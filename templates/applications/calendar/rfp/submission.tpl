@@ -43,12 +43,9 @@ if(isset($pdf))
 
 <table class="header">
 <tr>
-	<td><img src="http://www.revalhotels.com/img/reval/logo.gif" alt="Reval Hotels"></td>
+	<td><img src="{VAR:baseurl}/img/aw_logo_gray.gif" alt="Reval Hotels"></td>
 	<td>
-		<strong>Reval Hotel Central</strong><br>
-		Narva mnt 7C, 10117 Tallinn, Estonia<br>
-		Tel +372 633 9800, fax +372 633 9900<br>
-		central.sales@revalhotels.com
+		<!-- rekvisiidid -->
 	</td>
 </tr>
 <tr>
@@ -433,11 +430,11 @@ if(isset($pdf))
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_ORG}: <strong>{VAR:data_company}</strong></td>
-	<td>{VAR:LC_RFP_HOTEL}: <strong>O&Uuml; Central Hotel / Reval Hotel Central</strong></td>
+	<td>{VAR:LC_RFP_HOTEL}: <strong>O&Uuml; Struktuur Meedia</strong></td>
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_STREET}: <strong>   {VAR:data_street}</strong></td>
-	<td>{VAR:LC_RFP_STREET}: <strong>   Narva mnt 7 C</strong></td>
+	<td>{VAR:LC_RFP_STREET}: <strong>   Narva mnt 158b</strong></td>
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_CITY}: <strong>{VAR:data_city}</strong></td>
@@ -445,7 +442,7 @@ if(isset($pdf))
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_INDEX}: <strong>{VAR:data_zip}</strong></td>
-	<td>{VAR:LC_RFP_INDEX}: <strong>10117</strong></td>
+	<td>{VAR:LC_RFP_INDEX}: <strong>11317</strong></td>
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_COUNTRY}: <strong>{VAR:data_country}</strong></td>
@@ -453,11 +450,11 @@ if(isset($pdf))
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_PHONE}: <strong>{VAR:data_phone}</strong></td>
-	<td>{VAR:LC_RFP_PHONE}: <strong>+372 633 9933</strong></td>
+	<td>{VAR:LC_RFP_PHONE}: <strong>+372 6 558 334</strong></td>
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_FAX}: <strong>{VAR:data_fax}</strong></td>
-	<td>{VAR:LC_RFP_FAX}: <strong>+372 633 9988</strong></td>
+	<td>{VAR:LC_RFP_FAX}: <strong></strong></td>
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_EMAIL}: <strong>{VAR:data_email}</strong></td>

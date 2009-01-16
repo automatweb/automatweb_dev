@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.5 2008/04/28 13:59:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.6 2009/01/16 11:37:47 kristo Exp $
 // aiesecimport.aw - Aiesec import 
 /*
 
@@ -222,19 +222,10 @@ class aiesecimport extends class_base
 		
 		$o_person = new object($i_person_id);
 		
-		$o_person -> connect(array(
-				"to" => $this->a_members_group[$s_type]["rank_oid"], 
-				"type"=> RELTYPE_RANK,
-		));
-		
-		$o_person -> connect(array(
-				"to" => $this->i_aiesec_in_estonia_id, 
-				"type"=> RELTYPE_WORK,
-		));
-		
-		$o_person -> connect(array(
-				"to" => $this->a_members_group[$s_type][$s_lc],
-				"type"=> RELTYPE_SECTION,
+		$o_person->add_work_relation(array(
+			"org" => $this->i_aiesec_in_estonia_id,
+			"section" => $this->a_members_group[$s_type][$s_lc],
+			"profession" => $this->a_members_group[$s_type]["rank_oid"],
 		));
 		
 		if ($s_type == "AIESECi liikmed")
@@ -1031,7 +1022,7 @@ class aiesecimport extends class_base
 				$oMeeting -> set_prop("start1", $a_meetings[$i]["cdate"]);
 				$oMeeting -> set_prop("end", $a_meetings[$i]["cdate"]);
 				$oMeeting -> set_prop("is_done", 8);
-				$oMeeting -> set_prop("summary", $a_meetings[$i]["longdesc"]);
+//				$oMeeting -> set_prop("summary", $a_meetings[$i]["longdesc"]);
 				$oMeeting -> save();
 				
 				$oCompany = new object($aCompanies[$iAieCompanyId]["oid"]);
@@ -1309,15 +1300,11 @@ class aiesecimport extends class_base
 					if (array_key_exists($w["companyid"], $aCompanies))
 					{
 						$iAWCompanyId = $aCompanies[$w["companyid"]]["aw_id"];
-						
-						// RELTYPE_WORK connection
 						{
-							$o->connect(array(
-								"to" => $iAWCompanyId, 
-								"type"=> RELTYPE_WORK,
+							$o->add_work_relation(array(
+								"org" => $iAWCompanyId,
+								"profession" =>array_search ( $w["positionname"], $aPositions),
 							));
-							$o->set_prop("work_contact", $iAWCompanyId);
-							$o->set_prop("rank", array_search ( $w["positionname"], $aPositions));
 						}
 						
 						// RELTYPE_PREVIOUS_JOB connection
@@ -2628,14 +2615,10 @@ class aiesecimport extends class_base
 			
 			if ($iAWCompanyId>0)
 			{
-				$oPerson->connect(array(
-					"to" => $iAWCompanyId, 
-					"type"=> RELTYPE_WORK,
+				$oPerson->add_work_relation(array(
+					"org" => $iAWCompanyId,
+					"profession" =>array_search ( $w["positionname"], $aPositions),
 				));
-
-				$oPerson->set_prop("work_contact", $iAWCompanyId);
-				$oPerson->set_prop("rank", array_search ( $w["positionname"], $aPositions));
-				$oPerson->save();
 			}
 			else
 			{

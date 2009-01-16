@@ -96,12 +96,8 @@
             <field>meta</field>
             <method>serialize</method>
             <mode>manager</mode>
-            <props>
-		  <num_0>filename</num_0>
-            </props>
-	    <table_fields>
-		    <num_0>filename</num_0>
-		</table_fields>
+            <props>filename</props>
+            <table_fields>filename</table_fields>
             <caption>Failid</caption>
       </property>
       <property>

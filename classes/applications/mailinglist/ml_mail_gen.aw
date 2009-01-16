@@ -327,18 +327,32 @@ class ml_mail_gen extends run_in_background
 		$message = str_replace("#e-mail#" , $arr["mail"] , $message);
 		
 		$add_co = substr_count($message, '#organisatsioon#');
+		$add_per = substr_count($message, '#isik#');
 		$add_pro = substr_count($message, '#ametinimetus#');
 		$add_sec = substr_count($message, '#osakond#');
 arr($obj); arr($arr["member_id"]); arr($add_co); arr($add_pro);
 		if($obj && ($add_pro || $add_co || $add_sec))
 		{
 			$member = obj($arr["member_id"]);
+			if($add_per)
+			{
+				$person_name = "";
+				if($obj->class_id() == CL_CRM_PERSON)
+				{
+					$person_name = $obj->name();
+				}
+				$message = str_replace("#isik#" , $person_name, $message);
+			}
 			if($add_co)
 			{
 				$company_name = "";
 				if($obj->class_id() == CL_CRM_PERSON)
 				{
 					$company_name = $obj->company_name();
+				}
+				if($obj->class_id() == CL_CRM_COMPANY)
+				{
+					$company_name = $obj->name();
 				}
 				//siia vaja karupersest saada organisatsioon
 				$message = str_replace("#organisatsioon#" , $company_name, $message);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.143 2009/01/12 19:11:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.144 2009/01/16 11:37:31 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -223,17 +223,18 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property mail_toolbar type=toolbar no_caption=1
 @caption Maili toolbar
 
-@layout mail_top type=hbox closeable=1 width=20%:20%:30%:30%
-	@property send_away type=checkbox ch_value=1 store=no parent=mail_top no_caption=1
+@layout mail_top type=hbox closeable=1 area_caption=Seaded 
+//width=20%:20%:30%:30%
+	@property send_away type=checkbox ch_value=1 store=no parent=mail_top 
 	@caption Saada peale salvestamist &auml;ra
 	
-	@property save_as_new type=checkbox ch_value=1 parent=mail_top no_caption=1
+	@property save_as_new type=checkbox ch_value=1 parent=mail_top 
 	@caption Salvesta uue kirjana
 	
-	@property no_fck type=checkbox ch_value=1 parent=mail_top no_caption=1
+	@property no_fck type=checkbox ch_value=1 parent=mail_top 
 	@caption Maili kirjutamine plaintext vaates
 
-	@property take_out_adrr type=checkbox ch_value=1 parent=mail_top no_caption=1
+	@property take_out_adrr type=checkbox ch_value=1 parent=mail_top 
 	@caption Enne saatmist lase m&otilde;ningad aadressid v&auml;lja praakida
 
 @layout write_message_layout type=hbox width=40%:60% 
@@ -1011,6 +1012,7 @@ class ml_list extends class_base
 				$prop["value"] = t("Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br /><br />
 					#username# - AutomatWebi kasutajanimi<br />
 					#organisatsioon# - liikme organisatsioon<br />
+					#isik# - Isiku nimi<br />
 					#osakond# - Osakond<br />
 					#ametinimetus# - ametinimetus<br />
 					#name# - Listi liikme nimi<br />

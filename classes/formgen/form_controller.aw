@@ -276,6 +276,8 @@ class form_controller extends form_base
 		{
 			return true;	// don't remove this, otherwise all controller checks will fail withut a controller
 		}
+//echo "cpontroller $id <br>\n";
+//flush();
 		enter_function("form_controller::eval_controller");
 		enter_function("form_controller::eval_controller::$id");
 		$this->form_ref =& $form_ref;
@@ -291,7 +293,7 @@ class form_controller extends form_base
 		}
 		$co = $this->load_controller($id);
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
-
+		
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
 		dbg::p2("controller id $id: evaling $eq <br />");
 		if (aw_ini_get("site_id") == 139)

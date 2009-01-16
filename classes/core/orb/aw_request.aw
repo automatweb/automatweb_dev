@@ -55,7 +55,7 @@ class aw_request
 	{
 		if (!isset($this->args[$name]))
 		{
-			throw new awex_request_na("Argument not available");
+//			throw new awex_request_na("Argument not available");
 		}
 
 		return $this->args[$name];

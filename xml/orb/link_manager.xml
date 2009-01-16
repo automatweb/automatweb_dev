@@ -9,7 +9,7 @@
 				</arguments>
 			</function>
 		</action>
-
+		
 		<action name="topf">
 			<function name="topf">
 				<arguments>
@@ -17,7 +17,7 @@
 				</arguments>
 			</function>
 		</action>
-
+		
 		<action name="manager">
 			<function name="manager">
 				<arguments>
@@ -25,6 +25,6 @@
 				</arguments>
 			</function>
 		</action>
-
+		
 	</class>
 </orb>

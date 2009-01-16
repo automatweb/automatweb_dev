@@ -121,6 +121,7 @@ class menuedit extends aw_template implements request_startup
 			}
 
 			$class_id = $_obj->class_id();
+
 			if ($class_id == CL_MENU)
 			{
 				if (!($_obj->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id )

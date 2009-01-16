@@ -371,7 +371,7 @@ class crm_bill_obj extends _int_object
 			{
 				$people[$person->id()] = $person->id();
 			}
-			$amt+= $comment->prop("add_wh");
+			$amt+= $comment->bill_hours();
 			if($err = $this->connect_bug_comment($comment->id()) || $err2 = $row->connect_bug_comment($comment->id()))
 			{
 				arr($err);

@@ -1494,7 +1494,7 @@ class site_show extends class_base
 			return $this->parse();
 		}
 
-		if ($this->sel_section_obj->prop("no_menus") == 1 || !empty($GLOBALS["print"]) || !empty($arr["content_only"]))
+		if ($this->sel_section_obj->prop("no_menus") == 1 || !empty($_GET["print"]) || !empty($arr["content_only"]))
 		{
 			if (aw_ini_get("menuedit.print_template"))
 			{
@@ -1874,7 +1874,7 @@ class site_show extends class_base
 			));
 
 			$show_always = false;
-			if ((($ref->class_id() == CL_MENU && $ref->prop("clickable") == 1) || $ref->class_id() == CL_DOCUMENT  || $ref->class_id() == CL_CRM_SECTOR) && $show && $ref->class_id() != CL_DOCUMENT)
+			if ((($ref->class_id() == CL_MENU && $ref->prop("clickable") == 1) || $ref->class_id() == CL_DOCUMENT || $ref->class_id() == CL_CRM_SECTOR) && $show && $ref->class_id() != CL_DOCUMENT)
 			{
 				if ($this->is_template("YAH_LINK_BEGIN") && $ya == "")
 				{
@@ -3251,7 +3251,7 @@ class site_show extends class_base
 				{
 					continue;
 				}
-				$o = obj($id);
+				$o = obj($id);if(aw_global_get("uid") == "markop") arr($o);
 				foreach($o->connections_to(array("type" => 5, "to.lang_id" => aw_global_get("lang_id"))) as $c)
 				{
 					$samenu = $c->from();

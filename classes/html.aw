@@ -558,6 +558,11 @@ class html extends aw_template
 	**/
 	function text($args = array())
 	{
+		if (!isset($args["value"]))
+		{
+//			throw new awex_html_param("Required parameter 'value' missing");
+		}
+
 		if (!empty($args["textsize"]))
 		{
 			$element = "<span style=\"font-size: {$args["textsize"]};\">{$args["value"]}</span>";

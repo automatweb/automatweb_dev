@@ -80,7 +80,7 @@ class dompdf extends class_base
 		$lds .= " -o ".$this->orientation;
 		$hd = aw_ini_get("html2pdf.dompdf_path");
 		$cmdl = "php ".$hd."/dompdf.php ".$lds;
-		$cmdl2 = "php ".$hd."/dompdf.php ".$lds2;
+		$cmdl2 = "php ".$hd."/dompdf.php ".$lds2;//arr($cmdl);arr($this->source); die();
 		shell_exec($cmdl);
 		unlink($this->tmpfile);
 	}

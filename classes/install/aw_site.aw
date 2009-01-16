@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.58 2008/08/28 08:09:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.59 2009/01/16 11:37:48 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1 maintainer=kristo
@@ -344,6 +344,8 @@ class aw_site extends class_base
 			$GLOBALS["objects"] = array();
 			$site = $this->get_site_def($id);
 
+			unset($_SESSION["non_logged_in_users_group_oid"]);
+
 			$tmp = obj(aw_global_get("uid_oid"));
 
 			if (!$this->is_site_ok($site))
@@ -620,6 +622,8 @@ class aw_site extends class_base
 		// remember old default db
 		$default_db = aw_global_get("db::".$this->default_cid);
 		aw_global_set("db::".$this->default_cid, $dbi->dc[$dbi->default_cid]);
+
+		aw_global_set("__install_db", $dbi->dc[$dbi->default_cid]);
 
 		$clss = aw_ini_get("install.init_classes");
 		foreach($clss as $class)

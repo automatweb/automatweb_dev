@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.27 2008/09/05 07:58:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.28 2009/01/16 11:37:31 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -239,7 +239,8 @@ class ml_member extends class_base
 				$member_obj->set_prop("name",$name);
 				$member_obj->set_prop("mail",$email);
 
-				$member_obj->set_meta("name",$name);
+	
+	$member_obj->set_meta("name",$name);
 				$member_obj->set_meta("email",$email);
 				$member_obj->set_meta("hash",$hash);
 				$member_obj->set_meta("time",$ts);
@@ -278,8 +279,7 @@ class ml_member extends class_base
 				
 				$tmp_time = strtotime($args["udef_fields"]["date1"]["year"]."-".$args["udef_fields"]["date1"]["month"]."-".$args["udef_fields"]["date1"]["day"]);
 				$member_obj->set_prop("udef_date1", $tmp_time);
-				
-				
+						
 				$member_obj->save();
 		
 				$added = true;

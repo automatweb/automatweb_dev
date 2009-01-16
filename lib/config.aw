@@ -29,12 +29,16 @@ function aw_ini_get($var)
 			{
 				$val = $GLOBALS["cfg"][$index];
 			}
-			else
+/*			else
 			{
+
+echo "var = $var <br>";
+echo dbg::process_backtrace(debug_backtrace());
+die();
 				$e = new awex_cfg_key("Invalid key '" . $var . "'");
 				$e->awcfg_key = $var;
 				throw $e;
-			}
+			}*/
 		}
 	}
 
@@ -68,7 +72,15 @@ function aw_ini_set($var, $value, $save = false)
 {
 	$setting = "\$GLOBALS['cfg']['" . str_replace(".", "']['", $var) . "'] = " . var_export($value, true) . ";";
 	eval($setting);
-
+if (false && ++$GLOBALS["FUCK"] > 1000)
+{
+if (class_exists("dbg", false))
+{
+	ob_end_clean();
+	echo dbg::process_backtrace(debug_backtrace())." <br>\n";
+	flush();
+}
+}
 	if (false === strpos($var, "."))
 	{
 		$setting = "\$GLOBALS['cfg']['__default__short']['" . str_replace(".", "']['", $var) . "'] = " . var_export($value, true) . ";";

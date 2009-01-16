@@ -3534,7 +3534,6 @@ class cfgform extends class_base
 		$tmp = $class_i->load_from_storage(array(
 			"id" => $cf->id()
 		));
-
 		$dat = array();
 		foreach($tmp as $pn => $pd)
 		{

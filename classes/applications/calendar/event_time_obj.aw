@@ -14,16 +14,16 @@ class event_time_obj extends _int_object
 				}
 		}
 		parent::set_prop($name,$value);
-		switch($name)
+	}
+
+	function save()
+	{
+		if($this->prop("event"))
 		{
-			case "start":
-			case "end":
-				if($this->prop("event"))
-				{
-					$event = obj($this->prop("event"));
-					$event->set_start_end();
-				}
+			$event = obj($this->prop("event"));
+			$event->set_start_end();
 		}
+		return parent::save();
 	}
 
 	function prop($k)

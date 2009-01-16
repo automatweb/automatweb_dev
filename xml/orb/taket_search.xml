@@ -16,6 +16,7 @@
 					<optional name="direction" />
 					<optional name="asukoht" />
 					<optional name="wvat" />
+					<optional name="osaline" />
 				</arguments>
 			</function>
 		</action>

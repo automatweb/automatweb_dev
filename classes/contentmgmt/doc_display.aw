@@ -119,7 +119,6 @@ class doc_display extends aw_template
 		}
 		
 		lc_site_load("document",$this);
-		
 		$this->vars(array("image_inplace" => ""));
 		$this->vars($al->get_vars());
 		$docmod = $doc->prop("doc_modified");
@@ -342,7 +341,6 @@ class doc_display extends aw_template
 			}
 			header("Content-type: text/html; charset=".$cs);
 		}
-
 		$str = $this->parse();
 		$this->vars(array("image_inplace" => ""));
 		exit_function("doc_display::gen_preview::".$arr["docid"]);
@@ -1027,7 +1025,7 @@ class doc_display extends aw_template
 				WHERE
 					board_id = '".$doc->id()."'
 				AND
-					lang_id = ".aw_global_get("ct_lang_id"),
+					lang_id = ".((int)aw_global_get("ct_lang_id")),
 				"cnt");
 			$this->vars(array(
 				"num_comments" => sprintf("%d",$num_comments),

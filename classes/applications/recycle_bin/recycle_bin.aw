@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.30 2008/10/06 15:29:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.31 2009/01/16 11:37:33 kristo Exp $
 // recycle_bin.aw - Pr&uuml;gikast 
 /*
 
@@ -410,6 +410,7 @@ class recycle_bin extends class_base
 		$p = $this->db_fetch_field($query, "parent");
 		$query = "SELECT status FROM objects WHERE oid='".$p."'";
 		$status = $this->db_fetch_field($query, "status");
+
 		if($status < 1)
 		{
 			$fo = $this->get_restore_folder($ob);

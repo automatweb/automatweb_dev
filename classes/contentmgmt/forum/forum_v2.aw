@@ -749,7 +749,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				"lang_id" => array(),
 				"site_id" => array(),
 			),
-			array(CL_MSGBOARD_TOPIC => array(new obj_sql_func(OBJ_SQL_UNIQUE, "jrk", "forum_topics.jrk")))
+			array(CL_MSGBOARD_TOPIC => array(new obj_sql_func(OBJ_SQL_UNIQUE, "jrk", "jrk")))
 		);
 		$jrks = array();
 		foreach($odl->arr() as $od)

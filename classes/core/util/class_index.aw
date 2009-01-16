@@ -23,7 +23,8 @@ class class_index
 	// requestable classes should be those that contain methods that can be called through exec()
 	private static $requestable_classes = array(
 		"sys",
-		"popup_search"
+		"popup_search",
+		"document"
 	);
 
 	/**
@@ -121,7 +122,7 @@ class class_index
 
 				if ("file" === @filetype($class_file) and strrchr($file, ".") === AW_FILE_EXT and !in_array($class_file, $ignore_files))
 				{ // process only applicable code files
-					self::update_one_file($class_file, &$found_classes, $full_update, $path);
+					self::update_one_file($class_file, $found_classes, $full_update, $path);
 				}
 				elseif ("dir" === @filetype($class_file) and !in_array($file, $non_dirs))
 				{
@@ -242,7 +243,7 @@ class class_index
 					$cl_handle = fopen($class_dfn_file, "w");
 					$ret = chmod($class_dfn_file, 0666);
 
-					if (!$ret)
+					if (false && !$ret)
 					{
 						$e = new awex_clidx_filesys("Failed to change file permissions for " . $class_dfn_file . ".");
 						$e->clidx_file = $class_dfn_file;

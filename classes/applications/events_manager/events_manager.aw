@@ -750,7 +750,7 @@ class events_manager extends class_base
 	function &_get_event_list($this_o, &$args)
 	{
 /*		aw_disable_acl();
-		$x = 45700;
+		$x = 0;
 		set_time_limit(1800);
 		while($x < 50000)
 		{

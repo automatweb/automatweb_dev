@@ -11,14 +11,14 @@
             <caption>Aeg</caption>
       </property>
       <property>
-	      <name>orderer</name>
-	      <table>objects</table>
-	      <group>general</group>
-	      <parent>general_up</parent>
-	      <type>textbox</type>
-	      <store>no</store>
-	      <field>orderer</field>
-	      <caption>Tellija</caption>
+            <name>orderer</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>textbox</type>
+            <store>no</store>
+            <field>orderer</field>
+            <caption>Tellija</caption>
       </property>
       <property>
             <name>cust_type</name>
@@ -47,7 +47,7 @@
             <type>textbox</type>
             <store>no</store>
             <field>customer_name</field>
-            <caption>Klient</caption>
+            <caption>Klient - vaid olemasolev mitte lisamiseks</caption>
       </property>
       <property>
             <name>custp_fn</name>

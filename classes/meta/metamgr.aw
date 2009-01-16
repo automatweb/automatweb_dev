@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.19 2008/08/21 09:20:25 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.20 2009/01/16 11:37:50 kristo Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
@@ -293,7 +293,7 @@ class metamgr extends class_base
 		};
 		$t->set_sortable(false);
 
-		$t->table_header = "<small>" . join(" &gt; ",$pathstr) . "</small>";
+		$t->set_header("<small>" . join(" &gt; ",$pathstr) . "</small>");
 		if ($_GET["do_export"] == 1)
 		{
 			$file_name = $root_obj->id().".txt";

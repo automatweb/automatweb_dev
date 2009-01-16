@@ -472,7 +472,11 @@ class run_in_background extends class_base
 
 		aw_set_exec_time(AW_LONG_PROCESS);
 
-		$o = obj($arr["id"]);
+
+		aw_disable_acl();
+			$o = obj($arr["id"]);
+			aw_switch_user(array("uid" => $o->createdby()));
+		aw_restore_acl();
 
 		if ($this->bg_is_running($o))
 

@@ -405,6 +405,7 @@ class aw_template extends core
 		$this->template_filename = $this->adm_template_dir."/".$name;
 		if (file_exists($this->template_filename))
 		{
+			$this->_record_template_load($this->template_filename);
 			$retval = $this->read_tpl(file($this->template_filename));
 		}
 		else
@@ -451,6 +452,7 @@ class aw_template extends core
 		$this->template_filename = $this->site_template_dir."/".$name;
 		if (file_exists($this->template_filename))
 		{
+			$this->_record_template_load($this->template_filename);
 			$retval = $this->read_tpl(file($this->template_filename));
 		}
 		else
@@ -496,6 +498,7 @@ class aw_template extends core
 		$this->template_filename = trim($this->template_filename);
 		if (file_exists($this->template_filename))
 		{
+			$this->_record_template_load($this->template_filename);
 			$retval = $this->read_tpl(file($this->template_filename));
 		}
 		else
@@ -503,6 +506,7 @@ class aw_template extends core
 			$this->template_filename = $this->adm_template_dir."/".$name;
 			if (file_exists($this->template_filename))
 			{
+				$this->_record_template_load($this->template_filename);
 				$retval = $this->read_tpl(file($this->template_filename));
 			}
 			else
@@ -1115,9 +1119,12 @@ class aw_template extends core
 
 	private function _record_template_load($fn)
 	{
-		$f = fopen(aw_ini_get("site_basedir")."/files/template_log_".date("Y_m").".log", "a");
-		fwrite($f, time()."|".get_ru()."|".$fn."\n");
-		fclose($f);
+		if (strpos($fn, aw_ini_get("site_basedir")) !== false)
+		{
+			$f = fopen(aw_ini_get("site_basedir")."/files/template_log_".date("Y_m").".log", "a");
+			fwrite($f, time()."|".get_ru()."|".$fn."\n");
+			fclose($f);
+		}
 	}
 }
 

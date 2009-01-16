@@ -23,8 +23,9 @@ if (!defined("AW_DIR"))
 
 		try
 		{
+
 			automatweb::start();
-			automatweb::$instance->mode(automatweb::MODE_DBG);
+//			automatweb::$instance->mode(automatweb::MODE_DBG);
 			automatweb::$instance->bc();
 			automatweb::$instance->load_config_files($cfg_files, $cache_file);
 			$request = aw_request::autoload();

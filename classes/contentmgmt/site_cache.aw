@@ -23,7 +23,6 @@ class site_cache extends aw_template
 		{
 			$si->pre_start_display($arr);
 		}
-
 		//if (aw_ini_get("menuedit.content_from_class_base") == 1 && aw_global_get("section") != aw_ini_get("frontpage"))
 		if (aw_ini_get("menuedit.content_from_class_base") == 1)
 		{
@@ -40,7 +39,6 @@ class site_cache extends aw_template
 
 		$inst = get_instance("contentmgmt/site_show");
 		$content = $inst->show($arr);
-
 		if (aw_ini_get("menuedit.content_from_class_base") == 1)
 		{
 			// now I'm assuming that frontpage is set to some kind of AW object

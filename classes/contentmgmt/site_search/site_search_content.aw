@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.105 2009/01/11 15:15:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.106 2009/01/16 11:37:39 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1906,7 +1906,7 @@ class site_search_content extends class_base
 			"area" => $area,
 		));
 		$results = array();
-
+		
 		// seda peab siis kuidagi filtreerima ka .. et ta ei hakkas mul igasugu ikaldust n2itama
 		if ($str != "" || $area || (is_array($keyword) && sizeof($keyword)) || is_oid($field))
 		{
@@ -2064,7 +2064,6 @@ class site_search_content extends class_base
 						$grp_sort_by = $grpcfg["sorder"][$cid];
 					};
 				}
-
 						
 				$ret .= $this->display_results(array(
 					"groupname" => $grpcfg["caption"][$group],

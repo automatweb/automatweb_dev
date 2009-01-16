@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.11 2007/12/06 14:34:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.12 2009/01/16 11:37:34 kristo Exp $
 // scm_contestant.aw - V&otilde;istleja 
 /*
 
@@ -677,7 +677,7 @@ class scm_contestant extends class_base
 	function get_contestant_company($arr = array())
 	{
 		$o = obj($this->get_contestant_person($arr));
-		return ($s = $o->prop("work_contact"))?$s:false;
+		return ($s = $o->company_id())?$s:false;
 	}
 
 	/**

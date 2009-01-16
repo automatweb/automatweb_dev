@@ -1,4 +1,4 @@
-body { background: white; font-size: 100%;}
+body { background: white; font-size: 10px; font-family: Arial; line-height: 16px;}
 #content { width: auto;margin: 0 5%; padding: 0;border: 0; float: none !important; color: black; background: transparent none; }
 div#content {margin-left: 10%; padding-top: 1em; }
 #header, #footer {width: 100%; border-collapse: collapse;}
@@ -19,4 +19,9 @@ span.url {font-size: 90% ! important;}
 .image_left { padding: 10px 10px 10px 0; float: left; }
 .image_center { padding: 10px 0 10px 0;text-align: center; width: 100%; }
 
+h1 { font-size: 14px; }
+h2 { font-size: 12px; }
+h3 { font-size: 11px; }
+
 .break {clear: both;}
+

@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.13 2009/01/14 09:06:08 voldemar Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.14 2009/01/16 11:37:44 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -383,7 +383,8 @@ die();
 			$gidlist_oid[$nliug_o->id()] = $nliug_o->id();
 			$gidlist_pri_oid[(int)$nliug_o->id()] = (int)$nliug_o->prop("priority");
 		}
-		else
+
+		if ($_GET["dd"] == 1 || !((!empty($_SESSION["nliug"]) && !is_admin())))
 		{
 			aw_disable_acl();
 			$u_obj = obj($u_oid);
@@ -648,7 +649,8 @@ die();
 				"password" => $site["site_obj"]["default_user_pwd"],
 				"all_users_grp" => $aug->prop("gid"),
 				"use_md5_passwords" => true,
-				"obj_parent" => $ini_opts["users.root_folder"]
+				"obj_parent" => $ini_opts["users.root_folder"],
+				"aug_oid" => $aug->id()
 			));
 			$user_o->set_parent($ini_opts["users.root_folder"]);
 			$user_o->save();
@@ -964,8 +966,9 @@ die();
 				{
 					$o = obj($oid);
 					aw_session_set("user_adm_ui_lc", $o->prop("ui_language"));
-                                     $_SESSION["user_history_count"] = $o->prop("history_size") ? $o->prop("history_size") : 25;
-                                     $_SESSION["user_history_has_folders"] = $o->prop("history_has_folders");
+
+                                	$_SESSION["user_history_count"] = $o->prop("history_size") ? $o->prop("history_size") : 25;
+                                	$_SESSION["user_history_has_folders"] = $o->prop("history_has_folders");
 				}
 				$this->request_startup();
 

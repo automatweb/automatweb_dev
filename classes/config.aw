@@ -81,6 +81,12 @@ class config extends aw_template
 		{
 			$i = $this;
 		}
+
+		$q = "SELECT content FROM config WHERE ckey = '$ckey'";
+		if (aw_global_get("__install_db"))
+		{
+			return aw_global_get("__install_db")->db_fetch_field($q,"content");
+		}
 		$q = "SELECT content FROM config WHERE ckey = '$ckey'";
 		return $i->db_fetch_field($q,"content");
 	}

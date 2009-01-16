@@ -107,7 +107,6 @@ class db_server_explorer extends class_base
 		}
 		$servers = $cfg_inst->get_servers($ob->prop('conf'));
 		$databases = $cfg_inst->get_databases_by_server($ob->prop('conf'));
-
 		foreach($servers as $serv_id => $server)
 		{
 			if (!$arr["request"]["server_id"])
@@ -180,7 +179,7 @@ class db_server_explorer extends class_base
 
 		$server = get_instance(CL_DB_SERVER_LOGIN);
 		$server->login_as($server_id);
-
+		
 		$t = $arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			'name' => 'var',

@@ -1231,9 +1231,10 @@ class event_search extends class_base
 			$ext_search = $search;
 			unset($ext_search["id"]);
 			$ext_search["limit"] = "0,1";
-			$ext_search["CL_CALENDAR_EVENT.utextvar1"] = array();
+			$ext_search["CL_CALENDAR_EVENT.utextvar1"] = '%';
 			$ext_search["lang_id"] = array();
 			$ext_search["site_id"] = array();
+			//$ext_search[] = new object_list_filter(array("non_filter_classes" => array(CL_PLANNER)));
 			$ext_s_search = $ext_search;
 			$ext_e_search = $ext_search;
 			$ext_s_search["sort_by"] = "planner.start asc";

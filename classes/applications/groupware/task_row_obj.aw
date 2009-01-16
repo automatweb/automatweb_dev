@@ -225,6 +225,15 @@ class task_row_obj extends _int_object
 		}
 		return $ret;
 	}
+	
+	/** returns row's billable hours
+		@attrib api=1
+		@returns double
+	**/
+	public function bill_hours()
+	{
+		return $this->prop("time_to_cust") ? $this->prop("time_to_cust") : $this->prop("time_real");
+	}
 
 }
 ?>

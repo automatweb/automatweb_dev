@@ -55,6 +55,7 @@
                   <clid>
                         <num_0>CL_CRM_COMPANY</num_0>
                         <num_1>CL_CRM_PERSON</num_1>
+                        <num_2>CL_PROJECT</num_2>
                   </clid>
                   <caption>Osaleja</caption>
             </PARTICIPANT>

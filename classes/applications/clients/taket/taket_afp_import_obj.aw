@@ -58,13 +58,6 @@ class taket_afp_import_obj extends _int_object
 		$this->whs[3] = $s_o->prop("warehouse3");
 		$this->whs[4] = $s_o->prop("warehouse4");
 		$this->whs[5] = $s_o->prop("warehouse5");
-		for($i = 0; $i < 6; $i++)
-		{
-			if(!$this->can("view", $this->whs[$i]))
-			{
-				die(t("Taketi otsingu objektis on m&otilde;ni ladu seadistamata"));
-			}
-		}
 
 		$this->prod_fld = $prod_fld;
 		$this->org_fld = $org_fld;
@@ -80,8 +73,9 @@ class taket_afp_import_obj extends _int_object
 	
 	private function download($c)
 	{
+		aw_set_exec_time(AW_LONG_PROCESS);
 		echo "---------------------------------------------------------------------------\n";
-		$prod_offset = 0;
+		$prod_offset = 5000;
 		$overall_start = $this->microtime_float();
 		$start = $end = 0;
 		
@@ -178,7 +172,6 @@ class taket_afp_import_obj extends _int_object
 			flush();
 
 			//remove the next line when the class is complete
-			break;
 		}
 		$overall_end = $this->microtime_float();
 		echo "---------------------------------------------------------------------------<br>\n";

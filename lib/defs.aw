@@ -2393,7 +2393,6 @@ function eval_buffer($res)
 		return $arr;
 	}
 
-
 	function detect_country()
 	{
 		$ipl = get_instance("core/util/ip_locator/ip_locator");

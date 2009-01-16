@@ -3566,12 +3566,6 @@ class conference_planning extends class_base
 			$org->set_name($data["company_assocation"]);
 			$org->save();
 			$person_obj->add_work_relation(array("org" => $org->id()));
-
-//			$person_obj->connect(array(
-//				"to" => $org->id(),
-//				"type" => "RELTYPE_WORK",
-//			));
-//			$person_obj->set_prop("work_contact", $org->id());
 		}
 
 		if($data["phone_number"])

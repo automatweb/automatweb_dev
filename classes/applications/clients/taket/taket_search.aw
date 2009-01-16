@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_search.aw,v 1.2 2008/12/29 16:12:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_search.aw,v 1.3 2009/01/16 11:37:27 kristo Exp $
 // taket_search.aw - Taketi Otsing 
 /*
 
-@classinfo syslog_type= relationmgr=yes
+@classinfo syslog_type= relationmgr=yes maintainer=robert
 //groupinfo blocked caption=Piirangud
 
 @default table=objects
@@ -12,6 +12,41 @@
 //property taket_block_conf type=relpicker group=blocked reltype=RELTYPE_TAKET_BLOCK_CONF multiple=1
 //caption Piirangud
 
+@property warehouse0 type=relpicker reltype=RELTYPE_WAREHOUSE0 field=meta method=serialize
+@caption Kadaka tee ladu
+
+@property warehouse1 type=relpicker reltype=RELTYPE_WAREHOUSE1 field=meta method=serialize
+@caption Punane tn ladu
+
+@property warehouse2 type=relpicker reltype=RELTYPE_WAREHOUSE2 field=meta method=serialize
+@caption Tartu ladu
+
+@property warehouse3 type=relpicker reltype=RELTYPE_WAREHOUSE3 field=meta method=serialize
+@caption P&auml;rnu ladu
+
+@property warehouse4 type=relpicker reltype=RELTYPE_WAREHOUSE4 field=meta method=serialize
+@caption Paavli ladu
+
+@property warehouse5 type=relpicker reltype=RELTYPE_WAREHOUSE5 field=meta method=serialize
+@caption Viljandi ladu
+
+@reltype RELTYPE_WAREHOUSE0 value=1 clid=CL_SHOP_WAREHOUSE
+@caption Kadaka tee ladu
+
+@reltype RELTYPE_WAREHOUSE1 value=2 clid=CL_SHOP_WAREHOUSE
+@caption Punane tn ladu
+
+@reltype RELTYPE_WAREHOUSE2 value=3 clid=CL_SHOP_WAREHOUSE
+@caption Tartu ladu
+
+@reltype RELTYPE_WAREHOUSE3 value=4 clid=CL_SHOP_WAREHOUSE
+@caption P&auml;rnu ladu
+
+@reltype RELTYPE_WAREHOUSE4 value=5 clid=CL_SHOP_WAREHOUSE
+@caption Paavli ladu
+
+@reltype RELTYPE_WAREHOUSE5 value=6 clid=CL_SHOP_WAREHOUSE
+@caption Viljandi ladu
 */
 
 class taket_search extends class_base implements main_subtemplate_handler
@@ -65,6 +100,7 @@ class taket_search extends class_base implements main_subtemplate_handler
 		@param direction optional
 		@param asukoht optional
 		@param wvat optional
+		@param osaline optional
 		
 		@returns
 		
@@ -76,9 +112,7 @@ class taket_search extends class_base implements main_subtemplate_handler
 	{
 		$site_log_line = '[taket_search::parse_submit_info] ';
 
-
 		//determine the xml-rpc call
-		include('IXR_Library.inc.php');
 		$hosts = aw_ini_get('taket.xmlrpchost');
 		$path = aw_ini_get("taket.xmlrpcpath");
 		$port = aw_ini_get("taket.xmlrpcport");
@@ -99,10 +133,6 @@ class taket_search extends class_base implements main_subtemplate_handler
 			$this->site_log($taket_search_log, '/taket_search_logs/'.date('Ymd').'.xls');
 		}
 
-		if(isset($arr["kogus"]) && !strstr($arr["kogus"], ","))
-		{
-			$arr["kogus"] = ((int)$arr['kogus'] <= 0) ? 1 : (int)$arr['kogus'];
-		}
 		elseif(isset($arr['kogus']))
 		{
 			$tmpArr = split(',',$arr['kogus']);
@@ -116,26 +146,184 @@ class taket_search extends class_base implements main_subtemplate_handler
 			unset($tmpArr);
 		}
 
-		if ($arr['asukoht'] && $arr['asukoht'] != -1)
-		{
-			$hosts = array($arr['asukoht'] => $hosts[$arr['asukoht']]);
-		}
-
 		$this->read_template('search.tpl');
 		//ei ole eriti hea feature kui on mitmeleveliga subid aga siin k2ib kyll
 		$this->sub_merge = 0;
-		$data = array();
-		$product_info_arr = array();
-		$supplier_ids = array();
 		
-		$site_log_line .= '[XML-RPC]';
+		$param = array();
+	
+		$match = false;
+		$f_add = $arr["osaline"] ? "%" : "";
+		if(strstr($arr['tootekood'], ',') || $arr['kogus'])
+		{
+			$match = true;
+			$products = split(',', $arr['tootekood']);
+			$quantities = split(',', $arr['kogus']);
+			foreach($products as $key => $value)
+			{
+				$products[$key] = trim($value);
+				$quantities[$key] = ((int)$quantities[$key]) > 0 ? (int)$quantities[$key] : 1;
+			}
+		}
+
+		$param["class_id"] = CL_SHOP_PRODUCT;
+		$param["lang_id"] = array();
+		$param["site_id"] = array();
+
+		if($arr["tootekood"])
+		{
+			$find = array("-", " ", "O", "(", ")");
+			$replace = array("", "", "0", "", "");
+			$arr["tootekood"] = str_replace($find, $replace, $arr["tootekood"]);
+			$param[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"search_term" => $match ? $products : $f_add.$arr["tootekood"].$f_add,
+					"short_code" => $match ? $products : $f_add.$arr["tootekood"].$f_add,
+				),
+			));
+		}
+		if($arr["toote_nimetus"])
+		{
+			$param["name"] = "%".$arr["toote_nimetus"]."%";
+		}
+		if($arr["laos"])
+		{
+			$param["CL_SHOP_PRODUCT.RELTYPE_PRODUCT(CL_SHOP_WAREHOUSE_AMOUNT).amount"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
+		}
+		$ol = new object_list($param);
+
+		$numOfRows = $ol->count();
+		$noSkipped = $arr["start"];
+
+		$data = array();
+		$prodcodes = array();
+		foreach($ol->arr() as $o)
+		{
+			$value = array();
+			$value["product_name"] = $o->name();
+			$value["product_code"] = $o->prop("code");
+			$prodcodes[] = $o->prop("code");
+			$value["search_term"] = $o->prop("search_term");
+			$value["product_id"] = $o->id();
+			foreach($products as $key => $val)
+			{
+				if(str_replace($find, $replace, $val) == $o->prop("short_code"))
+				{
+					$value["quantity"] = $quantities[$key];
+				}
+			}
+			$data[$o->id()] = $value;
+		}
+
+		require(aw_ini_get("basedir")."addons/ixr/IXR_Library.inc.php");
+		$c = new IXR_Client($hosts[0], $path[0], $port[0]);
+		$c->query("server.getPrices", array("product_codes" => $prodcodes));
+		$price_data = $c->getResponse();
+		arr($price_data);
+
+		$amt_ol = new object_list(array(
+			"class_id" => CL_SHOP_WAREHOUSE_AMOUNT,
+			"product" => $ol->ids(),
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+
+		foreach($amt_ol->arr() as $o)
+		{
+			$data[$o->prop("product")]["amounts"][$o->prop("warehouse")] = $o->prop("amount");
+		}
+
+		$org_ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+			"product" => $ol->ids(),
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+
+		foreach($org_ol->arr() as $o)
+		{
+			$data[$o->prop("product")]["supplier_times"][$o->prop("warehouse")] = array(
+				"date1" => $o->prop("date1"),
+				"date2" => $o->prop("date2"),
+				"days" => $o->prop("days"),
+				"day1" => $o->prop("weekday"),
+			);
+		}	
+
+		$hidden["orderBy"] = $arr["orderBy"];
+		if($arr['direction'] == 'desc')
+		{
+			$hidden['direction'] = 'asc';
+			$hidden['direction_pg'] = 'desc';
+		}
+		else
+		{
+			$hidden['direction'] = 'desc';
+			$hidden['direction_pg'] = 'asc';
+		}
+
+		$o_ol = new object_list(array(
+			"class_id" => CL_TAKET_SEARCH,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$obj_inst = $o_ol->begin();
+
+		foreach($data as $value)
+		{
+			for($i = 0; $i < 6; $i++)
+			{
+				$whid = $obj_inst->prop("warehouse".$i);
+				if($value["quantity"] <= $value['amounts'][$whid] && $value['amounts'][$whid])
+				{
+					$in_stock[$value["product_id"]][$i] = $this->parse('instockyes');
+				}
+				//this product is out of stock
+				else
+				{
+					if($value['amounts'][$whid] > 0)
+					{
+						$in_stock[$value["product_id"]][$i] = $this->parse('instockpartially');
+					}
+					else
+					{
+						$in_stock[$value["product_id"]][$i] =  $this->_get_date_by_supplier_id($value["supplier_times"][$whid]);
+					}
+				}
+			}
+		}
+
+		usort($data, array($this, "__sort_products"));
+		
+		$pre_pages = $data;
+		$data = array();
+		$start = ($arr["start"] ? $arr["start"] : 0);
+
+		for($i = $start; $i < $start + 40; $i++)
+		{
+			if($pre_pages[$i])
+			{
+				$data[] = $pre_pages[$i];
+			}
+		}
+
+		$arr['asendustooted'] = (int)$arr['asendustooted'];
+		$arr['laos'] = (int)$arr['laos'];
+
+		$arr['start'] = (int)$arr['start'];
+
+		$this->vars($arr);
+
+		//---mingi xmlrpc värgindus---
+		/*$site_log_line .= '[XML-RPC]';
 		foreach($hosts as $key => $host)
 		{
 			$site_log_line .= '[host: ('.$key.') '.$host.']';
 			$client = new IXR_Client($host, $path[$key], $port[$key]);
 			if (aw_global_get('uid') == 110)
 			{
-			//	$client->debug = true;
+//				$client->debug = true;
 			}
 
 			enter_function("taket_search::parse_submit_info::xml_rpc_query");
@@ -155,10 +343,10 @@ class taket_search extends class_base implements main_subtemplate_handler
 			))
 			{
 				if(aw_global_get("uid") == 110)
-				{arr($host); arr($path[$key]);
-					echo('Something went wrong - '.$client->getErrorCode().' : '.
-					$client->getErrorMessage());
-					arr($client->getResponse());
+				{
+//					echo('Something went wrong - '.$client->getErrorCode().' : '.
+//					$client->getErrorMessage());
+//					arr($client->getResponse());
 				}
 				continue;
 			};
@@ -234,8 +422,8 @@ class taket_search extends class_base implements main_subtemplate_handler
 		$this->vars($arr);
 		
 		//assign the results
-		$count = 0;
-
+		//$count = 0;
+		*/
 
 		//if the search was done as follows:
 		//product_code & it's quantity, product_code & it's quantity etc
@@ -243,7 +431,7 @@ class taket_search extends class_base implements main_subtemplate_handler
 		//so i have to some pattern matching here because i can't
 		//extract the info from the query/results
 		//build patterns:
-		$match = false;
+		/*$match = false;
 		if(strstr($arr['tootekood'], ','))
 		{
 			$match = true;
@@ -254,8 +442,8 @@ class taket_search extends class_base implements main_subtemplate_handler
 				$products[$key] = trim($value);
 				$quantities[trim($value)] = ((int)$quantities[$key]) > 0 ? (int)$quantities[$key] : 1;
 			}
-		}
-		$wx = 1;
+		}*/
+		/*$wx = 1;
 		if(!$arr["wvat"])
 		{
 			$wvat = $_COOKIE["wvat"];
@@ -267,19 +455,36 @@ class taket_search extends class_base implements main_subtemplate_handler
 		if($wvat == 1)
 		{
 			$wx = 1.18;
-		}
+		}*/
 		
-		$numOfRows = 0;
+		/*$numOfRows = 0;
 		$noSkipped = 0;
 		$content = '';
 		$hidden = array();
 		$i = 0;
-		$lastQuantity = 1;
+		$lastQuantity = 1;*/
+
+
+		//---tarneajad---		
 
 		// lets remember the old $this->vars['trans_instock_no'] value, just to be able to replace it when
 		// delivery date is not available
-		$old_trans_instock_no = $this->vars['trans_instock_no'];
-		$supplier_times = array();
+		//$supplier_times = array();
+
+		/*$this->db_table_name = "taket_times";
+		if ($this->db_table_exists($this->db_table_name) === false)
+		{
+			$this->db_query('create table '.$this->db_table_name.' (
+				id int not null primary key auto_increment,
+				day1 varchar(25),
+				days int(11),
+				day2 varchar(25),
+				date1 int(11),
+				date2 int(11),
+				supplier_id varchar(255)
+			)');
+		}
+
 		if (!empty($supplier_ids))
 		{
 			$supplier_times_data = $this->db_fetch_array("SELECT * FROM taket_times WHERE supplier_id IN (".join(",", map("'%s'", $supplier_ids)).")");
@@ -296,11 +501,13 @@ class taket_search extends class_base implements main_subtemplate_handler
 			{
 				$supplier_times[$supplier_time['supplier_id']] = $supplier_time;
 			}
-		}
+		}*/
 
-		foreach($data as $key => $value)
+
+		//tsükkel üle toodete
+		foreach($data as $value)
 		{
-			if(isset($value['numOfRows']))
+			/*if(isset($value['numOfRows']))
 			{
 				$numOfRows = $value['numOfRows'] + $numOfRows;
 				continue;
@@ -418,43 +625,46 @@ class taket_search extends class_base implements main_subtemplate_handler
 			//echo $value['quantity'].'<br>';
 			//more or the same amount is in stock that was searched
 			// stock #1
-			if($value['quantity'] <= $value['inStock0'])
+			
+			for($i = 0; $i < 6; $i++)
 			{
-				$in_stock3 = $this->parse('instockyes');
-			}
-			//this product is out of stock
-			else
-			{
-				if($value['inStock0'] > 0)
+				$whid = $obj_inst->prop("warehouse".$i);
+				//put here search amount
+				if($search <= $value['amounts'][$whid] && $value['amounts'][$whid])
 				{
-					$in_stock3 = $this->parse('instockpartially');
+					${"in_stock".(3+$i)} = $this->parse('instockyes');
 				}
+				//this product is out of stock
 				else
 				{
-					// lets check if we know when the goods are possibly available
-					$date = $this->_get_date_by_supplier_id(array(
-						"supplier_id" => $product_info_arr[$value['product_code']]['supplier_id'],
-						'supplier_times' => $supplier_times
-					));
-					// if we know that, then lets show it to users too:
-					if ($date !== false)
+					if($value['amounts'][$whid] > 0)
 					{
-						$this->vars(array(
-							"trans_instock_no" => $date,
-						));
+						${"in_stock".(3+$i)} = $this->parse('instockpartially');
 					}
 					else
 					{
-						$this->vars(array(
-							"trans_instock_no" => $old_trans_instock_no,
-						));
+						// lets check if we know when the goods are possibly available
+						$date = $this->_get_date_by_supplier_id($value);
+						// if we know that, then lets show it to users too:
+						if ($date !== false)
+						{
+							$this->vars(array(
+								"trans_instock_no" => $date,
+							));
+						}
+						else
+						{
+							$this->vars(array(
+								"trans_instock_no" => $old_trans_instock_no,
+							));
+						}
+						${"in_stock".(3+$i)} = $this->parse('instockno');
 					}
-					$in_stock3 = $this->parse('instockno');
 				}
-			}
+			}*/
 			// stock #2
 			// hmm, seems i have to implement the $date showing here too, but this later
-			if($value['quantity'] <= $value['inStock1'])
+			/*if($value['quantity'] <= $value['inStock1'])
 			{
 				$in_stock4 = $this->parse('instockyes');
 			}
@@ -682,22 +892,51 @@ class taket_search extends class_base implements main_subtemplate_handler
 				$in_stock6 = "n/a";
 				$in_stock7 = "n/a";
 			}
-			
-			$this->vars(array(
-				"in_Stock3" => $in_stock3,
-				"in_Stock4" => $in_stock4,
-				"in_Stock5" => $in_stock5,
-				"in_Stock6" => $in_stock6,
-				"in_Stock7" => $in_stock7,
-				"in_Stock8" => $in_stock8,
-			));
+			*/
+			/*
 			$value['finalPrice'] = number_format($value['price'] * ((100 - $value['discount']) / 100), 2, '.', '');
-			$value['search_code'] = str_replace(' ','&nbsp;', $value['search_code']);
-			$value['product_code'] = str_replace(' ','&nbsp;', $value['product_code']);
-			//$value['replacement'] = ($value['replacement'])?'Peatoode':'Asendus';
+			//$value['replacement'] = ($value['replacement'])?'Peatoode':'Asendus';*/
+
+			$old_trans_instock_no = $this->vars['trans_instock_no'];
+
+			foreach($in_stock[$value["product_id"]] as $i => $val)
+			{
+				if(is_numeric($val))
+				{
+					$this->vars(array(
+						"trans_instock_no" => date("d/m/y", $val),
+					));
+				}
+				elseif($val === false)
+				{
+					$this->vars(array(
+						"trans_instock_no" => $old_trans_instock_no,
+					));
+				}
+				else
+				{
+					$this->vars(array(
+						"trans_instock_no" => $val,
+					));
+				}
+				$in_stock[$value["product_id"]][$i] = $this->parse('instockno');
+			}
+			$this->vars(array(
+				"in_Stock3" => $in_stock[$value["product_id"]][0],
+				"in_Stock4" => $in_stock[$value["product_id"]][1],
+				"in_Stock5" => $in_stock[$value["product_id"]][2],
+				"in_Stock6" => $in_stock[$value["product_id"]][3],
+				"in_Stock7" => $in_stock[$value["product_id"]][4],
+				"in_Stock8" => $in_stock[$value["product_id"]][5],
+			));
+			$value['search_code'] = str_replace(' ','&nbsp;', $value["search_term"]);
+			$value['product_code'] = str_replace(' ','&nbsp;', $value["product_code"]);
+			$value['product_name'] = str_replace(' ','&nbsp;', $value["product_name"]);
 			$value['i'] = $i++;
 			$this->vars($value);
-			//
+
+			$value['quantity'] = ((int)$value['quantity']) ? (int)$value['quantity'] : '1';
+
 			if($value['quantity'] <= $value['inStock'])
 			{
 				$this->vars(array(
@@ -783,7 +1022,7 @@ class taket_search extends class_base implements main_subtemplate_handler
 				'next' => $next,
 				'prev' => $prev,
 				'pageNumber' => $pageNumber,
-				'start' => $i*40,
+				'start_pg' => $i*40,
 			));
 			$content .= $this->parse('pageNumbers');
 		}
@@ -807,6 +1046,25 @@ class taket_search extends class_base implements main_subtemplate_handler
 		}
 
 		return $this->parse();
+	}
+
+	function __sort_products($a, $b)
+	{
+		if($_GET["direction"] == "desc")
+		{
+			$c = $a;
+			$a = $b;
+			$b = $c;
+		}
+		switch($_GET["orderBy"])
+		{
+			case "tootekood":
+				return strnatcasecmp($a["product_code"], $b["product_code"]);
+			case "nimetus":
+				return strcasecmp($a["product_name"], $b["product_name"]);
+			case "otsitunnus":
+				return strcasecmp($a["search_term"], $b["search_term"]);
+		}
 	}
 
 	function on_get_subtemplate_content($arr)
@@ -876,32 +1134,19 @@ class taket_search extends class_base implements main_subtemplate_handler
 	}
 	////
 	// supplier_id - Supplier id
-	function _get_date_by_supplier_id($arr)
+	function _get_date_by_supplier_id($supplier_times)
 	{
 		// JC (supplier_id == 179) 
 		// teisip2eva 6htust on ylej2rgmine esmasp2ev v6imalik
 //		$supplier_times = $this->db_fetch_array("select * from taket_times where supplier_id='".$arr['supplier_id']."'");
-		$supplier_times = $arr['supplier_times'];
-		if (empty($arr['supplier_id']) || empty($supplier_times))
+		if (empty($supplier_times) || ($supplier_times['date1'] < 1 && $supplier_times['date2'] < 1 && !$supplier_times['day1'] && !$supplier_times['days']))
 		{
 			return false;
 		}
 
 		// i think, that supplier ids are unique, i don't assume that in times management
 		// but here, if there are several, i'll take the first one
-		$supplier_time = $supplier_times[$arr['supplier_id']];
-		if ($supplier_time['day1'] == "---" || $supplier_time['day2'] == "---")
-		{
-			if ($supplier_time['date1'] >= (time() + $supplier_time['days'] * 86400))
-			{
-				$date = $supplier_time['date1'];
-			} 
-			else
-			{
-				$date = $supplier_time['date2'];
-			}
-		}
-		else
+		if ($supplier_times['date1'] < 1 && $supplier_times['date2'] < 1)
 		{
 			// this is for strtotime, just to get the eng. day according to the number
 			// i cant save the days like this in database, cause i need to do some 
@@ -918,10 +1163,10 @@ class taket_search extends class_base implements main_subtemplate_handler
 			);
 
 			// just for clearance:
-			$delivery_day = $supplier_time['day1'];
+			$delivery_day = $supplier_times['day1'];
 //			$order_day = $supplier_time['day2'];
 
-			$delivery_time = strtotime("this ".date("l")) + ($supplier_time['days'] * 24 * 3600);
+			$delivery_time = strtotime("this ".date("l")) + ($supplier_times['days'] * 24 * 3600);
 			// in php4, if next "day" is same as today, then it returns today, not +1 week, changed in php5 --dragut
 			if (date("w") == $delivery_day)
 			{
@@ -943,8 +1188,19 @@ class taket_search extends class_base implements main_subtemplate_handler
 			}
 
 		}
+		else
+		{
+			if ($supplier_times['date1'] >= (time() + $supplier_times['days'] * 86400))
+			{
+				$date = $supplier_times['date1'];
+			} 
+			else
+			{
+				$date = $supplier_times['date2'];
+			}
+		}
 
-		return date("d/m/y", $date);
+		return $date;
 	}
 	
 	/**

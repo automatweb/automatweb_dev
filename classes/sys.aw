@@ -700,6 +700,7 @@ class sys extends aw_template
 	**/
 	function test_sites($arr)
 	{
+		ob_end_clean();
 		aw_set_exec_time(AW_LONG_PROCESS);
 		echo "testing sites ... <br>\n";
 		flush();

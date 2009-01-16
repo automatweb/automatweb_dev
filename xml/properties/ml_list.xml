@@ -576,7 +576,6 @@
             <ch_value>1</ch_value>
             <store>no</store>
             <parent>mail_top</parent>
-            <no_caption>1</no_caption>
             <caption>Saada peale salvestamist &amp;amp;auml;ra</caption>
       </property>
       <property>
@@ -588,7 +587,6 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <parent>mail_top</parent>
-            <no_caption>1</no_caption>
             <caption>Salvesta uue kirjana</caption>
       </property>
       <property>
@@ -600,7 +598,6 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <parent>mail_top</parent>
-            <no_caption>1</no_caption>
             <caption>Maili kirjutamine plaintext vaates</caption>
       </property>
       <property>
@@ -612,7 +609,6 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <parent>mail_top</parent>
-            <no_caption>1</no_caption>
             <caption>Enne saatmist lase m&amp;amp;otilde;ningad aadressid v&amp;amp;auml;lja praakida</caption>
       </property>
       <property>
@@ -1019,9 +1015,8 @@
             <mail_top>
                   <type>hbox</type>
                   <closeable>1</closeable>
-                  <width>20%:20%:30%:30%</width>
+                  <area_caption>Seaded</area_caption>
                   <group>write_mail</group>
-                  <area_caption></area_caption>
             </mail_top>
             <write_message_layout>
                   <type>hbox</type>

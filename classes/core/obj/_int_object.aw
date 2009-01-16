@@ -2809,10 +2809,10 @@ class _int_object
 			return;
 		}
 
-		$properties = $this->load_properties_considering_cfgform();
+		//$properties = $this->load_properties_considering_cfgform();
 
 		$this->obj["properties"] = $GLOBALS["object_loader"]->ds->read_properties(array(
-			"properties" => $properties,
+			"properties" => $GLOBALS["properties"][$this->obj["class_id"]], //$properties,
 			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
 			"objdata" => $this->obj,
 		));

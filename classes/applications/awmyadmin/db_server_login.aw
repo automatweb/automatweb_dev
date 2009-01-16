@@ -55,10 +55,11 @@ class db_server_login extends class_base
 		$ob = obj($oid);
 		if ($ob->prop('server_driver') != '' && $ob->prop('server_host') != '' && $ob->prop('server_admin_user') != '')
 		{
+//die(dbg::dump($ob->properties()));
 			$this->db_connect(array(
 				'driver' => $ob->prop('server_driver'),
 				'server' => $ob->prop('server_host'),
-				'base' => aw_ini_get('db.base'),
+				'base' => "mysql", //aw_ini_get('db.base'),
 				'username' => $ob->prop('server_admin_user'),
 				'password' => $ob->prop('server_admin_pass')
 			));

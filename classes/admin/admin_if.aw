@@ -1479,8 +1479,10 @@ class admin_if extends class_base
 			$o->set_lang_id(aw_global_get("lang_id"));
 		}
 
-		$o->save();
-
+		if ($o->can("edit"))
+		{
+			$o->save();
+		}
 	}
 
 	private function _resolve_tbl_parent($arr)

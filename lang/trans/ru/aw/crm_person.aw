@@ -38,4 +38,5 @@ $GLOBALS["TRANS"]["Lahutatud"] = "разведен(а)";
 $GLOBALS["TRANS"]["Vabaabielus"] = "в свободном браке";
 $GLOBALS["TRANS"]["mees"] = "мужчина";
 $GLOBALS["TRANS"]["naine"] = "женщина";
+$GLOBALS["TRANS"]["--vali--"] = "--Выбери--";
 ?>

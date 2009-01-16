@@ -12,7 +12,7 @@ class link_manager extends aw_editor_manager_base
 	}
 
 	/**
-		@attrib name=manage default=1
+		@attrib name=manage default="1"
 		@param doc required
 		@param link_url optional
 	**/

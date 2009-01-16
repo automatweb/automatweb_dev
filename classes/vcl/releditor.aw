@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.171 2009/01/15 14:47:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.172 2009/01/16 11:37:52 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -2269,7 +2269,7 @@ class releditor extends core
 				$r[] = "'[$rel_prop_name][]': { ".join(", ", $d2)." } ";
 			}
 			else
-			if($rel_props[$rel_prop_name]["option_is_tuple"])
+			if($rel_props[$rel_prop_name]["option_is_tuple"] || $rel_props[$rel_prop_name]["type"] === "relpicker")
 			{
 				$value = is_oid($d[$idx][$rel_prop_name]) ? obj($d[$idx][$rel_prop_name])->name() : $d[$idx][$rel_prop_name];
 				$r[] = "'[".$rel_prop_name."]_awAutoCompleteTextbox': '".$value."'";

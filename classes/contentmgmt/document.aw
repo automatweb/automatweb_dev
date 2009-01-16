@@ -1673,7 +1673,7 @@ class document extends aw_template
 			$id = $oob["brother_of"];
 		}
 
-		return $this->mk_my_orb("change",array(
+		$url = $this->mk_my_orb("change",array(
 			"id" => $oob["oid"],
 			"section" => $_GET["section"],
 			"period" => $arr["period"],
@@ -1681,6 +1681,7 @@ class document extends aw_template
 			"edit_version" => $_GET["edit_version"],
 			"return_url" => $_GET["return_url"]
 		),"doc");
+		return $url;
 	}
 
 	/** Performs a search from all documents
@@ -3270,6 +3271,7 @@ class document extends aw_template
 			case "aw_in_budget":
 			case "no_show_in_promo":
 			case "ufupload1":
+			case "show_to_country":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => int

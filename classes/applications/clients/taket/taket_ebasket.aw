@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_ebasket.aw,v 1.1 2008/10/01 14:17:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_ebasket.aw,v 1.2 2009/01/16 11:37:27 kristo Exp $
 // taket_ebasket.aw - Ostukorv
 /*
 
@@ -1521,12 +1521,12 @@ else
 			
 		}
 	}
-/*
+
 	function microtime_float(){
 		list($usec, $sec) = explode(" ", microtime());
 		return ((float)$usec + (float)$sec);
 	}
-*/
+
 
 }
 ?>

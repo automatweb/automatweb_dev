@@ -73,6 +73,7 @@ function __autoload($class_name)
 		}
 		catch (awex_clidx $e)
 		{
+			echo dbg::process_backtrace(debug_backtrace());
 			exit("Fatal update error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
 			//!!! take action
 		}

@@ -60,6 +60,8 @@ class mysql
 
 	function db_query($qtext,$errors = true)
 	{
+//echo $qtext."<br>\n".dbg::short_backtrace()." <br>\n";
+//flush();
 		global $DUKE, $INTENSE_DUKE, $SLOW_DUKE;
 		if ($SLOW_DUKE == 1)
 		{

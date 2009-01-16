@@ -2044,19 +2044,17 @@ enter_function("company::_finish_org_tbl_5");
 		}
 exit_function("company::_finish_org_tbl_5");
 		# table contents
+		$perpage = 100;
+		$page_nr = $arr["request"]["ft_page"] ? $arr["request"]["ft_page"] : 0;
+		if($perpage > $orglist->count)
+		{
+			$page_nr = 0;
+		}
+		$GLOBALS["ft_page"] = $page_nr;
 		$org_count = 0;
 		foreach($orglist as $org)
 		{
-/*			$org_count++;
-			if(!($_GET["ft_page"] * 100 < $org_count && (($_GET["ft_page"]+1) * 100 > $org_count)))
-			{
-//				$tf->define_data(array(
-//					"id" => "0",
-//					"name" => $o->name(),
-//				));
-				continue;
-			}
-*/
+
 enter_function("company::_finish_org_tbl_6");
 			if($filter)
 			{
@@ -2065,6 +2063,17 @@ enter_function("company::_finish_org_tbl_6");
 					continue;
 				}
 			}
+//arr($org_count);
+			$org_count++;
+			if(!($page_nr * $perpage < $org_count && (($page_nr+1) * $perpage > $org_count)))
+			{
+//				$tf->define_data(array(
+//					"id" => "0",
+//					"name" => $o->name(),
+//				));
+				continue;
+			}
+
 
 			$o = obj($org);
 
@@ -2264,16 +2273,32 @@ exit_function("company::_finish_org_tbl_9");
 		}
 
 		// make pageselector.
-		$perpage = 100;
-		$tf->d_row_cnt = $this->result_count;
-		if($tf->d_row_cnt > $perpage)
-		{
-			$pageselector = $tf->draw_text_pageselector(array(
-				"records_per_page" => $perpage
-			));
-			$tf->table_header = $pageselector;
-		}
+
+//		$tf->d_row_cnt = $org_count;
+// 		$tf->define_pageselector (array (
+// 			"type" => "lb",
+// 			"d_row_cnt" => $org_count,
+// 			"records_per_page" => $perpage,
+// 		));
+
+
+
+//		if($tf->d_row_cnt > $perpage)
+//		{
+
+//			$pageselector = $tf->draw_text_pageselector(array(
+//				"records_per_page" => $perpage
+//			));arr($pageselector);
+//			$tf->set_header($pageselector);
+//		}
 		$tf->set_default_sortby("name");
+
+		$tf->define_pageselector(array(
+			"type"=>"lb",
+			"records_per_page"=>100,
+		//	"position"=>"both",
+			"d_row_cnt" => $org_count,
+		));
 		exit_function("company::_finish_org_tbl");
 	}
 

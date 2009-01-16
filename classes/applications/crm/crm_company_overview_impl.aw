@@ -1194,7 +1194,6 @@ class crm_company_overview_impl extends class_base
 					"logic" => "OR",
 					"conditions" => array(
 						"content" => $str_filt, //"%".$r["act_s_task_content"]."%",
-//						"summary" => $str_filt, //"%".$r["act_s_task_content"]."%",
 						"CL_TASK.RELTYPE_ROW.content" => $str_filt, //"%".$r["act_s_task_content"]."%",
 						"CL_CRM_MEETING.content" => $str_filt,
 						"CL_BUG.bug_content" => $str_filt

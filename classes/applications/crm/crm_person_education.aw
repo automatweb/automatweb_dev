@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.30 2008/11/26 15:00:44 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.31 2009/01/16 11:37:28 kristo Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -204,7 +204,7 @@ class crm_person_education extends class_base
 			case "school_1":
 				$ops = get_instance(CL_PERSONNEL_MANAGEMENT)->get_schools();
 				$prop["options"] = array("" => t("--vali--")) + $ops;
-				$prop["onchange"] = "var asd = this.name.replace('school1', 'faculty'); var el = aw_get_el(asd); $(el).removeOption(/./); $(el).ajaxAddOption('".$this->mk_my_orb("get_faculties_options")."', {'school1' : this.value});";
+				$prop["onchange"] = "var asd = this.name.replace('school1', 'faculty'); var el = aw_get_el(asd); if(el.name != undefined){ alert(el.name); $(el).removeOption(/./); $(el).ajaxAddOption('".$this->mk_my_orb("get_faculties_options")."', {'school1' : this.value})};";
 				break;
 		};
 		return $retval;
