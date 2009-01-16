@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.10 2008/10/31 12:08:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.11 2009/01/16 11:19:10 dragut Exp $
 // package.aw - Pakk 
 /*
 
@@ -117,7 +117,11 @@ class package extends class_base
 						"return_url" => get_ru(),
 					), CL_PACKAGE),
 				));
-			//-- get_property --//
+				break;
+			case "file_names":
+				// this is probably some bigger bug actually, that I can't have a text type property without its value element is set
+				$prop['value'] = ''; 
+				break;
 		};
 		return $retval;
 	}
@@ -459,7 +463,7 @@ class package extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["add_dependence"] = 0;
+		$arr["add_dependency"] = 0;
 		$arr["post_ru"] = post_ru();
 		$arr["tf"] = $_GET["tf"];
 	}
@@ -479,7 +483,7 @@ class package extends class_base
 
 	function callback_post_save($arr)
 	{
-		$arr["obj_inst"]->add_dependence($arr["request"]["add_dependence"]);
+		$arr["obj_inst"]->add_dependency($arr["request"]["add_dependency"]);
 	}
 
 	////////////////////////////////////

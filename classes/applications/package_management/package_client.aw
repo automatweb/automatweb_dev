@@ -342,9 +342,9 @@ class package_client extends class_base
 		));
 
 		$filter = array(
-			'search_name' => $arr['request']['search_name'],
-			'search_version' => $arr['request']['search_version'],
-			'search_file' => $arr['request']['search_file'],
+			'search_name' => (isset($arr['request']['search_name'])) ? $arr['request']['search_name'] : '',
+			'search_version' => (isset($arr['request']['search_version'])) ? $arr['request']['search_version'] : '',
+			'search_file' => (isset($arr['request']['search_file'])) ? $arr['request']['search_file'] : '',
 		);
 		$packages = $arr["obj_inst"]->get_packages($filter);
 
