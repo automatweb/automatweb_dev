@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.135 2009/01/16 17:51:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.136 2009/01/16 18:20:15 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -216,7 +216,7 @@
 	@layout bills type=hbox width=20%:80%
 		@layout bills_left parent=bills type=vbox area_caption=Arved&nbsp;staatuste&nbsp;kaupa
 			@property bills_tree type=treeview store=no no_caption=1 parent=bills_left
-		@layout bills_r parent=team type=vbox area_caption=Arvete&nbsp;nimekiri
+		@layout bills_r parent=bills type=vbox area_caption=Arvete&nbsp;nimekiri
 			@property bills_list type=table no_caption=1 store=no parent=bills_r
 
 @default group=create_bill
@@ -3179,7 +3179,6 @@ class project extends class_base
 		$t->define_field(array(
 			"name" => "print",
 			"caption" => t("Prindi"),
-			"sortable" => 1
 		));
 
 		$t->define_chooser(array(

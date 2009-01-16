@@ -1261,7 +1261,7 @@
                   <group>bills_list</group>
             </bills_left>
             <bills_r>
-                  <parent>team</parent>
+                  <parent>bills</parent>
                   <type>vbox</type>
                   <area_caption>Arvete&amp;amp;nbsp;nimekiri</area_caption>
                   <group>bills_list</group>
