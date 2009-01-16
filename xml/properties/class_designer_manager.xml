@@ -67,7 +67,7 @@
       <property>
             <name>toolbar</name>
             <table>objects</table>
-            <group>classes</group>
+            <group>classes_classes</group>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
@@ -77,7 +77,7 @@
       <property>
             <name>classes_tree</name>
             <table>objects</table>
-            <group>classes</group>
+            <group>classes_classes</group>
             <field>meta</field>
             <method>serialize</method>
             <type>treeview</type>
@@ -88,7 +88,7 @@
       <property>
             <name>classes_groups</name>
             <table>objects</table>
-            <group>classes</group>
+            <group>classes_classes</group>
             <field>meta</field>
             <method>serialize</method>
             <type>treeview</type>
@@ -99,13 +99,56 @@
       <property>
             <name>classes_list</name>
             <table>objects</table>
-            <group>classes</group>
+            <group>classes_classes</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <parent>classes_split</parent>
+      </property>
+      <property>
+            <name>props_toolbar</name>
+            <table>objects</table>
+            <group>classes_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>classes_props_tree</name>
+            <table>objects</table>
+            <group>classes_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>classes_props_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>classes_props_groups</name>
+            <table>objects</table>
+            <group>classes_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>classes_props_groups</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>classes_props_list</name>
+            <table>objects</table>
+            <group>classes_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>classes_props_split</parent>
       </property>
       <property>
             <name>cl_usage_stats_tree</name>
@@ -322,6 +365,14 @@
             <classes>
                   <caption>Klassid</caption>
             </classes>
+            <classes_classes>
+                  <caption>Klassid</caption>
+                  <parent>classes</parent>
+            </classes_classes>
+            <classes_props>
+                  <caption>Omadused</caption>
+                  <parent>classes</parent>
+            </classes_props>
             <cl_usage_stats>
                   <caption>Statistika</caption>
             </cl_usage_stats>
@@ -392,13 +443,13 @@
             </rels_hbox>
             <classes_split>
                   <type>hbox</type>
-                  <group>classes</group>
+                  <group>classes_classes</group>
                   <area_caption></area_caption>
             </classes_split>
             <classes_left>
                   <type>vbox</type>
                   <parent>classes_split</parent>
-                  <group>classes</group>
+                  <group>classes_classes</group>
                   <area_caption></area_caption>
             </classes_left>
             <classes_tree>
@@ -406,15 +457,40 @@
                   <area_caption>Klasside&amp;amp;nbsp;puu</area_caption>
                   <closeable>1</closeable>
                   <parent>classes_left</parent>
-                  <group>classes</group>
+                  <group>classes_classes</group>
             </classes_tree>
             <classes_groups>
                   <type>vbox</type>
                   <area_caption>Klasside&amp;amp;nbsp;grupid</area_caption>
                   <closeable>1</closeable>
                   <parent>classes_left</parent>
-                  <group>classes</group>
+                  <group>classes_classes</group>
             </classes_groups>
+            <classes_props_split>
+                  <type>hbox</type>
+                  <group>classes_props</group>
+                  <area_caption></area_caption>
+            </classes_props_split>
+            <classes_props_left>
+                  <type>vbox</type>
+                  <parent>classes_props_split</parent>
+                  <group>classes_props</group>
+                  <area_caption></area_caption>
+            </classes_props_left>
+            <classes_props_tree>
+                  <type>vbox</type>
+                  <area_caption>Klasside&amp;amp;nbsp;puu</area_caption>
+                  <closeable>1</closeable>
+                  <parent>classes_props_left</parent>
+                  <group>classes_props</group>
+            </classes_props_tree>
+            <classes_props_groups>
+                  <type>vbox</type>
+                  <area_caption>Omaduste&amp;amp;nbsp;grupid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>classes_props_left</parent>
+                  <group>classes_props</group>
+            </classes_props_groups>
             <cl_usage_stats_split>
                   <type>hbox</type>
                   <width>20%:80%</width>

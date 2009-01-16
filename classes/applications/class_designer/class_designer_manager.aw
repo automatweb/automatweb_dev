@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.21 2009/01/16 09:02:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.22 2009/01/16 11:33:29 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -28,7 +28,7 @@
 	@property rels_tree type=treeview no_caption=1 parent=rels_hbox
 	@property rels_tbl type=table no_caption=1 parent=rels_hbox
 
-@default group=classes
+@default group=classes_classes
 
 	@property toolbar type=toolbar no_caption=1 store=no
 	
@@ -45,6 +45,24 @@
 				@property classes_groups type=treeview no_caption=1 parent=classes_groups store=no
 
 		@property classes_list type=table no_caption=1 store=no parent=classes_split
+
+@default group=classes_props
+
+	@property props_toolbar type=toolbar no_caption=1 store=no
+	
+	@layout classes_props_split type=hbox
+
+		@layout classes_props_left type=vbox parent=classes_props_split
+
+			@layout classes_props_tree type=vbox area_caption=Klasside&nbsp;puu closeable=1 parent=classes_props_left
+	
+				@property classes_props_tree type=treeview no_caption=1 parent=classes_props_tree store=no
+
+			@layout classes_props_groups type=vbox area_caption=Omaduste&nbsp;grupid closeable=1 parent=classes_props_left
+	
+				@property classes_props_groups type=treeview no_caption=1 parent=classes_props_groups store=no
+
+		@property classes_props_list type=table no_caption=1 store=no parent=classes_props_split
 
 
 @default group=cl_usage_stats_clids
@@ -149,6 +167,9 @@
 @groupinfo mgr caption="Manager" submit=no
 @groupinfo rels caption="Seosed" submit=no
 @groupinfo classes caption="Klassid"
+	@groupinfo classes_classes caption="Klassid" parent=classes
+	@groupinfo classes_props caption="Omadused" parent=classes
+	
 @groupinfo cl_usage_stats caption="Statistika"
 	@groupinfo cl_usage_stats_clids caption="Klasside TOP" parent=cl_usage_stats submit=no
 	@groupinfo cl_usage_stats_props caption="Omadused" parent=cl_usage_stats submit=no
@@ -2305,6 +2326,207 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			$c
 		);
 		$this->_save_sent_mail($site, $c, $content, $mgr, $rule->mail_to);
+	}
+
+	function _get_classes_props_tree($arr)
+	{
+		$clf = aw_ini_get("classfolders");
+		foreach($clf as $id => $data)
+		{
+			$arr["prop"]["vcl_inst"]->add_item($data["parent"], array(
+				"name" => $data["name"],
+				"id" => $id,
+				"url" => aw_url_change_var("clf", $id, aw_url_change_var("grp", null))
+			));
+		}
+		if (!empty($arr["request"]["clf"]))
+		{
+			$arr["prop"]["vcl_inst"]->set_selected_item($arr["request"]["clf"]);
+		}
+
+		$clf = aw_ini_get("classes");
+		foreach($clf as $id => $data)
+		{
+			foreach(explode(",", ifset($data, "parents")) as $pt)
+			{
+				$arr["prop"]["vcl_inst"]->add_item($pt, array(
+					"name" => $data["name"],
+					"id" => "cls_".$id,
+					"iconurl" => icons::get_icon_url(CL_AW_SITE_ENTRY),
+					"url" => aw_url_change_var("cls", $id, aw_url_change_var("grp", null))
+				));
+			}
+		}
+		if (!empty($arr["request"]["cls"]))
+		{
+			$arr["prop"]["vcl_inst"]->set_selected_item("cls_".$arr["request"]["cls"]);
+		}
+
+		$arr["prop"]["vcl_inst"]->set_root_name(t("Klassid"));
+		$arr["prop"]["vcl_inst"]->set_root_url(aw_url_change_var("clf", null, aw_url_change_var("cls", null)));
+	}
+
+	function _get_classes_props_groups($arr)
+	{	
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML,
+				"tree_id" => "smc",
+				"persist_state" => true,
+			),
+			"root_item" => $arr["obj_inst"],
+			"ot" => new object_tree(array(
+				"class_id" => array(CL_SM_PROP_STATS_GROUP),
+				"parent" => $arr["obj_inst"]->id()
+			)),
+			"var" => "grp"
+                ));
+		foreach($arr["prop"]["vcl_inst"]->get_item_ids() as $id)
+		{
+			if ($id == $arr["obj_inst"]->id())
+			{
+				continue;
+			}
+			$d = $arr["prop"]["vcl_inst"]->get_item($id);
+			$d["name"] .= " ".html::get_change_url($id, array("return_url" => get_ru()), html::img(array("url" => aw_ini_get("baseurl")."/automatweb//images/icons/edit.gif", "border" => "0")));
+			$d["name"] .= " ".html::href(array(
+				"url" => $this->mk_my_orb("delete", array("id" => $id, "return_url" => get_ru()), CL_SM_PROP_STATS_GROUP), 
+				"caption" => html::img(array("url" => aw_ini_get("baseurl")."/automatweb//images/icons/delete.gif", "border" => "0"))
+			));
+			$arr["prop"]["vcl_inst"]->set_item($d);
+		}
+	}
+
+	private function _init_clp_list($t)
+	{
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => t("Omadus"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "store",
+			"caption" => t("Salvestatav?"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "table",
+			"caption" => t("Tabel"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "field",
+			"caption" => t("Tulp"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "method",
+			"caption" => t("Salvestamise meetod"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id"
+		));
+	}
+
+	function _get_classes_props_list($arr)
+	{	
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_clp_list($t);
+
+		if (empty($arr["request"]["cls"]))
+		{
+			return;
+		}
+
+		
+		$cls = aw_ini_get("classes");
+		$c = $cls[$arr["request"]["cls"]];
+		$t->set_caption(sprintf(t("Klassi %s omadused"), $c["name"]));
+
+		$tmp = obj();
+		$tmp->set_class_id($arr["request"]["cls"]);
+
+		foreach($this->_list_props($tmp, $arr["obj_inst"]) as $pn => $pd)
+		{
+			$pd["caption"] = html::href(array(
+				"url" => html::get_change_url($pd["id"], array("return_url" => get_ru())),
+				"caption" => parse_obj_name(ifset($pd, "caption"))
+			));
+			$t->define_data($pd); 
+		}
+	}
+
+	private function _list_props($o, $obj_inst)
+	{
+		$cls = aw_ini_get("classes");
+		$c = $cls[$o->class_id()];
+		$pl = $o->get_property_list();
+		$nms = map($c["def"]."::%s", array_keys($pl));
+
+		$ol = new object_list(array(
+			"class_id" => CL_AW_CLASS_PROPERTY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $nms
+		));
+		foreach($ol->arr() as $o)
+		{
+			list(, $pn) = explode("::", $o->name());
+			$pl[$pn]["id"] = $o->id();
+		}
+
+		foreach($pl as $pn => $pd)
+		{
+			if (!$pd["id"])
+			{
+				$p = obj();
+				$p->set_parent($obj_inst->id());
+				$p->set_class_id(CL_AW_CLASS_PROPERTY);
+				$p->set_name($c["def"]."::".$pn);
+				$pl[$pn]["id"] = $p->save();
+			}
+		}
+		return $pl;
+	}
+
+	function _get_props_toolbar($arr)
+	{
+		$pt = isset($arr["request"]["grp"]) ? $arr["request"]["grp"] : $arr["obj_inst"]->id();
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"onClick" => "len = document.changeform.elements.length;str  = '';
+	for(i = 0; i < len; i++)
+	{
+		if (document.changeform.elements[i].name.indexOf('sel') != -1 && document.changeform.elements[i].checked)
+		{
+			str += '&sel['+document.changeform.elements[i].value+']='+document.changeform.elements[i].value;
+		}
+	}
+	
+window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("return_url" => get_ru()))."&'+str;",
+			"url" => "#",
+			"tooltip" => "new"
+		));
 	}
 }
 ?>

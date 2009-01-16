@@ -125,6 +125,17 @@
 			</function>
 		</action>
 
+		<action name="delete_rels_id">
+			<function name="delete_rels_id">
+				<arguments>
+					<required name="id" type="oid" />
+					<optional name="sel" type="array" />
+					<optional name="check" type="array" />
+					<required name="post_ru" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="rel_reverse" all_args="1">
 			<function name="rel_reverse">
 				<arguments>

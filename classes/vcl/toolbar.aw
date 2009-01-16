@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.44 2008/11/20 12:29:52 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.45 2009/01/16 11:33:35 kristo Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -625,6 +625,20 @@ class toolbar extends aw_template
 			"name" => "delete",
 			"img" => "delete.gif",
 			"action" => "delete_rels",
+			"tooltip" => t("Kustuta valitud seosed"),
+			"confirm" => t("Oled kindel et soovid valitud seosed kustutada?")
+		));
+	}
+
+	/** Adds a delete relations button to the toolbar
+		@attrib api=1
+	**/
+	function add_delete_rels_button_rel_id()
+	{
+		$this->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_rels_id",
 			"tooltip" => t("Kustuta valitud seosed"),
 			"confirm" => t("Oled kindel et soovid valitud seosed kustutada?")
 		));

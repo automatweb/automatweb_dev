@@ -8,6 +8,7 @@ class object_tree extends _int_obj_container_base
 	/////////////////////////////////////////////
 	// private variables
 	var $tree;	// array - tree structure, 2 level - level one is parent, level 2 is oid => object
+	var $tree_names;
 
 	////////////////////////////////////////////
 	// public functions

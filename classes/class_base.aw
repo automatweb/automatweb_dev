@@ -6027,6 +6027,27 @@ class class_base extends aw_template
 	}
 
 	/**
+	@attrib name=delete_rels_id
+	@param id required type=oid
+	@param sel optional type=array
+	@param check optional type=array
+	@param post_ru required type=string
+	**/
+	function delete_rels_id($arr)
+	{
+		if (!is_array($arr["sel"]) && is_array($arr["check"]))
+		{
+			$arr["sel"] = $arr["check"];
+		}
+		foreach (safe_array($arr["sel"]) as $del_id)
+		{
+			$c = new connectnion($del_id);
+			$c->delete();
+		}
+		return  $arr["post_ru"];
+	}
+
+	/**
 	@attrib name=rel_reverse all_args=1
 	**/
 	function rel_reverse($arr)
