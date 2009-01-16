@@ -43,6 +43,10 @@ class ml_membership_manager extends class_base
 
 	public function _get_membership($arr)
 	{
+		if(!is_oid($arr["obj_inst"]->id()))
+		{
+			return PROP_IGNORE;
+		}
 		$this->_init_membership($arr);
 		$t = &$arr["prop"]["vcl_inst"];
 
