@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.20 2009/01/16 08:24:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.21 2009/01/16 09:02:08 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -2271,13 +2271,28 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			$so = obj($site["aw_oid"]);
 			if ($so->mail_to != "")
 			{
+				$mc = "Sait ".$site["url"]." tundub maas olevat!\n\nEsilehel sisu:\n$content";
 				send_mail(
 					$so->mail_to,
 					t("Sait maas!"),
-					"Sait ".$site["url"]." tundub maas olevat!\n\nEsilehel sisu:\n$content"
+					$mc
 				);
+				$this->_save_sent_mail($site, $mc, $content, $o, $so->mail_to);
 			}
 		}
+	}
+
+	private function _save_sent_mail($site, $content, $err, $o, $to)
+	{
+		$s = obj();
+		$s->set_parent($o->id());
+		$s->set_class_id(CL_SITE_NOTIFICATION_SENT);
+		$s->set_prop("site", $site["aw_oid"]);
+		$s->set_prop("when", time());
+		$s->set_prop("who", $to);
+		$s->set_prop("content", $mc);
+		$s->set_prop("error", $err);
+		$s->save();
 	}
 
 	private function _apply_scan_rule($rule, $site, $content, $mgr)
@@ -2289,6 +2304,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			$rule->mail_subj,
 			$c
 		);
+		$this->_save_sent_mail($site, $c, $content, $mgr, $rule->mail_to);
 	}
 }
 ?>
