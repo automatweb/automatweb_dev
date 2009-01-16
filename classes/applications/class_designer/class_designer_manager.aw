@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.19 2009/01/15 14:47:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.20 2009/01/16 08:24:12 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -157,6 +157,7 @@
 @groupinfo sites caption="Saidid"
 	@groupinfo sites_sites parent=sites caption="Saidid"
 	@groupinfo sites_servers parent=sites caption="Serverid"
+
 @groupinfo notifications caption="Teavitus"
 	@groupinfo notifications_rules caption="Reeglid" parent=notifications
 	@groupinfo notifications_sent caption="Saadetud teavitused" parent=notifications
@@ -2227,7 +2228,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 				$ar = "";
 			}
 
-			if ((strpos($fc, "<html") !== false || strpos($fc, "<head") !== false || $fc == "") && strpos($fc, "Suhtuge veateadetesse rahulikult") === false)
+			if ((strpos($fc, "<body") !== false || strpos($fc, "<html") !== false || strpos($fc, "<head") !== false || $fc == "") && strpos($fc, "Suhtuge veateadetesse rahulikult") === false)
 			{
 				echo " <font color=green>Success</font> $ar<br>\n";
 				flush();
@@ -2238,7 +2239,9 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 				echo "<pre>".htmlentities($fc)."</pre>";
 				flush();
 				$errs[] = "sait $row[url] tundub maas olevat, esilehe sisu: \n".$fc."\n\n";
+				$this->save_handle();
 				$this->_handle_scan_fail($row, $fc, $o);
+				$this->restore_handle();
 			}
 			$num++;
 		}
