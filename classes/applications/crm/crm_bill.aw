@@ -261,7 +261,6 @@ class crm_bill extends class_base
 		));
 
 		$this->states = array(
-
 			0 => t("Koostamisel"),
 			1 => t("Saadetud"),
 			2 => t("Makstud"),
@@ -271,6 +270,15 @@ class crm_bill extends class_base
 			5 => t("Tehtud kreeditarve"),
 			-5 => t("Maha kantud"),
 		);
+
+		if(is_oid($_GET["project"]) && $this->can("view" , $_GET["project"]))
+		{
+			$this->project_object = obj($_GET["project"]);
+			if($this->can("view" , $this->project_object->get_orderer()))
+			{
+				$this->customer_object = obj($this->project_object->get_orderer());
+			}
+		}
 	}
 
 	function get_bill_cust_data_object($bill)
@@ -440,39 +448,23 @@ class crm_bill extends class_base
 				break;
 
 			case "customer":
-// 				if(aw_global_get("uid") == "Teddi.Rull")
-// 				{
-// 					arr($this->get_customer_address($arr["obj_inst"]->id()));
-// 					arr($this->get_customer_code($arr["obj_inst"]->id()));
-// 					arr($this->get_customer_name($arr["obj_inst"]->id()));
-// 					arr($this->get_customer_address($arr["obj_inst"]->id(), "country"));
-// 					arr($this->get_customer_address($arr["obj_inst"]->id(), "country_en"));
-// 					arr($this->get_customer_address($arr["obj_inst"]->id(), "county"));
-// 					arr($this->get_customer_address($arr["obj_inst"]->id(), "index"));
-// 					arr($this->get_customer_address($arr["obj_inst"]->id(), "street"));
-// 				}
 				if($arr["obj_inst"]->prop("customer_name"))
 				{
 					return PROP_IGNORE;
 				}
-				$prop["autocomplete_class_id"] = array(CRM_PERSON,CRM_COMPANY);
-
-/*				$i = get_instance(CL_CRM_COMPANY);
-				$p_i = get_instance(CL_CRM_PERSON);
-				$cust = $i->get_my_customers();
-				if (count($cust))
+				if($arr["new"] && $this->customer_object)
 				{
-					$ol = new object_list(array("oid" => $cust));
-					$prop["options"] = $ol->names();
-					if (is_oid($prop["value"]) && $this->can("view", $prop["value"]) && !isset($prop["options"][$prop["value"]]))
-					{
-						$tmp = obj($prop["value"]);
-						$prop["options"][$prop["value"]] = $tmp->name();
-					}
+					$prop["value"] = $this->customer_object->id();
 				}
-				asort($prop["options"]);*/
+				$prop["autocomplete_class_id"] = array(CRM_PERSON,CRM_COMPANY);
 				break;
-
+			
+			case "bill_due_date_days":
+				if($arr["new"] && $this->customer_object)
+				{
+					$prop["value"] = $this->customer_object->prop("bill_due_date_days");
+				}
+				break;
 			case "sum":
 				$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
 				if(is_array($agreement_price) && $agreement_prices[0]["price"] && strlen($agreement_prices[0]["name"]) > 0)

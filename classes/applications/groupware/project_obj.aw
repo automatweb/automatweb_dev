@@ -416,5 +416,55 @@ exit_function("project::_get_billable_bugs");
 		}
 		return $ret;
 	}
+
+	private function get_bills_filter($status = null)
+	{
+		$ids = array();
+		$task_rows = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"project" => $this->id(),
+		));
+
+		foreach($task_rows->arr() as $tr)
+		{
+			$ids[$tr->prop("bill")] = $tr->prop("bill");
+		}
+
+		if(!sizeof($ids))
+		{
+			$ids[] = 1;
+		}
+
+		$filter = array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"oid" => $ids,
+		);
+
+		if($status != "")
+		{
+			$filter["status"] = $status;
+		}
+		return $filter;
+
+	}
+
+	/** Returns project bills
+		@attrib api=1
+		@param status optional type=int
+			Filter date to
+		@returns object list
+	**/
+	public function get_bills($arr = array())
+	{
+		$ol = new object_list(
+			$this->get_bills_filter($arr["status"])
+		);
+		return $ol;
+	}
+
 }
 ?>
