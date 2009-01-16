@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.133 2009/01/13 11:45:47 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.134 2009/01/16 15:19:47 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -211,6 +211,18 @@
 	@property controller_disp type=text store=no
 	@caption Kontrolleri v&auml;ljund
 
+@default group=bills_list
+	@property bills_tb type=toolbar no_caption=1 store=no
+	@layout bills type=hbox width=20%:80%
+		@layout bills_left parent=bills type=vbox area_caption=Arved&nbsp;staatuste&nbsp;kaupa
+			@property bills_tree type=treeview store=no no_caption=1 parent=bills_left
+		@layout bills_r parent=team type=vbox area_caption=Arvete&nbsp;nimekiri
+			@property bills_list type=table no_caption=1 store=no parent=bills_r
+
+@default group=create_bill
+	@property create_bill_tb type=toolbar no_caption=1 store=no
+	@layout create_bill_table parent=create_bill type=vbox area_caption=Arvele&nbsp;lisamata&nbsp;tehtud&nbsp;t&ouml;&ouml;e&nbsp;nimekiri
+		@property work_list type=table no_caption=1 store=no parent=create_bill_table
 
 @default group=team
 	@property team_tb type=toolbar no_caption=1 store=no
@@ -320,6 +332,9 @@
 	@groupinfo files caption="Dokumendid" submit=no parent=files_main
 	@groupinfo prods caption="Tooted" submit=no parent=files_main
 @groupinfo trans caption="T&otilde;lkimine"
+@groupinfo bills caption="Arved" submit=no
+	@groupinfo bills_list caption="Arvete nimekiri" submit=no parent=bills
+	@groupinfo create_bill caption="Maksmata t&ouml;&ouml;d" submit=no parent=bills
 @groupinfo team caption="Meeskond" submit=no
 @groupinfo transl caption=T&otilde;lgi
 

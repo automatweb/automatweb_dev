@@ -600,6 +600,54 @@
             <caption>Kontrolleri v&amp;amp;auml;ljund</caption>
       </property>
       <property>
+            <name>bills_tb</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>bills_tb</field>
+      </property>
+      <property>
+            <name>bills_tree</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>bills_left</parent>
+            <field>bills_tree</field>
+      </property>
+      <property>
+            <name>bills_list</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>bills_r</parent>
+            <field>bills_list</field>
+      </property>
+      <property>
+            <name>create_bill_tb</name>
+            <table>objects</table>
+            <group>create_bill</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>create_bill_tb</field>
+      </property>
+      <property>
+            <name>work_list</name>
+            <table>objects</table>
+            <group>create_bill</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>create_bill_table</parent>
+            <field>work_list</field>
+      </property>
+      <property>
             <name>team_tb</name>
             <table>objects</table>
             <group>team</group>
@@ -955,6 +1003,20 @@
             <trans>
                   <caption>T&amp;amp;otilde;lkimine</caption>
             </trans>
+            <bills>
+                  <caption>Arved</caption>
+                  <submit>no</submit>
+            </bills>
+            <bills_list>
+                  <caption>Arvete nimekiri</caption>
+                  <submit>no</submit>
+                  <parent>bills</parent>
+            </bills_list>
+            <create_bill>
+                  <caption>Maksmata t&amp;amp;ouml;&amp;amp;ouml;d</caption>
+                  <submit>no</submit>
+                  <parent>bills</parent>
+            </create_bill>
             <team>
                   <caption>Meeskond</caption>
                   <submit>no</submit>
@@ -1186,6 +1248,30 @@
                   <parent>files_left_lay</parent>
                   <group>files</group>
             </files_find_lay>
+            <bills>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>bills_list</group>
+                  <area_caption></area_caption>
+            </bills>
+            <bills_left>
+                  <parent>bills</parent>
+                  <type>vbox</type>
+                  <area_caption>Arved&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
+                  <group>bills_list</group>
+            </bills_left>
+            <bills_r>
+                  <parent>team</parent>
+                  <type>vbox</type>
+                  <area_caption>Arvete&amp;amp;nbsp;nimekiri</area_caption>
+                  <group>bills_list</group>
+            </bills_r>
+            <create_bill_table>
+                  <parent>create_bill</parent>
+                  <type>vbox</type>
+                  <area_caption>Arvele&amp;amp;nbsp;lisamata&amp;amp;nbsp;tehtud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;e&amp;amp;nbsp;nimekiri</area_caption>
+                  <group>create_bill</group>
+            </create_bill_table>
             <team>
                   <type>hbox</type>
                   <width>20%:80%</width>
