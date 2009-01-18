@@ -41,11 +41,17 @@ class bt_projects_impl extends core
 		}
 		if($owner)
 		{
+			$add1 = $add2 = "";
+			if($arr["request"]["filt_type"] == "category" && !$arr["request"]["filt_value"])
+			{
+				$add1 = "<strong>";
+				$add2 = "</strong>";
+			}
 			$t->add_item(0, array(
 				"id" => 1,
-				"name" => t("Kategooriad"),
+				"name" => $add1.t("Kategooriad").$add2,
 				"url" => aw_url_change_var(array(
-					"filt_type" => null,
+					"filt_type" => "category",
 					"filt_value" => null,
 				), false, get_ru()),
 			));
@@ -517,6 +523,10 @@ class bt_projects_impl extends core
 			$ol = new object_list($filt);
 			$num = $ol->count();
 		}
+		if(strlen($name) > 24)
+		{
+			$name = substr($name, 0, 24)."...";
+		}
 		return $add1.$name.$add2." (".$num.")";
 	}
 
@@ -714,6 +724,7 @@ class bt_projects_impl extends core
 		if($arr["request"]["filt_type"] == "category" && $this->can("add", $arr["request"]["filt_value"]))
 		{
 			$parent = $arr["request"]["filt_value"];
+			$is_cat = true;
 		}
 		else
 		{
@@ -727,5 +738,31 @@ class bt_projects_impl extends core
 		}
 
 		$tb->add_new_button(array(CL_PROJECT_CATEGORY), $parent);
+
+		if($is_cat)
+		{
+			$tb->add_button(array(
+				"name" => "cut",
+				"action" => "cut_project",
+				"img" => "cut.gif",
+				"tooltip" => t("L&otilde;ika"),
+			));
+		}
+		$tb->add_button(array(
+			"name" => "copy",
+			"action" => "copy_project",
+			"img" => "copy.gif",
+			"tooltip" => t("Kopeeri"),
+		));
+
+		if($is_cat && ($_SESSION["bt_proj_cut_clip"] || $_SESSION["bt_proj_copy_clip"]))
+		{
+			$tb->add_button(array(
+				"name" => "paste",
+				"action" => "paste_project",
+				"img" => "paste.gif",
+				"tooltip" => t("Kleebi"),
+			));
+		}
 	}
 }

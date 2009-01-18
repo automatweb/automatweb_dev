@@ -76,6 +76,15 @@ class crm_company_cust_impl extends class_base
 		));
 
 		$table->define_field(array(
+			"name" => "project_start",
+			"caption" => t("Algus"),
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y",
+		));
+
+		$table->define_field(array(
 			"name" => "project_deadline",
 			"caption" => t("T&auml;htaeg"),
 			"sortable" => 1,
@@ -227,6 +236,7 @@ class crm_company_cust_impl extends class_base
 			"project_orderer" => $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_ORDERER"))),
 			"project_impl" => $impl,
 			"project_deadline" => $project_obj->prop("deadline"),
+			"project_start" => $project_obj->prop("start"),
 			"project_end" => $project_obj->prop("end"),
 			"oid" => $project_obj->id(),
 			"roles" => $roles,

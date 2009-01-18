@@ -36,6 +36,27 @@
 			</function>
 		</action>
 
+		<action name="cut_project">
+			<function name="cut_project">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="copy_project">
+			<function name="copy_project">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_project">
+			<function name="paste_project">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete">
 			<function name="delete">
 				<arguments>

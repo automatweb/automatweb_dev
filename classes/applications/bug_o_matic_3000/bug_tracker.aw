@@ -1973,6 +1973,76 @@ class bug_tracker extends class_base
 		get_instance("applications/bug_o_matic_3000/bt_projects_impl")->proj_tree_level($arr);
 	}
 
+	/**
+	@attrib name=cut_project
+	**/
+	function cut_project($arr)
+	{
+		unset($_SESSION["bt_proj_copy_clip"]);
+		$_SESSION["bt_proj_cut_clip"] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+
+	/**
+	@attrib name=copy_project
+	**/
+	function copy_project($arr)
+	{
+		unset($_SESSION["bt_proj_cut_clip"]);
+		$_SESSION["bt_proj_copy_clip"] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+
+	/**
+	@attrib name=paste_project
+	**/
+	function paste_project($arr)
+	{
+		if($this->can("view", $arr["filt_value"]))
+		{
+			$cat = obj($arr["filt_value"]);
+		}
+		if(!$cat || $cat->class_id() != CL_PROJECT_CATEGORY)
+		{
+			return $arr["post_ru"];
+		}
+
+		if($ids = $_SESSION["bt_proj_cut_clip"])
+		{
+			$rem_cat = true;
+			unset($_SESSION["bt_proj_cut_clip"]);
+		}
+		elseif($ids = $_SESSION["bt_proj_copy_clip"])
+		{
+			$rem_cat = false;
+			unset($_SESSION["bt_proj_copy_clip"]);
+		}
+		else
+		{
+			return $arr["post_ru"];
+		}
+		
+		foreach($ids as $id)
+		{
+			if($this->can("view", $id))
+			{
+				$o = obj($id);
+				if($rem_cat)
+				{
+					$o->set_prop("category", $arr["filt_value"]);
+				}
+				else
+				{
+					$vals = $o->prop("category");
+					$vals[$arr["filt_value"]] = $arr["filt_value"];
+					$o->set_prop("category", $vals);
+				}
+				$o->save();
+			}
+		}
+		return $arr["post_ru"];
+	}
+
 	function _bug_tree($arr)
 	{
 		classload("core/icons");
@@ -2838,6 +2908,11 @@ class bug_tracker extends class_base
 			{
 				$arr["add_mail_group_devo"][$stid] = 0;
 			}
+		}
+
+		if($arr["group"] == "projects")
+		{
+			$arr["filt_value"] = $_GET["filt_value"];
 		}
 	}
 
