@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.88 2008/12/30 10:25:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.89 2009/01/19 14:05:39 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -45,6 +45,9 @@
 
 @property event_type_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption &Uuml;rituse t&uuml;&uuml;pide kaust
+
+@property country_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@caption Riikide kaust
 
 @property resources_price_rooms type=relpicker multiple=1 reltype=RELTYPE_RESOURCE_ROOMS field_meta method=serialize
 @caption Tellimuste ruumid
@@ -667,6 +670,7 @@ class rfp_manager extends class_base
 			$ol = new object_list(array(
 				"parent" => $prod_f,
 				"class_id" => CL_MENU,
+				"status" => STAT_ACTIVE,
 			));
 			$choose_set = false;
 			foreach($ol->arr() as $o)
@@ -674,6 +678,7 @@ class rfp_manager extends class_base
 				$p_ol = new object_list(array(
 					"parent" => $o->id(),
 					"class_id" => CL_SHOP_PRODUCT,
+					"status" => STAT_ACTIVE,
 				));
 				if(!$choose_set)
 				{
