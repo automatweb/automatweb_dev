@@ -1604,7 +1604,7 @@ class site_show extends class_base
 					continue;
 				}
 				$this->vars(array(
-					"sel_menu_active_image_".$nr => "<img name='sel_menu_active_image_".$nr."' src='".$dat["url"]."' border='0'>",
+					"sel_menu_active_image_".$nr =>  "<img src='".$dat["url"]."' alt='sel_menu_active_image_".$nr."' />",
 					"sel_menu_active_image_".$nr."_url" => $dat["url"]
 				));
 			}
