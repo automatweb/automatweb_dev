@@ -1315,7 +1315,7 @@ class crm_person_obj extends _int_object
 		$subject = sprintf(t("Teid on lisatud %s '%s' osalejaks"), $type, $o->name());
 		if($modified === true)
 		{
-			$subject = sprintf(t("%s '%s', mille osaleja olete, on muudetud"), $type_modified, $o->name());
+			$subject = sprintf(t("%s '%s' on muudetud"), $type_modified, $o->name());
 		}
 
 		$msg = t("Link: ").get_instance($o->class_id())->mk_my_orb("change", array("id" => $o->id()))."\n\n";
