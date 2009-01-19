@@ -131,17 +131,46 @@ class project_obj extends _int_object
 	**/
 	function get_billable_bugs()
 	{
-enter_function("project::_get_billable_bugs");
-		$all_bugs = new object_list(array(
+		enter_function("project::_get_billable_bugs");
+/*		$all_bugs = new object_list(array(
 			"lang_id" => array(),
 			"site_id" => array(),
 			"class_id" => CL_BUG,
 			"project" => $this->id(),
 			"sort_by" => "objects.created desc",
 			"send_bill" => 1,
-		));
-exit_function("project::_get_billable_bugs");
-		return $all_bugs;
+		));*/
+		$bugs = array();
+		$bugs_list = new object_list();
+		$rows_filter = $this->get_billable_bug_rows_filter();
+		$rowsres = array(
+			CL_TASK_ROW => array(
+				"task" => "task",
+			),
+		);
+		$rows_arr = new object_data_list($rows_filter , $rowsres);
+		foreach($rows_arr->list_data as $bcs)
+		{
+			$bugs[$bcs["task"]] = $bcs["task"];
+		}
+		$bugs_list->add($bugs);
+		exit_function("project::_get_billable_bugs");
+		
+		return $bugs_list;
+	}
+
+	private function get_billable_bug_rows_filter()
+	{
+		$filter = array(
+			"class_id" => CL_TASK_ROW,
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"on_bill" => 1,
+			"done" => 1,
+			"task.class_id" => CL_BUG,
+			"CL_TASK_ROW.task(CL_BUG).send_bill" => 1,
+			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
+		);
+		return $filter;
 	}
 
 	/** Returns an object_list with all bug comments for the project
@@ -407,6 +436,21 @@ exit_function("project::_get_billable_bugs");
 		return $orderer;
 	}
 
+	/** Returns implementor id
+		@attrib api=1
+		@returns oid
+			Implementor object id
+	**/
+	public function get_implementor()
+	{
+		$impl = $this->prop("implementor");
+		if (is_array($impl))
+		{
+			$impl = reset($impl);
+		}
+		return $impl;
+	}
+
 	public function get_customer_ids()
 	{
 		$ret = array();
@@ -503,7 +547,6 @@ exit_function("project::_get_billable_bugs");
 		return $ol;
 	}
 
-
 	function get_billable_rows()
 	{
 		$ol = new object_list(array(
@@ -525,5 +568,66 @@ exit_function("project::_get_billable_bugs");
 		return $ol;
 	}
 
+	function get_billable_task_rows()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"on_bill" => 1,
+			"done" => 1,
+			"task.class_id" => array(CL_TASK, CL_CRM_MEETING,CL_CRM_CALL),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_TASK_ROW.task(CL_TASK).send_bill" => 1,
+					"CL_TASK_ROW.task(CL_CRM_MEETING).send_bill" => 1,
+					"CL_TASK_ROW.task(CL_CRM_CALL).send_bill" => 1,
+				)
+			)),
+			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
+		));
+		return $ol;
+	}
+
+	/** Adds bill
+		@attrib api=1
+	**/
+	public function add_bill()
+	{
+		$bill = obj();
+		$bill->set_class_id(CL_CRM_BILL);
+		$bill->set_parent($this->id());
+		$bill->save();
+
+		$ser = get_instance(CL_CRM_NUMBER_SERIES);
+		$bno = $ser->find_series_and_get_next(CL_CRM_BILL,0,time());
+		if (!$bno)
+		{
+			$bno = $bill->id();
+		}
+
+		$bill->set_prop("bill_no", $bno);
+		$bill->set_prop("bill_trans_date", time());
+		$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
+		
+		$bill->set_project($this->id());
+		$cust = $this->get_orderer();
+		if ($cust)
+		{
+			$bill->set_prop("customer", $cust);
+		}
+
+// 		$impl = $this->get_implementor();
+// 		if ($impl)
+// 		{
+// 			$bill->set_prop("impl", $impl);
+// 		}
+		$bill->set_impl();
+		$bill->set_prop("bill_date", time());
+		$bill->set_due_date();
+
+		$bill->save();
+
+	}
 }
 ?>

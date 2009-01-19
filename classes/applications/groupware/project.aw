@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.137 2009/01/16 19:15:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.138 2009/01/19 19:00:31 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -854,6 +854,9 @@ class project extends class_base
 				$this->_get_work_list($arr);
 				break;
 
+			case "create_bill_tb":
+				$this->_get_create_bill_tb($arr);
+				break;
 			case "bills_tb":
 				$this->_get_bills_tb($arr);
 				break;
@@ -3363,45 +3366,85 @@ class project extends class_base
 		));
 	}
 
+	function _get_create_bill_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			'name' => 'create_bill',
+			'img' => 'save.gif',
+			'tooltip' => t('Loo arve'),
+			'action' => "create_bill",
+		));
+	}
+
+	/**
+		@attrib name=create_bill all_args=1
+	**/
+	function create_bill($arr)
+	{
+		//klientide kontroll ka vaja
+		$project = obj($arr["id"]);
+		if(isset($_SESSION["bill_id"]) && $this->can("view", $_SESSION["bill_id"]))
+		{
+			$bill = obj($_SESSION["bill_id"]);
+			unset($_SESSION["bill_id"]);
+		}
+		else
+		{
+			$bill = $project->add_bill();
+		}
+		$bill->add_rows(array(
+			"objects" => $arr["sel"],
+		));
+	}
+
 	function _get_work_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		$t->define_field(array(
+			"caption" => t("Ava"),
+			"name" => "open",
+			"align" => "center",
+//			"sortable" => 1
+		));
 
 		$t->define_field(array(
 			"caption" => t("Juhtumi nimi"),
 			"name" => "name",
 			"align" => "center",
-			"sortable" => 1
+//			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"caption" => t("Tunde"),
 			"name" => "hrs",
 			"align" => "right",
-			"sortable" => 1
+//			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"caption" => t("Tunni hind"),
 			"name" => "hr_price",
 			"align" => "right",
-			"sortable" => 1
+//			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"caption" => t("Summa"),
 			"name" => "sum",
 			"align" => "right",
-			"sortable" => 1
+//			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"caption" => t("Arvele m&auml;&auml;ramise kuup&auml;ev"),
 			"name" => "set_date",
 			"align" => "right",
-			"sortable" => 1,
-			"type" => "time",
-			"format" => "d.m.Y"
+//			"sortable" => 1,
+//			"type" => "time",
+//			"format" => "d.m.Y"
 		));
 
 		$t->define_chooser(array(
@@ -3412,7 +3455,7 @@ class project extends class_base
 		$rows = new object_list();
 		$sum = 0;
 		$hrs = 0;
-		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
+		$this->stats = get_instance("applications/crm/crm_company_stats_impl");
 		
 		$deal_tasks = $arr["obj_inst"]->get_billable_deal_tasks();
 		$deal_tasks_ids = $deal_tasks->ids();
@@ -3424,7 +3467,7 @@ class project extends class_base
 				"oid" => $row->id(),
 				"name" => $row->name(),
 				"sum" => $row->prop("deal_price").t("(Kokkuleppehind)").($row->prop("deal_has_tax") ? t("KMga") : ""),
-				"set_date" => $row->prop("to_bill_date"),
+				"set_date" => date("d.m.Y" , $row->prop("to_bill_date")),
 			));
 			$sum += $row->prop("deal_price");
 			$hrs += $row->prop("deal_amt");
@@ -3437,26 +3480,125 @@ class project extends class_base
 				"oid" => $row->id(),
 				"name" => $ro->name(),
 				"sum" => number_format(str_replace(",", ".", $row->prop("cost")),2),
-				"set_date" => mktime(0,0,0, $date["month"], $date["day"], $date["year"]),
+				"set_date" => date("d.m.Y" , mktime(0,0,0, $date["month"], $date["day"], $date["year"])),
 			));
+			$sum += $row->prop("cost");
 		}
 
-		foreach($arr["obj_inst"]->get_billable_rows()->arr() as $row)
+		foreach($arr["obj_inst"]->get_billable_task_rows()->arr() as $row)
 		{
 			if(!in_array($row->prop("task"), $deal_tasks_ids))
 			{
 				$t->define_data(array(
 					"oid" => $row->id(),
 					"name" => $row->prop("content"),
-					"hrs" => $co_stat_inst->hours_format($row->prop("time_to_cust")),
-					"hr_price" => number_format($this->task_hour_prices[$row->prop("task")],2),
-					"sum" => number_format(str_replace(",", ".", $row->prop("time_to_cust")) * $this->task_hour_prices[$row->prop("task")],2),
-					"set_date" => $row->prop("to_bill_date"),
-					"count" => html::hidden(array("name" => "count[".$row->prop("task")."]" , "value" => count($rs))),//mis jama see on?
+					"hrs" => $this->stats->hours_format($row->prop("time_to_cust")),
+					"hr_price" => number_format($row->prop("hr_price"),2),
+					"sum" => number_format($row->prop("time_to_cust") * $row->prop("hr_price"),2),
+					"set_date" => date("d.m.Y" , $row->prop("to_bill_date")),
 				));
 			}
+			$sum += $row->prop("time_to_cust") * $row->prop("hr_price");
+			$hrs += $row->prop("time_to_cust");
 		}
+
+		$bugs = $arr["obj_inst"]->get_billable_bugs();
+		$this->hour_prices = array();
+		$this->bug_hours = array();
+
+		foreach($bugs->arr() as $bug)
+		{
+			$lister = "<span id='bug".$bug->id()."' style='display: none;'>";
+			$table = new vcl_table;
+			$table->name = "bug".$bug->id();
+			$params = array(
+				"request" => array(
+					"bug" => $bug->id(),
+				),
+				"prop" => array(
+					"vcl_inst" => &$table
+				)
+			);
+			$this->_get_bug_row_list($params);
+			$lister .= $table->draw();
+			$lister .= "</span>";
+			$this->hour_prices[$bug->id()] = $bug->prop("hr_price");
+			$bug_data = array(
+				"open" => html::href(array(
+					"url" => "#", //aw_url_change_var("proj", $p),
+					"onClick" => "el=document.getElementById(\"bug".$bug->id()."\"); if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){if (el.style.display == \"block\") { d = \"none\";} else { d = \"block\";} } else { if (el.style.display == \"table-row\") {  d = \"none\"; } else {d = \"table-row\";} }  el.style.display=d;",
+					"caption" => t("Ava")
+				)),
+				"name" => $bug->name().$lister,
+				"hr_price" => number_format($this->hour_prices[$bug->id()],2),
+				"set_date" => date("d.m.Y" , ($bug->prop("to_bill_date"))),
+			);
+			$bug_data["hrs"] = $this->stats->hours_format($this->bug_hours[$bug->id()]);
+			$bug_data["sum"] = number_format(($this->bug_hours[$bug->id()] * $this->hour_prices[$bug->id()]),2);
+			$sum += $this->bug_hours[$bug->id()] * $this->hour_prices[$bug->id()];
+			$hrs += $this->bug_hours[$bug->id()];
+			$t->define_data($bug_data);
+		}
+
+		$t->define_data(array(
+			"open" => t("Kokku:"),
+			"hrs" => $this->stats->hours_format($hrs),
+			"sum" => number_format($sum,2),
+		));
+
 	}
+
+	private function _init_bug_row_list(&$t, $proj)
+	{
+		$t->define_field(array(
+			"caption" => t("Sisu"),
+			"name" => "comment",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"caption" => t("Tunde"),
+			"name" => "time",
+			"align" => "right",
+			"sortable" => 1
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	private function _get_bug_row_list($arr)
+	{
+		enter_function("bills_impl::_get_bill_task_list");
+		if(!($bug = obj($arr["request"]["bug"])))
+		{
+			return "";
+		}
+
+		$t =& $arr["prop"]["vcl_inst"];
+		$project =& $arr["request"]["project"];
+		$t->unset_filter();
+		$this->_init_bug_row_list($t);
+
+		$comments = $bug->get_billable_comments();
+		foreach($comments->arr() as $comment)
+		{
+			$capt = substr($comment->prop("content"), 0 , 300);
+			$hours = $comment->bill_hours();
+			$this->bug_hours[$arr["request"]["bug"]] += $hours;
+			$t->define_data(array(
+				"comment" => html::href(array(
+					"caption" => $capt ? $capt : t("..."),
+					"url" => html::obj_change_url($comment , array()))),
+				"time" => $this->stats->hours_format($comment->bill_hours()),
+				"oid" => $comment->id(),
+			));
+		}
+		exit_function("bills_impl::_get_bill_task_list");
+	}
+
 
 	function _goal_tree($arr)
 	{

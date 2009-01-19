@@ -403,6 +403,11 @@ class crm_bill_obj extends _int_object
 			{
 				$row->set_prop("price", $comment->prop("parent.hr_price"));
 			}
+			foreach($comment->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+			{
+				$bill = obj($row->parent());
+				$bill->set_project($c->prop("to"));
+			}
 			$row->set_prop("date", date("d.m.Y", $date));
 			$row->set_name($comment->prop("parent.name"));
 		}
@@ -424,7 +429,7 @@ class crm_bill_obj extends _int_object
 		@returns string/int
 			error, if true, if not, then 0
 	**/
-	function check_if_has_other_customers($customer)
+	public function check_if_has_other_customers($customer)
 	{
 		if(!is_oid($customer))
 		{
@@ -481,6 +486,19 @@ class crm_bill_obj extends _int_object
 			$this->set_prop("impl", $u->get_current_company());
 			$this->save();
 		}
+	}
+
+	/** sets project
+		@attrib api=1 params=pos
+		@param project required type=oid
+			project object id
+	**/
+	public function set_project($project)
+	{
+		$this->connect(array(
+			"to" => $project,
+			"type" => "RELTYPE_PROJECT",
+		));
 	}
 
 	/** sets customer
@@ -546,6 +564,250 @@ class crm_bill_obj extends _int_object
 		
 		$this->save();
 		return $this->prop("customer");
+	}
+
+	private function add_row()
+	{
+		$br = obj();
+		$br->set_class_id(CL_CRM_BILL_ROW);
+		$br->set_parent($this->id());
+		$br->save();
+		return $br;
+	}
+
+	/** adds rows to bill
+		@attrib api=1 params=name
+		@param objects optional type=array
+			object ids (tasks, meetings, bugs, calls, task rows etc.)
+		@returns
+	**/
+	public function add_rows($arr)
+	{
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$co_inst = get_instance(CL_CRM_COMPANY);
+		$sts = $seti->get_current_settings();
+		define("DEFAULT_TAX", 0.18);
+		$bug_rows = array();
+		$task_rows = array();
+		$tasks = array();
+		foreach(safe_array($arr["objects"]) as $id)
+		{
+			$work = obj($id);
+			switch($work->class_id())
+			{
+				case CL_TASK:
+					if($work->prop("deal_price"))
+					{
+						$agreement = $bill->meta("agreement_price");
+						if(!is_array($agreement))
+						{
+							$agreement = array();
+						}
+						$tax = DEFAULT_TAX;
+						$deal_name = $work->name();
+						$prod = "";
+						if ($sts)
+						{
+							if(is_oid($sts->prop("bill_def_prod")) && $this->can("view",$sts->prop("bill_def_prod")))
+							{
+								$prod_obj = obj($sts->prop("bill_def_prod"));
+								$prod = $sts->prop("bill_def_prod");
+								$deal_name = $prod_obj->comment();
+								$tr = obj($prod_obj->prop("tax_rate"));
+								if (time() >= $tr->prop("act_from") && time() < $tr->prop("act_to"))
+								{
+									$tax = $tr->prop("tax_amt")/100.0;
+								}
+							}
+						}
+				
+						$price = $work->prop("deal_price");
+						if($work->prop("deal_has_tax"))
+						{
+							$price = $price / (1 + $tax);
+						}
+						$agreement[] = array(
+							"unit" => $work->prop("deal_unit"),
+							"price" => $price,
+							"amt" => $work->prop("deal_amount"),
+							"name" => $deal_name,
+							"prod" => $prod,
+							"comment" => $deal_name,
+							"has_tax" => $work->prop("deal_has_tax"),
+						);
+						$bill->set_meta("agreement_price" , $agreement);
+						$bill->save();
+						$work->set_prop("send_bill" , 0);
+						$work->save();
+					//ridadele ikkagi arve kylge
+						foreach($work->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+						{
+							$row = $c->to();
+							if (!$row->prop("bill_id") && $row->prop("on_bill"))
+							{
+								$row->set_prop("bill_id", $bill->id());
+								$row->save();
+							}
+						}
+						$work->set_billable_oe_bill_id($bill->id());
+						
+						$tasks[] = $work->id();
+					}
+					break;
+				case CL_TASK_ROW:
+					if($work->prop("task.class_id") == CL_BUG)
+					{
+						$bug_rows[] = $work->id();
+					}
+					else
+					{
+						$task_rows[$work->task_id()][$work->id()];
+					}
+					$tasks[] = $work->task_id();
+					break;
+				case CL_CRM_EXPENSE:
+					$expense = $work;
+					$filt_by_row = $expense->id();
+					// get task from row
+					$conns = $expense->connections_to(array("from.class_id" => CL_TASK,"type" => "RELTYPE_EXPENSE"));
+					$c = reset($conns);
+					if ($c)
+					{
+						$tasks[] =  $c->prop("from");
+					}
+
+					$br = $this->add_row();
+					$br->set_prop("comment", $expense->name());
+					$br->set_prop("amt", 1);
+					$br->set_prop("people", $expense->prop("who"));
+					$br->set_prop("is_oe", 1);
+					$date = $expense->prop("date");
+					$br->set_prop("date", date("d.m.Y", mktime(0,0,0, $date["month"], $date["day"], $date["year"])));
+					// get default prod
+					if ($sts)
+					{
+						$br->set_prop("prod", $sts->prop("bill_def_prod"));
+					}
+
+					$sum = $co_inst->convert_to_company_currency(array(
+						"sum" => $expense->prop("cost"),
+						"o" => $expense,
+						"company_curr" => $this->prop("customer.currency"),
+					));
+
+					$br->set_prop("price", $sum);
+					$br->save();
+
+					$expense->set_prop("bill_id", $this->id());
+					$expense->save();
+	
+					$br->connect(array(
+						"to" => $expense->id(),
+						"type" => "RELTYPE_EXPENSE"
+					));
+					$this->connect(array(
+						"to" => $br->id(),
+						"type" => "RELTYPE_ROW"
+					));
+					break;
+			}
+
+		}
+
+		if(sizeof($bug_rows))
+		{
+			$this->add_bug_comments($bug_comments);
+		}
+
+		foreach($tasks as $task)
+		{
+			$this->connect(array(
+				"to" => $task,
+				"reltype" => "RELTYPE_TASK"
+			));
+		}
+			
+		foreach($task_rows as $task => $rows)
+		{
+			$task_o = obj($task);
+			foreach($rows as $row)
+			{
+				$row = obj($row);
+				$br = $this->add_row();
+				$br->set_prop("name", $row->prop("content"));
+				$br->set_prop("amt", $row->prop("time_to_cust"));
+//				$br->set_prop("prod", $row["prod"]);
+				$br->set_prop("price", $task_o->prop("hr_price"));
+				$br->set_prop("unit", t("tund"));
+				$br->set_prop("has_tax", 1);
+				$br->set_prop("date", date("d.m.Y", $row->prop("date")));
+				$br->set_prop("people", $row->prop("impl"));
+				// get default prod
+		
+				if ($sts)
+				{
+					$br->set_prop("prod", $sts->prop("bill_def_prod"));
+				}
+				$br->save();
+				$br->connect(array(
+					"to" => $task,
+					"type" => "RELTYPE_TASK"
+				));
+				$br->connect(array(
+					"to" => $row->id(),
+					"type" => "RELTYPE_TASK_ROW"
+				));
+				$this->connect(array(
+					"to" => $br->id(),
+					"type" => "RELTYPE_ROW"
+				));
+			}
+		}
+
+//------ send bill vaja maha saada, kui k6ik on arvele l2inud
+// 			if(!$task_rows_to_bill_count[$task]) $task_rows_to_bill_count[$task] = 0;
+// 			$task_rows_to_bill_count[$task] ++;
+// 			if($task_rows_to_bill_count[$task] == $_POST["count"][$task])
+// 			{
+// 				$task_o->set_prop("send_bill", 0);
+// 				$task_o->save();
+// 			}
+
+		$create_bill_ru = html::get_change_url($arr["id"], array("group" => "create_bill"));
+		return html::get_change_url($bill->id(),array("return_url" => $create_bill_ru,));
+	}
+
+	/** f the bill has an impl and customer, then check if they have a customer relation and if so, then get the due days from that
+		@attrib api=1
+	**/
+	public function set_due_date()
+	{
+		if (is_oid($this->prop("customer")) && is_oid($this->prop("impl")))
+		{
+			$cust_rel_list = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"buyer" => $this->prop("customer"),
+				"seller" => $this->prop("impl")
+			));
+			if ($cust_rel_list->count())
+			{
+				$cust_rel = $cust_rel_list->begin();
+				$this->set_prop("bill_due_date_days", $cust_rel->prop("bill_due_date_days"));
+			}
+
+			if(!$bill->prop("bill_due_date_days"))
+			{
+				$this->set_prop("bill_due_date_days", $this->prop("customer.bill_due_days"));
+			}
+
+			$bt = time();
+			$this->set_prop("bill_due_date",
+				mktime(3,3,3, date("m", $bt), date("d", $bt) + $this->prop("bill_due_date_days"), date("Y", $bt))
+			);
+			$this->save();
+		}
 	}
 }
 
