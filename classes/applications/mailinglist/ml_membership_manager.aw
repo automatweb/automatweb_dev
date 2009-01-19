@@ -6,14 +6,20 @@
 @default table=aw_ml_membership_manager
 @default group=general
 
-@property lists type=relpicker reltype=RELTYPE_LIST multiple=1 store=connect
-@caption Mailinglistid, mida tabelis kuvada
+#@property lists type=relpicker reltype=RELTYPE_LIST multiple=1 store=connect
+#@caption Mailinglistid, mida tabelis kuvada
+
+@property folders type=relpicker reltype=RELTYPE_FOLDER multiple=1 store=connect
+@caption Kaustad, mida tabelis kuvada
 
 @property membership type=table store=no
 @caption Liikmelisuse tabel
 
 @reltype LIST value=1 clid=CL_ML_LIST
 @caption Mailinglistid, mida tabelis kuvada
+
+@reltype FOLDER value=2 clid=CL_MENU
+@caption Kaustad, mida tabelis kuvada
 
 */
 
@@ -32,8 +38,8 @@ class ml_membership_manager extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 
 		$t->define_field(array(
-			"name" => "list",
-			"caption" => t("Mailinglist"),
+			"name" => "folder",
+			"caption" => t("Kaust"),
 		));
 		$t->define_field(array(
 			"name" => "membership",
@@ -53,25 +59,35 @@ class ml_membership_manager extends class_base
 		$inst = get_instance(CL_ML_MEMBER);
 
 		$mail_id = obj(get_instance(CL_USER)->get_current_person())->prop("email");
-		$mail = is_oid($mail_id) ? obj($mail_id)->mail : false;
+		if(!is_oid($mail_id))
+		{
+			return PROP_IGNORE;
+		}
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LIST")) as $conn)
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_ML_MEMBER,
+				"brother_of" => $mail_id,
+				"lang_id" => array(),
+				"site_id" => array(),
+			),
+			array(
+				CL_ML_MEMBER => array("parent"),
+			)
+		);
+		$pts = $odl->get_element_from_all("parent");
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FOLDER")) as $conn)
 		{
 			$t->define_data(array(
-				"list" => $this->can("edit", $conn->prop("to")) && is_admin() ? html::obj_change_url($conn->prop("to")) : $conn->prop("to.name"),
+				"folder" => $this->can("edit", $conn->prop("to")) && is_admin() ? html::obj_change_url($conn->prop("to")) : $conn->prop("to.name"),
 				"membership" => html::checkbox(array(
 					"name" => "membership[".$conn->prop("to")."]",
 					"value" => 1,
-					"checked" => $mail === false ? false : $inst->check_member(array(
-						"email" => $mail,
-						"folder" => obj($conn->prop("to"))->prop("def_user_folder"),
-					)) !== false,
+					"checked" => in_array($conn->prop("to"), $pts),
 				)).html::hidden(array(
 					"name" => "membership_old[".$conn->prop("to")."]",
-					"value" => ($mail === false ? false : $inst->check_member(array(
-						"email" => $mail,
-						"folder" => obj($conn->prop("to"))->prop("def_user_folder"),
-					)) !== false) ? 1 : 0,
+					"value" => in_array($conn->prop("to"), $pts) ? 1 : 0,
 				)),
 			));
 		}
@@ -83,22 +99,23 @@ class ml_membership_manager extends class_base
 		$mail_id = obj(get_instance(CL_USER)->get_current_person())->prop("email");
 		if(is_oid($mail_id))
 		{
-			$mail = obj($mail_id)->mail;
+			$mail = obj($mail_id);
 			foreach(safe_array($arr["request"]["membership_old"]) as $k => $v)
 			{
 				if(isset($arr["request"]["membership"][$k]) && $v == 0)
 				{
-					$inst->subscribe_member_to_list(array(
-						"email" => $mail,
-						"list_id" => $k,
-					));
+					$mail->create_brother($k);
 				}
 				elseif(!isset($arr["request"]["membership"][$k]) && $v == 1)
 				{
-					$inst->unsubscribe_member_from_list(array(
-						"email" => $mail,
-						"list_id" => $k,
+					$ol = new object_list(array(
+						"class_id" => CL_ML_MEMBER,
+						"brother_of" => $mail_id,
+						"parent" => $k,
+						"lang_id" => array(),
+						"site_id" => array(),
 					));
+					$ol->delete();
 				}
 			}
 		}
