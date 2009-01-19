@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.58 2009/01/08 11:11:03 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.59 2009/01/19 19:23:42 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1407,6 +1407,24 @@ class crm_company_webview extends class_base
 			$tmp_cty?array_push($tmp_city, $tmp_cty):"";
 			$tmp_ad?array_push($tmp_city, $tmp_ad->prop("linn.name")):"";
 			$city_cap = $name.(count($tmp_city)?" (".join(", ", $tmp_city).")":"");
+			$address = array();
+			if($o->prop("contact.aadress"))
+			{
+				$address[] = $o->prop("contact.aadress");
+			}
+			if($o->prop("contact.linn.name"))
+			{
+				$address[] = $o->prop("contact.linn.name");
+			}
+			if($o->prop("contact.maakond.name"))
+			{
+				$address[] = $o->prop("contact.maakond.name");
+			}
+			if($o->prop("contact.riik.name"))
+			{
+				$address[] = $o->prop("contact.riik.name");
+			}
+
 			$this->vars(array(
 				'company_id' => $o->id(),
 				'company_name' => $do_link ? html::href(array(
@@ -1431,11 +1449,20 @@ class crm_company_webview extends class_base
 						))
 						: '',
 
-				'address' => $o->prop("contact.name"),
+				'address' => join(" ," ,$address),//$o->prop("contact.name"),
+				'country' => $o->prop("contact.riik.name"),
+				'county' => $o->prop("contact.maakond.name"),
+				'city' => $o->prop("contact.linn.name"),
+				'aadress' => $o->prop("contact.aadress"),
 				'mails' => join(", " , $o->get_mails()),
 				'fax' => join(", " , $o->get_faxes()),
 				'phones' => join(", " , $o->get_phones()),
 			));
+
+			if(sizeof($o->get_phones()))
+			{
+				$this->vars(array("PHONES_SUB" => $this->parse("PHONES_SUB")));
+			}
 
 			foreach ($datalist as $item => $mapped)
 			{
