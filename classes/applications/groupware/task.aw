@@ -1892,6 +1892,22 @@ class task extends class_base
 
 	function callback_post_save($arr)
 	{
+		$inst = get_instance("crm_person_obj");
+		if($arr["obj_inst"]->class_id() == CL_TASK)
+		{
+			foreach($arr["obj_inst"]->connections_to(array("from.class_id" => CL_CRM_PERSON, "type" => "RELTYPE_PERSON_TASK")) as $conn)
+			{
+				$inst->event_notifications(array("connection" => $conn), "task", true);
+			}
+		}
+		elseif($arr["obj_inst"]->class_id() == CL_CRM_MEETING)
+		{
+			foreach($arr["obj_inst"]->connections_to(array("from.class_id" => CL_CRM_PERSON, "type" => "RELTYPE_PERSON_MEETING")) as $conn)
+			{
+				$inst->event_notifications(array("connection" => $conn), "meeting", true);
+			}
+		}
+
 		if (is_oid($arr["request"]["predicates"]) && $this->can("view", $arr["request"]["predicates"]))
 		{
 			$arr["obj_inst"]->connect(array(
