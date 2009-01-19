@@ -1892,12 +1892,6 @@ class task extends class_base
 
 	function callback_post_save($arr)
 	{
-		$inst = get_instance("crm_person_obj");
-		foreach($arr["obj_inst"]->connections_to(array(array("from.class_id" => CL_CRM_PERSON, "type" => "RELTYPE_PERSON_TASK"))) as $conn)
-		{
-			$inst->event_notifications(array("connection" => $conn), "task", true);
-		}
-
 		if (is_oid($arr["request"]["predicates"]) && $this->can("view", $arr["request"]["predicates"]))
 		{
 			$arr["obj_inst"]->connect(array(
@@ -5434,7 +5428,6 @@ $types = array(
 
 		//syndmuste kiirlisamiseks teeb sellise h2ki
 		$this->fast_add_participants($arr,$types);
-
 		if(!sizeof($c_conn = $arr["obj_inst"]->connections_to(array("type" => $types))))
 		{
 			return PROP_IGNORE;
