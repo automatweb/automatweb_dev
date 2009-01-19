@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.114 2009/01/16 15:55:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.115 2009/01/19 11:39:26 instrumental Exp $
 // kohtumine.aw - Kohtumine
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -921,16 +921,6 @@ class crm_meeting extends task
 		};
 		return $retval;
 	}
-
-	function callback_post_save($arr)
-	{
-		$inst = get_instance("crm_person_obj");
-		foreach($arr["obj_inst"]->connections_to(array(array("from.class_id" => CL_CRM_PERSON, "type" => "RELTYPE_PERSON_MEETING"))) as $conn)
-		{
-			$inst->event_notifications(array("connection" => $conn), "meeting", true);
-		}
-	}
-
 /*
 	function callback_post_save($arr)
 	{
