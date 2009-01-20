@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.141 2009/01/20 23:32:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.142 2009/01/20 23:38:58 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -218,9 +218,11 @@
 			@property bills_tree type=treeview store=no no_caption=1 parent=bills_left
 
 		@layout bills_right parent=bills type=vbox
-			@layout data_r_charts type=hbox parent=bills_right width=50%:50% closeable=1 area_caption=Graafikud
-					@property status_chart type=google_chart no_caption=1 parent=data_r_charts store=no
-					@property money_chart type=google_chart no_caption=1 parent=data_r_charts store=no
+			@layout data_r_charts type=vbox parent=bills_right width=50%:50% closeable=1 area_caption=Graafikud
+			@layout sgc parent=data_r_charts type=vbox area_caption=Arvete&nbsp;nimekiri
+					@property status_chart type=google_chart no_caption=1 parent=sgc store=no
+			@layout mgc parent=data_r_charts type=vbox area_caption=Arvete&nbsp;nimekiri
+					@property money_chart type=google_chart no_caption=1 parent=mgc store=no
 			
 			@layout bills_r parent=bills_right type=vbox area_caption=Arvete&nbsp;nimekiri
 				@property bills_list type=table no_caption=1 store=no parent=bills_r
