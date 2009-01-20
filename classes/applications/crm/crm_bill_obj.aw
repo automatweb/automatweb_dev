@@ -815,6 +815,26 @@ class crm_bill_obj extends _int_object
 			$this->save();
 		}
 	}
+
+	/** returns bill sum
+		@attrib api=1
+	**/
+	public function get_sum()
+	{
+		$agreement = $this->meta("agreement_price");
+		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
+		if($agreement[0]["sum"] && $agreement[0]["price"] && strlen($agreement[0]["name"]) > 0) 
+		{
+			$sum = 0;
+			foreach($agreement as $a)
+			{
+				$sum+= $a["sum"];
+			}
+			return $sum;
+		}
+		return $this->prop("sum");
+	}
+
 }
 
 ?>

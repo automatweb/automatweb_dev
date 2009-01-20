@@ -619,6 +619,26 @@
             <field>bills_tree</field>
       </property>
       <property>
+            <name>status_chart</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>data_r_charts</parent>
+            <store>no</store>
+            <field>status_chart</field>
+      </property>
+      <property>
+            <name>times_chart</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>data_r_charts</parent>
+            <store>no</store>
+            <field>times_chart</field>
+      </property>
+      <property>
             <name>bills_list</name>
             <table>objects</table>
             <group>bills_list</group>
@@ -1260,8 +1280,21 @@
                   <area_caption>Arved&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
                   <group>bills_list</group>
             </bills_left>
-            <bills_r>
+            <bills_right>
                   <parent>bills</parent>
+                  <type>vbox</type>
+                  <group>bills_list</group>
+                  <area_caption></area_caption>
+            </bills_right>
+            <data_r_charts>
+                  <type>vbox</type>
+                  <parent>bills_right</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>bills_list</group>
+            </data_r_charts>
+            <bills_r>
+                  <parent>bills_right</parent>
                   <type>vbox</type>
                   <area_caption>Arvete&amp;amp;nbsp;nimekiri</area_caption>
                   <group>bills_list</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.139 2009/01/20 19:43:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.140 2009/01/20 22:55:27 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -216,8 +216,15 @@
 	@layout bills type=hbox width=20%:80%
 		@layout bills_left parent=bills type=vbox area_caption=Arved&nbsp;staatuste&nbsp;kaupa
 			@property bills_tree type=treeview store=no no_caption=1 parent=bills_left
-		@layout bills_r parent=bills type=vbox area_caption=Arvete&nbsp;nimekiri
-			@property bills_list type=table no_caption=1 store=no parent=bills_r
+
+		@layout bills_right parent=bills type=vbox
+			
+			@layout data_r_charts type=vbox parent=bills_right closeable=1 area_caption=Graafikud
+				@property status_chart type=google_chart no_caption=1 parent=data_r_charts store=no
+				@property times_chart type=google_chart no_caption=1 parent=data_r_charts store=no
+			
+			@layout bills_r parent=bills_right type=vbox area_caption=Arvete&nbsp;nimekiri
+				@property bills_list type=table no_caption=1 store=no parent=bills_r
 
 @default group=create_bill
 	@property create_bill_tb type=toolbar no_caption=1 store=no
@@ -446,6 +453,139 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "status_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 400,
+					"height" => 100,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+
+				$bills = $arr["obj_inst"]->get_bills();
+
+				$times = array();
+				$labels = array();
+
+				foreach($bills->arr() as $bill)
+				{
+					$times[$bill->prop("state")] ++;
+				}
+
+				$bill_inst = get_instance(CL_CRM_BILL);
+
+				foreach($times as $status => $count)
+				{
+					$labels[] = $bill_inst->states[$status]." (".$count.")";
+				}
+				$c->add_data($times);
+				$c->set_labels($labels);
+				$c->set_title(array(
+					"text" => t("Arveid staatuste kaupa"),
+					"color" => "666666",
+					"size" => 11,
+				));
+				break;
+			
+			case "times_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_LINE_CHART);
+				$c->set_size(array(
+					"width" => 400,
+					"height" => 150,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+
+				$works = $arr["obj_inst"]-> get_rows_data();
+
+				$tasks = array();
+
+				foreach($works as $work)
+				{
+					$tasks[$work["task"]]+= $work["time_real"];
+				}
+				$work_price = 0;
+				$task_list = new object_list();
+				$task_list->add(array_keys($tasks));
+				foreach($task_list->arr() as $task)
+				{
+					$work_price+= $task->prop("hr_price") * $tasks[$task->id()];
+				}
+
+				$bill_sum = 0;
+				$payment_sum = 0;
+				$bills = $arr["obj_inst"]->get_bills();
+				foreach($bills->arr() as $bill)
+				{
+					$payment_sum += $bill->get_payments_sum();
+					$bill_sum +=$bill->get_sum();
+				}
+
+				$times = array();
+				$data = array();
+			
+				$data[] = $work_price;
+				$data[] = $bill_sum;
+				$data[] = $payment_sum;
+
+				if(count($data) == 1)
+				{
+					$data[] = $data[0];
+				}
+				$c->add_data($data);
+				$c->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
+				$left_axis = array();
+				if ($work_price > 0)
+				{
+					for($i = 0; $i <= $work_price; $i+= $work_price/4)
+					{
+						$left_axis[] = round($i, 2);
+					}
+				}
+				$c->add_axis_label(0, $left_axis);
+				$bot_axis = array();
+
+				$bot_axis[] = t("Tehtud t&ouml;id");
+				$bot_axis[] = t("Arveid esitatud");
+				$bot_axis[] = t("Laekunud");
+
+				$c->add_axis_label(1, $bot_axis);
+				$c->add_axis_style(1, array(
+					"color" => "999999",
+					"font" => 11,
+					"align" => GCHART_ALIGN_CENTER,
+				));
+				$c->set_grid(array(
+					"xstep" => 33,
+					"ystep" => 25,
+				));
+				$c->set_title(array(
+					"text" => t("Projekti statistika rahaliselt"),
+					"color" => "666666",
+					"size" => 11,
+				));
+				break;
+
 			case "prods_toolbar":
 				$this->_get_prods_toolbar($arr);
 				break;
