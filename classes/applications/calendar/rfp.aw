@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.177 2009/01/19 14:22:35 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.178 2009/01/20 14:09:22 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2188,10 +2188,14 @@ class rfp extends class_base
 							{
 								$bron->set_prop("start1", $start1);
 							}
+							$b_start1 = $bron->prop("start1");
+							$start1 = mktime(date('H', $start1), date('i', $start1), 0, date('m', $b_start1), date('d', $b_start1), date('Y', $b_start1));
 							if(!$bron->prop("end"))
 							{
 								$bron->set_prop("end", $b_end);
 							}
+							$b_end = $bron->prop("end");
+							$end = mktime(date('H', $end), date('i', $end), 0, date('m', $b_end), date('d', $b_end), date('Y', $b_end));
 							$bron->set_prop("resource", $data["room"]);
 							$bron->save();
 							$bri = $bron->instance();
