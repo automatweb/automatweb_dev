@@ -5432,26 +5432,17 @@ $types = array(
 			return;
 		}
 		$p = get_instance(CL_PROJECT);
-		$types = array(10, 8);
-		if ($arr["obj_inst"]->class_id() == CL_CRM_CALL)
-		{
-			$types = 9;
-		}
-		if ($arr["obj_inst"]->class_id() == CL_CRM_MEETING)
-		{
-			$types = 8;
-		}
 
 		//syndmuste kiirlisamiseks teeb sellise h2ki
 		$this->fast_add_participants($arr,$types);
-		if(!sizeof($c_conn = $arr["obj_inst"]->connections_to(array("type" => $types))))
+		$parts = $arr["obj_inst"]->get_participants();
+		if(!$parts->count())
 		{
 			return PROP_IGNORE;
 		}
 
-		foreach($c_conn as $c)
+		foreach($parts->arr() as $c)
 		{
-			$c = $c->from();
 			$name = obj($c);
 			$name = $name->name();
 			$oid = $c->company_id();

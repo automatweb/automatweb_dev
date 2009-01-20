@@ -227,12 +227,17 @@ class project_teams_impl extends class_base
 			foreach($connections as $c)
 			{
 				$o = $c->to();
+				if ($o->class_id() == CL_CRM_COMPANY)
+				{
+					continue;
+				}
+
 				if ($o->class_id() == CL_USER)
 				{
 					$i = $o->instance();
 					$o = obj($i->get_person_for_user($o));
 				}
-	
+
 				$co = $o->get_all_org_ids();
 				$co_s = array();
 				if (count($co))
@@ -250,12 +255,7 @@ class project_teams_impl extends class_base
 						$co_s[] = html::obj_change_url($empl);
 					}
 				}
-	
-				if ($o->class_id() == CL_CRM_COMPANY)
-				{
-					continue;
-				}
-	
+		
 				$role_url = $this->mk_my_orb("change", array(
 					"from_org" => $from,
 					"to_org" => $to,

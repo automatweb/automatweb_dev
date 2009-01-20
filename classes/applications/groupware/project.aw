@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.138 2009/01/19 19:00:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.139 2009/01/20 19:43:45 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -2681,6 +2681,13 @@ class project extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		switch($arr["group"])
+		{
+			case "create_bill":
+				$arr["bill_id"] = "";
+				break;
+		}
+		
 		$arr["post_ru"] = post_ru();
 		$arr["implementor"] = "0";
 		$arr["participants"] = "0";
@@ -3086,6 +3093,11 @@ class project extends class_base
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
 		$var = "st";
+		if(!isset($_GET[$var]))
+		{
+			$_GET[$var] = 10;
+		}
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"persist_state" => true,
@@ -3094,7 +3106,6 @@ class project extends class_base
 
 		$bills_inst = get_instance(CL_CRM_BILL);
 		$states = $bills_inst->states + array("90" => t("K&otilde;ik"));
-
 		foreach($states as $stat_id => $state)
 		{
 			if (isset($_GET[$var]) && $_GET[$var] == $stat_id+10)
@@ -3206,6 +3217,9 @@ class project extends class_base
 		$company_curr = $co_stat_inst->get_company_currency();
 		$sum_in_curr = $bal_in_curr = array();
 		$balance = $cg = 0;//$cg - currency grouping... if there are different currencies
+		$bills_inst = get_instance(CL_CRM_BILL);
+		$bills_inst->states;
+
 
 		foreach($bills->arr() as $bill)
 		{
@@ -3238,6 +3252,11 @@ class project extends class_base
 			if($bill->prop("state") == 3 && $bill->prop("partial_recieved") && $bill->prop("partial_recieved") < $cursum)
 			{
 				$partial = '<br>'.t("osaliselt");
+			}
+
+			if(isset($_GET["st"]) && $_GET["st"] == 100)
+			{
+				$state = $bills_inst->states[$bill->prop("state")];
 			}
 
 			$bill_data = array(
@@ -3364,11 +3383,21 @@ class project extends class_base
 				"project" => $arr["obj_inst"]->id(),
 			))
 		));
+		$tb->add_delete_button();
 	}
+
+
 
 	function _get_create_bill_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Lisa'),
+			'url' => html::get_new_url(CL_CRM_BILL, $arr["obj_inst"]->id(), array("return_url" => get_ru() , "project" => $arr["obj_inst"]->id()))
+		));
 
 		$tb->add_button(array(
 			'name' => 'create_bill',
@@ -3376,6 +3405,25 @@ class project extends class_base
 			'tooltip' => t('Loo arve'),
 			'action' => "create_bill",
 		));
+
+		$tb->add_menu_button(array(
+			"name" => "add_to_bill",
+			"img" => "search.gif",
+			"tooltip" => t("Lisa olemasolevale arvele"),
+		));
+
+		$bills = $arr["obj_inst"]->get_bills(array("status" =>  0));
+
+		foreach($bills->arr() as $bill)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "add_to_bill",
+				"text" => $bill->name(),
+				"link" =>"javascript:var asd = document.getElementsByName('bill_id');
+					asd[0].value=".$bill->id().";
+					submit_changeform('create_bill');",
+			));
+		}
 	}
 
 	/**
@@ -3383,9 +3431,24 @@ class project extends class_base
 	**/
 	function create_bill($arr)
 	{
+		foreach($arr as $k => $v)
+		{
+			if (substr($k, 0, 3) == "sel")
+			{
+				foreach($v as $v_id)
+				{
+					$arr["sel"][$v_id] = $v_id;
+				}
+			}
+		}
+
 		//klientide kontroll ka vaja
 		$project = obj($arr["id"]);
-		if(isset($_SESSION["bill_id"]) && $this->can("view", $_SESSION["bill_id"]))
+		if(isset($arr["bill_id"]) && $this->can("view", $arr["bill_id"]))
+		{
+			$bill = obj($arr["bill_id"]);
+		}
+		elseif(isset($_SESSION["bill_id"]) && $this->can("view", $_SESSION["bill_id"]))
 		{
 			$bill = obj($_SESSION["bill_id"]);
 			unset($_SESSION["bill_id"]);
@@ -3397,6 +3460,41 @@ class project extends class_base
 		$bill->add_rows(array(
 			"objects" => $arr["sel"],
 		));
+		$create_bill_ru = html::get_change_url($arr["id"], array("group" => "create_bill"));
+		return html::get_change_url($bill->id(),array("return_url" => $create_bill_ru,));
+	}
+
+	function callback_mod_layout(&$arr)
+	{
+		switch($arr["name"])
+		{
+//			case "bills_left":
+//				$arr["area_caption"] = sprintf(t("%s arved staatuste kaupa"), $arr["obj_inst"]->name());
+//				break;
+			case "bills_r":
+				$var = 10;
+				if(isset($_GET["st"]))
+				{
+					$var = $_GET["st"];
+				}
+				if($var == 14)
+				{
+					$state = t("Krediit");
+				}
+				elseif($var == 15)
+				{
+					$state = t("Tehtud krediit");
+				}
+				else
+				{
+					$bills_inst = get_instance(CL_CRM_BILL);
+					$states = $bills_inst->states + array("90" => t("K&otilde;ik"));
+					$state = $states[$var-10]." ";
+				}
+				$arr["area_caption"] = sprintf(t("Projekti %s %sarved"), $arr["obj_inst"]->name(), strtolower($state));
+				break;
+		}
+		return true;
 	}
 
 	function _get_work_list($arr)
@@ -3467,10 +3565,11 @@ class project extends class_base
 				"oid" => $row->id(),
 				"name" => $row->name(),
 				"sum" => $row->prop("deal_price").t("(Kokkuleppehind)").($row->prop("deal_has_tax") ? t("KMga") : ""),
-				"set_date" => date("d.m.Y" , $row->prop("to_bill_date")),
+				"set_date" => $row->prop("to_bill_date") ? date("d.m.Y" , $row->prop("to_bill_date")) : "",
+				"hrs" => $this->stats->hours_format($row->prop("deal_amount")),
 			));
 			$sum += $row->prop("deal_price");
-			$hrs += $row->prop("deal_amt");
+			$hrs += $row->prop("deal_amount");
 		}
 
 		foreach($arr["obj_inst"]->get_billable_expenses()->arr() as $row)
@@ -3489,16 +3588,17 @@ class project extends class_base
 		{
 			if(!in_array($row->prop("task"), $deal_tasks_ids))
 			{
+				$hr_price = $row->prop("task.hr_price");
 				$t->define_data(array(
 					"oid" => $row->id(),
 					"name" => $row->prop("content"),
 					"hrs" => $this->stats->hours_format($row->prop("time_to_cust")),
-					"hr_price" => number_format($row->prop("hr_price"),2),
-					"sum" => number_format($row->prop("time_to_cust") * $row->prop("hr_price"),2),
+					"hr_price" => number_format($hr_price,2),
+					"sum" => number_format($row->prop("time_to_cust") * $hr_price,2),
 					"set_date" => date("d.m.Y" , $row->prop("to_bill_date")),
 				));
 			}
-			$sum += $row->prop("time_to_cust") * $row->prop("hr_price");
+			$sum += $row->prop("time_to_cust") * $hr_price;
 			$hrs += $row->prop("time_to_cust");
 		}
 
@@ -3548,7 +3648,7 @@ class project extends class_base
 
 	}
 
-	private function _init_bug_row_list(&$t, $proj)
+	private function _init_bug_row_list(&$t, $bug)
 	{
 		$t->define_field(array(
 			"caption" => t("Sisu"),
@@ -3565,7 +3665,7 @@ class project extends class_base
 
 		$t->define_chooser(array(
 			"field" => "oid",
-			"name" => "sel"
+			"name" => "sel".$bug
 		));
 	}
 
@@ -3580,7 +3680,7 @@ class project extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$project =& $arr["request"]["project"];
 		$t->unset_filter();
-		$this->_init_bug_row_list($t);
+		$this->_init_bug_row_list($t,$arr["request"]["bug"]);
 
 		$comments = $bug->get_billable_comments();
 		foreach($comments->arr() as $comment)
@@ -3666,24 +3766,32 @@ class project extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "impl",
+			"caption" => t("Osalejad"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+
+		$t->define_field(array(
 			"name" => "start1",
 			"caption" => t("Algus"),
 			"align" => "center",
-			"sortable" => 1,
+/*			"sortable" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i",
 			"numeric" => 1
-		));
+*/		));
 
 		$t->define_field(array(
 			"name" => "end",
 			"caption" => t("L&otilde;pp"),
 			"align" => "center",
-			"sortable" => 1,
+/*			"sortable" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i",
 			"numeric" => 1
-		));
+*/		));
 
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -3698,27 +3806,39 @@ class project extends class_base
 
 		$parent = is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : new obj_predicate_compare(OBJ_COMP_NULL);
 
-		$goals = new object_list(array(
-			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
-			"project" => $arr["obj_inst"]->id(),
-			"predicates" => $parent,
-			"brother_of" => new obj_predicate_prop("id")
-		));
+		$goals = $arr["obj_inst"]->get_goals($parent);
 
-		$goals = new object_list(array(
-			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
-//			"project" => $arr["obj_inst"]->id(),
-			"CL_TASK.RELTYPE_PROJECT.id" => $arr["obj_inst"]->id(),
-//			"predicates" => $parent,
-//			"brother_of" => new obj_predicate_prop("id")
-		));
-
-		//kuna nyyd asi peaks toimuma nii et mis omab connectionit, on
-		foreach($arr["obj_inst"]->connections_to(array("type" => 4)) as $c)
+		foreach($goals->arr() as $goal)
 		{
-			$goals->add($c->prop("from"));
+			$goal_data = array(
+				"name" => html::href(array(
+					"url" => html::get_change_url($goal->id()),
+					"caption" => $goal->name(),
+					"target" => "_blank"
+				)),
+				"oid" => $goal->id(),
+				"class" => $goal->class_id(),
+				"end" => $goal->prop("end") ? date("d.m.Y H:i",  $goal->prop("end")) : "",
+			);
+			switch($goal->class_id())
+			{
+				case CL_CRM_MEETING:
+				case CL_TASK:
+				case CL_CRM_CALL:
+					$goal_data["impl"] = join(", " ,$goal->get_participants()->names());
+					$goal_data["start1"] = $goal->prop("start1") ? date("d.m.Y H:i",  $goal->prop("start1")) : "";
+					break;
+				case CL_BUG:
+					$goal_data["start1"] = date("d.m.Y H:i",  $goal->created());
+					$goal_data["impl"] = join(", " ,$goal->get_participants()->names());
+					break;
+			}
+			
+
+			$t->define_data($goal_data);
 		}
-		$t->data_from_ol($goals, array("change_col" => "name"));
+
+//		$t->data_from_ol($goals, array("change_col" => "name"));
 	}
 
 	/**

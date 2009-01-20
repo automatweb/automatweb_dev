@@ -485,12 +485,18 @@ class project_obj extends _int_object
 			"class_id" => CL_CRM_BILL,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"oid" => $ids,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"oid" => $ids,
+					"CL_CRM_BILL.RELTYPE_PROJECT" => $this->id(),
+				)
+			)),
 		);
 
-		if($status != "")
+		if(isset($status))
 		{
-			$filter["status"] = $status;
+			$filter["state"] = $status;
 		}
 		return $filter;
 
@@ -627,7 +633,41 @@ class project_obj extends _int_object
 		$bill->set_due_date();
 
 		$bill->save();
+		return $bill;
+	}
 
+	public function get_goals($parent = null)
+	{
+/*		$goals = new object_list(array(
+			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
+			"project" => $this->id(),
+			"predicates" => $parent,
+			"brother_of" => new obj_predicate_prop("id")
+		));
+*/
+		$goals = new object_list(array(
+			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING,CL_BUG),
+//			"project" => $arr["obj_inst"]->id(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"oid" => $ids,
+					"CL_TASK.RELTYPE_PROJECT" => $this->id(),
+					"CL_CRM_MEETING.RELTYPE_PROJECT" => $this->id(),
+					"CL_CRM_CALL.RELTYPE_PROJECT" => $this->id(),
+					"CL_BUG.RELTYPE_PROJECT" => $this->id(),
+				)
+			)),
+//			"predicates" => $parent,
+			"brother_of" => new obj_predicate_prop("id")
+		));
+ 
+		//kuna nyyd asi peaks toimuma nii et mis omab connectionit, on
+//		foreach($this->connections_to(array("type" => 4)) as $c)
+//		{
+//			$goals->add($c->prop("from"));
+//		}
+		return $goals;
 	}
 }
 ?>

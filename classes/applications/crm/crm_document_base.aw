@@ -46,6 +46,10 @@ class crm_document_base extends class_base
 
 			case "project":
 				$i = get_instance(CL_CRM_COMPANY);
+				if($arr["new"] && $this->can("view" , $arr["request"]["project"]))
+				{
+					$prop["value"] = $arr["request"]["project"];
+				}
 				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
 					// list events for project
@@ -78,6 +82,12 @@ class crm_document_base extends class_base
 				break;
 
 			case "customer":
+				if($arr["new"] && $this->can("view" , $arr["request"]["project"]))
+				{
+					$project = obj($arr["request"]["project"]);
+					$prop["value"] = $project->get_orderer();
+				}
+
 				$i = get_instance(CL_CRM_COMPANY);
 				$cs = $i->get_my_customers();
 				if (!count($cs))
@@ -99,14 +109,23 @@ class crm_document_base extends class_base
 
 			case "task":
 				$i = get_instance(CL_CRM_COMPANY);
-				if ($this->can("view", $arr["obj_inst"]->prop("project")))
+				if($arr["new"] && $this->can("view" , $arr["request"]["project"]))
+				{
+					$project = $arr["request"]["project"];
+				}
+				else
+				{
+					$project = $arr["obj_inst"]->prop("project");
+				}
+
+				if ($this->can("view", $project))
 				{
 					// list events for project
 					$ol = new object_list(array(
 						"class_id" => CL_TASK,
 						"lang_id" => array(),
 						"site_id" => array(),
-						"project" => $arr["obj_inst"]->prop("project")
+						"project" => $project
 					));
 					$prop["options"] = array("" => "") + $ol->names();
 				}

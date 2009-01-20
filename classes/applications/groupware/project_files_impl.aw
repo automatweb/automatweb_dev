@@ -7,6 +7,18 @@ class project_files_impl extends class_base
 	function project_files_impl()
 	{
 		$this->init();
+		$this->types = array(
+			CL_MENU => t("Kataloog"),
+			CL_FILE => t("Fail"),
+			CL_CRM_MEMO => t("Memo"),
+			CL_CRM_DOCUMENT => t("CRM Dokument"),
+			CL_CRM_DEAL => t("Leping"),
+			CL_CRM_OFFER => t("Pakkumine"),
+			CL_PROJECT_STRAT_GOAL_EVAL_WS => t("Eesm&auml;rkide hindamise t&ouml;&ouml;laud"),
+			CL_PROJECT_RISK_EVAL_WS => t("Riskide hindamise t&ouml;&ouml;laud"),
+			CL_PROJECT_ANALYSIS_WS => t("Anal&uuml;&uuml;si t&ouml;&ouml;laud"),
+			CL_DEVELOPMENT_ORDER => t("Arendustellimus")
+		);
 	}
 
 	function _get_files_tb($arr)
@@ -83,9 +95,13 @@ class project_files_impl extends class_base
 
 	function _get_files_pt($arr)
 	{
-		if ($arr["request"]["tf"] && $arr["request"]["tf"] != "unsorted")
+		if ($this->can("view" , $arr["request"]["tf"]) && !array_key_exists($arr["request"]["tf"] , $this->types))
 		{
-			return $arr["request"]["tf"];
+			$o = obj($arr["request"]["tf"]);
+			if($o->class_id() == CL_MENU)
+			{
+				return $arr["request"]["tf"];
+			}
 		}
 		$ff = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FILES_FLD");
 		if (!$ff)
@@ -132,6 +148,7 @@ class project_files_impl extends class_base
 		$pt = $this->_get_files_pt($arr);
 		classload("core/icons");
 		$parent_folders = $this->_get_parent_folders($arr["obj_inst"]);
+		$parent_folders[] = $arr["obj_inst"]->id();
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
 				"type" => TREE_DHTML, 
@@ -193,13 +210,12 @@ class project_files_impl extends class_base
 			{
 				$filter["project"] = $pr;
 			}
-			
 			if(in_array($clid ,array(CL_FILE,CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
 			{
 				$filter["parent"] = $parent_folders;
 			}
 			$ol = new object_list($filter);
-			$nm = $capt."(".sizeof($ol->ids()).")";
+			$nm = $capt." (".sizeof($ol->ids()).")";
 			if ($otf == $clid)
 			{
 				$nm = "<b>".$nm."</b>";

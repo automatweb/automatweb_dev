@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.65 2008/11/12 13:17:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.66 2009/01/20 19:43:51 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -220,9 +220,15 @@ class crm_offer extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		
 		switch($prop["name"])
 		{
+			case "project":
+				if($arr["new"] && $this->can("view" , $arr["request"]["project"]))
+				{
+					$prop["value"] = $arr["request"]["project"];
+					$prop["options"] = array($prop["value"] => get_name($prop["value"]));
+				}
+				break;
 			case "order_type":
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_OFFER_TYPE,
@@ -327,7 +333,7 @@ class crm_offer extends class_base
 			break;
 		
 			case "orderer":
-				if($arr["new"] && is_oid($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
+				if($arr["new"] && $this->can("view" , $arr["request"]["project"]))
 				{
 					$project = obj($arr["request"]["project"]);
 					$orderers = new object_list(array(
@@ -337,12 +343,13 @@ class crm_offer extends class_base
 						"site_id" => array()
 					));
 					$prop["options"] = $orderers->names();
+					$prop["value"] = $project->get_orderer();
 					break;
 				}
 
 				$my_org = false;
 
-				if(!($arr["new"] == 1) && is_object($arr["obj_inst"]))
+				if(is_object($arr["obj_inst"]))
 				{
 					$id = $arr["obj_inst"]->prop("preformer");
 					if (is_oid($id) && $this->can("view", $id))
@@ -360,7 +367,7 @@ class crm_offer extends class_base
 				if($my_org)
 				{
 					$org_inst = get_instance(CL_CRM_COMPANY);
-					$org_inst->get_customers_for_company($my_org, &$data);
+					$data = $my_org->get_customers_for_company();
 				
 				}
 				foreach ($data as $key)
@@ -371,7 +378,7 @@ class crm_offer extends class_base
 						$options[$key] = $obj->name();
 					}
 				}
-				
+
 				
 						
 				if($arr["request"]["alias_to_org"])

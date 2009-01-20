@@ -1248,6 +1248,45 @@ class crm_company_obj extends _int_object
 
 		$o->set_prop($prop, $ro->id());
 	}
+
+
+	/** goes through all the relations and returns a set of id
+		@attrib api=1
+		@returns array
+	**/
+	public function get_customers_for_company()
+	{
+		$data = array();
+		$impl = array();
+		$impl = $this->get_workers()->ids();
+		$impl[] = $this->id();
+		// also, add all orderers from projects where the company is implementor
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"CL_PROJECT.RELTYPE_IMPLEMENTOR" => $impl,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			foreach($o->get_customer_ids() as $ord)
+			{
+				if ($ord)
+				{
+					$data[$ord] = $ord;
+				}
+			}
+		}
+
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_CUSTOMER",
+		));
+		foreach($conns as $conn)
+		{
+			$data[$conn->prop('to')] = $conn->prop('to');
+		}
+		return $data;
+	}
 }
 
 ?>

@@ -595,10 +595,12 @@ class crm_bill_obj extends _int_object
 			$work = obj($id);
 			switch($work->class_id())
 			{
+				case CL_CRM_MEETING:
+				case CL_CRM_CALL:
 				case CL_TASK:
 					if($work->prop("deal_price"))
 					{
-						$agreement = $bill->meta("agreement_price");
+						$agreement = $this->meta("agreement_price");
 						if(!is_array($agreement))
 						{
 							$agreement = array();
@@ -635,8 +637,8 @@ class crm_bill_obj extends _int_object
 							"comment" => $deal_name,
 							"has_tax" => $work->prop("deal_has_tax"),
 						);
-						$bill->set_meta("agreement_price" , $agreement);
-						$bill->save();
+						$this->set_meta("agreement_price" , $agreement);
+						$this->save();
 						$work->set_prop("send_bill" , 0);
 						$work->save();
 					//ridadele ikkagi arve kylge
@@ -649,7 +651,7 @@ class crm_bill_obj extends _int_object
 								$row->save();
 							}
 						}
-						$work->set_billable_oe_bill_id($bill->id());
+						$work->set_billable_oe_bill_id($this->id());
 						
 						$tasks[] = $work->id();
 					}
@@ -661,7 +663,7 @@ class crm_bill_obj extends _int_object
 					}
 					else
 					{
-						$task_rows[$work->task_id()][$work->id()];
+						$task_rows[$work->task_id()][$work->id()] = $work->id();
 					}
 					$tasks[] = $work->task_id();
 					break;
@@ -716,7 +718,7 @@ class crm_bill_obj extends _int_object
 
 		if(sizeof($bug_rows))
 		{
-			$this->add_bug_comments($bug_comments);
+			$this->add_bug_comments($bug_rows);
 		}
 
 		foreach($tasks as $task)
@@ -726,13 +728,19 @@ class crm_bill_obj extends _int_object
 				"reltype" => "RELTYPE_TASK"
 			));
 		}
-			
+
 		foreach($task_rows as $task => $rows)
 		{
 			$task_o = obj($task);
 			foreach($rows as $row)
 			{
 				$row = obj($row);
+				$row->set_prop("bill_id" , $this->id());
+				$row->save();
+				foreach($row->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+				{
+					$this->set_project($c->prop("to"));
+				}
 				$br = $this->add_row();
 				$br->set_prop("name", $row->prop("content"));
 				$br->set_prop("amt", $row->prop("time_to_cust"));
@@ -772,9 +780,7 @@ class crm_bill_obj extends _int_object
 // 				$task_o->set_prop("send_bill", 0);
 // 				$task_o->save();
 // 			}
-
-		$create_bill_ru = html::get_change_url($arr["id"], array("group" => "create_bill"));
-		return html::get_change_url($bill->id(),array("return_url" => $create_bill_ru,));
+		return $this->id();
 	}
 
 	/** f the bill has an impl and customer, then check if they have a customer relation and if so, then get the due days from that
@@ -797,7 +803,7 @@ class crm_bill_obj extends _int_object
 				$this->set_prop("bill_due_date_days", $cust_rel->prop("bill_due_date_days"));
 			}
 
-			if(!$bill->prop("bill_due_date_days"))
+			if(!$this->prop("bill_due_date_days"))
 			{
 				$this->set_prop("bill_due_date_days", $this->prop("customer.bill_due_days"));
 			}

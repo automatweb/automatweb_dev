@@ -82,6 +82,12 @@ class task_object extends _int_object
 			case "deal_price":
 				$pv = str_replace("," , "." , $pv);
 				break;
+			case "send_bill":
+				if ($this->is_property("to_bill_date") && !$this->prop("send_bill"))
+				{
+					$this->set_prop("to_bill_date", time());
+				}
+				break;
 		}
 
 		$ret =  parent::set_prop($pn, $pv);
@@ -633,6 +639,46 @@ class task_object extends _int_object
 		}
 		
 		return $s_out;
+	}
+
+	/** returns bug participants object list
+		@attrib api=1
+	**/
+	public function get_participants()
+	{
+		$ol = new object_list();
+
+		$rows = new object_list(array(
+			"class_id" =>  CL_TASK_ROW,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"primary" => 1,
+			"task" => $this->id(),
+		));
+		foreach($rows->arr() as $row)
+		{
+			foreach($row->connections_from(array("type" => "RELTYPE_IMPL")) as $c)
+			{
+				$ol->add($c->prop("to"));
+			}
+		}
+
+		//kunagi peaks edasise 2ra kustutama
+		$types = array(10, 8);
+		if ($this->class_id() == CL_CRM_CALL)
+		{
+			$types = 9;
+		}
+		if ($this->class_id() == CL_CRM_MEETING)
+		{
+			$types = 8;
+		}
+
+		foreach($this->connections_to(array("type" => $types)) as $c)
+		{
+			$ol->add($c->prop("from"));
+		}
+		return $ol;
 	}
 
 }

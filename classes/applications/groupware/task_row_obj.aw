@@ -133,6 +133,12 @@ class task_row_obj extends _int_object
 			case "bug":
 				$pn = "task";
 				break;
+			case "on_bill":
+				if (!$this->prop("on_bill"))
+				{
+					$this->set_prop("to_bill_date", time());
+				}
+				break;
 		}
 
 		switch($pn)

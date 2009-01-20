@@ -271,6 +271,17 @@ class bug_object extends _int_object
 		return $this->prop("hr_price");
 	}
 
-
+	/** returns bug participants object list
+		@attrib api=1
+	**/
+	public function get_participants()
+	{
+		$ol = new object_list();
+		if(is_array($this->prop("monitors")))
+		{
+			$ol->add($this->prop("monitors"));
+		}
+		return $ol;
+	}
 
 }

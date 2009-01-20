@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.21 2008/12/19 10:59:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.22 2009/01/20 19:43:42 markop Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -179,6 +179,21 @@ class development_order extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "project":
+				if($arr["new"] && $this->can("view" , $arr["request"]["project"]))
+				{
+					$prop["value"] = $arr["request"]["project"];
+					$prop["options"] = array($prop["value"] => get_name($prop["value"]));
+				}
+				break;
+			case "customer":
+				if($arr["new"] && $this->can("view" , $arr["request"]["project"]))
+				{
+					$project = obj($arr["request"]["project"]);
+					$prop["value"] = $project->get_orderer();
+					$prop["options"] = array($prop["value"] => get_name($prop["value"]));
+				}
+				break;
 			case "bug_feedback_p":
 				if ($arr["obj_inst"]->prop("bug_status") != 10)
 				{
