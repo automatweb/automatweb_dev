@@ -574,6 +574,30 @@ class project_obj extends _int_object
 		return $ol;
 	}
 
+	private function all_rows_filter()
+	{
+		return array(
+			"class_id" => CL_TASK_ROW,
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"done" => 1,
+			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
+		);
+	}
+
+	public function get_rows_data()
+	{
+		$rows_filter = $this->all_rows_filter();
+		$rowsres = array(
+			CL_TASK_ROW => array(
+				"task",
+				"time_real",
+			),
+		);
+		$rows_arr = new object_data_list($rows_filter , $rowsres);
+
+		return $rows_arr->list_data;
+	}
+
 	function get_billable_task_rows()
 	{
 		$ol = new object_list(array(
