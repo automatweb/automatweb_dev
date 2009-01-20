@@ -629,14 +629,14 @@
             <field>status_chart</field>
       </property>
       <property>
-            <name>times_chart</name>
+            <name>money_chart</name>
             <table>objects</table>
             <group>bills_list</group>
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <parent>data_r_charts</parent>
             <store>no</store>
-            <field>times_chart</field>
+            <field>money_chart</field>
       </property>
       <property>
             <name>bills_list</name>
@@ -1287,8 +1287,9 @@
                   <area_caption></area_caption>
             </bills_right>
             <data_r_charts>
-                  <type>vbox</type>
+                  <type>hbox</type>
                   <parent>bills_right</parent>
+                  <width>50%:50%</width>
                   <closeable>1</closeable>
                   <area_caption>Graafikud</area_caption>
                   <group>bills_list</group>

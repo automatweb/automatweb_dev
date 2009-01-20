@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.140 2009/01/20 22:55:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.141 2009/01/20 23:32:55 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -218,10 +218,9 @@
 			@property bills_tree type=treeview store=no no_caption=1 parent=bills_left
 
 		@layout bills_right parent=bills type=vbox
-			
-			@layout data_r_charts type=vbox parent=bills_right closeable=1 area_caption=Graafikud
-				@property status_chart type=google_chart no_caption=1 parent=data_r_charts store=no
-				@property times_chart type=google_chart no_caption=1 parent=data_r_charts store=no
+			@layout data_r_charts type=hbox parent=bills_right width=50%:50% closeable=1 area_caption=Graafikud
+					@property status_chart type=google_chart no_caption=1 parent=data_r_charts store=no
+					@property money_chart type=google_chart no_caption=1 parent=data_r_charts store=no
 			
 			@layout bills_r parent=bills_right type=vbox area_caption=Arvete&nbsp;nimekiri
 				@property bills_list type=table no_caption=1 store=no parent=bills_r
@@ -461,7 +460,7 @@ class project extends class_base
 				$c = &$arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
-					"width" => 400,
+					"width" => 300,
 					"height" => 100,
 				));
 				$c->add_fill(array(
@@ -497,7 +496,7 @@ class project extends class_base
 				));
 				break;
 			
-			case "times_chart":
+			case "money_chart":
 				if($arr["new"])
 				{
 					return PROP_IGNORE;
@@ -505,8 +504,8 @@ class project extends class_base
 				$c = &$arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_LINE_CHART);
 				$c->set_size(array(
-					"width" => 400,
-					"height" => 150,
+					"width" => 300,
+					"height" => 100,
 				));
 				$c->add_fill(array(
 					"area" => GCHART_FILL_BACKGROUND,
@@ -548,10 +547,6 @@ class project extends class_base
 				$data[] = $bill_sum;
 				$data[] = $payment_sum;
 
-				if(count($data) == 1)
-				{
-					$data[] = $data[0];
-				}
 				$c->add_data($data);
 				$c->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
 				$left_axis = array();
@@ -571,19 +566,21 @@ class project extends class_base
 
 				$c->add_axis_label(1, $bot_axis);
 				$c->add_axis_style(1, array(
-					"color" => "999999",
-					"font" => 11,
+					"color" => "888888",
+					"font" => 10,
 					"align" => GCHART_ALIGN_CENTER,
 				));
 				$c->set_grid(array(
-					"xstep" => 33,
-					"ystep" => 25,
+					"xstep" => 30,
+					"ystep" => 20,
 				));
 				$c->set_title(array(
 					"text" => t("Projekti statistika rahaliselt"),
-					"color" => "666666",
-					"size" => 11,
+					"color" => "555555",
+					"size" => 10,
 				));
+				$arr["prop"]["type"] = "text";
+				$arr["prop"]["value"] = $c->get_html();
 				break;
 
 			case "prods_toolbar":
