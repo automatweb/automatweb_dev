@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.24 2007/11/23 07:01:22 dragut Exp $
-// staging.aw - Lavastus 
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.25 2009/01/20 15:25:16 instrumental Exp $
+// staging.aw - Lavastus
 /*
 
 @classinfo syslog_type=ST_STAGING relationmgr=yes maintainer=dragut
@@ -12,16 +12,16 @@
 @caption Algab
 
 @property end type=datetime_select field=end table=planner
-@caption Lõppeb
+@caption L&otilde;ppeb
 
 @property img type=releditor reltype=RELTYPE_PICTURE use_form=emb rel_id=first
 @caption Pilt
 
-@property utextarea1 type=textarea cols=90 rows=10 trans=1 table=planner 
+@property utextarea1 type=textarea cols=90 rows=10 trans=1 table=planner
 @caption Kirjeldus
 
 // seems i don't need those rules here anymore
-default field=meta 
+default field=meta
 default method=serialize
 
 
@@ -53,7 +53,7 @@ default method=serialize
 // to utextbox9 and utextbox10 so i can save those utextbox properties above
 // to utextbox1-utextbox8 fields in planner table
 // actually i think there should be separate table for stagings
-// possible ToDo while creating the WhereToGo module 
+// possible ToDo while creating the WhereToGo module
 
 @layout place_box type=hbox
 @caption Toimumispaik
@@ -130,7 +130,7 @@ class staging extends class_base
 			$first = reset($copy_conns);
 			$o = $first->from();
 		};
-		
+
 		$start1 = $o->prop("start1");
 		$conns = $o->connections_from(array(
 			"type" => 2, //"RELTYPE_COPY",
@@ -153,7 +153,7 @@ class staging extends class_base
 			)),
 			"caption" => t("Originaalobjekti ID"),
 		);
-		
+
 		$rv["active_" . $prefix] = array(
 			"type" => "text",
 			"name" => $prefix . "[active]",
@@ -161,7 +161,7 @@ class staging extends class_base
 			"caption" => t("Originaalobjekt"),
 		);
 
-		$empty_slots = 50;
+//		$empty_slots = 75;
 		foreach($conns as $conn)
 		{
 			$to = $conn->to();
@@ -171,7 +171,7 @@ class staging extends class_base
 			{
 				$caption .= t(" (Aktiivne)");
 			};
-				
+
 			$rv["existing_" . $prefix . $id] = array(
 				"type" => "datetime_select",
 				"name" => $prefix . "[existing][" . $id . "]",
@@ -181,18 +181,27 @@ class staging extends class_base
 				"day" => "text",
 				"month" => "text",
 			);
-			$empty_slots--;
+
+			$rv["existing_old_" . $prefix . $id] = array(
+				"type" => "hidden",
+				"name" => $prefix . "[existing_old][" . $id . "]",
+				"group" => $arr["prop"]["group"],
+				"value" => $to->prop("start1"),
+			);
+//			$empty_slots--;
 		}
 
 		$rv["sbx"] = array(
+			"name" => "sbx",
 			"type" => "text",
 			"subtitle" => 1,
 			"caption" => t("Uued"),
 		);
 
-		for ($i = 1; $i <= $empty_slots; $i++)
+//		for ($i = 1; $i <= $empty_slots; $i++)
+		for ($i = 1; $i <= 25; $i++)
 		{
-			// esimese väärtus peab olema eventi enda alguse aeg
+			// esimese v22rtus peab olema eventi enda alguse aeg
 			$rv["new_" . $prefix . $i] = array(
 				"type" => "datetime_select",
 				"name" => $prefix . "[new][" . $i . "]",
@@ -206,7 +215,7 @@ class staging extends class_base
 			$rv["newx_" . $prefix . $i] = array(
 				"type" => "checkbox",
 				"name" => $prefix . "[newx][" . $i . "]",
-				"caption" => sprintf(t("Tee sündmus %s"), $i),
+				"caption" => sprintf(t("Tee s&uuml;ndmus %s"), $i),
 				"group" => $arr["prop"]["group"],
 				"ch_value" => 1,
 			);
@@ -226,7 +235,7 @@ class staging extends class_base
 				$this->create_copies($arr);
 				break;
 			case "new_place":
-				
+
 				if (!empty($prop['value']))
 				{
 					$places_parent = aw_ini_get("staging.places_metamgr_oid");
@@ -243,7 +252,7 @@ class staging extends class_base
 
 		}
 		return $retval;
-	}	
+	}
 
 	function get_property($arr)
 	{
@@ -290,7 +299,7 @@ class staging extends class_base
 				printf("%s\t\t\t%s\t%s\t%s\t%s\n",$o->name(),$o->lang(),$o->prop("start1"),$o->id(),$o->brother_of());
 				if (sizeof($conns) > 0)
 				{
-					$first = reset($conns);	
+					$first = reset($conns);
 					$fo = $first->to();
 					if ($fo->prop("start1") != 0)
 					{
@@ -318,7 +327,7 @@ class staging extends class_base
 
 		$o = $arr["obj_inst"];
 		$o = $o->get_original();
-		
+
 		// check if this is a copy and then show connections from the original object
 		$copy_conns = $o->connections_to(array(
 			"type" => 2 //"RELTYPE_COPY",
@@ -330,7 +339,7 @@ class staging extends class_base
 			$o = $first->from();
 		};
 
-		// see raisk võtab jah originaalist
+		// see raisk v&otilde;tab jah originaalist
 
 		$brother_list = new object_list(array(
 			"brother_of" => $o->id(),
@@ -339,7 +348,7 @@ class staging extends class_base
 		$o_id = $o->id();
 		$original_parent = $o->parent();
 
-		// nii aga iga venna kohta mul vaja teada tõlgete id-sid no less.
+		// nii aga iga venna kohta mul vaja teada t6lgete id-sid no less.
 
 		$blist = array();
 		$xblist = array();
@@ -354,7 +363,7 @@ class staging extends class_base
 
 			$xblist[$bparent] = $this->_get_translations_for($bparent);
 			// xblist annab mulle ainult selle info kuhu alla vennad teha.
-			// tõlked tuleb ikka igast koopiast eraldi rajada
+			// t6lked tuleb ikka igast koopiast eraldi rajada
 
 			$blist[$bparent] = 1;
 		};
@@ -362,9 +371,9 @@ class staging extends class_base
 
 		// siin loome (mitte ei uuenda) koopiaid - koopia tegemisel
 		// 1. teha uus objekt
-		// 2. kanda info üle
-		// 3. teha tõlgete objektid
-		// 4. kanda info üle
+		// 2. kanda info yle
+		// 3. teha t6lgete objektid
+		// 4. kanda info yle
 
 		// update times of existing objects
 		if (is_array($times["existing"]))
@@ -373,6 +382,10 @@ class staging extends class_base
 			foreach($ext as $obj_id => $date_data)
 			{
 				$ts = $de->get_timestamp($date_data);
+				if($ts === (int)$times["existing_old"][$obj_id])
+				{
+					continue;
+				}
 
 				$obj_copy = new object($obj_id);
 				$obj_copy->set_prop("start1",$ts);
@@ -384,17 +397,17 @@ class staging extends class_base
 				{
 					$arr["obj_inst"]->set_prop("start1",$ts);
 				};
-				
+
 
 			};
 		}
-		
+
 		$news = $times["newx"];
 		if (!is_array($news))
 		{
 			$news = array();
 		};
-		
+
 
 		if (is_array($times["new"]))
 		{
@@ -405,10 +418,10 @@ class staging extends class_base
 				if ($news[$idx])
 				{
 					// loome uue koopia objekti
-					//parent jääb samaks
+					//parent j22b samaks
 
 					$new_obj = $o;
-					
+
 
 					$new_obj->set_prop("start1",$ts);
 					$new_obj->save_new();
@@ -429,13 +442,13 @@ class staging extends class_base
 					};
 
 				};
-					
+
 
 			};
 
 		};
 
-		// start time of the original object is also shown in that form so 
+		// start time of the original object is also shown in that form so
 		// update this as well
 		/*
 		$valx = $de->get_timestamp($times["active"]);
@@ -522,12 +535,12 @@ class staging extends class_base
 
 	// how do I get the mass entering of events to work?
 
-	// 1. how do I save those objects so that they show up as normal events 
+	// 1. how do I save those objects so that they show up as normal events
 	// in the calendar
 
 	// 2. if I edit one of those cloned objects then should the other events also change?
 
-	// 3. perhaps I should get the recurrency working properly .. this would allow me 
+	// 3. perhaps I should get the recurrency working properly .. this would allow me
 	// to create better .. oh yes .. I think that is the solution
 
 
