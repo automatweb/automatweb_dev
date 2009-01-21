@@ -135,8 +135,10 @@ caption S&uuml;ndmuse kodulehek&uuml;lg
 property location type=popup_search reltype=RELTYPE_LOCATION clid=CL_SCM_LOCATION style=autocomplete field=ucheck5 no_edit=1
 caption Toimumiskoht
 
+@property location_subt type=text subtitle=1 store=no
+@caption Toimumiskoht
 
-@property location type=releditor reltype=RELTYPE_LOCATION rel_id=first field=ucheck5 props=name,address
+@property location type=releditor reltype=RELTYPE_LOCATION rel_id=first props=name,address store=connect
 @caption Toimumiskoht
 
 property location_tb type=toolbar store=no no_caption=1
@@ -144,6 +146,9 @@ caption Asukoha toolbar
 
 property location_table type=table store=no no_caption=1
 caption Asukoha tabel
+
+@property organizer_subt type=text subtitle=1 store=no
+@caption Korraldaja
 
 @property organizer type=releditor reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY method=serialize field=meta table=objects rel_id=first props=name,contact table_fields=name,contact
 @caption Korraldaja
@@ -157,19 +162,6 @@ caption Korraldaja tabel
 
 - korraldaja releditoriks (kontakt tel, aadress[riik, maakond, linn, t2nav], email, www, nimi)
 
-
-@property level type=select field=level field=ucheck4
-@caption Tase
-
-@property published type=checkbox field=ucheck2
-@caption Avaldatud
-
-@property front_event type=checkbox field=ucheck3
-@caption Esilehe s&uuml;ndmus
-
-@property event_time type=relpicker reltype=RELTYPE_EVENT_TIME store=connect
-@caption Toimumisaeg
-
 property event_time_table type=table no_caption=1 store=no
 caption Toimumisaegade tabel
 
@@ -182,6 +174,18 @@ caption Toimumisaegade tabel
 
 @property aliasmgr type=aliasmgr no_caption=1 store=no
 @caption Aliastehaldur
+
+@property level type=select field=level field=ucheck4
+@caption Tase
+
+@property published type=checkbox field=ucheck2
+@caption Avaldatud
+
+@property front_event type=checkbox field=ucheck3
+@caption Esilehe s&uuml;ndmus
+
+@property event_time type=relpicker reltype=RELTYPE_EVENT_TIME store=connect
+@caption Toimumisaeg
 
 @default field=meta
 @default method=serialize

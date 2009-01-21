@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.172 2009/01/16 11:37:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.173 2009/01/21 14:05:37 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -41,7 +41,7 @@ class releditor extends core
 				}
 				return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>".html::hidden(array(
 					"name" => $property["name"]."_data",
-					"value" => $arr["cb_values"]["edit_data"] 
+					"value" => $arr["cb_values"]["edit_data"]
 				));
                         }
                 }
@@ -66,7 +66,7 @@ class releditor extends core
 		if (!is_array($parent_inst->relinfo))
 		{
 			$parent_inst->load_defaults();
-		}		
+		}
 		$target_reltype = $arr["prop"]["reltype"];
 		$arr["prop"]["reltype"] = $parent_inst->relinfo[$target_reltype]["value"];
 		$arr["prop"]["clid"] = $parent_inst->relinfo[$target_reltype]["clid"];
@@ -519,7 +519,6 @@ class releditor extends core
 		{
 			$relinfo = $arr["obj_inst"]->get_relinfo();
 			$clid = $relinfo[$prop["reltype"]]["clid"][0];
-
 		}
 
 		$props = $arr["prop"]["props"];
@@ -667,11 +666,11 @@ class releditor extends core
 		// 2) ....
 		foreach($all_props as $key => $_prop)
 		{
-                        if (!empty($arr["cb_values"]["value"][$key]))
-                        {
-                                $_prop["value"] = $arr["cb_values"]["value"][$key];
-                        }
- 
+			if (!empty($arr["cb_values"]["value"][$key]))
+			{
+				$_prop["value"] = $arr["cb_values"]["value"][$key];
+			}
+
 			//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
 			//if ($all_props[$key])
 			//if (is_array($props) && in_array($key,$props))
@@ -860,7 +859,7 @@ class releditor extends core
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
 			"name_prefix" => $this->elname,
-			"obj_inst" => ($obj_inst && is_oid($obj_inst->id())) ? $obj_inst : $arr["obj_inst"],
+			"obj_inst" => $obj_inst,
 		));
 
 		// add this after parse, otherwise the name will be in form propname[elname], and I do not
@@ -1787,7 +1786,7 @@ class releditor extends core
 //		$this->loaded_from_cfgform = is_oid($arr["cfgform"]) && $this->can("view", $arr["cfgform"]);
 		$t = new aw_table;
 		$this->_init_js_rv_table($t, $clid, $propn, $arr["cfgform"]);
-		
+
 		$cfgproplist = is_oid($arr["cfgform"]) ? get_instance(CL_CFGFORM)->get_cfg_proplist($arr["cfgform"]) : array();
 		$cfgcontroller_inst = get_instance(CL_CFGCONTROLLER);
 		$prev_dat = safe_array(unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$propn."_data"])));
@@ -2031,7 +2030,7 @@ class releditor extends core
 		$o->set_class_id($rel_clid);
 		$i = $o->instance();
 		$defs = array();
-		
+
 		foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
 		{
 			$tc_name = $prop_name;
@@ -2141,7 +2140,7 @@ class releditor extends core
 					{
 						$tc_val = $pv["value"];
 					}
-					
+
 					break;
 
 				case "checkbox":
@@ -2306,7 +2305,7 @@ class releditor extends core
 			die(t("Lisa"));
 		}
 	}
-	
+
 	/**
 		@attrib name=js_get_delete_confirmation_text nologin=1
 	**/
