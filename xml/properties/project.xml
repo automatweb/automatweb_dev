@@ -624,7 +624,7 @@
             <group>bills_list</group>
             <type>google_chart</type>
             <no_caption>1</no_caption>
-            <parent>sgc</parent>
+            <parent>chart1</parent>
             <store>no</store>
             <field>status_chart</field>
       </property>
@@ -634,7 +634,7 @@
             <group>bills_list</group>
             <type>google_chart</type>
             <no_caption>1</no_caption>
-            <parent>mgc</parent>
+            <parent>chart2</parent>
             <store>no</store>
             <field>money_chart</field>
       </property>
@@ -1287,25 +1287,25 @@
                   <area_caption></area_caption>
             </bills_right>
             <data_r_charts>
-                  <type>vbox</type>
+                  <type>hbox</type>
                   <parent>bills_right</parent>
                   <width>50%:50%</width>
                   <closeable>1</closeable>
                   <area_caption>Graafikud</area_caption>
                   <group>bills_list</group>
             </data_r_charts>
-            <sgc>
+            <chart1>
                   <parent>data_r_charts</parent>
                   <type>vbox</type>
-                  <area_caption>Arvete&amp;amp;nbsp;nimekiri</area_caption>
                   <group>bills_list</group>
-            </sgc>
-            <mgc>
+                  <area_caption></area_caption>
+            </chart1>
+            <chart2>
                   <parent>data_r_charts</parent>
                   <type>vbox</type>
-                  <area_caption>Arvete&amp;amp;nbsp;nimekiri</area_caption>
                   <group>bills_list</group>
-            </mgc>
+                  <area_caption></area_caption>
+            </chart2>
             <bills_r>
                   <parent>bills_right</parent>
                   <type>vbox</type>

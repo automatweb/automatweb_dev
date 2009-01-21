@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.143 2009/01/21 00:10:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.144 2009/01/21 00:15:42 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -561,9 +561,9 @@ class project extends class_base
 				$c2->add_axis_label(0, $left_axis);
 				$bot_axis = array();
 
-				$bot_axis[] = t("Tehtud t&ouml;id");
-				$bot_axis[] = t("Arveid esitatud");
-				$bot_axis[] = t("Laekunud");
+				$bot_axis[] = t("Tehtud t&ouml;id summas")." ".$work_price;
+				$bot_axis[] = t("Arveid esitatud summas")." ".$bill_sum;
+				$bot_axis[] = t("Laekunud")." ".$payment_sum;
 
 				$c2->add_axis_label(1, $bot_axis);
 				$c2->add_axis_style(1, array(
