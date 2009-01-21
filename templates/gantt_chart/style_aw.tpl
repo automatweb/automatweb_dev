@@ -55,8 +55,7 @@ a.VclGanttHeader
 	font-family : Verdana, Arial, Helvetica, Geneva, sans-serif;
 	font-size: {VAR:row_text_height}px;
 	white-space: nowrap;
-	padding-right: 3px;
-	padding-left: 16px;
+	padding: 1px 3px 1px 6px;
 	border-bottom: 1px solid;
 	border-right: none;
 	border-top: none;
@@ -102,6 +101,7 @@ div#VclGanttChartBox{VAR:chart_id}
 .VclGanttSubdivision
 {
 	border-left: 1px solid #EEEEEE;
+	white-space: nowrap;
 }
 
 .VclGanttTimespan
