@@ -195,7 +195,8 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+	    <group>search</group>
+            <captionside>top</captionside>
             <type>textbox</type>
             <store>no</store>
             <parent>search_left_lay</parent>
@@ -207,7 +208,8 @@
             <field>meta</field>
             <method>serialize</method>
             <group>search</group>
-            <type>textbox</type>
+	    <type>textbox</type>
+            <captionside>top</captionside>
             <store>no</store>
             <parent>search_left_lay</parent>
             <caption>Nimi</caption>

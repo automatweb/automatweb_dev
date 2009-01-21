@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.145 2009/01/21 19:19:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.146 2009/01/21 21:57:14 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -70,13 +70,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 			@property search_menu type=text captionside=top parent=search_left_lay
 			@caption Kaustad kust otsida
 
-			@property req_members_s type=text store=no parent=search_left_lay
+			@property req_members_s type=text store=no parent=search_left_lay captionside=top
 			@caption Otsi ka alamobjektide alt
 
-			@property search_mail type=textbox store=no parent=search_left_lay
+			@property search_mail type=textbox store=no parent=search_left_lay captionside=top
 			@caption E-mail
 			
-			@property search_name type=textbox store=no parent=search_left_lay
+			@property search_name type=textbox store=no parent=search_left_lay captionside=top
 			@caption Nimi
 			
 			@property search_submit type=submit store=no no_caption=1 parent=search_left_lay
@@ -378,6 +378,20 @@ class ml_list extends class_base
 		));
 		lc_load("definition");
 		lc_site_load("ml_list", &$this);
+	}
+
+	function callback_mod_layout(&$arr)
+	{
+		switch($arr["name"])
+		{
+			case "list_lay":
+				$arr["area_caption"] = sprintf(t("Mailinglisti liikmed"), $arr["obj_inst"]->name());
+				break;
+			case "search_left_lay":
+				$arr["area_caption"] = sprintf(t("Liikmete otsingu parameetrid"), $arr["obj_inst"]->name());
+				break;
+		}
+		return true;
 	}
 
 	function callback_pre_edit($arr)
@@ -983,6 +997,23 @@ class ml_list extends class_base
 
 		switch($prop["name"])
 		{
+			case "search_mail":
+			case "search_name":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+			case "search_menu":
+				$sources = $arr["obj_inst"]->get_sources();
+				$prop["value"] = "";
+				foreach($sources->arr() as $source)
+				{
+					$prop["value"].= html::checkbox(array(
+						"name" => "search_from_source[".$source->id()."]",
+						"value" => 1,
+						"checked" => $arr["request"]["search_from_source"][$source->id()]? 1 : 0,
+					)). " " . $source->name()." <br>";
+				}
+				break;
+
 			case "register_data":
 				if(is_object($rd = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER_DATA")))
 				{
@@ -1600,6 +1631,11 @@ class ml_list extends class_base
 		$object = obj($arr["args"]["id"]);
 		if($object->prop["no_rtf"]) $this->set_classinfo(array("allow_rte" => 0));
 		else $this->set_classinfo(array("allow_rte" => $object->prop("classinfo_allow_rte")));
+
+		$arr["args"]["search_mail"] = $_POST["search_mail"];
+		$arr["args"]["search_name"] = $_POST["search_name"];
+		$arr["args"]["search_from_source"] = $_POST["search_from_source"];
+		$arr["args"]["search_from_subfolders"] = $_POST["search_from_subfolders"];
 
 		if (isset($this->do_export))
 		{
@@ -4104,11 +4140,6 @@ arr($msg_obj->prop("message"));
 		$this->_add_expf_sched($l);
 		die(t("all done"));
 	}
-	
-	function search_tb($arr)
-	{
-	
-	}
 		
 	/**
 		@attrib api=1 params=name name=delete_old
@@ -4158,192 +4189,186 @@ arr($msg_obj->prop("message"));
 		return html::get_change_url($o->id(), array("return_url" => $arr["ru"]));
 	}
 	
+	private function _init_members_table(&$t, $list)
+	{
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+			"width" => 50,
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => t("Aadress"),
+			"sortable" => 1,
+		));
+		
+		$t->define_field(array(
+			"name" => "source",
+			"caption" => t("Allikas"),
+			"sortable" => 1,
+		));
+
+		if($this->show_extra_cols)
+		{
+			$t->define_field(array(
+				"name" => "co",
+				"caption" => t("Organisatsioon"),
+				"sortable" => 1,
+			));
+			$t->define_field(array(
+				"name" => "section",
+				"caption" => t("Osakond"),
+				"sortable" => 1,
+			));
+
+			$t->define_field(array(
+				"name" => "profession",
+				"caption" => t("Ametinimetus"),
+				"sortable" => 1,
+			));
+		}
+			
+		$t->define_field(array(
+			"name" => "joined",
+			"caption" => t("Liitunud"),
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "H:i d-m-Y",
+			"smart" => 1,
+		));
+			
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+
+		$cfg = $list->prop("member_config");
+		if(is_oid($cfg) && $this->can("view", $cfg))
+		{
+			$config_obj = &obj($cfg);
+			$config_data = $config_obj->meta("cfg_proplist");
+			uasort($config_data, array($this,"__sort_props_by_ord"));
+				
+			foreach($config_data as $key => $item)
+			{
+				strpos($key, "def_txbox");
+				if(strpos($key, "def_txbox"))
+				{
+					$t->define_field(array(
+						"name" => $item["name"],
+						"caption" => $item["caption"],
+						"sortable" => 1,
+					));
+				}
+					
+				if(strpos($key, "def_date"))
+				{
+					$t->define_field(array(
+						"name" => $item["name"],
+						"caption" => $item["caption"],
+						"sortable" => 1,
+					));	
+				}
+			}
+		}
+
+		if(!empty($cfg))
+		{
+			$t->define_field(array(
+				"name" => "others",
+				"caption" => t("Liitumisinfo"),
+			));
+		}
+
+	}
+
 	function member_search_table($arr)
 	{
-		if(strlen($arr["obj_inst"]->prop("search_mail")) > 1 || strlen($arr["obj_inst"]->prop("search_name")) > 1)
+		$ml_member_inst = get_instance(CL_ML_MEMBER);
+		$search_name = $arr["request"]["search_name"];
+		$search_mail = $arr["request"]["search_mail"];
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_default_sortby("id");
+		$t->set_default_sorder("desc");
+		$this->_init_members_table($t, $arr["obj_inst"]);
+
+		$this->list_id = $arr["obj_inst"]->id();
+		$members = $arr["obj_inst"]->get_members(array(
+			"sources" => array_keys($arr["request"]["search_from_source"]),
+			"mail" => $search_mail,
+			"name" => $search_name,
+			"all" => 1,
+		));
+
+		foreach($members as $key => $val)
 		{
-			$this->list_id = $arr["obj_inst"]->id();
-			$ml_list_members = $this->get_members(array(
-				"src"	=> $arr["obj_inst"]->prop("search_menu"),
-				"all"	=> 1,
-//				"id" 	=> $arr["obj_inst"]->id(),
-			));
-			$t = &$arr["prop"]["vcl_inst"];
-			$t->define_field(array(
-				"name" => "id",
-				"caption" => t("ID"),
-				"width" => 50,
-			));
-			$t->define_field(array(
-				"name" => "name",
-				"caption" => t("Nimi"),
-				"sortable" => 1,
-			));
-			$t->define_field(array(
-				"name" => "email",
-				"caption" => t("Aadress"),
-				"sortable" => 1,
-			));
-			
-			$t->define_field(array(
-				"name" => "source",
-				"caption" => t("Allikas"),
-				"sortable" => 1,
-			));
-
-			if($this->show_extra_cols)
+			$is_oid = 0;
+			if(is_oid($val["oid"]))
 			{
-				$t->define_field(array(
-					"name" => "co",
-					"caption" => t("Organisatsioon"),
-					"sortable" => 1,
-				));
-
-				$t->define_field(array(
-					"name" => "section",
-					"caption" => t("Osakond"),
-					"sortable" => 1,
-				));
-
-				$t->define_field(array(
-					"name" => "profession",
-					"caption" => t("Ametinimetus"),
-					"sortable" => 1,
-				));
+				$is_oid = 1;
 			}
-			
-			$t->define_field(array(
-				"name" => "joined",
-				"caption" => t("Liitunud"),
-				"sortable" => 1,
-				"type" => "time",
-				"format" => "H:i d-m-Y",
-				"smart" => 1,
-			));
-			
-			$t->define_chooser(array(
-				"name" => "sel",
-				"field" => "oid",
-			));
-			
-			$t->set_default_sortby("id");
-			$t->set_default_sorder("desc");
-			$cfg = $arr["obj_inst"]->prop("member_config");
-			if(is_oid($cfg) && $this->can("view", $cfg))
+			if(!(strlen($val["name"]) > 0))
 			{
-				$config_obj = &obj($cfg);
-				$config_data = $config_obj->meta("cfg_proplist");
-				uasort($config_data, array($this,"__sort_props_by_ord"));
-				
-				foreach($config_data as $key => $item)
-				{
-					strpos($key, "def_txbox");
-					if(strpos($key, "def_txbox"))
-					{
-						$t->define_field(array(
-							"name" => $item["name"],
-							"caption" => $item["caption"],
-							"sortable" => 1,
-						));
-					}
-					
-					if(strpos($key, "def_date"))
-					{
-						$t->define_field(array(
-							"name" => $item["name"],
-							"caption" => $item["caption"],
-							"sortable" => 1,
-						));	
-					}
-				}
+				$val["name"] = "(nimetu)";
 			}
-			$member_config = $arr["obj_inst"]->prop("member_config");
-			if(!empty($member_config))
+			$parent = obj($val["parent"]);
+			$parent_name = $parent->name();;
+			if($is_oid)
 			{
-				$t->define_field(array(
-					"name" => "others",
-					"caption" => t("Liitumisinfo"),
+				list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
+					"lid" => $arr["obj_inst"]->id(),
+					"member" => $val["oid"],
+					"from_user" => true,
 				));
-			}
-	
-			$ml_member_inst = get_instance(CL_ML_MEMBER);
-
-			if (is_array($ml_list_members))
-			{
-				foreach($ml_list_members as $key => $val)
-				{
-					if((strlen($arr["obj_inst"]->prop("search_name")) > 1) && (substr_count(strtolower($val["name"]), strtolower($arr["obj_inst"]->prop("search_name"))) < 1))
-					{
-						continue;
-					}
-					
-					if((strlen($arr["obj_inst"]->prop("search_mail")) > 1) && (substr_count($val["mail"], $arr["obj_inst"]->prop("search_mail")) < 1)) 
-					{
-						continue;
-					}
-				
-					$is_oid = 0;
-					if(is_oid($val["oid"]))
-					{
-						$is_oid = 1;
-					}
-					if(!(strlen($val["name"]) > 0))
-					{
-						$val["name"] = "(nimetu)";
-					}
-					$parent_obj = obj($val["parent"]);
-					$parent_name = $parent_obj->name();
-					if($is_oid)
-					{
-						list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
-							"lid" => $arr["obj_inst"]->id(),
-							"member" => $val["oid"],
-							"from_user" => true,
-						));
-						$joined = $memberdata["joined"];
-
-						$source = ($parent_obj->class_id() == $parent_obj->prop("parent.class_id") ? html::href(array(
-							"url" => admin_if::get_link_for_obj($parent_obj->parent()),
-							"caption" => $parent_obj->prop("parent.name"),
-						))."->" : "" ). html::href(array(
-							"url" => admin_if::get_link_for_obj($val["parent"]),
-							"caption" => $parent_name,
-						));
-						$others = html::href(array(
-							"caption" => t("Vaata"),
-							"url" => $this->mk_my_orb("change", array(
-								"id" => $val["oid"],
-								"group" => "udef_fields",
-								"cfgform" => $arr["obj_inst"]->prop("member_config"),
-								), CL_ML_MEMBER),
-						));
-						$name = html::get_change_url($val["oid"], array("return_url" => get_ru()), $val["name"]);
-						$oid = $val["oid"];
-					}
-					else
-					{
-						$source = $parent_name;
-						$name = $val["name"];
-						$oid = $val["parent"]."_row_count_".$val["row_cnt"];
-					}
-					$tabledata = array(
+				$joined = $memberdata["joined"];
+				$source = ($parent->class_id() == $parent->prop("parent.class_id") ? html::href(array(
+					"url" => admin_if::get_link_for_obj($parent->parent()),
+					"caption" => $parent->prop("parent.name"),
+				))."->" : "" ). html::href(array(
+					"url" => admin_if::get_link_for_obj($val["parent"]),
+					"caption" => $parent_name,
+				));
+				$others = html::href(array(
+					"caption" => t("Vaata"),
+					"url" => $this->mk_my_orb("change", array(
 						"id" => $val["oid"],
-						"email" => $val["mail"],
-						"joined" => $memberdata["joined"],
-						"source" => $source,
-						"others" => $others,
-						"name" => $name,
-						"oid" => $oid,
-					);
-					$t->define_data($tabledata);
-				}
-				$t->d_row_cnt = sizeof($ml_list_members);
-				$t->set_header($t->draw_text_pageselector(array(
-					"records_per_page" => $perpage,
-				)));
+						"group" => "udef_fields",
+						"cfgform" => $arr["obj_inst"]->prop("member_config"),
+						), CL_ML_MEMBER),
+				));
+				$name = html::get_change_url($val["oid"], array("return_url" => get_ru()), $val["name"]);
+				$oid = $val["oid"];
 			}
-			$t->sort_by();
+			else
+			{
+				$source = $parent_name;
+				$name = $val["name"];
+				$oid = $val["parent"]."_row_count_".$val["row_cnt"];
+			}
+
+			$tabledata = array(
+				"id" => $val["oid"],
+				"email" => $val["mail"],
+				"joined" => $memberdata["joined"],
+				"source" => $source,
+				"others" => $others,
+				"name" => $name,
+				"oid" => $oid,
+			);
+			$t->define_data($tabledata);
 		}
+
+		$t->d_row_cnt = sizeof($ml_list_members);
+		$t->set_header($t->draw_text_pageselector(array(
+			"records_per_page" => $perpage,
+		)));
+		$t->sort_by();
 	}
 }
 ?>
