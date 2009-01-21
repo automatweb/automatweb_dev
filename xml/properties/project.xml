@@ -668,6 +668,26 @@
             <field>work_list</field>
       </property>
       <property>
+            <name>works_by_person_chart</name>
+            <table>objects</table>
+            <group>create_bill</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>works_by_person</parent>
+            <store>no</store>
+            <field>works_by_person_chart</field>
+      </property>
+      <property>
+            <name>works_by_payment_chart</name>
+            <table>objects</table>
+            <group>create_bill</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>works_by_payment</parent>
+            <store>no</store>
+            <field>works_by_payment_chart</field>
+      </property>
+      <property>
             <name>team_tb</name>
             <table>objects</table>
             <group>team</group>
@@ -1313,11 +1333,29 @@
                   <group>bills_list</group>
             </bills_r>
             <create_bill_table>
-                  <parent>create_bill</parent>
                   <type>vbox</type>
                   <area_caption>Arvele&amp;amp;nbsp;lisamata&amp;amp;nbsp;tehtud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;e&amp;amp;nbsp;nimekiri</area_caption>
                   <group>create_bill</group>
             </create_bill_table>
+            <work_charts>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>create_bill</group>
+            </work_charts>
+            <works_by_person>
+                  <parent>work_charts</parent>
+                  <type>vbox</type>
+                  <group>create_bill</group>
+                  <area_caption></area_caption>
+            </works_by_person>
+            <works_by_payment>
+                  <parent>work_charts</parent>
+                  <type>vbox</type>
+                  <group>create_bill</group>
+                  <area_caption></area_caption>
+            </works_by_payment>
             <team>
                   <type>hbox</type>
                   <width>20%:80%</width>

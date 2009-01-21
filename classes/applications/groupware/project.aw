@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.146 2009/01/21 00:18:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.147 2009/01/21 18:09:14 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -228,8 +228,15 @@
 
 @default group=create_bill
 	@property create_bill_tb type=toolbar no_caption=1 store=no
-	@layout create_bill_table parent=create_bill type=vbox area_caption=Arvele&nbsp;lisamata&nbsp;tehtud&nbsp;t&ouml;&ouml;e&nbsp;nimekiri
+
+	@layout create_bill_table type=vbox area_caption=Arvele&nbsp;lisamata&nbsp;tehtud&nbsp;t&ouml;&ouml;e&nbsp;nimekiri
 		@property work_list type=table no_caption=1 store=no parent=create_bill_table
+
+	@layout work_charts type=hbox width=50%:50% closeable=1 area_caption=Graafikud
+		@layout works_by_person parent=work_charts type=vbox
+			@property works_by_person_chart type=google_chart no_caption=1 parent=works_by_person store=no
+		@layout works_by_payment parent=work_charts type=vbox
+			@property works_by_payment_chart type=google_chart no_caption=1 parent=works_by_payment store=no
 
 @default group=team
 	@property team_tb type=toolbar no_caption=1 store=no
@@ -3609,6 +3616,9 @@ class project extends class_base
 //			case "bills_left":
 //				$arr["area_caption"] = sprintf(t("%s arved staatuste kaupa"), $arr["obj_inst"]->name());
 //				break;
+			case "create_bill_table":
+				$arr["area_caption"] = sprintf(t("Projekti %s tegemata t&ouml;&ouml;de nimekiri"), $arr["obj_inst"]->name());
+				break;
 			case "bills_r":
 				$var = 10;
 				if(isset($_GET["st"]))
