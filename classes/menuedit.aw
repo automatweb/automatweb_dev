@@ -203,15 +203,6 @@ class menuedit extends aw_template implements request_startup
 			aw_ini_set("frontpage",$frontpage);
 			$this->cfg["frontpage"] = $frontpage;
 		}
-		// kui sektsiooni viimane m2rk on "-", paneme selle objekti sees pysti
-		// raw flagi
-
-		if (substr($section,-1) == "-")
-		{
-			$this->raw = 1;
-			// cut the minus sign
-			$section = substr($section,0,-1);
-		};
 
 		// cut the / from the end
 		// so that http://site/alias and http://site/alias/ both work
