@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.145 2009/01/21 00:17:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.146 2009/01/21 00:18:35 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -505,7 +505,7 @@ class project extends class_base
 				$c2 = &$arr["prop"]["vcl_inst"];
 				$c2->set_type(GCHART_LINE_CHART);
 				$c2->set_size(array(
-					"width" => 350,
+					"width" => 450,
 					"height" => 120,
 				));
 				$c2->add_fill(array(
