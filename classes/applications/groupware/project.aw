@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.147 2009/01/21 18:09:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.148 2009/01/21 18:54:11 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -454,12 +454,138 @@ class project extends class_base
 		);
 	}
 
+	private function get_all_works_sum()
+	{
+		if(isset($this->all_work_sum))
+		{
+			return $this->all_work_sum;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "works_by_person_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+
+				$c = &$arr["prop"]["vcl_inst"];
+
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 600,
+					"height" => 200,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+
+				$times = array();
+				$labels = array();
+
+				$works = $arr["obj_inst"]-> get_rows_data();
+				$tasks = array();
+				$works_per_person = array();
+				foreach($works as $work)
+				{
+					$implementor = reset($work["impl"]);
+					$works_per_person[$implementor]+= $work["time_real"];
+				}
+				foreach($works_per_person as $person => $hours)
+				{
+					if($person)
+					{
+						$times[$person] = $hours;
+						$labels[] = get_name($person) . " (" .$hours. ")";
+					}
+				}
+				$this->all_work_sum = array_sum($works_per_person);
+				$c->add_data($times);
+				$c->set_labels($labels);
+
+				$c->set_title(array(
+					"text" => t("T&ouml;&ouml;de jaotus inimeste kaupa tundides").". (".t("Kokku").":".array_sum($works_per_person).")",
+					"color" => "666666",
+					"size" => 11,
+				));
+
+				break;
+			case "works_by_payment_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 650,
+					"height" => 150,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+
+				$times = array();
+				$labels = array();
+
+				$works = $arr["obj_inst"]-> get_rows_data();
+				$tasks = array();
+
+				foreach($works as $work)
+				{
+					$tasks[$work["task"]]+= $work["time_real"];
+				}
+				$work_price = 0;
+				$task_list = new object_list();
+				$task_list->add(array_keys($tasks));
+				foreach($task_list->arr() as $task)
+				{
+					$work_price+= $task->prop("hr_price") * $tasks[$task->id()];
+				}
+
+				$bill_sum = 0;
+				$payment_sum = 0;
+				$bills = $arr["obj_inst"]->get_bills();
+				foreach($bills->arr() as $bill)
+				{
+					$payment_sum += $bill->get_payments_sum();
+					$bill_sum +=$bill->get_sum();
+				}
+				$c->set_title(array(
+					"text" => t("Laekumine t&ouml;&ouml;de eest"),
+					"color" => "666666",
+					"size" => 11,
+				));
+				$bill_sum = $bill_sum - $payment_sum;
+				$times[] = $work_price;
+				$times[] = $bill_sum;
+				$times[] = $payment_sum;
+
+				$labels[] = t("Arvele minemata t&ouml;id summas")." ".($work_price-$bill_sum);
+				$labels[] = t("Laekumata arveid summas")." ".$bill_sum;
+				$labels[] = t("Laekunud")." ".$payment_sum;
+
+				$c->add_data($times);
+				$c->set_labels($labels);
+
+				break;
 			case "status_chart":
 				if($arr["new"])
 				{
@@ -3536,14 +3662,14 @@ class project extends class_base
 	function _get_create_bill_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-
+/*
 		$tb->add_button(array(
 			'name' => 'new',
 			'img' => 'new.gif',
 			'tooltip' => t('Lisa'),
 			'url' => html::get_new_url(CL_CRM_BILL, $arr["obj_inst"]->id(), array("return_url" => get_ru() , "project" => $arr["obj_inst"]->id()))
 		));
-
+*/
 		$tb->add_button(array(
 			'name' => 'create_bill',
 			'img' => 'save.gif',
@@ -3551,23 +3677,26 @@ class project extends class_base
 			'action' => "create_bill",
 		));
 
-		$tb->add_menu_button(array(
-			"name" => "add_to_bill",
-			"img" => "search.gif",
-			"tooltip" => t("Lisa olemasolevale arvele"),
-		));
-
 		$bills = $arr["obj_inst"]->get_bills(array("status" =>  0));
 
-		foreach($bills->arr() as $bill)
+		if($bills->count)
 		{
-			$tb->add_menu_item(array(
-				"parent" => "add_to_bill",
-				"text" => $bill->name(),
-				"link" =>"javascript:var asd = document.getElementsByName('bill_id');
-					asd[0].value=".$bill->id().";
-					submit_changeform('create_bill');",
+			$tb->add_menu_button(array(
+				"name" => "add_to_bill",
+				"img" => "search.gif",
+				"tooltip" => t("Lisa olemasolevale arvele"),
 			));
+	
+			foreach($bills->arr() as $bill)
+			{
+				$tb->add_menu_item(array(
+					"parent" => "add_to_bill",
+					"text" => $bill->name(),
+					"link" =>"javascript:var asd = document.getElementsByName('bill_id');
+						asd[0].value=".$bill->id().";
+						submit_changeform('create_bill');",
+				));
+			}
 		}
 	}
 
