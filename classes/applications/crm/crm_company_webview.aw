@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.60 2009/01/21 19:26:15 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.61 2009/01/21 19:42:04 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1445,7 +1445,7 @@ class crm_company_webview extends class_base
 						))
 						: '',
 
-				'address' => join(" ," ,$address),//$o->prop("contact.name"),
+				'address' => join(", " ,$address),//$o->prop("contact.name"),
 				'country' => $o->prop("contact.riik.name"),
 				'county' => $o->prop("contact.maakond.name"),
 				'city' => $o->prop("contact.linn.name"),
