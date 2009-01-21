@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.144 2009/01/16 11:37:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.145 2009/01/21 19:19:10 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -62,29 +62,29 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 ------------------------------------------------------------------------
 @groupinfo search caption=Otsi parent=membership
 @default group=search
+	@property search_tb type=toolbar no_caption=1 store=no
+	@caption Otsingu toolbar
 
-@property search_tb type=toolbar no_caption=1
-@caption Otsingu toolbar
+	@layout search_lay type=hbox width=20%:80%
+		@layout search_left_lay type=vbox parent=search_lay
+			@property search_menu type=text captionside=top parent=search_left_lay
+			@caption Kaustad kust otsida
 
-@property search_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
-@caption Kaustad kust otsida
+			@property req_members_s type=text store=no parent=search_left_lay
+			@caption Otsi ka alamobjektide alt
 
-@property req_members_s type=text
-@caption Otsi ka alamobjektide alt
+			@property search_mail type=textbox store=no parent=search_left_lay
+			@caption E-mail
+			
+			@property search_name type=textbox store=no parent=search_left_lay
+			@caption Nimi
+			
+			@property search_submit type=submit store=no no_caption=1 parent=search_left_lay
+			@caption Otsi
 
-@property search_mail type=textbox
-@caption E-mail
-
-@property search_name type=textbox
-@caption Nimi
-
-@property search_submit type=submit store=no no_caption=1
-@caption Otsi
-
-@property search type=table store=no no_caption=1
-@caption Otsing
-
-
+		@layout list_lay closeable=1 type=vbox parent=search_lay
+			@property search_table type=table store=no no_caption=1 parent=list_lay
+			@caption Liimete nimekiri
 
 -----------------------------------------------------------------------
 @groupinfo subscribing caption=Liitumine parent=membership
@@ -1246,8 +1246,8 @@ class ml_list extends class_base
 				$this->gen_member_list($arr);
 				break;
 	
-			case "search":
-				$this->member_search($arr);
+			case "search_table":
+				$this->member_search_table($arr);
 				break;
 	
 			case "separator_legend":
@@ -4158,7 +4158,7 @@ arr($msg_obj->prop("message"));
 		return html::get_change_url($o->id(), array("return_url" => $arr["ru"]));
 	}
 	
-	function member_search($arr)
+	function member_search_table($arr)
 	{
 		if(strlen($arr["obj_inst"]->prop("search_mail")) > 1 || strlen($arr["obj_inst"]->prop("search_name")) > 1)
 		{

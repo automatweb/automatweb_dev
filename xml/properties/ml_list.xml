@@ -174,11 +174,9 @@
             <field>meta</field>
             <method>serialize</method>
             <group>search</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MEMBER_PARENT</reltype>
-            <editonly>1</editonly>
-            <multiple>1</multiple>
-            <delete_rels_popup_button>1</delete_rels_popup_button>
+            <type>text</type>
+            <captionside>top</captionside>
+            <parent>search_left_lay</parent>
             <caption>Kaustad kust otsida</caption>
       </property>
       <property>
@@ -188,6 +186,8 @@
             <method>serialize</method>
             <group>search</group>
             <type>text</type>
+            <store>no</store>
+            <parent>search_left_lay</parent>
             <caption>Otsi ka alamobjektide alt</caption>
       </property>
       <property>
@@ -197,6 +197,8 @@
             <method>serialize</method>
             <group>search</group>
             <type>textbox</type>
+            <store>no</store>
+            <parent>search_left_lay</parent>
             <caption>E-mail</caption>
       </property>
       <property>
@@ -206,6 +208,8 @@
             <method>serialize</method>
             <group>search</group>
             <type>textbox</type>
+            <store>no</store>
+            <parent>search_left_lay</parent>
             <caption>Nimi</caption>
       </property>
       <property>
@@ -217,10 +221,11 @@
             <type>submit</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>search_left_lay</parent>
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>search</name>
+            <name>search_table</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -228,7 +233,8 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Otsing</caption>
+            <parent>list_lay</parent>
+            <caption>Liimete nimekiri</caption>
       </property>
       <property>
             <name>admin_subscribe_folders</name>
@@ -1007,6 +1013,25 @@
             </PERSONNEL_MANAGEMENT>
       </reltypes>
       <layout>
+            <search_lay>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>search</group>
+                  <area_caption></area_caption>
+            </search_lay>
+            <search_left_lay>
+                  <type>vbox</type>
+                  <parent>search_lay</parent>
+                  <group>search</group>
+                  <area_caption></area_caption>
+            </search_left_lay>
+            <list_lay>
+                  <closeable>1</closeable>
+                  <type>vbox</type>
+                  <parent>search_lay</parent>
+                  <group>search</group>
+                  <area_caption></area_caption>
+            </list_lay>
             <status_bottom>
                   <type>hbox</type>
                   <group>list_status</group>
