@@ -299,7 +299,7 @@ class date_edit
 					break;
 
 				case "hour_textbox":
-					$retval .= "<input type='text' name='{$this->varname}[hour]' size='2' maxlength='2' value='$hour' $disabled $textsize>\n";
+					$retval .= "<input type='text' name='{$this->varname}[hour]' size='2' maxlength='2' value='$hour' $disabled $textsize \>\n";
 					break;
 
 				case "minute":
@@ -341,9 +341,15 @@ class date_edit
 				$date_clear_img_url = '/automatweb/images/icons/delete.gif';
 			}
 
-			$retval .= "<span style='white-space: nowrap;'><a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"{$this->varname}\");' id='{$this->varname}' name='{$this->varname}'>";
-			$retval .= "<img id='{$this->varname}_ico"."' src='".aw_ini_get('baseurl').$date_choose_img_url."' border='0'></a> ";
-			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"{$this->varname}\");'><img src='".aw_ini_get('baseurl').$date_clear_img_url."' border=0></a></span>";
+			$retval .= 
+				"<span style='white-space: nowrap;'>
+					<a href='javascript:void(0)' onclick='aw_date_edit_show_cal(\"{$this->varname}\");' id='{$this->varname}' name='{$this->varname}'>";
+			$retval .= "<img id='{$this->varname}_ico"."' src='".aw_ini_get('baseurl').$date_choose_img_url."' border='0' alt=''/>
+					</a> ";
+			$retval .= "<a href='javascript:void(0)' onclick='aw_date_edit_clear(\"{$this->varname}\");'>
+					<img src='".aw_ini_get('baseurl').$date_clear_img_url."' border=0  alt=''/>
+					</a>
+				</span>";
 		}
 
 		return $retval;
