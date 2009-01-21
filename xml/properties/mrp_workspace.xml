@@ -1373,6 +1373,7 @@
             <group>grp_worksheet</group>
             <type>select</type>
             <multiple>1</multiple>
+            <size>5</size>
             <store>no</store>
             <caption>Ressursid</caption>
       </property>

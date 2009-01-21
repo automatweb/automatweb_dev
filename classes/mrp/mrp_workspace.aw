@@ -354,7 +354,7 @@
 
 
 @default group=grp_worksheet
-	@property ws_resource type=select multiple=1 store=no
+	@property ws_resource type=select multiple=1 store=no size=5
 	@caption Ressursid
 
 	@property ws_from type=date_select store=no
@@ -1263,8 +1263,12 @@ class mrp_workspace extends class_base
 				{
 					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
 				}
-				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),$res_ol->names());
-				// $prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
+				$empty_selection = array();
+				if (count($resids) > 1)
+				{
+					$empty_selection = array("0" => t("K&otilde;ik ressursid"));
+				}
+				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"), $empty_selection + $res_ol->names());
 				$prop["value"] .= "</select>";
 
 				$prop["value"] .= "</td></tr></table>";
@@ -1411,7 +1415,7 @@ class mrp_workspace extends class_base
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
 
-		if ( (substr($prop["name"], 0, 9) == "parameter") and ($this_object->prop ($prop["name"]) != $prop["value"]) )
+		if ( (substr($prop["name"], 0, 9) === "parameter") and ($this_object->prop ($prop["name"]) != $prop["value"]) )
 		{
 			### post rescheduling msg
 			$this_object->set_prop("rescheduling_needed", 1);
@@ -1420,9 +1424,16 @@ class mrp_workspace extends class_base
 		switch ($prop["name"])
 		{
 			case "printer_legend":
-				if ($arr["request"]["pj_use_resource"])
+				if (isset($arr["request"]["pj_use_resource"]))
 				{
-					$_SESSION["mrp_operator_use_resource"] = $arr["request"]["pj_use_resource"];
+					if ($arr["request"]["pj_use_resource"])
+					{
+						aw_session_set("mrp_operator_use_resource", $arr["request"]["pj_use_resource"]);
+					}
+					else
+					{
+						aw_session_del("mrp_operator_use_resource");
+					}
 				}
 				break;
 
@@ -4692,7 +4703,8 @@ class mrp_workspace extends class_base
 //!!!
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).name"] = "%";
 		// this also does or is null, cause the customer can be null
-		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = new obj_predicate_not(1);
+		// $filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = new obj_predicate_not(1);
+
 		if ($arr["proj_states"])
 		{
 			$filt["CL_MRP_JOB.project(CL_MRP_CASE).state"] = $arr["states"];
