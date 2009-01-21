@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.144 2009/01/21 00:15:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.145 2009/01/21 00:17:13 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -461,8 +461,8 @@ class project extends class_base
 				$c = &$arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
-					"width" => 400,
-					"height" => 100,
+					"width" => 350,
+					"height" => 120,
 				));
 				$c->add_fill(array(
 					"area" => GCHART_FILL_BACKGROUND,
@@ -505,8 +505,8 @@ class project extends class_base
 				$c2 = &$arr["prop"]["vcl_inst"];
 				$c2->set_type(GCHART_LINE_CHART);
 				$c2->set_size(array(
-					"width" => 400,
-					"height" => 100,
+					"width" => 350,
+					"height" => 120,
 				));
 				$c2->add_fill(array(
 					"area" => GCHART_FILL_BACKGROUND,
