@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.59 2009/01/19 19:23:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.60 2009/01/21 19:26:15 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -280,7 +280,6 @@ class crm_company_webview extends class_base
 					: '',
 			'address' => $c->prop("contact.name"),
 		));
-
 		// All possible line_* values are defined here
 		$datafields = array(
 			'sectors' => '',
@@ -308,8 +307,7 @@ class crm_company_webview extends class_base
 			'userta3' => '',
 			'userta4' => '',
 			'userta5' => '',
-			'logo' => 'logo'
-
+			'logo' => 'logo',
 		);
 		
 		// Name is not obligatory - will go to template as {VAR:key}
@@ -330,7 +328,7 @@ class crm_company_webview extends class_base
 			'num_rooms' => t("Toad"),
 			'prices' => t("Hinnad"),
 			'type' => t("T&uuml;&uuml;p"),
-			'logo' => t("Logo")
+			'logo' => t("Logo"),
 		);
 		$crm_field_titles = array(
 			CL_CRM_FIELD_ACCOMMODATION => t("Majutusinfo"),
@@ -881,7 +879,7 @@ class crm_company_webview extends class_base
 					foreach($rels as $rel)
 					{
 						$_t = $rel->to();
-						$val = $_t->name();
+						$val = $_t->prop("url");
 						$val = (substr($val, 0, 7) == "http://")?$val:"http://".$val;
 						$value[] = html::href(array(
 							"url" => $val,
@@ -959,6 +957,23 @@ class crm_company_webview extends class_base
 				$this->vars(array('line_'.$item => $this->parse('line_'.$item)));
 			}
 		}
+
+		// External links
+		$value = "";
+		foreach($c->connections_from(array("type" => "RELTYPE_EXTERNAL_LINKS")) as $conn)
+		{
+			$_t = $conn->to();
+			$val = $_t->prop("url");
+			$val = (substr($val, 0, 7) == "http://")?$val:"http://".$val;
+			$this->vars(array(
+				"link" => $val,
+				"text" => $_t->name(),
+			));
+			$value .= $this->parse("external_links");
+		}
+		$this->vars(array(
+			"external_links" => $value,
+		));
 
 		// Images
 		$inst_img = get_instance(CL_IMAGE);
@@ -1106,7 +1121,6 @@ class crm_company_webview extends class_base
 		}
 		$this->vars(array(
 			"keywords" => $kw,
-			"PRINTANDSEND" => $this->parse("PRINTANDSEND"),
 		));
 		// Alrighty then, parse your arse away
 		return $this->parse('company_show');
@@ -1293,7 +1307,6 @@ class crm_company_webview extends class_base
 		if (!empty($arr['id']))
 		{
 			$ob = new object($arr["id"]);
-			$owner_id = $ob->prop("crm_db.owner_org");
 			$do_link = $ob->prop('clickable');
 			$show_title = $ob->prop('show_title');
 			if ($show_title)
@@ -1379,24 +1392,6 @@ class crm_company_webview extends class_base
 			{
 				continue;
 			}
-			enter_function("crm_company_webview::check.crm_company_customer_data.show_in_webview");
-			if(isset($ob) && is_object($ob) && $ob->prop("only_active") && isset($owner_id) || is_oid($owner_id))
-			{
-				$ol = new object_list(array(
-					"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-					"buyer" => $o->id(),
-					"seller" => $owner_id,
-					"show_in_webview" => 1,
-					"lang_id" => array(),
-					"site_id" => array(),
-					"limit" => 1,
-				));
-				if($ol->count() == 0)
-				{
-					continue;
-				}
-			}
-			exit_function("crm_company_webview::check.crm_company_customer_data.show_in_webview");
 			$address = $phone = $fax = $openhours = $email = $web = "";
 			$name = $o->trans_get_val("name");
 			$tmp_ad = $this->can("view", $o->prop("contact"))?obj($o->prop("contact")):false;
@@ -1407,6 +1402,7 @@ class crm_company_webview extends class_base
 			$tmp_cty?array_push($tmp_city, $tmp_cty):"";
 			$tmp_ad?array_push($tmp_city, $tmp_ad->prop("linn.name")):"";
 			$city_cap = $name.(count($tmp_city)?" (".join(", ", $tmp_city).")":"");
+
 			$address = array();
 			if($o->prop("contact.aadress"))
 			{
@@ -1786,7 +1782,7 @@ class crm_company_webview extends class_base
 //		arr(method_exists($si,'get_company_webview_folders'));
 		if(method_exists($si,'get_company_webview_folders'))
 		{
-			return $si->get_company_webview_folders($ret);
+			return $si->get_company_webview_folders($ret , $object, $level, $parent_o);
 		}
 		return $ret;
 	}
