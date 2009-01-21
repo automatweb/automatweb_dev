@@ -2939,6 +2939,12 @@ class site_show extends class_base
 							{
 								$alp[] = str_replace("%2F", "/", urlencode(($use_trans ? $p_o->trans_get_val("alias") : $p_o->alias())));
 							}
+                                                        else
+                                                        {
+                                                                // if empty alias, return no alias
+                                                                $link .= $o->id();
+                                                                return $link;
+                                                        }
 						}
 
 						$link .= join("/",$alp);
