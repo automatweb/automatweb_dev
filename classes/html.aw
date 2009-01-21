@@ -256,8 +256,12 @@ class html extends aw_template
 		$onchange = !empty($onChange) ? " onchange=\"{$onChange}\"" : "";
 		$onkeyup = isset($onkeyup) ? " onkeyup=\"{$onkeyup}\"" : '';
 		$style = isset($style) ? " style=\"{$style}\"":"";
+		if(!isset($selected) && strlen($value) > 0)
+		{
+			$selected = (array) $value;
+		}
 
-		if(!empty($autocomplete_class_id))
+		if(is_admin() && !empty($autocomplete_class_id))
 		{
 			$params = array(
 				"id" => $_GET["id"],
@@ -278,7 +282,7 @@ class html extends aw_template
 		}
 
 		### compose autocompletes source url
-		if (!empty($autocomplete_source) or !empty($options) and is_array($options) or !empty($autocomplete_source_method))
+		if (is_admin() && (!empty($autocomplete_source) or !empty($options) and is_array($options) or !empty($autocomplete_source_method)))
 		{
 			if (!defined("AW_AUTOCOMPLETE_INITIALIZED"))
 			{
@@ -558,11 +562,6 @@ class html extends aw_template
 	**/
 	function text($args = array())
 	{
-		if (!isset($args["value"]))
-		{
-//			throw new awex_html_param("Required parameter 'value' missing");
-		}
-
 		if (!empty($args["textsize"]))
 		{
 			$element = "<span style=\"font-size: {$args["textsize"]};\">{$args["value"]}</span>";
