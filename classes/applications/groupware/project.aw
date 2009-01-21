@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.142 2009/01/20 23:38:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.143 2009/01/21 00:10:42 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -218,12 +218,11 @@
 			@property bills_tree type=treeview store=no no_caption=1 parent=bills_left
 
 		@layout bills_right parent=bills type=vbox
-			@layout data_r_charts type=vbox parent=bills_right width=50%:50% closeable=1 area_caption=Graafikud
-			@layout sgc parent=data_r_charts type=vbox area_caption=Arvete&nbsp;nimekiri
-					@property status_chart type=google_chart no_caption=1 parent=sgc store=no
-			@layout mgc parent=data_r_charts type=vbox area_caption=Arvete&nbsp;nimekiri
-					@property money_chart type=google_chart no_caption=1 parent=mgc store=no
-			
+			@layout data_r_charts type=hbox parent=bills_right width=50%:50% closeable=1 area_caption=Graafikud
+				@layout chart1 parent=data_r_charts type=vbox
+					@property status_chart type=google_chart no_caption=1 parent=chart1 store=no
+				@layout chart2 parent=data_r_charts type=vbox
+					@property money_chart type=google_chart no_caption=1 parent=chart2 store=no
 			@layout bills_r parent=bills_right type=vbox area_caption=Arvete&nbsp;nimekiri
 				@property bills_list type=table no_caption=1 store=no parent=bills_r
 
@@ -462,7 +461,7 @@ class project extends class_base
 				$c = &$arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
-					"width" => 300,
+					"width" => 400,
 					"height" => 100,
 				));
 				$c->add_fill(array(
@@ -503,13 +502,13 @@ class project extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$c = &$arr["prop"]["vcl_inst"];
-				$c->set_type(GCHART_LINE_CHART);
-				$c->set_size(array(
-					"width" => 300,
+				$c2 = &$arr["prop"]["vcl_inst"];
+				$c2->set_type(GCHART_LINE_CHART);
+				$c2->set_size(array(
+					"width" => 400,
 					"height" => 100,
 				));
-				$c->add_fill(array(
+				$c2->add_fill(array(
 					"area" => GCHART_FILL_BACKGROUND,
 					"type" => GCHART_FILL_SOLID,
 					"colors" => array(
@@ -543,14 +542,14 @@ class project extends class_base
 				}
 
 				$times = array();
-				$data = array();
+				$data1 = array();
 			
-				$data[] = $work_price;
-				$data[] = $bill_sum;
-				$data[] = $payment_sum;
+				$data1[] = $work_price;
+				$data1[] = $bill_sum;
+				$data1[] = $payment_sum;
 
-				$c->add_data($data);
-				$c->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
+				$c2->add_data($data1);
+				$c2->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
 				$left_axis = array();
 				if ($work_price > 0)
 				{
@@ -559,30 +558,30 @@ class project extends class_base
 						$left_axis[] = round($i, 2);
 					}
 				}
-				$c->add_axis_label(0, $left_axis);
+				$c2->add_axis_label(0, $left_axis);
 				$bot_axis = array();
 
 				$bot_axis[] = t("Tehtud t&ouml;id");
 				$bot_axis[] = t("Arveid esitatud");
 				$bot_axis[] = t("Laekunud");
 
-				$c->add_axis_label(1, $bot_axis);
-				$c->add_axis_style(1, array(
+				$c2->add_axis_label(1, $bot_axis);
+				$c2->add_axis_style(1, array(
 					"color" => "888888",
 					"font" => 10,
 					"align" => GCHART_ALIGN_CENTER,
 				));
-				$c->set_grid(array(
+				$c2->set_grid(array(
 					"xstep" => 30,
 					"ystep" => 20,
 				));
-				$c->set_title(array(
+				$c2->set_title(array(
 					"text" => t("Projekti statistika rahaliselt"),
 					"color" => "555555",
 					"size" => 10,
 				));
 				$arr["prop"]["type"] = "text";
-				$arr["prop"]["value"] = $c->get_html();
+				$arr["prop"]["value"] = $c2->get_html();
 				break;
 
 			case "prods_toolbar":
