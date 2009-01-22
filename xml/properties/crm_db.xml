@@ -163,105 +163,71 @@
             <caption>Kuva tabelites ainult organisatsioone, mida kuvatakse veebis</caption>
       </property>
       <property>
-            <name>orgtoolbar</name>
+            <name>org_tlb</name>
             <table>objects</table>
-            <group>
-                  <num_0>firmad</num_0>
-                  <num_1>f2</num_1>
-                  <num_2>tegevusalad</num_2>
-                  <num_3>not_on_web</num_3>
-            </group>
+            <group>org</group>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Org. toolbar</caption>
       </property>
       <property>
-            <name>search_form1</name>
+            <name>org_tree</name>
             <table>objects</table>
-            <group>f2</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>form</type>
-            <sclass>crm/crm_org_search</sclass>
-            <sform>crm_search</sform>
-            <parent>org</parent>
-            <caption>Compound search</caption>
-      </property>
-      <property>
-            <name>company_table</name>
-            <table>objects</table>
-            <group>firmad</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>sector_tree</name>
-            <table>objects</table>
-            <group>tegevusalad</group>
+            <group>org</group>
             <field>meta</field>
             <method>serialize</method>
             <type>treeview</type>
-            <parent>ta</parent>
-            <no_caption>1</no_caption>
             <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>o_left_top</parent>
       </property>
       <property>
-            <name>sector_table</name>
+            <name>os_name</name>
             <table>objects</table>
-            <group>tegevusalad</group>
+            <group>org</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>o_left_bottom</parent>
+            <caption>Organisatsiooni nimi</caption>
+      </property>
+      <property>
+            <name>os_submit</name>
+            <table>objects</table>
+            <group>org</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <parent>o_left_bottom</parent>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>org_tbl</name>
+            <table>objects</table>
+            <group>org</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
-            <parent>ta</parent>
-            <no_caption>1</no_caption>
             <store>no</store>
-      </property>
-      <property>
-            <name>not_on_web_table</name>
-            <table>objects</table>
-            <group>not_on_web</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <parent>not_on_web</parent>
             <no_caption>1</no_caption>
-            <store>no</store>
+            <parent>o_right</parent>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_DB</syslog_type>
             <maintainer>markop</maintainer>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <org>
-                  <caption>Organisatsioonid</caption>
+                  <caption>Kataloog</caption>
+                  <submit>no</submit>
             </org>
-            <f2>
-                  <submit>no</submit>
-                  <caption>Otsing</caption>
-                  <parent>org</parent>
-            </f2>
-            <firmad>
-                  <submit>no</submit>
-                  <caption>Nimekiri</caption>
-                  <parent>org</parent>
-            </firmad>
-            <tegevusalad>
-                  <submit>no</submit>
-                  <caption>Tegevusalad</caption>
-                  <parent>org</parent>
-            </tegevusalad>
-            <not_on_web>
-                  <submit>no</submit>
-                  <caption>Organisatsioonid,&amp;amp;nbsp;mida&amp;amp;nbsp;veebis&amp;amp;nbsp;ei&amp;amp;nbsp;kuvata</caption>
-                  <parent>org</parent>
-            </not_on_web>
       </groupinfo>
       <reltypes>
             <SELECTIONS>
@@ -346,18 +312,38 @@
             </OWNER_ORG>
       </reltypes>
       <layout>
-            <org>
+            <o_main>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>f2</group>
+                  <group>org</group>
                   <area_caption></area_caption>
-            </org>
-            <ta>
-                  <type>hbox</type>
-                  <width>20%:80%</width>
-                  <group>tegevusalad</group>
+            </o_main>
+            <o_left>
+                  <type>vbox</type>
+                  <parent>o_main</parent>
+                  <group>org</group>
                   <area_caption></area_caption>
-            </ta>
+            </o_left>
+            <o_left_top>
+                  <type>vbox</type>
+                  <parent>o_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kataloogi&amp;amp;nbsp;puu</area_caption>
+                  <group>org</group>
+            </o_left_top>
+            <o_left_bottom>
+                  <type>vbox</type>
+                  <parent>o_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsi&amp;amp;nbsp;kataloogist</area_caption>
+                  <group>org</group>
+            </o_left_bottom>
+            <o_right>
+                  <type>vbox</type>
+                  <parent>o_main</parent>
+                  <group>org</group>
+                  <area_caption></area_caption>
+            </o_right>
       </layout>
 </properties>
 

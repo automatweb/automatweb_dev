@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.53 2009/01/11 12:09:07 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.54 2009/01/22 15:59:24 instrumental Exp $
 // crm_db.aw - CRM database
 /*
-@classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
+@classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
 @default table=objects
 @default group=general
 
@@ -58,47 +58,30 @@
 @caption Kuva tabelites ainult organisatsioone, mida kuvatakse veebis
 
 -----------------------------------------------------------------------------
-@groupinfo org caption=Organisatsioonid
-
-@groupinfo f2 submit=no caption=Otsing parent=org
-@default group=f2
+@groupinfo org caption=Kataloog submit=no
+@default group=org
 	
-@property orgtoolbar type=toolbar no_caption=1 group=firmad,f2,tegevusalad,not_on_web
-@caption Org. toolbar
+	@property org_tlb type=toolbar no_caption=1 store=no
 
-@layout org type=hbox width=20%:80%
+	@layout o_main type=hbox width=20%:80%
+		
+		@layout o_left type=vbox parent=o_main
+			
+			@layout o_left_top type=vbox parent=o_left closeable=1 area_caption=Kataloogi&nbsp;puu
 
-@property search_form1 type=form sclass=crm/crm_org_search sform=crm_search parent=org
-@caption Compound search
+				@property org_tree type=treeview store=no no_caption=1 parent=o_left_top
+			
+			@layout o_left_bottom type=vbox parent=o_left closeable=1 area_caption=Otsi&nbsp;kataloogist
 
-property search_table type=table parent=org no_caption=1
+				@property os_name type=textbox store=no captionside=top parent=o_left_bottom
+				@caption Organisatsiooni nimi
 
------------------------------------------------------------------------------
+				@property os_submit type=submit store=no parent=o_left_bottom
+				@caption Otsi
 
-@groupinfo firmad submit=no caption=Nimekiri parent=org
-@default group=firmad
+		@layout o_right type=vbox parent=o_main
 
-@property company_table type=table no_caption=1
-
------------------------------------------------------------------------------
-
-@groupinfo tegevusalad submit=no caption=Tegevusalad parent=org
-@default group=tegevusalad
-
-@layout ta type=hbox width=20%:80%
-	
-	@property sector_tree type=treeview parent=ta no_caption=1
-	
-	@property sector_table type=table parent=ta no_caption=1
-
-----------------------------------------------------------
-
-@groupinfo not_on_web submit=no caption=Organisatsioonid,&nbsp;mida&nbsp;veebis&nbsp;ei&nbsp;kuvata parent=org
-@default group=not_on_web
-
-	@property not_on_web_table type=table parent=not_on_web no_caption=1
-
------------------------------------------------------------------------
+			@property org_tbl type=table store=no no_caption=1 parent=o_right
 
 @reltype SELECTIONS value=1 clid=CL_CRM_SELECTION
 @caption Valimid
@@ -165,21 +148,6 @@ class crm_db extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "not_on_web_table":
-			case "search_table":
-			case "sector_table":
-			case "company_table":
-				$this->company_table($arr);
-				break;
-			
-			case "sector_tree":
-				$this->sector_tree($arr);
-				break;
-		
-			case "orgtoolbar":
-				$this->org_toolbar($arr);
-				break;
-
 			case "flimit":
 				$prop["options"] = array (30 => 30, 60 => 60, 100 => 100);
 				break;
@@ -187,11 +155,46 @@ class crm_db extends class_base
 		return  $retval;
 	}
 
-	function sector_tree($arr)
+	function _get_org_tree($arr)
 	{
-		$item_count = array();
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_only_one_level_opened(1);
+		if(isset($_GET["branch_id"]))
+		{
+			$t->set_selected_item($_GET["branch_id"]);
+		}
 
-		$t = &$arr["prop"]["vcl_inst"];		
+		$roots = array(
+			"all" => t("K&otilde;ik organisatsioonid"),
+			"on_web" => t("Kuvatavad organisatsioonid"),
+			"not_on_web" => t("Mittekuvatavad organisatsioonid"),
+		);
+		foreach($roots as $k => $v)
+		{
+			$t->add_item(0, array(
+				"id" => $k,
+				"name" => $v,
+				"url" => aw_url_change_var(array(
+					"branch_id" => $k,
+				))
+			));
+		}
+		$t->add_item("on_web", array(
+			"id" => "on_web_all",
+			"name" => t("K&otilde;ik organisatsioonid"),
+			"url" => aw_url_change_var(array(
+				"branch_id" => "on_web_all",
+			))
+		));
+		$t->add_item("not_on_web", array(
+			"id" => "not_on_web_all",
+			"name" => t("K&otilde;ik organisatsioonid"),
+			"url" => aw_url_change_var(array(
+				"branch_id" => "not_on_web_all",
+			))
+		));
+
+		$item_count = array();
 		$sa = new aw_array($arr["obj_inst"]->prop("dir_tegevusala"));
 		$sectors_list = new object_list();
 		foreach($sa->get() as $parent)
@@ -232,11 +235,9 @@ class crm_db extends class_base
 			$t->add_item($parent, array(
 				"id" => $id,
 				"name" => $name,//strlen($name) > 20 ? substr($name, 0, 20).".." : $name,
-				"url" => aw_url_change_var("teg_oid", $sect->id()),
+				"url" => aw_url_change_var("branch_id", $sect->id()),
 			));
 		}
-		
-		$t->set_selected_item(ifset($arr["request"], "teg_oid"));
 	}
 
 	function _get_retated_orgs($s)
@@ -314,8 +315,8 @@ class crm_db extends class_base
 		));
 	}
 
-	function company_table($arr)
-	{//arr("kr2pp");
+	function _get_org_tbl($arr)
+	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_company_table(&$t);
 
@@ -330,7 +331,7 @@ class crm_db extends class_base
 		{
 			$all_letters[] = $l;
 		}
-		$letter = $arr["request"]["letter"] ? urldecode($arr["request"]["letter"]) : "A";
+		$letter = isset($arr["request"]["letter"]) ? urldecode($arr["request"]["letter"]) : "A";
 
 		$perpage = 20;
 		if ($arr["obj_inst"]->prop("flimit") != "")
@@ -362,12 +363,12 @@ class crm_db extends class_base
 				), ($val == $letter ? "<b>".$val."</b>" : $val));
 			}
 		}
-		if($this->can("view", $arr["request"]["teg_oid"]))
+		if(isset($_GET["branch_id"]) && $this->can("view", $_GET["branch_id"]))
 		{
-			$vars["pohitegevus"] = $arr["request"]["teg_oid"];
+			$vars["pohitegevus"] = $_GET["branch_id"];
 		}
 		
-		elseif($arr["request"]["group"] == "tegevusalad" && !$this->can("view", $arr["request"]["teg_oid"]))
+		elseif($arr["request"]["group"] == "tegevusalad" && !$this->can("view", $_GET["branch_id"]))
 		{
 			return;
 			$vars["CL_CRM_COMPANY.pohitegevus(CL_CRM_SECTOR).name"] = new obj_predicate_compare(OBJ_COMP_NULL); 
@@ -382,9 +383,9 @@ class crm_db extends class_base
 				"records_per_page" => $perpage
 			));
 		};
-		$ft_page = (int)$arr["request"]["ft_page"];
+		$ft_page = isset($arr["request"]["ft_page"]) ? (int)$arr["request"]["ft_page"] : 0;
 		$vars["limit"] = (60*$ft_page).",".(60*$ft_page+60);
-		$t->table_header = $pageselector."<br />".$ps;
+		$t->set_header($pageselector."<br />".$ps);
 		if($arr["obj_inst"]->show_as_on_web && $companys->count() > 0 && is_oid($arr["obj_inst"]->owner_org))
 		{
 			$ol = new object_list(array(
@@ -530,7 +531,7 @@ class crm_db extends class_base
 				"created" => date("Y.m.d H:i" , $com->created()),
 			));
 		}
-		if (!$_GET["sortby"])
+		if (!isset($_GET["sortby"]))
 		{
 			$t->set_sortable(false);
 		}
@@ -540,7 +541,7 @@ class crm_db extends class_base
 		}
 	}
 
-	function org_toolbar(&$arr)
+	function _get_org_tlb(&$arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
 		$tb->add_menu_button(array(
@@ -561,17 +562,17 @@ class crm_db extends class_base
 			$tb->add_menu_item(array(
 				"parent" => "create_event",
 				"text" => sprintf(t("Lisa organisatsioon (%s)"), $pt->name()),
-				"url" => $this->mk_my_orb("new", array("parent" => $pt->id(),"return_url" => get_ru(), "sector" => $arr["request"]["teg_oid"]), CL_CRM_COMPANY),
+				"url" => $this->mk_my_orb("new", array("parent" => $pt->id(),"return_url" => get_ru(), "sector" => $_GET["branch_id"]), CL_CRM_COMPANY),
 			));
 		}
 		if($arr["request"]["group"] == "tegevusalad" || $arr["request"]["group"] == "org")
 		{
-			if ($arr["request"]["teg_oid"])
+			if (isset($_GET["branch_id"]) && $this->can("add", $_GET["branch_id"]))
 			{
 				$tb->add_menu_item(array(
 					"parent" => "create_event",
 					"text" => t("Lisa tegevusala"),
-					"url" => $this->mk_my_orb("new", array("parent" => $arr["request"]["teg_oid"],"return_url" => get_ru()), CL_CRM_SECTOR),
+					"url" => $this->mk_my_orb("new", array("parent" => $_GET["branch_id"], "return_url" => get_ru()), CL_CRM_SECTOR),
 				));
 			}
 			else
@@ -655,16 +656,15 @@ class crm_db extends class_base
 				"url" => html::get_change_url($to),
 			));
 		};
-		$str .= html::select(array(
+		$str = html::select(array(
 			"name" => "add_to_selection",
 			"options" => $ops,
-			"selected" => $selected,
+			"selected" => isset($selected) ? $selected : array(),
 		));
-
+		$tb->add_cdata($str, "right");
 		$tb->add_separator(array(
 			"side" => "right",
 		));
-		$tb->add_cdata($str, "right");
 		$tb->add_button(array(
 			"name" => "go_add",
 			"tooltip" => t("Lisa valitud valimisse"),
