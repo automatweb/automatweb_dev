@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.146 2009/01/21 21:57:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.147 2009/01/22 18:27:52 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -16,6 +16,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property choose_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
 @caption Kaustad millega liituda
 
+@property sources_data_table type=table store=no no_caption=1
+@caption Allikate tabel
+
 @property choose_languages type=select multiple=1 field=meta method=serialize
 @caption Keeled millega v&otilde;ib liituda
 
@@ -30,6 +33,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property sub_form_type type=select rel=1
 @caption Vormi t&uuml;&uuml;p
+
+@property file_separator type=textbox 
+@caption Failis nime ja mailiaadressi eraldaja (tab=/t)
 
 @property redir_obj type=relpicker reltype=RELTYPE_REDIR_OBJECT rel=1
 @caption Dokument millele suunata
@@ -70,13 +76,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 			@property search_menu type=text captionside=top parent=search_left_lay
 			@caption Kaustad kust otsida
 
-			@property req_members_s type=text store=no parent=search_left_lay captionside=top
-			@caption Otsi ka alamobjektide alt
+			property req_members_s type=text store=no parent=search_left_lay captionside=top
+			caption Otsi ka alamobjektide alt
 
-			@property search_mail type=textbox store=no parent=search_left_lay captionside=top
+			@property search_mail type=textbox store=no parent=search_left_lay captionside=top size=20
 			@caption E-mail
 			
-			@property search_name type=textbox store=no parent=search_left_lay captionside=top
+			@property search_name type=textbox store=no parent=search_left_lay captionside=top size=20
 			@caption Nimi
 			
 			@property search_submit type=submit store=no no_caption=1 parent=search_left_lay
@@ -127,23 +133,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Massiline kustutamine
 ------------------------------------------------------------------------
 
-@groupinfo member_list caption=Nimekiri submit=no parent=membership
-@default group=member_list
+groupinfo member_list caption=Nimekiri submit=no parent=membership
+default group=member_list
 
-@property member_list_tb type=toolbar no_caption=1
-@caption Listi staatuse toolbar
+property member_list_tb type=toolbar no_caption=1
+caption Listi staatuse toolbar
 
-@property file_separator type=textbox 
-@caption Failis nime ja mailiaadressi eraldaja (tab=/t)
+property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
+caption Listi liikmete allikas
 
-@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
-@caption Listi liikmete allikas
+property req_members type=text
+caption Otsi ka alamobjektide alt
 
-@property req_members type=text
-@caption Otsi ka alamobjektide alt
-
-@property member_list type=table store=no no_caption=1
-@caption Liikmed
+property member_list type=table store=no no_caption=1
+caption Liikmed
 
 ------------------------------------------------------------------------
 
@@ -153,8 +156,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property export_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
 @caption Kaustad, mida eksportida
 
-@property req_members_e type=text
-@caption Otsi ka alamobjektide alt
+property req_members_e type=text
+caption Otsi ka alamobjektide alt
 
 @property export_type type=chooser orient=vertical store=no
 @caption Formaat
@@ -243,8 +246,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 		@property write_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1  delete_rels_popup_button=1 parent=wml captionside=top
 		@caption Grupid kellele kiri saata
 		
-		@property req_members_m type=text parent=wml captionside=top
-		@caption Otsi ka alamobjektide alt
+		property req_members_m type=text parent=wml captionside=top
+		caption Otsi ka alamobjektide alt
 		
 		@property bounce type=textbox parent=wml captionside=top
 		@caption Bounce aadress
@@ -997,6 +1000,9 @@ class ml_list extends class_base
 
 		switch($prop["name"])
 		{
+			case "sources_data_table":
+				$this->_get_sources_data_table($arr);
+				break;
 			case "search_mail":
 			case "search_name":
 				$prop["value"] = $arr["request"][$prop["name"]];
@@ -1170,6 +1176,15 @@ class ml_list extends class_base
 			case "search_tb":
 				$toolbar = &$prop["vcl_inst"];
 				$toolbar->add_button(array(
+					"name" => "new",
+					"img" => "new.gif",
+					"tooltip" => t("Lisa uus"),
+					"url" => aw_url_change_var("group", "subscribing" , $args["return_to"]),
+				));
+
+				$toolbar->add_save_button();
+
+				$toolbar->add_button(array(
 					"name" => "delete",
 					"tooltip" => t("Kustuta"),
 					"action" => "delete_members",
@@ -1185,14 +1200,14 @@ class ml_list extends class_base
 				);
 				$prop["type"] = "select";
 				break;
-			case "req_members_s": 
+/*			case "req_members_s": 
 				$source_prop = "search_menu";
 			case "req_members_e":
 				if(!$source_prop) $source_prop = "export_folders";
 			case "req_members_m":
 				if(!$source_prop) $source_prop = "write_user_folder";
 			case "req_members":
-				if(!$source_prop) $source_prop = "def_user_folder";
+				if(!$source_prop) $source_prop = "choose_menu";
 				if(!(is_array($arr["obj_inst"]->prop($source_prop)) && sizeof($arr["obj_inst"]->prop($source_prop))))
 				{
 					return PROP_IGNORE;
@@ -1216,7 +1231,7 @@ class ml_list extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				break;
+				break;*/
 			case "send_button":
 				$prop["value"] = t("Saada!");
 				$prop["onclick"] = "javascript:window.open(
@@ -1273,10 +1288,10 @@ class ml_list extends class_base
 				);
 				break;
 
-			case "member_list":
+/*			case "member_list":
 				$this->gen_member_list($arr);
 				break;
-	
+*/	
 			case "search_table":
 				$this->member_search_table($arr);
 				break;
@@ -1403,7 +1418,7 @@ class ml_list extends class_base
 					}
 				}
 				break;
-
+/*
 			case "member_list_tb":
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
@@ -1411,7 +1426,7 @@ class ml_list extends class_base
 					"img" => "new.gif",
 					"tooltip" => t("Lisa uus"),
 					"url" => aw_url_change_var("group", "subscribing" , $args["return_to"]),
-							));
+				));
 				$tb->add_button(array(
 					"name" => "save",
 					"img" => "save.gif",
@@ -1420,7 +1435,7 @@ class ml_list extends class_base
 				));
 				$this->gen_member_list_tb($arr);
 				break;
-			
+*/			
 			case "list_status_tb":
 				$this->gen_list_status_tb($arr);
 				break;
@@ -1475,6 +1490,9 @@ class ml_list extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "search_table":
+				$this->_set_member_search_table($arr);
+			break;
 			/*
 			case "msg_folder":
 				if(empty($prop["value"]) && !$arr["new"])
@@ -1487,7 +1505,9 @@ class ml_list extends class_base
 				}
 				break;
 			*/
-
+			case "sources_data_table":
+				$this->_set_sources_data_table($arr);
+				break;
 			case "list_status_table":
 				foreach($arr["request"]["pach_sizes"] as $qid => $val)
 				{
@@ -1518,14 +1538,14 @@ class ml_list extends class_base
 					return PROP_FATAL_ERROR;
 				}
 				break;
-			case "req_members_s": 
+/*			case "req_members_s": 
 				$source_prop = "search_menu";
 			case "req_members_e":
 				if(!$source_prop) $source_prop = "export_folders";
 			case "req_members_m":
 				if(!$source_prop) $source_prop = "write_user_folder";
 			case "req_members":
-				if(!$source_prop) $source_prop = "def_user_folder";
+				if(!$source_prop) $source_prop = "choose_menu";
 				if($_SESSION["submembers_source_prop_value"])
 				{
 					foreach($_SESSION["submembers_source_prop_value"] as $key)
@@ -1562,9 +1582,9 @@ class ml_list extends class_base
 							$menu->save();
 						}
 					}
-				}*/
+				}*//*
 				break;
-
+*/
 			case "delete_textfile":
 				$imp = $_FILES["delete_textfile"]["tmp_name"];
 				if (!is_uploaded_file($imp))
@@ -1936,7 +1956,7 @@ class ml_list extends class_base
 			"img" => "delete.gif",
 		));
 	}
-	
+	/*
 	function gen_member_list_tb($arr)
 	{
 		$toolbar = &$arr["prop"]["toolbar"];
@@ -1948,7 +1968,7 @@ class ml_list extends class_base
 			"img" => "delete.gif",
 		));
 	}
-
+*/
 	/** Exports list members as a plain text file
 		@attrib name=export_members
 		@param id required type=int 
@@ -2051,7 +2071,7 @@ class ml_list extends class_base
 		print $ser;
 		exit;
 	}
-
+/*
 	function gen_member_list($arr)
 	{/*
 		if(aw_global_get("uid") == "marko")
@@ -2080,9 +2100,9 @@ foreach($ol->arr() as $o)
 		}arr($ol->count());
 
 
-		}*/
+		}*//*
 		$perpage = 100;
-		$ft_page = (int)$GLOBALS["ft_page"];
+	/*	$ft_page = (int)$GLOBALS["ft_page"];
 		$ml_list_members = $this->get_members(array(
 			"id" 	=> $arr["obj_inst"]->id(),
 			"from"	=> $perpage * $ft_page ,
@@ -2315,7 +2335,7 @@ foreach($ol->arr() as $o)
 			));
 		}
 		$t->sort_by();
-	}
+	}*/
 
 	function __sort_props_by_ord($el1,$el2)
 	{
@@ -2641,28 +2661,61 @@ foreach($ol->arr() as $o)
 		return $this->ml_members;
 	}
 
-	function get_members_from_category($args)
+	private function ignore_member($source_obj, $member)
 	{
-		$this->show_extra_cols = 1;
+		if(!(is_object($source_obj) && $this->can("view" , $member)))
+		{
+			return false;
+		}
+
+		$ignore_list = $source_obj->meta("mail_ignore_list");
+		if(is_array($ignore_list) && isset($ignore_list[$member]))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	//"source_data" - array("usable_data" => array("orgs" , "pers" , "work"))
+	private function get_members_from_category($args)
+	{
+		$GLOBALS["mailinglist_show_org_column"] = 1;
 		extract($args);
 		$o = obj($id);
-
-		foreach($o->connections_from(array("type" => "RELTYPE_CUSTOMER")) as  $conn)
-//		foreach($ol->arr() as $co)
+		$customers = $o->get_category_customers();
+		if(is_array($source_data["usable_data"]) && sizeof($source_data["usable_data"]))
 		{
-			$co = $conn->to();
+			$use = $source_data["usable_data"];
+		}
+		foreach($customers->arr() as  $co)
+		{
+			$people = new object_list();
 			if($co->class_id() == CL_CRM_PERSON)
 			{
-				$people = new object_list();
-				$people->add($co);
+				if(!$use || in_array("pers" , $use))
+				{
+					$people->add($co);
+				}
 			}
 			else
 			{
-				$people = $co->get_workers();
-				$people->add($co);
+				if(!$use || in_array("work" , $use))
+				{
+					$GLOBALS["mailinglist_show_person_columns"] = 1;	
+					$people = $co->get_workers();
+				}
+				if(!$use || in_array("orgs", $use))
+				{
+					$people->add($co);
+				}
 			}
 			foreach($people->arr() as $worker)
 			{
+				if(!$args["all"] && $this->ignore_member($o , $worker->id()))
+				{
+					continue;
+				}
+			
 				if($worker->class_id() == CL_CRM_COMPANY)
 				{
 					$mail = $worker->get_mail();
@@ -2792,41 +2845,6 @@ foreach($ol->arr() as $o)
 		return $this->ml_members;
 	}
 
-	function get_req_menus($src)
-	{
-		$sub = array();
-		foreach($src as $menu)
-		{
-			if(!is_oid($menu) || !$this->can("view" , $menu))
-			{
-				continue;
-			}
-			$o = obj($menu);
-			if(!($o->class_id() == CL_MENU || $o->class_id() == CL_CRM_SECTOR))
-			{
-				continue;
-			}
-			if($o->meta("req_members"))
-			{
-				$ol = new object_list(array(
-					"class_id" => array(CL_MENU,CL_CRM_SECTOR),
-					"lang_id" => array(),
-					"parent" => $menu,
-				));
-
-				foreach($this->get_req_menus($ol->ids()) as $submenu)
-				{
-					$sub[] = $submenu;
-				}
-			}
-		}
-		foreach($sub as $submenu)
-		{
-			$src[] = $submenu;
-		}
-		return $src;
-	}
-
 	function un_format_name($arr)
 	{
 		$data = explode('&lt;' , $arr["name"]);
@@ -2882,11 +2900,14 @@ foreach($ol->arr() as $o)
 		}
 		if(!(sizeof($src) > 0))
 		{
-			$src = $obj->prop("def_user_folder");
+			$src = $obj->prop("choose_menu");
 			if(!$this->list_id) $this->list_id = $id;
 		}
-		$src = $this->get_req_menus($src);
+		$src = $obj->add_minions($src);
 		$fld = new aw_array($src);
+		$sources_data = $obj->get_sources_data();
+
+
 		foreach($fld->get() as $folder_id)
 		{
 			if(!is_oid($folder_id) || !$this->can("view", $folder_id))
@@ -3024,6 +3045,7 @@ foreach($ol->arr() as $o)
 					"all" => $all ,
 					"from" => $from ,
 					"to" => $to,
+					"source_data" => $sources_data[$source_obj->id()],
 					"no_return" => $no_return));
 			}
 			elseif($source_obj->class_id() == CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED)
@@ -4058,7 +4080,7 @@ arr($msg_obj->prop("message"));
 			}
 		}
 
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "member_list"));
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "search"));
 	}
 
 	function callback_post_save($arr)
@@ -4213,13 +4235,17 @@ arr($msg_obj->prop("message"));
 			"sortable" => 1,
 		));
 
-		if($this->show_extra_cols)
+		if(isset($GLOBALS["mailinglist_show_org_column"]))
 		{
 			$t->define_field(array(
 				"name" => "co",
 				"caption" => t("Organisatsioon"),
 				"sortable" => 1,
 			));
+		}
+		
+		if(isset($GLOBALS["mailinglist_show_person_columns"]))
+		{
 			$t->define_field(array(
 				"name" => "section",
 				"caption" => t("Osakond"),
@@ -4284,7 +4310,10 @@ arr($msg_obj->prop("message"));
 				"caption" => t("Liitumisinfo"),
 			));
 		}
-
+		$t->define_field(array(
+			"name" => "ignore",
+			"caption" => t("Ignoreeri"),
+		));
 	}
 
 	function member_search_table($arr)
@@ -4296,15 +4325,47 @@ arr($msg_obj->prop("message"));
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_default_sortby("id");
 		$t->set_default_sorder("desc");
-		$this->_init_members_table($t, $arr["obj_inst"]);
 
 		$this->list_id = $arr["obj_inst"]->id();
-		$members = $arr["obj_inst"]->get_members(array(
-			"sources" => array_keys($arr["request"]["search_from_source"]),
-			"mail" => $search_mail,
-			"name" => $search_name,
-			"all" => 1,
-		));
+
+		if(isset($arr["request"]["search_from_source"]) && is_array($arr["request"]["search_from_source"]) && sizeof($arr["request"]["search_from_source"]))
+		{
+			$members = $arr["obj_inst"]->get_members(array(
+				"sources" => array_keys($arr["request"]["search_from_source"]),
+				"mail" => $search_mail,
+				"name" => $search_name,
+				"all" => 1,
+			));
+		}
+		else
+		{
+			$members = array();
+		}
+
+		$this->_init_members_table($t, $arr["obj_inst"]);
+
+		//hangib organisatsioonide, ametinimetuste ja osakondade nimed
+		if($GLOBALS["mailinglist_show_org_column"])
+		{
+			$co_array = array();
+			$pro_array = array();
+			$sec_array = array();
+			foreach($members as $key => $val)
+			{
+				if($val["co"]) $co_array[$val["co"]] = $val["co"];
+				if($val["pro"]) $pro_array[$val["pro"]] = $val["pro"];
+				if($val["section"]) $sec_array[$val["section"]] = $val["section"];
+			}
+			$pros = new object_list();
+			$pros->add($pro_array);
+			$pros = $pros->names();
+			$cos = new object_list();
+			$cos->add($co_array);
+			$cos = $cos->names();
+			$secs = new object_list();
+			$secs->add($sec_array);
+			$secs = $secs->names();
+		}
 
 		foreach($members as $key => $val)
 		{
@@ -4361,6 +4422,25 @@ arr($msg_obj->prop("message"));
 				"name" => $name,
 				"oid" => $oid,
 			);
+
+			$tabledata["ignore"] = html::checkbox(array(
+				"name" => "ignore_members[".$val["oid"]."][".$val["parent"]."]",
+				"checked" => $this->ignore_member(obj($val["parent"]) , $val["oid"]) ? 1: 0,
+				"value" => 1,
+			));
+
+			if($val["co"])
+			{
+				$tabledata["co"] = $cos[$val["co"]];
+			}
+			if($val["pro"])
+			{
+				$tabledata["pro"] = $pros[$val["pro"]];
+			}
+			if($val["section"])
+			{
+				$tabledata["section"] = $secs[$val["section"]];
+			}
 			$t->define_data($tabledata);
 		}
 
@@ -4370,5 +4450,98 @@ arr($msg_obj->prop("message"));
 		)));
 		$t->sort_by();
 	}
+
+	function _set_member_search_table($arr)
+	{
+		foreach($arr["request"]["ignore_members"] as $source => $members)
+		{
+			$source = obj($source);
+			$ignore_list = $source->meta("mail_ignore_list");
+			foreach($members as $id => $val)
+			{
+				$ignore_list[$id] = $val;
+			}
+			$source->set_meta("mail_ignore_list" , $ignore_list);
+			$source->save();//ei saa aru miks ta kurat peale salvestamist 2ra kaob
+		}
+	}
+
+	function _set_sources_data_table($arr)
+	{
+		$arr["obj_inst"]->set_sources_data($arr["request"]["sources_data"]);
+	}
+
+	function _get_sources_data_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+		$sources = $arr["obj_inst"]->get_sources();
+		$categorys = $menus = 0;
+		$sources_data = $arr["obj_inst"]->get_sources_data();//arr($sources_data);
+		foreach($sources->arr() as $source)
+		{
+			$source_data = array();
+			$source_data["id"] = $source->id();
+			$source_data["name"] = $source->name();
+			$source_data["type"] = $source->class_id();
+			if($source->class_id() == CL_CRM_CATEGORY)
+			{
+				$categorys = 1;
+				$usable_data_options = array(
+					"orgs" => t("Organisatsioonid"),
+					"pers" => t("Isikud"),
+					"work" => t("T&ouml;&ouml;tajad"),
+				);
+				$source_data["usable_data"] = html::select(array(
+					"name" => "sources_data[".$source->id()."][usable_data]",
+					"multiple" => 1,
+					"options" => $usable_data_options,
+					"value" => $sources_data[$source->id()]["usable_data"],
+				));
+			}
+			if($source->class_id() == CL_MENU)
+			{
+				$menus = 1;
+				$source_data["use_minions"] = html::checkbox(array(
+					"name" => "sources_data[".$source->id()."][use_minions]",
+					"value" => 1,
+					"checked" => $sources_data[$source->id()]["use_minions"] ? 1:0,
+				));
+			}
+			$t->define_data($source_data);
+		}
+
+		if($categorys)
+		{
+			$t->define_field(array(
+				"name" => "usable_data",
+				"caption" => t("Kasuta"),
+			));
+		}
+
+		if($menus)
+		{
+			$t->define_field(array(
+				"name" => "use_minions",
+				"caption" => t("Kasuta ka alamkaustu"),
+			));
+		}
+	}
+
 }
 ?>

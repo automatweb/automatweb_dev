@@ -14,6 +14,17 @@
             <caption>Kaustad millega liituda</caption>
       </property>
       <property>
+	      <name>sources_data_table</name>
+	      <table>objects</table>
+	      <field>meta</field>
+	      <method>serialize</method>
+	      <group>general</group>
+	      <type>table</type>
+	      <store>no</store>
+	      <no_caption>1</no_caption>
+	      <caption>Allikate tabel</caption>
+      </property>
+      <property>
             <name>choose_languages</name>
             <table>objects</table>
             <field>meta</field>
@@ -188,6 +199,7 @@
             <type>text</type>
             <store>no</store>
             <parent>search_left_lay</parent>
+            <captionside>top</captionside>
             <caption>Otsi ka alamobjektide alt</caption>
       </property>
       <property>
@@ -195,11 +207,12 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-	    <group>search</group>
-            <captionside>top</captionside>
+            <group>search</group>
             <type>textbox</type>
-            <store>no</store>
+	    <store>no</store>
+	    <size>20</size>
             <parent>search_left_lay</parent>
+            <captionside>top</captionside>
             <caption>E-mail</caption>
       </property>
       <property>
@@ -208,10 +221,11 @@
             <field>meta</field>
             <method>serialize</method>
             <group>search</group>
-	    <type>textbox</type>
-            <captionside>top</captionside>
-            <store>no</store>
+            <type>textbox</type>
+	    <store>no</store>
+	    <size>20</size>
             <parent>search_left_lay</parent>
+            <captionside>top</captionside>
             <caption>Nimi</caption>
       </property>
       <property>
@@ -363,7 +377,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>member_list</group>
+            <group>general</group>
             <type>textbox</type>
             <caption>Failis nime ja mailiaadressi eraldaja (tab=/t)</caption>
       </property>
