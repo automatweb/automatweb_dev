@@ -204,7 +204,7 @@ function multifile_delete(id)
 		}
 		
 		if(XMLHttpRequestObject) {
-			XMLHttpRequestObject.open("GET", '/automatweb/orb.aw?class=multifile_upload&action=ajax_delete_obj&id='+id);
+			XMLHttpRequestObject.open("GET", '/orb.aw?class=multifile_upload&action=ajax_delete_obj&id='+id);
 			XMLHttpRequestObject.onreadystatechange = function()
 			{
 				if (XMLHttpRequestObject.readyState == 4 && XMLHttpRequestObject.status == 200) {
