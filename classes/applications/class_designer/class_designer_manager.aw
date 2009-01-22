@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.22 2009/01/16 11:33:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.23 2009/01/22 08:33:14 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -2232,6 +2232,10 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			echo sprintf("%03d/%03d", $num, $cnt)." ".$row["url"]." .... \n";
 			flush();
 
+			if (strpos($row["url"], ".dev.struktuur.ee") !== false)
+			{
+				continue;
+			}
 			ob_start();
 			$fc = strtolower(file_get_contents($row["url"]));
 			$ct = ob_get_contents();
