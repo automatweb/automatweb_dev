@@ -788,7 +788,7 @@ class html extends aw_template
 		$name = isset($args["name"]) ? $args["name"] : "";
 		$value = isset($args["value"]) ? $args["value"] : "";
 		$textsize = isset($args["textsize"]) && !empty($args["textsize"]) ? " style=\"font-size: ".$args["textsize"].";\"" : "";
-		$class = isset($args["class"]) && !empty($args["class"]) ? " class=\"".$args["textsize"]."\"" : "";
+		$class = isset($args["class"]) && !empty($args["class"]) ? " class=\"".$args["class"]."\"" : "";
 		$onclick = isset($args["onclick"]) && !empty($args["onclick"]) ? " onclick=\"".$args["onclick"]."; return this.value;\"" : "";
 
 		return "<input id=\"cbsubmit\" type=\"submit\" name=\"{$name}\" value='{$value}'{$class}{$onclick}{$textsize} />\n";
