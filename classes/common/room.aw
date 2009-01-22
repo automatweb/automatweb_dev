@@ -4509,6 +4509,16 @@ class room extends class_base
 		}
 		$step = 1;
 		$time = $end-$start;//+60 seep2rast et oleks nagu t2isminutid ja t2istunnid jne
+
+		if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
+		{
+			$rv["room_bargain"] = $special_discount = $arr["bron"]->prop("special_discount") * 0.01;
+		}
+		else
+		{
+			$special_discount = 0;
+		}
+
 		while($time >= 60)//alla minuti ei ole oluline aeg eriti..
 		{
 			$price = "";
@@ -4546,30 +4556,32 @@ class room extends class_base
 			{
 				break;
 			}
-			//otsib, kas m6ni soodushind kattub 
-			$bargain = $this->get_bargain(array(
-				"price" => $price,
-				"room" => $room,
-				"time" => $price->prop("time") * $this->step_length,
-				"start" => $end-$time,
-				"bron_made" => $bron_made,
-				"bron" => $arr["bron"]
-			));
-			if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
+			//otsib, kas m6ni soodushind kattub, ainult siis kui spetsiaalallahindlust pole 
+			if(!$special_discount)
 			{
-				$bargain =  $arr["bron"]->prop("special_discount") * 0.01;
+				$bargain = $this->get_bargain(array(
+					"price" => $price,
+					"room" => $room,
+					"time" => $price->prop("time") * $this->step_length,
+					"start" => $end-$time,
+					"bron_made" => $bron_made,
+					"bron" => $arr["bron"]
+				));
+	
+				$rv["room_bargain"] = $bargain;
 			}
-			$rv["room_bargain"] = $bargain;
-			foreach($price->meta("prices") as $currency => $hr_price)
-			{
-				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seep2rast, et l6ppemise t2istunniks v6etakse esialgu ymardatud allapoole tunnid... et siis ajale tuleb yks juurde liita, sest poolik tund l2heb t2is tunnina arvesse
-				$this->bargain_value[$currency] = $this->bargain_value[$currency] + $bargain*$hr_price;
-			}
+				foreach($price->meta("prices") as $currency => $hr_price)
+				{
+					$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seep2rast, et l6ppemise t2istunniks v6etakse esialgu ymardatud allapoole tunnid... et siis ajale tuleb yks juurde liita, sest poolik tund l2heb t2is tunnina arvesse
+					$this->bargain_value[$currency] = $this->bargain_value[$currency] + $bargain*$hr_price;
+				}
+
 			$time = $time - ($price->prop("time") * $this->step_length);
 		}
 		
 		$rv["room_price"] = $sum;
 		$max_room_price = $room->meta("max_room_price");
+		//kontrollib kas on olemas maksimumhind ruumile
 		if(is_array($max_room_price) && sizeof($max_room_price))
 		{
 			foreach($sum as $curr => $val)
@@ -4581,6 +4593,18 @@ class room extends class_base
 				}
 			}
 		}
+
+		//spetsiaalsooduse v6tab siis maha, kui on kogu ruumihind arvutatud
+		if($special_discount)
+		{
+			foreach($sum as $curr => $val)
+			{
+				$this->bargain_value[$curr] = $special_discount*$val;
+				$sum[$curr] = $val * (1 - $special_discount);
+				$rv["room_price"][$curr] = $sum[$curr];
+			}
+		}
+
 
 		$warehouse = $room->prop("warehouse");
 		if(is_object($arr["bron"]))
