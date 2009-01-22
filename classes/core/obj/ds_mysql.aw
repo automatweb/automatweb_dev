@@ -44,6 +44,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function get_objdata($oid, $param = array())
 	{
+		$this->save_handle();
 		$oid = (int)$oid;
 		if (!empty($GLOBALS["object2version"][$oid]) && $GLOBALS["object2version"][$oid] != "_act")
 		{
@@ -54,6 +55,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$ret["jrk"] = $ret2["o_jrk"];
 			$ret["metadata"] = $ret2["o_metadata"];
 			$rv =  $this->_get_objdata_proc($ret, $param, $oid);
+			$this->restore_handle();
 			return $rv;
 		}
 
@@ -103,6 +105,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			$ret = $this->_get_objdata_proc($ret, $param, $oid);
 		}
+		$this->restore_handle();
 		return $ret;
 	}
 
