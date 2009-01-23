@@ -1540,18 +1540,13 @@ class mrp_workspace extends class_base
 			"grp_printer_aborted",
 			"grp_printer_in_progress",
 			"grp_printer_startable",
+			"grp_schedule",
+			"grp_projects",
 			"grp_printer_notstartable"
 		);
-		if (!empty($arr["args"]["group"]))
+		if (!empty($arr["args"]["group"]) and in_array($arr["args"]["group"], $applicable_groups))
 		{
-			if (in_array($arr["args"]["group"], $applicable_groups))
-			{
-				unset($arr["args"]["just_saved"]);
-			}
-			elseif ("grp_projects" === $arr["args"]["group"])
-			{
-				unset($arr["args"]["just_saved"]);
-			}
+			unset($arr["args"]["just_saved"]);
 		}
 
 		$arr["args"]["mrp_tree_active_item"] = $arr["request"]["mrp_tree_active_item"];
@@ -5413,12 +5408,11 @@ class mrp_workspace extends class_base
 	**/
 	function cust_search_pop($arr)
 	{
-		extract($arr);
+		$s_name = $arr["s_name"];
+		$s_content = $arr["s_content"];
 		$this->read_template("csp.tpl");
-		if ($s_name != "" || $s_content != "")
+		if (!(empty($s_name) and empty($s_content)))
 		{
-
-			load_vcl("table");
 			$t = new aw_table(array(
 				"layout" => "generic"
 			));
@@ -5428,16 +5422,15 @@ class mrp_workspace extends class_base
 				"sortable" => 1
 			));
 			$t->define_field(array(
-                                "name" => "pick",
-                                "caption" => t("Vali see"),
-                        ));
-
+				"name" => "pick",
+				"caption" => t("Vali see"),
+			));
 
 			$sres = new object_list(array(
 				"class_id" => CL_CRM_COMPANY,
 				"name" => "%".$s_name."%",
 			));
-			for($o = $sres->begin(); !$sres->end(); $o = $sres->next())
+			for ($o = $sres->begin(); !$sres->end(); $o = $sres->next())
 			{
 				$name = strip_tags($o->name());
 				$name = str_replace("'","",$name);
@@ -5460,13 +5453,13 @@ class mrp_workspace extends class_base
 			$s_name = "%";
 			$s_content = "%";
 		}
+
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("cust_search_pop", array("reforb" => 0)),
 			"s_name"	=> $s_name,
 			"doc_sel" => checked($s_class_id != "item"),
 		));
-
-		return $this->parse();
+		exit($this->parse());
 	}
 
 	function pj_project_field_callback($row)

@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="http://localhost/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name=aw_admin.css">
 <script language="javascript">
 function ss(title)
 {
@@ -5,34 +6,27 @@ function ss(title)
 	window.close();
 }
 </script>
+
 <form method="GET" action="orb.{VAR:ext}">
-<table border=0 cellspacing=0 cellpadding=0>
-<tr>
-<td class="aste01" colspan="2">
-<table border=0 cellspacing=0 cellpadding=5>
-<tr>
-<td colspan="2">
-
-		<table border=0 cellspacing=0 cellpadding=2>
-		<tr>
-		
-		<td class="celltext" align="right">Otsi nimest</td>
-		<td class="celltext"><input type="text" name="s_name" size="40" value='{VAR:s_name}'
-		class="formtext"></td>
-		</tr>
-		<tr>
-		    <td></td>
-			<td class="celltext"><input type="submit" class="formbutton" value="Otsi"></td>
-		</tr>
-		</table>
-
-</td></tr>
-<tr class="aste06">
-		<td class="celltext" colspan=2>Tulemused:</td>
-		</tr>
-{VAR:LINE}
+<table id="awcbContentTblDefault" width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tr>
+		<td>
+			<table id="awcbContentTblDefault" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td id="linecaption" align="right">Otsi nimest</td>
+				<td id="lineelment"><input type="text" name="s_name" size="40" value='{VAR:s_name}' class="formtext"></td>
+			</tr>
+			<tr>
+				<td id="lineelment" colspan="2"><input style="margin: 5px;" type="submit" id="button" value="Otsi"></td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td id="linecaption" style="text-align: left;">Tulemused:</td>
+	</tr>
+	{VAR:LINE}
 </table>
-</td></tr></table>
 {VAR:reforb}
 </form>
 
