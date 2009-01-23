@@ -150,9 +150,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 @default group=grp_case_workflow
 	@layout vsplitbox type=hbox width=20%:80%
-	@layout case_workflow_box type=vbox parent=vsplitbox
-	@layout case_workflow_tree_box type=vbox closeable=1 area_caption=Ressursid parent=case_workflow_box
-		@property resource_tree type=text store=no no_caption=1 parent=case_workflow_tree_box
+		@property resource_tree type=text store=no no_caption=1 parent=vsplitbox
 		@property workflow_table type=table store=no no_caption=1 parent=vsplitbox
 
 
