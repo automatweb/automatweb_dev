@@ -29,13 +29,13 @@
       </property>
       <property>
             <name>header</name>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <group>
                   <num_0>grp_general</num_0>
                   <num_1>grp_case_data</num_1>
             </group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
             <field>header</field>
       </property>
       <property>
@@ -53,6 +53,20 @@
             <table>objects</table>
             <field>comment</field>
             <caption>Projekti nimetus</caption>
+      </property>
+      <property>
+            <name>state</name>
+            <group>
+                  <num_0>grp_case_schedule</num_0>
+                  <num_1>grp_general</num_1>
+                  <num_2>grp_case_workflow</num_2>
+                  <num_3>grp_case_data</num_3>
+            </group>
+            <table>mrp_case</table>
+            <type>text</type>
+            <editonly>1</editonly>
+            <field>state</field>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>starttime</name>
@@ -77,20 +91,6 @@
             <type>textbox</type>
             <field>project_priority</field>
             <caption>Projekti prioriteet</caption>
-      </property>
-      <property>
-            <name>state</name>
-            <group>
-                  <num_0>grp_case_schedule</num_0>
-                  <num_1>grp_general</num_1>
-                  <num_2>grp_case_workflow</num_2>
-                  <num_3>grp_case_data</num_3>
-            </group>
-            <table>mrp_case</table>
-            <type>text</type>
-            <editonly>1</editonly>
-            <field>state</field>
-            <caption>Staatus</caption>
       </property>
       <property>
             <name>customer</name>
@@ -378,7 +378,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vsplitbox</parent>
+            <parent>case_workflow_tree_box</parent>
       </property>
       <property>
             <name>workflow_table</name>
@@ -392,16 +392,6 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
-            <name>chart_navigation</name>
-            <group>grp_case_schedule</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
             <name>schedule_chart</name>
             <group>grp_case_schedule</group>
             <table>objects</table>
@@ -410,16 +400,6 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>chart_legend</name>
-            <group>grp_case_schedule</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
-            <caption>Legend</caption>
       </property>
       <property>
             <name>log</name>
@@ -465,7 +445,7 @@
                   <submit>no</submit>
             </grp_case_view>
             <grp_case_schedule>
-                  <caption>Kalender</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;voo diagramm</caption>
                   <submit>no</submit>
             </grp_case_schedule>
             <grp_case_comments>
@@ -518,10 +498,23 @@
       <layout>
             <vsplitbox>
                   <type>hbox</type>
-                  <group>grp_case_workflow</group>
                   <width>20%:80%</width>
+                  <group>grp_case_workflow</group>
                   <area_caption></area_caption>
             </vsplitbox>
+            <case_workflow_box>
+                  <type>vbox</type>
+                  <parent>vsplitbox</parent>
+                  <group>grp_case_workflow</group>
+                  <area_caption></area_caption>
+            </case_workflow_box>
+            <case_workflow_tree_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ressursid</area_caption>
+                  <parent>case_workflow_box</parent>
+                  <group>grp_case_workflow</group>
+            </case_workflow_tree_box>
       </layout>
 </properties>
 

@@ -1373,8 +1373,8 @@
             <group>grp_worksheet</group>
             <type>select</type>
             <multiple>1</multiple>
-            <size>5</size>
             <store>no</store>
+            <size>5</size>
             <caption>Ressursid</caption>
       </property>
       <property>
@@ -1465,7 +1465,7 @@
                   <confirm_save_data>1</confirm_save_data>
             </grp_projects>
             <grp_schedule>
-                  <caption>Kalender</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;voog</caption>
                   <submit>no</submit>
             </grp_schedule>
             <grp_printer>

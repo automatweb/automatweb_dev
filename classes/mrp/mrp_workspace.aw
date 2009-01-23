@@ -13,7 +13,7 @@
 
 @groupinfo grp_customers caption="Kliendid" submit=no submit_method=get
 @groupinfo grp_projects caption="Projektid" confirm_save_data=1
-@groupinfo grp_schedule caption="Kalender" submit=no
+@groupinfo grp_schedule caption="T&ouml;&ouml;voog" submit=no
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
 	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
 	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no

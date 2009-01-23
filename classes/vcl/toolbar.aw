@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.45 2009/01/16 11:33:35 kristo Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -72,7 +71,7 @@ class toolbar extends aw_template
 			if(!empty($arr["text"]))
 			{
 				$arr["type"] = "text_button";
-			} 
+			}
 			else
 			{
 				$arr["img"] = "new.gif";
@@ -385,7 +384,7 @@ class toolbar extends aw_template
 		if (!empty($this->menu_inited))
 		{
 			$this->build_menus();
-		};
+		}
 		$matrix = new aw_array($this->matrix);
 		$tpl = "buttons.tpl";
 		$this->read_template($tpl);
@@ -423,7 +422,7 @@ class toolbar extends aw_template
 
 					if (!empty($val["img"]))
 					{
-						$val["img_url"] = substr($val["img"], 0, 4) == "http" ? $val["img"] : $this->imgbase."/".$val["img"];
+						$val["img_url"] = substr($val["img"], 0, 4) === "http" ? $val["img"] : $this->imgbase."/".$val["img"];
 					}
 
 					if (!empty($val["load_on_demand_url"]))
@@ -439,7 +438,7 @@ class toolbar extends aw_template
 
 					if (!empty($val["ismenu"]))
 					{
-						if($val["type"] == "text_button")
+						if($val["type"] === "text_button")
 						{
 							$tpl = "text_menu_button";
 						}
@@ -453,7 +452,7 @@ class toolbar extends aw_template
 						$tpl = "menu_button_lod";
 					}
 
-					if ($side == "left")
+					if ($side === "left")
 					{
 						$result .= $this->parse($tpl);
 					}
@@ -465,7 +464,7 @@ class toolbar extends aw_template
 
 				case "separator":
 					$this->vars($val);
-					if ($side == "left")
+					if ($side === "left")
 					{
 						$result .= $this->parse("separator");
 					}
@@ -477,7 +476,7 @@ class toolbar extends aw_template
 
 				case "cdata":
 					$this->vars($val);
-					if ($side == "left")
+					if ($side === "left")
 					{
 						$result .= $this->parse("cdata");
 					}
@@ -504,9 +503,8 @@ class toolbar extends aw_template
 			$this->vars(array(
 				"right_side_content" => $right_side_content,
 			));
-
 			$result .= $this->parse("right_side");
-		};
+		}
 
 		$result .= $this->parse("real_end") . $this->custom_data;
 		return $result;

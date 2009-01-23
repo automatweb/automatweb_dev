@@ -17,13 +17,13 @@ if ( typeof jQuery == "undefined" )
 		<!-- END SUB: button -->
 
 		<!-- SUB: button_disabled -->
-		<td nowrap class="aw04toolbarbutton">
+		<div nowrap class="aw04toolbarbutton">
 			<table border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					<td><span style="position: relative; width: 100%; height: 100%;"><img src="{VAR:img_url}" border="0"><span style="position: absolute;  top: 0px; left: 0px; background: transparent url('{VAR:imgbase}/disabled_background.gif'); width: 100%; height: 100%; font-size: 2px;">&nbsp;</span></span></td>
 				</tr>
 			</table>
-		</td>
+		</div>
 		<!-- END SUB: button_disabled -->
 
 		<!-- SUB: menu_button -->
@@ -60,8 +60,8 @@ if ( typeof jQuery == "undefined" )
 			el = document.getElementById("tb_lod_{VAR:lod_name}");
 			el.innerHTML=aw_get_url_contents("{VAR:load_on_demand_url}");
 			nhr=document.getElementById("href_{VAR:lod_name}");
-			if (document.createEvent) {evObj = document.createEvent("MouseEvents");evObj.initEvent( "click", true, true );nhr.dispatchEvent(evObj);} 
-			else { 
+			if (document.createEvent) {evObj = document.createEvent("MouseEvents");evObj.initEvent( "click", true, true );nhr.dispatchEvent(evObj);}
+			else {
 				nhr.fireEvent("onclick");
 			}
 		}
@@ -73,10 +73,10 @@ if ( typeof jQuery == "undefined" )
 		<!-- END SUB: text_button -->
 
 		<!-- SUB: text_menu_button -->
-		<div class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a  href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none; white-space: nowrap;">{VAR:text}</a> 
+		<div class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a  href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none; white-space: nowrap;">{VAR:text}</a>
 		</div>
 		<!-- END SUB: text_menu_button -->
-		
+
 		<!-- SUB: text_button_disabled -->
 		 <div class="aw04toolbarbutton"><span style="white-space: nowrap;">{VAR:tooltip}</span></div>
 		<!-- END SUB: text_button_disabled -->

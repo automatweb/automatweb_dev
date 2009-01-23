@@ -13,30 +13,29 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 @groupinfo grp_general caption="&Uuml;ldine" parent=general
 @groupinfo grp_case_data caption="Projekti andmed" parent=general
-groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_workflow caption="Ressursid ja t&ouml;&ouml;voog"
 @groupinfo grp_case_view caption="Vaatleja t&ouml;&ouml;laud" submit=no
-@groupinfo grp_case_schedule caption="Kalender" submit=no
+@groupinfo grp_case_schedule caption="T&ouml;&ouml;voo diagramm" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
 
 
-	@layout vsplitbox type=hbox group=grp_case_workflow width=20%:80%
-
-	@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
-	@property workflow_errors type=text store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data
-
+@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
+@property workflow_errors type=text store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data
+@property header type=text store=no no_caption=1 group=grp_general,grp_case_data
 
 @default group=grp_general
-	@property header type=text store=no no_caption=1 group=grp_general,grp_case_data
-
 	@property name type=textbox table=objects field=name
 	@caption Projekti nr.
 
 	@property comment type=textbox table=objects field=comment
 	@caption Projekti nimetus
 
+
 @default table=mrp_case
+	@property state type=text group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
+	@caption Staatus
+
 	@property starttime type=datetime_select
 	@caption Alustamisaeg (materjalide saabumine)
 
@@ -45,9 +44,6 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
-
-	@property state type=text group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
-	@caption Staatus
 
 	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY
 	@caption Klient
@@ -66,12 +62,12 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property archived type=text editonly=1
 	@caption Arhiveeritud
 
+
 @default table=objects
 @default field=meta
 @default method=serialize
 	@property sales_priority type=textbox size=5
 	@caption Prioriteedihinnang m&uuml;&uuml;gimehelt
-
 
 
 @default group=grp_case_data
@@ -147,34 +143,28 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption M&uuml;&uuml;gi hind
 
 
-default group=grp_case_material
-	property used_materials type=table store=no
-	caption Kasutatav materjal
-
-
 @default group=grp_case_comments
 	@property user_comments type=comments
 	@caption Kommentaarid juhtumi ja t&ouml;&ouml;de kohta
 
 
 @default group=grp_case_workflow
-	@property resource_tree type=text store=no no_caption=1 parent=vsplitbox
-	@property workflow_table type=table store=no no_caption=1 parent=vsplitbox
+	@layout vsplitbox type=hbox width=20%:80%
+	@layout case_workflow_box type=vbox parent=vsplitbox
+	@layout case_workflow_tree_box type=vbox closeable=1 area_caption=Ressursid parent=case_workflow_box
+		@property resource_tree type=text store=no no_caption=1 parent=case_workflow_tree_box
+		@property workflow_table type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_case_schedule
-	@property chart_navigation type=text store=no no_caption=1
 	@property schedule_chart type=text store=no no_caption=1
-
-	@property chart_legend type=text store=no
-	@caption Legend
 
 
 @default group=grp_case_log
 	@property log type=table store=no no_caption=1
 
-@default group=grp_case_view
 
+@default group=grp_case_view
 	@property case_view type=table no_caption=1 store=no
 
 
@@ -416,11 +406,6 @@ class mrp_case extends class_base
 				}
 				break;
 
-			case "chart_legend":
-				$ws = get_instance(CL_MRP_WORKSPACE);
-				$prop["value"] = $ws->draw_colour_legend ();
-				break;
-
 			case "resource_tree":
 				$this->create_resource_tree ($arr);
 				break;
@@ -456,10 +441,6 @@ class mrp_case extends class_base
 
 			case "log":
 				$this->_do_log($arr);
-				break;
-
-			case "chart_navigation":
-				$prop["value"] = $this->create_chart_navigation ($arr);
 				break;
 
 			case "case_view":
@@ -655,7 +636,7 @@ class mrp_case extends class_base
 		$chart = get_instance ("vcl/gantt_chart");
 		$columns = (int) ($arr["request"]["mrp_chart_length"] ? $arr["request"]["mrp_chart_length"] : 7);
 		$hilighted_project = $this_object->id();
-		$workspace =& $this->get_current_workspace ($arr);
+		$workspace = $this->get_current_workspace ($arr);
 
 		### get range start according to project state
 		$ol = new object_list(array(
@@ -921,6 +902,7 @@ class mrp_case extends class_base
 		}
 
 		### config
+		$ws = get_instance(CL_MRP_WORKSPACE);
 		$chart->configure_chart (array (
 			"chart_id" => "project_schedule_chart",
 			"style" => "aw",
@@ -931,6 +913,9 @@ class mrp_case extends class_base
 			"timespans" => $subdivisions,
 			"width" => 850,
 			"row_height" => 10,
+			"caption" => t("Projekt t&ouml;&ouml;voog"),
+			"footer" => $ws->draw_colour_legend(),
+			"navigation" => $this->create_chart_navigation($arr)
 		));
 
 		### define columns
@@ -1027,11 +1012,11 @@ class mrp_case extends class_base
 
 	function create_workflow_toolbar ($arr = array ())
 	{
-		$this_object =& $arr["obj_inst"];
-		$toolbar =& $arr["prop"]["toolbar"];
+		$this_object = $arr["obj_inst"];
+		$toolbar = $arr["prop"]["toolbar"];
 
 		### delete button
-		if ($arr["request"]["group"] == "grp_case_workflow")
+		if ($arr["request"]["group"] === "grp_case_workflow")
 		{
 			$disabled = false;
 		}
@@ -1188,7 +1173,7 @@ class mrp_case extends class_base
 		$this_object = $arr["obj_inst"];
 
 		### init. table
-		$table =& $arr["prop"]["vcl_inst"];
+		$table = $arr["prop"]["vcl_inst"];
 		$table->define_field(array(
 			"name" => "exec_order",
 			"caption" => t("Nr."),
@@ -1246,6 +1231,7 @@ class mrp_case extends class_base
 		$table->set_numeric_field ("exec_order");
 		$table->set_default_sortby ("exec_order");
 		$table->set_default_sorder ("asc");
+		$table->set_caption(t("Projekti t&ouml;&ouml;voog"));
 
 		### define data for each connected job
 		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
@@ -1383,7 +1369,7 @@ class mrp_case extends class_base
 
 	function save_workflow_data ($arr)
 	{
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 		$orders = array ();
 		$errors = false;
 		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
@@ -1668,8 +1654,8 @@ class mrp_case extends class_base
 
 	function add_job ($arr)
 	{
-		$this_object =& $arr["obj_inst"];
-		$workspace =& $this->get_current_workspace ($arr);
+		$this_object = $arr["obj_inst"];
+		$workspace = $this->get_current_workspace ($arr);
 		$connections = $this_object->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 		$resource_id = $arr["mrp_new_job_resource"];
 		$job_number = (count ($connections) + 1);
@@ -1701,7 +1687,7 @@ class mrp_case extends class_base
 		$prerequisite_job = $list->begin ();
 		$prerequisite = is_object ($prerequisite_job) ? $prerequisite_job->id () : "";
 
-		$job =& new object (array (
+		$job = new object (array (
 		   "parent" => $jobs_folder,
 		   // "class_id" => CL_MRP_JOB,
 		));
@@ -1834,7 +1820,7 @@ class mrp_case extends class_base
 
 	function _do_log($arr)
 	{
-		$t =& $arr["prop"]["vcl_inst"];
+		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_log_t($t);
 
 		$this->db_query("SELECT tm,objects.name as job_id, uid,message,mrp_log.comment as comment FROM mrp_log left join objects on objects.oid = mrp_log.job_id  WHERE project_id = ".$arr["obj_inst"]->id()." ORDER BY tm DESC");
@@ -1922,7 +1908,7 @@ class mrp_case extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] == "grp_case_details")
+		if ($arr["id"] === "grp_case_details")
 		{
 			return false;
 		}
@@ -2454,7 +2440,7 @@ class mrp_case extends class_base
 
 	function _case_view($arr)
 	{
-		$t =& $arr["prop"]["vcl_inst"];
+		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_case_view_t($t);
 
 		$this_object = $arr["obj_inst"];
@@ -2528,7 +2514,7 @@ class mrp_case extends class_base
 
 	function do_db_upgrade($table, $field, $q, $err)
 	{
-		if ("mrp_case" == $table)
+		if ("mrp_case" === $table)
 		{
 			ini_set("ignore_user_abort", "1");
 
