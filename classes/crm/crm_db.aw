@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.54 2009/01/22 15:59:24 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.55 2009/01/23 15:14:08 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -74,12 +74,35 @@
 			@layout o_left_bottom type=vbox parent=o_left closeable=1 area_caption=Otsi&nbsp;kataloogist
 
 				@property os_name type=textbox store=no captionside=top parent=o_left_bottom
-				@caption Organisatsiooni nimi
+				@caption Nimi
+
+				@property os_regnr type=textbox store=no captionside=top parent=o_left_bottom
+				@caption &Auml;riregistri number
+
+				@property os_address type=textbox store=no captionside=top parent=o_left_bottom
+				@caption Aadress
+
+				@property os_director type=textbox store=no captionside=top parent=o_left_bottom
+				@caption Firmajuht
+
+				@property os_legal_form type=relpicker reltyupe=RELTYPE_OS_LEGAL_FORM no_edit=1 automatic=1 multiple=1 store=no captionside=top parent=o_left_bottom size=5
+				@caption Ettev&otilde;lusvorm
+
+				@property os_city type=relpicker reltype=RELTYPE_OS_CITY no_edit=1 automatic=1 multiple=1 store=no captionside=top parent=o_left_bottom size=5
+				@caption Linn
+
+				@property os_county type=relpicker reltype=RELTYPE_OS_COUNTY no_edit=1 automatic=1 multiple=1 store=no captionside=top parent=o_left_bottom size=5
+				@caption Maakond
+
+				@property os_show_in_webview type=select store=no captionside=top parent=o_left_bottom
+				@caption Veebis kuvamine
 
 				@property os_submit type=submit store=no parent=o_left_bottom
 				@caption Otsi
 
 		@layout o_right type=vbox parent=o_main
+
+			@property org_a2z type=text store=no no_caption=1 parent=o_right
 
 			@property org_tbl type=table store=no no_caption=1 parent=o_right
 
@@ -131,6 +154,12 @@
 @reltype OWNER_ORG value=16 clid=CL_CRM_COMPANY
 @caption Omanikorganisatsioon
 
+@reltype OS_CITY value=17 clid=CL_CRM_CITY
+@caption Linn otsingus
+
+@reltype OS_COUNTY value=18 clid=CL_CRM_COUNTY
+@caption Maakond otsingus
+
 */
 
 class crm_db extends class_base
@@ -151,50 +180,102 @@ class crm_db extends class_base
 			case "flimit":
 				$prop["options"] = array (30 => 30, 60 => 60, 100 => 100);
 				break;
+			
+			case "os_show_in_webview":
+				$prop["options"] = array(
+					0 => t("K&otilde;ik"),
+					1 => t("Ei kuvata veebis"),
+					2 => t("Kuvatakse veebis"),
+				);
+			case "os_name":
+			case "os_regnr":
+			case "os_address":
+			case "os_director":
+			case "os_legal_form":
+			case "os_city":
+			case "os_county":
+				$prop["value"] = isset($_GET[$prop["name"]]) ? $_GET[$prop["name"]] : NULL;
+				break;
 		}
 		return  $retval;
 	}
 
 	function _get_org_tree($arr)
 	{
+		$oo = $arr["obj_inst"]->owner_org;
+		if(!$this->can("view", $oo))
+		{
+			return PROP_IGNORE;
+		}
+
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_only_one_level_opened(1);
-		if(isset($_GET["branch_id"]))
+		if(isset($_GET["branch_id"]) && is_oid($_GET["branch_id"]))
 		{
-			$t->set_selected_item($_GET["branch_id"]);
+			$prefix = $_GET["on_web"] == 2 ? "on_web" : "not_on_web";
+			$t->set_selected_item($prefix.$_GET["branch_id"]);
+		}
+		else
+		{
+			if(isset($_GET["on_web"]))
+			{
+				$t->set_selected_item((int)$_GET["on_web"] === 2 ? "on_web" : "not_on_web");
+			}
+			else
+			{
+				$t->set_selected_item("all");
+			}
 		}
 
-		$roots = array(
-			"all" => t("K&otilde;ik organisatsioonid"),
-			"on_web" => t("Kuvatavad organisatsioonid"),
-			"not_on_web" => t("Mittekuvatavad organisatsioonid"),
+		// Kliendisuhted, kus on show_in_webview=1 ja seller on omanik.
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"seller" => $oo,
+			),
+			array(
+				CL_CRM_COMPANY_CUSTOMER_DATA => array("buyer", "show_in_webview"),//, "buyer.pohitegevus"),
+			)
 		);
-		foreach($roots as $k => $v)
+		// Eraldame organisatsioonid veebis kuvamise p6hjal
+		$orgs = array(
+			"on_web" => array(),
+			"not_on_web" => array(),
+		);
+		foreach($odl->arr() as $od)
 		{
-			$t->add_item(0, array(
-				"id" => $k,
-				"name" => $v,
-				"url" => aw_url_change_var(array(
-					"branch_id" => $k,
-				))
-			));
-		}
-		$t->add_item("on_web", array(
-			"id" => "on_web_all",
-			"name" => t("K&otilde;ik organisatsioonid"),
-			"url" => aw_url_change_var(array(
-				"branch_id" => "on_web_all",
-			))
-		));
-		$t->add_item("not_on_web", array(
-			"id" => "not_on_web_all",
-			"name" => t("K&otilde;ik organisatsioonid"),
-			"url" => aw_url_change_var(array(
-				"branch_id" => "not_on_web_all",
-			))
-		));
+			if(!$this->can("view", $od["buyer"]))
+			{
+				continue;
+			}
 
-		$item_count = array();
+			if((int)$od["show_in_webview"] === 1)
+			{
+				$orgs["on_web"][] = $od["buyer"];
+			}
+			else
+			{
+				$orgs["not_on_web"][] = $od["buyer"];
+			}
+		}
+
+		$secs = array();
+		foreach($orgs as $k => $v)
+		{
+			$conns = connection::find(array(
+				"from.class_id" => CL_CRM_COMPANY,
+				"from" => $v,
+				"type" => "RELTYPE_TEGEVUSALAD",
+			));
+			foreach($conns as $conn)
+			{
+				$secs[$k][$conn["to"]][$conn["from"]] = 1;
+			}
+		}
+
+		// Tegevusalad
 		$sa = new aw_array($arr["obj_inst"]->prop("dir_tegevusala"));
 		$sectors_list = new object_list();
 		foreach($sa->get() as $parent)
@@ -206,49 +287,94 @@ class crm_db extends class_base
 			));
 			$sectors_list->add($menu_tree->to_list());
 		}
-		$ids = $this->make_keys($sectors_list->ids());
-		foreach($sectors_list->arr() as $oid => $sect)
+		$item_count = array();
+		$ids = $sectors_list->ids();
+		if(count($ids) > 0)
 		{
-			$org_count = $this->_get_retated_orgs($sect->id());
-			$item_count[$sect->parent()] = $item_count[$sect->parent()] + $org_count;
-			$item_count[$sect->id()] = $item_count[$sect->id()] + $org_count;
+			$odl = new object_data_list(
+				array(
+					"class_id" => CL_CRM_SECTOR,
+					"oid" => $ids,
+					"lang_id" => array(),
+					"site_id" => array(),
+				), 
+				array(
+					CL_CRM_SECTOR => array("parent", "name")
+				)
+			);
+			$ods = $odl->arr();
+			foreach($secs as $k => $v)
+			{
+				foreach($v as $id => $cnt)
+				{
+					$item_count[$k][$id] = isset($item_count[$k][$id]) ? $item_count[$k][$id] + $cnt : $cnt;
+					$tp = $ods[$id]["parent"];
+					while(isset($ods[$tp]))
+					{
+						$item_count[$k][$tp] = isset($item_count[$k][$tp]) ? $item_count[$k][$tp] + $cnt : $cnt;
+						$tp = $ods[$tp]["parent"];
+					}
+					$item_count[$k][$k] = isset($item_count[$k][$k]) ? $item_count[$k][$k] + $cnt : $cnt;
+				}
+			}
+			foreach($ods as $oid => $od)
+			{
+				$pt = isset($ods[$od["parent"]]) ? $od["parent"] : "";
+				$pm = get_instance("vcl/popup_menu");
+				$pm->begin_menu("site_edit_".$oid);
+				$url = $this->mk_my_orb("change", array("id" => $id, "return_url" => get_ru(), "is_sa" => 1), CL_CRM_SECTOR, true);
+				$pm->add_item(array(
+					"text" => t("Muuda"),
+					"link" => html::get_change_url($oid, array("return_url" => get_ru())),
+				));
+				$pm->add_item(array(
+					"text" => t("Kustuta"),
+					"link" => $this->mk_my_orb("delete_organizations", array("id" => $arr["obj_inst"]->id(), "sel[$oid]" => $oid, "post_ru" => get_ru())),
+				));
+				$cnt = isset($item_count["not_on_web"][$oid]) ? count($item_count["not_on_web"][$oid]) : 0;
+				$t->add_item("not_on_web".$pt,
+					array(
+						"id" => "not_on_web".$oid,
+						"name" => $od["name"]." (".$cnt.") ".$pm->get_menu(),
+						"url" => aw_url_change_var(array(
+							"branch_id" => $oid,
+							"ft_page" => NULL,
+							"on_web" => 1,
+						)),
+					)
+				);
+				$cnt = isset($item_count["on_web"][$oid]) ? count($item_count["on_web"][$oid]) : 0;
+				$t->add_item("on_web".$pt,
+					array(
+						"id" => "on_web".$oid,
+						"name" => $od["name"]." (".$cnt.") ".$pm->get_menu(),
+						"url" => aw_url_change_var(array(
+							"branch_id" => $oid,
+							"ft_page" => NULL,
+							"on_web" => 2,
+						)),
+					)
+				);
+			}
 		}
-		
-		foreach($sectors_list->arr() as $oid => $sect)
-		{
-			$id = $sect->id();
-			$parent = isset($ids[$sect->parent()]) ? $sect->parent() : 0 ;
-			$name = $sect->name();
-			$pm = get_instance("vcl/popup_menu");
-			$pm->begin_menu("site_edit_".$id);
-			$url = $this->mk_my_orb("change", array("id" => $id, "return_url" => get_ru(), "is_sa" => 1), CL_CRM_SECTOR, true);
-			$pm->add_item(array(
-				"text" => t("Muuda"),
-				//"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
-				"link" => html::get_change_url($id, array("return_url" => get_ru()))//"javascript:void(0)"
-			));
-			$pm->add_item(array(
-				"text" => t("Kustuta"),
-				"link" => $this->mk_my_orb("delete_organizations", array("id" => $arr["obj_inst"]->id(), "sel[$id]" => $id, "post_ru" => get_ru())),
-			));
-			$name = $name." (".$item_count[$id].") ".$pm->get_menu();
-			$t->add_item($parent, array(
-				"id" => $id,
-				"name" => $name,//strlen($name) > 20 ? substr($name, 0, 20).".." : $name,
-				"url" => aw_url_change_var("branch_id", $sect->id()),
-			));
-		}
-	}
 
-	function _get_retated_orgs($s)
-	{
-		$org_list = new object_list(array(
-			"class_id" => CL_CRM_COMPANY,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD.id" => $s,
-		));
-		return $org_list->count();
+		$roots = array(
+			"all" => t("K&otilde;ik organisatsioonid")." (".(count($orgs["on_web"]) + count($orgs["not_on_web"])).")",
+			"on_web" => t("Kuvatavad organisatsioonid")." (".count($orgs["on_web"]).")",
+			"not_on_web" => t("Mittekuvatavad organisatsioonid")." (".count($orgs["not_on_web"]).")",
+		);
+		foreach($roots as $k => $v)
+		{
+			$t->add_item(0, array(
+				"id" => $k,
+				"name" => $v,
+				"url" => aw_url_change_var(array(
+					"branch_id" => NULL,
+					"ft_page" => NULL,
+					"on_web" => $k == "on_web" ? 2 : ($k == "not_on_web" ? 1 : NULL),
+				))
+			));
+		}
 	}
 
 	function _init_company_table(&$t)
@@ -319,113 +445,28 @@ class crm_db extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_company_table(&$t);
-
-		$all_letters = array(); //array("0-9");
-		foreach(range("A", "Z") as $v)
-		{
-			$all_letters[] = $v;
-		}
-		// Although I don't think this is any better...
-		$let = array(html_entity_decode("&Ouml;"), html_entity_decode("&Auml;"), html_entity_decode("&Uuml;"), html_entity_decode("&Otilde;"));
-		foreach($let as $l)
-		{
-			$all_letters[] = $l;
-		}
-		$letter = isset($arr["request"]["letter"]) ? urldecode($arr["request"]["letter"]) : "A";
+		$this->set_org_tbl_caption($arr);
 
 		$perpage = 20;
 		if ($arr["obj_inst"]->prop("flimit") != "")
 		{
 			$perpage = $arr["obj_inst"]->prop("flimit");
-		};
+		};	
 
-		$pageselector = "";
-		$id = $arr["obj_inst"]->id();
+		$companys = $this->get_org_tbl_data($arr);
 
-		
-
-		$vars = array(
-			"parent" => $arr["obj_inst"]->prop("dir_firma"),
-			"class_id" => CL_CRM_COMPANY,
-			"sort_by" => "objects.jrk,objects.name",
-		);
-		if($arr["request"]["group"] == "firmad")
+		if($companys->count() > $perpage)
 		{
-			$vars["name"] = $letter."%";
-			foreach($all_letters as $val)
-			{
-				$pageselector .= "&nbsp;&nbsp;".html::get_change_url($id, array(
-						"group" => "firmad",
-						//"ft_page" => $arr["request"]["ft_page"],
-						"letter" => urlencode($val),
-						"return_url" => get_ru(),
-						"no_search" => 1,
-				), ($val == $letter ? "<b>".$val."</b>" : $val));
-			}
-		}
-		if(isset($_GET["branch_id"]) && $this->can("view", $_GET["branch_id"]))
-		{
-			$vars["pohitegevus"] = $_GET["branch_id"];
-		}
-		
-		elseif($arr["request"]["group"] == "tegevusalad" && !$this->can("view", $_GET["branch_id"]))
-		{
-			return;
-			$vars["CL_CRM_COMPANY.pohitegevus(CL_CRM_SECTOR).name"] = new obj_predicate_compare(OBJ_COMP_NULL); 
-		}
-
-		$companys = new object_list($vars);
-		$t->d_row_cnt = $companys->count();
-		$ps = "";
-		if ($t->d_row_cnt > $perpage)
-		{
-			$ps .= $t->draw_text_pageselector(array(
-				"records_per_page" => $perpage
+			$t->define_pageselector(array(
+				"type" => "lbtxt",
+				"records_per_page" => $perpage,
+				"d_row_cnt" => $companys->count(),
+				"no_recount" => true,
 			));
-		};
-		$ft_page = isset($arr["request"]["ft_page"]) ? (int)$arr["request"]["ft_page"] : 0;
-		$vars["limit"] = (60*$ft_page).",".(60*$ft_page+60);
-		$t->set_header($pageselector."<br />".$ps);
-		if($arr["obj_inst"]->show_as_on_web && $companys->count() > 0 && is_oid($arr["obj_inst"]->owner_org))
-		{
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-				"buyer" => $companys->ids(),
-				"seller" => $arr["obj_inst"]->owner_org,
-				"show_in_webview" => 1,
-				"lang_id" => array(),
-				"site_id" => array(),
-			));
-			if($ol->count() > 0)
-			{
-				// START - this should be done with RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).oid, but that doesn't seem to work. -kaarel 11.01.2009
-				$conns = connection::find(array(
-					"from.class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-					"from" => $ol->ids(),
-					"reltype" => "RELTYPE_BUYER",
-					"to" => $companys->ids(),
-				));
-				$ids = array();
-				if(count($conns) > 0)
-				{
-					foreach($conns as $conn)
-					{
-						$ids[] = $conn["to"];
-					}
-					$vars["oid"] = $arr["request"]["group"] == "not_on_web" ? new obj_predicate_not($ids) : $ids;
-					// END
-//					$vars["RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).oid"] = new obj_predicate_not($ol->ids());
-				}
-				$companys = count($ids) > 0 || $arr["request"]["group"] == "not_on_web" ? new object_list($vars) : new object_list();
-			}
-			else
-			{
-				$companys = new object_list();
-			}
-		}
-		else
-		{
-			$companys = new object_list($vars);
+			$p = isset($_GET["ft_page"]) ? (int)$_GET["ft_page"] : 0;
+			$ids = $companys->ids();
+			$ids_to_cut = safe_array(array_slice($ids, 0, $p * $perpage)) + safe_array(array_slice($ids, ($p + 1) * $perpage));
+			$companys->remove($ids_to_cut);
 		}
 		$coms = $companys->arr();
 		foreach($coms as $com)
@@ -673,7 +714,32 @@ class crm_db extends class_base
 			"img" => "import.gif",
 			"side" => "right",
 		));
-	}	
+	}
+
+	public function _get_org_a2z($arr)
+	{
+		$all_letters = range("A", "Z");
+
+		$let = array(html_entity_decode("&Otilde;"), html_entity_decode("&Auml;"), html_entity_decode("&Ouml;"), html_entity_decode("&Uuml;"));
+		foreach($let as $l)
+		{
+			$all_letters[] = $l;
+		}
+
+		$arr["prop"]["value"] = "<br>".str_repeat("&nbsp;", 4);
+		$arr["prop"]["value"] .= html::href(array(
+			"url" => aw_url_change_var("letter", NULL),
+			"caption" => isset($_GET["letter"]) ? t("K&otilde;ik") : "<b>".t("K&otilde;ik")."</b>",
+		))."&nbsp;";
+
+		foreach($all_letters as $l)
+		{
+			$arr["prop"]["value"] .= html::href(array(
+				"url" => aw_url_change_var("letter", $l),
+				"caption" => isset($_GET["letter"]) && $_GET["letter"] === $l ? "<b>".$l."</b>" : $l,
+			))."&nbsp;";
+		}
+	}
 
 	/**  
 		
@@ -721,9 +787,20 @@ class crm_db extends class_base
 	{
 		$args = &$arr["args"];
 		// no I need add all those things in search_form1 do my request vars
-		if (is_array($arr["request"]["search_form1"]))
+		if (is_array($arr["request"]["org_search"]))
 		{
-			$args["search_form1"] = $arr["request"]["search_form1"];
+			$args["org_search"] = $arr["request"]["org_search"];
+		}
+
+		foreach($arr["request"] as $k => $v)
+		{
+			if(substr($k, 0, 3) == "os_" && !empty($v))
+			{
+				unset($args["letter"]);
+				unset($args["branch_id"]);
+				unset($args["on_web"]);
+				$args[$k] = $v;
+			}
 		}
 	}
 
@@ -804,6 +881,158 @@ class crm_db extends class_base
 		}
 
 		return $arr["post_ru"];
+	}
+
+	private function get_org_tbl_data($arr)
+	{
+		$oo = $arr["obj_inst"]->owner_org;
+		if(!$this->can("view", $oo))
+		{
+			return new object_list();
+		}
+
+		$t = &$arr["prop"]["vcl_inst"];
+		if(isset($_GET["os_submit"]))
+		{
+			$show_in_webview = isset($_GET["os_show_in_webview"]) ? ((int)$_GET["os_show_in_webview"] === 2 ? 1 : new obj_predicate_not(1)) : array();
+		}
+		else
+		{
+			$show_in_webview = isset($_GET["on_web"]) ? ((int)$_GET["on_web"] === 2 ? 1 : new obj_predicate_not(1)) : array();
+		}
+
+		$cd_odl = new object_data_list(
+			array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"seller" => $oo,
+				"show_in_webview" => $show_in_webview,
+			),
+			array(
+				CL_CRM_COMPANY_CUSTOMER_DATA => array("buyer"),
+			)
+		);
+		$ids = $cd_odl->get_element_from_all("buyer");
+		if(count($ids) === 0)
+		{
+			return new object_list();
+		}
+		$vars = array(
+			"class_id" => CL_CRM_COMPANY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.jrk, objects.name",
+			"oid" => $ids,
+		);
+		if(isset($_GET["os_submit"]))
+		{
+			if(isset($_GET["os_name"]))
+			{
+				$vars["name"] = "%".$_GET["os_name"]."%";
+			}
+			if(isset($_GET["os_sector"]))
+			{
+				$vars["pohitegevus"] = $_GET["os_sector"];
+			}
+			if(isset($_GET["os_regnr"]))
+			{
+				$vars["reg_nr"] = "%".$_GET["os_regnr"]."%";
+			}
+			if(isset($_GET["os_legal_form"]))
+			{
+				$vars["ettevotlusvorm"] = $_GET["os_legal_form"];
+			}
+			if(isset($_GET["os_director"]))
+			{
+				$vars["firmajuht.name"] = "%".$_GET["os_director"]."%";
+			}
+			$adr_vars = array();
+			if(isset($_GET["os_address"]))
+			{
+				$adr_vars["aadress"] = "%".$_GET["os_address"]."%";
+			}
+			if(isset($_GET["os_city"]))
+			{
+				$adr_vars["linn"] = $_GET["os_city"];
+			}
+			if(isset($_GET["os_county"]))
+			{
+				$adr_vars["maakond"] = $_GET["os_county"];
+			}
+			if(count($adr_vars) > 0)
+			{
+				foreach($adr_vars as $k => $v)
+				{
+					unset($adr_vars[$k]);
+					$adr_vars["CL_CRM_COMPANY.RELTYPE_ADDRESS.".$k] = $v;
+				}
+				$vars[] = new object_list_filter(array(
+					"logic" => "AND",
+					"conditions" => $adr_vars,
+				));
+			}
+		}
+		else
+		{				
+			// Tegevusala
+			if(isset($_GET["branch_id"]) && $this->can("view", $_GET["branch_id"]))
+			{
+				$vars["pohitegevus"] = $_GET["branch_id"];
+			}
+		}
+		// Nime algust2he filter
+		if(isset($_GET["letter"]))
+		{
+			$vars[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_COMPANY.name" => $_GET["letter"]."%",
+				)
+			));
+		}
+
+		$companys = new object_list($vars);
+		return $companys;
+	}
+
+	private function set_org_tbl_caption($arr)
+	{
+		if(isset($_GET["branch_id"]) && is_oid($_GET["branch_id"]) && $this->can("view", $_GET["branch_id"]))
+		{
+			$s = obj($_GET["branch_id"])->name();
+			if(isset($_GET["on_web"]) && (int)$_GET["on_web"] === 2)
+			{
+				$c = sprintf(t("Organisatsioonid, mille tegevusalade hulgas on \"%s\" ja mida kuvatakse veebis"), $s);
+			}
+			else
+			{
+				$c = sprintf(t("Organisatsioonid, mille tegevusalade hulgas on \"%s\" ja mida veebis ei kuvata"), $s);
+			}
+		}
+		elseif(isset($_GET["os_submit"]))
+		{
+			$c = t("Otsingutulemused");
+		}
+		else
+		{
+			if(isset($_GET["on_web"]))
+			{
+				$c = (int)$_GET["on_web"] == 2 ? t("K&otilde;ik organisatsioonid, mida kuvatakse veebis") : t("K&otilde;ik organisatsioonid, mida veebis ei kuvata");
+			}
+			else
+			{
+				$c = t("K&otilde;ik organisatsioonid");
+			}
+		}
+
+		// Letter filter
+		if(isset($_GET["letter"]))
+		{
+			$c .= t(" (nime algust&auml;ht ".$_GET["letter"].")");
+		}
+
+		$arr["prop"]["vcl_inst"]->set_caption($c);
 	}
 }
 ?>
