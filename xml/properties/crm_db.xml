@@ -207,6 +207,17 @@
             <caption>Otsi</caption>
       </property>
       <property>
+            <name>org_a2z</name>
+            <table>objects</table>
+            <group>org</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>o_right</parent>
+      </property>
+      <property>
             <name>org_tbl</name>
             <table>objects</table>
             <group>org</group>
