@@ -193,7 +193,7 @@
             <store>no</store>
             <captionside>top</captionside>
             <parent>o_left_bottom</parent>
-            <caption>Organisatsiooni nimi</caption>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>os_regnr</name>
@@ -252,6 +252,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_CITY</reltype>
             <no_edit>1</no_edit>
+            <automatic>1</automatic>
             <store>no</store>
             <captionside>top</captionside>
             <parent>o_left_bottom</parent>
@@ -266,6 +267,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_COUNTY</reltype>
             <no_edit>1</no_edit>
+            <automatic>1</automatic>
             <store>no</store>
             <captionside>top</captionside>
             <parent>o_left_bottom</parent>
@@ -397,6 +399,16 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Omanikorganisatsioon</caption>
             </OWNER_ORG>
+            <OS_CITY>
+                  <value>17</value>
+                  <clid>CL_CRM_CITY</clid>
+                  <caption>Linn otsingus</caption>
+            </OS_CITY>
+            <OS_COUNTY>
+                  <value>18</value>
+                  <clid>CL_CRM_COUNTY</clid>
+                  <caption>Maakond otsingus</caption>
+            </OS_COUNTY>
       </reltypes>
       <layout>
             <o_main>
