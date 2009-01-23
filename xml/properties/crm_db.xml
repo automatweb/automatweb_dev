@@ -245,6 +245,7 @@
             <store>no</store>
             <captionside>top</captionside>
             <parent>o_left_bottom</parent>
+            <size>5</size>
             <caption>Ettev&amp;amp;otilde;lusvorm</caption>
       </property>
       <property>
@@ -261,6 +262,7 @@
             <store>no</store>
             <captionside>top</captionside>
             <parent>o_left_bottom</parent>
+            <size>5</size>
             <caption>Linn</caption>
       </property>
       <property>
@@ -277,6 +279,7 @@
             <store>no</store>
             <captionside>top</captionside>
             <parent>o_left_bottom</parent>
+            <size>5</size>
             <caption>Maakond</caption>
       </property>
       <property>
@@ -288,6 +291,7 @@
             <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
+            <parent>o_left_bottom</parent>
             <caption>Veebis kuvamine</caption>
       </property>
       <property>
