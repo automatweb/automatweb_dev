@@ -519,6 +519,9 @@ class user extends class_base
 					"uid" => $arr["obj_inst"]->prop("uid")
 				));
 				break;
+			case "settings_shortcuts_settings_shortcuts":
+				$this->_set_settings_shortcuts_settings_shortcuts($arr);
+				break;
 		}
 		return PROP_OK;
 	}
@@ -571,6 +574,7 @@ class user extends class_base
 		{
 			$data = array();
 			$o_shortcut = obj($con->prop("to"));
+			$data["oid"] = $o_shortcut->id();
 			$data["name"] = html::href(array(
 				"url" => $this->mk_my_orb("change", array(
 					"id" => $o_shortcut->id(),
@@ -579,18 +583,107 @@ class user extends class_base
 				"caption" => $o_shortcut->prop("name"),
 				));
 			$o_shortcut->name();
-			$data["keycombo"] = $o_shortcut->prop("keycombo");
+			$data["keycombo"] = html::div(array(
+						"id" => "aw_shortcut_" . $o_shortcut->id(),
+						"class" => "aw_shorcut_object",
+						"content" => $o_shortcut->prop("keycombo"),
+					));
 			$t->define_data($data);
 		}
 
 		$t->set_default_sortby("keycombo");
 		$t->sort_by();
+		
+		$data = array();
+		$data["name"] = html::textbox(array(
+			"name" => "new_shortcut[name]",
+			"class" => "new_shortcut_title",
+			"style" => "width: 200px",
+		));
+		$data["keycombo"] = html::textbox(array(
+			"name" => "new_shortcut[keycombo]",
+			"class" => "keycombo",
+			"style" => "width: 200px",
+		));
 
+		$t->define_data($data);
+		
 		$prop["value"] = $t->draw();
 	}
 
-
-
+	function _set_settings_shortcuts_settings_shortcuts($arr)
+	{
+		// delete shortcuts
+		if (!empty($arr["request"]["delete"]))
+		{
+			foreach($arr["request"]["delete"] as $key => $var)
+			{
+				$o = obj($var);
+				$o -> delete();
+			}
+		}
+	
+		// modify shortcuts
+		if (!empty($arr["request"]["modify_shortcut"]))
+		{
+			foreach($arr["request"]["modify_shortcut"] as $key => $var)
+			{
+				$o = obj($key);
+				$o -> set_prop("keycombo", $var);
+				$o -> save();
+			}
+		}
+		
+		// add new shortcut
+		if (!empty($arr["request"]["new_shortcut"]["name"]))
+		{
+			// get parent for shortcuts
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_MENU,
+					"parent" => 197,
+					"name" => "shortcuts"
+				));
+				if (count($ol->list)===0)
+				{
+					$o = new object(array(
+						"class_id" => CL_MENU,
+						"parent" => 197,
+						"name" => "shortcuts"
+					));
+					$o -> save();
+				}
+				else
+				{
+					$o = $ol->begin();
+				}
+				$shortcuts_dir_id = $o -> id();
+			}
+			
+			// save shortcut
+			{
+				$o2 = new object(array(
+					"class_id" => CL_SHORTCUT,
+					"parent" => $shortcuts_dir_id ,
+					"name" => $arr["request"]["new_shortcut"]["name"],
+				));
+				$o2 -> set_class_id(CL_SHORTCUT);
+				$o2 -> set_prop("keycombo", $arr["request"]["new_shortcut"]["keycombo"]);
+				$o2 -> save();
+			}
+			
+			// make relations 
+			{
+				$shortcut_set_oid = $arr["obj_inst"]->prop("settings_shortcuts_shortcut_sets");
+				$o3 = obj($shortcut_set_oid);
+				$o3->connect(array(
+					"to" => $o2,
+					"reltype" => "RELTYPE_SHORTCUT",
+				));
+			}
+		}
+	}
+	
 	function &_start_shortcuts_table()
 	{
 		load_vcl("table");
@@ -607,9 +700,16 @@ class user extends class_base
 			"caption" => t("Shortcut"),
 			"sortable" => 1,
 		));
+		
+		$t->define_chooser(array(
+			"name" => "delete",
+			"caption" => t("Kustuta"),
+	        "field" => "oid"
+        ));
 
 		return $t;
 	}
+ 
 
 	function _get_group_membership($o, $id)
 	{
@@ -1036,6 +1136,38 @@ class user extends class_base
 		}
 
 		$arr["args"]["set_ui_lang"] = $arr["request"]["set_ui_lang"];
+	}
+	
+	function callback_generate_scripts($arr)
+	{
+		if ($_GET["group"] == "settings_shortcuts")
+		{
+			$out = <<<EOF
+			function aw_handle_edit_shortcut()
+			{
+				$(".aw_shorcut_object").click(function(){
+					// fix column jump
+					$(this).parent().css("width", $(this).parent().width()+"px");
+					oid = this.id.replace("aw_shortcut_","");
+					$(this).replaceWith("<input id='"+this.id+"' name='modify_shortcut["+oid+"]' class='keycombo' style='width: 200px' value='"+$(this).html()+"' />");
+					$("#"+this.id).focus();
+					$(".keycombo").catch_keycombo();
+				});
+			}
+			
+			function aw_shortcut_manager_init()
+			{
+				aw_handle_edit_shortcut();
+				$.hotkeys.remove("*");  // reset current shortcuts so they don't activate if pressed	
+				$.getScript("http://hannes.dev.struktuur.ee/automatweb/js/jquery/plugins/jquery_catch_keycombo.js", function(){
+					$(".keycombo").catch_keycombo();
+				});
+			}
+			
+			aw_shortcut_manager_init();
+EOF;
+		}
+		return $out;
 	}
 
 	function on_delete_user_bro($arr)

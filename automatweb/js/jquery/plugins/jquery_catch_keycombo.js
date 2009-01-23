@@ -19,11 +19,15 @@
 			  s_key = String.fromCharCode(e.keyCode);
 			}
 			
-			active_keys[s_key] = String.fromCharCode(s_key);
-			$(this).val("")
-			for (key in active_keys)
+			// for bug #
+			if (e.keyCode != 13)
 			{
-				$(this).val($(this).val()+key+"+")
+				active_keys[s_key] = String.fromCharCode(s_key);
+				$(this).val("")
+				for (key in active_keys)
+				{
+					$(this).val($(this).val()+key+"+".toLowerCase())
+				}
 			}
 		});
 		

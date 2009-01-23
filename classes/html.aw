@@ -1352,6 +1352,34 @@ class html extends aw_template
 		$content = isset($content) ? $content : "";
 		return "<span{$class}{$style}{$id}>{$content}</span>";
 	}
+	
+	/**Link
+	@attrib api=1 params=name
+
+	@param class optional type=string
+		style class name
+	@param textsize optional type=string
+		examples: "10px", "0.7em", "smaller"
+	@param fontweight optional type=string
+		examples: "bold", "normal"
+	@param content optional type=string
+		html to insert between div tags
+	@returns string/html
+
+	@comments
+		draws <div class='$class'>$content</div>
+	**/
+	function div($args = array())
+	{
+		extract($args);
+		$textsize = ($textsize ? 'font-size: ' . $textsize . ';' : "");
+		$fontweight = ($fontweight ? 'font-weight: ' . $fontweight . ';' : "");
+		$style = (!empty($textsize) or !empty($fontweight)) ? " style=\"{$textsize}{$fontweight}\"" : "";
+		$class = ($class ? ' class="' . $class . '"' : "");
+		$id = ($id ? " id=\"{$id}\"" : "");
+		$content = isset($content) ? $content : "";
+		return "<div{$class}{$style}{$id}>{$content}</div>";
+	} 
 
 	/**
 	@attrib api=1 params=pos

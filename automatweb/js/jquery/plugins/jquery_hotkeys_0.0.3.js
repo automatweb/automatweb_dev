@@ -118,8 +118,19 @@ USAGE:
         opt = opt || {};
         target = opt.target || jQuery('html')[0];
         type = opt.type || 'keydown';
-		exp = exp.toLowerCase();        
-        delete this.all[target].events[type].callbackMap[exp]        
+		exp = exp.toLowerCase();
+		if (exp == "*") 
+		{
+			for (k in this.all[target].events[type].callbackMap )
+			{
+				//alert (k);
+				delete this.all[target].events[type].callbackMap[k];  
+			}
+		}
+		else
+		{
+			delete this.all[target].events[type].callbackMap[exp]        
+		}
         return jQuery;
 	};
     jQuery.hotkeys = this;
