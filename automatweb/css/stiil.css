@@ -482,7 +482,7 @@ a:hover {text-decoration: underline}
 	border-left: 1px solid #fff;
 	height: 26px;
 	padding: 3px 9px;
-	margin-bottom: 10px;
+	margin-bottom: 1px;
 	margin-right: -10px;
 }
 #toimingud .v {
@@ -612,6 +612,7 @@ span.kast {
 }
 #jalus a { color: #fff }
 .clear {
+	display: block;
 	clear: both
 }
 .awActbOptionList {
