@@ -1956,10 +1956,6 @@ class _int_object
 		if (empty($cl_id) and !empty($this->obj["class_id"]))
 		{
 			$cl_id = $this->obj["class_id"];
-			if (empty($cl_id))
-			{
-				throw new awex_obj("Missing required class id.");
-			}
 		}
 
 		if (isset($GLOBALS["properties"][$cl_id]) && isset($GLOBALS["tableinfo"][$cl_id]) && isset($GLOBALS["of2prop"][$cl_id]))
@@ -2626,6 +2622,10 @@ class _int_object
 	{
 		if (!$this->props_loaded)
 		{
+			if (empty($this->obj["class_id"]))
+			{
+				return null;
+			}
 			$this->_int_load_property_values();
 		}
 		$cur_v = null;
@@ -2719,7 +2719,7 @@ class _int_object
 		{
 			$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];
 		}
-		if ($pd && $pd["field"] == "meta" && $pd["table"] == "objects" && isset($this->obj["meta"][$pd["name"]]))
+		if ($pd && $pd["field"] === "meta" && $pd["table"] === "objects" && isset($this->obj["meta"][$pd["name"]]))
 		{
 			$this->_scan_warning_possibility($this->obj["meta"][$pd["name"]], $pd);
 			return isset($this->obj["meta"][$pd["name"]]) ? $this->obj["meta"][$pd["name"]] : null;
