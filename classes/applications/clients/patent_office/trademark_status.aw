@@ -62,7 +62,7 @@ class trademark_status extends class_base
 
 	function do_db_upgrade($t, $f, $q, $err)
 	{
-		if ($f == "" && $t == "aw_trademark_status")
+		if ($f == "" && $t === "aw_trademark_status")
 		{
 			$this->db_query("CREATE TABLE aw_trademark_status(
 				aw_oid int primary key,
@@ -71,8 +71,9 @@ class trademark_status extends class_base
 				aw_exported int,
 				aw_exported_date int,
 				aw_nr int,
-				aw_sent_date int,
+				aw_sent_date int
 			)");
+			return true;
 		}
 
 		switch($f)
@@ -83,8 +84,10 @@ class trademark_status extends class_base
 					"name" => $f,
 					"type" => "int"
 				));
+				return true;
 		}
-		return true;
+
+		return false;
 	}
 }
 

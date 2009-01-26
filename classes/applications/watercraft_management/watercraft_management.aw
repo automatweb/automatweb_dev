@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.16 2007/11/23 07:10:01 dragut Exp $
-// watercraft_management.aw - Veesõidukite haldus 
+// watercraft_management.aw - Vees6idukite haldus
 /*
 
 @classinfo syslog_type=ST_WATERCRAFT_MANAGEMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
@@ -11,13 +10,13 @@
 
 	@groupinfo sub_general caption="&Uuml;ldine" parent=general
 	@default group=sub_general
-		
+
 		@property name type=textbox
 		@caption Nimi
 
 		@property keeper type=relpicker reltype=RELTYPE_KEEPER table=watercraft_management
 		@caption Haldaja
-		
+
 		@property data type=relpicker reltype=RELTYPE_DATA table=watercraft_management
 		@caption Vees&otilde;idukite andmed
 
@@ -87,7 +86,7 @@
 			@property location type=select store=no captionside=top parent=watercraft_search_frame_left
 			@caption Asukoht
 
-			@property length type=range store=no captionside=top parent=watercraft_search_frame_left 
+			@property length type=range store=no captionside=top parent=watercraft_search_frame_left
 			@caption Pikkus
 
 			@property width type=range store=no captionside=top parent=watercraft_search_frame_left
@@ -113,14 +112,14 @@
 
 			@property seller type=select store=no captionside=top parent=watercraft_search_frame_left
 			@caption M&uuml;&uuml;ja
-			
+
 			@property price type=range store=no captionside=top parent=watercraft_search_frame_left
 			@caption Hind
 
 			@property watercraft_search_submit type=submit store=no no_caption=1 parent=watercraft_search_frame_left
 			@caption Otsi
 
-		@layout watercraft_search_frame_right type=vbox parent=watercraft_search_frame 
+		@layout watercraft_search_frame_right type=vbox parent=watercraft_search_frame
 
 	@property watercrafts_table type=table no_caption=1 group=all,motor_boat,sailing_ship,dinghy,rowing_boat,scooter,sailboard,canoe,fishing_boat,other,accessories,search parent=watercraft_search_frame_right
 	@caption Vees&otilde;idukite tabel
@@ -130,7 +129,7 @@
 
         @property activity type=table group=activity no_caption=1
         @caption Aktiivsus
-			
+
 
 @reltype KEEPER value=1 clid=CL_CRM_COMPANY
 @caption Haldaja
@@ -190,7 +189,7 @@ class watercraft_management extends class_base
 		switch($prop["name"])
 		{
 			case 'watercraft_type':
-				$prop['options'] = array(t('K&otilde;ik')) + $this->watercraft_inst->watercraft_type; 
+				$prop['options'] = array(t('K&otilde;ik')) + $this->watercraft_inst->watercraft_type;
 				$prop['selected'] = $arr['request']['watercraft_type'];
 				break;
 			case 'condition':
@@ -213,7 +212,7 @@ class watercraft_management extends class_base
 				}
 				$prop['selected'] = $arr['request']['location'];
 				break;
-			case 'length': 
+			case 'length':
 			case 'width':
 			case 'height':
 			case 'weight':
@@ -223,7 +222,7 @@ class watercraft_management extends class_base
 			case 'price':
 				$range = &$prop['vcl_inst'];
 				$range->set_range($arr['request'][$prop['name']]);
-				
+
 				break;
 			case 'additional_equipment':
 				$prop['value'] = $arr['request']['additional_equipment'];
@@ -232,7 +231,7 @@ class watercraft_management extends class_base
 				$prop['options'] = array(t('K&otilde;ik')) + $this->seller_type;
 				$prop['selected'] = $arr['request']['seller_type'];
 				break;
-				
+
 		};
 
 		if ( !empty($this->search_obj) )
@@ -259,7 +258,7 @@ class watercraft_management extends class_base
 			//-- set_property --//
 		}
 		return $retval;
-	}	
+	}
 
 
         function _get_activity($arr)
@@ -499,7 +498,7 @@ class watercraft_management extends class_base
 	function _get_manufacturers_management_toolbar($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
-		
+
 		$t->add_button(array(
 			'name' => 'new',
 			'img' => 'new.gif',
@@ -565,7 +564,7 @@ class watercraft_management extends class_base
 	function _get_locations_management_toolbar($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
-		
+
 		$t->add_button(array(
 			'name' => 'new',
 			'img' => 'new.gif',
@@ -698,7 +697,7 @@ class watercraft_management extends class_base
 				'type' => 'RELTYPE_MANUFACTURERS'
 			));
 			$arr['obj_inst']->set_prop('manufacturers', $manufacturers_oid);
-			
+
 			$locations = new object();
 			$locations->set_parent($arr['obj_inst']->id());
 			$locations->set_class_id(CL_MENU);
@@ -727,7 +726,7 @@ class watercraft_management extends class_base
 				"parent" => $wman->prop("data"),
 				"visible" => 1,
 				"status" => STAT_ACTIVE,
-				"modified" => new obj_predicate_compare(OBJ_COMP_LESS, mktime(0,0,0, date("n", $to), date("j", $to), date("Y", $to))), 
+				"modified" => new obj_predicate_compare(OBJ_COMP_LESS, mktime(0,0,0, date("n", $to), date("j", $to), date("Y", $to))),
 			));
 		}
 	}
@@ -769,18 +768,17 @@ class watercraft_management extends class_base
 		if (empty($field))
 		{
 			$this->db_query('CREATE TABLE '.$table.' (
-				oid INT PRIMARY KEY NOT NULL, 
-				keeper int, 
-				data int, 
-				locations int, 
-				manufacturers int, 
+				oid INT PRIMARY KEY NOT NULL,
+				keeper int,
+				data int,
+				locations int,
+				manufacturers int,
 				search int,
-				max_days int,
+				max_days int
 			)');
 			return true;
 		}
 
-		
 		switch ($field)
 		{
 			case 'keeper':
@@ -793,7 +791,7 @@ class watercraft_management extends class_base
 					'name' => $field,
 					'type' => 'int'
 				));
-                                return true;
+				return true;
 		}
 		return false;
 	}

@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_account.aw,v 1.5 2008/05/14 15:45:20 markop Exp $
-// rostering_account.aw - Eelarvestamise konto 
+// rostering_account.aw - Eelarvestamise konto
 /*
 
 @classinfo syslog_type=ST_ROSTERING_ACCOUNT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
@@ -69,7 +68,7 @@ class budgeting_account extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -115,15 +114,19 @@ class budgeting_account extends class_base
 
 	function do_db_upgrade($t,$f)
 	{
-		if ("aw_account_balances" == $tbl)
+		if ("aw_account_balances" === $t)
 		{
 			$i = get_instance(CL_CRM_CATEGORY);
 			return $i->do_db_upgrade($t, $f);
 		}
-		if ($f == "")
+
+		if ($f == "" and "aw_budgeting_account" === $t)
 		{
 			$this->db_query("CREATE TABLE aw_budgeting_account (aw_oid int primary key, aw_owner int,aw_balance double, aw_min_amt double)");
+			return true;
 		}
+
+		return false;
 	}
 }
 ?>
