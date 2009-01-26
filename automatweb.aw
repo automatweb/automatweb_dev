@@ -251,7 +251,6 @@ class automatweb
 	{
 		global $awt;
 		global $section;
-		include AW_DIR . "const" . AW_FILE_EXT;
 		$awt = new aw_timer();
 		if (strpos($_SERVER["REQUEST_URI"], "/automatweb") === false)
 		{
@@ -268,7 +267,7 @@ class automatweb
 		{
 			aw_ini_set("in_admin", true);
 			$vars = self::$request->get_args();
-			if (isset($vars["class"]) /*and class_index::is_requestable($vars["class"])*/)
+			if (isset($vars["class"]))
 			{
 				$GLOBALS["__START"] = microtime(true);
 
@@ -466,6 +465,7 @@ class automatweb
 	{
 		$this->bc = true;
 		require_once(AW_DIR . "lib/bc" .AW_FILE_EXT);
+		include AW_DIR . "const" . AW_FILE_EXT;
 	}
 }
 
