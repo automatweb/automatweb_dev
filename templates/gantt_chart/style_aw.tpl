@@ -55,7 +55,8 @@ a.VclGanttHeader
 	font-family : Verdana, Arial, Helvetica, Geneva, sans-serif;
 	font-size: {VAR:row_text_height}px;
 	white-space: nowrap;
-	padding: 3px 3px 3px 16px;
+	padding-right: 3px;
+	padding-left: 16px;
 	border-bottom: 1px solid;
 	border-right: none;
 	border-top: none;
