@@ -82,9 +82,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 			@property proj_tbl2 type=table no_caption=1 parent=proj_right
 
-@default group=by_default,by_project,by_who,by_class,by_cust,by_monitor
+@default group=by_default,by_prop
 
-	@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who,by_class
+	@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_prop
 
 	@layout bug type=hbox width=20%:80%
 
@@ -94,7 +94,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 		layout bug_table type=vbox parent=bug
 
-			@property bug_list type=text parent=bug no_caption=1 group=by_monitor,bugs,archive,by_default,by_project,by_who,by_class,by_cust
+			@property bug_list type=text parent=bug no_caption=1 group=bugs,archive,by_default,by_prop
 
 
 @default group=unestimated_bugs
@@ -545,11 +545,7 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo bugs caption="&Uuml;lesanded" submit=no
 
 	@groupinfo by_default caption="&Uuml;lesanded" parent=bugs submit=no
-	@groupinfo by_project caption="Projektid" parent=bugs submit=no
-	@groupinfo by_who caption="Kellele" parent=bugs submit=no
-	@groupinfo by_class caption="Klasside puu" parent=bugs submit=no
-	@groupinfo by_cust caption="Kliendid" parent=bugs submit=no
-	@groupinfo by_monitor caption="J&auml;lgijad" parent=bugs submit=no
+	@groupinfo by_prop caption="Kategooriad" parent=bugs submit=no
 	@groupinfo commits caption="Commitid" parent=bugs submit=no
 	@groupinfo search caption="Otsing" submit_method=get save=no parent=bugs
 	@groupinfo search_list caption="Salvestatud otsingud" parent=bugs
@@ -640,20 +636,9 @@ class bug_tracker extends class_base
 				$this->sort_type = "parent";
 				aw_session_set("bug_tree_sort",array("name" => "parent"));
 				break;
-			case "by_project":
-				aw_session_set("bug_tree_sort",array("name" => "project", "class" => CL_PROJECT, "reltype" => RELTYPE_PROJECT));
-				break;
-			case "by_who":
-				aw_session_set("bug_tree_sort",array("name" => "who", "class" => CL_CRM_PERSON, "reltype" => RELTYPE_MONITOR));
-				break;
-			case "by_class":
-				aw_session_set("bug_tree_sort",array("name" => "classes"));
-				break;
-			case "by_cust":
-				aw_session_set("bug_tree_sort",array("name" => "cust"));
-				break;
-			case "by_monitor":
-				aw_session_set("bug_tree_sort",array("name" => "monitor"));
+			case "by_prop":
+				$this->sort_type = "cat";
+				aw_session_set("bug_tree_sort",array("name" => "cat"));
 				break;
 		}
 
@@ -1539,362 +1524,81 @@ class bug_tracker extends class_base
 	}
 
 	/**
-		@attrib name=get_node_cust all_args=1
+	@attrib name=proj_tree_level all_args=1
 	**/
-	function get_node_cust($arr)
+	function proj_tree_level($arr)
 	{
-	    classload("core/icons");
-		$node_tree = get_instance("vcl/treeview");
-		$node_tree->start_tree (array (
-			"type" => TREE_DHTML,
-			"tree_id" => "bug_tree",
-			"branch" => 1,
-		));
-
-				$node_tree->add_item(($dat["parent"] && $dat["parent"] != $pt ? "fld_".$dat["parent"] : 0), array(
-					"id" => "fld_".$id,
-					"name" => $nm,
-					"iconurl" => icons::get_icon_url(CL_MENU),
-					"url" => html::get_change_url( $arr["inst_id"], array(
-						"id" => $this->self_id,
-						"group" => $arr["active_group"],
-						"p_fld_id" => $id,
-						"p_cls_id" => null
-					)),
-				));
-
-		die($node_tree->finalize_tree());
+		get_instance("applications/bug_o_matic_3000/bt_projects_impl")->proj_tree_level($arr);
 	}
 
 	/**
-		@attrib name=get_node_class all_args=1
+	@attrib name=cut_project
 	**/
-	function get_node_class($arr)
+	function cut_project($arr)
 	{
-	    classload("core/icons");
-		$node_tree = get_instance("vcl/treeview");
-		$node_tree->start_tree (array (
-			"type" => TREE_DHTML,
-			"tree_id" => "bug_tree",
-			"branch" => 1,
-		));
-
-		$f = aw_ini_get("classfolders");
-		if (is_oid($arr["parent"]))
-		{
-			$pt = 0;
-		}
-		else
-		{
-			list(,$pt) = explode("_", $arr["parent"]);
-		}
-
-		foreach($f as $id => $dat)
-		{
-			if ($dat["parent"] == $pt || $f[$dat["parent"]]["parent"] == $pt)
-			{
-				$nm = $this->name_cut($dat["name"]);
-				if ($_GET["p_fld_id"] == $id)
-				{
-					$nm = "<b>".$nm."</b>";
-				}
-				$node_tree->add_item(($dat["parent"] && $dat["parent"] != $pt ? "fld_".$dat["parent"] : 0), array(
-					"id" => "fld_".$id,
-					"name" => $nm,
-					"iconurl" => icons::get_icon_url(CL_MENU),
-					"url" => html::get_change_url( $arr["inst_id"], array(
-						"id" => $this->self_id,
-						"group" => $arr["active_group"],
-						"p_fld_id" => $id,
-						"p_cls_id" => null
-					)),
-					"alt" => $dat["name"]
-				));
-
-				$c = aw_ini_get("classes");
-				foreach($c as $clid => $dat)
-				{
-					$parents = explode(",", $dat["parents"]);
-					foreach($parents as $parent)
-					{
-						if ($parent == $id)
-						{
-							$nm = $this->name_cut($dat["name"]);
-							if ($_GET["p_cls_id"] == $clid)
-							{
-								$nm = "<b>".$nm."</b>";
-							}
-							$node_tree->add_item("fld_".$id, array(
-								"id" => "cls_".$clid,
-								"name" => $nm,
-								"iconurl" => icons::get_icon_url(CL_OBJECT_TYPE),
-								"url" => html::get_change_url( $arr["inst_id"], array(
-									"id" => $this->self_id,
-									"group" => $arr["active_group"],
-									"p_cls_id" => $clid,
-									"p_fld_id" => null
-								)),
-								"alt" => $dat["name"]
-							));
-						}
-					}
-				}
-			}
-		}
-
-		$c = aw_ini_get("classes");
-		foreach($c as $clid => $dat)
-		{
-			$parents = explode(",", $dat["parents"]);
-			foreach($parents as $parent)
-			{
-				if ($parent == $pt)
-				{
-					$nm = $this->name_cut($dat["name"]);
-					if ($_GET["p_cls_id"] == $clid)
-					{
-						$nm = "<b>".$nm."</b>";
-					}
-					$node_tree->add_item(0, array(
-						"id" => "cls_".$clid,
-						"name" => $nm,
-						"iconurl" => icons::get_icon_url(CL_OBJECT_TYPE),
-						"url" => html::get_change_url( $arr["inst_id"], array(
-							"id" => $this->self_id,
-							"group" => $arr["active_group"],
-							"p_cls_id" => $clid,
-							"p_fld_id" => null
-						)),
-						"alt" => $dat["name"]
-					));
-				}
-			}
-		}
-
-		die($node_tree->finalize_tree());
+		unset($_SESSION["bt_proj_copy_clip"]);
+		$_SESSION["bt_proj_cut_clip"] = $arr["sel"];
+		return $arr["post_ru"];
 	}
 
-	function get_node_by_who($arr)
+	/**
+	@attrib name=copy_project
+	**/
+	function copy_project($arr)
 	{
-	    classload("core/icons");
-		$node_tree = get_instance("vcl/treeview");
-		$node_tree->start_tree (array (
-			"type" => TREE_DHTML,
-			"tree_id" => "bug_tree",
-			"branch" => 1,
-		));
-
-		$obj = new object($arr["parent"]);
-		if($obj->class_id() == CL_BUG_TRACKER)
-		{
-			// list all persons that have bugs
-			$c = new connection();
-			$ppl = array();
-			foreach($c->find(array("from.class_id" => CL_BUG, "to.class_id" => CL_CRM_PERSON)) as $pc)
-			{
-				$ppl[$pc["to"]] = $pc["to"];
-			}
-
-			foreach($ppl as $p_id)
-			{
-				$p_o = obj($p_id);
-				$sn = $p_o->name();
-				if ($arr["p_id"] == $p_id)
-				{
-					$sn = "<b>".$sn."</b>";
-				}
-				$node_tree->add_item(0, array(
-					"id" => $p_id,
-					"name" => $sn,
-					"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
-					"url" => html::get_change_url(
-						$arr["inst_id"],
-						array(
-							"group" => "by_who",
-							"b_stat" => null,
-							"p_id" => $p_id
-						)
-					)
-				));
-				$node_tree->add_item($p_id, array("id" => "stat_".$p_id, "name" => "a"));
-			}
-		}
-		else
-		{
-			// list statuses
-			$bugi = get_instance(CL_BUG);
-			foreach($bugi->get_status_list() as $sid => $sn)
-			{
-				if ($arr["b_stat"] == $sid)
-				{
-					$sn = "<b>".$sn."</b>";
-				}
-				$node_tree->add_item(0, array(
-					"id" => $arr["parent"]."_".$sid,
-					"name" => $sn,
-					"url" => html::get_change_url(
-						$arr["inst_id"],
-						array(
-							"group" => "by_who",
-							"b_stat" => $sid,
-							"p_id" => $arr["parent"]
-						)
-					)
-				));
-			}
-		}
-		die($node_tree->finalize_tree());
+		unset($_SESSION["bt_proj_cut_clip"]);
+		$_SESSION["bt_proj_copy_clip"] = $arr["sel"];
+		return $arr["post_ru"];
 	}
 
-	/** to get subtree for who & projects view
-	    @attrib name=get_node_other all_args=1
+	/**
+	@attrib name=paste_project
 	**/
-	function get_node_other($arr)
+	function paste_project($arr)
 	{
-		if ($arr["active_group"] == "by_who")
+		if($this->can("view", $arr["filt_value"]))
 		{
-			$this->get_node_by_who($arr);
+			$cat = obj($arr["filt_value"]);
 		}
-	    classload("core/icons");
-		$node_tree = get_instance("vcl/treeview");
-		$node_tree->start_tree (array (
-			"type" => TREE_DHTML,
-			"tree_id" => "bug_tree",
-			"branch" => 1,
-		));
-
-		$obj = new object($arr["parent"]);
-		if($obj->class_id() == CL_BUG_TRACKER)
+		if(!$cat || $cat->class_id() != CL_PROJECT_CATEGORY)
 		{
-			$ol = new object_list(array("class_id" => CL_BUG, "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)));
-			$c = new connection();
-			$bug2proj = $c->find(array("from.class_id" => CL_BUG, "to.class_id" => $arr["clid"], "type" => $arr["reltype"], "from" => $ol->ids()));
-			foreach($bug2proj as $conn)
-			{
-				$to[] = $conn["to"];
-				$bugs[] = $conn["from"];
-				$bug_count[$conn["to"]]++;
-			}
+			return $arr["post_ru"];
+		}
 
-			$buglist = new object_list(array(
-				"class_id" => CL_BUG,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"oid" => $bugs,
-				"bug_status" => new obj_predicate_not(5)
-			));
-
-			if ($arr["reltype"] == 1 || $arr["active_group"] == "by_who" || $arr["active_group"] == "by_project")
-			{
-				$bug_count = array();
-				$bugs = array();
-				$bug_data = $buglist->arr();
-				$prop = $arr["active_group"] == "by_who" ? "who" : "project";
-				foreach($bug_data as $bug_obj)
-				{
-					if ($bug_obj->prop("bug_status") != 5)
-					{
-						$bug_count[$bug_obj->prop($prop)]++;
-					}
-				}
-			}
-			$to_unique = array_unique($to);
-
-			foreach($to_unique as $project)
-			{
-				$obj = new object($project);
-				$node_tree->add_item(0, array(
-					"id" => $obj->id(),
-					"name" => $this->name_cut($obj->name())." (".(int)$bug_count[$project].")",
-					"iconurl" => icons::get_icon_url($obj->class_id()),
-					"url" => html::get_change_url( $arr["inst_id"], array(
-						"id" => $this->self_id,
-						"group" => $arr["active_group"],
-						"p_id" => $obj->id(),
-					)),
-					"alt" => $obj->name()
-				));
-			}
-			if ($arr["reltype"] == 1)
-			{
-				foreach($bug_data as $sub_obj)
-				{
-					if (!$this->can("view", $sub_obj->prop("who")))
-					{
-						continue;
-					}
-					$node_tree->add_item($sub_obj->prop("who") , array(
-						"id" => $sub_obj->id(),
-						"name" => $sub_obj->name(),
-					));
-				}
-			}
-			else
-			{
-				foreach($bugs as $key => $bug)
-				{
-					$sub_obj =  new object($bug);
-					$node_tree->add_item($to[$key] , array(
-						"id" => $sub_obj->id(),
-						"name" => $sub_obj->name(),
-					));
-				}
-			}
+		if($ids = $_SESSION["bt_proj_cut_clip"])
+		{
+			$rem_cat = true;
+			unset($_SESSION["bt_proj_cut_clip"]);
+		}
+		elseif($ids = $_SESSION["bt_proj_copy_clip"])
+		{
+			$rem_cat = false;
+			unset($_SESSION["bt_proj_copy_clip"]);
 		}
 		else
 		{
-			if($obj->class_id() == CL_PROJECT)
+			return $arr["post_ru"];
+		}
+		
+		foreach($ids as $id)
+		{
+			if($this->can("view", $id))
 			{
-				$filter = "project";
-			}
-			elseif($obj->class_id() == CL_CRM_PERSON)
-			{
-				$filter = "who";
-			}
-			else
-			{
-				$filter = "parent";
-			}
-
-			$filt = array(
-				$filter  => $obj->id(),
-				"class_id" => CL_BUG,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)
-			);
-			$ol = new object_list($filt);
-			$objects = $ol->arr();
-			foreach($objects as $obj_id => $object)
-			{
-				$ol = new object_list(array(
-					"parent" => $obj_id,
-					"class_id" => CL_BUG,
-					"lang_id" => array(),
-					"site_id" => array(),
-					/*, "bug_status" => new obj_predicate_not(5)*/));
-				$ol_list = $ol->arr();
-
-				$node_tree->add_item(0 ,array(
-					"id" => $obj_id,
-					"name" => $this->name_cut($object->name()).(count($ol_list)?" (".count($ol_list).")":""),
-					"iconurl" => icons::get_icon_url($object->class_id()),
-					"url" => html::get_change_url($arr["inst_id"], array(
-						"group" => $arr["active_group"],
-						"b_id" => $obj_id,
-					)),
-					"alt" => $object->name()
-				));
-				foreach($ol_list as $sub_id => $sub_obj)
+				$o = obj($id);
+				if($rem_cat)
 				{
-					$node_tree->add_item( $obj_id, array(
-						"id" => $sub_id,
-						"name" => $sub_obj->name(),
-					));
+					$o->set_prop("category", $arr["filt_value"]);
 				}
+				else
+				{
+					$vals = $o->prop("category");
+					$vals[$arr["filt_value"]] = $arr["filt_value"];
+					$o->set_prop("category", $vals);
+				}
+				$o->save();
 			}
 		}
-		die($node_tree->finalize_tree());
+		return $arr["post_ru"];
 	}
 
 	/**  to get subtree for default view
@@ -1966,81 +1670,226 @@ class bug_tracker extends class_base
 	}
 
 	/**
-	@attrib name=proj_tree_level all_args=1
+	@attrib name=get_node_cat all_args=1
 	**/
-	function proj_tree_level($arr)
+	function get_node_cat($arr)
 	{
-		get_instance("applications/bug_o_matic_3000/bt_projects_impl")->proj_tree_level($arr);
+		$arr["parent"] = substr($arr["parent"], 1);
+		classload("core/icons");
+		$pr_i = get_instance("applications/bug_o_matic_3000/bt_projects_impl");
+
+		$tree = get_instance("vcl/treeview");
+		$tree->start_tree (array (
+			"type" => TREE_DHTML,
+			"tree_id" => "bug_tree",
+			"branch" => 1,
+		));
+		switch($arr["parent"])
+		{
+			case 1:
+				$pr_i->__insert_cust_categories($tree, 0, $arr);
+				break;
+
+			case 2:
+				$pr_i->__insert_sections($tree, 0, $arr);
+				break;
+
+			case 3:
+				$this->__insert_ppl_tree1($tree, 0, $arr, "monitors");
+				break;
+
+			case 4:
+				$this->__insert_ppl_tree1($tree, 0, $arr, "who");
+				break;
+
+			case 5:
+				$this->__insert_classes_tree($tree, 0, 0, $arr);
+				break;
+
+			default:
+				if($this->can("view", $arr["parent"]))
+				{
+					$o = obj($arr["parent"]);
+					switch($o->class_id())
+					{
+						case CL_CRM_CATEGORY:
+							$pr_i->__insert_category_subs($tree, $o, 0, $arr);
+							break;
+
+						case CL_CRM_SECTION:
+							$pr_i->__insert_section_subs($tree, $o, 0, $arr);
+							break;
+
+						case CL_CRM_PERSON:
+							$pr_i->__insert_person_projects($tree, $o, 0, $arr);
+							break;
+					}
+				}
+				elseif(strpos($arr["parent"], "_"))
+				{
+					$tmp = explode("_", $arr["parent"]);
+					switch($tmp[0])
+					{
+						case "monitors":
+						case "who":
+							if($this->can("view", $tmp[1]))
+							{
+								$this->__insert_ppl_tree2($tree, obj($tmp[1]), 0, $arr, $tmp[0]);
+							}
+							break;
+						case "fld":
+							$this->__insert_classes_tree($tree, 0, $tmp[1], $arr);
+							break;
+					}
+				} 
+		}
+		die($tree->finalize_tree());
 	}
 
-	/**
-	@attrib name=cut_project
-	**/
-	function cut_project($arr)
+	private function __insert_ppl_tree1($tree, $parent, $arr, $prop)
 	{
-		unset($_SESSION["bt_proj_copy_clip"]);
-		$_SESSION["bt_proj_cut_clip"] = $arr["sel"];
-		return $arr["post_ru"];
-	}
-
-	/**
-	@attrib name=copy_project
-	**/
-	function copy_project($arr)
-	{
-		unset($_SESSION["bt_proj_cut_clip"]);
-		$_SESSION["bt_proj_copy_clip"] = $arr["sel"];
-		return $arr["post_ru"];
-	}
-
-	/**
-	@attrib name=paste_project
-	**/
-	function paste_project($arr)
-	{
-		if($this->can("view", $arr["filt_value"]))
+		$owner = $this->_get_owner($arr);
+		if(!$owner)
 		{
-			$cat = obj($arr["filt_value"]);
+			return;
 		}
-		if(!$cat || $cat->class_id() != CL_PROJECT_CATEGORY)
+		$c = new connection();
+		foreach($c->find(array("from.class_id" => CL_BUG, "to.class_id" => CL_CRM_PERSON)) as $pc)
 		{
-			return $arr["post_ru"];
-		}
-
-		if($ids = $_SESSION["bt_proj_cut_clip"])
-		{
-			$rem_cat = true;
-			unset($_SESSION["bt_proj_cut_clip"]);
-		}
-		elseif($ids = $_SESSION["bt_proj_copy_clip"])
-		{
-			$rem_cat = false;
-			unset($_SESSION["bt_proj_copy_clip"]);
-		}
-		else
-		{
-			return $arr["post_ru"];
-		}
-
-		foreach($ids as $id)
-		{
-			if($this->can("view", $id))
+			if($set_ppl[$pc["to"]])
 			{
-				$o = obj($id);
-				if($rem_cat)
-				{
-					$o->set_prop("category", $arr["filt_value"]);
-				}
-				else
-				{
-					$vals = $o->prop("category");
-					$vals[$arr["filt_value"]] = $arr["filt_value"];
-					$o->set_prop("category", $vals);
-				}
-				$o->save();
+				continue;
+			}
+			$set_ppl[$pc["to"]] = $pc["to"];
+			unset($wrl);
+			if($this->can("view", $pc["to"]))
+			{
+				$po = obj($pc["to"]);
+				$wrl = $po->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+			}
+			if($wrl && $wrl->prop("org") == $owner->id())
+			{
+				$ppl[] = $pc["to"];
 			}
 		}
-		return $arr["post_ru"];
+		$ol = new object_list();
+		if(count($ppl))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_SECTION,
+				"CL_CRM_SECTION.RELTYPE_SECTION(CL_CRM_PERSON_WORK_RELATION).RELTYPE_CURRENT_JOB(CL_CRM_PERSON)" => $ppl,
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+		}
+		foreach($ol->arr() as $o)
+		{
+			$tree->add_item($parent, array(
+				"id" => $prop."_".$o->id(),
+				"name" => $o->name(),
+				"url" => "#",
+			));
+			if($parent == 0)
+			{
+				$this->__insert_ppl_tree2($tree, $o, $prop."_".$o->id(), $arr, $prop);
+			}
+		}
+	}
+
+	private function __insert_ppl_tree2(&$tree, $o, $parent, $arr, $prop)
+	{
+		$bp_i = get_instance("classes/applications/bug_o_matic_3000/bt_projects_impl");
+		$owner = $this->_get_owner($arr);
+		if(!$owner)
+		{
+			return;
+		}
+		$c = new connection();
+		foreach($c->find(array("from.class_id" => CL_BUG, "to.class_id" => CL_CRM_PERSON)) as $pc)
+		{
+			if($set_ppl[$pc["to"]])
+			{
+				continue;
+			}
+			$set_ppl[$pc["to"]] = $pc["to"];
+			unset($wrl);
+			if($this->can("view", $pc["to"]))
+			{
+				$po = obj($pc["to"]);
+				$wrl = $po->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+			}
+			if(!$wrl || $wrl->prop("section") != $o->id())
+			{
+				continue;
+			}
+			$ch_ol = new object_list(array(
+				"class_id" => CL_BUG,
+				"site_id" => array(),
+				"lang_id" => array(),
+				$prop => $pc["to"],
+			));
+			if($num = $ch_ol->count())
+			{
+				$tree->add_item($parent, array(
+					"id" => $prop."_".$pc["to"],
+					"name" => $bp_i->__parse_name($pc["to.name"], $prop."_".$pc["to"], $arr, $num),
+					"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
+					"url" => aw_url_change_var(array(
+						"filt_type" => $prop,
+						"filt_value" => $prop."_".$pc["to"],
+					), false, $arr["set_retu"]),
+				));
+			}
+			
+		}
+	}
+
+	private function __insert_classes_tree(&$tree, $parent, $cl_parent, $arr)
+	{
+		$bp_i = get_instance("classes/applications/bug_o_matic_3000/bt_projects_impl");
+		$f = aw_ini_get("classfolders");
+		foreach($f as $id => $dat)
+		{
+			if ($dat["parent"] == $cl_parent)
+			{
+				$tree->add_item($parent, array(
+					"id" => "fld_".$id,
+					"name" => $dat["name"],
+					"url" => "#",
+				));
+				if(strpos($parent, "fld") === false)
+				{
+					$this->__insert_classes_tree($tree, "fld_".$id, $id, $arr);
+				}
+			}
+		}
+		$cl = aw_ini_get("classes");
+		foreach($cl as $id => $dat)
+		{
+			if($dat["parents"] == $cl_parent)
+			{
+				$num = 0;
+				if($parent == 0)
+				{
+					$num_ol = new object_list(array(
+						"class_id" => CL_BUG,
+						"site_id" => array(),	
+						"lang_id" => array(),
+						"bug_class" => $id,
+					));
+					$num = $num_ol->count();
+				}
+				$tree->add_item($parent, array(
+					"id" => "cl_".$id,
+					"iconurl" => icons::get_icon_url($id),
+					"name" => $bp_i->__parse_name($dat["name"], "fld_".$id, $arr, $num),
+					"url" => aw_url_change_var(array(
+						"filt_type" => "class",
+						"filt_value" => "cl_".$id,
+					), false, $arr["set_retu"]),
+				));
+			}
+		}
 	}
 
 	function _bug_tree($arr)
@@ -2053,26 +1902,9 @@ class bug_tracker extends class_base
 		$this->tree_root_name = "Bug-Tracker";
 		switch($this->sort_type["name"])
 		{
-			case "classes":
-				$orb_function = "get_node_class";
-				$tid = "_cls";
-				break;
-
-			case "cust":
-				// add customers to the tree
-				$this->_add_custs_to_tree($arr["prop"]["vcl_inst"]);
-				return;
-
-			case "project":
-				$tid = "_prj";
-			case "who":
-				$tid = "_who";
-				$orb_function = "get_node_other";
-				break;
-
-			case "monitor":
-				$tid = "_monitor";
-				$orb_function = "get_node_monitor";
+			case "cat":
+				$orb_function = "get_node_cat";
+				$tid = "_cat";
 				break;
 
 			default:
@@ -2081,21 +1913,12 @@ class bug_tracker extends class_base
 				break;
 		}
 
-		$root_name = array(
-			"by_default" => t("Tavaline"),
-			"by_project"=> t("Projektid"),
-			"by_who" => t("Teostajad"),
-			"by_class" => t("Klassid"),
-			"by_cust" => t("Kliendid"),
-			"by_monitor" => t("J&auml;lgijad"),
-		);
-
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
 			"has_root" => 1,
 			"tree_id" => "bug_tree".$tid,
 			"persist_state" => 1,
-			"root_name" => $root_name[($this->active_group == "bugs")?"by_default":$this->active_group],
+			"root_name" => t("&Uuml;lesanded"),
 			"root_url" => aw_url_change_var("b_id", null),
 			"get_branch_func" => $this->mk_my_orb($orb_function, array(
 				"type" => $this->sort_type["name"],
@@ -2109,6 +1932,8 @@ class bug_tracker extends class_base
 				"p_cust_id" => $arr["request"]["p_cust_id"],
 				"b_mon" => $arr["request"]["b_mon"],
 				"b_stat" => $arr["request"]["b_stat"],
+				"filt_type" => $arr["request"]["filt_type"],
+				"filt_value" => $arr["request"]["filt_value"],
 				"set_retu" => get_ru(),
 				"parent" => " ",
 			)),
@@ -2120,131 +1945,14 @@ class bug_tracker extends class_base
 			));
 		}
 
-		if($this->sort_type["name"] == "classes")
+		if($this->sort_type["name"] == "cat")
 		{
-			$this->generate_class_bug_tree(array(
-				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
-			));
-		}
-
-		if($this->sort_type["name"] == "cust")
-		{
-			$this->generate_cust_bug_tree(array(
-				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
-			));
-		}
-
-		if($this->sort_type["name"] == "monitor")
-		{
-			$this->generate_mon_bug_tree(array(
-				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
-			));
-		}
-
-		if ($this->sort_type["name"] == "who")
-		{
-			$this->tree->add_item(0,array(
-				"id" => $this->self_id,
-				"name" => $this->tree_root_name,
-			));
-
-			$this->tree->add_item($this->self_id,array(
-				"id" => "allah",
-				"name" => "a",
-			));
-		}
-
-		if($this->sort_type["name"] == "project")
-		{
-			$this->gen_tree_other(array(
-				"parent" => $this->self_id,
-			));
+			$this->generate_cat_bug_tree($arr);
 		}
 
 		$arr["prop"]["value"] = $this->tree->finalize_tree();
 		$arr["prop"]["type"] = "text";
 
-	}
-
-	function generate_cust_bug_tree($arr)
-	{
-		$this->tree->add_item(0,array(
-			"id" => $this->self_id,
-			"name" => $this->tree_root_name,
-		));
-
-		$i = get_instance(CL_CRM_COMPANY);
-		$i->active_node = (int)$arr['request']['category'];
-
-		$i->generate_tree(array(
-			'tree_inst' => &$this->tree,
-			'obj_inst' => $arr['obj_inst'],
-			'node_id' => &$node_id,
-			'conn_type' => 'RELTYPE_CATEGORY',
-			'skip' => array(CL_CRM_COMPANY),
-			'attrib' => 'category',
-			'leafs' => 'false',
-			'style' => 'nodetextbuttonlike',
-			"edit_mode" => 1
-		));
-
-	/*	$f = aw_ini_get("classfolders");
-		foreach($f as $id => $dat)
-		{
-			if (!$dat["parent"])
-			{
-				$this->tree->add_item($arr["parent"],array(
-					"id" => "fld_".$id,
-					"name" => $dat["name"],
-				));
-			}
-		}*/
-	}
-
-	function generate_class_bug_tree($arr)
-	{
-		$this->tree->add_item(0,array(
-			"id" => $this->self_id,
-			"name" => $this->tree_root_name,
-		));
-
-		$f = aw_ini_get("classfolders");
-		foreach($f as $id => $dat)
-		{
-			if (!$dat["parent"])
-			{
-				$this->tree->add_item($arr["parent"],array(
-					"id" => "fld_".$id,
-					"name" => $dat["name"],
-				));
-			}
-		}
-	}
-
-	function gen_tree_other($arr)
-	{
-		$c = new connection();
-		$bug2proj = $c->find(array("from.class_id" => CL_BUG, "to.class_id" => $this->sort_type["class"], "type" => $this->sort_type["reltype"]));
-
-		foreach($bug2proj as $conn)
-		{
-			$projects[] = $conn["to"];
-		}
-		$projects = array_unique($projects);
-
-		$this->tree->add_item(0,array(
-			"id" => $this->self_id,
-			"name" => $this->tree_root_name." (".count($projects).")",
-		));
-
-		foreach($projects as $project)
-		{
-			$obj = new object($project);
-			$this->tree->add_item($arr["parent"],array(
-				"id" => $obj->id(),
-				"name" => $obj->name(),
-			));
-		}
 	}
 
 	function generate_bug_tree($arr)
@@ -2275,6 +1983,46 @@ class bug_tracker extends class_base
 				"onClick" => "do_bt_table_switch($obj_id);return false;"
 			));
 		}
+	}
+
+	function generate_cat_bug_tree($arr)
+	{
+		$pr_i = get_instance("applications/bug_o_matic_3000/bt_projects_impl");
+
+		$this->tree->add_item(0, array(
+			"id" => 1,
+			"name" => t("Kliendid"),
+			"url" => aw_url_change_var(array("filt_type" => null, "filt_value" => null)),
+		));
+		$pr_i->__insert_cust_categories($this->tree, 1, $arr);
+
+		$this->tree->add_item(0, array(
+			"id" => 2,
+			"name" => t("Projektijuhid"),
+			"url" => aw_url_change_var(array("filt_type" => null, "filt_value" => null)),
+		));
+		$pr_i->__insert_sections($this->tree, 2, $arr);
+
+		$this->tree->add_item(0, array(
+			"id" => 3,
+			"name" => t("J&auml;lgijad"),
+			"url" => aw_url_change_var(array("filt_type" => null, "filt_value" => null)),
+		));
+		$this->__insert_ppl_tree1($this->tree, 3, $arr, "monitors");
+
+		$this->tree->add_item(0, array(
+			"id" => 4,
+			"name" => t("Tegijad"),
+			"url" => aw_url_change_var(array("filt_type" => null, "filt_value" => null)),
+		));
+		$this->__insert_ppl_tree1($this->tree, 4, $arr, "who");
+
+		$this->tree->add_item(0, array(
+			"id" => 5,
+			"name" => t("Klassid"),
+			"url" => aw_url_change_var(array("filt_type" => null, "filt_value" => null)),
+		));
+		$this->__insert_classes_tree($this->tree, 5, 0, $arr);
 	}
 
 	function name_cut($name)
@@ -2559,11 +2307,10 @@ class bug_tracker extends class_base
 		classload("vcl/table");
 		$t = new vcl_table;
 		$this->_init_bug_list_tbl($t);
+		$t->set_caption(t("Nimekiri arendus&uuml;lesannetest"));
 
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
-		if(($this->can("view", $pt) ||
-			$arr["request"]["group"] == "by_class"
-		) && $arr["request"]["group"] != "by_who" && $arr["request"]["group"] != "by_project" && $arr["request"]["group"] != "by_cust" )
+		if($this->can("view", $pt) && !$arr["request"]["filt_type"])
 		{
 			// arhiivi tab
 			if($arr["request"]["group"] == "archive")
@@ -2650,38 +2397,49 @@ class bug_tracker extends class_base
 				$ol = new object_list($filt);
 			}
 		}
-		else
-		if ($arr["request"]["group"] == "by_who" && $arr["request"]["p_id"])
+		elseif($arr["request"]["filt_type"] && $arr["request"]["filt_value"])
 		{
-			$ol = new object_list(array(
+			$filt = array(
 				"class_id" => CL_BUG,
 				"lang_id" => array(),
 				"site_id" => array(),
-				"bug_status" => $arr["request"]["b_stat"] ? $arr["request"]["b_stat"] : new obj_predicate_not(BUG_STATUS_CLOSED),
-				"who" => $arr["request"]["p_id"]
-			));
-		}
-		else
-		if ($arr["request"]["group"] == "by_cust" && $arr["request"]["cust"])
-		{
-			$ol = new object_list(array(
-				"class_id" => CL_BUG,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
-				"customer" => $arr["request"]["cust"]
-			));
-		}
-		else
-		if ($arr["request"]["group"] == "by_project" && $arr["request"]["p_id"])
-		{
-			$ol = new object_list(array(
-				"class_id" => CL_BUG,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
-				"project" => $arr["request"]["p_id"]
-			));
+			);
+			$val = $arr["request"]["filt_value"];
+			switch($arr["request"]["filt_type"])
+			{
+				case "customer":
+					$filt["customer"] = $val;
+					if($this->can("view", $val))
+					{
+						$t->set_caption(sprintf(t("Arendus&uuml;lesanded, mille klient on %s"), obj($val)->name()));
+					}
+					break;
+
+				case "project":
+					$filt["project"] = $val;
+					if($this->can("view", $val))
+					{
+						$t->set_caption(sprintf(t("Arendus&uuml;lesanded, mille projekt on %s"), obj($val)->name()));
+					}
+					break;
+
+				case "monitors":
+				case "who":
+					$tmp = explode("_", $val);
+					if($this->can("view", $tmp[1]))
+					{
+						$t->set_caption(sprintf(t("Arendus&uuml;lesanded, mille %s on %s"), (($tmp[0] == "monitors") ? t("j&auml;lgija") : t("tegija")), obj($tmp[1])->name()));
+					}
+					$filt[$tmp[0]] = $tmp[1];
+					break;
+
+				case "class":
+					$tmp = explode("_", $arr["request"]["filt_value"]);
+					$t->set_caption(sprintf(t("Arendus&uuml;lesanded, mille klass on %s"),  t($cls[$tmp[1]]["name"])));
+					$filt["bug_class"] = $tmp[1];
+					break;
+			}
+			$ol = new object_list($filt);
 		}
 		else
 		{
@@ -2690,7 +2448,6 @@ class bug_tracker extends class_base
 
 		$this->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));
 		$t->sort_by();
-		$t->set_caption(t("Nimekiri arendus&uuml;lesannetest"));
 		$arr["prop"]["value"] = "<span id=\"bug_table\">".$t->get_html()."</table>";
 		if ($arr["request"]["tb_only"] == 1)
 		{
@@ -5349,6 +5106,20 @@ echo "<div style='font-size: 10px;'>";
 			3 => t("Arendus")
 		);
 		$arr["prop"]["value"] = $arr["request"]["s_finance_type"];
+	}
+
+	function _get_owner($arr)
+	{
+		$obj_inst = $arr["id"] ? obj($arr["id"]) : ($arr["inst_id"] ? obj($arr["inst_id"]) : obj($arr["request"]["id"]));
+		$conn = $obj_inst->connections_from(array(
+			"type" => "RELTYPE_OWNER",
+		));
+		if(count($conn))
+		{
+			$c = reset($conn);
+			$owner = $c->to();
+		}
+		return $owner;
 	}
 }
 ?>

@@ -160,7 +160,7 @@ class bt_projects_impl extends core
 	{
 		if($oid == 1)
 		{
-			$o = $this->__get_owner($arr);
+			$o = get_instance(CL_BUG_TRACKER)->_get_owner($arr);
 			if($o)
 			{
 				$oid = $o->id();
@@ -192,9 +192,9 @@ class bt_projects_impl extends core
 		}
 	}
 
-	private function __insert_cust_categories(&$t, $parent, $arr)
+	function __insert_cust_categories(&$t, $parent, $arr)
 	{
-		$owner = $this->__get_owner($arr);
+		$owner = get_instance(CL_BUG_TRACKER)->_get_owner($arr);
 		if($owner)
 		{
 			$conn = $owner->connections_from(array(
@@ -207,7 +207,7 @@ class bt_projects_impl extends core
 					"name" => $c->prop("to.name"),
 					"url" => "#",
 				));
-				if($parent != 2)
+				if($parent == 0)
 				{
 					$this->__insert_category_subs($t, $c->to(), $c->prop("to"), $arr);
 				}
@@ -215,7 +215,7 @@ class bt_projects_impl extends core
 		}
 	}
 
-	private function __insert_category_subs(&$t, $o, $parent, $arr)
+	function __insert_category_subs(&$t, $o, $parent, $arr)
 	{
 		$conn = $o->connections_from(array(
 			"type" => "RELTYPE_CATEGORY"
@@ -266,9 +266,9 @@ class bt_projects_impl extends core
 		}
 	}
 
-	private function __insert_sections(&$t, $parent, $arr)
+	function __insert_sections(&$t, $parent, $arr)
 	{
-		$owner = $this->__get_owner($arr);
+		$owner = get_instance(CL_BUG_TRACKER)->_get_owner($arr);
 		$ol = new object_list(array(
 			"class_id" => CL_PROJECT,
 			"site_id" => array(),
@@ -319,9 +319,9 @@ class bt_projects_impl extends core
 		}
 	}
 
-	private function __insert_section_subs(&$t, $obj, $parent, $arr)
+	function __insert_section_subs(&$t, $obj, $parent, $arr)
 	{
-		$owner = $this->__get_owner($arr);
+		$owner = get_instance(CL_BUG_TRACKER)->_get_owner($arr);
 		$ol = new object_list(array(
 			"class_id" => CL_PROJECT,
 		));
@@ -348,9 +348,35 @@ class bt_projects_impl extends core
 				"id" => $po->id(),
 				"name" => $this->__parse_name($po->name(), $po->id(), $arr),
 				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
-				"url" => aw_url_change_var(array(
+				"url" => $arr["inst_id"] ? "#" : aw_url_change_var(array(
 					"filt_type" => "person",
 					"filt_value" => $po->id(),
+				), false, $arr["set_retu"]),
+			));
+			if($arr["inst_id"])
+			{
+				$this->__insert_person_projects($t, $po, $po->id(), $arr);
+			}
+		}
+	}
+
+	function __insert_person_projects($t, $p, $parent, $arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"proj_mgr" => $p->id(),
+		));
+		foreach($ol->arr() as $oid => $o)
+		{
+			$t->add_item($parent, array(
+				"id" => $oid,
+				"name" => $this->__parse_name($o->name(), $oid, $arr),
+				"iconurl" => icons::get_icon_url(CL_PROJECT),
+				"url" => aw_url_change_var(array(
+					"filt_type" => "project",
+					"filt_value" => $o->id(),
 				), false, $arr["set_retu"]),
 			));
 		}
@@ -438,20 +464,6 @@ class bt_projects_impl extends core
 		}
 	}
 
-	private function __get_owner($arr)
-	{
-		$obj_inst = $arr["id"] ? obj($arr["id"]) : obj($arr["request"]["id"]);
-		$conn = $obj_inst->connections_from(array(
-			"type" => "RELTYPE_OWNER",
-		));
-		if(count($conn))
-		{
-			$c = reset($conn);
-			$owner = $c->to();
-		}
-		return $owner;
-	}
-
 	private function __get_months()
 	{
 		return array(
@@ -470,7 +482,7 @@ class bt_projects_impl extends core
 		);
 	}
 
-	private function __parse_name($name, $id, $arr)
+	function __parse_name($name, $id, $arr, $num = false)
 	{
 		$add1 = $add2 = "";
 		if($arr["filt_value"] == $id)
@@ -478,56 +490,76 @@ class bt_projects_impl extends core
 			$add1 = "<strong>";
 			$add2 = "</strong>";
 		}
-
-		$num = 0;
-		$filt = array(
-			"class_id" => CL_PROJECT,
-			"site_id" => array(),
-			"lang_id" => array(),
-		);
-
-		$i = get_instance(CL_PROJECT);
-		if($i->states[$id])
+		
+		if($num === false)
 		{
-			$filt["state"] = $id;
-		}
-		elseif(strpos($id, "-") !== false && $arr["filt_prop"])
-		{
-			$tmp = explode("-", $id);
-			$start = mktime(0, 0, 0, $tmp[0], 1, $tmp[1]);
-			$end = mktime(23, 59, 59, $tmp[0] +1, 0, $tmp[1]);
-			$filt[$arr["filt_prop"]] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end);
-		}
-		elseif($this->can("view", $id))
-		{
-			$o = obj($id);
-			switch($o->class_id())
+			$num = 0;
+			$filt = array(
+				"class_id" => CL_PROJECT,
+				"site_id" => array(),
+				"lang_id" => array(),
+			);
+	
+			$i = get_instance(CL_PROJECT);
+			if($i->states[$id])
 			{
-				case CL_PROJECT_CATEGORY:
-					$filt["category"] = $id;
-					break;
-				case CL_CRM_COMPANY:
-					$filt["orderer"] = $id;
-					break;
-				case CL_CRM_PERSON:
-					$filt["proj_mgr"] = $id;
-					break;
+				$filt["state"] = $id;
 			}
-		}
-		else
-		{
-			$filt = false;
+			elseif(strpos($id, "-") !== false && $arr["filt_prop"])
+			{
+				$tmp = explode("-", $id);
+				$start = mktime(0, 0, 0, $tmp[0], 1, $tmp[1]);
+				$end = mktime(23, 59, 59, $tmp[0] +1, 0, $tmp[1]);
+				$filt[$arr["filt_prop"]] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end);
+			}
+			elseif($this->can("view", $id) && !$num)
+			{
+				$o = obj($id);
+				switch($o->class_id())
+				{
+					case CL_PROJECT_CATEGORY:
+						$filt["category"] = $id;
+						break;
+					case CL_CRM_COMPANY:
+						if($arr["inst_id"])
+						{
+							$filt["class_id"] = CL_BUG;
+							$filt["customer"] = $id;
+						}
+						else
+						{
+							$filt["orderer"] = $id;
+						}
+						break;
+					case CL_CRM_PERSON:
+						$filt["proj_mgr"] = $id;
+						if($arr["inst_id"])
+						{
+							$filt = false;
+						}
+						break;
+					case CL_PROJECT:
+						$filt["class_id"] = CL_BUG;
+						$filt["project"] = $id;
+						break;
+				}
+			}
 		}
 		if($filt)
 		{
 			$ol = new object_list($filt);
 			$num = $ol->count();
+			$numpart = " (".$num.")";
+		}
+		elseif($num !== false)
+		{
+			$numpart = " (".$num.")";
 		}
 		if(strlen($name) > 24)
 		{
 			$name = substr($name, 0, 24)."...";
 		}
-		return $add1.$name.$add2." (".$num.")";
+		return $add1.$name.$add2.$numpart;
 	}
 
 	function _get_proj_tbl1($arr)
@@ -659,9 +691,19 @@ class bt_projects_impl extends core
 		{
 			$i->_get_proj_data_row($project_obj, $data);
 		}
-		$i->do_projects_table_header($t, $data, isset($arr["prj"]));
+
+		$i->do_projects_table_header($t, $data, false, true);
 		foreach($data as $row)
 		{
+			$row["actions"] = html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $arr["obj_inst"]->id(),
+					"group" => "by_prop",
+					"filt_type" => "project",
+					"filt_value" => $row["oid"],
+				), CL_BUG_TRACKER),
+				"caption" => t("Tegevused"),
+			));
 			$t->define_data($row);
 		}
 	}
@@ -691,9 +733,18 @@ class bt_projects_impl extends core
 		{
 			$i->_get_proj_data_row($c->from(), $data);
 		}
-		$i->do_projects_table_header($t, $data, isset($arr["prj"]));
+		$i->do_projects_table_header($t, $data, false, true);
 		foreach($data as $row)
 		{
+			$row["actions"] = html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $arr["obj_inst"]->id(),
+					"group" => "by_prop",
+					"filt_type" => "project",
+					"filt_value" => $row["oid"],
+				), CL_BUG_TRACKER),
+				"caption" => t("Tegevused"),
+			));
 			$t->define_data($row);
 		}
 	}
@@ -728,7 +779,7 @@ class bt_projects_impl extends core
 		}
 		else
 		{
-			$owner = $this->__get_owner($arr);
+			$owner = get_instance(CL_BUG_TRACKER)->_get_owner($arr);
 			if(!$owner)
 			{
 				$arr["prop"]["error"] = t("BT omanik on m&auml;&auml;ramata!");

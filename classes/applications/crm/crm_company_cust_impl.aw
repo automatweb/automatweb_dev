@@ -9,13 +9,21 @@ class crm_company_cust_impl extends class_base
 		$this->init();
 	}
 
-	function do_projects_table_header(&$table, $data = false, $skip_sel = false)
+	function do_projects_table_header(&$table, $data = false, $skip_sel = false, $is_bt= null)
 	{
 		$table->define_field(array(
 			"name" => "project_name",
 			"caption" => t("Nimi"),
 			"sortable" => 1,
 		));
+
+		if($is_bt)
+		{
+			$table->define_field(array(
+				"name" => "actions",
+				"caption" => t("Tegevused"),
+			));
+		}
 
 		if ($_GET["group"] == "org_projects_archive")
 		{
