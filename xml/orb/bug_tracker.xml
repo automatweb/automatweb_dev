@@ -1,34 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="bug_tracker" folder="applications/bug_o_matic_3000" extends="class_base">
-		<action name="get_node_cust" all_args="1">
-			<function name="get_node_cust">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_node_class" all_args="1">
-			<function name="get_node_class">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_node_other" all_args="1">
-			<function name="get_node_other">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_node" all_args="1">
-			<function name="get_node">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="proj_tree_level" all_args="1">
 			<function name="proj_tree_level">
 				<arguments>
@@ -52,6 +24,20 @@
 
 		<action name="paste_project">
 			<function name="paste_project">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_node" all_args="1">
+			<function name="get_node">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_node_cat" all_args="1">
+			<function name="get_node_cat">
 				<arguments>
 				</arguments>
 			</function>

@@ -1753,23 +1753,22 @@ class bug_tracker extends class_base
 		{
 			return;
 		}
-		$c = new connection();
-		foreach($c->find(array("from.class_id" => CL_BUG, "to.class_id" => CL_CRM_PERSON)) as $pc)
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_PERSON.RELTYPE_MONITOR(CL_BUG).class_id" => CL_BUG,
+		));
+		foreach($ol->arr() as $oid => $p)
 		{
-			if($set_ppl[$pc["to"]])
-			{
-				continue;
-			}
-			$set_ppl[$pc["to"]] = $pc["to"];
 			unset($wrl);
-			if($this->can("view", $pc["to"]))
+			if($this->can("view", $p))
 			{
-				$po = obj($pc["to"]);
-				$wrl = $po->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+				$wrl = $po>get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
 			}
 			if($wrl && $wrl->prop("org") == $owner->id())
 			{
-				$ppl[] = $pc["to"];
+				$ppl[] = $oid;
 			}
 		}
 		$ol = new object_list();
