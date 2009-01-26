@@ -62,7 +62,9 @@ class mysql
 	{
 //echo $qtext."<br>\n".dbg::short_backtrace()." <br>\n";
 //flush();
-		global $DUKE, $INTENSE_DUKE, $SLOW_DUKE;
+		$DUKE = $_GET["DUKE"];
+		$INTENSE_DUKE = $_GET["INTENSE_DUKE"];
+		$SLOW_DUKE = $_GET["SLOW_DUKE"];
 		if ($SLOW_DUKE == 1)
 		{
 			list($micro,$sec) = split(' ',microtime());
