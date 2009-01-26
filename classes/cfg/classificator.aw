@@ -122,7 +122,7 @@ class classificator extends class_base
 		}
 
 		if (!empty ($default_value) and empty ($prop["value"]))
-		{ 
+		{
 			$prop["default"] = $default_value;
 		}
 
@@ -135,7 +135,7 @@ class classificator extends class_base
 		{
 			$use_type = "view";
 		}
-		
+
 		switch($use_type)
 		{
 			case "checkboxes":
@@ -190,18 +190,18 @@ class classificator extends class_base
 			}
 		}
 		$arr["property"]["value"] = implode(", ", $vals);
-	
+
 	}
 
 	/** returns a list of classificator objects for the given property
 		@attrib api=1
-		
-		@param object_type_id optional type=int 
-			The oid of the object type object from what to read the classificatrs from 
+
+		@param object_type_id optional type=int
+			The oid of the object type object from what to read the classificatrs from
 
 		@param clid optional type=int
 			The class id to return the classificators for. Either this or object_type_id must be specified
-		
+
 		@param name required type=string
 			Name of the property to return the classificators for
 
@@ -218,7 +218,7 @@ class classificator extends class_base
 			array:
 				0 => object_list of classificator objects
 				1 => classificator manager name
-				2 => type of the classificator element (mselect, select, checkboxes, radiobuttons) 
+				2 => type of the classificator element (mselect, select, checkboxes, radiobuttons)
 				3 => default classificator
 				4 => array(
 					"list" => oid's of the classificator objects
@@ -258,6 +258,11 @@ class classificator extends class_base
 			{
 				$ff = $custom_ff;
 			}
+		}
+
+		if (!is_oid($ff))
+		{
+			return false;
 		}
 
 		$oft = new object($ff);
@@ -309,7 +314,7 @@ class classificator extends class_base
 		$langid = aw_global_get("lang_id");
 		if (!is_admin() && aw_ini_get("user_interface.full_content_trans"))
 		{
-			$langid = aw_global_get("ct_lang_id"); 
+			$langid = aw_global_get("ct_lang_id");
 		}
 		if(isset($arr["sort_callback"]))
 		{
@@ -439,16 +444,16 @@ class classificator extends class_base
 
 	/** returns a list of classificator names for the given property
 		@attrib api=1 params=name
-		
-		@param object_type optional type=int 
-			The oid of the object type object from what to read the classificatrs from 
+
+		@param object_type optional type=int
+			The oid of the object type object from what to read the classificatrs from
 
 		@param object_inst optional type=object
 			If set, the object type is read from the objects metadata
 
 		@param clid optional type=int
 			The class id to return the classificators for. Either this or object_type_id must be specified
-		
+
 		@param name required type=string
 			Name of the property to return the classificators for
 
