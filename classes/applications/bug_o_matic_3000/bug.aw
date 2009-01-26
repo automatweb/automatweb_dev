@@ -1181,7 +1181,11 @@ class bug extends class_base
 				$prop["post_append_text"] = html::span(array(
 					"id" => "bug_stopper_pause_link",
 					"content" => "<a href=''>".t("Paus")."</a>",
+				))." ".html::span(array(
+					"id" => "bug_stopper_clear_link",
+					"content" => "<a href=''>".t("Clear")."</a>",
 				));
+				break;
 			case "bug_add_guess":
 				$prop["value"] == "";
 				break;
@@ -3488,6 +3492,11 @@ die($email);
 				});
 				$("#bug_add_real").focus(function () { 
 					_toggle_stopper(true);
+					return false;
+				});
+				$("#bug_stopper_clear_link").click(function () {
+					_toggle_stopper(true);
+					$("#bug_add_real").val(0.00);
 					return false;
 				});
 			}
