@@ -362,17 +362,6 @@
             <caption>Massiline kustutamine</caption>
       </property>
       <property>
-            <name>member_list_tb</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>member_list</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Listi staatuse toolbar</caption>
-      </property>
-      <property>
             <name>file_separator</name>
             <table>objects</table>
             <field>meta</field>
@@ -380,39 +369,6 @@
             <group>general</group>
             <type>textbox</type>
             <caption>Failis nime ja mailiaadressi eraldaja (tab=/t)</caption>
-      </property>
-      <property>
-            <name>def_user_folder</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>member_list</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MEMBER_PARENT</reltype>
-            <editonly>1</editonly>
-            <multiple>1</multiple>
-            <delete_rels_popup_button>1</delete_rels_popup_button>
-            <caption>Listi liikmete allikas</caption>
-      </property>
-      <property>
-            <name>req_members</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>member_list</group>
-            <type>text</type>
-            <caption>Otsi ka alamobjektide alt</caption>
-      </property>
-      <property>
-            <name>member_list</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>member_list</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <caption>Liikmed</caption>
       </property>
       <property>
             <name>export_folders</name>
@@ -621,17 +577,6 @@
             <ch_value>1</ch_value>
             <parent>mail_top</parent>
             <caption>Maili kirjutamine plaintext vaates</caption>
-      </property>
-      <property>
-            <name>take_out_adrr</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>write_mail</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <parent>mail_top</parent>
-            <caption>Enne saatmist lase m&amp;amp;otilde;ningad aadressid v&amp;amp;auml;lja praakida</caption>
       </property>
       <property>
             <name>write_user_folder</name>
@@ -921,11 +866,6 @@
                   <caption>Lahkumine</caption>
                   <parent>membership</parent>
             </unsubscribing>
-            <member_list>
-                  <caption>Nimekiri</caption>
-                  <submit>no</submit>
-                  <parent>membership</parent>
-            </member_list>
             <export_members>
                   <caption>Eksport</caption>
                   <parent>membership</parent>

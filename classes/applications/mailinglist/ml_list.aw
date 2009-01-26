@@ -1,5 +1,5 @@
-<?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.147 2009/01/22 18:27:52 markop Exp $
+<?Php
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.148 2009/01/26 12:55:01 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -133,23 +133,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Massiline kustutamine
 ------------------------------------------------------------------------
 
-groupinfo member_list caption=Nimekiri submit=no parent=membership
-default group=member_list
-
-property member_list_tb type=toolbar no_caption=1
-caption Listi staatuse toolbar
-
-property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
-caption Listi liikmete allikas
-
-property req_members type=text
-caption Otsi ka alamobjektide alt
-
-property member_list type=table store=no no_caption=1
-caption Liikmed
-
-------------------------------------------------------------------------
-
 @groupinfo export_members caption=Eksport parent=membership
 @default group=export_members
 
@@ -237,8 +220,8 @@ caption Otsi ka alamobjektide alt
 	@property no_fck type=checkbox ch_value=1 parent=mail_top 
 	@caption Maili kirjutamine plaintext vaates
 
-	@property take_out_adrr type=checkbox ch_value=1 parent=mail_top 
-	@caption Enne saatmist lase m&otilde;ningad aadressid v&auml;lja praakida
+	property take_out_adrr type=checkbox ch_value=1 parent=mail_top 
+	caption Enne saatmist lase m&otilde;ningad aadressid v&auml;lja praakida
 
 @layout write_message_layout type=hbox width=40%:60% 
 	@layout wml type=vbox parent=write_message_layout area_caption=&nbsp;
@@ -435,7 +418,7 @@ class ml_list extends class_base
 	}
 
 	function choose_addresses($arr)
-	{
+	{/*
 		$members = $this->get_members(array("id" => $arr["id"]));
 		classload("vcl/table");
 		$t = new vcl_table();
@@ -524,7 +507,7 @@ class ml_list extends class_base
 			"content" => $html
 		));
 
-
+*/
 	}
 
 
@@ -574,13 +557,13 @@ class ml_list extends class_base
 		{
 			$msg = obj($id);
 			$mfrom = $msg->prop("mfrom");
-			if($msg->meta("let_choose_addresses"))
-			{
-				return $this->choose_addresses(array(
-					"list_id" => $targets,
-					"id" => $id,
-				));
-			}
+//			if($msg->meta("let_choose_addresses"))
+//			{
+//				return $this->choose_addresses(array(
+//					"list_id" => $targets,
+//					"id" => $id,
+//				));
+//			}
 		}
 
 		$this->mk_path(0, "<a href='".aw_global_get("route_back")."'>".t("Tagasi")."</a>&nbsp;/&nbsp;".t("Saada teade"));
@@ -1288,10 +1271,6 @@ class ml_list extends class_base
 				);
 				break;
 
-/*			case "member_list":
-				$this->gen_member_list($arr);
-				break;
-*/	
 			case "search_table":
 				$this->member_search_table($arr);
 				break;
@@ -1418,24 +1397,7 @@ class ml_list extends class_base
 					}
 				}
 				break;
-/*
-			case "member_list_tb":
-				$tb = &$prop["vcl_inst"];
-				$tb->add_button(array(
-					"name" => "new",
-					"img" => "new.gif",
-					"tooltip" => t("Lisa uus"),
-					"url" => aw_url_change_var("group", "subscribing" , $args["return_to"]),
-				));
-				$tb->add_button(array(
-					"name" => "save",
-					"img" => "save.gif",
-					"tooltip" => t("Salvesta"),
-					"action" => "submit",
-				));
-				$this->gen_member_list_tb($arr);
-				break;
-*/			
+		
 			case "list_status_tb":
 				$this->gen_list_status_tb($arr);
 				break;
@@ -1956,19 +1918,7 @@ class ml_list extends class_base
 			"img" => "delete.gif",
 		));
 	}
-	/*
-	function gen_member_list_tb($arr)
-	{
-		$toolbar = &$arr["prop"]["toolbar"];
-		$toolbar->add_button(array(
-			"name" => "delete",
-			"tooltip" => t("Kustuta"),
-			"action" => "delete_members",
-			"confirm" => t("Kustutada need liikmed?"),
-			"img" => "delete.gif",
-		));
-	}
-*/
+
 	/** Exports list members as a plain text file
 		@attrib name=export_members
 		@param id required type=int 
@@ -2621,6 +2571,10 @@ foreach($ol->arr() as $o)
 		));
 		foreach($ol->arr() as $o)
 		{
+			if(!$args["all"] && $this->ignore_member($ala , $o->id()))
+			{
+				continue;
+			}
 			$mail = $o->prop("email_id.mail");
 			if (!$mail)
 			{
@@ -2903,9 +2857,17 @@ foreach($ol->arr() as $o)
 			$src = $obj->prop("choose_menu");
 			if(!$this->list_id) $this->list_id = $id;
 		}
-		$src = $obj->add_minions($src);
+		if($this->can("view" , $this->list_id))
+		{
+			$mailinglist = obj($this->list_id);
+		}
+		else
+		{
+			$mailinglist = $obj;
+		}
+		$src = $mailinglist ->add_minions($src);
 		$fld = new aw_array($src);
-		$sources_data = $obj->get_sources_data();
+		$sources_data = $mailinglist ->get_sources_data();
 
 
 		foreach($fld->get() as $folder_id)
@@ -2935,6 +2897,10 @@ foreach($ol->arr() as $o)
 				$this->db_query($q);
 				while($row = $this->db_next())
 				{
+					if(!$args["all"] && $this->ignore_member($source_obj , $row["oid"]))
+					{
+						continue;
+					}
 					if(!(array_key_exists($row["mail"] , $this->already_found)))
 					{
 						$this->ml_members[] = array(
@@ -2956,6 +2922,10 @@ foreach($ol->arr() as $o)
 				foreach ($members as $member)
 				{
 					$member = $member->to();
+					if(!$args["all"] && $this->ignore_member($source_obj , $member->id()))
+					{
+						continue;
+					}
 					$email = $member->get_first_obj_by_reltype("RELTYPE_EMAIL");
 					if(!$email)
 					{
@@ -4424,8 +4394,11 @@ arr($msg_obj->prop("message"));
 			);
 
 			$tabledata["ignore"] = html::checkbox(array(
-				"name" => "ignore_members[".$val["oid"]."][".$val["parent"]."]",
+				"name" => "ignore_members[".$val["parent"]."][".$val["oid"]."]",
 				"checked" => $this->ignore_member(obj($val["parent"]) , $val["oid"]) ? 1: 0,
+				"value" => 1,
+			)).html::hidden(array(
+				"name" => "ignore_members_count[".$val["parent"]."][".$val["oid"]."]",
 				"value" => 1,
 			));
 
@@ -4453,13 +4426,20 @@ arr($msg_obj->prop("message"));
 
 	function _set_member_search_table($arr)
 	{
-		foreach($arr["request"]["ignore_members"] as $source => $members)
+		foreach($arr["request"]["ignore_members_count"] as $source => $members)
 		{
 			$source = obj($source);
 			$ignore_list = $source->meta("mail_ignore_list");
 			foreach($members as $id => $val)
 			{
-				$ignore_list[$id] = $val;
+				if($arr["request"]["ignore_members"][$source->id()][$id])
+				{
+					$ignore_list[$id] = $val;
+				}
+				elseif(isset($ignore_list[$id]))
+				{
+					unset($ignore_list[$id]);
+				}
 			}
 			$source->set_meta("mail_ignore_list" , $ignore_list);
 			$source->save();//ei saa aru miks ta kurat peale salvestamist 2ra kaob
