@@ -17,7 +17,7 @@
 **/
 function is_oid($oid)
 {
-	return is_numeric($oid) && $oid > 0;
+	return is_numeric($oid) and $oid > 0 and ($oid == (int) $oid);
 }
 
 /** checks if the parameter is a valid class_id
@@ -32,11 +32,7 @@ function is_oid($oid)
 **/
 function is_class_id($clid)
 {
-	if (!is_numeric($clid))
-	{
-		return false;
-	}
-	return true;
+	return is_numeric($clid) and $clid > 0 and ($clid == (int) $clid);
 }
 
 /** disables all acl checks
