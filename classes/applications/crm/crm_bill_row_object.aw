@@ -67,6 +67,10 @@ class crm_bill_row_object extends _int_object
 		{
 			return $c->prop("to");
 		}
+		foreach($this->connections_from(array("type" => "RELTYPE_TASK"))as $c)
+		{
+			return $c->prop("to");
+		}
 		return "";
 	}
 

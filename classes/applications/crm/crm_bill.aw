@@ -2985,6 +2985,7 @@ class crm_bill extends class_base
 		));
 		$bill->set_prop("bill_trans_date", time());
 		$bill->save();
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "return_url" => $arr["retu"]), CL_CRM_BILL);
 		return $arr["retu"];
 	}
 
@@ -3307,18 +3308,33 @@ class crm_bill extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Toimetus"),
-			"sortable" => 1
+//			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+//			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "work",
+			"caption" => t("T&ouml;&ouml;"),
+//			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "hrs",
 			"caption" => t("Tunde"),
-			"sortable" => 1
+//			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "cust_hours",
+			"caption" => t("Tunde kliendile"),
+//			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "price",
 			"caption" => t("Hind"),
-			"sortable" => 1
+//			"sortable" => 1
 		));
 
 		$t->define_chooser(array(
@@ -3330,32 +3346,67 @@ class crm_bill extends class_base
 	function _bill_task_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
 		$this->_init_bill_task_list($t);
 		$stats = get_instance("applications/crm/crm_company_stats_impl");
+	
+		$tasks = $arr["obj_inst"]->bill_tasks();
+		$rows = $arr["obj_inst"]->bill_task_rows_data();
+		$rows_data = array();
 
-		$ol = new object_list(array(
+		foreach($rows as $data)
+		{
+			$rows_data[$data["task"]][] = $data;
+		}
+
+/*		$ol = new object_list(array(
 			"class_id" => CL_TASK,
 			"customer" => $arr["obj_inst"]->prop("customer"),
 			"CL_TASK.RELTYPE_ROW.done" => 1,
 			"CL_TASK.RELTYPE_ROW.on_bill" => 1,
 			"CL_TASK.RELTYPE_ROW.bill_id" => 0,
-		));
+		));*/
 		$ti = get_instance(CL_TASK);
-		foreach($ol->arr() as $task)
+		foreach($tasks->arr() as $task)
 		{
-			$rows = $ti->get_task_bill_rows($task);
-			$hrs = $price = 0;
-			foreach($rows as $row)
+			$task_hours = $task_hours_customer = $task_sum = 0;
+			$hour_price = $task->prop("hr_price");
+			foreach($rows_data[$task->id()] as $d)
 			{
-				$hrs += $row["amt"];
-				$price += $row["sum"];
+				$customer_time = $d["time_to_cust"] ? $d["time_to_cust"] : $d["time_real"];
+				$task_hours_customer += $customer_time;
+				$task_hours += $d["time_real"];
+				$task_sum += $customer_time * $hour_price;
 			}
+
+//			$rows = $ti->get_task_bill_rows($task);
+//			$hrs = $price = 0;
+//			foreach($rows as $row)
+//			{
+//				$hrs += $row["amt"];
+//				$price += $row["sum"];
+//			}
 			$t->define_data(array(
 				"name" => html::obj_change_url($task),
-				"hrs" => $stats->hours_format($hrs),
-				"price" => number_format($price, 2,".", " "),
-				"oid" => $task->id()
+				"hrs" => $stats->hours_format($task_hours),
+				"price" => $task_sum,
+				"oid" => $task->id(),
+				"cust_hours" => $task_hours_customer,
+				"project" => join(", " , $task->get_projects()->names()),
 			));
+
+			foreach($rows_data[$task->id()] as $d)
+			{
+				$customer_time = $d["time_to_cust"] ? $d["time_to_cust"] : $d["time_real"];
+				$t->define_data(array(
+					"work" => $d["content"],
+					"hrs" => $stats->hours_format($d["time_real"]),
+					"price" => number_format($customer_time * $hour_price, 2,".", " "),
+					"oid" => $d["oid"],
+					"cust_hours" => $stats->hours_format($d["time_to_cust"]),
+				));
+			}
+
 		}
 	}
 	function _billt_tb($arr)
@@ -3545,10 +3596,10 @@ class crm_bill extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] == "tasks")
-		{
-			return false;
-		}
+//		if ($arr["id"] == "tasks")
+//		{
+//			return false;
+// 		}
 		return true;
 	}
 

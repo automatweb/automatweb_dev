@@ -835,6 +835,38 @@ class crm_bill_obj extends _int_object
 		return $this->prop("sum");
 	}
 
+	public function bill_tasks()
+	{
+		$filter = array();
+		$filter["class_id"] = CL_TASK;
+		$filter["CL_TASK.RELTYPE_BILL"] = $this->id();
+		return new object_list($filter);
+	}
+
+	public function bill_task_rows_data()
+	{
+		$rows_filter = $this->bill_task_rows_filter();
+		$rowsres = array(
+			CL_TASK_ROW => array(
+				"task",
+				"time_real",
+				"impl",
+				"time_to_cust",
+				"content"
+			),
+		);
+		$rows_arr = new object_data_list($rows_filter , $rowsres);
+		return $rows_arr->list_data;
+	}
+
+	private function bill_task_rows_filter()
+	{
+		$filter = array();
+		$filter["class_id"] = CL_TASK_ROW;
+		$filter["CL_TASK_ROW.RELTYPE_BILL"] = $this->id();
+		return $filter;
+	}
+
 }
 
 ?>

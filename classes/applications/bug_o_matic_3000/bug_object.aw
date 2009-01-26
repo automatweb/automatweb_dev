@@ -284,4 +284,35 @@ class bug_object extends _int_object
 		return $ol;
 	}
 
+	/** returns bug projects
+		@attrib api=1
+		@return object list
+	**/
+	public function get_projects()
+	{
+// 		$ol = new object_list(array(
+// 			"class_id" =>  CL_CRM_PARTY,
+// 			"lang_id" => array(),
+// 			"participant.class_id" => CL_PROJECT,
+// 			"site_id" => array(),
+// 			"task" => $this->id(),
+// 			"limit" => 1,
+// 		));
+		$projects = new object_list();
+// 		foreach($ol->arr() as $party)
+// 		{
+// 			$projects->add($party->prop("project"));
+// 		}
+
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_PROJECT",
+		));
+		foreach($conns as $con)
+		{
+			$projects->add($con->prop("to"));
+		}
+
+		return $projects;
+	}
+
 }

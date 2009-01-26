@@ -8640,7 +8640,7 @@ Bank accounts: yksteise all
 				//arr(str_replace("," , "." , $row["time_to_cust_real"])); arr($br->prop("time_to_cust"));
 			}
 		}
-		return $_SESSION["aw_session_track"]["server"]["referer"];
+		return $arr["post_ru"];
 	}
 
 	function _get_insurance_tbl($arr)
