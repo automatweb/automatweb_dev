@@ -162,7 +162,7 @@ class mysql
 			$this->num_fields = @mysql_num_fields($this->qID);
 		};
 		$this->rec_count = 0;
-		if ( (aw_ini_get("debug_mode") != 0) && ($DUKE || $GLOBALS["INTENSE_DUKE"]))
+		if ( (aw_ini_get("debug_mode") != 0) && ($DUKE || $INTENSE_DUKE))
 		{
 			list($micro,$sec) = split(' ',microtime());
 			$ts_e = $sec + $micro;
