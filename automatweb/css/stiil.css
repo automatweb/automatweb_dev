@@ -897,3 +897,12 @@ div.jqi button{background-color:#05A6E9;border-color:#FFFFFF #0373AC #0373AC #FF
 .tooltip_content_content p { line-height: 14px; margin: 0; font-size: 10px;}
 .tooltip_content_footer { background: url(/automatweb/images/aw06/tooltip_footer_bg.png); height: 13px; }
 .help {  } 
+
+/* enalbe tree in change views */
+table.tree_enabled_in_edit { width: 100%; background: white; }
+table.tree_enabled_in_edit td.tree_enabled_in_edit_tree { vertical-align: top; width: 330px; }
+table.tree_enabled_in_edit td.tree_enabled_in_edit_content { vertical-align: top; padding-top: 12px;}
+table.tree_enabled_in_edit .tree_enabled_in_edit_content #sisu { border: 1px solid #E1E1E1; margin-left: 1px; padding-left: 1px; }
+table.tree_enabled_in_edit .tree_enabled_in_edit_content #sisu div.tree_enabled_in_edit_content_title { display: block; background: #E1E1E1; height:21px; margin-right: -10px; margin-bottom: 1px; margin-left: -1px; }
+table.tree_enabled_in_edit .tree_enabled_in_edit_content #sisu div.tree_enabled_in_edit_content_title span { font-family:Tahoma,Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; padding-left:8px; padding-top:3px; display: block; }
+table.tree_enabled_in_edit .tree_enabled_in_edit_content #sisu .awcbContentTblDefault { margin-left: 1px;}
