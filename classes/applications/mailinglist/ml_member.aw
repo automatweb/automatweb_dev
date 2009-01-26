@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.29 2009/01/16 13:17:35 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.30 2009/01/26 13:00:43 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -181,7 +181,7 @@ class ml_member extends class_base
 		}
 
 		$list_obj = new object($list_id);
-		$user_folder = $list_obj->prop("def_user_folder");
+		$user_folder = $list_obj->prop("choose_menu");
 
 		$section = aw_global_get("section");
 
@@ -319,7 +319,7 @@ class ml_member extends class_base
 		if((!$use_folders) && is_oid($list_id))
 		{
 			$list_obj = new object($list_id);
-			$use_folders = $list_obj->prop("def_user_folder");
+			$use_folders = $list_obj->prop("choose_menu");
 		}
 		if(is_array($use_folders))
 		{
