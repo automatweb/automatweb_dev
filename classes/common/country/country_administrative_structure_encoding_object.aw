@@ -18,11 +18,6 @@ class country_administrative_structure_encoding_object extends _int_object
 		CL_ADDRESS_STREET,
 	);
 
-	function country_administrative_structure_encoding_object ($param = null)
-	{
-		parent::_int_object ($param);
-	}
-
 	function prop ($param)
 	{
 		if (is_array ($param))

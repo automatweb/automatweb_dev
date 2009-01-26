@@ -1,13 +1,8 @@
 <?php
 
-// maintainer=markop 
+// maintainer=markop
 class task_object extends _int_object
 {
-	function task_object()
-	{
-		parent::_int_object();
-	}
-
 	function get_prop($pn)
 	{
 		switch($pn)
@@ -381,7 +376,7 @@ class task_object extends _int_object
 
 	/** returns task client manager oid
 		@attrib api=1
-		@returns oid	
+		@returns oid
 	**/
 	function get_client_mgr()
 	{
@@ -390,7 +385,7 @@ class task_object extends _int_object
 
 	/** returns task client manager name
 		@attrib api=1
-		@returns string	
+		@returns string
 	**/
 	function get_client_mgr_name()
 	{
@@ -591,14 +586,14 @@ class task_object extends _int_object
 				"parent" => $this->id(),
 				"sort_by" => "objects.created"
 			));
-			
+
 			$i_lifespan = end($o_bug_comments->arr())->created() - $i_created;
 		}
 		else
 		{
 			$i_lifespan = time() - $i_created;
 		}
-		
+
 		// format output
 		$i_lifespan_hours = $i_lifespan/3600;
 		if ($i_lifespan_hours<=24)
@@ -637,7 +632,7 @@ class task_object extends _int_object
 				$s_out = ($i_temp = round($i_lifespan_hours/24))==1 ? $i_temp." ".t("p&auml;ev") : $i_temp." ".t("p&auml;eva");
 			}
 		}
-		
+
 		return $s_out;
 	}
 

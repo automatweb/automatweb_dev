@@ -80,9 +80,6 @@ class object
 			- if the user has no access to the object, acl error is thrown
 			- if no such object exists or it cannot be loaded, error is thrown
 
-		@returns:
-			constructors have no return value
-
 		@examples:
 			$o = new object; // creates an empty object
 
@@ -98,13 +95,17 @@ class object
 	**/
 	function object($param = NULL)
 	{
-		if ($param != NULL && !is_array($param))
+		if (is_array($param))
+		{
+			$this->oid = $GLOBALS["object_loader"]->load_new_object($param);
+		}
+		elseif (null !== $param)
 		{
 			$this->load($param);
 		}
 		else
 		{
-			$this->oid = $GLOBALS["object_loader"]->new_object_temp_id($param);
+			$this->oid = $GLOBALS["object_loader"]->load_new_object();
 		}
 	}
 
@@ -148,7 +149,7 @@ class object
 	{
 		if (!is_object($GLOBALS["object_loader"]))
 		{
-			die(t("object loader is not object!!"));
+			throw new awex_obj("Object loader not found.");
 		}
 
 		$oid = $GLOBALS["object_loader"]->param_to_oid($param);
@@ -820,24 +821,13 @@ class object
 	**/
 	function set_class_id($param)
 	{
-		$rv = $GLOBALS["objects"][$this->oid]->set_class_id($param);
-		// we might need to change $this, if an object override is present for the new class id
-		// we can't do this in _int_object, because if a new object is created, then _int_object actually
-		// does not know it's own id, strangely enough
-		$cld = $GLOBALS["cfg"]["classes"][$param];
-		if (!empty($cld["object_override"]))
+		if (is_class_id($GLOBALS["objects"][$this->oid]->class_id()))
 		{
-			if (get_class($GLOBALS["objects"][$this->oid]) != basename($cld["object_override"]))
-			{
-				$i = get_instance($cld["object_override"]);
-				$i->obj = $GLOBALS["objects"][$this->oid]->obj;
-				$i->implicit_save = $GLOBALS["objects"][$this->oid]->implicit_save;
-				$i->props_loaded = $GLOBALS["objects"][$this->oid]->props_loaded;
-				$i->obj_sys_flags = $GLOBALS["objects"][$this->oid]->obj_sys_flags;
-				$GLOBALS["objects"][$this->oid] = $i;
-			}
+			throw new awex_obj("Class id can be changed only once.");
 		}
 
+		$GLOBALS["object_loader"]->load_new_object(array("oid" => $this->oid, "class_id" => $param));
+		$GLOBALS["objects"][$this->oid]->set_class_id($param);
 		return $this;
 	}
 

@@ -24,6 +24,7 @@ class _int_object_loader extends core
 	var $__aw_acl_cache;		// acl memory cache
 
 	private $acl_ids;
+	private static $tmp_id_count = 0;
 
 	function _int_object_loader()
 	{
@@ -139,7 +140,7 @@ class _int_object_loader extends core
 			if (!$oid)
 			{
 				error::raise(array(
-					"id" => ERR_NO_ALIAS,
+					"id" => "ERR_NO_ALIAS",
 					"msg" => sprintf(t("object_loader::param_to_oid(%s): no object with alias %s!"), $param, $param)
 				));
 				return;
@@ -149,18 +150,16 @@ class _int_object_loader extends core
 		else
 		if (is_object($param))
 		{
-			$cl = get_class($param);
-			if ($cl == "object" || $cl == "_int_object")
+			if (is_a($param, "object") || is_a($param, "_int_object"))
 			{
 				return $param->id();
 			}
 		}
 
 		error::raise(array(
-			"id" => ERR_PARAM,
+			"id" => "ERR_PARAM",
 			"msg" => t("object_loader::param_to_oid(): parameter must be either: oid , string (alias) or object instance!")
 		));
-		return;
 	}
 
 	// returns array of oids in param
@@ -177,7 +176,7 @@ class _int_object_loader extends core
 			if (!$oid)
 			{
 				error::raise(array(
-					"id" => ERR_NO_ALIAS,
+					"id" => "ERR_NO_ALIAS",
 					"msg" => sprintf(t("no object with alias %s!"), $param)
 				));
 				return;
@@ -187,18 +186,17 @@ class _int_object_loader extends core
 		else
 		if (is_object($param))
 		{
-			$cl = get_class($param);
-			if ($cl == "object" || $cl == "_int_object")
+			if (is_a($param, "object") || is_a($param, "_int_object"))
 			{
 				return array($param->id());
 			}
 			else
-			if ($cl == "object_list")
+			if (is_a($param, "object_list"))
 			{
 				return $param->ids();
 			}
 			else
-			if ($cl == "object_tree")
+			if (is_a($param, "object_tree"))
 			{
 				return $param->ids();
 			}
@@ -223,26 +221,43 @@ class _int_object_loader extends core
 		}
 
 		error::raise(array(
-			"id" => ERR_PARAM,
+			"id" => "ERR_PARAM",
 			"msg" => t("parameter must be either: oid , string (alias), object instance or object list instance!")
 		));
 		return;
 	}
 
-
 	////
 	// !returns temp id for new object
-	function new_object_temp_id($param = NULL)
+	function load_new_object($objdata = array())
 	{
-		$cnt = 0;
-		$str = "new_object_temp_id_".$cnt;
-		while (isset($GLOBALS["objects"][$str]))
-		{
-			$cnt++;
-			$str = "new_object_temp_id_".$cnt;
+		// get tmp oid
+		if (!isset($objdata["oid"]))
+		{ // tmp oid for completely new object
+			$cnt = ++self::$tmp_id_count;
+			$oid = "new_object_temp_id_{$cnt}";
 		}
-		$GLOBALS["objects"][$str] =& new _int_object($param, false);
-		return $str;
+		else
+		{
+			$oid = $objdata["oid"];
+			unset($objdata["oid"]); // _int_object built to not know its own oid until saved. when this changes, remove.
+		}
+
+		// determine class
+		if (isset($objdata["class_id"]) and is_class_id($class = $objdata["class_id"]) and isset($GLOBALS["cfg"]["classes"][$class]["object_override"]))
+		{
+			$class = basename($GLOBALS["cfg"]["classes"][$class]["object_override"]);
+
+			// copy data from generic object that is to be converted to a specific class
+			$objdata = $objdata + $GLOBALS["objects"][$oid]->get_object_data();
+		}
+		else
+		{
+			$class = "_int_object";
+		}
+
+		$GLOBALS["objects"][$oid] =& new $class($objdata);
+		return $oid;
 	}
 
 	function load($oid)
@@ -250,7 +265,7 @@ class _int_object_loader extends core
 		if (!is_oid($oid))
 		{
 			error::raise(array(
-				"id" => ERR_PARAM,
+				"id" => "ERR_PARAM",
 				"msg" => sprintf(t("object_loader::load(%s): parameter is not object id!"), $oid)
 			));
 			return;
@@ -260,13 +275,37 @@ class _int_object_loader extends core
 		{
 			$ob = $GLOBALS["objects"][$oid];
 		}
+
 		if (!isset($ob) || !is_object($ob))
 		{
-			$ref = &new _int_object($oid, false);
+			// check access rights to object
+			if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
+			{
+				$e = new awex_obj_acl("No view access object with id '{$oid}'.");
+				$e->awobj_id = $oid;
+				throw $e;
+			}
+
+			// load object data
+			if (isset($GLOBALS["__obj_sys_objd_memc"][$oid]))
+			{
+				$objdata = $GLOBALS["__obj_sys_objd_memc"][$oid];
+				unset($GLOBALS["__obj_sys_objd_memc"][$oid]);
+			}
+			else
+			{
+				$objdata = $GLOBALS["object_loader"]->ds->get_objdata($oid);
+			}
+
+			// get class
+			$class = isset($GLOBALS["cfg"]["classes"][$objdata["class_id"]]["object_override"]) ? basename($GLOBALS["cfg"]["classes"][$objdata["class_id"]]["object_override"]) : "_int_object";
+			$objdata["__obj_load_parameter"] = $oid;
+
+			$ref =& new $class($objdata);
 			if ($ref->id() === NULL)
 			{
 				error::raise(array(
-					"id" => ERR_PARAM,
+					"id" => "ERR_PARAM",
 					"msg" => sprintf(t("object_loader::load(%s): no such object!"), $oid)
 				));
 				return;
@@ -277,7 +316,7 @@ class _int_object_loader extends core
 				{
 					$GLOBALS["objects"][$oid] = $ref;
 				}
-			};
+			}
 		}
 
 		// also remove the entry from acl memc cause we dont need it no more
@@ -294,7 +333,7 @@ class _int_object_loader extends core
 		if (!is_object($GLOBALS["objects"][$oid]))
 		{
 			error::raise(array(
-				"id" => ERR_OBJECT,
+				"id" => "ERR_OBJECT",
 				"msg" => sprintf(t("object_loader::save(%s): no object with oid %s exists in the global list"), $oid, $oid)
 			));
 			return;
@@ -348,7 +387,7 @@ class _int_object_loader extends core
 		if (!is_object($GLOBALS["objects"][$oid]))
 		{
 			error::raise(array(
-				"id" => ERR_OBJECT,
+				"id" => "ERR_OBJECT",
 				"msg" => sprintf(t("object_loader::save_new(%s): no object with oid %s exists in the global list"), $oid, $oid)
 			));
 			return;
@@ -379,7 +418,7 @@ class _int_object_loader extends core
 	// load properties - arr[file] , arr[clid]
 	function load_properties($arr)
 	{
-		if ($arr["file"] == "document" || $arr["file"] == "document_brother")
+		if ($arr["file"] === "document" || $arr["file"] === "document_brother")
 		{
 			$arr["file"] = "doc";
 		}
@@ -426,7 +465,7 @@ class _int_object_loader extends core
 		if (!is_object($ds))
 		{
 			error::raise(array(
-				"id" => ERR_NO_DS,
+				"id" => "ERR_NO_DS",
 				"msg" => sprintf(t("object_loader::switch_db_connection(%s): could nto find root connection!"), $new_conn)
 			));
 			return;
@@ -446,6 +485,7 @@ class _int_object_loader extends core
 		{
 			return 0;
 		}
+
 		if (!isset($this->__aw_acl_cache[$oid]) || !($max_acl = $this->__aw_acl_cache[$oid]))
 		{
 			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
@@ -472,11 +512,11 @@ class _int_object_loader extends core
 			$this->__aw_acl_cache[$oid] = $max_acl;
 		}
 
-		if (!isset($max_acl["can_view"]) && $_SESSION["uid"] == "")
+		if (!isset($max_acl["can_view"]) && empty($_SESSION["uid"]))
 		{
-			return $GLOBALS["cfg"]["acl"]["default"];
+			return $GLOBALS["cfg"]["acl"]["default"]; //!!! acl.default setting on array! default on 1 view-l. teistel ini-s m22ramata. parandada!
 		}
-		return (int) $max_acl[$acl_name];
+		return (int) isset($max_acl[$acl_name]) ? $max_acl[$acl_name] : 0;
 	}
 
 	function _calc_max_acl($oid)
@@ -554,7 +594,7 @@ class _int_object_loader extends core
 
 			if (++$cnt > 100)//!!! move this limit setting to config?
 			{
-				$this->raise_error(ERR_ACL_EHIER,sprintf(t("object_loader->can(%s, %s): error in object hierarchy, count exceeded!"), $access,$oid),true);
+				$this->raise_error("ERR_ACL_EHIER", sprintf(t("object_loader->can(%s, %s): error in object hierarchy, count exceeded!"), $access,$oid),true);
 			}
 
 			// go to parent

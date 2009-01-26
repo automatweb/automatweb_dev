@@ -157,9 +157,13 @@ class cfgutils extends aw_template
 		$clid = null;
 		extract($args);
 
-		if (empty($args['source']) && !$file && !$this->clist_init_done)
+		if (!$this->clist_init_done)
 		{
 			$this->_init_clist();
+		}
+
+		if (empty($args["source"]) && empty($args["file"]) && !empty($args["clid"]))
+		{
 			$file = isset($this->clist[$clid]) ? $this->clist[$clid] : "";
 		}
 
@@ -179,14 +183,15 @@ class cfgutils extends aw_template
 			{
 				$fqfn = $this->f_site_basedir . $file . ".xml";
 			}
-			$cachename = aw_ini_get("cache.page_cache") . "/propdef_" . $file . ".cache";
 
+			$cachename = aw_ini_get("cache.page_cache") . "/propdef_" . $file . ".cache";
 
 			if (!$system)
 			{
 				load_class_translations($file);
-			};
+			}
 		}
+
 		$from_cache = false;
 		if (empty($args['source']) && file_exists($cachename) && file_exists($fqfn) && (filemtime($cachename) > filemtime($fqfn)))
 		{
@@ -675,14 +680,14 @@ class cfgutils extends aw_template
 	**/
 	function load_properties($args = array())
 	{
-		$clid = $args["clid"];
-		$file = isset($args["file"]) ? $args["file"] : null;
+		$clid = isset($args["clid"]) ? $args["clid"] : 0;
 
-		if (empty($file))
+		if (empty($args["file"]))
 		{
 			try
 			{
-				$file = basename(aw_ini_get("classes.{$clid}.file"));
+				$file = aw_ini_get("classes.{$clid}.file");
+				$file = basename($file);
 			}
 			catch (Exception $e)
 			{
@@ -693,13 +698,22 @@ class cfgutils extends aw_template
 			{
 				$file = "doc";
 			}
+
+			if (empty($file))
+			{
+				throw new aw_exception("No valid file or class id given.");
+			}
+		}
+		else
+		{
+			$file = basename($args["file"]);
 		}
 
 		$adm_ui_lc = null;
 		if (aw_ini_isset("user_interface.default_language"))
 		{
 			$adm_ui_lc = aw_ini_get("user_interface.default_language");
-			$trans_fn = AW_DIR . "lang/trans/" . $adm_ui_lc . "/aw/" . basename($file) . AW_FILE_EXT;
+			$trans_fn = AW_DIR . "lang/trans/" . $adm_ui_lc . "/aw/" . $file . AW_FILE_EXT;
 			if (file_exists($trans_fn))
 			{
 				require_once($trans_fn);
@@ -732,13 +746,17 @@ class cfgutils extends aw_template
 
 		if (empty($file))
 		{
-			$file = "";//!!! otsida mis on 6ige default v22rtus
 			if (isset($clinf[$clid]["file"]))
 			{
-				$file = basename($clinf[$clid]["file"]);//!!! mida teha kui see pole saadaval
+				$file = basename($clinf[$clid]["file"]);
 			}
 
 			if ($clid == 7) $file = "doc";
+
+			if (empty($file))
+			{
+				throw new aw_exception("No file or class id given.");
+			}
 		}
 
 		if (aw_ini_isset("user_interface.default_language"))

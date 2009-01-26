@@ -24,10 +24,10 @@ class address_object extends _int_object
 		CL_ADDRESS_STREET,
 	);
 
-	function address_object ($param = null)
+	function address_object ($param)
 	{
+		parent::_int_object($param);
 		$this->as_load_data();
-		parent::_int_object ($param);
 	}
 
 	function prop ($param)

@@ -4,11 +4,6 @@
 */
 class meta_obj extends _int_object
 {
-	function __construct($param = null)
-	{
-		parent::_int_object($param);
-	}
-	
 	function meta($var)
 	{
 		if($var == "translations")

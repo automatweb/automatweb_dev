@@ -17,15 +17,13 @@ class _int_object
 	///////////////////////////////////////////
 	// private variables
 
-	var $obj;			// actual object data
+	var $obj = array();			// actual object data. $this->objdata["__obj_load_parameter"] -- special element for storing constructor parameter
 	var $implicit_save;
 	var $obj_sys_flags;
 	var $props_loaded;
 
 	private static $global_save_count = 0;
 	private static $cache_off = false;
-
-	private $constructor_parameter;
 
 	/**
 		This defines, after how many object saves cache will automatically be turned off for the rest of the request.
@@ -36,34 +34,14 @@ class _int_object
 	///////////////////////////////////////////
 	// public functions
 
-	function _int_object($param = NULL, $ignore = true)
+	function _int_object($objdata)
 	{
-		if ($ignore)
-		{
-			$this->_init_empty();
-			return;
-		}
-		$this->constructor_parameter = $param;
+		$this->_init_empty();
+		$this->obj = $objdata;
 
-		if ($param != NULL)
+		if (isset($objdata["__obj_load_parameter"]))
 		{
-			$this->load($param);
-		}
-		else
-		{
-			$this->_init_empty();
-		}
-	}
-
-	function load($param)
-	{
-		if (is_array($param))
-		{
-			$this->obj = $param;
-		}
-		else
-		{
-			$this->_int_load($GLOBALS["object_loader"]->param_to_oid($param));
+			$this->_int_load();
 		}
 	}
 
@@ -161,7 +139,7 @@ class _int_object
 			$cprms = array("to" => $oid);
 			if ($param["reltype"])
 			{
-				if (!is_numeric($param["reltype"]) && substr($param["reltype"], 0, 7) == "RELTYPE")
+				if (!is_numeric($param["reltype"]) && substr($param["reltype"], 0, 7) === "RELTYPE")
 				{
 					// it is "RELTYPE_FOO"
 					// resolve it to numeric
@@ -180,7 +158,7 @@ class _int_object
 			}
 			else
 			{
-				if ($GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]) &&
+				if (isset($this->obj["brother_of"]) && $GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]) &&
 					$GLOBALS["object_loader"]->ds->can("view", $oid))
 				{
 					$c = new connection();
@@ -660,8 +638,6 @@ class _int_object
 
 	function set_class_id($param)
 	{
-		$prev = isset($this->obj["class_id"]) ? $this->obj["class_id"] : null;
-
 		if (!is_class_id($param))
 		{
 			error::raise(array(
@@ -676,8 +652,6 @@ class _int_object
 		// since the class id has changed, we gots to load new properties for the new class type
 		$this->_int_load_properties();
 		$this->_int_do_implicit_save();
-
-		return $prev;
 	}
 
 	function status()
@@ -1576,8 +1550,31 @@ class _int_object
 
 	function load_version($v)
 	{
-		$GLOBALS["object2version"][$this->obj["oid"]] = $v;
-		$this->_int_load($this->obj["oid"]);
+		$oid = $this->obj["oid"];
+		$GLOBALS["object2version"][$oid] = $v;
+
+		// check access rights to object
+		if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
+		{
+			$e = new awex_obj_acl("No view access object with id '{$oid}'.");
+			$e->awobj_id = $oid;
+			throw $e;
+		}
+
+		// load object data
+		if (isset($GLOBALS["__obj_sys_objd_memc"][$oid]))
+		{
+			$objdata = $GLOBALS["__obj_sys_objd_memc"][$oid];
+			unset($GLOBALS["__obj_sys_objd_memc"][$oid]);
+		}
+		else
+		{
+			$objdata = $GLOBALS["object_loader"]->ds->get_objdata($oid);
+		}
+
+		$objdata["__obj_load_parameter"] = $oid;
+		$this->obj = $objdata;
+		$this->_int_load();
 	}
 
 	function set_save_version($v)
@@ -1935,69 +1932,38 @@ class _int_object
 		}
 	}
 
-	function _int_load($oid)
+	function _int_load()
 	{
-		if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
-		{
-			$e = new awex_obj_acl("No view access object with id '" . $oid . "'.");
-			$e->awobj_id = $oid;
-			throw $e;
-		}
-
-		$this->_init_empty();
-
-		// now. we gots to find the class_id of the object
-		if (isset($GLOBALS["__obj_sys_objd_memc"][$oid]))
-		{
-			$this->obj = $GLOBALS["__obj_sys_objd_memc"][$oid];
-			unset($GLOBALS["__obj_sys_objd_memc"][$oid]);
-		}
-		else
-		{
-			$this->obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
-		}
-
+		$oid = $GLOBALS["object_loader"]->param_to_oid($this->obj["__obj_load_parameter"]);
 		$this->_int_load_property_values();
 
-		// now that we know the class id, change the object instance out from beneath us, if it is set so in the ini file
-		$cld = isset($GLOBALS["cfg"]["classes"][$this->obj["class_id"]]) ? $GLOBALS["cfg"]["classes"][$this->obj["class_id"]] : array();
-		if (!empty($cld["object_override"]))
+		// yeees, this looks weird, BUT it is needed if the loaded object is not actually the one requested
+		$GLOBALS["objects"][$oid] = $this;
+
+		if ($oid !== $this->obj["oid"])
 		{
-			$cln = basename($cld["object_override"]);
-			$i = new $cln($this->constructor_parameter, true);
-			// copy props
-			$i->obj = $this->obj;
-			$i->implicit_save = $this->implicit_save;
-			$i->props_loaded = $this->props_loaded;
-			$i->obj_sys_flags = $this->obj_sys_flags;
-			$i->obj_sys_flags = $GLOBALS["__obj_sys_opts"];
-			if (method_exists($i, "_init_override_object"))
-			{
-				$i->_init_override_object();
-			}
-			$GLOBALS["objects"][$oid] = $i;
-			$GLOBALS["objects"][$this->obj["oid"]] = $i;
+			$GLOBALS["objects"][$this->obj["oid"]] = $this;
 		}
-		else
-		{
-			// yeees, this looks weird, BUT it is needed if the loaded object is not actually the one requested
-			$GLOBALS["objects"][$oid] = $this;
-			if ($oid !== $this->obj["oid"])
-			{
-				$GLOBALS["objects"][$this->obj["oid"]] = $this;
-			}
-		}
+	}
+
+	function get_object_data()
+	{
+		return $this->obj;
 	}
 
 	function _int_load_properties($cl_id = NULL)
 	{
-		if ($cl_id === NULL)
+		if (empty($cl_id) and !empty($this->obj["class_id"]))
 		{
 			$cl_id = $this->obj["class_id"];
+			if (empty($cl_id))
+			{
+				throw new awex_obj("Missing required class id.");
+			}
 		}
 
 		if (isset($GLOBALS["properties"][$cl_id]) && isset($GLOBALS["tableinfo"][$cl_id]) && isset($GLOBALS["of2prop"][$cl_id]))
-		{
+		{ // class properties already loaded
 			return;
 		}
 
@@ -2263,8 +2229,8 @@ class _int_object
 			if ($mod)
 			{
 				$this->_int_set_prop_mod(
-					$pn, 
-					isset($this->obj["properties"][$pn]) ? $this->obj["properties"][$pn] : null, 
+					$pn,
+					isset($this->obj["properties"][$pn]) ? $this->obj["properties"][$pn] : null,
 					isset($this->obj[$ofname]) ? $this->obj[$ofname] : null
 				);
 			}
@@ -2396,7 +2362,7 @@ class _int_object
 				{
 					error::raise(array(
 						"id" => "ERR_ACL",
-						"msg" => sprintf(t("object::save(): no access to add object under folder %s (gidlist = %s)!"), $this->obj["parent"], join(", ", aw_global_get("gidlist")))
+						"msg" => sprintf(t("object::save(): no access to add object under folder %s (gidlist = %s)!"), $this->obj["parent"], join(", ", (array) aw_global_get("gidlist")))
 					));
 					return;
 				}

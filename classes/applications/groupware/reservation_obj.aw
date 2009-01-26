@@ -3,14 +3,9 @@
 //final_saved_sum - valuutades lplik summa mis sai makstud ka tenoliselt... ja kui see olemas siis rohkem ei arvutata
 //special_sum - mratud kindel summa kigis valuutades... le kirjutamiseks objekti juurest miskitel spetsjuhtudel
 
-//maintainer=markop  
+//maintainer=markop
 class reservation_obj extends _int_object
 {
-	function task_object()
-	{
-		parent::_int_object();
-	}
-
 	function delete()
 	{
 		$ol = $this->get_other_brons();
@@ -74,7 +69,7 @@ class reservation_obj extends _int_object
 			case "seller":
 				$pn = "inbetweener";
 				break;
-			
+
 		}
 		$retval = parent::set_prop($pn, $pv);
 
@@ -105,7 +100,7 @@ class reservation_obj extends _int_object
 		}
 
 
-		$sum = $this->meta("final_saved_sum"); 
+		$sum = $this->meta("final_saved_sum");
 		//kui on salvestatud summa ja mneski valuutas omab vrtust, ning see on salvestatud ndal peale aja lbi saamist, siis lheb salvestatud variant loosi ja ei hakka uuesti le arvutama
 		if(is_array($sum) && (!$this->prop("end") || ($this->prop("end") + 3600*24*7) < $this->meta("sum_saved_time")))
 		{
@@ -238,7 +233,7 @@ class reservation_obj extends _int_object
 	/** returns reservation price in currency
 		@attrib api=1
 		@param curr type=int/string
-			currency id or 
+			currency id or
 		@returns double
 			reservation price
 	**/
@@ -306,7 +301,7 @@ class reservation_obj extends _int_object
 	/** returns resources sum
 		@attrib api=1 params=pos
 		@param special_discounts_off bool optional default=false
-			
+
 		@returns
 			returns reservations resources sum in different currencies
 	 **/
@@ -411,7 +406,7 @@ class reservation_obj extends _int_object
 		@attrib api=1 params=pos
 		@param setting required type=string
 			room setting
-		@return 
+		@return
 			room setting value , or 0
 	**/
 	function get_room_setting($setting)
