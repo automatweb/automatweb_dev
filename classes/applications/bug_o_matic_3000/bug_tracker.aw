@@ -29,57 +29,57 @@ define("BUG_STATUS_CLOSED", 5);
 @default group=projects
 
 	@property proj_toolbar type=toolbar no_caption=1
-	
+
 	@layout proj_split type=hbox width=25%:75%
 
 		@layout proj_left type=vbox parent=proj_split
 
 			@layout proj_tree_lay type=vbox closeable=1 area_caption=Projektide&nbsp;puu parent=proj_left
-				
+
 				@property proj_tree type=treeview no_caption=1 parent=proj_tree_lay
-	
+
 			@layout proj_search_lay type=vbox closeable=1 area_caption=Projektide&nbsp;otsing parent=proj_left
-	
+
 				@property proj_search_name type=textbox store=no parent=proj_search_lay size=33 captionside=top
 				@caption Projekti nimi
-	
+
 				@property proj_search_cust type=textbox store=no parent=proj_search_lay size=33 captionside=top
 				@caption Klient
-	
+
 				@property proj_search_part type=text size=28 parent=proj_search_lay store=no captionside=top
 				@caption Osaleja
-	
+
 				@property proj_search_state type=chooser store=no parent=proj_search_lay  captionside=top
 				@caption Staatus
-	
+
 				@property proj_search_code type=textbox store=no parent=proj_search_lay size=33 captionside=top
 				@caption Projekti kood
-	
+
 				@property proj_search_arh_code type=textbox store=no parent=proj_search_lay size=33 captionside=top
 				@caption Arhiveerimistunnus
-	
+
 				@property proj_search_proj_mgr type=textbox store=no parent=proj_search_lay size=33 captionside=top
 				@caption Projektijuht
-	
+
 				@property proj_search_dl_from type=date_select store=no parent=proj_search_lay  captionside=top format=day_textbox,month_textbox,year_textbox
 				@caption T&auml;htaeg alates
-	
+
 				@property proj_search_dl_to type=date_select store=no parent=proj_search_lay  captionside=top format=day_textbox,month_textbox,year_textbox
 				@caption T&auml;htaeg kuni
-	
+
 				@property proj_search_end_from type=date_select store=no parent=proj_search_lay  captionside=top format=day_textbox,month_textbox,year_textbox
 				@caption L&otilde;pp alates
-	
+
 				@property proj_search_end_to type=date_select store=no parent=proj_search_lay  captionside=top format=day_textbox,month_textbox,year_textbox
 				@caption L&otilde;pp kuni
-	
+
 				@property proj_search_sbt type=submit  parent=proj_search_lay no_caption=1
 				@caption Otsi
 
 		@layout proj_right type=vbox parent=proj_split
 
 			@property proj_tbl1 type=table no_caption=1 parent=proj_right
-	
+
 			@property proj_tbl2 type=table no_caption=1 parent=proj_right
 
 @default group=by_default,by_project,by_who,by_class,by_cust,by_monitor
@@ -114,7 +114,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property send_monitor_mails type=checkbox ch_value=1 default=1 field=meta method=serialize
 	@caption Saada j&auml;lgijatele meile
-	
+
 	@property dorder_mail_contents type=textarea rows=10 cols=50 field=meta method=serialize
 	@caption Arendustellimuse loomise meil
 
@@ -149,15 +149,15 @@ define("BUG_STATUS_CLOSED", 5);
 		@caption Leia ka buge, millel on alambuge
 
 	@layout s_date_lay type=vbox closeable=1 area_caption=Aeg parent=s_top_v
-		
+
 		@layout s_date_lay_top type=vbox parent=s_date_lay
-	
+
 			@property s_date_type type=chooser store=no parent=s_date_lay_top captionside=top
 			@caption Mille j&auml;rgi
-	
+
 			@property s_date_from type=datetime_select store=no parent=s_date_lay_top captionside=top default=-1
 			@caption Alates
-	
+
 			@property s_date_to type=datetime_select store=no parent=s_date_lay_top captionside=top default=-1
 			@caption Kuni
 
@@ -201,7 +201,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 			@property s_bug_status type=select store=no multiple=1 parent=s_status_lay_top size=3 captionside=top
 			@caption Staatus
-	
+
 			@property s_cust_status type=select store=no multiple=1 parent=s_status_lay_top size=3 captionside=top
 			@caption Kliendi staatus
 
@@ -341,7 +341,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@comment Valem mida kasutatakse kombineeritud prioriteedi arvutamiseks. Formaat: php, tagastatav prioriteet muutujas $p. Muutujad: $sp_lut - staatustele vastavad prioriteedid (default array(BUG_OPEN => 100,BUG_INPROGRESS => 110,BUG_DONE => 70,BUG_TESTED => 60,BUG_CLOSED => 50,BUG_INCORRECT => 40,BUG_NOTREPEATABLE => 40,BUG_NOTFIXABLE => 40,BUG_FATALERROR => 200,BUG_FEEDBACK => 130)), $bs - ylesande staatus, $cp - kliendi prioriteet, $pp - projekti prioriteet, $bp - ylesande prioriteet, $bl - ylesande prognoositud tunde, $bi - ylesande t6sidus, $dd - t2htaeg. N2ide: $p = $cp + $pp + $bp;
 
 @default group=settings_statuses
-	
+
 	@property statuses_bug_tbl type=table store=no no_caption=1
 	@property statuses_devo_tbl type=table store=no no_caption=1
 
@@ -1139,7 +1139,7 @@ class bug_tracker extends class_base
 			"lang_id" => array(),
 		));
 		$this->get_table_from_ol($ol, $t, $arr);
-		
+
 	}
 
 	function get_table_from_ol($ol, &$t, $arr)
@@ -2021,7 +2021,7 @@ class bug_tracker extends class_base
 		{
 			return $arr["post_ru"];
 		}
-		
+
 		foreach($ids as $id)
 		{
 			if($this->can("view", $id))
@@ -3025,7 +3025,7 @@ class bug_tracker extends class_base
 
 		$search_filt = $this->_get_bug_search_filt($arr["request"]);
 		$ol = new object_list($search_filt);
-		
+
 		if ($arr["request"]["s_find_parens"] != 1 && $ol->count())
 		{
 			$bugs = $ol->arr();
@@ -3847,7 +3847,7 @@ class bug_tracker extends class_base
 			}
 			else
 			{
-				
+
 				$st =  mktime($day_start, 0, 0, date('m', $cur), date('d', $cur), date('Y', $cur));
 				if($this->gt_start == $cur)
 				{
@@ -3873,39 +3873,39 @@ class bug_tracker extends class_base
 	function get_gantt_bug_colors($gt)
 	{
 		$color = "silver";
-		$class = "VclGanttRowName";
+		$class = "VclGanttRowName btGanttRowName";
 		$deadline = $gt->prop("deadline");
 		if($deadline > 1)
 		{
 			if($deadline < time())
 			{
 				$color = "red";
-				$class = "VclGanttRowName deadline0";
+				$class .= " deadline0";
 			}
 			elseif(($deadline - 5*24*60*60) < time() && $deadline - 4*24*60*60 > time())
 			{
 				$color = "yellow";
-				$class = "VclGanttRowName deadline5";
+				$class .= " deadline5";
 			}
 			elseif(($deadline - 4*24*60*60) < time() && $deadline - 3*24*60*60 > time())
 			{
 				$color = "#FFD400";
-				$class = "VclGanttRowName deadline4";
+				$class .= " deadline4";
 			}
 			elseif(($deadline - 3*24*60*60) < time() && $deadline - 2*24*60*60 > time())
 			{
 				$color = "#FFA900";
-				$class = "VclGanttRowName deadline3";
+				$class .= " deadline3";
 			}
 			elseif(($deadline - 2*24*60*60) < time() && $deadline - 1*24*60*60 > time())
 			{
 				$color = "#FF7E00";
-				$class = "VclGanttRowName deadline2";
+				$class .= " deadline2";
 			}
 			elseif(($deadline - 1*24*60*60) < time() && $deadline > time())
 			{
 				$color = "#FF5300";
-				$class = "VclGanttRowName deadline1";
+				$class .= " deadline1";
 			}
 		}
 
@@ -3913,12 +3913,12 @@ class bug_tracker extends class_base
 		if($status == 10)
 		{
 			$color = "green";
-			$class = "VclGanttRowName feedback";
+			$class .= " feedback";
 		}
 		elseif($status == 11)
 		{
 			$color = "black";
-			$class = "VclGanttRowName fatalerror";
+			$class .= " fatalerror";
 		}
 		return array(
 			"color" => $color,

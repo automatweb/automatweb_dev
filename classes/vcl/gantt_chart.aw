@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.26 2009/01/14 08:53:27 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -369,7 +368,7 @@ class gantt_chart extends class_base
 			"chart_id" => $this->chart_id,
 			"chart_width" => $this->chart_width,
 			"row_height" => $this->row_height,
-			"row_text_height" => ($this->row_height - 1),
+			"row_text_height" => ($this->row_height - ceil($this->row_height/10)),
 		);
 		$style = $this->parse ();
 

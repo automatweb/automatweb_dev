@@ -21,7 +21,7 @@ a:hover {text-decoration: underline}
 	height: 14px;
 	border-bottom: 1px solid #f1f8fc
 }
-#pais .logo { 
+#pais .logo {
 	background: url('/automatweb/images/aw06/logo_t.gif') no-repeat;
 	width: 239px;
 	height: 57px;
@@ -29,7 +29,7 @@ a:hover {text-decoration: underline}
 	position: absolute;
 	z-index: 10;
 }
-#pais .logo img { 
+#pais .logo img {
 	margin:17px 0 0 15px
 }
 #pais .logo span {
@@ -217,7 +217,7 @@ a:hover {text-decoration: underline}
 	height: 14px;
 	border-bottom: 1px solid #f1f8fc
 }
-#pais2 .logo { 
+#pais2 .logo {
 	background: url('/automatweb/images/aw06/logo_t.gif') no-repeat;
 	width: 239px;
 	height: 57px;
@@ -225,7 +225,7 @@ a:hover {text-decoration: underline}
 	position: absolute;
 	z-index: 10;
 }
-#pais2 .logo img { 
+#pais2 .logo img {
 	margin:17px 0 0 15px
 }
 #pais2 .logo span {
@@ -571,7 +571,7 @@ a:hover {text-decoration: underline}
 #veerud .p {
 }
 #veerud .p a {
-	color: #0018af 
+	color: #0018af
 }
 input.vali, select.vali {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
@@ -603,7 +603,7 @@ span.kast {
 	padding-bottom: 8px;
 	display: block
 }
-/* jalus */ 
+/* jalus */
 #jalus {
 	background: #05a6e9 url('/automatweb/images/aw06/jalus_t.gif') repeat-x left bottom;
 	padding: 7px 0 9px 12px;
@@ -835,7 +835,7 @@ text-decoration:underline;
 /*
  * #pais .tabs .norm , #pais .tabs .akt {padding-left: 0px ! important;}
  * #pais .tabs .norm .right, #pais .tabs .akt .right {padding-right: 0px ! important;}
- * 
+ *
 */
 
 .awmenuedittabletag {background: white;}
@@ -844,15 +844,15 @@ text-decoration:underline;
 .ac_results {padding: 0px;border: 1px solid black;background-color: white;overflow: hidden;	z-index: 99999;}
 .ac_results ul {width: 100%; list-style-position: outside; list-style: none; padding: 0; margin: 0;}
 .ac_results li {margin: 0px; padding: 2px 5px; cursor: default; display: block;
-	/* 
-	if width will be 100% horizontal scrollbar will apear 
+	/*
+	if width will be 100% horizontal scrollbar will apear
 	when scroll mode will be used
 	*/
 	/*width: 100%;*/
 	font: menu;
 	font-size: 12px;
-	/* 
-	it is very important, if line-height not setted or setted 
+	/*
+	it is very important, if line-height not setted or setted
 	in relative units scroll will be broken in firefox
 	*/
 	line-height: 16px;
@@ -861,17 +861,21 @@ text-decoration:underline;
 
 /*.ac_loading {background: white url('indicator.gif') right center no-repeat;}*/
 .ac_odd {background-color: #eee;}
-.ac_over {background-color: #0A246A; color: white;} 
+.ac_over {background-color: #0A246A; color: white;}
 
 /* templates/gantt_chart/chart_aw.tpl */
-.fatalerror {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat! important; padding-left: 16px ! important;}
-.deadline0 {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -25px ! important; padding-left: 16px ! important;}
-.deadline1 {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -50px ! important; padding-left: 16px ! important;}
-.deadline2 {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -75px ! important; padding-left: 16px ! important;}
-.deadline3 {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -100px ! important; padding-left: 16px ! important;}
-.deadline4 {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -125px ! important; padding-left: 16px ! important;}
-.deadline5 {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -150px ! important; padding-left: 16px ! important;}
-.feedback {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -175px ! important; padding-left: 16px ! important;}
+.fatalerror { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat! important; }
+.deadline0 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -25px ! important; }
+.deadline1 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -50px ! important; }
+.deadline2 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -75px ! important; }
+.deadline3 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -100px ! important; }
+.deadline4 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -125px ! important; }
+.deadline5 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -150px ! important; }
+.feedback { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -175px ! important; }
+.btGanttRowName
+{
+	padding: 3px 6px 3px 16px ! important;
+}
 
 
 /*
@@ -896,7 +900,7 @@ div.jqi button{background-color:#05A6E9;border-color:#FFFFFF #0373AC #0373AC #FF
 .tooltip_content_content { background: url(/automatweb/images/aw06/tooltip_content_bg.png) repeat-y; padding: 0 17px; }
 .tooltip_content_content p { line-height: 14px; margin: 0; font-size: 10px;}
 .tooltip_content_footer { background: url(/automatweb/images/aw06/tooltip_footer_bg.png); height: 13px; }
-.help {  } 
+.help {  }
 
 /* enalbe tree in change views */
 table.tree_enabled_in_edit { width: 100%; background: white; }
