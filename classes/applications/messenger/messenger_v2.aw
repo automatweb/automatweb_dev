@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.41 2008/02/25 12:08:27 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.42 2009/01/26 12:26:30 robert Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -404,6 +404,10 @@ class messenger_v2 extends class_base
 					$obj->set_name(aw_global_get("uid").".aadressiraamat");
 					$obj->set_parent($arr["obj_inst"]->id());
 					$cls = array($obj->save_new());
+					$arr["obj_inst"]->connect(array(
+						"type" => "RELTYPE_CONTACT_LIST",
+						"to" => $obj->id(),
+					));
 				}
 
 				$adds = $cl->get_addresses($cls);
