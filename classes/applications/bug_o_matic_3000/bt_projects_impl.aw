@@ -312,7 +312,7 @@ class bt_projects_impl extends core
 				"name" => $o->name(),
 				"url" => "#",
 			));
-			if($parent != 4)
+			if($parent == 0)
 			{
 				$this->__insert_section_subs($t, $o, $o->id(), $arr);
 			}
@@ -346,7 +346,7 @@ class bt_projects_impl extends core
 			}
 			$t->add_item($parent, array(
 				"id" => $po->id(),
-				"name" => $this->__parse_name($po->name(), $po->id(), $arr),
+				"name" => $arr["inst_id"] ? $po->name() : $this->__parse_name($po->name(), $po->id(), $arr),
 				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
 				"url" => $arr["inst_id"] ? "#" : aw_url_change_var(array(
 					"filt_type" => "person",
