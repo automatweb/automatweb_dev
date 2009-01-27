@@ -390,6 +390,12 @@ class task extends class_base
 	{
 		switch($requester)
 		{
+			case "send_bill":
+				if($arr["new"])
+				{
+					$prop["value"] = 1;
+				}
+				break;
 			case "part":
 				$l = new object_list(array(
 					"class_id" => CL_CRM_PERSON,

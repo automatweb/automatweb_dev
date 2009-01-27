@@ -166,6 +166,11 @@ class task_row_obj extends _int_object
 
 	function save($arr = array())
 	{
+		//default esimesel salvestamisel et k6ik l2hevad arvele
+		if(!is_oid($this->id()))
+		{
+			$this->set_prop("on_bill" , 1);
+		}
 		//igal salvestamisel v6iks osa infot yle kontrollida toimetuse juurest
 		if($this->prop("primary"))
 		{

@@ -595,6 +595,11 @@ class crm_bill_obj extends _int_object
 			$work = obj($id);
 			switch($work->class_id())
 			{
+				case CL_BUG:
+					$bug_row_ol = $work->get_billable_comments();
+					$bug_rows += $bug_row_ol->ids();
+					$tasks[] = $work->id();
+					break;
 				case CL_CRM_MEETING:
 				case CL_CRM_CALL:
 				case CL_TASK:
@@ -713,7 +718,6 @@ class crm_bill_obj extends _int_object
 					));
 					break;
 			}
-
 		}
 
 		if(sizeof($bug_rows))

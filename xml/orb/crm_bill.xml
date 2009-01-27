@@ -73,5 +73,12 @@
 			</function>
 		</action>
 
+		<action name="bug_search" all_args="1">
+			<function name="bug_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
 	</class>
 </orb>

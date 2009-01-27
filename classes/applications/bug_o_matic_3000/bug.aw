@@ -442,6 +442,12 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "send_bill":
+				if($arr["new"])
+				{
+					$prop["value"] = 1;
+				}
+				break;
 			case "persons_chart":
 				if($arr["new"])
 				{
@@ -3855,7 +3861,7 @@ EOF;
 		return array(
 			1 => t("T&ouml;&ouml; l&otilde;ppedes"),
 			2 => t("Projekti l&otilde;ppedes"),
-			3 => t("Arendus")
+//			3 => t("Arendus")
 		);
 	}
 

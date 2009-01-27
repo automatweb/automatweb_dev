@@ -290,6 +290,11 @@ class crm_bill extends class_base
 		{
 			$arr["obj_inst"]->set_project($arr["request"]["project"]);
 		}
+		if($this->can("view" , $arr["add_bug"]))
+		{
+			$arr["obj_inst"]->add_rows(array("objects" => $arr["add_bug"]));
+		}
+		arr();die();
 	}
 
 	function get_bill_cust_data_object($bill)
@@ -358,7 +363,7 @@ class crm_bill extends class_base
 						"caption" => t("Lisa laekumine!"),
 					)).
 					" ".html::href(array(
-						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+						"url" => "javascript:aw_popup_scroll('".$url."','Otsing',550,500)",
 						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
 						"title" => t("Otsi")
 					))."<br>";
@@ -936,6 +941,7 @@ class crm_bill extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["add_bug"] = "";
 		$arr["reconcile_price"] = -1;
 		$arr["new_payment"] = "";
 		$arr["add_dn"] = 0;
@@ -1047,9 +1053,12 @@ class crm_bill extends class_base
 	
 		$t->define_field(array(
 			"name" => "has_tax",
-			"caption" => "<a href='javascript:selall(\"rows\")'>".t("+KM?")."</a>",
+			"caption" => html::href(array(
+				"url" => "javascript:selall('rows')",
+				"caption" => t("+KM?"),
+				"title" => t("+KM?")
+			))
 		));
-
 		$t->define_field(array(
 			"name" => "sel",
 			"caption" => t("Vali"),
@@ -1132,7 +1141,7 @@ class crm_bill extends class_base
 			));
 
 			$connect_row_link = html::href(array(
-				"url" => "javascript:aw_popup_scroll(\"$connect_row_url\",\"Otsing\",1100,700)",
+				"url" => "javascript:aw_popup_scroll('".$connect_row_url."','Otsing',1100,700)",
 				"caption" => t("Lisa toimetuse rida"),
 				"title" => t("Otsi")
 			));
@@ -3165,11 +3174,21 @@ class crm_bill extends class_base
 			}
 		}
 
-		$tb->add_button(array(
+		$tb->add_menu_button(array(
 			"name" => "new",
-			"tooltip" => t("Lisa rida"),
-			"img" => "new.gif",
-			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru()))
+			"tooltip" => t("Uus"),
+			"img" => "new.gif"
+		));
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru())),
+			"text" => t("Lisa t&uuml;hi rida")
+		));
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"url" => "#",
+			"onClick" => "win = window.open('".$this->mk_my_orb("bug_search", array("is_popup" => 1, "customer" => $arr["obj_inst"]->get_bill_customer()), CL_CRM_BILL)."','bug_search','width=720,height=600,statusbar=yes, scrollbars=yes ');",
+			"text" => t("Lisa arendus&uuml;lesanne")
 		));
 
 		$tb->add_save_button();
@@ -3622,5 +3641,152 @@ class crm_bill extends class_base
 			return reset($bills->ids());
 		}
 	}
+
+	/** returns bill id
+		@attrib name=bug_search all_args=1
+	@param customer optional type=int
+		customer id
+	**/
+	function bug_search($arr)
+	{
+		$content = "";
+		if(is_oid($arr["task"]))
+		{
+			die("<script language='javascript'>
+				if (window.opener)
+				{
+					window.opener.document.getElementsByName('add_bug')[0].value=".$arr["task"].";
+					window.opener.submit_changeform();
+				}
+				window.close();
+			</script>");
+		}
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+
+		$htmlc->add_property(array(
+			"name" => "name",
+			"type" => "textbox",
+			"value" => $arr["name"],
+			"caption" => t("Tegevuse nimi"),
+			"autocomplete_class_id" => array(CL_TASK , CL_BUG),
+		));
+		$htmlc->add_property(array(
+			"name" => "project",
+			"type" => "textbox",
+			"value" => $arr["project"],
+			"caption" => t("Projekt"),
+			"autocomplete_class_id" => array(CL_PROJECT),
+		));
+		$htmlc->add_property(array(
+			"name" => "submit",
+			"type" => "submit",
+			"value" => t("Otsi"),
+			"caption" => t("Otsi")
+		));
+		$data = array(
+			"customer" => $arr["customer"],
+			"orb_class" => $_GET["class"]?$_GET["class"]:$_POST["class"],
+			"reforb" => 0,
+		);
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));
+		$t->define_field(array(
+			"name" => "choose",
+			"caption" => "",
+		));
+/*		$t->define_chooser(array(
+			"name" => "task",
+			"field" => "oid",
+		));*/
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+		));
+		$filter = array(
+			"class_id" => array(CL_TASK,CL_BUG),
+			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_TASK.RELTYPE_CUSTOMER" => $arr["customer"],
+					"CL_BUG.RELTYPE_CUSTOMER" => $arr["customer"],
+				)
+			)),
+		);
+
+		if($arr["name"])
+		{
+			$filter["name"] = "%".$arr["name"]."%";
+		}
+		if($arr["project"])
+		{
+			$filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_TASK.RELTYPE_PROJECT.name" => "%".$arr["project"]."%",
+					"CL_BUG.RELTYPE_PROJECT.name" => $arr["customer"],
+				)
+			));
+		}
+
+		$ol = new object_list($filter);
+
+		foreach($ol->arr() as $o)
+		{
+			$cust = "";
+			$t->define_data(array(
+				"oid" => $o->id(),
+				"name" => $o->prop("name"),
+				"choose" => html::href(array(
+					"caption" => t("Vali see"),
+					"url" => $this->mk_my_orb("bug_search",
+						array(
+							"task" => $o->id(),
+						), "crm_bill"
+					),
+				)),
+				"project" => $o->prop("project.name"),
+			));
+		}
+
+
+		$htmlc->add_property(array(
+			"name" => "table",
+			"type" => "text",
+			"value" => $t->draw(),
+			"no_caption" => 1,
+		));
+
+/*
+		$htmlc->add_property(array(
+			"name" => "submit2",
+			"type" => "submit",
+			"value" => t("Salvesta"),
+			"caption" => t("Salvesta")
+		));
+*/
+		$htmlc->finish_output(array(
+			"action" => "bug_search",
+			"method" => "POST",
+			"data" => $data
+		));
+
+		$content.= $htmlc->get_result();
+
+
+/*		$content.= "<form action='orb.aw' method='POST' name='changeform2' enctype='multipart/form-data' >".$t->draw()."
+			<input id='button' type='submit' name='submit' value='Salvesta'/>
+		</form>";*/
+		return $content;
+	}
+
 }
 ?>
