@@ -111,6 +111,16 @@
             <caption>Kas v&amp;amp;auml;ike pilt on kadreeritud</caption>
       </property>
       <property>
+            <name>v_tn_subimage_stretch</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>imgsize</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kas v&amp;amp;auml;ikest ei venitata</caption>
+      </property>
+      <property>
             <name>v_tn_subimage_left</name>
             <table>objects</table>
             <field>meta</field>
@@ -207,6 +217,16 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Kas v&amp;amp;auml;ike pilt on kadreeritud</caption>
+      </property>
+      <property>
+            <name>h_tn_subimage_stretch</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>imgsize</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kas v&amp;amp;auml;ikest pilti ei venitata</caption>
       </property>
       <property>
             <name>h_tn_subimage_left</name>
