@@ -80,7 +80,7 @@ class crm_sector extends class_base
 		));
 
 		$this->trans_props = array(
-			"tegevusala", "comment"
+			"alias", "tegevusala", "comment"
 		);
 	}
 
