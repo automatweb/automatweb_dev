@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.19 2008/03/26 12:13:00 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.20 2009/01/27 19:09:54 instrumental Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes maintainer=kristo
@@ -319,7 +319,7 @@ class gallery_conf extends class_base
 			$is_subimage = $conf->prop("h_".$prefix."subimage") == 1;
 			if ($is_subimage)
 			{
-				$si_top = $conf->prop("h_".prefix."subimage_top");
+				$si_top = $conf->prop("h_".$prefix."subimage_top");
 				$si_left = $conf->prop("h_".$prefix."subimage_left");
 				$si_width = $conf->prop("h_".$prefix."subimage_width");
 				$si_height = $conf->prop("h_".$prefix."subimage_height");
@@ -332,7 +332,7 @@ class gallery_conf extends class_base
 			$is_subimage = $conf->prop("v_".$prefix."subimage") == 1;
 			if ($is_subimage)
 			{
-				$si_top = $conf->prop("v_".prefix."subimage_top");
+				$si_top = $conf->prop("v_".$prefix."subimage_top");
 				$si_left = $conf->prop("v_".$prefix."subimage_left");
 				$si_width = $conf->prop("v_".$prefix."subimage_width");
 				$si_height = $conf->prop("v_".$prefix."subimage_height");
