@@ -118,7 +118,7 @@
             <group>imgsize</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas v&amp;amp;auml;ikest ei venitata</caption>
+            <caption>V&amp;amp;auml;ikest pilti ei venitata</caption>
       </property>
       <property>
             <name>v_tn_subimage_left</name>
@@ -226,7 +226,7 @@
             <group>imgsize</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas v&amp;amp;auml;ikest pilti ei venitata</caption>
+            <caption>V&amp;amp;auml;ikest pilti ei venitata</caption>
       </property>
       <property>
             <name>h_tn_subimage_left</name>

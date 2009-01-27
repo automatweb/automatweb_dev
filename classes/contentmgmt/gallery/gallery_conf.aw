@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.21 2009/01/27 19:37:51 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.22 2009/01/27 19:43:28 instrumental Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes maintainer=kristo
@@ -49,7 +49,7 @@
 	@caption Kas v&auml;ike pilt on kadreeritud
 
 	@property v_tn_subimage_stretch type=checkbox ch_value=1 
-	@caption Kas v&auml;ikest ei venitata
+	@caption V&auml;ikest pilti ei venitata
 
 	@property v_tn_subimage_left type=textbox size=5 
 	@caption Mitu pikslit vasakult kaader algab
@@ -82,7 +82,7 @@
 	@caption Kas v&auml;ike pilt on kadreeritud
 
 	@property h_tn_subimage_stretch type=checkbox ch_value=1 
-	@caption Kas v&auml;ikest pilti ei venitata
+	@caption V&auml;ikest pilti ei venitata
 
 	@property h_tn_subimage_left type=textbox size=5 
 	@caption Mitu pikslit vasakult kaader algab
