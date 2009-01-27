@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.55 2009/01/23 15:14:08 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.56 2009/01/27 20:19:02 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -85,16 +85,16 @@
 				@property os_director type=textbox store=no captionside=top parent=o_left_bottom
 				@caption Firmajuht
 
-				@property os_legal_form type=relpicker reltyupe=RELTYPE_OS_LEGAL_FORM no_edit=1 automatic=1 multiple=1 store=no captionside=top parent=o_left_bottom size=5
+				@property os_legal_form type=chooser multiple=1 store=no captionside=top parent=o_left_bottom
 				@caption Ettev&otilde;lusvorm
-
-				@property os_city type=relpicker reltype=RELTYPE_OS_CITY no_edit=1 automatic=1 multiple=1 store=no captionside=top parent=o_left_bottom size=5
-				@caption Linn
 
 				@property os_county type=relpicker reltype=RELTYPE_OS_COUNTY no_edit=1 automatic=1 multiple=1 store=no captionside=top parent=o_left_bottom size=5
 				@caption Maakond
 
-				@property os_show_in_webview type=select store=no captionside=top parent=o_left_bottom
+				@property os_city type=relpicker reltype=RELTYPE_OS_CITY no_edit=1 automatic=1 multiple=1 store=no captionside=top parent=o_left_bottom size=5
+				@caption Linn
+
+				@property os_show_in_webview type=chooser multiple=1 store=no captionside=top parent=o_left_bottom
 				@caption Veebis kuvamine
 
 				@property os_submit type=submit store=no parent=o_left_bottom
@@ -183,17 +183,49 @@ class crm_db extends class_base
 			
 			case "os_show_in_webview":
 				$prop["options"] = array(
-					0 => t("K&otilde;ik"),
 					1 => t("Ei kuvata veebis"),
 					2 => t("Kuvatakse veebis"),
 				);
+				$prop["value"] = isset($_GET[$prop["name"]]) ? $_GET[$prop["name"]] : NULL;
+				break;
+
+			case "os_legal_form":
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_CORPFORM,
+					"parent" => is_oid($arr["obj_inst"]->dir_ettevotlusvorm) ? $arr["obj_inst"]->dir_ettevotlusvorm : array(),
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				$prop["options"] = $ol->names();
+				$prop["value"] = isset($_GET[$prop["name"]]) ? $_GET[$prop["name"]] : NULL;
+				break;
+
+			case "os_city":
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_CITY,
+					"parent" => is_oid($arr["obj_inst"]->dir_linn) ? $arr["obj_inst"]->dir_linn : array(),
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				$prop["options"] = $ol->names();
+				$prop["value"] = isset($_GET[$prop["name"]]) ? $_GET[$prop["name"]] : NULL;
+				break;
+
+			case "os_county":
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_COUNTY,
+					"parent" => is_oid($arr["obj_inst"]->dir_maakond) ? $arr["obj_inst"]->dir_maakond : array(),
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				$prop["options"] = $ol->names();
+				$prop["value"] = isset($_GET[$prop["name"]]) ? $_GET[$prop["name"]] : NULL;
+				break;
+
 			case "os_name":
 			case "os_regnr":
 			case "os_address":
 			case "os_director":
-			case "os_legal_form":
-			case "os_city":
-			case "os_county":
 				$prop["value"] = isset($_GET[$prop["name"]]) ? $_GET[$prop["name"]] : NULL;
 				break;
 		}
@@ -894,7 +926,7 @@ class crm_db extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		if(isset($_GET["os_submit"]))
 		{
-			$show_in_webview = isset($_GET["os_show_in_webview"]) ? ((int)$_GET["os_show_in_webview"] === 2 ? 1 : new obj_predicate_not(1)) : array();
+			$show_in_webview = isset($_GET["os_show_in_webview"]) && count($_GET["os_show_in_webview"]) == 1 ? ((int)reset($_GET["os_show_in_webview"]) === 2 ? 1 : new obj_predicate_not(1)) : array();
 		}
 		else
 		{
