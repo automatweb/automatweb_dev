@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.22 2009/01/27 19:43:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.23 2009/01/27 20:00:06 instrumental Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes maintainer=kristo
@@ -353,8 +353,8 @@ class gallery_conf extends class_base
 			$ratio_w = $width ? $w / $width : 1;
 			$ratio_h = $height ? $h / $height : 1;
 			$ratio = max($ratio_w, $ratio_h);
-			$width = (int)($w * $ratio);
-			$height = (int)($h * $height);
+			$width = (int)($w / $ratio);
+			$height = (int)($h / $ratio);
 		}
 
 		// check if the user only specified one of width/height and then calc the other one
