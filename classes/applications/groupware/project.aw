@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.148 2009/01/21 18:54:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.149 2009/01/27 16:57:16 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -268,10 +268,31 @@
 	@property goal_tb type=toolbar no_caption=1
 
 	@layout goal_vb type=hbox width="20%:80%"
-		@layout goal_tree_lay type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=goal_vb
-			@property goal_tree type=treeview parent=goal_vb no_caption=1 parent=goal_tree_lay
+		layout goal_tree_lay type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=goal_vb
+			property goal_tree type=treeview parent=goal_vb no_caption=1 parent=goal_tree_lay
 
-		@property goal_table type=table parent=goal_vb no_caption=1
+		@layout task_types_tree_left type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=goal_vb
+
+			@layout task_types_tree_lay type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=task_types_tree_left
+
+				@property task_types_tree type=treeview parent=goal_vb no_caption=1 parent=task_types_tree_lay
+
+			@layout task_types_search_lay type=vbox closeable=1 area_caption=Otsinguparameetrid parent=task_types_tree_left
+
+ 				@property search_part type=textbox captionside=top store=no
+				@caption Osaleja
+			
+				@property search_start type=date_select captionside=top store=no
+				@caption Algus
+
+				@property search_end type=date_select captionside=top store=no
+				@caption L&otilde;pp
+			
+				@property search_type type=text captionside=top store=no
+				@caption T&uuml;&uuml;pide kaupa
+
+		@layout task_table type=vbox closeable=1 area_caption=Tegevused parent=goal_vb
+			@property goal_table type=table parent=task_table no_caption=1
 
 
 @default group=goals_gantt
@@ -304,11 +325,35 @@
 
 
 @default group=stats
-	@property stats type=text store=no
+
+	@layout stats_charts type=hbox width=50%:50% closeable=1 area_caption=Graafikud
+		@layout stats_by_person parent=stats_charts type=vbox
+			@property stats_by_person_chart type=google_chart no_caption=1 parent=stats_by_person store=no
+		@layout stats_by_type parent=stats_charts type=vbox
+			@property stats_by_type_chart type=google_chart no_caption=1 parent=stats_by_type store=no
+
+
+	@layout stats_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
+		@property stats type=text store=no
+		@caption T&ouml;&ouml;tunnid
+
+		@property stats_table type=table store=no no_caption=1
+		@caption T&ouml;&ouml;tunnid inimeste kaupa
+
+
+@default group=stats_money
+	@layout stats_money_charts type=hbox width=50%:50% closeable=1 area_caption=Graafikud
+		@layout stats_money_by_person parent=work_charts type=vbox
+			@property stats_money_by_person_chart type=google_chart no_caption=1 parent=stats_money_by_person store=no
+		@layout stats_money_by_time parent=work_charts type=vbox
+			@property stats_by_time_chart type=google_chart no_caption=1 parent=stats_money_by_time store=no
+
+	@layout stats_money_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
+	@property stats_money type=text store=no no_caption=1
 	@caption T&ouml;&ouml;tunnid
 
-	@property stats_table type=table store=no no_caption=1
-	@caption T&ouml;&ouml;tunnid inimeste kaupa
+	@property stats_money_table type=table store=no no_caption=1
+	@caption Raha inimeste kaupa
 
 @default group=stats_entry
 	
@@ -329,12 +374,11 @@
 	@groupinfo userdefined caption="Kasutaja defineeritud andmed" parent=general
 @groupinfo participants parent=general caption="Osalejad"
 @groupinfo event_list caption="Tegevused" submit=no
-	@groupinfo goals_edit caption="Muuda" parent=event_list submit=no
-	@groupinfo goals_gantt caption="Vaata" parent=event_list submit=no
+	@groupinfo goals_edit caption="Tegevused tabelis" parent=event_list submit=no
+	@groupinfo goals_gantt caption="Tegevused voop&otilde;hiselt" parent=event_list submit=no
 	@groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no parent=event_list
 	@groupinfo req caption="N&otilde;uded" submit=no parent=event_list
 	@groupinfo req_process caption="N&otilde;uded protsessidega" submit=no parent=event_list
-	@groupinfo stats caption="Statistika" submit=no parent=event_list
 	@groupinfo stats_entry caption="Vali t&uuml;&uuml;bid" parent=event_list
 
 @groupinfo event_list_premise caption="Tegevused eeldustegevuste p&otilde;hiselt" submit=no
@@ -350,6 +394,11 @@
 	@groupinfo bills_list caption="Arvete nimekiri" submit=no parent=bills
 	@groupinfo create_bill caption="Maksmata t&ouml;&ouml;d" submit=no parent=bills
 @groupinfo team caption="Meeskond" submit=no
+
+@groupinfo reports caption="Aruanded" submit=no
+	@groupinfo stats caption="T&ouml;&ouml;aja aruanne" submit=no parent=reports
+	@groupinfo stats_money caption="Rahavoo aruanne" submit=no parent=reports
+
 @groupinfo transl caption=T&otilde;lgi
 
 
