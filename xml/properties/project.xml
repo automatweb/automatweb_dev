@@ -785,6 +785,7 @@
             <type>textbox</type>
             <captionside>top</captionside>
             <store>no</store>
+	    <parent>task_types_search_lay</parent>
             <field>search_part</field>
             <caption>Osaleja</caption>
       </property>
@@ -792,7 +793,8 @@
             <name>search_start</name>
             <table>objects</table>
             <group>goals_edit</group>
-            <type>date_select</type>
+	    <type>date_select</type>
+	    <parent>task_types_search_lay</parent>
             <captionside>top</captionside>
             <store>no</store>
             <field>search_start</field>
@@ -802,7 +804,8 @@
             <name>search_end</name>
             <table>objects</table>
             <group>goals_edit</group>
-            <type>date_select</type>
+	    <type>date_select</type>
+	    <parent>task_types_search_lay</parent>
             <captionside>top</captionside>
             <store>no</store>
             <field>search_end</field>
@@ -814,9 +817,22 @@
             <group>goals_edit</group>
             <type>text</type>
             <captionside>top</captionside>
-            <store>no</store>
+	    <store>no</store>
+	    <parent>task_types_search_lay</parent>
             <field>search_type</field>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;pide kaupa</caption>
+      </property>
+      <property>
+	      <name>tasks_search_sbt</name>
+	      <table>objects</table>
+	      <group>goals_edit</group>
+	      <type>submit</type>
+	      <captionside>top</captionside>
+	      <parent>task_types_search_lay</parent>
+	      <no_caption>1</no_caption>
+	      <store>no</store>
+	      <field>files_search_sbt</field>
+	      <caption>Otsi</caption>
       </property>
       <property>
             <name>goal_table</name>
@@ -1505,15 +1521,13 @@
             </goal_vb>
             <task_types_tree_left>
                   <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Eesm&amp;amp;auml;rgid</area_caption>
-                  <parent>goal_vb</parent>
+		  <parent>goal_vb</parent>
                   <group>goals_edit</group>
             </task_types_tree_left>
             <task_types_tree_lay>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Eesm&amp;amp;auml;rgid</area_caption>
+		  <area_caption>tyypide kaupa</area_caption>
                   <parent>task_types_tree_left</parent>
                   <group>goals_edit</group>
             </task_types_tree_lay>

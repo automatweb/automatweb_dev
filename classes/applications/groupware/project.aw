@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.149 2009/01/27 16:57:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.150 2009/01/27 21:29:57 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -273,27 +273,29 @@
 
 		@layout task_types_tree_left type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=goal_vb
 
-			@layout task_types_tree_lay type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=task_types_tree_left
+			@layout task_types_tree_lay type=vbox closeable=1 area_caption=Puu parent=task_types_tree_left
 
-				@property task_types_tree type=treeview parent=goal_vb no_caption=1 parent=task_types_tree_lay
+				@property task_types_tree type=treeview no_caption=1 parent=task_types_tree_lay
 
 			@layout task_types_search_lay type=vbox closeable=1 area_caption=Otsinguparameetrid parent=task_types_tree_left
 
- 				@property search_part type=textbox captionside=top store=no
+ 				@property search_part type=textbox captionside=top store=no parent=task_types_search_lay
 				@caption Osaleja
 			
-				@property search_start type=date_select captionside=top store=no
+				@property search_start type=date_select captionside=top store=no parent=task_types_search_lay
 				@caption Algus
 
-				@property search_end type=date_select captionside=top store=no
+				@property search_end type=date_select captionside=top store=no parent=task_types_search_lay
 				@caption L&otilde;pp
 			
-				@property search_type type=text captionside=top store=no
+				@property search_type type=text captionside=top store=no parent=task_types_search_lay
 				@caption T&uuml;&uuml;pide kaupa
+
+				@property tasks_search_sbt type=submit captionside=top parent=task_types_search_lay no_caption=1
+				@caption Otsi
 
 		@layout task_table type=vbox closeable=1 area_caption=Tegevused parent=goal_vb
 			@property goal_table type=table parent=task_table no_caption=1
-
 
 @default group=goals_gantt
 	@property goals_gantt type=text store=no no_caption=1
@@ -521,6 +523,36 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "search_part":
+				$data["size"] = 34;
+			case "search_part":
+			case "search_start":
+			case "search_end":
+				$data["value"] = $arr["request"][$data["name"]];
+				break;
+			case "search_type":
+				$data["value"]= html::checkbox(array(
+					"name" => "search_type[".CL_TASK."]",
+					"value" => 1,
+					"checked" => $arr["request"][$data["name"]][CL_TASK] ? 1 : 0
+				))." ".t("Toimetus")."<br>".
+				$data["value"] = html::checkbox(array(
+					"name" => "search_type[".CL_CRM_MEETING."]",
+					"value" => 1,
+					"checked" => $arr["request"][$data["name"]][CL_CRM_MEETING] ? 1 : 0
+				))." ".t("Kohtumine")."<br>".
+				$data["value"] = html::checkbox(array(
+					"name" => "search_type[".CL_CRM_CALL."]",
+					"value" => 1,
+					"checked" => $arr["request"][$data["name"]][CL_CRM_CALL] ? 1 : 0
+				))." ".t("K&otilde;ne")."<br>".
+				$data["value"] = html::checkbox(array(
+					"name" => "search_type[".CL_BUG."]",
+					"value" => 1,
+					"checked" => $arr["request"][$data["name"]][CL_BUG] ? 1 : 0
+				))." ".t("Arendus&uuml;lesanne");
+
+				break;
 			case "works_by_person_chart":
 				if($arr["new"])
 				{
@@ -1168,6 +1200,10 @@ class project extends class_base
 
 			case "goal_tree":
 				$this->_goal_tree($arr);
+				break;
+
+			case "task_types_tree":
+				$this->_task_types_tree($arr);
 				break;
 
 			case "work_list":
@@ -2992,11 +3028,23 @@ class project extends class_base
 		{
 		  $args["team"] = $arr["request"]["hidden_team"];
 		}
+		if($arr["request"]["group"] == "goals_edit")
+		{
+			$args["search_part"] = $arr["request"]["search_part"];
+			$args["search_start"] = $arr["request"]["search_start"];
+			$args["search_end"] = $arr["request"]["search_end"];
+			$args["search_type"] = $arr["request"]["search_type"];
+		}
+
 		$args["team_search_person"] = $arr["request"]["team_search_person"];
 		$args["team_search_co"] = $arr["request"]["team_search_co"];
-		$args["files_find_name"] = $arr["request"]["files_find_name"];
-		$args["files_find_type"] = $arr["request"]["files_find_type"];
-		$args["files_find_comment"] = $arr["request"]["files_find_comment"];
+
+		if($arr["request"]["group"] == "files")
+		{
+			$args["files_find_name"] = $arr["request"]["files_find_name"];
+			$args["files_find_type"] = $arr["request"]["files_find_type"];
+			$args["files_find_comment"] = $arr["request"]["files_find_comment"];
+		}
 	}
 
 	function callback_mod_reforb($arr)
@@ -3342,7 +3390,7 @@ class project extends class_base
 			"parent" => "new",
 			"link" => html::get_new_url(
 				CL_TASK,
-				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
+				$arr["obj_inst"]->id(),
 				array(
 					"return_url" => get_ru(),
 					"alias_to_org" => $ord,
@@ -3357,7 +3405,7 @@ class project extends class_base
 			"parent" => "new",
 			"link" => html::get_new_url(
 				CL_CRM_CALL,
-				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
+				$arr["obj_inst"]->id(),
 				array(
 					"return_url" => get_ru(),
 					"alias_to_org" => $ord,
@@ -3372,7 +3420,7 @@ class project extends class_base
 			"parent" => "new",
 			"link" => html::get_new_url(
 				CL_CRM_MEETING,
-				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
+				$arr["obj_inst"]->id(),
 				array(
 					"return_url" => get_ru(),
 					"alias_to_org" => $ord,
@@ -3381,6 +3429,22 @@ class project extends class_base
 				)
 			),
 			"text" => t("Kohtumine"),
+		));
+
+		$t->add_menu_item(array(
+			"name" => "new_bug",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_BUG,
+				$arr["obj_inst"]->id(),
+				array(
+					"return_url" => get_ru(),
+					"alias_to_org" => $ord,
+					"set_proj" => $arr["obj_inst"]->id(),
+					"set_pred" => $arr["request"]["tf"]
+				)
+			),
+			"text" => t("Arendus&uuml;lesanne"),
 		));
 
 		$t->add_button(array(
@@ -3794,6 +3858,15 @@ class project extends class_base
 //			case "bills_left":
 //				$arr["area_caption"] = sprintf(t("%s arved staatuste kaupa"), $arr["obj_inst"]->name());
 //				break;
+			case "task_types_search_lay":
+				$arr["area_caption"] = sprintf(t("Otsingu parameetrid"));
+				break;	
+			case "task_types_tree_lay":
+				$arr["area_caption"] = sprintf(t("Tegevused t&uuml;&uuml;pide kaupa"));
+				break;	
+			case "task_table":
+				$arr["area_caption"] = sprintf(t("Projekti %s tegevused"), $arr["obj_inst"]->name());
+				break;
 			case "create_bill_table":
 				$arr["area_caption"] = sprintf(t("Projekti %s tegemata t&ouml;&ouml;de nimekiri"), $arr["obj_inst"]->name());
 				break;
@@ -4025,6 +4098,208 @@ class project extends class_base
 		exit_function("bills_impl::_get_bill_task_list");
 	}
 
+	function _task_types_tree($arr)
+	{
+		classload("core/icons");
+		$act = $arr["request"]["tf"];
+		$tv =& $arr["prop"]["vcl_inst"];
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_task_types",
+		));
+
+		$types = array(
+			CL_BUG => "Arendus&uuml;lesanded",
+			CL_TASK => t("Toimetused"),
+			CL_CRM_MEETING => t("Kohtumised"),
+			CL_CRM_CALL => t("K&otilde;ned"),
+			1 => t("K&ouml;ik"),
+		);
+
+		$bug_inst = get_instance(CL_BUG);
+		$bugs_data = $arr["obj_inst"]->get_bugs_data();
+		$bugs_count = array();
+		foreach($bugs_data as $bd)
+		{
+			$bugs_count[$bd["bug_status"]] ++;
+		}
+
+		$tasks_data = $arr["obj_inst"]->get_all_tasks_data();
+		$tasks_count = array();
+		foreach($tasks_data as $bd)
+		{
+			$tasks_count[$bd["class_id"]][$bd["is_done"]] ++;
+		}
+
+		$count = 0;
+		$count += array_sum($bugs_count);
+		$count += array_sum($tasks_count);
+
+		foreach($types as $clid => $name)
+		{
+			if($clid == CL_BUG)
+			{
+				$name = $name." (".array_sum($bugs_count).")"; 
+			}
+
+			if($tasks_count[$clid])
+			{
+				$name = $name." (".array_sum($tasks_count[$clid]).")";
+			}
+
+			if($clid == 1)
+			{
+				$name = $name." (".$count.")";
+			}
+
+			$tv->add_item(0,array(
+				"name" => $clid == $act ? "<b>".$name."</b>" : $name,
+				"id" => $clid,
+				"url" => aw_url_change_var("tf", $clid),
+			));
+		}
+
+		//bugi staatuste kaupa
+		foreach($bug_inst->bug_statuses as $stat_id => $caption)
+		{
+			if($bugs_count[$stat_id])
+			{
+				$caption = $caption." (".$bugs_count[$stat_id].")";
+			}
+			$tf = CL_BUG."_".$stat_id;
+			$tv->add_item(CL_BUG,array(
+				"name" => $act == $tf ? "<b>".$caption."</b>" : $caption,
+				"id" => $tf,
+				"url" => aw_url_change_var("tf", $tf),
+			));
+		}
+
+		//taskid valmis ja mitte
+		$clid = CL_TASK;
+		$tf = $clid."_0";
+		$nm = t("Tegemata");
+		if($tasks_count[$clid][0])
+		{
+			$nm = $nm." (".$tasks_count[$clid][0].")";
+		}
+
+		$tv->add_item($clid,array(
+			"name" => $act == $tf ? "<b>".$nm."</b>" :$nm ,
+			"id" => $tf,
+			"url" => aw_url_change_var("tf", $tf),
+		));
+		$tf = $clid."_1";
+		$nm = t("Valmis");
+		if($tasks_count[$clid][8])
+		{
+			$nm = $nm." (".$tasks_count[$clid][8].")";
+		}
+		$tv->add_item($clid,array(
+			"name" => $act == $tf ? "<b>".$nm."</b>" : $nm,
+			"id" => $tf,
+				"url" => aw_url_change_var("tf", $tf),
+		));
+
+		//kohtumised valmis ja mitte
+		$clid = CL_CRM_MEETING;
+		$tf = $clid."_0";
+		$nm = t("Tulekul");
+		if($tasks_count[$clid][0])
+		{
+			$nm = $nm." (".$tasks_count[$clid][0].")";
+		}
+		$tv->add_item($clid,array(
+			"name" => $act == $tf ? "<b>".$nm."</b>" : $nm,
+			"id" => $tf,
+				"url" => aw_url_change_var("tf", $tf),
+		));
+		$tf = $clid."_1";
+		$nm = t("L&otilde;pppenud");
+		if($tasks_count[$clid][8])
+		{
+			$nm = $nm." (".$tasks_count[$clid][8].")";
+		}
+		$tv->add_item($clid,array(
+			"name" => $act == $tf ? "<b>".$nm."</b>" : $nm,
+			"id" => $tf,
+				"url" => aw_url_change_var("tf", $tf),
+		));
+
+		//kohtumised valmis ja mitte
+		$clid = CL_CRM_CALL;
+		$tf = $clid."_0";
+		$nm = t("Plaanis olevad");
+		if($tasks_count[$clid][0])
+		{
+			$nm = $nm." (".$tasks_count[$clid][0].")";
+		}
+		$tv->add_item($clid,array(
+			"name" => $act == $tf ? "<b>".$nm."</b>" : $nm,
+			"id" => $tf,
+				"url" => aw_url_change_var("tf", $tf),
+		));
+		$tf = $clid."_1";
+		$nm = t("Tehtud");
+		if($tasks_count[$clid][8])
+		{
+			$nm = $nm." (".$tasks_count[$clid][8].")";
+		}
+		$tv->add_item($clid,array(
+			"name" => $act == $tf ? "<b>".$nm."</b>" : $nm,
+			"id" => $tf,
+				"url" => aw_url_change_var("tf", $tf),
+		));
+
+
+
+/*
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
+//			"project" => $arr["obj_inst"]->id(),
+			"CL_TASK.RELTYPE_PROJECT.id" => $arr["obj_inst"]->id(),
+			"is_goal" => 1,
+//			"lang_id" => 1,
+			"brother_of" => new obj_predicate_prop("id")
+		));
+		$ids = $this->make_keys($ol->ids());
+		// now make tree, based on predicate tasks
+
+
+
+		foreach($ol->arr() as $o)
+		{
+			$nm = parse_obj_name($o->name());
+			if ($arr["request"]["tf"] == $o->id())
+			{
+				$nm = "<b>".$nm."</b>";
+			}
+
+			$pt = $o->prop("predicates");
+			if (is_array($pt))
+			{
+				$pt = $this->make_keys($pt);
+				unset($pt["0"]);
+				$pt = reset($pt);
+			}
+			if (!$this->can("view", $pt))
+			{
+				$pt = $arr["obj_inst"]->id();
+			}
+			if (!isset($ids[$pt]))
+			{
+				$pt = $arr["obj_inst"]->id();
+			}
+			$tv->add_item($pt, array(
+				"name" => $nm,
+				"id" => $o->id(),
+				"url" => aw_url_change_var("tf", $o->id()),
+				"iconurl" => icons::get_icon_url(CL_MENU)
+			));
+		}*/
+	
+	}
 
 	function _goal_tree($arr)
 	{
@@ -4130,11 +4405,81 @@ class project extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_goal_table($t);
 
-		$parent = is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : new obj_predicate_compare(OBJ_COMP_NULL);
+//		$parent = is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : new obj_predicate_compare(OBJ_COMP_NULL);
 
-		$goals = $arr["obj_inst"]->get_goals($parent);
 
-		foreach($goals->arr() as $goal)
+		if(isset($arr["request"]["tf"]))
+		{
+			$tf = explode("_" , $arr["request"]["tf"]);
+			switch($tf[0])
+			{
+				case CL_BUG:
+					$tasks = $arr["obj_inst"]->get_bugs(array("status" => $tf[1]));
+					break;
+	
+				case CL_TASK:
+					$tasks = $arr["obj_inst"]->get_tasks(array("done" => $tf[1]));
+					break;
+				case CL_CRM_MEETING:
+					$tasks = $arr["obj_inst"]->get_meetings(array("done" => $tf[1]));
+					break;
+				case CL_CRM_CALL:
+					$tasks = $arr["obj_inst"]->get_calls(array("done" => $tf[1]));
+					break;
+				case 1:
+					$tasks = $arr["obj_inst"]->get_goals();
+					break;
+				default:
+					$tasks = new object_list();
+			}
+		}
+		else
+		{
+			$tasks = new object_list();
+
+			if($arr["request"]["search_part"] || $arr["request"]["search_start"] || $arr["request"]["search_end"] || $arr["request"]["search_type"])
+			{
+				$search = array();
+				if($arr["request"]["search_part"])
+				{
+					$search["participant"] = $arr["request"]["search_part"];
+				}
+				if($arr["request"]["search_start"])
+				{
+					$search["from"] = date_edit::get_timestamp($arr["request"]["search_start"]);
+				}
+				if($arr["request"]["search_end"])
+				{
+					$search["to"] = date_edit::get_timestamp($arr["request"]["search_end"]);
+				}
+				
+				if(!$arr["request"]["search_type"] || $arr["request"]["search_type"][CL_BUG])
+				{
+					$tasks->add($arr["obj_inst"]->get_bugs($search));
+				}
+
+				if(!$arr["request"]["search_type"] || $arr["request"]["search_type"][CL_TASK])
+				{
+					$tasks->add($arr["obj_inst"]->get_tasks($search));
+				}
+
+				if(!$arr["request"]["search_type"] || $arr["request"]["search_type"][CL_CRM_MEETING])
+				{
+					$tasks->add($arr["obj_inst"]->get_meetings($search));
+				}
+				if(!$arr["request"]["search_type"] || $arr["request"]["search_type"][CL_CRM_CALL])
+				{
+					$tasks->add($arr["obj_inst"]->get_calls($search));
+				}
+			}
+		}
+
+
+//		$goals = new object_list();
+
+		//$goals = $arr["obj_inst"]->get_goals($parent);
+
+		foreach($tasks->arr() as $goal)
 		{
 			$goal_data = array(
 				"name" => html::href(array(
@@ -4163,8 +4508,7 @@ class project extends class_base
 
 			$t->define_data($goal_data);
 		}
-
-//		$t->data_from_ol($goals, array("change_col" => "name"));
+//		$t->data_from_ol($goals, array("change_col" => "name"));*/
 	}
 
 	/**

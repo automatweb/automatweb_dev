@@ -50,52 +50,93 @@ class project_obj extends _int_object
 			Filter date from
 		@param to optional type=int
 			Filter date to
+		@param done optional type=bool
 		@returns
 			object_list 
 	**/
-	function get_tasks($arr)
+	public function get_tasks($arr)
 	{
-		$filter = array(
-			"lang_id" => array(),
-			"site_id" => array(),
-			"class_id" => CL_TASK,
-			"project" => $this->id(),
-			"brother_of" => new obj_predicate_prop("id"),
-		);
+		$arr["clid"] = CL_TASK;
+		$filter = $this->_get_tasks_filter($arr);
+		$ol = new object_list($filter);
+		return $ol;
+	}
 
-		if ($arr["from"] > 1 && $arr["to"])
-		{
-			$time_filt = new obj_predicate_compare(OBJ_COMP_BETWEEN, $arr["from"], $arr["to"]);
-		}
-		else
-		if ($arr["from"] > 1)
-		{
-			$time_filt = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["from"]);
-		}
-		else
-		if ($arr["to"] > 1)
-		{
-			$time_filt = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["to"]);
-		}
+	/** Returns project meetings
+		@attrib api=1 params=name
+		@param from optional type=int
+			Filter date from
+		@param to optional type=int
+			Filter date to
+		@param done optional type=bool
+		@returns
+			object_list 
+	**/
+	public function get_meetings($arr)
+	{
+		$arr["clid"] = CL_CRM_MEETING;
+		$filter = $this->_get_tasks_filter($arr);
+		$ol = new object_list($filter);
+		return $ol;
+	}
 
-		if($time_filt)
-		{
-			$filter["CL_TASK.RELTYPE_ROW.date"] = $time_filt;
-		}
-
+	/** Returns project calls
+		@attrib api=1 params=name
+		@param from optional type=int
+			Filter date from
+		@param to optional type=int
+			Filter date to
+		@param done optional type=bool
+		@returns
+			object_list 
+	**/
+	public function get_calls($arr)
+	{
+		$arr["clid"] = CL_CRM_CALL;
+		$filter = $this->_get_tasks_filter($arr);
 		$ol = new object_list($filter);
 		return $ol;
 	}
 
 	/** returns all bugs related to current project
-		@attrib api=1 params=pos
+		@attrib api=1 params=name
 		@param start optional
 			time between start
 		@param end optional
 			time between end
+		@param status optional type=bool
+		@param participant optional type=string/oid
 		@returns object list
 	**/
-	function get_bugs($start = null, $end=null)
+	public function get_bugs($arr = array())
+	{
+		$filter = $this->_get_bugs_filter($arr);
+		$ol = new object_list($filter);
+		return $ol;
+	}
+
+	/** returns bugs related to current project
+		@attrib api=1 params=name
+		@param from optional type=int
+			time between start
+		@param to optional
+			time between end type=int
+		@param status optional type=int
+			bug status
+		@returns object list
+	**/
+	public function get_bugs_data($arr = array())
+	{
+		$filter = $this->_get_bugs_filter($arr);
+		$bugres = array(
+			CL_BUG => array("bug_status"),
+		);
+		$rows_arr = new object_data_list($filter , $bugres);
+
+		return $rows_arr->list_data;
+	}
+
+	private function _get_bugs_filter($arr = array())
 	{
 		$filter = array(
 			"lang_id" => array(),
@@ -105,24 +146,43 @@ class project_obj extends _int_object
 			"sort_by" => "objects.created desc",
 		);
 
-		if ($start && $end)
+		extract($arr);
+
+		if ($from && $to)
 		{
-			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_OR_EQ, $start, $end);
+			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $from-1, $to);
 		}
 		else
-		if ($start)
+		if ($from)
 		{
-			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start);
+			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
 		}
 		else
-		if ($end)
+		if ($to)
 		{
-			$filt["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end);
+			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
+		}
+		
+		if($participant)
+		{
+			if(is_oid($participant))
+			{
+				$filter["CL_BUG.RELTYPE_MONITOR"] = $participant;
+			}
+			else
+			{
+				$filter["CL_BUG.RELTYPE_MONITOR.name"] = "%".$participant."%";;
+			}
+
 		}
 
-		$ol = new object_list($filter);
+		if($status)
+		{
+			$filter["bug_status"] = $status;
+		}
 
-		return $ol;
+		return $filter;
+		
 	}
 
 	/** returns all billable bugs related to current project
@@ -214,30 +274,6 @@ class project_obj extends _int_object
 		}
 		$com_ol = new object_list($filt);
 		return $com_ol;
-	}
-
-	function get_calls()
-	{
-		$filter = array(
-			"lang_id" => array(),
-			"site_id" => array(),
-			"class_id" => CL_CRM_CALL,
-			"project" => $this->id(),
-		);
-		$ol = new object_list($filter);
-		return $ol;
-	}
-
-	function get_meetings()
-	{
-		$filter = array(
-			"lang_id" => array(),
-			"site_id" => array(),
-			"class_id" => CL_CRM_MEETING,
-			"project" => $this->id(),
-		);
-		$ol = new object_list($filter);
-		return $ol;
 	}
 	
 	function get_products()
@@ -694,5 +730,133 @@ class project_obj extends _int_object
 //		}
 		return $goals;
 	}
+
+	/** returns all tasks, meetings and calls data related to current project
+		@attrib api=1 params=name
+		@returns object list
+	**/
+	public function get_all_tasks_data($arr = array())
+	{
+		$filter = $this->_get_tasks_filter($arr);
+		$bugres = array(
+			CL_TASK => array("end", "is_done"),
+		);
+		$rows_arr = new object_data_list($filter , $bugres);
+
+		return $rows_arr->list_data;
+	}
+
+	private function _get_tasks_filter($arr = array())
+	{
+		$filter = array(
+			"lang_id" => array(),
+			"site_id" => array(),
+			//"class_id" => CL_TASK,
+			"brother_of" => new obj_predicate_prop("id"),
+		);
+
+		$clids = array(CL_TASK => "CL_TASK", CL_CRM_MEETING => "CL_CRM_MEETING" , CL_CRM_CALL => "CL_CRM_CALL");
+		if($arr["clid"])
+		{
+			$search_clids = array($arr["clid"]);
+		}
+		else
+		{
+			$search_clids = array_keys($clids);
+		}
+
+		$filter["class_id"] = $search_clids;
+
+		$project_cond = array();
+		foreach($search_clids as $c)
+		{
+			$project_cond[$clids[$c].".RELTYPE_PROJECT"] = $this->id();
+		}
+		$filter[] = new object_list_filter(array(
+			"logic" => "OR",
+			"conditions" => $project_cond,
+		));
+
+		if ($arr["from"] > 1 && $arr["to"])
+		{
+			$time_filt = new obj_predicate_compare(OBJ_COMP_BETWEEN, $arr["from"], $arr["to"]);
+		}
+		else
+		if ($arr["from"] > 1)
+		{
+			$time_filt = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["from"]);
+		}
+		else
+		if ($arr["to"] > 1)
+		{
+			$time_filt = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["to"]);
+		}
+
+		if(isset($arr["done"]))
+		{
+			if($arr["done"])
+			{
+				$filter["is_done"] = 1;
+			}
+			else
+			{
+				$filter["is_done"] = new obj_predicate_not(1);
+			}
+		}
+
+		if($time_filt)
+		{
+			$time_cond = array();
+			foreach($search_clids as $c)
+			{
+//				$time_cond[$clids[$c].".RELTYPE_ROW.date"] = $time_filt;
+				$time_cond[$clids[$c].".start1"] = $time_filt;
+				$time_cond[$clids[$c].".end"] = $time_filt;
+			}
+			$filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => $time_cond,
+			));
+		}
+
+		//kui k6igile osalus, siis toimisk
+		if($arr["participant"])
+		{
+			$rows_filter = array("class_id" => CL_TASK_ROW);
+			$rows_filter["CL_TASK_ROW.RELTYPE_PROJECT"] = $this->id();
+			$rows_filter["task.class_id"] = $search_clids;
+			if(is_oid($arr["participant"]))
+			{
+				$rows_filter["CL_TASK_ROW.RELTYPE_IMPL"] = $arr["participant"];
+			}
+			else
+			{
+				$rows_filter["CL_TASK_ROW.RELTYPE_IMPL.name"] = "%".$arr["participant"]."%";
+			}
+			$task_ids = array();
+
+			$rowsres = array(
+				CL_TASK_ROW => array(
+					"task" => "task",
+				),
+			);
+			$rows_arr = new object_data_list($rows_filter , $rowsres);
+
+			foreach($rows_arr->list_data as $bcs)
+			{
+				$task_ids[$bcs["task"]] = $bcs["task"];
+			}
+			if(sizeof($task_ids))
+			{
+				$filter["oid"] = $task_ids;
+			}
+			else
+			{
+				$filter["oid"] = 1;
+			}
+		}
+		return $filter;
+	}
+
 }
 ?>
