@@ -769,21 +769,61 @@
             <field>goal_tb</field>
       </property>
       <property>
-            <name>goal_tree</name>
+            <name>task_types_tree</name>
             <table>objects</table>
             <group>goals_edit</group>
             <type>treeview</type>
-            <parent>goal_tree_lay</parent>
+            <parent>task_types_tree_lay</parent>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>goal_tree</field>
+            <field>task_types_tree</field>
+      </property>
+      <property>
+            <name>search_part</name>
+            <table>objects</table>
+            <group>goals_edit</group>
+            <type>textbox</type>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>search_part</field>
+            <caption>Osaleja</caption>
+      </property>
+      <property>
+            <name>search_start</name>
+            <table>objects</table>
+            <group>goals_edit</group>
+            <type>date_select</type>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>search_start</field>
+            <caption>Algus</caption>
+      </property>
+      <property>
+            <name>search_end</name>
+            <table>objects</table>
+            <group>goals_edit</group>
+            <type>date_select</type>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>search_end</field>
+            <caption>L&amp;amp;otilde;pp</caption>
+      </property>
+      <property>
+            <name>search_type</name>
+            <table>objects</table>
+            <group>goals_edit</group>
+            <type>text</type>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>search_type</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;pide kaupa</caption>
       </property>
       <property>
             <name>goal_table</name>
             <table>objects</table>
             <group>goals_edit</group>
             <type>table</type>
-            <parent>goal_vb</parent>
+            <parent>task_table</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>goal_table</field>
@@ -881,6 +921,26 @@
             <field>req_tbl</field>
       </property>
       <property>
+            <name>stats_by_person_chart</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>stats_by_person</parent>
+            <store>no</store>
+            <field>stats_by_person_chart</field>
+      </property>
+      <property>
+            <name>stats_by_type_chart</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>stats_by_type</parent>
+            <store>no</store>
+            <field>stats_by_type_chart</field>
+      </property>
+      <property>
             <name>stats</name>
             <table>objects</table>
             <group>stats</group>
@@ -898,6 +958,46 @@
             <no_caption>1</no_caption>
             <field>stats_table</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid inimeste kaupa</caption>
+      </property>
+      <property>
+            <name>stats_money_by_person_chart</name>
+            <table>objects</table>
+            <group>stats_money</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>stats_money_by_person</parent>
+            <store>no</store>
+            <field>stats_money_by_person_chart</field>
+      </property>
+      <property>
+            <name>stats_by_time_chart</name>
+            <table>objects</table>
+            <group>stats_money</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>stats_money_by_time</parent>
+            <store>no</store>
+            <field>stats_by_time_chart</field>
+      </property>
+      <property>
+            <name>stats_money</name>
+            <table>objects</table>
+            <group>stats_money</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stats_money</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
+      </property>
+      <property>
+            <name>stats_money_table</name>
+            <table>objects</table>
+            <group>stats_money</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stats_money_table</field>
+            <caption>Raha inimeste kaupa</caption>
       </property>
       <property>
             <name>stats_entry_table</name>
@@ -973,12 +1073,12 @@
                   <submit>no</submit>
             </event_list>
             <goals_edit>
-                  <caption>Muuda</caption>
+                  <caption>Tegevused tabelis</caption>
                   <parent>event_list</parent>
                   <submit>no</submit>
             </goals_edit>
             <goals_gantt>
-                  <caption>Vaata</caption>
+                  <caption>Tegevused voop&amp;amp;otilde;hiselt</caption>
                   <parent>event_list</parent>
                   <submit>no</submit>
             </goals_gantt>
@@ -997,11 +1097,6 @@
                   <submit>no</submit>
                   <parent>event_list</parent>
             </req_process>
-            <stats>
-                  <caption>Statistika</caption>
-                  <submit>no</submit>
-                  <parent>event_list</parent>
-            </stats>
             <stats_entry>
                   <caption>Vali t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
                   <parent>event_list</parent>
@@ -1061,6 +1156,20 @@
                   <caption>Meeskond</caption>
                   <submit>no</submit>
             </team>
+            <reports>
+                  <caption>Aruanded</caption>
+                  <submit>no</submit>
+            </reports>
+            <stats>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;aja aruanne</caption>
+                  <submit>no</submit>
+                  <parent>reports</parent>
+            </stats>
+            <stats_money>
+                  <caption>Rahavoo aruanne</caption>
+                  <submit>no</submit>
+                  <parent>reports</parent>
+            </stats_money>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -1394,13 +1503,34 @@
                   <group>goals_edit</group>
                   <area_caption></area_caption>
             </goal_vb>
-            <goal_tree_lay>
+            <task_types_tree_left>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Eesm&amp;amp;auml;rgid</area_caption>
                   <parent>goal_vb</parent>
                   <group>goals_edit</group>
-            </goal_tree_lay>
+            </task_types_tree_left>
+            <task_types_tree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Eesm&amp;amp;auml;rgid</area_caption>
+                  <parent>task_types_tree_left</parent>
+                  <group>goals_edit</group>
+            </task_types_tree_lay>
+            <task_types_search_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Otsinguparameetrid</area_caption>
+                  <parent>task_types_tree_left</parent>
+                  <group>goals_edit</group>
+            </task_types_search_lay>
+            <task_table>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Tegevused</area_caption>
+                  <parent>goal_vb</parent>
+                  <group>goals_edit</group>
+            </task_table>
             <req_l>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -1431,6 +1561,54 @@
                   </group>
                   <area_caption></area_caption>
             </req_tbl_l>
+            <stats_charts>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>stats</group>
+            </stats_charts>
+            <stats_by_person>
+                  <parent>stats_charts</parent>
+                  <type>vbox</type>
+                  <group>stats</group>
+                  <area_caption></area_caption>
+            </stats_by_person>
+            <stats_by_type>
+                  <parent>stats_charts</parent>
+                  <type>vbox</type>
+                  <group>stats</group>
+                  <area_caption></area_caption>
+            </stats_by_type>
+            <stats_top>
+                  <type>vbox</type>
+                  <area_caption>Projektiga&amp;amp;nbsp;seotud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;tunnid</area_caption>
+                  <group>stats</group>
+            </stats_top>
+            <stats_money_charts>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>stats_money</group>
+            </stats_money_charts>
+            <stats_money_by_person>
+                  <parent>work_charts</parent>
+                  <type>vbox</type>
+                  <group>stats_money</group>
+                  <area_caption></area_caption>
+            </stats_money_by_person>
+            <stats_money_by_time>
+                  <parent>work_charts</parent>
+                  <type>vbox</type>
+                  <group>stats_money</group>
+                  <area_caption></area_caption>
+            </stats_money_by_time>
+            <stats_money_top>
+                  <type>vbox</type>
+                  <area_caption>Projektiga&amp;amp;nbsp;seotud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;tunnid</area_caption>
+                  <group>stats_money</group>
+            </stats_money_top>
       </layout>
 </properties>
 
