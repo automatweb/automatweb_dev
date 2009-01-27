@@ -237,33 +237,12 @@
             <group>org</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltyupe>RELTYPE_OS_LEGAL_FORM</reltyupe>
-            <no_edit>1</no_edit>
-            <automatic>1</automatic>
+            <type>chooser</type>
             <multiple>1</multiple>
             <store>no</store>
             <captionside>top</captionside>
             <parent>o_left_bottom</parent>
-            <size>5</size>
             <caption>Ettev&amp;amp;otilde;lusvorm</caption>
-      </property>
-      <property>
-            <name>os_city</name>
-            <table>objects</table>
-            <group>org</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_OS_CITY</reltype>
-            <no_edit>1</no_edit>
-            <automatic>1</automatic>
-            <multiple>1</multiple>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>o_left_bottom</parent>
-            <size>5</size>
-            <caption>Linn</caption>
       </property>
       <property>
             <name>os_county</name>
@@ -283,12 +262,30 @@
             <caption>Maakond</caption>
       </property>
       <property>
+            <name>os_city</name>
+            <table>objects</table>
+            <group>org</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OS_CITY</reltype>
+            <no_edit>1</no_edit>
+            <automatic>1</automatic>
+            <multiple>1</multiple>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>o_left_bottom</parent>
+            <size>5</size>
+            <caption>Linn</caption>
+      </property>
+      <property>
             <name>os_show_in_webview</name>
             <table>objects</table>
             <group>org</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
+            <type>chooser</type>
+            <multiple>1</multiple>
             <store>no</store>
             <captionside>top</captionside>
             <parent>o_left_bottom</parent>
