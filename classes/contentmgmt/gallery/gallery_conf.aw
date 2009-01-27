@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.20 2009/01/27 19:09:54 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.21 2009/01/27 19:37:51 instrumental Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes maintainer=kristo
@@ -48,6 +48,9 @@
 	@property v_tn_subimage type=checkbox ch_value=1 
 	@caption Kas v&auml;ike pilt on kadreeritud
 
+	@property v_tn_subimage_stretch type=checkbox ch_value=1 
+	@caption Kas v&auml;ikest ei venitata
+
 	@property v_tn_subimage_left type=textbox size=5 
 	@caption Mitu pikslit vasakult kaader algab
 
@@ -77,6 +80,9 @@
 
 	@property h_tn_subimage type=checkbox ch_value=1
 	@caption Kas v&auml;ike pilt on kadreeritud
+
+	@property h_tn_subimage_stretch type=checkbox ch_value=1 
+	@caption Kas v&auml;ikest pilti ei venitata
 
 	@property h_tn_subimage_left type=textbox size=5 
 	@caption Mitu pikslit vasakult kaader algab
@@ -324,6 +330,7 @@ class gallery_conf extends class_base
 				$si_width = $conf->prop("h_".$prefix."subimage_width");
 				$si_height = $conf->prop("h_".$prefix."subimage_height");
 			}
+			$dont_stretch = $conf->prop("v_".$prefix."subimage_stretch") == 1;
 		}
 		else
 		{
@@ -337,6 +344,17 @@ class gallery_conf extends class_base
 				$si_width = $conf->prop("v_".$prefix."subimage_width");
 				$si_height = $conf->prop("v_".$prefix."subimage_height");
 			}
+			$dont_stretch = $conf->prop("v_".$prefix."subimage_stretch") == 1;
+		}
+
+		if($dont_stretch)
+		{
+			// Select maximum width, height allowed so that the proportions stay unchanged.
+			$ratio_w = $width ? $w / $width : 1;
+			$ratio_h = $height ? $h / $height : 1;
+			$ratio = max($ratio_w, $ratio_h);
+			$width = (int)($w * $ratio);
+			$height = (int)($h * $height);
 		}
 
 		// check if the user only specified one of width/height and then calc the other one
