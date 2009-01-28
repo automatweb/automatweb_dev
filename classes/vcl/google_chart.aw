@@ -153,6 +153,9 @@ class google_chart extends aw_template
 	@param height required type=int
 	@comment
 		Set chart's size in pixels. Required to display a chart.
+		Chart height must be at most 1,000 pixels.
+		Chart width must be at most 1,000 pixels.
+		Chart may contain at most 300,000 pixels.
 	@examples
 		$ch->set_size(array(
 			"width" => 250,
