@@ -50,7 +50,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 			@property tax_nr type=textbox table=kliendibaas_firma parent=co_top_right
 			@caption KMKohuslase nr
 
-			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first method=serialize field=meta table=objects parent=co_top_right captionside=top override_parent=this
+			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first table=objects parent=co_top_right captionside=top override_parent=this store=connect
 			@caption Organisatsiooni logo
 
 			@property firmajuht type=relpicker reltype=RELTYPE_FIRMAJUHT table=kliendibaas_firma editonly=1 parent=co_top_right
