@@ -5624,14 +5624,22 @@ class class_base extends aw_template
 					}
 				}
 				//
+				$so = 0;
 				foreach($props as $p)
 				{
+					if (!isset($ppl[$p]))
+					{
+						continue;
+					}
 					// source language value
 					$nm = "src_lng_val_".$p;
 					$ret[$nm]["name"] = $nm;
 					$ret[$nm]["caption"] = $ppl[$p]["caption"] . "<small>" . t(" (l&auml;htetekst)") . "</small>";
 					$ret[$nm]["type"] = "text";
 					$ret[$nm]["value"] = iconv(aw_global_get("charset"), "UTF-8", (isset($src_lang_vals[$p]) ? $src_lang_vals[$p] : $o->is_property($p) ? $o->prop_str($p) : ""));
+					$ret[$nm]["ord"] = ++$so;
+					unset($ret[$nm]["parent"]);
+					unset($ret[$nm]["group"]);
 
 					// translation field
 					$nm = "trans_".$lang["id"]."_".$p;
@@ -5639,15 +5647,18 @@ class class_base extends aw_template
 					$ret[$nm]["caption"] .=  "<small>" . t(" (t&otilde;lge)") . "</small>";
 					$ret[$nm]["name"] = $nm;
 					$ret[$nm]["value"] = iconv($lang["charset"], "UTF-8", $vals[$p]);
+					$ret[$nm]["ord"] = ++$so;
+					unset($ret[$nm]["parent"]);
+					unset($ret[$nm]["group"]);
 				}
-
 				$nm = "act_".$lang["id"];
 				$ret[$nm] = array(
 					"name" => $nm,
 					"caption" => t("T&otilde;lge aktiivne"),
 					"type" => "checkbox",
 					"ch_value" => 1,
-					"value" => $o->meta("trans_".$lang["id"]."_status")
+					"value" => $o->meta("trans_".$lang["id"]."_status"),
+					"ord" => ++$so
 				);
 
 				$nm = "sbt_".$lang["id"];
@@ -5655,6 +5666,7 @@ class class_base extends aw_template
 					"name" => $nm,
 					"caption" => t("Salvesta"),
 					"type" => "submit",
+					"ord" => ++$so
 				);
 
 				$nm = $this->translation_lang_var_name;
