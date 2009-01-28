@@ -44,7 +44,7 @@ class multifile_upload extends class_base
 					"id" => $fo->id(),
 					"counter" => $i++,
 					"file_name"=>$fo -> name(),
-					"file_url" => $fo->class_id() == CL_IMAGE ? $file_instance->get_url_by_id($fo->id()) : $file_instance->get_url($fo->id(), $fo->name()),
+					"file_url" => $fo->class_id() == CL_IMAGE ? (file_exists($fo->prop("file2")) ? $file_instance->get_big_url_by_id($fo->id()) : $file_instance->get_url_by_id($fo->id())) : $file_instance->get_url($fo->id(), $fo->name()),
 					"edit_url" => html::get_change_url($fo->id()),
 					"delete_url" => $this->mk_my_orb("ajax_delete_obj", array("id" => $fo->id())),
 				));
