@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.35 2009/01/02 11:58:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.36 2009/01/28 12:32:33 instrumental Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -2020,6 +2020,13 @@ class image extends class_base
 				{
 					$bigf = false;
 				}
+			}
+
+			if($o->prop("file") != $o->meta("old_file") && $bigf)
+			{
+				// If we changed the small file, change the big file also!
+				unlink($bigf);
+				$bigf = false;
 			}
 
 			if (!$bigf)

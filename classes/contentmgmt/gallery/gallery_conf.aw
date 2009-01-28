@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.23 2009/01/27 20:00:06 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.24 2009/01/28 12:32:37 instrumental Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes maintainer=kristo
@@ -42,7 +42,7 @@
 	@property resize_before_crop type=checkbox ch_value=1 
 	@caption Muuda suurust enne kadreerimist
 
-	@property img_vert 
+	@property img_vert type=text subtitle=1
 	@caption Kui pilt on k&otilde;rgem kui laiem
 
 	@property v_tn_subimage type=checkbox ch_value=1 
@@ -50,6 +50,9 @@
 
 	@property v_tn_subimage_stretch type=checkbox ch_value=1 
 	@caption V&auml;ikest pilti ei venitata
+
+	@property v_subimage_stretch type=checkbox ch_value=1 
+	@caption Suurt pilti ei venitata
 
 	@property v_tn_subimage_left type=textbox size=5 
 	@caption Mitu pikslit vasakult kaader algab
@@ -75,7 +78,7 @@
 	@property v_height type=textbox size=5 
 	@caption Suure pildi k&otilde;rgus
 
-	@property img_horiz 
+	@property img_horiz type=text subtitle=1
 	@caption Kui pilt on laiem kui k&otilde;rgem 
 
 	@property h_tn_subimage type=checkbox ch_value=1
@@ -83,6 +86,9 @@
 
 	@property h_tn_subimage_stretch type=checkbox ch_value=1 
 	@caption V&auml;ikest pilti ei venitata
+
+	@property h_subimage_stretch type=checkbox ch_value=1 
+	@caption Suurt pilti ei venitata
 
 	@property h_tn_subimage_left type=textbox size=5 
 	@caption Mitu pikslit vasakult kaader algab

@@ -98,6 +98,8 @@
             <field>meta</field>
             <method>serialize</method>
             <group>imgsize</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
             <caption>Kui pilt on k&amp;amp;otilde;rgem kui laiem</caption>
       </property>
       <property>
@@ -119,6 +121,16 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>V&amp;amp;auml;ikest pilti ei venitata</caption>
+      </property>
+      <property>
+            <name>v_subimage_stretch</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>imgsize</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Suurt pilti ei venitata</caption>
       </property>
       <property>
             <name>v_tn_subimage_left</name>
@@ -206,6 +218,8 @@
             <field>meta</field>
             <method>serialize</method>
             <group>imgsize</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
             <caption>Kui pilt on laiem kui k&amp;amp;otilde;rgem </caption>
       </property>
       <property>
@@ -227,6 +241,16 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>V&amp;amp;auml;ikest pilti ei venitata</caption>
+      </property>
+      <property>
+            <name>h_subimage_stretch</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>imgsize</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Suurt pilti ei venitata</caption>
       </property>
       <property>
             <name>h_tn_subimage_left</name>
