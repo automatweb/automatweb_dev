@@ -360,6 +360,7 @@
             <name>add_event</name>
             <table>objects</table>
             <group>add_event</group>
+            <type>callback</type>
             <callback>callback_get_add_event</callback>
             <store>no</store>
             <field>add_event</field>
@@ -773,8 +774,8 @@
             <table>objects</table>
             <group>goals_edit</group>
             <type>treeview</type>
-            <parent>task_types_tree_lay</parent>
             <no_caption>1</no_caption>
+            <parent>task_types_tree_lay</parent>
             <store>no</store>
             <field>task_types_tree</field>
       </property>
@@ -785,7 +786,7 @@
             <type>textbox</type>
             <captionside>top</captionside>
             <store>no</store>
-	    <parent>task_types_search_lay</parent>
+            <parent>task_types_search_lay</parent>
             <field>search_part</field>
             <caption>Osaleja</caption>
       </property>
@@ -793,10 +794,10 @@
             <name>search_start</name>
             <table>objects</table>
             <group>goals_edit</group>
-	    <type>date_select</type>
-	    <parent>task_types_search_lay</parent>
+            <type>date_select</type>
             <captionside>top</captionside>
             <store>no</store>
+            <parent>task_types_search_lay</parent>
             <field>search_start</field>
             <caption>Algus</caption>
       </property>
@@ -804,10 +805,10 @@
             <name>search_end</name>
             <table>objects</table>
             <group>goals_edit</group>
-	    <type>date_select</type>
-	    <parent>task_types_search_lay</parent>
+            <type>date_select</type>
             <captionside>top</captionside>
             <store>no</store>
+            <parent>task_types_search_lay</parent>
             <field>search_end</field>
             <caption>L&amp;amp;otilde;pp</caption>
       </property>
@@ -817,22 +818,22 @@
             <group>goals_edit</group>
             <type>text</type>
             <captionside>top</captionside>
-	    <store>no</store>
-	    <parent>task_types_search_lay</parent>
+            <store>no</store>
+            <parent>task_types_search_lay</parent>
             <field>search_type</field>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;pide kaupa</caption>
       </property>
       <property>
-	      <name>tasks_search_sbt</name>
-	      <table>objects</table>
-	      <group>goals_edit</group>
-	      <type>submit</type>
-	      <captionside>top</captionside>
-	      <parent>task_types_search_lay</parent>
-	      <no_caption>1</no_caption>
-	      <store>no</store>
-	      <field>files_search_sbt</field>
-	      <caption>Otsi</caption>
+            <name>tasks_search_sbt</name>
+            <table>objects</table>
+            <group>goals_edit</group>
+            <type>submit</type>
+            <captionside>top</captionside>
+            <parent>task_types_search_lay</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>tasks_search_sbt</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>goal_table</name>
@@ -937,42 +938,44 @@
             <field>req_tbl</field>
       </property>
       <property>
-            <name>stats_by_person_chart</name>
+            <name>hours_stats_by_person_chart</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>hours_stats</group>
             <type>google_chart</type>
             <no_caption>1</no_caption>
-            <parent>stats_by_person</parent>
+            <parent>hours_stats_by_person</parent>
             <store>no</store>
-            <field>stats_by_person_chart</field>
+            <field>hours_stats_by_person_chart</field>
       </property>
       <property>
-            <name>stats_by_type_chart</name>
+            <name>hours_stats_by_type_chart</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>hours_stats</group>
             <type>google_chart</type>
             <no_caption>1</no_caption>
-            <parent>stats_by_type</parent>
+            <parent>hours_stats_by_type</parent>
             <store>no</store>
-            <field>stats_by_type_chart</field>
+            <field>hours_stats_by_type_chart</field>
       </property>
       <property>
-            <name>stats</name>
+            <name>hours_stats</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>hours_stats</group>
             <type>text</type>
             <store>no</store>
-            <field>stats</field>
+            <parent>hours_stats_top</parent>
+            <field>hours_stats</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
       </property>
       <property>
-            <name>stats_table</name>
+            <name>hours_stats_table</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>hours_stats</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>stats_table</field>
+            <parent>hours_stats_top</parent>
+            <field>hours_stats_table</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid inimeste kaupa</caption>
       </property>
       <property>
@@ -996,24 +999,46 @@
             <field>stats_by_time_chart</field>
       </property>
       <property>
-            <name>stats_money</name>
-            <table>objects</table>
-            <group>stats_money</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>stats_money</field>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
-      </property>
-      <property>
             <name>stats_money_table</name>
             <table>objects</table>
             <group>stats_money</group>
+            <no_caption>1</no_caption>
+            <parent>stats_money_top</parent>
+            <type>table</type>
+            <store>no</store>
+            <field>stats_money_table</field>
+            <caption>Raha inimeste kaupa</caption>
+      </property>
+      <property>
+            <name>stats_time_by_person_chart</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>stats_charts</parent>
+            <store>no</store>
+            <field>stats_time_by_person_chart</field>
+      </property>
+      <property>
+            <name>stats</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>stats_top</parent>
+            <field>stats</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
+      </property>
+      <property>
+            <name>stats_table</name>
+            <table>objects</table>
+            <group>stats</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>stats_money_table</field>
-            <caption>Raha inimeste kaupa</caption>
+            <parent>stats_top</parent>
+            <field>stats_table</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid inimeste kaupa</caption>
       </property>
       <property>
             <name>stats_entry_table</name>
@@ -1176,16 +1201,21 @@
                   <caption>Aruanded</caption>
                   <submit>no</submit>
             </reports>
-            <stats>
+            <hours_stats>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;aja aruanne</caption>
                   <submit>no</submit>
                   <parent>reports</parent>
-            </stats>
+            </hours_stats>
             <stats_money>
                   <caption>Rahavoo aruanne</caption>
                   <submit>no</submit>
                   <parent>reports</parent>
             </stats_money>
+            <stats>
+                  <caption>Ajap&amp;amp;otilde;hine aruanne</caption>
+                  <submit>no</submit>
+                  <parent>reports</parent>
+            </stats>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -1521,13 +1551,15 @@
             </goal_vb>
             <task_types_tree_left>
                   <type>vbox</type>
-		  <parent>goal_vb</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Eesm&amp;amp;auml;rgid</area_caption>
+                  <parent>goal_vb</parent>
                   <group>goals_edit</group>
             </task_types_tree_left>
             <task_types_tree_lay>
                   <type>vbox</type>
                   <closeable>1</closeable>
-		  <area_caption>tyypide kaupa</area_caption>
+                  <area_caption>Puu</area_caption>
                   <parent>task_types_tree_left</parent>
                   <group>goals_edit</group>
             </task_types_tree_lay>
@@ -1575,30 +1607,30 @@
                   </group>
                   <area_caption></area_caption>
             </req_tbl_l>
-            <stats_charts>
+            <hours_stats_charts>
                   <type>hbox</type>
                   <width>50%:50%</width>
                   <closeable>1</closeable>
                   <area_caption>Graafikud</area_caption>
-                  <group>stats</group>
-            </stats_charts>
-            <stats_by_person>
+                  <group>hours_stats</group>
+            </hours_stats_charts>
+            <hours_stats_by_person>
                   <parent>stats_charts</parent>
                   <type>vbox</type>
-                  <group>stats</group>
+                  <group>hours_stats</group>
                   <area_caption></area_caption>
-            </stats_by_person>
-            <stats_by_type>
+            </hours_stats_by_person>
+            <hours_stats_by_type>
                   <parent>stats_charts</parent>
                   <type>vbox</type>
-                  <group>stats</group>
+                  <group>hours_stats</group>
                   <area_caption></area_caption>
-            </stats_by_type>
-            <stats_top>
+            </hours_stats_by_type>
+            <hours_stats_top>
                   <type>vbox</type>
                   <area_caption>Projektiga&amp;amp;nbsp;seotud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;tunnid</area_caption>
-                  <group>stats</group>
-            </stats_top>
+                  <group>hours_stats</group>
+            </hours_stats_top>
             <stats_money_charts>
                   <type>hbox</type>
                   <width>50%:50%</width>
@@ -1620,9 +1652,20 @@
             </stats_money_by_time>
             <stats_money_top>
                   <type>vbox</type>
-                  <area_caption>Projektiga&amp;amp;nbsp;seotud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;tunnid</area_caption>
+                  <area_caption>Projektiga&amp;amp;nbsp;seotud&amp;amp;nbsp;rahavood</area_caption>
                   <group>stats_money</group>
             </stats_money_top>
+            <stats_charts>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Graafik</area_caption>
+                  <group>stats</group>
+            </stats_charts>
+            <stats_top>
+                  <type>vbox</type>
+                  <area_caption>Projektiga&amp;amp;nbsp;seotud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;tunnid</area_caption>
+                  <group>stats</group>
+            </stats_top>
       </layout>
 </properties>
 

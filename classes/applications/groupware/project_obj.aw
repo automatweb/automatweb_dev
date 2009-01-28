@@ -626,8 +626,12 @@ class project_obj extends _int_object
 		$rowsres = array(
 			CL_TASK_ROW => array(
 				"task",
+				"task.class_id",
 				"time_real",
-				"impl"
+				"time_to_cust",
+				"time_guess",
+				"impl",
+				"date",
 			),
 		);
 		$rows_arr = new object_data_list($rows_filter , $rowsres);

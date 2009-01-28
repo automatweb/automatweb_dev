@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.150 2009/01/27 21:29:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.151 2009/01/28 21:45:31 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -129,7 +129,7 @@
 
 
 @default group=add_event
-	@property add_event callback=callback_get_add_event store=no
+	@property add_event type=callback callback=callback_get_add_event store=no
 	@caption Lisa s&uuml;ndmus
 
 
@@ -326,22 +326,21 @@
 		@property req_tbl type=table store=no no_caption=1 parent=req_tbl_l
 
 
-@default group=stats
+@default group=hours_stats
 
-	@layout stats_charts type=hbox width=50%:50% closeable=1 area_caption=Graafikud
-		@layout stats_by_person parent=stats_charts type=vbox
-			@property stats_by_person_chart type=google_chart no_caption=1 parent=stats_by_person store=no
-		@layout stats_by_type parent=stats_charts type=vbox
-			@property stats_by_type_chart type=google_chart no_caption=1 parent=stats_by_type store=no
+	@layout hours_stats_charts type=hbox width=50%:50% closeable=1 area_caption=Graafikud
+		@layout hours_stats_by_person parent=stats_charts type=vbox
+			@property hours_stats_by_person_chart type=google_chart no_caption=1 parent=hours_stats_by_person store=no
+		@layout hours_stats_by_type parent=stats_charts type=vbox
+			@property hours_stats_by_type_chart type=google_chart no_caption=1 parent=hours_stats_by_type store=no
 
 
-	@layout stats_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
-		@property stats type=text store=no
+	@layout hours_stats_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
+		@property hours_stats type=text store=no parent=hours_stats_top
 		@caption T&ouml;&ouml;tunnid
 
-		@property stats_table type=table store=no no_caption=1
+		@property hours_stats_table type=table store=no no_caption=1 parent=hours_stats_top
 		@caption T&ouml;&ouml;tunnid inimeste kaupa
-
 
 @default group=stats_money
 	@layout stats_money_charts type=hbox width=50%:50% closeable=1 area_caption=Graafikud
@@ -350,12 +349,25 @@
 		@layout stats_money_by_time parent=work_charts type=vbox
 			@property stats_by_time_chart type=google_chart no_caption=1 parent=stats_money_by_time store=no
 
-	@layout stats_money_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
-	@property stats_money type=text store=no no_caption=1
-	@caption T&ouml;&ouml;tunnid
+	@layout stats_money_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;rahavood
 
-	@property stats_money_table type=table store=no no_caption=1
-	@caption Raha inimeste kaupa
+		@property stats_money_table no_caption=1 parent=stats_money_top type=table store=no 
+		@caption Raha inimeste kaupa
+
+
+@default group=stats
+
+	@layout stats_charts type=vbox closeable=1 area_caption=Graafik
+		@property stats_time_by_person_chart type=google_chart no_caption=1 parent=stats_charts store=no
+
+	@layout stats_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
+		@property stats type=text store=no parent=stats_top
+		@caption T&ouml;&ouml;tunnid
+
+		@property stats_table type=table store=no no_caption=1 parent=stats_top
+		@caption T&ouml;&ouml;tunnid inimeste kaupa
+
+
 
 @default group=stats_entry
 	
@@ -398,8 +410,9 @@
 @groupinfo team caption="Meeskond" submit=no
 
 @groupinfo reports caption="Aruanded" submit=no
-	@groupinfo stats caption="T&ouml;&ouml;aja aruanne" submit=no parent=reports
+	@groupinfo hours_stats caption="T&ouml;&ouml;aja aruanne" submit=no parent=reports
 	@groupinfo stats_money caption="Rahavoo aruanne" submit=no parent=reports
+	@groupinfo stats caption="Ajap&otilde;hine aruanne" submit=no parent=reports
 
 @groupinfo transl caption=T&otilde;lgi
 
@@ -481,6 +494,7 @@
 
 */
 
+define("DAY", 86400);
 class project extends class_base
 {
 	function project()
@@ -503,6 +517,14 @@ class project extends class_base
 		$this->trans_props = array(
 			"name"
 		);
+	
+		$this->event_types = array(
+			CL_BUG => "&Uuml;lesanded",
+			CL_TASK => t("Toimetused"),
+			CL_CRM_MEETING => t("Kohtumised"),
+			CL_CRM_CALL => t("K&otilde;ned"),
+		);
+
 	}
 
 	private function get_all_works_sum()
@@ -523,6 +545,8 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "hours_stats":
+				return PROP_IGNORE;
 			case "search_part":
 				$data["size"] = 34;
 			case "search_part":
@@ -553,6 +577,14 @@ class project extends class_base
 				))." ".t("Arendus&uuml;lesanne");
 
 				break;
+			case "hours_stats_by_person_chart":
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_colors(array(
+					"990000","000033","000066","000099","0000cc",
+					"000000","003300","006600","009900","00cc00",
+					"330000","660000","000000","aa0000","aa00cc",
+					"330099","660099","990099","aa0099","9900cc",
+				));
 			case "works_by_person_chart":
 				if($arr["new"])
 				{
@@ -711,6 +743,120 @@ class project extends class_base
 				));
 				break;
 			
+			case "stats_time_by_person_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$c2 = &$arr["prop"]["vcl_inst"];
+				$c2->set_type(GCHART_LINE_CHART);
+				$c2->set_size(array(
+					"width" => 1000,
+					"height" => 220,
+				));
+				$c2->set_colors(array("5511aa"));
+				$c2->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$times = array();
+				$data1 = array();
+				$bot_axis = array();
+
+				classload("core/date/date_calc");
+				$all_data = $arr["obj_inst"]->get_rows_data();
+				$work_data = array();
+				$end = $arr["obj_inst"]->prop("end");
+				$start = time();
+				$max_hours = 0;
+
+				$result = array();
+
+				foreach($all_data as $data)
+				{
+					if(!$data["time_real"])
+					{
+						continue;
+					}
+					$date_day_start = date("wmy" , $data["date"]);
+					if($end < $data["date"])
+					{
+						$end = $data["date"];
+					}
+					if($start > $data["date"])
+					{
+						$start = $data["date"];
+					}
+					$result[$data["task.class_id"]][$date_day_start] +=$data["time_real"];
+					$result[1][$date_day_start] +=$data["time_real"];
+				}
+
+
+				if($start < $end - DAY * 600)
+				{
+					$start = $end - DAY * 600;
+				}
+				$start = get_week_start($start);
+				if(!($end > 1 && $start > 1))
+				{
+					return;
+				}
+
+				$month = 1;
+				while($end > $start)
+				{
+					if(date("mY", $month) != date("mY", $start))
+					{
+						$month = $start;
+						$bot_axis[] = date("M Y" , $start);
+					}
+					else
+					{
+	//					$bot_axis[] = "";
+					}
+					$data1[] = $result[1][date("wmy" , $start)];
+					if($max_hours < $result[1][date("wmy" , $start)])
+					{
+						$max_hours = $result[1][date("wmy" , $start)];
+					}
+					$start += DAY*7;
+				}
+
+				$c2->add_data($data1);
+				$c2->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
+				$left_axis = array();
+				if ($max_hours > 0)
+				{
+					for($i = 0; $i <= $max_hours; $i+= $max_hours/4)
+					{
+						$left_axis[] = round($i, 0);
+					}
+				}
+				$c2->add_axis_label(0, $left_axis);
+
+				$c2->add_axis_label(1, $bot_axis);
+				$c2->add_axis_style(1, array(
+					"color" => "888888",
+					"font" => 10,
+					"align" => GCHART_ALIGN_CENTER,
+				));
+				$c2->set_grid(array(
+					"xstep" => 30,
+					"ystep" => 20,
+				));
+				$c2->set_title(array(
+					"text" => t("Projekti T&ouml;&ouml; aktiivsus tundides n&auml;da kohta"),
+					"color" => "555555",
+					"size" => 10,
+				));
+				$arr["prop"]["type"] = "text";
+				$arr["prop"]["value"] = $c2->get_html();
+				break;
+
+
 			case "money_chart":
 				if($arr["new"])
 				{
@@ -1247,13 +1393,22 @@ class project extends class_base
 				}
 				break;
 
-			case "stats":
+			case "stats":return PROP_IGNORE;
 				$data["value"] = $this->_get_stats($arr["obj_inst"]);
 				break;
 
 			case "stats_table":
 				$data["value"] = $this->_get_stats_table($arr);
 				break;
+			case "hours_stats_table":
+				$data["value"] = $this->_get_hours_stats_table($arr);
+				break;
+
+			case "stats_money_table":
+				$data["value"] = $this->_get_stats_money_table($arr);
+				break;
+
+
 
 			case "stats_entry_table":
 				$this->_get_stats_entry_table($arr);
@@ -3792,7 +3947,7 @@ class project extends class_base
 
 		$bills = $arr["obj_inst"]->get_bills(array("status" =>  0));
 
-		if($bills->count)
+		if($bills->count())
 		{
 			$tb->add_menu_button(array(
 				"name" => "add_to_bill",
@@ -3858,6 +4013,13 @@ class project extends class_base
 //			case "bills_left":
 //				$arr["area_caption"] = sprintf(t("%s arved staatuste kaupa"), $arr["obj_inst"]->name());
 //				break;
+			
+			case "stats_top":
+				$arr["area_caption"] = sprintf(t("Projektiga %s seotud t&ouml;&ouml;tundide jagunemine t&ouml;&ouml;p&auml;evade kaupa"), $arr["obj_inst"]->name());
+				break;
+			case "hours_stats_top":
+				$arr["area_caption"] = sprintf(t("Projekti %s k&otilde;ik kirja pandud t&ouml;&ouml;tunnid tegevuse t&uuml;&uuml;bi kaupa"), $arr["obj_inst"]->name());
+				break;
 			case "task_types_search_lay":
 				$arr["area_caption"] = sprintf(t("Otsingu parameetrid"));
 				break;	
@@ -3870,6 +4032,10 @@ class project extends class_base
 			case "create_bill_table":
 				$arr["area_caption"] = sprintf(t("Projekti %s tegemata t&ouml;&ouml;de nimekiri"), $arr["obj_inst"]->name());
 				break;
+			case "stats_money_top":
+				$arr["area_caption"] = sprintf(t("Projekti %s rahavood"), $arr["obj_inst"]->name());
+				break;
+
 			case "bills_r":
 				$var = 10;
 				if(isset($_GET["st"]))
@@ -3936,6 +4102,12 @@ class project extends class_base
 		));
 
 		$t->define_field(array(
+			"caption" => t("Tegevuse aeg"),
+			"name" => "event_date",
+			"align" => "right",
+		));
+
+		$t->define_field(array(
 			"caption" => t("Arvele m&auml;&auml;ramise kuup&auml;ev"),
 			"name" => "set_date",
 			"align" => "right",
@@ -3960,12 +4132,23 @@ class project extends class_base
 		foreach($deal_tasks->arr() as $deal_task)
 		{
 			$row = obj($deal_task);
+			$event_date = "";
+			if($row->prop("start1") > 0)
+			{
+				$event_date.= date("d.m.Y" , $row->prop("start1"));
+			}
+			if($row->prop("end") > 0)
+			{
+				$event_date.= " - ".date("d.m.Y" , $row->prop("end"));
+			}
+
 			$t->define_data(array(
 				"oid" => $row->id(),
 				"name" => $row->name(),
 				"sum" => $row->prop("deal_price").t("(Kokkuleppehind)").($row->prop("deal_has_tax") ? t("KMga") : ""),
 				"set_date" => $row->prop("to_bill_date") ? date("d.m.Y" , $row->prop("to_bill_date")) : "",
 				"hrs" => $this->stats->hours_format($row->prop("deal_amount")),
+				"event_date" => $event_date,
 			));
 			$sum += $row->prop("deal_price");
 			$hrs += $row->prop("deal_amount");
@@ -3979,6 +4162,7 @@ class project extends class_base
 				"name" => $ro->name(),
 				"sum" => number_format(str_replace(",", ".", $row->prop("cost")),2),
 				"set_date" => date("d.m.Y" , mktime(0,0,0, $date["month"], $date["day"], $date["year"])),
+				"event_date" => date("d.m.Y" , mktime(0,0,0, $date["month"], $date["day"], $date["year"])),
 			));
 			$sum += $row->prop("cost");
 		}
@@ -3995,6 +4179,7 @@ class project extends class_base
 					"hr_price" => number_format($hr_price,2),
 					"sum" => number_format($row->prop("time_to_cust") * $hr_price,2),
 					"set_date" => date("d.m.Y" , $row->prop("to_bill_date")),
+					"event_date" => $row->prop("date") ? date("d.m.Y" , $row->prop("date")) : "",
 				));
 			}
 			$sum += $row->prop("time_to_cust") * $hr_price;
@@ -4007,6 +4192,12 @@ class project extends class_base
 
 		foreach($bugs->arr() as $bug)
 		{
+			$event_date = "";
+			if($bug->prop("actual_live_date") > 0)
+			{
+				$event_date.= date("d.m.Y" , $bug->prop("actual_live_date"));
+			}
+
 			$lister = "<span id='bug".$bug->id()."' style='display: none;'>";
 			$table = new vcl_table;
 			$table->name = "bug".$bug->id();
@@ -4031,6 +4222,7 @@ class project extends class_base
 				"name" => $bug->name().$lister,
 				"hr_price" => number_format($this->hour_prices[$bug->id()],2),
 				"set_date" => date("d.m.Y" , ($bug->prop("to_bill_date"))),
+				"event_date" => $event_date,
 			);
 			$bug_data["hrs"] = $this->stats->hours_format($this->bug_hours[$bug->id()]);
 			$bug_data["sum"] = number_format(($this->bug_hours[$bug->id()] * $this->hour_prices[$bug->id()]),2);
@@ -4060,6 +4252,12 @@ class project extends class_base
 			"name" => "time",
 			"align" => "right",
 			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Tegevuse aeg"),
+			"name" => "event_time",
+			"align" => "right",
 		));
 
 		$t->define_chooser(array(
@@ -4093,6 +4291,8 @@ class project extends class_base
 					"url" => html::obj_change_url($comment , array()))),
 				"time" => $this->stats->hours_format($comment->bill_hours()),
 				"oid" => $comment->id(),
+				"event_time" => date("d.m.Y" , $comment->prop("date")),
+
 			));
 		}
 		exit_function("bills_impl::_get_bill_task_list");
@@ -6819,13 +7019,353 @@ class project extends class_base
 		}
 	}
 
-	private function _get_stats_table($arr)
+
+	private function _get_stats_money_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 
+		$bills = $arr["obj_inst"]->get_bills();
+
+		$all_data = $arr["obj_inst"]->get_rows_data();
+		$tasks = $task_prices = array();
+		foreach($all_data as $data)
+		{
+			$tasks[$data["task"]] = $data["task"];
+		}
+
+		$tasks_ol = new object_list();
+		$tasks_ol->add($tasks);
+		foreach($tasks_ol->arr() as $to)
+		{
+			$task_prices[$to->id()] = $to->prop("hr_price");
+		}
+
+		$work_data = array();
+		$result = array();
+		foreach($all_data as $data)
+		{
+			$person = reset($data["impl"]);
+			if(!isset($work_data[$person]))
+			{
+				$work_data[$person] = array();
+			}
+
+			$work_data[$person]["real"] +=$data["time_real"];
+			$work_data[$person]["guess"] +=$data["time_guess"];
+			$work_data[$person]["cust"] +=$data["time_to_cust"];
+			if($task_prices[$data["task"]])
+			{
+				$work_data[$person]["sum"] += $data["time_real"] * $task_prices[$data["task"]];
+				$result["sum"] += $data["time_real"] * $task_prices[$data["task"]];
+				$work_data[$person]["sum_cust"] += $data["time_to_cust"] * $task_prices[$data["task"]];
+				$result["sum_cust"] += $data["time_to_cust"] * $task_prices[$data["task"]];
+			}
+			else
+			{
+				$work_data[$person]["without"] += $data["time_real"];
+				$result["without"] += $data["time_real"];
+			}
+			$result["real"] +=$data["time_real"];
+			$result["guess"] +=$data["time_guess"];
+			$result["cust"] +=$data["time_to_cust"];
+
+		}
+
+		//iga isiku info
+		foreach($work_data as  $person  => $d)
+		{
+			$data_defined = $d;
+			$data_defined["person"] = html::obj_change_url($person);
+			$t->define_data($data_defined);
+		}
+
+		foreach($bills->arr() as $bill)
+		{
+			$result["on_bill"] += $bill->get_sum();
+			$result["payments"] += $bill->get_payments_sum();
+		}
+
+		//kokkuv6tte rea info
+		$data_defined = $result;
+		$data_defined["person"] = t("Kokku");
+		$t->define_data($data_defined);
+
+
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "center",
+		));
+	
+
+		$t->define_field(array(
+			"name" => "guess",
+			"caption" => t("Prognoositud t&ouml;&ouml;tunde"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "real",
+			"caption" => t("Tegelikke t&ouml;&ouml;tunde"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "without",
+			"caption" => t("Tunnihinnata t&ouml;&ouml;tunde"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("T&ouml;id summas"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "cust",
+			"caption" => t("T&ouml;&ouml;tunde kliendile"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "sum_cust",
+			"caption" => t("T&ouml;id kliendile summas"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "on_bill",
+			"caption" => t("T&ouml;id arvel summas"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "payments",
+			"caption" => t("Tasu laekunud summas"),
+			"align" => "center",
+		));
+
+		$t->set_sortable(false);
+	}
+
+	private function _get_hours_stats_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+	
+		$all_data = $arr["obj_inst"]->get_rows_data();
+		$work_data = array();
+		$this->event_types = $this->event_types + array(1 => t("Kokku"));
+		$params = array(
+			"prog" => t("Prognoositud"),
+			"real" => t("Tegelik"),
+			"cust" => t("Kliendile"),
+
+		);
+
+		$result = array();
+
+		foreach($all_data as $data)
+		{
+			$person = reset($data["impl"]);
+			if(!isset($work_data[$person]))
+			{
+				$work_data[$person] = array();
+			}
+			$work_data[$person][$data["task.class_id"]]["real"] +=$data["time_real"];
+			$work_data[$person][1]["real"] +=$data["time_real"];
+			$work_data[$person][$data["task.class_id"]]["cust"] +=$data["time_to_cust"];
+			$work_data[$person][1]["cust"] +=$data["time_to_cust"];
+			$work_data[$person][$data["task.class_id"]]["prog"] +=$data["time_guess"];
+			$work_data[$person][1]["prog"] +=$data["time_guess"];
+
+			$result[$data["task.class_id"]]["real"] +=$data["time_real"];
+			$result[1]["real"] +=$data["time_real"];
+			$result[$data["task.class_id"]]["cust"] +=$data["time_to_cust"];
+			$result[1]["cust"] +=$data["time_to_cust"];
+			$result[$data["task.class_id"]]["prog"] +=$data["time_guess"];
+			$result[1]["prog"] +=$data["time_guess"];
+		}
+
+		//iga isiku info
+		foreach($work_data as  $person  => $d)
+		{
+			$data_defined = array();
+			$data_defined["person"] = html::obj_change_url($person);
+			foreach($this->event_types as $clid => $capt)
+			{
+				foreach($params as $param_id => $param_name)
+				{
+					$data_defined[$clid."_".$param_id] = $d[$clid][$param_id];
+				}
+			}
+			$t->define_data($data_defined);
+		}
+
+		//kokkuv6tte rea info
+		$data_defined = array();
+		$data_defined["person"] = t("Kokku");
+		foreach($this->event_types as $clid => $capt)
+		{
+			foreach($params as $param_id => $param_name)
+			{
+				$data_defined[$clid."_".$param_id] = $result[$clid][$param_id];
+			}
+		}
+		$t->define_data($data_defined);
+
+
+
+
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "center",
+		));
+	
+		foreach($this->event_types as $clid => $capt)
+		{
+			$t->define_field(array(
+				"name" => "field".$clid,
+				"caption" => $capt,
+				"align" => "center",
+			));
+			foreach($params as $param_id => $param_name)
+			{
+				$t->define_field(array(
+					"name" => $clid."_".$param_id,
+					"caption" => $param_name,
+					"align" => "center",
+					"parent" => "field".$clid,
+				));
+			}
+		}
+
+		$t->set_sortable(false);
+	}
+
+
+	private function _get_stats_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		classload("core/date/date_calc");
+		$all_data = $arr["obj_inst"]->get_rows_data();
+		$work_data = array();
+		$this->event_types = $this->event_types;
+		$end = $arr["obj_inst"]->prop("end");
+		$params = array(
+			"prog" => t("Prognoositud"),
+			"real" => t("Tegelik"),
+			"cust" => t("Kliendile"),
+		);
+
+		$start = time();
+		$result = array();
+
+		foreach($all_data as $data)
+		{
+			if(!$data["time_real"])
+			{
+				continue;
+			}
+			$person = reset($data["impl"]);
+			if(!isset($work_data[$person]))
+			{
+				$work_data[$person] = array();
+			}
+
+			if($end < $data["date"])
+			{
+				$end = $data["date"];
+			}
+			if($start > $data["date"])
+			{
+				$start = $data["date"];
+			}
+			$date_day_start = date("dmy" , $data["date"]);
+			$work_data[$person][$data["task.class_id"]][$date_day_start] +=$data["time_real"];
+			$work_data[$person][1][$date_day_start] +=$data["time_real"];
+
+			$result[$data["task.class_id"]][$date_day_start] +=$data["time_real"];
+			$result[1][$date_day_start] +=$data["time_real"];
+		}
+
+		//iga isiku info
+		foreach($work_data as $person  => $d)
+		{
+			if(!$person) continue;
+			$data_defined = array();//$work_data[$person][1];
+			$data_defined["person"] = html::obj_change_url($person);
+			$t->define_data($data_defined);
+			
+			foreach($this->event_types as $clid => $capt)
+			{
+				$data_defined = $work_data[$person][$clid];
+				$data_defined["person"] = $capt;
+				$t->define_data($data_defined);
+			}
+		}
+
+		//kokkuv6tte rea info
+		$data_defined = array();
+		$data_defined["person"] = t("Kokku");
+		$t->define_data($data_defined);
+		foreach($this->event_types as $clid => $capt)
+		{
+			$data_defined = $result[$clid];
+			$data_defined["person"] = $capt;
+			$t->define_data($data_defined);
+		}
+
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "center",
+		));
+
+		$start = $arr["obj_inst"]->prop("start");
+
+		//mingi piirang ka peale... 
+		if($start < $end - DAY * 600)
+		{
+			$start = $end - DAY * 600;
+		}
+
+		$start = get_day_start($start);
+		if(!($end > 1 && $start > 1))
+		{
+			return;
+		}
+		while($end > $start)
+		{
+			if(date("N" , $start) > 5)
+			{
+				$start += DAY;
+				continue;
+			}
+			if($parent_field !=  date("my" , $start))
+			{
+				$t->define_field(array(
+					"name" => date("my" , $start),
+					"caption" => date("M Y" , $start),
+					"align" => "center",
+				));
+				$parent_field =  date("my" , $start);
+			}
+			$t->define_field(array(
+				"name" => date("dmy" , $start),
+				"caption" => date("d" , $start),
+				"align" => "center",
+				"parent" => date("my" , $start),
+			));
+			$start += DAY;
+		}
+
+/*
 		$stats_by_ppl = $arr["obj_inst"]->stats_get_by_person();
 		$types = array();
 		$tot_sums = array();
+arr($stats_by_ppl);
 		foreach($stats_by_ppl as $person => $data)
 		{
 			$d = array(
@@ -6864,7 +7404,7 @@ class project extends class_base
 
 		$tot_sums["person"] = t("Summa");
 		$t->define_data(array_map(create_function('$a', 'return html::strong($a);'), $tot_sums));
-
+*/
 		$t->set_sortable(false);
 	}
 
