@@ -61,10 +61,20 @@ class mysql
 	function db_query($qtext,$errors = true)
 	{
 //echo $qtext."<br>\n".dbg::short_backtrace()." <br>\n";
-//flush();
-		$DUKE = $_GET["DUKE"];
-		$INTENSE_DUKE = $_GET["INTENSE_DUKE"];
-		$SLOW_DUKE = $_GET["SLOW_DUKE"];
+		//flush();
+		$DUKE = $INTENSE_DUKE = $SLOW_DUKE = false;
+		if (isset($_GET["DUKE"]))
+		{
+			$DUKE = $_GET["DUKE"];
+		}
+		if (isset($_GET["INTENSE_DUKE"]))
+		{
+			$INTENSE_DUKE = $_GET["INTENSE_DUKE"];
+		}
+		if (isset($_GET["SLOW_DUKE"]))
+		{
+			$SLOW_DUKE = $_GET["SLOW_DUKE"];
+		}
 		if ($SLOW_DUKE == 1)
 		{
 			list($micro,$sec) = split(' ',microtime());
