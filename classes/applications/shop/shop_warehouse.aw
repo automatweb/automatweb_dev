@@ -1736,6 +1736,14 @@ class shop_warehouse extends class_base
 		);
 		$arr["warehouses"] = array($arr["obj_inst"]->id());
 		$res = $this->get_products_list_ol($arr);
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"warehouse" => $arr["obj_inst"]->id(),
+			"product" => $res["ol"]->ids(),
+		));
+		$ol->arr();
 		foreach($res["ol"]->arr() as $prodid => $prod)
 		{
 			$ol = new object_list(array(
@@ -2455,6 +2463,7 @@ class shop_warehouse extends class_base
 				$params["code"] = "%".$code."%";
 			}
 		}
+		$params["limit"] = "0,100";
 		if($barcode = $arr["request"]["prod_s_barcode"])
 		{
 			$params["barcode"] = "%".$varcode."%";
