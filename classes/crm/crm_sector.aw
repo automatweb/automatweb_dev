@@ -156,6 +156,7 @@ class crm_sector extends class_base
 		switch($prop["name"])
 		{
 			case "transl":
+				$this->write_trans_aliases($arr);
 				$this->trans_save($arr, $this->trans_props);
 				break;
 
@@ -246,6 +247,11 @@ class crm_sector extends class_base
 		}
 
 		return false;
+	}
+
+	public function write_trans_aliases($arr)
+	{
+		return get_instance("menu")->write_trans_aliases($arr);
 	}
 }
 ?>
