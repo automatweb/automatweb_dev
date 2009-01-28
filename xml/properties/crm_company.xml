@@ -99,11 +99,11 @@
             <reltype>RELTYPE_ORGANISATION_LOGO</reltype>
             <use_form>emb</use_form>
             <rel_id>first</rel_id>
-            <method>serialize</method>
-            <field>meta</field>
             <parent>co_top_right</parent>
             <captionside>top</captionside>
             <override_parent>this</override_parent>
+            <store>connect</store>
+            <field>logo</field>
             <caption>Organisatsiooni logo</caption>
       </property>
       <property>
