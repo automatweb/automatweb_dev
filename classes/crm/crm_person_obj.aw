@@ -1310,12 +1310,12 @@ class crm_person_obj extends _int_object
 	public function send_nfy_mail($addr, $o, $modified = false)
 	{
 		$type = $o->class_id() == CL_TASK ? t("toimetuse") : t("kohtumise");
-		$type_modified = $o->class_id() == CL_TASK ? t("Toimetust") : t("Kohtumist");
+		$type_modified = $o->class_id() == CL_TASK ? t("toimetust") : t("kohtumist");
 
 		$subject = sprintf(t("Teid on lisatud %s '%s' osalejaks"), $type, $o->name());
 		if($modified === true)
 		{
-			$subject = sprintf(t("%s '%s' on muudetud"), $type_modified, $o->name());
+			$subject = sprintf(t("%s muutis %s '%s'"), aw_global_get("uid"), $type_modified, $o->name());
 		}
 
 		$msg = t("Link: ").get_instance($o->class_id())->mk_my_orb("change", array("id" => $o->id()))."\n\n";
@@ -1325,8 +1325,12 @@ class crm_person_obj extends _int_object
 		$msg .= sprintf(t("L%spp: "), html_entity_decode("&otilde;")).get_lc_date($o->start1, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i", $o->end)."\n";
 		$msg .= strlen(trim($o->comment)) > 0 ? t("Kommentaar: ").$o->comment."\n" : "";
 		$msg .= strlen(trim($o->content)) > 0 ? t("Sisu: ").$o->content."\n" : "";
-
-		send_mail($addr, $subject, $msg, "From: notifications@".str_replace(array("http://", "http://www."), "", aw_ini_get("baseurl")));
+		if(strcmp($msg, $o->meta("sent_mail_content")) != 0)
+		{
+			$o->set_meta("sent_mail_content", $msg);
+			$o->save();
+			send_mail($addr, $subject, $msg, "From: notifications@".str_replace(array("http://", "http://www."), "", aw_ini_get("baseurl")));
+		}
 	}
 
 
