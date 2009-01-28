@@ -459,8 +459,8 @@ class html extends aw_template
 					$hval = htmlspecialchars($hval);
 				}
 				$retval = "<textarea class=\"codepress php\" id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\" wrap=\"off\" >{$value}</textarea>
-
-				<!--<input type=\"hidden\" value=\"{$hval}\" name=\"{$name}\" id=\"{$name}\" />-->\n";
+				<br />
+				<input type=\"checkbox\" onClick=\"{$name}.toggleAutoComplete();\" checked /> AutoComplete\n";
 			}
 			else
 			{
