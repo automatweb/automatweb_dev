@@ -139,13 +139,13 @@ class crm_phone_obj extends _int_object
 			));
 			if($ol->count() > 0)
 			{
-				$pho = $ol->begin();
+				$phoid = reset($ol->ids());
 			}
 			else
 			{
 				$pho = obj(parent::save_new());
 				$pho->name = $nname;
-				$pho->save();
+				$phoid = $pho->save();
 			}
 
 			if(count($conn_ids) > 0)
@@ -161,8 +161,8 @@ class crm_phone_obj extends _int_object
 						$c = new connection();
 						$c->load($conn_id);
 						$c->change(array(
-							"from" => $c->prop("from") == $oid ? $pho->id() : $c->prop("from"),
-							"to" => $c->prop("to") == $oid ? $pho->id() : $c->prop("to"),
+							"from" => $c->prop("from") == $oid ? $phoid : $c->prop("from"),
+							"to" => $c->prop("to") == $oid ? $phoid : $c->prop("to"),
 						));
 					}
 					catch (Exception $e)
@@ -170,8 +170,8 @@ class crm_phone_obj extends _int_object
 					}
 				}
 			}
-			parent::load($pho->id());
-			return $pho->id();
+			parent::load($phoid);
+			return $phoid;
 		}
 		return parent::save();
 	}
