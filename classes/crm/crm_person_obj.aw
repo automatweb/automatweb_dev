@@ -1325,9 +1325,9 @@ class crm_person_obj extends _int_object
 		$msg .= sprintf(t("L%spp: "), html_entity_decode("&otilde;")).get_lc_date($o->start1, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i", $o->end)."\n";
 		$msg .= strlen(trim($o->comment)) > 0 ? t("Kommentaar: ").$o->comment."\n" : "";
 		$msg .= strlen(trim($o->content)) > 0 ? t("Sisu: ").$o->content."\n" : "";
-		if(strcmp($msg, $o->meta("sent_mail_content")) != 0)
+		if(strcmp($msg, $o->meta("sent_mail_content_".$addr)) != 0)
 		{
-			$o->set_meta("sent_mail_content", $msg);
+			$o->set_meta("sent_mail_content_".$addr, $msg);
 			$o->save();
 			send_mail($addr, $subject, $msg, "From: notifications@".str_replace(array("http://", "http://www."), "", aw_ini_get("baseurl")));
 		}
