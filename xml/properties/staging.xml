@@ -14,7 +14,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>L&amp;otilde;ppeb</caption>
+            <caption>L&amp;amp;otilde;ppeb</caption>
       </property>
       <property>
             <name>img</name>

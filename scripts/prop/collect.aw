@@ -1,10 +1,12 @@
 <?php
-
+ini_set("error_reporting", E_ALL);
+ini_set("display_errors", "1");
 $basedir = realpath(".");
 include($basedir . "/automatweb.aw");
 
 automatweb::start();
 automatweb::$instance->bc();
+
 // automatweb::$instance->mode(automatweb::MODE_DBG);
 aw_global_set("no_db_connection", 1);
 aw_ini_set("baseurl", "automatweb");

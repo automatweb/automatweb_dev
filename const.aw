@@ -1,5 +1,7 @@
 <?php
-
+if (!defined("AW_CONST_INC"))
+{
+	define("AW_CONST_INC", 1);
 // 1:42 PM 8/3/2008 - const.aw now contains only parts of old startup script that are to be moved to new appropriate files or deleted. const.aw file to be removed eventually.
 
 set_magic_quotes_runtime(0);
@@ -17,7 +19,6 @@ function get_time()
 	list($micro,$sec) = explode(" ",microtime());
 	return ((float)$sec + (float)$micro);
 }
-
 define ("AW_SHORT_PROCESS", 1);
 Define ("AW_LONG_PROCESS", 2);
 
@@ -1137,5 +1138,5 @@ function check_pagecache_folders()
 		touch($pg."/temp/lmod");
 	}
 }
-
+}
 ?>
