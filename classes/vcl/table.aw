@@ -2380,7 +2380,7 @@ echo dbg::short_backtrace();
 	// parameters:
 	//	style - id of the css style to apply to the page
 	//	records_per_page - number of records on each page
-	function draw_lb_pageselector($arr)
+	function draw_lb_pageselector($arr = array())
 	{
 		$this->read_template("lb_pageselector.tpl");
 
@@ -2458,7 +2458,7 @@ echo dbg::short_backtrace();
 			$act_page = 0;
 		}
 
-		$num_pages = $_drc / $records_per_page;
+		$num_pages = $records_per_page > 0 ? ($_drc / $records_per_page) : 1;
 		for ($i = 0; $i < $num_pages; $i++)
 		{
 			$from = $i*$records_per_page+1;
