@@ -174,5 +174,12 @@
 			</function>
 		</action>
 
+		<action name="clid_stats" nologin="1">
+			<function name="clid_stats">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

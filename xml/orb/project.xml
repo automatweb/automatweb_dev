@@ -15,6 +15,13 @@
 			</function>
 		</action>
 
+		<action name="create_bill" all_args="1">
+			<function name="create_bill">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="del_goals">
 			<function name="del_goals">
 				<arguments>
@@ -140,13 +147,6 @@
 
 		<action name="daily_stats_type_check" nologin="1">
 			<function name="daily_stats_type_check">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="create_bill" all_args="1">
-			<function name="create_bill">
 				<arguments>
 				</arguments>
 			</function>

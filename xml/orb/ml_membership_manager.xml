@@ -3,4 +3,3 @@
 	<class name="ml_membership_manager" folder="applications/mailinglist" extends="class_base">
 	</class>
 </orb>
-		

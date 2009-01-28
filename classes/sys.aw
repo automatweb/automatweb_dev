@@ -1209,6 +1209,70 @@ ENDCLASSFORM;
 			unlink($fn);
 		}
 	}
+
+	/**
+		@attrib prop_stats nologin="1"
+	**/
+	function prop_stats()
+	{
+		$rv = array();
+		// go over all classes and all their props and for each in a separate table query that to fetch count
+		$clss = aw_ini_get("classes");
+		//$this->db_query("DELETE FROM aw_site_class_prop_stats WHERE site_id = ".aw_ini_get("site_id"));
+		ob_end_clean();
+		foreach($clss as $clid => $cld)
+		{
+			$o = obj();
+			$o->set_class_id($clid);
+			$total = $this->db_fetch_field("SELECT count(*) as cnt FROM objects WHERE class_id = $clid", "cnt");
+			echo "class $clid <br>\n";
+			flush();
+			foreach($o->get_property_list() as $pn => $pd)
+			{
+				if ($pd["store"] == "no" || $pd["table"] == "objects" || $pd["method"] == "serialize" || $pd["table"] == "" || $pd["field"] == "" || $pd["store"] == "connect")
+				{
+					continue;
+				}
+
+				$q = "SELECT count(*) as cnt from ".$pd["table"]." WHERE `".$pd["field"]."` != ''";
+				echo "q = $q <br>\n";
+				flush();
+				$cnt = (int)$this->db_fetch_field($q, "cnt", false);
+				//$this->db_query("INSERT INTO aw_site_class_prop_stats(class_id, prop, site_id, set_objs, total_objs) 
+				//	values($clid, '".$pn."', ".aw_ini_get("site_id").", $cnt, $total)");
+				$rv[] = array(
+					"class_id" => $clid, 
+					"prop" => $pn,
+					"site_id" => aw_ini_get("site_id"), 
+					"set_objs" => $cnt, 
+					"total_objs" => $total
+				);
+			}
+		}
+		return $rv;
+	}
+
+	/**
+		@attrib name=clid_stats nologin="1"
+	**/
+	function clid_stats()
+	{
+		$rv = array();
+		//$this->db_query("DELETE FROM aw_site_object_stats WHERE site_id = ".aw_ini_get("site_id"));
+		$this->db_query("SELECT count(*) as cnt, class_id FROM objects GROUP BY class_id");
+		while ($row = $this->db_next())
+		{
+			/*$this->save_handle();
+			$this->db_query("INSERT INTO aw_site_object_stats(site_id, class_id, count) values(".aw_ini_get("site_id").", $row[class_id], $row[cnt])");
+			$this->restore_handle();*/
+			$rv[] = array(
+				"site_id" => aw_ini_get("site_id"), 
+				"class_id" => $row["class_id"], 
+				"count" => $row["cnt"]
+			);
+		}
+		return $rv;
+	}
 }
 
 /* Generic sys class exception */
