@@ -1590,7 +1590,7 @@ class bank_payment extends class_base
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}	
 
-	private function check_nordea_args($arr)
+	function check_nordea_args($arr)
 	{
 		if(is_oid($arr["payment_id"]))
 		{
@@ -1605,9 +1605,8 @@ class bank_payment extends class_base
 			fclose($fp);
 		}
 
-		$arr["expl"] =  trim($arr["expl"]);
 		if(!$arr["service"]) $arr["service"] = "0002";
-		if(!$arr["version"]) $arr["version"] = "0003";
+		if(!$arr["version"]) $arr["version"] = "0001";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
 		if(!$arr["confirm"]) $arr["confirm"] = "YES";
 		if(!$arr["acc"]) $arr["acc"] = "";
@@ -1615,6 +1614,7 @@ class bank_payment extends class_base
 		if(!$arr["recieve_id"]) $arr["recieve_id"] = "10354213";
 		if(!$arr["date"]) $arr["date"] = 'EXPRESS';
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+//		if(!substr_count("http" , $arr["cancel_url"]))$arr["cancel_url"] = aw_ini_get("baseurl").$arr["cancel_url"];
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
 		if(array_key_exists($arr["lang"] , $this->languages["nordea"]))
@@ -1626,6 +1626,16 @@ class bank_payment extends class_base
 			$arr["lang"] = "3";
 		}
 
+	/*	if($arr["lang"] == "et" || $arr["lang"] == "EST")
+		{
+			$arr["lang"] = 4;
+		}
+		if($arr["lang"] == "en" || $arr["lang"] == "ENG")
+		{
+			$arr["lang"] = 3;
+		}
+		if(!($arr["lang"] > 0)) $arr["lang"] = "3";
+		*/
 		return($arr);
 	}
 
