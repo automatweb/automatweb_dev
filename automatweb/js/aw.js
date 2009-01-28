@@ -63,13 +63,16 @@ function aw_get_el(name,form)
 		}
 	}
 	// here's a fix for IE because in search (class) names are removed from select boxes
-	return $("select", form).each(function(){
-		if (this.name_tmp == name)
-		{
-			this.name = this.name_tmp;
-			return this;
-		}
-	});
+	if ($.gup("class")=="aw_object_search")
+	{
+	    	return $("select", form).each(function(){
+			if (this.name_tmp == name)
+			{
+				this.name = this.name_tmp;
+				return this;
+			}
+		});
+	};
 }
 
 function list_preset(el,oid)
