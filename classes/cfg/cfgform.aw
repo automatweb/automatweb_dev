@@ -4804,17 +4804,28 @@ class cfgform extends class_base
 			$this->cfgview_vars["awcb_display_mode"] = $_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
 
 			// make request
-			classload("core/orb/orb");
-			$orb = new orb();
-			$orb->process_request(array(
-				"class" => $class,
-				"action" => $action,
-				"reforb" => $this->cfgview_vars["reforb"],
-				"user"	=> 1,//!!! whats that for?
-				"vars" => $this->cfgview_vars,
-				"silent" => false,
-			));
-			$content = $orb->get_data();
+			$content = false;
+
+			do
+			{
+				if (false !== $content)
+				{
+					$tmp = parse_url($content);
+					parse_str($tmp["query"], $this->cfgview_vars);
+				}
+
+				$orb = new orb();
+				$orb->process_request(array(
+					"class" => $this->cfgview_vars["class"],
+					"action" => $this->cfgview_vars["action"],
+					"reforb" => $this->cfgview_vars["reforb"],
+					"user"	=> 1,//!!! whats that for?
+					"vars" => $this->cfgview_vars,
+					"silent" => false
+				));
+				$content = $orb->get_data();
+			}
+			while (0 === strpos($content, "http://"));
 		}
 
 		exit_function("cfg_form::get_class_cfgview");
@@ -5185,7 +5196,7 @@ class cfgform extends class_base
 	{
 		$o = isset($arr["o"]) && is_object($arr["o"]) && $this->can("view", $arr["o"]->id()) ? $arr["o"] : obj($arr["oid"]);
 		$clid = $this->can("view", $o->id()) ? $o->class_id() : (isset($arr["clid"]) && is_class_id($arr["clid"]) ? $arr["clid"] : CL_CRM_PERSON);
-		
+
 		if(!$this->can("view", $o->id()))
 		{
 			$o = obj();
