@@ -222,7 +222,10 @@
 	@caption N&auml;idatavad tabid
 
 	@property cfgview_ru type=textbox field=meta method=serialize
-	@caption Aadress kuhu suunata
+	@caption Aadress kuhu suunata (lisamine)
+
+	@property cfgview_ru_change type=textbox field=meta method=serialize
+	@caption Aadress kuhu suunata (muutmine)
 
 	@property cfgview_ru_id_param type=textbox field=meta method=serialize
 	@caption OID parameeter
@@ -414,6 +417,22 @@ class cfgform extends class_base
 
 		switch($data["name"])
 		{
+			case "cfgview_ru":
+				$applicable_methods = array("new", "cfgview_view_new", "cfgview_change_new");
+				if (!in_array($arr["obj_inst"]->prop("cfgview_action"), $applicable_methods))
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+
+			case "cfgview_ru_change":
+				$applicable_methods = array("change", "cfgview_change_new");
+				if (!in_array($arr["obj_inst"]->prop("cfgview_action"), $applicable_methods))
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+
 			case "general_tb":
 				$this->_general_tb($arr);
 				break;
@@ -4804,28 +4823,17 @@ class cfgform extends class_base
 			$this->cfgview_vars["awcb_display_mode"] = $_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
 
 			// make request
-			$content = false;
-
-			do
-			{
-				if (false !== $content)
-				{
-					$tmp = parse_url($content);
-					parse_str($tmp["query"], $this->cfgview_vars);
-				}
-
-				$orb = new orb();
-				$orb->process_request(array(
-					"class" => $this->cfgview_vars["class"],
-					"action" => $this->cfgview_vars["action"],
-					"reforb" => $this->cfgview_vars["reforb"],
-					"user"	=> 1,//!!! whats that for?
-					"vars" => $this->cfgview_vars,
-					"silent" => false
-				));
-				$content = $orb->get_data();
-			}
-			while (0 === strpos($content, "http://"));
+			classload("core/orb/orb");
+			$orb = new orb();
+			$orb->process_request(array(
+				"class" => $class,
+				"action" => $action,
+				"reforb" => $this->cfgview_vars["reforb"],
+				"user"	=> 1,//!!! whats that for?
+				"vars" => $this->cfgview_vars,
+				"silent" => false,
+			));
+			$content = $orb->get_data();
 		}
 
 		exit_function("cfg_form::get_class_cfgview");
@@ -5196,7 +5204,7 @@ class cfgform extends class_base
 	{
 		$o = isset($arr["o"]) && is_object($arr["o"]) && $this->can("view", $arr["o"]->id()) ? $arr["o"] : obj($arr["oid"]);
 		$clid = $this->can("view", $o->id()) ? $o->class_id() : (isset($arr["clid"]) && is_class_id($arr["clid"]) ? $arr["clid"] : CL_CRM_PERSON);
-
+		
 		if(!$this->can("view", $o->id()))
 		{
 			$o = obj();
