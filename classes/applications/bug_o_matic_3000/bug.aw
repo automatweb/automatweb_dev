@@ -1881,6 +1881,7 @@ class bug extends class_base
 			$msgtxt .= t("Status"). ": " . $this->bug_statuses[$bug->prop("bug_status")] . "\n";
 			$msgtxt .= ($bug->prop("bug_status") == BUG_FEEDBACK) ? t("Feedback from"). ": " . $bug->prop("bug_feedback_p.name") . "\n" : "";
 			$msgtxt .= t("Priority"). ": " . $bug->prop("bug_priority") . "\n";
+			$msgtxt .= t("Assigned to"). ": " . $bug->prop("who.name") . "\n";
 			$msgtxt .= "-------------\n\nNew comment from " . $uid . " at " . date("Y-m-d H:i") . "\n";
 			$msgtxt .= strip_tags($comment)."\n";
 			$msgtxt .= strip_tags($this->_get_comment_list($bug, "desc", false));
