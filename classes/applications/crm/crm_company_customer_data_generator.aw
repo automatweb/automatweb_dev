@@ -157,6 +157,8 @@ class crm_company_customer_data_generator extends class_base
 
 		@param id required type=int acl=view
 
+		@param return_url required type=string
+
 	**/
 	public function generate($arr)
 	{

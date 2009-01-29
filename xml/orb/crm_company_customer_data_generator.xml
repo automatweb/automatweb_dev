@@ -5,7 +5,7 @@
 			<function name="generate">
 				<arguments>
 					<required name="id" type="int" acl="view" />
-					<optinal name="return_url" type="string" />
+					<required name="return_url" type="string" />
 				</arguments>
 			</function>
 		</action>
