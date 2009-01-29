@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.57 2009/01/29 08:54:24 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.58 2009/01/29 08:59:53 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -288,11 +288,11 @@ class crm_db extends class_base
 
 			if((int)$od["show_in_webview"] === 1)
 			{
-				$orgs["on_web"][] = $od["buyer"];
+				$orgs["on_web"][$od["buyer"]] = $od["buyer"];
 			}
 			else
 			{
-				$orgs["not_on_web"][] = $od["buyer"];
+				$orgs["not_on_web"][$od["buyer"]] = $od["buyer"];
 			}
 		}
 
