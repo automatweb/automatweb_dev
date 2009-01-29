@@ -278,11 +278,12 @@ class google_chart extends aw_template
 		GCHART_POSITION_LEFT
 		GCHART_POSITION_RIGHT
 	@examples
-		$ch->set_legend(array(
+		$c2->set_legend(array(
 			"labels" => array(
 				t("First"),
 				t("Second"),
 				t("Third"),
+			),
 			"position" => GCHART_POSITION_LEFT,
 		));
 	**/
@@ -906,11 +907,18 @@ class google_chart extends aw_template
 		}
 		foreach($this->data as $rid => $row)
 		{
-			foreach($row as $id => $num)
+			if(!is_array($row))
 			{
-				$row[$id] = round($num / $high * 100, 1);
+				$rows[] = -1;
 			}
-			$rows[] = implode(",", $row);
+			else
+			{
+				foreach($row as $id => $num)
+				{
+					$row[$id] = round($num / $high * 100, 1);
+				}
+				$rows[] = implode(",", $row);
+			}
 		}
 		return "t:".implode("|", $rows);
 	}

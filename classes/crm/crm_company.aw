@@ -5776,6 +5776,8 @@ class crm_company extends class_base
 
 		$bill->save();
 
+		$bugs = array();
+
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
 		$task_rows_to_bill_count = array();
@@ -5783,6 +5785,12 @@ class crm_company extends class_base
 		{
 			$to = obj($task);
 			$class_id = $to->class_id();
+
+			if($class_id == CL_BUG)
+			{
+				$bugs[$to->id()] = 1;
+				continue;
+			}
 
 			//kokkuleppehinna toimetuselt arvele pookimine
 			if($to->class_id() == CL_TASK && ($to->prop("deal_unit") || $to->prop("deal_price") || $to->prop("deal_amount")))
@@ -6004,15 +6012,26 @@ class crm_company extends class_base
 		}
 
 		//teeb bugide lisamise eraldi
+		$billable_bug_rows = array();
+		foreach($_SESSION["ccbc_bug_comments"] as $key => $comment)
+		{
+			$bc = obj($comment);
+			if($bugs[$bc->prop("task")])
+			{
+				$billable_bug_rows[] = $comment;
+				unset($_SESSION["ccbc_bug_comments"][$key]);
+			}
+
+		}
 		if($arr["bunch_bugs"])
 		{
-			$bill->add_bug_comments($_SESSION["ccbc_bug_comments"]);
+			$bill->add_bug_comments($billable_bug_rows);
 		}
 		else
 		{
-			$bill->add_bug_comments_single_rows($_SESSION["ccbc_bug_comments"]);
+			$bill->add_bug_comments_single_rows($billable_bug_rows);
 		}
-		unset($_SESSION["ccbc_bug_comments"]);
+//		unset($_SESSION["ccbc_bug_comments"]);
 
 		if($_SESSION["create_bill_ru"])
 		{

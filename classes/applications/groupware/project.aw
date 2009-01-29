@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.153 2009/01/29 12:45:43 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.154 2009/01/29 17:32:35 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -326,36 +326,45 @@
 		@property req_tbl type=table store=no no_caption=1 parent=req_tbl_l
 
 
-@default group=stats
+@default group=hours_stats
 
-	@layout stats_charts type=hbox width=50%:50% closeable=1 area_caption=Graafikud
-		@layout stats_by_person parent=stats_charts type=vbox
-			@property stats_by_person_chart type=google_chart no_caption=1 parent=stats_by_person store=no
-		@layout stats_by_type parent=stats_charts type=vbox
-			@property stats_by_type_chart type=google_chart no_caption=1 parent=stats_by_type store=no
+	@layout hours_stats_charts type=hbox width=50%:50% closeable=1 area_caption=Graafikud
+		@layout hours_stats_by_person parent=hours_stats_charts type=vbox
+			@property hours_stats_by_person_chart type=google_chart no_caption=1 parent=hours_stats_by_person store=no
+		@layout hours_stats_by_type parent=hours_stats_charts type=vbox
+			@property hours_stats_by_type_chart type=google_chart no_caption=1 parent=hours_stats_by_type store=no
 
 
-	@layout stats_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
-		@property stats type=text store=no
+	@layout hours_stats_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
+		@property hours_stats type=text store=no parent=hours_stats_top
 		@caption T&ouml;&ouml;tunnid
 
-		@property stats_table type=table store=no no_caption=1
+		@property hours_stats_table type=table store=no no_caption=1 parent=hours_stats_top
 		@caption T&ouml;&ouml;tunnid inimeste kaupa
 
-
 @default group=stats_money
-	@layout stats_money_charts type=hbox width=50%:50% closeable=1 area_caption=Graafikud
-		@layout stats_money_by_person parent=work_charts type=vbox
+	@layout stats_money_charts type=vbox closeable=1 area_caption=Graafikud
+		@layout stats_money_by_person parent=stats_money_charts type=vbox
 			@property stats_money_by_person_chart type=google_chart no_caption=1 parent=stats_money_by_person store=no
-		@layout stats_money_by_time parent=work_charts type=vbox
-			@property stats_by_time_chart type=google_chart no_caption=1 parent=stats_money_by_time store=no
 
-	@layout stats_money_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
-	@property stats_money type=text store=no no_caption=1
-	@caption T&ouml;&ouml;tunnid
+	@layout stats_money_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;rahavood
 
-	@property stats_money_table type=table store=no no_caption=1
-	@caption Raha inimeste kaupa
+		@property stats_money_table no_caption=1 parent=stats_money_top type=table store=no 
+		@caption Raha inimeste kaupa
+
+
+@default group=stats
+
+	@layout stats_charts type=vbox closeable=1 area_caption=Graafik
+		@property stats_time_by_person_chart type=google_chart no_caption=1 parent=stats_charts store=no
+
+	@layout stats_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
+		@property stats type=text store=no parent=stats_top
+		@caption T&ouml;&ouml;tunnid
+
+		@property stats_table type=table store=no no_caption=1 parent=stats_top
+		@caption T&ouml;&ouml;tunnid inimeste kaupa
+
 
 @default group=stats_entry
 	
@@ -397,9 +406,11 @@
 	@groupinfo create_bill caption="Maksmata t&ouml;&ouml;d" submit=no parent=bills
 @groupinfo team caption="Meeskond" submit=no
 
+
 @groupinfo reports caption="Aruanded" submit=no
-	@groupinfo stats caption="T&ouml;&ouml;aja aruanne" submit=no parent=reports
+	@groupinfo hours_stats caption="T&ouml;&ouml;aja aruanne" submit=no parent=reports
 	@groupinfo stats_money caption="Rahavoo aruanne" submit=no parent=reports
+	@groupinfo stats caption="Ajap&otilde;hine aruanne" submit=no parent=reports
 
 @groupinfo transl caption=T&otilde;lgi
 
@@ -481,6 +492,7 @@
 
 */
 
+define("DAY", 86400);
 class project extends class_base
 {
 	function project()
@@ -502,6 +514,14 @@ class project extends class_base
 
 		$this->trans_props = array(
 			"name"
+		);
+
+	
+		$this->event_types = array(
+			CL_BUG => "&Uuml;lesanded",
+			CL_TASK => t("Toimetused"),
+			CL_CRM_MEETING => t("Kohtumised"),
+			CL_CRM_CALL => t("K&otilde;ned"),
 		);
 	}
 
@@ -553,6 +573,15 @@ class project extends class_base
 				))." ".t("Arendus&uuml;lesanne");
 
 				break;
+			case "hours_stats_by_person_chart":
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_colors(array(
+					"990000","000033","000066","000099","0000cc",
+					"000000","003300","006600","009900","00cc00",
+					"330000","660000","000000","aa0000","aa00cc",
+					"330099","660099","990099","aa0099","9900cc",
+				));
+			
 			case "works_by_person_chart":
 				if($arr["new"])
 				{
@@ -602,6 +631,112 @@ class project extends class_base
 					"color" => "666666",
 					"size" => 11,
 				));
+
+				break;
+
+			case "hours_stats_by_type_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+
+
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_BAR_GV);
+				$c->set_size(array(
+					"width" => 640,
+					"height" => 200,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+
+				$c->set_title(array(
+					"text" => t("T&ouml;&ouml;tunnid t&uuml;&uuml;pide kaupa"),
+					"color" => "444444",
+					"size" => 11,
+				));
+
+				$times = array();
+				$labels = array();
+
+				$all_data = $arr["obj_inst"]->get_rows_data();
+				$work_data = array();
+				$params = array(
+					"prog" => t("Prognoositud"),
+					"real" => t("Tegelik"),
+					"cust" => t("Kliendile"),
+		
+				);
+	
+				foreach($all_data as $dat)
+				{
+					$work_data[$dat["task.class_id"]]["prog"] +=$dat["time_guess"];
+					$work_data[$dat["task.class_id"]]["real"] +=$dat["time_real"];
+					$work_data[$dat["task.class_id"]]["cust"] +=$dat["time_to_cust"]? $dat["time_to_cust"] : $dat["time_real"];
+
+				}
+
+				$max = 0;
+
+				foreach($work_data as $clid  => $d)
+				{
+					foreach($d as $param => $count)
+					{
+						if($param == "real")
+						{
+							$labels[] = $this->event_types[$clid];
+						}else $labels[] = " ";
+						
+
+						if($max < $count)
+						{
+							$max = $count;
+						}
+						$label2[] = $params[$param];
+						$times[] = $count;
+					}
+				}
+				$c->set_axis(array(
+					GCHART_AXIS_LEFT,
+					GCHART_AXIS_BOTTOM,
+					GCHART_AXIS_BOTTOM,
+					GCHART_AXIS_TOP,
+				));
+
+		//set some labels
+		$c->add_axis_label(0, array("0", round($max/2), round($max)));
+
+		$c->add_axis_style(2, array(
+			"color" => "FFFFFF",
+			"font" => 8,
+			"align" => GCHART_AXIS_TOP,
+		));
+
+		//set the range and style for one of them
+		$c->add_axis_style(1, array(
+			"color" => "ff0000",
+			"font" => 11,
+			"align" => GCHART_AXIS_BOTTOM,
+		));
+				$c->set_colors(array(
+					"aa2222", "FFFF00","bbbbbb", "aa2222", "FFFF00","bbbbbb", "aa2222", "FFFF00","bbbbbb", "aa2222", "FFFF00",
+				));
+
+				$c->set_bar_sizes(array(
+					"width" => 60,
+					"bar_spacing" => 3,
+					"bar_group_spacing" => 8,
+				));
+
+				$c->add_axis_label(2, $labels);
+				$c->add_axis_label(3, $times);
+				$c->add_data($times);
+				$c->set_labels($label2);
 
 				break;
 			case "works_by_payment_chart":
@@ -658,7 +793,9 @@ class project extends class_base
 				$times[] = $work_price;
 				$times[] = $bill_sum;
 				$times[] = $payment_sum;
-
+				$c->set_colors(array(
+					"bbbbbb", "aa2222", "FFFF00",
+				));
 				$labels[] = t("Arvele minemata t&ouml;id summas")." ".($work_price-$bill_sum);
 				$labels[] = t("Laekumata arveid summas")." ".$bill_sum;
 				$labels[] = t("Laekunud")." ".$payment_sum;
@@ -710,7 +847,129 @@ class project extends class_base
 					"size" => 11,
 				));
 				break;
-			
+
+			case "stats_money_by_person_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$this->_get_stats_money_by_person_chart($arr);
+				break;
+
+		case "stats_time_by_person_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$c2 = &$arr["prop"]["vcl_inst"];
+				$c2->set_type(GCHART_LINE_CHART);
+				$c2->set_size(array(
+					"width" => 1000,
+					"height" => 220,
+				));
+				$c2->set_colors(array("5511aa"));
+				$c2->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$times = array();
+				$data1 = array();
+				$bot_axis = array();
+
+				classload("core/date/date_calc");
+				$all_data = $arr["obj_inst"]->get_rows_data();
+				$work_data = array();
+				$end = $arr["obj_inst"]->prop("end");
+				$start = time();
+				$max_hours = 0;
+
+				$result = array();
+
+				foreach($all_data as $data)
+				{
+					if(!$data["time_real"])
+					{
+						continue;
+					}
+					$date_day_start = date("wmy" , $data["date"]);
+					if($end < $data["date"])
+					{
+						$end = $data["date"];
+					}
+					if($start > $data["date"])
+					{
+						$start = $data["date"];
+					}
+					$result[$data["task.class_id"]][$date_day_start] +=$data["time_real"];
+					$result[1][$date_day_start] +=$data["time_real"];
+				}
+
+
+				if($start < $end - DAY * 600)
+				{
+					$start = $end - DAY * 600;
+				}
+				$start = get_week_start($start);
+				if(!($end > 1 && $start > 1))
+				{
+					return;
+				}
+				$month = 1;
+				while($end > $start)
+				{
+					if(date("mY", $month) != date("mY", $start))
+					{
+						$month = $start;
+						$bot_axis[] = date("M Y" , $start);
+					}
+					else
+					{
+	//					$bot_axis[] = "";
+					}
+					$data1[] = $result[1][date("wmy" , $start)];
+					if($max_hours < $result[1][date("wmy" , $start)])
+					{
+						$max_hours = $result[1][date("wmy" , $start)];
+					}
+					$start += DAY*7;
+				}
+
+				$c2->add_data($data1);
+				$c2->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
+				$left_axis = array();
+				if ($max_hours > 0)
+				{
+					for($i = 0; $i <= $max_hours; $i+= $max_hours/4)
+					{
+						$left_axis[] = round($i, 0);
+					}
+				}
+				$c2->add_axis_label(0, $left_axis);
+
+				$c2->add_axis_label(1, $bot_axis);
+				$c2->add_axis_style(1, array(
+					"color" => "888888",
+					"font" => 10,
+					"align" => GCHART_ALIGN_CENTER,
+				));
+				$c2->set_grid(array(
+					"xstep" => 30,
+					"ystep" => 20,
+				));
+				$c2->set_title(array(
+					"text" => t("Projekti T&ouml;&ouml; aktiivsus tundides n&auml;da kohta"),
+					"color" => "555555",
+					"size" => 10,
+				));
+				$arr["prop"]["type"] = "text";
+				$arr["prop"]["value"] = $c2->get_html();
+				break;
+
+
+
 			case "money_chart":
 				if($arr["new"])
 				{
@@ -1247,12 +1506,19 @@ class project extends class_base
 				}
 				break;
 
-			case "stats":
+			case "stats":return PROP_IGNORE;
 				$data["value"] = $this->_get_stats($arr["obj_inst"]);
 				break;
 
 			case "stats_table":
 				$data["value"] = $this->_get_stats_table($arr);
+				break;
+			case "hours_stats_table":
+				$data["value"] = $this->_get_hours_stats_table($arr);
+				break;
+
+			case "stats_money_table":
+				$data["value"] = $this->_get_stats_money_table($arr);
 				break;
 
 			case "stats_entry_table":
@@ -3790,7 +4056,7 @@ class project extends class_base
 			'action' => "create_bill",
 		));
 
-		$bills = $arr["obj_inst"]->get_bills(array("status" =>  0));
+		$bills = $arr["obj_inst"]->get_all_customer_bills(array("status" =>  0));
 
 		if($bills->count)
 		{
@@ -3868,7 +4134,7 @@ class project extends class_base
 				$arr["area_caption"] = sprintf(t("Projekti %s tegevused"), $arr["obj_inst"]->name());
 				break;
 			case "create_bill_table":
-				$arr["area_caption"] = sprintf(t("Projekti %s tegemata t&ouml;&ouml;de nimekiri"), $arr["obj_inst"]->name());
+				$arr["area_caption"] = sprintf(t("Projekti %s tehtud arveta t&ouml;&ouml;de nimekiri"), $arr["obj_inst"]->name());
 				break;
 			case "bills_r":
 				$var = 10;
@@ -6835,13 +7101,350 @@ class project extends class_base
 		}
 	}
 
-	private function _get_stats_table($arr)
+	private function _get_stats_money_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 
+		$bills = $arr["obj_inst"]->get_bills();
+
+		$all_data = $arr["obj_inst"]->get_rows_data();
+		$tasks = $task_prices = array();
+		foreach($all_data as $data)
+		{
+			$tasks[$data["task"]] = $data["task"];
+		}
+
+		$tasks_ol = new object_list();
+		$tasks_ol->add($tasks);
+		foreach($tasks_ol->arr() as $to)
+		{
+			$task_prices[$to->id()] = $to->prop("hr_price");
+		}
+
+		$work_data = array();
+		$result = array();
+		foreach($all_data as $data)
+		{
+			$person = reset($data["impl"]);
+			if(!isset($work_data[$person]))
+			{
+				$work_data[$person] = array();
+			}
+			$cust_time = $data["time_to_cust"] ? $data["time_to_cust"] : $data["time_real"];
+			$work_data[$person]["real"] +=$data["time_real"];
+			$work_data[$person]["guess"] +=$data["time_guess"];
+			$work_data[$person]["cust"] +=$cust_time;
+			if($task_prices[$data["task"]])
+			{
+				$work_data[$person]["sum"] += $data["time_real"] * $task_prices[$data["task"]];
+				$result["sum"] += $data["time_real"] * $task_prices[$data["task"]];
+				$work_data[$person]["sum_cust"] += $cust_time * $task_prices[$data["task"]];
+				$result["sum_cust"] += $cust_time * $task_prices[$data["task"]];
+			}
+			else
+			{
+				$work_data[$person]["without"] += $data["time_real"];
+				$result["without"] += $data["time_real"];
+			}
+			$result["real"] +=$data["time_real"];
+			$result["guess"] +=$data["time_guess"];
+			$result["cust"] +=$cust_time;
+
+		}
+
+		//iga isiku info
+		foreach($work_data as  $person  => $d)
+		{
+			$data_defined = $d;
+			$data_defined["person"] = html::obj_change_url($person);
+			$t->define_data($data_defined);
+		}
+
+		foreach($bills->arr() as $bill)
+		{
+			$result["on_bill"] += $bill->get_sum();
+			$result["payments"] += $bill->get_payments_sum();
+		}
+
+		//kokkuv6tte rea info
+		$data_defined = $result;
+		$data_defined["person"] = t("Kokku");
+		$t->define_data($data_defined);
+
+
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "center",
+		));
+	
+
+		$t->define_field(array(
+			"name" => "guess",
+			"caption" => t("Prognoositud t&ouml;&ouml;tunde"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "real",
+			"caption" => t("Tegelikke t&ouml;&ouml;tunde"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "without",
+			"caption" => t("Tunnihinnata t&ouml;&ouml;tunde"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("T&ouml;id summas"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "cust",
+			"caption" => t("T&ouml;&ouml;tunde kliendile"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "sum_cust",
+			"caption" => t("T&ouml;id kliendile summas"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "on_bill",
+			"caption" => t("T&ouml;id arvel summas"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "payments",
+			"caption" => t("Tasu laekunud summas"),
+			"align" => "center",
+		));
+
+		$t->set_sortable(false);
+	}
+
+	private function _get_hours_stats_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+	
+		$all_data = $arr["obj_inst"]->get_rows_data();
+		$work_data = array();
+		$this->event_types = $this->event_types + array(1 => t("Kokku"));
+		$params = array(
+			"prog" => t("Prognoositud"),
+			"real" => t("Tegelik"),
+			"cust" => t("Kliendile"),
+
+		);
+
+		$result = array();
+
+		foreach($all_data as $data)
+		{
+			$person = reset($data["impl"]);
+			if(!isset($work_data[$person]))
+			{
+				$work_data[$person] = array();
+			}
+		$custh = $data["time_to_cust"] ? $data["time_to_cust"] : $data["time_real"];
+			$work_data[$person][$data["task.class_id"]]["real"] +=$data["time_real"];
+			$work_data[$person][1]["real"] +=$data["time_real"];
+			$work_data[$person][$data["task.class_id"]]["cust"] +=$custh;
+			$work_data[$person][1]["cust"] +=$custh;
+			$work_data[$person][$data["task.class_id"]]["prog"] +=$data["time_guess"];
+			$work_data[$person][1]["prog"] +=$data["time_guess"];
+
+			$result[$data["task.class_id"]]["real"] +=$data["time_real"];
+			$result[1]["real"] +=$data["time_real"];
+			$result[$data["task.class_id"]]["cust"] +=$custh;
+			$result[1]["cust"] +=$custh;
+			$result[$data["task.class_id"]]["prog"] +=$data["time_guess"];
+			$result[1]["prog"] +=$data["time_guess"];
+		}
+
+		//iga isiku info
+		foreach($work_data as  $person  => $d)
+		{
+			$data_defined = array();
+			$data_defined["person"] = html::obj_change_url($person);
+			foreach($this->event_types as $clid => $capt)
+			{
+				foreach($params as $param_id => $param_name)
+				{
+					$data_defined[$clid."_".$param_id] = $d[$clid][$param_id];
+					if(!$d[$clid][$param_id]) $data_defined[$clid."_".$param_id] = "-";
+				}
+			}
+			$t->define_data($data_defined);
+		}
+
+		//kokkuv6tte rea info
+		$data_defined = array();
+		$data_defined["person"] = t("Kokku");
+		foreach($this->event_types as $clid => $capt)
+		{
+			foreach($params as $param_id => $param_name)
+			{
+				$data_defined[$clid."_".$param_id] = $result[$clid][$param_id];
+				if(!$result[$clid][$param_id]) $data_defined[$clid."_".$param_id] = "-";
+			}
+		}
+		$t->define_data($data_defined);
+
+
+
+
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "center",
+		));
+	
+		foreach($this->event_types as $clid => $capt)
+		{
+			$t->define_field(array(
+				"name" => "field".$clid,
+				"caption" => $capt,
+				"align" => "center",
+			));
+			foreach($params as $param_id => $param_name)
+			{
+				$t->define_field(array(
+					"name" => $clid."_".$param_id,
+					"caption" => $param_name,
+					"align" => "center",
+					"parent" => "field".$clid,
+				));
+			}
+		}
+
+		$t->set_sortable(false);
+	}
+
+	private function _get_stats_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		classload("core/date/date_calc");
+		$all_data = $arr["obj_inst"]->get_rows_data();
+		$work_data = array();
+		$this->event_types = $this->event_types;
+		$end = $arr["obj_inst"]->prop("end");
+		$start = time();
+		$result = array();
+
+		foreach($all_data as $data)
+		{
+			if(!$data["time_real"])
+			{
+				continue;
+			}
+			$person = reset($data["impl"]);
+			if(!isset($work_data[$person]))
+			{
+				$work_data[$person] = array();
+			}
+
+			if($end < $data["date"])
+			{
+				$end = $data["date"];
+			}
+			if($start > $data["date"])
+			{
+				$start = $data["date"];
+			}
+			$date_day_start = date("dmy" , $data["date"]);
+			$work_data[$person][$data["task.class_id"]][$date_day_start] +=$data["time_real"];
+			$work_data[$person][1][$date_day_start] +=$data["time_real"];
+
+			$result[$data["task.class_id"]][$date_day_start] +=$data["time_real"];
+			$result[1][$date_day_start] +=$data["time_real"];
+		}
+
+		//iga isiku info
+		foreach($work_data as $person  => $d)
+		{
+			if(!$person) continue;
+			$data_defined = array();//$work_data[$person][1];
+			$data_defined["person"] = html::obj_change_url($person);
+			$t->define_data($data_defined);
+			
+			foreach($this->event_types as $clid => $capt)
+			{
+				$data_defined = $work_data[$person][$clid];
+				$data_defined["person"] = $capt;
+				$t->define_data($data_defined);
+			}
+		}
+
+		//kokkuv6tte rea info
+		$data_defined = array();
+		$data_defined["person"] = t("Kokku");
+		$t->define_data($data_defined);
+		foreach($this->event_types as $clid => $capt)
+		{
+			$data_defined = $result[$clid];
+			$data_defined["person"] = $capt;
+			$t->define_data($data_defined);
+		}
+
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "center",
+		));
+
+		$start = $arr["obj_inst"]->prop("start");
+
+		//mingi piirang ka peale... 
+		if($start < $end - DAY * 600)
+		{
+			$start = $end - DAY * 600;
+		}
+
+		$start = get_day_start($start);
+		if(!($end > 1 && $start > 1))
+		{
+			return;
+		}
+		while($end > $start)
+		{
+			if(date("N" , $start) > 5)
+			{
+				$start += DAY;
+				continue;
+			}
+			if($parent_field !=  date("my" , $start))
+			{
+				$t->define_field(array(
+					"name" => date("my" , $start),
+					"caption" => date("M Y" , $start),
+					"align" => "center",
+				));
+				$parent_field =  date("my" , $start);
+			}
+			$t->define_field(array(
+				"name" => date("dmy" , $start),
+				"caption" => date("d" , $start),
+				"align" => "center",
+				"parent" => date("my" , $start),
+				"callback" =>  array(&$this, "__tm_field_format"),
+				"callb_pass_row" => true,
+			));
+			$start += DAY;
+		}
+
+/*
 		$stats_by_ppl = $arr["obj_inst"]->stats_get_by_person();
 		$types = array();
 		$tot_sums = array();
+arr($stats_by_ppl);
 		foreach($stats_by_ppl as $person => $data)
 		{
 			$d = array(
@@ -6880,9 +7483,22 @@ class project extends class_base
 
 		$tot_sums["person"] = t("Summa");
 		$t->define_data(array_map(create_function('$a', 'return html::strong($a);'), $tot_sums));
-
+*/
 		$t->set_sortable(false);
 	}
+
+	function __tm_field_format($val)
+	{
+		if(!$val[$val["_this_cell"]])
+		{
+			return "-";
+		}
+		else
+		{
+			return($val[$val["_this_cell"]]);
+		}
+	}
+
 
 	private function _init_stats_entry_table($t)
 	{
@@ -7102,5 +7718,154 @@ class project extends class_base
 		}
 		die("all done");
 	}
+
+	function _get_stats_money_by_person_chart($arr)
+	{
+		$c2 = &$arr["prop"]["vcl_inst"];
+		$c2->set_type(GCHART_LINE_CHARTXY);
+		$c2->set_size(array(
+			"width" => 1000,
+			"height" => 220,
+		));
+		$c2->set_colors(array("5511aa" , "55aa44"));
+		$c2->add_fill(array(
+			"area" => GCHART_FILL_BACKGROUND,
+			"type" => GCHART_FILL_SOLID,
+			"colors" => array(
+				"color" => "e9e9e9",
+			),
+		));
+		$time = array();
+		$time_data = array();
+		classload("core/date/date_calc");
+		$all_data = $arr["obj_inst"]->get_rows_data();
+		$end = $arr["obj_inst"]->prop("end");
+		$start = time();
+		$result = array();
+
+		$chart_data = $chart_payments = array();
+		$tasks = $task_prices = array();
+		foreach($all_data as $data)
+		{
+			if(!($data["time_real"] || $data["time_to_cust"]))
+			{
+				continue;
+			}
+			$date_day_start = date("wmy" , $data["date"]);
+			if($end < $data["date"])
+			{
+				$end = $data["date"];
+			}
+			if($start > $data["date"])
+			{
+				$start = $data["date"];
+			}
+			$tasks[$data["task"]] = $data["task"];
+		}
+
+		$tasks_ol = new object_list();
+		$tasks_ol->add($tasks);
+		foreach($tasks_ol->arr() as $to)
+		{
+			$task_prices[$to->id()] = $to->prop("hr_price");
+		}
+
+		$round = round(4*($end-$start)/100 , -6);
+//		arr($round);
+
+		foreach($all_data as $data)
+		{
+			if(!($data["time_real"] || $data["time_to_cust"]))
+			{
+				continue;
+			}
+			$date_day_start = round($data["date"]/$round);
+			$custh = $data["time_to_cust"] ? $data["time_to_cust"] : $data["time_real"];
+			$chart_data[$date_day_start] += $task_prices[$data["task"]] * $custh;
+		}
+
+		$bills = $arr["obj_inst"]->get_bills();
+		foreach($bills->arr() as $bill)
+		{
+			foreach($bill->get_bill_payments_data() as $p_data)
+			{
+				$date_day_start = round($p_data["date"]/$round);
+				$chart_payments[$date_day_start] += $p_data["sum"];
+			}
+		}
+
+		$sum = 0;
+		$pay_sum = 0;
+		$x = 0;
+		
+		$data0 = $data1 = $data2 = $labels = array();
+
+		$labels[]= date("M Y" , $start);
+		$labels[]= date("M Y" , $start + (($end - $start) / 3));
+		$labels[]= date("M Y" , $start + (($end - $start) / 2));
+		$labels[]= date("M Y" , $end -   (($end - $start) / 3));
+		$labels[]= date("M Y" , $end);
+
+		while($start < $end)
+		{
+			$st= round($start/$round);
+			$sum+= $chart_data[$st];
+			$pay_sum += $chart_payments[$st];
+			$data1[] = $sum;
+			$data3[] = $pay_sum;
+			$start += $round;
+			$x++;
+		}
+
+		$c2->set_labels($labels);
+ 		$c2->add_data(-1);
+ 		$c2->add_data($data1);
+ 		$c2->add_data(-1);
+ 		$c2->add_data($data3);
+
+// 		$c2->add_data(array(10,20,40,80,90,95,99));
+ //		$c2->add_data(array(20,30,40,50,60,70,80));
+ //		$c2->add_data(-1);
+ //		$c2->add_data(array(5,25,45,65,85));
+
+
+		$c2->set_axis(array(
+			GCHART_AXIS_RIGHT,
+			GCHART_AXIS_BOTTOM
+		));
+		$left_axis = array();
+		if ($sum > 0)
+		{
+			for($i = 0; $i <= $sum; $i+= $sum/4)
+			{
+				$left_axis[] = round($i, 0);
+			}
+		}
+		$c2->add_axis_label(0, $left_axis);
+		$c2->add_axis_label(1, $bot_axis);
+		$c2->add_axis_style(1, array(
+			"color" => "888888",
+			"font" => 10,
+			"align" => GCHART_ALIGN_CENTER,
+		));
+		$c2->set_grid(array(
+			"xstep" => 30,
+			"ystep" => 20,
+		));
+		$c2->set_title(array(
+			"text" => t("T&ouml;id tehtud t&ouml;&ouml;d ja laekunud summad kokku ajaliselt"),
+			"color" => "555555",
+			"size" => 10,
+		));
+		$c2->set_legend(array(
+			"labels" => array(
+				t("Tehtud t&ouml;id summas"),
+				t("Raha laekunud"),
+			),
+			"position" => GCHART_POSITION_LEFT,
+		));
+		//
+	}
+
 };
 ?>

@@ -1287,6 +1287,22 @@ class crm_company_obj extends _int_object
 		}
 		return $data;
 	}
+
+	/** returns all projects where company is customer
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_projects_as_customer($arr = array())
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"CL_PROJECT.RELTYPE_ORDERER" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		return $ol;
+	}
+
 }
 
 ?>

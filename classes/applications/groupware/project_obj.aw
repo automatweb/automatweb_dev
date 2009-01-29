@@ -497,6 +497,20 @@ class project_obj extends _int_object
 		return $ret;
 	}
 
+	/** Returns project customers
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_customers()
+	{
+		$ol = new object_list();
+		foreach($this->connections_from(array("type" => "RELTYPE_ORDERER")) as $c)
+		{
+			$ol->add($c->prop("to"));
+		}
+		return $ol;
+	}
+
 	private function get_bills_filter($status = null)
 	{
 		$ids = array();
@@ -536,6 +550,40 @@ class project_obj extends _int_object
 		}
 		return $filter;
 
+	}
+
+	/** Returns project bills
+		@attrib api=1
+		@param status optional type=int
+			Filter date to
+		@returns object list
+	**/
+	public function get_all_customer_bills($arr)
+	{
+		$projects = array();
+		$projects[$this->id()] = $this;
+		$params = array();
+		if(isset($arr["status"]))
+		{
+			$params["status"] = $arr["status"];
+		}
+
+		$customers = $this->get_customers();
+
+		foreach($customers->arr() as $customer)
+		{
+			foreach($customer->get_projects_as_customer()->arr() as $project_id => $project)
+			{
+				$projects[$project_id] = $project;
+			}
+		}
+
+		$bills = new object_list();
+		foreach($projects as $id => $o)
+		{
+			$bills->add($o->get_bills($params));
+		}
+		return $bills;
 	}
 
 	/** Returns project bills

@@ -187,7 +187,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 @default group=tasks
 	@property bill_tb type=toolbar store=no no_caption=1
-	@property bill_task_list type=table store=no no_caption=1
+	@layout bill_task_list_l type=vbox
+		@property bill_task_list type=table store=no no_caption=1 parent=bill_task_list_l
 
 @groupinfo other_data caption="Muud andmed"
 @groupinfo delivery_notes caption="Saatelehed"
@@ -3325,6 +3326,11 @@ class crm_bill extends class_base
 	function _init_bill_task_list(&$t)
 	{
 		$t->define_field(array(
+			"name" => "oid",
+			"caption" => t("ID"),
+//			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Toimetus"),
 //			"sortable" => 1
@@ -3612,6 +3618,18 @@ class crm_bill extends class_base
 	{
 		$arr["args"]["project"] = $arr["request"]["project"];
 	}
+
+	function callback_mod_layout(&$arr)
+	{
+		switch($arr["name"])
+		{
+			case "bill_task_list_l":
+				$arr["area_caption"] = sprintf(t("%s seotud tegevused"), $arr["obj_inst"]->name());
+				break;
+		}
+		return true;
+	}
+
 
 	function callback_mod_tab($arr)
 	{

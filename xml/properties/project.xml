@@ -359,7 +359,6 @@
             <name>add_event</name>
             <table>objects</table>
             <group>add_event</group>
-            <type>callback</type>
             <callback>callback_get_add_event</callback>
             <store>no</store>
             <field>add_event</field>
@@ -988,16 +987,6 @@
             <field>stats_money_by_person_chart</field>
       </property>
       <property>
-            <name>stats_by_time_chart</name>
-            <table>objects</table>
-            <group>stats_money</group>
-            <type>google_chart</type>
-            <no_caption>1</no_caption>
-            <parent>stats_money_by_time</parent>
-            <store>no</store>
-            <field>stats_by_time_chart</field>
-      </property>
-      <property>
             <name>stats_money_table</name>
             <table>objects</table>
             <group>stats_money</group>
@@ -1614,13 +1603,13 @@
                   <group>hours_stats</group>
             </hours_stats_charts>
             <hours_stats_by_person>
-                  <parent>stats_charts</parent>
+                  <parent>hours_stats_charts</parent>
                   <type>vbox</type>
                   <group>hours_stats</group>
                   <area_caption></area_caption>
             </hours_stats_by_person>
             <hours_stats_by_type>
-                  <parent>stats_charts</parent>
+                  <parent>hours_stats_charts</parent>
                   <type>vbox</type>
                   <group>hours_stats</group>
                   <area_caption></area_caption>
@@ -1631,24 +1620,17 @@
                   <group>hours_stats</group>
             </hours_stats_top>
             <stats_money_charts>
-                  <type>hbox</type>
-                  <width>50%:50%</width>
+                  <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Graafikud</area_caption>
                   <group>stats_money</group>
             </stats_money_charts>
             <stats_money_by_person>
-                  <parent>work_charts</parent>
+                  <parent>stats_money_charts</parent>
                   <type>vbox</type>
                   <group>stats_money</group>
                   <area_caption></area_caption>
             </stats_money_by_person>
-            <stats_money_by_time>
-                  <parent>work_charts</parent>
-                  <type>vbox</type>
-                  <group>stats_money</group>
-                  <area_caption></area_caption>
-            </stats_money_by_time>
             <stats_money_top>
                   <type>vbox</type>
                   <area_caption>Projektiga&amp;amp;nbsp;seotud&amp;amp;nbsp;rahavood</area_caption>

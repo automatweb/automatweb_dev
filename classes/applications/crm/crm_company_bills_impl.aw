@@ -863,13 +863,14 @@ enter_function("bills_impl::_get_bill_task_list5");
 					$bug = obj($id);
 					$hr_price = $bug->get_hour_price();
 					$t->define_data(array(
-						"name" => html::obj_change_url($bug)." ".html::href(array("caption" => t("(kommentaarid)") , "url" => 'javascript:aw_popup_scroll("'.$this->mk_my_orb(
+						"name" => html::obj_change_url($bug)." ".html::href(array("caption" => t("(kommentaarid)") ,
+						"url" => "javascript:aw_popup_scroll('".$this->mk_my_orb(
 							"create_bill_bug_popup", array(
 								"openprintdialog" => 1,
 								"id" => $bug->id(),
 								"start" => $this->search_start,
 								"end" => $this->search_end,
-						)).'","'.t("Bugide kommentaarid").'",800,600)')),
+						))."','".t("Bugide kommentaarid")."',800,600)")),
 						"oid" => $bug->id(),
 						"hrs" =>  $bt,
 						"hr_price" => $hr_price,
