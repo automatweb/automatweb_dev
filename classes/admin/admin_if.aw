@@ -1487,7 +1487,7 @@ class admin_if extends class_base
 
 	private function _resolve_tbl_parent($arr)
 	{
-		$parent = !empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : $this->cfg["rootmenu"];
+		$parent = !empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : aw_ini_get("rootmenu");
 		if (!$this->can("view", $parent))
 		{
 			return null;
