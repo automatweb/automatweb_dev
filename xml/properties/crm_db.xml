@@ -19,6 +19,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SELECTIONS</reltype>
+            <store>connect</store>
             <caption>Vaikimisi valim</caption>
       </property>
       <property>
@@ -30,6 +31,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_FIRMA_CAT</reltype>
             <multiple>1</multiple>
+            <store>connect</store>
             <caption>Ettev&amp;amp;otilde;tete kaust</caption>
       </property>
       <property>
@@ -40,6 +42,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ISIK_CAT</reltype>
+            <store>connect</store>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;tajate kaust</caption>
       </property>
       <property>
@@ -50,6 +53,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_CAT</reltype>
+            <store>connect</store>
             <caption>Aadresside kaust</caption>
       </property>
       <property>
@@ -60,6 +64,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ETTEVOTLUSVORM_CAT</reltype>
+            <store>connect</store>
             <caption>&amp;amp;Otilde;iguslike vormide kaust</caption>
       </property>
       <property>
@@ -70,6 +75,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_RIIK_CAT</reltype>
+            <store>connect</store>
             <caption>Riikide kaust</caption>
       </property>
       <property>
@@ -80,6 +86,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_PIIRKOND_CAT</reltype>
+            <store>connect</store>
             <caption>Piirkondade kaust</caption>
       </property>
       <property>
@@ -90,6 +97,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_MAAKOND_CAT</reltype>
+            <store>connect</store>
             <caption>Maakondade kaust</caption>
       </property>
       <property>
@@ -100,6 +108,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_LINN_CAT</reltype>
+            <store>connect</store>
             <caption>Linnade kaust</caption>
       </property>
       <property>
@@ -111,6 +120,7 @@
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_TEGEVUSALA_CAT</reltype>
+            <store>connect</store>
             <caption>Tegevusalade kaust</caption>
       </property>
       <property>
@@ -121,6 +131,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_TOODE_CAT</reltype>
+            <store>connect</store>
             <caption>Toodete kaust</caption>
       </property>
       <property>
@@ -131,6 +142,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_GENERAL_CAT</reltype>
+            <store>connect</store>
             <caption>Kaust, kui m&amp;amp;otilde;ni eelnevatest pole m&amp;amp;auml;&amp;amp;auml;ratud, siis kasutatakse seda</caption>
       </property>
       <property>
