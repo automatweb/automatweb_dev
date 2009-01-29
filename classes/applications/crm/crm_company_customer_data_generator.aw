@@ -91,13 +91,18 @@ class crm_company_customer_data_generator extends class_base
 
 	public function _get_start_generating($arr)
 	{
-		$cnt = $arr["obj_inst"]->get_orgs()->count();
+		$cnt = $arr["obj_inst"]->get_orgs()->ids();
+		$cnt_ = $arr["obj_inst"]->get_done_orgs();
+		$done = array_intersect($cnt, $cnt_);
 
-		$s = count($arr["obj_inst"]->get_done_orgs()) == 0 ? t("Alusta") : t("J&auml;tka");
+		$s = count($done) == 0 ? t("Alusta") : t("J&auml;tka");
+		$caption = sprintf(t("%s kliendisuhete genereerimist %u organisatsioonile"), $s, count($cnt));
+		$caption .= count($done) > 0 ? sprintf(t(" (tehtud %u)"), $done) : "";
+		$caption .= count($cnt) - count($done) > 200 ? sprintf(t(" (korraga genereeritakse %u)"), 200) : "";
 
 		$arr["prop"]["value"] = html::href(array(
 			"url" => $this->mk_my_orb("generate", array("id" => $arr["obj_inst"]->id(), "return_url" => get_ru())),
-			"caption" => sprintf(t("%s kliendisuhete genereerimist %u organisatsioonile"), $s, $cnt),
+			"caption" => $caption,
 		));
 	}
 
