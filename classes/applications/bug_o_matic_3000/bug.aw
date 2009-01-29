@@ -24,7 +24,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property name type=textbox table=objects parent=name_way no_caption=1
 	@property expl_txt type=text store=no no_caption=1 parent=name_way
-	
+
 @layout settings_wrap type=vbox closeable=1 area_caption=M&auml;&auml;rangud
 @layout settings type=hbox parent=settings_wrap
 
@@ -166,8 +166,8 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@layout data_r_bot type=vbox parent=content_right closeable=1 area_caption=Andmed
 
-			@layout data_r_bot_s type=hbox parent=data_r_bot 
-	
+			@layout data_r_bot_s type=hbox parent=data_r_bot
+
 				@layout data_r_bot_left type=vbox parent=data_r_bot_s
 
 					@property aw_spec type=relpicker reltype=RELTYPE_AW_SPEC  parent=data_r_bot_left captionside=top
@@ -181,20 +181,20 @@ define("BUG_STATUS_CLOSED", 5);
 
 
 				@layout data_r_bot_right type=vbox parent=data_r_bot_s
-	
-					@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data_r_bot_right captionside=top store=no max_files=99 
+
+					@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data_r_bot_right captionside=top store=no max_files=99
 					@caption Fail
 
 					@property bug_predicates type=textbox parent=data_r_bot_right captionside=top field=aw_bug_predicates size=15
 					@caption Eeldusbugid
-	
+
 					@property bug_mail type=textbox parent=data_r_bot_right captionside=top size=15
 					@caption Bugmail CC
 
 		@layout data_r_charts type=vbox parent=content_right closeable=1 area_caption=Graafikud
 
 				@property persons_chart type=google_chart no_caption=1 parent=data_r_charts store=no
-				
+
 				@property times_chart type=google_chart no_caption=1 parent=data_r_charts store=no
 
 
@@ -493,7 +493,7 @@ class bug extends class_base
 					"size" => 11,
 				));
 				break;
-			
+
 			case "times_chart":
 				if($arr["new"])
 				{
@@ -907,7 +907,7 @@ class bug extends class_base
 			case "who":
 			case "monitors":
 				if ($arr["new"] || true)
-				{ 
+				{
 					foreach($this->parent_options[$prop["name"]] as $key => $val)
 					{
 						$key_o = obj($key);
@@ -1189,7 +1189,7 @@ class bug extends class_base
 					"content" => "<a href=''>".t("Paus")."</a>",
 				))." ".html::span(array(
 					"id" => "bug_stopper_clear_link",
-					"content" => "<a href=''>".t("Clear")."</a>",
+					"content" => "<a href=''>".t("Nulli")."</a>",
 				));
 				break;
 			case "bug_add_guess":
@@ -1210,7 +1210,7 @@ class bug extends class_base
 				{
 					$path = obj($arr["request"]["parent"])->path();
 					foreach($path as $po)
-					{ 	 
+					{
 						if($po->class_id() == CL_BUG_TRACKER)
 						{
 							$bt = $po;
@@ -2153,7 +2153,7 @@ class bug extends class_base
 				),
 			));
 		}
-	
+
 		$ol = new object_list($params);
 		$com_str = "";
 		$u = get_instance(CL_USER);
@@ -2359,7 +2359,7 @@ class bug extends class_base
 				"on_bill" => $onbill,
 			));
 		}
-		
+
 	}
 
 	function get_priority_list()
@@ -2469,7 +2469,7 @@ class bug extends class_base
 
 	function create_dev_order($arr)
 	{
-		
+
 		$o = new object();
 
 		$bt = $this->_get_bt($arr["obj_inst"]);
@@ -2564,10 +2564,10 @@ class bug extends class_base
 				"type" => "RELTYPE_FILE"
 			));
 		}
-		
+
 		$creator = obj(get_instance(CL_USER)->get_person_for_uid($arr["obj_inst"]->createdby()));
 
-		$devo_url = 
+		$devo_url =
 		$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
 		$pt = $po->path();
 		$bt_obj = null;
@@ -2580,7 +2580,7 @@ class bug extends class_base
 		}
 
 		$mail = $bt->prop("dorder_mail_contents");
-		
+
 		$find = array(
 			"#added_by#",
 			"#confirmation_by#",
@@ -2604,7 +2604,7 @@ class bug extends class_base
 				$adr = obj($mail)->prop("mail");
 				send_mail($adr, "Lisati arendustellimus", $mail_contents, "From: bugtrack@".substr(strstr(aw_ini_get("baseurl"), "//"), 2));
 			}
-			
+
 		}
 
 		die("<script> window.location = '".$this->mk_my_orb("change", array("id" => $o->id()), CL_DEVELOPMENT_ORDER)."' </script>");
@@ -2886,7 +2886,7 @@ die($email);
 		if($email)
 		{
 			$text= "Class ".$file." changed\n\n".$this->hexbin($msg);
-		
+
 			send_mail(
 				$email,
 				$file." new commit",
@@ -3471,7 +3471,7 @@ die($email);
 			jQuery.stopper_watch($(this), arr);
 			return this;
 		};
-		
+
 		jQuery.stopper_watch = function(object, arr) {
 			time = 0;
 			var old_time = false; // value in input field
@@ -3480,23 +3480,23 @@ die($email);
 			var timestamp_start = thisdate.getTime();
 			var seconds_start = 0;
 			var time_before_pause = parseFloat($("#bug_add_real").val());
-			
+
 			_start_stopper();
 			_handlers();
 			// + stop visual jumping
 			object.parent().css("width", "600px");
-			
+
 			function _handlers()
 			{
-				object.children().click(function () { 
+				object.children().click(function () {
 					_toggle_stopper(false);
 					return false;
 				});
-				$("#bug_stopper_pause_link").click(function () { 
+				$("#bug_stopper_pause_link").click(function () {
 					_toggle_stopper(false);
 					return false;
 				});
-				$("#bug_add_real").focus(function () { 
+				$("#bug_add_real").focus(function () {
 					_toggle_stopper(true);
 					return false;
 				});
@@ -3506,7 +3506,7 @@ die($email);
 					return false;
 				});
 			}
-			
+
 			function _start_stopper()
 			{
 				$.timer(1000, function f (timer){
@@ -3528,7 +3528,7 @@ die($email);
 					$("#bug_add_real").val(r2(tmp));
 				})
 			}
-			
+
 			function _toggle_stopper(force_pause)
 			{
 				if (pause && !force_pause)
@@ -3548,7 +3548,7 @@ die($email);
 					$("#bug_stopper_pause_link").children().html("J&auml;tka")
 				}
 			}
-			
+
 			function _return_normal_clock(seconds)
 			{
 				var s = seconds;
@@ -3578,7 +3578,7 @@ die($email);
 				}
 				return h+":"+m+":"+s;
 			}
-			
+
 			function r2(n)
 			{
 				ans = n * 1000
@@ -3588,10 +3588,10 @@ die($email);
 				ans = ans.substring(0,len-2) + "." + ans.substring(len-2,len)
 				return ans
 			}
-		
-		
+
+
 		}
-		
+
 		$("#bug_stopper_watch_time").stopper_watch();
 EOF;
 		$bt = $this->_get_bt($arr["obj_inst"]);
@@ -3667,7 +3667,7 @@ EOF;
 				}
 			}';
 		}
-		
+
 		if ($arr["request"]["group"] == "general" || $arr["request"]["group"] == "")
 		{
 			$hide_fb = <<<EOF
@@ -3709,7 +3709,7 @@ EOF;
 				}
 			}
 		}
-		
+
 
 		$type_app = "
 			var opts = new Array()";
@@ -3752,12 +3752,12 @@ EOF;
 		{
 			return $hide_fb.$maintainers.$s_bug_stopper_watch_v2.$type_app;
 		}
-		
+
 		if (!$arr["new"])
 		{
 			return "";
 		}
-		
+
 
 		return
 		"function aw_submit_handler() {".
