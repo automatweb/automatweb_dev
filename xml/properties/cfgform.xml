@@ -605,7 +605,16 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Aadress kuhu suunata</caption>
+            <caption>Aadress kuhu suunata (lisamine)</caption>
+      </property>
+      <property>
+            <name>cfgview_ru_change</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Aadress kuhu suunata (muutmine)</caption>
       </property>
       <property>
             <name>cfgview_ru_id_param</name>
