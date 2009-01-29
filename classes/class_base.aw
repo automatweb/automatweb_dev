@@ -1245,9 +1245,9 @@ class class_base extends aw_template
 			if ($this->can("view", $request["cfgform"]))
 			{
 				$cfgform_o = obj($request["cfgform"]);
-				if (!is_admin() and $cfgform_o->prop("cfgview_ru") != "")
+				if (!is_admin() and $cfgform_o->prop("cfgview_ru" . ($this->new ? "" : "_change")) != "")
 				{
-					$retval = $cfgform_o->prop("cfgview_ru");
+					$retval = $cfgform_o->prop("cfgview_ru" . ($this->new ? "" : "_change"));
 					if($cfgform_o->prop("cfgview_ru_id_param") != "")
 					{
 						$retval = aw_url_change_var($cfgform_o->prop("cfgview_ru_id_param"), $this->obj_inst->id(), $retval);
