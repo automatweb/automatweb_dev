@@ -186,13 +186,7 @@ class bt_projects_impl extends core
 				));
 				if($parent == 0)
 				{
-					$conn = $c->to()->connections_from(array(
-						"type" => "RELTYPE_CATEGORY"
-					));
-					if(count($conn))
-					{
-						$t->add_item($c->prop("to"), array());
-					}
+					$this->__insert_proj_categories($t, $o->id(), $o->id(), $arr);
 				}
 			}
 		}
@@ -215,7 +209,13 @@ class bt_projects_impl extends core
 				));
 				if($parent == 0)
 				{
-					$this->__insert_category_subs($t, $c->to(), $c->prop("to"), $arr);
+					$conn = $c->to()->connections_from(array(
+						"type" => "RELTYPE_CATEGORY"
+					));
+					if(count($conn))
+					{
+						$t->add_item($c->prop("to"), array());
+					}
 				}
 			}
 		}
@@ -233,10 +233,6 @@ class bt_projects_impl extends core
 				"name" => $c->prop("to.name"),
 				"url" => "#",
 			));
-			if($parent != 0)
-			{
-				break;
-			}
 			$this->__insert_category_subs($t, $c->to(), $c->prop("to"), $arr);
 		}
 		$conn = $o->connections_from(array(
@@ -321,26 +317,12 @@ class bt_projects_impl extends core
 		$owner = get_instance(CL_BUG_TRACKER)->_get_owner($arr);
 		$ol = new object_list(array(
 			"class_id" => CL_PROJECT,
+			"proj_mgr.RELTYPE_CURRENT_JOB.RELTYPE_SECTION" => $obj->id(),
 		));
 		$set_ppl = array();
 		foreach($ol->arr() as $o)
 		{
-			$p = $o->prop("proj_mgr");
-			if($set_ppl[$p])
-			{
-				continue;
-			}
-			$set_ppl[$p] = $p;
-			unset($wrl);
-			if($p)
-			{
-				$po = obj($p);
-				$wrl = $po->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
-			}
-			if(!$wrl || $wrl->prop("section") != $obj->id())
-			{
-				continue;
-			}
+			$po = obj($o->prop("proj_mgr"));
 			$t->add_item($parent, array(
 				"id" => $po->id(),
 				"name" => $arr["inst_id"] ? $po->name() : $this->__parse_name($po->name(), $po->id(), $arr),
