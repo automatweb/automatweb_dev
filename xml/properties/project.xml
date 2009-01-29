@@ -148,12 +148,11 @@
       </property>
       <property>
             <name>proj_mgr</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>general2</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PARTICIPANT</reltype>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_proj_mgr</field>
             <parent>left_bit</parent>
             <clid>CL_CRM_PERSON</clid>
             <caption>Projekti juht</caption>

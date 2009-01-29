@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.151 2009/01/28 21:45:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.152 2009/01/29 12:29:26 robert Exp $
 // project.aw - Projekt
 /*
 
@@ -55,7 +55,7 @@
 
 			@property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker parent=left_bit
 
-			@property proj_mgr type=relpicker reltype=RELTYPE_PARTICIPANT field=meta method=serialize parent=left_bit clid=CL_CRM_PERSON
+			@property proj_mgr type=relpicker reltype=RELTYPE_PARTICIPANT table=aw_projects field=aw_proj_mgr parent=left_bit clid=CL_CRM_PERSON
 			@caption Projekti juht
 
 			@property category type=relpicker reltype=RELTYPE_CATEGORY store=connect multiple=1 size=2 parent=left_bit
@@ -5982,6 +5982,22 @@ class project extends class_base
 					"name" => $field,
 					"type" => "varchar(50)"
 				));
+				return true;
+			case "aw_proj_mgr":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int",
+				));
+				$ol = new object_list(array(
+					"class_id" => CL_PROJECT,
+					"site_id" => array(),
+					"lang_id" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$o->set_prop($field, $o->meta($field));
+					$o->save();
+				}
 				return true;
 		}
 	}
