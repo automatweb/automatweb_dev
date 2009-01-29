@@ -860,9 +860,14 @@ class class_base extends aw_template
 
 		// find help data for current tab
 		$cls = aw_ini_get("classes");
+		$__a_class = $argblock["orb_class"];
+		if ($__a_class == "doc")
+		{
+			$__a_class = "document";
+		}
 		foreach($cls as $clid => $cl)
 		{
-			if(isset($cl["file"]) && basename($cl["file"]) == $argblock["orb_class"])
+			if(isset($cl["file"]) && basename($cl["file"]) == $__a_class)
 			{
 				$current_clid = $clid;
 				break;

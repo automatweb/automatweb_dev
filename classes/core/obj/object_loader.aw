@@ -436,7 +436,11 @@ class _int_object_loader extends core
 		// it won't call this function if an object of the same class id has been loaded before
 		// so doing the caching here is just wasting memory now.
 		// - terryf
-
+		$cls = aw_ini_get("classes");
+		if (!isset($cls[$arr["clid"]]) && empty($arr["file"]))
+		{
+			return array(array(), array(), array(), array(), array());
+		}	
 		$props = $this->cfgu->load_properties($arr);
 		$rv = array($props, $this->cfgu->tableinfo, $this->cfgu->relinfo, $this->cfgu->classinfo, $this->cfgu->groupinfo);
 		return $rv;
