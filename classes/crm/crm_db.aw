@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.58 2009/01/29 08:59:53 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.59 2009/01/29 15:06:01 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -9,53 +9,59 @@
 @default field=meta
 @default method=serialize
 
-@property owner_org type=relpicker reltype=RELTYPE_OWNER_ORG store=connect
-@caption Omanikorganisatsioon
+	@groupinfo config_general caption=&Uuml;ldised&nbsp;seaded parent=general
+	@default group=config_general
 
-@property selections type=relpicker reltype=RELTYPE_SELECTIONS group=general store=connect
-@caption Vaikimisi valim
+		@property owner_org type=relpicker reltype=RELTYPE_OWNER_ORG store=connect
+		@caption Omanikorganisatsioon
 
-@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT multiple=1 store=connect
-@caption Ettev&otilde;tete kaust
+		@property selections type=relpicker reltype=RELTYPE_SELECTIONS group=general store=connect
+		@caption Vaikimisi valim
 
-@property folder_person type=relpicker reltype=RELTYPE_ISIK_CAT store=connect
-@caption T&ouml;&ouml;tajate kaust
+		@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT multiple=1 store=connect
+		@caption Ettev&otilde;tete kaust
 
-@property dir_address type=relpicker reltype=RELTYPE_ADDRESS_CAT store=connect
-@caption Aadresside kaust
+		@property folder_person type=relpicker reltype=RELTYPE_ISIK_CAT store=connect
+		@caption T&ouml;&ouml;tajate kaust
 
-@property dir_ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM_CAT store=connect
-@caption &Otilde;iguslike vormide kaust
+		@property dir_address type=relpicker reltype=RELTYPE_ADDRESS_CAT store=connect
+		@caption Aadresside kaust
 
-@property dir_riik type=relpicker reltype=RELTYPE_RIIK_CAT store=connect
-@caption Riikide kaust
+		@property dir_ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM_CAT store=connect
+		@caption &Otilde;iguslike vormide kaust
 
-@property dir_piirkond type=relpicker reltype=RELTYPE_PIIRKOND_CAT store=connect
-@caption Piirkondade kaust
+		@property dir_riik type=relpicker reltype=RELTYPE_RIIK_CAT store=connect
+		@caption Riikide kaust
 
-@property dir_maakond type=relpicker reltype=RELTYPE_MAAKOND_CAT store=connect
-@caption Maakondade kaust
+		@property dir_piirkond type=relpicker reltype=RELTYPE_PIIRKOND_CAT store=connect
+		@caption Piirkondade kaust
 
-@property dir_linn type=relpicker reltype=RELTYPE_LINN_CAT store=connect
-@caption Linnade kaust
+		@property dir_maakond type=relpicker reltype=RELTYPE_MAAKOND_CAT store=connect
+		@caption Maakondade kaust
 
-@property dir_tegevusala type=relpicker multiple=1 reltype=RELTYPE_TEGEVUSALA_CAT store=connect
-@caption Tegevusalade kaust
+		@property dir_linn type=relpicker reltype=RELTYPE_LINN_CAT store=connect
+		@caption Linnade kaust
 
-@property dir_toode type=relpicker reltype=RELTYPE_TOODE_CAT store=connect
-@caption Toodete kaust
+		@property dir_tegevusala type=relpicker multiple=1 reltype=RELTYPE_TEGEVUSALA_CAT store=connect
+		@caption Tegevusalade kaust
 
-@property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT store=connect
-@caption Kaust, kui m&otilde;ni eelnevatest pole m&auml;&auml;ratud, siis kasutatakse seda
+		@property dir_toode type=relpicker reltype=RELTYPE_TOODE_CAT store=connect
+		@caption Toodete kaust
 
-@property flimit type=select
-@caption Kirjeid &uuml;hel lehel
+		@property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT store=connect
+		@caption Kaust, kui m&otilde;ni eelnevatest pole m&auml;&auml;ratud, siis kasutatakse seda
 
-@property all_ct_data type=checkbox ch_value=1 
-@caption Kuva k&otilde;iki kontaktandmeid
+	@groupinfo config_org caption=Kataloogi&nbsp;seaded parent=general
+	@default group=config_org
 
-@property show_as_on_web type=checkbox ch_value=1
-@caption Kuva tabelites ainult organisatsioone, mida kuvatakse veebis
+		@property flimit type=select
+		@caption Kirjeid &uuml;hel lehel
+
+		@property all_ct_data type=checkbox ch_value=1 
+		@caption Kuva k&otilde;iki kontaktandmeid
+
+		@property org_tbl_fields type=select multiple=1
+		@caption Tabeli v&auml;ljad
 
 -----------------------------------------------------------------------------
 @groupinfo org caption=Kataloog submit=no
@@ -169,6 +175,19 @@ class crm_db extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_DB,
 		));
+		$this->org_tbl_fields = array(
+			"org" => t("Organisatsioon"),
+			"field" => t("P&otilde;hitegevus"),
+			"ettevotlusvorm" => t("Ettev&otilde;lusvorm"),
+			"address" => t("Aadress"),
+			"e_mail" => t("E-post"),
+			"url" => t("WWW"),
+			"phone" => t("Telefon"),
+			"org_leader" => t("Juht"),
+			"cr_manager" => t("Kliendihaldur"),
+			"changed" => t("Muudetud"),
+			"created" => t("Loodud"),
+		);
 	}	
 		
 	function get_property(&$arr)
@@ -177,6 +196,10 @@ class crm_db extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "org_tbl_fields":
+				$prop["options"] = $this->org_tbl_fields;
+				break;
+
 			case "flimit":
 				$prop["options"] = array (30 => 30, 60 => 60, 100 => 100);
 				break;
@@ -412,64 +435,20 @@ class crm_db extends class_base
 		}
 	}
 
-	function _init_company_table(&$t)
+	function _init_company_table($arr)
 	{
-		$t->set_default_sortby("fname");	
-		$t->define_field(array(
-			"name" => "org",
-			"caption" => t("Organisatsioon"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "field",
-			"caption" => t("P&otilde;hitegevus"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "ettevotlusvorm",
-			"caption" => t("&Otilde;iguslik vorm"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "address",
-			"caption" => t("Aadress"),
-			"sortable" => 1,
-		));	
-		$t->define_field(array(
-			"name" => "e_mail",
-			"caption" => t("E-post"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "url",
-			"caption" => t("WWW"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "phone",
-			"caption" => t("Telefon"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "org_leader",
-			"caption" => t("Juht"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "cr_manager",
-			"caption" => t("Kliendihaldur"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "changed",
-			"caption" => t("Muudetud"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "created",
-			"caption" => t("Loodud"),
-			"sortable" => 1,
-		));
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_default_sortby("fname");
+
+		$fields = is_array($arr["obj_inst"]->org_tbl_fields) ? $arr["obj_inst"]->org_tbl_fields : array_keys($this->org_tbl_fields);
+		foreach($fields as $field)
+		{
+			$t->define_field(array(
+				"name" => $field,
+				"caption" => $this->org_tbl_fields[$field],
+				"sortable" => 1,
+			));
+		}
 		$t->define_chooser(array(
 			"field" => "id",
 			"name" => "sel",
@@ -479,7 +458,7 @@ class crm_db extends class_base
 	function _get_org_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		$this->_init_company_table(&$t);
+		$this->_init_company_table($arr);
 		$this->set_org_tbl_caption($arr);
 
 		$perpage = 20;
@@ -695,7 +674,7 @@ class crm_db extends class_base
 		$tb->add_separator();
 		if(is_oid($arr["obj_inst"]->owner_org))
 		{
-			if($arr["request"]["group"] == "not_on_web" || !$arr["obj_inst"]->show_as_on_web)
+			if(!isset($_GET["on_web"]) || $_GET["on_web"] == 1)
 			{
 				$tb->add_button(array(
 					"name" => "show_on_web",
@@ -703,7 +682,7 @@ class crm_db extends class_base
 					"action" => "show_on_web",
 				));
 			}
-			if($arr["request"]["group"] != "not_on_web")
+			if(!isset($_GET["on_web"]) || $_GET["on_web"] == 2)
 			{
 				$tb->add_button(array(
 					"name" => "hide_on_web",
