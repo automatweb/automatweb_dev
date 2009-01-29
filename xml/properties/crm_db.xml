@@ -3,7 +3,7 @@
       <property>
             <name>owner_org</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -25,7 +25,7 @@
       <property>
             <name>dir_firma</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -37,7 +37,7 @@
       <property>
             <name>folder_person</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -48,7 +48,7 @@
       <property>
             <name>dir_address</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -59,7 +59,7 @@
       <property>
             <name>dir_ettevotlusvorm</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -70,7 +70,7 @@
       <property>
             <name>dir_riik</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -81,7 +81,7 @@
       <property>
             <name>dir_piirkond</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -92,7 +92,7 @@
       <property>
             <name>dir_maakond</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -103,7 +103,7 @@
       <property>
             <name>dir_linn</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -114,7 +114,7 @@
       <property>
             <name>dir_tegevusala</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -126,7 +126,7 @@
       <property>
             <name>dir_toode</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -137,7 +137,7 @@
       <property>
             <name>dir_default</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -148,7 +148,7 @@
       <property>
             <name>flimit</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_org</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -157,7 +157,7 @@
       <property>
             <name>all_ct_data</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_org</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -165,14 +165,14 @@
             <caption>Kuva k&amp;amp;otilde;iki kontaktandmeid</caption>
       </property>
       <property>
-            <name>show_as_on_web</name>
+            <name>org_tbl_fields</name>
             <table>objects</table>
-            <group>general</group>
+            <group>config_org</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Kuva tabelites ainult organisatsioone, mida kuvatakse veebis</caption>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Tabeli v&amp;amp;auml;ljad</caption>
       </property>
       <property>
             <name>org_tlb</name>
@@ -343,6 +343,14 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <config_general>
+                  <caption>&amp;amp;Uuml;ldised&amp;amp;nbsp;seaded</caption>
+                  <parent>general</parent>
+            </config_general>
+            <config_org>
+                  <caption>Kataloogi&amp;amp;nbsp;seaded</caption>
+                  <parent>general</parent>
+            </config_org>
             <org>
                   <caption>Kataloog</caption>
                   <submit>no</submit>
