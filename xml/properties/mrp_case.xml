@@ -402,6 +402,17 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>states_chart</name>
+            <group>grp_case_schedule</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>states_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
             <name>log</name>
             <group>grp_case_log</group>
             <table>objects</table>
@@ -502,6 +513,18 @@
                   <group>grp_case_workflow</group>
                   <area_caption></area_caption>
             </vsplitbox>
+            <charts>
+                  <type>hbox</type>
+                  <group>grp_case_schedule</group>
+                  <area_caption></area_caption>
+            </charts>
+            <states_chart>
+                  <type>vbox</type>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;d&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
+                  <parent>charts</parent>
+                  <closeable>1</closeable>
+                  <group>grp_case_schedule</group>
+            </states_chart>
       </layout>
 </properties>
 

@@ -110,6 +110,22 @@
 @default group=grp_schedule
 	@property master_schedule_chart type=text store=no no_caption=1
 
+	@layout charts_1 type=hbox width=50%:50%
+
+		@layout states_chart type=vbox area_caption=Projektid&nbsp;staatuste&nbsp;kaupa parent=charts_1 closeable=1
+		
+			@property states_chart type=google_chart no_caption=1 parent=states_chart store=no
+
+		@layout clients_chart type=vbox area_caption=Projektid&nbsp;klientide&nbsp;kaupa parent=charts_1 closeable=1
+		
+			@property clients_chart type=google_chart no_caption=1 parent=clients_chart store=no
+
+	@layout charts_2 type=hbox width=50%:50%
+
+		@layout deadline_chart type=vbox area_caption=Projektid&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=charts_2 closeable=1
+		
+			@property deadline_chart type=google_chart no_caption=1 parent=deadline_chart store=no
+
 	@layout schedule_search_box type=vbox closeable=1 area_caption=Otsing
 		@property chart_project_hilight_gotostart type=checkbox store=no parent=schedule_search_box
 		@caption Mine valitud projekti algusesse
@@ -1121,6 +1137,152 @@ class mrp_workspace extends class_base
 				break;
 
 			### schedule tab
+			case "states_chart":
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 500,
+					"height" => 100,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$data = array();
+				$labels = array();
+				$colors = array();
+				$ol = new object_list(array(
+					"class_id" => CL_MRP_CASE,
+					"parent" => $this_object->prop("projects_folder"),
+				));
+				foreach($ol->arr() as $o)
+				{
+					if(!isset($data[$o->state]))
+					{
+						$data[$o->state] = 1;
+					}
+					else
+					{
+						$data[$o->state]++;
+					}
+					$colors[$o->state] = strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[$o->state]));
+					$labels[$o->state] = $this->states[$o->state]." (".$data[$o->state].")";
+				}
+				$c->set_colors($colors);
+				$c->add_data($data);
+				$c->set_labels($labels);
+				$c->set_title(array(
+					"text" => t("Projekid staatuste kaupa"),
+					"color" => "666666",
+					"size" => 11,
+				));
+				break;
+
+			case "clients_chart":
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 500,
+					"height" => 100,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$data = array();
+				$labels = array();
+				$ol = new object_list(array(
+					"class_id" => CL_MRP_CASE,
+					"parent" => $this_object->prop("projects_folder"),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$key = $o->customer;
+					$name = $o->prop("customer.name");
+					if(!isset($data[$key]))
+					{
+						$data[$key] = 1;
+					}
+					else
+					{
+						$data[$key]++;
+					}
+					$labels[$key] = $name." (".$data[$key].")";
+				}
+				$labels[0] = sprintf(t("(M&Auml;&Auml;RAMATA) (%u)"), $data[0]);
+				$c->set_colors(array("2222ff"));
+				$c->add_data($data);
+				$c->set_labels($labels);
+				$c->set_title(array(
+					"text" => t("Projekid klientide kaupa"),
+					"color" => "666666",
+					"size" => 11,
+				));
+				break;
+
+			case "deadline_chart":
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 500,
+					"height" => 100,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$data = array();
+				$labels = array();
+				$ol = new object_list(array(
+					"class_id" => CL_MRP_CASE,
+					"state" => array(
+						MRP_STATUS_INPROGRESS,
+						MRP_STATUS_PLANNED,
+					),
+					"parent" => $this_object->prop("projects_folder"),
+				));
+				$names = array(
+					0 => t("Graafikus"),
+					1 => t("&Uuml;le t&auml;htaja"),
+				);
+				$colors_ = array(
+					0 => "00ff00",
+					1 => "ff0000",
+				);
+				foreach($ol->arr() as $o)
+				{
+					$key = $o->planned_date > $o->due_date ? 1 : 0;
+					$name = $o->prop("customer.name");
+					if(!isset($data[$key]))
+					{
+						$data[$key] = 1;
+					}
+					else
+					{
+						$data[$key]++;
+					}
+					$colors[$key] = $colors_[$key];
+					$labels[$key] = $names[$key]." (".$data[$key].")";
+				}
+				$c->set_colors($colors);
+				$c->add_data($data);
+				$c->set_labels($labels);
+				$c->set_title(array(
+					"text" => t("Projekid t&auml;htaja j&auml;rgi"),
+					"color" => "666666",
+					"size" => 11,
+				));
+				break;
+
 			case "master_schedule_chart":
 				### update schedule
 				$schedule = get_instance (CL_MRP_SCHEDULE);

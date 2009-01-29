@@ -320,6 +320,39 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>states_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>states_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>clients_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>clients_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>deadline_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>deadline_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
             <name>chart_project_hilight_gotostart</name>
             <table>objects</table>
             <field>meta</field>
@@ -1589,6 +1622,39 @@
                   <parent>vsplitbox</parent>
                   <group>grp_resources</group>
             </resources_tree_box>
+            <charts_1>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <group>grp_schedule</group>
+                  <area_caption></area_caption>
+            </charts_1>
+            <states_chart>
+                  <type>vbox</type>
+                  <area_caption>Projektid&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
+                  <parent>charts_1</parent>
+                  <closeable>1</closeable>
+                  <group>grp_schedule</group>
+            </states_chart>
+            <clients_chart>
+                  <type>vbox</type>
+                  <area_caption>Projektid&amp;amp;nbsp;klientide&amp;amp;nbsp;kaupa</area_caption>
+                  <parent>charts_1</parent>
+                  <closeable>1</closeable>
+                  <group>grp_schedule</group>
+            </clients_chart>
+            <charts_2>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <group>grp_schedule</group>
+                  <area_caption></area_caption>
+            </charts_2>
+            <deadline_chart>
+                  <type>vbox</type>
+                  <area_caption>Projektid&amp;amp;nbsp;t&amp;amp;auml;htaja&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <parent>charts_2</parent>
+                  <closeable>1</closeable>
+                  <group>grp_schedule</group>
+            </deadline_chart>
             <schedule_search_box>
                   <type>vbox</type>
                   <closeable>1</closeable>

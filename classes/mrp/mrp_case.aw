@@ -155,8 +155,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default group=grp_case_schedule
+
 	@property schedule_chart type=text store=no no_caption=1
 
+	@layout charts type=hbox
+
+		@layout states_chart type=vbox area_caption=T&ouml;&ouml;d&nbsp;staatuste&nbsp;kaupa parent=charts closeable=1
+		
+			@property states_chart type=google_chart no_caption=1 parent=states_chart store=no
 
 @default group=grp_case_log
 	@property log type=table store=no no_caption=1
@@ -443,6 +449,48 @@ class mrp_case extends class_base
 
 			case "case_view":
 				$this->_case_view($arr);
+				break;
+
+			case "states_chart":
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 400,
+					"height" => 100,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$data = array();
+				$labels = array();
+				$colors = array();
+				$conns = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
+				foreach($conns as $conn)
+				{
+					$job = $conn->to();
+					if(!isset($data[$job->state]))
+					{
+						$data[$job->state] = 1;
+					}
+					else
+					{
+						$data[$job->state]++;
+					}
+					$colors[$job->state] = strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[$job->state]));
+					$labels[$job->state] = $this->states[$job->state]." (".$data[$job->state].")";
+				}
+				$c->add_data($data);
+				$c->set_colors($colors);
+				$c->set_labels($labels);
+				$c->set_title(array(
+					"text" => t("T&ouml;&ouml;d staatuste kaupa"),
+					"color" => "666666",
+					"size" => 11,
+				));
 				break;
 		}
 
