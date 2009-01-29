@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.56 2009/01/27 20:19:02 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.57 2009/01/29 08:54:24 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -12,40 +12,40 @@
 @property owner_org type=relpicker reltype=RELTYPE_OWNER_ORG store=connect
 @caption Omanikorganisatsioon
 
-@property selections type=relpicker reltype=RELTYPE_SELECTIONS group=general
+@property selections type=relpicker reltype=RELTYPE_SELECTIONS group=general store=connect
 @caption Vaikimisi valim
 
-@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT multiple=1
+@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT multiple=1 store=connect
 @caption Ettev&otilde;tete kaust
 
-@property folder_person type=relpicker reltype=RELTYPE_ISIK_CAT
+@property folder_person type=relpicker reltype=RELTYPE_ISIK_CAT store=connect
 @caption T&ouml;&ouml;tajate kaust
 
-@property dir_address type=relpicker reltype=RELTYPE_ADDRESS_CAT
+@property dir_address type=relpicker reltype=RELTYPE_ADDRESS_CAT store=connect
 @caption Aadresside kaust
 
-@property dir_ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM_CAT
+@property dir_ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM_CAT store=connect
 @caption &Otilde;iguslike vormide kaust
 
-@property dir_riik type=relpicker reltype=RELTYPE_RIIK_CAT
+@property dir_riik type=relpicker reltype=RELTYPE_RIIK_CAT store=connect
 @caption Riikide kaust
 
-@property dir_piirkond type=relpicker reltype=RELTYPE_PIIRKOND_CAT
+@property dir_piirkond type=relpicker reltype=RELTYPE_PIIRKOND_CAT store=connect
 @caption Piirkondade kaust
 
-@property dir_maakond type=relpicker reltype=RELTYPE_MAAKOND_CAT
+@property dir_maakond type=relpicker reltype=RELTYPE_MAAKOND_CAT store=connect
 @caption Maakondade kaust
 
-@property dir_linn type=relpicker reltype=RELTYPE_LINN_CAT
+@property dir_linn type=relpicker reltype=RELTYPE_LINN_CAT store=connect
 @caption Linnade kaust
 
-@property dir_tegevusala type=relpicker multiple=1 reltype=RELTYPE_TEGEVUSALA_CAT
+@property dir_tegevusala type=relpicker multiple=1 reltype=RELTYPE_TEGEVUSALA_CAT store=connect
 @caption Tegevusalade kaust
 
-@property dir_toode type=relpicker reltype=RELTYPE_TOODE_CAT
+@property dir_toode type=relpicker reltype=RELTYPE_TOODE_CAT store=connect
 @caption Toodete kaust
 
-@property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT
+@property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT store=connect
 @caption Kaust, kui m&otilde;ni eelnevatest pole m&auml;&auml;ratud, siis kasutatakse seda
 
 @property flimit type=select
@@ -195,6 +195,7 @@ class crm_db extends class_base
 					"parent" => is_oid($arr["obj_inst"]->dir_ettevotlusvorm) ? $arr["obj_inst"]->dir_ettevotlusvorm : array(),
 					"lang_id" => array(),
 					"site_id" => array(),
+					"sort_by" => "objects.jrk, objects.name",
 				));
 				$prop["options"] = $ol->names();
 				$prop["value"] = isset($_GET[$prop["name"]]) ? $_GET[$prop["name"]] : NULL;
@@ -206,6 +207,7 @@ class crm_db extends class_base
 					"parent" => is_oid($arr["obj_inst"]->dir_linn) ? $arr["obj_inst"]->dir_linn : array(),
 					"lang_id" => array(),
 					"site_id" => array(),
+					"sort_by" => "objects.jrk, objects.name",
 				));
 				$prop["options"] = $ol->names();
 				$prop["value"] = isset($_GET[$prop["name"]]) ? $_GET[$prop["name"]] : NULL;
@@ -217,6 +219,7 @@ class crm_db extends class_base
 					"parent" => is_oid($arr["obj_inst"]->dir_maakond) ? $arr["obj_inst"]->dir_maakond : array(),
 					"lang_id" => array(),
 					"site_id" => array(),
+					"sort_by" => "objects.jrk, objects.name",
 				));
 				$prop["options"] = $ol->names();
 				$prop["value"] = isset($_GET[$prop["name"]]) ? $_GET[$prop["name"]] : NULL;
