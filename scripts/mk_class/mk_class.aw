@@ -158,7 +158,6 @@ if (!$args_from_caller)
 	automatweb::$instance->bc();
 	aw_global_set("no_db_connection", 1);
 	aw_ini_set("baseurl", "automatweb");
-	include AW_DIR . "const" . AW_FILE_EXT;
 	automatweb::shutdown();
 }
 

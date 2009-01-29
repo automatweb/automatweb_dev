@@ -9,7 +9,6 @@ automatweb::start();
 automatweb::$instance->bc();
 aw_global_set("no_db_connection", 1);
 aw_ini_set("baseurl", "automatweb");
-require_once AW_DIR . "const" . AW_FILE_EXT;
 
 $stderr = fopen('php://stderr', 'w');
 

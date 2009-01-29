@@ -9,7 +9,6 @@ automatweb::$instance->bc();
 $awt = new aw_timer();
 aw_global_set("no_db_connection", 1);
 aw_ini_set("baseurl", "automatweb");
-include AW_DIR . "const" . AW_FILE_EXT;
 aw_set_exec_time(AW_LONG_PROCESS);
 
 $anal = new parser();
