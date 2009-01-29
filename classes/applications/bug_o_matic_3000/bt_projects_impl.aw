@@ -186,7 +186,13 @@ class bt_projects_impl extends core
 				));
 				if($parent == 0)
 				{
-					$this->__insert_proj_categories($t, $o->id(), $o->id(), $arr);
+					$conn = $c->to()->connections_from(array(
+						"type" => "RELTYPE_CATEGORY"
+					));
+					if(count($conn))
+					{
+						$t->add_item($c->prop("to"), array());
+					}
 				}
 			}
 		}
@@ -269,31 +275,21 @@ class bt_projects_impl extends core
 	function __insert_sections(&$t, $parent, $arr)
 	{
 		$owner = get_instance(CL_BUG_TRACKER)->_get_owner($arr);
-		$ol = new object_list(array(
-			"class_id" => CL_PROJECT,
-			"site_id" => array(),
-			"lang_id" => array(),
-		));
+		$odl = new object_data_list(
+			array(
+				"lang_id" => array(),
+				"site_id" => array(),
+				"class_id" => CL_PROJECT,
+				"proj_mgr" => new obj_predicate_anything(),
+			),
+			array(
+				CL_PROJECT => array(new obj_sql_func(OBJ_SQL_UNIQUE, "proj_mgr", "proj_mgr"))
+			)
+		);
 		$ppl = array();
-		$set_ppl = array();
-		foreach($ol->arr() as $o)
+		foreach($odl->arr() as $o)
 		{
-			$p = $o->prop("proj_mgr");
-			if($set_ppl[$p])
-			{
-				continue;
-			}
-			$set_ppl[$p] = $p;
-			unset($wrl);
-			if($this->can("view", $p))
-			{
-				$po = obj($p);
-				$wrl = $po->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
-			}
-			if($wrl && $wrl->prop("org") == $owner->id())
-			{
-				$ppl[] = $p;
-			}
+			$ppl[] = $o["proj_mgr"];
 		}
 		$ol = new object_list();
 		if(count($ppl))
@@ -301,6 +297,7 @@ class bt_projects_impl extends core
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_SECTION,
 				"CL_CRM_SECTION.RELTYPE_SECTION(CL_CRM_PERSON_WORK_RELATION).RELTYPE_CURRENT_JOB(CL_CRM_PERSON)" => $ppl,
+				"CL_CRM_SECTION.RELTYPE_SECTION(CL_CRM_PERSON_WORK_RELATION).RELTYPE_ORG" => $owner->id(),
 				"site_id" => array(),
 				"lang_id" => array(),
 			));
@@ -314,7 +311,7 @@ class bt_projects_impl extends core
 			));
 			if($parent == 0)
 			{
-				$this->__insert_section_subs($t, $o, $o->id(), $arr);
+				$t->add_item($o->id(), array());
 			}
 		}
 	}
