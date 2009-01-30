@@ -39,11 +39,12 @@ class ml_membership_manager extends class_base
 
 		$t->define_field(array(
 			"name" => "folder",
-			"caption" => t("Kaust"),
+			"caption" => t("List"),
 		));
 		$t->define_field(array(
 			"name" => "membership",
 			"caption" => t("Olen liige"),
+			"align" => "center",
 		));
 	}
 
