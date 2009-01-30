@@ -6,7 +6,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <group>
-                  <num_0>grp_case_schedule</num_0>
+                  <num_0>grp_case_schedule_gantt</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
                   <num_3>grp_case_data</num_3>
@@ -20,7 +20,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <group>
-                  <num_0>grp_case_schedule</num_0>
+                  <num_0>grp_case_schedule_gantt</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
                   <num_3>grp_case_data</num_3>
@@ -57,7 +57,7 @@
       <property>
             <name>state</name>
             <group>
-                  <num_0>grp_case_schedule</num_0>
+                  <num_0>grp_case_schedule_gantt</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
                   <num_3>grp_case_data</num_3>
@@ -65,6 +65,7 @@
             <table>mrp_case</table>
             <type>text</type>
             <editonly>1</editonly>
+            <parent>general_info</parent>
             <field>state</field>
             <caption>Staatus</caption>
       </property>
@@ -378,7 +379,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vsplitbox</parent>
+            <parent>resource_tree</parent>
       </property>
       <property>
             <name>workflow_table</name>
@@ -393,17 +394,18 @@
       </property>
       <property>
             <name>schedule_chart</name>
-            <group>grp_case_schedule</group>
+            <group>grp_case_schedule_gantt</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
       </property>
       <property>
             <name>states_chart</name>
-            <group>grp_case_schedule</group>
+            <group>grp_case_schedule_google</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -411,6 +413,28 @@
             <no_caption>1</no_caption>
             <parent>states_chart</parent>
             <store>no</store>
+      </property>
+      <property>
+            <name>recources_chart</name>
+            <group>grp_case_schedule_google</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>recources_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>job_charts_tbl</name>
+            <group>grp_case_schedule_google</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>job_charts</parent>
       </property>
       <property>
             <name>log</name>
@@ -456,9 +480,19 @@
                   <submit>no</submit>
             </grp_case_view>
             <grp_case_schedule>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;voo diagramm</caption>
+                  <caption>Tellimuse t&amp;amp;ouml;&amp;amp;ouml;voog</caption>
                   <submit>no</submit>
             </grp_case_schedule>
+            <grp_case_schedule_gantt>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;voo diagramm</caption>
+                  <submit>no</submit>
+                  <parent>grp_case_schedule</parent>
+            </grp_case_schedule_gantt>
+            <grp_case_schedule_google>
+                  <caption>Graafikud</caption>
+                  <submit>no</submit>
+                  <parent>grp_case_schedule</parent>
+            </grp_case_schedule_google>
             <grp_case_comments>
                   <caption>Kommentaarid</caption>
             </grp_case_comments>
@@ -510,12 +544,42 @@
             <vsplitbox>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>grp_case_workflow</group>
+                  <group>
+                        <num_0>grp_case_workflow</num_0>
+                        <num_1>grp_case_schedule_gantt</num_1>
+                  </group>
                   <area_caption></area_caption>
             </vsplitbox>
+            <left_pane>
+                  <type>vbox</type>
+                  <parent>vsplitbox</parent>
+                  <group>
+                        <num_0>grp_case_workflow</num_0>
+                        <num_1>grp_case_schedule_gantt</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </left_pane>
+            <general_info>
+                  <type>vbox</type>
+                  <parent>left_pane</parent>
+                  <area_caption>Projekti&amp;amp;nbsp;&amp;amp;uuml;ldandmed</area_caption>
+                  <closeable>1</closeable>
+                  <group>
+                        <num_0>grp_case_workflow</num_0>
+                        <num_1>grp_case_schedule_gantt</num_1>
+                  </group>
+            </general_info>
+            <resource_tree>
+                  <type>vbox</type>
+                  <parent>left_pane</parent>
+                  <area_caption>Ressursid&amp;amp;nbsp;kategooriate&amp;amp;nbsp;kaupa</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_case_workflow</group>
+            </resource_tree>
             <charts>
                   <type>hbox</type>
-                  <group>grp_case_schedule</group>
+                  <width>50%:50%</width>
+                  <group>grp_case_schedule_google</group>
                   <area_caption></area_caption>
             </charts>
             <states_chart>
@@ -523,8 +587,21 @@
                   <area_caption>T&amp;amp;ouml;&amp;amp;ouml;d&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
                   <parent>charts</parent>
                   <closeable>1</closeable>
-                  <group>grp_case_schedule</group>
+                  <group>grp_case_schedule_google</group>
             </states_chart>
+            <recources_chart>
+                  <type>vbox</type>
+                  <area_caption>Kestused&amp;amp;nbsp;ressursside&amp;amp;nbsp;kaupa</area_caption>
+                  <parent>charts</parent>
+                  <closeable>1</closeable>
+                  <group>grp_case_schedule_google</group>
+            </recources_chart>
+            <job_charts>
+                  <type>vbox</type>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;kestuste&amp;amp;nbsp;v&amp;amp;otilde;rdlus</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_case_schedule_google</group>
+            </job_charts>
       </layout>
 </properties>
 

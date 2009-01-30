@@ -282,7 +282,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resources</group>
+            <group>grp_resources_manage</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -292,7 +292,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resources</group>
+            <group>
+                  <num_0>grp_resources_manage</num_0>
+                  <num_1>grp_resources_load</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -303,7 +306,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resources</group>
+            <group>
+                  <num_0>grp_resources_manage</num_0>
+                  <num_1>grp_resources_load</num_1>
+            </group>
             <type>table</type>
             <store>no</store>
             <parent>vsplitbox</parent>
@@ -314,50 +320,17 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule</group>
+            <group>grp_schedule_gantt</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>states_chart</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_schedule</group>
-            <type>google_chart</type>
-            <no_caption>1</no_caption>
-            <parent>states_chart</parent>
-            <store>no</store>
-      </property>
-      <property>
-            <name>clients_chart</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_schedule</group>
-            <type>google_chart</type>
-            <no_caption>1</no_caption>
-            <parent>clients_chart</parent>
-            <store>no</store>
-      </property>
-      <property>
-            <name>deadline_chart</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_schedule</group>
-            <type>google_chart</type>
-            <no_caption>1</no_caption>
-            <parent>deadline_chart</parent>
-            <store>no</store>
       </property>
       <property>
             <name>chart_project_hilight_gotostart</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule</group>
+            <group>grp_schedule_gantt</group>
             <type>checkbox</type>
             <store>no</store>
             <parent>schedule_search_box</parent>
@@ -368,7 +341,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule</group>
+            <group>grp_schedule_gantt</group>
             <type>text</type>
             <store>no</store>
             <parent>schedule_search_box</parent>
@@ -379,7 +352,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule</group>
+            <group>grp_schedule_gantt</group>
             <type>date_select</type>
             <store>no</store>
             <parent>schedule_search_box</parent>
@@ -390,11 +363,44 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule</group>
+            <group>grp_schedule_gantt</group>
             <type>submit</type>
             <store>no</store>
             <parent>schedule_search_box</parent>
             <caption>N&amp;amp;auml;ita</caption>
+      </property>
+      <property>
+            <name>states_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule_google</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>states_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>clients_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule_google</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>clients_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>deadline_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule_google</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>deadline_chart</parent>
+            <store>no</store>
       </property>
       <property>
             <name>user_list_toolbar</name>
@@ -1479,10 +1485,6 @@
                   <parent>general</parent>
                   <submit>no</submit>
             </grp_users_mgr>
-            <grp_resources>
-                  <caption>Ressursside haldus</caption>
-                  <parent>general</parent>
-            </grp_resources>
             <grp_worksheet>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;lehed</caption>
                   <parent>general</parent>
@@ -1501,6 +1503,27 @@
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;voog</caption>
                   <submit>no</submit>
             </grp_schedule>
+            <grp_schedule_gantt>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;voo diagramm</caption>
+                  <submit>no</submit>
+                  <parent>grp_schedule</parent>
+            </grp_schedule_gantt>
+            <grp_schedule_google>
+                  <caption>Graafikud</caption>
+                  <submit>no</submit>
+                  <parent>grp_schedule</parent>
+            </grp_schedule_google>
+            <grp_resources>
+                  <caption>Ressursid</caption>
+            </grp_resources>
+            <grp_resources_manage>
+                  <caption>Haldus</caption>
+                  <parent>grp_resources</parent>
+            </grp_resources_manage>
+            <grp_resources_load>
+                  <caption>Koormus</caption>
+                  <parent>grp_resources</parent>
+            </grp_resources_load>
             <grp_printer>
                   <caption>Operaatori vaade</caption>
                   <submit>no</submit>
@@ -1567,10 +1590,11 @@
                   <group>
                         <num_0>grp_customers</num_0>
                         <num_1>grp_projects</num_1>
-                        <num_2>grp_resources</num_2>
-                        <num_3>grp_users_tree</num_3>
-                        <num_4>grp_users_mgr</num_4>
-                        <num_5>grp_settings_def</num_5>
+                        <num_2>grp_resources_manage</num_2>
+                        <num_3>grp_resources_load</num_3>
+                        <num_4>grp_users_tree</num_4>
+                        <num_5>grp_users_mgr</num_5>
+                        <num_6>grp_settings_def</num_6>
                   </group>
                   <width>20%:80%</width>
                   <area_caption></area_caption>
@@ -1620,12 +1644,21 @@
                   <closeable>1</closeable>
                   <area_caption>Ressursid&amp;amp;amp;kategooriad</area_caption>
                   <parent>vsplitbox</parent>
-                  <group>grp_resources</group>
+                  <group>
+                        <num_0>grp_resources_manage</num_0>
+                        <num_1>grp_resources_load</num_1>
+                  </group>
             </resources_tree_box>
+            <schedule_search_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <group>grp_schedule_gantt</group>
+            </schedule_search_box>
             <charts_1>
                   <type>hbox</type>
                   <width>50%:50%</width>
-                  <group>grp_schedule</group>
+                  <group>grp_schedule_google</group>
                   <area_caption></area_caption>
             </charts_1>
             <states_chart>
@@ -1633,19 +1666,19 @@
                   <area_caption>Projektid&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
                   <parent>charts_1</parent>
                   <closeable>1</closeable>
-                  <group>grp_schedule</group>
+                  <group>grp_schedule_google</group>
             </states_chart>
             <clients_chart>
                   <type>vbox</type>
                   <area_caption>Projektid&amp;amp;nbsp;klientide&amp;amp;nbsp;kaupa</area_caption>
                   <parent>charts_1</parent>
                   <closeable>1</closeable>
-                  <group>grp_schedule</group>
+                  <group>grp_schedule_google</group>
             </clients_chart>
             <charts_2>
                   <type>hbox</type>
                   <width>50%:50%</width>
-                  <group>grp_schedule</group>
+                  <group>grp_schedule_google</group>
                   <area_caption></area_caption>
             </charts_2>
             <deadline_chart>
@@ -1653,14 +1686,8 @@
                   <area_caption>Projektid&amp;amp;nbsp;t&amp;amp;auml;htaja&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
                   <parent>charts_2</parent>
                   <closeable>1</closeable>
-                  <group>grp_schedule</group>
+                  <group>grp_schedule_google</group>
             </deadline_chart>
-            <schedule_search_box>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Otsing</area_caption>
-                  <group>grp_schedule</group>
-            </schedule_search_box>
             <userlist_tree_box>
                   <type>vbox</type>
                   <closeable>1</closeable>

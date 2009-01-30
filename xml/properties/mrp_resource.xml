@@ -39,7 +39,19 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_joblist</group>
+            <group>grp_resource_joblist_todo</group>
+            <type>table</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <no_caption>1</no_caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;leht</caption>
+      </property>
+      <property>
+            <name>job_list_done</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_joblist_done</group>
             <type>table</type>
             <store>no</store>
             <editonly>1</editonly>
@@ -218,6 +230,16 @@
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;leht</caption>
                   <submit>no</submit>
             </grp_resource_joblist>
+            <grp_resource_joblist_todo>
+                  <caption>Eesseisvad t&amp;amp;ouml;&amp;amp;ouml;d</caption>
+                  <submit>no</submit>
+                  <parent>grp_resource_joblist</parent>
+            </grp_resource_joblist_todo>
+            <grp_resource_joblist_done>
+                  <caption>Tehtud t&amp;amp;ouml;&amp;amp;ouml;d</caption>
+                  <submit>no</submit>
+                  <parent>grp_resource_joblist</parent>
+            </grp_resource_joblist_done>
             <grp_resource_settings>
                   <caption>Seaded</caption>
             </grp_resource_settings>

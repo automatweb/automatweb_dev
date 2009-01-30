@@ -15,13 +15,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @groupinfo grp_case_data caption="Projekti andmed" parent=general
 @groupinfo grp_case_workflow caption="Ressursid ja t&ouml;&ouml;voog"
 @groupinfo grp_case_view caption="Vaatleja t&ouml;&ouml;laud" submit=no
-@groupinfo grp_case_schedule caption="T&ouml;&ouml;voo diagramm" submit=no
+@groupinfo grp_case_schedule caption="Tellimuse t&ouml;&ouml;voog" submit=no
+	@groupinfo grp_case_schedule_gantt caption="T&ouml;&ouml;voo diagramm" submit=no parent=grp_case_schedule
+	@groupinfo grp_case_schedule_google caption="Graafikud" submit=no parent=grp_case_schedule
 @groupinfo grp_case_comments caption="Kommentaarid"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
 
 
-@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
-@property workflow_errors type=text store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data
+@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data editonly=1
+@property workflow_errors type=text store=no no_caption=1 group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data
 @property header type=text store=no no_caption=1 group=grp_general,grp_case_data
 
 @default group=grp_general
@@ -33,7 +35,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default table=mrp_case
-	@property state type=text group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
+	@property state type=text group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data editonly=1 parent=general_info
 	@caption Staatus
 
 	@property starttime type=datetime_select
@@ -149,20 +151,33 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default group=grp_case_workflow
-	@layout vsplitbox type=hbox width=20%:80%
-		@property resource_tree type=text store=no no_caption=1 parent=vsplitbox
+	@layout vsplitbox type=hbox width=20%:80% group=grp_case_workflow,grp_case_schedule_gantt
+		@layout left_pane type=vbox parent=vsplitbox group=grp_case_workflow,grp_case_schedule_gantt
+			@layout general_info type=vbox parent=left_pane area_caption=Projekti&nbsp;&uuml;ldandmed closeable=1 group=grp_case_workflow,grp_case_schedule_gantt
+			@layout resource_tree type=vbox parent=left_pane area_caption=Ressursid&nbsp;kategooriate&nbsp;kaupa closeable=1
+				@property resource_tree type=text store=no no_caption=1 parent=resource_tree
 		@property workflow_table type=table store=no no_caption=1 parent=vsplitbox
 
 
-@default group=grp_case_schedule
+@default group=grp_case_schedule_gantt
 
-	@property schedule_chart type=text store=no no_caption=1
+	@property schedule_chart type=text store=no no_caption=1 parent=vsplitbox
 
-	@layout charts type=hbox
+@default group=grp_case_schedule_google
+
+	@layout charts type=hbox width=50%:50%
 
 		@layout states_chart type=vbox area_caption=T&ouml;&ouml;d&nbsp;staatuste&nbsp;kaupa parent=charts closeable=1
 		
 			@property states_chart type=google_chart no_caption=1 parent=states_chart store=no
+
+		@layout recources_chart type=vbox area_caption=Kestused&nbsp;ressursside&nbsp;kaupa parent=charts closeable=1
+		
+			@property recources_chart type=google_chart no_caption=1 parent=recources_chart store=no
+
+	@layout job_charts type=vbox area_caption=T&ouml;&ouml;de&nbsp;kestuste&nbsp;v&otilde;rdlus closeable=1
+
+		@property job_charts_tbl type=table store=no no_caption=1 parent=job_charts
 
 @default group=grp_case_log
 	@property log type=table store=no no_caption=1
@@ -455,7 +470,7 @@ class mrp_case extends class_base
 				$c = &$arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
-					"width" => 400,
+					"width" => 500,
 					"height" => 100,
 				));
 				$c->add_fill(array(
@@ -492,9 +507,150 @@ class mrp_case extends class_base
 					"size" => 11,
 				));
 				break;
+
+			case "recources_chart":
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 500,
+					"height" => 100,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$data = array();
+				$labels = array();
+				$colors = array();
+				$odl = new object_data_list(
+					array(
+						"class_id" => CL_MRP_JOB,
+						"CL_MRP_JOB.RELTYPE_MRP_PROJECT_JOB(CL_MRP_CASE)" => $this_object->id(),
+					),
+					array(
+						CL_MRP_JOB => array("RELTYPE_MRP_RESOURCE.oid" => "res", "RELTYPE_MRP_RESOURCE.name" => "res_nm", "length"),
+					)
+				);
+				foreach($odl->arr() as $oid => $odata)
+				{
+					$data[$odata["res"]] = $odata["length"];
+					$labels[$odata["res"]] = $odata["res_nm"];
+					$new_hexrgb = dechex(rand(0,4294967296));
+					$colors[$odata["res"]] = str_repeat("0", 6 - strlen($new_hexrgb)).$new_hexrgb;
+				}
+				$c->add_data($data);
+				$c->set_colors($colors);
+				$c->set_labels($labels);
+				$c->set_title(array(
+					"text" => t("Planeeritud kestused ressursside kaupa"),
+					"color" => "666666",
+					"size" => 11,
+				));
+				break;
+
+			case "job_charts_tbl":
+				$this->_get_job_charts_tbl($arr);
+				break;
 		}
 
 		return $retval;
+	}
+
+	function _get_job_charts_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_titlebar_display(false);
+		$t->set_sortable(false);
+
+		$perrow = 4;
+
+		for($i = 0; $i < $perrow; $i++)
+		{
+			$t->define_field(array(
+				"name" => "chart_".$i,
+				"align" => "center",
+			));
+		}
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"CL_MRP_JOB.RELTYPE_MRP_PROJECT_JOB(CL_MRP_CASE)" => $arr["obj_inst"]->id(),
+				"sort_by" => "objects.oid"
+			),
+			array(
+				CL_MRP_JOB => array("length", "started", "finished"),
+			)
+		);
+		$jobs = array_values($odl->arr());
+
+		$j = 0;
+		while(isset($jobs[$j]))
+		{
+			$t_data = array();
+			for($i = 0; $i < $perrow && isset($jobs[$j]); $i++)
+			{
+				$job = $jobs[$j];
+				$c = new google_chart();
+				$c->set_id($arr["request"]["class"].".".$arr["prop"]["name"].".".$j.".".$arr["obj_inst"]->id());
+				$c->set_type(GCHART_BAR_GV);
+				$c->set_size(array(
+					"width" => 275,
+					"height" => 100,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e1e1e1",
+					),
+				));
+				$plan = $job["length"];
+				$real = $job["started"] && $job["finished"] ? $job["finished"] - $job["started"] : false;
+				$deviation = $real !== false ? $real - $plan : 0;
+				$real = $real === false ? 0 : $real;
+				$c->add_data(array(
+					"plan" => $plan,
+				));
+				$c->add_data(array(
+					"real" => $real,
+				));
+				$c->add_data(array(
+					"d" => $deviation,
+				));
+				$max = max($plan, $real, $deviation);
+				$min = min($plan, $real, $deviation);
+				$c->set_title(array(
+					"text" => $job["name"],
+					"color" => "666666",
+					"size" => 11,
+				));
+				$c->set_bar_sizes(array(
+					"width" => 60,
+					"bar_spacing" => 3,
+					"bar_group_spacing" => 8,
+				));
+				$c->set_legend(array(
+					"labels" => array(
+						t("Planeeritud"),
+						t("Tegelik"),
+						t("H&auml;lve"),
+					),
+						"position" => GCHART_POSITION_RIGHT,
+				));
+				$c->set_data_scales(array(array(-110, 110)));
+				$c->set_colors(array(
+					"5b9f44", "996600", $deviation > 0 ? "ff0000" : "0000ff"
+				));
+
+				$t_data["chart_".$i] = $c->get_html();
+				$j++;
+			}
+			$t->define_data($t_data);
+		}
 	}
 
 	function set_property($arr = array())
@@ -1962,6 +2118,25 @@ class mrp_case extends class_base
 		return true;
 	}
 
+	function callback_mod_layout(&$arr)
+	{
+		switch($arr["name"])
+		{
+			case "states_chart":
+				$arr["area_caption"] = sprintf(t("Projekti '%s' t&ouml;&ouml;d staatuste kaupa"), $arr["obj_inst"]->name());
+				break;
+
+			case "recources_chart":
+				$arr["area_caption"] = sprintf(t("Projekti '%s' planeeritud kestused ressursside kaupa"), $arr["obj_inst"]->name());
+				break;
+
+			case "job_charts":
+				$arr["area_caption"] = sprintf(t("Projekti '%s' t&ouml;&ouml;de kestuste v&otilde;rdlus"), $arr["obj_inst"]->name());
+				break;
+		}
+		return true;
+	}
+
 /**
     @attrib name=start
 	@param id required type=int
@@ -2455,12 +2630,12 @@ class mrp_case extends class_base
 		));
 		$t->define_field(array(
 			"name" => "planned_length",
-			"caption" => t("Planeeritud ketvus"),
+			"caption" => t("Planeeritud kestus"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "real_len",
-			"caption" => t("Tegelik ketvus"),
+			"caption" => t("Tegelik kestus"),
 			"align" => "center"
 		));
 		$t->define_field(array(

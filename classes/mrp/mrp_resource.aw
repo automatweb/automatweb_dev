@@ -7,6 +7,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="T&ouml;&ouml;leht" submit=no
+	@groupinfo grp_resource_joblist_todo caption="Eesseisvad t&ouml;&ouml;d" submit=no parent=grp_resource_joblist
+	@groupinfo grp_resource_joblist_done caption="Tehtud t&ouml;&ouml;d" submit=no parent=grp_resource_joblist
 @groupinfo grp_resource_settings caption="Seaded"
 @groupinfo grp_resource_maintenance caption="Hooldus"
 @groupinfo grp_resource_unavailable caption="T&ouml;&ouml;ajad"
@@ -29,8 +31,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@caption T&ouml;&ouml;d
 
 
-@default group=grp_resource_joblist
+@default group=grp_resource_joblist_todo
 	@property job_list type=table store=no editonly=1 no_caption=1
+	@caption T&ouml;&ouml;leht
+
+@default group=grp_resource_joblist_done
+	@property job_list_done type=table store=no editonly=1 no_caption=1
 	@caption T&ouml;&ouml;leht
 
 
@@ -256,6 +262,7 @@ class mrp_resource extends class_base
 				break;
 
 			case "job_list":
+			case "job_list_done":
 				### update schedule
 				$schedule = get_instance (CL_MRP_SCHEDULE);
 				$schedule->create (array("mrp_workspace" => $this->workspace->id()));
@@ -537,7 +544,7 @@ class mrp_resource extends class_base
 		}
 	}
 
-	function _init_job_list_table(&$table)
+	function _init_job_list_table(&$table, $times = false)
 	{
 
 		/*||
@@ -600,6 +607,32 @@ class mrp_resource extends class_base
 			"format" => "d-m-Y"
 		));
 
+		if($times)
+		{
+			$table->define_field(array(
+				"name" => "planned_length",
+				"caption" => t("Planeeritud kestus"),
+				"sortable" => 1,
+				"align" => "center",
+				"numeric" => 1,
+			));
+
+			$table->define_field(array(
+				"name" => "real_length",
+				"caption" => t("Tegelik kestus"),
+				"sortable" => 1,
+				"align" => "center",
+				"numeric" => 1,
+			));
+
+			$table->define_field(array(
+				"name" => "deviation",
+				"caption" => t("H&auml;lve"),
+				"sortable" => 1,
+				"align" => "center",
+			));
+		}
+
 		$table->define_field(array(
 			"name" => "trykiarv",
 			"caption" => t("Tr&uuml;kiarv"),
@@ -617,11 +650,12 @@ class mrp_resource extends class_base
 		));
 	}
 
-	function create_job_list_table ($arr)
+	function create_job_list_table ($arr, $for_workspace = false)
 	{
 		$this_object =& $arr["obj_inst"];
 		$table =& $arr["prop"]["vcl_inst"];
-		$this->_init_job_list_table($table);
+		$done = $arr["prop"]["name"] === "job_list_done" || $for_workspace;
+		$this->_init_job_list_table($table, $done);
 
 
 
@@ -632,11 +666,29 @@ class mrp_resource extends class_base
 		));
 
 		### states for resource joblist
-		$applicable_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_INPROGRESS,
-		);
+		if($for_workspace)
+		{
+			$applicable_states = array(
+				MRP_STATUS_DONE,
+				MRP_STATUS_PLANNED,
+				MRP_STATUS_PAUSED,
+				MRP_STATUS_INPROGRESS,
+			);
+		}
+		elseif($done)
+		{
+			$applicable_states = array(
+				MRP_STATUS_DONE,
+			);
+		}
+		else
+		{
+			$applicable_states = array(
+				MRP_STATUS_PLANNED,
+				MRP_STATUS_PAUSED,
+				MRP_STATUS_INPROGRESS,
+			);
+		}
 
 		$list = new object_list(array(
 			"class_id" => CL_MRP_JOB,
@@ -647,11 +699,11 @@ class mrp_resource extends class_base
 
 		if ($list->count () > 0)
 		{
-			$this->draw_job_list_table_from_list($table, $list);
+			$this->draw_job_list_table_from_list($table, $list, $done);
 		}
 	}
 
-	function draw_job_list_table_from_list(&$table, $list)
+	function draw_job_list_table_from_list(&$table, $list, $times)
 	{
 		for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
 		{
@@ -685,13 +737,13 @@ class mrp_resource extends class_base
 				$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 				$change_url = html::get_change_url($job->id(), array("return_url" => get_ru()));
 
-				$table->define_data (array (
+				$data = array (
 					"modify" => html::href (array (
 						"caption" => t("Ava"),
 						"url" => $change_url,
 						)),
 					"project" => $project,
-					"proj_nr" => $p->name(),
+					"proj_nr" => html::obj_change_url($p),
 					"proj_com" => $p->comment(),
 					"state" => $state,
 					"starttime" => $job->prop ("starttime"),
@@ -700,7 +752,26 @@ class mrp_resource extends class_base
 					"trykiarv" => $p->prop("trykiarv"),
 					"trykiarv_notes" => $p->prop("trykiarv_notes"),
 					"resource" => $job->prop("RELTYPE_MRP_RESOURCE.name")
-				));
+				);
+				if($times || $for_workspace)
+				{
+					$planned_length = (float) ($job->length / 3600);
+
+					$data += array(
+						"planned_length" => round($planned_length, 2),
+					);
+					if(MRP_STATUS_DONE == $job->state)
+					{
+						$real_length = (float) (($job->finished - $job->started) / 3600);
+						$deviation_float = (float) ($real_length - $planned_length);
+						$deviation_percent = $deviation_float / $planned_length * 100;
+						$data += array(
+							"real_length" => round($real_length, 2),
+							"deviation" => sprintf(t("%.2f (%.2f%%)"), round($deviation_float, 2), round($deviation_percent, 2)),
+						);
+					}
+				}
+				$table->define_data ($data);
 			}
 		}
 	}

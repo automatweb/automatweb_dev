@@ -8,12 +8,16 @@
 	@groupinfo grp_settings_salesman caption="M&uuml;&uuml;gimehe seaded" parent=general
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=general submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=general submit=no
-	@groupinfo grp_resources caption="Ressursside haldus" parent=general
 	@groupinfo grp_worksheet caption="T&ouml;&ouml;lehed" parent=general submit_method=get
 
 @groupinfo grp_customers caption="Kliendid" submit=no submit_method=get
 @groupinfo grp_projects caption="Projektid" confirm_save_data=1
 @groupinfo grp_schedule caption="T&ouml;&ouml;voog" submit=no
+	@groupinfo grp_schedule_gantt caption="T&ouml;&ouml;voo diagramm" submit=no parent=grp_schedule
+	@groupinfo grp_schedule_google caption="Graafikud" submit=no parent=grp_schedule
+@groupinfo grp_resources caption="Ressursid"
+	@groupinfo grp_resources_manage caption="Haldus" parent=grp_resources
+	@groupinfo grp_resources_load caption="Koormus" parent=grp_resources
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
 	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
 	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
@@ -35,7 +39,7 @@
 	@property rescheduling_needed type=hidden
 
 	// elements main grouper
-	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr,grp_settings_def width=20%:80%
+	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources_manage,grp_resources_load,grp_users_tree,grp_users_mgr,grp_settings_def width=20%:80%
 
 @default group=grp_customers
 	@property customers_toolbar type=toolbar store=no no_caption=1
@@ -100,15 +104,30 @@
 		@caption Otsi
 
 
-@default group=grp_resources
-	@property resources_toolbar type=toolbar store=no no_caption=1
+@default group=grp_resources_manage,grp_resources_load
+	@property resources_toolbar type=toolbar store=no no_caption=1 group=grp_resources_manage
 	@layout resources_tree_box type=vbox closeable=1 area_caption=Ressursid&amp;kategooriad parent=vsplitbox
 	@property resources_tree type=text store=no no_caption=1 parent=resources_tree_box
 	@property resources_list type=table store=no parent=vsplitbox no_caption=1
 
 
-@default group=grp_schedule
+@default group=grp_schedule_gantt
 	@property master_schedule_chart type=text store=no no_caption=1
+
+	@layout schedule_search_box type=vbox closeable=1 area_caption=Otsing
+		@property chart_project_hilight_gotostart type=checkbox store=no parent=schedule_search_box
+		@caption Mine valitud projekti algusesse
+
+		@property chart_search type=text store=no parent=schedule_search_box
+		@caption Otsi
+
+		@property chart_start_date type=date_select store=no parent=schedule_search_box
+		@caption N&auml;idatava perioodi algus
+
+		@property chart_submit type=submit store=no parent=schedule_search_box
+		@caption N&auml;ita
+	
+@default group=grp_schedule_google
 
 	@layout charts_1 type=hbox width=50%:50%
 
@@ -125,19 +144,6 @@
 		@layout deadline_chart type=vbox area_caption=Projektid&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=charts_2 closeable=1
 		
 			@property deadline_chart type=google_chart no_caption=1 parent=deadline_chart store=no
-
-	@layout schedule_search_box type=vbox closeable=1 area_caption=Otsing
-		@property chart_project_hilight_gotostart type=checkbox store=no parent=schedule_search_box
-		@caption Mine valitud projekti algusesse
-
-		@property chart_search type=text store=no parent=schedule_search_box
-		@caption Otsi
-
-		@property chart_start_date type=date_select store=no parent=schedule_search_box
-		@caption N&auml;idatava perioodi algus
-
-		@property chart_submit type=submit store=no parent=schedule_search_box
-		@caption N&auml;ita
 
 @default group=grp_users_tree
 	@property user_list_toolbar type=toolbar store=no no_caption=1
@@ -1702,7 +1708,7 @@ class mrp_workspace extends class_base
 			"grp_printer_aborted",
 			"grp_printer_in_progress",
 			"grp_printer_startable",
-			"grp_schedule",
+			"grp_schedule_gantt",
 			"grp_projects",
 			"grp_printer_notstartable"
 		);
@@ -1848,7 +1854,7 @@ class mrp_workspace extends class_base
 		// END archived res removal backwards compatible version
 
 		classload("vcl/treeview");
-		$tree = treeview::tree_from_objects(array(
+		$tree_prms = array(
 			"tree_opts" => array(
 				"type" => TREE_DHTML,
 				"tree_id" => "resourcetree",
@@ -1860,7 +1866,14 @@ class mrp_workspace extends class_base
 			"node_actions" => array (
 				CL_MRP_RESOURCE => "change",
 			),
-		));
+		);
+
+		if($arr["request"]["group"] == "grp_resources_load")
+		{
+			unset($tree_prms["node_actions"]);
+		}
+
+		$tree = treeview::tree_from_objects($tree_prms);
 
 		$arr["prop"]["value"] .= $tree->finalize_tree ();
 	}
@@ -1876,6 +1889,10 @@ class mrp_workspace extends class_base
 
 			if ($active_item->class_id () != CL_MENU)
 			{
+				if($arr["request"]["group"] == "grp_resources_load")
+				{
+					return $this->create_resources_load_list($arr);
+				}
 				$parent = $active_item->parent ();
 			}
 			else
@@ -1943,13 +1960,22 @@ class mrp_workspace extends class_base
 			}
 
 			$table->define_data (array (
-				"name" => html::obj_change_url($resource),
+				"name" => $arr["request"]["group"] == "grp_resources_load" ? html::href(array(
+					"mrp_tree_active_item" => $resource->id(),
+					"caption" => $resource->name(),
+				)) : html::obj_change_url($resource),
 				"order" => $resource->ord (),
 				"operator" => join(",",$operators),
 				"status" => $this->resource_states[$resource->prop("state")],
 				"resource_id" => $resource->id(),
 			));
 		}
+	}
+
+	function create_resources_load_list($arr)
+	{
+		$args = array_merge($arr, array("obj_inst" => obj($arr["request"]["mrp_tree_active_item"])));
+		return $args["obj_inst"]->instance()->create_job_list_table($args, true);
 	}
 
 	function create_resources_toolbar ($arr = array())
