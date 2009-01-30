@@ -80,6 +80,14 @@
 			</function>
 		</action>
 
+		<action name="set_data_scales">
+			<function name="set_data_scales">
+				<arguments>
+					<required name="data_scales" type="array" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="set_bar_sizes">
 			<function name="set_bar_sizes">
 				<arguments>

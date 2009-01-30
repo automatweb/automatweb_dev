@@ -307,6 +307,22 @@ class google_chart extends aw_template
 	{
 		$this->zeroline = $zeros;
 	}
+
+	/**
+	@attrib name=set_data_scales api=1
+	@param data_scales required type=array
+	@comment
+		Sets a pair of data ranges for each data set of bar chart.
+		You can define just one pair, that will then be used for each data set.
+	@examples
+		$ch->set_data_scales(array(
+			array(100, 0), array(100, -100)
+		));
+	**/
+	function set_data_scales($data_scales)
+	{
+		$this->data_scales = $data_scales;
+	}
 	
 	/**
 	@attrib name=set_bar_sizes api=1
@@ -654,6 +670,11 @@ class google_chart extends aw_template
 			$params["chp"] = implode(",", $this->zeroline);
 		}
 
+		if(isset($this->data_scales) && is_array($this->data_scales) && count($this->data_scales) > 0)
+		{
+			$params["chds"] = $this->process_data_scales($this->data_scales);
+		}
+
 		if(count($this->linestyles))
 		{
 			$params["chls"] = $this->process_linestyles();
@@ -795,6 +816,16 @@ class google_chart extends aw_template
 			$labels[] = $this->process_text($label);
 		}
 		return implode("|", $labels);
+	}
+
+	private function process_data_scales($data)
+	{
+		$data_scales = array();
+		foreach($data as $row)
+		{
+			$data_scales[] = implode(",", $row);
+		}
+		return implode(",", $data_scales);
 	}
 
 	private function process_params($data)
