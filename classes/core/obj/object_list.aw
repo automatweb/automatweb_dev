@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.70 2008/11/14 09:52:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.71 2009/01/30 12:19:44 instrumental Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -789,6 +789,34 @@ class object_list extends _int_obj_container_base
 	function count()
 	{
 		return count($this->list);
+	}
+
+	/** Works almost the same as array_slice(), except it doesn't return anything, but modifies the object_list it is applied to.
+		@attrib api=1 name=slice params=pos
+
+		@param offset required type=int
+
+		@param length optional type=int
+
+		@errors
+			none
+
+		@returns
+			nothing
+
+		@examples
+			$ol = new object_list(array(
+				"status" => STAT_ACTIVE
+			));
+			echo $ol->count();	// 386
+			$ol->slice(4,5);
+			echo $ol->count();	// 5
+	**/
+	public function slice($start, $length = false)
+	{
+		$ids = $this->ids();
+		$ids_ = $length ? array_slice($ids, $start, $length) : array_slice($ids, $start);
+		$this->_int_remove_from_list(array_diff($ids, $ids_));
 	}
 
 	// static
