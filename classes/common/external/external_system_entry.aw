@@ -2,7 +2,7 @@
 /*
 @classinfo syslog_type=ST_EXTERNAL_SYSTEM_ENTRY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=voldemar
 
-@tableinfo aw_ext_system_entries index=aw_oid master_table=objects masster_index=brother_of
+@tableinfo aw_ext_system_entries index=aw_oid master_table=objects master_index=brother_of
 
 @default table=aw_ext_system_entries
 @default group=general
@@ -19,7 +19,7 @@
 @reltype EXTSYS value=1 clid=CL_EXTERNAL_SYSTEM
 @caption Siduss&uuml;steem
 
-@reltype OBJ value=2 
+@reltype OBJ value=2
 @caption AW Objekt
 
 */
@@ -52,7 +52,7 @@ class external_system_entry extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{

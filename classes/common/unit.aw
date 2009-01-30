@@ -5,7 +5,7 @@
 @default table=objects
 @default group=general
 @default field=meta
-@default method=seralize
+@default method=serialize
 
 @property unit_code type=textbox
 @caption &Uuml;hiku kood
@@ -15,7 +15,7 @@
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 */
@@ -57,12 +57,12 @@ class unit extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_tab($arr)
 	{
 		$trc = aw_ini_get("user_interface.trans_classes");
-		
+
 		if ($arr["id"] == "transl" && (aw_ini_get("user_interface.content_trans") != 1 && !$trc[$this->clid]))
 		{
 			return false;

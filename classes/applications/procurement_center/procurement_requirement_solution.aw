@@ -1,12 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement_solution.aw,v 1.3 2007/12/06 14:33:50 kristo Exp $
-// procurement_requirement_solution.aw - N&otilde;ude lahendus 
+// procurement_requirement_solution.aw - N&otilde;ude lahendus
 /*
 
 @classinfo syslog_type=ST_PROCUREMENT_REQUIREMENT_SOLUTION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=aw_procurement_requirement_solution
-@tableinfo aw_procurement_requirement_solution index=aw_oid master_index=brother_of mater_table=objects
+@tableinfo aw_procurement_requirement_solution index=aw_oid master_index=brother_of master_table=objects
 
 @default group=general
 
@@ -168,7 +167,7 @@ class procurement_requirement_solution extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -182,7 +181,7 @@ class procurement_requirement_solution extends class_base
 		if ($f == "")
 		{
 			$this->db_query("
-				CREATE TABLE aw_procurement_requirement_solution (aw_oid int primary key, aw_readyness int, aw_price double, 
+				CREATE TABLE aw_procurement_requirement_solution (aw_oid int primary key, aw_readyness int, aw_price double,
 				aw_time_to_install double, aw_solution text)
 			");
 			return true;
@@ -219,7 +218,7 @@ class procurement_requirement_solution extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'section',
-			'caption' => t('Üksus'),
+			'caption' => t('&Uuml;ksus'),
 			'sortable' => '1',
 		));
 		$t->define_field(array(
@@ -290,7 +289,7 @@ class procurement_requirement_solution extends class_base
 				)),
 				"price" => $price
 			));
-			
+
 		}
 	}
 }

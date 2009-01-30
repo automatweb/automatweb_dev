@@ -50,7 +50,7 @@
             <table>aw_problem_tickets</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>ORDERER_CO</reltype>
+            <reltype>RELTYPE_ORDERER_CO</reltype>
             <field>aw_orderer_co</field>
             <caption>Tellija organisatsioon</caption>
       </property>
@@ -59,7 +59,7 @@
             <table>aw_problem_tickets</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>UNIT</reltype>
+            <reltype>RELTYPE_UNIT</reltype>
             <field>aw_orderer_unit</field>
             <caption>Tellija &amp;amp;uuml;ksus</caption>
       </property>

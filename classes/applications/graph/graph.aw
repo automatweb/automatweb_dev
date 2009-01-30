@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/graph/graph.aw,v 1.2 2007/12/06 14:33:30 kristo Exp $
 // graph.aw - graafikute haldamine
 
-/* 
+/*
 
 @classinfo no_status=1 relationmgr=yes syslog_type=ST_GRAPH maintainer=kristo
 
@@ -23,20 +22,20 @@
 @default method=serialize
 @default group=data_entry
 
-	@property x_axis_data type=textbox 
+	@property x_axis_data type=textbox
 	@caption X-Telje andmed
 	@comment Eralda andmed komaga
 
-	@property y_axis_data type=table store=no 
+	@property y_axis_data type=table store=no
 	@caption Y-Telje andmed
 	@comment Eralda andmed komaga
 
 @default group=data_pie
 
-	@property pie_labels type=textbox default=Mai,Juuni,Juuli,August,September
+	@property pie_labels type=textbox default="Mai,Juuni,Juuli,August,September"
 	@caption Kirjeldused
 
-	@property pie_data type=textbox default=5,13,18,7,3
+	@property pie_data type=textbox default="5,13,18,7,3"
 	@caption V&auml;&auml;rtused
 
 @default group=settings
@@ -76,7 +75,7 @@
 
 	@property x_axis_col type=colorpicker default=000000
 	@caption X Telje teksti v&auml;rv
-	
+
 	@property y_grid type=textbox size=5 default=6
 	@caption Y telje &uuml;hikute arv
 
@@ -85,7 +84,7 @@
 
 	@property show_grid_val type=checkbox ch_value=1 default=1
 	@caption N&auml;itan gridil v&auml;&auml;rtusi
-	
+
 	@property fir_col type=colorpicker default=00FF00
 	@caption Andmede v&auml;rv
 
@@ -94,10 +93,10 @@
 	@property radius type=textbox size=5 default=50
 	@caption Raadius
 
-	@property percentage type=checkbox ch_value=1 default=1 
+	@property percentage type=checkbox ch_value=1 default=1
 	@caption N&auml;itan piruka peal protsente
 
-	@property showlabels type=checkbox ch_value=1 default=1 
+	@property showlabels type=checkbox ch_value=1 default=1
 	@caption N&auml;itan kirjeldusi
 
 @default group=preview
@@ -224,24 +223,24 @@ class graph extends class_base
 		return "<img src='".$this->mk_my_orb("show", array("id" => $alias["target"]), "graph",false,true)."'>";
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=show params=name default="0"
-		
+
 		@param id required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
 	function show($ar)
 	{
 		$o = obj($ar["id"]);
-		switch ($o->prop("type")) 
+		switch ($o->prop("type"))
 		{
-			case TYPE_PIE:			
+			case TYPE_PIE:
 				die($this->pie_show($ar["id"]));
 				break;
 
@@ -251,7 +250,7 @@ class graph extends class_base
 				$create = "image".$this->outputimagetype;
 				eval("$create(\$p);");
 				imagedestroy($p);
-				die;				
+				die;
 				break;
 
 			case TYPE_LINE:
@@ -260,14 +259,14 @@ class graph extends class_base
 				$create = "image".$this->outputimagetype;
 				eval("$create(\$p);");
 				imagedestroy($p);
-				die;				
+				die;
 				break;
 			default:
 				break;
 		}
 	}
 
-	function pie_show($id) 
+	function pie_show($id)
 	{
 		$o = obj($id);
 		classload("applications/graph/tt_pie");
@@ -283,17 +282,17 @@ class graph extends class_base
 
 		header("Content-type: image/png");
 		imagepng($p->image);
-		die;				
+		die;
 	}
 
-	//Kõigetegija bari ja line jaoks, peamiselt teeb valmis pildi ja returnib image pointeri.
+	//K6igetegija bari ja line jaoks, peamiselt teeb valmis pildi ja returnib image pointeri.
 	function show_line_bar($id)
 	{
 		if ($id)
 		{
 			$o = obj($id);
 
-			switch ($o->prop("type")) 
+			switch ($o->prop("type"))
 			{
 				case TYPE_BAR:
 					classload("applications/graph/tt_bar");
@@ -315,12 +314,12 @@ class graph extends class_base
 			* Joonistame Base valmis, kus on borderid ja asjad k6ik paigas
 			*/
 			$Im->GraphBase($o->prop("width"),$o->prop("height"),$o->prop("back_col"));
-	
+
 			$data = $this->_get_data($o);
 			$Im->parseData($data["xdata"],$data["ydata"]);
 			$Im->title($o->prop("title"),$o->prop("title_col"));
 			$Im->xaxis($data["xdata"],$o->prop("x_axis_text"),$o->prop("x_axis_col"));
-			
+
 			$o->prop("show_grid_val") ? $drawg = true : $drawg = false;
 			$Im->grid($o->prop("y_grid"),$drawg,$o->prop("y_grid_col"));
 
@@ -330,7 +329,7 @@ class graph extends class_base
 			if ($type=="bar")
 			{
 				$Im->makeBar($data["ydata"],$data["ycol"]);
-			} 
+			}
 			else
 			{
 				for($i=0;$i<count($data["ydata"]);$i++)
@@ -343,7 +342,7 @@ class graph extends class_base
 			return $image;
 		}
 	}
-	
+
 	function _get_data($o)
 	{
 		$ydata = array();

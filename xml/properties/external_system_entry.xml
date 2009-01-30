@@ -38,7 +38,6 @@
             <aw_ext_system_entries>
                   <index>aw_oid</index>
                   <master_table>objects</master_table>
-                  <masster_index>brother_of</masster_index>
                   <master_index>brother_of</master_index>
             </aw_ext_system_entries>
       </tableinfo>

@@ -46,11 +46,15 @@
             <method>serialize</method>
             <type>textbox</type>
             <default>
-                  <num_0>Mai</num_0>
+                  <num_0>
+                  <![CDATA["Mai]]>
+                  </num_0>
                   <num_1>Juuni</num_1>
                   <num_2>Juuli</num_2>
                   <num_3>August</num_3>
-                  <num_4>September</num_4>
+                  <num_4>
+                  <![CDATA[September"]]>
+                  </num_4>
             </default>
             <caption>Kirjeldused</caption>
       </property>
@@ -62,11 +66,15 @@
             <method>serialize</method>
             <type>textbox</type>
             <default>
-                  <num_0>5</num_0>
+                  <num_0>
+                  <![CDATA["5]]>
+                  </num_0>
                   <num_1>13</num_1>
                   <num_2>18</num_2>
                   <num_3>7</num_3>
-                  <num_4>3</num_4>
+                  <num_4>
+                  <![CDATA[3"]]>
+                  </num_4>
             </default>
             <caption>V&amp;amp;auml;&amp;amp;auml;rtused</caption>
       </property>

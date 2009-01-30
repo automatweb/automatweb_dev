@@ -69,7 +69,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>texarea</type>
+            <type>textarea</type>
             <cols>50</cols>
             <rows>5</rows>
             <caption>Kommentaar</caption>

@@ -105,7 +105,7 @@
             <aw_procurement_requirement_solution>
                   <index>aw_oid</index>
                   <master_index>brother_of</master_index>
-                  <mater_table>objects</mater_table>
+                  <master_table>objects</master_table>
             </aw_procurement_requirement_solution>
       </tableinfo>
       <reltypes>

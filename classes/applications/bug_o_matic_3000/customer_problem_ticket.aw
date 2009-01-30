@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/customer_problem_ticket.aw,v 1.5 2007/12/06 14:32:52 kristo Exp $
-// customer_problem_ticket.aw - Probleem 
+// customer_problem_ticket.aw - Probleem
 /*
 
 @classinfo syslog_type=ST_CUSTOMER_PROBLEM_TICKET relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
@@ -23,10 +22,10 @@
 	@property from_bug type=relpicker reltype=RELTYPE_FROM_BUG field=aw_from_bug
 	@caption Arendus&uuml;lesanne
 
-	@property orderer_co type=relpicker reltype=ORDERER_CO field=aw_orderer_co
+	@property orderer_co type=relpicker reltype=RELTYPE_ORDERER_CO field=aw_orderer_co
 	@caption Tellija organisatsioon
 
-	@property orderer_unit type=relpicker reltype=UNIT field=aw_orderer_unit
+	@property orderer_unit type=relpicker reltype=RELTYPE_UNIT field=aw_orderer_unit
 	@caption Tellija &uuml;ksus
 
 	@property content type=textarea rows=20 cols=50 field=aw_content
@@ -160,7 +159,7 @@ class customer_problem_ticket extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -211,7 +210,7 @@ class customer_problem_ticket extends class_base
 		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BUG")));
 		$bt = get_instance(CL_BUG_TRACKER);
 		$bt->_init_bug_list_tbl($t);
-		$bt->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));		
+		$bt->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));
 		$t->set_caption(t("Probleemist tulenenud &uuml;lesanded"));
 	}
 

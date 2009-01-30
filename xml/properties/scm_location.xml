@@ -64,7 +64,7 @@
             <name>make_copy</name>
             <table>objects</table>
             <group>general</group>
-            <type>choose</type>
+            <type>chooser</type>
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>

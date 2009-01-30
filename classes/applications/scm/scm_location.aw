@@ -30,7 +30,7 @@
 @property owner type=relpicker table=scm_location field=owner reltype=RELTYPE_OWNER
 @caption Omanik
 
-@property make_copy type=choose multiple=1 field=meta method=serialize
+@property make_copy type=chooser multiple=1 field=meta method=serialize
 @caption Tee koopia
 
 @property usercheckbox1 type=checkbox table=scm_location field=usercheckbox1 ch_value=1
@@ -186,7 +186,7 @@ class scm_location extends class_base
 		}
 		return false;
 	}
-	
+
 	/**
 	@attrib name=autocomplete_location params=name all_args=1
 	**/
@@ -205,7 +205,7 @@ class scm_location extends class_base
 			"options" => &$autocomplete_options,// required
 			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
 		);
-		
+
 		$ol = new object_list(array(
 			"class_id" => CL_SCM_LOCATION,
 			"lang_id" => array(),
