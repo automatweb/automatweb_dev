@@ -239,6 +239,12 @@ class crm_bill_obj extends _int_object
 	**/
 	function get_bill_customer()
 	{
+		// New
+		if(!is_oid($this->id()))
+		{
+			return "";
+		}
+
 		$id = "";
 		$bi = get_instance("applications/crm/crm_bill");
 		if (is_oid($this->prop("customer")) && $bi->can("view", $this->prop("customer")))
