@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.14 2009/01/16 11:37:44 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.15 2009/01/31 11:53:59 voldemar Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -769,44 +769,43 @@ die();
 	**/
 	function id_pre_login($arr)
 	{
-		if($_SERVER["HTTPS"] != "on")
+		if($_SERVER["HTTPS"] !== "on")
 		{
 			return aw_ini_get("baseurl");
 		}
 
 		// well.. this is a nice ocsp check. this checks wheater the user's certificate is valid at current point or not
 		// when this feature is turned off(ocsp service is provided as a priced service(in id-card situation at least)), the function returs 'all okay'
-		$ocsp = get_instance(CL_OCSP);
+		$ocsp = new ocsp();
 		$ocsp_retval = $ocsp->OCSP_check($_SERVER["_SSL_CLIENT_CERT"], $_SERVER["SSL_CLIENT_I_DN_CN"]);
 		if($ocsp_retval !== 1)
 		{
 			return aw_ini_get("baseurl");
 		}
 
-		classload("core/users/id_config");
-		$act_inst = get_instance(CL_ID_CONFIG);
+		$act_inst = new id_config();
 		$act = id_config::get_active();
 
 
 		// this little modafocka is here beacause estonian language has freaking umlauts etc..
 		$data = $this->returncertdata($_SERVER["SSL_CLIENT_CERT"]);
-		$arr["firstname"] = $data["f_name"];
-		$arr["lastname"] = $data["l_name"];
-		$arr["ik"] = $data["pid"];
-
-		$arr["gender"] = ($arr["ik"][0] == 1 || $arr["ik"][0] == 3 || $arr["ik"][0] == 5)?1:2;
-
 
 		if($act_inst->use_safelist())
-		{
+		{ // only people in safelist can log in with id card
 			$sl = $act_inst->get_safelist();
-			if(!in_array($arr["ik"], array_keys($sl)))
+			if(!in_array($data["pid"], array_keys($sl)))
 			{
 				return aw_ini_get("baseurl");
 			}
 		}
 
-		if(!$arr["firstname"] || !$arr["lastname"] || !$arr["ik"])
+		$arr["firstname"] = $data["f_name"];
+		$arr["lastname"] = $data["l_name"];
+		$arr["ik"] = $data["pid"];
+		$ik = new pid_et($arr["ik"]);
+		$arr["gender"] = $ik->gender(1,2);
+
+		if(!$arr["firstname"] || !$arr["lastname"] || !$ik->is_valid())
 		{
 			$url = aw_ini_get("baseurl")."/orb.aw?class=ddoc&action=no_ddoc";
 			$tpl = new aw_template();
@@ -816,52 +815,50 @@ die();
 			$tpl->read_template("error.tpl");
 			die($tpl->parse());
 		}
+
 		$arr["uid"] = $this->_find_username($arr["firstname"],$arr["lastname"]);
 		$password = substr(gen_uniq_id(),0,8);
 		aw_disable_acl();
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_PERSON,
-			"personal_id" => $arr["ik"],
+			"personal_id" => $ik->get(),
 			"site_id" => array(),
 			"lang_id" => array(),
-			"status" => new obj_predicate_not(STAT_DELETED),
-			//"status" => STAT_ACTIVE,
+			"status" => new obj_predicate_not(STAT_DELETED)
 		));
+
 		if($ol->count() < 1 && aw_ini_get("users.id_only_existing") == "1")
-		{
+		{ // only people who have a user object in this system can log in with id card
 			aw_restore_acl();
 			return aw_ini_get("baseurl");
 		}
+
 		if($ol->count() < 1)
 		{
-			$gr_inst = get_instance(CL_GROUP);
 			$grs = $act_inst->get_ugroups();
-			$user = get_instance("core/users/user");
+			$user = new user();
 			$u_obj = $user->add_user(array(
 				"uid" => $arr["uid"],
 				"password" => $password,
-				"real_name" => $arr["firstname"]." ".$arr["lastname"],
+				"real_name" => $arr["firstname"]." ".$arr["lastname"]
 			));
 			// set new users user groups depending on the active id_config settings
 			foreach($grs as $gr)
 			{
-				$gr_obj = obj($gr);
+				$gr_inst = new group();
+				$gr_obj = new object($gr);
 				$gr_inst->add_user_to_group($u_obj, $gr_obj);
 			}
-
-			//aw_switch_user(array("uid" => $u_obj->id()));
 
 			$person_obj = new object();
 			$person_obj->set_class_id(145);
 			$person_obj->set_parent(aw_ini_get("users.root_folder"));
 			$person_obj->set_name($arr["uid"]);
-			$person_obj->set_prop("personal_id",$arr["ik"]);
+			$person_obj->set_prop("personal_id",$ik->get());
 			$person_obj->set_prop("firstname",$arr["firstname"]);
 			$person_obj->set_prop("lastname",$arr["lastname"]);
 			$person_obj->set_prop("gender",$arr["gender"]);
-			$person_id = $person_obj->save_new();
-
-
+			$person_id = $person_obj->save();
 
 			$o = new object($u_obj->id());
 			$o->connect(array(
