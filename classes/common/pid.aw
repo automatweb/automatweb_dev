@@ -1,229 +1,124 @@
 <?php
 
-define ("PID_GENDER_FEMALE", 2);
-define ("PID_GENDER_MALE", 3);
-
-define ("PID_ERROR_LENGTH", 1);
-define ("PID_ERROR_CHECKSUM", 2);
-define ("PID_ERROR_INVALID_DATE", 3);
-define ("PID_ERROR_INVALID_COUNTRY", 4);
-
 /*
 @classinfo  maintainer=voldemar
 
 Class for working with personal identification numbers (PID-s). Loading and common usage:
 
-	$pid = get_instance ("common/pid");
-	$pid->country_code ("ee");
-	$pid->set (45503034582);
-	$gender = $pid->gender ();
+	$pid = new pid_et("45503034582");
+	$gender = $pid->gender();
 
 */
 
-class pid extends core
+class pid
 {
-	var $pid;
-	var $gender;
-	var $birth_date;
-	var $country;
-	var $country_code;
-	var $errors = array ();
-	var $error_data = array ();
-	var $is_valid;
+	const GENDER_FEMALE = 2;
+	const GENDER_MALE = 3;
 
-	function pid ($arg = array ())
+	protected $pid; // actual pid string
+	protected $data = array(); // pid type/country specific data
+	protected $is_valid; // boolean when checked/validated, null by default
+
+	function __construct ($pid = null, $errors = false)
 	{
-		$this->init();
-		$this->error_data = array (
-			PID_ERROR_CHECKSUM => t("Isikukood ei vasta Eesti Vabariigi isikukoodi standardile."),
-			PID_ERROR_INVALID_DATE => t("Isikukoodis leiduv s&uuml;nnikuup&auml;evateave ei vasta &uuml;helegi kuup&auml;evale Gregoriuse kalendris."),
-			PID_ERROR_LENGTH => t("Isikukood vale pikkusega."),
-			PID_ERROR_INVALID_COUNTRY => t("Riik sobimatus formaadis."),
-		);
-	}
-
-	/*
-		@attrib name=errors api=1 
-		@returns array (int error_code => string error_description) Errors that occurred during last method call. FALSE if none.
-	*/
-	function errors ()
-	{
-		if (count ($this->errors))
+		if (isset($pid))
 		{
-			$errors = array ();
-
-			foreach ($this->errors as $err_id)
-			{
-				$errors[$err_id] = $this->error_data[$err_id];
-			}
-
-			return $errors;
-		}
-		else
-		{
-			return FALSE;
+			$this->set($pid, $errors);
 		}
 	}
 
-	/*
-		@attrib name=get api=1
-		@returns PID data. Void if not defined.
-	*/
+	/**
+		@attrib name=get api=1 params=pos
+		@returns string PID data. NULL if not defined.
+	**/
 	function get ()
 	{
-		unset ($this->errors);
 		return $this->pid;
 	}
 
-	/*
-		@attrib name=set api=1
-		@param pid required type=var PID data
-	*/
-	function set ($pid)
+	/**
+		@attrib name=set api=1 params=pos
+		@param pid required type=string
+		@param errors optional type=bool default=false
+		@errors
+			throws awex_pid_invalid subclasses when $errors parameter is TRUE
+	**/
+	function set ($pid, $errors = false)
 	{
-		unset ($this->errors);
-		$this->pid = $pid;
-		unset ($this->is_valid);
+		$this->pid = (string) $pid;
+		$this->parse($errors);
 	}
 
-	/*
-		@attrib name=gender api=1
-		@returns PID_GENDER_FEMALE for female PID_GENDER_MALE for male, if applicable in this country. Void if not defined. FALSE on error.
-	*/
-	function gender ()
-	{
-		unset ($this->errors);
-
-		if ($this->is_valid and isset ($this->gender))
-		{
-			return $this->gender;
-		}
-		else
-		{
-			$this->_parse ();
-
-			if ($this->is_valid)
-			{
-				return isset ($this->gender) ? $this->gender : NULL;
-			}
-			else
-			{
-				return FALSE;
-			}
-		}
-	}
-
-	/*
-		@attrib name=birth_date api=1
-		@returns UNIX timestamp birth date corresponding to PID if applicable in this country. Void if not defined. FALSE on error.
-	*/
-	function birth_date ()
-	{
-		unset ($this->errors);
-
-		if ($this->is_valid and isset ($this->birth_date))
-		{
-			return $this->birth_date;
-		}
-		else
-		{
-			$this->_parse ();
-
-			if ($this->is_valid)
-			{
-				return isset ($this->birth_date) ? $this->birth_date : NULL;
-			}
-			else
-			{
-				return FALSE;
-			}
-		}
-	}
-
-	/*
-		@attrib name=country api=1
-		@param country optional type=object,aw_oid Set new country for this PID
-		@returns boolean success if $country specified, currently defined country othewise (void if not defined).
-	*/
-	function country ($country = NULL)
-	{
-		unset ($this->errors);
-
-		if (isset ($country))
-		{
-			if (is_object ($country))
-			{
-				$this->country = $country;
-			}
-			elseif ($this->can ("view", $country))
-			{
-				$this->country = obj ($country);
-			}
-			else
-			{
-				$this->errors[] = PID_ERROR_INVALID_COUNTRY;
-				return FALSE;
-			}
-
-			$this->country_code = $this->country->prop ("code");
-			unset ($this->is_valid);
-			return TRUE;
-		}
-		else
-		{
-			return $this->country;
-		}
-	}
-
-	/*
-		@attrib name=country_code api=1
-		@param code optional type=string Set new country code (ISO 3166-1 two letter) for this PID
-		@returns boolean success if $code specified, currently defined country code othewise (void if not defined).
-	*/
-	function country_code ($code = NULL)
-	{
-		unset ($this->errors);
-
-		if (isset ($code))
-		{
-			$this->country_code = (string) $code;
-			unset ($this->is_valid);
-		}
-		else
-		{
-			return $this->country_code;
-		}
-	}
-
-	/*
-		@attrib name=is_valid api=1
-		@returns TRUE if currently defined PID data corresponds to PID standart of specified country, FALSE othewise.
-	*/
+	/**
+		@attrib name=is_valid api=1 params=pos
+		@returns TRUE/FALSE whether loaded PID is valid.
+	**/
 	function is_valid ()
 	{
-		unset ($this->errors);
-
-		return (isset ($this->is_valid) ? $this->is_valid : $this->_parse ());
-	}
-
-/* Private methods */
-
-	private function _parse ()
-	{
-		$parse_method = "_parse_" . strtolower ($this->country_code);
-		$this->is_valid = $this->$parse_method ();
 		return $this->is_valid;
 	}
 
-	## returns TRUE if pid complies to Estonian personal identification number standard EVS 1990:585.
-	private function _parse_ee ()
+	function __toString()
 	{
+		return $this->get();
+	}
+
+	protected function parse($errors)
+	{
+	}
+}
+
+class pid_et extends pid
+{
+	/*
+		@attrib name=gender api=1 params=pos
+		@param male_value optional type=bool default=false
+		@param female_value optional type=bool default=false
+		@returns pid::GENDER_FEMALE for female pid::GENDER_MALE for male by default. If $female_value and/or $male_value parameters specified, returns these values correspondingly.
+		@errors
+			throws awex_pid_na if no gender info retrieved
+	*/
+	function gender($male_value = self::GENDER_MALE, $female_value = self::GENDER_FEMALE)
+	{
+		if (!isset($this->data["gender"]))
+		{
+			throw new awex_pid_na("Gender not retireved");
+		}
+		$gender = $this->data["gender"] === self::GENDER_MALE ? $male_value : $female_value;
+		return $gender;
+	}
+
+	/**
+		@attrib name=birth_date api=1 params=pos
+		@param format optional type=string default=UNIXTIMESTAMP
+		@returns birth date in requested format.
+		@errors
+			throws awex_pid_na if no birth date info retrieved
+	**/
+	function birth_date($format = "UNIXTIMESTAMP")
+	{
+		if (!isset($this->data["birth_date"]))
+		{
+			throw new awex_pid_na("Birth date not retireved");
+		}
+		return $this->data["birth_date"];
+	}
+
+	// parses pid according to Estonian personal identification number standard EVS 1990:585.
+	protected function parse($errors)
+	{
+		$this->is_valid = true;
+		$this->data = array();
 		$pid = $this->pid;
-		settype ($pid, "string");
 
 		if (strlen ($pid) != 11)
 		{
-			$this->errors[] = PID_ERROR_LENGTH;
+			$this->is_valid = false;
+
+			if ($errors)
+			{
+				throw new awex_pid_length();
+			}
 		}
 
 		$quotient = 10;
@@ -259,7 +154,12 @@ class pid extends core
 
 		if (!$check)
 		{
-			$this->errors[] = PID_ERROR_CHECKSUM;
+			$this->is_valid = false;
+
+			if ($errors)
+			{
+				throw new awex_pid_checksum();
+			}
 		}
 
 		$pid_1 = (int) substr ($pid, 0, 1);
@@ -269,50 +169,78 @@ class pid extends core
 
 		switch ($pid_1)
 		{
-			case 1: // 1800–1899 mees;
+			case 1: // 1800–1899 male;
 				$pid_year += 1800;
-				$this->gender = PID_GENDER_MALE;
+				$this->data["gender"] = self::GENDER_MALE;
 				break;
 
-			case 2: // 1800–1899  naine;
+			case 2: // 1800–1899  female;
 				$pid_year += 1800;
-				$this->gender = PID_GENDER_FEMALE;
+				$this->data["gender"] = self::GENDER_FEMALE;
 				break;
 
-			case 3: // 1900–1999  mees;
+			case 3: // 1900–1999  male;
 				$pid_year += 1900;
-				$this->gender = PID_GENDER_MALE;
+				$this->data["gender"] = self::GENDER_MALE;
 				break;
 
-			case 4: // 1900–1999  naine;
+			case 4: // 1900–1999  female;
 				$pid_year += 1900;
-				$this->gender = PID_GENDER_FEMALE;
+				$this->data["gender"] = self::GENDER_FEMALE;
 				break;
 
-			case 5: // 2000–2099  mees;
+			case 5: // 2000–2099  male;
 				$pid_year += 2000;
-				$this->gender = PID_GENDER_MALE;
+				$this->data["gender"] = self::GENDER_MALE;
 				break;
 
-			case 6: // 2000–2099  naine;
+			case 6: // 2000–2099  female;
 				$pid_year += 2000;
-				$this->gender = PID_GENDER_FEMALE;
+				$this->data["gender"] = self::GENDER_FEMALE;
 				break;
 		}
 
 		if (checkdate ($pid_month, $pid_day, $pid_year))
 		{
-			$this->birth_date = mktime (0, 0, 0, $pid_month, $pid_day, $pid_year);
+			$this->data["birth_date"] = mktime (0, 0, 0, $pid_month, $pid_day, $pid_year);
 		}
 		else
 		{
-			$this->errors[] = PID_ERROR_INVALID_DATE;
+			$this->is_valid = false;
+
+			if ($errors)
+			{
+				throw new awex_pid_birthdate();
+			}
 		}
-
-		return (count ($this->errors) ? FALSE : TRUE);
 	}
+}
 
-/* END Private methods */
+/** Generic pid exception **/
+class awex_pid extends aw_exception {}
+
+/** Indicates that requested data element is not defined or retrieved **/
+class awex_pid_na extends awex_pid {}
+
+/** Invalid pid **/
+class awex_pid_invalid extends awex_pid {}
+
+/** Invalid pid length **/
+class awex_pid_length extends awex_pid_invalid
+{
+	protected $message = "Invalid length";
+}
+
+/** Invalid birthdate in pid **/
+class awex_pid_birthdate extends awex_pid_invalid
+{
+	protected $message = "Invalid birthdate info";
+}
+
+/** Invalid pid checksum **/
+class awex_pid_checksum extends awex_pid_invalid
+{
+	protected $message = "Checksum incorrect";
 }
 
 ?>
