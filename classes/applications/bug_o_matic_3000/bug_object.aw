@@ -232,6 +232,7 @@ class bug_object extends _int_object
 		$ol = new object_list();
 		$comments = $this->connections_from(array(
 			"type" => "RELTYPE_COMMENT",
+			"to.class_id" => CL_TASK_ROW,
 		));
 		$inst = get_instance(CL_BUG);
 		foreach($comments as $c)
