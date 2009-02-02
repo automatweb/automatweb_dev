@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.23 2009/01/22 08:33:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.24 2009/02/02 13:27:06 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
+
+//			automatweb::$instance->mode(automatweb::MODE_DBG);
+
 /*
 
 @classinfo syslog_type=ST_CLASS_DESIGNER_MANAGER relationmgr=yes no_comment=1 no_status=1 maintainer=kristo prop_cb=1
@@ -16,7 +19,10 @@
 
 	@layout mgr_hbox type=hbox width=20%:80%
 
-	@property mgr_tree type=treeview no_caption=1 parent=mgr_hbox
+		@layout mgr_tree_box type=vbox closeable=1 area_caption=Klasside&nbsp;kaustad parent=mgr_hbox
+
+			@property mgr_tree type=treeview no_caption=1 parent=mgr_tree_box
+
 	@property mgr_tbl type=table no_caption=1 parent=mgr_hbox
 
 @default group=rels
@@ -25,7 +31,10 @@
 
 	@layout rels_hbox type=hbox width=20%:80%
 
-	@property rels_tree type=treeview no_caption=1 parent=rels_hbox
+		@layout rels_tree_box type=vbox closeable=1 area_caption=Klasside&nbsp;kaustad parent=rels_hbox
+
+			@property rels_tree type=treeview no_caption=1 parent=rels_tree_box
+
 	@property rels_tbl type=table no_caption=1 parent=rels_hbox
 
 @default group=classes_classes
@@ -83,9 +92,14 @@
 
 			@layout cl_usage_stats_right_split type=hbox parent=cl_usage_stats_right
 
-				@property cl_usage_stats_list type=table no_caption=1 store=no parent=cl_usage_stats_right_split
-				@property site_usage_stats_list type=table no_caption=1 store=no parent=cl_usage_stats_right_split
+				@layout cl_usage_stats_right_split_1 type=vbox parent=cl_usage_stats_right_split
+					@property cl_usage_stats_list_gpx type=google_chart no_caption=1 store=no parent=cl_usage_stats_right_split_1
+					@property cl_usage_stats_list type=table no_caption=1 store=no parent=cl_usage_stats_right_split_1
 
+				@layout cl_usage_stats_right_split_2 type=vbox parent=cl_usage_stats_right_split
+					@property site_usage_stats_list_gpx type=google_chart no_caption=1 store=no parent=cl_usage_stats_right_split_2
+					@property site_usage_stats_list type=table no_caption=1 store=no parent=cl_usage_stats_right_split_2
+	
 @default group=cl_usage_stats_props
 
 	@layout cl_usage_props_stats_split type=hbox width=20%:80%
@@ -102,8 +116,9 @@
 
 		@layout cl_usage_props_stats_right type=vbox parent=cl_usage_props_stats_split
 
-			@layout cl_usage_props_stats_right_split type=hbox parent=cl_usage_props_stats_right
+			@layout cl_usage_props_stats_right_split type=vbox parent=cl_usage_props_stats_right
 
+				@property cl_usage_props_stats_list_gpx type=google_chart no_caption=1 store=no parent=cl_usage_props_stats_right_split
 				@property cl_usage_props_stats_list type=table no_caption=1 store=no parent=cl_usage_props_stats_right_split
 
 @default group=cl_usage_stats_tms
@@ -134,13 +149,34 @@
 
 		@layout errors_right type=vbox parent=errors_split
 
-			@layout errors_right_split type=hbox parent=errors_right
+			@layout errors_right_split type=vbox parent=errors_right
+
+				@layout errors_right_split_gp type=hbox parent=errors_right_split
+					@property errors_list_grapx type=google_chart no_caption=1 store=no parent=errors_right_split_gp
+					@property errors_list_grapx_days type=google_chart no_caption=1 store=no parent=errors_right_split_gp
 
 				@property errors_list type=table no_caption=1 store=no parent=errors_right_split
 
 @default group=sites_sites
 
-	@property sites_list type=table store=no no_caption=1
+	@property sites_sites_toolbar type=toolbar no_caption=1 store=no
+
+	@layout sites_sites_split type=hbox width=20%:80%
+
+		@layout sites_sites_left type=vbox parent=sites_sites_split
+
+			@layout sites_sites_tree type=vbox area_caption=Grupid closeable=1 parent=sites_sites_left
+	
+				@property sites_sites_grp_tree type=treeview no_caption=1 parent=sites_sites_tree store=no
+
+		@layout sites_sites_right type=vbox parent=sites_sites_split
+
+			@layout sites_sites_right_split type=vbox parent=sites_sites_right
+
+				@property sites_list_grapx  type=google_chart store=no no_caption=1 parent=sites_sites_right_split
+				@property sites_list type=table store=no no_caption=1 parent=sites_sites_right_split
+
+
 
 @default group=sites_servers
 
@@ -251,6 +287,7 @@ class class_designer_manager extends class_base
 		$arr["classf_name"] = "";
 		$arr["ch_classf_name"] = "";
 		$arr["ch_classf_id"] = "";
+		$arr["cls"] = ifset($_GET, "cls");
 	}
 
 	function _mgr_tb($arr)
@@ -358,13 +395,15 @@ class class_designer_manager extends class_base
 		$t->define_field(array(
 			"name" => "clid_nm",
 			"caption" => t("ID"),
-			"align" => "center"
+			"align" => "center",
+			"numeric" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "size",
 			"caption" => t("Suurus"),
-			"align" => "center"
+			"align" => "center",
+			"numeric" => 1
 		));
 
 		$t->define_field(array(
@@ -1200,8 +1239,22 @@ class class_designer_manager extends class_base
 	{
 		$clss = aw_ini_get("classes");
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_classes_list_table($t);
+		$this->_init_classes_list_table($t, $arr["obj_inst"]);
 		$this->_filter_class_list($clss, $arr["request"]);
+
+		$ot = new object_tree(array(
+			"class_id" => array(CL_SM_CLASS_STATS_GROUP),
+			"parent" => $arr["obj_inst"]->id()
+		));
+		$grp_list = $ot->to_list()->arr();
+		$grps = array();
+		foreach($grp_list as $grp_id => $grp_obj)
+		{
+			foreach(safe_array($grp_obj->prop("class_list")) as $class_id => $tmp)
+			{
+				$grps[$class_id][$grp_id] = 1;
+			}
+		}
 
 		$sum = array();
 		foreach($clss as $class_id => $cld)
@@ -1213,6 +1266,14 @@ class class_designer_manager extends class_base
 			$cld["rel_cnt"] = 0;
 			$cld["prop_table"] = 0;
 			$cld["prop_meta"] = 0;
+			foreach($grp_list as $grp_id => $grp_obj)
+			{
+				$cld[$grp_id] = html::checkbox(array(
+					"name" => "grps[$grp_id][$class_id]",
+					"value" => 1,
+					"checked" => !empty($grps[$class_id][$grp_id])
+				));
+			}
 			foreach($o->get_property_list() as $pn => $pd)
 			{
 				$cld["prop_cnt"]++;
@@ -1310,7 +1371,7 @@ class class_designer_manager extends class_base
 		}
 	}
 
-	private function _init_classes_list_table(&$t)
+	private function _init_classes_list_table(&$t, $o)
 	{
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -1320,6 +1381,7 @@ class class_designer_manager extends class_base
 			"name" => "def",
 			"caption" => t("ID"),
 			"align" => "left",
+			"numeric" => 1,
 			"sortable" => 1
 		));
 		$t->define_field(array(
@@ -1363,6 +1425,25 @@ class class_designer_manager extends class_base
 			"numeric" => 1,
 			"sortable" => 1
 		));
+		$t->define_field(array(
+			"name" => "grps",
+			"caption" => t("Grupid"),
+			"align" => "center",
+		));
+		$ot = new object_tree(array(
+			"class_id" => array(CL_SM_CLASS_STATS_GROUP),
+			"parent" => $o->id()
+		));
+
+		foreach($ot->to_list()->arr() as $o)
+		{
+			$t->define_field(array(
+				"name" => $o->id(),
+				"caption" => $o->name(),
+				"align" => "center",
+				"parent" => "grps"
+			));
+		}
 	}
 
 	function _get_toolbar($arr)
@@ -1487,10 +1568,12 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		$this->db_query("SELECT SUM(count) as cnt, site_id FROM aw_site_object_stats WHERE class_id IN (".$clids->to_sql().") GROUP BY site_id ORDER BY cnt desc");
 		while($row = $this->db_next())
 		{
+			$this->save_handle();
 			$t->define_data(array(
 				"site_id" => get_instance("site_list")->get_url_for_site($row["site_id"]),
 				"total_cnt" => $row["cnt"]
 			));
+			$this->restore_handle();
 		}
 	}
 
@@ -1610,9 +1693,11 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		$total_site_count = $this->db_fetch_field("SELECT count(distinct(site_id)) as cnt from aw_site_class_prop_stats", "cnt");
 		$class_id = $arr["request"]["class_id"];
 		$this->db_query("SELECT prop, count(site_id) as num_sites, sum(set_objs) as num_objects, sum(total_objs) as total_objs  FROM aw_site_class_prop_stats WHERE class_id = $class_id GROUP BY prop ");
+		$pl = obj()->set_class_id($class_id)->get_property_list();
 		while ($row = $this->db_next())
 		{
 			$t->define_data(array(
+				"caption" => $pl[$row["prop"]]["caption"],
 				"prop" => $row["prop"],
 				"num_sites" => $row["num_sites"],
 				"num_objects" => $row["num_objects"],
@@ -1621,11 +1706,18 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 				"usage_pct_objs" => number_format( (100.0 * $row["num_objects"]) / $row["total_objs"], 2)
 			));
 		}
-		
+		$t->set_default_sortby("caption");
+		$t->sort_by();
 	}
 
 	private function _init_cl_usage_props_stats_list($t)
 	{
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => t("Nimi"),
+			"align" => "left",
+			"sortable" => 1
+		));
 		$t->define_field(array(
 			"name" => "prop",
 			"caption" => t("Omadus"),
@@ -1636,31 +1728,36 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"name" => "num_sites",
 			"caption" => t("Kasutusel saitides"),
 			"align" => "left",
-			"sortable" => 1
+			"sortable" => 1,
+			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "total_objs",
 			"caption" => t("Kokku objekte"),
 			"align" => "left",
-			"sortable" => 1
+			"sortable" => 1,
+			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "num_objects",
 			"caption" => t("Kasutusel objektides"),
 			"align" => "left",
-			"sortable" => 1
+			"sortable" => 1,
+			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "usage_pct_sites",
 			"caption" => t("Kasutuse % saitide kaupa"),
 			"align" => "left",
-			"sortable" => 1
+			"sortable" => 1,
+			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "usage_pct_objs",
 			"caption" => t("Kasutuse % objektide kaupa"),
 			"align" => "left",
-			"sortable" => 1
+			"sortable" => 1,
+			"numeric" => 1
 		));
 	}
 
@@ -1739,24 +1836,28 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"name" => "pageviews",
 			"caption" => t("Lehevaatamisi"),
 			"align" => "center",
+			"numeric" => 1,
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "avg_time",
 			"caption" => t("Keskmine lehe aeg"),
 			"align" => "center",
+			"numeric" => 1,
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "max_time",
 			"caption" => t("Pikim lehe aeg"),
 			"align" => "center",
+			"numeric" => 1,
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "min_time",
 			"caption" => t("V&auml;ikseim lehe aeg"),
 			"align" => "center",
+			"numeric" => 1,
 			"sortable" => 1
 		));
 	}
@@ -2032,6 +2133,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"name" => "per_day",
 			"caption" => t("P&auml;evas"),
 			"align" => "right",
+			"numeric" => 1,
 			"sortable" => 1
 		));
 		$t->define_field(array(
@@ -2401,7 +2503,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		}
 	}
 
-	private function _init_clp_list($t)
+	private function _init_clp_list($t, $o)
 	{
 		$t->define_field(array(
 			"name" => "caption",
@@ -2440,6 +2542,18 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "customer",
+			"caption" => t("Klient"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "method",
 			"caption" => t("Salvestamise meetod"),
 			"align" => "left",
@@ -2449,33 +2563,133 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"name" => "sel",
 			"field" => "id"
 		));
+		$t->define_field(array(
+			"name" => "grps",
+			"caption" => t("Grupid"),
+			"align" => "center",
+		));
+		$ot = new object_tree(array(
+			"class_id" => array(CL_SM_PROP_STATS_GROUP),
+			"parent" => $o->id()
+		));
+
+		foreach($ot->to_list()->arr() as $o)
+		{
+			$t->define_field(array(
+				"name" => $o->id(),
+				"caption" => $o->name(),
+				"align" => "center",
+				"parent" => "grps"
+			));
+		}
 	}
 
 	function _get_classes_props_list($arr)
 	{	
 		$t = $arr["prop"]["vcl_inst"];
-		$this->_init_clp_list($t);
+		$this->_init_clp_list($t, $arr["obj_inst"]);
 
 		if (empty($arr["request"]["cls"]))
 		{
 			return;
 		}
 
-		
 		$cls = aw_ini_get("classes");
 		$c = $cls[$arr["request"]["cls"]];
 		$t->set_caption(sprintf(t("Klassi %s omadused"), $c["name"]));
+
+
+		$ot = new object_tree(array(
+			"class_id" => array(CL_SM_PROP_STATS_GROUP),
+			"parent" => $arr["obj_inst"]->id()
+		));
+		$grp_list = $ot->to_list()->arr();
+		$grps = array();
+		foreach($grp_list as $grp_id => $grp_obj)
+		{
+			foreach($grp_obj->connections_from() as $con)
+			{
+				list($clid_n, $prop) = explode("::", $con->prop("to.name"));
+				if ($c["def"] == $clid_n)
+				{
+					$grps[$prop][$grp_id] = 1;
+				}
+			}
+		}
+		
 
 		$tmp = obj();
 		$tmp->set_class_id($arr["request"]["cls"]);
 
 		foreach($this->_list_props($tmp, $arr["obj_inst"]) as $pn => $pd)
 		{
+
+			foreach($grp_list as $grp_id => $grp_obj)
+			{
+				$pd[$grp_id] = html::checkbox(array(
+					"name" => "grps[$grp_id][$pn]",
+					"value" => 1,
+					"checked" => !empty($grps[$pn][$grp_id])
+				));
+			}
+
 			$pd["caption"] = html::href(array(
 				"url" => html::get_change_url($pd["id"], array("return_url" => get_ru())),
 				"caption" => parse_obj_name(ifset($pd, "caption"))
 			));
+			$pd["customer"] = html::obj_change_url(obj($pd["id"])->customer);
+			$pd["project"] = html::obj_change_url(obj($pd["id"])->project);
 			$t->define_data($pd); 
+		}
+	}
+
+	function _set_classes_props_list($arr)
+	{
+		$tmp = obj();
+		$tmp->set_class_id($arr["request"]["cls"]);
+
+		$ot = new object_tree(array(
+			"class_id" => array(CL_SM_PROP_STATS_GROUP),
+			"parent" => $arr["obj_inst"]->id()
+		));
+
+		$cls = aw_ini_get("classes");
+		$c = $cls[$arr["request"]["cls"]];
+
+		$grp_list = $ot->to_list()->arr();
+		$grps = array();
+		foreach($grp_list as $grp_id => $grp_obj)
+		{
+			foreach($grp_obj->connections_from() as $con)
+			{
+				list($clid_n, $prop) = explode("::", $con->prop("to.name"));
+
+				if ($c["def"] == $clid_n)
+				{
+					$grps[$prop][$grp_id] = 1;
+				}
+			}
+		}
+
+		foreach($this->_list_props($tmp, $arr["obj_inst"]) as $pn => $pd)
+		{
+			foreach($grp_list as $grp_id => $grp)
+			{
+				if (!empty($arr["request"]["grps"][$grp_id][$pn]) && empty($grps[$pn][$grp_id]))
+				{
+					$grp->connect(array(
+						"to" => $pd["id"],
+						"type" => "RELTYPE_PROP"
+					));
+				}
+				else
+				if (empty($arr["request"]["grps"][$grp_id][$pn]) && !empty($grps[$pn][$grp_id]))
+				{
+					$grp->disconnect(array(
+						"from" => $pd["id"]
+					));
+				}				
+			}
 		}
 	}
 
@@ -2531,6 +2745,347 @@ window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("re
 			"url" => "#",
 			"tooltip" => "new"
 		));
+	}
+
+	function _set_classes_list($arr)
+	{	
+		$ot = new object_tree(array(
+			"class_id" => array(CL_SM_CLASS_STATS_GROUP),
+			"parent" => $arr["obj_inst"]->id()
+		));
+
+		$grp_list = $ot->to_list()->arr();
+		foreach($grp_list as $grp_id => $grp_obj)
+		{
+			$grp_obj->set_prop("class_list", $this->make_keys(array_keys($arr["request"]["grps"][$grp_id])));
+			$grp_obj->save();
+		}
+
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["cls"] = $arr["request"]["cls"];
+	}
+
+	/**
+		@attrib name=gather_stats nologin="1"
+	**/
+	function gather_stats()
+	{
+		ob_end_clean();
+//			automatweb::$instance->mode(automatweb::MODE_DBG);
+		$site_list = get_instance("install/site_list")->get_site_list();
+//die(dbg::dump($site_list));
+	/*	foreach($site_list as $site)
+		{
+			list($srv, $cp) = explode(":", $site["code_branch"]);
+//echo "site = $site[url] srv = $srv , cp $cp <br>";
+			if (($cp == "/www/automatweb_cvs" || $cp == "/www/automatweb_cvs/") && $site["id"] != 33)
+			{
+//echo dbg::dump($site);
+				$this->db_query("DELETE FROM aw_site_object_stats WHERE site_id = ".$site["id"]);
+				$rv = $this->do_orb_method_call(array(
+					"action" => "clid_stats",
+					"class" => "sys",
+					"params" => array(),
+					"method" => "xmlrpc",
+					"server" => $site["url"],
+					"no_errors" => 1
+				));
+//echo dbg::dump($rv);
+				if (is_array($rv))
+	 			{
+					foreach($rv as $row)
+					{
+						$this->db_query("INSERT INTO aw_site_object_stats(".join(",", array_keys($row)).") VALUES(".join(",", map("'%s'", array_values($row))).")");
+					}
+				}
+				echo "did site $site[url] <br>\n";
+				flush();
+			}
+		}*/
+
+		set_time_limit(0);
+		aw_global_set("__from_raise_error", 1);
+		foreach($site_list as $site)
+		{
+			list($srv, $cp) = explode(":", $site["code_branch"]);
+//echo "site = $site[url] srv = $srv , cp $cp <br>";
+			if (($cp == "/www/automatweb_cvs" || $cp == "/www/automatweb_cvs/") && $site["id"] != 33)
+			{
+//echo dbg::dump($site);
+				$this->db_query("DELETE FROM aw_site_class_prop_stats WHERE site_id = ".$site["id"]);
+				$rv = $this->do_orb_method_call(array(
+					"action" => "prop_stats",
+					"class" => "sys",
+					"params" => array(),
+					"method" => "xmlrpc",
+					"server" => $site["url"],
+					"no_errors" => 1
+				));
+//echo dbg::dump($rv);
+				if (is_array($rv))
+	 			{
+					foreach($rv as $row)
+					{
+						$this->db_query("INSERT INTO aw_site_class_prop_stats(".join(",", array_keys($row)).") VALUES(".join(",", map("'%s'", array_values($row))).")");
+					}
+				}
+				echo "2did site $site[url] res = ".count($rv)." <br>\n";
+				flush();
+			}
+		}
+		die("all done");
+	}
+
+	function _get_sites_list_grapx($arr)
+	{
+
+		$this->db_query("SELECT s.name as name, s.ip as ip, count(*) as cnt FROM aw_site_list LEFT JOIN aw_server_list s ON s.id = aw_site_list.server_id WHERE site_used = 1 GROUP BY server_id");
+		$d = array();
+		$l = array();
+		$max = 0;
+		while ($row = $this->db_next())
+		{
+			if ($row["cnt"] < 2)
+			{
+				continue;
+			}
+			$d[] = $row["cnt"];
+			$l[] = ($row["name"] != "" ? $row["name"] : $row["ip"]);
+			$max = max($max, $row["cnt"]);
+		}
+
+		$c = $arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_BAR_V);
+		$c->set_size(array("width" => 500, "height" => 300));
+		$c->add_data($d);
+		$c->set_labels($l);
+		$c->set_title(array("text" => t("Saitide jaotus serverites")));
+		$c->set_axis(array(
+			GCHART_AXIS_LEFT
+		));
+		$c->set_grid(array("xstep" => 20, "ystep" => 20));
+		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
+		$c->add_axis_range(0, array(0, $max));
+	}
+
+	function _get_errors_list_grapx($arr)
+	{
+		$this->db_query("SELECT site, count(*) as cnt FROM bugtrack_errors  GROUP BY site ORDER BY cnt DESC LIMIT 10");
+		$d = array();
+		$l = array();
+		$max = 0;
+		while ($row = $this->db_next())
+		{
+			if ($row["cnt"] < 2)
+			{
+				continue;
+			}
+			$d[] = $row["cnt"];
+			$l[] = $row["site"]." (".$row["cnt"].")";
+			$max = max($max, $row["cnt"]);
+		}
+
+		$c = $arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_PIE);
+		$c->set_size(array("width" => 600, "height" => 300));
+		$c->add_data($d);
+		$c->set_labels($l);
+		$c->set_title(array("text" => t("Vigade jaotus saitides TOP 10")));
+		$c->set_axis(array(
+			GCHART_AXIS_LEFT
+		));
+		$c->set_grid(array("xstep" => 20, "ystep" => 20));
+		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
+		$c->add_axis_range(0, array(0, $max));
+	}
+
+	function _get_errors_list_grapx_days($arr)
+	{
+		$tm = mktime(0, 0, 0, date("m")-1, date("d"), date("Y"));
+		$this->db_query("SELECT tm, count(*) as cnt FROM bugtrack_errors  WHERE tm > $tm GROUP BY DAYOFYEAR(FROM_UNIXTIME(tm)) ORDER BY cnt DESC LIMIT 10");
+		$d = array();
+		$l = array();
+		$max = 0;
+		while ($row = $this->db_next())
+		{
+			if ($row["cnt"] < 2)
+			{
+				continue;
+			}
+			$d[] = $row["cnt"];
+			$l[] = date("d.m.Y", $row["tm"])." (".$row["cnt"].")";
+			$max = max($max, $row["cnt"]);
+		}
+
+		$c = $arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_PIE);
+		$c->set_size(array("width" => 600, "height" => 300));
+		$c->add_data($d);
+		$c->set_labels($l);
+		$c->set_title(array("text" => t("Vigade jaotus viimase kuu p&auml;evade l&otilde;ikes TOP 10")));
+		$c->set_axis(array(
+			GCHART_AXIS_LEFT
+		));
+		$c->set_grid(array("xstep" => 20, "ystep" => 20));
+		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
+		$c->add_axis_range(0, array(0, $max));
+	}
+
+	function _get_cl_usage_stats_list_gpx($arr)
+	{
+		$tm = mktime(0, 0, 0, date("m")-1, date("d"), date("Y"));
+
+		$this->db_query("SELECT SUM(count) as cnt, class_id FROM aw_site_object_stats GROUP BY class_id ORDER BY cnt desc LIMIT 10");
+		$d = array();
+		$l = array();
+		$max = 0;
+		$clss = aw_ini_get("classes");
+		while ($row = $this->db_next())
+		{
+			$d[] = $row["cnt"];
+			$l[] = $clss[$row["class_id"]]["name"]." (".$row["cnt"].")";
+			$max = max($max, $row["cnt"]);
+		}
+
+		$c = $arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_PIE);
+		$c->set_size(array("width" => 600, "height" => 300));
+		$c->add_data($d);
+		$c->set_labels($l);
+		$c->set_title(array("text" => t("Objektide kasutuse TOP 10")));
+		$c->set_axis(array(
+			GCHART_AXIS_LEFT
+		));
+		$c->set_grid(array("xstep" => 20, "ystep" => 20));
+		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
+		$c->add_axis_range(0, array(0, $max));
+	}
+
+	function _get_site_usage_stats_list_gpx($arr)
+	{
+		$tm = mktime(0, 0, 0, date("m")-1, date("d"), date("Y"));
+
+		$this->db_query("SELECT SUM(count) as cnt, site_id FROM aw_site_object_stats GROUP BY site_id ORDER BY cnt desc LIMIT 10");
+		$d = array();
+		$l = array();
+		$max = 0;
+		$sl = get_instance("site_list");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$d[] = $row["cnt"];
+			$l[] = $sl->get_url_for_site($row["site_id"])." (".$row["cnt"].")";
+			$max = max($max, $row["cnt"]);
+			$this->restore_handle();
+		}
+
+		$c = $arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_PIE);
+		$c->set_size(array("width" => 600, "height" => 300));
+		$c->add_data($d);
+		$c->set_labels($l);
+		$c->set_title(array("text" => t("Objektide kasutus saitide kaupa TOP 10")));
+		$c->set_axis(array(
+			GCHART_AXIS_LEFT
+		));
+		$c->set_grid(array("xstep" => 20, "ystep" => 20));
+		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
+		$c->add_axis_range(0, array(0, $max));
+	}
+
+	function _get_cl_usage_props_stats_list_gpx($arr)
+	{
+		if (empty($arr["request"]["class_id"]))
+		{
+			return PROP_IGNORE;
+		}
+		$tm = mktime(0, 0, 0, date("m")-1, date("d"), date("Y"));
+
+		$total_site_count = $this->db_fetch_field("SELECT count(distinct(site_id)) as cnt from aw_site_class_prop_stats", "cnt");
+		$class_id = $arr["request"]["class_id"];
+		$this->db_query("SELECT prop,  ((100 *  sum(set_objs)) / sum(total_objs)) as cnt  FROM aw_site_class_prop_stats WHERE class_id = $class_id GROUP BY prop ORDER BY cnt desc LIMIT 10");
+
+		$d = array();
+		$l = array();
+		$max = 0;
+		$pl = obj()->set_class_id($class_id)->get_property_list();
+
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$d[] = $row["cnt"];
+			$l[] = $pl[$row["prop"]]["caption"]." (".number_format($row["cnt"], 2)."%)";
+			$max = max($max, $row["cnt"]);
+			$this->restore_handle();
+		}
+
+		$c = $arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_PIE);
+		$c->set_size(array("width" => 600, "height" => 300));
+		$c->add_data($d);
+		$c->set_labels($l);
+		$c->set_title(array("text" => t("Omaduste kasutus TOP 10")));
+		$c->set_axis(array(
+			GCHART_AXIS_LEFT
+		));
+		$c->set_grid(array("xstep" => 20, "ystep" => 20));
+		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
+		$c->add_axis_range(0, array(0, $max));
+	}
+
+	function _get_sites_sites_toolbar($arr)
+	{
+		$pt = isset($arr["request"]["grp"]) ? $arr["request"]["grp"] : $arr["obj_inst"]->id();
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"onClick" => "len = document.changeform.elements.length;str  = '';
+	for(i = 0; i < len; i++)
+	{
+		if (document.changeform.elements[i].name.indexOf('sel') != -1 && document.changeform.elements[i].checked)
+		{
+			str += '&sel['+document.changeform.elements[i].value+']='+document.changeform.elements[i].value;
+		}
+	}
+	
+window.location.href='".html::get_new_url(CL_SM_SITE_GROUP, $pt, array("return_url" => get_ru()))."&'+str;",
+			"url" => "#",
+			"tooltip" => "new"
+		));
+	}
+
+	function _get_sites_sites_grp_tree($arr)
+	{	
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML,
+				"tree_id" => "smc",
+				"persist_state" => true,
+			),
+			"root_item" => $arr["obj_inst"],
+			"ot" => new object_tree(array(
+				"class_id" => array(CL_SM_SITE_GROUP),
+				"parent" => $arr["obj_inst"]->id()
+			)),
+			"var" => "grp"
+                ));
+		foreach($arr["prop"]["vcl_inst"]->get_item_ids() as $id)
+		{
+			if ($id == $arr["obj_inst"]->id())
+			{
+				continue;
+			}
+			$d = $arr["prop"]["vcl_inst"]->get_item($id);
+			$d["name"] .= " ".html::get_change_url($id, array("return_url" => get_ru()), html::img(array("url" => aw_ini_get("baseurl")."/automatweb//images/icons/edit.gif", "border" => "0")));
+			$d["name"] .= " ".html::href(array(
+				"url" => $this->mk_my_orb("delete", array("id" => $id, "return_url" => get_ru()), CL_SM_PROP_STATS_GROUP), 
+				"caption" => html::img(array("url" => aw_ini_get("baseurl")."/automatweb//images/icons/delete.gif", "border" => "0"))
+			));
+			$arr["prop"]["vcl_inst"]->set_item($d);
+		}
 	}
 }
 ?>

@@ -47,12 +47,25 @@
 @property p_default type=text 
 @caption Vaikimisi v&auml;&auml;rtus
 
+@property customer type=relpicker reltype=RELTYPE_CUSTOMER store=connect
+@caption Klient
+
+@property project type=relpicker reltype=RELTYPE_PROJECT store=connect
+@caption Projekt
+
 @default group=groups
 
 	@property toolbar type=toolbar store=no no_caption=1
 	@property table type=table store=no no_caption=1
 
 @groupinfo groups caption="Grupid"
+
+@reltype PROJECT value=1 clid=CL_PROJECT
+@caption Projekt
+
+@reltype CUSTOMER value=2 clid=CL_CRM_COMPANY
+@caption Klient
+
 
 */
 

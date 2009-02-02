@@ -6,6 +6,9 @@
 @default table=aw_site_list
 @default group=general
 
+@property short_name type=textbox
+@caption L&uuml;hend
+
 @property id type=textbox
 @caption Saidi ID
 
