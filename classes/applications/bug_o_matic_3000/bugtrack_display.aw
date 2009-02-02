@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.22 2009/01/05 13:37:23 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.23 2009/02/02 15:30:49 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -344,7 +344,13 @@ class bugtrack_display extends class_base
 								"contactperson" => $cur,
 							)
 						)),
-						"orderer_unit" => $sects,
+						new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => array(
+								"CL_BUG.orderer_unit" => $sects,
+								"CL_DEVELOPMENT_ORDER.orderer_unit" => $sects,
+							),
+						)),
 					),
 				)),
 			);
@@ -355,7 +361,13 @@ class bugtrack_display extends class_base
 			$this->_recur_get_all_sects($sects, obj($arr["request"]["sect_filter"]));
 			$filt = array(
 				"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
-				"orderer_unit" => $sects,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_BUG.orderer_unit" => $sects,
+						"CL_DEVELOPMENT_ORDER.orderer_unit" => $sects,
+					),
+				)),
 			);
 		}
 		else
@@ -365,6 +377,8 @@ class bugtrack_display extends class_base
 				"createdby" => $cur_u
 			);
 		}
+		$filt["site_id"] = array();
+		$filt["lang_id"] = array();
 		$ol = new object_list($filt);
 		$this->_insert_data_to_table_from_settings($data, $t, $ol, $arr);
 		

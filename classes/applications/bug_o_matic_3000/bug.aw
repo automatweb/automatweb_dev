@@ -2470,7 +2470,6 @@ class bug extends class_base
 
 	function create_dev_order($arr)
 	{
-
 		$o = new object();
 
 		$bt = $this->_get_bt($arr["obj_inst"]);
@@ -2483,7 +2482,8 @@ class bug extends class_base
 		$o->set_prop("bug_priority", $arr["obj_inst"]->prop("bug_priority"));
 		$o->set_prop("bug_app", $arr["obj_inst"]->prop("bug_app"));
 		$o->set_prop("deadline", $arr["obj_inst"]->prop("deadline"));
-		$o->set_prop("prognosis", time());
+		$o->set_prop("prognosis", $arr["obj_inst"]->prop("prognosis"));
+		$o->set_prop("com", $arr["obj_inst"]->prop("bug_content"));
 
 		$u = get_instance(CL_USER);
 		$cur = obj($u->get_person_for_uid($arr["obj_inst"]->createdby()));
@@ -2514,22 +2514,25 @@ class bug extends class_base
 				}
 			}
 		}
-		if($highest->prop("jrk") < 1)
+		if($highest)
 		{
-			foreach($sections as $s)
+			if($highest->prop("jrk") < 1)
 			{
-				$highest = $this->_find_highest_prof_recur($s->to());
+				foreach($sections as $s)
+				{
+					$highest = $this->_find_highest_prof_recur($s->to());
+				}
 			}
-		}
-		$c = new connection();
-		$people = $c->find(array(
-			"from.class_id" => CL_CRM_PERSON,
-			"type" => "RELTYPE_RANK",
-			"to" => $highest->id()
-		));
-		foreach($people as $p)
-		{
-			$person = obj($p["from"]);
+			$c = new connection();
+			$people = $c->find(array(
+				"from.class_id" => CL_CRM_PERSON,
+				"type" => "RELTYPE_RANK",
+				"to" => $highest->id()
+			));
+			foreach($people as $p)
+			{
+				$person = obj($p["from"]);
+			}
 		}
 		if ($person)
 		{
@@ -2547,6 +2550,15 @@ class bug extends class_base
 		}
 
 		$o->save();
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FILE")) as $c)
+		{
+			$o->connect(array(
+				"to" => $c->prop("to"),
+				"type" => "RELTYPE_FILE",
+			));
+		}
+
 		$o->connect(array(
 			"to" => $arr["obj_inst"]->id(),
 			"type" => "RELTYPE_MAIN_BUG"
@@ -2580,23 +2592,25 @@ class bug extends class_base
 			}
 		}
 
-		$mail = $bt->prop("dorder_mail_contents");
-
-		$find = array(
-			"#added_by#",
-			"#confirmation_by#",
-			"#dev_url#",
-			"#dev_id#",
-		);
-		$replace = array(
-			$creator->name(),
-			$person->name(),
-			$this->mk_my_orb("change", array("id" => $o->id()), CL_DEVELOPMENT_ORDER),
-			$o->id(),
-		);
-		$mail_contents = str_replace($find, $replace, $mail);
-
-		$mails = array($creator->prop("email"), $person->prop("email"));
+		$mails = array();
+		if($person)
+		{
+			$mail = $bt->prop("dorder_mail_contents");
+		
+			$find = array(
+				"#added_by#",
+				"#confirmation_by#",
+				"#dev_url#",
+				"#dev_id#",
+			);
+			$replace = array(
+				$creator->name(),
+				$person->name(),
+				$this->mk_my_orb("change", array("id" => $o->id()), CL_DEVELOPMENT_ORDER),
+				$o->id(),
+			);
+			$mail_contents = str_replace($find, $replace, $mail);
+		}
 
 		foreach($mails as $mail)
 		{
