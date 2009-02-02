@@ -147,6 +147,11 @@ class site_cache extends aw_template
 		$cp[] = aw_global_get("ct_lang_id");
 		$cp[] = isset($_SESSION["doc_content_type"]) ? $_SESSION["doc_content_type"] : null;
 		$cp[] = isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : null;
+		if (isset($GLOBALS["oid"]))
+		{
+			$cp[] = $GLOBALS["oid"];
+		}
+
 		if (isset($_SESSION["menu_context"]) && is_array($_SESSION["menu_context"]))
 		{
 			$cp[] = join(",", $_SESSION["menu_context"]);
