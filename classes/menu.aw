@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.247 2009/01/12 11:27:15 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.248 2009/02/02 11:04:26 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1719,6 +1719,7 @@ class menu extends class_base implements main_subtemplate_handler
 		$str = "!\"@#.¤$%&/()[]={}?\+-`'|,;:";
 		$name = str_replace(preg_split("//", $str, -1 , PREG_SPLIT_NO_EMPTY), "", $name);
 		$name = str_replace($to_replace, $replace_with, htmlentities($name, ENT_QUOTES, aw_global_get("charset")));
+		$name = str_replace("--", "-", $name);
 		return $this->_check_alias_name(strtolower(substr($name,0, 50)), $oid);
 	}
 
