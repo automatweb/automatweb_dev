@@ -4459,7 +4459,7 @@ class task extends class_base
 			"send_bill" => html::checkbox(array(
 				"name" => "add_clauses[send_bill]",
 				"value" => 1,
-				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
+				"checked" => (is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("send_bill")) || isset($arr["new"]) ? 1 : 0,
 			)),
 			"is_work" => html::checkbox(array(
 				"name" => "add_clauses[is_work]",

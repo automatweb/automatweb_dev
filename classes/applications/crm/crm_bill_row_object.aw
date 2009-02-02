@@ -22,6 +22,11 @@ class crm_bill_row_object extends _int_object
 		{
 			$value = str_replace(",",".",$value);
 		}
+		if ($p == "amt")
+		{
+			$value = str_replace(",",".",$value);
+		}
+
 		return $rv;
 	}
 
@@ -38,7 +43,7 @@ class crm_bill_row_object extends _int_object
 		return $sum;
 	}
 
-	/** checks if task_row is connected to task
+	/** checks if task row is connected to bill row
 		@attrib api=1
 		@returns boolean
 			reservation price
@@ -51,6 +56,22 @@ class crm_bill_row_object extends _int_object
 		}
 		return 0;
 	}
+
+	/** returns task row ids
+		@attrib api=1
+		@returns boolean
+			reservation price
+	**/
+	function task_rows()
+	{
+		$arr = array();
+		foreach($this->connections_from(array("type" => "RELTYPE_TASK_ROW"))as $c)
+		{
+			$arr[] = $c->prop("to");
+		}
+		return $arr;
+	}
+
 
 	/** Returns task row or bug connected to this bill row
 		@attrib api=1
@@ -216,6 +237,7 @@ class crm_bill_row_object extends _int_object
 		//tegelt ma ei teagi kas on yldse m6tet rida ka siduma hakata
 
 	}
+
 
 }
 ?>

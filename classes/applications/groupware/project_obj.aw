@@ -662,8 +662,8 @@ class project_obj extends _int_object
 	{
 		return array(
 			"class_id" => CL_TASK_ROW,
-			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
-			"done" => 1,
+//			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+//			"done" => 1,
 			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
 		);
 	}
@@ -680,6 +680,7 @@ class project_obj extends _int_object
 				"time_guess",
 				"impl",
 				"date",
+				"bill_id"
 			),
 		);
 		$rows_arr = new object_data_list($rows_filter , $rowsres);
@@ -910,5 +911,161 @@ class project_obj extends _int_object
 		return $filter;
 	}
 
+	private function _money_format($sum)
+	{
+		return number_format($sum, 2);
+	}
+
+	public function get_workers_stats()
+	{
+		$all_data = $this->get_rows_data();
+		$bills = $this->get_bills();
+		$work_data = array();
+		$result = array();
+
+		foreach($bills->arr() as $bill)
+		{
+			$bill_sum = $bill->get_sum();
+			$payments = $bill->get_payments_sum();
+			$bill_rows = $bill->get_bill_rows_data();
+			$projects = $bill->get_project_ids();
+
+			if(sizeof($projects) < 2)//kui arve yhe projekti kohta
+			{
+				$result["on_bill"] += $bill_sum;
+				$result["payments"] += $payments;
+			}
+
+			foreach($bill_rows as $br)
+			{
+				$people = $br["persons"];
+				$paid = 0;
+				if($payments)
+				{
+					$paid = min($payments/$bill_sum , 1);
+				}
+				if(!sizeof($br["task_rows"]))
+				{
+					$divide = sizeof($people);
+					if(sizeof($people))
+					{
+						foreach($people as $person)
+						{
+							$work_data[$person]["on_bill"]+= $this->_money_format($br["sum"]/$divide);
+							$work_data[$person]["payments"]+= $this->_money_format(($br["sum"]/$divide) / $paid);
+							if(sizeof($projects) > 1)
+							{
+								$result["on_bill"] += $this->_money_format(($br["sum"]/$divide) / sizeof($projects));
+								$result["payments"] += $this->_money_format(($br["sum"]/$divide) / ($paid * sizeof($projects)));
+							}
+
+						}
+					}
+					if(sizeof($projects) > 1)
+					{
+						$result["on_bill"] += $this->_money_format($br["sum"] / sizeof($projects));
+						$result["payments"] += $this->_money_format($br["sum"] / ($paid * sizeof($projects)));
+					}
+				}
+				else
+				{
+					$br_person_hours = array();
+					$br_person_cust_hours = array();
+					foreach($br["task_rows"] as $task_row)
+					{
+						if(!array_key_exists($task_row , $all_data))
+						{
+							continue;
+						}
+						$impl = reset($all_data[$task_row]["impl"]);
+						$br_person_hours[$impl]+= $all_data[$task_row]["time_real"];
+						$br_person_cust_hours[$impl]+= $all_data[$task_row]["time_to_cust"];
+					}
+					if(sizeof($people))
+					{
+						foreach($people as $person)
+						{
+							if(array_sum($br_person_hours))
+							{
+								$divide = array_sum($br_person_hours) / max(0.01 , $br_person_hours[$person]);
+							}
+							else
+							{
+								$divide = array_sum($br_person_cust_hours) / max(0.01 , $br_person_cust_hours[$person]);
+							}
+							$work_data[$person]["on_bill"]+= $this->_money_format($br["sum"]/$divide);
+							$work_data[$person]["payments"]+= $this->_money_format(($br["sum"]/$divide) / $paid);
+						}
+					}
+					if(sizeof($projects) > 1 && sizeof($br_person_hours))
+					{
+						$result["on_bill"] += $this->_money_format($br["sum"]);
+						$result["payments"] += $this->_money_format($br["sum"] / $paid);
+					}
+
+				}
+			}
+		}
+
+		$tasks = $task_prices = array();
+		foreach($all_data as $data)
+		{
+			$tasks[$data["task"]] = $data["task"];
+		}
+
+		$tasks_ol = new object_list();
+		$tasks_ol->add($tasks);
+		foreach($tasks_ol->arr() as $to)
+		{
+			$task_prices[$to->id()] = $to->prop("hr_price");
+		}
+
+
+		foreach($all_data as $data)
+		{
+			$person = reset($data["impl"]);
+			if(!isset($work_data[$person]))
+			{
+				$work_data[$person] = array();
+			}
+			$cust_time = $data["time_to_cust"];// ? $data["time_to_cust"] : $data["time_real"];
+			$work_data[$person]["real"] +=$data["time_real"];
+			$work_data[$person]["guess"] +=$data["time_guess"];
+			$work_data[$person]["cust"] +=$cust_time;
+			if($task_prices[$data["task"]])
+			{
+				$work_data[$person]["sum"] += $data["time_real"] * $task_prices[$data["task"]];
+				$result["sum"] += $data["time_real"] * $task_prices[$data["task"]];
+				$work_data[$person]["sum_cust"] += $cust_time * $task_prices[$data["task"]];
+				$result["sum_cust"] += $cust_time * $task_prices[$data["task"]];
+			}
+			else
+			{
+				$work_data[$person]["without"] += $data["time_real"];
+ 				$result["without"] += $data["time_real"];
+			}
+ 			$result["real"] +=$data["time_real"];
+ 			$result["guess"] +=$data["time_guess"];
+ 			$result["cust"] +=$cust_time;
+
+		}
+
+		$work_data["result"] = $result;
+		return $work_data;
+	}
+
+	public function get_payments_data()
+	{
+		$data = array();
+		$bills = $this->get_bills();
+		foreach($bills->arr() as $bill)
+		{
+			foreach($bill->get_bill_payments_data() as $p_data)
+			{
+				$data[] = $p_data;
+			}
+		}
+		return $data;
+	}
 }
 ?>

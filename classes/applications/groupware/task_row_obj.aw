@@ -247,5 +247,14 @@ class task_row_obj extends _int_object
 		return $this->prop("time_to_cust") ? $this->prop("time_to_cust") : $this->prop("time_real");
 	}
 
+	/** returns row implementor id
+		@attrib api=1
+		@returns oid
+	**/
+	public function implementor()
+	{
+		return reset($this->prop("impl"));
+	}
+
 }
 ?>

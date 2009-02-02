@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.155 2009/02/02 10:32:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.156 2009/02/02 16:07:51 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -698,7 +698,7 @@ class project extends class_base
 							$max = $count;
 						}
 						$label2[] = $params[$param];
-						$times[] = $count;
+						$times[] = number_format($count , 2);
 					}
 				}
 				$c->set_axis(array(
@@ -789,14 +789,15 @@ class project extends class_base
 					"color" => "666666",
 					"size" => 11,
 				));
-				$bill_sum = $bill_sum - $payment_sum;
-				$times[] = $work_price;
+				$unpaid_work = max(0 , $work_price - $bill_sum);
+				$bill_sum = max(0 , $bill_sum - $payment_sum);
+				$times[] = $unpaid_work;
 				$times[] = $bill_sum;
 				$times[] = $payment_sum;
 				$c->set_colors(array(
 					"bbbbbb", "aa2222", "FFFF00",
 				));
-				$labels[] = t("Arvele minemata t&ouml;id summas")." ".($work_price-$bill_sum);
+				$labels[] = t("Arvele minemata t&ouml;id summas")." ".$unpaid_work;
 				$labels[] = t("Laekumata arveid summas")." ".$bill_sum;
 				$labels[] = t("Laekunud")." ".$payment_sum;
 
@@ -894,7 +895,7 @@ class project extends class_base
 					{
 						continue;
 					}
-					$date_day_start = date("wmy" , $data["date"]);
+					$date_day_start = date("YW" , $data["date"]);
 					if($end < $data["date"])
 					{
 						$end = $data["date"];
@@ -929,10 +930,10 @@ class project extends class_base
 					{
 	//					$bot_axis[] = "";
 					}
-					$data1[] = $result[1][date("wmy" , $start)];
-					if($max_hours < $result[1][date("wmy" , $start)])
+					$data1[] = $result[1][date("YW" , $start)];
+					if($max_hours < $result[1][date("YW" , $start)])
 					{
-						$max_hours = $result[1][date("wmy" , $start)];
+						$max_hours = $result[1][date("YW" , $start)];
 					}
 					$start += DAY*7;
 				}
@@ -940,11 +941,16 @@ class project extends class_base
 				$c2->add_data($data1);
 				$c2->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
 				$left_axis = array();
+				$round_i = 0;
+				if($max_hours < 10)
+				{
+					$round_i = 2;
+				}
 				if ($max_hours > 0)
 				{
 					for($i = 0; $i <= $max_hours; $i+= $max_hours/4)
 					{
-						$left_axis[] = round($i, 0);
+						$left_axis[] = round($i, $round_i);
 					}
 				}
 				$c2->add_axis_label(0, $left_axis);
@@ -1524,6 +1530,8 @@ class project extends class_base
 			case "stats_entry_table":
 				$this->_get_stats_entry_table($arr);
 				break;
+			case "hours_stats":
+				return PROP_IGNORE;
 		}
 		return $retval;
 	}
@@ -7131,126 +7139,88 @@ class project extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 
-		$bills = $arr["obj_inst"]->get_bills();
-
-		$all_data = $arr["obj_inst"]->get_rows_data();
-		$tasks = $task_prices = array();
-		foreach($all_data as $data)
-		{
-			$tasks[$data["task"]] = $data["task"];
-		}
-
-		$tasks_ol = new object_list();
-		$tasks_ol->add($tasks);
-		foreach($tasks_ol->arr() as $to)
-		{
-			$task_prices[$to->id()] = $to->prop("hr_price");
-		}
-
-		$work_data = array();
-		$result = array();
-		foreach($all_data as $data)
-		{
-			$person = reset($data["impl"]);
-			if(!isset($work_data[$person]))
-			{
-				$work_data[$person] = array();
-			}
-			$cust_time = $data["time_to_cust"];// ? $data["time_to_cust"] : $data["time_real"];
-			$work_data[$person]["real"] +=$data["time_real"];
-			$work_data[$person]["guess"] +=$data["time_guess"];
-			$work_data[$person]["cust"] +=$cust_time;
-			if($task_prices[$data["task"]])
-			{
-				$work_data[$person]["sum"] += $data["time_real"] * $task_prices[$data["task"]];
-				$result["sum"] += $data["time_real"] * $task_prices[$data["task"]];
-				$work_data[$person]["sum_cust"] += $cust_time * $task_prices[$data["task"]];
-				$result["sum_cust"] += $cust_time * $task_prices[$data["task"]];
-			}
-			else
-			{
-				$work_data[$person]["without"] += $data["time_real"];
-				$result["without"] += $data["time_real"];
-			}
-			$result["real"] +=$data["time_real"];
-			$result["guess"] +=$data["time_guess"];
-			$result["cust"] +=$cust_time;
-
-		}
+		$work_data = $arr["obj_inst"]->get_workers_stats();
 
 		//iga isiku info
 		foreach($work_data as  $person  => $d)
 		{
-			$data_defined = $d;
-			$data_defined["person"] = html::obj_change_url($person);
-			$t->define_data($data_defined);
-		}
-
-		foreach($bills->arr() as $bill)
-		{
-			$result["on_bill"] += $bill->get_sum();
-			$result["payments"] += $bill->get_payments_sum();
+			if($this->can("view" , $person))
+			{
+				$data_defined = $d;
+				foreach($data_defined as $key => $dt)
+				{
+					if($dt)
+					{
+						$data_defined[$key] = number_format($dt , 2);
+					}
+					else
+					{
+						$data_defined[$key] = "";
+					}
+				}
+				$data_defined["person"] = html::obj_change_url($person);
+				$t->define_data($data_defined);
+			}
 		}
 
 		//kokkuv6tte rea info
-		$data_defined = $result;
+		$data_defined = $work_data["result"];
 		$data_defined["person"] = t("Kokku");
 		$t->define_data($data_defined);
-
 
 		$t->define_field(array(
 			"name" => "person",
 			"caption" => t("Isik"),
-			"align" => "center",
+			"align" => "left",
 		));
 	
 
 		$t->define_field(array(
 			"name" => "guess",
 			"caption" => t("Prognoositud t&ouml;&ouml;tunde"),
-			"align" => "center",
+			"align" => "right",
 		));
 
 		$t->define_field(array(
 			"name" => "real",
 			"caption" => t("Tegelikke t&ouml;&ouml;tunde"),
-			"align" => "center",
+			"align" => "right",
 		));
 
 		$t->define_field(array(
 			"name" => "without",
 			"caption" => t("Tunnihinnata t&ouml;&ouml;tunde"),
-			"align" => "center",
+			"align" => "right",
 		));
 
 		$t->define_field(array(
 			"name" => "sum",
 			"caption" => t("T&ouml;id summas"),
-			"align" => "center",
+			"align" => "right",
 		));
 
 		$t->define_field(array(
 			"name" => "cust",
 			"caption" => t("T&ouml;&ouml;tunde kliendile"),
-			"align" => "center",
+			"align" => "right",
 		));
 
 		$t->define_field(array(
 			"name" => "sum_cust",
 			"caption" => t("T&ouml;id kliendile summas"),
-			"align" => "center",
+			"align" => "right",
 		));
 
 		$t->define_field(array(
 			"name" => "on_bill",
 			"caption" => t("T&ouml;id arvel summas"),
-			"align" => "center",
+			"align" => "right",
 		));
 
 		$t->define_field(array(
 			"name" => "payments",
 			"caption" => t("Tasu laekunud summas"),
-			"align" => "center",
+			"align" => "right",
 		));
 
 		$t->set_sortable(false);
@@ -7304,8 +7274,14 @@ class project extends class_base
 			{
 				foreach($params as $param_id => $param_name)
 				{
-					$data_defined[$clid."_".$param_id] = $d[$clid][$param_id];
-					if(!$d[$clid][$param_id]) $data_defined[$clid."_".$param_id] = "-";
+					if(!$d[$clid][$param_id])
+					{
+						$data_defined[$clid."_".$param_id] = "-";
+					}
+					else
+					{
+						$data_defined[$clid."_".$param_id] = number_format($d[$clid][$param_id],2);
+					}
 				}
 			}
 			$t->define_data($data_defined);
@@ -7313,13 +7289,19 @@ class project extends class_base
 
 		//kokkuv6tte rea info
 		$data_defined = array();
-		$data_defined["person"] = t("Kokku");
+		$data_defined["person"] = "<b>" . t("Kokku") . "</b>";
 		foreach($this->event_types as $clid => $capt)
 		{
 			foreach($params as $param_id => $param_name)
 			{
-				$data_defined[$clid."_".$param_id] = $result[$clid][$param_id];
-				if(!$result[$clid][$param_id]) $data_defined[$clid."_".$param_id] = "-";
+				if(!$result[$clid][$param_id])
+				{
+					$data_defined[$clid."_".$param_id] = "-";
+				}
+				else
+				{
+					$data_defined[$clid."_".$param_id] = number_format($result[$clid][$param_id] , 2);
+				}
 			}
 		}
 		$t->define_data($data_defined);
@@ -7330,7 +7312,7 @@ class project extends class_base
 		$t->define_field(array(
 			"name" => "person",
 			"caption" => t("Isik"),
-			"align" => "center",
+			"align" => "left",
 		));
 	
 		foreach($this->event_types as $clid => $capt)
@@ -7345,7 +7327,7 @@ class project extends class_base
 				$t->define_field(array(
 					"name" => $clid."_".$param_id,
 					"caption" => $param_name,
-					"align" => "center",
+					"align" => "right",
 					"parent" => "field".$clid,
 				));
 			}
@@ -7398,7 +7380,7 @@ class project extends class_base
 		{
 			if(!$person) continue;
 			$data_defined = array();//$work_data[$person][1];
-			$data_defined["person"] = html::obj_change_url($person);
+			$data_defined["person"] = "<b>".html::obj_change_url($person, str_replace(" " , "&nbsp;" , get_name($person)))."</b>";
 			$t->define_data($data_defined);
 			
 			foreach($this->event_types as $clid => $capt)
@@ -7411,7 +7393,7 @@ class project extends class_base
 
 		//kokkuv6tte rea info
 		$data_defined = array();
-		$data_defined["person"] = t("Kokku");
+		$data_defined["person"] =  "<b>".t("Kokku")."</b>";
 		$t->define_data($data_defined);
 		foreach($this->event_types as $clid => $capt)
 		{
@@ -7423,7 +7405,7 @@ class project extends class_base
 		$t->define_field(array(
 			"name" => "person",
 			"caption" => t("Isik"),
-			"align" => "center",
+			"align" => "left",
 		));
 
 		$start = $arr["obj_inst"]->prop("start");
@@ -7458,7 +7440,7 @@ class project extends class_base
 			$t->define_field(array(
 				"name" => date("dmy" , $start),
 				"caption" => date("d" , $start),
-				"align" => "center",
+				"align" => "right",
 				"parent" => date("my" , $start),
 				"callback" =>  array(&$this, "__tm_field_format"),
 				"callb_pass_row" => true,
@@ -7765,6 +7747,7 @@ arr($stats_by_ppl);
 		$time_data = array();
 		classload("core/date/date_calc");
 		$all_data = $arr["obj_inst"]->get_rows_data();
+		$payments = $arr["obj_inst"]->get_payments_data();
 		$end = $arr["obj_inst"]->prop("end");
 		$start = time();
 		$result = array();
@@ -7789,6 +7772,16 @@ arr($stats_by_ppl);
 			$tasks[$data["task"]] = $data["task"];
 		}
 
+		foreach($payments as $p_data)
+		{
+			if($end < $p_data["date"])
+			{
+				$end = $p_data["date"];
+			}
+		}
+		$end = $end+DAY;
+
+
 		$tasks_ol = new object_list();
 		$tasks_ol->add($tasks);
 		foreach($tasks_ol->arr() as $to)
@@ -7810,14 +7803,10 @@ arr($stats_by_ppl);
 			$chart_data[$date_day_start] += $task_prices[$data["task"]] * $custh;
 		}
 
-		$bills = $arr["obj_inst"]->get_bills();
-		foreach($bills->arr() as $bill)
+		foreach($payments as $p_data)
 		{
-			foreach($bill->get_bill_payments_data() as $p_data)
-			{
-				$date_day_start = round($p_data["date"]/$round);
-				$chart_payments[$date_day_start] += $p_data["sum"];
-			}
+			$date_day_start = round($p_data["date"]/$round);
+			$chart_payments[$date_day_start] += $p_data["sum"];
 		}
 
 		$sum = 0;
@@ -7860,6 +7849,7 @@ arr($stats_by_ppl);
 			GCHART_AXIS_BOTTOM
 		));
 		$left_axis = array();
+		$sum = max($sum , $pay_sum);
 		if ($sum > 0)
 		{
 			for($i = 0; $i <= $sum; $i+= $sum/4)

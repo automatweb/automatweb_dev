@@ -394,7 +394,7 @@ class crm_bill_obj extends _int_object
 			));
 		}
 
-		$amt = ((int)(($amt * 4)+1)) / 4;//ymardab yles 0.25listeni
+	//	$amt = ((int)(($amt * 4)+1)) / 4;//ymardab yles 0.25listeni
 
 		$row->set_prop("amt", $amt);
 		$row->set_prop("price", $price);
@@ -850,6 +850,9 @@ class crm_bill_obj extends _int_object
 		return $this->prop("sum");
 	}
 
+	/** returns task object list
+		@attrib api=1
+	**/
 	public function bill_tasks()
 	{
 		$filter = array();
@@ -863,6 +866,9 @@ class crm_bill_obj extends _int_object
 		return $ol;
 	}
 
+	/** returns task rows data
+		@attrib api=1
+	**/
 	public function bill_task_rows_data()
 	{
 		$rows_filter = $this->bill_task_rows_filter();
@@ -887,6 +893,95 @@ class crm_bill_obj extends _int_object
 		return $filter;
 	}
 
+	/** returns bill rows data
+		@attrib api=1
+	**/
+	public function get_bill_rows_data()
+	{
+		$inf = array();
+
+		$cons = $this->connections_from(array("type" => "RELTYPE_ROW"));
+		foreach($cons as $c)
+		{
+			$row = $c->to();
+			$kmk = "";
+			if ($GLOBALS["object_loader"]->cache->can("view", $row->prop("prod")))
+			{
+				$prod = obj($row->prop("prod"));
+				if ($GLOBALS["object_loader"]->cache->can("view", $prod->prop("tax_rate")))
+				{
+					$tr = obj($prod->prop("tax_rate"));
+					$kmk = $tr->prop("code");
+				}
+			}
+
+			$ppl = array();
+			foreach((array)$row->prop("people") as $p_id)
+			{
+				if ($GLOBALS["object_loader"]->cache->can("view", $p_id))
+				{
+					$ppl[$p_id] = $p_id;	
+				}
+			}
+			$rd = array(
+				"amt" => $row->prop("amt"),
+				"prod" => $row->prop("prod"),
+				"name" => $row->prop("desc"),
+				"comment" => $row->prop("comment"),
+				"price" => $row->prop("price"),
+				"sum" => $row->prop("amt") * $row->prop("price"),
+				"km_code" => $kmk,
+				"unit" => $row->prop("unit"),
+				"jrk" => $row->meta("jrk"),
+				"id" => $row->id(),
+				"is_oe" => $row->prop("is_oe"),
+				"has_tax" => $row->prop("has_tax"),
+				"date" => $row->prop("date"),
+				"id" => $row->id(),
+				"persons" => $ppl,
+				"has_task_row" => $row->has_task_row(),
+				"task_rows" => $row->task_rows(),
+			);
+
+			$inf[] = $rd;
+		}
+		usort($inf, array(&$this, "__br_sort"));
+		return $inf;
+	}
+
+	private function __br_sort($a, $b)
+	{
+		$a_date = $a["date"];
+		$b_date = $b["date"];
+		list($a_d, $a_m, $a_y) = explode(".", $a_date);
+		list($b_d, $b_m, $b_y) = explode(".", $b_date);
+		$a_tm = mktime(0,0,0, $a_m, $a_d, $a_y);
+		$b_tm = mktime(0,0,0, $b_m, $b_d, $b_y);
+		if(!(($a["is_oe"] - $b["is_oe"]) == 0))
+		{
+			return $a["is_oe"]- $b["is_oe"];
+		}
+		return  $a["jrk"] < $b["jrk"] ? -1 :
+			($a["jrk"] > $b["jrk"] ? 1:
+				($a_tm >  $b_tm ? 1:
+					($a_tm == $b_tm ? ($a["id"] > $b["id"] ? 1 : -1): -1)
+				)
+			);
+	}
+
+	/** returns bill project id's
+		@attrib api=1
+		@returns array
+	**/
+	public function get_project_ids()
+	{
+		$ret = array();	
+		foreach($this->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+		{
+			$ret[] = $c->prop("to");
+		}
+		return $ret;
+	}
 }
 
 ?>
