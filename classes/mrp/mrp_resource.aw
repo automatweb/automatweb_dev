@@ -761,12 +761,19 @@ class mrp_resource extends class_base
 						"planned_length" => round($planned_length, 2),
 					);
 					if(MRP_STATUS_DONE == $job->state)
-					{
-						$real_length = (float) (($job->finished - $job->started) / 3600);
-						$deviation_float = (float) ($real_length - $planned_length);
+					{						
+						// ARVUTA TEGELIK
+						$this->db_query("SELECT * FROM mrp_stats WHERE job_oid = ".$job->id());
+						$real_len = 0;
+						while ($row = $this->db_next())
+						{
+							$real_len += $row["length"];
+						}
+						$real_len = $real_len/3600;
+						$deviation_float = (float) ($real_len - $planned_length);
 						$deviation_percent = $deviation_float / $planned_length * 100;
 						$data += array(
-							"real_length" => round($real_length, 2),
+							"real_length" => round($real_len, 2),
 							"deviation" => sprintf(t("%.2f (%.2f%%)"), round($deviation_float, 2), round($deviation_percent, 2)),
 						);
 					}

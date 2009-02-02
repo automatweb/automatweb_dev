@@ -312,7 +312,7 @@
             </group>
             <type>table</type>
             <store>no</store>
-            <parent>vsplitbox</parent>
+            <parent>right_pane</parent>
             <no_caption>1</no_caption>
       </property>
       <property>
@@ -1516,14 +1516,14 @@
             <grp_resources>
                   <caption>Ressursid</caption>
             </grp_resources>
-            <grp_resources_manage>
-                  <caption>Haldus</caption>
-                  <parent>grp_resources</parent>
-            </grp_resources_manage>
             <grp_resources_load>
                   <caption>Koormus</caption>
                   <parent>grp_resources</parent>
             </grp_resources_load>
+            <grp_resources_manage>
+                  <caption>Haldus</caption>
+                  <parent>grp_resources</parent>
+            </grp_resources_manage>
             <grp_printer>
                   <caption>Operaatori vaade</caption>
                   <submit>no</submit>
@@ -1596,7 +1596,7 @@
                         <num_5>grp_users_mgr</num_5>
                         <num_6>grp_settings_def</num_6>
                   </group>
-                  <width>20%:80%</width>
+                  <width>25%:75%</width>
                   <area_caption></area_caption>
             </vsplitbox>
             <customers_box>
@@ -1649,6 +1649,15 @@
                         <num_1>grp_resources_load</num_1>
                   </group>
             </resources_tree_box>
+            <right_pane>
+                  <type>vbox</type>
+                  <parent>vsplitbox</parent>
+                  <group>
+                        <num_0>grp_resources_manage</num_0>
+                        <num_1>grp_resources_load</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </right_pane>
             <schedule_search_box>
                   <type>vbox</type>
                   <closeable>1</closeable>

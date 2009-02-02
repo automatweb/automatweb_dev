@@ -151,7 +151,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default group=grp_case_workflow
-	@layout vsplitbox type=hbox width=20%:80% group=grp_case_workflow,grp_case_schedule_gantt
+	@layout vsplitbox type=hbox width=25%:75% group=grp_case_workflow,grp_case_schedule_gantt
 		@layout left_pane type=vbox parent=vsplitbox group=grp_case_workflow,grp_case_schedule_gantt
 			@layout general_info type=vbox parent=left_pane area_caption=Projekti&nbsp;&uuml;ldandmed closeable=1 group=grp_case_workflow,grp_case_schedule_gantt
 			@layout resource_tree type=vbox parent=left_pane area_caption=Ressursid&nbsp;kategooriate&nbsp;kaupa closeable=1
@@ -524,7 +524,6 @@ class mrp_case extends class_base
 				));
 				$data = array();
 				$labels = array();
-				$colors = array();
 				$odl = new object_data_list(
 					array(
 						"class_id" => CL_MRP_JOB,
@@ -538,11 +537,8 @@ class mrp_case extends class_base
 				{
 					$data[$odata["res"]] = $odata["length"];
 					$labels[$odata["res"]] = $odata["res_nm"];
-					$new_hexrgb = dechex(rand(0,4294967296));
-					$colors[$odata["res"]] = str_repeat("0", 6 - strlen($new_hexrgb)).$new_hexrgb;
 				}
 				$c->add_data($data);
-				$c->set_colors($colors);
 				$c->set_labels($labels);
 				$c->set_title(array(
 					"text" => t("Planeeritud kestused ressursside kaupa"),
@@ -565,7 +561,7 @@ class mrp_case extends class_base
 		$t->set_titlebar_display(false);
 		$t->set_sortable(false);
 
-		$perrow = 4;
+		$perrow = 3;
 
 		for($i = 0; $i < $perrow; $i++)
 		{
@@ -598,8 +594,8 @@ class mrp_case extends class_base
 				$c->set_id($arr["request"]["class"].".".$arr["prop"]["name"].".".$j.".".$arr["obj_inst"]->id());
 				$c->set_type(GCHART_BAR_GV);
 				$c->set_size(array(
-					"width" => 275,
-					"height" => 100,
+					"width" => 350,
+					"height" => 200,
 				));
 				$c->add_fill(array(
 					"area" => GCHART_FILL_BACKGROUND,
@@ -608,10 +604,19 @@ class mrp_case extends class_base
 						"color" => "e1e1e1",
 					),
 				));
+				// ARVUTA TEGELIK
+				$this->db_query("SELECT * FROM mrp_stats WHERE job_oid = '".$job["oid"]."'");
+				$real_len = 0;
+				while ($row = $this->db_next())
+				{
+					$real_len += $row["length"];
+				}
 				$plan = $job["length"];
-				$real = $job["started"] && $job["finished"] ? $job["finished"] - $job["started"] : false;
+				$real = $job["started"] && $job["finished"] ? $real_len : false;
 				$deviation = $real !== false ? $real - $plan : 0;
-				$real = $real === false ? 0 : $real;
+				$real = $real === false ? 0 : round($real/3600, 1);
+				$plan = round($plan/3600, 1);
+				$deviation = round($deviation/3600, 1);
 				$c->add_data(array(
 					"plan" => $plan,
 				));
@@ -622,14 +627,13 @@ class mrp_case extends class_base
 					"d" => $deviation,
 				));
 				$max = max($plan, $real, $deviation);
-				$min = min($plan, $real, $deviation);
 				$c->set_title(array(
 					"text" => $job["name"],
 					"color" => "666666",
 					"size" => 11,
 				));
 				$c->set_bar_sizes(array(
-					"width" => 60,
+					"width" => 70,
 					"bar_spacing" => 3,
 					"bar_group_spacing" => 8,
 				));
@@ -637,13 +641,44 @@ class mrp_case extends class_base
 					"labels" => array(
 						t("Planeeritud"),
 						t("Tegelik"),
-						t("H&auml;lve"),
+						$deviation > 0 ? t("&Uuml;lekulu") : t("Alakulu"),
 					),
 						"position" => GCHART_POSITION_RIGHT,
 				));
-				$c->set_data_scales(array(array(-110, 110)));
+				$c->add_marker(array(
+					"type" => GCHART_MARKER_TEXT,
+					"text" => $plan.t(" h"),
+					"color" => "000000",
+					"dataset" => 0,
+					"datapoint" => 0,
+					"size" => 11,
+					"order" => GCHART_ORDER_TOP
+				));
+				$c->add_marker(array(
+					"type" => GCHART_MARKER_TEXT,
+					"text" => $real.t(" h"),
+					"color" => "000000",
+					"dataset" => 1,
+					"datapoint" => 0,
+					"size" => 11,
+					"order" => GCHART_ORDER_TOP
+				));
+				$c->add_marker(array(
+					"type" => GCHART_MARKER_TEXT,
+					"text" => $deviation.sprintf(t(" h (%s %%)"), round(($deviation/$plan)*100),1),
+					"color" => "000000",
+					"dataset" => 2,
+					"datapoint" => 0,
+					"size" => 11,
+					"order" => GCHART_ORDER_TOP
+				));
+				$c->set_axis(array(
+					GCHART_AXIS_LEFT,
+				));
+				$c->add_axis_range(0, array($max*-1.1, $max*1.2));
+				$c->set_data_scales(array(array(-110, 120)));
 				$c->set_colors(array(
-					"5b9f44", "996600", $deviation > 0 ? "ff0000" : "0000ff"
+					"5b9f44", "996600", $deviation > 0 ? "ff0000" : "00ff00"
 				));
 
 				$t_data["chart_".$i] = $c->get_html();
@@ -2131,7 +2166,7 @@ class mrp_case extends class_base
 				break;
 
 			case "job_charts":
-				$arr["area_caption"] = sprintf(t("Projekti '%s' t&ouml;&ouml;de kestuste v&otilde;rdlus"), $arr["obj_inst"]->name());
+				$arr["area_caption"] = sprintf(t("Projekti '%s' t&ouml;&ouml;de kestuste v&otilde;rdlused"), $arr["obj_inst"]->name());
 				break;
 		}
 		return true;

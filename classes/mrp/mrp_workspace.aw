@@ -16,8 +16,8 @@
 	@groupinfo grp_schedule_gantt caption="T&ouml;&ouml;voo diagramm" submit=no parent=grp_schedule
 	@groupinfo grp_schedule_google caption="Graafikud" submit=no parent=grp_schedule
 @groupinfo grp_resources caption="Ressursid"
-	@groupinfo grp_resources_manage caption="Haldus" parent=grp_resources
 	@groupinfo grp_resources_load caption="Koormus" parent=grp_resources
+	@groupinfo grp_resources_manage caption="Haldus" parent=grp_resources
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
 	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
 	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
@@ -39,7 +39,7 @@
 	@property rescheduling_needed type=hidden
 
 	// elements main grouper
-	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources_manage,grp_resources_load,grp_users_tree,grp_users_mgr,grp_settings_def width=20%:80%
+	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources_manage,grp_resources_load,grp_users_tree,grp_users_mgr,grp_settings_def width=25%:75%
 
 @default group=grp_customers
 	@property customers_toolbar type=toolbar store=no no_caption=1
@@ -107,8 +107,11 @@
 @default group=grp_resources_manage,grp_resources_load
 	@property resources_toolbar type=toolbar store=no no_caption=1 group=grp_resources_manage
 	@layout resources_tree_box type=vbox closeable=1 area_caption=Ressursid&amp;kategooriad parent=vsplitbox
-	@property resources_tree type=text store=no no_caption=1 parent=resources_tree_box
-	@property resources_list type=table store=no parent=vsplitbox no_caption=1
+		@property resources_tree type=text store=no no_caption=1 parent=resources_tree_box
+	@layout right_pane type=vbox parent=vsplitbox
+#		@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=right_pane
+#			@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no
+		@property resources_list type=table store=no parent=right_pane no_caption=1
 
 
 @default group=grp_schedule_gantt
@@ -1123,6 +1126,81 @@ class mrp_workspace extends class_base
 				break;
 			case "resources_list":
 				$this->create_resources_list ($arr);
+				break;
+
+			case "resource_deviation_chart":
+				if($this->can("view", $arr["request"]["mrp_tree_active_item"]))
+				{
+					$id = $arr["request"]["mrp_tree_active_item"];
+					
+					$odl = new object_data_list(
+						array(
+							"class_id" => CL_MRP_JOB,
+							"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $id,
+							"state" => MRP_STATUS_DONE,
+							"finished" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+							new obj_predicate_sort(array("finished" => ASC))
+						),
+						array(
+							CL_MRP_JOB => array("length", "finished"),
+						)
+					);
+					if($odl->count() == 0)
+					{
+						$prop["type"] = "text";
+						$prop["value"] = sprintf(t("Ressursil '%s' ei ole veel &uuml;htegi l&otilde;petatud t&ouml;&ouml;d!"), obj($id)->name());
+						return PROP_OK;
+					}
+					$jobs = $odl->arr();
+
+					$real = array();
+					$stats = $this->db_fetch_array("SELECT * FROM mrp_stats WHERE job_oid IN (".implode(",", array_keys($odl->arr())).") ORDER BY end ASC");
+					foreach($stats as $stat)
+					{
+						$real[$stat["job_oid"]] = isset($real[$stat["job_oid"]]) ? $real[$stat["job_oid"]] + $stat["length"] : $stat["length"];
+						$end[$stat["job_oid"]] = max($stat["end"], isset($end[$stat["job_oid"]]) ? $end[$stat["job_oid"]] : 0);
+					}
+					$min_end = min($end);
+					$max_end = max($end);
+					
+					foreach($jobs as $oid => $job)
+					{
+						$real[$oid] = isset($real[$oid]) ? $real[$oid] : 0;
+						$end[$oid] = isset($end[$oid]) ? $end[$oid] : $job["finished"];
+
+						$d = ($job["length"] - $real[$oid]) / $real[$oid];
+						$data_x[$oid] = ($end[$oid] - $min_end) / ($max_end - $min_end) * 100;
+						$data_y[$oid] = $d;
+					}
+					$min_d = min($data_y);
+					$max_d = max($data_y);
+					foreach($data_y as $k => $v)
+					{
+						$data_y[$k] = $v / $max_d * 100;
+					}
+
+					$c = &$arr["prop"]["vcl_inst"];
+					$c->set_type(GCHART_LINE_CHARTXY);
+					$c->set_size(array(
+						"width" => 800,
+						"height" => 100,
+					));
+					$c->add_fill(array(
+						"area" => GCHART_FILL_BACKGROUND,
+						"type" => GCHART_FILL_SOLID,
+						"colors" => array(
+							"color" => "e9e9e9",
+						),
+					));
+					$c->add_data($data_x);
+					$c->add_data($data_y);
+					$c->set_data_scales(array(array(0,100),array(round($min_d / $max_d * 100 - 5), 105)));
+					$c->set_title(array(
+						"text" => t(""),
+						"color" => "666666",
+						"size" => 11,
+					));
+				}
 				break;
 
 			### customers tab
@@ -5279,6 +5357,20 @@ class mrp_workspace extends class_base
 		{
 			unset($arr["classinfo"]["relationmgr"]);
 			return false;
+		}
+		return true;
+	}
+
+	function callback_mod_layout(&$arr)
+	{
+		switch($arr["name"])
+		{
+			case "resource_deviation_chart":
+				if($this->can("view", $arr["request"]["mrp_tree_active_item"]))
+				{
+					$arr["area_caption"] = sprintf(t("Ressursi '%s' suhtelise h&auml;lbe muutus ajas"), obj($arr["request"]["mrp_tree_active_item"])->name());
+				}
+				break;
 		}
 		return true;
 	}

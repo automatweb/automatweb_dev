@@ -543,7 +543,7 @@
       <layout>
             <vsplitbox>
                   <type>hbox</type>
-                  <width>20%:80%</width>
+                  <width>25%:75%</width>
                   <group>
                         <num_0>grp_case_workflow</num_0>
                         <num_1>grp_case_schedule_gantt</num_1>
