@@ -291,11 +291,11 @@ class crm_bill extends class_base
 		{
 			$arr["obj_inst"]->set_project($arr["request"]["project"]);
 		}
-		if($this->can("view" , $arr["add_bug"]))
+		if($this->can("view" , $arr["request"]["add_bug"]))
 		{
-			$arr["obj_inst"]->add_rows(array("objects" => $arr["add_bug"]));
+			$arr["obj_inst"]->add_rows(array("objects" => array($arr["request"]["add_bug"])));
 		}
-		arr();die();
+
 	}
 
 	function get_bill_cust_data_object($bill)
@@ -3362,10 +3362,10 @@ class crm_bill extends class_base
 //			"sortable" => 1
 		));
 
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "oid"
-		));
+//		$t->define_chooser(array(
+//			"name" => "sel",
+//			"field" => "oid"
+//		));
 	}
 
 	function _bill_task_list($arr)
@@ -3431,9 +3431,62 @@ class crm_bill extends class_base
 					"cust_hours" => $stats->hours_format($d["time_to_cust"]),
 				));
 			}
+			unset($rows_data[$task->id()]);
+		}
 
+
+		foreach($rows_data as $task_id => $rows)
+		{
+			$task = $task_hours = $task_hours_customer = $task_sum = 0;
+
+			if($this->can("view" , $task_id))
+			{
+				$task = obj($task_id);
+			}
+			if(is_object($task))
+			{
+				$hour_price = $task->prop("hr_price");
+			}
+			foreach($rows as $d)
+			{
+				$customer_time = $d["time_to_cust"];
+				$task_hours_customer += $customer_time;
+				$task_hours += $d["time_real"];
+				$task_sum += $customer_time * $hour_price;
+			}
+			if(is_object($task))
+			{
+				$t->define_data(array(
+					"name" => html::obj_change_url($task),
+					"hrs" => $stats->hours_format($task_hours),
+					"price" => $task_sum,
+					"oid" => $task->id(),
+					"cust_hours" => $task_hours_customer,
+					"project" => join(", " , $task->get_projects()->names()),
+				));
+			}
+			else
+			{
+				$t->define_data(array(
+					"name" => "",
+					"hrs" => $stats->hours_format($task_hours),
+					"cust_hours" => $task_hours_customer,
+				));
+			}
+			foreach($rows_data[$task->id()] as $d)
+			{
+				$customer_time = $d["time_to_cust"];
+				$t->define_data(array(
+					"work" => $d["content"],
+					"hrs" => $stats->hours_format($d["time_real"]),
+					"price" => number_format($customer_time * $hour_price, 2,".", " "),
+					"oid" => $d["oid"],
+					"cust_hours" => $stats->hours_format($d["time_to_cust"]),
+				));
+			}
 		}
 	}
+
 	function _billt_tb($arr)
 	{
 		

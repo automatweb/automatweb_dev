@@ -737,6 +737,11 @@ class crm_bill_obj extends _int_object
 				"to" => $task,
 				"reltype" => "RELTYPE_TASK"
 			));
+			$task_object = obj($task);
+			$task_object->connect(array(
+				"to"=> $this->id(),
+				"type" => "RELTYPE_BILL"
+			));
 		}
 
 		foreach($task_rows as $task => $rows)
@@ -850,7 +855,12 @@ class crm_bill_obj extends _int_object
 		$filter = array();
 		$filter["class_id"] = CL_TASK;
 		$filter["CL_TASK.RELTYPE_BILL"] = $this->id();
-		return new object_list($filter);
+		$ol = new object_list($filter);
+		foreach($this->connections_from(array("type" => "RELTYPE_TASK")) as $c)
+		{
+			$ol->add($c->prop("to"));
+		}
+		return $ol;
 	}
 
 	public function bill_task_rows_data()
