@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.29 2008/07/08 10:53:37 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.30 2009/02/02 12:02:55 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1 maintainer=dragut
@@ -14,9 +14,6 @@
 
 	@property active type=chooser table=forum_topics field=active
 	@caption Aktiivne
-
-	@property jrk type=textbox table=forum_topics field=jrk size=3 default=0
-	@caption J&auml;rjekord
 
 	@property comment type=textarea
 	@caption Sisu

@@ -17,16 +17,6 @@
             <caption>Aktiivne</caption>
       </property>
       <property>
-            <name>jrk</name>
-            <table>forum_topics</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>jrk</field>
-            <size>3</size>
-            <default>0</default>
-            <caption>J&amp;amp;auml;rjekord</caption>
-      </property>
-      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
