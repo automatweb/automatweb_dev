@@ -3398,7 +3398,7 @@ class crm_bill extends class_base
 			$hour_price = $task->prop("hr_price");
 			foreach($rows_data[$task->id()] as $d)
 			{
-				$customer_time = $d["time_to_cust"] ? $d["time_to_cust"] : $d["time_real"];
+				$customer_time = $d["time_to_cust"];// ? $d["time_to_cust"] : $d["time_real"];
 				$task_hours_customer += $customer_time;
 				$task_hours += $d["time_real"];
 				$task_sum += $customer_time * $hour_price;
@@ -3422,7 +3422,7 @@ class crm_bill extends class_base
 
 			foreach($rows_data[$task->id()] as $d)
 			{
-				$customer_time = $d["time_to_cust"] ? $d["time_to_cust"] : $d["time_real"];
+				$customer_time = $d["time_to_cust"];// ? $d["time_to_cust"] : $d["time_real"];
 				$t->define_data(array(
 					"work" => $d["content"],
 					"hrs" => $stats->hours_format($d["time_real"]),

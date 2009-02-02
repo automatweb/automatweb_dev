@@ -243,6 +243,7 @@ class task_row_obj extends _int_object
 	**/
 	public function bill_hours()
 	{
+		return $this->prop("time_to_cust");
 		return $this->prop("time_to_cust") ? $this->prop("time_to_cust") : $this->prop("time_real");
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.154 2009/01/29 17:32:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.155 2009/02/02 10:32:53 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -677,7 +677,7 @@ class project extends class_base
 				{
 					$work_data[$dat["task.class_id"]]["prog"] +=$dat["time_guess"];
 					$work_data[$dat["task.class_id"]]["real"] +=$dat["time_real"];
-					$work_data[$dat["task.class_id"]]["cust"] +=$dat["time_to_cust"]? $dat["time_to_cust"] : $dat["time_real"];
+					$work_data[$dat["task.class_id"]]["cust"] +=$dat["time_to_cust"];//? $dat["time_to_cust"] : $dat["time_real"];
 
 				}
 
@@ -4188,6 +4188,13 @@ class project extends class_base
 		));
 
 		$t->define_field(array(
+			"caption" => t("Tunde kliendile"),
+			"name" => "hrs_cust",
+			"align" => "right",
+//			"sortable" => 1
+		));
+
+		$t->define_field(array(
 			"caption" => t("Tunni hind"),
 			"name" => "hr_price",
 			"align" => "right",
@@ -4216,8 +4223,9 @@ class project extends class_base
 		));
 
 		$rows = new object_list();
-		$sum = 0;
-		$hrs = 0;
+		$sum = 0;//summa
+		$hrs = 0;//tunde
+		$hrs_cust = 0;//tunde kliendile
 		$this->stats = get_instance("applications/crm/crm_company_stats_impl");
 		
 		$deal_tasks = $arr["obj_inst"]->get_billable_deal_tasks();
@@ -4232,9 +4240,11 @@ class project extends class_base
 				"sum" => $row->prop("deal_price").t("(Kokkuleppehind)").($row->prop("deal_has_tax") ? t("KMga") : ""),
 				"set_date" => $row->prop("to_bill_date") ? date("d.m.Y" , $row->prop("to_bill_date")) : "",
 				"hrs" => $this->stats->hours_format($row->prop("deal_amount")),
+				"hrs_cust" => $this->stats->hours_format($row->prop("deal_amount")),
 			));
 			$sum += $row->prop("deal_price");
 			$hrs += $row->prop("deal_amount");
+			$hrs_cust += $row->prop("deal_amount");
 		}
 
 		foreach($arr["obj_inst"]->get_billable_expenses()->arr() as $row)
@@ -4257,19 +4267,22 @@ class project extends class_base
 				$t->define_data(array(
 					"oid" => $row->id(),
 					"name" => $row->prop("content"),
-					"hrs" => $this->stats->hours_format($row->prop("time_to_cust")),
+					"hrs_cust" => $this->stats->hours_format($row->prop("time_to_cust")),
+					"hrs" => $this->stats->hours_format($row->prop("hours_real")),
 					"hr_price" => number_format($hr_price,2),
 					"sum" => number_format($row->prop("time_to_cust") * $hr_price,2),
 					"set_date" => date("d.m.Y" , $row->prop("to_bill_date")),
 				));
 			}
 			$sum += $row->prop("time_to_cust") * $hr_price;
-			$hrs += $row->prop("time_to_cust");
+			$hrs_cust += $row->prop("time_to_cust");
+			$hrs += $row->prop("hours_real");
 		}
 
 		$bugs = $arr["obj_inst"]->get_billable_bugs();
 		$this->hour_prices = array();
 		$this->bug_hours = array();
+		$this->bug_real_hours = array();
 
 		foreach($bugs->arr() as $bug)
 		{
@@ -4297,17 +4310,21 @@ class project extends class_base
 				"name" => $bug->name().$lister,
 				"hr_price" => number_format($this->hour_prices[$bug->id()],2),
 				"set_date" => date("d.m.Y" , ($bug->prop("to_bill_date"))),
+
 			);
-			$bug_data["hrs"] = $this->stats->hours_format($this->bug_hours[$bug->id()]);
+			$bug_data["hrs"] = $this->stats->hours_format($this->bug_real_hours[$bug->id()]);
+			$bug_data["hrs_cust"] = $this->stats->hours_format($this->bug_hours[$bug->id()]);
 			$bug_data["sum"] = number_format(($this->bug_hours[$bug->id()] * $this->hour_prices[$bug->id()]),2);
 			$sum += $this->bug_hours[$bug->id()] * $this->hour_prices[$bug->id()];
-			$hrs += $this->bug_hours[$bug->id()];
+			$hrs += $this->bug_real_hours[$bug->id()];
+			$hrs_cust += $this->bug_hours[$bug->id()];
 			$t->define_data($bug_data);
 		}
 
 		$t->define_data(array(
 			"open" => t("Kokku:"),
 			"hrs" => $this->stats->hours_format($hrs),
+			"hrs_cust" => $this->stats->hours_format($hrs_cust),
 			"sum" => number_format($sum,2),
 		));
 
@@ -4322,8 +4339,15 @@ class project extends class_base
 		));
 
 		$t->define_field(array(
-			"caption" => t("Tunde"),
+			"caption" => t("T&ouml;&ouml;tunde"),
 			"name" => "time",
+			"align" => "right",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Tunde kliendile"),
+			"name" => "time_cust",
 			"align" => "right",
 			"sortable" => 1
 		));
@@ -4353,11 +4377,13 @@ class project extends class_base
 			$capt = substr($comment->prop("content"), 0 , 300);
 			$hours = $comment->bill_hours();
 			$this->bug_hours[$arr["request"]["bug"]] += $hours;
+			$this->bug_real_hours[$arr["request"]["bug"]] += $comment->prop("time_real");
 			$t->define_data(array(
 				"comment" => html::href(array(
 					"caption" => $capt ? $capt : t("..."),
 					"url" => html::obj_change_url($comment , array()))),
-				"time" => $this->stats->hours_format($comment->bill_hours()),
+				"time_cust" => $this->stats->hours_format($comment->bill_hours()),
+				"time" => $this->stats->hours_format($comment->prop("time_real")),
 				"oid" => $comment->id(),
 			));
 		}
@@ -7130,7 +7156,7 @@ class project extends class_base
 			{
 				$work_data[$person] = array();
 			}
-			$cust_time = $data["time_to_cust"] ? $data["time_to_cust"] : $data["time_real"];
+			$cust_time = $data["time_to_cust"];// ? $data["time_to_cust"] : $data["time_real"];
 			$work_data[$person]["real"] +=$data["time_real"];
 			$work_data[$person]["guess"] +=$data["time_guess"];
 			$work_data[$person]["cust"] +=$cust_time;
@@ -7253,7 +7279,7 @@ class project extends class_base
 			{
 				$work_data[$person] = array();
 			}
-		$custh = $data["time_to_cust"] ? $data["time_to_cust"] : $data["time_real"];
+		$custh = $data["time_to_cust"];// ? $data["time_to_cust"] : $data["time_real"];
 			$work_data[$person][$data["task.class_id"]]["real"] +=$data["time_real"];
 			$work_data[$person][1]["real"] +=$data["time_real"];
 			$work_data[$person][$data["task.class_id"]]["cust"] +=$custh;
@@ -7780,7 +7806,7 @@ arr($stats_by_ppl);
 				continue;
 			}
 			$date_day_start = round($data["date"]/$round);
-			$custh = $data["time_to_cust"] ? $data["time_to_cust"] : $data["time_real"];
+			$custh = $data["time_to_cust"];// ? $data["time_to_cust"] : $data["time_real"];
 			$chart_data[$date_day_start] += $task_prices[$data["task"]] * $custh;
 		}
 
