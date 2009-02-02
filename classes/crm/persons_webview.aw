@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.47 2008/10/16 08:50:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.48 2009/02/02 14:28:22 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1152,21 +1152,22 @@ class persons_webview extends class_base
 			"reception" => $worker->prop("work_hrs"),
 		);
 
-		//pilt
-		$photo="";
-		$image_inst = get_instance(CL_IMAGE);
-		if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
-		{
-			$photo = $image_inst->make_img_tag_wl($worker->prop("picture"));
-		}
-		else
-		{
-			$photo_obj = $worker->get_first_obj_by_reltype("RELTYPE_PICTURE");
-			if(is_object($photo_obj))
-			{
-				$photo = $image_inst->make_img_tag_wl($photo_obj->id());
-			}
-		}
+		//pilt                $photo="";
+                $image_inst = get_instance(CL_IMAGE);
+                if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
+                {
+                        $photo = $image_inst->make_img_tag_wl($worker->prop("picture"));$vars["photo_url"] = $image_inst->get_url_by_id($worker->prop("picture"));
+                }
+                else
+                {
+                        $photo_obj = $worker->get_first_obj_by_reltype("RELTYPE_PICTURE");
+                        if(is_object($photo_obj))
+                        {
+                                $photo = $image_inst->make_img_tag_wl($photo_obj->id());$vars["photo_url"] = $image_inst->get_url_by_id($photo_obj->id());
+
+                        }
+                }
+
 		
 		//igast telefoninumbrid
 		$phone_array = $this->phone_types;
