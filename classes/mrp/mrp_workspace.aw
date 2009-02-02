@@ -134,17 +134,17 @@
 
 	@layout charts_1 type=hbox width=50%:50%
 
-		@layout states_chart type=vbox area_caption=Projektid&nbsp;staatuste&nbsp;kaupa parent=charts_1 closeable=1
+		@layout states_chart type=vbox area_caption=K&auml;imasolevad&nbso;projektid&nbsp;staatuste&nbsp;kaupa parent=charts_1 closeable=1
 		
 			@property states_chart type=google_chart no_caption=1 parent=states_chart store=no
 
-		@layout clients_chart type=vbox area_caption=Projektid&nbsp;klientide&nbsp;kaupa parent=charts_1 closeable=1
+		@layout clients_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;klientide&nbsp;kaupa parent=charts_1 closeable=1
 		
 			@property clients_chart type=google_chart no_caption=1 parent=clients_chart store=no
 
 	@layout charts_2 type=hbox width=50%:50%
 
-		@layout deadline_chart type=vbox area_caption=Projektid&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=charts_2 closeable=1
+		@layout deadline_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=charts_2 closeable=1
 		
 			@property deadline_chart type=google_chart no_caption=1 parent=deadline_chart store=no
 
@@ -489,6 +489,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
 			MRP_STATUS_DONE => MRP_COLOUR_DONE,
 			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
+			MRP_STATUS_DELETED => MRP_COLOUR_DELETED,
 			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
 			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED
 		);
@@ -1222,55 +1223,39 @@ class mrp_workspace extends class_base
 
 			### schedule tab
 			case "states_chart":
-				$c = &$arr["prop"]["vcl_inst"];
-				$c->set_type(GCHART_PIE_3D);
-				$c->set_size(array(
-					"width" => 500,
-					"height" => 100,
-				));
-				$c->add_fill(array(
-					"area" => GCHART_FILL_BACKGROUND,
-					"type" => GCHART_FILL_SOLID,
-					"colors" => array(
-						"color" => "e9e9e9",
-					),
-				));
+				$applicable_states = array_diff(array_keys($this->states), array(MRP_STATUS_DONE, MRP_STATUS_ARCHIVED));
 				$data = array();
 				$labels = array();
 				$colors = array();
-				$ol = new object_list(array(
-					"class_id" => CL_MRP_CASE,
-					"parent" => $this_object->prop("projects_folder"),
-				));
-				foreach($ol->arr() as $o)
+				$odl = new object_data_list(
+					array(
+						"class_id" => CL_MRP_CASE,
+						"parent" => $this_object->prop("projects_folder"),
+						"state" => $applicable_states,
+					),
+					array(
+						CL_MRP_CASE => array("state"),
+					)
+				);
+				foreach($odl->arr() as $o)
 				{
-					if(!isset($data[$o->state]))
+					if(!isset($data[$o["state"]]))
 					{
-						$data[$o->state] = 1;
+						$data[$o["state"]] = 1;
 					}
 					else
 					{
-						$data[$o->state]++;
+						$data[$o["state"]]++;
 					}
-					$colors[$o->state] = strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[$o->state]));
-					$labels[$o->state] = $this->states[$o->state]." (".$data[$o->state].")";
+					$colors[$o["state"]] = strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[$o["state"]]));
+					$labels[$o["state"]] = $this->states[$o["state"]]." (".$data[$o["state"]].")";
 				}
-				$c->set_colors($colors);
-				$c->add_data($data);
-				$c->set_labels($labels);
-				$c->set_title(array(
-					"text" => t("Projekid staatuste kaupa"),
-					"color" => "666666",
-					"size" => 11,
-				));
-				break;
 
-			case "clients_chart":
 				$c = &$arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
 					"width" => 500,
-					"height" => 100,
+					"height" => 200,
 				));
 				$c->add_fill(array(
 					"area" => GCHART_FILL_BACKGROUND,
@@ -1279,16 +1264,29 @@ class mrp_workspace extends class_base
 						"color" => "e9e9e9",
 					),
 				));
+				$c->set_colors($colors);
+				$c->add_data($data);
+				$c->set_labels($labels);
+				break;
+
+			case "clients_chart":
+				$applicable_states = array_diff(array_keys($this->states), array(MRP_STATUS_DONE, MRP_STATUS_ARCHIVED));
 				$data = array();
 				$labels = array();
-				$ol = new object_list(array(
-					"class_id" => CL_MRP_CASE,
-					"parent" => $this_object->prop("projects_folder"),
-				));
-				foreach($ol->arr() as $o)
+				$odl = new object_data_list(
+					array(
+						"class_id" => CL_MRP_CASE,
+						"parent" => $this_object->prop("projects_folder"),
+						"state" => $applicable_state,
+					),
+					array(
+						CL_MRP_CASE => array("customer.name", "customer"),
+					)
+				);
+				foreach($odl->arr() as $o)
 				{
-					$key = $o->customer;
-					$name = $o->prop("customer.name");
+					$key = $o["customer"];
+					$name = $o["customer.name"];
 					if(!isset($data[$key]))
 					{
 						$data[$key] = 1;
@@ -1300,17 +1298,65 @@ class mrp_workspace extends class_base
 					$labels[$key] = $name." (".$data[$key].")";
 				}
 				$labels[0] = sprintf(t("(M&Auml;&Auml;RAMATA) (%u)"), $data[0]);
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 500,
+					"height" => 200,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
 				$c->set_colors(array("2222ff"));
+				$data = array_slice($data, 0, 60);
+				$labels = array_slice($labels, 0, 60);
 				$c->add_data($data);
 				$c->set_labels($labels);
-				$c->set_title(array(
-					"text" => t("Projekid klientide kaupa"),
-					"color" => "666666",
-					"size" => 11,
-				));
 				break;
 
 			case "deadline_chart":
+				$data = array();
+				$labels = array();
+				$odl = new object_data_list(
+					array(
+						"class_id" => CL_MRP_CASE,
+						"state" => array(
+							MRP_STATUS_INPROGRESS,
+							MRP_STATUS_PLANNED,
+						),
+						"parent" => $this_object->prop("projects_folder"),
+					),
+					array(
+						CL_MRP_CASE => array("due_date", "planned_date"),
+					)
+				);
+				$names = array(
+					0 => t("Graafikus"),
+					1 => t("&Uuml;le t&auml;htaja"),
+				);
+				$colors_ = array(
+					0 => "00ff00",
+					1 => "ff0000",
+				);
+				foreach($odl->arr() as $o)
+				{
+					$key = $o["planned_date"] > $o["due_date"] ? 1 : 0;
+					if(!isset($data[$key]))
+					{
+						$data[$key] = 1;
+					}
+					else
+					{
+						$data[$key]++;
+					}
+					$colors[$key] = $colors_[$key];
+					$labels[$key] = $names[$key]." (".$data[$key].")";
+				}
+
 				$c = &$arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
@@ -1324,47 +1370,9 @@ class mrp_workspace extends class_base
 						"color" => "e9e9e9",
 					),
 				));
-				$data = array();
-				$labels = array();
-				$ol = new object_list(array(
-					"class_id" => CL_MRP_CASE,
-					"state" => array(
-						MRP_STATUS_INPROGRESS,
-						MRP_STATUS_PLANNED,
-					),
-					"parent" => $this_object->prop("projects_folder"),
-				));
-				$names = array(
-					0 => t("Graafikus"),
-					1 => t("&Uuml;le t&auml;htaja"),
-				);
-				$colors_ = array(
-					0 => "00ff00",
-					1 => "ff0000",
-				);
-				foreach($ol->arr() as $o)
-				{
-					$key = $o->planned_date > $o->due_date ? 1 : 0;
-					$name = $o->prop("customer.name");
-					if(!isset($data[$key]))
-					{
-						$data[$key] = 1;
-					}
-					else
-					{
-						$data[$key]++;
-					}
-					$colors[$key] = $colors_[$key];
-					$labels[$key] = $names[$key]." (".$data[$key].")";
-				}
 				$c->set_colors($colors);
 				$c->add_data($data);
 				$c->set_labels($labels);
-				$c->set_title(array(
-					"text" => t("Projekid t&auml;htaja j&auml;rgi"),
-					"color" => "666666",
-					"size" => 11,
-				));
 				break;
 
 			case "master_schedule_chart":
@@ -1946,7 +1954,7 @@ class mrp_workspace extends class_base
 			),
 		);
 
-		if($arr["request"]["group"] == "grp_resources_load")
+		if($arr["request"]["group"] == "grp_resources_load" || $arr["request"]["group"] == "grp_resources")
 		{
 			unset($tree_prms["node_actions"]);
 		}
@@ -1967,7 +1975,7 @@ class mrp_workspace extends class_base
 
 			if ($active_item->class_id () != CL_MENU)
 			{
-				if($arr["request"]["group"] == "grp_resources_load")
+				if($arr["request"]["group"] == "grp_resources_load" || $arr["request"]["group"] == "grp_resources")
 				{
 					return $this->create_resources_load_list($arr);
 				}
@@ -2038,7 +2046,7 @@ class mrp_workspace extends class_base
 			}
 
 			$table->define_data (array (
-				"name" => $arr["request"]["group"] == "grp_resources_load" ? html::href(array(
+				"name" => $arr["request"]["group"] == "grp_resources_load" || $arr["request"]["group"] == "grp_resources" ? html::href(array(
 					"mrp_tree_active_item" => $resource->id(),
 					"caption" => $resource->name(),
 				)) : html::obj_change_url($resource),
@@ -2411,6 +2419,7 @@ class mrp_workspace extends class_base
 					"chgbgcolor" => "bgcolour_overdue",
 					"caption" => t("Prio&shy;ri&shy;teet"),
 					"sortable" => 1,
+					"sorting_field" => "priority_int",
 				));
 				break;
 		}
@@ -2532,6 +2541,7 @@ class mrp_workspace extends class_base
 				),
 				"customer" => (is_object($customer) ? $customer->name () : ""),
 				"priority" => $priority,
+				"priority_int" => $priority,
 				"sales_priority" => $project->prop ("sales_priority"),
 				"title" => substr(wordwrap($project->comment(), 25, "...", true), 0, 26),
 				"starttime" => $project->prop ("starttime"),
@@ -4014,7 +4024,7 @@ class mrp_workspace extends class_base
 		$t->set_root_url(aw_url_change_var(array(
 			"cat" => null,
 			"cust" => null
-		), false, get_ru()));
+		)));
 
 		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 		{
@@ -4025,7 +4035,7 @@ class mrp_workspace extends class_base
 				"url" => aw_url_change_var(array(
 					"cat" => $c->prop("to"),
 					"cust" => null
-				), false, get_ru()),
+				)),
 			));
 			$this->_req_create_customers_tree($c->to(), $t);
 		}
@@ -4802,7 +4812,7 @@ class mrp_workspace extends class_base
 		$all_res = $ws->meta("umgr_all_resources");
 		foreach($profs->arr() as $prof)
 		{
-			if ($all_res[$prof->id()] == 1)
+			if (isset($all_res[$prof->id()]) && $all_res[$prof->id()] == 1)
 			{
 				return t("K&otilde;ik ressursid");
 			}

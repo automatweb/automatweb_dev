@@ -668,7 +668,7 @@ class mrp_resource extends class_base
 		### states for resource joblist
 		if($for_workspace)
 		{
-			$applicable_states = array(
+			$applicable_project_states = $applicable_states = array(
 				MRP_STATUS_DONE,
 				MRP_STATUS_PLANNED,
 				MRP_STATUS_PAUSED,
@@ -680,43 +680,96 @@ class mrp_resource extends class_base
 			$applicable_states = array(
 				MRP_STATUS_DONE,
 			);
+			$applicable_project_states = array(
+				MRP_STATUS_DONE,
+				MRP_STATUS_PLANNED,
+				MRP_STATUS_PAUSED,
+				MRP_STATUS_INPROGRESS,
+			);
 		}
 		else
 		{
-			$applicable_states = array(
+			$applicable_project_states = $applicable_states = array(
 				MRP_STATUS_PLANNED,
 				MRP_STATUS_PAUSED,
 				MRP_STATUS_INPROGRESS,
 			);
 		}
 
-		$list = new object_list(array(
-			"class_id" => CL_MRP_JOB,
-			"resource" => $this_object->id (),
-			"state" => $applicable_states,
-			// "starttime" => new obj_predicate_compare (OBJ_COMP_LESS, (time () + 886400)),
-		));
+		$list = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"resource" => $this_object->id (),
+				"state" => $applicable_states,
+				// "starttime" => new obj_predicate_compare (OBJ_COMP_LESS, (time () + 886400)),
+				new obj_predicate_sort(array("starttime" => "ASC")),
+				"CL_MRP_JOB.project(CL_MRP_CASE).state" => $applicable_project_states,
+			),
+			array(
+				CL_MRP_JOB => array("project", "exec_order", "state", "starttime", "RELTYPE_MRP_RESOURCE.name", "length"),
+			)
+		);
+		$jobs = $list->arr();
 
-		if ($list->count () > 0)
+		foreach($jobs as $oid => $o)
 		{
-			$this->draw_job_list_table_from_list($table, $list, $done);
+			if(!$this->can("view", $o["project"]))
+			{
+				unset($jobs[$oid]);
+			}
 		}
+
+		if(count($jobs) > 0)
+		{
+			$this->draw_job_list_table_from_list($table, $jobs, $done);
+		}
+			/*
+		$proj_oids = $list->get_element_from_all("project");
+		if(count($proj_oids) > 0)
+		{
+			$projects = new object_list(array(
+				"class_id" => CL_MRP_CASE,
+				"state" => $applicable_project_states,
+				"oid" => $proj_oids,
+			));
+
+			foreach($jobs as $oid => $o)
+			{
+				if(!$this->can("view", $o["project"]) || !in_array($o["project"], $projects->ids()))
+				{
+					unset($jobs[$oid]);
+				}
+			}
+
+			if(count($jobs) > 0)
+			{
+				$this->draw_job_list_table_from_list($table, $jobs, $done);
+			}
+		}
+		*/
 	}
 
-	function draw_job_list_table_from_list(&$table, $list, $times)
+	function draw_job_list_table_from_list(&$table, $jobs, $times)
 	{
-		for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
+		$perpage = 20;
+		if(count($jobs) > $perpage)
+		{
+			$s = isset($_GET["ft_page"]) ? $_GET["ft_page"] * $perpage : 0;
+			$table->define_pageselector(array(
+				"type" => "lbtxt",
+				"records_per_page" => $perpage,
+				"d_row_cnt" => count($jobs),
+				"no_recount" => true,
+			));
+			$jobs = array_slice($jobs, $s, $perpage, true);
+		}
+		foreach($jobs as $oid => $job)
 		{
 			### get project and client name
 			$project = $client = "";
 
-			if (!$this->can("view", $job->prop("project")))
-			{
-				continue;
-			}
-
-			$p = obj($job->prop("project"));
-			$project = html::get_change_url($p->id(), array("return_url" => get_ru()), ($p->name() . "-" . $job->prop ("exec_order")));
+			$p = obj($job["project"]);
+			$project = html::get_change_url($p->id(), array("return_url" => get_ru()), ($p->name() . "-" . $job["exec_order"]));
 
 			if ($this->can("view", $p->prop("customer")))
 			{
@@ -724,62 +777,52 @@ class mrp_resource extends class_base
 				$client = html::get_change_url($c->id(), array("return_url" => get_ru()), $c->name());
 			}
 
-			### show only applicable projects' jobs
-			$applicable_states = array (
-				MRP_STATUS_PLANNED,
-				MRP_STATUS_PAUSED,
-				MRP_STATUS_INPROGRESS,
+			### colour job status
+			$state = '<span style="color: ' . $this->state_colours[$job["state"]] . ';">' . $this->states[$job["state"]] . '</span>';
+			$change_url = html::get_change_url($oid, array("return_url" => get_ru()));
+
+			$data = array (
+				"modify" => html::href (array (
+					"caption" => t("Ava"),
+					"url" => $change_url,
+					)),
+				"project" => $project,
+				"proj_nr" => html::obj_change_url($p),
+				"proj_com" => $p->comment(),
+				"state" => $state,
+				"starttime" => $job["starttime"],
+				"client" => $client,
+				"deadline" => $p->prop("due_date"),
+				"trykiarv" => $p->prop("trykiarv"),
+				"trykiarv_notes" => $p->prop("trykiarv_notes"),
+				"resource" => $job["RELTYPE_MRP_RESOURCE.name"],
 			);
-
-			if (in_array ($p->prop ("state"), $applicable_states))
+			if($times || $for_workspace)
 			{
-				### colour job status
-				$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
-				$change_url = html::get_change_url($job->id(), array("return_url" => get_ru()));
+				$planned_length = (float) ($job["length"] / 3600);
 
-				$data = array (
-					"modify" => html::href (array (
-						"caption" => t("Ava"),
-						"url" => $change_url,
-						)),
-					"project" => $project,
-					"proj_nr" => html::obj_change_url($p),
-					"proj_com" => $p->comment(),
-					"state" => $state,
-					"starttime" => $job->prop ("starttime"),
-					"client" => $client,
-					"deadline" => $p->prop("due_date"),
-					"trykiarv" => $p->prop("trykiarv"),
-					"trykiarv_notes" => $p->prop("trykiarv_notes"),
-					"resource" => $job->prop("RELTYPE_MRP_RESOURCE.name")
+				$data += array(
+					"planned_length" => round($planned_length, 2),
 				);
-				if($times || $for_workspace)
-				{
-					$planned_length = (float) ($job->length / 3600);
-
-					$data += array(
-						"planned_length" => round($planned_length, 2),
-					);
-					if(MRP_STATUS_DONE == $job->state)
-					{						
-						// ARVUTA TEGELIK
-						$this->db_query("SELECT * FROM mrp_stats WHERE job_oid = ".$job->id());
-						$real_len = 0;
-						while ($row = $this->db_next())
-						{
-							$real_len += $row["length"];
-						}
-						$real_len = $real_len/3600;
-						$deviation_float = (float) ($real_len - $planned_length);
-						$deviation_percent = $deviation_float / $planned_length * 100;
-						$data += array(
-							"real_length" => round($real_len, 2),
-							"deviation" => sprintf(t("%.2f (%.2f%%)"), round($deviation_float, 2), round($deviation_percent, 2)),
-						);
+				if(MRP_STATUS_DONE == $job["state"])
+				{						
+					// ARVUTA TEGELIK
+					$this->db_query("SELECT * FROM mrp_stats WHERE job_oid = ".$oid);
+					$real_len = 0;
+					while ($row = $this->db_next())
+					{
+						$real_len += $row["length"];
 					}
+					$real_len = $real_len/3600;
+					$deviation_float = (float) ($real_len - $planned_length);
+					$deviation_percent = $deviation_float / $planned_length * 100;
+					$data += array(
+						"real_length" => round($real_len, 2),
+						"deviation" => sprintf(t("%.2f (%.2f%%)"), round($deviation_float, 2), round($deviation_percent, 2)),
+					);
 				}
-				$table->define_data ($data);
 			}
+			$table->define_data ($data);
 		}
 	}
 
