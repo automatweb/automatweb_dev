@@ -866,7 +866,6 @@ class crm_company_cedit_impl extends core
 				$o = obj($id);
 				$o->set_name($data["email"]);
 				$o->set_prop("mail",$data["email"]);
-				mail("kaareln@gmail.com", time(), "datamail - ".$data["email"]);
 				$o->conn_id = $data["conn_id"];
 				$o->save();
 			}
