@@ -168,11 +168,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@layout charts type=hbox width=50%:50%
 
 		@layout states_chart type=vbox area_caption=T&ouml;&ouml;d&nbsp;staatuste&nbsp;kaupa parent=charts closeable=1
-		
+
 			@property states_chart type=google_chart no_caption=1 parent=states_chart store=no
 
 		@layout recources_chart type=vbox area_caption=Kestused&nbsp;ressursside&nbsp;kaupa parent=charts closeable=1
-		
+
 			@property recources_chart type=google_chart no_caption=1 parent=recources_chart store=no
 
 	@layout job_charts type=vbox area_caption=T&ouml;&ouml;de&nbsp;kestuste&nbsp;v&otilde;rdlus closeable=1
@@ -327,14 +327,14 @@ class mrp_case extends class_base
 		switch($prop["name"])
 		{
 			case "name":
-				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_general", "grp_case_workflow", "grp_case_view")))
+				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
 				{
 					$prop["type"] = "text";
 				}
 				break;
 
 			case "customer":
-				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_general", "grp_case_workflow", "grp_case_view")))
+				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
 				{
 					$prop["type"] = "text";
 					$prop["value"] = $arr["obj_inst"]->prop($prop["name"].".name");
@@ -735,12 +735,12 @@ class mrp_case extends class_base
 				$ws = get_instance(CL_MRP_WORKSPACE);
 				$ws->mrp_log($arr["obj_inst"]->id(), NULL, "", $prop["value"]["comment"]);
 				break;
-		}
 
-
-		switch($prop["name"])
-		{
 			case "name":
+				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
+				{
+					return PROP_IGNORE;
+				}
 				// see if any other projects have the same name
 				$ol = new object_list(array(
 					"class_id" => CL_MRP_CASE,
@@ -759,11 +759,18 @@ class mrp_case extends class_base
 				}
 				break;
 
+			case "customer":
+				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "workflow_table":
 				$save = $this->save_workflow_data ($arr);
 
 				if ($save !== PROP_OK)
-				{echo $save;
+				{
 					$prop["error"] = $save;
 					return PROP_FATAL_ERROR;
 				}
@@ -1827,6 +1834,12 @@ class mrp_case extends class_base
 		### sort workflow topologically, halt on cycle
 		$jobs = array ();
 
+		$cycle = $this->check_prerequisites_cycle($workflow);
+		if($cycle !== false)
+		{
+			return $cycle;
+		}
+
 		foreach ($workflow as $job_id => $prerequisites)
 		{
 			$degree = 0;
@@ -1837,7 +1850,7 @@ class mrp_case extends class_base
 			{
 				if ($degree > count ($workflow))
 				{
-					return t("T&ouml;&ouml;voog sisaldab ts&uuml;klit");
+					return t("T&ouml;&ouml;voog sisaldab ts&uuml;klit!");
 				}
 
 				$current_nodes = $nodes;
@@ -1884,6 +1897,44 @@ class mrp_case extends class_base
 			$job->save ();
 			aw_restore_acl();
 		}
+	}
+
+	function check_prerequisites_cycle($workflow)
+	{
+		foreach($workflow as $job_id => $prerequisites)
+		{
+			foreach($prerequisites as $prerequisite)
+			{
+				if($prerequisite === "none")
+				{
+					continue;
+				}
+				if($this->check_prerequistes_cycle_for_one_job($workflow, $job_id, $prerequisite))
+				{
+					return t("T&ouml;&ouml;voog sisaldab ts&uuml;klit!");
+				}
+			}
+		}
+		return false;
+	}
+
+	function check_prerequistes_cycle_for_one_job($workflow, $job_id, $prerequisite)
+	{
+		### go through the prerequisites to see if any of those is the current job
+		foreach($workflow[$prerequisite] as $_prerequisite)
+		{
+			if(!isset($workflow[$_prerequisite]))
+			{
+				continue;
+			}
+			if($_prerequisite == $job_id)
+			{
+				return true;
+			}
+			### go through the prerequisites of the prerequisite to see if any of those is the current job
+			return $this->check_prerequistes_cycle_for_one_job($workflow, $job_id, $_prerequisite);
+		}
+		return false;
 	}
 
 /**
