@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.30 2009/01/26 13:00:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.31 2009/02/03 14:21:03 instrumental Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -239,7 +239,7 @@ class ml_member extends class_base
 				$member_obj->set_prop("mail",$email);
 
 
-	$member_obj->set_meta("name",$name);
+				$member_obj->set_meta("name",$name);
 				$member_obj->set_meta("email",$email);
 				$member_obj->set_meta("hash",$hash);
 				$member_obj->set_meta("time",$ts);
