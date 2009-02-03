@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.15 2009/01/31 11:53:59 voldemar Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.16 2009/02/03 14:22:59 instrumental Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -383,8 +383,7 @@ die();
 			$gidlist_oid[$nliug_o->id()] = $nliug_o->id();
 			$gidlist_pri_oid[(int)$nliug_o->id()] = (int)$nliug_o->prop("priority");
 		}
-
-		if ($_GET["dd"] == 1 || !((!empty($_SESSION["nliug"]) && !is_admin())))
+		else
 		{
 			aw_disable_acl();
 			$u_obj = obj($u_oid);
