@@ -1169,9 +1169,16 @@ exit_function("bills_impl::_get_bill_task_list");
 			"caption" => t("Klient"),
 			"sortable" => 1
 		));
+
 		$t->define_field(array(
 			"name" => "client_manager",
 			"caption" => t("Kliendihaldur"),
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "project_leader",
+			"caption" => t("Projektijuht"),
 			"sortable" => 1
 		));
 
@@ -1445,6 +1452,19 @@ exit_function("bills_impl::_get_bill_task_list");
 				$bill_data["payment_date"] = $payment_date;
 			}
 */			
+			$project_leaders = $bill->project_leaders();
+			if($project_leaders->count())
+			{
+				$pl_array = array();
+				foreach($project_leaders->arr() as $pl)
+				{
+					$pl_array[] = html::href(array(
+						"caption" => $pl->name(),
+						"url" => html::obj_change_url($pl , array())
+					));
+				}
+				$bill_data["project_leader"] = join("<br>" , $pl_array);
+			}
 			if($arr["request"]["show_bill_balance"])
 			{
 				$curr_balance = $bill->get_bill_needs_payment();

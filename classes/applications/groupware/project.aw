@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.157 2009/02/03 15:19:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.158 2009/02/03 18:53:33 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -4136,7 +4136,7 @@ class project extends class_base
 
 		$bills = $arr["obj_inst"]->get_all_customer_bills(array("status" =>  0));
 
-		if($bills->count)
+		if($bills->count())
 		{
 			$tb->add_menu_button(array(
 				"name" => "add_to_bill",

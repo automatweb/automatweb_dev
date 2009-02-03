@@ -28,7 +28,13 @@ class crm_data extends class_base
 	{
 		$of = array(
 			"class_id" => CL_CRM_BILL,
-			"parent" => $co->id()
+/*			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"parent" => $co->id(),
+					"CRM_BILL.impl" => $co->id(),
+				)
+			)),*/
 		);
 
 		if ($filter !== NULL)

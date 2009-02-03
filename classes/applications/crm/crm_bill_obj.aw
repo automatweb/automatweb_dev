@@ -982,6 +982,22 @@ class crm_bill_obj extends _int_object
 		}
 		return $ret;
 	}
+
+	/** returns bill project leaders
+		@attrib api=1
+		@returns object list
+	**/
+	public function project_leaders()
+	{
+		$ol = new object_list();
+		$ol->add($this->get_project_ids());
+		$leaders = new object_list();
+		foreach($ol->arr() as $o)
+		{
+			$leaders->add($o->prop("proj_mgr"));
+		}
+		return $leaders;
+	}
 }
 
 ?>
