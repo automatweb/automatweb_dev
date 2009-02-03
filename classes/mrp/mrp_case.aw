@@ -27,7 +27,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @property header type=text store=no no_caption=1 group=grp_general,grp_case_data
 
 @default group=grp_general
-	@property name type=textbox table=objects field=name
+	@property name type=textbox table=objects field=name group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data,grp_case_view parent=general_info
 	@caption Projekti nr.
 
 	@property comment type=textbox table=objects field=comment
@@ -35,7 +35,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default table=mrp_case
-	@property state type=text group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data editonly=1 parent=general_info
+	@property state type=text group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data,grp_case_view editonly=1 parent=general_info
 	@caption Staatus
 
 	@property starttime type=datetime_select
@@ -47,7 +47,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
 
-	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY
+	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data,grp_case_view editonly=1 parent=general_info
 	@caption Klient
 
 	@property progress type=hidden
@@ -151,9 +151,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default group=grp_case_workflow
-	@layout vsplitbox type=hbox width=25%:75% group=grp_case_workflow,grp_case_schedule_gantt
-		@layout left_pane type=vbox parent=vsplitbox group=grp_case_workflow,grp_case_schedule_gantt
-			@layout general_info type=vbox parent=left_pane area_caption=Projekti&nbsp;&uuml;ldandmed closeable=1 group=grp_case_workflow,grp_case_schedule_gantt
+	@layout vsplitbox type=hbox width=25%:75% group=grp_case_workflow,grp_case_schedule_gantt,grp_case_view
+		@layout left_pane type=vbox parent=vsplitbox group=grp_case_workflow,grp_case_schedule_gantt,grp_case_view
+			@layout general_info type=vbox parent=left_pane area_caption=Projekti&nbsp;&uuml;ldandmed closeable=1 group=grp_case_workflow,grp_case_schedule_gantt,grp_case_view
 			@layout resource_tree type=vbox parent=left_pane area_caption=Ressursid&nbsp;kategooriate&nbsp;kaupa closeable=1
 				@property resource_tree type=text store=no no_caption=1 parent=resource_tree
 		@property workflow_table type=table store=no no_caption=1 parent=vsplitbox
@@ -184,7 +184,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default group=grp_case_view
-	@property case_view type=table no_caption=1 store=no
+	@property case_view type=table no_caption=1 store=no parent=vsplitbox
 
 
 // --------------- RELATION TYPES ---------------------
@@ -326,6 +326,21 @@ class mrp_case extends class_base
 
 		switch($prop["name"])
 		{
+			case "name":
+				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_general", "grp_case_workflow", "grp_case_view")))
+				{
+					$prop["type"] = "text";
+				}
+				break;
+
+			case "customer":
+				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_general", "grp_case_workflow", "grp_case_view")))
+				{
+					$prop["type"] = "text";
+					$prop["value"] = $arr["obj_inst"]->prop($prop["name"].".name");
+				}
+				break;
+
 			case "header":
 				if ($arr["new"])
 				{

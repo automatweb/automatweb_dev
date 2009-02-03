@@ -40,10 +40,17 @@
       </property>
       <property>
             <name>name</name>
-            <group>grp_general</group>
+            <group>
+                  <num_0>grp_case_schedule_gantt</num_0>
+                  <num_1>grp_general</num_1>
+                  <num_2>grp_case_workflow</num_2>
+                  <num_3>grp_case_data</num_3>
+                  <num_4>grp_case_view</num_4>
+            </group>
             <type>textbox</type>
             <table>objects</table>
             <field>name</field>
+            <parent>general_info</parent>
             <caption>Projekti nr.</caption>
       </property>
       <property>
@@ -61,6 +68,7 @@
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
                   <num_3>grp_case_data</num_3>
+                  <num_4>grp_case_view</num_4>
             </group>
             <table>mrp_case</table>
             <type>text</type>
@@ -95,11 +103,19 @@
       </property>
       <property>
             <name>customer</name>
-            <group>grp_general</group>
+            <group>
+                  <num_0>grp_case_schedule_gantt</num_0>
+                  <num_1>grp_general</num_1>
+                  <num_2>grp_case_workflow</num_2>
+                  <num_3>grp_case_data</num_3>
+                  <num_4>grp_case_view</num_4>
+            </group>
             <table>mrp_case</table>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_CUSTOMER</reltype>
             <clid>CL_CRM_COMPANY</clid>
+            <editonly>1</editonly>
+            <parent>general_info</parent>
             <field>customer</field>
             <caption>Klient</caption>
       </property>
@@ -455,6 +471,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <parent>vsplitbox</parent>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_CASE</syslog_type>
@@ -547,6 +564,7 @@
                   <group>
                         <num_0>grp_case_workflow</num_0>
                         <num_1>grp_case_schedule_gantt</num_1>
+                        <num_2>grp_case_view</num_2>
                   </group>
                   <area_caption></area_caption>
             </vsplitbox>
@@ -556,6 +574,7 @@
                   <group>
                         <num_0>grp_case_workflow</num_0>
                         <num_1>grp_case_schedule_gantt</num_1>
+                        <num_2>grp_case_view</num_2>
                   </group>
                   <area_caption></area_caption>
             </left_pane>
@@ -567,6 +586,7 @@
                   <group>
                         <num_0>grp_case_workflow</num_0>
                         <num_1>grp_case_schedule_gantt</num_1>
+                        <num_2>grp_case_view</num_2>
                   </group>
             </general_info>
             <resource_tree>

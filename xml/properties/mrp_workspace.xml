@@ -1672,14 +1672,14 @@
             </charts_1>
             <states_chart>
                   <type>vbox</type>
-                  <area_caption>Projektid&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
+                  <area_caption>K&amp;amp;auml;imasolevad&amp;amp;nbso;projektid&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
                   <parent>charts_1</parent>
                   <closeable>1</closeable>
                   <group>grp_schedule_google</group>
             </states_chart>
             <clients_chart>
                   <type>vbox</type>
-                  <area_caption>Projektid&amp;amp;nbsp;klientide&amp;amp;nbsp;kaupa</area_caption>
+                  <area_caption>K&amp;amp;auml;imasolevad&amp;amp;nbsp;projektid&amp;amp;nbsp;klientide&amp;amp;nbsp;kaupa</area_caption>
                   <parent>charts_1</parent>
                   <closeable>1</closeable>
                   <group>grp_schedule_google</group>
@@ -1692,7 +1692,7 @@
             </charts_2>
             <deadline_chart>
                   <type>vbox</type>
-                  <area_caption>Projektid&amp;amp;nbsp;t&amp;amp;auml;htaja&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <area_caption>K&amp;amp;auml;imasolevad&amp;amp;nbsp;projektid&amp;amp;nbsp;t&amp;amp;auml;htaja&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
                   <parent>charts_2</parent>
                   <closeable>1</closeable>
                   <group>grp_schedule_google</group>

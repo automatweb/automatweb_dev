@@ -129,23 +129,23 @@
 
 		@property chart_submit type=submit store=no parent=schedule_search_box
 		@caption N&auml;ita
-	
+
 @default group=grp_schedule_google
 
 	@layout charts_1 type=hbox width=50%:50%
 
 		@layout states_chart type=vbox area_caption=K&auml;imasolevad&nbso;projektid&nbsp;staatuste&nbsp;kaupa parent=charts_1 closeable=1
-		
+
 			@property states_chart type=google_chart no_caption=1 parent=states_chart store=no
 
 		@layout clients_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;klientide&nbsp;kaupa parent=charts_1 closeable=1
-		
+
 			@property clients_chart type=google_chart no_caption=1 parent=clients_chart store=no
 
 	@layout charts_2 type=hbox width=50%:50%
 
 		@layout deadline_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=charts_2 closeable=1
-		
+
 			@property deadline_chart type=google_chart no_caption=1 parent=deadline_chart store=no
 
 @default group=grp_users_tree
@@ -640,7 +640,7 @@ class mrp_workspace extends class_base
 			switch ($this->list_request)
 			{
 				case "inwork":
-					$sort_by = "mrp_case.due_date"; // default sort order
+						$sort_by = new obj_predicate_sort(array("due_date" => $sort_order));
 					break;
 
 				case "planned_overdue":
@@ -650,7 +650,7 @@ class mrp_workspace extends class_base
 				case "all":
 				case "done":
 				default:
-					$sort_by = "mrp_case.starttime"; // default sort order
+						$sort_by = new obj_predicate_sort(array("starttime" => $sort_order));
 					break;
 			}
 
@@ -662,20 +662,20 @@ class mrp_workspace extends class_base
 				switch ($arr["request"]["sortby"])
 				{
 					case "starttime":
-						$sort_by = "mrp_case.starttime {$sort_order}";
+						$sort_by = new obj_predicate_sort(array("starttime" => $sort_order));
 						break;
 
 					case "planned_date":
-						$sort_by = "mrp_case_schedule.planned_date {$sort_order}";
+						$sort_by = new obj_predicate_sort(array("planned_date" => $sort_order));
 						$tmp = new obj_predicate_compare (OBJ_COMP_GREATER, 0);//!!! temporary. acceptable solution needed. projects with planned_date NULL not retrieved.
 						break;
 
 					case "due_date":
-						$sort_by = "mrp_case.due_date {$sort_order}";
+						$sort_by = new obj_predicate_sort(array("due_date" => $sort_order));
 						break;
 
 					case "priority":
-						$sort_by = "mrp_case.project_priority {$sort_order}";
+						$sort_by = new obj_predicate_sort(array("project_priority" => $sort_order));
 						break;
 				}
 			}
@@ -686,7 +686,7 @@ class mrp_workspace extends class_base
 				"limit" => $limit,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
-				"sort_by" => $sort_by,
+				$sort_by,
 				"planned_date" => $tmp,//!!! to enable sorting by planned_date which is in mrp_case_schedule table
 			);
 
@@ -1133,7 +1133,7 @@ class mrp_workspace extends class_base
 				if($this->can("view", $arr["request"]["mrp_tree_active_item"]))
 				{
 					$id = $arr["request"]["mrp_tree_active_item"];
-					
+
 					$odl = new object_data_list(
 						array(
 							"class_id" => CL_MRP_JOB,
@@ -1163,7 +1163,7 @@ class mrp_workspace extends class_base
 					}
 					$min_end = min($end);
 					$max_end = max($end);
-					
+
 					foreach($jobs as $oid => $job)
 					{
 						$real[$oid] = isset($real[$oid]) ? $real[$oid] : 0;
@@ -2941,7 +2941,7 @@ class mrp_workspace extends class_base
 				"LEFT JOIN objects o_cust ON o_cust.oid = a_case.target " .
 			"WHERE " .
 				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
-				"o_cust.name like '%{$arr["request"]["chart_customer"]}%' AND " .
+				"o_cust.name like '%".$arr["request"]["chart_customer"]."%' AND " .
 				"o.status > 0 AND " .
 				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
 				"((!(job.started < ".$range_start.")) OR ((job.state = " . MRP_STATUS_DONE . " AND job.finished > ".$range_start.") OR (job.state != " . MRP_STATUS_DONE . " AND ".$time." > ".$range_start."))) AND " .
