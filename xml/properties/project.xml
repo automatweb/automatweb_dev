@@ -998,6 +998,29 @@
             <caption>Raha inimeste kaupa</caption>
       </property>
       <property>
+            <name>stats_time_chooser</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>stats_time</parent>
+            <no_caption>1</no_caption>
+            <field>stats_time_chooser</field>
+            <caption>Tabeli ajavahemike valik</caption>
+      </property>
+      <property>
+            <name>stats_time_sbt</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>submit</type>
+            <captionside>top</captionside>
+            <parent>stats_time</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>stats_time_sbt</field>
+            <caption>Vali</caption>
+      </property>
+      <property>
             <name>stats_time_by_person_chart</name>
             <table>objects</table>
             <group>stats</group>
@@ -1013,7 +1036,7 @@
             <group>stats</group>
             <type>text</type>
             <store>no</store>
-            <parent>stats_top</parent>
+            <parent>stats_table_l</parent>
             <field>stats</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
       </property>
@@ -1024,7 +1047,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>stats_top</parent>
+            <parent>stats_table_l</parent>
             <field>stats_table</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid inimeste kaupa</caption>
       </property>
@@ -1636,17 +1659,38 @@
                   <area_caption>Projektiga&amp;amp;nbsp;seotud&amp;amp;nbsp;rahavood</area_caption>
                   <group>stats_money</group>
             </stats_money_top>
+            <stats_head>
+                  <type>hbox</type>
+                  <width>10%:90%</width>
+                  <group>stats</group>
+                  <area_caption></area_caption>
+            </stats_head>
+            <stats_time>
+                  <type>vbox</type>
+                  <area_caption>Kuude&amp;amp;nbsp;valik&amp;amp;nbsp;tabelis</area_caption>
+                  <parent>stats_head</parent>
+                  <group>stats</group>
+            </stats_time>
+            <stats_right>
+                  <type>vbox</type>
+                  <parent>stats_head</parent>
+                  <group>stats</group>
+                  <area_caption></area_caption>
+            </stats_right>
             <stats_charts>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Graafik</area_caption>
+                  <parent>stats_right</parent>
                   <group>stats</group>
             </stats_charts>
-            <stats_top>
+            <stats_table_l>
                   <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>stats_right</parent>
                   <area_caption>Projektiga&amp;amp;nbsp;seotud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;tunnid</area_caption>
                   <group>stats</group>
-            </stats_top>
+            </stats_table_l>
       </layout>
 </properties>
 

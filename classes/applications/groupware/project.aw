@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.156 2009/02/02 16:07:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.157 2009/02/03 15:19:03 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -354,16 +354,27 @@
 
 
 @default group=stats
+	@layout stats_head type=hbox width=10%:90% 
 
-	@layout stats_charts type=vbox closeable=1 area_caption=Graafik
-		@property stats_time_by_person_chart type=google_chart no_caption=1 parent=stats_charts store=no
+		@layout stats_time type=vbox area_caption=Kuude&nbsp;valik&nbsp;tabelis parent=stats_head
+			@property stats_time_chooser type=text store=no parent=stats_time no_caption=1
+			@caption Tabeli ajavahemike valik
 
-	@layout stats_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid
-		@property stats type=text store=no parent=stats_top
-		@caption T&ouml;&ouml;tunnid
+			@property stats_time_sbt type=submit captionside=top parent=stats_time no_caption=1
+			@caption Vali
 
-		@property stats_table type=table store=no no_caption=1 parent=stats_top
-		@caption T&ouml;&ouml;tunnid inimeste kaupa
+		@layout stats_right type=vbox parent=stats_head
+
+			@layout stats_charts type=vbox closeable=1 area_caption=Graafik parent=stats_right
+				@property stats_time_by_person_chart type=google_chart no_caption=1 parent=stats_charts store=no
+
+			@layout stats_table_l type=vbox closeable=1 parent=stats_right area_caption=Projektiga&nbsp;seotud&nbsp;t&ouml;&ouml;tunnid 
+
+				@property stats type=text store=no parent=stats_table_l
+				@caption T&ouml;&ouml;tunnid
+	
+				@property stats_table type=table store=no no_caption=1 parent=stats_table_l
+				@caption T&ouml;&ouml;tunnid inimeste kaupa
 
 
 @default group=stats_entry
@@ -537,12 +548,66 @@ class project extends class_base
 		}
 	}
 
+	private function month_selector($start , $end, $month_chooser = array())
+	{
+		$ret = "";
+		$mY = "";
+		if(!$end)
+		{
+			$end = time();
+		}
+
+		if(!$start)
+		{
+			$start = $end - 31*DAY;
+		}
+
+		if(!$month_chooser || !sizeof($month_chooser))
+		{
+			$month_chooser = array();
+			$month_chooser[date("my" , $end)] = 1;
+			$month_chooser[date("my" , mktime(0,0,0, date("m" , $end) - 1, date("d" , $end), date("Y" , $end)))] = 1;
+		}
+
+		while($start < $end)
+		{
+			if($mY != date("my" , $start))
+			{
+				$mY = date("my" , $start);
+				$ret.= html::checkbox(array(
+					"name" => "month_chooser[".$mY."]",
+					"value" => 1,
+					"checked" => ($month_chooser[$mY]) ? 1 : 0
+				))." ".date("M Y" , $start)."<br>";
+			}
+			$start+= DAY*28;
+		}
+		if($mY != date("my" , $start) && date("my" , $start) == date("my" , $end))
+		{
+			$mY = date("my" , $start);
+			$ret.= html::checkbox(array(
+				"name" => "month_chooser[".$mY."]",
+				"value" => 1,
+				"checked" => ($month_chooser[$mY]) ? 1 : 0
+			))." ".date("M Y" , $start)."<br>";
+		}
+
+		return $ret;
+	}
+
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "stats_time_chooser":
+				$data["value"] = $this->month_selector(
+					$arr["obj_inst"]->prop("start"),
+					time(),
+					$arr["request"]["month_chooser"]
+				);
+				break;
 			case "search_part":
 				$data["size"] = 34;
 			case "search_part":
@@ -889,23 +954,23 @@ class project extends class_base
 
 				$result = array();
 
-				foreach($all_data as $data)
+				foreach($all_data as $work)
 				{
-					if(!$data["time_real"])
+					if(!$work["time_real"])
 					{
 						continue;
 					}
-					$date_day_start = date("YW" , $data["date"]);
-					if($end < $data["date"])
+					$date_day_start = date("YW" , $work["date"]);
+					if($end < $work["date"])
 					{
-						$end = $data["date"];
+						$end = $work["date"];
 					}
-					if($start > $data["date"])
+					if($start > $work["date"])
 					{
-						$start = $data["date"];
+						$start = $work["date"];
 					}
-					$result[$data["task.class_id"]][$date_day_start] +=$data["time_real"];
-					$result[1][$date_day_start] +=$data["time_real"];
+					$result[$work["task.class_id"]][$date_day_start] +=$work["time_real"];
+					$result[1][$date_day_start] +=$work["time_real"];
 				}
 
 
@@ -970,11 +1035,7 @@ class project extends class_base
 					"color" => "555555",
 					"size" => 10,
 				));
-				$arr["prop"]["type"] = "text";
-				$arr["prop"]["value"] = $c2->get_html();
 				break;
-
-
 
 			case "money_chart":
 				if($arr["new"])
@@ -3298,6 +3359,15 @@ class project extends class_base
 				$args["cb_group"] = $this->emb_group;
 			};
 		};
+
+		switch($arr["request"]["group"])
+		{
+			case "stats":
+				$args["month_chooser"] = $arr["request"]["month_chooser"];
+				break;
+		}
+	
+
 		if($arr["request"]["hidden_team"] && !$args["team"])
 		{
 		  $args["team"] = $arr["request"]["hidden_team"];
@@ -7375,6 +7445,17 @@ class project extends class_base
 			$result[1][$date_day_start] +=$data["time_real"];
 		}
 
+
+		$month_chooser = $arr["request"]["month_chooser"];
+		if(!$month_chooser || !$month_chooser)
+		{
+			$month_chooser = array();
+			$month_chooser[date("my" , $end)] = 1;
+			$month_chooser[date("my" , mktime(0,0,0, date("m" , $end) - 1, date("d" , $end), date("Y" , $end)))] = 1;
+		}
+
+
+
 		//iga isiku info
 		foreach($work_data as $person  => $d)
 		{
@@ -7411,11 +7492,11 @@ class project extends class_base
 		$start = $arr["obj_inst"]->prop("start");
 
 		//mingi piirang ka peale... 
-		if($start < $end - DAY * 600)
+/*		if($start < $end - DAY * 30)
 		{
-			$start = $end - DAY * 600;
+			$start = $end - DAY * 30;
 		}
-
+*/
 		$start = get_day_start($start);
 		if(!($end > 1 && $start > 1))
 		{
@@ -7423,7 +7504,7 @@ class project extends class_base
 		}
 		while($end > $start)
 		{
-			if(date("N" , $start) > 5)
+			if(!$month_chooser[date("my" , $start)])
 			{
 				$start += DAY;
 				continue;
@@ -7789,8 +7870,12 @@ arr($stats_by_ppl);
 			$task_prices[$to->id()] = $to->prop("hr_price");
 		}
 
-		$round = round(4*($end-$start)/100 , -6);
-//		arr($round);
+		if($end < $start + 15000000)
+		{
+			$start = $end - 15000000;
+		}
+
+		$round = round(4*($end-$start)/100 , -5);
 
 		foreach($all_data as $data)
 		{
@@ -7812,7 +7897,7 @@ arr($stats_by_ppl);
 		$sum = 0;
 		$pay_sum = 0;
 		$x = 0;
-		
+
 		$data0 = $data1 = $data2 = $labels = array();
 
 		$labels[]= date("M Y" , $start);

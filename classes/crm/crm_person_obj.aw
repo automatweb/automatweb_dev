@@ -1035,7 +1035,7 @@ class crm_person_obj extends _int_object
 	**/
 	public function get_all_org_ids()
 	{
-		$ol = get_all_orgs();
+		$ol = $this->get_all_orgs();
 		return $ol->ids();
 	}
 
