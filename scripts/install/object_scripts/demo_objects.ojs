@@ -35,7 +35,7 @@ $do = obj { class_id=CL_MENU, parent=${parent}, name="N&auml;idisobjektid", stat
 
 		$ml_mem_f = obj { class_id=CL_MENU, parent=${ml}, name="Listi liikmete kaust", status=STAT_ACTIVE }
 
-		$ml_o = obj { class_id=CL_ML_LIST, parent=${ml}, name="Meilinglist", status=STAT_ACTIVE, def_user_folder=${ml_mem_f} }
+		$ml_o = obj { class_id=CL_ML_LIST, parent=${ml}, name="Meilinglist", status=STAT_ACTIVE, choose_menu=${ml_mem_f} }
 
 		$ml_doc = obj { class_id=CL_DOCUMENT, parent=${ml}, name="Meilinglist", title="Meilinglist", status=STAT_ACTIVE, lead="Demo meilinglist", content="#list1#" }
 		rel { from=${ml_doc}, to=${ml_o} }
