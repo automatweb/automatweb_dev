@@ -17,6 +17,7 @@ class automatweb
 	const MODE_DEFAULT = 1;
 	const MODE_DBG = 2;
 	const MODE_PRODUCTION = 4;
+	const MODE_REASONABLE = 8;
 
 	private $mode; // current mode
 	private $request_loaded = false; // whether request is loaded or only empty initialized
@@ -443,6 +444,13 @@ class automatweb
 		{
 			error_reporting(E_ALL);
 			// error_reporting(E_ALL | E_STRICT);
+			ini_set("display_errors", "1");
+			ini_set("display_startup_errors", "1");
+			set_exception_handler("aw_dbg_exception_handler");
+		}
+		elseif(self::MODE_REASONABLE === $id)
+		{
+			error_reporting(E_ALL ^ E_NOTICE);
 			ini_set("display_errors", "1");
 			ini_set("display_startup_errors", "1");
 			set_exception_handler("aw_dbg_exception_handler");
