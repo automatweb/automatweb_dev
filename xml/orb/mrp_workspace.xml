@@ -8,7 +8,6 @@
 			</function>
 		</action>
 
-<<<<<<< mrp_workspace.xml
 		<action name="delete">
 			<function name="delete">
 				<arguments>
@@ -170,7 +169,5 @@
 			</function>
 		</action>
 
-=======
->>>>>>> 1.18
 	</class>
 </orb>
