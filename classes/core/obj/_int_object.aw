@@ -34,7 +34,7 @@ class _int_object
 	///////////////////////////////////////////
 	// public functions
 
-	function _int_object($objdata)
+	function _int_object($objdata = array())
 	{
 		$this->_init_empty();
 		$this->obj = $objdata;
