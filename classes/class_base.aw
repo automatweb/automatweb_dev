@@ -5378,7 +5378,7 @@ class class_base extends aw_template
 	{
 		// this maybe be called for a not logged in user for an embedded object
 		aw_session_set("no_cache", 1);
-		return aw_global_get("HTTP_REFERER");
+		return aw_url_change_var("just_saved", NULL, aw_global_get("HTTP_REFERER"));
 	}
 
 	/////////////////////////////////////////////
