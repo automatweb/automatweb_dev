@@ -1133,7 +1133,7 @@ class aw_table extends aw_template
 
 		if (!isset($act_page))
 		{
-			$act_page = isset($GLOBALS["ft_page"]) ? $GLOBALS["ft_page"] : null;
+			$act_page = isset($_GET["ft_page"]) ? $_GET["ft_page"] : null;
 		}
 
 		if ($act_page*$this->records_per_page > count($this->data))
@@ -2390,7 +2390,7 @@ echo dbg::short_backtrace();
 
 			$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
 			$records_per_page = empty($arr["records_per_page"]) ? $this->records_per_page : $arr["$records_per_page"];
-			$page = (int) $GLOBALS["ft_page"];
+			$page = (int) $_GET["ft_page"];
 			if ($page*$records_per_page > $_drc)
 			{
 				$page = 0;
@@ -2452,7 +2452,7 @@ echo dbg::short_backtrace();
 
 		$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
 
-		$act_page = $GLOBALS["ft_page"];
+		$act_page = $_GET["ft_page"];
 		if ($act_page*$records_per_page > $_drc)
 		{
 			$act_page = 0;
