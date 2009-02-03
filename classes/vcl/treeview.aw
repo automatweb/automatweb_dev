@@ -1396,7 +1396,10 @@ class treeview extends class_base
 		}
 		else
 		{
-			$url = aw_url_change_var ($var, $root_item->id(), $target_url);
+			$url = aw_url_change_var (array(
+				$var => $root_item->id(),
+				"ft_page" => NULL,		// The tree branch should always link to the first page of the table. -kaarel
+			), false, $target_url);
 		}
 
 		$tv->start_tree($tree_opts);
