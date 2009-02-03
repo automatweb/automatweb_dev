@@ -1,5 +1,5 @@
-<?Php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.149 2009/01/30 15:48:30 instrumental Exp $
+<?php
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.150 2009/02/03 17:02:24 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -66,7 +66,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @groupinfo membership caption=Liikmed 
 ------------------------------------------------------------------------
-@groupinfo search caption=Otsi parent=membership
+@groupinfo search caption=Nimekiri parent=membership
 @default group=search
 	@property search_tb type=toolbar no_caption=1 store=no
 	@caption Otsingu toolbar
@@ -91,47 +91,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 		@layout list_lay closeable=1 type=vbox parent=search_lay
 			@property search_table type=table store=no no_caption=1 parent=list_lay
 			@caption Liimete nimekiri
-
------------------------------------------------------------------------
-@groupinfo subscribing caption=Liitumine parent=membership
-@default group=subscribing
-
-@property admin_subscribe_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
-@caption Kaustad, kuhu liituda
-
-@property confirm_subscribe type=checkbox ch_value=1 
-@caption Liitumiseks on vaja kinnitust
-
-@property confirm_subscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE
-@caption Liitumise kinnituseks saadetav kiri
-
-@property import_textfile type=fileupload store=no
-@caption Impordi liikmed tekstifailist
-
-@property mass_subscribe type=textarea rows=25 store=no
-@caption Massiline liitumine <br>(Iga liituja eraldi real, nimi ja aadress komaga eraldatud)
-@comment Iga liituja eraldi real, nimi ja aadress komaga eraldatud
-
-------------------------------------------------------------------------
-
-@groupinfo unsubscribing caption=Lahkumine parent=membership
-@default group=unsubscribing
-
-@property admin_unsubscribe_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
-@caption Kaustad, kust lahkuda
-
-@property confirm_unsubscribe type=checkbox ch_value=1 
-@caption Lahkumiseks on vaja kinnitust
-
-@property confirm_unsubscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE 
-@caption Lahkumise kinnituseks saadetav kiri
-
-@property delete_textfile type=fileupload store=no
-@caption Kustuta tekstifailis olevad aadressid
-
-@property mass_unsubscribe type=textarea rows=25 store=no 
-@caption Massiline kustutamine
-------------------------------------------------------------------------
 
 @groupinfo export_members caption=Eksport parent=membership
 @default group=export_members
@@ -165,7 +124,48 @@ caption Otsi ka alamobjektide alt
 @property expf_next_time type=text store=no
 @caption Millal j&auml;rgmine eksport toimub
 
+-----------------------------------------------------------------------
+@groupinfo subsc_parent caption=Liitumine
+@groupinfo subscribing caption=Liitumine parent=subsc_parent
+@default group=subscribing
+
+	@property admin_subscribe_folders type=text store=no
+	@caption Kaustad,&nbsp;kuhu&nbsp;liituda
+
+	@property confirm_subscribe type=checkbox ch_value=1 
+	@caption Liitumiseks on vaja kinnitust
+
+	@property confirm_subscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE
+	@caption Liitumise kinnituseks saadetav kiri
+	
+	@property import_textfile type=fileupload store=no
+	@caption Impordi liikmed tekstifailist
+	
+	@property mass_subscribe type=textarea rows=25 store=no
+	@caption Massiline liitumine <br>(Iga liituja eraldi real, nimi ja aadress komaga eraldatud)
+	@comment Iga liituja eraldi real, nimi ja aadress komaga eraldatud
+
 ------------------------------------------------------------------------
+
+@groupinfo unsubscribing caption=Lahkumine parent=subsc_parent
+@default group=unsubscribing
+
+	@property admin_unsubscribe_folders type=text store=no
+	@caption Kaustad, kust lahkuda
+	
+	@property confirm_unsubscribe type=checkbox ch_value=1 
+	@caption Lahkumiseks on vaja kinnitust
+	
+	@property confirm_unsubscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE 
+	@caption Lahkumise kinnituseks saadetav kiri
+	
+	@property delete_textfile type=fileupload store=no
+	@caption Kustuta tekstifailis olevad aadressid
+	
+	@property mass_unsubscribe type=textarea rows=25 store=no 
+	@caption Massiline&nbsp;kustutamine <br> (Aadressid eraldi real)
+------------------------------------------------------------------------
+
 
 @groupinfo raports caption=Kirjad
 
@@ -983,6 +983,24 @@ class ml_list extends class_base
 
 		switch($prop["name"])
 		{
+			case "admin_unsubscribe_folders":
+			case "admin_subscribe_folders":
+				$sources = $arr["obj_inst"]->get_menu_sources();
+				$prop["value"] = "";
+				if(!$sources->count())
+				{
+					$prop["value"].= t("Tuleb valida mailinglisti liikmete allikaks ka m&otilde;ni kaust!");
+				}
+				foreach($sources->arr() as $source)
+				{
+					$prop["value"].= html::checkbox(array(
+						"name" => "admin_subscribe_folders[".$source->id()."]",
+						"value" => 1,
+						"checked" => $arr["request"]["admin_subscribe_folders"][$source->id()]? 1 : 0,
+					)). " " . $source->name()." <br>";
+				}
+				break;
+
 			case "sources_data_table":
 				$this->_get_sources_data_table($arr);
 				break;
@@ -1158,13 +1176,13 @@ class ml_list extends class_base
 
 			case "search_tb":
 				$toolbar = &$prop["vcl_inst"];
-				$toolbar->add_button(array(
+/*				$toolbar->add_button(array(
 					"name" => "new",
 					"img" => "new.gif",
 					"tooltip" => t("Lisa uus"),
 					"url" => aw_url_change_var("group", "subscribing" , $args["return_to"]),
 				));
-
+*/
 				$toolbar->add_save_button();
 
 				$toolbar->add_button(array(
@@ -1491,62 +1509,17 @@ class ml_list extends class_base
 					return PROP_OK;
 				}
 				$contents = file_get_contents($imp);
-				if(!$this->mass_subscribe(array(
-					"list_id" => $arr["obj_inst"]->id(),
+				if(!$arr["obj_inst"]->mass_subscribe(array(
+					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
 					"text" => $contents,
+					"debug" => 1,
 				)))
 				{
-					$prop["error"] = t("Selle toimingu jaoks peab listiliikmete allikas olema kaust");
+					$prop["error"] = t("Liitumiseks peab olema valitud m&otilde;ni kaust kuhu liituda");
 					return PROP_FATAL_ERROR;
 				}
 				break;
-/*			case "req_members_s": 
-				$source_prop = "search_menu";
-			case "req_members_e":
-				if(!$source_prop) $source_prop = "export_folders";
-			case "req_members_m":
-				if(!$source_prop) $source_prop = "write_user_folder";
-			case "req_members":
-				if(!$source_prop) $source_prop = "choose_menu";
-				if($_SESSION["submembers_source_prop_value"])
-				{
-					foreach($_SESSION["submembers_source_prop_value"] as $key)
-					{
-						if($this->can("view" , $key))
-						{
-							$menu = obj($key);
-							$menu->set_meta("req_members",$_POST["req_members"][$key]);
-							$menu->save();
-						}
-					}
-					unset($_SESSION["submembers_source_prop_value"]);
-				}
-				else
-				{
-					foreach($_POST["req_members"] as $key=> $val)
-					{
-						if(is_oid($key))
-						{
-							$menu = obj($key);
-							$menu->set_meta("req_members",$val);
-							$menu->save();
-						}
-					}
-				}
-/*				if(is_array($arr["request"]["def_user_folder"]))
-				{
-					foreach($arr["request"]["def_user_folder"] as $fld)
-					{
-						if(is_oid($fld))
-						{
-							$menu = obj($fld);
-							$menu->set_meta("req_members",$prop["value"][$fld]);
-							$menu->save();
-						}
-					}
-				}*//*
-				break;
-*/
+
 			case "delete_textfile":
 				$imp = $_FILES["delete_textfile"]["tmp_name"];
 				if (!is_uploaded_file($imp))
@@ -1554,34 +1527,38 @@ class ml_list extends class_base
 					return PROP_OK;
 				}
 				$contents = file_get_contents($imp);
-				if(!$this->mass_unsubscribe(array(
-					"list_id" => $arr["obj_inst"]->id(),
+
+				if(!$arr["obj_inst"]->mass_unsubscribe(array(
+					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
 					"text" => $contents,
+					"debug" => 1,
 				)))
 				{
-					$prop["error"] = t("Selle toimingu jaoks peab listiliikmete allikas olema kaust");
+					$prop["error"] = t("Lahkumiseks peab olema valitud m&otilde;ni kaust kust lahkuda");
 					return PROP_FATAL_ERROR;
 				}
 				break;
 				
 			case "mass_subscribe":
-				if(!$this->mass_subscribe(array(
-					"list_id" => $arr["obj_inst"]->id(),
+				if(!$arr["obj_inst"]->mass_subscribe(array(
+					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
 					"text" => $prop["value"],
+					"debug" => 1,
 				)))
 				{
-					$prop["error"] = t("Selle toimingu jaoks peab listiliikmete allikas olema kaust");
+					$prop["error"] = t("Liitumiseks peab olema valitud m&otilde;ni kaust kuhu liituda");
 					return PROP_FATAL_ERROR;
 				}
 				break;
 
 			case "mass_unsubscribe":
-				if(!$this->mass_unsubscribe(array(
-					"list_id" => $arr["obj_inst"]->id(),
+				if(!$arr["obj_inst"]->mass_unsubscribe(array(
+					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
 					"text" => $prop["value"],
+					"debug" => 1,
 				)))
 				{
-					$prop["error"] = t("Selle toimingu jaoks peab listiliikmete allikas olema kaust");
+					$prop["error"] = t("Lahkumiseks peab olema valitud m&otilde;ni kaust kust lahkuda");
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -1617,6 +1594,8 @@ class ml_list extends class_base
 		$arr["args"]["search_mail"] = $_POST["search_mail"];
 		$arr["args"]["search_name"] = $_POST["search_name"];
 		$arr["args"]["search_from_source"] = $_POST["search_from_source"];
+		$arr["args"]["admin_subscribe_folders"] = $_POST["admin_subscribe_folders"];
+
 		$arr["args"]["search_from_subfolders"] = $_POST["search_from_subfolders"];
 
 		if (isset($this->do_export))
@@ -1656,6 +1635,7 @@ class ml_list extends class_base
 		aw_global_set("no_cache_flush", 1);
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
+		arr($arr);
 		$fld = new aw_array($list_obj->prop("admin_subscribe_folders"));
 		foreach($fld->get() as $fold)
 		{
@@ -1784,76 +1764,6 @@ class ml_list extends class_base
 		}
 	}
 	
-	////
-	// !Mass unsubscribe of addresses
-	function mass_unsubscribe($arr)
-	{
-		$lines = explode("\n", $arr["text"]);
-		$list_obj = new object($arr["list_id"]);
-		$fold = new aw_array($list_obj->prop("admin_unsubscribe_folders"));
-		foreach($fold->get() as $fld)
-		{
-			if(!is_oid($fld) || !$this->can("add", $fld))
-			{
-				continue;
-			}
-			$fld_obj = new object($fld);
-			if($fld_obj->class_id() != CL_MENU)
-			{
-				continue;
-			}
-			$is_fold = true;
-			//break;
-			
-			$name = $fld_obj->name();
-			echo "Kustutan kasutajaid kataloogist $fld / $name... <br />";
-			aw_set_exec_time(AW_LONG_PROCESS);
-			$ml_member = get_instance(CL_ML_MEMBER);
-			$cnt = 0;
-			if (sizeof($lines) > 0)
-			{
-				foreach($lines as $line)
-				{
-					if (strlen($line) < 5)
-					{
-						continue;
-					}
-					// no, this is different, no explode. I need to extract an email address from the
-					// line
-					preg_match("/(\S*@\S*)/",$line,$m);
-					$addr = $m[1];
-					if (is_email($addr))
-					{
-						$retval = $ml_member->unsubscribe_member_from_list(array(
-							"email" => $addr,
-							"list_id" => $list_obj->id(),
-							"ret_status" => true,
-							"use_folders" => $fld,
-						));
-						if ($retval)
-						{
-							$cnt++;
-							print "OK a:$addr<br />";
-						}
-						else
-						{
-							print "Ei leidnud $addr<br />";
-						}
-						flush();
-						usleep(500000);
-					}
-					else
-					{
-						print "IGN - a:$addr<br />";
-						flush();
-					}
-				}
-			}
-		print "Kustutasin $cnt aadressi<br>";
-		}
-		return true;
-	}
-
 	function gen_unsent_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -2879,51 +2789,39 @@ foreach($ol->arr() as $o)
 			$source_obj = obj($folder_id);
 			if($source_obj->class_id() == CL_MENU)
 			{
-				$odl_prms = array(
-					"class_id" => CL_ML_MEMBER,
-					"parent" => $folder_id,
-					"lang_id" => array(),
-					"site_id" => array(),
-				);
 				if($to > 1)
 				{
 					if(($from - $this->member_count) < 0) $from_q = 0;
 					else $from_q = $from - $this->member_count;
 					if(($to - $from_q - $this->member_count) < 0) $to_q = 0;
 					else $to_q = $to - $from_q - $this->member_count;
-
-					$odl_prms["limit"] = $from_q.", ".$to_q;
-				}
-
-				$odl = new object_data_list(
-					$odl_prms,
-					array(
-						CL_ML_MEMBER => array("name", "mail"),
-					)
-				);
-
-				if($to > 1)
-				{
-					$cnt_all = $odl->count();
+					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid , objects.brother_of FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, $from_q, $to_q);
+					$q_count = sprintf("SELECT COUNT(*) as cnt FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0" , $folder_id);
+					$cnt_all = $this->db_fetch_field($q_count , "cnt");
 					$this->member_count = $this->member_count + $cnt_all;
 				}
-				foreach($odl->arr() as $oid => $od)
+				else
 				{
-					if(!$args["all"] && $this->ignore_member($source_obj , $oid))
+					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid  , objects.brother_of FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC" , $folder_id);
+				}
+				$this->db_query($q);
+				while($row = $this->db_next())
+				{
+					if(!$args["all"] && $this->ignore_member($source_obj , $row["oid"]))
 					{
 						continue;
 					}
-					if(!(array_key_exists($od["mail"] , $this->already_found)))
+					if(!(array_key_exists($row["mail"] , $this->already_found)))
 					{
 						$this->ml_members[] = array(
-							"oid" 		=> $oid,
+							"oid" 		=> $row["oid"],
 							"parent"	=> $folder_id,
-							"name"		=> $od["name"],
-							"mail"		=> $od["mail"]
+							"name"		=> $row["name"],
+							"mail"		=> $row["mail"]
 						);
 						if(!($to > 1))$this->member_count++;
 					}
-					if(!$all) $this->already_found[$od["mail"]] = $od["mail"];
+					if(!$all) $this->already_found[$row["mail"]] = $row["mail"];
 				}
 			}
 			elseif ($source_obj->class_id() == CL_GROUP)
