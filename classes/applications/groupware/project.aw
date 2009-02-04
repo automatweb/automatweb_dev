@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.158 2009/02/03 18:53:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.159 2009/02/04 18:08:10 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -129,7 +129,7 @@
 
 
 @default group=add_event
-	@property add_event callback=callback_get_add_event store=no
+	@property add_event type=callback callback=callback_get_add_event store=no
 	@caption Lisa s&uuml;ndmus
 
 
@@ -271,7 +271,7 @@
 		layout goal_tree_lay type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=goal_vb
 			property goal_tree type=treeview parent=goal_vb no_caption=1 parent=goal_tree_lay
 
-		@layout task_types_tree_left type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=goal_vb
+		@layout task_types_tree_left type=vbox parent=goal_vb
 
 			@layout task_types_tree_lay type=vbox closeable=1 area_caption=Puu parent=task_types_tree_left
 
@@ -7414,7 +7414,15 @@ class project extends class_base
 		$work_data = array();
 		$this->event_types = $this->event_types;
 		$end = $arr["obj_inst"]->prop("end");
-		$start = time();
+		
+		if($arr["obj_inst"]->prop("start") > 0)
+		{
+			$start = $arr["obj_inst"]->prop("start");
+		}
+		else
+		{
+			$start = time();
+		}
 		$result = array();
 
 		foreach($all_data as $data)
@@ -7489,7 +7497,6 @@ class project extends class_base
 			"align" => "left",
 		));
 
-		$start = $arr["obj_inst"]->prop("start");
 
 		//mingi piirang ka peale... 
 /*		if($start < $end - DAY * 30)
@@ -7497,6 +7504,7 @@ class project extends class_base
 			$start = $end - DAY * 30;
 		}
 */
+
 		$start = get_day_start($start);
 		if(!($end > 1 && $start > 1))
 		{
@@ -7900,21 +7908,38 @@ arr($stats_by_ppl);
 
 		$data0 = $data1 = $data2 = $labels = array();
 
-		$labels[]= date("M Y" , $start);
-		$labels[]= date("M Y" , $start + (($end - $start) / 3));
-		$labels[]= date("M Y" , $start + (($end - $start) / 2));
-		$labels[]= date("M Y" , $end -   (($end - $start) / 3));
-		$labels[]= date("M Y" , $end);
-
-		while($start < $end)
+		$my = "";
+		while(true)
 		{
+			if($my != date("my" , $start))
+			{
+				$my = date("my" , $start);
+				$labels[]= date("M Y" , $start);
+			}
 			$st= round($start/$round);
 			$sum+= $chart_data[$st];
 			$pay_sum += $chart_payments[$st];
 			$data1[] = $sum;
 			$data3[] = $pay_sum;
+			if($start > $end)
+			{
+				break;
+			}
 			$start += $round;
 			$x++;
+		}
+
+		if(sizeof($labels) > 19)
+		{
+			$rnd = round(sizeof($labels) / 19) + 1;
+
+			foreach($labels as $key => $label)
+			{
+				if(($key % $rnd) != 0)
+				{
+					unset($labels[$key]);
+				}
+			}
 		}
 
 		$c2->set_labels($labels);

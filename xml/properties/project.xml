@@ -359,6 +359,7 @@
             <name>add_event</name>
             <table>objects</table>
             <group>add_event</group>
+            <type>callback</type>
             <callback>callback_get_add_event</callback>
             <store>no</store>
             <field>add_event</field>
@@ -1562,10 +1563,9 @@
             </goal_vb>
             <task_types_tree_left>
                   <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Eesm&amp;amp;auml;rgid</area_caption>
                   <parent>goal_vb</parent>
                   <group>goals_edit</group>
+                  <area_caption></area_caption>
             </task_types_tree_left>
             <task_types_tree_lay>
                   <type>vbox</type>
