@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.78 2008/12/17 16:14:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.79 2009/02/04 17:23:30 instrumental Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1344,6 +1344,10 @@ class join_site extends class_base
 					}
 					foreach($mfmt as $mft)
 					{
+						if(!$this->can("view", $mft))
+						{
+							continue;
+						}
 						$to = obj($mft);
 						$tom = $to->prop("mail");
 						if ($to->prop("name") != "")
@@ -2140,7 +2144,7 @@ class join_site extends class_base
 				}
 				else
 				{
-					$data_o = $c->to();
+					$data_o = obj($c);
 				}
 			}
 			elseif($this->can("edit", $a_objs[$clid]) && is_oid($a_objs[$clid]))
