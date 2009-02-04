@@ -27,7 +27,7 @@ if (!defined("AW_DIR"))
 			automatweb::start();
 			try
 			{
-				$mode = constant("automatweb::".aw_ini_get("config.id"));
+				$mode = constant("automatweb::".aw_ini_get("config.mode"));
 				if($mode !== NULL)
 				{
 					automatweb::$instance->mode($mode);
