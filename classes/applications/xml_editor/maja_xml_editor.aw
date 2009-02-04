@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.19 2008/01/31 13:51:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.20 2009/02/04 08:24:45 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -8,97 +8,91 @@
 @default table=objects
 @default group=general
 
-@property orig_xml_file type=textbox field=meta method=serialize size=50
-@caption Originaal xml fail
+	@property orig_xml_file type=textbox field=meta method=serialize size=50
+	@caption Originaal xml fail
 
-@property new_xml_file type=textbox field=meta method=serialize size=50
-@caption Uus xml fail
+	@property new_xml_file type=textbox field=meta method=serialize size=50
+	@caption Uus xml fail
 
-@property db_table_contents type=relpicker reltype=RELTYPE_DB_TABLE_CONTENTS field=meta method=serialize
-@caption Andmebaasitabeli sisu objekt
+	@property db_table_contents type=relpicker reltype=RELTYPE_DB_TABLE_CONTENTS field=meta method=serialize
+	@caption Andmebaasitabeli sisu objekt
 
 @groupinfo db_saving_settings caption="Baasi salvestamise seaded"
 @default group=db_saving_settings
 
-@property house_name type=textbox field=meta method=serialize
-@caption Maja nimi/aadress
+	@property house_name type=textbox field=meta method=serialize
+	@caption Maja nimi/aadress
 
-@property xml_to_db_connections type=table field=meta method=serialize no_caption=1
-@caption XML ja DB v&auml;ljade vahelised seosed
+	@property xml_to_db_connections type=table field=meta method=serialize no_caption=1
+	@caption XML ja DB v&auml;ljade vahelised seosed
 
 @groupinfo additional_info caption="Lisainfo korterite tabeli jaoks"
 @default group=additional_info
 
-@property additional_info_table type=table no_caption=1
-@caption Additional info
+	@property additional_info_table type=table no_caption=1
+	@caption Additional info
 
----------------------------------------------------
 @groupinfo content_change caption="XML-i muutmine"
 
-@groupinfo group_01 caption="Tab 01" parent=content_change
+	@groupinfo group_01 caption="Tab 01" parent=content_change
 
-@property content_table_01 type=table store=no no_caption=1 group=group_01
-@caption Sisu tabel 01
+		@property content_table_01 type=table store=no no_caption=1 group=group_01
+		@caption Sisu tabel 01
 
-@property xml_field_01 type=select group=group_01 field=meta method=serialize
-@caption Parent XMl-ist
+		@property xml_field_01 type=select group=group_01 field=meta method=serialize
+		@caption Parent XMl-ist
 
-@property db_table_01 type=relpicker group=group_01 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
-@caption Andmebaasi tabel
+		@property db_table_01 type=relpicker group=group_01 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
+		@caption Andmebaasi tabel
 
----------
-@groupinfo group_02 caption="Tab 02" parent=content_change
+	@groupinfo group_02 caption="Tab 02" parent=content_change
 
-@property content_table_02 type=table store=no no_caption=1 group=group_02
-@caption Sisu tabel 02
+		@property content_table_02 type=table store=no no_caption=1 group=group_02
+		@caption Sisu tabel 02
 
-@property xml_field_02 type=select group=group_02 field=meta method=serialize
-@caption Parent XML-ist
+		@property xml_field_02 type=select group=group_02 field=meta method=serialize
+		@caption Parent XML-ist
 
-@property db_table_02 type=relpicker group=group_02 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
-@caption Andmebaasi tabel
+		@property db_table_02 type=relpicker group=group_02 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
+		@caption Andmebaasi tabel
 
----------
-@groupinfo group_03 caption="Tab 03" parent=content_change
+	@groupinfo group_03 caption="Tab 03" parent=content_change
 
+		@property content_table_03 type=table store=no no_caption=1 group=group_03
+		@caption Sisu tabel 03
 
-@property content_table_03 type=table store=no no_caption=1 group=group_03
-@caption Sisu tabel 03
+		@property xml_field_03 type=select group=group_03 field=meta method=serialize
+		@caption Parent XML-ist
 
-@property xml_field_03 type=select group=group_03 field=meta method=serialize
-@caption Parent XML-ist
+		@property db_table_03 type=relpicker group=group_03 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
+		@caption Andmebaasi tabel
 
-@property db_table_03 type=relpicker group=group_03 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
-@caption Andmebaasi tabel
+	@groupinfo group_04 caption="Tab 04" parent=content_change
 
----------
-@groupinfo group_04 caption="Tab 04" parent=content_change
+		@property content_table_04 type=table store=no no_caption=1 group=group_04
+		@caption Sisu tabel 04
 
-@property content_table_04 type=table store=no no_caption=1 group=group_04
-@caption Sisu tabel 04
+		@property xml_field_04 type=select group=group_04 field=meta method=serialize
+		@caption parent XML-ist
 
-@property xml_field_04 type=select group=group_04 field=meta method=serialize
-@caption parent XML-ist
+		@property db_table_04 type=relpicker group=group_04 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
+		@caption Andmebaasi tabel
 
-@property db_table_04 type=relpicker group=group_04 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
-@caption Andmebaasi tabel
+	@groupinfo group_05 caption="Tab 05" parent=content_change
 
----------
-@groupinfo group_05 caption="Tab 05" parent=content_change
+		@property content_table_05 type=table store=no no_caption=1 group=group_05
+		@caption Sisu tabel 05
 
-@property content_table_05 type=table store=no no_caption=1 group=group_05
-@caption Sisu tabel 05
+		@property xml_field_05 type=select group=group_05 field=meta method=serialize
+		@caption parent XML-ist
 
-@property xml_field_05 type=select group=group_05 field=meta method=serialize
-@caption parent XML-ist
-
-@property db_table_05 type=relpicker group=group_05 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
-@caption Andmebaasi tabel
-
+		@property db_table_05 type=relpicker group=group_05 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
+		@caption Andmebaasi tabel
 
 
 @reltype DB_TABLE_CONTENTS value=1 clid=CL_DB_TABLE_CONTENTS
 @caption Andmebaasitabeli sisu objekt
+
 */
 
 class maja_xml_editor extends class_base
@@ -119,8 +113,6 @@ class maja_xml_editor extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-// get_xml fail peaks kuidagi teistmoodi handlima seda kui faili ei leita - nt. sest mitte välja tegema
-// v. false tagasmtaam vms.
 
 		$xml_content = $this->get_xml(array("obj_inst" => $arr['obj_inst']));
 		if (!$xml_content)
@@ -264,7 +256,7 @@ class maja_xml_editor extends class_base
 /*
 
 		// antud juhul ei ole seda siin vaja, kuna "open" tyypi tagidel selles
-		// xml failis ei ole atribuute (maja element on ainus open tüüpi tag)
+		// xml failis ei ole atribuute (maja element on ainus open tyypi tag)
 
 				$attributes = "";
 				if(isset($value['attributes']))
@@ -285,7 +277,7 @@ class maja_xml_editor extends class_base
 				{
 					foreach($value['attributes'] as $attribute_key => $attribute_value)
 					{
-						$textfield_size = 10;
+						$textfield_size = 40;
 						if(($attribute_key == "korterinr") || ($attribute_key == "number") || ($attribute_key == "tubadearv") || ($attribute_key == "pindala"))
 						{
 							$textfield_size = 5;
@@ -355,6 +347,9 @@ class maja_xml_editor extends class_base
 				return $tags;
 			}
 		}
+		// in case there is no 'close' tag (ie. there is only one tag in xml and its type is 'complete')
+		// then return the complete tags 
+		return $tags;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -741,7 +736,7 @@ class maja_xml_editor extends class_base
 			$sql_commands = array();
 
 			$xml_to_db_conns = $arr['obj_inst']->meta("xml_to_db_conns");
-// tuleb kokku panna sql_commands massiiv, mis koosneb $sql_command massiividest kus on kirjas milliseid välju uuendatakse
+// tuleb kokku panna sql_commands massiiv, mis koosneb $sql_command massiividest kus on kirjas milliseid v2lju uuendatakse
 // baasis 
 //			arr($arr);
 
