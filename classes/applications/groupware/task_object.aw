@@ -31,6 +31,22 @@ class task_object extends _int_object
 		return $ret;
 	}
 
+	function save()
+	{
+		$res =  parent::save();
+		$this->update_all_rows();
+		return $res;
+	}
+
+	private function update_all_rows()
+	{
+		$comments = new object_list();
+		$comments->add($this->get_all_rows());
+		foreach($comments->arr() as $comment)
+		{
+			$comment->save();
+		}
+	}
 
 	function set_prop($pn, $pv)
 	{

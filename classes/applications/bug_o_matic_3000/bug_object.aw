@@ -12,11 +12,28 @@ class bug_object extends _int_object
 		{
 			$this->_set_default_bug_props();
 		}
-		return parent::save();
+
+		$res =  parent::save();
+
+		$this->update_all_rows();
+
+		return $res;
 	}
 
 	function set_prop($name,$value)
 	{
+		if($name == "project" && is_oid($value))
+		{
+			foreach($this->connections_from(array(
+				"type" => "RELTYPE_PROJECT",
+			)) as $c)
+			{
+				if ($c->prop("to") != $value)
+				{
+					$c->delete();
+				}
+			}
+		}
 		if($name == "send_bill" && !$this->prop("send_bill"))
 		{
 			$this->set_prop("to_bill_date" , time());
@@ -175,8 +192,10 @@ class bug_object extends _int_object
 		$comments = $this->connections_from(array(
 			"type" => "RELTYPE_COMMENT",
 		));
-		
-		$ol->add($comments);
+		foreach($comments as $c)
+		{
+			$ol->add($c->prop("to"));
+		}
 		return $ol;
 	}
 
@@ -314,6 +333,15 @@ class bug_object extends _int_object
 		}
 
 		return $projects;
+	}
+
+	private function update_all_rows()
+	{
+		$comments = $this->get_bug_comments();
+		foreach($comments->arr() as $comment)
+		{
+			$comment->save();
+		}
 	}
 
 }

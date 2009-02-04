@@ -193,6 +193,8 @@ class task_row_obj extends _int_object
 		{
 			$task = obj($this->prop("task"));
 		}
+		//taski infot otse rea juurde, et otsida oleks lihtsam
+		//kui vaja uuendada kuskilt, siis saab lihtsalt salvestada rea objekti
 		if(is_object($task))
 		{
 			if($task->class_id() != CL_BUG)
@@ -231,6 +233,18 @@ class task_row_obj extends _int_object
 						"to" => $c->prop("to"),
 						"reltype" => "RELTYPE_PROJECT"
 					));
+				}
+			}
+			foreach($this->connections_from(array(
+				"type" => "RELTYPE_PROJECT",
+			)) as $c)
+			{
+				if (!$task->is_connected_to(array(
+					"to" => $c->prop("to"),
+					"type" => "RELTYPE_PROJECT")
+				))
+				{
+					$c->delete();
 				}
 			}
 		}
