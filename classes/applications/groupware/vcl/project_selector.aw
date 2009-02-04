@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.13 2008/03/12 21:22:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.14 2009/02/04 10:56:19 instrumental Exp $
 /*
 @classinfo maintainer=kristo
 */
@@ -104,11 +104,11 @@ class project_selector extends core
 				$all_props[$propname . $item_id] = array(
 					"type" => "checkbox",
 					"name" => $propname . "[" . $item_id . "]",
-					"caption" => html::href(array(
+					"caption" => is_admin() ? html::href(array(
 						"url" => $this->mk_my_orb("change",array("id" => $item_id),CL_PROJECT),
 						"caption" => 
 							"<font color='$color'>" . $item->name() . "</font>",
-					)),
+					)) : $item->name(),
 					"ch_value" => isset($xlist[$item_id]) ? $xlist[$item_id] : 0,
 					"value" => 1,
 				);
@@ -138,7 +138,7 @@ class project_selector extends core
 		$xlist = array();
 		foreach($olist->arr() as $o)
 		{
-			// hm, originaali näidatakse aga listi ei panda. Ongi nii või?
+			// hm, originaali n2idatakse aga listi ei panda. Ongi nii v6i?
 			$p_o = new object($o->parent());
 			if ($p_o->class_id() != CL_PROJECT)
 			{
@@ -207,7 +207,7 @@ class project_selector extends core
 
 			if ($parentcount > 1)
 			{
-				$arr["prop"]["error"] = "Sündmus ei saa korraga olla mitmes viimase taseme projektis!";	
+				$arr["prop"]["error"] = "S&uuml;ndmus ei saa korraga olla mitmes viimase taseme projektis!";	
 				return PROP_ERROR;
 			};
 
