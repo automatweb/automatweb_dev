@@ -1071,6 +1071,9 @@ default group=org_objects
 	@property stats_s_worker_sel type=select multiple=1 store=no
 	@caption T&ouml;&ouml;taja
 
+	@property project_mgr type=select store=no
+	@caption Projektijuht
+
 	@property stats_s_from type=date_select store=no format=day_textbox,month_textbox,year_textbox
 	@caption Alates
 
@@ -2982,6 +2985,7 @@ class crm_company extends class_base
 			case "stats_s_cust_type":
 			case "stats_s_res":
 			case "stats_s_state":
+			case "project_mgr":
 			case "stats_s_res_type":
 			case "stats_s_bill_state":
 			case "stats_s_area":
@@ -4245,6 +4249,7 @@ class crm_company extends class_base
 			$arr['args']['stats_s_area'] = ($arr['request']['stats_s_area']);
 			$arr['args']['stats_s_proj'] = ($arr['request']['stats_s_proj']);
 			$arr['args']['stats_s_state'] = ($arr['request']['stats_s_state']);
+			$arr['args']['project_mgr'] = ($arr['request']['project_mgr']);
 			$arr['args']['stats_s_time_sel'] = ($arr['request']['stats_s_time_sel']);
 			$arr['args']['stats_s_from'] = ($arr['request']['stats_s_from']);
 			$arr['args']['stats_s_to'] = ($arr['request']['stats_s_to']);
@@ -7586,7 +7591,7 @@ class crm_company extends class_base
 	function save_report($arr)
 	{
 		$o = obj();
-		$arr = $_GET;
+		$arr = $_POST;
 		$o->set_class_id(CL_CRM_REPORT_ENTRY);
 		$o->set_parent($arr["id"]);
 		$o->set_prop("cust", $arr["stats_s_cust"]);
@@ -7598,6 +7603,7 @@ class crm_company extends class_base
 		$o->set_prop("to", date_edit::get_timestamp($arr["stats_s_to"]));
 		$o->set_prop("time_sel", $arr["stats_s_time_sel"]);
 		$o->set_prop("state", $arr["stats_s_state"]);
+		$o->set_prop("project_mgr", $arr["project_mgr"]);
 		$o->set_prop("bill_state", $arr["stats_s_bill_state"]);
 		$o->set_prop("only_billable", $arr["stats_s_only_billable"]);
 		$o->set_prop("area", $arr["stats_s_area"]);

@@ -22,7 +22,7 @@ class bug_object extends _int_object
 
 	function set_prop($name,$value)
 	{
-		if($name == "project" && is_oid($value))
+		if($name == "project" && is_oid($value) && is_oid($this->id()))
 		{
 			foreach($this->connections_from(array(
 				"type" => "RELTYPE_PROJECT",

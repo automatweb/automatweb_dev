@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_report_entry.aw,v 1.2 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_report_entry.aw,v 1.3 2009/02/04 17:27:57 markop Exp $
 // crm_report_entry.aw - Aruanne 
 /*
 
@@ -22,6 +22,9 @@
 
 	@property worker_sel type=select multiple=1 table=objects field=meta method=serialize
 	@caption T&ouml;&ouml;taja
+
+	@property project_mgr type=select table=objects field=meta method=serialize
+	@caption Projektijuht
 
 	@property from type=date_select table=objects field=meta method=serialize
 	@caption Alates
@@ -86,6 +89,7 @@ class crm_report_entry extends class_base
 				}
 				$fn = "_get_stats_s_".$prop["name"];
 				$val = $prop["value"];
+				$arr["obj_inst"] = obj(get_current_company());
 				$retval = $stats_impl->$fn($arr);
 				$prop["value"] = $val;
 				break;

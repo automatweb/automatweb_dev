@@ -3385,6 +3385,15 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
       </property>
       <property>
+            <name>project_mgr</name>
+            <table>objects</table>
+            <group>stats_s</group>
+            <type>select</type>
+            <store>no</store>
+            <field>project_mgr</field>
+            <caption>Projektijuht</caption>
+      </property>
+      <property>
             <name>stats_s_from</name>
             <table>objects</table>
             <group>stats_s</group>

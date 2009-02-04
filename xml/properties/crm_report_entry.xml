@@ -47,6 +47,15 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
       </property>
       <property>
+            <name>project_mgr</name>
+            <group>general</group>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Projektijuht</caption>
+      </property>
+      <property>
             <name>from</name>
             <group>general</group>
             <type>date_select</type>
