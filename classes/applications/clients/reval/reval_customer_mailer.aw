@@ -94,6 +94,26 @@ class reval_customer_mailer extends class_base
 	**/
 	function daily_check($arr)
 	{
+/*	  $entry = $this->db_fetch_row("SELECT * FROM reval_daily_bookings WHERE conf_no = 2402230");
+	  list($entry["First"], $entry["Last"]) = explode(" ", $entry["name"]);
+	  $entry["Confirmation_No"] = $entry["conf_no"];
+	  $entry["Resort"] = $entry["hotel"];
+	  $entry["EMail"] = $entry["email"];
+			$html = $this->_gen_mail_ct($entry);
+			$awm = get_instance("protocols/mail/aw_mail");
+			$awm->create_message(array(
+							"froma" => "feedback@revalhotels.com",
+							"fromn" => "Reval Hotels",
+							"subject" => "Your visit",
+							"to" => "kristo@struktuur.ee", //$entry["EMail"],//"erki@struktuur.ee", //$arr["sendto"],
+							"body" => strip_tags($html),
+			));
+			$awm->htmlbodyattach(array(
+							"data" => $html,
+			));
+			$awm->gen_mail();
+
+die("done");*/
 		aw_set_exec_time(AW_LONG_PROCESS);
 		$rv = $this->do_call("GetGuestsWithEmailByCODate", array(
 			"CODate" => date("Y-m-d", time() - 24*3600)
@@ -120,12 +140,17 @@ class reval_customer_mailer extends class_base
 			echo "<td><input name=sel[] type=checkbox value=".$entry["Confirmation_No"]." ></td>";
 			echo "</tr>\n";*/
 
+			if ($entry["Resort"] == "EXP")
+			{
+				continue;
+			}
+
 			$html = $this->_gen_mail_ct($entry);
 			$awm = get_instance("protocols/mail/aw_mail");
 			$awm->create_message(array(
-							"froma" => "info@revalhotels.com",
+							"froma" => "feedback@revalhotels.com",
 							"fromn" => "Reval Hotels",
-							"subject" => "Your visit",
+							"subject" => "Thank you for your stay",
 							"to" => $entry["EMail"],//"erki@struktuur.ee", //$arr["sendto"],
 							"body" => strip_tags($html),
 			));
@@ -201,9 +226,9 @@ class reval_customer_mailer extends class_base
 			$html = $this->_gen_mail_ct($entry);
 			$awm = get_instance("protocols/mail/aw_mail");
 			$awm->create_message(array(
-							"froma" => "info@revalhotels.com",
+							"froma" => "feedback@revalhotels.com",
 							"fromn" => "Reval Hotels",
-							"subject" => "Your visit",
+							"subject" => "Thank you for your stay",
 							"to" => $arr["sendto"],
 							"body" => strip_tags($html),
 			));
@@ -223,12 +248,13 @@ class reval_customer_mailer extends class_base
 		$name = iconv("utf-8", aw_global_get("charset")."//IGNORE", $e["First"]." ".$e["Last"]);
 		$hotel = $this->hotel_lut[$e["Resort"]];
 		$date = date("Y-m-d", time() - 24*3600);
+		$cs = aw_global_get("charset");
 $html = <<<EOT
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
         <title> Reval Hotels </title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=$cs" />
         <meta name="generator" content="editplus" />
         <meta name="author" content="" />
         <meta name="keywords" content="" />
@@ -252,7 +278,7 @@ If this doesn't display correctly, please visit: http://www.revalhotels.com/en/1
                                                         <p style="color: #de101f; font-family: Arial, Helvetica, sans-serif; font-size: 18px;">Dear $name,</p>
 
                                                         <p style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #666666;">Thank you for your recent stay at $hotel on $date</p>
-<p style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #666666;">With the goal of constantly trying to improve our service and product quality, we would be grateful if you could take a moment to share your experience with us. The survey will not take more that 1 minute.</p>
+<p style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #666666;">With the goal of constantly trying to improve our service and product quality, we would be grateful if you could take a moment to share your experience with us. The survey will not take more than 1 minute.</p>
                                                         <p style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #666666;"><a href="http://www.revalhotels.com/en/	
 184345?hotel=$e[Resort]&c=$e[Confirmation_No]"><img src="http://www.revalhotels.com/img/m2/gfx/rm01_btn1.gif" alt="Take the Survey" border="0" /></a></p>
                                                         <p style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #666666;">In hope of welcoming you back soon,</p>

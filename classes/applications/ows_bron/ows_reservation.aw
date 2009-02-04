@@ -178,7 +178,9 @@ class ows_reservation extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($prop["name"])
+
+//	arr($arr["obj_inst"]->meta());
+switch($prop["name"])
 		{
 		};
 		return $retval;
@@ -327,9 +329,43 @@ fwrite($f, "die error\n");
 fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($return)."\n");
 			if ($o->prop("is_confirmed") == 1)
 			{
-fwrite($f, "return is conf\n");
+				fwrite($f, "return is conf\n");
 					return;
 			}
+
+
+
+	//makse kohta info 2ra saata v6i nii
+
+		$params = array(
+  	 		"dttmPayment" => date("Y-m-d" , $data["time"])."T".date("h:m:s", $data["time"]),//?????????????
+     			"paymentMethodSubtypeId" => 2,//--------------------
+      			"paymentLogPaymentResultId" => 1,//edukas makse,... praegu igatahes siia funktsiooni muud ei j6uagi
+      			"paymentCurrency" => $data["curr"]?$data["curr"]:"EEK",
+      			"paymentReceived" => $data["sum"]?$data["sum"]:0,
+      			"remoteTransactionIdentifier" => $data["ref"]?$data["ref"]:time(),//suvaline tehingu identifikaator
+      			"remoteReference" => $data["receipt_no"]?$data["receipt_no"]:time(),//misiganes asi, mille abil on meil v6imalik maksele v6i maksel meie tehingule viidata
+      			"resultMessage" =>  $data["msg"]?$data["msg"]:"tekst",//kogu makes kohta tagatstatav info, mida tuleks salvestada
+      			"description" => $data["all"]?$data["all"]:"tekst",//k6ik muu tekst, mis eelmiste hulka ei mahu
+      			"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
+      			"onlineBookingId" => $o->meta("booking_id") ? $o->meta("booking_id") : 0,
+      			"partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
+      			"partnerWebsiteDomain" => $o->meta("partnerWebsiteDomain") ? $o->meta("partnerWebsiteDomain") : 0,
+			"userInfo" => $data["payer"]?$data["payer"]:" ",
+   			"hotelId" => $o->prop("hotel_id")?$o->prop("hotel_id"):0,
+ "bookingId" => $o->meta("booking_id"),
+		);
+		$return = $this->do_orb_method_call(array(
+			"action" => "RecordPaymentLogEntry",
+			"class" => "http://markus.ee/RevalServices/Booking/",
+			"params" => $params,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx" // REPL
+//			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+		));
+if(aw_global_get("uid") == "struktuur"){		arr($params); arr($return);}
+fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($return)."\n");
+
 			$checkin = date("Y", $o->prop("arrival_date")).'-'.date("m", $o->prop("arrival_date")).'-'.date("d", $o->prop("arrival_date")).'T00:00:00';
 
 			$checkout = date("Y", $o->prop("departure_date")).'-'.date("m", $o->prop("departure_date")).'-'.date("d", $o->prop("departure_date")).'T23:59:00';
@@ -393,7 +429,8 @@ if($o->meta("partnerWebsiteDomain"))
 
 			if ($data["bank_id"] == "credit_card")
 			{
-				$params["guaranteeReferenceInfo"] .= "\nCreditCard Payment";
+				$params["guaranteeReferenceInfo"] = "CreditCard Payment";
+//				$params["guaranteeReferenceInfo"] .= "\nCreditCard Payment";
 			}
 
 //die(dbg::dump($params));
@@ -420,7 +457,7 @@ if($o->meta("partnerWebsiteDomain"))
 //if(aw_global_get("uid") == "struktuur"){			arr($return);arr($return2);}
 fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($params).dbg::dump($return)."\n\n\n\n");
 	//echo dbg::dump($return);
-			if ($return["MakeBookingExWithBirthdayResult"]["ResultCode"] != "Success")
+			if ($return["MakeBookingExWithBirthdayAndBookingIDResult"]["ResultCode"] != "Success")
 			{
 				$o->set_meta("query", $params);
 				$o->set_meta("result", $return);
@@ -452,13 +489,13 @@ fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($params).dbg::dump($return)."\n\n\
 				$o->set_prop("payment_type", $params["guaranteeType"]);
 			}
 
-			$o->set_prop("confirmation_code", $return["MakeBookingExWithBirthdayResult"]["ConfirmationCode"]);
-			$o->set_prop("booking_id", $return["MakeBookingExWithBirthdayResult"]["BookingId"]);
-			$o->set_prop("cancel_deadline", $owb->parse_date_int($return["MakeBookingExWithBirthdayResult"]["CancellationDeadline"]));
-			$o->set_prop("total_room_charge", $return["MakeBookingExWithBirthdayResult"]["TotalRoomAndPackageCharges"]);
-			$o->set_prop("total_tax_charge", $return["MakeBookingExWithBirthdayResult"]["TotalTaxAndFeeCharges"]);
-			$o->set_prop("total_charge", $return["MakeBookingExWithBirthdayResult"]["TotalCharges"]);
-			$o->set_prop("charge_currency", $return["MakeBookingExWithBirthdayResult"]["ChargeCurrencyCode"]);
+			$o->set_prop("confirmation_code", $return["MakeBookingExWithBirthdayAndBookingIDResult"]["ConfirmationCode"]);
+			$o->set_prop("booking_id", $return["MakeBookingExWithBirthdayAndBookingIDResult"]["BookingId"]);
+			$o->set_prop("cancel_deadline", $owb->parse_date_int($return["MakeBookingExWithBirthdayAndBookingIDResult"]["CancellationDeadline"]));
+			$o->set_prop("total_room_charge", $return["MakeBookingExWithBirthdayAndBookingIDResult"]["TotalRoomAndPackageCharges"]);
+			$o->set_prop("total_tax_charge", $return["MakeBookingExWithBirthdayAndBookingIDResult"]["TotalTaxAndFeeCharges"]);
+			$o->set_prop("total_charge", $return["MakeBookingExWithBirthdayAndBookingIDResult"]["TotalCharges"]);
+			$o->set_prop("charge_currency", $return["MakeBookingExWithBirthdayAndBookingIDResult"]["ChargeCurrencyCode"]);
 
 			if (!$o->prop("ows_bron"))
 			{
@@ -466,12 +503,17 @@ fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($params).dbg::dump($return)."\n\n\
 			}
 
 			$o->set_meta("query", $params);
-			$o->set_meta("result", $return);
+				$o->set_meta("result", $return);
 			aw_disable_acl();
 			$o->save();
 			aw_restore_acl();
 			$i = get_instance(CL_OWS_BRON);
 			$i->send_mail_from_bron($o, true);
+
+                        $orderValue = $return["MakeBookingExWithBirthdayAndBookingIDResult"]["TotalRoomAndPackageCharges"];
+                        $orderNumber = $return["MakeBookingExWithBirthdayAndBookingIDResult"]["BookingId"];
+                        include_once(aw_ini_get("site_basedir")."/public/vv_td/TD_tracking_booking.php");
+
 
 			$url = $this->mk_my_orb("display_final_page", array("ows_rvs_id" => $o->prop("confirmation_code"), "section" => 107221), "ows_bron");
 			$url = str_replace("automatweb/", "", $url);

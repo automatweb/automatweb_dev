@@ -47,7 +47,7 @@ class reval_extranet extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	private function _get_user_id()
+	function _get_user_id()
 	{
 		return (int)$_SESSION["reval_extranet"]["id"];
 	}
@@ -60,7 +60,9 @@ class reval_extranet extends class_base
 		lc_site_load("reval_extranet", $this);
 
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("login", array("fail_return" => get_ru()), "users")
+			"reforb" => $this->mk_reforb("login", array("fail_return" => get_ru()), "users"),
+			"IS_ERROR" => ($_GET["flogin"] ? $this->parse("IS_ERROR") : ""),
+			"fail_url" => aw_url_change_var("flogin", 1)
 		));
 		return $this->parse();
 	}
@@ -76,6 +78,10 @@ class reval_extranet extends class_base
 		}
 		$this->read_template("show.tpl");
 		lc_site_load("reval_extranet", $this);
+		$this->vars(array(
+			"cru1" => substr(aw_url_change_var("mgr_id", "1"), 0, -1),
+			"cru2" => substr(aw_url_change_var("emgr_id", "1"), 0, -1),
+		));
 		$this->_disp_company_profile_edit($arr["id"]);
 		$this->_disp_acct_mgr($arr["id"]);
 		$this->_disp_event_mgr($arr["id"]);
@@ -92,9 +98,133 @@ class reval_extranet extends class_base
 		{
 			return $this->display_login();
 		}
+		$this->read_template("visits.tpl");
+ lc_site_load("reval_extranet", $this);
+		$return = $this->do_orb_method_call(array(
+                        "action" => "GetCompanyVisits",
+                        "class" => "http://markus.ee/RevalServices/Customers/",
+                        "params" => array(
+                                "companyId" => $_SESSION["reval_extranet"]["data"]["CompanyId"],
+                        ),
+                        "method" => "soap",
+                        "server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+                ));
+//die(dbg::dump($return));
+//echo dbg::dump($_SESSION["reval_extranet"]["data"]["CompanyId"]).dbg::dump($return);
+		$s = "";
+		$sum = 0;
+		$sumv = 0;
+	        if (isset($return["GetCompanyVisitsResult"]["Visits"]["VisitID"]))
+                {
+                        $var = array($return["GetCompanyVisitsResult"]["Visits"]);
+                }
+                else
+                {
+                        $var = $return["GetCompanyVisitsResult"]["Visits"];
+                }	
+		foreach($var as $visit)
+		{
+			$visit["ArrivalDate"] =  date("d.m.Y", reval_customer::_parse_date($visit["ArrivalDate"]));
+			$visit["DepartureDate"] = date("d.m.Y", reval_customer::_parse_date($visit["DepartureDate"]));
+ 			$sumv += $visit["RoomNights"];
+			$this->vars($visit);
+			$s .= $this->parse("VISIT");
+		}	
+
+
+		$return = $this->do_orb_method_call(array(
+                        "action" => "GetAllCompanyBookings",
+                        "class" => "http://markus.ee/RevalServices/Customers/",
+                        "params" => array(
+                                "companyId" => $_SESSION["reval_extranet"]["data"]["CompanyId"],
+				"languageId" => $this->_get_web_language_id()
+                        ),
+                        "method" => "soap",
+                        "server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+                ));
+//echo dbg::dump(array(
+                                //"companyId" => $_SESSION["reval_extranet"]["data"]["CompanyId"],
+				//"languageId" => $this->_get_web_language_id()
+                       // ));
+//die(dbg::dump($return));
+//echo dbg::dump($_SESSION["reval_extranet"]["data"]["CompanyId"]).dbg::dump($return);
+		//$s = "";
+		//$sum = 0;
+	        if (isset($return["GetAllCompanyBookingsResult"]["BookingDetails"]["BookingDetails"]["BookingId"]))
+                {
+                        $var = array($return["GetAllCompanyBookingsResult"]["BookingDetails"]["BookingDetails"]);
+                }
+                else
+                {
+                        $var = $return["GetAllCompanyBookingsResult"]["BookingDetails"]["BookingDetails"];
+                }	
+		$bs = "";
+		foreach($var as $visit)
+		{
+			$visit["ArrivalDate"] =  date("d.m.Y", reval_customer::_parse_date($visit["ArrivalDate"]));
+			$visit["DepartureDate"] = date("d.m.Y", reval_customer::_parse_date($visit["DepartureDate"]));
+                        $visit["Hotel"] = iconv("utf-8", aw_global_get("charset"), $visit["HotelName"]);
+                        $visit["BookingCompanyName"] = iconv("utf-8", aw_global_get("charset"), $visit["BookingCompanyName"]);
+                        $visit["BookerName"] = iconv("utf-8", aw_global_get("charset"), $visit["BookerName"]);
+                        $visit["RoomNights"] = (int)$visit["LengthOfStay"];
+			$sum += $visit["LengthOfStay"];
+			$this->vars($visit);
+			$bs .= $this->parse("BOOKING");
+		}	
+
+		/*$return = $this->do_orb_method_call(array(
+                        "action" => "GetActiveCompanyBookings",
+                        "class" => "http://markus.ee/RevalServices/Customers/",
+                        "params" => array(
+                                "companyId" => $_SESSION["reval_extranet"]["data"]["CompanyId"],
+				"languageId" => $this->_get_web_language_id()
+                        ),
+                        "method" => "soap",
+                        "server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+                ));
+//die(dbg::dump($return));
+//echo dbg::dump($_SESSION["reval_extranet"]["data"]["CompanyId"]).dbg::dump($return);
+		//$s = "";
+		//$sum = 0;
+	        if (isset($return["GetActiveCompanyBookingsResult"]["BookingDetails"]["BookingDetails"]["BookingId"]))
+                {
+                        $var = array($return["GetActiveCompanyBookingsResult"]["BookingDetails"]["BookingDetails"]);
+                }
+                else
+                {
+                        $var = $return["GetActiveCompanyBookingsResult"]["BookingDetails"]["BookingDetails"];
+                }	
+		foreach($var as $visit)
+		{
+			$visit["ArrivalDate"] =  date("d.m.Y", reval_customer::_parse_date($visit["ArrivalDate"]));
+			$visit["DepartureDate"] = date("d.m.Y", reval_customer::_parse_date($visit["DepartureDate"]));
+ 			$visit["Hotel"] = iconv("utf-8", aw_global_get("charset"), $visit["HotelName"]);
+			$visit["RoomNights"] = (int)$visit["LengthOfStay"];
+			$sum += $visit["LengthOfStay"];
+			$this->vars($visit);
+			$bs .= $this->parse("BOOKING");
+		}*/	
+
+
+		$this->vars(array(
+			"VISIT" => $s,
+			"BOOKING" => $bs,
+			"sum_nights" => $sum,
+			"sum_nights_v" => $sumv
+		));
+                $this->_disp_acct_mgr($arr["id"]);
+                $this->_disp_event_mgr($arr["id"]);
+                $this->_insert_tabs($arr["id"]);
+	
+		return $this->parse();
 		$this->read_template("show_tab2.tpl");
 		lc_site_load("reval_extranet", $this);
+		$this->vars(array(
+			"cru" => $_SERVER["REQUEST_URI"]
+		));
 		$this->_insert_tabs($arr["id"]);
+		$this->_disp_acct_mgr($arr["id"]);
+		$this->_disp_event_mgr($arr["id"]);
 		return $this->parse();
 	}
 
@@ -108,17 +238,22 @@ class reval_extranet extends class_base
 				"languageId" => $this->_get_web_language_id()
 			),
 			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServicesTest/CustomerService.asmx"
+			"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
 		));
 
 		if ($return["GetCompanyAccountManagersResult"]["ResultCode"] != "Success")
 		{
 			return $this->display_login();
 		}
+
+		if (!is_array($return["GetCompanyAccountManagersResult"]["AccountManagers"]))
+		{
+			return;
+		}
 		$ctry_list = array();
 		foreach($return["GetCompanyAccountManagersResult"]["AccountManagers"]["AccountManager"] as $mgr)
 		{
-			$ctry_list[$mgr["ID"]] = $mgr["CountryName"];
+			$ctry_list[$mgr["ID"]] = $mgr["CountryName"]." - ".$mgr["CategoryName"];
 		}
 		foreach($return["GetCompanyAccountManagersResult"]["AccountManagers"]["AccountManager"] as $mgr)
 		{
@@ -128,16 +263,36 @@ class reval_extranet extends class_base
 					"mgr_fn" => reval_customer::_f($mgr["FirstName"]),
 					"mgr_ln" => reval_customer::_f($mgr["LastName"]),
 					"mgr_email" => reval_customer::_f($mgr["Email"]),
-					"mgr_phone" => "__undefined__",//reval_customer::_f($mgr[""]),
-					"mgr_mobile" => "__undefined__",//reval_customer::_f($mgr["LastName"]),
+					"mgr_phone" => reval_customer::_f($mgr["Phone"]),
+					"mgr_mobile" => reval_customer::_f($mgr["MobilPhone"]),
 					"mgr_skype" => reval_customer::_f($mgr["SkypeID"]),
+					"acct_mgr_img" => $this->mk_my_orb("disp_evmgr", array("id" => $mgr["ID"])),
 				));
 				break;
 			}
 		}
 		$this->vars(array(
-			"acct_mgr_ctry_select" => $this->picker("", $ctry_list)
+			"acct_mgr_ctry_select" => $this->picker($_GET["mgr_id"], $ctry_list)
 		));
+	}
+
+	/**
+		@attrib name=disp_evmgr nologin="1"
+		@param id required
+	**/
+	public function disp_evmgr($arr)
+	{
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetSystemUserPicture",
+			"class" => "http://markus.ee/RevalServices/Customers/",
+			"params" => array(
+				"systemUserId" => $arr["id"],
+			),
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+		));
+		header("Content-type: image/jpeg");
+		die(base64_decode($return["GetSystemUserPictureResult"]));
 	}
 
 	private function _disp_event_mgr($id)
@@ -150,7 +305,7 @@ class reval_extranet extends class_base
 				"languageId" => $this->_get_web_language_id()
 			),
 			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServicesTest/CustomerService.asmx"
+			"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
 		));
 
 		if ($return["GetCompanyEventManagersResult"]["ResultCode"] != "Success")
@@ -158,6 +313,14 @@ class reval_extranet extends class_base
 			return $this->display_login();
 		}
 
+		if (!is_array($return["GetCompanyEventManagersResult"]["EventManagers"]))
+		{
+			return;
+		}
+		if (!is_array($return["GetCompanyEventManagersResult"]["EventManagers"]["EventManager"]))
+		{
+			return;
+		}
 		$ctry_list = array();
 		if (!is_array($return["GetCompanyEventManagersResult"]["EventManagers"]["EventManager"][0]))
 		{
@@ -168,7 +331,7 @@ class reval_extranet extends class_base
 
 		foreach($return["GetCompanyEventManagersResult"]["EventManagers"]["EventManager"] as $mgr)
 		{
-			$ctry_list[$mgr["ID"]] = $mgr["CountryName"];
+			$ctry_list[$mgr["ID"]] = $mgr["CountryName"]." - ".$mgr["CategoryName"];
 		}
 		foreach($return["GetCompanyEventManagersResult"]["EventManagers"]["EventManager"] as $mgr)
 		{
@@ -178,15 +341,16 @@ class reval_extranet extends class_base
 					"emgr_fn" => reval_customer::_f($mgr["FirstName"]),
 					"emgr_ln" => reval_customer::_f($mgr["LastName"]),
 					"emgr_email" => reval_customer::_f($mgr["Email"]),
-					"emgr_phone" => "__undefined__",//reval_customer::_f($mgr[""]),
-					"emgr_mobile" => "__undefined__",//reval_customer::_f($mgr["LastName"]),
+					"emgr_phone" => reval_customer::_f($mgr["Phone"]),
+					"emgr_mobile" => reval_customer::_f($mgr["MobilPhone"]),
 					"emgr_skype" => reval_customer::_f($mgr["SkypeID"]),
+					"event_mgr_img" => $this->mk_my_orb("disp_evmgr", array("id" => $mgr["ID"])),
 				));
 				break;
 			}
 		}
 		$this->vars(array(
-			"event_mgr_ctry_select" => $this->picker("", $ctry_list)
+			"event_mgr_ctry_select" => $this->picker($_GET["emgr_id"], $ctry_list)
 		));
 	}
 
@@ -213,7 +377,7 @@ class reval_extranet extends class_base
 				"languageId" => $this->_get_web_language_id()
 			),
 			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServicesTest/CustomerService.asmx"
+			"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
 		));
 
 		if ($return["GetCompanyProfileResult"]["ResultCode"] != "Success")
@@ -244,7 +408,7 @@ class reval_extranet extends class_base
 		));
 	}
 
-	private function _get_web_language_id()
+	function _get_web_language_id()
 	{
 		$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
 		return get_instance(CL_OWS_BRON)->get_web_language_id($lc);
@@ -275,9 +439,45 @@ class reval_extranet extends class_base
 	public function submit_view1($arr)
 	{
 		// validate
+
+		$params = array(
+			"companyId" => self::get_company_id(),
+			"userCustomerId" => $_SESSION["reval_extranet"]["data"]["CustomerId"],
+			"businessAddressLine1" => $this->_st($arr["adr1"]),
+			"businessAddressLine2" => $this->_st($arr["adr2"]),
+			"businessCityName" => $this->_st($arr["city"]),
+			"businessPostalCode" => $this->_st($arr["zip"]),
+			"contactBusinessTitle" => $this->_st($arr["ct_business_title"]),
+			"contactName" => $this->_st($arr["ct_firstname"])." ".$this->_st($arr["ct_lastname"]),
+			"contactEmail" => $this->_st($arr["ct_email"]),
+			"contactPhone" => $this->_st($arr["ct_phone"]),
+			"contactMobile" => $this->_st($arr["ct_mobile"]),
+			"languageId" => $this->_get_web_language_id()
+		);
+
 		// service
-		die("service not implemented yet");
+		$return = $this->do_orb_method_call(array(
+			"action" => "UpdateCompanyProfile",
+			"class" => "http://markus.ee/RevalServices/Customers/",
+			"params" => $params,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+		));
 		return $arr["ru"];
+	}
+
+	public function _st($str)
+	{
+		return iconv(aw_global_get("charset"), "utf-8", strip_tags($str));
+	}
+
+	public static function get_cust_id()
+	{
+		//if ($rv = reval_customer::get_cust_id())
+		//{
+		//	return $rv;
+		//}
+		return $_SESSION["reval_extranet"]["data"]["CustomerId"];
 	}
 }
 

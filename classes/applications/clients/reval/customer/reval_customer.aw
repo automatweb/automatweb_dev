@@ -20,7 +20,7 @@ class reval_customer extends class_base
 	);
 
 	function reval_customer()
-	{
+	{//if(aw_global_get("uid") == "testinimene@struktuur.ee") arr($_SESSION["reval_fc"]);
 		$this->init(array(
 			"tpldir" => "applications/clients/reval/customer/reval_customer",
 			"clid" => CL_REVAL_CUSTOMER
@@ -64,7 +64,7 @@ class reval_customer extends class_base
 	}
 
 	function show($arr)
-	{ 
+	{
 		if (!$this->get_cust_id())
 		{
 			if ($_GET["do"] == "verifyForgotPassword")
@@ -84,7 +84,105 @@ class reval_customer extends class_base
 		$this->_insert_web_bookings(5, array("id" => $arr["id"]));
 		$this->_insert_subscribed_categories();
 		$this->_insert_edit_links($ob->id());
+		$this->_insert_free_nights();
 		return $this->parse();
+	}
+
+	function _insert_free_nights()
+	{
+
+/*if ($_SESSION["reval_fc"]["id"] != 63073)
+{
+	return;
+}*/
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetCustomerComplimentaryNightStatistics",
+			"class" => "http://markus.ee/RevalServices/Customers/",
+			"params" => array(
+				"customerId" => $_SESSION["reval_fc"]["id"]
+			),
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+		));
+		if ($return["GetCustomerComplimentaryNightStatisticsResult"]["PendingNights"] > 0 ||
+			$return["GetCustomerComplimentaryNightStatisticsResult"]["UnusedNights"] > 0 ||
+			$return["GetCustomerComplimentaryNightStatisticsResult"]["ExpiredNights"] > 0 ||
+			$return["GetCustomerComplimentaryNightStatisticsResult"]["UsedNights"] > 0)
+		{
+			$return2 = $this->do_orb_method_call(array(
+				"action" => "GetCustomerUnusedComplimentaryNights",
+				"class" => "http://markus.ee/RevalServices/Customers/",
+				"params" => array(
+					"customerId" => $_SESSION["reval_fc"]["id"]
+				),
+				"method" => "soap",
+				"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+			));
+//die(dbg::dump($return2));
+			if (is_array($return2["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]) && is_array($return2["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]["ComplimentaryNightCount"]) && !is_array($return2["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]["ComplimentaryNightCount"][0]) && !empty($return2["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]["ComplimentaryNightCount"]["NumberOfNights"]))
+			{
+				$return2["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]["ComplimentaryNightCount"] = array($return2["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]["ComplimentaryNightCount"]);
+			}
+			$s = "";
+			foreach($return2["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]["ComplimentaryNightCount"] as $e)
+			{
+				$this->vars(array(
+					"freee_avail_count" => $e["NumberOfNights"],
+					"freee_avail_date" => date("F Y", $this->_parse_date($e["ExpiryDate"])),
+				));
+				$s .= $this->parse("AVAILABLE_FREE_NIGHT");
+			}
+
+			$return2 = $this->do_orb_method_call(array(
+				"action" => "GetCustomerUsedComplimentaryNights",
+				"class" => "http://markus.ee/RevalServices/Customers/",
+				"params" => array(
+					"customerId" => $_SESSION["reval_fc"]["id"]
+				),
+				"method" => "soap",
+				"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+			));
+			$s2 = "";
+			if (is_array($return2["GetCustomerUsedComplimentaryNightsResult"]["UsedComplimentaryNights"]) && is_array($return2["GetCustomerUsedComplimentaryNightsResult"]["UsedComplimentaryNights"]["ComplimentaryNightUsage"]) && !is_array($return2["GetCustomerUsedComplimentaryNightsResult"]["UsedComplimentaryNights"]["ComplimentaryNightUsage"][0]) && !empty($return2["GetCustomerUsedComplimentaryNightsResult"]["UsedComplimentaryNights"]["ComplimentaryNightUsage"]["UsageDate"]))
+			{
+				$return2["GetCustomerUsedComplimentaryNightsResult"]["UsedComplimentaryNights"]["ComplimentaryNightUsage"] = array($return2["GetCustomerUsedComplimentaryNightsResult"]["UsedComplimentaryNights"]["ComplimentaryNightUsage"]);
+			}
+
+			foreach($return2["GetCustomerUsedComplimentaryNightsResult"]["UsedComplimentaryNights"]["ComplimentaryNightUsage"] as $e)
+			{
+				$this->vars(array(
+					"num_free_used" => 1, //$e["NumberOfNights"],
+					"date_free_used" => date("F Y", $this->_parse_date($e["UsageDate"])),
+				));
+				$s2 .= $this->parse("USED_FREE_NIGHT");
+			}
+			
+			$this->vars(array(
+				"USED_FREE_NIGHT" => $s2,
+				"AVAILABLE_FREE_NIGHT" => $s,
+				"num_late_expired" => $return["GetCustomerComplimentaryNightStatisticsResult"]["ExpiredNights"],
+			));
+			if ($s2 != "")
+			{
+				$this->vars(array(
+					"HAS_USED_FREE_NIGHT" => $this->parse("HAS_USED_FREE_NIGHT")
+				));
+			}
+			if ($s != "")
+			{
+				$this->vars(array(
+					"HAS_AVAIL_NIGHTS" => $this->parse("HAS_AVAIL_NIGHTS")
+				));
+			}
+
+			if ($return["GetCustomerComplimentaryNightStatisticsResult"]["ExpiredNights"])
+			{
+				$this->vars(array(
+					"HAS_LATELY_EXPIRED" => $this->parse("HAS_LATELY_EXPIRED")
+				));
+			}
+			$this->vars(array("HAS_FREE_NIGHTS" => $this->parse("HAS_FREE_NIGHTS")));
+		}
 	}
 
 	function _disp_login()
@@ -109,13 +207,13 @@ class reval_customer extends class_base
 			"login" => $arr["fc_uid"],
 			"password" => $arr["fc_pwd"]
 		);
-	
+
 		$return = $this->do_orb_method_call(array(
 			"action" => "ValidateCustomerByLoginAndPassword",
 			"class" => "http://markus.ee/RevalServices/Security/",
 			"params" => $params,
 			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServicesTest/SecurityService.asmx"
+			"server" => "http://195.250.171.36/RevalServices/SecurityService.asmx" // REPL
 		));
 
 		if ($return["ValidateCustomerByLoginAndPasswordResult"]["ValidationStatus"] != "Success")
@@ -192,10 +290,24 @@ class reval_customer extends class_base
 			"smoking_pref" => $room_pref_options[(int)$this->_f($cust_data["RoomSmokingPreferenceId"])],
 			"floor_pref" => $floor_pref_opts[$this->_f($cust_data["FloorPreferenceId"])],
 			"currency_pref" => $this->_f($cust_data["DefaultWebCurrencyLabel"]),
+			"Last2YearVisits" => $this->_f($cust_data["Last2YearVisits"]),
 			"last_visit" => date("d.m.Y H:i:s", $this->_parse_date($cust_data["LastWebLoginDateTime"]))
 		));
 
-		if ($cust_data["NextLevelId"])
+		if ($cust_data["CurrentLevelId"] == $cust_data["NextLevelId"])
+		{
+			$this->vars(array(
+				"DIAMOND" => $this->parse("DIAMOND")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"NOT_DIAMOND" => $this->parse("NOT_DIAMOND")
+			));
+		}
+
+		if ($cust_data["NextLevelId"] && $cust_data["NightsTillNextLevel"] != -1)
 		{
 			$this->vars(array(
 				"HAS_NEXT_LEVEL" => $this->parse("HAS_NEXT_LEVEL")
@@ -225,17 +337,17 @@ class reval_customer extends class_base
 
 	public static function get_cust_id()
 	{
+//return 74678;
 	//return 24419;
 		return (int)$_SESSION["reval_fc"]["id"];
 	}
 
 	private function _insert_web_bookings($limit = null, $arr)
 	{
-		$book_data = $this->do_call("GetCustomerBookings", array(
+		$book_data = $this->do_call("GetCustomerLastTwoYearBookings", array(
 			"customerId" => $this->get_cust_id(),
 			"webLanguageId" => $this->_get_web_language_id()
 		), "Customers");
-
 		$bs = "";
 		if (isset($book_data["BookingDetails"]["BookingDetails"]["BookingId"]))
 		{
@@ -245,6 +357,7 @@ class reval_customer extends class_base
 		{
 			$var = $book_data["BookingDetails"]["BookingDetails"];
 		}
+		$bron_inst = get_instance("applications/ows_bron/ows_bron");
 		foreach($var as $booking)
 		{
 				$this->vars(array(
@@ -257,7 +370,8 @@ class reval_customer extends class_base
 				"booking_from" => date("d.m.Y", $this->_parse_date($booking["ArrivalDate"])),
 				"booking_to" => date("d.m.Y", $this->_parse_date($booking["DepartureDate"])),
 				"num_nights" => $this->_f($booking["LengthOfStay"]),
-				"hotel_name" => $this->_f($booking["HotelName"]),
+				//"hotel_name" => $this->_f($booking["HotelName"]), webservice gives wrong hotel name
+				"hotel_name" => $bron_inst->hotel_list[$this->_f($booking["HotelId"])],
 				"checkin_url" => $this->mk_my_orb("do_checkin", array("ows_rvs_id" => $booking["ConfirmationCode"], "section" => /*aw_global_get("section")*/ 176784 , "id" => $arr["id"]))
 			));
 			if (++$i % 2 == 1)
@@ -308,15 +422,15 @@ class reval_customer extends class_base
 			"class" => "http://markus.ee/RevalServices/$ns/",
 			"params" => $params,
 			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServicesTest/".$fn.".asmx"
+			"server" => "http://195.250.171.36/RevalServices/".$fn.".asmx" // REPL
 		));
 		exit_function("reval_customer::ws_call::$action");
 		return $full_res ? $return : $return[$action.'Result'];
 	}
 
-	private function _f($str)
+	public function _f($str)
 	{
-		$str = iconv("utf-8", $this->_charset(), $str);
+		$str = iconv("utf-8", self::_charset(), $str);
 		return $str;
 	}
 
@@ -338,7 +452,7 @@ class reval_customer extends class_base
 		@param id required type=int acl=view
 	**/
 	function edit_profile($arr)
-	{	
+	{
 		if (!$this->get_cust_id())
 		{
 			return $this->_disp_login();
@@ -373,7 +487,7 @@ class reval_customer extends class_base
 		$cust_data = $this->do_call("GetCustomerProfile", array(
 			"customerId" => $this->get_cust_id(),
 			"webLanguageId" => $this->_get_web_language_id()
-		), "Customers");
+		), "Customers"); //arr($cust_data);
 //die(dbg::dump($cust_data));
 		$this->vars(array(
 			"firstname" => $this->_f($cust_data["FirstName"]),
@@ -511,7 +625,7 @@ class reval_customer extends class_base
 
 	private function _get_room_preference_options()
 	{
-		return array("1" => t("Ei ole eelistust"), 3 => t("Suitsetav"), 2 => t("Suitsuvaba"));
+		return array(/*"1" => t("Ei ole eelistust"), */ 2 => t("Suitsuvaba"), 3 => t("Suitsetav"));
 	}
 
 	private function _ep_do_room_pref_select($fb_id)
@@ -557,10 +671,12 @@ class reval_customer extends class_base
 
 	private function _ep_do_city_select($city_id)
 	{
+		$ce = "";
 		$c = get_instance("cache");
 		if (($ct = $c->file_get("ws_city_list")) !== false)
 		{
-			$d = unserialize($ct);
+			//$d = unserialize($ct);
+			$ce = $ct;
 		}
 		else
 		{
@@ -572,17 +688,26 @@ class reval_customer extends class_base
 			foreach($city_list["Cities"]["City"] as $city_entry)
 			{
 				$d[$city_entry["ID"]] = $city_entry["Name"];
+				$this->vars(array(
+					"country" => trim($city_entry["CountryCode"]),
+					"city_id" => $city_entry["ID"],
+					"city_name" => iconv("utf-8", aw_global_get("charset"), $city_entry["Name"])
+				));
+				$ce .= $this->parse("CITY_ENTRY");
 			}
-			$c->file_set("ws_city_list", serialize($d));
+
+			$c->file_set("ws_city_list", /*serialize($d)*/ $ce);
 		}
+
+		$this->vars(array("CITY_ENTRY" => $ce));
 
 		return $this->picker($city_id, $d);
 	}
 
-	private function _ef($str)
+	public function _ef($str)
 	{
 		$r = iconv("utf-8", aw_global_get("charset")."//IGNORE", $str);
-		return $this->_efc($r);
+		return self::_efc($r);
 	}
 
 	private function _efc($str)
@@ -671,13 +796,30 @@ class reval_customer extends class_base
 		);
 //echo dbg::dump($d);
 //die();
-if (aw_global_get("uid") == "diamond@hotmail.com")
-{
+//if (aw_global_get("uid") == "diamond@hotmail.com")
+//{
 	//aw_global_set("soap_debug", 1);
-}
+//}
 		$rv = $this->do_call("UpdateCustomerProfile", $d, "Customers", true);
 //echo dbg::dump($rv);
+//die();
 //echo "<hr>";
+
+/*		if($rv["UpdateCustomerProfileResult"]["ResultCode"] == "Success" && $u->get_current_person())
+		{
+			$u = get_instance(CL_USER);
+			$person = obj($u->get_current_person());
+			$person ->set_prop("firstname" , $cust_data["FirstName"]);
+			$person ->set_prop("lastname" , $cust_data["LastName"]);
+			$person ->set_name(join(" " , array($cust_data["FirstName"] , $cust_data["LastName"])));
+		aw_disable_acl();
+			$person -> save();
+		aw_restore_acl();
+
+		}
+
+*/
+
 		// set sub cats
 		$all_cat_list = $this->do_call("GetSubscriptionCategories", array(
 			"languageId" => $this->_get_web_language_id()
@@ -699,12 +841,12 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		), "Customers");
 //echo dbg::dump($rv2);
 
-
+/*
 if (aw_global_get("uid") == "diamond@hotmail.com")
 {
 	arr($d); arr($rv); arr($rv2);arr($arr);
 }
-
+*/
 
 		return $this->_u($this->mk_my_orb("edit_profile", array("error" => 100, "section" => $arr["section"], "id" => $arr["id"], "reval_customer", false, false, "&", false)));
 	}
@@ -724,6 +866,7 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 	/**
 		@attrib name=edit_email nologin="1"
 		@param id required type=int
+		@param done optional type=int
 	**/
 	function edit_email($arr)
 	{
@@ -739,6 +882,10 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		$this->_ep_insert_tabs($o->id());
 		$this->_ee_do_data();
 		$this->_do_errors();
+		if($arr["done"])
+		{
+			$this->vars(array("DONE" => $this->parse("DONE")));
+		}
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_edit_email", array("section" => aw_global_get("section"), "id" => $arr["id"]))
 		));
@@ -752,7 +899,7 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 			"webLanguageId" => $this->_get_web_language_id()
 		), "Customers");
 		$this->vars(array(
-			"cur_email" => $cust_data["Login"],
+			"cur_email" => $cust_data["Email"],
 			"new_email" => $this->_req("NewEmail", "")
 		));
 	}
@@ -761,7 +908,11 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		@attrib name=submit_edit_email nologin="1"
 	**/
 	function submit_edit_email($arr)
-	{	
+	{
+
+		$u = get_instance(CL_USER);
+
+		$user = obj($u->get_current_user());
 		if (!$this->get_cust_id())
 		{
 			return $this->_disp_login();
@@ -781,12 +932,20 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		{
 				return $this->_err_ret("edit_email", $arr, 2);
 		}
-		return $this->_u($this->mk_my_orb("edit_email", array("id" => $arr["id"], "section" => $arr["section"]), "reval_customer", false, false, "&", false));
+
+/*		if($this->can("edit" ,$user->id()))
+		{
+			$user->set_prop("uid" , $arr["NewEmail"]);
+			$user->set_name($arr["NewEmail"]);
+			$user->save();
+		}*/
+		return $this->_u($this->mk_my_orb("edit_email", array("id" => $arr["id"], "section" => $arr["section"], "done" => 1), "reval_customer", false, false, "&", false));
 	}
 
 	/**
 		@attrib name=edit_password nologin="1"
 		@param id required type=int
+		@param done optional type=int
 	**/
 	function edit_password($arr)
 	{
@@ -801,6 +960,10 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 
 		$this->_ep_insert_tabs($o->id());
 		$this->_do_errors();
+		if($arr["done"])
+		{
+			$this->vars(array("DONE" => $this->parse("DONE")));
+		}
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_edit_password", array("section" => aw_global_get("section"), "id" => $arr["id"]))
 		));
@@ -1026,16 +1189,20 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		lc_site_load("reval_customer", $this);
 
 		$return = $this->do_orb_method_call(array(
-			"action" => "GetCustomerVisits",
+			"action" => "GetCustomerLastTwoYearVisits",
 			"class" => "http://markus.ee/RevalServices/Customers/",
 			"params" => array("customerId" => $this->get_cust_id()),
 			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServicesTest/CustomerService.asmx"
+			"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
 		));
 
 		$v = "";
 		$sum = 0;
-		foreach($return["GetCustomerVisitsResult"]["Visits"]["HotelVisit"] as $visit)
+		if (is_array($return["GetCustomerLastTwoYearVisitsResult"]["Visits"]["HotelVisit"]) && !is_array($return["GetCustomerLastTwoYearVisitsResult"]["Visits"]["HotelVisit"][0]))
+		{
+			$return["GetCustomerLastTwoYearVisitsResult"]["Visits"]["HotelVisit"] = array($return["GetCustomerLastTwoYearVisitsResult"]["Visits"]["HotelVisit"]);
+		}
+		foreach($return["GetCustomerLastTwoYearVisitsResult"]["Visits"]["HotelVisit"] as $visit)
 		{
 			$this->vars(array(
 				"hotel" => $visit["Hotel"],
@@ -1087,17 +1254,15 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		{
 			return $this->_err_ret("register_as_customer", $arr, 2);
 		}
-
 		$rv = $this->do_call("ValidateCustomerByCardNumberAndBirthday", array(
 			"cardNumber" => $arr["card_number"],
 			"birthday" => sprintf("%04d", $y).'-'.sprintf("%02d", $m).'-'.sprintf("%02d", $d).'T00:00:00'
 		), "Security");
-
 		if ($rv["ValidationStatus"] != "Success")
 		{
 			return $this->_err_ret("register_as_customer", $arr, 3);
 		}
-	
+
 		// write data to session, so that the person can edit their profile
 		$_SESSION["reval_fc"]["id"] = $rv["CustomerId"];
 		return $this->mk_my_orb("edit_profile", array("section" => $arr["section"], "id" => $arr["id"]), "reval_customer", false, false, "&", false);
@@ -1194,6 +1359,10 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 	**/
 	function forgot_password($arr)
 	{
+			if ($_GET["message"])
+			{
+				$_GET["error"] = $_GET["message"];
+			}
 			$this->read_template("forgot_password.tpl");
 			lc_site_load("reval_customer", $this);
 			$this->_do_errors();
@@ -1205,7 +1374,7 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 	}
 
 	/**
-		@attrib name=submit_forgot_password
+		@attrib name=submit_forgot_password nologin="1"
 	**/
 	function submit_forgot_password($arr)
 	{
@@ -1235,17 +1404,17 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		// generate new password, set it to the user and mail them about it
 		$password = generate_password();
 
-		$rv = $this->do_call("SetCustomerPassword", array(
+		$rv2 = $this->do_call("SetCustomerPassword", array(
 			"customerId" => $rv["CustomerId"],
 			"password" => $password
 		), "Customers", true);
-		if ($rv["SetCustomerPasswordResult"]["ResultCode"] != "Success")
+		if ($rv2["SetCustomerPasswordResult"]["ResultCode"] != "Success")
 		{
 				return $this->_err_ret("forgot_password", $arr, 5);
 		}
 
 		$this->_mail_customer_password($rv, $password);
-		return $this->mk_my_orb("forgot_password", array("section" => aw_global_get("section"), "error" => 100));
+		return str_replace("orb.aw", "", $this->mk_my_orb("forgot_password", array("section" => $arr["section"], "message" => 100)));
 	}
 
 	private function _mail_customer_password($rv, $password)
@@ -1263,16 +1432,71 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 
 			$awm = get_instance("protocols/mail/aw_mail");
 			$awm->create_message(array(
-							"froma" => "info@revalhotels.com",
+							"froma" => "firstclient.estonia@revalhotels.com",
 							"fromn" => "Reval Hotels",
 							"subject" => trim($subject),
-							"to" => "kristo@struktuur.ee", //$email,
+							"to" => $rv["Email"],
 							"body" => strip_tags($content),
 			));
 			$awm->htmlbodyattach(array(
 							"data" => $content,
 			));
 			$awm->gen_mail();
+	}
+
+	/**
+		@attrib name=complimentary_nights_page nologin=1
+	**/
+	function complimentary_nights_page($arr)
+	{
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		$this->read_template("complimentary_nights.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetCustomerComplimentaryNightStatistics",
+			"class" => "http://markus.ee/RevalServices/Customers/",
+			"params" => array("customerId" => $this->get_cust_id()),
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+		));
+
+		$this->vars(array(
+			"active" => $return["GetCustomerComplimentaryNightStatisticsResult"]["UnusedNights"],
+			"expired" => $return["GetCustomerComplimentaryNightStatisticsResult"]["ExpiredNights"],
+			"used" => $return["GetCustomerComplimentaryNightStatisticsResult"]["UsedNights"],
+		));
+
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetCustomerUnusedComplimentaryNights",
+			"class" => "http://markus.ee/RevalServices/Customers/",
+			"params" => array("customerId" => $this->get_cust_id()),
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/CustomerService.asmx" // REPL
+		));
+
+		if (is_array($return["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]["ComplimentaryNightCount"]) && 
+				count($return["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]["ComplimentaryNightCount"]))
+		{
+			foreach($return["GetCustomerUnusedComplimentaryNightsResult"]["ComplimentaryNights"]["ComplimentaryNightCount"] as $row)
+			{
+				$this->vars(array(
+					"number" => $row["NumberOfNights"],
+					"date" => date("d.m.Y", $this->_parse_date($row["ExpiryDate"]))
+				));
+				$s .= $this->parse("NIGHT_LINE");
+			}
+		}
+
+		$this->vars(array(
+			"NIGHT_LINE" => $s
+		));
+
+		return $this->parse();
 	}
 }
 
