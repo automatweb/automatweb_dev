@@ -654,10 +654,11 @@ class mrp_resource extends class_base
 	{
 		$this_object =& $arr["obj_inst"];
 		$table =& $arr["prop"]["vcl_inst"];
-		$done = $arr["prop"]["name"] === "job_list_done" || $for_workspace;
+		$done = $arr["prop"]["ame"] === "job_list_done" || $for_workspace;
 		$this->_init_job_list_table($table, $done);
 
-
+		$caption = sprintf($for_workspace ? t("Ressursi '%s' t&ouml;&ouml;d") : ($done ? t("Ressursi '%s' tehtud t&ouml;&ouml;d") : t("Ressursi '%s' eelseisvad t&ouml;&ouml;d")), parse_obj_name($this_object->name()));
+		$table->set_caption($caption);
 
 		$table->set_default_sortby ("starttime");
 		$table->set_default_sorder ("asc");
@@ -723,30 +724,6 @@ class mrp_resource extends class_base
 		{
 			$this->draw_job_list_table_from_list($table, $jobs, $done);
 		}
-			/*
-		$proj_oids = $list->get_element_from_all("project");
-		if(count($proj_oids) > 0)
-		{
-			$projects = new object_list(array(
-				"class_id" => CL_MRP_CASE,
-				"state" => $applicable_project_states,
-				"oid" => $proj_oids,
-			));
-
-			foreach($jobs as $oid => $o)
-			{
-				if(!$this->can("view", $o["project"]) || !in_array($o["project"], $projects->ids()))
-				{
-					unset($jobs[$oid]);
-				}
-			}
-
-			if(count($jobs) > 0)
-			{
-				$this->draw_job_list_table_from_list($table, $jobs, $done);
-			}
-		}
-		*/
 	}
 
 	function draw_job_list_table_from_list(&$table, $jobs, $times)
@@ -805,7 +782,7 @@ class mrp_resource extends class_base
 					"planned_length" => round($planned_length, 2),
 				);
 				if(MRP_STATUS_DONE == $job["state"])
-				{						
+				{
 					// ARVUTA TEGELIK
 					$this->db_query("SELECT * FROM mrp_stats WHERE job_oid = ".$oid);
 					$real_len = 0;

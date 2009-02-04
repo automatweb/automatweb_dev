@@ -302,6 +302,20 @@
             <parent>resources_tree_box</parent>
       </property>
       <property>
+            <name>resource_deviation_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_resources_manage</num_0>
+                  <num_1>grp_resources_load</num_1>
+            </group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>resource_deviation_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
             <name>resources_list</name>
             <table>objects</table>
             <field>meta</field>
@@ -381,17 +395,6 @@
             <store>no</store>
       </property>
       <property>
-            <name>clients_chart</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_schedule_google</group>
-            <type>google_chart</type>
-            <no_caption>1</no_caption>
-            <parent>clients_chart</parent>
-            <store>no</store>
-      </property>
-      <property>
             <name>deadline_chart</name>
             <table>objects</table>
             <field>meta</field>
@@ -400,6 +403,17 @@
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <parent>deadline_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>clients_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule_google</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>clients_chart</parent>
             <store>no</store>
       </property>
       <property>
@@ -1658,6 +1672,16 @@
                   </group>
                   <area_caption></area_caption>
             </right_pane>
+            <resource_deviation_chart>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ressursi&amp;amp;nbsp;h&amp;amp;auml;lbe&amp;amp;nbsp;muutus&amp;amp;nbsp;ajas</area_caption>
+                  <parent>right_pane</parent>
+                  <group>
+                        <num_0>grp_resources_manage</num_0>
+                        <num_1>grp_resources_load</num_1>
+                  </group>
+            </resource_deviation_chart>
             <schedule_search_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
@@ -1672,31 +1696,24 @@
             </charts_1>
             <states_chart>
                   <type>vbox</type>
-                  <area_caption>K&amp;amp;auml;imasolevad&amp;amp;nbso;projektid&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
+                  <area_caption>K&amp;amp;auml;imasolevad&amp;amp;nbsp;projektid&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
                   <parent>charts_1</parent>
                   <closeable>1</closeable>
                   <group>grp_schedule_google</group>
             </states_chart>
-            <clients_chart>
-                  <type>vbox</type>
-                  <area_caption>K&amp;amp;auml;imasolevad&amp;amp;nbsp;projektid&amp;amp;nbsp;klientide&amp;amp;nbsp;kaupa</area_caption>
-                  <parent>charts_1</parent>
-                  <closeable>1</closeable>
-                  <group>grp_schedule_google</group>
-            </clients_chart>
-            <charts_2>
-                  <type>hbox</type>
-                  <width>50%:50%</width>
-                  <group>grp_schedule_google</group>
-                  <area_caption></area_caption>
-            </charts_2>
             <deadline_chart>
                   <type>vbox</type>
                   <area_caption>K&amp;amp;auml;imasolevad&amp;amp;nbsp;projektid&amp;amp;nbsp;t&amp;amp;auml;htaja&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
-                  <parent>charts_2</parent>
+                  <parent>charts_1</parent>
                   <closeable>1</closeable>
                   <group>grp_schedule_google</group>
             </deadline_chart>
+            <clients_chart>
+                  <type>vbox</type>
+                  <area_caption>K&amp;amp;auml;imasolevad&amp;amp;nbsp;projektid&amp;amp;nbsp;klientide&amp;amp;nbsp;kaupa&amp;amp;nbsp;(TOP&amp;amp;nbsp;20)</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_schedule_google</group>
+            </clients_chart>
             <userlist_tree_box>
                   <type>vbox</type>
                   <closeable>1</closeable>

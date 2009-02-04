@@ -109,8 +109,8 @@
 	@layout resources_tree_box type=vbox closeable=1 area_caption=Ressursid&amp;kategooriad parent=vsplitbox
 		@property resources_tree type=text store=no no_caption=1 parent=resources_tree_box
 	@layout right_pane type=vbox parent=vsplitbox
-#		@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=right_pane
-#			@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no
+		@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=right_pane
+			@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no
 		@property resources_list type=table store=no parent=right_pane no_caption=1
 
 
@@ -134,19 +134,17 @@
 
 	@layout charts_1 type=hbox width=50%:50%
 
-		@layout states_chart type=vbox area_caption=K&auml;imasolevad&nbso;projektid&nbsp;staatuste&nbsp;kaupa parent=charts_1 closeable=1
+		@layout states_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;staatuste&nbsp;kaupa parent=charts_1 closeable=1
 
 			@property states_chart type=google_chart no_caption=1 parent=states_chart store=no
 
-		@layout clients_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;klientide&nbsp;kaupa parent=charts_1 closeable=1
-
-			@property clients_chart type=google_chart no_caption=1 parent=clients_chart store=no
-
-	@layout charts_2 type=hbox width=50%:50%
-
-		@layout deadline_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=charts_2 closeable=1
+		@layout deadline_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=charts_1 closeable=1
 
 			@property deadline_chart type=google_chart no_caption=1 parent=deadline_chart store=no
+
+	@layout clients_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;klientide&nbsp;kaupa&nbsp;(TOP&nbsp;20) closeable=1
+
+		@property clients_chart type=google_chart no_caption=1 parent=clients_chart store=no
 
 @default group=grp_users_tree
 	@property user_list_toolbar type=toolbar store=no no_caption=1
@@ -1140,7 +1138,7 @@ class mrp_workspace extends class_base
 							"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $id,
 							"state" => MRP_STATUS_DONE,
 							"finished" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
-							new obj_predicate_sort(array("finished" => ASC))
+							new obj_predicate_sort(array("finished" => ASC)),
 						),
 						array(
 							CL_MRP_JOB => array("length", "finished"),
@@ -1155,36 +1153,47 @@ class mrp_workspace extends class_base
 					$jobs = $odl->arr();
 
 					$real = array();
-					$stats = $this->db_fetch_array("SELECT * FROM mrp_stats WHERE job_oid IN (".implode(",", array_keys($odl->arr())).") ORDER BY end ASC");
+					$stats = $this->db_fetch_array("SELECT * FROM mrp_stats WHERE job_oid IN (".implode(",", array_keys($odl->arr())).") ORDER BY end DESC");
 					foreach($stats as $stat)
 					{
+						if((int)$stat["end"] === 0)
+						{
+							continue;
+						}
 						$real[$stat["job_oid"]] = isset($real[$stat["job_oid"]]) ? $real[$stat["job_oid"]] + $stat["length"] : $stat["length"];
 						$end[$stat["job_oid"]] = max($stat["end"], isset($end[$stat["job_oid"]]) ? $end[$stat["job_oid"]] : 0);
 					}
+					$end = array_slice($end, 0, 200, true);
 					$min_end = min($end);
 					$max_end = max($end);
 
 					foreach($jobs as $oid => $job)
 					{
+						if(!isset($real[$oid]) || !isset($end[$oid]))
+						{
+							continue;
+						}
 						$real[$oid] = isset($real[$oid]) ? $real[$oid] : 0;
-						$end[$oid] = isset($end[$oid]) ? $end[$oid] : $job["finished"];
+						$end[$oid] = $job["finished"];
 
-						$d = ($job["length"] - $real[$oid]) / $real[$oid];
+						$d = ($job["length"] - $real[$oid]) / $job["length"];
 						$data_x[$oid] = ($end[$oid] - $min_end) / ($max_end - $min_end) * 100;
 						$data_y[$oid] = $d;
 					}
 					$min_d = min($data_y);
 					$max_d = max($data_y);
-					foreach($data_y as $k => $v)
+
+					for($i = $min_end; $i < $max_end + 30*24*3600; $i += 30*24*3600)
 					{
-						$data_y[$k] = $v / $max_d * 100;
+						$months[date("F", $i)] = date("F", $i);
+						$years[date("Y", $i)] = date("Y", $i);
 					}
 
 					$c = &$arr["prop"]["vcl_inst"];
 					$c->set_type(GCHART_LINE_CHARTXY);
 					$c->set_size(array(
 						"width" => 800,
-						"height" => 100,
+						"height" => 200,
 					));
 					$c->add_fill(array(
 						"area" => GCHART_FILL_BACKGROUND,
@@ -1193,14 +1202,32 @@ class mrp_workspace extends class_base
 							"color" => "e9e9e9",
 						),
 					));
+					$c->add_data(array(0,100));
+					$c->add_data(array(0,0));
 					$c->add_data($data_x);
 					$c->add_data($data_y);
-					$c->set_data_scales(array(array(0,100),array(round($min_d / $max_d * 100 - 5), 105)));
-					$c->set_title(array(
-						"text" => t(""),
-						"color" => "666666",
-						"size" => 11,
+					$c->set_colors(array(
+						strtolower(preg_replace("/[^0-9A-Za-z]/", "", MRP_COLOUR_PLANNED)),
+						"0099ff",
 					));
+					$c->set_grid(array(
+						"xstep" => 0,
+						"ystep" => 20,
+					));
+					$c->set_data_scales(array(
+						array(0,100),
+						array(round($min_d * 1.25,1), round($max_d * 1.25,1)),
+						array(0,100),
+						array(round($min_d * 1.25,1), round($max_d * 1.25,1)),
+					));
+					$c->set_axis(array(
+						GCHART_AXIS_LEFT,
+						GCHART_AXIS_BOTTOM,
+						GCHART_AXIS_BOTTOM,
+					));
+					$c->add_axis_range(0, array(round($min_d*1.25,1), round($max_d*1.25,1)));
+					$c->add_axis_label(1, $months);
+					$c->add_axis_label(2, $years);
 				}
 				break;
 
@@ -1255,7 +1282,7 @@ class mrp_workspace extends class_base
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
 					"width" => 500,
-					"height" => 200,
+					"height" => 100,
 				));
 				$c->add_fill(array(
 					"area" => GCHART_FILL_BACKGROUND,
@@ -1270,14 +1297,12 @@ class mrp_workspace extends class_base
 				break;
 
 			case "clients_chart":
-				$applicable_states = array_diff(array_keys($this->states), array(MRP_STATUS_DONE, MRP_STATUS_ARCHIVED));
 				$data = array();
 				$labels = array();
 				$odl = new object_data_list(
 					array(
 						"class_id" => CL_MRP_CASE,
 						"parent" => $this_object->prop("projects_folder"),
-						"state" => $applicable_state,
 					),
 					array(
 						CL_MRP_CASE => array("customer.name", "customer"),
@@ -1297,11 +1322,22 @@ class mrp_workspace extends class_base
 					}
 					$labels[$key] = $name." (".$data[$key].")";
 				}
+				$top_cust = $data;
+				rsort($top_cust);
+				$requirement = $top_cust[19];
+				foreach($data as $k => $v)
+				{
+					if($v < $requirement)
+					{
+						unset($data[$k]);
+						unset($labels[$k]);
+					}
+				}
 				$labels[0] = sprintf(t("(M&Auml;&Auml;RAMATA) (%u)"), $data[0]);
 				$c = &$arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
-					"width" => 500,
+					"width" => 800,
 					"height" => 200,
 				));
 				$c->add_fill(array(
@@ -1311,7 +1347,18 @@ class mrp_workspace extends class_base
 						"color" => "e9e9e9",
 					),
 				));
-				$c->set_colors(array("2222ff"));
+				$colors = array();
+				for($i = 15; $i > 0; $i -= 3)
+				{
+					$colors[] = "aaaa".str_repeat(dechex($i), 2);
+					$colors[] = "bb".str_repeat(dechex($i), 2)."bb";
+					$colors[] = str_repeat(dechex($i), 2)."cccc";
+					$colors[] = "fb".str_repeat(dechex($i), 2)."bf";
+					$colors[] = "affa".str_repeat(dechex($i), 2);
+					$colors[] = str_repeat(dechex($i), 2)."ceec";
+				}
+				$colors = array_slice($colors, 0, count($data));
+				$c->set_colors($colors);
 				$data = array_slice($data, 0, 60);
 				$labels = array_slice($labels, 0, 60);
 				$c->add_data($data);
