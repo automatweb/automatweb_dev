@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.115 2009/01/19 11:39:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.116 2009/02/04 13:37:21 markop Exp $
 // kohtumine.aw - Kohtumine
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -25,15 +25,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 			@caption Lisatingimused
 
 		@layout top_2way_right type=vbox parent=top_2way
-			@property start1 type=datetime_select field=start table=planner parent=top_2way_right
+
+			@property start1 type=datetime_select parent=top_2way_right field=start table=planner
 			@caption Algus
 
-			@property end type=datetime_select table=planner parent=top_2way_right
+			@property end type=datetime_select parent=top_2way_right table=planner
 			@caption L&otilde;peb
 
 			@property deadline type=datetime_select table=planner field=deadline parent=top_2way_right
 			@caption T&auml;htaeg
-
 
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
@@ -99,12 +99,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property is_work type=checkbox ch_value=1 field=aw_is_work table=planner
 @caption T&ouml;&ouml;aeg
-
-@property start1 type=datetime_select field=start table=planner
-@caption Algab
-
-@property end type=datetime_select table=planner
-@caption L&otilde;peb
 
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
 @caption Kestab terve p&auml;eva

@@ -34,14 +34,16 @@
             <table>planner</table>
             <group>general</group>
             <type>datetime_select</type>
+            <parent>top_2way_right</parent>
             <field>start</field>
-            <caption>Algab </caption>
+            <caption>Algus</caption>
       </property>
       <property>
             <name>end</name>
             <table>planner</table>
             <group>general</group>
             <type>datetime_select</type>
+            <parent>top_2way_right</parent>
             <field>end</field>
             <caption>L&amp;amp;otilde;peb</caption>
       </property>
@@ -298,7 +300,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>udeftb5</field>
-            <caption>User-defined textbox 5 </caption>
+            <caption>User-defined textbox 5</caption>
       </property>
       <property>
             <name>udeftb6</name>
@@ -307,7 +309,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>udeftb6</field>
-            <caption>User-defined textbox 6 </caption>
+            <caption>User-defined textbox 6</caption>
       </property>
       <property>
             <name>udeftb7</name>
@@ -325,7 +327,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>udeftb8</field>
-            <caption>User-defined textbox 8 </caption>
+            <caption>User-defined textbox 8</caption>
       </property>
       <property>
             <name>udeftb9</name>
@@ -334,7 +336,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>udeftb9</field>
-            <caption>User-defined textbox 9 </caption>
+            <caption>User-defined textbox 9</caption>
       </property>
       <property>
             <name>udeftb10</name>
@@ -343,7 +345,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>udeftb10</field>
-            <caption>User-defined textbox 10 </caption>
+            <caption>User-defined textbox 10</caption>
       </property>
       <property>
             <name>udefta1</name>
@@ -407,7 +409,7 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Prognoositav tundide arv 	</caption>
+            <caption>Prognoositav tundide arv</caption>
       </property>
       <property>
             <name>time_real</name>
