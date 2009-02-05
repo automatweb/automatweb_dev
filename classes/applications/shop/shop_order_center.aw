@@ -1275,6 +1275,7 @@ class shop_order_center extends class_base
 
 		$cart = get_instance(CL_SHOP_ORDER_CART)->get_cart($oc);
 
+		$override_params = array("rows" , "cols" , "caption");
 		// rewrite names as user_data[prop]
 		foreach($cf_ps as $pn => $pd)
 		{
@@ -1283,7 +1284,14 @@ class shop_order_center extends class_base
 				continue;
 			}
 			$ret[$pn] = $all_ps[$pn];
-			$ret[$pn]["caption"] = $pd["caption"];
+			foreach($override_params as $override_param)
+			{
+				if($pd[$override_param])
+				{
+					$ret[$pn][$override_param] = $pd[$override_param];
+				}
+			}
+
 			$ret[$pn]["name"] = "user_data[$pn]";
 
 			if (aw_global_get("uid") != "")
