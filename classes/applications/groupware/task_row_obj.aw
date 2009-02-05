@@ -166,6 +166,11 @@ class task_row_obj extends _int_object
 
 	function save($arr = array())
 	{
+		if ($this->in_save)
+		{
+			return false;
+		}
+		$this->in_save = true;
 		//default esimesel salvestamisel et k6ik l2hevad arvele
 		if(!is_oid($this->id()))
 		{
@@ -188,6 +193,7 @@ class task_row_obj extends _int_object
 				$this->set_prop("impl",$cp->id());
 			}
 		}
+		
 		$ret = parent::save();
 		if(is_oid($this->prop("task")))
 		{
@@ -202,12 +208,16 @@ class task_row_obj extends _int_object
 				if(isset($this->update_time_real))
 				{
 					if($task->created() > 1227022000)
+					{
 						$task->update_hours();
+					}
 				}
 				if(isset($this->update_time_cust))
 				{
 					if($task->created() > 1227022000)
+					{
 						$task->update_cust_hours();
+					}
 				}
 			}
 			foreach($task->connections_from(array(
@@ -222,7 +232,7 @@ class task_row_obj extends _int_object
 					));
 				}
 			}
-
+			
 			foreach($task->connections_from(array(
 				"type" => "RELTYPE_PROJECT",
 			)) as $c)
@@ -248,6 +258,7 @@ class task_row_obj extends _int_object
 				}
 			}
 		}
+		$this->in_save = false;
 		return $ret;
 	}
 	

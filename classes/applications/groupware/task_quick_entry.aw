@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.48 2008/11/10 14:41:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.49 2009/02/05 09:31:49 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -633,7 +633,7 @@ $start = ((float)$usec + (float)$sec);
 		{
 			$o = $ol->begin();
 		}
-
+		
 		// if task exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
@@ -714,7 +714,6 @@ $start = ((float)$usec + (float)$sec);
 					if(($row_obj->prop("ord") >= $max_ord) || ($row_obj->prop("ord") == null && $max_ord == 0)) $max_ord = $row_obj->prop("ord") + 10;
 				}
 			}
-			
 			// add row to task
 			$r = $t->add_row();
 //			$r->set_class_id(CL_TASK_ROW);
@@ -725,7 +724,6 @@ $start = ((float)$usec + (float)$sec);
 				$r->set_prop("orderer", $o->id());
 			}
 			
-
 			$r->set_prop("content", $arr["request"]["content"]);
 			$r->set_prop("date", date_edit::get_timestamp($arr["request"]["date"]));
 			$r->set_prop("time_guess", $arr["request"]["duration"]);
@@ -736,7 +734,6 @@ $start = ((float)$usec + (float)$sec);
 			$r->set_prop("impl", $cur_p->id());
 			$r->set_prop("ord", $max_ord);
 			$r->save();
-
 			foreach(safe_array($arr["request"]["parts"]) as $part)
 			{
 				$t_i->add_participant($t, obj($part));
@@ -754,7 +751,6 @@ $start = ((float)$usec + (float)$sec);
 		$row = reset($rows->arr());
 		$t_id = $row->prop("task");
 	}
-
 		if ($arr["request"]["submit_and_add"] != "" || $arr["request"]["button_p"])
 		{
 			header("Location: ".$arr["request"]["post_ru"]);
