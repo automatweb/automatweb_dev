@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.78 2008/10/26 11:26:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.79 2009/02/05 15:43:07 markop Exp $
 // shop_order.aw - Tellimus
 /*
 
@@ -1647,7 +1647,7 @@ class shop_order extends class_base
 		$this->vars(array(
 			"NOT_IN_PRINT" => (!$_GET["print"] ? $this->parse("NOT_IN_PRINT") : "")
 		));
-
+		$this->vars(array("order_date" => date("d.m.Y" , $o->created())));
 		$objs = array();
 
 		$oc = obj($o->prop("oc"));
@@ -1753,7 +1753,7 @@ class shop_order extends class_base
 				"user_data_".$ud_k => $ud_v
 			));
 		}
-		//arr($this->vars);
+
 
 		$pl = "";
 		if ($this->is_template("PROD_LONG"))
@@ -1785,7 +1785,6 @@ class shop_order extends class_base
 				$prev_page = $pages[$prod->id()];
 			}
 		}
-
 		// sellers
 		$hs = "";
 		if (is_oid($o->prop("seller_company")) && $this->can("view", $o->prop("seller_company")))
