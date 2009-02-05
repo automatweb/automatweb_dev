@@ -279,6 +279,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1 store=no
 	@caption Fake county
 
+	@property fake_address_country type=textbox store=no
+	@caption Fake country
+
+	@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1 store=no
+	@caption Fake country
+
 	@property show_on_web type=checkbox ch_value=1 store=no
 	@caption Kuva veebis
 
@@ -1571,6 +1577,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype EXTERNAL_LINKS value=82 clid=CL_EXTLINK
 @caption V&auml;lised lingid
+
+@reltype FAKE_COUNTRY value=83 clid=CL_CRM_COUNTRY
+@caption Fake country
 
 
 */

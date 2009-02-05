@@ -789,6 +789,26 @@
             <caption>Fake county</caption>
       </property>
       <property>
+            <name>fake_address_country</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_address_country</field>
+            <caption>Fake country</caption>
+      </property>
+      <property>
+            <name>fake_address_country_relp</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAKE_COUNTRY</reltype>
+            <automatic>1</automatic>
+            <store>no</store>
+            <field>fake_address_country_relp</field>
+            <caption>Fake country</caption>
+      </property>
+      <property>
             <name>show_on_web</name>
             <table>objects</table>
             <group>add_info</group>
@@ -4643,6 +4663,11 @@
                   <clid>CL_EXTLINK</clid>
                   <caption>V&amp;amp;auml;lised lingid</caption>
             </EXTERNAL_LINKS>
+            <FAKE_COUNTRY>
+                  <value>83</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Fake country</caption>
+            </FAKE_COUNTRY>
       </reltypes>
       <layout>
             <co_top>
