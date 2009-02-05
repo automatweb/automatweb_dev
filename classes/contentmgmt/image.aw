@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.36 2009/01/28 12:32:33 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.37 2009/02/05 20:22:09 instrumental Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1145,7 +1145,8 @@ class image extends class_base
 			*/
 
 			case "file":
-				$prop["value"] = image::make_img_tag_wl($arr["obj_inst"]->id());
+				$prop["value"] = "<div id=\"image_".$arr["obj_inst"]->id()."\">";
+				$prop["value"] .= image::make_img_tag_wl($arr["obj_inst"]->id());
 				if (is_oid($arr["obj_inst"]->id()))
 				{
 					$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
@@ -1154,6 +1155,14 @@ class image extends class_base
 						"img_id" => $arr["obj_inst"]->id(),
 						"close" => true,
 					), CL_IMAGE);
+					if($this->can("delete", $arr["obj_inst"]->id()))
+					{
+						$prop["value"] .= "<br />\n".html::href(array(
+							"url" => "javascript:void(0)",
+							"onclick" => "if(confirm(\"Oled kindel?\")){ $.ajax({url: \"".$this->mk_my_orb("delete_image", array("id" => $arr["obj_inst"]->id()))."\"}); $(\"#image_".$arr["obj_inst"]->id()."\").hide(); }",
+							"caption" => t("Kustuta pilt"),
+						));
+					}
 					$prop["value"] .= "&nbsp;&nbsp;
 						<script language=\"javascript\">
 						function getDocID()
@@ -1186,6 +1195,7 @@ class image extends class_base
 					</script>
 					";
 				}
+				$prop["value"] .= "</div>";
 				break;
 			case "file2":
 				$url = $this->get_url($arr["obj_inst"]->prop($prop["name"]));
@@ -2579,6 +2589,28 @@ class image extends class_base
 	{
 		$o = obj($arr["id"]);
 		die($o->prop("longdesc"));
+	}
+
+	/**
+		@attrib name=delete_image
+
+		@param id required type=int acl=delete
+
+		@param delete_file type=bool default=false
+
+	**/
+	function delete_image($arr)
+	{
+		if($this->can("delete", $arr["id"]))
+		{
+			$o = obj($arr["id"]);
+			unlink($o->file);
+			unlink($o->file2);
+			if(isset($arr["delete_file"]) && $arr["delete_file"])
+			{
+				$o->delete();
+			}
+		}
 	}
 }
 ?>
