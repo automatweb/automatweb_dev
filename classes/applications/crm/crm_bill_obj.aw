@@ -994,7 +994,10 @@ class crm_bill_obj extends _int_object
 		$leaders = new object_list();
 		foreach($ol->arr() as $o)
 		{
-			$leaders->add($o->prop("proj_mgr"));
+			if(is_oid($o->prop("proj_mgr")))
+			{
+				$leaders->add($o->prop("proj_mgr"));
+			}
 		}
 		return $leaders;
 	}
