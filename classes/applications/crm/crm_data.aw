@@ -28,6 +28,8 @@ class crm_data extends class_base
 	{
 		$of = array(
 			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"site_id" => array(),
 /*			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(

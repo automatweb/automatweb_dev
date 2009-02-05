@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.159 2009/02/04 18:08:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.160 2009/02/05 18:50:23 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -4240,12 +4240,40 @@ class project extends class_base
 		return true;
 	}
 
+	function callback_generate_scripts($arr)
+	{
+		$sc = "";
+		$sc.= "
+			function openall()
+			{
+				var allElements = document.getElementsByName(\"bug_comments_table\");
+				len = allElements.length;
+				for (i=0; i < len; i++)
+				{
+					el=document.getElementsByName(\"bug_comments_table\")[i];
+					if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){
+						if(el.style.display == \"block\")
+							{ d = \"none\";}
+						else { d = \"block\";} }
+					else {
+						if (el.style.display == \"table-row\") {
+							d = \"none\"; 
+						} 
+						else {d = \"table-row\";} 
+					}
+					el.style.display=d;
+				}
+			}";
+		return $sc;
+
+	}
+
 	function _get_work_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->set_sortable(false);
 		$t->define_field(array(
-			"caption" => t("Ava"),
+			"caption" => t("<a href='javascript:void(0)' onclick='openall();'>Ava</a>"),
 			"name" => "open",
 			"align" => "center",
 //			"sortable" => 1
@@ -4285,10 +4313,20 @@ class project extends class_base
 			"align" => "right",
 //			"sortable" => 1
 		));
-
+/*
 		$t->define_field(array(
 			"caption" => t("Arvele m&auml;&auml;ramise kuup&auml;ev"),
 			"name" => "set_date",
+			"align" => "right",
+//			"sortable" => 1,
+//			"type" => "time",
+//			"format" => "d.m.Y"
+		));
+*/
+
+		$t->define_field(array(
+			"caption" => t("tegevuse kuup&auml;ev"),
+			"name" => "date",
 			"align" => "right",
 //			"sortable" => 1,
 //			"type" => "time",
@@ -4317,6 +4355,7 @@ class project extends class_base
 				"name" => $row->name(),
 				"sum" => $row->prop("deal_price").t("(Kokkuleppehind)").($row->prop("deal_has_tax") ? t("KMga") : ""),
 				"set_date" => $row->prop("to_bill_date") ? date("d.m.Y" , $row->prop("to_bill_date")) : "",
+				"date" => $row->prop("start1") ? date("d.m.Y" , $row->prop("start1")) : "",
 				"hrs" => $this->stats->hours_format($row->prop("deal_amount")),
 				"hrs_cust" => $this->stats->hours_format($row->prop("deal_amount")),
 			));
@@ -4332,7 +4371,7 @@ class project extends class_base
 				"oid" => $row->id(),
 				"name" => $ro->name(),
 				"sum" => number_format(str_replace(",", ".", $row->prop("cost")),2),
-				"set_date" => date("d.m.Y" , mktime(0,0,0, $date["month"], $date["day"], $date["year"])),
+				"date" => date("d.m.Y" , mktime(0,0,0, $date["month"], $date["day"], $date["year"])),
 			));
 			$sum += $row->prop("cost");
 		}
@@ -4350,6 +4389,7 @@ class project extends class_base
 					"hr_price" => number_format($hr_price,2),
 					"sum" => number_format($row->prop("time_to_cust") * $hr_price,2),
 					"set_date" => date("d.m.Y" , $row->prop("to_bill_date")),
+					"date" => date("d.m.Y" , $row->prop("date")),
 				));
 			}
 			$sum += $row->prop("time_to_cust") * $hr_price;
@@ -4364,7 +4404,7 @@ class project extends class_base
 
 		foreach($bugs->arr() as $bug)
 		{
-			$lister = "<span id='bug".$bug->id()."' style='display: none;'>";
+			$lister = "<span id='bug".$bug->id()."' name=bug_comments_table style='display: none;'>";
 			$table = new vcl_table;
 			$table->name = "bug".$bug->id();
 			$params = array(
@@ -4388,7 +4428,7 @@ class project extends class_base
 				"name" => $bug->name().$lister,
 				"hr_price" => number_format($this->hour_prices[$bug->id()],2),
 				"set_date" => date("d.m.Y" , ($bug->prop("to_bill_date"))),
-
+				"date" => date("d.m.Y" , $this->bug_start[$bug->id()]) . " - ".date("d.m.Y" , $this->bug_end[$bug->id()])
 			);
 			$bug_data["hrs"] = $this->stats->hours_format($this->bug_real_hours[$bug->id()]);
 			$bug_data["hrs_cust"] = $this->stats->hours_format($this->bug_hours[$bug->id()]);
@@ -4430,6 +4470,12 @@ class project extends class_base
 			"sortable" => 1
 		));
 
+		$t->define_field(array(
+			"caption" => t("tegevuse kuup&auml;ev"),
+			"name" => "date",
+			"align" => "right",
+		));
+
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel".$bug
@@ -4448,7 +4494,8 @@ class project extends class_base
 		$project =& $arr["request"]["project"];
 		$t->unset_filter();
 		$this->_init_bug_row_list($t,$arr["request"]["bug"]);
-
+		$this->bug_start[$arr["request"]["bug"]] = time();
+		$this->bug_end[$arr["request"]["bug"]] = $bug->prop("end");
 		$comments = $bug->get_billable_comments();
 		foreach($comments->arr() as $comment)
 		{
@@ -4456,6 +4503,15 @@ class project extends class_base
 			$hours = $comment->bill_hours();
 			$this->bug_hours[$arr["request"]["bug"]] += $hours;
 			$this->bug_real_hours[$arr["request"]["bug"]] += $comment->prop("time_real");
+
+			if($comment->prop("date") > $this->bug_start[$arr["request"]["bug"]])
+			{
+				$this->bug_end[$arr["request"]["bug"]] = $comment->prop("date");
+			}
+			if($comment->prop("date") < $this->bug_start[$arr["request"]["bug"]])
+			{
+				$this->bug_start[$arr["request"]["bug"]] = $comment->prop("date");
+			}
 			$t->define_data(array(
 				"comment" => html::href(array(
 					"caption" => $capt ? $capt : t("..."),
@@ -4463,6 +4519,7 @@ class project extends class_base
 				"time_cust" => $this->stats->hours_format($comment->bill_hours()),
 				"time" => $this->stats->hours_format($comment->prop("time_real")),
 				"oid" => $comment->id(),
+				"date" => date("d.m.Y" , $comment->prop("date")),
 			));
 		}
 		exit_function("bills_impl::_get_bill_task_list");

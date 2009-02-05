@@ -3159,7 +3159,7 @@ class crm_bill extends class_base
 		$xml .= "</response>";
 		die($xml);
 	}
-	
+
 	function _bill_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -3310,18 +3310,31 @@ class crm_bill extends class_base
 	{
 		foreach($arr["sel_rows"] as $row_id)
 		{
+			//selle funktsionaalsuse teeb tegevused vaatesse, et seal saaks eemaldada taske
 			// now, the bill row has maybe a task row connected, reset the task row's bill no
-			$ro = obj($row_id);
+/*			$ro = obj($row_id);
 			$tr = $ro->get_first_obj_by_reltype("RELTYPE_TASK_ROW");
 			if ($tr)
 			{
 				$tr->set_prop("bill_id", 0);
 				$tr->save();
-			}
+			}*/
 		}
 		object_list::iterate_list($arr["sel_rows"], "delete");
 		return $arr["post_ru"];
 	}
+
+
+	/**
+		@attrib name=remove_rows_from_bill
+	**/
+	function remove_rows_from_bill($arr)
+	{
+		$bill = obj($arr["id"]);
+		$bill->remove_tasks($arr["sel"]);
+		return $arr["post_ru"];
+	}
+
 
 	function _init_bill_task_list(&$t)
 	{
@@ -3362,10 +3375,10 @@ class crm_bill extends class_base
 //			"sortable" => 1
 		));
 
-//		$t->define_chooser(array(
-//			"name" => "sel",
-//			"field" => "oid"
-//		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
 	}
 
 	function _bill_task_list($arr)
@@ -3489,7 +3502,15 @@ class crm_bill extends class_base
 
 	function _billt_tb($arr)
 	{
-		
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			"name" => "remove_from_bill",
+			"img" => "delete.gif",
+			"tooltip" => t("Eemalda arve k&uuml;ljest"),
+			"confirm" => t("Oled kindel et soovid read eemaldada?"),
+			"action" => "remove_rows_from_bill"
+		));
 	}
 
 	function do_db_upgrade($table, $field, $q, $err)

@@ -1001,6 +1001,58 @@ class crm_bill_obj extends _int_object
 		}
 		return $leaders;
 	}
+
+	/** disconnects tasks from bill and bill rows
+		@attrib api=1 params=pos
+		@param tasks required type=array
+			object ids (tasks, meetings, bugs, calls, task rows etc.)
+	**/
+	public function remove_tasks($tasks)
+	{
+		$cons = $this->connections_from(array("type" => "RELTYPE_ROW"));
+		foreach($cons as $c)
+		{
+			$row = $c->to();
+			foreach($tasks as $task)
+			{
+				if($row->is_connected_to(array("to" => $task)))
+				{
+					$row->disconnect(array(
+						"from" => $task,
+					));
+				}
+			}
+		}
+		foreach($tasks as $task)
+		{
+			$o = obj($task);
+			switch($o->class_id())
+			{
+				case CL_CRM_MEETING:
+				case CL_CRM_CALL:
+				case CL_TASK:
+					$o->set_prop("bill_no" , "");
+					$o->save();
+					break;
+				case CL_TASK_ROW:
+					$o->set_prop("bill_id" , "");
+					$o->save();
+					break;
+			}
+			if($this->is_connected_to(array("to" => $o->id())))
+			{
+				$this->disconnect(array(
+					"from" => $o->id(),
+				));
+			}
+			if($o->is_connected_to(array("to" => $this->id())))
+			{
+				$o->disconnect(array(
+					"from" => $this->id(),
+				));
+			}
+		}
+	}
 }
 
 ?>
