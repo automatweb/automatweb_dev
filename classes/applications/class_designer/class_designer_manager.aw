@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.24 2009/02/02 13:27:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.25 2009/02/05 12:04:45 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 
 //			automatweb::$instance->mode(automatweb::MODE_DBG);
@@ -184,13 +184,36 @@
 
 @default group=notifications_rules
 	
-	@property notifications_rules type=releditor mode=manager2 reltype=RELTYPE_NOTIFICATION_RULE store=no props=err_content,mail_to,mail_subj,mail_content table_fields=err_content,mail_to,mail_subj,mail_content
+	@property notif_tb type=toolbar store=no no_caption=1
+
+	@property notifications_rules type=table store=no no_caption=1
 	@caption Reeglid
 
 @default group=notifications_sent
+
+
+	@layout notifications_sent_split type=hbox width=20%:80%
+
+		@layout notifications_sent_left type=vbox parent=notifications_sent_split
+
+			@layout notifications_sent_tree type=vbox area_caption=Saitide&nbsp;grupid closeable=1 parent=notifications_sent_left
 	
-	@property notifications_sent type=table store=no
-	@caption Saadetud teavitused
+				@property notifications_sent_site_tree type=treeview no_caption=1 parent=notifications_sent_tree store=no
+
+			@layout notifications_sent_tree_rules type=vbox area_caption=Teavituse&nbsp;reeglid closeable=1 parent=notifications_sent_left
+	
+				@property notifications_sent_site_tree_rules type=treeview no_caption=1 parent=notifications_sent_tree_rules store=no
+
+		@layout notifications_sent_right type=vbox parent=notifications_sent_split
+
+			@layout notifications_sent_right_split type=vbox parent=notifications_sent_right
+
+				@layout notifications_sent_grapx  type=vbox area_caption=Teavituste&nbsp;TOP&nbsp;10 closeable=1 parent=notifications_sent_right_split
+
+					@property notifications_sent_grapx  type=google_chart store=no no_caption=1 parent=notifications_sent_grapx
+
+				@property notifications_sent type=table store=no no_caption=1 parent=notifications_sent_right_split
+
 
 @default group=notifications_status
 
@@ -216,9 +239,9 @@
 	@groupinfo sites_servers parent=sites caption="Serverid"
 
 @groupinfo notifications caption="Teavitus"
-	@groupinfo notifications_rules caption="Reeglid" parent=notifications
-	@groupinfo notifications_sent caption="Saadetud teavitused" parent=notifications
-	@groupinfo notifications_status caption="staatus" parent=notifications
+	@groupinfo notifications_sent caption="Saadetud teavitused" parent=notifications save=no submit=no
+	@groupinfo notifications_rules caption="Reeglid" parent=notifications submit=no
+	@groupinfo notifications_status caption="Staatus" parent=notifications save=no submit=no
 
 
 @reltype NOTIFICATION_RULE value=1 clid=CL_SITE_NOTIFICATION_RULE
@@ -2143,20 +2166,180 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		));
 	}
 
+	private function _init_sites_list_t($t)
+	{
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "url",
+			"caption" => t("URL"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "server_oid",
+			"caption" => t("Server"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "site_used",
+			"caption" => t("Kasutusel"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "code_branch",
+			"caption" => t("Koodiversioon"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "last_update",
+			"caption" => t("Viimane uuendus"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "grps",
+			"caption" => t("Grupid"),
+			"align" => "center",
+		));
+		$ol = new object_list(array(
+			"class_id" => CL_SM_SITE_GROUP,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_field(array(
+				"name" => $o->id(),
+				"caption" => $o->name(),
+				"align" => "center",
+				"parent" => "grps"
+			));
+		}
+	}
+
 	function _get_sites_list($arr)
 	{	
 		// convert sites to objects
 		$this->_site_convert_check();
 
-		$arr["prop"]["vcl_inst"]->table_from_ol(
-			new object_list(array(
-				"class_id" => CL_AW_SITE_ENTRY,
-				"lang_id" => array(),
-				"site_id" => array()
-			)),
-			array("id", "name", "url", "server_oid", "site_used", "code_branch", "last_update", "modified"),
-			CL_AW_SITE_ENTRY
-		);
+		$ol = new object_list(array(
+			"class_id" => CL_SM_SITE_GROUP,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$grps = $ol->names();
+		$grps_sel = array();
+		foreach($ol->arr() as $o)
+		{
+			foreach($o->connections_from(array("type" => "RELTYPE_SITE")) as $c)
+			{
+				$grps_sel[$c->prop("to")][$o->id()] = 1;
+			}
+		}
+		
+
+
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_sites_list_t($t);
+
+		$ol = new object_list(array(
+			"class_id" => CL_AW_SITE_ENTRY,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			$d = array(
+				"id" => $o->prop("site_id"),
+				"name" => html::obj_change_url($o),
+				"url" => $o->url,
+				"server_oid" => $o->server_oid,
+				"site_used" => $o->site_used ? t("Jah") : t("Ei"),
+				"code_branch" => $o->code_branch,
+				"last_update" => $o->last_update,
+				"modified" => $o->modified,
+			);
+			foreach($grps as $gid => $gn)
+			{
+				$d[$gid] = html::checkbox(array(
+					"name" => "g[$gid][".$o->id()."]",
+					"value" => 1,
+					"checked" => !empty($grps_sel[$o->id()][$gid])
+				));
+			}
+			$t->define_data($d);
+		}
+	}
+
+	function _set_sites_list($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SM_SITE_GROUP,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$grps = $ol->names();
+		$grps_sel = array();
+		foreach($ol->arr() as $o)
+		{
+			foreach($o->connections_from(array("type" => "RELTYPE_SITE")) as $c)
+			{
+				$grps_sel[$c->prop("to")][$o->id()] = 1;
+			}
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_AW_SITE_ENTRY,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			foreach($grps as $gid => $gn)
+			{
+				if (empty($arr["request"]["g"][$gid][$o->id()]))
+				{
+					if (!empty($grps_sel[$o->id()][$gid]))
+					{
+						obj($gid)->disconnect(array("from" => $o->id()));
+					}
+				}
+				else
+				{
+					if (empty($grps_sel[$o->id()][$gid]))
+					{
+						obj($gid)->connect(array("to" => $o->id(), "type" => "RELTYPE_SITE"));
+					}
+				}
+			}
+		}
 	}
 
 	function _get_sites_servers($arr)
@@ -2267,12 +2450,48 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_notify_table($t);
-		
-		$ol = new object_list(array(
+
+		$filt = array(
 			"class_id" => CL_SITE_NOTIFICATION_SENT,
 			"lang_id" => array(),
 			"site_id" => array()
-		));
+		);
+
+		if (!empty($arr["request"]["grp"]))
+		{
+			if (!empty($arr["request"]["site"]))
+			{
+				$gp = obj($arr["request"]["site"]);
+				$t->set_caption(sprintf(t("Saadetud teavitused saidile %s"), $gp->name()));
+				$filt["site"] = $gp->id();
+			}
+			else
+			{
+				$gp = obj($arr["request"]["grp"]);
+				$sl = array();
+				foreach($gp->get_sites_in_group() as $site)
+				{
+					$sl[] = $site->id();
+				}
+				$filt["site"] = $sl;
+
+				$t->set_caption(sprintf(t("Saadetud teavitused saitide grupile %s"), $gp->name()));
+			}
+		}		
+		else
+		if (!empty($arr["request"]["rule"]))
+		{
+			$gp = obj($arr["request"]["rule"]);
+			$filt["rule"] = $arr["request"]["rule"];
+
+			$t->set_caption(sprintf(t("Saadetud teavitused reeglist %s"), $gp->name()));
+		}		
+		else
+		{
+			$t->set_caption(t("Saadetud teavitused"));
+		}
+
+		$ol = new object_list($filt);
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
@@ -2317,6 +2536,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 	**/
 	function scan_sites($arr)
 	{	
+		ob_end_clean();
 		aw_set_exec_time(AW_LONG_PROCESS);
 		echo "testing sites ... <br>\n";
 		flush();
@@ -2331,13 +2551,13 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		$this->db_query("SELECT * FROM aw_site_list WHERE site_used = 1 AND last_update > ".(time() - 24*3600*30));
 		while ($row = $this->db_next())
 		{
-			echo sprintf("%03d/%03d", $num, $cnt)." ".$row["url"]." .... \n";
-			flush();
-
-			if (strpos($row["url"], ".dev.struktuur.ee") !== false)
+			if ($row["aw_no_notify"] == 1)
 			{
 				continue;
 			}
+			echo sprintf("%03d/%03d", $num, $cnt)." ".$row["url"]." .... \n";
+			flush();
+
 			ob_start();
 			$fc = strtolower(file_get_contents($row["url"]));
 			$ct = ob_get_contents();
@@ -2365,7 +2585,11 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 				echo " <font color=red>Failed</font><br>\n";
 				echo "<pre>".htmlentities($fc)."</pre>";
 				flush();
-				$errs[] = "sait $row[url] tundub maas olevat, esilehe sisu: \n".$fc."\n\n";
+				$errs[] = array(
+					"site" => $row,
+					"content" => "sait $row[url] tundub maas olevat, esilehe sisu: \n".$fc."\n\n",
+					"error" => $fc
+				);
 				$this->save_handle();
 				$this->_handle_scan_fail($row, $fc, $o);
 				$this->restore_handle();
@@ -2375,7 +2599,11 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 
 		if (count($errs) > 0)
 		{
-			send_mail("kristo@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
+			foreach($errs as $entry)
+			{
+				send_mail("kristo@struktuur.ee", "SAIT MAAS!!", $entry["content"], "From: big@brother.ee");
+				$this->_save_sent_mail($entry["site"], $entry["content"], $entry["error"], $o, "kristo@struktuur.ee");
+			}
 		}
 		die(t("All done"));
 	}
@@ -2409,17 +2637,21 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		}
 	}
 
-	private function _save_sent_mail($site, $content, $err, $o, $to)
+	private function _save_sent_mail($site, $content, $err, $o, $to, $rule = null)
 	{
 		$s = obj();
 		$s->set_parent($o->id());
 		$s->set_class_id(CL_SITE_NOTIFICATION_SENT);
+		$s->set_name(sprintf(t("Viga saidil %s"), $site["url"]));
 		$s->set_prop("site", $site["aw_oid"]);
+		$s->set_prop("rule", $rule);
 		$s->set_prop("when", time());
 		$s->set_prop("who", $to);
 		$s->set_prop("content", $mc);
 		$s->set_prop("error", $err);
+		aw_disable_acl();
 		$s->save();
+		aw_restore_acl();
 	}
 
 	private function _apply_scan_rule($rule, $site, $content, $mgr)
@@ -2431,7 +2663,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			$rule->mail_subj,
 			$c
 		);
-		$this->_save_sent_mail($site, $c, $content, $mgr, $rule->mail_to);
+		$this->_save_sent_mail($site, $c, $content, $mgr, $rule->mail_to, $rule->id());
 	}
 
 	function _get_classes_props_tree($arr)
@@ -2841,7 +3073,6 @@ window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("re
 
 	function _get_sites_list_grapx($arr)
 	{
-
 		$this->db_query("SELECT s.name as name, s.ip as ip, count(*) as cnt FROM aw_site_list LEFT JOIN aw_server_list s ON s.id = aw_site_list.server_id WHERE site_used = 1 GROUP BY server_id");
 		$d = array();
 		$l = array();
@@ -3086,6 +3317,130 @@ window.location.href='".html::get_new_url(CL_SM_SITE_GROUP, $pt, array("return_u
 			));
 			$arr["prop"]["vcl_inst"]->set_item($d);
 		}
+	}
+
+	function _get_notif_tb($arr)
+	{	
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_SITE_NOTIFICATION_RULE), $arr["obj_inst"]->id(), 1 /* RELTYPE_NOTIFICATION_RULE */);
+		$tb->add_delete_button();
+
+	}
+
+	function _get_notifications_rules($arr)
+	{
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_NOTIFICATION_RULE"))),
+			array("name","err_content","mail_to","mail_subj","mail_content"),
+			CL_SITE_NOTIFICATION_RULE
+		);
+		$arr["prop"]["vcl_inst"]->set_caption(t("Teavituste saatmise reeglid"));
+	}
+
+	public function _get_notifications_sent_site_tree($arr)
+	{	
+		$tv = $arr["prop"]["vcl_inst"];
+		// list groups and sites in groups in tree
+		$ol = new object_list(array(
+			"class_id" => CL_SM_SITE_GROUP,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			$tv->add_item(0, array(
+				"id" => $o->id(),
+				"name" => $o->name(),
+				"url" => aw_url_change_var("grp", $o->id(), aw_url_change_var("rule", null, aw_url_change_var("site", null)))
+			));
+			foreach($o->get_sites_in_group() as $site)
+			{
+				$tv->add_item($o->id(), array(
+					"id" => $o->id()."_".$site->id(),
+					"name" => $site->name(),
+					"url" => aw_url_change_var("site", $site->id(), aw_url_change_var("grp", $o->id() , aw_url_change_var("rule", null)))
+				));
+			}
+		}
+		if ($arr["request"]["site"])
+		{
+			$tv->set_selected_item($arr["request"]["grp"]."_".$arr["request"]["site"]);
+		}
+		else
+		{
+			$tv->set_selected_item($arr["request"]["grp"]);
+		}
+	}
+
+	public function _get_notifications_sent_site_tree_rules($arr)
+	{	
+		$tv = $arr["prop"]["vcl_inst"];
+		// list groups and sites in groups in tree
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_NOTIFICATION_RULE")));
+		foreach($ol->arr() as $o)
+		{
+			$tv->add_item(0, array(
+				"id" => $o->id(),
+				"name" => parse_obj_name($o->name()),
+				"url" => aw_url_change_var("rule", $o->id(), aw_url_change_var("grp", null, aw_url_change_var("site", null)))
+			));
+		}
+		$tv->set_selected_item($arr["request"]["rule"]);
+	}
+
+	public function _get_notifications_sent_grapx($arr)
+	{
+		$filt = array(
+			"class_id" => CL_SITE_NOTIFICATION_SENT,
+			"lang_id" => array(),
+			"site_id" => array()
+		);
+
+		if (!empty($arr["request"]["grp"]))
+		{
+			$gp = obj($arr["request"]["grp"]);
+			$sl = array();
+			foreach($gp->get_sites_in_group() as $site)
+			{
+				$sl[] = $site->id();
+			}
+			$filt["site"] = $sl;
+		}		
+		else
+		if (!empty($arr["request"]["rule"]))
+		{
+			$gp = obj($arr["request"]["grp"]);
+			$filt["rule"] = $arr["request"]["rule"];
+		}		
+
+		$ol = new object_list($filt);
+		$ids = new aw_array($ol->ids());
+
+		$this->db_query("SELECT aw_site, count(*) as cnt FROM aw_site_notification_sent WHERE aw_oid IN (".$ids->to_sql().") GROUP BY aw_site ORDER BY cnt DESC LIMIT 10");
+		$d = array();
+		$l = array();
+		$max = 0;
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$d[] = $row["cnt"];
+			$l[] = obj($row["aw_site"])->name();
+			$max = max($max, $row["cnt"]);
+			$this->restore_handle();
+		}
+
+		$c = $arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_PIE);
+		$c->set_size(array("width" => 600, "height" => 300));
+		$c->add_data($d);
+		$c->set_labels($l);
+		$c->set_title(array("text" => t("Teavituste TOP 10 saitide kaupa")));
+		$c->set_axis(array(
+			GCHART_AXIS_LEFT
+		));
+		$c->set_grid(array("xstep" => 20, "ystep" => 20));
+		$c->set_bar_sizes(array("width" => (500 / count($d)) - 5, "bar_spacing" => 5));
+		$c->add_axis_range(0, array(0, $max));
 	}
 }
 ?>

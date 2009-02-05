@@ -9,7 +9,10 @@
 @property site type=relpicker reltype=RELTYPE_SITE field=aw_site
 @caption Sait mille kohta saadeti
 
-@property when type=datetime_select field=aw_site
+@property rule type=relpicker reltype=RELTYPE_RULE field=aw_rule
+@caption Teavituse reegel
+
+@property when type=datetime_select field=aw_when
 @caption Millal saadeti
 
 @property who type=textbox field=aw_who
@@ -23,6 +26,9 @@
 
 @reltype SITE value=1 clid=CL_AW_SITE_ENTRY
 @caption Sait
+
+@reltype RULE value=2 clid=CL_SITE_NOTIFICATION_RULE
+@caption Teavituse reegel
 */
 
 class site_notification_sent extends class_base
@@ -84,10 +90,27 @@ class site_notification_sent extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_site":
+			case "aw_when":
+			case "aw_rule":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
+				));
+				return true;
+
+			case "aw_who":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(255)"
+				));
+				return true;
+
+			case "aw_content":
+			case "aw_error":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "text"
 				));
 				return true;
 		}

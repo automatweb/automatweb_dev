@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_AW_SITE_ENTRY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo no_name=1
+@classinfo syslog_type=ST_AW_SITE_ENTRY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo 
 @tableinfo aw_site_list master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_site_list
@@ -9,7 +9,7 @@
 @property short_name type=textbox
 @caption L&uuml;hend
 
-@property id type=textbox
+@property site_id type=textbox field=id
 @caption Saidi ID
 
 @property name type=textbox
@@ -26,6 +26,9 @@
 
 @property site_used type=checkbox ch_value=1
 @caption Sait kasutusel
+
+@property no_notify type=checkbox ch_value=1 field=aw_no_notify
+@caption &Auml;ra teavita maasolekust
 
 @property code_branch type=textbox
 @caption Koodiversioon
@@ -114,10 +117,10 @@ class aw_site_entry extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_no_notify":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
 				));
 				return true;
 		}

@@ -6,6 +6,15 @@
 @default table=aw_sm_site_group
 @default group=general
 
+
+@default group=sites
+
+	@property sites_tb type=toolbar no_caption=1 store=no
+	@property sites type=table no_caption=1 store=no
+
+
+@groupinfo sites caption="Saidid"
+
 @reltype SITE value=1 clid=CL_AW_SITE_ENTRY
 @caption Sait
 */
@@ -76,6 +85,20 @@ class sm_site_group extends class_base
 				));
 				return true;
 		}
+	}
+
+	function _get_sites_tb($arr)
+	{	
+		$arr["prop"]["vcl_inst"]->add_delete_rels_button();
+	}
+
+	function _get_sites($arr)
+	{
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SITE"))),
+			array("id", "name", "url", "site_used", "code_branch", "server_oid"),
+			CL_AW_SITE_ENTRY
+		);	
 	}
 }
 

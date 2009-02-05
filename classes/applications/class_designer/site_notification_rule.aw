@@ -15,6 +15,9 @@
 @property mail_subj type=textbox field=aw_mail_subj
 @caption Meili teema
 
+@property mail_content_legend type=text store=no
+@caption Legend
+
 @property mail_content type=textarea rows=30 cols=80 field=aw_mail_content
 @caption Meili sisu
 
@@ -29,6 +32,11 @@ class site_notification_rule extends class_base
 			"tpldir" => "applications/class_designer/site_notification_rule",
 			"clid" => CL_SITE_NOTIFICATION_RULE
 		));
+	}
+
+	function _get_mail_content_legend($arr)
+	{	
+		$arr["prop"]["value"] = t("Teksti sees v&otilde;ib kasutada: %site% - saidi url, kus viga esines. %error% - veateate sisu");
 	}
 
 	function get_property($arr)
