@@ -1,26 +1,41 @@
 <?php
+
 $aw_dir = "{VAR:aw_dir}";
-$site_dir = __FILE__;
-$lsl = strrpos($site_dir, DIRECTORY_SEPARATOR);
-$site_dir = substr($site_dir, 0, $lsl);
-$lsl = strrpos($site_dir, DIRECTORY_SEPARATOR);
-$site_dir = substr($site_dir, 0, $lsl);
+$site_dir = "{VAR:site_dir}";
+$cache_file = $site_dir . "/pagecache/ini.cache";
+$cfg_files = array($site_dir."/aw.ini");
 
-include($aw_dir."/init.aw");
-init_config(array(
-	"cache_file" => $site_dir."/pagecache/ini.cache",
-	"ini_files" => array($aw_dir."/aw.ini",$site_dir."/aw.ini")
-));
+require_once($aw_dir."/automatweb.aw");
 
-if (strpos($_SERVER["REQUEST_URI"],"/automatweb") === false)
+try
 {
-	// can't use classload here, cause it will be included from within a function and then all kinds of nasty
-	// scoping rules come into action. blech.
-	$script = basename($_SERVER["SCRIPT_FILENAME"], ".".aw_ini_get("ext"));
-	$path = aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/".$script."_impl.".aw_ini_get("ext");
-	if (file_exists($path))
+	automatweb::start();
+	// automatweb::$instance->mode(automatweb::MODE_DBG);
+	automatweb::$instance->bc();
+	automatweb::$instance->load_config_files($cfg_files, $cache_file);
+	$request = aw_request::autoload();
+	automatweb::$instance->set_request($request);
+	automatweb::$instance->exec();
+	automatweb::$result->send();
+	automatweb::shutdown();
+}
+catch (Exception $e)
+{
+	if (!headers_sent())
 	{
-		include($path);
+		header("HTTP/1.1 500 Server Error");
+	}
+
+	echo nl2br($e);
+
+	try
+	{
+		automatweb::shutdown();
+	}
+	catch (Exception $se)
+	{
+		echo "<br/><br/>" . nl2br($e);
 	}
 }
+
 ?>
