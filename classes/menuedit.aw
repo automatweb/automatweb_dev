@@ -322,8 +322,8 @@ class menuedit extends aw_template implements request_startup
 					$this->quote(&$last);
 					$lang_id = aw_global_get("ct_lang_id");
 					$this->quote(&$lang_id);
-					$this->db_query("SELECT menu_id FROM aw_alias_trans WHERE alias = '$last' AND lang_id = '$lang_id'");
-					while ($row = $this->db_next())
+					$rows = $this->db_fetch_array("SELECT menu_id FROM aw_alias_trans WHERE alias = '$last' AND lang_id = '$lang_id'");
+					foreach ($rows as $row)
 					{
 						if (!$this->can("view", $row["menu_id"]))
 						{
