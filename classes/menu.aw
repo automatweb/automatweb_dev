@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.248 2009/02/02 11:04:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.249 2009/02/06 13:29:33 instrumental Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2535,7 +2535,8 @@ class menu extends class_base implements main_subtemplate_handler
 			{
 				$this->db_query("DELETE FROM aw_alias_trans WHERE menu_id = ".$o->id(). " AND lang_id = ".$lid);
 				$str = $arr["request"]["trans_".$lid."_alias"];
-				$nv = iconv("UTF-8", $lang["charset"], $str);
+				// No spaces in the end/beginning! -kaarel 6.02.2009
+				$nv = trim(iconv("UTF-8", $lang["charset"], $str));
 				$this->quote(&$nv);
 				$this->db_query("INSERT INTO aw_alias_trans(menu_id,lang_id,alias)
 					VALUES(".$o->id().", $lid, '$nv')");
