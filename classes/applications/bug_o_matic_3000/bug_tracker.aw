@@ -20,6 +20,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@property bug_folder type=relpicker reltype=RELTYPE_FOLDER table=objects field=meta method=serialize
 	@caption Bugide kataloog
 
+	@property do_folder type=relpicker reltype=RELTYPE_FOLDER table=objects field=meta method=serialize
+	@caption Arendustellimuste kaust
+
 	@property bug_by_class_parent type=relpicker reltype=RELTYPE_BUG table=objects field=meta method=serialize
 	@caption Klasside puusse lisatud bugide asukoht
 
@@ -1618,7 +1621,13 @@ class bug_tracker extends class_base
 		$ol = new object_list(array(
 			"parent" => $arr["parent"],
 			"class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER),
-			"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_BUG.bug_status" => new obj_predicate_not(array(BUG_STATUS_CLOSED, 14)),
+					"class_id" => new obj_predicate_not(CL_BUG),
+				),
+			)),
 			"sort_by" => "objects.name"
 		));
 
@@ -1627,7 +1636,17 @@ class bug_tracker extends class_base
 		$objects = $ol->arr();
 		foreach($objects as $obj_id => $object)
 		{
-			$ol = new object_list(array("parent" => $obj_id, "class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
+			$ol = new object_list(array(
+				"parent" => $obj_id,
+				"class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER),
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_BUG.bug_status" => new obj_predicate_not(array(BUG_STATUS_CLOSED, 14)),
+						"class_id" => new obj_predicate_not(CL_BUG),
+					),
+				)),
+			));
 			$ol_list = $ol->arr();
 			$subtree_count = (count($ol_list) > 0)?" (".count($ol_list).")":"";
 
@@ -1636,14 +1655,7 @@ class bug_tracker extends class_base
 			{
 				$nm = "<b>".$nm."</b>";
 			}
-			if($object->class_id()==CL_DEVELOPMENT_ORDER)
-			{
-				$icon_url = icons::get_icon_url(CL_MENU);
-			}
-			else
-			{
-				$icon_url = icons::get_icon_url($object->class_id());
-			}
+			$icon_url = icons::get_icon_url($object->class_id());
 			$node_tree->add_item(0 ,array(
 				"id" => $obj_id,
 				"name" => $nm."  (".html::get_change_url($obj_id, array("return_url" => $arr["set_retu"]), t("<span style='font-size: 8px;'>Muuda</span>")).")",
@@ -2223,6 +2235,7 @@ class bug_tracker extends class_base
 		$bugi = get_instance(CL_BUG);
 		$statuses = $bugi->get_status_list();
 		unset($statuses[5]);
+		unset($statuses[14]);
 		$t->define_field(array(
 			"name" => "bug_status",
 			"caption" => t("Staatus"),
@@ -2332,7 +2345,7 @@ class bug_tracker extends class_base
 			{
 				$filt = array(
 					"parent" => $pt,
-					"class_id" => array(CL_BUG,CL_MENU),
+					"class_id" => array(CL_BUG,CL_MENU,CL_DEVELOPMENT_ORDER),
 				);
 				$closed = 0;
 				foreach($arr["request"] as $r)
@@ -2342,7 +2355,13 @@ class bug_tracker extends class_base
 				}
 				if(!$closed)
 				{
-					$filt["bug_status"] = new obj_predicate_not(BUG_STATUS_CLOSED);
+					$filt[] = new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"CL_BUG.bug_status" => new obj_predicate_not(array(BUG_STATUS_CLOSED, 14)),
+							"class_id" => new obj_predicate_not(CL_BUG),
+						),
+					));
 				}
 
 				if(strlen($arr["request"]["p_id"]))
@@ -2446,6 +2465,8 @@ class bug_tracker extends class_base
 		}
 
 		$this->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));
+		$t->set_default_sortby("id");
+		$t->set_default_sorder("desc");
 		$t->sort_by();
 		$arr["prop"]["value"] = "<span id=\"bug_table\">".$t->get_html()."</table>";
 		if ($arr["request"]["tb_only"] == 1)

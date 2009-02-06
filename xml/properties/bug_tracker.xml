@@ -29,6 +29,16 @@
             <caption>Bugide kataloog</caption>
       </property>
       <property>
+            <name>do_folder</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Arendustellimuste kaust</caption>
+      </property>
+      <property>
             <name>bug_by_class_parent</name>
             <table>objects</table>
             <group>general_sub</group>

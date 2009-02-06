@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.23 2009/02/02 15:30:49 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.24 2009/02/06 13:33:28 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -326,7 +326,7 @@ class bugtrack_display extends class_base
 		$cur_u = $uo->name();
 		$cur = $cur_p->id();
 		$sects = $this->get_all_sects();
-		if($arr["request"]["sect_filter"] == "all")
+		if($arr["request"]["sct_filter"] == "all")
 		{
 			$filt = array(
 				"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
@@ -355,10 +355,10 @@ class bugtrack_display extends class_base
 				)),
 			);
 		}
-		elseif($arr["request"]["sect_filter"] && array_search($arr["request"]["sect_filter"], $sects) !== false)
+		elseif($arr["request"]["sct_filter"] && array_search($arr["request"]["sct_filter"], $sects) !== false)
 		{
-			$sects = array($arr["request"]["sect_filter"]);
-			$this->_recur_get_all_sects($sects, obj($arr["request"]["sect_filter"]));
+			$sects = array($arr["request"]["sct_filter"]);
+			$this->_recur_get_all_sects($sects, obj($arr["request"]["sct_filter"]));
 			$filt = array(
 				"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
 				new object_list_filter(array(
@@ -374,7 +374,13 @@ class bugtrack_display extends class_base
 		{
 			$filt = array(
 				"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
-				"createdby" => $cur_u
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"createdby" => $cur_u,
+						"CL_DEVELOPMENT_ORDER.bug_createdby" => $cur_u,
+					),
+				)),
 			);
 		}
 		$filt["site_id"] = array();
@@ -769,22 +775,22 @@ class bugtrack_display extends class_base
 			}
 		}
 
-		if ($this->can("view", $arr["request"]["sect_filter"]) && count($cur))
+		if ($this->can("view", $arr["request"]["sct_filter"]) && count($cur))
 		{
 			$cur = array();
 			$co_i = get_instance(CL_CRM_COMPANY);
-			foreach($co_i->get_employee_picker(obj($arr["request"]["sect_filter"])) as $_id => $nm)
+			foreach($co_i->get_employee_picker(obj($arr["request"]["sct_filter"])) as $_id => $nm)
 			{
 				$cur[$_id] = $_id;
 			}
 		}
 		$cp_ppl = array();
-		if($this->can("view", $arr["request"]["sect_filter"]))
+		if($this->can("view", $arr["request"]["sct_filter"]))
 		{
-			$view_sects = array($arr["request"]["sect_filter"]);
-			$this->_recur_get_all_sects($view_sects, obj($arr["request"]["sect_filter"]));
+			$view_sects = array($arr["request"]["sct_filter"]);
+			$this->_recur_get_all_sects($view_sects, obj($arr["request"]["sct_filter"]));
 		}
-		elseif($arr["request"]["sect_filter"] == "all")
+		elseif($arr["request"]["sct_filter"] == "all")
 		{
 			$view_sects = $this->get_all_sects();
 		}
@@ -811,7 +817,7 @@ class bugtrack_display extends class_base
 			}
 		}
 		$sects = $this->get_all_sects();
-		if($arr["request"]["sect_filter"] == "all")
+		if($arr["request"]["sct_filter"] == "all")
 		{
 			$filt = array(
 				"bug_status" => 1,
@@ -843,10 +849,10 @@ class bugtrack_display extends class_base
 				)),
 			);
 		}
-		elseif($arr["request"]["sect_filter"] && array_search($arr["request"]["sect_filter"], $sects) !== false)
+		elseif($arr["request"]["sct_filter"] && array_search($arr["request"]["sct_filter"], $sects) !== false)
 		{
-			$sects = array($arr["request"]["sect_filter"]);
-			$this->_recur_get_all_sects($sects, obj($arr["request"]["sect_filter"]));
+			$sects = array($arr["request"]["sct_filter"]);
+			$this->_recur_get_all_sects($sects, obj($arr["request"]["sct_filter"]));
 			$filt = array(
 				"bug_status" => 1,
 				"class_id" => array(CL_DEVELOPMENT_ORDER),
@@ -864,7 +870,13 @@ class bugtrack_display extends class_base
 			$filt = array(
 				"bug_status" => 1,
 				"class_id" => array(CL_DEVELOPMENT_ORDER),
-				"createdby" => $p->has_user(get_current_person())->name(),
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"createdby" => $p->has_user(get_current_person())->name(),
+						"bug_createdby" => $p->has_user(get_current_person())->name(),
+					),
+				)),
 			);
 		}
 		$ol = new object_list($filt);
@@ -875,24 +887,24 @@ class bugtrack_display extends class_base
 	{
 		$p = get_current_person();
 		$sect_id = $p->prop("org_section");
-		$sects = array(aw_url_change_var("sect_filter", "all", get_ru()) => t("K&otilde;ik"),
-			aw_url_change_var("sect_filter", null, get_ru()) => t("Minu lisatud"),
+		$sects = array(aw_url_change_var("sct_filter", "all", get_ru()) => t("K&otilde;ik"),
+			aw_url_change_var("sct_filter", null, get_ru()) => t("Minu lisatud"),
 		);
 		if($sect_id)
 		{
-			$sects[aw_url_change_var("sect_filter", $sect_id, get_ru())] = obj($sect_id)->name();
+			$sects[aw_url_change_var("sct_filter", $sect_id, get_ru())] = obj($sect_id)->name();
 		}
 		if ($this->can("view", $sect_id))
 		{
 			$this->_recur_sect_list($sects, obj($sect_id));
 		}
 		$arr["prop"]["options"] = $sects;
-		$arr["prop"]["value"] = aw_url_change_var("sect_filter", null, get_ru());
-		if($arr["request"]["sect_filter"])
+		$arr["prop"]["value"] = aw_url_change_var("sct_filter", null, get_ru());
+		if($arr["request"]["sct_filter"])
 		{
 			foreach($sects as $url => $tmp)
 			{
-				if(strpos($url, "sect_filter=".$arr["request"]["sect_filter"])!==false)
+				if(strpos($url, "sct_filter=".$arr["request"]["sct_filter"])!==false)
 				{
 					$arr["prop"]["value"] = $url;
 				}
@@ -906,7 +918,7 @@ class bugtrack_display extends class_base
 		$this->_sect_level++;
 		foreach($section->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
 		{
-			$data[aw_url_change_var("sect_filter", $c->prop("to"), get_ru())] = str_repeat("&nbsp;", ($this->_sect_level) * 4).$c->prop("to.name");
+			$data[aw_url_change_var("sct_filter", $c->prop("to"), get_ru())] = str_repeat("&nbsp;", ($this->_sect_level) * 4).$c->prop("to.name");
 			$this->_recur_sect_list($data, $c->to());
 		}
 		$this->_sect_level--;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.22 2009/01/20 19:43:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.23 2009/02/06 13:33:28 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -7,6 +7,8 @@
 @tableinfo aw_dev_orders master_table=objects master_index=brother_of index=aw_oid
 @default table=aw_dev_orders
 @default group=general
+
+@property bug_createdby type=hidden
 
 	@layout name type=vbox closeable=1 area_caption=L&uuml;hikirjeldus
 
@@ -562,6 +564,12 @@ class development_order extends class_base
 					$this->_set_feedback = $p->id();
 				}
 				break;
+			case "com":
+				if(!$arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -838,6 +846,12 @@ class development_order extends class_base
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
+				));
+				return true;
+			case "bug_createdby":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(255)",
 				));
 				return true;
 			case "com":

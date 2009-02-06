@@ -371,6 +371,7 @@ class bug extends class_base
 	{
 		$arr["from_problem"] = $_GET["from_problem"];
 		$arr["do_split"] = "0";
+		$arr["post_ru"] = get_ru();
 	}
 
 	function callback_on_load($arr)
@@ -2473,10 +2474,17 @@ class bug extends class_base
 		$o = new object();
 
 		$bt = $this->_get_bt($arr["obj_inst"]);
-		$parent = $arr["obj_inst"]->parent();
+		if($bt)
+		{
+			$parent = $bt->prop("do_folder");
+		}
+		if(!$parent)
+		{
+			$parent = $arr["obj_inst"]->parent();
+		}
+		$o->set_class_id(CL_DEVELOPMENT_ORDER);
 		$o->set_parent($parent);
 		$o->set_name($arr["obj_inst"]->name());
-		$o->set_class_id(CL_DEVELOPMENT_ORDER);
 		$o->set_prop("bug_type",$arr["obj_inst"]->prop("bug_type"));
 		$o->set_prop("bug_status", 1);
 		$o->set_prop("bug_priority", $arr["obj_inst"]->prop("bug_priority"));
@@ -2484,6 +2492,7 @@ class bug extends class_base
 		$o->set_prop("deadline", $arr["obj_inst"]->prop("deadline"));
 		$o->set_prop("prognosis", $arr["obj_inst"]->prop("prognosis"));
 		$o->set_prop("com", $arr["obj_inst"]->prop("bug_content"));
+		$o->set_prop("bug_createdby", $arr["obj_inst"]->createdby());
 
 		$u = get_instance(CL_USER);
 		$cur = obj($u->get_person_for_uid($arr["obj_inst"]->createdby()));
@@ -2622,7 +2631,7 @@ class bug extends class_base
 
 		}
 
-		die("<script> window.location = '".$this->mk_my_orb("change", array("id" => $o->id()), CL_DEVELOPMENT_ORDER)."' </script>");
+		die("<script> window.location = '".$this->mk_my_orb("change", array("id" => $o->id(), "return_url" => $arr["request"]["return_url"]), CL_DEVELOPMENT_ORDER)."' </script>");
 	}
 
 	function _find_highest_prof_recur($s)

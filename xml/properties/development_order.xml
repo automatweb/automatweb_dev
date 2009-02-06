@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>bug_createdby</name>
+            <table>aw_dev_orders</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>bug_createdby</field>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>
