@@ -276,7 +276,7 @@ class bt_projects_impl extends core
 				"lang_id" => array(),
 				"site_id" => array(),
 				"class_id" => CL_PROJECT,
-				"proj_mgr" => new obj_predicate_anything(),
+				"proj_mgr" => "%",
 			),
 			array(
 				CL_PROJECT => array(new obj_sql_func(OBJ_SQL_UNIQUE, "proj_mgr", "proj_mgr"))
@@ -322,7 +322,13 @@ class bt_projects_impl extends core
 		$set_ppl = array();
 		foreach($ol->arr() as $o)
 		{
-			$po = obj($o->prop("proj_mgr"));
+			$p = $o->prop("proj_mgr");
+			if($set_ppl[$p])
+			{
+				continue;
+			}
+			$set_ppl[$p] = $p;
+			$po = obj($p);
 			$t->add_item($parent, array(
 				"id" => $po->id(),
 				"name" => $arr["inst_id"] ? $po->name() : $this->__parse_name($po->name(), $po->id(), $arr),
