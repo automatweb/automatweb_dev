@@ -264,6 +264,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property fake_address_address type=textbox store=no
 	@caption Fake address
 
+	@property fake_address_address2 type=textbox store=no
+	@caption Fake address 2
+
 	@property fake_address_postal_code type=textbox store=no
 	@caption Fake ZIP code
 
