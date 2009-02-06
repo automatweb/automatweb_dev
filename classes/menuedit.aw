@@ -315,6 +315,17 @@ class menuedit extends aw_template implements request_startup
 				if(!$obj)//edasi oleks nagu ainult selle sektsioooni objekti otsimine, seda pole vaja kui see olemas
 				{
 
+				// Viskame v2lja need, mis niikuinii ei sobi. N2iteks juht, kus yks alias on t6lgitud, teine mitte - http://ekt.einst.ee/en/cultural-heritage/muuseumid
+				//			-kaarel 6.02.2009
+				foreach($candidates as $cand_id => $cand_path)
+				{
+					$path_for_obj = substr($cand_path,0,-1);
+					if ($path_for_obj != $section)
+					{
+						unset($candidates[$cand_id]);
+					}
+				}
+
 
 				if (aw_ini_get("user_interface.full_content_trans") && !count($candidates))
 				{
@@ -323,6 +334,16 @@ class menuedit extends aw_template implements request_startup
 					$lang_id = aw_global_get("ct_lang_id");
 					$this->quote(&$lang_id);
 					$rows = $this->db_fetch_array("SELECT menu_id FROM aw_alias_trans WHERE alias = '$last' AND lang_id = '$lang_id'");
+					$ol = new object_list(array(
+						"alias" => $last,
+						//"status" => STAT_ACTIVE,
+						"site_id" => aw_ini_get("site_id"),
+						"lang_id" => array(),
+					));
+					foreach($ol->ids() as $id)
+					{
+						$rows[] = array("menu_id" => $id);
+					}
 					foreach ($rows as $row)
 					{
 						if (!$this->can("view", $row["menu_id"]))
@@ -342,7 +363,7 @@ class menuedit extends aw_template implements request_startup
 							if (!$stop)
 							{
 								$alias = $this->db_fetch_field("SELECT alias FROM aw_alias_trans WHERE lang_id = $lang_id AND menu_id =".$path_obj->id(), "alias");
-								if ($alias == null)
+								if ($alias == null || !$path_obj->meta("trans_".$lang_id."_status"))
 								{
 									$alias = $path_obj->alias();
 								}
