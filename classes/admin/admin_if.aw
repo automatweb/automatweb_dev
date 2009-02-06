@@ -82,7 +82,7 @@ class admin_if extends class_base
 
 	function _get_o_tb($arr)
 	{
-		$parent = !empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : $this->cfg["rootmenu"];
+		$parent = !empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : aw_ini_get("rootmenu");
 
 		$tb =& $arr["prop"]["vcl_inst"];
 		// add button only visible if the add privilege is set
@@ -221,10 +221,10 @@ class admin_if extends class_base
 	{
 		$tree =& $arr["prop"]["vcl_inst"];
 
-		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
+		$rn = empty($this->use_parent) ? aw_ini_get("admin_rootmenu2") : $this->use_parent;
 
 		$this->period = isset($arr["request"]["period"]) ? $arr["request"]["period"] : null;
-		$admrm = $this->cfg["admin_rootmenu2"];
+		$admrm = aw_ini_get("admin_rootmenu2");
 		if (is_array($admrm))
 		{
 			$admrm = reset($admrm);
@@ -383,8 +383,8 @@ class admin_if extends class_base
 			exit_function("admin_folders::resolve_item_new");
 			return false;
 		};
-		$baseurl = $this->cfg["baseurl"];
-		$ext = $this->cfg["ext"];
+		$baseurl = aw_ini_get("baseurl");
+		$ext = aw_ini_get("ext");
 
 		$iconurl = "";
 		if ($m->class_id() == CL_PROMO)
@@ -458,7 +458,7 @@ class admin_if extends class_base
 		}
 		$hf = new object($ucfg->prop("home_folder"));
 		// add home folder
-		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
+		$rn = empty($this->use_parent) ? aw_ini_get("admin_rootmenu2") : $this->use_parent;
 		$this->tree->add_item(is_array($rn) ? reset($rn) : $rn,array(
 			"id" => $hf->id(),
 			"parent" => $this->force_0_parent ? 0 : (is_array($rn) ? reset($rn) : $rn),
@@ -503,7 +503,7 @@ class admin_if extends class_base
 			"lang_id" => array(),
 			"sort_by" => "objects.parent,objects.jrk,objects.created"
 		));
-		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
+		$rn = empty($this->use_parent) ? aw_ini_get("admin_rootmenu2") : $this->use_parent;
 		$rn = is_array($rn) ? reset($rn) : $rn;
 		if ($this->force_0_parent)
 		{
