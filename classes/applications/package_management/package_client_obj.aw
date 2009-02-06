@@ -194,6 +194,7 @@ class package_client_obj extends _int_object
 		$zip->open($data["file_name"]);
 //		arr($zip->numFiles);
 //arr($data["file_name"]);
+
 		if ($inst->db_table_exists($this->db_table_name) === false)
 		{
 			$inst->db_query('create table '.$this->db_table_name.' (
@@ -201,13 +202,30 @@ class package_client_obj extends _int_object
 				file_name varchar(255),
 				file_version varchar(31),
 				file_location varchar(31),
+				class_name varchar(255),
+				file_ext CHAR(8),
 				package_name varchar(255),
 				package_version varchar(31),
 				package_id int,
 				used int,
 				installed_date int,
-				dependences varchar(255),
+				dependences varchar(255)
 			)');//see viimane on niisama, 2kki leiab hea lahenduse selleks
+		}
+		$tbl = $inst->db_get_table($this->db_table_name);
+		if (!isset($tbl["fields"]["file_ext"]))
+		{
+			$inst->db_add_col("site_file_index", array(
+				"name" => "file_ext",
+				"type" => "CHAR(8)"
+			));
+		}
+		if (!isset($tbl["fields"]["class_name"]))
+		{
+			$inst->db_add_col("site_file_index", array(
+				"name" => "class_name",
+				"type" => "varchar(255)"
+			));
 		}
 
 //pakib failid failide kataloogi saidi juurde
@@ -239,6 +257,21 @@ class package_client_obj extends _int_object
 				$file_name = basename($path);
 				$location =  dirname($dat["name"]);
 				if($file_version)$file_version = $data["file_versions"][$dat["name"]];
+				$ext = $fs = "";
+
+				$newfile_arr = explode("." , $file_name);
+				if(sizeof($newfile_arr) > 1)
+				{
+					$ext = end($newfile_arr);
+					unset($newfile_arr[sizeof($newfile_arr) - 1]);
+					$fs = join("." , $newfile_arr);
+				}
+				else
+				{
+					$ext = "";
+					$fs = $file_name;
+				}
+				
 
 			//andmebaasi kirje sellest installist
 				if(!$file_version)$file_version = $data["file_versions"]['/'.$dat["name"]];
@@ -246,6 +279,8 @@ class package_client_obj extends _int_object
 					file_name,
 					file_version,
 					file_location,
+					class_name,
+					file_ext,
 					package_name,
 					package_version,
 					package_id,
@@ -256,14 +291,15 @@ class package_client_obj extends _int_object
 					'".$file_name."',
 					'".$file_version."',
 					'".$location."',
-					'".$data["name"]."',
+					'".$fs."',
+					'".$ext."',
+					'".$dat["name"]."',
 					'".$data["version"]."',
-					'".$data["package_id"]."',
-					'1',
-					'".time()."',
-					'"."123"."'
+					".$data["package_id"].",
+					1,
+					".time().",
+					'123'
 				)";
-//arr($sql);
 
 				$this->uninstall_file(array(
 					"name" => $file_name,
