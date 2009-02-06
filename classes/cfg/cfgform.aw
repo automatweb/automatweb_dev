@@ -46,7 +46,7 @@
 		@groupinfo lang_11 caption="lang" parent=translate
 		@groupinfo lang_12 caption="lang" parent=translate
 	@groupinfo show_props caption="Omadused grupiti"
-	@groupinfo transl caption="T&otilde;lgi nime"
+	@groupinfo transl caption="T&otilde;lgi seadete vormi"
 
 
 	@default table=objects
@@ -388,7 +388,7 @@ class cfgform extends class_base
 			"tpldir" => "cfgform",
 		));
 		$this->trans_props = array(
-			"name"
+			"name", "cfgview_ru", "cfgview_ru_change"
 		);
 		$this->cfgview_actions = array(
 			"view" => t("Vaatamine (view)"),
