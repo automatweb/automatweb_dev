@@ -225,6 +225,8 @@ class project_obj extends _int_object
 			"class_id" => CL_TASK_ROW,
 			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 			"on_bill" => 1,
+			"site_id" => array(),
+			"lang_id" => array(),
 			"done" => 1,
 			"task.class_id" => CL_BUG,
 			"CL_TASK_ROW.task(CL_BUG).send_bill" => 1,
@@ -607,6 +609,8 @@ class project_obj extends _int_object
 			"class_id" => array(CL_TASK, CL_CRM_MEETING,CL_CRM_CALL),
 			"send_bill" => 1,
 			"lang_id" => array(),
+			"site_id" => array(),
+			"lang_id" => array(),
 			"brother_of" => new obj_predicate_prop("id"),
 			"deal_price" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
 			new object_list_filter(array(
@@ -644,6 +648,8 @@ class project_obj extends _int_object
 			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 			"on_bill" => 1,
 			"done" => 1,
+			"site_id" => array(),
+			"lang_id" => array(),
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
@@ -665,6 +671,8 @@ class project_obj extends _int_object
 //			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 //			"done" => 1,
 			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
 		);
 	}
 
@@ -705,6 +713,8 @@ class project_obj extends _int_object
 				)
 			)),
 			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
 		));
 		return $ol;
 	}
