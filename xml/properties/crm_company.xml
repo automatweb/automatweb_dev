@@ -740,6 +740,15 @@
             <caption>Fake address</caption>
       </property>
       <property>
+            <name>fake_address_address2</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_address_address2</field>
+            <caption>Fake address 2</caption>
+      </property>
+      <property>
             <name>fake_address_postal_code</name>
             <table>objects</table>
             <group>add_info</group>
