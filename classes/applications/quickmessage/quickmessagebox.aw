@@ -121,7 +121,7 @@ class quickmessagebox extends class_base
 		$i = 0;
 		foreach ($msgs->arr() as $msg)
 		{
-			$to = array();arr($msg->prop("to"));
+			$to = array();
 			foreach ($msg->prop("to") as $to_oid)
 			{
 				$tmp = new object($cl_user->get_person_for_user(new object($to_oid)));
