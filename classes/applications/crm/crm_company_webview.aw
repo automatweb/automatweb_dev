@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.61 2009/01/21 19:42:04 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.62 2009/02/07 19:00:58 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -884,6 +884,7 @@ class crm_company_webview extends class_base
 						$value[] = html::href(array(
 							"url" => $val,
 							"caption" => $val,
+							"target" => "_blank",
 						));
 
 					}
@@ -975,8 +976,24 @@ class crm_company_webview extends class_base
 			"external_links" => $value,
 		));
 
+
 		// Images
 		$inst_img = get_instance(CL_IMAGE);
+
+		// Logo
+		if($this->can("view", $c->logo))
+		{
+			$this->vars(array(
+				"imgref" => $inst_img->get_url_by_id($c->logo),
+				"imgref_big" => $inst_img->get_big_url_by_id($c->logo),
+				"imghtml" => $inst_img->make_img_tag_wl($c->logo),
+			));
+			$this->vars(array(
+				"logo" => $this->parse("logo"),
+			));
+		}
+
+		// Pictures with reltype RELTYPE_IMAGE
 		if (!is_array($images_conns) || !count($images_conns))
 		{
 			$images_conns = $c->connections_from(array(
@@ -1000,18 +1017,22 @@ class crm_company_webview extends class_base
 
 		asort($ims);
 		$f_im = reset(array_keys($ims));
-		$imi = get_instance(CL_IMAGE);
+		$all_imstr = "";
 		if ($f_im)
 		{
 			$this->vars(array(
-				"imgref" => $imi->get_url_by_id($f_im)
+				"imgref" => $inst_img->get_url_by_id($f_im),
+				"imgref_big" => $inst_img->get_big_url_by_id($f_im),
+				"imghtml" => $inst_img->make_img_tag_wl($f_im),
 			));
+			$all_imstr .= $this->parse("all_images");
 			$this->vars(array(
 				"first_image" => $this->parse("first_image")
 			));
 		}
 		
 		$f = true;
+		$imstr = "";
 		foreach($ims as $im_id => $ord)
 		{
 			if ($f)
@@ -1020,12 +1041,16 @@ class crm_company_webview extends class_base
 				continue;
 			}
 			$this->vars(array(
-				"imgref" => $imi->get_url_by_id($im_id)
+				"imgref" => $inst_img->get_url_by_id($im_id),
+				"imgref_big" => $inst_img->get_big_url_by_id($im_id),
+				"imghtml" => $inst_img->make_img_tag_wl($im_id),
 			));
 			$imstr .= $this->parse("other_images");
+			$all_imstr .= $this->parse("all_images");
 		}
 		$this->vars(array(
 			"other_images" => $imstr,
+			"all_images" => $all_imstr,
 		));
 	
 		// Rating, show results
@@ -1420,6 +1445,14 @@ class crm_company_webview extends class_base
 			{
 				$address[] = $o->prop("contact.riik.name");
 			}
+			$mail_links = array();
+			foreach($o->get_mails() as $ml)
+			{
+				$mail_links[] = html::href(array(
+					"caption" => $ml,
+					"url" => "mailto:".$ml,
+				));
+			}
 
 			$this->vars(array(
 				'company_id' => $o->id(),
@@ -1451,6 +1484,7 @@ class crm_company_webview extends class_base
 				'city' => $o->prop("contact.linn.name"),
 				'aadress' => $o->prop("contact.aadress"),
 				'mails' => join(", " , $o->get_mails()),
+				'mail_links' => join(", " , $mail_links),
 				'fax' => join(", " , $o->get_faxes()),
 				'phones' => join(", " , $o->get_phones()),
 			));
