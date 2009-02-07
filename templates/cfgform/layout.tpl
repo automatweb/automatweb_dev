@@ -100,6 +100,7 @@ function cfgformToggleSelectProps(grpId)
 		<!-- SUB: options -->
 			<div class="closer">{VAR:prp_opts_caption} <a href="javascript:cfgformToggleOpts({VAR:tmp_id})"><img src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif" id="cfgformOptsBtn{VAR:tmp_id}" width="20" height="15" border="0"></a></div>
 			<div id="cfgformPrpOpts{VAR:tmp_id}" style="display: none;">
+				{VAR:comment_caption} <textarea name="prpconfig[{VAR:prp_key}][comment]" cols="25" rows="3">{VAR:comment}</textarea><br/>
 				{VAR:no_caption_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][no_caption]" value="1"{VAR:no_caption_checked}/>
 				<input type="hidden" name="xconfig[{VAR:prp_key}][no_caption]" value="{VAR:no_caption}"/><br/>
 				{VAR:disabled_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][disabled]" value="1"{VAR:disabled_checked}/>

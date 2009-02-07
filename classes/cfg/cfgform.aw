@@ -2716,6 +2716,8 @@ class cfgform extends class_base
 							"textsize" => empty($property["textsize"]) ? "" : $property["textsize"],
 							"disabled_caption" => t("Mitteaktiivne (disabled)"),
 							"disabled_checked" => checked(!empty($property["disabled"])),
+							"comment_caption" => t("Kommentaar"),
+							"comment" => $property["comment"],
 							"disabled" => empty($property["disabled"]) ? "" : $property["disabled"],
 							"prp_options" => $property["cfgform_additional_options"],
 							"prp_opts_caption" => t("Lisavalikud"),
