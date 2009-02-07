@@ -2430,4 +2430,95 @@ function eval_buffer($res)
 		return $ret;
 	}
 
+	/**
+	@attrib api=1
+	@comment Goes to superuser mode. Switches user to "automatweb". If you need a user that exists in every system and you want to do anything, use this
+	**/
+	function start_superuser()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_USER,
+			"name" => "automatweb%",
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		foreach($ol->arr() as $o)
+		{
+			if($o->meta("usertype") == "superuser")
+			{
+				$user = $o;
+			}
+		}
+		if(!$user)
+		{
+			$uname = $uname_root = "automatweb";
+			$token = 0;
+			$users = $ol->names();
+			while(true)
+			{
+				if(!array_search($uname, $users))
+				{
+					$set_uname = $uname;
+					break;
+				}
+				else
+				{
+					$token++;
+					$uname = $uname_root.$token;
+				}
+			}
+			$ui = get_instance(CL_USER);
+			$user = $ui->add_user(array(
+				"uid" => $uname,
+				"password" => md5(uniqid(rand(), true)),
+			));
+			$user->set_meta("usertype", "superuser");
+			$user->save();
+		}
+		aw_switch_user(array("uid" => $user->name()));
+		aw_disable_acl();
+	}
+
+	/**
+	@attrib api=1
+	@comment Exits superuser mode
+	**/
+	function end_superuser()
+	{
+		aw_restore_user();
+		aw_restore_acl();
+	}
+
+	/**
+	@attrib api=1
+	@param uid required type=string
+		User's id
+	@param msg required type=string
+		Message contents
+	@param url optional type=string
+		Url that will be used for the link on the notification popup
+	@param html optional type=bool
+		Whether the message is displayed as html, defaults to true
+	@comment Sends a quickmessage to the chosen user
+	**/
+	function send_aw_message($arr)
+	{
+		extract($arr);
+		start_superuser();
+		$b = obj();
+		$b->set_class_id(CL_QUICKMESSAGEBOX);
+		$uo = get_instance(CL_USER)->get_obj_for_uid($uid);
+		$box = $b->get_msgbox_for_user($uo, true);
+		$o = obj();
+		$o->set_class_id(CL_QUICKMESSAGE);
+		$o->set_parent($box->id());
+		$o->set_prop("to", array($uo->id()));
+		$o->set_prop("box", $box->id());
+		$o->set_prop("msg", $msg);
+		$o->set_prop("url", $arr["url"]);
+		$o->set_prop("html", (isset($html) && !$html) ? 0 : 1);
+		$o->save();
+		end_superuser();
+	}
+
 ?>

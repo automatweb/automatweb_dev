@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_ws.aw,v 1.5 2008/11/18 10:38:53 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_ws.aw,v 1.6 2009/02/07 17:10:34 robert Exp $
 // project_analysis_ws.aw - Projekti anal&uuml;&uuml;si t&ouml;&ouml;laud 
 /*
 
@@ -16,6 +16,9 @@
 
 	@property eval_req type=checkbox ch_value=1 field=meta method=serialize
 	@caption Hindamine kohustuslik
+
+	@property sum_average type=checkbox ch_value=1 field=meta method=serialize
+	@caption Summaks v&otilde;etakse keskmine
 
 @default group=eval
 
@@ -46,14 +49,18 @@
 	@property strat_wt_tb type=toolbar no_caption=1
 	@property strat_wt type=table no_caption=1 store=no
 
-@default group=cols
+@default group=cols_cols
 
 	@property cols_tb type=toolbar no_caption=1 no_comment=1
 	@property cols_table type=table no_caption=1 no_comment=1
 
+@default group=cols_settings
+	
+	@property cols_s_table type=table no_caption=1 no_comment=1
+
 @default group=rows
 
-	@property rows_tb type=toolbar no_caption=1 no_comment=1
+	@property rows_tb type=toolbar no_caption=1
 
 	@property rows_top type=text subtitle=1 store=no
 
@@ -71,6 +78,8 @@
 
 @groupinfo strat_res_wt caption="Hindajad" 
 @groupinfo cols caption="Tulbad" submit=no
+@groupinfo cols_cols caption="Tulbad" submit=no parent=cols
+@groupinfo cols_settings caption="Seaded" parent=cols
 @groupinfo rows caption="Read"
 
 
@@ -191,7 +200,7 @@ class project_analysis_ws extends class_base
 				break;
 
 			case "strat_a":
-				$this->_save_strat_a($arr);
+				$retval = $this->_save_strat_a($arr);
 				break;
 
 			case "rows_table":
@@ -365,6 +374,23 @@ class project_analysis_ws extends class_base
 				));
 			}
 		}
+		$sch = get_instance("core/scheduler");
+		$pi = get_instance(CL_CRM_PERSON);
+		foreach($arr["request"]["eval_p"] as $pid => $data)
+		{
+			$url = $this->mk_my_orb("send_notification_msg", array(
+				"pid" => $pid,
+				"id" => $arr["obj_inst"]->id(),
+			));
+			$sch->remove($url);
+			if($arr["request"]["is"][$pid] && date_edit::get_timestamp($data["deadline"]) > 0 && $data["remind"] > 0 && $pi->has_user(obj($pid)))
+			{
+				$sch->add(array(
+					"event" => $url,
+					"time" => date_edit::get_timestamp($data["deadline"]) - $data["remind"] * 24 * 60 * 60,
+				));
+			}
+		}
 	}
 
 	function do_db_upgrade($t, $f)
@@ -469,6 +495,147 @@ class project_analysis_ws extends class_base
 				"ord" => $st->prop("ord")
 			));
 		}
+	}
+
+	function _init_cols_s_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "in_sum",
+			"caption" => t("Arvestatakse summas"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "scale",
+			"caption" => t("Hindamise skaala"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Hindamise t&uuml;&uuml;p"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "scale_names",
+			"caption" => t("Hinnete nimed"),
+			"align" => "center",
+		));
+	}
+
+	function _get_cols_s_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_cols_s_table($t);
+	
+		$data = $arr["obj_inst"]->meta("col_settings");
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_COL")) as $c)
+		{
+			if(!strlen($data["scale_from"][$c->prop("to")]) || !$data["scale_to"][$c->prop("to")] || $data["scale_from"][$c->prop("to")] >= $data["scale_to"][$c->prop("to")])
+			{
+				$sn = t("Skaala on m&auml;&auml;ramata");
+			}
+			else
+			{
+				$scale_opts = array("" => t("--vali--"));
+				for($i = $data["scale_from"][$c->prop("to")]; $i <= $data["scale_to"][$c->prop("to")]; $i++)
+				{
+					$scale_opts[$i] = $i;
+				}
+				if(count($scale_opts) < 103)
+				{
+					$sn = t("Lisa")."<br />".html::select(array(
+						"name" => "add_label[".$c->prop("to")."][num]",
+						"options" => $scale_opts,
+					)).html::textbox(array(
+						"name" => "add_label[".$c->prop("to")."][name]",
+						"size" => 10,
+					));
+					if(count($data["scale_names"][$c->prop("to")]))
+					{
+						$sn .= "<br />".t("Kustuta")."<br />";
+					}
+					ksort($data["scale_names"][$c->prop("to")]);
+					foreach($data["scale_names"][$c->prop("to")] as $num => $name)
+					{
+						$sn .= html::checkbox(array(
+							"name" => "del_label[".$c->prop("to")."][".$num."]",
+							"ch_value" => 1,
+						)).$num.": ".$name."<br />";
+					}
+				}
+				else
+				{
+					$sn = t("Skaala on liiga suur");
+				}
+			}
+			$t->define_data(array(
+				"name" => html::obj_change_url($c->to()),
+				"in_sum" => html::checkbox(array(
+					"checked" => $data["not_in_sum"][$c->prop("to")] ? 0 : 1,
+					"ch_value" => 1,
+					"name" => "col_settings[not_in_sum][".$c->prop("to")."]",
+				)),
+				"scale" => html::textbox(array(
+					"name" => "col_settings[scale_from][".$c->prop("to")."]",
+					"value" => $data["scale_from"][$c->prop("to")],
+					"size" => 4,
+				))." ".t("kuni")." ".html::textbox(array(
+					"name" => "col_settings[scale_to][".$c->prop("to")."]",
+					"value" => $data["scale_to"][$c->prop("to")],
+					"size" => 4,
+				)),
+				"type" => html::select(array(
+					"name" => "col_settings[type][".$c->prop("to")."]",
+					"value" => $data["type"][$c->prop("to")],
+					"options" => array(
+						1 => t("Tekstikast"),
+						2 => t("Valik"),
+					),
+				)),
+				"scale_names" => $sn,
+			));
+		}
+	}
+
+	function _set_cols_s_table($arr)
+	{
+		$old_data = $arr["obj_inst"]->meta("col_settings");
+		$not_in_sum = array();
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_COL")) as $c)
+		{
+			if(!$arr["request"]["col_settings"]["not_in_sum"][$c->prop("to")])
+			{
+				$not_in_sum[$c->prop("to")] = 1;
+			}
+			else
+			{
+				unset($not_in_sum[$c->prop("to")]);
+			}
+		}
+		$data = $arr["request"]["col_settings"];
+		$data["not_in_sum"] = $not_in_sum;
+		$data["scale_names"] = $old_data["scale_names"];
+		foreach($arr["request"]["add_label"] as $id => $dat)
+		{
+			if(strlen($dat["num"]) && $dat["name"])
+			{
+				$data["scale_names"][$id][$dat["num"]] = $dat["name"];
+			}
+		}
+		foreach($arr["request"]["del_label"] as $id => $dat)
+		{
+			foreach($dat as $num => $tmp)
+			{
+				unset($data["scale_names"][$id][$num]);
+			}
+		}
+		$arr["obj_inst"]->set_meta("col_settings", $data);
+		$arr["obj_inst"]->save();
 	}
 
 	/**
@@ -882,6 +1049,8 @@ class project_analysis_ws extends class_base
 		{
 			$strats[$c->prop("to")] = $c->prop("to");
 		}
+		
+		$col_data = $arr["obj_inst"]->meta("col_settings");
 
 		$no_use = $arr["obj_inst"]->meta("rows_no_use");
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW", "sort_by" => "to.jrk")) as $c)
@@ -902,11 +1071,33 @@ class project_analysis_ws extends class_base
 			);
 			foreach($strats as $strat)
 			{
-				$ar[$strat] = html::textbox(array(
-					"name" => "a[".$row->id()."][$strat]",
-					"value" => $data[$row->id()][$strat],
-					"size" => 3
-				));
+				if($col_data["type"][$strat] == 2 && strlen($col_data["scale_from"][$strat]) && $col_data["scale_to"][$strat] && $col_data["scale_from"][$strat] < $col_data["scale_to"][$strat])
+				{
+					$opts = array("" => t("--vali--"));
+					for($i = $col_data["scale_from"][$strat]; $i <= $col_data["scale_to"][$strat]; $i++)
+					{
+						$add = "";
+						if($name = $col_data["scale_names"][$strat][$i])
+						{
+							$add = sprintf(" (%s)", $name);
+						}
+						$opts[$i] = $i.$add;
+					}
+					$val = html::select(array(
+						"name" => "a[".$row->id()."][$strat]",
+						"value" => $data[$row->id()][$strat],
+						"options" => $opts,
+					));
+				}
+				else
+				{
+					$val = html::textbox(array(
+						"name" => "a[".$row->id()."][$strat]",
+						"value" => $data[$row->id()][$strat],
+						"size" => 3
+					));
+				}
+				$ar[$strat] = $val;
 			}
 			$t->define_data($ar);
 		}
@@ -940,12 +1131,31 @@ class project_analysis_ws extends class_base
 		}
 	}
 
-	function _save_strat_a($arr)
+	function _save_strat_a(&$arr)
 	{
+		$settings = $arr["obj_inst"]->meta("col_settings");
+		$errors = array();
+		foreach($arr["request"]["a"] as $row => $coldata)
+		{
+			foreach($coldata as $col => $data)
+			{
+				if($data && ($data > $settings["scale_to"][$col] || $data < $settings["scale_from"][$col]))
+				{
+					unset($arr["request"]["a"][$row][$col]);
+					$error = sprintf(t("%s hindamise skaala on %s - %s"), obj($col)->name(), $settings["scale_from"][$col], $settings["scale_to"][$col]);
+					$errors[$error] = $error;
+				}
+			}
+		}
 		// see if there is an eval for this person already, if not, create it , if it is, update it
 		$se = $this->_get_strat_eval($arr["obj_inst"]);
 		$se->set_meta("grid", $arr["request"]["a"]);
 		$se->save();
+		if(count($errors))
+		{
+			$arr["prop"]["error"] = implode("<br>", $errors);
+			return PROP_ERROR;
+		}
 	}
 
 	function _srt($arr)
@@ -1006,6 +1216,7 @@ class project_analysis_ws extends class_base
 			}
 		}
 		$no_use = $arr["obj_inst"]->meta("rows_no_use");
+		$settings = $arr["obj_inst"]->meta("col_settings");
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
 			$row = $c->to();
@@ -1023,16 +1234,23 @@ class project_analysis_ws extends class_base
 				"task_comm" => $row->comment()
 			);
 			$sum = 0;
+			$count = 0;
 			foreach($strats as $strat)
 			{
 				$ar[$strat] = number_format($data[$row->id()][$strat] / $ol->count(), 2);
-				$sum += $ar[$strat];
+				if(!$settings["not_in_sum"][$strat])
+				{
+					$sum += $ar[$strat];
+					$count++;
+				}
+			}
+			if($arr["obj_inst"]->prop("sum_average"))
+			{
+				$sum /= $count;
 			}
 			$ar["sum"] = number_format($sum, 2);
 			$t->define_data($ar);
 		}
-		$t->sort_by();
-		$t->set_sortable(false);
 	}
 
 	function _strat_res($arr)
@@ -1073,6 +1291,7 @@ class project_analysis_ws extends class_base
 		$sbs = array();
 		$sums = array();
 		$no_use = $arr["obj_inst"]->meta("rows_no_use");
+		$settings = $arr["obj_inst"]->meta("col_settings");
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW", "sort_by" => "to.jrk")) as $c)
 		{
 			$row = $c->to();
@@ -1090,20 +1309,27 @@ class project_analysis_ws extends class_base
 				"task_comm" => $row->comment()
 			);
 			$sum = 0;
+			$count = 0;
 			foreach($strats as $strat)
 			{
 				$ar[$strat] = number_format($data[$row->id()][$strat] / $ol->count(), 2);
-				$sum += $ar[$strat];
 				$sbs[$strat] += $ar[$strat];
 				$sums[$strat] += $ar[$strat];
+				if(!$settings["not_in_sum"][$strat])
+				{
+					$sum += $ar[$strat];
+					$count++;
+				}
+			}
+			if($arr["obj_inst"]->prop("sum_average"))
+			{
+				$sum /= $count;
 			}
 			$ar["sum"] = number_format($sum, 2);
 			$t->define_data($ar);
 		}
 		$this->_init_strat_res_tbl($t, $arr["obj_inst"], $sums);
 
-		$t->sort_by();
-		$t->set_sortable(false);
 		$sbs["task"] = t("<b>Summa</b>");
 		//$t->define_data($sbs);
 	}
@@ -1140,6 +1366,23 @@ class project_analysis_ws extends class_base
 			"align" => "center",
 			"numeric" => 1,
 			"sortable" => 1
+		));
+	}
+
+	/**
+	@attrib name=send_notification_msg all_args=1
+	**/
+	function send_notification_msg($arr)
+	{
+		$url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"group" => "eval"
+		), CL_PROJECT_ANALYSIS_WS, true);
+		$msg = sprintf(t("Teil on kohustus anda oma hinnang anal&uuml;&uuml;sit&ouml;&ouml;laual. Hindamiseks klikake <a href=\"%s\">siia</a>."), $url);
+		send_aw_message(array(
+			"uid" => get_instance(CL_CRM_PERSON)->has_user(obj($arr["pid"]))->name(),
+			"msg" => $msg,
+			"url" => $url
 		));
 	}
 }

@@ -85,7 +85,7 @@ class quickmessagebox extends class_base
 			$t->define_data(array(
 				"oid" => $msg->id(),
 				"from" => $from->name(),
-				"msg" => htmlspecialchars($msg->prop("msg")),
+				"msg" => $msg->prop("html") ? $msg->prop("msg") : htmlspecialchars($msg->prop("msg")),
 				"sent" => $msg->created(),
 				// "colour" => self::COLOUR_READ,
 				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
@@ -100,7 +100,7 @@ class quickmessagebox extends class_base
 			$t->define_data(array(
 				"oid" => $msg->id(),
 				"from" => $from->name(),
-				"msg" => htmlspecialchars($msg->prop("msg")),
+				"msg" => $msg->prop("html") ? $msg->prop("msg") : htmlspecialchars($msg->prop("msg")),
 				"sent" => $msg->created(),
 				"colour" => self::COLOUR_UNREAD,
 				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
@@ -121,7 +121,7 @@ class quickmessagebox extends class_base
 		$i = 0;
 		foreach ($msgs->arr() as $msg)
 		{
-			$to = array();
+			$to = array();arr($msg->prop("to"));
 			foreach ($msg->prop("to") as $to_oid)
 			{
 				$tmp = new object($cl_user->get_person_for_user(new object($to_oid)));
@@ -132,7 +132,7 @@ class quickmessagebox extends class_base
 			$t->define_data(array(
 				"oid" => $msg->id(),
 				"to" => $to,
-				"msg" => htmlspecialchars($msg->prop("msg")),
+				"msg" => $msg->prop("html") ? $msg->prop("msg") : htmlspecialchars($msg->prop("msg")),
 				"sent" => $msg->created(),
 				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
 			));
@@ -312,6 +312,24 @@ class quickmessagebox extends class_base
 		}
 
 		exit;
+	}
+
+	/**
+		@attrib name=redir_userbox all_args=1
+	**/
+	function redir_userbox($arr)
+	{
+		return quickmessagebox_obj::redir_userbox($arr["url"]);
+	}
+
+	/**
+		@attrib name=redir_popup_url all_args=1
+	**/
+	function redir_popup_url($arr)
+	{
+		$box = quickmessagebox_obj::get_msgbox_for_user(obj(aw_global_get("uid_oid")));
+		$box->read_new_msgs();
+		return $arr["url"];
 	}
 }
 

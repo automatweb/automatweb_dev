@@ -31,6 +31,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_init_session_modal.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.selectboxes.min.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_unload_handler.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_popup.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.tooltip.min.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
@@ -68,7 +69,6 @@ jQuery.hotkeys.add('Ctrl+Shift+q', function(){
 jQuery.hotkeys.add('Ctrl+Shift+e', function(){
 	aw_popup_scroll("{VAR:stop_pop_url_qw}", "quick_task_entry", 800,600);
 });
-
 </script>
 
 <!--[if lt IE 7]>
@@ -78,6 +78,24 @@ jQuery.hotkeys.add('Ctrl+Shift+e', function(){
 </head>
 <div style="padding:10px 20px; width:200px; left: 50%; margin-left: -100px; height:200; top:50%; margin-top:-100; background-color:white; border:1px solid silver; position:absolute; text-align:center; color:gray; font-size:12px; display:none;" id="ajax_loader_div"><img src="{VAR:baseurl}/automatweb/images/ajax-loader.gif"><br/><br/>Laadin...</div>
 <body onLoad="check_generic_loader();">
+<!-- SUB: MSG_POPUP -->
+<div class="msg_popup" style="background: #ffffff; width: 150px; min-height: 76px; font-size: 11px; padding: 0px; visibility: hidden; position: fixed; right: 0px;  border: #05A6E9 2px solid;">
+<div style="background: url('{VAR:baseurl}/automatweb/images/aw06/layout_t.gif') repeat-x top; height:14px; color: white; font-weight: bold; padding: 4px;">
+<div style="float: left;">{VAR:msg_popup_title}</div>
+<div style="float: right; font-family: arial; font-weight: bold;">
+<a href="#" style="color: #ffffff;" id="msg_popup_close">X</a>
+</div></div>
+
+<div style="padding:10px;">
+<a href="{VAR:msg_popup_url}" style="color: #666666;";>{VAR:msg_popup_content}</a>
+</div>
+</div>
+<script type="text/javascript">
+jQuery(function(){
+	jQuery("div.msg_popup").popup();
+});
+</script>
+<!-- END SUB: MSG_POPUP -->
 
 <div id="aw_object_quickadd" style="display: none;">
 	<div class="icon"><img src="{VAR:baseurl}/automatweb/images/aw06/blank.gif" width="40" alt="" /></div>
@@ -131,7 +149,7 @@ $.init_session_modal({
 	<div class="top-right-menyy">
 		{VAR:lang_pop}
 		{VAR:settings_pop}
-
+		<a href="{VAR:msg_url}"><img src="{VAR:baseurl}/automatweb/images/icons/mail_send.gif" border="0" alt="msg" /></a>
 		<a href="{VAR:baseurl}/orb.aw?class=users&action=logout" class="logout">{VAR:logout_text}</a>
 	</div>
 

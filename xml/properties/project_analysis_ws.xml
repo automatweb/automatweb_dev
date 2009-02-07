@@ -19,6 +19,16 @@
             <caption>Hindamine kohustuslik</caption>
       </property>
       <property>
+            <name>sum_average</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Summaks v&amp;amp;otilde;etakse keskmine</caption>
+      </property>
+      <property>
             <name>strat_a</name>
             <table>objects</table>
             <group>eval</group>
@@ -97,7 +107,7 @@
       <property>
             <name>cols_tb</name>
             <table>objects</table>
-            <group>cols</group>
+            <group>cols_cols</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <no_comment>1</no_comment>
@@ -107,7 +117,7 @@
       <property>
             <name>cols_table</name>
             <table>objects</table>
-            <group>cols</group>
+            <group>cols_cols</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <no_comment>1</no_comment>
@@ -115,12 +125,21 @@
             <field>cols_table</field>
       </property>
       <property>
+            <name>cols_s_table</name>
+            <table>objects</table>
+            <group>cols_settings</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <no_comment>1</no_comment>
+            <store>no</store>
+            <field>cols_s_table</field>
+      </property>
+      <property>
             <name>rows_tb</name>
             <table>objects</table>
             <group>rows</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
-            <no_comment>1</no_comment>
             <store>no</store>
             <field>rows_tb</field>
       </property>
@@ -193,6 +212,15 @@
                   <caption>Tulbad</caption>
                   <submit>no</submit>
             </cols>
+            <cols_cols>
+                  <caption>Tulbad</caption>
+                  <submit>no</submit>
+                  <parent>cols</parent>
+            </cols_cols>
+            <cols_settings>
+                  <caption>Seaded</caption>
+                  <parent>cols</parent>
+            </cols_settings>
             <rows>
                   <caption>Read</caption>
             </rows>

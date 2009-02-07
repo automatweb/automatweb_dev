@@ -29,6 +29,20 @@
             <field>box</field>
       </property>
       <property>
+            <name>html</name>
+            <table>quickmessages</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>html</field>
+      </property>
+      <property>
+            <name>url</name>
+            <table>quickmessages</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>url</field>
+      </property>
+      <property>
             <name>from_display</name>
             <table>quickmessages</table>
             <group>general</group>

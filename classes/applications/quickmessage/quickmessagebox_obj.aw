@@ -121,7 +121,8 @@ class quickmessagebox_obj extends _int_object
 
 		if (
 			(self::APPROVED_SENDERS_CONTACTS === $approved_senders and !in_array($msg->prop("from"), $this->prop("contactlist"))) or
-			self::APPROVED_SENDERS_NONE === $approved_senders
+			self::APPROVED_SENDERS_NONE === $approved_senders and
+			obj($msg->prop("from"))->meta("usertype") != "superuser"
 		)
 		{
 			throw new awex_qmsg_unwanted_msg("Message poster is not among this user's approved senders.");
@@ -188,7 +189,7 @@ class quickmessagebox_obj extends _int_object
 	@comment
 		If no messagebox found for user and ini setting quickmessaging.auto_create_box is set to true, creates one.
 	**/
-	public static function get_msgbox_for_user(object $user)
+	public static function get_msgbox_for_user(object $user, $create = false)
 	{
 		$c = $user->connections_to(array(
 			"class" => CL_QUICKMESSAGEBOX,
@@ -203,7 +204,7 @@ class quickmessagebox_obj extends _int_object
 		}
 		elseif (0 === count($c))
 		{
-			if (aw_ini_get("quickmessaging.auto_create_box"))
+			if (aw_ini_get("quickmessaging.auto_create_box") || $create)
 			{
 				$box = new object();
 				$box->set_class_id(CL_QUICKMESSAGEBOX);
@@ -457,6 +458,13 @@ class quickmessagebox_obj extends _int_object
 		}
 
 		fclose($fp);
+	}
+
+	// finds / creates a user's messagebox and redirects to it
+	function redir_userbox($url)
+	{
+		$o = self::get_msgbox_for_user(obj(aw_global_get("uid_oid")), true);
+		return $this->mk_my_orb("change", array("group" => "message_inbox", "id" => $o->id(), "return_url" => $url), "quickmessagebox");
 	}
 }
 

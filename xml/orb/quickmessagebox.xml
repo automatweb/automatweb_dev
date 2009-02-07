@@ -18,5 +18,19 @@
 			</function>
 		</action>
 
+		<action name="redir_userbox" all_args="1">
+			<function name="redir_userbox">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="redir_popup_url" all_args="1">
+			<function name="redir_popup_url">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

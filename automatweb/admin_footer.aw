@@ -142,6 +142,7 @@ $sf->vars(array(
 		"load_on_demand_url" => $sf->mk_my_orb("settings_lod", array("url" => get_ru()), "user"),
 		"text" => '<img src="/automatweb/images/aw06/ikoon_seaded.gif" alt="seaded" width="17" height="17" border="0" align="left" style="margin: -1px 5px -3px -2px" />'.t("Seaded").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 	)),
+	"msg_url" => $sf->mk_my_orb("redir_userbox", array("url" => get_ru()), "quickmessagebox"),
 	"lang_pop" => $bml->get_menu(array(
 		"load_on_demand_url" => $sf->mk_my_orb("lang_pop", array("url" => get_ru()), "language"),
 		"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
@@ -153,6 +154,32 @@ $sf->vars(array(
 	"btn_session_end_cancel" => html_entity_decode(t("L&otilde;petan")),
 	"session_length" => ini_get("session.gc_maxlifetime")*1000
 ));
+$box_o = obj();
+$box_o->set_class_id(CL_QUICKMESSAGEBOX);
+$box = $box_o->get_msgbox_for_user(obj(aw_global_get("uid_oid")));
+$ol = new object_list($box->connections_from(array("type" => "RELTYPE_UNREAD_MESSAGE")));
+if($num = $ol->count())
+{
+	if($num == 1)
+	{
+		$o = $ol->begin();
+		$text = strip_tags($o->prop("msg"));
+		$text = html::strong(obj($o->prop("from"))->name()).":<br />".(strlen($text) > 100 ? substr($text, 0, 100)."..." : $text);
+	}
+	else
+	{
+		$text = sprintf(t("Teile on %s uut s&otilde;numit"), $num);
+	}
+	$sf->vars(array(
+		"msg_popup_title" => t("Teade"),
+		"msg_popup_content" => $text,
+		"msg_popup_url" => ($num == 1 && $o->prop("url")) ? $sf->mk_my_orb("redir_popup_url", array("url" => $o->prop("url")), "quickmessagebox") : $sf->mk_my_orb("redir_userbox", array("url" => get_ru()), "quickmessagebox"),
+	));
+	$popup = $sf->parse("MSG_POPUP");
+	$sf->vars(array(
+		"MSG_POPUP" => $popup,
+	));
+}
 
 if ($sf->prog_acl("view", "disp_person"))
 {

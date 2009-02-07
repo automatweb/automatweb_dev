@@ -156,7 +156,7 @@ class quickmessage_obj extends _int_object
 			{
 				$to_o = new object($this->prop("to"));
 				$msgbox = quickmessagebox_obj::get_msgbox_for_user($to_o);
-				$u_oid = aw_global_get("uid_oid");
+				$u_oid = get_instance(CL_USER)->get_obj_for_uid(aw_global_get("uid"))->id();
 				$this->set_prop("from", $u_oid);
 				$this->set_name(aw_global_get("uid") . " => " .  $to_o->name() . " @ " . date("d.M. Y H:i:s"));
 			}

@@ -13,6 +13,8 @@
 	@property to type=hidden
 	@property from type=hidden
 	@property box type=hidden
+	@property html type=hidden
+	@property url type=hidden
 
 	@property from_display type=text store=no editonly=1
 	@caption From
@@ -51,6 +53,14 @@ class quickmessage extends class_base
 	{
 		$arr["prop"]["value"] = htmlspecialchars($arr["prop"]["value"]);
 		return PROP_OK;
+	}
+
+	function _get_from($arr)
+	{
+		if($arr["new"])
+		{
+			$arr["prop"]["value"] = aw_global_get("uid_oid");
+		}
 	}
 
 	function _get_box($arr)
@@ -146,6 +156,7 @@ class quickmessage extends class_base
 			{
 				case "from":
 				case "box":
+				case "html":
 					$this->db_add_col($table, array(
 						"name" => $field,
 						"type" => "int"
@@ -154,6 +165,7 @@ class quickmessage extends class_base
 
 				case "to":
 				case "msg":
+				case "url":
 					$this->db_add_col($table, array(
 						"name" => $field,
 						"type" => "text"

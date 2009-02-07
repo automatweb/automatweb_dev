@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="send_notification_msg" all_args="1">
+			<function name="send_notification_msg">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
