@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.91 2008/12/18 11:34:58 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.92 2009/02/07 15:59:25 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -5751,7 +5751,7 @@ class personnel_management extends class_base
 			"site_id" => array()
 		));
 		$o = obj($id);
-		$nitems[$o->id()] = $o->name();
+		$nitems[$o->id()] = $o->trans_get_val("name");
 		$this->_req_add_0level_item_to_list($nitems, $ot, $id);
 	}
 
@@ -5760,7 +5760,7 @@ class personnel_management extends class_base
 		$this->_level++;
 		foreach($ot->level($id) as $o)
 		{
-			$nitems[$o->id()] = str_repeat("&nbsp;", $this->_level*3).$o->name();
+			$nitems[$o->id()] = str_repeat("&nbsp;", $this->_level*3).$o->trans_get_val("name");
 			$this->_req_add_0level_item_to_list($nitems, $ot, $o->id());
 		}
 		$this->_level--;
