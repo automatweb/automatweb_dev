@@ -156,7 +156,7 @@ $sf->vars(array(
 ));
 $box_o = obj();
 $box_o->set_class_id(CL_QUICKMESSAGEBOX);
-$box = $box_o->get_msgbox_for_user(obj(aw_global_get("uid_oid")));
+$box = $box_o->get_msgbox_for_user(obj(aw_global_get("uid_oid")), true);
 $ol = new object_list($box->connections_from(array("type" => "RELTYPE_UNREAD_MESSAGE")));
 if($num = $ol->count())
 {
