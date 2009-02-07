@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.59 2009/01/29 15:06:01 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.60 2009/02/07 17:49:13 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -18,7 +18,7 @@
 		@property selections type=relpicker reltype=RELTYPE_SELECTIONS group=general store=connect
 		@caption Vaikimisi valim
 
-		@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT multiple=1 store=connect
+		@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT store=connect
 		@caption Ettev&otilde;tete kaust
 
 		@property folder_person type=relpicker reltype=RELTYPE_ISIK_CAT store=connect
@@ -467,7 +467,7 @@ class crm_db extends class_base
 			$perpage = $arr["obj_inst"]->prop("flimit");
 		};	
 
-		$companys = $this->get_org_tbl_data($arr);
+		list($companys, $customer_data) = $this->get_org_tbl_data($arr);
 
 		if($companys->count() > $perpage)
 		{
@@ -571,9 +571,13 @@ class crm_db extends class_base
 				$cts = join(", ", $pha);
 			}
 			
+			$pm = $this->get_org_popupmenu(array("oid" => $com->id(), "cd_oid" => $customer_data[$com->id()]));
 			$t->define_data(array(
 				"id" => $com->id(),
-				"org" => html::get_change_url($com->id(), array("return_url" => get_ru()), strlen($com->name()) ? $com->name() : t("(nimetu)")),
+//				"org" => html::get_change_url($com->id(), array("return_url" => get_ru()), strlen($com->name()) ? $com->name() : t("(nimetu)")),
+				"org" => $pm->get_menu(array(
+					"text" => parse_obj_name($com->name()),
+				)),
 				"field" => $com->prop_str("pohitegevus"),
 				"ettevotlusvorm" => $com->prop_str("ettevotlusvorm"),
 				"address" => $cts,
@@ -606,20 +610,16 @@ class crm_db extends class_base
 		));
 
 		$df = $arr["obj_inst"]->prop("dir_firma");
+		$df = is_array($df) ? reset($df) : $df;
 		if ($this->can("view", $df))
 		{
-			$df = array($df);
-		}
-
-		foreach(safe_array($df) as $pt)
-		{
-			$pt = obj($pt);
 			$tb->add_menu_item(array(
 				"parent" => "create_event",
-				"text" => sprintf(t("Lisa organisatsioon (%s)"), $pt->name()),
-				"url" => $this->mk_my_orb("new", array("parent" => $pt->id(),"return_url" => get_ru(), "sector" => $_GET["branch_id"]), CL_CRM_COMPANY),
+				"text" => t("Lisa organisatsioon"),
+				"url" => $this->mk_my_orb("new", array("parent" => $df,"return_url" => get_ru(), "sector" => $_GET["branch_id"]), CL_CRM_COMPANY),
 			));
 		}
+
 		if($arr["request"]["group"] == "tegevusalad" || $arr["request"]["group"] == "org")
 		{
 			if (isset($_GET["branch_id"]) && $this->can("add", $_GET["branch_id"]))
@@ -902,7 +902,7 @@ class crm_db extends class_base
 		$oo = $arr["obj_inst"]->owner_org;
 		if(!$this->can("view", $oo))
 		{
-			return new object_list();
+			return array(new object_list(), array());
 		}
 
 		$t = &$arr["prop"]["vcl_inst"];
@@ -930,7 +930,7 @@ class crm_db extends class_base
 		$ids = $cd_odl->get_element_from_all("buyer");
 		if(count($ids) === 0)
 		{
-			return new object_list();
+			return array(new object_list(), array());
 		}
 		$vars = array(
 			"class_id" => CL_CRM_COMPANY,
@@ -1007,7 +1007,7 @@ class crm_db extends class_base
 		}
 
 		$companys = new object_list($vars);
-		return $companys;
+		return array($companys, array_reverse($ids));
 	}
 
 	private function set_org_tbl_caption($arr)
@@ -1047,6 +1047,24 @@ class crm_db extends class_base
 		}
 
 		$arr["prop"]["vcl_inst"]->set_caption($c);
+	}
+
+	function get_org_popupmenu($arr)
+	{
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu($arr["oid"]);
+
+		$pm->add_item(array(
+			"text" => t("Muuda organisatsiooni"),
+			"link" => html::get_change_url($arr["oid"], array("return_url" => get_ru()))
+		));
+		
+		$pm->add_item(array(
+			"text" => t("Muuda kliendisuhet"),
+			"link" => html::get_change_url($arr["cd_oid"], array("return_url" => get_ru()))
+		));
+
+		return $pm;
 	}
 }
 ?>
