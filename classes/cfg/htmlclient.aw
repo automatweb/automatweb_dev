@@ -410,11 +410,25 @@ class htmlclient extends aw_template
 				$this->tooltip_index = 1;
 			}
 
-			$help_url = "javascript:void(0);";
-			$help_text = $args["comment"];
+			$this->vars(array(
+				"tooltip_index" => $this->tooltip_index,
+				"comment" => $args["comment"],
+			));
 
-			$caption = '<span id="tooltip_'.$this->tooltip_index.'" class="help">'.$caption.'</span>'.
-						'<div class="tooltip_content">'.$help_text.'</div>';
+			if(isset($args["comment_style"]) && $args["comment_style"] == "text")
+			{
+				$this->vars(array(
+					"TITLE_HELP_TEXT" => $this->parse("TITLE_HELP_TEXT"),
+					"TITLE_HELP_POPUP" => "",
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"TITLE_HELP_TEXT" => "",
+					"TITLE_HELP_POPUP" => $this->parse("TITLE_HELP_POPUP"),
+				));
+			}
 		};
 		$tpl_vars = array(
 				"caption" => $caption,
