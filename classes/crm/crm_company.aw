@@ -50,7 +50,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 			@property tax_nr type=textbox table=kliendibaas_firma parent=co_top_right
 			@caption KMKohuslase nr
 
-			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first table=objects parent=co_top_right captionside=top override_parent=this store=connect
+			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first table=objects parent=co_top_right captionside=top store=connect
 			@caption Organisatsiooni logo
 
 			@property firmajuht type=relpicker reltype=RELTYPE_FIRMAJUHT table=kliendibaas_firma editonly=1 parent=co_top_right
@@ -3139,29 +3139,6 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
-			case "fake_email":
-			case "fake_phone":
-			case "fake_url":
-			case "fake_address_country":
-			case "fake_address_country_relp":
-			case "fake_address_county":
-			case "fake_address_county_relp":
-			case "fake_address_city":
-			case "fake_address_city_relp":
-			case "fake_address_postal_code":
-			case "fake_address_address":
-			case "fake_address_address2":
-				$arr["obj_inst"]->set_prop($data["name"], $data["value"]);
-				break;
-
-			case "logo":
-				if(!is_oid($arr["obj_inst"]->id()))
-				{
-					// Save the company object, cuz the picture will set the company object as its parent.
-					$arr["obj_inst"]->save();
-				}
-				break;
-
 			case "phone_id":
 			case "telefax_id":
 			case "url_id":
