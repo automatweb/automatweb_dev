@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.37 2009/02/05 20:22:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.38 2009/02/09 11:43:21 instrumental Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1145,10 +1145,10 @@ class image extends class_base
 			*/
 
 			case "file":
-				$prop["value"] = "<div id=\"image_".$arr["obj_inst"]->id()."\">";
-				$prop["value"] .= image::make_img_tag_wl($arr["obj_inst"]->id());
-				if (is_oid($arr["obj_inst"]->id()))
+				if (is_oid($arr["obj_inst"]->id()) && file_exists($arr["obj_inst"]->file))
 				{
+					$prop["value"] = "<div id=\"image_".$arr["obj_inst"]->id()."\">";
+					$prop["value"] .= image::make_img_tag_wl($arr["obj_inst"]->id());
 					$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
 					$image_url = $this->get_url_by_id($arr["obj_inst"]->id());
 					$alias_url = $this->mk_my_orb("gen_image_alias_for_doc", array(
@@ -1194,8 +1194,12 @@ class image extends class_base
 						}
 					</script>
 					";
+					$prop["value"] .= "</div>";
 				}
-				$prop["value"] .= "</div>";
+				else
+				{
+					$prop["value"] = "";
+				}
 				break;
 			case "file2":
 				$url = $this->get_url($arr["obj_inst"]->prop($prop["name"]));
