@@ -1040,6 +1040,12 @@ class admin_if extends class_base
 	function if_copy($arr)
 	{
 		extract($arr);
+
+		if (aw_ini_get("admin_if.no_copy_feedback"))
+		{
+			return $this->mk_my_orb("submit_copy_feedback", array("ret_to_orb" => 1, "reforb" => 1, "ser_type" => 2, "ser_rels" => 1, "parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url));
+		}
+
 		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url));
 	}
 
