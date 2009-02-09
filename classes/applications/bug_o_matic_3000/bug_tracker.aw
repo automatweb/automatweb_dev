@@ -1332,6 +1332,8 @@ class bug_tracker extends class_base
 			}
 		}
 
+		$our_company = get_current_company();
+
 		foreach ($bugs as $bug_id => $comments)
 		{
 			$bug = new object($bug_id);
@@ -1339,6 +1341,12 @@ class bug_tracker extends class_base
 			foreach ($comments as $comment_id => $comment)
 			{
 				$working_hours += $comment->prop('add_wh');
+			}
+			
+			$development = $bug->prop("customer") == $our_company->id() ? 1 : 0;
+			if($development)
+			{
+				$bug->finance_type = 3;
 			}
 			$t->define_data(array(
 				'name' => html::href(array(
@@ -1774,10 +1782,7 @@ class bug_tracker extends class_base
 		foreach($ol->arr() as $oid => $p)
 		{
 			unset($wrl);
-			if($this->can("view", $p))
-			{
-				$wrl = $po>get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
-			}
+			$wrl = $po->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
 			if($wrl && $wrl->prop("org") == $owner->id())
 			{
 				$ppl[] = $oid;
@@ -1857,6 +1862,13 @@ class bug_tracker extends class_base
 
 	private function __insert_classes_tree(&$tree, $parent, $cl_parent, $arr)
 	{
+		if($parent != 0)
+		{
+			$tree->add_item($parent, array(
+				"id" => "",
+				"url" => "#",
+			));
+		}
 		$bp_i = get_instance("classes/applications/bug_o_matic_3000/bt_projects_impl");
 		$f = aw_ini_get("classfolders");
 		foreach($f as $id => $dat)
@@ -1877,7 +1889,7 @@ class bug_tracker extends class_base
 		$cl = aw_ini_get("classes");
 		foreach($cl as $id => $dat)
 		{
-			if($dat["parents"] == $cl_parent)
+			if(isset($dat["parents"]) && $dat["parents"] == $cl_parent)
 			{
 				$num = 0;
 				if($parent == 0)
