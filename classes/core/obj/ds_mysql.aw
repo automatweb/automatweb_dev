@@ -3083,7 +3083,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					switch($resn->sql_func)
 					{
 						case OBJ_SQL_UNIQUE:
-							$ret[$pn] = " DISTINCT(".$param.") AS `".$resn->name."` ";
+							$ret[$pn] = " DISTINCT ".$resn->name." ";
 							break;
 
 						case OBJ_SQL_COUNT:

@@ -2774,6 +2774,17 @@
             <field>bills_tb</field>
       </property>
       <property>
+            <name>bills_tree</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>bills_list_u</parent>
+            <field>bills_tree</field>
+            <caption>Arvete puu</caption>
+      </property>
+      <property>
             <name>bill_s_cust</name>
             <table>objects</table>
             <group>bills_list</group>
@@ -5184,9 +5195,23 @@
                   <group>bills_list</group>
                   <area_caption></area_caption>
             </bills_list_box>
-            <bills_list_s>
+            <bills_list_l>
                   <type>vbox</type>
                   <parent>bills_list_box</parent>
+                  <closeable>1</closeable>
+                  <group>bills_list</group>
+                  <area_caption></area_caption>
+            </bills_list_l>
+            <bills_list_u>
+                  <type>vbox</type>
+                  <parent>bills_list_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Arved</area_caption>
+                  <group>bills_list</group>
+            </bills_list_u>
+            <bills_list_s>
+                  <type>vbox</type>
+                  <parent>bills_list_l</parent>
                   <closeable>1</closeable>
                   <area_caption>Otsing</area_caption>
                   <group>bills_list</group>

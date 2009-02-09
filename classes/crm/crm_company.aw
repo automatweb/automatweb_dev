@@ -50,7 +50,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 			@property tax_nr type=textbox table=kliendibaas_firma parent=co_top_right
 			@caption KMKohuslase nr
 
-			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first table=objects parent=co_top_right captionside=top store=connect
+			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first table=objects parent=co_top_right captionside=top override_parent=this store=connect
 			@caption Organisatsiooni logo
 
 			@property firmajuht type=relpicker reltype=RELTYPE_FIRMAJUHT table=kliendibaas_firma editonly=1 parent=co_top_right
@@ -252,41 +252,32 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property user_classificator_5 type=classificator reltype=RELTYPE_USER_CLASSIFICATOR_5 store=connect
 	@caption User-defined classificator 5
 
-	@property fake_phone type=textbox
+	@property fake_phone type=textbox store=no
 	@caption Fake phone
 
-	@property fake_email type=textbox
+	@property fake_email type=textbox store=no
 	@caption Fake e-mail
 
-	@property fake_url type=textbox
+	@property fake_url type=textbox store=no
 	@caption Fake URL
 
-	@property fake_address_address type=textbox
+	@property fake_address_address type=textbox store=no
 	@caption Fake address
 
-	@property fake_address_address2 type=textbox
-	@caption Fake address 2
-
-	@property fake_address_postal_code type=textbox
+	@property fake_address_postal_code type=textbox store=no
 	@caption Fake ZIP code
 
-	@property fake_address_city type=textbox
+	@property fake_address_city type=textbox store=no
 	@caption Fake city
 
-	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY automatic=1
+	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY automatic=1 store=no
 	@caption Fake city
 
-	@property fake_address_county type=textbox
+	@property fake_address_county type=textbox store=no
 	@caption Fake county
 
-	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1
+	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1 store=no
 	@caption Fake county
-
-	@property fake_address_country type=textbox
-	@caption Fake country
-
-	@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1
-	@caption Fake country
 
 	@property show_on_web type=checkbox ch_value=1 store=no
 	@caption Kuva veebis
@@ -937,7 +928,15 @@ default group=org_objects
 
 	@layout bills_list_box type=hbox width=20%:80%
 
-		@layout bills_list_s type=vbox parent=bills_list_box closeable=1 area_caption=Otsing
+		@layout bills_list_l type=vbox parent=bills_list_box closeable=1
+
+		@layout bills_list_u type=vbox parent=bills_list_l closeable=1 area_caption=Arved
+
+			@property bills_tree type=treeview store=no no_caption=1 parent=bills_list_u group=bills_list
+			@caption Arvete puu
+
+		@layout bills_list_s type=vbox parent=bills_list_l closeable=1 area_caption=Otsing
+
 
 			otsing Kliendi, arve nr,  esitamise ajavahemiku,
 			kliendihalduri, koostamisel/makstud/maksmata j&auml;rgi
@@ -1581,9 +1580,6 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype EXTERNAL_LINKS value=82 clid=CL_EXTLINK
 @caption V&auml;lised lingid
 
-@reltype FAKE_COUNTRY value=83 clid=CL_CRM_COUNTRY
-@caption Fake country
-
 
 */
 /*
@@ -1983,6 +1979,24 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
+			case "fake_email":
+			case "fake_phone":
+			case "fake_url":
+			case "fake_address_country":
+			case "fake_address_country_relp":
+			case "fake_address_county":
+			case "fake_address_county_relp":
+			case "fake_address_city":
+			case "fake_address_city_relp":
+			case "fake_address_postal_code":
+			case "fake_address_address":
+			case "fake_address_address2":
+				if(!isset($data["value"]) || strlen(trim($data["value"])) == 0)
+				{
+					$data["value"] = $arr["obj_inst"]->prop($data["name"]);
+				}
+				break;
+
 			case "ettevotlusvorm":
 				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 				if(is_oid($pm_inst->get_sysdefault()))
@@ -2905,6 +2919,7 @@ class crm_company extends class_base
 			case 'bill_proj_list':
 			case 'bill_tb':
 			case 'bills_list':
+			case 'bills_tree':
 			case 'bills_tb':
 			case 'bills_mon_tb':
 			case "bill_s_client_mgr":
@@ -3139,6 +3154,29 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "fake_email":
+			case "fake_phone":
+			case "fake_url":
+			case "fake_address_country":
+			case "fake_address_country_relp":
+			case "fake_address_county":
+			case "fake_address_county_relp":
+			case "fake_address_city":
+			case "fake_address_city_relp":
+			case "fake_address_postal_code":
+			case "fake_address_address":
+			case "fake_address_address2":
+				$arr["obj_inst"]->set_prop($data["name"], $data["value"]);
+				break;
+
+			case "logo":
+				if(!is_oid($arr["obj_inst"]->id()))
+				{
+					// Save the company object, cuz the picture will set the company object as its parent.
+					$arr["obj_inst"]->save();
+				}
+				break;
+
 			case "phone_id":
 			case "telefax_id":
 			case "url_id":

@@ -1238,6 +1238,9 @@ exit_function("bills_impl::_get_bill_task_list");
 
 	function _get_bills_list($arr)
 	{
+
+		//arr(new object_list(array("CL_CRM_PERSON.RELTYPE_ISIK(CL_PROJECT)" => array(), "class_id" => CL_CRM_PERSON)));
+
 		if($arr["request"]["show_bill_balance"]) $this->show_bill_balance = 1;
 		$t =& $arr["prop"]["vcl_inst"];
 		if($_GET["get_all_customers_without_client_relation"])
@@ -1275,7 +1278,52 @@ exit_function("bills_impl::_get_bill_task_list");
 		else
 		{
 			$filt = array();
-			if ($arr["request"]["bill_s_from"] == "")
+			if($arr["request"]["st"])
+			{
+				switch($arr["request"]["st"])
+				{
+					case "period_last":
+						$filt["bill_date_range"] = array(
+							"from" => mktime(0,0,0, date("m")-1, 0, date("Y")),
+							"to" => mktime(0,0,0, date("m"), 0, date("Y")),
+						);
+					break;
+					case "period_current":
+						$filt["bill_date_range"] = array(
+							"from" => mktime(0,0,0, date("m"), 0, date("Y")),
+							"to" => mktime(0,0,0, date("m")+1, 0, date("Y")),
+						);
+					break;
+					case "period_next":
+						$filt["bill_date_range"] = array(
+							"from" => mktime(0,0,0, date("m")+1, 0, date("Y")),
+							"to" => mktime(0,0,0, date("m")+2, 0, date("Y")),
+						);
+					break;
+					default:
+						if($arr["request"]["st"] > 1)
+						{
+							$filt["state"] = $arr["request"]["st"]-10;
+						}
+						else
+						{
+							$stuff = explode("_" , $arr["request"]["st"]);
+							switch($stuff[0])
+							{
+								case "prman":
+									$filt["project_mgr"] = $stuff[1];
+								break;
+								case "custman":
+									$filt["client_mgr"] = $stuff[1];
+								break;
+								case "cust":
+									$filt["customer"] = $stuff[1];
+								break;
+							}
+						}
+				}
+			}
+			elseif ($arr["request"]["bill_s_from"] == "")
 			{
 				// init default search opts
 				$u = get_instance(CL_USER);
@@ -1324,7 +1372,7 @@ exit_function("bills_impl::_get_bill_task_list");
 				{
 					$filt["state"] = $arr["request"]["bill_s_status"];
 				}
-			}//arr($filt);
+			}
 			$bills = $d->get_bills_by_co($arr["obj_inst"], $filt);
 			$format = t('%s arved');
 		}
@@ -1345,6 +1393,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			}
 			$this->_do_export_hr($bills, $arr, $arr["request"]["export_hr"]);
 		}
+
 		$sum_in_curr = $bal_in_curr = array();
 		$balance = 0;
 		foreach($bills->arr() as $bill)
@@ -2183,8 +2232,6 @@ exit_function("bills_impl::_get_bill_task_list");
 		}
 		return $s;
 	}
-
-
 	
 	function get_billable_bugs($r)
 	{
@@ -2421,6 +2468,211 @@ exit_function("bills_impl::_get_bill_task_list");
 		return;
 	}
 
+	function _get_bills_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "st";
+		if(!isset($_GET[$var]))
+		{
+			$_GET[$var] = 10;
+		}
+		classload("core/icons");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_tree",
+		));
+
+		$bills_inst = get_instance(CL_CRM_BILL);
+		$states = $bills_inst->states;
+
+		$tv->add_item(0,array(
+			"name" => t("Staatus"),
+			"id" => "stats",
+//			"url" => aw_url_change_var($var, $stat_id+10),
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("Projektijuht"),
+			"id" => "pr_mgr",
+//			"url" => aw_url_change_var($var, $stat_id+10),
+		));
+
+ 
+		foreach($this->all_project_managers()->names() as $id => $name)
+		{
+			if(!$name)
+			{
+				continue;
+			}
+			if (isset($_GET[$var]) && $_GET[$var] == "prman_".$id)
+			{
+				$name = "<b>".$name."</b>";
+			}
+			$tv->add_item("pr_mgr",array(
+				"name" => $name,
+				"id" => "prman".$id,
+				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
+				"url" => aw_url_change_var($var, "prman_".$id),
+			));
+
+		}
+
+		$tv->add_item(0,array(
+			"name" => t("Kliendihaldur"),
+			"id" => "cust_mgr",
+//			"url" => aw_url_change_var($var, $stat_id+10),
+		));
+
+		foreach($this->all_client_managers()->names() as $id => $name)
+		{
+			if(!$name)
+			{
+				continue;
+			}
+			if (isset($_GET[$var]) && $_GET[$var] == "custman_".$id)
+			{
+				$name = "<b>".$name."</b>";
+			}
+			$tv->add_item("cust_mgr",array(
+				"name" => $name,
+				"id" => "custman".$id,
+				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
+				"url" => aw_url_change_var($var, "custman_".$id),
+			));
+
+		}
+
+		$tv->add_item(0,array(
+			"name" => t("Klient"),
+			"id" => "cust",
+//			"url" => aw_url_change_var($var, $stat_id+10),
+		));
+
+		foreach($this->all_bill_customers()->names() as $id => $name)
+		{
+			if(!$name)
+			{
+				continue;
+			}
+			if (isset($_GET[$var]) && $_GET[$var] == "cust_".$id)
+			{
+				$name = "<b>".$name."</b>";
+			}
+			$tv->add_item("cust",array(
+				"name" => $name,
+				"id" => "cust".$id,
+				"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
+				"url" => aw_url_change_var($var, "cust_".$id),
+			));
+		}
+
+
+		$tv->add_item(0,array(
+			"name" => t("Periood"),
+			"id" => "period",
+//			"url" => aw_url_change_var($var, $stat_id+10),
+		));
+
+		foreach($states as $stat_id => $state)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == $stat_id+10)
+			{
+				$state = "<b>".$state."</b>";
+			}
+			$tv->add_item("stats",array(
+				"name" => $state,
+				"id" => $stat_id+10,
+				"url" => aw_url_change_var($var, $stat_id+10),
+			));
+		}
+
+		$state = t("Eelmine kuu");
+		if (isset($_GET[$var]) && $_GET[$var] == "period_last") $state = "<b>".$state."</b>";
+		$tv->add_item("period",array(
+			"name" => $state,
+			"id" => "period_last",
+			"url" => aw_url_change_var($var, "period_last"),
+		));
+
+		$state = t("Jooksev kuu");
+		if (isset($_GET[$var]) && $_GET[$var] == "period_current") $state = "<b>".$state."</b>";
+		$tv->add_item("period",array(
+			"name" => $state,
+			"id" => "period_current",
+			"url" => aw_url_change_var($var, "period_current"),
+		));
+
+		$state = t("J&auml;rgmine kuu");
+		if (isset($_GET[$var]) && $_GET[$var] == "period_next") $state = "<b>".$state."</b>";
+		$tv->add_item("period",array(
+			"name" => $state,
+			"id" => "period_next",
+			"url" => aw_url_change_var($var, "period_next"),
+		));
+
+	}
+
+	private function all_client_managers()
+	{
+		$filter = array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"CL_CRM_COMPANY_CUSTOMER_DATA.client_manager" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_CRM_COMPANY_CUSTOMER_DATA =>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "aw_crm_customer_data.aw_client_manager"))
+			)
+		);
+
+		$ol = new object_list();
+		$ol->add($t->get_element_from_all("aw_client_manager"));
+		return $ol;
+	}
+
+	private function all_project_managers()
+	{
+		$filter = array(
+			"class_id" => CL_PROJECT,
+			"CL_PROJECT.proj_mgr" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_PROJECT=>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "aw_projects.aw_proj_mgr"))
+			)
+		);
+
+		$ol = new object_list();
+		$ol->add($t->get_element_from_all("aw_proj_mgr"));
+		return $ol;
+
+	}
+
+
+	private function all_bill_customers()
+	{
+		$filter = array(
+			"class_id" => CL_CRM_BILL,
+			"CL_CRM_BILL.customer" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_CRM_BILL=>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "aw_crm_bill.aw_customer"))
+			)
+		);
+
+		$ol = new object_list();
+		$ol->add($t->get_element_from_all("aw_customer"));
+		return $ol;
+
+	}
 
 }
 ?>
