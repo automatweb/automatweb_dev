@@ -823,19 +823,7 @@ class cfgform extends class_base
 	function _init_trans_tbl(&$t, $o, $req, $str = "Omadus")
 	{
 		$l = get_instance("languages");
-		$ld = $l->fetch($o->lang_id(), false);
-
-		$t->define_field(array(
-			"name" => "property",
-			"caption" => $str,
-			"align" => "center"
-		));
-
-		$t->define_field(array(
-			"name" => "orig_str",
-			"caption" => $ld["name"],
-			"align" => "center"
-		));
+		$orig_ld = $l->fetch($o->lang_id(), false);
 
 		$lid = substr($req["group"], 5);
 		$tmp = $l->get_list(array("ignore_status" => 1));
@@ -846,11 +834,40 @@ class cfgform extends class_base
 		);
 		$lid = $this->lang_inf["ids"][max((int)$lid-1,0)];
 		$ld = $l->fetch($lid, false);
+
 		$t->define_field(array(
-			"name" => "trans_str",
-			"caption" => $ld["name"],
+			"name" => "property",
+			"caption" => $str,
 			"align" => "center"
 		));
+
+		$t->define_field(array(
+			"name" => "orig_str",
+			"caption" => sprintf(t("Caption (%s)"), $orig_ld["name"]),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "trans_str",
+			"caption" => sprintf(t("Caption (%s)"), $ld["name"]),
+			"align" => "center"
+		));
+
+		if($str === "Omadus")
+		{
+			$t->define_field(array(
+				"name" => "orig_comment",
+				"caption" => sprintf(t("Kommentaar (%s)"), $orig_ld["name"]),
+				"align" => "center"
+			));
+
+			$t->define_field(array(
+				"name" => "trans_comment",
+				"caption" => sprintf(t("Kommentaar (%s)"), $ld["name"]),
+				"align" => "center"
+			));
+		}
+
 		return $ld;
 	}
 
@@ -869,11 +886,13 @@ class cfgform extends class_base
 		{
 			$capt = $pd["type"] == "text" ? $pd["value"] : $pd["caption"];
 			$capt = iconv($ld["charset"], "utf-8", $capt);
+			$comm = iconv($ld["charset"], "utf-8", $pd["comment"]);
 			$v = iconv($ld["charset"], "utf-8", $trans[$lid][$pn]);
 
 			if (trim($v) == "")
 			{
 				$v = iconv(aw_global_get("charset"), "utf-8", $trans[$lid][$pn]);
+				$v2 = iconv(aw_global_get("charset"), "utf-8", $trans[$lid][$pn."_comment"]);
 			}
 			$t->define_data(array(
 				"property" => $pn,
@@ -881,6 +900,11 @@ class cfgform extends class_base
 				"trans_str" => html::textbox(array(
 					"name" => "dat[".$lid."][$pn]",
 					"value" => $v
+				)),
+				"orig_comment" => $comm,
+				"trans_comment" => html::textbox(array(
+					"name" => "dat[".$lid."][{$pn}_comment]",
+					"value" => $v2
 				))
 			));
 		}
@@ -2531,6 +2555,8 @@ class cfgform extends class_base
 								$this->vars(array(
 									"cfgform_id_caption" => t("Seadetevormi id"),
 									"cfgform_id" => $property["cfgform_id"],
+									"obj_parent_caption" => t("Parent"),
+									"obj_parent" => $property["obj_parent"],
 									"use_form" => $property["use_form"],
 									"rel_id" => $property["rel_id"],
 									"mode" => $property["mode"],
@@ -4026,6 +4052,10 @@ class cfgform extends class_base
 				if ($tc_capt[$pn."_tbl_capt"] != "")
 				{
 					$ret[$pn]["emb_tbl_caption"] = $tc_capt[$pn."_tbl_capt"];
+				}
+				if($tc[$pn."_comment"] != "")
+				{
+					$ret[$pn]["comment"] = $tc[$pn."_comment"];
 				}
 			}
 		}

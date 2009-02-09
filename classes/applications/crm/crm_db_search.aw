@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.10 2009/01/11 12:44:14 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.11 2009/02/09 13:54:34 instrumental Exp $
 // crm_db_search.aw - Kliendibaasi otsingu grupp 
 /*
 
@@ -149,13 +149,13 @@ class crm_db_search extends class_base
 		}
 		$c = count($arr['results']);
 		$out .= sprintf(t("Otsisid '<b>%s</b>', "), $arr['str']);
-		$out .= sprintf( $c == 1 ? t('Leiti %s asutus.') : t('Leiti %s asutust.'), count($arr['results']));
+		$out .= sprintf( $c == 1 ? t('leiti %s asutus.') : t('leiti %s asutust.'), count($arr['results']));
 		$out .= '<br>';
 	
 		$wvinst = get_instance(CL_CRM_COMPANY_WEBVIEW);
 		$wvinst->read_template("default.tpl");
 		$wvinst->vars(array("res_count_row" => $out));
-		$out =  $wvinst->_get_companies_list_html(array(
+		$out .= $wvinst->_get_companies_list_html(array(
 			'list' => $arr['results'],
 			'do_link' => true,
 			'url' => $url,

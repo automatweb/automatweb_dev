@@ -181,6 +181,7 @@ function cfgformToggleSelectProps(grpId)
 
 <!-- SUB: releditor_options -->
 			{VAR:cfgform_id_caption} <input type="text" size="10" name="prpconfig[{VAR:prp_key}][cfgform_id]" value="{VAR:cfgform_id}"/><br/>
+			{VAR:obj_parent_caption} <input type="text" size="10" name="prpconfig[{VAR:prp_key}][obj_parent]" value="{VAR:obj_parent}"/><br/>
 			use_form <input type="text" size="10" name="prpconfig[{VAR:prp_key}][use_form]" value="{VAR:use_form}"/><br/>
 			rel_id <input type="text" size="10" name="prpconfig[{VAR:prp_key}][rel_id]" value="{VAR:rel_id}"/><br/>
 			mode <input type="text" size="10" name="prpconfig[{VAR:prp_key}][mode]" value="{VAR:mode}"/><br/>

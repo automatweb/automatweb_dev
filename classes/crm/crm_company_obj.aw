@@ -67,7 +67,7 @@ class crm_company_obj extends _int_object
 		return parent::prop($k);
 	}
 
-	function set_prop($name,$value)
+	function set_prop($name, $value, $set_into_meta = true)
 	{
 		if($k == "show_on_web")
 		{
@@ -110,13 +110,13 @@ class crm_company_obj extends _int_object
 			switch(substr($name, 5))
 			{
 				case "url":
-					return $this->set_fake_url($value);
+					return $this->set_fake_url($value, $set_into_meta);
 
 				case "email":
-					return $this->set_fake_email($value);
+					return $this->set_fake_email($value, $set_into_meta);
 
 				case "phone":
-					return $this->set_fake_phone($value);
+					return $this->set_fake_phone($value, $set_into_meta);
 
 				case "address_country":
 				case "address_country_relp":
@@ -127,16 +127,35 @@ class crm_company_obj extends _int_object
 				case "address_postal_code":
 				case "address_address":
 				case "address_address2":
-					return $this->set_fake_address_prop($name, $value);
+					return $this->set_fake_address_prop($name, $value, $set_into_meta);
 			}
 		}
-		parent::set_prop($name,$value);
+		return parent::set_prop($name, $value);
 	}
 
 	function set_name($v)
 	{
 		$v = htmlspecialchars($v);
 		return parent::set_name($v);
+	}
+
+	public function save()
+	{
+		parent::save();
+		$fakes = array(
+			"url", "email", "phone", "address_country", "address_country_relp", "address_county", "address_county_relp", "address_city", "address_city_relp", "address_postal_code", "address_address", "address_address2"
+		);
+		foreach($fakes as $fake)
+		{
+			$sim = $this->meta("sim_fake_".$fake);
+			if($sim)
+			{
+				$this->set_meta("sim_fake_".$fake, NULL);
+				$this->set_prop("fake_".$fake, $this->meta("tmp_fake_".$fake), false);
+				$this->set_meta("tmp_fake_".$fake, NULL);
+			}
+		}
+		return parent::save();
 	}
 
 	function get_undone_orders()
@@ -1050,32 +1069,44 @@ class crm_company_obj extends _int_object
 	}
 
 	/** sets the default email adress content or creates it if needed **/
-	private function set_fake_email($mail)
+	private function set_fake_email($mail, $set_into_meta = true)
 	{
-		$n = false;
-		
-		if($GLOBALS["object_loader"]->cache->can("view", $this->prop("email_id")))
+		if($set_into_meta === true)
 		{
-			$eo = obj($this->prop("email_id"));
+			$this->set_meta("tmp_fake_email", $mail);
+			$this->set_meta("sim_fake_email", 1);
 		}
 		else
 		{
-			$eo = $this->get_first_obj_by_reltype("RELTYPE_EMAIL");
-			if($eo === false)
+			$n = false;
+			
+			if($GLOBALS["object_loader"]->cache->can("view", $this->prop("email_id")))
 			{
-				$eo = obj();
-				$eo->set_class_id(CL_ML_MEMBER);
-				$eo->set_parent($this->id());
-				$eo->set_prop("name", $this->name());
+				$eo = obj($this->prop("email_id"));
 			}
-			$n = true;
-		}
+			else
+			{
+				$eo = $this->get_first_obj_by_reltype("RELTYPE_EMAIL");
+				if($eo === false)
+				{
+					$eo = obj();
+					$eo->set_class_id(CL_ML_MEMBER);
+					$eo->set_parent($this->id());
+					$eo->set_prop("name", $this->name());
+				}
+				$n = true;
+			}
+			$conns = connection::find(array("from" => $this->id(), "to" => $eo->id(), "from.class_id" => CL_CRM_COMPANY, "reltype" => "RELTYPE_EMAIL"));
+			if(count($conns) > 0)
+			{
+				$eo->conn_id = reset(array_keys($conns));
+			}
 
-		$eo->set_prop("mail", $mail);
-		$eo->save();
-		
-		if ($n)
-		{
+			$eo->set_prop("mail", $mail);
+			aw_disable_acl();
+			$eo->save();
+			aw_restore_acl();
+
 			$this->set_prop("email_id", $eo->id());
 			$this->save();
 			$this->connect(array(
@@ -1086,139 +1117,165 @@ class crm_company_obj extends _int_object
 	}
 
 	/** sets the default email adress content or creates it if needed **/
-	private function set_fake_phone($phone)
+	private function set_fake_phone($phone, $set_into_meta = true)
 	{
-		if(!is_oid($this->id()))
+		if($set_into_meta === true)
 		{
-			$this->save();
-		}
-		$n = false;
-		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("phone_id")))
-		{
-			$eo = obj($this->prop("phone_id"));
+			$this->set_meta("tmp_fake_phone", $phone);
+			$this->set_meta("sim_fake_phone", 1);
 		}
 		else
 		{
-			$eo = $this->get_first_obj_by_reltype("RELTYPE_PHONE");
-			if($eo === false)
+			if(!is_oid($this->id()))
 			{
-				$eo = obj();
-				$eo->set_class_id(CL_CRM_PHONE);
-				$eo->set_parent($this->id());
+				$this->save();
 			}
-			$n = true;
-		}
-		$conns = connection::find(array("from" => $this->id(), "to" => $eo->id(), "from.class_id" => CL_CRM_COMPANY, "reltype" => "RELTYPE_PHONE"));
-		if(count($conns) > 0)
-		{
-			$eo->conn_id = reset(array_keys($conns));
-		}
-
-		$eo->set_name($phone);
-		aw_disable_acl();
-		$eo->save();
-		aw_restore_acl();
-
-		$this->set_prop("phone_id", $eo->id());
-		$this->save();
-		$this->connect(array(
-			"type" => "RELTYPE_PHONE",
-			"to" => $eo->id()
-		));
-	}
-
-	private function set_fake_url($url)
-	{
-		$n = false;
-		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("url_id")))
-		{
-			$eo = obj($this->prop("url_id"));
-		}
-		else
-		{
-			$eo = $this->get_first_obj_by_reltype("RELTYPE_URL");
-			if($eo === false)
+			$n = false;
+			if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("phone_id")))
 			{
-				$eo = obj();
-				$eo->set_class_id(CL_EXTLINK);
-				$eo->set_parent($this->id());
+				$eo = obj($this->prop("phone_id"));
 			}
-			$n = true;
-		}
+			else
+			{
+				$eo = $this->get_first_obj_by_reltype("RELTYPE_PHONE");
+				if($eo === false)
+				{
+					$eo = obj();
+					$eo->set_class_id(CL_CRM_PHONE);
+					$eo->set_parent($this->id());
+				}
+				$n = true;
+			}
+			$conns = connection::find(array("from" => $this->id(), "to" => $eo->id(), "from.class_id" => CL_CRM_COMPANY, "reltype" => "RELTYPE_PHONE"));
+			if(count($conns) > 0)
+			{
+				$eo->conn_id = reset(array_keys($conns));
+			}
 
-		$eo->set_prop("url", $url);
-		$eo->save();
-		
-		if ($n)
-		{
-			$this->set_prop("url_id", $eo->id());
+			$eo->set_name($phone);
+			aw_disable_acl();
+			$eo->save();
+			aw_restore_acl();
+
+			$this->set_prop("phone_id", $eo->id());
 			$this->save();
 			$this->connect(array(
-				"type" => "RELTYPE_URL",
+				"type" => "RELTYPE_PHONE",
 				"to" => $eo->id()
 			));
 		}
 	}
 
-	private function set_fake_address_prop($k, $v)
+	private function set_fake_url($url, $set_into_meta = true)
 	{
-		$pmap = array(
-			"fake_address_country" => "riik",
-			"fake_address_country_relp" => "riik",
-			"fake_address_county" => "maakond",
-			"fake_address_county_relp" => "maakond",
-			"fake_address_city" => "linn",
-			"fake_address_city_relp" => "linn",
-			"fake_address_postal_code" => "postiindeks",
-			"fake_address_address" => "aadress",
-			"fake_address_address2" => "aadress2"
-		);
-		$n = false;
-		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("contact")))
+		if($set_into_meta === true)
 		{
-			$eo = obj($this->prop("contact"));
+			$this->set_meta("tmp_fake_url", $url);
+			$this->set_meta("sim_fake_url", 1);
 		}
 		else
 		{
-			$eo = obj();
-			$eo->set_class_id(CL_CRM_ADDRESS);
-			$eo->set_parent($this->id());
-			$n = true;
-		}
-
-		switch($k)
-		{
-			case "fake_address_county":
-			case "fake_address_city":
-			case "fake_address_country":
-				if(strlen(trim($v)) > 0)
+			$n = false;
+			if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("url_id")))
+			{
+				$eo = obj($this->prop("url_id"));
+			}
+			else
+			{
+				$eo = $this->get_first_obj_by_reltype("RELTYPE_URL");
+				if($eo === false)
 				{
-					$this->_adr_set_via_rel($eo, $pmap[$k], $v);
+					$eo = obj();
+					$eo->set_class_id(CL_EXTLINK);
+					$eo->set_parent($this->id());
 				}
-				break;
+				$n = true;
+			}
 
-			case "fake_address_county_relp":
-			case "fake_address_city_relp":
-			case "fake_address_country_relp":
-				if(is_oid($v))
-				{
+			$eo->set_prop("url", $url);
+			$eo->save();
+			
+			if ($n)
+			{
+				$this->set_prop("url_id", $eo->id());
+				$this->save();
+				$this->connect(array(
+					"type" => "RELTYPE_URL",
+					"to" => $eo->id()
+				));
+			}
+		}
+	}
+
+	private function set_fake_address_prop($k, $v, $set_into_meta = true)
+	{
+		if($set_into_meta === true)
+		{
+			$this->set_meta("tmp_".$k, $v);
+			$this->set_meta("sim_".$k, 1);
+		}
+		else
+		{
+			$pmap = array(
+				"fake_address_country" => "riik",
+				"fake_address_country_relp" => "riik",
+				"fake_address_county" => "maakond",
+				"fake_address_county_relp" => "maakond",
+				"fake_address_city" => "linn",
+				"fake_address_city_relp" => "linn",
+				"fake_address_postal_code" => "postiindeks",
+				"fake_address_address" => "aadress",
+				"fake_address_address2" => "aadress2"
+			);
+			$n = false;
+			if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("contact")))
+			{
+				$eo = obj($this->prop("contact"));
+			}
+			else
+			{
+				$eo = obj();
+				$eo->set_class_id(CL_CRM_ADDRESS);
+				$eo->set_parent($this->id());
+				$n = true;
+			}
+
+			switch($k)
+			{
+				case "fake_address_county":
+				case "fake_address_city":
+				case "fake_address_country":
+					if(strlen(trim($v)) > 0)
+					{
+						$this->_adr_set_via_rel($eo, $pmap[$k], $v);
+					}
+					else
+					{
+						$eo->set_prop($pmap[$k], 0);
+					}
+					break;
+
+				case "fake_address_county_relp":
+				case "fake_address_city_relp":
+				case "fake_address_country_relp":
+					$v = is_oid($v) ? $v : 0;
 					$eo->set_prop($pmap[$k], $v);
-				}
-				break;
+					break;
 
-			case "fake_address_postal_code":
-			case "fake_address_address":
-			case "fake_address_address2":
-				$eo->set_prop($pmap[$k], $v);
-				break;
-		}
+				case "fake_address_postal_code":
+				case "fake_address_address":
+				case "fake_address_address2":
+					$eo->set_prop($pmap[$k], $v);
+					break;
+			}
 
-		$eo->save();
-		
-		if ($n)
-		{
-			$this->set_prop("contact", $eo->id());
-			$this->save();
+			$eo->save();
+			
+			if ($n)
+			{
+				$this->set_prop("contact", $eo->id());
+				$this->save();
+			}
 		}
 	}
 
