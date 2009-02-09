@@ -266,6 +266,15 @@
             <caption>Saata arve</caption>
       </property>
       <property>
+            <name>promoter</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>promoter</field>
+            <caption>Korraldaja</caption>
+      </property>
+      <property>
             <name>in_budget</name>
             <table>planner</table>
             <group>general</group>

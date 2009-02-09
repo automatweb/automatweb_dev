@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.75 2008/11/24 21:24:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.76 2009/02/09 13:56:15 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -153,11 +153,11 @@
 @property is_personal type=checkbox ch_value=1 field=meta method=serialize table=objects
 @caption Isiklik
 
-@property start1 type=datetime_select field=start 
-@caption Algus
+@property is_personal type=checkbox ch_value=1 field=meta method=serialize table=objects
+@caption Isiklik
 
-@property end type=datetime_select field=end 
-@caption L&otilde;pp
+@property promoter type=checkbox ch_value=1 table=planner field=promoter
+@caption Korraldaja
 
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
 @caption Saata arve
@@ -433,6 +433,7 @@ class crm_call extends task
 			case "deal_amount":
 			case "deal_price":
 			case "deal_has_tax":
+			case "promoter":
 				return PROP_IGNORE;
 
 			case "new_call_date":
@@ -697,6 +698,7 @@ class crm_call extends task
 			case "is_personal":
 			case "send_bill":
 			case "is_work":
+			case "promoter":
 				return PROP_IGNORE;
 
 			case "new_call_date":
@@ -1327,5 +1329,15 @@ class crm_call extends task
 		}
 		return $arr["post_ru"];
 	}
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ("planner" == $tbl)
+		{
+			$i = get_instance(CL_TASK);
+			return $i->do_db_upgrade($tbl, $field);
+		}
+	}
+
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.116 2009/02/04 13:37:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.117 2009/02/09 13:56:15 markop Exp $
 // kohtumine.aw - Kohtumine
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -93,6 +93,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
+
+@property promoter type=checkbox ch_value=1 table=planner field=promoter
+@caption Korraldaja
 
 @property is_personal type=checkbox ch_value=1 field=meta method=serialize
 @caption Isiklik
@@ -472,6 +475,7 @@ class crm_meeting extends task
 			case "deal_amount":
 			case "deal_price":
 			case "deal_has_tax":
+			case "promoter":
 				return PROP_IGNORE;
 
 			case "controller_disp":
@@ -841,6 +845,7 @@ class crm_meeting extends task
 			case "is_personal":
 			case "send_bill":
 			case "is_work":
+			case "promoter":
 				return PROP_IGNORE;
 
 			case "transl":
@@ -1714,7 +1719,11 @@ class crm_meeting extends task
 			$this->db_query("create table kliendibaas_kohtumine (id int primary key)");
 			return true;
 		}
-
+		if ("planner" == $tbl)
+		{
+			$i = get_instance(CL_TASK);
+			return $i->do_db_upgrade($tbl, $field);
+		}
 		switch($field)
 		{
 			case "udefch1":

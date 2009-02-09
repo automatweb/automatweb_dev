@@ -103,6 +103,9 @@
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill
 @caption Saata arve
 
+@property promoter type=checkbox ch_value=1 table=planner field=promoter
+@caption Korraldaja
+
 @property in_budget type=checkbox ch_value=1 table=planner field=aw_in_budget
 @caption Eelarvesse
 
@@ -1177,6 +1180,7 @@ class task extends class_base
 			case "in_budget":
 			case "service_type":
 			case "is_work":
+			case "promoter":
 				return PROP_IGNORE;
 
 			case "controller_disp":
@@ -1658,6 +1662,7 @@ class task extends class_base
 			case "in_budget":
 			case "service_type":
 			case "is_work":
+			case "promoter":
 				return PROP_IGNORE;
 
 			case "sel_resources":
@@ -4266,6 +4271,17 @@ class task extends class_base
 				"align" => "center",
 				"parent" => "add_clauses",
 			));
+
+			if($arr["obj_inst"]->class_id() == CL_CRM_CALL)//teiste jaoks pole veel vajadust n2inud
+			{
+				$t->define_field(array(
+					"name" => "promoter",
+					"caption" =>  t("K&otilde;ne suund"),
+					"align" => "center",
+					"parent" => "add_clauses",
+				));
+			}
+
 			$t->define_field(array(
 				"name" => "send_bill",
 				"caption" => t("Arvele"),
@@ -4456,6 +4472,13 @@ class task extends class_base
 				"value" => 1,
 				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
 			)),
+
+			"promoter" => html::select(array(
+				"name" => "add_clauses[promoter]",
+				"value" => $arr["obj_inst"]->prop("promoter"),
+				"options" => array("1" => t("Tuli sisse") , "0" => t("L&auml;ks v&auml;lja")),
+			)),
+
 			"send_bill" => html::checkbox(array(
 				"name" => "add_clauses[send_bill]",
 				"value" => 1,
@@ -4490,6 +4513,11 @@ class task extends class_base
 			$arr["obj_inst"]->set_prop("is_goal", $arr["request"]["add_clauses"]["is_goal"] ? 1 : 0);
 		}
 		$arr["obj_inst"]->set_prop("is_personal", $arr["request"]["add_clauses"]["is_personal"] ? 1 : 0);
+
+		if($arr["obj_inst"]->class_id() == CL_CRM_CALL)
+		{
+			$arr["obj_inst"]->set_prop("promoter", $arr["request"]["add_clauses"]["promoter"] ? 1 : 0);
+		}
 		$arr["obj_inst"]->set_prop("send_bill", $arr["request"]["add_clauses"]["send_bill"] ? 1 : 0);
 		$arr["obj_inst"]->set_prop("in_budget",$arr["request"]["add_clauses"]["in_budget"] ? 1 : 0);
 		if($arr["request"]["add_clauses"]["is_work"])
@@ -6078,6 +6106,7 @@ $types = array(
 		}
 		switch($f)
 		{
+			case "promoter":
 			case "deal_has_tax":
 				$this->db_add_col($t, array(
 					"name" => $f,

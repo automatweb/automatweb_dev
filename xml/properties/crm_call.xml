@@ -56,6 +56,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>start</field>
+            <parent>top_2way_right</parent>
             <caption>Algus</caption>
       </property>
       <property>
@@ -63,8 +64,9 @@
             <table>planner</table>
             <group>general</group>
             <type>datetime_select</type>
+            <parent>top_2way_right</parent>
             <field>end</field>
-            <caption>L&amp;amp;otilde;pp</caption>
+            <caption>L&amp;amp;otilde;peb</caption>
       </property>
       <property>
             <name>deadline</name>
@@ -246,6 +248,15 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Isiklik</caption>
+      </property>
+      <property>
+            <name>promoter</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>promoter</field>
+            <caption>Korraldaja</caption>
       </property>
       <property>
             <name>send_bill</name>
