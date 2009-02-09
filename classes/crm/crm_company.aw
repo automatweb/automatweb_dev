@@ -252,40 +252,40 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property user_classificator_5 type=classificator reltype=RELTYPE_USER_CLASSIFICATOR_5 store=connect
 	@caption User-defined classificator 5
 
-	@property fake_phone type=textbox store=no
+	@property fake_phone type=textbox
 	@caption Fake phone
 
-	@property fake_email type=textbox store=no
+	@property fake_email type=textbox
 	@caption Fake e-mail
 
-	@property fake_url type=textbox store=no
+	@property fake_url type=textbox
 	@caption Fake URL
 
-	@property fake_address_address type=textbox store=no
+	@property fake_address_address type=textbox
 	@caption Fake address
 
-	@property fake_address_address2 type=textbox store=no
+	@property fake_address_address2 type=textbox
 	@caption Fake address 2
 
-	@property fake_address_postal_code type=textbox store=no
+	@property fake_address_postal_code type=textbox
 	@caption Fake ZIP code
 
-	@property fake_address_city type=textbox store=no
+	@property fake_address_city type=textbox
 	@caption Fake city
 
-	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY automatic=1 store=no
+	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY automatic=1
 	@caption Fake city
 
-	@property fake_address_county type=textbox store=no
+	@property fake_address_county type=textbox
 	@caption Fake county
 
-	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1 store=no
+	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1
 	@caption Fake county
 
-	@property fake_address_country type=textbox store=no
+	@property fake_address_country type=textbox
 	@caption Fake country
 
-	@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1 store=no
+	@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1
 	@caption Fake country
 
 	@property show_on_web type=checkbox ch_value=1 store=no
@@ -1983,24 +1983,6 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
-			case "fake_email":
-			case "fake_phone":
-			case "fake_url":
-			case "fake_address_country":
-			case "fake_address_country_relp":
-			case "fake_address_county":
-			case "fake_address_county_relp":
-			case "fake_address_city":
-			case "fake_address_city_relp":
-			case "fake_address_postal_code":
-			case "fake_address_address":
-			case "fake_address_address2":
-				if(!isset($data["value"]) || strlen(trim($data["value"])) == 0)
-				{
-					$data["value"] = $arr["obj_inst"]->prop($data["name"]);
-				}
-				break;
-
 			case "ettevotlusvorm":
 				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 				if(is_oid($pm_inst->get_sysdefault()))
