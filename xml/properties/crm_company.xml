@@ -708,7 +708,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_phone</field>
             <caption>Fake phone</caption>
       </property>
@@ -717,7 +716,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_email</field>
             <caption>Fake e-mail</caption>
       </property>
@@ -726,7 +724,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_url</field>
             <caption>Fake URL</caption>
       </property>
@@ -735,7 +732,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_address</field>
             <caption>Fake address</caption>
       </property>
@@ -744,7 +740,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_address2</field>
             <caption>Fake address 2</caption>
       </property>
@@ -753,7 +748,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_postal_code</field>
             <caption>Fake ZIP code</caption>
       </property>
@@ -762,7 +756,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_city</field>
             <caption>Fake city</caption>
       </property>
@@ -773,7 +766,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_FAKE_CITY</reltype>
             <automatic>1</automatic>
-            <store>no</store>
             <field>fake_address_city_relp</field>
             <caption>Fake city</caption>
       </property>
@@ -782,7 +774,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_county</field>
             <caption>Fake county</caption>
       </property>
@@ -793,7 +784,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_FAKE_COUNTY</reltype>
             <automatic>1</automatic>
-            <store>no</store>
             <field>fake_address_county_relp</field>
             <caption>Fake county</caption>
       </property>
@@ -802,7 +792,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_country</field>
             <caption>Fake country</caption>
       </property>
@@ -813,7 +802,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_FAKE_COUNTRY</reltype>
             <automatic>1</automatic>
-            <store>no</store>
             <field>fake_address_country_relp</field>
             <caption>Fake country</caption>
       </property>
