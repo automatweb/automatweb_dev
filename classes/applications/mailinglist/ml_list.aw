@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.150 2009/02/03 17:02:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.151 2009/02/09 15:22:26 instrumental Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -4410,7 +4410,7 @@ arr($msg_obj->prop("message"));
 				$source_data["use_minions"] = html::checkbox(array(
 					"name" => "sources_data[".$source->id()."][use_minions]",
 					"value" => 1,
-					"checked" => $sources_data[$source->id()]["use_minions"] ? 1:0,
+					"checked" => isset($sources_data[$source->id()]["use_minions"]) && $sources_data[$source->id()]["use_minions"] ? 1:0,
 				));
 			}
 			$t->define_data($source_data);
