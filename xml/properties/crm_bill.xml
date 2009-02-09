@@ -487,6 +487,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>bill_task_list_l</parent>
             <field>bill_task_list</field>
       </property>
       <classinfo>
@@ -677,6 +678,11 @@
                   <area_caption>Read</area_caption>
                   <group>general</group>
             </bottom>
+            <bill_task_list_l>
+                  <type>vbox</type>
+                  <group>tasks</group>
+                  <area_caption></area_caption>
+            </bill_task_list_l>
       </layout>
 </properties>
 

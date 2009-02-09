@@ -1675,6 +1675,14 @@ exit_function("bills_impl::_get_bill_task_list");
 			'link' => "#",
 			"onClick" => "v=prompt('" . t("Sisesta arve number?") . "','$last_bno'); if (v != null) { window.location='".aw_url_change_var("export_hr", 2)."&exp_bno='+v;} else { return false; }"
 		));
+
+		$tb->add_button(array(
+			'name' => 'commix',
+			'img' => 'merge_left.png',
+			'tooltip' => t('Koonda arved'),
+			'action' => 'commix',
+		));
+
 /*
 		$tb->add_button(array(
 			"name" => "add_payment",

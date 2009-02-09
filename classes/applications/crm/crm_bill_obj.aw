@@ -885,12 +885,38 @@ class crm_bill_obj extends _int_object
 		return $rows_arr->list_data;
 	}
 
+	/** returns task rows
+		@attrib api=1
+		@returns object list
+	**/
+	public function bill_task_rows()
+	{
+		$rows_filter = $this->bill_task_rows_filter();
+		$ol = new object_list($rows_filter);
+		return $ol;
+	}
+
 	private function bill_task_rows_filter()
 	{
 		$filter = array();
 		$filter["class_id"] = CL_TASK_ROW;
 		$filter["CL_TASK_ROW.RELTYPE_BILL"] = $this->id();
 		return $filter;
+	}
+
+	/** returns bill rows
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_bill_rows()
+	{
+		$ol = new object_list();
+		$cons = $this->connections_from(array("type" => "RELTYPE_ROW"));
+		foreach($cons as $c)
+		{
+			$ol->add($c->prop("to"));
+		}
+		return $ol;
 	}
 
 	/** returns bill rows data
@@ -1053,6 +1079,64 @@ class crm_bill_obj extends _int_object
 			}
 		}
 	}
+
+	public function add_bills($list)
+	{
+		$tasks = new object_list();
+		$task_rows = new object_list();
+		$bill_rows = new object_list();
+		$customer = array($this->get_bill_customer() => $this->get_bill_customer());
+		foreach($list as $bill_id)
+		{
+			$bill = obj($bill_id);
+			$bill_rows->add($bill->get_bill_rows());
+			$tasks->add($bill->bill_tasks());
+			$task_rows->add($bill->bill_task_rows());
+			$customer[$bill->get_bill_customer()] = $bill->get_bill_customer();
+		}
+		if(!(sizeof($customer) > 1)) //kui erinevad kliendid, siis ignoreerib t2ielikult
+		{
+			foreach($bill_rows->arr() as $bill_row)
+			{
+				$this->connect(array(
+					"to" => $bill_row->id(),
+					"type" => "RELTYPE_ROW"
+				));
+				$bill_row->set_parent($this->id());
+				$bill_row->save();
+			}
+
+			foreach($task_rows->arr() as $task_row)
+			{
+				$task_row->set_prop("bill_id" , $this->id());
+				$task_row->save();
+			}
+
+			foreach($tasks->arr() as $task)
+			{
+				$task->connect(array(
+					"to" => $this->id(),
+					"type" => "RELTYPE_BILL"
+				));
+				$this->connect(array(
+					"to" => $task->id(),
+					"type" => "RELTYPE_TASK"
+				));	
+			}
+
+			$this->save();
+			$delete_bills = new object_list();
+			$delete_bills->add($list);
+			$delete_bills->delete();
+
+			return $this->id();
+		}
+		else
+		{
+			return null;
+		}
+	}
+
 }
 
 ?>

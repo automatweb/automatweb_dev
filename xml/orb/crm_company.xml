@@ -586,5 +586,12 @@
 			</function>
 		</action>
 
+		<action name="commix" all_args="1">
+			<function name="commix">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -198,7 +198,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 @groupinfo preview_w_rows caption="Eelvaade ridadega"
 
 
-@reltype TASK value=1 clid=CL_TASK
+@reltype TASK value=1 clid=CL_TASK,CL_BUG
 @caption &Uuml;lesanne
 
 @reltype CUST value=2 clid=CL_CRM_COMPANY,CL_CRM_PERSON
@@ -243,6 +243,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 @reltype ADDRESS value=15 clid=CL_CRM_ADDRESS
 @caption L&auml;hetusaadress
 
+#selle v6iks 2ra kaotada
 @reltype BUG value=16 clid=CL_BUG
 @caption Bugi
 

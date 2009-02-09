@@ -9357,6 +9357,27 @@ Bank accounts: yksteise all
 	{
 		return parent::submit($args);
 	}
+
+	/**
+		@attrib name=commix api=1 params=name all_args=1
+	**/
+	public function commix($arr)
+	{
+		foreach($arr["sel"] as $key => $bill_id)
+		{
+			unset($arr["sel"][$key]);
+			$bill = obj($bill_id);
+			$ret = $bill->add_bills($arr["sel"]);
+			if($this->can("view" , $ret))
+			{
+				return html::get_change_url($ret, array("return_url" => $arr["post_ru"]));
+			}
+			else
+			{
+				return $arr["post_ru"];
+			}
+		}
+	}
 }
 
 ?>
