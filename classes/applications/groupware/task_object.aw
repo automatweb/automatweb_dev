@@ -692,6 +692,8 @@ class task_object extends _int_object
 		return $ol;
 	}
 
+
+
 	/** returns task projects
 		@attrib api=1
 		@return object list
@@ -722,5 +724,64 @@ class task_object extends _int_object
 
 		return $projects;
 	}
+
+	/** returns task orderers
+		@attrib api=1
+		@return object list
+	**/
+	public function get_orderers()
+	{
+		$ol = new object_list();
+		if(is_oid($this->id()))
+		{
+			$conns = $this->connections_from(array(
+				"type" => "RELTYPE_CUSTOMER",
+			));
+			foreach($conns as $con)
+			{
+				$ol->add($con->prop("to"));
+			}
+		}
+
+		return $ol;
+	}
+
+	/** creates new bug object with task info
+		@attrib api=1
+		@return oid
+			new bug object id
+	**/
+	public function create_bug()
+	{
+		$o = new object();
+		$o->set_class_id(CL_BUG);
+		$o->set_parent($this->id());
+		$o->set_name($this->name());
+		foreach($this->get_orderers()->arr() as $orderer)
+		{
+			if($orderer->class_id() == CL_CRM_COMPANY)
+			{
+				$o->set_prop("customer" , $orderer->id());
+			}
+		}
+		$u = get_instance(CL_USER);
+		$o->set_prop("bug_status" , 0);
+		$o->set_prop("who" , $u->get_current_person());
+		$o->set_prop("bug_content" , $this->prop("content"));
+		$o->save();
+
+		return $o->id();
+	}
+
+	public function bug_created()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_BUG,
+			"parent" => $this->id(),
+		));
+		
+		return $ol->count();
+	}
+
 }
 ?>

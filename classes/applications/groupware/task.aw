@@ -2052,6 +2052,16 @@ class task extends class_base
 			}
 			unset($_SESSION["add_to_task"]);
 		}
+
+
+		if($arr["obj_inst"]->class_id() == CL_CRM_CALL)
+		{
+			if($arr["request"]["add_clauses"]["create_bug"])
+			{
+				$arr["obj_inst"]->create_bug();
+			}
+		}
+
 	}
 
 	function request_execute($obj)
@@ -4280,6 +4290,16 @@ class task extends class_base
 					"align" => "center",
 					"parent" => "add_clauses",
 				));
+
+				if(!$arr["obj_inst"]->bug_created())
+				{
+					$t->define_field(array(
+						"name" => "create_bug",
+						"caption" =>  t("Tee bugi"),
+						"align" => "center",
+						"parent" => "add_clauses",
+					));
+				}
 			}
 
 			$t->define_field(array(
@@ -4443,6 +4463,10 @@ class task extends class_base
 				"name" => "hr_price_currency",
 				"options" => $curs,
 				"value" => $arr["obj_inst"]->prop("hr_price_currency"),
+			)),
+			"create_bug" => html::checkbox(array(
+				"name" => "add_clauses[create_bug]",
+				"value" => 1,
 			)),
 //			"bill_no" => $bno,
 		//	"code" => $arr["obj_inst"]->prop("code"),
@@ -5135,16 +5159,17 @@ class task extends class_base
 
 	function _co_table($arr)
 	{
-		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()) || !sizeof($c_conn = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER"))))
+		
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
 		{
 			return PROP_IGNORE;
 		}
+		$orderers = $arr["obj_inst"]->get_orderers();
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_co_table($t);
 
-		foreach($c_conn as $c)
+		foreach($orderers->arr() as  $c)
 		{
-			$c = $c->to();
 			$row = $arr["obj_inst"]->get_party_obj($c->id());
 			$t->define_data(array(
 				"oid" => $c->id(),
