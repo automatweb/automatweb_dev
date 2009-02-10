@@ -118,6 +118,28 @@
             <caption>Vaikimisi v&amp;amp;auml;&amp;amp;auml;rtus</caption>
       </property>
       <property>
+            <name>customer</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUSTOMER</reltype>
+            <store>connect</store>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>project</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROJECT</reltype>
+            <store>connect</store>
+            <caption>Projekt</caption>
+      </property>
+      <property>
             <name>toolbar</name>
             <table>objects</table>
             <group>groups</group>
@@ -157,5 +179,17 @@
                   <index>aw_oid</index>
             </aw_aw_class_property>
       </tableinfo>
+      <reltypes>
+            <PROJECT>
+                  <value>1</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Projekt</caption>
+            </PROJECT>
+            <CUSTOMER>
+                  <value>2</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Klient</caption>
+            </CUSTOMER>
+      </reltypes>
 </properties>
 

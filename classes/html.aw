@@ -1015,6 +1015,8 @@ class html extends aw_template
 		if month = "text" then month is shown as textbox, not selectbox
 	@param day optional type=string
 		if day = "text" then day is shown as textbox, not selectbox
+	@param year optional type=string
+		if year = "text" then year is shown as textbox, not selectbox
 	@param month_as_numbers type=bool default=false
 		if set to true, monthnames are replaced with numbers
 	@returns string/html date selector
@@ -1058,7 +1060,15 @@ class html extends aw_template
 		{
 			$set["month"] = 1;
 		};
-		$set["year"] = 1;
+
+		if (!empty($args["year"]) && $args["year"] === "text")
+		{
+			$set["year_textbox"] = 1;
+		}
+		else
+		{
+			$set["year"] = 1;
+		}
 
 		if (!empty($args["format"]) && is_array($args["format"]))
 		{

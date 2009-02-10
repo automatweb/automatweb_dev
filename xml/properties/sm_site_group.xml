@@ -1,5 +1,23 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>sites_tb</name>
+            <table>aw_sm_site_group</table>
+            <group>sites</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>sites_tb</field>
+      </property>
+      <property>
+            <name>sites</name>
+            <table>aw_sm_site_group</table>
+            <group>sites</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>sites</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SM_SITE_GROUP</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -8,6 +26,11 @@
             <prop_cb>1</prop_cb>
             <maintainer>root</maintainer>
       </classinfo>
+      <groupinfo>
+            <sites>
+                  <caption>Saidid</caption>
+            </sites>
+      </groupinfo>
       <tableinfo>
             <aw_sm_site_group>
                   <master_index>brother_of</master_index>

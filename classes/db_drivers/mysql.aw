@@ -824,6 +824,10 @@ class mysql
 
 			foreach($clss as $clid => $inf)
 			{
+				if (!is_class_id($clid))
+				{
+					continue;
+				}
 				$o = obj();
 				$o->set_class_id($clid);
 				$ti = $o->get_tableinfo();
@@ -866,6 +870,10 @@ class mysql
 			$clss = aw_ini_get("classes");
 			foreach($clss as $clid => $inf)
 			{
+				if (!is_class_id($clid))
+				{
+					continue;
+				}
 				$o = obj();
 				$o->set_class_id($clid);
 				$ti = $o->get_tableinfo();

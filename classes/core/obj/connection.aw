@@ -655,13 +655,14 @@ class connection
 					{
 						aw_disable_acl();
 					}
-						// [cs-rel-create] => 5.5006 (40.27%)
-						$o->set_class_id(CL_RELATION);
-						$o->set_status(STAT_ACTIVE);
-						$o->set_subclass($to->class_id());
-						$awt->start("cs-rel-save");
-						$this->conn["relobj_id"] = $o->save();
-						$awt->stop("cs-rel-save");
+
+					$o->set_class_id(CL_RELATION);
+					$o->set_status(STAT_ACTIVE);
+					$o->set_subclass($to->class_id());
+					$awt->start("cs-rel-save");
+					$this->conn["relobj_id"] = $o->save();
+					$awt->stop("cs-rel-save");
+
 					if ($noc)
 					{
 						aw_restore_acl();

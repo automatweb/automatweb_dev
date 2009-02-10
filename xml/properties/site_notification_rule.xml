@@ -25,6 +25,15 @@
             <caption>Meili teema</caption>
       </property>
       <property>
+            <name>mail_content_legend</name>
+            <table>aw_site_notification_rule</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>mail_content_legend</field>
+            <caption>Legend</caption>
+      </property>
+      <property>
             <name>mail_content</name>
             <table>aw_site_notification_rule</table>
             <group>general</group>

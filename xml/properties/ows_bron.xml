@@ -69,6 +69,15 @@
             <field>mail_bank_bcc</field>
       </property>
       <property>
+            <name>mail_cc_bcc</name>
+            <table>objects</table>
+            <group>mail_cc_bcc</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>mail_cc_bcc</field>
+      </property>
+      <property>
             <name>promo_settings</name>
             <table>objects</table>
             <group>promo_settings</group>
@@ -98,13 +107,17 @@
                   <parent>mail_settings</parent>
             </mail_settings_cancel>
             <mail_bcc>
-                  <caption>BCC</caption>
+                  <caption>CC makse BCC</caption>
                   <parent>mail_settings</parent>
             </mail_bcc>
             <mail_bank_bcc>
                   <caption>Pangalingi BCC</caption>
                   <parent>mail_settings</parent>
             </mail_bank_bcc>
+            <mail_cc_bcc>
+                  <caption>CC kinnituse BCC</caption>
+                  <parent>mail_settings</parent>
+            </mail_cc_bcc>
             <bank_settings>
                   <caption>Panga seaded</caption>
             </bank_settings>

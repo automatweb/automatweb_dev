@@ -825,7 +825,7 @@ class object
 		{
 			throw new awex_obj("Class id can be changed only once.");
 		}
-
+//echo "set clid on ".dbg::dump($this)." <br>";
 		$GLOBALS["object_loader"]->load_new_object(array("oid" => $this->oid, "class_id" => $param));
 		$GLOBALS["objects"][$this->oid]->set_class_id($param);
 		return $this;

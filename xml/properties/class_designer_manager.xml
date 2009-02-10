@@ -18,7 +18,7 @@
             <method>serialize</method>
             <type>treeview</type>
             <no_caption>1</no_caption>
-            <parent>mgr_hbox</parent>
+            <parent>mgr_tree_box</parent>
             <store>no</store>
       </property>
       <property>
@@ -50,7 +50,7 @@
             <method>serialize</method>
             <type>treeview</type>
             <no_caption>1</no_caption>
-            <parent>rels_hbox</parent>
+            <parent>rels_tree_box</parent>
             <store>no</store>
       </property>
       <property>
@@ -173,6 +173,17 @@
             <store>no</store>
       </property>
       <property>
+            <name>cl_usage_stats_list_gpx</name>
+            <table>objects</table>
+            <group>cl_usage_stats_clids</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>cl_usage_stats_right_split_1</parent>
+      </property>
+      <property>
             <name>cl_usage_stats_list</name>
             <table>objects</table>
             <group>cl_usage_stats_clids</group>
@@ -181,7 +192,18 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>cl_usage_stats_right_split</parent>
+            <parent>cl_usage_stats_right_split_1</parent>
+      </property>
+      <property>
+            <name>site_usage_stats_list_gpx</name>
+            <table>objects</table>
+            <group>cl_usage_stats_clids</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>cl_usage_stats_right_split_2</parent>
       </property>
       <property>
             <name>site_usage_stats_list</name>
@@ -192,7 +214,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>cl_usage_stats_right_split</parent>
+            <parent>cl_usage_stats_right_split_2</parent>
       </property>
       <property>
             <name>cl_usage_props_stats_tree</name>
@@ -215,6 +237,17 @@
             <no_caption>1</no_caption>
             <parent>cl_usage_props_stats_groups</parent>
             <store>no</store>
+      </property>
+      <property>
+            <name>cl_usage_props_stats_list_gpx</name>
+            <table>objects</table>
+            <group>cl_usage_stats_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>cl_usage_props_stats_right_split</parent>
       </property>
       <property>
             <name>cl_usage_props_stats_list</name>
@@ -261,6 +294,28 @@
             <store>no</store>
       </property>
       <property>
+            <name>errors_list_grapx</name>
+            <table>objects</table>
+            <group>errors</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>errors_right_split_gp</parent>
+      </property>
+      <property>
+            <name>errors_list_grapx_days</name>
+            <table>objects</table>
+            <group>errors</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>errors_right_split_gp</parent>
+      </property>
+      <property>
             <name>errors_list</name>
             <table>objects</table>
             <group>errors</group>
@@ -272,6 +327,38 @@
             <parent>errors_right_split</parent>
       </property>
       <property>
+            <name>sites_sites_toolbar</name>
+            <table>objects</table>
+            <group>sites_sites</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>sites_sites_grp_tree</name>
+            <table>objects</table>
+            <group>sites_sites</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>sites_sites_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>sites_list_grapx</name>
+            <table>objects</table>
+            <group>sites_sites</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>sites_sites_right_split</parent>
+      </property>
+      <property>
             <name>sites_list</name>
             <table>objects</table>
             <group>sites_sites</group>
@@ -280,6 +367,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>sites_sites_right_split</parent>
       </property>
       <property>
             <name>sites_servers</name>
@@ -292,28 +380,58 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>notif_tb</name>
+            <table>objects</table>
+            <group>notifications_rules</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>notifications_rules</name>
             <table>objects</table>
             <group>notifications_rules</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>releditor</type>
-            <mode>manager2</mode>
-            <reltype>RELTYPE_NOTIFICATION_RULE</reltype>
+            <type>table</type>
             <store>no</store>
-            <props>
-                  <num_0>err_content</num_0>
-                  <num_1>mail_to</num_1>
-                  <num_2>mail_subj</num_2>
-                  <num_3>mail_content</num_3>
-            </props>
-            <table_fields>
-                  <num_0>err_content</num_0>
-                  <num_1>mail_to</num_1>
-                  <num_2>mail_subj</num_2>
-                  <num_3>mail_content</num_3>
-            </table_fields>
+            <no_caption>1</no_caption>
             <caption>Reeglid</caption>
+      </property>
+      <property>
+            <name>notifications_sent_site_tree</name>
+            <table>objects</table>
+            <group>notifications_sent</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>notifications_sent_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>notifications_sent_site_tree_rules</name>
+            <table>objects</table>
+            <group>notifications_sent</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>notifications_sent_tree_rules</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>notifications_sent_grapx</name>
+            <table>objects</table>
+            <group>notifications_sent</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>notifications_sent_grapx</parent>
       </property>
       <property>
             <name>notifications_sent</name>
@@ -323,7 +441,8 @@
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <caption>Saadetud teavitused</caption>
+            <no_caption>1</no_caption>
+            <parent>notifications_sent_right_split</parent>
       </property>
       <property>
             <name>ns_next</name>
@@ -408,17 +527,22 @@
             <notifications>
                   <caption>Teavitus</caption>
             </notifications>
-            <notifications_rules>
-                  <caption>Reeglid</caption>
-                  <parent>notifications</parent>
-            </notifications_rules>
             <notifications_sent>
                   <caption>Saadetud teavitused</caption>
                   <parent>notifications</parent>
+                  <save>no</save>
+                  <submit>no</submit>
             </notifications_sent>
-            <notifications_status>
-                  <caption>staatus</caption>
+            <notifications_rules>
+                  <caption>Reeglid</caption>
                   <parent>notifications</parent>
+                  <submit>no</submit>
+            </notifications_rules>
+            <notifications_status>
+                  <caption>Staatus</caption>
+                  <parent>notifications</parent>
+                  <save>no</save>
+                  <submit>no</submit>
             </notifications_status>
       </groupinfo>
       <reltypes>
@@ -435,12 +559,26 @@
                   <group>mgr</group>
                   <area_caption></area_caption>
             </mgr_hbox>
+            <mgr_tree_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Klasside&amp;amp;nbsp;kaustad</area_caption>
+                  <parent>mgr_hbox</parent>
+                  <group>mgr</group>
+            </mgr_tree_box>
             <rels_hbox>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>rels</group>
                   <area_caption></area_caption>
             </rels_hbox>
+            <rels_tree_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Klasside&amp;amp;nbsp;kaustad</area_caption>
+                  <parent>rels_hbox</parent>
+                  <group>rels</group>
+            </rels_tree_box>
             <classes_split>
                   <type>hbox</type>
                   <group>classes_classes</group>
@@ -529,6 +667,18 @@
                   <group>cl_usage_stats_clids</group>
                   <area_caption></area_caption>
             </cl_usage_stats_right_split>
+            <cl_usage_stats_right_split_1>
+                  <type>vbox</type>
+                  <parent>cl_usage_stats_right_split</parent>
+                  <group>cl_usage_stats_clids</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_right_split_1>
+            <cl_usage_stats_right_split_2>
+                  <type>vbox</type>
+                  <parent>cl_usage_stats_right_split</parent>
+                  <group>cl_usage_stats_clids</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_right_split_2>
             <cl_usage_props_stats_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -562,7 +712,7 @@
                   <area_caption></area_caption>
             </cl_usage_props_stats_right>
             <cl_usage_props_stats_right_split>
-                  <type>hbox</type>
+                  <type>vbox</type>
                   <parent>cl_usage_props_stats_right</parent>
                   <group>cl_usage_stats_props</group>
                   <area_caption></area_caption>
@@ -624,11 +774,93 @@
                   <area_caption></area_caption>
             </errors_right>
             <errors_right_split>
-                  <type>hbox</type>
+                  <type>vbox</type>
                   <parent>errors_right</parent>
                   <group>errors</group>
                   <area_caption></area_caption>
             </errors_right_split>
+            <errors_right_split_gp>
+                  <type>hbox</type>
+                  <parent>errors_right_split</parent>
+                  <group>errors</group>
+                  <area_caption></area_caption>
+            </errors_right_split_gp>
+            <sites_sites_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>sites_sites</group>
+                  <area_caption></area_caption>
+            </sites_sites_split>
+            <sites_sites_left>
+                  <type>vbox</type>
+                  <parent>sites_sites_split</parent>
+                  <group>sites_sites</group>
+                  <area_caption></area_caption>
+            </sites_sites_left>
+            <sites_sites_tree>
+                  <type>vbox</type>
+                  <area_caption>Grupid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>sites_sites_left</parent>
+                  <group>sites_sites</group>
+            </sites_sites_tree>
+            <sites_sites_right>
+                  <type>vbox</type>
+                  <parent>sites_sites_split</parent>
+                  <group>sites_sites</group>
+                  <area_caption></area_caption>
+            </sites_sites_right>
+            <sites_sites_right_split>
+                  <type>vbox</type>
+                  <parent>sites_sites_right</parent>
+                  <group>sites_sites</group>
+                  <area_caption></area_caption>
+            </sites_sites_right_split>
+            <notifications_sent_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>notifications_sent</group>
+                  <area_caption></area_caption>
+            </notifications_sent_split>
+            <notifications_sent_left>
+                  <type>vbox</type>
+                  <parent>notifications_sent_split</parent>
+                  <group>notifications_sent</group>
+                  <area_caption></area_caption>
+            </notifications_sent_left>
+            <notifications_sent_tree>
+                  <type>vbox</type>
+                  <area_caption>Saitide&amp;amp;nbsp;grupid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>notifications_sent_left</parent>
+                  <group>notifications_sent</group>
+            </notifications_sent_tree>
+            <notifications_sent_tree_rules>
+                  <type>vbox</type>
+                  <area_caption>Teavituse&amp;amp;nbsp;reeglid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>notifications_sent_left</parent>
+                  <group>notifications_sent</group>
+            </notifications_sent_tree_rules>
+            <notifications_sent_right>
+                  <type>vbox</type>
+                  <parent>notifications_sent_split</parent>
+                  <group>notifications_sent</group>
+                  <area_caption></area_caption>
+            </notifications_sent_right>
+            <notifications_sent_right_split>
+                  <type>vbox</type>
+                  <parent>notifications_sent_right</parent>
+                  <group>notifications_sent</group>
+                  <area_caption></area_caption>
+            </notifications_sent_right_split>
+            <notifications_sent_grapx>
+                  <type>vbox</type>
+                  <area_caption>Teavituste&amp;amp;nbsp;TOP&amp;amp;nbsp;10</area_caption>
+                  <closeable>1</closeable>
+                  <parent>notifications_sent_right_split</parent>
+                  <group>notifications_sent</group>
+            </notifications_sent_grapx>
       </layout>
 </properties>
 

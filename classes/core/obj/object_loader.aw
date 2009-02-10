@@ -250,6 +250,7 @@ class _int_object_loader extends core
 
 			// copy data from generic object that is to be converted to a specific class
 			$objdata = $objdata + $GLOBALS["objects"][$oid]->get_object_data();
+//echo ("oid = $oid ".dbg::dump($GLOBALS["objects"][$oid]->get_object_data()));
 		}
 		else
 		{
