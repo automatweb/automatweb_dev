@@ -28,6 +28,8 @@
 					<optional name="s_date" />
 					<optional name="field" />
 					<optional name="area" />
+					<optional name="county" />
+					<optional name="city" />
 					<optional name="keyword" />
 				</arguments>
 			</function>

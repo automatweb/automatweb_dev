@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.106 2009/01/16 11:37:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.107 2009/02/10 08:52:39 instrumental Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -613,9 +613,50 @@ class site_search_content extends class_base
 				break;
 			}
 		}
+
+		// Asukohad. CL_CRM_DB_SEARCH kasutab
+		if(isset($cid) && is_object($cid) && $cid->class_id() == CL_CRM_DB_SEARCH)
+		{
+			$locs = array(
+				"county",
+				"city"
+			);
+
+			foreach($locs as $loc)
+			{
+				$LOC = strtoupper($loc);
+
+				if($this->is_template($LOC."_OPTION"))
+				{
+					$ol = new object_list(array(
+						"class_id" => constant("CL_CRM_".$LOC),
+						"lang_id" => array(),
+						"site_id" => array(),
+						new obj_predicate_sort(array(
+							"jrk" => "ASC",
+							"name" => "ASC"
+						)),
+					));
+					$OPTION = "";
+					foreach($ol->arr() as $o)
+					{
+						$this->vars(array(
+							$loc."_value" => $o->id(),
+							$loc."_caption" => $o->trans_get_val("name"),
+							"selected" => $arr[$loc] == $o->id() ? "selected=\"selected\"" : "",
+						));
+						$OPTION .= $this->parse($LOC."_OPTION");
+					}
+					$this->vars(array(
+						$LOC."_OPTION" => $OPTION,
+					));
+				}
+			}
+		}
 		
 		//paneb default v44rtused
-		if(is_oid($arr["field"]))
+		// Lase nyyd ikka tyhjaks ka valida! => true ||
+		if(true || is_oid($arr["field"]))
 		{
 			$_SESSION["active_section"] = $arr["field"];
 		}
@@ -647,7 +688,7 @@ class site_search_content extends class_base
 				}
 				$this->vars(array(
 					"sec_value" => $sec->id(),
-					"sec_name" => strtoupper($sec->name()),
+					"sec_name" => strtoupper($sec->trans_get_val("name")),
 					"selected" => $selected,
 				));
 				$sec_opt.= $this->parse("SEC_OPTION");
@@ -667,7 +708,7 @@ class site_search_content extends class_base
 					}
 					$this->vars(array(
 						"sec_value" => $child->id(),
-						"sec_name" => "--".$child->name(),
+						"sec_name" => "--".$child->trans_get_val("name"),
 						"selected" => $selected,
 					));
 					$sec_opt.= $this->parse("SEC_OPTION");
@@ -1869,6 +1910,8 @@ class site_search_content extends class_base
 		@param s_date optional
 		@param field optional
 		@param area optional
+		@param county optional
+		@param city optional
 		@param keyword optional
 		
 		@returns
@@ -1904,6 +1947,8 @@ class site_search_content extends class_base
 			"field" => $field,
 			"keyword" => $keyword,
 			"area" => $area,
+			"county" => isset($county) ? $county : "",
+			"city" => isset($city) ? $city : "",
 		));
 		$results = array();
 		
