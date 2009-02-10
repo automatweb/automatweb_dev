@@ -1311,6 +1311,8 @@ class bug_tracker extends class_base
 		$bugs = array();
 		foreach ($bug_comments->arr() as $id => $bug_comment)
 		{
+			$bug_id = $bug_comment->task_id();
+			
 			if ($bug_comment->createdby() == '')
 			{
 				$text = $bug_comment->comment();
@@ -1318,7 +1320,7 @@ class bug_tracker extends class_base
 				{
 					if ($uid == $mt[1])
 					{
-						$bugs[$bug_comment->parent()][$id] = $bug_comment;
+						$bugs[$bug_id][$id] = $bug_comment;
 					}
 				}
 
@@ -1327,7 +1329,7 @@ class bug_tracker extends class_base
 			{
 				if ($uid == $bug_comment->createdby())
 				{
-					$bugs[$bug_comment->parent()][$id] = $bug_comment;
+					$bugs[$bug_id][$id] = $bug_comment;
 				}
 			}
 		}

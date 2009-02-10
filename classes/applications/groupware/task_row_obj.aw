@@ -51,11 +51,21 @@ class task_row_obj extends _int_object
 	**/
 	public function task_id()
 	{
-		if($this->prop("task"))
+		$possible_task_classes = array(CL_BUG,CL_TASK,CL_CRM_MEETING,CL_CRM_CALL);
+		if($this->prop("task") && in_array($this->prop("task.class_id") , $possible_task_classes))
 		{
 			return $this->prop("task");
 		}
-		$possible_task_classes = array(CL_BUG,CL_TASK,CL_CRM_MEETING,CL_CRM_CALL);
+
+		if($this->prop("task") && $this->prop("task.class_id") == CL_TASK_ROW)
+		{
+			$parent = obj($this->prop("task"));
+			$ret = $parent->task_id();
+			$this->set_prop("task" , $ret);
+			$this->save();
+			return $ret;
+		}
+
 		$conn = $this->connections_to(array(
 //			"type" => "RELTYPE_ROW",//erinevate klasside puhul ei paista toimivat
 			"from.class_id" => $possible_task_classes,
