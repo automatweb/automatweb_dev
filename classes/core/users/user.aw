@@ -1902,6 +1902,18 @@ EOF;
 		return $o;
 	}
 
+	private function can_mess_with($oid, $user)
+	{
+
+		$max_acl = $GLOBALS["object_loader"]->_calc_max_acl($oid);
+		if ($max_acl === false)
+		{
+			$max_acl = array_combine($this->acl_ids, array_fill(0, count($this->acl_ids), false));
+		}
+
+		return $max_acl;
+	}
+
 	function aclwizard_ponder($arr)
 	{
 		extract($arr);
@@ -1934,6 +1946,15 @@ EOF;
 		// order by priority desc
 		// go over objects in path
 		// if acl is set, match is there.
+
+		if (aw_ini_get("acl.use_new_acl"))
+		{
+			$names = aw_ini_get("acl.names");
+			$acl = $this->can_mess_with($oid , $user);
+ 			return $str.sprintf(t("<br>M&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>
+				%s"),$this->_new_acl_string($acl));
+		}
+
 		$ca = $this->_aclw_get_controlling_acl($user, $oid);
 		if ($ca === false)
 		{
@@ -2081,6 +2102,19 @@ EOF;
 		{
 			$cn = $int & (1 << $bp);
 			$str[] = $names[$name]." => ".($cn ? "Jah" : "Ei");
+		}
+
+		return join("<br>", $str);
+	}
+
+	private function _new_acl_string($acl)
+	{
+		$names = aw_ini_get("acl.names");
+
+		$str = array();
+		foreach($names as $key => $name)
+		{
+			$str[] = $name." => ".($acl[$key] ? "Jah" : "Ei");
 		}
 
 		return join("<br>", $str);
