@@ -5743,7 +5743,7 @@ class mrp_workspace extends class_base
 		));
 
 		$spl = $this->mk_my_orb("cust_search_pop", array("id" => $arr["obj_inst"]->id()));
-		$str .= " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"$spl\",\"_spop\",300,400)'>Otsi kliente</a>";
+		$str .= " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"$spl\",\"_spop\",400,400)'>Otsi kliente</a>";
 		$str .= "<script language='javascript'>function setLink(n) { document.changeform.chart_customer.value = n; document.changeform.submit();}</script>";
 		$arr["prop"]["value"] = $str;
 	}

@@ -125,6 +125,8 @@ classload("mrp/mrp_header");
 
 class mrp_resource extends class_base
 {
+	private $mrp_error = "";
+
 	function mrp_resource()
 	{
 		$this->resource_states = array(
@@ -298,7 +300,7 @@ class mrp_resource extends class_base
 			case "materials_tree":
 				$this->mk_materials_tree($arr);
 				break;
-		
+
 			case "materials_tbl":
 				$this->mk_materials_tbl($arr);
 				break;
@@ -462,14 +464,14 @@ class mrp_resource extends class_base
 				break;
 
 			case "work_hrs_recur":
-				if (($arr["request"]["work_hrs_recur_action"] != "delete") and is_array ($prop["value"]))
+				if (($arr["request"]["work_hrs_recur_action"] !== "delete") and is_array ($prop["value"]))
 				{
 					$prop["value"]["recur_type"] = RECUR_DAILY;
 					$prop["value"]["interval_daily"] = 1;
 				}
 
 			case "unavailable_recur":
-				if (($arr["request"]["work_hrs_recur_action"] != "delete") and ($arr["request"]["unavailable_recur_action"] != "delete") and is_array ($prop["value"]))
+				if (($arr["request"]["work_hrs_recur_action"] !== "delete") and ($arr["request"]["unavailable_recur_action"] != "delete") and is_array ($prop["value"]))
 				{
 					$applicable_types = array (
 						RECUR_DAILY,
@@ -587,7 +589,7 @@ class mrp_resource extends class_base
 			$this_object->save ();
 		}
 
-		if($arr["request"]["group"] == "grp_resource_materials")
+		if($arr["request"]["group"] === "grp_resource_materials")
 		{
 			foreach($arr["request"]["add_ids"] as $oid)
 			{
@@ -1651,7 +1653,7 @@ class mrp_resource extends class_base
 	function mk_materials_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		
+
 		$cat = $arr["request"]["pgtf"];
 		if ($this->can("view", $cat))
 		{
@@ -1677,8 +1679,13 @@ class mrp_resource extends class_base
 			{
 				$oids[$c->prop("from")] = $c->prop("from");
 			}
-			$params["class_id"] = CL_SHOP_PRODUCT;
-			$params["oid"] = isset($params["oid"])?array_intersect($params["oid"], $oids):$oids;
+
+			$params = array("class_id" => CL_SHOP_PRODUCT);
+
+			if (count($oids))
+			{
+				$params["oid"] = $oids;
+			}
 
 			$ol = new object_list($params);
 
