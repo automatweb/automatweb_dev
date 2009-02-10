@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.79 2009/02/04 17:23:30 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.80 2009/02/10 15:33:40 instrumental Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1449,7 +1449,16 @@ class join_site extends class_base
 		{
 			$this->join_done = true;
 			aw_session_set("join_err", array());
-			$rv = $obj->prop("after_join_url");
+			$langid = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+			if($langid != $obj->lang_id())
+			{
+				$lp = $obj->meta("lang_props");
+				$rv = $lp["bt"]["__after_join_url"][$langid];
+			}
+			if(!isset($rv) || strlen($rv) === 0)
+			{
+				$rv = $obj->prop("after_join_url");
+			}
 			if ($rv == "")
 			{
 				$rv = aw_ini_get("baseurl");
