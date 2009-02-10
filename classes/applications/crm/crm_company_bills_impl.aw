@@ -2624,12 +2624,12 @@ exit_function("bills_impl::_get_bill_task_list");
 		$t = new object_data_list(
 			$filter,
 			array(
-				CL_CRM_COMPANY_CUSTOMER_DATA =>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "aw_crm_customer_data.aw_client_manager"))
+				CL_CRM_COMPANY_CUSTOMER_DATA =>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "client_manager", "aw_crm_customer_data.aw_client_manager"))
 			)
 		);
 
 		$ol = new object_list();
-		$ol->add($t->get_element_from_all("aw_client_manager"));
+		$ol->add($t->get_element_from_all("client_manager"));
 		return $ol;
 	}
 
@@ -2643,12 +2643,12 @@ exit_function("bills_impl::_get_bill_task_list");
 		$t = new object_data_list(
 			$filter,
 			array(
-				CL_PROJECT=>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "aw_projects.aw_proj_mgr"))
+				CL_PROJECT=>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "project_manager", "aw_projects.aw_proj_mgr"))
 			)
 		);
 
 		$ol = new object_list();
-		$ol->add($t->get_element_from_all("aw_proj_mgr"));
+		$ol->add($t->get_element_from_all("project_manager"));
 		return $ol;
 
 	}
@@ -2664,12 +2664,12 @@ exit_function("bills_impl::_get_bill_task_list");
 		$t = new object_data_list(
 			$filter,
 			array(
-				CL_CRM_BILL=>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "aw_crm_bill.aw_customer"))
+				CL_CRM_BILL => array(new obj_sql_func(OBJ_SQL_UNIQUE, "customer", "aw_crm_bill.aw_customer"))
 			)
 		);
 
 		$ol = new object_list();
-		$ol->add($t->get_element_from_all("aw_customer"));
+		$ol->add($t->get_element_from_all("customer"));
 		return $ol;
 
 	}
