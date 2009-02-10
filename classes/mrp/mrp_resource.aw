@@ -14,7 +14,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 @groupinfo grp_resource_unavailable caption="T&ouml;&ouml;ajad"
 	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
 	@groupinfo grp_resource_unavailable_una caption="Kinnised ajad" parent=grp_resource_unavailable
-
+@groupinfo grp_resource_materials caption="Materjalid" submit=no
 
 @default table=objects
 @default field=meta
@@ -82,6 +82,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@property unavailable_dates type=textarea rows=5 cols=50
 	@comment Formaat: alguskuup&auml;ev.kuu, tund:minut - l&otilde;ppkuup&auml;ev.kuu, tund:minut; alguskuup&auml;ev.kuu, ...
 	@caption Kinnised p&auml;evad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...)
+
+@default group=grp_resource_materials
+
+	@property materials_tb type=toolbar no_caption=1
+
+	@layout materials_split type=hbox width=25%:75%
+
+		@layout materials_tree_box parent=materials_split type=vbox area_caption=Materjalid closeable=1
+
+			@property materials_tree type=treeview parent=materials_tree_box no_caption=1
+
+		@layout materials_split_right parent=materials_split type=vbox
+
+			@property materials_tbl type=table parent=materials_split_right no_caption=1
+			@property materials_sel_tbl type=table parent=materials_split_right no_caption=1
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
@@ -275,6 +290,22 @@ class mrp_resource extends class_base
 			case "global_buffer":
 				$prop["value"] = $prop["value"] / 3600;
 				break;
+
+			case "materials_tb":
+				$this->mk_materials_tb($arr);
+				break;
+
+			case "materials_tree":
+				$this->mk_materials_tree($arr);
+				break;
+		
+			case "materials_tbl":
+				$this->mk_materials_tbl($arr);
+				break;
+
+			case "materials_sel_tbl":
+				$this->mk_materials_sel_tbl($arr);
+				break;
 		}
 
 		return $retval;
@@ -323,6 +354,19 @@ class mrp_resource extends class_base
 		if ($this->resource_parent)
 		{
 			$arr["mrp_parent"] = $this->resource_parent;
+		}
+
+		if($arr["group"] == "grp_resource_materials")
+		{
+			$arr["pgtf"] = automatweb::$request->arg("pgtf");
+ 		}
+	}
+
+	function callback_mod_retval($arr)
+	{
+		if(isset($arr["request"]["pgtf"]))
+		{
+			$arr["args"]["pgtf"] = $arr["request"]["pgtf"];
 		}
 	}
 
@@ -541,6 +585,27 @@ class mrp_resource extends class_base
 			$this_object->set_parent ($parent);
 			$this_object->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
 			$this_object->save ();
+		}
+
+		if($arr["request"]["group"] == "grp_resource_materials")
+		{
+			foreach($arr["request"]["add_ids"] as $oid)
+			{
+				$prod = obj($oid);
+				$o = obj();
+				$o->set_class_id(CL_MATERIAL_EXPENSE_CONDITION);
+				$o->set_parent($arr["obj_inst"]->id());
+				$o->set_name(sprintf(t("%s kulutingimus %s jaoks"), $prod->name(), $arr["obj_inst"]->name()));
+				$o->set_prop("resource", $arr["obj_inst"]->id());
+				$o->set_prop("product", $oid);
+				$o->save();
+			}
+
+			foreach($arr["request"]["rem_ids"] as $oid)
+			{
+				$o = obj($oid);
+				$o->delete();
+			}
 		}
 	}
 
@@ -1559,6 +1624,121 @@ class mrp_resource extends class_base
 				'text' => $clss[$clid]["name"],
 				'link' => $url
 			));
+		}
+	}
+
+	function mk_materials_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_save_button();
+	}
+
+	function mk_materials_tree($arr)
+	{
+		$whi = get_instance(CL_SHOP_WAREHOUSE);
+		$owner = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		if($owner)
+		{
+			$whid = $owner->prop("warehouse");
+		}
+		if($this->can("view", $whid))
+		{
+			$arr["warehouses"] = array($whid);
+			$whi->mk_prodg_tree(&$arr);
+		}
+	}
+
+	function mk_materials_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		
+		$cat = $arr["request"]["pgtf"];
+		if ($this->can("view", $cat))
+		{
+			$t->set_caption(t("Materjalide nimekiri"));
+			$t->define_field(array(
+				"name" => "oid",
+				"caption" => t("Lisa"),
+				"align" => "center",
+				"width" => 55,
+			));
+			$t->define_field(array(
+				"name" => "name",
+				"caption" => t("Nimi"),
+			));
+
+			$cato = obj($cat);
+			$conn = $cato->connections_to(array(
+				"type" => "RELTYPE_CATEGORY",
+				"from.class_id" => CL_SHOP_PRODUCT,
+			));
+			$oids = array();
+			foreach($conn as $c)
+			{
+				$oids[$c->prop("from")] = $c->prop("from");
+			}
+			$params["class_id"] = CL_SHOP_PRODUCT;
+			$params["oid"] = isset($params["oid"])?array_intersect($params["oid"], $oids):$oids;
+
+			$ol = new object_list($params);
+
+			$ch_ol = new object_list(array(
+				"class_id" => CL_MATERIAL_EXPENSE_CONDITION,
+				"resource" => $arr["obj_inst"]->id(),
+				"product" => $ol->ids(),
+			));
+			$existant = array();
+			foreach($ch_ol->arr() as $o)
+			{
+				$pid = $o->prop("product");
+				$existant[$pid] = $pid;
+			}
+
+			foreach($ol->names() as $oid => $name)
+			{
+				$t->define_data(array(
+					"oid" => $existant[$oid] ? null : html::checkbox(array(
+						"name" => "add_ids[".$oid."]",
+						"value" => $oid,
+					)),
+					"name" => html::obj_change_url(obj($oid)),
+				));
+			}
+		}
+	}
+
+	function mk_materials_sel_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_caption(t("Valitud materjalid"));
+		$t->define_field(array(
+			"name" => "oid",
+			"caption" => t("Eemalda"),
+			"align" => "center",
+			"width" => 55,
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$conn = $arr["obj_inst"]->connections_to(array(
+			"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
+		));
+		foreach($conn as $c)
+		{
+			$o = $c->from();
+			$prodid = $o->prop("product");
+			if($this->can("view", $prodid))
+			{
+				$prod = obj($prodid);
+				$t->define_data(array(
+					"oid" => html::checkbox(array(
+						"name" => "rem_ids[".$o->id()."]",
+						"value" => $o->id(),
+					)),
+					"name" => html::obj_change_url($o, $prod->name()),
+				));
+			}
 		}
 	}
 

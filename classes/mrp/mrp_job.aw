@@ -9,8 +9,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 @tableinfo mrp_schedule index=oid master_table=objects master_index=oid
 
 @groupinfo data caption="Andmed"
-@groupinfo workflow caption="Töövoog"
-
+@groupinfo workflow caption="T&ouml;&ouml;voog"
+@groupinfo materials caption="Materjalid"
 
 
 @default group=general
@@ -27,7 +27,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 @default table=mrp_schedule
 	@property starttime type=text
-	@caption Plaanitud töösseminekuaeg
+	@caption Plaanitud t&ouml;&ouml;sseminekuaeg
 
 	@property planned_length type=text
 	@caption Planeeritud kestus (h)
@@ -38,7 +38,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@caption Alustatud
 
 	@property finished type=text
-	@caption Lõpetatud
+	@caption L&otilde;petatud
 
 	@property resource type=text
 	@caption Ressurss
@@ -47,39 +47,42 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@caption Projekt
 
 	@property exec_order type=hidden
-	@caption Töö jrk. nr.
+	@caption T&ouml;&ouml; jrk. nr.
 
 	@property state type=text
 	@caption Staatus
 
+@default group=materials
+
+	@property materials_tbl type=table no_caption=1
 
 @default group=data
 	@property length type=textbox
-	@caption Töö pikkus (h)
+	@caption T&ouml;&ouml; pikkus (h)
 
 	@property pre_buffer type=textbox
 	@caption Eelpuhveraeg (h)
 
 	@property post_buffer type=textbox
-	@caption Järelpuhveraeg (h)
+	@caption J&auml;relpuhveraeg (h)
 
 	@property minstart type=datetime_select
-	@comment Enne seda kuupäeva, kellaaega ei alustata tööd
+	@comment Enne seda kuup&auml;eva, kellaaega ei alustata t&ouml;&ouml;d
 	@caption Varaseim alustusaeg
 
 	@property remaining_length type=textbox
-	@comment Arvatav ajakulu töö järeloleva osa tegemiseks
-	@caption Lõpetamiseks kuluv aeg (h)
+	@comment Arvatav ajakulu t&ouml;&ouml; j&auml;reloleva osa tegemiseks
+	@caption L&otilde;petamiseks kuluv aeg (h)
 
 	@property prerequisites type=text
-	@caption Eeldustööd
+	@caption Eeldust&ouml;&ouml;d
 
 
 @default table=objects
 @default field=meta
 @default method=serialize
 	@property advised_starttime type=datetime_select
-	@comment Allhankijaga kokkulepitud aeg, millal töö alustada.
+	@comment Allhankijaga kokkulepitud aeg, millal t&ouml;&ouml; alustada.
 	@caption Soovitav algusaeg
 
 
@@ -87,7 +90,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 // --------------- RELATION TYPES ---------------------
 
 @reltype MRP_RESOURCE value=1 clid=CL_MRP_RESOURCE
-@caption Tööks kasutatav ressurss
+@caption T&ouml;&ouml;ks kasutatav ressurss
 
 @reltype MRP_PROJECT value=2 clid=CL_MRP_CASE
 @caption Projekt
@@ -137,13 +140,13 @@ class mrp_job extends class_base
 		$this->states = array(
 			MRP_STATUS_NEW => t("Uus"),
 			MRP_STATUS_PLANNED => t("Planeeritud"),
-			MRP_STATUS_INPROGRESS => t("Töös"),
+			MRP_STATUS_INPROGRESS => t("T&ouml;&ouml;s"),
 			MRP_STATUS_ABORTED => t("Katkestatud"),
 			MRP_STATUS_DONE => t("Valmis"),
 			MRP_STATUS_LOCKED => t("Lukustatud"),
 			MRP_STATUS_PAUSED => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
-			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
+			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
 		);
 
@@ -168,7 +171,7 @@ class mrp_job extends class_base
 	{
 		if (!is_oid ($arr["request"]["id"]))
 		{
-			$this->mrp_error .= t("Uut tööd saab luua vaid ressursihalduskeskkonnas. ");
+			$this->mrp_error .= t("Uut t&ouml;&ouml;d saab luua vaid ressursihalduskeskkonnas. ");
 		}
 		else
 		{
@@ -184,22 +187,22 @@ class mrp_job extends class_base
 
 				if (!$this->workspace or !$this->project or !$this->resource)
 				{
-					$this->mrp_error .= t("Tööl puudub ressurss, projekt või ressursihalduskeskkond. ");
+					$this->mrp_error .= t("T&ouml;&ouml;l puudub ressurss, projekt v&otilde;i ressursihalduskeskkond. ");
 				}
 			}
 			else
 			{
 				if (is_oid($project_id))
 				{
-					$this->mrp_error .= t("Tööl puudub ressurss. ");
+					$this->mrp_error .= t("T&ouml;&ouml;l puudub ressurss. ");
 				}
 				elseif (is_oid($resource_id))
 				{
-					$this->mrp_error .= t("Tööl puudub projekt. ");
+					$this->mrp_error .= t("T&ouml;&ouml;l puudub projekt. ");
 				}
 				else
 				{
-					$this->mrp_error .= t("Tööl puudub ressurss ja projekt. ");
+					$this->mrp_error .= t("T&ouml;&ouml;l puudub ressurss ja projekt. ");
 				}
 			}
 		}
@@ -261,7 +264,7 @@ class mrp_job extends class_base
 
 					if (!empty ($errors))
 					{
-						$prop["value"] = ' <div style="color: #DF0D12; margin: 5px;">' . t('Esinenud tõrked: ') . implode (". ", $errors) . '.</div>';
+						$prop["value"] = ' <div style="color: #DF0D12; margin: 5px;">' . t('Esinenud t&otilde;rked: ') . implode (". ", $errors) . '.</div>';
 						unset ($arr["request"]["errors"]);
 					}
 				}
@@ -283,7 +286,7 @@ class mrp_job extends class_base
 				break;
 
 			case "state":
-				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : t("Määramata");
+				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : t("M&auml;&auml;ramata");
 				break;
 
 			case "starttime":
@@ -291,15 +294,19 @@ class mrp_job extends class_base
 				break;
 
 			case "started":
-				$prop["value"] = $prop["value"] ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Tööd pole veel alustatud");
+				$prop["value"] = $prop["value"] ? date(MRP_DATE_FORMAT, $prop["value"]) : t("T&ouml;&ouml;d pole veel alustatud");
 				break;
 
 			case "finished":
-				$prop["value"] = ($this_object->prop ("state") == MRP_STATUS_DONE) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Tööd pole veel lõpetatud");
+				$prop["value"] = ($this_object->prop ("state") == MRP_STATUS_DONE) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("T&ouml;&ouml;d pole veel l&otilde;petatud");
 				break;
 
 			case "job_toolbar":
 				$this->create_job_toolbar ($arr);
+				break;
+
+			case "materials_tbl":
+				$this->create_materials_tbl($arr);
 				break;
 		}
 
@@ -352,6 +359,10 @@ class mrp_job extends class_base
 			case "pre_buffer":
 			case "post_buffer":
 				$prop["value"] = round ($prop["value"] * 3600);
+				break;
+
+			case "materials_tbl":
+				$this->save_materials($arr);
 				break;
 		}
 
@@ -412,7 +423,7 @@ class mrp_job extends class_base
 		));
 		$toolbar->add_button(array(
 			"name" => "end_shift",
-			"confirm" => t("Lõpeta vahetus ja logi v&auml;lja?"),
+			"confirm" => t("L&otilde;peta vahetus ja logi v&auml;lja?"),
 			"tooltip" => t("Vahetuse l&otilde;pp"),
 			"action" => "end_shift",
 			"disabled" => $disabled_inprogress,
@@ -542,7 +553,7 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			$errors[] = t("Töö id vale");
+			$errors[] = t("T&ouml;&ouml; id vale");
 			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
@@ -558,12 +569,12 @@ class mrp_job extends class_base
 
 		if (!in_array ($project->prop ("state"), $applicable_project_states))
 		{
-			$errors[] = t("Projekt pole töös ega planeeritud");
+			$errors[] = t("Projekt pole t&ouml;&ouml;s ega planeeritud");
 		}
 
 		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
 		{
-			$errors[] = t("Töö pole planeeritud");
+			$errors[] = t("T&ouml;&ouml; pole planeeritud");
 		}
 
 		### check if prerequisites are done
@@ -581,13 +592,13 @@ class mrp_job extends class_base
 				if (((int) $prerequisite->prop ("state")) != MRP_STATUS_DONE)
 				{
 					$prerequisites_done = false;
-					$errors[] = t("Eeldustööd tegemata");
+					$errors[] = t("Eeldust&ouml;&ouml;d tegemata");
 					break;
 				}
 			}
 			else
 			{
-				$errors[] = t("Eeldustöö definitsioon on katki");
+				$errors[] = t("Eeldust&ouml;&ouml; definitsioon on katki");
 				break;
 			}
 		}
@@ -629,7 +640,7 @@ class mrp_job extends class_base
 
 				if ($project_errors)
 				{
-					$errors[] = t("Projekti alustamine ebaõnnestus");
+					$errors[] = t("Projekti alustamine eba&otilde;nnestus");
 					$errors = array_merge($errors, $project_errors);
 
 					### free resource and exit
@@ -684,7 +695,7 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			$errors[] = t("Töö id vale");
+			$errors[] = t("T&ouml;&ouml; id vale");
 			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
@@ -696,7 +707,7 @@ class mrp_job extends class_base
 
 		if (!in_array ($this_object->prop ("state"), $applicable_states))
 		{
-			$errors[] = t("Töö staatus sobimatu");
+			$errors[] = t("T&ouml;&ouml; staatus sobimatu");
 		}
 
 		### ...
@@ -711,9 +722,9 @@ class mrp_job extends class_base
 
 			if (!$resource_freed)
 			{
-				$errors[] = t("Ressursi vabastamine ebaõnnestus");
+				$errors[] = t("Ressursi vabastamine eba&otilde;nnestus");
 				error::raise(array(
-					"msg" => sprintf (t("Ressursi vabastamine ebaõnnestus. Job: %s, res: %s"), $this_object->id (), $this_object->prop("resource")),
+					"msg" => sprintf (t("Ressursi vabastamine eba&otilde;nnestus. Job: %s, res: %s"), $this_object->id (), $this_object->prop("resource")),
 					"fatal" => false,
 					"show" => false,
 				));
@@ -775,7 +786,7 @@ class mrp_job extends class_base
 					{
 						$project_state = $project->prop ("state");
 
-						$errors[] = t(sprintf ("Projekti lõpetamine ebaõnnestus. Projekti staatus oli '%s'", $project_state));
+						$errors[] = t(sprintf ("Projekti l&otilde;petamine eba&otilde;nnestus. Projekti staatus oli '%s'", $project_state));
 						$errors = array_merge($errors, $project_errors);
 					}
 				}
@@ -819,7 +830,7 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			$errors[] = t("Töö id vale");
+			$errors[] = t("T&ouml;&ouml; id vale");
 			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
@@ -831,7 +842,7 @@ class mrp_job extends class_base
 
 		if (!in_array ($this_object->prop ("state"), $applicable_states))
 		{
-			$errors[] = t("Töö pole tegemisel");
+			$errors[] = t("T&ouml;&ouml; pole tegemisel");
 		}
 
 		### ...
@@ -846,9 +857,9 @@ class mrp_job extends class_base
 
 			if (!$resource_freed)
 			{
-				$errors[] = t("Ressursi vabastamine ebaõnnestus");
+				$errors[] = t("Ressursi vabastamine eba&otilde;nnestus");
 				error::raise(array(
-					"msg" => sprintf (t("Ressursi vabastamine ebaõnnestus. Job: %s, res: %s"), $this_object->id (), $this_object->prop("resource")),
+					"msg" => sprintf (t("Ressursi vabastamine eba&otilde;nnestus. Job: %s, res: %s"), $this_object->id (), $this_object->prop("resource")),
 					"fatal" => false,
 					"show" => false,
 				));
@@ -912,7 +923,7 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			$errors[] = t("Töö id vale");
+			$errors[] = t("T&ouml;&ouml; id vale");
 			$errors = urlencode(serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
@@ -924,7 +935,7 @@ class mrp_job extends class_base
 
 		if (!in_array ($this_object->prop ("state"), $applicable_states))
 		{
-			$errors[] = t("Töö pole tegemisel");
+			$errors[] = t("T&ouml;&ouml; pole tegemisel");
 		}
 
 		### ...
@@ -981,7 +992,7 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			$errors[] = t("Töö id vale");
+			$errors[] = t("T&ouml;&ouml; id vale");
 			$errors = urlencode(serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
@@ -996,12 +1007,12 @@ class mrp_job extends class_base
 
 		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
 		{
-			$errors[] = t("Töö pole pausil");
+			$errors[] = t("T&ouml;&ouml; pole pausil");
 		}
 
 		if (!in_array ($project->prop ("state"), $applicable_project_states))
 		{
-			$errors[] = t("Projekt pole jätkatav");
+			$errors[] = t("Projekt pole j&auml;tkatav");
 		}
 
 		### ...
@@ -1057,7 +1068,7 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			$errors[] = t("Töö id vale");
+			$errors[] = t("T&ouml;&ouml; id vale");
 			$errors = urlencode(serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
@@ -1073,12 +1084,12 @@ class mrp_job extends class_base
 
 		if (!in_array ($project->prop ("state"), $applicable_project_states))
 		{
-			$errors[] = t("Projekt pole jätkatav");
+			$errors[] = t("Projekt pole j&auml;tkatav");
 		}
 
 		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
 		{
-			$errors[] = t("Töö pole katkestatud");
+			$errors[] = t("T&ouml;&ouml; pole katkestatud");
 		}
 
 		### check if prerequisites are done
@@ -1101,13 +1112,13 @@ class mrp_job extends class_base
 				if (((int) $prerequisite->prop ("state")) != MRP_STATUS_DONE)
 				{
 					$prerequisites_done = false;
-					$errors[] = t("Eeldustööd tegemata");
+					$errors[] = t("Eeldust&ouml;&ouml;d tegemata");
 					break;
 				}
 			}
 			else
 			{
-				$errors[] = t("Eeldustöö definitsioon on katki");
+				$errors[] = t("Eeldust&ouml;&ouml; definitsioon on katki");
 				break;
 			}
 		}
@@ -1178,7 +1189,7 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			$errors[] = t("Töö id vale");
+			$errors[] = t("T&ouml;&ouml; id vale");
 			$errors = urlencode(serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
@@ -1190,7 +1201,7 @@ class mrp_job extends class_base
 
 		if (!in_array ($this_object->prop ("state"), $applicable_states))
 		{
-			$errors[] = t("Töö pole tegemisel");
+			$errors[] = t("T&ouml;&ouml; pole tegemisel");
 		}
 
 		### ...
@@ -1476,6 +1487,109 @@ class mrp_job extends class_base
 
 			$job->save();
 			aw_restore_acl();
+		}
+	}
+
+	function create_materials_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "is_used",
+			"caption" => t("Kasutusel"),
+			"align"=> "center",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Materjal"),
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+			"align"=> "center",
+		));
+		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+		if($res)
+		{
+			$conn = $res->connections_to(array(
+				"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
+			));
+			$conn2 = $arr["obj_inst"]->connections_to(array(
+				"from.class_id" => CL_MATERIAL_EXPENSE,
+			));
+			$amts = $arr["obj_inst"]->meta("expense_amounts");
+			foreach($conn2 as $c)
+			{
+				$o = $c->from();
+				$prod = $o->prop("product");
+				$prods[$prod] = array(
+					"amount" => $o->prop("amount"),
+					"expense_id" => $o->id(),
+				);
+			}
+			foreach($conn as $c)
+			{
+				$prod = $c->from()->prop("product");
+				$t->define_data(array(
+					"is_used" => html::checkbox(array(
+						"name" => "is_used[".$prod."]",
+						"value" => $prod,
+						"checked" => isset($prods[$prod]),
+					)),
+					"name" => html::obj_change_url(obj($prod)),
+					"amount" => html::textbox(array(
+						"name" => "amount[".$prod."]",
+						"size" => 4,
+						"value" => $prods[$prod]["amount"] ? $prods[$prod]["amount"] : $amts[$prod],
+					)),
+				));
+			}
+		}
+	}
+
+	function save_materials($arr)
+	{
+		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+		if($res)
+		{
+			$conn = $res->connections_to(array(
+				"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
+			));
+			$conn2 = $arr["obj_inst"]->connections_to(array(
+				"from.class_id" => CL_MATERIAL_EXPENSE,
+			));
+			$amts = $arr["obj_inst"]->meta("expense_amounts");
+			foreach($conn2 as $c)
+			{
+				$o = $c->from();
+				$prod = $o->prop("product");
+				$prods[$prod] = $o->id();
+			}
+			foreach($conn as $c)
+			{
+				$prod = $c->from()->prop("product");
+				if(!$prods[$prod] && $arr["request"]["is_used"][$prod])
+				{
+					$o = obj();
+					$o->set_class_id(CL_MATERIAL_EXPENSE);
+					$o->set_parent($arr["obj_inst"]->id());
+					$o->set_name(sprintf(t("%s kulu %s jaoks"), obj($prod)->name(), $arr["obj_inst"]->name()));
+					$o->set_prop("product", $prod);
+					$o->set_prop("amount", $arr["request"]["amount"][$prod]);
+					$o->set_prop("job", $arr["obj_inst"]->id());
+					$o->save();
+				}
+				else
+				{
+					if($prods[$prod] && !$arr["request"]["is_used"][$prod])
+					{
+						$eo = obj($prods[$prod]);
+						$eo->delete();
+					}
+					$amts[$prod] = $arr["request"]["amount"][$prod];
+				}
+			}
+			$arr["obj_inst"]->set_meta("expense_amounts", $amts);
+			$arr["obj_inst"]->save();
 		}
 	}
 }

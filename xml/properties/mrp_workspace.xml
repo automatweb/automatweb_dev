@@ -574,6 +574,17 @@
             <caption>Projekti headeri kontroller</caption>
       </property>
       <property>
+            <name>warehouse</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MRP_WAREHOUSE</reltype>
+            <parent>left_column</parent>
+            <caption>Materjalide ladu</caption>
+      </property>
+      <property>
             <name>pv_per_page</name>
             <table>objects</table>
             <field>meta</field>
@@ -1597,6 +1608,11 @@
                   <value>5</value>
                   <caption>Projekti headeri kontroller</caption>
             </MRP_HEADER_CONTROLLER>
+            <MRP_WAREHOUSE>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <value>6</value>
+                  <caption>Materjalide ladu</caption>
+            </MRP_WAREHOUSE>
       </reltypes>
       <layout>
             <vsplitbox>

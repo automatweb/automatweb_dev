@@ -189,6 +189,9 @@
 	@property case_header_controller type=relpicker reltype=RELTYPE_MRP_HEADER_CONTROLLER parent=left_column
 	@caption Projekti headeri kontroller
 
+	@property warehouse type=relpicker reltype=RELTYPE_MRP_WAREHOUSE parent=left_column
+	@caption Materjalide ladu
+
 	@property pv_per_page type=textbox default=30 datatype=int parent=left_column
 	@caption Operaatori vaates t&ouml;id lehel
 
@@ -405,6 +408,8 @@
 @reltype MRP_HEADER_CONTROLLER clid=CL_FORM_CONTROLLER value=5
 @caption Projekti headeri kontroller
 
+@reltype MRP_WAREHOUSE clid=CL_SHOP_WAREHOUSE value=6
+@caption Materjalide ladu
 */
 
 require_once "mrp_header.aw";
@@ -972,7 +977,7 @@ class mrp_workspace extends class_base
 								break;
 							}
 						}
-						$prop["value"] = join("<br>", $txt);
+						$prop["value"] = "<div style='padding: 5px;'>".trim(join("<br>", $txt))."</div>";
 						break;
 
 					case "job_comment":
@@ -5133,6 +5138,7 @@ class mrp_workspace extends class_base
 			aw_session_set("mrpws_err", $errs);
 		}
 
+		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer_current",
@@ -5161,6 +5167,7 @@ class mrp_workspace extends class_base
 			aw_session_set("mrpws_err", $errs);
 		}
 
+		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer_current",
@@ -5192,6 +5199,7 @@ class mrp_workspace extends class_base
 
 		aw_session_set ("mrp_printer_aborted", $job_id);
 
+		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer_current",
@@ -5220,6 +5228,7 @@ class mrp_workspace extends class_base
 			aw_session_set("mrpws_err", $errs);
 		}
 
+		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer_current",
@@ -5248,6 +5257,7 @@ class mrp_workspace extends class_base
 			aw_session_set("mrpws_err", $errs);
 		}
 
+		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer_current",
@@ -5276,6 +5286,7 @@ class mrp_workspace extends class_base
 			aw_session_set("mrpws_err", $errs);
 		}
 
+		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer_current",
@@ -5304,6 +5315,7 @@ class mrp_workspace extends class_base
 			aw_session_set("mrpws_err", $errs);
 		}
 
+		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer_current",
