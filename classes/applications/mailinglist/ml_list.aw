@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.151 2009/02/09 15:22:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.152 2009/02/10 09:52:41 instrumental Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2789,39 +2789,52 @@ foreach($ol->arr() as $o)
 			$source_obj = obj($folder_id);
 			if($source_obj->class_id() == CL_MENU)
 			{
+				$odl_prms = array(
+					"class_id" => CL_ML_MEMBER,
+					"parent" => $folder_id,
+					"lang_id" => array(),
+					"site_id" => array(),
+				);
 				if($to > 1)
 				{
 					if(($from - $this->member_count) < 0) $from_q = 0;
 					else $from_q = $from - $this->member_count;
 					if(($to - $from_q - $this->member_count) < 0) $to_q = 0;
 					else $to_q = $to - $from_q - $this->member_count;
-					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid , objects.brother_of FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, $from_q, $to_q);
-					$q_count = sprintf("SELECT COUNT(*) as cnt FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0" , $folder_id);
-					$cnt_all = $this->db_fetch_field($q_count , "cnt");
+
+					$odl_prms["limit"] = $from_q.", ".$to_q;
+				}
+
+				$odl = new object_data_list(
+					$odl_prms,
+					array(
+						CL_ML_MEMBER => array("name", "mail"),
+					)
+				);
+
+				if($to > 1)
+				{
+					$cnt_all = $odl->count();
 					$this->member_count = $this->member_count + $cnt_all;
 				}
-				else
+
+				foreach($odl->arr() as $oid => $od)
 				{
-					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid  , objects.brother_of FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC" , $folder_id);
-				}
-				$this->db_query($q);
-				while($row = $this->db_next())
-				{
-					if(!$args["all"] && $this->ignore_member($source_obj , $row["oid"]))
+					if(!$args["all"] && $this->ignore_member($source_obj , $oid))
 					{
 						continue;
 					}
-					if(!(array_key_exists($row["mail"] , $this->already_found)))
+					if(!(array_key_exists($od["mail"] , $this->already_found)))
 					{
 						$this->ml_members[] = array(
-							"oid" 		=> $row["oid"],
+							"oid" 		=> $oid,
 							"parent"	=> $folder_id,
-							"name"		=> $row["name"],
-							"mail"		=> $row["mail"]
+							"name"		=> $od["name"],
+							"mail"		=> $od["mail"]
 						);
 						if(!($to > 1))$this->member_count++;
 					}
-					if(!$all) $this->already_found[$row["mail"]] = $row["mail"];
+					if(!$all) $this->already_found[$row["mail"]] = $od["mail"];
 				}
 			}
 			elseif ($source_obj->class_id() == CL_GROUP)
