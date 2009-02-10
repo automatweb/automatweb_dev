@@ -222,9 +222,22 @@ class auth_config extends class_base
 		$servers = $this->_get_auth_servers($auth_id);
 		$settings = obj($auth_id);
 		$dat = $settings->meta("auth");
+
+		// go over servers and all of them have different names then no need to check for empty
+		$nms = array();
+		$diff = true;
 		foreach($servers as $server)
 		{
-			if ($credentials["server"] != "")
+			if (isset($nms[$dat[$server->id()]["int_name"]]))
+			{
+				$diff = false;
+			}
+			$nms[$dat[$server->id()]["int_name"]] = 1;
+		}
+
+		foreach($servers as $server)
+		{
+			if ($diff || $credentials["server"] != "")
 			{
 				if ($dat[$server->id()]["int_name"] != $credentials["server"])
 				{
