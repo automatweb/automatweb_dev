@@ -413,6 +413,7 @@ class crm_bill_obj extends _int_object
 			{
 				$bill = obj($row->parent());
 				$bill->set_project($c->prop("to"));
+				$row->set_comment($c->prop("to.name"));
 			}
 			$row->set_prop("date", date("d.m.Y", $date));
 			$row->set_name($comment->prop("parent.name"));

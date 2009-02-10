@@ -2056,8 +2056,6 @@ class crm_bill extends class_base
 		{
 			$this->show_agreement_rows = 1;
 			$bill_rows = $agreement;
-//			$agreement_price_data = $this->get_agreement_row($agreement);
-//			extract($agreement_price_data);
 		}
 		else
 		{
@@ -2089,9 +2087,14 @@ class crm_bill extends class_base
 				$tax_rate = (double)$prod_o->prop("tax_rate.tax_amt") / 100.0;
 			}
 
+			//kole asi... idee selles, et kuskil seppikus ja sirelis jne on toodetega mingi teema, mida mujal ei kasutata, ja siis ridade kokku koondamine k2iks nagu vaid siis kui toode on sama, a kui ei ole, siis peaks ikka ka saama.... et ma siis olematule tootele kui kommentaari v2li on t2idetud, l2heb tooteks 1
 			if (!$this->can("view", $row["prod"]))
 			{
-				$row["prod"] = --$_no_prod_idx;
+				if($row["comment"])
+				{
+					$row["prod"] = 1;
+				}
+				else $row["prod"] = --$_no_prod_idx;
 			}
 			if ($tax_rate > 0)
 			{
@@ -2142,8 +2145,8 @@ class crm_bill extends class_base
 		}
 
 		$fbr = reset($brows);
+
 		//koondab sama nimega ja nimetud he hinnaga read kokku
-		
 		if(!$arr["all_rows"]) $grp_rows = $this->collocate_rows($grp_rows);
 		foreach($grp_rows as $prod => $grp_rowa)
 		{
