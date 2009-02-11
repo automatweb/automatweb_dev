@@ -6239,11 +6239,11 @@ class class_base extends aw_template
 	{
 		$retval = "";
 		// Drafting
-		if($arr["request"]["class"] == "doc")
+		if(isset($arr["request"]["class"]) && $arr["request"]["class"] == "doc")
 		{
 			$arr["request"]["class"] = "document";
 		}
-		$props = is_oid($arr["request"]["id"]) ? get_instance("cfgform")->get_default_proplist(array("oid" => $arr["request"]["id"])) : get_instance("cfgform")->get_default_proplist(array("clid" => constant("CL_".strtoupper($arr["request"]["class"]))));
+		$props = isset($arr["request"]["id"]) && is_oid($arr["request"]["id"]) ? get_instance("cfgform")->get_default_proplist(array("oid" => $arr["request"]["id"])) : get_instance("cfgform")->get_default_proplist(array("clid" => constant("CL_".strtoupper($arr["request"]["class"]))));
 		$draftable_props = array();
 		foreach($props as $k => $prop)
 		{
@@ -6258,12 +6258,15 @@ class class_base extends aw_template
 			$params = array(
 				"class_id" => CL_DRAFT,
 				"draft_user" => get_instance("user")->get_current_user(),
-				"draft_object" => $arr["request"]["id"],
 			);
-			if(!is_oid($arr["request"]["id"]))
+			if(!isset($arr["request"]["id"]) || !is_oid($arr["request"]["id"]))
 			{
 				unset($params["draft_object"]);
 				$params["draft_new"] = constant("CL_".strtoupper($arr["request"]["class"]));
+			}
+			else
+			{
+				$params["draft_object"] = $arr["request"]["id"];
 			}
 			$odl = new object_data_list(
 				$params,
@@ -6328,7 +6331,7 @@ class class_base extends aw_template
 							$.ajax({
 								type: 'POST',
 								url: '".aw_ini_get("baseurl")."/automatweb/orb.aw',
-								data: 'action=set_draft&class=".$arr["request"]["class"]."&prop='+draftable_props[j]+'&value='+el.value+'&id=".$arr["request"]["id"]."',
+								data: 'action=set_draft&class=".$arr["request"]["class"]."&prop='+draftable_props[j]+'&value='+el.value+'&id=".(isset($arr["request"]["id"]) ? $arr["request"]["id"] : "")."',
 							});
 							prop_vals[draftable_props[j]] = el.value;
 						}
