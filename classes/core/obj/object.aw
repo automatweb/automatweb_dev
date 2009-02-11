@@ -99,7 +99,7 @@ class object
 		{
 			$this->oid = $GLOBALS["object_loader"]->load_new_object($param);
 		}
-		elseif (null !== $param)
+		elseif (!empty($param))
 		{
 			$this->load($param);
 		}
