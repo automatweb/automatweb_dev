@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.79 2009/02/05 15:43:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.80 2009/02/11 12:27:24 markop Exp $
 // shop_order.aw - Tellimus
 /*
 
@@ -329,7 +329,7 @@ class shop_order extends class_base
 		));
 		$t->parse_xml_def("shop/shop_order_items");
 		$matchers = array();
-		foreach($t->rowdefs as $row)
+		foreach($t->get_defined_fields() as $row)
 		{
 			if($row["name"] == "name" || $row["name"] == "count")
 			{
@@ -491,11 +491,13 @@ class shop_order extends class_base
 
 		$tmp_defs = array();
 
-		foreach($t->rowdefs as  $def)
+		foreach($t->get_defined_fields() as  $def)
 		{
 			$tmp_defs[$def["name"]] = $def;
+			$t->remove_field($def["name"]);
 		}
-		unset($t->rowdefs);
+
+	//	unset($t->rowdefs);
 
 		foreach($order as $ord)
 		{
