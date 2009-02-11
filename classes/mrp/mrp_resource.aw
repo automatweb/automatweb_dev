@@ -1678,6 +1678,7 @@ class mrp_resource extends class_base
 			{
 				if(set_ids[add_id])
 				{
+					alert('".t("Antud materjal on juba lisatud")."')
 					return;
 				}
 
@@ -1847,7 +1848,7 @@ class mrp_resource extends class_base
 	function mk_materials_sel_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->set_caption(t("Valitud materjalid"));
+		$t->set_caption(t("Ressursil kasutatavad materjalid"));
 		$t->define_field(array(
 			"name" => "oid",
 			"caption" => t("Eemalda"),
