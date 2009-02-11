@@ -154,9 +154,8 @@ $sf->vars(array(
 	"btn_session_end_cancel" => html_entity_decode(t("L&otilde;petan")),
 	"session_length" => ini_get("session.gc_maxlifetime")*1000
 ));
-$box_o = obj();
-$box_o->set_class_id(CL_QUICKMESSAGEBOX);
-$box = $box_o->get_msgbox_for_user(obj(aw_global_get("uid_oid")), true);
+
+$box = quickmessagebox_obj::get_msgbox_for_user(obj(aw_global_get("uid_oid")), true);
 $ol = new object_list($box->connections_from(array("type" => "RELTYPE_UNREAD_MESSAGE")));
 if($num = $ol->count())
 {
