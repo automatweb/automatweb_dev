@@ -2449,8 +2449,9 @@ class crm_bill extends class_base
 
 	function show_add($arr)
 	{
-		$stats = get_instance("applications/crm/crm_company_stats_impl");
+		$stats  = $this->stats = get_instance("applications/crm/crm_company_stats_impl");
 		$b = obj($arr["id"]);
+		$this->bill = obj($arr["id"]);
 		$bill_rows = $this->get_bill_rows($b);
 		//lkkab mned read kokku ja liidab summa , ning koguse.vibolla saaks sama funktsiooni teise sarnase asemel ka kasutada, kui seda varem teha kki
 //		$bill_rows = $this->collocate($bill_rows);
@@ -2470,7 +2471,7 @@ class crm_bill extends class_base
 			$lc = $lo->prop("lang_acceptlang");
 		}
 		$tpl .= "_".$lc;
-
+//$this->read_site_template("show_add.tpl");
 		if ($this->read_site_template($tpl.".tpl", true) === false)
 		{
 			$this->read_site_template("show_add.tpl");
@@ -2609,104 +2610,37 @@ class crm_bill extends class_base
 
 
 		$rs = array();
-		$sum_wo_tax = 0;
-		$tax = 0;
-		$sum = 0;
-		foreach($bill_rows as $key => $row)
+		$this->sum_wo_tax = 0;
+		$this->tax = 0;
+		$this->sum = 0;
+
+		$grouped_rows = array();
+		foreach($bill_rows as $row)
 		{
-			$row_data = array();
-			$row_data["task_row_id"] = $row["task_row_id"];
-			$row_data["orderer"] = $row["orderer"];
-			if ($row["is_oe"])
-			{
-				continue;
-			}
-			$cur_tax = 0;
-			$cur_sum = 0;
-			
-			if ($row["has_tax"] == 1)
-			{
-				// tax needs to be added
-				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * 0.18);
-				$cur_pr = $this->num($row["price"]);
-			}	
-			else
-			{
-				// tax does not need to be added, tax free it seems
-				$cur_sum = $row["sum"];
-				$cur_tax = 0;
-				$cur_pr = $this->num($row["price"]);
-			}
-
-			if($arr["between"] && !($key+1 >= $arr["between"][0] && $key+1 <= $arr["between"][1]));
-			else
-			{
-				$this->vars($row_data);
-				$this->vars(array(
-					"unit" => $this->get_unit_name($row["unit"], $b),
-					"amt" => $stats->hours_format($row["amt"]),
-					"price" => number_format($row["price"], 2,".", " "),
-					"sum" => number_format($cur_sum, 2,"." , " "),
-					"desc" => $row["name"],
-					"date" => $row["date"],
-					"row_orderer" => $row["orderer"],
-				));
-				$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
-			}
-
-			$sum_wo_tax += $cur_sum;
-			$tax += $cur_tax;
-			$sum += ($cur_tax+$cur_sum);
-			$unit = $row["unit"];
-			$tot_amt += $row["amt"];
-			$tot_cur_sum += $cur_sum;
+			$grouped_rows[$row["comment"]][] = $row;
 		}
-		
-		foreach($bill_rows as $key => $row)
+
+		if($this->is_template("GROUP_ROWS"))
 		{
-			if (!$b->meta("show_oe_add") || !$row["is_oe"])
+			$GR = "";
+			foreach($grouped_rows as $capt => $crows)
 			{
-				continue;
-			}
-			$cur_tax = 0;
-			$cur_sum = 0;
-			
-			if ($row["has_tax"] == 1)
-			{
-				// tax needs to be added
-				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * 0.18);
-				$cur_pr = $this->num($row["price"]);
-			}	
-			else
-			{
-				// tax does not need to be added, tax free it seems
-				$cur_sum = $row["sum"];
-				$cur_tax = 0;
-				$cur_pr = $this->num($row["price"]);
+				$rs = $this->parse_preview_add_rows($crows);
+				$this->vars(array(
+					"uniter" => $capt,
+					"ROW" => join("", $rs),
+				));
+				$GR.= $this->parse("GROUP_ROWS");
 			}
 			$this->vars(array(
-				"unit" => $this->get_unit_name($row["unit"], $b),
-				"amt" => $stats->hours_format($row["amt"]),
-				"price" => number_format($cur_pr, 2,".", " "),
-				"sum" => number_format($cur_sum, 2, ".", " "),
-				"desc" => $row["name"],
-				"date" => $row["date"],
-				"row_orderer" => $row["orderer"],
+				"GROUP_ROWS" => $GR,
 			));
-
-			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
-			$sum_wo_tax += $cur_sum;
-			$tax += $cur_tax;
-			$sum += ($cur_tax+$cur_sum);
 		}
-		usort($rs, array(&$this, "__br_sort"));
-		foreach($rs as $idx => $ida)
+		else
 		{
-			$rs[$idx] = $ida["str"];
+			$rs = $this->parse_preview_add_rows($bill_rows);
+	
 		}
-
 		$sigs = "";
 		
 		foreach((array)$b->prop("signers") as $signer)
@@ -2741,10 +2675,10 @@ class crm_bill extends class_base
 			"ROW" => join("", $rs),
 			"TOTAL" => $total_,
 			"HEADER" => $_header,
-			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
-			"tax" => number_format($tax, 2,"." , " "),
-			"total" => number_format($sum, 2,".", " "),
-			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc),
+			"total_wo_tax" => number_format($this->sum_wo_tax, 2,".", " "),
+			"tax" => number_format($this->tax, 2,"." , " "),
+			"total" => number_format($this->sum, 2,".", " "),
+			"total_text" => locale::get_lc_money_text($this->sum, $ord_cur, $lc),
 			"tot_amt" => $stats->hours_format($tot_amt),
 			"page_no" => $page_no,
 		));
@@ -2783,6 +2717,107 @@ class crm_bill extends class_base
 		}
 		return $res;
 		die($res);
+	}
+
+	private function parse_preview_add_rows($bill_rows)
+	{
+		$rs = array();
+		foreach($bill_rows as $key => $row)
+		{
+			$row_data = array();
+			$row_data["task_row_id"] = $row["task_row_id"];
+			$row_data["orderer"] = $row["orderer"];
+			if ($row["is_oe"])
+			{
+				continue;
+			}
+			$cur_tax = 0;
+			$cur_sum = 0;
+			
+			if ($row["has_tax"] == 1)
+			{
+				// tax needs to be added
+				$cur_sum = $row["sum"];
+				$cur_tax = ($row["sum"] * 0.18);
+				$cur_pr = $this->num($row["price"]);
+			}	
+			else
+			{
+				// tax does not need to be added, tax free it seems
+				$cur_sum = $row["sum"];
+				$cur_tax = 0;
+				$cur_pr = $this->num($row["price"]);
+			}
+	
+			if($arr["between"] && !($key+1 >= $arr["between"][0] && $key+1 <= $arr["between"][1]));
+			else
+			{
+				$this->vars($row_data);
+				$this->vars(array(
+					"unit" => $this->get_unit_name($row["unit"], $this->bill),
+					"amt" => $this->stats->hours_format($row["amt"]),
+					"price" => number_format($row["price"], 2,".", " "),
+					"sum" => number_format($cur_sum, 2,"." , " "),
+					"desc" => $row["name"],
+					"date" => $row["date"],
+					"row_orderer" => $row["orderer"],
+					"comment" => $row["comment"],
+				));
+				$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
+			}
+	
+			$this->sum_wo_tax += $cur_sum;
+			$this->tax += $cur_tax;
+			$this->sum += ($cur_tax+$cur_sum);
+			$unit = $row["unit"];
+			$tot_amt += $row["amt"];
+			$tot_cur_sum += $cur_sum;
+		}
+
+		foreach($bill_rows as $key => $row)
+		{
+			if (!$this->bill->meta("show_oe_add") || !$row["is_oe"])
+			{
+				continue;
+			}
+			$cur_tax = 0;
+			$cur_sum = 0;
+			
+			if ($row["has_tax"] == 1)
+				{
+				// tax needs to be added
+				$cur_sum = $row["sum"];
+				$cur_tax = ($row["sum"] * 0.18);
+				$cur_pr = $this->num($row["price"]);
+			}	
+			else
+			{
+				// tax does not need to be added, tax free it seems
+				$cur_sum = $row["sum"];
+				$cur_tax = 0;
+				$cur_pr = $this->num($row["price"]);
+			}
+			$this->vars(array(
+				"unit" => $this->get_unit_name($row["unit"], $this->bill),
+				"amt" => $this->stats->hours_format($row["amt"]),
+				"price" => number_format($cur_pr, 2,".", " "),
+				"sum" => number_format($cur_sum, 2, ".", " "),
+				"desc" => $row["name"],
+				"date" => $row["date"],
+				"row_orderer" => $row["orderer"],
+			));
+	
+			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
+			$this->sum_wo_tax += $cur_sum;
+			$this->tax += $cur_tax;
+			$this->sum += ($cur_tax+$cur_sum);
+			}
+			usort($rs, array(&$this, "__br_sort"));
+			foreach($rs as $idx => $ida)
+		{
+			$rs[$idx] = $ida["str"];
+		}
+		return $rs;
 	}
 
 	function get_bill_currency($b)
