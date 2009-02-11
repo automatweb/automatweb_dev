@@ -247,10 +247,6 @@ class _int_object_loader extends core
 		if (isset($objdata["class_id"]) and is_class_id($class = $objdata["class_id"]) and isset($GLOBALS["cfg"]["classes"][$class]["object_override"]))
 		{
 			$class = basename($GLOBALS["cfg"]["classes"][$class]["object_override"]);
-
-			// copy data from generic object that is to be converted to a specific class
-			$objdata = $objdata + $GLOBALS["objects"][$oid]->get_object_data();
-//echo ("oid = $oid ".dbg::dump($GLOBALS["objects"][$oid]->get_object_data()));
 		}
 		else
 		{
@@ -441,7 +437,7 @@ class _int_object_loader extends core
 		if (!isset($cls[$arr["clid"]]) && empty($arr["file"]))
 		{
 			return array(array(), array(), array(), array(), array());
-		}	
+		}
 		$props = $this->cfgu->load_properties($arr);
 		$rv = array($props, $this->cfgu->tableinfo, $this->cfgu->relinfo, $this->cfgu->classinfo, $this->cfgu->groupinfo);
 		return $rv;
@@ -548,7 +544,7 @@ class _int_object_loader extends core
 			}
 			elseif (isset($GLOBALS["objects"][$cur_oid]))
 			{
-				$tmp = $GLOBALS["objects"][$cur_oid]->obj;
+				$tmp = $GLOBALS["objects"][$cur_oid]->get_object_data();
 			}
 			else
 			{
