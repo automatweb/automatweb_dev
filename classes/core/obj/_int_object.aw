@@ -17,13 +17,18 @@ class _int_object
 	///////////////////////////////////////////
 	// private variables
 
-	var $obj = array();			// actual object data. $this->objdata["__obj_load_parameter"] -- special element for storing constructor parameter
-	var $implicit_save;
-	var $obj_sys_flags;
-	var $props_loaded;
-
-	private static $global_save_count = 0;
-	private static $cache_off = false;
+	var $obj = array(
+		"properties" => array(),
+		"class_id" => null,
+		"meta" => null
+	);			// actual object data. $this->objdata["__obj_load_parameter"] -- special element for storing constructor parameter
+	protected $implicit_save = false;
+	protected $obj_sys_flags;
+	protected $props_loaded = false;
+	protected $props_modified = array();
+	protected $ot_modified = array("modified" => 1);
+	protected static $global_save_count = 0;
+	protected static $cache_off = false;
 
 	/**
 		This defines, after how many object saves cache will automatically be turned off for the rest of the request.
@@ -34,9 +39,8 @@ class _int_object
 	///////////////////////////////////////////
 	// public functions
 
-	function _int_object($objdata = array())
+	function _int_object($objdata)
 	{
-		$this->_init_empty();
 		$this->obj = $objdata;
 
 		if (isset($objdata["__obj_load_parameter"]))
@@ -1879,22 +1883,15 @@ class _int_object
 		return $this->obj["mod_cnt"];
 	}
 
+	public function get_object_data()
+	{
+		return $this->obj;
+	}
+
 	/////////////////////////////////////////////////////////////////
 	// private functions
 
-	function _init_empty()
-	{
-		$this->obj = array();
-		$this->obj["properties"] = array();
-		$this->obj['class_id'] = null;
-		$this->obj['meta'] = null;
-		$this->implicit_save = false;
-		$this->props_loaded = false;
-		$this->props_modified = array();
-		$this->ot_modified = array("modified" => 1);
-	}
-
-	function _int_set_prop_mod($prop, $oldval, $newval)
+	protected function _int_set_prop_mod($prop, $oldval, $newval)
 	{
 		$cv1 = $oldval;
 		$cv2 = $newval;
@@ -1917,7 +1914,7 @@ class _int_object
 		}
 	}
 
-	function _int_set_ot_mod($fld, $oldval, $newval)
+	protected function _int_set_ot_mod($fld, $oldval, $newval)
 	{
 		$cv1 = $oldval;
 		$cv2 = $newval;
@@ -1932,7 +1929,7 @@ class _int_object
 		}
 	}
 
-	function _int_load()
+	protected function _int_load()
 	{
 		$oid = $GLOBALS["object_loader"]->param_to_oid($this->obj["__obj_load_parameter"]);
 		$this->_int_load_property_values();
@@ -1946,12 +1943,7 @@ class _int_object
 		}
 	}
 
-	function get_object_data()
-	{
-		return $this->obj;
-	}
-
-	function _int_load_properties($cl_id = NULL)
+	protected function _int_load_properties($cl_id = NULL)
 	{
 		if (empty($cl_id) and !empty($this->obj["class_id"]))
 		{
@@ -2017,7 +2009,7 @@ class _int_object
 		}
 	}
 
-	function _int_do_save($exclusive, $previous_state)
+	protected function _int_do_save($exclusive, $previous_state)
 	{
 		if ($previous_state === null)
 		{
@@ -2152,7 +2144,7 @@ class _int_object
 		self::$global_save_count++;
 	}
 
-	function _int_do_inherit_new_props()
+	protected function _int_do_inherit_new_props()
 	{
 		$data = $GLOBALS["object_loader"]->obj_inherit_props_conf;
 		if (!is_array($data))
@@ -2179,7 +2171,7 @@ class _int_object
 		}
 	}
 
-	function _int_do_obj_inherit_props()
+	protected function _int_do_obj_inherit_props()
 	{
 		if (isset($GLOBALS["object_loader"]->obj_inherit_props_conf[$this->obj["oid"]]))
 		{
@@ -2208,7 +2200,7 @@ class _int_object
 		}
 	}
 
-	function _int_do_implicit_save()
+	protected function _int_do_implicit_save()
 	{
 		if ($this->implicit_save)
 		{
@@ -2216,7 +2208,7 @@ class _int_object
 		}
 	}
 
-	function _int_sync_from_objfield_to_prop($ofname, $mod = true)
+	protected function _int_sync_from_objfield_to_prop($ofname, $mod = true)
 	{
 		// object field changed, sync to properties
 		$pn = empty($GLOBALS["of2prop"][$this->obj["class_id"]][$ofname]) ? "" : $GLOBALS["of2prop"][$this->obj["class_id"]][$ofname];
@@ -2234,7 +2226,7 @@ class _int_object
 		}
 	}
 
-	function _int_path($param)
+	protected function _int_path($param)
 	{
 		$ret = array();
 		$parent = $this->id();
@@ -2317,12 +2309,12 @@ class _int_object
 		return $ret;
 	}
 
-	function _int_can($param)
+	protected function _int_can($param)
 	{
 		return $GLOBALS["object_loader"]->ds->can($param, $this->obj["oid"]);
 	}
 
-	function _int_can_save()
+	protected function _int_can_save()
 	{
 		if (is_array($this->obj["parent"]))
 		{
@@ -2368,14 +2360,15 @@ class _int_object
 		return false;
 	}
 
-	function _int_set_of_value($ofield, $val)
+	protected function _int_set_of_value($ofield, $val)
 	{
-		$this->_int_set_ot_mod($ofield, $this->obj[$ofield], $val);
+		$oldval = isset($this->obj[$ofield]) ? $this->obj[$ofield] : null;
+		$this->_int_set_ot_mod($ofield, $oldval, $val);
 		$this->obj[$ofield] = $val;
 		$this->_int_sync_from_objfield_to_prop($ofield);
 	}
 
-	function _int_init_new()
+	protected function _int_init_new()
 	{
 		$this->_int_set_of_value("created", time());
 		$this->_int_set_of_value("createdby", aw_global_get("uid"));
@@ -2398,12 +2391,12 @@ class _int_object
 		}
 	}
 
-	function _int_is_property($prop)
+	protected function _int_is_property($prop)
 	{
 		return isset($GLOBALS["properties"][$this->obj["class_id"]][$prop]) && is_array($GLOBALS["properties"][$this->obj["class_id"]][$prop]);
 	}
 
-	function _int_do_delete($oid, $full_delete = false)
+	protected function _int_do_delete($oid, $full_delete = false)
 	{
 		// load the object to see of its brother status
 		$obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
@@ -2489,7 +2482,7 @@ class _int_object
 		}
 	}
 
-	function _int_create_brother($parent)
+	protected function _int_create_brother($parent)
 	{
 		$rv =  $GLOBALS["object_loader"]->ds->create_brother(array(
 			"objdata" => $this->obj,
@@ -2503,7 +2496,7 @@ class _int_object
 		return $rv;
 	}
 
-	function _int_check_draft($param)
+	protected function _int_check_draft($param)
 	{
 		// If no property specified, return NULL
 		if(strlen($prop) == 0)
@@ -2520,7 +2513,7 @@ class _int_object
 		return true;
 	}
 
-	function _int_set_draft($param, $value)
+	protected function _int_set_draft($param, $value)
 	{
 		if($this->_int_check_draft($param))
 		{
@@ -2570,7 +2563,7 @@ class _int_object
 		return true;
 	}
 
-	function _int_get_draft($prop)
+	protected function _int_get_draft($prop)
 	{
 		if($this->_int_check_draft($param))
 		{
@@ -2608,7 +2601,7 @@ class _int_object
 		}
 	}
 
-	function _int_set_prop($prop, $val)
+	protected function _int_set_prop($prop, $val)
 	{
 		if (!$this->props_loaded)
 		{
@@ -2618,7 +2611,7 @@ class _int_object
 		$this->obj["properties"][$prop] = $val;
 	}
 
-	function _int_get_prop($prop)
+	protected function _int_get_prop($prop)
 	{
 		if (!$this->props_loaded)
 		{
@@ -2733,7 +2726,7 @@ class _int_object
 		return isset($this->obj["properties"][$prop]) ? $this->obj["properties"][$prop] : null;
 	}
 
-	function _scan_warning_possibility($value, $prop = false)
+	protected function _scan_warning_possibility($value, $prop = false)
 	{
 		if(!$prop || !is_array($prop) || !$prop["type"])
 		{
@@ -2765,7 +2758,7 @@ class _int_object
 		return false;
 	}
 
-	function _int_load_property_values()
+	protected function _int_load_property_values()
 	{
 		$this->_int_load_properties();
 
@@ -2793,7 +2786,7 @@ class _int_object
 		$this->props_loaded = true;
 	}
 
-	function _fetch_to_delete_objects($pt)
+	protected function _fetch_to_delete_objects($pt)
 	{
 		$parents = array($pt);
 		$ret = array();
@@ -2814,7 +2807,7 @@ class _int_object
 		return $ret;
 	}
 
-	private function load_properties_considering_cfgform()
+	protected function load_properties_considering_cfgform()
 	{
 		enter_function("load_properties_considering_cfgform");
 		$properties = $GLOBALS["properties"][$this->obj["class_id"]];
