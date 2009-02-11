@@ -1645,11 +1645,28 @@ class mrp_resource extends class_base
 	{
 		if($arr["request"]["group"] == "grp_resource_materials")
 		{
+			$conn = $arr["obj_inst"]->connections_to(array(
+				"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
+			));
+			$prods = array();
+			foreach($conn as $c)
+			{
+				if($prod = $c->from()->prop("product"))
+				{
+					$prods[] = $prod;
+				}
+			}
 			$script = "
-
 			var tbls = $('.awmenuedittabletag')
-			var set_ids = new Array()
-
+			var set_ids = new Array()";
+			
+			foreach($prods as $prod)
+			{
+				$script .= "
+			set_ids[".$prod."] = 1";
+			}
+			
+			$script .= "
 			function add_attribute(elem, attr, value)
 			{
 				var newAttr = document.createAttribute(attr);
