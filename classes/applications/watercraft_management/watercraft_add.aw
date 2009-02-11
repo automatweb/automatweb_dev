@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.20 2008/07/23 10:50:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.21 2009/02/11 14:31:23 dragut Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -690,6 +690,7 @@ class watercraft_add extends class_base
 		if (empty($pages_diff) && isset($arr['send']))
 		{
 			$watercraft_obj->set_status(STAT_ACTIVE);
+			$watercraft_obj->set_name($watercraft_obj->prop('brand') . ' - ' . $watercraft_obj->prop('engine_model'));
 			$watercraft_obj->save();
 			unset($_SESSION['watercraft_input_data']);
 			$return_url = aw_ini_get('baseurl').'/'.aw_global_get('section');
