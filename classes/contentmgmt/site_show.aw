@@ -477,7 +477,7 @@ class site_show extends class_base
 			$url = $this->get_cval("orb_err_mustlogin");
 		}
 		aw_session_set("request_uri_before_auth",aw_global_get("REQUEST_URI"));
-		header("Location: ".$this->cfg["baseurl"]."/$url");
+		header("Location: ".aw_ini_get("baseurl")."/$url");
 		exit;
 	}
 
@@ -700,7 +700,7 @@ class site_show extends class_base
 		{
 			$check = obj($docid);
 			$ok = $check->class_id() == CL_DOCUMENT && $check->status() == STAT_ACTIVE;
-			if ($this->cfg["lang_menus"] == 1)
+			if (aw_ini_get("lang_menus") == 1)
 			{
 				$ok &= $check->lang() == aw_global_get("LC");
 			}
@@ -1288,7 +1288,7 @@ class site_show extends class_base
 			aw_register_default_class_member("document", "cnt_documents", sizeof($docid));
 
 			$template = $template == "" ? "plain.tpl" : $template;
-			$template2 = file_exists($this->cfg["tpldir"]."/automatweb/documents/".$template."2") ? $template."2" : $template;
+			$template2 = file_exists(aw_ini_get("tpldir")."/automatweb/documents/".$template."2") ? $template."2" : $template;
 
 			$this->vars(array("DOCUMENT_LIST" => $this->parse("DOCUMENT_LIST")));
 			$this->_is_in_document_list = 1;
@@ -1780,7 +1780,7 @@ class site_show extends class_base
 		$prev = false;
 		$show_obj_tree = false;
 
-		$rootmenu = $this->cfg["rootmenu"];
+		$rootmenu = aw_ini_get("rootmenu");
 		if (aw_ini_get("ini_rootmenu"))
 		{
 			$rootmenu = aw_ini_get("ini_rootmenu");
@@ -1815,17 +1815,17 @@ class site_show extends class_base
 
 				if (aw_ini_get("user_interface.full_content_trans"))
 				{
-					$link = $this->cfg["baseurl"]."/".aw_global_get("ct_lang_lc")."/".$linktext;
+					$link = aw_ini_get("baseurl")."/".aw_global_get("ct_lang_lc")."/".$linktext;
 				}
 				else
 				{
-					$link = $this->cfg["baseurl"]."/".$linktext;
+					$link = aw_ini_get("baseurl")."/".$linktext;
 				}
 			}
 			else
 			{
 				$use_aliases = false;
-				$link = $this->cfg["baseurl"]."/".$ref->id();
+				$link = aw_ini_get("baseurl")."/".$ref->id();
 			};
 
 			if ($ref->prop("link") != "")
@@ -2013,7 +2013,7 @@ class site_show extends class_base
 				$img_url = $this->image->get_url_by_id($row["meta"]["lang_img"]);
 			}
 
-			$url = $this->cfg["baseurl"] . "/?".$var."=$row[id]";
+			$url = aw_ini_get("baseurl") . "/?".$var."=$row[id]";
 			if (!empty($row["meta"]["temp_redir_url"]) && $uid == "")
 			{
 				$url = $row["meta"]["temp_redir_url"];
@@ -2478,7 +2478,7 @@ class site_show extends class_base
 	{
 		tm::s(__CLASS__, __FUNCTION__);
 		$section = $this->section_obj->id();
-		$frontpage = $this->cfg["frontpage"];
+		$frontpage = aw_ini_get("frontpage");
 
 		$islm = get_instance("site_loginmenu");
 		$site_loginmenu = $islm->get_site_loginmenu($this);
@@ -2497,7 +2497,15 @@ class site_show extends class_base
 
 		$u = get_instance(CL_USER);
 		aw_disable_acl();
-		$p = obj($u->get_current_person());
+		$tmp = $u->get_current_person();
+		if (is_oid($tmp))
+		{
+			$p = obj($tmp);
+		}
+		else
+		{
+			$p = obj();
+		}
 		aw_restore_acl();
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
@@ -2892,7 +2900,7 @@ class site_show extends class_base
 			{
 				$use_trans = false;
 			}
-			$link = $this->cfg["baseurl"] ."/";
+			$link = aw_ini_get("baseurl") ."/";
 			if (aw_ini_get("menuedit.language_in_url"))
 			{
 				$link .= $lc."/";
@@ -2907,11 +2915,11 @@ class site_show extends class_base
 				{
 					if (aw_ini_get("menuedit.show_real_location"))
 					{
-						$link .= "index.".$this->cfg["ext"]."?section=".$o->brother_of().$this->add_url;
+						$link .= "index.".aw_ini_get("ext")."?section=".$o->brother_of().$this->add_url;
 					}
 					else
 					{
-						$link .= "index.".$this->cfg["ext"]."?section=".$o->id().$this->add_url;
+						$link .= "index.".aw_ini_get("ext")."?section=".$o->id().$this->add_url;
 					}
 				}
 			}
@@ -3029,7 +3037,7 @@ class site_show extends class_base
 		tm::s(__CLASS__, __FUNCTION__);
 		global $awt;
 
-		$tpldir = str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
+		$tpldir = str_replace(aw_ini_get("site_basedir")."/", "", aw_ini_get("tpldir"))."/automatweb/menuedit";
 
 		if (isset($arr["tpldir"]) && $arr["tpldir"] != "")
 		{
