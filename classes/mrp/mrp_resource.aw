@@ -592,7 +592,7 @@ class mrp_resource extends class_base
 			$add_ids = explode(",", $arr["request"]["add_ids"]);
 			foreach($add_ids as $oid)
 			{
-				if($arr["request"]["rem_ids"][$oid])
+				if($arr["request"]["rem_ids"][$oid] || !$oid)
 				{
 					continue;
 				}
