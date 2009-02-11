@@ -19,14 +19,14 @@
 	@groupinfo grp_resources_load caption="Koormus" parent=grp_resources
 	@groupinfo grp_resources_manage caption="Haldus" parent=grp_resources
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
-	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
-	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
-	@groupinfo grp_printer_done caption="Tehtud t&ouml;&ouml;d" parent=grp_printer submit=no
-	@groupinfo grp_printer_aborted caption="Katkestatud t&ouml;&ouml;d" parent=grp_printer submit=no
+#	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
+#	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
+#	@groupinfo grp_printer_done caption="Tehtud t&ouml;&ouml;d" parent=grp_printer submit=no
+#	@groupinfo grp_printer_aborted caption="Katkestatud t&ouml;&ouml;d" parent=grp_printer submit=no
 
-	@groupinfo grp_printer_in_progress caption="K&otilde;ik t&ouml;&ouml;s olevad" parent=grp_printer submit=no
-	@groupinfo grp_printer_startable caption="K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada" parent=grp_printer submit=no
-	@groupinfo grp_printer_notstartable caption="T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada" parent=grp_printer submit=no
+#	@groupinfo grp_printer_in_progress caption="K&otilde;ik t&ouml;&ouml;s olevad" parent=grp_printer submit=no
+#	@groupinfo grp_printer_startable caption="K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada" parent=grp_printer submit=no
+#	@groupinfo grp_printer_notstartable caption="T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada" parent=grp_printer submit=no
 
 @groupinfo grp_login_select_res caption="Vali kasutatav ressurss"
 
@@ -254,124 +254,136 @@
 	@caption Skaala aja&uuml;hik
 
 
-@default group=grp_printer_current,grp_printer_done,grp_printer_aborted,grp_printer_in_progress,grp_printer_startable,grp_printer_notstartable
-	@layout printer_legend_box type=vbox no_caption=1 closeable=0
-	@property printer_legend type=text no_caption=1 parent=printer_legend_box
+#@default group=grp_printer_current,grp_printer_done,grp_printer_aborted,grp_printer_in_progress,grp_printer_startable,grp_printer_notstartable
+@default group=grp_printer
 
-	@property printer_jobs_prev_link type=text store=no no_caption=1
+	@layout printer_master type=hbox width=25%:75%
 
-	@property printer_jobs type=table no_caption=1
+		@layout printer_left type=vbox parent=printer_master
 
-	@property printer_jobs_next_link type=text store=no no_caption=1
+			@layout printer_tree type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;de&nbsp;puu
 
-	@property pj_toolbar type=toolbar store=no no_caption=1
-	@caption Muuda staatust
+				@property printer_tree type=treeview parent=printer_tree
 
-	// these are shown when a job is selected
-	@property pj_case_header type=text no_caption=1 store=no
+		@layout printer_right type=vbox parent=printer_master area_caption=T
 
-	@property pj_errors type=text store=no
-	@caption Vead
+			@layout printer_legend_box type=vbox no_caption=1 closeable=0 parent=printer_right
+			@property printer_legend type=text no_caption=1 parent=printer_legend_box
 
-	@layout comment_hbox type=hbox width=40%:60%
-	@caption Kommentaar
+			@property printer_jobs_prev_link type=text store=no no_caption=1 parent=printer_right
 
-	@property pj_change_comment type=textarea rows=5 cols=50 store=no parent=comment_hbox no_caption=1
-	@caption Kommentaar
+			@property printer_jobs type=table no_caption=1 parent=printer_right
 
-	@property pj_change_comment_history type=text store=no parent=comment_hbox no_caption=1
+			@property printer_jobs_next_link type=text store=no no_caption=1 parent=printer_right
 
-	@property pj_title_job_data type=text store=no subtitle=1
-	@caption T&ouml;&ouml; andmed
+			@property pj_toolbar type=toolbar store=no no_caption=1 parent=printer_right
+			@caption Muuda staatust
 
-	@property pj_starttime type=text store=no
-	@caption Algus
+			// these are shown when a job is selected
+			@property pj_case_header type=text no_caption=1 store=no parent=printer_right
 
-	@property pj_length type=text store=no
-	@caption Plaanitud kestus (h)
+			@property pj_errors type=text store=no parent=printer_right
+			@caption Vead
 
-	@property pj_minstart type=datetime_select store=no
-	@caption Arvatav j&auml;tkamisaeg
+			@layout comment_hbox type=hbox width=40%:60% parent=printer_right
+			@caption Kommentaar
 
-	@property pj_remaining_length type=textbox store=no
-	@caption Arvatav l&otilde;petamiseks kuluv aeg (h)
+			@property pj_change_comment type=textarea rows=5 cols=50 store=no parent=comment_hbox no_caption=1
+			@caption Kommentaar
 
-	@property pj_submit type=submit store=no
-	@caption Salvesta
+			@property pj_change_comment_history type=text store=no parent=comment_hbox no_caption=1
 
-	property pj_pre_buffer type=text store=no
-	caption Eelpuhveraeg (h)
+			@property pj_title_job_data type=text store=no subtitle=1 parent=printer_right
+			@caption T&ouml;&ouml; andmed
 
-	property pj_post_buffer type=text store=no
-	caption J&auml;relpuhveraeg (h)
+			@property pj_starttime type=text store=no parent=printer_right
+			@caption Algus
 
-	@layout resource_hbox type=hbox width="50%:50%"
-	@caption Ressurss
+			@property pj_length type=text store=no parent=printer_right
+			@caption Plaanitud kestus (h)
 
-	@property pj_resource type=text store=no parent=resource_hbox no_caption=1
-	@caption Ressurss
+			@property pj_minstart type=datetime_select store=no parent=printer_right
+			@caption Arvatav j&auml;tkamisaeg
 
-	@property pj_job_comment type=text store=no parent=resource_hbox
-	@caption T&ouml;&ouml; kommentaar
+			@property pj_remaining_length type=textbox store=no parent=printer_right
+			@caption Arvatav l&otilde;petamiseks kuluv aeg (h)
 
-	@property pj_state type=text store=no
-	@caption Staatus
+			@property pj_submit type=submit store=no parent=printer_right
+			@caption Salvesta
 
-	@property pjp_title_proj_data type=text store=no subtitle=1
-	@caption Projekti andmed
+			property pj_pre_buffer type=text store=no parent=printer_right
+			caption Eelpuhveraeg (h)
 
-	@property pjp_format type=text store=no
-	@caption Formaat
+			property pj_post_buffer type=text store=no parent=printer_right
+			caption J&auml;relpuhveraeg (h)
 
-	@property pjp_sisu_lk_arv type=text store=no
-	@caption Sisu lk arv
+			@layout resource_hbox type=hbox width="50%:50%" parent=printer_right
+			@caption Ressurss
 
-	@property pjp_kaane_lk_arv type=text store=no
-	@caption Kaane lk arv
+			@property pj_resource type=text store=no parent=resource_hbox no_caption=1
+			@caption Ressurss
 
-	@property pjp_sisu_varvid type=text store=no
-	@caption Sisu v&auml;rvid
+			@property pj_job_comment type=text store=no parent=resource_hbox
+			@caption T&ouml;&ouml; kommentaar
 
-	@property pjp_sisu_varvid_notes type=text store=no
-	@caption Sisu v&auml;rvid Notes
+			@property pj_state type=text store=no parent=printer_right
+			@caption Staatus
 
-	@property pjp_sisu_lakk_muu type=text store=no
-	@caption Sisu lakk/muu
+			@property pjp_title_proj_data type=text store=no subtitle=1 parent=printer_right
+			@caption Projekti andmed
 
-	@property pjp_kaane_varvid type=text store=no
-	@caption Kaane v&auml;rvid
+			@property pjp_format type=text store=no parent=printer_right
+			@caption Formaat
 
-	@property pjp_kaane_varvid_notes type=text store=no
-	@caption Kaane v&auml;rvid Notes
+			@property pjp_sisu_lk_arv type=text store=no parent=printer_right
+			@caption Sisu lk arv
 
-	@property pjp_kaane_lakk_muu type=text store=no
-	@caption Kaane lakk/muu
+			@property pjp_kaane_lk_arv type=text store=no parent=printer_right
+			@caption Kaane lk arv
 
-	@property pjp_sisu_paber type=text store=no
-	@caption Sisu paber
+			@property pjp_sisu_varvid type=text store=no parent=printer_right
+			@caption Sisu v&auml;rvid
 
-	@property pjp_kaane_paber type=text store=no
-	@caption Kaane paber
+			@property pjp_sisu_varvid_notes type=text store=no parent=printer_right
+			@caption Sisu v&auml;rvid Notes
 
-	@property pjp_trykiarv type=text store=no
-	@caption Tr&uuml;kiarv
+			@property pjp_sisu_lakk_muu type=text store=no parent=printer_right
+			@caption Sisu lakk/muu
 
-	@property pjp_trykise_ehitus type=text store=no
-	@caption Tr&uuml;kise ehitus
+			@property pjp_kaane_varvid type=text store=no parent=printer_right
+			@caption Kaane v&auml;rvid
 
-	@property pjp_kromaliin type=text store=no
-	@caption Kromalin
+			@property pjp_kaane_varvid_notes type=text store=no parent=printer_right
+			@caption Kaane v&auml;rvid Notes
 
-	@property pjp_makett type=text store=no
-	@caption Makett
+			@property pjp_kaane_lakk_muu type=text store=no parent=printer_right
+			@caption Kaane lakk/muu
 
-	@property pjp_naidis type=text store=no
-	@caption N&auml;idis
+			@property pjp_sisu_paber type=text store=no parent=printer_right
+			@caption Sisu paber
 
-	@property pjp_title_case_wf type=text store=no subtitle=1
-	@caption Projekti t&ouml;&ouml;voog
+			@property pjp_kaane_paber type=text store=no parent=printer_right
+			@caption Kaane paber
 
-	@property pjp_case_wf type=table store=no no_caption=1
+			@property pjp_trykiarv type=text store=no parent=printer_right
+			@caption Tr&uuml;kiarv
+
+			@property pjp_trykise_ehitus type=text store=no parent=printer_right
+			@caption Tr&uuml;kise ehitus
+
+			@property pjp_kromaliin type=text store=no parent=printer_right
+			@caption Kromalin
+
+			@property pjp_makett type=text store=no parent=printer_right
+			@caption Makett
+
+			@property pjp_naidis type=text store=no parent=printer_right
+			@caption N&auml;idis
+
+			@property pjp_title_case_wf type=text store=no subtitle=1 parent=printer_right
+			@caption Projekti t&ouml;&ouml;voog
+
+			@property pjp_case_wf type=table store=no no_caption=1 parent=printer_right
 
 
 @default group=grp_login_select_res
@@ -1002,6 +1014,11 @@ class mrp_workspace extends class_base
 
 		switch($prop["name"])
 		{
+			### printer tab
+			case "printer_tree":
+				$this->_get_printer_tree($arr);
+				break;
+
 			### projects tab
 			case "sp_submit":
 				$uri = automatweb::$request->get_uri();
@@ -1640,7 +1657,7 @@ class mrp_workspace extends class_base
 						aw_session_del("mrp_operator_use_resource");
 					}
 					// aaaand redirect
-					header("Location: ".$this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => "grp_printer_current")));
+					header("Location: ".$this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "branch_id" => "grp_printer_current")));
 					die();
 				}
 				elseif (count($resids) > 0)
@@ -1661,7 +1678,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs_next_link":
-				if (!empty($arr["request"]["pj_job"]) || $arr["request"]["group"] === "grp_printer_notstartable" || $arr["request"]["group"] === "grp_printer_startable")
+				if (!empty($arr["request"]["pj_job"]) || $arr["request"]["branch_id"] === "grp_printer_notstartable" || $arr["request"]["branch_id"] === "grp_printer_startable")
 				{
 					return PROP_IGNORE;
 				}
@@ -1673,7 +1690,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs_prev_link":
-				if (!empty($arr["request"]["pj_job"]) || $arr["request"]["group"] === "grp_printer_notstartable" || $arr["request"]["group"] === "grp_printer_startable")
+				if (!empty($arr["request"]["pj_job"]) || $arr["request"]["branch_id"] === "grp_printer_notstartable" || $arr["request"]["branch_id"] === "grp_printer_startable")
 				{
 					return PROP_IGNORE;
 				}
@@ -1713,6 +1730,35 @@ class mrp_workspace extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function _get_printer_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$branches = array(
+			"grp_printer_current" => "Jooksvad t&ouml;&ouml;d",
+			"grp_printer_old" => "Tegemata t&ouml;&ouml;d",
+			"grp_printer_done" => "Tehtud t&ouml;&ouml;d",
+			"grp_printer_aborted" => "Katkestatud t&ouml;&ouml;d",
+			"grp_printer_in_progress" => "K&otilde;ik t&ouml;&ouml;s olevad",
+			"grp_printer_startable" => "K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada",
+			"grp_printer_notstartable" => "T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada",
+		);
+		$selected = isset($_GET["branch_id"]) && array_key_exists($_GET["branch_id"], $branches) ? $_GET["branch_id"] : "grp_printer_current";
+		$t->set_selected_item($selected);
+
+		foreach($branches as $id => $caption)
+		{
+			$t->add_item(0, array(
+				"id" => $id,
+				"name" => $caption,
+				"url" => aw_url_change_var(array(
+					"pj_job" => NULL,
+					"branch_id" => $id,
+				)),
+			));
+		}
 	}
 
 	function set_property ($arr = array ())
@@ -1776,7 +1822,7 @@ class mrp_workspace extends class_base
 					aw_session_del("mrp_operator_use_resource");
 				}
 				// aaaand redirect
-				header("Location: ".$this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => "grp_printer_current")));
+				header("Location: ".$this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "branch_id" => "grp_printer_current")));
 				die();
 				break;
 
@@ -1841,7 +1887,7 @@ class mrp_workspace extends class_base
 		$applicable_groups =  array(
 			"grp_printer",
 			"grp_printer_current",
-			"groupinfo grp_printer_old",
+			"grp_printer_old",
 			"grp_printer_done",
 			"grp_printer_aborted",
 			"grp_printer_in_progress",
@@ -1850,7 +1896,7 @@ class mrp_workspace extends class_base
 			"grp_projects",
 			"grp_printer_notstartable"
 		);
-		if (!empty($arr["args"]["group"]) and in_array($arr["args"]["group"], $applicable_groups))
+		if (!empty($arr["args"]["branch_id"]) and in_array($arr["args"]["branch_id"], $applicable_groups))
 		{
 			unset($arr["args"]["just_saved"]);
 		}
@@ -4416,7 +4462,7 @@ class mrp_workspace extends class_base
 	function _printer_jobs($arr)
 	{
 		$t = $arr["prop"]["vcl_inst"];
-		$grp = $arr["prop"]["group"];
+		$grp = isset($arr["prop"]["branch_id"]) ? $arr["prop"]["branch_id"] : "grp_printer_current";
 		$this->_init_printer_jobs_t($t, $grp);
 
 		$res = $this->get_cur_printer_resources(array(
@@ -4428,7 +4474,7 @@ class mrp_workspace extends class_base
 		$page = isset($arr["request"]["printer_job_page"]) ? (int) $arr["request"]["printer_job_page"] : 0;
 		$limit = ($page*$per_page).",".$per_page;
 
-		switch ($arr["request"]["group"])
+		switch ($arr["request"]["branch_id"])
 		{
 			case "grp_printer_done":
 				$states = array(MRP_STATUS_DONE);
@@ -4449,7 +4495,7 @@ class mrp_workspace extends class_base
 				$default_sortby = "mrp_job.started";
 				break;
 
-			case "grp_printer":
+			case "":
 			case "grp_printer_current":
 				$default_sortby = "mrp_schedule.starttime";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
@@ -4562,7 +4608,7 @@ class mrp_workspace extends class_base
 
 					if (in_array($row["state"], $states))
 					{
-						$view = $_GET["group"];
+						$view = $_GET["branch_id"];
 					}
 				}
 
@@ -4583,9 +4629,9 @@ class mrp_workspace extends class_base
 					}
 				}
 
-				if ($view !== $_GET["group"])
+				if ($view !== $_GET["branch_id"])
 				{
-					header("Location: ".aw_url_change_var("group", $view));
+					header("Location: ".aw_url_change_var("branch_id", $view));
 					die();
 				}
 
@@ -4693,12 +4739,12 @@ class mrp_workspace extends class_base
 				}
 			}
 
-			if ($arr["request"]["group"] === "grp_printer_startable" && $bgcol == $this->pj_colors["can_not_start"])
+			if ($arr["request"]["branch_id"] === "grp_printer_startable" && $bgcol == $this->pj_colors["can_not_start"])
 			{
 				continue;
 			}
 
-			if ($arr["request"]["group"] === "grp_printer_notstartable" && ($bgcol == $this->pj_colors["can_start"] || $cnt > 5))
+			if ($arr["request"]["branch_id"] === "grp_printer_notstartable" && ($bgcol == $this->pj_colors["can_start"] || $cnt > 5))
 			{
 				continue;
 			}
@@ -4711,7 +4757,7 @@ class mrp_workspace extends class_base
 			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
 			### get length, end and start according to job state
-			switch ($arr["request"]["group"])
+			switch ($arr["request"]["branch_id"])
 			{
 				case "grp_printer_done":
 					$start = $job->prop("started");
@@ -5141,7 +5187,7 @@ class mrp_workspace extends class_base
 		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer_current",
+			"branch_id" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -5170,7 +5216,7 @@ class mrp_workspace extends class_base
 		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer_current",
+			"branch_id" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -5202,7 +5248,7 @@ class mrp_workspace extends class_base
 		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer_current",
+			"branch_id" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -5231,7 +5277,7 @@ class mrp_workspace extends class_base
 		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer_current",
+			"branch_id" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -5260,7 +5306,7 @@ class mrp_workspace extends class_base
 		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer_current",
+			"branch_id" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -5289,7 +5335,7 @@ class mrp_workspace extends class_base
 		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer_current",
+			"branch_id" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -5318,7 +5364,7 @@ class mrp_workspace extends class_base
 		return $arr["post_ru"];
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer_current",
+			"branch_id" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -5832,6 +5878,7 @@ class mrp_workspace extends class_base
 		$arr["no_edit"] = 1;
 		$job = obj($arr["request"]["pj_job"]);
 		$arr["obj_inst"] = obj($job->prop("project"));
+		$arr["request"]["group"] = isset($_GET["branch_id"]) ? $_GET["branch_id"] : "grp_printer_current";
 		$case->create_workflow_table($arr);
 	}
 

@@ -779,18 +779,21 @@
             <caption>Skaala aja&amp;amp;uuml;hik</caption>
       </property>
       <property>
+            <name>printer_tree</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>treeview</type>
+            <parent>printer_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
             <name>printer_legend</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <no_caption>1</no_caption>
             <parent>printer_legend_box</parent>
@@ -800,33 +803,21 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>printer_right</parent>
       </property>
       <property>
             <name>printer_jobs</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>table</type>
             <no_caption>1</no_caption>
+            <parent>printer_right</parent>
             <store>no</store>
       </property>
       <property>
@@ -834,34 +825,22 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>printer_right</parent>
       </property>
       <property>
             <name>pj_toolbar</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>printer_right</parent>
             <caption>Muuda staatust</caption>
       </property>
       <property>
@@ -869,33 +848,21 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <parent>printer_right</parent>
       </property>
       <property>
             <name>pj_errors</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Vead</caption>
       </property>
       <property>
@@ -903,14 +870,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
@@ -924,14 +884,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>comment_hbox</parent>
@@ -942,17 +895,11 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
+            <parent>printer_right</parent>
             <caption>T&amp;amp;ouml;&amp;amp;ouml; andmed</caption>
       </property>
       <property>
@@ -960,16 +907,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Algus</caption>
       </property>
       <property>
@@ -977,16 +918,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Plaanitud kestus (h)</caption>
       </property>
       <property>
@@ -994,16 +929,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>datetime_select</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Arvatav j&amp;amp;auml;tkamisaeg</caption>
       </property>
       <property>
@@ -1011,16 +940,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>textbox</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Arvatav l&amp;amp;otilde;petamiseks kuluv aeg (h)</caption>
       </property>
       <property>
@@ -1028,16 +951,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>submit</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Salvesta</caption>
       </property>
       <property>
@@ -1045,14 +962,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>resource_hbox</parent>
@@ -1064,14 +974,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>resource_hbox</parent>
@@ -1082,16 +985,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Staatus</caption>
       </property>
       <property>
@@ -1099,17 +996,11 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
+            <parent>printer_right</parent>
             <caption>Projekti andmed</caption>
       </property>
       <property>
@@ -1117,16 +1008,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Formaat</caption>
       </property>
       <property>
@@ -1134,16 +1019,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Sisu lk arv</caption>
       </property>
       <property>
@@ -1151,16 +1030,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Kaane lk arv</caption>
       </property>
       <property>
@@ -1168,16 +1041,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Sisu v&amp;amp;auml;rvid</caption>
       </property>
       <property>
@@ -1185,16 +1052,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Sisu v&amp;amp;auml;rvid Notes</caption>
       </property>
       <property>
@@ -1202,16 +1063,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Sisu lakk/muu</caption>
       </property>
       <property>
@@ -1219,16 +1074,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Kaane v&amp;amp;auml;rvid</caption>
       </property>
       <property>
@@ -1236,16 +1085,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Kaane v&amp;amp;auml;rvid Notes</caption>
       </property>
       <property>
@@ -1253,16 +1096,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Kaane lakk/muu</caption>
       </property>
       <property>
@@ -1270,16 +1107,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Sisu paber</caption>
       </property>
       <property>
@@ -1287,16 +1118,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Kaane paber</caption>
       </property>
       <property>
@@ -1304,16 +1129,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Tr&amp;amp;uuml;kiarv</caption>
       </property>
       <property>
@@ -1321,16 +1140,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Tr&amp;amp;uuml;kise ehitus</caption>
       </property>
       <property>
@@ -1338,16 +1151,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Kromalin</caption>
       </property>
       <property>
@@ -1355,16 +1162,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>Makett</caption>
       </property>
       <property>
@@ -1372,16 +1173,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
+            <parent>printer_right</parent>
             <caption>N&amp;amp;auml;idis</caption>
       </property>
       <property>
@@ -1389,17 +1184,11 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
+            <parent>printer_right</parent>
             <caption>Projekti t&amp;amp;ouml;&amp;amp;ouml;voog</caption>
       </property>
       <property>
@@ -1407,17 +1196,11 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_done</num_1>
-                  <num_2>grp_printer_aborted</num_2>
-                  <num_3>grp_printer_in_progress</num_3>
-                  <num_4>grp_printer_startable</num_4>
-                  <num_5>grp_printer_notstartable</num_5>
-            </group>
+            <group>grp_printer</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>printer_right</parent>
       </property>
       <property>
             <name>select_session_resource</name>
@@ -1553,36 +1336,6 @@
                   <caption>Operaatori vaade</caption>
                   <submit>no</submit>
             </grp_printer>
-            <grp_printer_current>
-                  <caption>Jooksvad t&amp;amp;ouml;&amp;amp;ouml;d</caption>
-                  <parent>grp_printer</parent>
-                  <submit>no</submit>
-            </grp_printer_current>
-            <grp_printer_done>
-                  <caption>Tehtud t&amp;amp;ouml;&amp;amp;ouml;d</caption>
-                  <parent>grp_printer</parent>
-                  <submit>no</submit>
-            </grp_printer_done>
-            <grp_printer_aborted>
-                  <caption>Katkestatud t&amp;amp;ouml;&amp;amp;ouml;d</caption>
-                  <parent>grp_printer</parent>
-                  <submit>no</submit>
-            </grp_printer_aborted>
-            <grp_printer_in_progress>
-                  <caption>K&amp;amp;otilde;ik t&amp;amp;ouml;&amp;amp;ouml;s olevad</caption>
-                  <parent>grp_printer</parent>
-                  <submit>no</submit>
-            </grp_printer_in_progress>
-            <grp_printer_startable>
-                  <caption>K&amp;amp;otilde;ik t&amp;amp;ouml;&amp;amp;ouml;d mida oleks v&amp;amp;otilde;imalik alustada</caption>
-                  <parent>grp_printer</parent>
-                  <submit>no</submit>
-            </grp_printer_startable>
-            <grp_printer_notstartable>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;d, mida ei ole veel v&amp;amp;otilde;imalik alustada</caption>
-                  <parent>grp_printer</parent>
-                  <submit>no</submit>
-            </grp_printer_notstartable>
             <grp_login_select_res>
                   <caption>Vali kasutatav ressurss</caption>
             </grp_login_select_res>
@@ -1764,45 +1517,52 @@
                   <parent>vsplitbox2</parent>
                   <group>grp_settings_def</group>
             </right_column>
+            <printer_master>
+                  <type>hbox</type>
+                  <width>25%:75%</width>
+                  <group>grp_printer</group>
+                  <area_caption></area_caption>
+            </printer_master>
+            <printer_left>
+                  <type>vbox</type>
+                  <parent>printer_master</parent>
+                  <group>grp_printer</group>
+                  <area_caption></area_caption>
+            </printer_left>
+            <printer_tree>
+                  <type>vbox</type>
+                  <parent>printer_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;puu</area_caption>
+                  <group>grp_printer</group>
+            </printer_tree>
+            <printer_right>
+                  <type>vbox</type>
+                  <parent>printer_master</parent>
+                  <area_caption>T</area_caption>
+                  <group>grp_printer</group>
+            </printer_right>
             <printer_legend_box>
                   <type>vbox</type>
                   <no_caption>1</no_caption>
                   <closeable>0</closeable>
-                  <group>
-                        <num_0>grp_printer_current</num_0>
-                        <num_1>grp_printer_done</num_1>
-                        <num_2>grp_printer_aborted</num_2>
-                        <num_3>grp_printer_in_progress</num_3>
-                        <num_4>grp_printer_startable</num_4>
-                        <num_5>grp_printer_notstartable</num_5>
-                  </group>
+                  <parent>printer_right</parent>
+                  <group>grp_printer</group>
                   <area_caption></area_caption>
             </printer_legend_box>
             <comment_hbox>
                   <type>hbox</type>
                   <width>40%:60%</width>
-                  <group>
-                        <num_0>grp_printer_current</num_0>
-                        <num_1>grp_printer_done</num_1>
-                        <num_2>grp_printer_aborted</num_2>
-                        <num_3>grp_printer_in_progress</num_3>
-                        <num_4>grp_printer_startable</num_4>
-                        <num_5>grp_printer_notstartable</num_5>
-                  </group>
+                  <parent>printer_right</parent>
+                  <group>grp_printer</group>
                   <area_caption></area_caption>
                   <caption>Kommentaar</caption>
             </comment_hbox>
             <resource_hbox>
                   <type>hbox</type>
                   <width>50%:50%</width>
-                  <group>
-                        <num_0>grp_printer_current</num_0>
-                        <num_1>grp_printer_done</num_1>
-                        <num_2>grp_printer_aborted</num_2>
-                        <num_3>grp_printer_in_progress</num_3>
-                        <num_4>grp_printer_startable</num_4>
-                        <num_5>grp_printer_notstartable</num_5>
-                  </group>
+                  <parent>printer_right</parent>
+                  <group>grp_printer</group>
                   <area_caption></area_caption>
                   <caption>Ressurss</caption>
             </resource_hbox>
