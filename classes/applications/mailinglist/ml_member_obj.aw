@@ -64,7 +64,7 @@ class ml_member_obj extends _int_object
 
 		return $ret;
 	}
-
+/*
 	function save()
 	{
 		$oid = parent::id();
@@ -147,7 +147,7 @@ class ml_member_obj extends _int_object
 		}
 		return parent::save();
 	}
-
+*/
 	function delete()
 	{
 		$ol = new object_list(array(
