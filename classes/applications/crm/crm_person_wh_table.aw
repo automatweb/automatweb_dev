@@ -12,12 +12,40 @@
 	@property ppl type=chooser reltype=RELTYPE_PERSON multiple=1 store=connect editonly=1 orient=vertical
 	@caption Isikud
 
-@default group=wanted_hours
+@default group=modify_hours
 
 	@property wanted_hours_tb type=toolbar store=no no_caption=1
 	@property wanted_hours_table type=table store=no no_caption=1
 
+@default group=current_hours
+
+	@property current_hours_table type=table store=no no_caption=1
+
+@default group=hour_entries
+
+	@property hour_entry_tb type=toolbar no_caption=1 store=no
+
+	@layout hour_entry_split type=hbox width=20%:80%
+
+		@layout hour_entry_left type=vbox parent=hour_entry_split
+
+			@layout hour_entry_tree type=vbox closeable=1 area_caption=Aja&nbsp;filter  parent=hour_entry_left
+
+				@property hour_entry_tree type=treeview store=no no_caption=1 parent=hour_entry_tree
+
+
+		@property hour_entry_table type=table store=no no_caption=1 parent=hour_entry_split
+
+
+
 @groupinfo wanted_hours caption="Kohustuslikud tunnid" submit=no
+
+	@groupinfo current_hours caption="Kehtivad tunnid" parent=wanted_hours submit=no
+	@groupinfo modify_hours caption="Muuda kehtivaid tunde" parent=wanted_hours submit=no
+
+@groupinfo hour_entries caption="Reaalsed tunnid" submit=no
+
+
 
 @reltype OWNER value=1 clid=CL_CRM_COMPANY
 @caption Omanik
@@ -242,6 +270,177 @@ class crm_person_wh_table extends class_base
 	{	
 		$arr["prop"]["vcl_inst"]->add_delete_button();
 		$arr["prop"]["vcl_inst"]->add_save_button();
+	}
+
+	private function _init_current_hours_table($t)
+	{
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "right",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "hours_cust",
+			"caption" => t("Muutuvtunnid"),
+			"align" => "right",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "hours_other",
+			"caption" => t("P&uuml;&uuml;situnnid"),
+			"align" => "right",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "hours_total",
+			"caption" => t("Kokku tunnid"),
+			"align" => "right",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+	}
+
+	function _get_current_hours_table($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_current_hours_table($t);
+
+		$overview = $arr["obj_inst"]->get_current_required_hours();
+		$sums = array("hours_total" => 0, "hours_cust" => 0, "hours_other" => 0);
+		foreach($overview as $entry)
+		{
+			$t->define_data(array(
+				"person" => obj($entry->person)->name,
+				"hours_total" => $entry->hours_total,
+				"hours_cust" => $entry->hours_cust,
+				"hours_other" => $entry->hours_other,
+			));
+			$sums["hours_total"] += $entry->hours_total;
+			$sums["hours_cust"] += $entry->hours_cust;
+			$sums["hours_other"] += $entry->hours_other;
+		}
+		$t->set_default_sortby("person");
+		$t->set_caption(t("Isikute kohustuslikud t&ouml;&ouml;tunnid"));
+		$t->sort_by();
+		$t->set_sortable(false);
+		
+		$t->define_data(array(
+			"person" => html::strong(t("Summa")),
+			"hours_total" => html::strong($sums["hours_total"]),
+			"hours_cust" => html::strong($sums["hours_cust"]),
+			"hours_other" => html::strong($sums["hours_other"]),
+		));
+	}
+
+	function _get_hour_entry_tree($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON_WH_TABLE_ENTRY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"wh_table" => $arr["obj_inst"]->id()
+		));
+		$dates = array();
+		foreach($ol->arr() as $o)
+		{
+			$dates[$o->year][$o->month] = 1;
+		}
+
+		$tv = $arr["prop"]["vcl_inst"];
+
+		foreach($dates as $year => $months)
+		{
+			$tv->add_item(0, array(
+				"id" => "year_".$year,
+				"name" => $year,
+				"url" => aw_url_change_var("year", $year, aw_url_change_var("month", null))
+			));
+			foreach($months as $month => $one)
+			{
+				$tv->add_item("year_".$year, array(
+					"id" => "mon_".$month,
+					"name" => $month,
+					"url" => aw_url_change_var("month", $month, aw_url_change_var("year",$year))
+				));
+			}
+		}
+	}
+
+	function _get_hour_entry_tb($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_CRM_PERSON_WH_TABLE_ENTRY), $arr["obj_inst"]->id(), null, array("workspace" => $arr["obj_inst"]->id()));
+		$tb->add_delete_button();
+	}
+
+	private function _init_hour_entry_table($t)
+	{
+		$t->set_caption(t("T&ouml;&ouml;tundide sisestused"));
+		$t->define_field(array(
+			"name" => "year",
+			"caption" => t("Aasta"),
+			"sortable" => 1,
+			"align" => "right",
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "month",
+			"caption" => t("Kuu"),
+			"sortable" => 1,
+			"align" => "right",
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+	}
+
+	function _get_hour_entry_table($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_hour_entry_table($t);
+
+		$filt = array(
+			"class_id" => CL_CRM_PERSON_WH_TABLE_ENTRY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"wh_table" => $arr["obj_inst"]->id()
+		);
+
+		if (!empty($arr["request"]["year"]))
+		{
+			$filt["year"] = $arr["request"]["year"];
+		}		
+		if (!empty($arr["request"]["month"]))
+		{
+			$filt["month"] = $arr["request"]["month"];
+		}		
+
+		if (empty($filt["month"]) && empty($filt["year"]))
+		{
+			$filt["limit"] = 10;
+			$filt[] = new obj_predicate_sort(array("year" => "desc", "month" => "desc"));
+		}
+
+		$ol = new object_list($filt);
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"year" => $o->year,
+				"month" => $o->month,
+				"change" => html::obj_change_url($o),
+				"oid" => $o->id()
+			));
+		}
 	}
 }
 

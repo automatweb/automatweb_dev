@@ -21,4 +21,14 @@ class obj_predicate_sort
 		}
 		return $rv;
 	}
+
+	function __toString()
+	{
+		$s ="";
+		foreach(safe_array($this->arr) as $prop => $direction)
+		{
+			$s .= $prop."=>".$direction;
+		}
+		return $s;
+	}
 }

@@ -25,7 +25,7 @@
       <property>
             <name>wanted_hours_tb</name>
             <table>aw_crm_person_wh_table</table>
-            <group>wanted_hours</group>
+            <group>modify_hours</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -34,11 +34,49 @@
       <property>
             <name>wanted_hours_table</name>
             <table>aw_crm_person_wh_table</table>
-            <group>wanted_hours</group>
+            <group>modify_hours</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>wanted_hours_table</field>
+      </property>
+      <property>
+            <name>current_hours_table</name>
+            <table>aw_crm_person_wh_table</table>
+            <group>current_hours</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>current_hours_table</field>
+      </property>
+      <property>
+            <name>hour_entry_tb</name>
+            <table>aw_crm_person_wh_table</table>
+            <group>hour_entries</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>hour_entry_tb</field>
+      </property>
+      <property>
+            <name>hour_entry_tree</name>
+            <table>aw_crm_person_wh_table</table>
+            <group>hour_entries</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>hour_entry_tree</parent>
+            <field>hour_entry_tree</field>
+      </property>
+      <property>
+            <name>hour_entry_table</name>
+            <table>aw_crm_person_wh_table</table>
+            <group>hour_entries</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>hour_entry_split</parent>
+            <field>hour_entry_table</field>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_PERSON_WH_TABLE</syslog_type>
@@ -53,6 +91,20 @@
                   <caption>Kohustuslikud tunnid</caption>
                   <submit>no</submit>
             </wanted_hours>
+            <current_hours>
+                  <caption>Kehtivad tunnid</caption>
+                  <parent>wanted_hours</parent>
+                  <submit>no</submit>
+            </current_hours>
+            <modify_hours>
+                  <caption>Muuda kehtivaid tunde</caption>
+                  <parent>wanted_hours</parent>
+                  <submit>no</submit>
+            </modify_hours>
+            <hour_entries>
+                  <caption>Reaalsed tunnid</caption>
+                  <submit>no</submit>
+            </hour_entries>
       </groupinfo>
       <tableinfo>
             <aw_crm_person_wh_table>
@@ -73,5 +125,26 @@
                   <caption>Isik</caption>
             </PERSON>
       </reltypes>
+      <layout>
+            <hour_entry_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>hour_entries</group>
+                  <area_caption></area_caption>
+            </hour_entry_split>
+            <hour_entry_left>
+                  <type>vbox</type>
+                  <parent>hour_entry_split</parent>
+                  <group>hour_entries</group>
+                  <area_caption></area_caption>
+            </hour_entry_left>
+            <hour_entry_tree>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Aja&amp;amp;nbsp;filter</area_caption>
+                  <parent>hour_entry_left</parent>
+                  <group>hour_entries</group>
+            </hour_entry_tree>
+      </layout>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.27 2008/01/31 13:52:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.28 2009/02/11 10:30:39 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -36,7 +36,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_menu)
 @caption Otsi ainult m&auml;rks&otilde;nadest
 
 @reltype SEARCH_LOCATION value=1 clid=CL_MENU
-@caption Otsingu lähtekoht
+@caption Otsingu l&auml;tekoht
 
 @reltype KW value=2 clid=CL_KEYWORD
 @caption M&auml;rks&otilde;na
@@ -110,7 +110,7 @@ class site_search_content_grp extends class_base
 		));
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => t("k.a. alammenüüd"),
+			"caption" => t("k.a. alammen&uuml;&uuml;d"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -202,7 +202,7 @@ class site_search_content_grp extends class_base
 			{
 				$ret[$m] = $m;
 				$ot = new object_tree(array(
-					"class_id" => array(CL_MENU, CL_PROMO),
+					"class_id" => array(CL_MENU, CL_PROMO, CL_CRM_SECTOR),
 					"parent" => $m,
 					"status" => ($notact[$m] ? array(STAT_ACTIVE,STAT_NOTACTIVE) : STAT_ACTIVE),
 					"sort_by" => "objects.parent",
@@ -269,7 +269,7 @@ class site_search_content_grp extends class_base
 		if (aw_global_get("uid") == "")
 		{
 			$ol = new object_list(array(
-				"class_id" => array(CL_MENU, CL_PROMO),
+				"class_id" => array(CL_MENU, CL_PROMO, CL_CRM_SECTOR),
 				"oid" => $ret,
 				"site_id" => array(),
 				"lang_id"  => array()
