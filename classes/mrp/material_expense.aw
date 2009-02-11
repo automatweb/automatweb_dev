@@ -15,11 +15,17 @@
 @property amount type=textbox datatype=int
 @caption Kogus
 
+@property unit type=relpicker reltype=RELTYPE_UNIT
+@caption &Uuml;hik
+
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption Materjal
 
 @reltype JOB value=2 clid=CL_MRP_JOB
 @caption Tegevus
+
+@reltype UNIT value=3 clid=CL_UNIT
+@caption &Uuml;hik
 */
 
 class material_expense extends class_base
@@ -83,6 +89,7 @@ class material_expense extends class_base
 		{
 			case "product":
 			case "job":
+			case "unit":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

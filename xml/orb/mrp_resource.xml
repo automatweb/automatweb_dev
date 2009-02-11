@@ -18,6 +18,12 @@
 				</arguments>
 			</function>
 		</action>
-
+		
+		<action name="get_materials_tree_level">
+			<function name="get_materials_tree_level">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>

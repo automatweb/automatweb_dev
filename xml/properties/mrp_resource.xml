@@ -226,17 +226,6 @@
             <store>no</store>
       </property>
       <property>
-            <name>materials_tbl</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_resource_materials</group>
-            <type>table</type>
-            <parent>materials_split_right</parent>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
             <name>materials_sel_tbl</name>
             <table>objects</table>
             <field>meta</field>

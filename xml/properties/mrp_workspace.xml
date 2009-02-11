@@ -582,6 +582,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_WAREHOUSE</reltype>
             <parent>left_column</parent>
+            <multiple>1</multiple>
             <caption>Materjalide ladu</caption>
       </property>
       <property>

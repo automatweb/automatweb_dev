@@ -95,7 +95,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 
 		@layout materials_split_right parent=materials_split type=vbox
 
-			@property materials_tbl type=table parent=materials_split_right no_caption=1
 			@property materials_sel_tbl type=table parent=materials_split_right no_caption=1
 
 @groupinfo transl caption=T&otilde;lgi
@@ -125,8 +124,6 @@ classload("mrp/mrp_header");
 
 class mrp_resource extends class_base
 {
-	private $mrp_error = "";
-
 	function mrp_resource()
 	{
 		$this->resource_states = array(
@@ -300,7 +297,7 @@ class mrp_resource extends class_base
 			case "materials_tree":
 				$this->mk_materials_tree($arr);
 				break;
-
+		
 			case "materials_tbl":
 				$this->mk_materials_tbl($arr);
 				break;
@@ -361,6 +358,7 @@ class mrp_resource extends class_base
 		if($arr["group"] == "grp_resource_materials")
 		{
 			$arr["pgtf"] = automatweb::$request->arg("pgtf");
+			$arr["add_ids"] = "";
  		}
 	}
 
@@ -464,14 +462,14 @@ class mrp_resource extends class_base
 				break;
 
 			case "work_hrs_recur":
-				if (($arr["request"]["work_hrs_recur_action"] !== "delete") and is_array ($prop["value"]))
+				if (($arr["request"]["work_hrs_recur_action"] != "delete") and is_array ($prop["value"]))
 				{
 					$prop["value"]["recur_type"] = RECUR_DAILY;
 					$prop["value"]["interval_daily"] = 1;
 				}
 
 			case "unavailable_recur":
-				if (($arr["request"]["work_hrs_recur_action"] !== "delete") and ($arr["request"]["unavailable_recur_action"] != "delete") and is_array ($prop["value"]))
+				if (($arr["request"]["work_hrs_recur_action"] != "delete") and ($arr["request"]["unavailable_recur_action"] != "delete") and is_array ($prop["value"]))
 				{
 					$applicable_types = array (
 						RECUR_DAILY,
@@ -589,10 +587,15 @@ class mrp_resource extends class_base
 			$this_object->save ();
 		}
 
-		if($arr["request"]["group"] === "grp_resource_materials")
+		if($arr["request"]["group"] == "grp_resource_materials")
 		{
-			foreach($arr["request"]["add_ids"] as $oid)
+			$add_ids = explode(",", $arr["request"]["add_ids"]);
+			foreach($add_ids as $oid)
 			{
+				if($arr["request"]["rem_ids"][$oid])
+				{
+					continue;
+				}
 				$prod = obj($oid);
 				$o = obj();
 				$o->set_class_id(CL_MATERIAL_EXPENSE_CONDITION);
@@ -606,7 +609,10 @@ class mrp_resource extends class_base
 			foreach($arr["request"]["rem_ids"] as $oid)
 			{
 				$o = obj($oid);
-				$o->delete();
+				if($o->class_id() == CL_MATERIAL_EXPENSE_CONDITION)
+				{
+					$o->delete();
+				}
 			}
 		}
 	}
@@ -1635,82 +1641,192 @@ class mrp_resource extends class_base
 		$tb->add_save_button();
 	}
 
+	function callback_generate_scripts($arr)
+	{
+		if($arr["request"]["group"] == "grp_resource_materials")
+		{
+			$script = "
+
+			var tbls = $('.awmenuedittabletag')
+			var set_ids = new Array()
+
+			function add_attribute(elem, attr, value)
+			{
+				var newAttr = document.createAttribute(attr);
+    				newAttr.nodeValue = value
+				elem.setAttributeNode(newAttr); 
+			}
+			
+			function add_row(add_id, add_url, add_text)
+			{
+				if(set_ids[add_id])
+				{
+					return;
+				}
+
+				set_ids[add_id] = 1
+
+				var newrow = document.createElement('tr')
+				add_attribute(newrow, 'class', 'awmenuedittabletrow')
+	
+				var cell1 = document.createElement('td')
+				add_attribute(cell1, 'class', 'awmenuedittabletext')
+				add_attribute(cell1, 'align', 'center')
+				add_attribute(cell1, 'width', '55')
+				add_attribute(cell1, 'style', 'background: #CCFFCC')
+	
+				var chb1 = document.createElement('input')
+				add_attribute(chb1, 'class', 'checkbox')
+				add_attribute(chb1, 'type', 'checkbox')
+				add_attribute(chb1, 'name', 'rem_ids['+add_id+']')
+				add_attribute(chb1, 'value', add_id)
+				cell1. appendChild(chb1)
+	
+				var cell2 = document.createElement('td')
+				add_attribute(cell2, 'style', 'background: #CCFFCC')
+				add_attribute(cell2, 'class', 'awmenuedittabletext')
+				
+				var url2 = document.createElement('a')
+				add_attribute(url2, 'href', add_url)
+				var urlcontent2 = document.createTextNode(add_text)
+				url2.appendChild(urlcontent2)
+				cell2. appendChild(url2)
+	
+				newrow.appendChild(cell1)
+				newrow.appendChild(cell2)
+				tbls[0].appendChild(newrow)
+
+				document.forms.changeform.add_ids.value += ','+add_id
+			}
+			";
+
+			return $script;
+		}
+	}
+
 	function mk_materials_tree($arr)
 	{
 		$whi = get_instance(CL_SHOP_WAREHOUSE);
 		$owner = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 		if($owner)
 		{
-			$whid = $owner->prop("warehouse");
+			$whs = $owner->prop("warehouse");
 		}
-		if($this->can("view", $whid))
+		if(count($whs))
 		{
-			$arr["warehouses"] = array($whid);
-			$whi->mk_prodg_tree(&$arr);
+			$arr["warehouses"] = $whs;
+			$pt = $whi->get_warehouse_configs($arr, "prod_type_fld");
+			$root_name = t("Artiklikategooriad");
+			$ol = new object_list(array(
+				"parent" => $pt,
+				"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+			$gbf = $this->mk_my_orb("get_materials_tree_level",array(
+				"set_retu" => get_ru(),
+				"pgtf" => automatweb::$request->arg("pgtf"),
+				"parent" => " ",
+			));
+	
+			$tree = $arr["prop"]["vcl_inst"];
+			$tree->start_tree(array(
+				"has_root" => true,
+				"root_name" => $root_name,
+				"root_url" => aw_url_change_var(array("pgtf"=> null)),
+				"root_icon" => icons::get_icon_url(CL_MENU),
+				"type" => TREE_DHTML,
+				"tree_id" => "materials_tree",
+				"persist_state" => 1,
+				"get_branch_func" => $gbf,
+			));
+			foreach($ol->arr() as $o)
+			{
+				$url = aw_url_change_var(array("pgtf" => $o->id()));
+				$this->insert_materials_tree_item($tree, $o, $url);
+			}
+			$tree->set_selected_item(automatweb::$request->arg("pgtf"));
 		}
 	}
 
-	function mk_materials_tbl($arr)
+	/**
+		@attrib name=get_materials_tree_level all_args=1
+	**/
+	function get_materials_tree_level($arr)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
+		parse_str($_SERVER['QUERY_STRING'], $arr);
+		$tree = get_instance("vcl/treeview");
+		$arr["parent"] = trim($arr["parent"]);
+		$tree->start_tree(array (
+			"type" => TREE_DHTML,
+			"branch" => 1,
+			"tree_id" => "materials_tree",
+			"persist_state" => 1,
+		));
 
-		$cat = $arr["request"]["pgtf"];
-		if ($this->can("view", $cat))
+		$ol = new object_list(array(
+			"parent" => $arr["parent"],
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+
+		$po = obj($arr["parent"]);
+		$conn = $po->connections_to(array(
+			"from.class_id" => CL_SHOP_PRODUCT,
+			"type" => "RELTYPE_CATEGORY",
+		));
+		foreach($conn as $c)
 		{
-			$t->set_caption(t("Materjalide nimekiri"));
-			$t->define_field(array(
-				"name" => "oid",
-				"caption" => t("Lisa"),
-				"align" => "center",
-				"width" => 55,
-			));
-			$t->define_field(array(
-				"name" => "name",
-				"caption" => t("Nimi"),
-			));
+			$ol->add($c->from());
+		}
 
-			$cato = obj($cat);
-			$conn = $cato->connections_to(array(
-				"type" => "RELTYPE_CATEGORY",
+		foreach($ol->arr() as $o)
+		{
+			if($o->class_id() != CL_SHOP_PRODUCT)
+			{
+				$params["pgtf"] = $o->id();
+				$url = aw_url_change_var($params, false, $arr["set_retu"]);
+			}
+			else
+			{
+				$url = "javascript:add_row('".$o->id()."', '".$this->mk_my_orb("change", array("id" => $o->id(), "return_url" => get_ru()), CL_SHOP_PRODUCT)."', '".str_replace(array("'", '"'), array("", ""), $o->name())."')";
+			}
+			$this->insert_materials_tree_item($tree, $o, $url);
+		}
+
+		$tree->set_selected_item(trim(automatweb::$request->arg("pgtf")));
+		die($tree->finalize_tree());
+	}
+
+	private function insert_materials_tree_item($tree, $o, $url)
+	{
+		$clid = $o->class_id();
+		$tree->add_item(0, array(
+			"url" => $url,
+			"name" => $o->name(),
+			"id" => $o->id(),
+			"iconurl" => icons::get_icon_url(($clid == CL_SHOP_PRODUCT)?$clid:CL_MENU),
+		));
+		$check_ol = new object_list(array(
+			"parent" => $o->id(),
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+		));
+		if($clid == CL_SHOP_PRODUCT_CATEGORY)
+		{
+			$conn = $o->connections_to(array(
 				"from.class_id" => CL_SHOP_PRODUCT,
+				"type" => "RELTYPE_CATEGORY",
 			));
-			$oids = array();
-			foreach($conn as $c)
+			if(count($conn))
 			{
-				$oids[$c->prop("from")] = $c->prop("from");
+				$subitems = 1;
 			}
+		}
 
-			$params = array("class_id" => CL_SHOP_PRODUCT);
-
-			if (count($oids))
-			{
-				$params["oid"] = $oids;
-			}
-
-			$ol = new object_list($params);
-
-			$ch_ol = new object_list(array(
-				"class_id" => CL_MATERIAL_EXPENSE_CONDITION,
-				"resource" => $arr["obj_inst"]->id(),
-				"product" => $ol->ids(),
-			));
-			$existant = array();
-			foreach($ch_ol->arr() as $o)
-			{
-				$pid = $o->prop("product");
-				$existant[$pid] = $pid;
-			}
-
-			foreach($ol->names() as $oid => $name)
-			{
-				$t->define_data(array(
-					"oid" => $existant[$oid] ? null : html::checkbox(array(
-						"name" => "add_ids[".$oid."]",
-						"value" => $oid,
-					)),
-					"name" => html::obj_change_url(obj($oid)),
-				));
-			}
+		if($check_ol->count() || $subitems)
+		{
+			$tree->add_item($o->id(), array());
 		}
 	}
 

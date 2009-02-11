@@ -1494,17 +1494,17 @@ class mrp_job extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
-			"name" => "is_used",
-			"caption" => t("Kasutusel"),
-			"align"=> "center",
-		));
-		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Materjal"),
 		));
 		$t->define_field(array(
 			"name" => "amount",
 			"caption" => t("Kogus"),
+			"align"=> "center",
+		));
+		$t->define_field(array(
+			"name" => "unit",
+			"caption" => t("&Uuml;hik"),
 			"align"=> "center",
 		));
 		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
@@ -1516,31 +1516,59 @@ class mrp_job extends class_base
 			$conn2 = $arr["obj_inst"]->connections_to(array(
 				"from.class_id" => CL_MATERIAL_EXPENSE,
 			));
-			$amts = $arr["obj_inst"]->meta("expense_amounts");
 			foreach($conn2 as $c)
 			{
 				$o = $c->from();
 				$prod = $o->prop("product");
 				$prods[$prod] = array(
 					"amount" => $o->prop("amount"),
-					"expense_id" => $o->id(),
+					"unit" => $o->prop("unit"),
 				);
 			}
 			foreach($conn as $c)
 			{
 				$prod = $c->from()->prop("product");
+				$po = obj($prod);
+				$units = $po->instance()->get_units($po);
+				$unitopts = array("" => t("--vali--"));
+				foreach($units as $i => $unit)
+				{
+					if(!$unit)
+					{
+						unset($units[$i]);
+					}
+					else
+					{
+						$unitopts[$unit] = obj($unit)->name();
+					}
+				}
+				if(count($units) == 1)
+				{
+					$unitselect = obj(reset($units))->name().html::hidden(array(
+						"name" => "unit[".$prod."]",
+						"value" => reset($units),
+					));
+				}
+				elseif(count($units))
+				{
+					$unitselect = html::select(array(
+						"name" => "unit[".$prod."]",
+						"options" => $unitopts,
+						"value" => $prods[$prod]["unit"] ? $prods[$prod]["unit"] : "",
+					));
+				}
+				else
+				{
+					$unitselect = "-";
+				}
 				$t->define_data(array(
-					"is_used" => html::checkbox(array(
-						"name" => "is_used[".$prod."]",
-						"value" => $prod,
-						"checked" => isset($prods[$prod]),
-					)),
-					"name" => html::obj_change_url(obj($prod)),
+					"name" => html::obj_change_url($po),
 					"amount" => html::textbox(array(
 						"name" => "amount[".$prod."]",
 						"size" => 4,
-						"value" => $prods[$prod]["amount"] ? $prods[$prod]["amount"] : $amts[$prod],
+						"value" => $prods[$prod]["amount"] ? $prods[$prod]["amount"] : 0,
 					)),
+					"unit" => $unitselect,
 				));
 			}
 		}
@@ -1557,7 +1585,6 @@ class mrp_job extends class_base
 			$conn2 = $arr["obj_inst"]->connections_to(array(
 				"from.class_id" => CL_MATERIAL_EXPENSE,
 			));
-			$amts = $arr["obj_inst"]->meta("expense_amounts");
 			foreach($conn2 as $c)
 			{
 				$o = $c->from();
@@ -1567,25 +1594,28 @@ class mrp_job extends class_base
 			foreach($conn as $c)
 			{
 				$prod = $c->from()->prop("product");
-				if(!$prods[$prod] && $arr["request"]["is_used"][$prod])
+				if(!$prods[$prod] && $arr["request"]["amount"][$prod])
 				{
 					$o = obj();
 					$o->set_class_id(CL_MATERIAL_EXPENSE);
 					$o->set_parent($arr["obj_inst"]->id());
 					$o->set_name(sprintf(t("%s kulu %s jaoks"), obj($prod)->name(), $arr["obj_inst"]->name()));
 					$o->set_prop("product", $prod);
+					if($arr["request"]["unit"][$prod])
+					{
+						$o->set_prop("unit", $arr["request"]["unit"][$prod]);
+					}
 					$o->set_prop("amount", $arr["request"]["amount"][$prod]);
 					$o->set_prop("job", $arr["obj_inst"]->id());
 					$o->save();
 				}
 				else
 				{
-					if($prods[$prod] && !$arr["request"]["is_used"][$prod])
+					if($prods[$prod] && !$arr["request"]["amount"][$prod])
 					{
 						$eo = obj($prods[$prod]);
 						$eo->delete();
 					}
-					$amts[$prod] = $arr["request"]["amount"][$prod];
 				}
 			}
 			$arr["obj_inst"]->set_meta("expense_amounts", $amts);

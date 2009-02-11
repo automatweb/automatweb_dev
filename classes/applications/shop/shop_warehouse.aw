@@ -2036,7 +2036,6 @@ class shop_warehouse extends class_base
 			$url = aw_url_change_var(array("pgtf" => $o->id(), $group."_s_art_cat" => $o->id(), "ptf" => null));
 			$this->insert_prodg_tree_item($tree, $o, $url);
 		}
-
 		$tree->set_selected_item(automatweb::$request->arg("pgtf"));
 	}
 
@@ -3573,7 +3572,7 @@ class shop_warehouse extends class_base
 		return $ol;
 	}
 
-	private function get_warehouse_configs($arr, $prop = null)
+	function get_warehouse_configs($arr, $prop = null)
 	{
 		$cfgs = array();
 		foreach($arr["warehouses"] as $wh)

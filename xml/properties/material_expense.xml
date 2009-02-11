@@ -27,6 +27,15 @@
             <field>amount</field>
             <caption>Kogus</caption>
       </property>
+      <property>
+            <name>unit</name>
+            <table>aw_material_expense</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_UNIT</reltype>
+            <field>unit</field>
+            <caption>&amp;amp;Uuml;hik</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MATERIAL_EXPENSE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -53,6 +62,11 @@
                   <clid>CL_MRP_JOB</clid>
                   <caption>Tegevus</caption>
             </JOB>
+            <UNIT>
+                  <value>3</value>
+                  <clid>CL_UNIT</clid>
+                  <caption>&amp;amp;Uuml;hik</caption>
+            </UNIT>
       </reltypes>
 </properties>
 
