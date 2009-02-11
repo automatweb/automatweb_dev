@@ -82,6 +82,10 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		{
 			$i = get_instance(CL_USER);
 			$tmp = $i->get_current_person();
+			if ($tmp === false)
+			{
+				$tmp = null;
+			}
 			if (is_oid($tmp) && !$i->can("view", $tmp))
 			{
 				$i->create_obj_access($tmp);
@@ -2414,7 +2418,7 @@ function eval_buffer($res)
 		if (is_object($awt) && !empty($GLOBALS["cfg"]["debug"]["profile"]))
 		{
 			$sums = $awt->summaries();
-			
+
 			while(list($k,$v) = each($sums))
 			{
 				$ret.= "$k = $v\n";
