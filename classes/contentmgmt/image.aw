@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.38 2009/02/09 11:43:21 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.39 2009/02/11 19:39:37 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -847,7 +847,7 @@ class image extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$rootdir = $this->cfg["site_basedir"];
+		$rootdir = aw_ini_get("site_basedir");
 		$f1 = substr($file,0,1);
 		$fname = $rootdir . "/img/$f1/" . $file;
 		if ($file)
@@ -867,7 +867,7 @@ class image extends class_base
 
 			if (!$passed)
 			{
-				$rootdir = $this->cfg["site_basedir"];
+				$rootdir = aw_ini_get("site_basedir");
 				$fname = $rootdir . "/files/$f1/" . $file;
 				if (is_file($fname) && is_readable($fname)) 
 				{
@@ -1032,7 +1032,7 @@ class image extends class_base
 			{
 				$fname = $m[1];
 				$first = substr($fname,0,1);
-				$url = $this->cfg["baseurl"] . $imgbaseurl . "/" . $first . "/" . $fname;
+				$url = aw_ini_get("baseurl") . $imgbaseurl . "/" . $first . "/" . $fname;
 				if (substr($url,-11) == "/aw_img.jpg")
 				{
 					$url = str_replace("/aw_img.jpg","",$url);
