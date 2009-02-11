@@ -1,9 +1,5 @@
 <?php
 
-/*
-@classinfo maintainer=voldemar
-*/
-
 $__FILE__ = __FILE__;//!!! to check if works with zend encoder (__FILE__)
 $aw_dir = str_replace("\\", "/", dirname($__FILE__)) . "/";
 $aw_dir = str_replace("//", "/", $aw_dir);
@@ -38,6 +34,7 @@ class automatweb
 			// initialize object lifetime
 			$this->start_time = microtime();
 			$this->mode(self::MODE_DEFAULT);
+			if($_GET["uid"] == "marko") $this->mode(self::MODE_DBG);
 		}
 		else
 		{
@@ -45,16 +42,6 @@ class automatweb
 		}
 	}
 
-	/** Shortcut method for running a typical http www request
-	@attrib api=1 params=pos
-	@param cfg_file required type=string
-		Configuration file absolute path. It is expected to be in an automatweb site directory! I.e. a 'pagecache' directory must be found in that same directory.
-	@returns void
-	@comment
-		A common web request execution script. Creates a server instance, autoloads request. Ends php script when done.
-	@errors
-		Displays critical errors in output. If cfg_file not found, or when a fatal server error occurred.
-	**/
 	public static function run_simple_web_request_bc($cfg_file)
 	{
 		if (!is_readable($cfg_file))
@@ -71,7 +58,7 @@ class automatweb
 
 			automatweb::$instance->load_config_files(array($cfg_file), $cfg_cache_file);
 
-			$request = aw_request::autoload();
+			$request = new aw_request(true);
 			automatweb::$instance->set_request($request);
 			automatweb::$instance->exec();
 			echo automatweb::$result->send();
@@ -79,6 +66,8 @@ class automatweb
 		}
 		catch (Exception $e)
 		{
+			echo nl2br($e);
+
 			try
 			{
 				automatweb::shutdown();
@@ -92,7 +81,7 @@ class automatweb
 				header("HTTP/1.1 500 Server Error");
 			}
 
-			echo "Server Error";
+			echo "<br /><br />" . nl2br($e);
 		}
 
 		exit;
@@ -135,9 +124,6 @@ class automatweb
 		self::$instance = $aw;
 		self::$request = $request;
 		self::$result = $result;
-
-//		require_once(aw_ini_get("classdir")."/core/tm.aw");
-		tm::request_start();
 	}
 
 	/**
@@ -223,7 +209,7 @@ class automatweb
 	{
 		if (!$this->request_loaded)
 		{ // autoload request
-			$request = aw_request::autoload();
+			$request = new aw_request(true);
 			$this->set_request($request);
 		}
 
@@ -253,6 +239,7 @@ class automatweb
 		global $awt;
 		global $section;
 		$awt = new aw_timer();
+
 		if (strpos($_SERVER["REQUEST_URI"], "/automatweb") === false)
 		{
 			// can't use classload here, cause it will be included from within a function and then all kinds of nasty
@@ -273,6 +260,11 @@ class automatweb
 				$GLOBALS["__START"] = microtime(true);
 
 				// parse vars
+				if (isset($_AW_GET_VARS) && is_array($_AW_GET_VARS))
+				{
+					$vars = $vars + $_AW_GET_VARS;
+				}
+
 				$class = self::$request->class_name();
 				$action = self::$request->action();
 
@@ -349,10 +341,8 @@ class automatweb
 					}
 				}
 
-				ob_start();
 				include(AW_DIR . "automatweb/admin_footer" . AW_FILE_EXT);
-				$footer_return = ob_get_clean();
-				self::$result->set_data($content . $footer_return);
+				self::$result->set_data($content);
 			}
 			else
 			{
@@ -474,6 +464,7 @@ class automatweb
 		$this->bc = true;
 		require_once(AW_DIR . "lib/bc" .AW_FILE_EXT);
 		include AW_DIR . "const" . AW_FILE_EXT;
+		$GLOBALS["section"] = $section;
 	}
 }
 
