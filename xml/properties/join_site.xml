@@ -68,6 +68,16 @@
             <caption>Andmete valideerimise kontroller</caption>
       </property>
       <property>
+            <name>after_sbt_controller</name>
+            <table>objects</table>
+            <group>general_ctrl</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_AFTER_SAVE_CTR</reltype>
+            <store>connect</store>
+            <field>after_sbt_controller</field>
+            <caption>Kontroller p&amp;amp;auml;rast liitumist</caption>
+      </property>
+      <property>
             <name>join_properties</name>
             <table>objects</table>
             <group>sel_props</group>
@@ -508,6 +518,11 @@
                   <clid>CL_FORM_CONTROLLER</clid>
                   <caption>Valideerimise kontroller</caption>
             </VALIDATE_CTR>
+            <AFTER_SAVE_CTR>
+                  <value>8</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kontroller p&amp;amp;auml;rast liitumist</caption>
+            </AFTER_SAVE_CTR>
       </reltypes>
 </properties>
 
