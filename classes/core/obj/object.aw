@@ -828,6 +828,7 @@ class object
 
 		$objdata = $GLOBALS["objects"][$this->oid]->get_object_data();
 		$objdata["class_id"] = $param;
+		$objdata["oid"] = $this->oid; // because _int_object doesn't know its own id before save
 		$GLOBALS["object_loader"]->load_new_object($objdata);
 		$GLOBALS["objects"][$this->oid]->set_class_id($param);
 		return $this;
