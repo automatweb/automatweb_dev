@@ -1750,7 +1750,7 @@ class mrp_resource extends class_base
 			$tree->start_tree(array(
 				"has_root" => true,
 				"root_name" => $root_name,
-				"root_url" => aw_url_change_var(array("pgtf"=> null)),
+				"root_url" => "#",
 				"root_icon" => icons::get_icon_url(CL_MENU),
 				"type" => TREE_DHTML,
 				"tree_id" => "materials_tree",
@@ -1777,7 +1777,7 @@ class mrp_resource extends class_base
 		$tree->start_tree(array (
 			"type" => TREE_DHTML,
 			"branch" => 1,
-			"tree_id" => "materials_tree",
+			"tree_id" => "materials_tree_s",
 			"persist_state" => 1,
 		));
 
@@ -1802,8 +1802,7 @@ class mrp_resource extends class_base
 		{
 			if($o->class_id() != CL_SHOP_PRODUCT)
 			{
-				$params["pgtf"] = $o->id();
-				$url = aw_url_change_var($params, false, $arr["set_retu"]);
+				$url = "#";
 			}
 			else
 			{
@@ -1811,8 +1810,6 @@ class mrp_resource extends class_base
 			}
 			$this->insert_materials_tree_item($tree, $o, $url);
 		}
-
-		$tree->set_selected_item(trim(automatweb::$request->arg("pgtf")));
 		die($tree->finalize_tree());
 	}
 
