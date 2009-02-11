@@ -110,7 +110,7 @@ class aw_template extends core
 
 		if (is_admin())
 		{
-			return $dir = $this->cfg["site_tpldir"];
+			return $dir = aw_ini_get("site_tpldir");
 		}
 
 		if (!aw_global_get("aw_init_done"))
@@ -139,7 +139,7 @@ class aw_template extends core
 		// this comes from session.
 		$this->vars = array(
 			"self" => aw_global_get("PHP_SELF"),
-			"ext"  => $this->cfg["ext"],
+			"ext"  => aw_ini_get("ext"),
 			// not very random really
 			"rand" => time(),
 			"current_time" => time(),
@@ -951,7 +951,7 @@ class aw_template extends core
 		{
 			// this will add link to documentation
 			$pos = strpos($this->template_filename, aw_ini_get("tpldir"));
-			$tpl_doc_link = ($pos === false) ? str_replace($this->cfg['basedir']."/templates", "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename) :
+			$tpl_doc_link = ($pos === false) ? str_replace(aw_ini_get('basedir')."/templates", "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename) :
 			str_replace(aw_ini_get("tpldir"), "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename);
 			aw_global_set("TPL=1", aw_global_get("TPL=1").'$_aw_tpl_equals_1["'.$this->template_filename.'"]=array("link"=>"'.$tpl_doc_link.'");$_aw_tpl_equals_1_counter[]="'.$this->template_filename.'";');
 		};
