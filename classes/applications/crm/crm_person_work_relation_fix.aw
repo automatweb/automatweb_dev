@@ -55,6 +55,13 @@ class crm_person_work_relation_fix extends _int_object
 		return parent::prop($v);
 	}
 
+	/** sets profession to work relation
+		@attrib api=1 params=pos
+		@param profession required type=oid/string
+		@param parent optional default=NULL
+		@returns oid
+			profession object id
+	**/
 	public function set_profession($profession,$parent = null)
 	{
 		if(!$parent)
@@ -89,6 +96,12 @@ class crm_person_work_relation_fix extends _int_object
 		return $id;
 	}
 
+	/** sets section to work relation
+		@attrib api=1 params=pos
+		@param section required type=oid/string
+		@returns oid
+			section object id
+	**/
 	public function set_section($section)
 	{
 		$parent = $this->prop("org");
@@ -138,6 +151,10 @@ class crm_person_work_relation_fix extends _int_object
 		return $o->id();
 	}
 
+	/** sets mail address to work relation
+		@attrib api=1 params=pos
+		@param mail required type=string
+	**/
 	public function set_mail($mail)
 	{
 		$o = new object();
@@ -156,6 +173,10 @@ class crm_person_work_relation_fix extends _int_object
 		return $o->id();
 	}
 
+	/** sets phone to work relation
+		@attrib api=1 params=pos
+		@param phone required type=string
+	**/
 	public function set_phone($phone)
 	{
 		$o = new object();
@@ -177,6 +198,44 @@ class crm_person_work_relation_fix extends _int_object
 		return $o->id();
 	}
 
+	/** finishes current work relation
+		@attrib api=1
+	**/
+	public function finish()
+	{
+		$person = $this->get_person();
+		if(!is_object($person))
+		{
+			return false;
+		}
+		$person->disconnect(array(
+			"from" => $this->id(),
+		));
+		$person->connect(array(
+			"to" => $this->id(),
+			"type" => "RELTYPE_PREVIOUS_JOB",
+		));
+		$this->set_prop("end" , time());
+		$this->save();
+		return $this->id();
+	}
 
+	private function get_person()
+	{
+		$persons  = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			"site_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_ORG_RELATION" => $this->id(),
+					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB" => $this->id(),
+					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $this->id(),
+				)
+			)),
+		));
+		return reset($persons->arr());
+	}
 }
 ?>

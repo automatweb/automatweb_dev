@@ -1237,6 +1237,48 @@ class crm_person_obj extends _int_object
 		return $wr->id();
 	}
 
+	/** finishes work relation
+		@attrib api=1 params=name
+		@param id optional type=oid
+			Work relation id
+		@param org optional type=oid
+			Company id
+		@param section optional type=oid
+			Section id
+		@param profession optional type=oid
+			Profession id
+		@return oid/0
+			oid, if successful
+	**/
+	public function finish_work_relation($arr = array())
+	{
+		if(is_oid($arr["id"]))
+		{
+			$wr = obj($wr);
+		}
+		else
+		{
+			$wr_id = $this->get_work_relation_id(array(
+				"company" => $arr["org"],
+				"section" => $arr["section"],
+				"profession" => $arr["profession"]
+			));
+			if(is_oid($wr_id))
+			{
+				$wr = obj($wr_id);
+			}
+		}
+		if(is_object($wr))
+		{
+			$wr->finish();
+
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
 	/** Gets all persons marked as important
 		@attrib api=1 params=pos
 		@param company optional type=oid

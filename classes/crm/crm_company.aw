@@ -4846,6 +4846,7 @@ class crm_company extends class_base
 	function paste_p($arr)
 	{
 		// first cut persons
+// arr($p_from);arr($_SESSION["crm_cut_p"]);arr($arr); die();
 		foreach(safe_array($_SESSION["crm_cut_p"]) as $p_id => $p_from)
 		{
 			if (!(is_oid($p_id) && $this->can("view", $p_id)))
@@ -4883,27 +4884,35 @@ class crm_company extends class_base
 								"from" => $p_from["unit"],
 							));
 						}
+						$unit = obj($p_from["unit"]);
+						// disconnect from that unit
+						if ($unit->is_connected_to(array("to" => $p->id())))
+						{
+							$unit->disconnect(array(
+								"from" => $p->id(),
+							));
+						}
 					}
 
-					// if currently under profession
-					if ($arr["cat"])
+					//uus systeem... kui on t88suhe, siis uut ei tee
+					if(!$p->get_work_relation_id(array(
+						"org" => $arr["id"],
+						"section" => $arr["unit"],
+						"profession" => $arr["cat"],
+					)))
 					{
-						// connect to that profession
-						$p->connect(array(
-							"to" => $arr["cat"],
-							"reltype" => 7
+						$p->add_work_relation(array(
+							"org" => $arr["id"],
+							"section" => $arr["unit"],
+							"profession" => $arr["cat"],
 						));
 					}
+					$p->finish_work_relation(array(
+						"org" => $arr["id"],
+						"section" => $p_from["unit"],
+						"profession" => $p_from["proffession"],
+					));
 
-					// if currently under unit
-					if ($arr["unit"])
-					{
-						// connect to that unit
-						$p->connect(array(
-							"to" => $arr["unit"],
-							"reltype" => 21
-						));
-					}
 					break;
 
 				case CL_CRM_PROFESSION:
@@ -4975,25 +4984,20 @@ class crm_company extends class_base
 			switch($p->class_id())
 			{
 				case CL_CRM_PERSON:
-					// if currently under profession
-					if ($arr["cat"])
+					//uus systeem... kui on t88suhe, siis uut ei tee
+					if(!$p->get_work_relation_id(array(
+						"org" => $arr["id"],
+						"section" => $arr["unit"],
+						"profession" => $arr["cat"],
+					)))
 					{
-						// connect to that profession
-						$p->connect(array(
-							"to" => $arr["cat"],
-							"reltype" => 7
+						$p->add_work_relation(array(
+							"org" => $arr["id"],
+							"section" => $arr["unit"],
+							"profession" => $arr["cat"],
 						));
 					}
 
-					// if currently under unit
-					if ($arr["unit"])
-					{
-						// connect to that unit
-						$p->connect(array(
-							"to" => $arr["unit"],
-							"reltype" => 21
-						));
-					}
 					break;
 
 				case CL_CRM_SECTION:
