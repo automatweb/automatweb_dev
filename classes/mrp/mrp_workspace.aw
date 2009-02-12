@@ -263,7 +263,24 @@
 
 			@layout printer_tree type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;de&nbsp;puu
 
-				@property printer_tree type=treeview parent=printer_tree
+				@property printer_tree type=treeview parent=printer_tree store=no
+
+			@layout printer_personal type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;taja
+
+				@layout ppl_data type=vbox parent=printer_personal
+
+					@property pp_picture type=text parent=ppl_data store=no
+
+					@property pp_name type=text parent=ppl_data store=no
+					@caption Nimi
+
+				@layout ppl_resources type=vbox_sub parent=printer_personal area_caption=Minu&nbsp;ressursid closeable=1
+
+					@property pp_resources type=table parent=ppl_resources no_caption=1 store=no
+
+				@layout ppl_birthdays type=vbox_sub parent=printer_personal area_caption=Kaast&ouml;&ouml;tajate&nbsp;s&uuml;nnip&auml;evad closeable=1
+
+					@property pp_birthdays type=table parent=ppl_birthdays no_caption=1 store=no
 
 		@layout printer_right type=vbox parent=printer_master area_caption=T
 
@@ -1019,6 +1036,22 @@ class mrp_workspace extends class_base
 				$this->_get_printer_tree($arr);
 				break;
 
+			case "pp_picture":
+				$prop["value"] = get_instance("image")->make_img_tag_wl(obj(get_instance("user")->get_current_person())->picture);
+				break;
+
+			case "pp_name":
+				$prop["value"] = obj(get_instance("user")->get_current_person())->name;
+				break;
+
+			case "pp_resources":
+				$this->_get_pp_resources($arr);
+				break;
+
+			case "pp_birthdays":
+				$this->_get_pp_birthdays($arr);
+				break;
+
 			### projects tab
 			case "sp_submit":
 				$uri = automatweb::$request->get_uri();
@@ -1730,6 +1763,81 @@ class mrp_workspace extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function _get_pp_birthdays($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "left",
+		));
+		$t->define_field(array(
+			"name" => "birthday",
+			"caption" => t("S&uuml;nnip&auml;ev"),
+			"align" => "left",
+			"sorting_field" => "birthday_tm"
+		));
+
+		$ps = obj($arr["obj_inst"]->owner)->get_workers()->arr();
+		uasort($ps, array($this, "sort_by_birthday"));
+
+		foreach($ps as $p)
+		{
+			if((int)$p->birthday <= 0)
+			{
+				continue;
+			}
+			$bd_tm = explode("-", $p->birthday);
+			$bd_tm = mktime(0, 0, 0, $bd_tm[1], $bd_tm[2], $bd_tm[0]);
+			$bd = date("d-m-Y", $bd_tm);
+			if(date("d-m", $bd_tm) == date("d-m"))
+			{
+				$bd = t("T&auml;na");
+			}
+			elseif(date("d-m", $bd_tm) == date("d-m", time() + 24*3600))
+			{
+				$bd = t("Homme");
+			}
+			$t->define_data(array(
+				"name" => parse_obj_name($p->name),
+				"birthday" => $bd,
+				"birthday_tm" => $p->birthday,
+			));
+		}
+	}
+
+	function sort_by_birthday($a, $b)
+	{
+		$a_tm = explode("-", $a->birthday);
+		$b_tm = explode("-", $b->birthday);
+		$bd_tm = mktime(0, 0, 0, $bd_tm[1], $bd_tm[2], $bd_tm[0]);
+		return (int)$a_tm[1] - (int)date("n") == (int)$b_tm[1] - (int)date("n") ? (int)$a_tm[2] < (int)$b_tm[2] : (int)$a_tm[1] - (int)date("n") < (int)$b_tm[1] - (int)date("n");
+	}
+
+	function _get_pp_resources($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "resource",
+			"caption" => t("Ressurss"),
+			"align" => "left"
+		));
+		$t->define_field(array(
+			"name" => "state",
+			"caption" => t("Staatus"),
+			"align" => "center"
+		));
+
+		foreach($rs as $r)
+		{
+			$t->define_data(array(
+				"resource" => $r->name(),
+				"state" => t("as"),
+			));
+		}
 	}
 
 	function _get_printer_tree($arr)
@@ -5484,6 +5592,23 @@ class mrp_workspace extends class_base
 				if($this->can("view", $arr["request"]["mrp_tree_active_item"]))
 				{
 					$arr["area_caption"] = sprintf(t("Ressursi '%s' suhtelise h&auml;lbe muutus ajas"), obj($arr["request"]["mrp_tree_active_item"])->name());
+				}
+				break;
+
+			case "printer_right":
+				$caps = array(
+					"grp_printer_current" => t("Jooksvad t&ouml;&ouml;d"),
+					"grp_printer_old" => t("Tegemata t&ouml;&ouml;d"),
+					"grp_printer_done" => t("Tehtud t&ouml;&ouml;d"),
+					"grp_printer_aborted" => t("Katkestatud t&ouml;&ouml;d"),
+					"grp_printer_in_progress" => t("K&otilde;ik t&ouml;&ouml;s olevad"),
+					"grp_printer_startable" => t("K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada"),
+					"grp_printer_notstartable" => t("T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada"),
+				);
+				$grp = isset($_GET["branch_id"]) ? $_GET["branch_id"] : "grp_printer_current";
+				if(array_key_exists($grp, $caps))
+				{
+					$arr["area_caption"] = $caps[$grp];
 				}
 				break;
 		}

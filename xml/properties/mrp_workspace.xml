@@ -790,6 +790,49 @@
             <store>no</store>
       </property>
       <property>
+            <name>pp_picture</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>text</type>
+            <parent>ppl_data</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>pp_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>text</type>
+            <parent>ppl_data</parent>
+            <store>no</store>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>pp_resources</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>table</type>
+            <parent>ppl_resources</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>pp_birthdays</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>table</type>
+            <parent>ppl_birthdays</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>printer_legend</name>
             <table>objects</table>
             <field>meta</field>
@@ -1537,6 +1580,33 @@
                   <area_caption>T&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;puu</area_caption>
                   <group>grp_printer</group>
             </printer_tree>
+            <printer_personal>
+                  <type>vbox</type>
+                  <parent>printer_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;taja</area_caption>
+                  <group>grp_printer</group>
+            </printer_personal>
+            <ppl_data>
+                  <type>vbox</type>
+                  <parent>printer_personal</parent>
+                  <group>grp_printer</group>
+                  <area_caption></area_caption>
+            </ppl_data>
+            <ppl_resources>
+                  <type>vbox_sub</type>
+                  <parent>printer_personal</parent>
+                  <area_caption>Minu&amp;amp;nbsp;ressursid</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_printer</group>
+            </ppl_resources>
+            <ppl_birthdays>
+                  <type>vbox_sub</type>
+                  <parent>printer_personal</parent>
+                  <area_caption>Kaast&amp;amp;ouml;&amp;amp;ouml;tajate&amp;amp;nbsp;s&amp;amp;uuml;nnip&amp;amp;auml;evad</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_printer</group>
+            </ppl_birthdays>
             <printer_right>
                   <type>vbox</type>
                   <parent>printer_master</parent>
