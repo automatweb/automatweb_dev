@@ -4764,7 +4764,7 @@ class task extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"action" => "delete_rels"
+			"action" => "delete_parts"
 		));
 	}
 
@@ -5398,16 +5398,20 @@ class task extends class_base
 		$rows = $arr["request"]["rows"];
 		foreach($rows as $key => $row)
 		{
-			$set = 0;
-			foreach($row as $prop => $val)
+			if(!isset($row["on_bill"]))
+			{
+				$row["on_bill"] = 0;
+			}
+			$set = 1;//0;
+/*			foreach($row as $prop => $val)
 			{
 				if($val)
 				{
 					$set = 1;
 					break;
 				}
-			}
-			if($set)
+			}*/
+			if($set && $this->can("view"  , $key))
 			{
 				$row["person"] = $key;
 				$arr["obj_inst"]->set_primary_row($row);
@@ -5975,6 +5979,36 @@ $types = array(
 					));
 				}
 			}
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=delete_parts
+	**/
+	function delete_parts($arr)
+	{
+		$o = obj($arr["id"]);
+		$o = obj($o->brother_of());
+
+		if (is_array($arr["sel_part"]) && count($arr["sel_part"]))
+		{
+			$arr["check"] = $arr["sel_part"];
+			$arr["event_id"] = $arr["id"];
+			foreach($arr["sel_part"] as $part)
+			{
+			
+				$pr = $o->get_primary_row_for_person($part);
+				if($pr)
+				{
+					$pr->delete();
+				}
+			}
+			post_message_with_param(
+				MSG_MEETING_DELETE_PARTICIPANTS,
+				CL_CRM_MEETING,
+				&$arr
+			);
 		}
 		return $arr["post_ru"];
 	}

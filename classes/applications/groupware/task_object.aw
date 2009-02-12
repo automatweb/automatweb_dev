@@ -31,6 +31,28 @@ class task_object extends _int_object
 		return $ret;
 	}
 
+	function set_name($name)
+	{$GLOBALS["DUKE"] = 1;
+		$rows = $this->get_all_primary_rows();
+		foreach($rows->arr() as $row)
+		{
+			$row->update_name();
+		}
+		return parent::set_name($name);
+	}
+
+	function get_all_primary_rows()
+	{
+		$rows = new object_list(array(
+			"class_id" =>  CL_TASK_ROW,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"primary" => 1,
+			"task" => $this->id(),
+		));
+		return $rows;
+	}
+
 	function save()
 	{
 		$res =  parent::save();
@@ -97,6 +119,13 @@ class task_object extends _int_object
 				if ($this->is_property("to_bill_date") && !$this->prop("send_bill"))
 				{
 					$this->set_prop("to_bill_date", time());
+				}
+				break;
+			case "name":
+				$rows = $this->get_all_primary_rows();
+				foreach($rows->arr() as $row)
+				{
+					$row->update_name();
 				}
 				break;
 		}
@@ -306,16 +335,18 @@ class task_object extends _int_object
 	}
 
 	/** makes new task row
-		@attrib api=1
+		@attrib api=1 params=pos
+		@param person optional type=id default=current_person
 		@returns object
 			row object
 	**/
-	function add_row()
+	function add_row($person)
 	{
 		$new_row = new object();
 		$new_row->set_class_id(CL_TASK_ROW);
 		$new_row->set_parent($this->id());
 		$new_row->set_prop("task" , $this->id());
+		$new_row->set_prop("impl" , $person);
 		$time = $this->prop("end");
 		if(!($time > 0))
 		{
@@ -443,6 +474,7 @@ class task_object extends _int_object
 	public function get_primary_row_for_person($person)
 	{
 		if(!is_oid($person)) return null;
+
 		$ol = new object_list(array(
 			"class_id" =>  CL_TASK_ROW,
 			"lang_id" => array(),
@@ -461,11 +493,12 @@ class task_object extends _int_object
 			$u = get_instance(CL_USER);
 			$data["person"] = $u->get_current_person();
 		}
+
 		$row = $this->get_primary_row_for_person($data["person"]);
 		if(!$row)
 		{
 			$person = obj($data["person"]);
-			$row = $this->add_row();
+			$row = $this->add_row($data["person"]);
 			$name = $this->name()." ".($person->name() ? $person->name() : "")." ".t("tegevus");
 			$row->set_name($name);
 			$row->set_prop("content" , $name);

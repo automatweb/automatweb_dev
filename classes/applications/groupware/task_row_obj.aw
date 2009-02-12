@@ -31,7 +31,7 @@ class task_row_obj extends _int_object
 				break;
 		}
 		$val =  parent::prop($pn);
-	
+
 		switch($pn)
 		{
 			case "date":
@@ -149,6 +149,12 @@ class task_row_obj extends _int_object
 					$this->set_prop("to_bill_date", time());
 				}
 				break;
+			case "impl":
+				if($this->prop("primary"))
+				{
+					$pv = array(0 => end($pv));
+				}
+				break;
 		}
 
 		switch($pn)
@@ -197,7 +203,7 @@ class task_row_obj extends _int_object
 			{
 				$this->set_prop("date" , time());
 			}
-			if(!$this->prop("impl"))
+			if(!$this->prop("impl") && !$this->prop("primary"))
 			{
 				$cp = get_current_person();
 				$this->set_prop("impl",$cp->id());
@@ -291,5 +297,16 @@ class task_row_obj extends _int_object
 		return reset($this->prop("impl"));
 	}
 
+	public function update_name()
+	{
+		if($this->prop("primary"))
+		{
+			if($person_name = $this->prop("impl.name"))
+			{
+				$this->set_name($this->prop("task.name")." ".$person_name." ".t("tegevus"));
+				$this->save();
+			}
+		}
+	}
 }
 ?>

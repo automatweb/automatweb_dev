@@ -1706,7 +1706,7 @@ class crm_bill extends class_base
 		}
 		if($page == 0) $arr["prop"]["value"] = die($this->show_add(array(
 			"id" => $arr["obj_inst"]->id(),
-			"pdf" => $arr["pdf"]
+			"pdf" => ($arr["request"]["pdf"] || $arr["pdf"]) ? 1 : 0 
 		)));
 	}
 
@@ -1783,6 +1783,87 @@ class crm_bill extends class_base
 		return ($new_rows);
 	}
 
+	private function implementor_vars($imp)
+	{
+		$vars = array();
+		if ($this->can("view", $imp))
+		{
+			$impl = obj($imp);
+			$vars["impl_name"] = $impl->name();
+			$vars["impl_reg_nr"] = $impl->prop("reg_nr");
+			$vars["impl_kmk_nr"] = $impl->prop("tax_nr");
+			$vars["impl_fax"] = $impl->prop_str("telefax_id");
+			$vars["impl_url"] = $impl->prop_str("url_id");
+			$vars["impl_phone"] = $impl->prop_str("phone_id");
+			$vars["imp_penalty"] = $impl->prop("bill_penalty_pct");
+
+			$ba = "";
+			foreach($impl->connections_from(array("type" => "RELTYPE_BANK_ACCOUNT")) as $c)
+			{
+				$acc = $c->to();
+				$bank = obj();
+				if ($this->can("view", $acc->prop("bank")))
+				{
+					$bank = obj($acc->prop("bank"));
+				}
+				$this->vars(array(
+					"bank_name" => $bank->name(),
+					"acct_no" => $acc->prop("acct_no"),
+					"bank_iban" => $acc->prop("iban_code")
+				));
+
+				$ba .= $this->parse("BANK_ACCOUNT");
+			}
+			$this->vars(array(
+				"BANK_ACCOUNT" => $ba
+			));
+
+			$logo_o = $impl->get_first_obj_by_reltype("RELTYPE_ORGANISATION_LOGO");
+			if ($logo_o)
+			{
+				$logo_i = $logo_o->instance();
+				$vars["logo"] = $logo_i->make_img_tag_wl($logo_o->id());
+				$vars["logo_url"] = $logo_i->get_url_by_id($logo_o->id());
+			}
+
+
+			$has_country = "";
+			if ($this->can("view", $impl->prop("contact")))
+			{
+				$ct = obj($impl->prop("contact"));
+				$ap = array($ct->prop("aadress"));
+				if ($ct->prop("linn"))
+				{
+					$vars["impl_city"] = $ct->prop_str("linn");
+					$ap[] = $ct->prop_str("linn");
+				}
+				$aps = join(", ", $ap)."<br>";
+				$aps .= $ct->prop_str("maakond");
+				$aps .= " ".$ct->prop("postiindeks");
+				$vars["impl_index"] = $ct->prop("postiindeks");
+				$vars["impl_county"] = $ct->prop_str("maakond");
+				$vars["impl_addr"] = $aps;
+				$vars["impl_street"] = $ct->prop("aadress");
+				
+				if ($this->can("view", $ct->prop("riik")))
+				{
+					$riik = obj($ct->prop("riik"));
+					$vars["impl_country"] = $riik->name();
+					$vars["impl_phone"] = $riik->prop("area_code")." ".$impl_phone;
+					$this->vars(array("HAS_COUNTRY" => $this->parse("HAS_COUNTRY")));
+				}
+			}
+
+			if ($this->can("view", $impl->prop("email_id")))
+			{
+				$mail = obj($impl->prop("email_id"));
+				$vars["impl_mail"] = $mail->prop("mail");
+			}
+			$this->vars($vars);
+		}
+		return $vars;
+	}
+
 	function show($arr)
 	{
 		$b = obj($arr["id"]);
@@ -1830,26 +1911,7 @@ class crm_bill extends class_base
 			}
 			if ($this->can("view", $ord->prop($prop)))
 			{
-				//$ct = obj($ord->prop("contact"));
-				//$ord_addr = $ct->name()." ".$ct->prop("postiindeks");
-
 				$ct = obj($ord->prop($prop));
-//				$ap = array($ct->prop("aadress"));
-//				if ($ct->prop("linn"))
-//				{
-//					$ap[] = $ct->prop_str("linn");
-//					$ord_city = $ct->prop_str("linn");
-//				}
-//				$aps = join(", ", $ap)."<br>";
-//				$aps .= $ct->prop_str("maakond");
-//				$aps .= " ".$ct->prop("postiindeks");
-//				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
-//				$ord_country = $ct->prop_str("riik");
-//				$ord_index = $this->get_customer_address($b->id(), "index");//$ct->prop("postiindeks");
-//				$ord_county = $this->get_customer_address($b->id(), "county");//$ct->prop_str("maakond");
-//				$ord_city = $this->get_customer_address($b->id(), "city");
-				//$ord_no = substr(strrchr($ct->prop("aadress"), " "), 1 );
-//				$ord_street = $this->get_customer_address($b->id(), "street");//$ct->prop("aadress");
 				//riigi tlge, kui on inglise keeles
 				if($b->prop("language"))
 				{
@@ -1868,102 +1930,19 @@ class crm_bill extends class_base
 			{
 				$ord_cur = obj($ord->prop("currency"));
 			}
-	}
+		}
 
 		if ($b->prop("ctp_text") != "")
 		{
 			$ord_ct = $b->prop("ctp_text");
 		}
 
-		$logo = "";
-		$impl = obj();
-		if ($this->can("view", $b->prop("impl")))
-		{
-			$impl = obj($b->prop("impl"));
-
-			$ba = "";
-			foreach($impl->connections_from(array("type" => "RELTYPE_BANK_ACCOUNT")) as $c)
-			{
-				$acc = $c->to();
-				$bank = obj();
-				if ($this->can("view", $acc->prop("bank")))
-				{
-					$bank = obj($acc->prop("bank"));
-				}
-				$this->vars(array(
-					"bank_name" => $bank->name(),
-					"acct_no" => $acc->prop("acct_no"),
-					"bank_iban" => $acc->prop("iban_code")
-				));
-
-				$ba .= $this->parse("BANK_ACCOUNT");
-			}
-
-			$this->vars(array(
-				"BANK_ACCOUNT" => $ba
-			));
-			$logo_o = $impl->get_first_obj_by_reltype("RELTYPE_ORGANISATION_LOGO");
-			if ($logo_o)
-			{
-				$logo_i = $logo_o->instance();
-				$logo = $logo_i->make_img_tag_wl($logo_o->id());
-				$logo_url = $logo_i->get_url_by_id($logo_o->id());
-			}
-
-			$impl_phone = $impl->prop_str("phone_id");
-			$has_country = "";
-			if ($this->can("view", $impl->prop("contact")))
-			{
-				$ct = obj($impl->prop("contact"));
-				$ap = array($ct->prop("aadress"));
-				if ($ct->prop("linn"))
-				{
-					$impl_city = $ct->prop_str("linn");
-					$ap[] = $ct->prop_str("linn");
-				}
-				$aps = join(", ", $ap)."<br>";
-				$aps .= $ct->prop_str("maakond");
-				$aps .= " ".$ct->prop("postiindeks");
-				$impl_index = $ct->prop("postiindeks");
-				$impl_county = $ct->prop_str("maakond");
-				$impl_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
-				//loodetavastu tuleb millalgi mni parem idee
-			//	$impl_no = substr(strrchr($ct->prop("aadress"), " "), 1 );
-				$impl_street = $ct->prop("aadress");
-				//arr($impl_street);
-				
-				//substr($ct->prop("aadress"), 0, strpos( ));
-				if ($this->can("view", $ct->prop("riik")))
-				{
-					$riik = obj($ct->prop("riik"));
-					//see tundub kll mttetu...et nagu need tingimused on tidetud, siis mni rida allpool tehakse tpselt sama
-//					if( $riik->name() != $ord_country)
-//					{
-//						$ord_addr .= " ".$ord_country;
-//					}
-					$impl_country = $riik->name();
-					$impl_phone = $riik->prop("area_code")." ".$impl_phone;
-				
-					$this->vars(array("HAS_COUNTRY" => $this->parse("HAS_COUNTRY")));
-				}
-			}
-
-//			if(!is_object($riik) ||  $riik->name() != $ord_country)
-//			{
-//				$ord_addr .= " ".$ord_country;
-//			}
-			if ($this->can("view", $impl->prop("email_id")))
-			{
-				$mail = obj($impl->prop("email_id"));
-				$impl_mail = $mail->prop("mail");
-			}
-
-		}
+		$imp_vars = $this->implementor_vars($b->prop("impl"));
 
 		$bpct = $ord->prop("bill_penalty_pct");
 		if (!$bpct)
 		{
-			$bpct = $impl->prop("bill_penalty_pct");
+			$bpct = $imp_vars["impl_penalty"];
 		}
 
 		//need enne vaja 2ra leida, sest hiljem subide jaoks ka vaja
@@ -1981,29 +1960,15 @@ class crm_bill extends class_base
 			"orderer_index" => $this->get_customer_address($b->id() , "index"),//$ord_index,
 			"orderer_country" => $ord_country,
 			"orderer_street" => $this->get_customer_address($b->id() , "street"),//$ord_street,
-			"impl_street" => $impl_street,
-			"impl_city" => $impl_city,
-			"impl_county" => $impl_county,
-			"impl_index" => $impl_index,
-			"impl_country" => $impl_country,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
 			"bill_no" => $b->prop("bill_no"),
-			"impl_logo" => $logo,
-			"impl_logo_url" => $logo_url,
 			"bill_date" => $b->prop("bill_date"),
 			"payment_due_days" => $b->prop("bill_due_date_days"),
 			"bill_due" => date("d.m.Y", $b->prop("bill_due_date")),
 			"orderer_contact" => $ord_ct,
 			"orderer_contact_profession" => $ord_ct_prof,
 			"comment" => $b->prop("notes"),
-			"impl_name" => $impl->name(),
-			"impl_address" => $impl_addr,
-			"impl_reg_nr" => $impl->prop("reg_nr"),
-			"impl_kmk_nr" => $impl->prop("tax_nr"),
-			"impl_phone" => $impl_phone,
-			"impl_fax" => $impl->prop_str("telefax_id"),
-			"impl_email" => $impl_mail,
-			"impl_url" => $impl->prop_str("url_id"),
+
 		));
 		if($ord_country)
 		{
@@ -2511,74 +2476,13 @@ class crm_bill extends class_base
 				$ord_cur = obj($ord->prop("currency"));
 			}
 		}
-		$logo = "";
-		$impl = obj();
-		if ($this->can("view", $b->prop("impl")))
-		{
-			$impl = obj($b->prop("impl"));
 
-			$ba = "";
-			foreach($impl->connections_from(array("type" => "RELTYPE_BANK_ACCOUNT")) as $c)
-			{
-				$acc = $c->to();
-				$bank = obj();
-				if ($this->can("view", $acc->prop("bank")))
-				{
-					$bank = obj($acc->prop("bank"));
-				}
-				$this->vars(array(
-					"bank_name" => $bank->name(),
-					"acct_no" => $acc->prop("acct_no"),
-					"bank_iban" => $acc->prop("iban_code")
-				));
-
-				$ba .= $this->parse("BANK_ACCOUNT");
-			}
-
-			$this->vars(array(
-				"BANK_ACCOUNT" => $ba
-			));
-			$logo_o = $impl->get_first_obj_by_reltype("RELTYPE_ORGANISATION_LOGO");
-			if ($logo_o)
-			{
-				$logo_i = $logo_o->instance();
-				$logo = $logo_i->make_img_tag_wl($logo_o->id());
-				$logo_url = $logo_i->get_url_by_id($logo_o->id());
-			}
-
-			$impl_phone = $impl->prop_str("phone_id");
-
-			if ($this->can("view", $impl->prop("contact")))
-			{
-				$ct = obj($impl->prop("contact"));
-				$ap = array($ct->prop("aadress"));
-				if ($ct->prop("linn"))
-				{
-					$ap[] = $ct->prop_str("linn");
-				}
-				$aps = join(", ", $ap)."<br>";
-				$aps .= $ct->prop_str("maakond");
-				$aps .= " ".$ct->prop("postiindeks");
-				$impl_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
-				if ($this->can("view", $ct->prop("riik")))
-				{
-					$riik = obj($ct->prop("riik"));
-					$impl_phone = $riik->prop("area_code")." ".$impl_phone;
-				}
-			}
-
-			if ($this->can("view", $impl->prop("email_id")))
-			{
-				$mail = obj($impl->prop("email_id"));
-				$impl_mail = $mail->prop("mail");
-			}
-
-		}
+		$impl_vars = $this->implementor_vars($b->prop("impl"));
 
 		$bpct = $ord->prop("bill_penalty_pct");
 		if (!$bpct)
 		{
-			$bpct = $impl->prop("bill_penalty_pct");
+			$bpct = $impl_vars["impl_penalty"];
 		}
 
 		$this->vars(array(
@@ -2589,21 +2493,11 @@ class crm_bill extends class_base
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
 			"bill_no" => $b->prop("bill_no"),
-			"impl_logo" => $logo,
-			"impl_logo_url" => $logo_url,
 			"bill_date" => $b->prop("bill_date"),
 			"payment_due_days" => $b->prop("bill_due_date_days"),
 			"bill_due" => date("d.m.Y", $b->prop("bill_due_date")),
 			"orderer_contact" => $ord_ct,
 			"comment" => $b->prop("notes"),
-			"impl_name" => $impl->name(),
-			"impl_address" => $impl_addr,
-			"impl_reg_nr" => $impl->prop("reg_nr"),
-			"impl_kmk_nr" => $impl->prop("tax_nr"),
-			"impl_phone" => $impl_phone,
-			"impl_fax" => $impl->prop_str("telefax_id"),
-			"impl_email" => $impl_mail,
-			"impl_url" => $impl->prop_str("url_id"),
 			"comment" => $b->comment(),
 			"time_spent_desc" => $b->prop("time_spent_desc")
 		));		
@@ -2707,13 +2601,22 @@ class crm_bill extends class_base
 		if($arr["pdf"])
 		{
 			$conv = get_instance("core/converters/html2pdf");
-			$conv->converter = 1;
-			header("Content-type: application/pdf");
-			$res = $conv->convert(array(
-				"source" => $res,
-				"filename" => $b->name().".pdf",
-			));
-			die($res);
+			if($conv->can_convert())
+			{
+				$conv->gen_pdf(array(
+					"source" => $res,
+					"filename" => $b->name()."_".t("lisa").".pdf",
+				));
+			}
+
+//			$conv = get_instance("core/converters/html2pdf");
+//			$conv->converter = 1;
+//			header("Content-type: application/pdf");
+//			$res = $conv->convert(array(
+//				"source" => $res,
+//				"filename" => $b->name().".pdf",
+//			));
+//			die($res);
 		}
 		return $res;
 		die($res);
@@ -3262,7 +3165,10 @@ class crm_bill extends class_base
 		{
 			$onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
 		}
-		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("pdf" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
+		$onclick.= "win = window.open('".$this->mk_my_orb("change", array(
+			"pdf" => 1,
+			"id" => $arr["obj_inst"]->id(),
+			"group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
 		if(!$has_val)
 		{
 			$onclick.= "}else;";
@@ -3290,7 +3196,10 @@ class crm_bill extends class_base
 
 		$onclick = "";
 		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("pdf" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
+		$onclick.= "win = window.open('".$this->mk_my_orb("change", array(
+			"pdf" => 1,
+			"id" => $arr["obj_inst"]->id(),
+			"group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
 		if(!$has_val) $onclick.= "}else {;}";
 		
 

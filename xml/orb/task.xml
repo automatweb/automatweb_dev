@@ -152,5 +152,12 @@
 			</function>
 		</action>
 
+		<action name="delete_parts">
+			<function name="delete_parts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
