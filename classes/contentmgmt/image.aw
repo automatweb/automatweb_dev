@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.39 2009/02/11 19:39:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.40 2009/02/12 10:04:50 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -268,9 +268,9 @@ class image extends class_base
 	{
 		if ($url)
 		{
-			if (!empty($this->cfg["imgbaseurl"]))
+			if (aw_ini_get("image.imgbaseurl") != "")
 			{
-				$imgbaseurl = $this->cfg["imgbaseurl"];
+				$imgbaseurl = aw_ini_get("image.imgbaseurl");
 				$first = substr(basename($url),0,1);
 				if (substr($imgbaseurl, 0, 4) == "http")
 				{
@@ -278,7 +278,7 @@ class image extends class_base
 				}
 				else
 				{
-					$url = $this->cfg["baseurl"] . $imgbaseurl . "/" . $first . "/" . basename($url);
+					$url = aw_ini_get("baseurl") . $imgbaseurl . "/" . $first . "/" . basename($url);
 				}
 			}
 			else
@@ -520,7 +520,7 @@ class image extends class_base
 					$replacement = localparse($tpls["image_linked"],$vars);
 				}
 				else 
-				if (!$this->cfg["no_default_template"])
+				if (!aw_ini_get("no_default_template"))
 				{
 					$authortxt = "";
 					if ($idata['meta']['author'] != "")
@@ -585,7 +585,7 @@ class image extends class_base
 				{
 					$replacement = localparse($tpls[$tpl],$vars);
 				}
-				else if (!$this->cfg["no_default_template"])
+				else if (!aw_ini_get("no_default_template"))
 				{
 					$replacement = "";
 					if ($vars["align"] != "")
@@ -1145,7 +1145,7 @@ class image extends class_base
 			*/
 
 			case "file":
-				if (is_oid($arr["obj_inst"]->id()) && file_exists($arr["obj_inst"]->file))
+				if (is_oid($arr["obj_inst"]->id()) && file_exists($this->_mk_fn($arr["obj_inst"]->file)))
 				{
 					$prop["value"] = "<div id=\"image_".$arr["obj_inst"]->id()."\">";
 					$prop["value"] .= image::make_img_tag_wl($arr["obj_inst"]->id());
@@ -1219,7 +1219,7 @@ class image extends class_base
 				{
 					if ($fl{0} != "/")
 					{
-						$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+						$fl = aw_ini_get("site_basedir")."/files/".$fl{0}."/".$fl;
 					}
 					$sz = @getimagesize($fl);
 					$prop["value"] = $sz[0] . " X " . $sz[1];
@@ -1235,7 +1235,7 @@ class image extends class_base
 				{
 					// rewrite $fl to be correct if site moved
 					$fl = basename($fl);
-					$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+					$fl = aw_ini_get("site_basedir")."/files/".$fl{0}."/".$fl;
 
 					$sz = @getimagesize($fl);
 					$prop["value"] = $sz[0] . " X " . $sz[1];
@@ -1502,7 +1502,7 @@ class image extends class_base
 
 		$img = get_instance("core/converters/image_convert");
 		$fn = basename($im[$file]);
-		$fn = $this->cfg["site_basedir"]."/files/".$fn{0}."/".$fn;
+		$fn = aw_ini_get("site_basedir")."/files/".$fn{0}."/".$fn;
 		$img->load_from_file($fn);
 		list($i_width, $i_height) = $img->size();
 		$width = $arr['width'];
@@ -2230,7 +2230,7 @@ class image extends class_base
 		if ($o->prop("file2") != "")
 		{
 			$file2 = basename($o->prop("file2"));
-			$file2 = $that->cfg["site_basedir"]."/files/".$file2{0}."/".$file2;
+			$file2 = aw_ini_get("site_basedir")."/files/".$file2{0}."/".$file2;
 			if ($has_big_alt !== NULL)
 			{
 				$alt = $has_big_alt;
