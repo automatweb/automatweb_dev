@@ -2488,7 +2488,10 @@ EOF;
 		}
 
 		$u = obj(aw_global_get("uid_oid"));
-		$u->set_class_id(CL_USER);
+		if(!is_class_id($u->class_id()))
+		{
+			$u->set_class_id(CL_USER);
+		}
 		$gl = $u->get_group_list();
 
 		foreach($gl as $gn => $d)
