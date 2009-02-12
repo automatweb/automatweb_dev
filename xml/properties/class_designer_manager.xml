@@ -473,14 +473,6 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
-            <mgr>
-                  <caption>Manager</caption>
-                  <submit>no</submit>
-            </mgr>
-            <rels>
-                  <caption>Seosed</caption>
-                  <submit>no</submit>
-            </rels>
             <classes>
                   <caption>Klassid</caption>
             </classes>
@@ -492,6 +484,16 @@
                   <caption>Omadused</caption>
                   <parent>classes</parent>
             </classes_props>
+            <mgr>
+                  <caption>Lisamise puu</caption>
+                  <submit>no</submit>
+                  <parent>classes</parent>
+            </mgr>
+            <rels>
+                  <caption>Seosed</caption>
+                  <submit>no</submit>
+                  <parent>classes</parent>
+            </rels>
             <cl_usage_stats>
                   <caption>Statistika</caption>
             </cl_usage_stats>

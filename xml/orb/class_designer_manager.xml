@@ -102,5 +102,12 @@
 			</function>
 		</action>
 
+		<action name="gather_stats" nologin="1">
+			<function name="gather_stats">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

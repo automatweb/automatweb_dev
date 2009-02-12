@@ -6,7 +6,7 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: orb_gen.aw,v 1.4 2008/11/21 10:51:58 robert Exp $
+	@cvs $Id: orb_gen.aw,v 1.5 2009/02/12 11:04:01 kristo Exp $
 
 	@comment
 	generates orb defs, based on information from docgen_analyzer
@@ -291,6 +291,7 @@ class orb_gen extends class_base
 			{
 				$da = new aw_code_analyzer();
 				$cld = $da->analyze_file($file, true);
+				
 				// if there are no classes in the file then it gets ignored
 				if (!is_array($cld["classes"]) || count($cld["classes"]) < 1)
 				{

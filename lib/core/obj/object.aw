@@ -32,7 +32,17 @@ function is_oid($oid)
 **/
 function is_class_id($clid)
 {
-	return is_numeric($clid) and $clid > 0 and ($clid == (int) $clid);
+	$r = is_numeric($clid) and $clid > 0 and ($clid == (int) $clid);
+	if (!$r)
+	{
+		return false;
+	}
+	$cls = aw_ini_get("classes");
+	if (!isset($cls[$clid]["def"]))
+	{
+		return false;
+	}
+	return true;
 }
 
 /** disables all acl checks

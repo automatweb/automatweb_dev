@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.150 2008/11/06 18:51:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.151 2009/02/12 11:03:59 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -1480,6 +1480,33 @@ class planner extends class_base
 			// recurrence information on lihtsalt nimekiri timestampidest, millel syndmus esineb
 			if (!$_GET["XX6"])
 			{
+				// add participants to comment as links
+				if (is_array($event["parts"]))
+				{
+					$c = array();
+					foreach($event["parts"] as $part)
+					{
+						list($fn, $ln) = explode(" ", $part["name"]);
+						
+						$c[] = html::href(array(
+							"caption" => $fn,
+							"url" => $this->mk_my_orb("change", array("id" => $part["id"], "return_url" => get_ru()), $part["class_id"])
+						));
+					}
+					$event["comment"] = join(", ", $c)." ".$event["comment"];
+				}
+				if (is_array($event["custs"]))
+				{
+					$c = array();
+					foreach($event["custs"] as $part)
+					{
+						$c[] = html::href(array(
+							"caption" => $part["name"],
+							"url" => $this->mk_my_orb("change", array("id" => $part["id"], "return_url" => get_ru(), "group" => "overview"), $part["class_id"])
+						));
+					}
+					$event["comment"] = join(", ", $c)." ".$event["comment"];
+				}
 				$varx = array(
 					"item_start" => $event["start"],
 					"data" => array(

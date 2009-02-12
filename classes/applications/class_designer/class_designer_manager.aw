@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.25 2009/02/05 12:04:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.26 2009/02/12 11:04:22 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 
 //			automatweb::$instance->mode(automatweb::MODE_DBG);
@@ -223,11 +223,12 @@
 	@property ns_manual type=text store=no
 	@caption K&auml;ivita kohe
 
-@groupinfo mgr caption="Manager" submit=no
-@groupinfo rels caption="Seosed" submit=no
 @groupinfo classes caption="Klassid"
 	@groupinfo classes_classes caption="Klassid" parent=classes
 	@groupinfo classes_props caption="Omadused" parent=classes
+
+	@groupinfo mgr caption="Lisamise puu" submit=no parent=classes
+	@groupinfo rels caption="Seosed" submit=no parent=classes
 	
 @groupinfo cl_usage_stats caption="Statistika"
 	@groupinfo cl_usage_stats_clids caption="Klasside TOP" parent=cl_usage_stats submit=no
@@ -2353,7 +2354,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 				"lang_id" => array(),
 				"site_id" => array()
 			)),
-			array("id", "name", "ip"),
+			array("id", "name", "ip", "customer", "contact"),
 			CL_AW_SERVER_ENTRY
 		);
 	}
@@ -2394,6 +2395,22 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 	{
 		if ($this->db_query("SELECT count(*) as cnt FROM aw_server_list WHERE aw_oid IS NOT NULL", false))
 		{
+			// update all added
+			$srv = $this->db_fetch_array("SELECT * FROM aw_server_list");
+			foreach($srv as $row)
+			{
+				if (!$row["aw_oid"])
+				{
+					$o = obj();
+					$o->set_class_id(CL_AW_SERVER_ENTRY);
+					$o->set_parent(aw_ini_get("amenustart"));
+					$o->save();
+
+					$id = $o->id();
+					$this->db_query("DELETE FROM aw_server_list WHERE aw_oid = $id");
+					$this->db_query("UPDATE aw_server_list SET aw_oid = $id WHERE id = $row[id]");
+				}
+			}
 			return;
 		}
 

@@ -2,7 +2,6 @@
 /*
 @classinfo maintainer=voldemar
 */
-
 if (!defined("AW_DIR"))
 {
 	// script for old site startup

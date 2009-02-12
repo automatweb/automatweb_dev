@@ -25,6 +25,24 @@
             <caption>IP</caption>
       </property>
       <property>
+            <name>customer</name>
+            <table>aw_server_list</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUSTOMER</reltype>
+            <field>aw_customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>contact</name>
+            <table>aw_server_list</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT</reltype>
+            <field>aw_contact</field>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>aw_server_list</table>
             <group>general</group>
@@ -49,5 +67,20 @@
                   <index>aw_oid</index>
             </aw_server_list>
       </tableinfo>
+      <reltypes>
+            <CUSTOMER>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
+                  <caption>Klient</caption>
+            </CUSTOMER>
+            <CONTACT>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kontaktisik</caption>
+            </CONTACT>
+      </reltypes>
 </properties>
 

@@ -15,8 +15,21 @@
 @property ip type=textbox
 @caption IP
 
+@property customer type=relpicker reltype=RELTYPE_CUSTOMER field=aw_customer
+@caption Klient
+
+@property contact type=relpicker reltype=RELTYPE_CONTACT field=aw_contact
+@caption Kontaktisik
+
+
 @property comment type=textarea rows=30 cols=80
 @caption Kommentaar
+
+@reltype CUSTOMER value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Klient
+
+@reltype CONTACT value=2 clid=CL_CRM_PERSON
+@caption Kontaktisik
 
 */
 
@@ -79,10 +92,11 @@ class aw_server_entry extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_customer":
+			case "aw_contact":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
 				));
 				return true;
 		}

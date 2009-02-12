@@ -71,7 +71,7 @@ class site_list extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sync",
-			"caption" => t("Sünkroniseeri andmebaas"),
+			"caption" => t("S&uuml;nkroniseeri andmebaas"),
 		));
 		$t->define_field(array(
 			'name' => 'change',
@@ -104,7 +104,7 @@ class site_list extends class_base
 			$row["sync"] = html::href(array(
 				"target" => "_blank",
 				'url' => $x."/orb.aw?class=sys&action=dbsync",
-				'caption' => t("Sünkroniseeri"),
+				'caption' => t("S&uuml;nkroniseeri"),
 			));
 			if ($row["site_used"])
 			{
@@ -380,13 +380,18 @@ class site_list extends class_base
 		}
 		else
 		{
-			$id = $this->db_fetch_field("SELECT MAX(id) AS max FROM aw_server_list", "max")+1;
-			$arr['id'] = $id;
-			$keys = join(",",array_keys($arr));
-			$vals = join(",", map("'%s'",array_values($arr)));
-			$q = "INSERT INTO aw_server_list($keys) VALUES($vals)";
-//			echo "insert q = $q <br />";
-			$this->db_query($q);
+			// find by ip
+			$row = $this->db_fetch_row("SELECT * FROM aw_server_list WHERE ip = '".trim($arr["ip"])."'");
+			if (!$row)
+			{
+				$id = $this->db_fetch_field("SELECT MAX(id) AS max FROM aw_server_list", "max")+1;
+				$arr['id'] = $id;
+				$keys = join(",",array_keys($arr));
+				$vals = join(",", map("'%s'",array_values($arr)));
+				$q = "INSERT INTO aw_server_list($keys) VALUES($vals)";
+//				echo "insert q = $q <br />";
+				$this->db_query($q);
+			}
 		}
 	}
 
@@ -435,6 +440,9 @@ class site_list extends class_base
 		return $res;
 	}
 
+	/**
+		@attrib name=orb_get_server_list nologin=1
+	**/
 	function orb_get_server_list($arr)
 	{
 		extract($arr);

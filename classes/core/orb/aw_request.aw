@@ -89,7 +89,6 @@ class aw_request
                         $this->args = $_GET;
                         $this->method = "GET";
                 }
-
 		return $this->args;
 	}
 

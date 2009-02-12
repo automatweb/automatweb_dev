@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.16 2009/02/03 14:22:59 instrumental Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.17 2009/02/12 11:04:06 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -1061,7 +1061,6 @@ die();
 		$o = obj($group_oid);
 		aw_restore_acl();
 		$admin_rootmenu = $this->_get_admin_rootmenu_from_group($o, $inherit);
-
 		if ($admin_rootmenu !== null)
 		{
 			aw_ini_set("admin_rootmenu2",$admin_rootmenu);

@@ -38,6 +38,13 @@
 			</function>
 		</action>
 
+		<action name="orb_get_server_list" nologin="1">
+			<function name="orb_get_server_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="get_server_id_by_ip" all_args="1">
 			<function name="get_server_id_by_ip">
 				<arguments>

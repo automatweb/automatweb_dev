@@ -130,6 +130,48 @@ class planner_model extends core
 		$awt->start("get-event-list");
 		$events = $this->get_event_list($args);
 		$awt->stop("get-event-list");
+
+		if (count($events))
+{
+		// load participant list
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_MEETING,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"oid" => array_keys($events)
+		));
+		$meetings = $ol->ids();
+		$c = new connection();
+		$conns = $c->find(array(
+			"from.class_id" => CL_CRM_PERSON,
+			"to" => $meetings,
+			"type" => "RELTYPE_PERSON_MEETING"
+		));
+		$participants = array();
+		foreach($conns as $con)
+		{
+			$participants[$con["to"]][$con["from"]] = array(
+				"id" => $con["from"],
+				"name" => $con["from.name"],
+				"class_id" => $con["from.class_id"],
+			);
+		}
+
+		$conns = $c->find(array(
+			"from.class_id" => CL_CRM_MEETING,
+			"from" => $meetings,
+			"type" => "RELTYPE_CUSTOMER"
+		));
+		$customers = array();
+		foreach($conns as $con)
+		{
+			$customers[$con["from"]][$con["to"]] = array(
+				"id" => $con["to"],
+				"name" => $con["to.name"],
+				"class_id" => $con["to.class_id"],
+			);
+		}
+}
 		$reflist = array();
 		$rv = array();
 		$awt->start("calendar-full-event-list");
@@ -146,6 +188,9 @@ class planner_model extends core
 			}
 			$of = new object($event["id"]);
 			$row = $event + $of->properties();
+			$row["parts"] = $participants[$event["id"]];
+			$row["custs"] = $customers[$event["id"]];
+
 			exit_function("get-edit-link");
 			$rec = array();
 			$gx = date("dmY",$event["start"]);

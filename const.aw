@@ -38,7 +38,6 @@ if (get_magic_quotes_gpc() && !defined("GPC_HANDLER"))
 }
 
 $pi = "";
-
 $PATH_INFO = isset($_SERVER["PATH_INFO"]) ? $_SERVER["PATH_INFO"] : null;
 $QUERY_STRING = isset($_SERVER["QUERY_STRING"]) ? $_SERVER["QUERY_STRING"] : null;
 $REQUEST_URI = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : null;
@@ -154,7 +153,6 @@ if (empty($LC))
 {
 	$LC="et";
 }
-
 // stat function fields
 define("FILE_SIZE",7);
 define("FILE_MODIFIED",9);
