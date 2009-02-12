@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.80 2009/02/11 12:27:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.81 2009/02/12 14:52:20 markop Exp $
 // shop_order.aw - Tellimus
 /*
 
@@ -1480,7 +1480,7 @@ class shop_order extends class_base
 		@param id required type=int acl=view
 	**/
 	function show($arr)
-	{
+	{//arr(dbg::short_backtrace());if(aw_global_get("uid") == "markop")arr();
 		if (!$arr["template"])
 		{
 			$arr["template"] = "show.tpl";
@@ -2028,6 +2028,20 @@ class shop_order extends class_base
 				"NO_RENT" => $this->parse("NO_RENT")
 			));
 		}
+
+		//kontrollerist suvaliste muutujate muutmiseks
+		//$form_ref seest saab info ja $entry sisse peab panema uue info - kontrolleris
+		if ($this->can("view", $oc->prop("order_show_controller")))
+		{
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$changed_vars = array();
+			$asd = $ctrl->eval_controller($oc->prop("order_show_controller") , &$changed_vars, $this->vars);
+		}
+		else
+		{
+			$changed_vars = array();
+		}
+		$this->vars($changed_vars);
 
 		return $this->parse();
 	}

@@ -108,11 +108,17 @@
 	@property use_controller type=checkbox ch_value=1
 	@caption N&auml;itamiseks kasuta kontrollerit
 
+	@property use_cart_controller type=checkbox ch_value=1
+	@caption Ostukorvi n&auml;itamiseks kasuta kontrollerit
+
 	@property no_show_cart_contents type=checkbox ch_value=1
 	@caption &Auml;ra n&auml;ita korvi kinnitusvaadet
 
 	@property controller type=relpicker reltype=RELTYPE_CONTROLLER
 	@caption Vaikimisi n&auml;itamise kontroller
+
+	@property order_show_controller type=relpicker reltype=RELTYPE_CONTROLLER
+	@caption Tellimuse n&auml;itamise kontroller
 
 	@property sortbl type=table store=no
 	@caption Toodete sorteerimine
