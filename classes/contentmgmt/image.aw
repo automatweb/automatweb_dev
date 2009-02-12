@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.40 2009/02/12 10:04:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.41 2009/02/12 14:23:12 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -520,7 +520,7 @@ class image extends class_base
 					$replacement = localparse($tpls["image_linked"],$vars);
 				}
 				else 
-				if (!aw_ini_get("no_default_template"))
+				if (!aw_ini_get("image.no_default_template"))
 				{
 					$authortxt = "";
 					if ($idata['meta']['author'] != "")
@@ -585,7 +585,7 @@ class image extends class_base
 				{
 					$replacement = localparse($tpls[$tpl],$vars);
 				}
-				else if (!aw_ini_get("no_default_template"))
+				else if (!aw_ini_get("image.no_default_template"))
 				{
 					$replacement = "";
 					if ($vars["align"] != "")
