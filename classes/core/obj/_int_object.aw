@@ -1943,7 +1943,7 @@ class _int_object
 		}
 	}
 
-	protected function _int_load_properties($cl_id = NULL)
+	function _int_load_properties($cl_id = NULL)
 	{
 		if (empty($cl_id) and !empty($this->obj["class_id"]))
 		{
