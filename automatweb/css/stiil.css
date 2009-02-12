@@ -89,6 +89,9 @@ a:hover {text-decoration: underline}
 	padding: 5px 20px 5px 43px;
 	margin: 0;
 }
+#pais .top-right-menyy a.quickmessagebox_link {
+	padding: 3px 8px 2px 10px;
+}
 #pais .top-right-menyy .nool {
 	top: -1px;
 	position: relative

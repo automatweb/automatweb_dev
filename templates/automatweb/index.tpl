@@ -149,7 +149,7 @@ $.init_session_modal({
 	<div class="top-right-menyy">
 		{VAR:lang_pop}
 		{VAR:settings_pop}
-		<a href="{VAR:msg_url}"><img src="{VAR:baseurl}/automatweb/images/icons/mail_send.gif" border="0" alt="msg" /></a>
+		<a title="{VAR:msg_title}" href="{VAR:msg_url}" class="quickmessagebox_link"><img src="{VAR:baseurl}/automatweb/images/icons/mail_send.gif" border="0" alt="{VAR:msg_title}" /></a>
 		<a href="{VAR:baseurl}/orb.aw?class=users&action=logout" class="logout">{VAR:logout_text}</a>
 	</div>
 
