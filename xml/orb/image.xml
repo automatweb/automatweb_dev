@@ -210,6 +210,14 @@
 				</arguments>
 			</function>
 		</action>
+                <action name="delete_image">
+                        <function name="delete_image">
+                                <arguments>
+                                        <required name="id" type="int" acl="view" />
+					<optional name="delete_file" />
+                                </arguments>
+                        </function>
+                </action>
 
 	</class>
 </orb>

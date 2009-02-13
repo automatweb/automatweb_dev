@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.41 2009/02/12 14:23:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.42 2009/02/13 08:33:40 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1308,7 +1308,6 @@ class image extends class_base
 					$final_name = $_fi->generate_file_path(array(
 						"type" => $ftype,
 					));
-				
 					move_uploaded_file($src_file, $final_name);
 
 					if (function_exists("exif_read_data"))

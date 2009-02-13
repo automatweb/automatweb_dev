@@ -534,7 +534,7 @@ class file extends class_base
 
 				if (is_uploaded_file($file))
 				{
-					if ($this->cfg["upload_virus_scan"])
+					if (aw_ini_get("file.upload_virus_scan"))
 					{
 						if (($vir = $this->_do_virus_scan($file)))
 						{
@@ -753,7 +753,7 @@ class file extends class_base
 
 			if ($fi["meta"]["show_framed"])
 			{
-				$url = $this->cfg["baseurl"]."/section=".aw_global_get("section")."/oid=$alias[target]";
+				$url = aw_ini_get("baseurl")."/section=".aw_global_get("section")."/oid=$alias[target]";
 			}
 			else
 			{
@@ -849,7 +849,7 @@ class file extends class_base
 
 		}
 		$mt = get_instance("core/aw_mime_types");
-		$site_basedir = $this->cfg["site_basedir"];
+		$site_basedir = aw_ini_get("site_basedir");
 		// find the extension for the file
 		if (strpos($arr["type"], "/") !== false)
 		{
@@ -884,11 +884,11 @@ class file extends class_base
 	{
 		if (is_object($row))
 		{
-			return in_array($row->prop("type"),$this->cfg["embtypes"]);
+			return in_array($row->prop("type"),aw_ini_get("file.embtypes"));
 		}
 		else
 		{
-			return in_array($row["type"],$this->cfg["embtypes"]);
+			return in_array($row["type"],aw_ini_get("file.embtypes"));
 		}
 	}
 
@@ -1059,11 +1059,11 @@ class file extends class_base
 	{
 		if ($args["sys"])
 		{
-			$path = $this->cfg["basedir"] . "/files";
+			$path = aw_ini_get("basedir") . "/files";
 		}
 		else
 		{
-			$path = $this->cfg["site_basedir"] . "/files";
+			$path = aw_ini_get("site_basedir") . "/files";
 		};
 
 		if ($args["path"])
@@ -1083,11 +1083,11 @@ class file extends class_base
 	{
 		if ($args["sys"])
 		{
-			$path = $this->cfg["basedir"] . "/files";
+			$path = aw_ini_get("basedir") . "/files";
 		}
 		else
 		{
-			$path = $this->cfg["site_basedir"] . "/files";
+			$path = aw_ini_get("site_basedir") . "/files";
 		};
 
 		if ($args["path"])
