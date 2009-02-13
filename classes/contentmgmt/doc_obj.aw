@@ -12,7 +12,7 @@ class doc_obj extends _int_object
 				$tbl = $inst->db_get_table("documents");
 				if (!isset($tbl["fields"]["show_to_country"]))
 				{
-					$this->db_add_col("documents", array(
+					$this->instance()->db_add_col("documents", array(
 						"name" => "show_to_country",
 						"type" => "varchar(255)"
 					));
