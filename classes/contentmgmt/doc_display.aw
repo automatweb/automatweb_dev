@@ -213,7 +213,6 @@ class doc_display extends aw_template
 			"text_no_aliases" => $text_no_aliases,
 			"title" => $title,
 			"author" => $doc->prop("author"),
-			"channel" => $doc->prop("channel"),
 			"docid" => $doc->id(),
 			"modified_by" => $mb_person->name(),
 			"date_est" => locale::get_lc_date($_date, LC_DATE_FORMAT_LONG),
