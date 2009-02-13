@@ -2431,8 +2431,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$done_ot_js = array(); 	// reverting remembering this, because previously it was needed for double joins on same names, but now we filter the doubles and unneeded joins out later anyway
 					// and this actually can cause some joins to go missing that are needed, cause it does not recurd the full parameter list
 		// now make joins and for the final prop, query
+//echo dbg::dump($this->join_data);
 		foreach($this->join_data as $pos => $join)
 		{
+//echo "process ".dbg::dump($join)." <br>";
 			if ($join["via"] == "rel")
 			{
 				// from prev to alias from alias to obj
@@ -2562,7 +2564,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$field = $new_t[$tbl]["index"];
 					}
 
-					$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$prev_t.".target ";
+					if ($prev["is_reverse"] == 1)
+					{
+						$tmp_fld = "source";
+					}
+					else
+					{	
+						$tmp_fld = "target";
+					}
+					$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$prev_t.".".$tmp_fld." ";
 					$this->_add_s($prev_t);
 					$this->_add_join($str);
 //					$this->joins[] = $str;
