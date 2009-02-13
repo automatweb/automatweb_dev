@@ -2158,17 +2158,23 @@ EOF;
 					"status" => object::STAT_ACTIVE,
 					"lang_id" => array(),
 					"site_id" => array(),
-					"CL_GROUP.RELTYPE_MEMBERSHIP.RELTYPE_USER" => $tmp,
-					"CL_GROUP.RELTYPE_MEMBERSHIP.status" => object::STAT_ACTIVE,
+					"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).RELTYPE_USER" => $tmp,
+					"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).status" => object::STAT_ACTIVE,
 					new object_list_filter(array(
 						"logic" => "OR",
 						"conditions" => array(
-							"CL_GROUP.RELTYPE_MEMBERSHIP.membership_forever" => 1,
+							"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).membership_forever" => 1,
 							new object_list_filter(array(
 								"logic" => "AND",
 								"conditions" => array(
-									"CL_GROUP.RELTYPE_MEMBERSHIP.date_start" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
-									"CL_GROUP.RELTYPE_MEMBERSHIP.date_end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+									"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).date_start" => new obj_predicate_compare(
+										OBJ_COMP_LESS_OR_EQ
+										, time()
+									),
+									"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).date_end" => new obj_predicate_compare(
+										OBJ_COMP_GREATER,
+										time()
+									),
 								),
 							)),
 						),
@@ -2397,7 +2403,7 @@ EOF;
 			{
 				continue;
 			}
-			if ($o->prop("priority") > $can_adm_max && $o->prop("if_acls_set"))
+			if ((!isset($can_adm_max) || $o->prop("priority") > $can_adm_max) && $o->prop("if_acls_set"))
 			{
 				// all settings except can use admin depend on if_acls_set being true
 				$dyc = $o->prop("editable_settings");
@@ -2405,7 +2411,7 @@ EOF;
 			}
 		}
 
-		if ($dyc && !$dyc[$arr["id"]])
+		if (isset($dyc) && (!isset($dyc[$arr["id"]]) || !$dyc[$arr["id"]]))
 		{
 			return false;
 		}
@@ -2479,7 +2485,7 @@ EOF;
 			{
 				continue;
 			}
-			if ($o->prop("priority") > $can_adm_max && $o->prop("if_acls_set"))
+			if ((!isset($can_adm_max) || $o->prop("priority") > $can_adm_max) && $o->prop("if_acls_set"))
 			{
 				// all settings except can use admin depend on if_acls_set being true
 				$dyc = $o->prop("editable_settings");
