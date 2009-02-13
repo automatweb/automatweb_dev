@@ -2428,8 +2428,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
-		$done_ot_js = $this->done_ot_js;
-
+		$done_ot_js = array(); 	// reverting remembering this, because previously it was needed for double joins on same names, but now we filter the doubles and unneeded joins out later anyway
+					// and this actually can cause some joins to go missing that are needed, cause it does not recurd the full parameter list
 		// now make joins and for the final prop, query
 		foreach($this->join_data as $pos => $join)
 		{
@@ -2609,7 +2609,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if (!isset($done_ot_js[$objt_name]))
 				{
 					$this->_add_join(" LEFT JOIN objects $objt_name ON ".$objt_name.".oid = $prev_t.".$join["field"]." ");
-//					$this->joins[] = " LEFT JOIN objects $objt_name ON ".$objt_name.".oid = $prev_t.".$join["field"]." ";
 					$this->_add_s($prev_t);
 					$done_ot_js[$objt_name] = 1;
 				}
@@ -3892,6 +3891,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	private function _add_join($str)
 	{
+//	echo "add join $str from ".dbg::short_backtrace()." <br> <br>";
 		$this->joins[] = $str;
 	}
 
