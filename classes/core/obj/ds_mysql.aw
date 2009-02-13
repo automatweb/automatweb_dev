@@ -3086,8 +3086,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$param = $resn->params;
 					if (isset($p[$param]))
 					{
-						$param = $p[$param]["table"].".`".$p[$param]["field"]."`";
 						$this->_add_s($p[$param]["table"]);
+						$param = $p[$param]["table"].".`".$p[$param]["field"]."`";
 					}
 					switch($resn->sql_func)
 					{
@@ -3896,7 +3896,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	private function _add_s($tbl)
 	{
-		$this->search_tables_used[$tbl] = dbg::short_backtrace();
+		$this->search_tables_used[$tbl] = 1; //dbg::short_backtrace();
 	}
 
 	private function _add_join($str)
