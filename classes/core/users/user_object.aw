@@ -47,9 +47,9 @@ class user_object extends _int_object
 		// create home folder
 		aw_disable_acl();
 		$o = obj();
+		$o->set_class_id(CL_MENU);
 		$o->set_parent(1);
 		$o->set_name($this->prop("uid"));
-		$o->set_class_id(CL_MENU);
 		$o->set_comment(sprintf(t("%s kodukataloog"), $this->prop("uid")));
 		$o->set_prop("type", MN_HOME_FOLDER);
 		$hfid = $o->save();
