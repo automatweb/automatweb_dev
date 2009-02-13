@@ -4059,21 +4059,6 @@ class cfgform extends class_base
 				}
 			}
 		}
-		if ($read_from_trans && aw_global_get("LC") != $o->lang())
-		{
-			// get all props from class
-			$tmp = obj();
-			$tmp->set_class_id($o->subclass());
-			foreach($tmp->get_property_list() as $pn => $pd)
-			{
-				// trick here is, that we do not need to redo the t() calls, because the translations are already loaded
-				// so we just copy the captions
-				if (isset($ret[$pn]))
-				{
-					//$ret[$pn]["caption"] = $pd["caption"];
-				}
-			}
-		}
 
 		// also eval all controllers
 		foreach((array)$o->prop("cfg_groups") as $grpn => $grpdat)
@@ -4116,7 +4101,10 @@ class cfgform extends class_base
 					}
 				}
 
-				if(!$allowed_to_see) unset($ret[$key]);
+				if(!$allowed_to_see) 
+				{
+					unset($ret[$key]);
+				}
 			}
 		}
 

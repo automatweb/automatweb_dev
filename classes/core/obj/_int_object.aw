@@ -2782,7 +2782,7 @@ class _int_object
 			{
 				$this->_int_sync_from_objfield_to_prop($key, false);
 			}
-		}//if($this->id() == 3479)arr($this->obj["properties"]);
+		}
 		$this->props_loaded = true;
 	}
 
@@ -2815,14 +2815,6 @@ class _int_object
 		$restricted_classes = array(CL_DOCUMENT, CL_MENU);
 		if(!in_array($this->obj["class_id"], $restricted_classes) && is_oid($this->obj["oid"]))
 		{
-			/* Sorry, but somewhy obj() sometimes goes to infinite cycle.
-			$cff = $this->instance()->get_cfgform_for_object(array(
-				"obj_inst" => obj($this->obj["oid"]),
-				"args" => array(
-					"action" => "change",
-				),
-			));
-			*/
 			if(isset($this->obj["meta"]["cfgform_id"]) && is_oid($this->obj["meta"]["cfgform_id"]))
 			{
 				$cff = $this->obj["meta"]["cfgform_id"];
