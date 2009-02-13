@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.21 2009/02/11 14:31:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.22 2009/02/13 12:29:51 dragut Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -624,6 +624,7 @@ class watercraft_add extends class_base
 		else
 		{
 			$watercraft_obj = new object($_SESSION['watercraft_input_data']['watercraft_id']);
+			$watercraft_obj->set_name($watercraft_obj->prop('brand') . ' - ' . $watercraft_obj->prop('engine_model'));
 		}
 
 		// here i can upload/save images
