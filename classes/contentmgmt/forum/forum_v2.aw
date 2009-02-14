@@ -562,7 +562,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			foreach($data->get() as $topic_id => $jrk)
 			{
 				$to = obj($topic_id);
-				$to->set_prop("jrk", $jrk);
+				$to->set_ord($jrk);
 				$to->save();
 			}
 		}
