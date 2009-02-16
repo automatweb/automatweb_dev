@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.90 2009/02/16 07:58:02 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.91 2009/02/16 09:17:56 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -157,6 +157,12 @@ caption Linnade kaust
 			@property stats_filt_end1 type=date_select store=no parent=stats_filt_left
 			@caption &Uuml;rituse algus kuni
 
+			@property stats_filt_currency type=select store=no parent=stats_filt_left
+			@caption Valuuta
+
+			@property stats_filt_confirmed type=checkbox ch_value=1 store=no parent=stats_filt_left
+			@caption Ainult kinnitatud
+
 		 @layout stats_filt_right type=vbox parent=stats_filt_lay
 
 			@property stats_filt_start2 type=date_select store=no parent=stats_filt_right default=-1
@@ -165,6 +171,9 @@ caption Linnade kaust
 			@property stats_filt_end2 type=date_select store=no parent=stats_filt_right default=-1
 			@caption &Uuml;rituse sisestus kuni
 
+			@property stats_filt_hotel type=select store=no parent=stats_filt_right
+			@caption Hotell
+	
 	@property stats_tbl type=table no_caption=1
 
 @groupinfo rfps caption="Tellimused"
@@ -445,6 +454,33 @@ class rfp_manager extends class_base
 			case "s_org":
 			case "s_contact":
 			case "s_from_planner":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+			case "stats_filt_hotel":
+				$prop["options"][0] = t("-- K&otilde;ik --");
+				$hs = $this->rfpm->prop("hotels");
+				if(is_array($hs) && count($hs))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_LOCATION,
+						"oid" => $hs,
+					));
+					foreach($ol->arr() as $obj)
+					{
+						$prop["options"][$obj->id()] = $obj->name();
+					}
+				}
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+			case "stats_filt_currency":
+				$ol = new object_list(array(
+					"class_id" => CL_CURRENCY,
+					"lang_id" => array(),
+				));
+				$prop["options"] = $ol->names();
+				$prop["value"] = $arr["request"][$prop["name"]] ? $arr["request"][$prop["name"]] : $arr["obj_inst"]->prop("default_currency");
+				break;
+			case "stats_filt_confirmed":
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 			case "stats_filt_start1":
@@ -1623,7 +1659,7 @@ class rfp_manager extends class_base
 		$arr["post_ru"] = post_ru();
 		if($arr["group"] == "stats")
 		{
-			$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2");
+			$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2", "stats_filt_hotel", "stats_filt_confirmed", "stats_filt_currency");
 			foreach($stats_filt as $var)
 			{
 				if($_GET[$var])
@@ -1648,7 +1684,7 @@ class rfp_manager extends class_base
 		{
 			$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
 		}
-		$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2");
+		$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2", "stats_filt_hotel", "stats_filt_confirmed", "stats_filt_currency");
 		foreach($stats_filt as $var)
 		{
 			if($arr["request"][$var])
@@ -2580,6 +2616,12 @@ class rfp_manager extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "total",
+			"caption" => t("Kokku"),
+			"parent" => "money",
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "event_type",
 			"caption" => t("&Uuml;rituse t&uuml;&uuml;p"),
 			"parent" => "money",
@@ -2613,7 +2655,7 @@ class rfp_manager extends class_base
 	**/
 	function export_stats($arr)
 	{
-		$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2");
+		$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2", "stats_filt_hotel", "stats_filt_confirmed", "stats_filt_currency");
 		foreach($stats_filt as $var)
 		{
 			$arr["request"][$var] = $arr["h_".$var];
@@ -2641,7 +2683,7 @@ class rfp_manager extends class_base
 		$start1 = date_edit::get_timestamp($arr["request"]["stats_filt_start1"]);
 		$start2 = date_edit::get_timestamp($arr["request"]["stats_filt_start2"]);
 		$end1 = date_edit::get_timestamp($arr["request"]["stats_filt_end1"]);
-		$end2 = date_edit::get_timestamp($arr["request"]["stats_filt_end"]);
+		$end2 = date_edit::get_timestamp($arr["request"]["stats_filt_end2"]);
 		if($start1 > 0 && $end1 > 0)
 		{
 			$param["data_gen_arrival_date_admin"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start1, $end1);
@@ -2651,8 +2693,16 @@ class rfp_manager extends class_base
 			$param["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start2, $end2);
 			
 		}
+		if($arr["request"]["stats_filt_confirmed"])
+		{
+			$param["confirmed"] = 2;
+		}
+		$cur = $param["default_currency"] = $arr["request"]["stats_filt_currency"];
+		if($arr["request"]["stats_filt_hotel"])
+		{
+			$param["data_gen_hotel"] = $arr["request"]["stats_filt_hotel"];
+		}
 
-		$cur = $arr["obj_inst"]->prop("default_currency");
 		$rvi = get_instance(CL_RESERVATION);
 		$ri = get_instance(CL_ROOM);
 		$rfpi = get_instance(CL_RFP);
@@ -2687,8 +2737,8 @@ class rfp_manager extends class_base
 			}
 			$titles["rooms"] = t("K&auml;ive"); $titles["catering"] = "";
 			$titles["resources"] = ""; $titles["housing"] = "";
-			$titles["additional_services"] = ""; $titles["event_type"] = "";
-			$titles["status"] = ""; 
+			$titles["additional_services"] = ""; $titles["total"] = "";
+			$titles["event_type"] = ""; $titles["status"] = ""; 
 			$data[] = $titles;
 			$titles = array();
 			$titles["evt_start"] = t("Algus");
@@ -2710,10 +2760,13 @@ class rfp_manager extends class_base
 			$titles["resources"] = t("Ressursid");
 			$titles["housing"] = t("Majutus");
 			$titles["additional_services"] = t("Lisateenused");
+			$titles["total_sum"] = t("Kokku");
 			$titles["event_type"] = t("&Uuml;rituse t&uuml;&uuml;p");
 			$titles["status"] = t("Tellimuse staatus");
 			$data[] = $titles;
 		}
+
+		$total_sum = 0;
 
 		foreach($ol->arr() as $o)
 		{
@@ -2785,8 +2838,10 @@ class rfp_manager extends class_base
 				$room_sums[$rid] += $roomdata[$rid];
 			}
 
+			$total = 0;
 			$row["rooms"] = $room_sum;
 			$rooms_sum += $room_sum;
+			$total += $room_sum;
 
 			$product_sum = 0;
 			$conn = $o->connections_from(array(
@@ -2815,9 +2870,11 @@ class rfp_manager extends class_base
 			}
 			$row["catering"] = $product_sum;
 			$catering_sum += $product_sum;
+			$total += $product_sum;
 
 			$row["resources"] = $res_sum;
 			$resources_sum += $res_sum;
+			$total += $res_sum;
 
 			$housing = $o->meta("housing");
 			$sum = 0;
@@ -2827,6 +2884,7 @@ class rfp_manager extends class_base
 			}
 			$row["housing"] = $sum;
 			$housing_sum += $sum;
+			$total += $housing_sum;
 
 			$services = $o->get_additional_services();
 			$sum = 0;
@@ -2836,6 +2894,10 @@ class rfp_manager extends class_base
 			}
 			$row["additional_services"] = $sum;
 			$additional_services_sum = $sum;
+			$total += $sum;
+			
+			$row["total"] = $total;
+			$total_sum += $total;
 
 			$row["event_type"] = $o->prop("data_mf_event_type.name");
 			$statuses = $o->instance()->get_rfp_statuses();

@@ -445,6 +445,27 @@
             <caption>&amp;amp;Uuml;rituse algus kuni</caption>
       </property>
       <property>
+            <name>stats_filt_currency</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>stats_filt_left</parent>
+            <field>stats_filt_currency</field>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
+            <name>stats_filt_confirmed</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>stats_filt_left</parent>
+            <field>stats_filt_confirmed</field>
+            <caption>Ainult kinnitatud</caption>
+      </property>
+      <property>
             <name>stats_filt_start2</name>
             <table>objects</table>
             <group>stats</group>
@@ -465,6 +486,16 @@
             <default>-1</default>
             <field>stats_filt_end2</field>
             <caption>&amp;amp;Uuml;rituse sisestus kuni</caption>
+      </property>
+      <property>
+            <name>stats_filt_hotel</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>stats_filt_right</parent>
+            <field>stats_filt_hotel</field>
+            <caption>Hotell</caption>
       </property>
       <property>
             <name>stats_tbl</name>
