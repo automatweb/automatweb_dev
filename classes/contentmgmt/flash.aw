@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.18 2008/10/06 14:01:51 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.19 2009/02/16 10:41:10 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -174,7 +174,7 @@ class flash extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$rootdir = $this->cfg["site_basedir"];
+		$rootdir = aw_ini_get("site_basedir");
 		$f1 = substr($file,0,1);
 		$fname = $rootdir . "/img/$f1/" . $file;
 		if ($file) 
@@ -194,7 +194,7 @@ class flash extends class_base
 
 			if (!$passed)
 			{
-				$rootdir = $this->cfg["site_basedir"];
+				$rootdir = aw_ini_get("site_basedir");
 				$fname = $rootdir . "/files/$f1/" . $file;
 				if (is_file($fname) && is_readable($fname)) 
 				{
