@@ -1802,7 +1802,7 @@ class bug_tracker extends class_base
 			));
 			if($parent == 0)
 			{
-				$this->__insert_ppl_tree2($tree, $o, $prop."_".$o->id(), $arr, $prop);
+				$tree->add_item($prop."_".$o->id(), array());
 			}
 		}
 	}
@@ -1815,39 +1815,31 @@ class bug_tracker extends class_base
 		{
 			return;
 		}
-		$c = new connection();
-		foreach($c->find(array("from.class_id" => CL_BUG, "to.class_id" => CL_CRM_PERSON)) as $pc)
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_SECTION" => $o->id(),
+			"CL_CRM_PERSON.RELTYPE_MONITOR(CL_BUG).class_id" => CL_BUG,
+			"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.oid" => $owner->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		foreach($ol->arr() as $oid => $o)
 		{
-			if($set_ppl[$pc["to"]])
-			{
-				continue;
-			}
-			$set_ppl[$pc["to"]] = $pc["to"];
-			unset($wrl);
-			if($this->can("view", $pc["to"]))
-			{
-				$po = obj($pc["to"]);
-				$wrl = $po->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
-			}
-			if(!$wrl || $wrl->prop("section") != $o->id())
-			{
-				continue;
-			}
 			$ch_ol = new object_list(array(
 				"class_id" => CL_BUG,
 				"site_id" => array(),
 				"lang_id" => array(),
-				$prop => $pc["to"],
+				$prop => $oid,
 			));
 			if($num = $ch_ol->count())
 			{
 				$tree->add_item($parent, array(
-					"id" => $prop."_".$pc["to"],
-					"name" => $bp_i->__parse_name($pc["to.name"], $prop."_".$pc["to"], $arr, $num),
+					"id" => $prop."_".$oid,
+					"name" => $bp_i->__parse_name($o->name(), $prop."_".$oid, $arr, $num),
 					"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
 					"url" => aw_url_change_var(array(
 						"filt_type" => $prop,
-						"filt_value" => $prop."_".$pc["to"],
+						"filt_value" => $prop."_".$oid,
 					), false, $arr["set_retu"]),
 				));
 			}
