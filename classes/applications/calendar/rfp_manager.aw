@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.89 2009/01/19 14:05:39 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.90 2009/02/16 07:58:02 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -93,10 +93,11 @@ caption Linnade kaust
 		@property resources_table type=table store=no no_caption=1 group=resources
 
 @groupinfo raports caption="Raportid"
-@default group=raports
+@groupinfo raport caption="Raport" parent=raports
+@default group=raport
 	@property raports_tb type=toolbar no_caption=1 store=no
 
-	@layout raports_hsplit type=hbox group=raports width=25%:75%
+	@layout raports_hsplit type=hbox group=raport width=25%:75%
 		@layout raports_search type=vbox closeable=1 area_caption="Otsing" parent=raports_hsplit
 			@property raports_search_rfp_name type=textbox parent=raports_search captionside=top store=no
 			@caption &Uuml;rituse nimi
@@ -141,6 +142,30 @@ caption Linnade kaust
 			/@property raports_table type=table no_caption=1 store=no parent=raports_table
 			@property raports_table type=text no_caption=1 store=no parent=raports_table
 
+@groupinfo stats parent=raports caption="Statistika"
+@default group=stats
+
+	@property stats_tb type=toolbar no_caption=1
+
+	@layout stats_filt_lay type=hbox width=50%:50% group=stats
+
+		 @layout stats_filt_left type=vbox parent=stats_filt_lay
+
+			@property stats_filt_start1 type=date_select store=no parent=stats_filt_left
+			@caption &Uuml;rituse algus alates
+		
+			@property stats_filt_end1 type=date_select store=no parent=stats_filt_left
+			@caption &Uuml;rituse algus kuni
+
+		 @layout stats_filt_right type=vbox parent=stats_filt_lay
+
+			@property stats_filt_start2 type=date_select store=no parent=stats_filt_right default=-1
+			@caption &Uuml;rituse sisestus alates
+		
+			@property stats_filt_end2 type=date_select store=no parent=stats_filt_right default=-1
+			@caption &Uuml;rituse sisestus kuni
+
+	@property stats_tbl type=table no_caption=1
 
 @groupinfo rfps caption="Tellimused"
 @groupinfo rfps_active caption="Aktiivsed" parent=rfps
@@ -421,6 +446,12 @@ class rfp_manager extends class_base
 			case "s_contact":
 			case "s_from_planner":
 				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+			case "stats_filt_start1":
+			case "stats_filt_start2":
+			case "stats_filt_end1":
+			case "stats_filt_end2":
+				$prop["value"] = date_edit::get_timestamp($arr["request"][$prop["name"]]);
 				break;
 			case "s_time_to":
 			case "s_time_from":
@@ -1590,6 +1621,17 @@ class rfp_manager extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		if($arr["group"] == "stats")
+		{
+			$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2");
+			foreach($stats_filt as $var)
+			{
+				if($_GET[$var])
+				{
+					$arr["h_".$var] = $_GET[$var];
+				}
+			}
+		}
 	}
 
 	function callback_mod_retval($arr)
@@ -1605,6 +1647,14 @@ class rfp_manager extends class_base
 		foreach($todo as $do)
 		{
 			$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
+		}
+		$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2");
+		foreach($stats_filt as $var)
+		{
+			if($arr["request"][$var])
+			{
+				$arr["args"][$var] = $arr["request"][$var];
+			}
 		}
 	}
 
@@ -2390,7 +2440,428 @@ class rfp_manager extends class_base
 		return $as;
 	}
 
+	function _get_stats_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_save_button();
+		$tb->add_button(array(
+			"name" => "export_stats",
+			"tooltip" => t("Ekspordi statistika"),
+			"img" => "ftype_xls.gif",
+			"action" => "export_stats",
+		));
+	}
 
+	function _init_stats_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "general",
+			"caption" => t("&Uuml;ldinfo"),
+		));
+		$t->define_field(array(
+			"name" => "eas",
+			"caption" => t("EAS"),
+		));
+		$t->define_field(array(
+			"name" => "event_hours",
+			"caption" => t("&Uuml;ritustunnid"),
+		));
+		$t->define_field(array(
+			"name" => "money",
+			"caption" => t("K&auml;ive"),
+		));
+
+		$t->define_field(array(
+			"name" => "evt_start",
+			"caption" => t("Algus"),
+			"parent" => "general",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "evt_entry",
+			"caption" => t("Sisestus"),
+			"parent" => "general",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "realization",
+			"caption" => t("Tellimuse realiseerumine"),
+			"parent" => "general",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "orderer",
+			"caption" => t("Tellija"),
+			"parent" => "general",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "theme",
+			"caption" => t("Teema"),
+			"parent" => "eas",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "duration",
+			"caption" => t("Kestus"),
+			"parent" => "eas",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "international",
+			"caption" => t("Rahvusvaheline / kohalik"),
+			"parent" => "eas",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "countries",
+			"caption" => t("Riigid"),
+			"parent" => "eas",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "foreign_guests",
+			"caption" => t("V&auml;lisk&uuml;lalised"),
+			"parent" => "eas",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "local_guests",
+			"caption" => t("Kohalikud"),
+			"parent" => "eas",
+			"align" => "center",
+		));
+
+		$rf = $arr["obj_inst"]->prop("room_folder");
+		$ol = new object_list(array(
+			"class_id" => CL_ROOM,
+			"parent" => $rf,
+		));
+		foreach($ol->names() as $oid => $name)
+		{
+			$t->define_field(array(
+				"name" => "room".$oid,
+				"caption" => $name,
+				"parent" => "event_hours",
+				"align" => "center",
+			));
+		}
+
+		$t->define_field(array(
+			"name" => "rooms",
+			"caption" => t("Ruumid"),
+			"parent" => "money",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "catering",
+			"caption" => t("Toitlustus"),
+			"parent" => "money",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "resources",
+			"caption" => t("Ressursid"),
+			"parent" => "money",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "housing",
+			"caption" => t("Majutus"),
+			"parent" => "money",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "additional_services",
+			"caption" => t("Lisateenused"),
+			"parent" => "money",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "event_type",
+			"caption" => t("&Uuml;rituse t&uuml;&uuml;p"),
+			"parent" => "money",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Tellimuse staatus"),
+			"parent" => "money",
+			"align" => "center",
+		));
+		$t->set_sortable(false);
+	}
+
+	function _get_stats_tbl($arr)
+	{
+		if($arr["request"]["stats_filt_start1"] && $arr["request"]["stats_filt_end1"] || $arr["request"]["stats_filt_start2"] && $arr["request"]["stats_filt_end2"])
+		{
+			$t = &$arr["prop"]["vcl_inst"];
+			$this->_init_stats_tbl($arr);
+			$data = $this->get_stats_data($arr, false);
+			foreach($data as $row)
+			{
+				$t->define_data($row);
+			}
+		}
+	}
+
+	/**
+	@attrib name=export_stats all_args=1
+	**/
+	function export_stats($arr)
+	{
+		$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2");
+		foreach($stats_filt as $var)
+		{
+			$arr["request"][$var] = $arr["h_".$var];
+		}
+		$arr["obj_inst"] = obj($arr["id"]);
+		$data = $this->get_stats_data($arr, true);
+		$out = array();
+		foreach($data as $row)
+		{
+			foreach($row as $var => $val)
+			{
+				$row[$var] = sprintf("\"%s\"", str_replace("\"", "\\"."\"", html_entity_decode($val)));
+			}
+			$out[] = implode(";", $row);
+		}
+		$out = implode(chr(13).chr(10), $out);
+		header("Content-type: text/csv");
+		header("Content-Disposition: filename=stats.xsl");
+		die($out);
+	}
+
+	function get_stats_data($arr, $is_export)
+	{
+		$param["class_id"] = CL_RFP;
+		$start1 = date_edit::get_timestamp($arr["request"]["stats_filt_start1"]);
+		$start2 = date_edit::get_timestamp($arr["request"]["stats_filt_start2"]);
+		$end1 = date_edit::get_timestamp($arr["request"]["stats_filt_end1"]);
+		$end2 = date_edit::get_timestamp($arr["request"]["stats_filt_end"]);
+		if($start1 > 0 && $end1 > 0)
+		{
+			$param["data_gen_arrival_date_admin"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start1, $end1);
+		}
+		if($start2 > 0 && $end2 > 0)
+		{
+			$param["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start2, $end2);
+			
+		}
+
+		$cur = $arr["obj_inst"]->prop("default_currency");
+		$rvi = get_instance(CL_RESERVATION);
+		$ri = get_instance(CL_ROOM);
+		$rfpi = get_instance(CL_RFP);
+
+		$ol = new object_list($param);
+		$ol->sort_by(array(
+			"prop" => "data_gen_arrival_date_admin",
+			"sorder" => "asc",
+		));
+		
+		$rf = $arr["obj_inst"]->prop("room_folder");
+		$r_ol = new object_list(array(
+			"class_id" => CL_ROOM,
+			"parent" => $rf,
+		));
+		$rooms = $r_ol->names();
+
+		$data = array();
+
+		if($is_export)
+		{
+			$titles = array();
+			$titles["evt_start"] = t("&Uuml;ldinfo"); $titles["evt_entry"] = "";
+			$titles["realization"] = ""; $titles["orderer"] = "";
+			$titles["theme"] = t("EAS"); $titles["duration"] = "";
+			$titles["international"] = ""; $titles["countries"] = "";
+			$titles["foreign_guests"] = ""; $titles["local_guests"] = "";
+			foreach($rooms as $rid => $room)
+			{
+				$titles["room".$rid] = $r_set ? "" : t("&Uuml;ritustunnid");
+				$r_set = 1;
+			}
+			$titles["rooms"] = t("K&auml;ive"); $titles["catering"] = "";
+			$titles["resources"] = ""; $titles["housing"] = "";
+			$titles["additional_services"] = ""; $titles["event_type"] = "";
+			$titles["status"] = ""; 
+			$data[] = $titles;
+			$titles = array();
+			$titles["evt_start"] = t("Algus");
+			$titles["evt_entry"] = t("Sisestus");
+			$titles["realization"] = t("Tellimuse realiseerumine");
+			$titles["orderer"] = t("Tellija");
+			$titles["theme"] = t("Teema");
+			$titles["duration"] = t("Kestus");
+			$titles["international"] = t("Rahvusvaheline / kohalik");
+			$titles["countries"] = t("Riigid");
+			$titles["foreign_guests"] = t("V&auml;lisk&uuml;lalised");
+			$titles["local_guests"] = t("Kohalikud");
+			foreach($rooms as $rid => $room)
+			{
+				$titles["room".$rid] = $room;
+			}
+			$titles["rooms"] = t("Ruumid");
+			$titles["catering"] = t("Toitlustus");
+			$titles["resources"] = t("Ressursid");
+			$titles["housing"] = t("Majutus");
+			$titles["additional_services"] = t("Lisateenused");
+			$titles["event_type"] = t("&Uuml;rituse t&uuml;&uuml;p");
+			$titles["status"] = t("Tellimuse staatus");
+			$data[] = $titles;
+		}
+
+		foreach($ol->arr() as $o)
+		{
+			$start = $o->prop("data_gen_arrival_date_admin");
+			$end = $o->prop("data_gen_departure_date_admin");
+			$row["evt_start"] = date('d.m.Y', $start);
+			$row["evt_entry"] = date('d.m.Y', $o->created());
+			$row["realization"] = round(($start - $o->created()) / 60 / 60 / 24).(!$is_export ? " ".t("p&auml;eva") : "");
+			$orderer = $o->prop("data_subm_organisation");
+			$row["orderer"] = $this->can("view", $orderer) ? obj($orderer)->name() : $orderer;
+			$row["theme"] = $o->prop("final_theme.name");
+			$row["duration"] = (mktime(0,0,0,date('m', $end), date('d', $end), date('Y', $end)) - mktime(0,0,0,date('m', $start), date('d', $start), date('Y', $start))) / 24 / 60 / 60 + 1;
+			$duration_sum += $row["duration"];
+			$row["international"] = $o->prop("final_international") ? "r" : "k";
+			$cids = $o->prop("final_foreign_countries");
+			$countries = array();
+			foreach($cids as $cid)
+			{
+				$countries[$cid] = obj($cid)->name();
+			}
+			$row["countries"] = implode(", ", $countries);
+			$row["foreign_guests"] = $o->prop("final_foreign_guests");
+			$foreign_guests_sum += $row["foreign_guests"];
+			$row["local_guests"] = $o->prop("final_native_guests");
+			$local_guests_sum += $row["local_guests"];
+
+			$bron_conn = $o->connections_from(array(
+				"type" => "RELTYPE_RESERVATION",
+			));
+			$res_sum = 0;
+			$room_sum = 0;
+			$roomdata = array();
+			foreach($bron_conn as $c)
+			{
+				$bron = $c->to();
+				if($bron->prop("verified"))
+				{
+					$start = $bron->prop("start1");
+					$end = $bron->prop("end");
+	
+					$times = $rfpi->alter_reservation_time_include_extra_min_hours($bron, $arr["obj_inst"]);
+					$sum = $ri->cal_room_price(array(
+						"room" => $bron->prop("resource"),
+						"start" => $times["start1"],
+						"end" => $times["end"],
+						"people" => $bron->prop("people_count"),
+						"products" => $bron->meta("amount"),
+						"bron" => $bron,
+						"detailed_info" => true
+					));
+					$sum["room_price"] = $rfpi->alter_reservation_price_include_extra_max_hours($bron, $arr["obj_inst"], $sum["room_price"]);
+					$total = $sum["room_price"][$cur];
+					$ssum = $bron->get_special_sum();
+					if($ssum[$cur])
+					{
+						$total = $ssum[$cur];
+					}
+					$room_sum += $total;
+
+					$room = $bron->prop("resource");
+					$roomdata[$room] = (mktime(date('H', $end), 0, 0, date('m', $end), date('d', $end), date('Y', $end)) - mktime(date('H', $start), 0, 0, date('m', $start), date('d', $start), date('Y', $start))) /  60 / 60 + 1;
+					$res_prices = $bron->get_resources_sum();
+					$res_sum += $res_prices[$cur];
+				}
+			}
+			foreach($rooms as $rid => $room)
+			{
+				$row["room".$rid] = $roomdata[$rid];
+				$room_sums[$rid] += $roomdata[$rid];
+			}
+
+			$row["rooms"] = $room_sum;
+			$rooms_sum += $room_sum;
+
+			$product_sum = 0;
+			$conn = $o->connections_from(array(
+				"type" => "RELTYPE_CATERING_RESERVATION",
+			));
+			foreach($conn as $c)
+			{
+				$rv = $c->to();
+				$rv_amount = $rv->get_product_amount();
+				$discount = $rvi->get_product_discount($rv->id());
+				$prod_list = $rvi->get_room_products($rv->prop("resource"));
+				foreach($prod_list->arr() as $prod)
+				{
+					$count = $rv_amount[$prod->id()];
+					if(!$arr["request"]["show_all_prods"][$rv->id()] && !$count)
+					{
+						$prod_skip = true;
+						continue;
+					}
+					$prices = $prod->meta("cur_prices");
+					$price = $prices[$cur];
+					$disc = $discount[$prod->id()];
+					$prod_sum = $price * $count;
+					$product_sum = $prod_sum - ($prod_sum * $disc)/100;
+				}
+			}
+			$row["catering"] = $product_sum;
+			$catering_sum += $product_sum;
+
+			$row["resources"] = $res_sum;
+			$resources_sum += $res_sum;
+
+			$housing = $o->meta("housing");
+			$sum = 0;
+			foreach($housing as $h)
+			{
+				$sum += $h["sum"];
+			}
+			$row["housing"] = $sum;
+			$housing_sum += $sum;
+
+			$services = $o->get_additional_services();
+			$sum = 0;
+			foreach($services as $s)
+			{
+				$sum += $s["sum"];
+			}
+			$row["additional_services"] = $sum;
+			$additional_services_sum = $sum;
+
+			$row["event_type"] = $o->prop("data_mf_event_type.name");
+			$statuses = $o->instance()->get_rfp_statuses();
+			$row["status"] = $statuses[$o->prop("confirmed")];
+			$data[] = $row;
+		}
+		$sums = reset($data);
+		foreach($sums as $var => $val)
+		{
+			if(isset(${$var."_sum"}))
+			{
+				$sums[$var] = ${$var."_sum"};
+			}
+			else
+			{
+				$sums[$var] = "";
+			}
+		}
+		foreach($room_sums as $rid => $sum)
+		{
+			$sums["room".$rid] = $sum;
+		}
+		$sums["evt_start"] = t("Kokku");
+		$data = array_merge($data, array($sums));
+		return $data;
+	}
 
 	/** For internal use, removes prices from packages
 		@attrib name=remove_prices params=name all_args=1

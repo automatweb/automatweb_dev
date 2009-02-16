@@ -51,6 +51,13 @@
 			</function>
 		</action>
 
+		<action name="export_stats" all_args="1">
+			<function name="export_stats">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="remove_prices" all_args="1">
 			<function name="remove_prices">
 				<arguments>
