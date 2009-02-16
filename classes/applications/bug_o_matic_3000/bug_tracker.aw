@@ -1780,16 +1780,9 @@ class bug_tracker extends class_base
 			"lang_id" => array(),
 			"site_id" => array(),
 			"CL_CRM_PERSON.RELTYPE_MONITOR(CL_BUG).class_id" => CL_BUG,
+			"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.oid" => $owner->id(),
 		));
-		foreach($ol->arr() as $oid => $p)
-		{
-			unset($wrl);
-			$wrl = $po->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
-			if($wrl && $wrl->prop("org") == $owner->id())
-			{
-				$ppl[] = $oid;
-			}
-		}
+		$ppl = $ol->ids();
 		$ol = new object_list();
 		if(count($ppl))
 		{
