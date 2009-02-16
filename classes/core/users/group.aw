@@ -948,8 +948,8 @@ class group extends class_base
 				{
 					$gms = obj();
 					$gms->set_class_id(CL_GROUP_MEMBERSHIP);
-					$gms->set_name(sprintf(t("%s kuulub gruppi %s"), $user->uid, $group->name));
 					$gms->set_parent($user->id());
+					$gms->set_name(sprintf(t("%s kuulub gruppi %s"), $user->uid, $group->name));
 					$gms->set_status(object::STAT_ACTIVE);
 					$gms->gms_user = $user->id();
 					$gms->gms_group = $group->id();
@@ -964,7 +964,6 @@ class group extends class_base
 					}
 					$gms->save();
 				}
-//				die($gms->id());
 			}
 			else
 			{
@@ -1087,38 +1086,7 @@ class group extends class_base
 	**/
 	function get_group_members($g)
 	{
-		if(false && aw_ini_get("users.use_group_membership") == 1)
-		{
-			$ol = new object_list(array(
-				"class_id" => CL_USER,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).RELTYPE_GROUP" => $g->id(),
-				"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).status" => object::STAT_ACTIVE,
-				new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-						"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).membership_forever" => 1,
-						new object_list_filter(array(
-							"logic" => "AND",
-							"conditions" => array(
-								"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).date_start" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
-								"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).date_end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
-							),
-						)),
-					),
-				)),
-			));
-		}
-		else
-		{
-			$ol = new object_list(array(
-				"class_id" => CL_USER,
-				"parent" => $g->id(),
-				"lang_id" => array(),
-				"site_id" => array()
-			));
-		}
+		$ol = $g->get_goup_members();
 		return $ol->arr();
 	}
 

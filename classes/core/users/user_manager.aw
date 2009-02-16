@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.16 2008/11/26 20:51:01 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.17 2009/02/16 15:07:02 instrumental Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -83,7 +83,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 
 				@property usergroups_tree type=treeview no_caption=1 store=no parent=vbox_ug_tree
 
-			@layout vbox_ug_search type=vbox parent=ug_left_bit closeable=1 area_caption=Kasutajagruppide&nbsp;tsing
+			@layout vbox_ug_search type=vbox parent=ug_left_bit closeable=1 area_caption=Kasutajagruppide&nbsp;otsing
 		
 				@layout vbox_ug_search_name type=vbox parent=vbox_ug_search
 
@@ -907,18 +907,11 @@ class user_manager extends class_base
 		{
 			case 'grouprelated':
 				$parent_obj = obj($this->parent);
-				$table->set_caption("Grupi '$parent_obj->name' kasutajad".$link);	
+				$table->set_caption(sprintf(t("Grupi '%s' kasutajad"), $parent_obj->name).$link);	
 				$g = obj($this->parent);
-				$conns = $g->connections_from(array(
-					'type' => 'RELTYPE_MEMBER',
-					'class' => CL_USER,
-				));
-				foreach ($conns as $c)
-				{
-					$users[] = $c->prop('to');
-				}
-		
+				$users = $g->get_group_members()->ids();		
 			break;
+
 			case 'inactive':
 				$table->set_header(t("Mitteaktiivsed kasutajad").$link);	
 				// Find period of idleness needed to be listed
@@ -933,9 +926,9 @@ class user_manager extends class_base
 					'brother_of' => new obj_predicate_prop('id'),
 					//'status' => STAT_NOTACTIVE,
 				));
-				$users = $ol->list;
-				
+				$users = $ol->ids();
 			break;
+
 			case "search":
 				$table->set_caption("Otsingutulemused");
 				$r = $arr["request"];
@@ -974,7 +967,14 @@ class user_manager extends class_base
 					{
 						$conditions[] = "%".trim($grp)."%";
 					}
-					$ol_args["CL_USER.RELTYPE_GRP.name"] = $conditions;
+					if(aw_ini_get("users.use_group_membership") == 1)
+					{
+						$ol_args["CL_USER.RELTYPE_USER(CL_GROUP_MEMBERSHIP).RELTYPE_GROUP.name"] = $conditions;
+					}
+					else
+					{
+						$ol_args["CL_USER.RELTYPE_GRP.name"] = $conditions;
+					}
 				}
 				if($r["search_users_from"] == 1)
 				{
@@ -987,7 +987,14 @@ class user_manager extends class_base
 						$ids[] = $oid;
 						$ids += $ot->ids();
 					}
-					$ol_args["CL_USER.RELTYPE_GRP"] = $ids;
+					if(aw_ini_get("users.use_group_membership") == 1)
+					{
+						$ol_args["CL_USER.RELTYPE_USER(CL_GROUP_MEMBERSHIP).RELTYPE_GROUP"] = $ids;
+					}
+					else
+					{
+						$ol_args["CL_USER.RELTYPE_GRP"] = $ids;
+					}
 				}
 				$ol = new object_list($ol_args);
 				$users = $ol->ids();
@@ -1790,7 +1797,10 @@ class user_manager extends class_base
 		}
 
 		$u = obj($oid);
-		$u->set_class_id(CL_USER);
+		if(!is_class_id($u->class_id()))
+		{
+			$u->set_class_id(CL_USER);
+		}
 		$gl = $u->get_group_list();
 
 		foreach($gl as $gn => $d)

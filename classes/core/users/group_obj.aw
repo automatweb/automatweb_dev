@@ -36,39 +36,59 @@ class group_obj extends _int_object
 		{
 			return 0;
 		}
-		$odl = new object_data_list(
-			array(
-				"lang_id" => array(),
-				"site_id" => array(),
-				"class_id" => CL_USER,
-				"parent" => $this->id()
-			),
-			array(
-				"" => array(new obj_sql_func(OBJ_SQL_COUNT, "cnt", "oid"))
-			)
-		);
-		$r = $odl->arr();
-		return $r[0]["cnt"];
+		$ol = $this->get_group_members();
+		return $ol->count();
 	}
 
 	function get_group_persons()
 	{
 		$persons = new object_list();
-		$ol = new object_list(array(
-			"class_id" => CL_USER,
-			"parent" => $this->id(),
-			"lang_id" => array(),
-			"site_id" => array()
-		));
 		$user_inst = get_instance(CL_USER);
-		foreach($ol->arr() as $o)
+
+		foreach(get_instance(CL_GROUP)->get_group_members($this) as $o)
 		{
 			$persons->add($user_inst->get_person_for_user($o));
 		}
 		return $persons;
 	}
 
+	public function get_group_members()
+	{
+		if(aw_ini_get("users.use_group_membership") == 1)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_USER,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_USER.RELTYPE_USER(CL_GROUP_MEMBERSHIP).RELTYPE_GROUP" => $this->id(),
+				"CL_USER.RELTYPE_USER(CL_GROUP_MEMBERSHIP).status" => object::STAT_ACTIVE,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_USER.RELTYPE_USER(CL_GROUP_MEMBERSHIP).membership_forever" => 1,
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"CL_USER.RELTYPE_USER(CL_GROUP_MEMBERSHIP).date_start" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
+								"CL_USER.RELTYPE_USER(CL_GROUP_MEMBERSHIP).date_end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+							),
+						)),
+					),
+				)),
+			));
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_USER,
+				"parent" => $this->id(),
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+		}
 
+		return $ol;
+	}
 }
 
 ?>
