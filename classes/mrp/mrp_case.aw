@@ -324,20 +324,24 @@ class mrp_case extends class_base
 		$retval = PROP_OK;
 		$this_object =& $arr["obj_inst"];
 
+		$txt_grps = array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view");
+
 		switch($prop["name"])
 		{
 			case "name":
-				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
+				if(in_array($arr["request"]["group"], $txt_grps))
 				{
 					$prop["type"] = "text";
+					$prop["caption"] = trim($prop["caption"], "\.").":";
 				}
 				break;
 
 			case "customer":
-				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
+				if(in_array($arr["request"]["group"], $txt_grps))
 				{
 					$prop["type"] = "text";
 					$prop["value"] = $arr["obj_inst"]->prop($prop["name"].".name");
+					$prop["caption"] .= ":";
 				}
 				break;
 
@@ -371,6 +375,10 @@ class mrp_case extends class_base
 
 			case "state":
 				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : "M&auml;&auml;ramata";
+				if(in_array($arr["request"]["group"], $txt_grps))
+				{
+					$prop["caption"] .= ":";
+				}
 				break;
 
 			case "planned_date":

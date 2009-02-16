@@ -265,6 +265,17 @@
 
 				@property printer_tree type=treeview parent=printer_tree store=no
 
+			@layout printer_search type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;de&nbsp;otsing
+
+				@property ps_resource type=select parent=printer_search captionside=top
+				@caption Resurss
+
+				@property ps_project type=textbox parent=printer_search captionside=top
+				@caption Projekt
+
+				@property ps_submit type=submit parent=printer_search
+				@caption Otsi
+
 			@layout printer_personal type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;taja
 
 				@layout ppl_data type=vbox parent=printer_personal
@@ -272,13 +283,22 @@
 					@property pp_picture type=text parent=ppl_data store=no
 
 					@property pp_name type=text parent=ppl_data store=no
-					@caption Nimi
+					@caption Nimi:
 
-				@layout ppl_resources type=vbox_sub parent=printer_personal area_caption=Minu&nbsp;ressursid closeable=1
+					@property pp_profession type=text parent=ppl_data store=no
+					@caption Amet:
+
+					@property pp_section type=text parent=ppl_data store=no
+					@caption &Uuml;ksus:
+
+					@property pp_company type=text parent=ppl_data store=no
+					@caption Organisatsioon:
+
+				@layout ppl_resources type=vbox_sub parent=printer_personal area_caption=Minu&nbsp;ressursid closeable=1 no_padding=1
 
 					@property pp_resources type=table parent=ppl_resources no_caption=1 store=no
 
-				@layout ppl_birthdays type=vbox_sub parent=printer_personal area_caption=Kaast&ouml;&ouml;tajate&nbsp;s&uuml;nnip&auml;evad closeable=1
+				@layout ppl_birthdays type=vbox_sub parent=printer_personal area_caption=Meie&nbsp;t&ouml;&ouml;tajate&nbsp;s&uuml;nnip&auml;evad closeable=1 no_padding=1
 
 					@property pp_birthdays type=table parent=ppl_birthdays no_caption=1 store=no
 
@@ -1041,7 +1061,20 @@ class mrp_workspace extends class_base
 				break;
 
 			case "pp_name":
-				$prop["value"] = obj(get_instance("user")->get_current_person())->name;
+			case "pp_profession":
+			case "pp_section":
+			case "pp_company":
+				$map = array(
+					"pp_name" => "name",
+					"pp_profession" => "rank.name",
+					"pp_section" => "org_section.name",
+					"pp_company" => "work_contact.name",
+				);
+				$prop["value"] = obj(get_instance("user")->get_current_person())->prop($map[$prop["name"]]);
+				if(strlen($prop["value"]) === 0)
+				{
+					$retval = PROP_IGNORE;
+				}
 				break;
 
 			case "pp_resources":
@@ -1050,6 +1083,41 @@ class mrp_workspace extends class_base
 
 			case "pp_birthdays":
 				$this->_get_pp_birthdays($arr);
+				break;
+
+			case "ps_project":
+			case "ps_submit":
+				if (!empty($arr["request"]["pj_job"]))
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+
+			case "ps_resource":
+				if (!empty($arr["request"]["pj_job"]))
+				{
+					$retval = PROP_IGNORE;
+				}
+				else
+				{
+					$resids = $this->get_cur_printer_resources(array(
+						"ws" => $arr["obj_inst"],
+						"ign_glob" => true
+					));
+					$res_ol = new object_list();
+					if (count($resids))
+					{
+						$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
+					}
+					$empty_selection = array();
+					if (count($resids) > 1)
+					{
+						$empty_selection = array("0" => t("K&otilde;ik ressursid"));
+					}
+					$prop["options"] = $empty_selection + $res_ol->names();
+					$prop["value"] = aw_global_get("mrp_operator_use_resource");
+					$prop["onchange"] = "xchanged=1; submit_changeform('');";
+				}
 				break;
 
 			### projects tab
@@ -1183,7 +1251,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "resource_deviation_chart":
-				if($this->can("view", $arr["request"]["mrp_tree_active_item"]))
+				if(isset($arr["request"]["mrp_tree_active_item"]) && $this->can("view", $arr["request"]["mrp_tree_active_item"]) && obj($arr["request"]["mrp_tree_active_item"])->class_id() == CL_MRP_RESOURCE)
 				{
 					$id = $arr["request"]["mrp_tree_active_item"];
 
@@ -1202,7 +1270,7 @@ class mrp_workspace extends class_base
 					if($odl->count() == 0)
 					{
 						$prop["type"] = "text";
-						$prop["value"] = sprintf(t("Ressursil '%s' ei ole veel &uuml;htegi l&otilde;petatud t&ouml;&ouml;d!"), obj($id)->name());
+						$prop["value"] = sprintf(t("Ressursil '%s' ei ole veel &uuml;htegi l&otilde;petatud t&ouml;&ouml;d."), obj($id)->name());
 						return PROP_OK;
 					}
 					$jobs = $odl->arr();
@@ -1283,6 +1351,10 @@ class mrp_workspace extends class_base
 					$c->add_axis_range(0, array(round($min_d*1.25,1), round($max_d*1.25,1)));
 					$c->add_axis_label(1, $months);
 					$c->add_axis_label(2, $years);
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
 				}
 				break;
 
@@ -1596,38 +1668,16 @@ class mrp_workspace extends class_base
 			case "printer_legend":
 				if (!empty($arr["request"]["pj_job"]))
 				{
-					return PROP_IGNORE;
+					$retval = PROP_IGNORE;
 				}
-
-				$prop["value"] = "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr><td>";
-				$prop["value"]  .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["done"]."'>".t("Valmis")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("V&otilde;ib alustada")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada/t&ouml;&ouml;s")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["resource_in_use"]."'>".t("Eeldust&ouml;&ouml; tehtud")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["search_result"]."'>".t("Otsingu tulemus")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "</td><td align=right>";
-				$prop["value"] .= "<span style='font-size: 11px;'>Projekt: <input size=6 type=text name=do_pv_proj_s>";
-				$prop["value"] .= "<a href='#' onclick='changed=0;document.changeform.submit()'>Otsi</a></span>";
-				$prop["value"] .= "</td><td align=right>";
-				$prop["value"] .= "<span style='font-size: 11px;'>Vali ressurss: <select onchange='xchanged=1;submit_changeform(\"\");' name=pj_use_resource>";
-				$resids = $this->get_cur_printer_resources(array(
-					"ws" => $arr["obj_inst"],
-					"ign_glob" => true
-				));
-				$res_ol = new object_list();
-				if (count($resids))
+				else
 				{
-					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
+					$prop["value"] = "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["done"]."'>".t("Valmis")."</span>&nbsp;&nbsp;";
+					$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("V&otilde;ib alustada")."</span>&nbsp;&nbsp;";
+					$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada/t&ouml;&ouml;s")."</span>&nbsp;&nbsp;";
+					$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["resource_in_use"]."'>".t("Eeldust&ouml;&ouml; tehtud")."</span>&nbsp;&nbsp;";
+					$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["search_result"]."'>".t("Otsingu tulemus")."</span>&nbsp;&nbsp;";
 				}
-				$empty_selection = array();
-				if (count($resids) > 1)
-				{
-					$empty_selection = array("0" => t("K&otilde;ik ressursid"));
-				}
-				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"), $empty_selection + $res_ol->names());
-				$prop["value"] .= "</select>";
-
-				$prop["value"] .= "</td></tr></table>";
 				break;
 
 			case "sp_name":
@@ -1768,6 +1818,8 @@ class mrp_workspace extends class_base
 	function _get_pp_birthdays($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
@@ -1776,19 +1828,26 @@ class mrp_workspace extends class_base
 		$t->define_field(array(
 			"name" => "birthday",
 			"caption" => t("S&uuml;nnip&auml;ev"),
-			"align" => "left",
+			"align" => "center",
 			"sorting_field" => "birthday_tm"
 		));
 
 		$ps = obj($arr["obj_inst"]->owner)->get_workers()->arr();
 		uasort($ps, array($this, "sort_by_birthday"));
 
+		$cnt = 1;
 		foreach($ps as $p)
 		{
 			if((int)$p->birthday <= 0)
 			{
 				continue;
 			}
+
+			if($cnt++ > 10)
+			{
+				break;
+			}
+
 			$bd_tm = explode("-", $p->birthday);
 			$bd_tm = mktime(0, 0, 0, $bd_tm[1], $bd_tm[2], $bd_tm[0]);
 			$bd = date("d-m-Y", $bd_tm);
@@ -1813,12 +1872,15 @@ class mrp_workspace extends class_base
 		$a_tm = explode("-", $a->birthday);
 		$b_tm = explode("-", $b->birthday);
 		$bd_tm = mktime(0, 0, 0, $bd_tm[1], $bd_tm[2], $bd_tm[0]);
-		return (int)$a_tm[1] - (int)date("n") == (int)$b_tm[1] - (int)date("n") ? (int)$a_tm[2] < (int)$b_tm[2] : (int)$a_tm[1] - (int)date("n") < (int)$b_tm[1] - (int)date("n");
+		$retval = ((int)$a_tm[1] - (int)date("n") == (int)$b_tm[1] - (int)date("n") ? (int)$a_tm[2] < (int)$b_tm[2] : (int)$a_tm[1] - (int)date("n") < (int)$b_tm[1] - (int)date("n")) ? -1 : 1;
+		
+		return $retval;
 	}
 
 	function _get_pp_resources($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
 
 		$t->define_field(array(
 			"name" => "resource",
@@ -1831,12 +1893,29 @@ class mrp_workspace extends class_base
 			"align" => "center"
 		));
 
-		foreach($rs as $r)
+		$rs = $this->get_cur_printer_resources(array(
+			"ws" => $arr["obj_inst"],
+			"ign_glob" => true	
+		));
+
+		if(count($rs) > 0)
 		{
-			$t->define_data(array(
-				"resource" => $r->name(),
-				"state" => t("as"),
-			));
+			$inst = get_instance(CL_MRP_RESOURCE);
+
+			foreach($rs as $r_id)
+			{
+				$r = obj($r_id);
+				list($state, $num_jobs) = $inst->get_resource_state($r);
+
+				$t->define_data(array(
+					"resource" => $r->name(),
+					"state" => sprintf(t("%s (%u)"), $inst->resource_states[$state], $num_jobs),
+				));
+			}
+		}
+		else
+		{
+			return PROP_IGNORE;
 		}
 	}
 
@@ -1884,11 +1963,11 @@ class mrp_workspace extends class_base
 		switch ($prop["name"])
 		{
 			case "printer_legend":
-				if (isset($arr["request"]["pj_use_resource"]))
+				if (isset($arr["request"]["ps_resource"]))
 				{
-					if ($arr["request"]["pj_use_resource"])
+					if ($arr["request"]["ps_resource"])
 					{
-						aw_session_set("mrp_operator_use_resource", $arr["request"]["pj_use_resource"]);
+						aw_session_set("mrp_operator_use_resource", $arr["request"]["ps_resource"]);
 					}
 					else
 					{
@@ -2091,7 +2170,7 @@ class mrp_workspace extends class_base
 			}
 		}
 
-		$_SESSION["mrp"]["do_pv_proj_s"] = $arr["request"]["do_pv_proj_s"];
+		$_SESSION["mrp"]["ps_project"] = $arr["request"]["ps_project"];
 	}
 
 	function callback_pre_save ($arr)
@@ -4683,11 +4762,11 @@ class mrp_workspace extends class_base
 
 		classload("core/date/date_calc");
 
-		// now, if the session contans [mrp][do_pv_proj_s] then we must get a list of all the jobs in the current view
+		// now, if the session contans [mrp][ps_project] then we must get a list of all the jobs in the current view
 		// then iterate them until we find a job with the requested project
 		// and then figure out the page number and finally, redirect the user to that page.
 		// this sort of sucks, but I can't figure out how to do the count in sql..
-		if (!empty($_SESSION["mrp"]["do_pv_proj_s"]))
+		if (!empty($_SESSION["mrp"]["ps_project"]))
 		{
 			// this needs to get done abit differently - we need to find all the jobs
 			// that are part of this project for the current resource(s)
@@ -4695,7 +4774,7 @@ class mrp_workspace extends class_base
 			// where they can be found
 			// so, list the jobs
 			// but first we need the oid of the project
-			$proj2oid = new object_list(array("name" => $_SESSION["mrp"]["do_pv_proj_s"], "class_id" => CL_MRP_CASE));
+			$proj2oid = new object_list(array("name" => $_SESSION["mrp"]["ps_project"], "class_id" => CL_MRP_CASE));
 			if ($proj2oid->count() && count($res))
 			{
 				$s_proj = $proj2oid->begin();
@@ -4743,8 +4822,8 @@ class mrp_workspace extends class_base
 					die();
 				}
 
-				$find_proj = $_SESSION["mrp"]["do_pv_proj_s"];
-				unset($_SESSION["mrp"]["do_pv_proj_s"]);
+				$find_proj = $_SESSION["mrp"]["ps_project"];
+				unset($_SESSION["mrp"]["ps_project"]);
 				$_SESSION["mrp"]["pv_s_hgl"] = $s_proj->id();
 				$jobs = $this->get_next_jobs_for_resources(array(
 					"resources" => $res,
@@ -5596,19 +5675,26 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_right":
-				$caps = array(
-					"grp_printer_current" => t("Jooksvad t&ouml;&ouml;d"),
-					"grp_printer_old" => t("Tegemata t&ouml;&ouml;d"),
-					"grp_printer_done" => t("Tehtud t&ouml;&ouml;d"),
-					"grp_printer_aborted" => t("Katkestatud t&ouml;&ouml;d"),
-					"grp_printer_in_progress" => t("K&otilde;ik t&ouml;&ouml;s olevad"),
-					"grp_printer_startable" => t("K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada"),
-					"grp_printer_notstartable" => t("T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada"),
-				);
-				$grp = isset($_GET["branch_id"]) ? $_GET["branch_id"] : "grp_printer_current";
-				if(array_key_exists($grp, $caps))
+				if(isset($arr["request"]["pj_job"]) && $this->can("view", $arr["request"]["pj_job"]))
 				{
-					$arr["area_caption"] = $caps[$grp];
+					$arr["area_caption"] = sprintf(t("T&ouml;&ouml; \"%s\" detailvaade"), obj($arr["request"]["pj_job"])->name());
+				}
+				else
+				{
+					$caps = array(
+						"grp_printer_current" => t("Jooksvad t&ouml;&ouml;d"),
+						"grp_printer_old" => t("Tegemata t&ouml;&ouml;d"),
+						"grp_printer_done" => t("Tehtud t&ouml;&ouml;d"),
+						"grp_printer_aborted" => t("Katkestatud t&ouml;&ouml;d"),
+						"grp_printer_in_progress" => t("K&otilde;ik t&ouml;&ouml;s olevad"),
+						"grp_printer_startable" => t("K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada"),
+						"grp_printer_notstartable" => t("T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada"),
+					);
+					$grp = isset($_GET["branch_id"]) ? $_GET["branch_id"] : "grp_printer_current";
+					if(array_key_exists($grp, $caps))
+					{
+						$arr["area_caption"] = $caps[$grp];
+					}
 				}
 				break;
 		}
