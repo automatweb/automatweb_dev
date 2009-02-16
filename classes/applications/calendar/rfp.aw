@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.178 2009/01/20 14:09:22 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.179 2009/02/16 07:41:09 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3196,6 +3196,14 @@ class rfp extends class_base
 			$res_sub = $this->parse("RESOURCES");
 			$totalprice += $resources_total;
 		}
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_CATERING_RESERVATION",
+		));
+		foreach($conn as $c)
+		{
+			$oid = $c->prop("to");
+			$prod_rv_oids[$oid] = $oid;
+		}
 		$prods = $arr["obj_inst"]->meta("prods");
 		$pd_sub = "";
 		uasort(&$prods, array($this, "_sort_submission_products"));
@@ -3205,7 +3213,10 @@ class rfp extends class_base
 			$pdr = "";
 			foreach($prods as $oids => $prod)
 			{
-				$sorted_prods[date("d.m.Y", $prod["start1"])][$oids] = $prod;
+				if($prod_rv_oids[$prod["bronid"]])
+				{
+					$sorted_prods[date("d.m.Y", $prod["start1"])][$oids] = $prod;
+				}
 			}
 			foreach($sorted_prods as $rvid => $proddata)
 			{
