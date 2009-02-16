@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.76 2009/02/09 13:56:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.77 2009/02/16 13:30:01 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -692,7 +692,9 @@ class crm_call extends task
 				}
 
 				break;
-
+			case "parts_table":
+				$this->save_parts_table($arr);
+				break;
 			case "is_done":
 			case "status":
 			case "is_personal":

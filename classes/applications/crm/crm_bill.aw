@@ -1876,11 +1876,25 @@ class crm_bill extends class_base
 			$lc = $lo->prop("lang_acceptlang");
 		}
 		
-		$tpl .= "_".$lc;
-
-		if ($this->read_site_template($tpl.".tpl", true) === false)
+		if($_GET["pdf"])
 		{
-			$this->read_site_template("show.tpl");
+			$tpl .= "_pdf";
+			$tpl .= "_".$lc;
+			if ($this->read_site_template($tpl.".tpl", true) === false)
+			{
+				if ($this->read_site_template("show_".$lc.".tpl", true) === false)
+				{
+					$this->read_site_template("show.tpl");
+				}
+			}
+		}
+		else
+		{
+			$tpl .= "_".$lc;
+			if ($this->read_site_template($tpl.".tpl", true) === false)
+			{
+				$this->read_site_template("show.tpl");
+			}
 		}
 		$ord = obj();
 		$ord_cur = obj();
@@ -2287,9 +2301,15 @@ class crm_bill extends class_base
 			$conv = get_instance("core/converters/html2pdf");
 			if($conv->can_convert())
 			{
+				$pdf_name = $b->name().".pdf";
+
+				if($this->is_template("TITLE"))
+				{
+					$pdf_name = $this->parse("TITLE").".pdf";
+				}
 				$conv->gen_pdf(array(
 					"source" => $res,
-					"filename" => $b->name().".pdf",
+					"filename" => $pdf_name,
 				));
 			}
 //			header("Content-type: application/pdf");
@@ -2435,11 +2455,27 @@ class crm_bill extends class_base
 			$lo = obj($b->prop("language"));
 			$lc = $lo->prop("lang_acceptlang");
 		}
-		$tpl .= "_".$lc;
-//$this->read_site_template("show_add.tpl");
-		if ($this->read_site_template($tpl.".tpl", true) === false)
+		
+		
+		if($_GET["pdf"])
 		{
-			$this->read_site_template("show_add.tpl");
+			$tpl .= "_pdf";
+			$tpl .= "_".$lc;
+			if ($this->read_site_template($tpl.".tpl", true) === false)
+			{
+				if ($this->read_site_template("show_add_".$lc.".tpl", true) === false)
+				{
+					$this->read_site_template("show_add.tpl");
+				}
+			}
+		}
+		else
+		{
+			$tpl .= "_".$lc;
+			if ($this->read_site_template($tpl.".tpl", true) === false)
+			{
+				$this->read_site_template("show_add.tpl");
+			}
 		}
 
 		$ord = obj();
