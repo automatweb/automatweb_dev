@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.117 2009/02/09 13:56:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.118 2009/02/17 15:20:46 markop Exp $
 // kohtumine.aw - Kohtumine
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -148,9 +148,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property udefta3 type=textarea user=1 table=kliendibaas_kohtumine
 @caption User-defined textarea 3
 
-@property send_bill type=checkbox ch_value=1 table=planner field=send_bill
-@caption Saata arve
-
 @property bill_no type=text table=planner
 @caption Arve number
 
@@ -245,6 +242,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @default group=other_settings
 
+
+	@property send_bill type=checkbox ch_value=1 table=planner field=send_bill
+	@caption Saata arve
 
 	@property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1
 	@caption Kokkuv&otilde;te
@@ -461,7 +461,7 @@ class crm_meeting extends task
 			case "status":
 			case "whole_day":
 			case "is_personal":
-			case "send_bill":
+//			case "send_bill":
 			case "time_guess":
 			case "time_real":
 			case "time_to_cust":
@@ -843,7 +843,7 @@ class crm_meeting extends task
 			case "status":
 			case "whole_day":
 			case "is_personal":
-			case "send_bill":
+//			case "send_bill":
 			case "is_work":
 			case "promoter":
 				return PROP_IGNORE;
@@ -1614,7 +1614,7 @@ class crm_meeting extends task
 		$o->set_prop("time_real", $o->prop("time_real") + $arr["hours"]);
 		$o->set_prop("time_to_cust", $o->prop("time_to_cust") + $arr["hours"]);
 		$o->set_prop("is_done", $arr["data"]["isdone"]["value"]?8:0);
-		$o->set_prop("send_bill", $arr["data"]["tobill"]["value"]?1:0);
+	//	$o->set_prop("send_bill", $arr["data"]["tobill"]["value"]?1:0);
 		$o->set_prop("content", $arr["data"]["desc"]["value"]);
 		$o->set_prop("end", time());
 		$o->save();

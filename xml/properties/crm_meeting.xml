@@ -384,15 +384,6 @@
             <caption>User-defined textarea 3</caption>
       </property>
       <property>
-            <name>send_bill</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>send_bill</field>
-            <caption>Saata arve</caption>
-      </property>
-      <property>
             <name>bill_no</name>
             <table>planner</table>
             <group>general</group>
@@ -691,6 +682,16 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+      </property>
+      <property>
+            <name>send_bill</name>
+            <table>planner</table>
+            <group>other_settings</group>
+            <field>send_bill</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saata arve</caption>
       </property>
       <property>
             <name>udeflb1</name>

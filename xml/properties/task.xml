@@ -257,15 +257,6 @@
             <caption>Isiklik</caption>
       </property>
       <property>
-            <name>send_bill</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>send_bill</field>
-            <caption>Saata arve</caption>
-      </property>
-      <property>
             <name>promoter</name>
             <table>planner</table>
             <group>general</group>
@@ -605,6 +596,15 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <method>serialize</method>
+      </property>
+      <property>
+            <name>send_bill</name>
+            <table>planner</table>
+            <group>comments</group>
+            <field>send_bill</field>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saata arve</caption>
       </property>
       <property>
             <name>rows_tb</name>

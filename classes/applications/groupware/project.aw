@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.160 2009/02/05 18:50:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.161 2009/02/17 15:20:52 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -4428,7 +4428,8 @@ class project extends class_base
 				"name" => $bug->name().$lister,
 				"hr_price" => number_format($this->hour_prices[$bug->id()],2),
 				"set_date" => date("d.m.Y" , ($bug->prop("to_bill_date"))),
-				"date" => date("d.m.Y" , $this->bug_start[$bug->id()]) . " - ".date("d.m.Y" , $this->bug_end[$bug->id()])
+				"date" => date("d.m.Y" , $this->bug_start[$bug->id()]) . " - ".date("d.m.Y" , $this->bug_end[$bug->id()]),
+				"oid" => $bug->id(),
 			);
 			$bug_data["hrs"] = $this->stats->hours_format($this->bug_real_hours[$bug->id()]);
 			$bug_data["hrs_cust"] = $this->stats->hours_format($this->bug_hours[$bug->id()]);

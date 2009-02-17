@@ -671,7 +671,8 @@ class crm_bill_obj extends _int_object
 				case CL_TASK_ROW:
 					if($work->prop("task.class_id") == CL_BUG)
 					{
-						$bug_rows[] = $work->id();
+						$task_rows[$work->task_id()][$work->id()] = $work->id();
+//						$bug_rows[] = $work->id();
 					}
 					else
 					{
@@ -758,6 +759,7 @@ class crm_bill_obj extends _int_object
 					$this->set_project($c->prop("to"));
 				}
 				$br = $this->add_row();
+				$br->set_comment($task_o->name());
 				$br->set_prop("name", $row->prop("content"));
 				$br->set_prop("amt", $row->prop("time_to_cust"));
 //				$br->set_prop("prod", $row["prod"]);

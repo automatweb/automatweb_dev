@@ -304,6 +304,7 @@ class task_row_obj extends _int_object
 			if($person_name = $this->prop("impl.name"))
 			{
 				$this->set_name($this->prop("task.name")." ".$person_name." ".t("tegevus"));
+				$this->set_prop("content" , $this->prop("task.name")." ".$person_name." ".t("tegevus"));
 				$this->save();
 			}
 		}

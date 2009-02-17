@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.77 2009/02/16 13:30:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.78 2009/02/17 15:20:46 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -159,9 +159,6 @@
 @property promoter type=checkbox ch_value=1 table=planner field=promoter
 @caption Korraldaja
 
-@property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
-@caption Saata arve
-
 @property is_work type=checkbox ch_value=1 table=planner field=aw_is_work
 @caption T&ouml;&ouml;aeg
 
@@ -257,6 +254,12 @@
 @groupinfo participants caption=Osalejad submit=no
 @groupinfo other_calls caption="Eelmised k&otilde;ned" 
 @groupinfo predicates caption="Eeldused" 
+
+@groupinfo other_settings caption="Muud seaded"
+@default group=other_settings
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
+@caption Saata arve
+
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -419,7 +422,7 @@ class crm_call extends task
 			case "is_done":
 			case "status":
 			case "is_personal":
-			case "send_bill":
+//			case "send_bill":
 			case "time_guess":
 			case "time_real":
 			case "time_to_cust":
@@ -698,7 +701,7 @@ class crm_call extends task
 			case "is_done":
 			case "status":
 			case "is_personal":
-			case "send_bill":
+//			case "send_bill":
 			case "is_work":
 			case "promoter":
 				return PROP_IGNORE;
@@ -950,7 +953,7 @@ class crm_call extends task
 		$o->set_prop("time_real", $o->prop("time_real") + $arr["hours"]);
 		$o->set_prop("time_to_cust", $o->prop("time_to_cust") + $arr["hours"]);
 		$o->set_prop("is_done", $arr["data"]["isdone"]["value"]?1:0);
-		$o->set_prop("send_bill", $arr["data"]["tobill"]["value"]?1:0);
+//		$o->set_prop("send_bill", $arr["data"]["tobill"]["value"]?1:0);
 		$o->set_prop("content", $arr["data"]["desc"]["value"]);
 		$o->set_prop("end", time());
 		$o->save();

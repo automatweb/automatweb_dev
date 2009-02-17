@@ -55,7 +55,15 @@ class task_object extends _int_object
 
 	function save()
 	{
+		if (!is_oid($this->id()))
+		{
+			if (0 != $this->prop("send_bill"))
+			{
+				$this->set_prop("send_bill", 1);
+			}
+		}
 		$res =  parent::save();
+
 		$this->update_all_rows();
 		return $res;
 	}

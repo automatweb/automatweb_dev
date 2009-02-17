@@ -229,7 +229,7 @@ class project_obj extends _int_object
 			"lang_id" => array(),
 			"done" => 1,
 			"task.class_id" => CL_BUG,
-			"CL_TASK_ROW.task(CL_BUG).send_bill" => 1,
+//			"CL_TASK_ROW.task(CL_BUG).send_bill" => 1,
 			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
 		);
 		return $filter;

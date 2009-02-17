@@ -100,9 +100,6 @@
 	@property is_personal type=checkbox ch_value=1 field=meta method=serialize parent=personal no_caption=1
 	@caption Isiklik
 
-@property send_bill type=checkbox ch_value=1 table=planner field=send_bill
-@caption Saata arve
-
 @property promoter type=checkbox ch_value=1 table=planner field=promoter
 @caption Korraldaja
 
@@ -212,6 +209,9 @@ caption Seostehaldur
 @default group=comments
 //ajutiselt teine parent
 	@property other_expenses type=table store=no no_caption=1 method=serialize
+
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill
+@caption Saata arve
 
 @default group=rows
 
@@ -1117,7 +1117,7 @@ class task extends class_base
 					"whole_day" => t("Terve p&auml;ev"),
 					"is_goal" => t("Verstapost"),
 					"is_personal" => t("Isiklik"),
-					"send_bill" => t("Arvele"),
+//					"send_bill" => t("Arvele"),
 					"in_budget" => t("Eelarvesse"),
 //					"is_work" => t("T&ouml;&ouml;aeg")
 				);
@@ -1127,7 +1127,7 @@ class task extends class_base
 					"whole_day" => $arr["obj_inst"]->prop("whole_day") ? 1 : 0,
 					"is_goal" => $arr["obj_inst"]->prop("is_goal") ? 1 : 0,
 					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
-					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
+//					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
 					"in_budget" => $arr["obj_inst"]->prop("in_budget") ? 1 : 0,
 //					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
 				);
@@ -1175,7 +1175,7 @@ class task extends class_base
 			case "whole_day":
 			case "is_goal":
 			case "is_personal":
-			case "send_bill":
+//			case "send_bill":
 			case "hr_price_currency":
 			case "in_budget":
 			case "service_type":
@@ -1658,7 +1658,7 @@ class task extends class_base
 			case "whole_day":
 			case "is_goal":
 			case "is_personal":
-			case "send_bill":
+//			case "send_bill":
 			case "in_budget":
 			case "service_type":
 			case "is_work":
@@ -4301,14 +4301,14 @@ class task extends class_base
 					));
 				}
 			}
-
+/*
 			$t->define_field(array(
 				"name" => "send_bill",
 				"caption" => t("Arvele"),
 				"align" => "center",
 				"parent" => "add_clauses",
 			));
-
+*/
 			if($arr["obj_inst"]->class_id() == CL_TASK)$t->define_field(array(
 				"name" => "in_budget",
 				"caption" =>  t("Eelarvesse"),
@@ -4503,11 +4503,11 @@ class task extends class_base
 				"options" => array("1" => t("Tuli sisse") , "0" => t("L&auml;ks v&auml;lja")),
 			)),
 
-			"send_bill" => html::checkbox(array(
+/*			"send_bill" => html::checkbox(array(
 				"name" => "add_clauses[send_bill]",
 				"value" => 1,
 				"checked" => (is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("send_bill")) || isset($arr["new"]) ? 1 : 0,
-			)),
+			)),*/
 			"is_work" => html::checkbox(array(
 				"name" => "add_clauses[is_work]",
 				"value" => 1,
@@ -4542,7 +4542,7 @@ class task extends class_base
 		{
 			$arr["obj_inst"]->set_prop("promoter", $arr["request"]["add_clauses"]["promoter"] ? 1 : 0);
 		}
-		$arr["obj_inst"]->set_prop("send_bill", $arr["request"]["add_clauses"]["send_bill"] ? 1 : 0);
+//		$arr["obj_inst"]->set_prop("send_bill", $arr["request"]["add_clauses"]["send_bill"] ? 1 : 0);
 		$arr["obj_inst"]->set_prop("in_budget",$arr["request"]["add_clauses"]["in_budget"] ? 1 : 0);
 		if($arr["request"]["add_clauses"]["is_work"])
 		{
@@ -4552,7 +4552,7 @@ class task extends class_base
 
 		if(!$arr["request"]["add_clauses"]["send_bill"] || $arr["obj_inst"]->if_can_set_billable())
 		{
-			$arr["obj_inst"]->set_prop("send_bill", $arr["request"]["add_clauses"]["send_bill"] ? 1 : 0);
+//			$arr["obj_inst"]->set_prop("send_bill", $arr["request"]["add_clauses"]["send_bill"] ? 1 : 0);
 		}
 		else
 		{

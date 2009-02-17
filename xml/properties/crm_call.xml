@@ -259,15 +259,6 @@
             <caption>Korraldaja</caption>
       </property>
       <property>
-            <name>send_bill</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>send_bill</field>
-            <caption>Saata arve</caption>
-      </property>
-      <property>
             <name>is_work</name>
             <table>planner</table>
             <group>general</group>
@@ -537,6 +528,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>send_bill</name>
+            <table>planner</table>
+            <group>other_settings</group>
+            <field>send_bill</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saata arve</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_CALL</syslog_type>
             <no_status>1</no_status>
@@ -566,6 +567,9 @@
             <predicates>
                   <caption>Eeldused</caption>
             </predicates>
+            <other_settings>
+                  <caption>Muud seaded</caption>
+            </other_settings>
       </groupinfo>
       <tableinfo>
             <planner>

@@ -427,7 +427,7 @@ class bug extends class_base
 	}
 
 	function get_property($arr)
-	{
+	{//arr($arr["prop"]["name"]);
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		if($arr["new"] && !empty($this->parent_data[$prop["name"]]))
@@ -444,6 +444,7 @@ class bug extends class_base
 		switch($prop["name"])
 		{
 			case "send_bill":
+				return PROP_IGNORE;
 				if($arr["new"])
 				{
 					$prop["value"] = 1;
@@ -644,6 +645,10 @@ class bug extends class_base
 				else
 				{
 					$co = get_current_company();
+				}
+				if($co->class_id() != CL_CRM_COMPANY)
+				{
+					return;
 				}
 				$co_i = $co->instance();
 				$sects = $co_i->get_all_org_sections($co);
@@ -1206,6 +1211,8 @@ class bug extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "send_bill":
+				return PROP_IGNORE;
 			case "finance_type":
 				if ($arr["new"] && !$arr["prop"]["value"])
 				{
