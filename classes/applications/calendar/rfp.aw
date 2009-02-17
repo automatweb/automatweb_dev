@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.179 2009/02/16 07:41:09 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.180 2009/02/17 13:11:57 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3196,108 +3196,117 @@ class rfp extends class_base
 			$res_sub = $this->parse("RESOURCES");
 			$totalprice += $resources_total;
 		}
-		$conn = $arr["obj_inst"]->connections_from(array(
+		$prod_conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_CATERING_RESERVATION",
 		));
-		foreach($conn as $c)
-		{
-			$oid = $c->prop("to");
-			$prod_rv_oids[$oid] = $oid;
-		}
 		$prods = $arr["obj_inst"]->meta("prods");
 		$pd_sub = "";
 		uasort(&$prods, array($this, "_sort_submission_products"));
+
 		if(count($prods))
 		{
 			$prod_total = 0;
 			$pdr = "";
 			foreach($prods as $oids => $prod)
 			{
-				if($prod_rv_oids[$prod["bronid"]])
-				{
-					$sorted_prods[date("d.m.Y", $prod["start1"])][$oids] = $prod;
-				}
+				$tmp = explode(".", $oids);
+				$sorted_meta_prods[$tmp[1]][$tmp[0]] = $prod;
 			}
-			foreach($sorted_prods as $rvid => $proddata)
+			foreach($prod_conn as $c)
 			{
-				$pds = "";
-				foreach($proddata as $prodid => $prod)
+				$sorted_prods[date("d.m.Y", $c->to()->prop("start1"))][$c->prop("to")] = $sorted_meta_prods[$c->prop("to")];
+			}
+			foreach($sorted_prods as $rvid => $rvs)
+			{
+				foreach($rvs as $rv_id => $proddata)
 				{
-					$po = obj($prodid);
-					if($prod["amount"] <= 0)
+					$pds = "";
+					$has_prod = false;
+					$rv_o = obj($rv_id);
+					foreach($proddata as $prodid => $prod)
 					{
-						continue;
-					}
-					$prodprices = $po->meta("cur_prices");
-					$prod["price"] = $prodprices[$currency];
-					$prod["sum"] = ($prod["price"] * $prod["amount"]);
-					if($prod["discount"] > 0)
-					{
-						$prod["sum"] = $prod["sum"] - ($prod["sum"] * $prod["discount"] / 100);
-					}
-					$prodcountcheck++;
-					$varname = "";
-					$varid = $prod["var"];
-					if(is_oid($varid))
-					{
-						$var = obj($varid);
-						$var_trans = $var->meta("translations");
-						$varname = ($_t = $var_trans[$default_lang]["name"])?$_t:$var->trans_get_val("name");
-					}
-					$room = obj($prod["room"]);
-					//gen nice event/room combo
-					$evt_room = array();
-					if(strlen($varname))
-					{
-						$evt_room[] = $varname;
-					}
-					$product_trans = $po->meta("translations");
-					$room_trans = $room->meta("translations");
-					if(strlen($room->name()))
-					{
-						$evt_room[] = ($_t = $room_trans[$default_lang]["name"])?$_t:$room->name();
-					}
-					$ta_subs = array();
-					for($i = 1; $i <= 10; $i++)
-					{
-						if($this->is_template("PROD_USERTA".$i))
+						$prod["start1"] = $rv_o->prop("start1");
+						$prod["end"] = $rv_o->prop("end");
+						$po = obj($prodid);
+						if($prod["amount"] <= 0)
 						{
-							$val = $product_trans[$default_lang]["userta".$i] ? $product_trans[$default_lang]["userta".$i] : $po->trans_get_val("userta".$i);
-							$this->vars(array(
-								"prod_userta".$i => nl2br($val),
-							));
-							$sub = $this->parse("PROD_USERTA".$i);
-							$this->vars(array(
-								"PROD_USERTA".$i => $sub,
-							));
+							continue;
 						}
+						$has_prod = true;
+						$prodprices = $po->meta("cur_prices");
+						$prod["price"] = $prodprices[$currency];
+						$prod["sum"] = ($prod["price"] * $prod["amount"]);
+						if($prod["discount"] > 0)
+						{
+							$prod["sum"] = $prod["sum"] - ($prod["sum"] * $prod["discount"] / 100);
+						}
+						$prodcountcheck++;
+						$varname = "";
+						$varid = $prod["var"];
+						if(is_oid($varid))
+						{
+							$var = obj($varid);
+							$var_trans = $var->meta("translations");
+							$varname = ($_t = $var_trans[$default_lang]["name"])?$_t:$var->trans_get_val("name");
+						}
+						$room = obj($prod["room"]);
+						//gen nice event/room combo
+						$evt_room = array();
+						if(strlen($varname))
+						{
+							$evt_room[] = $varname;
+						}
+						$product_trans = $po->meta("translations");
+						$room_trans = $room->meta("translations");
+						if(strlen($room->name()))
+						{
+							$evt_room[] = ($_t = $room_trans[$default_lang]["name"])?$_t:$room->name();
+						}
+						$ta_subs = array();
+						for($i = 1; $i <= 10; $i++)
+						{
+							if($this->is_template("PROD_USERTA".$i))
+							{
+								$val = $product_trans[$default_lang]["userta".$i] ? $product_trans[$default_lang]["userta".$i] : $po->trans_get_val("userta".$i);
+								$this->vars(array(
+									"prod_userta".$i => nl2br($val),
+								));
+								$sub = $this->parse("PROD_USERTA".$i);
+								$this->vars(array(
+									"PROD_USERTA".$i => $sub,
+								));
+							}
+						}
+						$this->vars(array(
+							"prod_from_date" => date("d.m.Y", $prod["start1"]),
+							"prod_to_date" => date("d.m.Y", $prod["end"]),
+							"prod_from_hour" => date("H", $prod["start1"]),
+							"prod_from_minute" => date("i", $prod["start1"]),
+							"prod_to_hour" => date("H", $prod["end"]),
+							"prod_to_minute" => date("i", $prod["end"]),
+							"prod_event" => $varname,
+							"prod_count" => $prod["amount"],
+							"prod_prod" => ($_t = $product_trans[$default_lang]["name"])?$_t:$po->trans_get_val("name"),
+							"prod_price" => $this->_format_price($prod["price"]),
+							"prod_sum" => $this->_format_price($prod["sum"]),
+							"prod_comment" => $prod["comment"],
+							"prod_description" => $po->prop("description"),
+							"prod_discount" => $prod["discount"]?sprintf("%s %%", $prod["discount"]):"-",
+							"prod_event_and_room" => join(", ",$evt_room),
+							"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
+						));
+						$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
+						$prod_total += $this->_format_price($prod["sum"]);
 					}
-					$this->vars(array(
-						"prod_from_date" => date("d.m.Y", $prod["start1"]),
-						"prod_to_date" => date("d.m.Y", $prod["end"]),
-						"prod_from_hour" => date("H", $prod["start1"]),
-						"prod_from_minute" => date("i", $prod["start1"]),
-						"prod_to_hour" => date("H", $prod["end"]),
-						"prod_to_minute" => date("i", $prod["end"]),
-						"prod_event" => $varname,
-						"prod_count" => $prod["amount"],
-						"prod_prod" => ($_t = $product_trans[$default_lang]["name"])?$_t:$po->trans_get_val("name"),
-						"prod_price" => $this->_format_price($prod["price"]),
-						"prod_sum" => $this->_format_price($prod["sum"]),
-						"prod_comment" => $prod["comment"],
-						"prod_description" => $po->prop("description"),
-						"prod_discount" => $prod["discount"]?sprintf("%s %%", $prod["discount"]):"-",
-						"prod_event_and_room" => join(", ",$evt_room),
-						"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
-					));
-					$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
-					$prod_total += $this->_format_price($prod["sum"]);
+					if($has_prod)
+					{
+						$this->vars(array(
+							"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
+							"reservation_name" => $rvid,
+						));
+						$pdr .= $this->parse("PRODUCTS_RESERVATION".($package?"":"_NO_PACKAGE"));
+					}
 				}
-				$this->vars(array(
-					"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
-					"reservation_name" => $rvid,
-				));
-				$pdr .= $this->parse("PRODUCTS_RESERVATION".($package?"":"_NO_PACKAGE"));
 			}
 			if($prodcountcheck) // there might be a chance that some row's were skipped(maybe all), and then we don't need that table at all
 			{
