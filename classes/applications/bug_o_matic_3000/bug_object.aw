@@ -264,12 +264,12 @@ class bug_object extends _int_object
 //selle asemele peaks miski ilus filter olema hoopis
 			if(
 				($arr["start"] && $arr["start"] > $comment->prop("date")) || 
-				($arr["end"] && $arr["end"] < $comment->prop("date"))
+				($arr["end"] && $arr["end"] < $comment->prop("date")) 
 			)
 			{
 				continue;
 			}
-			if(!$inst->can("view" , $comment->prop("bill")))
+			if($comment->prop("on_bill") && !$inst->can("view" , $comment->prop("bill")))
 			{
 				$ol->add($comment->id());
 			}

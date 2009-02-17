@@ -728,11 +728,6 @@ class crm_bill_obj extends _int_object
 			}
 		}
 
-		if(sizeof($bug_rows))
-		{
-			$this->add_bug_comments($bug_rows);
-		}
-
 		foreach($tasks as $task)
 		{
 			$this->connect(array(
@@ -789,6 +784,23 @@ class crm_bill_obj extends _int_object
 				));
 			}
 		}
+
+		//koondatavad bugide read siia vaid
+		if(sizeof($bug_rows))
+		{
+			foreach($bug_rows as $key => $id)
+			{
+				foreach($task_rows as $task_id => $row_ids)
+				{
+					if(is_array($row_ids) &&  in_array($id , $row_ids))
+					{
+						unset($bug_rows[$key]);
+					}
+				}
+			}
+			$this->add_bug_comments($bug_rows);
+		}
+
 
 //------ send bill vaja maha saada, kui k6ik on arvele l2inud
 // 			if(!$task_rows_to_bill_count[$task]) $task_rows_to_bill_count[$task] = 0;
