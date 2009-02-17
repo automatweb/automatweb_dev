@@ -1866,6 +1866,12 @@ class room extends class_base
 		$this->extra_row = $arr["obj_inst"]->has_extra_row($this->start, $this->start + 24*3600*$len);
 		$this->show_unverified = $settings->prop("show_unverified");
 
+		$this->other_rooms = $arr["obj_inst"]->get_other_rooms_selection();
+		if(is_array($this->other_rooms) && sizeof($this->other_rooms))
+		{
+			$other_room_ol = new object_list();
+			$other_room_ol->add(array_keys($this->other_rooms));
+		}
 
 		$this->_init_calendar_t($t,$this->start, $len);
 		exit_function("get_calendar_tbl::3::genres");
@@ -1999,7 +2005,21 @@ class room extends class_base
 							}
 							$val = 0;
 							$string = $settings->prop("available_time_string")?$settings->prop("available_time_string") :t("VABA");
+			
 							$col[$x] = $arr["obj_inst"]->get_color("available");
+							if(is_array($this->other_rooms) && sizeof($this->other_rooms) && $settings->prop("col_slave") != "")
+							{
+								foreach($other_room_ol->arr() as $oro)
+								{//arr($oro);arr(date("d.m h:i" , $start_step)); arr(date("d.m h:i" , $end_step));
+									if(!$oro->is_available(array(
+										"start" => $start_step,
+										"end" => $end_step,
+									)))
+									{
+										$col[$x] = "#".$settings->prop("col_slave"); 
+									}
+								}
+							}
 							if($_SESSION["room_reservation"][$room_id]["start"]<=$start_step && $_SESSION["room_reservation"][$room_id]["end"]>=$end_step)
 							{
 								//teeb selle kontrolli ka , et 2kki tyybid yltse teist ruumi tahavad juba... et siis l2heks sassi
