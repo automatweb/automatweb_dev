@@ -461,7 +461,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <store>no</store>
-            <parent>stats_filt_left</parent>
+            <parent>stats_filt_middle</parent>
             <field>stats_filt_confirmed</field>
             <caption>Staatus</caption>
       </property>
@@ -855,7 +855,7 @@
             </raports_table>
             <stats_filt_lay>
                   <type>hbox</type>
-                  <width>50%:50%</width>
+                  <width>35%:30%:35%</width>
                   <group>stats</group>
                   <area_caption></area_caption>
             </stats_filt_lay>
@@ -865,6 +865,12 @@
                   <group>stats</group>
                   <area_caption></area_caption>
             </stats_filt_left>
+            <stats_filt_middle>
+                  <type>vbox</type>
+                  <parent>stats_filt_lay</parent>
+                  <group>stats</group>
+                  <area_caption></area_caption>
+            </stats_filt_middle>
             <stats_filt_right>
                   <type>vbox</type>
                   <parent>stats_filt_lay</parent>

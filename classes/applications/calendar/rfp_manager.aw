@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.92 2009/02/17 08:36:07 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.93 2009/02/17 08:45:08 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -147,7 +147,7 @@ caption Linnade kaust
 
 	@property stats_tb type=toolbar no_caption=1
 
-	@layout stats_filt_lay type=hbox width=50%:50% group=stats
+	@layout stats_filt_lay type=hbox width=35%:30%:35% group=stats
 
 		 @layout stats_filt_left type=vbox parent=stats_filt_lay
 
@@ -160,10 +160,12 @@ caption Linnade kaust
 			@property stats_filt_currency type=select store=no parent=stats_filt_left
 			@caption Valuuta
 
-			@property stats_filt_confirmed type=select multiple=1 store=no parent=stats_filt_left
+		@layout stats_filt_middle type=vbox parent=stats_filt_lay
+			
+			@property stats_filt_confirmed type=select multiple=1 store=no parent=stats_filt_middle
 			@caption Staatus
 
-		 @layout stats_filt_right type=vbox parent=stats_filt_lay
+		@layout stats_filt_right type=vbox parent=stats_filt_lay
 
 			@property stats_filt_start2 type=date_select store=no parent=stats_filt_right default=-1
 			@caption &Uuml;rituse sisestus alates
