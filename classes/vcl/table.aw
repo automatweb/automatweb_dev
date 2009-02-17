@@ -2642,7 +2642,10 @@ echo dbg::short_backtrace();
 					$url = aw_global_get("REQUEST_URI");
 				}
 				$baseurl = aw_ini_get("baseurl");
-				$url = $baseurl.$url;
+				if(!substr_count($url , $baseurl))
+				{
+					$url = $baseurl.$url;
+				}
 				$url = preg_replace("/sortby=[^&$]*/","",$url);
 				$url = preg_replace("/sort_order=[^&$]*/","",$url);
 				$url = preg_replace("/&{2,}/","&",$url);
