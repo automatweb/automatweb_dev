@@ -285,7 +285,6 @@ class crm_company_people_impl extends class_base
 		classload("core/icons");
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_human_resources_table($t);
-
 		$format = t('%s t&ouml;&ouml;tajad');
 		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
@@ -312,8 +311,6 @@ class crm_company_people_impl extends class_base
 		$professions = array();
 		$sections = array();
 		//if section present, i'll get all the professions
-
-
 
 //-------------------osakonna inimesed-------------
 		if(is_oid($arr['request']['unit']))
@@ -458,7 +455,6 @@ class crm_company_people_impl extends class_base
 		$pers2cal = $this->_get_calendars_for_persons($persons);
 		exit_function("ghr::ll");
 		enter_function("ghr::loop");
-
 		foreach($persons as $person)
 		{
 			$tdata = array();
@@ -638,6 +634,7 @@ class crm_company_people_impl extends class_base
 
 	function _add_edit_stuff_to_table($arr)
 	{
+		$arr["prop"]["vcl_inst"]->set_sortable(false);
 		$parent = $arr["request"]["cat"];
 		if (!$parent)
 		{
@@ -1366,8 +1363,8 @@ class crm_company_people_impl extends class_base
 
 	function _get_cedit_table($arr)
 	{
-		$this->_get_human_resources($arr);
 		$this->_add_edit_stuff_to_table($arr);
+		$this->_get_human_resources($arr);
 	}
 }
 ?>

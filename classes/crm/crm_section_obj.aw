@@ -12,7 +12,9 @@ class crm_section_obj extends _int_object
 		return $r;
 	}
 
-	function get_employees()
+	//old function... for people without work relation
+	//for only people with work relation, use get_workers() instead
+	function get_employees($no_subs = 0)
 	{
 		$ol = new object_list();
 		//getting all the workers for the $obj
@@ -25,18 +27,20 @@ class crm_section_obj extends _int_object
 		}
 
 		//getting all the sections
-		$conns = $this->connections_from(array(
-			"type" => "RELTYPE_SECTION",
-		));
-		foreach($conns as $conn)
+		if(!$no_subs)
 		{
-			$section = $conn->to();
-			foreach($section->get_employees()->ids() as $oid)
+			$conns = $this->connections_from(array(
+				"type" => "RELTYPE_SECTION",
+			));
+			foreach($conns as $conn)
 			{
-				$ol->add($oid);
+				$section = $conn->to();
+				foreach($section->get_employees()->ids() as $oid)
+				{
+					$ol->add($oid);
+				}
 			}
 		}
-
 		return $ol;
 	}
 
@@ -76,6 +80,13 @@ class crm_section_obj extends _int_object
 		return $ret;
 	}
 
+	/** Returns section workers
+		@attrib api=1 params=name
+		@param co optional type=oid
+			company id
+		@return object list
+			person object list
+	**/
 	function get_workers($arr = array())
 	{
 		$ol = new object_list();
@@ -97,8 +108,12 @@ class crm_section_obj extends _int_object
 			));
 		}
 
-		//vana asja toimiseks
-		$ol->add($this->get_employees());
+		//vana asja toimimiseks
+		if(!$arr["co"] || !is_object($co = obj($arr["co"])) || !$co->prop("use_only_wr_workers"))
+		{
+			$ol->add($this->get_employees(1));
+		}
+
 		return $ol;
 	}
 
