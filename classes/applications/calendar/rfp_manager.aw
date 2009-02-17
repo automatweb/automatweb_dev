@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.91 2009/02/16 09:17:56 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.92 2009/02/17 08:36:07 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -160,8 +160,8 @@ caption Linnade kaust
 			@property stats_filt_currency type=select store=no parent=stats_filt_left
 			@caption Valuuta
 
-			@property stats_filt_confirmed type=checkbox ch_value=1 store=no parent=stats_filt_left
-			@caption Ainult kinnitatud
+			@property stats_filt_confirmed type=select multiple=1 store=no parent=stats_filt_left
+			@caption Staatus
 
 		 @layout stats_filt_right type=vbox parent=stats_filt_lay
 
@@ -481,6 +481,7 @@ class rfp_manager extends class_base
 				$prop["value"] = $arr["request"][$prop["name"]] ? $arr["request"][$prop["name"]] : $arr["obj_inst"]->prop("default_currency");
 				break;
 			case "stats_filt_confirmed":
+				$prop["options"] = get_instance(CL_RFP)->get_rfp_statuses();
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 			case "stats_filt_start1":
@@ -2671,9 +2672,9 @@ class rfp_manager extends class_base
 			}
 			$out[] = implode(";", $row);
 		}
-		$out = implode(chr(13).chr(10), $out);
-		header("Content-type: text/csv");
-		header("Content-Disposition: filename=stats.xsl");
+		$out = implode("\r\n", $out);
+		header('Content-type: application/octet-stream');
+		header("Content-Disposition: root_access; filename=stats.csv");
 		die($out);
 	}
 
@@ -2695,7 +2696,7 @@ class rfp_manager extends class_base
 		}
 		if($arr["request"]["stats_filt_confirmed"])
 		{
-			$param["confirmed"] = 2;
+			$param["confirmed"] = $arr["request"]["stats_filt_confirmed"];
 		}
 		$cur = $param["default_currency"] = $arr["request"]["stats_filt_currency"];
 		if($arr["request"]["stats_filt_hotel"])

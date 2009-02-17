@@ -458,12 +458,12 @@
             <name>stats_filt_confirmed</name>
             <table>objects</table>
             <group>stats</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>select</type>
+            <multiple>1</multiple>
             <store>no</store>
             <parent>stats_filt_left</parent>
             <field>stats_filt_confirmed</field>
-            <caption>Ainult kinnitatud</caption>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>stats_filt_start2</name>
