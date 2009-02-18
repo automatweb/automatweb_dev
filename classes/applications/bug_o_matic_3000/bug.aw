@@ -2188,13 +2188,15 @@ class bug extends class_base
 				"com_adder" => $com->createdby(),
 				"com_adder_person" => $p->name(),
 				"com_date" => date("d.m.Y H:i", $com->created()),
-				"com_text" => $comt
+				"com_text" => $comt,
+				"txt_respond" => t("vasta"),
+				"id" => $com->id(),
 			));
 			$com_str .= $this->parse("COMMENT");
 		}
 		if($base_com)
 		{
-			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("bug_content"))))));
+			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b> <a class=\"bug_respond\" href=\"JavaScript:void(0)\">".t("vasta")."</a><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("bug_content"))))));
 		}
 		elseif($o->prop("com"))
 		{
@@ -2209,6 +2211,7 @@ class bug extends class_base
 			"main_text_after" => $so == "asc" ? "" : $main_c,
 			"COMMENT" => $com_str
 		));
+		load_javascript ("applications/bug_o_matic_3000/bug.js", "bottom");
 		return $this->parse();
 	}
 
