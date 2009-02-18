@@ -1873,7 +1873,7 @@ class mrp_workspace extends class_base
 		$b_tm = explode("-", $b->birthday);
 		$bd_tm = mktime(0, 0, 0, $bd_tm[1], $bd_tm[2], $bd_tm[0]);
 		$retval = ((int)$a_tm[1] - (int)date("n") == (int)$b_tm[1] - (int)date("n") ? (int)$a_tm[2] < (int)$b_tm[2] : (int)$a_tm[1] - (int)date("n") < (int)$b_tm[1] - (int)date("n")) ? -1 : 1;
-		
+
 		return $retval;
 	}
 
@@ -1895,7 +1895,7 @@ class mrp_workspace extends class_base
 
 		$rs = $this->get_cur_printer_resources(array(
 			"ws" => $arr["obj_inst"],
-			"ign_glob" => true	
+			"ign_glob" => true
 		));
 
 		if(count($rs) > 0)
@@ -2790,8 +2790,7 @@ class mrp_workspace extends class_base
 
 			if (!$planned_date)
 			{
-				$connections = $project->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
-				$jobs = count ($connections);
+				$jobs = $project->get_job_count();
 
 				$list = new object_list (array (
 					"class_id" => CL_MRP_JOB,
@@ -4760,9 +4759,7 @@ class mrp_workspace extends class_base
 			$sby .= " " . $sort_order;
 		}
 
-		classload("core/date/date_calc");
-
-		// now, if the session contans [mrp][ps_project] then we must get a list of all the jobs in the current view
+		// now, if the session contans [mrp][do_pv_proj_s] then we must get a list of all the jobs in the current view
 		// then iterate them until we find a job with the requested project
 		// and then figure out the page number and finally, redirect the user to that page.
 		// this sort of sucks, but I can't figure out how to do the count in sql..
@@ -5025,7 +5022,7 @@ class mrp_workspace extends class_base
 		if ("grp_printer_done" === $grp)
 		{
 			$t->set_default_sortby("tm_end");
-			if (aw_global_get("sortby") == "tm")
+			if (aw_global_get("sortby") === "tm")
 			{
 				aw_global_set("sortby", "tm_end");
 			}
@@ -5069,7 +5066,7 @@ class mrp_workspace extends class_base
 		// get resource operators for professions
 		$ops = new object_list(array(
 			"profession" => $profs->ids(),
-				"lang_id" => array(),
+			"lang_id" => array(),
 			"site_id" => array(),
 			"class_id" => CL_MRP_RESOURCE_OPERATOR
 		));
@@ -5256,16 +5253,16 @@ class mrp_workspace extends class_base
 		{
 			$filt["state"] = $arr["states"];
 		}
-//!!!
+
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).name"] = "%";
 		// this also does or is null, cause the customer can be null
-		// $filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = new obj_predicate_not(1);
+		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = new obj_predicate_not(1);
 
 		if ($arr["proj_states"])
 		{
 			$filt["CL_MRP_JOB.project(CL_MRP_CASE).state"] = $arr["states"];
 		}
-//!!!
+
 		$jobs = new object_list($filt);
 		$ret = array();
 		foreach($jobs->arr() as $o)
@@ -5668,7 +5665,7 @@ class mrp_workspace extends class_base
 		switch($arr["name"])
 		{
 			case "resource_deviation_chart":
-				if($this->can("view", $arr["request"]["mrp_tree_active_item"]))
+				if(isset($arr["request"]["mrp_tree_active_item"]) and $this->can("view", $arr["request"]["mrp_tree_active_item"]))
 				{
 					$arr["area_caption"] = sprintf(t("Ressursi '%s' suhtelise h&auml;lbe muutus ajas"), obj($arr["request"]["mrp_tree_active_item"])->name());
 				}
