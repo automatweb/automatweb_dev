@@ -368,7 +368,7 @@ class html extends aw_template
 		{
 			$hidden_value = "";
 
-			if (is_array($selected))
+			if (isset($selected) && is_array($selected))
 			{
 				$content = "";
 
@@ -385,12 +385,12 @@ class html extends aw_template
 				}
 			}
 
-			$onkeyup = $autocomplete ? $onkeyup : "onkeyup=\"$('#{$id}').val(this.value); ".$args["onkeyup"]."\"";
+			$onkeyup = $autocomplete ? $onkeyup : "onkeyup=\"$('#{$id}').val(this.value); ".$onkeyup."\"";
 
 			$value_elem = "<input type=\"hidden\" id=\"{$id}\" name=\"{$name}\" value=\"{$hidden_value}\">\n";
 			$id .= "AWAutoCompleteTextbox";
 			$name .= "_awAutoCompleteTextbox";
-			$value = $content;
+			$value = isset($content) ? $content : "";
 		}
 
 		return "<input type=\"text\" id=\"{$id}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$style}{$onkeypress}{$onkeyup}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti}{$ac_off}{$onchange} />{$post_append_text}\n{$value_elem}{$autocomplete}";

@@ -268,7 +268,7 @@ class classificator extends class_base
 		$oft = new object($ff);
 		$clf = $oft->meta("classificator");
 		$clf_default = $oft->meta("clf_default");
-		$default_value = $clf_default[$arr["name"]];
+		$default_value = isset($clf_default[$arr["name"]]) ? $clf_default[$arr["name"]] : "";
 
 		$name = $arr["name"];
 		// if name is formatted like userdata[uservar1], convert it to just uservar1
@@ -293,7 +293,7 @@ class classificator extends class_base
 			"site_id" => array(),
 		);
 
-		if($arr["sort_by"])
+		if(isset($arr["sort_by"]))
 		{
 			$vars["sort_by"] = $arr["sort_by"];
 		}
@@ -302,7 +302,7 @@ class classificator extends class_base
 			$vars["sort_by"] = "objects.jrk";
 		}
 
-		if($this->recursive == 1)
+		if(isset($this->recursive) && $this->recursive == 1)
 		{
 			$asd = new object_tree($vars);
 			$olx = $asd->to_list();

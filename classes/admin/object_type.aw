@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.30 2008/06/08 12:38:34 instrumental Exp $
+$Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.31 2009/02/18 13:46:32 instrumental Exp $
 
 @classinfo relationmgr=yes syslog_type=ST_OBJECT_TYPE maintainer=kristo
 
@@ -156,7 +156,7 @@ class object_type extends class_base
 		$rv = false;
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			if($arr["general"] === true)
+			if(isset($arr["general"]) && $arr["general"] === true)
 			{
 				$rv = $o->id();
 			}

@@ -4793,7 +4793,7 @@ class class_base extends aw_template
 					"request" => $args,
 				));
 			}
-			if (!isset($this->groupinfo[$use_group]))
+			if (!isset($use_group) || !isset($this->groupinfo[$use_group]))
 			{
 				$use_group = $default_group;
 			}
