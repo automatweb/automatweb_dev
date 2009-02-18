@@ -25,5 +25,12 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="remove_materials">
+			<function name="remove_materials">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>

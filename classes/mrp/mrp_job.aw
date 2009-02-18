@@ -54,6 +54,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 @default group=materials
 
+	@property materials_sel_tbl type=table no_caption=1
+
 	@property materials_tbl type=table no_caption=1
 
 @default group=data
@@ -303,6 +305,10 @@ class mrp_job extends class_base
 
 			case "job_toolbar":
 				$this->create_job_toolbar ($arr);
+				break;
+
+			case "materials_sel_tbl":
+				$this->create_materials_sel_tbl($arr);
 				break;
 
 			case "materials_tbl":
@@ -1490,26 +1496,63 @@ class mrp_job extends class_base
 		}
 	}
 
-	function create_materials_tbl($arr)
+	function init_materials_tbl($t)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Materjal"),
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "amount",
 			"caption" => t("Kogus"),
 			"align"=> "center",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "unit",
 			"caption" => t("&Uuml;hik"),
 			"align"=> "center",
+			"chgbgcolor" => "color",
 		));
+		$t->set_rgroupby(array("category" => "category"));
+	}
+
+	function create_materials_sel_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->init_materials_tbl(&$t);
+		$t->set_caption(sprintf(t("Tooteretsepti x poolt t&ouml;&ouml;s %s kasutatavad materjalid"), $arr["obj_inst"]->name()));
+		$conn = $arr["obj_inst"]->connections_to(array(
+			"from.class_id" => CL_MATERIAL_EXPENSE,
+		));
+		foreach($conn as $c)
+		{
+			$prod = $c->from()->prop("product");
+			$po = obj($prod);
+			$unitselect = $this->get_materials_unitselect($po, $c->from()->prop("unit"));
+			$t->define_data(array(
+				"name" => html::obj_change_url($po),
+				"amount" => html::textbox(array(
+					"name" => "amount[".$prod."]",
+					"size" => 4,
+					"value" => $c->from()->prop("amount"),
+				)),
+				"unit" => $unitselect,
+				"category" => ($cat = $po->get_first_obj_by_reltype("RELTYPE_CATEGORY")) ? $cat->name() : "",
+				"color" => "#EAEAEA",
+			));
+		}
+	}
+
+	function create_materials_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->init_materials_tbl(&$t);
 		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
 		if($res)
 		{
+			$t->set_caption(sprintf(t("Ressursil %s kasutatavad materjalid"), $res->name()));
 			$conn = $res->connections_to(array(
 				"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
 			));
@@ -1518,60 +1561,71 @@ class mrp_job extends class_base
 			));
 			foreach($conn2 as $c)
 			{
-				$o = $c->from();
-				$prod = $o->prop("product");
-				$prods[$prod] = array(
-					"amount" => $o->prop("amount"),
-					"unit" => $o->prop("unit"),
-				);
+				$prod = $c->from()->prop("product");
+				$has_ids[$prod] = $prod;
 			}
 			foreach($conn as $c)
 			{
 				$prod = $c->from()->prop("product");
+				if($has_ids[$prod])
+				{
+					continue;
+				}
 				$po = obj($prod);
-				$units = $po->instance()->get_units($po);
-				$unitopts = array("" => t("--vali--"));
-				foreach($units as $i => $unit)
-				{
-					if(!$unit)
-					{
-						unset($units[$i]);
-					}
-					else
-					{
-						$unitopts[$unit] = obj($unit)->name();
-					}
-				}
-				if(count($units) == 1)
-				{
-					$unitselect = obj(reset($units))->name().html::hidden(array(
-						"name" => "unit[".$prod."]",
-						"value" => reset($units),
-					));
-				}
-				elseif(count($units))
-				{
-					$unitselect = html::select(array(
-						"name" => "unit[".$prod."]",
-						"options" => $unitopts,
-						"value" => $prods[$prod]["unit"] ? $prods[$prod]["unit"] : "",
-					));
-				}
-				else
-				{
-					$unitselect = "-";
-				}
+				$unitselect = $this->get_materials_unitselect($po);
 				$t->define_data(array(
 					"name" => html::obj_change_url($po),
 					"amount" => html::textbox(array(
 						"name" => "amount[".$prod."]",
 						"size" => 4,
-						"value" => $prods[$prod]["amount"] ? $prods[$prod]["amount"] : 0,
+						"value" => 0,
 					)),
 					"unit" => $unitselect,
+					"category" => ($cat = $po->get_first_obj_by_reltype("RELTYPE_CATEGORY")) ? $cat->name() : "",
+					"color" => "#EAEAEA",
 				));
 			}
 		}
+	}
+
+	function get_materials_unitselect($po, $value = null)
+	{
+		$units = $po->instance()->get_units($po);
+		foreach($units as $i => $unit)
+		{
+			if(!$unit)
+			{
+				unset($units[$i]);
+			}
+			else
+			{
+				$unitopts[$unit] = obj($unit)->name();
+			}
+		}
+		if(count($units) == 1)
+		{
+			$unitselect = obj(reset($units))->name().html::hidden(array(
+				"name" => "unit[".$prod."]",
+				"value" => reset($units),
+			));
+		}
+		elseif(count($units))
+		{
+			$unitselect = "";
+			foreach($unitopts as $unit => $name)
+			{
+				$unitselect .= html::radiobutton(array(
+					"name" => "unit[".$po->id()."]",
+					"value" => $unit,
+					"checked" => $value ? ($value == $unit) : ($unit == $units[0]),
+				)).$name." ";
+			}
+		}
+		else
+		{
+			$unitselect = "-";
+		}
+		return $unitselect;
 	}
 
 	function save_materials($arr)
@@ -1616,9 +1670,15 @@ class mrp_job extends class_base
 						$eo = obj($prods[$prod]);
 						$eo->delete();
 					}
+					elseif($prods[$prod])
+					{
+						$eo = obj($prods[$prod]);
+						$eo->set_prop("unit", $arr["request"]["unit"][$prod]);
+						$eo->set_prop("amount", $arr["request"]["amount"][$prod]);
+						$eo->save();
+					}
 				}
 			}
-			$arr["obj_inst"]->set_meta("expense_amounts", $amts);
 			$arr["obj_inst"]->save();
 		}
 	}

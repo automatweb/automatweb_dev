@@ -14,7 +14,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 @groupinfo grp_resource_unavailable caption="T&ouml;&ouml;ajad"
 	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
 	@groupinfo grp_resource_unavailable_una caption="Kinnised ajad" parent=grp_resource_unavailable
-@groupinfo grp_resource_materials caption="Materjalid" submit=no
+@groupinfo grp_resource_materials caption="Materjalid" submit=no confirm_save_data=1
 
 @default table=objects
 @default field=meta
@@ -297,10 +297,6 @@ class mrp_resource extends class_base
 			case "materials_tree":
 				$this->mk_materials_tree($arr);
 				break;
-		
-			case "materials_tbl":
-				$this->mk_materials_tbl($arr);
-				break;
 
 			case "materials_sel_tbl":
 				$this->mk_materials_sel_tbl($arr);
@@ -360,6 +356,8 @@ class mrp_resource extends class_base
 			$arr["pgtf"] = automatweb::$request->arg("pgtf");
 			$arr["add_ids"] = "";
  		}
+		
+		$arr["post_ru"] = get_ru();
 	}
 
 	function callback_mod_retval($arr)
@@ -604,15 +602,6 @@ class mrp_resource extends class_base
 				$o->set_prop("resource", $arr["obj_inst"]->id());
 				$o->set_prop("product", $oid);
 				$o->save();
-			}
-
-			foreach($arr["request"]["rem_ids"] as $oid)
-			{
-				$o = obj($oid);
-				if($o->class_id() == CL_MATERIAL_EXPENSE_CONDITION)
-				{
-					$o->delete();
-				}
 			}
 		}
 	}
@@ -1639,6 +1628,31 @@ class mrp_resource extends class_base
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
 		$tb->add_save_button();
+		$tb->add_button(array(
+			"name" => "rem_materials",
+			"action" => "remove_materials",
+			"img" => "delete.gif",
+			"tooltip" => t("Eemalda valitud"),
+		));
+	}
+
+	/**
+	@attrib name=remove_materials all_args=1
+	**/
+	function remove_materials($arr)
+	{
+		foreach($arr["rem_ids"] as $oid)
+		{
+			if($this->can("view", $oid))
+			{
+				$o = obj($oid);
+				if($o->class_id() == CL_MATERIAL_EXPENSE_CONDITION)
+				{
+					$o->delete();
+				}
+			}
+		}
+		return $arr["post_ru"];
 	}
 
 	function callback_generate_scripts($arr)
@@ -1859,6 +1873,7 @@ class mrp_resource extends class_base
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
+		$t->set_caption(sprintf(t("Ressursil %s kasutatavad materjalid"), $arr["obj_inst"]->name()));
 		$conn = $arr["obj_inst"]->connections_to(array(
 			"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
 		));

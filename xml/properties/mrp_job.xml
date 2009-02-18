@@ -96,6 +96,15 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>materials_sel_tbl</name>
+            <group>materials</group>
+            <table>mrp_job</table>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>materials_sel_tbl</field>
+      </property>
+      <property>
             <name>materials_tbl</name>
             <group>materials</group>
             <table>mrp_job</table>
