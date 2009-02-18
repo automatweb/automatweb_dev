@@ -10,6 +10,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property billp_tb type=toolbar store=no no_caption=1
 	@caption Arve toolbar
 
+	@property important_comment type=text store=no no_caption=1
+	@caption T&auml;htis kommentaar
+
 	@layout main_split type=vbox
 		@layout top_split parent=main_split type=hbox
 
@@ -171,6 +174,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property udef5 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Kasutajadefineeritud muutuja 5
+
+	@property project type=relpicker store=connect reltype=RELTYPE_PROJECT multiple=1
+	@caption Projekt
+
+	@property comments type=text store=no
+	@caption Kommentaarid
+
+	@property comments_add type=texarea store=no
+	@caption Lisa
 
 @default group=delivery_notes
 	@property dn_tb type=toolbar store=no no_caption=1
@@ -336,6 +348,16 @@ class crm_bill extends class_base
 			//		}
 			//	}
 			//	break;
+			case "important_comment":
+				if($this->can("view" , $arr["obj_inst"]->meta("important_comment")))
+				{
+					$ic = obj($arr["obj_inst"]->meta("important_comment"));
+					$prop["value"] = "<font color=red size=+1><b>".$ic->comment()."</b></font>";
+				}
+				break;
+			case "comments":
+				$prop["value"] = $arr["obj_inst"]->get_comments_text();
+				break;
 			case 'partial_recieved':
 				$sum = $this->get_bill_recieved_money($arr["obj_inst"]);
 /*				$bi = get_instance(CL_CRM_BILL);
@@ -554,6 +576,15 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "comments_add":
+				if($prop["value"])
+				{
+					$arr["obj_inst"]->add_comment($prop["value"]);
+				}
+				break;
+			case "comments":
+				$arr["obj_inst"]->set_meta("important_comment" , $arr["request"]["set_important_comment"]);
+				break;
 			case 'partial_recieved':
 				$pa = array();
 				if(is_oid($arr["request"]["new_payment"]))

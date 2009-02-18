@@ -1152,6 +1152,93 @@ class crm_bill_obj extends _int_object
 		}
 	}
 
+	public function get_comments_text()
+	{
+		get_instance("vcl/table");
+		$t = new vcl_table();
+		$t->define_field(array(
+			"name" => "choose",
+			"width" => 10,
+//			"caption" => t("Kommentaar"),
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"width" => 100,
+//			"caption" => t("Kommentaar"),
+		));
+		$t->define_field(array(
+			"name" => "user",
+			"width" => 100,
+//			"caption" => t("Kommentaar"),
+		));
+		$t->define_field(array(
+			"name" => "text",
+//			"caption" => t("Kulunud aeg"),
+		));
+
+		$ret = array();
+		$ol = $this->get_comments();
+		foreach($ol->arr() as $o)
+		{
+			$radio = html::radiobutton(array(
+				"name" => "set_important_comment",
+				"value" => $o->id(),
+				"checked" => $this->meta("important_comment") ==  $o->id() ? 1 : 0,
+				
+				"onclick" => "
+				el = document.getElementsByName(this.name);
+				var x = 0;
+				while(x < el.length)
+				{
+					if(el[x].value != this.value)
+					{
+						el[x].accessKey=0;
+					}
+					x++;
+				}
+				if(this.accessKey == 1)
+				{
+					this.checked=0;
+					this.accessKey=0;
+				}
+				else
+				{
+					this.accessKey=1;
+				}
+				"
+			));
+			$t->define_data(array(
+				"choose" => $radio,
+				"user" => $o->prop("createdby"),
+				"time" => date("d.m.Y h:i" , $o->created()),
+				"text" =>  $o->comment(),
+			));
+		}
+		return $t->draw();
+		return join("<br>" , $ret);
+	}
+
+	public function get_comments()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMMENT,
+			"parent" => $this->id(),	
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		return $ol;
+	}
+
+	public function add_comment($comment)
+	{
+		$o = new object();
+		$o->set_class_id(CL_CRM_COMMENT);
+		$o->set_parent($this->id());
+		$o->set_name(t("Kommentaar objektile ").$this->name());
+		$o->set_comment($comment);
+		$o->save();
+		return $o->id();
+	}
 }
 
 ?>

@@ -1280,47 +1280,51 @@ exit_function("bills_impl::_get_bill_task_list");
 			$filt = array();
 			if($arr["request"]["st"])
 			{
-				switch($arr["request"]["st"])
+				$stuff = explode("_" , $arr["request"]["st"]);
+				switch($stuff[0])
 				{
-					case "period_last":
-						$filt["bill_date_range"] = array(
-							"from" => mktime(0,0,0, date("m")-1, 0, date("Y")),
-							"to" => mktime(0,0,0, date("m"), 0, date("Y")),
-						);
+					case "period":
+						switch($stuff[1])
+						{
+							case "last":
+								$filt["bill_date_range"] = array(
+									"from" => mktime(0,0,0, date("m")-1, 0, date("Y")),
+									"to" => mktime(0,0,0, date("m"), 0, date("Y")),
+								);
+							break;
+							case "current":
+								$filt["bill_date_range"] = array(
+									"from" => mktime(0,0,0, date("m"), 0, date("Y")),
+									"to" => mktime(0,0,0, date("m")+1, 0, date("Y")),
+								);
+							break;
+							case "next":
+								$filt["bill_date_range"] = array(
+									"from" => mktime(0,0,0, date("m")+1, 0, date("Y")),
+									"to" => mktime(0,0,0, date("m")+2, 0, date("Y")),
+								);
+							break;
+						}
+						break;
+					case "prman":
+						$filt["project_mgr"] = $stuff[1];
 					break;
-					case "period_current":
-						$filt["bill_date_range"] = array(
-							"from" => mktime(0,0,0, date("m"), 0, date("Y")),
-							"to" => mktime(0,0,0, date("m")+1, 0, date("Y")),
-						);
+					case "custman":
+						$filt["client_mgr"] = $stuff[1];
 					break;
-					case "period_next":
-						$filt["bill_date_range"] = array(
-							"from" => mktime(0,0,0, date("m")+1, 0, date("Y")),
-							"to" => mktime(0,0,0, date("m")+2, 0, date("Y")),
-						);
+					case "cust":
+						$filt["customer"] = $stuff[1];
 					break;
+
 					default:
-						if($arr["request"]["st"] > 1)
-						{
-							$filt["state"] = $arr["request"]["st"]-10;
-						}
-						else
-						{
-							$stuff = explode("_" , $arr["request"]["st"]);
-							switch($stuff[0])
-							{
-								case "prman":
-									$filt["project_mgr"] = $stuff[1];
-								break;
-								case "custman":
-									$filt["client_mgr"] = $stuff[1];
-								break;
-								case "cust":
-									$filt["customer"] = $stuff[1];
-								break;
-							}
-						}
+					if($arr["request"]["st"] > 1)
+					{
+						$filt["state"] = $arr["request"]["st"]-10;
+					}
+				}
+				if(isset($stuff[2]))
+				{
+					$filt["state"] = $stuff[2];
 				}
 			}
 			elseif ($arr["request"]["bill_s_from"] == "")
@@ -2484,6 +2488,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			"tree_id" => "proj_bills_tree",
 		));
 
+
 		$bills_inst = get_instance(CL_CRM_BILL);
 		$states = $bills_inst->states;
 
@@ -2492,6 +2497,21 @@ exit_function("bills_impl::_get_bill_task_list");
 			"id" => "stats",
 //			"url" => aw_url_change_var($var, $stat_id+10),
 		));
+
+ 		foreach($states as $status => $name)
+ 		{
+ 			if (isset($_GET[$var]) && $_GET[$var] == ($status + 10))
+ 			{
+ 				$name = "<b>".$name."</b>";
+ 			}
+ 			$tv->add_item("stats",array(
+ 				"name" => $name,
+ 				"id" => ($status + 10),
+ 				"iconurl" => icons::get_icon_url(CL_CRM_BILL),
+ 				"url" => aw_url_change_var($var, ($status + 10)),
+ 			));
+ 		}
+
 
 		$tv->add_item(0,array(
 			"name" => t("Projektijuht"),
@@ -2506,10 +2526,22 @@ exit_function("bills_impl::_get_bill_task_list");
 			{
 				continue;
 			}
+
+			$bills_data = $this->all_bills_data($id);
+			$pm_statuses = array();
+			foreach($bills_data as $bd)
+			{
+				$pm_statuses[$bd["state"]] ++;
+			}
+			if(array_sum($pm_statuses))
+			{
+				$name = $name." (".array_sum($pm_statuses).")";
+			}
 			if (isset($_GET[$var]) && $_GET[$var] == "prman_".$id)
 			{
 				$name = "<b>".$name."</b>";
 			}
+
 			$tv->add_item("pr_mgr",array(
 				"name" => $name,
 				"id" => "prman".$id,
@@ -2517,6 +2549,24 @@ exit_function("bills_impl::_get_bill_task_list");
 				"url" => aw_url_change_var($var, "prman_".$id),
 			));
 
+			if(sizeof($pm_statuses))
+			{
+				foreach($pm_statuses as $status => $st_count)
+				{
+					$name = $states[$status]." (".$st_count.")";
+					if (isset($_GET[$var]) && $_GET[$var] == "prman_".$id."_".$status)
+					{
+						$name = "<b>".$name."</b>";
+					}
+		
+					$tv->add_item("prman".$id,array(
+						"name" => $name,
+						"id" => "prman_".$id."_".$status,
+						"iconurl" => icons::get_icon_url(CL_CRM_BILL),
+						"url" => aw_url_change_var($var, "prman_".$id."_".$status),
+					));
+				}
+			}
 		}
 
 		$tv->add_item(0,array(
@@ -2575,43 +2625,111 @@ exit_function("bills_impl::_get_bill_task_list");
 //			"url" => aw_url_change_var($var, $stat_id+10),
 		));
 
-		foreach($states as $stat_id => $state)
-		{
-			if (isset($_GET[$var]) && $_GET[$var] == $stat_id+10)
-			{
-				$state = "<b>".$state."</b>";
-			}
-			$tv->add_item("stats",array(
-				"name" => $state,
-				"id" => $stat_id+10,
-				"url" => aw_url_change_var($var, $stat_id+10),
-			));
-		}
-
 		$state = t("Eelmine kuu");
+ 		$bills_data = $this->all_bills_data("period_last");
+ 		$pm_statuses = array();
+ 		foreach($bills_data as $bd)
+ 		{
+ 			$pm_statuses[$bd["state"]] ++;
+ 		}
+ 		if(array_sum($pm_statuses))
+ 		{
+ 			$state = $state." (".array_sum($pm_statuses).")";
+ 		}
 		if (isset($_GET[$var]) && $_GET[$var] == "period_last") $state = "<b>".$state."</b>";
 		$tv->add_item("period",array(
 			"name" => $state,
 			"id" => "period_last",
 			"url" => aw_url_change_var($var, "period_last"),
 		));
+ 		if(sizeof($pm_statuses))
+ 		{
+ 			foreach($pm_statuses as $status => $st_count)
+ 			{
+ 				$name = $states[$status]." (".$st_count.")";
+ 				if (isset($_GET[$var]) && $_GET[$var] == "period_last_".$status)
+ 				{
+ 					$name = "<b>".$name."</b>";
+ 				}
+ 				$tv->add_item("period_last",array(
+ 					"name" => $name,
+ 					"id" => "period_last_".$status,
+ 					"iconurl" => icons::get_icon_url(CL_CRM_BILL),
+ 					"url" => aw_url_change_var($var, "period_last_".$status),
+ 				));
+ 			}
+ 		}
 
 		$state = t("Jooksev kuu");
+		$bills_data = $this->all_bills_data("period_current");
+ 		$pm_statuses = array();
+ 		foreach($bills_data as $bd)
+ 		{
+ 			$pm_statuses[$bd["state"]] ++;
+ 		}
+ 		if(array_sum($pm_statuses))
+ 		{
+ 			$state = $state." (".array_sum($pm_statuses).")";
+ 		}
 		if (isset($_GET[$var]) && $_GET[$var] == "period_current") $state = "<b>".$state."</b>";
 		$tv->add_item("period",array(
 			"name" => $state,
 			"id" => "period_current",
 			"url" => aw_url_change_var($var, "period_current"),
 		));
+ 		if(sizeof($pm_statuses))
+ 		{
+ 			foreach($pm_statuses as $status => $st_count)
+ 			{
+ 				$name = $states[$status]." (".$st_count.")";
+ 				if (isset($_GET[$var]) && $_GET[$var] == "period_current_".$status)
+ 				{
+ 					$name = "<b>".$name."</b>";
+ 				}
+ 				$tv->add_item("period_current",array(
+ 					"name" => $name,
+ 					"id" => "period_current_".$status,
+ 					"iconurl" => icons::get_icon_url(CL_CRM_BILL),
+ 					"url" => aw_url_change_var($var, "period_current_".$status),
+ 				));
+ 			}
+ 		}
+
 
 		$state = t("J&auml;rgmine kuu");
+		$bills_data = $this->all_bills_data("period_next");
+ 		$pm_statuses = array();
+ 		foreach($bills_data as $bd)
+ 		{
+ 			$pm_statuses[$bd["state"]] ++;
+ 		}
+ 		if(array_sum($pm_statuses))
+ 		{
+ 			$state = $state." (".array_sum($pm_statuses).")";
+ 		}
 		if (isset($_GET[$var]) && $_GET[$var] == "period_next") $state = "<b>".$state."</b>";
 		$tv->add_item("period",array(
 			"name" => $state,
 			"id" => "period_next",
 			"url" => aw_url_change_var($var, "period_next"),
 		));
-
+ 		if(sizeof($pm_statuses))
+ 		{
+ 			foreach($pm_statuses as $status => $st_count)
+ 			{
+ 				$name = $states[$status]." (".$st_count.")";
+ 				if (isset($_GET[$var]) && $_GET[$var] == "period_next_".$status)
+ 				{
+ 					$name = "<b>".$name."</b>";
+ 				}
+ 				$tv->add_item("period_next",array(
+ 					"name" => $name,
+ 					"id" => "period_next_".$status,
+ 					"iconurl" => icons::get_icon_url(CL_CRM_BILL),
+ 					"url" => aw_url_change_var($var, "period_next_".$status),
+ 				));
+ 			}
+ 		}
 	}
 
 	private function all_client_managers()
@@ -2631,6 +2749,42 @@ exit_function("bills_impl::_get_bill_task_list");
 		$ol = new object_list();
 		$ol->add($t->get_element_from_all("client_manager"));
 		return $ol;
+	}
+
+	private function all_bills_data($filt)
+	{
+		$filter = array(
+			"class_id" => CL_CRM_BILL,
+			"site_id" => array(),
+			"lang_id" => array(),
+		);
+
+		if(is_oid($filt))
+		{
+			$filter["CL_CRM_BILL.RELTYPE_PROJECT.proj_mgr"] = $filt;
+		}
+		elseif($filt == "period_last")
+		{
+			$filter["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, mktime(0,0,0, date("m")-1, 0, date("Y")), mktime(0,0,0, date("m"), 0, date("Y")));
+		}
+		elseif($filt == "period_current")
+		{
+			$filter["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, mktime(0,0,0, date("m"), 0, date("Y")), mktime(0,0,0, date("m")+1, 0, date("Y")));
+		}
+		elseif($filt == "period_next")
+		{
+			$filter["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, mktime(0,0,0, date("m")+1, 0, date("Y")), mktime(0,0,0, date("m")+2, 0, date("Y")));
+		}
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_CRM_BILL => array(
+					"impl","state"
+				),
+			)
+		);
+		return $t->list_data;
 	}
 
 	private function all_project_managers()

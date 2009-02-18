@@ -11,6 +11,16 @@
             <caption>Arve toolbar</caption>
       </property>
       <property>
+            <name>important_comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>important_comment</field>
+            <caption>T&amp;amp;auml;htis kommentaar</caption>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>
@@ -427,6 +437,35 @@
             <caption>Kasutajadefineeritud muutuja 5</caption>
       </property>
       <property>
+            <name>project</name>
+            <table>objects</table>
+            <group>other_data</group>
+            <type>relpicker</type>
+            <store>connect</store>
+            <reltype>RELTYPE_PROJECT</reltype>
+            <multiple>1</multiple>
+            <field>project</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>comments</name>
+            <table>objects</table>
+            <group>other_data</group>
+            <type>text</type>
+            <store>no</store>
+            <field>comments</field>
+            <caption>Kommentaarid</caption>
+      </property>
+      <property>
+            <name>comments_add</name>
+            <table>objects</table>
+            <group>other_data</group>
+            <type>texarea</type>
+            <store>no</store>
+            <field>comments_add</field>
+            <caption>Lisa</caption>
+      </property>
+      <property>
             <name>dn_tb</name>
             <table>objects</table>
             <group>delivery_notes</group>
@@ -529,7 +568,10 @@
       <reltypes>
             <TASK>
                   <value>1</value>
-                  <clid>CL_TASK</clid>
+                  <clid>
+                        <num_0>CL_TASK</num_0>
+                        <num_1>CL_BUG</num_1>
+                  </clid>
                   <caption>&amp;amp;Uuml;lesanne</caption>
             </TASK>
             <CUST>
