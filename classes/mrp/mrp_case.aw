@@ -1260,9 +1260,7 @@ class mrp_case extends class_base
 		$resource_tree = new object_tree (array (
 			"parent" => $resources_folder,
 			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
-// how did this work, the state is in metadata?!?!
-//			"state" => new obj_predicate_not(MRP_STATUS_RESOURCE_INACTIVE),
-			"sort_by" => "objects.jrk",
+			"sort_by" => "objects.jrk"
 		));
 
 		if (!count($resource_tree->ids()))
@@ -1271,7 +1269,17 @@ class mrp_case extends class_base
 			return;
 		}
 
-		classload ("vcl/treeview");
+		// don't display MRP_STATUS_RESOURCE_INACTIVE resources. objtree allows currently only simple filtering
+		$resource_tree->filter(array(
+			"state" => MRP_STATUS_RESOURCE_INUSE
+		), false);
+		$resource_tree->filter(array(
+			"state" => MRP_STATUS_RESOURCE_AVAILABLE
+		), false);
+		$resource_tree->filter(array(
+			"state" => MRP_STATUS_RESOURCE_OUTOFSERVICE
+		), false);
+
 		$tree = treeview::tree_from_objects (array (
 			"tree_opts" => array (
 				"type" => TREE_DHTML_WITH_BUTTONS,
@@ -2010,6 +2018,20 @@ class mrp_case extends class_base
 		));
 		$prerequisite_job = $list->begin ();
 		$prerequisite = is_object ($prerequisite_job) ? $prerequisite_job->id () : "";
+		$jobs = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"project" => $this_object->id()
+			),
+			array(
+				CL_MRP_JOB => array("jrk"),
+			)
+		);
+		$job_nr = 1;
+		foreach ($jobs as $job)
+		{
+			$job_nr = max($job_nr, $job["jrk"]);
+		}
 
 		$job = new object (array (
 		   "parent" => $jobs_folder,
@@ -2023,10 +2045,11 @@ class mrp_case extends class_base
 		$job->set_prop ("pre_buffer", $pre_buffer);
 		$job->set_prop ("post_buffer", $post_buffer);
 		$job->set_prop ("resource", $resource_id);
-		$job->set_name ($this_object->name () . "-" . $resource->name ());
-		aw_disable_acl();
+		$job->set_ord($job_nr);
+		$job->set_name ($this_object->name () . "-" . $resource->name () . "-" . $job_nr);
+		// aw_disable_acl(); // should instead be configured by giving proper access rights
 		$job->save ();
-		aw_restore_acl();
+		// aw_restore_acl();
 
 		if ($resource)
 		{
@@ -2544,6 +2567,7 @@ class mrp_case extends class_base
 **/
 	function plan ($arr)
 	{
+		$this->submit($arr);
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
