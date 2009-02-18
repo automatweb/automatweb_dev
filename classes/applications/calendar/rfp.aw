@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.180 2009/02/17 13:11:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.181 2009/02/18 08:46:47 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3199,9 +3199,10 @@ class rfp extends class_base
 		$prod_conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_CATERING_RESERVATION",
 		));
+		uasort(&$prod_conn, array($this, "_sort_submission_products2"));
+		uasort(&$prods, array($this, "_sort_submission_products"));
 		$prods = $arr["obj_inst"]->meta("prods");
 		$pd_sub = "";
-		uasort(&$prods, array($this, "_sort_submission_products"));
 
 		if(count($prods))
 		{
@@ -3225,8 +3226,6 @@ class rfp extends class_base
 					$rv_o = obj($rv_id);
 					foreach($proddata as $prodid => $prod)
 					{
-						$prod["start1"] = $rv_o->prop("start1");
-						$prod["end"] = $rv_o->prop("end");
 						$po = obj($prodid);
 						if($prod["amount"] <= 0)
 						{
@@ -3473,6 +3472,12 @@ class rfp extends class_base
 	{
 		//return ($a["from"]["hour"].str_pad($a["from"]["minute"], 2, "0", STR_PAD_LEFT)) - ($b["from"]["hour"].str_pad($b["from"]["minute"], 2, "0", STR_PAD_LEFT));
 		return $a["start1"] - $b["start1"];
+	}
+
+	private function _sort_submission_products2($a, $b)
+	{
+		//return ($a["from"]["hour"].str_pad($a["from"]["minute"], 2, "0", STR_PAD_LEFT)) - ($b["from"]["hour"].str_pad($b["from"]["minute"], 2, "0", STR_PAD_LEFT));
+		return $a->to()->prop("start1") - $b->to()->prop("start1");
 	}
 
 	private function _sort_submission_additional_services($a, $b)
