@@ -11,7 +11,7 @@ $.fn.bug_respond = function(){
 		$(this).click(function(){
 			i_bug_comm_id = this.id.split("_")[2];
 			s_bug_comment = strip_bug_info($("#bug_comm_content_"+i_bug_comm_id).html());
-			s_bug_comment_new = "\n\n"+trim(smart_split_string_to_lines(s_bug_comment));
+			s_bug_comment_new = "\n\n"+smart_split_string_to_lines(s_bug_comment);
 			// insert the value
 			offset = $("#bug_content_comm").val(s_bug_comment_new).offset();
 			$("#bug_content_comm").focus();
@@ -52,6 +52,24 @@ function smart_split_string_to_lines(s_bug_comment)
 			key--;
 		}
 	}
+	
+	s_bug_comment_new = trim(s_bug_comment_new);
+
+	a_bug_comment = s_bug_comment_new.split("\n");
+	a_bug_comment_length = a_bug_comment.length;
+	s_bug_comment_new = "";
+	for(key=0;key<a_bug_comment_length;key++)
+	{
+		if (a_bug_comment[key].indexOf('>')===0)
+		{
+			s_bug_comment_new += a_bug_comment[key]+"\n";
+		}
+		else
+		{
+			 s_bug_comment_new += "> " + a_bug_comment[key]+"\n";
+		}
+	}
+
 	return s_bug_comment_new;
 }
 
@@ -71,7 +89,9 @@ function strip_bug_info(s_bug)
 		if (a_bug[key].indexOf('Tegelik tundide arv')===0 ||
 		   a_bug[key].indexOf('Prognoositud tundide arv')===0 ||
 		   a_bug[key].indexOf('Tunde kliendile arv')===0 ||
-		   a_bug[key].indexOf('Isiku prognoositud tundide arv')===0 )
+		   a_bug[key].indexOf('Isiku prognoositud tundide arv')===0||
+		   a_bug[key].indexOf('Kellele muudeti')===0
+		   )
 		{
 			continue
 		}
