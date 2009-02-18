@@ -165,7 +165,7 @@ class task_object extends _int_object
 
 	function name()
 	{
-		if ($this->_no_display)
+		if (isset($this->_no_display) && $this->_no_display)
 		{
 			return t("Isiklik");
 		}
@@ -174,7 +174,7 @@ class task_object extends _int_object
 
 	function comment()
 	{
-		if ($this->_no_display)
+		if (isset($this->_no_display) && $this->_no_display)
 		{
 			return t("Isiklik");
 		}
