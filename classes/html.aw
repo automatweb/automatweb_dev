@@ -166,6 +166,8 @@ class html extends aw_template
 		text visible to user when $option_is_tuple is set to TRUE.
 	@param size optional type=int
 		textbox size
+	@param maxlength optional type=int
+		maximum lenght
 	@param disabled optional type=bool
 		if true, textbox is disabled
 	@param textsize optional type=string
@@ -411,6 +413,8 @@ class html extends aw_template
 		if true, textarea is disabled
 	@param textsize optional type=string
 		font size . examples: "10px", "0.7em", "smaller"
+	@param maxlength optional type=int
+		maximum lenght
 	@param style optional type=string
 		textarea style
 	@param onFocus optional type=string
@@ -429,12 +433,19 @@ class html extends aw_template
 	function textarea($args = array())
 	{
 		extract($args);
+		
+		if(empty($richtext) && isset($maxlength) && is_numeric($maxlength) && $maxlength > 0)
+		{
+			$onkeyup = isset($onkeyup) ? " ".$onkeyup : "";
+			$onkeyup = "if(this.value.length>{$maxlength}){this.value=this.value.substr(0,{$maxlength});}".$onkeyup;
+		}
+
 		$cols = !empty($cols) ? $cols : 60;
 		$rows = !empty($rows) ? $rows : 40;
 		$value = isset($value) ? $value : "";
-		$onFocus = isset($onFocus) ? " onfocus=\"{$onFocus}\"" : '';
-		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
-		$onkeyup = isset($onkeyup) ? " onkeyup=\"{$onkeyup}\"" : '';
+		$onFocus = isset($onFocus) ? " onfocus=\"{$onFocus}\"" : "";
+		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : "";
+		$onkeyup = isset($onkeyup) ? " onkeyup=\"{$onkeyup}\"" : "";
 		$onchange = !empty($onchange) ? " onchange=\"{$onchange}\"" : "";
 
 		if (strpos($value, "<") !== false)
