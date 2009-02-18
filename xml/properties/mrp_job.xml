@@ -80,6 +80,22 @@
             <caption>Projekt</caption>
       </property>
       <property>
+            <name>real_length</name>
+            <group>workflow</group>
+            <table>mrp_job</table>
+            <type>hidden</type>
+            <field>real_length</field>
+            <caption>Tegelik kestus</caption>
+      </property>
+      <property>
+            <name>length_deviation</name>
+            <group>workflow</group>
+            <table>mrp_job</table>
+            <type>hidden</type>
+            <field>length_deviation</field>
+            <caption>Kestuse absoluutne h&amp;amp;auml;lve</caption>
+      </property>
+      <property>
             <name>exec_order</name>
             <group>workflow</group>
             <table>mrp_job</table>

@@ -46,6 +46,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@property project type=hidden
 	@caption Projekt
 
+	@property real_length type=hidden
+	@caption Tegelik kestus
+
+	@property length_deviation type=hidden
+	@caption Kestuse absoluutne h&auml;lve
+
 	@property exec_order type=hidden
 	@caption T&ouml;&ouml; jrk. nr.
 
@@ -448,6 +454,7 @@ class mrp_job extends class_base
 		}
 		else
 		{
+			$action = "";
 			$disabled = true;
 		}
 
@@ -1710,6 +1717,31 @@ class mrp_job extends class_base
 				{
 					$c->from()->update_dn_rows($c->from(), $data);
 				}
+			}
+		}
+	}
+
+	function do_db_upgrade($table, $field, $q, $err)
+	{
+		if ("mrp_job" === $table)
+		{
+			ini_set("ignore_user_abort", "1");
+
+			switch($field)
+			{
+				case "real_length":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(10) UNSIGNED"
+					));
+					return true;
+
+				case "length_deviation":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(10)"
+					));
+					return true;
 			}
 		}
 	}
