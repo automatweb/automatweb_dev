@@ -31,14 +31,14 @@
 	@caption Contact list
 	@comment Select people you want in your contact list
 
-@property msg_toolbar type=toolbar no_caption=1 store=no group=message_inbox,message_outbox
-@property Message list toolbar
+@property msg_toolbar type=toolbar store=no group=message_inbox,message_outbox
+@caption Message list toolbar
 
-@property msg_inbox_tbl type=table no_caption=1 store=no group=message_inbox
-@caption Messages
+@property msg_inbox_tbl type=table store=no group=message_inbox
+@caption Received messages
 
-@property msg_outbox_tbl type=table no_caption=1 store=no group=message_outbox
-@caption Messages
+@property msg_outbox_tbl type=table store=no group=message_outbox
+@caption Sent messages
 
 
 ////////////////// RELTYPES ////////////////////

@@ -66,15 +66,8 @@
                   <num_1>message_outbox</num_1>
             </group>
             <type>toolbar</type>
-            <no_caption>1</no_caption>
             <store>no</store>
-      </property>
-      <property>
-            <name>Message</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
+            <caption>Message list toolbar</caption>
       </property>
       <property>
             <name>msg_inbox_tbl</name>
@@ -83,9 +76,8 @@
             <method>serialize</method>
             <group>message_inbox</group>
             <type>table</type>
-            <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Messages</caption>
+            <caption>Received messages</caption>
       </property>
       <property>
             <name>msg_outbox_tbl</name>
@@ -94,9 +86,8 @@
             <method>serialize</method>
             <group>message_outbox</group>
             <type>table</type>
-            <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Messages</caption>
+            <caption>Sent messages</caption>
       </property>
       <classinfo>
             <syslog_type>ST_QUICKMESSAGEBOX</syslog_type>
