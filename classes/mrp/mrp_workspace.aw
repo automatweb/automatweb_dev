@@ -1933,8 +1933,12 @@ class mrp_workspace extends class_base
 			"grp_printer_startable" => "K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada",
 			"grp_printer_notstartable" => "T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada",
 		);
-		$selected = isset($_GET["branch_id"]) && array_key_exists($_GET["branch_id"], $branches) ? $_GET["branch_id"] : "grp_printer_current";
-		$t->set_selected_item($selected);
+		if(!isset($_GET["pj_job"]) || !$this->can("view", $_GET["pj_job"]))
+		{
+			$selected = isset($_GET["branch_id"]) && array_key_exists($_GET["branch_id"], $branches) ? $_GET["branch_id"] : "grp_printer_current";
+			$t->set_selected_item($selected);
+		}
+		
 
 		foreach($branches as $id => $caption)
 		{
