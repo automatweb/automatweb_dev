@@ -186,7 +186,7 @@ class obj_xml_gen
 			$len = strlen($v);
 			for($i = 0; $i < $len; $i++)
 			{
-				if (ord($v[$i]) < 32 || ord($v[$i]) > 127)
+				if (ord($v[$i]) < 32)
 				{
 					$v[$i] = " ";
 				}
