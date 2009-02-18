@@ -31,7 +31,7 @@ class mrp_job_obj extends _int_object
 
 	function get_deviation()
 	{
-		return $this->prop("planned_length") - $this->prop("real_length");
+		return $this->prop("real_length") - $this->prop("planned_length");
 	}
 
 	function get_real($k)
