@@ -688,11 +688,14 @@ class mrp_workspace extends class_base
 			$perpage = $this_object->prop ("projects_list_objects_perpage") ? $this_object->prop ("projects_list_objects_perpage") : 30;
 			$limit = ((isset($arr["request"]["ft_page"]) ? (int) $arr["request"]["ft_page"] : 0) * $perpage) . "," . $perpage;
 
+			$sort_order = (isset($arr["request"]["sort_order"]) and "desc" === $arr["request"]["sort_order"]) ? "desc" : "asc";
+			$tmp = NULL;
+
 			#### sort
 			switch ($this->list_request)
 			{
 				case "inwork":
-						$sort_by = new obj_predicate_sort(array("due_date" => $sort_order));
+					$sort_by = new obj_predicate_sort(array("due_date" => $sort_order));
 					break;
 
 				case "planned_overdue":
@@ -702,12 +705,9 @@ class mrp_workspace extends class_base
 				case "all":
 				case "done":
 				default:
-						$sort_by = new obj_predicate_sort(array("starttime" => $sort_order));
+					$sort_by = new obj_predicate_sort(array("starttime" => $sort_order));
 					break;
 			}
-
-			$sort_order = (isset($arr["request"]["sort_order"]) and "desc" === $arr["request"]["sort_order"]) ? "desc" : "asc";
-			$tmp = NULL;
 
 			if (isset($arr["request"]["sortby"]))
 			{
@@ -1451,7 +1451,8 @@ class mrp_workspace extends class_base
 				}
 				$top_cust = $data;
 				rsort($top_cust);
-				$requirement = $top_cust[19];
+				// If there are over 20 customers, show only the top 20.
+				$requirement = $top_cust[min(20, count($top_cust)) - 1];
 				foreach($data as $k => $v)
 				{
 					if($v < $requirement)
