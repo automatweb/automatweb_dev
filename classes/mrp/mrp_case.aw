@@ -64,6 +64,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@property archived type=text editonly=1
 	@caption Arhiveeritud
 
+	@property warehouse type=select editonly=1
+	@caption Ladu
 
 @default table=objects
 @default field=meta
@@ -572,6 +574,17 @@ class mrp_case extends class_base
 
 			case "job_charts_tbl":
 				$this->_get_job_charts_tbl($arr);
+				break;
+
+			case "warehouse":
+				$ws = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+				if($ws && $whs = $ws->prop("warehouse"))
+				{
+					$ol = new object_list(array(
+						"oid" => $whs,
+					));
+					$prop["options"] = array_merge(array("" => t("--vali--")), $ol->names());
+				}
 				break;
 		}
 
@@ -2000,9 +2013,9 @@ class mrp_case extends class_base
 
 		$job = new object (array (
 		   "parent" => $jobs_folder,
-		   // "class_id" => CL_MRP_JOB,
+		   "class_id" => CL_MRP_JOB,
 		));
-		$job->set_class_id (CL_MRP_JOB);
+		//$job->set_class_id (CL_MRP_JOB);
 		$job->set_prop ("state", MRP_STATUS_NEW);
 		$job->set_prop ("exec_order", $job_number);
 		$job->set_prop ("prerequisites", $prerequisite);
@@ -2852,6 +2865,7 @@ class mrp_case extends class_base
 			{
 				case "finished":
 				case "archived":
+				case "warehouse":
 					$this->db_add_col($table, array(
 						"name" => $field,
 						"type" => "INT(10) UNSIGNED"

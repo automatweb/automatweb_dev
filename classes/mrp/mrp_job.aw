@@ -1680,6 +1680,37 @@ class mrp_job extends class_base
 				}
 			}
 			$arr["obj_inst"]->save();
+			$conn = $arr["obj_inst"]->connections_to(array(
+				"from.class_id" => CL_MATERIAL_MOVEMENT_RELATION,
+			));
+			foreach($arr["request"]["unit"] as $prod => $unit)
+			{
+				if(!$arr["request"]["amount"][$prod])
+				{
+					continue;
+				}
+				$data[$prod] = array(
+					"unit" => $unit,
+					"amount" => $arr["request"]["amount"][$prod],
+				);
+			}
+			if(!count($conn))
+			{
+				$o = obj();
+				$o->set_class_id(CL_MATERIAL_MOVEMENT_RELATION);
+				$o->set_parent($arr["obj_inst"]->id());
+				$o->set_name(sprintf(t("Materjali liikumisseos t&ouml;&ouml;ga %s"), $arr["obj_inst"]->name()));
+				$o->set_prop("job", $arr["obj_inst"]->id());
+				$o->save();
+				$o->create_dn($o, $data);
+			}
+			else
+			{
+				foreach($conn as $c)
+				{
+					$c->from()->update_dn_rows($c->from(), $data);
+				}
+			}
 		}
 	}
 }

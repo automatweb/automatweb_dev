@@ -489,14 +489,14 @@ class shop_delivery_note extends class_base
 		}
 		for($i = 0; $i < 10+$count; $i++)
 		{
-			$t->define_data($this->get_art_row($i, $data));
+			$t->define_data($this->get_art_row($i, $data, $arr["obj_inst"]));
 		}
 		if(!$arr["new"])
 		{
 			foreach($conn as $c)
 			{
 				$row = $c->to();
-				$rd = $this->get_art_row($row, $data);
+				$rd = $this->get_art_row($row, $data, $arr["obj_inst"]);
 				if($rd)
 				{
 					$t->define_data($rd);
@@ -507,7 +507,7 @@ class shop_delivery_note extends class_base
 		$t->set_rgroupby(array("add"=>"add"));
 	}
 
-	function get_art_row($row = null, $arr = array())
+	function get_art_row($row = null, $arr = array(), $obj)
 	{
 		unset($vals);
 		extract($arr);
@@ -566,7 +566,7 @@ class shop_delivery_note extends class_base
 					"name" => "rows[".$row->id()."][prodid]",
 					"value" => $id,
 				)):'',
-				"purchase_price" => ($calc_type == 2) ? $pi->get_fifo_price($prod) : $pi->get_last_purchase_price($prod),
+				"purchase_price" => ($calc_type == 2) ? $pi->get_fifo_price($prod, $obj->prop("from_warehouse")) : $pi->get_last_purchase_price($prod),
 				"base_price" => $bprice,
 				"base_price_tax" => round($bprice*1.18, 2),
 				"ourprice_sum" => $ourprice_sum,

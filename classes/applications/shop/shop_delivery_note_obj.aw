@@ -2,6 +2,24 @@
 
 class shop_delivery_note_obj extends _int_object
 {
+	function awobj_get_delivery_date()
+	{
+		$conn = parent::connections_to(array(
+			"from.class_id" => CL_MATERIAL_MOVEMENT_RELATION,
+		));
+		foreach($conn as $c)
+		{
+			$mmr = $c->from();
+			$job = $mmr->prop("job");
+			if($this->can("view", $job))
+			{
+				$jo = obj($job);
+				return $jo->prop("starttime");
+			}
+		}
+		return parent::prop("delivery_date");
+	}
+
 	function create_movement($arr)
 	{
 		$conn = $arr["obj_inst"]->connections_from(array(

@@ -161,6 +161,15 @@
             <caption>Arhiveeritud</caption>
       </property>
       <property>
+            <name>warehouse</name>
+            <group>grp_general</group>
+            <table>mrp_case</table>
+            <type>select</type>
+            <editonly>1</editonly>
+            <field>warehouse</field>
+            <caption>Ladu</caption>
+      </property>
+      <property>
             <name>sales_priority</name>
             <group>grp_general</group>
             <table>objects</table>
