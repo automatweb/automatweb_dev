@@ -946,7 +946,7 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		@attrib name=edit_password nologin="1"
 		@param id required type=int
 		@param done optional type=int
-                @param show_username type=int
+                @param show_username optional type=int
 	**/
 	function edit_password($arr)
 	{
@@ -966,7 +966,8 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 			$this->vars(array("DONE" => $this->parse("DONE")));
 		}
                 if($arr["show_username"])
-                {
+		{
+ 			$this->vars(array("username" =>  aw_global_get("uid")));
                          $this->vars(array("USERNAME" => $this->parse("USERNAME")));
                 }
 

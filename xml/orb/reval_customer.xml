@@ -44,7 +44,7 @@
 				<arguments>
 					<required name="id" type="int" />
 					<optional name="done" type="int" />
-					<type=int name="show_username" />
+					<optional name="show_username" type="int" />
 				</arguments>
 			</function>
 		</action>
