@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.181 2009/02/18 08:46:47 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.182 2009/02/19 13:54:14 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3219,10 +3219,10 @@ class rfp extends class_base
 			}
 			foreach($sorted_prods as $rvid => $rvs)
 			{
+				$has_prod = false;
+				$pds = "";
 				foreach($rvs as $rv_id => $proddata)
 				{
-					$pds = "";
-					$has_prod = false;
 					$rv_o = obj($rv_id);
 					foreach($proddata as $prodid => $prod)
 					{
@@ -3297,14 +3297,14 @@ class rfp extends class_base
 						$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
 						$prod_total += $this->_format_price($prod["sum"]);
 					}
-					if($has_prod)
-					{
-						$this->vars(array(
-							"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
-							"reservation_name" => $rvid,
-						));
-						$pdr .= $this->parse("PRODUCTS_RESERVATION".($package?"":"_NO_PACKAGE"));
-					}
+				}
+				if($has_prod)
+				{
+					$this->vars(array(
+						"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
+						"reservation_name" => $rvid,
+					));
+					$pdr .= $this->parse("PRODUCTS_RESERVATION".($package?"":"_NO_PACKAGE"));
 				}
 			}
 			if($prodcountcheck) // there might be a chance that some row's were skipped(maybe all), and then we don't need that table at all
