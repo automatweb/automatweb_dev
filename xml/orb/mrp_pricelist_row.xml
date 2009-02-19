@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="mrp_pricelist_row" folder="mrp/orders" extends="class_base">
+	</class>
+</orb>
+		

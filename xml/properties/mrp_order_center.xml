@@ -1,5 +1,99 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>owner_co</name>
+            <table>aw_mrp_order_center</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OWNER</reltype>
+            <field>aw_owner</field>
+            <caption>Omanik</caption>
+      </property>
+      <property>
+            <name>mrp_workspace</name>
+            <table>aw_mrp_order_center</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MRP_WORKSPACE</reltype>
+            <field>aw_mrp_workspace</field>
+            <caption>Ressursihalduse t&amp;amp;ouml;&amp;amp;ouml;laud</caption>
+      </property>
+      <property>
+            <name>order_tb</name>
+            <table>aw_mrp_order_center</table>
+            <group>order_order</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>order_tb</field>
+      </property>
+      <property>
+            <name>order_filter_tree</name>
+            <table>aw_mrp_order_center</table>
+            <group>order_order</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>order_left_top</parent>
+            <field>order_filter_tree</field>
+      </property>
+      <property>
+            <name>order_list</name>
+            <table>aw_mrp_order_center</table>
+            <group>order_order</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>order_split</parent>
+            <field>order_list</field>
+      </property>
+      <property>
+            <name>customer_tb</name>
+            <table>aw_mrp_order_center</table>
+            <group>customer</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>customer_tb</field>
+      </property>
+      <property>
+            <name>customer_filter_tree</name>
+            <table>aw_mrp_order_center</table>
+            <group>customer</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>customer_left_top</parent>
+            <field>customer_filter_tree</field>
+      </property>
+      <property>
+            <name>customer_list</name>
+            <table>aw_mrp_order_center</table>
+            <group>customer</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>customer_split</parent>
+            <field>customer_list</field>
+      </property>
+      <property>
+            <name>pr_tb</name>
+            <table>aw_mrp_order_center</table>
+            <group>pricelists</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>pr_tb</field>
+      </property>
+      <property>
+            <name>pr_table</name>
+            <table>aw_mrp_order_center</table>
+            <group>pricelists</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>pr_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_ORDER_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -8,6 +102,24 @@
             <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
+      <groupinfo>
+            <order>
+                  <caption>Tellimused</caption>
+            </order>
+            <order_order>
+                  <caption>Tellimused</caption>
+                  <parent>order</parent>
+                  <submit>no</submit>
+            </order_order>
+            <customer>
+                  <caption>Kliendid</caption>
+                  <submit>no</submit>
+            </customer>
+            <pricelists>
+                  <caption>Hinnakirjad</caption>
+                  <submit>no</submit>
+            </pricelists>
+      </groupinfo>
       <tableinfo>
             <aw_mrp_order_center>
                   <master_index>brother_of</master_index>
@@ -15,5 +127,62 @@
                   <index>aw_oid</index>
             </aw_mrp_order_center>
       </tableinfo>
+      <reltypes>
+            <OWNER>
+                  <value>1</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Omanik</caption>
+            </OWNER>
+            <MRP_WORKSPACE>
+                  <value>2</value>
+                  <clid>CL_MRP_WORKSPACE</clid>
+                  <caption>ERP T&amp;amp;ouml;&amp;amp;ouml;laud</caption>
+            </MRP_WORKSPACE>
+            <MRP_PRICELIST>
+                  <value>4</value>
+                  <clid>CL_MRP_PRICELIST</clid>
+                  <caption>Hinnakiri</caption>
+            </MRP_PRICELIST>
+      </reltypes>
+      <layout>
+            <order_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>order_order</group>
+                  <area_caption></area_caption>
+            </order_split>
+            <order_left>
+                  <type>hbox</type>
+                  <parent>order_split</parent>
+                  <group>order_order</group>
+                  <area_caption></area_caption>
+            </order_left>
+            <order_left_top>
+                  <type>vbox</type>
+                  <parent>order_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Filter</area_caption>
+                  <group>order_order</group>
+            </order_left_top>
+            <customer_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>customer</group>
+                  <area_caption></area_caption>
+            </customer_split>
+            <customer_left>
+                  <type>hbox</type>
+                  <parent>customer_split</parent>
+                  <group>customer</group>
+                  <area_caption></area_caption>
+            </customer_left>
+            <customer_left_top>
+                  <type>vbox</type>
+                  <parent>customer_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Filter</area_caption>
+                  <group>customer</group>
+            </customer_left_top>
+      </layout>
 </properties>
 

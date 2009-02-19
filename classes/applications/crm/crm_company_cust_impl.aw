@@ -1981,15 +1981,6 @@ class crm_company_cust_impl extends class_base
 			"edit_mode" => 1,
 			"statuses" => 1
 		));
-		/*
-		$tree_inst->start_tree(array(
-			"type" => TREE_DHTML,
-			"has_root" => 1,
-			"root_name" => "hey",
-			"root_url" => "#"
-		));
-		*/
-
 		return PROP_OK;
 	}
 

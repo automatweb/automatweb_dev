@@ -62,8 +62,50 @@
             <field>aw_state</field>
             <caption>Staatus</caption>
       </property>
+      <property>
+            <name>amount</name>
+            <table>aw_mrp_order_print</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_amount</field>
+            <caption>Kogus</caption>
+      </property>
+      <property>
+            <name>format</name>
+            <table>aw_mrp_order_print</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_format</field>
+            <caption>Formaat</caption>
+      </property>
+      <property>
+            <name>tiraazh</name>
+            <table>aw_mrp_order_print</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_tiraazh</field>
+            <caption>Tiraazh</caption>
+      </property>
+      <property>
+            <name>deadline</name>
+            <table>aw_mrp_order_print</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_deadline</field>
+            <caption>T&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>materials</name>
+            <table>aw_mrp_order_print</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_materials</field>
+            <caption>Materjalid</caption>
+      </property>
       <classinfo>
-            <syslog_type>ST_MRP_ORDER</syslog_type>
+            <syslog_type>ST_MRP_ORDER_PRINT</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
@@ -76,6 +118,11 @@
                   <master_table>objects</master_table>
                   <index>aw_oid</index>
             </aw_mrp_order>
+            <aw_mrp_order_print>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_mrp_order_print>
       </tableinfo>
       <reltypes>
             <WORKSPACE>
