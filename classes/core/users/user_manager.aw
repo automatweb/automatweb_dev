@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.17 2009/02/16 15:07:02 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.18 2009/02/19 09:35:30 instrumental Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -11,8 +11,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 @default table=objects
 @default group=general
 
-	@property root type=relpicker reltype=RELTYPE_ROOT field=meta method=serialize 
-	@caption Vaikimise grupp
+	@property root type=relpicker reltype=RELTYPE_ROOT field=meta method=serialize no_edit=1
+	@caption Vaikimisi grupp
 	@comment Hallata saab selle objekti all olevaid gruppe ja kasutajaid
 
 	@property all_roots type=relpicker reltype=RELTYPE_ROOT multiple=1 store=connect
@@ -187,6 +187,35 @@ class user_manager extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "root":
+				$ids = array();
+				foreach($arr["obj_inst"]->all_roots as $oid)
+				{
+					$ot = new object_tree(array(
+						"parent" => $oid,
+						"class_id" => CL_GROUP,
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					$ids[$oid] = $oid;
+					$ids = array_merge($ids, $ot->ids());
+				}
+				if(count($ids) > 0)
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_GROUP,
+						"oid" => $ids,
+						"lang_id" => array(),
+						"site_id" => array(),
+						new obj_predicate_sort(array(
+							"jrk" => "ASC",
+							"name" => "ASC",
+						)),
+					));
+					$prop["options"] = array(0 => t("--vali--")) + $ol->names();
+				}
+				break;
+
 			case "search_blocked":
 				$prop["options"] = array(
 					"0" => t("K&otilde;ik"),
@@ -283,6 +312,8 @@ class user_manager extends class_base
 					$kids = new object_list(array(
 						'parent' => $root->id(),
 						'class_id' => CL_MENU,
+						"lang_id" => array(),
+						"site_id" => array(),
 					));
 					for ($k = $kids->begin(); !$kids->end(); $k = $kids->next())
 					{
@@ -291,6 +322,8 @@ class user_manager extends class_base
 						$grandkids  = new object_list(array(
 							'parent' => $k->id(),
 							'class_id' => CL_MENU,
+							"lang_id" => array(),
+							"site_id" => array(),
 						));
 			
 						for ($gk = $grandkids->begin(); !$grandkids->end(); $gk = $grandkids->next())
@@ -748,6 +781,8 @@ class user_manager extends class_base
 			$treedata = new object_tree(array(
 				'parent' => $parent,
 				'class_id' => CL_GROUP,
+				"lang_id" => array(),
+				"site_id" => array(),
 			));
 			$treenames = $treedata->to_list()->names();
 			foreach($treedata->tree as $pt => $items)
@@ -786,6 +821,8 @@ class user_manager extends class_base
 			$parent = $arr['obj_inst']->prop('root');
 			$ol = new object_list(array(
 				'name' => '%'.$search.'%',
+				"lang_id" => array(),
+				"site_id" => array(),
 			));
 
 			// Sweep through all found groups, check paths
@@ -925,6 +962,8 @@ class user_manager extends class_base
 					'lastaction' => new obj_predicate_compare(OBJ_COMP_LESS, time()-$period*24*3600),  // Last activity less than period days ago
 					'brother_of' => new obj_predicate_prop('id'),
 					//'status' => STAT_NOTACTIVE,
+					"lang_id" => array(),
+					"site_id" => array(),
 				));
 				$users = $ol->ids();
 			break;
@@ -983,9 +1022,11 @@ class user_manager extends class_base
 						$ot = new object_tree(array(
 							'parent' => $oid,
 							'class_id' => CL_GROUP,
+							"lang_id" => array(),
+							"site_id" => array(),
 						));
 						$ids[] = $oid;
-						$ids += $ot->ids();
+						$ids = array_merge($ids, $ot->ids());
 					}
 					if(aw_ini_get("users.use_group_membership") == 1)
 					{
@@ -1041,7 +1082,7 @@ class user_manager extends class_base
 				foreach ($comps as $c => $nm)
 				{
 					$companies[] = html::href(array(
-						'caption' => $nm,
+						'caption' => parse_obj_name($nm),
 						'url' => $this->mk_my_orb("change", array(
 							'id' => $c,
 							'return_url' => get_ru()
@@ -1239,6 +1280,8 @@ class user_manager extends class_base
 				$ot = new object_tree(array(
 					'parent' => $oid,
 					'class_id' => CL_GROUP,
+					"lang_id" => array(),
+					"site_id" => array(),
 				));
 				$ids[] = $oid;
 				$ids += $ot->ids();
@@ -1251,6 +1294,8 @@ class user_manager extends class_base
 			{
 				$ol_args = array(
 					'class_id' => CL_GROUP,
+					"lang_id" => array(),
+					"site_id" => array(),
 				);
 
 				if($r["ug_search_txt"])
@@ -1308,6 +1353,8 @@ class user_manager extends class_base
 			$ol = new object_list(array(
 				'parent' => $this->parent,
 				'class_id' => CL_GROUP,
+				"lang_id" => array(),
+				"site_id" => array(),
 			));
 			$target = $ol->arr();
 		}
@@ -1690,6 +1737,8 @@ class user_manager extends class_base
 			$kids = new object_list(array(
 				'parent' => $rootfolder->id(),
 				'class_id' => CL_MENU,
+				"lang_id" => array(),
+				"site_id" => array(),
 			));
 
 			$return .= "<ul class='user_manager_popup'>";
@@ -1700,6 +1749,8 @@ class user_manager extends class_base
 				$grandkids  = new object_list(array(
 					'parent' => $k->id(),
 					'class_id' => CL_MENU,
+					"lang_id" => array(),
+					"site_id" => array(),
 				));
 			
 				$return .= "<ul>";
@@ -1733,6 +1784,8 @@ class user_manager extends class_base
 		$ol = new object_list(array(
 			'class_id' => CL_USER_MANAGER,
 			'status' => STAT_ACTIVE,
+			"lang_id" => array(),
+			"site_id" => array(),
 		));
 		$users = get_instance("users");
 		for ($manager = $ol->begin(); !$ol->end(); $manager = $ol->next())

@@ -8,7 +8,8 @@
             <reltype>RELTYPE_ROOT</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Vaikimise grupp</caption>
+            <no_edit>1</no_edit>
+            <caption>Vaikimisi grupp</caption>
             <comment>Hallata saab selle objekti all olevaid gruppe ja kasutajaid</comment>
       </property>
       <property>
