@@ -1027,10 +1027,6 @@ class group extends class_base
 					"from" => $group->id()
 				));
 			}
-			obj_set_opt("no_cache", $tmp);
-			$user->disconnect(array(
-				"from" => $group->id()
-			));
 		}
 		obj_set_opt("no_cache", $tmp);
 
