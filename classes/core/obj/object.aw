@@ -116,6 +116,16 @@ class object
 			return call_user_func_array(array($GLOBALS["objects"][$this->oid], $method), $args);
 		}
 		else
+		if ($this->is_property($method))
+		{
+			$val = $this->prop($method);
+			if ($GLOBALS["object_loader"]->cache->can("view", $val))
+			{
+				return obj($val);
+			}
+			return obj();
+		}
+		else
 		{
 			throw new awex_obj_method("Call to undefined method '" . $method . "' on an instance of '" . get_class($GLOBALS["objects"][$this->oid]) . "' with clid '" . $GLOBALS["objects"][$this->oid]->class_id() . "'.");
 		}
