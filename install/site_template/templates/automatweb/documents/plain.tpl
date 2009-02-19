@@ -1,42 +1,25 @@
 <!-- SUB: SHOW_TITLE -->
 <h1>{VAR:title}</h1>
 <!-- END SUB: SHOW_TITLE -->
-<!-- SUB: SHOW_MODIFIED -->
-<span class="kp">{VAR:date_est}</span>
-<!-- END SUB: SHOW_MODIFIED -->
-<p class="text">{VAR:text}</p>
 
-
-
+{VAR:text}
 
 <!-- SUB: PRINTANDSEND -->
-<p>
 <table width="100%" border="0">
-<tr><td align="right"><a href="{VAR:baseurl}/?class=document&action=print&section={VAR:docid}" target="_new"
- onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('print','','{VAR:baseurl}/img/icon_2_print_over.gif',1)"><IMG SRC="{VAR:baseurl}/img/icon_22_print.gif" BORDER="0" name="print" ALT="Print"></a><IMG SRC="{VAR:baseurl}/img/trans.gif" BORDER="0" width="5" ALT="">
- <!--
- <a href="{VAR:baseurl}/?class=document&action=print&section={VAR:docid}&format=pdf"
- onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('pdf','','{VAR:baseurl}/img/icon_2_pdf_over.gif',1)"><IMG SRC="{VAR:baseurl}/img/icon_22_pdf.gif" BORDER="0" name="pdf" ALT="Salvesta PDF"></a><IMG SRC="{VAR:baseurl}/img/trans.gif" BORDER="0" width="5" ALT=""><a href="{VAR:baseurl}/?class=document&action=feedback&section={VAR:docid}"
- onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('feedback','','{VAR:baseurl}/img/icon_2_feedback_over.gif',1)"><IMG SRC="{VAR:baseurl}/img/icon_22_feedback.gif" BORDER="0" name="feedback" ALT="Tagasiside"></a>
- -->
- </td></tr></table>
-<!--{VAR:baseurl}/?class=document&action=send&section={VAR:docid}-->
+	<tr>
+		<td align="left">
+			<!-- SUB: SHOW_MODIFIED -->
+			<span class="kp"><i>{VAR:date_est_fullyear}</i></span>
+			<!-- END SUB: SHOW_MODIFIED -->
+		</td>
+		<td align="right" width="1"> 
+			<a href="{VAR:baseurl}/?class=document&amp;action=print&amp;section={VAR:docid}" target="_new"><img src="{VAR:baseurl}/img/icon_22_print.gif" border="0" name="print" alt="Print" /></a>
+		</td>
+	</tr>
+</table>
 <!-- END SUB: PRINTANDSEND -->
 
 
-<!-- SUB: image -->
-<div style="width: {VAR:width}px;" class="image image_{VAR:alignstr}">
-<div style="width: {VAR:width}px;">
-<span class="author">
-	<!-- SUB: HAS_AUTHOR -->
-	(FOTO: {VAR:author})
-	<!-- END SUB: HAS_AUTHOR -->
-</span>
-<a href="<?php echo strlen('{VAR:bigurl}') > 0 ? '{VAR:bigurl}' : '{VAR:imgref}'; ?>" title="{VAR:imgcaption}" class="thickbox"><img src="{VAR:imgref}" alt="Single Image"/></a>
-{VAR:imgcaption}
-</div>
-</div>
-<!-- END SUB: image -->
 
 
 <!-- SUB: image -->
@@ -47,8 +30,10 @@
 	(FOTO: {VAR:author})
 	<!-- END SUB: HAS_AUTHOR -->
 </span>
-<a href="<?php echo strlen('{VAR:bigurl}') > 0 ? '{VAR:bigurl}' : '{VAR:imgref}'; ?>" title="{VAR:imgcaption}" class="thickbox"><img src="{VAR:imgref}" alt="{VAR:alt}" /></a>
-{VAR:imgcaption}
+<?php echo strlen('{VAR:bigurl}') > 0 ? '<a href="{VAR:bigurl}">' : ''; ?>
+<img src="{VAR:imgref}" alt="{VAR:alt}"/>
+<?php echo strlen('{VAR:bigurl}') > 0 ? '</a>' : ''; ?>
+<p class="caption" style="width: {VAR:width}px;">{VAR:imgcaption}</p>
 </div>
 </div>
 <!-- END SUB: image -->
@@ -61,8 +46,8 @@
 	(FOTO: {VAR:author})
 	<!-- END SUB: HAS_AUTHOR -->
 </span>
-<a href="{VAR:plink}" title="{VAR:imgcaption}"><img src="{VAR:imgref}" alt="{VAR:alt}" /></a>
-{VAR:imgcaption}
+<a href="{VAR:plink}" title="{VAR:imgcaption}"><img src="{VAR:imgref}" alt="{VAR:alt}"/></a>
+<p class="caption" style="width: {VAR:width}px;">{VAR:imgcaption}</p>
 </div>
 </div>
 <!-- END SUB: image_linked -->
@@ -75,8 +60,8 @@
 	(FOTO: {VAR:author})
 	<!-- END SUB: HAS_AUTHOR -->
 </span>
-<a href="{VAR:bigurl}" title="{VAR:imgcaption}" class="thickbox"><img src="{VAR:imgref}" alt="{VAR:alt}" /></a>
-{VAR:imgcaption}
+<a href="{VAR:bigurl}" title="{VAR:imgcaption}" class="thickbox" rel="gallery-aw"><img src="{VAR:imgref}" alt="Single Image"/></a>
+<p class="caption" style="width: {VAR:width}px;">{VAR:imgcaption}</p>
 </div>
 </div>
 <!-- END SUB: image_has_big -->

@@ -1,30 +1,19 @@
-<table border=0 cellpadding=0 cellspacing=0 {VAR:align}>
-<tr>
-<td style="padding-bottom: 10px;">
-
-
+<div id="doc_pealk">
 <!-- SUB: SHOW_TITLE -->
-
 <!-- SUB: TITLE_LINK_BEGIN -->
-<a href='{VAR:baseurl}/{VAR:docid}'>
+<a href="{VAR:baseurl}/{VAR:docid}">
 <!-- END SUB: TITLE_LINK_BEGIN -->
-
-<b>{VAR:title}</b>
+{VAR:title}
 <!-- SUB: TITLE_LINK_END -->
 </a>
 <!-- END SUB: TITLE_LINK_END -->
-
+<br>
 <!-- END SUB: SHOW_TITLE -->
-
-<!-- SUB: SHOW_MODIFIED -->
-<span class="kp">{VAR:date_est}</span>
-<!-- END SUB: SHOW_MODIFIED -->
-<p class="text">{VAR:text}</p>
+</div>
+<div class="text">{VAR:text}</div>
+<div id="doc_kuup">{VAR:date_est}</div>
 
 
-</td>
-</tr>
-</table>
 
 
 <!-- SUB: image -->
@@ -35,7 +24,7 @@
 	(FOTO: {VAR:author})
 	<!-- END SUB: HAS_AUTHOR -->
 </span>
-<a href="<?php echo strlen('{VAR:bigurl}') > 0 ? '{VAR:bigurl}' : '{VAR:imgref}'; ?>" title="{VAR:imgcaption}" class="thickbox"><img src="{VAR:imgref}" alt="{VAR:alt}" /></a>
+<a href="<?php echo strlen('{VAR:bigurl}') > 0 ? '{VAR:bigurl}' : '{VAR:imgref}'; ?>" title="{VAR:imgcaption}" class="thickbox" rel="gallery-aw"><img src="{VAR:imgref}" alt="Single Image"/></a>
 {VAR:imgcaption}
 </div>
 </div>
@@ -49,7 +38,7 @@
 	(FOTO: {VAR:author})
 	<!-- END SUB: HAS_AUTHOR -->
 </span>
-<a href="{VAR:plink}" title="{VAR:imgcaption}"><img src="{VAR:imgref}" alt="{VAR:alt}" /></a>
+<a href="{VAR:plink}" title="{VAR:imgcaption}"><img src="{VAR:imgref}" alt="{VAR:alt}"/></a>
 {VAR:imgcaption}
 </div>
 </div>
@@ -63,7 +52,7 @@
 	(FOTO: {VAR:author})
 	<!-- END SUB: HAS_AUTHOR -->
 </span>
-<a href="{VAR:bigurl}" title="{VAR:imgcaption}" class="thickbox"><img src="{VAR:imgref}" alt="{VAR:alt}" /></a>
+<a href="{VAR:bigurl}" title="{VAR:imgcaption}" class="thickbox" rel="gallery-aw"><img src="{VAR:imgref}" alt="Single Image"/></a>
 {VAR:imgcaption}
 </div>
 </div>
