@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.17 2009/02/12 11:04:06 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.18 2009/02/19 08:39:28 instrumental Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -9,6 +9,7 @@ class users extends users_user implements request_startup
 	function users()
 	{
 		$this->init("automatweb/users");
+		lc_site_load("users", &$this);
 	}
 
 	/** generates the form for changing the current users password
