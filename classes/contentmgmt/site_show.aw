@@ -2769,7 +2769,7 @@ class site_show extends class_base
 		tm::s(__CLASS__, __FUNCTION__);
 		$this->skip = false;
 		$link_str = $o->trans_get_val("link");
-		if ($this->can("view", $o->meta("linked_obj")))
+		if ($this->can("view", $o->meta("linked_obj")) && $o->meta("linked_obj") != $o->id())
 		{
 			$linked_obj = obj($o->meta("linked_obj"));
 			if ($linked_obj->class_id() == CL_MENU)
