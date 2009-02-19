@@ -50,7 +50,7 @@
             <SEARCH_LOCATION>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>Otsingu l&amp;auml;htekoht</caption>
+                  <caption>Otsingu l&amp;amp;auml;tekoht</caption>
             </SEARCH_LOCATION>
             <KW>
                   <value>2</value>

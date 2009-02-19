@@ -790,6 +790,39 @@
             <store>no</store>
       </property>
       <property>
+            <name>ps_resource</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>select</type>
+            <parent>printer_search</parent>
+            <captionside>top</captionside>
+            <caption>Resurss</caption>
+      </property>
+      <property>
+            <name>ps_project</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>textbox</type>
+            <parent>printer_search</parent>
+            <captionside>top</captionside>
+            <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>ps_submit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>submit</type>
+            <parent>printer_search</parent>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>pp_picture</name>
             <table>objects</table>
             <field>meta</field>
@@ -808,7 +841,40 @@
             <type>text</type>
             <parent>ppl_data</parent>
             <store>no</store>
-            <caption>Nimi</caption>
+            <caption>Nimi:</caption>
+      </property>
+      <property>
+            <name>pp_profession</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>text</type>
+            <parent>ppl_data</parent>
+            <store>no</store>
+            <caption>Amet:</caption>
+      </property>
+      <property>
+            <name>pp_section</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>text</type>
+            <parent>ppl_data</parent>
+            <store>no</store>
+            <caption>&amp;amp;Uuml;ksus:</caption>
+      </property>
+      <property>
+            <name>pp_company</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_printer</group>
+            <type>text</type>
+            <parent>ppl_data</parent>
+            <store>no</store>
+            <caption>Organisatsioon:</caption>
       </property>
       <property>
             <name>pp_resources</name>
@@ -1580,6 +1646,13 @@
                   <area_caption>T&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;puu</area_caption>
                   <group>grp_printer</group>
             </printer_tree>
+            <printer_search>
+                  <type>vbox</type>
+                  <parent>printer_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;otsing</area_caption>
+                  <group>grp_printer</group>
+            </printer_search>
             <printer_personal>
                   <type>vbox</type>
                   <parent>printer_left</parent>
@@ -1598,13 +1671,15 @@
                   <parent>printer_personal</parent>
                   <area_caption>Minu&amp;amp;nbsp;ressursid</area_caption>
                   <closeable>1</closeable>
+                  <no_padding>1</no_padding>
                   <group>grp_printer</group>
             </ppl_resources>
             <ppl_birthdays>
                   <type>vbox_sub</type>
                   <parent>printer_personal</parent>
-                  <area_caption>Kaast&amp;amp;ouml;&amp;amp;ouml;tajate&amp;amp;nbsp;s&amp;amp;uuml;nnip&amp;amp;auml;evad</area_caption>
+                  <area_caption>Meie&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;tajate&amp;amp;nbsp;s&amp;amp;uuml;nnip&amp;amp;auml;evad</area_caption>
                   <closeable>1</closeable>
+                  <no_padding>1</no_padding>
                   <group>grp_printer</group>
             </ppl_birthdays>
             <printer_right>

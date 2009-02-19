@@ -292,6 +292,7 @@
             <grp_resource_materials>
                   <caption>Materjalid</caption>
                   <submit>no</submit>
+                  <confirm_save_data>1</confirm_save_data>
             </grp_resource_materials>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>

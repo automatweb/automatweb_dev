@@ -394,7 +394,7 @@
                   <type>vbox</type>
                   <parent>ug_left_bit</parent>
                   <closeable>1</closeable>
-                  <area_caption>Kasutajagruppide&amp;amp;nbsp;tsing</area_caption>
+                  <area_caption>Kasutajagruppide&amp;amp;nbsp;otsing</area_caption>
                   <group>usergroups</group>
             </vbox_ug_search>
             <vbox_ug_search_name>
