@@ -806,7 +806,7 @@ class task_object extends _int_object
 			}
 		}
 		$u = get_instance(CL_USER);
-		$o->set_prop("bug_status" , 0);
+		$o->set_prop("bug_status" , BUG_OPEN);
 		$o->set_prop("deadline" , (time() + 3600*24*360));
 		$o->set_prop("who" , $u->get_current_person());
 		$o->set_prop("bug_content" , $this->prop("content"));
