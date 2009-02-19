@@ -946,6 +946,7 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		@attrib name=edit_password nologin="1"
 		@param id required type=int
 		@param done optional type=int
+                @param show_username type=int
 	**/
 	function edit_password($arr)
 	{
@@ -964,6 +965,11 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		{
 			$this->vars(array("DONE" => $this->parse("DONE")));
 		}
+                if($arr["show_username"])
+                {
+                         $this->vars(array("USERNAME" => $this->parse("USERNAME")));
+                }
+
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_edit_password", array("section" => aw_global_get("section"), "id" => $arr["id"]))
 		));
@@ -1265,8 +1271,7 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 
 		// write data to session, so that the person can edit their profile
 		$_SESSION["reval_fc"]["id"] = $rv["CustomerId"];
-		return $this->mk_my_orb("edit_profile", array("section" => $arr["section"], "id" => $arr["id"]), "reval_customer", false, false, "&", false);
-
+                return $this->mk_my_orb("edit_password", array("section" => $arr["section"], "id" => $arr["id"],"show_username" => 1), "reval_customer", false, false, "&", false);
 		// create temp hash and send e-mail
 		$hash = gen_uniq_id();
 		//$this->_insert_temp_hash($hash, $rv["CustomerId"]);

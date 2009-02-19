@@ -27,6 +27,7 @@
 			<function name="edit_email">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="done" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -42,6 +43,8 @@
 			<function name="edit_password">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="done" type="int" />
+					<type=int name="show_username" />
 				</arguments>
 			</function>
 		</action>
@@ -129,8 +132,15 @@
 			</function>
 		</action>
 
-		<action name="submit_forgot_password">
+		<action name="submit_forgot_password" nologin="1">
 			<function name="submit_forgot_password">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="complimentary_nights_page" nologin="1">
+			<function name="complimentary_nights_page">
 				<arguments>
 				</arguments>
 			</function>
