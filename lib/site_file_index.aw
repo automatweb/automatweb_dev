@@ -10,7 +10,7 @@ function load_versions()
 
 	if(!table_exists("site_file_index"))
 	{
-		mysql_query('create table '.$this->db_table_name.' (
+		mysql_query('create table '.$table.' (
 			id int not null primary key auto_increment,
 			file_name varchar(255),
 			file_version varchar(31),
@@ -98,6 +98,7 @@ function load_versions_if_not_loaded()
 function get_class_version($class)
 {
 	$block_list = array("aw_request" , "aw_resource");//ueh...ei tea mis teha... enne neid pole saidi ini sisse loetud
+
 	if(in_array($class , $block_list))
 	{
 		return $class;
