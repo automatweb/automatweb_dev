@@ -1853,7 +1853,7 @@ class room extends class_base
 			$today_start -= 3600;
 		}
 
-		enter_function("get_calendar_tbl::3");
+
 		$len = 7;
 		if ($_GET["start"] && $_GET["end"])
 		{
@@ -1861,18 +1861,25 @@ class room extends class_base
 		}
 		$this->len = $len;
 		enter_function("get_calendar_tbl::3::genres");
+		$this->other_rooms = array_keys($arr["obj_inst"]->get_other_rooms_selection());
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len , $settings->prop("show_unverified"));
 		$this->multi = $arr["obj_inst"]->prop("allow_multiple");
-		$this->extra_row = $arr["obj_inst"]->has_extra_row($this->start, $this->start + 24*3600*$len);
+		
+		$period_end = $this->start + 24*3600*$len;
+		$this->extra_row = $arr["obj_inst"]->has_extra_row($this->start, $period_end);
+		if($this->extra_row)
+		{
+			$this->gen_extra_res_table($arr["obj_inst"] , $this->start, $period_end);
+		}
+
 		$this->show_unverified = $settings->prop("show_unverified");
 
-		$this->other_rooms = $arr["obj_inst"]->get_other_rooms_selection();
-		if(is_array($this->other_rooms) && sizeof($this->other_rooms))
+/*		if(is_array($this->other_rooms) && sizeof($this->other_rooms))
 		{
 			$other_room_ol = new object_list();
 			$other_room_ol->add(array_keys($this->other_rooms));
 		}
-
+*/
 		$this->_init_calendar_t($t,$this->start, $len);
 		exit_function("get_calendar_tbl::3::genres");
 
@@ -1901,6 +1908,8 @@ class room extends class_base
 		$real_day_start = get_day_start($today_start);
 		$base_add = $today_start - $real_day_start;
 
+
+		enter_function("get_calendar_tbl::3");
 		while($step < $day_end/($step_length * $time_step))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
@@ -2007,7 +2016,7 @@ class room extends class_base
 							$string = $settings->prop("available_time_string")?$settings->prop("available_time_string") :t("VABA");
 			
 							$col[$x] = $arr["obj_inst"]->get_color("available");
-							if(is_array($this->other_rooms) && sizeof($this->other_rooms) && $settings->prop("col_slave") != "")
+/*							if(is_array($this->other_rooms) && sizeof($this->other_rooms) && $settings->prop("col_slave") != "")
 							{
 								foreach($other_room_ol->arr() as $oro)
 								{//arr($oro);arr(date("d.m h:i" , $start_step)); arr(date("d.m h:i" , $end_step));
@@ -2019,7 +2028,7 @@ class room extends class_base
 										$col[$x] = "#".$settings->prop("col_slave"); 
 									}
 								}
-							}
+							}*/
 							if($_SESSION["room_reservation"][$room_id]["start"]<=$start_step && $_SESSION["room_reservation"][$room_id]["end"]>=$end_step)
 							{
 								//teeb selle kontrolli ka , et 2kki tyybid yltse teist ruumi tahavad juba... et siis l2heks sassi
@@ -2091,6 +2100,8 @@ class room extends class_base
 				//kui mitu lubatud, hakkab siia lisaks veel panema asju....
 				if($this->multi)
 				{
+					
+					enter_function("room::multi_fields");
 	//				arr(date("d.m.Y h:i" , $start_step));
 					$time_reservations = $arr["obj_inst"]->get_time_reservations($start_step , $end_step);
 					foreach($time_reservations as $key => $time_reservation)
@@ -2107,18 +2118,22 @@ class room extends class_base
 						$extra_d[$x."_".$col] = $this->get_bron_cell_html(obj($time_reservation["id"]), $settings,$start_step);
 						$extra_col[$x."_".$col] = $this->get_bron_cell_color(obj($time_reservation["id"]), $settings,$start_step);
 					}
+					exit_function("room::multi_fields");
 				}
 
 				//kole asi, kuid siia tuleb lisaks toitlustuse ja muud tyypi broneeringud
 				if($this->extra_row)
 				{
-					$xtr = $arr["obj_inst"]->get_extra_res($start_step , $end_step);
+					enter_function("room::extra_row");
+					$xtr = $this->get_extra_res_from_table($start_step , $end_step);
+
 					if($xtr)
 					{
 						$this->is_after_buffer = 0;
 						$extra_d[$x."_0"] = $this->get_bron_cell_html(obj($xtr), $settings,$start_step);
 						$extra_col[$x."_0"] = $this->get_bron_cell_color(obj($xtr), $settings,$start_step);
 					}
+					exit_function("room::extra_row");
 				}
 
 				$x++;
@@ -2180,9 +2195,11 @@ class room extends class_base
 	
 	private function get_bron_cell_color($last_bron , $settings,$start_step)
 	{
+		enter_function("room::get_bron_cell_color");
 		$col = array();
 		$x = 1;
-		if($last_bron->is_lower_bron() && $settings->prop("col_slave") != "")
+		//kui on alambronn... kas siis ruumil mis on seotud teise ruumiga kust broneeritakse, v6i siis ruumil kust broneeritakse juhul kui on broneering m6nes seotud olevas ruumis
+		if($settings->prop("col_slave") != ""  && ((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
 		{
 			$col[$x] = "#".$settings->prop("col_slave"); 
 		}
@@ -2229,6 +2246,7 @@ class room extends class_base
 				"#EE6363";
 			}
 		}
+		exit_function("room::get_bron_cell_color");
 		return $col[$x];
 	}
 
@@ -2266,6 +2284,7 @@ class room extends class_base
 
 	private function get_bron_cell_html($last_bron, $settings,$start_step)
 	{
+		enter_function("room::get_bron_cell_html");
 		$d = array();
 		$x = 1;
 		$cus = $settings->prop("reserved_time_string")?$settings->prop("reserved_time_string") :t("BRON");
@@ -2623,7 +2642,7 @@ class room extends class_base
 									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
 								}
 							}
-
+		exit_function("room::get_bron_cell_html");
 		return $d[$x];
 	}
 
@@ -5380,6 +5399,7 @@ class room extends class_base
 //kui ruumile tekitada muurtuja check_for_people , siis annab tulemuseks arvu palju inimesi mahub, juhul kui on ruumile v6imalik mitu broneeringut teha
 	function check_from_table($arr)
 	{
+		enter_function("room::check_from_table");
 		$ret = 1;
 		if($this->max_capacity && $this->allow_multiple && $this->check_for_people)
 		{
@@ -5390,6 +5410,7 @@ class room extends class_base
 		{
 			if($key > $arr["end"])
 			{
+				exit_function("room::check_from_table");
 				return $ret;
 			}
 			if($val["end"] > $arr["start"])
@@ -5421,8 +5442,9 @@ class room extends class_base
 					}
 					else
 					{
-						if($val["verified"] && !$this->is_after_buffer && !$this->is_before_buffer) // juhul kui pole j2relpuhver ja on kinnitatud, siis pole vaja enam edasi otsida
+						if($val["verified"] && !$this->is_after_buffer && !$this->is_before_buffer && !$val["slave"]) // juhul kui pole j2relpuhver ja on kinnitatud, siis pole vaja enam edasi otsida, v6tab eelduseks ka , et pole miski seotud ruumi bronn
 						{
+							exit_function("room::check_from_table");
 							return false;
 						}
 						else
@@ -5434,11 +5456,41 @@ class room extends class_base
 			}
 			if($ret < 0 ||  $ret < $this->check_for_people) $ret = false;
 		}
+		exit_function("room::check_from_table");
+		return $ret;
+	}
+
+
+	private function get_extra_res_from_table($start , $end)
+	{
+		$ret = 0;
+		foreach($this->extra_res_table as $key => $val)
+		{
+			if($key > $end)
+			{
+				return $ret;
+			}
+			if($val["end"] > $start)
+			{//arr(date("h:i" , arr($key))); arr(date("h:i", $arr["end"]));arr($val);
+				if($key < $end)
+				{
+					if($val["verified"] && !$val["slave"]) // juhul kui pole j2relpuhver ja on kinnitatud, siis pole vaja enam edasi otsida, v6tab eelduseks ka , et pole miski seotud ruumi bronn
+					{
+						return $val["id"];
+					}
+					else
+					{
+						$ret = $val["id"];
+					}
+				}
+			}
+		}
 		return $ret;
 	}
 
 	function generate_res_table($room, $start = 0, $end = 0,$un = 0)
 	{
+		enter_function("room::generate_res_table");
 		$this->max_capacity = $room->prop("max_capacity");
 		$this->allow_multiple = $room->prop("allow_multiple");
 		if(!$this->start)
@@ -5457,10 +5509,18 @@ class room extends class_base
 		}
 		$step_length = $this->step_lengths[$room->prop("time_unit")];
 
+		$room_selection = $room->id();
+		if(sizeof($room->get_other_rooms_selection()))
+		{
+			$other_rooms = array_keys($room->get_other_rooms_selection());
+			$room_selection = $other_rooms;
+			$room_selection[] = $room->id();
+		}
+
 		$filt = array(
 			"class_id" => array(CL_RESERVATION),
 			"lang_id" => array(),
-			"resource" => $room->id(),
+			"resource" => $room_selection,
 			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $end),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
 		);
@@ -5542,6 +5602,10 @@ class room extends class_base
 			$this->res_table[$start]["real_start"] = $res->prop("start1");
 			$this->res_table[$start]["id"] = $res->id();
 			$this->res_table[$start]["people"] = $res->prop("people_count");
+			if(is_array($other_rooms) && in_array($res->prop("resource") , $other_rooms))
+			{
+				$this->res_table[$start]["slave"] = 1;
+			}
 			$customers[] = $res->prop("customer");
 		}
 		ksort($this->res_table);//if(aw_global_get("uid") == "struktuur") arr($this->res_table);
@@ -5554,7 +5618,75 @@ class room extends class_base
 			));
 			$custs = $cust_ol->arr();
 		}
+		exit_function("room::generate_res_table");
 	}
+
+
+	private function gen_extra_res_table($room, $start = 0, $end = 0,$un = 0)
+	{
+		enter_function("room::generate_extra_res_table");
+
+		$reservations = $room->get_extra_reservations($start , $end);
+
+		$this->extra_res_table = array();
+
+		foreach($reservations->arr() as $res)
+		{
+			$start = $orig_start = $res->prop("start1")-$room->prop("buffer_before")*$room->prop("buffer_before_unit");
+			$end = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+			if($this->extra_res_table[$start]["verified"])//kontrollib kas tabelis sama aja peal on juba m6ni kinnitatud broneering... v6ibolla siis pole vaja yldse n2idata
+			{
+				if($this->extra_res_table[$start]["end"] < $end)
+				{
+					$start = $this->extra_res_table[$start]["end"];
+				}
+				else
+				{
+					continue;
+				}
+			}
+			$this->extra_res_table[$start]["end"] = $end;
+			//tekitab eelnevale v6i eelnevatele cellidele n8. broneeringu, mis on lihtsalt broneeritud buffriks
+			if($room->prop("buffer_after"))
+			{
+				$buff_start = $orig_start-$room->prop("buffer_after")*$room->prop("buffer_after_unit");
+				if($this->extra_res_table[$buff_start]["verified"])
+				{
+					if($this->extra_res_table[$buff_start]["end"] < $start)
+					{
+						$buff_start = $this->extra_res_table[$buff_start]["end"];
+					}
+					else
+					{
+						unset($buff_start);
+					}
+				}
+				if($buff_start)
+				{
+					$this->extra_res_table[$buff_start]["end"] = $start;
+					$this->extra_res_table[$buff_start]["going_to_be_after_buffer"] = 1;
+				}
+			}
+
+			if($res->prop("verified"))
+			{
+				$this->extra_res_table[$start]["verified"] = 1;
+			}
+			$this->extra_res_table[$start]["real_end"] = $res->prop("end");
+			$this->extra_res_table[$start]["real_start"] = $res->prop("start1");
+			$this->extra_res_table[$start]["id"] = $res->id();
+			$this->extra_res_table[$start]["people"] = $res->prop("people_count");
+			if(is_array($other_rooms) && in_array($res->prop("resource") , $other_rooms))
+			{
+				$this->extra_res_table[$start]["slave"] = 1;
+			}
+		}
+		ksort($this->extra_res_table);//if(aw_global_get("uid") == "struktuur") arr($this->extra_res_table);
+//arr(sizeof($this->extra_res_table));
+		exit_function("room::generate_extra_res_table");
+	}
+
+
 
 //seda kasutada kalendrivaatel kontrollimiseks kas miskit n2ha on, kui vaja kontrollida, kas saab salvestada teatud ajale, siis kasutada ruumi objekti juurest is_available funktsiooni
 	/** checks if the room is available 

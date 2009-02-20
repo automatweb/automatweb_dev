@@ -324,6 +324,29 @@ class room_obj extends _int_object
 
 	}
 
+	/** returns extra reservations / other type
+		@attrib api=1 params=pos
+		@param start required type=int
+			start timestamp
+		@param end required type=int
+			end timestamp
+	**/
+	public function get_extra_reservations($start , $end)
+	{
+		$filter = array(
+			"class_id" => CL_RESERVATION,
+			"lang_id" => array(),
+			"resource" => $this->id(),
+//			"limit" => 1,
+			"type" => "%food%",
+		);
+		$filter["end"] = new obj_predicate_compare(OBJ_COMP_GREATER, $start);
+		$filter["start1"] = new obj_predicate_compare(OBJ_COMP_LESS, $end);
+		$ol = new object_list($filter);//arr($ol); arr($filter); arr(date("d.m.Y h:i" , $start)); arr(date("d.m.Y h:i" , $end));
+		return $ol;
+
+	}
+
 	/** returns reservation list
 		@attrib api=1
 		@param start optional type=int
