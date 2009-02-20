@@ -14,13 +14,22 @@ require_once AW_DIR . "classes/core/util/class_index" . AW_FILE_EXT;
 // other. later perhaps implement conditional loading.
 require_once AW_DIR . "lib/core/obj/object" . AW_FILE_EXT;
 require_once AW_DIR . "lib/debug" . AW_FILE_EXT;
+require_once AW_DIR . "lib/site_file_index" . AW_FILE_EXT;
 
 function __autoload($class_name)
 {
+	$orig_class_name = $class_name;
+	//klassile pakihalduse teemalise versiooni
+	if(function_exists("get_class_version"))
+	{
+		$class_name = get_class_version($class_name);
+	}
 	try
 	{
 		$class_file = class_index::get_file_by_name($class_name);
+//		var_dump($class_file); 
 		require_once $class_file;
+//;print "require_once";
 	}
 	catch (awex_clidx_double_dfn $e)
 	{
@@ -64,7 +73,7 @@ function __autoload($class_name)
 			//!!! take action
 		}
 	}
-
+$class_name = $orig_class_name;
 	if (!class_exists($class_name, false) and !interface_exists($class_name, false))
 	{ // class may be moved to another file, force update and try again
 		try
@@ -73,7 +82,6 @@ function __autoload($class_name)
 		}
 		catch (awex_clidx $e)
 		{
-			echo dbg::process_backtrace(debug_backtrace());
 			exit("Fatal update error. " . $e->getMessage() . " Tried to load '" . $class_name . "'");//!!! tmp
 			//!!! take action
 		}
