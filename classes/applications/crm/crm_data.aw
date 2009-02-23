@@ -146,14 +146,28 @@ class crm_data extends class_base
 				}
 				else
 				{
-					$ft = new object_list_filter(array(
-						"logic" => "OR",
-						"conditions" => array(
-							"CL_CRM_BILL.customer(CL_CRM_COMPANY).name" => "%".$filter["customer"]."%",
-							"CL_CRM_BILL.customer(CL_CRM_PERSON).name" => "%".$filter["customer"]."%",
-							"CL_CRM_BILL.customer_name" => "%".$filter["customer"]."%",
-						)
-					));
+					if(strlen($filter["customer"]) == 1)//yhet2helistest otsingust vaid esimese t2he j2rgi
+					{
+						$ft = new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => array(
+								"CL_CRM_BILL.customer(CL_CRM_COMPANY).name" => $filter["customer"]."%",
+								"CL_CRM_BILL.customer(CL_CRM_PERSON).name" => $filter["customer"]."%",
+								"CL_CRM_BILL.customer_name" => $filter["customer"]."%",
+							)
+						));
+					}
+					else
+					{
+						$ft = new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => array(
+								"CL_CRM_BILL.customer(CL_CRM_COMPANY).name" => "%".$filter["customer"]."%",
+								"CL_CRM_BILL.customer(CL_CRM_PERSON).name" => "%".$filter["customer"]."%",
+								"CL_CRM_BILL.customer_name" => "%".$filter["customer"]."%",
+							)
+						));
+					}
 				}
 				$of[] = $ft;
 				$of2[] = $ft;

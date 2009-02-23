@@ -722,10 +722,14 @@ default group=org_objects
 
 		@layout my_proj_search_group type=vbox parent=my_proj
 
+		@layout my_proj_tree type=vbox parent=my_proj_search_group closeable=1 area_caption=Puu
+			@property project_tree type=treeview store=no no_caption=1 parent=my_proj_tree
+			@caption Projektide puu
+
 		@layout my_proj_search type=vbox parent=my_proj_search_group closeable=1 area_caption=Otsing
 
 			@layout my_proj_search_b type=vbox parent=my_proj_search
-
+ 
 				@layout my_proj_search_b_top type=vbox parent=my_proj_search_b
 
 					@property proj_search_name type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
@@ -2437,6 +2441,7 @@ class crm_company extends class_base
 			case "offers_current_org_id":
 			case "projects_listing_tree":
 			case "projects_listing_table":
+			case "project_tree":
 			case "org_proj_tb":
 			case "org_proj_arh_tb":
 			case "report_list":
@@ -4846,7 +4851,7 @@ class crm_company extends class_base
 	function paste_p($arr)
 	{
 		// first cut persons
-// arr($p_from);arr($_SESSION["crm_cut_p"]);arr($arr); die();
+ //arr($p_from);arr($_SESSION["crm_cut_p"]);arr($arr); die();
 		foreach(safe_array($_SESSION["crm_cut_p"]) as $p_id => $p_from)
 		{
 			if (!(is_oid($p_id) && $this->can("view", $p_id)))
@@ -4872,7 +4877,7 @@ class crm_company extends class_base
 							));
 						}
 					}
-					else
+
 					// else
 					// if from unit
 					if (is_oid($p_from["unit"]))
@@ -4885,6 +4890,7 @@ class crm_company extends class_base
 							));
 						}
 						$unit = obj($p_from["unit"]);
+
 						// disconnect from that unit
 						if ($unit->is_connected_to(array("to" => $p->id())))
 						{

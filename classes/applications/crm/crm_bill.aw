@@ -181,7 +181,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property comments type=text store=no
 	@caption Kommentaarid
 
-	@property comments_add type=texarea store=no
+	@property comments_add type=textarea store=no
 	@caption Lisa
 
 @default group=delivery_notes
@@ -349,6 +349,25 @@ class crm_bill extends class_base
 			//	}
 			//	break;
 			case "important_comment":
+
+			/*	if(aw_global_get("uid") == "marko")
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_BILL,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"bill_no" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, 901005),
+					));
+					foreach($ol->arr() as $o)
+					{
+						arr($o->name());
+						$o->set_prop("impl" , 324374);
+						$o->save();
+					}
+
+				}*/
+
+
 				if($this->can("view" , $arr["obj_inst"]->meta("important_comment")))
 				{
 					$ic = obj($arr["obj_inst"]->meta("important_comment"));
@@ -3369,6 +3388,11 @@ class crm_bill extends class_base
 //			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+//			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "work",
 			"caption" => t("T&ouml;&ouml;"),
 //			"sortable" => 1
@@ -3457,6 +3481,7 @@ class crm_bill extends class_base
 					"price" => number_format($customer_time * $hour_price, 2,".", " "),
 					"oid" => $d["oid"],
 					"cust_hours" => $stats->hours_format($d["time_to_cust"]),
+					"time" => date("d.m.Y" , $d["date"]),
 				));
 			}
 			unset($rows_data[$task->id()]);
@@ -3510,6 +3535,7 @@ class crm_bill extends class_base
 					"price" => number_format($customer_time * $hour_price, 2,".", " "),
 					"oid" => $d["oid"],
 					"cust_hours" => $stats->hours_format($d["time_to_cust"]),
+					"time" => date("d.m.Y" , $d["date"]),
 				));
 			}
 		}

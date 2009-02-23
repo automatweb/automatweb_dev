@@ -2599,25 +2599,46 @@ exit_function("bills_impl::_get_bill_task_list");
 			"id" => "cust",
 //			"url" => aw_url_change_var($var, $stat_id+10),
 		));
-
-		foreach($this->all_bill_customers()->names() as $id => $name)
+		$customers_by_1_letter = array();
+		$customer_names = $this->all_bill_customers()->names();
+		asort($customer_names);
+		foreach($customer_names as $customer_id => $customer_name)
 		{
-			if(!$name)
+			if(!$customer_name)
 			{
 				continue;
 			}
-			if (isset($_GET[$var]) && $_GET[$var] == "cust_".$id)
+			$customers_by_1_letter[substr($customer_name,0,1)][$customer_id] = $customer_name;
+		}
+
+		foreach($customers_by_1_letter as $letter1 => $customers)
+		{
+			$name = $letter1 ." (".sizeof($customers).")";
+			if (isset($_GET[$var]) && $_GET[$var] == "cust_".$letter1)
 			{
 				$name = "<b>".$name."</b>";
 			}
 			$tv->add_item("cust",array(
 				"name" => $name,
-				"id" => "cust".$id,
-				"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
-				"url" => aw_url_change_var($var, "cust_".$id),
+				"id" => "cust".$letter1,
+			//	"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
+				"url" => aw_url_change_var($var, "cust_".$letter1),
 			));
-		}
 
+			foreach($customers as $id => $name)
+			{
+				if (isset($_GET[$var]) && $_GET[$var] == "cust_".$id)
+				{
+					$name = "<b>".$name."</b>";
+				}
+				$tv->add_item("cust".$letter1,array(
+					"name" => $name,
+					"id" => "cust".$id,
+					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
+					"url" => aw_url_change_var($var, "cust_".$id),
+				));
+			}
+		}
 
 		$tv->add_item(0,array(
 			"name" => t("Periood"),
@@ -2732,7 +2753,7 @@ exit_function("bills_impl::_get_bill_task_list");
  		}
 	}
 
-	private function all_client_managers()
+	public function all_client_managers()
 	{
 		$filter = array(
 			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
@@ -2787,7 +2808,7 @@ exit_function("bills_impl::_get_bill_task_list");
 		return $t->list_data;
 	}
 
-	private function all_project_managers()
+	public function all_project_managers()
 	{
 		$filter = array(
 			"class_id" => CL_PROJECT,

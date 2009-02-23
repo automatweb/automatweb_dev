@@ -2107,6 +2107,17 @@
             <field>projects_listing_table</field>
       </property>
       <property>
+            <name>project_tree</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>my_proj_tree</parent>
+            <field>project_tree</field>
+            <caption>Projektide puu</caption>
+      </property>
+      <property>
             <name>proj_search_name</name>
             <table>objects</table>
             <group>my_projects</group>
@@ -5021,6 +5032,13 @@
                   <group>my_projects</group>
                   <area_caption></area_caption>
             </my_proj_search_group>
+            <my_proj_tree>
+                  <type>vbox</type>
+                  <parent>my_proj_search_group</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Puu</area_caption>
+                  <group>my_projects</group>
+            </my_proj_tree>
             <my_proj_search>
                   <type>vbox</type>
                   <parent>my_proj_search_group</parent>

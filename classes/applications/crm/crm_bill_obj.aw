@@ -15,8 +15,28 @@ class crm_bill_obj extends _int_object
 //				$this->set_name(str_replace($this->prop("bill_no"), $value , $this->name()));
 //			}
 		}
+		if($name == "state")
+		{
+			if($value != $this->prop("state"))
+			{
+				$bill_inst = get_instance(CL_CRM_BILL);
+				$_SESSION["bill_change_comments"][] = t("Staatus") .": " .$bill_inst->states[$this->prop("state")]. " => " .$bill_inst->states[$value];
+			}
+		}
 
 		parent::set_prop($name,$value);
+	}
+
+	function save()
+	{
+		$rv = parent::save();
+
+		if(isset($_SESSION["bill_change_comments"]) && is_array($_SESSION["bill_change_comments"]))
+		{
+			$this->add_comment(join("<br>\n" , $_SESSION["bill_change_comments"]));
+			unset($_SESSION["bill_change_comments"]);
+		}
+		return $rv;
 	}
 
 	function get_bill_print_popup_menu()
@@ -893,7 +913,8 @@ class crm_bill_obj extends _int_object
 				"time_real",
 				"impl",
 				"time_to_cust",
-				"content"
+				"content",
+				"date"
 			),
 		);
 		$rows_arr = new object_data_list($rows_filter , $rowsres);
