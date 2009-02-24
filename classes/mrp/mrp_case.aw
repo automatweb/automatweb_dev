@@ -1270,15 +1270,22 @@ class mrp_case extends class_base
 		}
 
 		// don't display MRP_STATUS_RESOURCE_INACTIVE resources. objtree allows currently only simple filtering
-		$resource_tree->filter(array(
-			"state" => MRP_STATUS_RESOURCE_INUSE
-		), false);
-		$resource_tree->filter(array(
-			"state" => MRP_STATUS_RESOURCE_AVAILABLE
-		), false);
-		$resource_tree->filter(array(
-			"state" => MRP_STATUS_RESOURCE_OUTOFSERVICE
-		), false);
+		$applicable_states = array(
+				MRP_STATUS_RESOURCE_INUSE,
+				MRP_STATUS_RESOURCE_AVAILABLE,
+				MRP_STATUS_RESOURCE_OUTOFSERVICE
+		);
+		function mrp_filter_resource_tree($o, $param)
+		{
+			if (CL_MRP_RESOURCE == $o->class_id() and !in_array($o->prop("state"), $param[1]))
+			{
+				$param[0]->remove($o->id());
+			}
+		}
+		$resource_tree->foreach_cb(array(
+			"func" => "mrp_filter_resource_tree",
+			"param" => array($resource_tree, $applicable_states)
+		));
 
 		$tree = treeview::tree_from_objects (array (
 			"tree_opts" => array (
@@ -1598,13 +1605,14 @@ class mrp_case extends class_base
 			$t_pre_buffer = round ((($job->prop ("pre_buffer"))/3600), 2);
 			$t_post_buffer = round ((($job->prop ("post_buffer"))/3600), 2);
 			$t_minstart = (($job->prop ("minstart")) ? $job->prop ("minstart") : time());
+			$job_name = $job->name() ? $job->name () : ($this_object->name() . " - " . $resource_name);
 
 			$table->define_data(array(
 				"name" => empty($arr["no_edit"]) ? html::get_change_url(
 					$job->id(),
 					array("return_url" => get_ru()),
-					$this_object->name () . " - " . $resource_name
-				) : ($this_object->name () . " - " . $resource_name),
+					$job_name
+				) : $job_name,
 				"length" => empty($arr["no_edit"]) ? html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-length",
 					"size" => "1",
@@ -1729,7 +1737,7 @@ class mrp_case extends class_base
 
 						if ($job->comment() != $arr["request"]["comments"][$job->id()])
 						{
-						$job->set_comment($arr["request"]["comments"][$job->id()]);
+							$job->set_comment($arr["request"]["comments"][$job->id()]);
 							$workspace_i = get_instance(CL_MRP_WORKSPACE);
 							$workspace_i->mrp_log($job->prop("project"), $job->id(), t("Lisas kommentaari"), $arr["request"]["comments"][$job->id()]);
 						}
@@ -2018,6 +2026,8 @@ class mrp_case extends class_base
 		));
 		$prerequisite_job = $list->begin ();
 		$prerequisite = is_object ($prerequisite_job) ? $prerequisite_job->id () : "";
+
+		// get job number
 		$jobs = new object_data_list(
 			array(
 				"class_id" => CL_MRP_JOB,
@@ -2027,17 +2037,18 @@ class mrp_case extends class_base
 				CL_MRP_JOB => array("jrk"),
 			)
 		);
-		$job_nr = 1;
-		foreach ($jobs as $job)
+		$job_nr = 0;
+		foreach ($jobs->list_data as $job)
 		{
 			$job_nr = max($job_nr, $job["jrk"]);
 		}
+		++$job_nr;
 
+		// create job object
 		$job = new object (array (
 		   "parent" => $jobs_folder,
 		   "class_id" => CL_MRP_JOB,
 		));
-		//$job->set_class_id (CL_MRP_JOB);
 		$job->set_prop ("state", MRP_STATUS_NEW);
 		$job->set_prop ("exec_order", $job_number);
 		$job->set_prop ("prerequisites", $prerequisite);
@@ -2046,7 +2057,7 @@ class mrp_case extends class_base
 		$job->set_prop ("post_buffer", $post_buffer);
 		$job->set_prop ("resource", $resource_id);
 		$job->set_ord($job_nr);
-		$job->set_name ($this_object->name () . "-" . $resource->name () . "-" . $job_nr);
+		$job->set_name ($this_object->name () . " - " . $resource->name () . " - " . $job_nr);
 		// aw_disable_acl(); // should instead be configured by giving proper access rights
 		$job->save ();
 		// aw_restore_acl();
