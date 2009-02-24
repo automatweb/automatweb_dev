@@ -580,9 +580,13 @@ class mrp_workspace extends class_base
 			{
 				$this->list_request = "search";
 			}
+			elseif (isset($arr["request"]["mrp_tree_active_item"]))
+			{
+				$this->list_request = $arr["request"]["mrp_tree_active_item"];
+			}
 			else
 			{
-				$this->list_request = empty($arr["request"]["mrp_tree_active_item"]) ? "planned" : $arr["request"]["mrp_tree_active_item"];
+				$this->list_request = "planned";
 			}
 
 			$list = new object_list (array (
@@ -1990,7 +1994,7 @@ class mrp_workspace extends class_base
 					"aborted_jobs"
 				);
 
-				if ( in_array ($arr["request"]["mrp_tree_active_item"], $applicable_lists) or empty ($arr["request"]["mrp_tree_active_item"]) )
+				if (empty ($arr["request"]["mrp_tree_active_item"]) or in_array ($arr["request"]["mrp_tree_active_item"], $applicable_lists))
 				{
 					$this_object->set_prop("rescheduling_needed", 1);
 				}
@@ -2088,12 +2092,15 @@ class mrp_workspace extends class_base
 			"grp_projects",
 			"grp_printer_notstartable"
 		);
-		if (!empty($arr["args"]["branch_id"]) and in_array($arr["args"]["branch_id"], $applicable_groups))
+		if (isset($arr["args"]["branch_id"]) and in_array($arr["args"]["branch_id"], $applicable_groups))
 		{
 			unset($arr["args"]["just_saved"]);
 		}
 
-		$arr["args"]["mrp_tree_active_item"] = $arr["request"]["mrp_tree_active_item"];
+		if (isset($arr["request"]["mrp_tree_active_item"]))
+		{
+			$arr["args"]["mrp_tree_active_item"] = $arr["request"]["mrp_tree_active_item"];
+		}
 
 		### gantt chart start selection
 		if ($arr["request"]["chart_start_date"])
@@ -2251,7 +2258,14 @@ class mrp_workspace extends class_base
 
 		$tree = treeview::tree_from_objects($tree_prms);
 
-		$arr["prop"]["value"] .= $tree->finalize_tree ();
+		if (isset($arr["prop"]["value"]))
+		{
+			$arr["prop"]["value"] .= $tree->finalize_tree ();
+		}
+		else
+		{
+			$arr["prop"]["value"] = $tree->finalize_tree ();
+		}
 	}
 
 	function create_resources_list ($arr = array())
@@ -2259,7 +2273,7 @@ class mrp_workspace extends class_base
 		$table = $arr["prop"]["vcl_inst"];
 		$this_object = $arr["obj_inst"];
 
-		if (is_oid ($arr["request"]["mrp_tree_active_item"]))
+		if (isset($arr["request"]["mrp_tree_active_item"]) and $this->can("view", $arr["request"]["mrp_tree_active_item"]))
 		{
 			$active_item = obj ($arr["request"]["mrp_tree_active_item"]);
 
@@ -2330,9 +2344,12 @@ class mrp_workspace extends class_base
 		{
 			$operators = array();
 
-			foreach(safe_array($res2p[$resource->id()]) as $person)
+			if (isset($res2p[$resource->id()]))
 			{
-				$operators[] = html::obj_change_url($person);
+				foreach($res2p[$resource->id()] as $person)
+				{
+					$operators[] = html::obj_change_url($person);
+				}
 			}
 
 			$table->define_data (array (
@@ -2359,7 +2376,7 @@ class mrp_workspace extends class_base
 		$toolbar = $arr["prop"]["toolbar"];
 		$this_object = $arr["obj_inst"];
 
-		if (is_oid ($arr["request"]["mrp_tree_active_item"]))
+		if (isset($arr["request"]["mrp_tree_active_item"]) and $this->can("view", $arr["request"]["mrp_tree_active_item"]))
 		{
 			$active_item = obj ($arr["request"]["mrp_tree_active_item"]);
 
@@ -2420,8 +2437,10 @@ class mrp_workspace extends class_base
 			"img" => "copy.gif",
 		));
 
-		if (count(safe_array($_SESSION["mrp_workspace"]["cut_resources"])) > 0 ||
-			count(safe_array($_SESSION["mrp_workspace"]["copied_resources"])) > 0)
+		if (
+			isset($_SESSION["mrp_workspace"]["cut_resources"]) and count(safe_array($_SESSION["mrp_workspace"]["cut_resources"])) > 0 or
+			isset($_SESSION["mrp_workspace"]["copied_resources"]) and count(safe_array($_SESSION["mrp_workspace"]["copied_resources"])) > 0
+		)
 		{
 			$toolbar->add_button(array(
 				"name" => "paste",
@@ -2488,7 +2507,7 @@ class mrp_workspace extends class_base
 			"sp_status"
 		));
 
-		if (!empty($arr["request"]["mrp_tree_active_item"]) and strstr($arr["request"]["mrp_tree_active_item"], "archived_"))
+		if (isset($arr["request"]["mrp_tree_active_item"]) and strstr($arr["request"]["mrp_tree_active_item"], "archived_"))
 		{
 			$tmp = explode("_", $arr["request"]["mrp_tree_active_item"]);
 
@@ -5618,13 +5637,16 @@ class mrp_workspace extends class_base
 		}
 		unset($_SESSION["mrp_workspace"]["cut_resources"]);
 
-		foreach(safe_array($_SESSION["mrp_workspace"]["copied_resources"]) as $resource)
+		if (isset($_SESSION["mrp_workspace"]["copied_resources"]) and is_array($_SESSION["mrp_workspace"]["copied_resources"]))
 		{
-			if ($this->can("view", $resource) && $this->can("add", $arr["mrp_tree_active_item"]))
+			foreach($_SESSION["mrp_workspace"]["copied_resources"] as $resource)
 			{
-				$o = obj($resource);
-				$o->set_parent($arr["mrp_tree_active_item"]);
-				$o->save_new();
+				if ($this->can("view", $resource) && isset($arr["mrp_tree_active_item"]) && $this->can("add", $arr["mrp_tree_active_item"]))
+				{
+					$o = obj($resource);
+					$o->set_parent($arr["mrp_tree_active_item"]);
+					$o->save_new();
+				}
 			}
 		}
 		unset($_SESSION["mrp_workspace"]["copied_resources"]);
@@ -5634,19 +5656,18 @@ class mrp_workspace extends class_base
 
 	function callback_on_load($arr)
 	{
-		$o = obj($arr["request"]["id"]);
-		if ($this->can("view", $o->prop("workspace_configmanager")))
-		{
-			$this->cfgmanager = $o->prop("workspace_configmanager");
-		}
+		$this->cfgmanager = $this->callback_get_cfgmanager($arr);
 	}
 
 	function callback_get_cfgmanager($arr)
 	{
-		$o = obj($arr["request"]["id"]);
-		if ($this->can("view", $o->prop("workspace_configmanager")))
+		if (isset($arr["request"]["id"]) and $this->can("view", $arr["request"]["id"]))
 		{
-			return $o->prop("workspace_configmanager");
+			$o = obj($arr["request"]["id"]);
+			if ($this->can("view", $o->prop("workspace_configmanager")))
+			{
+				return $o->prop("workspace_configmanager");
+			}
 		}
 	}
 

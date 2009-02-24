@@ -1821,7 +1821,7 @@ class mrp_schedule extends db_connector
 					$recurrence_end += $recurrence["interval"];
 				}
 
-				if (($recurrence_end > $recurrence["start"]) and ($recurrence_start < $recurrence["end"]) and ($recurrence_end > $closest_periods[$recurrence_start]))
+				if (($recurrence_end > $recurrence["start"]) and ($recurrence_start < $recurrence["end"]) and (!isset($closest_periods[$recurrence_start]) or $recurrence_end > $closest_periods[$recurrence_start]))
 				{
 					$closest_periods[$recurrence_start] = $recurrence_end;
 				}

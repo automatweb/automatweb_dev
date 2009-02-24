@@ -124,6 +124,10 @@ classload("mrp/mrp_header");
 
 class mrp_resource extends class_base
 {
+	private $mrp_error = false;
+	private $resource_parent;
+	private $workspace;
+
 	function mrp_resource()
 	{
 		$this->resource_states = array(
@@ -287,7 +291,7 @@ class mrp_resource extends class_base
 			case "default_pre_buffer":
 			case "default_post_buffer":
 			case "global_buffer":
-				$prop["value"] = $prop["value"] / 3600;
+				$prop["value"] = isset($prop["value"]) ? ($prop["value"] / 3600) : 0;
 				break;
 
 			case "materials_tb":
@@ -356,7 +360,7 @@ class mrp_resource extends class_base
 			$arr["pgtf"] = automatweb::$request->arg("pgtf");
 			$arr["add_ids"] = "";
  		}
-		
+
 		$arr["post_ru"] = get_ru();
 	}
 
@@ -714,9 +718,9 @@ class mrp_resource extends class_base
 
 	function create_job_list_table ($arr, $for_workspace = false)
 	{
-		$this_object =& $arr["obj_inst"];
-		$table =& $arr["prop"]["vcl_inst"];
-		$done = $arr["prop"]["ame"] === "job_list_done" || $for_workspace;
+		$this_object = $arr["obj_inst"];
+		$table = $arr["prop"]["vcl_inst"];
+		$done = $arr["prop"]["name"] === "job_list_done" || $for_workspace;
 		$this->_init_job_list_table($table, $done);
 
 		$caption = sprintf($for_workspace ? t("Ressursi '%s' t&ouml;&ouml;d") : ($done ? t("Ressursi '%s' tehtud t&ouml;&ouml;d") : t("Ressursi '%s' eelseisvad t&ouml;&ouml;d")), parse_obj_name($this_object->name()));
@@ -1657,7 +1661,7 @@ class mrp_resource extends class_base
 
 	function callback_generate_scripts($arr)
 	{
-		if($arr["request"]["group"] == "grp_resource_materials")
+		if(isset($arr["request"]["group"]) and $arr["request"]["group"] === "grp_resource_materials")
 		{
 			$conn = $arr["obj_inst"]->connections_to(array(
 				"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
@@ -1673,21 +1677,21 @@ class mrp_resource extends class_base
 			$script = "
 			var tbls = $('.awmenuedittabletag')
 			var set_ids = new Array()";
-			
+
 			foreach($prods as $prod)
 			{
 				$script .= "
 			set_ids[".$prod."] = 1";
 			}
-			
+
 			$script .= "
 			function add_attribute(elem, attr, value)
 			{
 				var newAttr = document.createAttribute(attr);
     				newAttr.nodeValue = value
-				elem.setAttributeNode(newAttr); 
+				elem.setAttributeNode(newAttr);
 			}
-			
+
 			function add_row(add_id, add_url, add_text)
 			{
 				if(set_ids[add_id])
@@ -1700,30 +1704,30 @@ class mrp_resource extends class_base
 
 				var newrow = document.createElement('tr')
 				add_attribute(newrow, 'class', 'awmenuedittabletrow')
-	
+
 				var cell1 = document.createElement('td')
 				add_attribute(cell1, 'class', 'awmenuedittabletext')
 				add_attribute(cell1, 'align', 'center')
 				add_attribute(cell1, 'width', '55')
 				add_attribute(cell1, 'style', 'background: #CCFFCC')
-	
+
 				var chb1 = document.createElement('input')
 				add_attribute(chb1, 'class', 'checkbox')
 				add_attribute(chb1, 'type', 'checkbox')
 				add_attribute(chb1, 'name', 'rem_ids['+add_id+']')
 				add_attribute(chb1, 'value', add_id)
 				cell1. appendChild(chb1)
-	
+
 				var cell2 = document.createElement('td')
 				add_attribute(cell2, 'style', 'background: #CCFFCC')
 				add_attribute(cell2, 'class', 'awmenuedittabletext')
-				
+
 				var url2 = document.createElement('a')
 				add_attribute(url2, 'href', add_url)
 				var urlcontent2 = document.createTextNode(add_text)
 				url2.appendChild(urlcontent2)
 				cell2. appendChild(url2)
-	
+
 				newrow.appendChild(cell1)
 				newrow.appendChild(cell2)
 				tbls[0].appendChild(newrow)
@@ -1760,7 +1764,7 @@ class mrp_resource extends class_base
 				"pgtf" => automatweb::$request->arg("pgtf"),
 				"parent" => " ",
 			));
-	
+
 			$tree = $arr["prop"]["vcl_inst"];
 			$tree->start_tree(array(
 				"has_root" => true,
