@@ -331,6 +331,62 @@
             <field>status_limits</field>
             <caption>Staatuste piirangud</caption>
       </property>
+      <property>
+            <name>bill_mail_to</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kellele meil saata</caption>
+      </property>
+      <property>
+            <name>bill_mail_from</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili from aadress</caption>
+      </property>
+      <property>
+            <name>bill_mail_from_name</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili from nimi</caption>
+      </property>
+      <property>
+            <name>bill_mail_subj</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili subjekt</caption>
+      </property>
+      <property>
+            <name>bill_mail_legend</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili sisu legend</caption>
+      </property>
+      <property>
+            <name>bill_mail_ct</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textarea</type>
+            <rows>20</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili sisu</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SETTINGS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -352,6 +408,9 @@
             <status_limits>
                   <caption>Staatuste piirangud</caption>
             </status_limits>
+            <bill_mail>
+                  <caption>Arve maili seaded</caption>
+            </bill_mail>
       </groupinfo>
       <reltypes>
             <USER>

@@ -1260,6 +1260,261 @@ class crm_bill_obj extends _int_object
 		$o->save();
 		return $o->id();
 	}
+
+	private function get_mail_targets()
+	{
+		$res = array();
+		
+		if (aw_global_get("uid_oid") != "")
+		{
+			$u = obj(aw_global_get("uid_oid"));
+			$res[] = $u->get_user_mail_address();
+		}
+
+		if($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_to"))
+		{
+			$res[] = $this->crm_settings->prop("bill_mail_to");
+		}
+
+		if($this->prop("bill_mail_to"))
+		{
+			$res[] = $this->prop("bill_mail_to");
+		}
+
+		return join(", ", $res);
+	}
+
+	private function get_sender_signature()
+	{
+		$ret = array();
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		$ret[]= $p->name();
+		$ret[]= reset($p->get_profession_names);
+		$ret[]= reset($p->get_companies()->names());
+		$ret[]= $p->get_phone();
+		$ret[]= $p->get_mail();
+		return join("<br>" , $ret);
+	}
+
+	private function get_mail_from()
+	{
+		$ret = "";
+		if($this->prop("bill_mail_from"))
+		{
+			$ret = $this->prop("bill_mail_from");
+		}
+		else
+		{
+			if($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_from"))
+			{
+				$ret = $this->crm_settings->prop("bill_mail_from");
+			}
+		}
+
+		if(!$ret)
+		{
+			$u = obj(aw_global_get("uid_oid"));
+			$ret = $u->get_user_mail_address();
+		}
+		
+		return $ret;
+	}
+
+	private function get_mail_from_name()
+	{
+		$ret = aw_global_get("uid");
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		if(is_object($p))
+		{
+			$ret = $p->name();
+		}
+		if($this->prop("bill_mail_from_name"))
+		{
+			$ret = $this->prop("bill_mail_from_name");
+		}
+		else
+		{
+			if($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_from_name"))
+			{
+				$ret = $this->crm_settings->prop("bill_mail_from_name");
+			}
+		}
+
+		return $ret;
+	}
+
+	private function get_mail_subject()
+	{
+		$replace = array(
+			"#bill_no#" => $this->prop("bill_no"),
+			"#customer_name#" => $this->get_customer_name(),
+			"#contact_person#" => $this->prop("ctp_text"),
+			"#signature#" => $this->get_sender_signature(),
+		);
+		$subject = "";
+		if($this->prop("bill_mail_subj"))
+		{
+			$subject = $this->prop("bill_mail_subj");
+		}
+		elseif($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_subj"))
+		{
+			$subject = $this->crm_settings->prop("bill_mail_subj");
+		}
+		foreach($replace as $key => $val)
+		{
+			$subject = str_replace($key , $val , $subject);
+		}
+		return $subject;
+	}
+
+	public function get_customer_name()
+	{
+		if($this->prop("customer_name"))
+		{
+			return $this->prop("customer_name");
+		}
+		else
+		{
+			return $this->prop("customer.name");
+		}
+	}
+
+	private function get_mail_body()
+	{
+		$replace = array(
+			"#bill_no#" => $this->prop("bill_no"),
+			"#customer_name#" => $this->get_customer_name(),
+			"#contact_person#" => $this->prop("ctp_text"),
+			"#signature#" => $this->get_sender_signature(),
+		);
+		
+		$content = "";
+		if($this->prop("bill_mail_ct"))
+		{
+			$subject = $this->prop("bill_mail_ct");
+		}
+		elseif($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_ct"))
+		{
+			$content = $this->crm_settings->prop("bill_mail_ct");
+		}
+
+		foreach($replace as $key => $val)
+		{
+			$content = str_replace($key , $val , $content);
+		}
+
+		return $content;
+	}
+
+	private function set_crm_settings()
+	{
+		if(!$this->crm_settings)
+		{
+			$seti = get_instance(CL_CRM_SETTINGS);
+			$this->crm_settings = $seti->get_current_settings();
+		}
+		if($this->crm_settings)
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	private function get_pdf_add()
+	{
+		$inst = get_instance(CL_CRM_BILL);
+		return $inst->show_add(array(
+			"id" => $this->id(),
+			"pdf" => 1,
+			"return" => 1,
+		));
+	}
+	
+	private function get_pdf()
+	{
+		$inst = get_instance(CL_CRM_BILL);
+		return $inst->show(array(
+			"id" => $this->id(),
+			"pdf" => 1,
+			"return" => 1,
+		));
+	}
+
+	private function make_preview_pdf()
+	{
+                $f = get_instance(CL_FILE);
+		$id = $f->create_file_from_string(array(
+			"parent" => $this->id(),
+			"content" => $this->get_pdf(),
+			"name" => t("Arve nr:"). " ".$this->prop("bill_no"),
+			"type" => "application/pdf"
+		));
+
+		return obj($id);
+	}
+
+	private function make_add_pdf()
+	{
+                $f = get_instance(CL_FILE);
+		$id = $f->create_file_from_string(array(
+			"parent" => $this->id(),
+			"content" => $this->get_pdf_add(),
+			"name" => t("Arve lisa nr:"). " ".$this->prop("bill_no"),
+			"type" => "application/pdf"
+		));
+		return obj($id);
+	}
+
+	/** sends bill pdf to lots of people
+		@attrib api=1
+	**/
+	public function send_bill($add = null)
+	{
+		$addresses = $this->get_mail_targets();//arr($addresses);
+		$subject = $this->get_mail_subject();
+		$from = $this->get_mail_from();
+		$from_name = $this->get_mail_from_name();
+		$body = $this->get_mail_body();
+
+		$awm = get_instance("protocols/mail/aw_mail");
+		$awm->create_message(array(
+			"froma" => $from,
+			"fromn" => $from_name,
+			"subject" => $subject,
+			"to" => $addresses,
+			"body" => $body,
+		));
+
+		$mimeregistry = get_instance("core/aw_mime_types");
+
+		$to_o = $this->make_preview_pdf();
+		$ret = $awm->fattach(array(
+			"path" => $to_o->prop("file"),
+			"contenttype"=> $mimeregistry->type_for_file($to_o->name()),
+			"name" => $to_o->name(),
+		));
+
+		if($add)
+		{
+			$to_o = $this->make_add_pdf();
+			$awm->fattach(array(
+				"path" => $to_o->prop("file"),
+				"contenttype"=> $mimeregistry->type_for_file($to_o->name()),
+				"name" => $to_o->name(),
+			));
+		}
+		$awm->htmlbodyattach(array(
+			"data" => $body
+		));
+		$awm->gen_mail();
+		$ret.= t("saatis arve aadressidele:")."<br>";
+		$ret.= $addresses;
+		die($ret);
+		return $this->id();
+	}
+
 }
 
 ?>

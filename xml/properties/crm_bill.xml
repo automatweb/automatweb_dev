@@ -460,10 +460,66 @@
             <name>comments_add</name>
             <table>objects</table>
             <group>other_data</group>
-            <type>texarea</type>
+            <type>textarea</type>
             <store>no</store>
             <field>comments_add</field>
             <caption>Lisa</caption>
+      </property>
+      <property>
+            <name>bill_mail_to</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kellele meil saata</caption>
+      </property>
+      <property>
+            <name>bill_mail_from</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili from aadress</caption>
+      </property>
+      <property>
+            <name>bill_mail_from_name</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili from nimi</caption>
+      </property>
+      <property>
+            <name>bill_mail_subj</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili subjekt</caption>
+      </property>
+      <property>
+            <name>bill_mail_legend</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>text</type>
+            <store>no</store>
+            <field>bill_mail_legend</field>
+            <caption>Meili sisu legend</caption>
+      </property>
+      <property>
+            <name>bill_mail_ct</name>
+            <table>objects</table>
+            <group>bill_mail</group>
+            <type>textarea</type>
+            <rows>20</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili sisu</caption>
       </property>
       <property>
             <name>dn_tb</name>
@@ -541,6 +597,9 @@
             <other_data>
                   <caption>Muud andmed</caption>
             </other_data>
+            <bill_mail>
+                  <caption>Maili seaded</caption>
+            </bill_mail>
             <delivery_notes>
                   <caption>Saatelehed</caption>
             </delivery_notes>

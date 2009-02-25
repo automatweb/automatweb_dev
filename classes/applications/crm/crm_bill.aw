@@ -184,6 +184,26 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property comments_add type=textarea store=no
 	@caption Lisa
 
+@default group=bill_mail
+
+	@property bill_mail_to type=textbox field=meta method=serialize
+	@caption Kellele meil saata
+
+	@property bill_mail_from type=textbox field=meta method=serialize
+	@caption Meili from aadress
+
+	@property bill_mail_from_name type=textbox field=meta method=serialize
+	@caption Meili from nimi
+
+	@property bill_mail_subj type=textbox field=meta method=serialize
+	@caption Meili subjekt
+
+	@property bill_mail_legend type=text store=no
+	@caption Meili sisu legend
+		
+	@property bill_mail_ct type=textarea rows=20 cols=50 field=meta method=serialize
+	@caption Meili sisu
+
 @default group=delivery_notes
 	@property dn_tb type=toolbar store=no no_caption=1
 	@property dn_tbl type=table store=no no_caption=1
@@ -203,6 +223,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 		@property bill_task_list type=table store=no no_caption=1 parent=bill_task_list_l
 
 @groupinfo other_data caption="Muud andmed"
+@groupinfo bill_mail caption="Maili seaded"
 @groupinfo delivery_notes caption="Saatelehed"
 @groupinfo tasks caption="Toimetused" submit=no
 @groupinfo preview caption="Eelvaade"
@@ -584,9 +605,37 @@ class crm_bill extends class_base
 			case "bill_trans_date":
 				if($prop["value"] == -1) $prop["value"] = time();
 				break;
+//			case "bill_mail_to":
+			case "bill_mail_from":
+			case "bill_mail_from_name":
+			case "bill_mail_subj":
+			case "bill_mail_ct":
+				if(!$prop["value"])
+				{
+					$seti = get_instance(CL_CRM_SETTINGS);
+					$this->crm_settings = $seti->get_current_settings();
+					if($this->crm_settings)
+					{
+						$prop["value"] = $this->crm_settings->prop($prop["name"]);
+					}
+				}
+				break;
 
+			case "bill_mail_legend":
+				$prop["value"] = $this->get_mail_legend();
+				break;
 		};
 		return $retval;
+	}
+
+	function get_mail_legend()
+	{
+		return "#bill_no# => Arve number \n<br>
+			#customer_name# => Kliendi nimi \n<br>
+			#contact_person# => Kontaktisik,
+			#signature# => saatja allkiri"
+		;
+
 	}
 
 	function set_property($arr = array())
@@ -2346,7 +2395,7 @@ class crm_bill extends class_base
 			return $res;
 		}
 
-		if($_GET["pdf"])
+		if($_GET["pdf"] || $arr["pdf"])
 		{
 			$conv = get_instance("core/converters/html2pdf");
 			if($conv->can_convert())
@@ -2357,10 +2406,22 @@ class crm_bill extends class_base
 				{
 					$pdf_name = $this->parse("TITLE").".pdf";
 				}
-				$conv->gen_pdf(array(
-					"source" => $res,
-					"filename" => $pdf_name,
-				));
+
+				if($arr["return"])
+				{$res = "<b>Arve sisu</b>";
+					$res = $conv->convert(array(
+						"source" => $res,
+						"filename" => $pdf_name,
+					));
+					return $res;
+				}
+				else
+				{
+					$conv->gen_pdf(array(
+						"source" => $res,
+						"filename" => $pdf_name,
+					));
+				}
 			}
 //			header("Content-type: application/pdf");
 //			//arr($res);
@@ -2369,6 +2430,7 @@ class crm_bill extends class_base
 //				"filename" => $b->name().".pdf",
 //			));
 //			die($res);
+
 		}
 
 		if ($_GET["openprintdialog"] == 1)
@@ -2689,10 +2751,23 @@ class crm_bill extends class_base
 			$conv = get_instance("core/converters/html2pdf");
 			if($conv->can_convert())
 			{
-				$conv->gen_pdf(array(
-					"source" => $res,
-					"filename" => $b->name()."_".t("lisa").".pdf",
-				));
+
+				if($arr["return"])
+				{$res = "<b>Arve lisa</b>";
+					$res = $conv->convert(array(
+						"source" => $res,
+						"filename" => $b->name()."_".t("lisa").".pdf",
+					));
+					return $res;
+				}
+				else
+				{
+					$conv->gen_pdf(array(
+						"source" => $res,
+						"filename" => $b->name()."_".t("lisa").".pdf",
+					));
+				}
+
 			}
 
 //			$conv = get_instance("core/converters/html2pdf");
@@ -3296,6 +3371,42 @@ class crm_bill extends class_base
 			"text" => t("Prindi arve lisa pdf")
 		));
 
+
+
+
+		$tb->add_menu_button(array(
+			"name" => "send_bill",
+			"tooltip" => t("Saada arve"),
+			"img" => "mail_send.gif",
+//			"onClick" => $onclick,
+		));
+		
+		$onclick = "";
+		$onclick.= "fRet = confirm('".t("Kas oled kindel et tahad arve saata?")."');if(fRet){";
+		$onclick.= "win = window.open('".$this->mk_my_orb("send_bill", array(
+			"id" => $arr["obj_inst"]->id(),), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
+		$onclick.= "}else;";
+
+		$tb->add_menu_item(array(
+			"parent" => "send_bill",
+			"url" => "#",
+			"onClick" => $onclick,
+			"text" => t("Saada arve pdf")
+		));
+
+		$onclick = "";
+		$onclick.= "fRet = confirm('".t("Kas oled kindel et tahad arvet koos lisaga saata?")."');if(fRet){";
+		$onclick.= "win = window.open('".$this->mk_my_orb("send_bill", array(
+			"id" => $arr["obj_inst"]->id(),"preview_add" => 1), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
+		$onclick.= "}else;";
+
+		$tb->add_menu_item(array(
+			"parent" => "send_bill",
+			"url" => "#",
+			"onClick" => $onclick,
+			"text" => t("Saada arve pdf koos lisaga")
+		));
+
 		$onclick = "";
 		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
 		$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
@@ -3773,6 +3884,20 @@ class crm_bill extends class_base
 		{
 			return reset($bills->ids());
 		}
+	}
+
+	/**
+		@attrib name=send_bill api=1 all_args=1
+	@param id required type=int
+		bill id
+	@param preview_add optional type=int
+	@returns int
+		bill id
+	**/
+	function send_bill($arr)
+	{
+		$obj = obj($arr["id"]);
+		$obj->send_bill($arr["preview_add"]);
 	}
 
 	/** returns bill id

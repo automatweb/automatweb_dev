@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.32 2008/07/14 18:13:38 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.33 2009/02/25 18:47:40 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -93,7 +93,6 @@
 	@property comment_menu type=relpicker reltype=RELTYPE_MENU table=objects field=meta method=serialize
 	@caption Kommentaaride kaust
 
-
 	@property default_my_company_tab type=select table=objects field=meta
   	@caption Minu organisatsiooni avanev tab
 
@@ -154,10 +153,33 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 	@caption Staatuste piirangud
 
 
+
+@default group=bill_mail
+
+	@property bill_mail_to type=textbox field=meta method=serialize
+	@caption Kellele meil saata
+
+	@property bill_mail_from type=textbox field=meta method=serialize
+	@caption Meili from aadress
+
+	@property bill_mail_from_name type=textbox field=meta method=serialize
+	@caption Meili from nimi
+
+	@property bill_mail_subj type=textbox field=meta method=serialize
+	@caption Meili subjekt
+
+	@property bill_mail_legend type=text field=meta method=serialize
+	@caption Meili sisu legend
+		
+	@property bill_mail_ct type=textarea rows=20 cols=50 field=meta method=serialize
+	@caption Meili sisu
+
+
 @groupinfo tables caption="Tabelid"
 @groupinfo whom caption="Kellele kehtib"
 @groupinfo img caption="Pildid"
 @groupinfo status_limits caption="Staatuste piirangud"
+@groupinfo bill_mail caption="Arve maili seaded"
 
 
 @reltype USER value=1 clid=CL_USER
@@ -286,7 +308,10 @@ class crm_settings extends class_base
 			case "default_client_company_tab":
 				$prop["options"] = $this->get_company_tabs();
 				break;
-				
+			case "bill_mail_legend":
+				$bill = get_instance(CL_CRM_BILL);
+				$prop["value"] = $bill->get_mail_legend();
+				break;
 		}
 		return $retval;
 	}
