@@ -250,6 +250,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @reltype USER value=10 clid=CL_USER
 @caption Kasutaja
 
+reltype SHORTCUT value=11 clid=CL_SHORTCUT
+caption Kiirviide
+
+@reltype SHORTCUT_SET value=11 clid=CL_SHORTCUT_SET
+@caption Kiirviidete&nbsp;kogu
+
+
+
 */
 
 class user extends class_base
@@ -565,6 +573,10 @@ class user extends class_base
 		$t =& $this->_start_shortcuts_table();
 		$o = $arr["obj_inst"];
 
+		if (!$o->prop("settings_shortcuts_shortcut_sets"))
+		{
+			return;
+		}
 		$o_shortcut_set = obj($o->prop("settings_shortcuts_shortcut_sets"));
 
 		$conns = $o_shortcut_set->connections_from(array(

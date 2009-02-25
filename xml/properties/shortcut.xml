@@ -33,6 +33,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <size>100</size>
             <caption>URL</caption>
       </property>
       <property>

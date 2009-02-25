@@ -14,7 +14,7 @@
 @property type type=select field=meta method=serialize
 @caption T&uuml;&uuml;p
 
-@property url type=textbox field=meta method=serialize
+@property url type=textbox field=meta method=serialize size=100
 @caption URL
 
 @property custom type=textarea field=meta method=serialize
@@ -102,6 +102,17 @@ class shortcut extends class_base
 			));
 			
 			$tmp = $this->parse("GO_TO_URL");
+			
+			$search = array(
+				"{VAR:baseurl}",
+				"{VAR:parent}",
+			);
+			$replace = array(
+				aw_ini_get("baseurl"),
+				$_GET["parent"],
+			);
+			
+			$tmp = str_replace($search, $replace, $tmp);
 			
 			$this->vars(array(
 				"GO_TO_URL" => $tmp,
