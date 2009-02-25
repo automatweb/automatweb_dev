@@ -1193,11 +1193,18 @@ EOF;
 		$o = obj($oid);
 		$real_user = $o->get_original();
 
-		if (!is_oid($o->parent()))
+		if (!$this->can("view", $o->parent()))
 		{
 			return;
 		}
+		aw_global_set("__from_raise_error", 1);
 		$grp_o = obj($o->parent());
+		if ($GLOBALS["aw_is_error"] == 1)
+		{
+			aw_global_set("__from_raise_error", 0);
+			$GLOBALS["aw_is_error"] = 0;
+			return;
+		}
 		if ($grp_o->class_id() == CL_GROUP)
 		{
 			// sync manually here.
