@@ -255,6 +255,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property fake_phone type=textbox store=no
 	@caption Fake phone
 
+	@property fake_fax type=textbox store=no
+	@caption Fake fax
+
+	@property fake_mobile type=textbox store=no
+	@caption Fake mobile
+
+	@property fake_skype type=textbox store=no
+	@caption Fake skype
+
 	@property fake_email type=textbox store=no
 	@caption Fake e-mail
 
@@ -1064,6 +1073,41 @@ default group=org_objects
 
 			@property mail_tbl type=table store=no no_caption=1 parent=mail_tbl_box
 
+
+@default group=stats_stats
+
+	@property stats_stats_tb type=toolbar no_caption=1 store=no
+
+	@layout stats_list_box type=hbox width=20%:80%
+
+		@layout stats_list_l type=vbox parent=stats_list_box closeable=1
+
+		@layout stats_list_u type=vbox parent=stats_list_l closeable=1 area_caption=Aruanded
+
+			@property stats_tree type=treeview store=no no_caption=1 parent=stats_list_u
+			@caption Aruannete puu
+
+		@layout stats_list_s type=vbox parent=stats_list_l closeable=1
+
+			@property bill_s_from type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
+			@caption Esitatud alates
+
+			@property bill_s_to type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
+			@caption Esitatud kuni
+
+			@property bill_s_search type=submit store=no parent=stats_list_s captionside=top no_caption=1 
+			@caption Otsi
+
+		@layout stats_list_r type=vbox parent=stats_list_box closeable=1
+
+			@layout data_r_charts type=hbox parent=stats_list_r width=50%:50% closeable=1 area_caption=Graafikud
+				@layout chart1 parent=data_r_charts type=vbox
+					@property status_chart type=google_chart no_caption=1 parent=chart1 store=no
+				@layout chart2 parent=data_r_charts type=vbox
+					@property money_chart type=google_chart no_caption=1 parent=chart2 store=no
+			@layout stats_table type=vbox parent=stats_list_r closeable=1
+				@property stats_table type=table store=no no_caption=1 parent=stats_table
+
 @default group=stats_s
 
 	@property stats_s_toolbar type=toolbar store=no no_caption=1
@@ -1330,8 +1374,11 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo bills_create parent=bills caption="Maksmata t&ouml;&ouml;d" submit=no save=no
        @groupinfo bill_payments parent=bills caption="Laekumised" submit=no save=no
 
+
+
 @groupinfo stats caption="Aruanded" save=no
 
+	@groupinfo stats_stats parent=stats caption="Aruanded" save=no
 	@groupinfo stats_s parent=stats caption="Otsi" save=no
 	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
 	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no
@@ -3005,6 +3052,14 @@ class crm_company extends class_base
 			case "stats_s_area":
 			case "stats_s_worker_sel":
 			case "stats_s_time_sel":
+ 			case "stats_stats_tb":
+ 			case "stats_tree":
+ 			case "stats_stats_from":
+ 			case "stats_stats_to":
+ 			case "stats_stats_search":
+ 			case "status_chart":
+ 			case "money_chart":
+ 			case "stats_table":
 				static $stats_impl;
 				if (!$stats_impl)
 				{

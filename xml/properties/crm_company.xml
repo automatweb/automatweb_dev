@@ -713,6 +713,33 @@
             <caption>Fake phone</caption>
       </property>
       <property>
+            <name>fake_fax</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_fax</field>
+            <caption>Fake fax</caption>
+      </property>
+      <property>
+            <name>fake_mobile</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_mobile</field>
+            <caption>Fake mobile</caption>
+      </property>
+      <property>
+            <name>fake_skype</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_skype</field>
+            <caption>Fake skype</caption>
+      </property>
+      <property>
             <name>fake_email</name>
             <table>objects</table>
             <group>add_info</group>
@@ -2818,10 +2845,10 @@
       <property>
             <name>bill_s_from</name>
             <table>objects</table>
-            <group>bills_list</group>
+            <group>stats_stats</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>bills_list_s</parent>
+            <parent>stats_list_s</parent>
             <captionside>top</captionside>
             <format>
                   <num_0>day_textbox</num_0>
@@ -2834,10 +2861,10 @@
       <property>
             <name>bill_s_to</name>
             <table>objects</table>
-            <group>bills_list</group>
+            <group>stats_stats</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>bills_list_s</parent>
+            <parent>stats_list_s</parent>
             <captionside>top</captionside>
             <format>
                   <num_0>day_textbox</num_0>
@@ -2910,10 +2937,10 @@
       <property>
             <name>bill_s_search</name>
             <table>objects</table>
-            <group>bills_list</group>
+            <group>stats_stats</group>
             <type>submit</type>
             <store>no</store>
-            <parent>bills_list_s</parent>
+            <parent>stats_list_s</parent>
             <captionside>top</captionside>
             <no_caption>1</no_caption>
             <field>bill_s_search</field>
@@ -3350,6 +3377,56 @@
             <no_caption>1</no_caption>
             <parent>mail_tbl_box</parent>
             <field>mail_tbl</field>
+      </property>
+      <property>
+            <name>stats_stats_tb</name>
+            <table>objects</table>
+            <group>stats_stats</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>stats_stats_tb</field>
+      </property>
+      <property>
+            <name>stats_tree</name>
+            <table>objects</table>
+            <group>stats_stats</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_list_u</parent>
+            <field>stats_tree</field>
+            <caption>Aruannete puu</caption>
+      </property>
+      <property>
+            <name>status_chart</name>
+            <table>objects</table>
+            <group>stats_stats</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>chart1</parent>
+            <store>no</store>
+            <field>status_chart</field>
+      </property>
+      <property>
+            <name>money_chart</name>
+            <table>objects</table>
+            <group>stats_stats</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>chart2</parent>
+            <store>no</store>
+            <field>money_chart</field>
+      </property>
+      <property>
+            <name>stats_table</name>
+            <table>objects</table>
+            <group>stats_stats</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_table</parent>
+            <field>stats_table</field>
       </property>
       <property>
             <name>stats_s_toolbar</name>
@@ -4194,6 +4271,11 @@
                   <caption>Aruanded</caption>
                   <save>no</save>
             </stats>
+            <stats_stats>
+                  <parent>stats</parent>
+                  <caption>Aruanded</caption>
+                  <save>no</save>
+            </stats_stats>
             <stats_s>
                   <parent>stats</parent>
                   <caption>Otsi</caption>
@@ -5293,6 +5375,67 @@
                   <group>ovrv_email</group>
                   <area_caption></area_caption>
             </mail_tbl_box>
+            <stats_list_box>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>stats_stats</group>
+                  <area_caption></area_caption>
+            </stats_list_box>
+            <stats_list_l>
+                  <type>vbox</type>
+                  <parent>stats_list_box</parent>
+                  <closeable>1</closeable>
+                  <group>stats_stats</group>
+                  <area_caption></area_caption>
+            </stats_list_l>
+            <stats_list_u>
+                  <type>vbox</type>
+                  <parent>stats_list_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Aruanded</area_caption>
+                  <group>stats_stats</group>
+            </stats_list_u>
+            <stats_list_s>
+                  <type>vbox</type>
+                  <parent>stats_list_l</parent>
+                  <closeable>1</closeable>
+                  <group>stats_stats</group>
+                  <area_caption></area_caption>
+            </stats_list_s>
+            <stats_list_r>
+                  <type>vbox</type>
+                  <parent>stats_list_box</parent>
+                  <closeable>1</closeable>
+                  <group>stats_stats</group>
+                  <area_caption></area_caption>
+            </stats_list_r>
+            <data_r_charts>
+                  <type>hbox</type>
+                  <parent>stats_list_r</parent>
+                  <width>50%:50%</width>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>stats_stats</group>
+            </data_r_charts>
+            <chart1>
+                  <parent>data_r_charts</parent>
+                  <type>vbox</type>
+                  <group>stats_stats</group>
+                  <area_caption></area_caption>
+            </chart1>
+            <chart2>
+                  <parent>data_r_charts</parent>
+                  <type>vbox</type>
+                  <group>stats_stats</group>
+                  <area_caption></area_caption>
+            </chart2>
+            <stats_table>
+                  <type>vbox</type>
+                  <parent>stats_list_r</parent>
+                  <closeable>1</closeable>
+                  <group>stats_stats</group>
+                  <area_caption></area_caption>
+            </stats_table>
             <res_lt>
                   <type>hbox</type>
                   <width>20%:80%</width>
