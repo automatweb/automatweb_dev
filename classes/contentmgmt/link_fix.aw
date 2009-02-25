@@ -31,14 +31,14 @@ class link_fix extends _int_object
 
 	function save()
 	{
-		parent::save();
-		if(parent::prop("url") != $this->url)
+		return parent::save();
+/*		if(parent::prop("url") != $this->url)
 		{
 			$i = get_instance(CL_IMAGE);
 			$i->db_query("ALTER TABLE extlinks CHANGE `url` `url` TEXT NULL");
 		}
 		parent::set_prop("url", $this->url);
-		return parent::save();
+		return parent::save();*/
 	}
 }
 ?>
