@@ -1920,7 +1920,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						}
 						else
 						{
-							$sql[] = $tf." NOT IN (".join(",", $v_data).") ";
+							$sql[] = $tf." NOT IN (".join(",", map("'%s'", $v_data)).") ";
 						}
 					}
 					else
