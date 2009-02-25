@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.93 2009/02/17 08:45:08 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.94 2009/02/25 12:02:10 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -2457,6 +2457,29 @@ class rfp_manager extends class_base
 			);
 			// i dont put the products here right now, most of the reservations get probably filtered out anyway..
 		}*/
+		foreach($ol->arr() as $oid => $o)
+		{
+			$conn = $o->connections_from(array(
+				"type" => "RELTYPE_CATERING_RESERVATION",
+			));
+			foreach($conn as $c)
+			{
+				$rvid = $c->prop("to");
+				if(!$return[$rvid])
+				{
+					$rvo = obj($rvid);
+					$return[$rvid] = array(
+						"start1" => $rvo->prop("start1"),
+						"end" => $rvo->prop("end"),
+						"room" => $rvo->prop("resource"),
+						"people_count" => $rvo->prop("people_count"),
+						"reservation" => $rvid,
+						"result_type" => RFP_RAPORT_TYPE_CATERING,
+						"rfp" => $oid,
+					);
+				}
+			}
+		}
 		return $return;
 	}
 	
@@ -2591,6 +2614,12 @@ class rfp_manager extends class_base
 		$t->define_field(array(
 			"name" => "rooms",
 			"caption" => t("Ruumid"),
+			"parent" => "money",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "packages",
+			"caption" => t("Paketid"),
 			"parent" => "money",
 			"align" => "center",
 		));
@@ -2738,7 +2767,8 @@ class rfp_manager extends class_base
 				$titles["room".$rid] = $r_set ? "" : t("&Uuml;ritustunnid");
 				$r_set = 1;
 			}
-			$titles["rooms"] = t("K&auml;ive"); $titles["catering"] = "";
+			$titles["rooms"] = t("K&auml;ive"); $titles["packages"] = "";
+			$titles["catering"] = "";
 			$titles["resources"] = ""; $titles["housing"] = "";
 			$titles["additional_services"] = ""; $titles["total"] = "";
 			$titles["event_type"] = ""; $titles["status"] = ""; 
@@ -2759,6 +2789,7 @@ class rfp_manager extends class_base
 				$titles["room".$rid] = $room;
 			}
 			$titles["rooms"] = t("Ruumid");
+			$titles["packages"] = t("Paketid");
 			$titles["catering"] = t("Toitlustus");
 			$titles["resources"] = t("Ressursid");
 			$titles["housing"] = t("Majutus");
@@ -2801,7 +2832,12 @@ class rfp_manager extends class_base
 			));
 			$res_sum = 0;
 			$room_sum = 0;
+			$package_sum = 0;
 			$roomdata = array();
+			$pk_prices = $arr["obj_inst"]->get_packages();
+			$pk_price = $o->prop("data_gen_package_price");
+			$people = $o->prop("data_gen_attendees_no");
+			$package_id = $o->prop("data_gen_package");
 			foreach($bron_conn as $c)
 			{
 				$bron = $c->to();
@@ -2823,14 +2859,28 @@ class rfp_manager extends class_base
 					$sum["room_price"] = $rfpi->alter_reservation_price_include_extra_max_hours($bron, $arr["obj_inst"], $sum["room_price"]);
 					$total = $sum["room_price"][$cur];
 					$ssum = $bron->get_special_sum();
-					if($ssum[$cur])
+
+
+					if(is_array($pk_prices) && $package_id)
+					{
+						$price = $pk_prices[$package_id]["prices"][$pk_price][$cur];
+						$pk_discount = $o->get_package_custom_discount();
+						if($pk_discount)
+						{
+							$price *= (100 - $pk_discount ) / 100;
+						}
+						$package_sum += $price * $people;
+						$total = 0;
+					}
+
+					if($ssum[$cur] && !$package_sum)
 					{
 						$total = $ssum[$cur];
 					}
 					$room_sum += $total;
 
 					$room = $bron->prop("resource");
-					$roomdata[$room] = (mktime(date('H', $end), 0, 0, date('m', $end), date('d', $end), date('Y', $end)) - mktime(date('H', $start), 0, 0, date('m', $start), date('d', $start), date('Y', $start))) /  60 / 60 + 1;
+					$roomdata[$room] += (mktime(date('H', $end), 0, 0, date('m', $end), date('d', $end), date('Y', $end)) - mktime(date('H', $start), 0, 0, date('m', $start), date('d', $start), date('Y', $start))) /  60 / 60 + 1;
 					$res_prices = $bron->get_resources_sum();
 					$res_sum += $res_prices[$cur];
 				}
@@ -2840,6 +2890,9 @@ class rfp_manager extends class_base
 				$row["room".$rid] = $roomdata[$rid];
 				$room_sums[$rid] += $roomdata[$rid];
 			}
+
+			$row["packages"] = $package_sum;
+			$packages_sum += $package_sum;
 
 			$total = 0;
 			$row["rooms"] = $room_sum;
@@ -2868,7 +2921,7 @@ class rfp_manager extends class_base
 					$price = $prices[$cur];
 					$disc = $discount[$prod->id()];
 					$prod_sum = $price * $count;
-					$product_sum = $prod_sum - ($prod_sum * $disc)/100;
+					$product_sum += $prod_sum - ($prod_sum * $disc)/100;
 				}
 			}
 			$row["catering"] = $product_sum;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.182 2009/02/19 13:54:14 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.183 2009/02/25 12:02:10 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3223,6 +3223,7 @@ class rfp extends class_base
 				$pds = "";
 				foreach($rvs as $rv_id => $proddata)
 				{
+					$rv_has_prod = false;
 					$rv_o = obj($rv_id);
 					foreach($proddata as $prodid => $prod)
 					{
@@ -3231,6 +3232,7 @@ class rfp extends class_base
 						{
 							continue;
 						}
+						$rv_has_prod = true;
 						$has_prod = true;
 						$prodprices = $po->meta("cur_prices");
 						$prod["price"] = $prodprices[$currency];
@@ -3297,15 +3299,45 @@ class rfp extends class_base
 						$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
 						$prod_total += $this->_format_price($prod["sum"]);
 					}
+					if(!$rv_has_prod)
+					{
+						$room = obj($rv_o->prop("resource"));
+						//gen nice event/room combo
+						$evt_room = array();
+						if(strlen($varname))
+						{
+							$evt_room[] = $varname;
+						}
+						$room_trans = $room->meta("translations");
+						if(strlen($room->name()))
+						{
+							$evt_room[] = ($_t = $room_trans[$default_lang]["name"])?$_t:$room->name();
+						}
+						$this->vars(array(
+							"prod_from_date" => date("d.m.Y", $rv_o->prop("start1")),
+							"prod_to_date" => date("d.m.Y", $rv_o->prop("end")),
+							"prod_from_hour" => date("H", $rv_o->prop("start1")),
+							"prod_from_minute" => date("i", $rv_o->prop("start1")),
+							"prod_to_hour" => date("H", $rv_o->prop("end")),
+							"prod_to_minute" => date("i", $rv_o->prop("end")),
+							"prod_event" => $varname,
+							"prod_count" => $rv_o->prop("people_count"),
+							"prod_event_and_room" => join(", ",$evt_room),
+							"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
+							"prod_sum" => "-",
+							"prod_price" => "-",
+							"prod_comment" => "-",
+							"prod_description" => "-",
+							"prod_prod" => "-",
+						));
+						$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
+					}
 				}
-				if($has_prod)
-				{
-					$this->vars(array(
-						"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
-						"reservation_name" => $rvid,
-					));
-					$pdr .= $this->parse("PRODUCTS_RESERVATION".($package?"":"_NO_PACKAGE"));
-				}
+				$this->vars(array(
+					"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
+					"reservation_name" => $rvid,
+				));
+				$pdr .= $this->parse("PRODUCTS_RESERVATION".($package?"":"_NO_PACKAGE"));
 			}
 			if($prodcountcheck) // there might be a chance that some row's were skipped(maybe all), and then we don't need that table at all
 			{
