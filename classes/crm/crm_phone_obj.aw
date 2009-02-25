@@ -97,7 +97,7 @@ class crm_phone_obj extends _int_object
 		}
 		return parent::set_prop($k, $v);
 	}
-
+/*
 	function save()
 	{
 		$oid = parent::id();
@@ -175,7 +175,7 @@ class crm_phone_obj extends _int_object
 		}
 		return parent::save();
 	}
-
+*/
 	private function conns_remain_unchanged($conns)
 	{
 		$r = array();
@@ -197,7 +197,7 @@ class crm_phone_obj extends _int_object
 	}
 
 	private function parent_save($conn_ids)
-	{		
+	{
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_PHONE,
 			"name" => parent::prop("name"),
