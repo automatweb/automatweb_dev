@@ -867,7 +867,6 @@ text-decoration:underline;
 .ac_over {background-color: #0A246A; color: white;}
 
 /* templates/gantt_chart/chart_aw.tpl */
-.fatalerror { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat! important; }
 .deadline0 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -25px ! important; }
 .deadline1 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -50px ! important; }
 .deadline2 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -75px ! important; }
@@ -875,6 +874,7 @@ text-decoration:underline;
 .deadline4 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -125px ! important; }
 .deadline5 { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -150px ! important; }
 .feedback { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -175px ! important; }
+.fatalerror { background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat! important; }
 .btGanttRowName
 {
 	padding: 3px 6px 3px 16px ! important;
