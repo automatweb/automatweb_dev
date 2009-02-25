@@ -627,6 +627,11 @@
                   <clid>CL_USER</clid>
                   <caption>Kasutaja</caption>
             </USER>
+            <SHORTCUT_SET>
+                  <value>11</value>
+                  <clid>CL_SHORTCUT_SET</clid>
+                  <caption>Kiirviidete&amp;amp;nbsp;kogu</caption>
+            </SHORTCUT_SET>
       </reltypes>
       <layout>
             <settings_shortcuts_top>
