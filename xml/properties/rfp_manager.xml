@@ -455,23 +455,12 @@
             <caption>Valuuta</caption>
       </property>
       <property>
-            <name>stats_filt_confirmed</name>
-            <table>objects</table>
-            <group>stats</group>
-            <type>select</type>
-            <multiple>1</multiple>
-            <store>no</store>
-            <parent>stats_filt_middle</parent>
-            <field>stats_filt_confirmed</field>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>stats_filt_start2</name>
             <table>objects</table>
             <group>stats</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>stats_filt_right</parent>
+            <parent>stats_filt_middle</parent>
             <default>-1</default>
             <field>stats_filt_start2</field>
             <caption>&amp;amp;Uuml;rituse sisestus alates</caption>
@@ -482,7 +471,7 @@
             <group>stats</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>stats_filt_right</parent>
+            <parent>stats_filt_middle</parent>
             <default>-1</default>
             <field>stats_filt_end2</field>
             <caption>&amp;amp;Uuml;rituse sisestus kuni</caption>
@@ -493,9 +482,39 @@
             <group>stats</group>
             <type>select</type>
             <store>no</store>
-            <parent>stats_filt_right</parent>
+            <parent>stats_filt_middle</parent>
             <field>stats_filt_hotel</field>
             <caption>Hotell</caption>
+      </property>
+      <property>
+            <name>stats_filt_confirmed</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <store>no</store>
+            <parent>stats_filt_right</parent>
+            <field>stats_filt_confirmed</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>stats_chart</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>stats_filt_charts</parent>
+            <field>stats_chart</field>
+      </property>
+      <property>
+            <name>stats_chart_filt</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <captionside>top</captionside>
+            <parent>stats_filt_charts</parent>
+            <field>stats_chart_filt</field>
+            <caption>Graafiku t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>stats_tbl</name>
@@ -855,9 +874,10 @@
             </raports_table>
             <stats_filt_lay>
                   <type>hbox</type>
-                  <width>35%:30%:35%</width>
+                  <width>35%:35%:30%</width>
                   <group>stats</group>
-                  <area_caption></area_caption>
+                  <closeable>1</closeable>
+                  <area_caption>Statistika&amp;amp;nbsp;filter</area_caption>
             </stats_filt_lay>
             <stats_filt_left>
                   <type>vbox</type>
@@ -877,6 +897,12 @@
                   <group>stats</group>
                   <area_caption></area_caption>
             </stats_filt_right>
+            <stats_filt_charts>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>stats</group>
+            </stats_filt_charts>
             <hsplit>
                   <type>hbox</type>
                   <group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.94 2009/02/25 12:02:10 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.95 2009/02/25 14:48:46 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -147,7 +147,7 @@ caption Linnade kaust
 
 	@property stats_tb type=toolbar no_caption=1
 
-	@layout stats_filt_lay type=hbox width=35%:30%:35% group=stats
+	@layout stats_filt_lay type=hbox width=35%:35%:30% group=stats closeable=1 area_caption=Statistika&nbsp;filter
 
 		 @layout stats_filt_left type=vbox parent=stats_filt_lay
 
@@ -160,22 +160,30 @@ caption Linnade kaust
 			@property stats_filt_currency type=select store=no parent=stats_filt_left
 			@caption Valuuta
 
+
 		@layout stats_filt_middle type=vbox parent=stats_filt_lay
-			
-			@property stats_filt_confirmed type=select multiple=1 store=no parent=stats_filt_middle
-			@caption Staatus
 
-		@layout stats_filt_right type=vbox parent=stats_filt_lay
-
-			@property stats_filt_start2 type=date_select store=no parent=stats_filt_right default=-1
+			@property stats_filt_start2 type=date_select store=no parent=stats_filt_middle default=-1
 			@caption &Uuml;rituse sisestus alates
 		
-			@property stats_filt_end2 type=date_select store=no parent=stats_filt_right default=-1
+			@property stats_filt_end2 type=date_select store=no parent=stats_filt_middle default=-1
 			@caption &Uuml;rituse sisestus kuni
 
-			@property stats_filt_hotel type=select store=no parent=stats_filt_right
+			@property stats_filt_hotel type=select store=no parent=stats_filt_middle
 			@caption Hotell
 	
+		@layout stats_filt_right type=vbox parent=stats_filt_lay
+			
+			@property stats_filt_confirmed type=select multiple=1 store=no parent=stats_filt_right
+			@caption Staatus
+
+	@layout stats_filt_charts type=vbox closeable=1 area_caption=Graafikud
+
+			@property stats_chart type=google_chart no_caption=1 parent=stats_filt_charts
+			
+			@property stats_chart_filt type=select captionside=top parent=stats_filt_charts
+			@caption Graafiku t&uuml;&uuml;p
+
 	@property stats_tbl type=table no_caption=1
 
 @groupinfo rfps caption="Tellimused"
@@ -491,6 +499,17 @@ class rfp_manager extends class_base
 			case "stats_filt_end1":
 			case "stats_filt_end2":
 				$prop["value"] = date_edit::get_timestamp($arr["request"][$prop["name"]]);
+				break;
+			case "stats_chart_filt":
+				$prop["options"] = array(
+					"theme" => t("Teema"),
+					"event_type" => t("&Uuml;rituse t&uuml;&uuml;p"),
+					"status" => t("Staatus"),
+					"international" => t("Rahvusvaheline / kohalik"),
+					"rooms" => t("Ruumid"),
+					"money" => t("K&auml;ive"),
+				);
+				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 			case "s_time_to":
 			case "s_time_from":
@@ -1685,9 +1704,12 @@ class rfp_manager extends class_base
 		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status", "rfp_submitter", "rfp_city", "rfp_hotel", "rfp_name", "rfp_catering_type", "rfp_tables");
 		foreach($todo as $do)
 		{
-			$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
+			if($arr["request"][$var])
+			{
+				$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
+			}
 		}
-		$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2", "stats_filt_hotel", "stats_filt_confirmed", "stats_filt_currency");
+		$stats_filt = array("stats_filt_start1", "stats_filt_start2", "stats_filt_end1", "stats_filt_end2", "stats_filt_hotel", "stats_filt_confirmed", "stats_filt_currency", "stats_chart_filt");
 		foreach($stats_filt as $var)
 		{
 			if($arr["request"][$var])
@@ -2502,6 +2524,126 @@ class rfp_manager extends class_base
 		return $as;
 	}
 
+	function _get_stats_chart($arr)
+	{
+		$c = &$arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_PIE_3D);
+		$c->set_size(array(
+			"width" => 500,
+			"height" => 150,
+		));
+		$c->add_fill(array(
+			"area" => GCHART_FILL_BACKGROUND,
+			"type" => GCHART_FILL_SOLID,
+			"colors" => array(
+				"color" => "e9e9e9",
+			),
+		));
+		if(!isset($arr["request"]["stats_filt_start1"]))
+		{
+			return;
+		}
+		if(!$this->stats_data)
+		{
+			$data = $this->get_stats_data($arr, false);
+		}
+		else
+		{
+			$data = $this->stats_data;
+		}
+		if(!$arr["request"]["stats_chart_filt"])
+		{
+			$arr["request"]["stats_chart_filt"] = "theme";
+		}
+		switch($arr["request"]["stats_chart_filt"])
+		{
+			case "theme":
+			case "international":
+			case "status":
+			case "event_type":
+				$var = $arr["request"]["stats_chart_filt"];
+				switch($var)
+				{
+					case "theme":
+						$title = t("&Uuml;rituse teema");
+						break;
+					case "international":
+						$title = t("Rahvusvaheline (r) v&otilde;i kohalik (k)");
+						break;
+					case "status":
+						$title = t("Tellimuse staatus");
+						break;
+					case "event_type":
+						$title = t("&Uuml;rituse t&uuml;&uuml;p");
+						break;
+				}
+				$counts = array();
+				foreach($data as $d)
+				{
+					if($d[$var])
+					{
+						$counts[$d[$var]] += 1;
+					}
+				}
+				$labels = array();
+				foreach($counts as $l => $n)
+				{
+					$labels[] = $l." (".$n.")";
+				}
+				$c->add_data($counts);
+				$c->set_labels($labels);
+				break;
+			case "rooms":
+				$sums = array_pop($data);
+				$title = t("&Uuml;ritustunde ruumides");
+				$data = array();
+				$labels = array();
+				foreach($sums as $k => $s)
+				{
+					if(!$s)
+					{
+						continue;
+					}
+					if(strpos($k, "room") !== false && strpos($k, "rooms") === false)
+					{
+						$data[] = $s;
+						$labels[] = obj(substr($k, 4))->name()." (".$s.")";
+					}
+				}
+				$c->add_data($data);
+				$c->set_labels($labels);
+				break;
+			case "money":
+				$sums = array_pop($data);
+				$title = t("K&auml;ibe jaotus");
+				$fields = array(
+					"rooms" => t("Ruumid"),
+					"packages" => t("Paketid"),
+					"catering" => t("Toitlustus"), 
+					"resources" => t("Ressursid"), 
+					"housing" => t("Majutus"), 
+					"additional_services" => t("Lisateenused"),
+				);
+				$data = $labels = array();
+				foreach($fields as $k => $f)
+				{
+					if($sums[$k])
+					{
+						$data[] = $sums[$k];
+						$labels[] = $f." (".$sums[$k].")";
+					}
+				}
+				$c->add_data($data);
+				$c->set_labels($labels);
+				break;
+		}
+		$c->set_title(array(
+			"text" => $title,
+			"color" => "666666",
+			"size" => 11,
+		));
+	}
+
 	function _get_stats_tb($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
@@ -2666,6 +2808,7 @@ class rfp_manager extends class_base
 			"align" => "center",
 		));
 		$t->set_sortable(false);
+		$t->set_caption(t("Statistika andmed"));
 	}
 
 	function _get_stats_tbl($arr)
@@ -2674,7 +2817,14 @@ class rfp_manager extends class_base
 		{
 			$t = &$arr["prop"]["vcl_inst"];
 			$this->_init_stats_tbl($arr);
-			$data = $this->get_stats_data($arr, false);
+			if(!$this->stats_data)
+			{
+				$data = $this->get_stats_data($arr, false);
+			}
+			else
+			{
+				$data = $this->stats_data;
+			}
 			foreach($data as $row)
 			{
 				$t->define_data($row);
@@ -2978,6 +3128,7 @@ class rfp_manager extends class_base
 		}
 		$sums["evt_start"] = t("Kokku");
 		$data = array_merge($data, array($sums));
+		$this->stats_data = $data;
 		return $data;
 	}
 
