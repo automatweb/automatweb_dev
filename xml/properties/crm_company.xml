@@ -713,33 +713,6 @@
             <caption>Fake phone</caption>
       </property>
       <property>
-            <name>fake_fax</name>
-            <table>objects</table>
-            <group>add_info</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>fake_fax</field>
-            <caption>Fake fax</caption>
-      </property>
-      <property>
-            <name>fake_mobile</name>
-            <table>objects</table>
-            <group>add_info</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>fake_mobile</field>
-            <caption>Fake mobile</caption>
-      </property>
-      <property>
-            <name>fake_skype</name>
-            <table>objects</table>
-            <group>add_info</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>fake_skype</field>
-            <caption>Fake skype</caption>
-      </property>
-      <property>
             <name>fake_email</name>
             <table>objects</table>
             <group>add_info</group>
@@ -2845,10 +2818,10 @@
       <property>
             <name>bill_s_from</name>
             <table>objects</table>
-            <group>stats_stats</group>
+            <group>bills_list</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>stats_list_s</parent>
+            <parent>bills_list_s</parent>
             <captionside>top</captionside>
             <format>
                   <num_0>day_textbox</num_0>
@@ -2861,10 +2834,10 @@
       <property>
             <name>bill_s_to</name>
             <table>objects</table>
-            <group>stats_stats</group>
+            <group>bills_list</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>stats_list_s</parent>
+            <parent>bills_list_s</parent>
             <captionside>top</captionside>
             <format>
                   <num_0>day_textbox</num_0>
@@ -2937,10 +2910,10 @@
       <property>
             <name>bill_s_search</name>
             <table>objects</table>
-            <group>stats_stats</group>
+            <group>bills_list</group>
             <type>submit</type>
             <store>no</store>
-            <parent>stats_list_s</parent>
+            <parent>bills_list_s</parent>
             <captionside>top</captionside>
             <no_caption>1</no_caption>
             <field>bill_s_search</field>
@@ -3397,6 +3370,50 @@
             <parent>stats_list_u</parent>
             <field>stats_tree</field>
             <caption>Aruannete puu</caption>
+      </property>
+      <property>
+            <name>sats_stats_from</name>
+            <table>objects</table>
+            <group>stats_stats</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>stats_list_s</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>sats_stats_from</field>
+            <caption>Esitatud alates</caption>
+      </property>
+      <property>
+            <name>sats_stats_to</name>
+            <table>objects</table>
+            <group>stats_stats</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>stats_list_s</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>sats_stats_to</field>
+            <caption>Esitatud kuni</caption>
+      </property>
+      <property>
+            <name>sats_stats_search</name>
+            <table>objects</table>
+            <group>stats_stats</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>stats_list_s</parent>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>sats_stats_search</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>status_chart</name>

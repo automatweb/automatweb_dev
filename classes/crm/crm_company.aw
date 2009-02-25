@@ -255,15 +255,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property fake_phone type=textbox store=no
 	@caption Fake phone
 
-	@property fake_fax type=textbox store=no
-	@caption Fake fax
-
-	@property fake_mobile type=textbox store=no
-	@caption Fake mobile
-
-	@property fake_skype type=textbox store=no
-	@caption Fake skype
-
 	@property fake_email type=textbox store=no
 	@caption Fake e-mail
 
@@ -1089,13 +1080,13 @@ default group=org_objects
 
 		@layout stats_list_s type=vbox parent=stats_list_l closeable=1
 
-			@property bill_s_from type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
+			@property sats_stats_from type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
 			@caption Esitatud alates
 
-			@property bill_s_to type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
+			@property sats_stats_to type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
 			@caption Esitatud kuni
 
-			@property bill_s_search type=submit store=no parent=stats_list_s captionside=top no_caption=1 
+			@property sats_stats_search type=submit store=no parent=stats_list_s captionside=top no_caption=1 
 			@caption Otsi
 
 		@layout stats_list_r type=vbox parent=stats_list_box closeable=1
