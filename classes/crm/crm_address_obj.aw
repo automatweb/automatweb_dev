@@ -106,11 +106,16 @@ class crm_address_obj extends _int_object
 
 	private function get_address_name()
 	{
-		$name = array();	
+		$name = array();
 		if ($this->prop("aadress") != "")
 		{
 			$name[] = $this->prop("aadress");
-		}
+		};
+
+		if ($this->prop("aadress2") != "")
+		{
+			$name[] = $this->prop("aadress2");
+		};
 
 		if ($this->prop("linn.name") != "")
 		{
