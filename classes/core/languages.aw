@@ -382,7 +382,7 @@ class languages extends aw_template implements request_startup
 					//a reason for that, i checked on eures the values of the variables, and the
 					//if without the true seems to work too, if anything goes wrong, i can always
 					//write it back in, this why i'm writing this comment :)
-					if (trim($row["site_id"]) == "" || in_array($this->cfg["site_id"], explode(",", trim($row["site_id"]))))
+					if (trim($row["site_id"]) == "" || in_array(aw_ini_get("site_id"), explode(",", trim($row["site_id"]))))
 					{
 						aw_cache_set("languages", $row["id"],$row);
 					}
