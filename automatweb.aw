@@ -341,8 +341,10 @@ class automatweb
 					}
 				}
 
+				ob_start();
 				include(AW_DIR . "automatweb/admin_footer" . AW_FILE_EXT);
-				self::$result->set_data($content);
+				$footer_return = ob_get_clean();
+				self::$result->set_data($str . $footer_return);
 			}
 			else
 			{
