@@ -11,6 +11,15 @@ class crm_address_obj extends _int_object
 		return parent::save();
 	}
 
+	function prop($k)
+	{
+		if($k === "name" && strlen(parent::prop($k)) === 0)
+		{
+			return $this->get_address_name();
+		}
+		return parent::prop($k);
+	}
+
 	/** Sets county to address
 		@attrib api=1 params=pos
 		@param county optional type=string/oid
