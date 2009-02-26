@@ -1684,6 +1684,11 @@ class _int_object
 				$val = $trs[$cur_lid][$prop];
 			}
 		}
+		// No spaces in the end of alias! -kaarel 26.02.2009
+		if($prop === "alias")
+		{
+			$val = trim($val);
+		}
 		return $val;
 	}
 
