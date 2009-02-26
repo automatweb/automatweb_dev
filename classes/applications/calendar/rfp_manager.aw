@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.95 2009/02/25 14:48:46 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.96 2009/02/26 13:13:22 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1704,7 +1704,7 @@ class rfp_manager extends class_base
 		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status", "rfp_submitter", "rfp_city", "rfp_hotel", "rfp_name", "rfp_catering_type", "rfp_tables");
 		foreach($todo as $do)
 		{
-			if($arr["request"][$var])
+			if($arr["request"]["raports_search_".$do])
 			{
 				$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
 			}
