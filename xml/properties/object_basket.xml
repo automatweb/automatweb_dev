@@ -32,6 +32,16 @@
             <caption>Maksimaalne kirjete arv</caption>
       </property>
       <property>
+            <name>perpage</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mitu objekti lehel</caption>
+      </property>
+      <property>
             <name>object_basket</name>
             <table>objects</table>
             <group>general</group>
