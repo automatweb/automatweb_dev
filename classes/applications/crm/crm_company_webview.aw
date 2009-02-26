@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.63 2009/02/26 10:23:35 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.64 2009/02/26 15:14:23 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1912,9 +1912,9 @@ class crm_company_webview extends class_base
 			return $this->mk_my_orb("show_sect", array("section" => $this->_menu_parent_object->id(), "wv" => $this->_webview->id()));
 		}
 
-		if ($sect_obj->prop("link") != "")
+		if ($sect_obj->trans_get_val("link") != "")
 		{
-			return $sect_obj->prop("link");
+			return $sect_obj->trans_get_val("link");
 		}
 		if ($sect_obj->alias() != "")
 		{
