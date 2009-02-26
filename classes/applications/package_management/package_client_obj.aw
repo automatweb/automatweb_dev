@@ -56,7 +56,6 @@ class package_client_obj extends _int_object
 	{
 		$packages = array();
 		$files = $this->get_installed_files_data();
-		
 		foreach($files as $file)
 		{
 			$key = $file["package_id"].$file["package_name"].$file["package_version"];
@@ -195,34 +194,17 @@ class package_client_obj extends _int_object
 //		arr($zip->numFiles);
 //arr($data["file_name"]);
 
-		if ($inst->db_table_exists($this->db_table_name) === false)
-		{
-			$inst->db_query('create table '.$this->db_table_name.' (
-				id int not null primary key auto_increment,
-				file_name varchar(255),
-				file_version varchar(31),
-				file_location varchar(31),
-				class_name varchar(255),
-				file_ext CHAR(8),
-				package_name varchar(255),
-				package_version varchar(31),
-				package_id int,
-				used int,
-				installed_date int,
-				dependences varchar(255)
-			)');//see viimane on niisama, 2kki leiab hea lahenduse selleks
-		}
 		$tbl = $inst->db_get_table($this->db_table_name);
 		if (!isset($tbl["fields"]["file_ext"]))
 		{
-			$inst->db_add_col("site_file_index", array(
+			$inst->db_add_col($this->db_table_name, array(
 				"name" => "file_ext",
 				"type" => "CHAR(8)"
 			));
 		}
 		if (!isset($tbl["fields"]["class_name"]))
 		{
-			$inst->db_add_col("site_file_index", array(
+			$inst->db_add_col($this->db_table_name, array(
 				"name" => "class_name",
 				"type" => "varchar(255)"
 			));
@@ -293,7 +275,7 @@ class package_client_obj extends _int_object
 					'".$location."',
 					'".$fs."',
 					'".$ext."',
-					'".$dat["name"]."',
+					'".$data["name"]."',
 					'".$data["version"]."',
 					".$data["package_id"].",
 					1,

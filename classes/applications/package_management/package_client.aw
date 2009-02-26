@@ -418,16 +418,6 @@ class package_client extends class_base
 
 	function _get_my_list($arr)
 	{
-		$tbl = $this->db_get_table("site_file_index");
-		if (!isset($tbl["fields"]["package_id"]))
-		{
-			$this->db_add_col("site_file_index", array(
-				"name" => "package_id",
-				"type" => "int"
-			));
-		}
-
-
 		$t = &$arr['prop']['vcl_inst'];
 		$t->set_sortable(false);
 
@@ -484,7 +474,7 @@ class package_client extends class_base
 
 		foreach ($packages as $data)
 		{
-			$color = $isinstalled = $actions = null;
+			$color = $isinstalled = $actions = null;//arr($installed);arr($data);
 			foreach($installed as $i)
 			{
 				if($data["name"] == $i["package_name"] && $data["version"] == $i["package_version"])
