@@ -667,7 +667,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// insert default new acl to object table here
 		$acld_fld = $acld_val = "";
 		$n_acl_data = null;
-		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "")
+		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "" && is_oid(aw_global_get("uid_oid")))
 		{
 			$uo = obj(aw_global_get("uid_oid"));
 			$g_d = $uo->get_default_group();
@@ -2252,7 +2252,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$objdata["site_id"] = $od["site_id"];//aw_ini_get("site_id");
 
 		$acld_fld = $acld_val = "";
-		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "")
+		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "" && is_oid(aw_global_get("uid_oid")))
 		{
 			$uo = obj(aw_global_get("uid_oid"));
 			$g_d = $uo->get_default_group();

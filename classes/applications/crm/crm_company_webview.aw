@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.62 2009/02/07 19:00:58 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.63 2009/02/26 10:23:35 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -80,6 +80,8 @@ class crm_company_webview extends class_base
 		$this->trans_props = array(
 			"name"
 		);
+
+		lc_site_load("crm_company_webview", &$this);
 	}
 
 	//////
@@ -270,7 +272,7 @@ class crm_company_webview extends class_base
 					'caption' => $c->name()))
 					: $c->name(),
 			'company_name_url' => $url . $c->id() . '&l=' .$arr['id'],
-			'company_name_text' => $c->name(),
+			'company_name_text' => $c->trans_get_val("name"),
 			'company_changeurl' => $this->can('edit', $c->id()) ? html::href(array(
 					'caption' => '('.t("Muuda").')',
 					'url' => $this->mk_my_orb('change',array(
@@ -492,7 +494,7 @@ class crm_company_webview extends class_base
 				case 'name':
 				case 'comment':
 				case 'description':
-					$value = nl2br($c->trans_get_val($mapped));
+					$value = nl2br(str_replace(array("'", "\""), array("&#39;", "&quot;"), $c->trans_get_val($mapped)));
 				break;
 				case 'founded':
 					if ($c->prop($mapped) > 0)
@@ -857,7 +859,7 @@ class crm_company_webview extends class_base
 				case "userta3":
 				case "userta4":
 				case "userta5":
-					$value = $c->trans_get_val($item);
+					$value = nl2br($c->trans_get_val($item));
 					break;
 				case "email":
 					$rels = $c->connections_from(array(
@@ -866,6 +868,10 @@ class crm_company_webview extends class_base
 					foreach($rels as $rel)
 					{
 						$_t = $rel->to();
+						if(!strlen($_t->prop("mail")))
+						{
+							continue;
+						}
 						$value[] = html::href(array(
 							"url" => "mailto:".$_t->prop("mail"),
 							"caption" => $_t->prop("mail"),
@@ -895,8 +901,28 @@ class crm_company_webview extends class_base
 					{
 						if ($item == 'address')
 						{
-							$props = array("aadress", "postiindeks");
+							$props = array("aadress", "aadress2", "postiindeks");
 							$objs = array("linn", "maakond", "piirkond", "riik");
+							$rows = array(
+								array("aadress", "postiindeks"),
+								array("linn", "aadress2"),
+								array("maakond", "piirkond", "riik"),
+							);
+							$value = "";
+							foreach($rows as $row)
+							{
+								$address_line = "";
+								foreach($row as $prop)
+								{
+									if(strlen($val = $o_item->prop((in_array($prop,$objs)?$prop.".name":$prop))))
+									{
+										$address_line .= strlen($address_line) > 0 ? ", " : "";
+										$address_line .= $val;
+									}
+								}
+								$value .= strlen($address_line) > 0 ? $address_line."<br />" : "";
+							}
+							/*
 							foreach(array_merge($props, $objs) as $prop)
 							{
 								if(strlen($val = $o_item->prop((in_array($prop,$objs)?$prop.".name":$prop))))
@@ -904,6 +930,7 @@ class crm_company_webview extends class_base
 									$value[] = $val;
 								}
 							}
+							*/
 							
 							/*
 							$idx = $o_item->prop('postiindeks');
@@ -968,24 +995,30 @@ class crm_company_webview extends class_base
 			$val = (substr($val, 0, 7) == "http://")?$val:"http://".$val;
 			$this->vars(array(
 				"link" => $val,
-				"text" => $_t->name(),
+				"text" => isset($_GET["print"]) && $_GET["print"] ? $val : $_t->name(),
 			));
 			$value .= $this->parse("external_links");
 		}
 		$this->vars(array(
 			"external_links" => $value,
 		));
+		if(strlen($value) > 0)
+		{
+			$this->vars(array(
+				"EXTERNAL_LINKS" => $this->parse("EXTERNAL_LINKS"),
+			));
+		}
 
 
 		// Images
 		$inst_img = get_instance(CL_IMAGE);
 
 		// Logo
-		if($this->can("view", $c->logo))
+		if($this->can("view", $c->logo) && file_exists($c->prop("logo.file")))
 		{
 			$this->vars(array(
 				"imgref" => $inst_img->get_url_by_id($c->logo),
-				"imgref_big" => $inst_img->get_big_url_by_id($c->logo),
+				"imgref_big" => file_exists($c->prop("logo.file2")) ? $inst_img->get_big_url_by_id($c->logo) : $inst_img->get_url_by_id($c->logo),
 				"imghtml" => $inst_img->make_img_tag_wl($c->logo),
 			));
 			$this->vars(array(
@@ -1022,7 +1055,7 @@ class crm_company_webview extends class_base
 		{
 			$this->vars(array(
 				"imgref" => $inst_img->get_url_by_id($f_im),
-				"imgref_big" => $inst_img->get_big_url_by_id($f_im),
+				"imgref_big" => file_exists(obj($f_im)->prop("file2")) ? $inst_img->get_big_url_by_id($f_im) : $inst_img->get_url_by_id($f_im),
 				"imghtml" => $inst_img->make_img_tag_wl($f_im),
 			));
 			$all_imstr .= $this->parse("all_images");
@@ -1219,7 +1252,6 @@ class crm_company_webview extends class_base
 		/// okay, I'm sorry, this is just SO badly done, I'm rewriting this completely.
 		$filt = array(
 			'class_id' => CL_CRM_COMPANY,
-			'status' => STAT_ACTIVE,
 			'parent' => $dir,
 			'lang_id' => array(),
 		);
@@ -1238,6 +1270,14 @@ class crm_company_webview extends class_base
 		if(!empty($arr["area"]))
 		{
 			$filt["CL_CRM_COMPANY.RELTYPE_ADDRESS.name"] = "%".$arr["area"]."%";
+		}
+		if(!empty($arr["county"]))
+		{
+			$filt["CL_CRM_COMPANY.contact.maakond"] = $arr["county"];
+		}
+		if(!empty($arr["city"]))
+		{
+			$filt["CL_CRM_COMPANY.contact.linn"] = $arr["city"];
 		}
 		if(isset($arr["keyword"]) && is_array($arr["keyword"]) && sizeof($arr["keyword"]))
 		{
@@ -1277,9 +1317,13 @@ class crm_company_webview extends class_base
 		}
 
 
-		if (($ob && $ob->prop("only_active")) || !empty($arr["only_active"]))
+		if ((($ob && $ob->prop("only_active")) || !empty($arr["only_active"])) && is_oid($crm_db->prop("owner_org")) && $this->can("view", $crm_db->prop("owner_org")))
 		{
-			$filt["status"] = STAT_ACTIVE;
+//			$filt["status"] = STAT_ACTIVE;
+			$filt["CL_CRM_COMPANY.RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).show_in_webview"] = 1;
+			$filt["CL_CRM_COMPANY.RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).status"] = array(object::STAT_ACTIVE, object::STAT_NOTACTIVE);
+			$filt["CL_CRM_COMPANY.RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).seller"] = $crm_db->prop("owner_org");
+			$filt["CL_CRM_COMPANY.RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).buyer"] = new obj_predicate_prop("id");
 		}
 	
 		if (!empty($arr['limit_plaintext']))
@@ -1318,8 +1362,9 @@ class crm_company_webview extends class_base
 			$filt["sort_by"] = join(", ", $order);
 		}
 		$ol = new object_list($filt);
+		$retval = $ol->arr();
 		exit_function('crm_company_webview::list');
-		return $ol->arr();
+		return $retval;
 	}
 
 	// Returns html for companies list
@@ -1402,9 +1447,13 @@ class crm_company_webview extends class_base
 		$img_inst = get_instance(CL_IMAGE);
 		$ph_inst = get_instance(CL_CRM_PHONE);
 		$cnt = 0;
-		if(isset($_GET["page"]))
+		if(isset($_GET["page"]) && is_array($_GET["page"]) && isset($_GET["page"][$arr["id"]]))
 		{
-			$page = $_GET["page"] - 1;
+			$page = int($_GET["page"][$arr["id"]]);
+		}
+		elseif(isset($_GET["page"]) && !is_array($_GET["page"]))
+		{
+			$page = (int)($_GET["page"] - 1);
 		}
 		else
 		{
@@ -1433,6 +1482,10 @@ class crm_company_webview extends class_base
 			{
 				$address[] = $o->prop("contact.aadress");
 			}
+			if($o->prop("contact.aadress2"))
+			{
+				$address[] = $o->prop("contact.aadress2");
+			}
 			if($o->prop("contact.linn.name"))
 			{
 				$address[] = $o->prop("contact.linn.name");
@@ -1453,6 +1506,32 @@ class crm_company_webview extends class_base
 					"url" => "mailto:".$ml,
 				));
 			}
+			$fake_email = html::href(array(
+				"caption" => $o->prop("fake_email"),
+				"url" => "mailto:".$o->prop("fake_email"),
+			));
+
+			$url_links = array();
+			foreach($o->connections_from(array("type" => "RELTYPE_URL")) as $conn)
+			{
+				$to = $conn->to();
+				if(strlen($to->url) === 0)
+				{
+					continue;
+				}
+				$url_links[] = html::href(array(
+					"caption" => $to->url,
+					"url" => substr($to->url, 0, 7) === "http://" ? $to->url : "http://".$to->url,
+				));
+			}
+			$fake_url = html::href(array(
+				"caption" => $o->prop("fake_url"),
+				"url" => substr($o->prop("fake_url"), 0, 7) === "http://" ? $o->prop("fake_url") : "http://".$o->prop("fake_url"),
+			));
+			$fake_url_broken_into_rows = strlen($o->prop("fake_url")) > 0? html::href(array(
+				"caption" => $this->brake_into_rows($o->prop("fake_url"), 35),
+				"url" => substr($o->prop("fake_url"), 0, 7) === "http://" ? $o->prop("fake_url") : "http://".$o->prop("fake_url"),
+			)) : "";
 
 			$this->vars(array(
 				'company_id' => $o->id(),
@@ -1485,6 +1564,10 @@ class crm_company_webview extends class_base
 				'aadress' => $o->prop("contact.aadress"),
 				'mails' => join(", " , $o->get_mails()),
 				'mail_links' => join(", " , $mail_links),
+				'fake_email' => $fake_email,
+				"fake_url" => $fake_url,
+				"fake_url_broken_into_rows" => $fake_url_broken_into_rows,
+				"url_links" => join(", ", $url_links),
 				'fax' => join(", " , $o->get_faxes()),
 				'phones' => join(", " , $o->get_phones()),
 			));
@@ -1939,6 +2022,41 @@ class crm_company_webview extends class_base
 			$ss->_init_path_vars($arr);
 			return $ss->_int_show_documents($doc);
 		}
+	}
+
+	public function brake_into_rows($str, $maks = 25)
+	{
+		for($k = 0; $k + $maks < strlen($str); $k = $l + 7)
+		{
+			$l = max(
+				strrpos(substr($str, 0, $k + $maks), "@"),
+				strrpos(substr($str, 0, $k + $maks), "."),
+				strrpos(substr($str, 0, $k + $maks), "&"),
+				strrpos(substr($str, 0, $k + $maks), "?"),
+				strrpos(substr($str, 0, $k + $maks), "="),
+				strrpos(substr($str, 0, $k + $maks), "/"),
+				strrpos(substr($str, 0, $k + $maks), "-")
+			);
+			if($l <= 0 || $l <= strrpos(substr($str, 0, $k + $maks), ">"))
+			{
+				$l = min(
+					strrpos(substr($str, $k + $maks), "@"),
+					strrpos(substr($str, $k + $maks), "."),
+					strrpos(substr($str, $k + $maks), "&"),
+					strrpos(substr($str, $k + $maks), "?"),
+					strrpos(substr($str, $k + $maks), "="),
+					strrpos(substr($str, $k + $maks), "/"),
+					strrpos(substr($str, $k + $maks), "-")
+				);
+				if($l <= 0)
+				{
+					break;
+				}
+				$l = $l <= 0 ? $maks : $l;
+			}
+			$str = substr_replace($str, '<br />', $l + 1, 0);
+		}
+		return $str;
 	}
 }
 ?>
