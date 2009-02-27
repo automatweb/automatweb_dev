@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.48 2009/02/02 14:28:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.49 2009/02/27 13:14:01 instrumental Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -779,7 +779,7 @@ class persons_webview extends class_base
 			"document" => $section->prop("link_document"),
 		);
 
-		if(is_oid($section->prop("phone_id")))
+		if(is_oid($section->prop("phone_id")) && $this->can("view", $section->prop("phone_id")))
 		{
 			$phone_obj = obj($section->prop("phone_id"));
 		}
