@@ -285,6 +285,16 @@ function load_config ($files = array(), $cache_file = null)
 
 		$cfg = unserialize($cfg);
 
+		// check if cache file is for the same files and in same order as are those requested to be loadad
+		if (isset($cfg["__aw_ini_cache_meta_cached_files"]))
+		{
+			if ($cfg["__aw_ini_cache_meta_cached_files"] !== $files)
+			{
+				$read_from_cache = false;
+				unset($cfg["__aw_ini_cache_meta_cached_files"]);
+			}
+		}
+
 		if (!is_array($cfg))
 		{
 			throw new aw_exception("Configuration cache file corrupt.");
@@ -314,21 +324,51 @@ function load_config ($files = array(), $cache_file = null)
 		// and write to cache if file is specified
 		if (isset($cache_file))
 		{
-			if (is_writable(dirname($cache_file)))
+			if (!is_writable(dirname($cache_file)))
 			{
-				$cfg = serialize($cfg);
-				$bytes = file_put_contents($cache_file, $cfg, LOCK_EX);
-
-				if ($bytes !== strlen($cfg))
+				$success = chmod($cache_file, 0770);
+				if (!$success)
 				{
-					throw new aw_exception("Failed to write configuration file cache.");
+					throw new aw_exception("Mode change failed for cache file directory.");
 				}
-				// Make it rewritable for 'make ini'
-				chmod($cache_file, 0666);
+
+				if (!is_writable(dirname($cache_file)))
+				{
+					chmod($cache_file, 0777);
+				}
+
+				if (!is_writable(dirname($cache_file)))
+				{
+					throw new aw_exception("No permissions for cache file directory.");
+				}
 			}
-			else
+
+			if (file_exists($cache_file) and !is_writable($cache_file))
 			{
-				throw new aw_exception("Cache file not writable.");
+				$success = chmod($cache_file, 0660);
+				if (!$success)
+				{
+					throw new aw_exception("Mode change failed for cache file.");
+				}
+
+				if (!is_writable($cache_file))
+				{
+					chmod($cache_file, 0666);
+				}
+
+				if (!is_writable($cache_file))
+				{
+					throw new aw_exception("No permissions for cache file.");
+				}
+			}
+
+			$cfg["__aw_ini_cache_meta_cached_files"] = $files;
+			$cfg = serialize($cfg);
+			$bytes = file_put_contents($cache_file, $cfg, LOCK_EX);
+
+			if ($bytes !== strlen($cfg))
+			{
+				throw new aw_exception("Failed to write configuration file cache.");
 			}
 		}
 	}
