@@ -1291,17 +1291,21 @@ class bug_tracker extends class_base
 			$end = time();
 		}
 		$bug_comments = new object_list(array(
-			"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
+			"class_id" => array(CL_TASK_ROW),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start, $end),
 			"sort_by" => "objects.createdby, objects.created"
 		));
 
+		$u = get_instance(CL_USER);
+		$person = $u->get_current_person();
+
 		$uid = aw_global_get('uid');
 		if ($arr["request"]["filt_p"])
 		{
 			$p = get_instance(CL_CRM_PERSON);
+			$person = $arr["request"]["filt_p"];
 			$u = $p->has_user(obj($arr["request"]["filt_p"]));
 			if ($u)
 			{
@@ -1327,10 +1331,14 @@ class bug_tracker extends class_base
 			}
 			else
 			{
-				if ($uid == $bug_comment->createdby())
+				if ($bug_comment->prop("impl") && in_array($person, $bug_comment->prop("impl")))
 				{
 					$bugs[$bug_id][$id] = $bug_comment;
 				}
+//				if ($uid == $bug_comment->createdby())
+//				{
+//					$bugs[$bug_id][$id] = $bug_comment;
+//				}
 			}
 		}
 
@@ -4732,6 +4740,7 @@ echo "<div style='font-size: 10px;'>";
 	**/
 	function mail_scanner($arr)
 	{
+die("a");
 		$u = get_instance("users");
 		$u->login(array("uid" => "kix", "password" => "jobu13"));
 		aw_switch_user(array("uid" => "kix"));
