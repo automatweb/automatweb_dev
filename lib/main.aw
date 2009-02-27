@@ -27,7 +27,7 @@ function __autoload($class_name)
 	try
 	{
 		$class_file = class_index::get_file_by_name($class_name);
-//		var_dump($class_file); 
+//		var_dump($class_file);
 		require_once $class_file;
 //;print "require_once";
 	}
@@ -73,7 +73,7 @@ function __autoload($class_name)
 			//!!! take action
 		}
 	}
-$class_name = $orig_class_name;
+	$class_name = $orig_class_name;
 	if (!class_exists($class_name, false) and !interface_exists($class_name, false))
 	{ // class may be moved to another file, force update and try again
 		try
@@ -100,13 +100,11 @@ $class_name = $orig_class_name;
 
 function get_include_contents($filename)
 {
-	if (is_file($filename))
+	if (is_readable($filename))
 	{
 		ob_start();
-		include $filename;
-		$contents = ob_get_contents();
-		ob_end_clean();
-		return $contents;
+		require_once $filename;
+		return ob_get_clean();
 	}
 }
 
