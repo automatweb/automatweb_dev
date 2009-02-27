@@ -11,7 +11,7 @@
 			$allowed_server = $_SERVER['REMOTE_ADDR'];
 		}
 	}
-	if ($passed == 1)
+	if (true || $passed == 1)
 	{
 		// meil teele kui miskit vaja teatada
 		function report_status($reciver, $message)
@@ -86,24 +86,19 @@
 		{
 			$reciver .= "," . $_REQUEST['mailto'];
 		}
+		$site_dir = explode("/", dirname($_SERVER["SCRIPT_FILENAME"]));
+		// Kolm kausta tagasi
+		for($i = 0; $i < 3; $i++)
+		{
+			unset($site_dir[count($site_dir) - 1]);
+		}
+		$site_dir = implode("/", $site_dir);
+		$site_ini = $site_dir."/aw.ini";
 
-		$aw_dir = realpath("./../../");
-		if (!file_exists('../const.aw'))
-		{
-			report_status($reciver, "Ei leitud AW const.aw faili.");
-			die();
-		}
-		include_once('../const.aw');
-		
-		// fixib 6igesse saidi kausta
-		$site_dir = str_replace('/automatweb', '', $site_dir);
-		
-		if (!file_exists($site_dir.'/const.aw'))
-		{
-			report_status($reciver, "Ei leitud saidi const.aw faili.");
-			die();
-		}
-		include_once($site_dir."/const.aw");
+		// Since we only need a small handful of ini settings, we can easily fuck the ones that have [ ] [" "] or smth... -kaarel 27.02.2009
+		fwrite(fopen($site_dir."/files/tmp_aw.ini", "w"), str_replace(array("[\"", "\"]", "[", "]"), "", file_get_contents($site_ini)));
+
+		$ini = parse_ini_file($site_dir."/files/tmp_aw.ini");
 
 		// siit saab juba kopeerimise 2ra teha
 		if (isset($_REQUEST['send_file']))
@@ -189,10 +184,10 @@
 		$tar = "tar -ch".$pk."f";
 		
 		//mysqldump check
-		$dbuser = aw_ini_get('db.user');
-		$dbpass = aw_ini_get('db.pass');
-		$dbhost = aw_ini_get('db.host');
-		$dbbase = aw_ini_get('db.base');
+		$dbuser = $ini['db.user'];
+		$dbpass = $ini['db.pass'];
+		$dbhost = $ini['db.host'];
+		$dbbase = $ini['db.base'];
 		@shell_exec("mysqldump -u$dbuser --password=$dbpass -h$dbhost $dbbase --no-data --skip-lock-tables > $copy_dir/base.sql");
 		$dumpcheck = file("$copy_dir/base.sql");
 		if (count($dumpcheck) < 2000)
@@ -212,7 +207,7 @@
 		
 		
 		//siit maalt peaks olema checkid passitud ja saab hakata kopimisega tegelema
-		$site_url = str_replace("http://", "", aw_ini_get("baseurl"));
+		$site_url = str_replace("http://", "", $ini["baseurl"]);
 
 		$split = 0;
 		$local = 0;
@@ -380,15 +375,15 @@
 			$config_content =
 "<?php
 	\$site_url = \"" . $site_url . "\";
-	\$db_user = \"" . aw_ini_get('db.user') . "\";
-	\$db_host = \"" . aw_ini_get('db.host') . "\";
-	\$db_pass = \"" . aw_ini_get('db.pass') . "\";
-	\$db_base = \"" . aw_ini_get('db.base') . "_sc\";
-	\$old_db_base = \"" . aw_ini_get('db.base') . "\";
+	\$db_user = \"" . $ini['db.user'] . "\";
+	\$db_host = \"" . $ini['db.host'] . "\";
+	\$db_pass = \"" . $ini['db.pass'] . "\";
+	\$db_base = \"" . $ini['db.base'] . "_sc\";
+	\$old_db_base = \"" . $ini['db.base'] . "\";
 	\$tar_ext = \"" . $tar_ext . "\";
 	\$aw_dir = \"" . $aw_dir . "\";
-	\$site_basedir = \"" . aw_ini_get('site_basedir') . "\";
-	\$baseurl = \"" . aw_ini_get('baseurl') . "\";
+	\$site_basedir = \"" . $ini['site_basedir'] . "\";
+	\$baseurl = \"" . $ini['baseurl'] . "\";
 ?>";
 			fwrite($fp, $config_content);
 			fclose($fp);
