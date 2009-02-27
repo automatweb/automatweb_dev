@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.18 2009/02/19 08:39:28 instrumental Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.19 2009/02/27 10:10:32 voldemar Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -784,8 +784,6 @@ die();
 		}
 
 		$act_inst = new id_config();
-		$act = id_config::get_active();
-
 
 		// this little modafocka is here beacause estonian language has freaking umlauts etc..
 		$data = $this->returncertdata($_SERVER["SSL_CLIENT_CERT"]);
@@ -860,12 +858,11 @@ die();
 			$person_obj->set_prop("gender",$arr["gender"]);
 			$person_id = $person_obj->save();
 
-			$o = new object($u_obj->id());
-			$o->connect(array(
+			$u_obj->connect(array(
 				"to" => $person_id,
-				"type" => 2,
+				"type" => "RELTYPE_PERSON"
 			));
-			$o->save();
+			$u_obj->save();
 			$c = get_instance("cache");
 			$c->file_clear_pt("storage_object_data");
 			$c->file_clear_pt("storage_search");

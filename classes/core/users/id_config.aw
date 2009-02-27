@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.8 2008/01/31 13:53:57 kristo Exp $
-// id_config.aw - ID-Kaardi konfiguratsioon 
+// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.9 2009/02/27 10:10:32 voldemar Exp $
+// id_config.aw - ID-Kaardi konfiguratsioon
 /*
 
 @classinfo syslog_type=ST_ID_CONFIG relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
@@ -67,7 +67,7 @@ class id_config extends class_base
 			//-- set_property --//
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -109,7 +109,7 @@ class id_config extends class_base
 
 		$pl = new object_list(array(
 			"class_id" => CL_ID_CONFIG
-		));	
+		));
 		for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
 		{
 			$actcheck = checked($o->flag(OBJ_FLAG_IS_SELECTED));
@@ -186,7 +186,7 @@ class id_config extends class_base
 		}
 
 	}
-	
+
 	/**
 		@attrib params=name all_args=1 name=rem_pid
 	**/
@@ -244,7 +244,7 @@ class id_config extends class_base
 		));
 		$tb->add_cdata($search_butt);
 	}
-	
+
 	/**
 		@attrib api=1 params=pos
 		@param oid required type=oid
@@ -303,12 +303,12 @@ class id_config extends class_base
 		$this->set_safelist($oid, $olist);
 		return true;
 	}
-	
+
 	/**
 		@attrib api=1
 		@comment
 			Finds out the active id-config object. If not present, creates one.
-		@returns 
+		@returns
 			ID-config object.
 
 	**/
@@ -331,12 +331,12 @@ class id_config extends class_base
 			$o->set_class_id(CL_ID_CONFIG);
 			$o->set_name(t("ID-kaardi Konfiguratsioon"));
 			$o->set_parent(DEFAULT_ID_CONFIG_PARENT);
-			$o->save_new();
+			$o->save();
 			$new_group = new object();
 			$new_group->set_class_id(CL_GROUP);
 			$new_group->set_name("ID-Kaardi kasutajad");
 			$new_group->set_parent(aw_ini_get("users.root_folder"));
-			$new_group->save_new();
+			$new_group->save();
 			$new_group->set_prop("priority", DEFAULT_ID_LOGIN_PRIORITY);
 			$new_group->save();
 			$o->connect(array(
@@ -361,6 +361,7 @@ class id_config extends class_base
 			if(is_oid($group) && $group != 0)
 			{
 				$is = true;
+				break;
 			}
 		}
 		if(!$is)
@@ -369,7 +370,7 @@ class id_config extends class_base
 			$new_group->set_class_id(CL_GROUP);
 			$new_group->set_name("ID-Kaardi kasutajad");
 			$new_group->set_parent(aw_ini_get("users.root_folder"));
-			$new_group->save_new();
+			$new_group->save();
 			$new_group->set_prop("priority", DEFAULT_ID_LOGIN_PRIORITY);
 			$new_group->save();
 			$o->connect(array(
