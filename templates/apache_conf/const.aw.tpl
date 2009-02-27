@@ -3,21 +3,13 @@
 $aw_dir = "{VAR:aw_dir}";
 $site_dir = "{VAR:site_dir}";
 $cache_file = $site_dir . "/pagecache/ini.cache";
-$cfg_files = array($site_dir."/aw.ini");
+$cfg_files = array($site_dir . "/aw.ini");
 
-require_once($aw_dir."/automatweb.aw");
+require_once($aw_dir . "/automatweb.aw");
 
 try
 {
 	automatweb::start();
-	// automatweb::$instance->mode(automatweb::MODE_DBG);
-	automatweb::$instance->bc();
-	automatweb::$instance->load_config_files($cfg_files, $cache_file);
-	$request = aw_request::autoload();
-	automatweb::$instance->set_request($request);
-	automatweb::$instance->exec();
-	automatweb::$result->send();
-	automatweb::shutdown();
 }
 catch (Exception $e)
 {
@@ -26,7 +18,7 @@ catch (Exception $e)
 		header("HTTP/1.1 500 Server Error");
 	}
 
-	echo nl2br($e);
+	echo "Server startup error. ";
 
 	try
 	{
@@ -34,8 +26,19 @@ catch (Exception $e)
 	}
 	catch (Exception $se)
 	{
-		echo "<br/><br/>" . nl2br($e);
+		echo "Shutdown error also occurred. ";
 	}
+
+	exit;
 }
+
+// automatweb::$instance->mode(automatweb::MODE_DBG);
+automatweb::$instance->bc();
+automatweb::$instance->load_config_files($cfg_files, $cache_file);
+$request = aw_request::autoload();
+automatweb::$instance->set_request($request);
+automatweb::$instance->exec();
+automatweb::$result->send();
+automatweb::shutdown();
 
 ?>
