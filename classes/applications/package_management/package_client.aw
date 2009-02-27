@@ -412,6 +412,7 @@ class package_client extends class_base
 				'package' => $d["package_name"] ,
 				"package_version" => $d["package_version"],
 				"time" => date("d.m.Y" , $d["installed_date"]),
+				"color" => $d["file_exists"] ? "" : "grey",
 			));
 		}
 	}

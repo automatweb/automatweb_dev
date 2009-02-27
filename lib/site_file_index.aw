@@ -10,7 +10,7 @@ function load_versions()
 
 	if(!table_exists("site_file_index"))
 	{
-		mysql_query('create table '.$table.' (
+		mysql_query('create table '.$this->db_table_name.' (
 			id int not null primary key auto_increment,
 			file_name varchar(255),
 			file_version varchar(31),
@@ -98,7 +98,6 @@ function load_versions_if_not_loaded()
 function get_class_version($class)
 {
 	$block_list = array("aw_request" , "aw_resource");//ueh...ei tea mis teha... enne neid pole saidi ini sisse loetud
-
 	if(in_array($class , $block_list))
 	{
 		return $class;
@@ -156,14 +155,27 @@ function get_class_version($class)
 		if installed file not found, returns original
 **/
 function get_file_version($file)
-{//print $file." - ".aw_ini_get("db.base")."<br>";
+{
+//	print $file." - ".AW_DIR."<br>";
+
 	load_versions_if_not_loaded();
+
 	$beg = "";
+	$add_aw_dir = 0;
+	if(substr_count($file , AW_DIR))
+	{
+		$add_aw_dir = 1;
+		$file = substr($file , strlen(AW_DIR));
+		
+	}
 	if(substr($file , 0 , 1) == "/")
 	{
 		$beg = "/";
 		$file = substr($file , 1);
 	}
+
+//print $file." - ".AW_DIR."<br>";
+
 	$data = null;
 /*	if(isset($GLOBALS['cfg']['versions'][basename($class)]))
 	{
@@ -191,14 +203,25 @@ function get_file_version($file)
 		$ver_file = $fs."_".$data["file_version"].($ext ? ".".$ext : "");
 	}
 
-	if($_GET["DBG"] && $ver_class)
+	if($_GET["DBG"] && $ver_file)
 	{
-		print "file :". $class." , version: "; print $ver_class."<br>";
+		print "file :". $file." , version: "; print $ver_class."<br>";
 	}
 
-	if($ver_file) {
+	if($ver_file)
+	{
+		if($add_aw_dir)
+		{
+			$ver_file = AW_DIR.$ver_file;
+		}
 		return $ver_file;
 	}
+
+	if($add_aw_dir)
+	{
+		$file = AW_DIR.$file;
+	}
+
 	//return $ver_class;
 	return $beg.$file;
 }

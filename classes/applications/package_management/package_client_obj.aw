@@ -540,7 +540,7 @@ arr($sql); die();
 		$inst = $this->instance();
 		$this->db_table_name = "site_file_index";
 		$filt = array();
-		if(isset($arr['old_files']))
+		if(isset($arr['old_files']) && $arr['old_files'])
 		{
 			$filt[] = "used < 1";
 		}
@@ -553,11 +553,12 @@ arr($sql); die();
 			$filt[] = "file_name LIKE '%".$arr['search_file_name']."%'";
 		}
 		$sql = "select * FROM ".$this->db_table_name." WHERE ".join(" AND " , $filt);
-
+//arr($sql);
 		$inst->db_query($sql);
 		$rv = array();
 		while($row = $inst->db_next())
 		{
+			$row["file_exists"] = file_exists(AW_DIR.$row["file_location"]."/".$row["class_name"]."_".$row["file_version"].($row["file_ext"] ? ".".$row["file_ext"] : ""));
 			$rv[] = $row;
 		};
 		return $rv;
