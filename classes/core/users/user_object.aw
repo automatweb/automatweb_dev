@@ -7,12 +7,12 @@ class user_object extends _int_object
 {
 	function prop($k)
 	{
-		if ($k == "password")
+		if ($k === "password")
 		{
 			return "";
 		}
 		$rv = parent::prop($k);
-		if($k == "history_size")
+		if($k === "history_size")
 		{
 			if(!($rv > "-1"))
 			{
@@ -24,7 +24,7 @@ class user_object extends _int_object
 
 	function set_prop($k, $v)
 	{
-		if ($k != "password")
+		if ($k !== "password")
 		{
 			parent::set_prop($k,$v);
 		}
@@ -123,7 +123,7 @@ class user_object extends _int_object
 		@attrib api=1
 
 		@returns
-			oid of the user's default group or null if it not found. 
+			oid of the user's default group or null if it not found.
 	**/
 	function get_default_group()
 	{
@@ -186,7 +186,7 @@ class user_object extends _int_object
 
 	public function is_group_member($user, $group)
 	{
-		$user = is_object($user) ? $user : obj($user);
+		$user = is_object($user) ? $user : (is_oid($user) ? obj($user) : $this);
 		$group = is_object($group) ? array($group->id()) : (array) $group;
 
 		$grps = $user->get_groups_for_user();
