@@ -1,7 +1,9 @@
 <?php
 if (!defined("AW_CONST_INC"))
 {
-	define("AW_CONST_INC", 1);
+
+
+define("AW_CONST_INC", 1);
 // 1:42 PM 8/3/2008 - const.aw now contains only parts of old startup script that are to be moved to new appropriate files or deleted. const.aw file to be removed eventually.
 
 set_magic_quotes_runtime(0);
@@ -20,7 +22,8 @@ function get_time()
 	return ((float)$sec + (float)$micro);
 }
 define ("AW_SHORT_PROCESS", 1);
-Define ("AW_LONG_PROCESS", 2);
+define ("AW_LONG_PROCESS", 2);
+$section = null;
 
 ini_set("memory_limit", "300M");
 if (get_magic_quotes_gpc() && !defined("GPC_HANDLER"))
@@ -59,14 +62,17 @@ if (strlen($PATH_INFO) > 1)
 if (strlen($QUERY_STRING) > 1)
 {
 	$pi .= "?".$QUERY_STRING;
-};
+}
+
 $pi = trim($pi);
+
 if (substr($pi, 0, strlen("/class=image")) == "/class=image")
 {
 	$pi = substr(str_replace("/", "&", str_replace("?", "&", $pi)), 1);
 	parse_str($pi, $_GET);
-extract($_GET);
+	extract($_GET);
 }
+
 if (substr($pi, 0, strlen("/class=file")) == "/class=file")
 {
 	$pi = substr(str_replace("/", "&", str_replace("?", "&", $pi)), 1);
@@ -75,78 +81,81 @@ if (substr($pi, 0, strlen("/class=file")) == "/class=file")
 }
 else
 {
-$_SERVER["REQUEST_URI"] = isset($_SERVER['REQUEST_URI']) ? preg_replace("|\?automatweb=[^&]*|","", $_SERVER["REQUEST_URI"]) : "";
-$pi = preg_replace("|\?automatweb=[^&]*|ims", "", $pi);
-if ($pi)
-{
-	if (($_pos = strpos($pi, "section=")) === false)
+	$_SERVER["REQUEST_URI"] = isset($_SERVER['REQUEST_URI']) ? preg_replace("|\?automatweb=[^&]*|","", $_SERVER["REQUEST_URI"]) : "";
+	$pi = preg_replace("|\?automatweb=[^&]*|ims", "", $pi);
+	if ($pi)
 	{
-		// ok, we need to check if section is followed by = then it is not really the section but
-		// for instance index.aw/set_lang_id=1
-		// we check for that like this:
-		// if there are no / or ? chars before = then we don't prepend
-
-		$qpos = strpos($pi, "?");
-		$slpos = strpos($pi, "/");
-		$eqpos = strpos($pi, "=");
-		$qpos = $qpos ? $qpos : 20000000;
-		$slpos = $slpos ? $slpos : 20000000;
-
-		if (!$eqpos || ($eqpos > $qpos || $slpos > $qpos))
+		if (($_pos = strpos($pi, "section=")) === false)
 		{
-			// if no section is in url, we assume that it is the first part of the url and so prepend section = to it
-			$pi = str_replace("?", "&", "section=".substr($pi, 1));
-		}
-	}
+			// ok, we need to check if section is followed by = then it is not really the section but
+			// for instance index.aw/set_lang_id=1
+			// we check for that like this:
+			// if there are no / or ? chars before = then we don't prepend
 
-	if (($_pos = strpos($pi, "section=")) !== false)
-	{
-		// this here adds support for links like http://bla/index.aw/section=291/lcb=117
-		$t_pi = substr($pi, $_pos+strlen("section="));
-		if (($_eqp = strpos($t_pi, "="))!== false)
-		{
-			$t_pi = substr($t_pi, 0, $_eqp);
-			$_tpos1 = strpos($t_pi, "?");
-			$_tpos2 = strpos($t_pi, "&");
-			if ($_tpos1 !== false || $_tpos2 !== false)
+			$qpos = strpos($pi, "?");
+			$slpos = strpos($pi, "/");
+			$eqpos = strpos($pi, "=");
+			$qpos = $qpos ? $qpos : 20000000;
+			$slpos = $slpos ? $slpos : 20000000;
+
+			if (!$eqpos || ($eqpos > $qpos || $slpos > $qpos))
 			{
-				// if the thing contains ? or & , then section is the part before it
-				if ($_tpos1 === false)
+				// if no section is in url, we assume that it is the first part of the url and so prepend section = to it
+				$pi = str_replace("?", "&", "section=".substr($pi, 1));
+			}
+		}
+
+		if (($_pos = strpos($pi, "section=")) !== false)
+		{
+			// this here adds support for links like http://bla/index.aw/section=291/lcb=117
+			$t_pi = substr($pi, $_pos+strlen("section="));
+			if (($_eqp = strpos($t_pi, "="))!== false)
+			{
+				$t_pi = substr($t_pi, 0, $_eqp);
+				$_tpos1 = strpos($t_pi, "?");
+				$_tpos2 = strpos($t_pi, "&");
+				if ($_tpos1 !== false || $_tpos2 !== false)
 				{
-					$_tpos = $_tpos2;
+					// if the thing contains ? or & , then section is the part before it
+					if ($_tpos1 === false)
+					{
+						$_tpos = $_tpos2;
+					}
+					else
+					if ($_tpos2 === false)
+					{
+						$_tpos = $_tpos1;
+					}
+					else
+					{
+						$_tpos = min($_tpos1, $_tpos2);
+					}
+					$section = substr($t_pi, 0, $_tpos);
 				}
 				else
-				if ($_tpos2 === false)
 				{
-					$_tpos = $_tpos1;
+					// if not, then te section is the part upto the last /
+					$_lslp = strrpos($t_pi, "/");
+					if ($_lslp !== false)
+					{
+						$section = substr($t_pi, 0, $_lslp);
+					}
+					else
+					{
+						$section = $t_pi;
+					}
 				}
-				else
-				{
-					$_tpos = min($_tpos1, $_tpos2);
-				}
-				$section = substr($t_pi, 0, $_tpos);
 			}
 			else
 			{
-				// if not, then te section is the part upto the last /
-				$_lslp = strrpos($t_pi, "/");
-				if ($_lslp !== false)
-				{
-					$section = substr($t_pi, 0, $_lslp);
-				}
-				else
-				{
-					$section = $t_pi;
-				}
+				$section = $t_pi;
 			}
-		}
-		else
-		{
-			$section = $t_pi;
 		}
 	}
 }
-}
+
+$GLOBALS["section"] = $section;
+
 $ext = "aw";  // filename extension
 
 if (empty($LC))
@@ -606,7 +615,7 @@ function load_class_translations($class)
 		return;
 	}
 	$adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"];
-	$trans_fn = $GLOBALS["cfg"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
+	$trans_fn = AW_DIR."lang/trans/{$adm_ui_lc}/aw/".basename($class).AW_FILE_EXT;
 	if (is_readable($trans_fn))
 	{
 		require_once($trans_fn);
@@ -631,14 +640,14 @@ function load_vcl($lib)
 {
 	if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 	{
-		$trans_fn = $GLOBALS["cfg"]["basedir"]."/lang/trans/{$adm_ui_lc}/aw/".basename($lib).".aw";
+		$trans_fn = AW_DIR."lang/trans/{$adm_ui_lc}/aw/".basename($lib).AW_FILE_EXT;
 		if (is_readable($trans_fn))
 		{
 			require_once($trans_fn);
 		}
 	}
 
-	$fn = $GLOBALS["cfg"]["classdir"]."/vcl/{$lib}".AW_FILE_EXT;
+	$fn = AW_DIR."classes/vcl/{$lib}".AW_FILE_EXT;
 	if (is_readable($fn))
 	{
 		include_once($fn);
@@ -792,15 +801,14 @@ function &__get_site_instance()
 	global $__site_instance;
 	if (!is_object($__site_instance))
 	{
-		$fname = "site.".$GLOBALS["cfg"]["ext"];
-		$fname = aw_ini_get("site_basedir")."/public/".$fname;
+		$fname = aw_ini_get("site_basedir")."/public/site".AW_FILE_EXT;
 		if (is_readable($fname))
 		{
 			include($fname);
 		}
 		else
 		{
-			$fname = aw_ini_get("site_basedir")."/htdocs/"."site.".$GLOBALS["cfg"]["ext"];
+			$fname = aw_ini_get("site_basedir")."/htdocs/site".AW_FILE_EXT;
 			if (is_readable($fname))
 			{
 				include($fname);
@@ -908,7 +916,7 @@ function __init_aw_session_track()
 
 $GLOBALS["error_handler_calls"] = 0;
 
-function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
+function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context) // Looks abandoned and used nowhere. To be deprecated?
 {
 	if ($errno == 8 || $errno == 2)
 	{
@@ -1136,5 +1144,7 @@ function check_pagecache_folders()
 		touch($pg."/temp/lmod");
 	}
 }
+
+
 }
 ?>
