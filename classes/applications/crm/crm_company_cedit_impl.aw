@@ -595,6 +595,7 @@ class crm_company_cedit_impl extends core
 	function _get_email_tbl(&$t, $arr)
 	{
 		$org_fixed = 0;
+		$mail_inst = get_instance(CL_ML_MEMBER);
 		$query = $this->parse_url_parse_query($arr["request"]["return_url"]);
 		if($query["class"] == "crm_company" && $this->can("view", $query["id"]))
 		{
@@ -678,6 +679,12 @@ class crm_company_cedit_impl extends core
 						"name" => "cedit_email[".$obj->id()."][conn_id]",
 						"value" => $conn->id(),
 					)),
+					"type" => html::select(array(
+						"caption" => t("T&uuml;&uuml;p"),
+						"name" => "cedit_email[".$obj->id()."][type]",
+						"value" => $obj->prop("contact_type"),
+						"options" => $mail_inst->types,
+					)),
 					"change" => html::href(array(
 						"caption" => t("Muuda"),
 						"url" => $ch_url,
@@ -719,6 +726,7 @@ class crm_company_cedit_impl extends core
 						"caption" => t("Muuda"),
 						"url" => $ch_url,
 					)),
+					"type" => $mail_inst->types[$obj->prop("contact_type")],
 					"rels" => $popup_menu->get_menu(),
 				));
 			}
@@ -737,9 +745,15 @@ class crm_company_cedit_impl extends core
 					"value" => "",
 					"size" => 15
 				)),
+				"type" => html::select(array(
+					"caption" => t("T&uuml;&uuml;p"),
+					"name" => "cedit_email[-1][type]",
+					"options" => $mail_inst->types,
+				)),
 				"change" => ""
 			));
 		}
+		$t->define_field(array("name" => "type" , "caption" => t("T&uuml;&uuml;p")));
 		$t->set_sortable(false);
 	}
 
@@ -866,6 +880,7 @@ class crm_company_cedit_impl extends core
 				$o = obj($id);
 				$o->set_name($data["email"]);
 				$o->set_prop("mail",$data["email"]);
+				$o->set_prop("contact_type" , $data["type"]);
 				$o->conn_id = $data["conn_id"];
 				$o->save();
 			}
@@ -876,6 +891,7 @@ class crm_company_cedit_impl extends core
 				$o->set_parent($arr["obj_inst"]->id());
 				$o->set_class_id(CL_ML_MEMBER);
 				$o->set_name($data["email"]);
+				$o->set_prop("contact_type" , $data["type"]);
 				$has = false;
 				foreach($data as $k => $v)
 				{

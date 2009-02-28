@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.31 2009/02/03 14:21:03 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.32 2009/02/28 18:34:00 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -105,6 +105,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 	@property udef_date2 type=date_select field=meta method=serialize year_from=1930 default=-1
 	@caption Kuup&auml;ev 2
 
+	@property contact_type type=select table=ml_users
+	@caption Aadressi t&uuml;&uuml;p
+
 	@groupinfo udef_fields caption="Muud v&auml;ljad"
 
 	@tableinfo ml_users index=id master_table=objects master_index=oid
@@ -122,8 +125,14 @@ class ml_member extends class_base
 		));
 		lc_load("definition");
 		$this->users = get_instance("users");
+		$this->types = array(
+			"" => "",
+			"0" => t("&Uuml;ldkontakt"),
+			"1" => t("E-mail arvete saatmiseks"),
+			"2" => t("Projektijuhtimise kontakt"),
+		);
 	}
-	/*
+	
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -131,11 +140,11 @@ class ml_member extends class_base
 
 		switch($data["name"])
 		{
-			case "udef_date1":
+			case "contact_type":
+				$data["options"] = $this->types;
 				break;
 		}
-	}*/
-
+	}
 
 	////
 	// email(string) - email addy
@@ -436,5 +445,23 @@ class ml_member extends class_base
 			}
 		}
 	}
+
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		switch($field)
+		{
+			case "contact_type":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int",
+				));
+				return true;
+
+		}
+		return false;
+	}
+
+
 };
 ?>

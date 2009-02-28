@@ -275,6 +275,14 @@
             <default>-1</default>
             <caption>Kuup&amp;amp;auml;ev 2</caption>
       </property>
+      <property>
+            <name>contact_type</name>
+            <table>ml_users</table>
+            <group>udef_fields</group>
+            <type>select</type>
+            <field>contact_type</field>
+            <caption>Aadressi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
       <classinfo>
             <maintainer>markop</maintainer>
             <syslog_type>ST_MAILINGLIST_MEMBER</syslog_type>
