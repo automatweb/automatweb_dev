@@ -325,7 +325,7 @@ class orb extends aw_template
 
 			if (!method_exists($t,$fname))
 			{
-				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
+				$this->raise_error("ERR_ORB_MNOTFOUND",sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
 			};
 			// this is perhaps the single most important place in the code ;)
 			$content = $t->$fname($params);
@@ -359,7 +359,7 @@ class orb extends aw_template
 
 			if (!is_numeric($args["value"]))
 			{
-				$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$args["name"]),true,$this->silent);
+				$this->raise_error("ERR_ORB_NINT",sprintf(E_ORB_NOT_INTEGER,$args["name"]),true,$this->silent);
 			};
 		};
 	}
