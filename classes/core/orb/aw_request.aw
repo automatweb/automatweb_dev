@@ -6,7 +6,6 @@
 class aw_request
 {
 	protected $args = array(); // Request parameters. Associative array of argument name/value pairs. read-only
-	protected $type = ""; // request type. http|...
 	protected $class; // requested class. aw_class.class_name
 	protected $default_class = "admin_if";
 	protected $action; // requested class action. one of aw_class.actions
@@ -30,8 +29,8 @@ class aw_request
 	public static function autoload()
 	{
 		// determine request type and create instance
-		if (!empty($_SERVER["SERVER_PROTOCOL"]) and "http" === strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, 4)))
-		{
+		if (!empty($_SERVER["SERVER_PROTOCOL"]) and substr_count(strtolower($_SERVER["SERVER_PROTOCOL"]), "http") > 0)
+		{ //!!! check if SERVER_PROTOCOL always set and 'http' when http request. A rumoured case that empty when https on some specific server/machine.
 			$request = new aw_http_request(true);
 		}
 		else
@@ -47,18 +46,18 @@ class aw_request
 	@param name required type=string
 		Argument name to get value for.
 	@returns var
-		Request argument value
-	@throws awex_request
-		When argument by $name not found
+		Request argument value or NULL if argument not defined
 	**/
 	public function arg($name)
 	{
-		if (!isset($this->args[$name]))
+		if (isset($this->args[$name]))
 		{
-//			throw new awex_request_na("Argument not available");
+			return $this->args[$name];
 		}
-
-		return $this->args[$name];
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -79,16 +78,6 @@ class aw_request
 	**/
 	public function get_args()
 	{
-                if (!empty($_POST))
-                {
-                        $this->args = $_POST;
-                        $this->method = "POST";
-                }
-                elseif (!empty($_GET))
-                {
-                        $this->args = $_GET;
-                        $this->method = "GET";
-                }
 		return $this->args;
 	}
 
@@ -210,15 +199,8 @@ class aw_request
 		return $this->is_fastcall;
 	}
 
-	/**
-	@attrib api=1 params=pos
-	@returns string
-		Type of current request. http
-	**/
-	public function type()
-	{
-		return $this->type;
-	}
+	public function type() // DEPRECATED
+	{ return get_class($this) === "aw_http_request" ? "http" : "";	}
 
 	/**
 	@attrib api=1 params=pos
@@ -227,10 +209,6 @@ class aw_request
 	**/
 	public function class_name()
 	{
-		if (empty($this->class))
-		{
-			return isset($_POST["class"]) ? $_POST["class"] : $_GET["class"];
-		}
 		return $this->class;
 	}
 
@@ -241,52 +219,17 @@ class aw_request
 	**/
 	public function action()
 	{
-                if (empty($this->action))
-                {
-                        return isset($_POST["action"]) ? $_POST["action"] : $_GET["action"];
-                }
-
 		return $this->action;
 	}
 
 	protected function _autoload()
 	{
-		// load arguments
-		if (!empty($_POST))
-		{
-			$this->args = $_POST;
-			$this->method = "POST";
-			foreach(safe_array($_GET) as $k => $v)
-			{
-				$this->args[$k] = $v;
-				$_POST[$k] = $v;	
-			}
-		}
-		elseif (!empty($_GET))
-		{
-			$this->args = $_GET;
-			$this->method = "GET";
-		}
-		// load uri
-		if (!empty($_SERVER["REQUEST_URI"]))
-		{
-			try
-			{
-				$this->uri = new aw_uri($_SERVER["REQUEST_URI"]);
-			}
-			catch (Exception $e)
-			{
-				$this->uri = new aw_uri();
-			}
-		}
-
 		// parse arguments
 		$this->parse_args();
 	}
 
 	protected function parse_args()
 	{
-		$this->type = "http"; // other types implemented later
 		$this->is_fastcall = !empty($this->args["fastcall"]);
 		// no name validation because requests can be formed and sent to other servers where different classes, methods, etc. defined
 		$this->class = empty($this->args["class"]) ? $this->default_class : $this->args["class"];

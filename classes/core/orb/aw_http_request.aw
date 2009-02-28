@@ -3,6 +3,7 @@
 class aw_http_request extends aw_request
 {
 	protected $uri; // request uri aw_uri object if available, empty aw_uri object if not. read-only
+	protected $method = "GET";
 
 	public function __construct($autoload = false)
 	{
@@ -31,8 +32,17 @@ class aw_http_request extends aw_request
 		// load arguments
 		if (!empty($_POST))
 		{
-			$this->args = $_POST;
 			$this->method = "POST";
+
+			if (!empty($_GET) and count($_GET))
+			{ // _GET overwrites _POST. Must be reviewed and this requirement deprecated and code requiring it rewritten.
+				$this->args = $_GET + $_POST;
+				$_POST = $_GET + $_POST;
+			}
+			else
+			{
+				$this->args = $_POST;
+			}
 		}
 		elseif (!empty($_GET))
 		{
@@ -56,7 +66,6 @@ class aw_http_request extends aw_request
 		// parse special automatweb request variables
 		$AW_GET_VARS = array();
 		$pi = "";
-		$section = "";
 		$PATH_INFO = "";
 		$QUERY_STRING = "";
 		$REQUEST_URI = "";
@@ -103,77 +112,7 @@ class aw_http_request extends aw_request
 				// expand and import PATH_INFO
 				// replace ? and / with & in $pi and output the result to AW_GET_VARS
 				parse_str(str_replace("?","&",str_replace("/","&",$pi)),$AW_GET_VARS);
-				$GLOBALS["fastcall"] = array_key_exists("fastcall", $AW_GET_VARS) ? $AW_GET_VARS["fastcall"] : null;
 			}
-
-			if (($_pos = strpos($pi, "section=")) === false)
-			{
-				// ok, we need to check if section is followed by = then it is not really the section but
-				// for instance index.aw/set_lang_id=1
-				// we check for that like this:
-				// if there are no / or ? chars before = then we don't prepend
-
-				$qpos = strpos($pi, "?");
-				$slpos = strpos($pi, "/");
-				$eqpos = strpos($pi, "=");
-				$qpos = $qpos ? $qpos : 20000000;
-				$slpos = $slpos ? $slpos : 20000000;
-
-				if (!$eqpos || ($eqpos > $qpos || $slpos > $qpos))
-				{
-					// if no section is in url, we assume that it is the first part of the url and so prepend section = to it
-					$pi = str_replace("?", "&", "section=".substr($pi, 1));
-				}
-			}
-
-			if (($_pos = strpos($pi, "section=")) !== false)
-			{
-				// this here adds support for links like http://bla/index.aw/section=291/lcb=117
-				$t_pi = substr($pi, $_pos+strlen("section="));
-				if (($_eqp = strpos($t_pi, "=")) !== false)
-				{
-					$t_pi = substr($t_pi, 0, $_eqp);
-					$_tpos1 = strpos($t_pi, "?");
-					$_tpos2 = strpos($t_pi, "&");
-					if ($_tpos1 !== false || $_tpos2 !== false)
-					{
-						// if the thing contains ? or & , then section is the part before it
-						if ($_tpos1 === false)
-						{
-							$_tpos = $_tpos2;
-						}
-						else
-						if ($_tpos2 === false)
-						{
-							$_tpos = $_tpos1;
-						}
-						else
-						{
-							$_tpos = min($_tpos1, $_tpos2);
-						}
-						$section = substr($t_pi, 0, $_tpos);
-					}
-					else
-					{
-						// if not, then te section is the part upto the last /
-						$_lslp = strrpos($t_pi, "/");
-						if ($_lslp !== false)
-						{
-							$section = substr($t_pi, 0, $_lslp);
-						}
-						else
-						{
-							$section = $t_pi;
-						}
-					}
-				}
-				else
-				{
-					$section = $t_pi;
-				}
-			}
-
-			$AW_GET_VARS["section"] = $section;
 		}
 
 		$this->args = $this->args + $AW_GET_VARS;
