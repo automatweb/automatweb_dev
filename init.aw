@@ -1,7 +1,10 @@
 <?php
-/*
-@classinfo maintainer=voldemar
-*/
+
+/* DEPRECATED FILE */
+// ! UUSI ARENDUSI SIIA POLE M6TET TEHA
+// see on ainult selleks alles veel, et tagasiulatuvat yhilduvust
+// vana startup skriptiga saitide const.aw-dele pakkuda.
+
 if (!defined("AW_DIR"))
 {
 	// script for old site startup
@@ -22,22 +25,9 @@ if (!defined("AW_DIR"))
 
 		try
 		{
-
 			automatweb::start();
 			automatweb::$instance->bc();
 			automatweb::$instance->load_config_files($cfg_files, $cache_file);
-			try
-			{
-				$mode = constant("automatweb::".aw_ini_get("config.mode"));
-				if($mode !== NULL)
-				{
-					automatweb::$instance->mode($mode);
-				}
-			}
-			catch (Exception $e)
-			{
-				automatweb::$instance->mode(automatweb::MODE_DBG);
-			}
 			$request = aw_request::autoload();
 			automatweb::$instance->set_request($request);
 			automatweb::$instance->exec();
@@ -51,7 +41,7 @@ if (!defined("AW_DIR"))
 				header("HTTP/1.1 500 Server Error");
 			}
 
-			echo nl2br($e);
+			echo "Server error. ";
 
 			try
 			{
@@ -59,7 +49,7 @@ if (!defined("AW_DIR"))
 			}
 			catch (Exception $se)
 			{
-				echo "<br/><br/>" . nl2br($e);
+				echo "Shutdown error. ";
 			}
 		}
 
