@@ -1977,6 +1977,10 @@ class crm_bill extends class_base
 		
 		if($_GET["pdf"])
 		{
+			$arr["pdf"] = $_GET["pdf"];
+		}
+		if($arr["pdf"])
+		{
 			$tpl .= "_pdf";
 			$tpl .= "_".$lc;
 			if ($this->read_site_template($tpl.".tpl", true) === false)
@@ -2395,7 +2399,7 @@ class crm_bill extends class_base
 			return $res;
 		}
 
-		if($_GET["pdf"] || $arr["pdf"])
+		if($arr["pdf"])
 		{
 			$conv = get_instance("core/converters/html2pdf");
 			if($conv->can_convert())
@@ -2408,7 +2412,7 @@ class crm_bill extends class_base
 				}
 
 				if($arr["return"])
-				{$res = "<b>Arve sisu</b>";
+				{
 					$res = $conv->convert(array(
 						"source" => $res,
 						"filename" => $pdf_name,
@@ -2568,8 +2572,12 @@ class crm_bill extends class_base
 			$lc = $lo->prop("lang_acceptlang");
 		}
 		
-		
 		if($_GET["pdf"])
+		{
+			$arr["pdf"] = $_GET["pdf"];
+		}
+		
+		if($arr["pdf"])
 		{
 			$tpl .= "_pdf";
 			$tpl .= "_".$lc;
@@ -2753,7 +2761,7 @@ class crm_bill extends class_base
 			{
 
 				if($arr["return"])
-				{$res = "<b>Arve lisa</b>";
+				{//$res = "<b>Arve lisa</b>";
 					$res = $conv->convert(array(
 						"source" => $res,
 						"filename" => $b->name()."_".t("lisa").".pdf",
@@ -3381,11 +3389,8 @@ class crm_bill extends class_base
 //			"onClick" => $onclick,
 		));
 		
-		$onclick = "";
-		$onclick.= "fRet = confirm('".t("Kas oled kindel et tahad arve saata?")."');if(fRet){";
-		$onclick.= "win = window.open('".$this->mk_my_orb("send_bill", array(
-			"id" => $arr["obj_inst"]->id(),), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
-		$onclick.= "}else;";
+		$onclick= "win = window.open('".$this->mk_my_orb("send_bill", array(
+			"id" => $arr["obj_inst"]->id(),), CL_CRM_BILL)."','billprint','width=800,height=600,statusbar=yes');";
 
 		$tb->add_menu_item(array(
 			"parent" => "send_bill",
@@ -3394,11 +3399,8 @@ class crm_bill extends class_base
 			"text" => t("Saada arve pdf")
 		));
 
-		$onclick = "";
-		$onclick.= "fRet = confirm('".t("Kas oled kindel et tahad arvet koos lisaga saata?")."');if(fRet){";
-		$onclick.= "win = window.open('".$this->mk_my_orb("send_bill", array(
-			"id" => $arr["obj_inst"]->id(),"preview_add" => 1), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
-		$onclick.= "}else;";
+		$onclick= "win = window.open('".$this->mk_my_orb("send_bill", array(
+			"id" => $arr["obj_inst"]->id(),"preview_add" => 1), CL_CRM_BILL)."','billprint','width=800,height=600,statusbar=yes');";
 
 		$tb->add_menu_item(array(
 			"parent" => "send_bill",
@@ -3891,13 +3893,112 @@ class crm_bill extends class_base
 	@param id required type=int
 		bill id
 	@param preview_add optional type=int
+	@param preview_add_pdf optional type=int
+	@param preview_pdf optional type=int
 	@returns int
 		bill id
 	**/
 	function send_bill($arr)
 	{
 		$obj = obj($arr["id"]);
-		$obj->send_bill($arr["preview_add"]);
+
+		if($arr["preview_pdf"])
+		{
+			$obj->send_bill($arr["preview_pdf"], $arr["preview_add_pdf"]);
+			die();
+		}
+
+		$attatchments = "";
+
+		$to_o = $obj->make_preview_pdf();
+
+		$attatchments.= html::href(array(
+			"caption" => html::img(array(
+				"url" => aw_ini_get("baseurl")."/automatweb/images/icons/pdf_upload.gif",
+				"border" => 0,
+			)).$to_o->name(),
+			"url" => $to_o->get_url(),
+		));
+
+		$data = array(
+			"preview_pdf" => $to_o->id(),
+			"orb_class" => $_GET["class"]?$_GET["class"]:$_POST["class"],
+			"reforb" => 0,
+			"id" => $obj->id(),
+		);
+
+		if($arr["preview_add"])
+		{
+			$to_o2 = $obj->make_add_pdf();
+			$attatchments.= "<br>".html::href(array(
+				"caption" => html::img(array(
+					"url" => aw_ini_get("baseurl")."/automatweb/images/icons/pdf_upload.gif",
+					"border" => 0,
+				)).$to_o2->name(),
+				"url" => $to_o2->get_url(),
+			));
+			$data["preview_add_pdf"] = $to_o2->id();
+		}
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+
+		$htmlc->add_property(array(
+			"name" => "to",
+			"type" => "text",
+			"value" => $obj->get_mail_targets(),
+			"caption" => t("to:"),
+		));
+
+//arr($obj->get_mail_from_name());
+		$htmlc->add_property(array(
+			"name" => "from",
+			"type" => "text",
+			"value" => $obj->get_mail_from_name()."<".$obj->get_mail_from().">",
+			"caption" => t("from:"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "subject",
+			"type" => "text",
+			"value" => $obj->get_mail_subject(),
+			"caption" => t("Subject"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "body",
+			"type" => "text",
+			"value" => $obj->get_mail_body(),
+			"caption" => t("Text"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "attachments",
+			"type" => "text",
+			"value" => $attatchments,
+			"caption" => t("Attachments"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "sub",
+			"type" => "button",
+			"value" => t("Send!"),
+			"onclick" => "fRet = confirm('".t("Kas oled kindel et tahad arve saata?")."');if(fRet){
+				changeform.submit();
+				}else;",
+			"caption" => t("Send!")
+		));
+
+		$htmlc->finish_output(array(
+			"action" => "send_bill",
+			"method" => "POST",
+			"data" => $data,
+			"submit" => "no"
+		));
+
+		$content = $htmlc->get_result();
+		return $content;
+//		$obj->send_bill($arr["preview_add"]);
 	}
 
 	/** returns bill id

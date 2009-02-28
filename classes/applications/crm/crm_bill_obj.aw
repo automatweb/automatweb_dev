@@ -1261,7 +1261,7 @@ class crm_bill_obj extends _int_object
 		return $o->id();
 	}
 
-	private function get_mail_targets()
+	public function get_mail_targets()
 	{
 		$res = array();
 		
@@ -1281,6 +1281,15 @@ class crm_bill_obj extends _int_object
 			$res[] = $this->prop("bill_mail_to");
 		}
 
+		$res[] = $this->prop("bill_mail_to");
+
+		if(is_oid($this->prop("customer")))
+		{
+			$customer = obj($this->prop("customer"));
+			//$res[]= $customer->get_mail();
+			arr($customer->get_mail());
+		}
+
 		return join(", ", $res);
 	}
 
@@ -1297,7 +1306,7 @@ class crm_bill_obj extends _int_object
 		return join("<br>" , $ret);
 	}
 
-	private function get_mail_from()
+	public function get_mail_from()
 	{
 		$ret = "";
 		if($this->prop("bill_mail_from"))
@@ -1321,7 +1330,7 @@ class crm_bill_obj extends _int_object
 		return $ret;
 	}
 
-	private function get_mail_from_name()
+	public function get_mail_from_name()
 	{
 		$ret = aw_global_get("uid");
 		$u = get_instance(CL_USER);
@@ -1342,10 +1351,12 @@ class crm_bill_obj extends _int_object
 			}
 		}
 
+		
+
 		return $ret;
 	}
 
-	private function get_mail_subject()
+	public function get_mail_subject()
 	{
 		$replace = array(
 			"#bill_no#" => $this->prop("bill_no"),
@@ -1381,7 +1392,7 @@ class crm_bill_obj extends _int_object
 		}
 	}
 
-	private function get_mail_body()
+	public function get_mail_body()
 	{
 		$replace = array(
 			"#bill_no#" => $this->prop("bill_no"),
@@ -1393,7 +1404,7 @@ class crm_bill_obj extends _int_object
 		$content = "";
 		if($this->prop("bill_mail_ct"))
 		{
-			$subject = $this->prop("bill_mail_ct");
+			$content = $this->prop("bill_mail_ct");
 		}
 		elseif($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_ct"))
 		{
@@ -1442,7 +1453,7 @@ class crm_bill_obj extends _int_object
 		));
 	}
 
-	private function make_preview_pdf()
+	public function make_preview_pdf()
 	{
                 $f = get_instance(CL_FILE);
 		$id = $f->create_file_from_string(array(
@@ -1455,7 +1466,7 @@ class crm_bill_obj extends _int_object
 		return obj($id);
 	}
 
-	private function make_add_pdf()
+	public function make_add_pdf()
 	{
                 $f = get_instance(CL_FILE);
 		$id = $f->create_file_from_string(array(
@@ -1470,7 +1481,7 @@ class crm_bill_obj extends _int_object
 	/** sends bill pdf to lots of people
 		@attrib api=1
 	**/
-	public function send_bill($add = null)
+	public function send_bill($preview = null,$add = null)
 	{
 		$addresses = $this->get_mail_targets();//arr($addresses);
 		$subject = $this->get_mail_subject();
@@ -1489,7 +1500,8 @@ class crm_bill_obj extends _int_object
 
 		$mimeregistry = get_instance("core/aw_mime_types");
 
-		$to_o = $this->make_preview_pdf();
+		//$to_o = $this->make_preview_pdf();
+		$to_o = obj($preview);
 		$ret = $awm->fattach(array(
 			"path" => $to_o->prop("file"),
 			"contenttype"=> $mimeregistry->type_for_file($to_o->name()),
@@ -1498,7 +1510,8 @@ class crm_bill_obj extends _int_object
 
 		if($add)
 		{
-			$to_o = $this->make_add_pdf();
+		//	$to_o = $this->make_add_pdf();
+			$to_o = obj($add);
 			$awm->fattach(array(
 				"path" => $to_o->prop("file"),
 				"contenttype"=> $mimeregistry->type_for_file($to_o->name()),
