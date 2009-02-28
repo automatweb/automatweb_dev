@@ -1,5 +1,9 @@
 <?php
 
+/*
+@classinfo maintainer=voldemar
+*/
+
 $__FILE__ = __FILE__;//!!! to check if works with zend encoder (__FILE__)
 $aw_dir = str_replace("\\", "/", dirname($__FILE__)) . "/";
 $aw_dir = str_replace("//", "/", $aw_dir);
@@ -17,7 +21,7 @@ class automatweb
 
 	private $mode; // current mode
 	private $request_loaded = false; // whether request is loaded or only empty initialized
-	private $start_time; // unix micro + timestamp when current aw server instance was started
+	private $start_time; // float unix timestamp + micro when current aw server instance was started
 	private static $instance_data = array(); // aw instance stack
 	private static $current_instance_nr = 0;
 	private static $default_cfg_loaded = false;
@@ -32,9 +36,8 @@ class automatweb
 		if ("start" === $caller)
 		{
 			// initialize object lifetime
-			$this->start_time = microtime();
+			$this->start_time = microtime(true);
 			$this->mode(self::MODE_DEFAULT);
-			if($_GET["uid"] == "marko") $this->mode(self::MODE_DBG);
 		}
 		else
 		{
@@ -42,6 +45,16 @@ class automatweb
 		}
 	}
 
+	/** Shortcut method for running a typical http www request
+	@attrib api=1 params=pos
+	@param cfg_file required type=string
+		Configuration file absolute path. It is expected to be in an automatweb site directory! I.e. a 'pagecache' directory must be found in that same directory.
+	@returns void
+	@comment
+		A common web request execution script. Creates a server instance, autoloads request. Ends php script when done.
+	@errors
+		Displays critical errors in output. If cfg_file not found, or when a fatal server error occurred.
+	**/
 	public static function run_simple_web_request_bc($cfg_file)
 	{
 		if (!is_readable($cfg_file))
@@ -52,22 +65,9 @@ class automatweb
 		try
 		{
 			automatweb::start();
-			automatweb::$instance->bc();
-
-			$cfg_cache_file = dirname($cfg_file) .  "/pagecache/ini.cache";
-
-			automatweb::$instance->load_config_files(array($cfg_file), $cfg_cache_file);
-
-			$request = new aw_request(true);
-			automatweb::$instance->set_request($request);
-			automatweb::$instance->exec();
-			echo automatweb::$result->send();
-			automatweb::shutdown();
 		}
 		catch (Exception $e)
 		{
-			echo nl2br($e);
-
 			try
 			{
 				automatweb::shutdown();
@@ -81,9 +81,17 @@ class automatweb
 				header("HTTP/1.1 500 Server Error");
 			}
 
-			echo "<br /><br />" . nl2br($e);
+			echo "Server Error";
 		}
 
+		automatweb::$instance->bc();
+		$cfg_cache_file = dirname($cfg_file) .  "/pagecache/ini.cache";
+		automatweb::$instance->load_config_files(array($cfg_file), $cfg_cache_file);
+		$request = aw_request::autoload();
+		automatweb::$instance->set_request($request);
+		automatweb::$instance->exec();
+		echo automatweb::$result->send();
+		automatweb::shutdown();
 		exit;
 	}
 
@@ -124,6 +132,7 @@ class automatweb
 		self::$instance = $aw;
 		self::$request = $request;
 		self::$result = $result;
+		tm::request_start();
 	}
 
 	/**
@@ -197,6 +206,14 @@ class automatweb
 		}
 
 		load_config($files, $cache_file);
+
+		// set mode by config
+		$mode = "automatweb::MODE_" . aw_ini_get("config.mode");
+		if (defined($mode))
+		{
+			$mode = constant($mode);
+			automatweb::$instance->mode($mode);
+		}
 	}
 
 	/**
@@ -209,13 +226,13 @@ class automatweb
 	{
 		if (!$this->request_loaded)
 		{ // autoload request
-			$request = new aw_request(true);
+			$request = aw_request::autoload();
 			$this->set_request($request);
 		}
 
 		date_default_timezone_set(aw_ini_get("date_default_tz"));
 
-		if ("http" === self::$request->type())
+		if (is_a(self::$request, "aw_http_request"))
 		{
 			self::$result = new aw_http_response();
 		}
@@ -229,8 +246,7 @@ class automatweb
 			$class = self::$request->class_name();
 			$method = self::$request->action();
 			$o = new $class(); //!!! validate and pass params?
-			$result = $o->$method(); //!!! validate and pass params from request?
-			self::$result->set_data($result);
+			$o->$method(); //!!! validate and pass params from request?
 		}
 	}
 
@@ -260,11 +276,6 @@ class automatweb
 				$GLOBALS["__START"] = microtime(true);
 
 				// parse vars
-				if (isset($_AW_GET_VARS) && is_array($_AW_GET_VARS))
-				{
-					$vars = $vars + $_AW_GET_VARS;
-				}
-
 				$class = self::$request->class_name();
 				$action = self::$request->action();
 
@@ -374,46 +385,11 @@ class automatweb
 	**/
 	public function output_result()
 	{
-		echo $this->result->data();//!!! tmp. vaja m6elda, mida headerite jms. teha.
+		$this->result->send();
 	}
 
-	/**
-	@attrib api=1 params=pos
-	@param value required type=var
-		Value to write to result
-	@param buffer type=boolean default=true
-		Write value to buffer or directly to output. In last case, $value won't be stored.
-	@param append type=boolean default=false
-		Append to current result or replace it. Append is applicable only if result and $value are strings.
-	@returns void
-	@comment
-		Writes $value to buffer or output
-	**/
-	public function set_result($value, $buffer = true, $append = false)
-	{
-		if ($buffer)
-		{
-			if ($append and is_string($value))
-			{
-				if (!isset($this->result))
-				{
-					$this->result = $value;
-				}
-				elseif (is_string($this->result))
-				{
-					$this->result .= $value;
-				}
-			}
-			else
-			{
-				$this->result = $value;
-			}
-		}
-		elseif (is_string($value))
-		{
-			echo $value;//!!! tmp. requesti j2rgi vaja otsustada, mis kujul output on.
-		}
-	}
+	public function set_result($value, $buffer = true, $append = false) // DEPRECATED
+	{ if ($buffer) { if ($append){ $this->result->set_data($value); } else { $this->result->clear_data(); $this->result->set_data($value); } } elseif (is_string($value)) { echo $value; } }
 
 	/**
 	@attrib api=1 params=pos
