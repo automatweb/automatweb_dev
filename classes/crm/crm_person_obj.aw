@@ -808,6 +808,28 @@ class crm_person_obj extends _int_object
 		return "";
 	}
 
+	/** returns e-mail address for bill
+		@attrib api=1
+	**/
+	public function get_bill_mail()
+	{
+		$mails = $this->emails();
+		$ret = null;
+		foreach($mails->arr() as $mail)
+		{
+			if($mail->prop("mail"))
+			{
+				if($mail->prop("contact_type") == 1)
+				{
+					return $mail->prop("mail");
+				}
+				$ret = $mail->prop("mail");
+			}
+		}
+
+		return $ret;
+	}
+
 	/** returns one e-mail address link
 		@attrib api=1
 	**/

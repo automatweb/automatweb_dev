@@ -1286,8 +1286,8 @@ class crm_bill_obj extends _int_object
 		if(is_oid($this->prop("customer")))
 		{
 			$customer = obj($this->prop("customer"));
-			//$res[]= $customer->get_mail();
-			arr($customer->get_mail());
+			//$res[]= $customer->get_bill_mail();
+			arr($customer->get_bill_mail());
 		}
 
 		return join(", ", $res);

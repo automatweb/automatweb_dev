@@ -3911,12 +3911,12 @@ class crm_bill extends class_base
 		$attatchments = "";
 
 		$to_o = $obj->make_preview_pdf();
-
+		$file_data = $to_o->get_file();
 		$attatchments.= html::href(array(
 			"caption" => html::img(array(
 				"url" => aw_ini_get("baseurl")."/automatweb/images/icons/pdf_upload.gif",
 				"border" => 0,
-			)).$to_o->name(),
+			)).$to_o->name()." (".filesize($file_data["properties"]["file"])." B)",
 			"url" => $to_o->get_url(),
 		));
 
@@ -3930,11 +3930,12 @@ class crm_bill extends class_base
 		if($arr["preview_add"])
 		{
 			$to_o2 = $obj->make_add_pdf();
+			$file_data = $to_o2->get_file();
 			$attatchments.= "<br>".html::href(array(
 				"caption" => html::img(array(
 					"url" => aw_ini_get("baseurl")."/automatweb/images/icons/pdf_upload.gif",
 					"border" => 0,
-				)).$to_o2->name(),
+				)).$to_o2->name()." (".filesize($file_data["properties"]["file"])." B)",
 				"url" => $to_o2->get_url(),
 			));
 			$data["preview_add_pdf"] = $to_o2->id();
