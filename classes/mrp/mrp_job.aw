@@ -374,7 +374,7 @@ class mrp_job extends class_base
 				break;
 
 			case "materials_tbl":
-				$this->save_materials($arr);
+				$arr["obj_inst"]->save_materials($arr);
 				break;
 		}
 
@@ -1633,92 +1633,6 @@ class mrp_job extends class_base
 			$unitselect = "-";
 		}
 		return $unitselect;
-	}
-
-	function save_materials($arr)
-	{
-		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
-		if($res)
-		{
-			$conn = $res->connections_to(array(
-				"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
-			));
-			$conn2 = $arr["obj_inst"]->connections_to(array(
-				"from.class_id" => CL_MATERIAL_EXPENSE,
-			));
-			foreach($conn2 as $c)
-			{
-				$o = $c->from();
-				$prod = $o->prop("product");
-				$prods[$prod] = $o->id();
-			}
-			foreach($conn as $c)
-			{
-				$prod = $c->from()->prop("product");
-				if(!$prods[$prod] && $arr["request"]["amount"][$prod])
-				{
-					$o = obj();
-					$o->set_class_id(CL_MATERIAL_EXPENSE);
-					$o->set_parent($arr["obj_inst"]->id());
-					$o->set_name(sprintf(t("%s kulu %s jaoks"), obj($prod)->name(), $arr["obj_inst"]->name()));
-					$o->set_prop("product", $prod);
-					if($arr["request"]["unit"][$prod])
-					{
-						$o->set_prop("unit", $arr["request"]["unit"][$prod]);
-					}
-					$o->set_prop("amount", $arr["request"]["amount"][$prod]);
-					$o->set_prop("job", $arr["obj_inst"]->id());
-					$o->save();
-				}
-				else
-				{
-					if($prods[$prod] && !$arr["request"]["amount"][$prod])
-					{
-						$eo = obj($prods[$prod]);
-						$eo->delete();
-					}
-					elseif($prods[$prod])
-					{
-						$eo = obj($prods[$prod]);
-						$eo->set_prop("unit", $arr["request"]["unit"][$prod]);
-						$eo->set_prop("amount", $arr["request"]["amount"][$prod]);
-						$eo->save();
-					}
-				}
-			}
-			$arr["obj_inst"]->save();
-			$conn = $arr["obj_inst"]->connections_to(array(
-				"from.class_id" => CL_MATERIAL_MOVEMENT_RELATION,
-			));
-			foreach($arr["request"]["unit"] as $prod => $unit)
-			{
-				if(!$arr["request"]["amount"][$prod])
-				{
-					continue;
-				}
-				$data[$prod] = array(
-					"unit" => $unit,
-					"amount" => $arr["request"]["amount"][$prod],
-				);
-			}
-			if(!count($conn))
-			{
-				$o = obj();
-				$o->set_class_id(CL_MATERIAL_MOVEMENT_RELATION);
-				$o->set_parent($arr["obj_inst"]->id());
-				$o->set_name(sprintf(t("Materjali liikumisseos t&ouml;&ouml;ga %s"), $arr["obj_inst"]->name()));
-				$o->set_prop("job", $arr["obj_inst"]->id());
-				$o->save();
-				$o->create_dn($o, $data);
-			}
-			else
-			{
-				foreach($conn as $c)
-				{
-					$c->from()->update_dn_rows($c->from(), $data);
-				}
-			}
-		}
 	}
 
 	function do_db_upgrade($table, $field, $q, $err)
