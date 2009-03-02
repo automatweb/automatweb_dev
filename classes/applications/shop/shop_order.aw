@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.81 2009/02/12 14:52:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.82 2009/03/02 11:07:05 markop Exp $
 // shop_order.aw - Tellimus
 /*
 
@@ -1060,7 +1060,6 @@ class shop_order extends class_base
 						));
 					}
 
-
 					foreach($emails as $c)
 					{
 						$eml = $c->to();
@@ -1166,6 +1165,7 @@ class shop_order extends class_base
 					$uo = obj(aw_global_get("uid_oid"));
 					$_send_to = $uo->prop("email");
 				}
+				$awm->clean();
 
 				$awm->create_message(array(
 					"froma" => $mail_from_addr,
@@ -1183,6 +1183,7 @@ class shop_order extends class_base
 				}
 			}
 		} // if(this->order_center) end
+
 		return $oi->id();
 	}
 
