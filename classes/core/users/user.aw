@@ -625,6 +625,9 @@ class user extends class_base
 
 	function _set_settings_shortcuts_settings_shortcuts($arr)
 	{
+		$o_user = $arr["obj_inst"];
+		$shortcut_parent = $o_user->prop("settings_shortcuts_shortcut_sets");
+	
 		// delete shortcuts
 		if (!empty($arr["request"]["delete"]))
 		{
@@ -653,14 +656,14 @@ class user extends class_base
 			{
 				$ol = new object_list(array(
 					"class_id" => CL_MENU,
-					"parent" => 197,
+					"parent" => $shortcut_parent,
 					"name" => "shortcuts"
 				));
 				if (count($ol->list)===0)
 				{
 					$o = new object(array(
 						"class_id" => CL_MENU,
-						"parent" => 197,
+						"parent" => $shortcut_parent,
 						"name" => "shortcuts"
 					));
 					$o -> save();
@@ -674,11 +677,9 @@ class user extends class_base
 			
 			// save shortcut
 			{
-				$o2 = new object(array(
-					"class_id" => CL_SHORTCUT,
-					"parent" => $shortcuts_dir_id ,
-					"name" => $arr["request"]["new_shortcut"]["name"],
-				));
+				$o2 = new object();
+				$o2 -> set_parent($shortcuts_dir_id);
+				$o2 -> set_name($arr["request"]["new_shortcut"]["name"]);
 				$o2 -> set_class_id(CL_SHORTCUT);
 				$o2 -> set_prop("keycombo", $arr["request"]["new_shortcut"]["keycombo"]);
 				$o2 -> save();

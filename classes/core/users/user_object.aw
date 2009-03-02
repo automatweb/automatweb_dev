@@ -192,6 +192,13 @@ class user_object extends _int_object
 		$grps = $user->get_groups_for_user();
 		return count(array_intersect($group, array_keys($grps))) > 0;
 	}
+
+	function get_user_mail_address()
+	{
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		return $p->get_mail();
+	}
 }
 
 ?>
