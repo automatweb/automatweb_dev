@@ -2179,7 +2179,32 @@ class bug extends class_base
 
 			// replace #675656 with link to bug
 			$comt = preg_replace("/(?<!&)#([0-9]+)/ims", "<a href='http://intranet.automatweb.com/\\1'>#\\1</a>", $comt);
-
+//-------- vastus divi sisse
+			$comt_arr = explode("\n",$comt);
+			$ans_start = null;
+			$ans_end = null;
+			foreach($comt_arr as $key => $val)
+			{
+				if(substr($val , 0 , 4) == "&gt;")
+				{
+					if(!$ans_start)
+					{
+						$ans_start = $key;
+					}
+					$ans_end = $key;
+				}
+				elseif($ans_end)
+				{
+					break;
+				}
+			}
+			if($ans_end)
+			{
+				$comt_arr[$ans_start] = "<div class=bug_reply_txt>".$comt_arr[$ans_start];
+				$comt_arr[$ans_end].=$comt_arr[$ans_end]."</div>";
+				$comt = join ("\n" , $comt_arr);
+			}
+//-------- END vastus divi sisse
 
 //			$comt = $this->parse_commited_msg($comt);
 
