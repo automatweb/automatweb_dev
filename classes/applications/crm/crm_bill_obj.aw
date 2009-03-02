@@ -1261,36 +1261,49 @@ class crm_bill_obj extends _int_object
 		return $o->id();
 	}
 
+
+	public function get_bcc()
+	{
+		$ret = "";
+		if($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_to"))
+		{
+			$ret = $this->crm_settings->prop("bill_mail_to");
+		}
+		return $ret;
+	}
+
 	public function get_mail_targets()
 	{
 		$res = array();
 		
 		if (aw_global_get("uid_oid") != "")
 		{
+			$user_inst = get_instance(CL_USER);
 			$u = obj(aw_global_get("uid_oid"));
-			$res[] = $u->get_user_mail_address();
+			$person = obj($user_inst->get_current_person());
+			$res[$u->get_user_mail_address()] = 
+			$person->name() . " <" . $u->get_user_mail_address() . ">";
 		}
-
+/*
 		if($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_to"))
 		{
-			$res[] = $this->crm_settings->prop("bill_mail_to");
+			$res[$this->crm_settings->prop("bill_mail_to")] = $this->crm_settings->prop("bill_mail_to");
 		}
-
+*/
 		if($this->prop("bill_mail_to"))
 		{
-			$res[] = $this->prop("bill_mail_to");
+			$res[$this->prop("bill_mail_to")] = $this->prop("bill_mail_to");
 		}
-
-		$res[] = $this->prop("bill_mail_to");
 
 		if(is_oid($this->prop("customer")))
 		{
 			$customer = obj($this->prop("customer"));
-			//$res[]= $customer->get_bill_mail();
-			arr($customer->get_bill_mail());
+			$this->get_customer_name() . " <" . $customer->get_bill_mail() . ">";
+			//$res[$customer->get_bill_mail()]= $this->get_customer_name() . " <" . $customer->get_bill_mail() . ">";
+			arr(htmlspecialchars($this->get_customer_name() . " <" . $customer->get_bill_mail() . ">"));
 		}
 
-		return join(", ", $res);
+		return $res;
 	}
 
 	private function get_sender_signature()
@@ -1459,7 +1472,7 @@ class crm_bill_obj extends _int_object
 		$id = $f->create_file_from_string(array(
 			"parent" => $this->id(),
 			"content" => $this->get_pdf(),
-			"name" => t("Arve nr:"). " ".$this->prop("bill_no"),
+			"name" => t("Arve nr:"). " ".$this->prop("bill_no").".pdf",
 			"type" => "application/pdf"
 		));
 
@@ -1472,7 +1485,7 @@ class crm_bill_obj extends _int_object
 		$id = $f->create_file_from_string(array(
 			"parent" => $this->id(),
 			"content" => $this->get_pdf_add(),
-			"name" => t("Arve lisa nr:"). " ".$this->prop("bill_no"),
+			"name" => t("Arve lisa nr:"). " ".$this->prop("bill_no").".pdf",
 			"type" => "application/pdf"
 		));
 		return obj($id);
@@ -1494,8 +1507,9 @@ class crm_bill_obj extends _int_object
 			"froma" => $from,
 			"fromn" => $from_name,
 			"subject" => $subject,
-			"to" => $addresses,
+			"to" => join("," , $addresses),
 			"body" => $body,
+			"bcc" => $this->get_bcc(),
 		));
 
 		$mimeregistry = get_instance("core/aw_mime_types");
@@ -1523,7 +1537,8 @@ class crm_bill_obj extends _int_object
 		));
 		$awm->gen_mail();
 		$ret.= t("saatis arve aadressidele:")."<br>";
-		$ret.= $addresses;
+		$addresses[]= $this->get_bcc();
+		$ret.= join ("<br>" , $addresses);
 		die($ret);
 		return $this->id();
 	}

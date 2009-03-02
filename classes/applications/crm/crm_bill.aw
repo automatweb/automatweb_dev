@@ -3944,18 +3944,31 @@ class crm_bill extends class_base
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
 
+		$targets = $obj->get_mail_targets();
+		foreach($targets as $key => $val)
+		{
+ 			$targets[$key] = htmlspecialchars($val);
+		}
+
 		$htmlc->add_property(array(
 			"name" => "to",
 			"type" => "text",
-			"value" => $obj->get_mail_targets(),
-			"caption" => t("to:"),
+			"value" => join("<br>" ,$targets),
+			"caption" => t("To:"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "bcc",
+			"type" => "text",
+			"value" => htmlspecialchars($obj->get_bcc()),
+			"caption" => t("Bcc:"),
 		));
 
 //arr($obj->get_mail_from_name());
 		$htmlc->add_property(array(
-			"name" => "from",
+			"name" => "From",
 			"type" => "text",
-			"value" => $obj->get_mail_from_name()."<".$obj->get_mail_from().">",
+			"value" => htmlspecialchars($obj->get_mail_from_name()." <".$obj->get_mail_from().">"),
 			"caption" => t("from:"),
 		));
 
