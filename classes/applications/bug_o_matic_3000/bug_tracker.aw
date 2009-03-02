@@ -2150,6 +2150,7 @@ class bug_tracker extends class_base
 //			"callback" => array(&$this, "show_status"),
 //			"callb_pass_row" => 1,
 			"filter" => $statuses,
+			"sorting_field" => "bug_sort",
 		));
 
 		$t->define_field(array(
@@ -2249,6 +2250,7 @@ class bug_tracker extends class_base
 			"sortable" => 1,
 //			"callback" => array(&$this, "show_status"),
 //			"callb_pass_row" => 1,
+			"sorting_field" => "bug_sort",
 			"filter" => $statuses,
 		));
 		$t->define_field(array(
@@ -2531,6 +2533,10 @@ class bug_tracker extends class_base
 
 		$formula = $params["bt"]->prop("combined_priority_formula");
 		$bug_count = 0;
+
+		$bug_sort = array(BUG_FATALERROR => 0,
+				BUG_FEEDBACK => 1 , BUG_INPROGRESS => 2, BUG_OPEN => 3, BUG_DEVORDER => 4, BUG_WONTFIX => 5, BUG_TESTING => 6, BUG_VIEWING => 7, BUG_TESTED => 8, BUG_DONE => 9, BUG_CLOSED => 10, BUG_INCORRECT => 11, BUG_NOTREPEATABLE => 12, BUG_NOTFIXABLE => 13);
+
 		foreach($bug_list as $bug)
 		{
 			if(($s["s_date_time_from"] && $times_by_bug[$bug->id()] < $s["s_date_time_from"]) || ($s["s_date_time_to"] && $times_by_bug[$bug->id()] > $s["s_date_time_to"]))
@@ -2587,6 +2593,7 @@ class bug_tracker extends class_base
 					"caption" => t("Sisene")
 				)).")",
 				"bug_status" => $states[$bug->prop("bug_status")],
+				"bug_sort" => $bug_sort[$bug->prop("bug_status")],
 				"who" => $bug->prop_str("who"),
 				"bug_priority" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_priority"),
 				"bug_severity" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_severity"),
@@ -2608,6 +2615,7 @@ class bug_tracker extends class_base
 		{
 			$t->set_caption(sprintf(t("Leiti %s bugi"), $bug_count));
 		}
+		$t->set_numeric_field("bug_sort");
 		$t->set_numeric_field("sort_priority");
 		$t->set_default_sortby("sort_priority");
 		$t->set_default_sorder("desc");
