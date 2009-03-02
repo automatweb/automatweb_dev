@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.78 2009/02/17 15:20:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.79 2009/03/02 09:05:59 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -200,6 +200,13 @@
 	@property deal_has_tax type=checkbox size=5 table=planner
 	@caption Sisestati koos k&auml;ibemaksuga
 
+
+
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill group=other_settings
+@caption Saata arve
+
+
+
 @default table=objects
 @default field=meta
 @default method=serialize
@@ -257,8 +264,6 @@
 
 @groupinfo other_settings caption="Muud seaded"
 @default group=other_settings
-@property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
-@caption Saata arve
 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
@@ -685,7 +690,7 @@ class crm_call extends task
 				$arr["obj_inst"]->set_status($data["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
 				$arr["obj_inst"]->set_prop("is_done", $data["value"]["is_done"] ? 8 : 0);
 				$arr["obj_inst"]->set_prop("is_personal", $data["value"]["is_personal"] ? 1 : 0);
-				$arr["obj_inst"]->set_prop("send_bill", $data["value"]["send_bill"] ? 1 : 0);
+//				$arr["obj_inst"]->set_prop("send_bill", $data["value"]["send_bill"] ? 1 : 0);
 //				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
 				if($data["value"]["is_work"])
 				{ 

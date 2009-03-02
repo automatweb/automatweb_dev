@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.118 2009/02/17 15:20:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.119 2009/03/02 09:05:59 markop Exp $
 // kohtumine.aw - Kohtumine
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -194,6 +194,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property controller_disp type=text store=no
 @caption Kontrolleri v&auml;ljund
 
+
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill group=other_settings
+@caption Saata arve
+
+
 @default field=meta
 @default method=serialize
 
@@ -242,9 +247,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @default group=other_settings
 
-
-	@property send_bill type=checkbox ch_value=1 table=planner field=send_bill
-	@caption Saata arve
 
 	@property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1
 	@caption Kokkuv&otilde;te
