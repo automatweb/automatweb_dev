@@ -244,7 +244,7 @@ class toolbar extends aw_template
 			if ($_SERVER["PHP_SELF"]=="/automatweb/orb.aw")
 			{
 				$cache = get_instance("cache");
-				$cache->file_set("aw_toolbars",$cache->file_get("aw_toolbars").$cdata );
+				$cache->file_set("aw_toolbars_".aw_global_get("uid"),$cache->file_get("aw_toolbars_".aw_global_get("uid")).$cdata );
 			}
 			else // for site use the old method
 			{

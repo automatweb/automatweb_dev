@@ -290,9 +290,9 @@ $sf->vars(array(
 	"title_action" => $ta,
 	"html_title" => $html_title,
 	"MINIFY_JS_AND_CSS" => minify_js_and_css::parse_admin_header($sf->parse("MINIFY_JS_AND_CSS")),
-	"POPUP_MENUS" => $cache->file_get("aw_toolbars"),
+	"POPUP_MENUS" => $cache->file_get("aw_toolbars_".aw_global_get("uid")),
 ));
-$cache->file_set("aw_toolbars", "");
+$cache->file_set("aw_toolbars_".aw_global_get("uid"), "");
 
 if ($sf->is_template("aw_styles"))
 {
