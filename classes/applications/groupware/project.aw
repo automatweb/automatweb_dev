@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.161 2009/02/17 15:20:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.162 2009/03/02 14:46:21 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -4436,7 +4436,7 @@ class project extends class_base
 			$bug_data["sum"] = number_format(($this->bug_hours[$bug->id()] * $this->hour_prices[$bug->id()]),2);
 			$sum += $this->bug_hours[$bug->id()] * $this->hour_prices[$bug->id()];
 			$hrs += $this->bug_real_hours[$bug->id()];
-			$hrs_cust += $this->bug_hours[$bug->id()];
+			$hrs_cust += $this->bug_hours[$bug->id()];//arr($bug->id()); arr($bug_data);
 			$t->define_data($bug_data);
 		}
 
@@ -4515,7 +4515,7 @@ class project extends class_base
 			}
 			$t->define_data(array(
 				"comment" => html::href(array(
-					"caption" => $capt ? $capt : t("..."),
+					"caption" => $capt ? htmlspecialchars($capt) : t("..."),
 					"url" => html::obj_change_url($comment , array()))),
 				"time_cust" => $this->stats->hours_format($comment->bill_hours()),
 				"time" => $this->stats->hours_format($comment->prop("time_real")),
