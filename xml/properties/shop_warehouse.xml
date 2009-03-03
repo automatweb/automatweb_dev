@@ -420,12 +420,14 @@
       <property>
             <name>arrival_company_folder</name>
             <table>objects</table>
-            <group>arrivals</group>
+            <group>
+                  <num_0>arrivals</num_0>
+                  <num_1>arrivals_by_company</num_1>
+            </group>
             <type>relpicker</type>
             <reltype>RELTYPE_ARRIVAL_COMPANY_FOLDER</reltype>
             <multiple>1</multiple>
             <size>3</size>
-            <parent>arrival_prod_set_lay</parent>
             <captionside>top</captionside>
             <field>meta</field>
             <method>serialize</method>
@@ -522,6 +524,23 @@
             <parent>arrival_prod_split</parent>
             <field>arrival_products_list</field>
             <caption>Toodete nimekiri</caption>
+      </property>
+      <property>
+            <name>arrivals_bc_info</name>
+            <table>objects</table>
+            <group>arrivals_by_company</group>
+            <type>text</type>
+            <field>arrivals_bc_info</field>
+            <caption>Info</caption>
+      </property>
+      <property>
+            <name>arrivals_bc_table</name>
+            <table>objects</table>
+            <group>arrivals_by_company</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>arrivals_bc_table</field>
       </property>
       <property>
             <name>storage_income_toolbar</name>
@@ -2223,6 +2242,10 @@
                   <submit>no</submit>
                   <parent>articles</parent>
             </arrivals>
+            <arrivals_by_company>
+                  <caption>Firmade tarneajad</caption>
+                  <parent>articles</parent>
+            </arrivals_by_company>
             <storage>
                   <caption>Muutused</caption>
             </storage>
@@ -2470,13 +2493,6 @@
                   <group>arrivals</group>
                   <area_caption></area_caption>
             </arrival_prod_left>
-            <arrival_prod_set_lay>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Seaded</area_caption>
-                  <parent>arrival_prod_left</parent>
-                  <group>arrivals</group>
-            </arrival_prod_set_lay>
             <arrival_prod_tree_lay>
                   <type>vbox</type>
                   <closeable>1</closeable>

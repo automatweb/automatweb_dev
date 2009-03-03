@@ -161,14 +161,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 	@property arrivals_tb type=toolbar no_caption=1
 
+	@property arrival_company_folder type=relpicker reltype=RELTYPE_ARRIVAL_COMPANY_FOLDER multiple=1 size=3 captionside=top field=meta method=serialize group=arrivals,arrivals_by_company
+	@caption Organisatsioonide kaust
+
+
 	@layout arrival_prod_split type=hbox width=20%:80%
 
 		@layout arrival_prod_left type=vbox parent=arrival_prod_split
-
-			@layout arrival_prod_set_lay type=vbox closeable=1 area_caption=Seaded parent=arrival_prod_left
-
-				@property arrival_company_folder type=relpicker reltype=RELTYPE_ARRIVAL_COMPANY_FOLDER multiple=1 size=3 parent=arrival_prod_set_lay captionside=top field=meta method=serialize
-				@caption Organisatsioonide kaust
 
 			@layout arrival_prod_tree_lay type=vbox closeable=1 area_caption=Toodete&nbsp;puu parent=arrival_prod_left
 
@@ -198,6 +197,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@property arrival_products_list type=table store=no no_caption=1  parent=arrival_prod_split
 		@caption Toodete nimekiri
+
+@default group=arrivals_by_company
+
+	@property arrivals_bc_info type=text
+	@caption Info
+	
+	@property arrivals_bc_table type=table no_caption=1
+
 
 @default group=storage_income
 
@@ -737,6 +744,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@groupinfo products caption="Artiklid" submit=no parent=articles
 	@groupinfo packets caption="Paketid" submit=no parent=articles
 	@groupinfo arrivals caption="Tarneajad" submit=no parent=articles
+	@groupinfo arrivals_by_company caption="Firmade tarneajad" parent=articles
 
 @groupinfo storage caption="Muutused"
 
@@ -1810,6 +1818,107 @@ class shop_warehouse extends class_base
 			$o->set_prop("date1", date_edit::get_timestamp($data["date1"]));
 			$o->set_prop("date2", date_edit::get_timestamp($data["date2"]));
 			$o->save();
+		}
+	}
+
+	function _get_arrivals_bc_info($arr)
+	{
+		$arr["prop"]["value"] = t("Selle vaate salvestamine kirjutab &uuml;le k&otilde;ik vastavate organisatsioonide tarnetingimused");
+	}
+
+	function _get_arrivals_bc_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "company",
+			"caption" => t("Organisatsioon"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "weekday",
+			"caption" => t("Tarnep&auml;ev"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "days",
+			"caption" => t("Tarneaeg p&auml;evades"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "date1",
+			"caption" => t("Kuup&auml;ev 1"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "date2",
+			"caption" => t("Kuup&auml;ev 2"),
+			"align" => "center",
+		));
+		$c_ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"parent" => $arr["obj_inst"]->prop("arrival_company_folder"),
+			"sort_by" => "name asc",
+		));
+		$weekdays = array(
+			0 => t("--vali--"),
+			1 => t("Esmasp&auml;ev"),
+			2 => t("Teisip&auml;ev"),
+			3 => t("Kolmap&auml;ev"),
+			4 => t("Neljap&auml;ev"),
+			5 => t("Reede"),
+			6 => t("Laup&auml;ev"),
+			7 => t("P&uuml;hap&auml;ev"),
+		);
+		foreach($c_ol->arr() as $oid => $o)
+		{
+			$t->define_data(array(
+				"prod" => $o->name(),
+				"company" => html::obj_change_url($o),
+				"weekday" => html::select(array(
+					"options" => $weekdays,
+					"name" => "arrivals[".$oid."][weekday]",
+					"value" => $o->meta("purveyance_weekday"),
+				)),
+				"days" => html::textbox(array(
+					"size" => 3,
+					"name" => "arrivals[".$oid."][days]",
+					"value" => $o->meta("purveyance_days"),
+				)),
+				"date1" => html::date_select(array(
+					"name" => "arrivals[".$oid."][date1]",
+					"value" => ($d = $o->prop("purveyance_date1"))? $d : -1,
+				)),
+				"date2" => html::date_select(array(
+					"name" => "arrivals[".$oid."][date2]",
+					"value" => ($d = $o->prop("purveyance_date2"))? $d : -1,
+				)),
+			));
+		}
+	}
+
+	function _set_arrivals_bc_table($arr)
+	{
+		foreach($arr["request"]["arrivals"] as $oid => $data)
+		{
+			$co = obj($oid);
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+				"company" => $oid,
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+			$ol->set_prop("weekday", $data["weekday"]);
+			$ol->set_prop("days", $data["days"]);
+			$ol->set_prop("date1", $data["date1"]);
+			$ol->set_prop("date2", $data["date2"]);
+			$ol->save();
+			$co->set_meta("purveyance_weekday", $data["weekday"]);
+			$co->set_meta("purveyance_days", $data["days"]);
+			$co->set_meta("purveyance_date1", $data["date1"]);
+			$co->set_meta("purveyance_date2", $data["date2"]);
+			$co->save();
 		}
 	}
 
@@ -3575,13 +3684,23 @@ class shop_warehouse extends class_base
 	function get_warehouse_configs($arr, $prop = null)
 	{
 		$cfgs = array();
-		foreach($arr["warehouses"] as $wh)
+		if(!is_array($arr["warehouses"]) && $this->config)
 		{
-			$who = obj($wh);
-			$cfgid = $who->prop("conf");
-			if($this->can("view", $cfgid))
+			$cfgs[] = $this->config;
+		}
+		else
+		{
+			foreach($arr["warehouses"] as $wh)
 			{
-				$cfgs[] = obj($cfgid);
+				if($this->can("view", $wh))
+				{
+					$who = obj($wh);
+					$cfgid = $who->prop("conf");
+					if($this->can("view", $cfgid))
+					{
+						$cfgs[] = obj($cfgid);
+					}
+				}
 			}
 		}
 		if($prop)
@@ -3809,7 +3928,10 @@ class shop_warehouse extends class_base
 		{
 			foreach($data["warehouses"] as $wh)
 			{
-				$whs[$wh] = obj($wh);
+				if($this->can("view", $wh))
+				{
+					$whs[$wh] = obj($wh);
+				}
 			}
 		}
 		$npt = "create_new";
