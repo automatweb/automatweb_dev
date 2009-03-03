@@ -624,7 +624,10 @@ class crm_bill_obj extends _int_object
 			{
 				case CL_BUG:
 					$bug_row_ol = $work->get_billable_comments();
-					$bug_rows += $bug_row_ol->ids();
+					foreach($bug_row_ol->ids() as $id)
+					{
+						$bug_rows[$id] = $id;
+					}
 					$tasks[] = $work->id();
 					break;
 				case CL_CRM_MEETING:
@@ -1299,8 +1302,12 @@ class crm_bill_obj extends _int_object
 		{
 			$customer = obj($this->prop("customer"));
 			$this->get_customer_name() . " <" . $customer->get_bill_mail() . ">";
-			//$res[$customer->get_bill_mail()]= $this->get_customer_name() . " <" . $customer->get_bill_mail() . ">";
-			arr(htmlspecialchars($this->get_customer_name() . " <" . $customer->get_bill_mail() . ">"));
+			$res[$customer->get_bill_mail()]= $this->get_customer_name() . " <" . $customer->get_bill_mail() . ">";
+			if(!$customer->get_bill_mail())
+			{
+				arr("<font color=red><b>".t("Kliendil arve aadress m&auml;&auml;ramata!")."</b></font>");
+			}
+			//arr(htmlspecialchars($this->get_customer_name() . " <" . $customer->get_bill_mail() . ">"));
 		}
 
 		return $res;
