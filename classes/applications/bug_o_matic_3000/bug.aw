@@ -445,7 +445,7 @@ class bug extends class_base
 	}
 
 	function get_property($arr)
-	{//arr($arr["prop"]["name"]);
+	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		if($arr["new"] && !empty($this->parent_data[$prop["name"]]))
@@ -462,7 +462,6 @@ class bug extends class_base
 		switch($prop["name"])
 		{
 			case "send_bill":
-				return PROP_IGNORE;
 				if($arr["new"])
 				{
 					$prop["value"] = 1;
@@ -663,10 +662,6 @@ class bug extends class_base
 				else
 				{
 					$co = get_current_company();
-				}
-				if($co->class_id() != CL_CRM_COMPANY)
-				{
-					return;
 				}
 				$co_i = $co->instance();
 				$sects = $co_i->get_all_org_sections($co);
@@ -1229,8 +1224,6 @@ class bug extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "send_bill":
-				return PROP_IGNORE;
 			case "finance_type":
 				if ($arr["new"] && !$arr["prop"]["value"])
 				{
@@ -2197,32 +2190,7 @@ class bug extends class_base
 
 			// replace #675656 with link to bug
 			$comt = preg_replace("/(?<!&)#([0-9]+)/ims", "<a href='http://intranet.automatweb.com/\\1'>#\\1</a>", $comt);
-//-------- vastus divi sisse
-			$comt_arr = explode("\n",$comt);
-			$ans_start = null;
-			$ans_end = null;
-			foreach($comt_arr as $key => $val)
-			{
-				if(substr($val , 0 , 4) == "&gt;")
-				{
-					if(!$ans_start)
-					{
-						$ans_start = $key;
-					}
-					$ans_end = $key;
-				}
-				elseif($ans_end)
-				{
-					break;
-				}
-			}
-			if($ans_end)
-			{
-				$comt_arr[$ans_start] = "<div class=bug_reply_txt>".$comt_arr[$ans_start];
-				$comt_arr[$ans_end].=$comt_arr[$ans_end]."</div>";
-				$comt = join ("\n" , $comt_arr);
-			}
-//-------- END vastus divi sisse
+
 
 //			$comt = $this->parse_commited_msg($comt);
 
@@ -2231,15 +2199,13 @@ class bug extends class_base
 				"com_adder" => $com->createdby(),
 				"com_adder_person" => $p->name(),
 				"com_date" => date("d.m.Y H:i", $com->created()),
-				"com_text" => $comt,
-				"txt_respond" => t("vasta"),
-				"id" => $com->id(),
+				"com_text" => $comt
 			));
 			$com_str .= $this->parse("COMMENT");
 		}
 		if($base_com)
 		{
-			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b> <a class=\"bug_respond\" href=\"JavaScript:void(0)\">".t("vasta")."</a><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("bug_content"))))));
+			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("bug_content"))))));
 		}
 		elseif($o->prop("com"))
 		{
@@ -2254,7 +2220,6 @@ class bug extends class_base
 			"main_text_after" => $so == "asc" ? "" : $main_c,
 			"COMMENT" => $com_str
 		));
-		load_javascript ("applications/bug_o_matic_3000/bug.js", "bottom");
 		return $this->parse();
 	}
 
@@ -2596,6 +2561,9 @@ class bug extends class_base
 				$person = obj($p["from"]);
 			}
 		}
+
+		$creator = obj(get_instance(CL_USER)->get_person_for_uid($arr["obj_inst"]->createdby()));
+
 		if ($person)
 		{
 			$o->set_prop("orderer", array($person->id()=>$person->id()));
@@ -2609,6 +2577,7 @@ class bug extends class_base
 				$sect = $c->prop("from");
 			}
 			$o->set_prop("orderer_unit", $sect);
+			$o->set_prop("monitors", array($creator->id(), get_current_person()->id()));
 		}
 
 		$o->save();
@@ -2640,8 +2609,6 @@ class bug extends class_base
 			));
 		}
 
-		$creator = obj(get_instance(CL_USER)->get_person_for_uid($arr["obj_inst"]->createdby()));
-
 		$devo_url =
 		$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
 		$pt = $po->path();
@@ -2672,7 +2639,9 @@ class bug extends class_base
 				$o->id(),
 			);
 			$mail_contents = str_replace($find, $replace, $mail);
+			$mails[] = $person->prop("email");
 		}
+		$mails[] = $creator->prop("email");
 
 		foreach($mails as $mail)
 		{
