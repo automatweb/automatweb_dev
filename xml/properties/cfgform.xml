@@ -699,6 +699,16 @@
             <default>0</default>
             <caption>Salvestamise kontroll lehelt lahkumisel</caption>
       </property>
+      <property>
+            <name>on_save_settings_remove_word_html</name>
+            <table>objects</table>
+            <group>on_save_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Salvestamisel eemalda Word'i html</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>
@@ -768,6 +778,10 @@
                   <caption>Liidese kuvamine</caption>
                   <parent>settings</parent>
             </view_settings>
+            <on_save_settings>
+                  <caption>Salvestamine</caption>
+                  <parent>settings</parent>
+            </on_save_settings>
             <translate>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </translate>
