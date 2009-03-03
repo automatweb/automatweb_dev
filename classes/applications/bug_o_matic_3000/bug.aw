@@ -378,7 +378,25 @@ class bug extends class_base
 	{
 		$this->cx = get_instance("cfg/cfgutils");
 		$pt = $arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"];
-		if (!$pt)
+		if($pt && $this->can("view", $pt) && obj($pt)->class_id() == CL_DEVELOPMENT_ORDER)
+		{
+			$devo = obj($pt);
+			$els = array("orderer" => "orderer_co", "orderer_unit" => "orderer_unit", "orderer_person" => "orderer", "bug_app" => "bug_app", "bug_type" => "bug_type");
+			foreach($els as $el => $d_el)
+			{
+				if(is_array($val = $devo->prop($d_el)))
+				{
+					foreach($val as $v)
+					{
+						$this->parent_options[$el][$v] = obj($v)->name();
+					}
+				}
+				$this->parent_options[$el][$devo->prop($d_el)] = $devo->prop($d_el.".name");
+				$this->parent_data[$el] = $devo->prop($d_el);
+			}
+			return;
+		}
+		elseif (!$pt || !$this->can("view", $pt) || obj($pt)->class_id() != CL_BUG)
 		{
 			return;
 		}
