@@ -1089,7 +1089,7 @@ default group=org_objects
 			@property sats_stats_search type=submit store=no parent=stats_list_s captionside=top no_caption=1 
 			@caption Otsi
 
-		@layout stats_list_r type=vbox parent=stats_list_box closeable=1
+		@layout stats_list_s type=vbox parent=stats_list_l closeable=1 area_caption=Ajavahemik
 
 			@layout data_r_charts type=hbox parent=stats_list_r width=50%:50% closeable=1 area_caption=Graafikud
 				@layout chart1 parent=data_r_charts type=vbox
@@ -2895,7 +2895,8 @@ class crm_company extends class_base
 				$fn = "_get_".$data["name"];
 				return $docs_impl->$fn($arr);
 
-
+			case 'stats_stats_from':
+			case 'stats_stats_to':
 			case 'docs_s_name':
 			case 'docs_s_comment':
 			case 'docs_s_task':
@@ -3044,6 +3045,7 @@ class crm_company extends class_base
 			case "stats_s_worker_sel":
 			case "stats_s_time_sel":
  			case "stats_stats_tb":
+			case "stats_stats_time_sel":
  			case "stats_tree":
  			case "stats_stats_from":
  			case "stats_stats_to":
@@ -3970,6 +3972,10 @@ class crm_company extends class_base
 	*/
 	function callback_mod_reforb($arr)
 	{
+		if($arr["group"] == "stats_stats")
+		{
+			$arr['st'] = $_GET["st"];
+		}
 		$arr['unit'] = $this->unit;
 		$arr['category'] = $this->category;
 		$arr['cat'] = $this->cat;
@@ -4322,6 +4328,13 @@ class crm_company extends class_base
 			$arr['args']['stats_s_group_by_project'] = ($arr['request']['stats_s_group_by_project']);
 			$arr['args']['stats_s_group_by_task'] = ($arr['request']['stats_s_group_by_task']);
 			$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
+		}
+		if($arr["args"]["group"] == "stats_stats")
+		{
+			$arr['args']['stats_stats_time_sel'] = ($arr['request']['stats_stats_time_sel']);
+			$arr['args']['stats_stats_from'] = ($arr['request']['stats_stats_from']);
+			$arr['args']['stats_stats_to'] = ($arr['request']['stats_stats_to']);
+			$arr['args']['st'] = ($arr['request']['st']);
 		}
 		if($arr["args"]["group"] == "ovrv_email")
 		{

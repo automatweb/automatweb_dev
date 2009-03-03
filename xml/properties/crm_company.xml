@@ -5416,16 +5416,9 @@
                   <type>vbox</type>
                   <parent>stats_list_l</parent>
                   <closeable>1</closeable>
+                  <area_caption>Ajavahemik</area_caption>
                   <group>stats_stats</group>
-                  <area_caption></area_caption>
             </stats_list_s>
-            <stats_list_r>
-                  <type>vbox</type>
-                  <parent>stats_list_box</parent>
-                  <closeable>1</closeable>
-                  <group>stats_stats</group>
-                  <area_caption></area_caption>
-            </stats_list_r>
             <data_r_charts>
                   <type>hbox</type>
                   <parent>stats_list_r</parent>
