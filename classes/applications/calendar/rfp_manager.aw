@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.96 2009/02/26 13:13:22 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.97 2009/03/03 11:07:42 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -997,7 +997,7 @@ class rfp_manager extends class_base
 						"rfp_modifiedby_uid" => $rfp->modifiedby(),
 						"rfp_createdby_name" => $cper->name(),
 						"rfp_modifiedby_name" => $mper->name(),
-						"tables" => $rfp->prop("data_mf_table_form.name"),
+						"tables" => ($this->can("view", $tbl = obj($data["reservation"])->meta("tables"))) ? obj($tbl)->name() : $rfp->prop("data_mf_table_form.name"),
 					));
 
 					$this->vars($rfp_prop_values);
@@ -2279,6 +2279,11 @@ class rfp_manager extends class_base
 					unset($result[$k]);
 					continue;
 				}
+			}
+			if($arr["rfp_catering_type"] && array_search($data["var"], $arr["rfp_catering_type"]) === false)
+			{
+				unset($result[$k]);
+				continue;
 			}
 			if(!$this->can("view", $data["rfp"])) // this is a separate reservation object, came from catering search function. these need to be handled differenctly. here we set the products for them
 			{
