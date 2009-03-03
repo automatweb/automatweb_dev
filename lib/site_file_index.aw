@@ -2,10 +2,16 @@
 
 function load_versions() 
 {
-	$versions = $GLOBALS['cfg']['versions'] = array();
 	$table = "site_file_index";
 
 	$r = mysql_connect(aw_ini_get("db.host"), aw_ini_get("db.user"), aw_ini_get("db.pass"));
+	if(!$r)
+	{
+		return;
+	}
+
+	$versions = $GLOBALS['cfg']['versions'] = array();
+
 	mysql_select_db(aw_ini_get("db.base"), $r);
 
 	if(!table_exists("site_file_index"))
@@ -97,13 +103,19 @@ function load_versions_if_not_loaded()
 **/
 function get_class_version($class)
 {
-	$block_list = array("aw_request" , "aw_resource");//ueh...ei tea mis teha... enne neid pole saidi ini sisse loetud
+/*	$block_list = array("aw_request" , "aw_resource" , "tm");//ueh...ei tea mis teha... enne neid pole saidi ini sisse loetud
 	if(in_array($class , $block_list))
 	{
 		return $class;
 	}
-
+*/
 	load_versions_if_not_loaded();
+
+	if(!isset($GLOBALS['cfg']['versions']))
+	{
+		return $class;
+	}
+
 	$data = null;
 
 	if(isset($GLOBALS['cfg']['versions'][basename($class)]))
