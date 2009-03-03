@@ -766,6 +766,37 @@ class task_object extends _int_object
 		return $projects;
 	}
 
+	/** returns task project ids
+		@attrib api=1
+		@return array
+	**/
+	public function get_project_ids()
+	{
+		$ol = new object_list(array(
+			"class_id" =>  CL_CRM_PARTY,
+			"lang_id" => array(),
+			"participant.class_id" => CL_PROJECT,
+			"site_id" => array(),
+			"task" => $this->id(),
+			"limit" => 1,
+		));
+		$projects = array();
+		foreach($ol->arr() as $party)
+		{
+			$projects[] = $party->prop("project");
+		}
+
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_PROJECT",
+		));
+		foreach($conns as $con)
+		{
+			$projects[] = $con->prop("to");
+		}
+
+		return $projects;
+	}
+
 	/** returns task orderers
 		@attrib api=1
 		@return object list
@@ -781,6 +812,27 @@ class task_object extends _int_object
 			foreach($conns as $con)
 			{
 				$ol->add($con->prop("to"));
+			}
+		}
+
+		return $ol;
+	}
+
+	/** returns task orderer ids
+		@attrib api=1
+		@return array
+	**/
+	public function get_orderer_ids()
+	{
+		$ol = array();
+		if(is_oid($this->id()))
+		{
+			$conns = $this->connections_from(array(
+				"type" => "RELTYPE_CUSTOMER",
+			));
+			foreach($conns as $con)
+			{
+				$ol[] = $con->prop("to");
 			}
 		}
 
