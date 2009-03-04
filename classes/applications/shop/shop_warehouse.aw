@@ -1906,6 +1906,7 @@ class shop_warehouse extends class_base
 			$ol = new object_list(array(
 				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
 				"company" => $oid,
+				"warehouse" => $arr["obj_inst"]->id(),
 				"site_id" => array(),
 				"lang_id" => array(),
 			));
@@ -1914,6 +1915,7 @@ class shop_warehouse extends class_base
 			$ol->set_prop("date1", $data["date1"]);
 			$ol->set_prop("date2", $data["date2"]);
 			$ol->save();
+			$ol->remove_all();
 			$co->set_meta("purveyance_weekday", $data["weekday"]);
 			$co->set_meta("purveyance_days", $data["days"]);
 			$co->set_meta("purveyance_date1", $data["date1"]);
@@ -5607,7 +5609,16 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 				if($this->can("view", $id))
 				{
+					$vars = array(
+						"id" => $id,
+					);
 					$res.='<DIV style="page-break-after:always">';
+					if(file_exists($this->site_template_dir."/show_ordered.tpl"))
+					{
+						$vars["template"] = "show_ordered.tpl";
+						$vars["unsent"] = $_GET["unsent"];
+					}
+					arr($oo->show($vars));
 					$res .= $oo->request_execute(obj($id));
 					$res.='</DIV>';
 				}
