@@ -931,94 +931,105 @@ class relationmgr extends aw_template
 		
 		$tbl->parse_xml_def(aw_ini_get("basedir")."/xml/generic_table.xml");
 		
-		$tbl->define_field(array(
-			"name" => "icon",
-			"caption" => t("&nbsp;"),
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-			"width" => "25",
-		));
-		$tbl->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-			"talign" => "center",
-			"sortable" => 1,
-		));
-		$tbl->define_field(array(
-			"name" => "lang",
-			"caption" => t("Keel"),
-			"talign" => "center",
-			"align" => "center",
-			"sortable" => 1,
-		));
-		$tbl->define_field(array(
-			"name" => "comment",
-			"caption" => t("Muu info"),
-			"talign" => "center",
-			"sortable" => 1,
-		));
-		$tbl->define_field(array(
-			"name" => "alias",
-			"caption" => t("Alias"),
-			"talign" => "center",
-			"width" => 50,
-			"align" => "center",
-			"class" => "celltext",
-		));
-		$tbl->define_field(array(
-			"name" => "link",
-			"caption" => t("Link"),
-			"talign" => "center",
-			"width" => 50,
-			"align" => "center",
-			"class" => "celltext",
-			"nowrap" => "1",
-		));
-		$tbl->define_field(array(
-			"name" => "cache",
-			"caption" => t("Cache"),
-			"talign" => "center",
-			"width" => 50,
-			"align" => "center",
-			"class" => "celltext",
-			"nowrap" => "1",
-		));
-		$tbl->define_field(array(
-			"name" => "modifiedby",
-			"caption" => t("Muutja"),
-			"align" => "center",
-			"talign" => "center",
-			"nowrap" => "1",
-			"sortable" => 1,
-		));
-		$tbl->define_field(array(
-			"name" => "modified",
-			"caption" => t("Muudetud"),
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-			"sortable" => 1,
-			"numeric" => 1,
-			"type" => "time",
-			"format" => "d.m.y / H:i"
-		));
-		$tbl->define_field(array(
-			"name" => "title",
-			"caption" => t("T&uuml;&uuml;p"),
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-			"sortable" => 1,
-		));
-		$tbl->define_field(array(
-			"name" => "reltype",
-			"caption" => t("Seose t&uuml;&uuml;p"),
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-			"filter" => "automatic",
-		));
+		$flds = array(
+			"icon" => array(
+				"name" => "icon",
+				"caption" => t("&nbsp;"),
+				"talign" => "center",
+				"align" => "center",
+				"nowrap" => "1",
+				"width" => "25",
+			),
+			"name" => array(
+				"name" => "name",
+				"caption" => t("Nimi"),
+				"talign" => "center",
+				"sortable" => 1,
+			),
+			"lang" => array(
+				"name" => "lang",
+				"caption" => t("Keel"),
+				"talign" => "center",
+				"align" => "center",
+				"sortable" => 1,
+			),
+			"comment" => array(
+				"name" => "comment",
+				"caption" => t("Muu info"),
+				"talign" => "center",
+				"sortable" => 1,
+			),
+			"alias" => array(
+				"name" => "alias",
+				"caption" => t("Alias"),
+				"talign" => "center",
+				"width" => 50,
+				"align" => "center",
+				"class" => "celltext",
+			),
+			"link" => array(
+				"name" => "link",
+				"caption" => t("Link"),
+				"talign" => "center",
+				"width" => 50,
+				"align" => "center",
+				"class" => "celltext",
+				"nowrap" => "1",
+			),
+			"cache" => array(
+				"name" => "cache",
+				"caption" => t("Cache"),
+				"talign" => "center",
+				"width" => 50,
+				"align" => "center",
+				"class" => "celltext",
+				"nowrap" => "1",
+			),
+			"modifiedby" => array(
+				"name" => "modifiedby",
+				"caption" => t("Muutja"),
+				"align" => "center",
+				"talign" => "center",
+				"nowrap" => "1",
+				"sortable" => 1,
+			),
+			"modified" => array(
+				"name" => "modified",
+				"caption" => t("Muudetud"),
+				"talign" => "center",
+				"align" => "center",
+				"nowrap" => "1",
+				"sortable" => 1,
+				"numeric" => 1,
+				"type" => "time",
+				"format" => "d.m.y / H:i"
+			),
+			"title" => array(
+				"name" => "title",
+				"caption" => t("T&uuml;&uuml;p"),
+				"talign" => "center",
+				"align" => "center",
+				"nowrap" => "1",
+				"sortable" => 1,
+			),
+			"reltype" => array(
+				"name" => "reltype",
+				"caption" => t("Seose t&uuml;&uuml;p"),
+				"talign" => "center",
+				"align" => "center",
+				"nowrap" => "1",
+				"filter" => "automatic",
+			),
+			"location" => array(
+				"name" => "location",
+				"caption" => t("Asukoht"),
+				"align" => "center"
+			)
+		);
+		foreach(aw_ini_get("relationmgr.table_fields") as $fld)
+		{
+			$tbl->define_field($flds[$fld]);
+		}
 		
 		$tbl->define_chooser(array(
 			"name" => "check",
@@ -1069,7 +1080,8 @@ class relationmgr extends aw_template
 				"created" => $target_obj->prop("created"),
 				"modifiedby" => $target_obj->prop("modifiedby"),
 				"modified" => $target_obj->prop("modified"),
-				"comment" => $target_obj->prop("comment")
+				"comment" => $target_obj->prop("comment"),
+				"location" => $target_obj->path_str(array("max_len" => 3, "path_only" => true))
 			);
 			$adat["lang"] = $target_obj->lang();
 			$aclid = $target_obj->prop("class_id");
