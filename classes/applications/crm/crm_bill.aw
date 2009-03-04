@@ -300,6 +300,7 @@ class crm_bill extends class_base
 
 		$this->states = array(
 			0 => t("Koostamisel"),
+			7 => t("Kinnitatud"),
 			1 => t("Saadetud"),
 			2 => t("Makstud"),
 			3 => t("Laekunud"),
