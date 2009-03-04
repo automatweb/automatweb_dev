@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.183 2009/02/25 12:02:10 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.184 2009/03/04 12:36:55 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3330,6 +3330,19 @@ class rfp extends class_base
 							"prod_description" => "-",
 							"prod_prod" => "-",
 						));
+						for($i = 1; $i <= 10; $i++)
+						{
+							if($this->is_template("PROD_USERTA".$i))
+							{
+								$this->vars(array(
+									"prod_userta".$i => "",
+								));
+								$sub = $this->parse("PROD_USERTA".$i);
+								$this->vars(array(
+									"PROD_USERTA".$i => $sub,
+								));
+							}
+						}
 						$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
 					}
 				}
