@@ -692,6 +692,27 @@ class crm_company_obj extends _int_object
 		return $ret;
 	}
 
+	/** returns e-mail addresses for sending bill
+		@attrib api=1
+	**/
+	public function get_bill_mails()
+	{
+		$mails = $this->get_mails(array());
+		$ret = array();
+		foreach($mails->arr() as $mail)
+		{
+			if($mail->prop("mail"))
+			{
+				if($mail->prop("contact_type") == 1)
+				{
+					$ret[]= $mail->prop("mail");
+				}
+//				$ret = $mail->prop("mail");
+			}
+		}
+		return $ret;
+	}
+
 	public function add_mail($address)
 	{
 		$mo = new object();
