@@ -16,7 +16,8 @@ function load_versions()
 
 	if(!table_exists("site_file_index"))
 	{
-		mysql_query('create table '.$this->db_table_name.' (
+		$that = get_instance(CL_FILE);
+		mysql_query('create table '.$that->db_table_name.' (
 			id int not null primary key auto_increment,
 			file_name varchar(255),
 			file_version varchar(31),
