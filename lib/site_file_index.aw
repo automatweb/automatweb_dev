@@ -2,6 +2,10 @@
 
 function load_versions() 
 {
+	if (aw_global_get("no_db_connection"))
+	{
+		return;
+	}
 	$table = "site_file_index";
 
 	$r = mysql_connect(aw_ini_get("db.host"), aw_ini_get("db.user"), aw_ini_get("db.pass"));
@@ -111,7 +115,6 @@ function get_class_version($class)
 	}
 */
 	load_versions_if_not_loaded();
-
 	if(!isset($GLOBALS['cfg']['versions']))
 	{
 		return $class;

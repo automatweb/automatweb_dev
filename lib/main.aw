@@ -29,7 +29,7 @@ function __autoload($class_name)
 		$class_file = class_index::get_file_by_name($class_name);
 //		var_dump($class_file);
 		require_once $class_file;
-//;print "require_once";
+		//;print "require_once";
 	}
 	catch (awex_clidx_double_dfn $e)
 	{

@@ -4,9 +4,10 @@
 // and replaces all include commands in that file with the contents of the file that is included
 $basedir = realpath(".");
 require_once($basedir . "/automatweb.aw");
-
+aw_global_set("no_db_connection", 1);
 automatweb::start();
 automatweb::$instance->bc();
+
 aw_global_set("no_db_connection", 1);
 aw_ini_set("baseurl", "automatweb");
 
