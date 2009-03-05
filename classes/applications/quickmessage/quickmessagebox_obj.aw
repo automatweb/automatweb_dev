@@ -181,11 +181,14 @@ class quickmessagebox_obj extends _int_object
 
 	/**
 	@attrib api=1
+	@param user required type=cl_user
+		User object
 	@returns cl_quickmessagebox object
 		User's messagebox.
 	@errors
 		throws awex_qmsg_no_box if user has no messagebox.
 		throws awex_qmsg_cfg if user has more than one messagebox.
+		throws awex_qmsg_acl if quickmessagebox is defined but current user has no permissions to access it
 	@comment
 		If no messagebox found for user and ini setting quickmessaging.auto_create_box is set to true, creates one.
 	**/
@@ -197,7 +200,20 @@ class quickmessagebox_obj extends _int_object
 			"type" => 4,
 		));
 
-		if (1 === count($c))
+		aw_disable_acl(); // because could be a call when another user is logged in
+		$c_check = $user->connections_to(array(
+			"class" => CL_QUICKMESSAGEBOX,
+			// "type" => "RELTYPE_OWNER",
+			"type" => 4,
+			"from.status" => new obj_predicate_not(object::STAT_DELETED)
+		));
+		aw_restore_acl();
+
+		if (1 === count($c_check) and 0 === count($c))
+		{
+			throw new awex_qmsg_acl("No access permissions for user's quickmessagebox.");
+		}
+		elseif (1 === count($c))
 		{
 			$c = reset($c);
 			$box = $c->from();
@@ -487,6 +503,9 @@ class awex_qmsg_box extends awex_qmsg {}
 
 /* Indicates that user has no quickmessagebox defined */
 class awex_qmsg_no_box extends awex_qmsg_box {}
+
+/* Indicates missing access permissions */
+class awex_qmsg_acl extends awex_qmsg_box {}
 
 /* Configuration errors */
 class awex_qmsg_cfg extends awex_qmsg_box {}
