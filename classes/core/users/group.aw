@@ -1082,7 +1082,7 @@ class group extends class_base
 	**/
 	function get_group_members($g)
 	{
-		$ol = $g->get_goup_members();
+		$ol = $g->get_group_members();
 		return $ol->arr();
 	}
 
