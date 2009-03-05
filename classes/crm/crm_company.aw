@@ -4329,7 +4329,7 @@ class crm_company extends class_base
 			$arr['args']['stats_s_group_by_task'] = ($arr['request']['stats_s_group_by_task']);
 			$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
 		}
-		if($arr["args"]["group"] == "stats_stats")
+		if($arr["args"]["group"] == "stats_stats" || $arr["args"]["group"] == "stats")
 		{
 			$arr['args']['stats_stats_time_sel'] = ($arr['request']['stats_stats_time_sel']);
 			$arr['args']['stats_stats_from'] = ($arr['request']['stats_stats_from']);
