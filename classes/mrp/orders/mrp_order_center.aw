@@ -48,11 +48,19 @@
 
 	@property pr_table type=table store=no no_caption=1
 
+@default group=covers
+
+	@property co_tb type=toolbar store=no no_caption=1
+
+	@property co_table type=table store=no no_caption=1
+
+
 @groupinfo order caption="Tellimused"
 	@groupinfo order_order caption="Tellimused" parent=order submit=no
 
 @groupinfo customer caption="Kliendid" submit=no
 @groupinfo pricelists caption="Hinnakirjad" submit=no
+@groupinfo covers caption="Katted" submit=no
 
 @reltype OWNER value=1 clid=CL_CRM_COMPANY
 @caption Omanik
@@ -62,6 +70,9 @@
 
 @reltype MRP_PRICELIST value=4 clid=CL_MRP_PRICELIST
 @caption Hinnakiri
+
+@reltype MRP_COVER value=5 clid=CL_MRP_ORDER_COVER
+@caption Kate
 
 */
 
@@ -140,44 +151,102 @@ class mrp_order_center extends class_base
 		$t->add_item(0, array(
 			"id" => "stat",	
 			"name" => t("Staatused"),
-			"url" => aw_url_change_var(array("stat" => null, "custmgr" => null))
+			"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => null))
 		));
 		foreach(mrp_order::get_state_list() as $idx => $stat)
 		{
 			$t->add_item("stat", array(
 				"id" => "stat_".$idx,	
 				"name" => $stat,
-				"url" => aw_url_change_var(array("stat" => $idx, "custmgr" => null))
+				"url" => aw_url_change_var(array("stat" => "stat_".$idx, "custmgr" => null, "slr" => null))
 			));
 		}
 
 		$t->add_item(0, array(
 			"id" => "mgr",	
-			"name" => t("Kliendihaldur"),
-			"url" => aw_url_change_var(array("stat" => null, "custmgr" => null))
+			"name" => t("Kliendipoolne kontakt"),
+			"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => null))
 		));
-		foreach($arr["obj_inst"]->get_all_order_managers() as $id => $name)
+		foreach($arr["obj_inst"]->get_all_customer_contacts() as $id => $name)
 		{
 			$t->add_item("mgr", array(
 				"id" => "custmgr_".$id,	
 				"name" => $name,
-				"url" => aw_url_change_var(array("stat" => null, "custmgr" => $id))
+				"url" => aw_url_change_var(array("stat" => null, "custmgr" => $id, "slr" => null))
 			));
+
+			foreach(mrp_order::get_state_list() as $idx => $stat)
+			{
+				$t->add_item("custmgr_".$id, array(
+					"id" => "custmgr_".$id."_stat_".$idx,	
+					"name" => $stat,
+					"url" => aw_url_change_var(array("stat" => "stat_".$idx, "custmgr" => $id, "slr" => null))
+				));
+			}
 		}
 
-		if (!empty($arr["request"]["stat"]))
+
+		$t->add_item(0, array(
+			"id" => "slr",	
+			"name" => t("Teostajapoolne kontakt"),
+			"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => null))
+		));
+		foreach($arr["obj_inst"]->get_all_seller_contacts() as $id => $name)
 		{
-			$t->set_selected_item("stat_".$arr["request"]["stat"]);
+			$t->add_item("slr", array(
+				"id" => "slr_".$id,	
+				"name" => $name,
+				"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => $id))
+			));
+
+			foreach(mrp_order::get_state_list() as $idx => $stat)
+			{
+				$t->add_item("slr_".$id, array(
+					"id" => "slr_".$id."_stat_".$idx,	
+					"name" => $stat,
+					"url" => aw_url_change_var(array("stat" => "stat_".$idx, "custmgr" => null, "slr" => $id))
+				));
+			}
+		}
+
+		$stat = ifset($arr["request"], "stat");
+		$cm = ifset($arr["request"], "custmgr");
+		$slr = ifset($arr["request"], "slr");
+
+		if ($slr && $stat)
+		{
+			$t->set_selected_item("slr_".$slr."_".$stat);
 		}
 		else
-		if (!empty($arr["request"]["custmgr"]))
+		if ($cm && $stat)
 		{
-			$t->set_selected_item("custmgr_".$arr["request"]["custmgr"]);
+			$t->set_selected_item("custmgr_".$cm."_".$stat);
+		}
+		else
+		if ($slr)
+		{
+			$t->set_selected_item("slr_".$slr);
+		}
+		else
+		if ($cm)
+		{
+			$t->set_selected_item("custmgr_".$cm);
+		}
+		else
+		if ($stat)
+		{
+			$t->set_selected_item($stat);
 		}
 	}
 
 	private function _init_order_list_table($t)
 	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
 		$t->define_field(array(
 			"name" => "customer",
 			"caption" => t("Klient"),
@@ -186,7 +255,13 @@ class mrp_order_center extends class_base
 		));
 		$t->define_field(array(
 			"name" => "orderer_person",
-			"caption" => t("Tellija"),
+			"caption" => t("Kliendi kontakt"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "seller_person",
+			"caption" => t("Teostaja kontakt"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -204,12 +279,6 @@ class mrp_order_center extends class_base
 			"numeric" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i"
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-			"align" => "center",
-			"sortable" => 1
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -230,7 +299,7 @@ class mrp_order_center extends class_base
 				"orderer_person" => html::obj_change_url($order->orderer_person),
 				"state" => $states[$order->state],
 				"when" => $order->created,
-				"name" => html::obj_change_url($order->name),
+				"name" => html::obj_change_url($order),
 				"id" => $order->id
 			));
 		}
@@ -244,17 +313,42 @@ class mrp_order_center extends class_base
 			"site_id" => array(),
 			"workspace" => $o->id()
 		);
+		if (!empty($r["stat"]) && !empty($r["custmgr"]))
+		{
+			$filt["orderer_person"] = $r["custmgr"];
+			list(, $tmp) = explode("_", $r["stat"]);
+			$filt["state"] = $tmp;
+			$sl = mrp_order::get_state_list();
+			$t->set_caption(sprintf(t("Tellimused kliendipoolse kontaktiga %s ja staatusega %s"), obj($r["custmgr"])->name, $sl[$filt["state"]]));
+		}
+		else
+		if (!empty($r["stat"]) && !empty($r["slr"]))
+		{
+			$filt["seller_person"] = $r["slr"];
+			list(, $tmp) = explode("_", $r["stat"]);
+			$filt["state"] = $tmp;
+			$sl = mrp_order::get_state_list();
+			$t->set_caption(sprintf(t("Tellimused teostajapoolse kontaktiga %s ja staatusega %s"), obj($r["slr"])->name, $sl[$filt["state"]]));
+		}
+		else
 		if (!empty($r["stat"]))
 		{
-			$filt["state"] = $r["stat"];
+			list(, $tmp) = explode("_", $r["stat"]);
+			$filt["state"] = $tmp;
 			$sl = mrp_order::get_state_list();
 			$t->set_caption(sprintf(t("Tellimused staatusega %s"), $sl[$filt["state"]]));
 		}
 		else
 		if (!empty($r["custmgr"]))
 		{
-			$filt["CL_MRP_ORDER_PRINT.customer.client_manager"] = $r["custmgr"];
-			$t->set_caption(sprintf(t("Tellimused kliendihalduriga %s"), obj($r["custmgr"])->name));
+			$filt["orderer_person"] = $r["custmgr"];
+			$t->set_caption(sprintf(t("Tellimused kliendipoolse kontaktiga %s"), obj($r["custmgr"])->name));
+		}
+		else
+		if (!empty($r["slr"]))
+		{
+			$filt["seller_person"] = $r["slr"];
+			$t->set_caption(sprintf(t("Tellimused teostajapoolse kontaktiga %s"), obj($r["slr"])->name));
 		}
 		else
 		{
@@ -313,6 +407,21 @@ class mrp_order_center extends class_base
 			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_MRP_PRICELIST"))),
 			array("name", "created", "act_from", "act_to"),
 			CL_MRP_PRICELIST
+		);
+	}
+
+	function _get_co_tb($arr)
+	{
+		$arr["prop"]["vcl_inst"]->add_new_button(array(CL_MRP_ORDER_COVER), $arr["obj_inst"]->id(), 5 /* MRP_COVER */);
+		$arr["prop"]["vcl_inst"]->add_delete_button();
+	}
+
+	function _get_co_table($arr)
+	{
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_MRP_COVER"))),
+			array("name", "created"),
+			CL_MRP_ORDER_COVER
 		);
 	}
 }

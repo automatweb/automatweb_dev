@@ -39,6 +39,11 @@ function load_versions()
 
 	$res = mysql_query('select file_name,file_version,class_name,file_location from site_file_index where used="1"');
 
+	if (!$res)
+	{
+		return;
+	}
+	
 	while ($row = mysql_fetch_assoc($res))
 	{
 		$versions[$row['file_location'].'/'.$row['file_name']] = $row;

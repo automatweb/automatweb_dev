@@ -6,10 +6,10 @@
 @default table=aw_mrp_order
 @default group=general
 
-	@property workspace type=relpicker reltype=RELTYPE_WORKSPACE field=aw_workspace
+	@property workspace type=hidden field=aw_workspace
 	@caption T&ouml;&ouml;laud
 
-	@property customer type=relpicker reltype=RELTYPE_CUSTOMER field=aw_customer
+	@property customer type=relpicker reltype=RELTYPE_CUSTOMER field=aw_customer no_edit=1 
 	@caption Klient
 
 	@property orderer_person type=relpicker reltype=RELTYPE_ORDERER_PERSON field=aw_orderer_person
@@ -18,7 +18,10 @@
 	@property seller_person type=relpicker reltype=RELTYPE_SELLER_PERSON field=aw_seller_person
 	@caption Teostajapoolne kontakt
 
-	@property mrp_case type=relpicker reltype=RELTYPE_CASE field=aw_mrp_case
+	@property mrp_case type=hidden field=aw_mrp_case
+	@caption Arendustoode
+
+	@property mrp_case_view type=text store=no
 	@caption Arendustoode
 
 	@property mrp_pricelist type=relpicker reltype=RELTYPE_MRP_PRICELIST field=aw_mrp_pricelist
@@ -65,8 +68,10 @@ class mrp_order extends class_base
 		return array(
 			0 => t("Uus"),
 			1 => t("&Uuml;levaatamisel"),
-			2 => t("Kinnitatud"),
-			3 => t("Saadetud"),
+			2 => t("Koostamisel"),
+			3 => t("Kinnitatud"),
+			4 => t("Saadetud"),
+			5 => t("Tagasi l&uuml;katud"),
 		);
 	}
 
@@ -136,6 +141,96 @@ class mrp_order extends class_base
 					"type" => "int"
 				));
 				return true;
+		}
+	}
+
+	function _get_customer($arr)
+	{	
+		$ol = new object_data_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"seller" => $arr["new"] ? obj($arr["request"]["ws"])->owner_co : $arr["obj_inst"]->workspace()->owner_co,
+			"lang_id" => array(),
+			"site_id" => array()
+		), array(
+			CL_CRM_COMPANY_CUSTOMER_DATA => array("buyer" => "buyer")
+		));
+		$ids = array_values($ol->get_element_from_all("buyer"));
+		if (count($ids))
+		{
+			$ol = new object_list(array(
+				"oid" => $ids,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$arr["prop"]["options"] = $ol->names();
+		}
+	}
+
+	function _get_orderer_person($arr)
+	{
+		if (!($crel = $arr["obj_inst"]->get_customer_relation()))
+		{
+			return PROP_IGNORE;
+		}
+
+		if ($this->can("view", $crel->contact_person))
+		{
+			$arr["prop"]["options"][$crel->contact_person] = $crel->contact_person()->name();
+		}
+		if ($this->can("view", $crel->contact_person2))
+		{
+			$arr["prop"]["options"][$crel->contact_person2] = $crel->contact_person2()->name();
+		}
+		if ($this->can("view", $crel->contact_person3))
+		{
+			$arr["prop"]["options"][$crel->contact_person3] = $crel->contact_person3()->name();
+		}
+	}
+
+	function _get_seller_person($arr)
+	{	
+		if (!($crel = $arr["obj_inst"]->get_customer_relation()))
+		{
+			return PROP_IGNORE;
+		}
+
+		if ($this->can("view", $crel->client_manager))
+		{
+			$arr["prop"]["options"][$crel->client_manager] = $crel->client_manager()->name();
+		}
+	}
+
+	function _get_mrp_pricelist($arr)
+	{
+		$ws = $arr["new"] ? obj($arr["request"]["ws"]) : $arr["obj_inst"]->workspace();
+		$ap = $ws->get_default_pricelist();
+
+		if (!$ap)
+		{
+			return;
+		}
+		$arr["prop"]["options"][$ap->id()] = $ap->name();
+
+		if (!$arr["prop"]["value"])
+		{
+			$arr["prop"]["value"] = $ap->id();
+		}
+	}
+
+	function _get_mrp_case_view($arr)
+	{
+		if (!is_oid($arr["obj_inst"]->id()) || !($case = $arr["obj_inst"]->get_case()))
+		{
+			return PROP_IGNORE;
+		}
+		$arr["prop"]["value"] = html::get_change_url($case->id(), array("return_url" => get_ru()), t("Vaata"));
+	}
+
+	function _get_workspace($arr)
+	{
+		if ($arr["new"])
+		{
+			$arr["prop"]["value"] = $arr["request"]["ws"];
 		}
 	}
 }

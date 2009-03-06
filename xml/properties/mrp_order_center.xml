@@ -94,6 +94,24 @@
             <no_caption>1</no_caption>
             <field>pr_table</field>
       </property>
+      <property>
+            <name>co_tb</name>
+            <table>aw_mrp_order_center</table>
+            <group>covers</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>co_tb</field>
+      </property>
+      <property>
+            <name>co_table</name>
+            <table>aw_mrp_order_center</table>
+            <group>covers</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>co_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_ORDER_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -119,6 +137,10 @@
                   <caption>Hinnakirjad</caption>
                   <submit>no</submit>
             </pricelists>
+            <covers>
+                  <caption>Katted</caption>
+                  <submit>no</submit>
+            </covers>
       </groupinfo>
       <tableinfo>
             <aw_mrp_order_center>
@@ -143,6 +165,11 @@
                   <clid>CL_MRP_PRICELIST</clid>
                   <caption>Hinnakiri</caption>
             </MRP_PRICELIST>
+            <MRP_COVER>
+                  <value>5</value>
+                  <clid>CL_MRP_ORDER_COVER</clid>
+                  <caption>Kate</caption>
+            </MRP_COVER>
       </reltypes>
       <layout>
             <order_split>

@@ -83,6 +83,26 @@ class mrp_pricelist_obj extends _int_object
 			$r->save();
 		}
 	}
+
+	function get_price_for_resource_and_amount($resource, $amount)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_PRICELIST_ROW,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"pricelist" => $this->id(),
+			"resource" => $resource->id(),
+			"cnt_from" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $amount),
+			"cnt_to" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $amount)
+		));
+
+		if (!$ol->count())
+		{
+			return 0;
+		}
+		$row = $ol->begin();
+		return $row->config_price + ($row->item_price * $amount);
+	}
 }
 
 ?>

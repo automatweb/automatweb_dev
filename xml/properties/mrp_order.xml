@@ -4,8 +4,7 @@
             <name>workspace</name>
             <table>aw_mrp_order</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_WORKSPACE</reltype>
+            <type>hidden</type>
             <field>aw_workspace</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;laud</caption>
       </property>
@@ -16,6 +15,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_CUSTOMER</reltype>
             <field>aw_customer</field>
+            <no_edit>1</no_edit>
             <caption>Klient</caption>
       </property>
       <property>
@@ -40,9 +40,17 @@
             <name>mrp_case</name>
             <table>aw_mrp_order</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CASE</reltype>
+            <type>hidden</type>
             <field>aw_mrp_case</field>
+            <caption>Arendustoode</caption>
+      </property>
+      <property>
+            <name>mrp_case_view</name>
+            <table>aw_mrp_order</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>mrp_case_view</field>
             <caption>Arendustoode</caption>
       </property>
       <property>

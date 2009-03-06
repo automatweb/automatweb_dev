@@ -1595,7 +1595,7 @@ class mrp_job extends class_base
 		}
 	}
 
-	function get_materials_unitselect($po, $value = null)
+	function get_materials_unitselect($po, $value = null, $set_job_oid = false)
 	{
 		$units = $po->instance()->get_units($po);
 		foreach($units as $i => $unit)
@@ -1611,8 +1611,16 @@ class mrp_job extends class_base
 		}
 		if(count($units) == 1)
 		{
+			if ($set_job_oid)
+			{
+				$_name = "jobs[$set_job_oid][unit][".$prod."]";
+			}
+			else
+			{
+				$_name = "unit[".$prod."]";
+			}
 			$unitselect = obj(reset($units))->name().html::hidden(array(
-				"name" => "unit[".$prod."]",
+				"name" => $_name,
 				"value" => reset($units),
 			));
 		}
@@ -1621,8 +1629,16 @@ class mrp_job extends class_base
 			$unitselect = "";
 			foreach($unitopts as $unit => $name)
 			{
+				if ($set_job_oid)
+				{
+					$_name = "jobs[$set_job_oid][unit][".$po->id()."]";
+				}
+				else
+				{
+					$_name = "unit[".$po->id()."]";
+				}
 				$unitselect .= html::radiobutton(array(
-					"name" => "unit[".$po->id()."]",
+					"name" => $_name,
 					"value" => $unit,
 					"checked" => $value ? ($value == $unit) : ($unit == $units[0]),
 				)).$name." ";

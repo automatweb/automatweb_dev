@@ -4,8 +4,7 @@
             <name>workspace</name>
             <table>aw_mrp_order</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_WORKSPACE</reltype>
+            <type>hidden</type>
             <field>aw_workspace</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;laud</caption>
       </property>
@@ -16,6 +15,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_CUSTOMER</reltype>
             <field>aw_customer</field>
+            <no_edit>1</no_edit>
             <caption>Klient</caption>
       </property>
       <property>
@@ -40,9 +40,17 @@
             <name>mrp_case</name>
             <table>aw_mrp_order</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CASE</reltype>
+            <type>hidden</type>
             <field>aw_mrp_case</field>
+            <caption>Arendustoode</caption>
+      </property>
+      <property>
+            <name>mrp_case_view</name>
+            <table>aw_mrp_order</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>mrp_case_view</field>
             <caption>Arendustoode</caption>
       </property>
       <property>
@@ -65,7 +73,10 @@
       <property>
             <name>amount</name>
             <table>aw_mrp_order_print</table>
-            <group>general</group>
+            <group>
+                  <num_0>general</num_0>
+                  <num_1>price</num_1>
+            </group>
             <type>textbox</type>
             <size>5</size>
             <field>aw_amount</field>
@@ -78,15 +89,6 @@
             <type>textbox</type>
             <field>aw_format</field>
             <caption>Formaat</caption>
-      </property>
-      <property>
-            <name>tiraazh</name>
-            <table>aw_mrp_order_print</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>5</size>
-            <field>aw_tiraazh</field>
-            <caption>Tiraazh</caption>
       </property>
       <property>
             <name>deadline</name>
@@ -104,6 +106,102 @@
             <field>aw_materials</field>
             <caption>Materjalid</caption>
       </property>
+      <property>
+            <name>workflow_errors</name>
+            <table>aw_mrp_order_print</table>
+            <group>grp_case_workflow</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>workflow_errors</field>
+      </property>
+      <property>
+            <name>resource_tree</name>
+            <table>aw_mrp_order_print</table>
+            <group>grp_case_workflow</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>resource_tree</parent>
+            <field>resource_tree</field>
+      </property>
+      <property>
+            <name>workflow_table</name>
+            <table>aw_mrp_order_print</table>
+            <group>grp_case_workflow</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
+            <field>workflow_table</field>
+      </property>
+      <property>
+            <name>materials_table</name>
+            <table>aw_mrp_order_print</table>
+            <group>grp_case_materials</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>materials_table</field>
+      </property>
+      <property>
+            <name>material_price</name>
+            <table>aw_mrp_order_print</table>
+            <group>price</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>material_price</field>
+            <caption>Materjalide hind</caption>
+      </property>
+      <property>
+            <name>resource_price</name>
+            <table>aw_mrp_order_print</table>
+            <group>price</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>resource_price</field>
+            <caption>Ressursside hind</caption>
+      </property>
+      <property>
+            <name>cover_price</name>
+            <table>aw_mrp_order_print</table>
+            <group>price</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>cover_price</field>
+            <caption>Katete hind</caption>
+      </property>
+      <property>
+            <name>tot_price</name>
+            <table>aw_mrp_order_print</table>
+            <group>price</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>tot_price</field>
+            <caption>Koguhind</caption>
+      </property>
+      <property>
+            <name>final_price</name>
+            <table>aw_mrp_order_print</table>
+            <group>price</group>
+            <type>textbox</type>
+            <size>10</size>
+            <field>aw_final_price</field>
+            <caption>L&amp;amp;otilde;plik hind</caption>
+      </property>
+      <property>
+            <name>preview</name>
+            <table>aw_mrp_order_print</table>
+            <group>preview</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>preview</field>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_ORDER_PRINT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -112,6 +210,21 @@
             <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
+      <groupinfo>
+            <grp_case_workflow>
+                  <caption>Ressursid ja t&amp;amp;ouml;&amp;amp;ouml;voog</caption>
+            </grp_case_workflow>
+            <grp_case_materials>
+                  <caption>Materjalid</caption>
+            </grp_case_materials>
+            <price>
+                  <caption>Hind</caption>
+            </price>
+            <preview>
+                  <caption>Eelvaade</caption>
+                  <no_submit>1</no_submit>
+            </preview>
+      </groupinfo>
       <tableinfo>
             <aw_mrp_order>
                   <master_index>brother_of</master_index>
@@ -158,6 +271,39 @@
                   <clid>CL_MRP_PRICELIST</clid>
                   <caption>ERP Hinnakiri</caption>
             </MRP_PRICELIST>
+            <SEL_COVER>
+                  <value>10</value>
+                  <clid>CL_MRP_ORDER_COVER</clid>
+                  <caption>Kate</caption>
+            </SEL_COVER>
       </reltypes>
+      <layout>
+            <vsplitbox>
+                  <type>hbox</type>
+                  <width>25%:75%</width>
+                  <group>grp_case_workflow</group>
+                  <area_caption></area_caption>
+            </vsplitbox>
+            <left_pane>
+                  <type>vbox</type>
+                  <parent>vsplitbox</parent>
+                  <group>grp_case_workflow</group>
+                  <area_caption></area_caption>
+            </left_pane>
+            <general_info>
+                  <type>vbox</type>
+                  <parent>left_pane</parent>
+                  <area_caption>Projekti&amp;amp;nbsp;&amp;amp;uuml;ldandmed</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_case_workflow</group>
+            </general_info>
+            <resource_tree>
+                  <type>vbox</type>
+                  <parent>left_pane</parent>
+                  <area_caption>Ressursid&amp;amp;nbsp;kategooriate&amp;amp;nbsp;kaupa</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_case_workflow</group>
+            </resource_tree>
+      </layout>
 </properties>
 

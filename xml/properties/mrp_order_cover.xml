@@ -1,0 +1,46 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>cover_amt</name>
+            <table>aw_mrp_order_cover</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>10</size>
+            <field>aw_cover_amt</field>
+            <caption>Katte summa</caption>
+      </property>
+      <property>
+            <name>cover_tot_price_pct</name>
+            <table>aw_mrp_order_cover</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>10</size>
+            <field>aw_cover_tot_price_pct</field>
+            <caption>Katte protsent hinnalt</caption>
+      </property>
+      <property>
+            <name>cover_amt_piece</name>
+            <table>aw_mrp_order_cover</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>10</size>
+            <field>aw_cover_amt_piece</field>
+            <caption>Kate t&amp;amp;uuml;kilt</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_MRP_ORDER_COVER</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+            <maintainer>kristo</maintainer>
+      </classinfo>
+      <tableinfo>
+            <aw_mrp_order_cover>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_mrp_order_cover>
+      </tableinfo>
+</properties>
+

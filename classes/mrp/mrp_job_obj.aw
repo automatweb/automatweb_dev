@@ -50,6 +50,11 @@ class mrp_job_obj extends _int_object
 		return $v ? (int)$v : 0;
 	}
 
+	function get_resource()
+	{
+		return $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+	}
+
 	function save_materials($arr)
 	{
 		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
@@ -67,6 +72,7 @@ class mrp_job_obj extends _int_object
 				$prod = $o->prop("product");
 				$prods[$prod] = $o->id();
 			}
+
 			foreach($conn as $c)
 			{
 				$prod = $c->from()->prop("product");
@@ -134,6 +140,22 @@ class mrp_job_obj extends _int_object
 				}
 			}
 		}
+	}
+
+	public function get_material_expense_list()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MATERIAL_EXPENSE,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"job" => $this->id()
+		));
+		$rv = array();
+		foreach($ol->arr() as $entry)
+		{
+			$rv[$entry->prop("product")] = $entry;
+		}
+		return $rv;
 	}
 }
 

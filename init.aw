@@ -36,6 +36,7 @@ if (!defined("AW_DIR"))
 		}
 		catch (Exception $e)
 		{
+			die(dbg::dump($e));
 			if (!headers_sent())
 			{
 				header("HTTP/1.1 500 Server Error");
