@@ -308,9 +308,14 @@ class aw_template extends core
 	function read_template($name,$silent = 0)
 	{
 		$this->template_filename = $this->template_dir."/".$name;
+
 		if (!file_exists($this->template_filename))
 		{
 			$this->template_filename = $this->adm_template_dir . "/" . $name;
+			if(function_exists("get_file_version"))
+			{
+				$this->template_filename = get_file_version($this->template_filename);
+			}
 		};
 
 		// try to load a template from aw directory then
@@ -403,6 +408,10 @@ class aw_template extends core
 	{
 		$retval = true;
 		$this->template_filename = $this->adm_template_dir."/".$name;
+		if(function_exists("get_file_version"))
+		{
+			$this->template_filename = get_file_version($this->template_filename);
+		}
 		if (file_exists($this->template_filename))
 		{
 			$this->_record_template_load($this->template_filename);
@@ -504,6 +513,10 @@ class aw_template extends core
 		else
 		{
 			$this->template_filename = $this->adm_template_dir."/".$name;
+			if(function_exists("get_file_version"))
+			{
+				$this->template_filename = get_file_version($this->template_filename);
+			}
 			if (file_exists($this->template_filename))
 			{
 				$this->_record_template_load($this->template_filename);

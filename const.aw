@@ -41,6 +41,7 @@ if (get_magic_quotes_gpc() && !defined("GPC_HANDLER"))
 }
 
 $pi = "";
+
 $PATH_INFO = isset($_SERVER["PATH_INFO"]) ? $_SERVER["PATH_INFO"] : null;
 $QUERY_STRING = isset($_SERVER["QUERY_STRING"]) ? $_SERVER["QUERY_STRING"] : null;
 $REQUEST_URI = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : null;
@@ -162,6 +163,7 @@ if (empty($LC))
 {
 	$LC="et";
 }
+
 // stat function fields
 define("FILE_SIZE",7);
 define("FILE_MODIFIED",9);
@@ -433,7 +435,14 @@ function classload($args)
 	while(list(,$lib) = each($arg_list))
 	{
 		// let's not allow including ../../../etc/passwd :)
-		$lib = $olib = str_replace(".","", $lib);
+		$default_lib = $lib = $olib = str_replace(".","", $lib);
+
+		//klassile pakihalduse teemalise versiooni
+		//$lib muutuja on paketihalduse versiooni nimega, $default_lib ilma - default v22rtuseks
+		if(function_exists("get_class_version"))
+		{
+			$lib = get_class_version($lib);
+		}
 
 		try
 		{
@@ -462,6 +471,14 @@ function classload($args)
 				if (is_readable($trans_fn))
 				{
 					require_once($trans_fn);
+				}
+				else
+				{
+					$trans_fn = $GLOBALS["cfg"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($default_lib);
+					if (is_readable($trans_fn))
+					{
+						require_once($trans_fn);
+					}
 				}
 			}
 		}
@@ -551,13 +568,24 @@ function get_instance($class, $args = array(), $errors = true)
 		$classdir = aw_ini_get("classdir");
 	}
 
-	if (!file_exists($classdir."/".str_replace(".","", $class).AW_FILE_EXT))
+	$replaced = str_replace(".","", $class);
+	//klassile pakihalduse teemalise versiooni
+
+//echo "dir = $classdir class = $class , lib = $lib <br>";
+
+	if (!file_exists($classdir."/".$replaced.AW_FILE_EXT))
 	{
 		__autoload(basename($class));
 	}
 
-	$_fn = $classdir."/".str_replace(".","", $class).AW_FILE_EXT;
-	if (is_readable($_fn))
+	if(function_exists("get_class_version"))
+	{
+		$replaced = get_class_version($replaced);
+	}
+
+	$_fn = $classdir."/".$replaced.AW_FILE_EXT;
+
+	if (is_readable($_fn) && !class_exists($lib))
 	{
 		require_once($_fn);
 	}
@@ -566,6 +594,7 @@ function get_instance($class, $args = array(), $errors = true)
 	if (isset($GLOBALS["cfg"]["user_interface"]["default_language"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 	{
 		$trans_fn = $GLOBALS["cfg"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).AW_FILE_EXT;
+
 		if (is_readable($trans_fn))
 		{
 			require_once($trans_fn);

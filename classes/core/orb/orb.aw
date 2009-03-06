@@ -367,8 +367,13 @@ class orb extends aw_template
 	function load_xml_orb_def($class)
 	{
 		$fc = get_instance("cache");
+		$fname = "/xml/orb/$class.xml";
+		if(function_exists("get_file_version") && is_file(AW_DIR .($fqfn_version = get_file_version($fname))))
+		{
+			$fname = $fqfn_version;
+		}
 		$fc->get_cached_file(array(
-			"fname" => "/xml/orb/$class.xml",
+			"fname" => $fname,
 			"unserializer" => array(&$this,"load_xml_orb_def_file"),
 			"loader" => array(&$this,"load_serialized_orb_def"),
 		));

@@ -13,8 +13,8 @@ class cfgutils extends aw_template
 	function cfgutils($args = array())
 	{
 		$this->init("");
-		$this->fbasedir = AW_DIR . $this->fbasedir;
-		$this->f_site_basedir = AW_DIR . $this->f_site_basedir;
+		$this->fbasedir = $this->fbasedir;
+		$this->f_site_basedir = $this->f_site_basedir;
 		$this->cache = get_instance("cache");
 	}
 
@@ -92,8 +92,8 @@ class cfgutils extends aw_template
 		if ($fname)
 		{
 			// that check is a bit of stupid, OTOH it needs to be fast
-			$retval = file_exists($this->fbasedir . $fname . '.xml');
-			$retval |= file_exists($this->f_site_basedir . $fname . '.xml');
+			$retval = file_exists(AW_DIR .$this->fbasedir . $fname . '.xml');
+			$retval |= file_exists(AW_DIR .$this->f_site_basedir . $fname . '.xml');
 		}
 		return $retval;
 	}
@@ -179,9 +179,14 @@ class cfgutils extends aw_template
 		if (empty($args['source']))
 		{
 			$fqfn = $this->fbasedir . $file . ".xml";
+			if(function_exists("get_file_version") && is_file(AW_DIR .($fqfn_version = get_file_version($fqfn))))
+			{
+				$fqfn = $fqfn_version;
+			}
+			$fqfn = AW_DIR .$fqfn;
 			if (!is_file($fqfn))
 			{
-				$fqfn = $this->f_site_basedir . $file . ".xml";
+				$fqfn = AW_DIR .$this->f_site_basedir . $file . ".xml";
 			}
 
 			$cachename = aw_ini_get("cache.page_cache") . "/propdef_" . $file . ".cache";
