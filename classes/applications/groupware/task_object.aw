@@ -43,6 +43,10 @@ class task_object extends _int_object
 
 	function get_all_primary_rows()
 	{
+		if(!is_oid($this->id()))
+		{
+			return new object_list();
+		}
 		$rows = new object_list(array(
 			"class_id" =>  CL_TASK_ROW,
 			"lang_id" => array(),
