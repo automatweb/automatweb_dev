@@ -163,7 +163,7 @@ class popup_search extends aw_template
 		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 		{
 			$tmp["value"] .= html::href(array(
-				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
+				"url" => "javascript:aw_popup_scroll('$url','Otsing',".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
 				"title" => t("Otsi")
 			));
