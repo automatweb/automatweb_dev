@@ -191,22 +191,22 @@ class quickmessagebox_obj extends _int_object
 		throws awex_qmsg_acl if quickmessagebox is defined but current user has no permissions to access it
 	@comment
 		If no messagebox found for user and ini setting quickmessaging.auto_create_box is set to true, creates one.
+		Options are set to default values found in current ini configuration.
 	**/
 	public static function get_msgbox_for_user(object $user, $create = false)
 	{
-		$c = $user->connections_to(array(
+		$filter = array(
 			"class" => CL_QUICKMESSAGEBOX,
-			// "type" => "RELTYPE_OWNER",
-			"type" => 4,
-		));
-
-		aw_disable_acl(); // because could be a call when another user is logged in
-		$c_check = $user->connections_to(array(
-			"class" => CL_QUICKMESSAGEBOX,
+			"from.lang_id" => array(),
+			"from.site_id" => array(),
 			// "type" => "RELTYPE_OWNER",
 			"type" => 4,
 			"from.status" => new obj_predicate_not(object::STAT_DELETED)
-		));
+		);
+		$c = $user->connections_to($filter);
+
+		aw_disable_acl(); // because could be a call when another user is logged in
+		$c_check = $user->connections_to($filter);
 		aw_restore_acl();
 
 		if (1 === count($c_check) and 0 === count($c))
@@ -222,13 +222,15 @@ class quickmessagebox_obj extends _int_object
 		{
 			if (aw_ini_get("quickmessaging.auto_create_box") || $create)
 			{
+				$approved_senders = constant("self::" . aw_ini_get("quickmessaging.approved_senders"));
+				$show_addressees = constant("self::" . aw_ini_get("quickmessaging.show_addressees"));
 				$box = new object();
 				$box->set_class_id(CL_QUICKMESSAGEBOX);
 				$box->set_parent($user->id());
 				$box->set_name(sprintf(t("Quickmessagebox of %s"), $user->name()));
 				$box->set_prop("owner", $user->id());
-				$box->set_prop("approved_senders", self::APPROVED_SENDERS_ANYONE);
-				$box->set_prop("show_addressees", self::ADDRESSEES_EVERYONE);
+				$box->set_prop("approved_senders", $approved_senders);
+				$box->set_prop("show_addressees", $show_addressees);
 				aw_disable_acl(); // because trying to save under another user object
 				$box->save();
 				aw_restore_acl();
