@@ -11,7 +11,7 @@
 			$allowed_server = $_SERVER['REMOTE_ADDR'];
 		}
 	}
-	if (true || $passed == 1)
+	if ($passed == 1)
 	{
 		// meil teele kui miskit vaja teatada
 		function report_status($reciver, $message)
