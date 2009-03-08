@@ -197,28 +197,28 @@ class quickmessagebox_obj extends _int_object
 	{
 		$filter = array(
 			"class" => CL_QUICKMESSAGEBOX,
-			"from.lang_id" => array(),
-			"from.site_id" => array(),
-			// "type" => "RELTYPE_OWNER",
-			"type" => 4,
-			"from.status" => new obj_predicate_not(object::STAT_DELETED)
+			"site_id" => array(),
+			"lang_id" => array(),
+			"CL_QUICKMESSAGEBOX.RELTYPE_OWNER" => $user->id(),
+			"status" => new obj_predicate_not(object::STAT_DELETED)
 		);
-		$c = $user->connections_to($filter);
+		$ol = new object_list($filter);
+		$ol_count = $ol->count();
 
 		aw_disable_acl(); // because could be a call when another user is logged in
-		$c_check = $user->connections_to($filter);
+		$ol_check = new object_list($filter);
+		$ol_check = $ol_check->count();
 		aw_restore_acl();
 
-		if (1 === count($c_check) and 0 === count($c))
+		if (1 === $ol_check and 0 === $ol_count)
 		{
 			throw new awex_qmsg_acl("No access permissions for user's quickmessagebox.");
 		}
-		elseif (1 === count($c))
+		elseif (1 === $ol_count)
 		{
-			$c = reset($c);
-			$box = $c->from();
+			$box = $ol->begin();
 		}
-		elseif (0 === count($c))
+		elseif (0 === $ol_count)
 		{
 			if (aw_ini_get("quickmessaging.auto_create_box") || $create)
 			{
