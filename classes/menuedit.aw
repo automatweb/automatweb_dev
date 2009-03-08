@@ -154,7 +154,8 @@ class menuedit extends aw_template implements request_startup
 					$dt->add_hit($realsect);
 				}
 			};
-		};
+		}
+
 		if ($set_ct_lang_id)
 		{
 			$_SESSION["ct_lang_id"] = $set_ct_lang_id;
@@ -206,7 +207,7 @@ class menuedit extends aw_template implements request_startup
 
 		// cut the / from the end
 		// so that http://site/alias and http://site/alias/ both work
-		if (substr($section,-1) == "/")
+		if (substr($section,-1) === "/")
 		{
 			$section = substr($section,0,-1);
 		};
@@ -218,7 +219,7 @@ class menuedit extends aw_template implements request_startup
 			$section = str_replace(substr($bits["path"], 1), "", $section);
 		}
 
-		if ($section == "")
+		if (empty($section))
 		{
 			$ret = $frontpage < 1 ? 1 : $frontpage;
 
@@ -229,19 +230,33 @@ class menuedit extends aw_template implements request_startup
 			return $ret;
 		}
 
-		if ($section == 'favicon.ico')
+		if ("reforb".AW_FILE_EXT === $section)
+		{
+			if (automatweb::$request->arg_isset("section"))
+			{
+				$section = automatweb::$request->arg("section");
+			}
+			else
+			{
+				$section = $frontpage;
+			}
+		}
+
+		if ($section === 'favicon.ico')
 		{
 			// if user requested favicon, then just show the thing here and be done with it
 			$c = get_instance("config");
 			$c->show_favicon(array());
 		}
-		if ($section == 'sitemap.gz')
+
+		if ($section === 'sitemap.gz')
 		{
 			// if user requested favicon, then just show the thing here and be done with it
 			$c = get_instance(CL_MENU);
 			$c->get_sitemap();
 		}
-		if($section == 'robots.txt')
+
+		if($section === 'robots.txt')
 		{
 			echo "Sitemap: ".aw_ini_get("baseurl")."/sitemap.gz";
 			die();
@@ -302,10 +317,10 @@ class menuedit extends aw_template implements request_startup
 							else
 							{
 								$stop = true;
-							};
-						};
-					};
-				};
+							}
+						}
+					}
+				}
 
 				if (aw_ini_get("ini_rootmenu"))
 				{
@@ -315,93 +330,92 @@ class menuedit extends aw_template implements request_startup
 				if(!$obj)//edasi oleks nagu ainult selle sektsioooni objekti otsimine, seda pole vaja kui see olemas
 				{
 
-				// Viskame v2lja need, mis niikuinii ei sobi. N2iteks juht, kus yks alias on t6lgitud, teine mitte - http://ekt.einst.ee/en/cultural-heritage/muuseumid
-				//			-kaarel 6.02.2009
-				foreach($candidates as $cand_id => $cand_path)
-				{
-					$path_for_obj = substr($cand_path,0,-1);
-					if ($path_for_obj != $section)
+					// Viskame v2lja need, mis niikuinii ei sobi. N2iteks juht, kus yks alias on t6lgitud, teine mitte - http://ekt.einst.ee/en/cultural-heritage/muuseumid
+					//			-kaarel 6.02.2009
+					foreach($candidates as $cand_id => $cand_path)
 					{
-						unset($candidates[$cand_id]);
-					}
-				}
-
-
-				if (aw_ini_get("user_interface.full_content_trans") && !count($candidates))
-				{
-					// do the same check for the translated aliases
-					$this->quote(&$last);
-					$lang_id = aw_global_get("ct_lang_id");
-					$this->quote(&$lang_id);
-					$rows = $this->db_fetch_array("SELECT menu_id FROM aw_alias_trans WHERE alias = '$last' AND lang_id = '$lang_id'");
-					$ol = new object_list(array(
-						"alias" => $last,
-						//"status" => STAT_ACTIVE,
-						"site_id" => aw_ini_get("site_id"),
-						"lang_id" => array(),
-					));
-					foreach($ol->ids() as $id)
-					{
-						$rows[] = array("menu_id" => $id);
-					}
-					foreach ($rows as $row)
-					{
-						if (!$this->can("view", $row["menu_id"]))
+						$path_for_obj = substr($cand_path,0,-1);
+						if ($path_for_obj != $section)
 						{
-							continue;
+							unset($candidates[$cand_id]);
 						}
-						$check_obj = obj($row["menu_id"]);
-						// put it in correct order and remove the first element (object itself)
-						$path = array_reverse($check_obj->path());
-						$curr_id = $check_obj->id();
-						$candidates[$curr_id] = "";
+					}
 
-						$stop = false;
 
-						foreach($path as $path_obj)
-						{
-							if (!$stop)
-							{
-								$alias = $this->db_fetch_field("SELECT alias FROM aw_alias_trans WHERE lang_id = $lang_id AND menu_id =".$path_obj->id(), "alias");
-								if ($alias == null || !$path_obj->meta("trans_".$lang_id."_status"))
-								{
-									$alias = $path_obj->alias();
-								}
-								if (strlen($alias) > 0)
-								{
-									$candidates[$curr_id] = $alias . "/" . $candidates[$curr_id];
-								}
-								else
-								{
-									$stop = true;
-								};
-							};
-						};
-					};
-				}
-
-				foreach($candidates as $cand_id => $cand_path)
-				{
-					$path_for_obj = substr($cand_path,0,-1);
-					if ($path_for_obj == $section)
+					if (aw_ini_get("user_interface.full_content_trans") && !count($candidates))
 					{
-						if ($obj)
+						// do the same check for the translated aliases
+						$this->quote(&$last);
+						$lang_id = aw_global_get("ct_lang_id");
+						$this->quote(&$lang_id);
+						$rows = $this->db_fetch_array("SELECT menu_id FROM aw_alias_trans WHERE alias = '$last' AND lang_id = '$lang_id'");
+						$ol = new object_list(array(
+							"alias" => $last,
+							//"status" => STAT_ACTIVE,
+							"site_id" => aw_ini_get("site_id"),
+							"lang_id" => array(),
+						));
+						foreach($ol->ids() as $id)
 						{
-							$tmp = obj($cand_id);
-							if ($tmp->ord() < $obj->ord())
+							$rows[] = array("menu_id" => $id);
+						}
+						foreach ($rows as $row)
+						{
+							if (!$this->can("view", $row["menu_id"]))
 							{
 								continue;
 							}
-						}
-	
-						$obj = new object($cand_id);
-						if ($obj->id() != $obj->brother_of() && $this->can("view", $obj->brother_of()))
-						{
-							$obj = obj($obj->brother_of());
-						}
-					};
-				};
+							$check_obj = obj($row["menu_id"]);
+							// put it in correct order and remove the first element (object itself)
+							$path = array_reverse($check_obj->path());
+							$curr_id = $check_obj->id();
+							$candidates[$curr_id] = "";
 
+							$stop = false;
+
+							foreach($path as $path_obj)
+							{
+								if (!$stop)
+								{
+									$alias = $this->db_fetch_field("SELECT alias FROM aw_alias_trans WHERE lang_id = $lang_id AND menu_id =".$path_obj->id(), "alias");
+									if ($alias == null || !$path_obj->meta("trans_".$lang_id."_status"))
+									{
+										$alias = $path_obj->alias();
+									}
+									if (strlen($alias) > 0)
+									{
+										$candidates[$curr_id] = $alias . "/" . $candidates[$curr_id];
+									}
+									else
+									{
+										$stop = true;
+									}
+								}
+							}
+						}
+					}
+
+					foreach($candidates as $cand_id => $cand_path)
+					{
+						$path_for_obj = substr($cand_path,0,-1);
+						if ($path_for_obj == $section)
+						{
+							if ($obj)
+							{
+								$tmp = obj($cand_id);
+								if ($tmp->ord() < $obj->ord())
+								{
+									continue;
+								}
+							}
+
+							$obj = new object($cand_id);
+							if ($obj->id() != $obj->brother_of() && $this->can("view", $obj->brother_of()))
+							{
+								$obj = obj($obj->brother_of());
+							}
+						}
+					}
 				}
 			}
 			else
@@ -424,8 +438,7 @@ class menuedit extends aw_template implements request_startup
 					{
 						$menu_id = $this->db_fetch_field("SELECT menu_id FROM aw_alias_trans WHERE lang_id = $lang_id AND alias = '$section'", "menu_id");
 					}
-					else
-					if (aw_ini_get("menuedit.login_on_no_access") == 1)
+					elseif (aw_ini_get("menuedit.login_on_no_access") == 1)
 					{
 						$row = $this->db_fetch_row("SELECT oid,status FROM objects WHERE lang_id = $lang_id AND alias = '$section'");
 						if ($row && $row["status"] > 1)
@@ -435,6 +448,7 @@ class menuedit extends aw_template implements request_startup
 							auth_config::redir_to_login();
 						}
 					}
+
 					if ($this->can("view", $menu_id))
 					{
 						$obj = obj($menu_id);
@@ -471,7 +485,7 @@ class menuedit extends aw_template implements request_startup
 			else
 			{
 				$section = $obj->id();
-			};
+			}
 		}
 		else
 		{
@@ -567,7 +581,7 @@ class menuedit extends aw_template implements request_startup
 				if ("/".$row["old"] == $gr)
 				{
 					header("HTTP/1.0 301 Moved Permanently");
-					if (substr($row["new"], 0, 4) == "http")
+					if (substr($row["new"], 0, 4) === "http")
 					{
 						header("Location: ".$row["new"]);
 					}
@@ -583,7 +597,7 @@ class menuedit extends aw_template implements request_startup
 		if ($repls)
 		{
 			header("HTTP/1.0 301 Moved Permanently");
-			if (substr($repl_gr, -1) == "/")
+			if (substr($repl_gr, -1) === "/")
 			{
 				$repl_gr = substr($repl_gr, 0, -1);
 			}
@@ -602,7 +616,7 @@ class menuedit extends aw_template implements request_startup
 		}
 		$this->_log("ST_MENUEDIT", "SA_ACL_ERROR",sprintf(t("&uuml;ritas accessida objekti id-ga '%s'. Kr&auml;kkimiskatse?"),$_SERVER["REQUEST_URI"]), $section);
 		// neat :), kui objekti ei leita, siis saadame 404 koodi
-		$r404 = $this->cfg["404redir"];
+		$r404 = aw_ini_get("menuedit.404redir");
 		if (is_array($r404))
 		{
 			if (aw_ini_get("user_interface.full_content_trans"))
@@ -618,6 +632,7 @@ class menuedit extends aw_template implements request_startup
 				$r404 = $r404[aw_global_get("lang_id")];
 			}
 		}
+
 		if ($r404 && "/".$GLOBALS["section"] != $r404)
 		{
 			header("Location: " . $r404);
