@@ -54,4 +54,6 @@ define ("MRP_COLOUR_OVERDUE", "#DF0D12");
 define ("MRP_COLOUR_AVAILABLE", "#FCFCF4");
 define ("MRP_COLOUR_PRJHILITE", "#FFE706");
 
+class awex_mrp extends aw_exception {}
+
 ?>
