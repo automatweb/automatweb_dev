@@ -196,7 +196,7 @@ class quickmessagebox_obj extends _int_object
 	public static function get_msgbox_for_user(object $user, $create = false)
 	{
 		$filter = array(
-			"class" => CL_QUICKMESSAGEBOX,
+			"class_id" => CL_QUICKMESSAGEBOX,
 			"site_id" => array(),
 			"lang_id" => array(),
 			"CL_QUICKMESSAGEBOX.RELTYPE_OWNER" => $user->id(),
