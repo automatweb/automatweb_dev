@@ -3973,6 +3973,99 @@ EOF;
 	function quick_add($arr)
 	{
 		var_dump($arr); die();
+		if($arr["bug_content"] || $arr["name"])
+		{
+			$o = new object();
+			$o->set_class_id(CL_BUG);
+			$o->set_parent($arr["parent"]);
+			$o->set_name($arr["name"]);
+		
+			foreach($arr as $key => $val)
+			{
+				switch($key)
+				{
+					case "bug_priority":
+					case "bug_severity":
+					case "who":
+					case "bug_class":
+					case "deadline":
+					case "hr_price":
+					case "bug_url":
+					case "bug_content":
+						$o->set_prop($key , $val);
+						break;
+				}
+			}
+
+			$customers = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $arr["customer"],
+				"limit" => 1,
+			));
+			$customer = reset($customers->arr());
+			$o->set_prop("customer" ,$customer->id());
+			$customer_units = new object_list(array(
+				"class_id" => CL_CRM_SECTION,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $arr["customer_unit"],
+				"limit" => 1,
+			));
+			$customer_unit = reset($customer_units->arr());
+			$o->set_prop("customer_unit" ,$customer_unit->id());
+			$customer_persons = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $arr["customer_person"],
+				"limit" => 1,
+			));
+			$customer_person = reset($customer_persons->arr());
+			$o->set_prop("customer_person" ,$customer_person->id());
+
+
+			$orderers = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $arr["orderer"],
+				"limit" => 1,
+			));
+			$orderer = reset($orderers->arr());
+			$o->set_prop("customer" ,$orderer->id());
+			$orderer_units = new object_list(array(
+				"class_id" => CL_CRM_SECTION,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $arr["orderer_unit"],
+				"limit" => 1,
+			));
+			$orderer_unit = reset($orderer_units->arr());
+			$o->set_prop("orderer_unit" ,$orderer_unit->id());
+			$orderer_persons = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $arr["orderer_person"],
+				"limit" => 1,
+			));
+			$orderer_person = reset($orderer_persons->arr());
+			$o->set_prop("customer_person" ,$orderer_person->id());
+
+			$projects = new object_list(array(
+				"class_id" => CL_PROJECT,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $arr["project"],
+				"limit" => 1,
+			));
+			$project = reset($projects->arr());
+			$o->set_prop("customer_person" ,$project->id());
+
+			$o->save();
+		}
 		$co_inst = get_instance(CL_CRM_COMPANY);
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
