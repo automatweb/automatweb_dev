@@ -388,11 +388,25 @@
 			</function>
 		</action>
 
-		<action name="proj_autocomplete_source">
+		<action name="proj_autocomplete_source" all_args="1">
 			<function name="proj_autocomplete_source">
 				<arguments>
 					<optional name="stats_s_cust" />
 					<optional name="stats_s_proj" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="unit_options_autocomplete_source" all_args="1">
+			<function name="unit_options_autocomplete_source">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="worker_options_autocomplete_source" all_args="1">
+			<function name="worker_options_autocomplete_source">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
