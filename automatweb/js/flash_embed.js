@@ -8,11 +8,11 @@ function f(url, w, h, wmode)
 	if(typeof(wmode) != 'undefined')
 	{
 		document.writeln('<param name="wmode" value="transparent" />');
-		document.writeln('<embed src="'+url+'" wmode="transparent" style="overflow:hidden; width:'+w+'px; height:'+h+'px;" quality="high" scale="noscale" width="'+w+'" height="'+h+'" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />');
+		document.writeln('<embed src="'+url+'" wmode="transparent" style="overflow:hidden; width:'+w+'px; height:'+h+'px;" quality="high" width="'+w+'" height="'+h+'" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />');
 	}
 	else
 	{
-		document.writeln('<embed src="'+url+'" quality="high" scale="noscale" width="'+w+'" height="'+h+'" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />');
+		document.writeln('<embed src="'+url+'" quality="high" width="'+w+'" height="'+h+'" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />');
 	}
 	document.writeln('</object>');
 }
