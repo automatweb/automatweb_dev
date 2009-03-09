@@ -3966,5 +3966,230 @@ EOF;
 		}
 		return $statuses;
 	}
+
+	/**
+		@attrib name=quick_add all_args=1
+	**/
+	function quick_add($arr)
+	{
+		var_dump($arr); die();
+		$co_inst = get_instance(CL_CRM_COMPANY);
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+
+		$htmlc->add_property(array(
+			"name" => "name",
+			"type" => "textbox",
+			"caption" => t("L&uuml;hikirjeldus"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "bug_priority",
+			"type" => "select",
+			"options" => $this->get_priority_list(),
+			"value" => 3,
+			"caption" => t("Prioriteet"),
+		));
+		$htmlc->add_property(array(
+			"name" => "bug_severity",
+			"type" => "select",
+			"options" => $this->get_priority_list(),
+			"caption" => t("T&otilde;sidus"),
+		));
+		$company = get_current_company();
+
+		$htmlc->add_property(array(
+			"name" => "who",
+			"type" => "select",
+			"caption" => t("Kellele"),
+			"options" => $company->get_worker_selection(),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "bug_class",
+			"type" => "select",
+			"caption" => t("Klass"),
+			"options" => array("" => "") + $this->get_class_list(),
+			"onchange" => "check_class_maintainer();",
+		));
+
+		$htmlc->add_property(array(
+			"name" => "deadline",
+			"type" => "date_select",
+			"caption" => t("T&auml;htaeg"),
+			"value" => time() + 31*24*3600,
+		));
+
+		$htmlc->add_property(array(
+			"name" => "finance_type",
+			"type" => "chooser",
+			"caption" => t("Kulud kaetakse"),
+			"options" => $this->get_finance_types(),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "hr_price",
+			"type" => "textbox",
+			"caption" => t("Tunnihind"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "bug_url",
+			"type" => "textbox",
+			"caption" => t("URL"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "bug_content",
+			"type" => "textarea",
+			"caption" => t("Sisu"),
+			"rows" => 20,
+			"cols" => 60,
+		));
+
+		$htmlc->add_property(array(
+			"name" => "klient",
+			"type" => "text",
+			"caption" => t("Klient"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "customer",
+			"type" => "textbox",
+			"caption" => t("Organisatsioon"),
+			"autocomplete_class_id" => array(CL_CRM_COMPANY),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "customer_unit",
+			"type" => "textbox",
+			"caption" => t("&Uuml;ksus"),
+			"autocomplete_source" => "/automatweb/orb.aw?class=crm_company&action=unit_options_autocomplete_source",
+			"autocomplete_params" => array("customer"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "customer_person",
+			"type" => "textbox",
+			"caption" => t("Isik"),
+			"autocomplete_source" => "/automatweb/orb.aw?class=crm_company&action=worker_options_autocomplete_source",
+			"autocomplete_params" => array("customer"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "tellija",
+			"type" => "text",
+			"caption" => t("Tellija"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "orderer",
+			"type" => "textbox",
+			"caption" => t("Organisatsioon"),
+			"autocomplete_class_id" => array(CL_CRM_COMPANY),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "orderer_unit",
+			"type" => "textbox",
+			"caption" => t("&Uuml;ksus"),
+			"autocomplete_source" => "/automatweb/orb.aw?class=crm_company&action=unit_options_autocomplete_source",
+			"autocomplete_params" => array("orderer"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "orderer_person",
+			"type" => "textbox",
+			"caption" => t("Isik"),
+			"autocomplete_source" => "/automatweb/orb.aw?class=crm_company&action=worker_options_autocomplete_source",
+			"autocomplete_params" => array("orderer"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "project",
+			"type" => "textbox",
+			"caption" => t("Projekt"),
+			"autocomplete_source" => "/automatweb/orb.aw?class=crm_company&action=proj_autocomplete_source",
+			"autocomplete_params" => array("customer","project"),
+		));
+
+
+		$htmlc->add_property(array(
+			"name" => "sub",
+			"type" => "button",
+			"value" => t("Lisa uus &Uuml;lesanne!"),
+			"onclick" => "changeform.submit();",
+			"caption" => t("Lisa uus &Uuml;lesanne!")
+		));
+		$data = array(
+			"orb_class" => $_GET["class"]?$_GET["class"]:$_POST["class"],
+			"reforb" => 0,
+		);
+		$htmlc->finish_output(array(
+			"action" => "quick_add",
+			"method" => "POST",
+			"data" => $data,
+			"submit" => "no"
+		));
+
+		$content = $htmlc->get_result();
+		return $content;
+	}
+
+	/**
+		@attrib name=orderer_autocomplete_source
+		@param customer optional
+		@param customer_name optional
+		@param orderer optional
+	**/
+	function orderer_autocomplete_source($arr)
+	{
+		$cl_json = get_instance("protocols/data/json");
+		if(!$arr["customer"])
+		{
+			$arr["customer"] = $arr["customer_name"];
+		}
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+		$customers = new object_list(array(
+			"class_id" => array(CL_CRM_COMPANY),
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 3,
+		));
+		$orderers = new object_list();
+		foreach($customers->arr() as $cust)
+		{
+			$orderers->add($cust->get_workers());
+		}
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_PERSON),
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["orderer"])."%",
+			"oid" => $orderers->ids(),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$autocomplete_options = $orderers->names();
+
+                foreach($autocomplete_options as $k => $v)
+                {
+                        $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
+                }
+		header("Content-type: text/html; charset=utf-8");
+		exit ($cl_json->encode($option_data));
+	}
+
+
+
 }
 ?>

@@ -57,5 +57,22 @@
 			</function>
 		</action>
 
+		<action name="quick_add" all_args="1">
+			<function name="quick_add">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="orderer_autocomplete_source">
+			<function name="orderer_autocomplete_source">
+				<arguments>
+					<optional name="customer" />
+					<optional name="customer_name" />
+					<optional name="orderer" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
