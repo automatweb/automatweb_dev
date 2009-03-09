@@ -7454,8 +7454,9 @@ class crm_company extends class_base
 		));
 	}
 
+
 	/**
-		@attrib name=proj_autocomplete_source
+		@attrib name=proj_autocomplete_source all_args=1
 		@param stats_s_cust optional
 		@param stats_s_proj optional
 	**/
@@ -7474,25 +7475,114 @@ class crm_company extends class_base
 			"options" => &$autocomplete_options,// required
 			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
 		);
-		if($arr["stats_s_cust"])
+		if(!$arr["stats_s_cust"])
 		{
-			$orderers = new object_list(array(
-				"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-				"name" => $arr["stats_s_cust"]."%",
-				"lang_id" => array(),
-				"site_id" => array(),
-			));
-			$orderers = $orderers->ids();
+			$arr["stats_s_cust"] = $arr["customer"];
 		}
+		if(!$arr["stats_s_proj"])
+		{
+			$arr["stats_s_proj"] = $arr["project"];
+		}
+
+		$arr["stats_s_cust"] = iconv("UTF-8",aw_global_get("charset"),  $arr["stats_s_cust"]);
 
 		$ol = new object_list(array(
 			"class_id" => array(CL_PROJECT),
 			"name" => $arr["stats_s_proj"]."%",
 			"lang_id" => array(),
 			"site_id" => array(),
-			"orderer" => $orderers,
+			"CL_PROJECT.RELTYPE_ORDERER.name" => $arr["stats_s_cust"]."%",
+		//	"orderer" => $orderers,
 		));
 		$autocomplete_options =  $ol->names();
+		foreach($autocomplete_options as $key=>$val)
+		{
+			$autocomplete_options[$key] = iconv(aw_global_get("charset"),"UTF-8",  $autocomplete_options[$key]);
+		}
+		exit ($cl_json->encode($option_data));
+	}
+
+	/**
+		@attrib name=unit_options_autocomplete_source all_args=1
+	**/
+	function unit_options_autocomplete_source($arr)
+	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$co = $arr["customer"] ? $arr["customer"] : $arr["orderer"];
+		$name = $arr["customer_unit"] ? $arr["customer_unit"] : $arr["orderer_unit"];
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
+		$co = iconv("UTF-8",aw_global_get("charset"),  $co);
+		$orgs = new object_list(array(
+			"class_id" => array(CL_CRM_COMPANY),
+			"name" => $co."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+//			"limit" => 1,
+		));
+
+		foreach($orgs->arr() as $org)
+		{
+			$secs = $org->get_sections();
+			$autocomplete_options = $secs->names();
+		}
+
+		//$autocomplete_options = $orgs->names();
+		foreach($autocomplete_options as $key=>$val)
+		{
+			$autocomplete_options[$key] = iconv(aw_global_get("charset"),"UTF-8",  $autocomplete_options[$key]);
+		}
+		exit ($cl_json->encode($option_data));
+	}
+
+	/**
+		@attrib name=worker_options_autocomplete_source all_args=1
+	**/
+	function worker_options_autocomplete_source($arr)
+	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$co = $arr["customer"] ? $arr["customer"] : $arr["orderer"];
+		$name = $arr["customer_person"] ? $arr["customer_person"] : $arr["orderer_person"];
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+		$co = iconv("UTF-8",aw_global_get("charset"),  $co);
+		$orgs = new object_list(array(
+			"class_id" => array(CL_CRM_COMPANY),
+			"name" => $co."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+//			"limit" => 1,
+		));
+
+		foreach($orgs->arr() as $org)
+		{
+			$autocomplete_options = $org->get_worker_selection();
+		}
+//$autocomplete_options = $orgs->names();
+		//$autocomplete_options = $orgs->names();
 		foreach($autocomplete_options as $key=>$val)
 		{
 			$autocomplete_options[$key] = iconv(aw_global_get("charset"),"UTF-8",  $autocomplete_options[$key]);
