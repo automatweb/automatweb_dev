@@ -186,6 +186,8 @@
 			</display>
 			<size>
 			</size>
+			<disabled>
+			</disabled>
 		</checkbox>
 		
 		<toolbar>
@@ -214,6 +216,8 @@
 			</option_is_tuple>
 			<autocomplete_class_id>
 			</autocomplete_class_id>
+			<disabled>
+			</disabled>
 		</textbox>
 		
 		<table>
