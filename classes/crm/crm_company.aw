@@ -3972,7 +3972,7 @@ class crm_company extends class_base
 	*/
 	function callback_mod_reforb($arr)
 	{
-		if($arr["group"] == "stats_stats")
+		if($arr["group"] == "stats_stats" || $arr["group"] == "stats")
 		{
 			$arr['st'] = $_GET["st"];
 		}
