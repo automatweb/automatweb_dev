@@ -195,6 +195,11 @@ class crm_bill_payment_obj extends _int_object
 		{
 			return t("laekumine ei saa olla erinevate klientidega arvetele");
 		}
+		if(!is_object($eb) || !$eb->prop("customer"))
+		{
+			$this->set_prop("customer" , $o->prop("customer"));
+			$this->save();
+		}
 
 		//vigu pole, siis teeb 2ra
 		$o->connect(array(

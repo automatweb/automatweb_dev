@@ -175,6 +175,7 @@ class crm_bill_obj extends _int_object
 		$p-> set_parent($this->id());
 		$p-> set_name($this->name() . " " . t("laekumine"));
 		$p-> set_class_id(CL_CRM_BILL_PAYMENT);
+		$p->set_prop("customer" , $this->prop("customer"));
 		$p-> set_prop("date", $tm);
 		$p->save();
 /*
@@ -1272,21 +1273,19 @@ class crm_bill_obj extends _int_object
 		{
 			$ret = $this->crm_settings->prop("bill_mail_to");
 		}
+		if (aw_global_get("uid_oid") != "")
+		{
+			$user_inst = get_instance(CL_USER);
+			$u = obj(aw_global_get("uid_oid"));
+			$person = obj($user_inst->get_current_person());
+			$ret.= ", ".$person->name() . " <" . $u->get_user_mail_address() . ">";
+		}
 		return $ret;
 	}
 
 	public function get_mail_targets()
 	{
 		$res = array();
-		
-		if (aw_global_get("uid_oid") != "")
-		{
-			$user_inst = get_instance(CL_USER);
-			$u = obj(aw_global_get("uid_oid"));
-			$person = obj($user_inst->get_current_person());
-			$res[$u->get_user_mail_address()] = 
-			$person->name() . " <" . $u->get_user_mail_address() . ">";
-		}
 /*
 		if($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_to"))
 		{
@@ -1298,18 +1297,23 @@ class crm_bill_obj extends _int_object
 			$res[$this->prop("bill_mail_to")] = $this->prop("bill_mail_to");
 		}
 
-		if(is_oid($this->prop("customer")))
+		if(!sizeof($res))
 		{
-			$customer = obj($this->prop("customer"));
-			$this->get_customer_name() . " <" . $customer->get_bill_mail() . ">";
-			$res[$customer->get_bill_mail()]= $this->get_customer_name() . " <" . $customer->get_bill_mail() . ">";
-			if(!$customer->get_bill_mail())
+			if(is_oid($this->prop("customer")))
 			{
-				arr("<font color=red><b>".t("Kliendil arve aadress m&auml;&auml;ramata!")."</b></font>");
+				$customer = obj($this->prop("customer"));
+				$bill_mails = $customer->get_bill_mails();
+				foreach($bill_mails as $bm)
+				{
+					$res[$bm] = $this->get_customer_name() . " <" . $bm . ">";
+				}
+				if(!sizeof($bill_mails))
+				{
+					arr("<font color=red><b>".t("Kliendil arve aadress m&auml;&auml;ramata!")."</b></font>");
+				}
+				//arr(htmlspecialchars($this->get_customer_name() . " <" . $customer->get_bill_mail() . ">"));
 			}
-			//arr(htmlspecialchars($this->get_customer_name() . " <" . $customer->get_bill_mail() . ">"));
 		}
-
 		return $res;
 	}
 
@@ -1453,6 +1457,21 @@ class crm_bill_obj extends _int_object
 		return 0;
 	}
 
+	/** returns sent mail objects
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_sent_mails()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MESSAGE,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $this->id(),
+		));
+		return $ol;
+	}
+
 	private function get_pdf_add()
 	{
 		$inst = get_instance(CL_CRM_BILL);
@@ -1508,6 +1527,14 @@ class crm_bill_obj extends _int_object
 		$from = $this->get_mail_from();
 		$from_name = $this->get_mail_from_name();
 		$body = $this->get_mail_body();
+		$att_comment = "";
+
+		$mail = new object();
+		$mail->set_class_id(CL_MESSAGE);
+		$mail->set_parent($this->id());
+		$mail->set_name(t("saadetud arve")." ".$this->prop("bill_no")." ".t("kliendile")." ".$this->get_customer_name());
+		$mail->save();
+
 
 		$awm = get_instance("protocols/mail/aw_mail");
 		$awm->create_message(array(
@@ -1523,20 +1550,39 @@ class crm_bill_obj extends _int_object
 
 		//$to_o = $this->make_preview_pdf();
 		$to_o = obj($preview);
+		$to_o ->set_parent($mail->id());
+		$to_o->save();
 		$ret = $awm->fattach(array(
 			"path" => $to_o->prop("file"),
 			"contenttype"=> $mimeregistry->type_for_file($to_o->name()),
 			"name" => $to_o->name(),
 		));
+		$att_comment.= html::href(array(
+			"caption" => html::img(array(
+				"url" => aw_ini_get("baseurl")."/automatweb/images/icons/pdf_upload.gif",
+				"border" => 0,
+			)).$to_o->name(),
+			"url" => $to_o->get_url(),
+		));
+
 
 		if($add)
 		{
 		//	$to_o = $this->make_add_pdf();
 			$to_o = obj($add);
+			$to_o ->set_parent($mail->id());
+			$to_o->save();
 			$awm->fattach(array(
 				"path" => $to_o->prop("file"),
 				"contenttype"=> $mimeregistry->type_for_file($to_o->name()),
 				"name" => $to_o->name(),
+			));
+			$att_comment.= html::href(array(
+				"caption" => html::img(array(
+					"url" => aw_ini_get("baseurl")."/automatweb/images/icons/pdf_upload.gif",
+					"border" => 0,
+				)).$to_o->name(),
+				"url" => $to_o->get_url(),
 			));
 		}
 		$awm->htmlbodyattach(array(
@@ -1546,6 +1592,44 @@ class crm_bill_obj extends _int_object
 		$ret.= t("saatis arve aadressidele:")."<br>";
 		$addresses[]= $this->get_bcc();
 		$ret.= join ("<br>" , $addresses);
+
+
+		$att = array($preview);
+		if($add)
+		{
+			$att[] = $add;
+		}
+		$mail->set_prop("attachments" , $att);
+		$mail->set_prop("customer" , $this->prop("customer"));
+		$mail->set_prop("message" , $body);
+		$mail->set_prop("html_mail" , 1);
+		$mail->set_prop("mfrom_name" , $from_name);
+		$mail->set_prop("mto" , join (", " , $addresses));
+		$mail->set_prop("bcc" , join (", " , $this->get_bcc()));
+		if($from)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_ML_MEMBER,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"mail" => $from,
+			));
+			if($ol->count())
+			{
+				$o = reset($ol->arr());
+				$mail->set_prop("mfrom" , $o->id());
+			}
+		}
+		$mto = array();
+		if(sizeof($mto))
+		{
+			$mail->set_prop("mto_relpicker" , $mto);
+		}
+		$mail->save();
+
+		$comment = sprintf(t("%s saatis arve nr %s; summa %s; kuup&auml;ev: %s; kellaaeg: %s; aadressitele: %s; tekst: %s; lisatud failid: %s. "), aw_global_get("uid"), $this->prop("bill_no") , $this->prop("sum") , date("d.m.Y") , date("H:i") , htmlspecialchars(join (", " , $addresses)), $body,$att_comment);
+		$this->add_comment($comment);
+
 		die($ret);
 		return $this->id();
 	}

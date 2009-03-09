@@ -522,6 +522,15 @@
             <caption>Meili sisu</caption>
       </property>
       <property>
+            <name>mail_table</name>
+            <table>objects</table>
+            <group>sent_mails</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mail_table</field>
+      </property>
+      <property>
             <name>dn_tb</name>
             <table>objects</table>
             <group>delivery_notes</group>
@@ -597,9 +606,17 @@
             <other_data>
                   <caption>Muud andmed</caption>
             </other_data>
+            <mails>
+                  <caption>Kirjad</caption>
+            </mails>
             <bill_mail>
-                  <caption>Maili seaded</caption>
+                  <caption>Kirjade seaded</caption>
+                  <parent>mails</parent>
             </bill_mail>
+            <sent_mails>
+                  <caption>Saadetud kirjad</caption>
+                  <parent>mails</parent>
+            </sent_mails>
             <delivery_notes>
                   <caption>Saatelehed</caption>
             </delivery_notes>

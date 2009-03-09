@@ -24,6 +24,9 @@
 @property currency type=relpicker reltype=RELTYPE_CURRENCY field=aw_currency 
 @caption Valuuta
 
+@property customer type=relpicker reltype=RELTYPE_CUSTOMER field=aw_customer 
+@caption Klient
+
 @property currency_rate type=textbox field=currency_rate field=aw_currency_rate 
 @caption Valuutakurss
 
@@ -33,6 +36,8 @@
 @reltype CURRENCY value=1 clid=CL_CURRENCY
 @caption valuuta
 
+@reltype CUSTOMER value=2 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Kleint
 
 - Kuup2ev
 - Tasumisviis (Ylekandega, sularahas)
@@ -541,9 +546,20 @@ class crm_bill_payment extends class_base
 				aw_payment_type int,
 				aw_sum double,
 				aw_currency int,
-				aw_currency_rate double
+				aw_customer int,
+				aw_currency_rate double,
+				
 			)");
 			return true;
+		}
+		switch($f)
+		{
+			case "aw_customer":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
 		}
 		return false;
 	}

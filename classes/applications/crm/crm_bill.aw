@@ -204,6 +204,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property bill_mail_ct type=textarea rows=20 cols=50 field=meta method=serialize
 	@caption Meili sisu
 
+@default group=sent_mails
+
+	@property mail_table type=table no_caption=1 no_caption=1
+
 @default group=delivery_notes
 	@property dn_tb type=toolbar store=no no_caption=1
 	@property dn_tbl type=table store=no no_caption=1
@@ -223,7 +227,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 		@property bill_task_list type=table store=no no_caption=1 parent=bill_task_list_l
 
 @groupinfo other_data caption="Muud andmed"
-@groupinfo bill_mail caption="Maili seaded"
+@groupinfo mails caption="Kirjad"
+@groupinfo bill_mail caption="Kirjade seaded" parent=mails
+@groupinfo sent_mails caption="Saadetud kirjad" parent=mails
 @groupinfo delivery_notes caption="Saatelehed"
 @groupinfo tasks caption="Toimetused" submit=no
 @groupinfo preview caption="Eelvaade"
@@ -360,6 +366,9 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "mail_table":
+				$this->_get_mail_table($arr);
+				break;
 			//case "language":
 			//	if(!$prop["value"])
 			//	{
@@ -4161,6 +4170,71 @@ class crm_bill extends class_base
 		</form>";*/
 		return $content;
 	}
+
+	function _get_mail_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"caption" => t("Aeg"),
+			"name" => "time",
+			"align" => "left",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"caption" => t("Saatja"),
+			"name" => "sender",
+			"align" => "left",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"caption" => t("Aadressidele"),
+			"name" => "to",
+			"align" => "left",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"caption" => t("Sisu"),
+			"name" => "content",
+			"align" => "left",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"caption" => t("Manused"),
+			"name" => "attachments",
+			"align" => "left",
+			"sortable" => 1,
+		));
+
+		$mails = $arr["obj_inst"]->get_sent_mails();
+		foreach($mails->arr() as $mail)
+		{
+			$data = array();
+			$data["time"] = date("d.m.Y H:i" , $mail->created());
+			$user = $mail->createdby();
+			$data["sender"] = $user;
+			$data["content"] = $mail->prop("message");
+			$addr = explode("," , htmlspecialchars($mail->prop("mto")));
+			
+			$data["to"] = join("<br>" , $addr);
+
+			$data["attachments"] = "";
+			$aos = $mail->prop("attachments");
+			foreach($aos as $ao)
+			{
+				$o = obj($ao);
+				$file_data = $o->get_file();
+				$data["attachments"].= "<br>\n".html::href(array(
+					"caption" => html::img(array(
+						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/pdf_upload.gif",
+						"border" => 0,
+					)).$o->name()." (".filesize($file_data["properties"]["file"])." B)",
+					"url" => $o->get_url(),
+				));
+			}
+			$t->define_data($data);
+		}
+	}
+
 
 }
 ?>
