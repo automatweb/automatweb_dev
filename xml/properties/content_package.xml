@@ -9,6 +9,14 @@
             <caption>Kasutajagrupi OID</caption>
       </property>
       <property>
+            <name>cp_sp</name>
+            <table>aw_content_package</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>cp_sp</field>
+            <caption>Toode OID</caption>
+      </property>
+      <property>
             <name>price</name>
             <table>aw_content_package</table>
             <group>general</group>

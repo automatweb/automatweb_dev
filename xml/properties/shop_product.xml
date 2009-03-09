@@ -32,6 +32,17 @@
             <comment>Kas objekt on aktiivne</comment>
       </property>
       <property>
+            <name>content_package</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>gen_left</parent>
+            <disabled>1</disabled>
+            <field>content_package</field>
+            <caption>Sisupaketi tooteobjekt</caption>
+      </property>
+      <property>
             <name>price_settings</name>
             <table>objects</table>
             <group>general_general</group>

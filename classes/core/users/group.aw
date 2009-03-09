@@ -910,12 +910,6 @@ class group extends class_base
 				continue;
 			}
 
-			// brother under group
-			if(!isset($arr["brother_done"]) || !$arr["brother_done"])
-			{
-				$brother_id = $user->create_brother($p_o->id());
-			}
-
 			if(aw_ini_get("users.use_group_membership") == 1)
 			{
 				// I can't see why we need two membership objects with EXACTLY the same attributes.
@@ -964,6 +958,7 @@ class group extends class_base
 					}
 					$gms->save();
 				}
+				$arr["brother_done"] = true;
 			}
 			else
 			{
@@ -978,6 +973,12 @@ class group extends class_base
 					"to" => $user->id(),
 					"reltype" => "RELTYPE_MEMBER",
 				));
+			}
+
+			// brother under group
+			if(!isset($arr["brother_done"]) || !$arr["brother_done"])
+			{
+				$brother_id = $user->create_brother($p_o->id());
 			}
 		}
 		$c = get_instance("cache");

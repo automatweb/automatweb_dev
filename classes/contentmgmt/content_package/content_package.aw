@@ -9,6 +9,9 @@
 	@property cp_ug type=hidden
 	@caption Kasutajagrupi OID
 
+	@property cp_sp type=hidden
+	@caption Toode OID
+
 	@property price type=textbox size=4
 	@caption Hind
 
@@ -56,7 +59,8 @@ class content_package extends class_base
 
 		switch($prop["name"])
 		{
-			case "subscribers_tmp":
+			case "date_end":
+				$prop["value"] = mktime(0, 0, 0, date("m"), date("d"), date("Y") + 1);
 				break;
 		}
 
@@ -146,6 +150,7 @@ class content_package extends class_base
 			case "date_end":
 			case "duration":
 			case "cp_ug":
+			case "cp_sp":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -402,6 +407,20 @@ class content_package extends class_base
 	function remove_acl_for_objects($arr)
 	{
 		return get_instance("content_package_obj")->remove_acl_for_objects($arr);
+	}
+
+	/**
+
+		@attrib name=add_subscriber api=1 params=name
+
+		@param user type=oid acl=view
+
+		@param content_package type=oid acl=view
+
+	**/
+	function add_subscriber($arr)
+	{
+		return get_instance("content_package_obj")->add_subscriber($arr);
 	}
 }
 

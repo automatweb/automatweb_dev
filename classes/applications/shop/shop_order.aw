@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.82 2009/03/02 11:07:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.83 2009/03/09 18:12:49 instrumental Exp $
 // shop_order.aw - Tellimus
 /*
 
@@ -1210,6 +1210,30 @@ class shop_order extends class_base
 		$o->set_prop("confirmed" , 1);
 		$o->save();
 		aw_restore_acl();
+
+		// process content packages
+		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]) && is_oid(aw_global_get("uid_oid")) && $this->can("view", aw_global_get("uid_oid")))
+		{
+			$ol = new object_list(
+				array(
+					"class_id" => CL_CONTENT_PACKAGE,
+					"CL_CONTENT_PACKAGE.cp_sp(CL_SHOP_PRODUCT).RELTYPE_PRODUCT(CL_SHOP_ORDER).id" => $arr["id"],
+					"lang_id" => array(),
+					"site_id" => array(),
+				),
+				array(
+					CL_CONTENT_PACKAGE => array("cp_ug"),
+				)
+			);
+			$inst = get_instance(CL_CONTENT_PACKAGE);
+			foreach($ol->ids() as $cp_oid)
+			{
+				$inst->add_subscriber(array(
+					"user" => aw_global_get("uid_oid"), 
+					"content_package" => $cp_oid
+				));
+			}
+		}
 
 		// process delivery
 		if (is_object($order_center) and $order_center->prop("show_delivery") and $this->can("view", $order_center->prop("delivery_exec_controller")))

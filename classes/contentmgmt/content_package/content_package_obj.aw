@@ -4,16 +4,34 @@ class content_package_obj extends _int_object
 {
 	function save()
 	{
-		if(!is_oid(parent::id()))
+		if(!is_oid($this->id()))
 		{
 			parent::save();
 		}
-		if(!parent::can("view", parent::prop("cp_ug")) || !is_oid(parent::prop("cp_ug")))
+		if(!$this->can("view", $this->prop("cp_ug")) || !is_oid($this->prop("cp_ug")))
 		{
 			// We'll make a usergroup for this content package. There has to be one for every content package.
-			$gid = get_instance(CL_GROUP)->add_group(parent::id(), parent::name(), GRP_REGULAR, 5000);
-			parent::set_prop("cp_ug", $gid);
+			$gid = get_instance(CL_GROUP)->add_group($this->id(), $this->name(), GRP_REGULAR, 5000);
+			$this->set_prop("cp_ug", $gid);
 		}
+
+		if(!$this->can("view", $this->prop("cp_sp")) || !is_oid($this->prop("cp_sp")))
+		{
+			// We'll make a shop product for this content package. There has to be one for every content package.
+			$sp = obj();
+			$sp->set_class_id(CL_SHOP_PRODUCT);
+			$sp->set_parent($this->id());
+		}
+		else
+		{
+			$sp = obj($this->prop("cp_sp"));
+		}
+		// The name and price of the shop product are always the same as the content package's.
+		$sp->set_name($this->name());
+		$sp->set_prop("price", $this->prop("price"));
+		$sp->set_prop("content_package", 1);
+		$this->set_prop("cp_sp", $sp->save());
+
 		return parent::save();
 	}
 
@@ -89,6 +107,18 @@ class content_package_obj extends _int_object
 				$o->acl_del($gid);
 			}
 		}
+	}
+
+	function add_subscriber($arr)
+	{
+		$o = obj($arr["content_package"]);
+		$u = obj($arr["user"]);
+		$g = obj($o->prop("cp_ug"));
+		$conditions = array(
+			"start" => mktime(0, 0, 0, date("m"), date("d"), date("Y")),
+			"end" => mktime(0, 0, 0, date("m"), date("d") + $o->prop("duration"), date("Y")),
+		);
+		get_instance(CL_GROUP)->add_user_to_group($u, $g, $conditions);
 	}
 }
 
