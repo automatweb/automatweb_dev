@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.119 2009/03/02 09:05:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.120 2009/03/10 16:20:34 markop Exp $
 // kohtumine.aw - Kohtumine
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -1779,6 +1779,236 @@ class crm_meeting extends task
 					('$oid', '$value')
 			");
 		}
+	}
+
+	private function get_new_parent($parent)
+	{
+		if($this->can("add" , $parent))
+		{
+			return $parent;
+		}
+		$company = get_current_company();
+		return $company->id();
+	}
+
+	/**
+		@attrib name=quick_add all_args=1
+	**/
+	function quick_add($arr)
+	{
+		$company = get_current_company();
+		if($arr["bug_content"] || $arr["name"])
+		{
+			$o = new object();
+			$o->set_class_id(CL_CRM_MEETING);
+			$o->set_parent($this->get_new_parent($arr["parent"]));
+			$o->set_name($arr["name"]);
+			foreach($arr as $key => $val)
+			{
+				switch($key)
+				{
+					case "start1":
+					case "end":
+						$o->set_prop($key , date_edit::get_timestamp($val));
+						break;
+					case "hr_price":
+					case "content":
+						$o->set_prop($key , $val);
+						break;
+				}
+			}
+
+			if($arr["customer"])
+			{
+				$customers = new object_list(array(
+					"class_id" => CL_CRM_COMPANY,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"name" => $arr["customer"],
+					"limit" => 1,
+				));
+				$customer = reset($customers->arr());
+				if(!$customer)
+				{
+					$customer = obj($company->add_customer($arr["customer"]));
+				}
+				if(is_object($customer))
+				{
+					$o->add_customer($customer->id());
+				}
+			}
+
+			if($arr["customer_person"] && is_object($customer))
+			{
+				$customer_persons = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"name" => $arr["customer_person"],
+					"limit" => 1,
+				));
+				$customer_person = reset($customer_persons->ids());
+				if(!$customer_person)
+				{
+					$customer_person = $customer->add_worker_data(array(
+						"worker" => $arr["customer_person"],
+					));
+				}
+				$o->add_participant($customer_person);
+			}
+
+			if($arr["project"])
+			{
+				if(is_object($customer))
+				{
+					$projects = $customer->get_projects_as_customer();
+					foreach($projects->names() as $id => $name)
+					{
+						if($arr["project"] == $name)
+						{
+							$project = $id;
+							break;
+						}
+					}
+					if(!$project)
+					{
+						$project = $customer->add_project_as_customer($arr["project"]);
+					}
+				}
+				else
+				{
+					$projects = new object_list(array(
+						"class_id" => CL_PROJECT,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"name" => $arr["project"],
+						"limit" => 1,
+					));
+					$project = reset($projects->ids());
+				}
+				if($project)
+				{
+					$o->add_project($project);
+				}
+			}
+
+			if(is_array($arr["participants"]) && sizeof($arr["participants"]))
+			{
+				foreach($arr["participants"] as $participant)
+				{
+					if($this->can("view" , $participant))
+					{
+						$o->add_participant($participant);
+					}
+				}
+			}
+
+			$u = get_instance(CL_USER);
+			$p = $u->get_current_person();
+
+			$o->add_participant($p);
+			$o->save();
+			$res = "<script language='javascript'>window.close();</script>";
+			die($res);
+		}
+		$co_inst = get_instance(CL_CRM_COMPANY);
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+
+		$htmlc->add_property(array(
+			"name" => "name",
+			"type" => "textbox",
+			"caption" => t("L&uuml;hikirjeldus"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "start1",
+			"type" => "datetime_select",
+			"caption" => t("Algus"),
+			"value" => mktime(date("H"), 0, 0, date("m"), (date("d")+1), date("y")),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "end",
+			"type" => "datetime_select",
+			"caption" => t("L&otilde;pp"),
+			"value" => mktime((date("H")+1), 0, 0, date("m"), date("d")+1, date("y")),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "hr_price",
+			"type" => "textbox",
+			"caption" => t("Tunnihind"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "content",
+			"type" => "textarea",
+			"caption" => t("Sisu"),
+			"rows" => 10,
+			"cols" => 60,
+		));
+
+		$htmlc->add_property(array(
+			"name" => "participants",
+			"type" => "select",
+			"caption" => t("Osalejad"),
+			"multiple" => 1,
+			"size" => 10,
+			"options" => $company->get_worker_selection(),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "klient",
+			"type" => "text",
+			"caption" => t("Klient"),
+			"subtitle" => 1
+		));
+
+		$htmlc->add_property(array(
+			"name" => "customer",
+			"type" => "textbox",
+			"caption" => t("Organisatsioon"),
+			"autocomplete_class_id" => array(CL_CRM_COMPANY),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "customer_person",
+			"type" => "textbox",
+			"caption" => t("Isik"),
+			"autocomplete_source" => "/automatweb/orb.aw?class=crm_company&action=worker_options_autocomplete_source",
+			"autocomplete_params" => array("customer"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "project",
+			"type" => "textbox",
+			"caption" => t("Projekt"),
+			"autocomplete_source" => "/automatweb/orb.aw?class=crm_company&action=proj_autocomplete_source",
+			"autocomplete_params" => array("customer","project"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "sub",
+			"type" => "button",
+			"value" => t("Lisa uus kohtumine!"),
+			"onclick" => "changeform.submit();",
+			"caption" => t("Lisa uus kohtumine!")
+		));
+		$data = array(
+			"orb_class" => $_GET["class"]?$_GET["class"]:$_POST["class"],
+			"reforb" => 0,
+			"parent" => $_GET["parent"],
+		);
+		$htmlc->finish_output(array(
+			"action" => "quick_add",
+			"method" => "POST",
+			"data" => $data,
+			"submit" => "no"
+		));
+
+		$content = $htmlc->get_result();
+		return $content;
 	}
 
 }
