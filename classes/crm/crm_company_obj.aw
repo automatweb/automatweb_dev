@@ -1404,6 +1404,121 @@ class crm_company_obj extends _int_object
 		return $ol;
 	}
 
+	/** adds new project and sets company as customer
+		@attrib api=1 params=pos
+		@returns oid
+	**/
+	public function add_project_as_customer($name, $impl = null)
+	{
+		if(!$impl)
+		{
+			$co = get_current_company();
+			$impl = $co->id();
+		}
+		$o = new object();
+		$o->set_parent($this->id());
+		$o->set_class_id(CL_PROJECT);
+		$o->set_name($name);
+		$o->save();
+		$o->connect(array(
+			"to" => $this->id(),
+			"type" => "RELTYPE_ORDERER"
+		));
+		$o->set_prop("implementor" , $impl);
+		$o->save();
+		return $o->id();
+	}
+
+	/** adds customer to company
+		@attrib api=1 params=pos
+		@param customer optional type=oid/string
+			form oid 
+		@returns oid
+			customer object id
+	**/
+	public function add_customer($customer)
+	{
+		if(is_oid($customer))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"oid" => $customer,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_PROJECT,
+				"name" => $customer,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+		}
+
+		$co = reset($ol->arr());
+		if(!$co)
+		{
+			if(is_oid($co))
+			{
+				return null;
+			}
+			$co = new object();
+			$co->set_parent($this->id());
+			$co->set_class_id(CL_CRM_COMPANY);
+			$co->set_name($customer);
+			$co->save();
+		}
+
+		$rel = $co->get_customer_relation(null, true);
+		return $co->id();
+	}
+
+	/** returns company section, adds if none exists
+		@attrib api=1 params=pos
+		@param section optional type=string
+			form oid 
+		@returns oid
+			customer object id
+	**/
+	public function get_section_by_name($section)
+	{
+		$units = $this->get_sections();
+		foreach($units->names() as $key => $name)
+		{
+			if($name == $section)
+			{
+				return $key;
+			}
+		}
+		$customer_unit = $this->add_section($section);
+
+		return $customer_unit;
+	}
+
+	/** adds new section to company
+		@attrib api=1 params=pos
+		@param section optional type=string
+			form oid 
+		@returns oid
+			customer object id
+	**/
+	public function add_section($section)
+	{
+		$sectiono = new object();
+		$sectiono -> set_parent($this->id());
+		$sectiono -> set_class_id(CL_CRM_SECTION);
+		$sectiono -> set_name($section);
+		$sectiono -> save();
+
+		$this->connect(array(
+			"to" => $sectiono->id(),
+			"type" => "RELTYPE_SECTION"
+		));
+		return $sectiono -> id();
+	}
+
 }
 
 ?>
