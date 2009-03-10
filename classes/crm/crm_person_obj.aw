@@ -1380,7 +1380,7 @@ class crm_person_obj extends _int_object
 			if((int)$user->prop("nfy_".$type) === 1 || $modified !== true && (int)$user->prop("nfy_".$type) === 2)
 			{
 				$email = $person->email;
-				if (is_oid($email))
+				if ($person->instance()->can("view" , $email))
 				{
 					$email_obj = new object($email);
 					$addr = $email_obj->prop("mail");
