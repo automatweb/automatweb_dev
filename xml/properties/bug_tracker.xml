@@ -906,6 +906,16 @@
             <caption>Tagasiside bugide kaust</caption>
       </property>
       <property>
+            <name>default_bug_parent</name>
+            <table>objects</table>
+            <group>settings_g</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FB_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi bugide kaust</caption>
+      </property>
+      <property>
             <name>bug_type_folder</name>
             <table>objects</table>
             <group>settings_g</group>

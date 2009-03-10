@@ -145,10 +145,10 @@ class crm_person_work_relation_fix extends _int_object
 			}
 		}
 
-		$this->set_prop("section" , $o->id());
+		$this->set_prop("section" , $id);
 		$this->save();
 
-		return $o->id();
+		return $id;
 	}
 
 	/** sets mail address to work relation
