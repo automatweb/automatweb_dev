@@ -7530,7 +7530,7 @@ class crm_company extends class_base
 			"name" => $co."%",
 			"lang_id" => array(),
 			"site_id" => array(),
-//			"limit" => 1,
+			"limit" => 1,
 		));
 
 		foreach($orgs->arr() as $org)
@@ -7574,7 +7574,7 @@ class crm_company extends class_base
 			"name" => $co."%",
 			"lang_id" => array(),
 			"site_id" => array(),
-//			"limit" => 1,
+			"limit" => 1,
 		));
 
 		foreach($orgs->arr() as $org)
