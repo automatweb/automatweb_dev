@@ -1357,7 +1357,7 @@ class bug_tracker extends class_base
 			}
 			
 			$development = $bug->prop("customer") == $our_company->id() ? 1 : 0;
-			if($development)
+			if($development && $bug->class_id() == CL_BUG)
 			{
 				$bug->finance_type = 3;
 			}
