@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.42 2009/01/26 12:26:30 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.43 2009/03/10 13:25:12 hannes Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -35,6 +35,9 @@ caption Identiteet
 
 @property page_reload type=textbox size=5
 @caption Kirjade v&auml;rskendamine (sekundites)
+
+@property mail_rte type=chooser
+@caption Kirjade RTE
 
 @property num_attachments type=select field=meta method=serialize group=advanced default=1 
 @caption Manuste arv
@@ -569,6 +572,13 @@ class messenger_v2 extends class_base
 			case "msg_new2_from":
 				$prop["options"] = array($arr["obj_inst"]->prop("fromname.mail") => $arr["obj_inst"]->prop("fromname.name"));
 			break;
+
+			case "mail_rte":
+				$prop["options"] = array(
+					0 => t("Ei kuva"),
+					2 => t("FCKeditor"),
+				);
+
 		};
 		return $retval;
 	}
@@ -666,6 +676,9 @@ class messenger_v2 extends class_base
 
 	function callback_generate_scripts($arr)
 	{
+		load_javascript("autocomplete.js");
+		load_javascript("autocomplete_lib.js");
+
 		$sendmail_url = $this->mk_my_orb("_catch_mail_send", array(
 			"id" => $arr["obj_inst"]->id(),
 		));
@@ -737,8 +750,32 @@ class messenger_v2 extends class_base
 					document.getElementById(async_location).innerHTML = (last_loaded_type=='PRE')?(req.responseText + add):(req.responseText + add);
 					hide_ajax_loader();
 					async_location = false;
+					$.getScript('/automatweb/js/fckeditor/2.6.3/fckeditor.js', function(){
+						_msgr_load_fck('message');
+					});
+					_msgr_load_autocomplete();
 					//f('Loading messenger layout '+ last_loaded_layout +' (' + aw_timer('msgr::load_layout') + 'ms)');
 				}
+			}
+
+			function _msgr_load_fck(name)
+			{
+				var oFCKeditor = new FCKeditor(name);
+				oFCKeditor.BasePath = '/automatweb/js/fckeditor/2.6.3/';
+				oFCKeditor.Width = '600px';
+				oFCKeditor.Height = '500px';
+				oFCKeditor.Config['AutoDetectLanguage'] = false;
+				oFCKeditor.Config['DefaultLanguage'] = 'et';
+				oFCKeditor.ReplaceTextarea();
+				oFCKeditor.Config['CustomConfigurationsPath'] = '/automatweb/orb.aw?class=fck_editor&action=get_fck_config' + ( new Date() * 1 ) ;
+			}
+			
+			function _msgr_load_autocomplete(name)
+			{
+				autocomplete = \"var awAc_message_info_mto_ = new awActb(document.getElementsByName('message_info[mto]')[0]);\";
+				autocomplete += \"awAc_message_info_mto_.actb_setOptionUrl('http://robert.dev.struktuur.ee/automatweb/orb.aw?class=mail_message&action=get_autocomplete');\";
+				autocomplete += \"awAc_message_info_mto_.actb_setParams(new Array ('message_info[mto]'));\";
+				eval(autocomplete);
 			}
 
 			function msgr_close(subject)
