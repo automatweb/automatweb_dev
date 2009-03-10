@@ -317,6 +317,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@property fb_folder type=relpicker reltype=RELTYPE_FB_FOLDER field=meta method=serialize
 	@caption Tagasiside bugide kaust
 
+	@property default_bug_parent type=relpicker reltype=RELTYPE_FB_FOLDER field=meta method=serialize
+	@caption Vaikimisi bugide kaust
+
 	@property bug_type_folder type=relpicker reltype=RELTYPE_BUG_TYPE_FOLDER field=meta method=serialize
 	@caption Bugi t&uuml;&uuml;pide kaust
 

@@ -3967,19 +3967,40 @@ EOF;
 		return $statuses;
 	}
 
+	private function get_bug_parent($parent)
+	{
+		if($this->can("add" , $parent))
+		{
+			return $parent;
+		}
+		$bugtracks = new object_list(array(
+			"class_id" => CL_BUG_TRACKER,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$bugtrack = reset();
+		foreach($bugtracks->arr() as $bugtrack)
+		{
+			if($bugtrack->prop("default_bug_parent"))
+			{
+				return $bugtrack->prop("default_bug_parent");
+			}
+		}
+	}
+
 	/**
 		@attrib name=quick_add all_args=1
 	**/
 	function quick_add($arr)
 	{
-		var_dump($arr); die();
+		$company = get_current_company();
 		if($arr["bug_content"] || $arr["name"])
 		{
 			$o = new object();
 			$o->set_class_id(CL_BUG);
-			$o->set_parent($arr["parent"]);
+			$o->set_parent($this->get_bug_parent($arr["parent"]));
 			$o->set_name($arr["name"]);
-		
+			$o->set_prop("bug_status" , BUG_OPEN);
 			foreach($arr as $key => $val)
 			{
 				switch($key)
@@ -3997,74 +4018,157 @@ EOF;
 				}
 			}
 
-			$customers = new object_list(array(
-				"class_id" => CL_CRM_COMPANY,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"name" => $arr["customer"],
-				"limit" => 1,
-			));
-			$customer = reset($customers->arr());
-			$o->set_prop("customer" ,$customer->id());
-			$customer_units = new object_list(array(
-				"class_id" => CL_CRM_SECTION,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"name" => $arr["customer_unit"],
-				"limit" => 1,
-			));
-			$customer_unit = reset($customer_units->arr());
-			$o->set_prop("customer_unit" ,$customer_unit->id());
-			$customer_persons = new object_list(array(
-				"class_id" => CL_CRM_PERSON,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"name" => $arr["customer_person"],
-				"limit" => 1,
-			));
-			$customer_person = reset($customer_persons->arr());
-			$o->set_prop("customer_person" ,$customer_person->id());
+			if($arr["customer"])
+			{
+				$customers = new object_list(array(
+					"class_id" => CL_CRM_COMPANY,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"name" => $arr["customer"],
+					"limit" => 1,
+				));
+				$customer = reset($customers->arr());
+				if(!$customer)
+				{
+					$customer = obj($company->add_customer($arr["customer"]));
+				}
+				if(is_object($customer))
+				{
+					$o->set_prop("customer" ,$customer->id());
+				}
+			}
+
+			if($arr["customer_unit"] && is_object($customer))
+			{
+				$customer_unit = $customer->get_section_by_name($arr["customer_unit"]);
+				if($customer_unit)
+				{
+					$o->set_prop("customer_unit" ,$customer_unit);
+				}
+			}
+
+			if($arr["customer_person"] && is_object($customer))
+			{
+				$customer_persons = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"name" => $arr["customer_person"],
+					"limit" => 1,
+				));
+				$customer_person = reset($customer_persons->ids());
+				if(!$customer_person)
+				{
+					$customer_person = $customer->add_worker_data(array(
+						"worker" => $arr["customer_person"],
+						"section" => $customer_unit,
+					));
+				}
+				if($customer_person)
+				{
+					$o->set_prop("customer_person" ,$customer_person);
+				}
+			}
+
+			if($arr["orderer"])
+			{
+				$orderers = new object_list(array(
+					"class_id" => CL_CRM_COMPANY,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"name" => $arr["orderer"],
+					"limit" => 1,
+				));
+				$orderer = reset($orderers->arr());
+				if(is_object($orderer))
+				{
+					$o->set_prop("orderer" ,$orderer->id());
+				}
+			}
+	
+			if($arr["orderer_unit"] && is_object($orderer))
+			{
+				$orderer_units = new object_list(array(
+					"class_id" => CL_CRM_SECTION,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"name" => $arr["orderer_unit"],
+					"limit" => 1,
+				));
+				$orderer_unit = $orderer->get_section_by_name($arr["orderer_unit"]);
+				if($orderer_unit)
+				{
+					$o->set_prop("orderer_unit" ,$orderer_unit);
+				}
+			}
+
+			if($arr["orderer_person"] && is_object($orderer))
+			{
+				$orderer_persons = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"name" => $arr["orderer_person"],
+					"limit" => 1,
+				));
+				$orderer_person = reset($orderer_persons->ids());
+				if(!$orderer_person)
+				{
+					$orderer_person = $orderer->add_worker_data(array(
+						"worker" => $arr["orderer_person"],
+						"section" => $orderer_unit,
+					));
+				}
+				if($orderer_person)
+				{
+					$o->set_prop("orderer_person" ,$orderer_person);
+				}
+			}
+
+			if($arr["project"])
+			{
+				if(is_object($customer))
+				{
+					$projects = $customer->get_projects_as_customer();
+					foreach($projects->names() as $id => $name)
+					{
+						if($arr["project"] == $name)
+						{
+							$project = $id;
+							break;
+						}
+					}
+					if(!$project)
+					{
+						$project = $customer->add_project_as_customer($arr["project"]);
+					}
+				}
+				else
+				{
+					$projects = new object_list(array(
+						"class_id" => CL_PROJECT,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"name" => $arr["project"],
+						"limit" => 1,
+					));
+					$project = reset($projects->ids());
+				}
+				if($project)
+				{
+					$o->set_prop("project" ,$project);
+				}
+			}
 
 
-			$orderers = new object_list(array(
-				"class_id" => CL_CRM_COMPANY,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"name" => $arr["orderer"],
-				"limit" => 1,
-			));
-			$orderer = reset($orderers->arr());
-			$o->set_prop("customer" ,$orderer->id());
-			$orderer_units = new object_list(array(
-				"class_id" => CL_CRM_SECTION,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"name" => $arr["orderer_unit"],
-				"limit" => 1,
-			));
-			$orderer_unit = reset($orderer_units->arr());
-			$o->set_prop("orderer_unit" ,$orderer_unit->id());
-			$orderer_persons = new object_list(array(
-				"class_id" => CL_CRM_PERSON,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"name" => $arr["orderer_person"],
-				"limit" => 1,
-			));
-			$orderer_person = reset($orderer_persons->arr());
-			$o->set_prop("customer_person" ,$orderer_person->id());
-
-			$projects = new object_list(array(
-				"class_id" => CL_PROJECT,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"name" => $arr["project"],
-				"limit" => 1,
-			));
-			$project = reset($projects->arr());
-			$o->set_prop("customer_person" ,$project->id());
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+			$o->set_prop("monitors" , array($p->id(), $p->id()));
 
 			$o->save();
+			
+			$res = "<script language='javascript'>window.close();</script>";
+			die($res);
 		}
 		$co_inst = get_instance(CL_CRM_COMPANY);
 		$htmlc = get_instance("cfg/htmlclient");
@@ -4089,7 +4193,7 @@ EOF;
 			"options" => $this->get_priority_list(),
 			"caption" => t("T&otilde;sidus"),
 		));
-		$company = get_current_company();
+
 
 		$htmlc->add_property(array(
 			"name" => "who",
@@ -4144,6 +4248,7 @@ EOF;
 			"name" => "klient",
 			"type" => "text",
 			"caption" => t("Klient"),
+			"subtitle" => 1
 		));
 
 		$htmlc->add_property(array(
@@ -4173,6 +4278,7 @@ EOF;
 			"name" => "tellija",
 			"type" => "text",
 			"caption" => t("Tellija"),
+			"subtitle" => 1
 		));
 
 		$htmlc->add_property(array(
@@ -4206,7 +4312,6 @@ EOF;
 			"autocomplete_params" => array("customer","project"),
 		));
 
-
 		$htmlc->add_property(array(
 			"name" => "sub",
 			"type" => "button",
@@ -4217,6 +4322,7 @@ EOF;
 		$data = array(
 			"orb_class" => $_GET["class"]?$_GET["class"]:$_POST["class"],
 			"reforb" => 0,
+			"parent" => $_GET["parent"],
 		);
 		$htmlc->finish_output(array(
 			"action" => "quick_add",
