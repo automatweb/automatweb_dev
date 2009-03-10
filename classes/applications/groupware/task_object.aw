@@ -526,6 +526,7 @@ class task_object extends _int_object
 			}
 		}
 		$row->save();
+		return $row->id();
 	}
 
 	public function set_party($data)
@@ -871,6 +872,11 @@ class task_object extends _int_object
 		return $o->id();
 	}
 
+	/** returns the number of created bugs connected to this task
+		@attrib api=1
+		@return int
+			number of bugs
+	**/
 	public function bug_created()
 	{
 		$ol = new object_list(array(
@@ -879,6 +885,90 @@ class task_object extends _int_object
 		));
 		
 		return $ol->count();
+	}
+
+	/** adds customer
+		@attrib api=1 params=pos
+		@param customer required type=oid
+			customer id
+		@return oid
+			customer id
+	**/
+	public function add_customer($customer)
+	{
+		if (is_oid($customer))
+		{
+			$this->connect(array(
+				"to" => $customer,
+				"type" => "RELTYPE_CUSTOMER"
+			));
+			$this->set_prop("customer" , $customer);
+			$this->save();
+		}
+		return $customer;
+	}
+
+	/** adds project
+		@attrib api=1 params=pos
+		@param project required type=oid
+			project id
+		@return oid
+			project id
+	**/
+	public function add_project($project)
+	{
+		if (is_oid($project))
+		{
+			$this->connect(array(
+				"to" => $project,
+				"type" => "RELTYPE_PROJECT"
+			));
+		}
+		return $customer;
+	}
+
+	public function set_participant_data($data)
+	{
+		if(!($row = $this->get_primary_row_for_person($data["person"])))
+		{
+			$this->add_participant($data["person"]);
+		}
+		return $this->set_primary_row($data);
+	}
+
+	/** adds participant
+		@attrib api=1 params=pos
+		@param person optional type=oid
+			person id
+	**/
+	public function add_participant($person = null)
+	{
+		$pl = get_instance(CL_PLANNER);
+		if($person)
+		{
+			$p = obj($person);
+		}
+		else
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+		}
+
+		$p->connect(array(
+			"to" => $this->id(),
+			"reltype" => "RELTYPE_PERSON_TASK"
+		));
+
+		// also add to their calendar
+		if (($cal = $pl->get_calendar_for_person($p)))
+		{
+			$pl->add_event_to_calendar(obj($cal), $this);
+		}
+
+		$data = array(
+			"person" => $p->id(),
+		);
+		return $this->set_primary_row($data);
 	}
 
 }

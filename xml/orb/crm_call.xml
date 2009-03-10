@@ -30,5 +30,12 @@
 			</function>
 		</action>
 
+		<action name="quick_add" all_args="1">
+			<function name="quick_add">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
