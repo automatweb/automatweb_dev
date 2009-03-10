@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.64 2009/02/26 15:14:23 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.65 2009/03/10 14:58:50 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -243,15 +243,18 @@ class crm_company_webview extends class_base
 	// Return html for company display
 	function _get_company_show_html ($arr)
 	{
+		enter_function("crm_company_webview::_get_company_show_html");
 		// If request parameter 'l' is set, show only that webview
 		if (isset($_REQUEST['l']) && is_oid($_REQUEST['l']) && $arr['list_id'] != $_REQUEST['l'])
 		{
+			exit_function("crm_company_webview::_get_company_show_html");
 			return "";
 		}
 		$this->sub_merge = 0;
 		$org = ifset($arr, 'company_id');
 		if (!$this->can('view', $org) || !($c = obj($org)) || $c->class_id() != CL_CRM_COMPANY)
 		{
+			exit_function("crm_company_webview::_get_company_show_html");
 			return "";
 		}
 		$this->vars(array("company_id" => $org, "modified" => date("d/m/y", $c->modified())));
@@ -409,9 +412,17 @@ class crm_company_webview extends class_base
 					}
 					break;
 
-				case 'phone': // Display all phone numbers, not selected one
+				case "phone":
+					$value = $c->prop("phone_id.name");
+					break;
+
+				case "fax":
+					$value = $c->prop("telefax_id.name");
+					break;
+
+				case 'phones': // Display all phone numbers, not selected one
 					$reltype = 'RELTYPE_PHONE';
-				case 'fax':
+				case 'faxes':
 					$reltype = empty($reltype) ? 'RELTYPE_TELEFAX' : $reltype;
 				
 					$conns = $c->connections_from(array(
@@ -888,8 +899,8 @@ class crm_company_webview extends class_base
 						$val = $_t->prop("url");
 						$val = (substr($val, 0, 7) == "http://")?$val:"http://".$val;
 						$value[] = html::href(array(
-							"url" => $val,
-							"caption" => $val,
+							"url" => htmlspecialchars($val, ENT_QUOTES),
+							"caption" => htmlspecialchars($val, ENT_QUOTES),
 							"target" => "_blank",
 						));
 
@@ -1181,7 +1192,9 @@ class crm_company_webview extends class_base
 			"keywords" => $kw,
 		));
 		// Alrighty then, parse your arse away
-		return $this->parse('company_show');
+		$ret = $this->parse('company_show');
+		exit_function("crm_company_webview::_get_company_show_html");
+		return $ret;
 	}
 
 	// Return sorted list of companies to display
@@ -1983,11 +1996,13 @@ class crm_company_webview extends class_base
 	**/
 	function show_co($arr)
 	{
+		enter_function("crm_company_webview::show_co");
 		$this->sub_merge = 1;
 
 		$o = obj($arr['wv']);
 		if ($o->class_id() != CL_CRM_COMPANY_WEBVIEW)
 		{
+			exit_function("crm_company_webview::show_co");
 			return;
 		}
 		$tmpl = $o->prop('template');
@@ -2004,8 +2019,8 @@ class crm_company_webview extends class_base
 		$ret = $this->_get_company_show_html(array(
 			"company_id" => $arr["org"],
 			"list_id" => $_REQUEST["l"]
-
 		));
+		exit_function("crm_company_webview::show_co");
 		return $ret;
 	}
 
