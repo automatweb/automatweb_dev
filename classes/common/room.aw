@@ -2199,16 +2199,7 @@ class room extends class_base
 		$col = array();
 		$x = 1;
 		//kui on alambronn... kas siis ruumil mis on seotud teise ruumiga kust broneeritakse, v6i siis ruumil kust broneeritakse juhul kui on broneering m6nes seotud olevas ruumis
-		if($settings->prop("col_slave") != ""  && ((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
-		{
-			$col[$x] = "#".$settings->prop("col_slave"); 
-		}
-		else
-		if(is_object($rfp = $last_bron->get_rfp() )&& $rfp->prop("confirmed") == 3 && $settings->prop("col_on_hold") != "")
-		{
-			$col[$x] = "#".$settings->prop("col_on_hold");
-		}
-		else
+
 		if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
 		{
 			$col[$x] = "#".$settings->prop("col_recent"); 
@@ -2222,6 +2213,11 @@ class room extends class_base
 		else
 		if($last_bron->prop("verified"))
 		{//arr($last_bron->prop("type") == "food" && $settings->prop("col_food") != "");
+			if($settings->prop("col_slave") != ""  && ((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
+			{
+				$col[$x] = "#".$settings->prop("col_slave"); 
+			}
+			else
 			if($last_bron->prop("type") == "food" && $settings->prop("col_food") != "")
 			{
 				$col[$x] = "#".$settings->prop("col_food");
@@ -2233,7 +2229,55 @@ class room extends class_base
 		}
 		else
 		{
-			$col[$x] = $settings->prop("col_web_halfling") != "" ? "#".$settings->prop("col_web_halfling") : "#FFE4B5";
+			$rfp_color = "";
+			if(is_object($rfp = $last_bron->get_rfp()))
+			{
+				switch($rfp->prop("confirmed"))
+				{
+					case 1:
+						if($settings->prop("col_slave") != ""  && ((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
+						{
+							 $rfp_color = $settings->prop("col_slave"); 
+						}
+						elseif($settings->prop("col_sent") != "")
+						{
+							$rfp_color = $settings->prop("col_sent");
+						}
+						break;
+					case 3:
+						if($settings->prop("col_slave") != ""  && ((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
+						{
+							 $rfp_color = $settings->prop("col_slave");
+						}
+						elseif($settings->prop("col_on_hold") != "")
+						{
+							$rfp_color = $settings->prop("col_on_hold");
+						}
+						break;
+					case 4:
+						if($settings->prop("col_back") != "")
+						{
+							$rfp_color = $settings->prop("col_back");
+						}
+						break;
+					case 5:
+						if($settings->prop("col_unverified") != "")
+						{
+							$rfp_color = $settings->prop("col_unverified");
+						}
+						break;
+				}
+
+			}
+
+			if($rfp_color)
+			{
+				$col[$x] = "#".$rfp_color;
+			}
+			else
+			{
+				$col[$x] = $settings->prop("col_web_halfling") != "" ? "#".$settings->prop("col_web_halfling") : "#FFE4B5";
+			}
 		}
 		if($this->is_after_buffer)
 		{
