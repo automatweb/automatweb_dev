@@ -35,8 +35,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 	@property gid field=gid type=text
 	@caption Grupi ID
 
-	@property name field=name type=textbox
+	@property name field=name type=textbox table=objects
 	@caption Nimi
+
+	@property gp_name field=name type=hidden
 
 	@property priority field=priority type=textbox size=15 warning=0
 	@caption Prioriteet

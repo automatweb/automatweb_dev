@@ -10,11 +10,18 @@
       </property>
       <property>
             <name>name</name>
-            <table>groups</table>
+            <table>objects</table>
             <group>general</group>
             <field>name</field>
             <type>textbox</type>
             <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>gp_name</name>
+            <table>groups</table>
+            <group>general</group>
+            <field>name</field>
+            <type>hidden</type>
       </property>
       <property>
             <name>priority</name>

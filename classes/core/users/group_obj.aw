@@ -10,14 +10,14 @@ class group_obj extends _int_object
 		$rv =  parent::name();
 		if ($rv == "")
 		{
-			$rv = parent::prop("name");
+			$rv = parent::prop("gp_name");
 		}
 		return $rv;
 	}
 
 	function set_prop($k, $v)
 	{
-		if ($k == "name")
+		if ($k == "name" || $k == "gp_name")
 		{
 			$this->set_name($v);
 		}
@@ -27,6 +27,7 @@ class group_obj extends _int_object
 	function set_name($v)
 	{
 		parent::set_prop("name", $v);
+		parent::set_prop("gp_name", $v);
 		return parent::set_name($v);
 	}
 
