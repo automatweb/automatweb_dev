@@ -64,11 +64,30 @@ class shortcut_manager extends class_base
 		$doc->loadXML( $file );
 		
 		$o_items = $doc->getElementsByTagName( "class" );
+		$shortcuts_array = array();
 		$j=0;
 		
 		$out = "aw_shortcut_db = new Array();\n";
 		$out .= "/* start xml/shortcuts.xml */ \n";
-		foreach( $o_items as $class )
+
+
+		foreach($o_items as $class)
+		{
+			$s_class = $class->getAttribute("name");
+			$out .= 'aw_shortcut_db["'.$s_class.'"] = new Array();';
+			foreach($class->getElementsByTagName( "shortcut" ) as $shortcut)
+			{
+				$s_function = $shortcut->getAttribute("function");
+				$s_shortcut = $shortcut->getAttribute("shortcut");
+				$out .= 'aw_shortcut_db["'.$s_class.'"]["'.$s_function.'"] = "'.$s_shortcut.'";';
+				$shortcuts_array[$s_class][$s_function] = array(
+					"shortcut" => $s_shortcut,
+					"url" => $shortcut->getAttribute("url"),
+				);
+			}
+		}
+
+/*		foreach( $o_items as $class )
 		{
 			//$classes = $item->getElementsByTagName( "shortcut" );
 			$s_class = $class->getAttribute("name");
@@ -88,7 +107,24 @@ class shortcut_manager extends class_base
 					}
 				}
 			}
+		}*/
+
+		foreach($shortcuts_array as $class => $funct)
+		{
+			foreach($funct as $function => $sc)
+			{
+				if($sc["url"])
+				{
+					$out.='$.hotkeys.add("'.$sc["shortcut"].'", function(){ aw_popup_scroll("'.$sc["url"].'", "'.$class.'_'.$function.'", 800,600);});';
+				}
+				else
+				{
+					$url = "/automatweb/orb.aw?class=".$class."&action=".$function."&in_popup=1";
+					$out.='$.hotkeys.add("'.$sc["shortcut"].'", function(){ aw_popup_scroll("'.$url.'", "'.$class.'_'.$function.'", 800,600);});';
+				}
+			}
 		}
+
 		$out .= "\n/* end xml/shortcuts.xml */\n";
 		ob_start ("ob_gzhandler");
 		header ("Content-type: text/javascript; charset: UTF-8");
@@ -118,13 +154,31 @@ class shortcut_manager extends class_base
 
 		$doc = new DOMDocument();
 		$doc->loadXML( $file );
-		
+		$shortcuts_array = array();
 		$o_items = $doc->getElementsByTagName( "class" );
 		$j=0;
 		
 		$out = "aw_shortcut_db = new Array();\n";
 		$out .= "/* start xml/shortcuts.xml */ \n";
-		foreach( $o_items as $class )
+
+
+		foreach($o_items as $class)
+		{
+			$s_class = $class->getAttribute("name");
+			$out .= 'aw_shortcut_db["'.$s_class.'"] = new Array();';
+			foreach($class->getElementsByTagName( "shortcut" ) as $shortcut)
+			{
+				$s_function = $shortcut->getAttribute("function");
+				$s_shortcut = $shortcut->getAttribute("shortcut");
+				$out .= 'aw_shortcut_db["'.$s_class.'"]["'.$s_function.'"] = "'.$s_shortcut.'";';
+				$shortcuts_array[$s_class][$s_function] = array(
+					"shortcut" => $s_shortcut,
+					"url" => $shortcut->getAttribute("url"),
+				);
+			}
+		}
+
+/*		foreach( $o_items as $class )
 		{
 			//$classes = $item->getElementsByTagName( "shortcut" );
 			$s_class = $class->getAttribute("name");
@@ -142,6 +196,22 @@ class shortcut_manager extends class_base
 							$out .= 'aw_shortcut_db["'.$s_class.'"]["'.$s_function.'"] = "'.$s_shortcut.'";';
 						}
 					}
+				}
+			}
+		}*/
+
+		foreach($shortcuts_array as $class => $funct)
+		{
+			foreach($funct as $function => $sc)
+			{
+				if($sc["url"])
+				{
+					$out.='$.hotkeys.add("'.$sc["shortcut"].'", function(){ aw_popup_scroll("'.$sc["url"].'", "'.$class.'_'.$function.'", 800,600);});';
+				}
+				else
+				{
+					$url = "/automatweb/orb.aw?class=".$class."&action=".$function."&in_popup=1";
+					$out.='$.hotkeys.add("'.$sc["shortcut"].'", function(){ aw_popup_scroll("'.$url.'", "'.$class.'_'.$function.'", 800,600);});';
 				}
 			}
 		}

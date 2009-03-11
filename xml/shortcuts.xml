@@ -2,26 +2,22 @@
 <shortcuts>
 	<classes>
 	<class name="aw_object_quickadd">
-		<shortcut description="Opens quickadd window">
-			<function name="handle_object_quickadd_activation">
-				<arguments>
-					<required name="shortcut" value="Alt+Ctrl+u" />
-				</arguments>
-			</function>
+		<shortcut description="Opens quickadd window" function="handle_object_quickadd_activation" shortcut="Alt+Ctrl+u">
 		</shortcut>
-
-		<shortcut description="Closes shortcut window">
-			<function name="handle_object_quickadd_exit">
-				<arguments>
-					<required name="shortcut" value="Esc" />
-				</arguments>
-			</function>
+		<shortcut description="Closes shortcut window" function="handle_object_quickadd_exit" shortcut="Esc">
 		</shortcut>
-		
+	</class>
+	<class name="bug">
+		<shortcut description="Opens quickadd window" function="quick_add" shortcut="Ctrl+Shift+b">
+		</shortcut>
+	</class>
+	<class name="crm_meeting">
+		<shortcut description="Opens quickadd window" function="quick_add" shortcut="Ctrl+Shift+m">
+		</shortcut>
+	</class>
+	<class name="crm_call">
+		<shortcut description="Opens quickadd window" function="quick_add" shortcut="Ctrl+Shift+c">
+		</shortcut>
 	</class>
 	</classes>
-	
-	<urls>
-		
-	</urls>
 </shortcuts>
