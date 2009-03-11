@@ -55,6 +55,19 @@ class mrp_job_obj extends _int_object
 		return $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
 	}
 
+	/**
+	@attrib name=save_materials
+		
+	@param amount required type=array
+	@param unit required type=array
+	@param movement optional type=array
+	@param planning optional type=array
+
+	@comment 
+		Function to be called on a mrp_job object to save its materials
+		Parameters are arrays of $product_id => "value" pairs
+		eg amount => array( 123 => 12, 124 => 13 ), where 123 & 124 are product ids, 12 & 13 amounts
+	**/
 	function save_materials($arr)
 	{
 		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
@@ -76,50 +89,32 @@ class mrp_job_obj extends _int_object
 			foreach($conn as $c)
 			{
 				$prod = $c->from()->prop("product");
-				if(!$prods[$prod] && $arr["request"]["amount"][$prod])
+				$arg["product"] = $prod;
+				$arg["amount"] = $arr["amount"][$prod];
+				$arg["unit"] = $arr["unit"][$prod];
+				if(isset($arr["movement"][$prod]))
 				{
-					$o = obj();
-					$o->set_class_id(CL_MATERIAL_EXPENSE);
-					$o->set_parent($this->id());
-					$o->set_name(sprintf(t("%s kulu %s jaoks"), obj($prod)->name(), $this->name()));
-					$o->set_prop("product", $prod);
-					if($arr["request"]["unit"][$prod])
-					{
-						$o->set_prop("unit", $arr["request"]["unit"][$prod]);
-					}
-					$o->set_prop("amount", $arr["request"]["amount"][$prod]);
-					$o->set_prop("job", $this->id());
-					$o->save();
+					$arg["movement"] = $arr["movement"][$prod];
 				}
-				else
+				if(isset($arr["planning"][$prod]))
 				{
-					if($prods[$prod] && !$arr["request"]["amount"][$prod])
-					{
-						$eo = obj($prods[$prod]);
-						$eo->delete();
-					}
-					elseif($prods[$prod])
-					{
-						$eo = obj($prods[$prod]);
-						$eo->set_prop("unit", $arr["request"]["unit"][$prod]);
-						$eo->set_prop("amount", $arr["request"]["amount"][$prod]);
-						$eo->save();
-					}
+					$arg["planning"] = $arr["planning"][$prod];
 				}
+				$this->set_used_material($arg);
 			}
-			$this->save();
+
 			$conn = $this->connections_to(array(
 				"from.class_id" => CL_MATERIAL_MOVEMENT_RELATION,
 			));
-			foreach($arr["request"]["unit"] as $prod => $unit)
+			foreach($arr["unit"] as $prod => $unit)
 			{
-				if(!$arr["request"]["amount"][$prod])
+				if(!$arr["amount"][$prod])
 				{
 					continue;
 				}
 				$data[$prod] = array(
 					"unit" => $unit,
-					"amount" => $arr["request"]["amount"][$prod],
+					"amount" => $arr["amount"][$prod],
 				);
 			}
 			if(!count($conn))
@@ -171,6 +166,90 @@ class mrp_job_obj extends _int_object
 			$rv[$entry->prop("product")] = $entry;
 		}
 		return $rv;
+	}
+
+	/**
+	@attrib name=set_used_material_assessment api=1
+
+	@param product required type=oid
+	@param amount required type=int
+	@param unit optional type=oid
+	@param movement optional type=int
+	@param planning optional type=int
+	
+	@comment saves a product for a job, when called on a job object
+	**/
+	function set_used_material($arr)
+	{
+		$conn2 = $this->connections_to(array(
+			"from.class_id" => CL_MATERIAL_EXPENSE,
+		));
+		foreach($conn2 as $c)
+		{
+			$o = $c->from();
+			$prod = $o->prop("product");
+			$prods[$prod] = $o->id();
+		}
+		$prod = $arr["product"];
+		if(!$prods[$prod] && $arr["amount"])
+		{
+			$o = obj();
+			$o->set_class_id(CL_MATERIAL_EXPENSE);
+			$o->set_parent($this->id());
+			$o->set_name(sprintf(t("%s kulu %s jaoks"), obj($prod)->name(), $this->name()));
+			$o->set_prop("product", $prod);
+			if($arr["unit"])
+			{
+				$unit = $arr["unit"];
+			}
+			else
+			{
+				$po = obj($prod);
+				$units = $po->instance()->get_units($po);
+				if(count($units))
+				{
+					$unit = reset($units);
+				}
+			}
+			if($unit)
+			{
+				$o->set_prop("unit", $unit);
+			}
+			$o->set_prop("amount", $arr["amount"]);
+			$o->set_prop("job", $this->id());
+			if(isset($arr["movement"]))
+			{
+				$o->set_prop("movement", $arr["movement"]);
+			}
+			if(isset($arr["planning"]))
+			{
+				$o->set_prop("planning", $arr["planning"]);
+			}
+			$o->save();
+		}
+		else
+		{
+			if($prods[$prod] && !$arr["amount"])
+			{
+				$eo = obj($prods[$prod]);
+				$eo->delete();
+			}
+			elseif($prods[$prod])
+			{
+				$eo = obj($prods[$prod]);
+				$eo->set_prop("unit", $arr["unit"]);
+				$eo->set_prop("amount", $arr["amount"]);
+				if(isset($arr["movement"]))
+				{
+					$eo->set_prop("movement", $arr["movement"]);
+				}
+				if(isset($arr["planning"]))
+				{
+					$eo->set_prop("planning", $arr["planning"]);
+				}
+				$eo->save();
+			}
+		}
 	}
 }
 

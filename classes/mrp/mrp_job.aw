@@ -374,7 +374,7 @@ class mrp_job extends class_base
 				break;
 
 			case "materials_tbl":
-				$arr["obj_inst"]->save_materials($arr);
+				$arr["obj_inst"]->save_materials($arr["request"]);
 				break;
 		}
 
@@ -1522,6 +1522,18 @@ class mrp_job extends class_base
 			"align"=> "center",
 			"chgbgcolor" => "color",
 		));
+		$t->define_field(array(
+			"name" => "planning",
+			"caption" => t("Tarnetingimus planeerimisel"),
+			"align"=> "center",
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "movement",
+			"caption" => t("Materjali liikumine materjalilaost"),
+			"align"=> "center",
+			"chgbgcolor" => "color",
+		));
 		$t->set_rgroupby(array("category" => "category"));
 	}
 
@@ -1533,6 +1545,8 @@ class mrp_job extends class_base
 		$conn = $arr["obj_inst"]->connections_to(array(
 			"from.class_id" => CL_MATERIAL_EXPENSE,
 		));
+		$mec_o = obj();
+		$mec_o->set_class_id(CL_MATERIAL_EXPENSE_CONDITION);
 		foreach($conn as $c)
 		{
 			$prod = $c->from()->prop("product");
@@ -1548,6 +1562,16 @@ class mrp_job extends class_base
 				"unit" => $unitselect,
 				"category" => ($cat = $po->get_first_obj_by_reltype("RELTYPE_CATEGORY")) ? $cat->name() : "",
 				"color" => "#EAEAEA",
+				"planning" => html::select(array(
+					"name" => "planning[".$prod."]",
+					"options" => $mec_o->planning_options(),
+					"value" => $c->from()->prop("planning"),
+				)),
+				"movement" => html::select(array(
+					"name" => "movement[".$prod."]",
+					"options" => $mec_o->movement_options(),
+					"value" => $c->from()->prop("movement"),
+				)),
 			));
 		}
 	}
@@ -1590,6 +1614,16 @@ class mrp_job extends class_base
 					"unit" => $unitselect,
 					"category" => ($cat = $po->get_first_obj_by_reltype("RELTYPE_CATEGORY")) ? $cat->name() : "",
 					"color" => "#EAEAEA",
+					"planning" => html::select(array(
+						"name" => "planning[".$prod."]",
+						"options" => $c->from()->planning_options(),
+						"value" => $c->from()->prop("planning"),
+					)),
+					"movement" => html::select(array(
+						"name" => "movement[".$prod."]",
+						"options" => $c->from()->movement_options(),
+						"value" => $c->from()->prop("movement"),
+					)),
 				));
 			}
 		}
