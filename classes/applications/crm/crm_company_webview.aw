@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.66 2009/03/11 10:39:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.67 2009/03/11 15:20:49 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -442,39 +442,32 @@ class crm_company_webview extends class_base
 				break;
 
 				case 'sectors':
-					$odl = new object_data_list(
-						array(
+					$value = array();
+					if(count($c->prop("pohitegevus")) > 0)
+					{
+						$ol = new object_list(array(
 							"class_id" => CL_CRM_SECTOR,
-							new object_list_filter(array(
-								"logic" => "OR",
-								"conditions" => array(
-									"CL_CRM_SECTOR.RELTYPE_SECTOR(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).company" => $c->id(),
-									"CL_CRM_SECTOR.RELTYPE_TEGEVUSALAD(CL_CRM_COMPANY).id"  => $c->id(),
-								),
-							)),
+							"oid" => $c->prop("pohitegevus"),
 							"lang_id" => array(),
 							"site_id" => array(),
-						), 
-						array(
-							CL_CRM_SECTOR => array("name")
-						)
-					);
-					foreach($odl->arr() as $oid => $odata)
-					{
-						if ($_GET["action"] == "show_co")
+						));
+						foreach($ol->names() as $oid => $name)
 						{
-							$value[] = html::href(array(
-								"caption" => $odata["name"],
-								"class" => "ccwSectLink",
-								"url" => $this->mk_my_orb("show_sect", array(
-									"section" => $oid,
-									"wv" => $_GET["wv"]
-								), "crm_company_webview")
-							));
-						}
-						else
-						{
-							$value[] = $odata["name"];
+							if ($_GET["action"] == "show_co")
+							{
+								$value[] = html::href(array(
+									"caption" => $name,
+									"class" => "ccwSectLink",
+									"url" => $this->mk_my_orb("show_sect", array(
+										"section" => $oid,
+										"wv" => $_GET["wv"]
+									), "crm_company_webview")
+								));
+							}
+							else
+							{
+								$value[] = $name;
+							}
 						}
 					}
 				break;
@@ -1317,13 +1310,7 @@ class crm_company_webview extends class_base
 		}
 		if (isset($limit_sector) && is_array($limit_sector) && count($limit_sector))
 		{			
-			$filt[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_COMPANY.RELTYPE_COMPANY(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).sector"  => $limit_sector,
-					"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD"  => $limit_sector,
-				),
-			));
+			$filt["CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD"] = $limit_sector;
 		}
 		if (empty($limit_city_excl) && !empty($limit_city))
 		{
@@ -1389,8 +1376,53 @@ class crm_company_webview extends class_base
 		}
 		$ol = new object_list($filt);
 		$retval = $ol->arr();
+
+		// Order the companies by 
+		if($ol->count() > 0 && (isset($arr["pohitegevus"]) || (isset($limit_sector) && is_array($limit_sector) && count($limit_sector))))
+		{
+			$jrk_odl = new object_data_list(
+				array(
+					"class_id" => CL_CRM_COMPANY_SECTOR_MEMBERSHIP,
+					"CL_CRM_COMPANY_SECTOR_MEMBERSHIP.RELTYPE_COMPANY" => $ol->ids(),
+					"CL_CRM_COMPANY_SECTOR_MEMBERSHIP.RELTYPE_SECTOR" => isset($arr["pohitegevus"]) ? $arr["pohitegevus"] : $limit_sector,
+					"lang_id" => array(),
+					"site_id" => array(),
+				),
+				array(
+					CL_CRM_COMPANY_SECTOR_MEMBERSHIP => array("jrk", "company"),
+				)
+			);
+			foreach($jrk_odl->arr() as $jrk_odata)
+			{
+				$jrks[$jrk_odata["company"]] = $jrk_odata["jrk"];
+			}
+			asort($jrks, SORT_NUMERIC);
+			$this->jrks = $jrks;
+			uasort($retval, array($this, "cmp_orgs"));
+		}
 		exit_function('crm_company_webview::list');
 		return $retval;
+	}
+
+	function cmp_orgs($a, $b)
+	{
+		$a_jrk = isset($this->jrks[$a->id()]) ? $this->jrks[$a->id()] : 0;
+		$b_jrk = isset($this->jrks[$b->id()]) ? $this->jrks[$b->id()] : 0;
+		if($a_jrk == $b_jrk)
+		{
+			if($a->ord() == $b->ord())
+			{
+				return strcmp($a->trans_get_val("name"), $b->trans_get_val("name"));
+			}
+			else
+			{
+				return $a->ord() > $b->ord() ? 1 : -1;
+			}
+		}
+		else
+		{
+			return $a_jrk > $b_jrk ? 1 : -1;
+		}
 	}
 
 	// Returns html for companies list

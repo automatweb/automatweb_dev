@@ -1,9 +1,9 @@
 <?php
 /*
 @classinfo syslog_type=ST_CRM_COMPANY_SECTOR_MEMBERSHIP relationmgr=yes no_comment=1 prop_cb=1 maintainer=instrumental
-@tableinfo aw_crm_company_sector_membership master_index=brother_of master_table=objects index=aw_oid
+#@tableinfo aw_crm_company_sector_membership master_index=brother_of master_table=objects index=aw_oid
 
-@default table=aw_crm_company_sector_membership
+#@default table=aw_crm_company_sector_membership
 @default group=general
 
 @property company type=relpicker reltype=RELTYPE_COMPANY store=connect

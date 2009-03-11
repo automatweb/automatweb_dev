@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.62 2009/03/11 10:51:21 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.63 2009/03/11 15:20:45 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -176,6 +176,7 @@ class crm_db extends class_base
 			"clid" => CL_CRM_DB,
 		));
 		$this->org_tbl_fields = array(
+			"jrk" => t("Jrk"),
 			"org" => t("Organisatsioon"),
 			"field" => t("P&otilde;hitegevus"),
 			"ettevotlusvorm" => t("Ettev&otilde;lusvorm"),
@@ -188,7 +189,51 @@ class crm_db extends class_base
 			"changed" => t("Muudetud"),
 			"created" => t("Loodud"),
 		);
-	}	
+		$this->org_tbl_fields_add_args = array(
+			"jrk" => array("sorting_field" => "jrk_int"),
+		);
+	}
+
+	function _set_org_tbl($arr)
+	{
+		foreach(safe_array($arr["prop"]["value"]) as $oid => $v)
+		{
+			if(isset($v["sector"]) && $this->can("view", $v["sector"]))
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_COMPANY_SECTOR_MEMBERSHIP,
+					"company" => $oid,
+					"sector" => $v["sector"],
+					"lang_id" => array(),
+					"site_id" => array(),
+					new obj_predicate_limit(1),
+				));
+				if($ol->count() > 0)
+				{
+					$o = $ol->begin();
+					$o->set_ord((int)$v["jrk"]);
+					$o->save();
+				}
+				elseif((int)$v["jrk"] !== 0)
+				{
+					$o = obj();
+					$o->set_class_id(CL_CRM_COMPANY_SECTOR_MEMBERSHIP);
+					$o->set_parent($oid);
+					$o->set_name(sprintf(t("Organisatsiooni OIDga %u seos tegevusalaga OIDga %u"), $oid, $v["sector"]));
+					$o->set_prop("company", $oid);
+					$o->set_prop("sector", $v["sector"]);
+					$o->set_ord((int)$v["jrk"]);
+					$o->save();
+				}
+			}
+			else
+			{
+				$o = obj($oid);
+				$o->set_ord((int)$v["jrk"]);
+				$o->save();
+			}
+		}
+	}
 		
 	function get_property(&$arr)
 	{
@@ -335,21 +380,6 @@ class crm_db extends class_base
 			{
 				$secs[$k][$conn["to"]][$conn["from"]] = 1;
 			}
-			$secs_odl = new object_data_list(
-				array(
-					"class_id" => CL_CRM_COMPANY_SECTOR_MEMBERSHIP,
-					"company" => $v,
-					"lang_id" => array(),
-					"site_id" => array(),
-				),
-				array(
-					CL_CRM_COMPANY_SECTOR_MEMBERSHIP => array("company", "sector"),
-				)
-			);
-			foreach($secs_odl->arr() as $odata)
-			{
-				$secs[$k][$odata["sector"]][$odata["company"]] = 1;
-			}
 		}
 
 		// Tegevusalad
@@ -462,11 +492,14 @@ class crm_db extends class_base
 		$fields = is_array($arr["obj_inst"]->org_tbl_fields) ? $arr["obj_inst"]->org_tbl_fields : array_keys($this->org_tbl_fields);
 		foreach($fields as $field)
 		{
-			$t->define_field(array(
+			$args = array(
 				"name" => $field,
 				"caption" => $this->org_tbl_fields[$field],
 				"sortable" => 1,
-			));
+			);
+			$add_args = !empty($this->org_tbl_fields_add_args[$field]) ? $this->org_tbl_fields_add_args[$field] : array();
+			$args = array_merge($args, $add_args);
+			$t->define_field($args);
 		}
 		$t->define_chooser(array(
 			"field" => "id",
@@ -488,6 +521,36 @@ class crm_db extends class_base
 
 		list($companys, $customer_data) = $this->get_org_tbl_data($arr);
 
+		// Get the order!
+		if(isset($_GET["branch_id"]) && $this->can("view", $_GET["branch_id"]))
+		{
+			foreach($companys->ids() as $id)
+			{
+				$jrks[$id] = 0;
+			}
+			$jrk_odl = new object_data_list(
+				array(
+					"class_id" => CL_CRM_COMPANY_SECTOR_MEMBERSHIP,
+					"CL_CRM_COMPANY_SECTOR_MEMBERSHIP.RELTYPE_COMPANY" => $companys->ids(),
+					"CL_CRM_COMPANY_SECTOR_MEMBERSHIP.RELTYPE_SECTOR" => isset($_GET["branch_id"]) ? $_GET["branch_id"] : array(),
+					"lang_id" => array(),
+					"site_id" => array(),
+				),
+				array(
+					CL_CRM_COMPANY_SECTOR_MEMBERSHIP => array("company", "jrk"),
+				)
+			);
+			foreach($jrk_odl->arr() as $jrk_od)
+			{
+				$jrks[$jrk_od["company"]] = $jrk_od["jrk"];
+			}
+		}
+		else
+		{
+			$jrks = $companys->ords();
+		}
+		asort($jrks, SORT_NUMERIC);
+
 		if($companys->count() > $perpage)
 		{
 			$t->define_pageselector(array(
@@ -497,8 +560,9 @@ class crm_db extends class_base
 				"no_recount" => true,
 			));
 			$p = isset($_GET["ft_page"]) ? (int)$_GET["ft_page"] : 0;
+
 			$ids = $companys->ids();
-			$ids_to_cut = safe_array(array_slice($ids, 0, $p * $perpage)) + safe_array(array_slice($ids, ($p + 1) * $perpage));
+			$ids_to_cut = array_diff($ids, array_keys(array_slice($jrks, $p * $perpage, $perpage, true)));
 			$companys->remove($ids_to_cut);
 		}
 		$coms = $companys->arr();
@@ -591,7 +655,18 @@ class crm_db extends class_base
 			}
 			
 			$pm = $this->get_org_popupmenu(array("oid" => $com->id(), "cd_oid" => $customer_data[$com->id()]));
+			$jrk = isset($_GET["branch_id"]) && $this->can("view", $_GET["branch_id"]) ? (isset($jrks[$com->id()]) ? (int)$jrks[$com->id()] : 0) : (int)$com->ord();
+			$sector = isset($_GET["branch_id"]) && $this->can("view", $_GET["branch_id"]) ? html::hidden(array(
+				"name" => "org_tbl[".$com->id()."][sector]",
+				"value" => $_GET["branch_id"],
+			)) : "";
 			$t->define_data(array(
+				"jrk" => html::textbox(array(
+					"name" => "org_tbl[".$com->id()."][jrk]",
+					"size" => 2,
+					"value" => $jrk,
+				)).$sector,
+				"jrk_int" => $jrk,
 				"id" => $com->id(),
 //				"org" => html::get_change_url($com->id(), array("return_url" => get_ru()), strlen($com->name()) ? $com->name() : t("(nimetu)")),
 				"org" => $pm->get_menu(array(
@@ -609,14 +684,8 @@ class crm_db extends class_base
 				"created" => date("Y.m.d H:i" , $com->created()),
 			));
 		}
-		if (!isset($_GET["sortby"]))
-		{
-			$t->set_sortable(false);
-		}
-		else
-		{
-			$t->sort_by();
-		}
+		$t->set_numeric_field("jrk_int");
+		$t->set_default_sortby("jrk_int");
 	}
 
 	function _get_org_tlb(&$arr)
@@ -663,6 +732,7 @@ class crm_db extends class_base
 				}
 			}
 		}
+		$tb->add_save_button();
 		$pl = get_instance(CL_PLANNER);
 		$cal_id = $pl->get_calendar_for_user(array(
 			"uid" => aw_global_get("uid"),

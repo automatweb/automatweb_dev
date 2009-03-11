@@ -4,11 +4,6 @@ class crm_company_obj extends _int_object
 {
 	function prop($k)
 	{
-		if($k === "pohitegevus")
-		{
-			return $this->get_pohitegevus();
-		}
-
 		if($k == "show_on_web")
 		{
 			$org = get_instance(CL_USER)->get_current_company();
@@ -74,11 +69,6 @@ class crm_company_obj extends _int_object
 
 	function set_prop($name, $value, $set_into_meta = true)
 	{
-		if($name === "pohitegevus")
-		{
-			return $this->set_pohitegevus($value);
-		}
-
 		if($k == "show_on_web")
 		{
 			$org = get_instance(CL_USER)->get_current_company();
@@ -167,12 +157,6 @@ class crm_company_obj extends _int_object
 				$this->set_prop("fake_".$fake, $this->meta("tmp_fake_".$fake), false);
 				$this->set_meta("tmp_fake_".$fake, NULL);
 			}
-		}
-		if($this->meta("sim_pohitegevus"))
-		{
-			$this->set_meta("sim_pohitegevus", NULL);
-			$this->set_pohitegevus($this->meta("tmp_pohitegevus"), false);
-			$this->set_meta("tmp_pohitegevus", NULL);
 		}
 		return parent::save();
 	}
@@ -1421,82 +1405,6 @@ class crm_company_obj extends _int_object
 			"site_id" => array()
 		));
 		return $ol;
-	}
-
-	private function set_pohitegevus($val, $set_into_meta = true)
-	{
-		if($set_into_meta)
-		{
-			$this->set_meta("tmp_pohitegevus", $val);
-			$this->set_meta("sim_pohitegevus", 1);
-		}
-		else
-		{
-			$val = is_oid($val) ? (array)$val : safe_array($val);
-			// Lose non-OID values.
-			foreach($val as $k => $v)
-			{
-				if(!is_oid($v))
-				{
-					unset($val[$k]);
-				}
-			}
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_SECTOR,
-				"CL_CRM_SECTOR.RELTYPE_SECTOR(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).company" => $this->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-			));
-			$todo = array_diff($val, $ol->ids());
-			foreach($todo as $id)
-			{
-				$o = obj();
-				$o->set_class_id(CL_CRM_COMPANY_SECTOR_MEMBERSHIP);
-				$o->set_parent($this->id());
-				$o->set_name(sprintf(t("Organisatsiooni %s seos tegevusalaga, mille OID on %u"), $this->name(), $id));
-				$o->set_prop("company", $this->id());
-				$o->set_prop("sector", $id);
-				$o->save();
-			}
-			$doomed = new object_list(array(
-				"class_id" => CL_CRM_COMPANY_SECTOR_MEMBERSHIP,
-				"sector" => new obj_predicate_not($val),
-				"company" => $this->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-			));
-			$doomed->delete();
-			// Remove old school
-			$conns = $this->connections_from(array("type" => "RELTYPE_TEGEVUSALAD"));
-			$conns->delete();
-			$this->set_meta("new_pohitegevus", 1);
-		}
-	}
-
-	private function get_pohitegevus()
-	{
-		if($this->meta("sim_pohitegevus"))
-		{
-			return $this->meta("tmp_pohitegevus");
-		}
-		elseif(!$this->meta("new_pohitegevus"))
-		{
-			return parent::prop("pohitegevus");
-		}
-		elseif(is_oid($this->id()))
-		{
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_SECTOR,
-				"CL_CRM_SECTOR.RELTYPE_SECTOR(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).company" => $this->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-			));
-			return $ol->ids();
-		}
-		else
-		{
-			return array();
-		}
 	}
 
 	/** adds new project and sets company as customer
