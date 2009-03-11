@@ -16,7 +16,7 @@ class mrp_job_obj extends _int_object
 				}
 				else
 				{
-					$this->set_prop($k, $this->get_real());
+					$this->set_prop($k, $this->get_real($k));
 				}
 				$this->save();
 			}
@@ -41,12 +41,12 @@ class mrp_job_obj extends _int_object
 		$job_id = $this->id();
 
 		$v = $this->instance()->db_fetch_field("
-			SELECT SUM(length) as length_sum FROM mrp_stats WHERE 
+			SELECT SUM(length) as length_sum FROM mrp_stats WHERE
 				case_oid = $case AND
 				resource_oid = $res AND
 				job_oid = $job_id",
 			"length_sum");
-		
+
 		return $v ? (int)$v : 0;
 	}
 
@@ -57,13 +57,13 @@ class mrp_job_obj extends _int_object
 
 	function save_materials($arr)
 	{
-		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
 		if($res)
 		{
 			$conn = $res->connections_to(array(
 				"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
 			));
-			$conn2 = $arr["obj_inst"]->connections_to(array(
+			$conn2 = $this->connections_to(array(
 				"from.class_id" => CL_MATERIAL_EXPENSE,
 			));
 			foreach($conn2 as $c)
@@ -80,15 +80,15 @@ class mrp_job_obj extends _int_object
 				{
 					$o = obj();
 					$o->set_class_id(CL_MATERIAL_EXPENSE);
-					$o->set_parent($arr["obj_inst"]->id());
-					$o->set_name(sprintf(t("%s kulu %s jaoks"), obj($prod)->name(), $arr["obj_inst"]->name()));
+					$o->set_parent($this->id());
+					$o->set_name(sprintf(t("%s kulu %s jaoks"), obj($prod)->name(), $this->name()));
 					$o->set_prop("product", $prod);
 					if($arr["request"]["unit"][$prod])
 					{
 						$o->set_prop("unit", $arr["request"]["unit"][$prod]);
 					}
 					$o->set_prop("amount", $arr["request"]["amount"][$prod]);
-					$o->set_prop("job", $arr["obj_inst"]->id());
+					$o->set_prop("job", $this->id());
 					$o->save();
 				}
 				else
@@ -107,8 +107,8 @@ class mrp_job_obj extends _int_object
 					}
 				}
 			}
-			$arr["obj_inst"]->save();
-			$conn = $arr["obj_inst"]->connections_to(array(
+			$this->save();
+			$conn = $this->connections_to(array(
 				"from.class_id" => CL_MATERIAL_MOVEMENT_RELATION,
 			));
 			foreach($arr["request"]["unit"] as $prod => $unit)
@@ -126,9 +126,9 @@ class mrp_job_obj extends _int_object
 			{
 				$o = obj();
 				$o->set_class_id(CL_MATERIAL_MOVEMENT_RELATION);
-				$o->set_parent($arr["obj_inst"]->id());
-				$o->set_name(sprintf(t("Materjali liikumisseos t&ouml;&ouml;ga %s"), $arr["obj_inst"]->name()));
-				$o->set_prop("job", $arr["obj_inst"]->id());
+				$o->set_parent($this->id());
+				$o->set_name(sprintf(t("Materjali liikumisseos t&ouml;&ouml;ga %s"), $this->name()));
+				$o->set_prop("job", $this->id());
 				$o->save();
 				$o->create_dn($o, $data);
 			}
@@ -140,6 +140,21 @@ class mrp_job_obj extends _int_object
 				}
 			}
 		}
+	}
+
+	/** Adds, changes or removes source materials planned to be used by this job
+	@attrib api=1 params=pos
+	@param product required type=CL_SHOP_PRODUCT
+	@param quantity required type=int,float
+		Quantity how much or how many of $product is assessed to be required for completing this job.
+	@param unit optional type=CL_UNIT
+		If no unit given, product's default unit used.
+	@returns void
+	@comment
+		If quantity is 0, the product is removed from this job's planned materials. If product already planned to be used and $quantity is different, it will overwrite previous value.
+	**/
+	public function set_used_material_assessment(object $product, $quantity, $unit = null)
+	{
 	}
 
 	public function get_material_expense_list()
