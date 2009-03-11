@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.154 2009/01/12 12:17:30 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.155 2009/03/11 13:12:44 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -346,6 +346,17 @@ class reservation extends class_base
 
 			case "verified":
 				if($is_lower_bron) return $prop["disabled"] = 1;
+				$conn = array();
+				if($this->can("view", $arr["obj_inst"]->id()))
+				{
+					$conn = $arr["obj_inst"]->connections_to(array(
+						"from.class_id" => CL_RFP,
+					));
+				}
+				if(count($conn) || $arr["request"]["rfp"])
+				{
+					$prop["disabled"] = 1;
+				}
 				if($arr["request"]["ver"])$prop["value"] = 1;
 				if ($prop["value"] == 1)
 				{
@@ -984,6 +995,13 @@ class reservation extends class_base
 				"to" => $arr["obj_inst"]->id(),
 			));
 
+			$vf = 0;
+			if($rfp->prop("confirmed") == 2)
+			{
+				$vf = 1;
+			}
+			$arr["obj_inst"]->set_prop("verified", $vf);
+
 			if($org = $arr["request"]["rfp_organisation"])
 			{
 				$org = obj($org);
@@ -993,8 +1011,8 @@ class reservation extends class_base
 				));
 				$arr["obj_inst"]->set_prop("customer", $org->id());
 				$arr["obj_inst"]->set_correct_name();
-				$arr["obj_inst"]->save();
 			}
+			$arr["obj_inst"]->save();
 		}
 		// well, this here makes a new person when rfp class makes a new reservation and personal data is provided also
 		/*

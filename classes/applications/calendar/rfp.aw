@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.184 2009/03/04 12:36:55 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.185 2009/03/11 13:12:40 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -975,6 +975,10 @@ class rfp extends class_base
 				$new_reservation_args["person_rfp_email"] = $arr["obj_inst"]->prop("data_subm_email");
 				$new_reservation_args["person_rfp_phone"] = $arr["obj_inst"]->prop("data_subm_phone");
 				$new_reservation_args["people_count_rfp"] = $arr["obj_inst"]->prop("data_gen_attendees_no");
+				if($arr["obj_inst"]->prop("confirmed") == RFP_STATUS_CONFIRMED)
+				{
+					$new_reservation_args["ver"] = 1;
+				}
 				if($arr["request"]["group"] == "final_catering")
 				{
 					$new_reservation_args["type"] = "food";
@@ -1778,6 +1782,11 @@ class rfp extends class_base
 		{
 			$oi_prods = $arr["obj_inst"]->meta("prods");
 			$rvi = get_instance(CL_RESERVATION);
+			$bron_verified = 0;
+			if($arr["obj_inst"]->prop("confirmed") == RFP_STATUS_CONFIRMED)
+			{
+				$bron_verified = 1;
+			}
 			foreach($arr["request"]["add_bron_tbl"] as $i => $add)
 			{
 				if(!$add["del"])
@@ -1803,6 +1812,7 @@ class rfp extends class_base
 					$o->set_prop("customer", $arr["obj_inst"]->prop("data_subm_organisation"));
 					$o->set_prop("type", "food");
 					$o->set_prop("people_count", $arr["obj_inst"]->prop("data_gen_attendees_no"));
+					$o->set_prop("verified", $bron_verified);
 					$o->save();
 					if(is_array($add["prod"]))
 					{
@@ -4089,6 +4099,14 @@ class rfp extends class_base
 				"to" => $arr["reservation"],
 				"type" => $arr["reltype"]?$arr["reltype"]:"RELTYPE_RESERVATION",
 			));
+			$rv_v = 0;
+			if($rfp->prop("confirmed") == RFP_STATUS_CONFIRMED)
+			{
+				$rv_v = 1;
+			}
+			$rvo = obj($arr["reservation"]);
+			$rvo->set_prop("verified", $rv_v);
+			$rvo->save();
 		}
 	}
 
