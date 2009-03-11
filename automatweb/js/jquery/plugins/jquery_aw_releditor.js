@@ -98,6 +98,10 @@ jQuery.aw_releditor = function(arr) {
 					$(this).attr("value", 1);
 				}
 			}
+			else if (date_selectbox_name = is_aw_date_selectbox($(this).attr("name")) )
+			{
+				$(this).attr("value", edit_data[date_selectbox_name[0]][date_selectbox_name[1]]*1.0);
+			}
 			else
 			{
 				$(this).attr("value", edit_data[s_prop_name]);
@@ -261,5 +265,24 @@ jQuery.aw_releditor = function(arr) {
 		// i don't undrestand why I had to doublescape: \\[
 		var re  =  new RegExp("^.*_.*_(.*)$", "g").exec(s_name);
 		return re[1];
+	}
+	
+	/*
+		checks if selectbox is part of date: event_time_edit[1][end][day]
+	*/
+	function is_aw_date_selectbox(s_name)
+	{
+		out = new Array()
+		var re  =  new RegExp("^.+\\[[0-9]+\\](\\[.*?\\])\\[(.*?)\\]$", "g").exec(s_name);
+		if (re)
+		{
+			if (re[2])
+			{
+				out[0] = re[1];
+				out[1] = re[2];
+				return out;
+			}
+		}
+		return false;
 	}
 }; 
