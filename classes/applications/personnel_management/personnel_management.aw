@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.93 2009/03/11 10:39:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.94 2009/03/11 13:37:13 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -2000,20 +2000,8 @@ class personnel_management extends class_base
 			}
 			if(isset($r["es_sector"]) && strlen(trim($r["es_sector"])) > 0)
 			{
-				$prms_2[] = new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-						"CL_CRM_COMPANY.RELTYPE_COMPANY(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).sector(CL_CRM_SECTOR).name" => "%".$r["es_sector"]."%",
-						"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD.name" => "%".$r["es_sector"]."%",
-					),
-				));
-				$prms_2[] = new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-						"CL_CRM_COMPANY.RELTYPE_COMPANY(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).sector(CL_CRM_SECTOR).parent" => $arr["obj_inst"]->sectors_fld,
-						"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD.parent" => $arr["obj_inst"]->sectors_fld,
-					),
-				));
+				$prms_2["CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD.name"] = "%".$r["es_sector"]."%";
+				$prms_2["CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD.parent"] = $arr["obj_inst"]->sectors_fld;
 			}
 			if(isset($r["es_legal_form"]) && is_oid($r["es_legal_form"]))
 			{
@@ -2103,13 +2091,7 @@ class personnel_management extends class_base
 			switch(obj($_GET["branch_id"])->class_id())
 			{
 				case CL_CRM_SECTOR:
-					$prms[] = new object_list_filter(array(
-						"logic" => "OR",
-						"conditions" => array(
-							"CL_CRM_COMPANY.RELTYPE_COMPANY(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).sector"  => $_GET["branch_id"],
-							"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD"  => $_GET["branch_id"],
-						),
-					));
+					$prms["CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD"] = $_GET["branch_id"];
 					break;
 				
 				case CL_CRM_COUNTRY:
