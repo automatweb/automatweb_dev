@@ -136,25 +136,43 @@
 @default method=serialize
 
 	@property col_buffer type=colorpicker 
-	@caption Puhveraja v&auml;rv kalendris
-
-	@property col_web_halfling type=colorpicker 
-	@caption Veebis poolelioleva tellimuse v&auml;rvi
-
-	@property col_closed type=colorpicker 
-	@caption Kinnise aja v&auml;rvi
+	@caption Puhveraeg kalendris
 
 	@property col_available type=colorpicker 
-	@caption Vaba aja v&auml;rvi
+	@caption Vaba aja v&auml;rv
 
-	@property col_recent type=colorpicker 
-	@caption Hiljuti muudetud reserveeringud
+	@property col_closed type=colorpicker 
+	@caption Kinnise aja v&auml;rv
 
-	@property col_slave type=colorpicker 
-	@caption Alam-reserveeringu v&auml;rv
+	@property unverified_color_sub type=text subtitle=1 store=no
+	@caption Kinnitamata broneering
+	
+		@property col_web_halfling type=colorpicker 
+		@caption Veebis pooleliolev tellimus
 
-	@property col_food type=colorpicker 
-	@caption Toitlustus-reserveeringu v&auml;rv
+		@property col_sent type=colorpicker
+		@caption Saadetud RFP tellimus
+
+		@property col_on_hold type=colorpicker
+		@caption T&auml;psustamisel RFP tellimus
+
+		@property col_back type=colorpicker
+		@caption Tagasi l&uuml;katud RFP tellimus
+
+		@property col_unverified type=colorpicker
+		@caption T&uuml;histatud RFP tellimus
+
+	@property verified_color_sub type=text subtitle=1 store=no
+	@caption Kinnitatud broneering
+
+		@property col_recent type=colorpicker 
+		@caption Hiljuti muudetud reserveering
+
+		@property col_slave type=colorpicker 
+		@caption Alamreserveering
+
+		@property col_food type=colorpicker 
+		@caption Toitlustusreserveering
 
 @groupinfo calendar_view caption="Kalendrivaade"
 @default group=calendar_view

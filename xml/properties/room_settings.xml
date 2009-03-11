@@ -33,36 +33,6 @@
             <caption>Ruumid mida samal ajal broneerida</caption>
       </property>
       <property>
-            <name>cal_show_prods</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kuva valitud tooteid kalendrivaates</caption>
-      </property>
-      <property>
-            <name>cal_show_prod_img</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kuva tootepilte kalendrivaates</caption>
-      </property>
-      <property>
-            <name>cal_show_prod_img_ord</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>5</size>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Tootepildi j&amp;amp;auml;rjekorranumber, mida kuvada</caption>
-      </property>
-      <property>
             <name>cal_refresh_time</name>
             <table>objects</table>
             <group>general</group>
@@ -331,6 +301,7 @@
             <table>objects</table>
             <group>calendar_view</group>
             <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <save>no</save>
             <no_caption>1</no_caption>
@@ -425,7 +396,36 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Puhveraja v&amp;amp;auml;rv kalendris</caption>
+            <caption>Puhveraeg kalendris</caption>
+      </property>
+      <property>
+            <name>col_available</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Vaba aja v&amp;amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>col_closed</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Kinnise aja v&amp;amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>unverified_color_sub</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <caption>Kinnitamata broneering</caption>
       </property>
       <property>
             <name>col_web_halfling</name>
@@ -437,31 +437,51 @@
             <caption>Veebis pooleliolev tellimus</caption>
       </property>
       <property>
-              <name>col_on_hold</name>
-             <table>objects</table>
-               <group>colours</group>
-              <field>meta</field>
-                  <method>serialize</method>
-              <type>colorpicker</type>
-			<caption>T&amp;amp;auml;psustamisel tellimus</caption>
-	</property>
-<property>
-            <name>col_closed</name>
+            <name>col_sent</name>
             <table>objects</table>
             <group>colours</group>
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Kinnise aja v&amp;amp;auml;rv</caption>
+            <caption>Saadetud RFP tellimus</caption>
       </property>
       <property>
-            <name>col_available</name>
+            <name>col_on_hold</name>
             <table>objects</table>
             <group>colours</group>
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Vaba aja v&amp;amp;auml;rv</caption>
+            <caption>T&amp;amp;auml;psustamisel RFP tellimus</caption>
+      </property>
+      <property>
+            <name>col_back</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Tagasi l&amp;amp;uuml;katud RFP tellimus</caption>
+      </property>
+      <property>
+            <name>col_unverified</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>T&amp;amp;uuml;histatud RFP tellimus</caption>
+      </property>
+      <property>
+            <name>verified_color_sub</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <caption>Kinnitatud broneering</caption>
       </property>
       <property>
             <name>col_recent</name>
@@ -482,14 +502,14 @@
             <caption>Alamreserveering</caption>
       </property>
       <property>
-	      <name>col_food</name>
-	      <table>objects</table>
-	      <group>colours</group>
-	      <field>meta</field>
-	      <method>serialize</method>
-	      <type>colorpicker</type>
-	      <caption>Toitlustusreserveering</caption>
-	      </property>
+            <name>col_food</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Toitlustusreserveering</caption>
+      </property>
       <property>
             <name>send_del_mail</name>
             <table>objects</table>
