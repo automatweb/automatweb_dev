@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.61 2009/03/11 10:39:45 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.62 2009/03/11 10:51:21 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -551,7 +551,7 @@ class crm_db extends class_base
 			
 			if (!$arr["obj_inst"]->prop("all_ct_data") && $this->can("view", $com->prop("url_id")))
 			{
-				$url = $com->prop("url_id.name");
+				$url = $com->prop("url_id.url");
 				$url = substr($url, strpos($url, "http://"), strlen($url)+1);
 				if(strlen($url) > 0)
 				{
