@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.97 2009/03/03 11:07:42 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.98 2009/03/11 12:14:22 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -142,7 +142,7 @@ caption Linnade kaust
 			/@property raports_table type=table no_caption=1 store=no parent=raports_table
 			@property raports_table type=text no_caption=1 store=no parent=raports_table
 
-@groupinfo stats parent=raports caption="Statistika"
+@groupinfo stats parent=raports caption="Statistika" submit=no
 @default group=stats
 
 	@property stats_tb type=toolbar no_caption=1
@@ -177,7 +177,9 @@ caption Linnade kaust
 			@property stats_filt_confirmed type=select multiple=1 store=no parent=stats_filt_right
 			@caption Staatus
 
-	@layout stats_filt_charts type=vbox closeable=1 area_caption=Graafikud
+	@layout stats_filt_charts type=hbox closeable=1 area_caption=Graafikud
+
+			@property stats_money_chart type=google_chart no_caption=1 parent=stats_filt_charts
 
 			@property stats_chart type=google_chart no_caption=1 parent=stats_filt_charts
 			
@@ -185,6 +187,9 @@ caption Linnade kaust
 			@caption Graafiku t&uuml;&uuml;p
 
 	@property stats_tbl type=table no_caption=1
+
+	@property stats_sbt type=submit store=no
+	@caption Otsi
 
 @groupinfo rfps caption="Tellimused"
 @groupinfo rfps_active caption="Aktiivsed" parent=rfps
@@ -507,7 +512,6 @@ class rfp_manager extends class_base
 					"status" => t("Staatus"),
 					"international" => t("Rahvusvaheline / kohalik"),
 					"rooms" => t("Ruumid"),
-					"money" => t("K&auml;ive"),
 				);
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
@@ -2529,6 +2533,12 @@ class rfp_manager extends class_base
 		return $as;
 	}
 
+	function _get_stats_money_chart($arr)
+	{
+		$arr["request"]["stats_chart_filt"] = "money";
+		return $this->_get_stats_chart(&$arr);
+	}
+
 	function _get_stats_chart($arr)
 	{
 		$c = &$arr["prop"]["vcl_inst"];
@@ -2536,13 +2546,6 @@ class rfp_manager extends class_base
 		$c->set_size(array(
 			"width" => 500,
 			"height" => 150,
-		));
-		$c->add_fill(array(
-			"area" => GCHART_FILL_BACKGROUND,
-			"type" => GCHART_FILL_SOLID,
-			"colors" => array(
-				"color" => "e9e9e9",
-			),
 		));
 		if(!isset($arr["request"]["stats_filt_start1"]))
 		{

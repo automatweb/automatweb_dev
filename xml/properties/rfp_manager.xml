@@ -498,13 +498,25 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>stats_money_chart</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>google_chart</type>
+            <parent>stats_filt_charts</parent>
+	    <field>stats_money_chart</field>
+	    <captionside>top</captionside>
+            <caption>K&amp;auml;ibe graafik</caption>
+      </property>
+      <property>
             <name>stats_chart</name>
             <table>objects</table>
             <group>stats</group>
             <type>google_chart</type>
-            <no_caption>1</no_caption>
+            <caption>1</caption>
             <parent>stats_filt_charts</parent>
-            <field>stats_chart</field>
+	    <field>stats_chart</field>
+	    <captionside>top</captionside>
+            <caption>Lisagraafik</caption>
       </property>
       <property>
             <name>stats_chart_filt</name>
@@ -514,7 +526,7 @@
             <captionside>top</captionside>
             <parent>stats_filt_charts</parent>
             <field>stats_chart_filt</field>
-            <caption>Graafiku t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            <caption>Lisagraafiku t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>stats_tbl</name>
@@ -524,6 +536,15 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>stats_tbl</field>
+      </property>
+      <property>
+            <name>stats_sbt</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>submit</type>
+            <store>no</store>
+	    <field>stats_tbl</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>rfps_tb</name>
@@ -749,6 +770,7 @@
             <stats>
                   <parent>raports</parent>
                   <caption>Statistika</caption>
+		  <submit>no</submit>
             </stats>
             <rfps>
                   <caption>Tellimused</caption>
@@ -898,10 +920,11 @@
                   <area_caption></area_caption>
             </stats_filt_right>
             <stats_filt_charts>
-                  <type>vbox</type>
+                  <type>hbox</type>
                   <closeable>1</closeable>
                   <area_caption>Graafikud</area_caption>
                   <group>stats</group>
+		  <width>5%:5%:90%</width>
             </stats_filt_charts>
             <hsplit>
                   <type>hbox</type>
