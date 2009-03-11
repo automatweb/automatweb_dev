@@ -148,6 +148,7 @@ class contents extends class_base
 			"act_per_name" => $act_per["name"],
 			"act_per_image_url" => $imgurl, 
 			"MENU" => $this->l,
+			"charset" => aw_global_get("charset")
 		));
 
 		return $this->parse();
