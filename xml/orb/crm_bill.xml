@@ -66,6 +66,13 @@
 			</function>
 		</action>
 
+		<action name="writeoff_rows">
+			<function name="writeoff_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="remove_rows_from_bill">
 			<function name="remove_rows_from_bill">
 				<arguments>

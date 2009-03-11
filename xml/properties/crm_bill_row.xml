@@ -72,6 +72,15 @@
             <caption>Muu kulu?</caption>
       </property>
       <property>
+            <name>writeoff</name>
+            <table>aw_crm_bill_rows</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_writeoff</field>
+            <caption>Maha kantud</caption>
+      </property>
+      <property>
             <name>has_tax</name>
             <table>aw_crm_bill_rows</table>
             <group>general</group>

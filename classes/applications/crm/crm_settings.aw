@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.33 2009/02/25 18:47:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.34 2009/03/11 17:00:29 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -154,7 +154,7 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 
 
 
-@default group=bill_mail
+@default group=bill
 
 	@property bill_mail_to type=textbox field=meta method=serialize
 	@caption Kellele meil saata
@@ -174,12 +174,17 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 	@property bill_mail_ct type=textarea rows=20 cols=50 field=meta method=serialize
 	@caption Meili sisu
 
+	@property bill_hide_pwr type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption Peita eelvaade ridadega
+
+	@property bill_hide_cr type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption Peita koonda read nupp
 
 @groupinfo tables caption="Tabelid"
 @groupinfo whom caption="Kellele kehtib"
 @groupinfo img caption="Pildid"
 @groupinfo status_limits caption="Staatuste piirangud"
-@groupinfo bill_mail caption="Arve maili seaded"
+@groupinfo bill caption="Arve seaded"
 
 
 @reltype USER value=1 clid=CL_USER

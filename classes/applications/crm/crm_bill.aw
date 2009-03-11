@@ -306,6 +306,7 @@ class crm_bill extends class_base
 
 		$this->states = array(
 			0 => t("Koostamisel"),
+			8 => t("Koostatud"),
 			7 => t("Kinnitatud"),
 			1 => t("Saadetud"),
 			2 => t("Makstud"),
@@ -1125,6 +1126,7 @@ class crm_bill extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimetus"),
+			"chgbgcolor" => "color"
 		));
 
 		/*
@@ -1136,30 +1138,36 @@ class crm_bill extends class_base
 		$t->define_field(array(
 			"name" => "unit",
 			"caption" => t("&Uuml;hik"),
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_field(array(
 			"name" => "price",
 			"caption" => t("Hind"),
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_field(array(
 			"name" => "amt",
 			"caption" => t("Kogus"),
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_field(array(
 			"name" => "sum",
 			"caption" => t("Summa"),
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_field(array(
 			"name" => "prod",
-			"caption" => t("Artikkel")
+			"caption" => t("Artikkel"),
+			"chgbgcolor" => "color"
 		));
 		$t->define_field(array(
 			"name" => "person",
-			"caption" => t("Isik")
+			"caption" => t("Isik"),
+			"chgbgcolor" => "color"
 		));
 	
 		$t->define_field(array(
@@ -1168,11 +1176,13 @@ class crm_bill extends class_base
 				"url" => "javascript:selall('rows')",
 				"caption" => t("+KM?"),
 				"title" => t("+KM?")
-			))
+			)),
+			"chgbgcolor" => "color"
 		));
 		$t->define_field(array(
 			"name" => "sel",
 			"caption" => t("Vali"),
+			"chgbgcolor" => "color"
 		));
 	}
 
@@ -1441,6 +1451,137 @@ class crm_bill extends class_base
 					if(!($agreement_price["name"] && $agreement_price["price"]))$done_new_line = 1;
 				}
 // 			}
+		}
+
+		$writeoffs = $arr["obj_inst"]->get_writeoff_rows_data();
+		if(sizeof($writeoffs))
+		{
+			$t->define_data(array(
+				"name" => t("Maha kantud arve read:"),
+				"color" => "gray",
+			));
+		}
+		foreach($writeoffs as $row)
+		{
+			//eraldab muid kulusid
+			if(!$first_oe && $row["is_oe"])
+			{
+				$t->define_data(array(
+					"name" => t("Kulud:"),
+				));
+				$first_oe = 1;
+			}
+			
+			$t_inf = $row;
+			$id = $row["id"];
+			$r_prods = $prods;
+			if (!isset($r_prods[$t_inf["prod"]]) && $this->can("view", $t_inf["prod"]))
+			{
+				$prodo = obj($t_inf["prod"]);
+				$r_prods[$t_inf["prod"]] = $prodo->name();
+			}
+			$r_pers = array("" => t("--vali--"));
+			foreach($row["persons"] as $rp_id)
+			{
+				if ($this->can("view", $rp_id))
+				{
+					$rp_o = obj($rp_id);
+					$r_pers[$rp_id] = $rp_o->name();
+				}
+			}
+			//miski suva jrjekorranuumbrite genereerimine... kui on vaja
+			if($default_row_jrk < $t_inf["jrk"]) $default_row_jrk = $t_inf["jrk"];
+			if(!$t_inf["jrk"]) $t_inf["jrk"] = $default_row_jrk;
+			$default_row_jrk = $default_row_jrk + 10;
+			$connect_row_url =  $this->mk_my_orb("add_task_row_to_bill_row", array(
+				"row" => $id,
+			));
+
+			$connect_row_link = html::href(array(
+				"url" => "javascript:aw_popup_scroll('".$connect_row_url."','Otsing',1100,700)",
+				"caption" => t("Lisa toimetuse rida"),
+				"title" => t("Otsi")
+			));
+			if($this->can("view", $t_inf["unit"]))
+			{
+				$unit_oid = $t_inf["unit"];
+			}
+			$unit_name = $this->get_unit_name($t_inf["unit"], $arr["obj_inst"]);
+			$t->define_data(array(
+			"name" => html::textbox(array(
+					"name" => "rows[$id][jrk]",
+					"value" => $t_inf["jrk"],
+					"size" => 3
+				)).html::textbox(array(
+					"name" => "rows[$id][date]",
+					"value" => $t_inf["date"],
+					"size" => 8
+				)).t("maha kantud")."<br>".html::textbox(array(
+					"name" => "rows[$id][comment]",
+					"value" => $t_inf["comment"],
+					"size" => 35
+				))."<br>".html::textarea(array(
+					"name" => "rows[$id][name]",
+					"value" => $t_inf["name"],
+					"rows" => 5,
+					"cols" => 40
+				)).(!$row["has_task_row"] ? "<br>".$connect_row_link :""),
+				"code" => html::textbox(array(
+					"name" => "rows[$id][code]",
+					"value" => $t_inf["code"],
+					"size" => 10
+				)),
+				"unit" => html::textbox(array(
+					"name" => "rows[$id][unit]",
+					"selected" => $unit_oid?array($unit_oid => $unit_name):'',
+					"size" => 5,
+					"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
+					"option_is_tuple" => 1,
+					"content" => $unit_name,
+				)),
+				"price" => html::textbox(array(
+					"name" => "rows[$id][price]",
+					"value" => $t_inf["price"],
+					"size" => 4
+				)),
+				"amt" => html::textbox(array(
+					"name" => "rows[$id][amt]",
+					"value" => $t_inf["amt"],
+					"size" => 3
+				)),
+				"sum" => $t_inf["sum"],
+				"has_tax" => html::checkbox(array(
+					"name" => "rows[$id][has_tax]",
+					"ch_value" => 1,
+					"checked" => $t_inf["has_tax"] == 1 ? true : false
+				)),
+				"prod" => html::select(array(
+					"name" => "rows[$id][prod]",
+					"options" => $r_prods,
+					"value" => $t_inf["prod"]
+				))." ".html::popup(array(
+					"width" => 800,
+					"height" => 500,
+					"scrollbars" => 1,
+					"url" => $this->mk_my_orb("do_search", array("pn" => "rows[$id][prod]", "clid" => CL_SHOP_PRODUCT, "tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
+					"caption" => t("Vali")
+				)),
+				"sel" => html::checkbox(array(
+					"name" => "sel_rows[]",
+					"value" => $id
+				)),
+				"person" => html::select(array(
+					"name" => "rows[$id][person]",
+					"options" => $r_pers,
+					"value" => $row["persons"],
+					"multiple" => 1
+				)).$pps->get_popup_search_link(array(
+					"pn" => "rows[$id][person]",
+					"multiple" => 1,
+					"clid" => array(CL_CRM_PERSON)
+				))
+			));
+			$sum += $t_inf["sum"];
 		}
 		$arr["prop"]["value"] = $t->draw();
 	}
@@ -2484,6 +2625,10 @@ class crm_bill extends class_base
 		foreach($cons as $c)
 		{
 			$row = $c->to();
+			if($row->prop("writeoff"))
+			{
+				continue;
+			}
 			$kmk = "";
 			if ($this->can("view", $row->prop("prod")))
 			{
@@ -3284,17 +3429,10 @@ class crm_bill extends class_base
 	function _bill_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
+		$this->set_current_settings();
 
 		$has_val = 1;
-		$rows = $this->get_bill_rows($arr["obj_inst"]);
-		foreach($rows as $row)
-		{
-			if(!$row["amt"] || !$row["sum"])
-			{
-				$has_val = 0;
-				break;
-			}
-		}
+		$has_val = !$arr["obj_inst"]->has_not_initialized_rows();
 
 		$tb->add_menu_button(array(
 			"name" => "new",
@@ -3389,9 +3527,6 @@ class crm_bill extends class_base
 			"text" => t("Prindi arve lisa pdf")
 		));
 
-
-
-
 		$tb->add_menu_button(array(
 			"name" => "send_bill",
 			"tooltip" => t("Saada arve"),
@@ -3419,37 +3554,44 @@ class crm_bill extends class_base
 			"text" => t("Saada arve pdf koos lisaga")
 		));
 
-		$onclick = "";
-		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-		$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
-		if(!$has_val) $onclick.= "}else;";
+		if(!$this->crm_settings || !$this->crm_settings->prop("bill_hide_pwr"))
+		{
+	
+			$onclick = "";
+			if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
+			$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
+			if(!$has_val) $onclick.= "}else;";
+	
+			$tb->add_menu_item(array(
+				"parent" => "print",
+				"url" => "#",
+				"onClick" => $onclick,
+				"text" => t("Prindi arve koos lisaga")
+			));
+	
+			$onclick = "";
+			if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
+			$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"pdf" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
+			if(!$has_val) $onclick.= "}else;";
+	
+			$tb->add_menu_item(array(
+				"parent" => "print",
+				"url" => "#",
+				"onClick" => $onclick,
+				"text" => t("Prindi arve koos lisaga pdf")
+			));
+		}
 
-		$tb->add_menu_item(array(
-			"parent" => "print",
-			"url" => "#",
-			"onClick" => $onclick,
-			"text" => t("Prindi arve koos lisaga")
-		));
-
-		$onclick = "";
-		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-		$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"pdf" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
-		if(!$has_val) $onclick.= "}else;";
-
-		$tb->add_menu_item(array(
-			"parent" => "print",
-			"url" => "#",
-			"onClick" => $onclick,
-			"text" => t("Prindi arve koos lisaga pdf")
-		));
-
-		$tb->add_button(array(
-			"name" => "reconcile",
-			"tooltip" => t("Koonda read"),
-			"action" => "reconcile_rows",
-			// get all checked rows and check their prices, if they are different, ask the user for a new price
-			"onClick" => "nfound=0;curp=-1;form=document.changeform;len = form.elements.length;for(i = 0; i < len; i++){if (form.elements[i].name.indexOf('sel_rows') != -1 && form.elements[i].checked)	{nfound++; neln = 'rows_'+form.elements[i].value+'__price_';nel = document.getElementById(neln); if (nfound == 1) { curp = nel.value; } else if(curp != nel.value) {price_diff = 1;}}}; if (price_diff) {v=prompt('Valitud ridade hinnad on erinevad, sisesta palun koondatud rea hind'); if (v) { document.changeform.reconcile_price.value = v;return true; } else {return false;} }"
-		));
+		if(!$this->crm_settings || !$this->crm_settings->prop("bill_hide_cr"))
+		{
+			$tb->add_button(array(
+				"name" => "reconcile",
+				"tooltip" => t("Koonda read"),
+				"action" => "reconcile_rows",
+				// get all checked rows and check their prices, if they are different, ask the user for a new price
+				"onClick" => "nfound=0;curp=-1;form=document.changeform;len = form.elements.length;for(i = 0; i < len; i++){if (form.elements[i].name.indexOf('sel_rows') != -1 && form.elements[i].checked)	{nfound++; neln = 'rows_'+form.elements[i].value+'__price_';nel = document.getElementById(neln); if (nfound == 1) { curp = nel.value; } else if(curp != nel.value) {price_diff = 1;}}}; if (price_diff) {v=prompt('Valitud ridade hinnad on erinevad, sisesta palun koondatud rea hind'); if (v) { document.changeform.reconcile_price.value = v;return true; } else {return false;} }"
+			));
+		}
 
 		$tb->add_button(array(
 			"name" => "delete",
@@ -3458,6 +3600,23 @@ class crm_bill extends class_base
 			"confirm" => t("Oled kindel et soovid read kustutada?"),
 			"action" => "delete_rows"
 		));
+
+		$tb->add_button(array(
+			"name" => "writeoff",
+			"img" => "class_244.gif",
+			"tooltip" => t("Kanna arve rida maha/Pane arve rida tagasi arvele"),
+			"confirm" => t("Oled kindel et soovid valitud read maha kanda/tagasi arvele panna?"),
+			"action" => "writeoff_rows"
+		));
+	}
+
+	function set_current_settings()
+	{
+		if(!isset($this->crm_settings))
+		{
+			$seti = get_instance(CL_CRM_SETTINGS);
+			$this->crm_settings = $seti->get_current_settings();
+		}
 	}
 
 	/**
@@ -3481,6 +3640,26 @@ class crm_bill extends class_base
 		return $arr["post_ru"];
 	}
 
+	/**
+		@attrib name=writeoff_rows
+	**/
+	function writeoff_rows($arr)
+	{
+		foreach($arr["sel_rows"] as $row_id)
+		{
+			$ro = obj($row_id);
+			if($ro->prop("writeoff"))
+			{
+				$ro->set_prop("writeoff" , 0);
+			}
+			else
+			{
+				$ro->set_prop("writeoff" , 1);
+			}
+			$ro->save();
+		}
+		return $arr["post_ru"];
+	}
 
 	/**
 		@attrib name=remove_rows_from_bill
@@ -3871,10 +4050,14 @@ class crm_bill extends class_base
 
 	function callback_mod_tab($arr)
 	{
-//		if ($arr["id"] == "tasks")
-//		{
-//			return false;
-// 		}
+		if ($arr["id"] == "preview_w_rows")
+		{
+			$this->set_current_settings();
+			if($this->crm_settings && $this->crm_settings->prop("bill_hide_pwr"))
+			{
+				return false;
+			}
+		}
 		return true;
 	}
 

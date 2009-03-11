@@ -1634,6 +1634,88 @@ class crm_bill_obj extends _int_object
 		return $this->id();
 	}
 
+	/** shows if bill has rows with no price or amount
+		@attrib api=1
+		@returns boolean
+			true if has rows with no price or no amount
+	**/
+	public function has_not_initialized_rows()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"site_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_BILL.RELTYPE_ROW.amt" => 0,
+					"CL_CRM_BILL.RELTYPE_ROW.price" => 0,
+				)
+			)),
+			"oid" => $this->id(),
+		));
+		return $ol->count();
+	}
+
+	function get_writeoff_rows_data()
+	{
+		$inf = array();
+		$cons = $this->connections_from(array("type" => "RELTYPE_ROW"));
+		foreach($cons as $c)
+		{
+			$row = $c->to();
+			if(!$row->prop("writeoff"))
+			{
+				continue;
+			}
+			$kmk = "";
+			if ($this->can("view", $row->prop("prod")))
+			{
+				$prod = obj($row->prop("prod"));
+				if ($this->can("view", $prod->prop("tax_rate")))
+				{
+					$tr = obj($prod->prop("tax_rate"));
+					$kmk = $tr->prop("code");
+				}
+			}
+
+			$ppl = array();
+			foreach((array)$row->prop("people") as $p_id)
+			{
+				if ($this->can("view", $p_id))
+				{
+					$ppl[$p_id] = $p_id;	
+				}
+			}
+			$rd = array(
+				"amt" => $row->prop("amt"),
+				"prod" => $row->prop("prod"),
+				"name" => $row->prop("desc"),
+				"comment" => $row->prop("comment"),
+				"price" => $row->prop("price"),
+				"sum" => str_replace(",", ".", $row->prop("amt")) * str_replace(",", ".", $row->prop("price")),
+				"km_code" => $kmk,
+				"unit" => $row->prop("unit"),
+				"jrk" => $row->meta("jrk"),
+				"id" => $row->id(),
+				"is_oe" => $row->prop("is_oe"),
+				"has_tax" => $row->prop("has_tax"),
+				"date" => $row->prop("date"),
+				"id" => $row->id(),
+				"persons" => $ppl,
+				"has_task_row" => $row->has_task_row(),
+			);
+			$rd["orderer"] = $row->get_orderer_person_name();
+			$rd["task_row_id"] = $row->get_task_row_or_bug_id();
+
+
+			$inf[] = $rd;
+		}
+		usort($inf, array(&$this, "__br_sort"));
+		return $inf;
+	}
+
+
 }
 
 ?>
