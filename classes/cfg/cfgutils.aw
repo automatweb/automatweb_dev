@@ -403,61 +403,28 @@ class cfgutils extends aw_template
 		}
 
 		// translate
-		if($args["load_trans"] == 1)
+		if(!empty($args["load_trans"]))
 		{
 			foreach($properties as $k => $d)
 			{
-				if (!isset($d['caption']))
-				{
-					$d['caption']['text'] = "";
-				}
-				if (!isset($d['name']))
-				{
-					$d['name']['text'] = "";
-				}
-				if (!is_array($d["caption"]))
-				{
-					$d["caption"] = array("text" => $d["caption"]);
-				}
-				if (!is_array($d["name"]))
-				{
-					$d["name"] = array("text" => $d["name"]);
-				}
-				$t_str = "Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption";
-				$tmp = t2($t_str);
-				if ($tmp !== NULL)
-				{
-					$properties[$k]["caption"]["text"] = $tmp;
-				}
+				$caption = isset($d["caption"]) ?  $d["caption"] : "";
+				$name = $d["name"];
 
-				$properties[$k]["orig_caption"] = isset($properties[$k]["caption"]) ? $properties[$k]["caption"] : "";
-
-				$t_str = "Omaduse ".$d["caption"]." (".$d["name"].") caption";
+				$properties[$k]["orig_caption"] = $caption;
+				$t_str = "Omaduse {$caption} ({$name}) caption";
 				$tmp = t2($t_str);
 				if ($tmp !== NULL)
 				{
 					$properties[$k]["caption"] = $tmp;
 				}
 
-				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") kommentaar");
-				if ($tmp !== NULL)
-				{
-					$properties[$k]["comment"]["text"] = $tmp;
-				}
-
-				$tmp = t2("Omaduse ".$d["caption"]." (".$d["name"].") kommentaar");
+				$tmp = t2("Omaduse {$caption} ({$name}) kommentaar");
 				if ($tmp !== NULL)
 				{
 					$properties[$k]["comment"] = $tmp;
 				}
 
-				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") help");
-				if ($tmp !== NULL)
-				{
-					$properties[$k]["help"]["text"] = $tmp;
-				}
-
-				$tmp = t2("Omaduse ".$d["caption"]." (".$d["name"].") help");
+				$tmp = t2("Omaduse {$caption} ({$name}) help");
 				if ($tmp !== NULL)
 				{
 					$properties[$k]["help"] = $tmp;
@@ -478,12 +445,6 @@ class cfgutils extends aw_template
 			{
 				foreach($relinfo as $k => $dat)
 				{
-					/*
-					if (!isset($dat[0]['caption']))
-					{
-						$dat[0]['caption']['text'] = "";
-					}
-					*/
 					$tmp = "Seose ". (isset($dat["caption"]) ? htmlentities($dat["caption"]) : "") . " (RELTYPE_".$k.") tekst";
 					$tmp = t2($tmp);
 					if ($tmp !== NULL)
@@ -492,7 +453,8 @@ class cfgutils extends aw_template
 					}
 
 				}
-			};
+			}
+
 			// new
 			if(is_array($layout))
 			{
