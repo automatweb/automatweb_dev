@@ -24,7 +24,7 @@
  * http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
  */
 
-FCKConfig.CustomConfigurationsPath = '/automatweb/js/fckeditor/custom_config.js' ;
+/* FCKConfig.CustomConfigurationsPath = '/automatweb/js/fckeditor/custom_config.js' ; */
 
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
 FCKConfig.EditorAreaStyles = '' ;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.23 2008/09/03 14:42:30 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.24 2009/03/11 12:00:58 hannes Exp $
 // fck_editor.aw - FCKeditor
 /*
 @classinfo  maintainer=hannes
@@ -84,13 +84,23 @@ class fck_editor extends aw_template
 			if ($strFcklang == "en")
 				$strFcklang = "en-uk";
 			
+			if (aw_ini_get("document.site_fck_config_path"))
+			{
+				$config = 'oFCKeditor.Config["CustomConfigurationsPath"] = "'.aw_ini_get("baseurl").aw_ini_get("document.site_fck_config_path").'";';
+			}
+			else
+			{
+				$config = 'oFCKeditor.Config["CustomConfigurationsPath"] = "/automatweb/js/fckeditor/custom_config.js";';
+			}
+			
 			$this->vars(array(
 					"name" => $nm,
 					"width"=> "600px",
 					"height"=> $height,
 					"lang" => $strFcklang,
 					"toolbarset" => $s_toolbarset,
-					"fck_version" => $this->fck_version
+					"fck_version" => $this->fck_version,
+					"config" => $config,
 				));
 			
 			if ($nm != "moreinfo")
@@ -122,17 +132,6 @@ class fck_editor extends aw_template
 		}
 		
 		return $this->parse();
-	}
-
-	/**
-		@attrib name=get_fck_config
-	**/
-	function get_fck_config($arr)
-	{
-		die("
-			FCKConfig.AutoDetectLanguage	= false ;
-			FCKConfig.DefaultLanguage		= '".($_SESSION["user_adm_ui_lc"] != "" ? $_SESSION["user_adm_ui_lc"] : "et")."' ;
-		");
 	}
 }
 ?>

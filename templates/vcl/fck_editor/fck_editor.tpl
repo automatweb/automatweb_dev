@@ -42,9 +42,8 @@ function FCKeditor_CreateEditor(name, version, width, height, lang)
 	oFCKeditor.Width = width;
 	oFCKeditor.Height = height;
 	oFCKeditor.Config["AutoDetectLanguage"] = false;
-	oFCKeditor.Config["DefaultLanguage"] = lang;
-	oFCKeditor.ReplaceTextarea();
-	oFCKeditor.Config["CustomConfigurationsPath"] = "/automatweb/orb.aw?class=fck_editor&action=get_fck_config" + ( new Date() * 1 ) ;
+	{VAR:config}
+	oFCKeditor.ReplaceTextarea();	
 }
 
 /*
