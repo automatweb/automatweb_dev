@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.49 2009/02/27 13:14:01 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.50 2009/03/11 10:23:04 instrumental Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -894,6 +894,7 @@ class persons_webview extends class_base
 	
 	private function get_person_section_professions($o)
 	{
+		enter_function("persons_webview::get_person_section_professions");
 		$pro_array = array();
 		foreach($o->connections_from(array("clid" => "CL_CRM_PERSON_WORK_RELATION")) as $c)
 		{
@@ -918,11 +919,13 @@ class persons_webview extends class_base
 		{
 			ksort($pro_array);
 		}
+		exit_function("persons_webview::get_person_section_professions");
 		return $pro_array;
 	}
 
 	function parse_profession($worker)
 	{
+		enter_function("persons_webview::parse_profession");
 		$profession = $directive = "";
 		$profession_obj = $worker->get_first_obj_by_reltype("RELTYPE_RANK");
 		//k6ik ametid mis tyybil on
@@ -993,6 +996,7 @@ class persons_webview extends class_base
 			"profession_with_directive" => $profession_with_directive,
 			"rank" => $profession,
 		));
+		exit_function("persons_webview::parse_profession");
 	}
 
 	function parse_persons($workers)
@@ -1128,6 +1132,7 @@ class persons_webview extends class_base
 
 	function parse_worker($worker)
 	{
+		enter_function("person_webview::parse_worker");
 		if(!$this->section && !$this->view_obj->prop("department_grouping"))
 		{
 			$this->section = $worker->get_first_obj_by_reltype("RELTYPE_SECTION");
@@ -1424,6 +1429,7 @@ class persons_webview extends class_base
 		$this->vars_safe(array(
 			"EDU_SUB" => $this->parse("EDU_SUB")
 		));
+		exit_function("person_webview::parse_worker");
 	}
 
 	function get_cols_num($row)
