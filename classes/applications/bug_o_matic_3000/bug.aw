@@ -462,6 +462,7 @@ class bug extends class_base
 		switch($prop["name"])
 		{
 			case "send_bill":
+				return PROP_IGNORE;
 				if($arr["new"])
 				{
 					$prop["value"] = 1;
@@ -1224,6 +1225,13 @@ class bug extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "send_bill":
+				return PROP_IGNORE;
+				if($arr["new"])
+				{
+					$prop["value"] = 1;
+				}
+				break;
 			case "finance_type":
 				if ($arr["new"] && !$arr["prop"]["value"])
 				{
