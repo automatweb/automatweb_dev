@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.65 2009/03/10 14:58:50 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.66 2009/03/11 10:39:48 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -440,35 +440,41 @@ class crm_company_webview extends class_base
 						}
 					}
 				break;
-//				case 'phone': // Display all phone numbers, not selected one
-//					$reltype = 'RELTYPE_PHONE';
+
 				case 'sectors':
-					//$reltype = empty($reltype) ? 'RELTYPE_TEGEVUSALAD' : $reltype;
-					$reltype = 'RELTYPE_TEGEVUSALAD';
-					
-					$conns = $c->connections_from(array(
-						'type' => $reltype,
-					));
-					foreach ($conns as $conn)
+					$odl = new object_data_list(
+						array(
+							"class_id" => CL_CRM_SECTOR,
+							new object_list_filter(array(
+								"logic" => "OR",
+								"conditions" => array(
+									"CL_CRM_SECTOR.RELTYPE_SECTOR(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).company" => $c->id(),
+									"CL_CRM_SECTOR.RELTYPE_TEGEVUSALAD(CL_CRM_COMPANY).id"  => $c->id(),
+								),
+							)),
+							"lang_id" => array(),
+							"site_id" => array(),
+						), 
+						array(
+							CL_CRM_SECTOR => array("name")
+						)
+					);
+					foreach($odl->arr() as $oid => $odata)
 					{
-						$thing = $conn->to();
-						if ($this->can('view', $thing->id()))
+						if ($_GET["action"] == "show_co")
 						{
-							if ($_GET["action"] == "show_co")
-							{
-								$value[] = html::href(array(
-									"caption" => $thing->name(),
-									"class" => "ccwSectLink",
-									"url" => $this->mk_my_orb("show_sect", array(
-										"section" => $thing->id(),
-										"wv" => $_GET["wv"]
-									), "crm_company_webview")
-								));
-							}
-							else
-							{
-								$value[] = $thing->name();
-							}
+							$value[] = html::href(array(
+								"caption" => $odata["name"],
+								"class" => "ccwSectLink",
+								"url" => $this->mk_my_orb("show_sect", array(
+									"section" => $oid,
+									"wv" => $_GET["wv"]
+								), "crm_company_webview")
+							));
+						}
+						else
+						{
+							$value[] = $odata["name"];
 						}
 					}
 				break;
@@ -1191,6 +1197,7 @@ class crm_company_webview extends class_base
 		$this->vars(array(
 			"keywords" => $kw,
 		));
+
 		// Alrighty then, parse your arse away
 		$ret = $this->parse('company_show');
 		exit_function("crm_company_webview::_get_company_show_html");
@@ -1309,8 +1316,14 @@ class crm_company_webview extends class_base
 			unset($filt["parent"]);
 		}
 		if (isset($limit_sector) && is_array($limit_sector) && count($limit_sector))
-		{
-			$filt["CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD"] = $limit_sector;
+		{			
+			$filt[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_COMPANY.RELTYPE_COMPANY(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).sector"  => $limit_sector,
+					"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD"  => $limit_sector,
+				),
+			));
 		}
 		if (empty($limit_city_excl) && !empty($limit_city))
 		{
@@ -2019,6 +2032,7 @@ class crm_company_webview extends class_base
 		$ret = $this->_get_company_show_html(array(
 			"company_id" => $arr["org"],
 			"list_id" => $_REQUEST["l"]
+
 		));
 		exit_function("crm_company_webview::show_co");
 		return $ret;

@@ -4177,11 +4177,6 @@ class crm_company extends class_base
 			$sect = obj($arr['sector']);
 			if ($sect->class_id() == CL_CRM_SECTOR)
 			{
-				// the company GETS A SECTOR! AIN'T THIS FUN?
-				$new_company->connect(array(
-					'to' => $arr['sector'],
-					'type' => 'RELTYPE_TEGEVUSALAD'
-				));
 				$new_company->set_prop('pohitegevus', $arr['sector']);
 			}
 		}

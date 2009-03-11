@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer_manager.aw,v 1.4 2008/01/31 13:54:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer_manager.aw,v 1.5 2009/03/11 10:39:45 instrumental Exp $
 // crm_special_offer_manager.aw - Organisatsiooni eripakkumiste haldus 
 // Valitud eripakkumiste veebi kuvamiseks
 /*
@@ -10,7 +10,7 @@
 @default group=general
 
 @property listtype type=chooser orient=vertical field=meta method=serialize
-@caption Kuvatava nimekirja tüüp
+@caption Kuvatava nimekirja t&uuml;&uuml;p
 
 @property url_to type=textbox field=meta method=serialize 
 @caption Aadress, kuhu nimekirjast suunata
@@ -99,7 +99,7 @@ class crm_special_offer_manager extends class_base
 				if (!is_numeric($prop['value']) || ($prop['value'] != 1 && $prop['value'] !=2) )
 				{
 					$retval = PROP_ERROR;
-					$prop['error'] = t("Nimekirja tüüp vigane.");
+					$prop['error'] = t("Nimekirja t&uuml;&uuml;p vigane.");
 				}
 			break;
 			case 'all_offers_table':
@@ -237,19 +237,27 @@ class crm_special_offer_manager extends class_base
 				$company_name = $co->name();
 
 				// Sectors / tegevusalad
-				$conns = $co->connections_from(array(
-					'type' => 'RELTYPE_TEGEVUSALAD',
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_SECTOR,
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"CL_CRM_SECTOR.RELTYPE_TEGEVUSALAD(CL_CRM_COMPANY).id" => $co->id(),
+							"CL_CRM_SECTOR.RELTYPE_SECTOR(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).company" => $co->id(),
+						),
+					)),
+					"lang_id" => array(),
+					"site_id" => array(),
 				));
 				$sectors = array();
-				$selected  = $co->prop('pohitegevus');
-				foreach ($conns as $con)
+				foreach($ol->names() as $sid => $name)
 				{
 					$s = $con->to();
-					$name = strlen($s->name()) ? $s->name() : '('.t("nimetu").' '.$s->id().')';
+					$name = strlen($name) ? $name : '('.t("nimetu").' '.$sid.')';
 					$sectors[] = html::href(array(
-						'caption' => $s->id() == $selected ? '<b>'.$name.'</b>' : $name,
+						'caption' => '<b>'.$name.'</b>',
 						'url' => $this->mk_my_orb("change", array(
-							'id' => $s->id(),
+							'id' => $sid,
 							'return_url' => get_ru(),
 						), CL_CRM_SECTOR),
 					));

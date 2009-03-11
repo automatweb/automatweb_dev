@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.152 2009/02/10 09:52:41 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.153 2009/03/11 10:39:46 instrumental Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2475,7 +2475,13 @@ foreach($ol->arr() as $o)
 		$ala = obj($id);
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_COMPANY,
-			"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD.id"  => $id,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_COMPANY.RELTYPE_COMPANY(CL_CRM_COMPANY_SECTOR_MEMBERSHIP).sector"  => $id,
+					"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD"  => $id,
+				),
+			)),
 			"site_id" => array(),
 			"lang_id" => array(),
 		));

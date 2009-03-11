@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.60 2009/02/07 17:49:13 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.61 2009/03/11 10:39:45 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -322,6 +322,10 @@ class crm_db extends class_base
 		$secs = array();
 		foreach($orgs as $k => $v)
 		{
+			if(count($v) === 0)
+			{
+				continue;
+			}
 			$conns = connection::find(array(
 				"from.class_id" => CL_CRM_COMPANY,
 				"from" => $v,
@@ -330,6 +334,21 @@ class crm_db extends class_base
 			foreach($conns as $conn)
 			{
 				$secs[$k][$conn["to"]][$conn["from"]] = 1;
+			}
+			$secs_odl = new object_data_list(
+				array(
+					"class_id" => CL_CRM_COMPANY_SECTOR_MEMBERSHIP,
+					"company" => $v,
+					"lang_id" => array(),
+					"site_id" => array(),
+				),
+				array(
+					CL_CRM_COMPANY_SECTOR_MEMBERSHIP => array("company", "sector"),
+				)
+			);
+			foreach($secs_odl->arr() as $odata)
+			{
+				$secs[$k][$odata["sector"]][$odata["company"]] = 1;
 			}
 		}
 
