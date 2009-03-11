@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.71 2009/01/30 12:19:44 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.72 2009/03/11 14:17:46 instrumental Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -767,6 +767,16 @@ class object_list extends _int_obj_container_base
 		foreach($this->list_objdata as $oid => $d)
 		{
 			$ret[$d["brother_of"]] = $d["brother_of"];
+		}
+		return $ret;
+	}
+
+	function ords()
+	{
+		$ret = array();
+		foreach($this->list_objdata as $oid => $d)
+		{
+			$ret[$oid] = $d["jrk"];
 		}
 		return $ret;
 	}

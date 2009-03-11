@@ -1415,6 +1415,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$fetch_sql = "
 					objects.oid as oid,
+					objects.jrk as jrk,
 					objects.name as name,
 					objects.parent as parent,
 					objects.brother_of as brother_of,
@@ -1514,7 +1515,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$objdata[$row["oid"]] = array(
 						"brother_of" => $row["brother_of"],
 						"status" => $row["status"],
-						"class_id" => $row["class_id"]
+						"class_id" => $row["class_id"],
+						"jrk" => $row["jrk"],
 					);
 
 					if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
@@ -1534,7 +1536,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$objdata[$row["oid"]] = array(
 						"brother_of" => $row["brother_of"],
 						"status" => $row["status"],
-						"class_id" => $row["class_id"]
+						"class_id" => $row["class_id"],
+						"jrk" => $row["jrk"],
 					);
 					if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 					{
