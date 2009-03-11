@@ -65,6 +65,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@property global_buffer type=textbox default=14400
 	@caption P&auml;eva &uuml;ldpuhver (h)
 
+	@property production_feedback_option_values type=textarea default=1 rows=5
+	@comment Valikud valiminud eksemplaride arvu v&otilde;i koguse sisestamiseks t&ouml;&ouml; vaates (ressursioperaatori vaates). T&auml;isarvud, koguste puhul ratsionaalarvud.
+	@caption Tootmise tagasiside valikud
+
+	@property products type=relpicker multiple=1 reltype=RELTYPE_PRODUCT store=connect
+	@caption Ressursil valmistatavad tooted
+
 
 @default group=grp_resource_unavailable_work
 
@@ -117,6 +124,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 
 @reltype RECUR_WRK value=5 clid=CL_RECURRENCE
 @caption T&ouml;&ouml;aja kordus
+
+@reltype PRODUCT value=6 clid=CL_SHOP_PRODUCT
+@caption Ressursil valmistatav toode
 
 */
 
@@ -220,6 +230,10 @@ class mrp_resource extends class_base
 		{
 			case "cal_tb";
 				$this->_get_cal_tb($arr);
+				break;
+
+			case "production_feedback_option_values":
+				$prop["value"] = implode(", ", $prop["value"]);
 				break;
 
 			case "category":
@@ -419,6 +433,26 @@ class mrp_resource extends class_base
 			case "default_post_buffer":
 			case "global_buffer":
 				$prop["value"] = round ($prop["value"] * 3600);
+				break;
+
+			case "production_feedback_option_values":
+				$strchrs = str_split($prop["value"]);
+				$nrs = array();
+				$i = 0;
+				$nrs[$i] = "";
+				foreach ($strchrs as $chr)
+				{
+					if (is_numeric($chr))
+					{
+						$nrs[$i] .= $chr;
+					}
+					elseif(strlen($nrs[$i]))
+					{
+						++$i;
+						$nrs[$i] = "";
+					}
+				}
+				$prop["value"] = $nrs;
 				break;
 
 			case "thread_data":
@@ -977,272 +1011,14 @@ class mrp_resource extends class_base
 		return $this->cal_items;
 	}
 
-	function get_unavailable_periods ($resource, $start, $end)
+	function get_unavailable_periods ($resource, $start, $end) // DEPRECATED
 	{
-// /* dbg */ if ($resource->id () == 6670  ) {
-// /* dbg */ $this->mrpdbg=1;
-// /* dbg */ }
-
-		$period_start = $start;
-		$period_end = $end;
-		$unavailable_dates = array ();
-		$dates = $resource->prop ("unavailable_dates");
-		$dates = explode (";", $dates);
-		$separators = " ,.:/|-\\";
-		$period_start_year = date ("Y", $period_start);
-		foreach ($dates as $date)
-		{
-			$start_day = (int) strtok ($date, $separators);
-			$start_mon = (int) strtok ($separators);
-			$start_hour = (int) strtok ($separators);
-			$start_min = (int) strtok ($separators);
-			$end_day = (int) strtok ($separators);
-			$end_mon = (int) strtok ($separators);
-			$end_hour = (int) strtok ($separators);
-			$end_min = (int) strtok ($separators);
-			$in_period_range = true;
-			$year = $period_start_year;
-
-			while ($in_period_range)
-			{
-				$start = mktime ($start_hour, $start_min, 0, $start_mon, $start_day, $year);
-				$end = mktime ($end_hour, $end_min, 0, $end_mon, $end_day, $year);
-
-				if ($start < $period_end)
-				{
-					if ($start < $end)
-					{
-						$unavailable_dates[$start] = max ($end, $unavailable_dates[$start]);
-					}
-				}
-				else
-				{
-					$in_period_range = false;
-				}
-
-				$year++;
-			}
-		}
-
-		foreach ($unavailable_dates as $start => $end)
-		{
-			if ($end <= $period_start)
-			{
-				unset ($unavailable_dates[$start]);
-			}
-		}
-
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "unavailable_dates:";
-// /* dbg */ arr ($unavailable_dates);
-// /* dbg */ }
-
-		return $unavailable_dates;
+		return $resource->get_unavailable_periods($start, $end);
 	}
 
-	function get_recurrent_unavailable_periods ($resource, $start, $end)
+	function get_recurrent_unavailable_periods ($resource, $start, $end) // DEPRECATED
 	{
-// /* dbg */ if ($resource->id () == 6670  ) {
-// /* dbg */ $this->mrpdbg=1;
-// /* dbg */ }
-
-		### unavailable recurrences
-		$recurrent_unavailable_periods = array ();
-		$start = mktime (0, 0, 0, date ("m", $start), date ("d", $start), date("Y", $start));
-		$end = mktime (0, 0, 0, date ("m", $end), date ("d", $end), date("Y", $end));
-
-		if ($resource->prop ("unavailable_weekends"))
-		{
-			$weekend_start = $this->get_week_start ($start) + (5 * 86400);
-			$weekend_length = 172800;
-			$recurrent_unavailable_periods[] = array (
-				"length" => $weekend_length,
-				"start" => $weekend_start,
-				"time" => 0,
-				"end" => $end,
-				"max_span" => $end + $weekend_length,
-				"interval" => 604800,
-			);
-		}
-
-		foreach ($resource->connections_from (array ("type" => "RELTYPE_RECUR")) as $connection)
-		{
-			$recurrence = $connection->to ();
-
-			if ( !(($recurrence->prop ("start") > $end) or ($recurrence->prop ("end") < $start)) )
-			{
-				switch ($recurrence->prop ("recur_type"))
-				{
-					case RECUR_DAILY: //day
-						$interval = $recurrence->prop ("interval_daily");
-						$interval = round (($interval ? $interval : 1) * 86400);
-						break;
-
-					case RECUR_WEEKLY: //week
-						$interval = $recurrence->prop ("interval_weekly");
-						$interval = round (($interval ? $interval : 1) * 86400 * 7);
-						break;
-
-					case RECUR_YEARLY: //year
-						$interval = $recurrence->prop ("interval_yearly");
-						$interval = round (($interval ? $interval : 1) * 86400 * 365);
-						break;
-
-					default:
-						continue;
-				}
-
-				$recurrence_starttime = $recurrence->prop ("time");
-				$recurrence_starttime = explode (":", $recurrence_starttime);
-				$recurrence_starttime_hours = $recurrence_starttime[0] ? (int) $recurrence_starttime[0] : 0;
-				$recurrence_starttime_minutes = $recurrence_starttime[1] ? (int) $recurrence_starttime[1] : 0;
-				$recurrence_starttime = $recurrence_starttime_hours * 3600 + $recurrence_starttime_minutes * 60;
-
-				$recurrent_unavailable_periods[] = array (
-					"length" => round ($this->safe_settype_float ($recurrence->prop ("length")) * 3600),
-					"start" => $recurrence->prop ("start"),
-					"time" => $recurrence_starttime,
-					"end" => $recurrence->prop ("end"),
-					"max_span" => $recurrence->prop ("end") + $time + $length,
-					"interval" => $interval,
-				);
-			}
-		}
-
-
-		### add workhours (available recurrences)
-		$recurrent_available_periods = array ();
-
-		foreach ($resource->connections_from (array ("type" => "RELTYPE_RECUR_WRK")) as $connection)
-		{
-			$recurrence = $connection->to ();
-
-			if ( !(($recurrence->prop ("start") > $end) or ($recurrence->prop ("end") < $start)) )
-			{
-				$interval = 86400;
-				list ($recurrence_time_hours, $recurrence_time_minutes) = explode (":", $recurrence->prop ("time"), 2);
-				$recurrence_time = abs ((int) $recurrence_time_hours) * 3600 + abs ((int) $recurrence_time_minutes) * 60;
-				$recurrence_length = round ($this->safe_settype_float ($recurrence->prop ("length")) * 3600);
-
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "recurrent_available_period time:" . $recurrence_time . "<br>";
-// /* dbg */ }
-
-				$recurrent_available_periods[] = array (
-					"length" => $recurrence_length,
-					"start" => $recurrence->prop ("start"),
-					"time" => $recurrence_time,
-					"end" => $recurrence->prop ("end"),
-					"interval" => $interval,
-				);
-			}
-		}
-
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "recurrent_available_periods:";
-// /* dbg */ arr ($recurrent_available_periods);
-// /* dbg */ }
-
-		### transmute recurrently available periods to unavailables
-		### throw away erroneous definitions
-		foreach ($recurrent_available_periods as $key => $available_period)
-		{
-			if ( ($available_period["start"] >= $available_period["end"]) or ($available_period["length"] > 86400) or ($available_period["length"] < 1) )
-			{
-				unset ($recurrent_available_periods[$key]);
-			}
-		}
-
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "recurrent_available_periods after errorcheck:";
-// /* dbg */ arr ($recurrent_available_periods);
-// /* dbg */ exit;
-// /* dbg */ }
-
-		### find combinations of available periods
-		$combination_breakpoints = array ($start, $end);
-
-		foreach ($recurrent_available_periods as $available_period)
-		{
-			if (($available_period["start"] > $start) and ($available_period["start"] < $end))
-			{
-				$combination_breakpoints[] = $available_period["start"];
-			}
-
-			if (($available_period["end"] > $start) and ($available_period["end"] < $end))
-			{
-				$combination_breakpoints[] = $available_period["end"];
-			}
-		}
-
-		### make unavailable recurrence definitions according to these combinations
-		usort ($recurrent_available_periods, array ($this, "sort_recurrences_by_start"));
-		sort ($combination_breakpoints, SORT_NUMERIC);
-		$interval = 86400;
-
-		foreach ($combination_breakpoints as $bp_key => $breakpoint)
-		{
-			if (isset ($combination_breakpoints[$bp_key + 1]))
-			{
-				$combination_start = $breakpoint;
-				$combination_end = $combination_breakpoints[$bp_key + 1];
-				$combination = array ();
-
-				foreach ($recurrent_available_periods as $available_period)
-				{
-					if ( ($available_period["start"] <= $combination_start) and ($available_period["end"] >= $combination_end) )
-					{
-						$combination[] = $available_period;
-					}
-				}
-
-				usort ($combination, array ($this, "sort_recurrences_by_time"));
-
-				foreach ($combination as $key => $available_period)
-				{
-					$time = ($available_period["time"] + $available_period["length"]) % $interval;
-
-					if (isset ($combination[$key + 1]))
-					{
-						$end_time = $combination[$key + 1]["time"];
-					}
-					else
-					{
-						$end_time = $combination[0]["time"];
-					}
-
-					if ($end_time > $time)
-					{
-						$length = $end_time - $time;
-					}
-					else
-					{
-						$length = $end_time + ($interval - $time);
-					}
-
-					$recurrent_unavailable_periods[] = array (
-						"length" => $length,
-						"start" => $combination_start,
-						"end" => $combination_end,
-						"time" => $time,
-						"max_span" => $recurrence->prop ("end") + $time + $length,
-						"interval" => $interval,
-					);
-				}
-			}
-		}
-
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "return recurrent_unavailable_periods:";
-// /* dbg */ foreach ($recurrent_unavailable_periods as $key => $value){ echo "<hr>";
-// /* dbg */ echo "length: " . ($value["length"]/3600).  "h<br>";
-// /* dbg */ echo "start: " . date (MRP_DATE_FORMAT, $value["start"]).  "<br>";
-// /* dbg */ echo "end: " . date (MRP_DATE_FORMAT, $value["end"]).  "<br>";
-// /* dbg */ echo "time: " . date ("H.i", mktime(0,0,0,1,1,2005) + $value["time"]).  "<br>";
-// /* dbg */ echo "interval: " . ($value["interval"]/3600).  "h<br>";}
-// /* dbg */ }
-
-		return $recurrent_unavailable_periods;
+		return $resource->get_recurrent_unavailable_periods($start, $end);
 	}
 
 	function get_week_start ($time = false) //!!! somewhat dst safe (safe if error doesn't exceed 12h)
@@ -1276,42 +1052,6 @@ class mrp_resource extends class_base
 		}
 
 		return $week_start;
-	}
-
-	function sort_recurrences_by_start ($recurrence1, $recurrence2)
-	{
-		if ($recurrence1["start"] > $recurrence2["start"])
-		{
-			$result = 1;
-		}
-		elseif ($recurrence1["start"] < $recurrence2["start"])
-		{
-			$result = -1;
-		}
-		else
-		{
-			$result = 0;
-		}
-
-		return $result;
-	}
-
-	function sort_recurrences_by_time ($recurrence1, $recurrence2)
-	{
-		if ($recurrence1["time"] > $recurrence2["time"])
-		{
-			$result = 1;
-		}
-		elseif ($recurrence1["time"] < $recurrence2["time"])
-		{
-			$result = -1;
-		}
-		else
-		{
-			$result = 0;
-		}
-
-		return $result;
 	}
 
 /**
@@ -1447,12 +1187,9 @@ class mrp_resource extends class_base
 		aw_restore_acl();
 	}
 
-	function safe_settype_float ($value)
+	function safe_settype_float ($value) // DEPRECATED
 	{
-		$separators = ".,";
-		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
-		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
-		return (float) ("{$int}.{$dec}");
+		return aw_math_calc::safe_settype_float($value);
 	}
 
 	function get_events_for_range($resource, $start, $end)
@@ -1547,11 +1284,7 @@ class mrp_resource extends class_base
 
 		if ($avail)
 		{
-			$una = $ri->get_unavailable_periods(
-				$resource,
-				$start,
-				$end
-			);
+			$una = $resource->get_unavailable_periods($start, $end);
 
 			if (count($una))
 			{
@@ -1567,11 +1300,7 @@ class mrp_resource extends class_base
 
 		if ($avail)
 		{
-			$una = $ri->get_recurrent_unavailable_periods(
-				$resource,
-				$start,
-				$end
-			);
+			$una = $resource->get_unavailable_periods($start, $end);
 			if (count($una))
 			{
 				$avail = false;

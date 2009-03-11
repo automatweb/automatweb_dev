@@ -127,6 +127,30 @@
             <caption>P&amp;amp;auml;eva &amp;amp;uuml;ldpuhver (h)</caption>
       </property>
       <property>
+            <name>production_feedback_option_values</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>textarea</type>
+            <default>1</default>
+            <rows>5</rows>
+            <comment>Valikud valiminud eksemplaride arvu v&amp;amp;otilde;i koguse sisestamiseks t&amp;amp;ouml;&amp;amp;ouml; vaates (ressursioperaatori vaates). T&amp;amp;auml;isarvud, koguste puhul ratsionaalarvud.</comment>
+            <caption>Tootmise tagasiside valikud</caption>
+      </property>
+      <property>
+            <name>products</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_PRODUCT</reltype>
+            <store>connect</store>
+            <caption>Ressursil valmistatavad tooted</caption>
+      </property>
+      <property>
             <name>work_hrs_recur</name>
             <table>objects</table>
             <field>meta</field>
@@ -319,6 +343,11 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;aja kordus</caption>
             </RECUR_WRK>
+            <PRODUCT>
+                  <value>6</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Ressursil valmistatav toode</caption>
+            </PRODUCT>
       </reltypes>
       <layout>
             <materials_split>
