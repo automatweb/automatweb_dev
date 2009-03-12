@@ -68,23 +68,31 @@ class crm_company_qv_impl extends class_base
 		$this->bills_paid_sum = 0;
 
 		$r = array();
-		$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
-		$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
-		if ($r["stats_s_from"] > 1 && $r["stats_s_to"])
+		if($arr["request"]["between"])
 		{
-			$time_filt = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"]);
+			$time_filt = $arr["request"]["between"];
 		}
 		else
-		if ($r["stats_s_from"] > 1)
 		{
-			$time_filt = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["stats_s_from"]);
+			$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
+			$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
+			if ($r["stats_s_from"] > 1 && $r["stats_s_to"])
+			{
+				$time_filt = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"]);
+			}
+			else
+			if ($r["stats_s_from"] > 1)
+			{
+				$time_filt = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["stats_s_from"]);
+			}
+			else
+			if ($r["stats_s_to"] > 1)
+			{
+				$time_filt = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["stats_s_to"]);
+			}
 		}
-		else
-		if ($r["stats_s_to"] > 1)
-		{
-			$time_filt = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["stats_s_to"]);
-		}
-
+		
+		
 		// projs
 		if (!empty($arr["proj"]))
 		{
