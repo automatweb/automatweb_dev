@@ -34,6 +34,15 @@
             <caption>Valuuta</caption>
       </property>
       <property>
+            <name>customer</name>
+            <table>aw_crm_bill_payment</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUSTOMER</reltype>
+            <field>aw_customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
             <name>currency_rate</name>
             <table>aw_crm_bill_payment</table>
             <group>general</group>
@@ -70,6 +79,14 @@
                   <clid>CL_CURRENCY</clid>
                   <caption>valuuta</caption>
             </CURRENCY>
+            <CUSTOMER>
+                  <value>2</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
+                  <caption>Kleint</caption>
+            </CUSTOMER>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.9 2008/09/30 11:46:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.10 2009/03/12 17:17:14 markop Exp $
 // crm_bill_row.aw - Arve rida 
 /*
 
@@ -34,6 +34,9 @@
 @property is_oe type=checkbox ch_value=1 field=aw_is_oe
 @caption Muu kulu?
 
+@property writeoff type=checkbox ch_value=1 field=aw_writeoff
+@caption Maha kantud
+
 @property has_tax type=checkbox ch_value=1 field=aw_has_tax
 @caption Lisandub k&auml;ibemaks?
 
@@ -45,6 +48,9 @@
 
 @property people type=relpicker reltype=RELTYPE_PEOPLE multiple=1 table=objects field=meta method=serialize
 @caption Isikud
+
+@property task_row type=relpicker reltype=RELTYPE_TASK_ROW store=connect multiple=1
+@caption Toimetuse read
 
 @reltype PROD value=1 clid=CL_CHOP_PRODUCT
 @caption Toode
@@ -108,7 +114,7 @@ class crm_bill_row extends class_base
 	{
 		if ($table == "aw_crm_bill_rows" && $field == "")
 		{
-			$this->db_query("create table aw_crm_bill_rows (aw_oid int primary key, aw_amt double,aw_prod int,aw_price double,aw_unit varchar(100),aw_is_oe int,aw_has_tax int ,aw_date varchar(255))");
+			$this->db_query("create table aw_crm_bill_rows (aw_oid int primary key, aw_amt double,aw_prod int,aw_price double,aw_unit varchar(100),aw_is_oe int,aw_has_tax int ,aw_date varchar(255), aw_writeoff int)");
 			return true;
 		}
 
@@ -130,6 +136,12 @@ class crm_bill_row extends class_base
 					$o->set_name($o->name());
 					$o->save();
 				}
+				return true;
+			case "aw_writeoff":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "int"
+				));
 				return true;
 		}
 	}
