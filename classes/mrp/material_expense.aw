@@ -18,6 +18,12 @@
 @property unit type=relpicker reltype=RELTYPE_UNIT
 @caption &Uuml;hik
 
+@property planning type=select
+@caption Planeerimine
+
+@property movement type=select
+@caption Materjali liikumine
+
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption Materjal
 
@@ -90,6 +96,8 @@ class material_expense extends class_base
 			case "product":
 			case "job":
 			case "unit":
+			case "planning":
+			case "movement":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

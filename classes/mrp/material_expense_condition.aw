@@ -12,6 +12,12 @@
 @property resource type=relpicker reltype=RELTYPE_RESOURCE
 @caption Ressurss
 
+@property planning type=select
+@caption Planeerimine
+
+@property movement type=select
+@caption Materjali liikumine
+
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption Materjal
 
@@ -37,6 +43,13 @@ class material_expense_condition extends class_base
 
 		switch($prop["name"])
 		{
+			case "planning":
+				$prop["options"] = $arr["obj_inst"]->planning_options();
+				break;
+	
+			case "movement":
+				$prop["options"] = $arr["obj_inst"]->movement_options();
+				break;
 		}
 
 		return $retval;
@@ -81,6 +94,8 @@ class material_expense_condition extends class_base
 		{
 			case "product":
 			case "resource":
+			case "planning":
+			case "movement":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

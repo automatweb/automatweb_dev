@@ -36,6 +36,22 @@
             <field>unit</field>
             <caption>&amp;amp;Uuml;hik</caption>
       </property>
+      <property>
+            <name>planning</name>
+            <table>aw_material_expense</table>
+            <group>general</group>
+            <type>select</type>
+            <field>planning</field>
+            <caption>Planeerimine</caption>
+      </property>
+      <property>
+            <name>movement</name>
+            <table>aw_material_expense</table>
+            <group>general</group>
+            <type>select</type>
+            <field>movement</field>
+            <caption>Materjali liikumine</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MATERIAL_EXPENSE</syslog_type>
             <relationmgr>yes</relationmgr>
