@@ -544,10 +544,9 @@
       </property>
       <property>
             <name>userta2</name>
-            <table>objects</table>
+            <table>documents</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta2</field>
             <type>textarea</type>
             <rows>10</rows>
             <cols>60</cols>
@@ -556,10 +555,9 @@
       </property>
       <property>
             <name>userta3</name>
-            <table>objects</table>
+            <table>documents</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta3</field>
             <type>textarea</type>
             <rows>10</rows>
             <cols>60</cols>
@@ -568,10 +566,9 @@
       </property>
       <property>
             <name>userta4</name>
-            <table>objects</table>
+            <table>documents</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta4</field>
             <type>textarea</type>
             <rows>10</rows>
             <cols>60</cols>
@@ -580,10 +577,9 @@
       </property>
       <property>
             <name>userta5</name>
-            <table>objects</table>
+            <table>documents</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta5</field>
             <type>textarea</type>
             <rows>10</rows>
             <cols>60</cols>
@@ -592,10 +588,9 @@
       </property>
       <property>
             <name>userta6</name>
-            <table>objects</table>
+            <table>documents</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta6</field>
             <type>textarea</type>
             <rows>10</rows>
             <cols>60</cols>
@@ -604,12 +599,11 @@
       </property>
       <property>
             <name>ucheck1</name>
-            <table>objects</table>
+            <table>documents</table>
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_ucheck1</field>
             <caption>Kasutaja defineeritud checkbox 1</caption>
       </property>
       <property>
