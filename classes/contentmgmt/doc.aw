@@ -166,22 +166,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@caption Kasutaja defineeritud 16
 
 
-	@property userta2 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@property userta2 table=documents field=aw_userta2 type=textarea rows=10 cols=60 trans=1
 	@caption Kasutaja defineeritud textarea 2
 
-	@property userta3 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@property userta3 table=documents field=aw_userta3 type=textarea rows=10 cols=60 trans=1
 	@caption Kasutaja defineeritud textarea 3
 
-	@property userta4 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@property userta4 table=documents field=aw_userta4 type=textarea rows=10 cols=60 trans=1
 	@caption Kasutaja defineeritud textarea 4
 
-	@property userta5 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@property userta5 table=documents field=aw_userta5 type=textarea rows=10 cols=60 trans=1
 	@caption Kasutaja defineeritud textarea 5
 
-	@property userta6 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@property userta6 table=documents field=aw_userta6 type=textarea rows=10 cols=60 trans=1
 	@caption Kasutaja defineeritud textarea 6
 
-	@property ucheck1 type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@property ucheck1 type=checkbox ch_value=1 table=documents field=aw_ucheck1
 	@caption Kasutaja defineeritud checkbox 1
 
 	@property ucheck2 type=checkbox ch_value=1 table=documents field=ucheck2
@@ -1659,29 +1659,30 @@ class doc extends class_base
                 }
         }
 
-
-	// function do_db_upgrade($t, $f)
-	// {
-		// switch($f)
-		// {
-			// case "user7":
-			// case "user8":
-			// case "user9":
-			// case "user10":
-			// case "user11":
-			// case "user12":
-			// case "user13":
-			// case "user14":
-			// case "user15":
-			// case "user16":
-			// case "show_to_country":
-				// $this->db_add_col($t, array(
-					// "name" => $f,
-					// "type" => "varchar(255)"
-				// ));
-			// return true;
-		// }
-	// }
+	/* This is in document.aw
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "user7":
+			case "user8":
+			case "user9":
+			case "user10":
+			case "user11":
+			case "user12":
+			case "user13":
+			case "user14":
+			case "user15":
+			case "user16":
+			case "show_to_country":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(255)"
+				));
+			return true;
+		}
+	}
+	*/
 
 	private function _get_simultaneous_key($o)
 	{

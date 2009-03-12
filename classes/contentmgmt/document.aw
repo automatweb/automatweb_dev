@@ -500,22 +500,22 @@ class document extends aw_template
 			}
 			if (!(($pp = strpos($doc["content"],"#edasi#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".aw_url_change_var("show_all", 1)."'>$re</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<a href='".aw_url_change_var("show_all", 1)."'>$re</a>";
 			}
 
 			if (!(($pp = strpos($doc["content"],"#edasi1#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".aw_url_change_var("show_all", 1)."'>$re</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<a href='".aw_url_change_var("show_all", 1)."'>$re</a>";
 			}
 
 			if (!(($pp = strpos($doc["lead"],"#edasi#")) === false))
 			{
-				$doc["lead"] = substr($doc["lead"],0,$pp)."<br /><B><a href='".aw_url_change_var("show_all", 1)."'>$re</a></b></font>";
+				$doc["lead"] = substr($doc["lead"],0,$pp)."<a href='".aw_url_change_var("show_all", 1)."'>$re</a>";
 			}
 
 			if (!(($pp = strpos($doc["lead"],"#edasi1#")) === false))
 			{
-				$doc["lead"] = substr($doc["lead"],0,$pp)."<br /><B><a href='".aw_url_change_var("show_all", 1)."'>$re</a></b></font>";
+				$doc["lead"] = substr($doc["lead"],0,$pp)."<a href='".aw_url_change_var("show_all", 1)."'>$re</a>";
 			}
 		}
 
@@ -3274,10 +3274,17 @@ class document extends aw_template
 			case "show_to_country":
 				$this->db_add_col($table, array(
 					"name" => $field,
-					"type" => int
+					"type" => "int"
 				));
 				return true;
-				break;
+
+			case "aw_ucheck1":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "int"
+				));
+				$this->resque_from_meta($table, $field);
+				return true;
 
 			case "user1":
 			case "user2":
@@ -3301,6 +3308,18 @@ class document extends aw_template
 				));
 				return true;
 
+			case "aw_userta2":
+			case "aw_userta3":
+			case "aw_userta4":
+			case "aw_userta5":
+			case "aw_userta6":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "text"
+				));
+				$this->resque_from_meta($table, $field);
+				return true;
+
 			case "show_to_country":
 				$this->db_add_col($table, array(
 					"name" => $field,
@@ -3309,6 +3328,31 @@ class document extends aw_template
 				return true;
 		}
 		return false;
+	}
+
+	private function resque_from_meta($t, $f)
+	{
+		$map = array(
+			"aw_ucheck1" => "ucheck1",
+			"aw_userta2" => "userta2",
+			"aw_userta3" => "userta3",
+			"aw_userta4" => "userta4",
+			"aw_userta5" => "userta5",
+			"aw_userta6" => "userta6",
+		);
+		if(isset($map[$f]))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_DOCUMENT,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			foreach($ol->arr() as $oid => $o)
+			{
+				$v = $o->meta($map[$f]);
+				$this->db_query("UPDATE $t SET $f = '$v' WHERE docid = '$oid' LIMIT 1;");
+			}
+		}
 	}
 
 	// todo 2 viimast if'i
