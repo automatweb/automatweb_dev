@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.20 2009/01/12 11:16:24 instrumental Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.21 2009/03/12 20:55:42 dragut Exp $
 
 	@comment
 	analyses aw code
@@ -536,6 +536,13 @@ die();*/
 				}
 
 				$has_default_val = true;
+				$next = $this->get();
+			}
+
+			if (is_array($next) && $next[1] == '::'){
+				$defval .= '::';
+				$next = $this->get();
+				$defval .= $next[1];
 				$next = $this->get();
 			}
 
