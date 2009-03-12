@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.11 2009/02/09 13:54:34 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.12 2009/03/12 11:51:28 instrumental Exp $
 // crm_db_search.aw - Kliendibaasi otsingu grupp 
 /*
 
@@ -22,15 +22,17 @@
 @property dir_tegevusala type=relpicker reltype=RELTYPE_TEGEVUSALA_CAT multiple=1
 @caption Tegevusalade kaust
 
+@property sector_recursive type=checkbox ch_value=1
+@caption Otsi ka alategevusaladest
+
 @property keywords type=textbox field=meta method=serialize
 @caption V&ouml;tmes&ouml;nad (komadega eraldatult)
 
 @property keywords2 type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_KEYWORD
 @caption AW V&otilde;tmes&otilde;nad
 
-
 @property keywords_in_row type=textbox field=meta method=serialize
-@caption V&ouml;tmes&ouml;nu &uuml;hel real
+@caption V&otilde;tmes&otilde;nu &uuml;hel real
 
 @property keywords_by_folder type=checkbox field=meta method=serialize
 @caption V&otilde;tmes&otilde;nad kaustade kaupa
@@ -132,9 +134,12 @@ class crm_db_search extends class_base
 			'crm_db' => $o->prop('crm_db'),
 			'limit_plaintext' => $arr['str'],
 			"only_active" => $o->prop("only_active"),
+			"sector_recursive" => $o->prop("sector_recursive"),
 			"field" => $arr["field"],
 			"keyword" => $arr["keyword"],
 			"area" => $arr["area"],
+			"county" => $arr["county"],
+			"city" => $arr["city"],
 		));
 		return $list;
 	}
@@ -149,13 +154,38 @@ class crm_db_search extends class_base
 		}
 		$c = count($arr['results']);
 		$out .= sprintf(t("Otsisid '<b>%s</b>', "), $arr['str']);
-		$out .= sprintf( $c == 1 ? t('leiti %s asutus.') : t('leiti %s asutust.'), count($arr['results']));
+		$out .= sprintf( $c == 1 ? t('leiti %u asutus.') : t('leiti %u asutust.'), count($arr['results']));
 		$out .= '<br>';
 	
 		$wvinst = get_instance(CL_CRM_COMPANY_WEBVIEW);
 		$wvinst->read_template("default.tpl");
-		$wvinst->vars(array("res_count_row" => $out));
-		$out .= $wvinst->_get_companies_list_html(array(
+		$wvinst->vars(array(
+			"res_count_row" => $out,
+			"count" => count($arr["results"]),
+		));
+		$search_args = array(
+			"str" => false,
+			"field" => true,
+			"county" => true,
+			"city" => true
+		);
+		foreach($search_args as $search_arg => $is_oid)
+		{
+			if(!empty($arr[$search_arg]))
+			{
+				$wvinst->vars(array(
+					$search_arg => $is_oid && $this->can("view", $arr[$search_arg]) ? obj($arr[$search_arg])->trans_get_val("name") : $arr[$search_arg],
+				));
+				$wvinst->vars(array(
+					strtoupper($search_arg) => $wvinst->parse(strtoupper($search_arg)),
+				));
+			}
+		}
+		$wvinst->vars(array(
+			"company_search_results_overview" => $wvinst->parse("company_search_results_overview")
+		));
+
+		$out = $wvinst->_get_companies_list_html(array(
 			'list' => $arr['results'],
 			'do_link' => true,
 			'url' => $url,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.67 2009/03/11 15:20:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.68 2009/03/12 11:51:28 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1200,7 +1200,7 @@ class crm_company_webview extends class_base
 	// Return sorted list of companies to display
 	function _list_companies ($arr)
 	{
-	enter_function('crm_company_webview::list');
+		enter_function('crm_company_webview::list');
 		$orgs = array(); // return value
 		if (!empty($arr["id"]))
 		{
@@ -1310,6 +1310,23 @@ class crm_company_webview extends class_base
 		}
 		if (isset($limit_sector) && is_array($limit_sector) && count($limit_sector))
 		{			
+			if($arr["sector_recursive"])
+			{
+				foreach($limit_sector as $sector)
+				{
+					if(!is_oid($sector))
+					{
+						continue;
+					}
+					$ot = new object_tree(array(
+						"parent" => $sector,
+						"class_id" => CL_CRM_SECTOR,
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					$limit_sector = array_merge($limit_sector, $ot->ids());
+				}
+			}
 			$filt["CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD"] = $limit_sector;
 		}
 		if (empty($limit_city_excl) && !empty($limit_city))
