@@ -2199,7 +2199,37 @@ class bug extends class_base
 			// replace #675656 with link to bug
 			$comt = preg_replace("/(?<!&)#([0-9]+)/ims", "<a href='http://intranet.automatweb.com/\\1'>#\\1</a>", $comt);
 //-------- vastus divi sisse
-			$comt_arr = explode("\n&gt;",$comt);
+
+
+			if(substr_count($comt, "\n&gt;"))
+			{
+				$comt_arr = explode("\n",$comt);
+				$start_set = 0;
+				foreach($comt_arr as $key => $val)
+				{
+					if(substr($val,0,4) == "&gt;" && !$start_set)
+					{
+						$comt_arr[$key] = "<div class=bug_reply_txt>".$comt_arr[$key];
+						$start_set = 1;
+					}
+					if(substr($val,0,4) != "&gt;" && $start_set)
+					{
+						$comt_arr[$key-1].="</div>";
+						$start_set = 0;
+					}
+				}
+				if($start_set)
+				{
+					$comt_arr[$key].="</div>";
+				}
+			
+				$comt = join ("\n" , $comt_arr);
+			}
+
+
+
+
+/*			$comt_arr = explode("\n&gt;",$comt);
 			if(sizeof($comt_arr) > 1)
 			{
 
@@ -2209,6 +2239,11 @@ class bug extends class_base
 				$comt_arr[sizeof($comt_arr) - 1] = join("\n" , $last);
 				$comt = join ("\n&gt;" , $comt_arr);
 			}
+
+
+
+
+*/
 //-------- END vastus divi sisse
 
 //			$comt = $this->parse_commited_msg($comt);
