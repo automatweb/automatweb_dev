@@ -172,7 +172,19 @@ class reservation_obj extends _int_object
                        "class_id" => CL_RFP,
                         "lang_id" => array(),
                         "site_id" => array(),
-                        "CL_RFP.RELTYPE_RESERVATION" => $this->id(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_RFP.RELTYPE_RESERVATION" => $this->id(),
+					"CL_RFP.RELTYPE_CATERING_RESERVATION" => $this->id(),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
+							"CL_RFP.RELTYPE_RESERVATION" => $this->parent(),
+						)
+					)),
+				),
+			)),
                 ));
 		if(sizeof($rfps->ids()))
 		{

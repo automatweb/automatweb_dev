@@ -2194,7 +2194,7 @@ class room extends class_base
 	}
 	
 	private function get_bron_cell_color($last_bron , $settings,$start_step)
-	{
+	{//if($last_bron->id() == 415994) arr($last_bron->prop("type"));
 		enter_function("room::get_bron_cell_color");
 		$col = array();
 		$x = 1;
@@ -2229,7 +2229,7 @@ class room extends class_base
 		}
 		else
 		{
-			$rfp_color = "";
+			$rfp_color = "";//arr($last_bron); arr($last_bron->get_rfp());
 			if(is_object($rfp = $last_bron->get_rfp()))
 			{
 				switch($rfp->prop("confirmed"))
@@ -5486,7 +5486,7 @@ class room extends class_base
 					}
 					else
 					{
-						if($val["verified"] && !$this->is_after_buffer && !$this->is_before_buffer && !$val["slave"]) // juhul kui pole j2relpuhver ja on kinnitatud, siis pole vaja enam edasi otsida, v6tab eelduseks ka , et pole miski seotud ruumi bronn
+						if($val["verified"] && !$this->is_after_buffer && !$this->is_before_buffer) // juhul kui pole j2relpuhver ja on kinnitatud, siis pole vaja enam edasi otsida, v6tab eelduseks ka , et pole miski seotud ruumi bronn
 						{
 							exit_function("room::check_from_table");
 							return false;
