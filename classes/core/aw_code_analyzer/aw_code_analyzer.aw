@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.21 2009/03/12 20:55:42 dragut Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.22 2009/03/13 10:21:30 dragut Exp $
 
 	@comment
 	analyses aw code
@@ -24,6 +24,7 @@ class aw_code_analyzer extends class_base
 	private $cur_line;
 	private $cur_file;
 	private $current_class;
+	private $current_function;
 	private $var_track_glob_scope = array();
 	private $var_track_class_scope = array();
 	private $var_track_func_scope = array();
@@ -234,6 +235,21 @@ die();*/
 	function get_line()
 	{
 		return $this->cur_line;
+	}
+
+	function get_file()
+	{
+		return $this->cur_file;
+	}
+
+	function get_current_class()
+	{
+		return $this->current_class;
+	}
+
+	function get_current_function()
+	{
+		return $this->current_function;
 	}
 
 	function assert($tok, $id)
@@ -539,6 +555,7 @@ die();*/
 				$next = $this->get();
 			}
 
+			// if the arguments default value is something like 'self::SOMETHING' then handle it:
 			if (is_array($next) && $next[1] == '::'){
 				$defval .= '::';
 				$next = $this->get();
@@ -566,8 +583,8 @@ die();*/
 			}
 			else
 			{
-				echo "got weird_ass token in func args on line ".$this->get_line()." tok = ";
-				$this->dump_tok($next);
+				echo 'ERROR in file '.$this->get_file().' on line '.$this->get_line()."\n";
+				echo 'Cannot parse '.$this->get_current_class().'::'.$this->get_current_function().' parameter\'s "'.$tok[1].'" default value!'."\n";
 				die();
 			}
 
