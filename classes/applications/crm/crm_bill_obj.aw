@@ -29,6 +29,8 @@ class crm_bill_obj extends _int_object
 
 	function save()
 	{
+		$this->set_prop("sum", $this->_calc_sum());
+
 		$rv = parent::save();
 
 		if(isset($_SESSION["bill_change_comments"]) && is_array($_SESSION["bill_change_comments"]))
@@ -37,6 +39,41 @@ class crm_bill_obj extends _int_object
 			unset($_SESSION["bill_change_comments"]);
 		}
 		return $rv;
+	}
+
+	private function _calc_sum()
+	{
+		$bill_inst = get_instance(CL_CRM_BILL);
+		$rows = $bill_inst->get_bill_rows($this);
+		$sum = 0;
+		foreach($rows as $row)
+		{
+			$sum+= $row["sum"];
+		}
+
+		if ($this->prop("disc") > 0)
+		{
+			$sum -= $sum * ($this->prop("disc") / 100.0);
+		}
+
+		return $this->round_sum($sum);
+	}
+
+	private function round_sum($sum)
+	{
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		$co = obj($co);
+		if(is_object($co) && $co->prop("round"))
+		{
+			$round = (double)$co->prop("round");
+			$min_stuff = $sum/$round - ($sum/$round - (int)($sum/$round));
+			$min_diff = $sum - $min_stuff*$round;
+			$max_diff = ($sum - ($min_stuff + 1) * $round)*-1;
+			if($max_diff > $min_diff) $sum = $min_stuff*$round;
+			else $sum = ($min_stuff+1)*$round;
+		}
+		 return $sum;
 	}
 
 	function get_bill_print_popup_menu()

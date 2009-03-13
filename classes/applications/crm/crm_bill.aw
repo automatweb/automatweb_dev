@@ -1363,12 +1363,12 @@ class crm_bill extends class_base
 			$sum -= $sum * ($arr["obj_inst"]->prop("disc") / 100.0);
 		}
 //		$sum = $this->round_sum($sum);
-		if ($arr["obj_inst"]->prop("sum") != $sum)
+/*		if ($arr["obj_inst"]->prop("sum") != $sum)
 		{
 			$arr["obj_inst"]->set_prop("sum", $sum);
 			$arr["obj_inst"]->save();
 		}
-
+*/
 		//kokkuleppe hind
 		$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
 		if(!is_array($agreement_prices[0]) && is_array($agreement_prices)) $agreement_prices = array($agreement_prices);//endiste kokkuleppehindade jaoks mis pold massiivis
@@ -1921,7 +1921,7 @@ class crm_bill extends class_base
 		{
 			$arr["obj_inst"]->set_prop("bill_due_date_days", $this->_set_bddd);
 		}
-		$arr["obj_inst"]->set_prop("sum", $this->_calc_sum($arr["obj_inst"]));
+
 		$bt = $arr["obj_inst"]->prop("bill_date");
 		$arr["obj_inst"]->set_prop("bill_due_date", 
 			mktime(3,3,3, date("m", $bt), date("d", $bt) + $arr["obj_inst"]->prop("bill_due_date_days"), date("Y", $bt))
