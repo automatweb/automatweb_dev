@@ -165,16 +165,9 @@ class site_show extends class_base
 		}
 
 		$request_uri = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
-		$pos = strpos($request_uri, "&");
-		$pos2 = strpos($request_uri, "set_lang_id");
-		if ($pos === false && $pos2 === false)
-		{
-			$printlink = $request_uri . "?print=1";
-		}
-		else
-		{
-			$printlink = $request_uri . "&print=1";
-		}
+		$printlink = aw_url_change_var(array(
+			"print" => 1,
+		), false, $request_uri);
 
 		$this->vars(array(
 			"sel_menu_id" => $this->sel_section,
@@ -1499,9 +1492,10 @@ class site_show extends class_base
 			if (aw_ini_get("menuedit.print_template"))
 			{
 				$this->read_template(aw_ini_get("menuedit.print_template"));
-				$this->vars(array(
+				$this->vars_safe(array(
 					"doc_content" => $docc,
 				));
+				$this->make_yah();
 				aw_global_set("no_cache", 1);
 
 				return $this->parse();
@@ -1604,7 +1598,7 @@ class site_show extends class_base
 					continue;
 				}
 				$this->vars(array(
-					"sel_menu_active_image_".$nr =>  "<img src='".$dat["url"]."' alt='sel_menu_active_image_".$nr."' />",
+					"sel_menu_active_image_".$nr => "<img src='".$dat["url"]."' alt='sel_menu_active_image_".$nr."' />",
 					"sel_menu_active_image_".$nr."_url" => $dat["url"]
 				));
 			}
