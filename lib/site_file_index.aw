@@ -9,6 +9,7 @@ function load_versions()
 	$table = "site_file_index";
 
 	$r = mysql_connect(aw_ini_get("db.host"), aw_ini_get("db.user"), aw_ini_get("db.pass"));
+
 	if(!$r)
 	{
 		return;
@@ -113,6 +114,7 @@ function load_versions_if_not_loaded()
 **/
 function get_class_version($class)
 {
+return $class;
 /*	$block_list = array("aw_request" , "aw_resource" , "tm");//ueh...ei tea mis teha... enne neid pole saidi ini sisse loetud
 	if(in_array($class , $block_list))
 	{
@@ -120,9 +122,20 @@ function get_class_version($class)
 	}
 */
 	load_versions_if_not_loaded();
+
 	if(!isset($GLOBALS['cfg']['versions']))
 	{
 		return $class;
+	}
+
+
+
+	$add_aw_dir = 0;
+	if(substr_count($class , AW_DIR))
+	{
+		$add_aw_dir = 1;
+		$class = substr($class , strlen(AW_DIR));
+		
 	}
 
 	$data = null;
@@ -150,6 +163,10 @@ function get_class_version($class)
 	}
 	else
 	{
+		if($add_aw_dir)
+		{
+			$class = AW_DIR.$class;
+		}
 		return $class;
 	}
 	if($_GET["DBG"] && $ver_class)
@@ -157,6 +174,10 @@ function get_class_version($class)
 		print "file: " . $class." , version: "; print $ver_class."<br>";
 	}
 
+	if($add_aw_dir)
+	{
+		$ver_class = AW_DIR.$ver_class;
+	}
 	return $ver_class;
 
 }
@@ -176,7 +197,7 @@ function get_class_version($class)
 		if installed file not found, returns original
 **/
 function get_file_version($file)
-{
+{return $file;
 //	print $file." - ".AW_DIR."<br>";
 
 	load_versions_if_not_loaded();
