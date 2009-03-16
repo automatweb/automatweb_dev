@@ -1556,7 +1556,7 @@ class bug extends class_base
 			case "monitors":
 				if (!$arr["new"] && $arr["request"]["who"])
 				{
-					$mon = $arr["obj_inst"]->prop("monitors");
+					$mon = $arr["request"]["monitors"];
 					if(!$mon[$arr["request"]["who"]])
 					{
 						$mon[$arr["request"]["who"]] = $arr["request"]["who"];

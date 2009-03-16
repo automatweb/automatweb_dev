@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.23 2009/02/06 13:33:28 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.24 2009/03/16 08:55:26 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -378,7 +378,7 @@ class development_order extends class_base
 				{
 					$ob = obj($orderer);
 					$ppl[$orderer] = $ob->name();
-					$prop["value"][$orderer] = $orderer;
+					//$prop["value"][$orderer] = $orderer;
 				}
 				
 				$prop["options"] += $ppl;

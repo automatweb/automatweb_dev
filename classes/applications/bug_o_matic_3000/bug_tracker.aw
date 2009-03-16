@@ -2494,6 +2494,7 @@ class bug_tracker extends class_base
 		$us = get_instance("users");
 		$bug_i = get_instance(CL_BUG);
 		$states = $bug_i->get_status_list();
+		$devo_states = get_instance(CL_DEVELOPMENT_ORDER)->get_status_list();
 		$bug_list = $ol->arr();
 		$user_list = array();
 		foreach($bug_list as $bug)
@@ -2595,7 +2596,7 @@ class bug_tracker extends class_base
 					"url" => $opurl,
 					"caption" => t("Sisene")
 				)).")",
-				"bug_status" => $states[$bug->prop("bug_status")],
+				"bug_status" => (($bug->class_id() == CL_DEVELOPMENT_ORDER) ? $devo_states[$bug->prop("bug_status")] : $states[$bug->prop("bug_status")]),
 				"bug_sort" => $bug_sort[$bug->prop("bug_status")],
 				"who" => $bug->prop_str("who"),
 				"bug_priority" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_priority"),
