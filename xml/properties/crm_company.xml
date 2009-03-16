@@ -522,90 +522,82 @@
       </property>
       <property>
             <name>userta1</name>
-            <table>objects</table>
+            <table>kliendibaas_firma</table>
             <group>add_info</group>
             <type>textarea</type>
             <rows>10</rows>
             <cols>50</cols>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta1</field>
             <caption>User-defined TA 1</caption>
       </property>
       <property>
             <name>userta2</name>
-            <table>objects</table>
+            <table>kliendibaas_firma</table>
             <group>add_info</group>
             <type>textarea</type>
             <rows>10</rows>
             <cols>50</cols>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta2</field>
             <caption>User-defined TA 2</caption>
       </property>
       <property>
             <name>userta3</name>
-            <table>objects</table>
+            <table>kliendibaas_firma</table>
             <group>add_info</group>
             <type>textarea</type>
             <rows>10</rows>
             <cols>50</cols>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta3</field>
             <caption>User-defined TA 3</caption>
       </property>
       <property>
             <name>userta4</name>
-            <table>objects</table>
+            <table>kliendibaas_firma</table>
             <group>add_info</group>
             <type>textarea</type>
             <rows>10</rows>
             <cols>50</cols>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta4</field>
             <caption>User-defined TA 4</caption>
       </property>
       <property>
             <name>userta5</name>
-            <table>objects</table>
+            <table>kliendibaas_firma</table>
             <group>add_info</group>
             <type>textarea</type>
             <rows>10</rows>
             <cols>50</cols>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta5</field>
             <caption>User-defined TA 5</caption>
       </property>
       <property>
             <name>userta6</name>
-            <table>objects</table>
+            <table>kliendibaas_firma</table>
             <group>add_info</group>
             <type>textarea</type>
             <rows>10</rows>
             <cols>50</cols>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta6</field>
             <caption>User-defined TA 6</caption>
       </property>
       <property>
             <name>userta7</name>
-            <table>objects</table>
+            <table>kliendibaas_firma</table>
             <group>add_info</group>
             <type>textarea</type>
             <rows>10</rows>
             <cols>50</cols>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta7</field>
             <caption>User-defined TA 7</caption>
       </property>
       <property>
             <name>userta8</name>
-            <table>objects</table>
+            <table>kliendibaas_firma</table>
             <group>add_info</group>
             <type>textarea</type>
             <rows>10</rows>
             <cols>50</cols>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_userta8</field>
             <caption>User-defined TA 8</caption>
       </property>
       <property>
@@ -713,6 +705,33 @@
             <caption>Fake phone</caption>
       </property>
       <property>
+            <name>fake_fax</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_fax</field>
+            <caption>Fake fax</caption>
+      </property>
+      <property>
+            <name>fake_mobile</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_mobile</field>
+            <caption>Fake mobile</caption>
+      </property>
+      <property>
+            <name>fake_skype</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_skype</field>
+            <caption>Fake skype</caption>
+      </property>
+      <property>
             <name>fake_email</name>
             <table>objects</table>
             <group>add_info</group>
@@ -787,6 +806,26 @@
             <store>no</store>
             <field>fake_address_county_relp</field>
             <caption>Fake county</caption>
+      </property>
+      <property>
+            <name>fake_address_country</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_address_country</field>
+            <caption>Fake country</caption>
+      </property>
+      <property>
+            <name>fake_address_country_relp</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAKE_COUNTRY</reltype>
+            <automatic>1</automatic>
+            <store>no</store>
+            <field>fake_address_country_relp</field>
+            <caption>Fake country</caption>
       </property>
       <property>
             <name>show_on_web</name>
@@ -4764,6 +4803,11 @@
                   <clid>CL_EXTLINK</clid>
                   <caption>V&amp;amp;auml;lised lingid</caption>
             </EXTERNAL_LINKS>
+            <FAKE_COUNTRY>
+                  <value>83</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Fake country</caption>
+            </FAKE_COUNTRY>
       </reltypes>
       <layout>
             <co_top>

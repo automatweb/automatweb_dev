@@ -198,28 +198,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property classif1 type=classificator store=connect reltype=RELTYPE_METAMGR
 	@caption Asutuse omadused
 
-	@property userta1 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@property userta1 type=textarea rows=10 cols=50 table=kliendibaas_firma field=aw_userta1
 	@caption User-defined TA 1
 
-	@property userta2 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@property userta2 type=textarea rows=10 cols=50 table=kliendibaas_firma field=aw_userta2
 	@caption User-defined TA 2
 
-	@property userta3 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@property userta3 type=textarea rows=10 cols=50 table=kliendibaas_firma field=aw_userta3
 	@caption User-defined TA 3
 
-	@property userta4 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@property userta4 type=textarea rows=10 cols=50 table=kliendibaas_firma field=aw_userta4
 	@caption User-defined TA 4
 
-	@property userta5 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@property userta5 type=textarea rows=10 cols=50 table=kliendibaas_firma field=aw_userta5
 	@caption User-defined TA 5
 
-	@property userta6 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@property userta6 type=textarea rows=10 cols=50 table=kliendibaas_firma field=aw_userta6
 	@caption User-defined TA 6
 
-	@property userta7 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@property userta7 type=textarea rows=10 cols=50 table=kliendibaas_firma field=aw_userta7
 	@caption User-defined TA 7
 
-	@property userta8 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@property userta8 type=textarea rows=10 cols=50 table=kliendibaas_firma field=aw_userta8
 	@caption User-defined TA 8
 
 	@property user_checkbox_1 type=checkbox ch_value=1 table=kliendibaas_firma field=user_checkbox_1
@@ -255,6 +255,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property fake_phone type=textbox store=no
 	@caption Fake phone
 
+	@property fake_fax type=textbox store=no 
+	@caption Fake fax
+
+	@property fake_mobile type=textbox store=no
+	@caption Fake mobile
+
+	@property fake_skype type=textbox store=no
+	@caption Fake skype
+
 	@property fake_email type=textbox store=no
 	@caption Fake e-mail
 
@@ -278,6 +287,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1 store=no
 	@caption Fake county
+
+	@property fake_address_country type=textbox store=no
+	@caption Fake country
+
+	@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1 store=no
+	@caption Fake country
 
 	@property show_on_web type=checkbox ch_value=1 store=no
 	@caption Kuva veebis
@@ -1622,6 +1637,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype EXTERNAL_LINKS value=82 clid=CL_EXTLINK
 @caption V&auml;lised lingid
 
+@reltype FAKE_COUNTRY value=83 clid=CL_CRM_COUNTRY 	 
+@caption Fake country
+
 
 */
 /*
@@ -2021,24 +2039,6 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
-			case "fake_email":
-			case "fake_phone":
-			case "fake_url":
-			case "fake_address_country":
-			case "fake_address_country_relp":
-			case "fake_address_county":
-			case "fake_address_county_relp":
-			case "fake_address_city":
-			case "fake_address_city_relp":
-			case "fake_address_postal_code":
-			case "fake_address_address":
-			case "fake_address_address2":
-				if(!isset($data["value"]) || strlen(trim($data["value"])) == 0)
-				{
-					$data["value"] = $arr["obj_inst"]->prop($data["name"]);
-				}
-				break;
-
 			case "ettevotlusvorm":
 				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 				if(is_oid($pm_inst->get_sysdefault()))
@@ -3205,23 +3205,24 @@ class crm_company extends class_base
 	function set_property($arr)
 	{
 		$data = &$arr['prop'];
+
+		// Security!
+		$no_html = array(
+			"fake_email", 
+			"fake_address_address", 
+			"fake_address_address2",
+			"fake_address_postal_code",
+			"fake_address_city",
+			"fake_address_county",
+			"fake_address_country",
+		);
+		if(in_array($data["name"], $no_html))
+		{
+			$data["value"] = htmlspecialchars($data["value"], ENT_NOQUOTES, aw_global_get("charset"), false);
+		}
+
 		switch($data["name"])
 		{
-			case "fake_email":
-			case "fake_phone":
-			case "fake_url":
-			case "fake_address_country":
-			case "fake_address_country_relp":
-			case "fake_address_county":
-			case "fake_address_county_relp":
-			case "fake_address_city":
-			case "fake_address_city_relp":
-			case "fake_address_postal_code":
-			case "fake_address_address":
-			case "fake_address_address2":
-				$arr["obj_inst"]->set_prop($data["name"], $data["value"]);
-				break;
-
 			case "logo":
 				if(!is_oid($arr["obj_inst"]->id()))
 				{
@@ -7369,23 +7370,28 @@ class crm_company extends class_base
 			}
 			return $sc;
 		}
-		return $sc.
-		"function aw_submit_handler() {".
-		// fetch list of companies with that name and ask user if count > 0
-		"var url = '".$this->mk_my_orb("get_company_count_by_name")."';".
-		"url = url + '&co_name=' + document.changeform.name.value;".
-		"num= parseInt(aw_get_url_contents(url));".
-		"if (num >0)
+		if(is_admin())
 		{
-			var ansa = confirm('" . t("Sellise nimega organisatsioon on juba olemas. Kas soovite minna selle objekti muutmisele?") . "');
-			if (ansa)
-			{
-				window.location = '".$this->mk_my_orb("go_to_first_co_by_name", array("return_url" => $arr["request"]["return_url"]))."&co_name=' + document.changeform.name.value;
-				return false;
-			}
-			return false;
-		}".
-		"return true;}";
+			$sc .= "
+			function aw_submit_handler() {".
+				// fetch list of companies with that name and ask user if count > 0
+				"var url = '".$this->mk_my_orb("get_company_count_by_name")."';".
+				"url = url + '&co_name=' + document.changeform.name.value;".
+				"num= parseInt(aw_get_url_contents(url));".
+				"if (num >0)
+				{
+					var ansa = confirm('" . t("Sellise nimega organisatsioon on juba olemas. Kas soovite minna selle objekti muutmisele?") . "');
+					if (ansa)
+					{
+						window.location = '".$this->mk_my_orb("go_to_first_co_by_name", array("return_url" => $arr["request"]["return_url"]))."&co_name=' + document.changeform.name.value;
+						return false;
+					}
+					return false;
+				}".
+				"return true;}
+			";
+		}
+		return $sc;
 	}
 
 	function callback_gen_forum($arr)
@@ -7843,10 +7849,25 @@ class crm_company extends class_base
 					));
 					return true;
 
+				case "aw_userta1":
+				case "aw_userta2":
+				case "aw_userta3":
+				case "aw_userta4":
+				case "aw_userta5":
+				case "aw_userta6":
+				case "aw_userta7":
+				case "aw_userta8":
+					$this->db_add_col($tbl, array(
+						"name" => $field,
+						"type" => "text"
+					));
+					$this->resque_data_from_meta($tbl, $field);
+					return true;
+
 				case "activity_keywords":
 					$this->db_add_col($tbl, array(
 						"name" => $field,
-						"type" => "TEXT"
+						"type" => "text"
 					));
 					return true;
 
@@ -7862,6 +7883,33 @@ class crm_company extends class_base
 			}
 		}
 		return false;
+	}
+
+	function resque_data_from_meta($table, $f)
+	{
+		$map = array(
+			"aw_userta1" => "userta1",
+			"aw_userta2" => "userta2",
+			"aw_userta3" => "userta3",
+			"aw_userta4" => "userta4",
+			"aw_userta5" => "userta5",
+			"aw_userta6" => "userta6",
+			"aw_userta7" => "userta7",
+			"aw_userta8" => "userta8",
+		);
+		if(!empty($map[$f]))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			foreach($ol->arr() as $oid => $o)
+			{
+				$v = $o->meta($map[$f]);
+				$this->db_query("UPDATE kliendibaas_firma SET $f = '$v' WHERE oid = '$oid' LIMIT 1");
+			}
+		}
 	}
 
 	function _init_ext_sys_t(&$t)
