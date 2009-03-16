@@ -448,6 +448,19 @@ class auth_config extends class_base
 				));
 			}
 		}
+		try
+		{
+			$hide_aw_info = aw_ini_get("login_box.hide_aw_info");
+		}
+		catch(Exception $e)
+		{
+		}
+		if (!$hide_aw_info)
+		{
+			$this->vars(array(
+				"aw_info" => $this->parse("aw_info")
+			));
+		}
 		return $this->parse();
 	}
 
