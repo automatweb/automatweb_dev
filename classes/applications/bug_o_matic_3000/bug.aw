@@ -664,6 +664,10 @@ class bug extends class_base
 				{
 					$co = get_current_company();
 				}
+				if($co->class_id() != CL_CRM_COMPANY)
+				{
+					return;
+				}
 				$co_i = $co->instance();
 				$sects = $co_i->get_all_org_sections($co);
 				$prop["options"] = array("" => t("--vali--"));
@@ -2253,7 +2257,9 @@ class bug extends class_base
 				"com_adder" => $com->createdby(),
 				"com_adder_person" => $p->name(),
 				"com_date" => date("d.m.Y H:i", $com->created()),
-				"com_text" => $comt
+				"com_text" => $comt,
+				"txt_respond" => t("vasta"),
+				"id" => $com->id(),
 			));
 			$com_str .= $this->parse("COMMENT");
 		}
@@ -2274,6 +2280,7 @@ class bug extends class_base
 			"main_text_after" => $so == "asc" ? "" : $main_c,
 			"COMMENT" => $com_str
 		));
+		load_javascript ("applications/bug_o_matic_3000/bug.js", "bottom");
 		return $this->parse();
 	}
 
