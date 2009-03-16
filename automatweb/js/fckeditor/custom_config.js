@@ -28,6 +28,7 @@ FCKConfig.PluginsPath = '/automatweb/js/fckeditor/plugins/' ;
 FCKConfig.Plugins.Add( 'awlup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awfup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awimageupload', 'en,et' ) ;
+FCKConfig.Plugins.Add( 'clear_styles', 'en,et' ) ;
 //FCKConfig.Plugins.Add( 'awrelationmgr', 'en,et' ) ; 
 //FCKConfig.Plugins.Add( 'awrelationmgr', 'en,et' ) ; 
 FCKConfig.AutoGrowMax = 400 ;
@@ -76,6 +77,7 @@ FCKConfig.ToolbarLocation = 'In' ;
 
 FCKConfig.ToolbarSets["aw"] = [
 		['Cut','Copy','Paste'],
+		['clear_styles'],
 		['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 		['Bold','Italic','Underline','StrikeThrough','-'],
 		['OrderedList','UnorderedList','-'],
