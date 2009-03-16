@@ -12,14 +12,32 @@
 @property folders type=relpicker reltype=RELTYPE_FOLDER multiple=1 store=connect
 @caption Kaustad, mida tabelis kuvada
 
+@property ml_list type=relpicker reltype=RELTYPE_ML_LIST store=connect
+@caption Mailinglist
+@comment Vajalik liitumis-/lahkumiskirjade saatmiseks
+
+@property from type=relpicker reltype=RELTYPE_FROM store=connect
+@caption Liitumis-/lahkumiskirjade saatja
+
+@property send_mail type=checkbox ch_value=1 field=aw_send_mail
+@caption Saada liitumis-/lahkumiskirju
+
 @property membership type=table store=no
 @caption Liikmelisuse tabel
+
+###
 
 @reltype LIST value=1 clid=CL_ML_LIST
 @caption Mailinglistid, mida tabelis kuvada
 
 @reltype FOLDER value=2 clid=CL_MENU
 @caption Kaustad, mida tabelis kuvada
+
+@reltype ML_LIST value=3 clid=CL_ML_LIST
+@caption Mailinglist
+
+@reltype FROM value=4 clid=CL_ML_MEMBER
+@caption Saatja
 
 */
 
@@ -48,6 +66,33 @@ class ml_membership_manager extends class_base
 		));
 	}
 
+	public function _get_from($arr)
+	{
+		if(!is_oid($arr["obj_inst"]->ml_list) || !$this->can("view", $arr["obj_inst"]->ml_list))
+		{
+			return PROP_IGNORE;
+		}
+		else
+		{
+			$ml = obj($arr["obj_inst"]->ml_list);
+			if(!is_array($ml->senders) || count($ml->senders) === 0)
+			{
+				$arr["prop"]["options"] = array();
+			}
+			else
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_ML_MEMBER,
+					"oid" => $ml->senders,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				$arr["prop"]["options"] = $ol->names();
+			}
+			return PROP_OK;
+		}
+	}
+
 	public function _get_membership($arr)
 	{
 		if(!is_oid($arr["obj_inst"]->id()))
@@ -68,7 +113,7 @@ class ml_membership_manager extends class_base
 		$odl = new object_data_list(
 			array(
 				"class_id" => CL_ML_MEMBER,
-				"brother_of" => $mail_id,
+				"brother_of" => obj($mail_id)->brother_of(),
 				"lang_id" => array(),
 				"site_id" => array(),
 			),
@@ -101,11 +146,14 @@ class ml_membership_manager extends class_base
 		if(is_oid($mail_id))
 		{
 			$mail = obj($mail_id);
+			$subscribed = array();
+			$unsubscribed = array();
 			foreach(safe_array($arr["request"]["membership_old"]) as $k => $v)
 			{
 				if(isset($arr["request"]["membership"][$k]) && $v == 0)
 				{
 					$mail->create_brother($k);
+					$subscribed[] = $k;
 				}
 				elseif(!isset($arr["request"]["membership"][$k]) && $v == 1)
 				{
@@ -116,7 +164,31 @@ class ml_membership_manager extends class_base
 						"lang_id" => array(),
 						"site_id" => array(),
 					));
+					$unsubscribed = array_merge($unsubscribed, $ol->ids());
 					$ol->delete();
+				}
+			}
+			if($arr["obj_inst"]->send_mail && is_oid($arr["obj_inst"]->ml_list) && $this->can("view", $arr["obj_inst"]->ml_list))
+			{
+				if(count($subscribed) > 0)
+				{
+					get_instance("ml_list")->send_subscription_mail(array(
+						"ml_list" => $arr["obj_inst"]->ml_list,
+						"to_mail" => $mail->mail,
+						"froma" => $arr["obj_inst"]->prop("from.mail"),
+						"fromn" => $arr["obj_inst"]->prop("from.name"),
+						"dir" => $subscribed,
+					));
+				}
+				if($arr["obj_inst"]->send_mail && count($unsubscribed) > 0)
+				{
+					get_instance("ml_list")->send_unsubscription_mail(array(
+						"ml_list" => $arr["obj_inst"]->ml_list,
+						"to_mail" => $mail->mail,
+						"froma" => $arr["obj_inst"]->prop("from.mail"),
+						"fromn" => $arr["obj_inst"]->prop("from.name"),
+						"dir" => $unsubscribed,
+					));
 				}
 			}
 		}
@@ -137,10 +209,10 @@ class ml_membership_manager extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_send_mail":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
 				));
 				return true;
 		}
