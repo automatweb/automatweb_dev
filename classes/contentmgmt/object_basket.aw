@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.17 2009/02/26 16:48:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.18 2009/03/16 13:53:26 instrumental Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -152,7 +152,7 @@ class object_basket extends class_base
 						}
 						else
 						{
-							$v[$var_name] = is_array($o->prop($prop)) ? reset($o->prop($prop)) : $o->prop($prop);
+							$v[$var_name] = is_array($o->trans_get_val($prop)) ? reset($o->trans_get_val($prop)) : $o->trans_get_val($prop);
 						}
 					}
 				}
@@ -269,7 +269,7 @@ class object_basket extends class_base
 		{
 			$_SESSION["object_basket"][$o->id()]["content"] = $ct;
 		}
-		return $arr["ru"];
+		return htmlspecialchars($arr["ru"], ENT_QUOTES);
 	}
 
 	/**
