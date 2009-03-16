@@ -4,31 +4,52 @@ class crm_bill_obj extends _int_object
 {
 	function set_prop($name,$value)
 	{
-		if($name == "bill_no")
+		switch($name)
 		{
-//			if(!$this->name() || strlen($this->name()) < 9)
-//			{
+			case "bill_no":
 				$this->set_name(t("Arve nr")." ".$value);
-//			}
-//			elseif($this->prop("bill_no") && substr_count($this->name() , $this->prop("bill_no")))
-//			{
-//				$this->set_name(str_replace($this->prop("bill_no"), $value , $this->name()));
-//			}
+				break;
+			case "state":
+				if($value != $this->prop("state"))
+				{
+					$bill_inst = get_instance(CL_CRM_BILL);
+					$_SESSION["bill_change_comments"][] = t("Staatus") .": " .$bill_inst->states[$this->prop("state")]. " => " .$bill_inst->states[$value];
+				}
+				break;
+			case "bill_due_date":
+				break;
+			case "project":
+				$old = $new = "";
+				foreach($this->prop($name) as $old_id)
+				{
+					$old.= " ".get_name($old_id);
+				}
+				
+				foreach($value as $new_id)
+				{
+					$new.= " ".get_name($new_id);
+				}
+				if(!is_array($this->prop($name)) || !is_array($value) ||  array_sum($value) != array_sum($this->prop($name)))
+				{
+					$_SESSION["bill_change_comments"][] = $GLOBALS["properties"][CL_CRM_BILL][$name]["caption"] ." : " .$old. " => " .$new;
+				}
+				break;
+			default :
+				if($value != $this->prop($name))
+				{
+					$_SESSION["bill_change_comments"][] = $GLOBALS["properties"][CL_CRM_BILL][$name]["caption"] ." : " .$this->prop($name). " => " .$value;
+				}
+				break;
 		}
-		if($name == "state")
-		{
-			if($value != $this->prop("state"))
-			{
-				$bill_inst = get_instance(CL_CRM_BILL);
-				$_SESSION["bill_change_comments"][] = t("Staatus") .": " .$bill_inst->states[$this->prop("state")]. " => " .$bill_inst->states[$value];
-			}
-		}
-
 		parent::set_prop($name,$value);
 	}
 
 	function save()
 	{
+		if(!is_oid($this->id()))
+		{
+			unset($_SESSION["bill_change_comments"]);
+		}
 		$this->set_prop("sum", $this->_calc_sum());
 
 		$rv = parent::save();
@@ -407,6 +428,11 @@ class crm_bill_obj extends _int_object
 		return $this->id();
 	}
 
+	private function add_bill_comment_data($data)
+	{
+		$_SESSION["bill_change_comments"][] = $data;
+	}
+
 
 	/** Adds bug comments to bill row
 		@attrib api=1 params=pos
@@ -422,6 +448,8 @@ class crm_bill_obj extends _int_object
 		$row->set_name(t("Arve rida"));
 		$row->set_parent($this->id());
 		$row->save();
+
+		$this->add_bill_comment_data(t("lisati rida idga ".$row->id()));
 
 		$people = array();
 		$amt = $price = $date = "";
@@ -564,6 +592,8 @@ class crm_bill_obj extends _int_object
 			"to" => $project,
 			"type" => "RELTYPE_PROJECT",
 		));
+		$_SESSION["bill_change_comments"][] = t("Projekt")." => " .get_name($project);
+		$this->save();
 	}
 
 	/** sets customer
@@ -637,6 +667,7 @@ class crm_bill_obj extends _int_object
 		$br->set_class_id(CL_CRM_BILL_ROW);
 		$br->set_parent($this->id());
 		$br->save();
+		$this->add_bill_comment_data(t("Lisati rida ID-ga"." ".$br->id()));
 		return $br;
 	}
 
@@ -1272,7 +1303,7 @@ class crm_bill_obj extends _int_object
 			$t->define_data(array(
 				"choose" => $radio,
 				"user" => $o->prop("createdby"),
-				"time" => date("d.m.Y h:i" , $o->created()),
+				"time" => date("d.m.Y H:i" , $o->created()),
 				"text" =>  $o->comment(),
 			));
 		}
@@ -1287,6 +1318,7 @@ class crm_bill_obj extends _int_object
 			"parent" => $this->id(),	
 			"site_id" => array(),
 			"lang_id" => array(),
+			"sort_by" => "objects.created desc",
 		));
 		return $ol;
 	}
