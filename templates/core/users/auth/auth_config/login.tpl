@@ -24,6 +24,7 @@
 	}
 
 	#wrapper tr td.top { border: 1px solid #e1e1e1; border-spacing: 1px; }
+	#wrapper tr td.top form { margin: 0; }
 	#wrapper tr td.top table.inner { background: #fcfcfc url("{VAR:baseurl}/automatweb/images/login/top.gif") no-repeat bottom; width: 446px; }
 	#wrapper tr td.top table.inner tr td.client { height: 72px; padding-left: 36px; vertical-align: middle; }
 	#wrapper tr td.top table.inner tr td.errors { padding-left: 36px; }
