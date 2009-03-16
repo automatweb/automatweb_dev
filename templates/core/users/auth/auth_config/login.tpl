@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="et" lang="et">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-4" />
-	<link rel="shortcut icon" href="http://uus.automatweb.com/img/favicon.ico" />
+	<link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico" />
 
 	<title>AutomatWeb - Culture in Database</title>
 
