@@ -156,6 +156,7 @@ class mrp_resource extends class_base
 			MRP_STATUS_DONE => t("Valmis"),
 			MRP_STATUS_LOCKED => t("Lukustatud"),
 			MRP_STATUS_PAUSED => t("Paus"),
+			MRP_STATUS_SHIFT_CHANGE => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
@@ -168,6 +169,7 @@ class mrp_resource extends class_base
 			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
 			MRP_STATUS_DONE => MRP_COLOUR_DONE,
 			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE => MRP_COLOUR_SHIFT_CHANGE,
 			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
 			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
 		);
@@ -348,7 +350,7 @@ class mrp_resource extends class_base
 			WHERE
 				j.resource = ".$resource->id()." AND
 				o.status > 0 AND
-				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.")
+				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.",".MRP_STATUS_SHIFT_CHANGE.")
 		", "cnt");
 		if ($cur_jobs >= $max_jobs)
 		{
@@ -773,6 +775,7 @@ class mrp_resource extends class_base
 				MRP_STATUS_DONE,
 				MRP_STATUS_PLANNED,
 				MRP_STATUS_PAUSED,
+				MRP_STATUS_SHIFT_CHANGE,
 				MRP_STATUS_INPROGRESS,
 			);
 		}
@@ -785,6 +788,7 @@ class mrp_resource extends class_base
 				MRP_STATUS_DONE,
 				MRP_STATUS_PLANNED,
 				MRP_STATUS_PAUSED,
+				MRP_STATUS_SHIFT_CHANGE,
 				MRP_STATUS_INPROGRESS,
 			);
 		}
@@ -793,6 +797,7 @@ class mrp_resource extends class_base
 			$applicable_project_states = $applicable_states = array(
 				MRP_STATUS_PLANNED,
 				MRP_STATUS_PAUSED,
+				MRP_STATUS_SHIFT_CHANGE,
 				MRP_STATUS_INPROGRESS,
 			);
 		}
@@ -925,6 +930,7 @@ class mrp_resource extends class_base
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_DONE,
 		);
@@ -1122,7 +1128,7 @@ class mrp_resource extends class_base
 					WHERE
 						j.resource = ".$resource->id()." AND
 						o.status > 0 AND
-						j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.")
+						j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.",".MRP_STATUS_SHIFT_CHANGE.")
 				", "cnt");
 				// compare
 				if ($cur_jobs >= $max_jobs)
@@ -1197,6 +1203,7 @@ class mrp_resource extends class_base
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 			MRP_STATUS_INPROGRESS,
 		);
 

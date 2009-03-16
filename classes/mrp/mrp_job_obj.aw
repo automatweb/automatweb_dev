@@ -4,6 +4,42 @@ classload("mrp/mrp_header");
 
 class mrp_job_obj extends _int_object
 {
+	function save()
+	{
+		$retval = parent::save();
+		$this->log_state_change();
+		return $retval;
+	}
+
+	function log_state_change()
+	{
+		$i = $this->instance();
+		$r = $i->db_fetch_row("SELECT * FROM mrp_job_rows WHERE aw_job_id = '".$this->id()."' ORDER BY aw_tm DESC, aw_row_id DESC LIMIT 1");
+		// Log only if state is changed or new object
+		if($r["aw_job_state"] != $this->prop("state") || !$r)
+		{
+			$last_duration = isset($r["aw_tm"]) ? time() - $r["aw_tm"] : 0;
+			$prev_state = isset($r["aw_job_state"]) ? $r["aw_job_state"] : MRP_STATUS_NEW;
+			$i->db_query("
+				INSERT INTO mrp_job_rows
+					(aw_job_id, aw_case_id, aw_resource_id, aw_uid, aw_uid_oid, aw_pid, aw_job_previous_state, aw_job_state, aw_job_last_duration, aw_tm)
+				VALUES
+					('".$this->id()."', '".$this->prop("project")."', '".$this->prop("resource")."', '".aw_global_get("uid")."', '".aw_global_get("uid_oid")."', '".get_instance("user")->get_current_person()."', '".$prev_state."', '".$this->prop("state")."', '".$last_duration."', '".time()."')
+			");
+		}
+	}
+
+	function set_prop($k, $v)
+	{
+		if($k === "state" && $v === MRP_STATUS_DONE && !is_numeric(parent::prop($k)))
+		{
+			$this->set_prop("length_deviation", $this->get_deviation());
+			$this->set_prop("real_length", $this->get_real());
+		}
+
+		return parent::set_prop($k, $v);
+	}
+
 	function prop($k)
 	{
 		if($k === "real_length" || $k === "length_deviation")
@@ -36,17 +72,25 @@ class mrp_job_obj extends _int_object
 
 	function get_real($k)
 	{
-		$case = $this->prop("project");
-		$res = $this->prop("resource");
 		$job_id = $this->id();
 
 		$v = $this->instance()->db_fetch_field("
-			SELECT SUM(length) as length_sum FROM mrp_stats WHERE
+			SELECT 
+				SUM(aw_job_last_duration) as length_sum
+			FROM
+				mrp_job_rows 
+			WHERE
+				aw_job_id = '".$job_id."' AND 
+				aw_job_previous_state = '".MRP_STATUS_INPROGRESS."';",
+			"length_sum");
+		/*
+		$v = $this->instance()->db_fetch_field("
+			SELECT SUM(length) as length_sum FROM mrp_stats WHERE 
 				case_oid = $case AND
 				resource_oid = $res AND
 				job_oid = $job_id",
 			"length_sum");
-
+		*/
 		return $v ? (int)$v : 0;
 	}
 

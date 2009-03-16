@@ -7,6 +7,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 @tableinfo mrp_job index=oid master_table=objects master_index=oid
 @tableinfo mrp_schedule index=oid master_table=objects master_index=oid
+@tableinfo mrp_job_rows index=aw_job_id master_table=objects master_index=brother_of
 
 @groupinfo data caption="Andmed"
 @groupinfo workflow caption="T&ouml;&ouml;voog"
@@ -153,6 +154,7 @@ class mrp_job extends class_base
 			MRP_STATUS_DONE => t("Valmis"),
 			MRP_STATUS_LOCKED => t("Lukustatud"),
 			MRP_STATUS_PAUSED => t("Paus"),
+			MRP_STATUS_SHIFT_CHANGE => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
@@ -165,6 +167,7 @@ class mrp_job extends class_base
 			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
 			MRP_STATUS_DONE => MRP_COLOUR_DONE,
 			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE => MRP_COLOUR_SHIFT_CHANGE,
 			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
 			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
 		);
@@ -340,6 +343,7 @@ class mrp_job extends class_base
 		$applicable_planning_states = array(
 			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 			MRP_STATUS_PLANNED,
 		);
 
@@ -442,7 +446,7 @@ class mrp_job extends class_base
 		));
 
 		### continue button
-		if ($this_object->prop("state") == MRP_STATUS_PAUSED)
+		if ($this_object->prop("state") == MRP_STATUS_PAUSED || $this_object->prop("state") == MRP_STATUS_SHIFT_CHANGE)
 		{
 			$disabled = false;
 			$action = "scontinue";
@@ -851,6 +855,7 @@ class mrp_job extends class_base
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 		);
 
 		if (!in_array ($this_object->prop ("state"), $applicable_states))
@@ -1016,6 +1021,7 @@ class mrp_job extends class_base
 		);
 		$applicable_job_states = array (
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 		);
 
 		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
@@ -1226,7 +1232,7 @@ class mrp_job extends class_base
 		else
 		{
 			### pause job
-			$this_object->set_prop ("state", MRP_STATUS_PAUSED);
+			$this_object->set_prop ("state", MRP_STATUS_SHIFT_CHANGE);
 
 			### update progress
 			$progress = max ($project->prop ("progress"), time ());
@@ -1359,7 +1365,7 @@ class mrp_job extends class_base
 			WHERE
 				j.resource = ".$resource->id()." AND
 				o.status > 0 AND
-				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.")
+				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.",".MRP_STATUS_SHIFT_CHANGE.")
 		", "cnt");
 
 		### compare
@@ -1385,6 +1391,7 @@ class mrp_job extends class_base
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 		);
 
 		if (in_array ($job->prop ("state"), $applicable_states))
@@ -1705,6 +1712,27 @@ class mrp_job extends class_base
 						"name" => $field,
 						"type" => "INT(10)"
 					));
+					return true;
+			}
+		}
+		elseif("mrp_job_rows" === $table)
+		{
+			switch($field)
+			{
+				case "":
+					$this->db_query("CREATE TABLE mrp_job_rows (
+						aw_row_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+						aw_job_id INT NOT NULL,
+						aw_case_id INT NOT NULL,
+						aw_resource_id INT NOT NULL,
+						aw_uid VARCHAR(50) NOT NULL,
+						aw_uid_oid INT NOT NULL,
+						aw_pid INT NOT NULL,
+						aw_job_previous_state TINYINT(2) UNSIGNED NOT NULL,
+						aw_job_state TINYINT(2) UNSIGNED NOT NULL,
+						aw_job_last_duration INT(10) UNSIGNED NOT NULL,
+						aw_tm INT NOT NULL
+					);");
 					return true;
 			}
 		}

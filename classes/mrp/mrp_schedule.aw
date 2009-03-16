@@ -403,6 +403,7 @@ class mrp_schedule extends db_connector
 		### get inprogress jobs
 		$applicable_states = array (
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 			MRP_STATUS_INPROGRESS,
 		);
 

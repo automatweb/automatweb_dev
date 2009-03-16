@@ -252,6 +252,7 @@ class mrp_case extends class_base
 		MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
 		MRP_STATUS_DONE => MRP_COLOUR_DONE,
 		MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
+		MRP_STATUS_SHIFT_CHANGE => MRP_COLOUR_SHIFT_CHANGE,
 		MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
 		MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
 	);
@@ -266,6 +267,7 @@ class mrp_case extends class_base
 			MRP_STATUS_DONE => t("Valmis"),
 			MRP_STATUS_LOCKED => t("Lukustatud"),
 			MRP_STATUS_PAUSED => t("Paus"),
+			MRP_STATUS_SHIFT_CHANGE => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
@@ -1032,6 +1034,7 @@ class mrp_case extends class_base
 			MRP_STATUS_DONE,
 			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE
 		);
 
 		$this->db_query (
@@ -1089,7 +1092,7 @@ class mrp_case extends class_base
 		{
 			if ($this->can("view", $job["oid"]))
 			{
-				$metadata = aw_unserialize ($job["metadata"]);
+				$metadata = aw_unserialize($job["metadata"]);
 				$job["paused_times"] = $metadata["paused_times"];
 				$jobs[] = $job;
 			}
@@ -1132,6 +1135,7 @@ class mrp_case extends class_base
 					$length = $job["planned_length"];
 					break;
 
+				case MRP_STATUS_SHIFT_CHANGE:
 				case MRP_STATUS_PAUSED:
 				case MRP_STATUS_INPROGRESS:
 					$start = $job["started"];
@@ -1551,6 +1555,7 @@ class mrp_case extends class_base
 			{
 				case MRP_STATUS_INPROGRESS:
 				case MRP_STATUS_PAUSED:
+				case MRP_STATUS_SHIFT_CHANGE:
 				case MRP_STATUS_DONE:
 					$disabled = true;
 					break;
@@ -1676,6 +1681,7 @@ class mrp_case extends class_base
 		$applicable_states = array(
 			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 			MRP_STATUS_DONE,
 		);
 
