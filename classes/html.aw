@@ -1248,7 +1248,7 @@ class html extends aw_template
 			$onClick = $onclick;
 		}
 		$textsize = isset($textsize) ? ' style="font-size: ' . $textsize . ';"' : "";
-		$target = isset($target) ? " target='$target'" : "";
+		$target = isset($target) ? " target=\"$target\"" : "";
 		$onClick = isset($onClick) ? " onclick='$onClick'" : "";
 		$title = isset($title) ? " alt='$title' title='$title'" : "";
 		$class = isset($class) ? " class='$class'" : "";
@@ -1263,6 +1263,8 @@ class html extends aw_template
 		{
 			$caption = $url;
 		}
+		// We use double quotes in HTML, so we need to escape those in the url.
+		$url = str_replace("\"", "\\\"", $url);
 
 		return "<a href=\"{$url}\"{$target}{$title}{$onClick}{$onMouseOver}{$onMouseOut}{$ti}{$textsize}{$class}{$id}{$rel}{$style}>{$caption}</a>";
 	}
