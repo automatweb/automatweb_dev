@@ -218,6 +218,11 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </mrp_schedule>
+            <mrp_job_rows>
+                  <index>aw_job_id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </mrp_job_rows>
       </tableinfo>
       <reltypes>
             <MRP_RESOURCE>
