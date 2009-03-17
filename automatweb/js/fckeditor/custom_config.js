@@ -76,18 +76,19 @@ FCKConfig.TemplateReplaceCheckbox = true ;
 FCKConfig.ToolbarLocation = 'In' ;
 
 FCKConfig.ToolbarSets["aw"] = [
-		['Cut','Copy','Paste'],
-		['clear_styles'],
-		['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-		['Bold','Italic','Underline','StrikeThrough','-'],
-		['OrderedList','UnorderedList','-'],
-		['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-		['Unlink','Anchor'],
-		['Table','Rule','SpecialChar'],
-		//['Templates'],
-		['FontFormat'],
-		['FitWindow','ShowBlocks']              // No comma for the last row.
+	['Cut','Copy','Paste'],
+	['clear_styles'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	['Bold','Italic','Underline','StrikeThrough','-'],
+	['OrderedList','UnorderedList','-'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['awlup','Unlink','Anchor'],
+	//['Templates'],
+	['awfup','awimageupload','Table','Rule','SpecialChar'],
+	['FontFormat'],
+	['FitWindow','ShowBlocks']              // No comma for the last row.
 ] ;
+
 
 FCKConfig.ToolbarSets["Default"] = FCKConfig.ToolbarSets["aw"];
 
