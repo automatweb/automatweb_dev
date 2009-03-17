@@ -18,6 +18,7 @@
 @groupinfo grp_resources caption="Ressursid"
 	@groupinfo grp_resources_load caption="Koormus" parent=grp_resources
 	@groupinfo grp_resources_manage caption="Haldus" parent=grp_resources
+@groupinfo grp_operators caption="Inimesed"
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
 #	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
 #	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
@@ -109,10 +110,27 @@
 	@layout resources_tree_box type=vbox closeable=1 area_caption=Ressursid&amp;kategooriad parent=vsplitbox
 		@property resources_tree type=text store=no no_caption=1 parent=resources_tree_box
 	@layout right_pane type=vbox parent=vsplitbox
-		@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=right_pane
-			@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no
+		@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=right_pane group=grp_resources_load
+			@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no group=grp_resources_load
+		@layout resource_time_chart type=vbox closeable=1 area_caption=Ressursside&nbsp;ajakasutus parent=right_pane group=grp_resources_load
+			@layout resource_time_limits type=hbox parent=resource_time_chart group=grp_resources_load
+
+				@property resource_time_start type=date_select parent=resource_time_limits group=grp_resources_load
+				@caption Alates
+
+				@property resource_time_end type=date_select parent=resource_time_limits group=grp_resources_load
+				@caption Kuni
+
+			@property resource_time_chart type=google_chart no_caption=1 parent=resource_time_chart store=no group=grp_resources_load
 		@property resources_list type=table store=no parent=right_pane no_caption=1
 
+@default group=grp_operators
+	@layout current_week_hours_chart type=vbox closeable=1 area_caption=K&auml;esoleva&nbsp;n&auml;dala&nbsp;t&ouml;&ouml;tundide&nbsp;graafik&nbsp;inimeste&nbsp;kaupa
+		@property current_week_hours_chart type=text no_caption=1 parent=current_week_hours_chart store=no
+	@layout last_week_hours_chart type=vbox closeable=1 area_caption=M&ouml;&ouml;dunud&nbsp;n&auml;dala&nbsp;t&ouml;&ouml;tundide&nbsp;graafik&nbsp;inimeste&nbsp;kaupa
+		@property last_week_hours_chart type=text no_caption=1 parent=last_week_hours_chart store=no
+	@layout hours_tbl type=vbox closeable=1 area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;inimeste&nbsp;kaupa
+		@property hours_tbl type=table no_caption=1 parent=hours_tbl store=no
 
 @default group=grp_schedule_gantt
 	@property master_schedule_chart type=text store=no no_caption=1
@@ -529,6 +547,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_DONE => t("Valmis"),
 			MRP_STATUS_LOCKED => t("Lukustatud"),
 			MRP_STATUS_PAUSED => t("Paus"),
+			MRP_STATUS_SHIFT_CHANGE => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud")
@@ -541,6 +560,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
 			MRP_STATUS_DONE => MRP_COLOUR_DONE,
 			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE => MRP_COLOUR_SHIFT_CHANGE,
 			MRP_STATUS_DELETED => MRP_COLOUR_DELETED,
 			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
 			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED
@@ -1303,7 +1323,7 @@ class mrp_workspace extends class_base
 						$real[$oid] = isset($real[$oid]) ? $real[$oid] : 0;
 						$end[$oid] = $job["finished"];
 
-						$d = ($job["length"] - $real[$oid]) / $job["length"];
+						$d = $job["length"] != 0 ? ($job["length"] - $real[$oid]) / $job["length"] : 0;
 						$data_x[$oid] = ($end[$oid] - $min_end) / ($max_end - $min_end) * 100;
 						$data_y[$oid] = $d;
 					}
@@ -1360,6 +1380,202 @@ class mrp_workspace extends class_base
 				{
 					$retval = PROP_IGNORE;
 				}
+				break;
+
+			case "resource_time_chart":
+				if(isset($arr["request"]["mrp_tree_active_item"]) && is_oid($arr["request"]["mrp_tree_active_item"]) && $this->can("view", $arr["request"]["mrp_tree_active_item"]))
+				{
+					$resources_folder = $arr["request"]["mrp_tree_active_item"];
+				}
+				else
+				{
+					$resources_folder = $this_object->prop("resources_folder");
+				}
+				$resource_tree = new object_tree(array(
+					"parent" => $resources_folder,
+					"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+					"sort_by" => "objects.jrk",
+				));
+				$ids = $resource_tree->ids();
+				$ids[] = $resources_folder;
+
+				$start = $arr["obj_inst"]->resource_time_start;
+				$end = $arr["obj_inst"]->resource_time_end;
+				$start = is_numeric($start) ? $start : mktime(0, 0, 0, date("m") - 1, date("d"), date("Y"));
+				$end = is_numeric($end) ? $end : time();
+				$span = $end - $start;
+				
+				$tmp = array();
+				$inst = get_instance("mrp_resource");
+				foreach(array_merge($resource_tree->to_list()->arr(), array(obj($resources_folder))) as $o)
+				{
+					if($o->class_id() == CL_MENU)
+					{
+						continue;
+					}
+					$tmp["free"][$o->id()] = 100;
+					$tmp["names"][$o->id()] = $o->name();
+					$tmp["unavail"][$o->id()] = 0;
+					foreach($inst->get_unavailable_periods($o, $start, $end) as $from => $to)
+					{
+						$tmp["unavail"][$o->id()] += max(0, $to - $from);
+					}
+					foreach($inst->get_recurrent_unavailable_periods($o, $start, $end) as $period)
+					{
+						for($g = $period["start"] + $period["time"]; $g < $period["end"]; $g += $period["interval"])
+						{
+							$u = $g + $period["length"] > $period["end"] ? $period["end"] - $g : $period["length"];
+							$tmp["unavail"][$o->id()] += max(0, $u);
+						}
+					}
+				}
+
+				$odl = new object_data_list(
+					array(
+						"class_id" => CL_MRP_JOB,
+						"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $ids,
+						"CL_MRP_JOB.state" => MRP_STATUS_DONE,
+						"CL_MRP_JOB.finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end + 24*3600 - 1, "int"),
+					), 
+					array(
+						CL_MRP_JOB => array("real_length", "length", "started", "finished", "RELTYPE_MRP_RESOURCE.oid"),
+					)
+				);
+				$res = array();
+				foreach($odl->arr() as $oid => $o)
+				{
+					$k = $o["RELTYPE_MRP_RESOURCE.oid"];
+					$res["real"][$k] = (int) (isset($res["real"][$k]) ? $res["real"][$k] + $o["real_length"] : $o["real_length"]);
+					$res["plan"][$k] = (int) (isset($res["plan"][$k]) ? $res["plan"][$k] + $o["length"] : $o["length"]);
+					$paus = max(0, $o["finished"] - $o["started"] - $o["real_length"]);
+					$res["paus"][$k] = (int) (isset($res["paus"][$k]) ? $res["paus"][$k] + $paus : $paus);
+					$res["fake"][$k] = 0;
+					$res["free"][$k] = 100;
+					$res["name"][$k] = $tmp["names"][$k];
+				}
+				foreach($res["real"] as $k => $v)
+				{
+					$res["real"][$k] = round($res["real"][$k] / $span * 100, 2);
+					$res["plan"][$k] = round($res["plan"][$k] / $span * 100, 2);
+					$res["paus"][$k] = round($res["paus"][$k] / $span * 100, 2);
+					$res["unavail"][$k] = round($tmp["unavail"][$k] / $span * 100, 2);
+
+					$res["over_plan"][$k] = max(0, $res["plan"][$k] - $res["real"][$k]);
+					$res["under_plan"][$k] = max(0, $res["real"][$k] - $res["plan"][$k]);
+
+					$res["free"][$k] -= $res["real"][$k] + $res["paus"][$k] + $res["over_plan"][$k] + $res["under_plan"][$k] + $res["unavail"][$k];
+				}
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_BAR_H);
+				$c->set_size(array(
+					"width" => 800,
+					"height" => 27 * count($res["fake"]) + 18,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$c->add_data(array_merge(array(100), $res["fake"]));
+				$c->add_data(array_merge(array(0), $res["unavail"]));
+				$c->add_data(array_merge(array(0), $res["free"]));
+				$c->add_data(array_merge(array(0), $res["real"]));
+				$c->add_data(array_merge(array(0), $res["over_plan"]));
+				$c->add_data(array_merge(array(0), $res["under_plan"]));
+				$c->add_data(array_merge(array(0), $res["paus"]));
+				$c->set_colors(array(
+					"e9e9e9",
+					"cccccc",
+					"0000ff",
+					"0099ff",
+					"00ff00",
+					"ff0000",
+					"bbccdd",
+				));
+				$c->set_axis(array(
+					GCHART_AXIS_LEFT,
+				));
+				$c->add_axis_label(0, array_reverse($res["name"]));
+				$c->set_legend(array(
+					"labels" => array(
+						t(""),
+						t("Kinnine aeg"),
+						t("Vaba aeg"),
+						t("Tegelik t&ouml;&ouml;aeg"),
+						t("Alakulu"),
+						t("&Uuml;lekulu"),
+						t("Paus"),
+					),
+					"position" => GCHART_POSITION_BOTTOM,
+				));
+				break;
+
+			case "resource_time_start":
+				if(!is_numeric($prop["value"]))
+				{
+					$prop["value"] = mktime(0, 0, 0, date("m") - 1, date("d"), date("Y"));
+				}
+				break;
+
+			### operators tab
+
+			case "current_week_hours_chart":
+			case "last_week_hours_chart":
+				$data = $this->get_hours($prop["name"] === "last_week_hours_chart" ? "last" : "current");
+
+				$prop["value"] = "";
+				for($i = 0; $i < count($data["name"]); $i += 10)
+				{
+					$c = new google_chart();
+					$c->set_type(GCHART_BAR_GV);
+					$c->set_size(array(
+						"width" => 1000,
+						"height" => 200,
+					));
+					$c->set_bar_sizes(array(
+						"width" => 35,
+						"bar_spacing" => 5,
+						"bar_group_spacing" => 15,
+					));
+					$c->add_fill(array(
+						"area" => GCHART_FILL_BACKGROUND,
+						"type" => GCHART_FILL_SOLID,
+						"colors" => array(
+							"color" => "e9e9e9",
+						),
+					));
+					$data_1 = array_slice($data[MRP_STATUS_INPROGRESS], $i, 10);
+					$data_2 = array_slice($data[MRP_STATUS_PAUSED], $i, 10);
+					$c->add_data($data_1);
+					$c->add_data($data_2);
+					$c->set_colors(array(
+						strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_INPROGRESS])),
+						strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_PAUSED])),
+					));
+					$c->set_legend(array(
+						"labels" => array(
+							t("T&ouml;&ouml;aeg (h)"),
+							t("Paus (h)"),
+						),
+						"position" => GCHART_POSITION_RIGHT,
+					));
+					$c->set_axis(array(
+						GCHART_AXIS_BOTTOM,
+						GCHART_AXIS_LEFT,
+					));
+					$max_real = max(array_merge($data_1, $data_2));
+					$max = max(40, $max_real);
+					$c->add_axis_label(0, array_slice($data["name"], $i, 10));
+					$c->add_axis_range(1, array(0, $max));
+					$c->set_data_scales(array(array(0, $max*100/$max_real)));
+					$prop["value"] .= $c->get_html()."<br />";
+				}
+				break;
+
+			case "hours_tbl":
+				$this->_get_hours_tbl($arr);
 				break;
 
 			### customers tab
@@ -1818,6 +2034,132 @@ class mrp_workspace extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function get_hours($week)
+	{
+		if("current" === $week)
+		{
+			$from = mktime(0, 0, 0, date("n"), date("j") - date("N") + 1, date("Y"));
+			$to = time();
+		}
+		else
+		{
+			$from = mktime(0, 0, 0, date("n"), date("j") - date("N") - 6, date("Y"));
+			$to = mktime(0, 0, 0, date("n"), date("j") - date("N") + 1, date("Y")) - 1;
+		}
+		$q = array();
+		$states = array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED);
+		foreach($states as $state)
+		{
+			$q[$state] = $this->db_fetch_array("
+				SELECT 
+					SUM(aw_job_last_duration)/3600 as hours,
+					aw_pid as pid
+				FROM
+					mrp_job_rows 
+				WHERE
+					aw_job_previous_state = '".$state."' AND
+					aw_tm BETWEEN $from AND $to
+				GROUP BY aw_pid
+			");
+		}
+		$data = array();
+		foreach($q[MRP_STATUS_INPROGRESS] as $d)
+		{
+			$data[MRP_STATUS_INPROGRESS][$d["pid"]] = $d["hours"];
+			$data[MRP_STATUS_PAUSED][$d["pid"]] = 0;
+		}
+		foreach($q[MRP_STATUS_PAUSED] as $d)
+		{
+			$data[MRP_STATUS_INPROGRESS][$d["pid"]] = isset($data[MRP_STATUS_INPROGRESS][$d["pid"]]) ? $data[MRP_STATUS_INPROGRESS][$d["pid"]] : 0;
+			$data[MRP_STATUS_PAUSED][$d["pid"]] = $d["hours"];
+		}
+		$ids = array_keys($data[MRP_STATUS_PAUSED]);
+		if(count($ids) > 0)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"oid" => $ids,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			$pn = $ol->names();
+		}
+		foreach(array_keys($data[MRP_STATUS_PAUSED]) as $id)
+		{
+			if(!isset($pn[$id]))
+			{
+				unset($data[MRP_STATUS_PAUSED][$id]);
+				unset($data[MRP_STATUS_INPROGRESS][$id]);
+			}
+			else
+			{
+				$data["name"][$id] = $pn[$id];
+			}
+		}
+		return $data;
+	}
+
+	function _get_hours_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("T&ouml;&ouml;taja"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "current_week",
+			"caption" => t("Jooksev n&auml;dal"),
+		));
+		$t->define_field(array(
+			"name" => "last_week",
+			"caption" => t("M&ouml;&ouml;dunud n&auml;dal"),
+		));
+		$t->define_field(array(
+			"name" => "current_week_work",
+			"caption" => t("T&ouml;&ouml;aeg"),
+			"sortable" => 1,
+			"parent" => "current_week"
+		));
+		$t->define_field(array(
+			"name" => "current_week_paus",
+			"caption" => t("Paus"),
+			"sortable" => 1,
+			"parent" => "current_week"
+		));
+		$t->define_field(array(
+			"name" => "last_week_work",
+			"caption" => t("T&ouml;&ouml;aeg"),
+			"sortable" => 1,
+			"parent" => "last_week"
+		));
+		$t->define_field(array(
+			"name" => "last_week_paus",
+			"caption" => t("Paus"),
+			"sortable" => 1,
+			"parent" => "last_week"
+		));
+		$current = $this->get_hours("current");
+		$last = $this->get_hours("last");
+		$rows = array();
+		foreach(array_keys($current["name"]) as $key)
+		{
+			$rows[$key]["person"] = $current["name"][$key];
+			$rows[$key]["current_week_work"] = number_format($current[MRP_STATUS_INPROGRESS][$key], 2);
+			$rows[$key]["current_week_paus"] = number_format($current[MRP_STATUS_PAUSED][$key], 2);
+		}
+		foreach(array_keys($last["name"]) as $key)
+		{
+			$rows[$key]["person"] = $last["name"][$key];
+			$rows[$key]["last_week_work"] = number_format($last[MRP_STATUS_INPROGRESS][$key],2);
+			$rows[$key]["last_week_paus"] = number_format($last[MRP_STATUS_PAUSED][$key], 2);
+		}
+		foreach($rows as $row)
+		{
+			$t->define_data($row);
+		}
 	}
 
 	function _get_pp_birthdays($arr)
@@ -2354,7 +2696,7 @@ class mrp_workspace extends class_base
 
 			$table->define_data (array (
 				"name" => $arr["request"]["group"] == "grp_resources_load" || $arr["request"]["group"] == "grp_resources" ? html::href(array(
-					"mrp_tree_active_item" => $resource->id(),
+					"url" => aw_url_change_var("mrp_tree_active_item", $resource->id()),
 					"caption" => $resource->name(),
 				)) : html::obj_change_url($resource),
 				"order" => $resource->ord (),
@@ -3234,6 +3576,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_DONE,
 			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 		);
 
 		if (!empty($arr["request"]["chart_customer"]))
@@ -3455,6 +3798,7 @@ class mrp_workspace extends class_base
 					$length = $job["planned_length"];
 					break;
 
+				case MRP_STATUS_SHIFT_CHANGE:
 				case MRP_STATUS_PAUSED:
 				case MRP_STATUS_INPROGRESS:
 					$start = $job["started"];
@@ -4708,25 +5052,25 @@ class mrp_workspace extends class_base
 			case "":
 			case "grp_printer_current":
 				$default_sortby = "mrp_schedule.starttime";
-				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
+				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED,MRP_STATUS_SHIFT_CHANGE);
 				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 
 			case "grp_printer_in_progress":
 				$default_sortby = "mrp_schedule.starttime";
-				$states = array(MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
+				$states = array(MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED,MRP_STATUS_SHIFT_CHANGE);
 				break;
 
 			case "grp_printer_startable":
 				$default_sortby = "mrp_schedule.starttime";
-				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
+				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED,MRP_STATUS_SHIFT_CHANGE);
 				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
 				break;
 
 			case "grp_printer_notstartable":
 				$default_sortby = "mrp_schedule.starttime";
-                                $states = array(MRP_STATUS_PLANNED,MRP_STATUS_PAUSED);
+				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_PAUSED,MRP_STATUS_SHIFT_CHANGE);
 				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
 				break;
@@ -6138,6 +6482,7 @@ class mrp_workspace extends class_base
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_PAUSED,
+			MRP_STATUS_SHIFT_CHANGE,
 			MRP_STATUS_INPROGRESS
 		);
 
