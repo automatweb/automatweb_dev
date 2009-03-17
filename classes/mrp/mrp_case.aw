@@ -916,7 +916,7 @@ class mrp_case extends class_base
 		$time =  time();
 		$this_object = $arr["obj_inst"];
 		$chart = get_instance ("vcl/gantt_chart");
-		$columns = (int) ($arr["request"]["mrp_chart_length"] ? $arr["request"]["mrp_chart_length"] : 7);
+		$columns = (int) (!empty($arr["request"]["mrp_chart_length"]) ? $arr["request"]["mrp_chart_length"] : 7);
 		$hilighted_project = $this_object->id();
 		$workspace = $this->get_current_workspace ($arr);
 
@@ -942,7 +942,7 @@ class mrp_case extends class_base
 		}
 
 		$range_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
-		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : $range_start);
+		$range_start = (int) (!empty($arr["request"]["mrp_chart_start"]) ? $arr["request"]["mrp_chart_start"] : $range_start);
 
 		$range_end = (int) ($range_start + $columns * 86400);
 		$hilighted_jobs = array ();
@@ -985,7 +985,7 @@ class mrp_case extends class_base
 					)
 				));
 
-				if (!$arr["request"]["chart_customer"])
+				if (empty($arr["request"]["chart_customer"]))
 				{
 					### add reserved times for resources, cut off past
 					$reserved_times = $mrp_schedule->get_unavailable_periods_for_range(array(
