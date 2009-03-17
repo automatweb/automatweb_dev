@@ -84,7 +84,7 @@ class mrp_resource_obj extends _int_object
 				{
 					if ($start < $end)
 					{
-						$unavailable_dates[$start] = max ($end, $unavailable_dates[$start]);
+						$unavailable_dates[$start] = isset($unavailable_dates[$start]) ? max($end, $unavailable_dates[$start]) : $end;
 					}
 				}
 				else
@@ -140,7 +140,8 @@ class mrp_resource_obj extends _int_object
 
 		if ($this->prop ("unavailable_weekends"))
 		{
-			$weekend_start = date_calc::get_week_start($start) + (5 * 86400);
+			classload("core/date/date_calc");
+			$weekend_start = get_week_start($start) + (5 * 86400);
 			$weekend_length = 172800;
 			$recurrent_unavailable_periods[] = array (
 				"length" => $weekend_length,
