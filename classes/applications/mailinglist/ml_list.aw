@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.154 2009/03/11 13:37:16 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.155 2009/03/17 15:00:42 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -271,8 +271,8 @@ caption Otsi ka alamobjektide alt
 @property message_id type=hidden store=no parent=wmr no_caption=1
 @caption Kirja id
 
-@property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
-@caption Aliastehaldur
+property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
+caption Aliastehaldur
 
 ------------------------------------------------------------------------
 

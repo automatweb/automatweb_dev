@@ -701,18 +701,6 @@
             <caption>Kirja id</caption>
       </property>
       <property>
-            <name>aliasmgr</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>relationmgr</group>
-            <type>aliasmgr</type>
-            <store>no</store>
-            <editonly>1</editonly>
-            <trans>1</trans>
-            <caption>Aliastehaldur</caption>
-      </property>
-      <property>
             <name>mail_subject</name>
             <table>objects</table>
             <field>meta</field>
