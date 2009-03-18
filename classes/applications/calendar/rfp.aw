@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.186 2009/03/13 12:36:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.187 2009/03/18 11:24:01 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3441,7 +3441,7 @@ class rfp extends class_base
 			{
 				$this->vars(array(
 					"as_date" => date("d.m.Y", $srv["time"]),
-					"as_time" => date("H:i", $srv["time"]),
+					"as_time" => sprintf("%s - %s", date("H:i", $srv["time"]), date("H:i", $srv["time_to"])),
 				));
 				$this->vars($srv);
 				$as_row .= $this->parse("SERVICE");
