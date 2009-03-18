@@ -45,6 +45,13 @@
             <field>unit</field>
             <caption>&amp;amp;Uuml;hik</caption>
       </property>
+      <property>
+            <name>is_default</name>
+            <table>aw_shop_warehouse_amount</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>is_default</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE_AMOUNT</syslog_type>
             <relationmgr>yes</relationmgr>

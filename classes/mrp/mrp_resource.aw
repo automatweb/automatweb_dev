@@ -643,6 +643,13 @@ class mrp_resource extends class_base
 				$o->set_prop("product", $oid);
 				$o->save();
 			}
+			foreach($arr["request"]["planning"] as $oid => $pl)
+			{
+				$o = obj($oid);
+				$o->set_prop("movement", $arr["request"]["movement"][$oid]);
+				$o->set_prop("planning", $pl);
+				$o->save();
+			}
 		}
 	}
 
@@ -1463,9 +1470,19 @@ class mrp_resource extends class_base
 				var urlcontent2 = document.createTextNode(add_text)
 				url2.appendChild(urlcontent2)
 				cell2. appendChild(url2)
+	
+				var cell3 = document.createElement('td')
+				add_attribute(cell3, 'style', 'background: #CCFFCC')
+				add_attribute(cell3, 'class', 'awmenuedittabletext')
+
+				var cell4 = document.createElement('td')
+				add_attribute(cell4, 'style', 'background: #CCFFCC')
+				add_attribute(cell4, 'class', 'awmenuedittabletext')
 
 				newrow.appendChild(cell1)
 				newrow.appendChild(cell2)
+				newrow.appendChild(cell3)
+				newrow.appendChild(cell4)
 				tbls[0].appendChild(newrow)
 
 				document.forms.changeform.add_ids.value += ','+add_id
@@ -1613,6 +1630,14 @@ class mrp_resource extends class_base
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
+		$t->define_field(array(
+			"name" => "planning",
+			"caption" => t("Tarnetingimus planeerimisel"),
+		));
+		$t->define_field(array(
+			"name" => "movement",
+			"caption" => t("Materjali liikumine materjalilaost"),
+		));
 		$t->set_caption(sprintf(t("Ressursil %s kasutatavad materjalid"), $arr["obj_inst"]->name()));
 		$conn = $arr["obj_inst"]->connections_to(array(
 			"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
@@ -1630,6 +1655,16 @@ class mrp_resource extends class_base
 						"value" => $o->id(),
 					)),
 					"name" => html::obj_change_url($o, $prod->name()),
+					"planning" => html::select(array(
+						"name" => "planning[".$o->id()."]",
+						"options" => $o->planning_options(),
+						"value" => $o->prop("planning"),
+					)),
+					"movement" => html::select(array(
+						"name" => "movement[".$o->id()."]",
+						"options" => $o->movement_options(),
+						"value" => $o->prop("movement"),
+					)),
 				));
 			}
 		}

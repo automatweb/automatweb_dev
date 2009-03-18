@@ -1618,6 +1618,119 @@
             <caption>Inventuurid</caption>
       </property>
       <property>
+            <name>status_orders_toolbar</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>status_orders_toolbar</field>
+      </property>
+      <property>
+            <name>status_orders_tree</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>treeview</type>
+            <parent>status_orders_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>status_orders_tree</field>
+      </property>
+      <property>
+            <name>status_orders_tree2</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>treeview</type>
+            <parent>status_orders_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>status_orders_tree2</field>
+      </property>
+      <property>
+            <name>status_orders_s_name</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>status_orders_left_search</parent>
+            <field>status_orders_s_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>status_orders_s_code</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>status_orders_left_search</parent>
+            <field>status_orders_s_code</field>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>status_orders_s_barcode</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>status_orders_left_search</parent>
+            <field>status_orders_s_barcode</field>
+            <caption>Ribakood</caption>
+      </property>
+      <property>
+            <name>status_orders_s_art_cat</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>status_orders_left_search</parent>
+            <field>status_orders_s_art_cat</field>
+            <caption>Kategooria</caption>
+      </property>
+      <property>
+            <name>status_orders_s_date</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>date_select</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>status_orders_left_search</parent>
+            <field>status_orders_s_date</field>
+            <caption>Kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>status_orders_s_sbt</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>submit</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>status_orders_left_search</parent>
+            <value>
+            <![CDATA["Otsi"]]>
+            </value>
+            <field>status_orders_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>status_orders</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>status_orders_split</parent>
+            <field>status_orders</field>
+      </property>
+      <property>
             <name>purchase_orders_toolbar</name>
             <table>objects</table>
             <group>purchase_orders</group>
@@ -2282,6 +2395,10 @@
                   <caption>Inventuurid</caption>
                   <parent>status</parent>
             </status_inventories>
+            <status_orders>
+                  <caption>Vajadused</caption>
+                  <parent>status</parent>
+            </status_orders>
             <purchases>
                   <caption>Laotellimused</caption>
             </purchases>
@@ -2695,6 +2812,32 @@
                   <closeable>1</closeable>
                   <group>status_inventories</group>
             </storage_inventories_left_search>
+            <status_orders_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>status_orders</group>
+                  <area_caption></area_caption>
+            </status_orders_split>
+            <status_orders_left>
+                  <type>vbox</type>
+                  <parent>status_orders_split</parent>
+                  <group>status_orders</group>
+                  <area_caption></area_caption>
+            </status_orders_left>
+            <status_orders_tree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Filtreeri</area_caption>
+                  <parent>status_orders_left</parent>
+                  <group>status_orders</group>
+            </status_orders_tree_lay>
+            <status_orders_left_search>
+                  <type>vbox</type>
+                  <parent>status_orders_left</parent>
+                  <area_caption>Otsing</area_caption>
+                  <closeable>1</closeable>
+                  <group>status_orders</group>
+            </status_orders_left_search>
             <purchase_orders_split>
                   <type>hbox</type>
                   <width>20%:80%</width>

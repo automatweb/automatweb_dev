@@ -20,9 +20,17 @@ class shop_delivery_note_obj extends _int_object
 		return parent::prop("delivery_date");
 	}
 
-	function create_movement($arr)
+	/**
+	@attrib name=create_movement api=1
+		
+	@comment
+		if called on a delivery note object, creates movements from its rows and changes the warehouse amounts
+	@returns
+		true everything is OK, false otherwise (error msg in session variable dn_error)
+	**/
+	function create_movement()
 	{
-		$conn = $arr["obj_inst"]->connections_from(array(
+		$conn = $this->connections_from(array(
 			"type" => "RELTYPE_ROW",
 		));
 		$single_vars = array(
@@ -45,9 +53,9 @@ class shop_delivery_note_obj extends _int_object
 		$ufi = obj();
 		$ufi->set_class_id(CL_SHOP_UNIT_FORMULA);
 		$ci = get_instance(CL_CURRENCY);
-		$wo = $arr["obj_inst"]->prop("writeoff");
-		$twh = $arr["obj_inst"]->prop("to_warehouse");
-		$fwh = $arr["obj_inst"]->prop("from_warehouse");
+		$wo = $this->prop("writeoff");
+		$twh = $this->prop("to_warehouse");
+		$fwh = $this->prop("from_warehouse");
 		foreach($conn as $c)
 		{
 			$row = $c->to();
@@ -78,7 +86,7 @@ class shop_delivery_note_obj extends _int_object
 					return false;
 				}
 				$sum = $row->prop("price");
-				$cur = $arr["obj_inst"]->prop("currency");
+				$cur = $this->prop("currency");
 				if(!$cur)
 				{
 					aw_session_set("dn_err", t("Valuuta on m&auml;&auml;ramata"));
@@ -110,9 +118,9 @@ class shop_delivery_note_obj extends _int_object
 					aw_session_set("dn_err", sprintf(t("Tootel %s pole m&auml;&auml;ratud p&otilde;hi&uuml;hikut"), $prod->name()));
 					return false;
 				}
-				if($arr["obj_inst"]->prop("from_warehouse"))
+				if($this->prop("from_warehouse"))
 				{
-					$ch_amt = $this->get_wh_amount($row, $arr["obj_inst"], true, $unit);
+					$ch_amt = $this->get_wh_amount($row, $this, true, $unit);
 					if(!is_numeric($ch_amt))
 					{
 						aw_session_set("dn_err", sprintf(t("Tootel %s puudub l&auml;htelaos antud parameetritega laoseis"), $prod->name()));
@@ -179,7 +187,7 @@ class shop_delivery_note_obj extends _int_object
 					{
 						$singles[] = $find_ol->begin();
 					}
-					elseif(!$arr["obj_inst"]->prop("from_warehouse"))
+					elseif(!$this->prop("from_warehouse"))
 					{
 						$o = obj();
 						$o->set_class_id(CL_SHOP_PRODUCT_SINGLE);
@@ -201,7 +209,7 @@ class shop_delivery_note_obj extends _int_object
 			$params = array(
 				"row" => $row,
 				"units" => $prod_units[$prod_id],
-				"obj_inst" => $arr["obj_inst"],
+				"obj_inst" => $this,
 				"amounts" => $amts,
 				"base_prices" => $base_prices,
 			);
@@ -224,7 +232,7 @@ class shop_delivery_note_obj extends _int_object
 	function create_movement_from_param($arr)
 	{
 		$row = $arr["row"];
-		$from_wh_id = $arr["obj_inst"]->prop("from_warehouse");
+		$from_wh_id = $this->prop("from_warehouse");
 		if(is_oid($from_wh_id) && $from_wh_id)
 		{
 			$from_wh = obj($from_wh_id);
@@ -234,7 +242,7 @@ class shop_delivery_note_obj extends _int_object
 		{
 			$to_wh = obj($twh);
 		}
-		$to_wh_id = $arr["obj_inst"]->prop("to_warehouse");
+		$to_wh_id = $this->prop("to_warehouse");
 		if(is_oid($to_wh_id))
 		{
 			$to_wh = obj($to_wh_id);
@@ -266,9 +274,11 @@ class shop_delivery_note_obj extends _int_object
 					if($unit && $this->can("view", $unit))
 					{
 						$amt = $arr["amounts"][$row->id()][$unit];
+						$is_default = 0;
 						if($i === 0)
 						{
 							$defamt = $amt;
+							$is_default = 1;
 						}
 						$amount = $pi->get_amount(array(
 							"unit" => $unit,
@@ -286,6 +296,7 @@ class shop_delivery_note_obj extends _int_object
 							$amto->set_prop("single", $sid);
 							$amto->set_prop("amount", ($whv["amt_mod"] * $amt));
 							$amto->set_prop("unit", $unit);
+							$amto->set_prop("is_default", $is_default);
 							$amto->set_name(sprintf(t("%s laoseis"), $prod->name()));
 							$amto->save();
 						}
@@ -309,11 +320,11 @@ class shop_delivery_note_obj extends _int_object
 		$mvo->set_prop("unit", $arr["units"][0]);
 		$mvo->set_prop("price", $row->prop("price"));
 		$mvo->set_prop("base_price", $arr["base_prices"][$row->id()]);
-		$mvo->set_prop("transport", $arr["obj_inst"]->prop("transport"));
-		$mvo->set_prop("customs", $arr["obj_inst"]->prop("customs"));
-		$mvo->set_prop("date", $arr["obj_inst"]->prop("delivery_date"));
-		$mvo->set_prop("delivery_note", $arr["obj_inst"]->id());
-		$mvo->set_prop("currency", $arr["obj_inst"]->prop("currency"));
+		$mvo->set_prop("transport", $this->prop("transport"));
+		$mvo->set_prop("customs", $this->prop("customs"));
+		$mvo->set_prop("date", $this->prop("delivery_date"));
+		$mvo->set_prop("delivery_note", $this->id());
+		$mvo->set_prop("currency", $this->prop("currency"));
 		$mvo->set_parent($prod_id);
 		$mvo->set_name(sprintf(t("%s liikumine"), $prod->name()));
 		$mvo->save();

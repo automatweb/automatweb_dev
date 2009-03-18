@@ -57,5 +57,5 @@ class shop_product_obj extends _int_object
 			}			
 		}
 		return parent::prop($k);
-	}
+ 	}
 }

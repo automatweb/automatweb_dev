@@ -21,6 +21,8 @@
 @property unit type=relpicker reltype=RELTYPE_UNIT
 @caption &Uuml;hik
 
+@property is_default type=hidden
+
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption Artikkel
 
@@ -97,6 +99,7 @@ class shop_warehouse_amount extends class_base
 			case "product":
 			case "warehouse":
 			case "single":
+			case "is_default":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

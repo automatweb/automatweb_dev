@@ -21,6 +21,7 @@ class material_movement_relation_obj extends _int_object
 					$set_prods[$prod] = $prod;
 					$row->set_prop("amount", $data[$prod]["amount"]);
 					$row->set_prop("unit", $data[$prod]["unit"]);
+					$row->save();
 				}
 				else
 				{
@@ -71,6 +72,7 @@ class material_movement_relation_obj extends _int_object
 			));
 		}
 		$o->set_prop("dn", $dno->id());
+		$o->save();
 	}
 
 	function create_dn_row($arr)

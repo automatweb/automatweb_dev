@@ -18,6 +18,23 @@
             <caption>Toode</caption>
       </property>
       <property>
+            <name>warehouse</name>
+            <group>general</group>
+            <table>aw_shop_order_rows</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WAREHOUSE</reltype>
+            <field>aw_warehouse</field>
+            <caption>Ladu</caption>
+      </property>
+      <property>
+            <name>date</name>
+            <group>general</group>
+            <table>aw_shop_order_rows</table>
+            <type>datetime_select</type>
+            <field>aw_date</field>
+            <caption>Aeg</caption>
+      </property>
+      <property>
             <name>unit</name>
             <group>general</group>
             <table>aw_shop_order_rows</table>
@@ -85,6 +102,15 @@
             <field>other_code</field>
             <caption>Teine artiklikood</caption>
       </property>
+      <property>
+            <name>reservation</name>
+            <group>general</group>
+            <table>aw_shop_order_rows</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_reservation</field>
+            <caption>Broneering</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_ROW</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -110,6 +136,11 @@
                   <clid>CL_UNIT</clid>
                   <caption>&amp;amp;Uuml;hik</caption>
             </UNIT>
+            <WAREHOUSE>
+                  <value>3</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </WAREHOUSE>
       </reltypes>
 </properties>
 

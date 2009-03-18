@@ -43,6 +43,16 @@
             <caption>Laod</caption>
       </property>
       <property>
+            <name>mrp_workspace</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WORKSPACE</reltype>
+            <store>connect</store>
+            <field>mrp_workspace</field>
+            <caption>Ressursihalduskeskkond</caption>
+      </property>
+      <property>
             <name>show_alt_units</name>
             <table>objects</table>
             <group>general_settings</group>
@@ -1498,6 +1508,10 @@
                   <clid>CL_SHOP_WAREHOUSE</clid>
                   <caption>Ladu</caption>
             </WAREHOUSE>
+            <WORKSPACE>
+                  <value>2</value>
+                  <clid>CL_MRP_WORKSPACE</clid>
+            </WORKSPACE>
       </reltypes>
       <layout>
             <storage_income_split>

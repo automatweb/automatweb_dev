@@ -11,6 +11,79 @@ class shop_purchase_manager_workspace_obj extends _int_object
 		}
 		return $warehouse_ids;
 	}
+
+	/**
+		@attrib name=order_product api=1
+
+		@param product required type=oid
+		@param unit optional type=oid
+		@param amount required type=int
+		@param date required type=int
+		@param job optional type=oid
+
+		@returns order object that was created
+	**/
+	public function order_product($arr)
+	{
+		$o = obj();
+		$po = obj($arr["product"]);
+		$o->set_class_id(CL_SHOP_SELL_ORDER);
+		$o->set_parent($this->id());
+		$o->set_name(sprintf("%s tellimus", $po->name()));
+		$o->set_prop("date", $arr["date"]);
+		if($arr["job"])
+		{
+			$o->set_prop("job", $arr["job"]);
+		}
+		$o->save();
+		$row = obj();
+		$row->set_class_id(CL_SHOP_ORDER_ROW);
+		$row->set_parent($o->id());
+		$row->set_name(sprintf(t("%s rida"), $o->name()));
+		$row->set_prop("prod", $arr["product"]);
+		$row->set_prop("amount", $arr["amount"]);
+		$unit = $arr["unit"];
+		if(!$unit)
+		{
+			$units = $po->instance()->get_units($po);
+			$unit = $units[0];
+		}
+		$row->set_prop("unit", $unit);
+		$row->save();
+		$o->connect(array(
+			"to" => $row,
+			"type" => "RELTYPE_ROW",
+		));
+		return $o;
+	}
+
+	/**
+	@attrib name=get_order_rows
+	
+	@param product optional type=clid
+	@param date optional type=int
+	
+	@comment
+		Returns object list of orders rows by specified date and/or product
+	**/
+	function get_order_rows($arr)
+	{
+		$params = array(
+			"class_id" => CL_SHOP_ORDER_ROW,
+			"RELTYPE_ROW(CL_SHOP_SELL_ORDER).closed" => new obj_predicate_not(1),
+			"site_id" => array(),
+			"lang_id" => array(),
+		);
+		if($arr["date"])
+		{
+			$params["RELTYPE_ROW(CL_SHOP_SELL_ORDER).date"] = new obj_predicate_compare(OBJ_LESS_THAN, $arr["date"]);
+		}
+		if($arr["product"])
+		{
+			$params["prod"] = $arr["product"];
+		}
+		return new object_list($params);
+	}
 }
 
 ?>

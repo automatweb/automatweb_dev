@@ -14,6 +14,12 @@
 @property prod type=relpicker reltype=RELTYPE_PRODUCT field=aw_product
 @caption Toode
 
+@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE field=aw_warehouse
+@caption Ladu
+
+@property date type=datetime_select field=aw_date
+@caption Aeg
+
 @property unit type=relpicker reltype=RELTYPE_UNIT
 @caption &Uuml;hik
 
@@ -38,11 +44,17 @@
 @property other_code type=textbox
 @caption Teine artiklikood
 
+@property reservation type=checkbox ch_value=1 field=aw_reservation
+@caption Broneering
+
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption Toode
 
 @reltype UNIT value=2 clid=CL_UNIT
 @caption &Uuml;hik
+
+@reltype WAREHOUSE value=3 clid=CL_SHOP_WAREHOUSE
+@caption Ladu
 */
 
 class shop_order_row extends class_base
@@ -118,6 +130,9 @@ class shop_order_row extends class_base
 				case "aw_items":
 				case "unit":
 				case "tax_rate":
+				case "aw_warehouse":
+				case "aw_date":
+				case "aw_reservation":
 					$this->db_add_col($table, array(
 						"name" => $field,
 						"type" => "int"

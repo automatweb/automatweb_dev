@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_SHOP_PURCHASE_ORDER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
+@classinfo syslog_type=ST_SHOP_PURCHASE_ORDER relationmgr=yes no_status=1 prop_cb=1 maintainer=kristo
 @tableinfo aw_shop_purcahse_orders master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_shop_purcahse_orders
@@ -13,6 +13,9 @@
 
 @property number type=textbox field=aw_number
 @caption Number
+
+@property comment type=textarea rows=5 cols=40 table=objects field=comment
+@caption Kommentaar
 
 @property purchaser type=relpicker reltype=RELTYPE_PURCHASER field=aw_purchaser
 @caption Hankija
@@ -349,7 +352,7 @@ class shop_purchase_order extends class_base
 		if($o)
 		{
 			$data["oid"] = $o->id();
-			$data["name"] = $this->can("view", $o->prop("prod"))?html::obj_change_url(obj($o->prop("prod")), parse_obj_name($o->prop("prod.name"))):'';
+			$data["name"] = $this->can("view", $o->prop("prod"))?html::obj_change_url(obj($o->prop("prod")), parse_obj_name($o->prop("prod.name"))): ($o->prod_name != "" ? $o->prod_name : '');
 			$data["code"] = $o->prop("prod.code");
 		}
 		else

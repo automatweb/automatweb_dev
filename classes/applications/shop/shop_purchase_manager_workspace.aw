@@ -23,6 +23,9 @@
 	@property warehouses type=relpicker multiple=1 reltype=RELTYPE_WAREHOUSE store=connect
 	@caption Laod
 
+	@property mrp_workspace type=relpicker reltype=RELTYPE_WORKSPACE store=connect
+	@caption Ressursihalduskeskkond
+
 	@property show_alt_units type=checkbox ch_value=1 field=meta method=serialize
 	@caption Kuva alternatiiv&uuml;hikuid
 
@@ -494,6 +497,8 @@
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption Ladu
+
+@reltype WORKSPACE value=2 clid=CL_MRP_WORKSPACE
 */
 
 class shop_purchase_manager_workspace extends class_base
