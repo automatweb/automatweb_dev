@@ -2229,13 +2229,13 @@ class room extends class_base
 		}
 		else
 		{
-			$rfp_color = "";//arr($last_bron); arr($last_bron->get_rfp());
+			$rfp_color = "";
 			if(is_object($rfp = $last_bron->get_rfp()))
 			{
 				switch($rfp->prop("confirmed"))
 				{
 					case 1:
-						if($settings->prop("col_slave") != ""  && ((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
+						if($settings->prop("col_slave") != ""  &&  $last_bron->is_lower_bron())//((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
 						{
 							 $rfp_color = $settings->prop("col_slave"); 
 						}
@@ -2245,14 +2245,14 @@ class room extends class_base
 						}
 						break;
 					case 3:
-						if($settings->prop("col_slave") != ""  && ((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
+						if($settings->prop("col_slave") != ""  &&  $last_bron->is_lower_bron())//((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
 						{
 							 $rfp_color = $settings->prop("col_slave");
 						}
 						elseif($settings->prop("col_on_hold") != "")
 						{
 							$rfp_color = $settings->prop("col_on_hold");
-						}
+						}//arr($last_bron); arr($last_bron->is_lower_bron());
 						break;
 					case 4:
 						if($settings->prop("col_back") != "")
@@ -5594,6 +5594,12 @@ class room extends class_base
 			{
 				continue;
 			}
+			$this_is_slave = 0;
+			if(is_array($other_rooms) && in_array($res->prop("resource") , $other_rooms))
+			{
+				$this_is_slave = 1;
+			}
+
 			if($use_prod_times)
 			{
 				list($before_buf, $after_buf) = $this->get_products_buffer(array("bron" => $res, "time" => "both"));
@@ -5604,15 +5610,18 @@ class room extends class_base
 			{
 				$start = $orig_start = $res->prop("start1")-$room->prop("buffer_before")*$room->prop("buffer_before_unit");
 				$end = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
-				if($this->res_table[$start]["verified"])//kontrollib kas tabelis sama aja peal on juba m6ni kinnitatud broneering... v6ibolla siis pole vaja yldse n2idata
+				if($this->res_table[$start])//kontrollib kas tabelis sama aja peal on juba m6ni kinnitatud broneering... v6ibolla siis pole vaja yldse n2idata
 				{
-					if($this->res_table[$start]["end"] < $end)
+					if($this->res_table[$start]["verified"] || $this_is_slave)
 					{
-						$start = $this->res_table[$start]["end"];
-					}
-					else
-					{
-						continue;
+						if($this->res_table[$start]["end"] < $end)
+						{
+							$start = $this->res_table[$start]["end"];
+						}
+						else
+						{
+							continue;
+						}
 					}
 				}
 				$this->res_table[$start]["end"] = $end;
@@ -5646,7 +5655,7 @@ class room extends class_base
 			$this->res_table[$start]["real_start"] = $res->prop("start1");
 			$this->res_table[$start]["id"] = $res->id();
 			$this->res_table[$start]["people"] = $res->prop("people_count");
-			if(is_array($other_rooms) && in_array($res->prop("resource") , $other_rooms))
+			if($this_is_slave)
 			{
 				$this->res_table[$start]["slave"] = 1;
 			}
