@@ -77,7 +77,7 @@ if ($.browser.opera && jQuery.browser.version>="9.50")
 else
 {
 	$(window).unload( function () {
-		unloadHandler ();
+		//unloadHandler ();
 	});
 }
 
