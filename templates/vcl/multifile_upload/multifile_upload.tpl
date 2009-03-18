@@ -16,7 +16,7 @@
 <!-- SUB: file -->
 <tr id="multifile_{VAR:id}">
 	<td>{VAR:counter}.</td>
-	<td><a href="{VAR:file_url}">{VAR:file_name}</a></td>
+	<td><a href="{VAR:file_url}" target="_blank">{VAR:file_name}</a></td>
 	<td><input type="button" value="muuda" class="delete" onClick="window.top.location = '{VAR:edit_url}'"> <input type="button" value="kustuta" class="delete" onClick="multifile_delete ('{VAR:id}')"></td></tr>
 <!-- END SUB: file -->
 </tbody>
