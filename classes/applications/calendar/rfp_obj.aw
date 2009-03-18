@@ -150,6 +150,14 @@ class rfp_obj extends _int_object
 			$reservation = $conn->to();
 			$reservation->delete();
 		}
+		$connections = $this->connections_from(array(
+			"type" => "RELTYPE_CATERING_RESERVATION",
+		));
+		foreach($connections as $conn)
+		{
+			$reservation = $conn->to();
+			$reservation->delete();
+		}
 		parent::delete();
 	}
 
