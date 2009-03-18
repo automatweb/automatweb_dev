@@ -2213,7 +2213,7 @@ class room extends class_base
 		else
 		if($last_bron->prop("verified"))
 		{//arr($last_bron->prop("type") == "food" && $settings->prop("col_food") != "");
-			if($settings->prop("col_slave") != ""  && ((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
+			if($settings->prop("col_slave") != ""  && $last_bron->is_lower_bron())//((is_array($this->other_rooms) && in_array($last_bron->prop("resource") , $this->other_rooms)) || $last_bron->is_lower_bron()))
 			{
 				$col[$x] = "#".$settings->prop("col_slave"); 
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.156 2009/03/18 11:17:33 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.157 2009/03/18 12:22:13 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -239,7 +239,31 @@ class reservation extends class_base
 		}
 		switch($prop["name"])
 		{
-			case "type":arr($prop["value"]);
+			case "type":
+		
+	/*			$ol = new object_list(array(
+					"class_id" => CL_RFP,
+					"lang_id" => array(),
+					"site_id" => array(),
+				//	"CL_RFP.RELTYPE_CATERING_RESERVATION.type" =>  obj_predicate_not("food"),
+				));
+				foreach($ol->arr() as $o)
+				{
+					foreach($o->connections_from(array(
+						"type" => "RELTYPE_CATERING_RESERVATION",
+					)) as $c)
+					{
+						$bron = $c->to();
+						if($bron->prop("type") != "food")
+						{
+							arr($bron);
+							$bron->set_prop("type" , "food");
+							$bron->save();
+						}
+					}
+				}
+*/
+
 				return PROP_IGNORE;
 			case "other_rooms":
 				if($is_lower_bron) return PROP_IGNORE;
@@ -994,6 +1018,11 @@ class reservation extends class_base
 				"type" => $arr["request"]["rfp_reltype"]?$arr["request"]["rfp_reltype"]:"RELTYPE_RESERVATION",
 				"to" => $arr["obj_inst"]->id(),
 			));
+
+			if($arr["request"]["type"] == "food")
+			{
+				$arr["obj_inst"]->set_prop("type" , "food");
+			}
 
 			$vf = 0;
 			if($rfp->prop("confirmed") == 2)
