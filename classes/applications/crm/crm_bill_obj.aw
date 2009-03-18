@@ -1027,6 +1027,25 @@ class crm_bill_obj extends _int_object
 		return $ol;
 	}
 
+	/** returns bill rows data using object data list
+		@attrib api=1
+	**/
+	public function get_bill_rows_dat()
+	{
+		$filter = array();
+		$filter["class_id"] = CL_CRM_BILL_ROW;
+		$filter["site_id"] = array();
+		$filter["lang_id"] = array();
+		$filter["CL_CRM_BILL_ROW.RELTYPE_ROW(CL_CRM_BILL)"] = $this->id();
+		$rowsres = array(
+			CL_CRM_BILL_ROW => array(
+				"task_row",
+			),
+		);
+		$rows_arr = new object_data_list($filter , $rowsres);
+		return $rows_arr->list_data;
+	}
+
 	/** returns bill rows data
 		@attrib api=1
 	**/
@@ -1724,6 +1743,25 @@ class crm_bill_obj extends _int_object
 			"oid" => $this->id(),
 		));
 		return $ol->count();
+	}
+
+	/**
+		@attrib api=1
+		@returns array
+			array(task => array(bill_row_1 , bill_row_2))
+	**/
+	public function task_row_2_bill_rows()
+	{
+		$res = array();
+		$data = $this->get_bill_rows_dat();
+		foreach($data as $dat)
+		{
+			foreach($dat["task_row"] as $tr)
+			{
+				$res[$tr][$dat["oid"]] = $dat["oid"];
+			}
+		}
+		return $res;
 	}
 
 	function get_writeoff_rows_data()

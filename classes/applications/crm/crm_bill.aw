@@ -1323,7 +1323,7 @@ class crm_bill extends class_base
 					"name" => "rows[$id][prod]",
 					"options" => $r_prods,
 					"value" => $t_inf["prod"]
-				))." ".html::popup(array(
+				))."  ".html::popup(array(
 					"width" => 800,
 					"height" => 500,
 					"scrollbars" => 1,
@@ -1339,7 +1339,7 @@ class crm_bill extends class_base
 					"options" => $r_pers,
 					"value" => $row["persons"],
 					"multiple" => 1
-				)).$pps->get_popup_search_link(array(
+				))."<br>".$pps->get_popup_search_link(array(
 					"pn" => "rows[$id][person]",
 					"multiple" => 1,
 					"clid" => array(CL_CRM_PERSON)
@@ -3675,13 +3675,17 @@ class crm_bill extends class_base
 	function _init_bill_task_list(&$t)
 	{
 		$t->define_field(array(
+			"name" => "br",
+			"caption" => t("Arve rida"),
+		));
+		$t->define_field(array(
 			"name" => "oid",
 			"caption" => t("ID"),
 //			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Toimetus"),
+			"caption" => t("Tegevus"),
 //			"sortable" => 1
 		));
 		$t->define_field(array(
@@ -3731,6 +3735,7 @@ class crm_bill extends class_base
 	
 		$tasks = $arr["obj_inst"]->bill_tasks();
 		$rows = $arr["obj_inst"]->bill_task_rows_data();
+		$task_2_bill_rows = $arr["obj_inst"]->task_row_2_bill_rows();
 		$rows_data = array();
 
 		foreach($rows as $data)
@@ -3784,6 +3789,7 @@ class crm_bill extends class_base
 					"oid" => $d["oid"],
 					"cust_hours" => $stats->hours_format($d["time_to_cust"]),
 					"time" => date("d.m.Y" , $d["date"]),
+					"br" => join(", " , $task_2_bill_rows[$d["oid"]]),
 				));
 			}
 			unset($rows_data[$task->id()]);
