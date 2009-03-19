@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.156 2009/03/19 15:14:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.157 2009/03/19 16:35:24 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1510,7 +1510,7 @@ class ml_list extends class_base
 				}
 				$contents = file_get_contents($imp);
 				if(!$arr["obj_inst"]->mass_subscribe(array(
-					"menus" => $arr["request"]["admin_subscribe_folders"],
+					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
 					"text" => $contents,
 					"debug" => 1,
 				)))
@@ -1529,7 +1529,7 @@ class ml_list extends class_base
 				$contents = file_get_contents($imp);
 
 				if(!$arr["obj_inst"]->mass_unsubscribe(array(
-					"menus" =>$arr["request"]["admin_subscribe_folders"],
+					"menus" =>array_keys($arr["request"]["admin_subscribe_folders"]),
 					"text" => $contents,
 					"debug" => 1,
 				)))
@@ -1541,7 +1541,7 @@ class ml_list extends class_base
 				
 			case "mass_subscribe":
 				if(!$arr["obj_inst"]->mass_subscribe(array(
-					"menus" => $arr["request"]["admin_subscribe_folders"],
+					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
 					"text" => $prop["value"],
 					"debug" => 1,
 				)))
@@ -1553,7 +1553,7 @@ class ml_list extends class_base
 
 			case "mass_unsubscribe":
 				if(!$arr["obj_inst"]->mass_unsubscribe(array(
-					"menus" => $arr["request"]["admin_subscribe_folders"],
+					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
 					"text" => $prop["value"],
 					"debug" => 1,
 				)))
@@ -4414,7 +4414,7 @@ arr($msg_obj->prop("message"));
 		));
 		$sources = $arr["obj_inst"]->get_sources();
 		$categorys = $menus = 0;
-		$sources_data = $arr["obj_inst"]->get_sources_data();//arr($sources_data);
+		$sources_data = $arr["obj_inst"]->get_sources_data();
 		foreach($sources->arr() as $source)
 		{
 			$source_data = array();
@@ -4433,7 +4433,7 @@ arr($msg_obj->prop("message"));
 					"name" => "sources_data[".$source->id()."][usable_data]",
 					"multiple" => 1,
 					"options" => $usable_data_options,
-					"value" => $sources_data[$source->id()]["usable_data"],
+					"value" => is_array($sources_data) ? $sources_data[$source->id()]["usable_data"] : "",
 				));
 			}
 			if($source->class_id() == CL_MENU)
