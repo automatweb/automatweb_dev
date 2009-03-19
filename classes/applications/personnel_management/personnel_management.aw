@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.95 2009/03/19 14:43:05 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.96 2009/03/19 15:04:30 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -731,7 +731,9 @@ class personnel_management extends class_base
 			"age" => t("Vanus"),
 			"gender" => t("Sugu"),
 			"apps" => t("Kandideerimised"),
-			"contact" => t("Kontaktandmed"),
+//			"contact" => t("Kontaktandmed"),
+			"phones" => t("Telefon"),
+			"emails" => t("E-postiaadress"),
 			"status" => t("Aktiivne"),
 			"approved" => t("Kinnitatud"),
 			"show_cnt" => t("Vaatamisi"),
@@ -2951,31 +2953,41 @@ class personnel_management extends class_base
 		foreach($objs as $obj_data)
 		{
 			$obj = obj($obj_data["oid"]);
-			unset($apps);
-			foreach($obj->get_applications(array("parent" => $this->offers_fld, "status" => object::STAT_ACTIVE))->names() as $app_id => $app_name)
-			{
-				$apps .= (strlen($apps) > 0) ? ", " : "";
-				$apps .= html::href(array(
-					"caption" => parse_obj_name($app_name),
-					"url" => $this->mk_my_orb("change", array("id" => $app_id, "return_url" => get_ru()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
-				));
-			}
-			$t->define_data(array(
-				"id" => $obj->id(),
+			$row = array(
+				"id" => $obj_data["oid"],
 				"name" => html::href(array(
-					"url" => $this->mk_my_orb("show_cv", array("id" => $obj->id(), "cv" => "cv/".basename($arr["obj_inst"]->prop("cv_tpl")), "die" => "1"), CL_CRM_PERSON),
-					"caption" => parse_obj_name($obj->name()),
+					"url" => $this->mk_my_orb("show_cv", array("id" => $obj_data["oid"], "cv" => "cv/".basename($arr["obj_inst"]->prop("cv_tpl")), "die" => "1"), CL_CRM_PERSON),
+					"caption" => parse_obj_name($obj_data["name"]),
 				)),
-				"age" => $obj->get_age(),
-				"gender" => $gender[$obj->prop("gender")],
-				"apps" => $apps,
-				"modtime" => date("Y-m-d H:i:s", $obj->prop("modified")),
-				"change" => html::get_change_url($obj->id(), array("return_url" => get_ru()), t("Muuda")),
-				"status" => $obj->prop_str("cvactive"),
-				"approved" => $obj->prop_str("cvapproved"),
-				"contact" => implode(", ", array_merge($obj->phones()->names(), $obj->emails()->names())),
-				"show_cnt" => $obj->show_cnt,
-			));
+				"gender" => $gender[$obj_data["gender"]],
+				"modtime" => date("Y-m-d H:i:s", $obj_data["modified"]),
+				"change" => html::get_change_url($obj_data["oid"], array("return_url" => get_ru()), t("Muuda")),
+				"status" => $obj_data["cvactive"] ? t("Jah") : t("Ei"),
+				"approved" => $obj_data["cvapproved"] ? t("Jah") : t("Ei"),
+//				"contact" => implode(", ", array_merge($obj->phones()->names(), $obj->emails()->names())),
+			);
+			if(empty($conf["age"]["disabled"]))
+			{
+				$row["age"] = obj($obj_data["id"])->get_age();
+			}
+			if(empty($conf["apps"]["disabled"]))
+			{
+				$apps = "";
+				foreach(obj($obj_data["id"])->get_applications(array("parent" => $this->offers_fld, "status" => object::STAT_ACTIVE))->names() as $app_id => $app_name)
+				{
+					$apps .= (strlen($apps) > 0) ? ", " : "";
+					$apps .= html::href(array(
+						"caption" => parse_obj_name($app_name),
+						"url" => $this->mk_my_orb("change", array("id" => $app_id, "return_url" => get_ru()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
+					));
+				}
+				$row["apps"] = $apps;
+			}
+			if(empty($conf["show_cnt"]["disabled"]))
+			{
+				$row["show_cnt"] = obj($obj_data["id"])->show_cnt;
+			}
+			$t->define_data($row);
 		}
 
 		if($_GET["get_csv_file"] == 1)
@@ -3149,6 +3161,8 @@ class personnel_management extends class_base
 					"gender" => "gender",
 					"birthday" => "birthday",
 					"modified" => "modified",
+					"cvactive" => "cvactive",
+					"cvapproved" => "cvapproved",
 				),
 			)
 		);
