@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.155 2009/03/17 15:00:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.156 2009/03/19 15:14:02 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1510,7 +1510,7 @@ class ml_list extends class_base
 				}
 				$contents = file_get_contents($imp);
 				if(!$arr["obj_inst"]->mass_subscribe(array(
-					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
+					"menus" => $arr["request"]["admin_subscribe_folders"],
 					"text" => $contents,
 					"debug" => 1,
 				)))
@@ -1529,7 +1529,7 @@ class ml_list extends class_base
 				$contents = file_get_contents($imp);
 
 				if(!$arr["obj_inst"]->mass_unsubscribe(array(
-					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
+					"menus" =>$arr["request"]["admin_subscribe_folders"],
 					"text" => $contents,
 					"debug" => 1,
 				)))
@@ -1541,7 +1541,7 @@ class ml_list extends class_base
 				
 			case "mass_subscribe":
 				if(!$arr["obj_inst"]->mass_subscribe(array(
-					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
+					"menus" => $arr["request"]["admin_subscribe_folders"],
 					"text" => $prop["value"],
 					"debug" => 1,
 				)))
@@ -1553,7 +1553,7 @@ class ml_list extends class_base
 
 			case "mass_unsubscribe":
 				if(!$arr["obj_inst"]->mass_unsubscribe(array(
-					"menus" => array_keys($arr["request"]["admin_subscribe_folders"]),
+					"menus" => $arr["request"]["admin_subscribe_folders"],
 					"text" => $prop["value"],
 					"debug" => 1,
 				)))
@@ -3684,7 +3684,7 @@ foreach($ol->arr() as $o)
 		}
 
 		//et igasugu urlid saaks kas urli objektist k"tte v6i salvestaks v2hemalt baseurli ette.
-		$msg_data["message"] = $this->make_fck_urls_good($msg_data["message"]);
+		$msg_data["message"] = $arr["obj_inst"]->make_fck_urls_good($msg_data["message"]);
 
 		//uhh......minuarust on selle koigega ikka miski jama
 		//toenaoliselt on varsti jalle miski probleem selle kohaga...a noh
@@ -4340,10 +4340,29 @@ arr($msg_obj->prop("message"));
 			$t->define_data($tabledata);
 		}
 
-		$t->d_row_cnt = sizeof($ml_list_members);
-		$t->set_header($t->draw_text_pageselector(array(
-			"records_per_page" => $perpage,
-		)));
+
+/*		$t->define_pageselector(array(
+			"type" => "text",
+			"records_per_page" =>  100,
+			"d_row_cnt" =>  sizeof($members),
+			"position" => "both",
+		));
+*/
+		if(sizeof($members) > 100)
+		{
+			$t->d_row_cnt = sizeof($members);
+			$t->records_per_page = 100;
+			$t->pageselector = "lbtxt";
+			$t->set_header($t->draw_lb_pageselector());
+		}
+		else
+		{
+			$t->set_header("1 - ".sizeof($members));
+		}
+//		$t->d_row_cnt = sizeof($members);arr($t->d_row_cnt);
+//		$t->set_header($t->draw_text_pageselector(array(
+//			"records_per_page" => $perpage,
+//		)));
 		$t->sort_by();
 	}
 

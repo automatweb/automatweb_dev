@@ -64,7 +64,7 @@ class ml_list_obj extends _int_object
 				continue;
 			}
 			$o = obj($menu);
-			if(in_array($o->class_id() , $minion_classes) && $sources_data[$o->id()]["use_minions"])
+			if(in_array($o->class_id() , $minion_classes) && isset($sources_data[$o->id()]["use_minions"]) && $sources_data[$o->id()]["use_minions"])
 			{
 				$ol = new object_list(array(
 					"class_id" => $minion_classes,
@@ -266,6 +266,8 @@ class ml_list_obj extends _int_object
 							"email" => $addr,
 							"list_id" => $this->id(),
 							"use_folders" => $fold,
+							"confirm_subscribe" => $this->prop("confirm_subscribe"),
+							"confirm_message" => $this->prop("confirm_subscribe_msg"),
 						));
 						$members[] = $addr;
 					}
@@ -394,6 +396,60 @@ class ml_list_obj extends _int_object
 		return true;
 	}
 
+	//teeb fck igasugu urlid mailile kohaseks, et mujal maailmas ka aru saaks kuhu asi viitab
+	function make_fck_urls_good($msg)
+	{
+		$x = 0;
+		$regs = array();
+		if ($asd = preg_match_all("/\/[0-9]+/", $msg, $regs)) 
+		{
+			if($x > 100) break;
+			foreach($regs[0] as $reg)
+			{
+				$reg = substr($reg , 1);
+				if($this->can("view" , $reg))
+				{
+					$link = obj($reg);
+					if($link->class_id() == CL_EXTLINK)
+					{
+						$msg = str_replace('href="/'.$link->id().'"', 'href="'.$link->prop("url").'"' , $msg);
+						$msg = str_replace("href='/".$link->id()."'", "href='".$link->prop("url")."'" , $msg);
+						$msg = str_replace('href="'.aw_ini_get("baseurl").'/'.$link->id().'"', 'href="'.$link->prop("url").'"' , $msg);
+						$msg = str_replace("href='".aw_ini_get("baseurl")."/".$link->id()."'", 'href="'.$link->prop("url").'"' , $msg);
+						continue;
+					}
+				}
+			}
+			if($reg > 1)
+			{
+				$msg = str_replace('href="/'.$reg.'"', 'href="'.aw_ini_get("baseurl").'/'.$reg.'"' , $msg);
+				$msg = str_replace("href='/".$reg."'", "href='".aw_ini_get("baseurl")."/".$reg."'" , $msg);
+			}
+ 			$x++;
+		}
+
+		$classes = aw_ini_get("classes");
+		list($astr) = explode(",", $classes[CL_IMAGE]["alias"]);
+		if ($astr == "")
+		{
+			list($astr) = explode(",", $classes[CL_IMAGE]["old_alias"]);
+		}
+
+		foreach($this->connections_from(array("reltype" => 0,
+ 			 "to.class_id" => 6)) as $c)
+		{
+			$pict = $c->to();
+			$alias = sprintf("#%s%d#", $astr, $c->prop("idx"));
+			if(substr_count($msg , $alias))
+			{
+				$msg = str_replace($alias, $pict->get_html(), $msg);
+			}
+		}
+		
+
+
+		return $msg;
+	}
 
 }
 
