@@ -3802,10 +3802,7 @@ EOF;
 				"site_id" => array(),
 				"lang_id" => array(),
 			));
-			$ol->sort_by(array(
-				"prop" => array("ord", "name"),
-				"order" => array("asc", "asc"),
-			));
+			$ol->sort_by_cb(array($this, "__bug_app_sorter"));
 			$options = array(0 => t("--vali--"));
 			foreach($ol->arr() as $oid => $o)
 			{
@@ -3880,6 +3877,18 @@ EOF;
 			}
 		}".
 		"return true;}";
+	}
+
+	function __bug_app_sorter($a, $b)
+	{
+		if($a->ord() == $b->ord())
+		{
+			return strcasecmp($a->name(), $b->name());
+		}
+		else
+		{
+			return ($a->ord() < $b->ord()) ? -1 : 1;
+		}
 	}
 
 	/**
