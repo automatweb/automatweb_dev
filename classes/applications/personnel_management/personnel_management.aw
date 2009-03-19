@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.94 2009/03/11 13:37:13 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.95 2009/03/19 14:43:05 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -2973,7 +2973,7 @@ class personnel_management extends class_base
 				"change" => html::get_change_url($obj->id(), array("return_url" => get_ru()), t("Muuda")),
 				"status" => $obj->prop_str("cvactive"),
 				"approved" => $obj->prop_str("cvapproved"),
-				"contact" => implode(", ", array_merge($person_inst->phones(array("id" => $obj->id()))->names(), $person_inst->emails(array("id" => $obj->id()))->names())),
+				"contact" => implode(", ", array_merge($obj->phones()->names(), $obj->emails()->names())),
 				"show_cnt" => $obj->show_cnt,
 			));
 		}
