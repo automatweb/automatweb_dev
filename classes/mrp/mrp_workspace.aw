@@ -2293,6 +2293,7 @@ class mrp_workspace extends class_base
 				"name" => $caption,
 				"url" => aw_url_change_var(array(
 					"pj_job" => NULL,
+					"printer_job_page" => NULL,
 					"branch_id" => $id,
 				)),
 			));
