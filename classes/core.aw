@@ -158,7 +158,7 @@ class core extends acl_base
 			*/
 			$q = sprintf("INSERT INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
 
-			if (!$this->db_query($q,false))
+			if (!$this->db_query($q))
 			{
 				echo "q = $q <br>";
 				echo ("cannot write to syslog: " . $this->db_last_error["error_string"]);
