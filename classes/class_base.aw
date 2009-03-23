@@ -1107,7 +1107,6 @@ class class_base extends aw_template
 		{
 			$args = iconv_array("utf-8", aw_global_get("charset"), $args);
 		}
-
 		$form_data = null;
 		// since submit should never change the return url, make sure we get at it later
 		$real_return_url = $args["return_url"];
@@ -4920,6 +4919,11 @@ class class_base extends aw_template
 			if (isset($all_properties[$key]))
 			{
 				$propdata = array_merge($all_properties[$key],$val);
+				// Miks siin yldse mergetakse? Kui cfgform midagi 2ra v6tab, siis siin pannakse see ju tagasi! :@ -kaarel 25.02.2009
+				if(is_array($val) && count($val) > 0 && !isset($val["parent"]))
+				{
+					unset($propdata["parent"]);
+				}
 			}
 			else
 			{
