@@ -1318,7 +1318,7 @@ class _int_object
 			));
 			return;
 		}
-
+		
 		$prev = $this->_int_get_prop($key);
 		$this->_int_set_prop($key, $val);
 		// if this is a relpicker property, create the relation as well
@@ -1913,7 +1913,8 @@ class _int_object
 			$cv1 = serialize($cv1);
 			$cv2 = serialize($cv2);
 		}
-		if ($cv1 != $cv2)
+		// strlen is here, cause otherwise "0011" would == "011" and "11"
+		if ($cv1 != $cv2 || strlen($cv1) != strlen($cv2))
 		{
 			$this->props_modified[$prop] = 1;
 		}
@@ -2670,7 +2671,7 @@ class _int_object
 				else
 				{
 					$cur_v = $o->prop($part);
-					$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
+					$prop_dat = isset($GLOBALS["properties"][$o->class_id()][$part]) ? $GLOBALS["properties"][$o->class_id()][$part] : NULL;
 				}
 				// the true here is because if the user says that this thingie is an oid, then we trust him
 				// we check of course, but still. we trust him.
