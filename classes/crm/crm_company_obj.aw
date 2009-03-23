@@ -33,8 +33,11 @@ class crm_company_obj extends _int_object
 				case "email":
 					return is_oid(parent::prop("email_id")) ? parent::prop("email_id.mail") : parent::prop("RELTYPE_EMAIL.mail");
 
+				case "skype":
+				case "mobile":
+				case "fax":
 				case "phone":
-					return is_oid(parent::prop("phone_id")) ? parent::prop("phone_id.name") : parent::prop("RELTYPE_PHONE.name");
+					return $this->get_prop_phone($k);
 
 				case "address_country":
 					return is_oid(parent::prop("contact")) ? parent::prop("contact.riik.name") : parent::prop("RELTYPE_ADDRESS.riik.name");
@@ -65,6 +68,29 @@ class crm_company_obj extends _int_object
 			}
 		}
 		return parent::prop($k);
+	}
+
+	function get_prop_phone($type, $return_oid = false)
+	{
+		if($type === "fake_phone" && $this->instance()->can("view", $this->prop("phone_id")))
+		{
+			return $return_oid ? $this->prop("phone_id") : $this->prop("phone_id.name");
+		}
+		else
+		{
+			$args = array(
+				"class_id" => CL_CRM_PHONE,
+				"CL_CRM_PHONE.RELTYPE_PHONE(CL_CRM_COMPANY).oid" => $this->id(),
+				"limit" => 1,
+				"type" => new obj_predicate_not(array("mobile", "fax", "skype")),
+			);
+			if(in_array(substr($type, 5), array_keys(get_instance("crm_phone")->phone_types)))
+			{
+				$args["type"] = substr($type, 5);
+			}
+			$ol = new object_list($args);
+			return $return_oid ? reset($ol->ids()) : reset($ol->names());
+		}
 	}
 
 	function set_prop($name, $value, $set_into_meta = true)
@@ -116,7 +142,10 @@ class crm_company_obj extends _int_object
 					return $this->set_fake_email($value, $set_into_meta);
 
 				case "phone":
-					return $this->set_fake_phone($value, $set_into_meta);
+				case "fax":
+				case "mobile":
+				case "skype":
+					return $this->set_fake_phone($name, $value, $set_into_meta);
 
 				case "address_country":
 				case "address_country_relp":
@@ -146,7 +175,7 @@ class crm_company_obj extends _int_object
 			parent::save();
 		}
 		$fakes = array(
-			"url", "email", "phone", "address_country", "address_country_relp", "address_county", "address_county_relp", "address_city", "address_city_relp", "address_postal_code", "address_address", "address_address2"
+			"url", "email", "phone", "fax", "mobile", "skype", "address_country", "address_country_relp", "address_county", "address_county_relp", "address_city", "address_city_relp", "address_postal_code", "address_address", "address_address2"
 		);
 		foreach($fakes as $fake)
 		{
@@ -399,8 +428,9 @@ class crm_company_obj extends _int_object
 	public function get_worker_selection($arr = array())
 	{
 		$workers = $this->get_workers($arr);
-
-		return $workers->names();
+		$ret = $workers->names();
+		asort($ret);
+		return $ret;
 
 	}
 
@@ -466,7 +496,7 @@ class crm_company_obj extends _int_object
 			work phone
 		@param parent optional type=oid
 			new person parent
-		@return 
+		@return oid
 	**/
 	public function add_worker_data($arr = array())
 	{
@@ -672,7 +702,6 @@ class crm_company_obj extends _int_object
 		return $ret;
 	}
 
-
 	/** returns e-mail address for sending bill
 		@attrib api=1
 	**/
@@ -688,7 +717,7 @@ class crm_company_obj extends _int_object
 				{
 					return $mail->prop("mail");
 				}
-				$ret = $mail->prop("mail");
+//				$ret = $mail->prop("mail");
 			}
 		}
 
@@ -713,6 +742,7 @@ class crm_company_obj extends _int_object
 //				$ret = $mail->prop("mail");
 			}
 		}
+
 		return $ret;
 	}
 
@@ -1125,8 +1155,6 @@ class crm_company_obj extends _int_object
 		}
 		else
 		{
-			$n = false;
-			
 			if($GLOBALS["object_loader"]->cache->can("view", $this->prop("email_id")))
 			{
 				$eo = obj($this->prop("email_id"));
@@ -1141,7 +1169,6 @@ class crm_company_obj extends _int_object
 					$eo->set_parent($this->id());
 					$eo->set_prop("name", $this->name());
 				}
-				$n = true;
 			}
 			$conns = connection::find(array("from" => $this->id(), "to" => $eo->id(), "from.class_id" => CL_CRM_COMPANY, "reltype" => "RELTYPE_EMAIL"));
 			if(count($conns) > 0)
@@ -1164,12 +1191,12 @@ class crm_company_obj extends _int_object
 	}
 
 	/** sets the default email adress content or creates it if needed **/
-	private function set_fake_phone($phone, $set_into_meta = true)
+	private function set_fake_phone($type, $phone, $set_into_meta = true)
 	{
 		if($set_into_meta === true)
 		{
-			$this->set_meta("tmp_fake_phone", $phone);
-			$this->set_meta("sim_fake_phone", 1);
+			$this->set_meta("tmp_".$type, $phone);
+			$this->set_meta("sim_".$type, 1);
 		}
 		else
 		{
@@ -1177,34 +1204,33 @@ class crm_company_obj extends _int_object
 			{
 				$this->save();
 			}
-			$n = false;
-			if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("phone_id")))
+			$id = $this->get_prop_phone($type, true);
+			if ($GLOBALS["object_loader"]->cache->can("view", $id))
 			{
-				$eo = obj($this->prop("phone_id"));
+				$eo = obj($id);
 			}
 			else
 			{
-				$eo = $this->get_first_obj_by_reltype("RELTYPE_PHONE");
-				if($eo === false)
-				{
-					$eo = obj();
-					$eo->set_class_id(CL_CRM_PHONE);
-					$eo->set_parent($this->id());
-				}
-				$n = true;
+				$eo = obj();
+				$eo->set_class_id(CL_CRM_PHONE);
+				$eo->set_parent($this->id());
 			}
 			$conns = connection::find(array("from" => $this->id(), "to" => $eo->id(), "from.class_id" => CL_CRM_COMPANY, "reltype" => "RELTYPE_PHONE"));
 			if(count($conns) > 0)
 			{
 				$eo->conn_id = reset(array_keys($conns));
 			}
-
+			$type = in_array(substr($type, 5), array_keys(get_instance("crm_phone")->phone_types)) ? substr($type, 5) : "work";
+			$eo->set_prop("type", $type);
 			$eo->set_name($phone);
 			aw_disable_acl();
 			$eo->save();
 			aw_restore_acl();
 
-			$this->set_prop("phone_id", $eo->id());
+			if($type === "fake_phone")
+			{
+				$this->set_prop("phone_id", $eo->id());
+			}
 			$this->save();
 			$this->connect(array(
 				"type" => "RELTYPE_PHONE",
@@ -1222,7 +1248,6 @@ class crm_company_obj extends _int_object
 		}
 		else
 		{
-			$n = false;
 			if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("url_id")))
 			{
 				$eo = obj($this->prop("url_id"));
@@ -1236,21 +1261,17 @@ class crm_company_obj extends _int_object
 					$eo->set_class_id(CL_EXTLINK);
 					$eo->set_parent($this->id());
 				}
-				$n = true;
 			}
 
 			$eo->set_prop("url", $url);
 			$eo->save();
 			
-			if ($n)
-			{
-				$this->set_prop("url_id", $eo->id());
-				$this->save();
-				$this->connect(array(
-					"type" => "RELTYPE_URL",
-					"to" => $eo->id()
-				));
-			}
+			$this->set_prop("url_id", $eo->id());
+			$this->save();
+			$this->connect(array(
+				"type" => "RELTYPE_URL",
+				"to" => $eo->id()
+			));
 		}
 	}
 
@@ -1274,7 +1295,6 @@ class crm_company_obj extends _int_object
 				"fake_address_address" => "aadress",
 				"fake_address_address2" => "aadress2"
 			);
-			$n = false;
 			if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("contact")))
 			{
 				$eo = obj($this->prop("contact"));
@@ -1284,7 +1304,6 @@ class crm_company_obj extends _int_object
 				$eo = obj();
 				$eo->set_class_id(CL_CRM_ADDRESS);
 				$eo->set_parent($this->id());
-				$n = true;
 			}
 
 			switch($k)
@@ -1318,11 +1337,8 @@ class crm_company_obj extends _int_object
 
 			$eo->save();
 			
-			if ($n)
-			{
-				$this->set_prop("contact", $eo->id());
-				$this->save();
-			}
+			$this->set_prop("contact", $eo->id());
+			$this->save();
 		}
 	}
 
