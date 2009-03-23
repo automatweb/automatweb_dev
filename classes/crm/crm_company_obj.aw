@@ -393,7 +393,7 @@ class crm_company_obj extends _int_object
 			"site_id" => array(),
 			"org" => $this->id(),
 		);
-		if($arr["active"])
+		if(!empty($arr["active"]))
 		{
 			$filter["start"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time());
 			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time());
@@ -405,11 +405,11 @@ class crm_company_obj extends _int_object
 				)
 			));
 		}
-		if($arr["profession"])
+		if(!empty($arr["profession"]))
 		{
 			$filter["profession"] = $arr["profession"];
 		}
-		if($arr["section"])
+		if(!empty($arr["section"]))
 		{
 			$filter["section"] = $arr["section"];
 		}

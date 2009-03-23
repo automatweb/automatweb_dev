@@ -107,7 +107,7 @@
 
 @default group=grp_resources_manage,grp_resources_load
 	@property resources_toolbar type=toolbar store=no no_caption=1 group=grp_resources_manage
-	@layout resources_tree_box type=vbox closeable=1 area_caption=Ressursid&amp;kategooriad parent=vsplitbox
+	@layout resources_tree_box type=vbox closeable=1 area_caption=Ressursid&nbsp;&amp;&nbsp;kategooriad parent=vsplitbox
 		@property resources_tree type=text store=no no_caption=1 parent=resources_tree_box
 	@layout right_pane type=vbox parent=vsplitbox
 		@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=right_pane group=grp_resources_load
@@ -1982,7 +1982,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs_next_link":
-				if (!empty($arr["request"]["pj_job"]) || $arr["request"]["branch_id"] === "grp_printer_notstartable" || $arr["request"]["branch_id"] === "grp_printer_startable")
+				if (!empty($arr["request"]["pj_job"]) || isset($arr["request"]["branch_id"]) && in_array($arr["request"]["branch_id"], array("grp_printer_notstartable", "grp_printer_startable")))
 				{
 					return PROP_IGNORE;
 				}
@@ -1994,7 +1994,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs_prev_link":
-				if (!empty($arr["request"]["pj_job"]) || $arr["request"]["branch_id"] === "grp_printer_notstartable" || $arr["request"]["branch_id"] === "grp_printer_startable")
+				if (!empty($arr["request"]["pj_job"]) || isset($arr["request"]["branch_id"]) && in_array($arr["request"]["branch_id"], array("grp_printer_notstartable","grp_printer_startable")))
 				{
 					return PROP_IGNORE;
 				}
@@ -2216,9 +2216,8 @@ class mrp_workspace extends class_base
 
 	function sort_by_birthday($a, $b)
 	{
-		$a_tm = explode("-", $a->birthday);
-		$b_tm = explode("-", $b->birthday);
-		$bd_tm = mktime(0, 0, 0, $bd_tm[1], $bd_tm[2], $bd_tm[0]);
+		$a_tm = explode("-", $a->birthday."-1-1");
+		$b_tm = explode("-", $b->birthday."-1-1");
 		$retval = ((int)$a_tm[1] - (int)date("n") == (int)$b_tm[1] - (int)date("n") ? (int)$a_tm[2] < (int)$b_tm[2] : (int)$a_tm[1] - (int)date("n") < (int)$b_tm[1] - (int)date("n")) ? -1 : 1;
 
 		return $retval;
@@ -4976,10 +4975,10 @@ class mrp_workspace extends class_base
 		));
 
 		$t->define_field(array(
-                        "name" => "proj_comment",
-                        "caption" => t("Projekti nimi"),
-                        "align" => "center",
-                        "chgbgcolor" => "bgcol",
+			"name" => "proj_comment",
+			"caption" => t("Projekti nimi"),
+			"align" => "center",
+			"chgbgcolor" => "bgcol",
 		));
 
 		$t->define_field(array(
@@ -5028,6 +5027,11 @@ class mrp_workspace extends class_base
 		$proj_states = false;
 		$page = isset($arr["request"]["printer_job_page"]) ? (int) $arr["request"]["printer_job_page"] : 0;
 		$limit = ($page*$per_page).",".$per_page;
+
+		if(!isset($arr["request"]["branch_id"]))
+		{
+			$arr["request"]["branch_id"] = "";
+		}
 
 		switch ($arr["request"]["branch_id"])
 		{
@@ -5202,7 +5206,7 @@ class mrp_workspace extends class_base
 				foreach($jobs as $job)
 				{
 					$count++;
-					$proj = obj($job->prop("project"));
+					$proj = obj($job["project"]);
 					if ($proj->name() == $find_proj)
 					{
 						$page = floor($count / $per_page);
@@ -5229,24 +5233,26 @@ class mrp_workspace extends class_base
 		$cnt = 0;
 		foreach($jobs as $job)
 		{
-			if (!$this->can("view", $job->prop("project")))
+			if (!$this->can("view", $job["project"]))
 			{
 				continue;
 			}
 			$cnt++;
-			$res = obj($job->prop("resource"));
-			$proj = obj($job->prop("project"));
+			$proj = obj($job["project"]);
 
 			$workers_str = array();
-			foreach(safe_array($workers[$res->id()]) as $person)
+			if(isset($workers[$job["resource"]]))
 			{
-				if ($this->can("edit", $person->id()))
+				foreach(safe_array($workers[$job["resource"]]) as $person)
 				{
-					$workers_str[] = html::obj_change_url($person);
-				}
-				else
-				{
-					$workers_str[] = $person->name();
+					if ($this->can("edit", $person->id()))
+					{
+						$workers_str[] = html::obj_change_url($person);
+					}
+					else
+					{
+						$workers_str[] = $person->name();
+					}
 				}
 			}
 
@@ -5265,23 +5271,23 @@ class mrp_workspace extends class_base
 			}
 
 			### set colours
-			if ($job->prop("state") == MRP_STATUS_DONE)
+			if ($job["state"] == MRP_STATUS_DONE)
 			{
 				// dark green
 				$bgcol = $this->pj_colors["done"];
 			}
-			elseif ($job->prop("state") == MRP_STATUS_INPROGRESS)
+			elseif ($job["state"] == MRP_STATUS_INPROGRESS)
 			{
 				$bgcol = $this->pj_colors["can_not_start"];
 			}
-			elseif ($mrp_job->can_start(array("job" => $job->id())))
+			elseif ($mrp_job->can_start(array("job" => $job["oid"])))
 			{
 				// light green
 				$bgcol = $this->pj_colors["can_start"];
 			}
 			else
 			{
-				if ($mrp_job->job_prerequisites_are_done(array("job" => $job->id())))
+				if ($mrp_job->job_prerequisites_are_done(array("job" => $job["oid"])))
 				{
 					$bgcol = $this->pj_colors["resource_in_use"];
 				}
@@ -5302,34 +5308,34 @@ class mrp_workspace extends class_base
 				continue;
 			}
 
-			if ($job->prop("project") == $_SESSION["mrp"]["pv_s_hgl"])
+			if (isset($job["project"]) && isset($_SESSION["mrp"]["pv_s_hgl"]) && $job["project"] == $_SESSION["mrp"]["pv_s_hgl"] || !isset($job["project"]) && !isset($_SESSION["mrp"]["pv_s_hgl"]))
 			{
 				$bgcol = $this->pj_colors["search_result"];
 			}
 
-			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+			$state = '<span style="color: ' . $this->state_colours[$job["state"]] . ';">' . $this->states[$job["state"]] . '</span>';
 
 			### get length, end and start according to job state
 			switch ($arr["request"]["branch_id"])
 			{
 				case "grp_printer_done":
-					$start = $job->prop("started");
-					$end = $job->prop("finished");
-					$length = $job->prop("finished") - $job->prop("started");
+					$start = $job["started"];
+					$end = $job["finished"];
+					$length = $job["finished"] - $job["started"];
 					break;
 
 				case "grp_printer_aborted":
-					$start = $job->prop("started");
+					$start = $job["started"];
 					$end = "...";//!!! lugeda logist v kuskilt abortimise aeg
 					$length = 0;//!!!
 					break;
 
-				case "grp_printer":
+				case "":
 				case "grp_printer_current":
 				case "grp_printer_startable":
-					$start = $job->prop("starttime");
-					$end = $job->prop("starttime") + $job->prop("length");
-					$length = $job->prop("length");
+					$start = $job["starttime"];
+					$end = $job["starttime"] + $job["length"];
+					$length = $job["length"];
 					break;
 			}
 
@@ -5337,10 +5343,10 @@ class mrp_workspace extends class_base
 			$len  = sprintf ("%02d", floor($length / 3600)).":";
 			$len .= sprintf ("%02d", floor(($length % 3600) / 60));
 
-			$resource_str = $res->name();
-			if ($this->can("edit", $res->id()))
+			$resource_str = $job["RELTYPE_MRP_RESOURCE.name"];
+			if ($this->can("edit", $job["resource"]))
 			{
-				$resource_str = html::obj_change_url($res);
+				$resource_str = html::obj_change_url($job["resource"]);
 			}
 
 			$project_str = $proj->name();
@@ -5354,7 +5360,7 @@ class mrp_workspace extends class_base
 				);
 			}
 
-			$comment = $job->comment();
+			$comment = $job["comment"];
 			if (strlen($comment) > 20)
 			{
 				$comment = html::href(array(
@@ -5371,7 +5377,7 @@ class mrp_workspace extends class_base
 				"job" => html::href(array(
 					"caption" => "<span style=\"font-size: 15px;\">".t("Ava")."</span>",
 					"url" => aw_url_change_var(array(
-						"pj_job" =>  $job->id(),
+						"pj_job" =>  $job["oid"],
 						"return_url" => get_ru()
 					)),
 				)),
@@ -5524,7 +5530,7 @@ class mrp_workspace extends class_base
 		// if no resources are given, check if the current user should have
 		// all resources displayed, the department's resources displayed
 		// or none
-		if (count($res) == 0)
+		if (count($ret) == 0)
 		{
 			$ws = $arr["ws"];
 
@@ -5594,7 +5600,7 @@ class mrp_workspace extends class_base
 			limit - limit number of returned data
 			ws - workspace object
 	**/
-	private function get_next_jobs_for_resources($arr)
+	function get_next_jobs_for_resources($arr)
 	{
 		if (!isset($arr["resources"]) || !is_array($arr["resources"]) || count($arr["resources"]) === 0)
 		{
@@ -5608,7 +5614,6 @@ class mrp_workspace extends class_base
 
 		$filt = array(
 			"resource" => $arr["resources"],
-			"limit" => $arr["limit"],
 			"class_id" => CL_MRP_JOB,
 			"site_id" => array(),
 			"lang_id" => array(),
@@ -5617,6 +5622,11 @@ class mrp_workspace extends class_base
 			"sort_by" => isset($arr["sort_by"]) ? $arr["sort_by"] : "mrp_schedule.starttime",
 //!!!
 		);
+
+		if(!empty($arr["limit"]))
+		{
+			$filt["limit"] = $arr["limit"];
+		}
 
 		if (!empty($arr["states"]))
 		{
@@ -5627,18 +5637,42 @@ class mrp_workspace extends class_base
 		// this also does or is null, cause the customer can be null
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = new obj_predicate_not(1);
 
-		if ($arr["proj_states"])
+		if (!empty($arr["proj_states"]))
 		{
-			$filt["CL_MRP_JOB.project(CL_MRP_CASE).state"] = $arr["states"];
+			$filt["CL_MRP_JOB.project(CL_MRP_CASE).state"] = $arr["proj_states"];
 		}
 
-		$jobs = new object_list($filt);
+		if(!empty($arr["filter"]) && is_array($arr["filter"]))
+		{
+			$filt = array_merge($filt, $arr["filter"]);
+		}
+
+		$jobs = new object_data_list(
+			$filt,
+			array(
+				CL_MRP_JOB => array(
+					"oid",
+					"comment",
+					"state",
+					"project",
+					"resource",
+					"started",
+					"finished",
+					"aborted",
+					"length",
+					"starttime",
+					"remaining_length",
+					"exec_order",
+					"RELTYPE_MRP_RESOURCE.name",
+				),
+			)
+		);
 		$ret = array();
 		foreach($jobs->arr() as $o)
 		{
-			if ($this->can("view", $o->prop("resource")))
+			if ($this->can("view", $o["resource"]))
 			{
-				$ret[] = $o;
+				$ret[$o["oid"]] = $o;
 			}
 		}
 		return $ret;
@@ -5691,9 +5725,12 @@ class mrp_workspace extends class_base
 		{
 			foreach($profs as $prof)
 			{
-				foreach(safe_array($prof2person[$prof]) as $person)
+				if(isset($prof2person[$prof]))
 				{
-					$ret[$resource][$person] = obj($person);
+					foreach(safe_array($prof2person[$prof]) as $person)
+					{
+						$ret[$resource][$person] = obj($person);
+					}
 				}
 			}
 		}
