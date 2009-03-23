@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.187 2009/03/18 11:24:01 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.188 2009/03/23 10:09:55 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -4124,7 +4124,7 @@ class rfp extends class_base
 			{
 				foreach($arr["room_sel"] as $room)
 				{
-					$o->remove_room_reservations($room);
+					//$o->remove_room_reservations($room);
 				}
 			}
 

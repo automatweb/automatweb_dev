@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.158 2009/03/23 09:32:18 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.159 2009/03/23 10:09:50 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -2014,7 +2014,8 @@ class reservation extends class_base
 			));
 			$has = true;
 		}
-		if ($arr["obj_inst"]->prop("verified"))
+
+		if ($arr["obj_inst"]->prop("verified") && !$arr["obj_inst"]->get_rfp())
 		{
 			$tb->add_button(array(
 				"name" => "unverify",
