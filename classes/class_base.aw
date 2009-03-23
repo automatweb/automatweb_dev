@@ -592,7 +592,7 @@ class class_base extends aw_template
 			),
 			"help"),
 
-			"translate_url" => in_array(aw_global_get("uid"), safe_array(aw_ini_get("class_base.show_trans")))?$translate_url." | ":"",
+			"translate_url" => in_array(aw_global_get("uid"), safe_array(aw_ini_get("class_base.show_trans"))) && !empty($translate_url) ? $translate_url." | ":"",
 			"more_help_text" => t("Rohkem infot"),
 			"close_help_text" => t("Peida &auml;ra"),
 			"open_help_text" => t("Abiinfo"),
@@ -4679,7 +4679,7 @@ class class_base extends aw_template
 					arsort($gx);
 					foreach($gx as $grp_oid => $grp_pri)
 					{
-						if ($forms[$grp_oid] && empty($found_form))
+						if (!empty($forms[$grp_oid]) && empty($found_form))
 						{
 							$found_form = $forms[$grp_oid];
 							$this->tmp_cfgform = $found_form;
