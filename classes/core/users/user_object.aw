@@ -193,8 +193,31 @@ class user_object extends _int_object
 		return count(array_intersect($group, array_keys($grps))) > 0;
 	}
 
-	function get_user_mail_address()
+	/**
+	@attrib name=get_user_name api=1
+	@returns string
+	**/
+	public function get_user_name()
 	{
+		if($this->prop("real_name"))
+		{
+			return $this->prop("real_name");
+		}
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		return $p->name();
+	}
+
+	/**
+	@attrib name=get_user_mail_address api=1
+	@returns string
+	**/
+	public function get_user_mail_address()
+	{
+		if($this->prop("email"))
+		{
+			return $this->prop("email");
+		}
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 		return $p->get_mail();
