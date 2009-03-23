@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.98 2009/03/11 12:14:22 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.99 2009/03/23 11:19:52 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -2992,7 +2992,7 @@ class rfp_manager extends class_base
 			$room_sum = 0;
 			$package_sum = 0;
 			$roomdata = array();
-			$pk_prices = $arr["obj_inst"]->get_packages();
+			$pk_prices = $arr["obj_inst"]->meta("pk_prices");
 			$pk_price = $o->prop("data_gen_package_price");
 			$people = $o->prop("data_gen_attendees_no");
 			$package_id = $o->prop("data_gen_package");
@@ -3018,7 +3018,6 @@ class rfp_manager extends class_base
 					$total = $sum["room_price"][$cur];
 					$ssum = $bron->get_special_sum();
 
-
 					if(is_array($pk_prices) && $package_id)
 					{
 						$price = $pk_prices[$package_id]["prices"][$pk_price][$cur];
@@ -3031,10 +3030,15 @@ class rfp_manager extends class_base
 						$total = 0;
 					}
 
-					if($ssum[$cur] && !$package_sum)
+					if($ssum[$cur])
 					{
 						$total = $ssum[$cur];
 					}
+					elseif($package_sum)
+					{
+						$total = $package_sum;
+					}
+arr($total);
 					$room_sum += $total;
 
 					$room = $bron->prop("resource");
