@@ -116,6 +116,16 @@
             <caption>Summa</caption>
       </property>
       <property>
+            <name>currency</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_currency</field>
+            <parent>top_left</parent>
+            <reltype>RELTYPE_CURRENCY</reltype>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
             <name>partial_recieved</name>
             <table>objects</table>
             <group>general</group>
@@ -736,6 +746,11 @@
                   <clid>CL_PROJECT</clid>
                   <caption>Projekt</caption>
             </PROJECT>
+            <CURRENCY>
+                  <value>18</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>Valuuta</caption>
+            </CURRENCY>
       </reltypes>
       <layout>
             <main_split>

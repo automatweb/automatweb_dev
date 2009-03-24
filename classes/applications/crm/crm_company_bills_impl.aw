@@ -1897,7 +1897,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			$brow[] = "";
 			$brow[] = 0;						//  0 (teadmata - vaikevaartus 0)
 			$i = get_instance(CL_CRM_BILL);
-			$cur = $i->get_bill_currency($b);
+			$cur = $b->get_bill_currency_name();
 			$brow[] = "";
 			$brow[] = "";
 			$brow[] = "";

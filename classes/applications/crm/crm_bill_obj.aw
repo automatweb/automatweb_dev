@@ -126,18 +126,28 @@ class crm_bill_obj extends _int_object
 	**/
 	function get_bill_currency_id()
 	{
+		if($this->prop("currency"))
+		{
+			return $this->prop("currency");
+		}
+		$currency = null;
 		if($this->prop("customer.currency"))
 		{
-			return $this->prop("customer.currency");
+			$currency = $this->prop("customer.currency");
 		}
-		if($cust = $this->get_bill_customer())
+		if(!$currency && $cust = $this->get_bill_customer())
 		{
 			$customer = obj($cust);
-			return $customer->prop("currency");
+			$currency =  $customer->prop("currency");
 		}
-		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
-		$company_curr = $co_stat_inst->get_company_currency();
-		return $company_curr;
+		if(!$currency)
+		{
+			$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
+			$currency = $co_stat_inst->get_company_currency();
+		}
+		$this->set_prop("currency" , $currency);
+		$this->save();
+		return $currency;
 	}
 
 	/** returns bill currency name
@@ -146,6 +156,11 @@ class crm_bill_obj extends _int_object
 	**/
 	function get_bill_currency_name()
 	{
+		if($currency = $this->get_bill_currency_id())
+		{
+			return get_name($currency);
+		}
+/*		
 		if($this->prop("customer.currency"))
 		{
 			$company_curr = $this->prop("customer.currency");
@@ -167,7 +182,7 @@ class crm_bill_obj extends _int_object
 		{
 			$cu_o = obj($company_curr);
 			return $cu_o->name();
-		}
+		}*/
 		return "EEK";
 	}
 
@@ -325,8 +340,8 @@ class crm_bill_obj extends _int_object
 		}
 
 		$id = "";
-		$bi = get_instance("applications/crm/crm_bill");
-		if (is_oid($this->prop("customer")) && $bi->can("view", $this->prop("customer")))
+		
+		if (is_oid($this->prop("customer")) && $GLOBALS["object_loader"]->cache->can("view", $this->prop("customer")))
 		{
 			return $this->prop("customer");
 		}
@@ -1031,19 +1046,116 @@ class crm_bill_obj extends _int_object
 		@attrib api=1
 	**/
 	public function get_bill_rows_dat()
-	{
+	{ 
 		$filter = array();
 		$filter["class_id"] = CL_CRM_BILL_ROW;
 		$filter["site_id"] = array();
 		$filter["lang_id"] = array();
 		$filter["CL_CRM_BILL_ROW.RELTYPE_ROW(CL_CRM_BILL)"] = $this->id();
+		$filter["writeoff"] = new obj_predicate_not();
+		
 		$rowsres = array(
 			CL_CRM_BILL_ROW => array(
-				"task_row",
+				"task_row","prod","price","amt","has_tax"
 			),
 		);
 		$rows_arr = new object_data_list($filter , $rowsres);
 		return $rows_arr->list_data;
+	}
+
+	/** calculates bill sum
+		@attrib api=1 params=pos
+		@param type type=int
+			BILL_SUM_TAX - bill tax sum , BILL_SUM_WO_TAX - bill sum without tax , BILL_AMT - bill hours
+		@returns int
+	**/
+	public function get_bill_sum($type = BILL_SUM)
+	{
+		$rs = "";
+		$sum_wo_tax = 0;
+		$tax = 0;
+		$sum = 0;
+		
+		$agreement_price = $this->meta("agreement_price");
+		if(is_array($agreement_price) && $agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0)
+		{
+			$rows = $agreement_price;
+		}
+		elseif(is_array($agreement_price) && $agreement_price["price"] && strlen($agreement_price["name"]) > 0)
+		{
+			$rows = array($agreement_price);
+		}
+		else
+		{
+			$rows = $this->get_bill_rows_dat();
+		}
+		foreach($rows as $row)
+		{
+			$cur_tax = 0;
+			$cur_sum = 0;
+			$cur_pr = 0;
+			$row["sum"] = $row["price"] * $row["amt"];
+			if ($GLOBALS["object_loader"]->cache->can("view", $row["prod"]))
+			{
+				$set = false;
+				// get tax from prod
+				$prod = obj($row["prod"]);
+				if ($this->can("view", $prod->prop("tax_rate")))
+				{
+					$tr = obj($prod->prop("tax_rate"));
+
+					if (time() >= $tr->prop("act_from") && time() < $tr->prop("act_to"))
+					{
+						$cur_sum = $row["sum"];
+						$cur_tax = ($row["sum"] * ($tr->prop("tax_amt")/100.0));
+						$cur_pr = $row["price"];
+						$set = true;
+					}
+				}
+
+				if (!$set)
+				{
+					// no tax
+					$cur_sum = $row["sum"];
+					$cur_tax = 0;
+					$cur_pr = $row["price"];
+				}
+			}
+			else
+			if ($row["has_tax"] == 1)
+			{
+				// tax needs to be added
+				$cur_sum = $row["sum"];
+				$cur_tax = ($row["sum"] * 0.18);
+				$cur_pr = $row["price"];
+			}	
+			else
+			{
+				// tax does not need to be added, tax free it seems
+				$cur_sum = $row["sum"];
+				$cur_tax = 0;
+				$cur_pr = $row["price"];
+			}
+
+			$sum_wo_tax += $cur_sum;
+			$tax += $cur_tax;
+			$sum += ($cur_tax+$cur_sum);
+			$tot_amt += $row["amt"];
+			$tot_cur_sum += $cur_sum;
+		}
+
+		switch($type)
+		{
+			case BILL_SUM_TAX:
+				return $tax;
+
+			case BILL_SUM_WO_TAX:
+				return $sum_wo_tax;
+
+			case BILL_AMT:
+				return $tot_amt;
+		}
+		return $sum;
 	}
 
 	/** returns bill rows data
@@ -1821,7 +1933,6 @@ class crm_bill_obj extends _int_object
 		usort($inf, array(&$this, "__br_sort"));
 		return $inf;
 	}
-
 
 }
 

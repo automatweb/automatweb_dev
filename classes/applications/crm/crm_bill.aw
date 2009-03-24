@@ -61,6 +61,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property sum type=text table=aw_crm_bill field=aw_sum size=5  parent=top_left
 	@caption Summa
 
+	@property currency type=relpicker table=aw_crm_bill field=aw_currency parent=top_left reltype=RELTYPE_CURRENCY
+	@caption Valuuta
+
 	@property partial_recieved type=text field=meta method=serialize parent=top_left
 	@caption Osaline laekumine
 
@@ -288,6 +291,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 @reltype PROJECT value=17 clid=CL_PROJECT
 @caption Projekt
+
+@reltype CURRENCY value=18 clid=CL_CURRENCY
+@caption Valuuta
 */
 
 define("BILL_SUM", 1);
@@ -367,6 +373,13 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "currency":
+				$prop["value"] = $arr["obj_inst"]->get_bill_currency_id();
+				if(!$prop["options"][$prop["value"]])
+				{
+					$prop["options"][$prop["value"]] = $arr["obj_inst"]->get_bill_currency_name();
+				}
+				break;
 			case "mail_table":
 				$this->_get_mail_table($arr);
 				break;
@@ -410,6 +423,7 @@ class crm_bill extends class_base
 				$prop["value"] = $arr["obj_inst"]->get_comments_text();
 				break;
 			case 'partial_recieved':
+
 				$sum = $this->get_bill_recieved_money($arr["obj_inst"]);
 /*				$bi = get_instance(CL_CRM_BILL);
 				$bill_sum = $bi->get_bill_sum($arr["obj_inst"]);
@@ -425,13 +439,13 @@ class crm_bill extends class_base
 				}
 */
 				$prop["value"] = number_format($sum, 2);
-				$prop["value"] .= " ".$this->get_bill_currency($arr["obj_inst"]);
+				$prop["value"] .= " ".$arr["obj_inst"]->get_bill_currency_name();
 				$url = $this->mk_my_orb("do_search", array(
 					"pn" => "new_payment",
 					"clid" => CL_CRM_BILL_PAYMENT,
 				), "popup_search", false, true);
 
-				if(!($sum >= $this->get_bill_sum($arr["obj_inst"])))
+				if(!($sum >= $arr["obj_inst"]->get_bill_sum()))
 				{
 					$prop["value"].= " ".html::href(array(
 						"url" => $this->mk_my_orb("add_payment", array("id" => $arr["obj_inst"]->id(), "ru" => get_ru())),
@@ -567,14 +581,13 @@ class crm_bill extends class_base
 					}
 					$prop["value"] = $sum;
 				}
-				if(($SUM_WT = $this->get_bill_sum($arr["obj_inst"])) > $prop["value"])
+				if(($SUM_WT = $arr["obj_inst"]->get_bill_sum()) > $prop["value"])
 				{
 					$SUM_WITHOUT = $SUM_WT - $prop["value"];
 					$add_tax = 1;
 				}
 
 				$prop["value"] = number_format($prop["value"], 2);
-				$curn = $arr["obj_inst"]->prop("customer.currency.name");
 				if($arr["obj_inst"]->id() > 0)
 				{
 					$prop["value"] .= " ".$arr["obj_inst"]->get_bill_currency_name();
@@ -1043,7 +1056,6 @@ class crm_bill extends class_base
 			return $b->prop("customer.code");
 		}
 	}
-
 	
 	function num($a)
 	{
@@ -1200,6 +1212,11 @@ class crm_bill extends class_base
 		// get prords from co
 		$u = get_instance(CL_USER);
 		$co = obj($u->get_current_company());
+		$ccurrency = $co->prop("currency");
+		$ccurrency_name = $co->prop("currency.name");
+
+		$bcurrency = $arr["obj_inst"]->get_bill_currency_id();
+
 		$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
 		if ($wh)
 		{
@@ -1223,10 +1240,26 @@ class crm_bill extends class_base
 			);
 		}
 		$pps = get_instance("applications/crm/crm_participant_search");
+		$curr_inst = get_instance(CL_CURRENCY);
+
 		$default_row_jrk = $first_oe = 0;
 		
 		foreach($rows as $row)
 		{
+			$price_cc = "";//hind oma organisatsiooni valuutas
+			$sum_cc = "";//summa oma organisatsiooni valuutas
+			if($ccurrency && $ccurrency != $bcurrency)
+			{
+				$cc_price = $curr_inst->convert(array(
+					"from" => $bcurrency,
+					"to" => $ccurrency,
+					"sum" => $row["price"],
+					"date" =>  $arr["obj_inst"]->prop("bill_date"),
+				));
+				$price_cc = "<br>".$cc_price." ".$ccurrency_name;
+				$sum_cc = "<br>".$cc_price*$row["amt"]." ".$ccurrency_name;
+			}
+
 			//eraldab muid kulusid
 			if(!$first_oe && $row["is_oe"])
 			{
@@ -1306,14 +1339,14 @@ class crm_bill extends class_base
 				"price" => html::textbox(array(
 					"name" => "rows[$id][price]",
 					"value" => $t_inf["price"],
-					"size" => 4
-				)),
+					"size" => 5
+				)).$price_cc,
 				"amt" => html::textbox(array(
 					"name" => "rows[$id][amt]",
 					"value" => $t_inf["amt"],
 					"size" => 3
 				)),
-				"sum" => $t_inf["sum"],
+				"sum" => $t_inf["sum"].$sum_cc,
 				"has_tax" => html::checkbox(array(
 					"name" => "rows[$id][has_tax]",
 					"ch_value" => 1,
@@ -3047,18 +3080,6 @@ class crm_bill extends class_base
 		return $rs;
 	}
 
-	function get_bill_currency($b)
-	{
-		return $b->prop("customer.currency.name") == "" ? "EEK" : $b->prop("customer.currency.name");
-	}
-
-	function get_bill_currency_id($b)
-	{
-		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
-		$company_curr = $co_stat_inst->get_company_currency();
-		return $b->prop("customer.currency.id") == "" ? $company_curr : $b->prop("customer.currency.id");
-	}
-
 	function get_bill_sum($b, $type = BILL_SUM)
 	{
 		$rs = "";
@@ -3429,10 +3450,13 @@ class crm_bill extends class_base
 	function _bill_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
+		enter_function("bill_tb_init");
 		$this->set_current_settings();
 
 		$has_val = 1;
 		$has_val = !$arr["obj_inst"]->has_not_initialized_rows();
+
+
 
 		$tb->add_menu_button(array(
 			"name" => "new",
@@ -3458,7 +3482,7 @@ class crm_bill extends class_base
 			"tooltip" => t("Prindi"),
 			"img" => "print.gif"
 		));
-		
+		exit_function("bill_tb_init");
 		$onclick = "";
 		if(!$has_val)
 		{
@@ -3885,6 +3909,7 @@ class crm_bill extends class_base
 			case "aw_selling_order":
 			case "aw_transfer_address":
 			case "aw_approved":
+			case "aw_currency":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "int"
@@ -3969,7 +3994,7 @@ class crm_bill extends class_base
 		{
 			return 0;
 		}
-		$bill_sum = $this->get_bill_sum($bill);
+		$bill_sum = $bill->get_bill_sum();
 		$sum = 0;
 		foreach($bill->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
 		{
@@ -3997,15 +4022,19 @@ class crm_bill extends class_base
 		{
 			return 0;
 		}
-		$bill_sum = $this->get_bill_sum($b);
+		enter_function("bill::get_bill_recieved_money");
+		$bill_sum = $b->get_bill_sum();
 		$needed = $this->get_bill_needs_payment(array("bill" => $b));
 		if($payment)
 		{
 			$needed_wtp = $this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment));
 			$payment = obj($payment);
 			$free_sum = $payment->get_free_sum($b->id());
+			exit_function("bill::get_bill_recieved_money");
 			return min($free_sum , $needed_wtp);
 		}
+
+		exit_function("bill::get_bill_recieved_money");
 		return $this->posValue($bill_sum - $needed);
 	}
 
