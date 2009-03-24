@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.99 2009/03/23 11:19:52 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.100 2009/03/24 10:53:40 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -3038,7 +3038,7 @@ class rfp_manager extends class_base
 					{
 						$total = $package_sum;
 					}
-arr($total);
+
 					$room_sum += $total;
 
 					$room = $bron->prop("resource");
