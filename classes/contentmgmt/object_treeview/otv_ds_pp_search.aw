@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.11 2008/01/31 13:52:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.12 2009/03/24 12:40:43 instrumental Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -494,8 +494,9 @@ class otv_ds_pp_search extends class_base
 				$htmlc->add_property(array(
 					"name" => "search",
 					"caption" => t("Otsi"),
-					"type" => "submit",
-					"store" => "no"
+					"type" => "button",
+					"store" => "no",
+					"onclick" => "this.disabled=true; self.disabled=true; document.otv_ds_pp_search.submit();",
 				));
 			}
 			$htmlc->finish_output();
