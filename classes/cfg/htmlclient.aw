@@ -1145,6 +1145,7 @@ class htmlclient extends aw_template
 				$this->vars_safe($arr);
 				//$retval = $this->parse("my_textarea");
 				$retval = html::textarea($arr);
+				$this->vars(array("value" => NULL));
 				break;
 
 			case "password":
@@ -1527,6 +1528,11 @@ class htmlclient extends aw_template
 					));
 					$closer = $this->parse("VGRID_HAS_CLOSER");
 				}
+
+				//miski errori n2itamise v6imalus layouti sisse
+				$this->vars(array("layout_error" => $_SESSION["layout_error"][$layout_name] ? $_SESSION["layout_error"][$layout_name] : ""));
+				$this->vars(array("LAYOUT_ERROR_SUB" => $_SESSION["layout_error"][$layout_name] ? $this->parse("LAYOUT_ERROR_SUB") : ""));
+				unset($_SESSION["layout_error"][$layout_name]);
 
 				$this->vars_safe(array(
 					"grid_name" => $layout_name,
