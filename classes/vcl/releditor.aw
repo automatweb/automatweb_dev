@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.173 2009/01/21 14:05:37 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.174 2009/03/24 11:57:34 hannes Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -465,7 +465,7 @@ class releditor extends core
 			"value" => '
 			<input type="submit" value="'.t("Lisa").'" name="'.$prop["name"].'" id="button" onchange="null;set_changed();"/>
 			<script>
-				$.aw_releditor({
+				jQuery.aw_releditor({
 					"releditor_name" : "'.$prop["name"].'",
 					"id" : "'.$arr["obj_inst"]->id().'",
 					"reltype" : "'.$arr["prop"]["reltype"].'",
