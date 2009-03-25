@@ -4456,21 +4456,29 @@ class bug_tracker extends class_base
 			"name" => "cust_bugst",
 			"align" => "center",
 			"caption" => t("Kliendistaatus => P&otilde;histaatus"),
+			"tooltip" => t("Milleks muutub p&otilde;histaatus, kui kliendistaatust muuta"),
+			"sortable" => 1,
 		));
 		$t->define_field(array(
 			"name" => "mail_groups_cust",
 			"align" => "center",
 			"caption" => t("Meilide saatmine"),
+			"tooltip" => t("Millistele kasutajagruppidele saata meil, kui muudetakse kliendistaatust"),
+			"sortable" => 1,
 		));
 		$t->define_field(array(
 			"name" => "bugst_cust",
 			"align" => "center",
 			"caption" => t("P&otilde;histaatus => Kliendistaatus"),
+			"tooltip" => t("Milleks muutub kliendistaatus, kui p&otilde;histaatust muuta"),
+			"sortable" => 1,
 		));
 		$t->define_field(array(
 			"name" => "mail_groups_bug",
 			"align" => "center",
 			"caption" => t("Meilide saatmine"),
+			"tooltip" => t("Millistele kasutajagruppidele saata meil, kui muudetakse kliendistaatust"),
+			"sortable" => 1,
 		));
 		$t->set_caption(t("Bugi staatused"));
 		$bi = get_instance(CL_BUG);
