@@ -126,6 +126,11 @@ class crm_bill_obj extends _int_object
 	**/
 	function get_bill_currency_id()
 	{
+		if(!is_oid($this->id()))
+		{
+			return;
+		}
+
 		if($this->prop("currency"))
 		{
 			return $this->prop("currency");
@@ -1071,6 +1076,11 @@ class crm_bill_obj extends _int_object
 	**/
 	public function get_bill_sum($type = BILL_SUM)
 	{
+		if(!is_oid($this->id()))
+		{
+			return 0;
+		}
+		
 		$rs = "";
 		$sum_wo_tax = 0;
 		$tax = 0;
@@ -1878,6 +1888,10 @@ class crm_bill_obj extends _int_object
 
 	function get_writeoff_rows_data()
 	{
+		if(!is_oid($this->id()))
+		{
+			return;
+		}
 		$inf = array();
 		$cons = $this->connections_from(array("type" => "RELTYPE_ROW"));
 		foreach($cons as $c)
@@ -1932,6 +1946,36 @@ class crm_bill_obj extends _int_object
 		}
 		usort($inf, array(&$this, "__br_sort"));
 		return $inf;
+	}
+
+	public function get_payment_over_date()
+	{
+		$time = $this->prop("bill_recieved");
+		if(!($time > 1))
+		{
+			$time = time();
+		}
+		$res = (int)(($time - $this->prop("bill_due_date")) / (3600*24));
+		if($res > 0) return $res;
+		return null;
+	}
+
+	private function set_implementor()
+	{
+		if(is_oid($this->prop("impl")))
+		{
+			$this->implementor_object = obj($this->prop("impl"));
+		}
+	}
+
+	public function get_customer_data($prop)
+	{
+		$this->set_implementor();
+		if($this->implementor_object)
+		{
+			arr($this->implementor_object);
+		}
+		return 2;
 	}
 
 }

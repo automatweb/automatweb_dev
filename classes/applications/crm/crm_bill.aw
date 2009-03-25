@@ -231,8 +231,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 @groupinfo other_data caption="Muud andmed"
 @groupinfo mails caption="Kirjad"
-@groupinfo bill_mail caption="Kirjade seaded" parent=mails
+
 @groupinfo sent_mails caption="Saadetud kirjad" parent=mails
+@groupinfo bill_mail caption="Kirjade seaded" parent=mails
+
 @groupinfo delivery_notes caption="Saatelehed"
 @groupinfo tasks caption="Toimetused" submit=no
 @groupinfo preview caption="Eelvaade"
@@ -1149,16 +1151,18 @@ class crm_bill extends class_base
 
 		$t->define_field(array(
 			"name" => "unit",
-			"caption" => t("&Uuml;hik"),
-			"chgbgcolor" => "color"
+			"caption" => "",//t("&Uuml;hik"),
+			"chgbgcolor" => "color",
+			"align" => "right"
 		));
-
+/*
 		$t->define_field(array(
 			"name" => "price",
-			"caption" => t("Hind"),
-			"chgbgcolor" => "color"
+			"caption" => "",//t("Hind"),
+			"chgbgcolor" => "color",
+			"align" => "left"
 		));
-
+/*
 		$t->define_field(array(
 			"name" => "amt",
 			"caption" => t("Kogus"),
@@ -1170,7 +1174,7 @@ class crm_bill extends class_base
 			"caption" => t("Summa"),
 			"chgbgcolor" => "color"
 		));
-
+*/
 		$t->define_field(array(
 			"name" => "prod",
 			"caption" => t("Artikkel"),
@@ -1248,7 +1252,7 @@ class crm_bill extends class_base
 		{
 			$price_cc = "";//hind oma organisatsiooni valuutas
 			$sum_cc = "";//summa oma organisatsiooni valuutas
-			if($ccurrency && $ccurrency != $bcurrency)
+			if($bcurrency && $ccurrency && $ccurrency != $bcurrency)
 			{
 				$cc_price = $curr_inst->convert(array(
 					"from" => $bcurrency,
@@ -1304,6 +1308,53 @@ class crm_bill extends class_base
 				$unit_oid = $t_inf["unit"];
 			}
 			$unit_name = $this->get_unit_name($t_inf["unit"], $arr["obj_inst"]);
+
+			classload("vcl/table");
+			$ut = new vcl_table(array(
+				"layout" => "generic",
+			));
+			$ut->define_field(array(
+				"name" => "field1",
+				"caption" => "",
+				"chgbgcolor" => "color"
+			));
+			$ut->define_field(array(
+				"name" => "field2",
+				"caption" => "",
+				"chgbgcolor" => "color"
+			));
+			$ut->define_data(array(
+				"field1" => t("&Uuml;hik"),
+				"field2" => html::textbox(array(
+					"name" => "rows[$id][unit]",
+					"selected" => $unit_oid?array($unit_oid => $unit_name):'',
+					"size" => 5,
+					"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
+					"option_is_tuple" => 1,
+					"content" => $unit_name,
+				)),
+			));
+			$ut->define_data(array(
+				"field1" => t("Hind"),
+				"field2" => html::textbox(array(
+					"name" => "rows[$id][price]",
+					"value" => $t_inf["price"],
+					"size" => 5
+				)).$price_cc,
+			));
+			$ut->define_data(array(
+				"field1" => t("Kogus"),
+				"field2" => html::textbox(array(
+					"name" => "rows[$id][amt]",
+					"value" => $t_inf["amt"],
+					"size" => 3
+				)).$price_cc,
+			));
+			$ut->define_data(array(
+				"field1" => t("Summa"),
+				"field2" => $t_inf["sum"].$sum_cc,
+			));
+
 			$t->define_data(array(
 			"name" => html::textbox(array(
 					"name" => "rows[$id][jrk]",
@@ -1316,7 +1367,7 @@ class crm_bill extends class_base
 				))."<br>".html::textbox(array(
 					"name" => "rows[$id][comment]",
 					"value" => $t_inf["comment"],
-					"size" => 35
+					"size" => 40
 				))."<br>".html::textarea(array(
 					"name" => "rows[$id][name]",
 					"value" => $t_inf["name"],
@@ -1328,7 +1379,7 @@ class crm_bill extends class_base
 					"value" => $t_inf["code"],
 					"size" => 10
 				)),
-				"unit" => html::textbox(array(
+/*				"unit" => html::textbox(array(
 					"name" => "rows[$id][unit]",
 					"selected" => $unit_oid?array($unit_oid => $unit_name):'',
 					"size" => 5,
@@ -1346,7 +1397,8 @@ class crm_bill extends class_base
 					"value" => $t_inf["amt"],
 					"size" => 3
 				)),
-				"sum" => $t_inf["sum"].$sum_cc,
+				"sum" => $t_inf["sum"].$sum_cc,*/
+				"unit" => $ut->draw(),
 				"has_tax" => html::checkbox(array(
 					"name" => "rows[$id][has_tax]",
 					"ch_value" => 1,
@@ -4391,19 +4443,22 @@ class crm_bill extends class_base
 
 	function _get_mail_table($arr)
 	{
+//Saaja isikute nimed, asutused, telefon laual ja mobiil, ametinimetus, meilidaadressid; arve summa, arve laekumise t2htaeg; arve staatus.
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"caption" => t("Saatja nimi"),
+			"name" => "sender",
+			"align" => "left",
+			"sortable" => 1,
+		));
+
 		$t->define_field(array(
 			"caption" => t("Aeg"),
 			"name" => "time",
 			"align" => "left",
 			"sortable" => 1,
 		));
-		$t->define_field(array(
-			"caption" => t("Saatja"),
-			"name" => "sender",
-			"align" => "left",
-			"sortable" => 1,
-		));
+
 		$t->define_field(array(
 			"caption" => t("Aadressidele"),
 			"name" => "to",
@@ -4423,13 +4478,18 @@ class crm_bill extends class_base
 			"sortable" => 1,
 		));
 
+		$user_inst = get_instance(CL_USER);
+		
+
 		$mails = $arr["obj_inst"]->get_sent_mails();
 		foreach($mails->arr() as $mail)
 		{
+			$user = $mail->createdby();
+			$person = $user_inst->get_person_for_uid($user);
 			$data = array();
 			$data["time"] = date("d.m.Y H:i" , $mail->created());
-			$user = $mail->createdby();
-			$data["sender"] = $user;
+			
+			$data["sender"] = $person->name();
 			$data["content"] = $mail->prop("message");
 			$addr = explode("," , htmlspecialchars($mail->prop("mto")));
 			
@@ -4452,7 +4512,6 @@ class crm_bill extends class_base
 			$t->define_data($data);
 		}
 	}
-
 
 }
 ?>

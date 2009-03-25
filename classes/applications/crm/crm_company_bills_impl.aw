@@ -1122,13 +1122,124 @@ exit_function("bills_impl::_get_bill_task_list");
 		return $t->draw();
 	}
 
+
+	function _get_mails_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_mails_list_t($t, $arr["request"]);
+
+		$stats = get_instance("applications/crm/crm_company_stats_impl");
+		$bills = $stats->search_bills(array("stats_s_bill_state" => 1));
+
+		$sum = $tol = $deadline = $mhpa =  array();
+
+		$stuff = explode("_" , $arr["request"]["st"]);
+		foreach($bills->arr() as $o)
+		{
+			$sum[$o->id()] = $o->prop("sum");
+			$deadline[$o->id()] = $o->prop("bill_date") + $o->prop("bill_due_date_days")*3600*24;
+			$mhpa[$o->id()] = $o->get_payment_over_date();
+			switch($stuff[1])
+			{
+				case "sent":
+					if($mhpa[$o->id()])
+					{
+						$bills->remove($o->id());
+					}
+				break;
+				case "overdate":
+					if(!$mhpa[$o->id()])
+					{
+						$bills->remove($o->id());
+					}
+					$tol[$o->id()] = $arr["obj_inst"]->get_customer_prop($o->prop("customer"), "bill_tolerance");
+					if($mhpa[$o->id()] > $tol[$o->id()])
+					{
+						$bills->remove($o->id());
+					}
+				break;
+				case "overtolerance":
+					if(!$mhpa[$o->id()])
+					{
+						$bills->remove($o->id());
+					}
+					if(!($mhpa[$o->id()] > $tol[$o->id()]))
+					{
+						$bills->remove($o->id());
+					}
+				break;
+				case "all":
+				break;
+			}
+		}
+
+		$mails = $this->get_bill_mails(array("bills" =>$bills->ids()));
+		$user_inst = get_instance(CL_USER);
+//arr($mhpa);
+		foreach($mails as $mail)
+		{
+			$user = $mail["createdby"];
+			$person = $user_inst->get_person_for_uid($user);
+			$data = array();
+			$data["sender"] = $person->name();
+
+			$addr = explode("," , htmlspecialchars($mail["mto"]));
+			$data["to"] = join("<br>" , $addr);
+
+			$data["sum"] = $sum[$mail["parent"]];
+			$data["payment_over_date"] = $mhpa[$mail["parent"]];
+			$data["bill_due_date"] = date("d.m.Y" , $deadline[$mail["parent"]]);
+			$t->define_data($data);
+		}
+
+
+	}
+
+	function _init_mails_list_t(&$t, $r)
+	{//aatja nimi (NB!!! mitte kasutada kasutajanime!!!!!), Saaja isikute nimed, asutused, telefon laual ja mobiil, ametinimetus, meilidaadressid; arve summa, arve laekumise t2htaeg; arve staatus.
+		$t->define_field(array(
+			"name" => "sender",
+			"caption" => t("Saatja nimi"),
+			"sortable" => 1,
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "to",
+			"caption" => t("Saajad"),
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"align" => "right",
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "bill_due_date",
+			"caption" => t("Makset&auml;htaeg"),
+			"numeric" => 1,
+			"sortable" => 1,
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "payment_over_date",
+			"caption" => t("<a href='javascript:void(0)' alt='Maksega hilinenud p&auml;evade arv' title='Maksega hilinenud p&auml;evade arv'>MHPA</a>"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+	}
+
 	function _init_bills_list_t(&$t, $r)
 	{
 		$t->define_field(array(
 			"name" => "bill_no",
 			"caption" => t("Number"),
 			"sortable" => 1,
-			"numeric" => 1
+			"numeric" => 1,
+			"chgbgcolor" => "color",
 		));
 		if ($r["group"] == "bills_monthly")
 		{
@@ -1136,7 +1247,8 @@ exit_function("bills_impl::_get_bill_task_list");
 				"name" => "create_new",
 				"caption" => t("Loo uus"),
 				"sortable" => 1,
-				"numeric" => 1
+				"numeric" => 1,
+			"chgbgcolor" => "color",
 			));
 		}
 		$t->define_field(array(
@@ -1145,7 +1257,8 @@ exit_function("bills_impl::_get_bill_task_list");
 			"type" => "time",
 			"format" => "d.m.Y",
 			"numeric" => 1,
-			"sortable" => 1
+			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "bill_due_date",
@@ -1153,8 +1266,16 @@ exit_function("bills_impl::_get_bill_task_list");
 			"type" => "time",
 			"format" => "d.m.Y",
 			"numeric" => 1,
-			"sortable" => 1
-		));/*
+			"sortable" => 1,
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "payment_over_date",
+			"caption" => t("<a href='javascript:void(0)' alt='Maksega hilinenud p&auml;evade arv' title='Maksega hilinenud p&auml;evade arv'>MHPA</a>"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+/*
 		$t->define_field(array(
 			"name" => "payment_date",
 			"caption" => t("Laekumiskuup&auml;ev"),
@@ -1167,19 +1288,22 @@ exit_function("bills_impl::_get_bill_task_list");
 		$t->define_field(array(
 			"name" => "customer",
 			"caption" => t("Klient"),
-			"sortable" => 1
+			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"name" => "client_manager",
 			"caption" => t("Kliendihaldur"),
-			"sortable" => 1
+			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"name" => "project_leader",
 			"caption" => t("Projektijuht"),
-			"sortable" => 1
+			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
@@ -1187,7 +1311,8 @@ exit_function("bills_impl::_get_bill_task_list");
 			"caption" => t("Summa"),
 			"sortable" => 1,
 			"numeric" => 1,
-			"align" => "right"
+			"align" => "right",
+			"chgbgcolor" => "color",
 		));
 		if($this->show_bill_balance)
 		{
@@ -1196,7 +1321,8 @@ exit_function("bills_impl::_get_bill_task_list");
 				"caption" => t("Arve saldo"),
 				"sortable" => 1,
 				"numeric" => 1,
-				"align" => "right"
+				"align" => "right",
+			"chgbgcolor" => "color",
 			));
 		}
 
@@ -1222,19 +1348,24 @@ exit_function("bills_impl::_get_bill_task_list");
 			$t->define_field(array(
 				"name" => "state",
 				"caption" => t("Staatus"),
-				"sortable" => 1
+				"sortable" => 1,
+			"chgbgcolor" => "color",
 			));
 		}
 		$t->define_field(array(
 			"name" => "print",
 			"caption" => t("Prindi"),
-			"sortable" => 1
+			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 		$t->define_chooser(array(
 			"field" => "oid",
-			"name" => "sel"
+			"name" => "sel",
+			"chgbgcolor" => "color",
 		));
 	}
+
+	
 
 	function _get_bills_list($arr)
 	{
@@ -1249,7 +1380,6 @@ exit_function("bills_impl::_get_bill_task_list");
 			return 1;
 		}
 
-		$this->_init_bills_list_t($t, $arr["request"]);
 
 		if($arr["request"]["bill_s_with_tax"] == 0)
 		{
@@ -1308,6 +1438,9 @@ exit_function("bills_impl::_get_bill_task_list");
 						break;
 					case "prman":
 						$filt["project_mgr"] = $stuff[1];
+					break;
+					case "mails":
+						return $this->_get_mails_list($arr);
 					break;
 					case "custman":
 						$filt["client_mgr"] = $stuff[1];
@@ -1383,6 +1516,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 		//$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
+		$this->_init_bills_list_t($t, $arr["request"]);
 		$bill_i = get_instance(CL_CRM_BILL);
 		$curr_inst = get_instance(CL_CURRENCY);
 		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
@@ -1408,7 +1542,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			if (is_oid($customer_id = $bill->get_bill_customer()))
 			{
 				$tmp = obj($customer_id);
-				$cust = $tmp->name() ?  html::get_change_url($tmp->id(), array("return_url" => get_ru()), $bill_i->get_customer_name($bill->id())) : "";
+				$cust = $tmp->name() ?  html::get_change_url($tmp->id(), array("return_url" => get_ru()), ($tmp->prop("short_name") ? $tmp->prop("short_name") : $tmp->name()) , $tmp->name()) : "";
 				$cm = html::obj_change_url($tmp->prop("client_manager"));
 			}
 			if ($arr["request"]["group"] == "bills_search")
@@ -1486,6 +1620,17 @@ exit_function("bills_impl::_get_bill_task_list");
 				"oid" => $bill->id(),
 				"print" => $pop->get_menu(),
 			);
+
+			if($bill->prop("state") == 1)
+			{
+				$bill_data["payment_over_date"] = $bill->get_payment_over_date();
+				$tolerance = $arr["obj_inst"]->get_customer_prop($bill->prop("customer"), "bill_tolerance");
+				if($bill_data["payment_over_date"] > $tolerance)
+				{
+					$bill_data["color"] = "#FF9999";
+				}
+			}
+
 /*
 			//laekunud summa
 			if($payments_sum = $bill->get_payments_sum())
@@ -1628,13 +1773,13 @@ exit_function("bills_impl::_get_bill_task_list");
 	{
 		if ($arr["request"]["bill_s_from"] == "")
 		{
-			$u = get_instance(CL_USER);
-			$p = obj($u->get_current_person());
-
-			if($p->is_cust_mgr())
-			{
-				$v = $p->name();
-			}
+//			$u = get_instance(CL_USER);
+//			$p = obj($u->get_current_person());
+//
+//			if($p->is_cust_mgr())
+//			{
+//				$v = $p->name();
+//			}
 		}
 		else
 		{
@@ -2492,26 +2637,47 @@ exit_function("bills_impl::_get_bill_task_list");
 		$bills_inst = get_instance(CL_CRM_BILL);
 		$states = $bills_inst->states;
 
+
 		$tv->add_item(0,array(
-			"name" => t("Staatus"),
-			"id" => "stats",
+			"name" => t("Saadetud arved"),
+			"id" => "sent_bills",
 //			"url" => aw_url_change_var($var, $stat_id+10),
 		));
 
- 		foreach($states as $status => $name)
- 		{
- 			if (isset($_GET[$var]) && $_GET[$var] == ($status + 10))
- 			{
- 				$name = "<b>".$name."</b>";
- 			}
- 			$tv->add_item("stats",array(
- 				"name" => $name,
- 				"id" => ($status + 10),
- 				"iconurl" => icons::get_icon_url(CL_CRM_BILL),
- 				"url" => aw_url_change_var($var, ($status + 10)),
- 			));
- 		}
-
+		$sent_bills_props = array(
+			"sent" => t("Saadetud ja laekumata"),
+			"overdate" => t("Laekumata &uuml;le makset&auml;htaja"),
+			"overtolerance" => t("Laekumata &uuml;le tolerantsi"),
+			"all" => t("Laekumata kokku"),
+		);
+/* 
+b) 
+(alla kuvab kliendtide nimekirja, kus kliendi nime j2rel sulus on vastav arvete arv)
+c) 
+(vt. punkt b)
+d) 
+*/
+/*		$bill_mails = $this->get_bill_mails(array(
+			"state" => 1,
+		));
+*/
+		foreach($sent_bills_props as $id => $name)
+		{
+			if(!$name)
+			{
+				continue;
+			}
+			if (isset($_GET[$var]) && $_GET[$var] == "mails_".$id)
+			{
+				$name = "<b>".$name."</b>";
+			}
+			$tv->add_item("sent_bills",array(
+				"name" => $name,
+				"id" => "mails".$id,
+				"iconurl" => icons::get_icon_url(CL_MESSAGE),
+				"url" => aw_url_change_var($var, "mails_".$id),
+			));
+		}
 
 		$tv->add_item(0,array(
 			"name" => t("Projektijuht"),
@@ -2519,7 +2685,6 @@ exit_function("bills_impl::_get_bill_task_list");
 //			"url" => aw_url_change_var($var, $stat_id+10),
 		));
 
- 
 		foreach($this->all_project_managers()->names() as $id => $name)
 		{
 			if(!$name)
@@ -2751,6 +2916,42 @@ exit_function("bills_impl::_get_bill_task_list");
  				));
  			}
  		}
+
+
+		$state = t("K&otilde;ik perioodid");
+		$bills_data = $this->all_bills_data();
+ 		$pm_statuses = array();
+ 		foreach($bills_data as $bd)
+ 		{
+ 			$pm_statuses[$bd["state"]] ++;
+ 		}
+ 		if(array_sum($pm_statuses))
+ 		{
+ 			$state = $state." (".array_sum($pm_statuses).")";
+ 		}
+		if (isset($_GET[$var]) && $_GET[$var] == "period_all") $state = "<b>".$state."</b>";
+		$tv->add_item("period",array(
+			"name" => $state,
+			"id" => "period_all",
+			"url" => aw_url_change_var($var, "period_all"),
+		));
+ 		if(sizeof($pm_statuses))
+ 		{
+ 			foreach($pm_statuses as $status => $st_count)
+ 			{
+ 				$name = $states[$status]." (".$st_count.")";
+ 				if (isset($_GET[$var]) && $_GET[$var] == "period_all_".$status)
+ 				{
+ 					$name = "<b>".$name."</b>";
+ 				}
+ 				$tv->add_item("period_all",array(
+ 					"name" => $name,
+ 					"id" => "period_all_".$status,
+ 					"iconurl" => icons::get_icon_url(CL_CRM_BILL),
+ 					"url" => aw_url_change_var($var, "period_all_".$status),
+ 				));
+ 			}
+ 		}
 	}
 
 	public function all_client_managers()
@@ -2802,6 +3003,30 @@ exit_function("bills_impl::_get_bill_task_list");
 			array(
 				CL_CRM_BILL => array(
 					"impl","state"
+				),
+			)
+		);
+		return $t->list_data;
+	}
+
+	private function get_bill_mails($arr)
+	{
+		if(!$arr["bills"] || !is_array($arr["bills"]) || !sizeof($arr["bills"]))
+		{
+			return array();
+		}
+		$filter = array(
+			"class_id" => CL_MESSAGE,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $arr["bills"],
+		);
+		
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_MESSAGE => array(
+					"parent","createdby","mto","created"
 				),
 			)
 		);

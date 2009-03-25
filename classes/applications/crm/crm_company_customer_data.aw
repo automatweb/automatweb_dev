@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.16 2009/01/08 10:14:44 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.17 2009/03/25 18:30:33 markop Exp $
 // crm_company_customer_data.aw - Kliendi andmed
 /*
 
@@ -93,6 +93,9 @@ default method=serialize
 
 	@property bill_due_date_days type=textbox size=5  table=aw_crm_customer_data field=aw_bill_due_date_days
 	@caption Makset&auml;htaeg (p&auml;evi)
+
+	@property bill_tolerance type=textbox size=5  table=aw_crm_customer_data field=aw_bill_tolerance
+	@caption Tolerants (p&auml;evi)
 
 	@property bill_penalty_pct type=textbox size=5  table=aw_crm_customer_data field=aw_bill_penalty_pct
 	@caption Viivise %
@@ -241,6 +244,7 @@ class crm_company_customer_data extends class_base
 			case "aw_active_client":
 			case "aw_authorized_person_control":
 			case "aw_show_in_webview":
+			case "aw_bill_tolerance":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int"

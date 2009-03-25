@@ -209,6 +209,15 @@
             <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
       </property>
       <property>
+            <name>bill_tolerance</name>
+            <table>aw_crm_customer_data</table>
+            <group>seller</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_bill_tolerance</field>
+            <caption>Tolerants (p&amp;amp;auml;evi)</caption>
+      </property>
+      <property>
             <name>bill_penalty_pct</name>
             <table>aw_crm_customer_data</table>
             <group>seller</group>
