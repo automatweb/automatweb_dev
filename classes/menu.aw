@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.249 2009/02/06 13:29:33 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.250 2009/03/25 11:32:25 robert Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2482,7 +2482,8 @@ class menu extends class_base implements main_subtemplate_handler
 
 		$u = get_instance(CL_USER);
 
-		$this->db_query("SELECT tm,uid FROM syslog WHERE oid = ".$arr["obj_inst"]->id()." AND act_id = ".SA_PAGEVIEW." ORDER BY id DESC LIMIT 50 ");
+		$this->db_query("SELECT tm,uid FROM syslog WHERE oid = ".$arr["obj_inst"]->id()." AND act_id = " .
+		 19 /*SA_PAGEVIEW*/ . " ORDER BY id DESC LIMIT 50 ");
 		while ($row = $this->db_next())
 		{
 			$p = $u->get_person_for_uid($row["uid"]);
