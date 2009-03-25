@@ -985,10 +985,10 @@ default group=org_objects
 			@property bill_s_with_tax type=chooser store=no parent=bills_list_s captionside=top no_caption=1
 			@caption K&auml;ibemaksuta/K&auml;ibemaksuga
 
-			@property show_bill_balance type=checkbox parent=bills_list_s store=no captionside=top ch_value=1 no_caption=1
+			@property show_bill_balance type=checkbox parent=bills_list_s store=no captionside=top ch_value=1
 			@caption Kuva arve saldot
 
-			@property currency_grouping type=checkbox parent=bills_list_s store=no captionside=top ch_value=1 no_caption=1
+			@property currency_grouping type=checkbox parent=bills_list_s store=no captionside=top ch_value=1
 			@caption Kuva valuutade l&otilde;ikes
 
 			@property bill_s_search type=submit store=no parent=bills_list_s captionside=top no_caption=1 group=bills_list
