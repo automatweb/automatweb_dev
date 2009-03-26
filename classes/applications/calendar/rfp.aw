@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.188 2009/03/23 10:09:55 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.189 2009/03/26 13:24:22 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1004,8 +1004,8 @@ class rfp extends class_base
 						"text" => sprintf(t("Ruumi '%s'"), $o->name()),
 						"url" => $url,
 					));
-					$tb->add_save_button();
 				}
+				$tb->add_save_button();
 				$tb->add_delete_button();
 
 				$ol = new object_list(array(
