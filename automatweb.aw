@@ -105,6 +105,9 @@ class automatweb
 	**/
 	public static function start()
 	{
+		// track_errors should be on although the $php_errormsg variable is for some reason not available in certain conditions and therefore unreliable
+		ini_set("track_errors", "1");
+
 		// load default cfg
 		if (self::$current_instance_nr)
 		{ // store previous configuration
@@ -232,7 +235,7 @@ class automatweb
 
 		date_default_timezone_set(aw_ini_get("date_default_tz"));
 
-		if (is_a(self::$request, "aw_http_request"))
+		if (self::$request instanceof aw_http_request)
 		{
 			self::$result = new aw_http_response();
 		}
@@ -407,6 +410,7 @@ class automatweb
 			error_reporting(0);
 			ini_set("display_errors", "0");
 			set_exception_handler("aw_exception_handler");
+			set_error_handler ("aw_error_handler");
 		}
 		elseif (self::MODE_DBG === $id)
 		{
@@ -414,14 +418,18 @@ class automatweb
 			// error_reporting(E_ALL | E_STRICT);
 			ini_set("display_errors", "1");
 			ini_set("display_startup_errors", "1");
+			ini_set("ignore_repeated_errors", "1");
 			set_exception_handler("aw_dbg_exception_handler");
+			set_error_handler ("aw_dbg_error_handler");
 		}
 		elseif(self::MODE_REASONABLE === $id)
 		{
+			// error_reporting(E_ALL | E_STRICT);
 			error_reporting(E_ALL ^ E_NOTICE);
 			ini_set("display_errors", "1");
 			ini_set("display_startup_errors", "1");
 			set_exception_handler("aw_dbg_exception_handler");
+			set_error_handler ("aw_dbg_error_handler");
 		}
 		else
 		{

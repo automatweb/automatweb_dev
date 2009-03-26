@@ -2,19 +2,186 @@
 
 function aw_exception_handler($e)
 {
-	exit;
+	try
+	{
+		error::raise(array(
+			"id" => get_class($e),
+			"msg" => $e->getMessage(),
+			"fatal" => true,
+			"show" => false,
+			"exception" => $e
+		));
+		automatweb::shutdown();
+	}
+	catch (Exception $e)
+	{
+		echo get_class($e)." thrown within the exception handler. Message: ".$e->getMessage()." on line ".$e->getLine();
+	}
 }
 
 function aw_dbg_exception_handler($e)
 {
-	error::raise(array(
-		"id" => "ERR_UNCAUGHT_EXCEPTION",
-		"msg" => $e->getMessage(),
-		"fatal" => true,
-		"exception" => $e
-	));
+	try
+	{
+		// display error
+		if ($e instanceof awex_php_generic_error)
+		{
+			$file = $e->errfile;
+			$line = $e->errline;
+			$trace = nl2br($e->getTraceAsString()) . "<br />\n <b>Variable context:</b> <br />\n" . var_export($e->context, true);
+		}
+		else
+		{
+			$file = $e->getFile();
+			$line = $e->getLine();
+			$trace = nl2br($e->getTraceAsString());
+		}
+
+		echo "<b>Uncaught exception:</b> " . get_class($e) . "<br />\n";
+		echo "<b>Message:</b> " . $e->getMessage() . "<br />\n";
+		echo "<b>File:</b> " . $file . "<br />\n";
+		echo "<b>Line:</b> " . $line . "<br />\n";
+		echo "<b>Stack trace:</b> <br />\n";
+		echo $trace;
+
+		$fwd = $e->get_forwarded_exceptions();
+		if (count($fwd))
+		{
+			echo "<br />\n<b>Forwarded exceptions:</b> <br />\n";
+			foreach ($fwd as $fwd_e)
+			{
+				arr($fwd_e);
+			}
+		}
+
+		automatweb::shutdown();
+	}
+	catch (Exception $e)
+	{
+		echo get_class($e)." thrown within the exception handler. Message: ".$e->getMessage()." on line ".$e->getLine();
+	}
 }
 
-class aw_exception extends Exception {}
+function aw_error_handler($errno, $errstr, $errfile, $errline, $context)
+{
+	// generate and throw exception when fatal error occurs. ignore all other errors
+	static $fatal_errors = array(
+		E_ERROR => "awex_php_error",
+		E_USER_ERROR => "awex_php_user_error",
+		E_CORE_ERROR => "awex_php_core_error",
+	);
+
+	if (isset($fatal_errors[$errno]))
+	{
+		$class = $fatal_errors[$errno];
+		$e = new $class($errstr, $errno);
+		$e->errfile = $errfile;
+		$e->errline = $errline;
+		$e->context = $context;
+		throw $e;
+	}
+}
+
+function aw_dbg_error_handler($errno, $errstr, $errfile, $errline, $context)
+{
+	// display non-fatal error information
+	static $non_fatal_errors = array(
+		E_NOTICE => "awex_php_notice",
+		E_STRICT => "awex_php_strict",
+		E_WARNING => "awex_php_warning",
+		E_USER_NOTICE => "awex_php_user_notice",
+		E_USER_WARNING => "awex_php_user_warning",
+		E_CORE_WARNING => "awex_php_core_warning",
+		E_COMPILE_WARNING => "awex_php_compile_warning"
+	);
+
+	static $fatal_errors = array(
+		E_ERROR => "awex_php_error",
+		E_USER_ERROR => "awex_php_user_error",
+		E_CORE_ERROR => "awex_php_core_error"
+	);
+
+	if (isset($non_fatal_errors[$errno]))
+	{
+		if (!(E_NOTICE === $errno and "unserialize()" === substr($errstr, 0, 13) and ("/defs.aw" === substr($errfile, -8) or "\\defs.aw" === substr($errfile, -8))))
+		{
+			echo "<b>{$errstr}</b> in {$errfile} on line {$errline} ({$non_fatal_errors[$errno]})<br><br>"; //!!! aw_response objekti ja sealt footerite kaudu templatesse, reasonable erinevus v6iks olla, et n2idatakse aint nende klasside vigu mille maintainer oled
+		}
+	}
+	elseif (isset($fatal_errors[$errno]))
+	{ // generate and throw exception when fatal error occurs
+		$class = $fatal_errors[$errno];
+		$e = new $class($errstr, $errno);
+		$e->errfile = $errfile;
+		$e->errline = $errline;
+		$e->context = $context;
+		throw $e;
+	}
+	else
+	{ // generate and throw exception for unknown error
+		$e = new awex_php_fatal($errstr, $errno);
+		$e->errfile = $errfile;
+		$e->errline = $errline;
+		$e->context = $context;
+		throw $e;
+	}
+}
+
+function aw_get_error_msg()
+{
+}
+
+/** Generic automatweb exception **/
+class aw_exception extends Exception
+{
+	protected $forwarded_exceptions = array();
+
+	public function set_forwarded_exception(Exception $e)
+	{
+		$this->forwarded_exceptions[] = $e;
+	}
+
+	public function get_forwarded_exceptions()
+	{
+		return $this->forwarded_exceptions;
+	}
+}
+
+class awex_php_generic_error extends aw_exception
+{
+	public $errfile;
+	public $errline;
+	public $context;
+}
+
+class awex_php_nonfatal extends awex_php_generic_error {}
+class awex_php_fatal extends awex_php_generic_error {}
+
+class awex_php_strict extends awex_php_nonfatal {}
+class awex_php_notice extends awex_php_nonfatal {}
+class awex_php_warning extends awex_php_nonfatal {}
+class awex_php_core_warning extends awex_php_nonfatal {}
+class awex_php_user_warning extends awex_php_nonfatal {}
+class awex_php_user_notice extends awex_php_nonfatal {}
+class awex_php_compile_warning extends awex_php_nonfatal {}
+
+class awex_php_error extends awex_php_fatal {}
+class awex_php_core_error extends awex_php_fatal {}
+class awex_php_user_error extends awex_php_fatal {}
+
+/*
+1 E_ERROR (integer)  Fatal run-time errors. These indicate errors that can not be recovered from, such as a memory allocation problem. Execution of the script is halted.
+2 E_WARNING (integer)  Run-time warnings (non-fatal errors). Execution of the script is not halted.
+4 E_PARSE (integer)  Compile-time parse errors. Parse errors should only be generated by the parser.
+8 E_NOTICE (integer)  Run-time notices. Indicate that the script encountered something that could indicate an error, but could also happen in the normal course of running a script.
+16 E_CORE_ERROR (integer)  Fatal errors that occur during PHP's initial startup. This is like an E_ERROR, except it is generated by the core of PHP.  since PHP 4
+32 E_CORE_WARNING (integer)  Warnings (non-fatal errors) that occur during PHP's initial startup. This is like an E_WARNING, except it is generated by the core of PHP.  since PHP 4
+64 E_COMPILE_ERROR (integer)  Fatal compile-time errors. This is like an E_ERROR, except it is generated by the Zend Scripting Engine.  since PHP 4
+128 E_COMPILE_WARNING (integer)  Compile-time warnings (non-fatal errors). This is like an E_WARNING, except it is generated by the Zend Scripting Engine.  since PHP 4
+256 E_USER_ERROR (integer)  User-generated error message. This is like an E_ERROR, except it is generated in PHP code by using the PHP function trigger_error().  since PHP 4
+512 E_USER_WARNING (integer)  User-generated warning message. This is like an E_WARNING, except it is generated in PHP code by using the PHP function trigger_error().  since PHP 4
+1024 E_USER_NOTICE (integer)  User-generated notice message. This is like an E_NOTICE, except it is generated in PHP code by using the PHP function trigger_error().  since PHP 4
+2048 E_STRICT (integer)  Run-time notices. Enable to have PHP suggest changes to your code which will ensure the best interoperability and forward compatibility of your code.  since PHP 5
+ */
 
 ?>
