@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.21 2008/06/09 14:42:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.22 2009/03/26 12:52:24 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -321,7 +321,7 @@ class currency extends class_base
 				"msg" => sprintf(t("currency::convert - kas %s v&otilde;i %s pole valuutadaobjektide id'd"), $to, $from),
 			));
 		}
-		
+
 		foreach($to_obj->meta("rates") as $rate)
 		{
 			if($rate["currency"] == $from && $rate["rate"] && $this->_check_curr_date($date, $rate["start_date"],$rate["end_date"]))
@@ -333,7 +333,7 @@ class currency extends class_base
 		}
 		if(!$changed)//et kui ei saanud vahetuskurssi tulemuse valuuta juurest, siis vaatab teisest
 		{
-			foreach($curr_obj->meta("rates") as $rate)
+			foreach($from_obj->meta("rates") as $rate)
 			{
 				if($rate["currency"] == $to && $rate["rate"] && $this->_check_curr_date($date, $rate["start_date"],$rate["end_date"]))
 				{
