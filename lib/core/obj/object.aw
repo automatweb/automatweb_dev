@@ -112,12 +112,51 @@ function clid_for_name($class_name)
 @attrib api=1
 @param param optional type=var
 	Object id, alias, ...
+@param constructor_args optional/required type=array
+	Class constructor arguments. Required if class constructor requires it and optional if not.
+@param class_id optional type=int
+	Class id to set for new object or to require a loaded one to be of.
+@param allow_extensions optional type=bool default=false
+	Loaded object can be an extension of class specified by class_id parameter
 @returns object
 	Automatweb object
+@errors
+	throws awex_obj_class when loaded object class id is not what expected
+	throws awex_obj_type when given class id is not valid
 **/
-function obj($param = NULL)
+function obj($param = NULL, $constructor_args = array(), $class_id = null, $allow_extensions = false)
 {
-	return new object($param);
+	if (isset($class_id))
+	{
+		if (!is_class_id($class_id))
+		{
+			$e = new awex_obj_type("Invalid class id");
+			$e->argument_name = "class_id";
+			throw $e;
+		}
+
+		$o = new object($param);
+		$real_clid = $o->class_id();
+
+		if (null === $real_clid)
+		{ // new object
+			$o->set_class_id($class_id);
+		}
+		elseif (!$allow_extensions and (int)$real_clid !== $class_id)
+		{ // existing object loaded
+			throw new awex_obj_class("The object with given oid is not of expected class.");
+		}
+		elseif ($allow_extensions and !$o->is_a($class_id))
+		{
+			throw new awex_obj_class("The object with given oid is not of expected class.");
+		}
+
+		return $o;
+	}
+	else
+	{
+		return new object($param);
+	}
 }
 
 /** sets an object system property
