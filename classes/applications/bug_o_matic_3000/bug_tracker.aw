@@ -4477,7 +4477,7 @@ class bug_tracker extends class_base
 			"name" => "mail_groups_bug",
 			"align" => "center",
 			"caption" => t("Meilide saatmine"),
-			"tooltip" => t("Millistele kasutajagruppidele saata meil, kui muudetakse kliendistaatust"),
+			"tooltip" => t("Millistele kasutajagruppidele saata meil, kui muudetakse p&otilde;histaatust"),
 			"sortable" => 1,
 		));
 		$t->set_caption(t("Bugi staatused"));
