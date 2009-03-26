@@ -48,13 +48,12 @@ class mrp_job_obj extends _int_object
 			{
 				if($k === "length_deviation")
 				{
-					$this->set_prop($k, $this->get_deviation());
+					return $this->get_deviation();
 				}
 				else
 				{
-					$this->set_prop($k, $this->get_real($k));
+					return $this->get_real($k);
 				}
-				$this->save();
 			}
 			else
 			{
@@ -294,6 +293,99 @@ class mrp_job_obj extends _int_object
 				$eo->save();
 			}
 		}
+	}
+
+	/**
+		@attrib name=get_person_work_hours api=1 params=name
+
+		@param from optional type=int
+			UNIX timestamp
+		@param to optional type=int
+			UNIX timestamp
+		@param state optional type=int/array
+			The state of job to return the hours for
+		@param person optional type=int/array
+			The OID of crm_person to return the hours for
+		@param average optional type=boolean
+			The OID of crm_person to return the hours for
+		@param count optional type=boolean
+			The OID of crm_person to return the hours for
+
+		@returns Array of work hours by person
+
+		@comment Output format:
+			Array
+			(
+				[MRP_STATUS_INPROGRESS] => Array
+				(
+					[{person object OID}] => {time in seconds}
+				)
+				[MRP_STATUS_INPROGRESS] => Array
+				(
+					[{person object OID}] => {time in seconds}
+				)
+				[name] => Array
+				(
+					[{person object OID}] => {name string}
+				)
+			)
+	**/
+	public function get_person_hours($arr)
+	{
+		$i = get_instance("class_base");
+
+		$states = isset($arr["state"]) ? (array)$arr["state"] : array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED);
+		$from = (int)(isset($arr["from"]) ? $arr["from"] : 0);
+		$to = (int)(isset($arr["to"]) ? $arr["to"] : time());
+
+		$arr["person"] = isset($arr["person"]) ? (is_oid($arr["person"]) ? (array)$arr["person"] : safe_array($arr["person"])) : array();
+		$persons = count($arr["person"]) > 0 ? "aw_pid IN (".implode(",", $arr["person"]).") AND" : "";
+		$count = !empty($arr["count"]) ? "COUNT(*) as cnt," : "";
+		$average = !empty($arr["average"]) ? "AVG(aw_job_last_duration)/3600 as avg," : "";
+
+		foreach($states as $state)
+		{
+			$q[$state] = $i->db_fetch_array("
+				SELECT 
+					$count
+					$average
+					SUM(aw_job_last_duration)/3600 as hours,
+					aw_pid as pid
+				FROM
+					mrp_job_rows 
+				WHERE
+					$persons
+					aw_job_previous_state = '".$state."' AND
+					aw_tm BETWEEN $from AND $to
+				GROUP BY aw_pid
+			");
+		}
+		foreach($states as $state)
+		{
+			foreach($q[$state] as $d)
+			{
+				$data[$state][$d["pid"]] = $d["hours"];
+				if(isset($d["avg"]))
+				{
+					$data["average"][$state][$d["pid"]] = $d["avg"];
+				}
+				if(isset($d["cnt"]))
+				{
+					$data["count"][$state][$d["pid"]] = $d["cnt"];
+				}
+				foreach($states as $_state)
+				{
+					if($state !== $_state && !isset($data[$state][$d["pid"]]))
+					{
+						$data[$_state][$d["pid"]] = 0;
+						$data["average"][$_state][$d["pid"]] = 0;
+						$data["count"][$_state][$d["pid"]] = 0;
+					}
+				}
+			}
+		}
+
+		return $data;
 	}
 }
 
