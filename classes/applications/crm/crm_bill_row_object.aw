@@ -13,7 +13,7 @@ class crm_bill_row_object extends _int_object
 
 	function set_prop($p, $v)
 	{
-		if(is_oid($this->id()) && $v != $this->prop($p))
+		if(is_oid($this->id()) && $v != $this->prop($p) && !(!$v && !$this->prop($p)))
 		{
 			$this->add_bill_comment_data(t("Rida")." ".$this->id()." ". $GLOBALS["properties"][CL_CRM_BILL_ROW][$p]["caption"] ." : " .$this->prop($p). " => " .$v);
 		}

@@ -131,6 +131,17 @@
             <caption>Ostja Prioriteet</caption>
       </property>
       <property>
+            <name>bill_person</name>
+            <table>objects</table>
+            <group>buyer</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BILL_PERSON</reltype>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <field>bill_person</field>
+            <caption>Arve saajad</caption>
+      </property>
+      <property>
             <name>cust_contract_creator</name>
             <table>aw_crm_customer_data</table>
             <group>seller</group>
@@ -305,6 +316,11 @@
                   <clid>CL_COMMENT</clid>
                   <caption>Kommentaar organisatsioonile</caption>
             </COMMENT_TO_COMPANY>
+            <BILL_PERSON>
+                  <value>7</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Arve saaja</caption>
+            </BILL_PERSON>
       </reltypes>
 </properties>
 

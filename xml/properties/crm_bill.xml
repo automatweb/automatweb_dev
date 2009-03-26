@@ -342,6 +342,17 @@
             <caption>L&amp;amp;auml;hetusaadress</caption>
       </property>
       <property>
+            <name>bill_targets</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>almost_bottom</parent>
+            <field>bill_targets</field>
+            <caption>Arve saajad</caption>
+      </property>
+      <property>
             <name>bill_rows</name>
             <table>objects</table>
             <group>general</group>
@@ -619,14 +630,14 @@
             <mails>
                   <caption>Kirjad</caption>
             </mails>
-            <bill_mail>
-                  <caption>Kirjade seaded</caption>
-                  <parent>mails</parent>
-            </bill_mail>
             <sent_mails>
                   <caption>Saadetud kirjad</caption>
                   <parent>mails</parent>
             </sent_mails>
+            <bill_mail>
+                  <caption>Kirjade seaded</caption>
+                  <parent>mails</parent>
+            </bill_mail>
             <delivery_notes>
                   <caption>Saatelehed</caption>
             </delivery_notes>
@@ -804,6 +815,13 @@
                   <area_caption>Ladu</area_caption>
                   <group>general</group>
             </bottom_right>
+            <almost_bottom>
+                  <parent>main_split</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Arve&amp;amp;nbsp;saajad</area_caption>
+                  <group>general</group>
+            </almost_bottom>
             <bottom>
                   <parent>main_split</parent>
                   <type>vbox</type>

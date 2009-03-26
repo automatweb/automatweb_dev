@@ -1057,7 +1057,7 @@ class crm_bill_obj extends _int_object
 		$filter["site_id"] = array();
 		$filter["lang_id"] = array();
 		$filter["CL_CRM_BILL_ROW.RELTYPE_ROW(CL_CRM_BILL)"] = $this->id();
-		$filter["writeoff"] = new obj_predicate_not();
+		$filter["writeoff"] = new obj_predicate_not(1);
 		
 		$rowsres = array(
 			CL_CRM_BILL_ROW => array(
@@ -1067,6 +1067,34 @@ class crm_bill_obj extends _int_object
 		$rows_arr = new object_data_list($filter , $rowsres);
 		return $rows_arr->list_data;
 	}
+
+	/** calculates bill writeoff rows sum without tax
+		@attrib api=1
+		@returns double
+	**/
+	public function get_writeoffs_sum()
+	{
+		$filter = array();
+		$filter["class_id"] = CL_CRM_BILL_ROW;
+		$filter["site_id"] = array();
+		$filter["lang_id"] = array();
+		$filter["CL_CRM_BILL_ROW.RELTYPE_ROW(CL_CRM_BILL)"] = $this->id();
+		$filter["writeoff"] = 1;
+		
+		$rowsres = array(
+			CL_CRM_BILL_ROW => array(
+				"price","amt"
+			),
+		);
+		$rows_arr = new object_data_list($filter , $rowsres);
+		$sum = 0;
+		foreach($rows_arr->list_data as $id => $data)
+		{
+			$sum+= $data["price"]*$data["amt"];
+		}
+		return $sum;
+	}
+
 
 	/** calculates bill sum
 		@attrib api=1 params=pos
@@ -1527,6 +1555,14 @@ class crm_bill_obj extends _int_object
 		return $res;
 	}
 
+	public function get_mail_persons()
+	{
+		$ol = new object_list();
+		$ol->add($this->get_customer_data("bill_person"));
+		$ol->add($this->project_leaders());
+		return $ol;
+	}
+
 	private function get_sender_signature()
 	{
 		$ret = array();
@@ -1839,7 +1875,17 @@ class crm_bill_obj extends _int_object
 
 		$comment = sprintf(t("%s saatis arve nr %s; summa %s; kuup&auml;ev: %s; kellaaeg: %s; aadressitele: %s; tekst: %s; lisatud failid: %s. "), aw_global_get("uid"), $this->prop("bill_no") , $this->prop("sum") , date("d.m.Y") , date("H:i") , htmlspecialchars(join (", " , $addresses)), $body,$att_comment);
 		$this->add_comment($comment);
+		switch($this->prop("state"))
+		{
+			case 0:
+			case 8:
+			case 7:
+			case -5:
+				$this->set_prop("state" , 1);
+				$this->save();
 
+		}
+		if(!$this->prop("state") || $this->prop("state"))
 		die($ret);
 		return $this->id();
 	}
@@ -1973,9 +2019,20 @@ class crm_bill_obj extends _int_object
 		$this->set_implementor();
 		if($this->implementor_object)
 		{
-			arr($this->implementor_object);
+			$cust_rel_list = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"buyer" => $this->prop("customer"),
+				"seller" => $this->prop("impl")
+			));
+			if ($cust_rel_list->count())
+			{
+				$cust_rel = $cust_rel_list->begin();
+				return $cust_rel->prop($prop);
+			}
 		}
-		return 2;
+		return null;
 	}
 
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.17 2009/03/25 18:30:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.18 2009/03/26 18:41:23 markop Exp $
 // crm_company_customer_data.aw - Kliendi andmed
 /*
 
@@ -63,6 +63,8 @@ default method=serialize
 	@property buyer_priority type=textbox table=aw_crm_customer_data field=aw_buyer_priority
 	@caption Ostja Prioriteet
 
+	@property bill_person type=relpicker reltype=RELTYPE_BILL_PERSON store=connect multiple=1
+	@caption Arve saajad
 
 @groupinfo seller caption="M&uuml;&uuml;ja"
 @default group=seller
@@ -133,6 +135,9 @@ default method=serialize
 
 @reltype COMMENT_TO_COMPANY value=75 clid=CL_COMMENT
 @caption Kommentaar organisatsioonile
+
+@reltype BILL_PERSON value=7 clid=CL_CRM_PERSON
+@caption Arve saaja
 
 */
 
