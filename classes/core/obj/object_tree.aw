@@ -307,14 +307,14 @@ class object_tree extends _int_obj_container_base
 				if (is_array($param["func"]))
 				{
 					$meth = $param["func"][1];
-					$param["func"][0]->$meth($o, $param["param"]);
+					isset($param["param"]) ? $param["func"][0]->$meth($o, $param["param"]) : $param["func"][0]->$meth($o);
 				}
 				else
 				{
-					$param["func"]($o, $param["param"]);
+					isset($param["param"]) ? $param["func"]($o, $param["param"]) : $param["func"]($o);
 				}
 
-				if ($param["save"])
+				if (!empty($param["save"]))
 				{
 					$o->save();
 				}
