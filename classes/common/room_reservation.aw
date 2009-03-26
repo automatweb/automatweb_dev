@@ -580,7 +580,7 @@ class room_reservation extends class_base
 		return $sum;
 	}
 
-	private function get_object_data($id)
+	function get_object_data($id)
 	{
 		$ret = array();
 		if(!is_oid($id) || !$this->can("view" , $id))
@@ -653,18 +653,31 @@ class room_reservation extends class_base
 			"bron" => $bron,
 		));
 
+
+
+		$min_prod_prices = $room->meta("web_min_prod_prices");
+		$min_prices = $room->meta("web_room_min_price");
 		foreach($sum as $curr => $val)
 		{
 			$currency = obj($curr);
 			$data["sum"][] =  $val." ".$currency->name();
-			$min_prices = $room->meta("web_room_min_price");
-			$min_sum = $min_prices[$curr] - $val;
+		//	$min_sum = $min_prices[$curr] - $val;
+			$min_sum = $min_prices[$curr] - $data["menu_sum"][$curr] + $data["menu_disc"][$curr];
 			if($min_sum < 0)
 			{
 				$min_sum = 0;
 			}
 			$data["min_sum_left"][] = $min_sum." ".$currency->name();
+
+			if($val || $val == 0)
+			{
+				$data["sum_pay"][] = $val." ".$currency->name();
+			}
+
 		}
+
+		$ret["sum_pay"] = join("/" , $data["sum_pay"]);
+
 		$ret["sum"] = join("/" , $data["sum"]);
 		$ret["bargain"] = join("/" , $data["bargain"]);
 		$ret["sum_wb"] = join("/" , $data["sum_wb"]);
