@@ -1131,12 +1131,13 @@ exit_function("bills_impl::_get_bill_task_list");
 		$stats = get_instance("applications/crm/crm_company_stats_impl");
 		$bills = $stats->search_bills(array("stats_s_bill_state" => 1));
 
-		$sum = $tol = $deadline = $mhpa =  array();
+		$sum = $tol = $deadline = $mhpa = $custs= array();
 
 		$stuff = explode("_" , $arr["request"]["st"]);
 		foreach($bills->arr() as $o)
 		{
 			$sum[$o->id()] = $o->prop("sum");
+			$custs[$o->id()] = $o->prop("customer");
 			$deadline[$o->id()] = $o->prop("bill_date") + $o->prop("bill_due_date_days")*3600*24;
 			$mhpa[$o->id()] = $o->get_payment_over_date();
 			switch($stuff[1])
@@ -1173,22 +1174,98 @@ exit_function("bills_impl::_get_bill_task_list");
 			}
 		}
 
-		$mails = $this->get_bill_mails(array("bills" =>$bills->ids()));
+		$mails = $this->get_bill_mails(array("bills" => $bills->ids()));
 		$user_inst = get_instance(CL_USER);
 //arr($mhpa);
+		$stats = get_instance("classes/applications/crm/crm_company_stats_impl");
 		foreach($mails as $mail)
 		{
+			$addr = array();//explode("," , htmlspecialchars($mail["mto"]));
+			if(is_array($mail["mto_relpicker"]) && sizeof($mail["mto_relpicker"]))
+			{
+				$ol = new object_list();
+				$ol->add($mail["mto_relpicker"]);
+				foreach($ol->arr() as $o)
+				{
+					$filter = array(
+						"class_id" => CL_CRM_PERSON_WORK_RELATION,
+						"lang_id" => array(),
+						"site_id" => array(),
+						"CL_CRM_PERSON_WORK_RELATION.RELTYPE_EMAIL" => $o->id(),
+					);
+					$ol2 = new object_list($filter);
+					if($ol2->count())
+					{
+						$ol3 = new object_list(array(
+							"class_id" => CL_CRM_PERSON,
+							"site_id" => array(),
+							"lang_id" => array(),
+							new object_list_filter(array(
+								"logic" => "OR",
+								"conditions" => array(
+									"CL_CRM_PERSON.RELTYPE_ORG_RELATION" => $ol2->ids(),
+									"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB" => $ol2->ids(),
+									"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $ol2->ids(),
+								)
+							)),
+
+						));
+						$target = reset($ol3->arr());
+
+					}
+					else
+					{
+						$conns = $o->connections_to(array(
+							"from.class_id" => CL_CRM_PERSON,
+							"type" => 11,
+						));
+						if(sizeof($conns))
+						{
+							foreach($conns as $conn)
+							{
+								$target = $conn->from();
+							}
+						}
+						else
+						{
+							$conns = $o->connections_to(array(
+								"from.class_id" => CL_CRM_COMPANY,
+								"type" => 15,
+							));
+							if(sizeof($conns))
+							{
+								foreach($conns as $conn)
+								{
+									$target = $conn->from();
+								}
+							}
+						}
+					}
+					if($target->class_id() == CL_CRM_COMPANY)
+					{
+						$addr[] = $target->name()." , ".join(", ",$target->get_phones()).", ".$o->prop("mail");
+					}
+					else
+					{
+						$phones = $target->phones();
+						$addr[] = $target->name()." , ". $target->company_name(). " , ".join(", ",$phones->names()).", ".join(", ",$target->get_profession_names()).", ".$o->prop("mail");
+					}
+				}
+			}
+
+			
 			$user = $mail["createdby"];
 			$person = $user_inst->get_person_for_uid($user);
 			$data = array();
-			$data["sender"] = $person->name();
+			$data["sender"] = $stats->js_obj_url($person->id(), $person->name());
+			$data["customer"] = $stats->js_obj_url($custs[$mail["parent"]], get_name($custs[$mail["parent"]]));
 
-			$addr = explode("," , htmlspecialchars($mail["mto"]));
 			$data["to"] = join("<br>" , $addr);
 
-			$data["sum"] = $sum[$mail["parent"]];
+			$data["sum"] = $stats->js_obj_url($mail["parent"], $sum[$mail["parent"]]);
 			$data["payment_over_date"] = $mhpa[$mail["parent"]];
 			$data["bill_due_date"] = date("d.m.Y" , $deadline[$mail["parent"]]);
+			$data["date"] = date("d.m.Y H:i" , $mail["created"]);
 			$t->define_data($data);
 		}
 
@@ -1203,7 +1280,16 @@ exit_function("bills_impl::_get_bill_task_list");
 			"sortable" => 1,
 			"chgbgcolor" => "color",
 		));
-
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Saadetud"),
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "customer",
+			"caption" => t("Klient"),
+			"chgbgcolor" => "color",
+		));
 		$t->define_field(array(
 			"name" => "to",
 			"caption" => t("Saajad"),
@@ -1219,14 +1305,14 @@ exit_function("bills_impl::_get_bill_task_list");
 		));
 		$t->define_field(array(
 			"name" => "bill_due_date",
-			"caption" => t("Makset&auml;htaeg"),
+			"caption" => t("T&auml;htaeg"),
 			"numeric" => 1,
 			"sortable" => 1,
 			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "payment_over_date",
-			"caption" => t("<a href='javascript:void(0)' alt='Maksega hilinenud p&auml;evade arv' title='Maksega hilinenud p&auml;evade arv'>MHPA</a>"),
+			"caption" => t("<a href='javascript:void(0)' alt='Maksega hilinenud p&auml;evade arv' title='Maksega hilinenud p&auml;evade arv'>HPA</a>"),
 			"align" => "center",
 			"chgbgcolor" => "color",
 		));
@@ -3026,7 +3112,7 @@ d)
 			$filter,
 			array(
 				CL_MESSAGE => array(
-					"parent","createdby","mto","created"
+					"parent","createdby","mto","created","mto_relpicker"
 				),
 			)
 		);

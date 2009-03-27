@@ -1506,19 +1506,33 @@ class crm_bill_obj extends _int_object
 
 	public function get_bcc()
 	{
-		$ret = "";
+		$ret = array();
+		$bill_targets = $this->meta("bill_targets");
+		$ol = new object_list();
+		if($this->project_leaders())
+		{
+			$ol->add($this->project_leaders());
+		}
+		foreach($ol->arr() as $mail_person)
+		{
+			if(!(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$mail_person->id()]))
+			{
+				$ret[$mail_person->get_mail($this->prop("customer"))] = $mail_person->name() . " <" . $mail_person->get_mail($this->prop("customer")) . ">";
+			}
+		}
+
 		if($this->set_crm_settings() && $this->crm_settings->prop("bill_mail_to"))
 		{
-			$ret = $this->crm_settings->prop("bill_mail_to");
+			$ret[$this->crm_settings->prop("bill_mail_to")] = $this->crm_settings->prop("bill_mail_to");
 		}
 		if (aw_global_get("uid_oid") != "")
 		{
 			$user_inst = get_instance(CL_USER);
 			$u = obj(aw_global_get("uid_oid"));
 			$person = obj($user_inst->get_current_person());
-			$ret.= ", ".$person->name() . " <" . $u->get_user_mail_address() . ">";
+			$ret[$u->get_user_mail_address()] = $person->name() . " <" . $u->get_user_mail_address() . ">";
 		}
-		return $ret;
+		return join("," , $ret);
 	}
 
 	public function get_mail_targets()
@@ -1530,26 +1544,28 @@ class crm_bill_obj extends _int_object
 			$res[$this->crm_settings->prop("bill_mail_to")] = $this->crm_settings->prop("bill_mail_to");
 		}
 */
+		$bill_targets = $this->meta("bill_targets");
+
 		if($this->prop("bill_mail_to"))
 		{
 			$res[$this->prop("bill_mail_to")] = $this->prop("bill_mail_to");
 		}
 
-		if(!sizeof($res))
+		$ol = new object_list();
+		if($this->get_customer_data("bill_person"))$ol->add($this->get_customer_data("bill_person"));
+		foreach($ol->arr() as $mail_person)
 		{
-			if(is_oid($this->prop("customer")))
+ 			if(!(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$mail_person->id()]))
 			{
-				$customer = obj($this->prop("customer"));
-				$bill_mails = $customer->get_bill_mails();
-				foreach($bill_mails as $bm)
-				{
-					$res[$bm] = $this->get_customer_name() . " <" . $bm . ">";
-				}
-				if(!sizeof($bill_mails))
-				{
-					arr("<font color=red><b>".t("Kliendil arve aadress m&auml;&auml;ramata!")."</b></font>");
-				}
-				//arr(htmlspecialchars($this->get_customer_name() . " <" . $customer->get_bill_mail() . ">"));
+				$res[$mail_person->get_mail($this->prop("customer"))]  = $mail_person->name() . " <" . $mail_person->get_mail($this->prop("customer")) . ">";
+			}
+		}
+
+		foreach($this->get_cust_mails() as $id => $mail)
+		{
+			if(!(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$id]))
+			{
+				$res[$mail] = $this->get_customer_name() . " <" . $mail . ">";
 			}
 		}
 		return $res;
@@ -1558,9 +1574,38 @@ class crm_bill_obj extends _int_object
 	public function get_mail_persons()
 	{
 		$ol = new object_list();
-		$ol->add($this->get_customer_data("bill_person"));
-		$ol->add($this->project_leaders());
+		if($this->get_customer_data("bill_person"))$ol->add($this->get_customer_data("bill_person"));
+		if($this->project_leaders())$ol->add($this->project_leaders());
 		return $ol;
+	}
+
+	public function get_cust_mails()
+	{
+		if(!is_oid($this->prop("customer")))
+		{
+			return array();
+		}
+		$cust = obj($this->prop("customer"));
+		if($cust->class_id() == CL_CRM_PERSON)
+		{
+			$mails = $cust->emails();
+		}
+		else
+		{
+			$mails = $cust->get_mails(array());
+		}
+		$ret = array();
+		foreach($mails->arr() as $mail)
+		{
+			if($mail->prop("mail"))
+			{
+				if($mail->prop("contact_type") == 1)
+				{
+					$ret[$mail->id()]= $mail->prop("mail");
+				}
+			}
+		}
+		return $ret;
 	}
 
 	private function get_sender_signature()
@@ -1852,6 +1897,64 @@ class crm_bill_obj extends _int_object
 		$mail->set_prop("mfrom_name" , $from_name);
 		$mail->set_prop("mto" , join (", " , $addresses));
 		$mail->set_prop("bcc" , join (", " , $this->get_bcc()));
+
+		$bill_targets = $this->meta("bill_targets");
+
+		foreach($this->get_cust_mails() as $id => $mail_addr)
+		{
+			if(!(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$id]))
+			{
+				$mail->connect(array(
+					"to" => $id,
+					"type" => "RELTYPE_TO_MAIL_ADDRESS"
+				));
+			}
+		}
+
+		$ol = new object_list();
+		if($this->project_leaders())
+		{
+			$ol->add($this->project_leaders());
+		}
+		if($ol->count())
+		{
+			foreach($ol->arr() as $o)
+			{
+				if(!(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$o->id()]))
+				{
+					if($id = $o->get_mail_id($this->prop("impl")))
+					{
+						$mail->connect(array(
+							"to" => $id,
+							"type" => "RELTYPE_TO_MAIL_ADDRESS"
+						));
+					}
+				}
+			}
+		}
+
+		$ol = new object_list();
+		if($this->get_customer_data("bill_person"))
+		{
+			$ol->add($this->get_customer_data("bill_person"));
+		}
+		if($ol->count())
+		{
+			foreach($ol->arr() as $o)
+			{
+				if(!(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$o->id()]))
+				{
+					if($id = $o->get_mail_id())
+					{
+						$mail->connect(array(
+							"to" => $id,
+							"type" => "RELTYPE_TO_MAIL_ADDRESS"
+						));
+					}
+				}
+			}
+		}
+
 		if($from)
 		{
 			$ol = new object_list(array(

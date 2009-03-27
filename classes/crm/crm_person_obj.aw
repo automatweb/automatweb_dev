@@ -808,6 +808,38 @@ class crm_person_obj extends _int_object
 		return "";
 	}
 
+	/** returns one e-mail id
+		@attrib api=1
+	**/
+	public function get_mail_id($co = null , $sect = null)
+	{
+		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
+		{
+			$current_job = $cn->to();
+			if($co && $current_job->prop("org") != $co)
+			{
+				continue;
+			}
+
+			if($sect && $current_job->prop("section") != $sect)
+			{
+				continue;
+			}
+
+			$mail = $current_job->get_first_obj_by_reltype("RELTYPE_EMAIL");
+			if(is_object($mail))
+			{
+				return $mail->id();
+			}
+		}
+
+		foreach(parent::connections_from(array("type" => "RELTYPE_EMAIL")) as $cn)
+		{
+			return $cn->prop("to");
+		}
+		return "";
+	}
+
 	/** returns e-mail address for bill
 		@attrib api=1
 	**/
@@ -835,7 +867,7 @@ class crm_person_obj extends _int_object
 	**/
 	public function get_bill_mails()
 	{
-		$mails = $this->get_mails(array());
+		$mails = $this->emails(array());
 		$ret = array();
 		foreach($mails->arr() as $mail)
 		{

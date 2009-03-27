@@ -496,6 +496,10 @@ class crm_bill extends class_base
 				break;
 
 			case 'bill_targets':
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
 				$this->_bill_targets($arr);
 				break;
 
@@ -1149,7 +1153,7 @@ class crm_bill extends class_base
 
 		foreach($arr["obj_inst"]->get_mail_persons()->arr() as $mail_person)
 		{
-			$t->define_data(array(
+			if($mail_person->class_id() == CL_CRM_PERSON)$t->define_data(array(
 				"name" => $mail_person->name(),
 				"oid" => $mail_person->id(),
 				"rank" => join(", " , $mail_person->get_profession_names($arr["obj_inst"]->prop("customer"))),
@@ -1161,9 +1165,25 @@ class crm_bill extends class_base
 					"ch_value" => $mail_person->id()
 				))
 			));
-
 		}
-		$mails = $arr["obj_inst"]->get_mail_targets();
+
+		foreach($arr["obj_inst"]->get_cust_mails() as $id => $mail)
+		{
+			$t->define_data(array(
+				"name" => $arr["obj_inst"]->get_customer_name(),
+				"oid" => $id,
+				"mail" => $mail,
+				"co" => $arr["obj_inst"]->get_customer_name(),
+				"selection" => html::checkbox(array(
+					"name" => "bill_targets[".$id."]",
+					"checked" => !(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$id]),
+					"ch_value" => $id
+				))
+			));
+		}
+
+
+/*		$mails = $arr["obj_inst"]->get_mail_targets();
 		foreach($mails as $key => $mail)
 		{
 			$t->define_data(array(
@@ -1174,10 +1194,10 @@ class crm_bill extends class_base
 					"ch_value" => $key
 				))
 			));
-		}
-		$t->define_data(array(
+		}*/
+/*		$t->define_data(array(
 			"mail" => htmlspecialchars($arr["obj_inst"]->get_bcc()),
-		));
+		));*/
 	}
 
 	function _dn_tbl($arr)
