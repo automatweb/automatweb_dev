@@ -627,6 +627,16 @@
             <comment>Parameeter, millega suunatavale aadressile lisatakse loodud/muudetud objekti OID</comment>
       </property>
       <property>
+            <name>cfgview_ru_cntrl</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+			<reltype>RELTYPE_RU_CONTROLLER</reltype>
+            <caption>Aadress kuhu suunata (kontroller)</caption>
+      </property>
+      <property>
             <name>orb_settings</name>
             <table>objects</table>
             <group>orb_settings</group>
@@ -876,6 +886,11 @@
                   <clid>CL_CFG_VIEW_CONTROLLER</clid>
                   <caption>Tabeli kontroller</caption>
             </TABLE_CONTROLLER>
+			<RU_CONTROLLER>
+                  <value>9</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Aadress kuhu suunata (kontroller)</caption>
+			</RU_CONTROLLER>
       </reltypes>
       <layout>
             <add_grp>

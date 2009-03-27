@@ -227,6 +227,9 @@
 	@property cfgview_ru_change type=textbox field=meta method=serialize
 	@caption Aadress kuhu suunata (muutmine)
 
+	@property cfgview_ru_cntrl type=relpicker reltype=RELTYPE_RU_CONTROLLER field=meta method=serialize
+	@caption Aadress kuhu suunata (kontroller)
+
 	@property cfgview_ru_id_param type=textbox field=meta method=serialize
 	@caption OID parameeter
 	@comment Parameeter, millega suunatavale aadressile lisatakse loodud/muudetud objekti OID
@@ -279,6 +282,9 @@
 
 	@reltype TABLE_CONTROLLER value=8 clid=CL_CFG_VIEW_CONTROLLER
 	@caption Tabeli kontroller
+
+	@reltype RU_CONTROLLER value=9 clid=CL_CFGCONTROLLER
+	@caption Aadress kuhu suunata (kontroller)
 
 	// so, how da fuck do I implement the grid layout thingie?
 	// add_item (item, row, col)
