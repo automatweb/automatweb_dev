@@ -4,25 +4,6 @@ class crm_company_obj extends _int_object
 {
 	function prop($k)
 	{
-		if($k == "show_on_web")
-		{
-			$org = get_instance(CL_USER)->get_current_company();
-			if(!is_oid($org) || !is_oid($this->id()))
-			{
-				return false;
-			}
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-				"seller" => $org,
-				"buyer" => $this->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"show_in_webview" => 1,
-				"limit" => 1,
-			));
-			return $ol->count() > 0;
-		}
-
 		if(substr($k, 0, 5) == "fake_" && is_oid($this->id()))
 		{
 			switch(substr($k, 5))
@@ -95,38 +76,6 @@ class crm_company_obj extends _int_object
 
 	function set_prop($name, $value, $set_into_meta = true)
 	{
-		if($k == "show_on_web")
-		{
-			$org = get_instance(CL_USER)->get_current_company();
-			if(is_oid($org) && is_oid($this->id()))
-			{
-			}
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-				"seller" => $org,
-				"buyer" => $this->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"show_in_webview" => 1,
-				"limit" => 1,
-			));
-			if($ol->count() > 0)
-			{
-				$o = $ol->begin();
-				$o->show_in_webview = $value;
-				$o->save();
-			}
-			elseif($value)
-			{
-				$o = obj();
-				$o->set_parent($org);
-				$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
-				$o->buyer = $this->id();
-				$o->seller = $org;
-				$o->show_in_webview = $value;
-				$o->save();
-			}
-		}
 		if($name == "name")
 		{
 			$value = htmlspecialchars($value);

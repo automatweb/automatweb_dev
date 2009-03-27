@@ -294,9 +294,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1 store=no
 	@caption Fake country
 
-	@property show_on_web type=checkbox ch_value=1 store=no
-	@caption Kuva veebis
-
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
 
@@ -7906,7 +7903,7 @@ class crm_company extends class_base
 			));
 			foreach($ol->arr() as $oid => $o)
 			{
-				$v = $o->meta($map[$f]);
+				$v = str_replace("'", "\'", $o->meta($map[$f]));
 				$this->db_query("UPDATE kliendibaas_firma SET $f = '$v' WHERE oid = '$oid' LIMIT 1");
 			}
 		}
