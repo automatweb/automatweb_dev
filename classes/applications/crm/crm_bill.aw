@@ -1329,7 +1329,7 @@ class crm_bill extends class_base
 		$co = obj($u->get_current_company());
 		$ccurrency = $co->prop("currency");
 		$ccurrency_name = $co->prop("currency.name");
-
+		$quality_options = array("" => "") + $arr["obj_inst"]->get_quality_options();
 		$bcurrency = $arr["obj_inst"]->get_bill_currency_id();
 
 		$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
@@ -1486,7 +1486,11 @@ class crm_bill extends class_base
 					"value" => $t_inf["name"],
 					"rows" => 5,
 					"cols" => 40
-				)).(!$row["has_task_row"] ? "<br>".$connect_row_link :""),
+				)).(!$row["has_task_row"] ? "<br>".$connect_row_link :"")."<br>".html::select(array(
+					"name" => "rows[$id][quality]",
+			//		"value" => $t_inf["name"],
+					"options" => $quality_options,
+				)),
 				"code" => html::textbox(array(
 					"name" => "rows[$id][code]",
 					"value" => $t_inf["code"],
@@ -1823,7 +1827,11 @@ class crm_bill extends class_base
 					"value" => $t_inf["name"],
 					"rows" => 5,
 					"cols" => 40
-				)).(!$row["has_task_row"] ? "<br>".$connect_row_link :""),
+				)).(!$row["has_task_row"] ? "<br>".$connect_row_link :"")."<br>".html::select(array(
+					"name" => "rows[$id][quality]",
+			//		"value" => $t_inf["name"],
+					"options" => $quality_options,
+				)),
 				"code" => html::textbox(array(
 					"name" => "rows[$id][code]",
 					"value" => $t_inf["code"],
@@ -3472,6 +3480,11 @@ class crm_bill extends class_base
 			{
 				$unit = $row["unit"];
 			}
+			if($row["quality"])
+			{
+				$o->create_brother($row["quality"]);
+			}
+
 			$o->set_prop("name", $row["name"]);
 			$o->set_prop("comment", $row["comment"]);
 			$o->set_prop("date", $row["date"]);

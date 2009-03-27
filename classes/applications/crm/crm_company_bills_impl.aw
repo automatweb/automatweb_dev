@@ -3157,6 +3157,121 @@ d)
 		$ol = new object_list();
 		$ol->add($t->get_element_from_all("customer"));
 		return $ol;
+	}
+
+	function _get_quality_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		if($arr["request"]["tf"])
+		{
+			$parent = $arr["request"]["tf"];
+		}
+
+		if(!$parent)
+		{
+			$menu = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_QUALITY_MENU");
+			$parent = $menu->id();
+		}
+		if(!$parent)
+		{
+			$parent = $arr["obj_inst"]->id();
+		}
+
+		$tb->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Lisa'),
+			'url' => html::get_new_url(CL_MENU, $parent, array("return_url" => get_ru()))
+		));
+	}
+
+	function _get_quality_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "st";
+		classload("core/icons");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "quality_bills_tree",
+		));
+
+		$bills_inst = get_instance(CL_CRM_BILL);
+		$states = $bills_inst->states;
+
+
+
+		$menu = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_QUALITY_MENU");
+		if(is_object($menu))
+		{
+			$tv->add_item(0,array(
+				"name" => t("T&uuml;&uuml;bid"),
+				"id" => $menu->id(),
+				"url" => aw_url_change_var($var, $menu->id()),
+			));
+
+			$ol = new object_list(array(
+				"class_id" => CL_MENU,
+				"parent" => $menu->id(),
+			));
+			foreach($ol->names() as $id => $name)
+			{
+				if($arr["request"][$var] == $id)
+				{
+					$name = "<b>".$name."</b>";
+				}
+				$tv->add_item($menu->id(),array(
+					"name" => $name,
+					"id" => $id,
+					"url" => aw_url_change_var($var, $id),
+				));
+			}
+		}
+	}
+
+	function _get_quality_list($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"caption" => t("Nimi"),
+			"name" => "name",
+			"align" => "center",
+			"sortable" => 1,
+		));
+/*		$t->define_field(array(
+			"caption" => t("Arve"),
+			"name" => "bill",
+			"align" => "center",
+			"sortable" => 1,
+		));*/
+		$t->define_field(array(
+			"caption" => t("Sisu"),
+			"name" => "content",
+			"align" => "center",
+			"sortable" => 1,
+		));
+
+		if(is_oid($arr["request"]["st"]))
+		{
+			$ol = new object_list(array(
+				"parent" => $arr["request"]["st"],
+			));
+			foreach($ol->arr() as $o)
+			{
+				$t->define_data(array(
+					"name" => $o->comment(),
+					"content" => $o->name(),
+//					"bill" => html::href(array(
+//						"caption" => $o->prop("parent.bill_no"),
+//						"url" => html::obj_change_url($o->parent() , array())
+//					)),
+				));
+			}
+			
+		}
 
 	}
 

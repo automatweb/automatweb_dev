@@ -2138,6 +2138,28 @@ class crm_bill_obj extends _int_object
 		return null;
 	}
 
+	public function get_quality_options()
+	{
+		$ret = array();
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		if(is_oid($co))
+		{
+			$co = obj($co);
+			$menu = $co->get_first_obj_by_reltype("RELTYPE_QUALITY_MENU");
+			if(is_object($menu))
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_MENU,
+					"parent" => $menu->id(),
+				));
+				return $ol->names();
+			}
+
+		}
+		return $ret;
+	}
+
 }
 
 ?>
