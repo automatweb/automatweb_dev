@@ -2929,7 +2929,6 @@
             <store>no</store>
             <captionside>top</captionside>
             <ch_value>1</ch_value>
-            <no_caption>1</no_caption>
             <field>show_bill_balance</field>
             <caption>Kuva arve saldot</caption>
       </property>
@@ -2942,7 +2941,6 @@
             <store>no</store>
             <captionside>top</captionside>
             <ch_value>1</ch_value>
-            <no_caption>1</no_caption>
             <field>currency_grouping</field>
             <caption>Kuva valuutade l&amp;amp;otilde;ikes</caption>
       </property>
@@ -2970,6 +2968,36 @@
             <no_caption>1</no_caption>
             <parent>bills_list_box</parent>
             <field>bills_list</field>
+      </property>
+      <property>
+            <name>quality_tb</name>
+            <table>objects</table>
+            <group>bills_quality</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>quality_tb</field>
+      </property>
+      <property>
+            <name>quality_tree</name>
+            <table>objects</table>
+            <group>bills_quality</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>quality_list</parent>
+            <field>quality_tree</field>
+            <caption>Kvaliteedi puu</caption>
+      </property>
+      <property>
+            <name>quality_list</name>
+            <table>objects</table>
+            <group>bills_quality</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>quality_list_s</parent>
+            <field>quality_list</field>
       </property>
       <property>
             <name>my_tasks_tb</name>
@@ -4323,6 +4351,12 @@
                   <submit>no</submit>
                   <save>no</save>
             </bill_payments>
+            <bills_quality>
+                  <parent>bills</parent>
+                  <caption>Kvaliteet</caption>
+                  <submit>no</submit>
+                  <save>no</save>
+            </bills_quality>
             <stats>
                   <caption>Aruanded</caption>
                   <save>no</save>
@@ -5356,6 +5390,26 @@
                   <area_caption>Otsing</area_caption>
                   <group>bills_list</group>
             </bills_list_s>
+            <quality_list_box>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>bills_quality</group>
+                  <area_caption></area_caption>
+            </quality_list_box>
+            <quality_list>
+                  <type>vbox</type>
+                  <parent>quality_list_box</parent>
+                  <closeable>1</closeable>
+                  <group>bills_quality</group>
+                  <area_caption></area_caption>
+            </quality_list>
+            <quality_list_s>
+                  <type>vbox</type>
+                  <parent>quality_list_box</parent>
+                  <closeable>1</closeable>
+                  <group>bills_quality</group>
+                  <area_caption></area_caption>
+            </quality_list_s>
             <my_tasks>
                   <type>hbox</type>
                   <width>20%:80%</width>

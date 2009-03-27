@@ -993,6 +993,15 @@ default group=org_objects
 
 		@property bills_list type=table store=no no_caption=1 parent=bills_list_box group=bills_list,bills_monthly
 
+@default group=bills_quality
+
+	@property quality_tb type=toolbar no_caption=1 store=no
+	@layout quality_list_box type=hbox width=20%:80%
+		@layout quality_list type=vbox parent=quality_list_box closeable=1
+			@property quality_tree type=treeview store=no no_caption=1 parent=quality_list
+			@caption Kvaliteedi puu
+		@layout quality_list_s type=vbox parent=quality_list_box closeable=1
+			@property quality_list type=table store=no no_caption=1 parent=quality_list_s
 
 
 @default group=my_tasks,meetings,calls,ovrv_offers,all_actions,ovrv_mails,documents_all_manage,bugs
@@ -1376,7 +1385,7 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo bills_search parent=bills caption="Otsi toimetusi" submit=no save=no
 	@groupinfo bills_create parent=bills caption="Maksmata t&ouml;&ouml;d" submit=no save=no
        @groupinfo bill_payments parent=bills caption="Laekumised" submit=no save=no
-
+	@groupinfo bills_quality parent=bills caption="Kvaliteet" submit=no save=no
 
 
 @groupinfo stats caption="Aruanded" save=no
@@ -2969,6 +2978,9 @@ class crm_company extends class_base
 			case "billable_start":
 			case "billable_end":
 			case "bs_tb":
+			case "quality_tb":
+			case "quality_tree":
+			case "quality_list":
 				static $bills_impl;
 				if (!$bills_impl)
 				{
