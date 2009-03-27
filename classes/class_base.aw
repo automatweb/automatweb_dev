@@ -1252,6 +1252,12 @@ class class_base extends aw_template
 						$retval = aw_url_change_var($cfgform_o->prop("cfgview_ru_id_param"), $this->obj_inst->id(), $retval);
 					}
 				}
+				if(!is_admin() && is_oid($cfgform_o->prop("cfgview_ru_cntrl")) && $this->can("view", $cfgform_o->prop("cfgview_ru_cntrl")))
+				{
+					$nothing = NULL;
+					$i = get_instance(CL_CFGCONTROLLER);
+					$retval = $i->check_property($cfgform_o->prop("cfgview_ru_cntrl"), $this->id, $nothing, $request, $retval, obj($this->id));
+				}
 
 				// call mod retval controller(s) from cfgform object if defined
 				$cfg_cntrl = (array) $cfgform_o->prop("mod_retval_controllers");
