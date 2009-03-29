@@ -18,7 +18,7 @@
 **/
 function arr($arr, $die=false, $see_html=false)
 {
-	if (automatweb::MODE_PRODUCTION === automatweb::$instance->mode())
+	if (isset(automatweb::$instance) and automatweb::MODE_PRODUCTION === automatweb::$instance->mode())
 	{
 		return;
 	}
