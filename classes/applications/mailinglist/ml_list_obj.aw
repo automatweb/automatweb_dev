@@ -64,7 +64,9 @@ class ml_list_obj extends _int_object
 				continue;
 			}
 			$o = obj($menu);
-			if(in_array($o->class_id() , $minion_classes) && isset($sources_data[$o->id()]["use_minions"]) && $sources_data[$o->id()]["use_minions"])
+
+			if(in_array($o->class_id() , $minion_classes) && is_array($sources_data) && isset($sources_data[$o->id()]["use_minions"]) &&  $sources_data[$o->id()]["use_minions"])
+
 			{
 				$ol = new object_list(array(
 					"class_id" => $minion_classes,
