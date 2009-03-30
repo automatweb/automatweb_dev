@@ -895,11 +895,18 @@ class crm_company_cedit_impl extends core
 				$has = false;
 				foreach($data as $k => $v)
 				{
+					if($k != "email")
+					{
+						continue;
+					}
 					if ($v != "")
 					{
 						$has = true;
 					}
-					$o->set_prop("mail", $v);
+					if($k == "email")
+					{
+						$o->set_prop("mail", $v);
+					}
 				}
 				if ($has)
 				{
