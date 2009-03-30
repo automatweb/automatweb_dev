@@ -79,7 +79,7 @@
             <reltype>RELTYPE_PROD_VARS_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Tootepakettide asukoht</caption>
+	    <caption>Toitlustus&amp;amp;uuml;&amp;amp;uuml;pide kaust</caption>
       </property>
       <property>
             <name>meta_folder</name>

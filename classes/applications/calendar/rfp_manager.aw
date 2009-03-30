@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.100 2009/03/24 10:53:40 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.101 2009/03/30 08:22:14 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -32,7 +32,7 @@
 @caption Klientide kaust
 
 @property prod_vars_folder type=relpicker reltype=RELTYPE_PROD_VARS_FOLDER field=meta method=serialize
-@caption Tootepakettide asukoht
+@caption Toitlustust&uuml;&uuml;pide kaust
 
 @property meta_folder type=relpicker reltype=RELTYPE_META_OBJECT_FOLDER store=connect
 @caption Toat&uuml;&uuml;pide kaust
