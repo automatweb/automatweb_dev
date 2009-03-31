@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.52 2008/11/27 10:47:42 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.53 2009/03/31 14:55:42 markop Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -829,7 +829,7 @@ class mail_message extends class_base
 	// basically the same as deliver, except that this one is _not_
 	// called through ORB, and you can specify replacements here
 	function process_and_deliver($args)
-	{
+	{/*
 		$oid = $args["id"];
 		$q = "SELECT name,mfrom,mto,message FROM objects
 			LEFT JOIN messages ON (objects.oid = messages.id)
@@ -837,8 +837,12 @@ class mail_message extends class_base
 		$this->db_query($q);
 
 		$row = $this->db_next();
+arr($row);*/
 
-		$message = $row["message"];
+		$mail = obj($args["id"]);
+		$message = $mail->prop("message");
+		$mto = $mail->prop("mto");
+		$from = $mail->prop("mfrom");
 		if (is_array($args["replacements"]))
 		{
 			foreach($args["replacements"] as $source => $target)
@@ -846,22 +850,14 @@ class mail_message extends class_base
 				$message = str_replace($source,$target,$message);
 			}
 		}
-		$mto = $row["mto"];
 		$awm = get_instance("protocols/mail/aw_mail");
 
-		$confirm_msg = obj($oid);
-
-		if(!$row["mfrom"])
+		if(is_oid($from) && $this->can("view", $from))
 		{
-			$row["mfrom"] = $confirm_msg->prop("mfrom");
-		}
-
-		$from = $row["mfrom"];
-		if(is_oid($row["mfrom"]) && $this->can("view", $row["mfrom"]))
-		{
-			$adr = obj($row["mfrom"]);
+			$adr = obj($from);
 			$address = $adr->prop("mail");
 		}
+
 		$awm->create_message(array(
 			"froma" => $address,
 			"subject" => $row["name"],
@@ -883,8 +879,6 @@ class mail_message extends class_base
 			));
 			$awm_admin->gen_mail();
 		}
-
-
 	}
 
 	/**
