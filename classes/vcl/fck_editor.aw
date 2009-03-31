@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.25 2009/03/18 12:50:16 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.26 2009/03/31 11:49:39 hannes Exp $
 // fck_editor.aw - FCKeditor
 /*
 @classinfo  maintainer=hannes
@@ -90,7 +90,7 @@ class fck_editor extends aw_template
 			}
 			else
 			{
-				$config = 'oFCKeditor.Config["CustomConfigurationsPath"] = "/automatweb/js/fckeditor/custom_config.js";';
+				$config = 'oFCKeditor.Config["CustomConfigurationsPath"] = "'.aw_ini_get("baseurl").'/automatweb/js/fckeditor/custom_config.js";';
 			}
 			
 			$this->vars(array(

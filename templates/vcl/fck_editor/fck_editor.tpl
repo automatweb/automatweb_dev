@@ -38,7 +38,7 @@ function FCKeditor_OnComplete( editorInstance )
 function FCKeditor_CreateEditor(name, version, width, height, lang)
 {
 	var oFCKeditor = new FCKeditor(name);
-	oFCKeditor.BasePath = "/automatweb/js/fckeditor/"+version+"/";
+	oFCKeditor.BasePath = "{VAR:baseurl}/automatweb/js/fckeditor/"+version+"/";
 	oFCKeditor.Width = width;
 	oFCKeditor.Height = height;
 	oFCKeditor.Config["AutoDetectLanguage"] = false;

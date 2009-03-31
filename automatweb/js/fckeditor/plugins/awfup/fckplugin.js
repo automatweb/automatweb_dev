@@ -8,7 +8,7 @@ InsertAWFupCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWFupCommand.Execute=function() {
 	if ( _fck_awdoc_exists() )
 	{
-		w = window.open('/automatweb/orb.aw?class=file_manager&doc='+escape(window.parent.location.href), 
+		w = window.open(FCKConfig.AWBaseurl+'/automatweb/orb.aw?class=file_manager&doc='+escape(window.parent.location.href), 
 				'InsertAWFupCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
 	}
 	else
@@ -34,7 +34,7 @@ InsertAWFupCommand.Name='FileChange';
 InsertAWFupCommand.prototype.Execute=function(){}
 InsertAWFupCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWFupCommand.Execute=function() {
-	window.open('/automatweb/orb.aw?class=file_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&file_id="+FCK.Selection.GetSelectedElement()._oid, 
+	window.open(FCKConfig.AWBaseurl+'/automatweb/orb.aw?class=file_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&file_id="+FCK.Selection.GetSelectedElement()._oid, 
 		'InsertAWFupCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awfilechange', InsertAWFupCommand );
@@ -109,7 +109,7 @@ FCKAWFilePlaceholders.GetUrlContents = function( url )
 FCKAWFilePlaceholders.SetupSpan = function( span, name )
 {
 	doc_id = FCKAWFilePlaceholders.GUP("id");
-	tmp = FCKAWFilePlaceholders.GetUrlContents("/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
+	tmp = FCKAWFilePlaceholders.GetUrlContents(FCKConfig.AWBaseurl+"/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 	eval(tmp);
 	span.innerHTML = connection_details_for_doc["#"+name+"#"]["comment"].length>0 ? connection_details_for_doc["#"+name+"#"]["comment"] : connection_details_for_doc["#"+name+"#"]["name"];
 
@@ -123,7 +123,7 @@ FCKAWFilePlaceholders.SetupSpan = function( span, name )
 	span.style.textDecoration = "underline";
 	span.style.display = "inline";
 	span.style.padding = "1px 0 1px 18px";
-	span.style.background = "url('/automatweb/images/icon_aw.gif') no-repeat 0 0";
+	span.style.background = "url('"+FCKConfig.AWBaseurl+"/automatweb/images/icon_aw.gif') no-repeat 0 0";
 
 	span._awfileplaceholder = name ;
 	span._oid = connection_details_for_doc["#"+name+"#"]["id"]
@@ -192,10 +192,10 @@ if ( FCKBrowserInfo.IsIE )
 				var name = aPlaholders[i].match( /#([^#]*?)#/ )[1] ;
 			
 				doc_id = FCKAWFilePlaceholders.GUP("id");
-				tmp = FCKAWFilePlaceholders.GetUrlContents("/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
+				tmp = FCKAWFilePlaceholders.GetUrlContents(FCKConfig.AWBaseurl+"/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 				eval(tmp);
 				s_name = connection_details_for_doc["#"+name+"#"]["comment"].length>0 ? connection_details_for_doc["#"+name+"#"]["comment"] : connection_details_for_doc["#"+name+"#"]["name"];
-				oRange.pasteHTML('<span style="color: #0000EE; text-decoration: underline; padding: 1px 0 1px 18px; background: url(\'/automatweb/images/icon_aw.gif\') no-repeat 0 0;" contenteditable="false" _awfileplaceholder="'+ name +'" _oid="'+ connection_details_for_doc["#"+name+"#"]["id"] +'">' + s_name + '</span>');
+				oRange.pasteHTML('<span style="color: #0000EE; text-decoration: underline; padding: 1px 0 1px 18px; background: url(\''+FCKConfig.AWBaseurl+'/automatweb/images/icon_aw.gif\') no-repeat 0 0;" contenteditable="false" _awfileplaceholder="'+ name +'" _oid="'+ connection_details_for_doc["#"+name+"#"]["id"] +'">' + s_name + '</span>');
 			}
 		}
 	}

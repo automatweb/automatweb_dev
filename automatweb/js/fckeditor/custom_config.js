@@ -1,5 +1,7 @@
 //FCKConfig.CustomConfigurationsPath = '/js/fckeditor/2.6/fmyconfig.js' ;
 
+FCKConfig.AWBaseurl = get_awbaseurl();
+
 //FCKConfig.EditorAreaCSS = '/automatweb/js/fckeditor/fck_editorarea.css' ;
 FCKConfig.EditorAreaCSS = aw_fck_get_url_contents('/orb.aw?class=doc&action=get_fckstyles_css');
 FCKConfig.EditorAreaStyles = '' ;
@@ -347,4 +349,39 @@ _fck_gup = function(param)
 	{
 		return results[1];
 	}
+}
+
+// figure out the baseurl even if it's foo.com/epi
+function get_awbaseurl()
+{
+	url = window.location+"";
+	a_path = url.split("/");
+	is_in_admin = false;
+	baseurl = "";
+	
+	i = 0;
+	for(k in a_path)
+	{
+		if(a_path[k] == 'automatweb')
+		{
+			is_in_admin = true;
+		}
+		i++;
+	}
+	
+	if(!is_in_admin)
+		return "";
+	
+	for(k in a_path)
+	{
+		if(a_path[k] == 'automatweb')
+		{
+			return baseurl;
+		}
+		if(k==0)
+			baseurl = a_path[k];
+		else
+			baseurl += "/"+a_path[k];
+	}
+	
 }

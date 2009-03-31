@@ -8,7 +8,7 @@ InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
 	if ( _fck_awdoc_exists() )
 	{
-		window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href), 
+		window.open(FCKConfig.AWBaseurl+'/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href), 
 			'InsertAWImageCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
 	}
 	else
@@ -37,7 +37,7 @@ InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
 	oid =  _aw_fck_selected_image_oid;
-	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&image_id="+oid,
+	window.open(FCKConfig.AWBaseurl+'/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&image_id="+oid,
 		'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awimagechange', InsertAWImageCommand ); 
@@ -84,7 +84,7 @@ InsertAWImageCommandOld.Name='ImageChangeOld';
 InsertAWImageCommandOld.prototype.Execute=function(){}
 InsertAWImageCommandOld.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommandOld.Execute=function() {
-  window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&imgsrc="+escape(FCK.Selection.GetSelectedElement().src), 
+  window.open(FCKConfig.AWBaseurl+'/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&imgsrc="+escape(FCK.Selection.GetSelectedElement().src), 
 					'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awimagechange_old', InsertAWImageCommandOld ); 
@@ -199,7 +199,7 @@ FCKAWImagePlaceholders.GetImageFloat = function( image_name )
 FCKAWImagePlaceholders.SetupImg = function( img, name )
 {
 	doc_id = FCKAWImagePlaceholders.GUP("id");
-	tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
+	tmp = FCKAWImagePlaceholders.GetUrlContents(FCKConfig.AWBaseurl+"/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 	eval (tmp);
 	if ( typeof(connection_details_for_doc["#"+name+"#"]) == "object" )
 	{
@@ -348,7 +348,7 @@ if ( FCKBrowserInfo.IsIE )
 				var name = aPlaholders[i].match( /#([^#]*?)#/ )[1] ;
 
 				doc_id = FCKAWImagePlaceholders.GUP("id");
-				tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
+				tmp = FCKAWImagePlaceholders.GetUrlContents(FCKConfig.AWBaseurl+"/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 				eval(tmp);
 				img_float = FCKAWImagePlaceholders.GetImageFloat(name);
 				img_align = "";
