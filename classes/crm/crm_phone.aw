@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.25 2008/06/12 13:22:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.26 2009/03/31 07:55:16 instrumental Exp $
 // phone.aw - Telefon
 /*
 
@@ -22,7 +22,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 @property comment type=textbox
 @caption Kommentaar
 
-@property type type=chooser field=meta method=serialize
+@property type type=chooser table=kliendibaas_telefon field=aw_phone_type
 @caption Numbri t&uuml;&uuml;p
 
 @property country type=relpicker reltype=RELTYPE_COUNTRY field=meta method=serialize automatic=1
@@ -231,6 +231,37 @@ class crm_phone extends class_base
 
 		switch($field)
 		{
+			case "aw_phone_type":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "varchar(25)"
+				));
+
+				aw_restore_acl();
+				// Now let's fill this property for all existing phones.
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_PHONE,
+					"parent" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+					"status" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$oid = $o->id();
+					$type = $o->meta("type");
+
+					$this->db_query("
+						INSERT INTO
+							kliendibaas_telefon (oid, aw_phone_type)
+						VALUES
+							('$oid', '$type')
+						ON DUPLICATE KEY UPDATE
+							aw_phone_type = '$type'
+					");
+				}
+				return true;
+
 			case "number":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
@@ -238,7 +269,7 @@ class crm_phone extends class_base
 				));
 
 				aw_restore_acl();
-				// Now let's fill this property for all existing persons.
+				// Now let's fill this property for all existing phones.
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_PHONE,
 					"parent" => array(),
@@ -258,7 +289,6 @@ class crm_phone extends class_base
 							('$oid', '$number')
 					");
 				}
-
 				return true;
 		}
 

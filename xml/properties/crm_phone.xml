@@ -32,11 +32,10 @@
       </property>
       <property>
             <name>type</name>
-            <table>objects</table>
+            <table>kliendibaas_telefon</table>
             <group>general</group>
             <type>chooser</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_phone_type</field>
             <caption>Numbri t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
