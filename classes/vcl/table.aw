@@ -467,7 +467,17 @@ class aw_table extends aw_template
 	**/
 	function set_numeric_field($elname)
 	{
-		$this->nfields[$elname] = 1;
+		if(is_array($elname))
+		{
+			foreach($elname as $_elname)
+			{
+				$this->set_numeric_field($_elname);
+			}
+		}
+		else
+		{
+			$this->nfields[$elname] = 1;
+		}
 	}
 
 	/**
@@ -766,8 +776,8 @@ class aw_table extends aw_template
 				}
 				$this->u_sorder = $this->sorder[$orig_eln];
 				$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
-				$v1 = $a[$_eln];
-				$v2 = $b[$_eln];
+				$v1 = isset($a[$_eln]) ? $a[$_eln] : NULL;
+				$v2 = isset($b[$_eln]) ? $b[$_eln] : NULL;
 				if ($v1 != $v2)
 				{
 					break;
@@ -1133,7 +1143,7 @@ class aw_table extends aw_template
 
 		if (!isset($act_page))
 		{
-			$act_page = isset($_GET["ft_page"]) ? $_GET["ft_page"] : null;
+			$act_page = isset($GLOBALS["ft_page"]) ? $GLOBALS["ft_page"] : null;
 		}
 
 		if ($act_page*$this->records_per_page > count($this->data))
@@ -1999,7 +2009,7 @@ class aw_table extends aw_template
 			);
 			$this->filter_index[$filter_key] = $args["name"];
 
-			if (isset($args["filter_options"]) and is_array ($args["filter_options"]))
+			if (is_array ($args["filter_options"]))
 			{
 				if (!empty ($args["filter_options"]["selected"]))
 				{
@@ -2380,7 +2390,7 @@ echo dbg::short_backtrace();
 	// parameters:
 	//	style - id of the css style to apply to the page
 	//	records_per_page - number of records on each page
-	function draw_lb_pageselector($arr = array())
+	function draw_lb_pageselector($arr)
 	{
 		$this->read_template("lb_pageselector.tpl");
 
@@ -2390,7 +2400,7 @@ echo dbg::short_backtrace();
 
 			$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
 			$records_per_page = empty($arr["records_per_page"]) ? $this->records_per_page : $arr["$records_per_page"];
-			$page = (int) $_GET["ft_page"];
+			$page = (int) $GLOBALS["ft_page"];
 			if ($page*$records_per_page > $_drc)
 			{
 				$page = 0;
@@ -2435,7 +2445,7 @@ echo dbg::short_backtrace();
 	protected function finish_pageselector($arr)
 	{
 		extract($arr);
-		$records_per_page = empty($arr["records_per_page"]) ? $this->records_per_page : $arr["$records_per_page"];
+		$records_per_page = empty($arr["records_per_page"]) ? $this->records_per_page : $arr["records_per_page"];
 		$ru = preg_replace("/ft_page=\d*/", "", aw_global_get("REQUEST_URI"));
 		$sep = "&";
 		if (strpos($ru, "?") === false)
@@ -2445,20 +2455,21 @@ echo dbg::short_backtrace();
 		$ru = $ru.$sep;
 		$url = preg_replace("/\&{2,}/","&",$ru);
 		$style = "";
-		if ($arr["style"])
+		if (!empty($arr["style"]))
 		{
 			$style = "class=\"style_".$style."\"";
 		}
 
-		$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
+		$_drc = !empty($arr["d_row_cnt"]) ? $arr["d_row_cnt"] : $this->d_row_cnt;
 
-		$act_page = $_GET["ft_page"];
+		$act_page = (int)ifset($GLOBALS, "ft_page");
 		if ($act_page*$records_per_page > $_drc)
 		{
 			$act_page = 0;
 		}
 
-		$num_pages = $records_per_page > 0 ? ($_drc / $records_per_page) : 1;
+		$num_pages = $records_per_page != 0 ? $_drc / $records_per_page : 1;
+		$rv = "";
 		for ($i = 0; $i < $num_pages; $i++)
 		{
 			$from = $i*$records_per_page+1;
@@ -2731,15 +2742,14 @@ echo dbg::short_backtrace();
 				$tbl2 .= "&nbsp;";
 				$tbl2 .= "</td>\n";
 			}
-
 			foreach($this->rowdefs as $k => $v)
 			{
 				$filter_style = "filter_normal";
+				$filter_key = $this->filters[$v['name']]['key'];
 
 				### add filter if defined for current column
-				if (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] === "select")
+				if (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] == "select")
 				{
-					$filter_key = $this->filters[$v['name']]['key'];
 					$filter_values = $this->get_filter ($v["name"]);
 					$filter_name = $this->filter_name;
 
@@ -2750,15 +2760,14 @@ echo dbg::short_backtrace();
 					$args = array (
 						"name" => $filter_name,
 						"options" => $filter_values,
-						"value" => isset($this->selected_filters[$filter_key]) ? $this->selected_filters[$filter_key]["filter_selection"] : "",
+						"value" => $this->selected_filters[$filter_key]["filter_selection"],
 						"class" => "filterSelect",
 						"onchange" => "xchanged=1;window.location='{$url}{$sep}{$filter_name}={$filter_key},'+this.options[this.selectedIndex].value+','+this.options[this.selectedIndex].text"
 					);
 					$filter_contents = html::select ($args);
 				}
-				elseif (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] === "text")
+				else if (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] == "text")
 				{
-					$filter_key = $this->filters[$v['name']]['key'];
 					$newurl = $url.$sep.$this->filter_name.'='.$filter_key;
 					$filter_contents = html::textbox(array(
 						'name' => $this->filter_name.'['.$v["name"].']',
@@ -3062,17 +3071,17 @@ class vcl_table extends aw_table
 			$data = array("oid" => $o->id());
 			foreach($this->rowdefs as $k => $v)
 			{
-				if (isset($v["name"]) && $v["name"] == "oid")
+				if ($v["name"] == "oid")
 				{
 					$val = $o->id();
 				}
 				else
-				if (isset($v["name"]) && $v["name"] == "createdby")
+				if ($v["name"] == "createdby")
 				{
 					$val = $o->createdby();
 				}
 				else
-				if (isset($v["name"]) && $v["name"] == "createdby_person")
+				if ($v["name"] == "createdby_person")
 				{
 					$val = $o->createdby();
 					// get person for user
@@ -3083,12 +3092,12 @@ class vcl_table extends aw_table
 					}
 				}
 				else
-				if (isset($v["name"]) && $v["name"] == "modifiedby")
+				if ($v["name"] == "modifiedby")
 				{
 					$val = $o->modifiedby();
 				}
 				else
-				if (isset($v["name"]) && $v["name"] == "modifiedby_person")
+				if ($v["name"] == "modifiedby_person")
 				{
 					$val = $o->modifiedby();
 					// get person for user
@@ -3099,32 +3108,32 @@ class vcl_table extends aw_table
 					}
 				}
 				else
-				if (isset($v["name"]) && $v["name"] == "created")
+				if ($v["name"] == "created")
 				{
 					$val = $o->created();
 				}
 				else
-				if (isset($v["name"]) && $v["name"] == "modified")
+				if ($v["name"] == "modified")
 				{
 					$val = $o->modified();
 				}
 				else
-				if (isset($v["name"]) && $v["name"] == "class_id")
+				if ($v["name"] == "class_id")
 				{
 					$val = $clss[$o->class_id()]["name"];
 				}
 				else
-				if (isset($v["name"]) && $v["name"] == "ord")
+				if ($v["name"] == "ord")
 				{
 					$val = $o->ord();
 				}
 				else
-				if (isset($v["name"]) && $v["name"] == "change")
+				if ($v["name"] == "change")
 				{
 					$val = html::get_change_url($o->id(), array("return_url" => get_ru()), "Muuda");
 				}
 				else
-				if (isset($v["_type"]) && $v["_type"] == "rel")
+				if ($v["_type"] == "rel")
 				{
 					$val = html::obj_change_url($o->prop($v["name"]));
 				}
@@ -3187,13 +3196,13 @@ class vcl_table extends aw_table
 				$d["format"] = "d.m.Y H:i";
 			}
 			else
-			if (!empty($ps[$prop]["type"]) && $ps[$prop]["type"] == "date_select")
+			if ($ps[$prop]["type"] == "date_select")
 			{
 				$d["type"] = "time";
 				$d["numeric"] = 1;
 				$d["format"] = "d.m.Y";
 			}
-			if (!empty($ps[$prop]["type"]) && $ps[$prop]["type"] == "relpicker")
+			if ($ps[$prop]["type"] == "relpicker")
 			{
 				$d["_type"] = "rel";
 			}
