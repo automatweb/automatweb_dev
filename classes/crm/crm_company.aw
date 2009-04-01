@@ -102,6 +102,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 			@property bill_due_date_days type=textbox size=5 table=kliendibaas_firma parent=co_bottom_seller_r
 			@caption Makset&auml;htaeg (p&auml;evi)
 
+			@property bill_tolerance type=textbox size=5  parent=co_bottom_seller_r store=no
+			@caption Tolerants (p&auml;evi)
+
 			@property bill_penalty_pct type=textbox table=kliendibaas_firma size=5  parent=co_bottom_seller_r
 			@caption Arve viivise %
 
@@ -252,46 +255,46 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property user_classificator_5 type=classificator reltype=RELTYPE_USER_CLASSIFICATOR_5 store=connect
 	@caption User-defined classificator 5
 
-	@property fake_phone type=textbox store=no
+	@property fake_phone type=textbox
 	@caption Fake phone
 
-	@property fake_fax type=textbox store=no 
+	@property fake_fax type=textbox
 	@caption Fake fax
 
-	@property fake_mobile type=textbox store=no
+	@property fake_mobile type=textbox
 	@caption Fake mobile
 
-	@property fake_skype type=textbox store=no
+	@property fake_skype type=textbox
 	@caption Fake skype
 
-	@property fake_email type=textbox store=no
+	@property fake_email type=textbox
 	@caption Fake e-mail
 
-	@property fake_url type=textbox store=no
+	@property fake_url type=textbox
 	@caption Fake URL
 
-	@property fake_address_address type=textbox store=no
+	@property fake_address_address type=textbox
 	@caption Fake address
 
-	@property fake_address_postal_code type=textbox store=no
+	@property fake_address_postal_code type=textbox
 	@caption Fake ZIP code
 
-	@property fake_address_city type=textbox store=no
+	@property fake_address_city type=textbox
 	@caption Fake city
 
-	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY automatic=1 store=no
+	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY automatic=1
 	@caption Fake city
 
-	@property fake_address_county type=textbox store=no
+	@property fake_address_county type=textbox
 	@caption Fake county
 
-	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1 store=no
+	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1
 	@caption Fake county
 
-	@property fake_address_country type=textbox store=no
+	@property fake_address_country type=textbox
 	@caption Fake country
 
-	@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1 store=no
+	@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1
 	@caption Fake country
 
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
@@ -1003,6 +1006,15 @@ default group=org_objects
 		@layout quality_list_s type=vbox parent=quality_list_box closeable=1
 			@property quality_list type=table store=no no_caption=1 parent=quality_list_s
 
+@default group=bills_quality
+
+	@property quality_tb type=toolbar no_caption=1 store=no
+	@layout quality_list_box type=hbox width=20%:80%
+		@layout quality_list type=vbox parent=quality_list_box closeable=1
+			@property quality_tree type=treeview store=no no_caption=1 parent=quality_list
+			@caption Kvaliteedi puu
+		@layout quality_list_s type=vbox parent=quality_list_box closeable=1
+			@property quality_list type=table store=no no_caption=1 parent=quality_list_s
 
 @default group=my_tasks,meetings,calls,ovrv_offers,all_actions,ovrv_mails,documents_all_manage,bugs
 
@@ -1099,15 +1111,18 @@ default group=org_objects
 			@property stats_tree type=treeview store=no no_caption=1 parent=stats_list_u
 			@caption Aruannete puu
 
-		@layout stats_list_s type=vbox parent=stats_list_l closeable=1
+		@layout stats_list_s type=vbox parent=stats_list_l closeable=1 area_caption=Ajavahemik
 
-			@property sats_stats_from type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
-			@caption Esitatud alates
+			@property stats_stats_time_sel type=select store=no parent=stats_list_s captionside=top
+			@caption Ajavahemik
 
-			@property sats_stats_to type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
-			@caption Esitatud kuni
+			@property stats_stats_from type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
+			@caption Alates
 
-			@property sats_stats_search type=submit store=no parent=stats_list_s captionside=top no_caption=1 
+			@property stats_stats_to type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
+			@caption Kuni
+
+			@property stats_stats_search type=submit store=no parent=stats_list_s captionside=top no_caption=1 
 			@caption Otsi
 
 		@layout stats_list_s type=vbox parent=stats_list_l closeable=1 area_caption=Ajavahemik
@@ -1384,9 +1399,8 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no save=no
 	@groupinfo bills_search parent=bills caption="Otsi toimetusi" submit=no save=no
 	@groupinfo bills_create parent=bills caption="Maksmata t&ouml;&ouml;d" submit=no save=no
-       @groupinfo bill_payments parent=bills caption="Laekumised" submit=no save=no
+	@groupinfo bill_payments parent=bills caption="Laekumised" submit=no save=no
 	@groupinfo bills_quality parent=bills caption="Kvaliteet" submit=no save=no
-
 
 @groupinfo stats caption="Aruanded" save=no
 
@@ -1643,9 +1657,11 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype EXTERNAL_LINKS value=82 clid=CL_EXTLINK
 @caption V&auml;lised lingid
 
-@reltype FAKE_COUNTRY value=83 clid=CL_CRM_COUNTRY 	 
-@caption Fake country
+@reltype QUALITY_MENU value=83 clid=CL_MENU
+@caption Kvaliteedi men&uuml;&uuml;
 
+@reltype FAKE_COUNTRY value=84 clid=CL_CRM_COUNTRY 	 
+@caption Fake country
 
 */
 /*
@@ -1718,31 +1734,40 @@ class crm_company extends class_base
 		$this->users_person = new object($us->get_current_person());
 	}
 
-	/*
-		arr[]
-			tree_inst -> the treeview object
-			obj_inst -> the root object
-			conn_type -> what type of connections are allowed
-			skip -> a type can have many "to" object types, if any of them
-						should be skipped, then $skip does the trick
-			attrib -> the node link can have some extra attributes
-			leafs -> if leafs should be shown (not exactly what the description implies)
-			style -> css style added to the node - sound funny - yeah, it is
-			show_people
-	*/
+	/**
+		@attrib name=generate_tree api=1 params=name
+		@param tree_inst required type=object
+			The treeview object
+		@param obj_inst required type=object
+			The root object
+		@param url optional type=string
+			The URL to add the params to
+		@param conn_type optional
+			What type of connections are allowed
+		@param skip optional
+			A connection type can have many "to" object types, if any of them should be skipped, then $skip does the trick
+		@param attrib optional
+			The node link can have some extra attributes
+		@param leafs optional
+			If leafs should be shown (not exactly what the description implies)
+		@param style optional
+			CSS style added to the node - sound funny - yeah, it is
+		@param show_people optional type=boolean
+	**/
 	//function generate_tree($tree, $obj,$node_id,$type1,$skip, $attrib, $leafs, $style=false)
-	function generate_tree($arr)
+	public function generate_tree($arr)
 	{
 		//all connections from the currrent object
 		//different reltypes
 		extract($arr);
+		$origurl = isset($arr["url"]) ? $arr["url"] : NULL;
 		$tree = &$arr['tree_inst'];
 		$obj = &$arr['obj_inst'];
 		$node_id = &$arr['node_id'];
 		$attrib = &$arr['attrib'];
 		$tmp_type = $conn_type;
 
-		if(sizeof($arr['skip']))
+		if(isset($arr['skip']) && is_array($arr['skip']) && sizeof($arr['skip']))
 		{
 			$skip = &$arr['skip'];
 		}
@@ -1760,39 +1785,23 @@ class crm_company extends class_base
 			'sort_dir' => 'asc',
 		));
 
-		$to_oids = array();
-		foreach($conns as $key=>$conn)
-		{
-			$to_oids[] = $conn->prop("to");
-		}
-
-		if (count($to_oids))
-		{
-			$ol = new object_list(array(
-				"oid" => $to_oids,
-				"lang_id" => array(),
-				"site_id" => array()
-			));
-			$ol->arr();
-		}
-
 		//parent nodes'id actually
 		$this_level_id = $node_id;
-		foreach($conns as $key=>$conn)
+		foreach($conns as $key => $conn)
 		{
 			//$skip in action
-			if(in_array($conn->prop('type'),$skip))
+			if(in_array($conn->prop('type'), $skip))
 			{
 				continue;
 			}
 			//iga alam item saab yhe v6rra suurema v22rtuse
 			//if the 'to.id' eq active_node then it should be bold
 			$name = $conn->prop('to.name');
-			if($style)
+			if(!empty($style))
 			{
 				$name = '<span class=&quot;'.$style.'&quot;>'.$name.'</span>';
 			}
-			if($conn->prop('to')==$this->active_node)
+			if($conn->prop('to') == $this->active_node)
 			{
 				$name='<b>'.$name.'</b>';
 			}
@@ -1800,7 +1809,7 @@ class crm_company extends class_base
 			$tmp_obj = $conn->to();
 
 			//use the plural unless plural is empty -- this is just for reltype_section
-			if ($this->tree_uses_oid)
+			if (!empty($this->tree_uses_oid))
 			{
 				$node_id = $conn->prop("to");
 			}
@@ -1809,7 +1818,7 @@ class crm_company extends class_base
 				++$node_id;
 			}
 
-			if ($arr["edit_mode"])
+			if (!empty($arr["edit_mode"]))
 			{
 				$popm = get_instance("vcl/popup_menu");
 				$popm->begin_menu("cst_".$node_id);
@@ -1828,11 +1837,11 @@ class crm_company extends class_base
 				'id'=>$node_id,
 				'name'=>$name,
 				'url'=>aw_url_change_var(array(
-					$attrib=>$conn->prop('to'),
-					'cat'=>'',
-					'org_id' => '',
+					'cat' => NULL,
+					'org_id' => NULL,
 					'customer_search_submit' => NULL,
-				)),
+					$attrib => $conn->prop('to'),
+				), false, $origurl),
 				'oid' => $conn->prop('to'),
 				"class_id" => $conn->prop("to.class_id"),
 			);
@@ -1872,15 +1881,16 @@ class crm_company extends class_base
 						'skip' => &$skip,
 						'attrib' => &$attrib,
 						'leafs' => $leafs,
-						"edit_mode" => $edit_mode,
+						"edit_mode" => isset($edit_mode) ? $edit_mode : NULL,
 						"show_people" => $show_people,
+						"url" => $origurl,
 			));
 		}
 		if($_GET['group'] == 'relorg_s')
 		{
 			unset($statuses);
 		}
-		if($statuses)
+		if(!empty($statuses))
 		{
 			classload("core/icons");
 			$st = get_instance(CL_CRM_COMPANY_STATUS);
@@ -1895,7 +1905,7 @@ class crm_company extends class_base
 
 				));
 
-				if(count($ol->list))
+				if($ol->count())
 				{
 					$tree->add_item(0,array(
 						"id" => 'cat'.$id,
@@ -1906,7 +1916,7 @@ class crm_company extends class_base
 							"name" => $_GET["tf"] == 'cat'.$id ? "<b>".$cat."</b>" : $cat,
 							"customer_search_submit" => null,
 							"customer_search_submit_and_change" => null,
-						))
+						), false, $origurl)
 					));
 
 					foreach($ol->arr() as $o)
@@ -1919,7 +1929,7 @@ class crm_company extends class_base
 								"category" => 'st_'.$o->id(),
 								"customer_search_submit" => null,
 								"customer_search_submit_and_change" => null,
-							)),
+							), false, $origurl),
 						));
 						$this->get_s_tree_stuff('cat'.$o->id(), $tree, 0);
 					}
@@ -1931,17 +1941,17 @@ class crm_company extends class_base
 		{
 			if(is_callable(array($this, $leafs)))
 			{
-				$this->$leafs(&$tree,&$obj,$this_level_id,&$node_id, $show_people);
+				$this->$leafs(&$tree,&$obj,$this_level_id,&$node_id, $show_people, $origurl);
 			}
 			else
 			{
-				$this->tree_node_items(&$tree,&$obj,$this_level_id,&$node_id, $show_people);
+				$this->tree_node_items(&$tree,&$obj,$this_level_id,&$node_id, $show_people, $origurl);
 			}
 		}
 	}
 
 	//hardcoded
-	function tree_node_items($tree,$obj,$this_level_id,$node_id, $show_people)
+	function tree_node_items($tree,$obj,$this_level_id,$node_id, $show_people, $origurl = NULL)
 	{
 		//getting the list of professions for the current
 		//unit/organization
@@ -1959,7 +1969,7 @@ class crm_company extends class_base
 		if($show_people)
 		{
 			// preload sections from persons
-			$p2s = array(1);
+			$p2s = array();
 			$c = new connection();
 			$r_conns = $c->find(array(
 				"from.class_id" => CL_CRM_PERSON,
@@ -1984,7 +1994,7 @@ class crm_company extends class_base
 			}
 
 			$url = array();
-			$url = aw_url_change_var(array('cat'=>$prof_conn->prop('to'),$key=>$value));
+			$url = aw_url_change_var(array('cat'=>$prof_conn->prop('to'),$key=>$value), false, $origurl);
 			$tree->add_item($this_level_id,
 				array(
 					'id' => ++$node_id,
@@ -1994,7 +2004,7 @@ class crm_company extends class_base
 					"class_id" => $tmp_obj->class_id()
 				)
 			);
-			if($show_people)
+			if($show_people && count($p2s) > 0)
 			{
 
 				$pol = new object_list(array(
@@ -2006,11 +2016,16 @@ class crm_company extends class_base
 				));
 				foreach($pol->arr() as $po)
 				{
-					$url = aw_url_change_var(array('cat'=>$po->id(),$key=>$value));
+					$url = aw_url_change_var(array('cat'=>$po->id(),$key=>$value), false, $origurl);
+					$name = parse_obj_name($po->name());
+					if($po->id() == $this->active_node && ($_GET["unit"] == $obj->id()))
+					{
+						$name = '<b>'.$name.'</b>';
+					}
 					$tree->add_item($node_id,
 						array(
 							'id' => $po->id(),
-							'name' => $po->name(),
+							'name' => $name,
 							'iconurl' =>' images/icons/class_145.gif',
 							'url'=>$url,
 							"class_id" => $po->class_id()
@@ -2024,11 +2039,16 @@ class crm_company extends class_base
 			foreach($p2s as $id)
 			{
 				$po = obj($id);
-				$url = aw_url_change_var(array('cat'=>$po->id(),$key=>$value));
+				$url = aw_url_change_var(array('cat'=>$po->id(),$key=>$value), false, $origurl);
+				$name = parse_obj_name($po->name());
+				if($po->id() == $this->active_node && ($_GET["unit"] == $obj->id()))
+				{
+					$name = '<b>'.$name.'</b>';
+				}
 				$tree->add_item($this_level_id,
 					array(
 						'id' => $po->id()."_".$po->id(),
-						'name' => $po->name(),
+						'name' => $name,
 						'iconurl' =>' images/icons/class_145.gif',
 						'url'=>$url,
 						"class_id" => $po->class_id()
@@ -3053,6 +3073,7 @@ class crm_company extends class_base
 			case "stats_s_area":
 			case "stats_s_worker_sel":
 			case "stats_s_time_sel":
+			case "stats_stats_time_sel":
  			case "stats_stats_tb":
 			case "stats_stats_time_sel":
  			case "stats_tree":
@@ -4334,6 +4355,7 @@ class crm_company extends class_base
 			$arr['args']['stats_s_group_by_task'] = ($arr['request']['stats_s_group_by_task']);
 			$arr['args']['MAX_FILE_SIZE'] = ($arr["request"]["MAX_FILE_SIZE"]);
 		}
+
 		if($arr["args"]["group"] == "stats_stats" || $arr["args"]["group"] == "stats")
 		{
 			$arr['args']['stats_stats_time_sel'] = ($arr['request']['stats_stats_time_sel']);
@@ -7090,6 +7112,15 @@ class crm_company extends class_base
 
 	function callback_mod_layout(&$arr)
 	{
+/*		if($arr["name"] == "data_r_charts")
+		{
+			if($_GET["st"] == "customers")
+			{
+				$arr["width"] = "1%:99%";
+				$arr["type"] = "vbox";
+			}
+		}
+*/
 		if($arr["name"] == "all_act_search" && aw_global_get("crm_task_view") == CRM_TASK_VIEW_CAL)
 		{
 			return false;
@@ -7253,6 +7284,15 @@ class crm_company extends class_base
 	function callback_generate_scripts($arr)
 	{
 		$sc = "";
+
+		$sc.='function gt_change(id)
+		{
+			change_url = "'.$this->mk_my_orb("gt_change").'";
+			change_url = change_url+"&id="+id+"&return_url='.urlencode(get_ru()).'";
+			NewWindow = window.open(change_url , "_blank");
+//			window.location.href = change_url;
+		}';
+
 		if (!$arr["new"])
 		{
 			$sc.="function co_contact(id,url)
@@ -7599,6 +7639,7 @@ class crm_company extends class_base
 		}
 		exit ($cl_json->encode($option_data));
 	}
+
 
 	/**
 		@attrib name=name_autocomplete_source
@@ -8512,6 +8553,31 @@ class crm_company extends class_base
 		{
 			$crel->set_prop("bill_due_date_days", $arr["prop"]["value"]);
 			$crel->save();
+		}
+	}
+
+	function _set_bill_tolerance($arr)
+	{
+		if (!$arr["request"]["co_is_buyer"])
+		{
+			return;
+		}
+		$cur = get_current_company();
+		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
+		if ($crel)
+		{
+			$crel->set_prop("bill_tolerance", $arr["prop"]["value"]);
+			$crel->save();
+		}
+	}
+
+	function _get_bill_tolerance($arr)
+	{
+		$cur = get_current_company();
+		$crel = $this->get_cust_rel($arr["obj_inst"], false, $cur);
+		if ($crel)
+		{
+			$arr["prop"]["value"] = $crel->prop("bill_tolerance");
 		}
 	}
 
