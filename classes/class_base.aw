@@ -1007,7 +1007,7 @@ class class_base extends aw_template
 		$this->leftout_layouts[$lay] = $lay;
 		foreach($this->layoutinfo as $key => $val)
 		{
-			if($val["parent"] == $lay)
+			if(ifset($val, "parent") == $lay)
 			{
 				$this->_get_sub_layouts($key);
 			}
@@ -1320,7 +1320,7 @@ class class_base extends aw_template
 				}
 
 				//$retval = $this->mk_my_orb($action,$args,$orb_class);
-				$retval = $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
+				$retval = !empty($request["post_ru"]) ? $request["post_ru"] : $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
 
 				if (is_numeric($class))
 				{
