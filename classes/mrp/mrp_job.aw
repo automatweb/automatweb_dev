@@ -35,11 +35,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 
 @default table=mrp_job
+	@property person type=relpicker reltype=RELTYPE_PERSON multiple=1 store=connect
+	@caption Isikud, kes on seda t&ouml;&ouml;d teinud
+
 	@property started type=text
 	@caption Alustatud
 
 	@property finished type=text
 	@caption L&otilde;petatud
+
+	@property aborted type=text
+	@caption Katkestatud
 
 	@property resource type=text
 	@caption Ressurss
@@ -104,6 +110,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 @reltype MRP_PROJECT value=2 clid=CL_MRP_CASE
 @caption Projekt
 
+@reltype PERSON value=3 clid=CL_CRM_PERSON
+@caption Isik, kes on seda t&ouml;&ouml;d teinud
+
 */
 
 /*
@@ -123,6 +132,7 @@ CREATE TABLE `mrp_job` (
   `post_buffer` int(10) unsigned default NULL,
   `started` int(10) unsigned default NULL,
   `finished` int(10) unsigned default NULL,
+  `aborted` int(10) unsigned default NULL,
   `remaining_length` int(10) unsigned default NULL,
 
 	PRIMARY KEY  (`oid`)
@@ -310,6 +320,17 @@ class mrp_job extends class_base
 
 			case "finished":
 				$prop["value"] = ($this_object->prop ("state") == MRP_STATUS_DONE) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("T&ouml;&ouml;d pole veel l&otilde;petatud");
+				break;
+
+			case "aborted":
+				if($this_object->prop("state") == MRP_STATUS_ABORTED)
+				{
+					$prop["value"] = date(MRP_DATE_FORMAT, $prop["value"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
 				break;
 
 			case "job_toolbar":
@@ -692,10 +713,12 @@ class mrp_job extends class_base
 		}
 	}
 
+	
+
 /**
 	@attrib name=done
 	@param id required type=int
-**/
+**/ 
 	function done ($arr)
 	{
 		$errors = array ();
@@ -752,6 +775,14 @@ class mrp_job extends class_base
 				$time = time ();
 				$this_object->set_prop ("state", MRP_STATUS_DONE);
 				$this_object->set_prop ("finished", $time);
+				foreach($arr["material_amount"] as $prod => $amount)
+				{
+					$this_object->set_used_material(array(
+						"product" => $prod,
+						"amount" => $amount,
+					));
+				}
+
 				aw_disable_acl();
 				$this_object->save ();
 				aw_restore_acl();
@@ -886,6 +917,7 @@ class mrp_job extends class_base
 			{
 				### abort job
 				$this_object->set_prop ("state", MRP_STATUS_ABORTED);
+				$this_object->set_prop ("aborted", time());
 				aw_disable_acl();
 				$this_object->save ();
 				aw_restore_acl();
@@ -1692,6 +1724,52 @@ class mrp_job extends class_base
 		return $unitselect;
 	}
 
+	function draw_expense_list_table($t , $job)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Materjal"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+/*		$t->define_field(array(
+			"name" => "prog_expense",
+			"caption" => t("Prognoositud kulu"),
+			"sortable" => 1,
+			"align" => "center"
+		));*/
+		$t->define_field(array(
+			"name" => "expense",
+			"caption" => t("Tegelik kulu"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "unit",
+			"caption" => t("&Uuml;hik"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->set_default_sortby ("name");
+		$t->set_caption(t("Materjali kulu"));
+		$t->set_default_sorder ("asc");
+		foreach($job->get_material_expense_list() as $id => $material)
+		{
+			$t->define_data(array(
+				"name" => $material->name(),
+				"prog_expense" => 0,
+				"expense" => html::textbox(array(
+					"name" => "material_amount[".$id."]",
+					"size" => 5,
+					"value" => $material->prop("amount"),
+				)),
+				"unit" => $material->prop("unit.name"),
+			));
+		}
+
+	}
+
 	function do_db_upgrade($table, $field, $q, $err)
 	{
 		if ("mrp_job" === $table)
@@ -1700,6 +1778,7 @@ class mrp_job extends class_base
 
 			switch($field)
 			{
+				case "aborted":
 				case "real_length":
 					$this->db_add_col($table, array(
 						"name" => $field,
@@ -1727,12 +1806,30 @@ class mrp_job extends class_base
 						aw_resource_id INT NOT NULL,
 						aw_uid VARCHAR(50) NOT NULL,
 						aw_uid_oid INT NOT NULL,
+						aw_previous_pid INT NOT NULL,
 						aw_pid INT NOT NULL,
 						aw_job_previous_state TINYINT(2) UNSIGNED NOT NULL,
 						aw_job_state TINYINT(2) UNSIGNED NOT NULL,
 						aw_job_last_duration INT(10) UNSIGNED NOT NULL,
 						aw_tm INT NOT NULL
 					);");
+					return true;
+
+				case "aw_previous_pid":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT",
+					));
+					$this->db_query("
+					UPDATE 
+						mrp_job_rows c, 
+						mrp_job_rows p 
+					SET
+						c.aw_previous_pid = p.aw_pid 
+					WHERE 
+						p.aw_job_id = c.aw_job_id AND
+						p.aw_job_state = c.aw_job_previous_state AND
+						c.aw_tm BETWEEN (p.aw_tm + c.aw_job_last_duration - 5) AND (p.aw_tm + c.aw_job_last_duration + 5);");
 					return true;
 			}
 		}

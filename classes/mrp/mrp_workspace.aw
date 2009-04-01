@@ -1,7 +1,7 @@
 <?php
 /*
 
-@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1 maintainer=voldemar
+@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1 prop_cb=1 maintainer=voldemar
 
 @groupinfo general caption="Seaded"
 	@groupinfo grp_settings_def caption="Seaded" parent=general confirm_save_data=1
@@ -18,8 +18,51 @@
 @groupinfo grp_resources caption="Ressursid"
 	@groupinfo grp_resources_load caption="Koormus" parent=grp_resources
 	@groupinfo grp_resources_manage caption="Haldus" parent=grp_resources
-@groupinfo grp_operators caption="Inimesed"
-@groupinfo grp_printer caption="Operaatori vaade" submit=no
+	@groupinfo grp_resources_hours_report caption="T&ouml;&ouml;ajaaruanne" parent=grp_resources submit=no
+@groupinfo grp_persons caption="Inimesed"
+	@groupinfo grp_persons_hours_report caption="T&ouml;&ouml;ajaaruanne" parent=grp_persons
+	@groupinfo grp_persons_jobs_report caption="Tehtud t&ouml;&ouml;d inimeste kaupa" parent=grp_persons
+
+@groupinfo grp_printer_general caption="Operaatori vaade" submit=no
+@groupinfo grp_printer caption="T&ouml;&ouml;d" submit=no parent=grp_printer_general
+
+@groupinfo my_stats caption="Minu aruanded" submit=no parent=grp_printer_general
+@default group=my_stats
+	layout my_stats_full type=hbox width=20%:80% group=my_stats
+		layout my_stats_left type=vbox parent=my_stats_full
+		layout my_stats_tree type=vbox parent=my_stats_left area_caption=Vali&nbsp;ajavahemik
+			property my_stats_time_tree type=treeview store=no no_caption=1 parent=my_stats_tree
+		layout my_stats_right type=vbox parent=grp_persons_full
+			layout my_stats_right_top type=hbox parent=my_stats_right width=50%:50%
+				layout my_stats_hours_by_resource_chart type=vbox closeable=1 parent=my_stats_right_top area_caption=A
+					property my_stats_hours_by_resource_chart type=google_chart store=no parent=my_stats_hours_by_resource_chart no_caption=1
+				layout my_stats_pauses_by_resource_chart type=vbox closeable=1 parent=my_stats_right_top area_caption=A
+					property my_stats_pauses_by_resource_chart type=google_chart store=no parent=my_stats_pauses_by_resource_chart no_caption=1
+			layout my_stats_hours_tbl type=vbox closeable=1 parent=my_stats_right area_caption=T&ouml;&ouml;tundide&nbsp;tabel
+				property my_stats_tbl type=table no_caption=1 parent=my_stats_hours_tbl store=no
+
+
+@groupinfo my_resources caption="Minu ressursid" submit=no parent=grp_printer_general
+@default group=my_resources
+	@layout my_resources_full type=hbox width=20%:80%
+	@layout my_resources_tree_box type=vbox closeable=1 area_caption=Ressursid&nbsp;&amp;&nbsp;kategooriad parent=my_resources_full
+		@property my_resources_tree type=text store=no no_caption=1 parent=my_resources_tree_box
+	@layout my_right_pane type=vbox parent=my_resources_full
+		@layout my_resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=my_right_pane
+			@property my_resource_deviation_chart type=google_chart no_caption=1 parent=my_resource_deviation_chart store=no
+		@layout my_resource_time_chart type=vbox closeable=1 area_caption=Ressursside&nbsp;ajakasutus parent=my_right_pane
+			@layout my_resource_time_limits type=hbox parent=my_resource_time_chart
+
+				@property my_resource_time_start type=date_select parent=my_resource_time_limits
+				@caption Alates
+
+				@property my_resource_time_end type=date_select parent=my_resource_time_limits
+				@caption Kuni
+
+			@property my_resource_time_chart type=google_chart no_caption=1 parent=my_resource_time_chart store=no
+		@property my_resources_list type=table store=no parent=my_right_pane no_caption=1
+
+
 #	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
 #	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
 #	@groupinfo grp_printer_done caption="Tehtud t&ouml;&ouml;d" parent=grp_printer submit=no
@@ -124,13 +167,59 @@
 			@property resource_time_chart type=google_chart no_caption=1 parent=resource_time_chart store=no group=grp_resources_load
 		@property resources_list type=table store=no parent=right_pane no_caption=1
 
-@default group=grp_operators
-	@layout current_week_hours_chart type=vbox closeable=1 area_caption=K&auml;esoleva&nbsp;n&auml;dala&nbsp;t&ouml;&ouml;tundide&nbsp;graafik&nbsp;inimeste&nbsp;kaupa
-		@property current_week_hours_chart type=text no_caption=1 parent=current_week_hours_chart store=no
-	@layout last_week_hours_chart type=vbox closeable=1 area_caption=M&ouml;&ouml;dunud&nbsp;n&auml;dala&nbsp;t&ouml;&ouml;tundide&nbsp;graafik&nbsp;inimeste&nbsp;kaupa
-		@property last_week_hours_chart type=text no_caption=1 parent=last_week_hours_chart store=no
-	@layout hours_tbl type=vbox closeable=1 area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;inimeste&nbsp;kaupa
-		@property hours_tbl type=table no_caption=1 parent=hours_tbl store=no
+@default group=grp_resources_hours_report
+	@layout resources_hours_full type=hbox width=20%:80%
+		@layout resources_hours_left type=vbox parent=resources_hours_full
+			@layout resources_time_tree type=vbox parent=resources_hours_left area_caption=Vali&nbsp;ajavahemik
+				@property resources_time_tree type=treeview store=no no_caption=1 parent=resources_time_tree
+			@layout resources_resource_span_tree type=vbox parent=resources_hours_left area_caption=Vali&nbsp;ressursid
+				@property resources_resource_span_tree type=treeview store=no no_caption=1 parent=resources_resource_span_tree
+		@layout resources_hours_right type=vbox parent=resources_hours_full
+			@layout resources_hours_chart type=vbox closeable=1 parent=resources_hours_right area_caption=T&ouml;&ouml;tundide&nbsp;graafik&nbsp;ressursside&nbsp;kaupa
+				@property resources_hours_chart type=text no_caption=1 parent=resources_hours_chart store=no
+			@layout resources_hours_tbl type=vbox closeable=1 parent=resources_hours_right area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;ressursside&nbsp;kaupa
+				@property resources_hours_tbl type=table no_caption=1 parent=resources_hours_tbl store=no
+
+@default group=grp_persons_hours_report,grp_persons_jobs_report,my_stats
+	@layout grp_persons_full type=hbox width=20%:80%
+		@layout grp_persons_left type=vbox parent=grp_persons_full
+			@layout persons_time_tree type=vbox parent=grp_persons_left area_caption=Vali&nbsp;ajavahemik
+				@property persons_time_tree type=treeview store=no no_caption=1 parent=persons_time_tree
+			@layout persons_personnel_tree type=vbox parent=grp_persons_left area_caption=Vali&nbsp;inimesed&#44;&nbsp;kelle&nbsp;t&ouml;&ouml;tunde&nbsp;soovid&nbsp;n&auml;ha
+				@property persons_personnel_tree type=treeview store=no no_caption=1 parent=persons_personnel_tree
+			@layout persons_other_options type=vbox parent=grp_persons_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
+			
+		@layout grp_persons_right type=vbox parent=grp_persons_full
+
+@default group=grp_persons_jobs_report
+	#layout grp_persons_full type=hbox width=20%:80%
+		#layout grp_persons_left type=vbox parent=grp_persons_full
+			#layout persons_other_options type=vbox parent=grp_persons_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
+				@property poo_job_done_only_by type=checkbox ch_value=1 parent=persons_other_options no_caption=1
+				@caption Kuva t&ouml;id, mida on teinud ainult valitud isik
+				@comment Omab m&otilde;ju ainult &uuml;he isiku t&ouml;&ouml;de kuvamisel
+		#layout grp_persons_right type=vbox parent=grp_persons_full
+			@layout persons_jobs_tbl type=vbox parent=grp_persons_right area_caption=Tehtud&nbsp;t&ouml&ouml;d
+				@property persons_jobs_tbl type=table store=no parent=persons_jobs_tbl no_caption=1
+
+@default group=grp_persons_hours_report,my_stats
+	#layout grp_persons_full type=hbox width=20%:80%
+		#layout grp_persons_left type=vbox parent=grp_persons_full
+			#layout persons_other_options type=vbox parent=grp_persons_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
+				@property poo_started_finished_by type=chooser parent=persons_other_options orient=vertical captionside=top
+				@caption Kuva iga isiku kohta tema poolt
+		#layout grp_persons_right type=vbox parent=grp_persons_full
+			@layout grp_persons_right_top type=hbox parent=grp_persons_right width=50%:50%
+				@layout hours_by_resource_chart type=vbox closeable=1 parent=grp_persons_right_top area_caption=A group=grp_persons_hours_report,my_stats
+					@property hours_by_resource_chart type=google_chart store=no parent=hours_by_resource_chart no_caption=1 group=grp_persons_hours_report,my_stats
+				@layout pauses_by_resource_chart type=vbox closeable=1 parent=grp_persons_right_top area_caption=A group=grp_persons_hours_report,my_stats
+					@property pauses_by_resource_chart type=google_chart store=no parent=pauses_by_resource_chart no_caption=1 group=grp_persons_hours_report,my_stats
+			@layout persons_hours_chart type=vbox closeable=1 parent=grp_persons_right area_caption=T&ouml;&ouml;tundide&nbsp;graafik&nbsp;inimeste&nbsp;kaupa group=grp_persons_hours_report,my_stats
+				@property persons_hours_chart type=text no_caption=1 parent=persons_hours_chart store=no group=grp_persons_hours_report,my_stats
+			@layout persons_hours_tbl type=vbox closeable=1 parent=grp_persons_right area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;inimeste&nbsp;kaupa group=grp_persons_hours_report,my_stats
+				@property persons_hours_tbl type=table no_caption=1 parent=persons_hours_tbl store=no group=grp_persons_hours_report,my_stats
+			@layout persons_detailed_hours_tbl type=vbox closeable=1 parent=grp_persons_right area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;t&ouml;&ouml;&nbsp;kaupa group=grp_persons_hours_report,my_stats
+				@property persons_detailed_hours_tbl type=table no_caption=1 parent=persons_detailed_hours_tbl store=no group=grp_persons_hours_report,my_stats
 
 @default group=grp_schedule_gantt
 	@property master_schedule_chart type=text store=no no_caption=1
@@ -209,6 +298,9 @@
 
 	@property warehouse type=relpicker reltype=RELTYPE_MRP_WAREHOUSE parent=left_column multiple=1
 	@caption Materjalide ladu
+
+	@property hr_time_format type=chooser parent=left_column
+	@caption Ajaformaat t&ouml;&ouml;ajaaruannetes
 
 	@property pv_per_page type=textbox default=30 datatype=int parent=left_column
 	@caption Operaatori vaates t&ouml;id lehel
@@ -438,6 +530,8 @@
 			@property pjp_title_case_wf type=text store=no subtitle=1 parent=printer_right
 			@caption Projekti t&ouml;&ouml;voog
 
+			@property pjp_material type=table store=no no_caption=1 parent=printer_right
+
 			@property pjp_case_wf type=table store=no no_caption=1 parent=printer_right
 
 
@@ -586,9 +680,35 @@ class mrp_workspace extends class_base
 		return $arr["post_ru"];
 	}
 
+	/**
+		@attrib name=save_pj_material
+	**/
+	function save_pj_material($arr)
+	{
+		$job = obj($arr["pj_job"]);
+		$units = array();
+		foreach($job->get_material_expense_list() as $id => $material)
+		{
+			$units[$id] = $material->prop("unit");
+		}
+		foreach($arr["material_amount"] as $prod => $amount)
+		{
+			$job->set_used_material(array(
+				"product" => $prod,
+				"amount" => $amount,
+				"unit" => $units[$prod],
+			));
+		}
+
+		return $arr["post_ru"];
+	}
+
+
 	function callback_pre_edit ($arr)
 	{
 		$this_object = $arr["obj_inst"];
+
+		$this->hours_report_time_format = $this_object->prop("hr_time_format");
 
 		if (!empty($arr["group"]) and $arr["group"] === "grp_projects")
 		{
@@ -938,6 +1058,11 @@ class mrp_workspace extends class_base
 					$this->_pjp_case_wf($arr);
 					return PROP_OK;
 				}
+				if ($prop["name"] === "pjp_material")
+				{
+					$this->_pjp_material($arr);
+					return PROP_OK;
+				}
 
 				$retv = $this->import->get_prop_value($prop, $rpn);
 				if ($retv != PROP_OK)
@@ -1042,9 +1167,12 @@ class mrp_workspace extends class_base
 					case "change_comment_history":
 						$txt = array();
 						$cnt = 0;
+						$user_inst = get_instance("user");
+		
 						foreach(safe_array($job->meta("change_comment_history")) as $comment_hist_item)
 						{
-							$txt[] = date("d.m.Y H:i", $comment_hist_item["tm"]).": ".$comment_hist_item["text"]." (".$comment_hist_item["uid"].")";
+							$user = $user_inst->get_obj_for_uid($comment_hist_item["uid"]);
+							$txt[] = date("d.m.Y H:i", $comment_hist_item["tm"]).": ".$comment_hist_item["text"]." (".($user ? $user->get_user_name(): $comment_hist_item["uid"]).")";
 							if ($cnt++ > 4)
 							{
 								break;
@@ -1267,6 +1395,7 @@ class mrp_workspace extends class_base
 					aw_session_del("mrp_errors");
 				}
 				break;
+			case "my_resources_tree":
 			case "resources_tree":
 				$this->create_resources_tree ($arr);
 				break;
@@ -1382,200 +1511,11 @@ class mrp_workspace extends class_base
 				}
 				break;
 
-			case "resource_time_chart":
-				if(isset($arr["request"]["mrp_tree_active_item"]) && is_oid($arr["request"]["mrp_tree_active_item"]) && $this->can("view", $arr["request"]["mrp_tree_active_item"]))
-				{
-					$resources_folder = $arr["request"]["mrp_tree_active_item"];
-				}
-				else
-				{
-					$resources_folder = $this_object->prop("resources_folder");
-				}
-				$resource_tree = new object_tree(array(
-					"parent" => $resources_folder,
-					"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
-					"sort_by" => "objects.jrk",
-				));
-				$ids = $resource_tree->ids();
-				$ids[] = $resources_folder;
-
-				$start = $arr["obj_inst"]->resource_time_start;
-				$end = $arr["obj_inst"]->resource_time_end;
-				$start = is_numeric($start) ? $start : mktime(0, 0, 0, date("m") - 1, date("d"), date("Y"));
-				$end = is_numeric($end) ? $end : time();
-				$span = $end - $start;
-				
-				$tmp = array();
-				$inst = get_instance("mrp_resource");
-				foreach(array_merge($resource_tree->to_list()->arr(), array(obj($resources_folder))) as $o)
-				{
-					if($o->class_id() == CL_MENU)
-					{
-						continue;
-					}
-					$tmp["free"][$o->id()] = 100;
-					$tmp["names"][$o->id()] = $o->name();
-					$tmp["unavail"][$o->id()] = 0;
-					foreach($inst->get_unavailable_periods($o, $start, $end) as $from => $to)
-					{
-						$tmp["unavail"][$o->id()] += max(0, $to - $from);
-					}
-					foreach($inst->get_recurrent_unavailable_periods($o, $start, $end) as $period)
-					{
-						for($g = $period["start"] + $period["time"]; $g < $period["end"]; $g += $period["interval"])
-						{
-							$u = $g + $period["length"] > $period["end"] ? $period["end"] - $g : $period["length"];
-							$tmp["unavail"][$o->id()] += max(0, $u);
-						}
-					}
-				}
-
-				$odl = new object_data_list(
-					array(
-						"class_id" => CL_MRP_JOB,
-						"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $ids,
-						"CL_MRP_JOB.state" => MRP_STATUS_DONE,
-						"CL_MRP_JOB.finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end + 24*3600 - 1, "int"),
-					), 
-					array(
-						CL_MRP_JOB => array("real_length", "length", "started", "finished", "RELTYPE_MRP_RESOURCE.oid"),
-					)
-				);
-				$res = array();
-				foreach($odl->arr() as $oid => $o)
-				{
-					$k = $o["RELTYPE_MRP_RESOURCE.oid"];
-					$res["real"][$k] = (int) (isset($res["real"][$k]) ? $res["real"][$k] + $o["real_length"] : $o["real_length"]);
-					$res["plan"][$k] = (int) (isset($res["plan"][$k]) ? $res["plan"][$k] + $o["length"] : $o["length"]);
-					$paus = max(0, $o["finished"] - $o["started"] - $o["real_length"]);
-					$res["paus"][$k] = (int) (isset($res["paus"][$k]) ? $res["paus"][$k] + $paus : $paus);
-					$res["fake"][$k] = 0;
-					$res["free"][$k] = 100;
-					$res["name"][$k] = $tmp["names"][$k];
-				}
-				foreach($res["real"] as $k => $v)
-				{
-					$res["real"][$k] = round($res["real"][$k] / $span * 100, 2);
-					$res["plan"][$k] = round($res["plan"][$k] / $span * 100, 2);
-					$res["paus"][$k] = round($res["paus"][$k] / $span * 100, 2);
-					$res["unavail"][$k] = round($tmp["unavail"][$k] / $span * 100, 2);
-
-					$res["over_plan"][$k] = max(0, $res["plan"][$k] - $res["real"][$k]);
-					$res["under_plan"][$k] = max(0, $res["real"][$k] - $res["plan"][$k]);
-
-					$res["free"][$k] -= $res["real"][$k] + $res["paus"][$k] + $res["over_plan"][$k] + $res["under_plan"][$k] + $res["unavail"][$k];
-				}
-				$c = &$arr["prop"]["vcl_inst"];
-				$c->set_type(GCHART_BAR_H);
-				$c->set_size(array(
-					"width" => 800,
-					"height" => 27 * count($res["fake"]) + 18,
-				));
-				$c->add_fill(array(
-					"area" => GCHART_FILL_BACKGROUND,
-					"type" => GCHART_FILL_SOLID,
-					"colors" => array(
-						"color" => "e9e9e9",
-					),
-				));
-				$c->add_data(array_merge(array(100), $res["fake"]));
-				$c->add_data(array_merge(array(0), $res["unavail"]));
-				$c->add_data(array_merge(array(0), $res["free"]));
-				$c->add_data(array_merge(array(0), $res["real"]));
-				$c->add_data(array_merge(array(0), $res["over_plan"]));
-				$c->add_data(array_merge(array(0), $res["under_plan"]));
-				$c->add_data(array_merge(array(0), $res["paus"]));
-				$c->set_colors(array(
-					"e9e9e9",
-					"cccccc",
-					"0000ff",
-					"0099ff",
-					"00ff00",
-					"ff0000",
-					"bbccdd",
-				));
-				$c->set_axis(array(
-					GCHART_AXIS_LEFT,
-				));
-				$c->add_axis_label(0, array_reverse($res["name"]));
-				$c->set_legend(array(
-					"labels" => array(
-						t(""),
-						t("Kinnine aeg"),
-						t("Vaba aeg"),
-						t("Tegelik t&ouml;&ouml;aeg"),
-						t("Alakulu"),
-						t("&Uuml;lekulu"),
-						t("Paus"),
-					),
-					"position" => GCHART_POSITION_BOTTOM,
-				));
-				break;
-
 			case "resource_time_start":
 				if(!is_numeric($prop["value"]))
 				{
 					$prop["value"] = mktime(0, 0, 0, date("m") - 1, date("d"), date("Y"));
 				}
-				break;
-
-			### operators tab
-
-			case "current_week_hours_chart":
-			case "last_week_hours_chart":
-				$data = $this->get_hours($prop["name"] === "last_week_hours_chart" ? "last" : "current");
-
-				$prop["value"] = "";
-				for($i = 0; $i < count($data["name"]); $i += 10)
-				{
-					$c = new google_chart();
-					$c->set_type(GCHART_BAR_GV);
-					$c->set_size(array(
-						"width" => 1000,
-						"height" => 200,
-					));
-					$c->set_bar_sizes(array(
-						"width" => 35,
-						"bar_spacing" => 5,
-						"bar_group_spacing" => 15,
-					));
-					$c->add_fill(array(
-						"area" => GCHART_FILL_BACKGROUND,
-						"type" => GCHART_FILL_SOLID,
-						"colors" => array(
-							"color" => "e9e9e9",
-						),
-					));
-					$data_1 = array_slice($data[MRP_STATUS_INPROGRESS], $i, 10);
-					$data_2 = array_slice($data[MRP_STATUS_PAUSED], $i, 10);
-					$c->add_data($data_1);
-					$c->add_data($data_2);
-					$c->set_colors(array(
-						strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_INPROGRESS])),
-						strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_PAUSED])),
-					));
-					$c->set_legend(array(
-						"labels" => array(
-							t("T&ouml;&ouml;aeg (h)"),
-							t("Paus (h)"),
-						),
-						"position" => GCHART_POSITION_RIGHT,
-					));
-					$c->set_axis(array(
-						GCHART_AXIS_BOTTOM,
-						GCHART_AXIS_LEFT,
-					));
-					$max_real = max(array_merge($data_1, $data_2));
-					$max = max(40, $max_real);
-					$c->add_axis_label(0, array_slice($data["name"], $i, 10));
-					$c->add_axis_range(1, array(0, $max));
-					$c->set_data_scales(array(array(0, $max*100/$max_real)));
-					$prop["value"] .= $c->get_html()."<br />";
-				}
-				break;
-
-			case "hours_tbl":
-				$this->_get_hours_tbl($arr);
 				break;
 
 			### customers tab
@@ -1848,6 +1788,14 @@ class mrp_workspace extends class_base
 				$prop["value"] = round (($prop["value"] / 3600), 2);
 				break;
 
+			case "hr_time_format":
+				$prop["options"] = array(
+					0 => t("Tunnid k&auml;ndendmurruna"),
+					1 => t("Tunnid ja minutid"),
+				);
+				$prop["value"] = isset($prop["value"]) ? (int)$prop["value"] : 0;
+				break;
+
 			### users tab
 			case "user_list_toolbar":
 				$this->_user_list_toolbar($arr);
@@ -2032,134 +1980,1058 @@ class mrp_workspace extends class_base
 			case "ws_tbl":
 				$this->_ws_tbl($arr);
 				break;
+
+			### persons tab
+			case "poo_started_finished_by":
+				$prop["options"] = array(
+					mrp_job_obj::PRSN_HNDL_S => t("... alustatud tegevusi"),
+					mrp_job_obj::PRSN_HNDL_F => t("... l&otilde;petatud tegevusi"),
+					mrp_job_obj::PRSN_HNDL_S_OR_F => t("... alustatud v&otilde;i l&otilde;petatud tegevusi"),
+					mrp_job_obj::PRSN_HNDL_S_AND_F => t("... alustatud ja l&otilde;petatud tegevusi"),
+				);
+				if(empty($prop["value"]))
+				{
+					$prop["value"] = mrp_job_obj::PRSN_HNDL_S;
+				}
+				break;
+
+			case "poo_job_done_only_by":
+				$prop["label"] = $prop["caption"];
+				if(!is_oid($this->get_hours_person($arr)))
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
 		}
 		return $retval;
 	}
 
-	function get_hours($week)
+	public function _get_persons_jobs_tbl($arr)
 	{
-		if("current" === $week)
+		$t = &$arr["prop"]["vcl_inst"];
+
+		// Init
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("T&ouml;&ouml;"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "customer",
+			"caption" => t("Klient"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "resource",
+			"caption" => t("Ressurss"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "persons",
+			"caption" => t("Inimesed"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "hours",
+			"caption" => t("T&ouml;&ouml;aeg"),
+		));
+			$t->define_field(array(
+				"name" => "inprogress",
+				"caption" => t("Tegelik"),
+				"align" => "right",
+				"sortable" => true,
+				"sorting_field" => "inprogress_int",
+				"parent" => "hours",
+			));
+			$t->define_field(array(
+				"name" => "length",
+				"caption" => t("Planeeritud"),
+				"align" => "right",
+				"sortable" => true,
+				"sorting_field" => "length_int",
+				"parent" => "hours",
+			));
+		$t->define_field(array(
+			"name" => "deviation",
+			"caption" => t("H&auml;lve"),
+		));
+			$t->define_field(array(
+				"name" => "abs_deviation",
+				"caption" => t("Absoluutne"),
+				"align" => "right",
+				"parent" => "deviation",
+				"sortable" => true,
+				"sorting_field" => "abs_deviation_int",
+			));
+			$t->define_field(array(
+				"name" => "rel_deviation",
+				"caption" => t("Suhteline"),
+				"align" => "right",
+				"parent" => "deviation",
+				"sortable" => true,
+				"sorting_field" => "rel_deviation_int",
+			));
+
+		$t->set_numeric_field(array("length_int", "paused_int", "inprogress_int", "rel_deviation_int", "abs_deviation_int"));
+
+		// Data
+		list($from, $to) = $this->get_hours_from_to();
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"person.oid" => $this->get_hours_person($arr),
+				"finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $from, $to, "int"),
+			),
+			array(
+				CL_MRP_JOB => array(
+					"person",
+					"length",
+					"length_deviation",
+					"real_length",
+					"resource" => "resource_id",
+					"resource(CL_MRP_RESOURCE).name" => "resource",
+					"project" => "project_id",
+					"project(CL_MRP_CASE).name" => "project",
+					"project(CL_MRP_CASE).customer" => "customer_id",
+					"project(CL_MRP_CASE).customer.name" => "customer",
+				),
+			)
+		);
+
+		// Get all the person names
+		$pids = array(-1);
+		foreach($odl->get_element_from_all("person") as $e)
 		{
-			$from = mktime(0, 0, 0, date("n"), date("j") - date("N") + 1, date("Y"));
-			$to = time();
+			$pids = array_merge($pids, (array)$e);
+		}
+		$names_ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"oid" => $pids,
+		));
+		$names = $names_ol->names();
+
+		foreach($odl->arr() as $o)
+		{
+			$o["person"] = (array)$o["person"];
+			if(is_oid($this->get_hours_person($arr)) && $arr["obj_inst"]->prop("poo_job_done_only_by") && (count($o["person"]) > 1 || reset($o["person"]) != $this->get_hours_person($arr)))
+			{
+				continue;
+			}
+
+			$persons = array();
+			foreach($o["person"] as $pid)
+			{
+				if(isset($names[$pid]))
+				{
+					$persons[$pid] = parse_obj_name($names[$pid]);
+				}
+			}
+			sort($persons);
+			$t->define_data(array(
+				"name" => $o["name"],
+				"project" => $o["project"],
+				"customer" => $o["customer"],
+				"resource" => $o["resource"],
+				"persons" => implode(", ", $persons),
+				"inprogress" => $this->format_hours($o["real_length"]/3600),
+				"inprogress_int" => $o["real_length"],
+				"length" => $this->format_hours($o["length"]/3600),
+				"length_int" => $o["length"],
+				"abs_deviation" => $this->format_hours($o["length_deviation"]/3600),
+				"abs_deviation_int" => $o["length_deviation"],
+				"rel_deviation" => sprintf("%s%%", $o["length"] > 0 ? number_format($o["length_deviation"]/$o["length"]*100, 2) : ($o["real_length"] > 0 ? "&#8734;" : "0")),
+				"rel_deviation_int" => $o["length"] > 0 ? $o["length_deviation"]/$o["length"] : ($o["real_length"] > 0 ? (int)sprintf("%u", -1) : 0),
+			));
+		}
+	}
+
+	public function _get_persons_hours_chart($arr)
+	{
+		return $this->_get_hours_chart($arr, "person");
+	}
+
+	public function _get_resources_hours_chart($arr)
+	{
+		return $this->_get_hours_chart($arr, "resource");
+	}
+
+	private function _get_hours_chart($arr, $kf = "person")
+	{
+		$data = $this->get_hours($arr, $kf);
+
+		$arr["prop"]["value"] = "";
+		for($i = 0; $i < count($data["name"]); $i += 8)
+		{
+			$c = new google_chart();
+			$c->set_type(GCHART_BAR_GV);
+			$c->set_size(array(
+				"width" => 950,
+				"height" => 200,
+			));
+			$c->set_bar_sizes(array(
+				"width" => 35,
+				"bar_spacing" => 5,
+				"bar_group_spacing" => 15,
+			));
+			$c->add_fill(array(
+				"area" => GCHART_FILL_BACKGROUND,
+				"type" => GCHART_FILL_SOLID,
+				"colors" => array(
+					"color" => "e9e9e9",
+				),
+			));
+			$data_1 = array_slice($data[MRP_STATUS_INPROGRESS], $i, 8);
+			$data_2 = array_slice($data[MRP_STATUS_PAUSED], $i, 8);
+			$c->add_data($data_1);
+			$c->add_data($data_2);
+			$c->set_colors(array(
+				strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_INPROGRESS])),
+				strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_PAUSED])),
+			));
+			$c->set_legend(array(
+				"labels" => array(
+					t("Efektiivne t&ouml;&ouml;aeg (h)"),
+					t("Paus (h)"),
+				),
+				"position" => GCHART_POSITION_RIGHT,
+			));
+			$c->set_axis(array(
+				GCHART_AXIS_BOTTOM,
+				GCHART_AXIS_LEFT,
+			));
+			$max_real = max(array_merge($data_1, $data_2));
+			$max = max(40, $max_real);
+			$c->add_axis_label(0, array_slice($data["name"], $i, 8));
+			$c->add_axis_range(1, array(0, $max));
+			$c->set_data_scales(array(array(0, $max*100/$max_real)));
+			$arr["prop"]["value"] .= $c->get_html()."<br />";
+		}
+	}
+
+	public function _get_resource_time_chart($arr)
+	{
+		if(isset($arr["request"]["mrp_tree_active_item"]) && $this->can("view", $arr["request"]["mrp_tree_active_item"]))
+		{
+			$resources_folder = $arr["request"]["mrp_tree_active_item"];
 		}
 		else
 		{
-			$from = mktime(0, 0, 0, date("n"), date("j") - date("N") - 6, date("Y"));
-			$to = mktime(0, 0, 0, date("n"), date("j") - date("N") + 1, date("Y")) - 1;
+			$resources_folder = $arr["obj_inst"]->prop("resources_folder");
 		}
-		$q = array();
-		$states = array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED);
-		foreach($states as $state)
+		$resource_tree = new object_tree(array(
+			"parent" => $resources_folder,
+			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+			"sort_by" => "objects.jrk",
+		));
+		$ids = $resource_tree->ids();
+		$ids[] = $resources_folder;
+
+		$start = $arr["obj_inst"]->resource_time_start;
+		$end = $arr["obj_inst"]->resource_time_end;
+		$start = is_numeric($start) ? $start : mktime(0, 0, 0, date("m") - 1, date("d"), date("Y"));
+		$end = is_numeric($end) ? ($end + 24*3600 -1) : time();
+		$span = $end - $start;
+		
+		$res = array();
+		$inst = get_instance("mrp_resource");
+		foreach(array_merge($resource_tree->to_list()->arr(), array(obj($resources_folder))) as $o)
 		{
-			$q[$state] = $this->db_fetch_array("
-				SELECT 
-					SUM(aw_job_last_duration)/3600 as hours,
-					aw_pid as pid
-				FROM
-					mrp_job_rows 
-				WHERE
-					aw_job_previous_state = '".$state."' AND
-					aw_tm BETWEEN $from AND $to
-				GROUP BY aw_pid
-			");
+			if($o->class_id() == CL_MRP_RESOURCE)
+			{
+				$res["free"][$o->id()] = 100;
+				$res["name"][$o->id()] = $o->name();
+				$res["unavail"][$o->id()] = 0;
+				$res["fake"][$o->id()] = 0;
+				$res["real"][$o->id()] = 0;
+				$res["plan"][$o->id()] = 0;
+				$res["paus"][$o->id()] = 0;
+				foreach($inst->get_unavailable_periods($o, $start, $end) as $from => $to)
+				{
+					$res["unavail"][$o->id()] += max(0, $to - $from);
+				}
+				foreach($inst->get_recurrent_unavailable_periods($o, $start, $end) as $period)
+				{
+					for($g = $period["start"] + $period["time"]; $g < $period["end"]; $g += $period["interval"])
+					{
+						$u = $g + $period["length"] > $period["end"] ? $period["end"] - $g : $period["length"];
+						$res["unavail"][$o->id()] += max(0, $u);
+					}
+				}
+			}
 		}
-		$data = array();
-		foreach($q[MRP_STATUS_INPROGRESS] as $d)
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $ids,
+				"CL_MRP_JOB.state" => MRP_STATUS_DONE,
+				"CL_MRP_JOB.finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end + 24*3600 - 1, "int"),
+			), 
+			array(
+				CL_MRP_JOB => array("real_length", "length", "started", "finished", "RELTYPE_MRP_RESOURCE.oid"),
+			)
+		);
+
+		$o_datas = $odl->arr();
+
+		$data = get_instance("mrp_job_obj")->get_resource_hours(array(
+			"from" => $start,
+			"to" => $end,
+			"state" => array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED),
+			"resource" => $ids,
+			"job" => array_keys($o_datas),
+			"convert_to_hours" => false,
+		));
+
+		$res["real"] = $data[MRP_STATUS_INPROGRESS] + $res["real"];
+		$res["paus"] = $data[MRP_STATUS_PAUSED] + $res["paus"];
+
+		foreach($o_datas as $oid => $o)
 		{
-			$data[MRP_STATUS_INPROGRESS][$d["pid"]] = $d["hours"];
-			$data[MRP_STATUS_PAUSED][$d["pid"]] = 0;
+			$k = $o["RELTYPE_MRP_RESOURCE.oid"];
+			$res["plan"][$k] = (int) (isset($res["plan"][$k]) ? $res["plan"][$k] + $o["length"] : $o["length"]);
+			$paus = max(0, $o["finished"] - $o["started"] - $o["real_length"]);
 		}
-		foreach($q[MRP_STATUS_PAUSED] as $d)
+		foreach($res["free"] as $k => $v)
 		{
-			$data[MRP_STATUS_INPROGRESS][$d["pid"]] = isset($data[MRP_STATUS_INPROGRESS][$d["pid"]]) ? $data[MRP_STATUS_INPROGRESS][$d["pid"]] : 0;
-			$data[MRP_STATUS_PAUSED][$d["pid"]] = $d["hours"];
+			$res["real"][$k] = round($res["real"][$k] / $span * 100, 2);
+			$res["plan"][$k] = round($res["plan"][$k] / $span * 100, 2);
+			$res["paus"][$k] = round($res["paus"][$k] / $span * 100, 2);
+			$res["unavail"][$k] = round($res["unavail"][$k] / $span * 100, 2);
+
+			$res["over_plan"][$k] = max(0, $res["plan"][$k] - $res["real"][$k]);
+			$res["under_plan"][$k] = max(0, $res["real"][$k] - $res["plan"][$k]);
+
+			$res["free"][$k] -= $res["real"][$k] + $res["paus"][$k] + $res["over_plan"][$k] + $res["under_plan"][$k] + $res["unavail"][$k];
 		}
-		$ids = array_keys($data[MRP_STATUS_PAUSED]);
+
+		//	Stupid
+		ksort($res["unavail"]);
+		ksort($res["free"]);
+		ksort($res["real"]);
+		ksort($res["over_plan"]);
+		ksort($res["under_plan"]);
+		ksort($res["paus"]);
+		ksort($res["name"]);
+		ksort($res["plan"]);
+
+		$cnt = count($res["fake"]);
+		if($cnt > 13)
+		{
+			/*
+			for($i = 0; $i < $cnt; $i += 13)
+			{
+				foreach(array("fake", "unavail", "free", "real", "over_plan", "under_plan", "paus", "name") as $key)
+				{
+					$_res[$key] = array_slice($res[$key], $i, 13);
+				}
+				$_cnt = count($_res["fake"]);
+
+				$c = new google_chart();
+				$c->set_type(GCHART_BAR_H);
+				$c->set_size(array(
+					"width" => 800,
+					"height" => 27 * $_cnt + 18,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$c->add_data(array_merge(array(100), $_res["fake"]));
+				$c->add_data(array_merge(array(0), $_res["unavail"]));
+				$c->add_data(array_merge(array(0), $_res["free"]));
+				$c->add_data(array_merge(array(0), $_res["real"]));
+				$c->add_data(array_merge(array(0), $_res["over_plan"]));
+				$c->add_data(array_merge(array(0), $_res["under_plan"]));
+				$c->add_data(array_merge(array(0), $_res["paus"]));
+				$c->set_colors(array(
+					"e9e9e9",
+					strtolower(preg_replace("/[^0-9A-Za-z]/", "", MRP_COLOUR_UNAVAILABLE)),
+					"ffffff",
+					strtolower(preg_replace("/[^0-9A-Za-z]/", "", MRP_COLOUR_INPROGRESS)),
+					"00ff00",
+					"ff0000",
+					strtolower(preg_replace("/[^0-9A-Za-z]/", "", MRP_COLOUR_PAUSED)),
+				));
+				$c->set_axis(array(
+					GCHART_AXIS_LEFT,
+				));
+				$c->add_axis_label(0, array_reverse($_res["name"]));
+				$c->set_legend(array(
+					"labels" => array(
+						t(""),
+						t("Kinnine aeg"),
+						t("Vaba aeg"),
+						t("Tegelik t&ouml;&ouml;aeg"),
+						t("Alakulu"),
+						t("&Uuml;lekulu"),
+						t("Paus"),
+					),
+					"position" => GCHART_POSITION_BOTTOM,
+				));
+
+				$arr["prop"]["type"] = "text";
+				$arr["prop"]["value"] .= $c->get_html()."<br />";
+			}
+			*/
+			$arr["prop"]["type"] = "text";
+			$arr["prop"]["value"] = t("Liiga palju ressursse!");
+		}
+		else
+		{
+			$c = &$arr["prop"]["vcl_inst"];
+			$c->set_type(GCHART_BAR_H);
+			$c->set_size(array(
+				"width" => 800,
+				"height" => 27 * $cnt + 18,
+			));
+			$c->add_fill(array(
+				"area" => GCHART_FILL_BACKGROUND,
+				"type" => GCHART_FILL_SOLID,
+				"colors" => array(
+					"color" => "e9e9e9",
+				),
+			));
+			$c->add_data(array_merge(array(100), $res["fake"]));
+			$c->add_data(array_merge(array(0), $res["unavail"]));
+			$c->add_data(array_merge(array(0), $res["free"]));
+			$c->add_data(array_merge(array(0), $res["real"]));
+			$c->add_data(array_merge(array(0), $res["over_plan"]));
+			$c->add_data(array_merge(array(0), $res["under_plan"]));
+			$c->add_data(array_merge(array(0), $res["paus"]));
+			$c->set_colors(array(
+				"e9e9e9",
+				strtolower(preg_replace("/[^0-9A-Za-z]/", "", MRP_COLOUR_UNAVAILABLE)),
+				"ffffff",
+				strtolower(preg_replace("/[^0-9A-Za-z]/", "", MRP_COLOUR_INPROGRESS)),
+				"00ff00",
+				"ff0000",
+				strtolower(preg_replace("/[^0-9A-Za-z]/", "", MRP_COLOUR_PAUSED)),
+			));
+			$c->set_axis(array(
+				GCHART_AXIS_LEFT,
+			));
+			$c->add_axis_label(0, array_reverse($res["name"]));
+			$c->set_legend(array(
+				"labels" => array(
+					t(""),
+					t("Kinnine aeg"),
+					t("Vaba aeg"),
+					t("Tegelik t&ouml;&ouml;aeg"),
+					t("Alakulu"),
+					t("&Uuml;lekulu"),
+					t("Paus"),
+				),
+				"position" => GCHART_POSITION_BOTTOM,
+			));
+		}
+	}
+
+	function _get_pauses_by_resource_chart($arr)
+	{
+		return $this->_get_something_by_resource_chart($arr, MRP_STATUS_PAUSED);
+	}
+
+	function _get_something_by_resource_chart($arr, $state)
+	{
+		list($from, $to) = $this->get_hours_from_to();
+		$persons = (array)$this->get_hours_person($arr);
+		
+		switch($arr["obj_inst"]->prop("poo_started_finished_by"))
+		{
+			default:
+			case mrp_job_obj::PRSN_HNDL_S:
+				$pid_query = count($persons) > 0 ? "aw_previous_pid IN (".implode(",", $persons).") AND" : "";
+				break;
+
+			case mrp_job_obj::PRSN_HNDL_F:
+				$pid_query = count($persons) > 0 ? "aw_pid IN (".implode(",", $persons).") AND" : "";
+				break;
+
+			case mrp_job_obj::PRSN_HNDL_S_AND_F:
+				$pid_query = count($persons) > 0 ? "aw_pid IN (".implode(",", $persons).") AND aw_pid = aw_previous_pid AND" : "";
+				break;
+
+			case mrp_job_obj::PRSN_HNDL_S_OR_F:
+				$pid_query = count($persons) > 0 ? "(aw_pid IN (".implode(",", $persons).") OR aw_previous_pid IN (".implode(",", $persons).")) AND" : "";
+				break;
+		}
+
+		$res = $this->db_fetch_array("
+			SELECT 
+				aw_resource_id as res, 
+				SUM(aw_job_last_duration) as sum 
+			FROM 
+				mrp_job_rows 
+			WHERE
+				$pid_query
+				aw_job_previous_state = $state AND
+				aw_tm BETWEEN $from AND $to
+			GROUP BY 
+				aw_resource_id
+		");
+		$ids = array();
+		foreach($res as $row)
+		{
+			$ids[] = $row["res"];
+		}
 		if(count($ids) > 0)
 		{
 			$ol = new object_list(array(
-				"class_id" => CL_CRM_PERSON,
+				"class_id" => CL_MRP_RESOURCE,
 				"oid" => $ids,
 				"lang_id" => array(),
 				"site_id" => array(),
 			));
-			$pn = $ol->names();
-		}
-		foreach(array_keys($data[MRP_STATUS_PAUSED]) as $id)
-		{
-			if(!isset($pn[$id]))
+			$names = $ol->names();
+			foreach($res as $row)
 			{
-				unset($data[MRP_STATUS_PAUSED][$id]);
-				unset($data[MRP_STATUS_INPROGRESS][$id]);
+				if(!isset($names[$row["res"]]))
+				{
+					continue;
+				}
+				$data[$row["res"]] = $row["sum"];
+				$labels[$row["res"]] = sprintf(t("%s (%s)"), $names[$row["res"]], $this->format_hours($row["sum"]/3600));
+			}
+			$colors = array();
+			for($i = 15; $i > 0; $i -= 3)
+			{
+				$colors[] = "aaaa".str_repeat(dechex($i), 2);
+				$colors[] = "bb".str_repeat(dechex($i), 2)."bb";
+				$colors[] = str_repeat(dechex($i), 2)."cccc";
+				$colors[] = "fb".str_repeat(dechex($i), 2)."bf";
+				$colors[] = "affa".str_repeat(dechex($i), 2);
+				$colors[] = str_repeat(dechex($i), 2)."ceec";
+			}
+
+			$c = &$arr["prop"]["vcl_inst"];
+			$c->set_type(GCHART_PIE_3D);
+			$c->set_size(array(
+				"width" => 400,
+				"height" => 120,
+			));
+			$c->add_fill(array(
+				"area" => GCHART_FILL_BACKGROUND,
+				"type" => GCHART_FILL_SOLID,
+				"colors" => array(
+					"color" => "e9e9e9",
+				),
+			));
+			$c->set_colors($colors);
+			$c->add_data($data);
+			$c->set_labels($labels);
+		}
+		else
+		{
+			$arr["prop"]["type"] = "text";
+			$type = $state === MRP_STATUS_INPROGRESS ? t("pausi") : t("efektiivset t&ouml;&ouml;tundi");
+			$arr["prop"]["value"] = sprintf(t("Valitud ajavahemikus ei ole &uuml;htegi %s."), $type);
+		}
+	}
+
+	function _get_hours_by_resource_chart($arr)
+	{
+		return $this->_get_something_by_resource_chart($arr, MRP_STATUS_INPROGRESS);
+	}
+
+	private function get_hours_from_to()
+	{
+		$from = 0;
+		$to = time();
+		if(isset($_GET["timespan"]))
+		{
+			if(substr($_GET["timespan"], 0, 5) === "date_")
+			{
+				list($Y, $M, $D) = explode("_", substr($_GET["timespan"], 5));
+				if($M === NULL)
+				{
+					$from = mktime(0, 0, 0, 1, 1, $Y);
+					$to = mktime(23, 59, 59, 12, 31, $Y);
+				}
+				elseif($D === NULL)
+				{
+					$from = mktime(0, 0, 0, $M, 1, $Y);
+					$to = mktime(23, 59, 59, $M+1, 0, $Y);
+				}
+				else
+				{
+					$from = mktime(0, 0, 0, $M, $D, $Y);
+					$to = mktime(23, 59, 59, $M, $D, $Y);
+				}
 			}
 			else
 			{
-				$data["name"][$id] = $pn[$id];
+				switch($_GET["timespan"])
+				{
+					case "current_week":
+						list($Y, $M, $D, $N) = explode("-", date("Y-n-j-N"));
+						$from = mktime(0, 0, 0, $M, $D-$N+1, $Y);
+						$to = mktime(23, 59, 59, $M, $D+7-$N, $Y);
+						break;
+
+					case "last_week":
+						list($Y, $M, $D, $N) = explode("-", date("Y-n-j-N"));
+						$from = mktime(0, 0, 0, $M, $D-$N-6, $Y);
+						$to = mktime(23, 59, 59, $M, $D-$N, $Y);
+						break;
+
+					case "current_month":
+						list($Y, $M) = explode("-", date("Y-n"));
+						$from = mktime(0, 0, 0, $M, 1, $Y);
+						$to = mktime(23, 59, 59, $M+1, 0, $Y);
+						break;
+
+					case "last_month":
+						list($Y, $M) = explode("-", date("Y-n"));
+						$from = mktime(0, 0, 0, $M-1, 1, $Y);
+						$to = mktime(23, 59, 59, $M, 0, $Y);
+						break;
+				}
 			}
 		}
-		return $data;
+		return array($from, $to);
 	}
 
-	function _get_hours_tbl($arr)
+	private function get_hours_person($arr)
+	{
+		if(!isset($this->hours_person))
+		{
+			if(isset($_GET["cat"]) && $this->can("view", $_GET["cat"]))
+			{
+				$p = obj($_GET["cat"]);
+				if($p->class_id() == CL_CRM_PERSON)
+				{
+					return $_GET["cat"];
+				}
+			}
+			if(isset($_GET["unit"]))
+			{
+				$o = obj($arr["obj_inst"]->owner);
+				$o->set_prop("use_only_wr_workers", 1);
+				return array_merge($o->get_workers(array(
+					"profession" => isset($_GET["cat"]) ? $_GET["cat"] : array(),
+					"section" => $_GET["unit"],
+				))->ids(), array(-1));
+			}
+			$o = obj($arr["obj_inst"]->prop("owner"));
+			$this->hours_person = array_merge(($o->class_id() == CL_CRM_COMPANY ? $o->get_workers()->ids() : array()), array(-1));
+		}
+		return $this->hours_person;
+	}
+
+	private function get_hours_resource($arr)
+	{
+		if(!isset($this->hours_resource))
+		{
+			if(isset($arr["request"]["resource_span"]) && $this->can("view", $arr["request"]["resource_span"]))
+			{
+				$p = obj($arr["request"]["resource_span"]);
+				if($p->class_id() == CL_MRP_RESOURCE)
+				{
+					return $arr["request"]["resource_span"];
+				}
+			}
+			if(isset($arr["request"]["resource_span"]) and $this->can("view", $arr["request"]["resource_span"]))
+			{
+				$parent = $arr["request"]["resource_span"];
+			}
+			else
+			{
+				$parent = $arr["obj_inst"]->prop("resources_folder");
+			}
+			$object_list = new object_tree(array(
+				"class_id" => array(CL_MRP_RESOURCE, CL_MENU),
+				"parent" => $parent,
+			));
+
+			$this->hours_resource = array_merge($object_list->ids(), array(-1));
+		}
+		return $this->hours_resource;
+	}
+
+	private function get_hours_by_job($arr, $kf = "person")
+	{
+		list($from, $to) = $this->get_hours_from_to();
+		$data_prms = array(
+			"from" => $from,
+			"to" => $to,
+			"by_job" => true,
+			"state" => array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED),
+		);
+		switch($kf)
+		{
+			case "person":
+				$data_prms["person"] = isset($arr["request"]["person_show_jobs"]) ? $arr["request"]["person_show_jobs"] : $this->get_hours_person($arr);
+				$data_prms["person_handling"] = $arr["obj_inst"]->prop("poo_started_finished_by");
+				$data = get_instance("mrp_job_obj")->get_person_hours($data_prms);
+				$clid = CL_CRM_PERSON;
+				break;
+
+			case "resource":
+				$data_prms["resource"] = $this->get_hours_resource($arr);
+				$data = get_instance("mrp_job_obj")->get_resource_hours($data_prms);
+				$clid = CL_MRP_RESOURCE;
+				break;
+		}
+
+		// Gather job OIDs
+		$ids = array(-1);
+		foreach($data[MRP_STATUS_INPROGRESS] as $pid => $jobs)
+		{
+			$ids = array_merge($ids, array_keys($jobs));
+		}
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"oid" => $ids
+			),
+			array(
+				CL_MRP_JOB => array(
+					"resource" => "resource_id", 
+					"resource(CL_MRP_RESOURCE).name" => "resource", 
+					"project" => "project_id", 
+					"project(CL_MRP_CASE).name" => "project", 
+					"project(CL_MRP_CASE).customer" => "customer_id",
+					"project(CL_MRP_CASE).customer.name" => "customer", 
+				),
+			)
+		);
+
+		$job_data = $odl->arr();
+
+		$ret = array();
+		// Hetkel eeldab, et t88d on ainult yhe inimese jaoks.
+		foreach($data[MRP_STATUS_INPROGRESS] as $pid => $jobs)
+		{
+			foreach(array_keys($jobs) as $job_id)
+			{
+				$ret[$job_id] = array(
+					"project" => $job_data[$job_id]["project"],
+					"customer" => $job_data[$job_id]["customer"],
+					"name" => $job_data[$job_id]["name"],
+					"resource" => $job_data[$job_id]["resource"],
+					"paused" => $this->format_hours($data[MRP_STATUS_PAUSED][$pid][$job_id]),
+					"inprogress" => $this->format_hours($data[MRP_STATUS_INPROGRESS][$pid][$job_id]),
+				);
+			}
+		}
+
+		return $ret;
+	}
+
+	private function get_hours($arr, $kf = "person")
+	{
+		if(!isset($this->hours[$kf]))
+		{
+			list($from, $to) = $this->get_hours_from_to();
+			$data_prms = array(
+				"from" => $from,
+				"to" => $to,
+				"state" => array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED),
+				"count" => true,
+				"average" => true,
+			);
+			switch($kf)
+			{
+				case "person":
+					$data_prms["person"] = $this->get_hours_person($arr);
+					$data_prms["person_handling"] = $arr["obj_inst"]->prop("poo_started_finished_by");
+					$data = get_instance("mrp_job_obj")->get_person_hours($data_prms);
+					$clid = CL_CRM_PERSON;
+					break;
+
+				case "resource":
+					$data_prms["resource"] = $this->get_hours_resource($arr);
+					$data = get_instance("mrp_job_obj")->get_resource_hours($data_prms);
+					$clid = CL_MRP_RESOURCE;
+					break;
+			}
+			$data["name"] = array();
+
+			$ids = array_keys($data[MRP_STATUS_PAUSED]);
+			if(count($ids) > 0)
+			{
+				$ol = new object_list(array(
+					"class_id" => $clid,
+					"oid" => $ids,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				$pn = $ol->names();
+			}
+			foreach(array_keys($data[MRP_STATUS_PAUSED]) as $id)
+			{
+				if(!isset($pn[$id]))
+				{
+					unset($data[MRP_STATUS_PAUSED][$id]);
+					unset($data[MRP_STATUS_INPROGRESS][$id]);
+				}
+				else
+				{
+					$data["name"][$id] = $pn[$id];
+				}
+			}
+			$this->hours[$kf] = $data;
+		}
+		return $this->hours[$kf];
+	}
+
+	function _get_persons_personnel_tree($arr)
+	{
+		$c = $arr["obj_inst"]->prop("owner");
+		$o = obj($c);
+		
+		$i = get_instance(CL_CRM_COMPANY);
+		$i->active_node = empty($arr["request"]["cat"]) ? (empty($arr["request"]["unit"]) ? $c : $arr["request"]["unit"]) : $arr["request"]["cat"];
+
+		$t = &$arr["prop"]["vcl_inst"];
+		if(empty($_GET["unit"]))
+		{
+			$t->set_selected_item($c);
+		}
+
+		$t->add_item(0, array(
+			"id" => $c,
+			"name" => $o->name(),
+			"url" => aw_url_change_var(array(
+				"unit" => NULL,
+			)),
+		));
+		$i->generate_tree(array(
+			"tree_inst" => &$t,
+			"obj_inst" => $o,
+			"node_id" => $c,
+			"conn_type" => "RELTYPE_SECTION",
+			"attrib" => "unit",
+			"leafs" => true,
+			"show_people" => true,
+			"url" => aw_ini_get("baseurl").aw_url_change_var(array(
+				"person_show_jobs" => NULL,
+			))
+		));
+	}
+
+	public function _get_resources_resource_span_tree($arr)
+	{
+		return $this->create_resources_tree($arr, "resource_span");
+	}
+
+	public function _get_resources_time_tree($arr)
+	{
+		return $this->_get_time_tree($arr);
+	}
+
+	public function _get_persons_time_tree($arr)
+	{
+		return $this->_get_time_tree($arr);
+	}
+
+	public function _get_my_stats_time_tree($arr)
+	{
+		return $this->_get_time_tree($arr);
+	}
+
+	function _get_time_tree($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->define_field(array(
-			"name" => "person",
-			"caption" => t("T&ouml;&ouml;taja"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "current_week",
-			"caption" => t("Jooksev n&auml;dal"),
-		));
-		$t->define_field(array(
-			"name" => "last_week",
-			"caption" => t("M&ouml;&ouml;dunud n&auml;dal"),
-		));
-		$t->define_field(array(
-			"name" => "current_week_work",
-			"caption" => t("T&ouml;&ouml;aeg"),
-			"sortable" => 1,
-			"parent" => "current_week"
-		));
-		$t->define_field(array(
-			"name" => "current_week_paus",
-			"caption" => t("Paus"),
-			"sortable" => 1,
-			"parent" => "current_week"
-		));
-		$t->define_field(array(
-			"name" => "last_week_work",
-			"caption" => t("T&ouml;&ouml;aeg"),
-			"sortable" => 1,
-			"parent" => "last_week"
-		));
-		$t->define_field(array(
-			"name" => "last_week_paus",
-			"caption" => t("Paus"),
-			"sortable" => 1,
-			"parent" => "last_week"
-		));
-		$current = $this->get_hours("current");
-		$last = $this->get_hours("last");
-		$rows = array();
-		foreach(array_keys($current["name"]) as $key)
+		$t->set_selected_item(isset($arr["request"]["timespan"]) ? $arr["request"]["timespan"] : "all");
+		$branches = array(
+			0 => array(
+				"all" => t("K&otilde;ik"),
+				"current_week" => t("K&auml;esolev n&auml;dal"),
+				"last_week" => t("M&ouml;&ouml;dunud n&auml;dal"),
+				"current_month" => t("K&auml;esolev kuu"),
+				"last_month" => t("M&ouml;&ouml;dunud kuu"),
+			),
+		);
+
+		$from_to = $this->db_fetch_row("SELECT MIN(aw_tm) as 'from', MAX(aw_tm) as 'to' FROM mrp_job_rows;");
+		$tm = $from_to["from"];
+		while($tm < $from_to["to"])
 		{
-			$rows[$key]["person"] = $current["name"][$key];
-			$rows[$key]["current_week_work"] = number_format($current[MRP_STATUS_INPROGRESS][$key], 2);
-			$rows[$key]["current_week_paus"] = number_format($current[MRP_STATUS_PAUSED][$key], 2);
+			list($M, $D, $Y) = explode("-", date("n-j-Y", $tm));
+			$branches[0]["date_".$Y] = $Y;
+			$branches["date_".$Y]["date_".$Y."_".$M] = sprintf(t("%s %u"), locale::get_lc_month($M), $Y);
+			$branches["date_".$Y."_".$M]["date_".$Y."_".$M."_".$D] = sprintf(t("%u. %s %u"), $D, locale::get_lc_month($M), $Y);
+			$tm = mktime(0, 0, 0, $M, $D+1, $Y);
 		}
-		foreach(array_keys($last["name"]) as $key)
+
+		foreach($branches as $parent => $branch)
 		{
-			$rows[$key]["person"] = $last["name"][$key];
-			$rows[$key]["last_week_work"] = number_format($last[MRP_STATUS_INPROGRESS][$key],2);
-			$rows[$key]["last_week_paus"] = number_format($last[MRP_STATUS_PAUSED][$key], 2);
+			foreach($branch as $id => $caption)
+			{
+				$t->add_item($parent, array(
+					"id" => $id,
+					"name" => $caption,
+					"url" => aw_url_change_var(array(
+						"timespan" => $id === "all" ? NULL : $id,
+					)),
+				));
+			}
+		}
+	}
+
+	function format_hours($n)
+	{
+		if(empty($this->hours_report_time_format))
+		{
+			return number_format($n, 2);
+		}
+		else
+		{
+			switch($this->hours_report_time_format)
+			{
+				case 1:
+					return sprintf("%s%d:%02u", $n < 0 ? "-" : "", floor(abs($n)), round(abs(fmod($n, 1)*60)));
+					break;
+			}
+		}
+	}
+
+	public function _get_persons_detailed_hours_tbl($arr)
+	{
+		if((empty($arr["request"]["person_show_jobs"]) || !is_oid($arr["request"]["person_show_jobs"])) && !is_oid($this->get_hours_person($arr)))
+		{
+			return PROP_IGNORE;
+		}
+
+		$t = &$arr["prop"]["vcl_inst"];
+
+		// Init
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("T&ouml;&ouml;"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "customer",
+			"caption" => t("Klient"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "resource",
+			"caption" => t("Ressurss"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "inprogress",
+			"caption" => t("Efektiivne t&ouml;&ouml;aeg"),
+			"align" => "right",
+		));
+		$t->define_field(array(
+			"name" => "paused",
+			"caption" => t("Paus"),
+			"align" => "right",
+		));
+
+		$rows = $this->get_hours_by_job($arr, "person");
+
+		foreach($rows as $row)
+		{
+			$t->define_data($row);
+		}
+	}
+
+	public function _get_persons_hours_tbl($arr)
+	{
+		return $this->_get_hours_tbl($arr, "person");
+	}
+
+	public function _get_resources_hours_tbl($arr)
+	{
+		return $this->_get_hours_tbl($arr, "resource");
+	}
+
+	private function _get_hours_tbl($arr, $kf = "person")
+	{
+		$kd = array(
+			"resource" => array(
+				"caption" => t("Ressurss"),
+			),
+			"person" => array(
+				"caption" => t("T&ouml;&ouml;taja"),
+			),
+		);
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => $kf,
+			"caption" => $kd[$kf]["caption"],
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "inprogress",
+			"caption" => sprintf(t("Efektiivne t&ouml;&ouml;aeg %s"), empty($this->hours_report_time_format) ? t("(h)") : t("(h:mm)")),
+			"sortable" => 1,
+			"sorting_field" => "inprogress_num",
+			"align" => "right",
+		));
+		$t->define_field(array(
+			"name" => "paused",
+			"caption" => sprintf(t("Paus %s"), empty($this->hours_report_time_format) ? t("(h)") : t("(h:mm)")),
+			"sortable" => 1,
+			"sorting_field" => "paused_num",
+			"align" => "right",
+		));
+		$t->define_field(array(
+			"name" => "paused_cnt",
+			"caption" => t("Pause kokku"),
+			"sortable" => 1,
+			"numerical" => 1,
+			"align" => "right",
+		));
+		$t->define_field(array(
+			"name" => "paused_avg",
+			"caption" => sprintf(t("Keskmine pausi pikkus %s"), empty($this->hours_report_time_format) ? t("(h)") : t("(h:mm)")),
+			"sortable" => 1,
+			"sorting_field" => "paused_avg_num",
+			"align" => "right",
+		));
+		$data = $this->get_hours($arr, $kf);
+
+		$rows = array();
+		foreach(array_keys($data["name"]) as $key)
+		{
+			$rows[$key][$kf] = html::href(array(
+				"caption" => $data["name"][$key],
+				"url" => aw_url_change_var(array(
+					"person_show_jobs" => $key,
+				)),
+				"title" => sprintf(t("Vaata %s t&ouml;id valitud ajavahemikus"), locale::get_genitive_for_name($data["name"][$key])),
+			));
+//			$rows[$key][$kf] = $data["name"][$key];
+			$rows[$key]["inprogress"] = $this->format_hours($data[MRP_STATUS_INPROGRESS][$key]);
+			$rows[$key]["inprogress_num"] = $data[MRP_STATUS_INPROGRESS][$key];
+			$rows[$key]["paused"] = $this->format_hours($data[MRP_STATUS_PAUSED][$key]);
+			$rows[$key]["paused_num"] = $data[MRP_STATUS_PAUSED][$key];
+			$rows[$key]["paused_cnt"] = (int)$data["count"][MRP_STATUS_PAUSED][$key];
+			$rows[$key]["paused_avg"] = $this->format_hours($data["average"][MRP_STATUS_PAUSED][$key]);
+			$rows[$key]["paused_avg_num"] = $data["average"][MRP_STATUS_PAUSED][$key];
 		}
 		foreach($rows as $row)
 		{
 			$t->define_data($row);
 		}
+		$t->set_numeric_field(array("paused_num", "paused_avg_num", "inprogress_num"));
+		$t->sort_by();
 	}
 
 	function _get_pp_birthdays($arr)
@@ -2218,7 +3090,7 @@ class mrp_workspace extends class_base
 	{
 		$a_tm = explode("-", $a->birthday."-1-1");
 		$b_tm = explode("-", $b->birthday."-1-1");
-		$retval = ((int)$a_tm[1] - (int)date("n") == (int)$b_tm[1] - (int)date("n") ? (int)$a_tm[2] < (int)$b_tm[2] : (int)$a_tm[1] - (int)date("n") < (int)$b_tm[1] - (int)date("n")) ? -1 : 1;
+		$retval = ((int)$a_tm[1] - (int)date("n") == (int)$b_tm[1] - (int)date("n") ? (int)$a_tm[2] < (int)$b_tm[2] : (int)sprintf("%u", (int)$a_tm[1] - (int)date("n")) < (int)sprintf("%u", (int)$b_tm[1] - (int)date("n"))) ? -1 : 1;
 
 		return $retval;
 	}
@@ -2541,7 +3413,8 @@ class mrp_workspace extends class_base
 	}
 
 	// method only needed in self::create_resources_tree() method archived res removal backwards compatible version
-	function cb_remove_inactive_res(&$o, $parent)
+//	function cb_remove_inactive_res(&$o, $parent)
+	function cb_remove_inactive_res(&$o)
 	{
 		if (CL_MRP_RESOURCE == $o->class_id() and MRP_STATUS_RESOURCE_INACTIVE == $o->prop("state"))
 		{
@@ -2549,7 +3422,7 @@ class mrp_workspace extends class_base
 		}
 	}
 
-	function create_resources_tree ($arr = array())
+	function create_resources_tree ($arr = array(), $attrb = "mrp_tree_active_item")
 	{
 		$this_object = $arr["obj_inst"];
 		$applicable_states = array(
@@ -2587,13 +3460,13 @@ class mrp_workspace extends class_base
 			),
 			"root_item" => obj ($resources_folder),
 			"ot" => $resource_tree,
-			"var" => "mrp_tree_active_item",
+			"var" => $attrb,
 			"node_actions" => array (
 				CL_MRP_RESOURCE => "change",
 			),
 		);
 
-		if($arr["request"]["group"] == "grp_resources_load" || $arr["request"]["group"] == "grp_resources")
+		if(in_array($arr["request"]["group"], array("grp_resources_load", "grp_resources", "grp_resources_hours_report")))
 		{
 			unset($tree_prms["node_actions"]);
 		}
@@ -5032,6 +5905,7 @@ class mrp_workspace extends class_base
 		{
 			$arr["request"]["branch_id"] = "";
 		}
+		$arr["request"]["printer_job_page"] = isset($arr["request"]["printer_job_page"]) ? $arr["request"]["printer_job_page"] : 0;
 
 		switch ($arr["request"]["branch_id"])
 		{
@@ -5315,6 +6189,7 @@ class mrp_workspace extends class_base
 
 			$state = '<span style="color: ' . $this->state_colours[$job["state"]] . ';">' . $this->states[$job["state"]] . '</span>';
 
+			$start = $end = $length = 0;
 			### get length, end and start according to job state
 			switch ($arr["request"]["branch_id"])
 			{
@@ -5745,6 +6620,13 @@ class mrp_workspace extends class_base
 		$j->create_job_toolbar($arr);
 
 		$arr["prop"]["toolbar"]->add_button(array(
+			"name" => "save_material",
+			"tooltip" => t("Salvesta materjali kulu"),
+			"action" => "save_pj_material",
+			"confirm" => t("Oled kindel et soovid materjali kulu salvestada?"),
+		));
+
+		$arr["prop"]["toolbar"]->add_button(array(
 			"name" => "save_comment",
 			"tooltip" => t("Salvesta kommentaar"),
 			"action" => "save_pj_comment",
@@ -6060,6 +6942,11 @@ class mrp_workspace extends class_base
 			return false;
 		}
 
+		if(in_array($arr["id"], array("grp_persons", "grp_persons_jobs_report", "grp_persons_hours_report", "grp_resources_hours_report")))
+		{
+			$arr["link"] = aw_url_change_var("timespan", "current_week", $arr["link"]);
+		}
+
 		if ($arr["request"]["group"] === "grp_login_select_res")
 		{
 			unset($arr["classinfo"]["relationmgr"]);
@@ -6072,6 +6959,52 @@ class mrp_workspace extends class_base
 	{
 		switch($arr["name"])
 		{
+			case "persons_personnel_tree":
+				if($arr["request"]["group"] == "my_stats")
+				{
+					return false;
+				}
+				if($arr["request"]["group"] == "grp_persons_jobs_report")
+				{
+					$arr["area_caption"] = t("Vali inimesed, kelle tehtud t&ouml;id soovid n&auml;ha");
+				}
+				break;
+
+			case "persons_detailed_hours_tbl":
+				$o = isset($_GET["person_show_jobs"]) ? obj($_GET["person_show_jobs"]) : (obj(isset($_GET["cat"]) ? $_GET["cat"] : NULL));
+				$arr["area_caption"] = sprintf(t("%s t&ouml;&ouml;tundide tabel t&ouml;&ouml;de kaupa"), locale::get_genitive_for_name(parse_obj_name($o->name())));
+				break;
+
+			case "pauses_by_resource_chart":
+			case "hours_by_resource_chart":
+				$type = $arr["name"] === "hours_by_resource_chart" ? t("Efektiivsed t&ouml;&ouml;tunnid") : t("Pausid");
+				if(empty($_GET["timespan"]))
+				{
+					$arr["area_caption"] = sprintf(t("%s ressursside kaupa"), $type);
+				}
+				else
+				{
+					list($from, $to) = $this->get_hours_from_to();
+					$period = sprintf(t("ajavahemikul %s kuni %s"), date("d.m.Y", $from), date("d.m.Y", $to));
+					$arr["area_caption"] = sprintf(t("%s ressursside kaupa %s"), $type, $period);
+				}
+				break;
+
+			case "persons_hours_chart":
+			case "persons_hours_tbl":
+				$type = $arr["name"] === "persons_hours_tbl" ? t("tabel") : t("graafik");
+				if(empty($_GET["timespan"]))
+				{
+					$arr["area_caption"] = sprintf(t("T&ouml;&ouml;tundide %s inimeste kaupa"), $type);
+				}
+				else
+				{
+					list($from, $to) = $this->get_hours_from_to();
+					$period = sprintf(t("Ajavahemiku %s kuni %s"), date("d.m.Y", $from), date("d.m.Y", $to));
+					$arr["area_caption"] = sprintf(t("%s t&ouml;&ouml;tundide %s inimeste kaupa"), $period, $type);
+				}				
+				break;
+
 			case "resource_deviation_chart":
 				if(isset($arr["request"]["mrp_tree_active_item"]) and $this->can("view", $arr["request"]["mrp_tree_active_item"]))
 				{
@@ -6364,15 +7297,19 @@ class mrp_workspace extends class_base
 				}
 			}
 
-			$list = new object_list (array (
+			$filter = array (
 				"class_id" => CL_MRP_JOB,
 				"state" => $applicable_states,
 				"resource" => $this->subcontractor_resource_ids,
 				"parent" => $this_object->prop ("jobs_folder"),
-				"starttime" => $tmp,// !!!
 				"limit" => $limit,
 				"sort_by" => $sort_by,
-			));
+			);
+			if(isset($tmp))
+			{
+				$filter["starttime"] = $tmp;
+			}
+			$list = new object_list ($filter);
 			return $list;
 		}
 		else
@@ -6496,6 +7433,14 @@ class mrp_workspace extends class_base
 		$arr["obj_inst"] = obj($job->prop("project"));
 		$arr["request"]["group"] = isset($_GET["branch_id"]) ? $_GET["branch_id"] : "grp_printer_current";
 		$case->create_workflow_table($arr);
+	}
+
+	function _pjp_material($arr)
+	{
+		$job = obj($arr["request"]["pj_job"]);
+		$t = $arr["prop"]["vcl_inst"];
+		$res = get_instance(CL_MRP_JOB);
+		$res->draw_expense_list_table($t , $job);
 	}
 
 	function _ws_tbl($arr)

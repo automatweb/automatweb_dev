@@ -1,7 +1,60 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>my_resources_tree</name>
+            <group>my_resources</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>my_resources_tree_box</parent>
+            <field>my_resources_tree</field>
+      </property>
+      <property>
+            <name>my_resource_deviation_chart</name>
+            <group>my_resources</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>my_resource_deviation_chart</parent>
+            <store>no</store>
+            <field>my_resource_deviation_chart</field>
+      </property>
+      <property>
+            <name>my_resource_time_start</name>
+            <group>my_resources</group>
+            <type>date_select</type>
+            <parent>my_resource_time_limits</parent>
+            <field>my_resource_time_start</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>my_resource_time_end</name>
+            <group>my_resources</group>
+            <type>date_select</type>
+            <parent>my_resource_time_limits</parent>
+            <field>my_resource_time_end</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>my_resource_time_chart</name>
+            <group>my_resources</group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>my_resource_time_chart</parent>
+            <store>no</store>
+            <field>my_resource_time_chart</field>
+      </property>
+      <property>
+            <name>my_resources_list</name>
+            <group>my_resources</group>
+            <type>table</type>
+            <store>no</store>
+            <parent>my_right_pane</parent>
+            <no_caption>1</no_caption>
+            <field>my_resources_list</field>
+      </property>
+      <property>
             <name>rescheduling_needed</name>
+            <group>my_resources</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -9,20 +62,20 @@
       </property>
       <property>
             <name>customers_toolbar</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>customers_tree</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -30,10 +83,10 @@
       </property>
       <property>
             <name>customers_list</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -41,10 +94,10 @@
       </property>
       <property>
             <name>customers_list_proj</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -52,10 +105,10 @@
       </property>
       <property>
             <name>cs_result</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <parent>vsplitbox</parent>
@@ -63,10 +116,10 @@
       </property>
       <property>
             <name>cs_name</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>textbox</type>
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
@@ -75,10 +128,10 @@
       </property>
       <property>
             <name>cs_firmajuht</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>textbox</type>
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
@@ -87,10 +140,10 @@
       </property>
       <property>
             <name>cs_contact</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>textbox</type>
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
@@ -99,10 +152,10 @@
       </property>
       <property>
             <name>cs_phone</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>textbox</type>
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
@@ -111,10 +164,10 @@
       </property>
       <property>
             <name>cs_reg_nr</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>textbox</type>
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
@@ -123,10 +176,10 @@
       </property>
       <property>
             <name>cs_status</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>textbox</type>
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
@@ -135,10 +188,10 @@
       </property>
       <property>
             <name>cs_submit</name>
+            <group>grp_customers</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_customers</group>
             <type>submit</type>
             <value>Otsi</value>
             <view_element>1</view_element>
@@ -148,20 +201,20 @@
       </property>
       <property>
             <name>projects_toolbar</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>projects_tree</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -169,10 +222,10 @@
       </property>
       <property>
             <name>projects_list</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -180,10 +233,10 @@
       </property>
       <property>
             <name>sp_result</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <parent>vsplitbox</parent>
@@ -191,10 +244,10 @@
       </property>
       <property>
             <name>sp_name</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>textbox</type>
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
@@ -203,10 +256,10 @@
       </property>
       <property>
             <name>sp_comment</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>textbox</type>
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
@@ -215,10 +268,10 @@
       </property>
       <property>
             <name>sp_customer</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>textbox</type>
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
@@ -227,10 +280,10 @@
       </property>
       <property>
             <name>sp_starttime</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>date_select</type>
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
@@ -240,10 +293,10 @@
       </property>
       <property>
             <name>sp_due_date</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>date_select</type>
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
@@ -253,10 +306,10 @@
       </property>
       <property>
             <name>sp_status</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>select</type>
             <multiple>1</multiple>
             <size>5</size>
@@ -267,10 +320,10 @@
       </property>
       <property>
             <name>sp_submit</name>
+            <group>grp_projects</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_projects</group>
             <type>button</type>
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
@@ -279,23 +332,23 @@
       </property>
       <property>
             <name>resources_toolbar</name>
+            <group>grp_resources_manage</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resources_manage</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>resources_tree</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_resources_manage</num_0>
                   <num_1>grp_resources_load</num_1>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -303,48 +356,259 @@
       </property>
       <property>
             <name>resource_deviation_chart</name>
+            <group>grp_resources_load</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>grp_resources_manage</num_0>
-                  <num_1>grp_resources_load</num_1>
-            </group>
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <parent>resource_deviation_chart</parent>
             <store>no</store>
       </property>
       <property>
-            <name>resources_list</name>
+            <name>resource_time_start</name>
+            <group>grp_resources_load</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>date_select</type>
+            <parent>resource_time_limits</parent>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>resource_time_end</name>
+            <group>grp_resources_load</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <parent>resource_time_limits</parent>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>resource_time_chart</name>
+            <group>grp_resources_load</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>resource_time_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>resources_list</name>
             <group>
                   <num_0>grp_resources_manage</num_0>
                   <num_1>grp_resources_load</num_1>
             </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <parent>right_pane</parent>
             <no_caption>1</no_caption>
       </property>
       <property>
-            <name>master_schedule_chart</name>
+            <name>resources_time_tree</name>
+            <group>grp_resources_hours_report</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>resources_time_tree</parent>
+      </property>
+      <property>
+            <name>resources_resource_span_tree</name>
+            <group>grp_resources_hours_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>resources_resource_span_tree</parent>
+      </property>
+      <property>
+            <name>resources_hours_chart</name>
+            <group>grp_resources_hours_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>resources_hours_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>resources_hours_tbl</name>
+            <group>grp_resources_hours_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>resources_hours_tbl</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>persons_time_tree</name>
+            <group>
+                  <num_0>grp_persons_hours_report</num_0>
+                  <num_1>grp_persons_jobs_report</num_1>
+                  <num_2>my_stats</num_2>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>persons_time_tree</parent>
+      </property>
+      <property>
+            <name>persons_personnel_tree</name>
+            <group>
+                  <num_0>grp_persons_hours_report</num_0>
+                  <num_1>grp_persons_jobs_report</num_1>
+                  <num_2>my_stats</num_2>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>persons_personnel_tree</parent>
+      </property>
+      <property>
+            <name>poo_job_done_only_by</name>
+            <group>grp_persons_jobs_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>persons_other_options</parent>
+            <no_caption>1</no_caption>
+            <caption>Kuva t&amp;amp;ouml;id, mida on teinud ainult valitud isik</caption>
+            <comment>Omab m&amp;amp;otilde;ju ainult &amp;amp;uuml;he isiku t&amp;amp;ouml;&amp;amp;ouml;de kuvamisel</comment>
+      </property>
+      <property>
+            <name>persons_jobs_tbl</name>
+            <group>grp_persons_jobs_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <parent>persons_jobs_tbl</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>poo_started_finished_by</name>
+            <group>
+                  <num_0>grp_persons_hours_report</num_0>
+                  <num_1>my_stats</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <parent>persons_other_options</parent>
+            <orient>vertical</orient>
+            <captionside>top</captionside>
+            <caption>Kuva iga isiku kohta tema poolt</caption>
+      </property>
+      <property>
+            <name>hours_by_resource_chart</name>
+            <group>
+                  <num_0>grp_persons_hours_report</num_0>
+                  <num_1>my_stats</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <parent>hours_by_resource_chart</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>pauses_by_resource_chart</name>
+            <group>
+                  <num_0>grp_persons_hours_report</num_0>
+                  <num_1>my_stats</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <parent>pauses_by_resource_chart</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>persons_hours_chart</name>
+            <group>
+                  <num_0>grp_persons_hours_report</num_0>
+                  <num_1>my_stats</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>persons_hours_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>persons_hours_tbl</name>
+            <group>
+                  <num_0>grp_persons_hours_report</num_0>
+                  <num_1>my_stats</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>persons_hours_tbl</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>persons_detailed_hours_tbl</name>
+            <group>
+                  <num_0>grp_persons_hours_report</num_0>
+                  <num_1>my_stats</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>persons_detailed_hours_tbl</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>master_schedule_chart</name>
             <group>grp_schedule_gantt</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>chart_project_hilight_gotostart</name>
+            <group>grp_schedule_gantt</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule_gantt</group>
             <type>checkbox</type>
             <store>no</store>
             <parent>schedule_search_box</parent>
@@ -352,10 +616,10 @@
       </property>
       <property>
             <name>chart_search</name>
+            <group>grp_schedule_gantt</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule_gantt</group>
             <type>text</type>
             <store>no</store>
             <parent>schedule_search_box</parent>
@@ -363,10 +627,10 @@
       </property>
       <property>
             <name>chart_start_date</name>
+            <group>grp_schedule_gantt</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule_gantt</group>
             <type>date_select</type>
             <store>no</store>
             <parent>schedule_search_box</parent>
@@ -374,10 +638,10 @@
       </property>
       <property>
             <name>chart_submit</name>
+            <group>grp_schedule_gantt</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule_gantt</group>
             <type>submit</type>
             <store>no</store>
             <parent>schedule_search_box</parent>
@@ -385,10 +649,10 @@
       </property>
       <property>
             <name>states_chart</name>
+            <group>grp_schedule_google</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule_google</group>
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <parent>states_chart</parent>
@@ -396,10 +660,10 @@
       </property>
       <property>
             <name>deadline_chart</name>
+            <group>grp_schedule_google</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule_google</group>
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <parent>deadline_chart</parent>
@@ -407,10 +671,10 @@
       </property>
       <property>
             <name>clients_chart</name>
+            <group>grp_schedule_google</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_schedule_google</group>
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <parent>clients_chart</parent>
@@ -418,20 +682,20 @@
       </property>
       <property>
             <name>user_list_toolbar</name>
+            <group>grp_users_tree</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_tree</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>user_list_tree</name>
+            <group>grp_users_tree</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_tree</group>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -439,10 +703,10 @@
       </property>
       <property>
             <name>user_list</name>
+            <group>grp_users_tree</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_tree</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -450,20 +714,20 @@
       </property>
       <property>
             <name>user_mgr_toolbar</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
             <name>user_mgr_tree</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -471,10 +735,10 @@
       </property>
       <property>
             <name>user_mgr</name>
+            <group>grp_users_mgr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users_mgr</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -482,20 +746,20 @@
       </property>
       <property>
             <name>name</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>name</field>
             <method>none</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <parent>left_column</parent>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>owner</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_OWNER</reltype>
             <clid>CL_CRM_COMPANY</clid>
@@ -504,10 +768,10 @@
       </property>
       <property>
             <name>resources_folder</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -516,10 +780,10 @@
       </property>
       <property>
             <name>customers_folder</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -528,10 +792,10 @@
       </property>
       <property>
             <name>projects_folder</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -540,10 +804,10 @@
       </property>
       <property>
             <name>jobs_folder</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
@@ -552,10 +816,10 @@
       </property>
       <property>
             <name>workspace_configmanager</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_WORKSPACE_CFGMGR</reltype>
             <clid>CL_CFGMANAGER</clid>
@@ -564,10 +828,10 @@
       </property>
       <property>
             <name>case_header_controller</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_HEADER_CONTROLLER</reltype>
             <parent>left_column</parent>
@@ -575,10 +839,10 @@
       </property>
       <property>
             <name>warehouse</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_WAREHOUSE</reltype>
             <parent>left_column</parent>
@@ -586,11 +850,21 @@
             <caption>Materjalide ladu</caption>
       </property>
       <property>
-            <name>pv_per_page</name>
+            <name>hr_time_format</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>chooser</type>
+            <parent>left_column</parent>
+            <caption>Ajaformaat t&amp;amp;ouml;&amp;amp;ouml;ajaaruannetes</caption>
+      </property>
+      <property>
+            <name>pv_per_page</name>
             <group>grp_settings_def</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textbox</type>
             <default>30</default>
             <datatype>int</datatype>
@@ -599,10 +873,10 @@
       </property>
       <property>
             <name>projects_list_objects_perpage</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>30</default>
             <datatype>int</datatype>
@@ -612,10 +886,10 @@
       </property>
       <property>
             <name>max_subcontractor_timediff</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>1</default>
             <parent>left_column</parent>
@@ -624,10 +898,10 @@
       </property>
       <property>
             <name>automatic_archiving_period</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <parent>left_column</parent>
             <datatype>int</datatype>
@@ -636,10 +910,10 @@
       </property>
       <property>
             <name>automatic_archiving_period_unit</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>text</type>
             <no_caption>1</no_caption>
             <parent>left_column</parent>
@@ -647,10 +921,10 @@
       </property>
       <property>
             <name>parameter_due_date_overdue_slope</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.5</default>
             <parent>right_column</parent>
@@ -658,10 +932,10 @@
       </property>
       <property>
             <name>parameter_due_date_overdue_intercept</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>10</default>
             <parent>right_column</parent>
@@ -669,10 +943,10 @@
       </property>
       <property>
             <name>parameter_due_date_decay</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.05</default>
             <parent>right_column</parent>
@@ -680,10 +954,10 @@
       </property>
       <property>
             <name>parameter_due_date_intercept</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.1</default>
             <parent>right_column</parent>
@@ -691,10 +965,10 @@
       </property>
       <property>
             <name>parameter_priority_slope</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.8</default>
             <parent>right_column</parent>
@@ -702,10 +976,10 @@
       </property>
       <property>
             <name>parameter_schedule_length</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>2</default>
             <parent>right_column</parent>
@@ -713,10 +987,10 @@
       </property>
       <property>
             <name>parameter_min_planning_jobstart</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>300</default>
             <parent>right_column</parent>
@@ -724,10 +998,10 @@
       </property>
       <property>
             <name>parameter_schedule_start</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>300</default>
             <parent>right_column</parent>
@@ -735,10 +1009,10 @@
       </property>
       <property>
             <name>parameter_start_priority</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>1</default>
             <parent>right_column</parent>
@@ -747,10 +1021,10 @@
       </property>
       <property>
             <name>parameter_length_priority</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textbox</type>
             <default>1</default>
             <parent>right_column</parent>
@@ -759,10 +1033,10 @@
       </property>
       <property>
             <name>parameter_timescale</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>textarea</type>
             <rows>7</rows>
             <cols>30</cols>
@@ -771,30 +1045,30 @@
       </property>
       <property>
             <name>parameter_timescale_unit</name>
+            <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_settings_def</group>
             <type>select</type>
             <parent>right_column</parent>
             <caption>Skaala aja&amp;amp;uuml;hik</caption>
       </property>
       <property>
             <name>printer_tree</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>treeview</type>
             <parent>printer_tree</parent>
             <store>no</store>
       </property>
       <property>
             <name>ps_resource</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>select</type>
             <parent>printer_search</parent>
             <captionside>top</captionside>
@@ -802,10 +1076,10 @@
       </property>
       <property>
             <name>ps_project</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>textbox</type>
             <parent>printer_search</parent>
             <captionside>top</captionside>
@@ -813,10 +1087,10 @@
       </property>
       <property>
             <name>ps_submit</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>submit</type>
             <parent>printer_search</parent>
             <store>no</store>
@@ -824,20 +1098,20 @@
       </property>
       <property>
             <name>pp_picture</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <parent>ppl_data</parent>
             <store>no</store>
       </property>
       <property>
             <name>pp_name</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <parent>ppl_data</parent>
             <store>no</store>
@@ -845,10 +1119,10 @@
       </property>
       <property>
             <name>pp_profession</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <parent>ppl_data</parent>
             <store>no</store>
@@ -856,10 +1130,10 @@
       </property>
       <property>
             <name>pp_section</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <parent>ppl_data</parent>
             <store>no</store>
@@ -867,10 +1141,10 @@
       </property>
       <property>
             <name>pp_company</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <parent>ppl_data</parent>
             <store>no</store>
@@ -878,10 +1152,10 @@
       </property>
       <property>
             <name>pp_resources</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>table</type>
             <parent>ppl_resources</parent>
             <no_caption>1</no_caption>
@@ -889,10 +1163,10 @@
       </property>
       <property>
             <name>pp_birthdays</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>table</type>
             <parent>ppl_birthdays</parent>
             <no_caption>1</no_caption>
@@ -900,20 +1174,20 @@
       </property>
       <property>
             <name>printer_legend</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <no_caption>1</no_caption>
             <parent>printer_legend_box</parent>
       </property>
       <property>
             <name>printer_jobs_prev_link</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -921,10 +1195,10 @@
       </property>
       <property>
             <name>printer_jobs</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <parent>printer_right</parent>
@@ -932,10 +1206,10 @@
       </property>
       <property>
             <name>printer_jobs_next_link</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -943,10 +1217,10 @@
       </property>
       <property>
             <name>pj_toolbar</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -955,10 +1229,10 @@
       </property>
       <property>
             <name>pj_case_header</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -966,10 +1240,10 @@
       </property>
       <property>
             <name>pj_errors</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -977,10 +1251,10 @@
       </property>
       <property>
             <name>pj_change_comment</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
@@ -991,10 +1265,10 @@
       </property>
       <property>
             <name>pj_change_comment_history</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>comment_hbox</parent>
@@ -1002,10 +1276,10 @@
       </property>
       <property>
             <name>pj_title_job_data</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -1014,10 +1288,10 @@
       </property>
       <property>
             <name>pj_starttime</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1025,10 +1299,10 @@
       </property>
       <property>
             <name>pj_length</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1036,10 +1310,10 @@
       </property>
       <property>
             <name>pj_minstart</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>datetime_select</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1047,10 +1321,10 @@
       </property>
       <property>
             <name>pj_remaining_length</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>textbox</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1058,10 +1332,10 @@
       </property>
       <property>
             <name>pj_submit</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>submit</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1069,10 +1343,10 @@
       </property>
       <property>
             <name>pj_resource</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>resource_hbox</parent>
@@ -1081,10 +1355,10 @@
       </property>
       <property>
             <name>pj_job_comment</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>resource_hbox</parent>
@@ -1092,10 +1366,10 @@
       </property>
       <property>
             <name>pj_state</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1103,10 +1377,10 @@
       </property>
       <property>
             <name>pjp_title_proj_data</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -1115,10 +1389,10 @@
       </property>
       <property>
             <name>pjp_format</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1126,10 +1400,10 @@
       </property>
       <property>
             <name>pjp_sisu_lk_arv</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1137,10 +1411,10 @@
       </property>
       <property>
             <name>pjp_kaane_lk_arv</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1148,10 +1422,10 @@
       </property>
       <property>
             <name>pjp_sisu_varvid</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1159,10 +1433,10 @@
       </property>
       <property>
             <name>pjp_sisu_varvid_notes</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1170,10 +1444,10 @@
       </property>
       <property>
             <name>pjp_sisu_lakk_muu</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1181,10 +1455,10 @@
       </property>
       <property>
             <name>pjp_kaane_varvid</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1192,10 +1466,10 @@
       </property>
       <property>
             <name>pjp_kaane_varvid_notes</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1203,10 +1477,10 @@
       </property>
       <property>
             <name>pjp_kaane_lakk_muu</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1214,10 +1488,10 @@
       </property>
       <property>
             <name>pjp_sisu_paber</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1225,10 +1499,10 @@
       </property>
       <property>
             <name>pjp_kaane_paber</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1236,10 +1510,10 @@
       </property>
       <property>
             <name>pjp_trykiarv</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1247,10 +1521,10 @@
       </property>
       <property>
             <name>pjp_trykise_ehitus</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1258,10 +1532,10 @@
       </property>
       <property>
             <name>pjp_kromaliin</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1269,10 +1543,10 @@
       </property>
       <property>
             <name>pjp_makett</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1280,10 +1554,10 @@
       </property>
       <property>
             <name>pjp_naidis</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <parent>printer_right</parent>
@@ -1291,10 +1565,10 @@
       </property>
       <property>
             <name>pjp_title_case_wf</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -1302,11 +1576,22 @@
             <caption>Projekti t&amp;amp;ouml;&amp;amp;ouml;voog</caption>
       </property>
       <property>
-            <name>pjp_case_wf</name>
+            <name>pjp_material</name>
+            <group>grp_printer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>printer_right</parent>
+      </property>
+      <property>
+            <name>pjp_case_wf</name>
             <group>grp_printer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1314,20 +1599,20 @@
       </property>
       <property>
             <name>select_session_resource</name>
+            <group>grp_login_select_res</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_login_select_res</group>
             <type>select</type>
             <store>no</store>
             <caption>Vali kasutatav ressurss</caption>
       </property>
       <property>
             <name>ws_resource</name>
+            <group>grp_worksheet</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_worksheet</group>
             <type>select</type>
             <multiple>1</multiple>
             <store>no</store>
@@ -1336,40 +1621,40 @@
       </property>
       <property>
             <name>ws_from</name>
+            <group>grp_worksheet</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_worksheet</group>
             <type>date_select</type>
             <store>no</store>
             <caption>Alates</caption>
       </property>
       <property>
             <name>ws_to</name>
+            <group>grp_worksheet</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_worksheet</group>
             <type>date_select</type>
             <store>no</store>
             <caption>Kuni</caption>
       </property>
       <property>
             <name>ws_sbt</name>
+            <group>grp_worksheet</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_worksheet</group>
             <type>submit</type>
             <store>no</store>
             <caption>N&amp;amp;auml;ita</caption>
       </property>
       <property>
             <name>ws_tbl</name>
+            <group>grp_worksheet</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_worksheet</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1378,6 +1663,7 @@
             <syslog_type>ST_MRP_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
             <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
@@ -1442,10 +1728,41 @@
                   <caption>Haldus</caption>
                   <parent>grp_resources</parent>
             </grp_resources_manage>
-            <grp_printer>
+            <grp_resources_hours_report>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;ajaaruanne</caption>
+                  <parent>grp_resources</parent>
+                  <submit>no</submit>
+            </grp_resources_hours_report>
+            <grp_persons>
+                  <caption>Inimesed</caption>
+            </grp_persons>
+            <grp_persons_hours_report>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;ajaaruanne</caption>
+                  <parent>grp_persons</parent>
+            </grp_persons_hours_report>
+            <grp_persons_jobs_report>
+                  <caption>Tehtud t&amp;amp;ouml;&amp;amp;ouml;d inimeste kaupa</caption>
+                  <parent>grp_persons</parent>
+            </grp_persons_jobs_report>
+            <grp_printer_general>
                   <caption>Operaatori vaade</caption>
                   <submit>no</submit>
+            </grp_printer_general>
+            <grp_printer>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;d</caption>
+                  <submit>no</submit>
+                  <parent>grp_printer_general</parent>
             </grp_printer>
+            <my_stats>
+                  <caption>Minu aruanded</caption>
+                  <submit>no</submit>
+                  <parent>grp_printer_general</parent>
+            </my_stats>
+            <my_resources>
+                  <caption>Minu ressursid</caption>
+                  <submit>no</submit>
+                  <parent>grp_printer_general</parent>
+            </my_resources>
             <grp_login_select_res>
                   <caption>Vali kasutatav ressurss</caption>
             </grp_login_select_res>
@@ -1478,6 +1795,45 @@
             </MRP_WAREHOUSE>
       </reltypes>
       <layout>
+            <my_resources_full>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>my_resources</group>
+                  <area_caption></area_caption>
+            </my_resources_full>
+            <my_resources_tree_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ressursid&amp;amp;nbsp;&amp;amp;amp;&amp;amp;nbsp;kategooriad</area_caption>
+                  <parent>my_resources_full</parent>
+                  <group>my_resources</group>
+            </my_resources_tree_box>
+            <my_right_pane>
+                  <type>vbox</type>
+                  <parent>my_resources_full</parent>
+                  <group>my_resources</group>
+                  <area_caption></area_caption>
+            </my_right_pane>
+            <my_resource_deviation_chart>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ressursi&amp;amp;nbsp;h&amp;amp;auml;lbe&amp;amp;nbsp;muutus&amp;amp;nbsp;ajas</area_caption>
+                  <parent>my_right_pane</parent>
+                  <group>my_resources</group>
+            </my_resource_deviation_chart>
+            <my_resource_time_chart>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ressursside&amp;amp;nbsp;ajakasutus</area_caption>
+                  <parent>my_right_pane</parent>
+                  <group>my_resources</group>
+            </my_resource_time_chart>
+            <my_resource_time_limits>
+                  <type>hbox</type>
+                  <parent>my_resource_time_chart</parent>
+                  <group>my_resources</group>
+                  <area_caption></area_caption>
+            </my_resource_time_limits>
             <vsplitbox>
                   <type>hbox</type>
                   <group>
@@ -1535,7 +1891,7 @@
             <resources_tree_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Ressursid&amp;amp;amp;kategooriad</area_caption>
+                  <area_caption>Ressursid&amp;amp;nbsp;&amp;amp;amp;&amp;amp;nbsp;kategooriad</area_caption>
                   <parent>vsplitbox</parent>
                   <group>
                         <num_0>grp_resources_manage</num_0>
@@ -1556,11 +1912,191 @@
                   <closeable>1</closeable>
                   <area_caption>Ressursi&amp;amp;nbsp;h&amp;amp;auml;lbe&amp;amp;nbsp;muutus&amp;amp;nbsp;ajas</area_caption>
                   <parent>right_pane</parent>
-                  <group>
-                        <num_0>grp_resources_manage</num_0>
-                        <num_1>grp_resources_load</num_1>
-                  </group>
+                  <group>grp_resources_load</group>
             </resource_deviation_chart>
+            <resource_time_chart>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ressursside&amp;amp;nbsp;ajakasutus</area_caption>
+                  <parent>right_pane</parent>
+                  <group>grp_resources_load</group>
+            </resource_time_chart>
+            <resource_time_limits>
+                  <type>hbox</type>
+                  <parent>resource_time_chart</parent>
+                  <group>grp_resources_load</group>
+                  <area_caption></area_caption>
+            </resource_time_limits>
+            <resources_hours_full>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>grp_resources_hours_report</group>
+                  <area_caption></area_caption>
+            </resources_hours_full>
+            <resources_hours_left>
+                  <type>vbox</type>
+                  <parent>resources_hours_full</parent>
+                  <group>grp_resources_hours_report</group>
+                  <area_caption></area_caption>
+            </resources_hours_left>
+            <resources_time_tree>
+                  <type>vbox</type>
+                  <parent>resources_hours_left</parent>
+                  <area_caption>Vali&amp;amp;nbsp;ajavahemik</area_caption>
+                  <group>grp_resources_hours_report</group>
+            </resources_time_tree>
+            <resources_resource_span_tree>
+                  <type>vbox</type>
+                  <parent>resources_hours_left</parent>
+                  <area_caption>Vali&amp;amp;nbsp;ressursid</area_caption>
+                  <group>grp_resources_hours_report</group>
+            </resources_resource_span_tree>
+            <resources_hours_right>
+                  <type>vbox</type>
+                  <parent>resources_hours_full</parent>
+                  <group>grp_resources_hours_report</group>
+                  <area_caption></area_caption>
+            </resources_hours_right>
+            <resources_hours_chart>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>resources_hours_right</parent>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;graafik&amp;amp;nbsp;ressursside&amp;amp;nbsp;kaupa</area_caption>
+                  <group>grp_resources_hours_report</group>
+            </resources_hours_chart>
+            <resources_hours_tbl>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>resources_hours_right</parent>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;tabel&amp;amp;nbsp;ressursside&amp;amp;nbsp;kaupa</area_caption>
+                  <group>grp_resources_hours_report</group>
+            </resources_hours_tbl>
+            <grp_persons_full>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>grp_persons_jobs_report</num_1>
+                        <num_2>my_stats</num_2>
+                  </group>
+                  <area_caption></area_caption>
+            </grp_persons_full>
+            <grp_persons_left>
+                  <type>vbox</type>
+                  <parent>grp_persons_full</parent>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>grp_persons_jobs_report</num_1>
+                        <num_2>my_stats</num_2>
+                  </group>
+                  <area_caption></area_caption>
+            </grp_persons_left>
+            <persons_time_tree>
+                  <type>vbox</type>
+                  <parent>grp_persons_left</parent>
+                  <area_caption>Vali&amp;amp;nbsp;ajavahemik</area_caption>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>grp_persons_jobs_report</num_1>
+                        <num_2>my_stats</num_2>
+                  </group>
+            </persons_time_tree>
+            <persons_personnel_tree>
+                  <type>vbox</type>
+                  <parent>grp_persons_left</parent>
+                  <area_caption>Vali&amp;amp;nbsp;inimesed&amp;amp;#44;&amp;amp;nbsp;kelle&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;tunde&amp;amp;nbsp;soovid&amp;amp;nbsp;n&amp;amp;auml;ha</area_caption>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>grp_persons_jobs_report</num_1>
+                        <num_2>my_stats</num_2>
+                  </group>
+            </persons_personnel_tree>
+            <persons_other_options>
+                  <type>vbox</type>
+                  <parent>grp_persons_left</parent>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;kuvamise&amp;amp;nbsp;tingimused</area_caption>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>grp_persons_jobs_report</num_1>
+                        <num_2>my_stats</num_2>
+                  </group>
+            </persons_other_options>
+            <grp_persons_right>
+                  <type>vbox</type>
+                  <parent>grp_persons_full</parent>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>grp_persons_jobs_report</num_1>
+                        <num_2>my_stats</num_2>
+                  </group>
+                  <area_caption></area_caption>
+            </grp_persons_right>
+            <persons_jobs_tbl>
+                  <type>vbox</type>
+                  <parent>grp_persons_right</parent>
+                  <area_caption>Tehtud&amp;amp;nbsp;t&amp;amp;ouml&amp;amp;ouml;d</area_caption>
+                  <group>grp_persons_jobs_report</group>
+            </persons_jobs_tbl>
+            <grp_persons_right_top>
+                  <type>hbox</type>
+                  <parent>grp_persons_right</parent>
+                  <width>50%:50%</width>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>my_stats</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </grp_persons_right_top>
+            <hours_by_resource_chart>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>grp_persons_right_top</parent>
+                  <area_caption>A</area_caption>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>my_stats</num_1>
+                  </group>
+            </hours_by_resource_chart>
+            <pauses_by_resource_chart>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>grp_persons_right_top</parent>
+                  <area_caption>A</area_caption>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>my_stats</num_1>
+                  </group>
+            </pauses_by_resource_chart>
+            <persons_hours_chart>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>grp_persons_right</parent>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;graafik&amp;amp;nbsp;inimeste&amp;amp;nbsp;kaupa</area_caption>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>my_stats</num_1>
+                  </group>
+            </persons_hours_chart>
+            <persons_hours_tbl>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>grp_persons_right</parent>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;tabel&amp;amp;nbsp;inimeste&amp;amp;nbsp;kaupa</area_caption>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>my_stats</num_1>
+                  </group>
+            </persons_hours_tbl>
+            <persons_detailed_hours_tbl>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>grp_persons_right</parent>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;tabel&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;&amp;amp;nbsp;kaupa</area_caption>
+                  <group>
+                        <num_0>grp_persons_hours_report</num_0>
+                        <num_1>my_stats</num_1>
+                  </group>
+            </persons_detailed_hours_tbl>
             <schedule_search_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
