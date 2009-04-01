@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.50 2009/02/04 11:44:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.51 2009/04/01 10:54:30 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -1431,7 +1431,7 @@ if(aw_global_get("uid") == "struktuur"){ arr($rn);}//33685 , 215250
 
 
                                //"guaranteeType" => "CreditCard",
-                               "guaranteeType" => "CompanyName",//$arr["ct2"]["pay_type"] == "cash" ? "CreditCard" : "CompanyName",
+                               "guaranteeType" => $arr["ct2"]["pay_type"] == "cash" ? "CorporateCash" : "CompanyName",
                                "guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["bron_comment"])),
                                "paymentType" => "NoPayment",
 
