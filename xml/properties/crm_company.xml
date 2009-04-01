@@ -240,6 +240,17 @@
             <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
       </property>
       <property>
+            <name>bill_tolerance</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>co_bottom_seller_r</parent>
+            <store>no</store>
+            <field>bill_tolerance</field>
+            <caption>Tolerants (p&amp;amp;auml;evi)</caption>
+      </property>
+      <property>
             <name>bill_penalty_pct</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>
@@ -700,11 +711,36 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_phone</field>
             <caption>Fake phone</caption>
       </property>
       <property>
+<<<<<<< crm_company.xml
+            <name>fake_fax</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <field>fake_fax</field>
+            <caption>Fake fax</caption>
+      </property>
+      <property>
+            <name>fake_mobile</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <field>fake_mobile</field>
+            <caption>Fake mobile</caption>
+      </property>
+      <property>
+            <name>fake_skype</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <field>fake_skype</field>
+            <caption>Fake skype</caption>
+      </property>
+      <property>
+=======
             <name>fake_fax</name>
             <table>objects</table>
             <group>add_info</group>
@@ -732,11 +768,11 @@
             <caption>Fake skype</caption>
       </property>
       <property>
+>>>>>>> 1.223
             <name>fake_email</name>
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_email</field>
             <caption>Fake e-mail</caption>
       </property>
@@ -745,7 +781,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_url</field>
             <caption>Fake URL</caption>
       </property>
@@ -754,7 +789,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_address</field>
             <caption>Fake address</caption>
       </property>
@@ -763,7 +797,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_postal_code</field>
             <caption>Fake ZIP code</caption>
       </property>
@@ -772,7 +805,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_city</field>
             <caption>Fake city</caption>
       </property>
@@ -783,7 +815,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_FAKE_CITY</reltype>
             <automatic>1</automatic>
-            <store>no</store>
             <field>fake_address_city_relp</field>
             <caption>Fake city</caption>
       </property>
@@ -792,7 +823,6 @@
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
-            <store>no</store>
             <field>fake_address_county</field>
             <caption>Fake county</caption>
       </property>
@@ -803,11 +833,21 @@
             <type>relpicker</type>
             <reltype>RELTYPE_FAKE_COUNTY</reltype>
             <automatic>1</automatic>
-            <store>no</store>
             <field>fake_address_county_relp</field>
             <caption>Fake county</caption>
       </property>
       <property>
+<<<<<<< crm_company.xml
+            <name>fake_address_country</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <field>fake_address_country</field>
+            <caption>Fake country</caption>
+      </property>
+      <property>
+            <name>fake_address_country_relp</name>
+=======
             <name>fake_address_country</name>
             <table>objects</table>
             <group>add_info</group>
@@ -829,13 +869,14 @@
       </property>
       <property>
             <name>show_on_web</name>
+>>>>>>> 1.223
             <table>objects</table>
             <group>add_info</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <store>no</store>
-            <field>show_on_web</field>
-            <caption>Kuva veebis</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAKE_COUNTRY</reltype>
+            <automatic>1</automatic>
+            <field>fake_address_country_relp</field>
+            <caption>Fake country</caption>
       </property>
       <property>
             <name>description_doc</name>
@@ -3439,7 +3480,18 @@
             <caption>Aruannete puu</caption>
       </property>
       <property>
-            <name>sats_stats_from</name>
+            <name>stats_stats_time_sel</name>
+            <table>objects</table>
+            <group>stats_stats</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>stats_list_s</parent>
+            <captionside>top</captionside>
+            <field>stats_stats_time_sel</field>
+            <caption>Ajavahemik</caption>
+      </property>
+      <property>
+            <name>stats_stats_from</name>
             <table>objects</table>
             <group>stats_stats</group>
             <type>date_select</type>
@@ -3451,11 +3503,11 @@
                   <num_1>month_textbox</num_1>
                   <num_2>year_textbox</num_2>
             </format>
-            <field>sats_stats_from</field>
-            <caption>Esitatud alates</caption>
+            <field>stats_stats_from</field>
+            <caption>Alates</caption>
       </property>
       <property>
-            <name>sats_stats_to</name>
+            <name>stats_stats_to</name>
             <table>objects</table>
             <group>stats_stats</group>
             <type>date_select</type>
@@ -3467,11 +3519,11 @@
                   <num_1>month_textbox</num_1>
                   <num_2>year_textbox</num_2>
             </format>
-            <field>sats_stats_to</field>
-            <caption>Esitatud kuni</caption>
+            <field>stats_stats_to</field>
+            <caption>Kuni</caption>
       </property>
       <property>
-            <name>sats_stats_search</name>
+            <name>stats_stats_search</name>
             <table>objects</table>
             <group>stats_stats</group>
             <type>submit</type>
@@ -3479,7 +3531,7 @@
             <parent>stats_list_s</parent>
             <captionside>top</captionside>
             <no_caption>1</no_caption>
-            <field>sats_stats_search</field>
+            <field>stats_stats_search</field>
             <caption>Otsi</caption>
       </property>
       <property>
@@ -4837,11 +4889,24 @@
                   <clid>CL_EXTLINK</clid>
                   <caption>V&amp;amp;auml;lised lingid</caption>
             </EXTERNAL_LINKS>
+<<<<<<< crm_company.xml
+            <QUALITY_MENU>
+                  <value>83</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kvaliteedi men&amp;amp;uuml;&amp;amp;uuml;</caption>
+            </QUALITY_MENU>
+            <FAKE_COUNTRY>
+                  <value>84</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Fake country</caption>
+            </FAKE_COUNTRY>
+=======
             <FAKE_COUNTRY>
                   <value>83</value>
                   <clid>CL_CRM_COUNTRY</clid>
                   <caption>Fake country</caption>
             </FAKE_COUNTRY>
+>>>>>>> 1.223
       </reltypes>
       <layout>
             <co_top>
