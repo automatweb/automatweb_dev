@@ -1516,7 +1516,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						"brother_of" => $row["brother_of"],
 						"status" => $row["status"],
 						"class_id" => $row["class_id"],
-						"jrk" => $row["jrk"],
+						"jrk" => ifset($row, "jrk"),
 					);
 
 					if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
@@ -2441,7 +2441,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($join["via"] == "rel")
 			{
 				// from prev to alias from alias to obj
-				if (!$join["table"])
+				if (empty($join["table"]))
 				{
 					$prev_t = "";
 				}
@@ -2455,7 +2455,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$cur_al_name = "aliases_".$tmp_prev["from_class"]."_".$tmp_prev["reltype"]."_".$join["to_class"]."_".$join["reltype"];
 				$rel_from_field = "source";
 				$rel_to_field = "target";
-				if ($join["is_reverse"] == 1)
+				if (ifset($join, "is_reverse") == 1)
 				{
 					$rel_from_field = "target";
 					$rel_to_field = "source";
@@ -2567,7 +2567,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$field = $new_t[$tbl]["index"];
 					}
 
-					if ($prev["is_reverse"] == 1)
+					if (ifset($prev, "is_reverse") == 1)
 					{
 						$tmp_fld = "source";
 					}
@@ -2611,7 +2611,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				// if the next stop is a property
 				// then join all the tables in that class
 				// first the objects table
-				if (!$prev_t)
+				if (empty($prev_t))
 				{
 					$prev_t = $join["table"]."_".$join["from_class"];
 				}
@@ -2859,7 +2859,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 
-			if ($cur_prop["store"] == "connect")
+			if (ifset($cur_prop, "store") == "connect")
 			{
 				$this->_do_add_class_id($cur_clid);
 				// rewrite to a reltype join
