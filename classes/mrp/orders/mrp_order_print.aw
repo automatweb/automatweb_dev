@@ -395,7 +395,7 @@ class mrp_order_print extends mrp_order
 		{
 			$tot_mat_price[$cur_id] += ($mo->price_get_by_currency(obj($cur_id)) * $calc_amt);
 		}
-		return $tot_mat_price;
+		return array(reset($tot_mat_price));
 		
 
 		// put all jobs in table and for each job list all possible materials and let the user pick some
@@ -425,6 +425,7 @@ class mrp_order_print extends mrp_order
 				}
 			}
 		}
+		return array(reset($tot_mat_price));
 		return $tot_mat_price;
 	}
 
@@ -486,7 +487,6 @@ class mrp_order_print extends mrp_order
 	{
 		// get pricelist and go over all resources in the job list and calc prices for those
 		$pricelist = $o->mrp_pricelist();
-
 		$pr = 0;
 		$pr += $pricelist->get_price_for_resource_and_amount($resource, $v);
 

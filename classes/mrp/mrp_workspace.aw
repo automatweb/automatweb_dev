@@ -1983,6 +1983,10 @@ class mrp_workspace extends class_base
 
 			### persons tab
 			case "poo_started_finished_by":
+				if($arr["request"]["group"] == "my_stats")
+				{
+					$prop["caption"] = t("Kuva minu poolt");
+				}
 				$prop["options"] = array(
 					mrp_job_obj::PRSN_HNDL_S => t("... alustatud tegevusi"),
 					mrp_job_obj::PRSN_HNDL_F => t("... l&otilde;petatud tegevusi"),
@@ -2448,8 +2452,16 @@ class mrp_workspace extends class_base
 	function _get_something_by_resource_chart($arr, $state)
 	{
 		list($from, $to) = $this->get_hours_from_to();
-		$persons = (array)$this->get_hours_person($arr);
-		
+		if($arr["request"]["group"] = "my_stats")
+		{
+			$me = get_current_person();
+			$persons = (array)$me->id();
+		}
+		else
+		{
+			$persons = (array)$this->get_hours_person($arr);
+		}
+
 		switch($arr["obj_inst"]->prop("poo_started_finished_by"))
 		{
 			default:
@@ -2747,7 +2759,15 @@ class mrp_workspace extends class_base
 			switch($kf)
 			{
 				case "person":
-					$data_prms["person"] = $this->get_hours_person($arr);
+					if($arr["request"]["group"] = "my_stats")
+					{
+						$me = get_current_person();
+						$data_prms["person"] = (array)$me->id();
+					}
+					else
+					{
+						$data_prms["person"] = $this->get_hours_person($arr);
+					}
 					$data_prms["person_handling"] = $arr["obj_inst"]->prop("poo_started_finished_by");
 					$data = get_instance("mrp_job_obj")->get_person_hours($data_prms);
 					$clid = CL_CRM_PERSON;
@@ -3006,10 +3026,10 @@ class mrp_workspace extends class_base
 			"align" => "right",
 		));
 		$data = $this->get_hours($arr, $kf);
-
 		$rows = array();
 		foreach(array_keys($data["name"]) as $key)
 		{
+
 			$rows[$key][$kf] = html::href(array(
 				"caption" => $data["name"][$key],
 				"url" => aw_url_change_var(array(
@@ -6996,12 +7016,20 @@ class mrp_workspace extends class_base
 				if(empty($_GET["timespan"]))
 				{
 					$arr["area_caption"] = sprintf(t("T&ouml;&ouml;tundide %s inimeste kaupa"), $type);
+					if($arr["request"]["group"] = "my_stats")
+					{
+						$arr["area_caption"] = sprintf(t("T&ouml;&ouml;tundide %s"), $type);
+					}
 				}
 				else
 				{
 					list($from, $to) = $this->get_hours_from_to();
 					$period = sprintf(t("Ajavahemiku %s kuni %s"), date("d.m.Y", $from), date("d.m.Y", $to));
 					$arr["area_caption"] = sprintf(t("%s t&ouml;&ouml;tundide %s inimeste kaupa"), $period, $type);
+					if($arr["request"]["group"] = "my_stats")
+					{
+						$arr["area_caption"] = sprintf(t("%s t&ouml;&ouml;tundide %s"), $period, $type);
+					}
 				}				
 				break;
 
