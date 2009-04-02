@@ -2551,6 +2551,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 					$new_t = $GLOBALS["tableinfo"][$join["from_class"]];
 					$do_other_join = false;
+					$and_buster = "";
 					if (!is_array($new_t) || !isset($GLOBALS["properties"][$join["from_class"]][$join["prop"]]) || $GLOBALS["properties"][$join["from_class"]][$join["prop"]]["table"] == "objects")
 					{
 						// class only has objects table, so join that
@@ -2560,6 +2561,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 						// and also join any other tables as well just to be on the safe side.
 						$do_other_join = is_array($new_t);
+						$and_buster = " AND $tbl.status > 0 ";
 					}
 					else
 					{
@@ -2575,7 +2577,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					{	
 						$tmp_fld = "target";
 					}
-					$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$prev_t.".".$tmp_fld." ";
+					$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$prev_t.".".$tmp_fld." $and_buster ";
 					$this->_add_s($prev_t);
 					$this->_add_join($str);
 //					$this->joins[] = $str;
