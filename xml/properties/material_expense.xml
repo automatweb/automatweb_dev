@@ -28,6 +28,15 @@
             <caption>Kogus</caption>
       </property>
       <property>
+            <name>base_amount</name>
+            <table>aw_material_expense</table>
+            <group>general</group>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <field>base_amount</field>
+            <caption>Kogus p&amp;amp;otilde;hi&amp;amp;uuml;hikus</caption>
+      </property>
+      <property>
             <name>unit</name>
             <table>aw_material_expense</table>
             <group>general</group>

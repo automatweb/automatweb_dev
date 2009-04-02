@@ -15,6 +15,9 @@
 @property amount type=textbox datatype=int
 @caption Kogus
 
+@property base_amount type=textbox datatype=int
+@caption Kogus p&otilde;hi&uuml;hikus
+
 @property unit type=relpicker reltype=RELTYPE_UNIT
 @caption &Uuml;hik
 
@@ -104,6 +107,7 @@ class material_expense extends class_base
 				));
 				return true;
 			case "amount":
+			case "base_amount":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(20)"
