@@ -48,6 +48,17 @@
             <caption>Planeeritud kestus (h)</caption>
       </property>
       <property>
+            <name>person</name>
+            <group>workflow</group>
+            <table>mrp_job</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PERSON</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>person</field>
+            <caption>Isikud, kes on seda t&amp;amp;ouml;&amp;amp;ouml;d teinud</caption>
+      </property>
+      <property>
             <name>started</name>
             <group>workflow</group>
             <table>mrp_job</table>
@@ -62,6 +73,14 @@
             <type>text</type>
             <field>finished</field>
             <caption>L&amp;amp;otilde;petatud</caption>
+      </property>
+      <property>
+            <name>aborted</name>
+            <group>workflow</group>
+            <table>mrp_job</table>
+            <type>text</type>
+            <field>aborted</field>
+            <caption>Katkestatud</caption>
       </property>
       <property>
             <name>resource</name>
@@ -235,6 +254,11 @@
                   <clid>CL_MRP_CASE</clid>
                   <caption>Projekt</caption>
             </MRP_PROJECT>
+            <PERSON>
+                  <value>3</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Isik, kes on seda t&amp;amp;ouml;&amp;amp;ouml;d teinud</caption>
+            </PERSON>
       </reltypes>
 </properties>
 

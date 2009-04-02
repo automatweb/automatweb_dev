@@ -13,6 +13,32 @@ class shop_purchase_manager_workspace_obj extends _int_object
 	}
 
 	/**
+		@attrib name=order_products api=1
+		
+		@param products required type=array
+		@param date required type=int
+		@param job optional type=oid
+	
+		@comment
+			arr[products] is an array of arrays ( product => oid, unit => oid, amount => int )
+			when unit is not defined there, product's default unit is used
+
+		@returns order object that was created
+	**/
+	public function order_products($arr)
+	{
+		$o = $this->create_order(array(
+			"name" => sprintf("Tellimus %s", date("d.m.Y", $arr["date"])),
+			"date" => $arr["date"],
+			"job" => $arr["job"],
+		));
+		foreach($arr["products"] as $product)
+		{
+			$row = $this->create_order_row($product, $o);
+		}
+	}
+
+	/**
 		@attrib name=order_product api=1
 
 		@param product required type=oid
@@ -25,17 +51,33 @@ class shop_purchase_manager_workspace_obj extends _int_object
 	**/
 	public function order_product($arr)
 	{
+		$o = $this->create_order(array(
+			"name" => sprintf("%s tellimus %s", obj($arr["product"]->name()), date("d.m.Y", $arr["date"])),
+			"date" => $arr["date"],
+			"job" => $arr["job"],
+		));
+		$row = $this->create_order_row($arr, $o);
+		return $o;
+	}
+
+	private function create_order($arr)
+	{
 		$o = obj();
-		$po = obj($arr["product"]);
 		$o->set_class_id(CL_SHOP_SELL_ORDER);
 		$o->set_parent($this->id());
-		$o->set_name(sprintf("%s tellimus", $po->name()));
+		$o->set_name($arr["name"]);
 		$o->set_prop("date", $arr["date"]);
 		if($arr["job"])
 		{
 			$o->set_prop("job", $arr["job"]);
 		}
 		$o->save();
+		return $o;
+	}
+
+	private function create_order_row($arr, $o)
+	{
+		
 		$row = obj();
 		$row->set_class_id(CL_SHOP_ORDER_ROW);
 		$row->set_parent($o->id());
@@ -54,7 +96,6 @@ class shop_purchase_manager_workspace_obj extends _int_object
 			"to" => $row,
 			"type" => "RELTYPE_ROW",
 		));
-		return $o;
 	}
 
 	/**
@@ -76,7 +117,11 @@ class shop_purchase_manager_workspace_obj extends _int_object
 		);
 		if($arr["date"])
 		{
-			$params["RELTYPE_ROW(CL_SHOP_SELL_ORDER).date"] = new obj_predicate_compare(OBJ_LESS_THAN, $arr["date"]);
+			$params["RELTYPE_ROW(CL_SHOP_SELL_ORDER).date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, time(), $arr["date"]);
+		}
+		else
+		{
+			$params["RELTYPE_ROW(CL_SHOP_SELL_ORDER).date"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
 		}
 		if($arr["product"])
 		{

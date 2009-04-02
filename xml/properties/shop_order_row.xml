@@ -70,7 +70,7 @@
       <property>
             <name>amount</name>
             <group>general</group>
-            <table>aw_shop_order_rows</table>
+            <table>aw_shop_order_rows_amount</table>
             <type>textbox</type>
             <datatype>int</datatype>
             <field>amount</field>
@@ -124,6 +124,11 @@
                   <master_index>brother_of</master_index>
                   <master_table>objects</master_table>
             </aw_shop_order_rows>
+            <aw_shop_order_rows_amount>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </aw_shop_order_rows_amount>
       </tableinfo>
       <reltypes>
             <PRODUCT>

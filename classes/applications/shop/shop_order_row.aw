@@ -4,6 +4,7 @@
 
 @classinfo syslog_type=ST_SHOP_ORDER_ROW relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 @tableinfo aw_shop_order_rows index=aw_oid master_index=brother_of master_table=objects
+@tableinfo aw_shop_order_rows_amount index=aw_oid master_index=brother_of master_table=objects
 
 @default group=general
 @default table=aw_shop_order_rows
@@ -32,7 +33,7 @@
 @property required type=textbox
 @caption Vajadus
 
-@property amount type=textbox datatype=int
+@property amount type=textbox datatype=int table=aw_shop_order_rows_amount
 @caption Kogus
 
 @property real_amount type=text datatype=int
@@ -149,6 +150,27 @@ class shop_order_row extends class_base
 					return true;
 					break;
 			}
+		}
+		elseif($table == "aw_shop_order_rows_amount")
+		{
+			
+			if($field=="")
+			{
+				$this->db_query("CREATE TABLE aw_shop_order_rows_amount (`aw_oid` int primary key)");
+				return true;
+			}
+			switch($field)
+			{
+				case "amount":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "double"
+					));
+					$this->db_query("INSERT INTO aw_shop_order_rows_amount SELECT aw_oid, amount FROM aw_shop_order_rows");
+					return true;
+					break;
+			}
+					
 		}
 	}
 }

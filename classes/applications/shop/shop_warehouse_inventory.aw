@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_inventory.aw,v 1.5 2008/09/24 09:22:51 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_inventory.aw,v 1.6 2009/04/02 08:22:24 robert Exp $
 // shop_warehouse_inventory.aw - Inventuur 
 /*
 

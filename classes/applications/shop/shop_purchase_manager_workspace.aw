@@ -371,6 +371,41 @@
 		@property storage_inventories type=table store=no no_caption=1  parent=storage_inventories_split
 		@caption Inventuurid
 
+@default group=status_orders
+
+	@property status_orders_toolbar type=toolbar no_caption=1 store=no
+
+	@layout status_orders_split type=hbox width=20%:80%
+
+		@layout status_orders_left type=vbox parent=status_orders_split
+
+			@layout status_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=status_orders_left
+
+				@property status_orders_tree type=treeview parent=status_orders_tree_lay store=no no_caption=1
+
+				@property status_orders_tree2 type=treeview parent=status_orders_tree_lay store=no no_caption=1
+
+			@layout status_orders_left_search type=vbox parent=status_orders_left area_caption=Otsing closeable=1
+
+				@property status_orders_s_name type=textbox store=no captionside=top size=30 parent=status_orders_left_search
+				@caption Nimi
+
+				@property status_orders_s_code type=textbox store=no captionside=top size=30 parent=status_orders_left_search
+				@caption Kood
+
+				@property status_orders_s_barcode type=textbox store=no captionside=top size=30 parent=status_orders_left_search
+				@caption Ribakood
+
+				@property status_orders_s_art_cat type=select store=no captionside=top parent=status_orders_left_search
+				@caption Kategooria
+
+				@property status_orders_s_date type=date_select ch_value=1 store=no captionside=top size=30  parent=status_orders_left_search
+				@caption Kuup&auml;ev
+
+				@property status_orders_s_sbt type=submit store=no captionside=top  parent=status_orders_left_search value="Otsi"
+				@caption Otsi
+
+		@property status_orders type=table store=no no_caption=1  parent=status_orders_split
 
 @default group=purchase_orders
 
@@ -489,6 +524,7 @@
 	@groupinfo status_status caption="Laoseis" parent=status
 	@groupinfo status_prognosis caption="Prognoos" parent=status
 	@groupinfo status_inventories caption="Inventuurid" parent=status
+	@groupinfo status_orders caption="Vajadused" parent=status
 
 @groupinfo purchases caption="Tellimused"
 

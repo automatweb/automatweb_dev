@@ -2610,7 +2610,6 @@ class shop_warehouse extends class_base
 				$params["code"] = "%".$code."%";
 			}
 		}
-		$params["limit"] = "0,100";
 		if($barcode = $arr["request"]["prod_s_barcode"])
 		{
 			$params["barcode"] = "%".$varcode."%";
@@ -2678,6 +2677,7 @@ class shop_warehouse extends class_base
 		{
 			$show = 1;
 		}
+		$params["limit"] = "0,100";
 		if(!$show)
 		{
 			foreach($arr["request"] as $var => $val)
@@ -7056,7 +7056,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			$units = $pi->get_units($o);
 
 			$rows = $wso->get_order_rows(array(
-				"date" => $arr["request"]["status_orders_s_date"],
+				"date" => ($d = $arr["request"]["status_orders_s_date"]) ? date_edit::get_timestamp($d) : 0,
 				"product" => $oid,
 			));
 			$order = 0;
@@ -7067,6 +7067,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 					continue;
 				}
 				unset($req_amt);
+				unset($row);
 				foreach($rows->arr() as $row)
 				{
 					if($row->prop("unit") == $units[$i])
@@ -7080,12 +7081,16 @@ $oo = get_instance(CL_SHOP_ORDER);
 				}
 				else
 				{
-					$unit = $row->prop("unit");
-					$fo = $ufi->get_formula(array(
-						"from_unit" => $unit,
-						"to_unit" => $units[$i],
-						"product" => $o,
-					));
+					unset($fo);
+					if($row)
+					{
+						$unit = $row->prop("unit");
+						$fo = $ufi->get_formula(array(
+							"from_unit" => $unit,
+							"to_unit" => $units[$i],
+							"product" => $o,
+						));
+					}
 					if($fo)
 					{
 						$data["required_".$i] = round($ufi->calc_amount(array(
