@@ -2,7 +2,7 @@
 
 class lc_cases
 {
-	private $vowels = array(// ascii indices
+	protected static $vowels = array(// ascii indices
 		65, //Latin capital letter A
 		69, //Latin capital letter E
 		73, //Latin capital letter I
