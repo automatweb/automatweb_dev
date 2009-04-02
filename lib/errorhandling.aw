@@ -135,7 +135,7 @@ function aw_reasonable_error_handler($errno, $errstr, $errfile, $errline, $conte
 	}
 
 	$r = true;
-	if ($current_user_is_maintainer or aw_is_fatal_error($errno))
+	if ($current_user_is_maintainer or aw_is_fatal_error($errno) or E_WARNING === $errno)
 	{
 		$r = aw_dbg_error_handler($errno, $errstr, $errfile, $errline, $context);
 	}
