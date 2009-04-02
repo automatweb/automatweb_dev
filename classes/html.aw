@@ -3,7 +3,7 @@
 @classinfo  maintainer=kristo
 */
 
-class html extends aw_template
+class html
 {
 	/**
 	@attrib api=1 params=name
@@ -39,7 +39,7 @@ class html extends aw_template
 
 	@comment creates html select
 	**/
-	function select($args = array())
+	public static function select($args = array())
 	{
 		$post_append_text = "";
 		extract($args);
@@ -236,7 +236,7 @@ class html extends aw_template
 	@comment creates html textbox
 	**/
 
-	function textbox($args = array())
+	public static function textbox($args = array())
 	{
 		extract($args);
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
@@ -279,7 +279,8 @@ class html extends aw_template
 			{
 				$class = $_POST["class"];
 			}
-			$autocomplete_source = $this->mk_my_orb("object_name_autocomplete_source", $params, $class , false, true);
+			$core = new core();
+			$autocomplete_source = $core->mk_my_orb("object_name_autocomplete_source", $params, $class , false, true);
 			$autocomplete_params = array($name);
 		}
 
@@ -325,7 +326,8 @@ class html extends aw_template
 					$params = array(
 						"id" => $_GET["id"],
 					);
-					$autocomplete_source = $this->mk_my_orb($autocomplete_source_method, $params, $autocomplete_source_class, false, true);
+					$core = new core();
+					$autocomplete_source = $core->mk_my_orb($autocomplete_source_method, $params, $autocomplete_source_class, false, true);
 					$autocomplete_source = parse_url ($autocomplete_source);
 					$autocomplete_source = $autocomplete_source["path"] . "?" . $autocomplete_source["query"];
 				}
@@ -430,10 +432,10 @@ class html extends aw_template
 
 	@comment creates html textarea
 	**/
-	function textarea($args = array())
+	public static function textarea($args = array())
 	{
 		extract($args);
-		
+
 		if(empty($richtext) && isset($maxlength) && is_numeric($maxlength) && $maxlength > 0)
 		{
 			$onkeyup = isset($onkeyup) ? " ".$onkeyup : "";
@@ -503,7 +505,7 @@ class html extends aw_template
 
 	@comment draws nice border around html content and put cute label on it, not all browsers support this
 	**/
-	function fieldset($args = array())
+	public static function fieldset($args = array())
 	{
 		extract($args);
 		$caption = isset($caption) ? '<legend>'.$caption.'</legend>' : '';
@@ -526,7 +528,7 @@ class html extends aw_template
 
 	@comment draws html iframe
 	**/
-	function iframe($args = array())
+	public static function iframe($args = array())
 	{
 		extract($args);
 		$width = isset($width) ? $width : '300';
@@ -550,7 +552,7 @@ class html extends aw_template
 
 	@comment creates html password input
 	**/
-	function password($args = array())
+	public static function password($args = array())
 	{
 		extract($args);
 		$textsize = ($textsize ? " style=\"font-size: {$textsize};\"" : "");
@@ -571,7 +573,7 @@ class html extends aw_template
 
 	@comment draws simple html text with given textsize
 	**/
-	function text($args = array())
+	public static function text($args = array())
 	{
 		if (!empty($args["textsize"]))
 		{
@@ -593,7 +595,7 @@ class html extends aw_template
 		hidden field value
 	@returns string/html Hidden field
 	**/
-	function hidden($args = array())
+	public static function hidden($args = array())
 	{
 		extract($args);
 		$value = isset($value) ? $value : '';
@@ -613,7 +615,7 @@ class html extends aw_template
 		if set, then all that stuff appears last row before the file upload
 	@returns strng/html fileupload
 	**/
-	function fileupload($args = array())
+	public static function fileupload($args = array())
 	{
 		extract($args);
 		$textsize = isset($textsize) && $textsize ? " style=\"font-size: {$textsize};\"" : "";
@@ -653,7 +655,7 @@ class html extends aw_template
 
 	@returns string/html checkbox
 	**/
-	function checkbox($args = array())
+	public static function checkbox($args = array())
 	{
 		extract($args);
 		$post_append_text = (!empty($post_append_text) ? $post_append_text : "");
@@ -740,7 +742,7 @@ class html extends aw_template
 		stuff what will happen if you click the radiobutton - javascript
 	@returns string/html radiobutton
 	**/
-	function radiobutton($args = array())
+	public static function radiobutton($args = array())
 	{
 		extract($args);
 		$checked = checked($checked);
@@ -794,7 +796,7 @@ class html extends aw_template
 		stuff what will happen if you click the button - javascript
 	@returns string/html submit button
 	**/
-	function submit($args = array())
+	public static function submit($args = array())
 	{
 		$name = isset($args["name"]) ? $args["name"] : "";
 		$value = isset($args["value"]) ? $args["value"] : "";
@@ -824,7 +826,7 @@ class html extends aw_template
 		stuff what will happen if you click the button - javascript
 	@returns string/html submit button
 	**/
-	function button($args = array())
+	public static function button($args = array())
 	{
 		extract($args);
 
@@ -856,7 +858,7 @@ class html extends aw_template
 	@comments
 		draws several selectboxes , can be used for selecting time
 	**/
-	function time_select($args = array())
+	public static function time_select($args = array())
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
@@ -914,7 +916,7 @@ class html extends aw_template
 	@comments
 		draws several selectboxes (with textboxes) , can be used for selecting time and date
 	**/
-	function datetime_select($args = array())
+	public static function datetime_select($args = array())
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
@@ -1035,7 +1037,7 @@ class html extends aw_template
 	@comments
 		draws several selectboxes and/or textboxes, can be used for selecting time and date
 	**/
-	function date_select($args = array())
+	public static function date_select($args = array())
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
@@ -1173,7 +1175,7 @@ class html extends aw_template
 	@comments
 		draws html image tag
 	**/
-	function img($args = array())
+	public static function img($args = array())
 	{
 		$xhtml_slash = "";
 		if (aw_ini_get("content.doctype") == "xhtml")
@@ -1240,7 +1242,7 @@ class html extends aw_template
 	@comments
 		draws html href tag
 	**/
-	function href($args = array())
+	public static function href($args = array())
 	{
 		extract($args);
 		if (!isset($onClick) && isset($onclick))
@@ -1257,6 +1259,7 @@ class html extends aw_template
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$id = isset($id) ? " id='$id'" : "";
 		$rel = isset($rel) ? " rel='$rel'" : "";
+		$url = isset($url) ? $url : "";
 		$style = isset($style) ? " style='$style'" : "";
 
 		if (empty($caption))
@@ -1303,7 +1306,7 @@ class html extends aw_template
 	@comments
 		draws html pupup link href tag or javascript text
 	**/
-	function popup($arr = array())
+	public static function popup($arr = array())
 	{
 		extract($arr);
 		$quote = isset($arr["quote"]) ? $arr["quote"] : "\"";
@@ -1338,7 +1341,7 @@ class html extends aw_template
 		html to insert between form tags
 	@returns string/html form
 	**/
-	function form($args = array())
+	public static function form($args = array())
 	{
 		$action = isset($args["action"]) ? $args["action"] : "";
 		$method = isset($args["method"]) ? $args["method"] : "";
@@ -1364,7 +1367,7 @@ class html extends aw_template
 	@comments
 		draws <span class='$class'>$content</span>
 	**/
-	function span($args = array())
+	public static function span($args = array())
 	{
 		extract($args);
 		$textsize = ($textsize ? 'font-size: ' . $textsize . ';' : "");
@@ -1375,7 +1378,7 @@ class html extends aw_template
 		$content = isset($content) ? $content : "";
 		return "<span{$class}{$style}{$id}>{$content}</span>";
 	}
-	
+
 	/**Link
 	@attrib api=1 params=name
 
@@ -1392,7 +1395,7 @@ class html extends aw_template
 	@comments
 		draws <div class='$class'>$content</div>
 	**/
-	function div($args = array())
+	public static function div($args = array())
 	{
 		extract($args);
 		$textsize = ($textsize ? 'font-size: ' . $textsize . ';' : "");
@@ -1402,7 +1405,7 @@ class html extends aw_template
 		$id = ($id ? " id=\"{$id}\"" : "");
 		$content = isset($content) ? $content : "";
 		return "<div{$class}{$style}{$id}>{$content}</div>";
-	} 
+	}
 
 	/**
 	@attrib api=1 params=pos
@@ -1420,16 +1423,8 @@ class html extends aw_template
 	@example
 		$url = html::obj_change_url($object);
 	**/
-	function obj_change_url($o, $caption = NULL, $prms = array())
+	public static function obj_change_url($o, $caption = NULL, $prms = array())
 	{
-		if (!$this)
-		{
-			$inst = get_instance(CL_FILE);
-		}
-		else
-		{
-			$inst = $this;
-		}
 		if (is_array($o))
 		{
 			$res = array();
@@ -1442,6 +1437,7 @@ class html extends aw_template
 
 		if (!is_object($o))
 		{
+			$inst = new acl_base();
 			if ($inst->can("view", $o))
 			{
 				$o = obj($o);
@@ -1469,7 +1465,7 @@ class html extends aw_template
 	@example
 		$url = html::obj_view_url($object);
 	**/
-	function obj_view_url($o, $caption = NULL)
+	public static function obj_view_url($o, $caption = NULL)
 	{
 		if (is_array($o))
 		{
@@ -1483,7 +1479,8 @@ class html extends aw_template
 
 		if (!is_object($o))
 		{
-			if ($this->can("view", $o))
+			$inst = new acl_base();
+			if ($inst->can("view", $o))
 			{
 				$o = obj($o);
 			}
@@ -1514,7 +1511,7 @@ class html extends aw_template
 	@example
 		$url = html::get_change_url($val["oid"], array("return_url" => get_ru()), $val["name"];
 	**/
-	function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
+	public static function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
 	{
 		$inst = get_instance(CL_FILE);
 
@@ -1539,7 +1536,7 @@ class html extends aw_template
 			$act = "view";
 		}
 
-		if (is_oid(@$_GET["section"]) and !isset($params["section"]))
+		if (!empty($_GET["section"]) and !isset($params["section"]))
 		{
 			$params["section"] = $_GET["section"];
 		}
@@ -1576,7 +1573,7 @@ class html extends aw_template
 	@example
 		$url = html::get_change_url($arr["class_id"] , $arr["parent_id"] , array("do" => "die" , "message" => "RIP")));
 	**/
-	function get_new_url($class_id, $parent, $params = array(), $caption = false)
+	public static function get_new_url($class_id, $parent, $params = array(), $caption = false)
 	{
 		$params = array("parent" => $parent) + $params;
 
@@ -1585,7 +1582,8 @@ class html extends aw_template
 			$params["section"] = $_GET["section"];
 		}
 
-		$retval =  $this->mk_my_orb("new", $params, $class_id);
+		$core = new core();
+		$retval =  $core->mk_my_orb("new", $params, $class_id);
 		if($caption)
 		{
 			$retval = html::href(array(
@@ -1596,7 +1594,7 @@ class html extends aw_template
 		return $retval;
 	}
 
-	function strong($str)
+	public static function strong($str)
 	{
 		return "<b>".$str."</b>";
 	}
