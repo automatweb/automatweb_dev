@@ -1291,7 +1291,7 @@ class class_base extends aw_template
 			));
 			$retval = $override_retval ? $override_retval : $retval;
 		}
-
+		
 		if (empty($retval))
 		{
 			if (isset($this->id_only))
@@ -1320,7 +1320,7 @@ class class_base extends aw_template
 				}
 
 				//$retval = $this->mk_my_orb($action,$args,$orb_class);
-				$retval = !empty($request["post_ru"]) ? $request["post_ru"] : $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
+				$retval = /*!empty($request["post_ru"]) ? $request["post_ru"] :*/ $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
 
 				if (is_numeric($class))
 				{
