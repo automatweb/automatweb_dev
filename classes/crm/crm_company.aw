@@ -1022,9 +1022,14 @@ default group=org_objects
 
 	@layout my_tasks type=hbox width=20%:80%
 
-		@layout all_act_search type=vbox parent=my_tasks closeable=1 area_caption=Otsing
+		@layout all_act_search type=vbox parent=my_tasks closeable=1
 
-			@layout act_s_dl_layout_top type=vbox parent=all_act_search
+			@layout tasks_tree_layout type=vbox parent=all_act_search area_caption=Tegevused&nbsp;puu&nbsp;kujul
+
+				@property tasks_tree type=treeview store=no no_caption=1 parent=tasks_tree_layout
+				@caption Tegevuste puu
+
+			@layout act_s_dl_layout_top type=vbox parent=all_act_search area_caption=Otsing
 
 			@property act_s_cust type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
 			@caption Klient
@@ -2801,6 +2806,7 @@ class crm_company extends class_base
 			case "mail_tb":
 			case "activity_stats_toolbar":
 			case "activity_stats_table":
+			case "tasks_tree":
 				static $overview_impl;
 				if (!$overview_impl)
 				{
