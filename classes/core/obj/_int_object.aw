@@ -2850,6 +2850,12 @@ class _int_object
 		exit_function("load_properties_considering_cfgform");
 		return $properties;
 	}
+
+	function __destruct()
+	{
+		$inst = aw_locker::instance();
+		$inst->unlock("object", $this->obj["oid"]);
+	}
 }
 
 ?>

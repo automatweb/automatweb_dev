@@ -1946,7 +1946,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 				$s = array(1, 2);
 				echo dbg::dump($s);
 		**/
-		function dump($data)
+		static function dump($data)
 		{
 			ob_start();
 			print "<pre>";

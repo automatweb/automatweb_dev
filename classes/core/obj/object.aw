@@ -61,7 +61,12 @@ class object
 	const STAT_NOTACTIVE = 1;
 	const STAT_ACTIVE = 2;
 
+	
 	var $oid;	// the object this instance points to
+
+	private static $instance_count = 0;
+	private $instance_number;
+	private static $instance_locks = array();
 
 	/** object class constructor
 		@attrib api=1
@@ -95,6 +100,8 @@ class object
 	**/
 	function object($param = NULL)
 	{
+		$this->instance_number = ++self::$instance_count;
+
 		if (is_array($param))
 		{
 			$this->oid = $GLOBALS["object_loader"]->load_new_object($param);
@@ -111,6 +118,8 @@ class object
 
 	function __call($method, $args)
 	{
+		$this->_check_lock_write();
+
 		if (method_exists($GLOBALS["objects"][$this->oid], $method))
 		{
 			return call_user_func_array(array($GLOBALS["objects"][$this->oid], $method), $args);
@@ -162,6 +171,8 @@ class object
 			throw new awex_obj("Object loader not found.");
 		}
 
+		$this->_check_lock_read();
+
 		$oid = $GLOBALS["object_loader"]->param_to_oid($param);
 		if ($force_reload && is_oid($oid))
 		{
@@ -210,6 +221,7 @@ class object
 	**/
 	function save()
 	{
+		$this->_check_lock_write();
 		return $this->oid = $GLOBALS["object_loader"]->save($this->oid);
 	}
 
@@ -242,6 +254,7 @@ class object
 	**/
 	function save_check_state($state_id = null)
 	{
+		$this->_check_lock_write();
 		return $this->oid = $GLOBALS["object_loader"]->save($this->oid, true, $state_id);
 	}
 
@@ -253,6 +266,7 @@ class object
 	**/
 	function get_state_id()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_state_id();
 	}
 
@@ -282,6 +296,7 @@ class object
 	**/
 	function save_new()
 	{
+		$this->_check_lock_write();
 		return $this->oid = $GLOBALS["object_loader"]->save_new($this->oid);
 	}
 
@@ -304,6 +319,7 @@ class object
 	**/
 	function set_implicit_save($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_implicit_save($param);
 	}
 
@@ -324,6 +340,7 @@ class object
 	**/
 	function get_implicit_save()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_implicit_save();
 	}
 
@@ -342,6 +359,7 @@ class object
 	**/
 	function arr()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->arr();
 	}
 
@@ -371,6 +389,7 @@ class object
 	**/
 	function delete($full_delete = false)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->delete($full_delete);
 	}
 
@@ -420,6 +439,7 @@ class object
 	**/
 	function connect($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->connect($param);
 	}
 
@@ -451,6 +471,7 @@ class object
 	**/
 	function disconnect($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->disconnect($param);
 	}
 
@@ -488,6 +509,7 @@ class object
 	**/
 	function connections_from($param = NULL)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->connections_from($param);
 	}
 
@@ -525,6 +547,7 @@ class object
 	**/
 	function connections_to($param = NULL)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->connections_to($param);
 	}
 
@@ -558,6 +581,7 @@ class object
 	**/
 	function get_first_conn_by_reltype($type = NULL)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_first_conn_by_reltype($type);
 	}
 
@@ -591,6 +615,7 @@ class object
 	**/
 	function get_first_obj_by_reltype($type = NULL)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_first_obj_by_reltype($type);
 	}
 
@@ -626,6 +651,7 @@ class object
 	**/
 	function path($param = NULL)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->path($param);
 	}
 
@@ -657,6 +683,7 @@ class object
 	**/
 	function path_str($param = NULL)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->path_str($param);
 	}
 
@@ -691,6 +718,7 @@ class object
 	**/
 	function is_property($param)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->is_property($param);
 	}
 
@@ -708,6 +736,7 @@ class object
 	**/
 	function can($param)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->can($param);
 	}
 
@@ -726,6 +755,7 @@ class object
 	**/
 	function parent()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->parent();
 	}
 
@@ -751,6 +781,7 @@ class object
 	**/
 	function set_parent($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_parent($param);
 	}
 
@@ -769,6 +800,7 @@ class object
 	**/
 	function name()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->name();
 	}
 
@@ -791,6 +823,7 @@ class object
 	**/
 	function set_name($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_name($param);
 	}
 
@@ -809,6 +842,7 @@ class object
 	**/
 	function class_id()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->class_id();
 	}
 
@@ -836,6 +870,8 @@ class object
 			throw new awex_obj("Class id can be changed only once.");
 		}
 
+		$this->_check_lock_write();
+
 		$objdata = $GLOBALS["objects"][$this->oid]->get_object_data();
 		$objdata["class_id"] = $param;
 		$objdata["oid"] = $this->oid; // because _int_object doesn't know its own id before save
@@ -862,6 +898,7 @@ class object
 	**/
 	function status()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->status();
 	}
 
@@ -884,6 +921,7 @@ class object
 	**/
 	function set_status($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_status($param);
 	}
 
@@ -902,6 +940,7 @@ class object
 	**/
 	function lang()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->lang();
 	}
 
@@ -922,6 +961,7 @@ class object
 	**/
 	function lang_id()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->lang_id();
 	}
 
@@ -944,6 +984,7 @@ class object
 	**/
 	function set_lang($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_lang($param);
 	}
 
@@ -966,6 +1007,7 @@ class object
 	**/
 	function set_lang_id($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_lang_id($param);
 	}
 
@@ -984,6 +1026,7 @@ class object
 	**/
 	function comment()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->comment();
 	}
 
@@ -1006,6 +1049,7 @@ class object
 	**/
 	function set_comment($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_comment($param);
 	}
 
@@ -1024,6 +1068,7 @@ class object
 	**/
 	function ord()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->ord();
 	}
 
@@ -1046,6 +1091,7 @@ class object
 	**/
 	function set_ord($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_ord($param);
 	}
 
@@ -1064,6 +1110,7 @@ class object
 	**/
 	function alias()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->alias();
 	}
 
@@ -1085,6 +1132,7 @@ class object
 	**/
 	function set_alias($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_alias($param);
 	}
 
@@ -1103,6 +1151,7 @@ class object
 	**/
 	function id()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->id();
 	}
 
@@ -1122,6 +1171,7 @@ class object
 	**/
 	function createdby()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->createdby();
 	}
 
@@ -1140,6 +1190,7 @@ class object
 	**/
 	function created()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->created();
 	}
 
@@ -1160,6 +1211,7 @@ class object
 	**/
 	function modifiedby()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->modifiedby();
 	}
 
@@ -1181,6 +1233,7 @@ class object
 	**/
 	function modified()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->modified();
 	}
 
@@ -1199,6 +1252,7 @@ class object
 	**/
 	function period()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->period();
 	}
 
@@ -1221,6 +1275,7 @@ class object
 	**/
 	function set_period($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_period($param);
 	}
 
@@ -1242,6 +1297,7 @@ class object
 	**/
 	function is_periodic()
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->is_periodic();
 	}
 
@@ -1263,6 +1319,7 @@ class object
 	**/
 	function set_periodic($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_periodic($param);
 	}
 
@@ -1281,6 +1338,7 @@ class object
 	**/
 	function site_id()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->site_id();
 	}
 
@@ -1299,6 +1357,7 @@ class object
 	**/
 	function set_site_id($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_site_id($param);
 	}
 
@@ -1321,6 +1380,7 @@ class object
 	**/
 	function is_brother()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->is_brother();
 	}
 
@@ -1343,6 +1403,7 @@ class object
 	**/
 	function has_brother($parent = NULL)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->has_brother($parent);
 	}
 
@@ -1358,6 +1419,7 @@ class object
 	**/
 	function brothers()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->brothers();
 	}
 
@@ -1383,6 +1445,7 @@ class object
 	**/
 	function get_original()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_original();
 	}
 
@@ -1401,6 +1464,7 @@ class object
 	**/
 	function subclass()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->subclass();
 	}
 
@@ -1425,6 +1489,7 @@ class object
 	**/
 	function set_subclass($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_subclass($param);
 	}
 
@@ -1447,6 +1512,7 @@ class object
 	**/
 	function flags()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->flags();
 	}
 
@@ -1471,6 +1537,7 @@ class object
 	**/
 	function set_flags($param)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_flags($param);
 	}
 
@@ -1494,6 +1561,7 @@ class object
 	**/
 	function flag($param)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->flag($param);
 	}
 
@@ -1519,6 +1587,7 @@ class object
 	**/
 	function set_flag($flag, $val)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_flag($flag, $val);
 	}
 
@@ -1541,6 +1610,7 @@ class object
 	**/
 	function meta($param = false)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->meta($param);
 	}
 
@@ -1565,6 +1635,7 @@ class object
 	**/
 	function set_meta($key, $value)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_meta($key, $value);
 	}
 
@@ -1594,6 +1665,7 @@ class object
 	**/
 	function prop($param)
 	{
+		$this->_check_lock_read();
 		$method = "awobj_get_" . $param;
 
 		if (method_exists($GLOBALS["objects"][$this->oid], $method))
@@ -1624,6 +1696,7 @@ class object
 	**/
 	function draft($param)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->draft($param);
 	}
 
@@ -1651,6 +1724,7 @@ class object
 	**/
 	function prop_str($param, $is_oid = NULL)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->prop_str($param, $is_oid);
 	}
 
@@ -1674,6 +1748,7 @@ class object
 	**/
 	function get_property_list()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_property_list();
 	}
 
@@ -1697,6 +1772,7 @@ class object
 	**/
 	function get_group_list()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_group_list();
 	}
 
@@ -1712,6 +1788,7 @@ class object
 	**/
 	function get_relinfo()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_relinfo();
 	}
 
@@ -1727,6 +1804,7 @@ class object
 	**/
 	function get_tableinfo()
 	{
+		$this->_check_lock_read();
 		if (!is_object($GLOBALS["objects"][$this->oid]))
 		{
 			return array();
@@ -1750,6 +1828,7 @@ class object
 	**/
 	function get_classinfo()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_classinfo();
 	}
 
@@ -1775,6 +1854,7 @@ class object
 	**/
 	function set_prop($key, $value)
 	{
+		$this->_check_lock_write();
 		$method = "awobj_set_" . $key;
 
 		if (method_exists($GLOBALS["objects"][$this->oid], $method))
@@ -1803,16 +1883,19 @@ class object
 	**/
 	function properties()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->properties();
 	}
 
 	function fetch()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->fetch();
 	}
 
 	function last()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->last();
 	}
 
@@ -1831,6 +1914,7 @@ class object
 	**/
 	function brother_of()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->brother_of();
 	}
 
@@ -1877,6 +1961,7 @@ class object
 	**/
 	function create_brother($parent)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->create_brother($parent);
 	}
 
@@ -1902,6 +1987,7 @@ class object
 	**/
 	function is_connected_to($param)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->is_connected_to($param);
 	}
 
@@ -1926,6 +2012,7 @@ class object
 	**/
 	function acl_set($group, $acl)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->acl_set($group, $acl);
 	}
 
@@ -1948,6 +2035,7 @@ class object
 	**/
 	function acl_get()
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->acl_get();
 	}
 
@@ -1966,6 +2054,7 @@ class object
 	**/
 	function acl_del($g_oid)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->acl_del($g_oid);
 	}
 
@@ -2007,6 +2096,7 @@ class object
 	**/
 	function get_xml($options)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->get_xml($options);
 	}
 
@@ -2036,31 +2126,37 @@ class object
 	**/
 	function from_xml($xml, $parent)
 	{
+		$this->_check_lock_write();
 		return _int_object::from_xml($xml, $parent);
 	}
 
 	function set_create_new_version()
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_create_new_version();
 	}
 
 	function load_version($v)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->load_version($v);
 	}
 
 	function set_save_version($v)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_save_version($v);
 	}
 
 	function set_no_modify($arg)
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->set_no_modify($arg);
 	}
 
 	function originalize()
 	{
+		$this->_check_lock_write();
 		return $GLOBALS["objects"][$this->oid]->originalize();
 	}
 
@@ -2087,16 +2183,19 @@ class object
 	**/
 	function trans_get_val($prop, $lang_id = false, $ignore_status = false)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->trans_get_val($prop, $lang_id, $ignore_status);
 	}
 
 	function trans_get_val_str($prop)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->trans_get_val_str($prop);
 	}
 
 	function prop_is_translated($prop)
 	{
+		$this->_check_lock_read();
 		return $GLOBALS["objects"][$this->oid]->prop_is_translated($prop);
 	}
 
@@ -2107,6 +2206,7 @@ class object
 
 	function __get($prop)
 	{
+		$this->_check_lock_read();
 		$ref = $GLOBALS["objects"][$this->oid];
 		if (method_exists($ref, $prop))
 		{
@@ -2117,6 +2217,7 @@ class object
 
 	function __set($prop, $value)
 	{
+		$this->_check_lock_write();
 		$ref = $GLOBALS["objects"][$this->oid];
 		$meth = "set_".$prop;
 		if (method_exists($ref, $meth))
@@ -2128,6 +2229,7 @@ class object
 
 	function __isset($prop)
 	{
+		$this->_check_lock_read();
 		$ref = $GLOBALS["objects"][$this->oid];
 		return $ref->is_property($prop);
 	}
@@ -2135,6 +2237,68 @@ class object
 	function __unset($prop)
 	{
 		$this->__set($prop, null);
+	}
+
+	function lock($type = aw_locker::LOCK_FULL, $boundary = aw_locker::BOUNDARY_SERVER, $wait_type = aw_locker::WAIT_BLOCK)
+	{
+		$inst = aw_locker::instance();
+		if ($boundary == aw_locker::BOUNDARY_PROCESS)
+		{
+			// lock this object class instance, not the object id
+			// in this case, change the wait type to exception, cause waiting would deadlock always
+			$inst->lock("object_instance", $this->instance_number, $type, $boundary, aw_locker::WAIT_EXCEPTION);
+			self::$instance_locks[$this->oid] = array(
+				$this->instance_number,
+				$type
+			);
+		}
+		else
+		{
+			// lock object by id inter-process
+			$inst->lock("object", $this->oid, $type, $boundary, $wait_type);
+		}
+	}
+
+	function unlock()
+	{
+		// unlock both instance and oid
+		$inst = aw_locker::instance();
+		$inst->unlock("object_instance", $this->instance_number);
+		$inst->unlock("object", $this->oid);
+
+		unset(self::$instance_locks[$this->oid]);
+	}
+
+	function __destruct()
+	{
+		if (isset(self::$instance_locks[$this->oid]) && is_array(self::$instance_locks[$this->oid]))
+		{
+			foreach(self::$instance_locks[$this->oid] as $key => $item)
+			{
+				if ($item[0] == $this->instance_number)
+				{
+					unset(self::$instance_locks[$this->oid][$key]);
+				}
+			}
+		}
+	}
+
+	function _check_lock_read()
+	{
+		if (isset(self::$instance_locks[$this->oid]) && self::$instance_locks[$this->oid][0] != $this->instance_number && self::$instance_locks[$this->oid][1] == aw_locker::LOCK_FULL)
+		{
+			aw_locker::try_operation("object_instance", self::$instance_locks[$this->oid][0], aw_locker::OPERATION_READ);
+		}
+		aw_locker::try_operation("object", $this->oid, aw_locker::OPERATION_READ);
+	}
+
+	function _check_lock_write()
+	{
+		if (isset(self::$instance_locks[$this->oid]) && self::$instance_locks[$this->oid][0] != $this->instance_number)
+		{
+			aw_locker::try_operation("object_instance", self::$instance_locks[$this->oid][0], aw_locker::OPERATION_WRITE);
+		}
+		aw_locker::try_operation("object", $this->oid, aw_locker::OPERATION_WRITE);
 	}
 }
 
