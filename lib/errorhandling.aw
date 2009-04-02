@@ -158,10 +158,10 @@ function aw_fatal_error_handler($e = null)
 
 			// generate exception
 			$class = aw_get_error_exception_class($errno);
-			$e = new $class($e["message"], $e["type"]);
-			$e->errfile = $e["file"];
-			$e->errline = $e["line"];
-			$current_exception_handler($e);
+			$E = new $class($e["message"], $e["type"]);
+			$E->errfile = $e["file"];
+			$E->errline = $e["line"];
+			$current_exception_handler($E);
 		}
 	}
 	catch (Exception $e)
