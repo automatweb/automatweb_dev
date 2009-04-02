@@ -2561,7 +2561,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 						// and also join any other tables as well just to be on the safe side.
 						$do_other_join = is_array($new_t);
-						$and_buster = " AND $tbl.status > 0 ";
+						$and_buster = " AND ".$tbl.".status > 0 ";
 					}
 					else
 					{
