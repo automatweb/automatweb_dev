@@ -76,8 +76,7 @@ class shop_purchase_manager_workspace_obj extends _int_object
 	}
 
 	private function create_order_row($arr, $o)
-	{
-		
+	{		
 		$row = obj();
 		$row->set_class_id(CL_SHOP_ORDER_ROW);
 		$row->set_parent($o->id());
@@ -87,6 +86,7 @@ class shop_purchase_manager_workspace_obj extends _int_object
 		$unit = $arr["unit"];
 		if(!$unit)
 		{
+			$po = obj($arr["product"]);
 			$units = $po->instance()->get_units($po);
 			$unit = $units[0];
 		}
@@ -96,6 +96,28 @@ class shop_purchase_manager_workspace_obj extends _int_object
 			"to" => $row,
 			"type" => "RELTYPE_ROW",
 		));
+	}
+
+	/**
+	@attrib name=update_order_rows
+
+	@param order required type=object
+	@param rows required type=array
+
+	@comment
+		Updates order rows' amounts
+	**/
+	function update_order_rows($order, $rows)
+	{
+		$conn = $order->connections_from(array(
+			"to.class_id" => CL_SHOP_ORDER_ROW,
+		));
+		foreach($conn as $c)
+		{
+			$o = $c->to();
+			$o->set_prop("amount", $rows[$o->prop("prod")]["amount"]);
+			$o->save();
+		}
 	}
 
 	/**
@@ -128,6 +150,107 @@ class shop_purchase_manager_workspace_obj extends _int_object
 			$params["prod"] = $arr["product"];
 		}
 		return new object_list($params);
+	}
+
+	/**
+	@attrib name=update_orders api=1
+
+	@comment
+		updates/creates orders according to mrp_jobs
+	**/
+	function update_orders($arr)
+	{
+		//find all planned jobs' dates
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"RELTYPE_MRP_RESOURCE.RELTYPE_MRP_OWNER.oid" => $this->prop("mrp_workspace"),
+				"state" => MRP_STATUS_PLANNED,
+			),
+			array(
+				CL_MRP_JOB => array("oid", "starttime"),
+			)
+		);
+		$jobs = array();
+		foreach($odl->arr() as $job)
+		{
+			$jobs[] = $job["oid"];
+		}
+
+		//get all orders for the loaded jobs
+		$odl2 = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_SELL_ORDER,
+				"job" => $jobs,
+			),
+			array(
+				CL_SHOP_SELL_ORDER => array("oid", "job", "date"),
+			)
+		);
+		$orders = array();
+		foreach($odl2->arr() as $order)
+		{
+			$orders[$order["job"]] = array(
+				"oid" => $order["oid"],
+				"date" => $order["date"],
+			);
+		}
+
+		//loop over jobs to change their orders' dates if needed
+		foreach($odl->arr() as $job)
+		{
+			if($orders[$job["oid"]] && $orders[$job["oid"]]["date"] != $job["starttime"])
+			{
+				$o = obj($orders[$job["oid"]]["oid"]);
+				$o->set_prop("date", $job["starttime"]);
+				$o->save();
+			}
+		}
+	}
+
+	/**
+	@attrib name=update_job_orders api=1
+	
+	@param job required type=object
+	
+	@comment 
+		updates the order for a job
+	**/
+	function update_job_order($job)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MATERIAL_EXPENSE,
+			"job" => $job->id(),
+		));
+		foreach($ol->arr() as $row)
+		{
+			if($row->prop("base_amount"))
+			{
+				$prods[$row->prop("product")] = array(
+					"product" => $row->prop("product"),
+					"amount" => $row->prop("base_amount"),
+				);
+			}
+		}
+		if(count($prods))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_SELL_ORDER,
+				"job" => $job->id(),
+			));
+			if($order = $ol->begin())
+			{
+				$this->update_order_rows($order, $prods);
+			}
+			else
+			{
+				$this->order_products(array(
+					"date" => $job->prop("starttime"),
+					"job" => $job->id(),
+					"products" => $prods,
+				));
+			}
+		}
 	}
 }
 
