@@ -4,6 +4,11 @@ classload("mrp/mrp_header");
 
 class mrp_job_obj extends _int_object
 {
+	const PRSN_HNDL_S = 1;
+	const PRSN_HNDL_F = 2;
+	const PRSN_HNDL_S_OR_F = 3;
+	const PRSN_HNDL_S_AND_F = 4;
+
 	function save()
 	{
 		$retval = parent::save();
@@ -22,54 +27,38 @@ class mrp_job_obj extends _int_object
 			$prev_state = isset($r["aw_job_state"]) ? $r["aw_job_state"] : MRP_STATUS_NEW;
 			$i->db_query("
 				INSERT INTO mrp_job_rows
-					(aw_job_id, aw_case_id, aw_resource_id, aw_uid, aw_uid_oid, aw_pid, aw_job_previous_state, aw_job_state, aw_job_last_duration, aw_tm)
+					(aw_job_id, aw_case_id, aw_resource_id, aw_uid, aw_uid_oid, aw_previous_pid, aw_pid, aw_job_previous_state, aw_job_state, aw_job_last_duration, aw_tm)
 				VALUES
-					('".$this->id()."', '".$this->prop("project")."', '".$this->prop("resource")."', '".aw_global_get("uid")."', '".aw_global_get("uid_oid")."', '".get_instance("user")->get_current_person()."', '".$prev_state."', '".$this->prop("state")."', '".$last_duration."', '".time()."')
+					('".$this->id()."', '".$this->prop("project")."', '".$this->prop("resource")."', '".aw_global_get("uid")."', '".aw_global_get("uid_oid")."', '".$r["aw_pid"]."', '".get_instance("user")->get_current_person()."', '".$prev_state."', '".$this->prop("state")."', '".$last_duration."', '".time()."')
 			");
+			$connectable_states = array(MRP_STATUS_INPROGRESS, MRP_STATUS_ABORTED, MRP_STATUS_DONE, MRP_STATUS_PAUSED, MRP_STATUS_SHIFT_CHANGE);
+			if(in_array($this->prop("state"), $connectable_states))
+			{
+				$this->connect(array(
+					"type" => "RELTYPE_PERSON",
+					"to" => get_instance("user")->get_current_person(),
+				));
+			}
 		}
 	}
 
 	function set_prop($k, $v)
 	{
-		if($k === "state" && $v === MRP_STATUS_DONE && !is_numeric(parent::prop($k)))
+		if($k === "state" && $v === MRP_STATUS_DONE)
 		{
-			$this->set_prop("length_deviation", $this->get_deviation());
 			$this->set_prop("real_length", $this->get_real());
+			$this->set_prop("length_deviation", $this->get_deviation());
 		}
 
 		return parent::set_prop($k, $v);
 	}
 
-	function prop($k)
+	private function get_deviation()
 	{
-		if($k === "real_length" || $k === "length_deviation")
-		{
-			if(!is_numeric(parent::prop($k)) && $this->prop("state") == MRP_STATUS_DONE && is_oid($this->id()))
-			{
-				if($k === "length_deviation")
-				{
-					return $this->get_deviation();
-				}
-				else
-				{
-					return $this->get_real($k);
-				}
-			}
-			else
-			{
-				return (int)parent::prop($k);
-			}
-		}
-
-		return parent::prop($k);
+		return $this->prop("real_length") - $this->prop("length");
 	}
 
-	function get_deviation()
-	{
-		return $this->prop("real_length") - $this->prop("planned_length");
-	}
-
-	function get_real($k)
+	private function get_real($k)
 	{
 		$job_id = $this->id();
 
@@ -82,15 +71,13 @@ class mrp_job_obj extends _int_object
 				aw_job_id = '".$job_id."' AND 
 				aw_job_previous_state = '".MRP_STATUS_INPROGRESS."';",
 			"length_sum");
-		/*
-		$v = $this->instance()->db_fetch_field("
-			SELECT SUM(length) as length_sum FROM mrp_stats WHERE 
-				case_oid = $case AND
-				resource_oid = $res AND
-				job_oid = $job_id",
-			"length_sum");
-		*/
-		return $v ? (int)$v : 0;
+		// If the work is still in progress we have to add the time from last state change until now.
+		$i = $this->instance()->db_fetch_row("SELECT aw_job_state, UNIX_TIMESTAMP() - aw_tm as tm FROM mrp_job_rows WHERE aw_job_id = '$job_id' ORDER BY aw_tm DESC LIMIT 1");
+		if(isset($i["aw_job_state"]) && $i["aw_job_state"] == MRP_STATUS_INPROGRESS)
+		{
+			return (int)$v + $i["tm"];
+		}
+		return (int)$v;
 	}
 
 	function get_resource()
@@ -241,14 +228,14 @@ class mrp_job_obj extends _int_object
 			$o->set_parent($this->id());
 			$o->set_name(sprintf(t("%s kulu %s jaoks"), obj($prod)->name(), $this->name()));
 			$o->set_prop("product", $prod);
-			$o->set_prop("unit", $arr["unit"]);
-			$o->set_prop("amount", $arr["amount"]);
+			$o->set_prop("unit", $unit);
 			$this->set_used_material_base_amount(array(
 				"obj" => &$o,
 				"product" => $prod,
 				"amount" => $arr["amount"],
 				"unit" => $arr["unit"],
 			));
+			$o->set_prop("amount", $arr["amount"]);
 			$o->set_prop("job", $this->id());
 			if(isset($arr["movement"]))
 			{
@@ -258,6 +245,12 @@ class mrp_job_obj extends _int_object
 			{
 				$o->set_prop("planning", $arr["planning"]);
 			}
+			$this->set_used_material_base_amount(array(
+				"obj" => &$eo,
+				"product" => $prod,
+				"amount" => $arr["amount"],
+				"unit" => $arr["unit"],
+			));
 			$o->save();
 		}
 		else
@@ -280,60 +273,9 @@ class mrp_job_obj extends _int_object
 				{
 					$eo->set_prop("planning", $arr["planning"]);
 				}
-				$this->set_used_material_base_amount(array(
-					"obj" => &$eo,
-					"product" => $prod,
-					"amount" => $arr["amount"],
-					"unit" => $arr["unit"],
-				));
 				$eo->save();
 			}
 		}
-		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
-		if($res)
-		{
-			$ws = $res->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-		}
-		if($ws)
-		{
-			$conn = $ws->connections_to(array(
-				"from.class_id" => CL_SHOP_PURCHASE_MANAGER_WORKSPACE,
-			));
-			foreach($conn as $c)
-			{
-				$c->from()->update_job_order($this);
-			}
-		}
-	}
-
-	private function set_used_material_base_amount($arr)
-	{
-		$po = obj($arr["product"]);
-		$units = $po->instance()->get_units($po);
-		$unit = reset($units);
-		if($arr["unit"] && $arr["unit"] != $unit)
-		{
-			$ufi = obj();
-			$ufi->set_class_id(CL_SHOP_UNIT_FORMULA);
-			$fo = $ufi->get_formula(array(
-				"from_unit" => $arr["unit"],
-				"to_unit" => $unit,
-				"product" => $po,
-			));
-			if($fo)
-			{
-				$amt = round($ufi->calc_amount(array(
-					"amount" => $arr["amount"],
-					"prod" => $po,
-					"obj" => $fo,
-				)), 3);
-			}
-		}
-		else
-		{
-			$amt = $arr["amount"];
-		}
-		$arr["obj"]->set_prop("base_amount", $amt);
 	}
 
 	/**
@@ -344,89 +286,283 @@ class mrp_job_obj extends _int_object
 		@param to optional type=int
 			UNIX timestamp
 		@param state optional type=int/array
-			The state of job to return the hours for
+			The state(s) of job to return the hours for
 		@param person optional type=int/array
-			The OID of crm_person to return the hours for
+			The OID(s) of crm_person to return the hours for
+		@param person_handling optional type=int default=PRSN_HNDL_S
+			How to use [person param]?
+			PRSN_HNDL_S - [person param] was the one to change the job's state to [state param]
+			PRSN_HNDL_F - [person param] was the one to change the job's state from [state param]
+			PRSN_HNDL_S_OR_F - PRSN_HNDL_S or PRSN_HNDL_F
+			PRSN_HNDL_S_AND_F - PRSN_HNDL_S and PRSN_HNDL_F
+		@param job optional type=int/array
+			The OID(s) of mrp_job to return the hours fo
+		@param by_job optional type=boolean default=false
+		
 		@param average optional type=boolean
-			The OID of crm_person to return the hours for
+
 		@param count optional type=boolean
-			The OID of crm_person to return the hours for
+
+		@param convert_to_hours optional type=boolean default=true
+
 
 		@returns Array of work hours by person
 
 		@comment Output format:
 			Array
 			(
-				[MRP_STATUS_INPROGRESS] => Array
+				[[job status]] => Array
 				(
 					[{person object OID}] => {time in seconds}
 				)
-				[MRP_STATUS_INPROGRESS] => Array
+				::optional::
+				[average] => Array
 				(
-					[{person object OID}] => {time in seconds}
+					[[job status]] => Array
+					(
+						[{person object OID}] => {time in seconds}
+					)
 				)
-				[name] => Array
+				[count] => Array
 				(
-					[{person object OID}] => {name string}
+					[[job status]] => Array
+					(
+						[{person object OID}] => {time in seconds}
+					)
 				)
+				::optional::
 			)
 	**/
 	public function get_person_hours($arr)
 	{
+		enter_function("mrp_job_obj::get_person_hours");
 		$i = get_instance("class_base");
 
 		$states = isset($arr["state"]) ? (array)$arr["state"] : array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED);
-		$from = (int)(isset($arr["from"]) ? $arr["from"] : 0);
-		$to = (int)(isset($arr["to"]) ? $arr["to"] : time());
 
-		$arr["person"] = isset($arr["person"]) ? (is_oid($arr["person"]) ? (array)$arr["person"] : safe_array($arr["person"])) : array();
-		$persons = count($arr["person"]) > 0 ? "aw_pid IN (".implode(",", $arr["person"]).") AND" : "";
-		$count = !empty($arr["count"]) ? "COUNT(*) as cnt," : "";
-		$average = !empty($arr["average"]) ? "AVG(aw_job_last_duration)/3600 as avg," : "";
-
+		// Initialize $data
+		$data = array();
 		foreach($states as $state)
 		{
-			$q[$state] = $i->db_fetch_array("
-				SELECT 
-					$count
-					$average
-					SUM(aw_job_last_duration)/3600 as hours,
-					aw_pid as pid
-				FROM
-					mrp_job_rows 
-				WHERE
-					$persons
-					aw_job_previous_state = '".$state."' AND
-					aw_tm BETWEEN $from AND $to
-				GROUP BY aw_pid
-			");
-		}
-		foreach($states as $state)
-		{
-			foreach($q[$state] as $d)
+			$data[$state] = array();
+			if(!empty($arr["average"]))
 			{
-				$data[$state][$d["pid"]] = $d["hours"];
-				if(isset($d["avg"]))
-				{
-					$data["average"][$state][$d["pid"]] = $d["avg"];
-				}
-				if(isset($d["cnt"]))
-				{
-					$data["count"][$state][$d["pid"]] = $d["cnt"];
-				}
-				foreach($states as $_state)
-				{
-					if($state !== $_state && !isset($data[$state][$d["pid"]]))
-					{
-						$data[$_state][$d["pid"]] = 0;
-						$data["average"][$_state][$d["pid"]] = 0;
-						$data["count"][$_state][$d["pid"]] = 0;
-					}
-				}
+				$data["average"][$state] = array();
+			}
+			if(!empty($arr["count"]))
+			{
+				$data["count"][$state] = array();
 			}
 		}
 
+		$arr["person_handling"] = isset($arr["person_handling"]) ? $arr["person_handling"] : self::PRSN_HNDL_S;
+		$arr["person"] = isset($arr["person"]) ? (is_oid($arr["person"]) ? (array)$arr["person"] : safe_array($arr["person"])) : array();
+
+		if($arr["person_handling"] == self::PRSN_HNDL_S_OR_F)
+		{
+			// First, get the hours the person started
+			$persons = count($arr["person"]) > 0 ? "aw_previous_pid IN (".implode(",", $arr["person"]).") AND" : "";
+			$q = $i->db_fetch_array($this->something_hours_build_query($arr, "aw_previous_pid", "pid", $persons));
+			$this->something_hours_insert_data($q, "pid", &$data, $arr);
+
+			// Now, get the hours the person finished, but DIDN'T start
+			$persons = count($arr["person"]) > 0 ? "aw_pid IN (".implode(",", $arr["person"]).") AND aw_pid != aw_previous_pid AND" : "";
+			$q = $i->db_fetch_array($this->something_hours_build_query($arr, "aw_pid", "pid", $persons));
+			$this->something_hours_insert_data($q, "pid", &$data, $arr);
+		}
+		else
+		{
+			switch($arr["person_handling"])
+			{
+				default:
+				case self::PRSN_HNDL_S:
+					$persons = count($arr["person"]) > 0 ? "aw_previous_pid IN (".implode(",", $arr["person"]).") AND" : "";
+					$field = "aw_previous_pid";
+					break;
+
+				case self::PRSN_HNDL_F:
+					$persons = count($arr["person"]) > 0 ? "aw_pid IN (".implode(",", $arr["person"]).") AND" : "";
+					$field = "aw_pid";
+					break;
+
+				case self::PRSN_HNDL_S_AND_F:
+					$persons = count($arr["person"]) > 0 ? "aw_pid IN (".implode(",", $arr["person"]).") AND aw_pid = aw_previous_pid AND" : "";
+					$field = "aw_pid";
+					break;
+			}
+
+			$q = $i->db_fetch_array($this->something_hours_build_query($arr, $field, "pid", $persons));
+			$this->something_hours_insert_data($q, "pid", &$data, $arr);
+		}
+
+		exit_function("mrp_job_obj::get_person_hours");
+
 		return $data;
+	}
+
+	/**
+		@attrib name=get_resource_hours api=1 params=name
+
+		@param from optional type=int
+			UNIX timestamp
+		@param to optional type=int
+			UNIX timestamp
+		@param state optional type=int/array
+			The state(s) of job to return the hours for
+		@param resource optional type=int/array
+			The OID(s) of mrp_resource to return the hours for
+		@param job optional type=int/array
+			The OID(s) of mrp_job to return the hours for
+		@param average optional type=boolean
+
+		@param count optional type=boolean
+
+		@param convert_to_hours optional type=boolean default=true
+			
+
+		@returns Array of work hours by person or FALSE on failure.
+
+		@comment Output format:
+			Array
+			(
+				[[job status]] => Array
+				(
+					[{resource object OID}] => {time in seconds}
+				)
+				::optional::
+				[average] => Array
+				(
+					[[job status]] => Array
+					(
+						[{resource object OID}] => {time in seconds}
+					)
+				)
+				[count] => Array
+				(
+					[[job status]] => Array
+					(
+						[{resource object OID}] => {count}
+					)
+				)
+				::optional::
+			)
+	**/
+	public function get_resource_hours($arr)
+	{
+		enter_function("mrp_job_obj::get_resource_hours");
+		$i = get_instance("class_base");
+
+		$states = isset($arr["state"]) ? (array)$arr["state"] : array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED);
+
+		// Initialize $data
+		$data = array();
+		foreach($states as $state)
+		{
+			$data[$state] = array();
+			if(!empty($arr["average"]))
+			{
+				$data["average"][$state] = array();
+			}
+			if(!empty($arr["count"]))
+			{
+				$data["count"][$state] = array();
+			}
+		}
+
+		$arr["resource"] = isset($arr["resource"]) ? (is_oid($arr["resource"]) ? (array)$arr["resource"] : safe_array($arr["resource"])) : array();
+		$resources = count($arr["resource"]) > 0 ? "aw_resource_id IN (".implode(",", $arr["resource"]).") AND" : "";
+
+		$q = $i->db_fetch_array($this->something_hours_build_query($arr, "aw_resource_id", "resource_id", $persons));
+		$this->something_hours_insert_data($q, "resource_id", &$data, $arr);
+
+		exit_function("mrp_job_obj::get_resource_hours");
+
+		return $data;
+	}
+
+	private function something_hours_build_query($arr, $field, $key, $additionnal)
+	{
+		$states = isset($arr["state"]) ? (array)$arr["state"] : array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED);
+		$from = (int)(isset($arr["from"]) ? $arr["from"] : 0);
+		$to = (int)(isset($arr["to"]) ? $arr["to"] : time());
+		$c2h = !isset($arr["convert_to_hours"]) || !empty($arr["convert_to_hours"]) ? "/3600" : "";
+		$count = !empty($arr["count"]) ? "COUNT(*) as cnt," : "";
+		$average = !empty($arr["average"]) ? "AVG(aw_job_last_duration){$c2h} as avg," : "";
+
+		$arr["job"] = isset($arr["job"]) ? (is_oid($arr["job"]) ? (array)$arr["job"] : safe_array($arr["job"])) : array();
+		$jobs = count($arr["job"]) > 0 ? "aw_job_id IN (".implode(",", $arr["job"]).") AND" : "";
+
+		$by_job = empty($arr["by_job"]) ? "" : "aw_job_id,";
+		$select_job = empty($arr["by_job"]) ? "" : "aw_job_id as job_id,";
+
+		$query = "
+			SELECT 
+				$select_job
+				$count
+				$average
+				aw_job_previous_state as state,
+				SUM(aw_job_last_duration){$c2h} as hours,
+				$field as $key
+			FROM
+				mrp_job_rows 
+			WHERE
+				$additionnal
+				$jobs
+				aw_job_previous_state IN('".implode("','", $states)."') AND
+				aw_tm BETWEEN $from AND $to
+			GROUP BY aw_job_previous_state, {$by_job} $field
+		";
+		return $query;
+	}
+
+	private function something_hours_insert_data($q, $key, &$data, $arr)
+	{
+		$states = isset($arr["state"]) ? (array)$arr["state"] : array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED);
+		$by_job = !empty($arr["by_job"]);
+
+		foreach($q as $d)
+		{
+			// Hours
+			if(isset($data[$d["state"]][$d[$key]]) && !$by_job || $by_job && isset($data[$d["state"]][$d[$key]][$d["job_id"]]))
+			{
+				$by_job ? $data[$d["state"]][$d[$key]][$d["job_id"]] += $d["hours"] : $data[$d["state"]][$d[$key]] += $d["hours"];
+			}
+			else
+			{
+				$by_job ? $data[$d["state"]][$d[$key]][$d["job_id"]] = $d["hours"] : $data[$d["state"]][$d[$key]] = $d["hours"];
+			}
+
+			// Average
+			if(isset($d["avg"]) && (isset($data["average"][$d["state"]][$d[$key]]) && !$by_job || $by_job && isset($data["average"][$d["state"]][$d[$key]][$d["job_id"]])))
+			{
+				$by_job ? $data["average"][$d["state"]][$d[$key]][$d["job_id"]] += $d["avg"] : $data["average"][$d["state"]][$d[$key]] += $d["avg"];
+			}
+			elseif(isset($d["avg"]))
+			{
+				$by_job ? $data["average"][$d["state"]][$d[$key]][$d["job_id"]] = $d["avg"] : $data["average"][$d["state"]][$d[$key]] = $d["avg"];
+			}
+
+			// Count
+			if(isset($d["cnt"]) && (isset($data["count"][$d["state"]][$d[$key]]) && !$by_job || $by_job && isset($data["count"][$d["state"]][$d[$key]][$d["job_id"]])))
+			{
+				$by_job ? $data["count"][$d["state"]][$d[$key]][$d["job_id"]] += $d["cnt"] : $data["count"][$d["state"]][$d[$key]] += $d["cnt"];
+			}
+			elseif(isset($d["cnt"]))
+			{
+				$by_job ? $data["count"][$d["state"]][$d[$key]][$d["job_id"]] = $d["cnt"] : $data["count"][$d["state"]][$d[$key]] = $d["cnt"];
+			}
+
+			// Initialize others
+			foreach($states as $_state)
+			{
+				if($d["state"] !== $_state && (!isset($data[$_state][$d[$key]])) && !$by_job || $by_job && !isset($data[$_state][$d[$key]][$d["job_id"]]))
+				{
+					$by_job ? $data[$_state][$d[$key]][$d["job_id"]] = 0 : $data[$_state][$d[$key]] = 0;
+					$by_job ? $data["average"][$_state][$d[$key]][$d["job_id"]] = 0 : $data["average"][$_state][$d[$key]] = 0;
+					$by_job ? $data["count"][$_state][$d[$key]][$d["job_id"]] = 0 : $data["count"][$_state][$d[$key]] = 0;
+				}
+			}
+		}
 	}
 }
 
