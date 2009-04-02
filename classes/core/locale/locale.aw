@@ -31,7 +31,7 @@ class locale
 		@comment
 			The number of the weekday is 0-7 inclusive. 0 and 7 both are for sunday.
 	**/
-	function get_lc_weekday($num, $short = false, $ucfirst = false)
+	public static function get_lc_weekday($num, $short = false, $ucfirst = false)
 	{
 		static $lc_date_inst;
 		$lc_date_inst = @get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
@@ -57,7 +57,7 @@ class locale
 			The number of the month to return the name for
 
 	**/
-	function get_lc_month($num)
+	public static function get_lc_month($num)
 	{
 		static $lc_date_inst;
 		$lc_date_inst = get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
@@ -93,7 +93,7 @@ class locale
 				LC_DATE_FORMAT_LONG = For example: 20. juuni 99
 				LC_DATE_FORMAT_LONG_FULLYEAR = For example: 20. juuni 1999
 	**/
-	function get_lc_date($timestamp,$format)
+	public static function get_lc_date($timestamp,$format)
 	{
 		static $lc_date_inst;
 //			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
@@ -126,7 +126,7 @@ class locale
 				locale::get_lc_number(7);
 			returns "seven"
 	**/
-	function get_lc_number($number)
+	public static function get_lc_number($number)
 	{
 		static $lc_date_inst;
 		$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/number", array(), false);
@@ -159,7 +159,7 @@ class locale
 		@comment
 			Does the same, as get_lc_number, but appends/prepends the currency name and unit names as needed. Used for writing the amount on bills as text.
 	**/
-	function get_lc_money_text($number, $currency, $lc = NULL)
+	public static function get_lc_money_text($number, $currency, $lc = NULL)
 	{
 		if (!$lc)
 		{
@@ -190,7 +190,7 @@ class locale
 		@param lc optional type=string
 			The locale code, defaults to the current one
 	**/
-	function get_genitive_for_name($name, $lc = NULL)
+	public static function get_genitive_for_name($name, $lc = NULL)
 	{
 		if (!$lc)
 		{
