@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.43 2009/04/03 10:09:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.44 2009/04/03 13:30:30 instrumental Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1077,11 +1077,11 @@ class image extends class_base
 		$tag .= isset($size["width"]) ?" width=\"".$size["width"]."\"":"";
 		if ($url == "")
 		{
-			return "<img border=\"0\" src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\" title=\"$alt\"".$tag.">";
+			return "<img src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\" title=\"$alt\"".$tag." />";
 		}
 		else
 		{
-			return "<img border=\"0\" src=\"$url\" alt=\"$alt\" title=\"$alt\"".$tag.">";
+			return "<img src=\"$url\" alt=\"$alt\" title=\"$alt\"".$tag." />";
 		}
 	}
 

@@ -696,6 +696,8 @@ class html
 			$onc = " onclick='{$onclick}'";
 		}
 
+		$id = str_replace(array("[", "]"), "_", $name);
+
 		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 
 		$tpl = get_instance("htmlclient");
@@ -716,7 +718,7 @@ class html
 		}
 		else
 		{
-			$rv = "$span<input class=\"checkbox\" type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$onBlur}{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}{$post_append_text}\n";
+			$rv = "$span<input class=\"checkbox\" type=\"checkbox\" id=\"{$id}\" name=\"{$name}\" value=\"{$value}\"{$onBlur}{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}{$post_append_text}\n";
 		}
 		return $rv;
 	}
