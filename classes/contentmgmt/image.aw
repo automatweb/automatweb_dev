@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.42 2009/02/13 08:33:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.43 2009/04/03 10:09:49 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1569,6 +1569,14 @@ class image extends class_base
 
 	}
 
+	function callback_pre_save($arr)
+	{	
+		if ($this->_set_dt)
+		{
+			$arr["obj_inst"]->set_prop("date_taken", $this->_set_dt);
+		}
+	}
+
 	function callback_post_save($arr)
 	{
 		if($this->new_h_big || $this->new_w_big)
@@ -1593,12 +1601,6 @@ class image extends class_base
 			$this->resize_picture($arr);
 		}
 		
-		if ($this->_set_dt)
-		{
-			$arr["obj_inst"]->set_prop("date_taken", $this->_set_dt);
-			$arr["obj_inst"]->save();
-		}
-
 		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
 		if ($arr["request"]["save_and_doc"] != "")
 		{
