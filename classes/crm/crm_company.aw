@@ -1024,12 +1024,18 @@ default group=org_objects
 
 		@layout all_act_search type=vbox parent=my_tasks closeable=1
 
-			@layout tasks_tree_layout type=vbox parent=all_act_search area_caption=Tegevused&nbsp;puu&nbsp;kujul
+			@layout tasks_tree_layout type=vbox parent=all_act_search closeable=1 area_caption=Tegevused&nbsp;puu&nbsp;kujul
 
 				@property tasks_tree type=treeview store=no no_caption=1 parent=tasks_tree_layout
 				@caption Tegevuste puu
 
-			@layout act_s_dl_layout_top type=vbox parent=all_act_search area_caption=Otsing
+			@layout tasks_tree_type_layout type=vbox parent=all_act_search closeable=1 area_caption=Aja&nbsp;ja&nbsp;t&uuml;&uuml;bi&nbsp;filter
+
+				@property tasks_type_tree type=treeview store=no no_caption=1 parent=tasks_tree_type_layout
+				@caption Tegevuste puu t&uuml;&uuml;pide kaupa
+
+
+			@layout act_s_dl_layout_top type=vbox parent=all_act_search area_caption=Otsing closeable=1
 
 			@property act_s_cust type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
 			@caption Klient
@@ -1055,24 +1061,22 @@ default group=org_objects
 			@property act_s_code type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,documents_all_manage
 			@caption Toimetuse kood
 
-			@property act_s_proj_name type=textbox size=18 parent=all_act_search store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
+			@property act_s_proj_name type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
 			@caption Projekti nimi
 
-			@layout act_s_dl_layout type=vbox parent=all_act_search
+			@property act_s_dl_from type=date_select store=no parent=act_s_dl_layout_top captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
+			@caption T&auml;htaeg alates
 
-				@property act_s_dl_from type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
-				@caption T&auml;htaeg alates
+			@property act_s_dl_to type=date_select store=no parent=act_s_dl_layout_top captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
+			@caption T&auml;htaeg kuni
 
-				@property act_s_dl_to type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,documents_all_manage,bugs
-				@caption T&auml;htaeg kuni
-
-			@property act_s_status type=chooser parent=all_act_search store=no captionside=top
+			@property act_s_status type=chooser parent=act_s_dl_layout_top store=no captionside=top
 			@caption Staatus
 
-			@property act_s_print_view type=checkbox parent=all_act_search store=no captionside=top ch_value=1 no_caption=1
+			@property act_s_print_view type=checkbox parent=act_s_dl_layout_top store=no captionside=top ch_value=1
 			@caption Printvaade
 
-			@property act_s_sbt type=submit  parent=all_act_search no_caption=1 group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails,documents_all_manage,bugs
+			@property act_s_sbt type=submit  parent=act_s_dl_layout_top no_caption=1 group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails,documents_all_manage,bugs
 			@caption Otsi
 
 		@property my_tasks type=table store=no no_caption=1 parent=my_tasks group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails,documents_all_manage,bugs
@@ -2806,6 +2810,7 @@ class crm_company extends class_base
 			case "mail_tb":
 			case "activity_stats_toolbar":
 			case "activity_stats_table":
+			case "tasks_type_tree":
 			case "tasks_tree":
 				static $overview_impl;
 				if (!$overview_impl)

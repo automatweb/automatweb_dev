@@ -1576,8 +1576,100 @@ class crm_company_overview_impl extends class_base
 		$this->do_org_actions($arr, $args, $clid);
 	}
 
+	function tree_tasks($arr)
+	{
+		$filter = array();
+		$ol = new object_list();
+		$params = explode("_" , $arr["request"]["st"]);
+		$stats = get_instance("applications/crm/crm_company_stats_impl");
+		classload("core/date/date_calc");
+arr($params);
+		switch($params[0])
+		{
+			case "my":
+				$person = get_current_person();
+				$filter["person"] = $person->id();
+				break;
+		}
+
+		switch($params[1])
+		{
+				case "next":
+					$start = time();
+					$end = time() + DAY*1000;
+					break;
+				case "currentweek":
+					$start = get_week_start();
+					$end = get_week_start()+7*DAY-1;
+					break;
+				case "currentmonth":
+					$start = get_month_start();
+					$end = mktime(0,0,0,(date("m") + 1) , 1 , date("Y"))-1;
+					break;
+				case "lastmonth":
+					$start = mktime(0,0,0,(date("m") - 1) ,1 , date("Y"));
+					$end = get_month_start()-1;
+					break;
+				case "last_last_mon":
+					$start = mktime(0,0,0,(date("m") - 2) , 1 , date("Y"));
+					$end = mktime(0,0,0,(date("m") - 1) , 1 , date("Y"))-1;
+					break;
+				case "cur_year":
+					$start = get_year_start();
+					$end = mktime(0,0,0,1,1,(date("Y") + 1))-1;
+					break;
+				case "last_year":
+					$start = mktime(0,0,0,1,1,(date("Y") - 1));
+					$end = get_year_start()-1;
+					break;
+				case CL_BUG:
+					$class_id = CL_BUG;
+					break;
+				case CL_CRM_CALL:
+					$class_id = CL_CRM_CALL;
+					break;
+				case CL_TASK:
+					$class_id = CL_TASK;
+					break;
+				case CL_CRM_MEETING:
+					$class_id = CL_CRM_MEETING;
+					break;
+		}
+		if(!$start)
+		{
+			$start = get_week_start();
+			$end = get_week_start()+7*DAY-1;
+		}
+
+		$filter["between"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING,$start, $end);
+
+		if(!$class_id || $class_id == CL_BUG)
+		{
+			$ol->add($stats->get_bugs($filter));
+		}
+		if(!$class_id || $class_id == CL_CRM_CALL)
+		{
+			$ol->add($stats->get_calls($filter));
+		}
+		if(!$class_id || $class_id == CL_CRM_MEETING)
+		{
+			$ol->add($stats->get_meetings($filter));
+		}
+		if(!$class_id || $class_id == CL_TASK)
+		{
+			$ol->add($stats->get_tasks($filter));
+		}
+		return $ol;
+	}
+
+
 	function _get_task_list($arr)
 	{
+		if($arr["request"]["st"])
+		{
+			return $this->tree_tasks($arr);
+		}
+
 		enter_function("_get_task_list:1");
 		$u = get_instance(CL_USER);
 		$co = $u->get_current_company();
@@ -2303,17 +2395,337 @@ class crm_company_overview_impl extends class_base
 		}
 	}
 
-	private function _add_leafs_to_tasks_tree($tree, $parent, $parent_id)
+// 	private function _add_leafs_to_tasks_tree($tree, $parent)
+// 	{
+// 		$types = array(
+// 			CL_BUG => t("&Uuml;lesanne"),
+// 			CL_TASK => t("Toimetus"),
+// 			CL_CRM_MEETING => t("Kohtumine"),
+// 			CL_CRM_CALL => t("K&otilde;ne")
+// 		);
+// 
+// 		$time_types = array(
+// 			"currentweek" => t("Jooksev n&auml;dal"),
+// 			"currentmonth" => t("Jooksev kuu"),
+// 			"lastmonth" => t("Eelmine kuu"),
+// 		);
+// 
+//  		$call_params = array(
+//  			"done" => t("Tehtud"),
+//  			"planned" => t("Plaanis"),
+//  		);
+//  
+//  		$meeting_params = array(
+//  			"past" => t("Toimunud"),
+//  			"planned" => t("Tulekul"),
+//  		);
+//  
+//  		$task_params = array(
+//  			"undone" => t("Tegemata"),
+//  			"overdeadline" => t("&Uuml;le t&auml;htaja"),
+//  		);
+//  
+//  		$bugs_params = array(
+//  			"undone" => t("Tegemata"),
+//  			"overdeadline" => t("&Uuml;le t&auml;htaja"),
+//  		);
+// 
+// 		foreach($types as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".$type_id),
+// 				"iconurl" => icons::get_icon_url($type_id),
+// 			));
+// 		}
+// 
+// 		foreach($time_types as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".$type_id),
+// 			));
+// 		}
+// 
+// 		foreach($call_params as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".CL_CRM_CALL."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent."_".CL_CRM_CALL,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".CL_CRM_CALL."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".CL_CRM_CALL."_".$type_id),
+// 			));
+// 		}
+// 		foreach($time_types as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".CL_CRM_CALL."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent."_".CL_CRM_CALL,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".CL_CRM_CALL."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".CL_CRM_CALL."_".$type_id),
+// 			));
+// 		}
+// 
+// 		foreach($meeting_params as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".CL_CRM_MEETING."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent."_".CL_CRM_MEETING,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".CL_CRM_MEETING."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".CL_CRM_MEETING."_".$type_id),
+// 			));
+// 		}
+// 		foreach($time_types as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".CL_CRM_MEETING."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent."_".CL_CRM_MEETING,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".CL_CRM_MEETING."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".CL_CRM_MEETING."_".$type_id),
+// 			));
+// 		}
+// 
+// 		foreach($task_params as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".CL_TASK."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent."_".CL_TASK,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".CL_TASK."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".CL_TASK."_".$type_id),
+// 			));
+// 		}
+// 		foreach($time_types as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".CL_TASK."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent."_".CL_TASK,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".CL_TASK."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".CL_TASK."_".$type_id),
+// 			));
+// 		}
+// 
+// 		foreach($bugs_params as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".CL_BUG."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent."_".CL_BUG,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".CL_BUG."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".CL_BUG."_".$type_id),
+// 			));
+// 		}
+// 		foreach($time_types as $type_id => $type)
+// 		{
+// 			if (isset($_GET["st"]) && $_GET["st"] == $parent."_".CL_BUG."_".$type_id)
+// 			{
+// 				$type = "<b>".$type."</b>";
+// 			}
+// 			$tree->add_item($parent."_".CL_BUG,array(
+// 				"name" => $type,
+// 				"id" => $parent."_".CL_BUG."_".$type_id,
+// 				"url" => aw_url_change_var("st", $parent."_".CL_BUG."_".$type_id),
+// 			));
+// 		}
+// 	}
+
+	function _get_tasks_type_tree($arr)
 	{
+		$tree =& $arr["prop"]["vcl_inst"];
+		$var = "tf";
+
+		if(!isset($_GET[$var]))
+		{
+			$_GET[$var] = "currentweek";
+		}
+
 		$types = array(
 			CL_BUG => t("&Uuml;lesanne"),
 			CL_TASK => t("Toimetus"),
 			CL_CRM_MEETING => t("Kohtumine"),
 			CL_CRM_CALL => t("K&otilde;ne")
 		);
+
+		$time_types = array(
+			"currentweek" => t("Jooksev n&auml;dal"),
+			"currentmonth" => t("Jooksev kuu"),
+			"lastmonth" => t("Eelmine kuu"),
+		);
+
+ 		$call_params = array(
+ 			"done" => t("Tehtud"),
+ 			"planned" => t("Plaanis"),
+ 		);
+ 
+ 		$meeting_params = array(
+ 			"past" => t("Toimunud"),
+ 			"planned" => t("Tulekul"),
+ 		);
+ 
+ 		$task_params = array(
+ 			"undone" => t("Tegemata"),
+ 			"overdeadline" => t("&Uuml;le t&auml;htaja"),
+ 		);
+ 
+ 		$bugs_params = array(
+ 			"undone" => t("Tegemata"),
+ 			"overdeadline" => t("&Uuml;le t&auml;htaja"),
+ 		);
+
 		foreach($types as $type_id => $type)
 		{
+			if (isset($_GET[$var]) && $_GET[$var] == $type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(0,array(
+				"name" => $type,
+				"id" => $type_id,
+				"url" => aw_url_change_var($var, $type_id),
+				"iconurl" => icons::get_icon_url($type_id),
+			));
+		}
 
+		foreach($time_types as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == $parent."_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(0,array(
+				"name" => $type,
+				"id" => $type_id,
+				"url" => aw_url_change_var($var, $type_id),
+			));
+		}
+
+		foreach($call_params as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == CL_CRM_CALL."_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(CL_CRM_CALL,array(
+				"name" => $type,
+				"id" => CL_CRM_CALL."_".$type_id,
+				"url" => aw_url_change_var($var, CL_CRM_CALL."_".$type_id),
+			));
+		}
+		foreach($time_types as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == CL_CRM_CALL."_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(CL_CRM_CALL,array(
+				"name" => $type,
+				"id" => CL_CRM_CALL."_".$type_id,
+				"url" => aw_url_change_var($var, CL_CRM_CALL."_".$type_id),
+			));
+		}
+
+		foreach($meeting_params as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == CL_CRM_MEETING."_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(CL_CRM_MEETING,array(
+				"name" => $type,
+				"id" => CL_CRM_MEETING."_".$type_id,
+				"url" => aw_url_change_var($var,CL_CRM_MEETING."_".$type_id),
+			));
+		}
+		foreach($time_types as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == $parent."_".CL_CRM_MEETING."_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(CL_CRM_MEETING,array(
+				"name" => $type,
+				"id" => CL_CRM_MEETING."_".$type_id,
+				"url" => aw_url_change_var($var, CL_CRM_MEETING."_".$type_id),
+			));
+		}
+
+		foreach($task_params as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == $parent."_".CL_TASK."_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(CL_TASK,array(
+				"name" => $type,
+				"id" => CL_TASK."_".$type_id,
+				"url" => aw_url_change_var($var, CL_TASK."_".$type_id),
+			));
+		}
+		foreach($time_types as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == CL_TASK."_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(CL_TASK,array(
+				"name" => $type,
+				"id" => CL_TASK."_".$type_id,
+				"url" => aw_url_change_var($var, CL_TASK."_".$type_id),
+			));
+		}
+
+		foreach($bugs_params as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == CL_BUG."_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(CL_BUG,array(
+				"name" => $type,
+				"id" => CL_BUG."_".$type_id,
+				"url" => aw_url_change_var($var, CL_BUG."_".$type_id),
+			));
+		}
+		foreach($time_types as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == CL_BUG."_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(CL_BUG,array(
+				"name" => $type,
+				"id" => CL_BUG."_".$type_id,
+				"url" => aw_url_change_var($var, CL_BUG."_".$type_id),
+			));
 		}
 	}
 
@@ -2323,8 +2735,9 @@ class crm_company_overview_impl extends class_base
 		$var = "st";
 		if(!isset($_GET[$var]))
 		{
-			$_GET[$var] = 10;
+			$_GET[$var] = "my";
 		}
+
 		classload("core/icons");
 
 		$tv->start_tree(array(
@@ -2333,15 +2746,24 @@ class crm_company_overview_impl extends class_base
 			"tree_id" => "co_tasks_tree",
 		));
 
+
+		$name = t("Minu tegevused");
+		$id = "my";
+		if (!isset($_GET[$var]) || $_GET[$var] == $id)
+		{
+			$name = "<b>".$name."</b>";
+		}
 		$tv->add_item(0,array(
-			"name" => t("Minu tegevused"),
-			"id" => "my_tasks",
+			"name" => $name,
+			"id" => $id,
 //			"url" => aw_url_change_var($var, $stat_id+10),
 		));
 
+//		$this->_add_leafs_to_tasks_tree($tv, "my");
+
 		$tv->add_item(0,array(
 			"name" => t("Projektijuht"),
-			"id" => "pr_mgr",
+			"id" => "prman",
 //			"url" => aw_url_change_var($var, $stat_id+10),
 		));
 
@@ -2359,18 +2781,19 @@ class crm_company_overview_impl extends class_base
 				$name = "<b>".$name."</b>";
 			}
 
-			$tv->add_item("pr_mgr",array(
+			$tv->add_item("prman",array(
 				"name" => $name,
 				"id" => "prman".$id,
 				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
 				"url" => aw_url_change_var($var, "prman_".$id),
 			));
+//			$this->_add_leafs_to_tasks_tree($tv, "prman".$id);
 
 		}
 
 		$tv->add_item(0,array(
 			"name" => t("Kliendihaldur"),
-			"id" => "cust_mgr",
+			"id" => "custman",
 //			"url" => aw_url_change_var($var, $stat_id+10),
 		));
 
@@ -2384,12 +2807,13 @@ class crm_company_overview_impl extends class_base
 			{
 				$name = "<b>".$name."</b>";
 			}
-			$tv->add_item("cust_mgr",array(
+			$tv->add_item("custman",array(
 				"name" => $name,
 				"id" => "custman".$id,
 				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
 				"url" => aw_url_change_var($var, "custman_".$id),
 			));
+//			$this->_add_leafs_to_tasks_tree($tv, "custman".$id);
 
 		}
 
@@ -2436,9 +2860,10 @@ class crm_company_overview_impl extends class_base
 					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
 					"url" => aw_url_change_var($var, "cust_".$id),
 				));
+//				$this->_add_leafs_to_tasks_tree($tv, "cust".$id);
 			}
 		}
-
+/*
 		$tv->add_item(0,array(
 			"name" => t("Periood"),
 			"id" => "period",
@@ -2475,7 +2900,16 @@ class crm_company_overview_impl extends class_base
 			"name" => $state,
 			"id" => "period_all",
 			"url" => aw_url_change_var($var, "period_all"),
+		));*/
+
+		$tv->add_item(0,array(
+			"name" => t("K&ouml;ik tegevused"),
+			"id" => "all",
+//			"url" => aw_url_change_var($var, $stat_id+10),
 		));
+
+//		$this->_add_leafs_to_tasks_tree($tv, "all");
+
  	}
 
 	private function all_customers()
