@@ -23,6 +23,9 @@ class relpicker extends  core
 
 		@param multiple optional type=int
 
+		@param size optional type=int
+			Select size for multiple relpickers
+
 		@param no_sel optional type=int
 
 		@param automatic optional type=int
@@ -34,6 +37,9 @@ class relpicker extends  core
 
 		@param buttonspos optional type=string
 			Position for buttons. Values: right, bottom. Default: right
+
+		@param value optional
+			Value for relpicker. array if multiple, int otherwise
 
 		@returns The HTML of the relpicker.
 
@@ -75,7 +81,11 @@ class relpicker extends  core
 		$relinfo = $o->get_relinfo();
 		$clids = $relinfo[$reltype]["clid"];
 
-		if($o->is_property($property))
+		if($value)
+		{
+			$selected = $value;
+		}
+		elseif($o->is_property($property))
 		{
 			$selected = $o->prop($property);
 		}
@@ -126,6 +136,8 @@ class relpicker extends  core
 			"name" => $name,
 			"options" => $options,
 			"selected" => $selected,
+			"multiple" => $multiple,
+			"size" => $size,
 		));
 
 		if($buttonspos == "bottom")
