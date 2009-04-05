@@ -327,7 +327,7 @@ class menuedit extends aw_template implements request_startup
 					aw_ini_set("rootmenu", $tmp);
 				}
 
-				if(!$obj)//edasi oleks nagu ainult selle sektsioooni objekti otsimine, seda pole vaja kui see olemas
+				if(empty($obj))//edasi oleks nagu ainult selle sektsioooni objekti otsimine, seda pole vaja kui see olemas
 				{
 
 					// Viskame v2lja need, mis niikuinii ei sobi. N2iteks juht, kus yks alias on t6lgitud, teine mitte - http://ekt.einst.ee/en/cultural-heritage/muuseumid
@@ -471,7 +471,7 @@ class menuedit extends aw_template implements request_startup
 			// www.struktuur.ee esimest korda v2lja tuli.
 			// niiet nyyd te siis teate ;)
 			// - terryf
-			if (!$obj)
+			if (empty($obj))
 			{
 				if ($show_errors)
 				{
