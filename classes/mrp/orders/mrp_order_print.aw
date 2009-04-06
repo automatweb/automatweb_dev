@@ -340,7 +340,6 @@ class mrp_order_print extends mrp_order
 				));
 				$sums[$v] = array();
 			}
-
 			foreach($arr["obj_inst"]->get_job_list() as $job)
 			{
 				$material_expenses = $job->get_material_expense_list();

@@ -1732,12 +1732,12 @@ class mrp_job extends class_base
 			"sortable" => 1,
 			"align" => "center"
 		));
-/*		$t->define_field(array(
+		$t->define_field(array(
 			"name" => "prog_expense",
 			"caption" => t("Prognoositud kulu"),
 			"sortable" => 1,
 			"align" => "center"
-		));*/
+		));
 		$t->define_field(array(
 			"name" => "expense",
 			"caption" => t("Tegelik kulu"),
@@ -1758,11 +1758,11 @@ class mrp_job extends class_base
 		{
 			$t->define_data(array(
 				"name" => $material->name(),
-				"prog_expense" => 0,
+				"prog_expense" => $material->prop("amount"),
 				"expense" => html::textbox(array(
 					"name" => "material_amount[".$id."]",
 					"size" => 5,
-					"value" => $material->prop("amount"),
+					"value" => $material->prop("uset_amount"),
 				)),
 				"unit" => $material->prop("unit.name"),
 			));

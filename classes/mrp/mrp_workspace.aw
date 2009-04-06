@@ -693,11 +693,12 @@ class mrp_workspace extends class_base
 		}
 		foreach($arr["material_amount"] as $prod => $amount)
 		{
-			$job->set_used_material(array(
+			$job->set_used_material_assessment(obj($prod) , $amount, $units[$prod]);
+/*			$job->set_used_material(array(
 				"product" => $prod,
 				"amount" => $amount,
 				"unit" => $units[$prod],
-			));
+			));*/
 		}
 
 		return $arr["post_ru"];
