@@ -1501,7 +1501,7 @@ class crm_company_overview_impl extends class_base
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "act_s_part",
 			"value" => $v,
-			"size" => 15
+			"size" => 25
 		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.act_s_part.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
@@ -1579,62 +1579,94 @@ class crm_company_overview_impl extends class_base
 	function tree_tasks($arr)
 	{
 		$filter = array();
+		$done = null;
+		$undone = $over_deadline = 0;
 		$ol = new object_list();
 		$params = explode("_" , $arr["request"]["st"]);
+		$time_params = explode("_" , $arr["request"]["tm"]);
+		$type_params = explode("_" , $arr["request"]["tf"]);
 		$stats = get_instance("applications/crm/crm_company_stats_impl");
 		classload("core/date/date_calc");
-arr($params);
 		switch($params[0])
 		{
 			case "my":
+			default :
 				$person = get_current_person();
 				$filter["person"] = $person->id();
 				break;
 		}
 
-		switch($params[1])
+		switch($type_params[0])
 		{
-				case "next":
-					$start = time();
-					$end = time() + DAY*1000;
+/*			case "next":
+				$start = time();
+				$end = time() + DAY*1000;
+				break;*/
+/*			case "last_last_mon":
+				$start = mktime(0,0,0,(date("m") - 2) , 1 , date("Y"));
+				$end = mktime(0,0,0,(date("m") - 1) , 1 , date("Y"))-1;
+				break;
+			case "cur_year":
+				$start = get_year_start();
+				$end = mktime(0,0,0,1,1,(date("Y") + 1))-1;
+				break;
+			case "last_year":
+				$start = mktime(0,0,0,1,1,(date("Y") - 1));
+				$end = get_year_start()-1;
+				break;*/
+			case CL_BUG:
+				$class_id = CL_BUG;
+				break;
+			case CL_CRM_CALL:
+				$class_id = CL_CRM_CALL;
+				break;
+			case CL_TASK:
+				$class_id = CL_TASK;
+				break;
+			case CL_CRM_MEETING:
+				$class_id = CL_CRM_MEETING;
+				break;
+			default:
+				break;
+		}
+
+		switch($time_params[0])
+		{
+			case "all":
+				$start = 1;
+				$end = time()*2;
+				break;
+			case "currentmonth":
+				$start = get_month_start();
+				$end = mktime(0,0,0,(date("m") + 1) , 1 , date("Y"))-1;
+				break;
+			case "lastmonth":
+				$start = mktime(0,0,0,(date("m") - 1) ,1 , date("Y"));
+				$end = get_month_start()-1;
+				break;
+			case "currentweek":
+			default:
+				$start = get_week_start();
+				$end = get_week_start()+7*DAY-1;
+				break;
+		}
+
+		switch($type_params[1])
+		{
+				case "planned":
+				case "undone":
+					$filter["done"] = 0;
 					break;
-				case "currentweek":
-					$start = get_week_start();
-					$end = get_week_start()+7*DAY-1;
+				case "done":
+					$filter["done"] = 1;
 					break;
-				case "currentmonth":
-					$start = get_month_start();
-					$end = mktime(0,0,0,(date("m") + 1) , 1 , date("Y"))-1;
+				case "overdeadline":
+					$over_deadline = 1;
 					break;
-				case "lastmonth":
-					$start = mktime(0,0,0,(date("m") - 1) ,1 , date("Y"));
-					$end = get_month_start()-1;
-					break;
-				case "last_last_mon":
-					$start = mktime(0,0,0,(date("m") - 2) , 1 , date("Y"));
-					$end = mktime(0,0,0,(date("m") - 1) , 1 , date("Y"))-1;
-					break;
-				case "cur_year":
-					$start = get_year_start();
-					$end = mktime(0,0,0,1,1,(date("Y") + 1))-1;
-					break;
-				case "last_year":
-					$start = mktime(0,0,0,1,1,(date("Y") - 1));
-					$end = get_year_start()-1;
-					break;
-				case CL_BUG:
-					$class_id = CL_BUG;
-					break;
-				case CL_CRM_CALL:
-					$class_id = CL_CRM_CALL;
-					break;
-				case CL_TASK:
-					$class_id = CL_TASK;
-					break;
-				case CL_CRM_MEETING:
-					$class_id = CL_CRM_MEETING;
+				default:
 					break;
 		}
+
 		if(!$start)
 		{
 			$start = get_week_start();
@@ -1642,6 +1674,8 @@ arr($params);
 		}
 
 		$filter["between"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING,$start, $end);
+		$filter["from"] = $start;
+		$filter["to"] = $end;
 
 		if(!$class_id || $class_id == CL_BUG)
 		{
@@ -1665,10 +1699,10 @@ arr($params);
 
 	function _get_task_list($arr)
 	{
-		if($arr["request"]["st"])
-		{
+//		if($arr["request"]["st"] || $arr["request"]["tf"])
+//		{
 			return $this->tree_tasks($arr);
-		}
+//		}
 
 		enter_function("_get_task_list:1");
 		$u = get_instance(CL_USER);
@@ -2558,22 +2592,15 @@ arr($params);
 // 		}
 // 	}
 
-	function _get_tasks_type_tree($arr)
+	function _get_tasks_time_tree($arr)
 	{
 		$tree =& $arr["prop"]["vcl_inst"];
-		$var = "tf";
+		$var = "tm";
 
 		if(!isset($_GET[$var]))
 		{
 			$_GET[$var] = "currentweek";
 		}
-
-		$types = array(
-			CL_BUG => t("&Uuml;lesanne"),
-			CL_TASK => t("Toimetus"),
-			CL_CRM_MEETING => t("Kohtumine"),
-			CL_CRM_CALL => t("K&otilde;ne")
-		);
 
 		$time_types = array(
 			"currentweek" => t("Jooksev n&auml;dal"),
@@ -2581,6 +2608,56 @@ arr($params);
 			"lastmonth" => t("Eelmine kuu"),
 		);
 
+		foreach($time_types as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == $type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item(0,array(
+				"name" => $type,
+				"id" => $type_id,
+				"url" => aw_url_change_var($var, $type_id),
+			));
+		}
+
+		$type = t("K&otilde;ik perioodid");
+		if (isset($_GET[$var]) && $_GET[$var] == "all")
+		{
+			$type = "<b>".$type."</b>";
+		}
+		$tree->add_item(0,array(
+			"name" => $type,
+			"id" => "undone",
+			"url" => aw_url_change_var($var, "all"),
+		));
+	}
+
+
+	function _get_tasks_type_tree($arr)
+	{
+		$tree =& $arr["prop"]["vcl_inst"];
+		$var = "tf";
+
+		if(!isset($_GET[$var]))
+		{
+			$_GET[$var] = "all_undone";
+		}
+
+		$types = array(
+			CL_BUG => t("&Uuml;lesanne"),
+			CL_TASK => t("Toimetus"),
+			CL_CRM_MEETING => t("Kohtumine"),
+			CL_CRM_CALL => t("K&otilde;ne"),
+			"all" => t("K&otilde;ik t&uuml;&uuml;bid")
+		);
+/*
+		$time_types = array(
+			"currentweek" => t("Jooksev n&auml;dal"),
+			"currentmonth" => t("Jooksev kuu"),
+			"lastmonth" => t("Eelmine kuu"),
+		);
+*/
  		$call_params = array(
  			"done" => t("Tehtud"),
  			"planned" => t("Plaanis"),
@@ -2592,11 +2669,13 @@ arr($params);
  		);
  
  		$task_params = array(
+ 			"done" => t("Tehtud"),
  			"undone" => t("Tegemata"),
  			"overdeadline" => t("&Uuml;le t&auml;htaja"),
  		);
  
  		$bugs_params = array(
+ 			"done" => t("Tehtud"),
  			"undone" => t("Tegemata"),
  			"overdeadline" => t("&Uuml;le t&auml;htaja"),
  		);
@@ -2617,7 +2696,7 @@ arr($params);
 
 		foreach($time_types as $type_id => $type)
 		{
-			if (isset($_GET[$var]) && $_GET[$var] == $parent."_".$type_id)
+			if (isset($_GET[$var]) && $_GET[$var] == $type_id)
 			{
 				$type = "<b>".$type."</b>";
 			}
@@ -2727,6 +2806,21 @@ arr($params);
 				"url" => aw_url_change_var($var, CL_BUG."_".$type_id),
 			));
 		}
+
+		foreach($bugs_params as $type_id => $type)
+		{
+			if (isset($_GET[$var]) && $_GET[$var] == "all_".$type_id)
+			{
+				$type = "<b>".$type."</b>";
+			}
+			$tree->add_item("all",array(
+				"name" => $type,
+				"id" => "all_".$type_id,
+				"url" => aw_url_change_var($var, "all_".$type_id),
+			));
+		}
+
+
 	}
 
 	function _get_tasks_tree($arr)

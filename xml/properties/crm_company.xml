@@ -3045,6 +3045,26 @@
             <caption>Tegevuste puu t&amp;amp;uuml;&amp;amp;uuml;pide kaupa</caption>
       </property>
       <property>
+            <name>tasks_time_tree</name>
+            <table>objects</table>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
+                  <num_5>ovrv_mails</num_5>
+                  <num_6>documents_all_manage</num_6>
+                  <num_7>bugs</num_7>
+            </group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>tasks_tree_time_layout</parent>
+            <field>tasks_time_tree</field>
+            <caption>Tegevuste puu aja kaupa</caption>
+      </property>
+      <property>
             <name>act_s_cust</name>
             <table>objects</table>
             <group>
@@ -5503,7 +5523,7 @@
                   <type>vbox</type>
                   <parent>all_act_search</parent>
                   <closeable>1</closeable>
-                  <area_caption>Aja&amp;amp;nbsp;ja&amp;amp;nbsp;t&amp;amp;uuml;&amp;amp;uuml;bi&amp;amp;nbsp;filter</area_caption>
+                  <area_caption>Tegevuse&amp;amp;nbsp;t&amp;amp;uuml;&amp;amp;uuml;bid</area_caption>
                   <group>
                         <num_0>my_tasks</num_0>
                         <num_1>meetings</num_1>
@@ -5515,6 +5535,22 @@
                         <num_7>bugs</num_7>
                   </group>
             </tasks_tree_type_layout>
+            <tasks_tree_time_layout>
+                  <type>vbox</type>
+                  <parent>all_act_search</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Aja&amp;amp;nbsp;filter</area_caption>
+                  <group>
+                        <num_0>my_tasks</num_0>
+                        <num_1>meetings</num_1>
+                        <num_2>calls</num_2>
+                        <num_3>ovrv_offers</num_3>
+                        <num_4>all_actions</num_4>
+                        <num_5>ovrv_mails</num_5>
+                        <num_6>documents_all_manage</num_6>
+                        <num_7>bugs</num_7>
+                  </group>
+            </tasks_tree_time_layout>
             <act_s_dl_layout_top>
                   <type>vbox</type>
                   <parent>all_act_search</parent>

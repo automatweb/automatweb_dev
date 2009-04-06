@@ -1029,10 +1029,15 @@ default group=org_objects
 				@property tasks_tree type=treeview store=no no_caption=1 parent=tasks_tree_layout
 				@caption Tegevuste puu
 
-			@layout tasks_tree_type_layout type=vbox parent=all_act_search closeable=1 area_caption=Aja&nbsp;ja&nbsp;t&uuml;&uuml;bi&nbsp;filter
+			@layout tasks_tree_type_layout type=vbox parent=all_act_search closeable=1 area_caption=Tegevuse&nbsp;t&uuml;&uuml;bid
 
 				@property tasks_type_tree type=treeview store=no no_caption=1 parent=tasks_tree_type_layout
 				@caption Tegevuste puu t&uuml;&uuml;pide kaupa
+
+			@layout tasks_tree_time_layout type=vbox parent=all_act_search closeable=1 area_caption=Aja&nbsp;filter
+
+				@property tasks_time_tree type=treeview store=no no_caption=1 parent=tasks_tree_time_layout
+				@caption Tegevuste puu aja kaupa
 
 
 			@layout act_s_dl_layout_top type=vbox parent=all_act_search area_caption=Otsing closeable=1
@@ -2785,7 +2790,9 @@ class crm_company extends class_base
 
 			// ACTIONS TAB
 
-
+			case "act_s_cal_name":
+			case "act_s_code":
+				return PROP_IGNORE;
 			case "my_tasks":
 			case "my_tasks_cal":
 				if(!(aw_global_get("crm_task_view") > -1))
@@ -2805,12 +2812,12 @@ class crm_company extends class_base
 			case "tasks_call":
 			case "my_tasks_tb":
 			case "act_s_part":
-			case "act_s_cal_name":
 			case "mail_tbl":
 			case "mail_tb":
 			case "activity_stats_toolbar":
 			case "activity_stats_table":
 			case "tasks_type_tree":
+			case "tasks_time_tree":
 			case "tasks_tree":
 				static $overview_impl;
 				if (!$overview_impl)
@@ -2862,6 +2869,7 @@ class crm_company extends class_base
 					return PROP_IGNORE;
 				}
 			case "act_s_print_view":
+				return PROP_IGNORE;
 				$data['value'] = $arr['request'][$data["name"]];
 				$data["onclick"] = "document.changeform.target=\"_blank\"";
 				break;
