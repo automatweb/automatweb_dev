@@ -1115,26 +1115,26 @@ default group=org_objects
 
 		@layout stats_list_l type=vbox parent=stats_list_box closeable=1
 
-		@layout stats_list_u type=vbox parent=stats_list_l closeable=1 area_caption=Aruanded
+			@layout stats_list_u type=vbox parent=stats_list_l closeable=1 area_caption=Aruanded
+	
+				@property stats_tree type=treeview store=no no_caption=1 parent=stats_list_u
+				@caption Aruannete puu
+	
+			@layout stats_list_s type=vbox parent=stats_list_l closeable=1 area_caption=Ajavahemik
+	
+				@property stats_stats_time_sel type=select store=no parent=stats_list_s captionside=top
+				@caption Ajavahemik
+	
+				@property stats_stats_from type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
+				@caption Alates
+	
+				@property stats_stats_to type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
+				@caption Kuni
+	
+				@property stats_stats_search type=submit store=no parent=stats_list_s captionside=top no_caption=1 
+				@caption Otsi
 
-			@property stats_tree type=treeview store=no no_caption=1 parent=stats_list_u
-			@caption Aruannete puu
-
-		@layout stats_list_s type=vbox parent=stats_list_l closeable=1 area_caption=Ajavahemik
-
-			@property stats_stats_time_sel type=select store=no parent=stats_list_s captionside=top
-			@caption Ajavahemik
-
-			@property stats_stats_from type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
-			@caption Alates
-
-			@property stats_stats_to type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
-			@caption Kuni
-
-			@property stats_stats_search type=submit store=no parent=stats_list_s captionside=top no_caption=1 
-			@caption Otsi
-
-		@layout stats_list_s type=vbox parent=stats_list_l closeable=1 area_caption=Ajavahemik
+		@layout stats_list_r type=vbox parent=stats_list_box closeable=1
 
 			@layout data_r_charts type=hbox parent=stats_list_r width=50%:50% closeable=1 area_caption=Graafikud
 				@layout chart1 parent=data_r_charts type=vbox
