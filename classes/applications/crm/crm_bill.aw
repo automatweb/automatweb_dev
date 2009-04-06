@@ -1385,8 +1385,8 @@ class crm_bill extends class_base
 					"sum" => $row["price"],
 					"date" =>  $arr["obj_inst"]->prop("bill_date"),
 				));
-				$price_cc = "<br>".$cc_price." ".$ccurrency_name;
-				$sum_cc = "<br>".$cc_price*$row["amt"]." ".$ccurrency_name;
+				$price_cc = "<br>".round($cc_price , 2)." ".$ccurrency_name;
+				$sum_cc = "<br>".round($cc_price*$row["amt"] , 2)." ".$ccurrency_name;
 			}
 
 			//eraldab muid kulusid

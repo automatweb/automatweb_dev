@@ -503,7 +503,7 @@ class crm_bill_obj extends _int_object
 	//	$amt = ((int)(($amt * 4)+1)) / 4;//ymardab yles 0.25listeni
 
 		$row->set_prop("amt", $amt);
-		$row->set_prop("price", $price);
+		$row->set_prop("price", $this->convert_to_bill_currency($price));
 		$row->set_prop("unit", t("tund"));
 		$row->set_prop("people", $people);
 
@@ -513,7 +513,7 @@ class crm_bill_obj extends _int_object
 		{
 			if($comment->prop("parent.class_id") == CL_BUG)
 			{
-				$row->set_prop("price", $comment->prop("parent.hr_price"));
+				$row->set_prop("price", $this->convert_to_bill_currency($comment->prop("parent.hr_price")));
 			}
 			foreach($comment->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
 			{
@@ -752,6 +752,7 @@ class crm_bill_obj extends _int_object
 						{
 							$price = $price / (1 + $tax);
 						}
+						$price = $this->convert_to_bill_currency($price , $work->prop("currency"));
 						$agreement[] = array(
 							"unit" => $work->prop("deal_unit"),
 							"price" => $price,
@@ -870,7 +871,7 @@ class crm_bill_obj extends _int_object
 				$br->set_prop("name", $row->prop("content"));
 				$br->set_prop("amt", $row->prop("time_to_cust"));
 //				$br->set_prop("prod", $row["prod"]);
-				$br->set_prop("price", $task_o->prop("hr_price"));
+				$br->set_prop("price", $this->convert_to_bill_currency($task_o->prop("hr_price") , $task_o->prop("currency")));
 				$br->set_prop("unit", t("tund"));
 				$br->set_prop("has_tax", 1);
 				$br->set_prop("date", date("d.m.Y", $row->prop("date")));
@@ -923,6 +924,34 @@ class crm_bill_obj extends _int_object
 // 				$task_o->save();
 // 			}
 		return $this->id();
+	}
+
+	private function convert_to_bill_currency($sum, $from=null)
+	{
+		if(!is_oid($from))
+		{
+			if(!$this->company_currency)
+			{
+				$u = get_instance(CL_USER);
+				$co = obj($u->get_current_company());
+				$this->company_currency = $co->prop("currency");
+			}
+		}
+		$from = $this->company_currency;
+		$bcurrency = $this->get_bill_currency_id();
+
+		if($bcurrency && $from && $from != $bcurrency)
+		{
+			$curr_inst = get_instance(CL_CURRENCY);
+			$price = $curr_inst->convert(array(
+				"from" => $from,
+				"to" => $bcurrency,
+				"sum" => $sum,
+				"date" =>  $this->prop("bill_date"),
+			));
+			return $price;
+		}
+		return $sum;
 	}
 
 	/** f the bill has an impl and customer, then check if they have a customer relation and if so, then get the due days from that
@@ -1879,6 +1908,7 @@ class crm_bill_obj extends _int_object
 		$awm->htmlbodyattach(array(
 			"data" => $body
 		));
+//if(aw_global_get("uid") == "marko") {arr($body); arr($this->get_bcc()); arr($addresses);die();}
 		$awm->gen_mail();
 		$ret.= t("saatis arve aadressidele:")."<br>";
 		$addresses[]= $this->get_bcc();
