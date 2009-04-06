@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.72 2009/03/11 14:17:46 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.73 2009/04/06 12:41:13 kristo Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -538,6 +538,12 @@ class object_list extends _int_obj_container_base
 				"id" => ERR_PARAM,
 				"msg" => sprintf(t("object_list::foreach_o(): %s is not a member function of the object class!"), $param["func"])
 			));
+		}
+
+		// special-case multiple object set_prop and save so we can do just one query
+		if ($func == "set_prop" && $param["save"] && ($single_clid = $this->_is_single_clid()) && $GLOBALS["object_loader"]->ds->property_is_multi_saveable($single_clid, $param["params"][0]))
+		{
+			return $GLOBALS["object_loader"]->ds->save_property_multiple($single_clid, $param["params"][0], $param["params"][1], $this->ids());
 		}
 
 		for($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
@@ -1138,6 +1144,24 @@ class object_list extends _int_obj_container_base
 		}
 		$data = $GLOBALS["object_loader"]->ds->fetch_list($to_fetch);
 		exit_function("object_list::_int_fetch_full_list");
+	}
+
+	function _is_single_clid()
+	{
+		$clid = null;
+		foreach($this->arr() as $item)
+		{
+			if ($clid === null)
+			{
+				$clid = $item->class_id();
+			}
+			else
+			if ($item->class_id() != $clid)
+			{
+				return false;
+			}
+		}
+		return $clid;
 	}
 }
 ?>

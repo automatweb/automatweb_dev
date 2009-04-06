@@ -3945,6 +3945,50 @@ enter_function("ds_mysql::optimize_joins");
 exit_function("ds_mysql::optimize_joins");
 		return $rs;
 	}
+
+	function property_is_multi_saveable($clid, $prop)
+	{
+		if (!is_class_id($clid))
+		{
+			return false;
+		}
+		// saved to a table and simple type
+		list($data) = $this->_get_prop_data($clid, $prop);
+		if (empty($data["store"]) && $data["table"] != "objects" && $data["field"] != "" && empty($data["reltype"]))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	function save_property_multiple($class_id, $prop, $value, $oid_list)
+	{
+		if (!is_array($oid_list) || !count($oid_list))
+		{
+			return false;
+		}
+		list($pd, $tableinfo) = $this->_get_prop_data($class_id, $prop);
+
+		$oid_list_awa = new aw_array($oid_list);
+		$table = $pd["table"];
+		$field = $pd["field"];
+		$value = mysql_real_escape_string($value);
+
+		$table_index = $tableinfo[$table]["index"];
+
+		$sql = " UPDATE $table SET `$field` = '$value' WHERE $table_index IN (".$oid_list_awa->to_sql().") ";
+		$this->db_query($sql);
+		return true;
+	}
+
+	function _get_prop_data($clid, $prop)
+	{
+		$tmp = obj();
+		$tmp->set_class_id($clid);
+		$pl = $tmp->get_property_list();
+		
+		return array($pl[$prop], $tmp->get_tableinfo());
+	}
 }
 
 ?>
