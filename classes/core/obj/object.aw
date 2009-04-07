@@ -506,6 +506,14 @@ class object
 			{
 				$con->delete();
 			}
+
+			// all connections with type 'SOMETHING', sorted by connected objects jrk value (object's order property), direction as ascending
+			$conns = $o->connections_from(array(
+				'type' => 'RELTYPE_SOMETHING',
+				'sort_by_num' => 'to.jrk',
+				'sort_dir' => 'asc'
+			));
+
 	**/
 	function connections_from($param = NULL)
 	{
