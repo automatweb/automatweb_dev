@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.162 2009/03/02 14:46:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.163 2009/04/07 13:15:59 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -348,6 +348,8 @@
 			@property stats_money_by_person_chart type=google_chart no_caption=1 parent=stats_money_by_person store=no
 
 	@layout stats_money_top type=vbox area_caption=Projektiga&nbsp;seotud&nbsp;rahavood
+		@property money_stats_string type=text store=no parent=stats_money_top no_caption=1 
+		@caption Rahaline aruanne
 
 		@property stats_money_table no_caption=1 parent=stats_money_top type=table store=no 
 		@caption Raha inimeste kaupa
@@ -388,11 +390,11 @@
 	@property prods_table type=table store=no no_caption=1
 
 @groupinfo general2 parent=general caption="&Uuml;ldandmed"
-	@groupinfo info_t caption="Lisainfo" parent=general
 	@groupinfo strat caption="Eesm&auml;rgid" parent=general submit=no
 	@groupinfo risks caption="Riskid" parent=general submit=no
-	@groupinfo web_settings parent=general caption="Veebiseadistused"
 	@groupinfo sides parent=general caption="Konfliktianal&uuml;&uuml;s" submit=no
+	@groupinfo info_t caption="Lisainfo" parent=general
+	@groupinfo web_settings parent=general caption="Veebiseadistused"
 	@groupinfo userdefined caption="Kasutaja defineeritud andmed" parent=general
 @groupinfo participants parent=general caption="Osalejad"
 @groupinfo event_list caption="Tegevused" submit=no
@@ -601,6 +603,12 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "money_stats_string":
+				$data["value"] = t("Laekunud")." : ";
+				$data["value"].= $arr["obj_inst"]->get_project_income_text();
+				$data["value"].= "<br>".t("Tuletatud tunnihind")." : ";
+				$data["value"].= round(($arr["obj_inst"]->get_project_income_cc() / $arr["obj_inst"]->get_real_hours()) , 2);// . " ".$arr["obj_inst"]->get_default_currency_name();
+				break;
 			case "stats_time_chooser":
 				$data["value"] = $this->month_selector(
 					$arr["obj_inst"]->prop("start"),
@@ -3820,6 +3828,7 @@ class project extends class_base
 	function _get_bills_tree($arr)
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
+		$bill_state_count = $arr["obj_inst"]->get_bill_state_count();
 		$var = "st";
 		if(!isset($_GET[$var]))
 		{
@@ -3836,6 +3845,10 @@ class project extends class_base
 		$states = $bills_inst->states + array("90" => t("K&otilde;ik"));
 		foreach($states as $stat_id => $state)
 		{
+			if($bill_state_count[$stat_id])
+			{
+				$state.= " (".$bill_state_count[$stat_id].")";
+			}
 			if (isset($_GET[$var]) && $_GET[$var] == $stat_id+10)
 			{
 				$state = "<b>".$state."</b>";
@@ -7516,8 +7529,14 @@ class project extends class_base
 		if(!$month_chooser || !$month_chooser)
 		{
 			$month_chooser = array();
-			$month_chooser[date("my" , $end)] = 1;
-			$month_chooser[date("my" , mktime(0,0,0, date("m" , $end) - 1, date("d" , $end), date("Y" , $end)))] = 1;
+//			$month_chooser[date("my" , $end)] = 1;
+//			$month_chooser[date("my" , mktime(0,0,0, date("m" , $end) - 1, date("d" , $end), date("Y" , $end)))] = 1;
+			$month_chooser[date("my" , time())] = 1;
+			$month_chooser[date("my" , mktime(0,0,0, date("m" , time()) - 1, date("d" , time()), date("Y" , time())))] = 1;
+			if($end < time())
+			{
+				$end = time();
+			}
 		}
 
 
@@ -7563,6 +7582,17 @@ class project extends class_base
 		}
 */
 
+/*		foreach($month_chooser as $month_str => $val)
+		{
+			$time = mktime(0,0,0, substr($month_str , 0 , 2), 11, substr($month_str , 2 , 2));
+	
+			$t->define_field(array(
+				"name" => date("my" , $time),
+				"caption" => date("M Y" ,$time),
+				"align" => "center",
+			));
+		}
+*/
 		$start = get_day_start($start);
 		if(!($end > 1 && $start > 1))
 		{

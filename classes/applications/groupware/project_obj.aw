@@ -212,7 +212,7 @@ class project_obj extends _int_object
 		foreach($rows_arr->list_data as $bcs)
 		{
 			$bugs[$bcs["task"]] = $bcs["task"];
-		}
+		}//arr($bugs);
 		$bugs_list->add($bugs);
 		exit_function("project::_get_billable_bugs");
 		
@@ -588,6 +588,22 @@ class project_obj extends _int_object
 		return $bills;
 	}
 
+	/** Returns different project bill statuses sum
+		@attrib api=1
+		@returns array
+			array(bill_status => count , ...)
+	**/
+	public function get_bill_state_count()
+	{
+		$ret = array();
+		$bills = $this->get_bills();
+		foreach($bills->arr() as $bill)
+		{
+			$ret[$bill->prop("state")]++;
+		}
+		return $ret;
+	}
+
 	/** Returns project bills
 		@attrib api=1
 		@param status optional type=int
@@ -654,6 +670,7 @@ class project_obj extends _int_object
 				"logic" => "OR",
 				"conditions" => array(
 					"CL_TASK_ROW.task(CL_TASK).send_bill" => 1,
+//					"CL_TASK_ROW.task.class_id" => CL_BUG,
 					"CL_TASK_ROW.task(CL_BUG).send_bill" => 1,
 					"CL_TASK_ROW.task(CL_CRM_MEETING).send_bill" => 1,
 					"CL_TASK_ROW.task(CL_CRM_CALL).send_bill" => 1,
@@ -1076,6 +1093,63 @@ class project_obj extends _int_object
 			}
 		}
 		return $data;
+	}
+
+	private function get_project_income()
+	{
+		$ret = array();
+		$payments = $this->get_payments_data();
+		foreach($payments as $p)
+		{
+			$ret[$p["currency"]]+= $p["sum"];
+		}
+		return $ret;
+	}
+
+	/** Returns project income in company currency
+		@attrib api=1
+		@returns double
+	**/
+	public function get_project_income_cc()
+	{
+		$sum = 0;
+		$payments = $this->get_payments_data();
+		foreach($payments as $p)
+		{
+			$sum+= $p["total_sum"];
+		}
+		return $sum;
+	}
+
+	/** Returns project work hours sum
+		@attrib api=1
+		@returns double
+	**/
+	public function get_real_hours()
+	{
+		$sum = 0;
+		foreach($this->get_rows_data() as $data)
+		{
+			$sum+= $data["time_real"];
+		}
+		return $sum;
+	}
+
+	/** Returns project income text
+		@attrib api=1
+		@returns string
+			ex: 123 EEK
+			    225 EUR
+	**/
+	public function get_project_income_text()
+	{
+		$income = $this->get_project_income();
+		$ret = array();
+		foreach($income as $curr => $sum)
+		{
+			$ret[] = round($sum , 2)." ".$curr;
+		}
+		return join("<br>" , $ret);
 	}
 }
 ?>

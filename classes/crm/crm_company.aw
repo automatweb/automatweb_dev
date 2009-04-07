@@ -1024,19 +1024,19 @@ default group=org_objects
 
 		@layout all_act_search type=vbox parent=my_tasks closeable=1
 
-			@layout tasks_tree_layout type=vbox parent=all_act_search closeable=1 area_caption=Tegevused&nbsp;puu&nbsp;kujul
+			@layout tasks_tree_layout type=vbox parent=all_act_search closeable=1 area_caption=Tegevused&nbsp;puu&nbsp;kujul group=all_actions
 
-				@property tasks_tree type=treeview store=no no_caption=1 parent=tasks_tree_layout
+				@property tasks_tree type=treeview store=no no_caption=1 parent=tasks_tree_layout group=all_actions
 				@caption Tegevuste puu
 
-			@layout tasks_tree_type_layout type=vbox parent=all_act_search closeable=1 area_caption=Tegevuse&nbsp;t&uuml;&uuml;bid
+			@layout tasks_tree_type_layout type=vbox parent=all_act_search closeable=1 area_caption=Tegevuse&nbsp;t&uuml;&uuml;bid group=all_actions
 
-				@property tasks_type_tree type=treeview store=no no_caption=1 parent=tasks_tree_type_layout
+				@property tasks_type_tree type=treeview store=no no_caption=1 parent=tasks_tree_type_layout group=all_actions
 				@caption Tegevuste puu t&uuml;&uuml;pide kaupa
 
-			@layout tasks_tree_time_layout type=vbox parent=all_act_search closeable=1 area_caption=Aja&nbsp;filter
+			@layout tasks_tree_time_layout type=vbox parent=all_act_search closeable=1 area_caption=Aja&nbsp;filter group=all_actions
 
-				@property tasks_time_tree type=treeview store=no no_caption=1 parent=tasks_tree_time_layout
+				@property tasks_time_tree type=treeview store=no no_caption=1 parent=tasks_tree_time_layout group=all_actions
 				@caption Tegevuste puu aja kaupa
 
 
@@ -7159,7 +7159,15 @@ class crm_company extends class_base
 
 	function callback_mod_tab($arr)
 	{
-
+		switch($arr["id"])
+		{
+			case "my_tasks":
+			case "meetings":
+			case "calls":
+			case "bugs":
+				return false;
+		}
+//arr($arr);
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;

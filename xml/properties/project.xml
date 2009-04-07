@@ -988,6 +988,17 @@
             <field>stats_money_by_person_chart</field>
       </property>
       <property>
+            <name>money_stats_string</name>
+            <table>objects</table>
+            <group>stats_money</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>stats_money_top</parent>
+            <no_caption>1</no_caption>
+            <field>money_stats_string</field>
+            <caption>Rahaline aruanne</caption>
+      </property>
+      <property>
             <name>stats_money_table</name>
             <table>objects</table>
             <group>stats_money</group>
@@ -1090,10 +1101,6 @@
                   <parent>general</parent>
                   <caption>&amp;amp;Uuml;ldandmed</caption>
             </general2>
-            <info_t>
-                  <caption>Lisainfo</caption>
-                  <parent>general</parent>
-            </info_t>
             <strat>
                   <caption>Eesm&amp;amp;auml;rgid</caption>
                   <parent>general</parent>
@@ -1104,15 +1111,19 @@
                   <parent>general</parent>
                   <submit>no</submit>
             </risks>
-            <web_settings>
-                  <parent>general</parent>
-                  <caption>Veebiseadistused</caption>
-            </web_settings>
             <sides>
                   <parent>general</parent>
                   <caption>Konfliktianal&amp;amp;uuml;&amp;amp;uuml;s</caption>
                   <submit>no</submit>
             </sides>
+            <info_t>
+                  <caption>Lisainfo</caption>
+                  <parent>general</parent>
+            </info_t>
+            <web_settings>
+                  <parent>general</parent>
+                  <caption>Veebiseadistused</caption>
+            </web_settings>
             <userdefined>
                   <caption>Kasutaja defineeritud andmed</caption>
                   <parent>general</parent>

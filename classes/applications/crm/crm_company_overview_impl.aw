@@ -437,16 +437,6 @@ class crm_company_overview_impl extends class_base
 			"width" => 1
 		));
 
-		if ($r["act_s_print_view"] != 1)
-		{
-			$t->define_field(array(
-				"caption" => t("&nbsp;"),
-				"name" => "menu",
-				"align" => "center",
-	//			"chgbgcolor" => "col",
-			));
-		}
-
 		if ($r["group"] == "meetings")
 		{
 			$t->define_field(array(
@@ -531,6 +521,12 @@ class crm_company_overview_impl extends class_base
 		//			"chgbgcolor" => "col",
 				"field" => "oid",
 				"name" => "sel"
+			));
+			$t->define_field(array(
+				"caption" => t("&nbsp;"),
+				"name" => "menu",
+				"align" => "center",
+	//			"chgbgcolor" => "col",
 			));
 		}
 	}
@@ -1587,15 +1583,28 @@ class crm_company_overview_impl extends class_base
 		$type_params = explode("_" , $arr["request"]["tf"]);
 		$stats = get_instance("applications/crm/crm_company_stats_impl");
 		classload("core/date/date_calc");
+
 		switch($params[0])
 		{
+			case "custman":
+				$filter["client_manager"] = $params[1];
+			case "prman":
+				$filter["project_manager"] = $params[1];
+				break;
+			case "cust":
+				$filter["customer"] = $params[1];
+				break;
 			case "my":
 			default :
 				$person = get_current_person();
 				$filter["person"] = $person->id();
 				break;
 		}
-
+//arr($type_params);arr($time_params); arr($params);
+		if(!$type_params[0])
+		{
+			$type_params[1] = "undone";
+		}
 		switch($type_params[0])
 		{
 /*			case "next":
@@ -1616,6 +1625,10 @@ class crm_company_overview_impl extends class_base
 				break;*/
 			case CL_BUG:
 				$class_id = CL_BUG;
+				if($type_params[1] > 0)
+				{
+					$filter["status"] = $type_params[1];
+				}
 				break;
 			case CL_CRM_CALL:
 				$class_id = CL_CRM_CALL;
@@ -1658,10 +1671,11 @@ class crm_company_overview_impl extends class_base
 					$filter["done"] = 0;
 					break;
 				case "done":
+				case "past":
 					$filter["done"] = 1;
 					break;
 				case "overdeadline":
-					$over_deadline = 1;
+					$filter["deadline"] = 1;
 					break;
 				default:
 					break;
@@ -1699,10 +1713,22 @@ class crm_company_overview_impl extends class_base
 
 	function _get_task_list($arr)
 	{
-//		if($arr["request"]["st"] || $arr["request"]["tf"])
-//		{
+		$search_vars = array("act_s_cust", "act_s_part" , "act_s_cal_name" , "act_s_task_name" , "act_s_task_content" , "act_s_code" , "act_s_proj_name" , "act_s_dl_from" , "act_s_dl_to" , "act_s_status" , "act_s_is_is", "act_s_mail_content" , "act_s_mail_name");
+
+		$tree = 1;
+		foreach($search_vars as $search_var)
+		{
+			if($arr["request"][$search_var])
+			{
+				$tree = 0;
+				break;
+			}
+
+		}
+		if($tree)
+		{
 			return $this->tree_tasks($arr);
-//		}
+		}
 
 		enter_function("_get_task_list:1");
 		$u = get_instance(CL_USER);
@@ -2639,6 +2665,8 @@ class crm_company_overview_impl extends class_base
 		$tree =& $arr["prop"]["vcl_inst"];
 		$var = "tf";
 
+		$bug_inst = get_instance(CL_BUG);
+
 		if(!isset($_GET[$var]))
 		{
 			$_GET[$var] = "all_undone";
@@ -2651,13 +2679,7 @@ class crm_company_overview_impl extends class_base
 			CL_CRM_CALL => t("K&otilde;ne"),
 			"all" => t("K&otilde;ik t&uuml;&uuml;bid")
 		);
-/*
-		$time_types = array(
-			"currentweek" => t("Jooksev n&auml;dal"),
-			"currentmonth" => t("Jooksev kuu"),
-			"lastmonth" => t("Eelmine kuu"),
-		);
-*/
+
  		$call_params = array(
  			"done" => t("Tehtud"),
  			"planned" => t("Plaanis"),
@@ -2675,8 +2697,8 @@ class crm_company_overview_impl extends class_base
  		);
  
  		$bugs_params = array(
- 			"done" => t("Tehtud"),
- 			"undone" => t("Tegemata"),
+ 			"done" => t("L&otilde;petatud"),
+ 			"undone" => t("Pooleli"),
  			"overdeadline" => t("&Uuml;le t&auml;htaja"),
  		);
 
@@ -2694,32 +2716,7 @@ class crm_company_overview_impl extends class_base
 			));
 		}
 
-		foreach($time_types as $type_id => $type)
-		{
-			if (isset($_GET[$var]) && $_GET[$var] == $type_id)
-			{
-				$type = "<b>".$type."</b>";
-			}
-			$tree->add_item(0,array(
-				"name" => $type,
-				"id" => $type_id,
-				"url" => aw_url_change_var($var, $type_id),
-			));
-		}
-
 		foreach($call_params as $type_id => $type)
-		{
-			if (isset($_GET[$var]) && $_GET[$var] == CL_CRM_CALL."_".$type_id)
-			{
-				$type = "<b>".$type."</b>";
-			}
-			$tree->add_item(CL_CRM_CALL,array(
-				"name" => $type,
-				"id" => CL_CRM_CALL."_".$type_id,
-				"url" => aw_url_change_var($var, CL_CRM_CALL."_".$type_id),
-			));
-		}
-		foreach($time_types as $type_id => $type)
 		{
 			if (isset($_GET[$var]) && $_GET[$var] == CL_CRM_CALL."_".$type_id)
 			{
@@ -2744,32 +2741,8 @@ class crm_company_overview_impl extends class_base
 				"url" => aw_url_change_var($var,CL_CRM_MEETING."_".$type_id),
 			));
 		}
-		foreach($time_types as $type_id => $type)
-		{
-			if (isset($_GET[$var]) && $_GET[$var] == $parent."_".CL_CRM_MEETING."_".$type_id)
-			{
-				$type = "<b>".$type."</b>";
-			}
-			$tree->add_item(CL_CRM_MEETING,array(
-				"name" => $type,
-				"id" => CL_CRM_MEETING."_".$type_id,
-				"url" => aw_url_change_var($var, CL_CRM_MEETING."_".$type_id),
-			));
-		}
 
 		foreach($task_params as $type_id => $type)
-		{
-			if (isset($_GET[$var]) && $_GET[$var] == $parent."_".CL_TASK."_".$type_id)
-			{
-				$type = "<b>".$type."</b>";
-			}
-			$tree->add_item(CL_TASK,array(
-				"name" => $type,
-				"id" => CL_TASK."_".$type_id,
-				"url" => aw_url_change_var($var, CL_TASK."_".$type_id),
-			));
-		}
-		foreach($time_types as $type_id => $type)
 		{
 			if (isset($_GET[$var]) && $_GET[$var] == CL_TASK."_".$type_id)
 			{
@@ -2794,7 +2767,7 @@ class crm_company_overview_impl extends class_base
 				"url" => aw_url_change_var($var, CL_BUG."_".$type_id),
 			));
 		}
-		foreach($time_types as $type_id => $type)
+		foreach($bug_inst->bug_statuses as $type_id => $type)
 		{
 			if (isset($_GET[$var]) && $_GET[$var] == CL_BUG."_".$type_id)
 			{
@@ -2807,7 +2780,7 @@ class crm_company_overview_impl extends class_base
 			));
 		}
 
-		foreach($bugs_params as $type_id => $type)
+		foreach($task_params as $type_id => $type)
 		{
 			if (isset($_GET[$var]) && $_GET[$var] == "all_".$type_id)
 			{
@@ -2819,8 +2792,6 @@ class crm_company_overview_impl extends class_base
 				"url" => aw_url_change_var($var, "all_".$type_id),
 			));
 		}
-
-
 	}
 
 	function _get_tasks_tree($arr)
@@ -2957,52 +2928,18 @@ class crm_company_overview_impl extends class_base
 //				$this->_add_leafs_to_tasks_tree($tv, "cust".$id);
 			}
 		}
-/*
+
+		$name = t("K&ouml;ik tegevused");
+		$id = "all";
+		if (isset($_GET[$var]) && $_GET[$var] == $id)
+		{
+			$name = "<b>".$name."</b>";
+		}
 		$tv->add_item(0,array(
-			"name" => t("Periood"),
-			"id" => "period",
-//			"url" => aw_url_change_var($var, $stat_id+10),
+			"name" => $name,
+			"id" => $id,
+			"url" => aw_url_change_var($var, $id),
 		));
-
-		$state = t("Eelmine kuu");
- 		if (isset($_GET[$var]) && $_GET[$var] == "period_last") $state = "<b>".$state."</b>";
-		$tv->add_item("period",array(
-			"name" => $state,
-			"id" => "period_last",
-			"url" => aw_url_change_var($var, "period_last"),
-		));
- 
-		$state = t("Jooksev kuu");
-		if (isset($_GET[$var]) && $_GET[$var] == "period_current") $state = "<b>".$state."</b>";
-		$tv->add_item("period",array(
-			"name" => $state,
-			"id" => "period_current",
-			"url" => aw_url_change_var($var, "period_current"),
-		));
-
-		$state = t("J&auml;rgmine kuu");
-		if (isset($_GET[$var]) && $_GET[$var] == "period_next") $state = "<b>".$state."</b>";
-		$tv->add_item("period",array(
-			"name" => $state,
-			"id" => "period_next",
-			"url" => aw_url_change_var($var, "period_next"),
-		));
- 
-		$state = t("K&otilde;ik perioodid");
-		if (isset($_GET[$var]) && $_GET[$var] == "period_all") $state = "<b>".$state."</b>";
-		$tv->add_item("period",array(
-			"name" => $state,
-			"id" => "period_all",
-			"url" => aw_url_change_var($var, "period_all"),
-		));*/
-
-		$tv->add_item(0,array(
-			"name" => t("K&ouml;ik tegevused"),
-			"id" => "all",
-//			"url" => aw_url_change_var($var, $stat_id+10),
-		));
-
-//		$this->_add_leafs_to_tasks_tree($tv, "all");
 
  	}
 
