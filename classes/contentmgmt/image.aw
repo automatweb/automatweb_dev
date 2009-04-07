@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.44 2009/04/03 13:30:30 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.45 2009/04/07 13:38:01 instrumental Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1058,6 +1058,10 @@ class image extends class_base
 				width => int
 			)
 			sets img tag height and width
+		@param arguments optional type=array
+			array(
+				show_title => true	// default true
+			)
 
 		@returns
 			- Rewrote URL
@@ -1071,17 +1075,19 @@ class image extends class_base
 		@examples
 			none
 	**/
-	function make_img_tag($url, $alt = "", $size = array())
+	function make_img_tag($url, $alt = "", $size = array(), $arr = array())
 	{
 		$tag = isset($size["height"]) ?" height=\"".$size["height"]."\"":"";
 		$tag .= isset($size["width"]) ?" width=\"".$size["width"]."\"":"";
+
+		$title = !isset($arr["show_title"]) || !empty($arr["show_title"]) ? " title=\"$alt\"" : "";
 		if ($url == "")
 		{
-			return "<img src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\" title=\"$alt\"".$tag." />";
+			return "<img src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\"{$title}".$tag." />";
 		}
 		else
 		{
-			return "<img src=\"$url\" alt=\"$alt\" title=\"$alt\"".$tag." />";
+			return "<img src=\"$url\" alt=\"$alt\"{$title}".$tag." />";
 		}
 	}
 
@@ -2192,13 +2198,16 @@ class image extends class_base
 			Images alternate text
 		@param has_big_alt optional type=string default=NULL
 			If big image is set, then this is the big image's alternate text.	
-
 		@param size optional type=array
 			array(
 				height => int,
 				width => int
 			)
-			sets img tag height and width	
+			sets img tag height and width
+		@param arguments optional type=array
+			array(
+				show_title => true	// default true
+			)
 
 		@errors 
 			none
@@ -2212,7 +2221,7 @@ class image extends class_base
 		@examples
 			none
 	**/
-	function make_img_tag_wl($id, $alt = NULL, $has_big_alt = NULL, $size = array())
+	function make_img_tag_wl($id, $alt = NULL, $has_big_alt = NULL, $size = array(), $arr = array())
 	{
 		static $that;
 		if (!$that)
@@ -2236,7 +2245,7 @@ class image extends class_base
 			{
 				$alt = $has_big_alt;
 			}
-			$imagetag = image::make_img_tag($u, $alt, $size);
+			$imagetag = image::make_img_tag($u, $alt, $size, $arr);
 
 			$size = @getimagesize($file2);
 
@@ -2252,7 +2261,7 @@ class image extends class_base
 		}
 		else
 		{
-			$imagetag = image::make_img_tag($u, $alt, $size);
+			$imagetag = image::make_img_tag($u, $alt, $size, $arr);
 		}
 
 		return $imagetag;
