@@ -94,6 +94,8 @@ class aw_locker
 	**/
 	public function lock($class, $id, $type, $boundary, $wait_type)
 	{
+		// FIXME
+		if ("win32" === aw_ini_get("server.platform")) { return; }
 		self::_block();
 		if (!self::_is_locked($class, $id))
 		{
@@ -135,6 +137,9 @@ class aw_locker
 	**/
 	public function unlock($class, $id)
 	{
+		// FIXME
+		if ("win32" === aw_ini_get("server.platform")) { return; }
+
 		self::_block();
 		if (($data = self::_is_locked($class, $id, true)))
 		{
@@ -186,6 +191,9 @@ class aw_locker
 	**/
 	public static function try_operation($class, $id, $try_type = self::OPERATION_READ, $wait_type = null)
 	{
+		// FIXME
+		if ("win32" === aw_ini_get("server.platform")) { return; }
+		
 		self::_block();
 		if (($data = self::_is_locked($class, $id)))
 		{
