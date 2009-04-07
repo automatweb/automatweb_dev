@@ -241,7 +241,7 @@ class relationmgr extends aw_template
 			asort($val);
 			if($id == 0 || $id == RELTYPE_BROTHER)
 			{
-				$val = array("capt_new_object" => html_entity_decode(t("Objekti t&uuml;&uuml;p"))) + $val;
+				$val = array("capt_new_object" => html_entity_decode(t("Objekti t&uuml;&uuml;p"), ENT_COMPAT, aw_global_get("charset"))) + $val;
 			}
 			$this->true_rel_classes[$id] = $val;
 		}
@@ -552,7 +552,7 @@ class relationmgr extends aw_template
 					"modifiedby" => $item["modifiedby"],
 					"modified" => $item["modified"],
 					"class_id" => $clinf[$item["class_id"]]["name"],
-					"location" => html_entity_decode($item["path_str"]),
+					"location" => html_entity_decode($item["path_str"], ENT_COMPAT, aw_global_get("charset")),
 					"change" => "<input type='checkbox' name='check' value='$id'>",
 				));
 			}
@@ -681,7 +681,7 @@ class relationmgr extends aw_template
 				$ls = array("&auml;", "&Auml;", "&ouml", "&Ouml;", "&uuml;", "&Uuml;", "&otilde;", "&Otilde;", );
 				foreach($ls as $l)
 				{
-					$vals = str_replace($l, html_entity_decode($l), $vals);
+					$vals = str_replace($l, html_entity_decode($l, ENT_COMPAT, aw_global_get("charset")), $vals);
 				}
 				$vals = $this->mk_kstring($vals);
 				if (isset($this->true_rel_classes[$k][$objtype]))
@@ -706,7 +706,7 @@ class relationmgr extends aw_template
 				}
 			}
 	
-			$rels1 .= 'listB.addOptions("_","'.html_entity_decode(t("Objekti t&uuml;&uuml;p")).'","capt_new_object"'.");\n";
+			$rels1 .= 'listB.addOptions("_","'.html_entity_decode(t("Objekti t&uuml;&uuml;p"), ENT_COMPAT, aw_global_get("charset")).'","capt_new_object"'.");\n";
 			$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
 	
 			$this->vars(array(
