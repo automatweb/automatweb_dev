@@ -1909,7 +1909,11 @@ class crm_bill_obj extends _int_object
 			"data" => $body
 		));
 //if(aw_global_get("uid") == "marko") {arr($body); arr($this->get_bcc()); arr($addresses);die();}
-		$awm->gen_mail();
+		$suc = $awm->gen_mail();
+		if(!$suc)
+		{
+			die("Arve saatmine eba&otilde;nnestus");
+		}
 		$ret.= t("saatis arve aadressidele:")."<br>";
 		$addresses[]= $this->get_bcc();
 		$ret.= join ("<br>" , $addresses);

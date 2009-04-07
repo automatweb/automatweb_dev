@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.17 2008/12/18 11:18:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.18 2009/04/07 15:11:39 markop Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -754,7 +754,7 @@ class aw_mail {
 		{
 			echo "<pre>Send mail: to: $to\nsubj: $subject\nemail = $email\nheaders = $headers\n</pre>";
 		}
-		send_mail($to,$subject,$email,$headers,$arguments);
+		return send_mail($to,$subject,$email,$headers,$arguments);
 	}
 };
 ?>

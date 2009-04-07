@@ -415,10 +415,42 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 	function send_mail($to,$subject,$msg,$headers="",$arguments="")
 	{
 //	echo "enter send to = $to , subj = $subject , msg:<pre>$headers\n$msg</pre>";
-		if (!is_email($to))
+		//vaatab et v2hemalt 1 aadress kuhu saata oleks ok	
+		$correct_mails_to_sent = 0;
+		$to_arr = explode(",", $to);
+		foreach($to_arr as $key => $t)
 		{
-			return;
+			$target_name_and_mail = explode("<" , $t);
+			if(!(sizeof($target_name_and_mail) > 1))
+			{
+				$mail_to_send = $t;
+			}
+			else
+			{
+				$tmp = explode(">" , $target_name_and_mail[1]);
+				$mail_to_send = $tmp[0];
+			}
+			if(is_email($mail_to_send))
+			{
+				$correct_mails_to_sent++;
+			}
+			else
+			{
+				unset($to_arr[$key]);
+			}
+			$to = join("," , $to_arr);
+	
 		}
+
+		if(!(sizeof($to_arr) && $correct_mails_to_sent))
+		{
+			return false;
+		}
+
+//		if (!is_email($to))
+//		{
+//			return false;
+//		}
 		preg_match("/From\: (.*)/im", $headers, $mt);
 		$from = $mt[1];
 
@@ -476,6 +508,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			"content" => $msg,
 			"app" => $app
 		));
+		return true;
 	}
 
 	/** returns an array of all classes defined in the system
