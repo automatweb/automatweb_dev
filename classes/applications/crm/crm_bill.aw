@@ -1251,7 +1251,8 @@ class crm_bill extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimetus"),
-			"chgbgcolor" => "color"
+			"chgbgcolor" => "color",
+//			"width" => 40,
 		));
 
 		/*
@@ -1837,25 +1838,7 @@ class crm_bill extends class_base
 					"value" => $t_inf["code"],
 					"size" => 10
 				)),
-/*				"unit" => html::textbox(array(
-					"name" => "rows[$id][unit]",
-					"selected" => $unit_oid?array($unit_oid => $unit_name):'',
-					"size" => 5,
-					"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
-					"option_is_tuple" => 1,
-					"content" => $unit_name,
-				)),
-				"price" => html::textbox(array(
-					"name" => "rows[$id][price]",
-					"value" => $t_inf["price"],
-					"size" => 4
-				)),
-				"amt" => html::textbox(array(
-					"name" => "rows[$id][amt]",
-					"value" => $t_inf["amt"],
-					"size" => 3
-				)),
-				"sum" => $t_inf["sum"],*/
+
 				"unit" => $ut->draw(array("no_titlebar" => 1)),
 				"has_tax" => html::checkbox(array(
 					"name" => "rows[$id][has_tax]",
@@ -1887,10 +1870,110 @@ class crm_bill extends class_base
 					"multiple" => 1,
 					"clid" => array(CL_CRM_PERSON)
 				))
-			));
+			));/*
+		$t->define_data(array(
+			"name" => $this->ajax_get_html($row["id"],"name"),
+			"code" => $this->ajax_get_html($row["id"],"code"),
+			"unit" => $this->ajax_get_html($row["id"],"unit"),
+			"has_tax" => $this->ajax_get_html($row["id"],"has_tax"),
+			"prod" => $this->ajax_get_html($row["id"],"prod"),
+			"sel" => html::checkbox(array(
+				"name" => "sel_rows[]",
+				"value" => $row["id"]
+			)),
+			"person" => $this->ajax_get_html($row["id"],"person"),
+		));
+
+*/
 			$sum += $t_inf["sum"];
 		}
-		$arr["prop"]["value"] = $t->draw();
+		$arr["prop"]["value"] = $t->draw()/*.'<script language="javascript">
+				$.get("/automatweb/orb.aw", {class: "aw_object_quickadd", action: "get_objects"}, function (html) { $("body").append(html); });
+			</script>"
+		'*/;
+	}
+
+	/**
+		@attrib name=get_row_change_fields all_args=1
+	**/
+	function get_row_change_fields($arr)
+	{
+		$row = obj($arr["id"]);
+		switch($arr["field"])
+		{
+			case "name":
+				return 
+					'</a><div id="row_'.$arr["id"].'_'.$arr["field"].'">'.
+				html::button(array(
+					"name" => "change_row",
+					"value" => t("Salvesta"),
+					"onclick" => "$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'get_row_change_fields', id: '".$id."', field: '".$field."'}, function (html) { $('body').append(html); });",
+				))."<table><tr><td width=400>".
+					$row->prop("jrk")."<br>".
+					$row->prop("date")."<br>".
+					$row->prop("comment")."<br>".
+					substr($row->prop("name") , 0 , 100)."</td></tr></table></div>";
+			case "code":
+				return $row->prop("code");
+			case "unit":
+				return $row->prop("unit.name")."<br>".
+					t("Hind").": ".$row->prop("price")."<br>".
+					t("Kogus").": ".$row->prop("amt")."<br>".
+					t("Summa").": ".$row->prop("price")*$row->prop("amt");
+			case "has_tax":
+				return html::checkbox(array(
+					"checked" => $row->prop("has_tax"),
+					"disabled" => 1,
+				));
+			case "prod":
+				return $row->prop("prod.name");
+			case "person":
+				return join("<br>" , $row->get_person_selection());
+		}
+	}
+
+	/**
+		@attrib name=get_row_change_fields all_args=1
+	**/
+	function ajax_get_row_change_fields($arr)
+	{
+		die($this->get_row_change_fields($arr));
+	}
+
+	function ajax_get_html($id,$field)
+	{
+		$row = obj($id);
+		switch($field)
+		{
+			case "name":
+				return '</a><div id="row_'.$id.'_'.$field.'">'.html::button(array(
+					"name" => "change_row",
+					"value" => t("Muuda"),
+					"onclick" => "$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'get_row_change_fields', id: '".$id."', field: '".$field."'}, function (html) {
+						x=document.getElementById('row_".$id."_".$field."');
+						x.innerHTML=html;});",
+				))."<table><tr><td width=400>".
+					$row->prop("jrk")."<br>".
+					$row->prop("date")."<br>".
+					$row->prop("comment")."<br>".
+					substr($row->prop("name") , 0 , 100)."</td></tr></table></div>";
+			case "code":
+				return $row->prop("code");
+			case "unit":
+				return $row->prop("unit.name")."<br>".
+					t("Hind").": ".$row->prop("price")."<br>".
+					t("Kogus").": ".$row->prop("amt")."<br>".
+					t("Summa").": ".$row->prop("price")*$row->prop("amt");
+			case "has_tax":
+				return html::checkbox(array(
+					"checked" => $row->prop("has_tax"),
+					"disabled" => 1,
+				));
+			case "prod":
+				return $row->prop("prod.name");
+			case "person":
+				return join("<br>" , $row->get_person_selection());
+		}
 	}
 
 	/** searches and connects bill row to task row
@@ -3911,6 +3994,14 @@ class crm_bill extends class_base
 			"confirm" => t("Oled kindel et soovid valitud read maha kanda/tagasi arvele panna?"),
 			"action" => "writeoff_rows"
 		));
+
+		$tb->add_button(array(
+			"name" => "reorder",
+			"img" => "rte_num_list.gif",
+			"tooltip" => t("J&auml;rjesta read uuesti"),
+			"confirm" => t("Oled kindel et soovid read uuesti j&auml;rjestada"),
+			"action" => "reorder_rows"
+		));
 	}
 
 	function set_current_settings()
@@ -4197,6 +4288,15 @@ class crm_bill extends class_base
 		}
 	}
 
+	/**
+		@attrib name=reorder_rows
+	**/
+	function reorder_rows($arr)
+	{
+		$bill = obj($arr["id"]);
+		$bill->reorder_rows();
+		return $arr["post_ru"];
+	}
 
 	/**
 		@attrib name=reconcile_rows

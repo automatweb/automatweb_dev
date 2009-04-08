@@ -1,8 +1,15 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_bill" folder="applications/crm" extends="class_base">
+	<class name="crm_bill" folder="www/automatweb_cvs/classes/applications/crm" extends="class_base">
 		<action name="add_payment" all_args="1">
 			<function name="add_payment">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_row_change_fields" all_args="1">
+			<function name="ajax_get_row_change_fields">
 				<arguments>
 				</arguments>
 			</function>
@@ -75,6 +82,13 @@
 
 		<action name="remove_rows_from_bill">
 			<function name="remove_rows_from_bill">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="reorder_rows">
+			<function name="reorder_rows">
 				<arguments>
 				</arguments>
 			</function>

@@ -248,6 +248,22 @@ class crm_bill_row_object extends _int_object
 
 	}
 
+	/** returns bill row implementors
+		@attrib api=1 params=pos
+		@returns array
+	**/
+	function get_person_selection()
+	{
+		$arr = array();
+		foreach($this->connections_from(array("type" => "RELTYPE_PEOPLE")) as $c)
+		{
+			$arr[$c->prop("to")] = $c->prop("to.name");
+		}
+		return $arr;
+		//tegelt ma ei teagi kas on yldse m6tet rida ka siduma hakata
+
+	}
+
 
 }
 ?>

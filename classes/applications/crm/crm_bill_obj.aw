@@ -2194,6 +2194,41 @@ class crm_bill_obj extends _int_object
 		return $ret;
 	}
 
+	public function __rsorter($a, $b)
+	{
+		$a_date = $a->prop("date");
+		$b_date = $b->prop("date");
+		list($a_d, $a_m, $a_y) = explode(".", $a_date);
+		list($b_d, $b_m, $b_y) = explode(".", $b_date);
+		$a_tm = mktime(0,0,0, $a_m, $a_d, $a_y);
+		$b_tm = mktime(0,0,0, $b_m, $b_d, $b_y);
+		if(!(($a->prop("is_oe") - $b->prop("is_oe")) == 0))
+		{
+			return $a->prop("is_oe")- $b->prop("is_oe");
+		}
+		if ($a->comment() != $b->comment())
+		{
+			return strcmp($a->comment(), $b->comment());
+		}
+		return $a_tm > $b_tm ? 1:
+			($a_tm == $b_tm ? 
+				($a->id() > $b->id() ? 1 : -1): -1);
+
+	}
+
+	public function reorder_rows()
+	{
+		$rows = $this->get_bill_rows();//arr($rows);
+		$rows->sort_by_cb(array($this, "__rsorter"));
+		$count = 0;//arr($rows);
+		foreach($rows->arr() as $row)
+		{
+			$row->set_meta("jrk", $count*10);
+			$row->save();
+			$count++;
+		}
+	}
+
 }
 
 ?>
