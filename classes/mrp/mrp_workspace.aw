@@ -1491,18 +1491,20 @@ class mrp_workspace extends class_base
 						"xstep" => 0,
 						"ystep" => 20,
 					));
+					$abs_deviation_max = max(abs($min_d), $max_d);
+					$range = array(round($abs_deviation_max * -1.25, 1), round($abs_deviation_max * 1.25, 1));
 					$c->set_data_scales(array(
 						array(0,100),
-						array(round($min_d * 1.25,1), round($max_d * 1.25,1)),
+						$range,
 						array(0,100),
-						array(round($min_d * 1.25,1), round($max_d * 1.25,1)),
+						$range,
 					));
 					$c->set_axis(array(
 						GCHART_AXIS_LEFT,
 						GCHART_AXIS_BOTTOM,
 						GCHART_AXIS_BOTTOM,
 					));
-					$c->add_axis_range(0, array(round($min_d*1.25,1), round($max_d*1.25,1)));
+					$c->add_axis_range(0, $range);
 					$c->add_axis_label(1, $months);
 					$c->add_axis_label(2, $years);
 				}
@@ -2304,8 +2306,9 @@ class mrp_workspace extends class_base
 		foreach($o_datas as $oid => $o)
 		{
 			$k = $o["RELTYPE_MRP_RESOURCE.oid"];
-			$res["plan"][$k] = (int) (isset($res["plan"][$k]) ? $res["plan"][$k] + $o["length"] : $o["length"]);
-			$paus = max(0, $o["finished"] - $o["started"] - $o["real_length"]);
+			$plan = $o["length"] * $res["real"][$k] / $o["real_length"];
+
+			$res["plan"][$k] = (int) (isset($res["plan"][$k]) ? $res["plan"][$k] + $plan : $plan);
 		}
 		foreach($res["free"] as $k => $v)
 		{
@@ -2316,6 +2319,9 @@ class mrp_workspace extends class_base
 
 			$res["over_plan"][$k] = max(0, $res["plan"][$k] - $res["real"][$k]);
 			$res["under_plan"][$k] = max(0, $res["real"][$k] - $res["plan"][$k]);
+
+			$res["real"][$k] -= $res["under_plan"][$k];
+			$res["plan"][$k] -= $res["over_plan"][$k];
 
 			$res["free"][$k] -= $res["real"][$k] + $res["paus"][$k] + $res["over_plan"][$k] + $res["under_plan"][$k] + $res["unavail"][$k];
 		}
@@ -2760,7 +2766,7 @@ class mrp_workspace extends class_base
 			switch($kf)
 			{
 				case "person":
-					if($arr["request"]["group"] = "my_stats")
+					if($arr["request"]["group"] == "my_stats")
 					{
 						$me = get_current_person();
 						$data_prms["person"] = (array)$me->id();

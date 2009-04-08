@@ -472,7 +472,7 @@ class mrp_job_obj extends _int_object
 		$arr["resource"] = isset($arr["resource"]) ? (is_oid($arr["resource"]) ? (array)$arr["resource"] : safe_array($arr["resource"])) : array();
 		$resources = count($arr["resource"]) > 0 ? "aw_resource_id IN (".implode(",", $arr["resource"]).") AND" : "";
 
-		$q = $i->db_fetch_array($this->something_hours_build_query($arr, "aw_resource_id", "resource_id", $persons));
+		$q = $i->db_fetch_array($this->something_hours_build_query($arr, "aw_resource_id", "resource_id", $resources));
 		$this->something_hours_insert_data($q, "resource_id", &$data, $arr);
 
 		exit_function("mrp_job_obj::get_resource_hours");
@@ -501,7 +501,7 @@ class mrp_job_obj extends _int_object
 				$count
 				$average
 				aw_job_previous_state as state,
-				SUM(aw_job_last_duration){$c2h} as hours,
+				SUM(LEAST(aw_tm - $from, aw_job_last_duration, $to - aw_tm + aw_job_last_duration)){$c2h} as hours,
 				$field as $key
 			FROM
 				mrp_job_rows 
@@ -509,7 +509,7 @@ class mrp_job_obj extends _int_object
 				$additionnal
 				$jobs
 				aw_job_previous_state IN('".implode("','", $states)."') AND
-				aw_tm BETWEEN $from AND $to
+				(aw_tm BETWEEN $from AND $to OR aw_tm - aw_job_last_duration < $to AND aw_tm > $from)
 			GROUP BY aw_job_previous_state, {$by_job} $field
 		";
 		return $query;
