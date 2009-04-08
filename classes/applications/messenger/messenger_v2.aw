@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.43 2009/03/10 13:25:12 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.44 2009/04/08 09:05:33 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -689,6 +689,8 @@ class messenger_v2 extends class_base
 			// this holds loading message
 			//temp_layout = '<div id=\"vbox\"><div class=\"pais\"><div class=\"caption\">Laadin ...</div><div class=\"closer\"></div></div><div class=\"sisu3\">".$v2."</div><div>';
 			temp_layout = '<div id=\"vbox\" style=\"margin:50 auto; position: absolute; width: 200px; height: 100px;\">".$v2."<div>';
+			ajax_loader_div = '<div style=\"padding:10px 20px; width:200px; left: 50%; margin-left: -100px; height:200; top:50%; margin-top:-100; background-color:white; border:1px solid silver; position:absolute; text-align:center; color:gray; font-size:12px; display:none;\" id=\"ajax_loader_div\"><img src=\"".aw_ini_get("baseurl")."/automatweb/images/ajax-loader.gif\"><br/><br/>Laadin...</div>';
+			$(\"body\").append(ajax_loader_div);
 
 			// 
 			loading = false;

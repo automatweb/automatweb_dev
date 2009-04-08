@@ -50,59 +50,71 @@ USAGE:
         combi = combi.toLowerCase();        
         
         // inspect if keystroke matches
-        var inspector = function(event) {
-            event = jQuery.event.fix(event); // jQuery event normalization.
-            var element = event.target;
-            // @ TextNode -> nodeType == 3
-            element = (element.nodeType==3) ? element.parentNode : element;
+        var inspector = function(event) 
+	{
+		event = jQuery.event.fix(event); // jQuery event normalization.
+		var element = event.target;
+		// @ TextNode -> nodeType == 3
+		element = (element.nodeType==3) ? element.parentNode : element;
             
-            if(opt['disableInInput']) { // Disable shortcut keys in Input, Textarea fields
-                var target = jQuery(element);
-                if( target.is("input") || target.is("textarea")){
-                    return;
-                }
-            }
-            var code = event.which,
-                type = event.type,
-                character = String.fromCharCode(code).toLowerCase(),
-                special = that.special_keys[code],
-                shift = event.shiftKey,
-                ctrl = event.ctrlKey,
-                alt= event.altKey,
-                propagate = true, // default behaivour
-                mapPoint = null;
+		if(opt['disableInInput']) 
+		{ // Disable shortcut keys in Input, Textarea fields
+                	var target = jQuery(element);
+	                if( target.is("input") || target.is("textarea"))
+			{
+                	    return;
+                	}
+            	}
+		var code = event.which,
+                	type = event.type,
+	                character = String.fromCharCode(code).toLowerCase(),
+        	        special = that.special_keys[code],
+                	shift = event.shiftKey,
+	                ctrl = event.ctrlKey,
+        	        alt= event.altKey,
+                	propagate = true, // default behaivour
+	                mapPoint = null;
             
-            // in opera + safari, the event.target is unpredictable.
-            // for example: 'keydown' might be associated with HtmlBodyElement 
-            // or the element where you last clicked with your mouse.
-            if (jQuery.browser.opera || jQuery.browser.safari || opt.checkParent){
-                while (!that.all[element] && element.parentNode){
-                    element = element.parentNode;
-                }
-            }
-            
-            var cbMap = that.all[element].events[type].callbackMap;
-            if(!shift && !ctrl && !alt) { // No Modifiers
-                mapPoint = cbMap[special] ||  cbMap[character]
+	            // in opera + safari, the event.target is unpredictable.
+        	    // for example: 'keydown' might be associated with HtmlBodyElement 
+	            // or the element where you last clicked with your mouse.
+		if (jQuery.browser.opera || jQuery.browser.safari || opt.checkParent)
+		{
+                	while (!that.all[element] && element.parentNode)
+			{
+				element = element.parentNode;
 			}
-            // deals with combinaitons (alt|ctrl|shift+anything)
-            else{
-                var modif = '';
-                if(alt) modif +='alt+';
-                if(ctrl) modif+= 'ctrl+';
-                if(shift) modif += 'shift+';
-                // modifiers + special keys or modifiers + characters or modifiers + shift characters
-                mapPoint = cbMap[modif+special] || cbMap[modif+character] || cbMap[modif+that.shift_nums[character]]
-            }
-            if (mapPoint){
-                mapPoint.cb(event);
-                if(!mapPoint.propagate) {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    return false;
-                }
-            }
-		};        
+		}
+            
+		var cbMap = that.all[element].events[type].callbackMap;
+		if(!shift && !ctrl && !alt) 
+		{ // No Modifiers
+                	mapPoint = cbMap[special] ||  cbMap[character]
+		}
+		// deals with combinaitons (alt|ctrl|shift+anything)
+		else
+		{
+                	var modif = '';
+	                if(alt) 
+				modif +='alt+';
+                	if(ctrl) 
+				modif+= 'ctrl+';
+			if(shift) 
+				modif += 'shift+';
+			// modifiers + special keys or modifiers + characters or modifiers + shift characters
+			mapPoint = cbMap[modif+special] || cbMap[modif+character] || cbMap[modif+that.shift_nums[character]]
+		}
+		if (mapPoint)
+		{
+			mapPoint.cb(event);
+			if(!mapPoint.propagate) 
+			{
+				event.stopPropagation();
+				event.preventDefault();
+				return false;
+			}
+		}
+	};        
         // first hook for this element
         if (!this.all[opt.target]){
             this.all[opt.target] = {events:{}};

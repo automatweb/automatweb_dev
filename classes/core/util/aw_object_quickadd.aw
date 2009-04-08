@@ -21,9 +21,9 @@ class aw_object_quickadd extends class_base
 		header ("Content-type: text/javascript; charset: UTF-8");
 		header("Expires: ".gmdate("D, d M Y H:i:s", time()+43200)." GMT");
 		header("Cache-Control: max-age=315360000");
-		echo $this->get_objects_to_js_array(array(
+		echo $this->get_objects_json(); /*to_js_array(array(
 			"pack" => true,
-		));
+		));*/
 		die();
 	}
 
@@ -109,6 +109,47 @@ class aw_object_quickadd extends class_base
 				$a_out[] = '},'.$line_prefix;
 			}
 		}
+		$a_out[count($a_out)-1] = "}";
+		$a_out[] = "]";
+		return implode  ( "",  $a_out);
+	}
+
+	function get_objects_json($arr)
+	{
+		if (!$arr["pack"])
+		{
+			$line_prefix = "\n";
+		}
+		
+		$a_items = $this->get_objects();
+
+		$d = array();
+
+		$a_out = array();
+		$a_out[] = 'var items = [';
+		foreach ($a_items as $key => $value)
+		{
+			$index = 0;
+			foreach ($a_items[$key] as $key2 => $value2)
+			{
+				$tmp = array();
+				$tmp["name"] = html_entity_decode ($a_items[$key][$key2]["name"]);
+				$tmp["url_obj"] = $a_items[$key][$key2]["url"];
+				$tmp["icon"] = $a_items[$key][$key2]["icon"];
+				$tmp["class"] = $a_items[$key][$key2]["class"];
+				$tmp["priority"] = 5;
+				$d[] = $tmp;
+
+				$a_out[] = '{name: "'.html_entity_decode ($a_items[$key][$key2]["name"]).'",';
+				$a_out[] = 'url_obj: "'.$a_items[$key][$key2]["url"].'",'.$line_prefix;
+				$a_out[] = 'icon: "'.$a_items[$key][$key2]["icon"].'",'.$line_prefix;
+				$a_out[] = '"class": "'.$a_items[$key][$key2]["class"].'"'.$line_prefix;
+				//$s_out .= 'priority: 5,'.$line_prefix;
+				$a_out[] = '},'.$line_prefix;
+			}
+//			$d[] = $tmp;
+		}
+		return json_encode($d);
 		$a_out[count($a_out)-1] = "}";
 		$a_out[] = "]";
 		return implode  ( "",  $a_out);

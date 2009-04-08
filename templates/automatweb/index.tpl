@@ -47,28 +47,11 @@
 <!-- END SUB: MINIFY_JS_AND_CSS -->
 
 {VAR:javascript}
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts"></script>
-<!--<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_xml&{VAR:random}"></script>
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_objects&{VAR:random}"></script>
--->
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=aw_object_quickadd&action=get_objects"></script>
+
+
 
 <script type="text/javascript">
 xchanged = 0;
-jQuery.hotkeys.add('Ctrl+Shift+a', function(){
-	desc = prompt("Kirjeldus", "nimetu");
-	if(desc){
-		aw_popup_scroll("{VAR:stop_pop_url_add}&name=" + desc, "quick_task_entry", 800,600);
-	}
-});
-
-jQuery.hotkeys.add('Ctrl+Shift+q', function(){
-	aw_popup_scroll("{VAR:stop_pop_url_quick_add}", "quick_task_entry", 800,600);
-});
-
-jQuery.hotkeys.add('Ctrl+Shift+e', function(){
-	aw_popup_scroll("{VAR:stop_pop_url_qw}", "quick_task_entry", 800,600);
-});
 </script>
 
 <!--[if lt IE 7]>
@@ -76,7 +59,6 @@ jQuery.hotkeys.add('Ctrl+Shift+e', function(){
 <![endif]-->
 
 </head>
-<div style="padding:10px 20px; width:200px; left: 50%; margin-left: -100px; height:200; top:50%; margin-top:-100; background-color:white; border:1px solid silver; position:absolute; text-align:center; color:gray; font-size:12px; display:none;" id="ajax_loader_div"><img src="{VAR:baseurl}/automatweb/images/ajax-loader.gif"><br/><br/>Laadin...</div>
 <body onLoad="check_generic_loader();">
 <!-- SUB: MSG_POPUP -->
 <div class="msg_popup" style="background: #ffffff; width: 150px; min-height: 76px; font-size: 11px; padding: 0px; visibility: hidden; position: fixed; right: 0px;  border: #05A6E9 2px solid;">
@@ -97,21 +79,67 @@ jQuery(function(){
 </script>
 <!-- END SUB: MSG_POPUP -->
 
-<div id="aw_object_quickadd" style="display: none;">
-	<div class="icon"><img src="{VAR:baseurl}/automatweb/images/aw06/blank.gif" width="40" alt="" /></div>
-	<div class="selected_object_name"></div>
-	<input type="text" id="aw_object_quickadd_input" class="text" /></div>
-<div id="aw_object_quickadd_results" style="display: none;" ></div>
-
 
 <script type="text/javascript">
+
 // aw object quickadd. use ctrl+alt+u to use
 var options = {
 	maxresults : 8,
 	baseurl    : "{VAR:baseurl}",
 	parent     : "{VAR:parent}"
 };
-$("#aw_object_quickadd").aw_object_quickadd(items, options);
+
+var recKp = [];
+
+function aw_keyhandler_rec(event)
+{
+	recKp[recKp.length] = event;
+}
+
+function aw_keyhandler_init(event)
+{
+	recKp[recKp.length] = event;
+	$(window).unbind("keydown", aw_keyhandler_init);
+	$(window).keydown(aw_keyhandler_rec);
+
+	var html = '<div id="aw_object_quickadd" style="display: none;">\
+		<div class="icon"><img src="/automatweb/images/aw06/blank.gif" width="40" alt="" /></div>\
+		<div class="selected_object_name"></div>\
+		<input type="text" id="aw_object_quickadd_input" class="text" /></div>\
+		<div id="aw_object_quickadd_results" style="display: none;" ></div>';
+	$("body").append(html);
+
+	$.get("{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts", {}, function (d) 
+		{ 
+			eval(d); 
+			// fetch items on demand
+			$("#aw_object_quickadd").aw_object_quickadd(null, options);
+
+			jQuery.hotkeys.add('Ctrl+Shift+a', function(){
+				desc = prompt("Kirjeldus", "nimetu");
+				if(desc){
+					aw_popup_scroll("{VAR:stop_pop_url_add}&name=" + desc, "quick_task_entry", 800,600);
+				}
+			});
+
+			jQuery.hotkeys.add('Ctrl+Shift+q', function(){
+				aw_popup_scroll("{VAR:stop_pop_url_quick_add}", "quick_task_entry", 800,600);
+			});
+
+			jQuery.hotkeys.add('Ctrl+Shift+e', function(){
+				aw_popup_scroll("{VAR:stop_pop_url_qw}", "quick_task_entry", 800,600);
+			});
+
+			$(window).unbind("keydown", aw_keyhandler_rec);
+			for(var i = 0; i < recKp.length; i++)
+			{
+				$(window).trigger("keydown", recKp[i]);
+			}
+		}
+	);
+}
+$(window).keydown(aw_keyhandler_init);
+
 
 // init session modal which pops up 5 minutes before session end
 $.init_session_modal({

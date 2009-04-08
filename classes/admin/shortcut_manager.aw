@@ -178,28 +178,6 @@ class shortcut_manager extends class_base
 			}
 		}
 
-/*		foreach( $o_items as $class )
-		{
-			//$classes = $item->getElementsByTagName( "shortcut" );
-			$s_class = $class->getAttribute("name");
-			$out .= 'aw_shortcut_db["'.$s_class.'"] = new Array();';
-			foreach($class->getElementsByTagName( "shortcut" ) as $shortcut)
-			{
-				foreach($shortcut->getElementsByTagName( "function" ) as $function)
-				{
-					$s_function = $function->getAttribute("name");
-					foreach($function->getElementsByTagName( "arguments" ) as $arguments)
-					{
-						foreach($arguments->getElementsByTagName( "required" ) as $required)
-						{
-							$s_shortcut = $required->getAttribute("value");
-							$out .= 'aw_shortcut_db["'.$s_class.'"]["'.$s_function.'"] = "'.$s_shortcut.'";';
-						}
-					}
-				}
-			}
-		}*/
-
 		foreach($shortcuts_array as $class => $funct)
 		{
 			foreach($funct as $function => $sc)
@@ -252,8 +230,6 @@ class shortcut_manager extends class_base
 			}
 		}
 		
-		//ob_start ("ob_gzhandler");
-		//header ("Content-type: text/javascript; charset: UTF-8");
 		die($out);
 	}
 	

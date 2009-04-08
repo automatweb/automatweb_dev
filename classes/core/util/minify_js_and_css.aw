@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.13 2008/11/19 09:59:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.14 2009/04/08 09:05:36 kristo Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 @classinfo  maintainer=hannes
@@ -274,8 +274,11 @@ class minify_js_and_css extends class_base
 			$cache->file_set($s_salt.$f_cache_filename_css, $s_css_contents);
 			
 		}
-		$s_out = '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name=aw_admin.css">'."\n";
-		$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_js&amp;name=aw_admin.js" type="text/javascript"></script>';
+//		$s_out = '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name=aw_admin.css">'."\n";
+//		$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_js&amp;name=aw_admin.js" type="text/javascript"></script>';
+
+		$s_out = '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/automatweb/get_min_css.aw?name=aw_admin.css">'."\n";
+		$s_out .= '<script src="'.aw_ini_get("baseurl").'/automatweb/get_min_css.aw?name=aw_admin.js" type="text/javascript"></script>';
 		
 		return $s_out;
 	}
