@@ -175,6 +175,36 @@ class mrp_order_print extends mrp_order
 	function _get_workflow_table($arr)
 	{
 		$this->_fwd_case($arr);
+		$t = $arr["prop"]["vcl_inst"];
+		$t->remove_field("minstart");
+		$t->remove_field("pre_buffer");
+		$t->remove_field("post_buffer");
+		$t->remove_field("prerequisites");
+		$t->remove_field("comment");
+		$t->remove_field("length");
+		$t->define_field(array(
+			"name" => "sales_comment",
+			"caption" => t("M&uuml;&uuml;gi kommentaar"),
+			"tooltip" => t("M&uuml;&uuml;gi kommentaar"),
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"tooltip" => t("Hind"),
+			"align" => "right",
+			"numeric" => 1
+		));
+
+		foreach($t->get_data() as $id => $item)
+		{
+			$jo = obj($item["job_id"]);
+			$item["sales_comment"] = html::textbox(array(
+				"name" => "sc[".$jo->id()."]",
+				"value" => $jo->sales_comment
+			));
+			$item["price"] = number_format($arr["obj_inst"]->get_price_for_job($jo), 2);
+			$t->set_data($id, $item);
+		}
 	}
 
 	private function _fwd_case_set($arr)
@@ -200,7 +230,23 @@ class mrp_order_print extends mrp_order
 
 	function _set_workflow_table($arr)
 	{
-		$this->_fwd_case_set($arr);
+		foreach(safe_array($arr["request"]["sc"]) as $id => $comm)
+		{
+			$jo = obj($id);
+			if ($jo->sales_comment != $comm)
+			{
+				$jo->sales_comment = $comm; 
+				$jo->save();
+			}
+		}
+
+		foreach(safe_array($arr["request"]["selection"]) as $id  => $id2)
+		{
+			if ($id && $id == $id2)
+			{
+				obj($id)->delete();
+			}
+		}
 	}
 
 	function callback_post_save($arr)

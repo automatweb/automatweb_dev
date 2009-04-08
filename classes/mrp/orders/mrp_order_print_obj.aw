@@ -50,6 +50,7 @@ class mrp_order_print_obj extends mrp_order_obj
 
 	protected function _get_mat_price($amt)
 	{	
+		$sums = array();
 		foreach($this->get_job_list() as $job)
 		{
 			$material_expenses = $job->get_material_expense_list();
@@ -101,6 +102,14 @@ class mrp_order_print_obj extends mrp_order_obj
 			$pr += $pricelist->get_price_for_resource_and_amount($resource, $amt);
 		}
 		return $pr;
+	}
+
+	public function get_price_for_job($job)
+	{
+		$pricelist = obj($this->prop("mrp_pricelist"));
+
+		$resource = $job->get_resource();
+		return $pricelist->get_price_for_resource_and_amount($resource, $this->prop("amount"));
 	}
 
 	function get_selected_covers()

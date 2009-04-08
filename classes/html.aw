@@ -1439,7 +1439,7 @@ class html
 
 		if (!is_object($o))
 		{
-			$inst = new acl_base();
+			$inst = get_instance(CL_FILE);
 			if ($inst->can("view", $o))
 			{
 				$o = obj($o);

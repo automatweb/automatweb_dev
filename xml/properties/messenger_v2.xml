@@ -67,6 +67,15 @@
             <caption>Kirjade v&amp;amp;auml;rskendamine (sekundites)</caption>
       </property>
       <property>
+            <name>mail_rte</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>Kirjade RTE</caption>
+      </property>
+      <property>
             <name>num_attachments</name>
             <table>objects</table>
             <group>advanced</group>

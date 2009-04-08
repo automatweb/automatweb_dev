@@ -55,10 +55,11 @@
 	@property co_table type=table store=no no_caption=1
 
 
+@groupinfo customer caption="Kliendid" submit=no
+
 @groupinfo order caption="Tellimused"
 	@groupinfo order_order caption="Tellimused" parent=order submit=no
 
-@groupinfo customer caption="Kliendid" submit=no
 @groupinfo pricelists caption="Hinnakirjad" submit=no
 @groupinfo covers caption="Katted" submit=no
 
@@ -153,38 +154,42 @@ class mrp_order_center extends class_base
 			"name" => t("Staatused"),
 			"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => null))
 		));
+
+		$odl = new object_data_list(array(
+			"class_id" => CL_MRP_ORDER_PRINT,
+			"lang_id" => array(),	
+			"site_id" => array(),
+			"workspace" => $arr["obj_inst"]->id()
+		), array(
+			CL_MRP_ORDER_PRINT => array(
+				"state" => "state", 
+				"orderer_person" => "orderer_person",
+				"seller_person" => "seller_person"
+			)
+		));
+		$cnts = array();
+		$cnts_orderer = array();
+		$cnts_seller = array();
+		$cnts_orderer_stat = array();
+		$cnts_seller_stat = array();
+
+		foreach($odl->arr() as $oid => $d)
+		{
+			$cnts[$d["state"]]++;
+			$cnts_orderer[$d["orderer_person"]]++;
+			$cnts_seller[$d["seller_person"]]++;
+			$cnts_orderer_stat[$d["orderer_person"]][$d["state"]]++;
+			$cnts_seller_stat[$d["seller_person"]][$d["state"]]++;
+		}
+
 		foreach(mrp_order::get_state_list() as $idx => $stat)
 		{
 			$t->add_item("stat", array(
 				"id" => "stat_".$idx,	
-				"name" => $stat,
+				"name" => $stat." (".((int)$cnts[$idx]).")",
 				"url" => aw_url_change_var(array("stat" => "stat_".$idx, "custmgr" => null, "slr" => null))
 			));
 		}
-
-		$t->add_item(0, array(
-			"id" => "mgr",	
-			"name" => t("Kliendipoolne kontakt"),
-			"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => null))
-		));
-		foreach($arr["obj_inst"]->get_all_customer_contacts() as $id => $name)
-		{
-			$t->add_item("mgr", array(
-				"id" => "custmgr_".$id,	
-				"name" => $name,
-				"url" => aw_url_change_var(array("stat" => null, "custmgr" => $id, "slr" => null))
-			));
-
-			foreach(mrp_order::get_state_list() as $idx => $stat)
-			{
-				$t->add_item("custmgr_".$id, array(
-					"id" => "custmgr_".$id."_stat_".$idx,	
-					"name" => $stat,
-					"url" => aw_url_change_var(array("stat" => "stat_".$idx, "custmgr" => $id, "slr" => null))
-				));
-			}
-		}
-
 
 		$t->add_item(0, array(
 			"id" => "slr",	
@@ -195,7 +200,7 @@ class mrp_order_center extends class_base
 		{
 			$t->add_item("slr", array(
 				"id" => "slr_".$id,	
-				"name" => $name,
+				"name" => $name." (".((int)$cnts_seller[$id]).")",
 				"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => $id))
 			));
 
@@ -203,11 +208,62 @@ class mrp_order_center extends class_base
 			{
 				$t->add_item("slr_".$id, array(
 					"id" => "slr_".$id."_stat_".$idx,	
-					"name" => $stat,
+					"name" => $stat." (".((int)$cnts_seller_stat[$id][$idx]).")",
 					"url" => aw_url_change_var(array("stat" => "stat_".$idx, "custmgr" => null, "slr" => $id))
 				));
 			}
 		}
+
+		// list all customers
+		$odl = new object_data_list(array(
+			"class_id" => CL_MRP_ORDER_PRINT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"workspace" => $arr["obj_inst"]->id()
+		),
+		array(
+			CL_MRP_ORDER_PRINT => array(new obj_sql_func(OBJ_SQL_UNIQUE, "customer", "customer"))
+		));
+
+		$cust_ids = array();
+		foreach($odl->arr() as $item)
+		{
+			$cust_ids[] = $item["customer"];
+		}
+		$ol = new object_list(array(
+			"lang_id" => array(),
+			"site_id" => array(),
+			"oid" => $cust_ids
+		));
+		$custs = array();
+		foreach($ol->names() as $id => $nm)
+		{
+			$tnm = strtoupper($nm);
+			$custs[$tnm[0]][] = array($id, $nm);
+		}
+
+		$t->add_item(0, array(
+			"id" => "cust",	
+			"name" => t("Kliendid"),
+			"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => null, "cust" => null))
+		));
+
+		foreach($custs as $char => $items)
+		{
+			$t->add_item("cust", array(
+				"id" => "cust_".$char,	
+				"name" => $char,
+				"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => null, "cust" => null))
+			));
+			foreach($items as $cust_entry)
+			{
+				$t->add_item("cust_".$char, array(
+					"id" => "cust_".$cust_entry[0],	
+					"name" => $cust_entry[1],
+					"url" => aw_url_change_var(array("stat" => null, "custmgr" => null, "slr" => null, "cust" => null))
+				));
+			}
+		}		
 
 		$stat = ifset($arr["request"], "stat");
 		$cm = ifset($arr["request"], "custmgr");
@@ -272,8 +328,15 @@ class mrp_order_center extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("hind"),
+			"align" => "right",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_field(array(
 			"name" => "when",
-			"caption" => t("Millal"),
+			"caption" => t("Loomise kp"),
 			"align" => "center",
 			"sortable" => 1,
 			"numeric" => 1,
@@ -300,7 +363,8 @@ class mrp_order_center extends class_base
 				"state" => $states[$order->state],
 				"when" => $order->created,
 				"name" => html::obj_change_url($order),
-				"id" => $order->id
+				"id" => $order->id,
+				"price" => $order->final_price
 			));
 		}
 	}

@@ -21,6 +21,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@property comment type=textarea table=objects field=comment
 	@caption Kommentaar
 
+	@property sales_comment type=textbox table=mrp_job_rows field=aw_sales_comment
+	@caption M&uuml;&uuml;gi kommentaar
+
 @default group=workflow
 	@property job_toolbar type=toolbar no_caption=1 store=no
 
@@ -1830,6 +1833,13 @@ class mrp_job extends class_base
 						p.aw_job_id = c.aw_job_id AND
 						p.aw_job_state = c.aw_job_previous_state AND
 						c.aw_tm BETWEEN (p.aw_tm + c.aw_job_last_duration - 5) AND (p.aw_tm + c.aw_job_last_duration + 5);");
+					return true;
+
+				case "aw_sales_comment":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "varchar(255)"
+					));
 					return true;
 			}
 		}

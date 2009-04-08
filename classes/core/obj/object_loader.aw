@@ -631,7 +631,16 @@ class _int_object_loader extends core
 		}
 		else
 		{
-			$type = @constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]);
+			$type = 0;
+			$st = aw_ini_get("syslog.types");
+			foreach($st as $id => $item)
+			{
+				if ($item["def"] == $GLOBALS["classinfo"][$clid]["syslog_type"])
+				{
+					$type = $id;
+					break;
+				}
+			}
 		}
 
 		if (!$type)

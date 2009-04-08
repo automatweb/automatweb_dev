@@ -168,8 +168,16 @@ class mysql
 		}
 		else
 		{
-			$this->num_rows = @mysql_num_rows($this->qID);
-			$this->num_fields = @mysql_num_fields($this->qID);
+			if (is_resource($this->qID))
+			{
+				$this->num_rows = mysql_num_rows($this->qID);
+				$this->num_fields = mysql_num_fields($this->qID);
+			}
+			else
+			{
+				$this->num_rows = 0;
+				$this->num_fields = 0;
+			}
 		};
 		$this->rec_count = 0;
 		if ( (aw_ini_get("debug_mode") != 0) && ($DUKE || $INTENSE_DUKE))

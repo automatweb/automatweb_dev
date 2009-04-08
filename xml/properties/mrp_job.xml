@@ -16,6 +16,14 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
+            <name>sales_comment</name>
+            <group>general</group>
+            <type>textbox</type>
+            <table>mrp_job_rows</table>
+            <field>aw_sales_comment</field>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi kommentaar</caption>
+      </property>
+      <property>
             <name>job_toolbar</name>
             <group>workflow</group>
             <type>toolbar</type>

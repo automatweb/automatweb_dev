@@ -67,11 +67,12 @@ class mrp_order extends class_base
 	{
 		return array(
 			0 => t("Uus"),
-			1 => t("&Uuml;levaatamisel"),
-			2 => t("Koostamisel"),
-			3 => t("Kinnitatud"),
-			4 => t("Saadetud"),
+			1 => t("Koostamisel"),
+			2 => t("Saadetud"),
+			3 => t("T&auml;psustamisel"),
+			4 => t("Kinnitatud"),
 			5 => t("Tagasi l&uuml;katud"),
+			6 => t("T&uuml;histatud")
 		);
 	}
 

@@ -653,7 +653,7 @@ class crm_company_cust_impl extends class_base
 
 
 
-			$tb->add_sub_menu(array(
+/*			$tb->add_sub_menu(array(
 				"parent" => "add_item",
 				"name" => "add_proj",
 				"text" => t("Projekt")
@@ -673,7 +673,7 @@ class crm_company_cust_impl extends class_base
 				'parent'=>'add_item',
 				'text' => t('Arve'),
 				"action" => "go_to_create_bill"
-			));
+			));*/
 
 	// add category
 			$alias_to = $arr['obj_inst']->id();
@@ -701,12 +701,12 @@ class crm_company_cust_impl extends class_base
 		}
 
 
-		$tb->add_button(array(
+/*		$tb->add_button(array(
 			'name' => 'add_task_to_co',
 			'img' => 'class_244.gif',
 			'tooltip' => t('Toimetus'),
 			'action' => 'add_task_to_co',
-		));
+		));*/
 		$tb->add_separator();
 
 		//delete button
@@ -2038,7 +2038,79 @@ class crm_company_cust_impl extends class_base
 			"edit_mode" => 1,
 			"statuses" => 1
 		));
+
+		$this->_add_cust_mgr($arr, $tree_inst);
+		$this->_add_cust_alpha($arr, $tree_inst);
+
 		return PROP_OK;
+	}
+
+	private function _add_cust_mgr($arr, $tree_inst)
+	{
+		$tree_inst->add_item(0, array(
+			"id" => "cmgr",
+			"name" => t("Kliendihaldur"),
+			"url" => aw_url_change_var("category", null, aw_url_change_var("filt_p", null))
+		));
+		$ol = new object_data_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"seller" => $arr["obj_inst"]->id()
+		),
+		array(
+			CL_CRM_COMPANY_CUSTOMER_DATA => array(new obj_sql_func(OBJ_SQL_UNIQUE, "client_manager", "client_manager"))
+		));
+		$tmp = $ol->arr();
+		$ids = array();
+		foreach($tmp as $item)
+		{
+			if ($this->can("view", $item["client_manager"]))
+			{
+				$ids[] = $item["client_manager"];
+			}
+		}
+		$ol = new object_list(array(
+			"oid" => $ids,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$nms = $ol->names();
+		foreach($nms as $id => $nm)
+		{
+			$tree_inst->add_item("cmgr", array(
+				"id" => "cmgr_".$id,
+				"name" => parse_obj_name($nm),
+				"url" => aw_url_change_var("category", null, aw_url_change_var("filt_p", null, aw_url_change_var("cmgr", $id)))
+			));
+		}
+
+		if (!empty($arr["request"]["cmgr"]))
+		{
+			$tree_inst->set_selected_item("cmgr_".$arr["request"]["cmgr"]);
+		}
+	}
+
+	private function _add_cust_alpha($arr, $tree_inst)
+	{
+		$tree_inst->add_item(0, array(
+			"id" => "alpha",
+			"name" => t("T&auml;hestik"),
+			"url" => aw_url_change_var("category", null)
+		));
+		for($i = ord("A"); $i < ord("Z"); $i++)
+		{
+			$tree_inst->add_item("alpha", array(
+				"id" => "alpha_".chr($i),
+				"name" => chr($i),
+				"url" => aw_url_change_var("category", null, aw_url_change_var("filt_p", chr($i)))
+			));
+		}
+
+		if (!empty($arr["request"]["filt_p"]))
+		{
+			$tree_inst->set_selected_item("alpha_".$arr["request"]["filt_p"]);
+		}
 	}
 
 	function _finish_org_tbl($arr, &$orglist)
@@ -2609,7 +2681,7 @@ exit_function("company::_get_customer");
 		return $cnt;
 	}
 
-	function _do_cust_cat_tb_submenus2(&$tb, $p)
+	function _do_cust_cat_tb_submenus2(&$tb)
 	{
 
 		$st = get_instance(CL_CRM_COMPANY_STATUS);

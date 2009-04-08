@@ -35,28 +35,35 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;d</caption>
       </property>
       <property>
+            <name>job_time_tree</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_resource_joblist_todo</num_0>
+                  <num_1>grp_resource_joblist_done</num_1>
+                  <num_2>grp_resource_joblist_aborted</num_2>
+            </group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>job_time_tree</parent>
+      </property>
+      <property>
             <name>job_list</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_joblist_todo</group>
+            <group>
+                  <num_0>grp_resource_joblist_todo</num_0>
+                  <num_1>grp_resource_joblist_done</num_1>
+                  <num_2>grp_resource_joblist_aborted</num_2>
+            </group>
             <type>table</type>
             <store>no</store>
             <editonly>1</editonly>
             <no_caption>1</no_caption>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;leht</caption>
-      </property>
-      <property>
-            <name>job_list_done</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_resource_joblist_done</group>
-            <type>table</type>
-            <store>no</store>
-            <editonly>1</editonly>
-            <no_caption>1</no_caption>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;leht</caption>
+            <parent>job_list_table</parent>
       </property>
       <property>
             <name>out_of_service</name>
@@ -276,6 +283,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <confirm_save_data>1</confirm_save_data>
+            <prop_cb>1</prop_cb>
             <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
@@ -296,6 +304,11 @@
                   <submit>no</submit>
                   <parent>grp_resource_joblist</parent>
             </grp_resource_joblist_done>
+            <grp_resource_joblist_aborted>
+                  <caption>Katkestatud t&amp;amp;ouml;&amp;amp;ouml;d</caption>
+                  <submit>no</submit>
+                  <parent>grp_resource_joblist</parent>
+            </grp_resource_joblist_aborted>
             <grp_resource_settings>
                   <caption>Seaded</caption>
             </grp_resource_settings>
@@ -350,6 +363,36 @@
             </PRODUCT>
       </reltypes>
       <layout>
+            <job_list>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>
+                        <num_0>grp_resource_joblist_todo</num_0>
+                        <num_1>grp_resource_joblist_done</num_1>
+                        <num_2>grp_resource_joblist_aborted</num_2>
+                  </group>
+                  <area_caption></area_caption>
+            </job_list>
+            <job_time_tree>
+                  <type>vbox</type>
+                  <area_caption>Vali&amp;amp;nbsp;kuvatavate&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;ajavahemik</area_caption>
+                  <parent>job_list</parent>
+                  <group>
+                        <num_0>grp_resource_joblist_todo</num_0>
+                        <num_1>grp_resource_joblist_done</num_1>
+                        <num_2>grp_resource_joblist_aborted</num_2>
+                  </group>
+            </job_time_tree>
+            <job_list_table>
+                  <type>vbox</type>
+                  <area_caption>&amp;amp;nbsp;</area_caption>
+                  <parent>job_list</parent>
+                  <group>
+                        <num_0>grp_resource_joblist_todo</num_0>
+                        <num_1>grp_resource_joblist_done</num_1>
+                        <num_2>grp_resource_joblist_aborted</num_2>
+                  </group>
+            </job_list_table>
             <materials_split>
                   <type>hbox</type>
                   <width>25%:75%</width>

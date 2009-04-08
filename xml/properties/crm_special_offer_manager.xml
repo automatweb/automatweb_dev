@@ -8,7 +8,7 @@
             <orient>vertical</orient>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kuvatava nimekirja t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Kuvatava nimekirja t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>url_to</name>

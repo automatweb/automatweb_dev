@@ -121,6 +121,10 @@
             <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
+            <customer>
+                  <caption>Kliendid</caption>
+                  <submit>no</submit>
+            </customer>
             <order>
                   <caption>Tellimused</caption>
             </order>
@@ -129,10 +133,6 @@
                   <parent>order</parent>
                   <submit>no</submit>
             </order_order>
-            <customer>
-                  <caption>Kliendid</caption>
-                  <submit>no</submit>
-            </customer>
             <pricelists>
                   <caption>Hinnakirjad</caption>
                   <submit>no</submit>

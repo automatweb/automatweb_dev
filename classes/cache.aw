@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.58 2008/04/28 13:59:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.59 2009/04/08 13:37:59 kristo Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -415,7 +415,7 @@ class cache extends core
 		}
 		fwrite($f, $cont);
 		fclose($f);
-		@chmod($fname, 0666);
+		chmod($fq, 0666);
 	}
 
 	/** Returns cache content for parent folder function
@@ -741,15 +741,19 @@ class cache extends core
 		$cachefile = $cachedir . "/" . $cache_id;
 			
 		// now get mtime for both files, source and cache
-		$source_mtime = @filemtime($fqfn);
-		$cache_mtime = @filemtime($cachefile);
+		$source_mtime = filemtime($fqfn);
+		$src = "";
+		if (file_exists($cachefile))
+		{
+			$cache_mtime = filemtime($cachefile);
 
-		// get the cache contents here, so we can check whether it is empty, cause for some weird reason 
-		// cache files get to be empty sometimes, damned if I know why
+			// get the cache contents here, so we can check whether it is empty, cause for some weird reason 
+			// cache files get to be empty sometimes, damned if I know why
 
-		$src = $this->get_file(array(
-			"file" => $cachefile,
-		));
+			$src = $this->get_file(array(
+				"file" => $cachefile,
+			));
+		}
 
 		if (($source_mtime > $cache_mtime) || (strlen($src) < 1))
 		{
