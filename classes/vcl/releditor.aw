@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.174 2009/03/24 11:57:34 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.175 2009/04/09 11:39:41 voldemar Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -11,6 +11,7 @@ class releditor extends core
 {
 	var $auto_fields;
 	private $loaded_from_cfgform = false;
+	private $choose_default = false;
 
 	function releditor()
 	{
@@ -324,9 +325,9 @@ class releditor extends core
 			$this->all_props[$key] = $_prop;
 		};
 
-		$cfgform_id = isset($arr["prop"]["cfgform_id"]) ? $arr["prop"]["cfgform_id"] : "";
-		if($this->can("view", $cfgform_id))
+		if(isset($arr["prop"]["cfgform_id"]) and $this->can("view", $arr["prop"]["cfgform_id"]))
 		{
+			$cfgform_id = $arr["prop"]["cfgform_id"];
 			$cfg = get_instance(CL_CFGFORM);
 			$this->cfg_act_props = $cfg->get_cfg_proplist($cfgform_id);
 			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
@@ -627,7 +628,8 @@ class releditor extends core
 		if (!empty($prop["use_form"]))
 		{
 			$filter["form"] = $prop["use_form"];
-		};
+			$use_form = $prop["use_form"];
+		}
 
 		$all_props = array();
 
@@ -637,7 +639,6 @@ class releditor extends core
 		$all_props = $t->load_defaults();
 		$this->clid = $use_clid;
 		$act_props = array();
-		$use_form = $prop["use_form"];
 
 
 		if (!empty($use_form))
@@ -651,7 +652,7 @@ class releditor extends core
 			};
 		};
 
-		$form_type = $arr["request"][$this->elname];
+		$form_type = empty($arr["request"][$this->elname]) ? "" : $arr["request"][$this->elname];
 		if (isset($arr["prop"]["always_show_add"]) && $arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id))
 		{
 			$form_type = "new";
@@ -679,7 +680,7 @@ class releditor extends core
 			if ($all_props[$key] && is_array($props) && in_array($key,$props))
 			{
 				// if (!empty($form_type) || $visual != "manager")
-				if (!empty($form_type) || $visual != "manager")
+				if (!empty($form_type) || $visual !== "manager")
 				{
 					// if (1 == $pcount)// yksiku elemendi caption releditor property captioniga sama
 					if (1 == $pcount and "manager" != $visual)
@@ -701,9 +702,9 @@ class releditor extends core
 		// "someone" has already used cfgform property, but for what purpose or why, is a big f'ing mystery to me,
 		// so i'll just implement something neater
 
-		$cfgform_id = $arr["prop"]["cfgform_id"];
-		if($this->can("view", $cfgform_id))
+		if(isset($arr["prop"]["cfgform_id"]) and $this->can("view", $arr["prop"]["cfgform_id"]))
 		{
+			$cfgform_id = $arr["prop"]["cfgform_id"];
 			$cfg = get_instance(CL_CFGFORM);
 			$this->cfg_act_props = $cfg->get_cfg_proplist($cfgform_id);
 			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
@@ -719,7 +720,7 @@ class releditor extends core
 
 		// the toolbar should be before the props, because otherwise it
 		// would look freakish when adding new or changing -- ahz
-		if($visual == "manager" && $arr["prop"]["no_toolbar"] != 1)
+		if($visual == "manager" && empty($arr["prop"]["no_toolbar"]))
 		{
 			// insert the toolbar into property array
 			$tbdef = $this->init_rel_toolbar($arr);
@@ -731,7 +732,7 @@ class releditor extends core
 			$this->choose_default = 1;
 		};
 
-		if ($visual == "manager")
+		if ($visual === "manager")
 		{
 			// insert the table into property array
 			$tabledef = $this->init_rel_table($arr);
@@ -739,9 +740,9 @@ class releditor extends core
 		};
 
 		// "form" does not need a caption
-		if ($visual == "manager")
+		if ($visual === "manager")
 		{
-			if ("new" == $form_type || ($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id)))
+			if ("new" === $form_type || (isset($arr["prop"]["always_show_add"]) && $arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id)))
 			{
 				$act_props = array($this->elname . "_caption" => array(
 					"name" => $this->elname . "_caption",
@@ -768,13 +769,13 @@ class releditor extends core
 		// a programmaticaly specified relation
 
 		// need to check whether a existing recurrence thing is specifed, if so, add that
-		if ($form_type != "new" && is_object($arr["obj_inst"]) &&  is_oid($arr["obj_inst"]->id()))
+		if ($form_type !== "new" && is_object($arr["obj_inst"]) &&  is_oid($arr["obj_inst"]->id()))
 		{
 			if ($edit_id)
 			{
 				$obj_inst = new object($edit_id);
 			}
-			else if (!empty($prop["rel_id"]) || $prop["rel_id"] == "first")
+			elseif (!empty($prop["rel_id"]))
 			{
 			//else if ($prop["rel_id"] == "first")
 			//{
@@ -785,7 +786,7 @@ class releditor extends core
 						"type" => $prop["reltype"],
 					));
 					// take the first
-					if ($prop["rel_id"] == "first")
+					if ($prop["rel_id"] === "first")
 					{
 						$key = reset($conns);
 						if ($key)
@@ -815,7 +816,7 @@ class releditor extends core
 		};
 
 
-		if (($visual == "manager" && (is_object($obj_inst) || ($form_type == "new" || ($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id))))))
+		if (($visual === "manager" && (is_object($obj_inst) || ($form_type === "new" || (isset($arr["prop"]["always_show_add"]) && $arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id))))))
 		//if ($visual == "form" || ($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
 		{
 			// I might not want a submit button, eh?
@@ -864,7 +865,7 @@ class releditor extends core
 
 		// add this after parse, otherwise the name will be in form propname[elname], and I do not
 		// want this
-		if ("manager" == $visual)
+		if ("manager" === $visual)
 		{
 			$act_name = $prop["name"] . "_action";
 			$xprops[$act_name] = array(
@@ -877,10 +878,9 @@ class releditor extends core
 		foreach($xprops as $pn => $pd)
 		{
 			preg_match("/.*\[(.*)\]/imsU", $pd["name"], $mt);
-			$rn = $mt[1];
-			if (!empty($arr["cb_values"]["value"][$rn]))
+			if (!empty($mt[1]) and !empty($arr["cb_values"]["value"][$mt[1]]))
 			{
-				$xprops[$pn]["value"] = $arr["cb_values"]["value"][$rn];
+				$xprops[$pn]["value"] = $arr["cb_values"]["value"][$mt[1]];
 			}
 		}
 
@@ -901,14 +901,14 @@ class releditor extends core
 
 	function init_rel_toolbar($arr)
 	{
-		if ($arr["request"]["action"] == "view")
+		if ($arr["request"]["action"] === "view")
 		{
 			return;
 		}
 		$createlinks = array();
 		$return_url = get_ru();
 		// You can set newly created object's parent to be current object
-		if (!empty($arr['prop']['override_parent']) && $arr['prop']['override_parent'] == 'this')
+		if (!empty($arr['prop']['override_parent']) && $arr['prop']['override_parent'] === 'this')
 		{
 			$parent = $arr['obj_inst']->id();
 		}
@@ -925,7 +925,7 @@ class releditor extends core
 		$s_clids = array();
 		foreach ($arr['prop']['clid'] as $clid)
 		{
-			if ($arr["prop"]["direct_links"])
+			if (!empty($arr["prop"]["direct_links"]))
 			{
 				$params = array(
 					"return_url" => $return_url,
@@ -1008,7 +1008,7 @@ class releditor extends core
 			"action" => "",
 		));
 
-		if($arr["prop"]["clone_link"] == 1)
+		if(isset($arr["prop"]["clone_link"]) and $arr["prop"]["clone_link"] == 1)
 		{
 			$tb->add_button(array(
 				"name" => "clone",
@@ -1031,21 +1031,20 @@ class releditor extends core
 
 	function init_rel_table($arr)
 	{
-		classload("vcl/table");
 		$awt = new vcl_table(array(
 			"layout" => "generic",
 		));
-		if ($arr["prop"]["table_edit_fields"])
+		if (!empty($arr["prop"]["table_edit_fields"]))
 		{
 			$ed_fields = new aw_array($arr["prop"]["table_edit_fields"]);
 			$ed_fields = $ed_fields->get();
 		};
 
-		if($arr["prop"]["filt_edit_fields"] == 1)
+		if(isset($arr["prop"]["filt_edit_fields"]) and $arr["prop"]["filt_edit_fields"] == 1)
 		{
 			$ed_fields = array("name" => "name");
 		}
-		if ($arr["prop"]["props"])
+		if (!empty($arr["prop"]["props"]))
 		{
 			$tmp = new aw_array($arr["prop"]["props"]);
 			$tb_fields = $tmp->get();
@@ -1054,7 +1053,7 @@ class releditor extends core
 		$fdata = array();
 		$conns = array();
 		$filt_props = array();
-		if(!$arr["new"] && is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		if (empty($arr["new"]) && is_a($arr["obj_inst"], "object"))
 		{
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => $arr["prop"]["reltype"],
@@ -1064,7 +1063,7 @@ class releditor extends core
 			foreach($conns as $conn)
 			{
 				$c_to = $conn->prop("to");
-				if ($arr["prop"]["direct_links"] == 1)
+				if (isset($arr["prop"]["direct_links"]) and $arr["prop"]["direct_links"] == 1)
 				{
 					$url = $this->mk_my_orb("change",array(
 						"id" => $c_to,
@@ -1088,7 +1087,7 @@ class releditor extends core
 					)),
 					"_sort_jrk" => $conn->prop("to.jrk"),
 					"_sort_name" => $conn->prop("to.name"),
-					"_active" => ($arr["request"][$this->elname] == $c_to),
+					"_active" => (isset($arr["request"][$this->elname]) and $arr["request"][$this->elname] == $c_to),
 				);
 				$export_props = array();
 				$clss = null;
@@ -1146,30 +1145,31 @@ class releditor extends core
 						};
 					}
 					// I don't want to display the value of the chooser, but the caption of the value. ;) - Kaarel
-					if ($_pd["type"] == "chooser" && is_array($prop["options"]))
+					if ($_pd["type"] === "chooser" && is_array($prop["options"]))
 					{
 						$prop["value"] = $prop["options"][$prop["value"]];
 					}
-					if ($_pd["type"] == "date_select")
+					if ($_pd["type"] === "date_select")
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
 					}
 					else
-					if ($_pd["type"] == "datetime_select")
+					if ($_pd["type"] === "datetime_select")
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
 					}
-					if (($_pd["type"] == "relpicker" || $_pd["type"] == "classificator") && $this->can("view", $prop["value"]))
+					if (($_pd["type"] === "relpicker" || $_pd["type"] === "classificator") && $this->can("view", $prop["value"]))
 					{
 						$_tmp = obj($prop["value"]);
 						$prop["value"] = parse_obj_name($_tmp->name());
 					}
 					else
-					if ($_pd["type"] == "select" && is_array($prop["options"]))
+					if ($_pd["type"] === "select" && is_array($prop["options"]))
 					{
 						$prop["value"] = $prop["options"][$prop["value"]];
-					};
-					if($arr["prop"]["filt_edit_fields"] == 1)
+					}
+
+					if(isset($arr["prop"]["filt_edit_fields"]) and $arr["prop"]["filt_edit_fields"] == 1)
 					{
 						if($prop["value"] != "" && $prop["type"] == "textbox")
 						{
@@ -1193,7 +1193,7 @@ class releditor extends core
 							$export_props[$ed_field] = html::textbox(array(
 								"name" => "$name" . '[_data][' . $conn->prop("id") . '][' . $ed_field . "]",
 								"value" => $export_props[$ed_field],
-								"size" => $this->all_props[$ed_field]["size"] ? $this->all_props[$ed_field]["size"] : 15,
+								"size" => empty($this->all_props[$ed_field]["size"]) ? 15 : $this->all_props[$ed_field]["size"]
 							));
 						};
 					};
@@ -1231,7 +1231,7 @@ class releditor extends core
 			));
 		};
 
-		if($arr["prop"]["filt_edit_fields"] == 1)
+		if(isset($arr["prop"]["filt_edit_fields"]) and $arr["prop"]["filt_edit_fields"] == 1)
 		{
 			$awt->define_field(array(
 				"name" => "id",
@@ -1314,7 +1314,7 @@ class releditor extends core
 			));
 		};
 
-		if ($arr["request"]["action"] != "view")
+		if ($arr["request"]["action"] !== "view")
 		{
 			$awt->define_field(array(
 				"name" => "edit",
@@ -1332,7 +1332,7 @@ class releditor extends core
 
 		// and how do I show the selected row?
 
-		if($arr["prop"]["clone_link"] == 1)
+		if(isset($arr["prop"]["clone_link"] ) and $arr["prop"]["clone_link"] == 1)
 		{
 			$awt->set_header('<input type="hidden" name="releditor_clones" id="releditor_clones" value="0" />');
 		}

@@ -1372,7 +1372,7 @@ class treeview extends class_base
 		$class_id = $arr["root_item"]->class_id ();
 		$class_name = strtolower (substr ($aw_classes[$class_id], 3));
 
-		if ( (is_array ($node_actions)) and ($node_actions[$class_id]) )
+		if ( (is_array ($node_actions)) and !empty($node_actions[$class_id]))
 		{
 			$tree_opts["root_url"] = $this->mk_my_orb ($node_actions[$class_id], array(
 				"id" => $o->id (),
@@ -1387,7 +1387,7 @@ class treeview extends class_base
 		$class_id = $root_item->class_id ();
 		$class_name = strtolower (substr ($aw_classes[$class_id], 3));
 
-		if ( (is_array ($node_actions)) and ($node_actions[$class_id]) )
+		if ( (is_array ($node_actions)) and !empty($node_actions[$class_id]) )
 		{
 			$url = $this->mk_my_orb ($node_actions[$class_id], array(
 				"id" => $o->id (),
@@ -1479,7 +1479,7 @@ class treeview extends class_base
 
 			$class_name = strtolower (substr ($aw_classes[$class_id], 3));
 
-			if ( (is_array ($node_actions)) and ($node_actions[$class_id]) )
+			if ( (is_array ($node_actions)) and !empty($node_actions[$class_id]) )
 			{
 				$url = html::get_change_url($oid, array("return_url" => get_ru()));
 			}
