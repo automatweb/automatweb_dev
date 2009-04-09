@@ -37,18 +37,11 @@ class automatweb
 	public static $instance; // current aw instance. read-only.
 	public static $result; // aw_resource object. result of executing the request
 
-	public function __construct($caller = false)
+	private function __construct()
 	{
-		if ("start" === $caller)
-		{
-			// initialize object lifetime
-			$this->start_time = microtime(true);
-			$this->mode(self::MODE_DEFAULT);
-		}
-		else
-		{
-			throw new aw_exception("Instantiation without initialization attempted.");
-		}
+		// initialize object lifetime
+		$this->start_time = microtime(true);
+		$this->mode(self::MODE_DEFAULT);
 	}
 
 	/** Shortcut method for running a typical http www request
@@ -126,7 +119,7 @@ class automatweb
 
 		// start aw
 		++self::$current_instance_nr;
-		$aw = new automatweb("start");
+		$aw = new automatweb();
 		$request = new aw_request();
 		$result = new aw_resource();
 		self::$instance_data[self::$current_instance_nr] = array(
