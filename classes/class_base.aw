@@ -151,21 +151,37 @@ class class_base extends aw_template
 
 	function load_storage_object($arr)
 	{
-		$this->id = $arr["id"];
-
-		$this->obj_inst = new object($this->id);
-
-		try
+		if (isset($arr["id"]))
 		{
-			$clid = aw_ini_get("class_lut." . $arr["class"]);
+			$this->id = $arr["id"];
+			$this->obj_inst = new object($this->id);
+
+			try
+			{
+				$clid = aw_ini_get("class_lut." . $arr["class"]);
+			}
+			catch (Exception $e)
+			{
+				$clid = null;
+			}
+
+			if($this->obj_inst->class_id() != $clid && is_admin() && $this->obj_inst->class_id() != CL_RELATION && $this->obj_inst->class_id() != 40)
+			{
+				throw new aw_exception("Given class doesn't match the object's class_id");
+			}
+
 		}
-		catch (Exception $e)
+		else
 		{
-		}
-
-		if($this->obj_inst->class_id() != $clid && is_admin() && $this->obj_inst->class_id() != CL_RELATION && $this->obj_inst->class_id() != 40)
-		{
-			throw new aw_exception("Given class doesn't match the object's class_id");
+			$this->obj_inst = new object();
+			try
+			{
+				$clid = aw_ini_get("class_lut." . $arr["class"]);
+				$this->obj_inst->set_class_id($clid);
+			}
+			catch (Exception $e)
+			{
+			}
 		}
 
 		$this->parent = "";
@@ -242,25 +258,26 @@ class class_base extends aw_template
 			$has_errors = true;
 		}
 
+		if (!isset($args["action"]))
+		{
+			$args["action"] = "view";
+		}
+
 		$cfgform_id = "";
 		$this->subgroup = $this->reltype = "";
 		$this->is_rel = false;
 		$this->orb_action = $args["action"];
 		$this->is_translated = 0;
 
-		if (!isset($args["action"]))
-		{
-			$args["action"] = "view";
-		}
 		if(!empty($args["no_buttons"]))
 		{
 			$this->no_buttons = true;
 		}
-		if ($args["action"] == "new")
+		if ($args["action"] === "new")
 		{
 			$this->init_storage_object($args);
 		}
-		elseif (($args["action"] == "change") || ($args["action"] == "view"))
+		elseif (($args["action"] === "change") || ($args["action"] === "view"))
 		{
 			$this->load_storage_object($args);
 
@@ -313,10 +330,14 @@ class class_base extends aw_template
 		$filter = array(
 			"clid" => $this->clid,
 			"clfile" => $this->clfile,
-			"group" => @$args["group"],
 			"cfgform_id" => $cfgform_id,
 			"cb_part" => isset($args["cb_part"]) ? $args["cb_part"] : "",
 		);
+
+		if (isset($args["group"]))
+		{
+			$filter["group"] = $args["group"];
+		}
 
 
 		if (!empty($args["form"]))
@@ -420,7 +441,7 @@ class class_base extends aw_template
 				$fstat = $this->inst->callback_pre_edit(array(
 					"id" => $this->id,
 					"request" => $this->request,
-					"obj_inst" => &$this->obj_inst,
+					"obj_inst" => $this->obj_inst,
 					"group" => $this->use_group,
 					"classinfo" => &$this->classinfo,
 				));
@@ -556,7 +577,7 @@ class class_base extends aw_template
 			};
 		};
 
-		$this->cli = &$cli;
+		$this->cli = $cli;
 		// aga mis siis, kui see on sama aken?
 		$cbtrans = get_instance("applications/cb_trans/cb_translate");
 		$trans_default_id = $cbtrans->get_sysdefault();
@@ -568,7 +589,7 @@ class class_base extends aw_template
 				"url" => $this->mk_my_orb("change",array(
 					"clid" => $this->clid,
 					"group" => "translation_sub",
-				"grpid" => @$args["group"],
+				"grpid" => isset($args["group"]) ? $args["group"] : null,
 				"id" => $trans_default_id->id(),
 				"area" => "groupedit",
 			),
@@ -588,7 +609,7 @@ class class_base extends aw_template
 		$cli->configure(array(
 			"help_url" => $this->mk_my_orb("browser",array(
 				"clid" => $this->clid,
-				"group" => @$args["group"],
+				"group" => isset($args["group"]) ? $args["group"] : null,
 			),
 			"help"),
 
@@ -1521,7 +1542,7 @@ class class_base extends aw_template
 			$this->cfg_debug = true;
 		}
 
-		if (!empty($_GET["just_saved"]))
+		if (automatweb::$request->arg("just_saved"))
 		{
 			$this->just_saved = true;
 			aw_global_set("REQUEST_URI", aw_url_change_var("just_saved", null));
@@ -1547,7 +1568,7 @@ class class_base extends aw_template
 			$orb_class = get_class($this->orb_class);
 		};
 
-		if ($orb_class == "document")
+		if ($orb_class === "document")
 		{
 			$orb_class = "doc";
 		};
@@ -1673,27 +1694,8 @@ class class_base extends aw_template
 			{
 				$target = "_self";
 			};
-			$title = "";
-			if (false && $this->can("view", $this->id))
-			{
-				$tmp = obj($this->id);
-				$title = html::href(array(
-					"url" => admin_if::get_link_for_obj($this->id),
-					"caption" => $tmp->name(),
-					"target" => $target,
-				))." / ";
-				if ($is_container && $this->can("view", $tmp->parent()))
-				{
-					$po= obj($tmp->parent());
-					$title = html::href(array(
-						"url" => admin_if::get_link_for_obj($tmp->parent()),
-						"caption" => $po->name(),
-						"target" => $target,
-					))." / " . $title;
-				}
-			}
-			$title .= html::href(array(
-				"url" => $_GET["return_url"],
+			$title = html::href(array(
+				"url" => automatweb::$request->arg("return_url"),
 				"caption" => t("Tagasi"),
 				"target" => $target,
 			));
@@ -1707,10 +1709,11 @@ class class_base extends aw_template
 		// but that doesn't really belong to classinfo
 		if (empty($no_yah))
 		{
-			if (@$_GET["class"] == "admin_if")
+			if (automatweb::$request->class_name() === "admin_if")
 			{
-				$parent = @$_GET["parent"];
+				$parent = automatweb::$request->arg("parent");
 			}
+
 			if ($this->obj_inst->class_id() == CL_MENU)
 			{
 				$this->mk_path($this->obj_inst->id(),$title,aw_global_get("period"));
@@ -1767,7 +1770,7 @@ class class_base extends aw_template
 						"caption" => $subcb->name()?$subcb->name():t("Nimetu"),
 					));
 				}
-				if($_GET["group"] && is_object($subcb))
+				if(automatweb::$request->arg("group") && is_object($subcb))
  				{
  					$cfgform_i = get_instance(CL_CFGFORM);
  					$cfgform = $subcb->meta("cfgform_id");
@@ -1776,8 +1779,13 @@ class class_base extends aw_template
  					{
  						$cfgform_i->get_cfg_groups($cfgform);
  					}
- 					$GLOBALS["yah_end"].= " > " .$cfgform_i->cfg_groups[$_GET["group"]]["caption"];
+
+ 					if (isset($cfgform_i->cfg_groups[automatweb::$request->arg("group")]))
+					{
+						$GLOBALS["yah_end"].= " > " .$cfgform_i->cfg_groups[automatweb::$request->arg("group")]["caption"];
+					}
  				}
+
 				if (!empty($this->request["return_url"]))
 				{
 					$GLOBALS["yah_end"].= " > ".html::href(array(
@@ -2274,7 +2282,7 @@ class class_base extends aw_template
 				};
 
 				// reset the richtext attribute, if it was disabled in the config form
-				if (($_all_props[$k]["type"] == "textarea") && (empty($orig["richtext"])))
+				if (($_all_props[$k]["type"] === "textarea") && (empty($orig["richtext"])))
 				{
 					unset($val["richtext"]);
 				};
@@ -2746,14 +2754,11 @@ class class_base extends aw_template
 		{
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
-				if ($this->new && $val["editonly"])
+				if ($this->new && !empty($val["editonly"]) || !$this->new && !empty($val["newonly"]))
 				{
 					continue;
-				};
-				if (!$this->new && $val["newonly"])
-				{
-					continue;
-				};
+				}
+
 				$meth = $val["callback"];
 				$argblock["prop"] = &$val;
 				$vx = $this->inst->$meth($argblock);
@@ -2946,28 +2951,28 @@ class class_base extends aw_template
 
 		foreach($properties as $key => $val)
 		{
-			if ($val["name"] == "tabpanel" && $this->view)
+			if ($val["name"] === "tabpanel" && $this->view)
 			{
 				continue;
 			};
 
-			if ($val["name"] == "name" && !empty($this->classinfo["no_name"]))
+			if ($val["name"] === "name" && !empty($this->classinfo["no_name"]))
 			{
 				continue;
 			};
 
 
 			// XXX: need to get rid of that "text" index
-			if ($val["name"] == "status" && !empty($this->classinfo["no_status"]))
+			if ($val["name"] === "status" && !empty($this->classinfo["no_status"]))
 			{
 				continue;
 			};
 
-			if ($val["name"] == "comment" && !empty($this->classinfo["no_comment"]))
+			if ($val["name"] === "comment" && !empty($this->classinfo["no_comment"]))
 			{
 				continue;
 			};
-			if ($val["type"] == "textarea" && $has_rte == false)
+			if ($val["type"] === "textarea" && $has_rte == false)
 			{
 				unset($val["richtext"]);
 			};
@@ -3014,11 +3019,11 @@ class class_base extends aw_template
 			};
 
 			$name = $val["name"];
-			if (is_array($val) && $val["type"] != "callback" && $val["type"] != "submit")
+			if (is_array($val) && $val["type"] !== "callback" && $val["type"] !== "submit")
 			{
 				$this->get_value(&$val);
 				// fuck me plenty
-				if ($this->view && $val["orig_type"] == "select" && is_oid($val["value"]) && !$val["view_element"])
+				if ($this->view && $val["orig_type"] === "select" && is_oid($val["value"]) && !$val["view_element"])
 				{
 					if (!$this->can("view", $val["value"]))
 					{
@@ -3031,7 +3036,7 @@ class class_base extends aw_template
 					}
 				}
 				else
-				if ($this->view && $val["orig_type"] == "select" && is_array($val["value"]) && count($val["value"]) > 0 && !$val["view_element"])
+				if ($this->view && $val["orig_type"] === "select" && is_array($val["value"]) && count($val["value"]) > 0 && !$val["view_element"])
 				{
 					$tmp_ol = new object_list(array("oid" => $val["value"]));
 					$val["value"] = join(", ", $tmp_ol->names());
@@ -3102,7 +3107,7 @@ class class_base extends aw_template
 				$resprops[$key] = $val;
 			}
 			else
-			if ($val["type"] == "hidden")
+			if ($val["type"] === "hidden")
 			{
 				$resprops[$name] = $val;
 			}
@@ -3118,7 +3123,7 @@ class class_base extends aw_template
 							"property" => &$val,
 							"id" => $this->id,
 							"clid" => $this->clid,
-							"obj_inst" => &$this->obj_inst,
+							"obj_inst" => $this->obj_inst,
 							//"columns" => $this->columninfo,
 							"relinfo" => $this->relinfo,
 							"view" => $this->view,
@@ -3142,15 +3147,15 @@ class class_base extends aw_template
 									$resprops[$rkey] = $rval;
 								}
 
-								$resprops[$rkey]["capt_ord"] = $val["capt_ord"];
-								$resprops[$rkey]["wf_capt_ord"] = $val["wf_capt_ord"];
+								$resprops[$rkey]["capt_ord"] = isset($val["capt_ord"]) ? $val["capt_ord"] : 0;
+								$resprops[$rkey]["wf_capt_ord"] = isset($val["wf_capt_ord"]) ? $val["wf_capt_ord"] : 0;
 							};
 						};
 					};
 					continue;
 				}
 
-				if ($val["type"] == "relmanager")
+				if ($val["type"] === "relmanager")
 				{
 					$argblock["prop"]["clid"] = $this->relinfo[$val["reltype"]]["clid"];
 					$val["vcl_inst"]->init_rel_manager($argblock);
@@ -3171,7 +3176,7 @@ class class_base extends aw_template
 					continue;
 				}
 
-				if ($val["type"] == "releditor")
+				if ($val["type"] === "releditor")
 				{
 					if (!isset($val["vcl_inst"]) || !is_object($val["vcl_inst"]))
 					{
@@ -3194,21 +3199,21 @@ class class_base extends aw_template
 
 					if (is_array($relres))
 					{
-						if ($val["error"])
-						{
+						// if ($val["error"])
+						// {
 							/*$resprops[$val["name"]."_error"] = array(
 								"type" => "text",
 								"value" => "",
 								"error" => $val["error"],
 							);*/
-						};
+						// };
 
 						foreach($relres as $rkey => $rval)
 						{
 							$this->convert_element(&$rval);
 							$resprops[$rkey] = $rval;
 							$resprops[$rkey]["wf_capt_ord"] = isset($val["wf_capt_ord"]) ? $val["wf_capt_ord"] : "";
-							if ($resprops[$rkey]["type"] == "hidden")
+							if ($resprops[$rkey]["type"] === "hidden")
 							{
 								unset($resprops[$rkey]["parent"]);
 							}
@@ -3222,9 +3227,9 @@ class class_base extends aw_template
 					continue;
 				}
 
-				if ($val["type"] == "toolbar")
+				if ($val["type"] === "toolbar")
 				{
-					if ($this->layout_mode == "fixed_toolbar")
+					if ($this->layout_mode === "fixed_toolbar")
 					{
 						//$this->groupinfo = $this->groupinfo();
 						$no_rte = $_GET["no_rte"];
@@ -3432,16 +3437,10 @@ class class_base extends aw_template
 	}*/
 
 	/** _serialize replacement for class_base based objects
-
 		@attrib name=ng_serialize params=name
-
 		@param oid required type=int
-
 		@returns
-
-
 		@comment
-
 	**/
 	function _serialize($args = array())
 	{
@@ -3459,9 +3458,9 @@ class class_base extends aw_template
 		foreach($realprops as $key => $val)
 		{
 			$this->get_value(&$val);
-			if (!empty($val["value"]) || $val["store"] != "no")
+			if (!empty($val["value"]) || $val["store"] !== "no")
 			{
-				if ($val["type"] == "fileupload" && is_readable($val["value"]))
+				if ($val["type"] === "fileupload" && is_readable($val["value"]))
 				{
 					$name = $val["name"];
 					$src = $this->get_file(array(
@@ -3937,7 +3936,7 @@ class class_base extends aw_template
 				$argblock["prop"]["error"] = $errors[$name]["msg"];
 			};
 
-			if ($status == PROP_OK && !empty($property["datatype"]) && "int" == $property["datatype"])
+			if ($status == PROP_OK && !empty($property["datatype"]) && "int" === $property["datatype"])
 			{
 				$val = $property["value"];
 				$val = str_replace(",",".",$val);
@@ -4785,8 +4784,9 @@ class class_base extends aw_template
 		// groupinfo contains a flat list of all groups
 		// I need to figure out which group should I actually be using
 		// if there is one in the url and it actually exists, then use it
+		$use_group = "";
 
-		if (isset($this->groupinfo[$arr["group"]]))
+		if (isset($arr["group"]) and isset($this->groupinfo[$arr["group"]]))
 		{
 			$use_group = $arr["group"];
 		}
@@ -4897,11 +4897,21 @@ class class_base extends aw_template
 			// I'm just ignoring those for now
 			foreach($x_tmp as $pkey)
 			{
-				if (!empty($rgroupmap[$pkey]))
+				if (is_array($pkey))
+				{
+					foreach ($pkey as $pkey2)
+					{
+						if (!empty($rgroupmap[$pkey2]))
+						{
+							$propgroups[] = $rgroupmap[$pkey2];
+						}
+					}
+				}
+				elseif (!empty($rgroupmap[$pkey]))
 				{
 					$propgroups[] = $rgroupmap[$pkey];
-				};
-			};
+				}
+			}
 
 			//$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
 			$this->prop_by_group = $this->prop_by_group + array_flip($propgroups);
@@ -5596,11 +5606,10 @@ class class_base extends aw_template
 		if (aw_ini_get("config.trans.separate_tabs") and aw_ini_get("user_interface.content_trans"))
 		{
 			$this->transl_grp_name = $arr["request"]["group"];
-			$lid = $arr["request"][$this->translation_lang_var_name];
 
-			if (array_key_exists($lid, $ll))
+			if (isset($arr["request"][$this->translation_lang_var_name]) and isset($ll[$arr["request"][$this->translation_lang_var_name]]))
 			{
-				$lang = $ll[$lid];
+				$lang = $ll[$arr["request"][$this->translation_lang_var_name]];
 			}
 			else
 			{
@@ -5623,7 +5632,7 @@ class class_base extends aw_template
 				if (aw_global_get("uid"))
 				{
 					$current_user = obj(aw_global_get("uid_oid"));
-					if (array_key_exists($current_user->prop("base_lang"), $all_vals))
+					if (isset($all_vals[$current_user->prop("base_lang")]))
 					{
 						$src_lang_id = $current_user->prop("base_lang");
 					}
@@ -6357,9 +6366,9 @@ class class_base extends aw_template
 			$retval .= $function_draft;
 		}
 
-		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && @$arr["request"]["group"] != "relationmgr")
+		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && empty($arr["request"]["group"]) || $arr["request"]["group"] !== "relationmgr")
 		{
-			if(@$arr["request"]["class"] == "admin_if" || @$arr["request"]["class"] == "personnel_management" && @$arr["request"]["group"] == "offers")
+			if(@$arr["request"]["class"] === "admin_if" || @$arr["request"]["class"] === "personnel_management" && @$arr["request"]["group"] === "offers")
 			{
 				$if_clause = "
 				anything_changed = false;
@@ -6386,7 +6395,7 @@ class class_base extends aw_template
 			else
 			{
 				$if_clause2 = "el_exists('status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1)."') == 1";
-				if(@$arr["request"]["class"] == "language")
+				if(@$arr["request"]["class"] === "language")
 				{
 					$status_variable = "lang_status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1);
 				}
