@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.13 2007/12/06 14:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.14 2009/04/09 10:38:35 voldemar Exp $
 // recurrence.aw - Kordus
 /*
 
@@ -77,6 +77,13 @@ define("RECUR_MINUTELY",6);
 
 class recurrence extends class_base
 {
+	const RECUR_DAILY = 1;
+	const RECUR_WEEKLY = 2;
+	const RECUR_MONTHLY = 3;
+	const RECUR_YEARLY = 4;
+	const RECUR_HOURLY = 5;
+	const RECUR_MINUTELY = 6;
+
 	function recurrence()
 	{
 		$this->init(array(
@@ -305,7 +312,7 @@ class recurrence extends class_base
 		};
 		return $rv;
 	}
-	
+
 	function calc_range_hourly($arr)
 	{
 		$interval = (int)$arr["interval"];
