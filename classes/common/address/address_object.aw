@@ -3,7 +3,7 @@
 @classinfo  maintainer=voldemar
 */
 
-require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
+require_once(AW_DIR . "classes/common/address/as_header.aw");
 
 class address_object extends _int_object
 {
@@ -24,9 +24,9 @@ class address_object extends _int_object
 		CL_ADDRESS_STREET,
 	);
 
-	function address_object ($param)
+	function __construct ($param)
 	{
-		parent::_int_object($param);
+		parent::__construct($param);
 		$this->as_load_data();
 	}
 
@@ -110,12 +110,12 @@ class address_object extends _int_object
 		}
 	}
 
-	function save ()
+	function save ($exclusive = false, $previous_state = null)
 	{
 		if ($this->as_save())
 		{
 			$this->as_changed = false;
-			return parent::save();
+			return parent::save($exclusive, $previous_state);
 		}
 		else
 		{

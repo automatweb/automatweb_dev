@@ -26,7 +26,7 @@ class quickmessagebox_obj extends _int_object
 	public function __construct($param)
 	{
 		$this->counter_file = self::get_counter_file();
-		return parent::_int_object($param);
+		parent::__construct($param);
 	}
 
 	private static function get_counter_file()

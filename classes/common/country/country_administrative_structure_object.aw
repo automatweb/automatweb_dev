@@ -70,7 +70,7 @@ class country_administrative_structure_object extends _int_object
 		}
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		if ($this->as_save())
 		{
@@ -80,7 +80,7 @@ class country_administrative_structure_object extends _int_object
 			return false;
 		}
 
-		return parent::save();
+		return parent::save($exclusive, $previous_state);
 	}
 
 	private function as_get_descendant_unit_ids($parent)
@@ -90,22 +90,36 @@ class country_administrative_structure_object extends _int_object
 			return false;
 		}
 
+/* dbg */ enter_function ("address2::as_get_descendant_unit_ids");
+/* dbg */ enter_function ("address2::as_get_descendant_unit_ids 1");
+
 		$index = (array) $this->meta("unit_hierarchy_index");
 		$parents = array($parent);
 		$descendants = array();
 
+/* dbg */ exit_function ("address2::as_get_descendant_unit_ids 1");
+
 		while (count($parents))
 		{
 			$children = array();
+
+/* dbg */ enter_function ("address2::as_get_descendant_unit_ids 2");
 
 			foreach ($parents as $parent)
 			{
 				$children = array_merge($children, array_keys($index, $parent));
 			}
 
+/* dbg */ exit_function ("address2::as_get_descendant_unit_ids 2");
+/* dbg */ enter_function ("address2::as_get_descendant_unit_ids 3");
+
 			$parents = $children;
 			$descendants = array_merge($descendants, $children);
+
+/* dbg */ exit_function ("address2::as_get_descendant_unit_ids 3");
 		}
+
+/* dbg */ exit_function ("address2::as_get_descendant_unit_ids");
 
 		return $descendants;
 	}
@@ -120,13 +134,24 @@ class country_administrative_structure_object extends _int_object
 			));
 		}
 
+/* dbg */ enter_function ("address2::as_get_addresses_by_unit");
+/* dbg */ enter_function ("address2::as_get_addresses_by_unit 1");
+
 		$parent_unit_ids = $this->as_get_descendant_unit_ids($unit->id());
+
+/* dbg */ exit_function ("address2::as_get_addresses_by_unit 1");
+/* dbg */ enter_function ("address2::as_get_addresses_by_unit 2");
+
 		$list = new object_list(array(
 			"class_id" => CL_ADDRESS,
 			"parent" => $parent_unit_ids,
 			"site_id" => array(),
 			"lang_id" => array()
 		));
+
+/* dbg */ exit_function ("address2::as_get_addresses_by_unit 2");
+/* dbg */ exit_function ("address2::as_get_addresses_by_unit");
+
 		return $list;
 	}
 
@@ -214,7 +239,7 @@ class country_administrative_structure_object extends _int_object
 
 			if (is_oid ($parent))
 			{
-				$o =& new object ();
+				$o = new object ();
 				$o->set_class_id ($class_id);
 				$o->set_parent ($parent);
 				$o->set_subclass ($subclass);

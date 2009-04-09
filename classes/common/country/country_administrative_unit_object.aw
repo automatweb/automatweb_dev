@@ -7,7 +7,7 @@ require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 
 class country_administrative_unit_object extends _int_object
 {
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		// find parent administrative structure
 		$o = $this;
@@ -21,7 +21,7 @@ class country_administrative_unit_object extends _int_object
 		$this->set_prop("administrative_structure", $o->id());
 
 		// save this unit object
-		$rv = parent::save();
+		$rv = parent::save($exclusive, $previous_state);
 
 		// add saved unit to adm str index
 		$o->set_prop("unit_index", $this);
