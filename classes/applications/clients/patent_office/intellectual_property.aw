@@ -88,7 +88,7 @@
 @reltype PHONE value=4 clid=CL_CRM_PHONE
 @caption Telefon
 
-@reltype FAX value=5 clid=CL_CRM_FAX
+@reltype FAX value=5 clid=CL_CRM_PHONE
 @caption Faks
 
 @reltype EMAIL value=6 clid=CL_CRM_EMAIL
@@ -113,6 +113,14 @@
 
 abstract class intellectual_property extends class_base
 {
+	public $ip_classes = array(
+		CL_PATENT,
+		CL_PATENT_PATENT,
+		CL_INDUSTRIAL_DESIGN,
+		CL_EURO_PATENT_ET_DESC,
+		CL_UTILITY_MODEL
+	);
+
 	function __construct()
 	{
 		parent::__construct();
@@ -263,6 +271,7 @@ abstract class intellectual_property extends class_base
 			));
 		}
 
+		$o = new object($oid);
 		$c = new connection();
 		$ret = $c->find(array(
 			"from.class_id" => CL_DDOC,
@@ -448,7 +457,7 @@ abstract class intellectual_property extends class_base
 				}
 			}
 
-			if(!(aw_global_get("uid") == $ob->createdby() || substr_count($ob->prop("authorized_codes"), $code) || $is_admin))
+			if(!(aw_global_get("uid") === $ob->createdby() || substr_count($ob->prop("authorized_codes"), $code) || $is_admin))
 			{
 				return "";
 			}
@@ -759,10 +768,12 @@ abstract class intellectual_property extends class_base
 		$a = "";
 		$correspond_address = "";
 		$address_inst = get_instance(CL_CRM_ADDRESS);
+		$is_corporate = false;
 
 		/////////////// APPLICANT //////////////
 		if($this->is_template("APPLICANT"))
 		{
+			$i = 0;
 			foreach($o->connections_from(array("type" => "RELTYPE_APPLICANT")) as $c)
 			{
 				foreach($this->datafromobj_del_vars as $del_var)
@@ -795,6 +806,7 @@ abstract class intellectual_property extends class_base
 				}
 				else
 				{
+					$_SESSION["patent"]["applicants"][$i]["applicant_type"] = "1";
 					$this->vars(array(
 						"email_value" => htmlspecialchars($applicant->prop("email_id.mail")),
 						"phone_value" => htmlspecialchars($applicant->prop("phone_id.name")),
@@ -873,6 +885,7 @@ abstract class intellectual_property extends class_base
 					$this->vars(array("CONTACT" => $this->parse("CONTACT")));
 				}
 				$a.= $this->parse("APPLICANT");
+				++$i;
 			}
 		}
 
@@ -1250,7 +1263,7 @@ abstract class intellectual_property extends class_base
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 		$name = $p->name();
-		if($name && $name == $o->name())
+		if($name && $name === $o->name())
 		{
 			$uo = obj(aw_global_get("uid_oid"));
 			$grp = obj($uo->get_default_group());
@@ -1341,7 +1354,7 @@ abstract class intellectual_property extends class_base
 
 		$tpl = $this->info_levels[$arr["data_type"]].".tpl";
 		$this->read_template($tpl);
-		lc_site_load("patent", &$this);
+		lc_site_load("patent", $this);
 		$this->vars($this->web_data($arr));
 
 		// $this->vars(array("form_handler" => $_SERVER["SCRIPT_URI"]));
@@ -2732,10 +2745,12 @@ abstract class intellectual_property extends class_base
 		$conns = $patent->connections_from(array(
 			"type" => "RELTYPE_APPLICANT",
 		));
+
 		foreach($conns as $conn)
 		{
 			$conn->delete();
 		}
+
 		foreach($_SESSION["patent"]["applicants"] as $key => $val)
 		{
 			if(!$_SESSION["patent"]["representer"] and get_class($this) !== "patent_patent" and get_class($this) !== "utility_model")
@@ -3082,6 +3097,80 @@ abstract class intellectual_property extends class_base
 		$patent->save();
 	}
 
+	private function check_and_set_authorized_codes_user_access($pid)
+	{
+		aw_disable_acl();
+		$ol = new object_list(array(
+			"class_id" => $this->ip_classes,
+			"lang_id" => array(),
+			"authorized_codes" => "%".$pid."%",
+			"status" => new obj_predicate_not(object::STAT_DELETED)
+		));
+		$user =  new object(aw_global_get("uid_oid"));
+		$grp = new object($user->get_default_group());
+
+		if ($grp instanceof object)
+		{
+			foreach ($ol->arr() as $o)
+			{
+				// access to application object
+				$o->acl_set($grp, array(
+					"can_add" => 1,
+					"can_edit" => 1,
+					"can_admin" => 0,
+					"can_delete" => 0,
+					"can_view" => 1,
+				));
+
+				// access to digidoc object
+				$ddc = $o->connections_to(array(
+					"from.class_id" => CL_DDOC,
+					"from.status" => new obj_predicate_not(object::STAT_DELETED)
+				));
+
+				foreach ($ddc as $c)
+				{
+					$ddo = new object($c->from());
+					$ddo->acl_set($grp, array(
+						"can_add" => 1,
+						"can_edit" => 1,
+						"can_admin" => 0,
+						"can_delete" => 0,
+						"can_view" => 1,
+					));
+					$signers = $ddo->connections_from(array("type" => "RELTYPE_SIGNER"));
+					foreach ($signers as $s_c)
+					{
+						$signer = $s_c->to();
+						$signer->acl_set($grp, array(
+							"can_add" => 0,
+							"can_edit" => 0,
+							"can_admin" => 0,
+							"can_delete" => 0,
+							"can_view" => 1,
+						));
+					}
+				}
+
+				// access to attachments etc.
+				$cc = $o->connections_from();
+
+				foreach ($cc as $c)
+				{
+					$co = new object($c->to());
+					$co->acl_set($grp, array(
+						"can_add" => 0,
+						"can_edit" => 0,
+						"can_admin" => 0,
+						"can_delete" => 0,
+						"can_view" => 1,
+					));
+				}
+			}
+		}
+		aw_restore_acl();
+	}
+
 	/** Show patents added by user
 
 		@attrib name=my_patent_list is_public="1" caption="Minu patenditaotlused"
@@ -3106,9 +3195,41 @@ abstract class intellectual_property extends class_base
 
 		$this->read_template($tpl);
 		$u = get_instance(CL_USER);
-		$p = obj($u->get_current_person());
+
+		//!!! ajutine lahendus patendiameti probleemile, kus id-kaardiga sisse logind kasutajale luuakse isik, aga seda get_current_person() vms. miskip2rast ei leia ja loob uue, ilma isikukoodita
+		$u_o = obj(aw_global_get("uid_oid"));
+		$person_c = $u_o->connections_from(array(
+			"type" => "RELTYPE_PERSON"
+		));
+
+		$p = false;
+		if (count($person_c))
+		{
+			foreach ($person_c as $person_connection)
+			{
+				$p = obj($person_connection->prop("to"));
+
+				if ($p->prop("personal_id"))
+				{
+					break;
+				}
+			}
+		}
+
+		if (false === $p)
+		{
+			$p = obj($u->get_current_person());
+		}
+		//!!! end ajutine lahendus
+
 		$code = $p->prop("personal_id");
 		$ddoc_inst = get_instance(CL_DDOC);
+
+		// give access rights to authorized_codes specified user
+		if ($code)
+		{
+			$this->check_and_set_authorized_codes_user_access($code);
+		}
 
 		/* PATENTS LIST */
 		$obj_list = new object_list(array(
