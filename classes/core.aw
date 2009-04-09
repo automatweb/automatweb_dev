@@ -115,8 +115,6 @@ class core extends acl_base
 		}
 		else
 		{
-			$this->quote($text);
-
 			$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 			if (!inet::is_ip($ip))
 			{
@@ -300,7 +298,6 @@ class core extends acl_base
 		$msg = htmlentities($msg);
 		if (aw_global_get("__from_raise_error") > 0)
 		{
-			// error_reporting($e);
 			return false;
 		}
 		aw_global_set("__from_raise_error",1);
@@ -316,7 +313,7 @@ class core extends acl_base
 		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie t&auml;helepanu mingile ebat&auml;psusele  andmetes v&otilde;i n&auml;puveale.<br /><br />\n\n".$msg." </b>";
 
 		// also attach backtrace
-		if (is_a($this->raise_error_exception, "Exception"))
+		if ($this->raise_error_exception instanceof Exception)
 		{
 			$msg .= str_replace("#", "<br /><b>#</b>", $this->raise_error_exception->getTraceAsString());
 		}
@@ -355,9 +352,9 @@ class core extends acl_base
 		$content.= "\nPHP_SELF: ".aw_global_get("PHP_SELF");
 		$content.= "\nlang_id: ".aw_global_get("lang_id");
 		$content.= "\nuid: ".aw_global_get("uid");
-		$content.= "\nsection: ".@$_REQUEST["section"];
+		$content.= "\nsection: ".(isset($_REQUEST["section"]) ? $_REQUEST["section"] : "");
 		$content.= "\nurl: " . $this->cfg["baseurl"] . aw_global_get("REQUEST_URI");
-		$content.= "\nreferer: " . @$_SERVER["HTTP_REFERER"];
+		$content.= "\nreferer: " . (isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "");
 		$content.= "\nis_rpc_call: " . (int) $is_rpc_call;
 		$content.= "\nrpc_call_type: " . $rpc_call_type;
 
@@ -416,12 +413,12 @@ class core extends acl_base
 		}
 
 		// ifthe request is too big or b0rked
-		if ($err_type == 30 && $_SERVER["REQUEST_METHOD"] == "POST" && count($_POST) == 0)
+		if ($err_type == 30 && $_SERVER["REQUEST_METHOD"] === "POST" && count($_POST) == 0)
 		{
 			$send_mail = false;
 		}
 
-		if ($err_type == 31 && substr($_REQUEST["class"], -3) == "...")
+		if ($err_type == 31 && substr($_REQUEST["class"], -3) === "...")
 		{
 			$send_mail = false;
 		}
@@ -441,12 +438,12 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
-		if (substr(@$_REQUEST["class"], 0, 4) == "http" || substr(@$_REQUEST["entry_id"], 0, 4) == "http")
+		if (substr(@$_REQUEST["class"], 0, 4) === "http" || substr(@$_REQUEST["entry_id"], 0, 4) === "http")
 		{
 			$send_mail = false;
 		}
 
-		if ($err_type === "ERR_ACL" && substr(@$_REQUEST["id"], 0, 4) == "http")
+		if ($err_type === "ERR_ACL" && substr(@$_REQUEST["id"], 0, 4) === "http")
 		{
 			$send_mail = false;
 		}
@@ -753,7 +750,7 @@ class core extends acl_base
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
 		// tracked_vars comes from orb->process_request
-		$this->orb_values = @$GLOBALS["tracked_vars"];
+		$this->orb_values = isset($GLOBALS["tracked_vars"]) ? $GLOBALS["tracked_vars"] : null;
 		$this->orb_values["class"] = $cl_name;
 		$this->orb_values["action"] = $fun;
 
