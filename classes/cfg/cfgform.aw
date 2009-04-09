@@ -4111,7 +4111,7 @@ class cfgform extends class_base
 					}
 				}
 
-				if(!$allowed_to_see) 
+				if(!$allowed_to_see)
 				{
 					unset($ret[$key]);
 				}
@@ -4219,7 +4219,7 @@ class cfgform extends class_base
 		$has_cb = method_exists($si, "callback_get_group_display");
 		foreach($ret as $gn => $gd)
 		{
-			if ($this->can("view", $gd["grp_d_ctl"]))
+			if (isset($gd["grp_d_ctl"]) and $this->can("view", $gd["grp_d_ctl"]))
 			{
 				$ctl = obj($gd["grp_d_ctl"]);
 				$ctli = $ctl->instance();
@@ -4792,7 +4792,7 @@ class cfgform extends class_base
 		$t->set_sortable(false);
 	}
 
-	function parse_alias($args)
+	function parse_alias($args = array())
 	{
 		$cff = obj($args["alias"]["target"]);
 		if(is_object($cff) && $cff->cfgform_id_from_url && $this->can("view", $_GET["cfgform_id"]))
@@ -5238,7 +5238,7 @@ class cfgform extends class_base
 	{
 		$o = isset($arr["o"]) && is_object($arr["o"]) && $this->can("view", $arr["o"]->id()) ? $arr["o"] : (isset($arr["oid"]) && is_oid($arr["oid"]) ? obj($arr["oid"]) : obj());
 		$clid = $this->can("view", $o->id()) ? $o->class_id() : (isset($arr["clid"]) && is_class_id($arr["clid"]) ? $arr["clid"] : CL_CRM_PERSON);
-		
+
 		if(!$this->can("view", $o->id()))
 		{
 			$o = obj();
