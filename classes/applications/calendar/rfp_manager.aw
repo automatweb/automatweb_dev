@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.101 2009/03/30 08:22:14 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.102 2009/04/09 08:52:37 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -3062,28 +3062,17 @@ class rfp_manager extends class_base
 			$total += $room_sum;
 
 			$product_sum = 0;
-			$conn = $o->connections_from(array(
-				"type" => "RELTYPE_CATERING_RESERVATION",
-			));
-			foreach($conn as $c)
+			$prods = $o->meta("prods");
+			foreach($prods as $prod)
 			{
-				$rv = $c->to();
-				$rv_amount = $rv->get_product_amount();
-				$discount = $rvi->get_product_discount($rv->id());
-				$prod_list = $rvi->get_room_products($rv->prop("resource"));
-				foreach($prod_list->arr() as $prod)
+				if($prod["amount"])
 				{
-					$count = $rv_amount[$prod->id()];
-					if(!$arr["request"]["show_all_prods"][$rv->id()] && !$count)
+					$price = $prod["amount"] * $prod["price"];
+					if($prod["discount"])
 					{
-						$prod_skip = true;
-						continue;
+						$price = round($price - $price * $prod["discount"] / 100, 2);
 					}
-					$prices = $prod->meta("cur_prices");
-					$price = $prices[$cur];
-					$disc = $discount[$prod->id()];
-					$prod_sum = $price * $count;
-					$product_sum += $prod_sum - ($prod_sum * $disc)/100;
+					$product_sum += $price;
 				}
 			}
 			$row["catering"] = $product_sum;

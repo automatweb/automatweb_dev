@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.189 2009/03/26 13:24:22 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.190 2009/04/09 08:52:37 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1789,7 +1789,7 @@ class rfp extends class_base
 			}
 			foreach($arr["request"]["add_bron_tbl"] as $i => $add)
 			{
-				if(!$add["del"])
+				if(!$add["del"] && $add["resource"])
 				{
 					$add["start"] = mktime($add["time"]["from"]["hour"], $add["time"]["from"]["minute"], 0, $add["start1"]["month"], $add["start1"]["day"], $add["start1"]["year"]);
 					$add["end"] = mktime($add["time"]["to"]["hour"], $add["time"]["to"]["minute"], 0, $add["start1"]["month"], $add["start1"]["day"], $add["start1"]["year"]);
@@ -2049,8 +2049,12 @@ class rfp extends class_base
 						$prod_skip = true;
 						continue;
 					}
-					$prices = $prod->meta("cur_prices");
-					$price = $prices[$currency];
+					$prod_price = $rvi->get_product_price(array(
+						"product" => $prod->id(),
+						"reservation" => $rv->id(),
+						"curr" => $arr["obj_inst"]->prop("default_currency"),
+					));
+					$price = $rvi->_get_admin_price_view(obj($prod->id()), $prod_price);
 					$disc = $discount[$prod->id()];
 					$prod_sum = $price * $count;
 					$prod_sum = $prod_sum - ($prod_sum * $disc)/100;
