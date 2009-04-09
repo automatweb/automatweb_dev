@@ -117,11 +117,11 @@ class crm_company_obj extends _int_object
 		return parent::set_name($v);
 	}
 
-	public function save()
+	public function save($exclusive = false, $previous_state = null)
 	{
 		if(!is_oid($this->id()))
 		{
-			parent::save();
+			parent::save($exclusive, $previous_state);
 		}
 		$fakes = array(
 			"url", "email", "phone", "fax", "mobile", "skype", "address_country", "address_country_relp", "address_county", "address_county_relp", "address_city", "address_city_relp", "address_postal_code", "address_address", "address_address2"
@@ -222,7 +222,7 @@ class crm_company_obj extends _int_object
 
 		return number_format($sum , 2);
 	}
-	
+
 	// Since the crm_company object is sometimes handled as school...
 	function get_students($arr)
 	{
@@ -481,7 +481,7 @@ class crm_company_obj extends _int_object
 		}
 
 		$wr = obj($wrid);
-		
+
 		if($profession)
 		{
 			$wr->set_profession($profession);
@@ -898,7 +898,7 @@ class crm_company_obj extends _int_object
 	**/
 	public function set_address($arr)
 	{
-		$arr["use_existing"] = 1; 
+		$arr["use_existing"] = 1;
 		return $this->add_address($arr);
 	}
 
@@ -956,7 +956,7 @@ class crm_company_obj extends _int_object
 	/** returns customer relation creator
 		@attrib api=1
 		@returns string
-	**/	
+	**/
 	public function get_cust_rel_creator_name()
 	{
 		$o = $this->get_customer_relation();
@@ -973,7 +973,7 @@ class crm_company_obj extends _int_object
 			if no customer relation object, makes one
 		@param my_co optional
 		@returns object
-	**/	
+	**/
 	public function get_customer_relation($my_co = null, $crea_if_not_exists = false)
 	{
 		if ($my_co === null)
@@ -1054,7 +1054,7 @@ class crm_company_obj extends _int_object
 		@param form optional
 			form oid or name
 		@returns object
-	**/	
+	**/
 	public function set_legal_form($form)
 	{
 		if(!$form)
@@ -1073,7 +1073,7 @@ class crm_company_obj extends _int_object
 				"lang_id" => array(),
 				"name" => $form,
 			));
-	
+
 			if($ol->count())
 			{
 				$form_id = reset($ol->ids());
@@ -1089,7 +1089,7 @@ class crm_company_obj extends _int_object
 			}
 		}
 
-		$this->set_prop("ettevotlusvorm" , $form_id); 
+		$this->set_prop("ettevotlusvorm" , $form_id);
 		$this->save();
 		return $form_id;
 	}
@@ -1214,7 +1214,7 @@ class crm_company_obj extends _int_object
 
 			$eo->set_prop("url", $url);
 			$eo->save();
-			
+
 			$this->set_prop("url_id", $eo->id());
 			$this->save();
 			$this->connect(array(
@@ -1285,7 +1285,7 @@ class crm_company_obj extends _int_object
 			}
 
 			$eo->save();
-			
+
 			$this->set_prop("contact", $eo->id());
 			$this->save();
 		}
@@ -1400,7 +1400,7 @@ class crm_company_obj extends _int_object
 	/** adds customer to company
 		@attrib api=1 params=pos
 		@param customer optional type=oid/string
-			form oid 
+			form oid
 		@returns oid
 			customer object id
 	**/
@@ -1446,7 +1446,7 @@ class crm_company_obj extends _int_object
 	/** returns company section, adds if none exists
 		@attrib api=1 params=pos
 		@param section optional type=string
-			form oid 
+			form oid
 		@returns oid
 			customer object id
 	**/
@@ -1468,7 +1468,7 @@ class crm_company_obj extends _int_object
 	/** adds new section to company
 		@attrib api=1 params=pos
 		@param section optional type=string
-			form oid 
+			form oid
 		@returns oid
 			customer object id
 	**/
