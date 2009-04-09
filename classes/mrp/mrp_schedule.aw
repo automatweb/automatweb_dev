@@ -11,8 +11,8 @@
 
 */
 
+require_once "mrp_header.aw";
 ini_set ("max_execution_time", "60");
-classload("mrp/mrp_header");
 
 class mrp_schedule extends db_connector
 {
@@ -60,7 +60,11 @@ class mrp_schedule extends db_connector
 	# importance of job start/job length in weighing available times for parallel threads (float)
 	protected $parameter_start_priority = 1;
 	protected $parameter_length_priority = 1;
+
+	# ...
+	protected $parameter_plan_materials = true;
 	# END scheduler parameters
+
 
 //!!! vbl teha ainult yks planeeritud t88de array ja seega siin absoluutsed ajad, mitte rel.
 	protected $range_scale = array (//!!! tihedamalt, kogu planeeritava perioodi peale need piirkonnad teha vbl automaatselt.
@@ -94,14 +98,7 @@ class mrp_schedule extends db_connector
 	// var $save_method = "save_direct";
 	protected $save_method = "save_fileload";
 
-	protected $state_names = array (
-		MRP_STATUS_NEW => "Uus",
-		MRP_STATUS_PLANNED => "T&ouml;&ouml;sse planeeritud",
-		MRP_STATUS_INPROGRESS => "T&ouml;&ouml;s",
-		MRP_STATUS_ABORTED => "Katkestatud",
-		MRP_STATUS_DONE => "Valmis",
-	);
-
+	private $mrpdbg = false;
 
 	function __construct()
 	{
@@ -120,7 +117,7 @@ class mrp_schedule extends db_connector
 			$schedule_length = $workspace->prop ("parameter_schedule_length");
 			if (strlen(trim($schedule_length)))
 			{
-				$this->schedule_length = $this->safe_settype_float($schedule_length);
+				$this->schedule_length = aw_math_calc::string2float($schedule_length);
 			}
 
 			$schedule_start = $workspace->prop ("parameter_schedule_start");
@@ -162,31 +159,31 @@ class mrp_schedule extends db_connector
 			$parameter_due_date_overdue_slope = $workspace->prop ("parameter_due_date_overdue_slope");
 			if (strlen(trim($parameter_due_date_overdue_slope)))
 			{
-				$this->parameter_due_date_overdue_slope = $this->safe_settype_float($parameter_due_date_overdue_slope);
+				$this->parameter_due_date_overdue_slope = aw_math_calc::string2float($parameter_due_date_overdue_slope);
 			}
 
 			$parameter_due_date_overdue_intercept = $workspace->prop ("parameter_due_date_overdue_intercept");
 			if (strlen(trim($parameter_due_date_overdue_intercept)))
 			{
-				$this->parameter_due_date_overdue_intercept = $this->safe_settype_float($parameter_due_date_overdue_intercept);
+				$this->parameter_due_date_overdue_intercept = aw_math_calc::string2float($parameter_due_date_overdue_intercept);
 			}
 
 			$parameter_due_date_decay = $workspace->prop ("parameter_due_date_decay");
 			if (strlen(trim($parameter_due_date_decay)))
 			{
-				$this->parameter_due_date_decay = $this->safe_settype_float($parameter_due_date_decay);
+				$this->parameter_due_date_decay = aw_math_calc::string2float($parameter_due_date_decay);
 			}
 
 			$parameter_due_date_intercept = $workspace->prop ("parameter_due_date_intercept");
 			if (strlen(trim($parameter_due_date_intercept)))
 			{
-				$this->parameter_due_date_intercept = $this->safe_settype_float($parameter_due_date_intercept);
+				$this->parameter_due_date_intercept = aw_math_calc::string2float($parameter_due_date_intercept);
 			}
 
 			$parameter_priority_slope = $workspace->prop ("parameter_priority_slope");
 			if (strlen(trim($parameter_priority_slope)))
 			{
-				$this->parameter_priority_slope = $this->safe_settype_float($parameter_priority_slope);
+				$this->parameter_priority_slope = aw_math_calc::string2float($parameter_priority_slope);
 			}
 
 
@@ -194,14 +191,16 @@ class mrp_schedule extends db_connector
 			$parameter_start_priority = $workspace->prop ("parameter_start_priority");
 			if (strlen(trim($parameter_start_priority)))
 			{
-				$this->parameter_start_priority = abs($this->safe_settype_float($schedule_length));
+				$this->parameter_start_priority = abs(aw_math_calc::string2float($schedule_length));
 			}
 
 			$parameter_length_priority = $workspace->prop ("parameter_length_priority");
 			if (strlen(trim($parameter_length_priority)))
 			{
-				$this->parameter_length_priority = abs($this->safe_settype_float($parameter_length_priority));
+				$this->parameter_length_priority = abs(aw_math_calc::string2float($parameter_length_priority));
 			}
+
+			$this->parameter_plan_materials = (bool) $workspace->prop ("parameter_plan_materials");
 		}
 
 		$this->schedule_length = $this->schedule_length * 31536000;
@@ -235,9 +234,12 @@ class mrp_schedule extends db_connector
 	}
 
 /**
-    @attrib name=create
-	@param mrp_workspace required type=int
+    @attrib name=create api=1
+	@param mrp_workspace required type=oid
 	@param mrp_force_replan optional type=int
+	@errors
+		throws awex_mrp_schedule_workspace if workspace not defined
+		throws awex_mrp_schedule_lock when failed to lock system for scheduling
 **/
 	public function create ($arr)
 	{
@@ -251,11 +253,7 @@ class mrp_schedule extends db_connector
 
 		if (CL_MRP_WORKSPACE != $workspace->class_id())
 		{
-			error::raise(array(
-				"msg" => t("Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata v&otilde;i puuduvad &otilde;igused selle vaatamiseks."),
-				"fatal" => true,
-				"show" => true,
-			));
+			throw new awex_mrp_schedule_workspace("Workspace not defined");
 		}
 
 		if ($not_win32)
@@ -265,11 +263,7 @@ class mrp_schedule extends db_connector
 
 			if ($sem_id === false)
 			{
-				error::raise(array(
-					"msg" => t("Planeerimisluku k&auml;ivitamine eba&otilde;nnestus! Planeerimist ei toimunud."),
-					"fatal" => true,
-					"show" => true,
-				));
+				throw new awex_mrp_schedule_lock("Lock init failed");
 			}
 
 			if (!sem_acquire($sem_id))
@@ -290,9 +284,8 @@ class mrp_schedule extends db_connector
 					// "fatal" => true,
 					// "show" => true,
 				// ));//!!! vaadata uurida miks ikkagi aegajalt ei saada seda semafori k2tte.
-				echo t("Planeerimiseks lukustamine eba&otilde;nnestus! Planeerimist ei toimunud.") . MRP_NEWLINE;
 				exit_function("mrp_schedule::create");
-				return;
+				throw new awex_mrp_schedule_lock("Lock acquiring failed");
 			}
 		}
 
@@ -341,6 +334,7 @@ class mrp_schedule extends db_connector
 
 
 		$this->initialize ($arr);
+		$jobs_folder = $workspace->prop ("jobs_folder");
 
 
 // /* timing */ timing ("initialize", "end");
@@ -400,17 +394,65 @@ class mrp_schedule extends db_connector
 
 // /* timing */ timing ("initiate resource timetables", "end");
 
+		if ($this->parameter_plan_materials)
+		{
+			// material requirements plan
+			$material_requirements = array(); //!!! format: product_id1 => array(date1 => required amount, ...), ... ???
+
+// /* timing */ timing ("read material data", "start");
+			// read all materials' order to delivery time times and other necessary data
+			$material_data = array(); // format: product_id1 => array("delivery_time" => delivery_time1_seconds, "available_amount" => currently_available_amount_in_default_units), ...
+			// available amount will decrease as higher priority jobs subtract their requirements as schedule planning progresses
+
+			$purchasing_manager = new object($workspace->prop ("purchasing_manager"));
+
+			if (CL_SHOP_PURCHASE_MANAGER_WORKSPACE != $purchasing_manager->class_id())
+			{
+				throw new awex_mrp_schedule_purchasemgr("Purchase manager not defined");
+			}
+
+			$warehouses = $purchasing_manager->get_warehouse_ids();
+
+			if (count($warehouses))
+			{
+				$warehouses = implode(",", $warehouses);
+				$this->db_query (
+				"SELECT spp.product as product,spp.days as days,swa.amount as amount " .
+				"FROM " .
+					"aw_shop_product_purveyance spp" .
+					"LEFT JOIN objects o1 ON o1.oid = spp.aw_oid " .
+					"LEFT JOIN aw_shop_warehouse_amount swa ON spp.product = swa.product " .
+					"LEFT JOIN objects o2 ON o2.oid = swa.aw_oid " .
+				"WHERE " .
+					"o1.status > 0 AND " . // purveyance not deleted
+					"o2.status > 0 AND " . // amount not deleted
+					"swa.is_default=1 AND " . // storage states only in default units
+					"spp.warehouse IN ({$warehouses})" . // only from applicable warehouses
+				"");
+
+				### initiate array
+				while ($acquisition_terms = $this->db_next ())
+				{
+					$material_data[$acquisition_terms["product"]] = array(
+						"delivery_time" => $acquisition_terms["days"] * 86400,
+						"available_amount" => $acquisition_terms["amount"]
+					);
+				}
+			}
+// /* timing */ timing ("read material data", "end");
+		}
+
 		### get inprogress jobs
 		$applicable_states = array (
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE,
-			MRP_STATUS_INPROGRESS,
+			mrp_job_obj::STATE_PAUSED,
+			mrp_job_obj::STATE_SHIFT_CHANGE,
+			mrp_job_obj::STATE_INPROGRESS
 		);
 
 		$list = new object_list (array (
 			"class_id" => CL_MRP_JOB,
 			"state" => $applicable_states,
-			"parent" => $workspace->prop ("jobs_folder"),
+			"parent" => $jobs_folder,
 		));
 		$inprogress_jobs = $list->arr ();
 
@@ -420,8 +462,8 @@ class mrp_schedule extends db_connector
 		### get all projects from db
 		### schedulable project states
 		$applicable_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_INPROGRESS,
+			mrp_case_obj::STATE_PLANNED,
+			mrp_case_obj::STATE_INPROGRESS,
 		);
 
 		if (!is_oid($workspace->prop ("projects_folder")))
@@ -447,10 +489,11 @@ class mrp_schedule extends db_connector
 			$projects[$project["oid"]] = array (
 				"jobs" => array (),
 				"starttime" => $project["starttime"],
+				"progress" => $project["progress"],
 				"due_date" => $project["due_date"],
 				"customer_priority" => $project["customer_priority"],
 				"project_priority" => $project["project_priority"],
-				"state" => $project["state"],
+				"state" => $project["state"]
 			);
 		}
 
@@ -461,23 +504,41 @@ class mrp_schedule extends db_connector
 		### get all jobs from db
 		### job states
 		$applicable_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_NEW,
-			MRP_STATUS_ABORTED,
+			mrp_job_obj::STATE_PLANNED,
+			mrp_job_obj::STATE_NEW,
+			mrp_job_obj::STATE_ABORTED
 		);
 
-		$this->db_query (
-		"SELECT job.* " .
-		"FROM " .
-			$this->jobs_table . " as job " .
-			"LEFT JOIN objects o ON o.oid = job.oid " .
-		"WHERE " .
-			"job.state IN (" . implode (",", $applicable_states) . ") AND " .
-			"job.project > 0 AND " .
-			"o.status > 0 AND " .
-			"o.parent = " . $workspace->prop ("jobs_folder") . " AND " .
-			"job.resource > 0 " .
-		"");
+		if ($this->parameter_plan_materials)
+		{
+			$this->db_query (
+			"SELECT job.*, o.meta " .
+			"FROM " .
+				$this->jobs_table . " as job " .
+				"LEFT JOIN objects o ON o.oid = job.oid " .
+			"WHERE " .
+				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
+				"job.project > 0 AND " .
+				"o.status > 0 AND " .
+				"o.parent = " . $jobs_folder . " AND " .
+				"job.resource > 0 " .
+			"");
+		}
+		else
+		{ // used materials data not read.
+			$this->db_query (
+			"SELECT job.* " .
+			"FROM " .
+				$this->jobs_table . " as job " .
+				"LEFT JOIN objects o ON o.oid = job.oid " .
+			"WHERE " .
+				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
+				"job.project > 0 AND " .
+				"o.status > 0 AND " .
+				"o.parent = " . $jobs_folder . " AND " .
+				"job.resource > 0 " .
+			"");
+		}
 
 // /* timing */ timing ("get all jobs from db", "end");
 // /* timing */ timing ("distribute jobs to projects", "start");
@@ -491,7 +552,7 @@ class mrp_schedule extends db_connector
 		{
 			/* kiiruse huvides seda kontrolli praegu ei tehta. sellest v6ib mingitel juhtudel jama olla. !!!vaadata altpoolt kas kuskil vaja yldse midagi mis eeldab vaatamis6iguse olemasolu t88le.
 			//!!! [15:16] <terryf> see onyks asi, mis seal fiksimist vajab jah
-			if (!$this->can("view", $job["oid"]))
+			if (!$this->can("view", $job["oid"]))  //!!! kui taas sisse lylitada siis tuleb panna evtendima acl_base-i
 			{
 				// echo t(sprintf ("Esines t&ouml;&ouml; (id: %s), mis pole kasutajale n&auml;htav. Planeerimine ei toimu adekvaatselt.", $job["oid"]));
 				continue;
@@ -505,7 +566,10 @@ class mrp_schedule extends db_connector
 
 				foreach ($prerequisites as $prerequisite)
 				{
-					$successor_index[$prerequisite][] = $job["oid"];
+					if ($prerequisite !== "")
+					{
+						$successor_index[$prerequisite][] = $job["oid"];
+					}
 				}
 			}
 		}
@@ -549,12 +613,12 @@ class mrp_schedule extends db_connector
 
 				if ($planned_date > $this->project_schedule[$job->prop("project")][0])
 				{
-					$this->project_schedule[$job->prop("project")] = array ($planned_date, MRP_STATUS_INPROGRESS);
+					$this->project_schedule[$job->prop("project")] = array ($planned_date, mrp_case_obj::STATE_INPROGRESS);
 				}
 			}
 		}
 
-		unset ($inprogress_jobs);
+		$inprogress_jobs = null;
 
 // /* timing */ timing ("insert inprogress jobs", "end");
 // /* timing */ timing ("sort jobs in projects", "start");
@@ -577,22 +641,22 @@ class mrp_schedule extends db_connector
 // /* timing */ timing ("sort projects", "end");
 // /* timing */ timing ("schedule jobs total", "start");
 
-		if ($_GET["show_progress"]==1)
-		// if ($arr["show_progress"]==1)
-		{
-			$projects_count = count ($projects);
-			$tick = $projects_count >= 100 ? round ($projects_count/100) : 1;
-			$tick_size = $projects_count >= 100 ? 1 : round (100/$projects_count);
-			$bar_size = $projects_count >= 100 ? round ($projects_count/$tick) : $projects_count*$tick_size;
-			$tick_i = 0;
-			echo '<div id="mrp_schedule_progress_bar"><center>' . t("Planeerimine") .
-				'<div style="width: ' . ($bar_size+2) . 'px; height: 13px; border: 1px solid black; background-color: #E0E0E0; text-align: left;"><span style=" letter-spacing: -2px; font-family: Arial; font-size: 14px; line-height: 12px;">';
-		}
+		### states for planning jobs
+		$applicable_planning_states = array (
+			mrp_job_obj::STATE_PLANNED,
+			mrp_job_obj::STATE_NEW
+		);
+
+		### states for reserving job time and length
+		$applicable_timereserve_states = array (
+			mrp_job_obj::STATE_ABORTED
+		);
 
 		### schedule jobs in all projects
+		// actual scheduling takes place here
 		foreach ($projects as $project_id => $project)
 		{
-			if (is_array ($project["jobs"]))
+			if (count ($project["jobs"]))
 			{
 // /* dbg */ if ($project_id == 7700) {
 // /* dbg */ $this->mrpdbg=1;
@@ -609,16 +673,26 @@ class mrp_schedule extends db_connector
 
 // /* timing */ timing ("one job total", "start");
 // /* timing */ timing ("reserve time & modify earliest start", "start");
-// /* dbg */ if (($job["oid"] == $_GET["mrp_dbg_job"] and $_GET["mrp_dbg_job"]) or ($job["oid"] == $_GET["mrp_dbg_resource"] and $_GET["mrp_dbg_resource"])) {
+// /* dbg */ if ((!empty($_GET["mrp_dbg_job"]) and $job["oid"] == $_GET["mrp_dbg_job"]) or (!empty($_GET["mrp_dbg_resource"]) and $job["oid"] == $_GET["mrp_dbg_resource"])) {
 // /* dbg */ $this->mrpdbg=1;
 // /* dbg */ echo "<hr><h2>Job oid: {$job["oid"]}</h2><hr>";
 // /* dbg */ exit;
 // /* dbg */ }
 
+					$material_delivery_time = 0;
+					if ($this->parameter_plan_materials)
+					{ // get max material acquisition time
+						$meta = unserialize($job["meta"]);
+						foreach ($meta["used_materials"] as $product_id)
+						{
+							$material_delivery_time = max($material_data[$product_id]["delivery_time"], $material_delivery_time);
+						}
+						$material_delivery_time += $this->schedule_start;
+					}
 
 					$this->currently_processed_job = (int) $job["oid"];
-					$successor_starttime = $starttime_index[$job["oid"]];
-					$minstart = max ($projects[$project_id]["starttime"], $projects[$project_id]["progress"], $this->schedule_start, $starttime_index[$job["oid"]], $job["minstart"]);
+					$successor_starttime = isset($starttime_index[$job["oid"]]) ? $starttime_index[$job["oid"]] : 0;
+					$minstart = max ($project_start, $project_progress, $this->schedule_start, $successor_starttime, $job["minstart"]);
 					// $minstart = $job["pre_buffer"] + $minstart;
 
 
@@ -628,17 +702,6 @@ class mrp_schedule extends db_connector
 // /* dbg */ echo "minplan jobstart: " . date (MRP_DATE_FORMAT,$this->min_planning_jobstart) . "<br>";
 // /* dbg */ echo "sched start: " . date (MRP_DATE_FORMAT,$this->schedule_start) . "<br>";
 // /* dbg */ }
-
-					### states for planning jobs
-					$applicable_planning_states = array (
-						MRP_STATUS_PLANNED,
-						MRP_STATUS_NEW,
-					);
-
-					### states for reserving job time and length
-					$applicable_timereserve_states = array (
-						MRP_STATUS_ABORTED,
-					);
 
 					$scheduled_start = $scheduled_length = NULL;
 
@@ -677,13 +740,13 @@ class mrp_schedule extends db_connector
 					if (isset ($scheduled_start))
 					{
 						### modify earliest starttime for unscheduled jobs next in workflow
-						if (is_array ($successor_index[$job["oid"]]))
+						if (isset ($successor_index[$job["oid"]]))
 						{
 							foreach ($successor_index[$job["oid"]] as $successor_id)
 							{
-								$tmp = ($scheduled_start + $scheduled_length + $job["post_buffer"]);
+								$tmp = ($scheduled_start + $scheduled_length + $job["post_buffer"]); // time when currently scheduled job allows next job in workflow to start
 
-								if ($tmp > $starttime_index[$successor_id])
+								if (!isset($starttime_index[$successor_id]) or $tmp > $starttime_index[$successor_id])
 								{
 									$starttime_index[$successor_id] = $tmp;
 								}
@@ -699,8 +762,7 @@ class mrp_schedule extends db_connector
 
 					### set planned finishing date for project
 					$planned_date = $scheduled_start + $scheduled_length;
-
-					if ($planned_date > $this->project_schedule[$project_id][0])
+					if (!isset($this->project_schedule[$project_id]) or $planned_date > $this->project_schedule[$project_id][0])
 					{
 						$this->project_schedule[$project_id] = array ($planned_date, $project["state"]);
 					}
@@ -712,21 +774,9 @@ class mrp_schedule extends db_connector
 // /* dbg */ $this->mrpdbg=0;
 // /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-				}
 
+				}
 // /* timing */ timing ("one project total", "end");
-			}
-
-			if ($_GET["show_progress"]==1)
-			// if ($arr["show_progress"]==1)
-			{
-				if (!($tick_i%$tick))
-				{
-					echo str_repeat ("|", $tick_size);
-					flush ();
-				}
-
-				$tick_i++;
 			}
 		}
 
@@ -763,18 +813,6 @@ class mrp_schedule extends db_connector
 // /* dbg */ list($micro,$sec) = split(" ",microtime());
 // /* dbg */ $ts_e = $sec + $micro;
 // /* dbg */ $GLOBALS["timings"]["planning_time"] = $ts_s - $ts_e;
-
-/*  time progress display
-		if ($_GET["show_progress"]==1)
-		{
-			echo '</span></div></center></div>
-			<script type="text/javascript">
-			pb = document.getElementById("mrp_schedule_progress_bar");
-			pb.style.display = "none";
-			</script>';
-		}
- */
-
  // /* timing */ timing ();
 		exit_function("mrp_schedule::create");
 // /* dbg */ exit;
@@ -792,146 +830,57 @@ class mrp_schedule extends db_connector
 
 /* --------------------------  PRIVATE METHODS ----------------------------- */
 
-	protected function save_direct ()// outdated. if needed must be updated according to save_fileload()
+	protected function save_direct ()
 	{
-		$log = get_instance(CL_MRP_WORKSPACE);
-
-		### job & project states for which to change state to planned and log change
-		$applicable_states = array (
-			MRP_STATUS_NEW,
-		);
-
 		if (is_array ($this->project_schedule) and is_array ($this->job_schedule))
 		{
-			foreach ($this->project_schedule as $project_id => $date)
+			foreach ($this->project_schedule as $project_id => $project_data)
 			{
-				if (is_oid($project_id))
-				{
 					$project = obj ($project_id);
-					$project->set_prop ("planned_date", $date);
-
-					if (in_array ($project->prop("state"), $applicable_states))
-					{
-						$project->set_prop ("state", MRP_STATUS_PLANNED);
-						$log->mrp_log(
-							$project->id(),
-							0,
-							"Projekti staatus muutus ".
-								$this->state_names[$project->prop("state")]." => ".
-								$this->state_names[MRP_STATUS_PLANNED]
-						);
-					}
-
-					aw_disable_acl();
-					$project->save ();
-					aw_restore_acl();
+					$project->schedule($project_data[0]);
 
 // /* dbg */ if ($_GET["mrp_dbg"]) {
 // /* dbg */ echo "proj-" . $project_id . ": [" . date (MRP_DATE_FORMAT, $date) . "]<br>";
 // /* dbg */ }
-
-				}
 			}
 
 			foreach ($this->job_schedule as $job_id => $job_data)
 			{
-				if (is_oid($job_id))
-				{
 					$job = obj ($job_id);
-					$job->set_prop ("starttime", $job_data[0]);
-					$job->set_prop ("planned_length", $job_data[1]);
-
-					if (in_array ($job->prop("state"), $applicable_states))
-					{
-						$job->set_prop ("state", MRP_STATUS_PLANNED);
-						$log->mrp_log(
-							$job->prop("project"),
-							$job->id(),
-							"T&ouml;&ouml; staatus muutus ".
-								$this->state_names[$job->prop("state")]." => ".
-								$this->state_names[MRP_STATUS_PLANNED]
-						);
-					}
-
-					aw_disable_acl();
-					$job->save ();
-					aw_restore_acl();
+					$job->schedule($job_data[0], $job_data[1]);
 
 // /* dbg */ if ($_GET["mrp_dbg"]) {
 // /* dbg */ echo "job-" . $job_id . ": [" . date (MRP_DATE_FORMAT, $job_data[0]) . "] - [" . date (MRP_DATE_FORMAT, $job_data[0]+$job_data[1]) . "]<br>";
 // /* dbg */ }
-
-				}
 			}
 		}
 	}
 
-	protected function save_fileload ()
+	protected function save_fileload () // changes directly mrp_job_obj internal format data
 	{
 // /* timing */ timing ("save schedule data", "start");
 		$win32 = ("win32" === aw_ini_get("server.platform"));
 
-		if (is_array ($this->project_schedule) and is_array ($this->job_schedule))
+		if (count($this->project_schedule) or count($this->job_schedule))
 		{
-			$log = get_instance(CL_MRP_WORKSPACE);
-
-			### job & project states for which to change state to planned and log change
-			$applicable_project_states = array (
-				MRP_STATUS_NEW,
-			);
-
-			$applicable_job_states = array (
-				MRP_STATUS_NEW,
-			);
-
 // /* timing */ timing ("save schedule data - projects", "start");
 			$tmpname = tempnam(aw_ini_get("server.tmpdir"), "mrpschedule");
 			$tmp = fopen ($tmpname, "w");
 
 			foreach ($this->project_schedule as $project_id => $project_data)
 			{
-				if (is_oid($project_id))
+				if ($project_data[1] == mrp_case_obj::STATE_NEW)
 				{
-// /* timing */ timing ("save schedule data - projects - write datafile record", "start");
-
-					$line = "{$project_id}\t{$project_data[0]}\n";
-					fwrite ($tmp, $line);
-
-// /* timing */ timing ("save schedule data - projects - write datafile record", "end");
-					if (in_array ($project_data[1], $applicable_job_states))
-					{
 // /* timing */ timing ("save schedule data - projects - save new state", "start");
-
-						$project = obj ($project_id);
-
-						if (in_array ($project->prop("state"), $applicable_project_states))
-						{
-							$project->set_prop ("state", MRP_STATUS_PLANNED);
-							$log->mrp_log(
-								$project->id(),
-								0,
-								"Projekti staatus muutus ".
-									$this->state_names[$project->prop("state")]." => ".
-									$this->state_names[MRP_STATUS_PLANNED]
-							);
-						}
-
-						aw_disable_acl();
-						$project->save ();
-						aw_restore_acl();
-
+					$project = obj ($project_id);
+					$project->schedule($project_data[0]);
 // /* timing */ timing ("save schedule data - projects - save new state", "end");
-					}
 				}
 				else
 				{
-					if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. proj: %s"), __LINE__, $project_id) . MRP_NEWLINE; flush ();}
-					// error::raise(array(
-						// "msg" => sprintf (t("Viga planeeritud aegade salvestamisel. Projekti id (%s) pole oid."), $project_id),
-						// "fatal" => false,
-						// "show" => false,
-					// ));
-					echo sprintf (t("Viga planeeritud aegade salvestamisel. Projekti id (%s) pole oid."), $project_id) . MRP_NEWLINE;
+// /* timing */ timing ("save schedule data - projects - write datafile record", "start");
+					fwrite ($tmp, "{$project_id}\t{$project_data[0]}\n");
+// /* timing */ timing ("save schedule data - projects - write datafile record", "end");
 				}
 
 // /* dbg */ if ($_GET["mrp_dbg"]) {
@@ -976,49 +925,18 @@ class mrp_schedule extends db_connector
 
 			foreach ($this->job_schedule as $job_id => $job_data)
 			{
-				if (is_oid ($job_id))
+				if (mrp_job_obj::STATE_NEW == $job_data[2])
 				{
-// /* timing */ timing ("save schedule data - jobs - write datafile record", "start");
-
-					$line = "{$job_id}\t{$job_data[1]}\t{$job_data[0]}\n";
-					fwrite ($tmp, $line);
-
-// /* timing */ timing ("save schedule data - jobs - write datafile record", "end");
-
-					if (in_array ($job_data[2], $applicable_job_states))
-					{
 // /* timing */ timing ("save schedule data - jobs - save new state", "start");
-
-						$job = obj ($job_id);
-
-						if (in_array ($job->prop("state"), $applicable_job_states))
-						{
-							$log->mrp_log(
-								$job->prop("project"),
-								$job->id(),
-								"T&ouml;&ouml; staatus muutus ".
-									$this->state_names[$job->prop("state")]." => ".
-									$this->state_names[MRP_STATUS_PLANNED]
-							);
-
-							$job->set_prop ("state", MRP_STATUS_PLANNED);
-							aw_disable_acl();
-							$job->save ();
-							aw_restore_acl();
-						}
-
+					$job = obj ($job_id);
+					$job->schedule($job_data[0], $job_data[1]);
 // /* timing */ timing ("save schedule data - jobs - save new state", "end");
-					}
 				}
 				else
 				{
-					// if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s."), __LINE__) . MRP_NEWLINE; flush ();}
-					// error::raise(array(
-						// "msg" => sprintf (t("Viga planeeritud aegade salvestamisel. T&ouml;&ouml; id (%s) pole oid. (starttime: %s, planned_len: %s, state: %s)"), $job_id, $job_data[0], $job_data[1], $job_data[2]),
-						// "fatal" => false,
-						// "show" => false,
-					// ));
-					echo sprintf (t("Viga planeeritud aegade salvestamisel. T&ouml;&ouml; id (%s) pole oid. (starttime: %s, planned_len: %s, state: %s)"), $job_id, $job_data[0], $job_data[1], $job_data[2]) . MRP_NEWLINE;
+// /* timing */ timing ("save schedule data - jobs - write datafile record", "start");
+					fwrite ($tmp, "{$job_id}\t{$job_data[1]}\t{$job_data[0]}\n");
+// /* timing */ timing ("save schedule data - jobs - write datafile record", "end");
 				}
 
 // /* dbg */ if ($_GET["mrp_dbg"]) {
@@ -1425,7 +1343,7 @@ class mrp_schedule extends db_connector
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 			### get max reach of previous timerange
-			$prev_range_end = (int) $this->range_ends[$resource_tag][($time_range - 1)];
+			$prev_range_end = (0 === $time_range) ? 0 : $this->range_ends[$resource_tag][($time_range - 1)];//!!! kui esimene range siis oli -1 indeks, vbl panna range_ends arraysse ka -1 kohta midagi?
 
 			if (count ($this->reserved_times[$resource_tag][$time_range]))
 			{ ### timerange has already reserved times
@@ -1595,10 +1513,11 @@ class mrp_schedule extends db_connector
 		$low = 0;
 		$high = count ($this->range_scale) - 1;
 		$i_dbg = 0;
+		$mid = 0;
 
 		while ($low <= $high)
 		{
-			$mid = floor (($low + $high) / 2);
+			$mid = (int) floor (($low + $high) / 2);
 			$next = isset ($this->range_scale[$mid + 1]) ? $this->range_scale[$mid + 1] : ($this->schedule_length + 1);
 
 			if ( ($starttime >= $this->range_scale[$mid]) and ($starttime < $next) )
@@ -1611,7 +1530,7 @@ class mrp_schedule extends db_connector
 // /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-				return $mid;
+				break;
 			}
 			else
 			{
@@ -1637,6 +1556,8 @@ class mrp_schedule extends db_connector
 				break;
 			}
 		}
+
+		return $mid;
 // /* timing */ timing ("find_range", "end");
 	}
 
@@ -1946,12 +1867,7 @@ class mrp_schedule extends db_connector
 	{
 		$resource_id = $arr["mrp_resource"];
 		$resource = obj ($resource_id);
-		$workspace = $resource->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-		if (!is_object($workspace))
-		{
-			return false;
-		}
+		$workspace = $resource->prop("workspace");
 
 		if (!$this->initialized)
 		{
@@ -2016,13 +1932,8 @@ class mrp_schedule extends db_connector
 		return $this->unavailable_times;
 	}
 
-	public static function safe_settype_float ($value)
-	{
-		$separators = ".,";
-		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
-		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
-		return (float) ("{$int}.{$dec}");
-	}
+	public static function safe_settype_float ($value) // DEPRECATED
+	{ return aw_math_calc::string2float($value); }
 }
 
 function timing ($name = NULL, $action = "show")
@@ -2080,5 +1991,20 @@ function mrp_schedule_reserved_times_sorter($a, $b)
 	}
 	return ($a[0] < $b[0]) ? -1 : 1;
 }
+
+/** Generic schedule exception **/
+class awex_mrp_schedule extends awex_mrp {}
+
+/** Workspace error **/
+class awex_mrp_schedule_workspace extends awex_mrp_schedule {}
+
+/** Purchase manager error **/
+class awex_mrp_schedule_purchasemgr extends awex_mrp_schedule {}
+
+/** Schedule data save error **/
+class awex_mrp_schedule_save extends awex_mrp_schedule {}
+
+/** Scheduling semaphore lock failure **/
+class awex_mrp_schedule_lock extends awex_mrp_schedule {}
 
 ?>

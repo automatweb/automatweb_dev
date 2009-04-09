@@ -424,13 +424,7 @@ class mrp_prisma_import extends class_base
 					$o->set_meta("imp_ts", $dat["TimeStamp"]);
 					$o->set_parent($ws->prop("projects_folder"));
 					$o->save();
-					if (!$o->is_connected_to(array("to" => $ws->id())))
-					{
-						$o->connect(array(
-							"to" => $ws->id(),
-							"reltype" => "RELTYPE_MRP_OWNER"
-						));
-					}
+					$o->set_prop("workspace", $ws);
 					echo "project ".$o->name()." (".$o->id().") updated! <br>\n";
 					flush();
 				}
@@ -457,14 +451,11 @@ class mrp_prisma_import extends class_base
 			$o->set_parent($ws->prop("projects_folder"));
 			$o->set_prop("extern_id", $id);
 			$o->set_prop("customer", $t->id());
+			$o->set_prop("workspace", $ws);
 			$o->save();
 			$this->_upd_proj_o($o, $dat);
 			$o->save();
 
-			$o->connect(array(
-				"to" => $ws->id(),
-				"reltype" => "RELTYPE_MRP_OWNER"
-			));
 
 			$t->connect(array(
 				"to" => $o->id(),
@@ -648,6 +639,8 @@ class mrp_prisma_import extends class_base
 			$o->set_parent(1256);
 			$o->set_prop("extern_id", $id);
 			$o->set_prop("state", 1); // MRP_STATUS_NEW
+			$ws = obj(aw_ini_get("prisma.ws"));
+			$o->set_prop("workspace", $ws);
 			if ($t)
 			{
 				$o->connect(array(
@@ -668,11 +661,6 @@ class mrp_prisma_import extends class_base
 					"reltype" => "RELTYPE_CUSTOMER"
 				));
 			}
-
-			$o->connect(array(
-				"to" => aw_ini_get("prisma.ws"),
-				"reltype" => "RELTYPE_MRP_OWNER"
-			));
 		}
 		else
 		{
@@ -692,14 +680,8 @@ class mrp_prisma_import extends class_base
 			}
 			$this->_upd_proj_o($o, $dat);
 
-			if (!$o->is_connected_to(array("to" => aw_ini_get("prisma.ws"))))
-			{
-				$o->connect(array(
-					"to" => aw_ini_get("prisma.ws"),
-					"reltype" => "RELTYPE_MRP_OWNER"
-				));
-			}
-
+			$ws = obj(aw_ini_get("prisma.ws"));
+			$o->set_prop("workspace", $ws);
 			$o->save();
 		}
 

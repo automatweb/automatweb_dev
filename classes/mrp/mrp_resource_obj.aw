@@ -1,8 +1,226 @@
 <?php
 
+/*
+@classinfo  maintainer=voldemar
+*/
+
+require_once "mrp_header.aw";
+
+/* A manufacturing resource is a processing unit that converts 'input products' to 'output products' */
+
 class mrp_resource_obj extends _int_object
 {
-	public function awobj_set_production_feedback_option_values($value = array())
+	const STATE_AVAILABLE = 10;
+	const STATE_RESERVED = 14;
+	const STATE_PROCESSING = 11;
+	const STATE_OUTOFSERVICE = 12;
+	const STATE_INACTIVE = 13;
+
+	const TYPE_SCHEDULABLE = 1;
+	const TYPE_NOT_SCHEDULABLE = 2;
+	const TYPE_SUBCONTRACTOR = 3;
+
+	protected $threads = array();
+	protected $workspace;
+
+	protected static $inactive_states = array(
+		self::STATE_INACTIVE,
+		self::STATE_OUTOFSERVICE
+	);
+
+	private $thread_index = array(); // thread_job_id => treads_array_key
+
+/** Class constructor
+	@attrib api=1 params=pos
+**/
+	public function __construct($objdata)
+	{
+		parent::__construct($objdata);
+
+		$new = (null === $this->id());
+		if ($new)
+		{
+			### set status
+			$this->set_prop ("state", self::STATE_AVAILABLE);
+		}
+	}
+
+	public function get_type_options()
+	{
+		return array (
+			self::TYPE_SCHEDULABLE => t("Ressursi kasutust planeeritakse"),
+			self::TYPE_NOT_SCHEDULABLE => t("Ressursi kasutust ei planeerita"),
+			self::TYPE_SUBCONTRACTOR => t("Ressurss on allhange")
+		);
+	}
+
+	public function awobj_set_thread_data($max_threads)
+	{ //!!! requires exclusive load
+		settype($max_threads, "int");
+		if ($max_threads < 1)
+		{
+			throw new awex_obj_type("Can't be less than 1 thread");
+		}
+
+		$this->load_threads();
+		$thread_count = count($this->threads);
+		if ($thread_count > $max_threads)
+		{ // lose threads
+			$no_of_threads_to_delete = $thread_count - $max_threads;
+			// make sure that jobs will be stopped on deleted threads
+			foreach ($this->threads as $key => $thread)
+			{ // remove as many available threads as possible and needed
+				if ($no_of_threads_to_delete < 1)
+				{
+					break;
+				}
+
+				if ($thread->is_available())
+				{
+					// remove thread
+					$job_id = $this->threads[$key]->get_job_id();
+					unset($this->threads[$key]);
+					--$no_of_threads_to_delete;
+
+					// clean index
+					if (isset($this->thread_index[$job_id]))
+					{
+						unset($this->thread_index[$job_id]);
+					}
+				}
+			}
+
+			if ($no_of_threads_to_delete)
+			{ // iremove among threads that are in use
+				foreach ($this->threads as $key => $thread)
+				{
+					if ($no_of_threads_to_delete < 1)
+					{
+						break;
+					}
+
+					// remove thread
+					$job_id = $this->threads[$key]->get_job_id();
+					unset($this->threads[$key]);
+					--$no_of_threads_to_delete;
+
+					// clean index
+					if (isset($this->thread_index[$job_id]))
+					{
+						unset($this->thread_index[$job_id]);
+					}
+				}
+			}
+		}
+		elseif ($thread_count < $max_threads)
+		{ // add threads
+			$no_of_threads_to_add = $max_threads - $thread_count;
+			while ($no_of_threads_to_add--)
+			{
+				$this->threads[] = new mrp_resource_thread();
+			}
+			$this->set_prop ("state", self::STATE_AVAILABLE);
+		}
+
+		$r = parent::set_prop("thread_data", $this->threads);
+		$workspace->request_rescheduling();
+		return $r;
+	}
+
+	public function awobj_get_thread_data()
+	{
+		$this->load_threads();
+		return count($this->threads);
+	}
+
+/**
+	@attrib params=pos api=1
+	@returns CL_MRP_WORKSPACE
+	@errors
+		throws awex_mrp_resource_workspace when workspace couldn't be loaded
+**/
+	public function awobj_get_workspace()
+	{
+		if (!$this->workspace)
+		{
+			$E = false;
+			try
+			{
+				$workspace = new object(parent::prop("workspace"));
+				if (!$workspace->is_a(CL_MRP_WORKSPACE))
+				{
+					// try backward compatibility
+					$workspace = $this->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+					if ($workspace instanceof object and CL_MRP_WORKSPACE == $workspace->class_id())
+					{ // save new format
+						$this->awobj_set_workspace($workspace);
+						$this->save();
+						$wc = $this->connections_from(array("type" => "RELTYPE_MRP_OWNER"));
+						foreach ($wc as $c)
+						{
+							$c->delete();
+						}
+					}
+					else
+					{
+						throw new awex_mrp_case_workspace("Workspace not defined");
+					}
+				}
+			}
+			catch (awex_mrp_case_workspace $e)
+			{
+				throw $e;
+			}
+			catch (Exception $E)
+			{
+			}
+
+			if ($E)
+			{
+				$e = new awex_mrp_case_workspace("Workspace not defined");
+				$e->set_forwarded_exception($E);
+				throw $e;
+			}
+			$this->workspace = $workspace;
+		}
+		return $this->workspace;
+	}
+
+/**
+	@attrib params=pos api=1
+	@param workspace type=CL_MRP_WORKSPACE
+	@returns starndard object set_prop return
+	@errors
+		throws awex_obj_type when workspace parameter is not a workspace object
+**/
+	public function awobj_set_workspace(object $workspace)
+	{
+		if (!$workspace->is_a(CL_MRP_WORKSPACE))
+		{
+			throw new awex_obj_type("Workspace not a mrp_workspace object");
+		}
+
+		$this->workspace = $workspace;
+		return parent::set_prop("workspace", $workspace->id());
+	}
+
+	public function awobj_set_global_buffer($value)
+	{
+		$r = parent::set_prop("global_buffer", $value);
+		$workspace->request_rescheduling();
+		return $r;
+	}
+
+	/**
+	@attrib api=1 params=pos
+	@param value required type=array
+	@returns array numeric
+		Output product count options
+	@errors
+		throws awex_obj_type when parameter is not array
+	**/
+	public function awobj_set_production_feedback_option_values($value)
 	{
 		if (!is_array($value))
 		{
@@ -16,6 +234,28 @@ class mrp_resource_obj extends _int_object
 		}
 
 		return $this->set_prop("production_feedback_option_values", $value);
+	}
+
+	public function awobj_set_state($value)
+	{
+		throw new awex_obj_readonly("State is a read-only property");
+	}
+
+	public function awobj_get_state()
+	{
+		$state = parent::prop("state");
+		if (!in_array($state, self::$inactive_states))
+		{
+			if ($this->is_available())
+			{
+				$state = self::STATE_AVAILABLE;
+			}
+			else
+			{
+				$state = self::STATE_PROCESSING;
+			}
+		}
+		return $state;
 	}
 
 	public function awobj_get_production_feedback_option_values()
@@ -37,6 +277,60 @@ class mrp_resource_obj extends _int_object
 			"resource" => $this->id()
 		));
 		return $ol->arr();
+	}
+
+	/** Adds a product to input materials of this resource
+	@attrib api=1 params=pos
+	@param product required type=CL_SHOP_PRODUCT
+	@returns void
+	@errors
+		throws awex_obj_type when $product is not a CL_SHOP_PRODUCT object (exception variable $argument_name contains faulty parameter name)
+	**/
+	public function add_input_product(object $product)
+	{
+		if (CL_SHOP_PRODUCT != $product->class_id())
+		{
+			$e = new awex_obj_type("Wrong type product object.");
+			$e->argument_name = "product";
+			throw $e;
+		}
+
+		$o = obj();
+		$o->set_class_id(CL_MATERIAL_EXPENSE_CONDITION);
+		$o->set_parent($this->id());
+		$o->set_name(sprintf(t("%s kulutingimus %s jaoks"), $product->name(), $this->name()));
+		$o->set_prop("resource", $this->id());
+		$o->set_prop("product", $product->id());
+		$o->save();
+	}
+
+	/** Removes a product from input materials of this resource
+	@attrib api=1 params=pos
+	@param product required type=CL_SHOP_PRODUCT
+	@returns void
+	@errors
+		throws awex_obj_type when $product is not a CL_SHOP_PRODUCT object (exception variable $argument_name contains faulty parameter name)
+	**/
+	public function remove_input_product(object $product)
+	{
+		if (CL_SHOP_PRODUCT != $product->class_id())
+		{
+			$e = new awex_obj_type("Wrong type product object.");
+			$e->argument_name = "product";
+			throw $e;
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_MATERIAL_EXPENSE_CONDITION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"resource" => $this->id(),
+			"product" => $product->id()
+		));
+		foreach ($ol->arr() as $o)
+		{
+			$o->delete();
+		}
 	}
 
 	/** Calculates and returns fixed unavailable periods effective between points in time specified by $start and $end
@@ -161,17 +455,17 @@ class mrp_resource_obj extends _int_object
 			{
 				switch ($recurrence->prop ("recur_type"))
 				{
-					case RECUR_DAILY: //day
+					case recurrence::RECUR_DAILY: //day
 						$interval = $recurrence->prop ("interval_daily");
 						$interval = round (($interval ? $interval : 1) * 86400);
 						break;
 
-					case RECUR_WEEKLY: //week
+					case recurrence::RECUR_WEEKLY: //week
 						$interval = $recurrence->prop ("interval_weekly");
 						$interval = round (($interval ? $interval : 1) * 86400 * 7);
 						break;
 
-					case RECUR_YEARLY: //year
+					case recurrence::RECUR_YEARLY: //year
 						$interval = $recurrence->prop ("interval_yearly");
 						$interval = round (($interval ? $interval : 1) * 86400 * 365);
 						break;
@@ -187,7 +481,7 @@ class mrp_resource_obj extends _int_object
 				$recurrence_starttime = $recurrence_starttime_hours * 3600 + $recurrence_starttime_minutes * 60;
 
 				$recurrent_unavailable_periods[] = array (
-					"length" => round (aw_math_calc::safe_settype_float ($recurrence->prop ("length")) * 3600),
+					"length" => round (aw_math_calc::string2float($recurrence->prop ("length")) * 3600),
 					"start" => $recurrence->prop ("start"),
 					"time" => $recurrence_starttime,
 					"end" => $recurrence->prop ("end"),
@@ -210,7 +504,7 @@ class mrp_resource_obj extends _int_object
 				$interval = 86400;
 				list ($recurrence_time_hours, $recurrence_time_minutes) = explode (":", $recurrence->prop ("time"), 2);
 				$recurrence_time = abs ((int) $recurrence_time_hours) * 3600 + abs ((int) $recurrence_time_minutes) * 60;
-				$recurrence_length = round (aw_math_calc::safe_settype_float ($recurrence->prop ("length")) * 3600);
+				$recurrence_length = round (aw_math_calc::string2float($recurrence->prop ("length")) * 3600);
 
 // /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "recurrent_available_period time:" . $recurrence_time . "<br>";
@@ -333,6 +627,288 @@ class mrp_resource_obj extends _int_object
 		return $recurrent_unavailable_periods;
 	}
 
+/** Starts to process job on this resource
+    @attrib api=1 params=pos
+	@param job required type=CL_MRP_JOB
+	@returns void
+	@errors
+		throws awex_obj_type when $job parameter is not CL_MRP_JOB
+		throws awex_mrp_resource_job when given job couldn't be processed
+		throws awex_mrp_resource_unavailable
+		throws awex_mrp_resource on any other error
+**/
+// Future development idea:
+// @comment
+// Multiple threads can process the same job simultaneously if job allows parallel processing
+	function start_job (object $job)
+	{
+		if (!$job->is_a(CL_MRP_JOB))
+		{
+			throw new awex_obj_type("Wrong type object");
+		}
+
+		if ($this->is_processing($job))
+		{
+			throw new awex_mrp_resource_job("Job is already being processed by this resource");
+		}
+
+		try
+		{
+			if (isset($this->thread_index[$job->id()]))
+			{
+				$key = $this->thread_index[$job->id()];
+				$this->threads[$key]->process($job);
+			}
+			else
+			{
+				foreach ($this->threads as $key => $thread)
+				{
+					if ($thread->is_available())
+					{
+						$thread->process($job);
+						$this->thread_index[$job->id()] = $key;
+						break;
+					}
+				}
+			}
+
+			aw_disable_acl();
+			$this->save ();
+			aw_restore_acl();
+		}
+		catch (awex_mrp_resource_unavailable $e)
+		{
+			throw $e;
+		}
+		catch (Exception $E)
+		{
+			$e = new awex_mrp_resource("Unknown error");
+			$e->set_forwarded_exception($E);
+			throw $e;
+		}
+	}
+
+/** Stops job on this resource
+    @attrib api=1 params=pos
+	@param job required type=CL_MRP_JOB
+	@errors
+		throws awex_obj_type when $job parameter is not CL_MRP_JOB
+		throws awex_mrp_resource_job when given job not being processed
+		throws awex_mrp_resource on any other error
+**/
+	function stop_job (object $job)
+	{
+		if (!$job->is_a(CL_MRP_JOB))
+		{
+			throw new awex_obj_type("Wrong type object");
+		}
+
+		try
+		{
+			$this->load_threads();
+			$finish = false;
+			foreach ($this->threads as $thread)
+			{
+				if ($thread->is_processing($job))
+				{
+					$thread->finish($job);
+					if (isset($this->thread_index[$job->id()]))
+					{
+						unset($this->thread_index[$job->id()]);
+					}
+					$finish = true;
+				}
+			}
+
+			if (!$finish)
+			{
+				throw new awex_mrp_resource_job("Job not found in processed jobs");
+			}
+
+			aw_disable_acl();
+			$this->save ();
+			aw_restore_acl();
+		}
+		catch (awex_mrp_resource_job $e)
+		{
+			throw $e;
+		}
+		catch (Exception $E)
+		{
+			$e = new awex_mrp_resource("Unknown error");
+			$e->set_forwarded_exception($E);
+			throw $e;
+		}
+	}
+
+/** Reserves the resource for given job.
+    @attrib api=1 params=pos
+	@param job type=CL_MRP_JOB
+	@returns void
+	@errors
+		throws awex_obj_type when $job parameter is not CL_MRP_JOB
+		throws awex_mrp_resource_unavailable
+		throws awex_mrp_resource on any other error
+**/
+	public function reserve(object $job)
+	{
+		if (!$job->is_a(CL_MRP_JOB))
+		{
+			throw new awex_obj_type("Wrong type object");
+		}
+
+		$this->load_threads();
+		try
+		{
+			foreach ($this->threads as $key => $thread)
+			{
+				if ($thread->is_available())
+				{
+					$thread->reserve($job);
+					$this->thread_index[$job->id()] = $key;
+					return;
+				}
+			}
+		}
+		catch (Exception $E)
+		{
+			$e = new awex_mrp_resource("Unknown error");
+			$e->set_forwarded_exception($E);
+			throw $e;
+		}
+
+		throw new awex_mrp_resource_unavailable("Resource unavailable");
+	}
+
+/** Cancel reservation for given job.
+    @attrib api=1 params=pos
+	@param job type=CL_MRP_JOB
+	@returns bool
+	@errors
+		throws awex_obj_type when $job parameter is not CL_MRP_JOB
+**/
+	public function cancel_reservation(object $job)
+	{
+		if (!$job->is_a(CL_MRP_JOB))
+		{
+			throw new awex_obj_type("Wrong type object");
+		}
+
+		$this->load_threads();
+
+		if (isset($this->thread_index[$job->id()]) and isset($this->threads[$this->thread_index[$job->id()]]))
+		{ // look in index first
+			$this->threads[$this->thread_index[$job->id()]]->cancel_reservation($job);
+			unset($this->thread_index[$job->id()]);
+		}
+		else
+		{ // index error, try to cancel reservation on every thread
+			foreach ($this->threads as $thread)
+			{
+				$thread->cancel_reservation($job);
+			}
+		}
+	}
+
+/** Tells if resource is processing given job.
+    @attrib api=1 params=pos
+	@param job type=CL_MRP_JOB
+	@returns bool
+	@errors
+		throws awex_obj_type when $job parameter is not CL_MRP_JOB
+**/
+	public function is_processing(object $job)
+	{
+		if (!$job->is_a(CL_MRP_JOB))
+		{
+			throw new awex_obj_type("Wrong type object");
+		}
+
+		$this->load_threads();
+		$is = false;
+
+		// try thread index
+		if (isset($this->thread_index[$job->id()]) and isset($this->threads[$this->thread_index[$job->id()]]) and $this->threads[$this->thread_index[$job->id()]]->is_processing($job))
+		{
+			$is = true;
+		}
+		else
+		{	// try iteration
+			foreach ($this->threads as $key => $thread)
+			{
+				if ($thread->is_processing($job))
+				{
+					$is = true;
+					// mend thread index
+					$this->thread_index[$job->id()] = $key;
+					break;
+				}
+			}
+		}
+
+		return $is;
+	}
+
+/** Tells if resource is available.
+    @attrib api=1 params=pos
+	@returns int
+		Number of available threads
+	@errors
+		throws awex_mrp_resource on any error
+**/
+	public function is_available()
+	{
+		$is = 0;
+		if (!in_array(parent::prop("state"), self::$inactive_states))
+		{
+			$this->load_threads();
+			foreach ($this->threads as $thread)
+			{
+				if ($thread->is_available())
+				{
+					++$is;
+				}
+			}
+		}
+		return $is;
+	}
+
+/**
+@attrib api=1 params=pos
+@comment
+	Standard _int_object parameters
+@errors
+	throws awex_mrp_case_workspace when workspace not found
+**/
+	public function save($exclusive = false, $previous_state = null)
+	{
+		$this->load_threads();
+		$new = (null === $this->id());
+		if ($new)
+		{
+			$workspace = $this->awobj_get_workspace();
+			$resources_folder = $workspace->prop ("resources_folder");
+			$this->set_parent ($resources_folder);
+		}
+
+		foreach ($this->threads as $key => $thread)
+		{
+			if ($thread->deleted() and $thread->is_available())
+			{
+				$job_id = $thread->get_job_id();
+				if (isset($this->thread_index[$job_id]))
+				{
+					unset($this->thread_index[$job_id]);
+				}
+				unset($this->threads[$key]);
+			}
+		}
+		$this->set_prop("thread_data", $this->threads);
+		parent::set_prop("state", $this->awobj_get_state());
+		$r = parent::save($exclusive, $previous_state);
+		return $r;
+	}
+
 	protected static function sort_recurrences_by_start ($recurrence1, $recurrence2)
 	{
 		if ($recurrence1["start"] > $recurrence2["start"])
@@ -369,95 +945,138 @@ class mrp_resource_obj extends _int_object
 		return $result;
 	}
 
-	/**
-		@attrib name=get_available_hours
-
-		@param from optional type=int default=0
-
-		@param to optional type=int
-
-	**/
-	public function get_available_hours($arr = array())
+	protected function load_threads()
 	{
-		$from = isset($arr["from"]) ? (int)$arr["from"] : 0;
-		$to = isset($arr["to"]) ? (int)$arr["to"] : time();
-		$span = $to - $from;
-
-		$ups = $this->get_unavailable_periods($from, $to);
-		foreach($ups as $up_s => $up_f)
+		if (empty($this->threads))
 		{
-			$span -= $up_f - $up_s;
+			$this->threads = $this->prop("thread_data");
+			if (empty($this->threads))
+			{ // new object probably
+				$this->threads = array(new mrp_resource_thread());
+			}
+			elseif (is_array(reset($this->threads)))
+			{ // convert old format thread data
+				$old_thread_data = $this->threads;
+				$this->threads = array();
+				foreach ($old_thread_data as $old_thread)
+				{
+					$thread = new mrp_resource_thread();
+					if (!empty($old_thread["job"]))
+					{ // job in work
+						try
+						{
+							$job = obj($old_thread["job"], array(), CL_MRP_JOB, false);
+							$thread->process($job);
+							$this->thread_index[$job->id()] = count($this->threads);
+						}
+						catch (Exception $e)
+						{
+							unset($this->thread_index[$job->id()]);
+						}
+					}
+					$this->threads[] = $thread;
+				}
+
+				if (count($this->thread_index) === count($this->threads))
+				{ // a job is in work, set global state
+					$this->set_prop("state", self::STATE_PROCESSING);
+				}
+			}
+
+			// index threads by their job
+			foreach ($this->threads as $key => $thread)
+			{
+				if ($thread->deleted())
+				{
+					unset($this->threads[$key]);
+				}
+				else
+				{
+					$this->thread_index[$thread->get_job_id()] = $key;
+				}
+			}
+		}
+	}
+}
+
+class mrp_resource_thread
+	{
+	protected $id;
+	protected $state = mrp_resource_obj::STATE_AVAILABLE;
+	protected $job; // current job oid
+	protected $to_be_deleted = false;
+
+	public function reserve(object $job)
+		{
+		if (!$this->is_available())
+		{
+			throw new awex_mrp_resource_unavailable("Resource thread not available");
+		}
+		$this->state = mrp_resource_obj::STATE_RESERVED;
+		$this->job = $job->id();
 		}
 
-		$rups = $this->get_recurrent_unavailable_periods($from, $to);
-		foreach($rups as $rup)
+	public function cancel_reservation(object $job)
 		{
-			for($i = $rup["start"] + $rup["time"]; $i < $rup["end"]; $i += $rup["interval"])
+		if ($this->state === mrp_resource_obj::STATE_RESERVED and $job->id() === $this->job)
 			{
-				$u = $i + $rup["length"] > $rup["end"] ? $rup["end"] - $i : $rup["length"];
-				$span -= max(0, $u);
+			$this->state = mrp_resource_obj::STATE_AVAILABLE;
 			}
 		}
 
-		return $span;
+	public function process(object $job)
+	{
+		if (!$this->to_be_deleted and ($this->state === mrp_resource_obj::STATE_AVAILABLE or $this->state === mrp_resource_obj::STATE_RESERVED and $job->id() === $this->job))
+		{
+			$this->job = $job->id();
+			$this->state = mrp_resource_obj::STATE_PROCESSING;
+		}
 	}
 
-	/**
-		@attrib name=get_planned_hours api=1 params=name
-
-		@param from optional type=int default=0
-
-		@param to optional type=int default=time()
-
-		@param id optional type=int/array
-			If not set the OID of current object will be used.
-
-		@returns Array of planned hours by resource if parameter id is array, planned hours as int otherwise.
-			
-	**/
-	public function get_planned_hours($arr)
+	public function finish(object $job)
 	{
-		/*
-		InstruMental: Kuidas ma object_listis ütlen, et anna mulle kõik objektid, mille prop1 ja prop2 summa on suurem kui n?
-		terryf: ei saagi
-		*/
-
-		$arr["id"] = !empty($arr["id"]) ? $arr["id"] : $this->id();
-		$resource_ids = implode(",", (array)$arr["id"]);
-		$from = isset($arr["from"]) ? (int)$arr["from"] : 0;
-		$to = isset($arr["to"]) ? (int)$arr["to"] : time();
-		$status = implode(",", array(object::STAT_ACTIVE, object::STAT_NOTACTIVE));
-		$span = $to - $from;
-
-		$rows = get_instance("class_base")->db_fetch_array("
-			SELECT
-				m.resource as resource_id, SUM(LEAST(m.length, $to - s.starttime, s.starttime + m.length - $from, $span)) as p
-			FROM
-				objects o 
-				LEFT JOIN mrp_job m ON o.brother_of = m.oid
-				LEFT JOIN mrp_schedule s ON o.brother_of = s.oid
-			WHERE
-				s.starttime < $to
-				AND s.starttime + m.length > 0
-				AND o.status IN ({$status})
-				AND m.resource IN ({$resource_ids})
-			GROUP BY m.resource
-		");
-
-		// Initialize
-		$p = array();
-		foreach((array)$arr["id"] as $resource_id)
+		if ($this->state === mrp_resource_obj::STATE_PROCESSING and $job->id() === $this->job)
 		{
-			$p[$resource_ids] = 0;
+			$this->state = mrp_resource_obj::STATE_AVAILABLE;
+		}
+	}
+
+	public function is_available()
+	{
+		return !$this->to_be_deleted and $this->state === mrp_resource_obj::STATE_AVAILABLE;
+	}
+			
+	public function is_processing(object $job)
+	{
+		return ($this->state === mrp_resource_obj::STATE_PROCESSING and $job->id() === $this->job);
 		}
 
-		foreach($rows as $row)
+	public function get_job_id()
 		{
-			$p[$row["resource_id"]] = $row["p"];
+		return $this->job;
 		}
 
-		return is_array($arr["id"]) ? $p : reset($p);
+	public function delete()
+	{
+		$this->to_be_deleted = true;
+	}
+
+	public function deleted()
+	{
+		return $this->to_be_deleted;
 	}
 }
+
+/** Generic mrp_resource exception **/
+class awex_mrp_resource extends awex_mrp {}
+
+/** Resource is unavailable **/
+class awex_mrp_resource_unavailable extends awex_mrp_resource {}
+
+/** Job processing errors **/
+class awex_mrp_resource_job extends awex_mrp_resource {}
+
+/** Workspace error **/
+class awex_mrp_resource_workspace extends awex_mrp_resource {}
 
 ?>

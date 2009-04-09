@@ -70,14 +70,4 @@
       <func>on_create_group</func>
       <param>CL_GROUP</param>
 </num_13>
-<num_14>
-      <class>mrp/mrp_resource</class>
-      <func>on_create_resource</func>
-      <param>CL_MRP_RESOURCE</param>
-</num_14>
-<num_15>
-      <class>mrp/mrp_case</class>
-      <func>on_new_case</func>
-      <param>CL_MRP_CASE</param>
-</num_15>
 </xml>

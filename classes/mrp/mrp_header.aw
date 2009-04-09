@@ -4,6 +4,8 @@
 included in all mrp files except operator and import.
 */
 
+/* ALL CONSTANTS HERE ARE TO BE DEPRECATED! USE THOSE DEFINED IN CLASSES */
+
 ### resource types
 define ("MRP_RESOURCE_SCHEDULABLE", 1);
 define ("MRP_RESOURCE_NOT_SCHEDULABLE", 2);
@@ -31,12 +33,6 @@ define ("MRP_STATUS_RESOURCE_INACTIVE", 13);
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 define ("MRP_NEWLINE", "<br />\n");
-define("RECUR_DAILY",1);
-define("RECUR_WEEKLY",2);
-define("RECUR_MONTHLY",3);
-define("RECUR_YEARLY",4);
-define("RECUR_HOURLY",5);
-define("RECUR_MINUTELY",6);
 
 ### colours (CSS colour definition)
 define ("MRP_COLOUR_NEW", "#05F123");
@@ -56,6 +52,7 @@ define ("MRP_COLOUR_OVERDUE", "#DF0D12");
 define ("MRP_COLOUR_AVAILABLE", "#FCFCF4");
 define ("MRP_COLOUR_PRJHILITE", "#FFE706");
 
-class awex_mrp extends aw_exception {}
+/** Generic erp/mrp application error **/
+class awex_mrp extends awex_obj {}
 
 ?>

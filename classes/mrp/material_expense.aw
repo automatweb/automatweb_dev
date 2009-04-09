@@ -13,7 +13,10 @@
 @caption Tegevus
 
 @property amount type=textbox datatype=int
-@caption Kogus
+@caption Planeeritud kogus
+
+@property used_amount type=textbox
+@caption Kulutatud kogus
 
 @property base_amount type=textbox datatype=int
 @caption Kogus p&otilde;hi&uuml;hikus
@@ -47,43 +50,9 @@ class material_expense extends class_base
 		));
 	}
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-	}
-
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
 	}
 
 	function do_db_upgrade($t, $f)
@@ -110,7 +79,7 @@ class material_expense extends class_base
 			case "base_amount":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => "varchar(20)"
+					"type" => "char(20)"
 				));
 				return true;
 		}

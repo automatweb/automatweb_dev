@@ -100,9 +100,4 @@
       <func>on_save_addr</func>
       <param>CL_ML_MEMBER</param>
 </num_19>
-<num_20>
-      <class>mrp/mrp_case</class>
-      <func>on_save_case</func>
-      <param>CL_MRP_CASE</param>
-</num_20>
 </xml>

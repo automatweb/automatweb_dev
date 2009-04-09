@@ -25,7 +25,15 @@
             <type>textbox</type>
             <datatype>int</datatype>
             <field>amount</field>
-            <caption>Kogus</caption>
+            <caption>Planeeritud kogus</caption>
+      </property>
+      <property>
+            <name>used_amount</name>
+            <table>aw_material_expense</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>used_amount</field>
+            <caption>Kulutatud kogus</caption>
       </property>
       <property>
             <name>base_amount</name>

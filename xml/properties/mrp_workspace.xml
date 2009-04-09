@@ -838,16 +838,16 @@
             <caption>Projekti headeri kontroller</caption>
       </property>
       <property>
-            <name>warehouse</name>
+            <name>purchasing_manager</name>
             <group>grp_settings_def</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_MRP_WAREHOUSE</reltype>
+            <reltype>RELTYPE_PURCHASING_MANAGER</reltype>
             <parent>left_column</parent>
             <multiple>1</multiple>
-            <caption>Materjalide ladu</caption>
+            <caption>Materjalide hankimise keskkond</caption>
       </property>
       <property>
             <name>hr_time_format</name>
@@ -1052,6 +1052,17 @@
             <type>select</type>
             <parent>right_column</parent>
             <caption>Skaala aja&amp;amp;uuml;hik</caption>
+      </property>
+      <property>
+            <name>parameter_plan_materials</name>
+            <group>grp_settings_def</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>right_column</parent>
+            <caption>Planeeri materjalide kasutust</caption>
       </property>
       <property>
             <name>printer_tree</name>
@@ -1788,11 +1799,11 @@
                   <value>5</value>
                   <caption>Projekti headeri kontroller</caption>
             </MRP_HEADER_CONTROLLER>
-            <MRP_WAREHOUSE>
-                  <clid>CL_SHOP_WAREHOUSE</clid>
+            <PURCHASING_MANAGER>
+                  <clid>CL_SHOP_PURCHASE_MANAGER_WORKSPACE</clid>
                   <value>6</value>
-                  <caption>Materjalide ladu</caption>
-            </MRP_WAREHOUSE>
+                  <caption>Materjalide hankimise keskkond</caption>
+            </PURCHASING_MANAGER>
       </reltypes>
       <layout>
             <my_resources_full>

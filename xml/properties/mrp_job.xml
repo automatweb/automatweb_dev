@@ -1,6 +1,17 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>job_toolbar</name>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <group>
+                  <num_0>general</num_0>
+                  <num_1>workflow</num_1>
+            </group>
+            <field>job_toolbar</field>
+      </property>
+      <property>
             <name>name</name>
             <group>general</group>
             <type>text</type>
@@ -215,6 +226,14 @@
             <type>datetime_select</type>
             <comment>Allhankijaga kokkulepitud aeg, millal t&amp;amp;ouml;&amp;amp;ouml; alustada.</comment>
             <caption>Soovitav algusaeg</caption>
+      </property>
+      <property>
+            <name>used_materials</name>
+            <group>data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_JOB</syslog_type>

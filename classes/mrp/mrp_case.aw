@@ -1,9 +1,7 @@
 <?php
+
 /*
 
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_change)
 
 @classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
@@ -35,6 +33,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default table=mrp_case
+	@property workspace type=hidden
+
 	@property state type=text group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data,grp_case_view editonly=1 parent=general_info
 	@caption Staatus
 
@@ -58,6 +58,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@caption Planeeritud valmimisaeg
 
 @default table=mrp_case
+	@property started type=text editonly=1
+	@caption Alustatud
+
 	@property finished type=text editonly=1
 	@caption L&otilde;petatud
 
@@ -203,6 +206,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @reltype MRP_USED_RESOURCE value=4 clid=CL_MRP_RESOURCE
 @caption Kasutatav ressurss
 
+// DEPRECATED
 @reltype MRP_OWNER value=5 clid=CL_MRP_WORKSPACE
 @caption Projekti omanik
 
@@ -214,6 +218,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 CREATE TABLE `mrp_case` (
   `oid` int(11) NOT NULL default '0',
   `starttime` int(10) unsigned default NULL,
+  `started` int(10) unsigned default NULL,
   `progress` int(10) unsigned default NULL,
   `due_date` int(10) unsigned default NULL,
   `project_priority` int(10) unsigned default NULL,
@@ -238,39 +243,36 @@ CREATE TABLE `mrp_case_schedule` (
 
 */
 
-classload("mrp/mrp_header");
+require_once "mrp_header.aw";
 
 class mrp_case extends class_base
 {
 	protected $workspace; // mrp_workspace object
 	protected $mrp_error = "";
 	protected $states = array();
-	protected $state_colours = array (
-		MRP_STATUS_NEW => MRP_COLOUR_NEW,
-		MRP_STATUS_PLANNED => MRP_COLOUR_PLANNED,
-		MRP_STATUS_INPROGRESS => MRP_COLOUR_INPROGRESS,
-		MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
-		MRP_STATUS_DONE => MRP_COLOUR_DONE,
-		MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
-		MRP_STATUS_SHIFT_CHANGE => MRP_COLOUR_SHIFT_CHANGE,
-		MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
-		MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
-	);
 
 	function mrp_case()
 	{
 		$this->states = array (
-			MRP_STATUS_NEW => t("Uus"),
-			MRP_STATUS_PLANNED => t("Planeeritud"),
-			MRP_STATUS_INPROGRESS => t("T&ouml;&ouml;s"),
-			MRP_STATUS_ABORTED => t("Katkestatud"),
-			MRP_STATUS_DONE => t("Valmis"),
-			MRP_STATUS_LOCKED => t("Lukustatud"),
-			MRP_STATUS_PAUSED => t("Paus"),
-			MRP_STATUS_SHIFT_CHANGE => t("Paus"),
-			MRP_STATUS_DELETED => t("Kustutatud"),
-			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
-			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
+			mrp_case_obj::STATE_NEW => t("Uus"),
+			mrp_case_obj::STATE_PLANNED => t("Planeeritud"),
+			mrp_case_obj::STATE_INPROGRESS => t("T&ouml;&ouml;s"),
+			mrp_case_obj::STATE_ABORTED => t("Katkestatud"),
+			mrp_case_obj::STATE_DONE => t("Valmis"),
+			mrp_case_obj::STATE_LOCKED => t("Lukustatud"),
+			mrp_case_obj::STATE_DELETED => t("Kustutatud"),
+			mrp_case_obj::STATE_ONHOLD => t("Plaanist v&auml;ljas"),
+			mrp_case_obj::STATE_ARCHIVED => t("Arhiveeritud"),
+
+			mrp_job_obj::STATE_NEW => t("Uus"),
+			mrp_job_obj::STATE_PLANNED => t("Planeeritud"),
+			mrp_job_obj::STATE_INPROGRESS => t("T&ouml;&ouml;s"),
+			mrp_job_obj::STATE_ABORTED => t("Katkestatud"),
+			mrp_job_obj::STATE_DONE => t("Valmis"),
+			mrp_job_obj::STATE_LOCKED => t("Lukustatud"),
+			mrp_job_obj::STATE_PAUSED => t("Paus"),
+			mrp_job_obj::STATE_SHIFT_CHANGE => t("Paus"),
+			mrp_job_obj::STATE_DELETED => t("Kustutatud")
 		);
 
 		$this->init(array(
@@ -283,24 +285,24 @@ class mrp_case extends class_base
 	{
 		if (!is_oid ($arr["request"]["id"]))
 		{
-			if (is_oid ($arr["request"]["mrp_workspace"]))
+			if (!automatweb::$request->arg_isset("mrp_workspace"))
 			{
-				$this->workspace = obj ($arr["request"]["mrp_workspace"]);
+				$this->mrp_error .= t("Uut projekti saab luua vaid ressursihalduskeskkonnast.");
+				return;
 			}
-			/*else
-			{
-				$this->mrp_error .= t("Uut projekti saab luua vaid ressursihalduskeskkonnast. ");
-			}*/
+
+			$ws_oid = automatweb::$request->arg("mrp_workspace");
+			$this->workspace = obj ($ws_oid, array(), CL_MRP_WORKSPACE);
 		}
 		else
 		{
 			$this_object = obj($arr["request"]["id"]);
-			$this->workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+			$this->workspace = $this_object->prop("workspace");
 
-			/*if (!$this->workspace)
+			if (!$this->workspace)
 			{
 				$this->mrp_error .= t("Projektil puudub ressursihalduskeskkond. ");
-			}*/
+			}
 		}
 
 		if ($this->mrp_error)
@@ -311,6 +313,11 @@ class mrp_case extends class_base
 
 	function callback_mod_reforb ($arr)
 	{
+		if (isset($arr["request"]["mrp_workspace"]))
+		{
+			$arr["mrp_workspace"] = $arr["request"]["mrp_workspace"];
+		}
+
 		if ($this->workspace)
 		{
 			$arr["mrp_workspace"] = $this->workspace->id ();
@@ -326,14 +333,14 @@ class mrp_case extends class_base
 
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 
 		$txt_grps = array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view");
 
 		switch($prop["name"])
 		{
 			case "name":
-				if(in_array($arr["request"]["group"], $txt_grps))
+				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], $txt_grps))
 				{
 					$prop["type"] = "text";
 					$prop["caption"] = trim($prop["caption"], "\.").":";
@@ -341,7 +348,7 @@ class mrp_case extends class_base
 				break;
 
 			case "customer":
-				if(in_array($arr["request"]["group"], $txt_grps))
+				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], $txt_grps))
 				{
 					$prop["type"] = "text";
 					$prop["value"] = $arr["obj_inst"]->prop($prop["name"].".name");
@@ -379,7 +386,7 @@ class mrp_case extends class_base
 
 			case "state":
 				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : "M&auml;&auml;ramata";
-				if(in_array($arr["request"]["group"], $txt_grps))
+				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], $txt_grps))
 				{
 					$prop["caption"] .= ":";
 				}
@@ -405,18 +412,18 @@ class mrp_case extends class_base
 				break;
 
 			case "finished":
-				$prop["value"] = ($this_object->prop ("state") == MRP_STATUS_DONE) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Pole veel l&otilde;petatud");
+				$prop["value"] = ($this_object->prop ("state") == mrp_case_obj::STATE_DONE) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Pole veel l&otilde;petatud");
 				break;
 
 			case "archived":
-				$prop["value"] = ($this_object->prop ("state") == MRP_STATUS_ARCHIVED) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Pole veel arhiveeritud");
+				$prop["value"] = ($this_object->prop ("state") == mrp_case_obj::STATE_ARCHIVED) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Pole veel arhiveeritud");
 				break;
 
 			case "schedule_chart":
 				### project states for showing its schedule chart
 				$applicable_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_INPROGRESS,
+					mrp_case_obj::STATE_PLANNED,
+					mrp_case_obj::STATE_INPROGRESS
 				);
 
 				if (in_array ($this_object->prop ("state"), $applicable_states))
@@ -424,7 +431,7 @@ class mrp_case extends class_base
 					if ($this->workspace)
 					{
 						### update schedule
-						$schedule = get_instance (CL_MRP_SCHEDULE);
+						$schedule = new mrp_schedule();
 						$schedule->create (array("mrp_workspace" => $this->workspace->id()));
 					}
 					else
@@ -436,10 +443,10 @@ class mrp_case extends class_base
 
 				### project states for showing its schedule chart
 				$applicable_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_INPROGRESS,
-					MRP_STATUS_DONE,
-					MRP_STATUS_ARCHIVED,
+					mrp_case_obj::STATE_PLANNED,
+					mrp_case_obj::STATE_INPROGRESS,
+					mrp_case_obj::STATE_DONE,
+					mrp_case_obj::STATE_ARCHIVED
 				);
 
 				if (in_array ($this_object->prop ("state"), $applicable_states))
@@ -463,8 +470,8 @@ class mrp_case extends class_base
 			case "workflow_table":
 				### project states for updating schedule
 				$applicable_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_INPROGRESS,
+					mrp_case_obj::STATE_PLANNED,
+					mrp_case_obj::STATE_INPROGRESS
 				);
 
 				if (in_array ($this_object->prop ("state"), $applicable_states))
@@ -472,7 +479,7 @@ class mrp_case extends class_base
 					if ($this->workspace)
 					{
 						### update schedule
-						$schedule = get_instance (CL_MRP_SCHEDULE);
+						$schedule = new mrp_schedule();
 						$schedule->create (array("mrp_workspace" => $this->workspace->id()));
 					}
 					else
@@ -522,7 +529,7 @@ class mrp_case extends class_base
 					{
 						$data[$job->state]++;
 					}
-					$colors[$job->state] = strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[$job->state]));
+					$colors[$job->state] = strtolower(preg_replace("/[^0-9A-Za-z]/", "", mrp_workspace::$state_colours[$job->state]));
 					$labels[$job->state] = $this->states[$job->state]." (".$data[$job->state].")";
 				}
 				$c->add_data($data);
@@ -579,7 +586,7 @@ class mrp_case extends class_base
 				break;
 
 			case "warehouse":
-				$ws = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+				$ws = $arr["obj_inst"]->prop("workspace");
 				if($ws && $whs = $ws->prop("warehouse"))
 				{
 					$ol = new object_list(array(
@@ -595,7 +602,7 @@ class mrp_case extends class_base
 
 	function _get_job_charts_tbl($arr)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
+		$t = $arr["prop"]["vcl_inst"];
 		$t->set_titlebar_display(false);
 		$t->set_sortable(false);
 
@@ -703,7 +710,7 @@ class mrp_case extends class_base
 				));
 				$c->add_marker(array(
 					"type" => GCHART_MARKER_TEXT,
-					"text" => $deviation.sprintf(t(" h (%s %%)"), round(($deviation/$plan)*100),1),
+					"text" => $deviation.sprintf(t(" h (%s %%)"), $plan == 0 && $deviation == 0 ? "0" : ($plan == 0 ? "&#8734;" : round(($deviation/$plan)*100, 1))),
 					"color" => "000000",
 					"dataset" => 2,
 					"datapoint" => 0,
@@ -733,14 +740,14 @@ class mrp_case extends class_base
 			return PROP_FATAL_ERROR;
 		}
 
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
 
 		### post rescheduling msg where necessary
 		$applicable_planning_states = array(
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PLANNED,
+			mrp_case_obj::STATE_INPROGRESS,
+			mrp_case_obj::STATE_PLANNED
 		);
 
 		switch ($prop["name"])
@@ -759,8 +766,11 @@ class mrp_case extends class_base
 				$ws->mrp_log($arr["obj_inst"]->id(), NULL, "", $prop["value"]["comment"]);
 				break;
 
+			case "workspace":
+				return PROP_IGNORE;
+
 			case "name":
-				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
+				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
 				{
 					return PROP_IGNORE;
 				}
@@ -783,7 +793,7 @@ class mrp_case extends class_base
 				break;
 
 			case "customer":
-				if(in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
+				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
 				{
 					return PROP_IGNORE;
 				}
@@ -829,36 +839,9 @@ class mrp_case extends class_base
 		return $retval;
 	}
 
-	function callback_post_save ($arr)
+	function callback_pre_save ($arr)
 	{
-		$this_object =& $arr["obj_inst"];
-		if($this->workspace)
-		{
-			$this->workspace->save ();
-		}
-
-		if ($arr["new"])
-		{
-			if (is_oid ($arr["request"]["mrp_workspace"]))
-			{
-				### set status
-				$this_object->set_prop ("state", MRP_STATUS_NEW);
-
-				### connect newly created obj. to workspace from which the req. was made
-				$workspace = obj ($arr["request"]["mrp_workspace"]);
-				$projects_folder = $workspace->prop ("projects_folder");
-				$this_object->connect (array (
-					"to" => $workspace,
-					"reltype" => "RELTYPE_MRP_OWNER",
-				));
-				$this_object->set_parent ($projects_folder);
-				$this_object->save ();
-			}
-			else
-			{
-				echo t("Ressursihalduskeskkond defineerimata v&otilde;i katkine");
-			}
-		}
+		$arr["obj_inst"]->set_prop("workspace", obj($arr["request"]["mrp_workspace"]));
 
 		if (is_string ($arr["request"]["mrp_resourcetree_data"]))
 		//!!! data_var argument changed in treeview. this here not to be updated until treeview updated in mail.prismaprint.ee
@@ -897,17 +880,7 @@ class mrp_case extends class_base
 			$this_object = $arr["obj_inst"];
 		}
 
-		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_OWNER", "class_id" => CL_MRP_WORKSPACE));
-		foreach ($connections as $connection)
-		{
-			$workspace = $connection->to();
-			break;
-		}
-
-		if (!isset($workspace))
-		{
-			$workspace = obj(aw_ini_get("prisma.ws"));
-		}
+		$workspace = $this_object->prop("workspace");
 		return $workspace;
 	}
 
@@ -931,9 +904,9 @@ class mrp_case extends class_base
 
 		switch ($this_object->prop ("state"))
 		{
-			case MRP_STATUS_INPROGRESS:
-			case MRP_STATUS_DONE:
-			case MRP_STATUS_ARCHIVED:
+			case mrp_case_obj::STATE_INPROGRESS:
+			case mrp_case_obj::STATE_DONE:
+			case mrp_case_obj::STATE_ARCHIVED:
 				$project_start = is_object($o) ? $o->prop("started") : $this_object->prop ("starttime");
 				break;
 
@@ -1031,10 +1004,10 @@ class mrp_case extends class_base
 
 		### job states that are shown in chart past
 		$applicable_states = array (
-			MRP_STATUS_DONE,
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE
+			mrp_job_obj::STATE_DONE,
+			mrp_job_obj::STATE_INPROGRESS,
+			mrp_job_obj::STATE_PAUSED,
+			mrp_job_obj::STATE_SHIFT_CHANGE
 		);
 
 		$this->db_query (
@@ -1047,7 +1020,7 @@ class mrp_case extends class_base
 			"job.state IN (" . implode (",", $applicable_states) . ") AND " .
 			"o.status > 0 AND " .
 			"o.parent = '" . $workspace->prop ("jobs_folder") . "' AND " .
-			"((!(job.started < {$range_start})) OR ((job.state = " . MRP_STATUS_DONE . " AND job.finished > {$range_start}) OR (job.state != " . MRP_STATUS_DONE . " AND {$time} > {$range_start}))) AND " .
+			"((!(job.started < {$range_start})) OR ((job.state = " . mrp_job_obj::STATE_DONE . " AND job.finished > {$range_start}) OR (job.state != " . mrp_job_obj::STATE_DONE . " AND {$time} > {$range_start}))) AND " .
 			"job.started < {$range_end} AND " .
 			"job.project > 0 AND " .
 			"job.length > 0 AND " .
@@ -1059,15 +1032,15 @@ class mrp_case extends class_base
 			if ($this->can("view", $job["oid"]))
 			{
 				$metadata = aw_unserialize ($job["metadata"]);
-				$job["paused_times"] = $metadata["paused_times"];
+				$job["paused_times"] = isset($metadata["paused_times"]) ? $metadata["paused_times"] : array();
 				$jobs[] = $job;
 			}
 		}
 
 		### job states that are shown in chart future
 		$applicable_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_ABORTED,
+			mrp_job_obj::STATE_PLANNED,
+			mrp_job_obj::STATE_ABORTED,
 		);
 
 		$this->db_query (
@@ -1093,7 +1066,7 @@ class mrp_case extends class_base
 			if ($this->can("view", $job["oid"]))
 			{
 				$metadata = aw_unserialize($job["metadata"]);
-				$job["paused_times"] = $metadata["paused_times"];
+				$job["paused_times"] = isset($metadata["paused_times"]) ? $metadata["paused_times"] : array();
 				$jobs[] = $job;
 			}
 		}
@@ -1110,10 +1083,10 @@ class mrp_case extends class_base
 
 			### project states that are shown in chart
 			$applicable_states = array (
-				MRP_STATUS_PLANNED,
-				MRP_STATUS_INPROGRESS,
-				MRP_STATUS_DONE,
-				MRP_STATUS_ARCHIVED,
+				mrp_case_obj::STATE_PLANNED,
+				mrp_case_obj::STATE_INPROGRESS,
+				mrp_case_obj::STATE_DONE,
+				mrp_case_obj::STATE_ARCHIVED
 			);
 
 			if (!in_array ($project->prop ("state"), $applicable_states))
@@ -1124,20 +1097,20 @@ class mrp_case extends class_base
 			### get start&length according to job state
 			switch ($job["state"])
 			{
-				case MRP_STATUS_DONE:
+				case mrp_job_obj::STATE_DONE:
 					$start = $job["started"];
 					$length = $job["finished"] - $job["started"];
 // /* dbg */ echo date(MRP_DATE_FORMAT, $start) . "-" . date(MRP_DATE_FORMAT, $start + $length) . "<br>";
 					break;
 
-				case MRP_STATUS_PLANNED:
+				case mrp_job_obj::STATE_PLANNED:
 					$start = $job["starttime"];
 					$length = $job["planned_length"];
 					break;
 
-				case MRP_STATUS_SHIFT_CHANGE:
-				case MRP_STATUS_PAUSED:
-				case MRP_STATUS_INPROGRESS:
+				case mrp_job_obj::STATE_SHIFT_CHANGE:
+				case mrp_job_obj::STATE_PAUSED:
+				case mrp_job_obj::STATE_INPROGRESS:
 					$start = $job["started"];
 					$length = (($start + $job["planned_length"]) < $time) ? ($time - $start) : $job["planned_length"];
 					break;
@@ -1147,7 +1120,7 @@ class mrp_case extends class_base
 			$job_name = $project->name () . "-" . $job["exec_order"] . " - " . $resource->name ();
 
 			### set bar colour
-			$colour = $this->state_colours[$job["state"]];
+			$colour = mrp_workspace::$state_colours[$job["state"]];
 			$colour = in_array ($job["oid"], $hilighted_jobs) ? MRP_COLOUR_HILIGHTED : $colour;
 
 			$bar = array (
@@ -1174,7 +1147,7 @@ class mrp_case extends class_base
 						"start" => $pd["start"],
 						"nostartmark" => true,
 						"layer" => 1,
-						"colour" => $this->state_colours[MRP_STATUS_PAUSED],
+						"colour" => mrp_workspace::$state_colours[mrp_job_obj::STATE_PAUSED],
 						"length" => ($pd["end"] - $pd["start"]),
 						"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
 						"title" => $job_name . ", paus (" . date (MRP_DATE_FORMAT, $pd["start"]) . " - " . date (MRP_DATE_FORMAT, $pd["end"]) . ")"
@@ -1226,10 +1199,10 @@ class mrp_case extends class_base
 
 	function create_chart_navigation ($arr)
 	{
-		$start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : time ());
+		$start = (int) (isset($arr["request"]["mrp_chart_start"]) ? $arr["request"]["mrp_chart_start"] : time ());
 		$start_nav = array ();
 		$start_uri = aw_url_change_var ("mrp_chart_length", "");
-		$start_uri = aw_url_change_var ("mrp_chart_start", "", $uri);
+		$start_uri = aw_url_change_var ("mrp_chart_start", "", $start_uri);
 		$period_length = (isset ($arr["request"]["mrp_chart_length"]) ? $arr["request"]["mrp_chart_length"] : 7) * 86400;
 
 		$start_nav[] = html::href (array (
@@ -1251,8 +1224,8 @@ class mrp_case extends class_base
 
 	function create_resource_tree ($arr = array ())
 	{
-		$this_object =& $arr["obj_inst"];
-		$workspace =& $this->get_current_workspace ($arr);
+		$this_object = $arr["obj_inst"];
+		$workspace = $this->get_current_workspace ($arr);
 		$resources_folder = $workspace->prop ("resources_folder");
 
 		if (!is_oid($resources_folder))
@@ -1291,12 +1264,13 @@ class mrp_case extends class_base
 			"param" => array($resource_tree, $applicable_states)
 		));
 
-		$tree = treeview::tree_from_objects (array (
+		$tree = new treeview();
+		$tree = $tree->tree_from_objects (array (
 			"tree_opts" => array (
 				"type" => TREE_DHTML_WITH_BUTTONS,
 				"tree_id" => "resourcetree",
 				"persist_state" => true,
-				"checkbox_data_var" => "mrp_resourcetree_data",
+				"checkbox_data_var" => "mrp_resourcetree_data"
 			),
 			"root_item" => obj ($resources_folder),
 			"ot" => $resource_tree,
@@ -1315,7 +1289,7 @@ class mrp_case extends class_base
 		$toolbar = $arr["prop"]["toolbar"];
 
 		### delete button
-		if ($arr["request"]["group"] === "grp_case_workflow")
+		if (isset($arr["request"]["group"]) and $arr["request"]["group"] === "grp_case_workflow")
 		{
 			$disabled = false;
 		}
@@ -1328,7 +1302,7 @@ class mrp_case extends class_base
 			"name" => "save",
 			"img" => "save.gif",
 			"tooltip" => t("Salvesta"),
-			"action" => "submit",
+			"action" => "submit"
 			// "disabled" => $disabled,
 		));
 
@@ -1338,7 +1312,7 @@ class mrp_case extends class_base
 			"tooltip" => t("Kustuta valitud t&ouml;&ouml;(d)"),
 			"confirm" => t("Kustutada k&otilde;ik valitud t&ouml;&ouml;d?"),
 			"action" => "delete",
-			"disabled" => $disabled,
+			"disabled" => $disabled
 		));
 
 		$toolbar->add_separator();
@@ -1352,9 +1326,9 @@ class mrp_case extends class_base
 
 		### states for scheduling a project
 		$applicable_states = array(
-			MRP_STATUS_NEW,
-			MRP_STATUS_ABORTED,
-			MRP_STATUS_ONHOLD,
+			mrp_case_obj::STATE_NEW,
+			mrp_case_obj::STATE_ABORTED,
+			mrp_case_obj::STATE_ONHOLD
 		);
 
 		if (in_array($this_object->prop("state"), $applicable_states))
@@ -1371,13 +1345,13 @@ class mrp_case extends class_base
 			// "img" => "plan.gif",
 			"tooltip" => t("Planeeri"),
 			"action" => "plan",
-			"disabled" => $disabled,
+			"disabled" => $disabled
 		));
 
 
 		### states for taking a project out of scheduling
 		$applicable_states = array(
-			MRP_STATUS_PLANNED,
+			mrp_case_obj::STATE_PLANNED
 		);
 
 		if (in_array($this_object->prop("state"), $applicable_states))
@@ -1395,12 +1369,12 @@ class mrp_case extends class_base
 			"tooltip" => t("Plaanist v&auml;lja"),
 			"action" => "set_on_hold",
 			"confirm" => t("Projekt plaanist v&auml;lja?"),
-			"disabled" => $disabled,
+			"disabled" => $disabled
 		));
 
 		### states for aborting a project
 		$applicable_states = array(
-			MRP_STATUS_INPROGRESS,
+			mrp_case_obj::STATE_INPROGRESS
 		);
 
 		if (in_array($this_object->prop("state"), $applicable_states))
@@ -1418,12 +1392,12 @@ class mrp_case extends class_base
 			"tooltip" => t("Katkesta"),
 			"confirm" => t("Katkestada projekt?"),
 			"action" => "abort",
-			"disabled" => $disabled,
+			"disabled" => $disabled
 		));
 
 		### states for finishing a project
 		$applicable_states = array(
-			MRP_STATUS_INPROGRESS,
+			mrp_case_obj::STATE_INPROGRESS
 		);
 
 		if (in_array($this_object->prop("state"), $applicable_states))
@@ -1441,12 +1415,12 @@ class mrp_case extends class_base
 			"tooltip" => t("Valmis"),
 			"action" => "finish",
 			"confirm" => t("Projekt on t&ouml;&ouml;s. Olete kindel, et soovite m&auml;&auml;rata projekti staatuseks 'valmis' ?"),
-			"disabled" => $disabled,
+			"disabled" => $disabled
 		));
 
 		### states for archiving a project
 		$applicable_states = array(
-			MRP_STATUS_DONE,
+			mrp_case_obj::STATE_DONE
 		);
 
 		if (in_array($this_object->prop("state"), $applicable_states))
@@ -1463,7 +1437,7 @@ class mrp_case extends class_base
 			// "img" => "archive.gif",
 			"tooltip" => t("Arhiveeri"),
 			"action" => "archive",
-			"disabled" => $disabled,
+			"disabled" => $disabled
 		));
 	}
 
@@ -1475,7 +1449,7 @@ class mrp_case extends class_base
 		$table = $arr["prop"]["vcl_inst"];
 		$table->define_field(array(
 			"name" => "exec_order",
-			"caption" => t("Nr."),
+			"caption" => t("Nr.")
 		));
 		$table->define_field(array(
 			"name" => "prerequisites",
@@ -1483,22 +1457,22 @@ class mrp_case extends class_base
 		));
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => t("Nimi"),
+			"caption" => t("Nimi")
 		));
 		$table->define_field(array(
 			"name" => "length",
 			"caption" => t("P"),
-			"tooltip" => t("Pikkus (h)"),
+			"tooltip" => t("Pikkus (h)")
 		));
 		$table->define_field(array(
 			"name" => "pre_buffer",
 			"caption" => t("EP"),
-			"tooltip" => t("Eel&shy;puh&shy;ver (h)"),
+			"tooltip" => t("Eel&shy;puh&shy;ver (h)")
 		));
 		$table->define_field(array(
 			"name" => "post_buffer",
 			"caption" => t("JP"),
-			"tooltip" => t("J&auml;rel&shy;puh&shy;ver (h)"),
+			"tooltip" => t("J&auml;rel&shy;puh&shy;ver (h)")
 		));
 		$table->define_field(array(
 			"name" => "comment",
@@ -1512,11 +1486,11 @@ class mrp_case extends class_base
 		));
 		$table->define_field(array(
 			"name" => "status",
-			"caption" => t("Staatus"),
+			"caption" => t("Staatus")
 		));
 		$table->define_field(array(
 			"name" => "starttime",
-			"caption" => t("T&ouml;&ouml;sse"),
+			"caption" => t("T&ouml;&ouml;sse")
 		));
 
 		if (empty($arr["no_edit"]))
@@ -1553,36 +1527,23 @@ class mrp_case extends class_base
 
 			switch ($job->prop ("state"))
 			{
-				case MRP_STATUS_INPROGRESS:
-				case MRP_STATUS_PAUSED:
-				case MRP_STATUS_SHIFT_CHANGE:
-				case MRP_STATUS_DONE:
+				case mrp_job_obj::STATE_INPROGRESS:
+				case mrp_job_obj::STATE_PAUSED:
+				case mrp_job_obj::STATE_SHIFT_CHANGE:
+				case mrp_job_obj::STATE_DONE:
 					$disabled = true;
 					break;
 			}
 
-			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+			$state = '<span style="color: ' . mrp_workspace::$state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
 			### translate prerequisites from object id-s to execution orders
 			$prerequisites = $job->prop ("prerequisites");
-			$prerequisites = empty ($prerequisites) ? array () : explode (",", $prerequisites);
 			$prerequisites_translated = array ();
 
-			foreach ($prerequisites as $oid)
+			foreach ($prerequisites->arr() as $prerequisite_job)
 			{
-				if ($this->can("view", $oid))
-				{
-					$prerequisite_job = obj ($oid);
-					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
-				}
-				else
-				{
-					error::raise(array(
-						"msg" => sprintf (t("Eeldust&ouml;&ouml; pole objekti id v&otilde;i puudub sellele objektile vaatamis&otilde;igus, mis siin peaks kindlasti olemas olema (oid: %s, prerequisites: %s)."), $oid, $job->prop ("prerequisites")),
-						"fatal" => false,
-						"show" => false,
-					));
-				}
+				$prerequisites_translated[] = $prerequisite_job->prop("exec_order");
 			}
 
 			$prerequisites = implode (",", $prerequisites_translated);
@@ -1679,10 +1640,10 @@ class mrp_case extends class_base
 
 		### non-changeable job states
 		$applicable_states = array(
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE,
-			MRP_STATUS_DONE,
+			mrp_job_obj::STATE_INPROGRESS,
+			mrp_job_obj::STATE_PAUSED,
+			mrp_job_obj::STATE_SHIFT_CHANGE,
+			mrp_job_obj::STATE_DONE
 		);
 
 		foreach ($connections as $connection)
@@ -1693,7 +1654,7 @@ class mrp_case extends class_base
 			### add non-changeable jobs to workflow
 			if (in_array ($job->prop ("state"), $applicable_states))
 			{
-				$prerequisites = explode (",", $job->prop ("prerequisites"));
+				$prerequisites = $job->prop ("prerequisites")->ids();
 				$workflow[$job->id ()] = $prerequisites;
 			}
 		}
@@ -1731,8 +1692,8 @@ class mrp_case extends class_base
 							case "length":
 							case "pre_buffer":
 							case "post_buffer":
-								$value = $this->safe_settype_float ($value);
-								$job->set_prop ($property, (round ($value * 3600)));
+								$value = aw_math_calc::string2float($value);
+								$job->set_prop ($property, (ceil($value * 3600)));
 								break;
 
 							case "minstart":
@@ -1767,19 +1728,18 @@ class mrp_case extends class_base
 		else
 		{
 			$applicable_planning_states = array(
-				MRP_STATUS_INPROGRESS,
-				MRP_STATUS_PLANNED,
+				mrp_case_obj::STATE_INPROGRESS,
+				mrp_case_obj::STATE_PLANNED
 			);
 
 			if (in_array ($this_object->prop ("state"), $applicable_planning_states))
 			{
 				### post rescheduling msg
-				$workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+				$workspace = $this_object->prop("workspace");
 
 				if ($workspace)
 				{
-					$workspace->set_prop("rescheduling_needed", 1);
-					$workspace->save();
+					$workspace->request_rescheduling();
 				}
 				else
 				{
@@ -1800,8 +1760,9 @@ class mrp_case extends class_base
 				{
 					foreach ($workflow as $job_id => $prerequisites)
 					{
+						$prerequisites = count($prerequisites) ? new object_list(array("oid" => $prerequisites)) : new object_list();
 						$job = obj ($job_id);
-						$job->set_prop ("prerequisites", implode (",", $prerequisites));
+						$job->set_prop ("prerequisites", $prerequisites);
 						aw_disable_acl();
 						$job->save ();
 						aw_restore_acl();
@@ -1820,14 +1781,14 @@ class mrp_case extends class_base
 	function order_jobs ($arr = array (), $workflow = false)
 	{
 		### get project object
-		if (is_oid ($arr["oid"]))
+		if (!empty ($arr["oid"]))
 		{
 			$project = obj ($arr["oid"]);
 		}
 
 		if (is_object ($arr["obj_inst"]))
 		{
-			$project =& $arr["obj_inst"];
+			$project = $arr["obj_inst"];
 		}
 
 		$connections = $project->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
@@ -1842,9 +1803,9 @@ class mrp_case extends class_base
 				$job = $connection->to ();
 
 				### exclude jobs just about to be deleted
-				if ($job->prop ("state") != MRP_STATUS_DELETED)
+				if ($job->prop ("state") != mrp_job_obj::STATE_DELETED)
 				{
-					$prerequisites = explode (",", $job->prop ("prerequisites"));
+					$prerequisites = $job->prop ("prerequisites")->ids();
 					$workflow[$job->id ()] = $prerequisites;
 				}
 			}
@@ -2055,9 +2016,8 @@ class mrp_case extends class_base
 		   "parent" => $jobs_folder,
 		   "class_id" => CL_MRP_JOB,
 		));
-		$job->set_prop ("state", MRP_STATUS_NEW);
 		$job->set_prop ("exec_order", $job_number);
-		$job->set_prop ("prerequisites", $prerequisite);
+		$job->set_prop ("prerequisites", new object_list(array("oid" => $prerequisite)));
 		$job->set_prop ("project", $this_object->id ());
 		$job->set_prop ("pre_buffer", $pre_buffer);
 		$job->set_prop ("post_buffer", $post_buffer);
@@ -2123,12 +2083,9 @@ class mrp_case extends class_base
 		return $return_url;
 	}
 
-	function on_save_case($arr)
-	{
-		// save data to prisma server
-		$i = get_instance(CL_MRP_PRISMA_IMPORT);
-		$i->write_proj($arr["oid"]);
-	}
+	function on_save_case($arr) // DEPRECATED. nothing changed or written in prisma_import::write_proj() anyway
+	{ // save data to prisma server
+		$i = get_instance(CL_MRP_PRISMA_IMPORT);  $i->write_proj($arr["oid"]);}
 
 	function mrp_log($proj, $job, $msg, $comment = '')
 	{
@@ -2199,64 +2156,9 @@ class mrp_case extends class_base
 		$t->sort_by();
 	}
 
-	function on_new_case ($arr)
-	{
-		$case_id = $arr["oid"];
-		$this->db_query("
-			INSERT INTO
-				mrp_log(
-					project_id,job_id,uid,tm,message
-				)
-				values(
-					$case_id,NULL,'".aw_global_get("uid")."',".time().",'Projekt lisati'
-				)
-		");
-	}
-
-	function on_delete_case ($arr)
-	{
-		$project = obj ($arr["oid"]);
-		$project->set_prop ("state", MRP_STATUS_DELETED);
-		aw_disable_acl();
-		$project->save ();
-		aw_restore_acl();
-
-		### delete project's jobs
-		$connections = $project->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB"));
-
-		foreach ($connections as $connection)
-		{
-			$job = $connection->to ();
-			$job->delete ();
-		}
-
-		$applicable_planning_states = array(
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PLANNED,
-		);
-
-		if (in_array ($project->prop ("state"), $applicable_planning_states))
-		{
-			### post rescheduling msg
-			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-			if ($workspace)
-			{
-				$workspace->set_prop("rescheduling_needed", 1);
-				aw_disable_acl();
-				$workspace->save();
-				aw_restore_acl();
-			}
-			else
-			{
-				return t("Ressursihalduskeskkond defineerimata");
-			}
-		}
-	}
-
 	function get_header($arr)
 	{
-		$ws = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		$ws = $arr["obj_inst"]->prop("workspace");
 
 		if ($ws)
 		{
@@ -2324,17 +2226,19 @@ class mrp_case extends class_base
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		### states for starting a project
-		$applicable_states = array (
-			MRP_STATUS_PLANNED,
-		);
-
-		if (!in_array ($project->prop ("state"), $applicable_states))
+		try
 		{
-			$errors[] = t("Projekt pole planeeritud");
+			$project->start();
+		}
+		catch (awex_mrp_state $e)
+		{
+			$errors[] = t("Projekti staatus sobimatu");
+		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Projekti ei saand alustada");
 		}
 
-		### ...
 		if ($errors)
 		{
 			$errors = (serialize($errors));
@@ -2342,18 +2246,6 @@ class mrp_case extends class_base
 		}
 		else
 		{
-			### start project
-			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
-			$project->set_prop ("progress", time ());
-			aw_disable_acl();
-			$project->save ();
-			aw_restore_acl();
-
-			### log change
-			$ws = get_instance (CL_MRP_WORKSPACE);
-			$ws->mrp_log ($project->id (), NULL, "Projekt l&auml;ks t&ouml;&ouml;sse");
-
-
 			return $return_url;
 		}
 	}
@@ -2383,38 +2275,21 @@ class mrp_case extends class_base
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		### check if all jobs are done
-		$job_list = new object_list (array (
-			"class_id" => CL_MRP_JOB,
-			"project" => $project->id (),
-		));
-		$all_jobs = (int) $job_list->count ();
-
-		### states for jobs that allow finishing a project
-		$applicable_states = array (
-			MRP_STATUS_DONE,
-			MRP_STATUS_ABORTED,
-		);
-		$job_list = new object_list (array (
-			"class_id" => CL_MRP_JOB,
-			"state" => $applicable_states,
-			"project" => $project->id()
-		));
-		$done_jobs = (int) $job_list->count ();
-
-		if ($done_jobs != $all_jobs)
+		try
+		{
+			$project->finish();
+		}
+		catch (awex_mrp_state $e)
+		{
+			$errors[] = t("Projekti staatus sobimatu");
+		}
+		catch (awex_mrp_case_not_completed $e)
 		{
 			$errors[] = t("Projekti ei saa l&otilde;petada. K&otilde;ik projekti t&ouml;&ouml;d pole valmis");
 		}
-
-		### states for finishing a project
-		$applicable_states = array (
-			MRP_STATUS_INPROGRESS,
-		);
-
-		if (!in_array ($project->prop ("state"), $applicable_states))
+		catch (Exception $e)
 		{
-			$errors[] = t("Projekt pole t&ouml;&ouml;s");
+			$errors[] = t("Projekti ei saand l&otilde;petada");
 		}
 
 		### ...
@@ -2425,21 +2300,6 @@ class mrp_case extends class_base
 		}
 		else
 		{
-			### finish project
-			$project->set_prop("finished", time());
-			$project->set_prop ("state", MRP_STATUS_DONE);
-			aw_disable_acl();
-			$project->save ();
-			aw_restore_acl();
-
-			### log event
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log(
-				$project->id(),
-				NULL,
-				"Projekt l&otilde;petati"
-			);
-
 			return $return_url;
 		}
 	}
@@ -2469,17 +2329,19 @@ class mrp_case extends class_base
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		### states for aborting a project
-		$applicable_states = array (
-			MRP_STATUS_INPROGRESS,
-		);
-
-		if (!in_array ($project->prop ("state"), $applicable_states))
+		try
 		{
-			$errors[] = t("Projekt pole t&ouml;&ouml;s");
+			$project->abort();
+		}
+		catch (awex_mrp_state $e)
+		{
+			$errors[] = t("Projekti staatus sobimatu");
+		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Projekti ei saand katkestada");
 		}
 
-		### if no errors, abort project
 		if ($errors)
 		{
 			$errors = (serialize($errors));
@@ -2487,31 +2349,6 @@ class mrp_case extends class_base
 		}
 		else
 		{
-			### abort project
-			$project->set_prop ("state", MRP_STATUS_ABORTED);
-			aw_disable_acl();
-			$project->save ();
-			aw_restore_acl();
-
-			### post rescheduling msg
-			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-			if ($workspace)
-			{
-				$workspace->set_prop("rescheduling_needed", 1);
-				aw_disable_acl();
-				$workspace->save();
-				aw_restore_acl();
-			}
-			else
-			{
-				return aw_url_change_var ("errors", array (t("Ressursihalduskeskkond defineerimata.")), $return_url);
-			}
-
-			### log event
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log ($project->id (), NULL, "Projekt katkestati");
-
 			return $return_url;
 		}
 	}
@@ -2541,17 +2378,19 @@ class mrp_case extends class_base
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		### states for archiving a project
-		$applicable_states = array(
-			MRP_STATUS_DONE,
-		);
-
-		if (!in_array ($project->prop ("state"), $applicable_states))
+		try
 		{
-			$errors[] = t("Projekt pole valmis");
+			$project->archive();
+		}
+		catch (awex_mrp_state $e)
+		{
+			$errors[] = t("Projekti staatus sobimatu");
+		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Projekti ei saand arhiveerida");
 		}
 
-		### if no errors, archive project
 		if ($errors)
 		{
 			$errors = (serialize($errors));
@@ -2559,21 +2398,6 @@ class mrp_case extends class_base
 		}
 		else
 		{
-			### archive project
-			$project->set_prop("archived", time());
-			$project->set_prop("state", MRP_STATUS_ARCHIVED);
-			aw_disable_acl();
-			$project->save();
-			aw_restore_acl();
-
-			### log event
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log(
-				$project->id(),
-				NULL,
-				"Projekt arhiveeriti"
-			);
-
 			return $return_url;
 		}
 	}
@@ -2604,20 +2428,19 @@ class mrp_case extends class_base
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		### states for planning a project
-		$applicable_states = array(
-			NULL,
-			MRP_STATUS_NEW,
-			MRP_STATUS_ABORTED,
-			MRP_STATUS_ONHOLD,
-		);
-
-		if (!in_array ($project->prop ("state"), $applicable_states))
+		try
 		{
-			$errors[] = t("Projekt pole planeerimiseks valmis");
+			$project->plan();
+		}
+		catch (awex_mrp_state $e)
+		{
+			$errors[] = t("Projekti staatus sobimatu");
+		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Projekti ei saand planeerida");
 		}
 
-		### if no errors, plan project
 		if ($errors)
 		{
 			$errors = (serialize($errors));
@@ -2625,35 +2448,6 @@ class mrp_case extends class_base
 		}
 		else
 		{
-			### plan project
-			$project->set_prop("state", MRP_STATUS_PLANNED);
-			aw_disable_acl();
-			$project->save();
-			aw_restore_acl();
-
-			### post rescheduling msg
-			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-			if ($workspace)
-			{
-				$workspace->set_prop("rescheduling_needed", 1);
-				aw_disable_acl();
-				$workspace->save();
-				aw_restore_acl();
-			}
-			else
-			{
-				return aw_url_change_var ("errors", array (t("Ressursihalduskeskkond defineerimata.")), $return_url);
-			}
-
-			### log event
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log(
-				$project->id(),
-				NULL,
-				"Projekt sisestati planeerimisse"
-			);
-
 			return $return_url;
 		}
 	}
@@ -2683,18 +2477,19 @@ class mrp_case extends class_base
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		### states for taking a project out of schedule
-		$applicable_states = array(
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PLANNED,
-		);
-
-		if (!in_array ($project->prop ("state"), $applicable_states))
+		try
+		{
+			$project->set_on_hold();
+		}
+		catch (awex_mrp_state $e)
 		{
 			$errors[] = t("Projekti staatus sobimatu");
 		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Projekti ei saand ootele seada");
+		}
 
-		### if no errors, set project on hold
 		if ($errors)
 		{
 			$errors = (serialize($errors));
@@ -2702,35 +2497,6 @@ class mrp_case extends class_base
 		}
 		else
 		{
-			### set project on hold
-			$project->set_prop("state", MRP_STATUS_ONHOLD);
-			aw_disable_acl();
-			$project->save();
-			aw_restore_acl();
-
-			### post rescheduling msg
-			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-			if ($workspace)
-			{
-				$workspace->set_prop("rescheduling_needed", 1);
-				aw_disable_acl();
-				$workspace->save();
-				aw_restore_acl();
-			}
-			else
-			{
-				return aw_url_change_var ("errors", array (t("Ressursihalduskeskkond defineerimata.")), $return_url);
-			}
-
-			### log event
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log(
-				$project->id(),
-				NULL,
-				"Projekt v&otilde;eti planeerimisest v&auml;lja"
-			);
-
 			return $return_url;
 		}
 	}
@@ -2761,13 +2527,8 @@ class mrp_case extends class_base
 		}
 	}
 
-	function safe_settype_float ($value)
-	{
-		$separators = ".,";
-		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
-		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
-		return (float) ("{$int}.{$dec}");
-	}
+	function safe_settype_float ($value) // DEPRECATED
+	{ return aw_math_calc::string2float($value); }
 
 	function _init_case_view_t(&$t)
 	{
@@ -2837,28 +2598,15 @@ class mrp_case extends class_base
 			$resource_id = $job->prop ("resource");
 			$resource = obj ($resource_id);
 
-			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+			$state = '<span style="color: ' . mrp_workspace::$state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
 			### translate prerequisites from object id-s to execution orders
-			$prerequisites = $job->prop ("prerequisites");
-			$prerequisites = empty ($prerequisites) ? array () : explode (",", $prerequisites);
 			$prerequisites_translated = array ();
+			$prerequisites = $job->prop("prerequisites")->arr();
 
-			foreach ($prerequisites as $oid)
+			foreach ($prerequisites as $prerequisite_job)
 			{
-				if ($this->can("view", $oid))
-				{
-					$prerequisite_job = obj ($oid);
-					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
-				}
-				else
-				{
-					error::raise(array(
-						"msg" => sprintf (t("Eeldust\xf6\xf6 pole objekti id v\xf5i puudub sellele objektile vaatamis\xf5igus, mis siin peaks kindlasti olemas olema (oid: %s, prerequisites: %s)."), $oid, $job->prop ("prerequisites")),
-						"fatal" => false,
-						"show" => false,
-					));
-				}
+				$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
 			}
 
 			$prerequisites = implode (",", $prerequisites_translated);
@@ -2904,12 +2652,14 @@ class mrp_case extends class_base
 
 			switch($field)
 			{
+				case "warehouse":
+				case "workspace":
 				case "finished":
 				case "archived":
-				case "warehouse":
+				case "started":
 					$this->db_add_col($table, array(
 						"name" => $field,
-						"type" => "INT(10) UNSIGNED"
+						"type" => "INT(11) UNSIGNED"
 					));
 					return true;
 			}

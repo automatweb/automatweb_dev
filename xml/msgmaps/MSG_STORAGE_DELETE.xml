@@ -80,14 +80,4 @@
       <func>on_delete_grp</func>
       <param>CL_GROUP</param>
 </num_15>
-<num_16>
-      <class>mrp/mrp_job</class>
-      <func>on_delete_job</func>
-      <param>CL_MRP_JOB</param>
-</num_16>
-<num_17>
-      <class>mrp/mrp_case</class>
-      <func>on_delete_case</func>
-      <param>CL_MRP_CASE</param>
-</num_17>
 </xml>

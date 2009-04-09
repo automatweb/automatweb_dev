@@ -1,8 +1,6 @@
 <?php
 /*
 
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
-
 @classinfo syslog_type=ST_MRP_JOB relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
 
 @tableinfo mrp_job index=oid master_table=objects master_index=oid
@@ -13,6 +11,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 @groupinfo workflow caption="T&ouml;&ouml;voog"
 @groupinfo materials caption="Materjalid"
 
+
+@property job_toolbar type=toolbar no_caption=1 store=no group=general,workflow
 
 @default group=general
 	@property name type=text
@@ -25,8 +25,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@caption M&uuml;&uuml;gi kommentaar
 
 @default group=workflow
-	@property job_toolbar type=toolbar no_caption=1 store=no
-
 	@property workflow_errors type=text store=no no_caption=1
 
 @default table=mrp_schedule
@@ -103,6 +101,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@comment Allhankijaga kokkulepitud aeg, millal t&ouml;&ouml; alustada.
 	@caption Soovitav algusaeg
 
+	@property used_materials type=hidden
+
 
 
 // --------------- RELATION TYPES ---------------------
@@ -125,6 +125,7 @@ CREATE TABLE `mrp_job` (
   `length` int(10) unsigned NOT NULL default '0',
   `planned_length` int(10) unsigned NOT NULL default '0',
   `resource` int(11) unsigned default NULL,
+  `workspace` int(11) unsigned default NULL,
   `exec_order` smallint(5) unsigned NOT NULL default '1',
   `project` int(11) unsigned default NULL,
   `minstart` int(10) unsigned default NULL,
@@ -151,7 +152,7 @@ CREATE TABLE `mrp_schedule` (
 
 */
 
-classload("mrp/mrp_header");
+require_once "mrp_header.aw";
 
 class mrp_job extends class_base
 {
@@ -171,18 +172,6 @@ class mrp_job extends class_base
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
-		);
-
-		$this->state_colours = array (
-			MRP_STATUS_NEW => MRP_COLOUR_NEW,
-			MRP_STATUS_PLANNED => MRP_COLOUR_PLANNED,
-			MRP_STATUS_INPROGRESS => MRP_COLOUR_INPROGRESS,
-			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
-			MRP_STATUS_DONE => MRP_COLOUR_DONE,
-			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE => MRP_COLOUR_SHIFT_CHANGE,
-			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
-			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
 		);
 
 		$this->init(array(
@@ -207,7 +196,7 @@ class mrp_job extends class_base
 			{
 				$this->project = obj ($project_id);
 				$this->resource = obj ($resource_id);
-				$this->workspace = $this->project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+				$this->workspace = $this->project->prop("workspace");
 
 				if (!$this->workspace or !$this->project or !$this->resource)
 				{
@@ -244,7 +233,7 @@ class mrp_job extends class_base
 			return PROP_IGNORE;
 		}
 
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
 
@@ -257,11 +246,11 @@ class mrp_job extends class_base
 				break;
 
 			case "prerequisites":
-				$prerequisites = explode (",", $prop["value"]);
+				$prerequisites = $this_object->awobj_get_prerequisites()->arr();
+				$prerequisite_orders = array();
 
-				foreach ($prerequisites as $prerequisite_oid)
+				foreach ($prerequisites as $prerequisite)
 				{
-					$prerequisite = obj ($prerequisite_oid);
 					$prerequisite_orders[] = $prerequisite->prop ("exec_order");
 				}
 
@@ -359,32 +348,9 @@ class mrp_job extends class_base
 			return PROP_FATAL_ERROR;
 		}
 
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
-
-		### post rescheduling msg where necessary
-		$applicable_planning_states = array(
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE,
-			MRP_STATUS_PLANNED,
-		);
-
-		switch ($prop["name"])
-		{
-			case "length":
-			case "pre_buffer":
-			case "post_buffer":
-			case "prerequisites":
-			case "minstart":
-				if ( in_array ($this_object->prop ("state"), $applicable_planning_states) and ($this_object->prop ($prop["name"]) != $prop["value"]) )
-				{
-					$this->workspace->set_prop("rescheduling_needed", 1);
-				}
-				break;
-		}
-
 
 		switch($prop["name"])
 		{
@@ -416,11 +382,11 @@ class mrp_job extends class_base
 
 	function create_job_toolbar ($arr = array())
 	{
-		$toolbar =& $arr["prop"]["toolbar"];
-		$this_object =& $arr["obj_inst"];
+		$toolbar = $arr["prop"]["toolbar"];
+		$this_object = $arr["obj_inst"];
 
 		### start button
-		if ( ($this_object->prop ("state") == MRP_STATUS_PLANNED) and ($this->can_start(array("job" => $this_object->id()))) )
+		if ( ($this_object->prop ("state") == MRP_STATUS_PLANNED) and ($this_object->can_start()))
 		{
 			$disabled = false;
 		}
@@ -505,73 +471,14 @@ class mrp_job extends class_base
 		));
 	}
 
-	function state_changed($job, $com)
-	{
-		$ws = get_instance(CL_MRP_WORKSPACE);
-		$com_txt = "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$this->states[$job->prop("state")];
-		$ws->mrp_log($job->prop("project"), $job->id(), $com_txt, $com);
-		$this->add_comment($job->id(), $com_txt." ".$com);
-	}
+	function state_changed($job, $com) // DEPRECATED
+	{ $job->state_changed($com); }
 
-	function stats_start($job)
-	{
-		$case = $job->prop("project");
-		$res = $job->prop("resource");
-		$job_id = $job->id();
-		$uid = aw_global_get("uid");
-		$start = time();
-		$u = get_instance(CL_USER);
-		$p = obj($u->get_current_person());
-		$person_name = $p->name();
+	function stats_start($job) // DEPRECATED
+	{ $job->stats_start(); }
 
-		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM mrp_stats
-			WHERE
-				case_oid = $case AND
-				resource_oid = $res AND
-				job_oid = $job_id AND
-				uid = '$uid'",
-			"cnt");
-		if ($cnt == 0)
-		{
-			$this->db_query("INSERT INTO mrp_stats(
-				case_oid, resource_oid, job_oid, uid, start, end, length, last_start, person_name
-			)
-			VALUES(
-				$case, $res, $job_id, '$uid', $start, NULL, 0, $start, '$person_name'
-			)");
-		}
-		else
-		{
-			// start after pause
-			$this->db_query("UPDATE mrp_stats SET
-					last_start = $start
-				WHERE
-					case_oid = $case AND resource_oid = $res AND job_oid = $job_id AND uid = '$uid'");
-		}
-	}
-
-	function stats_done($job)
-	{
-		$case = $job->prop("project");
-		$res = $job->prop("resource");
-		$job_id = $job->id();
-		$uid = aw_global_get("uid");
-		$tm = time();
-		$q = "SELECT * FROM mrp_stats WHERE
-			case_oid = $case AND resource_oid = $res AND job_oid = $job_id AND uid = '$uid'";
-		$row = $this->db_fetch_row($q);
-		if (!$row)
-		{
-			$fp = fopen(aw_ini_get("site_basedir")."/files/mrp_stats.txt", "a");
-			fwrite($fp, date("d.m.Y H:i:s").": stats_done($job_id): no row for $case, $res, $job_id, $uid\n");
-			fclose($fp);
-			return;
-		}
-		$this->db_query("UPDATE mrp_stats SET
-				end = $tm, length = length + ($tm - last_start), last_start = null
-			WHERE
-				case_oid = $case AND resource_oid = $res AND job_oid = $job_id AND uid = '$uid'");
-	}
+	function stats_done($job) // DEPRECATED
+	{ $job->stats_done(); }
 
 
 /**
@@ -599,129 +506,56 @@ class mrp_job extends class_base
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
-		$applicable_project_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_INPROGRESS,
-		);
-		$applicable_job_states = array (
-			MRP_STATUS_PLANNED,
-		);
-
-		if (!in_array ($project->prop ("state"), $applicable_project_states))
+		try
+		{
+			$this_object->load_data();
+			$comment = isset($arr["pj_change_comment"]) ? $arr["pj_change_comment"] : "";
+			$this_object->start($comment);
+		}
+		catch (awex_mrp_case_state $e)
 		{
 			$errors[] = t("Projekt pole t&ouml;&ouml;s ega planeeritud");
 		}
-
-		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
+		catch (awex_mrp_job_state $e)
 		{
 			$errors[] = t("T&ouml;&ouml; pole planeeritud");
 		}
-
-		### check if prerequisites are done
-		$prerequisites = trim($this_object->prop ("prerequisites")) ? explode(",", $this_object->prop("prerequisites")) : array();
-		$prerequisites_done = true;
-
-		foreach ($prerequisites as $prerequisite_oid)
+		catch (awex_mrp_job_prerequisites $e)
 		{
-			$prerequisite_oid = (int) $prerequisite_oid;
-
-			if (is_oid ($prerequisite_oid))
-			{
-				$prerequisite = obj ($prerequisite_oid);
-
-				if (((int) $prerequisite->prop ("state")) != MRP_STATUS_DONE)
-				{
-					$prerequisites_done = false;
-					$errors[] = t("Eeldust&ouml;&ouml;d tegemata");
-					break;
-				}
-			}
-			else
-			{
-				$errors[] = t("Eeldust&ouml;&ouml; definitsioon on katki");
-				break;
-			}
+			$errors[] = t("Eeldust&ouml;&ouml;d tegemata");
 		}
-
-		### reserve resource
-		$mrp_resource = get_instance(CL_MRP_RESOURCE);
-		$resource_is_reserved = $mrp_resource->start_job(array(
-			"resource" => $this_object->prop("resource"),
-			"job" => $this_object->id (),
-		));
-
-		if ($resource_is_reserved === false)
+		catch (awex_mrp_resource_unavailable $e)
 		{
 			$errors[] = t("Ressurss kinni");
 		}
+		catch (awex_mrp_case $e)
+		{
+			$errors[] = t("Projekti alustamine eba&otilde;nnestus");
+		}
+		catch (awex_mrp_resource $e)
+		{
+			$errors[] = t("Ressurssil esines viga");
+		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Tundmatu viga");
+		}
 
-		### if no errors, save
 		if ($errors)
 		{
-			### free resource and exit
-			$mrp_resource->stop_job(array(
-				"resource" => $this_object->prop("resource"),
-				"job" => $this_object->id (),
-			));
 			$errors = (serialize($errors));
-			return aw_url_change_var ("errors", $errors, $return_url);
+			$return_url = aw_url_change_var ("errors", $errors, $return_url);
 		}
-		else
-		{
-			### start project if first job
-			if ($project->prop ("state") != MRP_STATUS_INPROGRESS)
-			{
-				$mrp_case = get_instance(CL_MRP_CASE);
-				$project_start = $mrp_case->start(array("id" => $project->id ()));
 
-				$project_errors = parse_url($project_start);
-				$project_errors = explode("&", $project_errors["query"]);
-				$project_errors = unserialize(urldecode($project_errors["errors"]));
-
-				if ($project_errors)
-				{
-					$errors[] = t("Projekti alustamine eba&otilde;nnestus");
-					$errors = array_merge($errors, $project_errors);
-
-					### free resource and exit
-					$mrp_resource->stop_job(array(
-						"resource" => $this_object->prop("resource"),
-						"job" => $this_object->id (),
-					));
-					$errors = (serialize($errors));
-					return aw_url_change_var ("errors", $errors, $return_url);
-				}
-			}
-
-			### set project state & progress
-			$progress = time () + $this_object->prop ("planned_length");
-			$project->set_prop ("progress", $progress);
-
-			### start job
-			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
-			$this_object->set_prop ("started", time ());
-
-			### log
-			$this->state_changed($this_object, $arr["pj_change_comment"]);
-			$this->stats_start($this_object);
-
-			### all went well, save and say OK
-			aw_disable_acl();
-			$this_object->save ();
-			$project->save ();
-			aw_restore_acl();
-
-			return $return_url;
-		}
+		return $return_url;
 	}
 
-	
+
 
 /**
 	@attrib name=done
 	@param id required type=int
-**/ 
+**/
 	function done ($arr)
 	{
 		$errors = array ();
@@ -743,122 +577,40 @@ class mrp_job extends class_base
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
-		$applicable_states = array (
-			MRP_STATUS_INPROGRESS,
-		);
+		try
+		{
+			$this_object->load_data();
+			$comment = isset($arr["pj_change_comment"]) ? $arr["pj_change_comment"] : "";
+			$this_object->done($comment);
 
-		if (!in_array ($this_object->prop ("state"), $applicable_states))
+			foreach ($arr["material_amount"] as $prod => $amount)
+			{
+				$this_object->set_used_material(array(
+					"product" => $prod,
+					"amount" => $amount
+				));
+			}
+		}
+		catch (awex_mrp_job_state $e)
 		{
 			$errors[] = t("T&ouml;&ouml; staatus sobimatu");
 		}
-
-		### ...
-		if (empty ($errors))
+		catch (awex_mrp_resource $e)
 		{
-			### set resource as free
-			$mrp_resource = get_instance(CL_MRP_RESOURCE);
-			$resource_freed = $mrp_resource->stop_job(array(
-				"resource" => $this_object->prop("resource"),
-				"job" => $this_object->id (),
-			));
-
-			if (!$resource_freed)
-			{
-				$errors[] = t("Ressursi vabastamine eba&otilde;nnestus");
-				error::raise(array(
-					"msg" => sprintf (t("Ressursi vabastamine eba&otilde;nnestus. Job: %s, res: %s"), $this_object->id (), $this_object->prop("resource")),
-					"fatal" => false,
-					"show" => false,
-				));
-			}
-			else
-			{
-				### finish job
-				$time = time ();
-				$this_object->set_prop ("state", MRP_STATUS_DONE);
-				$this_object->set_prop ("finished", $time);
-				foreach($arr["material_amount"] as $prod => $amount)
-				{
-					$this_object->set_used_material(array(
-						"product" => $prod,
-						"amount" => $amount,
-					));
-				}
-
-				aw_disable_acl();
-				$this_object->save ();
-				aw_restore_acl();
-
-				### post rescheduling msg
-				$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-				if ($workspace)
-				{
-					$workspace->set_prop("rescheduling_needed", 1);
-					aw_disable_acl();
-					$workspace->save();
-					aw_restore_acl();
-				}
-				else
-				{
-					$errors[] = t("Ressursihalduskeskkond defineerimata.");
-				}
-
-				### log job change
-				$this->state_changed($this_object, $arr["pj_change_comment"]);
-				$this->stats_done($this_object);
-
-				### finish project if this was the last job
-				$list = new object_list (array (
-					"class_id" => CL_MRP_JOB,
-					"project" => $project->id (),
-					"state" => MRP_STATUS_DONE,
-				));
-				$done_jobs = (int) $list->count ();
-
-				$list = new object_list (array (
-					"class_id" => CL_MRP_JOB,
-					"project" => $project->id (),
-				));
-				$all_jobs = (int) $list->count ();
-
-				if ($done_jobs == $all_jobs)
-				{
-					### finish project
-					$mrp_case = get_instance(CL_MRP_CASE);
-					$project_finish = $mrp_case->finish(array("id" => $project->id ()));
-
-					$project_errors = parse_url($project_finish);
-					$project_errors = explode("&", $project_errors["query"]);
-					$project_errors = unserialize(urldecode($project_errors["errors"]));
-
-					if ($project_errors)
-					{
-						$project_state = $project->prop ("state");
-
-						$errors[] = t(sprintf ("Projekti l&otilde;petamine eba&otilde;nnestus. Projekti staatus oli '%s'", $project_state));
-						$errors = array_merge($errors, $project_errors);
-					}
-				}
-				else
-				{
-					### update progress
-					$project->set_prop ("progress", time ());
-					aw_disable_acl();
-					$project->save ();
-					aw_restore_acl();
-				}
-
-// /* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
-// /* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
-// /* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
-// /* dbg */ }
-			}
+			$errors[] = t("Ressurssil esines viga");
+		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Tundmatu viga");
 		}
 
-		$errors = (serialize($errors));
-		return aw_url_change_var ("errors", $errors, $return_url);
+		if ($errors)
+		{
+			$errors = (serialize($errors));
+			$return_url = aw_url_change_var ("errors", $errors, $return_url);
+		}
+
+		return $return_url;
 	}
 
 /**
@@ -886,74 +638,40 @@ class mrp_job extends class_base
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$applicable_states = array (
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE,
-		);
-
-		if (!in_array ($this_object->prop ("state"), $applicable_states))
+		try
+		{
+			$this_object->load_data();
+			$comment = isset($arr["pj_change_comment"]) ? $arr["pj_change_comment"] : "";
+			$this_object->abort($comment);
+		}
+		catch (awex_mrp_job_state $e)
 		{
 			$errors[] = t("T&ouml;&ouml; pole tegemisel");
 		}
-
-		### ...
-		if (empty ($errors))
+		catch (awex_mrp_resource_unavailable $e)
 		{
-			### set resource as free
-			$mrp_resource = get_instance(CL_MRP_RESOURCE);
-			$resource_freed = $mrp_resource->stop_job(array(
-				"resource" => $this_object->prop("resource"),
-				"job" => $this_object->id (),
-			));
-
-			if (!$resource_freed)
-			{
-				$errors[] = t("Ressursi vabastamine eba&otilde;nnestus");
-				error::raise(array(
-					"msg" => sprintf (t("Ressursi vabastamine eba&otilde;nnestus. Job: %s, res: %s"), $this_object->id (), $this_object->prop("resource")),
-					"fatal" => false,
-					"show" => false,
-				));
-			}
-			else
-			{
-				### abort job
-				$this_object->set_prop ("state", MRP_STATUS_ABORTED);
-				$this_object->set_prop ("aborted", time());
-				aw_disable_acl();
-				$this_object->save ();
-				aw_restore_acl();
-
-				### post rescheduling msg
-				$project = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_PROJECT");
-				$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-				if ($workspace)
-				{
-					$workspace->set_prop("rescheduling_needed", 1);
-					aw_disable_acl();
-					$workspace->save();
-					aw_restore_acl();
-				}
-				else
-				{
-					$errors[] = t("Ressursihalduskeskkond defineerimata.");
-				}
-
-				### log event
-				$this->state_changed($this_object, $arr["pj_change_comment"]);
-				$this->stats_done($this_object);
-
-// /* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
-// /* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
-// /* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
-// /* dbg */ }
-			}
+			$errors[] = t("Ressurss kinni");
+		}
+		catch (awex_mrp_case $e)
+		{
+			$errors[] = t("Projekti alustamine eba&otilde;nnestus");
+		}
+		catch (awex_mrp_resource $e)
+		{
+			$errors[] = t("Ressurssil esines viga. Ressursi vabastamine v&otilde;is eba&otilde;nnestuda");
+		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Tundmatu viga");
 		}
 
-		$errors = urlencode(serialize($errors));
-		return aw_url_change_var ("errors", $errors, $return_url);
+		if ($errors)
+		{
+			$errors = (serialize($errors));
+			$return_url = aw_url_change_var ("errors", $errors, $return_url);
+		}
+
+		return $return_url;
 	}
 
 /**
@@ -977,52 +695,32 @@ class mrp_job extends class_base
 		else
 		{
 			$errors[] = t("T&ouml;&ouml; id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
-		$applicable_states = array (
-			MRP_STATUS_INPROGRESS,
-		);
-
-		if (!in_array ($this_object->prop ("state"), $applicable_states))
+		try
+		{
+			$this_object->load_data();
+			$comment = isset($arr["pj_change_comment"]) ? $arr["pj_change_comment"] : "";
+			$this_object->pause($comment);
+		}
+		catch (awex_mrp_job_state $e)
 		{
 			$errors[] = t("T&ouml;&ouml; pole tegemisel");
 		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Tundmatu viga");
+		}
 
-		### ...
 		if ($errors)
 		{
-			$errors = urlencode(serialize($errors));
-			return aw_url_change_var ("errors", $errors, $return_url);
+			$errors = (serialize($errors));
+			$return_url = aw_url_change_var ("errors", $errors, $return_url);
 		}
-		else
-		{
-			### pause job
-			$this_object->set_prop ("state", MRP_STATUS_PAUSED);
 
-			### save paused times for job
-			$pt = safe_array($this_object->meta("paused_times"));
-			$pt[] = array("start" => time(), "end" => NULL);
-			$this_object->set_meta("paused_times" , $pt);
-
-			### update progress
-			$progress = max ($project->prop ("progress"), time ());
-			$project->set_prop ("progress", $progress);
-
-			### save project&job
-			aw_disable_acl();
-			$this_object->save ();
-			$project->save ();
-			aw_restore_acl();
-
-			### log event
-			$this->state_changed($this_object, $arr["pj_change_comment"]);
-			$this->stats_done($this_object);
-
-			return $return_url;
-		}
+		return $return_url;
 	}
 
 /**
@@ -1046,60 +744,32 @@ class mrp_job extends class_base
 		else
 		{
 			$errors[] = t("T&ouml;&ouml; id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
-		$applicable_project_states = array (
-			MRP_STATUS_INPROGRESS,
-		);
-		$applicable_job_states = array (
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE,
-		);
-
-		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
+		try
+		{
+			$this_object->load_data();
+			$comment = isset($arr["pj_change_comment"]) ? $arr["pj_change_comment"] : "";
+			$this_object->scontinue($comment);
+		}
+		catch (awex_mrp_job_state $e)
 		{
 			$errors[] = t("T&ouml;&ouml; pole pausil");
 		}
-
-		if (!in_array ($project->prop ("state"), $applicable_project_states))
+		catch (Exception $e)
 		{
-			$errors[] = t("Projekt pole j&auml;tkatav");
+			$errors[] = t("Tundmatu viga");
 		}
 
-		### ...
 		if ($errors)
 		{
-			$errors = urlencode(serialize($errors));
-			return aw_url_change_var ("errors", $errors, $return_url);
+			$errors = (serialize($errors));
+			$return_url = aw_url_change_var ("errors", $errors, $return_url);
 		}
-		else
-		{
-			### continue job
-			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
 
-			### save paused times for job
-			$pt = safe_array($this_object->meta("paused_times"));
-			$pt[count($pt)-1]["end"] = time();
-			$this_object->set_meta("paused_times" , $pt);
-
-			### update progress
-			$progress = max ($project->prop ("progress"), time ());
-			$project->set_prop ("progress", $progress);
-
-			aw_disable_acl();
-			$this_object->save ();
-			$project->save ();
-			aw_restore_acl();
-
-			### log event
-			$this->state_changed($this_object, $arr["pj_change_comment"]);
-			$this->stats_start($this_object);
-
-			return $return_url;
-		}
+		return $return_url;
 	}
 
 /**
@@ -1123,104 +793,52 @@ class mrp_job extends class_base
 		else
 		{
 			$errors[] = t("T&ouml;&ouml; id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
-		$applicable_project_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_INPROGRESS,
-		);
-		$applicable_job_states = array (
-			MRP_STATUS_ABORTED,
-		);
-
-		if (!in_array ($project->prop ("state"), $applicable_project_states))
+		try
+		{
+			$this_object->load_data();
+			$comment = isset($arr["pj_change_comment"]) ? $arr["pj_change_comment"] : "";
+			$this_object->acontinue($comment);
+		}
+		catch (awex_mrp_case_state $e)
 		{
 			$errors[] = t("Projekt pole j&auml;tkatav");
 		}
-
-		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
+		catch (awex_mrp_job_state $e)
 		{
 			$errors[] = t("T&ouml;&ouml; pole katkestatud");
 		}
-
-		### check if prerequisites are done
-		$prerequisites = trim($this_object->prop ("prerequisites")) ? explode(",", $this_object->prop("prerequisites")) : array();
-		$prerequisites_done = true;
-
-		foreach ($prerequisites as $prerequisite_oid)
+		catch (awex_mrp_job_prerequisites $e)
 		{
-			$prerequisite_oid = (int) $prerequisite_oid;
-
-			if (is_oid ($prerequisite_oid))
-			{
-				$prerequisite = obj ($prerequisite_oid);
-
-				if ($prerequisite->class_id() != CL_MRP_JOB)
-				{
-					continue;
-				}
-
-				if (((int) $prerequisite->prop ("state")) != MRP_STATUS_DONE)
-				{
-					$prerequisites_done = false;
-					$errors[] = t("Eeldust&ouml;&ouml;d tegemata");
-					break;
-				}
-			}
-			else
-			{
-				$errors[] = t("Eeldust&ouml;&ouml; definitsioon on katki");
-				break;
-			}
+			$errors[] = t("Eeldust&ouml;&ouml;d tegemata");
 		}
-
-		### reserve resource
-		$mrp_resource = get_instance(CL_MRP_RESOURCE);
-		$resource_is_reserved = $mrp_resource->start_job(array(
-			"resource" => $this_object->prop("resource"),
-			"job" => $this_object->id (),
-		));
-
-		if ($resource_is_reserved === false)
+		catch (awex_mrp_resource_unavailable $e)
 		{
 			$errors[] = t("Ressurss kinni");
 		}
+		catch (awex_mrp_case $e)
+		{
+			$errors[] = t("Projektil esines viga");
+		}
+		catch (awex_mrp_resource $e)
+		{
+			$errors[] = t("Ressurssil esines viga");
+		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Tundmatu viga");
+		}
 
-		### if no errors, save
 		if ($errors)
 		{
-			### free resource and exit
-			$mrp_resource->stop_job(array(
-				"resource" => $this_object->prop("resource"),
-				"job" => $this_object->id (),
-			));
-			$errors = urlencode(serialize($errors));
-			return aw_url_change_var ("errors", $errors, $return_url);
+			$errors = (serialize($errors));
+			$return_url = aw_url_change_var ("errors", $errors, $return_url);
 		}
-		else
-		{
-			### continue job
-			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
 
-			### update progress
-			$progress = max ($project->prop ("progress"), time ());
-			$project->set_prop ("progress", $progress);
-			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
-
-			aw_disable_acl();
-			$this_object->save ();
-			$project->save ();
-			aw_restore_acl();
-
-			### log event
-			$this->state_changed($this_object, $arr["pj_change_comment"]);
-			$this->stats_start($this_object);
-
-			return $return_url;
-		}
+		return $return_url;
 	}
 
 /**
@@ -1244,306 +862,46 @@ class mrp_job extends class_base
 		else
 		{
 			$errors[] = t("T&ouml;&ouml; id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
-		$applicable_states = array (
-			MRP_STATUS_INPROGRESS,
-		);
-
-		if (!in_array ($this_object->prop ("state"), $applicable_states))
+		try
+		{
+			$this_object->load_data();
+			$comment = isset($arr["pj_change_comment"]) ? $arr["pj_change_comment"] : "";
+			$this_object->end_shift($comment);
+		}
+		catch (awex_mrp_job_state $e)
 		{
 			$errors[] = t("T&ouml;&ouml; pole tegemisel");
 		}
+		catch (Exception $e)
+		{
+			$errors[] = t("Tundmatu viga");
+		}
 
-		### ...
 		if ($errors)
 		{
-			$errors = urlencode(serialize($errors));
-			return aw_url_change_var ("errors", $errors, $return_url);
+			$errors = (serialize($errors));
+			$return_url = aw_url_change_var ("errors", $errors, $return_url);
 		}
-		else
-		{
-			### pause job
-			$this_object->set_prop ("state", MRP_STATUS_SHIFT_CHANGE);
 
-			### update progress
-			$progress = max ($project->prop ("progress"), time ());
-			$project->set_prop ("progress", $progress);
-
-			aw_disable_acl();
-			$this_object->save ();
-			$project->save ();
-			aw_restore_acl();
-
-			### log event
-			$this->state_changed($this_object, $arr["pj_change_comment"]);
-			$this->stats_done($this_object);
-
-			### log out user
-			$u = get_instance("users");
-			$u->logout();
-
-			return $return_url;
-		}
+		return $return_url;
 	}
 
-	function job_prerequisites_are_done($arr)
-	{
-		if (is_oid ($arr["job"]))
-		{
-			$job = obj ($arr["job"]);
-		}
-		else
-		{
-			return false;
-		}
-
-		if (trim ($job->prop ("prerequisites")))
-		{
-			$prerequisites = explode (",", $job->prop ("prerequisites"));
-			$applicable_states = array (
-				MRP_STATUS_DONE,
-			);
-
-			foreach ($prerequisites as $prerequisite_oid)
-			{
-				if (!$this->can("view", $prerequisite_oid))
-				{
-					continue;
-				}
-
-				$prerequisite = obj ($prerequisite_oid);
-
-				if (!in_array ($prerequisite->prop ("state"), $applicable_states))
-				{
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
+	function job_prerequisites_are_done($arr) // DEPRECATED
+	{ if (is_oid ($arr["job"])) { $job = obj ($arr["job"]); } else { return false; } return $job->job_prerequisites_are_done(); }
 
 /**
     @attrib name=can_start
 	@param job required type=int
 **/
-	function can_start ($arr)
-	{
-		if (is_oid ($arr["job"]))
-		{
-			$job = obj ($arr["job"]);
-		}
-		else
-		{
-			return false;
-		}
+	function can_start ($arr) // DEPRECATED
+	{ if (is_oid ($arr["job"])) { $job = obj ($arr["job"]); } else { return false; } return $job->can_start(); }
 
-		### check if project is ready to go on
-		if ($this->can("view", $job->prop("project")))
-		{
-			$project = obj($job->prop("project"));
-		}
-
-		if (!$project)
-		{
-			return false;
-		}
-
-		$applicable_states = array (
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PLANNED,
-		);
-
-		if (!in_array ($project->prop ("state"), $applicable_states))
-		{
-			return false;
-		}
-		### check if job can start
-		$applicable_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_ABORTED,
-		);
-
-		if (!in_array ($job->prop ("state"), $applicable_states))
-		{
-			return false;
-		}
-
-		### check if resource is available
-		$resource = obj($job->prop("resource"));
-		$applicable_states = array (
-			NULL,
-			MRP_STATUS_RESOURCE_AVAILABLE,
-		);
-
-		/*
-		if (!in_array ($resource->prop ("state"), $applicable_states))
-		{
-			return false;
-		}
-		*/
-
-		### get max number of threads for resource
-		$max_jobs = max(1, count($resource->prop("thread_data")));
-
-		### get number of jobs using resource
-		$cur_jobs = $this->db_fetch_field("
-			SELECT
-				count(j.oid) AS cnt
-			FROM
-				mrp_job j
-				LEFT JOIN objects o ON o.oid = j.oid
-			WHERE
-				j.resource = ".$resource->id()." AND
-				o.status > 0 AND
-				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.",".MRP_STATUS_SHIFT_CHANGE.")
-		", "cnt");
-
-		### compare
-		if ($cur_jobs >= $max_jobs)
-		{
-			return false;
-		}
-
-		### check if all prerequisite jobs are done
-		if (!$this->job_prerequisites_are_done(array("job" => $job->id())))
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	function on_delete_job ($arr)
-	{
-		$job = obj ((int) $arr["oid"]);
-
-		### job states that require freeing resource
-		$applicable_states = array (
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE,
-		);
-
-		if (in_array ($job->prop ("state"), $applicable_states))
-		{
-			### free resource
-			$mrp_resource = get_instance(CL_MRP_RESOURCE);
-			$mrp_resource->stop_job(array(
-				"resource" => $job->prop("resource"),
-				"job" => $job->id (),
-			));
-		}
-
-		$job->set_prop ("state", MRP_STATUS_DELETED);
-		aw_disable_acl();
-		$job->save ();
-		aw_restore_acl();
-
-		### get project for deleted job
-		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
-
-		if (!$project)
-		{
-			return;
-		}
-
-		### set successive jobs' prerequisites equal to deleted job's prerequisites
-		$prerequisites = $job->prop ("prerequisites");
-		$prerequisites = empty($prerequisites) ? array() : explode (",", $prerequisites);
-
-		$list = new object_list (array (
-			"class_id" => CL_MRP_JOB,
-			"project" => $project->id (),
-			"state" => new obj_predicate_not (MRP_STATUS_DELETED),
-		));
-		$other_jobs = $list->arr ();
-
-		foreach ($other_jobs as $other_job)
-		{
-			$other_job_prerequisites = $other_job->prop ("prerequisites");
-			$other_job_prerequisites = empty($other_job_prerequisites) ? array() : explode (",", $other_job_prerequisites);
-
-			if (in_array ($job->id (), $other_job_prerequisites))
-			{
-				$successor_prerequisites = array_merge ($other_job_prerequisites, $prerequisites);
-				$successor_prerequisites = array_unique ($successor_prerequisites);
-
-				### remove deleted job from prerequisites
-				$keys = array_keys ($successor_prerequisites, $job->id ());
-
-				foreach ($keys as $key)
-				{
-					unset ($successor_prerequisites[$key]);
-				}
-
-				### ...
-				$successor_prerequisites = implode (",", $successor_prerequisites);
-				$other_job->set_prop ("prerequisites", $successor_prerequisites);
-				aw_disable_acl();
-				$other_job->save ();
-				aw_restore_acl();
-			}
-		}
-
-		### correct project's job order
-		$this->do_orb_method_call (array (
-			"action" => "order_jobs",
-			"class" => "mrp_case",
-			"params" => array (
-				"oid" => $project->id ()
-			)
-		));
-
-		$applicable_planning_states = array(
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_PLANNED,
-		);
-
-		if (in_array ($project->prop ("state"), $applicable_planning_states))
-		{
-			### post rescheduling msg
-			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-			if ($workspace)
-			{
-				$workspace->set_prop("rescheduling_needed", 1);
-				aw_disable_acl();
-				$workspace->save();
-				aw_restore_acl();
-			}
-			else
-			{
-				return t("Ressursihalduskeskkond defineerimata.");
-			}
-		}
-	}
-
-	function add_comment($job, $comment)
-	{
-		if (trim($comment) != "")
-		{
-		$job = obj($job);
-		$hist = safe_array($job->meta("change_comment_history"));
-		array_unshift($hist, array(
-			"tm" => time(),
-			"uid" => aw_global_get("uid"),
-			"text" => trim($comment)
-		));
-		$job->set_meta("change_comment_history", $hist);
-
-			aw_disable_acl();
-			$workspace_i = get_instance(CL_MRP_WORKSPACE);
-			$workspace_i->mrp_log($job->prop("project"), $job->id(), t("Lisas kommentaari"), $comment);
-
-			$job->save();
-			aw_restore_acl();
-		}
-	}
+	function add_comment($job, $comment) //DEPRECATED
+	{  $job = obj($job); $job->add_comment($comment); }
 
 	function init_materials_tbl($t)
 	{
@@ -1587,12 +945,11 @@ class mrp_job extends class_base
 		$conn = $arr["obj_inst"]->connections_to(array(
 			"from.class_id" => CL_MATERIAL_EXPENSE,
 		));
-		$mec_o = obj();
-		$mec_o->set_class_id(CL_MATERIAL_EXPENSE_CONDITION);
+		$mec_o = obj(null, array(), CL_MATERIAL_EXPENSE_CONDITION);
 		foreach($conn as $c)
 		{
 			$prod = $c->from()->prop("product");
-			$po = obj($prod);
+			$po = obj($prod, array(), CL_SHOP_PRODUCT);
 			$unitselect = $this->get_materials_unitselect($po, $c->from()->prop("unit"));
 			$t->define_data(array(
 				"name" => html::obj_change_url($po),
@@ -1620,7 +977,7 @@ class mrp_job extends class_base
 
 	function create_materials_tbl($arr)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
+		$t = $arr["prop"]["vcl_inst"];
 		$this->init_materials_tbl(&$t);
 		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
 		if($res)
@@ -1632,6 +989,7 @@ class mrp_job extends class_base
 			$conn2 = $arr["obj_inst"]->connections_to(array(
 				"from.class_id" => CL_MATERIAL_EXPENSE,
 			));
+			$has_ids = array();
 			foreach($conn2 as $c)
 			{
 				$prod = $c->from()->prop("product");
@@ -1640,7 +998,7 @@ class mrp_job extends class_base
 			foreach($conn as $c)
 			{
 				$prod = $c->from()->prop("product");
-				if($has_ids[$prod])
+				if(isset($has_ids[$prod]))
 				{
 					continue;
 				}
@@ -1781,6 +1139,13 @@ class mrp_job extends class_base
 
 			switch($field)
 			{
+				case "workspace":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(11) UNSIGNED"
+					));
+					return true;
+
 				case "aborted":
 				case "real_length":
 					$this->db_add_col($table, array(
@@ -1807,7 +1172,7 @@ class mrp_job extends class_base
 						aw_job_id INT NOT NULL,
 						aw_case_id INT NOT NULL,
 						aw_resource_id INT NOT NULL,
-						aw_uid VARCHAR(50) NOT NULL,
+						aw_uid CHAR(50) NOT NULL,
 						aw_uid_oid INT NOT NULL,
 						aw_previous_pid INT NOT NULL,
 						aw_pid INT NOT NULL,
@@ -1824,12 +1189,12 @@ class mrp_job extends class_base
 						"type" => "INT",
 					));
 					$this->db_query("
-					UPDATE 
-						mrp_job_rows c, 
-						mrp_job_rows p 
+					UPDATE
+						mrp_job_rows c,
+						mrp_job_rows p
 					SET
-						c.aw_previous_pid = p.aw_pid 
-					WHERE 
+						c.aw_previous_pid = p.aw_pid
+					WHERE
 						p.aw_job_id = c.aw_job_id AND
 						p.aw_job_state = c.aw_job_previous_state AND
 						c.aw_tm BETWEEN (p.aw_tm + c.aw_job_last_duration - 5) AND (p.aw_tm + c.aw_job_last_duration + 5);");

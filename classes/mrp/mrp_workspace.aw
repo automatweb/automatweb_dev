@@ -188,7 +188,7 @@
 			@layout persons_personnel_tree type=vbox parent=grp_persons_left area_caption=Vali&nbsp;inimesed&#44;&nbsp;kelle&nbsp;t&ouml;&ouml;tunde&nbsp;soovid&nbsp;n&auml;ha
 				@property persons_personnel_tree type=treeview store=no no_caption=1 parent=persons_personnel_tree
 			@layout persons_other_options type=vbox parent=grp_persons_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
-			
+
 		@layout grp_persons_right type=vbox parent=grp_persons_full
 
 @default group=grp_persons_jobs_report
@@ -296,8 +296,8 @@
 	@property case_header_controller type=relpicker reltype=RELTYPE_MRP_HEADER_CONTROLLER parent=left_column
 	@caption Projekti headeri kontroller
 
-	@property warehouse type=relpicker reltype=RELTYPE_MRP_WAREHOUSE parent=left_column multiple=1
-	@caption Materjalide ladu
+	@property purchasing_manager type=relpicker reltype=RELTYPE_PURCHASING_MANAGER parent=left_column multiple=1
+	@caption Materjalide hankimise keskkond
 
 	@property hr_time_format type=chooser parent=left_column
 	@caption Ajaformaat t&ouml;&ouml;ajaaruannetes
@@ -362,6 +362,9 @@
 
 	@property parameter_timescale_unit type=select parent=right_column
 	@caption Skaala aja&uuml;hik
+
+	@property parameter_plan_materials type=checkbox ch_value=1 parent=right_column
+	@caption Planeeri materjalide kasutust
 
 
 #@default group=grp_printer_current,grp_printer_done,grp_printer_aborted,grp_printer_in_progress,grp_printer_startable,grp_printer_notstartable
@@ -569,14 +572,33 @@
 @reltype MRP_HEADER_CONTROLLER clid=CL_FORM_CONTROLLER value=5
 @caption Projekti headeri kontroller
 
-@reltype MRP_WAREHOUSE clid=CL_SHOP_WAREHOUSE value=6
-@caption Materjalide ladu
+@reltype PURCHASING_MANAGER clid=CL_SHOP_PURCHASE_MANAGER_WORKSPACE value=6
+@caption Materjalide hankimise keskkond
 */
 
 require_once "mrp_header.aw";
 
 class mrp_workspace extends class_base
 {
+	public static $state_colours = array (
+		mrp_case_obj::STATE_NEW => MRP_COLOUR_NEW,
+		mrp_case_obj::STATE_PLANNED => MRP_COLOUR_PLANNED,
+		mrp_case_obj::STATE_INPROGRESS => MRP_COLOUR_INPROGRESS,
+		mrp_case_obj::STATE_ABORTED => MRP_COLOUR_ABORTED,
+		mrp_case_obj::STATE_DONE => MRP_COLOUR_DONE,
+		mrp_case_obj::STATE_ONHOLD => MRP_COLOUR_ONHOLD,
+		mrp_case_obj::STATE_ARCHIVED => MRP_COLOUR_ARCHIVED,
+
+		mrp_job_obj::STATE_NEW => MRP_COLOUR_NEW,
+		mrp_job_obj::STATE_PLANNED => MRP_COLOUR_PLANNED,
+		mrp_job_obj::STATE_INPROGRESS => MRP_COLOUR_INPROGRESS,
+		mrp_job_obj::STATE_ABORTED => MRP_COLOUR_ABORTED,
+		mrp_job_obj::STATE_DONE => MRP_COLOUR_DONE,
+		mrp_job_obj::STATE_PAUSED => MRP_COLOUR_PAUSED,
+		mrp_job_obj::STATE_SHIFT_CHANGE => MRP_COLOUR_SHIFT_CHANGE
+	);
+
+
 	private $project_list_categories = array(
 		"inwork" => "",
 		"planned_overdue" => "",
@@ -641,23 +663,10 @@ class mrp_workspace extends class_base
 			MRP_STATUS_DONE => t("Valmis"),
 			MRP_STATUS_LOCKED => t("Lukustatud"),
 			MRP_STATUS_PAUSED => t("Paus"),
-			MRP_STATUS_SHIFT_CHANGE => t("Paus"),
+			MRP_STATUS_SHIFT_CHANGE => t("Operaatori vahetus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud")
-		);
-
-		$this->state_colours = array (
-			MRP_STATUS_NEW => MRP_COLOUR_NEW,
-			MRP_STATUS_PLANNED => MRP_COLOUR_PLANNED,
-			MRP_STATUS_INPROGRESS => MRP_COLOUR_INPROGRESS,
-			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
-			MRP_STATUS_DONE => MRP_COLOUR_DONE,
-			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE => MRP_COLOUR_SHIFT_CHANGE,
-			MRP_STATUS_DELETED => MRP_COLOUR_DELETED,
-			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
-			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED
 		);
 
 		$this->init(array(
@@ -677,6 +686,7 @@ class mrp_workspace extends class_base
 	{
 		$job = get_instance(CL_MRP_JOB);
 		$job->add_comment($arr["pj_job"], $arr["pj_change_comment"]);
+		$job->save();
 		return $arr["post_ru"];
 	}
 
@@ -1156,7 +1166,7 @@ class mrp_workspace extends class_base
 
 					case "state":
 						$j = get_instance(CL_MRP_JOB);
-						$prop["value"] = "<span style='padding: 5px; background: ".$this->state_colours[$job->prop($rpn)]."'>".$j->states[$job->prop($rpn)]."<span>";
+						$prop["value"] = "<span style='padding: 5px; background: ".self::$state_colours[$job->prop($rpn)]."'>".$j->states[$job->prop($rpn)]."<span>";
 						break;
 
 					case "case_header":
@@ -1169,7 +1179,7 @@ class mrp_workspace extends class_base
 						$txt = array();
 						$cnt = 0;
 						$user_inst = get_instance("user");
-		
+
 						foreach(safe_array($job->meta("change_comment_history")) as $comment_hist_item)
 						{
 							$user = $user_inst->get_obj_for_uid($comment_hist_item["uid"]);
@@ -1405,7 +1415,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "resource_time_start":
-				if(!is_numeric($prop["value"]))
+				if(isset($prop["value"]) and !is_numeric($prop["value"]))
 				{
 					$prop["value"] = mktime(0, 0, 0, date("m") - 1, date("d"), date("Y"));
 				}
@@ -1454,7 +1464,7 @@ class mrp_workspace extends class_base
 					{
 						$data[$o["state"]]++;
 					}
-					$colors[$o["state"]] = strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[$o["state"]]));
+					$colors[$o["state"]] = strtolower(preg_replace("/[^0-9A-Za-z]/", "", self::$state_colours[$o["state"]]));
 					$labels[$o["state"]] = $this->states[$o["state"]]." (".$data[$o["state"]].")";
 				}
 
@@ -1678,7 +1688,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "max_subcontractor_timediff":
-				$prop["value"] = round (($prop["value"] / 3600), 2);
+				$prop["value"] = isset($prop["value"]) ? round (($prop["value"] / 3600), 2) : 0;
 				break;
 
 			case "hr_time_format":
@@ -1862,12 +1872,12 @@ class mrp_workspace extends class_base
 					));
 					$prop["options"] = $ol->names();
 				}
-				$prop["value"] = $arr["request"][$prop["name"]];
+				$prop["value"] = isset($arr["request"][$prop["name"]]) ? $arr["request"][$prop["name"]] : null;
 				break;
 
 			case "ws_from":
 			case "ws_to":
-				$prop["value"] = date_edit::get_timestamp($arr["request"][$prop["name"]]);
+				$prop["value"] = isset($arr["request"][$prop["name"]]) ? date_edit::get_timestamp($arr["request"][$prop["name"]]) : 0;
 				break;
 
 			case "ws_tbl":
@@ -2288,7 +2298,7 @@ class mrp_workspace extends class_base
 		$start = is_numeric($start) ? $start : mktime(0, 0, 0, date("m") - 1, date("d"), date("Y"));
 		$end = is_numeric($end) ? ($end + 24*3600 -1) : time();
 		$span = $end - $start;
-		
+
 		$res = array();
 		$inst = get_instance("mrp_resource");
 		foreach(array_merge($resource_tree->to_list()->arr(), array(obj($resources_folder))) as $o)
@@ -2321,9 +2331,9 @@ class mrp_workspace extends class_base
 			array(
 				"class_id" => CL_MRP_JOB,
 				"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $ids,
-				"CL_MRP_JOB.state" => MRP_STATUS_DONE,
+				"CL_MRP_JOB.state" => mrp_job_obj::STATE_DONE,
 				"CL_MRP_JOB.finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end + 24*3600 - 1, "int"),
-			), 
+			),
 			array(
 				CL_MRP_JOB => array("real_length", "length", "started", "finished", "RELTYPE_MRP_RESOURCE.oid"),
 			)
@@ -2331,7 +2341,7 @@ class mrp_workspace extends class_base
 
 		$o_datas = $odl->arr();
 
-		$data = get_instance("mrp_job_obj")->get_resource_hours(array(
+		$data = mrp_job_obj::get_resource_hours(array(
 			"from" => $start,
 			"to" => $end,
 			"state" => array(MRP_STATUS_INPROGRESS, MRP_STATUS_PAUSED),
@@ -2346,7 +2356,7 @@ class mrp_workspace extends class_base
 		foreach($o_datas as $oid => $o)
 		{
 			$k = $o["RELTYPE_MRP_RESOURCE.oid"];
-			$plan = $o["length"] * $res["real"][$k] / $o["real_length"];
+			$plan = $o["real_length"] ? $o["length"] * $res["real"][$k] / $o["real_length"] : 0;
 
 			$res["plan"][$k] = (int) (isset($res["plan"][$k]) ? $res["plan"][$k] + $plan : $plan);
 		}
@@ -2443,7 +2453,7 @@ class mrp_workspace extends class_base
 		}
 		else
 		{
-			$c = &$arr["prop"]["vcl_inst"];
+			$c = $arr["prop"]["vcl_inst"];
 			$c->set_type(GCHART_BAR_H);
 			$c->set_size(array(
 				"width" => 800,
@@ -2530,16 +2540,16 @@ class mrp_workspace extends class_base
 		}
 
 		$res = $this->db_fetch_array("
-			SELECT 
-				aw_resource_id as res, 
-				SUM(aw_job_last_duration) as sum 
-			FROM 
-				mrp_job_rows 
+			SELECT
+				aw_resource_id as res,
+				SUM(aw_job_last_duration) as sum
+			FROM
+				mrp_job_rows
 			WHERE
 				$pid_query
 				aw_job_previous_state = $state AND
 				aw_tm BETWEEN $from AND $to
-			GROUP BY 
+			GROUP BY
 				aw_resource_id
 		");
 		$ids = array();
@@ -2759,12 +2769,12 @@ class mrp_workspace extends class_base
 			),
 			array(
 				CL_MRP_JOB => array(
-					"resource" => "resource_id", 
-					"resource(CL_MRP_RESOURCE).name" => "resource", 
-					"project" => "project_id", 
-					"project(CL_MRP_CASE).name" => "project", 
+					"resource" => "resource_id",
+					"resource(CL_MRP_RESOURCE).name" => "resource",
+					"project" => "project_id",
+					"project(CL_MRP_CASE).name" => "project",
 					"project(CL_MRP_CASE).customer" => "customer_id",
-					"project(CL_MRP_CASE).customer.name" => "customer", 
+					"project(CL_MRP_CASE).customer.name" => "customer",
 				),
 			)
 		);
@@ -2816,13 +2826,13 @@ class mrp_workspace extends class_base
 						$data_prms["person"] = $this->get_hours_person($arr);
 					}
 					$data_prms["person_handling"] = $arr["obj_inst"]->prop("poo_started_finished_by");
-					$data = get_instance("mrp_job_obj")->get_person_hours($data_prms);
+					$data = mrp_job_obj::get_person_hours($data_prms);
 					$clid = CL_CRM_PERSON;
 					break;
 
 				case "resource":
 					$data_prms["resource"] = $this->get_hours_resource($arr);
-					$data = get_instance("mrp_job_obj")->get_resource_hours($data_prms);
+					$data = mrp_job_obj::get_resource_hours($data_prms);
 					$clid = CL_MRP_RESOURCE;
 
 					// Additionnal data
@@ -2872,7 +2882,7 @@ class mrp_workspace extends class_base
 	{
 		$c = $arr["obj_inst"]->prop("owner");
 		$o = obj($c);
-		
+
 		$i = get_instance(CL_CRM_COMPANY);
 		$i->active_node = empty($arr["request"]["cat"]) ? (empty($arr["request"]["unit"]) ? $c : $arr["request"]["unit"]) : $arr["request"]["cat"];
 
@@ -2961,7 +2971,7 @@ class mrp_workspace extends class_base
 				));
 			}
 		}
-	}
+		}
 
 	function format_hours($n)
 	{
@@ -3258,7 +3268,7 @@ class mrp_workspace extends class_base
 			$selected = isset($_GET["branch_id"]) && array_key_exists($_GET["branch_id"], $branches) ? $_GET["branch_id"] : "grp_printer_current";
 			$t->set_selected_item($selected);
 		}
-		
+
 
 		foreach($branches as $id => $caption)
 		{
@@ -4636,7 +4646,7 @@ class mrp_workspace extends class_base
 				if ($this->can("view", $job["oid"]))
 				{
 					$metadata = aw_unserialize ($job["metadata"]);
-					$job["paused_times"] = $metadata["paused_times"];
+					$job["paused_times"] = isset($metadata["paused_times"]) ? $metadata["paused_times"] : array();
 					$jobs[] = $job;
 				}
 			}
@@ -4795,7 +4805,7 @@ class mrp_workspace extends class_base
 			$job_name = $project->name () . "-" . $job["exec_order"] . " - " . $resource->name ();
 
 			### set bar colour
-			$colour = $this->state_colours[$job["state"]];
+			$colour = self::$state_colours[$job["state"]];
 			$colour = in_array ($job["oid"], $hilighted_jobs) ? MRP_COLOUR_HILIGHTED : $colour;
 
 			$bar = array (
@@ -4822,7 +4832,7 @@ class mrp_workspace extends class_base
 						"start" => $pd["start"],
 						"nostartmark" => true,
 						"layer" => 1,
-						"colour" => $this->state_colours[MRP_STATUS_PAUSED],
+						"colour" => self::$state_colours[MRP_STATUS_PAUSED],
 						"length" => ($pd["end"] - $pd["start"]),
 						"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
 						"title" => $job_name . ", paus (" . date (MRP_DATE_FORMAT, $pd["start"]) . " - " . date (MRP_DATE_FORMAT, $pd["end"]) . ")"
@@ -4953,7 +4963,7 @@ class mrp_workspace extends class_base
 					{
 						case "mrp_project_priority":
 							$project = obj ($oid);
-							$project->set_prop ("project_priority", $this->safe_settype_float ($value));
+							$project->set_prop ("project_priority", aw_math_calc::string2float($value));
 							$project->save ();
 							break;
 
@@ -5401,7 +5411,7 @@ class mrp_workspace extends class_base
 		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_user_mgr($t);
 
-		if (!is_oid($arr["request"]["unit"]))
+		if (empty($arr["request"]["unit"]))
 		{
 			return;
 		}
@@ -6204,7 +6214,6 @@ class mrp_workspace extends class_base
 
 		$workers = $this->get_workers_for_resources($res);
 
-		$mrp_job = get_instance(CL_MRP_JOB);
 		$mrp_case = get_instance(CL_MRP_CASE);
 
 		$cnt = 0;
@@ -6247,6 +6256,8 @@ class mrp_workspace extends class_base
 				}
 			}
 
+			$mrp_job = obj($job["oid"]);
+
 			### set colours
 			if ($job["state"] == MRP_STATUS_DONE)
 			{
@@ -6257,14 +6268,14 @@ class mrp_workspace extends class_base
 			{
 				$bgcol = $this->pj_colors["can_not_start"];
 			}
-			elseif ($mrp_job->can_start(array("job" => $job["oid"])))
+			elseif ($mrp_job->can_start())
 			{
 				// light green
 				$bgcol = $this->pj_colors["can_start"];
 			}
 			else
 			{
-				if ($mrp_job->job_prerequisites_are_done(array("job" => $job["oid"])))
+				if ($mrp_job->job_prerequisites_are_done())
 				{
 					$bgcol = $this->pj_colors["resource_in_use"];
 				}
@@ -6290,7 +6301,7 @@ class mrp_workspace extends class_base
 				$bgcol = $this->pj_colors["search_result"];
 			}
 
-			$state = '<span style="color: ' . $this->state_colours[$job["state"]] . ';">' . $this->states[$job["state"]] . '</span>';
+			$state = '<span style="color: ' . self::$state_colours[$job["state"]] . ';">' . $this->states[$job["state"]] . '</span>';
 
 			$start = $end = $length = 0;
 			### get length, end and start according to job state
@@ -6956,13 +6967,8 @@ class mrp_workspace extends class_base
 		");
 	}
 
-	function safe_settype_float ($value)
-	{
-		$separators = ".,";
-		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
-		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
-		return (float) ("{$int}.{$dec}");
-	}
+	function safe_settype_float ($value) // DEPRECATED
+	{ return aw_math_calc::string2float($value); }
 
 	/**
 
@@ -7113,7 +7119,7 @@ class mrp_workspace extends class_base
 					{
 						$arr["area_caption"] = sprintf(t("%s t&ouml;&ouml;tundide %s"), $period, $type);
 					}
-				}				
+				}
 				break;
 
 			case "resource_deviation_chart":
@@ -7344,7 +7350,7 @@ class mrp_workspace extends class_base
 		$dfn = "";
 		$rows = "";
 		$i = 1;
-		$state_colours = $this->state_colours;
+		$state_colours = self::$state_colours;
 		$state_colours["hilighted"] = MRP_COLOUR_HILIGHTED;
 		$state_colours["unavailable"] = MRP_COLOUR_UNAVAILABLE;
 		$states = $this->states;
@@ -7556,7 +7562,7 @@ class mrp_workspace extends class_base
 
 	function _ws_tbl($arr)
 	{
-		if (!$arr["request"]["MAX_FILE_SIZE"])//??? milleks?
+		if (empty($arr["request"]["MAX_FILE_SIZE"]))//??? milleks?
 		{
 			return;
 		}

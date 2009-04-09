@@ -41,10 +41,7 @@ class mrp_order_obj extends _int_object
 			$mc->set_parent(obj($this->prop("workspace"))->mrp_workspace()->projects_folder);
 			$mc->set_name($this->prop("name"));
 			$mc->save();
-			$mc->connect(array(
-				"to" => obj($this->prop("workspace"))->mrp_workspace,
-				"type" => "RELTYPE_MRP_OWNER"
-			));
+			$mc->set_prop("workspace", obj($this->prop("workspace"))->mrp_workspace);
 			$this->set_prop("mrp_case", $mc->id());
 			$this->save();
 		}

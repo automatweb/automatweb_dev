@@ -1,9 +1,7 @@
 <?php
 /*
 
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
-
-@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 confirm_save_data=1 prop_cb=1 maintainer=voldemar
+@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
 
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="T&ouml;&ouml;leht" submit=no
@@ -21,6 +19,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 @default table=objects
 @default field=meta
 @default method=serialize
+	@property workspace type=hidden
+
 	@property state type=text group=general,grp_resource_maintenance,grp_resource_settings
 	@caption Ressursi staatus
 
@@ -118,6 +118,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 @reltype MRP_SCHEDULE value=2 clid=CL_PLANNER
 @caption Ressursi kalender
 
+// DEPRECATED
 @reltype MRP_OWNER value=3 clid=CL_MRP_WORKSPACE
 @caption Ressursi omanik
 
@@ -132,22 +133,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 
 */
 
-classload("mrp/mrp_header");
+require_once "mrp_header.aw";
 
 class mrp_resource extends class_base
 {
 	private $mrp_error = false;
-	private $resource_parent;
 	private $workspace;
 
 	function mrp_resource()
 	{
 		$this->resource_states = array(
 			0 => "M&auml;&auml;ramata",
-			MRP_STATUS_RESOURCE_AVAILABLE => t("Vaba"),
-			MRP_STATUS_RESOURCE_INUSE => t("Kasutusel"),
-			MRP_STATUS_RESOURCE_OUTOFSERVICE => t("Suletud"),
-			MRP_STATUS_RESOURCE_INACTIVE => t("Arhiveeritud"),
+			mrp_resource_obj::STATE_AVAILABLE => t("Vaba"),
+			mrp_resource_obj::STATE_PROCESSING => t("Kasutusel"),
+			mrp_resource_obj::STATE_OUTOFSERVICE => t("Suletud"),
+			mrp_resource_obj::STATE_INACTIVE => t("Arhiveeritud")
 		);
 
 		$this->states = array (
@@ -161,22 +161,8 @@ class mrp_resource extends class_base
 			MRP_STATUS_SHIFT_CHANGE => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
-			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
+			MRP_STATUS_ARCHIVED => t("Arhiveeritud")
 		);
-
-		$this->state_colours = array (
-			MRP_STATUS_NEW => MRP_COLOUR_NEW,
-			MRP_STATUS_PLANNED => MRP_COLOUR_PLANNED,
-			MRP_STATUS_INPROGRESS => MRP_COLOUR_INPROGRESS,
-			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
-			MRP_STATUS_DONE => MRP_COLOUR_DONE,
-			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE => MRP_COLOUR_SHIFT_CHANGE,
-			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
-			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
-		);
-
-
 
 		$this->trans_props = array(
 			"name", "comment"
@@ -194,8 +180,7 @@ class mrp_resource extends class_base
 		{
 			if (is_oid ($arr["request"]["mrp_workspace"]))
 			{
-				$this->workspace = obj ($arr["request"]["mrp_workspace"]);
-				$this->resource_parent = $arr["request"]["mrp_parent"];
+				$this->workspace = obj ($arr["request"]["mrp_workspace"], array(), CL_MRP_WORKSPACE);
 			}
 			else
 			{
@@ -205,7 +190,7 @@ class mrp_resource extends class_base
 		else
 		{
 			$this_object = obj ($arr["request"]["id"]);
-			$this->workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+			$this->workspace = $this_object->prop("workspace");
 
 			if (!$this->workspace)
 			{
@@ -228,7 +213,7 @@ class mrp_resource extends class_base
 
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$this_object = &$arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 
 		switch($prop["name"])
 		{
@@ -257,22 +242,14 @@ class mrp_resource extends class_base
 
 			case "resource_calendar":
 				### update schedule
-				$schedule = get_instance (CL_MRP_SCHEDULE);
+				$schedule = new mrp_schedule();
 				$schedule->create (array("mrp_workspace" => $this->workspace->id()));
 
 				$prop["value"] = $this->create_resource_calendar ($arr);
 				break;
 
-			case "thread_data":
-				$prop["value"] = is_array ($this_object->prop ("thread_data")) ? count ($this_object->prop ("thread_data")) : 1;
-				break;
-
 			case "type":
-				$prop["options"] = array (
-					MRP_RESOURCE_SCHEDULABLE => t("Ressursi kasutust planeeritakse"),
-					MRP_RESOURCE_NOT_SCHEDULABLE => t("Ressursi kasutust ei planeerita"),
-					MRP_RESOURCE_SUBCONTRACTOR => t("Ressurss on allhange"),
-				);
+				$prop["options"] = $this_object->get_type_options();
 				break;
 
 			case "state":
@@ -283,15 +260,15 @@ class mrp_resource extends class_base
 			case "out_of_service":
 				switch ($this_object->prop("state"))
 				{
-					case MRP_STATUS_RESOURCE_INUSE:
+					case mrp_resource_obj::STATE_PROCESSING:
 						$prop["disabled"] = true;
 						break;
 
-					case MRP_STATUS_RESOURCE_AVAILABLE:
+					case mrp_resource_obj::STATE_AVAILABLE:
 						$prop["value"] = 0;
 						break;
 
-					case MRP_STATUS_RESOURCE_OUTOFSERVICE:
+					case mrp_resource_obj::STATE_OUTOFSERVICE:
 						$prop["value"] = 1;
 						break;
 				}
@@ -299,7 +276,7 @@ class mrp_resource extends class_base
 
 			case "job_list":
 				### update schedule
-				$schedule = get_instance (CL_MRP_SCHEDULE);
+				$schedule = new mrp_schedule();
 				$schedule->create (array("mrp_workspace" => $this->workspace->id()));
 
 				if($arr["request"]["group"] === "grp_resource_joblist_aborted")
@@ -340,31 +317,24 @@ class mrp_resource extends class_base
 		{
 			return;
 		}
-		if ($resource->prop("state") == MRP_STATUS_RESOURCE_OUTOFSERVICE)
+
+		if ($resource->prop("state") == mrp_resource_obj::STATE_OUTOFSERVICE)
 		{
-			return array(MRP_STATUS_RESOURCE_OUTOFSERVICE, 0);
+			return array(mrp_resource_obj::STATE_OUTOFSERVICE, 0);
 		}
-		if ($resource->prop("state") == MRP_STATUS_RESOURCE_INACTIVE)
+
+		if ($resource->prop("state") == mrp_resource_obj::STATE_INACTIVE)
 		{
-			return array(MRP_STATUS_RESOURCE_INACTIVE, 0);
+			return array(mrp_resource_obj::STATE_INACTIVE, 0);
 		}
-		$max_jobs = max(1, count($resource->prop("thread_data")));
-		$cur_jobs = $this->db_fetch_field("
-			SELECT
-				count(j.oid) AS cnt
-			FROM
-				mrp_job j
-				LEFT JOIN objects o ON o.oid = j.oid
-			WHERE
-				j.resource = ".$resource->id()." AND
-				o.status > 0 AND
-				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.",".MRP_STATUS_SHIFT_CHANGE.")
-		", "cnt");
-		if ($cur_jobs >= $max_jobs)
+
+		$max_jobs = $resource->prop("thread_data");
+		$available = $resource->is_available();
+		if (!$available)
 		{
-			return array(MRP_STATUS_RESOURCE_INUSE, $cur_jobs);
+			return array(mrp_resource_obj::STATE_PROCESSING, $max_jobs);
 		}
-		return array(MRP_STATUS_RESOURCE_AVAILABLE, $cur_jobs);
+		return array(mrp_resource_obj::STATE_AVAILABLE, $max_jobs-$available);
 	}
 
 	function callback_mod_reforb ($arr)
@@ -374,12 +344,7 @@ class mrp_resource extends class_base
 			$arr["mrp_workspace"] = $this->workspace->id ();
 		}
 
-		if ($this->resource_parent)
-		{
-			$arr["mrp_parent"] = $this->resource_parent;
-		}
-
-		if($arr["group"] == "grp_resource_materials")
+		if($arr["group"] === "grp_resource_materials")
 		{
 			$arr["pgtf"] = automatweb::$request->arg("pgtf");
 			$arr["add_ids"] = "";
@@ -405,35 +370,14 @@ class mrp_resource extends class_base
 
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$this_object = &$arr["obj_inst"];
-
-		### post rescheduling msg where necessary
-		switch ($prop["name"])
-		{
-			case "thread_data":
-				if (count ($this_object->prop ($prop["name"])) != $prop["value"] && $this->workspace->is_property("rescheduling_needed"))
-				{
-					$this->workspace->set_prop("rescheduling_needed", 1);
-				}
-				break;
-
-			case "global_buffer":
-				if ($this_object->prop ($prop["name"]) != $prop["value"] && $this->workspace->is_property("rescheduling_needed"))
-				{
-					$this->workspace->set_prop("rescheduling_needed", 1);
-				}
-				break;
-		}
+		$this_object = $arr["obj_inst"];
 
 		switch ($prop["group"])
 		{
 			case "grp_resource_unavailable_work":
 			case "grp_resource_unavailable_una":
 			case "grp_resource_unavailable":
-				if($this->workspace->is_property("rescheduling_needed"))
-				{
-					$this->workspace->set_prop("rescheduling_needed", 1);
-				}
+				$this->workspace->request_rescheduling();
 				break;
 		}
 
@@ -465,41 +409,6 @@ class mrp_resource extends class_base
 				$prop["value"] = $nrs;
 				break;
 
-			case "thread_data":
-				$thread_data = $this_object->prop ("thread_data");
-				$concurrent_threads = isset ($thread_data[0]["state"]) ? count ($thread_data) : false;
-				$desired_count = ($prop["value"] < 1) ? 1 : (int) $prop["value"];
-
-				if ($concurrent_threads != $desired_count)
-				{
-					if (!$concurrent_threads)
-					{
-						$thread_data = array_fill (0, $desired_count, array (
-							"state" => MRP_STATUS_RESOURCE_AVAILABLE,
-							"job" => NULL,
-						));
-					}
-					elseif ($desired_count > $concurrent_threads)
-					{
-						$new_threads = $desired_count - $concurrent_threads;
-						$thread_data = array_merge ($thread_data, array_fill ($concurrent_threads, $new_threads, array (
-							"state" => MRP_STATUS_RESOURCE_AVAILABLE,
-							"job" => NULL,
-						)));
-					}
-					elseif ($desired_count < $concurrent_threads)
-					{
-						$thread_data = array_slice ($thread_data, 0, $desired_count);
-					}
-
-					$prop["value"] = $thread_data;
-				}
-				else
-				{
-					return PROP_IGNORE;
-				}
-				break;
-
 			case "maintenance_history":
 				if (strlen(trim($prop["value"]["comment"])) < 2)
 				{
@@ -508,19 +417,19 @@ class mrp_resource extends class_base
 				break;
 
 			case "work_hrs_recur":
-				if (($arr["request"]["work_hrs_recur_action"] != "delete") and is_array ($prop["value"]))
+				if (($arr["request"]["work_hrs_recur_action"] !== "delete") and is_array ($prop["value"]))
 				{
-					$prop["value"]["recur_type"] = RECUR_DAILY;
+					$prop["value"]["recur_type"] = recurrence::RECUR_DAILY;
 					$prop["value"]["interval_daily"] = 1;
 				}
 
 			case "unavailable_recur":
-				if (($arr["request"]["work_hrs_recur_action"] != "delete") and ($arr["request"]["unavailable_recur_action"] != "delete") and is_array ($prop["value"]))
+				if (($arr["request"]["work_hrs_recur_action"] !== "delete") and ($arr["request"]["unavailable_recur_action"] !== "delete") and is_array ($prop["value"]))
 				{
 					$applicable_types = array (
-						RECUR_DAILY,
-						RECUR_WEEKLY,
-						RECUR_YEARLY,
+						recurrence::RECUR_DAILY,
+						recurrence::RECUR_WEEKLY,
+						recurrence::RECUR_YEARLY
 					);
 
 					if (!in_array ($prop["value"]["recur_type"], $applicable_types))
@@ -549,9 +458,9 @@ class mrp_resource extends class_base
 					$interval_yearly = $prop["value"]["interval_yearly"] ? $prop["value"]["interval_daily"] : 1;
 
 					if (
-						((RECUR_DAILY == $prop["value"]["recur_type"]) and ((24*$interval_daily) < $prop["value"]["length"]))
-						or ((RECUR_WEEKLY == $prop["value"]["recur_type"]) and ((24*7*$interval_weekly) < $prop["value"]["length"]))
-						or ((RECUR_YEARLY == $prop["value"]["recur_type"]) and ((24*365*$interval_yearly) < $prop["value"]["length"]))
+						((recurrence::RECUR_DAILY == $prop["value"]["recur_type"]) and ((24*$interval_daily) < $prop["value"]["length"]))
+						or ((recurrence::RECUR_WEEKLY == $prop["value"]["recur_type"]) and ((24*7*$interval_weekly) < $prop["value"]["length"]))
+						or ((recurrence::RECUR_YEARLY == $prop["value"]["recur_type"]) and ((24*365*$interval_yearly) < $prop["value"]["length"]))
 					)
 					{
 						$prop["error"] .= t("Pikkus ei saa olla suurem kui korduse periood. ") . MRP_NEWLINE;
@@ -582,7 +491,7 @@ class mrp_resource extends class_base
 			case "out_of_service":
 				switch ($this_object->prop("state"))
 				{
-					case MRP_STATUS_RESOURCE_INUSE:
+					case mrp_resource_obj::STATE_PROCESSING:
 						if ($prop["value"] == 1)
 						{
 							$prop["error"] = t("Ressurss on kasutusel. Ei saa hooldusse panna. ");
@@ -590,17 +499,17 @@ class mrp_resource extends class_base
 						}
 						break;
 
-					case MRP_STATUS_RESOURCE_AVAILABLE:
+					case mrp_resource_obj::STATE_AVAILABLE:
 						if ($prop["value"] == 1)
 						{
-							$this_object->set_prop("state", MRP_STATUS_RESOURCE_OUTOFSERVICE);
+							$this_object->set_prop("state", mrp_resource_obj::STATE_OUTOFSERVICE);
 						}
 						break;
 
-					case MRP_STATUS_RESOURCE_OUTOFSERVICE:
+					case mrp_resource_obj::STATE_OUTOFSERVICE:
 						if ($prop["value"] == 0)
 						{
-							$this_object->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
+							$this_object->set_prop("state", mrp_resource_obj::STATE_AVAILABLE);
 						}
 						break;
 				}
@@ -614,42 +523,30 @@ class mrp_resource extends class_base
 		return $retval;
 	}
 
-	function callback_post_save ($arr)
+	function callback_pre_save($arr)
 	{
-		$this_object =& $arr["obj_inst"];
-		$this->workspace->save ();
-
-		### connect newly created obj. to workspace from which the req. was made
 		if ($arr["new"] and is_oid ($arr["request"]["mrp_workspace"]))
 		{
-			$workspace = obj ($arr["request"]["mrp_workspace"]);
-			$parent = is_oid ($arr["request"]["mrp_parent"]) ? $arr["request"]["mrp_parent"] : $workspace->prop ("resources_folder");
-			$this_object->connect (array (
-				"to" => $workspace,
-				"reltype" => "RELTYPE_MRP_OWNER",
-			));
-			$this_object->set_parent ($parent);
-			$this_object->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
-			$this_object->save ();
+			$arr["obj_inst"]->set_prop("workspace", obj($arr["request"]["mrp_workspace"]));
 		}
+	}
 
-		if($arr["request"]["group"] == "grp_resource_materials")
+	function callback_post_save ($arr)
+	{
+		$this_object = $arr["obj_inst"];
+		$this->workspace->save ();
+
+		if(isset($arr["request"]["group"]) and $arr["request"]["group"] === "grp_resource_materials")
 		{
 			$add_ids = explode(",", $arr["request"]["add_ids"]);
 			foreach($add_ids as $oid)
 			{
-				if($arr["request"]["rem_ids"][$oid] || !$oid)
+				if(isset($arr["request"]["rem_ids"][$oid]) || !$oid)
 				{
 					continue;
 				}
 				$prod = obj($oid);
-				$o = obj();
-				$o->set_class_id(CL_MATERIAL_EXPENSE_CONDITION);
-				$o->set_parent($arr["obj_inst"]->id());
-				$o->set_name(sprintf(t("%s kulutingimus %s jaoks"), $prod->name(), $arr["obj_inst"]->name()));
-				$o->set_prop("resource", $arr["obj_inst"]->id());
-				$o->set_prop("product", $oid);
-				$o->save();
+				$arr["obj_inst"]->add_input_product($prod);
 			}
 			foreach($arr["request"]["planning"] as $oid => $pl)
 			{
@@ -663,7 +560,6 @@ class mrp_resource extends class_base
 
 	function _init_job_list_table(&$table, $times = false)
 	{
-
 		/*||
 			Ava | Staatus |
 		    Projekti nr. | Klient |
@@ -757,7 +653,6 @@ class mrp_resource extends class_base
 			"align" => "center",
 			"numeric" => 1,
 		));
-
 
 		$table->define_field(array(
 			"name" => "trykiarv_notes",
@@ -858,7 +753,62 @@ class mrp_resource extends class_base
 			"records_per_page" => 50,
 		));
 
-		$jobs = $this->get_jobs($arr);
+		### states for resource joblist
+		if($for_workspace)
+		{
+			$applicable_project_states = array(
+				mrp_case_obj::STATE_DONE,
+				mrp_case_obj::STATE_PLANNED,
+				mrp_case_obj::STATE_INPROGRESS
+			);
+			$applicable_states = array(
+				mrp_job_obj::STATE_DONE,
+				mrp_job_obj::STATE_PLANNED,
+				mrp_job_obj::STATE_PAUSED,
+				mrp_job_obj::STATE_SHIFT_CHANGE,
+				mrp_job_obj::STATE_INPROGRESS
+			);
+		}
+		elseif($done)
+		{
+			$applicable_states = array(
+				mrp_job_obj::STATE_DONE
+			);
+			$applicable_project_states = array(
+				mrp_case_obj::STATE_DONE,
+				mrp_case_obj::STATE_PLANNED,
+				mrp_case_obj::STATE_INPROGRESS
+			);
+		}
+		else
+		{
+			$applicable_project_states= array(
+				mrp_case_obj::STATE_PLANNED,
+				mrp_case_obj::STATE_ONHOLD,
+				mrp_case_obj::STATE_INPROGRESS
+			);
+			$applicable_states = array(
+				mrp_job_obj::STATE_PLANNED,
+				mrp_job_obj::STATE_PAUSED,
+				mrp_job_obj::STATE_SHIFT_CHANGE,
+				mrp_job_obj::STATE_INPROGRESS
+			);
+		}
+
+		$list = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"resource" => $this_object->id (),
+				"state" => $applicable_states,
+				// "starttime" => new obj_predicate_compare (OBJ_COMP_LESS, (time () + 886400)),
+				new obj_predicate_sort(array("starttime" => "ASC")),
+				"CL_MRP_JOB.project(CL_MRP_CASE).state" => $applicable_project_states,
+			),
+			array(
+				CL_MRP_JOB => array("project", "exec_order", "state", "starttime", "RELTYPE_MRP_RESOURCE.name", "length"),
+			)
+		);
+		$jobs = $list->arr();
 
 		foreach($jobs as $oid => $o)
 		{
@@ -903,7 +853,7 @@ class mrp_resource extends class_base
 			}
 
 			### colour job status
-			$state = '<span style="color: ' . $this->state_colours[$job["state"]] . ';">' . $this->states[$job["state"]] . '</span>';
+			$state = '<span style="color: ' . mrp_workspace::$state_colours[$job["state"]] . ';">' . $this->states[$job["state"]] . '</span>';
 			$change_url = html::get_change_url($oid, array("return_url" => get_ru()));
 
 			$data = array (
@@ -930,7 +880,7 @@ class mrp_resource extends class_base
 				$data += array(
 					"planned_length" => round($planned_length, 2),
 				);
-				if(MRP_STATUS_DONE == $job["state"])
+				if(mrp_job_obj::STATE_DONE == $job["state"])
 				{
 					// ARVUTA TEGELIK
 					$this->db_query("SELECT * FROM mrp_stats WHERE job_oid = ".$oid);
@@ -954,9 +904,10 @@ class mrp_resource extends class_base
 
 	function create_resource_calendar ($arr)
 	{
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
+		$date = isset($arr["request"]["date"]) ? $arr["request"]["date"] : null;
+		$view_type = isset($arr["request"]["viewtype"]) ? $arr["request"]["viewtype"] : null;
 
-		classload("vcl/calendar");
 		$calendar = new vcalendar (array ("tpldir" => "mrp_calendar"));
 		$calendar->init_calendar (array ());
 		$calendar->configure (array (
@@ -964,19 +915,19 @@ class mrp_resource extends class_base
 			"full_weeks" => true,
 		));
 		$range = $calendar->get_range (array (
-			"date" => $arr["request"]["date"],
-			"viewtype" => $arr["request"]["viewtype"],
+			"date" => $date,
+			"viewtype" => $view_type,
 		));
 		$start = $range["start"];
 		$end = $range["end"];
 
 		### states for resource joblist
 		$applicable_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE,
-			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_DONE,
+			mrp_job_obj::STATE_PLANNED,
+			mrp_job_obj::STATE_PAUSED,
+			mrp_job_obj::STATE_SHIFT_CHANGE,
+			mrp_job_obj::STATE_INPROGRESS,
+			mrp_job_obj::STATE_DONE
 		);
 
 		$list = new object_list(array(
@@ -989,7 +940,7 @@ class mrp_resource extends class_base
 		$this->cal_items = array();
 		if ($list->count () > 0)
 		{
-			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
+			for ($job = $list->begin(); !$list->end(); $job = $list->next())
 			{
 /* dbg */ if (!is_oid ($job->prop ("project"))) { echo "project is not an object. job:" . $job->id () . " proj:" . $job->prop ("project") ."<br>"; }
 				if (!$this->can("view", $job->prop("project")))
@@ -1000,10 +951,9 @@ class mrp_resource extends class_base
 				### show only applicable projects' jobs
 				$project = obj ($job->prop ("project"));
 				$applicable_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_PAUSED,
-					MRP_STATUS_INPROGRESS,
-					MRP_STATUS_DONE,
+					mrp_case_obj::STATE_PLANNED,
+					mrp_case_obj::STATE_INPROGRESS,
+					mrp_case_obj::STATE_DONE
 				);
 
 				if (in_array ($project->prop ("state"), $applicable_states))
@@ -1011,10 +961,10 @@ class mrp_resource extends class_base
 					$project_name = $project->name () ? $project->name () : "...";
 
 					### set timestamp according to state
-					$timestamp = ($job->prop ("state") == MRP_STATUS_DONE) ? $job->prop ("started") : $job->prop ("starttime");
+					$timestamp = ($job->prop ("state") == mrp_job_obj::STATE_DONE) ? $job->prop ("started") : $job->prop ("starttime");
 
 					### colour job status
-					$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+					$state = '<span style="color: ' . mrp_workspace::$state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
 					### ...
 					$calendar->add_item (array (
@@ -1062,16 +1012,13 @@ class mrp_resource extends class_base
 	}
 
 	function get_unavailable_periods ($resource, $start, $end) // DEPRECATED
-	{
-		return $resource->get_unavailable_periods($start, $end);
-	}
+	{ return $resource->get_unavailable_periods($start, $end); }
 
 	function get_recurrent_unavailable_periods ($resource, $start, $end) // DEPRECATED
-	{
-		return $resource->get_recurrent_unavailable_periods($start, $end);
-	}
+	{ return $resource->get_recurrent_unavailable_periods($start, $end); }
 
-	function get_week_start ($time = false) //!!! somewhat dst safe (safe if error doesn't exceed 12h)
+	// DEPRECATED. //!!! v6ibolla vaadata kas tasub date_calc-i omaga mergeda vms.
+	function get_week_start ($time = false) //!!! somewhat dst safe (safe if error doesn't exceed 12h) //
 	{
 		if (!$time)
 		{
@@ -1104,151 +1051,16 @@ class mrp_resource extends class_base
 		return $week_start;
 	}
 
-/**
-    @attrib name=start_job
-	@param resource required type=int
-	@param job required type=int
-**/
-	function start_job ($arr)
-	{
-		if (is_oid ($arr["resource"]) and is_oid ($arr["job"]))
-		{
-			$resource = obj ($arr["resource"]);
-		}
-		else
-		{
-			return false;
-		}
-
-		/*switch ($resource->prop ("state"))
-		{
-			case MRP_STATUS_RESOURCE_AVAILABLE:
-				$thread_data = $resource->prop ("thread_data");
-
-				if (!is_array($thread_data))
-				{
-					$thread_data = array ();
-					for ($i = 1; $i <= max(1, $resource->prop("thread_data")); $i++)
-					{
-						$thread_data[$i] = array("state" => MRP_STATUS_RESOURCE_AVAILABLE);
-					}
-				}
-
-				$started = false;
-				$last_thread = true;
-
-				foreach ($thread_data as $key => $thread)
-				{
-					if ( ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE) and ($started === false) )
-					{
-						$thread_data[$key]["state"] = MRP_STATUS_RESOURCE_INUSE;
-						$thread_data[$key]["job"] = $arr["job"];
-						$started = $key;
-					}
-					elseif ( ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE) and ($started !== false) )
-					{
-						$last_thread = false;
-						break;
-					}
-				}
-
-				if ($last_thread)
-				{
-					$resource->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
-				}
-
-				$resource->set_prop ("thread_data", $thread_data);
-				aw_disable_acl();
-				$resource->save ();
-				aw_restore_acl();*/
-				//return $started;
-				$max_jobs = max(1, count($resource->prop("thread_data")));
-				$cur_jobs = $this->db_fetch_field("
-					SELECT
-						count(j.oid) AS cnt
-					FROM
-						mrp_job j
-						LEFT JOIN objects o ON o.oid = j.oid
-					WHERE
-						j.resource = ".$resource->id()." AND
-						o.status > 0 AND
-						j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.",".MRP_STATUS_SHIFT_CHANGE.")
-				", "cnt");
-				// compare
-				if ($cur_jobs >= $max_jobs)
-				{
-					return false;
-				}
-				return true;
-/*			default:
-				return false;
-		}*/
-	}
-
-/**
-    @attrib name=stop_job
-	@param resource required type=int
-	@param job required type=int
-**/
-	function stop_job ($arr)
-	{
-		if (is_oid ($arr["resource"]) and is_oid ($arr["job"]))
-		{
-			$resource = obj ($arr["resource"]);
-		}
-		else
-		{
-			return false;
-		}
-
-		$thread_data = $resource->prop ("thread_data");
-
-		foreach ($thread_data as $key => $thread)
-		{
-			if ($thread["job"] == $arr["job"])
-			{
-				$thread_data[$key]["state"] = MRP_STATUS_RESOURCE_AVAILABLE;
-				$thread_data[$key]["job"] = NULL;
-				break;
-			}
-		}
-
-		$resource->set_prop ("thread_data", $thread_data);
-		$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
-		aw_disable_acl();
-		$resource->save ();
-		aw_restore_acl();
-		return true;
-	}
-
-	function on_create_resource ($arr)
-	{
-		$resource = obj ($arr["oid"]);
-
-		### set state
-		$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
-
-		### init thread_data
-		$thread_data = array(1 => array ("state" => MRP_STATUS_RESOURCE_AVAILABLE, "job" => NULL));
-		$resource->set_prop ("thread_data", $thread_data);
-
-		aw_disable_acl();
-		$resource->save ();
-		aw_restore_acl();
-	}
-
 	function safe_settype_float ($value) // DEPRECATED
-	{
-		return aw_math_calc::safe_settype_float($value);
-	}
+	{ return aw_math_calc::string2float($value); }
 
 	function get_events_for_range($resource, $start, $end)
 	{
 		$applicable_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_SHIFT_CHANGE,
-			MRP_STATUS_INPROGRESS,
+			mrp_job_obj::STATE_PLANNED,
+			mrp_job_obj::STATE_PAUSED,
+			mrp_job_obj::STATE_SHIFT_CHANGE,
+			mrp_job_obj::STATE_INPROGRESS
 		);
 
 		$list = new object_list(array(
@@ -1271,10 +1083,10 @@ class mrp_resource extends class_base
 				### show only applicable projects' jobs
 				$project = obj ($job->prop ("project"));
 				$applicable_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_PAUSED,
-					MRP_STATUS_INPROGRESS,
-					MRP_STATUS_DONE,
+					mrp_case_obj::STATE_PLANNED,
+					mrp_case_obj::STATE_PAUSED,
+					mrp_case_obj::STATE_INPROGRESS,
+					mrp_case_obj::STATE_DONE
 				);
 
 				if (in_array ($project->prop ("state"), $applicable_states))
@@ -1282,7 +1094,7 @@ class mrp_resource extends class_base
 					$project_name = $project->name () ? $project->name () : "...";
 
 					### set timestamp according to state
-					$timestamp = ($job->prop ("state") == MRP_STATUS_DONE) ? $job->prop ("started") : $job->prop ("starttime");
+					$timestamp = ($job->prop ("state") == mrp_job_obj::STATE_DONE) ? $job->prop ("started") : $job->prop ("starttime");
 
 					$ret[] = array(
 						"start" => $timestamp,
@@ -1552,7 +1364,7 @@ class mrp_resource extends class_base
 
 	function mk_materials_tb($arr)
 	{
-		$tb = &$arr["prop"]["vcl_inst"];
+		$tb = $arr["prop"]["vcl_inst"];
 		$tb->add_save_button();
 		$tb->add_button(array(
 			"name" => "rem_materials",
@@ -1567,17 +1379,19 @@ class mrp_resource extends class_base
 	**/
 	function remove_materials($arr)
 	{
-		foreach($arr["rem_ids"] as $oid)
+		if ($this->can("view", $arr["id"]))
 		{
-			if($this->can("view", $oid))
+			$resource =  new object($arr["id"]);
+			foreach($arr["rem_ids"] as $oid)
 			{
-				$o = obj($oid);
-				if($o->class_id() == CL_MATERIAL_EXPENSE_CONDITION)
+				if($this->can("view", $oid))
 				{
-					$o->delete();
+					$o = obj($oid);
+					$resource->remove_input_product($o);
 				}
 			}
 		}
+
 		return $arr["post_ru"];
 	}
 
@@ -1649,7 +1463,7 @@ class mrp_resource extends class_base
 				var urlcontent2 = document.createTextNode(add_text)
 				url2.appendChild(urlcontent2)
 				cell2. appendChild(url2)
-	
+
 				var cell3 = document.createElement('td')
 				add_attribute(cell3, 'style', 'background: #CCFFCC')
 				add_attribute(cell3, 'class', 'awmenuedittabletext')
@@ -1675,7 +1489,7 @@ class mrp_resource extends class_base
 	function mk_materials_tree($arr)
 	{
 		$whi = get_instance(CL_SHOP_WAREHOUSE);
-		$owner = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		$owner = $arr["obj_inst"]->prop("workspace");
 		if($owner)
 		{
 			$whs = $owner->prop("warehouse");
@@ -1797,13 +1611,13 @@ class mrp_resource extends class_base
 
 	function mk_materials_sel_tbl($arr)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
+		$t = $arr["prop"]["vcl_inst"];
 		$t->set_caption(t("Ressursil kasutatavad materjalid"));
 		$t->define_field(array(
 			"name" => "oid",
-			"caption" => t("Eemalda"),
+			"caption" => t("Vali"),
 			"align" => "center",
-			"width" => 55,
+			"width" => 30
 		));
 		$t->define_field(array(
 			"name" => "name",
@@ -1830,8 +1644,8 @@ class mrp_resource extends class_base
 				$prod = obj($prodid);
 				$t->define_data(array(
 					"oid" => html::checkbox(array(
-						"name" => "rem_ids[".$o->id()."]",
-						"value" => $o->id(),
+						"name" => "rem_ids[{$prodid}]",
+						"value" => $prodid,
 					)),
 					"name" => html::obj_change_url($o, $prod->name()),
 					"planning" => html::select(array(
@@ -1857,7 +1671,7 @@ class mrp_resource extends class_base
 			return false;
 		}
 
-		if(in_array($arr["id"], array("grp_resource_joblist", "grp_resource_joblist_todo", "grp_resource_joblist_done", "grp_resource_joblist_aborted")))
+		if ($arr["id"] === "transl" && (aw_ini_get("user_interface.content_trans") != 1 && !$trc[$this->clid]))
 		{
 			$arr["link"] = aw_url_change_var("timespan", "current_week", $arr["link"]);
 		}

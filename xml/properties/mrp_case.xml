@@ -62,6 +62,13 @@
             <caption>Projekti nimetus</caption>
       </property>
       <property>
+            <name>workspace</name>
+            <group>grp_general</group>
+            <table>mrp_case</table>
+            <type>hidden</type>
+            <field>workspace</field>
+      </property>
+      <property>
             <name>state</name>
             <group>
                   <num_0>grp_case_schedule_gantt</num_0>
@@ -141,6 +148,15 @@
             <editonly>1</editonly>
             <field>planned_date</field>
             <caption>Planeeritud valmimisaeg</caption>
+      </property>
+      <property>
+            <name>started</name>
+            <group>grp_general</group>
+            <table>mrp_case</table>
+            <type>text</type>
+            <editonly>1</editonly>
+            <field>started</field>
+            <caption>Alustatud</caption>
       </property>
       <property>
             <name>finished</name>
