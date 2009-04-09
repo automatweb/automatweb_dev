@@ -936,6 +936,10 @@ class google_chart extends aw_template
 				}
 			}
 		}
+		if(!$high)
+		{
+			return;
+		}
 		foreach($this->data as $rid => $row)
 		{
 			if(!is_array($row))
