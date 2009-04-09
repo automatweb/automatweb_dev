@@ -605,7 +605,7 @@ class user extends class_base
 
 		$t->set_default_sortby("keycombo");
 		$t->sort_by();
-		
+
 		$data = array();
 		$data["name"] = html::textbox(array(
 			"name" => "new_shortcut[name]",
@@ -619,7 +619,7 @@ class user extends class_base
 		));
 
 		$t->define_data($data);
-		
+
 		$prop["value"] = $t->draw();
 	}
 
@@ -627,7 +627,7 @@ class user extends class_base
 	{
 		$o_user = $arr["obj_inst"];
 		$shortcut_parent = $o_user->prop("settings_shortcuts_shortcut_sets");
-	
+
 		// delete shortcuts
 		if (!empty($arr["request"]["delete"]))
 		{
@@ -637,7 +637,7 @@ class user extends class_base
 				$o -> delete();
 			}
 		}
-	
+
 		// modify shortcuts
 		if (!empty($arr["request"]["modify_shortcut"]))
 		{
@@ -648,7 +648,7 @@ class user extends class_base
 				$o -> save();
 			}
 		}
-		
+
 		// add new shortcut
 		if (!empty($arr["request"]["new_shortcut"]["name"]))
 		{
@@ -674,7 +674,7 @@ class user extends class_base
 				}
 				$shortcuts_dir_id = $o -> id();
 			}
-			
+
 			// save shortcut
 			{
 				$o2 = new object();
@@ -684,8 +684,8 @@ class user extends class_base
 				$o2 -> set_prop("keycombo", $arr["request"]["new_shortcut"]["keycombo"]);
 				$o2 -> save();
 			}
-			
-			// make relations 
+
+			// make relations
 			{
 				$shortcut_set_oid = $arr["obj_inst"]->prop("settings_shortcuts_shortcut_sets");
 				$o3 = obj($shortcut_set_oid);
@@ -696,7 +696,7 @@ class user extends class_base
 			}
 		}
 	}
-	
+
 	function &_start_shortcuts_table()
 	{
 		load_vcl("table");
@@ -713,7 +713,7 @@ class user extends class_base
 			"caption" => t("Shortcut"),
 			"sortable" => 1,
 		));
-		
+
 		$t->define_chooser(array(
 			"name" => "delete",
 			"caption" => t("Kustuta"),
@@ -722,7 +722,7 @@ class user extends class_base
 
 		return $t;
 	}
- 
+
 
 	function _get_group_membership($o, $id)
 	{
@@ -1082,10 +1082,9 @@ class user extends class_base
 	}
 
 	// must not be deleting these, most important it is!
-	function _serialize($arr)
+	function _serialize($arr = array())
 	{
-		extract($arr);
-		$ob = obj($oid);
+		$ob = obj($arr["oid"]);
 		if (is_object($ob))
 		{
 			return aw_serialize($ob->fetch(), SERIALIZE_NATIVE);
@@ -1093,7 +1092,7 @@ class user extends class_base
 		return false;
 	}
 
-	function _unserialize($arr)
+	function _unserialize($arr = array())
 	{
 		extract($arr);
 		$row = aw_unserialize($str);
@@ -1150,7 +1149,7 @@ class user extends class_base
 
 		$arr["args"]["set_ui_lang"] = $arr["request"]["set_ui_lang"];
 	}
-	
+
 	function callback_generate_scripts($arr)
 	{
 		if ($_GET["group"] == "settings_shortcuts")
@@ -1167,16 +1166,16 @@ class user extends class_base
 					$(".keycombo").catch_keycombo();
 				});
 			}
-			
+
 			function aw_shortcut_manager_init()
 			{
 				aw_handle_edit_shortcut();
-				$.hotkeys.remove("*");  // reset current shortcuts so they don't activate if pressed	
+				$.hotkeys.remove("*");  // reset current shortcuts so they don't activate if pressed
 				$.getScript("http://hannes.dev.struktuur.ee/automatweb/js/jquery/plugins/jquery_catch_keycombo.js", function(){
 					$(".keycombo").catch_keycombo();
 				});
 			}
-			
+
 			aw_shortcut_manager_init();
 EOF;
 		}
@@ -1690,8 +1689,7 @@ EOF;
 	**/
 	function get_person_for_uid($uid)
 	{
-		$u = get_instance("users");
-		$oid = $u->get_oid_for_uid($uid);
+		$oid = $this->users->get_oid_for_uid($uid);
 		if (!$oid || !$this->can("view", $oid))
 		{
 			return obj();
@@ -1938,10 +1936,10 @@ EOF;
 	{
 		extract($arr);
 		// user, oid
-		$tmp = $this->db_fetch_field("SELECT brother_of FROM objects WHERE oid = '$oid'", "brother_of");
+		$tmp = $this->db_fetch_field("SELECT brother_of FROM objects WHERE oid = '{$oid}'", "brother_of");
 		if ($tmp != "" && $tmp != $oid)
 		{
-			$str = sprintf(t("Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"), $tmp);
+			$str = sprintf(t("Objekt %s on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"), $oid, $tmp);
 			$oid = $tmp;
 		}
 
@@ -2167,7 +2165,7 @@ EOF;
 			return new object_list();
 		}
 		$groups_list = array();
-		$tmp = users::get_oid_for_uid($uid);
+		$tmp = $this->users->get_oid_for_uid($uid);
 		if (is_oid($tmp) && $this->can("view", $tmp))
 		{
 			$user_obj = obj($tmp);
@@ -2657,7 +2655,7 @@ EOF;
 
 	function is_first_login($uid)
 	{
-		$user = &obj(users::get_oid_for_uid($uid));
+		$user = obj($this->users->get_oid_for_uid($uid));
 		if(!$user->prop("logins"))
 		{
 			return true;
