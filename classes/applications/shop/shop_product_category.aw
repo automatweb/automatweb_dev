@@ -9,7 +9,7 @@
 @property desc type=textarea rows=10 cols=50 field=aw_desc
 @caption Kirjeldus
 
-@property images type=relpicker reltype=RELTYPE_IMAGE multiple=1 store=connect 
+@property images type=relpicker reltype=RELTYPE_IMAGE multiple=1 store=connect
 @caption Pildid
 
 @property unit_formula type=relpicker reltype=RELTYPE_UNIT_FORMULA store=connect multiple=1
@@ -20,7 +20,7 @@
 
 @property folders_tb type=toolbar store=no no_caption=1
 
-@property folders type=table store=no no_caption=1 
+@property folders type=table store=no no_caption=1
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption Pilt
@@ -163,20 +163,23 @@ class shop_product_category extends class_base
 
 	function callback_post_save($arr)
 	{
-		if($fs = $arr["request"]["add_folder"])
+		if(!empty($arr["request"]["add_folder"]))
 		{
+			$fs = $arr["request"]["add_folder"];
 			$tmp = explode(",", $fs);
 			foreach($tmp as $f)
 			{
 				$arr["obj_inst"]->connect(array(
-					"type" => "RELTYPE_FOLDER",	
+					"type" => "RELTYPE_FOLDER",
 					"to" => $f,
 				));
 			}
 		}
+
 		$conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_FOLDER",
 		));
+
 		foreach($conn as $c)
 		{
 			$f = $c->prop("to");
@@ -194,13 +197,19 @@ class shop_product_category extends class_base
 				));
 			}
 		}
-		$arr["obj_inst"]->set_meta("def_fld", $arr["request"]["def_fld"]);
+
+		if (!empty($arr["request"]["def_fld"]))
+		{
+			$arr["obj_inst"]->set_meta("def_fld", $arr["request"]["def_fld"]);
+		}
+
 		if($arr["new"])
 		{
 			$po = obj($arr["obj_inst"]->parent());
+
 			if($po->class_id() == CL_SHOP_PRODUCT_CATEGORY)
 			{
-				if(!$arr["request"]["def_fld"])
+				if(empty($arr["request"]["def_fld"]))
 				{
 					$arr["obj_inst"]->set_meta("def_fld", $po->meta("def_fld"));
 					$arr["obj_inst"]->connect(array(
@@ -208,12 +217,14 @@ class shop_product_category extends class_base
 						"to" => $po->meta("def_fld"),
 					));
 				}
+
 				foreach($po->connections_from(array("type" => "RELTYPE_FOLDER")) as $c)
 				{
 					$arr["obj_inst"]->connect(array(
 						"to" => $c->prop("to"),
 						"type" => "RELTYPE_FOLDER",
 					));
+
 					if($po->is_connected_to(array("type" => "RELTYPE_DISPLAY_FOLDER", "to" => $c->prop("to"))))
 					{
 						$arr["obj_inst"]->connect(array(
@@ -225,6 +236,7 @@ class shop_product_category extends class_base
 				$arr["obj_inst"]->set_meta("units", $po->meta("units"));
 			}
 		}
+
 		$arr["obj_inst"]->save();
 	}
 }
