@@ -927,7 +927,7 @@ class aw_template extends core
 		$val = isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : "";
 		if ($this->use_eval)
 		{
-			$cval = $this->c_templates[$tmp];
+			$cval = ifset($this->c_templates, $tmp);
 			$vars = $this->vars;
 			eval("\$src=\"" . $cval . "\";");
 		}
