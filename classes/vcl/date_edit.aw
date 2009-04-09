@@ -341,7 +341,7 @@ class date_edit
 				$date_clear_img_url = '/automatweb/images/icons/delete.gif';
 			}
 
-			$retval .= 
+			$retval .=
 				"<span style='white-space: nowrap;'>
 					<a href='javascript:void(0)' onclick='aw_date_edit_show_cal(\"{$this->varname}\");' id='{$this->varname}' name='{$this->varname}'>";
 			$retval .= "<img id='{$this->varname}_ico"."' src='".aw_ini_get('baseurl').$date_choose_img_url."' border='0' alt=''/>
@@ -378,7 +378,7 @@ class date_edit
 		@returns
 		Returns Unix timestamp
 	**/
-	function get_timestamp($var, $prop_def = null)
+	public static function get_timestamp($var, $prop_def = null)
 	{
 		// if the prop def gives format, then eoms fields might be omitted, fill them in with defaults
 		if ($prop_def !== null && is_array($prop_def["format"]))
