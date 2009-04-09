@@ -1,9 +1,52 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name></name>
+            <name>comments</name>
             <table>taket_orders</table>
-            <field></field>
+            <type>hidden</type>
+            <field>comments</field>
+      </property>
+      <property>
+            <name>transport</name>
+            <table>taket_orders</table>
+            <type>hidden</type>
+            <field>transport</field>
+      </property>
+      <property>
+            <name>timestmp</name>
+            <table>taket_orders</table>
+            <type>hidden</type>
+            <field>timestmp</field>
+      </property>
+      <property>
+            <name>price</name>
+            <table>taket_orders</table>
+            <type>hidden</type>
+            <field>price</field>
+      </property>
+      <property>
+            <name>contact</name>
+            <table>taket_orders</table>
+            <type>hidden</type>
+            <field>contact</field>
+      </property>
+      <property>
+            <name>status</name>
+            <table>taket_orders</table>
+            <type>hidden</type>
+            <field>status</field>
+      </property>
+      <property>
+            <name>user_id</name>
+            <table>taket_orders</table>
+            <type>hidden</type>
+            <field>user_id</field>
+      </property>
+      <property>
+            <name>location</name>
+            <table>taket_orders</table>
+            <type>hidden</type>
+            <field>location</field>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>

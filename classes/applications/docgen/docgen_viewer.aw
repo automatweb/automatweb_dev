@@ -1,23 +1,22 @@
 <?php
 
 /** aw code analyzer viewer
+		displays the data that the docgen analyzer generates
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.30 2009/01/12 11:16:32 instrumental Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.31 2009/04/09 10:45:18 voldemar Exp $
 
-	@comment 
-		displays the data that the docgen analyzer generates
 **/
 
 /*
 
 @classinfo no_status=1 no_comment=1 relationmgr=yes syslog_type=ST_DOCGEN_VIEWER prop_cb=1 maintainer=kristo
 @default table=objects
-@default group=general 
+@default group=general
 
 @property foorum type=relpicker reltype=RELTYPE_FORUM field=meta method=serialize table=objects
 
-@property view type=text store=no 
+@property view type=text store=no
 
 @groupinfo more_options caption="Seaded"
 @default group=more_options
@@ -33,11 +32,11 @@
 
 	@layout ver_split type=hbox width=30%:70%
 
-		@layout tree type=vbox closeable=1 area_caption=Klasside&nbsp;puu parent=ver_split 
+		@layout tree type=vbox closeable=1 area_caption=Klasside&nbsp;puu parent=ver_split
 
 			@property class_tree type=text parent=tree store=no no_caption=1
 
-		@layout tbl type=hbox closeable=1 area_caption=Klassi&nbsp;info parent=ver_split 
+		@layout tbl type=hbox closeable=1 area_caption=Klassi&nbsp;info parent=ver_split
 
 			@property class_inf type=text store=no no_caption=1 parent=tbl
 
@@ -85,7 +84,7 @@ class docgen_viewer extends class_base
 	function set_property($arr)
 	{
 		$prop = &$arr['prop'];
-		
+
 		switch($prop['name'])
 		{
 			case 'refresh_properties':
@@ -95,14 +94,14 @@ class docgen_viewer extends class_base
 				$arr['obj_inst']->save();
 			break;
 		}
-		
+
 		return PROP_OK;
 	}
 
 	function _get_class_tree($arr)
 	{
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgclsss",
@@ -118,11 +117,11 @@ class docgen_viewer extends class_base
 		));
 
 		/* 	lihtsalt nii infi m6ttes - kui keegi hakkab seda puud siin feikima samasuguseks nagu on rohelise nupu puu
-			siis juhtub kaks asja: 
+			siis juhtub kaks asja:
 				- see aptch reverditakse
 				- ta j22b cvs commit accessist ilma
 
-			kui tekib selline tahtmine, siis selleks tehke uus puu uude kohta. 
+			kui tekib selline tahtmine, siis selleks tehke uus puu uude kohta.
 
 			- terryf.
 		*/
@@ -160,11 +159,11 @@ class docgen_viewer extends class_base
 		@attrib name=iniviewer
 	**/
 	function iniviewer($arr)
-	{	
+	{
 		$this->read_template("classlist.tpl");
 
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgini",
@@ -213,7 +212,7 @@ class docgen_viewer extends class_base
 				"setting" => $setting,
 				"comment" => $info["comment"],
 				"default_value" => $info["default_value"],
-			));	
+			));
 			$il .= $this->parse("INI_LINE");
 		}
 
@@ -293,7 +292,7 @@ class docgen_viewer extends class_base
 		return $this->finish_with_style($this->parse());
 	}
 
-	/**  
+	/**
 		@attrib name=class_list params=name default="0"
 	**/
 	function class_list()
@@ -301,7 +300,7 @@ class docgen_viewer extends class_base
 		$this->read_template("classlist.tpl");
 
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgclsss",
@@ -311,11 +310,11 @@ class docgen_viewer extends class_base
 		));
 
 		/* 	lihtsalt nii infi m6ttes - kui keegi hakkab seda puud siin feikima samasuguseks nagu on rohelise nupu puu
-			siis juhtub kaks asja: 
+			siis juhtub kaks asja:
 				- see aptch reverditakse
 				- ta j22b cvs commit accessist ilma
 
-			kui tekib selline tahtmine, siis selleks tehke uus puu uude kohta. 
+			kui tekib selline tahtmine, siis selleks tehke uus puu uude kohta.
 
 			- terryf.
 		*/
@@ -389,7 +388,7 @@ class docgen_viewer extends class_base
 			{
 				$url = $this->mk_my_orb("class_info", array("file" => str_replace($this->cfg["classdir"], "", $fp)));
 			}
-			// if the file only has 1 class in it, direct link to that, else split subs	
+			// if the file only has 1 class in it, direct link to that, else split subs
 			if (count($classes[$fp]) < 2)
 			{
 				$tv->add_item($path, array(
@@ -446,15 +445,15 @@ class docgen_viewer extends class_base
 		}
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=frames params=name default="1"
-		
-		@param id optional type=int 
-		
+
+		@param id optional type=int
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -466,7 +465,7 @@ class docgen_viewer extends class_base
 			"left" => $this->mk_my_orb("api_class_list"),
 			"right" => $this->mk_my_orb("intro"),
 			"doclist" => $this->mk_my_orb("doclist"),
-			"topf" => $this->mk_my_orb("topf", array("id" => $arr["id"]))
+			// "topf" => $this->mk_my_orb("topf", array("id" => $arr["id"]))
 		));
 		die($this->parse());
 	}
@@ -570,16 +569,16 @@ class docgen_viewer extends class_base
 			{
 				$example_links .= "<a href=\"".$url."\">$match</a><br />";
 			}
-		
-	
+
+
 			$errs = (empty($f_data['doc_comment']['errors'])) ? t('none') : nl2br($f_data['doc_comment']['errors']);
-			
+
 			foreach($ex_list as $ex_class => $ex_file)
 			{
 				if (strpos($errs, $ex_class) !== false)
 				{
 					$errs = preg_replace(
-						"/(\s)$ex_class(\s)/", 
+						"/(\s)$ex_class(\s)/",
 						"\\1".html::href(array(
 							"caption" => $ex_class,
 							"url" => $this->mk_my_orb("class_info", array("file" => $ex_file, "disp" => $ex_class)),
@@ -791,7 +790,7 @@ class docgen_viewer extends class_base
 		$p = "";
 		foreach($impl_arr as $impl)
 		{
-			try 
+			try
 			{
 				$clf = class_index::get_file_by_name(basename($impl));
 			}
@@ -884,7 +883,7 @@ class docgen_viewer extends class_base
 		$p = "";
 		foreach($throws as $impl)
 		{
-			try 
+			try
 			{
 				$clf = class_index::get_file_by_name(basename($impl));
 			}
@@ -948,11 +947,11 @@ class docgen_viewer extends class_base
 
 		@attrib params=name nologin=0 is_public=0 all_args=0 caption="N&auml;ita klassi infot" default=0 name=class_info
 
-		@param file required 
+		@param file required
 		@param api_only optional
 		@param disp optional
 
-		@returns 
+		@returns
 		html with class info
 
 		@comment
@@ -1008,7 +1007,7 @@ class docgen_viewer extends class_base
 		return join(", ", $ara);
 	}
 
-	/** displays function source 
+	/** displays function source
 
 		@attrib name=view_source
 
@@ -1037,7 +1036,7 @@ class docgen_viewer extends class_base
 			$start_line = 0;
 			$end_line = 100000;
 		}
-		
+
 		$fd = file($this->cfg["basedir"]."/classes".$file);
 		$line = 1;
 		if ($func)
@@ -1086,7 +1085,7 @@ class docgen_viewer extends class_base
 
 		foreach($dep as $d_class => $d_ar)
 		{
-			try 
+			try
 			{
 				$clf = class_index::get_file_by_name(basename($d_class));
 			}
@@ -1205,7 +1204,7 @@ class docgen_viewer extends class_base
 			$orb_defs = $orb->load_xml_orb_def($_extends);
 			$ex_fname = $this->cfg["basedir"]."/classes/".$orb_defs[$dat["extends"]]["___folder"]."/".$_extends.".".$this->cfg["ext"];
 
-			try 
+			try
 			{
 				if ($dat["extends"] == "Exception")
 				{
@@ -1272,7 +1271,7 @@ class docgen_viewer extends class_base
 	function do_class_doclist()
 	{
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgdoclss",
@@ -1342,7 +1341,7 @@ class docgen_viewer extends class_base
 	function do_tut_doclist()
 	{
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgdoclss",
@@ -1400,9 +1399,9 @@ class docgen_viewer extends class_base
 		return $tpl->parse();
 	}
 
-	/** displays top frame 
+	/** displays top frame
 
-		@attrib name=topf 
+		@attrib name=topf
 
 		@param id optional
 
@@ -1498,7 +1497,7 @@ class docgen_viewer extends class_base
 		return $this->parse();
 	}
 
-	/** 
+	/**
 		@attrib name=interface_list
 	**/
 	function interface_list($arr)
@@ -1506,7 +1505,7 @@ class docgen_viewer extends class_base
 		$this->read_template("classlist.tpl");
 
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgifaces",
@@ -1538,7 +1537,7 @@ class docgen_viewer extends class_base
 		return $this->finish_with_style($this->parse());
 	}
 
-	/** 
+	/**
 		@attrib name=maintainer_class_list
 	**/
 	function maintainer_class_list($arr)
@@ -1546,7 +1545,7 @@ class docgen_viewer extends class_base
 		$this->read_template("classlist.tpl");
 
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgmaints",
@@ -1598,7 +1597,7 @@ class docgen_viewer extends class_base
 		return $this->finish_with_style($this->parse());
 	}
 
-	/** 
+	/**
 		@attrib name=exception_list
 	**/
 	function exception_list($arr)
@@ -1606,7 +1605,7 @@ class docgen_viewer extends class_base
 		$this->read_template("classlist.tpl");
 
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgexception",
@@ -1656,7 +1655,7 @@ class docgen_viewer extends class_base
 	{
 		$this->read_template("proplist.tpl");
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgclsss",
@@ -1666,13 +1665,13 @@ class docgen_viewer extends class_base
 		));
 
 		$this->ic = get_instance("core/icons");
-		
+
 		$this->_req_mk_prop_tree(array(
 			'id' => $arr['id'],
-			'tree' => &$tv, 
+			'tree' => &$tv,
 			'classdir' => $this->cfg["classdir"],
 		));
-		
+
 		$this->vars(array(
 			"list" => $tv->finalize_tree(array(
 				"rootnode" => 0,
@@ -1726,7 +1725,7 @@ class docgen_viewer extends class_base
 		$this->read_template("classlist.tpl");
 
 		$tv = get_instance(CL_TREEVIEW);
-		
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgclsssapi",
@@ -1784,7 +1783,7 @@ class docgen_viewer extends class_base
 
 		sort($dc);
 		sort($fc);
-		
+
 		$hasf = false;
 		foreach($dc as $file)
 		{
@@ -1807,7 +1806,7 @@ class docgen_viewer extends class_base
 			$fp = $path."/".$file;
 			$awpath = str_replace($this->cfg["classdir"], "", $fp);
 
-			// if the file only has 1 class in it, direct link to that, else split subs	
+			// if the file only has 1 class in it, direct link to that, else split subs
 			if (count($classes[$fp]) < 2)
 			{
 				$tv->add_item($path, array(
@@ -1907,7 +1906,7 @@ class aw_language_documenter
 			else
 			{
 				if(substr($file,strlen($file)-2)=='aw')
-				{	
+				{
 					$this->parse_file($dirname.'/'.$file);
 				}
 			}
@@ -1962,7 +1961,7 @@ class aw_language_documenter
 				}
 			}
 		}
-		
+
 		if ("@property" == $key && isset($attribs["type"]))
 		{
 			$type = $attribs["type"];

@@ -1,19 +1,18 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_order.aw,v 1.1 2008/10/01 14:17:40 markop Exp $
-// taket_order.aw - Taketi tellimus 
+// taket_order.aw - Taketi tellimus
 /*
 @tableinfo taket_orders index=id master_table=objects master_index=oid
 @default table=taket_orders
-@property comments
-@property transport
-@property timestmp
-@property price
-@property contact
-@property status
-@property user_id
-@property location
+@property comments type=hidden
+@property transport type=hidden
+@property timestmp type=hidden
+@property price type=hidden
+@property contact type=hidden
+@property status type=hidden
+@property user_id type=hidden
+@property location type=hidden
 
-@classinfo syslog_type= relationmgr=yes
+@classinfo relationmgr=yes
 
 @default table=objects
 @default group=general
@@ -24,7 +23,7 @@ class taket_order extends class_base
 {
 	function taket_order()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
+		// change this to the folder under the templates folder, where this classes templates will be,
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "taket/taket_order",
@@ -57,7 +56,7 @@ class taket_order extends class_base
 
 		}
 		return $retval;
-	}	
+	}
 
 
 	////////////////////////////////////

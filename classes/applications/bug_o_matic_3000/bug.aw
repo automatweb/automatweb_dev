@@ -14,7 +14,7 @@ define("BUG_STATUS_CLOSED", 5);
 @default group=general
 @default table=aw_bugs
 
-@property bug_tb type=toolbar no_caption=1 save=no
+@property bug_tb type=toolbar no_caption=1 store=no
 
 
 
@@ -2228,7 +2228,7 @@ class bug extends class_base
 				{
 					$comt_arr[$key].="</div>";
 				}
-			
+
 				$comt = join ("\n" , $comt_arr);
 			}
 
@@ -2688,7 +2688,7 @@ class bug extends class_base
 		if($person)
 		{
 			$mail = $bt->prop("dorder_mail_contents");
-		
+
 			$find = array(
 				"#added_by#",
 				"#confirmation_by#",
@@ -4146,7 +4146,7 @@ EOF;
 					$o->set_prop("orderer" ,$orderer->id());
 				}
 			}
-	
+
 			if($arr["orderer_unit"] && is_object($orderer))
 			{
 				$orderer_units = new object_list(array(
@@ -4227,7 +4227,7 @@ EOF;
 			$o->set_prop("monitors" , array($p->id(), $p->id()));
 
 			$o->save();
-			
+
 			$res = "<script language='javascript'>window.close();</script>";
 			die($res);
 		}

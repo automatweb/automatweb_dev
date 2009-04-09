@@ -60,7 +60,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 //tehing
 
-		@property deal
+		@property deal type=hidden
 
 		@property transaction_type type=classificator table=realestate_property
 		@caption Tehingu t&uuml;&uuml;p
@@ -92,7 +92,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property seller_search type=text store=no
 		caption Ostja
 
-		@property seller type=text reltype=RELTYPE_REALESTATE_SELLER  field=meta method=serialize
+		@property seller type=relpicker reltype=RELTYPE_REALESTATE_SELLER  field=meta method=serialize
 
 		@property title101 type=text store=no subtitle=1
 		@caption Ostja andmed
@@ -100,10 +100,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property buyer_search type=text store=no
 		caption Ostja
 
-		@property buyer type=text reltype=RELTYPE_REALESTATE_BUYER  field=meta method=serialize
-
-		type=releditor reltype=RELTYPE_REALESTATE_BUYER rel_id=first editonly=1
-		props=firstname,lastname,personal_id,gender,birthday,phone,email,comment,notes
+		@property buyer type=relpicker reltype=RELTYPE_REALESTATE_BUYER  field=meta method=serialize
 
 
 		@property title5 type=text store=no subtitle=1
@@ -177,7 +174,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 	@property picture_icon_city24 type=hidden field=meta method=serialize
 	@property picture_icon type=text field=meta method=serialize
-	@property picture_icon_image reltype=RELTYPE_REALESTATE_PICTUREICON clid=CL_IMAGE field=meta method=serialize
+	@property picture_icon_image type=relpicker reltype=RELTYPE_REALESTATE_PICTUREICON clid=CL_IMAGE field=meta method=serialize
 	@caption V&auml;ike pilt
 
 @default group=grp_map

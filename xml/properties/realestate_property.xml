@@ -123,10 +123,11 @@
             <caption>Aadress</caption>
       </property>
       <property>
-            <name></name>
+            <name>deal</name>
             <table>objects</table>
             <group>transaction_data</group>
-            <field></field>
+            <type>hidden</type>
+            <field>deal</field>
       </property>
       <property>
             <name>transaction_type</name>
@@ -219,7 +220,7 @@
             <name>seller</name>
             <table>objects</table>
             <group>transaction_data</group>
-            <type>text</type>
+            <type>relpicker</type>
             <reltype>RELTYPE_REALESTATE_SELLER</reltype>
             <field>meta</field>
             <method>serialize</method>
@@ -246,7 +247,7 @@
             <name>buyer</name>
             <table>objects</table>
             <group>transaction_data</group>
-            <type>text</type>
+            <type>relpicker</type>
             <reltype>RELTYPE_REALESTATE_BUYER</reltype>
             <field>meta</field>
             <method>serialize</method>
@@ -488,6 +489,7 @@
             <name>picture_icon_image</name>
             <table>objects</table>
             <group>grp_photos</group>
+            <type>relpicker</type>
             <reltype>RELTYPE_REALESTATE_PICTUREICON</reltype>
             <clid>CL_IMAGE</clid>
             <field>meta</field>

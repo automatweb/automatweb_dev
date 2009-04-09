@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_ebasket.aw,v 1.3 2009/04/09 08:39:41 kristo Exp $
 // taket_ebasket.aw - Ostukorv
 /*
 
-@classinfo syslog_type= relationmgr=yes
+@classinfo relationmgr=yes
 
 @default table=objects
 @default group=general
@@ -42,8 +41,8 @@ class taket_ebasket extends class_base
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
-	
-	/**  
+
+	/**
 		@attrib name=show params=name default="0"
 		@param id optional
 		@param product_code optional
@@ -80,7 +79,7 @@ if ($_GET['dd'] && aw_global_get('uid') != ''){
 		arr($ids);
 	}
 
-exit('done');	
+exit('done');
 
 }
 */
@@ -122,7 +121,7 @@ exit('done');
 			'finalprice',
 			'quantity'
 		);
-									
+
 		$css = array(
 			'product_codecss' => 'listTitle',
 			'product_namecss' => 'listTitle',
@@ -149,7 +148,7 @@ exit('done');
 			if($arr['sort']=='order_id')
 			{
 				$sortBy='id';
-				$dirs = ($arr['dir']=='asc')?'desc':'asc';	
+				$dirs = ($arr['dir']=='asc')?'desc':'asc';
 			}
 		}
 // if default sort by column is product_code, then add proper css style
@@ -166,7 +165,7 @@ exit('done');
 		{
 			$sortBy='(taket_ebasket_item.price*(1-(discount/100))) '.$dirs;
 		}
-		
+
 		$this->vars($css);
 		$this->vars($dir);
 		$this->vars(array(
@@ -245,7 +244,7 @@ exit('done');
 
 		if ($taket_extended_log)
 		{
-			$this->site_log($_SERVER['REMOTE_ADDR'].'['.aw_global_get('uid').'][taket_ebasket::show][3] [storage] gathering all the ebasket items product codes = '.(float)($end_time - $start_time));		
+			$this->site_log($_SERVER['REMOTE_ADDR'].'['.aw_global_get('uid').'][taket_ebasket::show][3] [storage] gathering all the ebasket items product codes = '.(float)($end_time - $start_time));
 		}
 
 		$hosts = aw_ini_get('taket.xmlrpchost');
@@ -263,7 +262,7 @@ if (!$_GET['dragut']){
 		{
 
 			// if there is no products in ebasket, which are searched from $key host (location) and there are
-			// no products in ebasket, which are searched from all hosts (locations), then there is no point to 
+			// no products in ebasket, which are searched from all hosts (locations), then there is no point to
 			// make a XML-RPC call --dragut
 			if ( empty($productCodesByHost[$key]) && empty($productCodesByHost[-1]) )
 			{
@@ -335,14 +334,14 @@ if (!$_GET['dragut']){
 			//grouped_basket_item
 			foreach($grouped_basket_items as $key2=>$value2)
 			{
-				
+
 				if(array_key_exists($key,$value2))
 				{
 					$grouped_basket_items[$key2][$key] = $value;
 				}
 			}
 		}
-}	
+}
 		//have to query the different transportation types from AFP
 		//simple :)
 		$data2 = array();
@@ -461,7 +460,7 @@ if (!$_GET['dragut'])
 				{
 					$this->vars(array('instock_parsed1' => '---'));
 				}
-				
+
 				// stock #3
 				if (isset($data[$tmp_product_code]['inStock2']))
 				{
@@ -606,8 +605,8 @@ else
 				else
 				{
 					$price = $tarjoushinta * $o->prop('quantity');
-					
-					// i need to remember the tarjoushinta somehow ... so lets save it into 
+
+					// i need to remember the tarjoushinta somehow ... so lets save it into
 					// taket_ebasket_item-s meta info ... perhaps it is useful --dragut
 					$o->set_meta('tarjoushinta', $tarjoushinta);
 					$o->save();
@@ -664,7 +663,7 @@ else
 			}
 			else if($arr['inputErr']==2)
 			{
-				$this->vars(array('inputErrParsed'=>$this->parse('inputErr2')));			
+				$this->vars(array('inputErrParsed'=>$this->parse('inputErr2')));
 			}
 			$this->vars(array('vormistaParsed'=>$this->parse('vormista')));
 			$ebasket_html.=$this->parse('ebasket');
@@ -673,10 +672,10 @@ else
 		return $this->parse();
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=send_order params=name default="0"
-		
+
 		@param transport optional
 		@param kontakttelefon optional
 		@param eesperenimi optional
@@ -685,7 +684,7 @@ else
 		@param ebasket_name required
 		@param location optional
 		@param transport_name optional
-		
+
 		@returns
 		@comment
 	**/
@@ -694,13 +693,13 @@ else
 		aw_disable_acl();
 
 		$arr['ebasket_name'] = urldecode($arr['ebasket_name']);
-		//if all the fields weren't filled		
+		//if all the fields weren't filled
 		if(!($arr['kontakttelefon'] && $arr['eesperenimi'] && $arr['transport']))
 		{
 			return $this->mk_my_orb('show',array('inputErr'=>1,'saved'=>1),'taket_ebasket');
 		}
 		//else continue
-		
+
 
 		//send the order to the AFP
 		require(aw_ini_get("basedir")."addons/ixr/IXR_Library.inc.php");
@@ -775,7 +774,7 @@ else
 				if ( $tarjoushinta > 0 )
 				{
 					$price = $tarjoushinta;
-					$orderPriceD += $price * $o->prop('quantity');	
+					$orderPriceD += $price * $o->prop('quantity');
 				}
 				else
 				{
@@ -899,7 +898,7 @@ else
 				$tarjoushinta = (int)$o->meta('tarjoushinta');
 				if ( $tarjoushinta > 0 )
 				{
-					$price = $tarjoushinta;	
+					$price = $tarjoushinta;
 				}
 				else
 				{
@@ -918,19 +917,19 @@ else
 				$obj->set_prop('discount',$o->prop('discount'));
 				$obj->set_prop('product_name',$o->prop('product_name'));
 				$obj->set_prop('ebasket_name',$arr['ebasket_name']);
-				$obj->save();	
+				$obj->save();
 			}
 		}
 		$end_time = $this->microtime_float();
 
 		if ($taket_extended_log)
 		{
-			$this->site_log($_SERVER['REMOTE_ADDR'].'['.aw_global_get('uid').'][taket_ebasket::send_order][6] [storage] saving all ebasket items for later viewing (CL_TAKET_ORDER_ITEM) = '.(float)($end_time - $start_time));	
+			$this->site_log($_SERVER['REMOTE_ADDR'].'['.aw_global_get('uid').'][taket_ebasket::send_order][6] [storage] saving all ebasket items for later viewing (CL_TAKET_ORDER_ITEM) = '.(float)($end_time - $start_time));
 		}
 
 		////
 		//send email
-		
+
 		$start_time = $this->microtime_float();
 		classload('taket/taket_tellimuste_list');
 		$emailContent = taket_tellimuste_list::show_order(array('order_id' => $orderId));
@@ -947,14 +946,14 @@ else
 		));
 		$arr['user_id'] = aw_global_get('uid');
 		$this->vars($arr);
-		
+
 		$mail_to = aw_ini_get('taket.email_address');
 		$emailContent = $this->parse();
 	/*
 		$headers = "MIME-Version: 1.0\r\n";
 		$headers.= "Content-type: text/html; charset=iso-8859-1\r\n";
 		$headers.= "From: Taketi Tellimiskeskus <tellimine@taket.ee>\r\n";
-		
+
 		mail($mail_to[$location_key], 'Tellimus Taketi Tellimiskeskusest',$emailContent, $headers);
 		$xtra = aw_ini_get('taket.extraemails');
 		if(strlen($xtra[$_SESSION['uid']]))
@@ -994,14 +993,14 @@ else
 
 		if ($taket_extended_log)
 		{
-			$this->site_log($_SERVER['REMOTE_ADDR'].'['.aw_global_get('uid').'][taket_ebasket::send_order] creating mail message and sending it = '.(float)($end_time - $start_time));	
+			$this->site_log($_SERVER['REMOTE_ADDR'].'['.aw_global_get('uid').'][taket_ebasket::send_order] creating mail message and sending it = '.(float)($end_time - $start_time));
 		}
-	
+
 		$emailContent='';
 		//delete the ebasket
 		$this->delete_users_ebasket($user_id, $arr['ebasket_name']);
 		unset($_SESSION['TAKET']['ebasket_list'][$arr['ebasket_name']]);
-		
+
 //		return $this->mk_my_orb('show',array(),'taket_tellimuste_list');
 
 		aw_restore_acl();
@@ -1032,6 +1031,7 @@ else
 			$client->query('server.getProductInfo', $arr['product_code']);
 			$data = $client->getResponse();
 		}
+
 		//let's get all the items
 		$start_time = $this->microtime_float();
 		$ebasket = $this->get_users_active_ebasket($user_id);
@@ -1122,9 +1122,9 @@ else
 		}
 	}
 
-	/**  
+	/**
 		@attrib name=add_items params=name default="0"
-		
+
 		@param productId optional
 		@param quantity optional
 		@param valitud optional
@@ -1141,7 +1141,7 @@ else
 		require(aw_ini_get("basedir")."addons/ixr/IXR_Library.inc.php");
 		//did user just add an ebasket?
 		$arr['ebasket_name'] = trim($arr['ebasket_name']);
-		$ebasket_name = $this->current_ebasket_identificator; 
+		$ebasket_name = $this->current_ebasket_identificator;
 		if(strlen($arr['ebasket_name']))
 		{
 			//just in case :)
@@ -1205,7 +1205,7 @@ else
 		//add the item
 		$start_time = $this->microtime_float();
 		foreach($arr['valitud'] as $key=>$value)
-		{	
+		{
 			$start_time2 = $this->microtime_float();
 
 			$this->add_item(array(
@@ -1233,10 +1233,10 @@ else
 
 	//saves the changes after the user has pushed the
 	//check-out button
-	/**  
-		
+	/**
+
 		@attrib name=save_ebasket params=name default="0"
-		@param ebasket_name required	
+		@param ebasket_name required
 		@param productId optional
 		@param quantity optional
 		@param seesperenimi optional
@@ -1246,10 +1246,10 @@ else
 		@param dir optional
 		@param sinfo optional
 		@param check_all_stocks optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1259,7 +1259,7 @@ else
 		$arr['ebasket_name'] = urldecode($arr['ebasket_name']);
 		$user_id=users::get_oid_for_uid(aw_global_get('uid'));
 		//let's get all the ebasket_items
-		
+
 		$start_time = $this->microtime_float();
 		$ol = new object_list(array(
 			'parent' => $this->ebasket_item_parent_id,
@@ -1288,7 +1288,7 @@ else
 			//and is from current group
 			if(
 					!(
-					$arr['ebasket_name']==$this->current_ebasket_identificator 
+					$arr['ebasket_name']==$this->current_ebasket_identificator
 						||
 					$o->prop('ebasket_name')==$arr['ebasket_name']
 					)
@@ -1414,7 +1414,7 @@ else
 		}
 		return $ebasket;
 	}
-*/	
+*/
 
 	//l2heb sisselogimisel k2ivitusele
 	//terrifile pean saatma emaili
@@ -1425,7 +1425,7 @@ else
 		{
 			return;
 		}
-		
+
 		$ol = new object_list(array(
 			'parent' => $this->ebasket_item_parent_id,
 			'lang_id' => array()
@@ -1444,7 +1444,7 @@ else
 				}
 				else
 				{
-					$o->delete();	
+					$o->delete();
 				}
 			}
 		}
@@ -1519,7 +1519,7 @@ else
 			$params['user'] = 1;
 			$params['asukoht'] = 1;
 			return $this->add_items($params);
-			
+
 		}
 	}
 

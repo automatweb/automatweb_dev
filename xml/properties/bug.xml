@@ -12,7 +12,6 @@
             <table>aw_bugs</table>
             <type>toolbar</type>
             <no_caption>1</no_caption>
-            <save>no</save>
             <store>no</store>
             <field>bug_tb</field>
       </property>
