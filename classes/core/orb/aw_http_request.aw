@@ -29,6 +29,11 @@ class aw_http_request extends aw_request
 
 	protected function _autoload()
 	{
+		if (!empty($_SERVER["REQUEST_METHOD"]))
+		{
+			$this->method = $_SERVER["REQUEST_METHOD"];
+		}
+
 		// load arguments
 		if (!empty($_POST))
 		{
