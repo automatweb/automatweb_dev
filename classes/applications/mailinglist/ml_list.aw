@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.158 2009/04/09 09:27:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.159 2009/04/09 09:37:04 instrumental Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -63,6 +63,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property personnel_management type=relpicker reltype=RELTYPE_PERSONNEL_MANAGEMENT store=connect
 @caption Personalikeskkond
+
+@property subscribe_mail type=relpicker reltype=RELTYPE_SUBSCRIBE_MAIL store=connect
+@caption Liitumise kirja templeit
+
+@property unsubscribe_mail type=relpicker reltype=RELTYPE_UNSUBSCRIBE_MAIL store=connect
+@caption Lahkumise kirja templeit
 
 @groupinfo membership caption=Liikmed 
 ------------------------------------------------------------------------
@@ -345,6 +351,12 @@ caption Aliastehaldur
 
 @reltype PERSONNEL_MANAGEMENT value=12 clid=CL_PERSONNEL_MANAGEMENT
 @caption Personalikeskkond
+
+@reltype SUBSCRIBE_MAIL value=13 clid=CL_MESSAGE_TEMPLATE
+@caption Liitumise kirja templeit
+
+@reltype UNSUBSCRIBE_MAIL value=14 clid=CL_MESSAGE_TEMPLATE
+@caption Lahkumise kirja templeit
 
 
 */
@@ -4464,6 +4476,126 @@ arr($msg_obj->prop("message"));
 				"caption" => t("Kasuta ka alamkaustu"),
 			));
 		}
+	}
+
+	/**
+		@attrib name=send_subscription_mail params=name
+
+		@param ml_list required type=int acl=view
+			The OID of the mailing list object to take the mail template from.
+		@param dir required type=array/oid acl=view
+			The OID or array of OIDs of the directories joined.
+		@param to_mail required type=string
+			The e-mail address to send the mail to.
+		@param froma optional type=string
+			The e-mail address the mail is sent from.
+		@param fromn optional type=string
+			The name of the sender.
+
+		@returns False if the subscribe_mail property of given mailing list object is not set, otherwise returns true.
+	**/
+	public function send_subscription_mail($arr)
+	{
+		$o = obj($arr["ml_list"]);
+		if(!is_oid($o->subscribe_mail) || !$this->can("view", $o->subscribe_mail))
+		{
+			return false;
+		}
+
+		$m = obj($o->subscribe_mail);
+
+		$dirs = is_oid($arr["dir"]) ? (array)$arr["dir"] : safe_array($arr["dir"]);
+		$this->do_send_un_subscribe_mail($m, $arr["to_mail"], $dirs, $arr);
+		return true;
+	}
+
+	/**
+		@attrib name=send_unsubscription_mail params=name
+
+		@param ml_list required type=int acl=view
+			The OID of the mailing list object to take the mail template from.
+		@param dir required type=array/oid acl=view
+			The OID or array of OIDs of the directories joined.
+		@param to_mail required type=string
+			The e-mail address to send the mail to.
+		@param froma optional type=string
+			The e-mail address the mail is sent from.
+		@param fromn optional type=string
+			The name of the sender.
+
+		@returns False if the unsubscribe_mail property of given mailing list object is not set, otherwise returns true.
+	**/
+	public function send_unsubscription_mail($arr)
+	{
+		$o = obj($arr["ml_list"]);
+		if(!is_oid($o->unsubscribe_mail) || !$this->can("view", $o->unsubscribe_mail))
+		{
+			return false;
+		}
+
+		$m = obj($o->unsubscribe_mail);
+
+		$dirs = is_oid($arr["dir"]) ? (array)$arr["dir"] : safe_array($arr["dir"]);
+		$this->do_send_un_subscribe_mail($m, $arr["to_mail"], $dirs, $arr);
+		return true;
+	}
+
+	private function do_send_un_subscribe_mail($m, $to_mail, $dirs, $arr)
+	{
+		$inst = get_instance("protocols/mail/aw_mail");
+		$t = get_instance("aw_template");
+
+		$t->use_template($m->content);
+		$LIST = "";
+		if(count($dirs) > 0)
+		{
+			$dir_names_ol = new object_list(array(
+				"oid" => $dirs,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			$dir_names = $dir_names_ol->names();
+			foreach($dir_names as $dir_name)
+			{
+				$t->vars(array(
+					"list_name" => $dir_name,
+				));
+				$LIST .= $t->parse("LIST");
+			}
+		}
+		$t->vars(array(
+			"LIST" => $LIST,
+		));
+		$message = $t->parse();
+		$subject = $m->subject;
+		$froma = isset($arr["froma"]) ? $arr["froma"] : "";
+		$fromn = isset($arr["fromn"]) ? $arr["fromn"] : "";
+
+		$inst->set_header("Content-Type","text/plain; charset=\"".aw_global_get("charset")."\"");
+		if($m->is_html)
+		{
+			$inst->create_message(array(
+				"froma" => $froma,
+				"fromn" => $fromn,
+				"subject" => $subject,
+				"to" => $to_mail,
+				"body" => t("Kahjuks sinu kirjalugeja ei oska kuvada HTML-formaadis kirju."),
+			));
+			$inst->htmlbodyattach(array(
+				"data" => $message,
+			));
+		}
+		else
+		{
+			$inst->create_message(array(
+				"froma" => $froma,
+				"fromn" => $fromn,
+				"subject" => $subject,
+				"to" => $to_mail,
+				"body" => $message,
+			));
+		}
+		$inst->gen_mail();
 	}
 
 }

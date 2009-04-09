@@ -178,6 +178,28 @@
             <caption>Personalikeskkond</caption>
       </property>
       <property>
+            <name>subscribe_mail</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SUBSCRIBE_MAIL</reltype>
+            <store>connect</store>
+            <caption>Liitumise kirja templeit</caption>
+      </property>
+      <property>
+            <name>unsubscribe_mail</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_UNSUBSCRIBE_MAIL</reltype>
+            <store>connect</store>
+            <caption>Lahkumise kirja templeit</caption>
+      </property>
+      <property>
             <name>search_tb</name>
             <table>objects</table>
             <field>meta</field>
@@ -920,6 +942,16 @@
                   <clid>CL_PERSONNEL_MANAGEMENT</clid>
                   <caption>Personalikeskkond</caption>
             </PERSONNEL_MANAGEMENT>
+            <SUBSCRIBE_MAIL>
+                  <value>13</value>
+                  <clid>CL_MESSAGE_TEMPLATE</clid>
+                  <caption>Liitumise kirja templeit</caption>
+            </SUBSCRIBE_MAIL>
+            <UNSUBSCRIBE_MAIL>
+                  <value>14</value>
+                  <clid>CL_MESSAGE_TEMPLATE</clid>
+                  <caption>Lahkumise kirja templeit</caption>
+            </UNSUBSCRIBE_MAIL>
       </reltypes>
       <layout>
             <search_lay>
