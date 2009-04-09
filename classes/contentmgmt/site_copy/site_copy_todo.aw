@@ -38,15 +38,20 @@
 @reltype SITE_COPY value=1 clid=CL_SITE_COPY
 @caption Saitide kopeerimise objekt, mille seadeid kasutada
 
+@reltype MAIL value=1 clid=CL_ML_MEMBER
+@caption E-postiaadress, kuhu saadetakse infot kopeerimise progressist
+
 */
 
 class site_copy_todo extends class_base
 {
 	const STAT_COPY = 1;
 	const STAT_TRANSFER = 2;
-	const STAT_UNPACK = 4;
-	const STAT_INSTALL = 8;
-	const STAT_DELETE = 16;
+	const STAT_UNPACK = 3;
+	const STAT_INSTALL = 4;
+	const STAT_DELETE = 5;
+	const STAT_CVS = 6;
+	const STAT_DIFF = 7;
 
 	function site_copy_todo()
 	{
@@ -55,11 +60,13 @@ class site_copy_todo extends class_base
 			"clid" => CL_SITE_COPY_TODO
 		));
 		$this->sc_status_options = array(
-			site_copy_todo::STAT_COPY => t("Copy"),
-			site_copy_todo::STAT_TRANSFER => t("Transfer"),
-			site_copy_todo::STAT_UNPACK => t("Unpack"),
-			site_copy_todo::STAT_INSTALL => t("Install"),
-			site_copy_todo::STAT_DELETE => t("Delete"),
+			self::STAT_COPY => t("Copy"),
+			self::STAT_TRANSFER => t("Transfer"),
+			self::STAT_UNPACK => t("Unpack"),
+			self::STAT_INSTALL => t("Install"),
+			self::STAT_DELETE => t("Delete"),
+			self::STAT_CVS => t("Install on CVS code"),
+			self::STAT_DIFF => t("Compare sites"),
 		);
 	}
 

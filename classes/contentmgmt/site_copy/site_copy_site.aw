@@ -6,17 +6,26 @@
 @default table=aw_site_copy_site
 @default group=general
 
-@property url type=textbox disabled=1 field=name table=objects
+@property url type=textbox field=name table=objects
 @caption URL
 
-@property copy_url type=textbox disabled=1
+@property copy_url type=textbox
 @caption Saidi koopia URL
 
-@property copy_url_cvs type=textbox disabled=1
+@property copy_url_cvs type=textbox
 @caption Saidi koopia URL (CVS koodil)
 
-@property site_dir type=textbox disabled=1
+@property site_dir type=textbox
 @caption Saidi kaust kettal
+
+@property site_dir_cvs type=textbox
+@caption Saidi kaust kettal (CVS koodil)
+
+@property site_diff type=relpicker reltype=RELTYPE_SITE_DIFF store=connect
+@caption Saitide v&otilde;rdlus
+
+@reltype SITE_DIFF value=1 clid=CL_SITE_DIFF
+@caption Saitide v&otilde;rdlus
 
 */
 
@@ -82,6 +91,7 @@ class site_copy_site extends class_base
 			case "copy_url":
 			case "copy_url_cvs":
 			case "site_dir":
+			case "site_dir_cvs":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(255)"
