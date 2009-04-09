@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.157 2009/03/19 16:35:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.158 2009/04/09 09:27:15 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1798,6 +1798,7 @@ class ml_list extends class_base
 		}
 		$mails = new object_list(array(
 			"class_id" => CL_MESSAGE,
+			"site_id" => array(),
 			"parent" => !empty($fld) ? $fld : $arr["obj_inst"]->parent(),
 		));
 		foreach($mails->arr() as $mail)
