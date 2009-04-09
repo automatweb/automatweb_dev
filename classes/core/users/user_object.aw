@@ -30,10 +30,10 @@ class user_object extends _int_object
 		}
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		$new = !is_oid($this->id());
-		$rv = parent::save();
+		$rv = parent::save($exclusive, $previous_state);
 
 		if ($new)
 		{
