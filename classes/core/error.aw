@@ -41,11 +41,11 @@ class error
 				));
 			}
 	**/
-	function raise($arr)
+	public static function raise($arr)
 	{
 		if (!isset($arr["id"]) || !$arr["id"])
 		{
-			$arr["id"] = ERR_GENERIC;
+			$arr["id"] = "ERR_GENERIC";
 		}
 		if (!isset($arr["msg"]))
 		{
@@ -70,7 +70,7 @@ class error
 		$inst->raise_error($arr["id"], $arr["msg"], $arr["fatal"], !$arr["show"]);
 	}
 
-	function throw_acl($arr)
+	public static function throw_acl($arr)
 	{
 		$sct = isset($arr["access"]) ? "can_".$arr["access"] : t("not specified");
 		$objn = isset($arr["oid"]) ? $arr["oid"] : t("not specified");
@@ -104,11 +104,11 @@ class error
 				"msg" => sprintf(t("class::function(): parameter %s is not set!"), $param_name)
 			));
 	**/
-	function raise_if($cond, $arr)
+	public static function raise_if($cond, $arr)
 	{
 		if ($cond)
 		{
-			error::raise($arr);
+			self::raise($arr);
 		}
 	}
 
@@ -127,11 +127,11 @@ class error
 				echo  $o->name();
 			}
 	**/
-	function view_check($oid)
+	public static function view_check($oid)
 	{
 		$t = new acl_base;
 		$t->init();
-		if (!is_oid($oid) || !$t->can("view", $oid))
+		if (!$t->can("view", $oid))
 		{
 			$i = get_instance("menuedit");
 			$i->do_error_redir($oid);

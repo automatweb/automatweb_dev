@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.10 2008/08/06 14:20:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.11 2009/04/09 11:45:22 voldemar Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -19,7 +19,7 @@ class icons extends aw_template
 			arg1 - class id / object class instance
 			name - object name
 	**/
-	function get_icon_url($arg1,$name = "")
+	public static function get_icon_url($arg1,$name = "")
 	{
 		$done = false;
 
@@ -71,7 +71,7 @@ class icons extends aw_template
 		@returns
 		url to required icon
 	**/
-	function get_feature_icon_url($fid)
+	public static function get_feature_icon_url($fid)
 	{
 		return aw_ini_get("icons.server")."/prog_".$fid.".gif";
 	}
