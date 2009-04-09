@@ -49,7 +49,7 @@ class orb extends aw_template
 				"obj_inst" => $o,
 				"args" => array(
 					"action" => "change",
-					"cfgform" => @$args["vars"]["cfgform"]
+					"cfgform" => isset($args["vars"]["cfgform"]) ? $args["vars"]["cfgform"] : null
 				)
 			));
 		}
@@ -119,11 +119,10 @@ class orb extends aw_template
 
 		$fun = $orb_defs[$class][$action];
 		// oh the irony
-                if (!$fun && $action === "view")
-                {
-                        $action = "change";
-                };
-                $fun = $orb_defs[$class][$action];
+		if (!$fun && $action === "view")
+		{
+			$action = "change";
+		}
 
 		if (is_array($fun))
 		{
@@ -219,7 +218,7 @@ class orb extends aw_template
 			{
 				if (!isset($_params[$key]))
 				{
-					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$silent);
+					$this->raise_error("ERR_ORB_CPARM",sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$silent);
 				};
 			};
 			foreach($_params as $key => $val)
@@ -247,7 +246,7 @@ class orb extends aw_template
 			{
 				if (!isset($vars[$key]))
 				{
-					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$silent);
+					$this->raise_error("ERR_ORB_CPARM",sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$silent);
 				};
 
 				$this->validate_value(array(
@@ -275,12 +274,12 @@ class orb extends aw_template
 				else
 				if (isset($orb_defs[$class][$action]["defaults"][$key]))
 				{
-					if ($orb_defs[$class][$action]["defaults"][$key] == "true")
+					if ($orb_defs[$class][$action]["defaults"][$key] === "true")
 					{
 						$orb_defs[$class][$action]["defaults"][$key] = true;
 					}
 					else
-					if ($orb_defs[$class][$action]["defaults"][$key] == "false")
+					if ($orb_defs[$class][$action]["defaults"][$key] === "false")
 					{
 						$orb_defs[$class][$action]["defaults"][$key] = false;
 					}
@@ -427,31 +426,36 @@ class orb extends aw_template
 				if ((sizeof($attribs) > 0) && in_array($tagtype,array("open","complete")))
 				{
 					$$tag = $attribs["name"];
-					if (($tag == "action") && !empty($attribs["nologin"]))
+
+					if ("action" === $tag)
 					{
-						$orb_defs[$class][$attribs["name"]]["nologin"] = 1;
-					};
-					if (($tag == "action") && !empty($attribs["is_public"]))
-					{
-						$orb_defs[$class][$attribs["name"]]["is_public"] = 1;
-					};
-					if (($tag == "action") && !empty($attribs["is_content"]))
-					{
-						$orb_defs[$class][$attribs["name"]]["is_content"] = 1;
-					};
-					if (($tag == "action") && !empty($attribs["all_args"]))
-					{
-						$orb_defs[$class][$attribs["name"]]["all_args"] = true;
-					};
-					if (($tag == "action") && !empty($attribs["caption"]))
-					{
-						$orb_defs[$class][$attribs["name"]]["caption"] = $attribs["caption"];
-					};
-					if (isset($attribs["default"]) && $attribs["default"] && ($tag == "action"))
-					{
-						$orb_defs[$class]["default"] = $attribs["name"];
-					};
-					if ($tag == "function")
+						if (!empty($attribs["nologin"]))
+						{
+							$orb_defs[$class][$attribs["name"]]["nologin"] = 1;
+						};
+						if (!empty($attribs["is_public"]))
+						{
+							$orb_defs[$class][$attribs["name"]]["is_public"] = 1;
+						};
+						if (!empty($attribs["is_content"]))
+						{
+							$orb_defs[$class][$attribs["name"]]["is_content"] = 1;
+						};
+						if (!empty($attribs["all_args"]))
+						{
+							$orb_defs[$class][$attribs["name"]]["all_args"] = true;
+						};
+						if (!empty($attribs["caption"]))
+						{
+							$orb_defs[$class][$attribs["name"]]["caption"] = $attribs["caption"];
+						};
+						if (!empty($attribs["default"]))
+						{
+							$orb_defs[$class]["default"] = $attribs["name"];
+						}
+					}
+
+					if ($tag === "function")
 					{
 						$orb_defs[$class][$action][$tag] = $$tag;
 						// initsialiseerime need arrayd
@@ -479,8 +483,7 @@ class orb extends aw_template
 							$orb_defs[$class]["default"] = $action;
 						};
 					}
-					else
-					if ($tag == "class")
+					elseif ($tag === "class")
 					{
 						// klassi defauldid. kui funktsiooni juures pole, pannakse need
 						if (isset($attribs["xmlrpc"]))
@@ -500,46 +503,51 @@ class orb extends aw_template
 						{
 							$orb_defs[$class]["___folder"] = $attribs["folder"];
 						};
-					};
+					}
 				}
-				elseif ($tagtype == "close")
+				elseif ($tagtype === "close")
 				{
 					$$tag = "";
 				};
-			};
+			}
+
 			// kui leidsime argumenti m22rava tag-i, siis ...
 			if (in_array($tag,$argtypes))
 			{
 				// kontroll, just in case
-				if ($tagtype == "complete")
+				if ($tagtype === "complete")
 				{
-					if ($tag == "define")
+					if ($tag === "define")
 					{
 						$val = $attribs["value"];
 					}
 					else
 					{
 						$val = 1;
-					};
+					}
+
 					$orb_defs[$class][$action][$tag][$attribs["name"]] = $val;
 					if (isset($attribs["type"]))
 					{
 						$orb_defs[$class][$action]["types"][$attribs["name"]] = $attribs["type"];
-					};
+					}
+
 					if(isset($attribs["class_id"]))
 					{
 						$orb_defs[$class][$action]["class_ids"][$attribs["name"]] = explode(",", $attribs["class_id"]);
 					}
+
 					if (isset($attribs["default"]))
 					{
 						$orb_defs[$class][$action]["defaults"][$attribs["name"]] = $attribs["default"];
-					};
+					}
+
 					if (isset($attribs["acl"]))
 					{
 						$orb_defs[$class][$action]["acl"][$attribs["name"]] = $attribs["acl"];
 					}
-				};
-			};
+				}
+			}
 		}; // foreach;
 		return $orb_defs;
 	} // function
@@ -653,7 +661,7 @@ class orb extends aw_template
 		if (!isset($this->orb_class))
 		{
 			//print "trying to get instance $folder $class<br>";
-			if ($folder == "designedclass/")
+			if ($folder === "designedclass/")
 			{
 				$folder = "";
 			}
@@ -689,7 +697,7 @@ class orb extends aw_template
 
 							if (!$this->can($aclid, $varvalue))
 							{
-								$this->raise_error(ERR_ACL, "ORB:Teil puudub $aclid-&otilde;igus objektile id-ga $varvalue!", true, false);
+								$this->raise_error("ERR_ACL", "ORB:Teil puudub $aclid-&otilde;igus objektile id-ga $varvalue!", true, false);
 							}
 
 							if(isset($act["class_ids"][$varname]) && is_array($act["class_ids"][$varname]))
@@ -808,7 +816,7 @@ class orb extends aw_template
 				{
 					if (!isset($params[$key]))
 					{
-						$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$this->silent);
+						$this->raise_error("ERR_ORB_CPARM",sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$this->silent);
 					};
 
 					$vartype = $orb_defs[$class][$action]["types"][$key];
@@ -816,7 +824,7 @@ class orb extends aw_template
 					{
 						if (!is_numeric($params[$key]))
 						{
-							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),true,$this->silent);
+							$this->raise_error("ERR_ORB_NINT",sprintf(E_ORB_NOT_INTEGER,$key),true,$this->silent);
 						};
 					};
 					$ret[$key] = $params[$key];
@@ -833,7 +841,7 @@ class orb extends aw_template
 					{
 						if ( ($vartype == "int") && ($params[$key] != sprintf("%d",$vars[$key])) )
 						{
-							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),true,$this->silent);
+							$this->raise_error("ERR_ORB_NINT",sprintf(E_ORB_NOT_INTEGER,$key),true,$this->silent);
 						};
 						$ret[$key] = $params[$key];
 					}
@@ -870,12 +878,12 @@ class orb extends aw_template
 			}
 			else
 			{
-				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$func,$class),true,$this->silent);
+				$this->raise_error("ERR_ORB_MNOTFOUND",sprintf(E_ORB_METHOD_NOT_FOUND,$func,$class),true,$this->silent);
 			}
 		}
 		else
 		{
-			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,true,$this->silent);
+			$this->raise_error("ERR_ORB_NOCLASS",E_ORB_CLASS_UNDEF,true,$this->silent);
 		}
 	}
 
@@ -898,7 +906,7 @@ class orb extends aw_template
 		{
 			if ($server == "")
 			{
-				$this->raise_error(ERR_ORB_RPC_NO_SERVER, "No server defined for ORB RPC call!", true, false);
+				$this->raise_error("ERR_ORB_RPC_NO_SERVER", "No server defined for ORB RPC call!", true, false);
 			}
 
 			$login = get_instance("protocols/file/http");
@@ -925,7 +933,7 @@ class orb extends aw_template
 		$inst = get_instance("core/orb/".$method);
 		if (!is_object($inst))
 		{
-			$this->raise_error(ERR_ORB_RPC_NO_HANDLER,sprintf(t("orb::handle_rpc_call - Could not load request handler for request method '%s'"), $method), true,false);
+			$this->raise_error("ERR_ORB_RPC_NO_HANDLER",sprintf(t("orb::handle_rpc_call - Could not load request handler for request method '%s'"), $method), true,false);
 		}
 
 		// decode request
@@ -938,7 +946,7 @@ class orb extends aw_template
 
 		if (!isset($orb_defs[$request["class"]][$request["action"]]))
 		{
-			$this->raise_error(ERR_ORB_MNOTFOUND,sprintf("No action with name %s defined in class %s! Malformed XML?",$request["action"],$request["class"]),true,$this->silent);
+			$this->raise_error("ERR_ORB_MNOTFOUND",sprintf("No action with name %s defined in class %s! Malformed XML?",$request["action"],$request["class"]),true,$this->silent);
 		}
 
 		$ret = $this->do_local_call($orb_defs[$request["class"]][$request["action"]]["function"], $request["class"], $params,$orb_defs[$request["class"]]["___folder"]);
@@ -949,7 +957,7 @@ class orb extends aw_template
 
 		if ($output != "")
 		{
-			$this->raise_error(ERR_RPC_OUTPUT, "Output generated during RPC call! content: '$output'", true, false);
+			$this->raise_error("ERR_RPC_OUTPUT", "Output generated during RPC call! content: '$output'", true, false);
 		}
 
 		return $inst->encode_return_data($ret);
@@ -1050,17 +1058,20 @@ class orb extends aw_template
 	{
 		$methods = array();
 		$cur_class = $arr["class"];
-		do {
+
+		do
+		{
 			$orb_defs = $this->load_xml_orb_def($cur_class);
 			foreach(safe_array($orb_defs[$cur_class]) as $key => $val)
 			{
-				if ($key == "_extends" || $key == "___folder")
+				if ($key === "_extends" || $key === "___folder")
 				{
 					continue;
 				}
 				$methods[$key] = $val["function"];
 			};
-		} while(($cur_class = $orb_defs[$cur_class]["_extends"][0]) != "");
+		}
+		while(($cur_class = $orb_defs[$cur_class]["_extends"][0]) != "");
 
 		return $methods;
 	}
@@ -1071,7 +1082,7 @@ class orb extends aw_template
 		$orbclass = get_instance("core/orb/orb");
 		$orb_defs = $orbclass->load_xml_orb_def($id);
 //		echo "id = $id , action = $action , orb_defs = <pre>", var_dump($orb_defs),"</pre> <br />";
-		if ($action == "default")
+		if ($action === "default")
 		{
 			$action = $orb_defs[$id]["default"];
 		}
@@ -1085,7 +1096,7 @@ class orb extends aw_template
 		}
 		$cl = get_instance($fld.$id);
 		$ar = array();
-		if ($id == "document")
+		if ($id === "document")
 		{
 			if ($cl->get_opt("cnt_documents") == 1)
 			{
@@ -1111,7 +1122,7 @@ class orb extends aw_template
 				}
 			}
 		};
-		if ($id == "doc")
+		if ($id === "doc")
 		{
 			$cl = get_instance("document");
 			if ($cl->get_opt("cnt_documents") == 1)
@@ -1119,16 +1130,16 @@ class orb extends aw_template
 				$meth["values"]["id"] = $cl->get_opt("shown_document");
 			}
 			$meth["values"]["period"] = aw_global_get("act_per_id");
-			if ($action == "change" && $cl->get_opt("shown_document"))
+			if ($action === "change" && $cl->get_opt("shown_document"))
 			{
 				$meth["values"]["id"] = $cl->get_opt("shown_document");
 			}
-			if ($action == "new")
+			if ($action === "new")
 			{
 				$meth["values"]["parent"] = aw_global_get("section");
 			}
 		};
-		if ($id == "menu")
+		if ($id === "menu")
 		{
 			if ($this->can("view", aw_global_get("section")))
 			{
@@ -1142,13 +1153,13 @@ class orb extends aw_template
 			}
 		}
 		else
-		if ($id == "file")
+		if ($id === "file")
 		{
 			$meth["values"]["parent"] = aw_global_get("section");
 			$meth["values"]["id"] = aw_global_get("section");
 		}
 		//echo $obj;
-		if($id == "method")
+		if($id === "method")
 		{
 			if($obj)
 			{
