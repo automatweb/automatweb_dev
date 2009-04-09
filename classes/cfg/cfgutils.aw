@@ -501,6 +501,19 @@ class cfgutils extends aw_template
 					$relx["clid"] = array($relx["clid"]);
 				}
 
+				$_clidlist = array();
+
+				if (is_array($relinfo) && array_key_exists("clid", $relx))
+				{
+					foreach(safe_array($relx["clid"]) as $clid)
+					{
+						if (@constant($clid))
+						{
+							$_clidlist[] = constant($clid);
+						}
+					}
+				}
+
 				$relx["clid"] = $_clidlist;
 				$tmp[$key] = $relx;
 				$tmp[$_name] = $relx;
