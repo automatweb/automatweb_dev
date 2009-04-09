@@ -609,7 +609,8 @@ class orb extends aw_template
 		}
 		else
 		{
-			if (!file_exists($this->cfg["basedir"]."/xml/orb/$class.xml") && !file_exists($this->cfg["site_basedir"]."/xml/orb/$class.xml"))
+			if (!is_readable(AW_DIR."xml/orb/{$class}.xml") && !is_readable(aw_ini_get("site_basedir")."/xml/orb/{$class}.xml"))
+
 			{
 				$this->raise_error("ERR_ORB_NOTFOUND",sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
 			}

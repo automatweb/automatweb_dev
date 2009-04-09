@@ -1090,7 +1090,9 @@ class bug extends class_base
 
 			case "customer":
 				$i = get_instance(CL_CRM_COMPANY);
+				enter_function("bug::get_my_customers");
 				$cst = $i->get_my_customers();
+				exit_function("bug::get_my_customers");
 				if (!count($cst))
 				{
 					$prop["options"] = array("" => t("--vali--"));

@@ -108,7 +108,7 @@ class html2pdf extends class_base
 	function gen_pdf($arr)
 	{
 		$str = $this->convert($arr);
-		$file_name = strpos($arr["filename"], ".pdf") === (strlen($arr["filename"]) - 4) ? $arr["filename"] : $arr["filename"].".pdf";
+		$file_name = strpos($arr["filename"], ".pdf") === (strlen($arr["filename"]) - 4) ? $arr["filename"] : $arr["filename"].".pdf";$file_name = str_replace(" " , "_" , $file_name);
 		header("Cache-Control: private, must-revalidate, post-check=0, pre-check=0");
 		header("Pragma: private");
 		header("Content-type: application/pdf");

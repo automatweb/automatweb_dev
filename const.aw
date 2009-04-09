@@ -25,7 +25,7 @@ define ("AW_SHORT_PROCESS", 1);
 define ("AW_LONG_PROCESS", 2);
 $section = null;
 
-ini_set("memory_limit", "300M");
+ini_set("memory_limit", "900M");
 if (get_magic_quotes_gpc() && !defined("GPC_HANDLER"))
 {
 	function stripslashes_deep($value)
@@ -482,7 +482,6 @@ function classload($args)
 				}
 			}
 		}
-
 		if (is_readable($lib))
 		{
 			include_once($lib);
@@ -744,10 +743,9 @@ function aw_startup()
 // !called just before the very end
 function aw_shutdown()
 {
-	return;
 	// whotta fook, this messenger thingie goes here then?:S
 
-	$i = get_instance("file");
+	/*$i = get_instance("file");
 	if(isset($_SESSION["current_user_has_messenger"]) and $i->can("view", $_SESSION["current_user_has_messenger"]) and $i->can("view", $_SESSION["uid_oid"]))
 	{
 		$cur_usr = new object($_SESSION["uid_oid"]);
@@ -787,7 +785,7 @@ function aw_shutdown()
 		}
 	}
 	// end of that messenger new mail notifiaction crap
-
+*/
 
 	global $awt;
 	if (is_object($awt) && !empty($GLOBALS["cfg"]["debug"]["profile"]))

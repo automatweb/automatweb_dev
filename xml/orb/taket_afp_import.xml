@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="import_data_from_file">
+			<function name="import_data_from_file">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

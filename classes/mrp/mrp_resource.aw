@@ -36,8 +36,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@layout job_list type=hbox width=20%:80%
 		@layout job_time_tree type=vbox area_caption=Vali&nbsp;kuvatavate&nbsp;t&ouml;&ouml;de&nbsp;ajavahemik parent=job_list
 			@property job_time_tree type=treeview store=no no_caption=1 parent=job_time_tree
-		@layout job_list_table type=vbox area_caption=&nbsp; parent=job_list
-			@property job_list type=table store=no editonly=1 no_caption=1 parent=job_list_table
+		@layout job_list_right type=vbox parent=job_list
+			@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=job_list_right
+				@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no
+			@layout job_list_table type=vbox area_caption=&nbsp; parent=job_list_right
+				@property job_list type=table store=no editonly=1 no_caption=1 parent=job_list_table
 
 @default group=grp_resource_maintenance
 	@property out_of_service type=checkbox store=no ch_value=1
@@ -1366,6 +1369,12 @@ class mrp_resource extends class_base
 			return true;
 		}
 		return $evstr;
+	}
+
+	public function _get_resource_deviation_chart($arr)
+	{
+		$arr["request"]["mrp_tree_active_item"] = $arr["obj_inst"]->id();
+		return get_instance("mrp_workspace")->_get_resource_deviation_chart($arr);
 	}
 
 	function _get_job_time_tree($arr)

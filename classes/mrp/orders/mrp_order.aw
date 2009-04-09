@@ -100,6 +100,18 @@ class mrp_order extends class_base
 
 		switch($prop["name"])
 		{
+			case "workspace":
+				if (!$arr["prop"]["value"] && !$arr["new"])
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_MRP_WORKSPACE,
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					$o = $ol->begin();
+					$arr["prop"]["value"] = $o->id();
+				}
+				break;
 		}
 
 		return $retval;
@@ -204,6 +216,10 @@ class mrp_order extends class_base
 	function _get_mrp_pricelist($arr)
 	{
 		$ws = $arr["new"] ? obj($arr["request"]["ws"]) : $arr["obj_inst"]->workspace();
+		if (!is_oid($ws->id()))
+		{
+			return;
+		}
 		$ap = $ws->get_default_pricelist();
 
 		if (!$ap)

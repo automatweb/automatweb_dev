@@ -274,6 +274,17 @@
             <parent>conditions_right</parent>
             <field>conditions_tbl</field>
       </property>
+      <property>
+            <name>cp_warehouse</name>
+            <table>objects</table>
+            <group>cp_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PACKAGE_WAREHOUSE</reltype>
+            <store>connect</store>
+            <field>cp_warehouse</field>
+            <caption>Ladu</caption>
+            <comment>Ladu, kuhu luuakse toote objektid iga paketi jaoks</comment>
+      </property>
       <classinfo>
             <syslog_type>ST_USER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -299,6 +310,10 @@
                   <caption>Tingimused</caption>
                   <parent>content_packages</parent>
             </conditions>
+            <cp_settings>
+                  <caption>Seaded</caption>
+                  <parent>content_packages</parent>
+            </cp_settings>
       </groupinfo>
       <reltypes>
             <ROOT>
@@ -317,8 +332,13 @@
             <LOGIN_CONF>
                   <value>3</value>
                   <clid>CL_CONFIG_LOGIN_MENUS</clid>
-                  <caption>Loginmen&amp;amp;uuml;&amp;amp;uuml; seadete objekt </caption>
+                  <caption>Loginmen&amp;amp;uuml;&amp;amp;uuml; seadete objekt</caption>
             </LOGIN_CONF>
+            <PACKAGE_WAREHOUSE>
+                  <value>4</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </PACKAGE_WAREHOUSE>
       </reltypes>
       <layout>
             <hbox_toolbar>

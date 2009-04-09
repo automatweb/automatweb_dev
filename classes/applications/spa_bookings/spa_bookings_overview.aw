@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.79 2009/02/26 12:44:14 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.80 2009/04/09 08:39:53 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -2011,6 +2011,20 @@ class spa_bookings_overview extends class_base
 	function room_booking_printer($arr)
 	{
 		$arr = $_GET;
+		foreach($arr as $key => $val)
+		{
+			$arr[str_replace("\\" , "" , $key)] = $val;
+		}
+
+		foreach($arr["rs_booking_from"] as $key => $val)
+		{
+			$arr["rs_booking_from"][str_replace("\\" , "" , $key)] = $val;
+		}
+		foreach($arr["rs_booking_to"] as $key => $val)
+		{
+			$arr["rs_booking_to"][str_replace("\\" , "" , $key)] = $val;
+		}
+//arr($arr); die();
 		$this->read_any_template("booking_printer.tpl");
 		if(!($arr["to"] > 0 && $arr["from"] > 0))
 		{
@@ -2103,6 +2117,7 @@ class spa_bookings_overview extends class_base
 						"products_wo_amount" => $r_inst->get_products_wo_amount_text($r, " "),
 						"cust_arrived" => ($r->prop("client_arrived") == 0 ? "" : ($r->prop("client_arrived") == 1 ? t("Klient saabus") : t("Klient ei saabunud"))),
 						"comment" => $r->comment(),
+						"content" => $r->prop("content"),
 					));
 					$books .= $this->parse("BOOKING");
 				}

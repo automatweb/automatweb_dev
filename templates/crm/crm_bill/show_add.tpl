@@ -54,19 +54,26 @@ body {
   
   <tr valign="middle">
     <td width="96" height="44" align="center"><span class="style3">Kuup&auml;ev</span></td>
+    <td width="465" align="left" style="padding-left:6px"><span class="style3"> </span></td>
     <td width="465" align="left" style="padding-left:6px"><span class="style3"> T&ouml;&ouml; sisu </span></td>
     <td width="97" align="center"><span class="style3">Kulunud aeg</span> </td>
   </tr>
   <!-- SUB: ROW -->
   <tr valign="middle">
     <td height="28" align="center"><span class="style8">{VAR:date}</span></td>
+    <td height="28" align="center"><span class="style8">{VAR:comment}</span></td>
     <td align="left" style="padding-left: 6px"><span class="style8">{VAR:desc}</span></td>
    
     <td align="center"><span class="style8">{VAR:amt}</span></td>
   </tr>
     <!-- END SUB: ROW -->
-  <tr valign="middle">
-    <td height="28" colspan="3" align="left" bgcolor="#CCCCCC"><table width="99" border="0" align="right" cellpadding="0" cellspacing="0">
+  <tr valign="middle">  <td height="28" colspan="3" align="left" bgcolor="#CCCCCC"></td>
+
+    <td height="28" colspan="3" align="left" bgcolor="#CCCCCC">
+
+
+
+<table width="99" border="0" align="right" cellpadding="0" cellspacing="0">
       <tr>
         <td width="99"><div align="center" class="style3">{VAR:tot_amt} t</div></td>
       </tr>

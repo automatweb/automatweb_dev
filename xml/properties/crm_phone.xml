@@ -44,18 +44,17 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_COUNTRY</reltype>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>connect</store>
             <automatic>1</automatic>
+            <field>country</field>
             <caption>Riik</caption>
       </property>
       <property>
             <name>is_public</name>
-            <table>objects</table>
+            <table>kliendibaas_telefon</table>
             <group>general</group>
             <type>hidden</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_is_public</field>
             <caption>Avalik (endine checkbox)</caption>
       </property>
       <property>

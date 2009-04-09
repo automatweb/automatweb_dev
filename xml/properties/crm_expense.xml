@@ -96,11 +96,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Isik</caption>
             </PEOPLE>
-	    <TASK>
-		    <value>3</value>
-		    <clid>CL_TASK</clid>
-		    <caption>Toimetus</caption>
-            </PEOPLE>
+            <TASK>
+                  <value>3</value>
+                  <clid>CL_TASK</clid>
+                  <caption>Toimetus</caption>
+            </TASK>
       </reltypes>
 </properties>
 

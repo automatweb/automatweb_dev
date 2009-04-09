@@ -77,6 +77,13 @@ class taket_afp_import extends class_base
 			"img" => "import.gif",
 			"tooltip" => t("Impordi tooteandmed"),
 		));
+
+		$tb->add_button(array(
+			"name" => "import_data_from_file",
+			"action" => "import_data_from_file",
+			"img" => "import.gif",
+			"tooltip" => t("Impordi tooteandmed failist"),
+		));
 	}
 
 	/**
@@ -84,6 +91,19 @@ class taket_afp_import extends class_base
 	**/
 	function import_data($arr)
 	{
+		if($this->can("view", $arr["id"]))
+		{
+			obj($arr["id"])->get_data($arr);
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+	@attrib name=import_data_from_file
+	**/
+	function import_data_from_file($arr)
+	{
+		$arr['from_file'] = 1;
 		if($this->can("view", $arr["id"]))
 		{
 			obj($arr["id"])->get_data($arr);

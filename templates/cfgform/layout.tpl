@@ -157,10 +157,12 @@ function cfgformToggleSelectProps(grpId)
 			<input type="hidden" name="xconfig[{VAR:prp_key}][richtext]" value="{VAR:richtext}"/><br/>
 			{VAR:rows_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][rows]" value="{VAR:rows}"/><br/>
 			{VAR:cols_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][cols]" value="{VAR:cols}"/><br/>
+			{VAR:maxlength_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][maxlength]" value="{VAR:maxlength}"/><br/>
 <!-- END SUB: textarea_options -->
 
 <!-- SUB: textbox_options -->
 			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"/><br/>
+			{VAR:maxlength_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][maxlength]" value="{VAR:maxlength}"/><br/>
 <!-- END SUB: textbox_options -->
 
 <!-- SUB: relpicker_options -->

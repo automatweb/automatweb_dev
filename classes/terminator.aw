@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.6 2008/11/14 14:52:31 instrumental Exp $
-// terminator.aw - The Terminator 
+// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.7 2009/04/09 08:39:34 kristo Exp $
+// terminator.aw - The Terminator
 /*
 
 @classinfo syslog_type=ST_TERMINATOR relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kaarel
@@ -45,7 +45,7 @@ class terminator extends class_base
 			//-- set_property --//
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -69,18 +69,7 @@ class terminator extends class_base
 
 	function KAAREL($arr)
 	{
-		$odl = new object_data_list(
-			array(
-				"class_id" => CL_CRM_PERSON_EDUCATION,
-				"CL_CRM_PERSON_EDUCATION.RELTYPE_EDUCATION(CL_CRM_PERSON)" => 177,
-			),
-			array(
-				CL_CRM_PERSON_EDUCATION => array(
-					"CL_CRM_PERSON_EDUCATION.RELTYPE_EDUCATION(CL_CRM_PERSON)"
-				),
-			)
-		);
-		arr($odl->arr());
+//		get_instance("shop_order")->bank_return(array("id" => 320493));
 	}
 }
 ?>

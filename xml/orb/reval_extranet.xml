@@ -15,6 +15,14 @@
 			</function>
 		</action>
 
+		<action name="disp_evmgr" nologin="1">
+			<function name="disp_evmgr">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_view1" nologin="1">
 			<function name="submit_view1">
 				<arguments>

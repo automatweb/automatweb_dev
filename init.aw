@@ -7,12 +7,13 @@
 
 if (!defined("AW_DIR"))
 {
+ini_set("memory_limit", "900M");
 	// script for old site startup
 	function init_config($args)
 	{
 		$cache_file = $args["cache_file"];
 		$cfg_files = $args["ini_files"];
-
+		
 		foreach ($cfg_files as $file)
 		{
 			$file = dirname($file) . "/automatweb.aw";

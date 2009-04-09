@@ -321,6 +321,7 @@ class form_controller extends form_base
 
 		exit_function("form_controller::eval_controller");
 		exit_function("form_controller::eval_controller::".$co[OID]);
+echo "a <br>\n";
 		return $res;
 	}
 

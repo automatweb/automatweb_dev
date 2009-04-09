@@ -216,7 +216,7 @@ class connection
 			{
 				// it is "RELTYPE_FOO"
 				// resolve it to numeric
-				if (!is_array($GLOBALS["relinfo"][$param["from.class_id"]]))
+				if (!isset($GLOBALS["relinfo"][$param["from.class_id"]]) || !is_array($GLOBALS["relinfo"][$param["from.class_id"]]))
 				{
 					// load class def
 					_int_object::_int_load_properties($param["from.class_id"]);

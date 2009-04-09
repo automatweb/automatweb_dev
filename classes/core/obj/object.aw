@@ -2,9 +2,8 @@
 /*
 @classinfo  maintainer=kristo
 */
-
-classload(
-	"core/obj/ds_decorator_base",
+classload("core/obj/object_loader");
+/*classload(
 	"core/obj/_int_obj_container_base",
 	"core/obj/_int_object",
 	"core/obj/ds_base",
@@ -21,7 +20,7 @@ classload(
 	"core/obj/obj_predicate_limit",
 	"core/obj/obj_sql_func",
 	"core/obj/oql"
-);
+);*/
 
 $GLOBALS["properties"] = array();
 $GLOBALS["tableinfo"] = array();

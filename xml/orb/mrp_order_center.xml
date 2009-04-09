@@ -3,4 +3,3 @@
 	<class name="mrp_order_center" folder="mrp/orders" extends="class_base">
 	</class>
 </orb>
-		

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.83 2009/03/09 18:12:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.84 2009/04/09 08:39:51 kristo Exp $
 // shop_order.aw - Tellimus
 /*
 
@@ -2065,7 +2065,7 @@ class shop_order extends class_base
 		else
 		{
 			$changed_vars = array();
-		}
+		}if(aw_global_get("uid") == "struktuur.markop"){ var_dump($oc->prop("order_show_controller"));var_dump($changed_vars);}
 		$this->vars($changed_vars);
 
 		return $this->parse();

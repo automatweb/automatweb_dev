@@ -293,7 +293,7 @@ class file extends class_base
 					$data["value"] = html::href(array(
 						"caption" => $arr["obj_inst"]->name(),
 						"url" => $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name())
-					));arr($data);
+					));
 					return PROP_OK;
 				}
 				$retval = PROP_IGNORE;
@@ -1235,7 +1235,7 @@ class file extends class_base
 		$pi = pathinfo($fc["name"]);
 		$mimeregistry = get_instance("core/aw_mime_types");
 		$tmp = $mimeregistry->type_for_ext($pi["extension"]);
-
+		
 		if ($tmp != "")
 		{
 			$fc["type"] = $tmp;

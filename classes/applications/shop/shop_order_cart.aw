@@ -26,6 +26,9 @@
 @property finish_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
 @caption Tellimise kontroller
 
+@property order_show_controller type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
+@caption Tellimuse n&auml;itamise kontroller
+
 @reltype PROD_LAYOUT value=1 clid=CL_SHOP_PRODUCT_LAYOUT
 @caption toote kujundus
 
@@ -1608,7 +1611,6 @@ class shop_order_cart extends class_base
 	function final_finish_order($arr)
 	{
 		extract($arr);
-
 		$oc = obj($oc);
 		if($oc->prop("chart_final_template"))
 		{

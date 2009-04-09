@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.109 2008/11/19 13:52:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.110 2009/04/09 08:40:30 kristo Exp $
 // calendar.aw - VCL calendar
 /*
 @classinfo  maintainer=kristo
@@ -939,9 +939,9 @@ class vcalendar extends aw_template
 			"NEXT" => $next,
 			"mininaviurl" => aw_url_change_var("date","") . $urlsufix,
 			"naviurl" => aw_url_change_var("date",""),
-			"mnames" => html::picker((int)$m,$mnames),
-			"years" => html::picker($y,$years),
-			"monyears" => html::picker((int)$m."-".$y, $monyears),
+			"mnames" => aw_template::picker((int)$m,$mnames),
+			"years" => aw_template::picker($y,$years),
+			"monyears" => aw_template::picker((int)$m."-".$y, $monyears),
 			"content" => $content,
 			"caption" => $caption,
 			"prevlink" => $prevlink,

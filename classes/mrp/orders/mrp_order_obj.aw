@@ -33,6 +33,11 @@ class mrp_order_obj extends _int_object
 		{
 			$mc = obj();
 			$mc->set_class_id(CL_MRP_CASE);
+
+			if (!$GLOBALS["object_loader"]->cache->can("view", $this->prop("workspace")))
+			{
+				return null;
+			}
 			$mc->set_parent(obj($this->prop("workspace"))->mrp_workspace()->projects_folder);
 			$mc->set_name($this->prop("name"));
 			$mc->save();

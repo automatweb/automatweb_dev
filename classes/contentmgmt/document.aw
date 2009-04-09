@@ -315,6 +315,16 @@ class document extends aw_template
 		if ($loid)
 		{
 			aw_disable_acl();
+
+// 				$tbl = $this->db_get_table("languages");
+// 				if (!isset($tbl["fields"]["show_others"]))
+// 				{
+// 					$this->db_add_col("languages", array(
+// 						'name' => "show_others",
+// 						'type' => 'int'
+// 					));
+// 				}
+
 			$o = obj($loid);
 			aw_restore_acl();
 			$txts = new aw_array($o->meta("texts"));

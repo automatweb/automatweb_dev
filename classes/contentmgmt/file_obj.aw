@@ -82,5 +82,23 @@ class file_obj extends _int_object
 		return aw_ini_get("site_basedir")."/files/".$f2."/".substr($fname, $slash+1);
 	}
 
+	/** Returns the download url for the file.
+		@attrib name=get_url params=pos api=1
+		@param name optional type=string
+		@returns
+			Returns the download url for the file.
+		@comment
+	**/
+	function get_url($name = "")
+	{
+		if(!$name)
+		{
+			$name = $this->name();
+		}
+		$retval = str_replace("automatweb/","",$GLOBALS["object_loader"]->mk_my_orb("preview", array("id" => $this->id()),"file", false,true,"/"))."/".urlencode(str_replace("/","_",$name));
+//		$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true);
+		return $retval;
+	}
+
 }
 ?>

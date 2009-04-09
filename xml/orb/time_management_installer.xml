@@ -3,4 +3,3 @@
 	<class name="time_management_installer" folder="applications/spa_bookings" extends="class_base">
 	</class>
 </orb>
-		

@@ -366,6 +366,10 @@ class site_list extends class_base
 				unset($arr['id']);
 				$sets = join(",", map2("%s = '%s'", $arr));
 				$q = "UPDATE aw_server_list SET $sets WHERE id = '$id'";
+$f = fopen("/www/register.automatweb.com/files/sl_update_log.txt", "a");
+fwrite($f, date("d.m.Y H:i:s").": orb update server q = $q\n\n");
+fclose($f);
+
 //				echo "updateq = $q <br />";
 				$this->db_query($q);
 			}
@@ -374,6 +378,9 @@ class site_list extends class_base
 				$keys = join(",",array_keys($arr));
 				$vals = join(",", map("'%s'",array_values($arr)));
 				$q = "INSERT INTO aw_server_list($keys) VALUES($vals)";
+$f = fopen("/www/register.automatweb.com/files/sl_update_log.txt", "a");
+fwrite($f, date("d.m.Y H:i:s").": orb update server insert q = $q\n\n");
+fclose($f);
 //				echo "insert q = $q <br />";
 				$this->db_query($q);
 			}
@@ -389,6 +396,9 @@ class site_list extends class_base
 				$keys = join(",",array_keys($arr));
 				$vals = join(",", map("'%s'",array_values($arr)));
 				$q = "INSERT INTO aw_server_list($keys) VALUES($vals)";
+$f = fopen("/www/register.automatweb.com/files/sl_update_log.txt", "a");
+fwrite($f, date("d.m.Y H:i:s").": orb update server insert2 q = $q\n\n");
+fclose($f);
 //				echo "insert q = $q <br />";
 				$this->db_query($q);
 			}
@@ -808,12 +818,16 @@ class site_list extends class_base
 		$ip = @gethostbyname($url);
 		$server_url = @gethostbyaddr($ip);
 
+$f = fopen("/www/register.automatweb.com/files/sl_update_log.txt", "a");
+fwrite($f, date("d.m.Y H:i:s").": got update from $data[id] url = $url / ip = $ip / server_url = $server_url / data = ".dbg::dump($data)."\n");
 		// check if such server exists
 		if (!($serv_id = $this->get_server_id_by_ip(array("ip" => $ip))))
 		{
 			// if not, add it
 			$serv_id = $this->db_fetch_field("SELECT MAX(id) as id FROM aw_server_list", "id")+1;
-			$this->db_query("INSERT INTO aw_server_list(id,name,ip) values($serv_id,'$ip','$url')");
+			$this->db_query("INSERT INTO aw_server_list(id,ip,name) values($serv_id,'$ip','$url')");
+fwrite($f, " inserted new server INSERT INTO aw_server_list(id,ip,name) values($serv_id,'$ip','$url')\n");
+
 		}
 
 		// url, used => 1, code path, basedir, updater uid, time of update, server_id
@@ -831,6 +845,20 @@ class site_list extends class_base
 			WHERE
 				id = '$arr[site_id]'
 		");
+fwrite($f, " update query = 			UPDATE
+				aw_site_list
+			SET
+				url = '$data[baseurl]',
+				site_used = 1,
+				code_branch = '".$server_url.":".$data["code"]."',
+				basedir = '$data[site_basedir]',
+				updater_uid = '$data[uid]',
+				last_update = '".time()."',
+				server_id = '$serv_id'
+			WHERE
+				id = '$arr[site_id]'
+\n\n\n");
+fclose($f);
 		return true;
 	}
 

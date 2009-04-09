@@ -3,4 +3,3 @@
 	<class name="crm_company_cfgform_configurator" folder="applications/crm" extends="class_base">
 	</class>
 </orb>
-		

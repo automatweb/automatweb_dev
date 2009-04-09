@@ -54,6 +54,8 @@
 @property used_class_list type=textarea rows=30 cols=80
 @caption Kasutusel klassid
 
+@property server_id type=hidden field=server_id
+
 @reltype AW_SERVER_ENTRY value=1 clid=CL_AW_SERVER_ENTRY
 @caption Server
 */
@@ -123,6 +125,27 @@ class aw_site_entry extends class_base
 					"type" => "int"
 				));
 				return true;
+		}
+	}
+
+	function _get_server_oid($arr)
+	{
+/*		$pu = parse_url($arr["obj_inst"]->url);
+		if ($pu["host"] != "")
+		{
+			$arr["obj_inst"]->ip = gethostbyname($pu["host"]);
+		}*/
+
+		$ol = new object_list(array(
+			"class_id" => CL_AW_SERVER_ENTRY,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"ip" => $arr["obj_inst"]->ip
+		));
+		if ($ol->count())
+		{
+			$o = $ol->begin();
+			$arr["prop"]["options"][$o->id()] = $o->name();
 		}
 	}
 }

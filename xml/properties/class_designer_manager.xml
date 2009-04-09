@@ -181,7 +181,7 @@
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>cl_usage_stats_right_split_1</parent>
+            <parent>cl_usage_stats_right_split_1_v</parent>
       </property>
       <property>
             <name>cl_usage_stats_list</name>
@@ -203,7 +203,7 @@
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>cl_usage_stats_right_split_2</parent>
+            <parent>cl_usage_stats_right_split_2_v</parent>
       </property>
       <property>
             <name>site_usage_stats_list</name>
@@ -247,7 +247,7 @@
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>cl_usage_props_stats_right_split</parent>
+            <parent>cl_usage_props_stats_right_split_v</parent>
       </property>
       <property>
             <name>cl_usage_props_stats_list</name>
@@ -258,7 +258,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>cl_usage_props_stats_right_split</parent>
+            <parent>cl_usage_props_stats_right_split_b</parent>
       </property>
       <property>
             <name>cl_usage_stats_tms_tree</name>
@@ -302,7 +302,7 @@
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>errors_right_split_gp</parent>
+            <parent>errors_right_split_gp_v</parent>
       </property>
       <property>
             <name>errors_list_grapx_days</name>
@@ -313,7 +313,7 @@
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>errors_right_split_gp</parent>
+            <parent>errors_right_split_gp_v</parent>
       </property>
       <property>
             <name>errors_list</name>
@@ -356,7 +356,7 @@
             <type>google_chart</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>sites_sites_right_split</parent>
+            <parent>sites_sites_right_split_t</parent>
       </property>
       <property>
             <name>sites_list</name>
@@ -370,6 +370,28 @@
             <parent>sites_sites_right_split</parent>
       </property>
       <property>
+            <name>sites_servers_grp_tree</name>
+            <table>objects</table>
+            <group>sites_servers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>sites_servers_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>sites_servers_grapx</name>
+            <table>objects</table>
+            <group>sites_servers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>sites_servers_right_split_g</parent>
+      </property>
+      <property>
             <name>sites_servers</name>
             <table>objects</table>
             <group>sites_servers</group>
@@ -378,6 +400,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>sites_servers_right_split</parent>
       </property>
       <property>
             <name>notif_tb</name>
@@ -525,6 +548,7 @@
             <sites_servers>
                   <parent>sites</parent>
                   <caption>Serverid</caption>
+                  <submit>no</submit>
             </sites_servers>
             <notifications>
                   <caption>Teavitus</caption>
@@ -675,12 +699,26 @@
                   <group>cl_usage_stats_clids</group>
                   <area_caption></area_caption>
             </cl_usage_stats_right_split_1>
+            <cl_usage_stats_right_split_1_v>
+                  <type>vbox</type>
+                  <parent>cl_usage_stats_right_split_1</parent>
+                  <area_caption>Graafikud</area_caption>
+                  <closeable>1</closeable>
+                  <group>cl_usage_stats_clids</group>
+            </cl_usage_stats_right_split_1_v>
             <cl_usage_stats_right_split_2>
                   <type>vbox</type>
                   <parent>cl_usage_stats_right_split</parent>
                   <group>cl_usage_stats_clids</group>
                   <area_caption></area_caption>
             </cl_usage_stats_right_split_2>
+            <cl_usage_stats_right_split_2_v>
+                  <type>vbox</type>
+                  <parent>cl_usage_stats_right_split_2</parent>
+                  <area_caption>Graafikud</area_caption>
+                  <closeable>1</closeable>
+                  <group>cl_usage_stats_clids</group>
+            </cl_usage_stats_right_split_2_v>
             <cl_usage_props_stats_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -719,6 +757,19 @@
                   <group>cl_usage_stats_props</group>
                   <area_caption></area_caption>
             </cl_usage_props_stats_right_split>
+            <cl_usage_props_stats_right_split_v>
+                  <type>vbox</type>
+                  <parent>cl_usage_props_stats_right</parent>
+                  <area_caption>Graafikud</area_caption>
+                  <closeable>1</closeable>
+                  <group>cl_usage_stats_props</group>
+            </cl_usage_props_stats_right_split_v>
+            <cl_usage_props_stats_right_split_b>
+                  <type>vbox</type>
+                  <parent>cl_usage_props_stats_right</parent>
+                  <group>cl_usage_stats_props</group>
+                  <area_caption></area_caption>
+            </cl_usage_props_stats_right_split_b>
             <cl_usage_stats_tms_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -782,11 +833,18 @@
                   <area_caption></area_caption>
             </errors_right_split>
             <errors_right_split_gp>
-                  <type>hbox</type>
+                  <type>vbox</type>
                   <parent>errors_right_split</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>errors</group>
+            </errors_right_split_gp>
+            <errors_right_split_gp_v>
+                  <type>hbox</type>
+                  <parent>errors_right_split_gp</parent>
                   <group>errors</group>
                   <area_caption></area_caption>
-            </errors_right_split_gp>
+            </errors_right_split_gp_v>
             <sites_sites_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -818,6 +876,50 @@
                   <group>sites_sites</group>
                   <area_caption></area_caption>
             </sites_sites_right_split>
+            <sites_sites_right_split_t>
+                  <type>vbox</type>
+                  <parent>sites_sites_right_split</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>sites_sites</group>
+            </sites_sites_right_split_t>
+            <sites_servers_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>sites_servers</group>
+                  <area_caption></area_caption>
+            </sites_servers_split>
+            <sites_servers_left>
+                  <type>vbox</type>
+                  <parent>sites_servers_split</parent>
+                  <group>sites_servers</group>
+                  <area_caption></area_caption>
+            </sites_servers_left>
+            <sites_servers_tree>
+                  <type>vbox</type>
+                  <area_caption>Filter</area_caption>
+                  <closeable>1</closeable>
+                  <parent>sites_servers_left</parent>
+                  <group>sites_servers</group>
+            </sites_servers_tree>
+            <sites_servers_right>
+                  <type>vbox</type>
+                  <parent>sites_servers_split</parent>
+                  <group>sites_servers</group>
+                  <area_caption></area_caption>
+            </sites_servers_right>
+            <sites_servers_right_split>
+                  <type>vbox</type>
+                  <parent>sites_servers_right</parent>
+                  <group>sites_servers</group>
+                  <area_caption></area_caption>
+            </sites_servers_right_split>
+            <sites_servers_right_split_g>
+                  <type>vbox</type>
+                  <parent>sites_servers_right_split</parent>
+                  <area_caption>Graafikud</area_caption>
+                  <group>sites_servers</group>
+            </sites_servers_right_split_g>
             <notifications_sent_split>
                   <type>hbox</type>
                   <width>20%:80%</width>

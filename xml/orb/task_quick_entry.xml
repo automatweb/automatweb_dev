@@ -19,6 +19,16 @@
 			</function>
 		</action>
 
+		<action name="orderer_autocomplete_source">
+			<function name="orderer_autocomplete_source">
+				<arguments>
+					<optional name="customer" />
+					<optional name="customer_name" />
+					<optional name="orderer" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="name_autocomplete_source">
 			<function name="name_autocomplete_source">
 				<arguments>
@@ -38,17 +48,15 @@
 				</arguments>
 			</function>
 		</action>
-		
-		<action name="orderer_autocomplete_source">
-			<function name="orderer_autocomplete_source">
+
+		<action name="is_there_customer">
+			<function name="is_there_customer">
 				<arguments>
 					<optional name="customer" />
-					<optional name="customer_name" />
-					<optional name="orderer" />
 				</arguments>
 			</function>
 		</action>
-		
+
 		<action name="check_existing">
 			<function name="check_existing">
 				<arguments>
@@ -58,13 +66,6 @@
 				</arguments>
 			</function>
 		</action>
-		
-		<action name="is_there_customer">
-			<function name="is_there_customer">
-				<arguments>
-					<optional name="customer" />
-				</arguments>
-			</function>
-		</action>
+
 	</class>
 </orb>

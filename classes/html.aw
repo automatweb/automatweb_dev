@@ -700,6 +700,7 @@ class html
 
 		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 
+		
 		$tpl = get_instance("htmlclient");
 		$tpl->read_template("default.tpl");
 		if($tpl->is_template("CHECKBOX"))
@@ -761,7 +762,7 @@ class html
 			$id = $name."_".$value;
 		}
 
-		$tpl = get_instance("htmlclient");
+		/*$tpl = get_instance("htmlclient");
 		$tpl->read_template("default.tpl");
 		if($tpl->is_template("RADIOBUTTON"))
 		{
@@ -777,9 +778,9 @@ class html
 			$rv = $tpl->parse("RADIOBUTTON");
 		}
 		else
-		{
+		{*/
 			$rv = "<input class=\"radiobutton\" type=\"radio\" name=\"{$name}\" id=\"{$id}\" value=\"{$value}\"{$onc}{$checked}{$disabled} />\n {$caption}";
-		}
+//		}
 		return $rv;
 	}
 
@@ -1254,6 +1255,7 @@ class html
 		$textsize = isset($textsize) ? ' style="font-size: ' . $textsize . ';"' : "";
 		$target = isset($target) ? " target=\"$target\"" : "";
 		$onClick = isset($onClick) ? " onclick='$onClick'" : "";
+		$title = isset($title) ? str_replace("'", "&#39;", $title) : NULL;	// Cuz alt='$title'
 		$title = isset($title) ? " alt='$title' title='$title'" : "";
 		$class = isset($class) ? " class='$class'" : "";
 		$onMouseOver = isset($onmouseover)?" onmouseover='".$onmouseover."'":"";

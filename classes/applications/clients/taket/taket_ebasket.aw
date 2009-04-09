@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_ebasket.aw,v 1.2 2009/01/16 11:37:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_ebasket.aw,v 1.3 2009/04/09 08:39:41 kristo Exp $
 // taket_ebasket.aw - Ostukorv
 /*
 
@@ -52,6 +52,7 @@ class taket_ebasket extends class_base
 		@param discount optional
 		@param finalprice optional
 		@param quantity optional
+		@param check_all_stocks optional
 	**/
 	function show($arr)
 	{
@@ -84,7 +85,7 @@ exit('done');
 }
 */
 
-		include('IXR_Library.inc.php');
+		require(aw_ini_get("basedir")."addons/ixr/IXR_Library.inc.php");
 		//let it be
 		$ob = new object($arr["id"]);
 		//needed template & settings
@@ -702,7 +703,7 @@ else
 		
 
 		//send the order to the AFP
-		include('IXR_Library.inc.php');
+		require(aw_ini_get("basedir")."addons/ixr/IXR_Library.inc.php");
 
 		$hosts = aw_ini_get('taket.xmlrpchost');
 		$path = aw_ini_get("taket.xmlrpcpath");
@@ -1012,7 +1013,7 @@ else
 	{
 		$site_log_line = '[taket_ebasket::add_item][1]';
 		//getting product info
-		include_once('IXR_Library.inc.php');
+		require_once(aw_ini_get("basedir")."addons/ixr/IXR_Library.inc.php");
 		//let's get current users's id
 		$user_id=users::get_oid_for_uid(aw_global_get('uid'));
 
@@ -1031,7 +1032,6 @@ else
 			$client->query('server.getProductInfo', $arr['product_code']);
 			$data = $client->getResponse();
 		}
-		
 		//let's get all the items
 		$start_time = $this->microtime_float();
 		$ebasket = $this->get_users_active_ebasket($user_id);
@@ -1132,12 +1132,13 @@ else
 		@param ebasket_name_list optional
 		@param asukoht optional
 	**/
-	function add_items($arr){
+	function add_items($arr)
+	{
 		aw_disable_acl();
 		//adds many items to the basket at a time, uses the add_item function
 		//not to just copy the logic
 		//getting product info
-		include_once('IXR_Library.inc.php');
+		require(aw_ini_get("basedir")."addons/ixr/IXR_Library.inc.php");
 		//did user just add an ebasket?
 		$arr['ebasket_name'] = trim($arr['ebasket_name']);
 		$ebasket_name = $this->current_ebasket_identificator; 

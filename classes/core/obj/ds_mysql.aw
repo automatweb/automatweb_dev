@@ -2811,7 +2811,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					"id" => ERR_OBJ_NO_META,
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"), $pp, $cur_clid)
 				));
-
 				if ($set_clid)
 				{
 					$new_clid = $set_clid;
@@ -2874,7 +2873,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				// calc new class id
 				$new_clid = $GLOBALS["relinfo"][$cur_clid][$pp]["clid"][0];
-
 				$this->join_data[] = array(
 					"via" => "rel",
 					"reltype" => $reltype_id,

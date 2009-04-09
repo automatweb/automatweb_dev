@@ -22,7 +22,7 @@ function __autoload($class_name)
 	//klassile pakihalduse teemalise versiooni
 	if(function_exists("get_class_version"))
 	{
-		$class_name = get_class_version($class_name);
+	//	$class_name = get_class_version($class_name);
 	}
 	try
 	{

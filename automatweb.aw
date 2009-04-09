@@ -243,7 +243,7 @@ class automatweb
 		{
 			self::$result = new aw_http_response();
 		}
-
+		
 		if ($this->bc)
 		{ // old execution path. compatibility mode.
 			return $this->exec_bc();
@@ -290,7 +290,7 @@ class automatweb
 				{
 					$class = $vars["alias"];
 				}
-
+				
 				// execute fastcall if requested
 				if (isset($vars["fastcall"]) && $vars["fastcall"] == 1)
 				{
@@ -323,7 +323,7 @@ class automatweb
 				{
 					$t->auth_error();
 				}
-
+				
 				// actually, here we should find the program that get's executed somehow and do prog_acl for that.
 				// but there seems to be no sure way to do that unfortunately.
 

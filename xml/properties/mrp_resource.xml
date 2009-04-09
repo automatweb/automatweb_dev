@@ -50,6 +50,21 @@
             <parent>job_time_tree</parent>
       </property>
       <property>
+            <name>resource_deviation_chart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_resource_joblist_todo</num_0>
+                  <num_1>grp_resource_joblist_done</num_1>
+                  <num_2>grp_resource_joblist_aborted</num_2>
+            </group>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>resource_deviation_chart</parent>
+            <store>no</store>
+      </property>
+      <property>
             <name>job_list</name>
             <table>objects</table>
             <field>meta</field>
@@ -383,10 +398,31 @@
                         <num_2>grp_resource_joblist_aborted</num_2>
                   </group>
             </job_time_tree>
+            <job_list_right>
+                  <type>vbox</type>
+                  <parent>job_list</parent>
+                  <group>
+                        <num_0>grp_resource_joblist_todo</num_0>
+                        <num_1>grp_resource_joblist_done</num_1>
+                        <num_2>grp_resource_joblist_aborted</num_2>
+                  </group>
+                  <area_caption></area_caption>
+            </job_list_right>
+            <resource_deviation_chart>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ressursi&amp;amp;nbsp;h&amp;amp;auml;lbe&amp;amp;nbsp;muutus&amp;amp;nbsp;ajas</area_caption>
+                  <parent>job_list_right</parent>
+                  <group>
+                        <num_0>grp_resource_joblist_todo</num_0>
+                        <num_1>grp_resource_joblist_done</num_1>
+                        <num_2>grp_resource_joblist_aborted</num_2>
+                  </group>
+            </resource_deviation_chart>
             <job_list_table>
                   <type>vbox</type>
                   <area_caption>&amp;amp;nbsp;</area_caption>
-                  <parent>job_list</parent>
+                  <parent>job_list_right</parent>
                   <group>
                         <num_0>grp_resource_joblist_todo</num_0>
                         <num_1>grp_resource_joblist_done</num_1>

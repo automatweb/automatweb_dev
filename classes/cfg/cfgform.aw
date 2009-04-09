@@ -2495,6 +2495,8 @@ class cfgform extends class_base
 									"rows" => $property["rows"],
 									"cols_caption" => t("Laius"),
 									"cols" => $property["cols"],
+									"maxlength" => $property["maxlength"],
+									"maxlength_caption" => t("T&auml;hem&auml;rkide piirang"),
 									"prp_key" => $property["name"],
 								));
 								$property["cfgform_additional_options"] = $this->parse("textarea_options");
@@ -2505,6 +2507,8 @@ class cfgform extends class_base
 								$this->vars(array(
 									"size_caption" => t("Laius"),
 									"size" => empty($property["size"]) ? "" : $property["size"],
+									"maxlength" => $property["maxlength"],
+									"maxlength_caption" => t("T&auml;hem&auml;rkide piirang"),
 									"prp_key" => $property["name"],
 								));
 								$property["cfgform_additional_options"] = $this->parse("textbox_options");

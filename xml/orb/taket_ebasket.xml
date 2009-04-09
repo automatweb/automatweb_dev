@@ -11,6 +11,7 @@
 					<optional name="discount" />
 					<optional name="finalprice" />
 					<optional name="quantity" />
+					<optional name="check_all_stocks" />
 				</arguments>
 			</function>
 		</action>

@@ -413,6 +413,22 @@ function get_day_start($tm = NULL)
 	return mktime(0,0,0, date("m",$tm), date("d",$tm), date("Y",$tm));
 }
 
+/** returns the timestamp on the january 1st of the current year
+	@attrib api=1 params=name
+	@param tm optional type=int 
+		the timestamp for the year to calculate, optional, defaults to the current time
+	@returns the timestamp for 00:00 on the January 1st of the current year
+**/
+function get_year_start($tm = NULL)
+{
+	if ($tm === NULL)
+	{
+		$tm = time();
+	}
+	return mktime(0,0,0, 1, 1, date("Y",$tm));
+}
+
+
 /** returns true if the given timespans ($a_from, $a_to) - ($b_from - $b_to) overlap
 
 	@attrib api=1 params=name

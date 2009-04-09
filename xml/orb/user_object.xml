@@ -9,5 +9,19 @@
 			</function>
 		</action>
 
+		<action name="get_user_name">
+			<function name="get_user_name">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_user_mail_address">
+			<function name="get_user_mail_address">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

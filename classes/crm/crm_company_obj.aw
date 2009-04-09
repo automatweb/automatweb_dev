@@ -1486,6 +1486,24 @@ class crm_company_obj extends _int_object
 		));
 		return $sectiono -> id();
 	}
+
+	public function get_customer_prop($co , $prop)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"buyer" => $co,
+			"seller" => $this->id()
+		));
+		if ($ol->count())
+		{
+			$o = $ol->begin();//arr($o->prop($prop));
+			return $o->prop($prop);
+		}
+		else return "";
+
+	}
+
+
 }
 
 ?>

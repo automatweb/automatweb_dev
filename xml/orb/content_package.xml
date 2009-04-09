@@ -27,5 +27,14 @@
 			</function>
 		</action>
 
+		<action name="add_subscriber">
+			<function name="add_subscriber">
+				<arguments>
+					<type=oid name="user" acl="view" />
+					<type=oid name="content_package" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

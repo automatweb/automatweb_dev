@@ -59,6 +59,16 @@
             <method>serialize</method>
             <caption>Tellimise kontroller</caption>
       </property>
+      <property>
+            <name>order_show_controller</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tellimuse n&amp;amp;auml;itamise kontroller</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_CART</syslog_type>
             <relationmgr>yes</relationmgr>

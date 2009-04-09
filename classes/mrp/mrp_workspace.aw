@@ -1404,116 +1404,6 @@ class mrp_workspace extends class_base
 				$this->create_resources_list ($arr);
 				break;
 
-			case "resource_deviation_chart":
-				if(isset($arr["request"]["mrp_tree_active_item"]) && $this->can("view", $arr["request"]["mrp_tree_active_item"]) && obj($arr["request"]["mrp_tree_active_item"])->class_id() == CL_MRP_RESOURCE)
-				{
-					$id = $arr["request"]["mrp_tree_active_item"];
-
-					$odl = new object_data_list(
-						array(
-							"class_id" => CL_MRP_JOB,
-							"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $id,
-							"state" => MRP_STATUS_DONE,
-							"finished" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
-							new obj_predicate_sort(array("finished" => ASC)),
-						),
-						array(
-							CL_MRP_JOB => array("length", "finished"),
-						)
-					);
-					if($odl->count() == 0)
-					{
-						$prop["type"] = "text";
-						$prop["value"] = sprintf(t("Ressursil '%s' ei ole veel &uuml;htegi l&otilde;petatud t&ouml;&ouml;d."), obj($id)->name());
-						return PROP_OK;
-					}
-					$jobs = $odl->arr();
-
-					$real = array();
-					$stats = $this->db_fetch_array("SELECT * FROM mrp_stats WHERE job_oid IN (".implode(",", array_keys($odl->arr())).") ORDER BY end DESC");
-					foreach($stats as $stat)
-					{
-						if((int)$stat["end"] === 0)
-						{
-							continue;
-						}
-						$real[$stat["job_oid"]] = isset($real[$stat["job_oid"]]) ? $real[$stat["job_oid"]] + $stat["length"] : $stat["length"];
-						$end[$stat["job_oid"]] = max($stat["end"], isset($end[$stat["job_oid"]]) ? $end[$stat["job_oid"]] : 0);
-					}
-					$end = array_slice($end, 0, 200, true);
-					$min_end = min($end);
-					$max_end = max($end);
-
-					foreach($jobs as $oid => $job)
-					{
-						if(!isset($real[$oid]) || !isset($end[$oid]))
-						{
-							continue;
-						}
-						$real[$oid] = isset($real[$oid]) ? $real[$oid] : 0;
-						$end[$oid] = $job["finished"];
-
-						$d = $job["length"] != 0 ? ($job["length"] - $real[$oid]) / $job["length"] : 0;
-						$data_x[$oid] = ($end[$oid] - $min_end) / ($max_end - $min_end) * 100;
-						$data_y[$oid] = $d;
-					}
-					$min_d = min($data_y);
-					$max_d = max($data_y);
-
-					for($i = $min_end; $i < $max_end + 30*24*3600; $i += 30*24*3600)
-					{
-						$months[date("F", $i)] = date("F", $i);
-						$years[date("Y", $i)] = date("Y", $i);
-					}
-
-					$c = &$arr["prop"]["vcl_inst"];
-					$c->set_type(GCHART_LINE_CHARTXY);
-					$c->set_size(array(
-						"width" => 800,
-						"height" => 200,
-					));
-					$c->add_fill(array(
-						"area" => GCHART_FILL_BACKGROUND,
-						"type" => GCHART_FILL_SOLID,
-						"colors" => array(
-							"color" => "e9e9e9",
-						),
-					));
-					$c->add_data(array(0,100));
-					$c->add_data(array(0,0));
-					$c->add_data($data_x);
-					$c->add_data($data_y);
-					$c->set_colors(array(
-						strtolower(preg_replace("/[^0-9A-Za-z]/", "", MRP_COLOUR_PLANNED)),
-						"0099ff",
-					));
-					$c->set_grid(array(
-						"xstep" => 0,
-						"ystep" => 20,
-					));
-					$abs_deviation_max = max(abs($min_d), $max_d);
-					$range = array(round($abs_deviation_max * -1.25, 1), round($abs_deviation_max * 1.25, 1));
-					$c->set_data_scales(array(
-						array(0,100),
-						$range,
-						array(0,100),
-						$range,
-					));
-					$c->set_axis(array(
-						GCHART_AXIS_LEFT,
-						GCHART_AXIS_BOTTOM,
-						GCHART_AXIS_BOTTOM,
-					));
-					$c->add_axis_range(0, $range);
-					$c->add_axis_label(1, $months);
-					$c->add_axis_label(2, $years);
-				}
-				else
-				{
-					$retval = PROP_IGNORE;
-				}
-				break;
-
 			case "resource_time_start":
 				if(!is_numeric($prop["value"]))
 				{
@@ -2013,6 +1903,117 @@ class mrp_workspace extends class_base
 		return $retval;
 	}
 
+	public function _get_resource_deviation_chart($arr)
+	{
+		if(isset($arr["request"]["mrp_tree_active_item"]) && $this->can("view", $arr["request"]["mrp_tree_active_item"]) && obj($arr["request"]["mrp_tree_active_item"])->class_id() == CL_MRP_RESOURCE)
+		{
+			$id = $arr["request"]["mrp_tree_active_item"];
+
+			$odl = new object_data_list(
+				array(
+					"class_id" => CL_MRP_JOB,
+					"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $id,
+					"state" => MRP_STATUS_DONE,
+					"finished" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+					new obj_predicate_sort(array("finished" => ASC)),
+				),
+				array(
+					CL_MRP_JOB => array("length", "finished"),
+				)
+			);
+			if($odl->count() == 0)
+			{
+				$arr["prop"]["type"] = "text";
+				$arr["prop"]["value"] = sprintf(t("Ressursil '%s' ei ole veel &uuml;htegi l&otilde;petatud t&ouml;&ouml;d."), obj($id)->name());
+				return PROP_OK;
+			}
+			$jobs = $odl->arr();
+
+			$real = array();
+			$stats = $this->db_fetch_array("SELECT * FROM mrp_stats WHERE job_oid IN (".implode(",", array_keys($odl->arr())).") ORDER BY end DESC");
+			foreach($stats as $stat)
+			{
+				if((int)$stat["end"] === 0)
+				{
+					continue;
+				}
+				$real[$stat["job_oid"]] = isset($real[$stat["job_oid"]]) ? $real[$stat["job_oid"]] + $stat["length"] : $stat["length"];
+				$end[$stat["job_oid"]] = max($stat["end"], isset($end[$stat["job_oid"]]) ? $end[$stat["job_oid"]] : 0);
+			}
+			$end = array_slice($end, 0, 200, true);
+			$min_end = min($end);
+			$max_end = max($end);
+
+			foreach($jobs as $oid => $job)
+			{
+				if(!isset($real[$oid]) || !isset($end[$oid]))
+				{
+					continue;
+				}
+				$real[$oid] = isset($real[$oid]) ? $real[$oid] : 0;
+				$end[$oid] = $job["finished"];
+
+				$d = $job["length"] != 0 ? ($job["length"] - $real[$oid]) / $job["length"] : 0;
+				$data_x[$oid] = ($end[$oid] - $min_end) / ($max_end - $min_end) * 100;
+				$data_y[$oid] = $d;
+			}
+			$min_d = min($data_y);
+			$max_d = max($data_y);
+
+			for($i = $min_end; $i < $max_end + 30*24*3600; $i += 30*24*3600)
+			{
+				$months[date("F", $i)] = date("F", $i);
+				$years[date("Y", $i)] = date("Y", $i);
+			}
+
+			$c = &$arr["prop"]["vcl_inst"];
+			$c->set_type(GCHART_LINE_CHARTXY);
+			$c->set_size(array(
+				"width" => 800,
+				"height" => 200,
+			));
+			$c->add_fill(array(
+				"area" => GCHART_FILL_BACKGROUND,
+				"type" => GCHART_FILL_SOLID,
+				"colors" => array(
+					"color" => "e9e9e9",
+				),
+			));
+			$c->add_data(array(0,100));
+			$c->add_data(array(0,0));
+			$c->add_data($data_x);
+			$c->add_data($data_y);
+			$c->set_colors(array(
+				strtolower(preg_replace("/[^0-9A-Za-z]/", "", MRP_COLOUR_PLANNED)),
+				"0099ff",
+			));
+			$c->set_grid(array(
+				"xstep" => 0,
+				"ystep" => 20,
+			));
+			$abs_deviation_max = max(abs($min_d), $max_d);
+			$range = array(round($abs_deviation_max * -1.25, 1), round($abs_deviation_max * 1.25, 1));
+			$c->set_data_scales(array(
+				array(0,100),
+				$range,
+				array(0,100),
+				$range,
+			));
+			$c->set_axis(array(
+				GCHART_AXIS_LEFT,
+				GCHART_AXIS_BOTTOM,
+				GCHART_AXIS_BOTTOM,
+			));
+			$c->add_axis_range(0, $range);
+			$c->add_axis_label(1, $months);
+			$c->add_axis_label(2, $years);
+		}
+		else
+		{
+			$retval = PROP_IGNORE;
+		}
+	}
+
 	public function _get_persons_jobs_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -2177,7 +2178,49 @@ class mrp_workspace extends class_base
 		$data = $this->get_hours($arr, $kf);
 
 		$arr["prop"]["value"] = "";
-		for($i = 0; $i < count($data["name"]); $i += 8)
+		switch($kf)
+		{
+			case "resource":
+				$perrow = 4;
+				$colors = array(
+					"ffffff",
+					strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_PLANNED])),
+					strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_INPROGRESS])),
+					strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_PAUSED])),
+				);
+				$labels = array(
+					t("Ressursi kogu vaba aeg (h)"),
+					t("Planeeritud t&ouml;&ouml;aeg (h)"),
+					t("Efektiivne t&ouml;&ouml;aeg (h)"),
+					t("Paus (h)"),
+				);
+				$bar_sizes = array(
+					"width" => 35,
+					"bar_spacing" => 2,
+					"bar_group_spacing" => 34,
+				);
+				$max_all = max(array_merge($data[MRP_STATUS_INPROGRESS], $data[MRP_STATUS_PAUSED], $data[MRP_STATUS_PLANNED], $data["available"]));
+				break;
+
+			default:
+				$perrow = 8;
+				$colors = array(
+					strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_INPROGRESS])),
+					strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_PAUSED])),
+				);
+				$labels = array(
+					t("Efektiivne t&ouml;&ouml;aeg (h)"),
+					t("Paus (h)"),
+				);
+				$bar_sizes = array(
+					"width" => 35,
+					"bar_spacing" => 5,
+					"bar_group_spacing" => 15,
+				);
+				$max_all = max(array_merge($data[MRP_STATUS_INPROGRESS], $data[MRP_STATUS_PAUSED]));
+				break;
+		}
+		for($i = 0; $i < count($data["name"]); $i += $perrow)
 		{
 			$c = new google_chart();
 			$c->set_type(GCHART_BAR_GV);
@@ -2185,11 +2228,7 @@ class mrp_workspace extends class_base
 				"width" => 950,
 				"height" => 200,
 			));
-			$c->set_bar_sizes(array(
-				"width" => 35,
-				"bar_spacing" => 5,
-				"bar_group_spacing" => 15,
-			));
+			$c->set_bar_sizes($bar_sizes);
 			$c->add_fill(array(
 				"area" => GCHART_FILL_BACKGROUND,
 				"type" => GCHART_FILL_SOLID,
@@ -2197,30 +2236,31 @@ class mrp_workspace extends class_base
 					"color" => "e9e9e9",
 				),
 			));
-			$data_1 = array_slice($data[MRP_STATUS_INPROGRESS], $i, 8);
-			$data_2 = array_slice($data[MRP_STATUS_PAUSED], $i, 8);
+			$data_1 = array_slice($data[MRP_STATUS_INPROGRESS], $i, $perrow);
+			$data_2 = array_slice($data[MRP_STATUS_PAUSED], $i, $perrow);
+			$max = max(array_merge($data_1, $data_2));
+			if($kf == "resource")
+			{
+				$data_3 = array_slice($data["available"], $i, $perrow);
+				$data_4 = array_slice($data[MRP_STATUS_PLANNED], $i, $perrow);
+				$c->add_data($data_3);
+				$c->add_data($data_4);
+				$max = max(array_merge($data_1, $data_2, $data_3, $data_4));
+			}
 			$c->add_data($data_1);
 			$c->add_data($data_2);
-			$c->set_colors(array(
-				strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_INPROGRESS])),
-				strtolower(preg_replace("/[^0-9A-Za-z]/", "", $this->state_colours[MRP_STATUS_PAUSED])),
-			));
+			$c->set_colors($colors);
 			$c->set_legend(array(
-				"labels" => array(
-					t("Efektiivne t&ouml;&ouml;aeg (h)"),
-					t("Paus (h)"),
-				),
+				"labels" => $labels,
 				"position" => GCHART_POSITION_RIGHT,
 			));
 			$c->set_axis(array(
 				GCHART_AXIS_BOTTOM,
 				GCHART_AXIS_LEFT,
 			));
-			$max_real = max(array_merge($data_1, $data_2));
-			$max = max(40, $max_real);
-			$c->add_axis_label(0, array_slice($data["name"], $i, 8));
-			$c->add_axis_range(1, array(0, $max));
-			$c->set_data_scales(array(array(0, $max*100/$max_real)));
+			$c->add_axis_label(0, array_slice($data["name"], $i, $perrow));
+			$c->add_axis_range(1, array(0, $max_all));
+			$c->set_data_scales(array(array(0, $max_all*100/$max)));
 			$arr["prop"]["value"] .= $c->get_html()."<br />";
 		}
 	}
@@ -2784,6 +2824,13 @@ class mrp_workspace extends class_base
 					$data_prms["resource"] = $this->get_hours_resource($arr);
 					$data = get_instance("mrp_job_obj")->get_resource_hours($data_prms);
 					$clid = CL_MRP_RESOURCE;
+
+					// Additionnal data
+					$planned = get_instance("mrp_resource_obj")->get_planned_hours(array(
+						"from" => $from,
+						"to" => $to,
+						"id" => $data_prms["resource"],
+					));
 					break;
 			}
 			$data["name"] = array();
@@ -2809,6 +2856,11 @@ class mrp_workspace extends class_base
 				else
 				{
 					$data["name"][$id] = $pn[$id];
+					if($kf == "resource")
+					{
+						$data["available"][$id] = obj($id)->get_available_hours(array("from" => $from, "to" => $to))/3600;
+						$data[MRP_STATUS_PLANNED][$id] = ((int)ifset($planned, $id))/3600;
+					}
 				}
 			}
 			$this->hours[$kf] = $data;
@@ -2922,6 +2974,7 @@ class mrp_workspace extends class_base
 			switch($this->hours_report_time_format)
 			{
 				case 1:
+					$n = round($n, 3);
 					return sprintf("%s%d:%02u", $n < 0 ? "-" : "", floor(abs($n)), round(abs(fmod($n, 1)*60)));
 					break;
 			}
@@ -3004,6 +3057,23 @@ class mrp_workspace extends class_base
 			"caption" => $kd[$kf]["caption"],
 			"sortable" => 1,
 		));
+		if($kf == "resource")
+		{
+			$t->define_field(array(
+				"name" => "available",
+				"caption" => sprintf(t("Ressursi kogu vaba aeg %s"), empty($this->hours_report_time_format) ? t("(h)") : t("(h:mm)")),
+				"sortable" => 1,
+				"sorting_field" => "available_num",
+				"align" => "right",
+			));
+			$t->define_field(array(
+				"name" => "planned",
+				"caption" => sprintf(t("Planeeritud t&ouml;&ouml;aeg %s"), empty($this->hours_report_time_format) ? t("(h)") : t("(h:mm)")),
+				"sortable" => 1,
+				"sorting_field" => "planned_num",
+				"align" => "right",
+			));
+		}
 		$t->define_field(array(
 			"name" => "inprogress",
 			"caption" => sprintf(t("Efektiivne t&ouml;&ouml;aeg %s"), empty($this->hours_report_time_format) ? t("(h)") : t("(h:mm)")),
@@ -3036,7 +3106,6 @@ class mrp_workspace extends class_base
 		$rows = array();
 		foreach(array_keys($data["name"]) as $key)
 		{
-
 			$rows[$key][$kf] = html::href(array(
 				"caption" => $data["name"][$key],
 				"url" => aw_url_change_var(array(
@@ -3052,6 +3121,13 @@ class mrp_workspace extends class_base
 			$rows[$key]["paused_cnt"] = (int)$data["count"][MRP_STATUS_PAUSED][$key];
 			$rows[$key]["paused_avg"] = $this->format_hours($data["average"][MRP_STATUS_PAUSED][$key]);
 			$rows[$key]["paused_avg_num"] = $data["average"][MRP_STATUS_PAUSED][$key];
+			if($kf == "resource")
+			{
+				$rows[$key]["available"] = $this->format_hours($data["available"][$key]);
+				$rows[$key]["available_num"] = $data["available"][$key];
+				$rows[$key]["planned"] = $this->format_hours($data[MRP_STATUS_PLANNED][$key]);
+				$rows[$key]["planned_num"] = $data[MRP_STATUS_PLANNED][$key];
+			}
 		}
 		foreach($rows as $row)
 		{
@@ -3338,9 +3414,18 @@ class mrp_workspace extends class_base
 			unset($arr["args"]["just_saved"]);
 		}
 
-		if (isset($arr["request"]["mrp_tree_active_item"]))
+		$params_to_keep = array(
+			"mrp_tree_active_item",
+			"timespan",
+			"unit",
+			"cat",
+		);
+		foreach($params_to_keep as $param_to_keep)
 		{
-			$arr["args"]["mrp_tree_active_item"] = $arr["request"]["mrp_tree_active_item"];
+			if(isset($arr["request"][$param_to_keep]))
+			{
+				$arr["args"][$param_to_keep] = $arr["request"][$param_to_keep];
+			}
 		}
 
 		### gantt chart start selection
@@ -5159,14 +5244,20 @@ class mrp_workspace extends class_base
 
 	function callback_mod_reforb(&$arr)
 	{
-		if (isset($_GET["unit"]))
+		$_GET_params_to_keep = array(
+			"unit",
+			"category",
+			"cat",
+			"pj_job",
+			"mrp_tree_active_item",
+			"timespan"
+		);
+		foreach($_GET_params_to_keep as $_GET_param_to_keep)
 		{
-			$arr['unit'] = $_GET["unit"];
-		}
-
-		if (isset($_GET["category"]))
-		{
-			$arr['category'] = $_GET["category"];
+			if(isset($_GET[$_GET_param_to_keep]))
+			{
+				$arr[$_GET_param_to_keep] = $_GET[$_GET_param_to_keep];
+			}
 		}
 
 		$group = isset($_GET["group"]) ? $_GET["group"] : "";
@@ -5174,21 +5265,6 @@ class mrp_workspace extends class_base
 		if ($group !== "grp_search" && $group !== "grp_search_proj" && $group !== "grp_search_cust")
 		{
 			$arr['return_url'] = get_ru();
-		}
-
-		if (isset($_GET["cat"]))
-		{
-			$arr['cat'] = $_GET["cat"];
-		}
-
-		if (isset($_GET["pj_job"]))
-		{
-			$arr['pj_job'] = $_GET["pj_job"];
-		}
-
-		if (isset($_GET["mrp_tree_active_item"]))
-		{
-			$arr['mrp_tree_active_item'] = $_GET["mrp_tree_active_item"];
 		}
 
 		aw_register_header_text_cb(array(&$this, "make_aw_header"));

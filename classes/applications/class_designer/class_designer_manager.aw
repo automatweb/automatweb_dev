@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.26 2009/02/12 11:04:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.27 2009/04/09 08:39:39 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 
 //			automatweb::$instance->mode(automatweb::MODE_DBG);
@@ -92,12 +92,20 @@
 
 			@layout cl_usage_stats_right_split type=hbox parent=cl_usage_stats_right
 
-				@layout cl_usage_stats_right_split_1 type=vbox parent=cl_usage_stats_right_split
-					@property cl_usage_stats_list_gpx type=google_chart no_caption=1 store=no parent=cl_usage_stats_right_split_1
+				@layout cl_usage_stats_right_split_1 type=vbox parent=cl_usage_stats_right_split 
+
+					@layout cl_usage_stats_right_split_1_v type=vbox parent=cl_usage_stats_right_split_1 area_caption=Graafikud closeable=1
+
+						@property cl_usage_stats_list_gpx type=google_chart no_caption=1 store=no parent=cl_usage_stats_right_split_1_v
+
 					@property cl_usage_stats_list type=table no_caption=1 store=no parent=cl_usage_stats_right_split_1
 
-				@layout cl_usage_stats_right_split_2 type=vbox parent=cl_usage_stats_right_split
-					@property site_usage_stats_list_gpx type=google_chart no_caption=1 store=no parent=cl_usage_stats_right_split_2
+				@layout cl_usage_stats_right_split_2 type=vbox parent=cl_usage_stats_right_split 
+
+					@layout cl_usage_stats_right_split_2_v type=vbox parent=cl_usage_stats_right_split_2 area_caption=Graafikud closeable=1
+
+						@property site_usage_stats_list_gpx type=google_chart no_caption=1 store=no parent=cl_usage_stats_right_split_2_v
+
 					@property site_usage_stats_list type=table no_caption=1 store=no parent=cl_usage_stats_right_split_2
 	
 @default group=cl_usage_stats_props
@@ -118,9 +126,14 @@
 
 			@layout cl_usage_props_stats_right_split type=vbox parent=cl_usage_props_stats_right
 
-				@property cl_usage_props_stats_list_gpx type=google_chart no_caption=1 store=no parent=cl_usage_props_stats_right_split
-				@property cl_usage_props_stats_list type=table no_caption=1 store=no parent=cl_usage_props_stats_right_split
+				@layout cl_usage_props_stats_right_split_v type=vbox parent=cl_usage_props_stats_right area_caption=Graafikud closeable=1
 
+					@property cl_usage_props_stats_list_gpx type=google_chart no_caption=1 store=no parent=cl_usage_props_stats_right_split_v
+
+				@layout cl_usage_props_stats_right_split_b type=vbox parent=cl_usage_props_stats_right 
+
+					@property cl_usage_props_stats_list type=table no_caption=1 store=no parent=cl_usage_props_stats_right_split_b
+	
 @default group=cl_usage_stats_tms
 
 	@layout cl_usage_stats_tms_split type=hbox width=20%:80%
@@ -151,9 +164,10 @@
 
 			@layout errors_right_split type=vbox parent=errors_right
 
-				@layout errors_right_split_gp type=hbox parent=errors_right_split
-					@property errors_list_grapx type=google_chart no_caption=1 store=no parent=errors_right_split_gp
-					@property errors_list_grapx_days type=google_chart no_caption=1 store=no parent=errors_right_split_gp
+				@layout errors_right_split_gp type=vbox parent=errors_right_split closeable=1 area_caption=Graafikud
+					@layout errors_right_split_gp_v type=hbox parent=errors_right_split_gp 
+						@property errors_list_grapx type=google_chart no_caption=1 store=no parent=errors_right_split_gp_v
+						@property errors_list_grapx_days type=google_chart no_caption=1 store=no parent=errors_right_split_gp_v
 
 				@property errors_list type=table no_caption=1 store=no parent=errors_right_split
 
@@ -173,14 +187,34 @@
 
 			@layout sites_sites_right_split type=vbox parent=sites_sites_right
 
-				@property sites_list_grapx  type=google_chart store=no no_caption=1 parent=sites_sites_right_split
+				@layout sites_sites_right_split_t type=vbox parent=sites_sites_right_split closeable=1 area_caption=Graafikud
+				
+					@property sites_list_grapx  type=google_chart store=no no_caption=1 parent=sites_sites_right_split_t
+
 				@property sites_list type=table store=no no_caption=1 parent=sites_sites_right_split
 
 
 
 @default group=sites_servers
 
-	@property sites_servers type=table store=no no_caption=1
+	@layout sites_servers_split type=hbox width=20%:80%
+
+		@layout sites_servers_left type=vbox parent=sites_servers_split
+
+			@layout sites_servers_tree type=vbox area_caption=Filter closeable=1 parent=sites_servers_left
+	
+				@property sites_servers_grp_tree type=treeview no_caption=1 parent=sites_servers_tree store=no
+
+		@layout sites_servers_right type=vbox parent=sites_servers_split
+
+			@layout sites_servers_right_split type=vbox parent=sites_servers_right
+
+				@layout sites_servers_right_split_g type=vbox parent=sites_servers_right_split area_caption=1 area_caption=Graafikud
+
+					@property sites_servers_grapx  type=google_chart store=no no_caption=1 parent=sites_servers_right_split_g
+
+				@property sites_servers type=table store=no no_caption=1 parent=sites_servers_right_split
+
 
 @default group=notifications_rules
 	
@@ -237,7 +271,7 @@
 @groupinfo errors caption="Vead"
 @groupinfo sites caption="Saidid"
 	@groupinfo sites_sites parent=sites caption="Saidid"
-	@groupinfo sites_servers parent=sites caption="Serverid"
+	@groupinfo sites_servers parent=sites caption="Serverid" submit=no
 
 @groupinfo notifications caption="Teavitus"
 	@groupinfo notifications_sent caption="Saadetud teavitused" parent=notifications save=no submit=no
@@ -252,6 +286,8 @@
 
 class class_designer_manager extends class_base
 {
+	private $sc = array(".. - 100", "100-50", "49-10", "9-5", "4-0");		
+
 	function class_designer_manager()
 	{
 		$this->init(array(
@@ -1968,7 +2004,24 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		$errors = aw_ini_get("errors");
 
 		$filt_site = ifset($arr["request"], "site");
-		$filt_type = ifset($arr["request"], "type");
+		$filt_type = ifset($arr["request"], "filt_type");
+
+		$t->set_caption(sprintf(
+			t("%s saidil %s t&uuml;&uuml;biga %s"), 
+			html::href(array(
+				"url" => aw_url_change_var("filt_type", null, aw_url_change_var("site", null)),
+				"caption" => t("Vead")
+			)),
+			html::href(array(
+				"url" => aw_url_change_var("filt_type", null),
+				"caption" => $filt_site
+			)), 
+			html::href(array(
+				"url" => get_ru(),
+				"caption" => isset($errors[$filt_type]) ? $errors[$filt_type]["name"] : $filt_type)
+			))
+		);
+
 		$this->db_query("SELECT err_uid, tm, site, type_id, id FROM bugtrack_errors WHERE site = '$filt_site' AND type_id = '$filt_type' ");
 		while ($row = $this->db_next())
 		{
@@ -2088,10 +2141,12 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 
 	function _get_errors_list($arr)
 	{
+		$filt_site = ifset($arr["request"], "site");
+		$filt_type = ifset($arr["request"], "filt_type");
+
 		$t = $arr["prop"]["vcl_inst"];
 
-		$filt_type = ifset($arr["request"], "type");
-		if ($filt_type != "")
+		if ($filt_type != "" && $filt_site != "")
 		{
 			return $this->_get_errors_list_b($arr);
 		}
@@ -2105,25 +2160,44 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 
 		$errors = aw_ini_get("errors");
 
-		$filt_site = ifset($arr["request"], "site");
 
 		if ($filt_site != "")
 		{
 			$this->db_query("SELECT site, type_id, count(*) as total FROM bugtrack_errors WHERE site = '$filt_site' GROUP BY site, type_id");
+			$t->set_caption(sprintf(
+				t("%s saidil %s"), 
+				html::href(array(
+					"url" => aw_url_change_var("filt_type", null, aw_url_change_var("site", null)),
+					"caption" => t("Vead")
+				)),
+				html::href(array(
+					"url" => aw_url_change_var("filt_type", null),
+					"caption" => $filt_site
+				))
+			));
 		}
 		else
 		{
 			$this->db_query("SELECT site, type_id, count(*) as total FROM bugtrack_errors GROUP BY site, type_id");
+			$t->set_caption(t("Vigade &uuml;levaade"));
 		}
 		while ($row = $this->db_next())
 		{
+			if ($filt_site != "")
+			{
+				$url = aw_url_change_var("site", $row["site"], aw_url_change_var("filt_type", $row["type_id"]));
+			}
+			else
+			{
+				$url = aw_url_change_var("site", $row["site"]);
+			}
 			$t->define_data(array(
 				"site" => $row["site"],
 				"type_id" => isset($errors[$row["type_id"]]) ? $errors[$row["type_id"]]["name"] : $row["type_id"],
 				"total" => $row["total"],
 				"per_day" => number_format($row["total"] / $days, 2),
 				"view" => html::href(array(
-					"url" => aw_url_change_var("site", $row["site"], aw_url_change_var("type", $row["type_id"])),
+					"url" => $url,
 					"caption" => t("Vaata")
 				))
 			));
@@ -2200,12 +2274,12 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"align" => "center",
 			"sortable" => 1
 		));
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"name" => "code_branch",
 			"caption" => t("Koodiversioon"),
 			"align" => "center",
 			"sortable" => 1
-		));
+		));*/
 		$t->define_field(array(
 			"name" => "last_update",
 			"caption" => t("Viimane uuendus"),
@@ -2215,7 +2289,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"type" => "time",
 			"format" => "d.m.Y H:i"
 		));
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"name" => "modified",
 			"caption" => t("Muudetud"),
 			"align" => "center",
@@ -2223,7 +2297,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"numeric" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i"
-		));
+		));*/
 		$t->define_field(array(
 			"name" => "grps",
 			"caption" => t("Grupid"),
@@ -2281,9 +2355,9 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 				"id" => $o->prop("site_id"),
 				"name" => html::obj_change_url($o),
 				"url" => $o->url,
-				"server_oid" => $o->server_oid,
+				"server_oid" => $o->server_oid()->name(),
 				"site_used" => $o->site_used ? t("Jah") : t("Ei"),
-				"code_branch" => $o->code_branch,
+//				"code_branch" => $o->code_branch,
 				"last_update" => $o->last_update,
 				"modified" => $o->modified,
 			);
@@ -2297,6 +2371,8 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			}
 			$t->define_data($d);
 		}
+		$t->set_default_sortby("site_used");
+		$t->set_default_sorder("desc");
 	}
 
 	function _set_sites_list($arr)
@@ -2343,20 +2419,207 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		}
 	}
 
+	private function _init_server_table($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "ip",
+			"caption" => t("IP"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "customer",
+			"caption" => t("Klient"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "customer_contact",
+			"caption" => t("Kliendi kontaktisik"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "manager",
+			"caption" => t("Haldaja"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "manager_contact",
+			"caption" => t("Haldaja kontaktisik"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "site_cnt",
+			"caption" => t("Saite"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+	}
+
 	function _get_sites_servers($arr)
 	{	
 		// convert sites to objects
 		$this->_server_convert_check();
 
-		$arr["prop"]["vcl_inst"]->table_from_ol(
-			new object_list(array(
-				"class_id" => CL_AW_SERVER_ENTRY,
-				"lang_id" => array(),
-				"site_id" => array()
-			)),
-			array("id", "name", "ip", "customer", "contact"),
-			CL_AW_SERVER_ENTRY
+		$c = array();
+		foreach($this->db_fetch_array("SELECT server_id, count(*) as cnt FROM aw_site_list WHERE site_used > 0 GROUP BY server_id") as $row)
+		{
+			$c[$row["server_id"]] = $row["cnt"];
+		}
+
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_server_table($t);
+
+		$filt = array(
+			"class_id" => CL_AW_SERVER_ENTRY,
+			"lang_id" => array(),
+			"site_id" => array()
 		);
+		if (!empty($arr["request"]["mgr"]))
+		{
+			$filt["manager"] = $arr["request"]["mgr"];
+		}
+		if (!empty($arr["request"]["cust"]))
+		{
+			$filt["customer"] = $arr["request"]["cust"];
+		}
+		$ol = new object_list($filt);
+		foreach($ol->arr() as $o)
+		{
+			if (!empty($arr["request"]["sc"]))
+			{
+				$e = list($from, $to) = explode("-", $this->sc[$arr["request"]["sc"]]);
+				if ($from == "...")
+				{
+					$from = 1000000;
+				}
+				if ($to == 0)
+				{
+					$to = -1;
+				}
+
+				if ($c[$o->prop("id")] > $from || (int)$c[$o->prop("id")] <= (int)$to)
+				{
+					continue;
+				}
+			}
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"ip" => $o->ip,
+				"customer" => html::obj_change_url($o->customer),
+				"customer_contact" => html::obj_change_url($o->customer_contact),
+				"manager" => html::obj_change_url($o->manager),
+				"manager_contact" => html::obj_change_url($o->manager_contact),
+				"site_cnt" => $c[$o->prop("server_id")]
+			));
+		}
+		$t->set_default_sortby("site_cnt");
+		$t->set_default_sorder("desc");
+		$t->set_caption(t("AW Serverite nimekiri"));
+	}
+
+	function _get_sites_servers_grp_tree($arr)
+	{	
+		$t = $arr["prop"]["vcl_inst"];
+		$t->add_item(0, array(
+			"id" => "mgr",
+			"name" => t("Haldaja"),
+			"url" => aw_url_change_var(array("mgr" => null, "cust" => null, "sc" => null))
+		));
+		
+		// get all different mgrs
+		$odl = new object_data_list(
+			array(
+				"lang_id" => array(),
+				"site_id" => array(),
+				"class_id" => CL_AW_SERVER_ENTRY,
+			),
+			array(
+				CL_AW_SERVER_ENTRY => array(new obj_sql_func(OBJ_SQL_UNIQUE, "manager", "manager"))
+			)
+		);
+                foreach($odl->arr() as $o)
+                {
+			if (!$this->can("view", $o["manager"]))
+			{
+				continue;
+			}
+
+			$t->add_item("mgr", array(
+				"id" => "mgr_".$o["manager"],
+				"name" => obj($o["manager"])->name(),
+				"url" => aw_url_change_var(array("mgr" => null, "cust" => $o["manager"], "sc" => null))
+			));
+                }
+
+
+		$t->add_item(0, array(
+			"id" => "cust",
+			"name" => t("Klient"),
+			"url" => aw_url_change_var(array("mgr" => null, "cust" => null, "sc" => null))
+		));
+		
+		// get all different mgrs
+		$odl = new object_data_list(
+			array(
+				"lang_id" => array(),
+				"site_id" => array(),
+				"class_id" => CL_AW_SERVER_ENTRY,
+			),
+			array(
+				CL_AW_SERVER_ENTRY => array(
+					new obj_sql_func(OBJ_SQL_UNIQUE, "customer", "customer")
+				)
+			)
+		);
+                foreach($odl->arr() as $o)
+                {
+			if (!$this->can("view", $o["customer"]))
+			{
+				continue;
+			}
+
+			$t->add_item("cust", array(
+				"id" => "cust_".$o["customer"],
+				"name" => obj($o["customer"])->name(),
+				"url" => aw_url_change_var(array("mgr" => null, "cust" => $o["customer"], "sc" => null))
+			));
+                }
+
+
+		$t->add_item(0, array(
+			"id" => "site_cnt",
+			"name" => t("Saitide arv"),
+			"url" => aw_url_change_var(array("mgr" => null, "cust" => null, "sc" => null))
+		));
+
+                foreach($this->sc as $idx => $v)
+                {
+			$t->add_item("site_cnt", array(
+				"id" => "sc_".$idx,
+				"name" => $v,
+				"url" => aw_url_change_var(array("mgr" => null, "cust" => null, "sc" => $idx))
+			));
+                }
+
+		if (!empty($arr["request"]["sc"]))
+		{
+			$t->set_selected_item("sc_".$arr["request"]["sc"]);
+		}
+		else
+		{
+			$t->set_selected_item($arr["request"]["cust"] ? "cust_".$arr["request"]["cust"] : "mgr_".$arr["request"]["mgr"]);
+		}
 	}
 
 	private function _site_convert_check()
@@ -3088,9 +3351,14 @@ window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("re
 		die("all done");
 	}
 
+	function _get_sites_servers_grapx($arr)
+	{
+		return $this->_get_sites_list_grapx($arr);
+	}
+
 	function _get_sites_list_grapx($arr)
 	{
-		$this->db_query("SELECT s.name as name, s.ip as ip, count(*) as cnt FROM aw_site_list LEFT JOIN aw_server_list s ON s.id = aw_site_list.server_id WHERE site_used = 1 GROUP BY server_id");
+		$this->db_query("SELECT s.name as name, s.ip as ip, count(*) as cnt FROM aw_site_list LEFT JOIN aw_server_list s ON s.id = aw_site_list.server_id WHERE site_used = 1 GROUP BY server_id ORDER BY cnt DESC LIMIT 10");
 		$d = array();
 		$l = array();
 		$max = 0;
@@ -3101,21 +3369,22 @@ window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("re
 				continue;
 			}
 			$d[] = $row["cnt"];
-			$l[] = ($row["name"] != "" ? $row["name"] : $row["ip"]);
+			$l[] = ($row["name"] != "" ? $row["name"] : $row["ip"])." (".$row["cnt"].")";
 			$max = max($max, $row["cnt"]);
 		}
 
 		$c = $arr["prop"]["vcl_inst"];
-		$c->set_type(GCHART_BAR_V);
-		$c->set_size(array("width" => 500, "height" => 300));
+		$c->set_type(GCHART_PIE);
+		$c->set_size(array("width" => 600, "height" => 300));
 		$c->add_data($d);
 		$c->set_labels($l);
-		$c->set_title(array("text" => t("Saitide jaotus serverites")));
+		$c->set_title(array("text" => t("Saitide jaotus serverites TOP 10")));
 		$c->set_axis(array(
 			GCHART_AXIS_LEFT
 		));
+		$c->add_fill(array("area" => GCHART_FILL_BACKGROUND,"type" => GCHART_FILL_SOLID,"colors" => array("color" => "E9E9E9")));
 		$c->set_grid(array("xstep" => 20, "ystep" => 20));
-		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
+		$c->set_bar_sizes(array("width" => (600 / count($d)) - 5, "bar_spacing" => 5));
 		$c->add_axis_range(0, array(0, $max));
 	}
 
@@ -3145,6 +3414,9 @@ window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("re
 		$c->set_axis(array(
 			GCHART_AXIS_LEFT
 		));
+
+		$c->add_fill(array("area" => GCHART_FILL_BACKGROUND,"type" => GCHART_FILL_SOLID,"colors" => array("color" => "E9E9E9")));
+
 		$c->set_grid(array("xstep" => 20, "ystep" => 20));
 		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
 		$c->add_axis_range(0, array(0, $max));
@@ -3177,6 +3449,7 @@ window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("re
 		$c->set_axis(array(
 			GCHART_AXIS_LEFT
 		));
+		$c->add_fill(array("area" => GCHART_FILL_BACKGROUND,"type" => GCHART_FILL_SOLID,"colors" => array("color" => "E9E9E9")));
 		$c->set_grid(array("xstep" => 20, "ystep" => 20));
 		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
 		$c->add_axis_range(0, array(0, $max));
@@ -3207,6 +3480,7 @@ window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("re
 		$c->set_axis(array(
 			GCHART_AXIS_LEFT
 		));
+		$c->add_fill(array("area" => GCHART_FILL_BACKGROUND,"type" => GCHART_FILL_SOLID,"colors" => array("color" => "E9E9E9")));
 		$c->set_grid(array("xstep" => 20, "ystep" => 20));
 		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
 		$c->add_axis_range(0, array(0, $max));
@@ -3239,6 +3513,7 @@ window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("re
 		$c->set_axis(array(
 			GCHART_AXIS_LEFT
 		));
+		$c->add_fill(array("area" => GCHART_FILL_BACKGROUND,"type" => GCHART_FILL_SOLID,"colors" => array("color" => "E9E9E9")));
 		$c->set_grid(array("xstep" => 20, "ystep" => 20));
 		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
 		$c->add_axis_range(0, array(0, $max));
@@ -3279,6 +3554,7 @@ window.location.href='".html::get_new_url(CL_SM_PROP_STATS_GROUP, $pt, array("re
 		$c->set_axis(array(
 			GCHART_AXIS_LEFT
 		));
+		$c->add_fill(array("area" => GCHART_FILL_BACKGROUND,"type" => GCHART_FILL_SOLID,"colors" => array("color" => "E9E9E9")));
 		$c->set_grid(array("xstep" => 20, "ystep" => 20));
 		$c->set_bar_sizes(array("width" => (400 / count($d)) - 5, "bar_spacing" => 5));
 		$c->add_axis_range(0, array(0, $max));
@@ -3455,6 +3731,7 @@ window.location.href='".html::get_new_url(CL_SM_SITE_GROUP, $pt, array("return_u
 		$c->set_axis(array(
 			GCHART_AXIS_LEFT
 		));
+		$c->add_fill(array("area" => GCHART_FILL_BACKGROUND,"type" => GCHART_FILL_SOLID,"colors" => array("color" => "E9E9E9")));
 		$c->set_grid(array("xstep" => 20, "ystep" => 20));
 		$c->set_bar_sizes(array("width" => (500 / count($d)) - 5, "bar_spacing" => 5));
 		$c->add_axis_range(0, array(0, $max));

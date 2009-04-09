@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.18 2009/02/19 09:35:30 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.19 2009/04/09 08:40:14 kristo Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -131,6 +131,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 
 				@property conditions_tbl type=table no_caption=1 store=no parent=conditions_right
 
+	@groupinfo cp_settings caption=Seaded parent=content_packages
+	@default group=cp_settings
+
+		@property cp_warehouse type=relpicker reltype=RELTYPE_PACKAGE_WAREHOUSE store=connect
+		@caption Ladu
+		@comment Ladu, kuhu luuakse toote objektid iga paketi jaoks
+
 @reltype ROOT value=1 clid=CL_GROUP,CL_MENU
 @caption Juurkaust/-grupp
 
@@ -138,7 +145,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 @caption Loginmen&uuml;&uuml;de juurkaust
 
 @reltype LOGIN_CONF value=3 clid=CL_CONFIG_LOGIN_MENUS
-@caption Loginmen&uuml;&uuml; seadete objekt 
+@caption Loginmen&uuml;&uuml; seadete objekt
+
+@reltype PACKAGE_WAREHOUSE value=4 clid=CL_SHOP_WAREHOUSE
+@caption Ladu
 
 */
 

@@ -3,4 +3,3 @@
 	<class name="site_copy" folder="contentmgmt/site_copy" extends="class_base">
 	</class>
 </orb>
-		

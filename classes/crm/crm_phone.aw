@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.26 2009/03/31 07:55:16 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.27 2009/04/09 08:40:16 kristo Exp $
 // phone.aw - Telefon
 /*
 
@@ -25,10 +25,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 @property type type=chooser table=kliendibaas_telefon field=aw_phone_type
 @caption Numbri t&uuml;&uuml;p
 
-@property country type=relpicker reltype=RELTYPE_COUNTRY field=meta method=serialize automatic=1
+@property country type=relpicker reltype=RELTYPE_COUNTRY store=connect automatic=1
 @caption Riik
 
-@property is_public type=hidden field=meta method=serialize 
+@property is_public type=hidden table=kliendibaas_telefon field=aw_is_public
 @caption Avalik (endine checkbox)
 
 @property is_public_conn type=checkbox ch_value=1 store=no

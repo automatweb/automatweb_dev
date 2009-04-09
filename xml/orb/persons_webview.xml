@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="persons_webview" folder="crm" extends="class_base">
+	<class name="persons_webview" folder="www/automatweb_cvs/classes/crm" extends="class_base">
 		<action name="parse_alias" nologin="1" is_public="1">
 			<function name="parse_alias">
 				<arguments>

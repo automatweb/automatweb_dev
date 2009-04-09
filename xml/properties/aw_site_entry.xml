@@ -137,6 +137,13 @@
             <field>used_class_list</field>
             <caption>Kasutusel klassid</caption>
       </property>
+      <property>
+            <name>server_id</name>
+            <table>aw_site_list</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>server_id</field>
+      </property>
       <classinfo>
             <syslog_type>ST_AW_SITE_ENTRY</syslog_type>
             <relationmgr>yes</relationmgr>

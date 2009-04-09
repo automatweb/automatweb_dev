@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.8 2008/11/13 12:55:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.9 2009/04/09 08:39:41 kristo Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 @classinfo syslog_type=ST_TAKET_USERS_IMPORT relationmgr=yes
@@ -64,11 +64,6 @@ class taket_users_import extends class_base
 						$o = obj($row["oid"]);
 						$o->set_password($value);
 						$o->save();
-//						$row = $this->db_fetch_row('UPDATE users SET password="'.$value.'" WHERE uid= \''.$arr['username'][$key].'\'');
-
-						//let's update the users password
-						//
-						//	$inst->save(array('uid'=>$arr['username'][$key], 'password'=>$value));
 					}
 				}
 			}
@@ -126,8 +121,6 @@ taket.xmlrpcport[0] = 8888<br>";
 			if(strlen($value['kasutajanimi'])<3 || strlen($value['password'])<3)
 			{
 				continue;
-//see ei funka uues koodis
-			//	$inst->do_delete_user($value['kasutajanimi']);
 			}
 			
 			if(strlen($value['kasutajanimi'])==1)
@@ -151,44 +144,31 @@ taket.xmlrpcport[0] = 8888<br>";
 				
 			$row = $this->db_fetch_row('SELECT uid, password FROM users WHERE uid= \''.$value['kasutajanimi'].'\'');
 
-			//	$inst->add_users_to_group_rec(9, array($value['kasutajanimi']));
 			if(!is_array($row))
 			{
-/*				$inst->add(array(
-						'uid' => $value['kasutajanimi'],
-						'password' => $value['password'],
-						'email' => $value['email'],
-				));
-*/
-	
 				$user_o = $us->add_user(array(
 					"uid" => $value['kasutajanimi'],
 					"password" => $value['password'],
-//					"all_users_grp" => $aug->prop("gid"),
 					'email' => $value['email'],
 				));
 
 				$gr->add_user_to_group($user_o, obj(9));
-//				$inst->add_users_to_group_rec(9, array($value['kasutajanimi']));
 				$value['password']=md5($value['password']);
 			}
 			else
 			{
-				//just in case
-				//if(!$inst->is_member($value['kasutajanimi'],9))
-				//{
-				//	$inst->add_users_to_group_rec(9, array($value['kasutajanimi']));
-				//}
-				//$value['action']='Juba olemas';
 				$value['password'] = $row['password'];
 			}
 			$this->vars($value);	
 			$this->parse('klient');	
 		}
 		$this->vars(array(
-				'reforb'=>$this->mk_reforb('import_users',array('changed'=>1,'no_reforb'=>true),
-													'taket_users_import')
-						));
+			'reforb' => $this->mk_reforb('import_users',array(
+				'changed' => 1,
+				'no_reforb' => true
+				),
+				'taket_users_import')
+		));
 		echo $this->parse();
 		die();
 	}
@@ -225,7 +205,12 @@ taket.xmlrpcport[0] = 8888<br>";
 		$client = new IXR_Client($host[0], $path[0], $port[0]);
 		//username is the user_id in taket database@windoooza
 		$client->query('server.getUsers',array('user_id'=>$arr['uid']));
-		$data=$client->getResponse();	
+		$data=$client->getResponse();
+		
+		$data[0]['eesnimi'] = urldecode($data[0]['eesnimi']);
+		$data[0]['perenimi'] = urldecode($data[0]['perenimi']);
+		$data[0]['firmanimi'] = urldecode($data[0]['firmanimi']);
+
 		$_SESSION['TAKET']=$data[0];
 		$_SESSION['TAKET']['eesperenimi'] = $_SESSION['TAKET']['eesnimi'].' '.$_SESSION['TAKET']['perenimi'];
 		//initsialiseerima juba ka selle ebasketi listi

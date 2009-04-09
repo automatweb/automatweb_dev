@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.50 2009/03/11 10:23:04 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.51 2009/04/09 08:40:16 kristo Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -523,6 +523,7 @@ class persons_webview extends class_base
 
 	private function get_relation_profession_ord($o)
 	{
+		enter_function("persons_webview::get_relation_profession_ord");
 		$ret = 0;
 		foreach($o->connections_from(array("clid" => "CL_CRM_PERSON_WORK_RELATION")) as $c)
 		{
@@ -535,6 +536,7 @@ class persons_webview extends class_base
 				}
 			}
 		}
+		exit_function("persons_webview::get_relation_profession_ord");
 		return $ret;
 	}
 
@@ -668,15 +670,28 @@ class persons_webview extends class_base
 		{
 			$this->view_obj = obj($arr["alias"]["to"]); // dokumendis aliasena
 		}
-		if(is_oid($company_id)) $this->company = obj($company_id);
-		if(is_oid($section_id)) $this->section = obj($section_id);
+		if(is_oid($company_id))
+		{
+			$this->company = obj($company_id);
+		}
+		if(is_oid($section_id)) 
+		{
+			$this->section = obj($section_id);
+		}
 
 		$this->meta = $this->view_obj->meta();
 		$this->view_no = $view;
-		if($view) $this->view = $this->meta["view"][$view]; // juhul kui tuleb kuskilt urlist miski tase,... 
-		else $this->view = $this->meta["view"][0]; // algul paneb siis metasse esimese (default) taseme vaate,... 
+		if($view)
+		{
+			$this->view = $this->meta["view"][$view]; // juhul kui tuleb kuskilt urlist miski tase,... 
+		}
+		else
+		{
+			$this->view = $this->meta["view"][0]; // algul paneb siis metasse esimese (default) taseme vaate,... 
+		}
 		
-		if(is_oid($section)){
+		if(is_oid($section))
+		{
 			$section_obj = obj($section);
 			if($section_obj->class_id() == CL_CRM_PERSON)
 			{
@@ -691,7 +706,7 @@ class persons_webview extends class_base
 				$this->parse_worker($section_obj);
 				return $this->parse();
 			}
-			if(($section_obj->class_id() == CL_CRM_SECTION)  || ($section_obj->class_id() == CL_CRM_COMPANY))
+			if(($section_obj->class_id() == CL_CRM_SECTION) || ($section_obj->class_id() == CL_CRM_COMPANY))
 			{
 				$company = $section_obj;
 			}
@@ -700,13 +715,22 @@ class persons_webview extends class_base
 		if(!is_object($company))
 		{
 			$company_id = $this->view_obj->prop("company");
-			if(!is_oid($company_id)) return t("pole asutust valitud");
+			if(!is_oid($company_id))
+			{
+				return t("pole asutust valitud");
+			}
 			$company = obj($company_id);
 		}
 
 		//miskis lambikohas v6ib asutust ka vaja minna
-		if($company->class_id() == CL_CRM_COMPANY) $this->company=$company;
-		if(!$level)$level = 0;
+		if($company->class_id() == CL_CRM_COMPANY)
+		{
+			$this->company = $company;
+		}
+		if(!$level)
+		{
+			$level = 0;
+		}
 		$this->level = $level;
 		$this->set_levels($level);//teeb siis erinevatest tasemetest massiivi, mida yldse kuvada ja paneb selle muutujasse $this->levels
 
@@ -729,13 +753,21 @@ class persons_webview extends class_base
 			if($this->is_template("DEPARTMENT"))
 			{
 				$this->jrks = array();
-				if(in_array((0) , $this->levels) && (sizeof($this->levels) > 0)) $sections = array_merge(array($company) , $this->get_sections(array("section" => $company , "jrk" => 0)));
-				else $sections = $this->get_sections(array("section" => $company , "jrk" => 0));
-			foreach($sections as $section)
+				if(in_array((0) , $this->levels) && (sizeof($this->levels) > 0))
+				{
+					$sections = array_merge(array($company) , $this->get_sections(array("section" => $company , "jrk" => 0)));
+				}
+				else
+				{
+					$sections = $this->get_sections(array("section" => $company , "jrk" => 0));
+				}
+				foreach($sections as $section)
 				{
 					$this->section = $section; // eks seda l2heb vast mujal ka vaja... ametinimetuses n2iteks
-					if(!(in_array($section->id(), $this->view_obj->prop("departments")))
-						&& sizeof($this->view_obj->prop("departments"))>0 && array_sum($this->view_obj->prop("departments")) > 0) continue;
+					if(!(in_array($section->id(), $this->view_obj->prop("departments"))) && sizeof($this->view_obj->prop("departments"))>0 && array_sum($this->view_obj->prop("departments")) > 0)
+					{
+						continue;
+					}
 					if($this->view["with_persons"])
 					{
 						$workers = $this->get_workers($section);
@@ -744,8 +776,13 @@ class persons_webview extends class_base
 					//if(sizeof($workers) > 0)
 					$this->parse_section($section);
 					if($this->is_template("LEVEL".$this->jrks[$section->id()]."DEPARTMENT"))
+					{
 						$department .= $this->parse("LEVEL".$this->jrks[$section->id()]."DEPARTMENT");
-					else $department .= $this->parse("DEPARTMENT");
+					}
+					else
+					{
+						$department .= $this->parse("DEPARTMENT");
+					}
 				}
 				$this->vars_safe(array("DEPARTMENT" => $department));
 			}
@@ -766,9 +803,10 @@ class persons_webview extends class_base
 		$this->vars_safe(array(
 			"name" => $company->prop("name"),
 		));
-                $ret = $this->parse();
+
+		$ret = $this->parse();
 		$this->vars["DEPARTMENT"] = "";
-                return $ret;
+        return $ret;
 	}
 
 	function parse_section($section)
@@ -867,7 +905,13 @@ class persons_webview extends class_base
 			$workers = $this->person_sort($workers);
 		}
 		exit_function("person_webview::get_workers");
+		$this->get_professions($workers);
 		return $workers;
+	}
+
+	function get_professions($ws)
+	{
+		$this->PROFESSIONS = array();
 	}
 
 	function get_sections($args)
@@ -949,7 +993,7 @@ class persons_webview extends class_base
 				if($this->section && $section_conn->prop("from") == $this->section->id()) $profession_obj = $tmp_profession_obj;
 			}
 		}
-				$file_inst = get_instance(CL_FILE);
+		$file_inst = get_instance(CL_FILE);
 		if(is_object($profession_obj))
 		{
 			$profession = $profession_obj->name();
@@ -970,7 +1014,7 @@ class persons_webview extends class_base
 		{
 			$directive_obj = obj($directive);
 			$directive_obj->prop("name");
-			$profession_with_directive = '<a href ="'.$file_inst->get_url($directive , $directive_obj->prop("name")).'"  target=_new> '. $profession_with_directive.' </a>';
+			$profession_with_directive = '<a href ="'.$file_inst->get_url($directive, $directive_obj->prop("name")).'" target="_blank"> '. $profession_with_directive.' </a>';
 		}
 		//kirjutab yle k6ik juhendi muutujad, kui on viide olemas
 		if($directive_link)
@@ -1009,8 +1053,9 @@ class persons_webview extends class_base
 		$row = "";
 		$row_num = 0;
 		$this->min_col = $this->view["min_cols"];
-		$this->calculated=0;
-		$this->order_array=array();
+		$this->calculated = 0;
+		$this->order_array = array();
+
 		if($this->is_template("ROW") && $this->is_template("COL"))
 		{
 			foreach($workers as $val)
@@ -1018,8 +1063,14 @@ class persons_webview extends class_base
 				$worker = $val["worker"];
 				if($this->view["rows_by"])//ametinimede kaupa grupeerimise porno, et erinevale reale 6ige arv tuleks jne
 				{
-					if(!$this->order_array) $this->make_order_array($workers);
-					if(!$this->calculated) $col_num = $this->get_cols_num($row_num);
+					if(!$this->order_array)
+					{
+						$this->make_order_array($workers);
+					}
+					if(!$this->calculated) 
+					{
+						$col_num = $this->get_cols_num($row_num);
+					}
 				} 
 				$c = "";
 				if($this->is_template("worker"))
@@ -1493,9 +1544,12 @@ class persons_webview extends class_base
 				}
 				$row_num++;
 			}
-			if($small_rows == 0) break;
-			$x++;
+			if($small_rows == 0)
+			{
+				break;
 			}
+			$x++;
+		}
 		$tmp = array();
 		foreach ($this->order_array as $data)
 		{

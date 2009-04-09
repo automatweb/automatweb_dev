@@ -197,7 +197,7 @@ class project_teams_impl extends class_base
 		}
 		
 		$this->_init_team_t($t);
-		
+
 		if(($arr["request"]["no_search"]) && ($arr["request"]["team"] == "all_parts" || is_oid($arr["request"]["team"])))
 		{
 			//tabelile pealkiri
