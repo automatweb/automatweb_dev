@@ -454,7 +454,7 @@
 				rename($copy_dir."/package/".$files_array[$a], $copy_dir."/package/sitecopy".$b);
 				$a++;
 			}
-			$wget_url = "http://sitecopy.struktuur.ee/import/?start_transfer=".$uid."&files_count=".$filecount;
+			$wget_url = "http://sitecopy.struktuur.ee/import/?start_transfer=".$rid."&files_count=".$filecount;
 			file($wget_url);
 		}
 	}
