@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.19 2009/02/27 10:10:32 voldemar Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.20 2009/04/09 11:48:28 voldemar Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -445,7 +445,7 @@ die();
 		{
 			if(empty($_SESSION["uid_oid"]))
 			{
-				$_SESSION["uid_oid"] = users::get_oid_for_uid(aw_global_get("uid"));
+				$_SESSION["uid_oid"] = $this->get_oid_for_uid(aw_global_get("uid"));
 			}
 
 			$this->create_gidlists($_SESSION["uid_oid"]);
@@ -973,11 +973,11 @@ die();
 				$this->db_query("DELETE FROM user_hashes WHERE hash_time < ".(time() - 60*24*3600));
 
 				$url = ($t = urldecode(aw_global_get("request_uri_before_auth"))) ? $t : aw_ini_get("baseurl");
-				if ($url == aw_ini_get("baseurl")."/login.aw")
+				if ($url === aw_ini_get("baseurl")."/login.aw")
 				{
 					$url = aw_ini_get("baseurl");
 				}
-				if ($url[0] == "/")
+				if ($url{0} === "/")
 				{
 					$url = aw_ini_get("baseurl").$url;
 				}
