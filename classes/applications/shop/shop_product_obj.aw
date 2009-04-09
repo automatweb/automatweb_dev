@@ -24,7 +24,7 @@ class shop_product_obj extends _int_object
 
 	/** Returns the price as a double for the given currency
 		@attrib api=1 params=pos
-		
+
 		@param currency required type=cl_currency
 			The currency object to return the price for
 
@@ -54,8 +54,50 @@ class shop_product_obj extends _int_object
 			if(parent::meta($k."_trailing_zeros") > 0)
 			{
 				return sprintf("%.".parent::meta($k."_trailing_zeros")."f", parent::prop($k));
-			}			
+			}
 		}
 		return parent::prop($k);
  	}
+
+	/** Get units that can be used to measure product quantity
+		@attrib api=1
+		@returns array of CL_UNIT
+			array(0=> unit1, 1=> unit2, etc).
+			First unit is the default/base unit
+		@comment Some of the results may be undefined, beware of that.//!!!!!! ???
+	**/
+	public function get_units()
+	{
+		if($meta_units = $this->meta("units"))
+		{
+			$units = $meta_units;
+		}
+		else
+		{
+			if($dc = $this->meta("def_cat"))
+			{
+				$cato = obj($dc);
+			}
+			elseif($dco = $this->get_first_obj_by_reltype("RELTYPE_CATEGORY"))
+			{
+				$cato = $dco;
+			}
+			if($cato && $meta_units = $cato->meta("units"))
+			{
+				$units = $meta_units;
+			}
+		}
+
+		if(empty($units))
+		{
+			$units = array();
+		}
+
+		foreach ($units as $key => $oid)
+		{
+			$units[$key] = new object($oid);
+		}
+
+		return $units;
+	}
 }
