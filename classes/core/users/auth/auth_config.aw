@@ -452,8 +452,9 @@ class auth_config extends class_base
 		{
 			$hide_aw_info = aw_ini_get("login_box.hide_aw_info");
 		}
-		catch(Exception $e)
+		catch(awex_cfg_key $e)
 		{
+			$hide_aw_info = false;
 		}
 		if (!$hide_aw_info)
 		{
