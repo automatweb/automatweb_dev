@@ -367,7 +367,7 @@ class gantt_chart extends class_base
 		$this->vars = array (
 			"chart_id" => $this->chart_id,
 			"chart_width" => $this->chart_width,
-			"row_height" => $this->row_height,
+			"row_height" => $this->row_height+2,
 			"row_text_height" => ($this->row_height - ceil($this->row_height/10)),
 		);
 		$style = $this->parse ();
@@ -397,7 +397,7 @@ class gantt_chart extends class_base
 					break;
 
 				case "separator":
-					if ( ($row["expanded"] == false) or (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) === "y") or ($_GET["aw_gantt_chart_collapsed_" . $row["id"]] === "y") )//!!! kust siin _GET asemel v6tta see?
+					if ( ($row["expanded"] == false) or (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) === "y") or (isset($_GET["aw_gantt_chart_collapsed_" . $row["id"]]) and $_GET["aw_gantt_chart_collapsed_" . $row["id"]] === "y") )//!!! kust siin _GET asemel v6tta see?
 					{
 						aw_session_set("aw_gantt_chart_collapsed_" . $row["id"], "y");
 						$collapsed = true;
@@ -408,7 +408,7 @@ class gantt_chart extends class_base
 						$collapsed = false;
 					}
 
-					if ( (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) === "n") or ($_GET["aw_gantt_chart_collapsed_" . $row["id"]] === "n") )//!!! kust siin _GET asemel v6tta see?
+					if ( (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) === "n") or (isset($_GET["aw_gantt_chart_collapsed_" . $row["id"]]) and $_GET["aw_gantt_chart_collapsed_" . $row["id"]] === "n") )//!!! kust siin _GET asemel v6tta see?
 					{
 						aw_session_set("aw_gantt_chart_collapsed_" . $row["id"], "n");
 						$collapsed = false;
@@ -440,7 +440,7 @@ class gantt_chart extends class_base
 
 					while ($this->pointer < $cell_end)
 					{
-						if (!is_array ($this->parsed_data[$row["name"]]))
+						if (!isset($this->parsed_data[$row["name"]]) or !is_array ($this->parsed_data[$row["name"]]))
 						{
 							break;
 						}
@@ -718,7 +718,7 @@ class gantt_chart extends class_base
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
 	// alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
+	function parse_alias($arr =  array())
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}

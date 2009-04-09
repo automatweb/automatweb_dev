@@ -10,6 +10,12 @@
 	position: relative;
 }
 
+td.VclGanttColumn
+{
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
 .VclGanttColumn a:hover, .VclGanttSubdivision a:hover
 {
 	z-index: 1001;
