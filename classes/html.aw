@@ -555,7 +555,7 @@ class html
 	public static function password($args = array())
 	{
 		extract($args);
-		$textsize = ($textsize ? " style=\"font-size: {$textsize};\"" : "");
+		$textsize = !empty($textsize) ? " style=\"font-size: {$textsize};\"" : "";
 		$size = isset($size) ? $size : "40";
 		$maxlength = isset($maxlength) ? " maxlength=\"{$maxlength}\"" : "";
 		$value = isset($value) ? $value : '';
