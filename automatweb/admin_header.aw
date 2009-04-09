@@ -42,10 +42,17 @@ if (!empty($set_ct_lang_id))
 }
 
 $LC = aw_global_get("LC");
+$lc_file = AW_DIR."lang/" . $LC . "/errors".AW_FILE_EXT;
+if (is_readable($lc_file))
+{
+	include($lc_file);
+}
 
-@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors".AW_FILE_EXT);
-@include(aw_ini_get("basedir")."/lang/" . $LC . "/common".AW_FILE_EXT);
-
+$lc_file = AW_DIR."lang/" . $LC . "/common".AW_FILE_EXT;
+if (is_readable($lc_file))
+{
+	include($lc_file);
+}
 
 $awt = new aw_timer;
 register_shutdown_function("log_pv", $GLOBALS["awt"]->timers["__global"]["started"]);
