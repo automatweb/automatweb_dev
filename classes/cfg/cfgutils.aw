@@ -408,6 +408,12 @@ class cfgutils extends aw_template
 			foreach($properties as $k => $d)
 			{
 				$caption = isset($d["caption"]) ?  $d["caption"] : "";
+
+				if (empty($d["name"]))
+				{
+					throw new aw_exception("Property name can't be empty (file $fqfn, prop data: " . var_export($d, true) . ")");
+				}
+
 				$name = $d["name"];
 
 				$properties[$k]["orig_caption"] = $caption;
@@ -507,7 +513,7 @@ class cfgutils extends aw_template
 				{
 					foreach(safe_array($relx["clid"]) as $clid)
 					{
-						if (@constant($clid))
+						if (defined($clid))
 						{
 							$_clidlist[] = constant($clid);
 						}
@@ -517,9 +523,14 @@ class cfgutils extends aw_template
 				$relx["clid"] = $_clidlist;
 				$tmp[$key] = $relx;
 				$tmp[$_name] = $relx;
+				// define the constant
+				if (!defined($_name))
+				{
+					define($_name, $tmp[$key]["value"]);
+				}
 				$tmp[$tmp[$key]["value"]] = $relx;
-			};
-		};
+			}
+		}
 		$this->relinfo = $tmp;
 
 		$res = array();
