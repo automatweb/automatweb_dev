@@ -364,6 +364,17 @@
             <caption>Arveread</caption>
       </property>
       <property>
+            <name>writeoffs</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>writeoff_layout</parent>
+            <field>writeoffs</field>
+            <caption>Maha kantud arve read</caption>
+      </property>
+      <property>
             <name>show_oe_add</name>
             <table>objects</table>
             <group>other_data</group>
@@ -829,6 +840,13 @@
                   <area_caption>Read</area_caption>
                   <group>general</group>
             </bottom>
+            <writeoff_layout>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Maha&amp;amp;nbsp;kantud&amp;amp;nbsp;arve&amp;amp;nbsp;read</area_caption>
+                  <parent>main_split</parent>
+                  <group>general</group>
+            </writeoff_layout>
             <bill_task_list_l>
                   <type>vbox</type>
                   <group>tasks</group>

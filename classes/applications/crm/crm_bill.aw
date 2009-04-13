@@ -31,6 +31,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
  
 		@layout bottom parent=main_split type=vbox closeable=1 area_caption=Read
  
+		@layout writeoff_layout type=vbox closeable=1 area_caption=Maha&nbsp;kantud&nbsp;arve&nbsp;read parent=main_split
+
 	// top left lyt
 	@property name type=textbox table=objects field=name parent=top_left
 	@caption Nimi
@@ -145,7 +147,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@caption Arveread
 
 
-
+		@property writeoffs type=table store=no no_caption=1 parent=writeoff_layout
+		@caption Maha kantud arve read
 
 	#leftovers
 
@@ -502,7 +505,13 @@ class crm_bill extends class_base
 				}
 				$this->_bill_targets($arr);
 				break;
-
+			case "writeoffs":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$this->get_writeoffs($arr);
+				break;
 			case "bill_no":
 				if ($prop["value"] == "")
 				{
@@ -1116,6 +1125,57 @@ class crm_bill extends class_base
 		$arr["obj_inst"]->set_meta("bill_targets" , $arr["request"]["bill_targets"]);
 	}
 
+	private function get_writeoffs($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_bill_rows_t($t);
+
+		$task_i = get_instance(CL_TASK);
+
+		$t->set_sortable(false);
+
+		$writeoffs = $arr["obj_inst"]->get_writeoff_rows_data();
+
+		foreach($writeoffs as $row)
+		{
+			//eraldab muid kulusid
+			if(!$first_oe && $row["is_oe"])
+			{
+				$t->define_data(array(
+					"name" => t("Kulud:"),
+				));
+				$first_oe = 1;
+			}
+
+			$id = $row["id"];
+
+			$connect_row_url =  $this->mk_my_orb("add_task_row_to_bill_row", array(
+				"row" => $id,
+			));
+
+			$connect_row_link = html::href(array(
+				"url" => "javascript:aw_popup_scroll('".$connect_row_url."','Otsing',1100,700)",
+				"caption" => t("Lisa toimetuse rida"),
+				"title" => t("Otsi")
+			));
+
+			$t->define_data(array(
+				"name" => $this->get_row_html($row["id"],"name",$arr),
+				"code" => $this->get_row_html($row["id"],"code",$arr),
+				"unit" => $this->get_row_html($row["id"],"unit",$arr),
+				"has_tax" => $this->get_row_html($row["id"],"has_tax",$arr),
+				"prod" => $this->get_row_html($row["id"],"prod",$arr),
+				"sel" => html::checkbox(array(
+					"name" => "sel_rows[]",
+					"value" => $row["id"]
+				)),
+				"change" => $this->get_row_html($row["id"],"change",$arr),
+				"person" => $this->get_row_html($row["id"],"person",$arr),
+				"color" => "gray",
+			));
+		}
+	}
+
 	private function _bill_targets($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -1307,11 +1367,29 @@ class crm_bill extends class_base
 			)),
 			"chgbgcolor" => "color"
 		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("muuda"),
+			"chgbgcolor" => "color"
+		));
+
 		$t->define_field(array(
 			"name" => "sel",
 			"caption" => t("Vali"),
 			"chgbgcolor" => "color"
 		));
+	}
+
+	function get_co_currency()
+	{
+		if(!$this->company_currency)
+		{
+			$u = get_instance(CL_USER);
+			$co = obj($u->get_current_company());
+			$this->company_currency = $co->prop("currency");
+		}
+		return $this->company_currency;
 	}
 
 	function _bill_rows($arr)
@@ -1376,7 +1454,7 @@ class crm_bill extends class_base
 
 		foreach($rows as $row)
 		{
-			$price_cc = "";//hind oma organisatsiooni valuutas
+/*			$price_cc = "";//hind oma organisatsiooni valuutas
 			$sum_cc = "";//summa oma organisatsiooni valuutas
 			if($bcurrency && $ccurrency && $ccurrency != $bcurrency)
 			{
@@ -1389,7 +1467,7 @@ class crm_bill extends class_base
 				$price_cc = "<br>".round($cc_price , 2)." ".$ccurrency_name;
 				$sum_cc = "<br>".round($cc_price*$row["amt"] , 2)." ".$ccurrency_name;
 			}
-
+*/
 			//eraldab muid kulusid
 			if(!$first_oe && $row["is_oe"])
 			{
@@ -1401,7 +1479,7 @@ class crm_bill extends class_base
 			
 			$t_inf = $row;
 			$id = $row["id"];
-			$r_prods = $prods;
+/*			$r_prods = $prods;
 			if (!isset($r_prods[$t_inf["prod"]]) && $this->can("view", $t_inf["prod"]))
 			{
 				$prodo = obj($t_inf["prod"]);
@@ -1415,7 +1493,7 @@ class crm_bill extends class_base
 					$rp_o = obj($rp_id);
 					$r_pers[$rp_id] = $rp_o->name();
 				}
-			}
+			}*/
 			//miski suva jrjekorranuumbrite genereerimine... kui on vaja
 			if($default_row_jrk < $t_inf["jrk"]) $default_row_jrk = $t_inf["jrk"];
 			if(!$t_inf["jrk"]) $t_inf["jrk"] = $default_row_jrk;
@@ -1429,7 +1507,7 @@ class crm_bill extends class_base
 				"caption" => t("Lisa toimetuse rida"),
 				"title" => t("Otsi")
 			));
-			if($this->can("view", $t_inf["unit"]))
+/*			if($this->can("view", $t_inf["unit"]))
 			{
 				$unit_oid = $t_inf["unit"];
 			}
@@ -1497,25 +1575,7 @@ class crm_bill extends class_base
 					"value" => $t_inf["code"],
 					"size" => 10
 				)),
-/*				"unit" => html::textbox(array(
-					"name" => "rows[$id][unit]",
-					"selected" => $unit_oid?array($unit_oid => $unit_name):'',
-					"size" => 5,
-					"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
-					"option_is_tuple" => 1,
-					"content" => $unit_name,
-				)),
-				"price" => html::textbox(array(
-					"name" => "rows[$id][price]",
-					"value" => $t_inf["price"],
-					"size" => 5
-				)).$price_cc,
-				"amt" => html::textbox(array(
-					"name" => "rows[$id][amt]",
-					"value" => $t_inf["amt"],
-					"size" => 3
-				)),
-				"sum" => $t_inf["sum"].$sum_cc,*/
+
 				"unit" => $ut->draw(array("no_titlebar" => 1)),
 				"has_tax" => html::checkbox(array(
 					"name" => "rows[$id][has_tax]",
@@ -1547,6 +1607,19 @@ class crm_bill extends class_base
 					"multiple" => 1,
 					"clid" => array(CL_CRM_PERSON)
 				))
+			));*/
+			$t->define_data(array(
+				"name" => $this->get_row_html($row["id"],"name",$arr),
+				"code" => $this->get_row_html($row["id"],"code",$arr),
+				"unit" => $this->get_row_html($row["id"],"unit",$arr),
+				"has_tax" => $this->get_row_html($row["id"],"has_tax",$arr),
+				"prod" => $this->get_row_html($row["id"],"prod",$arr),
+				"sel" => html::checkbox(array(
+					"name" => "sel_rows[]",
+					"value" => $row["id"]
+				)),
+				"change" => $this->get_row_html($row["id"],"change",$arr),
+				"person" => $this->get_row_html($row["id"],"person",$arr),
 			));
 			$sum += $t_inf["sum"];
 		}
@@ -1706,7 +1779,7 @@ class crm_bill extends class_base
 // 			}
 		}
 
-		$writeoffs = $arr["obj_inst"]->get_writeoff_rows_data();
+/*		$writeoffs = $arr["obj_inst"]->get_writeoff_rows_data();
 		if(sizeof($writeoffs))
 		{
 			$t->define_data(array(
@@ -1727,7 +1800,7 @@ class crm_bill extends class_base
 			
 			$t_inf = $row;
 			$id = $row["id"];
-			$r_prods = $prods;
+/*			$r_prods = $prods;
 			if (!isset($r_prods[$t_inf["prod"]]) && $this->can("view", $t_inf["prod"]))
 			{
 				$prodo = obj($t_inf["prod"]);
@@ -1741,7 +1814,7 @@ class crm_bill extends class_base
 					$rp_o = obj($rp_id);
 					$r_pers[$rp_id] = $rp_o->name();
 				}
-			}
+			}*//*
 			//miski suva jrjekorranuumbrite genereerimine... kui on vaja
 			if($default_row_jrk < $t_inf["jrk"]) $default_row_jrk = $t_inf["jrk"];
 			if(!$t_inf["jrk"]) $t_inf["jrk"] = $default_row_jrk;
@@ -1755,7 +1828,7 @@ class crm_bill extends class_base
 				"caption" => t("Lisa toimetuse rida"),
 				"title" => t("Otsi")
 			));
-			if($this->can("view", $t_inf["unit"]))
+/*			if($this->can("view", $t_inf["unit"]))
 			{
 				$unit_oid = $t_inf["unit"];
 			}
@@ -1870,28 +1943,75 @@ class crm_bill extends class_base
 					"multiple" => 1,
 					"clid" => array(CL_CRM_PERSON)
 				))
-			));/*
+			));*//*
 		$t->define_data(array(
-			"name" => $this->ajax_get_html($row["id"],"name"),
-			"code" => $this->ajax_get_html($row["id"],"code"),
-			"unit" => $this->ajax_get_html($row["id"],"unit"),
-			"has_tax" => $this->ajax_get_html($row["id"],"has_tax"),
-			"prod" => $this->ajax_get_html($row["id"],"prod"),
+			"name" => $this->get_row_html($row["id"],"name",$arr),
+			"code" => $this->get_row_html($row["id"],"code",$arr),
+			"unit" => $this->get_row_html($row["id"],"unit",$arr),
+			"has_tax" => $this->get_row_html($row["id"],"has_tax",$arr),
+			"prod" => $this->get_row_html($row["id"],"prod",$arr),
 			"sel" => html::checkbox(array(
 				"name" => "sel_rows[]",
 				"value" => $row["id"]
 			)),
-			"person" => $this->ajax_get_html($row["id"],"person"),
+			"change" => $this->get_row_html($row["id"],"change",$arr),
+			"person" => $this->get_row_html($row["id"],"person",$arr),
 		));
 
-*/
+
 			$sum += $t_inf["sum"];
-		}
-		$arr["prop"]["value"] = $t->draw()/*.'<script language="javascript">
-				$.get("/automatweb/orb.aw", {class: "aw_object_quickadd", action: "get_objects"}, function (html) { $("body").append(html); });
-			</script>"
-		'*/;
+		}*/
+		$arr["prop"]["value"] = $t->draw();
 	}
+
+	/**
+		@attrib name=post_row all_args=1
+	**/
+	function post_row($arr)
+	{
+		if(!$this->can("view" , $arr["id"]))
+		{
+			die(0);
+		}
+		$o = obj($arr["id"]);
+		$props = array("name" , "comment" , "date" , "price" , "amt", "prod", "unit");
+		foreach($props as $prop)
+		{
+			if(isset($arr[$prop]))
+			{
+				$o->set_prop($prop , iconv("UTF-8", aw_global_get("charset"), $arr[$prop]));
+			}
+		}
+		if($arr["jrk"])
+		{
+			$o->set_meta("jrk" , $arr["jrk"]);
+		}
+
+			foreach($o->connections_from(array("type" => "RELTYPE_PEOPLE")) as $c)
+			{
+				if(!in_array($c->prop("to") , explode("," ,$arr["people"])))
+				{
+					$c->delete();
+				}
+			}
+			$o->set_prop("people" , explode("," ,$arr["people"]));
+
+		if($arr["has_tax"])
+		{
+			if($arr["has_tax"] == "true")
+			{
+				$o->set_prop("has_tax" , 1);
+			}
+			else
+			{
+				$o->set_prop("has_tax" , 0);
+			}
+		}
+		
+		$o->save();
+		die(var_dump($arr));
+	}
+
 
 	/**
 		@attrib name=get_row_change_fields all_args=1
@@ -1899,37 +2019,179 @@ class crm_bill extends class_base
 	function get_row_change_fields($arr)
 	{
 		$row = obj($arr["id"]);
+		$pps = get_instance("applications/crm/crm_participant_search");
+		extract($arr);
+		$ret = "";//'<div id="row_'.$id.'_'.$field.'">';
 		switch($arr["field"])
-		{
-			case "name":
-				return 
-					'</a><div id="row_'.$arr["id"].'_'.$arr["field"].'">'.
-				html::button(array(
+		{////'person[]': document.getElementsByName('rows[".$id."][person]')[0].value ,
+			case "change":
+				$ret.= html::button(array(
 					"name" => "change_row",
 					"value" => t("Salvesta"),
-					"onclick" => "$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'get_row_change_fields', id: '".$id."', field: '".$field."'}, function (html) { $('body').append(html); });",
-				))."<table><tr><td width=400>".
-					$row->prop("jrk")."<br>".
-					$row->prop("date")."<br>".
-					$row->prop("comment")."<br>".
-					substr($row->prop("name") , 0 , 100)."</td></tr></table></div>";
-			case "code":
-				return $row->prop("code");
-			case "unit":
-				return $row->prop("unit.name")."<br>".
-					t("Hind").": ".$row->prop("price")."<br>".
-					t("Kogus").": ".$row->prop("amt")."<br>".
-					t("Summa").": ".$row->prop("price")*$row->prop("amt");
-			case "has_tax":
-				return html::checkbox(array(
-					"checked" => $row->prop("has_tax"),
-					"disabled" => 1,
+					"onclick" => "
+						var a=document.getElementById('rows_".$id."__person_'); var result=[];
+						for (var i=0; i<a.length; i++) {
+							a[i].selected?result.push(a[i].value):'';
+						}
+
+					$.post('/automatweb/orb.aw?class=crm_bill&action=post_row', {
+						jrk: document.getElementsByName('rows[".$id."][jrk]')[0].value
+						, id: ".$id."
+						, people: result
+						, name: document.getElementsByName('rows[".$id."][name]')[0].value
+						, comment: document.getElementsByName('rows[".$id."][comment]')[0].value
+						, prod: document.getElementsByName('rows[".$id."][prod]')[0].value
+						, unit: document.getElementsByName('rows[".$id."][unit]')[0].value
+						, has_tax: document.getElementsByName('rows[".$id."][has_tax]')[0].checked
+						, date: document.getElementsByName('rows[".$id."][date]')[0].value
+						, jrk: document.getElementsByName('rows[".$id."][jrk]')[0].value
+						, price: document.getElementsByName('rows[".$id."][price]')[0].value
+						, amt: document.getElementsByName('rows[".$id."][amt]')[0].value
+						},function(data){load_new_data".$id."(); });
+
+						function load_new_data".$id."()
+						{
+							$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'ajax_get_row_html', id: '".$arr["id"]."', field: 'name'}, function (html) {
+								x=document.getElementById('row_".$id."_name');
+								x.innerHTML=html;});
+							$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'ajax_get_row_html', id: '".$arr["id"]."', field: 'unit'}, function (html) {
+								x=document.getElementById('row_".$id."_unit');
+								x.innerHTML=html;});
+							$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'ajax_get_row_html', id: '".$arr["id"]."', field: 'prod'}, function (html) {
+								x=document.getElementById('row_".$id."_prod');
+								x.innerHTML=html;});
+							$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'ajax_get_row_html', id: '".$arr["id"]."', field: 'person'}, function (html) {
+								x=document.getElementById('row_".$id."_person');
+								x.innerHTML=html;});
+							$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'ajax_get_row_html', id: '".$arr["id"]."', field: 'change'}, function (html) {
+								x=document.getElementById('row_".$id."_change');
+								x.innerHTML=html;});
+							$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'ajax_get_row_html', id: '".$arr["id"]."', field: 'has_tax'}, function (html) {
+								x=document.getElementById('row_".$id."_has_tax');
+								x.innerHTML=html;});
+						}
+						
+						",
 				));
+				break;
+			case "name":
+				$ret.="<table><tr><td width=400>".
+				html::textbox(array(
+					"name" => "rows[".$row->id()."][jrk]",
+					"value" => $row->meta("jrk"),
+					"size" => 3
+				)).html::textbox(array(
+					"name" => "rows[".$row->id()."][date]",
+					"value" => $row->prop("date"),
+					"size" => 8
+				)).t("maha kantud")."<br>".html::textbox(array(
+					"name" => "rows[".$row->id()."][comment]",
+					"value" => $row->comment(),
+					"size" => 35
+				))."<br>".html::textarea(array(
+					"name" => "rows[".$row->id()."][name]",
+					"value" => $row->name(),
+					"rows" => 5,
+					"cols" => 40
+				))
+					."</td></tr></table>";
+				break;
+			case "code":
+				$ret.=html::textbox(array(
+					"name" => "rows[".$row->id()."][code]",
+					"value" => $row->prop("code"),
+					"size" => 10
+				));
+				break;
+			case "unit":
+				classload("vcl/table");
+				$ut = new vcl_table(array(
+					"layout" => "generic",
+				));
+				$ut->define_field(array(
+					"name" => "field1",
+					"caption" => "",
+					"chgbgcolor" => "color"
+				));
+				$ut->define_field(array(
+					"name" => "field2",
+					"caption" => "",
+					"chgbgcolor" => "color"
+				));
+				$ut->clear_data();
+				$ut->define_data(array(
+					"field1" => t("&Uuml;hik"),
+					"field2" => html::select(array(
+						"name" => "rows[$id][unit]",
+//						"selected" => $unit_oid?array($unit_oid => $unit_name):'',
+						"options" =>  $prods = array("" => t("--vali--")) + $row->get_unit_selection(),
+						"value" => $row->prop("unit"),
+//						"size" => 5,
+//						"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
+//						"option_is_tuple" => 1,
+//						"content" => $unit_name,
+					)),
+				));
+				$ut->define_data(array(
+					"field1" => t("Hind"),
+					"field2" => html::textbox(array(
+						"name" => "rows[$id][price]",
+						"value" => $row->prop("price"),
+						"size" => 5
+					)).$price_cc,
+				));
+				$ut->define_data(array(
+					"field1" => t("Kogus"),
+					"field2" => html::textbox(array(
+						"name" => "rows[$id][amt]",
+						"value" => $row->prop("amt"),
+						"size" => 3
+					)),
+				));
+				$ut->define_data(array(
+					"field1" => t("Summa"),
+					"field2" => $row->prop("price")*$row->prop("amt"),
+				));
+				$ret.=$ut->draw(array("no_titlebar" => 1));
+				break;
+			case "has_tax":
+				$ret.=html::checkbox(array(
+					"checked" => $row->prop("has_tax"),
+					"name" => "rows[$id][has_tax]",
+				));
+				break;
 			case "prod":
-				return $row->prop("prod.name");
+				$ret.=html::select(array(
+					"name" => "rows[$id][prod]",
+					"options" => $row->get_prod_selection(),
+					"value" => $row->prop("prod")
+				))."  ".html::popup(array(
+					"width" => 800,
+					"height" => 500,
+					"scrollbars" => 1,
+					"url" => $this->mk_my_orb("do_search", array(
+						"pn" => "rows[$id][prod]",
+						"clid" => CL_SHOP_PRODUCT,
+						"no_submit" => 1,
+						"tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
+					"caption" => t("Vali")
+				));
+				break;
 			case "person":
-				return join("<br>" , $row->get_person_selection());
+				$ret.=html::select(array(
+					"name" => "rows[$id][person]",
+					"options" => array("" => t("--vali--"))+$row->get_person_selection(),
+					"value" => array_keys($row->get_person_selection()),
+					"multiple" => 1
+				))."<br>".$pps->get_popup_search_link(array(
+					"pn" => "rows[$id][person]",
+					"multiple" => 1,
+					"no_submit" => 1,
+					"clid" => array(CL_CRM_PERSON)
+				));
+				break;
 		}
+		return $ret;//.'</div>';
 	}
 
 	/**
@@ -1937,43 +2199,107 @@ class crm_bill extends class_base
 	**/
 	function ajax_get_row_change_fields($arr)
 	{
-		die($this->get_row_change_fields($arr));
+/*
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
+		foreach($autocomplete_options as $k => $v)
+		{
+			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
+		}
+		exit ($cl_json->encode($option_data));
+*/
+		die(iconv(aw_global_get("charset"), "UTF-8", $this->get_row_change_fields($arr)));
 	}
 
-	function ajax_get_html($id,$field)
+	/**
+		@attrib name=ajax_get_row_html all_args=1
+	**/
+	function ajax_get_row_html($arr)
+	{
+		die(iconv(aw_global_get("charset"), "UTF-8", $this->get_row_html($arr["id"] , $arr["field"])));
+	}
+
+	function get_row_html($id,$field,$arr)
 	{
 		$row = obj($id);
+		$ret = '<div id="row_'.$id.'_'.$field.'">';
 		switch($field)
 		{
-			case "name":
-				return '</a><div id="row_'.$id.'_'.$field.'">'.html::button(array(
+			case "change":
+				$ret.=html::button(array(
 					"name" => "change_row",
 					"value" => t("Muuda"),
-					"onclick" => "$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'get_row_change_fields', id: '".$id."', field: '".$field."'}, function (html) {
-						x=document.getElementById('row_".$id."_".$field."');
-						x.innerHTML=html;});",
-				))."<table><tr><td width=400>".
-					$row->prop("jrk")."<br>".
+					"onclick" => "edit_row('".$id."')",
+				));
+				break;
+			case "name":
+				$ret.="<div>".
+					$row->meta("jrk")."<br>".
 					$row->prop("date")."<br>".
-					$row->prop("comment")."<br>".
-					substr($row->prop("name") , 0 , 100)."</td></tr></table></div>";
+					"<b>".$row->prop("comment")."</b><br>".
+					//preg_replace('/([^\s]{100})(?=[^\s])/m', '$1 ', $row->prop("name")).
+					wordwrap($row->prop("name"), 100, "<br>", true).
+					"</div>";
+				break;
 			case "code":
-				return $row->prop("code");
+				$ret.=$row->prop("code");
+				break;
 			case "unit":
-				return $row->prop("unit.name")."<br>".
-					t("Hind").": ".$row->prop("price")."<br>".
-					t("Kogus").": ".$row->prop("amt")."<br>".
+				$price_cc = "";//hind oma organisatsiooni valuutas
+				$sum_cc = "";//summa oma organisatsiooni valuutas
+
+				if(is_object($arr["obj_inst"]))
+				{
+					$bcurrency = $arr["obj_inst"]->get_bill_currency_id();
+					$date = $arr["obj_inst"]->prop("bill_date");
+				}
+				else
+				{
+					$bcurrency = $row->get_bill_currency_id();
+					$date = $row->get_bill_date();
+				}
+				$ccurrency = $this->get_co_currency();
+				if($bcurrency && $ccurrency && $ccurrency != $bcurrency)
+				{
+					$cc_price = $curr_inst->convert(array(
+						"from" => $bcurrency,
+						"to" => $ccurrency,
+						"sum" => $row->prop("price"),
+						"date" =>  $date,
+					));
+					$price_cc = "<br>".round($cc_price , 2)." ".$ccurrency_name;
+					$sum_cc = "<br>".round($cc_price*$row->prop("amt") , 2)." ".$ccurrency_name;
+				}
+				$ret.=$row->prop("unit.name")."<br>".
+					t("Hind").": ".$row->prop("price")."<br>".$price_cc.
+					t("Kogus").": ".$row->prop("amt")."<br>".$sum_cc.
 					t("Summa").": ".$row->prop("price")*$row->prop("amt");
+				break;
 			case "has_tax":
-				return html::checkbox(array(
+				$ret.=html::checkbox(array(
 					"checked" => $row->prop("has_tax"),
 					"disabled" => 1,
 				));
+				break;
 			case "prod":
-				return $row->prop("prod.name");
+				$ret.=$row->prop("prod.name");
+				break;
 			case "person":
-				return join("<br>" , $row->get_person_selection());
+				$ret.=join("<br>" , $row->get_person_selection());
+				break;
 		}
+		return $ret.'</div>';
 	}
 
 	/** searches and connects bill row to task row
@@ -3711,6 +4037,28 @@ class crm_bill extends class_base
 	{
 		$url = $this->mk_my_orb("get_comment_for_prod");
 		return '
+			function edit_row(id)
+			{
+				$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "name"}, function (html) {
+					x=document.getElementById("row_"+id+"_name");
+					x.innerHTML=html;});
+					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "unit"}, function (html) {
+						x=document.getElementById("row_"+id+"_unit");
+						x.innerHTML=html;});
+					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "prod"}, function (html) {
+						x=document.getElementById("row_"+id +"_prod");
+						x.innerHTML=html;});
+					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "person"}, function (html) {
+						x=document.getElementById("row_" + id + "_person");
+						x.innerHTML=html;});
+					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "change"}, function (html) {
+						x=document.getElementById("row_" + id + "_change");
+						x.innerHTML=html;});
+					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "has_tax"}, function (html) {
+						x=document.getElementById("row_" + id + "_has_tax");
+						x.innerHTML=html;});
+			}
+
 			var date_day_el = aw_get_el("bill_date[day]")
 			var date_month_el = aw_get_el("bill_date[month]")
 			var date_year_el = aw_get_el("bill_date[year]")

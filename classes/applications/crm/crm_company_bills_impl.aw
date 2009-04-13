@@ -266,15 +266,15 @@ $x++;
 			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 			"on_bill" => 1,
 			"done" => 1,
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_TASK_ROW.task(CL_TASK).send_bill" => 1,
-					"CL_TASK_ROW.task(CL_BUG).send_bill" => 1,
-					"CL_TASK_ROW.task(CL_CRM_MEETING).send_bill" => 1,
-					"CL_TASK_ROW.task(CL_CRM_CALL).send_bill" => 1,
-				)
-			)),
+//			new object_list_filter(array(
+//				"logic" => "OR",
+//				"conditions" => array(
+//					"CL_TASK_ROW.task(CL_TASK).send_bill" => 1,
+//					"CL_TASK_ROW.task(CL_BUG).send_bill" => 1,
+//					"CL_TASK_ROW.task(CL_CRM_MEETING).send_bill" => 1,
+//					"CL_TASK_ROW.task(CL_CRM_CALL).send_bill" => 1,
+//				)
+//			)),
 			"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $this->search_start, $this->search_end),
 		);
 		$rowsres = array(

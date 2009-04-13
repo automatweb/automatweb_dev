@@ -2229,6 +2229,77 @@ class crm_bill_obj extends _int_object
 		}
 	}
 
+	/** returns bill product selection
+		@attrib api=1
+		@returns array
+	**/
+	public function get_prod_selection()
+	{
+		$prods = array("" => t("--vali--"));
+		// get prords from co
+		$u = get_instance(CL_USER);
+		$co = obj($u->get_current_company());
+		$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+		if ($wh)
+		{
+			$wh_i = $wh->instance();
+			$pkts = $wh_i->get_packet_list(array(
+				"id" => $wh->id()
+			));
+			foreach($pkts as $pko)
+			{
+				$prods[$pko->id()] = $pko->name();
+			}
+		}
+		return $prods;
+	}
+
+
+	/** returns bill unit selection
+		@attrib api=1
+		@returns array
+	**/
+	public function get_unit_selection()
+	{
+		// get prords from co
+		$filter = array(
+			"class_id" => CL_UNIT,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_UNIT => array(
+					new obj_sql_func(OBJ_SQL_UNIQUE, "name", "objects.name"),
+				)
+			)
+		);
+
+		$names = $t->get_element_from_all("name");
+
+		foreach($names as $id => $name)
+		{
+			if($name)
+			{
+				$prods[$this->get_unit_id($name)] = $name;
+			}
+		}
+		return $prods;
+	}
+
+	private function get_unit_id($name)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_UNIT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $name,
+		));
+		return reset($ol->ids());
+	}
+
 }
 
 ?>

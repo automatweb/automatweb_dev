@@ -264,6 +264,72 @@ class crm_bill_row_object extends _int_object
 
 	}
 
+	/** returns bill row product selection
+		@attrib api=1
+		@returns array
+	**/
+	public function get_prod_selection()
+	{
+		$prods = array();
+		$bill = $this->get_bill();
+		if($GLOBALS["object_loader"]->cache->can("view" , $bill))
+		{
+			$bill_obj = obj($bill);
+			$prods = $bill_obj->get_prod_selection();
+		}
+		if ($this->prop("prod") && !isset($prods[$this->prop("prod")]) && $GLOBALS["object_loader"]->cache->can("view", $this->prop("prod")))
+		{
+			$prodo = obj($this->prop("prod"));
+			$prods[$this->prop("prod")] = $prodo->name();
+		}
+		return $prods;
+	}
+
+	/** returns bill row unit selection
+		@attrib api=1
+		@returns array
+	**/
+	public function get_unit_selection()
+	{
+		$prods = array();
+		$bill = $this->get_bill();
+		if($GLOBALS["object_loader"]->cache->can("view" , $bill))
+		{
+			$bill_obj = obj($bill);
+			$prods = $bill_obj->get_unit_selection();
+		}
+		if ($this->prop("unit") && !isset($prods[$this->prop("unit")]) && $GLOBALS["object_loader"]->cache->can("view", $this->prop("unit")))
+		{
+			$prodo = obj($this->prop("unit"));
+			$prods[$this->prop("unit")] = $prodo->name();
+		}
+		asort($prods);
+		return $prods;
+	}
+
+	public function get_bill_currency_id()
+	{
+		$bill = $this->get_bill();
+		$ret = null;
+		if($GLOBALS["object_loader"]->cache->can("view" , $bill))
+		{
+			$bill_obj = obj($bill);
+			$ret = $bill_obj->get_bill_currency_id();
+		}
+		return $ret;
+	}
+
+	public function get_bill_date()
+	{
+		$bill = $this->get_bill();
+		$date = null;
+		if($GLOBALS["object_loader"]->cache->can("view" , $bill))
+		{
+			$bill_obj = obj($bill);
+			$date = $bill_obj->prop("bill_date");
+		}
+		return $date;
+	}
 
 }
 ?>
