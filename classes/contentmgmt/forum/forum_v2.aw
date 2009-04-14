@@ -2120,7 +2120,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				"class_id" => CL_MSGBOARD_TOPIC,
 				"status" => STAT_ACTIVE,
 			);
-			if($args["obj_inst"]->prop("activation"))
+			if(is_object($args["obj_inst"]) && $args["obj_inst"]->prop("activation"))
 			{
 				$params["active"] = 1;
 			}

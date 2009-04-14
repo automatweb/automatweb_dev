@@ -23,6 +23,7 @@
             <field>meta</field>
             <type>relpicker</type>
             <store>connect</store>
+            <reltype>RELTYPE_TASK</reltype>
             <caption>Toimetus</caption>
       </property>
       <property>

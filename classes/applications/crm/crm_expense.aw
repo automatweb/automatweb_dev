@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.9 2009/01/16 19:15:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.10 2009/04/14 15:23:53 markop Exp $
 // crm_expense.aw - Kulu 
 /*
 
@@ -15,7 +15,7 @@
 	@property date type=date_select
 	@caption Kuup&auml;ev
 
-	@property task type=relpicker store=connect
+	@property task type=relpicker store=connect reltype=RELTYPE_TASK
 	@caption Toimetus
 
 	@property on_bill type=checkbox ch_value=1
