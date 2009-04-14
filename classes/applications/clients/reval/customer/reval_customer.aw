@@ -965,15 +965,35 @@ if (aw_global_get("uid") == "diamond@hotmail.com")
 		{
 			$this->vars(array("DONE" => $this->parse("DONE")));
 		}
-                if($arr["show_username"])
+		
+		$user = "";
+		if(aw_global_get("uid"))
 		{
- 			$this->vars(array("username" =>  aw_global_get("uid")));
-                         $this->vars(array("USERNAME" => $this->parse("USERNAME")));
-                }
+			$user = aw_global_get("uid");
+		}
+		elseif($this->can("view" , aw_global_get("uid_oid")))
+		{
+			$uo = obj(aw_global_get("uid_oid"));
+			$user = $uo->prop("uid");
+		}
+
+		$this->vars(array("username" => $user));
+		$this->vars(array("USERNAME" => aw_global_get("uid")));
+
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_edit_password", array("section" => aw_global_get("section"), "id" => $arr["id"]))
 		));
+
+		if($arr["show_username"])
+		{
+			$this->vars(array("NEWUSER" => $this->parse("NEWUSER")));
+		}
+		else
+		{
+			$this->vars(array("OLDUSER" => $this->parse("OLDUSER")));
+		}
+
 		return $this->parse();
 	}
 
