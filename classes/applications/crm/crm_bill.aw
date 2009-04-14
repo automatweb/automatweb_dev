@@ -1982,6 +1982,11 @@ class crm_bill extends class_base
 				$o->set_prop($prop , iconv("UTF-8", aw_global_get("charset"), $arr[$prop]));
 			}
 		}
+		if($arr["name"])
+		{
+			$o->set_prop("desc" , $arr["name"]);
+		}
+
 		if($arr["jrk"])
 		{
 			$o->set_meta("jrk" , $arr["jrk"]);
@@ -2090,7 +2095,7 @@ class crm_bill extends class_base
 					"size" => 35
 				))."<br>".html::textarea(array(
 					"name" => "rows[".$row->id()."][name]",
-					"value" => $row->name(),
+					"value" => $row->prop("desc"),
 					"rows" => 5,
 					"cols" => 40
 				))
@@ -2249,7 +2254,7 @@ class crm_bill extends class_base
 					$row->prop("date")."<br>".
 					"<b>".$row->prop("comment")."</b><br>".
 					//preg_replace('/([^\s]{100})(?=[^\s])/m', '$1 ', $row->prop("name")).
-					wordwrap($row->prop("name"), 100, "<br>", true).
+					wordwrap(($row->prop("desc")), 100, "<br>", true).
 					"</div>";
 				break;
 			case "code":
