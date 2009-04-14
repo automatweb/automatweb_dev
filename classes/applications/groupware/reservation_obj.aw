@@ -13,6 +13,15 @@ class reservation_obj extends _int_object
 		parent::delete();
 	}
 
+	function save()
+	{
+		$rv = parent::save();
+
+		$this->set_sum();
+
+		return $rv;
+	}
+
 	function set_prop($pn, $pv)
 	{
 		//teatud propide puhul uuendab alambroneeringute andmeid ka
@@ -84,7 +93,39 @@ class reservation_obj extends _int_object
 		return $retval;
 	}
 
-	function get_sum()
+	private function set_sum()
+	{
+		$room_instance = get_instance(CL_ROOM);
+		$room_sum = $room_instance->cal_room_price(array(
+			"room" => $this->prop("resource"),
+			"start" => $this->prop("start1"),
+			"end" => $this->prop("end"),
+			"people" => $this->prop("people_count"),
+			"products" => $this->meta("amount"),
+			"bron" => $this,
+		));
+		if(is_array($this->get_special_sum()))
+		{
+			$sum = $spec_sum;
+		}
+		elseif(is_array($this->meta("special_sum")))
+		{
+			$sum = $this->meta("special_sum");
+		}
+		else
+		{
+			$sum = $room_sum;
+		}
+		//$this->set_saved_sum($room_sum,"room");//mingi aeg peaks eraldi ruumi ja toodete hinna ka salvestama kui vajadus tekkib
+		$this->set_saved_sum($sum,"sum");
+	}
+
+	/** returns reservation price
+		@attrib api=1
+		@return array
+			array(currency => sum, ...)
+	 **/
+	public function get_sum()
 	{
 		enter_function("sbo::_get_sum");
 		if($this->is_lower_bron())//kui on miski alambronn , siis on suht hindamatu
@@ -93,9 +134,14 @@ class reservation_obj extends _int_object
 			return array();
 		}
 
+		if(is_array($sum = $this->get_saved_sum()))
+		{exit_function("sbo::_get_sum");
+			return $sum;
+		}
+
 		//see meta versioon tuleb tagantpoolt 2ra koristada kohe kui kindel on, et kuskile pole seni seda salvestatud
 		if($spec_sum = $this->get_special_sum())
-		{
+		{exit_function("sbo::_get_sum");
 			return $spec_sum;
 		}
 
@@ -132,6 +178,58 @@ class reservation_obj extends _int_object
 		$this->save();
 		exit_function("sbo::_get_sum");
 		return $sum;
+	}
+
+	private function get_saved_sum($type = "sum")
+	{
+		$ret = array();
+		$prices = new object_list(array(
+			"class_id" => CL_PRICE,
+			"object" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"price_prop" => $type,
+		));
+		foreach($prices->arr() as $price)
+		{
+			if($price->prop("sum") && $price->prop("currency"))
+			{
+				$ret[$price->prop("currency")] = $price->prop("sum");
+			}
+		}
+		if(!sizeof($ret))
+		{
+			return null;
+		}
+		return $ret;
+	}
+
+	private function set_saved_sum($price_array , $type = "sum")
+	{
+		$prices = new object_list(array(
+			"class_id" => CL_PRICE,
+			"object" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"price_prop" => $type,
+		));
+		foreach($prices->arr() as $price)
+		{
+			if(isset($price_array[$price->prop("currency")]))
+			{
+				$price->set_prop("sum" , $price_array[$price->prop("currency")]);
+				$price->save();
+				unset($price_array[$price->prop("currency")]);
+			}
+		}
+		foreach($price_array  as $curr => $sum)
+		{
+			if($sum)
+			{
+				$this->add_price_object($curr , $sum, $type);
+			}
+		}
+		return 1;
 	}
 
 	/** returns reservation special price
