@@ -11,7 +11,6 @@ EMIT_MESSAGE(MSG_STORAGE_DELETE)
 
 */
 
-
 class _int_object
 {
 	///////////////////////////////////////////
@@ -22,7 +21,9 @@ class _int_object
 		"class_id" => null,
 		"meta" => null
 	);			// actual object data. $this->objdata["__obj_load_parameter"] -- special element for storing constructor parameter
+	protected $_create_new_version = 0;
 	protected $implicit_save = false;
+	protected $no_modify = false;
 	protected $obj_sys_flags;
 	protected $props_loaded = false;
 	protected $props_modified = array();
@@ -38,6 +39,11 @@ class _int_object
 
 	///////////////////////////////////////////
 	// public functions
+
+	function __construct($objdata)
+	{
+		$this->_int_object($objdata);
+	}
 
 	function _int_object($objdata)
 	{
@@ -420,7 +426,7 @@ class _int_object
 			);
 			if ($GLOBALS["object_loader"]->ds->can("view", $c_d["from"]))
 			{
-				$ret[] =& new connection($c_d);
+				$ret[] = new connection($c_d);
 			}
 		}
 
@@ -447,7 +453,7 @@ class _int_object
 	{
 		if (!is_object($this))
 		{
-			$o =& new object($param);
+			$o = new object($param);
 			return $o->path();
 		}
 
@@ -795,6 +801,7 @@ class _int_object
 		return $prev;
 	}
 
+	// id is null until object is saved
 	function id()
 	{
 		return isset($this->obj["oid"]) ? $this->obj["oid"] : null;
@@ -1318,7 +1325,7 @@ class _int_object
 			));
 			return;
 		}
-		
+
 		$prev = $this->_int_get_prop($key);
 		$this->_int_set_prop($key, $val);
 		// if this is a relpicker property, create the relation as well
@@ -1411,7 +1418,7 @@ class _int_object
 			}
 			else
 			{
-				if ($propi["method"] == "serialize")
+				if ($propi["method"] === "serialize")
 				{
 					$this->_int_set_ot_mod($propi["field"], $this->obj[$propi["field"]][$propi["name"]], $this->obj["properties"][$key]);
 					$this->obj[$propi["field"]][$propi["name"]] = $this->obj["properties"][$key];
@@ -2008,7 +2015,7 @@ class _int_object
 		);
 		foreach($GLOBALS["properties"][$cl_id] as $prop)
 		{
-			if (!empty($prop["table"]) && $prop['table'] == "objects" && $prop["field"] != "meta")
+			if (!empty($prop["table"]) && $prop['table'] === "objects" && $prop["field"] !== "meta")
 			{
 				$GLOBALS["of2prop"][$cl_id][$prop['name']] = $prop['name'];
 			}
@@ -2060,7 +2067,7 @@ class _int_object
 		else
 		{
 			// check if the class specifies that it is versioned and that something has changed
-			if ($GLOBALS["classinfo"][$this->obj["class_id"]]["versioned"] == 1 && aw_ini_get("config.object_versioning"))
+			if (!empty($GLOBALS["classinfo"][$this->obj["class_id"]]["versioned"]) && aw_ini_get("config.object_versioning"))
 			{
 				if (count($this->ot_modified) > 1 || count($this->props_modified) > 1)
 				{
@@ -2399,6 +2406,10 @@ class _int_object
 
 	protected function _int_is_property($prop)
 	{
+		if (!$this->props_loaded and !empty($this->obj["class_id"]))
+		{
+			$this->_int_load_property_values();
+		}
 		return isset($GLOBALS["properties"][$this->obj["class_id"]][$prop]) && is_array($GLOBALS["properties"][$this->obj["class_id"]][$prop]);
 	}
 
@@ -2855,6 +2866,18 @@ class _int_object
 	{
 		$inst = aw_locker::instance();
 		$inst->unlock("object", $this->obj["oid"]);
+	}
+
+	// returns object reference container (object class object) to be used by calls to other objects
+	protected function ref()
+	{
+		if (!empty($this->obj["oid"]))
+		{ // existing object reference container
+			return new object($this->obj["oid"]);
+		}
+		else
+		{ // new object, find referring container
+		}
 	}
 }
 

@@ -46,7 +46,7 @@ class acl_base extends db_connector
 	{
 		if (aw_ini_get("acl.use_new_acl"))
 		{
-			return safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
+			return safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata"), false, true));
 		}
 		$ret = array();
 		$acls = aw_ini_get("acl.names");
@@ -128,12 +128,12 @@ class acl_base extends db_connector
 
 		if (aw_ini_get("acl.use_new_acl"))
 		{
-			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
+			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")), false, true);
 			// convert gid to oid
 			$g_oid = $go->id();
 			$ad[$g_oid] = $this->get_acl_value_n($aclarr);
-			$ser = aw_serialize($ad);
-			$this->quote(&$ser);
+			$ser = aw_serialize($ad, SERIALIZE_NATIVE);
+			$this->quote($ser);
 			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
 		}
 	}
@@ -152,10 +152,10 @@ class acl_base extends db_connector
 
 		if (aw_ini_get("acl.use_new_acl"))
 		{
-			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
+			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata"), false, true));
 			unset($ad[$g_obj->id()]);
-			$ser = aw_serialize($ad);
-			$this->quote(&$ser);
+			$ser = aw_serialize($ad, SERIALIZE_NATIVE);
+			$this->quote($ser);
 			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
 		}
 
@@ -186,12 +186,12 @@ class acl_base extends db_connector
 
 		if (aw_ini_get("acl.use_new_acl"))
 		{
-			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
+			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata"), false, true));
 			// convert gid to oid
 			$g_oid = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$gid'", "oid");
 			$ad[$g_oid] = $this->get_acl_value_n($aclarr);
-			$ser = aw_serialize($ad);
-			$this->quote(&$ser);
+			$ser = aw_serialize($ad, SERIALIZE_NATIVE);
+			$this->quote($ser);
 			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
 			// If we change the ACL we have to change it in the cache also! -kaarel 28.11.2008
 			$GLOBALS["__obj_sys_acl_memc"][$oid]["acldata"][$g_oid] = $ad[$g_oid];
@@ -404,12 +404,12 @@ class acl_base extends db_connector
 			{
 				$max_acl = $this->can_aw($access,$oid);
 
-				$acl_cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
+				$acl_cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_NATIVE));
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
 			}
 			else
 			{
-				$max_acl = aw_unserialize($str_max_acl);
+				$max_acl = aw_unserialize($str_max_acl, false, true);
 			}
 		}
 
@@ -634,7 +634,7 @@ class acl_base extends db_connector
 		return $ret;
 	}
 
-	function init($args = NULL)
+	function init($args = array())
 	{
 		parent::init($args);
 	}

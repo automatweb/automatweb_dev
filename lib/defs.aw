@@ -721,9 +721,9 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		// kogu asendus tehakse yhe reaga
 		// "e" regexpi lopus tahendab seda, et teist parameetrit ksitletakse php koodina,
 		// mis eval-ist lbi lastakse.
-		$src = @preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
-		$src = @preg_replace("/{DATE:(.+?)\|(.+?)}/e","((is_numeric(\$vars[\"\\1\"]) && \$vars[\"\\1\"] > 1 )? date(\"\\2\",\$vars[\"\\1\"]) : \"\")",$src);
-		return @preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
+		$src = preg_replace("/{VAR:(.+?)}/e","(isset(\$vars[\"\\1\"]) ? \$vars[\"\\1\"] : '')",$src);
+		$src = preg_replace("/{DATE:(.+?)\|(.+?)}/e","((isset(\$vars[\"\\1\"]) && is_numeric(\$vars[\"\\1\"]) && \$vars[\"\\1\"] > 1 )? date(\"\\2\",\$vars[\"\\1\"]) : \"\")",$src);
+		return preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
 	}
 
 	/** gives the given string to xml_parse_into_struct and returns the result
@@ -1122,117 +1122,140 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		$name = str_replace('"',"&quot;", $name);
 	}
 
-	/** Serializes the given array to a string
+	/** Serializes the given variable/array to a string
 		@attrib api=1 params=pos
 
-		@param arr required type=array
-			The array to serialize
+		@param arr required type=mixed
+			The variable to serialize. Any type if SERIALIZE_NATIVE serialization requested, array in other cases
 
-		@param type optional type=int
-			The type of serializer to use, can be one of (SERIALIZE_PHP, SERIALIZE_PHP_FILE, SERIALIZE_PHP_NOINDEX, SERIALIZE_XML, SERIALIZE_XMLRPC), defaults to SERIALIZE_PHP
+		@param type optional type=int default=SERIALIZE_PHP
+			The type of serializer to use, can be one of (SERIALIZE_PHP, SERIALIZE_PHP_FILE, SERIALIZE_PHP_NOINDEX, SERIALIZE_XML, SERIALIZE_XMLRPC, SERIALIZE_NATIVE)
 
-		@param flags optional type=array
+		@param flags optional type=array default=array()
 			An array of settings to pass to the serializer
 
+		@param quote optional type=bool default=false
+			Whether to quote (escape, add slashes) the string after serializing.
+
 		@returns
-			A string that contains the array in a serialized form. can be turned back to an array by aw_unserialize
+			A string that contains the variable in a serialized form. can be turned back to a php variable by aw_unserialize
 
 		@comment
-			This can only handle arrays, not objects or any other type of values
+			Except in case of SERIALIZE_NATIVE this can only handle arrays, not objects or any other type of values. Optimized for SERIALIZE_NATIVE
 	**/
-	function aw_serialize($arr,$type = SERIALIZE_PHP, $flags = array())
+	function aw_serialize($arr, $type = SERIALIZE_PHP, $flags = array(), $quote = false)
 	{
-		switch($type)
+		$str = "";
+		if (SERIALIZE_NATIVE === $type)
 		{
-			case SERIALIZE_PHP:
-				$ser = new php_serializer;
-				foreach($flags as $fk => $fv)
-				{
-					$ser->set($fk, $fv);
-				}
-				$str = $ser->php_serialize($arr);
-				break;
-			case SERIALIZE_PHP_FILE:
-				$ser = new php_serializer_file;
-				foreach($flags as $fk => $fv)
-				{
-					$ser->set($fk, $fv);
-				}
-				$str = $ser->php_serialize($arr);
-				break;
-			case SERIALIZE_PHP_NOINDEX:
-				$ser = new php_serializer;
-				$ser->set("no_index",1);
-				$str = $ser->php_serialize($arr);
-				break;
+			$str = serialize($arr);
+		}
+		elseif (SERIALIZE_PHP === $type)
+		{
+			$ser = new php_serializer;
+			foreach($flags as $fk => $fv)
+			{
+				$ser->set($fk, $fv);
+			}
+			$str = $ser->php_serialize($arr);
+		}
+		elseif (SERIALIZE_PHP_FILE === $type)
+		{
+			$ser = new php_serializer_file;
+			foreach($flags as $fk => $fv)
+			{
+				$ser->set($fk, $fv);
+			}
+			$str = $ser->php_serialize($arr);
+		}
+		elseif (SERIALIZE_PHP_NOINDEX === $type)
+		{
+			$ser = new php_serializer;
+			$ser->set("no_index",1);
+			$str = $ser->php_serialize($arr);
+		}
+		elseif (SERIALIZE_XML === $type)
+		{
+			classload("core/serializers/xml");
+			$ser = new xml($flags);
+			$str = $ser->xml_serialize($arr);
+		}
+		elseif (SERIALIZE_XMLRPC === $type)
+		{
+			$ser = get_instance("core/orb/xmlrpc");
+			$str = $ser->xmlrpc_serialize($arr);
+		}
 
-			case SERIALIZE_XML:
-				classload("core/serializers/xml");
-				$ser = new xml($flags);
-				$str = $ser->xml_serialize($arr);
-				break;
-
-			case SERIALIZE_NATIVE:
-				$str = serialize($arr);
-				break;
-
-			case SERIALIZE_XMLRPC:
-				$ser = get_instance("core/orb/xmlrpc");
-				$str = $ser->xmlrpc_serialize($arr);
+		if ($quote)
+		{
+			$str = addslashes($str);
 		}
 
 		return $str;
 	}
 
-	/** unserializes a string to an array
+	/** unserializes a serialized string to a php variable
 		@attrib api=1 params=pos
 
 		@param str required type=string
 			The string to unserialize
 
-		@param dequote optional type=bool
-			Whether to run dequote() on the string before unserializing or not. defaults to false
+		@param dequote optional type=bool default=false
+			Whether to dequote (unescape db quote() output) the string before unserializing.
+
+		@param native_with_php_bc optional type=bool default=false
+			Unserialize value as if it was serialized with aw_serialize in SERIALIZE_NATIVE mode but checking for SERIALIZE_PHP/SERIALIZE_PHP_FILE/SERIALIZE_PHP_NOINDEX formats. Use when need to gradually convert existing serialized data from php formats to native and have performance priority to SERIALIZE_NATIVE.
 
 		@returns
-			The array, as unserialized from the string. If the string is not a valid serialization, returns null
+			The variable, as unserialized from the string. If the string is not a valid serialization, returns null
 
 		@comment
 			Use this to unserialize strings created by aw_serialize or php's serialize(), it autodetects the serializer type from the beginning of the string.
 
 	**/
-	function aw_unserialize($str,$dequote = 0)
+	function aw_unserialize($str, $dequote = false, $native_with_php_bc = false)
 	{
-		$retval = false;
 		if ($dequote)
 		{
 			$str = stripslashes($str);
-		};
+		}
 
-		$magic_bytes = substr($str,0,6);
-
-		if ($magic_bytes == "<?xml ")
-		{
-			classload("core/serializers/xml");
-			$x = new xml;
-			$retval = $x->xml_unserialize(array("source" => $str));
-		}
-		else
-		if ($magic_bytes == "\$arr =")
-		{
-			// php serializer
-			$p = new php_serializer;
-			$retval = $p->php_unserialize($str);
-		}
-		else
-		if ((strlen($str) > 0) && ($str{0} == "<"))
-		{
-			$ser = get_instance("core/orb/xmlrpc");
-			$retval = $ser->xmlrpc_unserialize($str);
-		}
-		elseif (!empty($str))
+		if ($native_with_php_bc)
 		{
 			$retval = unserialize($str);
+
+			if (false === $retval and "b:0;" !== $str) // track_errors $php_errormsg was null here when unserialize failed, serialize internal format string comparison used instead as a temporary(?) solution
+			{
+				$retval = aw_unserialize($str);
+			}
 		}
+		else
+		{
+			$retval = false; //!!! Tuleks muuta NULLiks, sest dok reklaamib nii ja false v6ib olla v22rtus. preagune nagu konverdiks tyhja stringi FALSEks
+			$magic_bytes = substr($str,0,6);
+			if ($magic_bytes === "<?xml ")
+			{
+				classload("core/serializers/xml");
+				$x = new xml;
+				$retval = $x->xml_unserialize(array("source" => $str));
+			}
+			elseif ($magic_bytes === "\$arr =")
+			{
+				// php serializer
+				$p = new php_serializer;
+				$retval = $p->php_unserialize($str);
+			}
+			elseif ((strlen($str) > 0) && ($str{0} === "<"))
+			{
+				$ser = get_instance("core/orb/xmlrpc");
+				$retval = $ser->xmlrpc_unserialize($str);
+			}
+			elseif (!empty($str))
+			{
+				$retval = unserialize($str);
+			}
+		}
+
 		return $retval;
 	}
 
@@ -2557,5 +2580,27 @@ function eval_buffer($res)
 		$o->save();
 		end_superuser();
 	}
+
+/**
+@attrib api=1
+@param s required type=string
+	String to translate
+@comment Translates the string to currently active language. Returns same string if translation not available.
+**/
+function t($s)
+{
+	return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : $s;
+}
+
+/**
+@attrib api=1
+@param s required type=string
+	String to translate
+@comment Translates the string to currently active language. Returns NULL if translation not available.
+**/
+function t2($s)
+{
+	return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : NULL;
+}
 
 ?>

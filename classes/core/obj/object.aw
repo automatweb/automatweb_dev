@@ -68,7 +68,13 @@ class object
 	private static $instance_locks = array();
 
 	/** object class constructor
-		@attrib api=1
+		@attrib api=1 params=pos
+
+		@param param optional default=null type=mixed
+			type: can be object id, object instance or alias
+
+		@param constructor_args optional type=array default=array()
+		 	Additional class specific constructor arguments
 
 		@comment
 			The object class represents a single object and has member functions via which you can modify or query all aspects of the object, also save it, copy it and delete it.
@@ -81,7 +87,7 @@ class object
 			in addition to the constructor, there is an utility function obj() in the global scope, to lessen the need to type, that passes it's parameters to the constructor
 
 		@errors:
-			- if the user has no access to the object, acl error is thrown
+			- if the user has no access to the object, awex_obj_acl is thrown
 			- if no such object exists or it cannot be loaded, error is thrown
 
 		@examples:
@@ -97,21 +103,21 @@ class object
 			   "class_id" => CL_FOO
 			));
 	**/
-	function object($param = NULL)
+	function object($param = NULL, $constructor_args = array())
 	{
 		$this->instance_number = ++self::$instance_count;
 
 		if (is_array($param))
 		{
-			$this->oid = $GLOBALS["object_loader"]->load_new_object($param);
+			$this->oid = $GLOBALS["object_loader"]->load_new_object($param, $constructor_args);
 		}
 		elseif (!empty($param))
 		{
-			$this->load($param);
+			$this->load($param, false, $constructor_args);
 		}
 		else
 		{
-			$this->oid = $GLOBALS["object_loader"]->load_new_object();
+			$this->oid = $GLOBALS["object_loader"]->load_new_object(null, $constructor_args);
 		}
 	}
 
@@ -145,10 +151,11 @@ class object
 		@param param required
 			type: can be object id, object instance or alias
 
-		@param force_reload optional
+		@param force_reload optional type=bool default=false
 		 	if TRUE, object will be reloaded from data source.
-			type: boolean
-			default: FALSE
+
+		@param constructor_args optional type=array default=array()
+		 	Additional class specific constructor arguments
 
 		@errors
 			- If user has no access, acl error is thrown.
@@ -163,7 +170,7 @@ class object
 			$o->load("alias/alias2");
 			$o->load(obj(666));
 	**/
-	function load($param, $force_reload = false)
+	function load($param, $force_reload = false, $constructor_args = array())
 	{
 		if (!is_object($GLOBALS["object_loader"]))
 		{
@@ -184,7 +191,7 @@ class object
 			$cnt = true;
 			enter_function("object::load");
 		}
-		$this->oid = $GLOBALS["object_loader"]->load($oid);
+		$this->oid = $GLOBALS["object_loader"]->load($oid, $constructor_args);
 		if ($cnt)
 		{
 			exit_function("object::load");
@@ -862,7 +869,7 @@ class object
 		@errors
 			- error is thrown if new class id is not known
 			- error is thrown if implicit_save is on and the user has no write access
-
+			throws awex_obj_class when class id already set
 
 		@returns
 			the object instance
@@ -874,7 +881,7 @@ class object
 	{
 		if (is_class_id($GLOBALS["objects"][$this->oid]->class_id()))
 		{
-			throw new awex_obj("Class id can be changed only once.");
+			throw new awex_obj_class("Class id can be changed only once.");
 		}
 
 		$this->_check_lock_write();
@@ -1673,11 +1680,11 @@ class object
 	function prop($param)
 	{
 		$this->_check_lock_read();
-		$method = "awobj_get_" . $param;
+		$method = "awobj_get_{$param}";
 
 		if (method_exists($GLOBALS["objects"][$this->oid], $method))
 		{
-			return $GLOBALS["objects"][$this->oid]->$method($value);
+			return $GLOBALS["objects"][$this->oid]->$method();
 		}
 		else
 		{
@@ -1862,7 +1869,7 @@ class object
 	function set_prop($key, $value)
 	{
 		$this->_check_lock_write();
-		$method = "awobj_set_" . $key;
+		$method = "awobj_set_{$key}";
 
 		if (method_exists($GLOBALS["objects"][$this->oid], $method))
 		{
@@ -2167,6 +2174,34 @@ class object
 		return $GLOBALS["objects"][$this->oid]->originalize();
 	}
 
+	/** Returns TRUE if the object is of this class or has this class as one of its parents
+		@attrib api=1 params=pos
+
+		@param class_id required type=int
+			One of CL_... constants
+
+		@errors
+			none
+
+		@returns boolean
+	**/
+	public function is_a($class_id)
+	{
+		$is = false;
+		if (is_class_id($class_id))
+		{
+			if ($class_id == $this->class_id())
+			{ // object is of queried class
+				$is = true;
+			}
+			elseif (aw_ini_isset("classes.{$class_id}.object_override") and is_a($GLOBALS["objects"][$this->oid], basename(aw_ini_get("classes.{$class_id}.object_override"))))
+			{ // object extends queried class
+				$is = true;
+			}
+		}
+		return $is;
+	}
+
 	/** Return the translation of the property
 		@attrib name=trans_get_val api=1 params=pos
 
@@ -2310,22 +2345,35 @@ class object
 }
 
 
-/* Generic AW object exception */
+/** Generic AW object exception **/
 class awex_obj extends aw_exception
 {
 	//!!! siia, et automaatselt laetaks obj id ja meetod, milles ex tehti. viimane throw?
 	public $awobj_id;
 }
 
-/* Requested method not defined for current object */
+/** Requested method not defined for current object **/
 class awex_obj_method extends awex_obj {}
 
-/* No access rights to perform requested operation */
+/** No access rights to perform requested operation **/
 class awex_obj_acl extends awex_obj {}
 
-/* Generic type mismatch condition */
-class awex_obj_type extends awex_obj {}
+/** Generic property exception **/
+class awex_obj_prop extends awex_obj {}
+
+/** Property is read-only **/
+class awex_obj_readonly extends awex_obj_prop {}
+
+/** Generic type mismatch condition. A method argument or something else is not of expected type **/
+class awex_obj_type extends awex_obj
+{
+	public $argument_name;
+}
+
+/** Generic class mismatch error condition. Contained internal object class is not what expected or tried to set class id on an object with clid already set **/
+class awex_obj_class extends awex_obj {}
 
 /** When in exclusive save and the object has been modified, this is thrown **/
 class awex_obj_modified_by_others extends awex_obj {}
+
 ?>

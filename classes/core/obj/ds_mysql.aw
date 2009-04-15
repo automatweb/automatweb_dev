@@ -28,7 +28,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$site_id = " AND site_id = '".$site_id."'";
 		}
 
-		$this->quote(&$alias);
+		$this->quote($alias);
 		$q = sprintf("
 			SELECT
 				%s
@@ -46,7 +46,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		$this->save_handle();
 		$oid = (int)$oid;
-		if (!empty($GLOBALS["object2version"][$oid]) && $GLOBALS["object2version"][$oid] != "_act")
+		if (!empty($GLOBALS["object2version"][$oid]) && $GLOBALS["object2version"][$oid] !== "_act")
 		{
 			$v = $GLOBALS["object2version"][$oid];
 			$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = '$oid' AND status != 0");
@@ -120,16 +120,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			else
 			{
 				error::raise(array(
-					"id" => ERR_NO_OBJ,
+					"id" => "ERR_NO_OBJ",
 					"msg" => sprintf(t("object::load(%s): no such object!"), $oid)
 				));
 			}
 		}
 
-		$ret["meta"] = aw_unserialize($ret["metadata"]);
+		$ret["meta"] = aw_unserialize($ret["metadata"], false, true);
 		if ($ret["metadata"] != "" && $ret["meta"] === NULL)
 		{
-			$ret["meta"] = aw_unserialize(stripslashes(stripslashes($ret["metadata"])));
+			$ret["meta"] = aw_unserialize(stripslashes(stripslashes($ret["metadata"])), false, true); //!!! miks siin topelt stripslashes vajalik on?
 		}
 		//unset($ret["metadata"]);
 
@@ -139,7 +139,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		// unserialize acldata
-		$ret["acldata"] = aw_unserialize(isset($ret["acldata"]) ? $ret["acldata"] : null);
+		if (isset($ret["acldata"]))
+		{
+			$ret["acldata"] = aw_unserialize($ret["acldata"], false, true);
+		}
+		else
+		{
+			$ret["acldata"] = null;
+		}
 
 		// filter it for all current groups
 
@@ -317,17 +324,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if (isset($this->read_properties_data_cache[$object_id]))
 				{
 					$data = $this->read_properties_data_cache[$object_id];
-					$this->dequote(&$data);
+					$this->dequote($data);
 				}
 				else
 				{
 					$data = $this->db_fetch_row($q);
-					$this->dequote(&$data);
+					$this->dequote($data);
 				}
+
 				if (is_array($data))
 				{
 					$ret += $data;
 				}
+
 				foreach($tbl2prop[$table] as $prop)
 				{
 					if ($prop["method"] === "serialize")
@@ -337,7 +346,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$prop['field'] = "metadata";
 						}
 
-						$unser = aw_unserialize($ret[$prop["field"]]);
+						$unser = aw_unserialize($ret[$prop["field"]], false, true);
 						$ret[$prop["name"]] = isset($unser[$prop["name"]]) ? $unser[$prop["name"]] : null;
 					}
 
@@ -444,7 +453,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$conn_prop_fetch = array();
 		foreach($properties as $prop => $data)
 		{
-			if ($data["store"] == "no")
+			if ($data["store"] === "no")
 			{
 				continue;
 			}
@@ -454,7 +463,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$data["table"] = "objects";
 			}
 
-			if ($data["store"] == "connect")
+			if ($data["store"] === "connect")
 			{
 				if ($GLOBALS["cfg"]["site_id"] != 139)
 				{
@@ -465,7 +474,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 
-			if ($data["table"] != "objects")
+			if ($data["table"] !== "objects")
 			{
 				$tables[$data["table"]] = $data["table"];
 				if ($data["store"] != "no")
@@ -486,12 +495,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$_got_fields = array();
 			foreach($tbl2prop[$table] as $prop)
 			{
-				if ($prop['field'] == "meta" && $prop["table"] == "objects")
+				if ($prop['field'] === "meta" && $prop["table"] === "objects")
 				{
 					$prop['field'] = "metadata";
 				}
 
-				if ($prop["method"] == "serialize")
+				if ($prop["method"] === "serialize")
 				{
 					if (!array_key_exists($prop["field"], $_got_fields))
 					{
@@ -506,12 +515,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$fields[] = $table.".`".$prop["field"]."_to` AS `".$prop["name"]."_to`";
 				}
 				else
-				if ($prop["method"] == "bitmask")
+				if ($prop["method"] === "bitmask")
 				{
 					$fields[] = " (".$table.".`".$prop["field"]."` & ".$prop["ch_value"].") AS `".$prop["name"]."`";
 				}
 				else
-				if ($prop["store"] != "connect")	// must not try to read store=connect fields at all, since they don't have to exist!
+				if ($prop["store"] !== "connect")	// must not try to read store=connect fields at all, since they don't have to exist!
 				{
 					$fields[] = $table.".`".$prop["field"]."` AS `".$prop["name"]."`";
 				}
@@ -557,7 +566,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				foreach($objtblprops as $objtblprop)
 				{
-	                                if ($objtblprop["method"] == "bitmask")
+	                                if ($objtblprop["method"] === "bitmask")
 	                                {
 	                                        $q .= ",\n(objects.`".$objtblprop["field"]."` & ".$objtblprop["ch_value"].") AS `".$objtblprop["name"]."`";
 	                                }
@@ -652,18 +661,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				continue;
 			}
 
-
-			if ($data["table"] == "objects" && $data["field"] == "meta" && !isset($arr["objdata"]["meta"][$data["name"]]) && !empty($data["default"]))
+			if ($data["table"] === "objects" && $data["field"] === "meta" && !isset($arr["objdata"]["meta"][$data["name"]]) && !empty($data["default"]))
 			{
 				$arr["objdata"]["meta"][$data["name"]] = $data["default"];
 			}
 		}
 		extract($arr);
 
-		$metadata = aw_serialize($objdata["meta"]);
-
-		$this->quote(&$metadata);
-		$this->quote(&$objdata);
+		$metadata = aw_serialize($objdata["meta"], SERIALIZE_NATIVE);
+		$this->quote($metadata);
+		$this->quote($objdata);
 		// insert default new acl to object table here
 		$acld_fld = $acld_val = "";
 		$n_acl_data = null;
@@ -677,7 +684,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			);
 
 			$acld_fld = ",acldata";
-			$acld_val = ",'".str_replace("'", "\\'", aw_serialize($n_acl_data))."'";
+			$acld_val = aw_serialize($n_acl_data, SERIALIZE_NATIVE);
+			$this->quote($acld_val);
+			$acld_val = ",'".$acld_val."'";
 		}
 
 		// create oid
@@ -690,12 +699,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				metadata,						subclass,					flags
 				$acld_fld
 		) VALUES (
-				'".$objdata["parent"]."',	'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
-				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
-				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
-				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
-										'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."'
-				$acld_val
+				'{$objdata["parent"]}',	'{$objdata["class_id"]}',		'{$objdata["name"]}',		'{$objdata["createdby"]}',
+				'{$objdata["created"]}',	'{$objdata["modified"]}',		'{$objdata["status"]}',	'{$objdata["site_id"]}',
+				'{$objdata["hits"]}',		'{$objdata["lang_id"]}',		'{$objdata["comment"]}',	'{$objdata["modifiedby"]}',
+				'{$objdata["jrk"]}',		'{$objdata["period"]}',		'{$objdata["alias"]}',	'{$objdata["periodic"]}',
+										'{$metadata}',				'{$objdata["subclass"]}',	'{$objdata["flags"]}'
+				{$acld_val}
 		)";
 		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 
@@ -731,24 +740,24 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				continue;
 			}
 
-			if ($data["table"] == "objects")
+			if ($data["table"] === "objects")
 			{
 				continue;
 			}
 
-			if ($data["store"] != "no" && $data["store"] != "connect")
+			if ($data["store"] !== "no" && $data["store"] !== "connect")
 			{
 				$tbls[$data["table"]]["index"] = $tableinfo[$data["table"]]["index"];
 				// check if the property has a value
 				if (isset($objdata["properties"][$prop]))
 				{
 					// if the prop is in a serialized field, then respect that
-					if ($data["method"] == "serialize")
+					if ($data["method"] === "serialize")
 					{
 						// unpack field, add value, repack field
-						$_field_val = aw_unserialize($tbls[$data["table"]]["defaults"][$data["field"]]);
+						$_field_val = aw_unserialize($tbls[$data["table"]]["defaults"][$data["field"]], false, true);
 						$_field_val[$prop] = $objdata["properties"][$prop];
-						$tbls[$data["table"]]["defaults"][$data["field"]] = aw_serialize($_field_val);
+						$tbls[$data["table"]]["defaults"][$data["field"]] = aw_serialize($_field_val, SERIALIZE_NATIVE);
 					}
 					else
 					{
@@ -757,19 +766,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				else
 				{
-					if ($data["method"] != "serialize")
+					if ($data["method"] !== "serialize")
 					{
 						$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
 					}
 					else
 					{
-						$_field_val = aw_unserialize($tbls[$data["table"]]["defaults"][$data["field"]]);
+						$_field_val = aw_unserialize($tbls[$data["table"]]["defaults"][$data["field"]], false, true);
 						$_field_val[$prop] = $data["default"];
-						$tbls[$data["table"]]["defaults"][$data["field"]] = aw_serialize($_field_val);
+						$tbls[$data["table"]]["defaults"][$data["field"]] = aw_serialize($_field_val, SERIALIZE_NATIVE);
 					}
 				}
 
-				if ($data["datatype"] == "int" && $tbls[$data["table"]]["defaults"][$data["field"]] == "")
+				if ($data["datatype"] === "int" && $tbls[$data["table"]]["defaults"][$data["field"]] == "")
 				{
 					$tbls[$data["table"]]["defaults"][$data["field"]] = "0";
 				}
@@ -826,15 +835,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			return $this->save_properties_new_version($arr);
 		}
-		if ($GLOBALS["object2version"][$arr["objdata"]["oid"]] != "")
+
+		if (!empty($GLOBALS["object2version"][$arr["objdata"]["oid"]]))
 		{
 			$arr["objdata"]["version_id"] = $GLOBALS["object2version"][$arr["objdata"]["oid"]];
 			return $this->save_properties_new_version($arr);
 		}
 
-		$metadata = aw_serialize($objdata["meta"]);
-		$this->quote(&$metadata);
-		$this->quote(&$objdata);
+		$metadata = aw_serialize($objdata["meta"], SERIALIZE_NATIVE);
+		$this->quote($metadata);
+		$this->quote($objdata);
 		$objdata["metadata"] = $metadata;
 
 		if ($objdata["brother_of"] == 0)
@@ -847,6 +857,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$arr["ot_modified"] = $GLOBALS["object_loader"]->all_ot_flds;
 		}
+
 		foreach(safe_array($arr["ot_modified"]) as $_field => $one)
 		{
 			$ot_sets[] = " $_field = '".$objdata[$_field]."' ";
@@ -877,7 +888,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$tbls = array();
 		foreach($properties as $prop => $data)
 		{
-			if ($data["store"] != "no" && $data["store"] != "connect")
+			if ($data["store"] !== "no" && $data["store"] !== "connect")
 			{
 				$tbls[$data["table"]][] = $data;
 			}
@@ -916,7 +927,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				continue;
 			}
 
-			if ($tbl == "objects")
+			if ($tbl === "objects")
 			{
 				if ($objdata["oid"] == $objdata["brother_of"])
 				{
@@ -935,13 +946,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				// this check is here, so that we won't overwrite default values, that are saved in create_new_object
 				if (isset($propvalues[$prop['name']]))
 				{
-					if ($prop["type"] == "datagrid")
+					if ($prop["type"] === "datagrid")
 					{
 						continue;
 					}
-					if ($prop['method'] == "serialize")
+					if ($prop['method'] === "serialize")
 					{
-						if ($prop['field'] == "meta" && $prop["table"] == "objects")
+						if ($prop['field'] === "meta" && $prop["table"] === "objects")
 						{
 							$prop['field'] = "metadata";
 						}
@@ -949,7 +960,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$serfs[$prop['field']][$prop['name']] = $propvalues[$prop['name']];
 					}
 					else
-					if ($prop['method'] == "bitmask")
+					if ($prop['method'] === "bitmask")
 					{
 						$val = $propvalues[$prop["name"]];
 
@@ -968,7 +979,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$seta[$prop["field"]] = $mask;;
 					}
 					else
-					if ($prop['type'] == 'range') // range support by dragut
+					if ($prop['type'] === 'range') // range support by dragut
 					{
 						$seta[$prop['field'].'_from'] = (int)$propvalues[$prop['name']]['from'];
 						$seta[$prop['field'].'_to'] = (int)$propvalues[$prop['name']]['to'];
@@ -976,11 +987,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					else
 					{
 						$str = $propvalues[$prop["name"]];
-						$this->quote(&$str);
+						$this->quote($str);
 						$seta[$prop["field"]] = $str;
 					}
 
-					if ($prop["datatype"] == "int" && $seta[$prop["field"]] == "")
+					if ($prop["datatype"] === "int" && $seta[$prop["field"]] == "")
 					{
 						$seta[$prop["field"]] = "0";
 					}
@@ -989,7 +1000,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			foreach($serfs as $field => $dat)
 			{
-				$str = aw_serialize($dat);
+				$str = aw_serialize($dat, SERIALIZE_NATIVE);
 				$this->quote($str);
 				$seta[$field] = $str;
 			}
@@ -998,7 +1009,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// and the table is the objects table, then we must ONLY write the metadata field
 			// to the original object. because if we write all, then ot fields will be the same for the brother and the original
 			// always. and that's not good.
-			if ($tbl == "objects" && $objdata["brother_of"] != $objdata["oid"])
+			if ($tbl === "objects" && $objdata["brother_of"] != $objdata["oid"])
 			{
 				$seta = array("metadata" => $seta["metadata"]);
 			}
@@ -1021,7 +1032,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			foreach($tbld as $prop)
 			{
-				if ($prop["type"] == "datagrid")
+				if ($prop["type"] === "datagrid")
 				{
 					$data_qs[] = "DELETE FROM ".$prop["table"]." WHERE ".$tableinfo[$prop["table"]]["index"]." = ".$objdata["oid"];
 					// insert data back
@@ -1033,7 +1044,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$tmp = array();
 							foreach($prop["fields"] as $field_name)
 							{
-								$this->quote(&$data_row[$field_name]);
+								$this->quote($data_row[$field_name]);
 								$tmp[$field_name] = $data_row[$field_name];
 							}
 
@@ -1284,7 +1295,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		foreach($arr as $k => $v)
 		{
-			if (substr($k, 0, 3) == "to.")
+			if (substr($k, 0, 3) === "to.")
 			{
 				if (is_array($v))
 				{
@@ -1302,7 +1313,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				};
 			}
-			if (substr($k, 0, 5) == "from.")
+			if (substr($k, 0, 5) === "from.")
 			{
 				if (is_array($v))
 				{
@@ -1328,8 +1339,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$ret = array();
 		while ($row = $this->db_next())
 		{
-			$row["from.acldata"] = aw_unserialize($row["from.acldata"]);
-			$row["to.acldata"] = aw_unserialize($row["to.acldata"]);
+			$row["from.acldata"] = aw_unserialize($row["from.acldata"], false, true);
+			$row["to.acldata"] = aw_unserialize($row["to.acldata"], false, true);
 			$ret[$row["id"]] = $row;
 		}
 
@@ -1477,7 +1488,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					// process metafields
 					foreach($fetch_metafields as $f_mf => $f_keys)
 					{
-						$f_unser = aw_unserialize($row[$f_mf]);
+						$f_unser = aw_unserialize($row[$f_mf], false, true);
 						foreach($f_keys as $f_key_name)
 						{
 							$row[$f_key_name] = $f_unser[$f_key_name];
@@ -1521,7 +1532,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 					if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 					{
-						$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
+						$row["acldata"] = safe_array(aw_unserialize($row["acldata"], false, true));
 						$acldata[$row["oid"]] = $row;
 					}
 				}
@@ -1541,7 +1552,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					);
 					if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 					{
-						$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
+						$row["acldata"] = safe_array(aw_unserialize($row["acldata"], false, true));
 						$acldata[$row["oid"]] = $row;
 					}
 				}
@@ -1659,23 +1670,23 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				continue;
 			}
 
-			if ("limit" == (string)($key))
+			if ("limit" === (string)($key))
 			{
 				$this->limit = " LIMIT $val ";
 				continue;
 			}
 
-			if ("join_strategy" == (string)($key))
+			if ("join_strategy" === (string)($key))
 			{
 				continue;
 			}
 
-			if ("status" == (string)($key))
+			if ("status" === (string)($key))
 			{
 				$this->stat = true;
 			}
 
-			if ("lang_id" == (string)($key))
+			if ("lang_id" === (string)($key))
 			{
 				$this->has_lang_id = true;
 			}
@@ -1694,7 +1705,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					"val" => $val,
 					"params" => $p_tmp
 				));
-				if ($tbl == "__rewrite_prop")
+				if ($tbl === "__rewrite_prop")
 				{
 					$key = $fld;
 				}
@@ -1713,17 +1724,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$fld = $this->properties[$key]["field"];
 				if ($fld == "meta")
 				{
-					if ($this->properties[$key]["store"] != "connect")
+					if ($this->properties[$key]["store"] !== "connect")
 					{
 						$this->meta_filter[$key] = $val;
 						continue;
 					}
 				}
 				else
-				if ($this->properties[$key]["method"] == "serialize")
+				if ($this->properties[$key]["method"] === "serialize")
 				{
 					error::raise(array(
-						"id" => ERR_FIELD,
+						"id" => "ERR_FIELD",
 						"msg" => sprintf(t("filter cannot contain properties (%s) that are in serialized fields other than metadata!"), $key)
 					));
 				}
@@ -1731,16 +1742,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->_add_s($tbl);
 			}
 
-			if ($tbl != "objects")
+			if ($tbl !== "objects")
 			{
 				$this->has_data_table_filter = true;
 			}
 			$tf = $tbl.".`".$fld."`";
 
-			if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] == "connect")
+			if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] === "connect")
 			{
 				// join aliases as many-many relation and filter by that
-				if ($tbl == "objects")
+				if ($tbl === "objects")
 				{
 					$idx = "brother_of";
 				}
@@ -1755,7 +1766,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->_add_s("aliases_".$key);
 			}
 
-			if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] == "connect" && $fld == "meta")
+			if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] === "connect" && $fld === "meta")
 			{
 				// figure out the joined alias table name and search from that
 				$tbl = "aliases_".$key;
@@ -1764,12 +1775,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->_add_s($tbl);
 			}
 
-			if (is_array($val) && ((isset($this->properties[$key]["method"]) && $this->properties[$key]["method"] == "bitmask") || $key == "flags"))
+			if (is_array($val) && ((isset($this->properties[$key]["method"]) && $this->properties[$key]["method"] === "bitmask") || $key === "flags"))
 			{
 				$sql[] = $tf." & ".$val["mask"]." = ".((int)$val["flags"]);
 			}
 			else
-			if (!is_array($val) && isset($this->properties[$key]) && ($this->properties[$key]["method"] == "bitmask") && $this->properties[$key]["ch_value"] > 0)
+			if (!is_array($val) && isset($this->properties[$key]) && ($this->properties[$key]["method"] === "bitmask") && $this->properties[$key]["ch_value"] > 0)
 			{
 				if (is_object($val))
 				{
@@ -1781,7 +1792,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 						case "obj_predicate_compare":
 							$v_data = $val->data;
-							if (is_object($val->data) && get_class($val->data) == "aw_array")
+							if (is_object($val->data) && get_class($val->data) === "aw_array")
 							{
 								$v_data = $v_data->get();
 							}
@@ -1830,7 +1841,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 								default:
 									error::raise(array(
-										"id" => ERR_OBJ_COMPARATOR,
+										"id" => "ERR_OBJ_COMPARATOR",
 										"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ,OBJ_COMP_NULL,OBJ_COMP_IN_TIMESPAN. the value supplied, was: %s!"), $val->comparator)
 									));
 							}
@@ -1881,7 +1892,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if (is_object($val))
 			{
 				$class_name = get_class($val);
-				if ($class_name == "object_list_filter")
+				if ($class_name === "object_list_filter")
 				{
 					if (!empty($val->filter["non_filter_classes"]))
 					{
@@ -1897,10 +1908,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
-				if ($class_name == "obj_predicate_not")
+				if ($class_name === "obj_predicate_not")
 				{
 					$v_data = $val->data;
-					if (is_object($val->data) && get_class($val->data) == "aw_array")
+					if (is_object($val->data) && get_class($val->data) === "aw_array")
 					{
 						$v_data = $v_data->get();
 					}
@@ -1945,13 +1956,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
-				if ($class_name == "obj_predicate_regex")
+				if ($class_name === "obj_predicate_regex")
 				{
 					$v_data = $val->data;
 					$sql[] = " (".$tf." REGEXP '".$v_data."'  ) ";
 				}
 				else
-				if ($class_name == "obj_predicate_compare")
+				if ($class_name === "obj_predicate_compare")
 				{
 					$v_data = $val->data;
 					if (is_object($val->data) && get_class($val->data) == "aw_array")
@@ -2003,7 +2014,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 						default:
 							error::raise(array(
-								"id" => ERR_OBJ_COMPARATOR,
+								"id" => "ERR_OBJ_COMPARATOR",
 								"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ,OBJ_COMP_NULL,OBJ_COMP_IN_TIMESPAN. the value supplied, was: %s!"), $val->comparator)
 							));
 					}
@@ -2043,9 +2054,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
-				if ($class_name == "obj_predicate_prop")
+				if ($class_name === "obj_predicate_prop")
 				{
-					if ($val->prop == "id")
+					if ($val->prop === "id")
 					{
 						$tbl2 = "objects";
 						$fld2 = "oid";
@@ -2088,7 +2099,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$sql[] = $tf.$compr.$tbl2.".".$fld2." ";
 				}
 				else
-				if ($class_name == "obj_predicate_limit")
+				if ($class_name === "obj_predicate_limit")
 				{
 					if (($tmp = $val->get_per_page()) > 0)
 					{
@@ -2100,7 +2111,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
-				if ($class_name == "obj_predicate_sort")
+				if ($class_name === "obj_predicate_sort")
 				{
 					$this->sby = " ORDER BY ";
 					$tmp = array();
@@ -2113,7 +2124,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$pd = $this->properties[$sl_item["prop"]];
 						}
 						else
-						if (isset($GLOBALS["object_loader"]->all_ot_flds[$sl_item["prop"]]) || $sl_item["prop"] == "oid")
+						if (isset($GLOBALS["object_loader"]->all_ot_flds[$sl_item["prop"]]) || $sl_item["prop"] === "oid")
 						{
 							$pd = array("table" => "objects", "field" => $sl_item["prop"]);
 						}
@@ -2125,14 +2136,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						{
 							$this->used_tables[$pd["table"]] = $pd["table"];
 						}
-						$tmp[] = $pd["table"].".`".$pd["field"]."` ".($sl_item["direction"] == "desc" ? "DESC" : "ASC")." ";
+						$tmp[] = $pd["table"].".`".$pd["field"]."` ".($sl_item["direction"] === "desc" ? "DESC" : "ASC")." ";
 						$this->_add_s($pd["table"]);
 					}
 					$this->sby .= join(", ", $tmp);
 				}
 			}
 			else
-			if (is_array($val) || (is_object($val) && get_class($val) == "aw_array"))
+			if (is_array($val) || (is_object($val) && get_class($val) === "aw_array"))
 			{
 				if (is_object($val))
 				{
@@ -2147,8 +2158,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						continue;
 					}
 
-					$this->quote(&$v);
-					if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] == "connect")
+					$this->quote($v);
+					if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] === "connect")
 					{
 						$str[] = " aliases_".$key.".target = '$v' ";
 					}
@@ -2170,13 +2181,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			else
 			{
-				$this->quote(&$val);
-				if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] == "connect")
+				$this->quote($val);
+				if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] === "connect")
 				{
 					$sql[] = " aliases_".$key.".target = '$val' ";
 				}
 				else
-				if (($key == "modified" && strpos($val, "%") === false) || $key == "flags")
+				if (($key === "modified" && strpos($val, "%") === false) || $key === "flags")
 				{
 					// pass all arguments .. &, >, < or whatever the user wants to
 					$sql[] = $tf." ".$val;
@@ -2241,9 +2252,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		extract($arr);
 
-		$metadata = aw_serialize($objdata["meta"]);
+		$metadata = aw_serialize($objdata["meta"], SERIALIZE_NATIVE);
 		$this->quote($metadata);
-		$this->quote(&$objdata);
+		$this->quote($objdata);
 
 		$objdata["createdby"] = $objdata["modifiedby"] = aw_global_get("uid");
 		$objdata["created"] = $objdata["modified"] = time();
@@ -2260,9 +2271,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$uo = obj(aw_global_get("uid_oid"));
 			$g_d = $uo->get_default_group();
 			$acld_fld = ",acldata";
-			$acld_val = ",'".str_replace("'", "\\'", aw_serialize(array(
+			$acld_val = aw_serialize(array(
 				$g_d => $this->get_acl_value_n($this->acl_get_default_acl_arr())
-			)))."'";
+			), SERIALIZE_NATIVE);
+			$this->quote($acld_val);
+			$acld_val = ",'".$acld_val."'";
 		}
 
 		// create oid
@@ -2275,12 +2288,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				metadata,					subclass,					flags,
 				brother_of					$acld_fld
 		) VALUES (
-				'".$parent."',				'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
-				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
-				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
-				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
-										'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."',
-				'".$objdata["oid"]."'		$acld_val
+				'{$parent}',				'{$objdata["class_id"]}',		'{$objdata["name"]}',		'{$objdata["createdby"]}',
+				'{$objdata["created"]}',	'{$objdata["modified"]}',		'{$objdata["status"]}',	'{$objdata["site_id"]}',
+				'{$objdata["hits"]}',		'{$objdata["lang_id"]}',		'{$objdata["comment"]}',	'{$objdata["modifiedby"]}',
+				'{$objdata["jrk"]}',		'{$objdata["period"]}',		'{$objdata["alias"]}',	'{$objdata["periodic"]}',
+										'{$metadata}',				'{$objdata["subclass"]}',	'{$objdata["flags"]}',
+				'{$objdata["oid"]}'		{$acld_val}
 		)";
 		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 		$this->db_query($q);
@@ -2329,7 +2342,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$clid = constant($filt[0]);
 		}
 
-		if (substr($filt[0], 0, 3) != "CL_" && (is_array($params["class_id"]) || is_class_id($params["class_id"])))
+		if (substr($filt[0], 0, 3) !== "CL_" && (is_array($params["class_id"]) || is_class_id($params["class_id"])))
 		{
 			$clss = aw_ini_get("classes");
 			if (is_array($params["class_id"]))
@@ -2344,12 +2357,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$filt = explode(".", $key);
 			$clid = constant($filt[0]);
 		}
+
 		if (!is_class_id($clid))
 		{
 			if (!is_array($params["class_id"]))
 			{
 				error::raise_if(!is_class_id($params["class_id"]), array(
-					"id" => ERR_OBJ_NO_CLID,
+					"id" => "ERR_OBJ_NO_CLID",
 					"msg" => sprintf(t("ds_mysql::do_proc_complex_param(%s, %s): if a complex join parameter is given without a class id as the first element, the class_id parameter must be set!"), $key, $val)
 				));
 				$clid = $params["class_id"];
@@ -2366,7 +2380,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// UNLESS the second part begins with RELTYPE
 			if (count($filt) == 2)
 			{
-				if (substr($filt[1], 0, 7) != "RELTYPE")
+				if (substr($filt[1], 0, 7) !== "RELTYPE")
 				{
 					// so just return the table and field for that clas
 					if (!isset($GLOBALS["properties"][$clid]))
@@ -2401,7 +2415,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						}
 					}
 
-					if ($prop["store"] == "connect" || $prop["method"] == "serialize")	// need psecial handling, rewrite to undefined class filter
+					if ($prop["store"] === "connect" || $prop["method"] === "serialize")	// need psecial handling, rewrite to undefined class filter
 					{
 						return array("__rewrite_prop", $filt[1]);
 					}
@@ -2438,7 +2452,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		foreach($this->join_data as $pos => $join)
 		{
 //echo "process ".dbg::dump($join)." <br>";
-			if ($join["via"] == "rel")
+			if ($join["via"] === "rel")
 			{
 				// from prev to alias from alias to obj
 				if (empty($join["table"]))
@@ -2451,7 +2465,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				$prev_clid = $join["from_class"];
 
-				$tmp_prev = $this->join_data[$pos-1];
+				$tmp_prev = isset($this->join_data[$pos-1]) ? $this->join_data[$pos-1] : array(
+					"from_class" => "",
+					"reltype" => "",
+					"via" => ""
+				);
 				$cur_al_name = "aliases_".$tmp_prev["from_class"]."_".$tmp_prev["reltype"]."_".$join["to_class"]."_".$join["reltype"];
 				$rel_from_field = "source";
 				$rel_to_field = "target";
@@ -2465,8 +2483,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					$str .= " objects.oid ";
 				}
-				else
-				if ($tmp_prev["via"] == "rel")
+				elseif ($tmp_prev["via"] === "rel")
 				{
 					$_tb_name = "objects__".$tmp_prev["from_class"]."_".$join["from_class"]."_".$tmp_prev["reltype"];
 					$str .= " ".$_tb_name.".oid ";
@@ -2505,7 +2522,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					if ($tbl != "")
 					{
 						$field = $new_t[$tbl]["index"];
-						$tbl .= "_".$join["from_class"]."_".$join["field"];
+						$tbl .= "_".$join["from_class"]."_".(isset($join["field"]) ? $join["field"] : "");
 						if (!isset($done_ot_js[$tbl_r]))
 						{
 							$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$objt_name.".brother_of";
@@ -2518,7 +2535,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 
 					// now, if the next join is via rel, we are gonna need the objects table here as well, so add that
-					if ($this->join_data[$pos+1]["via"] == "rel" && $tbl != "")
+					if (isset($this->join_data[$pos+1]["via"]) and $this->join_data[$pos+1]["via"] === "rel" && $tbl != "")
 					{
 						$o_field = "oid";
 						$o_tbl = "objects_".$join["to_class"];
@@ -2540,7 +2557,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			else	// via prop
 			{
-				if (!$join["to_class"] && $this->join_data[$pos-1]["via"] == "rel")
+				if (!$join["to_class"] && $this->join_data[$pos-1]["via"] === "rel")
 				{
 					$prev = $this->join_data[$pos-1];
 					$prev_prev = $this->join_data[$pos-2];
@@ -2574,7 +2591,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$tmp_fld = "source";
 					}
 					else
-					{	
+					{
 						$tmp_fld = "target";
 					}
 					$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$prev_t.".".$tmp_fld." $and_buster ";
@@ -2596,11 +2613,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$prev_t = $join["table"]."_".$prev_clid."_".$prev_filt;
 					}
 					$__fld = $GLOBALS["properties"][$join["from_class"]][$join["prop"]]["field"];
-					if ($join["prop"] == "class_id")
+					if ($join["prop"] === "class_id")
 					{
 						$__fld = "class_id";
 					}
-					if ($join["prop"] == "parent")
+					if ($join["prop"] === "parent")
 					{
 						$__fld = "parent";
 					}
@@ -2649,7 +2666,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 
 					// now, if the next join is via rel, we are gonna need the objects table here as well, so add that
-					if ($this->join_data[$pos+1]["via"] == "rel")
+					if ($this->join_data[$pos+1]["via"] === "rel")
 					{
 						$o_field = "oid";
 						$o_tbl = "objects_".$join["to_class"];
@@ -2680,7 +2697,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// else, if it is property for cur class - via property
 		// else - throw up
 
-		if (substr($pp, 0, 7) == "RELTYPE")
+		if (substr($pp, 0, 7) === "RELTYPE")
 		{
 			$this->_do_add_class_id($cur_clid);
 
@@ -2693,7 +2710,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$this->_do_add_class_id($nxt_clid);
 					$reltype_id = $GLOBALS["relinfo"][$nxt_clid]["RELTYPE_".$mt[1]]["value"];
 					error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
-						"id" => ERR_OBJ_NO_RELATION,
+						"id" => "ERR_OBJ_NO_RELATION",
 						"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
 					));
 
@@ -2712,8 +2729,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			else
 			{
 				$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
-				error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
-					"id" => ERR_OBJ_NO_RELATION,
+				error::raise_if(!$reltype_id && $pp !== "RELTYPE", array(
+					"id" => "ERR_OBJ_NO_RELATION",
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
 				));
 
@@ -2796,7 +2813,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 
 			error::raise_if(!is_array($cur_prop), array(
-				"id" => ERR_OBJ_NO_PROP,
+				"id" => "ERR_OBJ_NO_PROP",
 				"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no property %s in class %s "), $pp, $cur_clid)
 			));
 
@@ -2808,14 +2825,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($pos < (count($filt) - 1))
 			{
 				error::raise_if($cur_prop["method"] == "serialize" && $cur_prop["store"] != "connect", array(
-					"id" => ERR_OBJ_NO_META,
+					"id" => "ERR_OBJ_NO_META",
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"), $pp, $cur_clid)
 				));
 				if ($set_clid)
 				{
 					$new_clid = $set_clid;
 					error::raise_if(!$set_clid, array(
-						"id" => ERR_OBJ_W_TP,
+						"id" => "ERR_OBJ_W_TP",
 						"msg" => sprintf(t("ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"), $cur_prop["type"])
 					));
 				}
@@ -2840,7 +2857,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							}
 
 							error::raise_if(!$relt && !$new_clid, array(
-								"id" => ERR_OBJ_NO_REL,
+								"id" => "ERR_OBJ_NO_REL",
 								"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"), $relt_s, $cur_clid, $cur_prop["name"])
 							));
 
@@ -2853,7 +2870,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						default:
 							$new_clid = $set_clid;
 							error::raise_if(!$set_clid, array(
-								"id" => ERR_OBJ_W_TP,
+								"id" => "ERR_OBJ_W_TP",
 								"msg" => sprintf(t("ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"), $cur_prop["type"])
 							));
 					}
@@ -2867,7 +2884,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$pp = $cur_prop["reltype"];
 				$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
 				error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
-					"id" => ERR_OBJ_NO_RELATION,
+					"id" => "ERR_OBJ_NO_RELATION",
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
 				));
 
@@ -2912,13 +2929,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$join_strategy = "obj";
 		}
 
-		if ($join_strategy == "obj" || !$this->has_data_table_filter)
+		if ($join_strategy === "obj" || !$this->has_data_table_filter)
 		{
 			// make joins
 			$js = array();
 			foreach($this->used_tables as $tbl)
 			{
-				if ($tbl != "objects" && $tbl != "")
+				if ($tbl !== "objects" && $tbl != "")
 				{
 					$js[] = " LEFT JOIN $tbl ON $tbl.".$this->tableinfo[$tbl]["index"]." = objects.brother_of ";
 				}
@@ -2930,14 +2947,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			return "objects ".join("", $js).join(" ", $this->joins);
 		}
 		else
-		if ($join_strategy == "data")
+		if ($join_strategy === "data")
 		{
 			// make joins
 			$js = array();
 			$first_table = NULL;
 			foreach($this->used_tables as $tbl)
 			{
-				if ($tbl == "objects")
+				if ($tbl === "objects")
 				{
 					continue;
 				}
@@ -3083,7 +3100,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					$pn = $resn;
 				}
-				if (is_object($resn) && get_class($resn) == "obj_sql_func")
+				if (is_object($resn) && get_class($resn) === "obj_sql_func")
 				{
 					$has_func = true;
 					$param = $resn->params;
@@ -3123,7 +3140,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$pn = $resn;
 				}
 				else
-				if (substr($pn, 0, 5) == "meta.")
+				if (substr($pn, 0, 5) === "meta.")
 				{
 					$serialized_fields["objects.metadata"][] = substr($pn, 5);
 				}
@@ -3144,9 +3161,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$ret[$pn] = " objects.$pn AS `$resn` ";
 				}
 				else
-				if ($p[$pn]["method"] == "serialize")
+				if ($p[$pn]["method"] === "serialize")
 				{
-					if ($p[$pn]["table"] == "objects" && $p[$pn]["field"] == "meta")
+					if ($p[$pn]["table"] === "objects" && $p[$pn]["field"] === "meta")
 					{
 						$serialized_fields["objects.metadata"][] = $pn;
 					}
@@ -3157,7 +3174,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
-				if ($p[$pn]["store"] == "connect")
+				if ($p[$pn]["store"] === "connect")
 				{
 					// fetch value from aliases table
 					if (!isset($filter[$pn]))
@@ -3223,9 +3240,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		extract($arr);
 
-		$metadata = aw_serialize($objdata["meta"]);
-		$this->quote(&$metadata);
-		$this->quote(&$objdata);
+		$metadata = aw_serialize($objdata["meta"], SERIALIZE_NATIVE);
+		$this->quote($metadata);
+		$this->quote($objdata);
 		$objdata["metadata"] = $metadata;
 
 		if ($objdata["brother_of"] == 0)
@@ -3299,9 +3316,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				// this check is here, so that we won't overwrite default values, that are saved in create_new_object
 				if (isset($propvalues[$prop['name']]))
 				{
-					if ($prop['method'] == "serialize")
+					if ($prop['method'] === "serialize")
 					{
-						if ($prop['field'] == "meta" && $prop["table"] == "objects")
+						if ($prop['field'] === "meta" && $prop["table"] === "objects")
 						{
 							$prop['field'] = "metadata";
 						}
@@ -3309,7 +3326,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$serfs[$prop['field']][$prop['name']] = $propvalues[$prop['name']];
 					}
 					else
-					if ($prop['method'] == "bitmask")
+					if ($prop['method'] === "bitmask")
 					{
 						$val = $propvalues[$prop["name"]];
 
@@ -3330,11 +3347,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					else
 					{
 						$str = $propvalues[$prop["name"]];
-						$this->quote(&$str);
+						$this->quote($str);
 						$seta[$prop["field"]] = $str;
 					}
 
-					if ($prop["datatype"] == "int" && $seta[$prop["field"]] == "")
+					if ($prop["datatype"] === "int" && $seta[$prop["field"]] == "")
 					{
 						$seta[$prop["field"]] = "0";
 					}
@@ -3343,7 +3360,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			foreach($serfs as $field => $dat)
 			{
-				$str = aw_serialize($dat);
+				$str = aw_serialize($dat, SERIALIZE_NATIVE);
 				$this->quote($str);
 				$seta[$field] = $str;
 			}
@@ -3381,7 +3398,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$objtblprops = array();
 		foreach($properties as $prop => $data)
 		{
-			if ($data["store"] == "no")
+			if ($data["store"] === "no")
 			{
 				continue;
 			}
@@ -3391,7 +3408,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$data["table"] = "objects";
 			}
 
-			if ($data["table"] != "objects")
+			if ($data["table"] !== "objects")
 			{
 				$tables[$data["table"]] = $data["table"];
 				if ($data["store"] != "no")
@@ -3408,13 +3425,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// import object table properties in the props array
 		foreach($objtblprops as $prop)
 		{
-			if ($prop["method"] == "serialize")
+			if ($prop["method"] === "serialize")
 			{
 				// metadata is unserialized in read_objprops
 				$ret[$prop["name"]] = isset($objdata[$prop['field']]) && isset($objdata[$prop["field"]][$prop["name"]]) ? $objdata[$prop["field"]][$prop["name"]] : "";
 			}
 			else
-			if ($prop["method"] == "bitmask")
+			if ($prop["method"] === "bitmask")
 			{
 				$ret[$prop["name"]] = ((int)$objdata[$prop["field"]]) & ((int)$prop["ch_value"]);
 			}
@@ -3442,12 +3459,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$_got_fields = array();
 			foreach($tbl2prop[$table] as $prop)
 			{
-				if ($prop['field'] == "meta" && $prop["table"] == "objects")
+				if ($prop['field'] === "meta" && $prop["table"] === "objects")
 				{
 					$prop['field'] = "metadata";
 				}
 
-				if ($prop["method"] == "serialize")
+				if ($prop["method"] === "serialize")
 				{
 					if (!array_key_exists($prop["field"], $_got_fields))
 					{
@@ -3456,7 +3473,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
-				if ($prop["store"] == "connect")
+				if ($prop["store"] === "connect")
 				{
 					if ($GLOBALS["cfg"]["site_id"] != 139)
 					{
@@ -3492,15 +3509,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				foreach($tbl2prop[$table] as $prop)
 				{
-					if ($prop["method"] == "serialize")
+					if ($prop["method"] === "serialize")
 					{
-						if ($prop['field'] == "meta" && $prop["table"] == "objects")
+						if ($prop['field'] === "meta" && $prop["table"] === "objects")
 						{
 							$prop['field'] = "metadata";
 						}
 
 						//echo "unser for prop ".dbg::dump($prop)." <br>";
-						$unser = aw_unserialize($ret[$prop["field"]]);
+						$unser = aw_unserialize($ret[$prop["field"]], false, true);
 						//echo "unser = ".dbg::dump($unser)." <br>";
 						$ret[$prop["name"]] = $unser[$prop["name"]];
 					}
@@ -3595,7 +3612,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$arr["ot_modified"] = $GLOBALS["object_loader"]->all_ot_flds;
 		foreach(safe_array($arr["ot_modified"]) as $_field => $one)
 		{
-			$this->quote(&$objdata[$_field]);
+			$this->quote($objdata[$_field]);
 			$ot_sets[] = " o_".$_field." = '".$objdata[$_field]."' ";
 		}
 
@@ -3616,7 +3633,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$tbls = array();
 		foreach($properties as $prop => $data)
 		{
-			if ($data["store"] != "no" && $data["store"] != "connect")
+			if ($data["store"] !== "no" && $data["store"] !== "connect")
 			{
 				$tbls[$data["table"]][] = $data;
 			}
@@ -3646,9 +3663,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				// this check is here, so that we won't overwrite default values, that are saved in create_new_object
 				if (isset($propvalues[$prop['name']]))
 				{
-					if ($prop['method'] == "serialize")
+					if ($prop['method'] === "serialize")
 					{
-						if ($prop['field'] == "meta" && $prop["table"] == "objects")
+						if ($prop['field'] === "meta" && $prop["table"] === "objects")
 						{
 							$prop['field'] = "metadata";
 						}
@@ -3656,7 +3673,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$serfs[$prop['field']][$prop['name']] = $propvalues[$prop['name']];
 					}
 					else
-					if ($prop['method'] == "bitmask")
+					if ($prop['method'] === "bitmask")
 					{
 						$val = $propvalues[$prop["name"]];
 
@@ -3677,7 +3694,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					else
 					{
 						$str = $propvalues[$prop["name"]];
-						$this->quote(&$str);
+						$this->quote($str);
 						$seta[$prop["field"]] = $str;
 					}
 
@@ -3690,7 +3707,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			foreach($serfs as $field => $dat)
 			{
-				$str = aw_serialize($dat);
+				$str = aw_serialize($dat, SERIALIZE_NATIVE);
 				$this->quote($str);
 				$seta[$field] = $str;
 			}
@@ -3741,17 +3758,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$fld = $this->properties[$key]["field"];
 			if ($fld == "meta")
 			{
-				if ($this->properties[$key]["store"] != "connect")
+				if ($this->properties[$key]["store"] !== "connect")
 				{
 					$this->meta_filter[$key] = $val;
 					continue;
 				}
 			}
 			else
-			if ($this->properties[$key]["method"] == "serialize")
+			if ($this->properties[$key]["method"] === "serialize")
 			{
 				error::raise(array(
-					"id" => ERR_FIELD,
+					"id" => "ERR_FIELD",
 					"msg" => sprintf(t("filter cannot contain properties (%s) that are in serialized fields other than metadata!"), $key)
 				));
 			}
@@ -3872,7 +3889,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$nf = array();
 		foreach($fetch as $prop => $as)
 		{
-			if ($prop == "id")
+			if ($prop === "id")
 			{
 				$tf = "objects.oid";
 			}

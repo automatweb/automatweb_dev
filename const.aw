@@ -386,13 +386,13 @@ function lc_site_load($file, &$obj)
 		$LC = "et";
 	}
 
-	$fname = $GLOBALS["cfg"]["site_basedir"]."/lang/{$LC}/{$file}".AW_FILE_EXT;
+	$fname = aw_ini_get("site_basedir")."/lang/{$LC}/{$file}".AW_FILE_EXT;
 	if (is_readable($fname))
 	{
 		include_once($fname);
 	}
 
-	if ($obj)
+	if ($obj instanceof aw_template)
 	{
 		// kui objekt anti kaasa, siis loeme tema template sisse muutuja $lc_$file
 		$var = "lc_".$file;
@@ -609,7 +609,7 @@ function get_instance($class, $args = array(), $errors = true)
 		else
 		{
 			$instance = new $lib();
-		};
+		}
 	}
 	else
 	{
@@ -1066,18 +1066,8 @@ function log_pv($mt)
 {
 	if (is_readable("/home/revalhotels/automatweb_dev/logger.aw"))
 	{
-		@include_once("/home/revalhotels/automatweb_dev/logger.aw");
+		include_once("/home/revalhotels/automatweb_dev/logger.aw");
 	}
-}
-
-function t($s)
-{
-	return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : $s;
-}
-
-function t2($s)
-{
-	return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : NULL;
 }
 
 function call_fatal_handler($str)

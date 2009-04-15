@@ -25,6 +25,7 @@ class _int_object_loader extends core
 
 	private $acl_ids;
 	private static $tmp_id_count = 0;
+	private $registered = false;
 
 	function _int_object_loader()
 	{
@@ -75,7 +76,7 @@ class _int_object_loader extends core
 			$f = fopen($fn, "r");
 			if ($f)
 			{
-				$this->obj_inherit_props_conf = safe_array(aw_unserialize(fread($f, filesize($fn))));
+				$this->obj_inherit_props_conf = safe_array(aw_unserialize(fread($f, filesize($fn)), false, true));
 				fclose($f);
 			}
 		}
@@ -86,7 +87,7 @@ class _int_object_loader extends core
 		// there is no quote here -- duke
 		//$this->quote($alias);
 
-		if (substr($alias,-1) == "/")
+		if (substr($alias,-1) === "/")
 		{
 			$alias = substr($alias,0,-1);
 		}
@@ -207,7 +208,7 @@ class _int_object_loader extends core
 			$res = array();
 			foreach($param as $item)
 			{
-				if (is_object($item) && get_class($item) == "object")
+				if (is_object($item) && get_class($item) === "object")
 				{
 					$res[] = $item->id();
 				}
@@ -229,7 +230,7 @@ class _int_object_loader extends core
 
 	////
 	// !returns temp id for new object
-	function load_new_object($objdata = array())
+	function load_new_object($objdata = array(), $constructor_args = array())
 	{
 		// get tmp oid
 		if (!isset($objdata["oid"]))
@@ -253,11 +254,11 @@ class _int_object_loader extends core
 			$class = "_int_object";
 		}
 
-		$GLOBALS["objects"][$oid] =& new $class($objdata);
+		$GLOBALS["objects"][$oid] = new $class($objdata, $constructor_args);
 		return $oid;
 	}
 
-	function load($oid)
+	function load($oid, $constructor_args = array())
 	{
 		if (!is_oid($oid))
 		{
@@ -298,7 +299,7 @@ class _int_object_loader extends core
 			$class = isset($GLOBALS["cfg"]["classes"][$objdata["class_id"]]["object_override"]) ? basename($GLOBALS["cfg"]["classes"][$objdata["class_id"]]["object_override"]) : "_int_object";
 			$objdata["__obj_load_parameter"] = $oid;
 
-			$ref =& new $class($objdata);
+			$ref = new $class($objdata, $constructor_args);
 			if ($ref->id() === NULL)
 			{
 				error::raise(array(
@@ -342,7 +343,7 @@ class _int_object_loader extends core
 			// relocate the object in the global list
 			$GLOBALS["objects"][$t_oid] = $GLOBALS["objects"][$oid];
 			$GLOBALS["objects"][$oid] =& $GLOBALS["objects"][$t_oid];
-			post_message_with_param(MSG_STORAGE_NEW, $GLOBALS["objects"][$t_oid]->class_id(), array(
+			post_message_with_param("MSG_STORAGE_NEW", $GLOBALS["objects"][$t_oid]->class_id(), array(
 				"oid" => $t_oid
 			));
 		}
@@ -353,7 +354,7 @@ class _int_object_loader extends core
 		// probably.
 		// well, here's to hoping it won't happen!
 
-		post_message_with_param(MSG_STORAGE_SAVE, $GLOBALS["objects"][$t_oid]->class_id(), array(
+		post_message_with_param("MSG_STORAGE_SAVE", $GLOBALS["objects"][$t_oid]->class_id(), array(
 			"oid" => $t_oid
 		));
 
@@ -399,7 +400,7 @@ class _int_object_loader extends core
 		$GLOBALS["objects"][$t_oid] = $t_o;
 		$this->cache->file_set("objlastmod", time());
 
-		post_message_with_param(MSG_STORAGE_SAVE, $GLOBALS["objects"][$t_oid]->class_id(), array(
+		post_message_with_param("MSG_STORAGE_SAVE", $GLOBALS["objects"][$t_oid]->class_id(), array(
 			"oid" => $t_oid
 		));
 
@@ -493,7 +494,7 @@ class _int_object_loader extends core
 			$fn .= "-nliug-".(isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : "");
 			if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]) && ($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
 			{
-				$max_acl = aw_unserialize($str_max_acl);
+				$max_acl = aw_unserialize($str_max_acl, false, true);
 			}
 
 			if (!isset($max_acl))
@@ -506,7 +507,7 @@ class _int_object_loader extends core
 
 				if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
 				{
-					$this->cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
+					$this->cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_NATIVE));
 				}
 			}
 
@@ -627,28 +628,18 @@ class _int_object_loader extends core
 
 		if ($clid == 7)
 		{
-			$type = ST_DOCUMENT;
+			$type = "ST_DOCUMENT";
+		}
+		elseif (!empty($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]))
+		{
+			$type = $GLOBALS["classinfo"][$clid]["syslog_type"]["text"];
 		}
 		else
-		{
-			$type = 0;
-			$st = aw_ini_get("syslog.types");
-			foreach($st as $id => $item)
-			{
-				if ($item["def"] == $GLOBALS["classinfo"][$clid]["syslog_type"])
-				{
-					$type = $id;
-					break;
-				}
-			}
-		}
-
-		if (!$type)
 		{
 			$type = 10000;
 		}
 
-		$this->cache->_log($type, ($new ? SA_ADD : SA_CHANGE), $name, $oid, false, $name);
+		$this->cache->_log($type, ($new ? "SA_ADD" : "SA_CHANGE"), $name, $oid, false, $name);
 	}
 
 	function resolve_reltype($type, $class_id)
@@ -658,7 +649,7 @@ class _int_object_loader extends core
 			$res = array();
 			foreach($type as $ot)
 			{
-				if (!is_numeric($ot) && substr($ot, 0, 7) == "RELTYPE")
+				if (!is_numeric($ot) && substr($ot, 0, 7) === "RELTYPE")
 				{
 					$res[] = $this->_resolve_single_rt($ot, $class_id);
 				}
@@ -694,7 +685,7 @@ class _int_object_loader extends core
 		{
 			register_shutdown_function(array(&$this, "on_shutdown_update_cache"));
 			$this->cache_handlers = array();
-			$this->registered = 1;
+			$this->registered = true;
 		}
 
 		try

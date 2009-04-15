@@ -37,7 +37,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			"storage_object_data",
 			$oid,
 			$c_fn
-		));
+		), false, true);
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->get_objdata($oid, $param);
@@ -47,7 +47,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 					"storage_object_data",
 					$oid,
 					$c_fn,
-					aw_serialize($ret, SERIALIZE_PHP_FILE)
+					aw_serialize($ret, SERIALIZE_NATIVE)
 				);
 			}
 		}
@@ -79,7 +79,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			"storage_object_data",
 			$oid,
 			$c_fn
-		));
+		), false, true);
 
 		if (!is_array($ret))
 		{
@@ -90,7 +90,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 					"storage_object_data",
 					$oid,
 					$c_fn,
-					aw_serialize($ret, SERIALIZE_PHP_FILE)
+					aw_serialize($ret, SERIALIZE_NATIVE)
 				);
 			}
 		}
@@ -187,7 +187,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			"storage_object_data",
 			$id,
 			$c_fn
-		));
+		), false, true);
 
 		if (!is_array($ret))
 		{
@@ -198,7 +198,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 					"storage_object_data",
 					$id,
 					$c_fn,
-					aw_serialize($ret, SERIALIZE_PHP_FILE)
+					aw_serialize($ret, SERIALIZE_NATIVE)
 				);
 			}
 		}
@@ -206,7 +206,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	}
 
 	////
-	// !saves connection 
+	// !saves connection
 	function save_connection($data)
 	{
 		$ret =  $this->contained->save_connection($data);
@@ -225,7 +225,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 				$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "connection-".$oid);
 			}
 		}
-		
+
 		if (!obj_get_opt("no_cache"))
 		{
 			$this->cache->file_clear_pt("storage_search");
@@ -259,7 +259,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			$this->contained->delete_connection_cache_update($oid);
 		}
 	}
-	
+
 	////
 	// !returns all connections that match filter
 	function find_connections($arr)
@@ -277,7 +277,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			"storage_search",
 			$query_hash[0],
 			$c_fn
-		));
+		), false, true);
 
 		if (!is_array($ret))
 		{
@@ -288,7 +288,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 					"storage_search",
 					$query_hash[0],
 					$c_fn,
-					aw_serialize($ret, SERIALIZE_PHP_FILE)
+					aw_serialize($ret, SERIALIZE_NATIVE)
 				);
 			}
 		}
@@ -344,7 +344,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			"storage_search",
 			$query_hash[0],
 			$c_fn
-		));
+		), false, true);
 
 		if (!is_array($ret))
 		{
@@ -355,7 +355,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 					"storage_search",
 					$query_hash[0],
 					$c_fn,
-					aw_serialize($ret, SERIALIZE_PHP_FILE)
+					aw_serialize($ret, SERIALIZE_NATIVE)
 				);
 			}
 		}
