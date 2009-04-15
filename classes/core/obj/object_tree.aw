@@ -299,6 +299,7 @@ class object_tree extends _int_obj_container_base
 		}
 
 		$cnt = 0;
+		$param["param"] = isset($param["param"]) ? $param["param"] : null;
 		foreach($this->tree as $_pt => $level)
 		{
 			foreach($level as $_oid => $o)
@@ -440,9 +441,9 @@ class object_tree extends _int_obj_container_base
 			));
 			$ot->delete();
 	**/
-	function delete()
+	function delete($full = null)
 	{
-		return parent::delete();
+		return parent::delete($full);
 	}
 
 	/** removes the specified object(s) from the tree and all objects under those

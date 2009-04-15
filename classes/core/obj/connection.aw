@@ -95,7 +95,7 @@ class connection
 			if (!(is_numeric($id) || is_array($id)))
 			{
 				error::raise(array(
-					"id" => ERR_CONNECTION,
+					"id" => "ERR_CONNECTION",
 					"msg" => sprintf(t("connection::constructor(%s): parameter must be numeric or array!"), $id)
 				));
 				return;
@@ -145,7 +145,7 @@ class connection
 		if (!is_numeric($param))
 		{
 			error::raise(array(
-				"id" => ERR_CONNECTION,
+				"id" => "ERR_CONNECTION",
 				"msg" => t("connection::load(): parameter must be either array (connection data) or integer (connection id)!")
 			));
 			return;
@@ -204,7 +204,7 @@ class connection
 		if (!is_array($param))
 		{
 			error::raise(array(
-				"id" => ERR_PARAM,
+				"id" => "ERR_PARAM",
 				"msg" => t("connection::find(): parameter must be an array of filter parameters!")
 			));
 			return;

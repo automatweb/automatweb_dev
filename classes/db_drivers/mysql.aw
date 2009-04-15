@@ -41,7 +41,8 @@ class mysql
 			call_fatal_handler($err);
 			echo $err;
 			exit;
-		};
+		}
+
 		if (not(@mysql_select_db($base,$this->dbh)))
 		{
 			$err = "Can't connect to database";
@@ -125,7 +126,7 @@ class mysql
 			{
 				$eri = new class_base;
 				$eri->init();
-				$eri->raise_error(ERR_DB_NOTCONNECTED, "I'm not connected to the database, cannot perform the requested query. Please report this to site administrator immediately", true, false);
+				$eri->raise_error("ERR_DB_NOTCONNECTED", "I'm not connected to the database, cannot perform the requested query. Please report this to site administrator immediately", true, false);
 			}
 		}
 

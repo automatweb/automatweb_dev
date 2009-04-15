@@ -9,12 +9,12 @@
 
 class _int_obj_ds_base extends acl_base
 {
-	function init()
+	function init($args = array())
 	{
-		parent::init();
-		// grmbl - acl_base class needs this. 
+		parent::init($args);
+		// grmbl - acl_base class needs this.
 		// normally it gets inited in aw_template::init
-		// but since this class hooks into the inheritance tree before that, 
+		// but since this class hooks into the inheritance tree before that,
 		// we gots to init it here. and we don't want all the ini settings, cause they are not needed and take up much memory
 		$this->cfg["acl"] = $GLOBALS["cfg"]["acl"];
 	}
@@ -75,8 +75,8 @@ class _int_obj_ds_base extends acl_base
 	}
 
 	////
-	// !saves object properties, including all object table fields, 
-	// just stores the data, does not update or check it in any way, 
+	// !saves object properties, including all object table fields,
+	// just stores the data, does not update or check it in any way,
 	// except for db quoting of course
 	// params:
 	//	properties - prop array from propreader
@@ -102,7 +102,7 @@ class _int_obj_ds_base extends acl_base
 	}
 
 	////
-	// !saves connection 
+	// !saves connection
 	function save_connection($data)
 	{
 		error::raise(array(
@@ -121,7 +121,7 @@ class _int_obj_ds_base extends acl_base
 		));
 	}
 
-	
+
 	////
 	// !returns all connections that match filter
 	function find_connections($arr)
@@ -135,7 +135,7 @@ class _int_obj_ds_base extends acl_base
 	////
 	// !searches the database
 	// params:
-	//	array of filter parameters 
+	//	array of filter parameters
 	// if class id is present, properties can also be filtered, otherwise only object table fields
 	function search($params)
 	{
