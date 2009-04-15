@@ -1,11 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.110 2009/04/09 08:40:30 kristo Exp $
+
 // calendar.aw - VCL calendar
 /*
 @classinfo  maintainer=kristo
 */
 class vcalendar extends aw_template
 {
+	var $container_template = "container.tpl"; // access?
+	var $cal_tpl_dir = "calendar"; // access?
+	var $output_initialized = false; // access?
+
 	/**
 		@attrib params=name api=1
 		@param tpldir optional type=string
@@ -20,17 +24,18 @@ class vcalendar extends aw_template
 	function vcalendar($arr = array())
 	{
 		// calendar_view class needs templates from its own directory
-		$this->cal_tpl_dir = isset($arr["tpldir"]) ? $arr["tpldir"] : "calendar";
+		if (isset($arr["tpldir"]))
+		{
+			$this->cal_tpl_dir = $arr["tpldir"];
+		}
+
 		$this->init(array(
 			"tpldir" => $this->cal_tpl_dir,
 		));
 
-		$this->container_template = "container.tpl";
-
-		$this->output_initialized = false;
-		lc_site_load("vcl_calendar", &$this);
+		lc_site_load("vcl_calendar", $this);
 	}
-	
+
 	/**
 		@attrib params=pos api=1
 		@param feature required
@@ -44,7 +49,7 @@ class vcalendar extends aw_template
 	{
 		$retval = false;
 		// call this after configure ..
-		if (is_object($this->evt_tpl) && $feature == "first_image")
+		if (is_object($this->evt_tpl) && $feature === "first_image")
 		{
 			if ($this->evt_tpl->template_has_var("first_image"))
 			{
@@ -52,7 +57,7 @@ class vcalendar extends aw_template
 			}
 		};
 
-		if (is_object($this->evt_tpl) && $feature == "project_media")
+		if (is_object($this->evt_tpl) && $feature === "project_media")
 		{
 			if ($this->evt_tpl->is_template("project_media"))
 			{
@@ -94,7 +99,7 @@ class vcalendar extends aw_template
 			$tpl = $arr["event_template"];
 		}
 		else
-		if ($this->range["viewtype"] == "week")
+		if ($this->range["viewtype"] === "week")
 		{
 			$better_template = "week_event.tpl";
 		};//if(aw_global_get("uid") == "kix") arr($tpl);
@@ -107,7 +112,7 @@ class vcalendar extends aw_template
 		{
 			$this->evt_tpl->read_template($tpl);
 		};
-		lc_site_load("vcl_calendar", &$this->evt_tpl);
+		lc_site_load("vcl_calendar", $this->evt_tpl);
 		$this->output_initialized = true;
 	}
 	// whats for is that here ??(taiu)
@@ -120,7 +125,7 @@ class vcalendar extends aw_template
 
 	/**
 		@attrib params=name api=1
-		
+
 		@param tasklist_func optional type=array
 		array contents:
 		array(class_inst, method_name);
@@ -168,7 +173,7 @@ class vcalendar extends aw_template
 		@param month_week optional type=int
 		If set to 1, shows month viewtype like week's viewtype, just weeks below eachother.
 		By default not set.
-		
+
 		@comment
 		Configures the calendar view in all possible and non-possible ways.
 
@@ -203,7 +208,7 @@ class vcalendar extends aw_template
 		print $cal->get_html();
 		// echoes a calendar with month viewtype(shown as weeks below eachother), shows only one day(has event in it) and even if it's a weekend day.
 		// overview mini-calendar shows previous and next month also(in a regular month viewtype).
-		
+
 	**/
 	function configure($arr = array())
 	{
@@ -290,7 +295,7 @@ class vcalendar extends aw_template
 			$range["future"] = $this->future_limit;
 			$range["end"] += 86400 * 60;
 		};
-		
+
 		$this->el_count = 0;
 		$this->evt_list = array();
 		if($arr["show_ec"])
@@ -302,7 +307,7 @@ class vcalendar extends aw_template
 	}
 
 	// I need methods for adding item AND for drawing
-	// timestamp 
+	// timestamp
 	// data - arr
 	/**
 		@attrib params=name api=1
@@ -348,7 +353,7 @@ class vcalendar extends aw_template
 				// hehe, textbook problem .. swap variables
 				// but I don't do that, since I'm afraid that there are too many
 				// events where the start date is later than end. But maybe
-				// I shouldn't care 
+				// I shouldn't care
 				$arr["item_end"] = $arr["item_start"];
 				/*
 				$tmp = $arr["item_end"];
@@ -369,13 +374,14 @@ class vcalendar extends aw_template
 		{
 			$data["item_start"] = $arr["item_start"];
 			$start_tm = (int)($data["item_start"] / 86400);
-		};
+		}
+
 		if ($arr["item_end"])
 		{
 			$data["item_end"] = $arr["item_end"];
 			$end_tm = (int)($data["item_end"] / 86400);
 			list($ed,$em,$ey) = explode("/",date("d/m/Y",$arr["item_end"]));
-		};
+		}
 
 		$data["_id"] = $this->el_count;
 		$data["id"] = $arr["data"]["id"];
@@ -412,7 +418,7 @@ class vcalendar extends aw_template
 		// besides the first one
 		if (isset($arr["item_end"]))
 		{
-			// this is a tricky one - we should not add a whole day to the start time, 
+			// this is a tricky one - we should not add a whole day to the start time,
 			// because this will not make it work for events that start one day at 18:00 and end the next day
 			// at 16:00  - we must only make sure we are just behind 00:00
 			$arr["item_start"] = get_day_start($arr["item_start"]) + 86400;
@@ -461,7 +467,7 @@ class vcalendar extends aw_template
 			$this->future[] = &$this->items[$use_date][sizeof($this->items[$use_date])-1];
 		};
 
-		
+
 
 	}
 	/**
@@ -502,9 +508,9 @@ class vcalendar extends aw_template
 			-minical_background (by default 'minical_table')
 
 			All these can have common values(styles):
-			
+
 			[minical_cell] : usual cell with no events - day_without_events
-			[minical_cellact] : usual cell with events - day_with_events 
+			[minical_cellact] : usual cell with events - day_with_events
 			[minical_cellselected] : selected (active) cell - day_active
 			[minical_cell_today] : day_today
 			[minical_cell_deact] : deactiv (outside teh current range) - day_deactive
@@ -524,13 +530,13 @@ class vcalendar extends aw_template
 				// sets days's with events style like it hasn't any event.
 				"minical_background" => "minical_cell_today",
 				// sets overview calendars background to one of the day's style.
-				// Actually that style wasn't ment for that, but it produces pretty nice green calendar(check out yourself:)). 
+				// Actually that style wasn't ment for that, but it produces pretty nice green calendar(check out yourself:)).
 			)
 		));
 		// finalises and prints the calendar to the page
-		
+
 		$cal = get_instance("vcl/calendar");
-		$cal = new vcalendar();		
+		$cal = new vcalendar();
 		print $cal->get_html(array(
 			"text" => $cal->MY_OWN_VIEW_FUNC(); // can be calendars own draw_month() etc..
 		));
@@ -561,7 +567,7 @@ class vcalendar extends aw_template
 		{
 			$this->init_output($arr);
 		};
-		
+
 		$this->event_counter = 0;
 
 		enter_function("draw_calendar_content");
@@ -574,7 +580,7 @@ class vcalendar extends aw_template
 			if (!empty($arr["text"]))
 			{
 				$content = $arr["text"];
-			}	
+			}
 			else
 			{
 				switch($this->range["viewtype"])
@@ -587,7 +593,7 @@ class vcalendar extends aw_template
 						$caption .= " ";
 						$caption .= date("Y",$this->range["timestamp"]);
 						break;
-	
+
 					case "week":
 					case "last_events":
 						$content = $this->draw_week();
@@ -600,12 +606,12 @@ class vcalendar extends aw_template
 						$content = $this->draw_relative();
 						$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"]));
 						break;
-	
+
 					case "year":
 						$content = $this->draw_year();
 						$caption = "";
 						break;
-					
+
 					default:
 						$content = $this->draw_day($arr);
 						$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
@@ -642,7 +648,7 @@ class vcalendar extends aw_template
 					$content = $this->draw_year();
 					$caption = "";
 					break;
-					
+
 				default:
 					$content = $this->draw_day($arr);
 					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
@@ -650,7 +656,7 @@ class vcalendar extends aw_template
 		}
 		exit_function("draw_calendar_content");
 		//$awt->stop("load-properties");
-		
+
 		classload("core/date/date_calc");
 		$m = date("m",$this->range["timestamp"]);
 		$y = date("Y",$this->range["timestamp"]);
@@ -733,7 +739,7 @@ class vcalendar extends aw_template
 
 
 		$this->read_template($this->container_template);
-		$types = array( 
+		$types = array(
 			"today" => t("T&auml;na"),
 			"day" => t("P&auml;ev"),
 			"week" => t("N&auml;dal"),
@@ -1035,7 +1041,7 @@ class vcalendar extends aw_template
 					if(!$this->first_event)
 					{
 						$this->first_event = reset($events);
-						
+
 					}
 					foreach($events as $event)
 					{
@@ -1150,7 +1156,7 @@ class vcalendar extends aw_template
 		$this->vars(array(
 			"HEADER" => $header,
 			"WEEK" => $w,
-			"month_name" => locale::get_lc_month($this->range["m"]),	
+			"month_name" => locale::get_lc_month($this->range["m"]),
 			"year" => $this->range["y"],
 			"month_options" => $this->picker(get_ru(), $month_opts),
 			"year_options" => $this->picker(get_ru(), $year_opts),
@@ -1159,7 +1165,7 @@ class vcalendar extends aw_template
 		$rv =  $this->parse();
 		return $rv;
 	}
-	
+
 	function draw_year()
 	{
 		$this->read_template("year.tpl");
@@ -1183,7 +1189,7 @@ class vcalendar extends aw_template
 		for ($i = 1; $i <= 12; $i++)
 		{
 			$this->vars(array(
-				"month_name" => locale::get_lc_month($i),	
+				"month_name" => locale::get_lc_month($i),
 			));
 			$header = $this->parse("HEADER");
 			$footer = $this->parse("FOOTER");
@@ -1246,7 +1252,7 @@ class vcalendar extends aw_template
 
 		return $this->parse();
 	}
-	
+
 	function draw_week()
 	{
 		if ($this->overview_func)
@@ -1269,7 +1275,7 @@ class vcalendar extends aw_template
 		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$this->range["start"]));
 		#$e_parts = unpack("a4year/a2mon/a2day",date("Ymd",$this->range["end"]));
 
-		// alright, aga see saast siis ju eeldab et mul on 
+		// alright, aga see saast siis ju eeldab et mul on
 		#for ($t = 0; $t < 7; $t++)
 		#{
 		if($this->adm_day)
@@ -1317,7 +1323,7 @@ class vcalendar extends aw_template
 			{
 				$wn = 7;
 			};
-		
+
 			$dt = date("d",$reals);
 			$mn = locale::get_lc_month(date("m",$reals));
 			$mn2 = $mn . " " . date("H:i",$reals);
@@ -1350,7 +1356,7 @@ class vcalendar extends aw_template
 		));
 		return $this->parse();
 	}
-	
+
 	function draw_day($arr = array())
 	{
 	//	if ($this->overview_func)
@@ -1426,7 +1432,7 @@ class vcalendar extends aw_template
 
 		$limit = $this->past_limit;
 		$count = 0;
-		
+
 		// do the past
 		$past = $future = "";
 		if (is_array($this->past))
@@ -1454,7 +1460,7 @@ class vcalendar extends aw_template
 
 		$limit = $this->future_limit;
 		$count = 0;
-		
+
 		if (is_array($this->future))
 		{
 			uasort($this->future,array($this,"__asc_sort"));
@@ -1473,10 +1479,10 @@ class vcalendar extends aw_template
 				};
 			};
 		};
-		
+
 
 		$this->vars(array(
-			"PAST_EVENT" => $past, 
+			"PAST_EVENT" => $past,
 			"FUTURE_EVENT" => $future,
 		));
 		$past = $this->parse("PAST");
@@ -1538,7 +1544,7 @@ class vcalendar extends aw_template
 
 		// styles
 		// minical_cell - usual cell with no events  - day_without_events
-		// minical_cellact - usual cell with events  - day_with_events 
+		// minical_cellact - usual cell with events  - day_with_events
 		// minical_cellselected - selected (active) cell - day_active
 		// minical_cell_today - day_today
 		// minical_cell_deact  - deactiv (outside teh current range) - day_deactive
@@ -1554,19 +1560,19 @@ class vcalendar extends aw_template
 		{
 			$style_day_without_events = $this->styles["minical_day_without_events"];
 		};
-		
+
 		$style_day_active = "minical_cellselected";
 		if (isset($this->styles["minical_day_active"]))
 		{
 			$style_day_active = $this->styles["minical_day_active"];
 		};
-		
+
 		$style_day_deactive = "minical_cell_deact";
 		if (isset($this->styles["minical_day_deactive"]))
 		{
 			$style_day_deactive = $this->styles["minical_day_deactive"];
 		};
-		
+
 		$style_day_today = "minical_cell_today";
 		if (isset($this->styles["minical_day_today"]))
 		{
@@ -1578,7 +1584,7 @@ class vcalendar extends aw_template
 		{
 			$style_title = $this->styles["minical_title"];
 		};
-		
+
 		$style_background = "minical_table";
 		if (isset($this->styles["minical_background"]))
 		{
@@ -1641,7 +1647,7 @@ class vcalendar extends aw_template
 						"date" => date("d-m-Y",$reals),
 						"section" => $this->target_section,
 						// try to unset the sbt variable in url, so i can check in event_search
-						// if it is there or not 
+						// if it is there or not
 						"sbt" => "",
 					));
 					//miskid n6medad sectionid annab kaasa muidu, m6ni tahab urli sellisena
@@ -1666,7 +1672,7 @@ class vcalendar extends aw_template
 					$link = $link3 = $caption;
 				}
 
-				$events_str = ""; 
+				$events_str = "";
 				if (is_array($this->overview_items_oids[$dstamp]))
 				{
 					foreach ($this->overview_items_oids[$dstamp] as $event_oid)
@@ -1890,7 +1896,7 @@ class vcalendar extends aw_template
 		{
 			$time = $evt["time"];
 		}
-		
+
 		if ($evt["hide_times"] || $time == "00:00")
 		{
 			$time = "";
@@ -1949,11 +1955,11 @@ class vcalendar extends aw_template
 				"project_media" => $media_str,
 			));
 		};
-		
+
 
 		return $this->evt_tpl->parse();
 	}
-	
+
 	function __sort_by_ord($el1, $el2)
 	{
 		return $el1["ord"] - $el2["ord"];
@@ -1963,7 +1969,7 @@ class vcalendar extends aw_template
 	{
 		return (int)($el1["timestamp"] - $el2["timestamp"]);
 	}
-	
+
 	function __desc_sort($el1,$el2)
 	{
 		return (int)($el2["timestamp"] - $el1["timestamp"]);
@@ -1988,23 +1994,23 @@ class vcalendar extends aw_template
 	function __sort_events_starting_today_first($el1, $el2)
 	{
 		$day = $_GET['date'];
-		if(!$day) 
+		if(!$day)
 		{
 			$day = $this->day;
 		}
 		if ($day == date('d-m-Y', $el1['start']) || $day == date('d-m-Y', $el2['start']))
 		{
-			if ($day == date("d-m-Y", $el1["start"]) && $day != date("d-m-Y", $el2["start"])) 
-			{ 
-				return -1; 
+			if ($day == date("d-m-Y", $el1["start"]) && $day != date("d-m-Y", $el2["start"]))
+			{
+				return -1;
 			}
-			if ($day == date("d-m-Y", $el1["start"]) && $day == date("d-m-Y", $el2["start"])) 
-			{ 
-				return (int)($el1['start'] - $el2['start']); 
+			if ($day == date("d-m-Y", $el1["start"]) && $day == date("d-m-Y", $el2["start"]))
+			{
+				return (int)($el1['start'] - $el2['start']);
 			}
-			if ($day != date("d-m-Y", $el1["start"]) && $day == date("d-m-Y", $el2["start"])) 
-			{ 
-				return 1; 
+			if ($day != date("d-m-Y", $el1["start"]) && $day == date("d-m-Y", $el2["start"]))
+			{
+				return 1;
 			}
 		}
 		else
