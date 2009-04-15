@@ -195,7 +195,7 @@ class class_index
 				$class_dfn_file = $index_dir . $class_name . AW_FILE_EXT;
 
 				// look for redeclared classes
-				if (in_array($class_name, $found_classes) and "core/locale" !== substr($class_path, 0, 11))
+				if (in_array($class_name, $found_classes))
 				{
 					if (!is_readable($class_dfn_file))
 					{
@@ -243,7 +243,7 @@ class class_index
 					$cl_handle = fopen($class_dfn_file, "w");
 					$ret = chmod($class_dfn_file, 0666);
 
-					if (false && !$ret)
+					if (!$ret)
 					{
 						$e = new awex_clidx_filesys("Failed to change file permissions for " . $class_dfn_file . ".");
 						$e->clidx_file = $class_dfn_file;

@@ -1,19 +1,28 @@
 <?php
 
-/** all localization functions are grouped here **/
+/**
+@classinfo  maintainer=voldemar
+Localisation utilities class.
+**/
 class locale
 {
-	private $default_locale = "en";
-	private $lc_date_inst = false;
+	protected static $lc_data = array( // locale data by locale code
+		"de" => array(),
+		"en" => array(),
+		"es" => array(),
+		"et" => array(),
+		"fi" => array(),
+		"fr" => array(),
+		"lt" => array(),
+		"lv" => array(),
+		"ru" => array()
+	);
 
-	function locale()
+	private static $default_locale = "en";
+	private static $current_locale = false;
+
+	public function locale()
 	{
-		$this->lc_date_inst = @get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
-
-		if(!is_object($this->lc_date_inst))
-		{
-			$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en") . "/date");
-		}
 	}
 
 	/** returns the name of the weekday in the current language
@@ -33,21 +42,14 @@ class locale
 	**/
 	public static function get_lc_weekday($num, $short = false, $ucfirst = false)
 	{
-		static $lc_date_inst;
-		$lc_date_inst = @get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
-//			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
-		if(!is_object($lc_date_inst))
+		$lc = self::get_lc();
+		$method = array("awlc_date_{$lc}", "get_lc_weekday");
+		$weekday = "";
+		if (is_readable(AW_DIR . "classes/core/locale/date/date_{$lc}" . AW_FILE_EXT))
 		{
-			$lc_date_inst = get_instance("core/locale/en/date");
-		};
-		if (method_exists($lc_date_inst,"get_lc_weekday"))
-		{
-			return $lc_date_inst->get_lc_weekday($num,$short,$ucfirst);
+			$weekday = call_user_func($method, $num, $short = false, $ucfirst = false);
 		}
-		else
-		{
-			return "";
-		};
+		return $weekday;
 	}
 
 	/** returns the name of the month in the current language
@@ -59,22 +61,14 @@ class locale
 	**/
 	public static function get_lc_month($num)
 	{
-		static $lc_date_inst;
-		$lc_date_inst = get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
-
-		if(!is_object($lc_date_inst))
+		$lc = self::get_lc();
+		$method = array("awlc_date_{$lc}", "get_lc_month");
+		$month = "";
+		if (is_readable(AW_DIR . "classes/core/locale/date/date_{$lc}" . AW_FILE_EXT))
 		{
-			$lc_date_inst = get_instance("core/locale/en/date");
+			$month = call_user_func($method, $num);
 		}
-
-		if (method_exists($lc_date_inst,"get_lc_month"))
-		{
-			return $lc_date_inst->get_lc_month($num);
-		}
-		else
-		{
-			return "";
-		}
+		return $month;
 	}
 
 	/** returns a localized date in the current language
@@ -93,23 +87,16 @@ class locale
 				LC_DATE_FORMAT_LONG = For example: 20. juuni 99
 				LC_DATE_FORMAT_LONG_FULLYEAR = For example: 20. juuni 1999
 	**/
-	public static function get_lc_date($timestamp,$format)
+	public static function get_lc_date($timestamp, $format)
 	{
-		static $lc_date_inst;
-//			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
-		$lc_date_inst = @get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
-		if(!is_object($lc_date_inst))
+		$lc = self::get_lc();
+		$method = array("awlc_date_{$lc}", "get_lc_date");
+		$date = "";
+		if (is_readable(AW_DIR . "classes/core/locale/date/date_{$lc}" . AW_FILE_EXT))
 		{
-			$lc_date_inst = get_instance("core/locale/en/date");
-		};
-		if (method_exists($lc_date_inst,"get_lc_date"))
-		{
-			return $lc_date_inst->get_lc_date($timestamp,$format);
+			$date = call_user_func($method, $timestamp, $format);
 		}
-		else
-		{
-			return "";
-		};
+		return $date;
 	}
 
 	/** returns a readable string for the number given
@@ -128,20 +115,13 @@ class locale
 	**/
 	public static function get_lc_number($number)
 	{
-		static $lc_date_inst;
-		$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/number", array(), false);
-		if(!is_object($lc_date_inst))
+		$lc = self::get_lc();
+		$method = array("awlc_number_{$lc}", "get_lc_number");
+		if (is_readable(AW_DIR . "classes/core/locale/number/number_{$lc}" . AW_FILE_EXT))
 		{
-			$lc_date_inst = get_instance("core/locale/en/number");
-		};
-		if (method_exists($lc_date_inst,"get_lc_number"))
-		{
-			return $lc_date_inst->get_lc_number($number);
+			$number = call_user_func($method, $number);
 		}
-		else
-		{
-			return $number;
-		};
+		return $number;
 	}
 
 	/** returns the given amount of money as text with the currency name n the right place
@@ -161,25 +141,18 @@ class locale
 	**/
 	public static function get_lc_money_text($number, $currency, $lc = NULL)
 	{
-		if (!$lc)
+		if (!self::is_valid_lc_code($lc))
 		{
-			$lc = aw_global_get("LC");
+			$lc = self::get_lc();
 		}
 
-		static $lc_date_inst;
-		$lc_date_inst[$lc] = @get_instance("core/locale/".$lc."/number", array(), false);
-		if(!is_object($lc_date_inst[$lc]))
+		$lc = self::get_lc();
+		if (is_readable(AW_DIR . "classes/core/locale/number/number_{$lc}" . AW_FILE_EXT))
+		if (is_callable($method))
 		{
-			$lc_date_inst[$lc] = get_instance("core/locale/" .$lc. "/number");
-		};
-		if (method_exists($lc_date_inst[$lc],"get_lc_money_text"))
-		{
-			return $lc_date_inst[$lc]->get_lc_money_text($number, $currency);
+			$number = call_user_func($method, $number, $currency);
 		}
-		else
-		{
-			return $number;
-		}
+		return $number;
 	}
 
 	/** returns genitive case of a proper name
@@ -192,27 +165,66 @@ class locale
 	**/
 	public static function get_genitive_for_name($name, $lc = NULL)
 	{
-		if (!$lc)
+		settype($name, "string");
+
+		if (!self::is_valid_lc_code($lc))
 		{
-			$lc = aw_global_get("LC");
+			$lc = self::get_lc();
 		}
 
-		static $lc_cases_inst;
-		$lc_cases_inst[$lc] = @get_instance("core/locale/".$lc."/lc_cases", array(), false);
-		if(!is_object($lc_cases_inst[$lc]))
+		$method = array("awlc_cases_{$lc}", "get_genitive_for_name");
+		if (is_readable(AW_DIR . "classes/core/locale/cases/cases_{$lc}" . AW_FILE_EXT))
 		{
-			$lc_cases_inst[$lc] = get_instance("core/locale/" .$lc. "/lc_cases");
+			$name = call_user_func($method, $name);
 		}
-
-		if (method_exists($lc_cases_inst[$lc],"get_genitive_for_name"))
-		{
-			return $lc_cases_inst[$lc]->get_genitive_for_name((string) $name);
-		}
-		else
-		{
-			return $name;
-		}
+		return $name;
 	}
+
+	/** checks if lc code is valid
+		@attrib api=1 params=pos
+		@param code required type=string
+		@returns bool
+	**/
+	public static function is_valid_lc_code($code)
+	{
+		return isset(self::$lc_data[(string) $code]);
+	}
+
+	private static function get_lc()
+	{
+		if (false === self::$current_locale)
+		{
+			$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
+			if (!self::is_valid_lc_code($lc))
+			{
+				$lc = self::$default_locale;
+			}
+			self::$current_locale = $lc;
+		}
+		return self::$current_locale;
+	}
+}
+
+/** Generic locale class error **/
+class awex_locale extends aw_exception {}
+
+
+interface awlc_date
+{
+	public static function get_lc_month($num);
+	public static function get_lc_date($timestamp, $format);
+	public static function get_lc_weekday($num, $short = false, $ucfirst = false);
+}
+
+interface awlc_number
+{
+	public static function get_lc_number($number);
+	public static function get_lc_money_text($number, $currency);
+}
+
+interface awlc_cases
+{
+	public static function get_genitive_for_name($name);
 }
 
 ?>

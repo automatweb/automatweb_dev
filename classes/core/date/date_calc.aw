@@ -5,13 +5,13 @@
 
 /** returns timestamps for the beginning and end of the given date range
 
-	@attrib api=1 params=name 
+	@attrib api=1 params=name
 
 	@param time optional type=int
-		unix timestamp of the time to start from 
+		unix timestamp of the time to start from
 
 	@param date optional type=string
-		date (format: d-m-y) to start from 
+		date (format: d-m-y) to start from
 
 	@param range_start optional type=int
 		unix timestamp too start from
@@ -43,7 +43,7 @@
 		$r = get_date_range(array("time" => time(), "type" => "week"));
 		echo date("d.m.Y H:i:s", $r["start"]);	// echoes 00:00:00 the previous monday
 		echo date("d.m.Y H:i:s", $r["end"]);	// echoes 23:59:59 on the next sunday
-		
+
 
 	@comment
 		oe of the three parameters time, date, range_start must be given
@@ -78,10 +78,10 @@ function get_date_range($args = array())
 	{
 		list($d,$m,$y) = split("-",date("d-m-Y",$time));
 	};
-		
+
 	$timestamp = mktime(0,0,0,$m,$d,$y);
 	$timestamp2 = mktime(23,59,59,$m,$d,$y);
-	
+
 	// if a range is specified then use that as the base for our calculations
 	$range_start = $args["range_start"];
 	if ($range_start > 0)
@@ -89,7 +89,7 @@ function get_date_range($args = array())
 		$timestamp = $range_start;
 		list($d,$m,$y) = explode("-",date("d-m-Y",$timestamp));
 	}
-			
+
 	// current = 0, backward = 1, forward = 2
 	// current - start or end from/at the timestamp
 	if ($args["direction"] == 0)
@@ -140,7 +140,7 @@ function get_date_range($args = array())
 	if ($rg_end == 0)
 	{
 		$rg_end = $timestamp2 + (86400 * $diff);
-	}		
+	}
 
 
 	switch($type)
@@ -152,15 +152,15 @@ function get_date_range($args = array())
 			// special flag - fullweeks, if set we return dates from
 			// the first monday of the month to the last sunday of the month
 
-			
 
-			
+
+
 			// siin on next ja prev-i arvutamine monevorra special
 			// kui p2ev on suurem, kui j2rgmises kuus p2evi kokku
 			// j2rgmise kuu viimase p2eva. Sama kehtib eelmise kohta
 			$next_mon = date("d",mktime(0,0,0,$m+2,0,$y));
 			$prev_mon = date("d",mktime(0,0,0,$m,0,$y));
-	
+
 			if ($d > $next_mon)
 			{
 				$next = mktime(0,0,0,$m+1,$next_mon,$y);
@@ -183,17 +183,17 @@ function get_date_range($args = array())
 		case "year":
 			$start_ts = mktime(0,0,0,1,1,$y);
 			$end_ts = mktime(23,59,59,12,31,$y);
-			
+
 			$prev = mktime(0,0,0,$m,$d,$y-1);
 			$next = mktime(23,59,59,$m,$d,$y+1);
 			break;
-		
+
 		case "3month":
 			$start_ts = mktime(0,0,0,$m-1,1,$y);
 			$end_ts = mktime(23,59,59,$m+1,0,$y);
 			break;
-		
-		
+
+
 		case "week":
 			$next = mktime(0,0,0,$m,$d+7,$y);
 			$prev = mktime(0,0,0,$m,$d-7,$y);
@@ -207,7 +207,7 @@ function get_date_range($args = array())
 		case "relative":
                         $next = mktime(0,0,0,0,0,0);
                         $prev = mktime(0,0,0,0,0,0);
-			// if we are supposed to show future events, then set the start range to 
+			// if we are supposed to show future events, then set the start range to
 			// this same day
 			// forward = 0, backward = 1
 			if ($args["direction"] == "0")
@@ -246,7 +246,7 @@ function get_date_range($args = array())
 				$end_ts = mktime(23,59,59,12,31,2003);
 			};
 			break;
-		
+
 		case "day":
 			$start_ts = $rg_start;
 			$end_ts = $rg_end;
@@ -303,7 +303,7 @@ function get_date_range($args = array())
 		"timestamp" => $timestamp,
 	);
 	return $arr;
-}	
+}
 
 /** modifies the day of week returned by date("w") for european standard
 
@@ -323,7 +323,7 @@ function convert_wday($daycode)
 {
 	return ($daycode == 0) ? 7 : $daycode;
 }
-	
+
 /** Takes 2 timestamps and calculates the difference between them in days
 
 	@attrib api=1 params=pos
@@ -348,36 +348,15 @@ function get_day_diff($time1,$time2)
 }
 
 
-/** returns the timestamp for 00:00 on the last monday
-
-	@attrib api=1 
-
-	@param timestamp optional type=int
-		Timestamp to return the week start for
-
-	@returns the timestamp for 00:00 on the last monday
-
-	@example
-
-		echo date("d.m.Y", get_week_start()); // echos the date for last monday
-	
-**/
-function get_week_start($timestamp = null)
+function get_week_start($timestamp = null) // DEPRECATED if no objections
 {
-	if ($timestamp === null)
-	{
-		$timestamp = time();
-	}
-	$wd_lut = array(0 => 6, 1 => 0, 2 => 1, 3 => 2, 4 => 3, 5 => 4, 6 => 5);
-	$wday = $wd_lut[date("w",$timestamp )];
-
-	return mktime(0,0,0, date("m",$timestamp ), date("d",$timestamp )-$wday, date("Y",$timestamp ));
+	date_calc::get_week_start($timestamp);
 }
 
 
 /** returns the timestamp for 00:00 on the 1st of the current month
 
-	@attrib api=1 
+	@attrib api=1
 
 	@returns the timestamp for 00:00 on the 1st of the current month
 
@@ -395,7 +374,7 @@ function get_month_start()
 
 	@attrib api=1 params=name
 
-	@param tm optional type=int 
+	@param tm optional type=int
 		the timestamp for the day to calculate, optional, defaults to the current time
 
 	@returns the timestamp for 00:00 the given day
@@ -433,18 +412,18 @@ function get_year_start($tm = NULL)
 
 	@attrib api=1 params=name
 
-	@param a_from required type=int 
+	@param a_from required type=int
 		the timestamp for the beginning of the first range
 
-	@param a_to required type=int 
+	@param a_to required type=int
 		the timestamp for the end of the first range
 
-	@param b_from required type=int 
+	@param b_from required type=int
 		the timestamp for the beginning of the second range
 
-	@param a_to required type=int 
+	@param a_to required type=int
 		the timestamp for the end of the second range
-	
+
 
 	@returns true if the given ranges overlap, false if not
 
@@ -456,11 +435,11 @@ function get_year_start($tm = NULL)
 		{
 			echo "leopard!";
 		}
-		
+
 **/
 function timespans_overlap($a_from, $a_to, $b_from, $b_to)
 {
-	// test for NOT overlapping, that's simpler. 
+	// test for NOT overlapping, that's simpler.
 	// two options here: completely before or completely after
 	if ($a_to <= $b_from)
 	{
@@ -473,5 +452,36 @@ function timespans_overlap($a_from, $a_to, $b_from, $b_to)
 	return true;
 }
 
-class date_calc {} ;
+/**
+Date and time calculation
+**/
+class date_calc
+{
+/** returns the timestamp for 00:00 on the last monday
+
+	@attrib api=1
+
+	@param timestamp optional type=int
+		Timestamp to return the week start for
+
+	@returns the timestamp for 00:00 on the last monday
+
+	@example
+
+		echo date("d.m.Y", get_week_start()); // echos the date for last monday
+
+**/
+	public static function get_week_start($timestamp = null)
+	{
+		if ($timestamp === null)
+		{
+			$timestamp = time();
+		}
+		$wd_lut = array(0 => 6, 1 => 0, 2 => 1, 3 => 2, 4 => 3, 5 => 4, 6 => 5);
+		$wday = $wd_lut[date("w",$timestamp )];
+
+		return mktime(0,0,0, date("m",$timestamp ), date("d",$timestamp )-$wday, date("Y",$timestamp ));
+	}
+}
+
 ?>
