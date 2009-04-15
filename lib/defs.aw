@@ -415,7 +415,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 	function send_mail($to,$subject,$msg,$headers="",$arguments="")
 	{
 //	echo "enter send to = $to , subj = $subject , msg:<pre>$headers\n$msg</pre>";
-		//vaatab et v2hemalt 1 aadress kuhu saata oleks ok	
+		//vaatab et v2hemalt 1 aadress kuhu saata oleks ok
 		$correct_mails_to_sent = 0;
 		$to_arr = explode(",", $to);
 		foreach($to_arr as $key => $t)
@@ -439,7 +439,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 				unset($to_arr[$key]);
 			}
 			$to = join("," , $to_arr);
-	
+
 		}
 
 		if(!(sizeof($to_arr) && $correct_mails_to_sent))
@@ -2274,16 +2274,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 	}
 
 	// deprecated - use locale::get_lc_date instead
-	function get_lc_date($time=0, $format=3)
-	{
-		$inst = get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
-//		$inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
-		if(!is_object($inst))
-		{
-			$inst = get_instance("core/locale/en/date");
-		}
-		return $inst->get_lc_date($time, $format);
-	}
+	function get_lc_date($time=0, $format=3) { return locale::get_lc_date($time, $format); }
 
 /** returns the parameter or an array if the parameter is not an array
 	@attrib api=1 params=pos
