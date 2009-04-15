@@ -244,11 +244,11 @@ class class_index
 					$ret = chmod($class_dfn_file, 0666);
 
 					if (!$ret)
-					{
-						$e = new awex_clidx_filesys("Failed to change file permissions for " . $class_dfn_file . ".");
-						$e->clidx_file = $class_dfn_file;
-						$e->clidx_op = "mkdir";
-						throw $e;
+					{ //!!! mida teha
+						// $e = new awex_clidx_filesys("Failed to change file permissions for " . $class_dfn_file . ".");
+						// $e->clidx_file = $class_dfn_file;
+						// $e->clidx_op = "mkdir";
+						// throw $e;
 					}
 				}
 				else
