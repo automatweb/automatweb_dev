@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="google_chart" folder="vcl" extends="aw_template">
+	<class name="google_chart" folder="www/dev/terryf/automatweb_dev/classes/vcl" extends="aw_template">
 		<action name="set_type">
 			<function name="set_type">
 				<arguments>

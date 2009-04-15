@@ -1,0 +1,24 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="mrp_resource_obj" folder="www/dev/terryf/automatweb_dev/classes/mrp" extends="_int_object">
+		<action name="get_available_hours">
+			<function name="get_available_hours">
+				<arguments>
+					<optional name="from" type="int" />
+					<optional name="to" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_planned_hours">
+			<function name="get_planned_hours">
+				<arguments>
+					<optional name="from" type="int" />
+					<optional name="to" type="int" default="time()" />
+					<optional name="id" type="int/array" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

@@ -617,6 +617,16 @@
             <caption>Aadress kuhu suunata (muutmine)</caption>
       </property>
       <property>
+            <name>cfgview_ru_cntrl</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RU_CONTROLLER</reltype>
+            <caption>Aadress kuhu suunata (kontroller)</caption>
+      </property>
+      <property>
             <name>cfgview_ru_id_param</name>
             <table>objects</table>
             <group>cfgview_settings</group>
@@ -625,16 +635,6 @@
             <type>textbox</type>
             <caption>OID parameeter</caption>
             <comment>Parameeter, millega suunatavale aadressile lisatakse loodud/muudetud objekti OID</comment>
-      </property>
-      <property>
-            <name>cfgview_ru_cntrl</name>
-            <table>objects</table>
-            <group>cfgview_settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-			<reltype>RELTYPE_RU_CONTROLLER</reltype>
-            <caption>Aadress kuhu suunata (kontroller)</caption>
       </property>
       <property>
             <name>orb_settings</name>
@@ -709,16 +709,6 @@
             <default>0</default>
             <caption>Salvestamise kontroll lehelt lahkumisel</caption>
       </property>
-      <property>
-            <name>on_save_settings_remove_word_html</name>
-            <table>objects</table>
-            <group>on_save_settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Salvestamisel eemalda Word'i html</caption>
-      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>
@@ -788,10 +778,6 @@
                   <caption>Liidese kuvamine</caption>
                   <parent>settings</parent>
             </view_settings>
-            <on_save_settings>
-                  <caption>Salvestamine</caption>
-                  <parent>settings</parent>
-            </on_save_settings>
             <translate>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </translate>
@@ -886,11 +872,11 @@
                   <clid>CL_CFG_VIEW_CONTROLLER</clid>
                   <caption>Tabeli kontroller</caption>
             </TABLE_CONTROLLER>
-			<RU_CONTROLLER>
+            <RU_CONTROLLER>
                   <value>9</value>
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Aadress kuhu suunata (kontroller)</caption>
-			</RU_CONTROLLER>
+            </RU_CONTROLLER>
       </reltypes>
       <layout>
             <add_grp>

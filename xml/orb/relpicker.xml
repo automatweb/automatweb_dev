@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="relpicker" folder="vcl" extends="core">
+	<class name="relpicker" folder="www/dev/terryf/automatweb_dev/classes/vcl" extends="core">
 		<action name="create_relpicker">
 			<function name="create_relpicker">
 				<arguments>
@@ -9,11 +9,13 @@
 					<required name="oid" type="int" />
 					<required name="property" type="int" />
 					<optional name="multiple" type="int" />
+					<optional name="size" type="int" />
 					<optional name="no_sel" type="int" />
 					<optional name="automatic" type="int" />
 					<optional name="no_edit" type="int" />
 					<optional name="options" type="array" />
 					<optional name="buttonspos" type="string" />
+					<optional name="value" />
 				</arguments>
 			</function>
 		</action>

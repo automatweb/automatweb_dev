@@ -2433,7 +2433,7 @@ class cfgform extends class_base
 					$properties = $by_layout[$layout];
 				}
 
-				foreach ($properties as $property)
+				foreach (safe_array($properties) as $property)
 				{
 					$cnt++;
 					$prpdata = $this->all_props[$property["name"]];
@@ -4816,6 +4816,13 @@ class cfgform extends class_base
 			$this->cfgview_vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
 		}
 
+		if (!empty($args["submit_vars"]))
+		{
+			foreach($args["submit_vars"] as $k => $v)
+			{
+				$this->cfgview_vars[$k] = $v;
+			}
+		}
 		// get view
 		$content = "";
 		$main_view = (empty($this->cfgview_vars["class"]) or $class === $this->cfgview_vars["class"]);

@@ -783,6 +783,10 @@ class class_base extends aw_template
 			$argblock["is_sa"] = 1;
 		}
 
+		if (!empty($args["pseh"]))
+		{
+			$argblock["pseh"] = $args["pseh"];
+		}
 		if (!empty($_GET["pseh"]))
 		{
 			$argblock["pseh"] = $_GET["pseh"];

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="calendar_event" folder="applications/calendar" extends="class_base">
+	<class name="calendar_event" folder="www/dev/terryf/automatweb_dev/classes/applications/calendar" extends="class_base">
 		<action name="new" nologin="1" all_args="1">
 			<function name="new_change">
 				<arguments>

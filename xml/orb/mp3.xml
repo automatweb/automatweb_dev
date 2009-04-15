@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mp3" folder="applications/mp3player" extends="class_base">
+	<class name="mp3" folder="www/dev/terryf/automatweb_dev/classes/applications/mp3player" extends="class_base">
 		<action name="log_play_statistics" nologin="1" is_public="1">
 			<function name="log_play_statistics">
 				<arguments>

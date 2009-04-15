@@ -17,12 +17,23 @@
             <caption>Kehtib kuni</caption>
       </property>
       <property>
+            <name>res_folder_tree</name>
+            <table>aw_mrp_pricelist</table>
+            <group>res_prices</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>left_tree</parent>
+            <field>res_folder_tree</field>
+      </property>
+      <property>
             <name>res_prices</name>
             <table>aw_mrp_pricelist</table>
             <group>res_prices</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <parent>main_split</parent>
             <field>res_prices</field>
       </property>
       <classinfo>
@@ -45,5 +56,20 @@
                   <index>aw_oid</index>
             </aw_mrp_pricelist>
       </tableinfo>
+      <layout>
+            <main_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>res_prices</group>
+                  <area_caption></area_caption>
+            </main_split>
+            <left_tree>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Resursside&amp;amp;nbsp;kaustad</area_caption>
+                  <parent>main_split</parent>
+                  <group>res_prices</group>
+            </left_tree>
+      </layout>
 </properties>
 

@@ -841,7 +841,7 @@ class mysql
 				$o->set_class_id($clid);
 				$ti = $o->get_tableinfo();
 
-				foreach($ti as $tn => $td)
+				foreach(safe_array($ti) as $tn => $td)
 				{
 					if (isset($mt[1]) && $mt[1] == $tn)
 					{

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="server_folder" folder="contentmgmt" extends="class_base">
+	<class name="server_folder" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt" extends="class_base">
 		<action name="show_file">
 			<function name="show_file">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_deal" folder="crm" extends="class_base">
+	<class name="crm_deal" folder="www/dev/terryf/automatweb_dev/classes/crm" extends="class_base">
 		<action name="customer_autocomplete_source">
 			<function name="customer_autocomplete_source">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="spa_bookigs_entry" folder="applications/spa_bookings" extends="class_base">
+	<class name="spa_bookigs_entry" folder="www/dev/terryf/automatweb_dev/classes/applications/spa_bookings" extends="class_base">
 		<action name="select_room_booking">
 			<function name="select_room_booking">
 				<arguments>

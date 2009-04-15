@@ -451,7 +451,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$tbl2prop = array();
 		$objtblprops = array();
 		$conn_prop_fetch = array();
-		foreach($properties as $prop => $data)
+		foreach(safe_array($properties) as $prop => $data)
 		{
 			if ($data["store"] === "no")
 			{

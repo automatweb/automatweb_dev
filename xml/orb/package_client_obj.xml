@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="package_client_obj" folder="applications/package_management" extends="_int_object">
+	<class name="package_client_obj" folder="www/dev/terryf/automatweb_dev/classes/applications/package_management" extends="_int_object">
 		<action name="download_package_properties">
 			<function name="download_package_properties">
 				<arguments>

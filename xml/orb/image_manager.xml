@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="image_manager" folder="admin/editor" extends="aw_editor_manager_base">
+	<class name="image_manager" folder="www/dev/terryf/automatweb_dev/classes/admin/editor" extends="aw_editor_manager_base">
 		<action name="manage" default="1">
 			<function name="manage">
 				<arguments>

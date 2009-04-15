@@ -76,7 +76,7 @@ class mrp_job_obj extends _int_object
 		if ($new)
 		{
 			### set status
-			$this->set_prop ("state", self::STATE_NEW);
+//			$this->set_prop ("state", self::STATE_NEW);
 		}
 	}
 

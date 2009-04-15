@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="converters" folder="admin" extends="aw_template">
+	<class name="converters" folder="www/dev/terryf/automatweb_dev/classes/admin" extends="aw_template">
 		<action name="menu_convimages">
 			<function name="menu_convimages">
 				<arguments>

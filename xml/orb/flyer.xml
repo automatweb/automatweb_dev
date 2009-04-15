@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="flyer" folder="applications/calendar" extends="class_base">
+	<class name="flyer" folder="www/dev/terryf/automatweb_dev/classes/applications/calendar" extends="class_base">
 		<action name="show_flyer" nologin="1">
 			<function name="show_flyer">
 				<arguments>

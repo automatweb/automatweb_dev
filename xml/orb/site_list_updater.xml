@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="site_list_updater" folder="install" extends="aw_template">
+	<class name="site_list_updater" folder="www/dev/terryf/automatweb_dev/classes/install" extends="aw_template">
 		<action name="ping" nologin="1">
 			<function name="ping">
 				<arguments>

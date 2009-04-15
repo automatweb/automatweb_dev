@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="scheduler" folder="core" extends="aw_template">
+	<class name="scheduler" folder="www/dev/terryf/automatweb_dev/classes/core" extends="aw_template">
 		<action name="update_repeaters" nologin="1">
 			<function name="update_repeaters">
 				<arguments>

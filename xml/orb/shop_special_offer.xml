@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_special_offer" folder="applications/shop" extends="class_base">
+	<class name="shop_special_offer" folder="www/dev/terryf/automatweb_dev/classes/applications/shop" extends="class_base">
 		<action name="_get_ac_product_groups" all_args="1">
 			<function name="_get_ac_product_groups">
 				<arguments>

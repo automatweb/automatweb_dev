@@ -67,6 +67,7 @@ class site_show extends class_base
 
 	var $add_url;
 	var $_is_in_document_list;
+	var $path_brothers = array();
 
 	function site_show()
 	{
@@ -3001,7 +3002,13 @@ class site_show extends class_base
 		$str_part = str_replace($what_to_replace, '_', $tpl);
 
 		$fn = $this->cache->get_fqfn("compiled_menu_template-".$str_part."-".aw_global_get("lang_id"));
-		if (@file_exists($fn) && @is_readable($fn) && @filectime($fn) > @filectime($tpl))
+
+		if ($tpl[0] != "/")
+		{
+			$tpl = aw_ini_get("site_basedir")."/".$tpl;
+		}
+
+		if (file_exists($fn) && is_readable($fn) && filectime($fn) > filectime($tpl))
 		{
 			return $fn;
 		}

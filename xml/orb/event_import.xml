@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="event_import" folder="import" extends="class_base">
+	<class name="event_import" folder="www/dev/terryf/automatweb_dev/classes/import" extends="class_base">
 		<action name="ignore">
 			<function name="ignore">
 				<arguments>

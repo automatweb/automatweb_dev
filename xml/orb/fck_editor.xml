@@ -1,12 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="fck_editor" folder="vcl" extends="aw_template">
-		<action name="get_fck_config">
-			<function name="get_fck_config">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
+	<class name="fck_editor" folder="www/dev/terryf/automatweb_dev/classes/vcl" extends="aw_template">
 	</class>
 </orb>

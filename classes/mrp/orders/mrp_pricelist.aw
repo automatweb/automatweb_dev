@@ -14,7 +14,13 @@
 
 @default group=res_prices
 
-	@property res_prices type=table no_caption=1 store=no
+	@layout main_split type=hbox width=20%:80%
+
+		@layout left_tree type=vbox closeable=1 area_caption=Resursside&nbsp;kaustad parent=main_split
+
+			@property res_folder_tree type=treeview store=no no_caption=1 parent=left_tree 
+
+		@property res_prices type=table no_caption=1 store=no parent=main_split
 
 @groupinfo res_prices caption="Ressursside hinnad" 
 */
@@ -56,6 +62,12 @@ class mrp_pricelist extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["res_fld"] = $_GET["res_fld"];
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr['args']['res_fld'] = $arr['request']['res_fld'];
 	}
 
 	function show($arr)
@@ -135,7 +147,16 @@ class mrp_pricelist extends class_base
 		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_res_prices_table($t);
 
-		foreach($arr["obj_inst"]->get_resource_list() as $res)
+		if (!$arr["request"]["res_fld"])
+		{
+			$arr["request"]["res_fld"] = $this->_get_default_resource_parent($arr["obj_inst"]);
+			if (!$arr["request"]["res_fld"])
+			{
+				return;
+			}
+		}
+
+		foreach($arr["obj_inst"]->get_resource_list($arr["request"]["res_fld"]) as $res)
 		{
 			foreach($arr["obj_inst"]->get_ranges_for_resource($res) as $range)
 			{
@@ -164,9 +185,61 @@ class mrp_pricelist extends class_base
 
 	function _set_res_prices($arr)
 	{
-		foreach($arr["obj_inst"]->get_resource_list() as $res)
+		if (!$arr["request"]["res_fld"])
+		{
+			$arr["request"]["res_fld"] = $this->_get_default_resource_parent($arr["obj_inst"]);
+			if (!$arr["request"]["res_fld"])
+			{
+				return;
+			}
+		}
+
+		foreach($arr["obj_inst"]->get_resource_list($arr["request"]["res_fld"]) as $res)
 		{
 			$arr["obj_inst"]->set_ranges_for_resource($res, $arr["request"]["t"][$res->id()]);
+		}
+	}
+
+	function _get_default_resource_parent($o)
+	{
+		$conns = $o->connections_to(array("from.class_id" => CL_MRP_ORDER_CENTER));
+		$c = reset($conns);
+		if (!$c)
+		{
+			return null;
+		}
+
+		return $c->from()->mrp_workspace()->resources_folder;
+	}
+
+	function _get_res_folder_tree($arr)
+	{
+		$pt = $this->_get_default_resource_parent($arr["obj_inst"]);
+		if (!$pt)
+		{
+			return array();
+		}
+
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML,
+				"persist_state" => true,
+				"tree_id" => "mplt",
+			),
+			"root_item" => obj($pt),
+			"ot" => new object_tree(array(
+				"parent" => $pt,
+				"class_id" => array(CL_MENU),
+				"lang_id" => array(),
+				"site_id" => array()
+			)),
+			"var" => "res_fld",
+			"icon" => icons::get_icon_url(CL_MENU)
+		));
+
+		if (!$arr["request"]["res_fld"] || $pt == $arr["request"]["res_fld"])
+		{
+			$arr["prop"]["vcl_inst"]->set_selected_item($pt);
 		}
 	}
 }

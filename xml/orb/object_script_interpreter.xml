@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="object_script_interpreter" folder="install" extends="class_base">
+	<class name="object_script_interpreter" folder="www/dev/terryf/automatweb_dev/classes/install" extends="class_base">
 		<action name="exec_file">
 			<function name="exec_file">
 				<arguments>

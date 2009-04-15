@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ml_list" folder="applications/mailinglist" extends="class_base">
+	<class name="ml_list" folder="www/dev/terryf/automatweb_dev/classes/applications/mailinglist" extends="class_base">
 		<action name="submit_choose_addresses" all_args="1">
 			<function name="submit_choose_addresses">
 				<arguments>
@@ -117,6 +117,30 @@
 				<arguments>
 					<required name="ml" type="oid" />
 					<optional name="ru" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_subscription_mail">
+			<function name="send_subscription_mail">
+				<arguments>
+					<required name="ml_list" type="int" acl="view" />
+					<required name="dir" type="array/oid" acl="view" />
+					<required name="to_mail" type="string" />
+					<optional name="froma" type="string" />
+					<optional name="fromn" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_unsubscription_mail">
+			<function name="send_unsubscription_mail">
+				<arguments>
+					<required name="ml_list" type="int" acl="view" />
+					<required name="dir" type="array/oid" acl="view" />
+					<required name="to_mail" type="string" />
+					<optional name="froma" type="string" />
+					<optional name="fromn" type="string" />
 				</arguments>
 			</function>
 		</action>

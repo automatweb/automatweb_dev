@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="orders_form" folder="applications/orders" extends="class_base">
+	<class name="orders_form" folder="www/dev/terryf/automatweb_dev/classes/applications/orders" extends="class_base">
 		<action name="delete_from_order" nologin="1">
 			<function name="delete_from_order">
 				<arguments>

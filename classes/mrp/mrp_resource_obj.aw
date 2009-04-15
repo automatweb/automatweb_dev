@@ -41,7 +41,7 @@ class mrp_resource_obj extends _int_object
 		if ($new)
 		{
 			### set status
-			$this->set_prop ("state", self::STATE_AVAILABLE);
+		//	$this->set_prop ("state", self::STATE_AVAILABLE);
 		}
 	}
 

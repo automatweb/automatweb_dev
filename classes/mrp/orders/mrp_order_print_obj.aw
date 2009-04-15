@@ -17,6 +17,11 @@ class mrp_order_print_obj extends mrp_order_obj
 			$case->set_prop("due_date", $v);
 			$case->save();
 		}
+
+		if ($k == "e_name" && $this->name() == "")
+		{
+			$this->set_name($v);
+		}
 		return parent::set_prop($k, $v);
 	}
 

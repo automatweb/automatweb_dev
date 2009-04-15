@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="spa_bookings_overview" folder="applications/spa_bookings" extends="class_base">
+	<class name="spa_bookings_overview" folder="www/dev/terryf/automatweb_dev/classes/applications/spa_bookings" extends="class_base">
 		<action name="print_person_chart">
 			<function name="print_person_chart">
 				<arguments>

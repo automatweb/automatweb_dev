@@ -98,6 +98,11 @@
                   <clid>CL_SITE_COPY</clid>
                   <caption>Saitide kopeerimise objekt, mille seadeid kasutada</caption>
             </SITE_COPY>
+            <MAIL>
+                  <value>1</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>E-postiaadress, kuhu saadetakse infot kopeerimise progressist</caption>
+            </MAIL>
       </reltypes>
 </properties>
 

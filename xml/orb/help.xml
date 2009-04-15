@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="help" folder="core/help" extends="aw_template">
+	<class name="help" folder="www/dev/terryf/automatweb_dev/classes/core/help" extends="aw_template">
 		<action name="browser" default="1">
 			<function name="browser">
 				<arguments>

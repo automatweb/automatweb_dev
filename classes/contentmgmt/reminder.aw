@@ -1,9 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.11 2008/01/31 13:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.12 2009/04/15 13:12:03 kristo Exp $
 // reminder.aw - Meeldetuletus 
 /*
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_rconnect_from)
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_rconnect_to)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_DOCUMENT, on_rdisconnect_from)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_DOCUMENT, on_rdisconnect_to)
 

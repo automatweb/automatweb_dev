@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_selection" folder="crm" extends="class_base">
+	<class name="crm_selection" folder="www/dev/terryf/automatweb_dev/classes/crm" extends="class_base">
 		<action name="navigate">
 			<function name="navigate">
 				<arguments>

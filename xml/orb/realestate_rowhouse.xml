@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="realestate_rowhouse" folder="applications/realestate_management" extends="realestate_property">
+	<class name="realestate_rowhouse" folder="www/dev/terryf/automatweb_dev/classes/applications/realestate_management" extends="realestate_property">
 		<action name="pictures_view" nologin="1">
 			<function name="pictures_view">
 				<arguments>

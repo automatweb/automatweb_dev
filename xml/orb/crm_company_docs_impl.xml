@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_company_docs_impl" folder="applications/crm" extends="class_base">
+	<class name="crm_company_docs_impl" folder="www/dev/terryf/automatweb_dev/classes/applications/crm" extends="class_base">
 		<action name="get_tree_stuff" all_args="1">
 			<function name="get_tree_stuff">
 				<arguments>

@@ -611,7 +611,7 @@ class cfgutils extends aw_template
 				};
 			};
 		};
-		if (!$from_cache)
+		if (!$from_cache && !empty($cachename))
 		{
 			//print "writing out";
 			$fp = fopen($cachename, "w");
@@ -768,7 +768,7 @@ class cfgutils extends aw_template
 
 			$objprops = array();
 
-			foreach($result["properties"] as $key => $val)
+			foreach(safe_array($result["properties"]) as $key => $val)
 			{
 				if (!isset($val["name"]))
 				{

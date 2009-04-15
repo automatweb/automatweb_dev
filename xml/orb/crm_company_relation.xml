@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_company_relation" folder="applications/crm" extends="class_base">
+	<class name="crm_company_relation" folder="www/dev/terryf/automatweb_dev/classes/applications/crm" extends="class_base">
 		<action name="org_ac" all_args="1">
 			<function name="org_ac">
 				<arguments>

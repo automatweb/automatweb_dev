@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="rfp_manager" folder="applications/calendar" extends="class_base">
+	<class name="rfp_manager" folder="www/dev/terryf/automatweb_dev/classes/applications/calendar" extends="class_base">
 		<action name="create_new_room_price">
 			<function name="handle_new_room_price">
 				<arguments>

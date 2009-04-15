@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="spa_customer_interface" folder="applications/spa_bookings" extends="class_base">
+	<class name="spa_customer_interface" folder="www/dev/terryf/automatweb_dev/classes/applications/spa_bookings" extends="class_base">
 		<action name="add_pkt">
 			<function name="add_pkt">
 				<arguments>

@@ -79,7 +79,7 @@
             <reltype>RELTYPE_PROD_VARS_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-	    <caption>Toitlustus&amp;amp;uuml;&amp;amp;uuml;pide kaust</caption>
+            <caption>Toitlustust&amp;amp;uuml;&amp;amp;uuml;pide kaust</caption>
       </property>
       <property>
             <name>meta_folder</name>
@@ -502,21 +502,18 @@
             <table>objects</table>
             <group>stats</group>
             <type>google_chart</type>
+            <no_caption>1</no_caption>
             <parent>stats_filt_charts</parent>
-	    <field>stats_money_chart</field>
-	    <captionside>top</captionside>
-            <caption>K&amp;auml;ibe graafik</caption>
+            <field>stats_money_chart</field>
       </property>
       <property>
             <name>stats_chart</name>
             <table>objects</table>
             <group>stats</group>
             <type>google_chart</type>
-            <caption>1</caption>
+            <no_caption>1</no_caption>
             <parent>stats_filt_charts</parent>
-	    <field>stats_chart</field>
-	    <captionside>top</captionside>
-            <caption>Lisagraafik</caption>
+            <field>stats_chart</field>
       </property>
       <property>
             <name>stats_chart_filt</name>
@@ -526,7 +523,7 @@
             <captionside>top</captionside>
             <parent>stats_filt_charts</parent>
             <field>stats_chart_filt</field>
-            <caption>Lisagraafiku t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            <caption>Graafiku t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>stats_tbl</name>
@@ -543,7 +540,7 @@
             <group>stats</group>
             <type>submit</type>
             <store>no</store>
-	    <field>stats_tbl</field>
+            <field>stats_sbt</field>
             <caption>Otsi</caption>
       </property>
       <property>
@@ -770,7 +767,7 @@
             <stats>
                   <parent>raports</parent>
                   <caption>Statistika</caption>
-		  <submit>no</submit>
+                  <submit>no</submit>
             </stats>
             <rfps>
                   <caption>Tellimused</caption>
@@ -924,7 +921,6 @@
                   <closeable>1</closeable>
                   <area_caption>Graafikud</area_caption>
                   <group>stats</group>
-		  <width>5%:5%:90%</width>
             </stats_filt_charts>
             <hsplit>
                   <type>hbox</type>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cb_translate" folder="applications/cb_trans" extends="class_base">
+	<class name="cb_translate" folder="www/dev/terryf/automatweb_dev/classes/applications/cb_trans" extends="class_base">
 		<action name="editor">
 			<function name="editor">
 				<arguments>

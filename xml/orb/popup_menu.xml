@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="popup_menu" folder="vcl" extends="aw_template">
+	<class name="popup_menu" folder="www/dev/terryf/automatweb_dev/classes/vcl" extends="aw_template">
 		<action name="begin_menu">
 			<function name="begin_menu">
 				<arguments>

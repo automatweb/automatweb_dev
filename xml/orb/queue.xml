@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="queue" folder="core" extends="">
+	<class name="queue" folder="www/dev/terryf/automatweb_dev/classes/core" extends="">
 		<action name="queue">
 			<function name="queue">
 				<arguments>

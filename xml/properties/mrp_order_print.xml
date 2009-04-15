@@ -83,28 +83,12 @@
             <caption>Kogus</caption>
       </property>
       <property>
-            <name>format</name>
-            <table>aw_mrp_order_print</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>aw_format</field>
-            <caption>Formaat</caption>
-      </property>
-      <property>
             <name>deadline</name>
             <table>aw_mrp_order_print</table>
             <group>general</group>
             <type>date_select</type>
             <field>aw_deadline</field>
             <caption>T&amp;amp;auml;htaeg</caption>
-      </property>
-      <property>
-            <name>materials</name>
-            <table>aw_mrp_order_print</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>aw_materials</field>
-            <caption>Materjalid</caption>
       </property>
       <property>
             <name>workflow_errors</name>
@@ -202,6 +186,134 @@
             <no_caption>1</no_caption>
             <field>preview</field>
       </property>
+      <property>
+            <name>e_format</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FORMAT</reltype>
+            <field>aw_e_format</field>
+            <automatic>1</automatic>
+            <no_edit>1</no_edit>
+            <caption>Tr&amp;amp;uuml;kise formaat</caption>
+      </property>
+      <property>
+            <name>e_num_pages</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>aw_e_num_pages</field>
+            <caption>Lehtede arv</caption>
+      </property>
+      <property>
+            <name>e_covers</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_e_num_pages</field>
+            <caption>Kaaned?</caption>
+      </property>
+      <property>
+            <name>e_main_paper</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAIN_PAPER</reltype>
+            <field>aw_e_main_paper</field>
+            <no_edit>1</no_edit>
+            <caption>Sisupaber</caption>
+      </property>
+      <property>
+            <name>e_cover_paper</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COVER_PAPER</reltype>
+            <field>aw_e_cover_paper</field>
+            <no_edit>1</no_edit>
+            <caption>Kaanepaber</caption>
+      </property>
+      <property>
+            <name>e_main_colour</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>select</type>
+            <field>aw_e_main_colour</field>
+            <caption>Sisu v&amp;amp;auml;rvilisus</caption>
+      </property>
+      <property>
+            <name>e_cover_colour</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>select</type>
+            <field>aw_e_cover_colour</field>
+            <caption>Kaante v&amp;amp;auml;rvilisus</caption>
+      </property>
+      <property>
+            <name>e_post_processing</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>aw_e_post_processing</field>
+            <caption>J&amp;amp;auml;relt&amp;amp;ouml;&amp;amp;ouml;tlus</caption>
+      </property>
+      <property>
+            <name>e_binding</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>aw_e_binding</field>
+            <caption>K&amp;amp;ouml;ide v&amp;amp;otilde;i kinnitus</caption>
+      </property>
+      <property>
+            <name>e_measures</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>aw_e_measures</field>
+            <caption>M&amp;amp;otilde;&amp;amp;otilde;dud</caption>
+      </property>
+      <property>
+            <name>e_materials</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>aw_e_materials</field>
+            <caption>Materjalid</caption>
+      </property>
+      <property>
+            <name>e_orderer_co</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>aw_e_orderer_co</field>
+            <caption>Tellija organisatsioon</caption>
+      </property>
+      <property>
+            <name>e_orderer_person</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>aw_e_orderer_person</field>
+            <caption>Tellija isik</caption>
+      </property>
+      <property>
+            <name>e_orderer_email</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>aw_e_orderer_email</field>
+            <caption>Tellija telefon</caption>
+      </property>
+      <property>
+            <name>e_orderer_phone</name>
+            <table>aw_mrp_order_print</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>aw_e_orderer_phone</field>
+            <caption>Tellija telefon</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_ORDER_PRINT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -211,6 +323,9 @@
             <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
+            <data>
+                  <caption>Sisestatavad andmed</caption>
+            </data>
             <grp_case_workflow>
                   <caption>Ressursid ja t&amp;amp;ouml;&amp;amp;ouml;voog</caption>
             </grp_case_workflow>
@@ -276,6 +391,21 @@
                   <clid>CL_MRP_ORDER_COVER</clid>
                   <caption>Kate</caption>
             </SEL_COVER>
+            <FORMAT>
+                  <value>11</value>
+                  <clid>CL_MRP_ORDER_PRINT_FORMAT</clid>
+                  <caption>Formaat</caption>
+            </FORMAT>
+            <MAIN_PAPER>
+                  <value>12</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Sisupaber</caption>
+            </MAIN_PAPER>
+            <COVER_PAPER>
+                  <value>13</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Kaanepaber</caption>
+            </COVER_PAPER>
       </reltypes>
       <layout>
             <vsplitbox>

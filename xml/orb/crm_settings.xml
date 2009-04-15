@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_settings" folder="applications/crm" extends="class_base">
+	<class name="crm_settings" folder="www/dev/terryf/automatweb_dev/classes/applications/crm" extends="class_base">
 		<action name="delete_table_cfg">
 			<function name="delete_table_cfg">
 				<arguments>

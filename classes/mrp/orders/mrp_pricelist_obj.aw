@@ -5,8 +5,19 @@ class mrp_pricelist_obj extends _int_object
 	/** Returns array of resources for this price list
 		@attrib api=1
 	**/
-	function get_resource_list()
+	function get_resource_list($parent = null)
 	{	
+		if ($parent !== null)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_MRP_RESOURCE,
+				"parent" => $parent,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			return $ol->arr();
+		}
+
 		$conns = $this->connections_to(array("from.class_id" => CL_MRP_ORDER_CENTER));
 		$c = reset($conns);
 		if (!$c)

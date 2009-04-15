@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="db_server_explorer" folder="applications/awmyadmin" extends="class_base">
+	<class name="db_server_explorer" folder="www/dev/terryf/automatweb_dev/classes/applications/awmyadmin" extends="class_base">
 		<action name="add_table">
 			<function name="add_table">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="calendar_registration" folder="applications/calendar" extends="class_base">
+	<class name="calendar_registration" folder="www/dev/terryf/automatweb_dev/classes/applications/calendar" extends="class_base">
 		<action name="register_to_event" nologin="1">
 			<function name="register_to_event">
 				<arguments>

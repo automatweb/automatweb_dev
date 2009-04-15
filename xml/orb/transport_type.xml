@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="transport_type" folder="applications/crm" extends="class_base">
+	<class name="transport_type" folder="www/dev/terryf/automatweb_dev/classes/applications/crm" extends="class_base">
 		<action name="delete_obj">
 			<function name="delete_obj">
 				<arguments>

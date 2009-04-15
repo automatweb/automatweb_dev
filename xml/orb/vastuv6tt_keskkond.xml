@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="vastuv6tt_keskkond" folder="vastuv6tt" extends="class_base">
+	<class name="vastuv6tt_keskkond" folder="www/dev/terryf/automatweb_dev/classes/vastuv6tt" extends="class_base">
 		<action name="search">
 			<function name="sisseastuja_otsing">
 				<arguments>

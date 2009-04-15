@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="poll" folder="contentmgmt" extends="class_base">
+	<class name="poll" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt" extends="class_base">
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>

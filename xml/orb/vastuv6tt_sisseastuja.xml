@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="vastuv6tt_sisseastuja" folder="vastuv6tt" extends="class_base">
+	<class name="vastuv6tt_sisseastuja" folder="www/dev/terryf/automatweb_dev/classes/vastuv6tt" extends="class_base">
 		<action name="show">
 			<function name="show">
 				<arguments>

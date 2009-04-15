@@ -10,14 +10,9 @@
 	@property amount type=textbox size=5 field=aw_amount group=general,price
 	@caption Kogus
 
-	@property format type=textbox  field=aw_format
-	@caption Formaat
-
 	@property deadline type=date_select field=aw_deadline
 	@caption T&auml;htaeg
 
-	@property materials type=textbox  field=aw_materials
-	@caption Materjalid
 
 @default group=grp_case_workflow
 
@@ -56,6 +51,59 @@
 
 	@property preview type=text store=no no_caption=1
 
+@default group=data
+
+	@property e_format type=relpicker reltype=RELTYPE_FORMAT field=aw_e_format automatic=1 no_edit=1
+	@caption Tr&uuml;kise formaat
+
+	@property e_num_pages type=textbox field=aw_e_num_pages
+	@caption Lehtede arv
+
+	@property e_covers type=checkbox ch_value=1 field=aw_e_num_pages
+	@caption Kaaned?
+
+	@property e_main_paper type=relpicker reltype=RELTYPE_MAIN_PAPER field=aw_e_main_paper no_edit=1
+	@caption Sisupaber
+
+	@property e_cover_paper type=relpicker reltype=RELTYPE_COVER_PAPER field=aw_e_cover_paper no_edit=1
+	@caption Kaanepaber
+
+	@property e_main_colour type=select field=aw_e_main_colour
+	@caption Sisu v&auml;rvilisus
+	
+	@property e_cover_colour type=select field=aw_e_cover_colour
+	@caption Kaante v&auml;rvilisus
+
+	@property e_post_processing type=textbox field=aw_e_post_processing
+	@caption J&auml;relt&ouml;&ouml;tlus
+	
+	@property e_binding type=textbox field=aw_e_binding
+	@caption K&ouml;ide v&otilde;i kinnitus
+	
+	@property e_measures type=textbox field=aw_e_measures
+	@caption M&otilde;&otilde;dud
+	
+	@property e_materials type=textbox field=aw_e_materials
+	@caption Materjalid
+	
+
+	@property e_orderer_co type=textbox field=aw_e_orderer_co
+	@caption Tellija organisatsioon
+	
+	@property e_orderer_person type=textbox field=aw_e_orderer_person
+	@caption Tellija isik
+	
+	@property e_orderer_email type=textbox field=aw_e_orderer_email
+	@caption Tellija telefon
+	
+	@property e_orderer_phone type=textbox field=aw_e_orderer_phone
+	@caption Tellija telefon
+	
+
+@groupinfo data caption="Sisestatavad andmed"
+
+
+
 @groupinfo grp_case_workflow caption="Ressursid ja t&ouml;&ouml;voog"
 @groupinfo grp_case_materials caption="Materjalid"
 @groupinfo price caption="Hind"
@@ -63,6 +111,15 @@
 
 @reltype SEL_COVER value=10 clid=CL_MRP_ORDER_COVER
 @caption Kate
+
+@reltype FORMAT value=11 clid=CL_MRP_ORDER_PRINT_FORMAT
+@caption Formaat
+
+@reltype MAIN_PAPER value=12 clid=CL_SHOP_PRODUCT
+@caption Sisupaber
+
+@reltype COVER_PAPER value=13 clid=CL_SHOP_PRODUCT
+@caption Kaanepaber
 
 */
 
@@ -83,9 +140,56 @@ class mrp_order_print extends mrp_order
 
 		switch($prop["name"])
 		{
+			case "e_main_colour":
+			case "e_cover_colour":
+				$arr["prop"]["options"] = array(
+					t("1/0 - &uuml;helt poolt &uuml;he v&auml;rviga tr&uuml;kitud"),
+					t("1/1 - m&otilde;lemalt poolt 1 v&auml;rviga tr&uuml;kitud"),
+					t("4/0 - &uuml;helt poolt CMYK t&auml;isv&auml;rvitr&uuml;kis (saab tr&uuml;kkida v&auml;rvilisi fotosid)"),
+					t("4/4 - m&otilde;lemalt poolt v&auml;rviline")
+				);
+				break;
 		}
 
 		return $retval;
+	}
+
+	function _get_e_main_paper($arr)
+	{
+		// load options from settings
+		if ($this->can("view", $arr["request"]["web_interface_id"]))
+		{
+			$o = obj($arr["request"]["web_interface_id"]);
+			if ($this->can("view", $o->main_paper_folder))
+			{
+				$ol = new object_list(array(
+					"parent" => $o->main_paper_folder,
+					"class_id" => CL_SHOP_PRODUCT,
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$arr["prop"]["options"] = array("" => t("--vali--")) + $ol->names();
+			}
+		}
+	}
+
+	function _get_e_cover_paper($arr)
+	{
+		// load options from settings
+		if ($this->can("view", $arr["request"]["web_interface_id"]))
+		{
+			$o = obj($arr["request"]["web_interface_id"]);
+			if ($this->can("view", $o->cover_paper_folder))
+			{
+				$ol = new object_list(array(
+					"parent" => $o->cover_paper_folder,
+					"class_id" => CL_SHOP_PRODUCT,
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$arr["prop"]["options"] = array("" => t("--vali--")) + $ol->names();
+			}
+		}
 	}
 
 	function set_property($arr = array())
@@ -128,6 +232,13 @@ class mrp_order_print extends mrp_order
 			case "aw_amount":
 			case "aw_tiraazh":
 			case "aw_deadline":
+			case "aw_e_format":
+			case "aw_e_num_pages":
+			case "aw_e_covers":
+			case "aw_e_main_paper":
+			case "aw_e_cover_paper":
+			case "aw_e_main_colour":
+			case "aw_e_cover_colour":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -136,6 +247,15 @@ class mrp_order_print extends mrp_order
 
 			case "aw_format":
 			case "aw_materials":
+			case "aw_e_name":
+			case "aw_e_post_processing":
+			case "aw_e_binding":
+			case "aw_e_measures":
+			case "aw_e_materials":
+			case "aw_e_orderer_co":
+			case "aw_e_orderer_person":
+			case "aw_e_orderer_email":
+			case "aw_e_orderer_phone":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(255)"
@@ -143,6 +263,7 @@ class mrp_order_print extends mrp_order
 				return true;
 
 			case "aw_final_price":
+			case "aw_e_amount":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "double"

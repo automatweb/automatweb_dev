@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="aw_help" folder="core" extends="class_base">
+	<class name="aw_help" folder="www/dev/terryf/automatweb_dev/classes/core" extends="class_base">
 		<action name="show" all_args="1">
 			<function name="show">
 				<arguments>

@@ -1,0 +1,60 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="mrp_job_obj" folder="www/dev/terryf/automatweb_dev/classes/mrp" extends="_int_object">
+		<action name="save_materials">
+			<function name="save_materials">
+				<arguments>
+					<required name="amount" type="array" />
+					<required name="unit" type="array" />
+					<optional name="movement" type="array" />
+					<optional name="planning" type="array" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="set_used_material_assessment">
+			<function name="set_used_material">
+				<arguments>
+					<required name="product" type="oid" />
+					<required name="amount" type="int" />
+					<optional name="unit" type="oid" />
+					<optional name="movement" type="int" />
+					<optional name="planning" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_person_work_hours">
+			<function name="get_person_hours">
+				<arguments>
+					<optional name="from" type="int" />
+					<optional name="to" type="int" />
+					<optional name="state" type="int/array" />
+					<optional name="person" type="int/array" />
+					<optional name="person_handling" type="int" default="PRSN_HNDL_S" />
+					<optional name="job" type="int/array" />
+					<optional name="by_job" type="boolean" default="false" />
+					<optional name="average" type="boolean" />
+					<optional name="count" type="boolean" />
+					<optional name="convert_to_hours" type="boolean" default="true" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_resource_hours">
+			<function name="get_resource_hours">
+				<arguments>
+					<optional name="from" type="int" />
+					<optional name="to" type="int" />
+					<optional name="state" type="int/array" />
+					<optional name="resource" type="int/array" />
+					<optional name="job" type="int/array" />
+					<optional name="average" type="boolean" />
+					<optional name="count" type="boolean" />
+					<optional name="convert_to_hours" type="boolean" default="true" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

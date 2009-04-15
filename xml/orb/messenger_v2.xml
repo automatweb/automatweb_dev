@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="messenger_v2" folder="applications/messenger" extends="class_base">
+	<class name="messenger_v2" folder="www/dev/terryf/automatweb_dev/classes/applications/messenger" extends="class_base">
 		<action name="my_messages" is_public="1" all_args="1" caption="Minu kirjad">
 			<function name="my_messages">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="scm_contestant" folder="applications/scm" extends="class_base">
+	<class name="scm_contestant" folder="www/dev/terryf/automatweb_dev/classes/applications/scm" extends="class_base">
 		<action name="gen_new_contestant_sheet" all_args="1">
 			<function name="gen_new_contestant_sheet">
 				<arguments>
