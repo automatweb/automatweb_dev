@@ -47,22 +47,26 @@ class error
 		{
 			$arr["id"] = "ERR_GENERIC";
 		}
+
 		if (!isset($arr["msg"]))
 		{
 			$arr["msg"] = "";
 		}
+
 		if (!isset($arr["fatal"]))
 		{
 			$arr["fatal"] = true;
 		}
+
 		if (!isset($arr["show"]))
 		{
 			$arr["show"] = true;
 		}
-		$inst = new aw_template;
+
+		$inst = new core();
 		$inst->init();
 
-		if ("ERR_UNCAUGHT_EXCEPTION" === $arr["id"])
+		if (isset($arr["exception"]) and is_object($arr["exception"]))
 		{
 			$inst->raise_error_exception = $arr["exception"];
 		}

@@ -310,12 +310,21 @@ class core extends acl_base
 
 		$this->_log("ST_CORE", "SA_RAISE_ERROR", $msg, $oid);
 
-		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie t&auml;helepanu mingile ebat&auml;psusele  andmetes v&otilde;i n&auml;puveale.<br /><br />\n\n".$msg." </b>";
+		// $msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie t&auml;helepanu mingile ebat&auml;psusele  andmetes v&otilde;i n&auml;puveale.<br /><br />\n\n".$msg." </b>";
+		$msg = $msg." </b>";
 
-		// also attach backtrace
-		if ($this->raise_error_exception instanceof Exception)
+		// also attach backtrace and file/line
+		if ($this->raise_error_exception instanceof awex_php_generic_error)
 		{
-			$msg .= str_replace("#", "<br /><b>#</b>", $this->raise_error_exception->getTraceAsString());
+			$msg .= "<br /><b>File:</b> " . $this->raise_error_exception->errfile;
+			$msg .= "<br /><b>Line:</b> " . $this->raise_error_exception->errline;
+			$msg .= "<br /><b>Backtrace:</b>" . str_replace("#", "<br /><b>#</b>", $this->raise_error_exception->getTraceAsString()); //!!! backtrace otsida ka 6ige, errori enda oma, mitte errorhandleri oma
+		}
+		elseif ($this->raise_error_exception instanceof Exception)
+		{
+			$msg .= "<br /><b>File:</b> " . $this->raise_error_exception->getFile();
+			$msg .= "<br /><b>Line:</b> " . $this->raise_error_exception->getLine();
+			$msg .= "<br /><b>Backtrace:</b>" . str_replace("#", "<br /><b>#</b>", $this->raise_error_exception->getTraceAsString());
 		}
 		elseif (function_exists("debug_backtrace"))
 		{

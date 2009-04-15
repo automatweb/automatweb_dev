@@ -143,7 +143,7 @@ function aw_reasonable_error_handler($errno, $errstr, $errfile, $errline, $conte
 }
 
 function aw_fatal_error_handler($e = null)
-{
+{ // handles fatal errors as exceptions
 	try // just in case. to avoid exceptions without stack frame since this is a shutdown function
 	{
 		if (empty($e))
@@ -153,15 +153,21 @@ function aw_fatal_error_handler($e = null)
 
 		if (!empty($e) and aw_is_fatal_error($e["type"]))
 		{
+			// this is to find out the name of current exception handler function
 			$current_exception_handler = set_exception_handler("aw_exception_handler");
 			set_exception_handler($current_exception_handler);
+			//////////////
 
 			// generate exception
-			$class = aw_get_error_exception_class($errno);
+			$class = aw_get_error_exception_class($e["type"]);
 			$E = new $class($e["message"], $e["type"]);
 			$E->errfile = $e["file"];
 			$E->errline = $e["line"];
+			//////////////
+
+			// handle the exception
 			$current_exception_handler($E);
+			//////////////
 		}
 	}
 	catch (Exception $e)
