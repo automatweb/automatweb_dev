@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.34 2008/09/09 12:50:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.35 2009/04/15 12:01:53 instrumental Exp $
 // menu_tree.aw - men&uuml;&uuml;puu
 
 /*
@@ -710,6 +710,7 @@ class menu_tree extends class_base
 						"url" => $url,
 						"oid" => $id,
 						"name" => parse_obj_name($v->trans_get_val("name")),
+						"comment" => $v->trans_get_val("comment"),
 						"spacer" => $spacer,
 					));
 					if($this->is_template($tpl."_SEL") && aw_global_get("section") == $v->id())
