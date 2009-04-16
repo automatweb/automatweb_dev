@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.96 2009/03/19 15:04:30 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.97 2009/04/16 07:48:10 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -2968,12 +2968,12 @@ class personnel_management extends class_base
 			);
 			if(empty($conf["age"]["disabled"]))
 			{
-				$row["age"] = obj($obj_data["id"])->get_age();
+				$row["age"] = obj($obj_data["oid"])->get_age();
 			}
 			if(empty($conf["apps"]["disabled"]))
 			{
 				$apps = "";
-				foreach(obj($obj_data["id"])->get_applications(array("parent" => $this->offers_fld, "status" => object::STAT_ACTIVE))->names() as $app_id => $app_name)
+				foreach(obj($obj_data["oid"])->get_applications(array("parent" => $this->offers_fld, "status" => object::STAT_ACTIVE))->names() as $app_id => $app_name)
 				{
 					$apps .= (strlen($apps) > 0) ? ", " : "";
 					$apps .= html::href(array(
@@ -2985,7 +2985,7 @@ class personnel_management extends class_base
 			}
 			if(empty($conf["show_cnt"]["disabled"]))
 			{
-				$row["show_cnt"] = obj($obj_data["id"])->show_cnt;
+				$row["show_cnt"] = obj($obj_data["oid"])->show_cnt;
 			}
 			$t->define_data($row);
 		}
