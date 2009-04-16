@@ -46,7 +46,8 @@ class mrp_job_obj extends _int_object
 	@param objdata required type=array
 		_int_object standard input
 	@param args optional type=array
-		"load_data" element - default FALSE -- fast and memoryconserving mode, TRUE -- load all job data also which is required for some methods (refer to individual documentation).
+		"load_data" element - type bool - default FALSE -- fast and memoryconserving mode, TRUE -- load all job data also which is required for some methods (refer to individual documentation).
+		"resource" element - type object CL_MRP_RESOURCE - default null -- if set and constructing a new object, defaults will be imported from and 'resource' prop will be set to that resource.
 	@errors
 		throws awex_obj_acl when no access rights for resource or project.
 		throws awex_obj_class when resource or project of invalid class.
@@ -76,7 +77,31 @@ class mrp_job_obj extends _int_object
 		if ($new)
 		{
 			### set status
-//			$this->set_prop ("state", self::STATE_NEW);
+			$this->set_prop ("state", self::STATE_NEW);
+
+			if (isset($args["resource"]))
+			{
+				$resource = $args["resource"];
+				if (!($resource instanceof object) or !$resource->is_a(CL_MRP_RESOURCE))
+				{
+					throw new awex_obj_class("Invalid resource parameter. Not a resource object");
+				}
+
+				$this->set_prop("resource", $resource->id());
+				$this->set_prop("pre_buffer", $resource->prop("default_pre_buffer"));
+				$this->set_prop("post_buffer", $resource->prop("default_post_buffer"));
+				$this->set_prop("min_batches_to_continue_wf", $resource->prop("default_min_batches_to_continue_wf"));
+				$this->set_prop("batch_size", $resource->prop("default_batch_size"));
+			}
+			else
+			{
+				$this->set_prop("pre_buffer", 0);
+				$this->set_prop("post_buffer", 0);
+				$this->set_prop("min_batches_to_continue_wf", 0);
+				$this->set_prop("batch_size", 1);
+			}
+
+			$this->set_prop("component_quantity", 1);
 		}
 	}
 
@@ -163,7 +188,7 @@ class mrp_job_obj extends _int_object
 		State for which to get name. One of STATE constant values.
 	@comment
 	@returns mixed
-		Array of constant values (keys) and names (array values) if $state parameter not specified. String name corresponding to that state if $state parameter given. Names are in currently active language.
+		Array of constant values (keys) and names (array values) if $state parameter not specified. String name corresponding to that state if $state parameter given. Names are in currently active language. Empty string if invalid state parameter given.
 	**/
 	public static function get_state_names($state = null)
 	{
@@ -182,13 +207,17 @@ class mrp_job_obj extends _int_object
 			);
 		}
 
-		if (isset(self::$mrp_state_names[$state]))
+		if (!isset($state))
+		{
+			$names = self::$mrp_state_names;
+		}
+		elseif (is_scalar($state) and isset(self::$mrp_state_names[$state]))
 		{
 			$names = self::$mrp_state_names[$state];
 		}
 		else
 		{
-			$names = self::$mrp_state_names;
+			$names = "";
 		}
 
 		return $names;
@@ -693,6 +722,8 @@ class mrp_job_obj extends _int_object
 
 /** Ends the job. Job must be in progress.
     @attrib api=1 params=pos
+	@param quantity optional type=int,float
+		Amount/quantity of items done. If not specified, assumed that whole job done
 	@returns void
 	@comment This method requires job data to be fully loaded (load_data constructor parameter or load_data() method)
 	@errors
@@ -701,7 +732,7 @@ class mrp_job_obj extends _int_object
 		throws awex_mrp_job_not_loaded on load error.
 		throws awex_mrp_job on other errors.
 	**/
-	function done ($comment = "")
+	function done ($quantity = null, $comment = "")
 	{
 		if (!$this->mrp_job_data_loaded)
 		{
@@ -741,24 +772,45 @@ class mrp_job_obj extends _int_object
 
 		try
 		{
-			// free resource
-			try
-			{
-				$this->mrp_resource->stop_job($this->ref());
+			if (isset($quantity))
+			{ // part of job done
+				$this->set_prop ("done", $this->prop("done") + $quantity);
+
+				// set who did them. set time
+				$i = $this->instance();
+				$i->db_query("
+					INSERT INTO mrp_job_progress
+						(aw_job_id, aw_case_id, aw_resource_id, aw_uid_oid, aw_quantity, aw_entry_time)
+					VALUES
+						('".$this->id()."', '".$this->prop("project")."', '".$this->prop("resource")."', '".aw_global_get("uid_oid")."', '{$quantity}', '".time()."')
+				");
 			}
-			catch (awex_mrp_resource_job $e)
-			{
-				// ignore that job was marked in process but resource wasn't processing it
+			elseif ($this->prop("done") < 1)
+			{ // set whole order quantity done when no specific data entered
+				$this->set_prop ("done", $this->mrp_project->prop("trykiarv")*$this->prop("component_quantity"));
 			}
 
-			### finish job
-			$time = time ();
-			$this->set_prop ("state", self::STATE_DONE);
-			$this->set_prop ("finished", $time);
+			if ($this->prop("done") >= $this->mrp_project->prop("trykiarv")*$this->prop("component_quantity"))
+			{ // whole job done
+				// free resource
+				try
+				{
+					$this->mrp_resource->stop_job($this->ref());
+				}
+				catch (awex_mrp_resource_job $e)
+				{
+					// ignore that job was marked in process but resource wasn't processing it
+				}
 
-			### log job change
-			$this->state_changed($comment);
-			$this->stats_done();
+				### finish job
+				$time = time ();
+				$this->set_prop ("state", self::STATE_DONE);
+				$this->set_prop ("finished", $time);
+
+				### log job change
+				$this->state_changed($comment);
+				$this->stats_done();
+			}
 
 			### save changes
 			aw_disable_acl();
@@ -768,8 +820,11 @@ class mrp_job_obj extends _int_object
 			### post rescheduling msg
 			$this->mrp_workspace->request_rescheduling();
 
-			// update job in project
-			$this->mrp_project->update_progress($this->ref());
+			if (!isset($quantity))
+			{
+				// update job in project
+				$this->mrp_project->update_progress($this->ref());
+			}
 		}
 		catch (awex_mrp_resource $e)
 		{
@@ -1150,20 +1205,31 @@ class mrp_job_obj extends _int_object
 
 /**
     @attrib api=1 params=pos
-	@param reserve_start type=bool
+	@param reserve_start type=bool default=false
 		If TRUE then all entities that starting this job depends on, are reserved and waiting for this job to start
-	@returns bool
-		Whether starting the job is possible
+	@param return_info type=bool default=false
+		If TRUE and job can't be started returns comments why
+	@returns bool,string
+		Whether starting the job is possible, textual comments in current language if return_info set and can't start
 **/
-	function can_start ($reserve_start = false)
+	function can_start ($reserve_start = false, $return_info = false)
 	{
+		$info = "";
+
 		try
 		{
 			$this->load_data();
 		}
 		catch (Exception $e)
 		{
-			return false;
+			if ($return_info)
+			{
+				$info .= t("Andmete laadimine ei &otilde;nnestunud. ");
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		### check if project is ready to go on
@@ -1174,8 +1240,15 @@ class mrp_job_obj extends _int_object
 
 		if (!in_array ($this->mrp_project->prop ("state"), $applicable_states))
 		{
-			return false;
-	}
+			if ($return_info)
+			{
+				$info .= t("Projekti staatus sobimatu. ");
+			}
+			else
+			{
+				return false;
+			}
+		}
 
 		### check if job can start
 		$applicable_states = array (
@@ -1184,45 +1257,83 @@ class mrp_job_obj extends _int_object
 		);
 
 		if (!in_array ($this->mrp_state, $applicable_states))
-	{
-			return false;
+		{
+			if ($return_info)
+			{
+				$info .= t("Staatus sobimatu. ");
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		### check if resource is available
 		if (!$reserve_start and !$this->mrp_resource->is_available())
 		{
-			return false;
+			if ($return_info)
+			{
+				$info .= t("Ressurss kinni. ");
+			}
+			else
+			{
+				return false;
+			}
 		}
 
-		### get max number of threads for resource
-		$max_jobs = max(1, count($this->mrp_resource->prop("thread_data")));
-
-		### get number of jobs using resource
-		$cur_jobs = $this->instance()->db_fetch_field("
-			SELECT
-				count(j.oid) AS cnt
-			FROM
-				mrp_job j
-				LEFT JOIN objects o ON o.oid = j.oid
-			WHERE
-				j.resource = ".$this->mrp_resource->id()." AND
-				o.status > 0 AND
-				j.state IN (".self::STATE_INPROGRESS.",".self::STATE_PAUSED.",".self::STATE_SHIFT_CHANGE.")
-		", "cnt");
-
-		### compare
-		if ($cur_jobs >= $max_jobs)
+		### check if all prerequisite jobs are done or done in sufficient quantity
+		if (!$this->check_prerequisites_allow_continue())
 		{
-			return false;
+			if ($return_info)
+			{
+				$info .= t("Eeldust&ouml;&ouml;d tegemata. ");
+			}
+			else
+			{
+				return false;
+			}
 		}
 
-		### check if all prerequisite jobs are done
-		if (!$this->job_prerequisites_are_done())
+		return $info === "" ? true : $info;
+	}
+
+	private function check_prerequisites_allow_continue()
+	{
+		$allow = false;
+		try
 		{
-			return false;
-		}
+			$allow = $this->job_prerequisites_are_done();
 
-		return true;
+			if (!$allow)
+			{
+				aw_disable_acl();
+				$prerequisites = $this->awobj_get_prerequisites()->arr();
+				$allow = true;
+				foreach ($prerequisites as $prerequisite)
+				{
+					if (
+						// prerequisite that requires whole order to be done to continue processing workflow, is not done
+						$prerequisite->prop("min_batches_to_next_resource") < 1 and
+						$prerequisite->prop("state") != self::STATE_DELETED and
+						$prerequisite->prop("state") != self::STATE_DONE
+							or
+						// prereq that has less done than needed to allow continuing
+						$prerequisite->prop("state") != self::STATE_DELETED and
+						$prerequisite->prop("done") < $prerequisite->prop ("batch_size")*$prerequisite->prop("min_batches_to_continue_wf")
+					)
+					{
+						$allow = false;
+						break;
+					}
+				}
+				aw_restore_acl();
+			}
+		}
+		catch (Exception $e)
+		{
+			$allow = false;
+		}
+		return $allow;
 	}
 
 	function delete($full_delete = false)
@@ -1525,7 +1636,7 @@ class mrp_job_obj extends _int_object
 	}
 
 	public function awobj_set_length($value)
-			{
+	{
 		$r = parent::set_prop("length", (int) $value);
 		$this->request_rescheduling();
 		return $r;
@@ -1550,6 +1661,11 @@ class mrp_job_obj extends _int_object
 		$r = parent::set_prop("minstart", (int) $value);
 		$this->request_rescheduling();
 		return $r;
+	}
+
+	public function awobj_set_resource($value)
+	{
+		// import resource defaults, if not set
 	}
 
 	protected function request_rescheduling()
@@ -1607,16 +1723,10 @@ class mrp_job_obj extends _int_object
 		@param job optional type=int/array
 			The OID(s) of mrp_job to return the hours fo
 		@param by_job optional type=boolean default=false
-
 		@param average optional type=boolean
-
 		@param count optional type=boolean
-
 		@param convert_to_hours optional type=boolean default=true
-
-
 		@returns Array of work hours by person
-
 		@comment Output format:
 			Array
 			(

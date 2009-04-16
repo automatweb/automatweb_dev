@@ -36,6 +36,12 @@ class mrp_case_obj extends _int_object
 		}
 	}
 
+	public function awobj_set_trykiarv($value)
+	{
+		//!!! selle muutmine peab vist vaatama t88d l2bi ja kui on v2hem ekspemlare tehtud kui uus v22rtus siis panema nende staatused 'not done' lisaks, kui t88d on tehtud siis ei saa trykiarvu v2hendada, kui projekt on arhiveeritud (v6i ka valmis?) siis ei saa trykiarvu enam muuta
+		return parent::set_prop("trykiarv", $value);
+	}
+
 /**
 	@attrib params=pos api=1
 	@param workspace type=CL_MRP_WORKSPACE

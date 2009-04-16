@@ -283,7 +283,7 @@ class mrp_case extends class_base
 
 	function callback_on_load ($arr)
 	{
-		if (!is_oid ($arr["request"]["id"]))
+		if (empty($arr["request"]["id"]))
 		{
 			if (!automatweb::$request->arg_isset("mrp_workspace"))
 			{
@@ -501,7 +501,7 @@ class mrp_case extends class_base
 				break;
 
 			case "states_chart":
-				$c = &$arr["prop"]["vcl_inst"];
+				$c = $arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
 					"width" => 500,
@@ -543,7 +543,7 @@ class mrp_case extends class_base
 				break;
 
 			case "recources_chart":
-				$c = &$arr["prop"]["vcl_inst"];
+				$c = $arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
 				$c->set_size(array(
 					"width" => 500,
@@ -1969,15 +1969,12 @@ class mrp_case extends class_base
 
 		if (is_oid ($resource_id))
 		{
-			$resource = obj ($resource_id);
-			$pre_buffer = $resource->prop ("default_pre_buffer");
-			$post_buffer = $resource->prop ("default_post_buffer");
+			$resource = obj ($resource_id, array(), CL_MRP_RESOURCE);
+			$constructor_args = array("resource" => $resource);
 		}
 		else
 		{
-			$resource = false;
-			$pre_buffer = 0;
-			$post_buffer = 0;
+			$constructor_args = array();
 		}
 
 		if (!($jobs_folder = $workspace->prop ("jobs_folder")))
@@ -1989,7 +1986,7 @@ class mrp_case extends class_base
 			"class_id" => CL_MRP_JOB,
 			"exec_order" => ($job_number - 1),
 			"parent" => $jobs_folder,
-			"project" => $this_object->id (),
+			"project" => $this_object->id ()
 		));
 		$prerequisite_job = $list->begin ();
 		$prerequisite = is_object ($prerequisite_job) ? $prerequisite_job->id () : "";
@@ -2014,32 +2011,17 @@ class mrp_case extends class_base
 		// create job object
 		$job = new object (array (
 		   "parent" => $jobs_folder,
-		   "class_id" => CL_MRP_JOB,
-		));
+		   "class_id" => CL_MRP_JOB
+		), $constructor_args);
 		$job->set_prop ("exec_order", $job_number);
 		$job->set_prop ("prerequisites", new object_list(array("oid" => $prerequisite)));
 		$job->set_prop ("project", $this_object->id ());
-		$job->set_prop ("pre_buffer", $pre_buffer);
-		$job->set_prop ("post_buffer", $post_buffer);
-		$job->set_prop ("resource", $resource_id);
 		$job->set_ord($job_nr);
 		$job->set_name ($this_object->name () . " - " . $resource->name () . " - " . $job_nr);
 		// aw_disable_acl(); // should instead be configured by giving proper access rights
 		$job->save ();
 		// aw_restore_acl();
 
-		if ($resource)
-		{
-			$job->connect (array (
-				"to" => $resource,
-				"reltype" => "RELTYPE_MRP_RESOURCE",
-			));
-		}
-
-		$job->connect (array (
-			"to" => $this_object,
-			"reltype" => "RELTYPE_MRP_PROJECT",
-		));
 		$this_object->connect (array (
 			"to" => $job,
 			"reltype" => "RELTYPE_MRP_PROJECT_JOB",

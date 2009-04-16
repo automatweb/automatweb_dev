@@ -24,6 +24,7 @@
             <type>textarea</type>
             <table>objects</table>
             <field>comment</field>
+            <rows>5</rows>
             <caption>Kommentaar</caption>
       </property>
       <property>
@@ -33,14 +34,6 @@
             <table>mrp_job_rows</table>
             <field>aw_sales_comment</field>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gi kommentaar</caption>
-      </property>
-      <property>
-            <name>job_toolbar</name>
-            <group>workflow</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>job_toolbar</field>
       </property>
       <property>
             <name>workflow_errors</name>
@@ -84,6 +77,16 @@
             <type>text</type>
             <field>started</field>
             <caption>Alustatud</caption>
+      </property>
+      <property>
+            <name>done</name>
+            <group>workflow</group>
+            <table>mrp_job</table>
+            <type>text</type>
+            <default>0</default>
+            <datatype>int</datatype>
+            <field>done</field>
+            <caption>Valminud eksemplare</caption>
       </property>
       <property>
             <name>finished</name>
@@ -172,6 +175,7 @@
             <group>data</group>
             <table>mrp_job</table>
             <type>textbox</type>
+            <default>0</default>
             <field>length</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml; pikkus (h)</caption>
       </property>
@@ -180,6 +184,7 @@
             <group>data</group>
             <table>mrp_job</table>
             <type>textbox</type>
+            <default>0</default>
             <field>pre_buffer</field>
             <caption>Eelpuhveraeg (h)</caption>
       </property>
@@ -188,8 +193,42 @@
             <group>data</group>
             <table>mrp_job</table>
             <type>textbox</type>
+            <default>0</default>
             <field>post_buffer</field>
             <caption>J&amp;amp;auml;relpuhveraeg (h)</caption>
+      </property>
+      <property>
+            <name>component_quantity</name>
+            <group>data</group>
+            <table>mrp_job</table>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <default>1</default>
+            <field>component_quantity</field>
+            <comment>Tellimuse eksemplari jaoks vajalik selle t&amp;amp;ouml;&amp;amp;ouml; eksemplaride arv (mitu selle t88 tulemusel valmivat komponenti/eksemplari vaja yhe l6ppeksemplari jaoks)</comment>
+            <caption>Vajalik eksemplaride arv</caption>
+      </property>
+      <property>
+            <name>batch_size</name>
+            <group>data</group>
+            <table>mrp_job</table>
+            <type>textbox</type>
+            <default>1</default>
+            <datatype>int</datatype>
+            <field>batch_size</field>
+            <comment>Mitut eksemplari selles t&amp;amp;ouml;&amp;amp;ouml;s soovitakse k&amp;amp;auml;sitleda partiina. Vaikimisiv&amp;amp;auml;&amp;amp;auml;rtus m&amp;amp;auml;&amp;amp;auml;ratud ressursi juures.</comment>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tluspartii suurus</caption>
+      </property>
+      <property>
+            <name>min_batches_to_continue_wf</name>
+            <group>data</group>
+            <table>mrp_job</table>
+            <type>textbox</type>
+            <default>0</default>
+            <datatype>int</datatype>
+            <field>min_batches_to_continue_wf</field>
+            <comment>0 - kogu tellimuse maht</comment>
+            <caption>Partiisid j&amp;amp;auml;rgmisel ressursil alustamiseks</caption>
       </property>
       <property>
             <name>minstart</name>
@@ -205,6 +244,7 @@
             <group>data</group>
             <table>mrp_job</table>
             <type>textbox</type>
+            <default>0</default>
             <field>remaining_length</field>
             <comment>Arvatav ajakulu t&amp;amp;ouml;&amp;amp;ouml; j&amp;amp;auml;reloleva osa tegemiseks</comment>
             <caption>L&amp;amp;otilde;petamiseks kuluv aeg (h)</caption>
@@ -269,6 +309,11 @@
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
             </mrp_job_rows>
+            <mrp_job_progress>
+                  <index>aw_job_id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </mrp_job_progress>
       </tableinfo>
       <reltypes>
             <MRP_RESOURCE>

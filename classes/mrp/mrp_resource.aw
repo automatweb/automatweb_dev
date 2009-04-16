@@ -67,8 +67,16 @@
 	@property global_buffer type=textbox default=14400
 	@caption P&auml;eva &uuml;ldpuhver (h)
 
+	@property default_batch_size type=textbox default=1 datatype=int
+	@comment Mitu eksemplari valmib sel ressursil korraga v6i mitut soovitakse k&auml;sitleda partiina. Partii suurus.
+	@caption T&ouml;&ouml;tluspartii normsuurus
+
+	@property default_min_batches_to_continue_wf type=textbox default=0
+	@comment Mitu partiid peab olema valmis, et selle t&ouml;&ouml;tlemist saaks j&auml;tkata j&auml;rgmisel ressursil. 0 - kogu tootmistellimus, t&auml;isarv - kogus. T&auml;isarv, mille j&auml;rel on protsendim&auml;rk - mitu protsenti tootmistellimuse mahust peab olema valmis (n&auml;iteks 20%)
+	@caption T&ouml;&ouml;tluspartiisid t&ouml;&ouml;voo j&auml;tkamiseks
+
 	@property production_feedback_option_values type=textarea default=1 rows=5
-	@comment Valikud valiminud eksemplaride arvu v&otilde;i koguse sisestamiseks t&ouml;&ouml; vaates (ressursioperaatori vaates). T&auml;isarvud, koguste puhul ratsionaalarvud.
+	@comment Valikud valiminud partiide arvu sisestamiseks t&ouml;&ouml; vaates (ressursioperaatori vaates). T&auml;isarvud, koguste puhul ratsionaalarvud.
 	@caption Tootmise tagasiside valikud
 
 	@property products type=relpicker multiple=1 reltype=RELTYPE_PRODUCT store=connect
@@ -118,9 +126,10 @@
 @reltype MRP_SCHEDULE value=2 clid=CL_PLANNER
 @caption Ressursi kalender
 
-// DEPRECATED
+//////// DEPRECATED /////////
 @reltype MRP_OWNER value=3 clid=CL_MRP_WORKSPACE
 @caption Ressursi omanik
+/////////////////////////////////
 
 @reltype RECUR value=4 clid=CL_RECURRENCE
 @caption Kordus
@@ -1261,7 +1270,7 @@ class mrp_resource extends class_base
 		{
 			$branches[0]["last_week"] = sprintf(t("M&ouml;&ouml;dunud n&auml;dal (%u)"), count($lwcnt));
 		}
-		
+
 		$branches[0]["current_month"] = sprintf(t("K&auml;esolev kuu (%u)"), count($cmcnt));
 		if(!in_array($arr["request"]["group"], array("grp_resource_joblist_aborted", "grp_resource_joblist_done")))
 		{

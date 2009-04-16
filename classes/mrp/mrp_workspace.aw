@@ -1925,7 +1925,7 @@ class mrp_workspace extends class_base
 					"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $id,
 					"state" => MRP_STATUS_DONE,
 					"finished" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
-					new obj_predicate_sort(array("finished" => ASC)),
+					new obj_predicate_sort(array("finished" => "ASC")),//!!! miks sort selline on? milleks seda vaja kui ikkag sql lihtsalt kuskil?
 				),
 				array(
 					CL_MRP_JOB => array("length", "finished"),

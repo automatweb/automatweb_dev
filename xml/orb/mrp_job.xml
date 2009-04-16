@@ -13,6 +13,8 @@
 			<function name="done">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="quantity" type="int" />
+					<optional name="return_url" type="string" />
 				</arguments>
 			</function>
 		</action>

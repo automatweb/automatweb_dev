@@ -596,7 +596,7 @@ class mrp_schedule extends db_connector
 						{
 							$tmp = ($scheduled_start + $scheduled_length + $job->prop("post_buffer"));
 
-							if ($tmp > $starttime_index[$successor_id])
+							if (!isset($starttime_index[$successor_id]) or $tmp > $starttime_index[$successor_id])
 							{
 								$starttime_index[$successor_id] = $tmp;
 							}
@@ -611,7 +611,7 @@ class mrp_schedule extends db_connector
 				### set planned finishing date for project
 				$planned_date = $scheduled_start + $scheduled_length;
 
-				if ($planned_date > $this->project_schedule[$job->prop("project")][0])
+				if (!isset($this->project_schedule[$job->prop("project")]) or $planned_date > $this->project_schedule[$job->prop("project")][0])
 				{
 					$this->project_schedule[$job->prop("project")] = array ($planned_date, mrp_case_obj::STATE_INPROGRESS);
 				}

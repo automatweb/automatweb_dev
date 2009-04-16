@@ -156,6 +156,29 @@
             <caption>P&amp;amp;auml;eva &amp;amp;uuml;ldpuhver (h)</caption>
       </property>
       <property>
+            <name>default_batch_size</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>textbox</type>
+            <default>1</default>
+            <datatype>int</datatype>
+            <comment>Mitu eksemplari valmib sel ressursil korraga v6i mitut soovitakse k&amp;amp;auml;sitleda partiina. Partii suurus.</comment>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tluspartii normsuurus</caption>
+      </property>
+      <property>
+            <name>default_min_batches_to_continue_wf</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>textbox</type>
+            <default>0</default>
+            <comment>Mitu partiid peab olema valmis, et selle t&amp;amp;ouml;&amp;amp;ouml;tlemist saaks j&amp;amp;auml;tkata j&amp;amp;auml;rgmisel ressursil. 0 - kogu tootmistellimus, t&amp;amp;auml;isarv - kogus. T&amp;amp;auml;isarv, mille j&amp;amp;auml;rel on protsendim&amp;amp;auml;rk - mitu protsenti tootmistellimuse mahust peab olema valmis (n&amp;amp;auml;iteks 20%)</comment>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tluspartiisid t&amp;amp;ouml;&amp;amp;ouml;voo j&amp;amp;auml;tkamiseks</caption>
+      </property>
+      <property>
             <name>production_feedback_option_values</name>
             <table>objects</table>
             <field>meta</field>
@@ -164,7 +187,7 @@
             <type>textarea</type>
             <default>1</default>
             <rows>5</rows>
-            <comment>Valikud valiminud eksemplaride arvu v&amp;amp;otilde;i koguse sisestamiseks t&amp;amp;ouml;&amp;amp;ouml; vaates (ressursioperaatori vaates). T&amp;amp;auml;isarvud, koguste puhul ratsionaalarvud.</comment>
+            <comment>Valikud valiminud partiide arvu sisestamiseks t&amp;amp;ouml;&amp;amp;ouml; vaates (ressursioperaatori vaates). T&amp;amp;auml;isarvud, koguste puhul ratsionaalarvud.</comment>
             <caption>Tootmise tagasiside valikud</caption>
       </property>
       <property>
@@ -305,7 +328,6 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <confirm_save_data>1</confirm_save_data>
-            <prop_cb>1</prop_cb>
             <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>

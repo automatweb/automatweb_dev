@@ -123,6 +123,7 @@ class mrp_resource_obj extends _int_object
 		}
 
 		$r = parent::set_prop("thread_data", $this->threads);
+		$workspace = $this->awobj_get_workspace();
 		$workspace->request_rescheduling();
 		return $r;
 	}
@@ -208,6 +209,7 @@ class mrp_resource_obj extends _int_object
 	public function awobj_set_global_buffer($value)
 	{
 		$r = parent::set_prop("global_buffer", $value);
+		$workspace = $this->awobj_get_workspace();
 		$workspace->request_rescheduling();
 		return $r;
 	}
@@ -1045,7 +1047,7 @@ class mrp_resource_thread
 	{
 		return !$this->to_be_deleted and $this->state === mrp_resource_obj::STATE_AVAILABLE;
 	}
-			
+
 	public function is_processing(object $job)
 	{
 		return ($this->state === mrp_resource_obj::STATE_PROCESSING and $job->id() === $this->job);
