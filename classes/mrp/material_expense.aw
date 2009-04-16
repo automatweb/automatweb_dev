@@ -77,6 +77,7 @@ class material_expense extends class_base
 				return true;
 			case "amount":
 			case "base_amount":
+			case "used_amount":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "char(20)"

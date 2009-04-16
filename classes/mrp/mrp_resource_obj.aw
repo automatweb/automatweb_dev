@@ -998,6 +998,94 @@ class mrp_resource_obj extends _int_object
 				}
 			}
 		}
+	}	/**
+		@attrib name=get_available_hours
+
+		@param from optional type=int default=0
+
+		@param to optional type=int
+
+	**/
+	public function get_available_hours($arr = array())
+	{
+		$from = isset($arr["from"]) ? (int)$arr["from"] : 0;
+		$to = isset($arr["to"]) ? (int)$arr["to"] : time();
+		$span = $to - $from;
+
+		$ups = $this->get_unavailable_periods($from, $to);
+		foreach($ups as $up_s => $up_f)
+		{
+			$span -= $up_f - $up_s;
+		}
+
+		$rups = $this->get_recurrent_unavailable_periods($from, $to);
+		foreach($rups as $rup)
+		{
+			for($i = $rup["start"] + $rup["time"]; $i < $rup["end"]; $i += $rup["interval"])
+			{
+				$u = $i + $rup["length"] > $rup["end"] ? $rup["end"] - $i : $rup["length"];
+				$span -= max(0, $u);
+			}
+		}
+
+		return $span;
+	}
+
+	/**
+		@attrib name=get_planned_hours api=1 params=name
+
+		@param from optional type=int default=0
+
+		@param to optional type=int default=time()
+
+		@param id optional type=int/array
+			If not set the OID of current object will be used.
+
+		@returns Array of planned hours by resource if parameter id is array, planned hours as int otherwise.
+			
+	**/
+	public function get_planned_hours($arr)
+	{
+		/*
+		InstruMental: Kuidas ma object_listis ytlen, et anna mulle k6ik objektid, mille prop1 ja prop2 summa on suurem kui n?
+		terryf: ei saagi
+		*/
+
+		$arr["id"] = !empty($arr["id"]) ? $arr["id"] : $this->id();
+		$resource_ids = implode(",", (array)$arr["id"]);
+		$from = isset($arr["from"]) ? (int)$arr["from"] : 0;
+		$to = isset($arr["to"]) ? (int)$arr["to"] : time();
+		$status = implode(",", array(object::STAT_ACTIVE, object::STAT_NOTACTIVE));
+		$span = $to - $from;
+
+		$rows = get_instance("mrp_job")->db_fetch_array("
+			SELECT
+				m.resource as resource_id, SUM(LEAST(m.length, $to - s.starttime, s.starttime + m.length - $from, $span)) as p
+			FROM
+				objects o 
+				LEFT JOIN mrp_job m ON o.brother_of = m.oid
+				LEFT JOIN mrp_schedule s ON o.brother_of = s.oid
+			WHERE
+				s.starttime < $to
+				AND s.starttime + m.length > 0
+				AND o.status IN ({$status})
+				AND m.resource IN ({$resource_ids})
+			GROUP BY m.resource
+		");
+
+		// Initialize
+		$p = array();
+		foreach((array)$arr["id"] as $resource_id)
+		{
+			$p[$resource_ids] = 0;
+		}
+
+		foreach($rows as $row)
+		{
+			$p[$row["resource_id"]] = $row["p"];
+		}
+
+		return is_array($arr["id"]) ? $p : reset($p);
 	}
 }
 

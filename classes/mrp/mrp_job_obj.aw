@@ -1781,12 +1781,12 @@ class mrp_job_obj extends _int_object
 		{
 			// First, get the hours the person started
 			$persons = count($arr["person"]) > 0 ? "aw_previous_pid IN (".implode(",", $arr["person"]).") AND" : "";
-			$q = $i->db_fetch_array($this->something_hours_build_query($arr, "aw_previous_pid", "pid", $persons));
+			$q = $i->db_fetch_array(self::something_hours_build_query($arr, "aw_previous_pid", "pid", $persons));
 			$this->something_hours_insert_data($q, "pid", &$data, $arr);
 
 			// Now, get the hours the person finished, but DIDN'T start
 			$persons = count($arr["person"]) > 0 ? "aw_pid IN (".implode(",", $arr["person"]).") AND aw_pid != aw_previous_pid AND" : "";
-			$q = $i->db_fetch_array($this->something_hours_build_query($arr, "aw_pid", "pid", $persons));
+			$q = $i->db_fetch_array(self::something_hours_build_query($arr, "aw_pid", "pid", $persons));
 			$this->something_hours_insert_data($q, "pid", &$data, $arr);
 		}
 		else
@@ -1810,8 +1810,8 @@ class mrp_job_obj extends _int_object
 					break;
 			}
 
-			$q = $i->db_fetch_array($this->something_hours_build_query($arr, $field, "pid", $persons));
-			$this->something_hours_insert_data($q, "pid", &$data, $arr);
+			$q = $i->db_fetch_array(self::something_hours_build_query($arr, $field, "pid", $persons));
+			self::something_hours_insert_data($q, "pid", &$data, $arr);
 		}
 
 		exit_function("mrp_job_obj::get_person_hours");

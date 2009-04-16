@@ -1,15 +1,16 @@
 <?php
 /*
 
-@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
+@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 prop_cb=1 confirm_save_data=1 maintainer=voldemar
 
+	@groupinfo grp_general2 caption="Andmed" parent=general
+	@groupinfo grp_resource_settings caption="Seaded" parent=general
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="T&ouml;&ouml;leht" submit=no
 	@groupinfo grp_resource_joblist_todo caption="Eesseisvad t&ouml;&ouml;d" submit=no parent=grp_resource_joblist
 	@groupinfo grp_resource_joblist_done caption="Tehtud t&ouml;&ouml;d" submit=no parent=grp_resource_joblist
 	@groupinfo grp_resource_joblist_aborted caption="Katkestatud t&ouml;&ouml;d" submit=no parent=grp_resource_joblist
 	@groupinfo grp_resource_joblist_aborted caption="Katkestatud t&ouml;&ouml;d" submit=no parent=grp_resource_joblist
-@groupinfo grp_resource_settings caption="Seaded"
 @groupinfo grp_resource_maintenance caption="Hooldus"
 @groupinfo grp_resource_unavailable caption="T&ouml;&ouml;ajad"
 	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
@@ -17,14 +18,22 @@
 @groupinfo grp_resource_materials caption="Materjalid" submit=no confirm_save_data=1
 
 @default table=objects
+
+@default group=grp_general2
+	@property name type=textbox
+	@caption Nimi
+
+	@property comment type=textbox
+	@caption Kommentaar
+
 @default field=meta
 @default method=serialize
 	@property workspace type=hidden
 
-	@property state type=text group=general,grp_resource_maintenance,grp_resource_settings
+	@property state type=text group=grp_general2,grp_resource_maintenance,grp_resource_settings
 	@caption Ressursi staatus
 
-@default group=general
+@default group=grp_general2
 	@property category type=text editonly=1
 	@caption Kategooria
 
@@ -1698,7 +1707,7 @@ class mrp_resource extends class_base
 				}
 				else
 				{
-					if(!empty($done))
+					if($_GET["group"] === "grp_resource_joblist_done")
 					{
 						$arr["area_caption"] = sprintf(t("Ressursi '%s' tehtud t&ouml;&ouml;d"), parse_obj_name($arr["obj_inst"]->name()));
 					}
