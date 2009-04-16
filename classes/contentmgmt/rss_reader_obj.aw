@@ -1,0 +1,52 @@
+<?php
+
+class rss_reader_obj extends _int_object
+{
+	/**
+		@attrib api=1
+	**/
+	public function get_rss_items($show_all = false)
+	{
+		$xml = $this->_fetch_xml();
+		$items = $this->_parse_xml_items($xml, $show_all);
+		return $items;
+	}
+
+	private function _fetch_xml()
+	{
+		$cache_key = "rss_content-".$this->id();
+
+		$c = get_instance("cache");
+		if (($xml = $c->file_get_ts($cache_key, time() - (60 * $this->prop("update_interval")))) !== false)
+		{
+			return $xml;
+		}
+
+		$xml = file_get_contents($this->prop("rss_url"));
+		$c->file_set($cache_key, $xml);
+		return $xml;
+	}
+
+	private function _parse_xml_items($xml, $show_all = false)
+	{
+		$xml = new SimpleXMLElement($xml);
+		$items = array();
+		foreach($xml->channel->item as $item)
+		{
+			$items[] = array(
+				"title" => iconv("utf-8", aw_global_get("charset"), $item->title),
+				"link" => iconv("utf-8", aw_global_get("charset"), $item->link),
+				"description" => iconv("utf-8", aw_global_get("charset"), $item->description),
+				"guid" => iconv("utf-8", aw_global_get("charset"), $item->guid),
+				"pubDate" => iconv("utf-8", aw_global_get("charset"), $item->pubDate)
+			);
+		}
+		if (!$show_all && ($max_items = $this->prop("max_display_items")) > 0)
+		{
+			return array_slice($items, 0, $max_items);
+		}
+		return $items;
+	}
+}
+
+?>

@@ -116,7 +116,7 @@ class popup_menu extends aw_template
 	/** adds a separator line between menu isems that can not be clicked
 		@attrib api=1
 	**/
-	function add_separator($arr)
+	function add_separator($arr = array())
 	{
 		//$this->items[] = array("__is_sep" => 1);
 		if (!$arr["parent"])

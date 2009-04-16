@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.59 2009/04/08 13:37:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.60 2009/04/16 12:19:19 kristo Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -237,7 +237,7 @@ class cache extends core
 			return false;
 		}
 		$fqfn = $this->get_fqfn($key);
-		if ((@filemtime($fqfn)) < $ts)
+		if (file_exists($fqfn) && filemtime($fqfn) < $ts)
 		{
 			return false;
 		}
