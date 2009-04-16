@@ -414,22 +414,26 @@ class htmlclient extends aw_template
 				"tooltip_index" => $this->tooltip_index,
 				"comment" => $args["comment"],
 			));
-
-			if(isset($args["comment_style"]) && $args["comment_style"] == "text")
+			
+			if(strlen($args["comment"]))
 			{
-				$this->vars(array(
-					"TITLE_HELP_TEXT" => $this->parse("TITLE_HELP_TEXT"),
-					"TITLE_HELP_POPUP" => "",
-				));
+				$s_help_popup = $this->parse("HELP_POPUP");
 			}
 			else
 			{
-				$this->vars(array(
-					"TITLE_HELP_TEXT" => "",
-					"TITLE_HELP_POPUP" => $this->parse("TITLE_HELP_POPUP"),
-				));
+				$s_help_popup = "";
 			}
-		};
+
+			$this->vars(array(
+				"HELP_POPUP" => $s_help_popup,
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"HELP_POPUP" => "",
+			));
+		}
 		$tpl_vars = array(
 				"caption" => $caption,
 				"element" => $this->draw_element($args),
@@ -1675,10 +1679,33 @@ class htmlclient extends aw_template
 			));
 		}
 
+		if ( isset($this->tooltip_index) )
+		{
+			$this->tooltip_index++;
+		}
+		else
+		{
+			$this->tooltip_index = 1;
+		}
+		
+		$this->vars(array(
+			"tooltip_index" => $this->tooltip_index,
+			"comment" => $arr["comment"],
+		));
+		if(strlen($arr["comment"]))
+		{
+			$s_help_popup = $this->parse("HELP_POPUP");
+		}
+		else
+		{
+			$s_help_popup = "";
+		}
+
 		// name refers to a VAR inside the template
 		$caption_template = "CAPTION_" . $captionside;
 		$this->vars_safe(array(
 			$caption_template => $this->parse($caption_template),
+			"HELP_POPUP" => $s_help_popup,
 		));
 		$tpl = "GRIDITEM";
 

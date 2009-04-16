@@ -27,7 +27,13 @@
 
 	<!-- SUB: LINE -->
 	<tr>
-	    <td width="100" id="linecaption" >{VAR:caption}</td>
+	    <td width="100" id="linecaption" >{VAR:caption}
+			<!-- SUB: HELP_POPUP -->
+			<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
+			<div class="tooltip">{VAR:comment}</div>
+			<!-- END SUB: HELP_POPUP -->
+			
+		</td>
 	    <td id="lineelment">{VAR:element}</td>
 	</tr>
 	<!-- END SUB: LINE -->
@@ -100,14 +106,23 @@ this.disabled=true;self.disabled=true;
 			<!-- END SUB: GRID_ERR_MSG -->
 
 			<!-- SUB: CAPTION_TOP -->
-			{VAR:caption}<br/>
+			{VAR:caption}
+			<!-- SUB: HELP_POPUP -->
+				<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
+				<div class="tooltip">{VAR:comment}</div>
+				<!-- END SUB: HELP_POPUP -->
+			<br/>
 			{VAR:element}
 			<!-- END SUB: CAPTION_TOP -->
 			<!-- SUB: CAPTION_LEFT -->
 			<table border="0" width="100%">
 			<tr>
 				<td width="20%" align="right">
-			{VAR:caption}
+				{VAR:caption}
+				<!-- SUB: HELP_POPUP -->
+				<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
+				<div class="tooltip">{VAR:comment}</div>
+				<!-- END SUB: HELP_POPUP -->
 				</td>
 				<td width="80%">
 			{VAR:element}

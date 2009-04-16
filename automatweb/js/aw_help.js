@@ -15,24 +15,25 @@ jQuery.aw_prop_help =
 		return this.each(
 			function()
 			{
-				$(this).css("padding", " 0 20px 0 6px");
+				$(this).css("padding", "0 20px 0 6px");
+				$(this).css("display", "inline");
 				$(this).css("background", "url(/automatweb/images/aw06/icon_prop_help.gif) no-repeat right");
 				
 				content = $(this).next().text();
 				
-				html = '<div class="tooltip_content '+this.id+'"><div class="tooltip_content_header"><!-- --></div>'+
-						'<div class="tooltip_content_content">'+
+				html = '<div class="tooltip '+this.id+'"><div class="tooltip_header"><!-- --></div>'+
+						'<div class="tooltip_content">'+
 						'<p>'+content+'</p>'+
 						'</div>'+
-						'<div class="tooltip_content_footer"></div></div>';
+						'<div class="tooltip_footer"></div></div>';
 
-				$(this).next().html(html);
+				$(this).next().replaceWith(html);
 				
 				$(function() {
 					$('.help').parent().tooltip({
 						bodyHandler: function() { 
 							c = $('span', this);
-						    return $("."+c.attr("id")).html(); 
+						    return $("."+c.attr("id")).html()
 						},
 						left : 5,
 						top : 10
