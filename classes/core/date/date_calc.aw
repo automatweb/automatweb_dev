@@ -350,7 +350,7 @@ function get_day_diff($time1,$time2)
 
 function get_week_start($timestamp = null) // DEPRECATED if no objections
 {
-	date_calc::get_week_start($timestamp);
+	return date_calc::get_week_start($timestamp);
 }
 
 
@@ -479,7 +479,6 @@ class date_calc
 		}
 		$wd_lut = array(0 => 6, 1 => 0, 2 => 1, 3 => 2, 4 => 3, 5 => 4, 6 => 5);
 		$wday = $wd_lut[date("w",$timestamp )];
-
 		return mktime(0,0,0, date("m",$timestamp ), date("d",$timestamp )-$wday, date("Y",$timestamp ));
 	}
 }
