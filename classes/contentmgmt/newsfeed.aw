@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.31 2008/06/13 09:04:04 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.32 2009/04/16 10:58:58 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -469,12 +469,13 @@ class newsfeed extends class_base
 				
 				if ($o->prop("alias") != "")
 				{
-					if (aw_ini_get("menuedit.language_in_url"))
+					if (true || aw_ini_get("menuedit.language_in_url"))
 					{
 						static $ss_i;
 						if (!$ss_i)
 						{
 							$ss_i = get_instance("contentmgmt/site_show");
+							$ss_i->_init_path_vars($_GET);
 						}
 						$doc_link = $ss_i->make_menu_link($o);
 					}
@@ -489,15 +490,15 @@ class newsfeed extends class_base
 				}
 				
 				$items[] = array(
-					"item_id" => $oid,
+				//	"item_id" => $oid,
 					"title" => $title,
 					"link" => $doc_link,
-					"artdate" => date("Y-m-d",$mod_date),
-					"start_date" => date("Y-m-d H:i:s",$mod_date),
-					"end_date" => "0000-00-00 00:00:00", // documents have no ending date
+				//	"artdate" => date("Y-m-d",$mod_date),
+				//	"start_date" => date("Y-m-d H:i:s",$mod_date),
+			//		"end_date" => "0000-00-00 00:00:00", // documents have no ending date
 					"author" => $o->prop("author"),
 					"source" => $source,
-     				"art_lead" => $art_lead,
+//     				"art_lead" => $art_lead,
 					"description" => $description,
 					"guid" => $baseurl . "/" . $oid,
 					"pubDate" => date("r",$mod_date),
@@ -510,7 +511,7 @@ class newsfeed extends class_base
 				"link" => aw_ini_get("baseurl"),
 				"description" => $feedobj->comment(),
 				"language" => $feedobj->lang(),
-				"LastBuildDate" => date("r",$first),
+//				"LastBuildDate" => date("r",$first),
 			),  
 			"items" => $items,
 		);
@@ -531,8 +532,9 @@ class newsfeed extends class_base
 	function rss20_encode($data)
 	{
 		$res = "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
-		$res .= '<rss version="2.0">' . " \n";
+		$res .= '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">' . " \n";
 		$res .= "\t<channel>\n";
+		$res .= '<atom:link href="http://www.innove.ee/refernet_rss" rel="self" type="application/rss+xml" />';
 
 		foreach($data["channeldata"] as $key => $val)
 		{
@@ -558,6 +560,10 @@ class newsfeed extends class_base
 				{
 					$val = $this->_encode_rss_string($val);
 				};
+				if (($key == "author" || $key == "source" || $key == "") && $val == "")
+				{
+					continue;
+				}
 				$res .= "\t\t\t<${key}>" . $val . "</${key}>\n";
 			};
 			$res .= "\t\t</item>\n";
@@ -570,6 +576,12 @@ class newsfeed extends class_base
 
 	function _encode_rss_string($src)
 	{
+		if (trim($src) == "")
+		{
+			return "";
+		}
+		$src = str_replace('"<br>"', "\r\n", $src);
+		return strip_tags(str_replace("<br>", "\r\n", str_replace("<BR>", "\r\n", $src)));
 		return "<![CDATA[" . nl2br($src) . "]]>";
 	}
 
