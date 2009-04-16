@@ -273,7 +273,7 @@ class package_obj extends _int_object
 		}
 		$i = new file_archive;
 		$fi = get_instance(CL_FILE);
-		$zipname = str_replace(" " , "_" , $o->name()).(($v = $o->prop("version"))?"-".$v:"").".zip";
+		$zipname = str_replace(" " , "_" , $this->name()).(($v = $this->prop("version"))?"-".$v:"").".zip";
 		$ftype = "application/zip";
 		$fpath = $fi->generate_file_path(array("file_name" => $zipname, "type" => $ftype));
 		$folders = array();
@@ -315,12 +315,12 @@ class package_obj extends _int_object
 		$fo->set_name($zipname);arr($fpath);
 		$fo->set_prop("type", $ftype);
 		$fo->set_prop("file", $fpath);
-		$fo->set_parent($o->id());
+		$fo->set_parent($this->id());
 		$fo->save();
-		$o->connect(array(
+		$this->connect(array(
 			"to" => $fo->id(),
 			"type" => "RELTYPE_FILE",
-		));
+		));arr($fo->id());
 	}
 
 	/** Returns package dependency names and versions
@@ -362,6 +362,41 @@ class package_obj extends _int_object
 			return 1;
 		}
 		else return false;
+	}
+
+	private function get_next_version()
+	{
+		$version = $this->prop("version");
+		$explode = explode("." , $version);
+		if(!isset($explode[2]))
+		{
+			$explode[2] = 0;
+		}
+		$explode[2]++;
+		$version = join("." , $explode);
+		return $version;
+	}
+
+	/** Creates new version of package using the same files
+		@attrib api=1
+		@returns 1, if success.... else false
+	**/
+	public function create_new_package()
+	{
+		$o = new object();
+		$o->set_name($this->name());
+		$o->set_class_id(CL_PACKAGE);
+		$o->set_parent($this->parent());
+		$o->set_prop("version" , $this->get_next_version());
+		$o->set_prop("description" , $this->prop("description"));
+		$o->set_meta("package_contents" , $this->meta("package_contents"));
+		$o->save();
+		$o->create_package_zip($this);arr($this->get_dependencies());
+		foreach($this->get_dependencies()->ids() as $dep)
+		{
+			$o->add_dependency($dep);
+		}
+		return $o->id();
 	}
 
 }

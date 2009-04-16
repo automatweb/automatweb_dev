@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.11 2009/01/16 11:19:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.12 2009/04/16 11:45:05 markop Exp $
 // package.aw - Pakk 
 /*
 
@@ -109,6 +109,15 @@ class package extends class_base
 				break;
 			case "package_tb":
 				$arr["prop"]["vcl_inst"]->add_button(array(
+					"name" => "create_new_package",
+					"tooltip" => t("Loo uus pakett"),
+					"img" => "new.gif",
+					"url" => $this->mk_my_orb("create_new_package", array(
+						"id" => $arr["obj_inst"]->id(),
+						"return_url" => get_ru(),
+					), CL_PACKAGE),
+				));
+				$arr["prop"]["vcl_inst"]->add_button(array(
 					"name" => "add_image",
 					"tooltip" => t("Uuenda failide nimekiri"),
 					//"img" => "new.gif",
@@ -120,7 +129,10 @@ class package extends class_base
 				break;
 			case "file_names":
 				// this is probably some bigger bug actually, that I can't have a text type property without its value element is set
-				$prop['value'] = ''; 
+				if(!isset($prop['value']))
+				{
+					$prop['value'] = ''; 
+				}
 				break;
 		};
 		return $retval;
@@ -314,6 +326,27 @@ class package extends class_base
 		}
 		$o = obj($id);
 		$o->set_package_file_names();
+		return $return_url;
+	}
+
+	/**
+		@attrib name=create_new_package params=name all_args=1
+		@param id required type=int
+			package object id
+		@param return_url required type=string
+	**/
+	function create_new_package($arr)
+	{
+		extract($arr);
+		if(!$this->can("view" , $id))
+		{
+			return $return_url;
+		}
+		$o = obj($id);
+		if($id = $o->create_new_package())
+		{
+			return html::get_new_url(CL_PACKAGE, $id, array("return_url" => $return_url));
+		}
 		return $return_url;
 	}
 
