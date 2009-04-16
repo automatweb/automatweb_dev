@@ -618,6 +618,21 @@ class project_obj extends _int_object
 		return $ol;
 	}
 
+	/** Returns project bills sum
+		@attrib api=1
+		@returns double
+	**/
+	public function get_bill_sum()
+	{
+		$bills = $this->get_bills();
+		$sum = 0;
+		foreach($bills->arr() as $bill)
+		{
+			$sum += $bill->prop("sum");
+		}
+		return $sum;
+	}
+
 	function get_billable_deal_tasks()
 	{
 //---------------------------------------------uuele systeemile ka vaja... osalustega projektidele
@@ -679,6 +694,55 @@ class project_obj extends _int_object
 			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
 		));
 		return $ol;
+	}
+
+	/** Returns project billable hours
+		@attrib api=1
+		@returns double
+	**/
+	public function get_billable_hours()
+	{
+		$sum = 0;
+		$rows = $this->get_billable_rows();
+		foreach($rows->arr() as $row)
+		{
+			$sum+=$row->prop("time_real");
+		}
+		return $sum;
+	}
+
+	public function get_billed_hours()
+	{
+		$billed_hours_filter = array(
+			"class_id" => CL_TASK_ROW,
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, 1),
+			"site_id" => array(),
+			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_TASK_ROW.task(CL_TASK).send_bill" => 1,
+					"CL_TASK_ROW.task(CL_BUG).send_bill" => 1,
+					"CL_TASK_ROW.task(CL_CRM_MEETING).send_bill" => 1,
+					"CL_TASK_ROW.task(CL_CRM_CALL).send_bill" => 1,
+				)
+			)),
+			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
+		);
+		$rowsres = array(
+			CL_TASK_ROW => array(
+				"time_real",
+				"time_to_cust",
+				"time_guess",
+			),
+		);
+		$rows_arr = new object_data_list($billed_hours_filter , $rowsres);
+		$sum = 0;
+		foreach($rows_arr->list_data as $data)
+		{
+			$sum+= $data["time_real"];
+		}
+		return $sum;
 	}
 
 	private function all_rows_filter()
@@ -1151,5 +1215,20 @@ class project_obj extends _int_object
 		}
 		return join("<br>" , $ret);
 	}
+
+	/** Returns project planned hours
+		@attrib api=1
+		@returns double
+	**/
+	public function get_planned_hours()
+	{
+		$sum = 0;
+		foreach($this->get_rows_data() as $data)
+		{
+			$sum+= $data["time_guess"];
+		}
+		return $sum;
+	}
+
 }
 ?>

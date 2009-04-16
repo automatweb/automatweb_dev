@@ -439,6 +439,68 @@
             <field>files_table</field>
       </property>
       <property>
+            <name>project_costs</name>
+            <table>objects</table>
+            <group>income</group>
+            <type>text</type>
+            <parent>income_left_lay</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>project_costs</field>
+            <caption>Projekti maksumus</caption>
+      </property>
+      <property>
+            <name>planned_work_time</name>
+            <table>aw_projects</table>
+            <group>income</group>
+            <type>textbox</type>
+            <parent>income_left_lay</parent>
+            <captionside>top</captionside>
+            <field>planned_work_time</field>
+            <caption>Planeeritud t&amp;amp;ouml;&amp;amp;ouml;aeg</caption>
+      </property>
+      <property>
+            <name>planned_work_time_text</name>
+            <table>objects</table>
+            <group>income</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>income_left_lay</parent>
+            <no_caption>1</no_caption>
+            <field>planned_work_time_text</field>
+            <caption>Planeeritud t&amp;amp;ouml;&amp;amp;ouml;aeg tegevustest</caption>
+      </property>
+      <property>
+            <name>average_hr_price</name>
+            <table>aw_projects</table>
+            <group>income</group>
+            <type>textbox</type>
+            <parent>income_left_lay</parent>
+            <captionside>top</captionside>
+            <field>average_hr_price</field>
+            <caption>Planeeritud keskmine tunni omahind</caption>
+      </property>
+      <property>
+            <name>planned_other_expenses</name>
+            <table>aw_projects</table>
+            <group>income</group>
+            <type>textbox</type>
+            <parent>income_left_lay</parent>
+            <captionside>top</captionside>
+            <field>planned_other_expenses</field>
+            <caption>Planeeritud muud kulud</caption>
+      </property>
+      <property>
+            <name>income_table</name>
+            <table>objects</table>
+            <group>income</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>income_right_lay</parent>
+            <field>income_table</field>
+      </property>
+      <property>
             <name>trans</name>
             <table>objects</table>
             <group>trans</group>
@@ -1101,6 +1163,10 @@
                   <parent>general</parent>
                   <caption>&amp;amp;Uuml;ldandmed</caption>
             </general2>
+            <income>
+                  <caption>Tulud</caption>
+                  <parent>general</parent>
+            </income>
             <strat>
                   <caption>Eesm&amp;amp;auml;rgid</caption>
                   <parent>general</parent>
@@ -1466,6 +1532,25 @@
                   <parent>files_left_lay</parent>
                   <group>files</group>
             </files_find_lay>
+            <income_lay>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>income</group>
+                  <area_caption></area_caption>
+            </income_lay>
+            <income_left_lay>
+                  <type>vbox</type>
+                  <parent>income_lay</parent>
+                  <area_caption>Projekti&amp;amp;nbsp;parameetrid</area_caption>
+                  <group>income</group>
+            </income_left_lay>
+            <income_right_lay>
+                  <closeable>1</closeable>
+                  <type>vbox</type>
+                  <parent>income_lay</parent>
+                  <area_caption>Projekti&amp;amp;nbsp;tulud</area_caption>
+                  <group>income</group>
+            </income_right_lay>
             <bills>
                   <type>hbox</type>
                   <width>20%:80%</width>

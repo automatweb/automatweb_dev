@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.163 2009/04/07 13:15:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.164 2009/04/16 15:30:38 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -156,6 +156,30 @@
 			@caption Otsi
 
 		@property files_table type=table store=no no_caption=1 parent=files_lay
+
+
+@default group=income
+	@layout income_lay type=hbox width=20%:80%
+		@layout income_left_lay type=vbox parent=income_lay area_caption=Projekti&nbsp;parameetrid
+
+			@property project_costs type=text parent=income_left_lay captionside=top store=no
+			@caption Projekti maksumus
+
+			@property planned_work_time type=textbox parent=income_left_lay captionside=top table=aw_projects field=planned_work_time
+			@caption Planeeritud t&ouml;&ouml;aeg
+
+			@property planned_work_time_text type=text store=no parent=income_left_lay no_caption=1
+			@caption Planeeritud t&ouml;&ouml;aeg tegevustest
+
+			@property average_hr_price type=textbox parent=income_left_lay captionside=top table=aw_projects field=average_hr_price
+			@caption Planeeritud keskmine tunni omahind
+
+			@property planned_other_expenses type=textbox parent=income_left_lay captionside=top table=aw_projects field=planned_other_expenses
+			@caption Planeeritud muud kulud
+
+		@layout income_right_lay closeable=1 type=vbox parent=income_lay area_caption=Projekti&nbsp;tulud
+
+			@property income_table type=table store=no no_caption=1 parent=income_right_lay
 
 
 @default group=trans
@@ -390,6 +414,7 @@
 	@property prods_table type=table store=no no_caption=1
 
 @groupinfo general2 parent=general caption="&Uuml;ldandmed"
+	@groupinfo income caption="Tulud" parent=general
 	@groupinfo strat caption="Eesm&auml;rgid" parent=general submit=no
 	@groupinfo risks caption="Riskid" parent=general submit=no
 	@groupinfo sides parent=general caption="Konfliktianal&uuml;&uuml;s" submit=no
@@ -597,12 +622,86 @@ class project extends class_base
 		return $ret;
 	}
 
+	function _get_income_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "group",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "pr",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "tt",
+			"caption" => "",
+			"align" => "right",
+		));
+
+		$bill_sum = $arr["obj_inst"]->get_bill_sum();
+		$bill_income = $arr["obj_inst"]->get_project_income_cc();
+		$billed_hours = $arr["obj_inst"]->get_billed_hours();
+		$billable_hours = $arr["obj_inst"]->get_billable_hours();
+
+		$t->define_data(array(
+			"group" => t("Tulud"),
+			"name" => t("Makstud"),
+			"sum" => $arr["obj_inst"]->get_project_income_text(),
+			"pr" => number_format($bill_income  / $arr["obj_inst"]->prop("proj_price") * 100 ,  2)." %" ,
+			"tt" => number_format($billed_hours * ($bill_income/$bill_sum),2)." TT",
+		));
+
+		$t->define_data(array(
+			"group" => "",
+			"name" => t("Maksmata"),
+			"sum" => $bill_sum - $bill_income,
+			"pr" => number_format(($bill_sum - $bill_income) / $arr["obj_inst"]->prop("proj_price") * 100 , 2)." %",
+			"tt" => number_format($billed_hours * (1 - ($bill_income/$bill_sum)),2)." TT",
+		));
+
+		$t->define_data(array(
+			"group" => t("Viittulu"),
+			"name" => t("Tehtud ja maksmata"),
+			"sum" => round(min((($billable_hours / $arr["obj_inst"]->prop("planned_work_time"))*$arr["obj_inst"]->prop("proj_price")) , ($arr["obj_inst"]->prop("proj_price") - $bill_sum)), 2),
+			"pr" => round (($billable_hours / $arr["obj_inst"]->prop("planned_work_time"))*100 , 2)." %",
+			"tt" => $billable_hours." TT",
+		));
+
+		$t->define_data(array(
+			"group" => "",
+			"name" => t("Tegemata t&ouml;&ouml;d"),
+			"sum" => round((($arr["obj_inst"]->prop("planned_work_time") - $billable_hours  - $billed_hours) / $arr["obj_inst"]->prop("planned_work_time"))*$arr["obj_inst"]->prop("proj_price") , 2),
+			"pr" => round ((($arr["obj_inst"]->prop("planned_work_time") - $billable_hours  - $billed_hours)  / $arr["obj_inst"]->prop("planned_work_time"))*100 , 2)." %",
+			"tt" => $arr["obj_inst"]->prop("planned_work_time") - $billable_hours - $billed_hours." TT",
+		));
+
+		$t->set_sortable(false);
+	}
+
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "project_costs":
+				$data["value"] = $arr["obj_inst"]->prop("proj_price");
+				break;
+			case "planned_work_time_text":
+				$data["value"] = t("Planeeritud tegevused")." : ";
+				$data["value"].= round($arr["obj_inst"]->get_planned_hours() , 2);
+				$data["value"].= " ".t("tundi")."<br>";
+				break;
 			case "money_stats_string":
 				$data["value"] = t("Laekunud")." : ";
 				$data["value"].= $arr["obj_inst"]->get_project_income_text();
@@ -1138,6 +1237,9 @@ class project extends class_base
 
 			case "prods_table":
 				$this->_get_prods_table($arr);
+				break;
+			case "income_table":
+				$this->_get_income_table($arr);
 				break;
 
 			case "hidden_team":
@@ -6222,6 +6324,14 @@ class project extends class_base
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "varchar(50)"
+				));
+				return true;
+			case "planned_work_time":
+			case "average_hr_price":
+			case "planned_other_expenses":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "double"
 				));
 				return true;
 			case "aw_proj_mgr":
