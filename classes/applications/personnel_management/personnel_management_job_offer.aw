@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.67 2009/01/13 15:52:40 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.68 2009/04/16 10:22:38 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -1317,6 +1317,14 @@ class personnel_management_job_offer extends class_base
 					));
 				}
 			}
+		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] === "send_email_sms" && $_GET["group"] !== "send_email_sms")
+		{
+			return false;
 		}
 	}
 

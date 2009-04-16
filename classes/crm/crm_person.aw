@@ -4280,7 +4280,7 @@ class crm_person extends class_base
 	{
 		if(isset($arr["request"]["job_offer_id"]) && $this->can("view", $arr["request"]["job_offer_id"]))
 		{
-			print $arr["request"]["job_offer_id"];
+//			print $arr["request"]["job_offer_id"];
 			aw_session_set("job_offer_obj_id_for_candidate", $arr["request"]["job_offer_id"]);
 		}
 	}
@@ -4304,6 +4304,7 @@ class crm_person extends class_base
 			aw_session_set("candidate_obj_id_for_candidate", $candidate->id());
 			// Don't need this one anymore.
 			aw_session_set("job_offer_obj_id_for_candidate", "");
+			aw_global_set("job_offer_obj_id_for_candidate", "");
 		}
 		/*
 		if($arr["obj_inst"]->prop("work_contact"))
@@ -5741,10 +5742,10 @@ class crm_person extends class_base
 		$proplist = array();
 
 		//////////////////// CAPTIONS
-		$tmpo = obj();
 
 		foreach($prefixx as $clid => $prefix)
 		{
+			$tmpo = obj();
 			// First we set the captions to original
 
 			$tmpo->set_class_id($clid);
