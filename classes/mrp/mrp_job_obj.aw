@@ -556,6 +556,48 @@ class mrp_job_obj extends _int_object
 
 /** Inserts job to schedule or reschedules it
     @attrib api=1 params=pos
+	@returns void
+	@errors
+		throws awex_mrp_job_state when current job state doesn't allow planning.
+		throws awex_mrp_job_not_loaded on load error.
+		throws awex_mrp_job on errors.
+**/
+	function plan()
+	{
+		if (!$this->mrp_job_data_loaded)
+		{
+			throw new awex_mrp_job_not_loaded("Operation can't be wxecuted in this mode. Call load_data() before trying again.");
+		}
+
+		$applicable_states = array (
+			self::STATE_NEW,
+			self::STATE_ABORTED
+		);
+		if (!in_array ($this->prop("state"), $applicable_states))
+		{
+			throw new awex_mrp_job_state("State must be 'NEW' or 'ABORTED'.");
+		}
+
+		try
+		{
+			$this->set_prop ("state", self::STATE_PLANNED);
+			aw_disable_acl();
+			$this->save ();
+			aw_restore_acl();
+			$this->state_changed("");
+			$this->mrp_workspace->request_rescheduling();
+		}
+		catch (Exception $E)
+		{
+			$error_message = "Unknown error (" . get_class($e) . "): " . $e->getMessage();
+			$e = new awex_mrp_job($error_message);
+			$e->set_forwarded_exception($E);
+			throw $e;
+		}
+	}
+
+/** Inserts job to schedule or reschedules it
+    @attrib api=1 params=pos
 	@param start type=int
 		UNIX timestamp scheduled start time for this job
 	@param length type=int
@@ -1063,7 +1105,7 @@ class mrp_job_obj extends _int_object
 			if (!$this->job_prerequisites_are_done())
 			{
 				throw new awex_mrp_job_prerequisites("A prerequisite is not done.");
-	}
+			}
 
 			// start making changes to data
 			$this->save_mrp_state("start");
