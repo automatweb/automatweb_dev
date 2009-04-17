@@ -194,7 +194,7 @@ class htmlclient extends aw_template
 		// is added by class_base, so we should be covered
 		if ($args["type"] === "tabpanel" && !is_object($this->tabpanel))
 		{
-			$this->tabpanel = &$args["vcl_inst"];
+			$this->tabpanel = $args["vcl_inst"];
 			return false;
 		};
 
@@ -414,7 +414,7 @@ class htmlclient extends aw_template
 				"tooltip_index" => $this->tooltip_index,
 				"comment" => $args["comment"],
 			));
-			
+
 			if(strlen($args["comment"]))
 			{
 				$s_help_popup = $this->parse("HELP_POPUP");
@@ -1661,23 +1661,9 @@ class htmlclient extends aw_template
 					break;
 			}
 		}
-
-		// reset all captions
-		$this->vars_safe(array(
-			"caption" => empty($arr["caption"]) ? null : $arr["caption"],
-			"CAPTION_LEFT" => "",
-			"CAPTION_TOP" => "",
-			"element" => $this->draw_element($arr),
-			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
-			"GRID_ERR_MSG" => ""
-		));
-
-		if (!empty($arr["error"]))
-		{
-			$this->vars_safe(array(
-				"GRID_ERR_MSG" => $this->parse("GRID_ERR_MSG")
-			));
-		}
+		$caption_template = "CAPTION_" . $captionside;
+		// name refers to a VAR inside the template
+		$tpl_args = array($caption_template => $this->parse($caption_template));
 
 		if ( isset($this->tooltip_index) )
 		{
@@ -1687,27 +1673,42 @@ class htmlclient extends aw_template
 		{
 			$this->tooltip_index = 1;
 		}
-		
-		$this->vars(array(
-			"tooltip_index" => $this->tooltip_index,
-			"comment" => $arr["comment"],
-		));
+
 		if(strlen($arr["comment"]))
 		{
-			$s_help_popup = $this->parse("HELP_POPUP");
+			$this->vars_safe(array(
+				"tooltip_index" => $this->tooltip_index,
+				"comment" => $arr["comment"]
+			));
+			$tpl_args["HELP_POPUP"] = $this->parse("HELP_POPUP");
 		}
 		else
 		{
-			$s_help_popup = "";
+			$tpl_args["HELP_POPUP"] = "";
 		}
 
-		// name refers to a VAR inside the template
-		$caption_template = "CAPTION_" . $captionside;
+		// reset all captions
 		$this->vars_safe(array(
-			$caption_template => $this->parse($caption_template),
-			"HELP_POPUP" => $s_help_popup,
+			"caption" => empty($arr["caption"]) ? null : $arr["caption"],
+			"CAPTION_LEFT" => "",
+			"CAPTION_TOP" => "",
+			"element" => $this->draw_element($arr),
+			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
+			"GRID_ERR_MSG" => "",
+			"HELP_POPUP" => "",
+			"comment" => $arr["comment"]
 		));
+
+		if (!empty($arr["error"]))
+		{
+			$this->vars_safe(array(
+				"GRID_ERR_MSG" => $this->parse("GRID_ERR_MSG")
+			));
+		}
+
+		$this->vars_safe($tpl_args);
 		$tpl = "GRIDITEM";
+
 
 		if (!empty($arr["no_caption"]))
 		{
