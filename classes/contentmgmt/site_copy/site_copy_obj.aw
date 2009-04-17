@@ -2,6 +2,10 @@
 
 class site_copy_obj extends _int_object
 {
+	const SITE_DOESNT_EXIST = 1;
+	const SITE_INPROGRESS = 2;
+	const SITE_EXISTS = 3;
+
 	public function prop($k)
 	{
 		if(!is_oid(parent::prop($k)) && $k == "dir_sites")
@@ -663,7 +667,7 @@ class site_copy_obj extends _int_object
 		shell_exec("cd ".$dir."/".$dir_name."/files; mkdir class_index; chmod 777 class_index; cd ..; chmod 777 files");
 	}
 
-	protected function login()
+	protected static function login()
 	{
 		// Switch the user to avoid any ACL conflicts.
 		$u = get_instance("users");
@@ -678,7 +682,7 @@ class site_copy_obj extends _int_object
 		}
 	}
 
-	protected function logout()
+	protected static function logout()
 	{
 		$u = get_instance("users");
 		$u->logout();
@@ -691,7 +695,7 @@ class site_copy_obj extends _int_object
 		die($msg);
 	}
 
-	public function get_obj_inst()
+	public static function get_obj_inst()
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_SITE_COPY,
@@ -1122,6 +1126,127 @@ class site_copy_obj extends _int_object
 		// Copy vhost
 		$o_site_dir = explode("/", trim($o->site_dir, "/"));
 		shell_exec("cp ".$this->conf["apache_vhosts"]."/".$o_site_dir[count($o_site_dir) - 2]." ".$fld."/vhost");
+	}
+
+	public static function add_site($arr)
+	{
+		$o = self::get_obj_inst();
+		if(is_object($o))
+		{
+			$ips = $o->meta("allowed_servers");
+			if(!empty($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], $ips))
+			{
+				self::login();
+
+				$arr = array(
+					"obj_inst" => $o,
+					"prop" => array(
+						"value" => $arr["url"],
+					),
+					"request" => array(
+						"local_copy" => 0,
+						"local_copy_prms" => array(),
+						"email" => ifset($arr, "email"),
+						"cvs_copy" => ifset($arr, "cvs"),
+					),
+				);
+				$retval = self::check_add_site_submit($arr);
+
+				self::logout();
+			}
+		}
+	}
+
+	private static function check_add_site_submit(&$arr)
+	{
+		$retval = PROP_OK;
+		$url = $arr["prop"]["value"];
+		$url = substr($url, 0, 7) == "http://" ? $url : "http://".$url;
+		if(strlen($url) < 11)
+		{
+			$arr["prop"]["error"] = t("Saidi URL peab kindlasti olemas olema!");
+			$retval = PROP_FATAL_ERROR;
+		}
+		else
+		{
+			$arr["prop"]["value"] = $url;
+			// Let's see if we already have a site copied with this URL
+			$ol = new object_list(array(
+				"class_id" => CL_SITE_COPY_SITE,
+				"url" => array($url, trim($url, "/"), trim($url, "/")."/"),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"limit" => 1,
+			));
+			if($ol->count() > 0)
+			{
+				$arr["prop"]["error"] = t("Sellise URLiga sait on juba kopeeritud!");
+				$retval = PROP_FATAL_ERROR;
+			}
+			// Let's see if we already have a site in progress with this URL
+			$ol = new object_list(array(
+				"class_id" => CL_SITE_COPY_TODO,
+				"url" => $url,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sc_status" => new obj_predicate_not(get_instance(CL_SITE_COPY_TODO)->STAT_DELETE),
+				"limit" => 1,
+			));
+			if($ol->count() > 0)
+			{
+				$arr["prop"]["error"] = t("Sellise URLiga sait on juba kopeerimisel!");
+				$retval = PROP_FATAL_ERROR;
+			}
+		}
+
+		if(!is_email($arr["request"]["email"]) && empty($arr["request"]["local_copy"]))
+		{
+			$retval = PROP_FATAL_ERROR;
+		}
+
+		if($retval === PROP_OK)
+		{
+			$arr["obj_inst"]->add_site_to_todolist($arr);
+		}
+		return $retval;
+	}
+
+	public static function check_site($arr)
+	{
+		$retval = array("msg" => self::SITE_DOESNT_EXIST);
+		$url = $arr["url"];
+		$url = substr($url, 0, 7) == "http://" ? $url : "http://".$url;
+		// Let's see if we already have a site copied with this URL
+		$ol = new object_list(array(
+			"class_id" => CL_SITE_COPY_SITE,
+			"url" => array($url, trim($url, "/"), trim($url, "/")."/"),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 1,
+		));
+		if($ol->count() > 0)
+		{
+			$site = $ol->begin();
+			$retval = array(
+				"msg" => self::SITE_EXISTS,
+				"url" => $site->copy_url,
+				"url_cvs" => $site->copy_url_cvs,
+			);
+		}
+		// Let's see if we already have a site in progress with this URL
+		$ol = new object_list(array(
+			"class_id" => CL_SITE_COPY_TODO,
+			"url" => $url,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sc_status" => new obj_predicate_not(get_instance(CL_SITE_COPY_TODO)->STAT_DELETE),
+			"limit" => 1,
+		));
+		if($ol->count() > 0)
+		{
+			$retval = array("msg" => self::SITE_INPROGRESS);
+		}
+		return $retval;
 	}
 }
 

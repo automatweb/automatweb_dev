@@ -2,11 +2,11 @@
 
 class site_copy_site_obj extends _int_object
 {
-	function delete()
+	function delete($full_delete = false)
 	{
 		if($this->meta("delete"))
 		{
-			return parent::delete();
+			return parent::delete($full_delete);
 		}
 		else
 		{

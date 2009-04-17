@@ -226,7 +226,7 @@ class site_copy extends class_base
 				break;
 
 			case "url":
-				$retval = $this->check_add_site_submit($arr);
+				$retval = site_copy_obj::check_add_site_submit($arr);
 				break;
 
 			case "email":				
@@ -509,65 +509,6 @@ class site_copy extends class_base
 		}
 	}
 
-	private function check_add_site_submit(&$arr)
-	{
-		$retval = PROP_OK;
-		$url = $arr["prop"]["value"];
-		$url = substr($url, 0, 7) == "http://" ? $url : "http://".$url;
-		if(strlen($url) < 11)
-		{
-			$arr["prop"]["error"] = t("Saidi URL peab kindlasti olemas olema!");
-			$retval = PROP_FATAL_ERROR;
-		}
-		else
-		{
-			$arr["prop"]["value"] = $url;
-			// Let's see if we already have a site copied with this URL
-			$ol = new object_list(array(
-				"class_id" => CL_SITE_COPY_SITE,
-				"url" => array($url, trim($url, "/"), trim($url, "/")."/"),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"limit" => 1,
-			));
-			if($ol->count() > 0)
-			{
-				$arr["prop"]["error"] = t("Sellise URLiga sait on juba kopeeritud!");
-				$retval = PROP_FATAL_ERROR;
-			}
-			// Let's see if we already have a site in progress with this URL
-			$ol = new object_list(array(
-				"class_id" => CL_SITE_COPY_TODO,
-				"url" => $url,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"sc_status" => new obj_predicate_not(get_instance(CL_SITE_COPY_TODO)->STAT_DELETE),
-				"limit" => 1,
-			));
-			if($ol->count() > 0)
-			{
-				$arr["prop"]["error"] = t("Sellise URLiga sait on juba kopeerimisel!");
-				$retval = PROP_FATAL_ERROR;
-			}
-		}
-
-		if(!$this->check_email($arr))
-		{
-			$retval = PROP_FATAL_ERROR;
-		}
-
-		if($retval === PROP_OK)
-		{
-			$arr["obj_inst"]->add_site_to_todolist($arr);
-		}
-		return $retval;
-	}
-
-	private function check_email($arr)
-	{
-		return is_email($arr["request"]["email"]) || isset($arr["request"]["local_copy"]) && $arr["request"]["local_copy"] == 1;
-	}
-
 	/**
 		@attrib name=invoke api=1 nologin=1 params=name all_args=1
 	**/
@@ -698,19 +639,26 @@ class site_copy extends class_base
 
 		@param url required type=string
 
+		@param email required type=string
+
 		@param cvs optional type=boolean default=false
+
 	**/
 	public function add_site($arr)
 	{
-		arr($arr, true);
-		$o = site_copy_obj::get_obj_inst();
-		if(is_object($o))
-		{
-			$ips = $o->meta("allowed_servers");
-			if(!empty($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], $ips))
-			{
-			}
-		}
+		return site_copy_obj::add_site($arr);
+	}
+	
+	/**
+		@attrib name=check_site api=1 params=name nologin=1
+
+		@param url required type=string
+
+	**/
+	public function check_site($arr)
+	{
+		$r = site_copy_obj::check_site($arr);
+		die(json_encode($r));
 	}
 }
 
