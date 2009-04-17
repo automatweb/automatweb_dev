@@ -936,10 +936,6 @@ class google_chart extends aw_template
 				}
 			}
 		}
-		if(!$high)
-		{
-			return;
-		}
 		foreach($this->data as $rid => $row)
 		{
 			if(!is_array($row))
@@ -948,9 +944,12 @@ class google_chart extends aw_template
 			}
 			else
 			{
-				foreach($row as $id => $num)
+				if($high)
 				{
-					$row[$id] = round($num / $high * 100, 1);
+					foreach($row as $id => $num)
+					{
+						$row[$id] = round($num / $high * 100, 1);
+					}
 				}
 				$rows[] = implode(",", $row);
 			}
