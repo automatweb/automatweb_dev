@@ -48,7 +48,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
-			<ch_value>1</ch_value>
+            <ch_value>1</ch_value>
             <caption>Otsi ka alategevusaladest</caption>
       </property>
       <property>
@@ -78,7 +78,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>V&amp;amp;ouml;tmes&amp;amp;ouml;nu &amp;amp;uuml;hel real</caption>
+            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nu &amp;amp;uuml;hel real</caption>
       </property>
       <property>
             <name>keywords_by_folder</name>

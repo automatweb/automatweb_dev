@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_search.aw,v 1.4 2009/04/09 08:39:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_search.aw,v 1.5 2009/04/17 08:06:36 kristo Exp $
 // taket_search.aw - Taketi Otsing 
 /*
 
@@ -112,30 +112,9 @@ class taket_search extends class_base implements main_subtemplate_handler
 	{
 		enter_function("taket_search::parse_submit_info");
 		enter_function("taket_search::parse_submit_info:1");
-		$site_log_line = '[taket_search::parse_submit_info] ';
 
-		//determine the xml-rpc call
-		$hosts = aw_ini_get('taket.xmlrpchost');
-		$path = aw_ini_get("taket.xmlrpcpath");
-		$port = aw_ini_get("taket.xmlrpcport");
-
-		if (aw_ini_get('taket_search_log'))
-		{
-			$location_names = aw_ini_get('taket.location_name');
-			if (isset($location_names[$arr['asukoht']]))
-			{
-				$location_name = $location_names[$arr['asukoht']];
-			}
-			else
-			{
-				$location_name = 'K&otilde;ik';
-			}
-			
-			$taket_search_log = $arr['tootekood']."\t".$arr['toote_nimetus']."\t".$location_name."\t".aw_global_get('uid');
-			$this->site_log($taket_search_log, '/taket_search_logs/'.date('Ymd').'.xls');
-		}
-
-		elseif(isset($arr['kogus']))
+		// checking comma separated amount values
+		if(isset($arr['kogus']))
 		{
 			$tmpArr = split(',',$arr['kogus']);
 			$tmpArr2 = array();
@@ -149,148 +128,52 @@ class taket_search extends class_base implements main_subtemplate_handler
 		}
 
 		$this->read_template('search.tpl');
-		//ei ole eriti hea feature kui on mitmeleveliga subid aga siin k2ib kyll
-		$this->sub_merge = 0;
-		
-		$param = array();
-	
-		$match = false;
-		$f_add = $arr["osaline"] ? "%" : "";
-		if(strstr($arr['tootekood'], ',') || $arr['kogus'])
-		{
-			$match = true;
-			$products = split(',', $arr['tootekood']);
-			$quantities = split(',', $arr['kogus']);
-			foreach($products as $key => $value)
-			{
-				$products[$key] = trim($value);
-				$quantities[$key] = ((int)$quantities[$key]) > 0 ? (int)$quantities[$key] : 1;
-			}
-		}
 
-		$param["class_id"] = CL_SHOP_PRODUCT;
-		$param["lang_id"] = array();
-		$param["site_id"] = array();
-		$param["limit"] = "0,200";
+		$param = $this->compose_params($arr);
 
-		if($arr["tootekood"])
-		{
-			$find = array("-", " ", "O", "(", ")");
-			$replace = array("", "", "0", "", "");
-			$tk = str_replace($find, $replace, $arr["tootekood"]);
-			$param[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"search_term" => $match ? $products : $f_add.$tk.$f_add,
-					"short_code" => $match ? $products : $f_add.$tk.$f_add,
-				),
-			));
-		}
-		if($arr["toote_nimetus"])
-		{
-			$param["name"] = "%".$arr["toote_nimetus"]."%";
-		}
-		if($arr["laos"])
-		{
-			$param["CL_SHOP_PRODUCT.RELTYPE_PRODUCT(CL_SHOP_WAREHOUSE_AMOUNT).amount"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
-		}
-		$ol = new object_list($param);
-		$noSkipped = $arr["start"];
-
-		require(aw_ini_get("basedir")."addons/ixr/IXR_Library.inc.php");
-		$c = new IXR_Client("84.50.96.150", "/xmlrpc/index.php", "8080");
-		
-		$orig_prods = $ol->ids();
-
-		$prods = array();
-
-		foreach($ol->arr() as $oid => $o)
-		{
-			if(count($prods) == 200)
-			{
-				break;
-			}
-			$prods[$oid] = $oid;
-			if($o->prop("user1"))
-			{
-				$rp_ol = new object_list(array(
-					"class_id" => CL_SHOP_PRODUCT,
-					"site_id" => array(),
-					"lang_id" => array(),
-					"user1" => $o->prop("user1"),
-					"oid" => new obj_predicate_not($oid),
-				));
-				foreach($rp_ol->ids() as $rp_oid)
-				{
-					if(count($prods) == 200)
-					{
-						break;
-					}
-					$prods[$rp_oid] = $rp_oid;
-				}
-			}
-		}
-
-		$numOfRows = count($prods);
-
-		$ol = new object_list();
-		
-		if(count($prods))
-		{
-			$ol = new object_list(array(
-				"oid" => $prods,
-			));
-		}
-		$data = array();
-		$prodcodes = array();
-		foreach($ol->arr() as $oid => $o)
-		{
-			$value = array();
-			$value["product_name"] = $o->name();
-			$value["product_code"] = $code = $o->prop("code");
-
-			if(array_search($oid, $orig_prods) !== false)
-			{
-				$value["replacement"] = "K&uuml;situd";
-			}
-
-			$value["search_term"] = $o->prop("search_term");
-			$value["product_id"] = $o->id();
-			foreach($products as $key => $val)
-			{
-				if(str_replace($find, $replace, $val) == $o->prop("short_code"))
-				{
-					$value["quantity"] = $quantities[$key];
-				}
-			}
-			if(!isset($value["quantity"]))
-			{
-				$value["quantity"] = 1;
-			}
-			$data[$oid] = $value;
-			$prodcodes[] = $code;
-		}
+		$data = $this->get_products($param);
 
 		exit_function("taket_search::parse_submit_info:1");
 		enter_function("taket_search::parse_submit_info:2");
 		enter_function("taket_search::parse_submit_info:2:1");
-		if($ol->count())
+
+		$product_ids = array_keys($data);
+
+		if($product_ids)
 		{
+		/*
 			$amt_ol = new object_list(array(
 				"class_id" => CL_SHOP_WAREHOUSE_AMOUNT,
-				"product" => $ol->ids(),
+				"product" => $product_ids,
 				"site_id" => array(),
 				"lang_id" => array(),
 			));
+		*/
+			$amt_ol = new object_data_list(
+				array(
+				"class_id" => CL_SHOP_WAREHOUSE_AMOUNT,
+				"product" => $product_ids,
+				"site_id" => array(),
+				"lang_id" => array(),
+				),
+				array(
+					CL_SHOP_WAREHOUSE_AMOUNT => array(
+						'amount',
+						'product',
+						'warehouse'
+					)
+				)
+			);
 
 			foreach($amt_ol->arr() as $o)
 			{
-				$data[$o->prop("product")]["amounts"][$o->prop("warehouse")] = $o->prop("amount");
+			//	$data[$o->prop("product")]["amounts"][$o->prop("warehouse")] = $o->prop("amount");
+				$data[$o["product"]]["amounts"][$o["warehouse"]] = $o["amount"];
 			}
 	
 			$org_ol = new object_data_list(array(
 				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
-				"product" => $ol->ids(),
+				"product" => $product_ids,
 				"site_id" => array(),
 				"lang_id" => array(),
 			),
@@ -317,6 +200,7 @@ class taket_search extends class_base implements main_subtemplate_handler
 
 		exit_function("taket_search::parse_submit_info:2:1");
 		enter_function("taket_search::parse_submit_info:2:2");
+		
 		$hidden["orderBy"] = $arr["orderBy"];
 		if($arr['direction'] == 'desc')
 		{
@@ -343,18 +227,18 @@ class taket_search extends class_base implements main_subtemplate_handler
 				$whid = $obj_inst->prop("warehouse".$i);
 				if($value["quantity"] <= $value['amounts'][$whid] && $value['amounts'][$whid])
 				{
-					$in_stock[$value["product_id"]][$i] = $this->parse('instockyes');
+					$in_stock[$value["oid"]][$i] = $this->parse('instockyes');
 				}
 				//this product is out of stock
 				else
 				{
 					if($value['amounts'][$whid] > 0)
 					{
-						$in_stock[$value["product_id"]][$i] = $this->parse('instockpartially');
+						$in_stock[$value["oid"]][$i] = $this->parse('instockpartially');
 					}
 					else
 					{
-						$in_stock[$value["product_id"]][$i] =  $this->_get_date_by_supplier_id($value["supplier_times"][$whid]);
+						$in_stock[$value["oid"]][$i] =  $this->_get_date_by_supplier_id($value["supplier_times"][$whid]);
 					}
 				}
 			}
@@ -406,7 +290,7 @@ class taket_search extends class_base implements main_subtemplate_handler
 		// add all warehouse urls here
 		$urls = array(
 			0 => "http://84.50.96.150:8080/xmlrpc/index.php?db=1&".http_build_query(array("pc" => $page_prod_codes)),
-			1 => "http://88.196.208.74:8888/xmlrpc/index.php?db=1&".http_build_query(array("pc" => $page_prod_codes))
+		//	1 => "http://88.196.208.74:8888/xmlrpc/index.php?db=1&".http_build_query(array("pc" => $page_prod_codes))
 		);
 
 		$prs = $this->parallel_price_fetch($urls);
@@ -415,11 +299,11 @@ class taket_search extends class_base implements main_subtemplate_handler
 		exit_function("taket_search::parse_submit_info:2:4");
 		exit_function("taket_search::parse_submit_info:2");
 
-// this here is temporary as well - it think there should be better place to put this TAKET data into session! --dragut
+// this here is temporary as well - i think there should be better place to put this TAKET data into session! --dragut
 taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 
 		enter_function("taket_search::parse_submit_info:3");
-		//tsükkel üle toodete
+		// tsykkel yle toodete, joonistatakse toodete tabel
 		foreach($data as $value)
 		{
 			// XXX tmp:
@@ -465,7 +349,7 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 
 			$old_trans_instock_no = $this->vars['trans_instock_no'];
 
-			foreach($in_stock[$value["product_id"]] as $id => $val)
+			foreach($in_stock[$value["oid"]] as $id => $val)
 			{
 				if(is_numeric($val))
 				{
@@ -485,19 +369,19 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 						"trans_instock_no" => $val,
 					));
 				}
-				$in_stock[$value["product_id"]][$id] = $this->parse('instockno');
+				$in_stock[$value["oid"]][$id] = $this->parse('instockno');
 			}
 			$this->vars(array(
-				"in_Stock3" => $in_stock[$value["product_id"]][0],
-				"in_Stock4" => $in_stock[$value["product_id"]][1],
-				"in_Stock5" => $in_stock[$value["product_id"]][2],
-				"in_Stock6" => $in_stock[$value["product_id"]][3],
-				"in_Stock7" => $in_stock[$value["product_id"]][4],
-				"in_Stock8" => $in_stock[$value["product_id"]][5],
+				"in_Stock3" => $in_stock[$value["oid"]][0],
+				"in_Stock4" => $in_stock[$value["oid"]][1],
+				"in_Stock5" => $in_stock[$value["oid"]][2],
+				"in_Stock6" => $in_stock[$value["oid"]][3],
+				"in_Stock7" => $in_stock[$value["oid"]][4],
+				"in_Stock8" => $in_stock[$value["oid"]][5],
 			));
 			$value['search_code'] = str_replace(' ','&nbsp;', $value["search_term"]);
 			$value['product_code'] = str_replace(' ','&nbsp;', $value["product_code"]);
-			$value['product_name'] = str_replace(' ','&nbsp;', $value["product_name"]);
+			$value['product_name'] = str_replace(' ','&nbsp;', $value["name"]);
 			$value['i'] = $i++;
 			$this->vars($value);
 
@@ -575,6 +459,7 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 
 		//generating page numbers
 		$count2 = $count;
+		$noSkipped = $arr["start"];
 		$count = ceil($numOfRows/40);
 		$content = '';
 		for($i = 0; $i < $count; $i++)
@@ -608,11 +493,6 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 			'results' => $numOfRows
 		));
 
-		if (aw_ini_get('taket_extended_log'))
-		{
-			$this->site_log($site_log_line);
-		}
-
 		exit_function("taket_search::parse_submit_info:4");
 		exit_function("taket_search::parse_submit_info");
 		return $this->parse();
@@ -643,6 +523,165 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 			case "lopphind":
 				return (100 - ($a['kat_ale'.$_SESSION['TAKET']['ale']]/100)) * $a["price"] - (100 - ($b['kat_ale'.$_SESSION['TAKET']['ale']]/100)) * $b["price"];
 		}
+	}
+
+	function compose_params($arr)
+	{
+		$param = array();
+
+		$multiple_product_codes = false;
+		if(strstr($arr['tootekood'], ',') || $arr['kogus'])
+		{
+		// see asi siin ei t88ta praegu korralikult, sellep2rast, et filtrisse pannakse short code v2lja parameetritekse tootekoodid, mis ei ole short code-iks tehtud
+		// ilmselt tuleks siin rakendada ka ikkagi seda yhte short code controllerit mida importimisel kasutatakse.
+			$multiple_product_codes = true;
+			$products = split(',', $arr['tootekood']);
+			$quantities = split(',', $arr['kogus']);
+			foreach($products as $key => $value)
+			{
+				$products[$key] = trim($value);
+				$quantities[$key] = ((int)$quantities[$key]) > 0 ? (int)$quantities[$key] : 1;
+			}
+		}
+
+		$f_add = $arr["osaline"] ? "%" : "";
+		if($arr["tootekood"])
+		{
+			$find = array("-", " ", "O", "(", ")");
+			$replace = array("", "", "0", "", "");
+			$tk = str_replace($find, $replace, $arr["tootekood"]);
+		
+			$param[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"search_term" => $multiple_product_codes ? $products : $f_add.$tk.$f_add,
+					"short_code" => $multiple_product_codes ? $products : $f_add.$tk.$f_add,
+					"code" => $multiple_product_codes ? $products : $f_add.$tk.$f_add,
+				),
+			));
+		}
+
+		if($arr["toote_nimetus"])
+		{
+			$param["name"] = "%".$arr["toote_nimetus"]."%";
+		}
+
+		// the amount thingie has to be updated during the full import as well
+		if($arr["laos"])
+		{
+			$param["CL_SHOP_PRODUCT.RELTYPE_PRODUCT(CL_SHOP_WAREHOUSE_AMOUNT).amount"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
+		}
+
+		$param["class_id"] = CL_SHOP_PRODUCT;
+		$param["lang_id"] = array();
+		$param["site_id"] = array();
+		$param["limit"] = "0,200";
+
+		return $param;
+	}
+
+	function get_products($param)
+	{
+		$fetch = array(
+			CL_SHOP_PRODUCT => array(
+				'code' => 'product_code',
+				'short_code',
+				'search_term',
+				'user1' => 'replacement_product_code'
+			)
+		);
+
+		$odl = new object_data_list($param, $fetch);
+
+		$products = $odl->arr();
+		$product_ids = array_keys($products);
+
+		// get replacement products:
+		$replacements = array();
+		foreach ($products as $item)
+		{
+			if (!empty($item['replacement_product_code']))
+			{
+				$replacement_product_codes[$item['replacement_product_code']] = $item['replacement_product_code'];
+			}
+		}
+
+		if (!empty($replacement_product_codes))
+		{
+			$repl_odl = new object_data_list(
+				array(
+					'code' => $replacement_product_codes,
+					'site_id' => array(),
+					'lang_id' => array(),
+				),
+				$fetch
+			);
+			$replacements = $repl_odl->arr();
+		}
+
+		return $products + $replacements;
+/*
+		$prods = array();
+
+		// in this loop, the replacement product are collected
+		// but i definitely need to solve it somehow more elegantly and optimaly
+	
+		foreach($ol->arr() as $oid => $o)
+		{
+			if(count($prods) == 200)
+			{
+				break;
+			}
+			$prods[$oid] = $oid;
+			if($o->prop("user1"))
+			{
+				$rp_ol = new object_list(array(
+					"class_id" => CL_SHOP_PRODUCT,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"user1" => $o->prop("user1"),
+					"oid" => new obj_predicate_not($oid),
+				));
+				foreach($rp_ol->ids() as $rp_oid)
+				{
+					if(count($prods) == 200)
+					{
+						break;
+					}
+					$prods[$rp_oid] = $rp_oid;
+				}
+			}
+		}
+		
+		$numOfRows = count($prods);
+
+		$ol = new object_list();
+		
+		if(count($prods))
+		{
+			$ol = new object_list(array(
+				"oid" => $prods,
+			));
+		}
+
+		$data = array();
+		foreach($ol->arr() as $oid => $o)
+		{
+			$value = array();
+			$value["product_name"] = $o->name();
+			$value["product_code"] = $code = $o->prop("code");
+			$value["search_term"] = $o->prop("search_term");
+			$value["product_id"] = $o->id();
+
+			if(!isset($value["quantity"]))
+			{
+				$value["quantity"] = 1;
+			}
+
+			$data[$oid] = $value;
+		}
+		return $data;
+*/
 	}
 
 	function on_get_subtemplate_content($arr)

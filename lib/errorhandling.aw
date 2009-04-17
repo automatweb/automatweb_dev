@@ -16,12 +16,14 @@ function aw_exception_handler($e)
 	}
 	catch (Exception $e)
 	{
+		/*	Ajutiselt v2lja. Muidu ilmub pidevalt lehe sappa vastik veateade.
 		// exception handler error
 		echo get_class($e)." thrown within the exception handler. Message: ".$e->getMessage()." on line ".$e->getLine();
 		echo "<br /><b>Stack trace:</b> <br />\n";
 		$trace = nl2br($e->getTraceAsString());
 		echo $trace;
 		//!!! teha redirect vms siia
+		*/
 	}
 }
 

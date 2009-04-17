@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.7 2009/04/09 08:39:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.8 2009/04/17 08:06:34 kristo Exp $
 // terminator.aw - The Terminator
 /*
 
@@ -69,7 +69,8 @@ class terminator extends class_base
 
 	function KAAREL($arr)
 	{
-//		get_instance("shop_order")->bank_return(array("id" => 320493));
+		$url = "asdasdasd";
+		print file_get_contents("http://sitecopy.struktuur.ee/orb.aw?class=site_copy&action=add_site&url={$url}&cvs={$cvs}");
 	}
 }
 ?>

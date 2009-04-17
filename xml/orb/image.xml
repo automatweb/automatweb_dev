@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="image" folder="contentmgmt" extends="class_base">
+	<class name="image" folder="www/automatweb_cvs/classes/contentmgmt" extends="class_base">
 		<action name="get_image_by_id">
 			<function name="get_image_by_id">
 				<arguments>
@@ -49,6 +49,7 @@
 					<required name="url" type="string" />
 					<optional name="alt" type="string" />
 					<optional name="size" type="array" />
+					<optional name="arguments" type="array" />
 				</arguments>
 			</function>
 		</action>
@@ -147,6 +148,7 @@
 					<optional name="alt" type="string" default="NULL" />
 					<optional name="has_big_alt" type="string" default="NULL" />
 					<optional name="size" type="array" />
+					<optional name="arguments" type="array" />
 				</arguments>
 			</function>
 		</action>

@@ -60,10 +60,10 @@ class mrp_case_obj extends _int_object
 		return parent::set_prop("workspace", $workspace->id());
 	}
 
-	public function awobj_set_state($value)
+	/*public function awobj_set_state($value)
 	{
 		throw new awex_obj_readonly("State is a read-only property");
-	}
+	}*/
 
 /**
 	@attrib params=pos api=1

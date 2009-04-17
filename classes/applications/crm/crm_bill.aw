@@ -1984,7 +1984,7 @@ class crm_bill extends class_base
 		}
 		if($arr["name"])
 		{
-			$o->set_prop("desc" , $arr["name"]);
+			$o->set_prop("desc" , iconv("UTF-8", aw_global_get("charset"), $arr["name"]));
 		}
 
 		if($arr["jrk"])
@@ -2254,7 +2254,7 @@ class crm_bill extends class_base
 					$row->prop("date")."<br>".
 					"<b>".$row->prop("comment")."</b><br>".
 					//preg_replace('/([^\s]{100})(?=[^\s])/m', '$1 ', $row->prop("name")).
-					wordwrap(($row->prop("desc")), 100, "<br>", true).
+					wordwrap(htmlspecialchars(($row->prop("desc"))), 100, "<br>", true).
 					"</div>";
 				break;
 			case "code":

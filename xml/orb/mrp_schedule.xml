@@ -1,10 +1,10 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mrp_schedule" folder="mrp" extends="db_connector">
+	<class name="mrp_schedule" folder="www/automatweb_cvs/classes/mrp" extends="db_connector">
 		<action name="create">
 			<function name="create">
 				<arguments>
-					<required name="mrp_workspace" type="int" />
+					<required name="mrp_workspace" type="oid" />
 					<optional name="mrp_force_replan" type="int" />
 				</arguments>
 			</function>

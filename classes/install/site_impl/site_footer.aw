@@ -20,14 +20,13 @@ if (aw_global_get("uid"))
 		"login" => "",
 		"uid"  => aw_global_get("uid"),
 	));
-	$sf->parse("logged");
+	$sf->vars(array("logged" => $sf->parse("logged")));
 }
 else
 {
 	$sf->vars(array("logged" => ""));
-	$sf->parse("login");
+	$sf->vars(array("login" => $sf->parse("login")));
 }
-
 
 $a_plugins = Array();
 if ( aw_ini_get("plugin.jquery") )

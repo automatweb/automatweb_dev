@@ -8,8 +8,22 @@
 			</function>
 		</action>
 
+		<action name="post_row" all_args="1">
+			<function name="post_row">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="get_row_change_fields" all_args="1">
 			<function name="ajax_get_row_change_fields">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ajax_get_row_html" all_args="1">
+			<function name="ajax_get_row_html">
 				<arguments>
 				</arguments>
 			</function>

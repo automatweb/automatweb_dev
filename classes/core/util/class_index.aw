@@ -37,6 +37,8 @@ class class_index
 	**/
 	public static function update($full_update = true)
 	{
+if ($_SERVER["REMOTE_ADDR"] != "213.219.102.204")
+return;
 		// ...
 		$max_execution_time_prev_val = ini_get("max_execution_time");
 		set_time_limit(self::UPDATE_EXEC_TIMELIMIT);

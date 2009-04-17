@@ -737,7 +737,7 @@
             </PHONE>
             <FAX>
                   <value>5</value>
-                  <clid>CL_CRM_FAX</clid>
+                  <clid>CL_CRM_PHONE</clid>
                   <caption>Faks</caption>
             </FAX>
             <EMAIL>

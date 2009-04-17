@@ -60,6 +60,13 @@ class mrp_order_obj extends _int_object
 			$case->set_prop("customer", $v);
 			$case->save();
 		}
+
+		if ($k == "state" && $v == 4)
+		{
+			$case = $this->get_case();
+			$case->set_prop("state", MRP_STATUS_NEW);
+			$case->save();
+		}
 		return parent::set_prop($k, $v);
 	}
 }

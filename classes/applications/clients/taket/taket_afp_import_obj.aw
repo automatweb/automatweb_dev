@@ -33,7 +33,6 @@ class taket_afp_import_obj extends _int_object
 			die(t("Lao toodete kataloogi alla ei ole &otilde;igusi lisamiseks"));
 		}
 
-
 		$org_fld = $this->prop("org_fld");
 
 		if(!$org_fld)
@@ -261,6 +260,16 @@ class taket_afp_import_obj extends _int_object
 		exit();
 	}
 
+	public function get_suppliers()
+	{
+		$ol = new object_list(array(
+			'class_id' => CL_CRM_COMPANY,
+			'parent' => $this->org_fld
+		));
+
+		return $ol->arr();
+	}
+
 	private function update_suppliers($suppliers)
 	{
 		$ol = new object_list(array(
@@ -296,7 +305,6 @@ class taket_afp_import_obj extends _int_object
 			echo "[ok]<br />\n";
 		}
 		echo "Suppliers updated<br />\n";
-
 	}
 
 	private function update_products($data)
@@ -318,7 +326,7 @@ class taket_afp_import_obj extends _int_object
 		";
 
 		$aw_prods = $this->db_obj->db_fetch_array($sql);
-		echo "About go over <strong>".count($aw_prods)."</strong> products ... <br />\n";
+		echo "About to go over <strong>".count($aw_prods)."</strong> products ... <br />\n";
 		$count = 0;
 		foreach ($aw_prods as $aw_prod)
 		{
@@ -337,6 +345,11 @@ class taket_afp_import_obj extends _int_object
 				//	echo "Product is not changed <br />\n";
 				}
 
+				$this->update_purveyances(array(
+					'product_oid' => $aw_prod['oid'],
+					'product_name' => $prod_data['product_name'],
+				));
+
 				// the product is in aw, so lets remove it from data array:
 				unset($data[$code]);
 			}
@@ -353,7 +366,11 @@ class taket_afp_import_obj extends _int_object
 
 		foreach ($data as $value)
 		{
-			$this->add_product_sql($value);
+			$new_prod_oid = $this->add_product_sql($value);
+			$this->update_purveyances(array(
+				'product_oid' => $new_prod_oid,
+				'product_name' => $value['product_name'],
+			));
 		}
 
 		echo "<pre>";
@@ -492,6 +509,7 @@ class taket_afp_import_obj extends _int_object
 		";
 		$this->db_obj->db_query($sql);
 		echo "Insert new product: code: (".$data['product_code'].") || oid: ".$oid."<br />\n";
+		return $oid;
 	}
 
 	// the product object exists in the system, so i need to update the data
@@ -506,9 +524,6 @@ class taket_afp_import_obj extends _int_object
 			WHERE
 				oid = ".$oid."
 		";
-		echo "<pre>";
-		print_r($sql);
-		echo "</pre>";
 		$this->db_obj->db_query($sql);
 
 		$sql = "
@@ -522,9 +537,6 @@ class taket_afp_import_obj extends _int_object
 			WHERE
 				aw_oid = ".$oid."
 		";
-		echo "<pre>";
-		print_r($sql);
-		echo "</pre>";
 		$this->db_obj->db_query($sql);
 	}
 
@@ -536,6 +548,137 @@ class taket_afp_import_obj extends _int_object
 
 		$sql = "DELETE FROM aw_shop_products WHERE aw_oid = ".$oid;
 		$this->db_obj->db_query($sql);
+	}
+
+
+	private function update_purveyances($data)
+	{
+		$sql = "
+			SELECT
+				oid,
+				name,
+				warehouse,
+				company,
+				product
+			FROM
+				objects LEFT JOIN aw_shop_product_purveyance ON (oid = aw_oid)
+			WHERE
+				parent = ".$data['product_oid']." and
+				class_id = '".CL_SHOP_PRODUCT_PURVEYANCE."'
+		";
+		$res = $this->db_obj->db_fetch_array($sql);
+
+		$purveyances = array();
+		foreach ($res as $v)
+		{
+			$purveyances[$v['warehouse']] = $v;
+		}
+		$wh_counter = 1;
+		foreach ($this->warehouses as $wh_oid => $wh)
+		{
+			if (!isset($purveyances[$wh_oid]))
+			{
+				$this->add_purveyance_sql(array(
+					'parent' => $data['product_oid'],
+					'product_oid' => $data['product_oid'],
+					'product_name' => $data['product_name'],
+					'warehouse_oid' => $wh_oid,
+					'supplier_oid' => 0
+				));
+				echo "[ ".$wh_counter." ] Added purveyance: ".$data['product_name']." => ".$wh."<br />\n";
+			}
+			else
+			{
+			//	$this->update_purveyance_sql($purveyances[$wh_oid]['oid'], array(
+			//		'parent' => $data['product_oid'],
+			//		'product_oid' => $data['product_oid'],
+			//		'product_name' => $data['product_name'],
+			//		'warehouse_oid' => $wh_oid,
+			//		'supplier_oid' => 0
+			//	));
+			//	echo "Updated purveyance: ".$data['product_name']." => ".$wh."<br />\n";
+			//	echo "[ ".$wh_counter." ] Updated purveyance: ".$data['product_name']." => ".$wh."<br />\n";
+			}
+			$wh_counter++;
+		}
+
+	}
+
+	////
+	// it needs params:
+	// - parent - product objects oid
+	// - product_name
+	// - supplier_oid
+	// - warehouse_oid
+	// - product_oid
+	private function add_purveyance_sql($arr)
+	{
+		$obj_base = $this->db_obj->db_fetch_array("select * from objects where class_id = '".CL_SHOP_PRODUCT_PURVEYANCE."' limit 1");
+		$obj_base = reset($obj_base);
+		$obj_base['oid'] = 0;
+		$obj_base['createdby'] = '110';
+		$obj_base['modifiedby'] = '110';
+		$obj_base['parent'] = $arr['parent'];
+		// i should add prod code as well actually, to make the name more informative and therefore useful
+		$obj_base['name'] = sprintf(t("%s tarnetingimus"), addslashes($arr['product_name']));
+
+		$sql = "
+			INSERT INTO 
+				objects 
+			VALUES (".implode(',', map('"%s"', $obj_base)).");
+		";
+
+		$this->db_obj->db_query($sql);
+
+		$oid = $this->db_obj->db_last_insert_id();
+
+		$sql = "
+			INSERT INTO 
+				aw_shop_product_purveyance
+			SET
+				aw_oid = ".$oid.",
+				warehouse = ".$arr['warehouse_oid'].",
+				company = ".$arr['supplier_oid'].",
+				product = ".$arr['product_oid']."
+		";
+		$this->db_obj->db_query($sql);
+		echo "Insert new product puveyance: <br />\n";
+	}
+
+	private function update_purveyance_sql($oid, $data)
+	{
+		$sql = "
+			UPDATE 
+				objects
+			SET
+				name = '".addslashes($data['product_name'])."'
+			WHERE
+				oid = ".$oid."
+		";
+		$this->db_obj->db_query($sql);
+
+		$sql = "
+			UPDATE
+				aw_shop_product_purveyance
+			SET
+				warehouse = ".$data['warehouse_oid'].",
+				company = ".$data['supplier_oid'].",
+				product = ".$data['product_oid']."
+			WHERE
+				aw_oid = ".$oid."
+		";
+		$this->db_obj->db_query($sql);
+	
+	}
+
+	private function delete_purveyance_sql($oid)
+	{
+		$sql = "DELETE FROM objects WHERE oid = ".$oid;
+		$this->db_obj->db_query($sql);
+
+		$sql = "DELETE FROM aw_shop_product_purveyance WHERE aw_oid = ".$oid;
+		$this->db_obj->db_query($sql);
+	
 	}
 
 	private function apply_controller($code)

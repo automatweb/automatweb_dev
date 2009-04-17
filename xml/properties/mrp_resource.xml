@@ -1,8 +1,25 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>grp_general2</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>grp_general2</group>
+            <type>textbox</type>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
             <name>workspace</name>
             <table>objects</table>
+            <group>grp_general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
@@ -10,22 +27,22 @@
       <property>
             <name>state</name>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
             <group>
-                  <num_0>general</num_0>
+                  <num_0>grp_general2</num_0>
                   <num_1>grp_resource_maintenance</num_1>
                   <num_2>grp_resource_settings</num_2>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
             <caption>Ressursi staatus</caption>
       </property>
       <property>
             <name>category</name>
             <table>objects</table>
+            <group>grp_general2</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <type>text</type>
             <editonly>1</editonly>
             <caption>Kategooria</caption>
@@ -33,9 +50,9 @@
       <property>
             <name>resource_calendar</name>
             <table>objects</table>
+            <group>grp_resource_schedule</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_schedule</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -44,13 +61,13 @@
       <property>
             <name>job_time_tree</name>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_resource_joblist_todo</num_0>
                   <num_1>grp_resource_joblist_done</num_1>
                   <num_2>grp_resource_joblist_aborted</num_2>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -59,13 +76,13 @@
       <property>
             <name>resource_deviation_chart</name>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_resource_joblist_todo</num_0>
                   <num_1>grp_resource_joblist_done</num_1>
                   <num_2>grp_resource_joblist_aborted</num_2>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>google_chart</type>
             <no_caption>1</no_caption>
             <parent>resource_deviation_chart</parent>
@@ -74,13 +91,13 @@
       <property>
             <name>job_list</name>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <group>
                   <num_0>grp_resource_joblist_todo</num_0>
                   <num_1>grp_resource_joblist_done</num_1>
                   <num_2>grp_resource_joblist_aborted</num_2>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <editonly>1</editonly>
@@ -90,9 +107,9 @@
       <property>
             <name>out_of_service</name>
             <table>objects</table>
+            <group>grp_resource_maintenance</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_maintenance</group>
             <type>checkbox</type>
             <store>no</store>
             <ch_value>1</ch_value>
@@ -101,27 +118,27 @@
       <property>
             <name>maintenance_history</name>
             <table>objects</table>
+            <group>grp_resource_maintenance</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_maintenance</group>
             <type>comments</type>
             <caption>Hoolduskommentaarid</caption>
       </property>
       <property>
             <name>type</name>
             <table>objects</table>
+            <group>grp_resource_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_settings</group>
             <type>select</type>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>thread_data</name>
             <table>objects</table>
+            <group>grp_resource_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_settings</group>
             <type>textbox</type>
             <default>1</default>
             <comment>Positiivne t&amp;amp;auml;isarv</comment>
@@ -130,27 +147,27 @@
       <property>
             <name>default_pre_buffer</name>
             <table>objects</table>
+            <group>grp_resource_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_settings</group>
             <type>textbox</type>
             <caption>Vaikimisi eelpuhveraeg (h)</caption>
       </property>
       <property>
             <name>default_post_buffer</name>
             <table>objects</table>
+            <group>grp_resource_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_settings</group>
             <type>textbox</type>
             <caption>Vaikimisi j&amp;amp;auml;relpuhveraeg (h)</caption>
       </property>
       <property>
             <name>global_buffer</name>
             <table>objects</table>
+            <group>grp_resource_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_settings</group>
             <type>textbox</type>
             <default>14400</default>
             <caption>P&amp;amp;auml;eva &amp;amp;uuml;ldpuhver (h)</caption>
@@ -158,9 +175,9 @@
       <property>
             <name>default_batch_size</name>
             <table>objects</table>
+            <group>grp_resource_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_settings</group>
             <type>textbox</type>
             <default>1</default>
             <datatype>int</datatype>
@@ -170,9 +187,9 @@
       <property>
             <name>default_min_batches_to_continue_wf</name>
             <table>objects</table>
+            <group>grp_resource_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_settings</group>
             <type>textbox</type>
             <default>0</default>
             <comment>Mitu partiid peab olema valmis, et selle t&amp;amp;ouml;&amp;amp;ouml;tlemist saaks j&amp;amp;auml;tkata j&amp;amp;auml;rgmisel ressursil. 0 - kogu tootmistellimus, t&amp;amp;auml;isarv - kogus. T&amp;amp;auml;isarv, mille j&amp;amp;auml;rel on protsendim&amp;amp;auml;rk - mitu protsenti tootmistellimuse mahust peab olema valmis (n&amp;amp;auml;iteks 20%)</comment>
@@ -181,9 +198,9 @@
       <property>
             <name>production_feedback_option_values</name>
             <table>objects</table>
+            <group>grp_resource_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_settings</group>
             <type>textarea</type>
             <default>1</default>
             <rows>5</rows>
@@ -193,9 +210,9 @@
       <property>
             <name>products</name>
             <table>objects</table>
+            <group>grp_resource_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_settings</group>
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_PRODUCT</reltype>
@@ -205,9 +222,9 @@
       <property>
             <name>work_hrs_recur</name>
             <table>objects</table>
+            <group>grp_resource_unavailable_work</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_unavailable_work</group>
             <type>releditor</type>
             <reltype>RELTYPE_RECUR_WRK</reltype>
             <mode>manager</mode>
@@ -230,9 +247,9 @@
       <property>
             <name>unavailable_recur</name>
             <table>objects</table>
+            <group>grp_resource_unavailable_una</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_unavailable_una</group>
             <type>releditor</type>
             <reltype>RELTYPE_RECUR</reltype>
             <use_form>emb</use_form>
@@ -261,9 +278,9 @@
       <property>
             <name>unavailable_weekends</name>
             <table>objects</table>
+            <group>grp_resource_unavailable_una</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_unavailable_una</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Ei t&amp;amp;ouml;&amp;amp;ouml;ta n&amp;amp;auml;dalavahetustel</caption>
@@ -271,9 +288,9 @@
       <property>
             <name>unavailable_dates</name>
             <table>objects</table>
+            <group>grp_resource_unavailable_una</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_unavailable_una</group>
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
@@ -283,9 +300,9 @@
       <property>
             <name>materials_tb</name>
             <table>objects</table>
+            <group>grp_resource_materials</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_materials</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -293,9 +310,9 @@
       <property>
             <name>materials_tree</name>
             <table>objects</table>
+            <group>grp_resource_materials</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_materials</group>
             <type>treeview</type>
             <parent>materials_tree_box</parent>
             <no_caption>1</no_caption>
@@ -304,9 +321,9 @@
       <property>
             <name>materials_sel_tbl</name>
             <table>objects</table>
+            <group>grp_resource_materials</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_materials</group>
             <type>table</type>
             <parent>materials_split_right</parent>
             <no_caption>1</no_caption>
@@ -315,9 +332,9 @@
       <property>
             <name>transl</name>
             <table>objects</table>
+            <group>transl</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>transl</group>
             <type>callback</type>
             <callback>callback_get_transl</callback>
             <store>no</store>
@@ -327,10 +344,19 @@
             <syslog_type>ST_MRP_RESOURCE</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
             <confirm_save_data>1</confirm_save_data>
             <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
+            <grp_general2>
+                  <caption>Andmed</caption>
+                  <parent>general</parent>
+            </grp_general2>
+            <grp_resource_settings>
+                  <caption>Seaded</caption>
+                  <parent>general</parent>
+            </grp_resource_settings>
             <grp_resource_schedule>
                   <caption>Kalender</caption>
             </grp_resource_schedule>
@@ -353,9 +379,6 @@
                   <submit>no</submit>
                   <parent>grp_resource_joblist</parent>
             </grp_resource_joblist_aborted>
-            <grp_resource_settings>
-                  <caption>Seaded</caption>
-            </grp_resource_settings>
             <grp_resource_maintenance>
                   <caption>Hooldus</caption>
             </grp_resource_maintenance>
