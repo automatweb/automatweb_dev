@@ -2842,7 +2842,6 @@ d)
 				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
 				"url" => aw_url_change_var($var, "custman_".$id),
 			));
-
 		}
 
 		$tv->add_item(0,array(
@@ -2852,9 +2851,19 @@ d)
 		));
 		$customers_by_1_letter = array();
 		$customer_names = $this->all_bill_customers()->names();
-		asort($customer_names);
+		$cust_name_sort = array();
 		foreach($customer_names as $customer_id => $customer_name)
 		{
+			$cust_name_sort[$customer_id] = strtolower($customer_name);
+
+		}
+		asort($cust_name_sort);//arr($customer_names);
+		foreach($cust_name_sort as $customer_id => $customer_n)
+		{
+			$customer_name = $customer_names[$customer_id];//*/
+//		asort($customer_names , SORT_STRING);
+//		foreach($customer_names as $customer_id => $customer_name)
+//		{
 			if(!$customer_name)
 			{
 				continue;

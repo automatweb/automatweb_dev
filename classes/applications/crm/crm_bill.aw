@@ -142,6 +142,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property bill_targets type=table store=no no_caption=1 parent=almost_bottom
 	@caption Arve saajad
+ 
+	@property bill_rec_name type=textbox table=objects field=meta method=serialize parent=almost_bottom
+	@caption Arve saaja nimi
 
 	@property bill_rows type=text store=no no_caption=1 parent=bottom
 	@caption Arveread
@@ -1213,18 +1216,21 @@ class crm_bill extends class_base
 
 		foreach($arr["obj_inst"]->get_mail_persons()->arr() as $mail_person)
 		{
-			if($mail_person->class_id() == CL_CRM_PERSON)$t->define_data(array(
-				"name" => $mail_person->name(),
-				"oid" => $mail_person->id(),
-				"rank" => join(", " , $mail_person->get_profession_names($arr["obj_inst"]->prop("customer"))),
-				"mail" => $mail_person->get_mail($arr["obj_inst"]->prop("customer")),
-				"co" => $mail_person->company_name(),
-				"selection" => html::checkbox(array(
-					"name" => "bill_targets[".$mail_person->id()."]",
-					"checked" => !(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$mail_person->id()]),
-					"ch_value" => $mail_person->id()
-				))
-			));
+			if($mail_person->class_id() == CL_CRM_PERSON)
+			{
+				$t->define_data(array(
+					"name" => $mail_person->name(),
+					"oid" => $mail_person->id(),
+					"rank" => join(", " , $mail_person->get_profession_names($arr["obj_inst"]->prop("customer"))),
+					"mail" => $mail_person->get_mail($arr["obj_inst"]->prop("customer")),
+					"co" => $mail_person->company_name(),
+					"selection" => html::checkbox(array(
+						"name" => "bill_targets[".$mail_person->id()."]",
+						"checked" => !(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$mail_person->id()]),
+						"ch_value" => $mail_person->id()
+					))
+				));
+			}
 		}
 
 		foreach($arr["obj_inst"]->get_cust_mails() as $id => $mail)
@@ -1242,6 +1248,39 @@ class crm_bill extends class_base
 			));
 		}
 
+		if($arr["obj_inst"]->prop("bill_mail_to"))
+		{
+			$t->define_data(array(
+				"mail" => $arr["obj_inst"]->prop("bill_mail_to"),
+			));
+		}
+
+
+		if($arr["obj_inst"]->set_crm_settings() && $arr["obj_inst"]->crm_settings->prop("bill_mail_to"))
+		{
+			$t->define_data(array(
+				"mail" => $arr["obj_inst"]->crm_settings->prop("bill_mail_to"),
+			));
+		}
+		if (aw_global_get("uid_oid") != "")
+		{
+			$user_inst = get_instance(CL_USER);
+			$u = obj(aw_global_get("uid_oid"));
+			$person = obj($user_inst->get_current_person());
+			$mail = $u->get_user_mail_address();
+			if(is_oid($mail))
+			{
+				$mail_obj = obj($mail);
+				if($mail_obj->class_id() == CL_ML_MEMBER)
+				{
+					$mail = $mail_obj->prop("mail");
+				}
+			}
+			$t->define_data(array(
+				"name" => $person->name(),
+				"mail" =>$mail,
+			));
+		}
 
 /*		$mails = $arr["obj_inst"]->get_mail_targets();
 		foreach($mails as $key => $mail)

@@ -1736,11 +1736,25 @@ class crm_bill_obj extends _int_object
 		}
 	}
 
+	private function get_bill_target_name()
+	{
+		$ret = "";
+		if($this->prop("bill_rec_name"))
+		{
+			$ret = $this->prop("bill_rec_name");
+		}
+		else
+		{
+			$ret = $this->get_customer_name();
+		}
+		return $ret;
+	}
+
 	public function get_mail_body()
 	{
 		$replace = array(
 			"#bill_no#" => $this->prop("bill_no"),
-			"#customer_name#" => $this->get_customer_name(),
+			"#customer_name#" => $this->get_bill_target_name(),
 			"#contact_person#" => $this->prop("ctp_text"),
 			"#signature#" => $this->get_sender_signature(),
 		);
