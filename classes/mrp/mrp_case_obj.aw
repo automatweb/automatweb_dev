@@ -28,7 +28,7 @@ class mrp_case_obj extends _int_object
 	{
 		parent::__construct($objdata);
 
-		$new = (null === $this->id());
+		$new = (!is_oid($this->id()));
 		if ($new)
 		{
 			### set status

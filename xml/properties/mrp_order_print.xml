@@ -304,7 +304,7 @@
             <group>data</group>
             <type>textbox</type>
             <field>aw_e_orderer_email</field>
-            <caption>Tellija telefon</caption>
+            <caption>Tellija email</caption>
       </property>
       <property>
             <name>e_orderer_phone</name>

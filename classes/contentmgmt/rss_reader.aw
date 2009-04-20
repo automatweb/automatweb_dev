@@ -15,6 +15,9 @@
 	@property max_display_items type=textbox field=aw_max_display_items
 	@caption Kuvatavate kirjete arv
 
+	@property desc_max_len type=textbox field=aw_desc_max_len size=5
+	@caption Kirjelduse maksimaalne pikkus t&auml;htedes
+
 @default group=preview
 
 	@property preview type=text store=no no_caption=1
@@ -73,7 +76,7 @@ class rss_reader extends class_base
 			$this->vars(array(
 				"title" => $item["title"],
 				"link" => $item["link"],
-				"description" => nl2br($item["description"]),
+				"description" => $this->_format_desc($item["description"], $ob),
 				"guid" => $item["guid"],
 				"pubDate" => $item["pubDate"]
 			));
@@ -84,6 +87,15 @@ class rss_reader extends class_base
 			"ITEM" => $s
 		));
 		return $this->parse();
+	}
+
+	private function _format_desc($str, $o)
+	{
+		if ($o->desc_max_len > 0)
+		{
+			$str = substr($str, 0, $o->desc_max_len)."...";
+		}
+		return nl2br($str);
 	}
 
 	function do_db_upgrade($t, $f)
@@ -102,6 +114,13 @@ class rss_reader extends class_base
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(255)"
+				));
+				return true;
+
+			case "aw_desc_max_len":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
 				));
 				return true;
 		}

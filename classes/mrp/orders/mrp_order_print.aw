@@ -94,7 +94,7 @@
 	@caption Tellija isik
 	
 	@property e_orderer_email type=textbox field=aw_e_orderer_email
-	@caption Tellija telefon
+	@caption Tellija email
 	
 	@property e_orderer_phone type=textbox field=aw_e_orderer_phone
 	@caption Tellija telefon
@@ -781,7 +781,17 @@ class mrp_order_print extends mrp_order
 
 		// logo and other data from seller/buyer
 		$this->_preview_insert_co_data($arr["obj_inst"]->workspace()->owner_co(), "seller");
-		$this->_preview_insert_co_data($arr["obj_inst"]->customer(), "orderer");
+		if ($this->can("view", $arr["obj_inst"]->customer))
+		{
+			$this->_preview_insert_co_data($arr["obj_inst"]->customer(), "orderer");
+		}
+		else
+		{
+			$this->vars(array(
+				"orderer_name" => $arr["obj_inst"]->e_orderer_co,
+				"orderer_name" => $arr["obj_inst"]->e_orderer_co,
+			));
+		}
 
 		$this->vars(array(
 			"price" => $arr["obj_inst"]->get_total_price(),

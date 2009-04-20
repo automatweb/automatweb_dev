@@ -25,6 +25,15 @@
             <caption>Kuvatavate kirjete arv</caption>
       </property>
       <property>
+            <name>desc_max_len</name>
+            <table>aw_rss_reader</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_desc_max_len</field>
+            <size>5</size>
+            <caption>Kirjelduse maksimaalne pikkus t&amp;amp;auml;htedes</caption>
+      </property>
+      <property>
             <name>preview</name>
             <table>aw_rss_reader</table>
             <group>preview</group>
