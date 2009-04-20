@@ -40,7 +40,7 @@ class _int_object
 	///////////////////////////////////////////
 	// public functions
 
-	function __construct($objdata)
+	function __construct($objdata = array())
 	{
 		$this->_int_object($objdata);
 	}
