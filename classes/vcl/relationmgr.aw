@@ -168,11 +168,11 @@ class relationmgr extends aw_template
 		$this->clids[CL_SHOP_PRODUCT] = basename($classes[CL_SHOP_PRODUCT]["file"]);
 		$this->clids[CL_SHOP_PACKET] = basename($classes[CL_SHOP_PACKET]["file"]);
 		$this->clids[CL_SHOP_PRODUCT_PACKAGING] = basename($classes[CL_SHOP_PRODUCT_PACKAGING]["file"]);
-		$this->clids[CL_GROUP] = basename($class[CL_GROUP]["file"]);
+		$this->clids[CL_GROUP] = basename($classes[CL_GROUP]["file"]);
 		$tmp = array();
 		foreach($classes as $key => $class)
 		{
-			if($class["alias"])
+			if(isset($class["alias"]) && $class["alias"])
 			{
 				$tmp[$key] = $class["name"];
 				$this->clids[$key] = basename($class["file"]);
