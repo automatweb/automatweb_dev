@@ -71,7 +71,7 @@ class rss_reader extends class_base
 		$this->read_template("show.tpl");
 
 		$s = "";
-		foreach($ob->get_rss_items(!empty($_GET["show_all"])) as $item)
+		foreach($ob->get_rss_items($_GET["show_all"] == $ob->id()) as $item)
 		{
 			$this->vars(array(
 				"title" => $item["title"],
@@ -84,7 +84,8 @@ class rss_reader extends class_base
 		}
 
 		$this->vars(array(
-			"ITEM" => $s
+			"ITEM" => $s,
+			"oid" => $ob->id()
 		));
 		return $this->parse();
 	}

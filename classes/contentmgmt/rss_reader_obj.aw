@@ -29,7 +29,14 @@ class rss_reader_obj extends _int_object
 
 	private function _parse_xml_items($xml, $show_all = false)
 	{
-		$xml = new SimpleXMLElement($xml);
+		try 
+		{
+			$xml = new SimpleXMLElement($xml);
+		}
+		catch (Exception $e)
+		{
+			return array();
+		}
 		$items = array();
 		foreach($xml->channel->item as $item)
 		{
