@@ -69,8 +69,8 @@ class crm_bill_row_object extends _int_object
 
 	/** returns task row ids
 		@attrib api=1
-		@returns boolean
-			reservation price
+		@returns array
+			task row ids
 	**/
 	function task_rows()
 	{

@@ -4394,6 +4394,15 @@ class crm_bill extends class_base
 			"confirm" => t("Oled kindel et soovid read uuesti j&auml;rjestada"),
 			"action" => "reorder_rows"
 		));
+
+		$tb->add_button(array(
+			"name" => "form_new_bill",
+			"img" => "cut.gif",
+			"tooltip" => t("Loo valitud ridadest uus arve"),
+			"confirm" => t("Oled kindel et kanda valitud read uuele arvele?"),
+			"action" => "form_new_bill"
+		));
+
 	}
 
 	function set_current_settings()
@@ -4687,6 +4696,20 @@ class crm_bill extends class_base
 	{
 		$bill = obj($arr["id"]);
 		$bill->reorder_rows();
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=form_new_bill
+	**/
+	function form_new_bill($arr)
+	{
+		$bill = obj($arr["id"]);
+		$new = $bill->form_new_bill($arr["sel_rows"]);
+		if($this->can("view" , $new))
+		{
+			return $this->mk_my_orb("change", array("id" => $new), CL_CRM_BILL);
+		}
 		return $arr["post_ru"];
 	}
 

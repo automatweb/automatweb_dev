@@ -108,6 +108,13 @@
 			</function>
 		</action>
 
+		<action name="form_new_bill">
+			<function name="form_new_bill">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="reconcile_rows">
 			<function name="reconcile_rows">
 				<arguments>

@@ -681,20 +681,31 @@ class crm_bill_obj extends _int_object
 		return $this->prop("customer");
 	}
 
-	private function add_row()
+	private function add_row($id = null)
 	{
-		$br = obj();
-		$br->set_class_id(CL_CRM_BILL_ROW);
+		if(is_oid($id))
+		{
+			$br = obj($id);
+		}
+		else
+		{
+			$br = obj();
+			$br->set_class_id(CL_CRM_BILL_ROW);
+		}
 		$br->set_parent($this->id());
 		$br->save();
 		$this->add_bill_comment_data(t("Lisati rida ID-ga"." ".$br->id()));
+		$this->connect(array(
+			"to" => $br->id(),
+			"type" => "RELTYPE_ROW"
+		));
 		return $br;
 	}
 
 	/** adds rows to bill
 		@attrib api=1 params=name
 		@param objects optional type=array
-			object ids (tasks, meetings, bugs, calls, task rows etc.)
+			object ids (tasks, meetings, bugs, calls, task rows , bill rows etc.)
 		@returns
 	**/
 	public function add_rows($arr)
@@ -711,6 +722,31 @@ class crm_bill_obj extends _int_object
 			$work = obj($id);
 			switch($work->class_id())
 			{
+				case CL_CRM_BILL_ROW:
+					$ex_bill = obj($work->parent());
+					$ex_bill->disconnect(array(
+						"from" => $work->id(),
+					));
+					$this->add_row($work->id());
+					if(sizeof($work->task_rows()))
+					{
+						$br_task_rows = new object_list();
+						$br_task_rows -> add($work->task_rows());
+
+						foreach($br_task_rows->arr() as $br_task_row)
+						{
+							$br_task_row->set_prop("bill_id" , $br_task_row->parent());
+							if(is_oid($br_task_row->prop("task")))
+							{
+								$br_task_object = obj($br_task_row->prop("task"));
+								$br_task_object->connect(array(
+									"to" => $br_task_row->parent(),
+									"type" => "RELTYPE_BILL"
+								));
+							}
+						}
+					}
+					break;
 				case CL_BUG:
 					$bug_row_ol = $work->get_billable_comments();
 					foreach($bug_row_ol->ids() as $id)
@@ -832,10 +868,6 @@ class crm_bill_obj extends _int_object
 					$br->connect(array(
 						"to" => $expense->id(),
 						"type" => "RELTYPE_EXPENSE"
-					));
-					$this->connect(array(
-						"to" => $br->id(),
-						"type" => "RELTYPE_ROW"
 					));
 					break;
 			}
@@ -1067,27 +1099,27 @@ class crm_bill_obj extends _int_object
 	**/
 	public function get_bill_rows()
 	{
-		$ol = new object_list();
-		$cons = $this->connections_from(array("type" => "RELTYPE_ROW"));
-		foreach($cons as $c)
-		{
-			$ol->add($c->prop("to"));
-		}
+		$ol = new object_list($this->get_bill_rows_filter());
 		return $ol;
 	}
 
-	/** returns bill rows data using object data list
-		@attrib api=1
-	**/
-	public function get_bill_rows_dat()
-	{ 
+	private function get_bill_rows_filter()
+	{
 		$filter = array();
 		$filter["class_id"] = CL_CRM_BILL_ROW;
 		$filter["site_id"] = array();
 		$filter["lang_id"] = array();
 		$filter["CL_CRM_BILL_ROW.RELTYPE_ROW(CL_CRM_BILL)"] = $this->id();
 		$filter["writeoff"] = new obj_predicate_not(1);
-		
+		return $filter;
+	}
+
+	/** returns bill rows data using object data list
+		@attrib api=1
+	**/
+	public function get_bill_rows_dat()
+	{
+		$filter = $this->get_bill_rows_filter();
 		$rowsres = array(
 			CL_CRM_BILL_ROW => array(
 				"task_row","prod","price","amt","has_tax"
@@ -2314,6 +2346,58 @@ class crm_bill_obj extends _int_object
 		return reset($ol->ids());
 	}
 
+	/** makes new bill using this bill data
+		@attrib api=1
+		@param rows optional type=array
+			row ids - cut/paste
+		@returns oid
+			new bill id
+	**/
+	public function form_new_bill($rows = array())
+	{
+		$nb = new object();
+		$nb->set_parent($this->parent());
+		$nb->set_class_id(CL_CRM_BILL);
+		$nb->save();
+		$save_props = array(
+			"impl",
+			"bill_date",
+			"bill_due_date_days",
+			"bill_due_date",
+			"bill_recieved",
+			"payment_mode",
+			"state",
+			"currency",
+			"disc",
+			"language",
+			"on_demand",
+			"mail_notify",
+			"approved",
+			"bill_trans_date",
+			"signers",
+			"customer_name",
+			"customer",
+			"customer_code",
+			"customer_address",
+			"ctp_text",
+			"warehouse",
+			"price_list",
+			"transfer_method",
+			"transfer_condition",
+			"selling_order",
+			"transfer_address",
+			"bill_rec_name",
+			"show_oe_add",
+			"project",
+		);
+		foreach($save_props as $prop)
+		{
+			$nb->set_prop($prop , $this->prop($prop));
+		}
+		$nb->save();
+		$nb->add_rows(array("objects" => $rows));//arr($this->mk_my_orb("change", array("id" => $nb->id()), CL_CRM_BILL));
+		return $nb->id();
+	}
 }
 
 ?>
