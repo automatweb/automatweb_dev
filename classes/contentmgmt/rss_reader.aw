@@ -83,9 +83,14 @@ class rss_reader extends class_base
 			$s .= $this->parse("ITEM");
 		}
 
+		$updated = $ob->get_updated_time();
+
 		$this->vars(array(
 			"ITEM" => $s,
-			"oid" => $ob->id()
+			"oid" => $ob->id(),
+			"name" => $ob->name(),
+			"rss_url" => $ob->prop("rss_url"),
+			"last_update" => $updated ? date("d/m/Y H:i:s" , $updated) : "",
 		));
 		return $this->parse();
 	}

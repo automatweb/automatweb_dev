@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.60 2009/04/16 12:19:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.61 2009/04/21 11:06:00 markop Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -197,6 +197,41 @@ class cache extends core
 		{
 			return $this->cfg["page_cache"]."/".$hash{0}."/".$key;
 		}
+	}
+
+	/** Returns cache file modified time
+		@attrib params=pos api=1
+
+		@param key required type=string
+			String that is used to set the filename in cache. 
+		@errors
+			none
+
+		@returns int
+			timestamp
+		@examples
+			$cache = get_instance('cache');
+			$cache->file_set('foo', 'bar');
+			sleep(5);
+			var_dump($cache->get_modified_time('foo');
+	**/
+	function get_modified_time($key)
+	{
+		$hash = md5($key);
+		//return $this->cfg["page_cache"]."/".$hash{0}."/".$hash{1}."/".$hash{2}."/".$key;
+		if ($key{0} == "/")
+		{
+			$file = $this->cfg["page_cache"]."/".$hash{0}.$key;
+		}
+		else
+		{
+			$file =  $this->cfg["page_cache"]."/".$hash{0}."/".$key;
+		}
+		if(is_readable($file))
+		{
+			return filectime($file);
+		}
+		return false;
 	}
 
 	/** Returns cache file contents if the cache is not older than the given time
