@@ -2062,7 +2062,7 @@ class crm_company_cust_impl extends class_base
 			CL_CRM_COMPANY_CUSTOMER_DATA => array(new obj_sql_func(OBJ_SQL_UNIQUE, "client_manager", "client_manager"))
 		));
 		$tmp = $ol->arr();
-		$ids = array();
+		$ids = array(-1);
 		foreach($tmp as $item)
 		{
 			if ($this->can("view", $item["client_manager"]))

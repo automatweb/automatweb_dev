@@ -42,6 +42,33 @@ class mrp_case_obj extends _int_object
 		return parent::set_prop("trykiarv", $value);
 	}
 
+	/**	Create customer data object for workspace owner and project customer if no customer data object for those two exists.
+		@attrib api=1 params=pos
+
+		@param oid required type=int acl=view
+	**/
+	public function awobj_set_customer($oid)
+	{
+		if(is_oid($oid) && $this->can("view", $oid))
+		{
+			try
+			{
+				$ws = $this->awobj_get_workspace();
+				$seller = $ws->prop("owner");
+				if(is_oid($seller) && $this->can("view", $seller))
+				{
+					// Make customer data object if doesn't exist.
+					obj($oid)->get_customer_relation(obj($seller), true);
+				}
+			}
+			catch(awex_mrp_case_workspace $E)
+			{
+				// Damnit!
+			}
+		}
+		return parent::set_prop("customer", $oid);
+	}
+
 /**
 	@attrib params=pos api=1
 	@param workspace type=CL_MRP_WORKSPACE
@@ -149,6 +176,15 @@ class mrp_case_obj extends _int_object
 	{
 		$ol = new object_list($this->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB)));
 		return $ol->arr();
+	}
+
+	/**
+		@attrib api=1
+	**/
+	public function get_job_names()
+	{
+		$ol = new object_list($this->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB)));
+		return $ol->names();
 	}
 
 	public function save($exclusive = false, $previous_state = null)

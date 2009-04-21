@@ -969,9 +969,9 @@ class crm_company_obj extends _int_object
 
 	/** returns customer relation object
 		@attrib api=1 params=pos
+		@param my_co optional
 		@param crea_if_not_exists optional
 			if no customer relation object, makes one
-		@param my_co optional
 		@returns object
 	**/
 	public function get_customer_relation($my_co = null, $crea_if_not_exists = false)
@@ -1316,6 +1316,22 @@ class crm_company_obj extends _int_object
 		}
 
 		$o->set_prop($prop, $ro->id());
+	}
+
+	/**
+		@attrib api=1
+		@returns Object list of all customers by customer data objects.
+	**/
+	public function get_customers_by_customer_data_objs()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_COMPANY.RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).seller" => $this->id(),
+			"CL_CRM_COMPANY.RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).buyer" => new obj_predicate_prop("id"),
+		));
+		return $ol;
 	}
 
 
