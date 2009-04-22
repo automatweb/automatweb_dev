@@ -1646,7 +1646,6 @@ class htmlclient extends aw_template
 
 		return $html;
 	}
-
 	function put_griditem($arr)
 	{
 		// support TOP and LEFT for now only
@@ -1661,31 +1660,6 @@ class htmlclient extends aw_template
 					break;
 			}
 		}
-		$caption_template = "CAPTION_" . $captionside;
-		// name refers to a VAR inside the template
-		$tpl_args = array($caption_template => $this->parse($caption_template));
-
-		if ( isset($this->tooltip_index) )
-		{
-			$this->tooltip_index++;
-		}
-		else
-		{
-			$this->tooltip_index = 1;
-		}
-
-		if(isset($arr["comment"]) && strlen($arr["comment"]))
-		{
-			$this->vars_safe(array(
-				"tooltip_index" => $this->tooltip_index,
-				"comment" => $arr["comment"]
-			));
-			$tpl_args["HELP_POPUP"] = $this->parse("HELP_POPUP");
-		}
-		else
-		{
-			$tpl_args["HELP_POPUP"] = "";
-		}
 
 		// reset all captions
 		$this->vars_safe(array(
@@ -1694,9 +1668,7 @@ class htmlclient extends aw_template
 			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
 			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
-			"GRID_ERR_MSG" => "",
-			"HELP_POPUP" => "",
-			"comment" => ifset($arr, "comment")
+			"GRID_ERR_MSG" => ""
 		));
 
 		if (!empty($arr["error"]))
@@ -1706,9 +1678,35 @@ class htmlclient extends aw_template
 			));
 		}
 
-		$this->vars_safe($tpl_args);
-		$tpl = "GRIDITEM";
+		if ( isset($this->tooltip_index) )
+		{
+			$this->tooltip_index++;
+		}
+		else
+		{
+			$this->tooltip_index = 1;
+		}
+		
+		$this->vars(array(
+			"tooltip_index" => $this->tooltip_index,
+			"comment" => ifset($arr, "comment"),
+		));
+		if(isset($arr["comment"]) && strlen($arr["comment"]))
+		{
+			$s_help_popup = $this->parse("HELP_POPUP");
+		}
+		else
+		{
+			$s_help_popup = "";
+		}
 
+		// name refers to a VAR inside the template
+		$caption_template = "CAPTION_" . $captionside;
+		$this->vars_safe(array(
+			$caption_template => $this->parse($caption_template),
+			"HELP_POPUP" => $s_help_popup,
+		));
+		$tpl = "GRIDITEM";
 
 		if (!empty($arr["no_caption"]))
 		{
