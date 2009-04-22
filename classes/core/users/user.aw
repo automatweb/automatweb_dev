@@ -2524,7 +2524,7 @@ EOF;
 			{
 				continue;
 			}
-			if ($dyc && !$dyc[$gn])
+			if (!empty($dyc) && empty($dyc[$gn]))
 			{
 				continue;
 			}

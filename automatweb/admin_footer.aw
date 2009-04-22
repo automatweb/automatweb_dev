@@ -448,7 +448,7 @@ if (isset($_SESSION["user_history_count"]) and $_SESSION["user_history_count"] >
 				if (isset($_pu["query"]))
 				{
 					parse_str($_pu["query"], $_bits);
-					if (@$_bits["class"] == @$bits["class"] && @$_bits["id"] == @$bits["id"] && @$_bits["group"] == @$bits["group"])
+					if (ifset($_bits, "class") == ifset($bits, "class") && ifset($_bits, "id") == ifset($bits, "id") && ifset($_bits, "group") == ifset($bits, "group"))
 					{
 						$has = true;
 						break;
