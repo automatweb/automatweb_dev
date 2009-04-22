@@ -2274,6 +2274,14 @@ class crm_bill extends class_base
 		die(iconv(aw_global_get("charset"), "UTF-8", $this->get_row_html($arr["id"] , $arr["field"])));
 	}
 
+	private function set_currency_inst()
+	{
+		if(!isset($this->currency_inst))
+		{
+			$this->currency_inst = get_instance(CL_CURRENCY);
+		}
+	}
+
 	function get_row_html($id,$field,$arr)
 	{
 		$row = obj($id);
@@ -2302,7 +2310,6 @@ class crm_bill extends class_base
 			case "unit":
 				$price_cc = "";//hind oma organisatsiooni valuutas
 				$sum_cc = "";//summa oma organisatsiooni valuutas
-
 				if(is_object($arr["obj_inst"]))
 				{
 					$bcurrency = $arr["obj_inst"]->get_bill_currency_id();
@@ -2316,7 +2323,8 @@ class crm_bill extends class_base
 				$ccurrency = $this->get_co_currency();
 				if($bcurrency && $ccurrency && $ccurrency != $bcurrency)
 				{
-					$cc_price = $curr_inst->convert(array(
+					$this->set_currency_inst();
+					$cc_price = $this->currency_inst->convert(array(
 						"from" => $bcurrency,
 						"to" => $ccurrency,
 						"sum" => $row->prop("price"),
