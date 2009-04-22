@@ -1773,7 +1773,7 @@ class conference_planning extends class_base
 					case "data_gen_response_date":
 						$day = explode(".", $value["date"]);
 						$time = explode(":", $value["time"]);
-						$stamp = mktime($time[0], $time[1], 0, $day[1], $day[0], $day[2]);
+						$stamp = mktime($time[0]?$time[0]:0, $time[1]?$time[1]:0, 0, $day[1], $day[0], $day[2]);
 						$obj->set_prop($property."_admin", $stamp);
 					break;
 					case "data_mf_event_type":
