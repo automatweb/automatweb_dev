@@ -4,7 +4,7 @@
 		displays the data that the docgen analyzer generates
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.31 2009/04/09 10:45:18 voldemar Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.32 2009/04/22 12:34:26 instrumental Exp $
 
 **/
 
@@ -191,7 +191,7 @@ class docgen_viewer extends class_base
 			))
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	/**
@@ -289,7 +289,7 @@ class docgen_viewer extends class_base
 		$this->vars(array(
 			"content" => nl2br($fc)
 		));
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	/**
@@ -338,7 +338,7 @@ class docgen_viewer extends class_base
 			))
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	function _req_mk_clf_tree(&$tv, $path, $classes)
@@ -465,7 +465,7 @@ class docgen_viewer extends class_base
 			"left" => $this->mk_my_orb("api_class_list"),
 			"right" => $this->mk_my_orb("intro"),
 			"doclist" => $this->mk_my_orb("doclist"),
-			// "topf" => $this->mk_my_orb("topf", array("id" => $arr["id"]))
+			"topf" => $this->mk_my_orb("topf", array("id" => $arr["id"]))
 		));
 		die($this->parse());
 	}
@@ -1265,7 +1265,7 @@ class docgen_viewer extends class_base
 			"list" => $list
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	function do_class_doclist()
@@ -1494,7 +1494,7 @@ class docgen_viewer extends class_base
 		$this->vars(array(
 			"content" => "&nbsp;&nbsp;".join(" | ", $ret)
 		));
-		return $this->parse();
+		die($this->parse());
 	}
 
 	/**
@@ -1534,7 +1534,7 @@ class docgen_viewer extends class_base
 			))
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	/**
@@ -1594,7 +1594,7 @@ class docgen_viewer extends class_base
 			))
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	/**
@@ -1633,7 +1633,7 @@ class docgen_viewer extends class_base
 			))
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	private function _get_exception_list()
@@ -1678,7 +1678,7 @@ class docgen_viewer extends class_base
 			))
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	function _req_mk_prop_tree($arr)
@@ -1753,7 +1753,7 @@ class docgen_viewer extends class_base
 			))
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	function _req_mk_clf_api_tree(&$tv, $path, $api_files, $classes)
