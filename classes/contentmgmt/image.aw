@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.45 2009/04/07 13:38:01 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.46 2009/04/22 13:26:05 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -907,6 +907,41 @@ class image extends class_base
 							break;
 
 					};
+
+					// if resize requested 
+					if ($GLOBALS["resize_x"] > 0 || $GLOBALS["resize_y"] > 0)
+					{
+						$im = imagecreatefromstring(file_get_contents($fname));
+
+						if ($GLOBALS["resize_y"])
+						{
+							$y = $GLOBALS["resize_y"];
+							$x = (int)(($GLOBALS["resize_y"] / $size[1]) * $size[0]);
+						}
+						else
+						{
+							$x = $GLOBALS["resize_x"];
+							$y = (int)(($GLOBALS["resize_x"] / $size[0]) * $size[1]);
+						}
+						$tmpimg = imagecreatetruecolor($x, $y);
+						imagecopyresampled($tmpimg, $im,0,0, 0, 0, $x, $y, $size[0], $size[1]);
+						imagedestroy($im);
+
+						header("Content-type: $type");
+						switch($size[2]) 
+						{
+							case "1":
+								imagegif($tmpimg);
+								break;
+							case "2":
+								imagejpeg($tmpimg);
+								break;
+							case "3":
+								imagepng($tmpimg);
+								break;
+						}
+						die();
+					}
 
 					// let the browser cache images
 					$cur_etag = md5($arr["file"]);
