@@ -15,6 +15,9 @@
 
 @property job_toolbar type=toolbar no_caption=1 store=no group=general,workflow
 
+@property real_material_table type=table no_caption=1 store=no group=general,workflow
+
+
 @default group=general
 	@property name type=text
 	@caption Nimi
@@ -343,6 +346,10 @@ class mrp_job extends class_base
 				$this->create_job_toolbar ($arr);
 				break;
 
+			case "real_material_table":
+				$this->draw_expense_list_table($arr["prop"]["vcl_inst"] , $arr["obj_inst"]);
+				break;
+
 			case "materials_sel_tbl":
 				$this->create_materials_sel_tbl($arr);
 				break;
@@ -499,6 +506,28 @@ class mrp_job extends class_base
 			"onClick" => "if (document.changeform.pj_change_comment.value.replace(/\\s+/, '') != '') { submit_changeform('abort') } else { alert('" . t("Kommentaar peab olema t&auml;idetud!") . "'); }",
 			"disabled" => $disabled_inprogress,
 		));
+
+		$toolbar->add_button(array(
+			"name" => "save_material",
+			"tooltip" => t("Salvesta materjali kulu"),
+			"caption" => html::div(array(
+				"content" => t("Salvesta materjali kulu"),
+				"id" => "save_pr_material_button",
+			)),
+			"onClick" => "
+				$.ajax({
+					type: 'POST',
+					url: '/automatweb/orb.aw?class=mrp_job&action=js_post_material',
+					data: $('input[name^=material_amount]').serialize()  + '&' + $('input[name=pj_job]').serialize()  + '&' + $('input[name=id]').serialize(),
+					success: function(msg){
+						alert('".t("Materjali kulu salvestatud")."' + msg);
+					}
+				});
+				x=document.getElementById('save_pr_material_button');
+				x.innerHTML='".t("Salvesta materjali kulu")."';
+			",
+		));
+
 	}
 
 	function state_changed($job, $com) // DEPRECATED
@@ -879,6 +908,23 @@ class mrp_job extends class_base
 	}
 
 /**
+	@attrib name=js_post_material all_args=1
+**/
+	public function js_post_material($arr)
+	{
+		if(!$this->can("view" , $arr["pj_job"]))
+		{
+			$arr["pj_job"] = $arr["id"];
+		}
+		$job = obj($arr["pj_job"]);
+		foreach($arr["material_amount"] as $prod => $amount)
+		{
+			$job->set_used_material_amount(obj($prod),$amount);
+		}
+		die();
+	}
+
+/**
 	@attrib name=end_shift
 	@param id required type=int
 **/
@@ -987,7 +1033,7 @@ class mrp_job extends class_base
 		{
 			$prod = $c->from()->prop("product");
 			$po = obj($prod, array(), CL_SHOP_PRODUCT);
-			$unitselect = $this->get_materials_unitselect($po, $c->from()->prop("unit"));
+			$unitselect = self::get_materials_unitselect($po, $c->from()->prop("unit"));
 			$t->define_data(array(
 				"name" => html::obj_change_url($po),
 				"amount" => html::textbox(array(
@@ -1040,7 +1086,7 @@ class mrp_job extends class_base
 					continue;
 				}
 				$po = obj($prod);
-				$unitselect = $this->get_materials_unitselect($po);
+				$unitselect = self::get_materials_unitselect($po);
 				$t->define_data(array(
 					"name" => html::obj_change_url($po),
 					"amount" => html::textbox(array(
@@ -1066,8 +1112,9 @@ class mrp_job extends class_base
 		}
 	}
 
-	function get_materials_unitselect($po, $value = null, $set_job_oid = false)
+	public static function get_materials_unitselect($po, $value = null, $set_job_oid = false)
 	{
+		enter_function("mrp_job::get_materials_unitselect");
 		$units = $po->instance()->get_units($po);
 		foreach($units as $i => $unit)
 		{
@@ -1119,6 +1166,7 @@ class mrp_job extends class_base
 		{
 			$unitselect = "-";
 		}
+		exit_function("mrp_job::get_materials_unitselect");
 		return $unitselect;
 	}
 
@@ -1160,7 +1208,9 @@ class mrp_job extends class_base
 				"expense" => html::textbox(array(
 					"name" => "material_amount[".$id."]",
 					"size" => 5,
-					"value" => $material->prop("uset_amount"),
+					"value" => $material->prop("used_amount"),
+					"onChange" => "x=document.getElementById('save_pr_material_button');
+						x.innerHTML='"."<font color=red>".t("Salvesta materjali kulu")."</font>"."';",
 				)),
 				"unit" => $material->prop("unit.name"),
 			));

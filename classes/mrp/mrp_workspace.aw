@@ -42,23 +42,22 @@
 				property my_stats_tbl type=table no_caption=1 parent=my_stats_hours_tbl store=no
 
 
-@groupinfo my_resources caption="Minu ressursid" submit=no parent=grp_printer_general
-@default group=my_resources
-	@layout my_resources_full type=hbox width=20%:80%
-	@layout my_resources_tree_box type=vbox closeable=1 area_caption=Ressursid&nbsp;&amp;&nbsp;kategooriad parent=my_resources_full
-		@property my_resources_tree type=text store=no no_caption=1 parent=my_resources_tree_box
-	@layout my_right_pane type=vbox parent=my_resources_full
-		@layout my_resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=my_right_pane
-			@property my_resource_deviation_chart type=google_chart no_caption=1 parent=my_resource_deviation_chart store=no
-		@layout my_resource_time_chart type=vbox closeable=1 area_caption=Ressursside&nbsp;ajakasutus parent=my_right_pane
-			@layout my_resource_time_limits type=hbox parent=my_resource_time_chart
-				@property my_resource_time_start type=date_select parent=my_resource_time_limits
-				@caption Alates
-				@property my_resource_time_end type=date_select parent=my_resource_time_limits
-				@caption Kuni
-			@property my_resource_time_chart type=google_chart no_caption=1 parent=my_resource_time_chart store=no
-		@property my_resources_list type=table store=no parent=my_right_pane no_caption=1
-
+@groupinfo my_resources caption="Minu ressursid" parent=grp_printer_general
+#@default group=my_resources
+#	@layout my_resources_full type=hbox width=20%:80%
+#	@layout my_resources_tree_box type=vbox closeable=1 area_caption=Ressursid&nbsp;&amp;&nbsp;kategooriad parent=my_resources_full
+#		@property my_resources_tree type=text store=no no_caption=1 parent=my_resources_tree_box
+#	@layout my_right_pane type=vbox parent=my_resources_full
+#		@layout my_resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=my_right_pane
+#			@property my_resource_deviation_chart type=google_chart no_caption=1 parent=my_resource_deviation_chart store=no
+#		@layout my_resource_time_chart type=vbox closeable=1 area_caption=Ressursside&nbsp;ajakasutus parent=my_right_pane
+#			@layout my_resource_time_limits type=hbox parent=my_resource_time_chart
+#				@property my_resource_time_start type=date_select parent=my_resource_time_limits
+#				@caption Alates
+#				@property my_resource_time_end type=date_select parent=my_resource_time_limits
+#				@caption Kuni
+#			@property my_resource_time_chart type=google_chart no_caption=1 parent=my_resource_time_chart store=no
+#		@property my_resources_list type=table store=no parent=my_right_pane no_caption=1
 
 #	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
 #	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
@@ -80,7 +79,7 @@
 	@property rescheduling_needed type=hidden
 
 	// elements main grouper
-	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources_manage,grp_resources_load,grp_users_tree,grp_users_mgr,grp_settings_def width=25%:75%
+	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources_manage,grp_resources_load,grp_users_tree,grp_users_mgr,grp_settings_def,my_resources width=25%:75%
 
 @default group=grp_customers
 	@property customers_toolbar type=toolbar store=no no_caption=1
@@ -145,20 +144,20 @@
 		@caption Otsi
 
 
-@default group=grp_resources_manage,grp_resources_load
+@default group=grp_resources_manage,grp_resources_load,my_resources
 	@property resources_toolbar type=toolbar store=no no_caption=1 group=grp_resources_manage
 	@layout resources_tree_box type=vbox closeable=1 area_caption=Ressursid&nbsp;&amp;&nbsp;kategooriad parent=vsplitbox
 		@property resources_tree type=text store=no no_caption=1 parent=resources_tree_box
 	@layout right_pane type=vbox parent=vsplitbox
-		@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=right_pane group=grp_resources_load
-			@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no group=grp_resources_load
-		@layout resource_time_chart type=vbox closeable=1 area_caption=Ressursside&nbsp;ajakasutus parent=right_pane group=grp_resources_load
-			@layout resource_time_limits type=hbox parent=resource_time_chart group=grp_resources_load
-				@property resource_time_start type=date_select parent=resource_time_limits group=grp_resources_load
+		@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=right_pane group=grp_resources_load,my_resources
+			@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no group=grp_resources_load,my_resources
+		@layout resource_time_chart type=vbox closeable=1 area_caption=Ressursside&nbsp;ajakasutus parent=right_pane group=grp_resources_load,my_resources
+			@layout resource_time_limits type=hbox parent=resource_time_chart group=grp_resources_load,my_resources
+				@property resource_time_start type=date_select parent=resource_time_limits group=grp_resources_load,my_resources
 				@caption Alates
-				@property resource_time_end type=date_select parent=resource_time_limits group=grp_resources_load
+				@property resource_time_end type=date_select parent=resource_time_limits group=grp_resources_load,my_resources
 				@caption Kuni
-			@property resource_time_chart type=google_chart no_caption=1 parent=resource_time_chart store=no group=grp_resources_load
+			@property resource_time_chart type=google_chart no_caption=1 parent=resource_time_chart store=no group=grp_resources_load,my_resources
 		@property resources_list type=table store=no parent=right_pane no_caption=1
 
 @default group=grp_resources_hours_report
@@ -200,7 +199,7 @@
 	#layout grp_persons_full type=hbox width=20%:80%
 		#layout grp_persons_left type=vbox parent=grp_persons_full
 			#layout persons_other_options type=vbox parent=grp_persons_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
-				@property poo_started_finished_by type=chooser parent=persons_other_options orient=vertical captionside=top
+				@property poo_started_finished_by type=table parent=persons_other_options captionside=top
 				@caption Kuva iga isiku kohta tema poolt
 		#layout grp_persons_right type=vbox parent=grp_persons_full
 			@layout grp_persons_right_top type=hbox parent=grp_persons_right width=50%:50%
@@ -1003,6 +1002,12 @@ class mrp_workspace extends class_base
 				}
 			}
 		}
+
+		if(!empty($arr["request"]["poo_started_finished_by"]))
+		{
+			$arr["obj_inst"]->set_prop("poo_started_finished_by", $arr["request"]["poo_started_finished_by"]);
+			$arr["obj_inst"]->save();
+		}
 	}
 
 	function get_property($arr)
@@ -1407,7 +1412,7 @@ class mrp_workspace extends class_base
 			case "resources_list":
 				$this->create_resources_list ($arr);
 				break;
-
+			case "my_resource_time_start":
 			case "resource_time_start":
 				if(isset($prop["value"]) and !is_numeric($prop["value"]))
 				{
@@ -1879,23 +1884,6 @@ class mrp_workspace extends class_base
 				break;
 
 			### persons tab
-			case "poo_started_finished_by":
-				if($arr["request"]["group"] == "my_stats")
-				{
-					$prop["caption"] = t("Kuva minu poolt");
-				}
-				$prop["options"] = array(
-					mrp_job_obj::PRSN_HNDL_S => t("... alustatud tegevusi"),
-					mrp_job_obj::PRSN_HNDL_F => t("... l&otilde;petatud tegevusi"),
-					mrp_job_obj::PRSN_HNDL_S_OR_F => t("... alustatud v&otilde;i l&otilde;petatud tegevusi"),
-					mrp_job_obj::PRSN_HNDL_S_AND_F => t("... alustatud ja l&otilde;petatud tegevusi"),
-				);
-				if(empty($prop["value"]))
-				{
-					$prop["value"] = mrp_job_obj::PRSN_HNDL_S;
-				}
-				break;
-
 			case "poo_job_done_only_by":
 				$prop["label"] = $prop["caption"];
 				if(!is_oid($this->get_hours_person($arr)))
@@ -1905,6 +1893,89 @@ class mrp_workspace extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	public function _get_poo_started_finished_by($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_titlebar_display(false);
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			"name" => "prsn_hndl_s",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "prsn_hndl_f",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "prsn_hndl_s_or_f",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "prsn_hndl_s_and_f",
+			"caption" => "",
+		));
+
+		$charts = array(
+			"prsn_hndl_s" => array(
+				"value" => mrp_job_obj::PRSN_HNDL_S,
+				"title" => t("Kasuta iga isiku t&ouml;&ouml;aja arvestuseks ainult neid operatsiooni t&ouml;&ouml;ajafragmente, mille on t&ouml;&ouml;sse/pausile pannud tema ise."),
+				"colors" => array(
+					"bfd6e8",
+					"0099ff",
+				),
+			),
+			"prsn_hndl_f" => array(
+				"value" => mrp_job_obj::PRSN_HNDL_F,
+				"title" => t("Kasuta iga isiku t&ouml;&ouml;aja arvestuseks ainult neid operatsiooni t&ouml;&ouml;ajafragmente, mille on t&ouml;&ouml;st/pausilt &auml;ra v&otilde;tnud tema ise."),
+				"colors" => array(
+					"0099ff",
+					"bfd6e8",
+				),
+			),
+			"prsn_hndl_s_or_f" => array(
+				"value" => mrp_job_obj::PRSN_HNDL_S_OR_F,
+				"title" => t("Kasuta iga isiku t&ouml;&ouml;aja arvestuseks k&otilde;iki operatsiooni t&ouml;&ouml;ajafragmente, mille ta on pannud t&ouml;&ouml;sse/pausile v&otilde;i t&ouml;&ouml;st/pausilt &auml;ra v&otilde;tnud."),
+				"colors" => array(
+					"0099ff",
+				),
+			),
+			"prsn_hndl_s_and_f" => array(
+				"value" => mrp_job_obj::PRSN_HNDL_S_AND_F,
+				"title" => t("Kasuta iga isiku t&ouml;&ouml;aja arvestuseks ainult neid operatsiooni t&ouml;&ouml;ajafragmente, mille on t&ouml;&ouml;sse/pausile pannud tema ise ja ka t&ouml;&ouml;st/pausilt &auml;ra v&otilde;tnud tema ise."),
+				"colors" => array(
+					"bfd6e8",
+				),
+			),
+		);
+		$data = array();
+		foreach($charts as $chart => $chart_prms)
+		{
+			$c = new google_chart();
+			$c->set_type(GCHART_VENN);
+			$c->add_data(array(100, 100, 0, 30));
+			$c->set_size(array(
+				"width" => 50,
+				"height" => 50,
+			));
+			$c->add_fill(array(
+				"area" => GCHART_FILL_BACKGROUND,
+				"type" => GCHART_FILL_SOLID,
+				"colors" => array(
+					"color" => $arr["obj_inst"]->prop("poo_started_finished_by") == $chart_prms["value"] ? "9bff79" : "e1e1e1",
+				),
+			));
+			$c->set_colors($chart_prms["colors"]);
+			$data[$chart] = html::href(array(
+				"url" => aw_url_change_var("poo_started_finished_by", $chart_prms["value"]),
+				"caption" => $c->get_html(),
+				"title" => $chart_prms["title"],
+			));
+		}
+
+		$t->define_data($data);
 	}
 
 	public function _get_resource_deviation_chart($arr)
@@ -2188,6 +2259,11 @@ class mrp_workspace extends class_base
 	{
 		$data = $this->get_hours($arr, $kf);
 
+		if(count($data[MRP_STATUS_INPROGRESS]) === 0 && count($data[MRP_STATUS_PAUSED]) === 0)
+		{
+			return PROP_IGNORE;
+		}
+
 		$arr["prop"]["value"] = "";
 		switch($kf)
 		{
@@ -2286,11 +2362,24 @@ class mrp_workspace extends class_base
 		{
 			$resources_folder = $arr["obj_inst"]->prop("resources_folder");
 		}
-		$resource_tree = new object_tree(array(
+
+		$resource_tree_filter = array(
 			"parent" => $resources_folder,
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
-		));
+		);
+		if($arr["request"]["group"] == "my_resources")
+		{
+			$resource_tree_filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_MRP_RESOURCE.oid" => $this->get_my_resources(),
+					"class_id" => CL_MENU,
+				)
+			));
+		}
+
+		$resource_tree = new object_tree($resource_tree_filter);
 		$ids = $resource_tree->ids();
 		$ids[] = $resources_folder;
 
@@ -2889,7 +2978,7 @@ class mrp_workspace extends class_base
 			),
 		);
 
-		$from_to = $this->db_fetch_row("SELECT MIN(aw_tm) as 'from', MAX(aw_tm) as 'to' FROM mrp_job_rows;");
+		$from_to = $this->db_fetch_row("SELECT MIN(aw_tm) as 'from', MAX(aw_tm) as 'to' FROM mrp_job_rows WHERE aw_tm > 0;");
 		$tm = $from_to["from"];
 		while($tm < $from_to["to"])
 		{
@@ -3486,6 +3575,30 @@ class mrp_workspace extends class_base
 		}
 	}
 
+	private function get_my_resources()
+	{
+		$filter = array();
+		$filter["class_id"] = CL_MRP_RESOURCE_OPERATOR;
+		$filter["site_id"] = array();
+		$filter["lang_id"] = array();
+		$person = get_current_person();
+		if(is_object($person))
+		{
+			$filter["profession"] = array_keys($person->get_profession_selection());
+		}
+		else
+		{
+			$filter["oid"] = 1;
+		}
+		$ol = new object_list($filter);
+		$resources = array();
+		foreach($ol->arr() as $o)
+		{
+			$resources[] = $o->prop("resource");
+		}
+		return $resources;
+	}
+
 	function create_resources_tree ($arr = array(), $attrb = "mrp_tree_active_item")
 	{
 		$this_object = $arr["obj_inst"];
@@ -3495,12 +3608,33 @@ class mrp_workspace extends class_base
 
 		### resource tree
 		$resources_folder = $this_object->prop ("resources_folder");
-		$resource_tree = new object_tree(array(
-			"parent" => $resources_folder,
-			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
-			"sort_by" => "objects.jrk",
-			// "CL_MRP_RESOURCE.state" => new obj_predicate_not(array($applicable_states)), // archived res removal std version
-		));
+
+		if($arr["request"]["group"] == "my_resources")
+		{
+			$filter = array(
+				"parent" => $resources_folder,
+				"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+				"sort_by" => "objects.jrk",
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_MRP_RESOURCE.oid" => $this->get_my_resources(),
+						"class_id" => CL_MENU,
+					)
+				)),
+			);
+		}
+		else
+		{
+			$filter = array(
+				"parent" => $resources_folder,
+				"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+				"sort_by" => "objects.jrk",
+				// "CL_MRP_RESOURCE.state" => new obj_predicate_not(array($applicable_states)), // archived res removal std version
+			);
+		}
+
+		$resource_tree = new object_tree($filter);
 
 		// archived res removal backwards compatible version
 		$this->mrp_remove_resources_from_tree = array();
@@ -3551,6 +3685,8 @@ class mrp_workspace extends class_base
 	{
 		$table = $arr["prop"]["vcl_inst"];
 		$this_object = $arr["obj_inst"];
+		$person = get_current_person();
+		$my = ($arr["request"]["group"] == "my_resources");
 
 		if (isset($arr["request"]["mrp_tree_active_item"]) and $this->can("view", $arr["request"]["mrp_tree_active_item"]))
 		{
@@ -3577,6 +3713,10 @@ class mrp_workspace extends class_base
 		$parent_o = new object($parent);
 		$owner = $arr["obj_inst"]->prop("RELTYPE_MRP_OWNER.name");
 		$table->set_caption(sprintf(t("%s ressursid kategoorias '%s'"), $owner, $parent_o->name()));
+		if($my)
+		{
+			$table->set_caption(sprintf(t("%s ressursid kategoorias '%s'"), $person->name(), $parent_o->name()));
+		}
 
 		$table->define_field(array(
 			"name" => "name",
@@ -3610,10 +3750,17 @@ class mrp_workspace extends class_base
 		$table->set_default_sortby("order");
 		$table->set_default_sorder("asc");
 
-		$object_list = new object_list(array(
+		$res_filter = array(
 			"class_id" => CL_MRP_RESOURCE,
 			"parent" => $parent,
-		));
+		);
+
+		if($my)
+		{
+			$res_filter["oid"] = $this->get_my_resources();
+		}
+
+		$object_list = new object_list($res_filter);
 
 		$resources = $object_list->arr();
 
@@ -4933,8 +5080,8 @@ class mrp_workspace extends class_base
 
 								if (in_array ($job->prop ("state"), $applicable_states))
 								{
-									$job->set_prop ("state", MRP_STATUS_PLANNED);
-									$job->save ();
+									$job->load_data();
+									$job->plan();
 								}
 							}
 							break;
@@ -5591,25 +5738,32 @@ class mrp_workspace extends class_base
 
 	function create_customers_tree($arr)
 	{
-		$co = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-		if (!is_object($co))
+		$co_id = $arr["obj_inst"]->prop("owner");
+		if (!$this->can("view", $co_id))
 		{
 			return;
+		}
+		else
+		{
+			$co = obj($co_id);
 		}
 
 		$t = $arr["prop"]["vcl_inst"];
 		classload("core/icons");
 
-		$t->set_root_name(t("Kliendid"));
-		$t->set_root_url(aw_url_change_var(array(
-			"cat" => null,
-			"cust" => null
-		)));
+		$t->add_item(0, array(
+			"id" => "cats",
+			"name" => t("Kliendid kategooriate kaupa"),
+			"url" => aw_url_change_var(array(
+				"cat" => null,
+				"cust" => null
+			))
+		));
 
 		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 		{
 			$nm = $c->prop("to.name");
-			$t->add_item(0, array(
+			$t->add_item("cats", array(
 				"id" => $c->prop("to"),
 				"name" => (isset($arr["request"]["cat"]) and $arr["request"]["cat"] == $c->prop("to")) ? "<b>".$nm."</b>" : $nm,
 				"url" => aw_url_change_var(array(
@@ -5631,6 +5785,42 @@ class mrp_workspace extends class_base
 		elseif (!empty($arr["request"]["cat"]))
 		{
 			$t->set_selected_item($arr["request"]["cat"]);
+		}
+
+		$t->add_item(0, array(
+			"id" => "alph",
+			"name" => t("Kliendid A - Z"),
+			"url" => aw_url_change_var(array(
+				"cat" => null,
+				"cust" => null
+			))
+		));
+		$A_to_Z = array();
+		foreach($co->get_customers_by_customer_data_objs()->names() as $oid => $name)
+		{
+			$char = strtoupper(substr(trim($name), 0, 1));
+			$A_to_Z[$char] = 1;
+			$t->add_item("alph_".$char, array(
+				"id" => $oid,
+				"name" => parse_obj_name($name),
+				"url" => aw_url_change_var(array(
+					"cust" => $oid,
+					"cat" => null
+				)),
+			));
+		}
+		ksort($A_to_Z);
+		foreach(array_keys($A_to_Z) as $char)
+		{
+			$t->add_item("alph", array(
+				"id" => "alph_".$char,
+				"name" => $char,
+				"url" => aw_url_change_var(array(
+					"cust" => null,
+					"cat" => null,
+					"alph" => $char,
+				)),
+			));
 		}
 	}
 
@@ -6678,13 +6868,6 @@ class mrp_workspace extends class_base
 		$j->callback_on_load($arr);
 		
 		$j->create_job_toolbar($arr);
-
-		$arr["prop"]["toolbar"]->add_button(array(
-			"name" => "save_material",
-			"tooltip" => t("Salvesta materjali kulu"),
-			"action" => "save_pj_material",
-			"confirm" => t("Oled kindel et soovid materjali kulu salvestada?"),
-		));
 
 		$arr["prop"]["toolbar"]->add_button(array(
 			"name" => "save_comment",

@@ -1,60 +1,8 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>my_resources_tree</name>
-            <group>my_resources</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>my_resources_tree_box</parent>
-            <field>my_resources_tree</field>
-      </property>
-      <property>
-            <name>my_resource_deviation_chart</name>
-            <group>my_resources</group>
-            <type>google_chart</type>
-            <no_caption>1</no_caption>
-            <parent>my_resource_deviation_chart</parent>
-            <store>no</store>
-            <field>my_resource_deviation_chart</field>
-      </property>
-      <property>
-            <name>my_resource_time_start</name>
-            <group>my_resources</group>
-            <type>date_select</type>
-            <parent>my_resource_time_limits</parent>
-            <field>my_resource_time_start</field>
-            <caption>Alates</caption>
-      </property>
-      <property>
-            <name>my_resource_time_end</name>
-            <group>my_resources</group>
-            <type>date_select</type>
-            <parent>my_resource_time_limits</parent>
-            <field>my_resource_time_end</field>
-            <caption>Kuni</caption>
-      </property>
-      <property>
-            <name>my_resource_time_chart</name>
-            <group>my_resources</group>
-            <type>google_chart</type>
-            <no_caption>1</no_caption>
-            <parent>my_resource_time_chart</parent>
-            <store>no</store>
-            <field>my_resource_time_chart</field>
-      </property>
-      <property>
-            <name>my_resources_list</name>
-            <group>my_resources</group>
-            <type>table</type>
-            <store>no</store>
-            <parent>my_right_pane</parent>
-            <no_caption>1</no_caption>
-            <field>my_resources_list</field>
-      </property>
-      <property>
             <name>rescheduling_needed</name>
-            <group>my_resources</group>
+            <group>my_stats</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -345,6 +293,7 @@
             <group>
                   <num_0>grp_resources_manage</num_0>
                   <num_1>grp_resources_load</num_1>
+                  <num_2>my_resources</num_2>
             </group>
             <table>objects</table>
             <field>meta</field>
@@ -356,7 +305,10 @@
       </property>
       <property>
             <name>resource_deviation_chart</name>
-            <group>grp_resources_load</group>
+            <group>
+                  <num_0>grp_resources_load</num_0>
+                  <num_1>my_resources</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -367,7 +319,10 @@
       </property>
       <property>
             <name>resource_time_start</name>
-            <group>grp_resources_load</group>
+            <group>
+                  <num_0>grp_resources_load</num_0>
+                  <num_1>my_resources</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -377,7 +332,10 @@
       </property>
       <property>
             <name>resource_time_end</name>
-            <group>grp_resources_load</group>
+            <group>
+                  <num_0>grp_resources_load</num_0>
+                  <num_1>my_resources</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -387,7 +345,10 @@
       </property>
       <property>
             <name>resource_time_chart</name>
-            <group>grp_resources_load</group>
+            <group>
+                  <num_0>grp_resources_load</num_0>
+                  <num_1>my_resources</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -401,6 +362,7 @@
             <group>
                   <num_0>grp_resources_manage</num_0>
                   <num_1>grp_resources_load</num_1>
+                  <num_2>my_resources</num_2>
             </group>
             <table>objects</table>
             <field>meta</field>
@@ -517,10 +479,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>chooser</type>
+            <type>table</type>
             <parent>persons_other_options</parent>
-            <orient>vertical</orient>
             <captionside>top</captionside>
+            <store>no</store>
             <caption>Kuva iga isiku kohta tema poolt</caption>
       </property>
       <property>
@@ -1771,7 +1733,6 @@
             </my_stats>
             <my_resources>
                   <caption>Minu ressursid</caption>
-                  <submit>no</submit>
                   <parent>grp_printer_general</parent>
             </my_resources>
             <grp_login_select_res>
@@ -1806,45 +1767,6 @@
             </PURCHASING_MANAGER>
       </reltypes>
       <layout>
-            <my_resources_full>
-                  <type>hbox</type>
-                  <width>20%:80%</width>
-                  <group>my_resources</group>
-                  <area_caption></area_caption>
-            </my_resources_full>
-            <my_resources_tree_box>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Ressursid&amp;amp;nbsp;&amp;amp;amp;&amp;amp;nbsp;kategooriad</area_caption>
-                  <parent>my_resources_full</parent>
-                  <group>my_resources</group>
-            </my_resources_tree_box>
-            <my_right_pane>
-                  <type>vbox</type>
-                  <parent>my_resources_full</parent>
-                  <group>my_resources</group>
-                  <area_caption></area_caption>
-            </my_right_pane>
-            <my_resource_deviation_chart>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Ressursi&amp;amp;nbsp;h&amp;amp;auml;lbe&amp;amp;nbsp;muutus&amp;amp;nbsp;ajas</area_caption>
-                  <parent>my_right_pane</parent>
-                  <group>my_resources</group>
-            </my_resource_deviation_chart>
-            <my_resource_time_chart>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Ressursside&amp;amp;nbsp;ajakasutus</area_caption>
-                  <parent>my_right_pane</parent>
-                  <group>my_resources</group>
-            </my_resource_time_chart>
-            <my_resource_time_limits>
-                  <type>hbox</type>
-                  <parent>my_resource_time_chart</parent>
-                  <group>my_resources</group>
-                  <area_caption></area_caption>
-            </my_resource_time_limits>
             <vsplitbox>
                   <type>hbox</type>
                   <group>
@@ -1855,6 +1777,7 @@
                         <num_4>grp_users_tree</num_4>
                         <num_5>grp_users_mgr</num_5>
                         <num_6>grp_settings_def</num_6>
+                        <num_7>my_resources</num_7>
                   </group>
                   <width>25%:75%</width>
                   <area_caption></area_caption>
@@ -1907,6 +1830,7 @@
                   <group>
                         <num_0>grp_resources_manage</num_0>
                         <num_1>grp_resources_load</num_1>
+                        <num_2>my_resources</num_2>
                   </group>
             </resources_tree_box>
             <right_pane>
@@ -1915,6 +1839,7 @@
                   <group>
                         <num_0>grp_resources_manage</num_0>
                         <num_1>grp_resources_load</num_1>
+                        <num_2>my_resources</num_2>
                   </group>
                   <area_caption></area_caption>
             </right_pane>
@@ -1923,19 +1848,28 @@
                   <closeable>1</closeable>
                   <area_caption>Ressursi&amp;amp;nbsp;h&amp;amp;auml;lbe&amp;amp;nbsp;muutus&amp;amp;nbsp;ajas</area_caption>
                   <parent>right_pane</parent>
-                  <group>grp_resources_load</group>
+                  <group>
+                        <num_0>grp_resources_load</num_0>
+                        <num_1>my_resources</num_1>
+                  </group>
             </resource_deviation_chart>
             <resource_time_chart>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Ressursside&amp;amp;nbsp;ajakasutus</area_caption>
                   <parent>right_pane</parent>
-                  <group>grp_resources_load</group>
+                  <group>
+                        <num_0>grp_resources_load</num_0>
+                        <num_1>my_resources</num_1>
+                  </group>
             </resource_time_chart>
             <resource_time_limits>
                   <type>hbox</type>
                   <parent>resource_time_chart</parent>
-                  <group>grp_resources_load</group>
+                  <group>
+                        <num_0>grp_resources_load</num_0>
+                        <num_1>my_resources</num_1>
+                  </group>
                   <area_caption></area_caption>
             </resource_time_limits>
             <resources_hours_full>

@@ -550,8 +550,10 @@ class mrp_job_obj extends _int_object
 			"job" => $this->id(),
 			"product" => $product->id()
 		));
-		$ol->set_prop("used_amount", $amount);
-		$ol->save();
+//nomaeitea errorit annab see hetkel
+//		$ol->set_prop("used_amount", $amount);
+//		$ol->save();
+		foreach($ol->arr() as $o){$o->set_prop("used_amount", $amount);$o->save();}
 	}
 
 /** Inserts job to schedule or reschedules it
@@ -566,7 +568,7 @@ class mrp_job_obj extends _int_object
 	{
 		if (!$this->mrp_job_data_loaded)
 		{
-			throw new awex_mrp_job_not_loaded("Operation can't be wxecuted in this mode. Call load_data() before trying again.");
+			throw new awex_mrp_job_not_loaded("Operation can't be executed in this mode. Call load_data() before trying again.");
 		}
 
 		$applicable_states = array (
@@ -1795,7 +1797,7 @@ class mrp_job_obj extends _int_object
 				::optional::
 			)
 	**/
-	public function get_person_hours($arr)
+	public static function get_person_hours($arr)
 	{
 		enter_function("mrp_job_obj::get_person_hours");
 		$i = get_instance(CL_MRP_JOB);
@@ -1825,12 +1827,12 @@ class mrp_job_obj extends _int_object
 			// First, get the hours the person started
 			$persons = count($arr["person"]) > 0 ? "aw_previous_pid IN (".implode(",", $arr["person"]).") AND" : "";
 			$q = $i->db_fetch_array(self::something_hours_build_query($arr, "aw_previous_pid", "pid", $persons));
-			$this->something_hours_insert_data($q, "pid", &$data, $arr);
+			self::something_hours_insert_data($q, "pid", &$data, $arr);
 
 			// Now, get the hours the person finished, but DIDN'T start
 			$persons = count($arr["person"]) > 0 ? "aw_pid IN (".implode(",", $arr["person"]).") AND aw_pid != aw_previous_pid AND" : "";
 			$q = $i->db_fetch_array(self::something_hours_build_query($arr, "aw_pid", "pid", $persons));
-			$this->something_hours_insert_data($q, "pid", &$data, $arr);
+			self::something_hours_insert_data($q, "pid", &$data, $arr);
 		}
 		else
 		{
@@ -2023,6 +2025,37 @@ class mrp_job_obj extends _int_object
 					$by_job ? $data["count"][$_state][$d[$key]][$d["job_id"]] = 0 : $data["count"][$_state][$d[$key]] = 0;
 				}
 			}
+		}
+	}
+
+	/**
+		@attrib name=get_material_expenses params=name
+
+		@param id required type=int/array
+
+		@param odl optional type=bool default=false
+
+	**/
+	public static function get_material_expenses($arr)
+	{
+		$prms = array(
+			"class_id" => CL_MATERIAL_EXPENSE,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"job" => $arr["id"],
+		);
+		if(empty($arr["odl"]))
+		{
+			return new object_list($prms);
+		}
+		else
+		{
+			return new object_data_list(
+				$prms,
+				array(
+					CL_MATERIAL_EXPENSE => array("product", "product.name" => "product_name", "amount", "unit", "planning", "movement", "job")
+				)
+			);
 		}
 	}
 }

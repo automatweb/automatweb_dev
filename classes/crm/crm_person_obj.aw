@@ -58,6 +58,48 @@ class crm_person_obj extends _int_object
 		return $rank;
 	}
 
+
+	/** returns person profession selection
+		@attrib api=1
+		@param co optional type=oid
+			company id
+		@param units optional type=array
+			unit object ids
+		@return array
+			profession names
+	**/
+	public function get_profession_selection($co, $units = array())
+	{
+		$this->set_current_jobs();
+		$professions = array();
+		foreach($this->current_jobs->arr() as $o)
+		{
+			if(sizeof($units) && !in_array($o->prop("unit") , $units))//kui pole ette antud yksustes j2tab vahele
+			{
+				continue;
+			}
+			if((!$co || $co == $o->prop("org")) && $o->prop("profession.name"))
+			{
+				$professions[$o->prop("profession")] = $o->prop("profession.name");
+			}
+		}
+
+//vana versiooni toimimiseks...kui kedagi segab, v6ib 2ra kaotada
+		if(!sizeof($professions))
+		{
+			foreach($this->connections_from(array("type" => "RELTYPE_RANK")) as $c)
+			{
+				if(sizeof($professions) && !in_array($c->prop("to") , $units))//kui pole ette antud yksustes j2tab vahele
+				{
+					continue;
+				}
+				$professions[$c->prop("to")] = $c->prop("to.name");
+			}
+		}
+
+		return $sections;
+	}
+
 	function set_name($v)
 	{
 		$v = htmlspecialchars($v);
