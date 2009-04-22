@@ -16,7 +16,7 @@ class class_index
 	// update collects implemented interfaces in this, so we can update the interface definitions with the list of classes that implement that interface
 	private static $implements_interface = array();
 
-	// collect and save ancestor hierarchies to imporve is_extension_of() performance. array(parent1 => array(child1, ...), ...)
+	// collect and save ancestor hierarchies to improve is_extension_of() performance. array(parent1 => array(child1, ...), ...)
 	private static $parent_index = array();
 
 	// initial solution. additional classes that can handle requests.
@@ -37,8 +37,6 @@ class class_index
 	**/
 	public static function update($full_update = true)
 	{
-if ($_SERVER["REMOTE_ADDR"] != "213.219.102.204")
-return;
 		// ...
 		$max_execution_time_prev_val = ini_get("max_execution_time");
 		set_time_limit(self::UPDATE_EXEC_TIMELIMIT);
