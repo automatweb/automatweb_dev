@@ -9,11 +9,11 @@
 @property author type=relpicker reltype=RELTYPE_AUTHOR
 @caption Autor
 
-@layout frame type=hbox width=20%:80%
+@layout frame type=hbox width=50%:50% closeable=1 area_caption="Sisu"
 
 	@layout left_pane type=vbox parent=frame
 
-		@property description type=textarea parent=left_pane
+		@property description type=textarea cols=70 rows=30 captionside=top parent=left_pane
 		@caption Kirjeldus
 	
 	@layout right_pane type=vbox parent=frame
