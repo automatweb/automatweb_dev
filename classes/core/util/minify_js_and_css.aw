@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.15 2009/04/16 11:41:27 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.16 2009/04/22 10:05:48 instrumental Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 @classinfo  maintainer=hannes
@@ -237,7 +237,7 @@ class minify_js_and_css extends class_base
 		die();
 	}
 	
-	function parse_admin_header($str)
+	public static function parse_admin_header($str)
 	{
 		$s_out ="";
 		$s_salt = "this_is_a_salty_string_";

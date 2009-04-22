@@ -1953,7 +1953,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@returns
 				true, if the argument is a valid ip address, false if not
 		**/
-		function is_ip($addr)
+		public static function is_ip($addr)
 		{
 			// match 1 to 3 digits
 			$oct = "(\d{1,3}?)";

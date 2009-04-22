@@ -1093,8 +1093,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$this->db_query("UNLOCK TABLES");
 		}
 
-		unset($GLOBALS["__obj_sys_objd_memc"][$objdata["brother_of"]]);
-		unset($GLOBALS["__obj_sys_objd_memc"][$objdata["oid"]]);
+		if(isset($GLOBALS["__obj_sys_objd_memc"][$objdata["brother_of"]]))
+		{
+			unset($GLOBALS["__obj_sys_objd_memc"][$objdata["brother_of"]]);
+		}
+		if(isset($GLOBALS["__obj_sys_objd_memc"][$objdata["oid"]]))
+		{
+			unset($GLOBALS["__obj_sys_objd_memc"][$objdata["oid"]]);
+		}
 
 		unset($this->read_properties_data_cache[$objdata["oid"]]);
 		unset($this->read_properties_data_cache[$objdata["brother_of"]]);
@@ -2518,7 +2524,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if (is_array($new_t))
 				{
 					$objt_name = $tmp_cur_obj_name;
-					$tbl = $tbl_r = reset(array_keys($new_t));
+					$new_t_keys = array_keys($new_t);
+					$tbl = $tbl_r = reset($new_t_keys);
 					if ($tbl != "")
 					{
 						$field = $new_t[$tbl]["index"];

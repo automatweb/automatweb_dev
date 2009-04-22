@@ -1534,8 +1534,8 @@ class htmlclient extends aw_template
 				}
 
 				//miski errori n2itamise v6imalus layouti sisse
-				$this->vars(array("layout_error" => $_SESSION["layout_error"][$layout_name] ? $_SESSION["layout_error"][$layout_name] : ""));
-				$this->vars(array("LAYOUT_ERROR_SUB" => $_SESSION["layout_error"][$layout_name] ? $this->parse("LAYOUT_ERROR_SUB") : ""));
+				$this->vars(array("layout_error" => !empty($_SESSION["layout_error"][$layout_name]) ? $_SESSION["layout_error"][$layout_name] : ""));
+				$this->vars(array("LAYOUT_ERROR_SUB" => !empty($_SESSION["layout_error"][$layout_name]) ? $this->parse("LAYOUT_ERROR_SUB") : ""));
 				unset($_SESSION["layout_error"][$layout_name]);
 
 				$this->vars_safe(array(
@@ -1674,7 +1674,7 @@ class htmlclient extends aw_template
 			$this->tooltip_index = 1;
 		}
 
-		if(strlen($arr["comment"]))
+		if(isset($arr["comment"]) && strlen($arr["comment"]))
 		{
 			$this->vars_safe(array(
 				"tooltip_index" => $this->tooltip_index,
@@ -1696,7 +1696,7 @@ class htmlclient extends aw_template
 			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
 			"GRID_ERR_MSG" => "",
 			"HELP_POPUP" => "",
-			"comment" => $arr["comment"]
+			"comment" => ifset($arr, "comment")
 		));
 
 		if (!empty($arr["error"]))

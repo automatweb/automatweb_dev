@@ -151,7 +151,7 @@ class _int_object_loader extends core
 		else
 		if (is_object($param))
 		{
-			if (is_a($param, "object") || is_a($param, "_int_object"))
+			if ($param instanceof object || $param instanceof _int_object)
 			{
 				return $param->id();
 			}
@@ -187,17 +187,17 @@ class _int_object_loader extends core
 		else
 		if (is_object($param))
 		{
-			if (is_a($param, "object") || is_a($param, "_int_object"))
+			if ($param instanceof object || $param instanceof _int_object)
 			{
 				return array($param->id());
 			}
 			else
-			if (is_a($param, "object_list"))
+			if ($param instanceof object_list)
 			{
 				return $param->ids();
 			}
 			else
-			if (is_a($param, "object_tree"))
+			if ($param instanceof object_tree)
 			{
 				return $param->ids();
 			}
