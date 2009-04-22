@@ -313,7 +313,15 @@ class calendar_event extends class_base
 				break;
 
 			case "end":
-				if(!is_numeric($prop["value"]["year"]) || !is_numeric($prop["value"]["month"]) || !is_numeric($prop["value"]["day"]) || !is_numeric($prop["value"]["hour"]) || !is_numeric($prop["value"]["minute"]))
+				if(!is_numeric($prop["value"]["hour"]))
+				{
+					$prop["value"]["hour"] = 0;
+				}
+				if(!is_numeric($prop["value"]["minute"]))
+				{
+					$prop["value"]["minute"] = 0;
+				}
+				if(!is_numeric($prop["value"]["year"]) || !is_numeric($prop["value"]["month"]) || !is_numeric($prop["value"]["day"]))// || !is_numeric($prop["value"]["hour"]) || !is_numeric($prop["value"]["minute"]))
 				{
 					// There better be some good explanation why I can't use $arr["prop"]["value"] for date_select.
 					$request = &$arr["request"];
