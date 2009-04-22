@@ -13,23 +13,29 @@
 @property valid_to type=date_select field=valid_to
 @caption Kehtib kuni
 
-@property groups type=relpicker multiple=1 reltype=RELTYPE_GROUP field=groups
+@property jrk type=textbox size=4 table=objects
+@caption Jrk
+
+@property groups type=relpicker multiple=1 reltype=RELTYPE_GROUP store=connect
 @caption Kehtib gruppidele
 
-@property orgs type=relpicker multiple=1 reltype=RELTYPE_ORG field=orgs
+@property crm_categories type=relpicker multiple=1 reltype=RELTYPE_ORG_CAT store=connect
+@caption Kehtib kliendigruppidele
+
+@property orgs type=relpicker multiple=1 reltype=RELTYPE_ORG store=connect
 @caption Kehtib organisatsioonidele
 
-@property persons type=relpicker multiple=1 reltype=RELTYPE_PERSON field=persons
+@property persons type=relpicker multiple=1 reltype=RELTYPE_PERSON store=connect
 @caption Kehtib isikutele
+
+@property warehouses type=relpicker multiple=1 reltype=RELTYPE_WAREHOUSE store=connect
+@caption Kehtib ladudele
 
 @property discount type=textbox field=discount
 @caption Allahindlus
 
 @property base_price type=checkbox field=base_price
 @caption Baashindade alusel
-
-@property prod_category type=relpicker multiple=1 reltype=RELTYPE_CATEGORY field=categories
-@caption Kaubagrupp
 
 @reltype GROUP value=1 clid=CL_GROUP
 @caption Grupp
@@ -42,6 +48,12 @@
 
 @reltype CATEGORY value=4 clid=CL_SHOP_PRODUCT_CATEGORY
 @caption Kaubagrupp
+
+@reltype ORG_CAT value=5 clid=CL_CRM_CATEGORY
+@caption Kliendigrupp
+
+@reltype WAREHOUSE value=6 clid=CL_SHOP_WAREHOUSE
+@caption Ladu
 */
 
 class shop_price_list extends class_base
@@ -116,6 +128,7 @@ class shop_price_list extends class_base
 			case "orgs":
 			case "persons":
 			case "categories":
+			case "org_cats":
 			case "discount":
 				$this->db_add_col($t, array(
 					"name" => $f,
@@ -131,6 +144,7 @@ class shop_price_list extends class_base
 			case "orgs":
 			case "persons":
 			case "categories":
+			case "org_cats":
 				$this->db_query("ALTER TABLE aw_shop_price_list ADD INDEX(".$f.")");
 		}
 		return $ret;

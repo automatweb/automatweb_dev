@@ -17,14 +17,35 @@
             <caption>Kehtib kuni</caption>
       </property>
       <property>
+            <name>jrk</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
+            <field>jrk</field>
+            <caption>Jrk</caption>
+      </property>
+      <property>
             <name>groups</name>
             <table>aw_shop_price_list</table>
             <group>general</group>
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_GROUP</reltype>
+            <store>connect</store>
             <field>groups</field>
             <caption>Kehtib gruppidele</caption>
+      </property>
+      <property>
+            <name>crm_categories</name>
+            <table>aw_shop_price_list</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_ORG_CAT</reltype>
+            <store>connect</store>
+            <field>crm_categories</field>
+            <caption>Kehtib kliendigruppidele</caption>
       </property>
       <property>
             <name>orgs</name>
@@ -33,6 +54,7 @@
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_ORG</reltype>
+            <store>connect</store>
             <field>orgs</field>
             <caption>Kehtib organisatsioonidele</caption>
       </property>
@@ -43,8 +65,20 @@
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_PERSON</reltype>
+            <store>connect</store>
             <field>persons</field>
             <caption>Kehtib isikutele</caption>
+      </property>
+      <property>
+            <name>warehouses</name>
+            <table>aw_shop_price_list</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_WAREHOUSE</reltype>
+            <store>connect</store>
+            <field>warehouses</field>
+            <caption>Kehtib ladudele</caption>
       </property>
       <property>
             <name>discount</name>
@@ -61,16 +95,6 @@
             <type>checkbox</type>
             <field>base_price</field>
             <caption>Baashindade alusel</caption>
-      </property>
-      <property>
-            <name>prod_category</name>
-            <table>aw_shop_price_list</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <reltype>RELTYPE_CATEGORY</reltype>
-            <field>categories</field>
-            <caption>Kaubagrupp</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRICE_LIST</syslog_type>
@@ -108,6 +132,16 @@
                   <clid>CL_SHOP_PRODUCT_CATEGORY</clid>
                   <caption>Kaubagrupp</caption>
             </CATEGORY>
+            <ORG_CAT>
+                  <value>5</value>
+                  <clid>CL_CRM_CATEGORY</clid>
+                  <caption>Kliendigrupp</caption>
+            </ORG_CAT>
+            <WAREHOUSE>
+                  <value>6</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </WAREHOUSE>
       </reltypes>
 </properties>
 
