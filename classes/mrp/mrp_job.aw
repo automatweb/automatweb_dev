@@ -1077,18 +1077,18 @@ class mrp_job extends class_base
 			}
 			else
 			{
-				$unitopts[$unit] = obj($unit)->name();
+				$unitopts[$unit->id()] = obj($unit)->name();
 			}
 		}
 		if(count($units) == 1)
 		{
 			if ($set_job_oid)
 			{
-				$_name = "jobs[$set_job_oid][unit][".$prod."]";
+				$_name = "jobs[$set_job_oid][unit][".$po->id()."]";
 			}
 			else
 			{
-				$_name = "unit[".$prod."]";
+				$_name = "unit[".$po->id()."]";
 			}
 			$unitselect = obj(reset($units))->name().html::hidden(array(
 				"name" => $_name,

@@ -151,6 +151,90 @@ class mrp_order_print_obj extends mrp_order_obj
 
 		$this->sel_cover_list = null;
 	}
+
+	public function get_customer_name()
+	{
+		if ($GLOBALS["object_loader"]->can("view", $this->prop("customer")))
+		{
+			return $this->prop("customer.name");
+		}
+		return $this->prop("e_orderer_co");
+	}
+
+	public function get_contact_name()
+	{
+		if ($GLOBALS["object_loader"]->can("view", $this->prop("orderer_person")))
+		{
+			return $this->prop("orderer_person.name");
+		}
+		return $this->prop("e_orderer_person");
+	}
+
+	public function get_contact_mail()
+	{
+		if ($GLOBALS["object_loader"]->can("view", $this->prop("orderer_person")))
+		{
+			return $this->prop("orderer_person.email.mail");
+		}
+		return $this->prop("e_orderer_email");
+	}
+
+	public function get_saved_files()
+	{
+		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_SAVED_FILE")));
+		return $ol->arr();
+	}
+
+	public function get_sent_offers()
+	{
+		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_SENT_OFFER")));
+		$r = array();
+		foreach($ol->arr() as $item)
+		{
+			if ($item->do_send)
+			{
+				$r[] = $item;
+			}
+		}
+		return $r;
+	}
+
+	public function get_pending_offers()
+	{
+		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_SENT_OFFER")));
+		$r = array();
+		foreach($ol->arr() as $item)
+		{
+			if (!$item->do_send)
+			{
+				$r[] = $item;
+			}
+		}
+		return $r;
+	}
+
+	public function file_is_sent($file)
+	{
+		// find sent thingies connected to this and the file
+		foreach($this->get_sent_offers() as $offer)
+		{
+			if ($offer->is_connected_to(array("to" => $file->id())))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function get_colour_options()
+	{
+		return array(
+			t("1/0 - &uuml;helt poolt &uuml;he v&auml;rviga tr&uuml;kitud"),
+			t("1/1 - m&otilde;lemalt poolt 1 v&auml;rviga tr&uuml;kitud"),
+			t("4/0 - &uuml;helt poolt CMYK t&auml;isv&auml;rvitr&uuml;kis (saab tr&uuml;kkida v&auml;rvilisi fotosid)"),
+			t("4/4 - m&otilde;lemalt poolt v&auml;rviline")
+		);
+	}
 }
 
 ?>

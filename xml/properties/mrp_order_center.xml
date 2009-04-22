@@ -19,6 +19,15 @@
             <caption>Ressursihalduse t&amp;amp;ouml;&amp;amp;ouml;laud</caption>
       </property>
       <property>
+            <name>mail_template</name>
+            <table>aw_mrp_order_center</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAIL_TEMPLATE</reltype>
+            <field>aw_mail_template</field>
+            <caption>Saadetud pakkumise alus</caption>
+      </property>
+      <property>
             <name>order_tb</name>
             <table>aw_mrp_order_center</table>
             <group>order_order</group>
@@ -170,6 +179,11 @@
                   <clid>CL_MRP_ORDER_COVER</clid>
                   <caption>Kate</caption>
             </MRP_COVER>
+            <MAIL_TEMPLATE>
+                  <value>6</value>
+                  <clid>CL_MRP_ORDER_SENT</clid>
+                  <caption>Saadetud pakkumise alus</caption>
+            </MAIL_TEMPLATE>
       </reltypes>
       <layout>
             <order_split>

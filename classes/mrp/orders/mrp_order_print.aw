@@ -47,9 +47,21 @@
 	@property final_price type=textbox size=10 field=aw_final_price 
 	@caption L&otilde;plik hind
 
-@default group=preview
+@default group=preview_preview
+
+	@property preview_tb type=toolbar store=no no_caption=1
 
 	@property preview type=text store=no no_caption=1
+
+@default group=preview_saved
+
+	@property prev_tb type=toolbar store=no no_caption=1
+
+	@property files_table type=table store=no no_caption=1
+
+	@property pending_table type=table store=no no_caption=1
+
+	@property sent_table type=table store=no no_caption=1
 
 @default group=data
 
@@ -107,7 +119,9 @@
 @groupinfo grp_case_workflow caption="Ressursid ja t&ouml;&ouml;voog"
 @groupinfo grp_case_materials caption="Materjalid"
 @groupinfo price caption="Hind"
-@groupinfo preview caption="Eelvaade" no_submit=1
+@groupinfo preview caption="Eelvaade" 
+	@groupinfo preview_preview caption="Eelvaade" submit=no parent=preview
+	@groupinfo preview_saved caption="Salvestatud" parent=preview
 
 @reltype SEL_COVER value=10 clid=CL_MRP_ORDER_COVER
 @caption Kate
@@ -120,6 +134,12 @@
 
 @reltype COVER_PAPER value=13 clid=CL_SHOP_PRODUCT
 @caption Kaanepaber
+
+@reltype SAVED_FILE value=1 clid=CL_FILE
+@caption Salvestatud pakkumine
+
+@reltype SENT_OFFER value=2 clid=CL_MRP_ORDER_SENT
+@caption Saadetud pakkumine
 
 */
 
@@ -142,12 +162,7 @@ class mrp_order_print extends mrp_order
 		{
 			case "e_main_colour":
 			case "e_cover_colour":
-				$arr["prop"]["options"] = array(
-					t("1/0 - &uuml;helt poolt &uuml;he v&auml;rviga tr&uuml;kitud"),
-					t("1/1 - m&otilde;lemalt poolt 1 v&auml;rviga tr&uuml;kitud"),
-					t("4/0 - &uuml;helt poolt CMYK t&auml;isv&auml;rvitr&uuml;kis (saab tr&uuml;kkida v&auml;rvilisi fotosid)"),
-					t("4/4 - m&otilde;lemalt poolt v&auml;rviline")
-				);
+				$arr["prop"]["options"] = $arr["obj_inst"]->get_colour_options();
 				break;
 		}
 
@@ -351,6 +366,14 @@ class mrp_order_print extends mrp_order
 
 	function _set_workflow_table($arr)
 	{
+/*		$case = $arr["obj_inst"]->get_case();	
+		$tmp = array(
+			"prop" => &$arr["prop"],
+			"obj_inst" => $case,
+			"request" => $arr["request"]
+		);
+		get_instance(CL_MRP_CASE)->set_property($tmp);*/
+
 		foreach(safe_array($arr["request"]["sc"]) as $id => $comm)
 		{
 			$jo = obj($id);
@@ -370,17 +393,18 @@ class mrp_order_print extends mrp_order
 		}
 	}
 
-	function callback_post_save($arr)
+	function callback_pre_save($arr)
 	{
 		if ($arr["request"]["group"] == "grp_case_workflow")
 		{
 			$case = $arr["obj_inst"]->get_case();	
+			$arr["request"]["mrp_workspace"] = $arr["obj_inst"]->workspace()->mrp_workspace;
 			$tmp = array(
 				"prop" => &$arr["prop"],
 				"obj_inst" => $case,
 				"request" => $arr["request"]
 			);
-			get_instance(CL_MRP_CASE)->callback_post_save($tmp);
+			get_instance(CL_MRP_CASE)->callback_pre_save($tmp);
 		}
 	}
 
@@ -777,28 +801,48 @@ class mrp_order_print extends mrp_order
 
 	function _get_preview($arr)
 	{
+		$arr["prop"]["value"] = $this->generate_preview($arr["obj_inst"]);
+	}
+
+	public function generate_preview($o)
+	{
 		$this->read_template("preview.tpl");
 
 		// logo and other data from seller/buyer
-		$this->_preview_insert_co_data($arr["obj_inst"]->workspace()->owner_co(), "seller");
-		if ($this->can("view", $arr["obj_inst"]->customer))
+		$this->_preview_insert_co_data($o->workspace()->owner_co(), "seller");
+		if ($this->can("view", $o->customer))
 		{
-			$this->_preview_insert_co_data($arr["obj_inst"]->customer(), "orderer");
+			$this->_preview_insert_co_data($o->customer(), "orderer");
+			$this->vars(array(
+				"orderer_address" => $o->customer()->get_address_string(),
+				"orderer_phone" => $o->customer()->prop("fake_phone"),
+				"orderer_fax" => $o->customer()->prop("fake_fax"),
+				"orderer_contact" => $o->get_contact_name(),
+			));
 		}
 		else
 		{
 			$this->vars(array(
-				"orderer_name" => $arr["obj_inst"]->e_orderer_co,
-				"orderer_name" => $arr["obj_inst"]->e_orderer_co,
+				"orderer_name" => $o->e_orderer_co,
+				"orderer_contact" => $o->e_orderer_person,
+				"orderer_phone" => $o->e_orderer_phone,
 			));
 		}
 
+		$this->vars($o->properties());
+		$colo = $o->get_colour_options();
 		$this->vars(array(
-			"price" => $arr["obj_inst"]->get_total_price(),
-			"name" => $arr["obj_inst"]->name()
+			"price" => $o->get_total_price(),
+			"name" => $o->name(),
+			"e_format" => $o->e_format()->name(),
+			"e_covers" => $o->e_covers ? t("Jah") : t("Ei"),
+			"e_cover_colour" => $colo[$o->e_cover_colour],
+			"e_main_colour" => $colo[$o->e_main_colour],
+			"e_cover_paper" => $o->e_cover_paper()->name(),
+			"e_main_paper" => $o->e_main_paper()->name(),
 		));
 
-		$arr["prop"]["value"] = $this->parse();
+		return $this->parse();
 	}
 
 	private function _preview_insert_co_data($o, $prefix)
@@ -815,6 +859,205 @@ class mrp_order_print extends mrp_order
 			));
 		}
 		$this->vars($d);
+	}
+
+	public function _get_preview_tb($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_save_button();
+	}
+
+	public function _set_preview($arr)
+	{
+		$conv = get_instance("core/converters/html2pdf");
+		if (!$conv->can_convert())
+		{
+			die("no pdf converter available!");
+		}
+		$id = file::create_file_from_string(array(
+			"parent" => $arr["obj_inst"]->id(),
+			"content" => $conv->convert(array(
+				"source" => $this->generate_preview($arr["obj_inst"])
+			)),
+			"name" => sprintf(t("Pakkumine %s tellimusele %s (%s).pdf"),
+				$arr["obj_inst"]->get_customer_name(),
+				$arr["obj_inst"]->name(),
+				date("d.m.Y")
+			),
+			"type" => "application/pdf"
+		));
+
+		$arr["obj_inst"]->connect(array(
+			"to" => $id,
+			"type" => "RELTYPE_SAVED_FILE"
+		));
+	}
+
+	private function _init_files_table($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Fail"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Loodud"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Looja"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "sent",
+			"caption" => t("Saadetud"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "send",
+			"caption" => t("Saada"),
+			"align" => "center",
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	public function _get_files_table($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_files_table($t);
+
+		foreach($arr["obj_inst"]->get_saved_files() as $item)
+		{
+			$t->define_data(array(
+				"name" => html::href(array(
+					"caption" => $item->name(),
+					"url" => file::get_url($item->id(), $item->name())
+				)),
+				"created" => $item->created(),
+				"createdby" => get_instance(CL_USER)->get_person_for_uid($item->createdby())->name(),
+				"sent" => $arr["obj_inst"]->file_is_sent($item) ? t("Jah") : t("Ei"),
+				"send" => html::href(array(
+					"caption" => t("Saada"),
+					"url" => html::get_new_url(CL_MRP_ORDER_SENT, $arr["obj_inst"]->id(), array(
+						"alias_to" => $arr["obj_inst"]->id(),
+						"reltype" => 2,
+						"return_url" => get_ru(),
+						"oc" => $arr["obj_inst"]->workspace,
+						"file" => $item->id()
+					))
+				)),
+				"oid" => $item->id()
+			));
+		}
+
+		$t->set_caption(t("Salvestatud pakkumised"));
+	}
+
+	public function _init_sent_table($t)
+	{
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Millal"),
+			"align" => "center",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "who",
+			"caption" => t("Kellele"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "subj",
+			"caption" => t("Teema"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => t("Vaata"),
+			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	public function _get_sent_table($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_sent_table($t);
+
+		foreach($arr["obj_inst"]->get_sent_offers() as $offer)
+		{
+			$t->define_data(array(
+				"date" => $offer->sent_when,
+				"who" => $offer->send_to_name." (".$offer->send_to_mail.")",
+				"subj" => $offer->send_subject,
+				"view" => html::obj_change_url($offer),
+				"oid" => $offer->id()
+			));
+		}
+
+		$t->set_caption(t("Saadetud pakkumised"));
+	}
+
+	public function _init_pending_table($t)
+	{
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Loodud"),
+			"align" => "center",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "who",
+			"caption" => t("Looja"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => t("Vaata"),
+			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	public function _get_pending_table($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_pending_table($t);
+
+		foreach($arr["obj_inst"]->get_pending_offers() as $offer)
+		{
+			$t->define_data(array(
+				"date" => $offer->created,
+				"who" => get_instance(CL_USER)->get_person_for_uid($offer->createdby())->name(),
+				"view" => html::obj_change_url($offer),
+				"oid" => $offer->id()
+			));
+		}
+
+		$t->set_caption(t("Toimetamisel pakkumised"));
+	}
+
+	public function _get_prev_tb($arr)
+	{
+		$arr["prop"]["vcl_inst"]->add_delete_button();
 	}
 }
 

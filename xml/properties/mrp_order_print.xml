@@ -178,13 +178,58 @@
             <caption>L&amp;amp;otilde;plik hind</caption>
       </property>
       <property>
+            <name>preview_tb</name>
+            <table>aw_mrp_order_print</table>
+            <group>preview_preview</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>preview_tb</field>
+      </property>
+      <property>
             <name>preview</name>
             <table>aw_mrp_order_print</table>
-            <group>preview</group>
+            <group>preview_preview</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>preview</field>
+      </property>
+      <property>
+            <name>prev_tb</name>
+            <table>aw_mrp_order_print</table>
+            <group>preview_saved</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>prev_tb</field>
+      </property>
+      <property>
+            <name>files_table</name>
+            <table>aw_mrp_order_print</table>
+            <group>preview_saved</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>files_table</field>
+      </property>
+      <property>
+            <name>pending_table</name>
+            <table>aw_mrp_order_print</table>
+            <group>preview_saved</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>pending_table</field>
+      </property>
+      <property>
+            <name>sent_table</name>
+            <table>aw_mrp_order_print</table>
+            <group>preview_saved</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>sent_table</field>
       </property>
       <property>
             <name>e_format</name>
@@ -337,8 +382,16 @@
             </price>
             <preview>
                   <caption>Eelvaade</caption>
-                  <no_submit>1</no_submit>
             </preview>
+            <preview_preview>
+                  <caption>Eelvaade</caption>
+                  <submit>no</submit>
+                  <parent>preview</parent>
+            </preview_preview>
+            <preview_saved>
+                  <caption>Salvestatud</caption>
+                  <parent>preview</parent>
+            </preview_saved>
       </groupinfo>
       <tableinfo>
             <aw_mrp_order>
@@ -406,6 +459,16 @@
                   <clid>CL_SHOP_PRODUCT</clid>
                   <caption>Kaanepaber</caption>
             </COVER_PAPER>
+            <SAVED_FILE>
+                  <value>1</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Salvestatud pakkumine</caption>
+            </SAVED_FILE>
+            <SENT_OFFER>
+                  <value>2</value>
+                  <clid>CL_MRP_ORDER_SENT</clid>
+                  <caption>Saadetud pakkumine</caption>
+            </SENT_OFFER>
       </reltypes>
       <layout>
             <vsplitbox>

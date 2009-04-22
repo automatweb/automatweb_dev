@@ -1519,7 +1519,18 @@ class crm_company_obj extends _int_object
 
 	}
 
-
+	/** Returns default address as a string
+		@attrib api=1
+	**/
+	function get_address_string()
+	{
+		$ct = parent::prop("contact");
+		if ($GLOBALS["object_loader"]->can("view", $ct))
+		{
+			return obj($ct)->name();
+		}
+		return $this->prop("address_address")." ".$this->prop("address_city")." ".$this->prop("address_country");
+	}
 }
 
 ?>

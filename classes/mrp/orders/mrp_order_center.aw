@@ -12,6 +12,9 @@
 	@property mrp_workspace type=relpicker reltype=RELTYPE_MRP_WORKSPACE field=aw_mrp_workspace
 	@caption Ressursihalduse t&ouml;&ouml;laud
 
+	@property mail_template type=relpicker reltype=RELTYPE_MAIL_TEMPLATE field=aw_mail_template
+	@caption Saadetud pakkumise alus
+
 @default group=order_order
 
 	@property order_tb type=toolbar no_caption=1 store=no
@@ -74,6 +77,9 @@
 
 @reltype MRP_COVER value=5 clid=CL_MRP_ORDER_COVER
 @caption Kate
+
+@reltype MAIL_TEMPLATE value=6 clid=CL_MRP_ORDER_SENT
+@caption Saadetud pakkumise alus
 
 */
 
@@ -138,6 +144,7 @@ class mrp_order_center extends class_base
 		{
 			case "aw_owner":
 			case "aw_mrp_workspace":
+			case "aw_mail_template":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

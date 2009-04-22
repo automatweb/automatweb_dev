@@ -71,13 +71,13 @@
 		<td>{VAR:e_materials}</td>
 	</tr>
 	<tr>
-		<td>J&Auml;relt&Ouml;&Ouml;TLUS:</td>
+		<td>J&Auml;RELT&Ouml;&Ouml;TLUS:</td>
 		<td>{VAR:e_post_processing}</td>
 	</tr>
 
 	<tr>
 		<td colspan="2">
-			hind: {VAR:price} 
+			<b>hind: {VAR:price} </b>
 		</td>
 	</tr>
 </table>

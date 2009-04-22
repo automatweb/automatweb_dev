@@ -1435,7 +1435,8 @@ class mrp_job_obj extends _int_object
 			}
 
 			### correct project's job order
-			$this->do_orb_method_call (array (
+			$i = get_instance(CL_FILE);
+			$i->do_orb_method_call (array (
 				"action" => "order_jobs",
 				"class" => "mrp_case",
 				"params" => array (
