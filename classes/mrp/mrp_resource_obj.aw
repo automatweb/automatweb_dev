@@ -41,7 +41,7 @@ class mrp_resource_obj extends _int_object
 		if ($new)
 		{
 			### set status
-		//	$this->set_prop ("state", self::STATE_AVAILABLE);
+			$this->set_prop ("state", self::STATE_AVAILABLE);
 		}
 	}
 
@@ -1042,7 +1042,7 @@ class mrp_resource_obj extends _int_object
 			If not set the OID of current object will be used.
 
 		@returns Array of planned hours by resource if parameter id is array, planned hours as int otherwise.
-			
+
 	**/
 	public function get_planned_hours($arr)
 	{
@@ -1062,7 +1062,7 @@ class mrp_resource_obj extends _int_object
 			SELECT
 				m.resource as resource_id, SUM(LEAST(m.length, $to - s.starttime, s.starttime + m.length - $from, $span)) as p
 			FROM
-				objects o 
+				objects o
 				LEFT JOIN mrp_job m ON o.brother_of = m.oid
 				LEFT JOIN mrp_schedule s ON o.brother_of = s.oid
 			WHERE
