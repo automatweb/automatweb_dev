@@ -4389,6 +4389,7 @@ class bug_tracker extends class_base
 			unset($mg[$dat[0]][$dat[1]]);
 			$arr["obj_inst"]->set_meta("st_mail_groups_devo", $mg);
 			$arr["obj_inst"]->save();
+			$mg = $arr["obj_inst"]->meta("st_mail_groups_devo");
 		}
 		foreach($doi->get_status_list() as $stid => $status)
 		{
@@ -4488,12 +4489,22 @@ class bug_tracker extends class_base
 		$cbs = $arr["obj_inst"]->meta("cust_bug_status_conns");
 		$mg_bug = $arr["obj_inst"]->meta("st_mail_groups_bug");
 		$mg_cust = $arr["obj_inst"]->meta("st_mail_groups_cust");
+		$vars = array("bug", "cust");
 		if($rmb = $arr["request"]["rm_mail_group_bug"])
 		{
 			$dat = explode(",", $rmb);
-			unset($mg[$dat[0]][$dat[1]]);
-			$arr["obj_inst"]->set_meta("st_mail_groups_bug", $mg);
+			unset($mg_bug[$dat[0]][$dat[1]]);
+			$arr["obj_inst"]->set_meta("st_mail_groups_bug", $mg_bug);
 			$arr["obj_inst"]->save();
+			$mg_bug = $arr["obj_inst"]->meta("st_mail_groups_bug");
+		}
+		if($rmb = $arr["request"]["rm_mail_group_cust"])
+		{
+			$dat = explode(",", $rmb);
+			unset($mg_cust[$dat[0]][$dat[1]]);
+			$arr["obj_inst"]->set_meta("st_mail_groups_cust", $mg_cust);
+			$arr["obj_inst"]->save();
+			$mg_cust = $arr["obj_inst"]->meta("st_mail_groups_cust");
 		}
 		foreach($bi->bug_statuses as $stid => $status)
 		{
