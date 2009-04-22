@@ -259,6 +259,8 @@ class toolbar extends aw_template
 			Name of the button
 		@param tooltip required type=string
 			Text to be displayed for the button
+		@param caption optional type=string
+			Text for button without icon, = tooltip, if not set
 		@param img optional type=string
 			Icon url to display.
 		@param action optional type=string
@@ -415,6 +417,11 @@ class toolbar extends aw_template
 					if (empty($val["tooltip"]))
 					{
 						$val["tooltip"] = "";
+					}
+
+					if(empty($val["caption"]))
+					{
+						$val["caption"] = $val["tooltip"];
 					}
 
 					$val["url_q"] = str_replace("'", "\\'", $val["url"]);
