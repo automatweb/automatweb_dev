@@ -3207,7 +3207,7 @@ class site_show extends class_base
 		foreach($this->path as $p_obj)
 		{
 			$this->path_ids[] = $p_obj->id();
-			if ($pfp && $p_obj->id() == $pfp && !aw_global_get("class"))
+			if ($pfp && $p_obj->id() == $pfp && !$_REQUEST["class"])
 			{
 				// uh-oh. we are in shop menu but not in shop mode. redirect
 				$url = $this->mk_my_orb("show_items", array("section" => aw_global_get("section"), "id" => aw_ini_get("shop.prod_fld_path_oc")), "shop_order_center");
