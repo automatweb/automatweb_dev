@@ -1147,24 +1147,55 @@
             <field>status_orders_toolbar</field>
       </property>
       <property>
-            <name>status_orders_tree</name>
+            <name>status_orders_time_tree</name>
             <table>objects</table>
             <group>status_orders</group>
             <type>treeview</type>
-            <parent>status_orders_tree_lay</parent>
+            <parent>status_orders_time_tree_lay</parent>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>status_orders_tree</field>
+            <field>status_orders_time_tree</field>
       </property>
       <property>
-            <name>status_orders_tree2</name>
+            <name>status_orders_case_tree</name>
             <table>objects</table>
             <group>status_orders</group>
             <type>treeview</type>
-            <parent>status_orders_tree_lay</parent>
+            <parent>status_orders_case_tree_lay</parent>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>status_orders_tree2</field>
+            <field>status_orders_case_tree</field>
+      </property>
+      <property>
+            <name>status_orders_prod_tree</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>treeview</type>
+            <parent>status_orders_prod_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>status_orders_prod_tree</field>
+      </property>
+      <property>
+            <name>status_orders_res_tree</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>treeview</type>
+            <parent>status_orders_res_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>status_orders_res_tree</field>
+      </property>
+      <property>
+            <name>status_orders_opt1</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>chooser</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>status_orders_opt_lay</parent>
+            <field>status_orders_opt1</field>
+            <caption>Kuvatakse tooteid, mis...</caption>
       </property>
       <property>
             <name>status_orders_s_name</name>
@@ -1176,7 +1207,7 @@
             <size>30</size>
             <parent>status_orders_left_search</parent>
             <field>status_orders_s_name</field>
-            <caption>Nimi</caption>
+            <caption>Toote nimi</caption>
       </property>
       <property>
             <name>status_orders_s_code</name>
@@ -1188,19 +1219,7 @@
             <size>30</size>
             <parent>status_orders_left_search</parent>
             <field>status_orders_s_code</field>
-            <caption>Kood</caption>
-      </property>
-      <property>
-            <name>status_orders_s_barcode</name>
-            <table>objects</table>
-            <group>status_orders</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>status_orders_left_search</parent>
-            <field>status_orders_s_barcode</field>
-            <caption>Ribakood</caption>
+            <caption>Toote kood</caption>
       </property>
       <property>
             <name>status_orders_s_art_cat</name>
@@ -1211,10 +1230,22 @@
             <captionside>top</captionside>
             <parent>status_orders_left_search</parent>
             <field>status_orders_s_art_cat</field>
-            <caption>Kategooria</caption>
+            <caption>Toote kategooria</caption>
       </property>
       <property>
-            <name>status_orders_s_date</name>
+            <name>status_orders_s_case_no</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>status_orders_left_search</parent>
+            <field>status_orders_s_case_no</field>
+            <caption>Tellimuse nr</caption>
+      </property>
+      <property>
+            <name>status_orders_s_start</name>
             <table>objects</table>
             <group>status_orders</group>
             <type>date_select</type>
@@ -1223,8 +1254,21 @@
             <captionside>top</captionside>
             <size>30</size>
             <parent>status_orders_left_search</parent>
-            <field>status_orders_s_date</field>
-            <caption>Kuup&amp;amp;auml;ev</caption>
+            <field>status_orders_s_start</field>
+            <caption>Ajavahemiku algus</caption>
+      </property>
+      <property>
+            <name>status_orders_s_end</name>
+            <table>objects</table>
+            <group>status_orders</group>
+            <type>date_select</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>status_orders_left_search</parent>
+            <field>status_orders_s_end</field>
+            <caption>Ajavahemiku l&amp;amp;otilde;pp</caption>
       </property>
       <property>
             <name>status_orders_s_sbt</name>
@@ -1825,13 +1869,41 @@
                   <group>status_orders</group>
                   <area_caption></area_caption>
             </status_orders_left>
-            <status_orders_tree_lay>
+            <status_orders_time_tree_lay>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Filtreeri</area_caption>
+                  <area_caption>Vali&amp;amp;nbsp;ajavahemik</area_caption>
                   <parent>status_orders_left</parent>
                   <group>status_orders</group>
-            </status_orders_tree_lay>
+            </status_orders_time_tree_lay>
+            <status_orders_case_tree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Vali&amp;amp;nbsp;tellimus</area_caption>
+                  <parent>status_orders_left</parent>
+                  <group>status_orders</group>
+            </status_orders_case_tree_lay>
+            <status_orders_prod_tree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Vali&amp;amp;nbsp;tootegrupp</area_caption>
+                  <parent>status_orders_left</parent>
+                  <group>status_orders</group>
+            </status_orders_prod_tree_lay>
+            <status_orders_res_tree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Vali&amp;amp;nbsp;ressurss</area_caption>
+                  <parent>status_orders_left</parent>
+                  <group>status_orders</group>
+            </status_orders_res_tree_lay>
+            <status_orders_opt_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>status_orders_left</parent>
+                  <area_caption>Lisavalikud</area_caption>
+                  <group>status_orders</group>
+            </status_orders_opt_lay>
             <status_orders_left_search>
                   <type>vbox</type>
                   <parent>status_orders_left</parent>

@@ -223,7 +223,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 			@layout storage_income_left_search type=vbox parent=storage_income_left area_caption=Otsing closeable=1
 
 				@property storage_income_s_acquiredby type=textbox store=no captionside=top size=30 parent=storage_income_left_search
-				@caption Hankija
+				@caption Tarnija
 
 				@property storage_income_s_type type=chooser store=no captionside=top size=30 parent=storage_income_left_search
 				@caption T&uuml;&uuml;p
@@ -274,7 +274,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 			@layout storage_export_left_search type=vbox parent=storage_export_left area_caption=Otsing closeable=1
 
 				@property storage_export_s_acquiredby type=textbox store=no captionside=top size=30 parent=storage_export_left_search
-				@caption Hankija
+				@caption Tarnija
 
 				@property storage_export_s_type type=chooser store=no captionside=top size=30 parent=storage_export_left_search
 				@caption T&uuml;&uuml;p
@@ -556,28 +556,46 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@layout status_orders_left type=vbox parent=status_orders_split
 
-			@layout status_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=status_orders_left
+			@layout status_orders_time_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;ajavahemik parent=status_orders_left
 
-				@property status_orders_tree type=treeview parent=status_orders_tree_lay store=no no_caption=1
+				@property status_orders_time_tree type=treeview parent=status_orders_time_tree_lay store=no no_caption=1
 
-				@property status_orders_tree2 type=treeview parent=status_orders_tree_lay store=no no_caption=1
+			@layout status_orders_case_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;tellimus parent=status_orders_left
+
+				@property status_orders_case_tree type=treeview parent=status_orders_case_tree_lay store=no no_caption=1
+
+			@layout status_orders_prod_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;tootegrupp parent=status_orders_left
+
+				@property status_orders_prod_tree type=treeview parent=status_orders_prod_tree_lay store=no no_caption=1
+
+			@layout status_orders_res_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;ressurss parent=status_orders_left
+
+				@property status_orders_res_tree type=treeview parent=status_orders_res_tree_lay store=no no_caption=1
+
+			@layout status_orders_opt_lay type=vbox closeable=1 parent=status_orders_left area_caption=Lisavalikud
+				
+				@property status_orders_opt1 type=chooser store=no captionside=top parent=status_orders_opt_lay
+				@caption Kuvatakse tooteid, mis...
 
 			@layout status_orders_left_search type=vbox parent=status_orders_left area_caption=Otsing closeable=1
 
 				@property status_orders_s_name type=textbox store=no captionside=top size=30 parent=status_orders_left_search
-				@caption Nimi
+				@caption Toote nimi
 
 				@property status_orders_s_code type=textbox store=no captionside=top size=30 parent=status_orders_left_search
-				@caption Kood
-
-				@property status_orders_s_barcode type=textbox store=no captionside=top size=30 parent=status_orders_left_search
-				@caption Ribakood
+				@caption Toote kood
 
 				@property status_orders_s_art_cat type=select store=no captionside=top parent=status_orders_left_search
-				@caption Kategooria
+				@caption Toote kategooria
 
-				@property status_orders_s_date type=date_select ch_value=1 store=no captionside=top size=30  parent=status_orders_left_search
-				@caption Kuup&auml;ev
+				@property status_orders_s_case_no type=textbox store=no captionside=top size=30 parent=status_orders_left_search
+				@caption Tellimuse nr
+
+				@property status_orders_s_start type=date_select ch_value=1 store=no captionside=top size=30  parent=status_orders_left_search
+				@caption Ajavahemiku algus
+
+				@property status_orders_s_end type=date_select ch_value=1 store=no captionside=top size=30  parent=status_orders_left_search
+				@caption Ajavahemiku l&otilde;pp
 
 				@property status_orders_s_sbt type=submit store=no captionside=top  parent=status_orders_left_search value="Otsi"
 				@caption Otsi
@@ -599,7 +617,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 			@layout purchase_orders_left_search type=vbox parent=purchase_orders_left area_caption=Otsing closeable=1
 
 				@property purchase_orders_s_purchaser type=textbox store=no captionside=top size=30 parent=purchase_orders_left_search
-				@caption Hankija
+				@caption Tarnija
 
 				@property purchase_orders_s_number type=textbox store=no captionside=top size=30 parent=purchase_orders_left_search
 				@caption Number
@@ -864,7 +882,7 @@ define("STORAGE_FILTER_ALL", 3);
 
 define("STORAGE_FILTER_CONFIRMED", 1);
 define("STORAGE_FILTER_UNCONFIRMED", 2);
-define("STORAGE_FILTER_CONFIRMATION_ALL", 0);
+define("STORAGE_FILTER_CONFIRMATION_ALL", 10);
 
 define("STORAGE_FILTER_INCOME", 1);
 define("STORAGE_FILTER_EXPORT", 2);
@@ -1109,12 +1127,19 @@ class shop_warehouse extends class_base
 				case "sales_order_status":
 				case "purchase_order_status":
 				case "status":
-					$prop["options"] = array(
-						STORAGE_FILTER_CONFIRMATION_ALL => t("K&otilde;ik"),
-						STORAGE_FILTER_CONFIRMED => t("Kinnitatud"),
-						STORAGE_FILTER_UNCONFIRMED => t("Kinnitamata"),
-					);
-					$prop["value"] = ($val = $arr["request"][$prop["name"]]) ? $val : STORAGE_FILTER_CONFIRMATION_ALL;
+					if(in_array($prop["name"], array("purchase_orders_s_status", "sell_orders_s_status")))
+					{
+						$prop["options"] = array(STORAGE_FILTER_CONFIRMATION_ALL => t("K&otilde;ik")) + get_instance(CL_SHOP_PURCHASE_ORDER)->states;
+					}
+					else
+					{
+						$prop["options"] = array(
+							STORAGE_FILTER_CONFIRMATION_ALL => t("K&otilde;ik"),
+							STORAGE_FILTER_CONFIRMED => t("Kinnitatud"),
+							STORAGE_FILTER_UNCONFIRMED => t("Kinnitamata"),
+						);
+					}
+					$prop["value"] = $arr["request"][$prop["name"]];
 					break;
 
 				case "direction":
@@ -1133,6 +1158,17 @@ class shop_warehouse extends class_base
 						STORAGE_FILTER_DNOTES => t("Saatelehed"),
 					);
 					$prop["value"] = ($val = $arr["request"][$prop["name"]]) ? $val : STORAGE_FILTER_ALL;
+					break;
+
+				case "date":
+					if(!$arr["request"][$prop["name"]])
+					{
+						$prop["value"] = -1;
+					}
+					else
+					{
+						$prop["value"] = $arr["request"][$prop["name"]];
+					}
 					break;
 
 				default:
@@ -2492,19 +2528,13 @@ class shop_warehouse extends class_base
 				$p = $ps;
 				$f = "CL_SHOP_PURCHASE_ORDER";
 			}
-			switch($p)
+			if($p == STORAGE_FILTER_CONFIRMATION_ALL)
 			{
-				case STORAGE_FILTER_CONFIRMED:
-					$conditions[$f.".confirmed"] = 1;
-					break;
-
-				case STORAGE_FILTER_UNCONFIRMED:
-					$conditions[$f.".confirmed"] = new obj_predicate_not(1);
-					break;
-
-				default:
-					//$conditions["class_id"] = $clid; // not sure that was ment so..
-					$conditions["class_id"][] = $clid;
+				$conditions["class_id"][] = $clid;
+			}
+			else
+			{
+				$conditions["order_status"] = $p;
 			}
 		}
 
@@ -3901,7 +3931,7 @@ class shop_warehouse extends class_base
 			$t->define_field(array(
 				"sortable" => 1,
 				"name" => "acquirer",
-				"caption" => t("Hankija"),
+				"caption" => t("Tarnija"),
 				"align" => "center"
 			));
 		}
@@ -5516,11 +5546,18 @@ class shop_warehouse extends class_base
 		return true;
 	}
 
-	function callback_mod_reforb($arr)
+	function callback_mod_reforb($arr, $request)
 	{
-		$arr["ptf"] = $_GET["ptf"];
-		$arr["pgtf"] = $_GET["pgtf"];
+		$arr["ptf"] = $request["ptf"];
+		$arr["pgtf"] = $request["pgtf"];
 		$arr["post_ru"] = post_ru();
+		if($request["group"] == "status_orders")
+		{
+			$arr["add_rows_order"] = 0;
+			$arr["filt_time"] = $request["filt_time"];
+			$arr["filt_case"] = $request["filt_case"];
+			$arr["filt_res"] = $request["filt_res"];
+		}
 	}
 
 	function callback_mod_retval($arr)
@@ -5548,6 +5585,14 @@ class shop_warehouse extends class_base
 			if($this->is_search_param($var) && isset($arr["request"][$var]))
 			{
 				$arr["args"][$var] = $arr["request"][$var];
+			}
+		}
+		$status_orders_vars = array("status_orders_opt1", "filt_time", "filt_case", "filt_res");
+		foreach($status_orders_vars as $var)
+		{
+			if($arr["request"][$var])
+			{
+ 				$arr["args"][$var] = $arr["request"][$var];
 			}
 		}
 	}
@@ -6446,7 +6491,28 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 	function _get_purchase_orders_tree($arr)
 	{
-		$this->_get_storage_inventories_tree($arr);
+		$oi = get_instance(CL_SHOP_PURCHASE_ORDER);
+		$t = $arr["prop"]["vcl_inst"];
+
+		$group = $this->get_search_group($arr);
+		$var = $group."_s_status";
+		$disp = $arr["request"][$var];
+		
+		foreach($oi->states as $id => $state)
+		{
+			$odl = new object_data_list(array(
+				"class_id" => $arr["request"]["group"] == "purchase_orders" ? CL_SHOP_PURCHASE_ORDER : CL_SHOP_SELL_ORDER,
+				"order_status" => $id,
+			),
+			array(
+				array("name" => "name"),
+			));
+			$t->add_item(0, array(
+				"id" => "state_".$id,
+				"url" => aw_url_change_var($var, $id),
+				"name" => sprintf("%s (%s)", $disp == $id ? "<b>".$state."</b>" : $state, $odl->count()),
+			));
+		}
 	}
 
 	function _get_orders_ol($arr)
@@ -6494,13 +6560,9 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 		if($s = $arr["request"][$group."_s_status"])
 		{
-			if($s == STORAGE_FILTER_CONFIRMED)
+			if($s != STORAGE_FILTER_CONFIRMATION_ALL)
 			{
-				$params["confirmed"] = 1;
-			}
-			elseif($s == STORAGE_FILTER_UNCONFIRMED)
-			{
-				$params["confirmed"] = new obj_predicate_not(1);
+				$params["order_status"] = $s;
 			}
 		}
 		$t = date_edit::get_timestamp($arr["request"][$group."_s_to"]);
@@ -6545,7 +6607,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			{
 				$wh = $arr["obj_inst"]->id();
 			}
-			$params["warehouse"] = $wh;
+			//$params["warehouse"] = $wh;
 			$params["class_id"] = $class_id;
 			$params["site_id"] = array();
 			$params["lang_id"] = array();
@@ -6567,8 +6629,9 @@ $oo = get_instance(CL_SHOP_ORDER);
 			$schedule = new mrp_schedule();
 			$schedule->create(array(
 				"mrp_workspace" => obj($ws)->id(),
-				"mrp_force_replan" => 1
+				"mrp_force_replan" => 1,
 			));
+			$arr["obj_inst"]->update_orders();
 		}
 		$this->_init_purchase_orders_tbl($t, $arr);
 		$ol = $this->_get_orders_ol($arr);
@@ -6599,7 +6662,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			}
 			$dd = $o->prop("deal_date");
 			$dealnow = 0;
-			if(date("d.m.Y", $dd) <= date("d.m.Y") && !$o->prop("closed") && $arr["extra"])
+			if($dd <= time() && $o->prop("order_status") < ORDER_STATUS_SENT && $arr["extra"])
 			{
 				$dealnow = 1;
 			}
@@ -6706,7 +6769,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"date" => $o->prop("date"),
 				"rels" => implode(", ", $rel_arr),
 				"sum" => $sum,
-				"status" => $o->prop("confirmed")?t("Kinnitatud"):t("Kinnitamata"),
+				"status" => $o->instance()->states[$o->prop("order_status")],
 				"oid" => $o->id(),
 				"start_date" => html::textbox(array(
 					"name" => "orders[".$o->id()."][deal_date][day]",
@@ -6785,7 +6848,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		$t->define_field(array(
 			"name" => "purchaser",
-			"caption" => t("Hankija"),
+			"caption" => t("Tarnija"),
 			"sortable" => 1,
 			"align" => "center",
 			"chgbgcolor" => "color",
@@ -6858,7 +6921,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 	function _get_sell_orders_tree($arr)
 	{
-		$this->_get_storage_inventories_tree($arr);
+		$this->_get_purchase_orders_tree($arr);
 	}
 
 
@@ -6915,19 +6978,531 @@ $oo = get_instance(CL_SHOP_ORDER);
 		return array(0 => t("--vali--")) + $ol->names();
 	}
 
-	function _get_status_orders_tree($arr)
+	/**
+	@attrib name=get_status_orders_time_tree_level all_args=1
+	**/
+	function get_status_orders_time_tree_level($arr)
 	{
-		return $this->get_prod_tree($arr);
+		$t = get_instance("vcl/treeview");
+		$parent = trim($arr["parent"]);
+		$tmp = explode("_", $parent);
+		$t->start_tree(array (
+			"type" => TREE_DHTML,
+			"branch" => 1,
+			"tree_id" => "prodg_tree_s",
+			"persist_state" => 1,
+		));
+		$end = $this->_get_status_orders_time_tree_end(obj($arr["id"]));
+		if($end)
+		{
+			switch($tmp[0])
+			{
+				case "year":
+					$start = 1;
+					$end = 12;
+					if(date('Y') == $tmp[1])
+					{
+						$start = date('m', mktime(0,0,0,date('m'),1,$tmp[1]));
+					}
+					if(date('Y', $end) == $tmp[1])
+					{
+						$end = date('m', mktime(0,0,0,date('m', $end),1,$tmp[1]));
+					}
+					for($i = $start; $i <= $end; $i++)
+					{
+						$t->add_item(0, array(
+							"name" => sprintf("%s %s", locale::get_lc_month($i), $tmp[1]),
+							"id" => "month_".$i."_".$tmp[1],
+							"iconurl" => icons::get_icon_url(CL_MENU),
+							"url" => "#",
+						));
+						$t->add_item("month_".$i."_".$tmp[1], array());
+					}
+					break;
+				case "month":
+					$start = 1;
+					$end = date('d', mktime(0,0,1,$tmp[1]+1,0,$tmp[2]));
+					if(date('m.Y') == $tmp[1].".".$tmp[2])
+					{
+						$start = date('d', mktime(0,0,1,date('m'),date('d'),$tmp[2]));
+					}
+					if(date('m.Y', $end) == $tmp[1].".".$tmp[2])
+					{
+						$end = date('d', mktime(0,0,1,date('m', $end),date('d', $end),$tmp[2]));
+					}
+					for($i = $start; $i <= $end; $i++)
+					{
+						$t->add_item(0, array(
+							"name" => sprintf("%s %s %s", $i, locale::get_lc_month($tmp[1]), $tmp[2]),
+							"id" => "day_".$i."_".$tmp[1]."_".$tmp[2],
+							"iconurl" => icons::get_icon_url(CL_MENU),
+							"url" => aw_url_change_var(array("filt_time" => mktime(0,0,0,$tmp[1],$i,$tmp[2])), false, $arr["set_retu"]),
+						));
+					}
+					break;
+			}
+		}
+		$f = automatweb::$request->arg("filt_time");
+		if(is_numeric($f))
+		{
+			$t->set_selected_item("day_".((int)date('d', $f))."_".((int)date('m', $f))."_".date('Y', $f));
+		}
+		die($t->finalize_tree());
 	}
-	
-	function _get_status_orders_tree2($arr)
+
+	function _get_status_orders_time_tree($arr)
 	{
-		return $this->mk_prodg_tree($arr);
+		$t = $arr["prop"]["vcl_inst"];
+	
+		$gbf = $this->mk_my_orb("get_status_orders_time_tree_level",array(
+			"set_retu" => get_ru(),
+			"filt_time" => automatweb::$request->arg("filt_time"),
+			"id" => $arr["obj_inst"]->id(),
+			"parent" => " ",
+		), CL_SHOP_WAREHOUSE);
+
+		$t->start_tree(array(
+			"has_root" => true,
+			"root_name" => t("Ajavahemikud"),
+			"root_url" => aw_url_change_var(array("time"=> null)),
+			"root_icon" => icons::get_icon_url(CL_MENU),
+			"type" => TREE_DHTML,
+			"tree_id" => "status_orders_time_tree",
+			"persist_state" => 1,
+			"get_branch_func" => $gbf,
+		));
+
+		$t->add_item(0, array(
+			"name" => t("See n&auml;dal"),
+			"id" => "thisweek",
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("filt_time", ""),
+		));
+		$t->add_item(0, array(
+			"name" => t("J&auml;rgmine n&auml;dal"),
+			"id" => "nextweek",
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("filt_time", "nextweek"),
+		));
+		$t->add_item(0, array(
+			"name" => t("See kuu"),
+			"id" => "thismonth",
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("filt_time", "thismonth"),
+		));
+		$t->add_item(0, array(
+			"name" => t("J&auml;rgmine kuu"),
+			"id" => "nextmonth",
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("filt_time", "nextmonth"),
+		));
+
+		$end = $this->_get_status_orders_time_tree_end($arr["obj_inst"]);
+		if($end)
+		{
+			$start = time();
+			for($i = date('Y', $start); $i <= date('Y', $end); $i++)
+			{
+				$t->add_item(0, array(
+					"name" => $i,
+					"id" => "year_".$i,
+					"url" => "#",
+					"iconurl" => icons::get_icon_url(CL_MENU),
+				));
+				$t->add_item("year_".$i, array());
+			}
+		}
+		if(!$arr["request"]["status_orders_s_start"])
+		{
+			$t->set_selected_item(($f = automatweb::$request->arg("filt_time")) ? $f : "thisweek");
+		}
+	}
+
+	private function _get_status_orders_time_tree_end($o)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_JOB,
+			"RELTYPE_JOB(CL_MATERIAL_EXPENSE).class_id" => CL_MATERIAL_EXPENSE,
+			"RELTYPE_MRP_PROJECT.RELTYPE_MRP_OWNER" => $o->prop("mrp_workspace"),
+			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+			"sort_by" => "mrp_schedule.starttime desc",
+			"limit" => "0,1",
+		));
+		$o = $ol->begin();
+		if($o)
+		{/*
+			$ol2 = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+				"RELTYPE_PRODUCT.RELTYPE_PRODUCT(CL_MATERIAL_EXPENSE).RELTYPE_JOB" => $o->id(),
+				"days" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+				"sort_by" => "days desc",
+				"limit" => "0,1",
+			));
+			$o2 = $ol2->begin();*/
+			$days = 100;
+		}
+		return $o->prop("starttime") + 24 * 60 * 60 * $days;
+	}
+
+	function _get_status_orders_case_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->start_tree(array(
+			"has_root" => false,
+			"type" => TREE_DHTML,
+			"tree_id" => "status_orders_case_tree",
+			"persist_state" => 1,
+		));
+		$job_ol = $this->_get_jobs_for_time($arr);
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_CASE,
+			"RELTYPE_MRP_PROJECT(CL_MRP_JOB).oid" => $job_ol->count() ? $job_ol->ids() : -1,
+		));
+		foreach($ol->arr() as $oid => $o)
+		{
+			$t->add_item(0, array(
+				"name" => $o->name(),
+				"url" => aw_url_change_var("filt_case", $oid),
+				"iconurl" => icons::get_icon_url(CL_MRP_CASE),
+				"id" => "case".$oid,
+			));
+		}
+		$t->add_item(0, array(
+			"name" => t("K&otilde;ik"),
+			"url" => aw_url_change_var("filt_case", ""),
+			"iconurl" => icons::get_icon_url(CL_MRP_CASE),
+			"id" => "case_all",
+		));
+		if(!$arr["request"]["status_orders_s_case_no"])
+		{
+			$t->set_selected_item(($f = automatweb::$request->arg("filt_case")) ? "case".$f : "case_all");
+		}
+	}
+
+	function _get_status_orders_prod_tree($arr)
+	{
+		$this->mk_prodg_tree(&$arr);
+		$arr["prop"]["vcl_inst"]->add_item(0, array(
+			"name" => t("K&otilde;ik"),
+			"id" => "prod_all",
+			"url" => aw_url_change_var("pgtf", ""),
+			"iconurl" => icons::get_icon_url(CL_MENU),
+		));
+		$arr["prop"]["vcl_inst"]->set_selected_item(($f = automatweb::$request->arg("pgtf")) ? "case".$f : "prod_all");
+	}
+
+	function _get_status_orders_opt1($arr)
+	{
+		$arr["prop"]["options"] = array(
+			"bron" => t("On broneeritud antud ajavahemikuks")."<br />",
+			"order" => t("Tuleb tellida antud ajavahemikus")."<br /><br />",
+		);
+		if(!($r = $arr["request"][$arr["prop"]["name"]]))
+		{
+			$arr["prop"]["value"] = "bron";
+		}
+		else
+		{
+			$arr["prop"]["value"] = $r;
+		}
+	}
+
+	function _get_status_orders_s_start($arr)
+	{
+		$times = $this->_get_status_orders_time_filt($arr);
+		if(!($r = $arr["request"][$arr["prop"]["name"]]))
+		{
+			$arr["prop"]["value"] = $times["filt_start"];
+		}
+		else
+		{
+			$arr["prop"]["value"] = $r;
+		}
+	}
+
+	function _get_status_orders_s_end($arr)
+	{
+		$times = $this->_get_status_orders_time_filt($arr);
+		if(!($r = $arr["request"][$arr["prop"]["name"]]))
+		{
+			$arr["prop"]["value"] = $times["filt_end"];
+		}
+		else
+		{
+			$arr["prop"]["value"] = $r;
+		}
+	}
+
+	function _get_status_orders_res_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		if($ws = $arr["obj_inst"]->prop("mrp_workspace"))
+		{
+			$t->start_tree(array(
+				"has_root" => true,
+				"root_name" => t("Ressursid"),
+				"root_url" => aw_url_change_var(array("filt_res"=> null)),
+				"root_icon" => icons::get_icon_url(CL_MENU),
+				"type" => TREE_DHTML,
+				"tree_id" => "status_orders_res_tree",
+				"persist_state" => 1,
+			));
+			$pt = obj($ws)->prop ("resources_folder");
+			$ol = new object_list(array(
+				"parent" => $pt,
+				"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+				"sort_by" => "objects.jrk",
+			));
+			foreach($ol->arr() as $oid => $o)
+			{
+				$t->add_item(0, array(
+					"id" => "res".$oid,
+					"name" => $o->name(),
+					"iconurl" => icons::get_icon_url($o->class_id()),
+					"url" => aw_url_change_var("filt_res", ($o->class_id() == CL_MRP_RESOURCE) ? $oid : null),
+				));
+				if($o->class_id() == CL_MENU)
+				{
+					$this->_insert_res_tree_level(&$t, $oid);
+				}
+			}
+			$t->add_item(0, array(
+				"id" => "filt_all",
+				"name" => t("K&otilde;ik"),
+				"url" => aw_url_change_var("filt_res", null),
+				"iconurl" => icons::get_icon_url(CL_MRP_RESOURCE),
+			));
+			$t->set_selected_item(($f = automatweb::$request->arg("filt_res")) ? "res".$f : "filt_all");
+		}
+		else
+		{
+			return PROP_IGNORE;
+		}
+	}
+
+	private function _insert_res_tree_level($t, $pt)
+	{
+		$ol = new object_list(array(
+			"parent" => $pt,
+			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+			"sort_by" => "objects.jrk",
+		));
+		foreach($ol->arr() as $oid => $o)
+		{
+			$t->add_item($pt, array(
+				"id" => $oid,
+				"name" => $o->name(),
+				"iconurl" => icons::get_icon_url($o->class_id()),
+				"url" => aw_url_change_var("res_filt", ($o->class_id() == CL_MRP_RESOURCE) ? $oid : ""),
+			));
+			if($o->class_id() == CL_MENU)
+			{
+				$this->_insert_res_tree_level(&$t, $oid);
+			}
+		}
+	}
+
+	private function _get_status_orders_time_filt($arr)
+	{
+		$s1 = $arr["request"]["status_orders_s_start"];
+		$s2 = $arr["request"]["status_orders_s_end"];
+		if($s1 && $s2)
+		{
+			return array(
+				"filt_start" => date_edit::get_timestamp($s1),
+				"filt_end" => date_edit::get_timestamp($s2),
+			);
+		}
+		$time = $arr["request"]["filt_time"];
+		switch($time)
+		{
+			case "nextweek":
+				$filt_start = mktime(0, 0, 0, date('m'), date('d') + 7 - date('N'), date('Y'));
+				$filt_end = mktime(0, 0, 0, date('m'), date('d') + 14 - date('N'), date('Y'));
+				break;
+			case "thismonth":
+				$filt_start = mktime(0,0,0,date('m'),1,date('Y'));
+				$filt_end = mktime(0,0,0,date('m')+1,0,date('Y'));
+				break;
+			case "nextmonth":
+				$filt_start = mktime(0,0,0,date('m')+1,1,date('Y'));
+				$filt_end = mktime(0,0,0,date('m')+2,0,date('Y'));
+				break;
+			default:
+				if(is_numeric($time))
+				{
+					$filt_start = mktime(0,0,0,date('m', $time),date('d', $time),date('Y', $time));
+					$filt_end = mktime(23,59,59,date('m', $time),date('d', $time),date('Y', $time));
+				}
+				else
+				{
+					$filt_start = time();
+					$filt_end = mktime(0, 0, 0, date('m'), date('d') + 7 - date('N'), date('Y'));
+				}
+		}
+		return array(
+			"filt_start" => $filt_start,
+			"filt_end" => $filt_end,
+		);
+	}
+
+	private function _get_jobs_for_time($arr)
+	{
+		$time = $arr["request"]["filt_time"];
+		$min = 0;
+		$max = 0;
+		if($arr["request"]["status_orders_opt1"] == "order")
+		{
+			$ol2 = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+				"days" => new obj_predicate_not(null),
+				"sort_by" => "days desc",
+				"limit" => "0,1",
+			));
+			if($ol2->count())
+			{
+				$max = $ol2->begin()->prop("days");
+			}
+		}
+		extract($this->_get_status_orders_time_filt($arr));
+		$filt = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $filt_start - $max * 24 * 60 * 60, $filt_end);
+		$params = array(
+			"class_id" => CL_MRP_JOB,
+			"starttime" => $filt,
+			"RELTYPE_MRP_PROJECT.RELTYPE_MRP_OWNER" => $arr["obj_inst"]->prop("mrp_workspace"),
+		);
+		if($no = $arr["request"]["status_orders_s_case_no"])
+		{
+			$params["RELTYPE_MRP_PROJECT.name"] = "%".$no."%";
+		}
+		elseif($case = $arr["request"]["filt_case"])
+		{
+			$params["RELTYPE_MRP_PROJECT.oid"] = $case;
+		}
+		if($res = $arr["request"]["res_filt"])
+		{
+			$params["RELTYPE_MRP_RESOURCE.oid"] = $res;
+		}
+
+		if($arr["request"]["status_orders_opt1"] == "order")
+		{
+			$ol = new object_list($params);
+			$remove_ids = array();
+			foreach($ol->arr() as $oid =>$o)
+			{
+				$is_in_range = false;
+				$conn = $o->connections_to(array(
+					"from.class_id" => CL_MATERIAL_EXPENSE,
+				));
+				$prods = array();
+				foreach($conn as $c)
+				{
+					$prods[] = $c->from()->prop("product");
+				}
+				$odl = new object_data_list(array(
+					"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+					"product" => $prods,
+				),
+				array(
+					CL_SHOP_PRODUCT_PURVEYANCE => array("days" => "days", "product" => "product"),
+				));
+				$checked_prods = array();
+				foreach($odl->arr() as $od)
+				{
+					$d = $o->prop("starttime") + $od["days"] * 24 * 60 * 60;
+					$checked_prods[] = $od["product"];
+					if($d >= $filt_start && $d <= $filt_end)
+					{
+						$is_in_range = true;
+						break;
+					}
+				}
+				foreach($prods as $prod)
+				{
+					if(!in_array($prod, $checked_prods))
+					{
+						$d = $o->prop("starttime");
+						if($d >= $filt_start && $d <= $filt_end)
+						{
+							$is_in_range = true;
+							break;
+						}
+					}
+				}
+				if(!$is_in_range)
+				{
+					$remove_ids[] = $oid;
+				}
+			}
+			$ol->remove($remove_ids);
+			return $ol;
+		}
+		$ol = new object_list($params);
+		return $ol;
 	}
 
 	function _get_status_orders_toolbar($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
+
+		$tb->add_menu_button(array(
+			"img" => "nool1.gif",
+			"name" => "move_to_order",
+			"tooltip" => t("Lisa ostutellimuse reaks"),
+		));
+
+		$tb->add_sub_menu(array(
+			"parent" => "move_to_order",
+			"name" => "move_to_order_w1",
+			"text" => t("See n&auml;dal loodud"),
+		));
+
+		$tb->add_sub_menu(array(
+			"parent" => "move_to_order",
+			"name" => "move_to_order_w2",
+			"text" => t("Eelmine n&auml;dal loodud"),
+		));
+
+		$tb->add_sub_menu(array(
+			"parent" => "move_to_order",
+			"name" => "move_to_order_w3",
+			"text" => t("2 n&auml;dalat tagasi loodud"),
+		));
+
+		$tb->add_sub_menu(array(
+			"parent" => "move_to_order",
+			"name" => "move_to_order_w4",
+			"text" => t("3 n&auml;dalat tagasi loodud"),
+		));
+
+		get_instance(CL_SHOP_PURCHASE_ORDER);
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PURCHASE_ORDER,
+			"order_status" => ORDER_STATUS_INPROGRESS,
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, mktime(0, 0, 0, date('m'), date('d') - 28 + date('N'), date('Y'))),
+		));
+
+		$nw = date('W');
+
+		foreach($ol->arr() as $oid => $o)
+		{
+			$date = $o->prop("date");
+			$tb->add_menu_item(array(
+				"parent" => "move_to_order_w".($nw - date('W', $date) + 1),
+				"text" => sprintf("%s (%s)", date('d.m.Y', $date), ($p = $o->prop("purchaser")) ? obj($p)->name() : t("Tundmatu tarnija")),
+				"url" => "javascript: var cf = document.forms.changeform; cf.add_rows_order.value = '".$oid."'; cf.action.value = 'create_purchase_order'; cf.submit();",
+			));
+		}
+
+		$tb->add_button(array(
+			"img" => "copy.gif",
+			"action" => "create_purchase_order",
+			"name" => "create_purchase_order",
+			"tooltip" => t("Loo ostutellimus"),
+		));
+
+		$tb->add_save_button();
 	}
 
 	private function _init_status_orders($arr)
@@ -6936,45 +7511,31 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid",
+			"chgbgcolor" => "bgcolor",
 		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
-			"sortable" => 1,
+			"chgbgcolor" => "bgcolor",
 		));
 
-		foreach($arr["warehouses"] as $wh)
-		{
-			if(!$this->can("view", $wh))
-			{
-				continue;
-			}
-			for($i = 0; $i <= $arr["levels"]; $i++)
-			{
-				if(count($arr["warehouses"]) == 1)
-				{
-					$cp = $i?sprintf(t("%s %s"),"Kogus", $i+1):t("Kogus");
-				}
-				else
-				{
-					$who = obj($wh);
-					$cp = $i?sprintf(t("%s %s %s"), $who->name(), "kogus", $i+1):sprintf(t("%s %s"), $who->name(), "kogus");
-				}
-				$t->define_field(array(
-					"sortable" => 1,
-					"name" => "amount_".$wh."_".$i,
-					"caption" => $cp,
-					"align" => "center"
-				));
-			}
-		}
 		for($i = 0; $i <= $arr["levels"]; $i++)
 		{
 			$t->define_field(array(
-				"sortable" => 1,
 				"name" => "required_".$i,
 				"caption" => $i?sprintf(t("Vajadus %s"), $i+1) : t("Vajadus"),
 				"align" => "center",
+				"chgbgcolor" => "bgcolor",
+			));
+		}
+
+		for($i = 0; $i <= $arr["levels"]; $i++)
+		{
+			$t->define_field(array(
+				"name" => "ordered_".$i,
+				"caption" => $i?sprintf(t("Tellitud %s"), $i+1) : t("Tellitud"),
+				"align" => "center",
+				"chgbgcolor" => "bgcolor",
 			));
 		}
 
@@ -6984,22 +7545,30 @@ $oo = get_instance(CL_SHOP_ORDER);
 			{
 				continue;
 			}
+			$t->define_field(array(
+				"name" => "wh_".$wh,
+				"caption" => obj($wh)->name(),
+			));
 			for($i = 0; $i <= $arr["levels"]; $i++)
 			{
-				if(count($arr["warehouses"]) == 1)
-				{
-					$cp = $i?sprintf(t("%s %s"),"Vahe", $i+1):t("Vahe");
-				}
-				else
-				{
-					$who = obj($wh);
-					$cp = $i?sprintf(t("%s %s %s"), $who->name(), "vahe", $i+1):sprintf(t("%s %s"), $who->name(), "vahe");
-				}
+				$cp = $i?sprintf(t("%s %s"),"Kogus", $i+1):t("Kogus");
 				$t->define_field(array(
-					"sortable" => 1,
+					"name" => "amount_".$wh."_".$i,
+					"caption" => $cp,
+					"align" => "center",
+					"parent" => "wh_".$wh,
+					"chgbgcolor" => "bgcolor",
+				));
+			}
+			for($i = 0; $i <= $arr["levels"]; $i++)
+			{
+				$cp = $i?sprintf(t("%s %s"),"Vahe", $i+1):t("Vahe");
+				$t->define_field(array(
 					"name" => "diff_".$wh."_".$i,
 					"caption" => $cp,
-					"align" => "center"
+					"align" => "center",
+					"parent" => "wh_".$wh,
+					"chgbgcolor" => "bgcolor",
 				));
 			}
 		}
@@ -7008,9 +7577,10 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"name" => "companies",
 			"caption" => t("Tarnijad"),
 			"align" => "center",
-			"sortable" => 1,
+			"chgbgcolor" => "bgcolor",
 		));
-		$t->set_default_sortby(array("name" => "name"));
+		$t->set_default_sortby(array("product" => "product", "type" => "type"));
+		$t->set_caption(t("Kogusevajaduste tabel"));
 	}
 
 	function _get_status_orders($arr)
@@ -7020,8 +7590,9 @@ $oo = get_instance(CL_SHOP_ORDER);
 			$schedule = new mrp_schedule();
 			$schedule->create(array(
 				"mrp_workspace" => obj($ws)->id(),
-				"mrp_force_replan" => 1
+				"mrp_force_replan" => 1,
 			));
+			$arr["obj_inst"]->update_orders();
 		}
 
 		$t = &$arr["prop"]["vcl_inst"];
@@ -7032,78 +7603,175 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 		
 		$levels = 0;
-		if(count($this->get_warehouse_configs($arr, "has_alternative_units")))
+
+		if(count($this->get_warehouse_configs($arr, "has_alternative_units")) && ($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE || $arr["obj_inst"]->prop("show_alt_units")))
 		{
 			$levels += (int)$this->get_warehouse_configs($arr, "alternative_unit_levels");
 		}
 		$arr["levels"] = $levels;
 
 		$this->_init_status_orders(&$arr);
+
+		$job_ol = $this->_get_jobs_for_time($arr);
+		$params = array(
+			"class_id" => CL_SHOP_PRODUCT,
+		);
 		
-		$data = $this->get_products_list_ol($arr);
+		$n = $arr["request"]["status_orders_s_name"];
+		$c = $arr["request"]["status_orders_s_code"];
+		if($n || $c)
+		{
+			if($n)
+			{
+				$params["name"] = "%".$n."%";
+			}
+			if($c)
+			{
+				$params["code"] = "%".$c."%";
+			}
+		}
+		else
+		{
+			$params["RELTYPE_PRODUCT(CL_MATERIAL_EXPENSE).RELTYPE_JOB"] = $job_ol->count() ? $job_ol->ids() : -1;
+		}
+
+		$g = $arr["request"]["status_orders_s_art_cat"];
+		if(!$g)
+		{
+			$g = $arr["request"]["pgtf"];
+		}
+		if($g)
+		{
+			$params["RELTYPE_CATEGORY.oid"] = $g;
+		}
+		$prod_ol = new object_list($params);
+
 		$pi = get_instance(CL_SHOP_PRODUCT);
 		$wso = obj();
 		$wso->set_class_id(CL_SHOP_PURCHASE_MANAGER_WORKSPACE);
 		$ufi = obj();
 		$ufi->set_class_id(CL_SHOP_UNIT_FORMULA);
-		foreach($data["ol"]->arr() as $oid => $o)
+		get_instance(CL_SHOP_PURCHASE_ORDER);
+
+		foreach($prod_ol->arr() as $oid => $o)
 		{
 			$data = array(
 				"oid" => $oid,
 				"name" => html::obj_change_url($o),
+				"product" => $oid,
 			);
 			
 			$units = $pi->get_units($o);
 
-			$rows = $wso->get_order_rows(array(
+			$times = $this->_get_status_orders_time_filt($arr);
+
+			$add_time = 0;
+			if($arr["request"]["status_orders_opt1"] == "order")
+			{
+				$conn = $o->connections_to(array(
+					"from.class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+				));
+				if(count($conn))
+				{
+					$c = reset($conn);
+					$add_time = $c->from()->prop("days") * 24 * 60 * 60;
+				}
+			}
+
+			$brons = $wso->get_order_rows(array(
+				"date" => array($times["filt_start"] - $add_time, $times["filt_end"] - $add_time),
+				"job" => $job_ol->count() ? $job_ol->ids() : -1,
+				"product" => $oid,
+				"order_type" => "CL_SHOP_SELL_ORDER",
+			));
+
+			if(!$brons->count())
+			{
+				continue;
+			}
+
+			$orders = $wso->get_order_rows(array(
 				"date" => ($d = $arr["request"]["status_orders_s_date"]) ? date_edit::get_timestamp($d) : 0,
 				"product" => $oid,
+				"order_type" => "CL_SHOP_PURCHASE_ORDER",
+				"order_status" => ORDER_STATUS_CONFIRMED,
 			));
 			$order = 0;
+
+			foreach(array(array("brons", "required"), array("orders", "ordered")) as $var)
+			{
+				foreach($$var[0]->arr() as $row)
+				{
+					for($i = 0; $i <= $levels; $i++)
+					{
+						if($row->prop("unit") == $units[$i])
+						{
+							$req_amt = $row->prop("amount");
+						}
+						if(isset($req_amt))
+						{
+							$data[$var[1]."_".$i] += $req_amt;
+						}
+						else
+						{
+							unset($fo);
+							$unit = $row->prop("unit");
+							$fo = $ufi->get_formula(array(
+								"from_unit" => $unit,
+								"to_unit" => $units[$i],
+								"product" => $o,
+							));
+							if($fo)
+							{
+								$data[$var[1]."_".$i] += $req_amt = round($ufi->calc_amount(array(
+									"amount" => $row->prop("amount"),
+									"prod" => $o,
+									"obj" => $fo,
+								)), 3);
+							}
+						}
+					}
+					if($var[0] == "brons")
+					{
+						$conn = $row->connections_to(array(
+							"from.class_id" => CL_SHOP_SELL_ORDER,
+						));
+						foreach($conn as $c)
+						{
+							$order = $c->from();
+						}
+						$job = obj($order->prop("job"));
+						$job_data = array(
+							"name" => html::obj_change_url($job)."<br /><span style=\"font-size:10px;\">(".date('d.m.Y H:i', $job->prop("starttime")).")</span>",
+							"oid" => $row->id(),
+							"product" => $oid,
+							"type" => "job",
+							"bgcolor" => "#f0f0f0",
+						);
+						for($i = 0; $i <= $levels; $i++)
+						{
+							$job_data["required_".$i] = sprintf("%s %s", $req_amt, obj($units[$i])->prop("unit_code"));
+						}
+						$t->define_data($job_data);
+					}
+				}
+			}
 			for($i = 0; $i <= $levels; $i++)
 			{
 				if(!$units[$i])
 				{
 					continue;
 				}
-				unset($req_amt);
-				unset($row);
-				foreach($rows->arr() as $row)
-				{
-					if($row->prop("unit") == $units[$i])
-					{
-						$req_amt = $row->prop("amount");
-					}
-				}
-				if(isset($req_amt))
-				{
-					$data["required_".$i] = $req_amt;
-				}
-				else
-				{
-					unset($fo);
-					if($row)
-					{
-						$unit = $row->prop("unit");
-						$fo = $ufi->get_formula(array(
-							"from_unit" => $unit,
-							"to_unit" => $units[$i],
-							"product" => $o,
-						));
-					}
-					if($fo)
-					{
-						$data["required_".$i] = round($ufi->calc_amount(array(
-							"amount" => $row->prop("amount"),
-							"prod" => $o,
-							"obj" => $fo,
-						)), 3);
-					}
-				}
 				if(!$data["required_".$i])
 				{
 					$data["required_".$i] = 0;
 				}
+				if(!$data["ordered_".$i])
+				{
+					$data["ordered_".$i] = 0;
+				}
+				unset($req_amt);
+				unset($row);
 				foreach($arr["warehouses"] as $wh)
 				{
 					if(!$this->can("view", $wh))
@@ -7121,9 +7789,10 @@ $oo = get_instance(CL_SHOP_ORDER);
 						$amount += $ao->prop("amount");
 					}
 					$data["amount_".$wh."_".$i] = sprintf("%s %s", $amount, obj($units[$i])->prop("unit_code"));
-					$data["diff_".$wh."_".$i] = sprintf("%s %s", $amount - $data["required_".$i], obj($units[$i])->prop("unit_code"));
+					$data["diff_".$wh."_".$i] = sprintf("%s %s", $amount - $data["required_".$i] + $data["ordered_".$i], obj($units[$i])->prop("unit_code"));
 				}
 				$data["required_".$i] = sprintf("%s %s", $data["required_".$i], obj($units[$i])->prop("unit_code"));
+				$data["ordered_".$i] = sprintf("%s %s", $data["ordered_".$i], obj($units[$i])->prop("unit_code"));
 			}
 			$c_ol = new object_list(array(
 				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
@@ -7140,6 +7809,71 @@ $oo = get_instance(CL_SHOP_ORDER);
 			}
 			$data["companies"] = implode(", ", $cos);
 			$t->define_data($data);
+		}
+	}
+
+	/**
+	@attrib name=create_purchase_order
+	**/
+	function create_purchase_order($arr)
+	{
+		$params = array();
+		$item_params = array();
+		$wso = obj();
+		$wso->set_class_id(CL_SHOP_PURCHASE_MANAGER_WORKSPACE);
+		foreach($arr["sel"] as $id)
+		{
+			$o = obj($id);
+			if($o->class_id() == CL_SHOP_PRODUCT)
+			{
+				$units = $o->instance()->get_units($o);
+				$brons = $wso->get_order_rows(array(
+					"date" => ($d = $arr["request"]["status_orders_s_date"]) ? date_edit::get_timestamp($d) : 0,
+					"product" => $id,
+					"order_type" => "CL_SHOP_SELL_ORDER",
+				));
+				$amt = 0;
+				foreach($brons->arr() as $b)
+				{
+					if($b->prop("unit") == $units[0])
+					{
+						$amt += $b->prop("amount");
+					}
+					else
+					{
+						$fo = $ufi->get_formula(array(
+							"from_unit" => $b->prop("unit"),
+							"to_unit" => $units[0],
+							"product" => $o,
+						));
+						if($fo)
+						{
+							$amt += round($ufi->calc_amount(array(
+								"amount" => $b->prop("amount"),
+								"prod" => $o,
+								"obj" => $fo,
+							)), 3);
+						}
+					}
+				}
+				$item_params[] = $id.",".$amt.",".$units[0];
+			}
+			elseif($o->class_id() == CL_SHOP_ORDER_ROW)
+			{
+				$item_params[] = $o->prop("prod").",".$o->prop("amount").",".$o->prop("unit");
+			}
+		}
+		$params["add_rows"] = implode(";", $item_params);
+		if($oid = $arr["add_rows_order"])
+		{
+			$params["group"] = "articles";
+			$params["id"] = $oid;
+			return $this->mk_my_orb("change", $params, CL_SHOP_PURCHASE_ORDER);
+		}
+		else
+		{
+			$params["parent"] = $arr["id"];
+			return $this->mk_my_orb("new", $params, CL_SHOP_PURCHASE_ORDER);
 		}
 	}
 

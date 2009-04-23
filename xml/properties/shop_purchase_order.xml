@@ -42,7 +42,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_PURCHASER</reltype>
             <field>aw_purchaser</field>
-            <caption>Hankija</caption>
+            <caption>Tarnija</caption>
       </property>
       <property>
             <name>job</name>
@@ -95,7 +95,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_PURCHASER_REP</reltype>
             <field>aw_purchaser_rep</field>
-            <caption>Hankija esindaja</caption>
+            <caption>Tarnija esindaja</caption>
       </property>
       <property>
             <name>our_rep</name>
@@ -154,22 +154,13 @@
             <caption>Ladu</caption>
       </property>
       <property>
-            <name>confirmed</name>
+            <name>order_status</name>
             <table>aw_shop_purcahse_orders</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aw_confirmed</field>
-            <caption>Kinnitatud</caption>
-      </property>
-      <property>
-            <name>closed</name>
-            <table>aw_shop_purcahse_orders</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aw_closed</field>
-            <caption>Suletud</caption>
+            <type>chooser</type>
+            <default>0</default>
+            <field>aw_status</field>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>taxed</name>

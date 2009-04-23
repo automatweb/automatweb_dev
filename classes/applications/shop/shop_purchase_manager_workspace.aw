@@ -379,28 +379,46 @@
 
 		@layout status_orders_left type=vbox parent=status_orders_split
 
-			@layout status_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=status_orders_left
+			@layout status_orders_time_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;ajavahemik parent=status_orders_left
 
-				@property status_orders_tree type=treeview parent=status_orders_tree_lay store=no no_caption=1
+				@property status_orders_time_tree type=treeview parent=status_orders_time_tree_lay store=no no_caption=1
 
-				@property status_orders_tree2 type=treeview parent=status_orders_tree_lay store=no no_caption=1
+			@layout status_orders_case_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;tellimus parent=status_orders_left
+
+				@property status_orders_case_tree type=treeview parent=status_orders_case_tree_lay store=no no_caption=1
+
+			@layout status_orders_prod_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;tootegrupp parent=status_orders_left
+
+				@property status_orders_prod_tree type=treeview parent=status_orders_prod_tree_lay store=no no_caption=1
+
+			@layout status_orders_res_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;ressurss parent=status_orders_left
+
+				@property status_orders_res_tree type=treeview parent=status_orders_res_tree_lay store=no no_caption=1
+
+			@layout status_orders_opt_lay type=vbox closeable=1 parent=status_orders_left area_caption=Lisavalikud
+				
+				@property status_orders_opt1 type=chooser store=no captionside=top parent=status_orders_opt_lay
+				@caption Kuvatakse tooteid, mis...
 
 			@layout status_orders_left_search type=vbox parent=status_orders_left area_caption=Otsing closeable=1
 
 				@property status_orders_s_name type=textbox store=no captionside=top size=30 parent=status_orders_left_search
-				@caption Nimi
+				@caption Toote nimi
 
 				@property status_orders_s_code type=textbox store=no captionside=top size=30 parent=status_orders_left_search
-				@caption Kood
-
-				@property status_orders_s_barcode type=textbox store=no captionside=top size=30 parent=status_orders_left_search
-				@caption Ribakood
+				@caption Toote kood
 
 				@property status_orders_s_art_cat type=select store=no captionside=top parent=status_orders_left_search
-				@caption Kategooria
+				@caption Toote kategooria
 
-				@property status_orders_s_date type=date_select ch_value=1 store=no captionside=top size=30  parent=status_orders_left_search
-				@caption Kuup&auml;ev
+				@property status_orders_s_case_no type=textbox store=no captionside=top size=30 parent=status_orders_left_search
+				@caption Tellimuse nr
+
+				@property status_orders_s_start type=date_select ch_value=1 store=no captionside=top size=30  parent=status_orders_left_search
+				@caption Ajavahemiku algus
+
+				@property status_orders_s_end type=date_select ch_value=1 store=no captionside=top size=30  parent=status_orders_left_search
+				@caption Ajavahemiku l&otilde;pp
 
 				@property status_orders_s_sbt type=submit store=no captionside=top  parent=status_orders_left_search value="Otsi"
 				@caption Otsi
@@ -547,11 +565,9 @@ class shop_purchase_manager_workspace extends class_base
 		));
 	}
 
-	function callback_mod_reforb($arr)
+	function callback_mod_reforb($arr, $request)
 	{
-		$arr["ptf"] = $_GET["ptf"];
-		$arr["pgtf"] = $_GET["pgtf"];
-		$arr["post_ru"] = post_ru();
+		return get_instance(CL_SHOP_WAREHOUSE)->callback_mod_reforb(&$arr, $request);
 	}
 
 	function get_property($arr)
@@ -610,6 +626,14 @@ class shop_purchase_manager_workspace extends class_base
 	function callback_mod_retval($arr)
 	{
 		return get_instance(CL_SHOP_WAREHOUSE)->callback_mod_retval(&$arr);
+	}
+
+	/**
+	@attrib name=create_purchase_order
+	**/
+	function create_purchase_order($arr)
+	{
+		return get_instance(CL_SHOP_WAREHOUSE)->create_purchase_order($arr);
 	}
 }
 

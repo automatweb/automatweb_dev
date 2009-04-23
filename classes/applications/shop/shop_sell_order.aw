@@ -48,11 +48,8 @@
 @property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 field=aw_warehouse
 @caption Ladu
 
-@property confirmed type=checkbox ch_value=1 field=aw_confirmed
-@caption Kinnitatud
-
-@property closed type=checkbox ch_value=1 field=aw_closed
-@caption Suletud
+@property order_status type=chooser default=0 field=aw_status
+@caption Staatus
 
 @property taxed type=chooser field=aw_taxed
 @caption Maks
@@ -97,7 +94,7 @@
 @reltype ROW value=9 clid=CL_SHOP_ORDER_ROW
 @caption Rida
 
-@reltype JOB value=10 clid=CL_MRP_CASE
+@reltype JOB value=10 clid=CL_MRP_JOB
 @caption T&ouml;&ouml;
 */
 
@@ -109,6 +106,16 @@ class shop_sell_order extends class_base
 			"tpldir" => "applications/shop/shop_sell_order",
 			"clid" => CL_SHOP_SELL_ORDER
 		));
+
+		get_instance(CL_SHOP_PURCHASE_ORDER);
+
+		$this->states = array(
+			ORDER_STATUS_INPROGRESS => t("Koostamisel"),
+			ORDER_STATUS_CONFIRMED => t("Kinnitatud"),
+			ORDER_STATUS_CANCELLED => t("Katkestatud"),
+			ORDER_STATUS_SENT => t("Saadetud"),
+			ORDER_STATUS_CLOSED => t("T&auml;idetud"),
+		);
 	}
 
 	function callback_mod_reforb($arr)
@@ -122,11 +129,16 @@ class shop_sell_order extends class_base
 		$arr["prop"]["options"] = array(0 => "K&auml;ibemaksuta", 1 => "K&auml;ibemaksuga");
 	}
 
+	function _get_order_status($arr)
+	{
+		$arr["prop"]["options"] = $this->states;
+	}
+
 	function do_db_upgrade($t, $f)
 	{
 		if ($f == "")
 		{
-			$this->db_query("CREATE TABLE aw_shop_sell_orders(aw_oid int primary key, aw_number varchar(255), aw_purchaser int, related_purcahse_orders int, aw_date int, aw_planned_send_date int, aw_buyer_rep int, aw_our_rep int, aw_trans_cost double, aw_transp_type varchar(255), aw_currency int, aw_warehouse int, aw_confirmed int, aw_closed int, aw_taxed int)");
+			$this->db_query("CREATE TABLE aw_shop_sell_orders(aw_oid int primary key, aw_number varchar(255), aw_purchaser int, related_purcahse_orders int, aw_date int, aw_planned_send_date int, aw_buyer_rep int, aw_our_rep int, aw_trans_cost double, aw_transp_type varchar(255), aw_currency int, aw_warehouse int, aw_taxed int)");
 			return true;
 		}
 		switch($f)
@@ -140,6 +152,7 @@ class shop_sell_order extends class_base
 				break;
 			case "aw_job":
 			case "aw_deal_date":
+			case "aw_status":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

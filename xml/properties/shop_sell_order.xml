@@ -126,22 +126,13 @@
             <caption>Ladu</caption>
       </property>
       <property>
-            <name>confirmed</name>
+            <name>order_status</name>
             <table>aw_shop_sell_orders</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aw_confirmed</field>
-            <caption>Kinnitatud</caption>
-      </property>
-      <property>
-            <name>closed</name>
-            <table>aw_shop_sell_orders</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aw_closed</field>
-            <caption>Suletud</caption>
+            <type>chooser</type>
+            <default>0</default>
+            <field>aw_status</field>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>taxed</name>
@@ -238,7 +229,7 @@
             </ROW>
             <JOB>
                   <value>10</value>
-                  <clid>CL_MRP_CASE</clid>
+                  <clid>CL_MRP_JOB</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;</caption>
             </JOB>
       </reltypes>

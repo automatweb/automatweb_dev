@@ -67,6 +67,7 @@ class shop_purchase_manager_workspace_obj extends _int_object
 		$o->set_parent($this->id());
 		$o->set_name($arr["name"]);
 		$o->set_prop("date", $arr["date"]);
+		$o->set_prop("order_status", ORDER_STATUS_CONFIRMED);
 		if($arr["job"])
 		{
 			$o->set_prop("job", $arr["job"]);
@@ -123,27 +124,43 @@ class shop_purchase_manager_workspace_obj extends _int_object
 	/**
 	@attrib name=get_order_rows
 	
-	@param product optional type=clid
+	@param product optional type=int
 	@param date optional type=int
-	
+	@param job optional type=int
+	@param order_type required type=string	
+	@param order_status optional type=int
+
 	@comment
 		Returns object list of orders rows by specified date and/or product
 	**/
 	function get_order_rows($arr)
 	{
+		get_instance(CL_SHOP_PURCHASE_ORDER);
 		$params = array(
 			"class_id" => CL_SHOP_ORDER_ROW,
-			"RELTYPE_ROW(CL_SHOP_SELL_ORDER).closed" => new obj_predicate_not(1),
+			"RELTYPE_ROW(".$arr["order_type"].").class_id" => constant($arr["order_type"]),
 			"site_id" => array(),
 			"lang_id" => array(),
 		);
-		if($arr["date"])
+		if($arr["order_status"])
 		{
-			$params["RELTYPE_ROW(CL_SHOP_SELL_ORDER).date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, time(), $arr["date"]);
+			$params["RELTYPE_ROW(".$arr["order_type"].").order_status"] = $arr["order_status"];
+		}
+		if(is_array($arr["date"]))
+		{
+			$params["RELTYPE_ROW(".$arr["order_type"].").date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $arr["date"][0], $arr["date"][1]);
+		}
+		elseif($arr["date"])
+		{
+			$params["RELTYPE_ROW(".$arr["order_type"].").date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, time(), $arr["date"]);
 		}
 		else
 		{
-			$params["RELTYPE_ROW(CL_SHOP_SELL_ORDER).date"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+			$params["RELTYPE_ROW(".$arr["order_type"].").date"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+		}
+		if($arr["job"])
+		{
+			$params["RELTYPE_ROW(".$arr["order_type"].").job"] = $arr["job"];
 		}
 		if($arr["product"])
 		{
@@ -158,8 +175,47 @@ class shop_purchase_manager_workspace_obj extends _int_object
 	@comment
 		updates/creates orders according to mrp_jobs
 	**/
-	function update_orders($arr)
-	{
+	function update_orders()
+	{return;
+		get_instance(CL_MRP_JOB);
+
+		//find all jobs that don't have an order
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_JOB,
+			"state" => MRP_STATUS_PLANNED,
+			"RELTYPE_JOB(CL_SHOP_SELL_ORDER).oid" => new obj_predicate_compare(OBJ_COMP_NULL),
+			"RELTYPE_MRP_RESOURCE.RELTYPE_MRP_OWNER.oid" => $this->prop("mrp_workspace"),
+			"RELTYPE_JOB(CL_MATERIAL_EXPENSE).class_id" => CL_MATERIAL_EXPENSE,
+		));
+arr($ol);die();
+		$ol2 = new object_list(array(
+			"class_id" => CL_MATERIAL_EXPENSE,
+			"job" => $ol->ids(),
+		));
+		$ol2->arr();
+		foreach($ol->arr() as $oid => $o)
+		{
+			$ol2 = new object_list(array(
+				"class_id" => CL_MATERIAL_EXPENSE,
+				"job" => $oid,
+			));
+			foreach($ol2->arr() as $rid => $row)
+			{
+				if($row->prop("base_amount"))
+				{
+					$prods[$rid] = array(
+						"product" => $row->prop("product"),
+						"amount" => $row->prop("base_amount"),
+					);
+				}
+			}
+			$this->order_products(array(
+				"date" => $o->prop("starttime"),
+				"job" => $oid,
+				"products" => $prods,
+			));
+		}
+
 		//find all planned jobs' dates
 		$odl = new object_data_list(
 			array(

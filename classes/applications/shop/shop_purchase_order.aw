@@ -18,7 +18,7 @@
 @caption Kommentaar
 
 @property purchaser type=relpicker reltype=RELTYPE_PURCHASER field=aw_purchaser
-@caption Hankija
+@caption Tarnija
 
 @property job type=relpicker reltype=RELTYPE_JOB field=aw_job
 @caption T&ouml;&ouml;
@@ -36,7 +36,7 @@
 @caption Planeeritud saabumise kuup&auml;ev
 
 @property purchaser_rep type=relpicker reltype=RELTYPE_PURCHASER_REP field=aw_purchaser_rep
-@caption Hankija esindaja
+@caption Tarnija esindaja
 
 @property our_rep type=relpicker reltype=RELTYPE_OUR_REP field=aw_our_rep
 @caption Meie esindaja
@@ -56,11 +56,8 @@
 @property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 field=aw_warehouse
 @caption Ladu
 
-@property confirmed type=checkbox ch_value=1 field=aw_confirmed
-@caption Kinnitatud
-
-@property closed type=checkbox ch_value=1 field=aw_closed
-@caption Suletud
+@property order_status type=chooser default=0 field=aw_status
+@caption Staatus
 
 @property taxed type=chooser field=aw_taxed
 @caption Maks
@@ -110,6 +107,12 @@
 @caption Kommentaar
 */
 
+define("ORDER_STATUS_CANCELLED", -1);
+define("ORDER_STATUS_INPROGRESS", 1);
+define("ORDER_STATUS_SENT", 2);
+define("ORDER_STATUS_CONFIRMED", 3);
+define("ORDER_STATUS_CLOSED", 4);
+
 class shop_purchase_order extends class_base
 {
 	function shop_purchase_order()
@@ -118,12 +121,26 @@ class shop_purchase_order extends class_base
 			"tpldir" => "applications/shop/shop_purchase_order",
 			"clid" => CL_SHOP_PURCHASE_ORDER
 		));
+
+		$this->states = array(
+			ORDER_STATUS_CANCELLED => t("Katkestatud"),
+			ORDER_STATUS_INPROGRESS => t("Koostamisel"),
+			ORDER_STATUS_SENT => t("Saadetud"),
+			ORDER_STATUS_CONFIRMED => t("Kinnitatud"),
+			ORDER_STATUS_CLOSED => t("T&auml;idetud"),
+		);
 	}
 
-	function callback_mod_reforb($arr)
+	function _get_order_status($arr)
+	{
+		$arr["prop"]["options"] = $this->states;
+	}
+
+	function callback_mod_reforb($arr, $request)
 	{
 		$arr["post_ru"] = post_ru();
-		if($_GET["action"] == "new")
+		$arr["add_rows"] = $request["add_rows"];
+		if($request["action"] == "new")
 		{
 			return;
 		}
@@ -135,6 +152,34 @@ class shop_purchase_order extends class_base
 		{
 			$o = $c->to();
 			$arr["rows"][$o->id()]["tax_rate"] = $o->prop("tax_rate");
+		}
+	}
+
+	function callback_post_save($arr)
+	{
+		if(($add = $arr["request"]["add_rows"]) && $arr["request"]["group"] != "articles")
+		{
+			$this->_add_extra_rows($add, $arr["obj_inst"]);
+		}
+	}
+
+	function _add_extra_rows($add, $obj)
+	{
+		$rows = explode(";", $add);
+		foreach($rows as $row)
+		{
+			$data = explode(",", $row);
+			$o = obj();
+			$o->set_class_id(CL_SHOP_ORDER_ROW);
+			$o->set_parent($obj->id());
+			$o->set_prop("prod", $data[0]);
+			$o->set_prop("unit", $data[2]);
+			$o->set_prop("amount", $data[1]);
+			$o->save();
+			$obj->connect(array(
+				"to" => $o,
+				"type" => "RELTYPE_ROW",
+			));
 		}
 	}
 
@@ -165,7 +210,13 @@ class shop_purchase_order extends class_base
 		}
 		else
 		{
-			get_instance(CL_CFG_VIEW_CONTROLLER)->check_property(&$mail_url, $cfg->prop("purchase_order_mail_ctrl"), $arr);
+			try
+			{
+				get_instance(CL_CFG_VIEW_CONTROLLER)->check_property(&$mail_url, $cfg->prop("purchase_order_mail_ctrl"), $arr);
+			}
+			catch(Exception $e)
+			{
+			}
 		}
 		$tb->add_button(array(
 			"img" => "mail_send.gif",
@@ -184,7 +235,7 @@ class shop_purchase_order extends class_base
 	{
 		if ($f == "")
 		{
-			$this->db_query("CREATE TABLE aw_shop_purcahse_orders(aw_oid int primary key, aw_number varchar(255), aw_purchaser int, related_sales_orders int, aw_date int, aw_planned_arrival_date int, aw_purchaser_rep int, aw_our_rep int, aw_trans_cost double, aw_transp_type varchar(255), aw_currency int, aw_warehouse int, aw_confirmed int, aw_closed int, aw_taxed int)");
+			$this->db_query("CREATE TABLE aw_shop_purcahse_orders(aw_oid int primary key, aw_number varchar(255), aw_purchaser int, related_sales_orders int, aw_date int, aw_planned_arrival_date int, aw_purchaser_rep int, aw_our_rep int, aw_trans_cost double, aw_transp_type varchar(255), aw_currency int, aw_warehouse int, aw_taxed int)");
 			return true;
 		}
 		switch($f)
@@ -198,6 +249,7 @@ class shop_purchase_order extends class_base
 				break;
 			case "aw_job":
 			case "aw_deal_date":
+			case "aw_status":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -311,9 +363,23 @@ class shop_purchase_order extends class_base
 		));
 		$units = get_instance(CL_UNIT)->get_unit_list(true);
 		$data["units"] = $units;
-		for($i = 0; $i < 10+$count; $i++)
+		for($i = 0; $i < 10; $i++)
 		{
 			$t->define_data($this->get_art_row_data($data, $i));
+		}
+		if($ar = $arr["request"]["add_rows"])
+		{
+			$rows = explode(";", $ar);
+			foreach($rows as $row)
+			{
+				$data = explode(",", $row);
+				$t->define_data($this->get_art_row_data(array(
+					"product" => $data[0],
+					"unit" => $data[2],
+					"amount" => $data[1],
+					"units" => $units,
+				), $i++));
+			}
 		}
 		foreach($conn as $c)
 		{
@@ -357,11 +423,23 @@ class shop_purchase_order extends class_base
 		}
 		else
 		{
+			if($product && $this->can("view", $product))
+			{
+				$po = obj($product);
+				$data["add"] = t("Lisa read");
+				$code_val = array($product => $po->prop("code"));
+				$name_val = array($product => $po->name());
+			}
+			else
+			{
+				$data["add"] = t("Lisa uus");
+			}
 			$data["name"] = html::textbox(array(
 				"name" => "rows[".$id."][prodname]",
 				"autocomplete_class_id" => CL_SHOP_PRODUCT,
 				"size" => 10,
 				"option_is_tuple" => 1,
+				"value" => $name_val,
 			));
 			$data["code"] = html::textbox(array(
 				"name" => "rows[".$id."][prodcode]",
@@ -369,12 +447,13 @@ class shop_purchase_order extends class_base
 				"autocomplete_source" => $this->mk_my_orb("articles_add_autocomplete_source", array(), CL_SHOP_DELIVERY_NOTE),
 				"autocomplete_params" => array(),
 				"option_is_tuple" => 1,
+				"value" => $code_val,
 			));
-			$data["add"] = t("Lisa uus");
+			$data["add_num"] = $id;
 		}
 		$data["amount"] = html::textbox(array(
 			"name" => "rows[".$id."][amount]",
-			"value" => $o?$o->prop("amount"):'',
+			"value" => $o?$o->prop("amount"):($amount ? $amount : ''),
 			"size" => 3,
 		));
 		$data["required"] = html::textbox(array(
@@ -385,7 +464,7 @@ class shop_purchase_order extends class_base
 		$data["unit"] = html::select(array(
 			"name" => "rows[".$id."][unit]",
 			"options" => $units,
-			"value" => $o?$o->prop("unit"):'',
+			"value" => $o?$o->prop("unit"):($unit ? $unit : ''),
 		));
 		$data["unit_price"] = html::textbox(array(
 			"name" => "rows[".$id."][price]",
