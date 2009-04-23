@@ -93,11 +93,6 @@ class shop_product_obj extends _int_object
 			$units = array();
 		}
 
-		foreach ($units as $key => $oid)
-		{
-			$units[$key] = new object($oid);
-		}
-
 		return $units;
 	}
 }
