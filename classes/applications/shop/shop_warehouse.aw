@@ -7130,7 +7130,9 @@ $oo = get_instance(CL_SHOP_ORDER);
 		));
 		$o = $ol->begin();
 		if($o)
-		{/*
+		{
+			$start = $o->prop("starttime");
+			/*
 			$ol2 = new object_list(array(
 				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
 				"RELTYPE_PRODUCT.RELTYPE_PRODUCT(CL_MATERIAL_EXPENSE).RELTYPE_JOB" => $o->id(),
@@ -7141,7 +7143,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			$o2 = $ol2->begin();*/
 			$days = 100;
 		}
-		return $o->prop("starttime") + 24 * 60 * 60 * $days;
+		return $start + 24 * 60 * 60 * $days;
 	}
 
 	function _get_status_orders_case_tree($arr)

@@ -1085,6 +1085,10 @@ class mrp_job extends class_base
 				{
 					continue;
 				}
+				if(!$prod)
+				{
+					continue;
+				}
 				$po = obj($prod);
 				$unitselect = self::get_materials_unitselect($po);
 				$t->define_data(array(
@@ -1124,7 +1128,7 @@ class mrp_job extends class_base
 			}
 			else
 			{
-				$unitopts[$unit->id()] = obj($unit)->name();
+				$unitopts[$unit] = obj($unit)->name();
 			}
 		}
 		if(count($units) == 1)
