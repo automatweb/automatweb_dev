@@ -632,7 +632,7 @@ class banner extends class_base
 		@returns 
 			The html for the banner
 	**/
-	function get_banner_html($loc, $banner = null)
+	function get_banner_html($loc, $banner = null, $interval = true)
 	{
 		if ($banner === null)
 		{
@@ -716,9 +716,28 @@ class banner extends class_base
 					default:
 						$html = "";
 				}
+				if ($interval)
+				{
+					$location = obj($loc);
+					if (($si = $location->prop("dynamic_switch_interval")) > 0)
+					{
+						return $this->intervalize_html($html, $si, $loc);
+					}
+				}
 				return $html;
 			}
 		}
+	}
+
+	private function intervalize_html($html, $interval, $oid)
+	{
+		$html = "<div id=\"bloc$oid\">".$html."</div>";
+
+		$html .= "<script type=\"text/javascript\">function bannerIntervalize".$oid."() 
+		{ 
+			$.get(\"".$this->mk_my_orb("fetch_banner_content", array("loc" => $oid), "banner_client")."\", {}, function (data) { $(\"#bloc".$oid."\").html(data); setTimeout(\"bannerIntervalize".$oid."()\", ".($interval * 1000).");});
+		} setTimeout(\"bannerIntervalize".$oid."()\", ".($interval * 1000).");</script>";
+		return $html;
 	}
 
 	/** Inserts banner content into html

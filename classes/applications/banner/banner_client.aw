@@ -12,8 +12,12 @@
 	@property cont_doc_tpl type=select store=no
 	@caption Dokumendi template
 
+	@property dynamic_switch_interval type=textbox size=5 field=meta method=serialize
+	@caption D&uuml;naamilise vaheldumise intervall
+
 	@property html type=textarea cols=80 rows=10 table=banner_clients 
 	@caption Asukoha HTML
+
 
 */
 
@@ -90,5 +94,14 @@ class banner_client extends class_base
 	{
 		return "[bloc".$arr["id"]."]";
 	}	
+
+	/**
+		@attrib name=fetch_banner_content
+		@param loc required
+	**/
+	public function fetch_banner_content($arr)
+	{
+		die(get_instance(CL_BANNER)->get_banner_html($arr["loc"], null, false));
+	}
 }
 ?>

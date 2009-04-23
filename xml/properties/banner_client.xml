@@ -19,6 +19,16 @@
             <caption>Dokumendi template</caption>
       </property>
       <property>
+            <name>dynamic_switch_interval</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>D&amp;amp;uuml;naamilise vaheldumise intervall</caption>
+      </property>
+      <property>
             <name>html</name>
             <table>banner_clients</table>
             <group>general</group>
