@@ -18,11 +18,18 @@ class rss_reader_obj extends _int_object
 		$c = get_instance("cache");;
 		if (($xml = $c->file_get_ts($cache_key, time() - (60 * $this->prop("update_interval")))) !== false)
 		{
-			$this->updated_time = $c->get_modified_time($cache_key);
-			return $xml;
+			if ($xml != "")
+			{
+				$this->updated_time = $c->get_modified_time($cache_key);
+				return $xml;
+			}
 		}
 		$this->updated_time = time();
 		$xml = file_get_contents(trim($this->prop("rss_url")));
+		if (trim($xml) == "")
+		{
+			$xml = file_get_contents(trim($this->prop("rss_url")));
+		}
 		$c->file_set($cache_key, $xml);
 		return $xml;
 	}
