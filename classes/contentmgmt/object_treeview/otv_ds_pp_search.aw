@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.12 2009/03/24 12:40:43 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.13 2009/04/23 12:03:33 markop Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -54,6 +54,13 @@ class otv_ds_pp_search extends class_base
 			"tpldir" => "contentmgmt/object_treeview/otv_ds_pp_search",
 			"clid" => CL_OTV_DS_PP_SEARCH
 		));
+		$this->types = array(
+			"" => "",
+			0 => t("Tekstikast"),
+			1 => t("Valik olemasolevatest"),
+			2 => t("Ajavahemik"),
+			3 => t("Kuup&auml;eva vahemik"),
+		);
 	}
 
 	function get_property($arr)
@@ -111,6 +118,11 @@ class otv_ds_pp_search extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Otsinguv&auml;lja t&uuml;&uuml;p"),
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "caption",
 			"caption" => t("Tekst"),
 			"align" => "center"
@@ -151,7 +163,12 @@ class otv_ds_pp_search extends class_base
 				"caption" => html::textbox(array(
 					"name" => "td[$fldid][caption]",
 					"value" => $td[$fldid]["caption"],
-				))
+				)),
+				"type" => html::select(array(
+					"name" => "td[$fldid][type]",
+					"value" => $td[$fldid]["type"],
+					"options" => $this->types,
+				)),
 			));
 		}
 		$t->set_sortable(false);
@@ -300,13 +317,70 @@ class otv_ds_pp_search extends class_base
 			{
 				continue;
 			}
-			$ret[$fld] = array(
-				"name" => $fld,
-				"caption" => $fld_dat["caption"],
-				"value" => $request[$fld],
-				"type" => "textbox",
-				"store" => "no"
-			);
+			switch($fld_dat["type"])
+			{
+				case 1:
+					//array("" => t("-- Vali --"));
+					$selection = array();
+					$q = "SELECT DISTINCT aw_$fld FROM aw_otv_ds_pp_cache";
+					$this->db_query($q);
+					$res = array();
+					while($row = $this->db_next())
+					{
+						$selection[$row["aw_$fld"]] = $row["aw_$fld"];
+					};
+					asort($selection);
+					$ret[$fld] = array(
+						"name" => $fld,
+						"caption" => $fld_dat["caption"],
+						"value" => $request[$fld],
+						"type" => "select",
+						"store" => "no",
+						"options" => $selection
+					);
+					break;
+				case 2:
+					$ret[$fld] = array(
+						"name" => $fld,
+						"caption" => $fld_dat["caption"]." " .t("alates"),
+						"value" => $request[$fld],
+						"type" => "datetime_select",
+						"store" => "no"
+					);
+					$ret[$fld."_to"] = array(
+						"name" => $fld."_to",
+						"caption" => $fld_dat["caption"]." " .t("kuni"),
+						"value" => $request[$fld."_to"],
+						"type" => "datetime_select",
+						"store" => "no"
+					);
+					break;
+				case 3:
+					$ret[$fld] = array(
+						"name" => $fld,
+						"caption" => $fld_dat["caption"]." " .t("alates"),
+						"value" => $request[$fld],
+						"type" => "date_select",
+						"store" => "no"
+					);
+					$ret[$fld."_to"] = array(
+						"name" => $fld."_to",
+						"caption" => $fld_dat["caption"]." " .t("kuni"),
+						"value" => $request[$fld."_to"],
+						"type" => "date_select",
+						"store" => "no"
+					);
+					break;
+				default:
+					$ret[$fld] = array(
+						"name" => $fld,
+						"caption" => $fld_dat["caption"],
+						"value" => $request[$fld],
+						"type" => "textbox",
+						"store" => "no"
+					);
+					break;
+			}
 		}
 		
 		return $ret;
@@ -365,7 +439,6 @@ class otv_ds_pp_search extends class_base
 		}
 
 		$sql = $this->get_search_sql($o, $req);
-
 		$this->db_query($sql);
 		while ($row = $this->db_next())
 		{
@@ -431,7 +504,21 @@ class otv_ds_pp_search extends class_base
 			else
 			if ($req[$fld] != "")
 			{
-				$pts[] = " aw_".$fld." LIKE '%".$req[$fld]."%' ";
+				switch($fld_dat["type"])
+				{
+					case 1:
+						$pts[] = " aw_".$fld."='".$req[$fld]."' ";
+						break;
+					case 2:
+					case 3:
+						$from = date_edit::get_timestamp($req[$fld]);
+						$to = date_edit::get_timestamp($req[$fld."_to"]);
+						$pts[] = " aw_".$fld." BETWEEN '".$from."' AND '".$to."'";
+						break;
+					default: 
+						$pts[] = " aw_".$fld." LIKE '%".$req[$fld]."%' ";
+						break;
+				}
 			}
 		}
 
