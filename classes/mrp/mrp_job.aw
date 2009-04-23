@@ -1122,6 +1122,7 @@ class mrp_job extends class_base
 		$units = $po->instance()->get_units($po);
 		foreach($units as $i => $unit)
 		{
+			$unit = obj($unit);
 			if(!$unit)
 			{
 				unset($units[$i]);
