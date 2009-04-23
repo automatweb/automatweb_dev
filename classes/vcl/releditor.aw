@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.175 2009/04/09 11:39:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.176 2009/04/23 09:10:46 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -225,7 +225,7 @@ class releditor extends core
 		$awt->set_default_sortby(array("_sort_jrk"=>"_sort_jrk", "_sort_name"=>"_sort_name"));
 		$awt->sort_by();
 		$awt->set_sortable(false);
-		return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw().html::hidden(array("name" => $this->elname."_data", "value" => serialize($data))).'</div>';
+		return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw().html::hidden(array("name" => $this->elname."_data", "value" => htmlspecialchars(serialize($data)))).'</div>';
 	}
 
 
@@ -1886,9 +1886,14 @@ class releditor extends core
 			$row["cfgform"] = $cfgproplist[$propn]["cfgform_id"];
 			$i = get_instance($this->_get_related_clid($clid, $propn));
 			$rv = $i->submit($row);
+			// So the set_property() and prop() functions could change the value -kaarel 12.03.2009
+			foreach(array_keys($prev_dat[$num]) as $k)
+			{
+				$prev_dat[$num][$k] = $i->obj_inst->prop($k);
+			}
 		}
 
-		foreach($prev_dat  as $idx => $dat_row)
+		foreach($prev_dat as $idx => $dat_row)
 		{
 			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx, $arr["cfgform"], $err);
 		}
@@ -1896,7 +1901,7 @@ class releditor extends core
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($t->draw().html::hidden(array(
 			"name" => $propn."_data",
-			"value" => serialize($prev_dat)
+			"value" => htmlspecialchars(serialize($prev_dat))
 		)));
 	}
 
@@ -2371,7 +2376,7 @@ class releditor extends core
 		{
 			die(html::hidden(array(
 				"name" => $propn."_data",
-				"value" => serialize($prev_dat)
+				"value" => htmlspecialchars(serialize($prev_dat))
 			)));
 		}
 
@@ -2384,7 +2389,7 @@ class releditor extends core
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($t->draw().html::hidden(array(
 			"name" => $propn."_data",
-			"value" => serialize($prev_dat)
+			"value" => htmlspecialchars(serialize($prev_dat))
 		)));
 	}
 

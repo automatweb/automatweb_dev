@@ -598,8 +598,8 @@ class html
 	public static function hidden($args = array())
 	{
 		extract($args);
-		$value = isset($value) ? $value : '';
-		return "<input type=\"hidden\" id=\"{$name}\" name=\"{$name}\" value='{$value}' />\n";
+		$value = isset($value) ? str_replace('"', '\"', $value) : '';
+		return "<input type=\"hidden\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\" />\n";
 	}
 
 	/**File upload
