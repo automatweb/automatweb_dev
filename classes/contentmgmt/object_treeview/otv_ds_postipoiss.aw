@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.32 2008/02/11 09:43:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.33 2009/04/23 10:35:05 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -421,6 +421,11 @@ class otv_ds_postipoiss extends class_base
 		$fd = aw_unserialize($fc);
 		$this->read_template("show.tpl");
 
+		foreach($fd as $f_n => $f_v)
+		{
+			$fd[$f_n] = iconv("UTF-8",aw_global_get("charset"),$f_v);
+		}
+
 		$this->vars($fd);
 		$lineno = 0;
 		foreach($this->all_cols as $f_n => $f_v)
@@ -636,6 +641,10 @@ class otv_ds_postipoiss extends class_base
 		$file_cnt = 0;
 		foreach($dc as $fe)
 		{
+			if (substr($fe, -3) != "xml")
+			{
+				continue;
+			}
 			$mtime = max(@filemtime($xml_fld."/".$fe), $mtime);
 			//echo "file = ".$xml_fld."/".$fe." , mtime = ".date("d.m.Y H:i", filemtime($xml_fld."/".$fe))."<br>";
 			$file_cnt++;
@@ -659,6 +668,10 @@ class otv_ds_postipoiss extends class_base
 
 		foreach($dc as $fe)
 		{
+			if (substr($fe, -3) != "xml")
+			{
+				continue;
+			}
 			echo "file $fe <Br>\n";
 			flush();
 			$fc = $this->get_file(array("file" => $xml_fld."/".$fe));
@@ -714,14 +727,16 @@ class otv_ds_postipoiss extends class_base
 			$tmp = array();
 			foreach($data as $k => $v)
 			{
-				$tmp[$k] = convert_unicode($v);
+				$tmp[$k] = convert_unicode(iconv("UTF-8",aw_global_get("charset"),$v));
 			}
 			$data = $tmp;
 
 			$this->quote(&$data);
-			
+			if(aw_global_get("uid") == "robert")
+			{
+			}
 			$this->db_query("
-				INSERT INTO aw_otv_ds_pp_cache(".join(",", map("aw_%s", array_keys($data))).") 
+				INSERT INTO aw_otv_ds_pp_cache (".join(",", map("aw_%s", array_keys($data))).") 
 					VALUES(".join(",", map("'%s'", array_values($data))).")
 			");
 			$id = $this->db_last_insert_id();

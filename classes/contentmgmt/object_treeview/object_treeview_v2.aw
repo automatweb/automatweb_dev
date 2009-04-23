@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.123 2009/04/23 10:17:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.124 2009/04/23 10:35:05 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -918,9 +918,11 @@ class object_treeview_v2 extends class_base
 						$itemsorts->set($tmp_value);
 					}
 				}
+				$date_as_text = $ih_ob->meta("sel_columns_date_as_text");
 				$itemsorts->set(array(
 					"element" => $_GET['sort_by'],
 					"ord" => ($_GET['sort_order'] == "asc") ? "asc" : "desc",
+					"is_date" => !empty($date_as_text[$_GET['sort_by']])
 				));
 			}
 			else
