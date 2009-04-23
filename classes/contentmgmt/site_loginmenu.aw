@@ -23,6 +23,14 @@ class site_loginmenu extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_MENU,
 			"parent" => $login_menu_id,
+			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+						"lang_id" => aw_global_get("lang_id"),
+						"CL_MENU.type" => array(MN_CLIENT, MN_ADMIN1, MN_PMETHOD)
+				)
+			)),
 			"status" => 2
 		));
 		
@@ -33,6 +41,15 @@ class site_loginmenu extends class_base
 				"class_id" => CL_MENU,
 				"parent" => $o->id(),
 				"status" => 2,
+				"lang_id" => array(),
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+							"lang_id" => aw_global_get("lang_id"),
+							"CL_MENU.type" => array(MN_CLIENT, MN_ADMIN1, MN_PMETHOD)
+					)
+				)),
+
 			));
 			$link_L1 = str_replace  ("&","&amp;", $that->make_menu_link($o));
 
