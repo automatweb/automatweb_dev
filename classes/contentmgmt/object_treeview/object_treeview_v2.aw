@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.122 2008/08/27 08:54:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.123 2009/04/23 10:17:28 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -464,6 +464,7 @@ class object_treeview_v2 extends class_base
 				$arr["obj_inst"]->set_meta("sel_columns_editable", $arr["request"]["column_edit"]);
 				$arr["obj_inst"]->set_meta("sel_columns_sortable", $arr["request"]["column_sortable"]);
 				$arr["obj_inst"]->set_meta("sel_columns_controller", $arr["request"]["column_view_controller"]);
+				$arr["obj_inst"]->set_meta("sel_columns_date_as_text", $arr["request"]["column_date_as_text"]);
 ////
 // don't save empty fields
 				$valid_column_fields = array();
@@ -1298,6 +1299,12 @@ class object_treeview_v2 extends class_base
 			"sortable" => 1,
 			"align" => "center",
 		));
+		$t->define_field(array(
+			"name" => "date_as_text",
+			"caption" => t("Kuup&auml;ev tekstina"),
+			"sortable" => 1,
+			"align" => "center",
+		));
 
 		$t->define_field(array(
 			"name" => "fields",
@@ -1320,6 +1327,7 @@ class object_treeview_v2 extends class_base
 		$cols_edit = $arr["obj_inst"]->meta("sel_columns_editable");
 		$cols_sortable = $arr["obj_inst"]->meta("sel_columns_sortable");
 		$cols_fields = $arr["obj_inst"]->meta("sel_columns_fields");
+		$cols_date_as_text = $arr["obj_inst"]->meta("sel_columns_date_as_text");
 		$cols_view_controllers = $arr['obj_inst']->meta("sel_columns_controller");
 
 		$ob = $arr["obj_inst"];
@@ -1351,7 +1359,7 @@ class object_treeview_v2 extends class_base
 		}
 		foreach($cold as $colid => $coln)
 		{
-			$text = $editable = $sortable = $fields = $sep_before = $sep_after = $controller = "";
+			$date_as_text = $text = $editable = $sortable = $fields = $sep_before = $sep_after = $controller = "";
 
 
 			if ($cols[$colid])
@@ -1383,6 +1391,11 @@ class object_treeview_v2 extends class_base
 					"name" => "column_sortable[".$colid."]",
 					"value" => 1,
 					"checked" => $cols_sortable[$colid],
+				));
+				$date_as_text = html::checkbox(array(
+					"name" => "column_date_as_text[".$colid."]",
+					"value" => 1,
+					"checked" => $cols_date_as_text[$colid],
 				));
 				$controller = html::select(array(
 					"name" => "column_view_controller[".$colid."]",
@@ -1471,6 +1484,7 @@ class object_treeview_v2 extends class_base
 				"sep_before" => $sep_before,
 				"sep_after" => $sep_after,
 				"controller" => $controller,
+				"date_as_text" => $date_as_text
 			));
 		}
 
@@ -1769,6 +1783,7 @@ class object_treeview_v2 extends class_base
 		$show_link = $this->_get_link($name, $url, $parms['tree_obj_ih']);
 		$sep_before = $parms["tree_obj_ih"]->meta("sel_columns_sep_before");
 		$sep_after = $parms["tree_obj_ih"]->meta("sel_columns_sep_after");
+		$date_as_text = $parms["tree_obj_ih"]->meta("sel_columns_date_as_text");
 
 		$formatv = array(
 			"show" => $url,
@@ -1834,7 +1849,9 @@ class object_treeview_v2 extends class_base
 				if (isset($formatv[$colid]))
 				{
 					$content = $formatv[$colid];
-				}else if (strpos($sel_columns_full_prop_info[$colid]['type'], "date") !== false)
+				}
+				else 
+				if (strpos($sel_columns_full_prop_info[$colid]['type'], "date") !== false)
 				{
 					$content = date("d.m.Y", $arr[$colid]);
 				}
@@ -1850,6 +1867,15 @@ class object_treeview_v2 extends class_base
 						$this->tr_i->transform(obj($tr_id), $content, $arr);
 					}
 				}
+
+/*				if (!empty($date_as_text[$colid]))
+				{
+					list($d,$m,$y) = explode(".", $content);
+					list($y, $tm) = explode(" ", $y);
+					list($h, $min) = explode(":", $tm);
+					$y = strlen((int)$y) == 4 ? $y : ($y < 30 ? "20".$y : "19".$y);
+					$content = mktime($h,$min,0,$m, $d, $y);
+				}*/
 				if ($edit_columns[$colid] == 1)
 				{
 					switch($sel_columns_full_prop_info[$colid]["type"])
