@@ -7123,7 +7123,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$ol = new object_list(array(
 			"class_id" => CL_MRP_JOB,
 			"RELTYPE_JOB(CL_MATERIAL_EXPENSE).class_id" => CL_MATERIAL_EXPENSE,
-			"RELTYPE_MRP_PROJECT.RELTYPE_MRP_OWNER" => $o->prop("mrp_workspace"),
+			"RELTYPE_MRP_PROJECT.workspace" => $o->prop("mrp_workspace"),
 			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
 			"sort_by" => "mrp_schedule.starttime desc",
 			"limit" => "0,1",
@@ -7372,7 +7372,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$params = array(
 			"class_id" => CL_MRP_JOB,
 			"starttime" => $filt,
-			"RELTYPE_MRP_PROJECT.RELTYPE_MRP_OWNER" => $arr["obj_inst"]->prop("mrp_workspace"),
+			"RELTYPE_MRP_PROJECT.workspace" => $arr["obj_inst"]->prop("mrp_workspace"),
 		);
 		if($no = $arr["request"]["status_orders_s_case_no"])
 		{

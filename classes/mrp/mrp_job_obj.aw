@@ -312,9 +312,13 @@ class mrp_job_obj extends _int_object
 
 			foreach($conn as $c)
 			{
-				$prod = new object($c->from()->prop("product"));
+				$prod = $c->from()->prop("product");
+				if(!$prod)
+				{
+					continue;
+				}
 				$unit = new object($arr["unit"][$prod]);
-				$this->set_used_material_assessment($prod, $arr["amount"][$prod], $unit, $arr["movement"][$prod], $arr["planning"][$prod]);
+				$this->set_used_material_assessment(obj($prod), $arr["amount"][$prod], $unit, $arr["movement"][$prod], $arr["planning"][$prod]);
 			}
 
 			$conn = $this->connections_to(array(
@@ -347,6 +351,22 @@ class mrp_job_obj extends _int_object
 				{
 					$c->from()->update_dn_rows($c->from(), $data);
 				}
+			}
+			
+			if($this->prop("state") == self::STATE_PLANNED)
+			{
+				$ws = $res->prop("workspace");
+			}
+			if($ws)
+			{
+				$conn = $ws->connections_to(array(
+					"from.class_id" => CL_SHOP_PURCHASE_MANAGER_WORKSPACE,
+				));
+			}
+			if(count($conn))
+			{
+				$c = reset($conn);
+				$c->from()->update_job_order($this);
 			}
 		}
 	}
@@ -456,10 +476,10 @@ class mrp_job_obj extends _int_object
 				$o->set_prop("planning", $planning);
 			}
 			$this->set_used_material_base_amount(array(
-				"obj" => &$eo,
+				"obj" => &$o,
 				"product" => $prod,
-				"amount" => $arr["amount"],
-				"unit" => $arr["unit"],
+				"amount" => $amount,
+				"unit" => $unit->id(),
 			));
 			$o->save();
 			$used_materials[$prod] = $amount;//!!! in default units
@@ -487,6 +507,12 @@ class mrp_job_obj extends _int_object
 				{
 					$eo->set_prop("planning", $planning);
 				}
+				$this->set_used_material_base_amount(array(
+					"obj" => &$eo,
+					"product" => $prod,
+					"amount" => $amount,
+					"unit" => $unit->id(),
+				));
 				$eo->save();
 				$used_materials[$prod] = $amount;//!!! in default units
 			}
@@ -1741,11 +1767,57 @@ class mrp_job_obj extends _int_object
 		}
 
 		if ($save)
-			{
+		{
 			aw_disable_acl();
 			$this->save();
 			aw_restore_acl();
 		}
+
+		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+		if($res)
+		{
+			$ws = $res->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		}
+		if($ws && $this->prop("state") == MRP_STATUS_PLANNED)
+		{
+			$conn = $ws->connections_to(array(
+				"from.class_id" => CL_SHOP_PURCHASE_MANAGER_WORKSPACE,
+			));
+			foreach($conn as $c)
+			{
+				$c->from()->update_job_order($this);
+			}
+		}
+	}
+
+	private function set_used_material_base_amount($arr)
+	{
+		$po = obj($arr["product"]);
+		$units = $po->instance()->get_units($po);
+		$unit = reset($units);
+		if($arr["unit"] && $arr["unit"] != $unit)
+		{
+			$ufi = obj();
+			$ufi->set_class_id(CL_SHOP_UNIT_FORMULA);
+			$fo = $ufi->get_formula(array(
+				"from_unit" => $arr["unit"],
+				"to_unit" => $unit,
+				"product" => $po,
+			));
+			if($fo)
+			{
+				$amt = round($ufi->calc_amount(array(
+					"amount" => $arr["amount"],
+					"prod" => $po,
+					"obj" => $fo,
+				)), 3);
+			}
+		}
+		else
+		{
+			$amt = $arr["amount"];
+		}
+		$arr["obj"]->set_prop("base_amount", $amt);
 	}
 
 	/**

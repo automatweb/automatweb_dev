@@ -118,6 +118,14 @@ class shop_purchase_manager_workspace_obj extends _int_object
 			$o = $c->to();
 			$o->set_prop("amount", $rows[$o->prop("prod")]["amount"]);
 			$o->save();
+			$upd_prods[$o->prop("prod")] = 1;
+		}
+		foreach($rows as $row)
+		{
+			if(!$upd_prods[$row["product"]])
+			{
+				$this->create_order_row($row, $order);
+			}
 		}
 	}
 
@@ -177,14 +185,15 @@ class shop_purchase_manager_workspace_obj extends _int_object
 	**/
 	function update_orders()
 	{return;
-		get_instance(CL_MRP_JOB);
+		$job = obj();
+		$job->set_class_id(CL_MRP_JOB);
 
 		//find all jobs that don't have an order
 		$ol = new object_list(array(
 			"class_id" => CL_MRP_JOB,
-			"state" => MRP_STATUS_PLANNED,
+			"state" => mrp_job_obj::STATE_PLANNED,
 			"RELTYPE_JOB(CL_SHOP_SELL_ORDER).oid" => new obj_predicate_compare(OBJ_COMP_NULL),
-			"RELTYPE_MRP_RESOURCE.RELTYPE_MRP_OWNER.oid" => $this->prop("mrp_workspace"),
+			//"RELTYPE_MRP_RESOURCE.workspace" => $this->prop("mrp_workspace"),
 			"RELTYPE_JOB(CL_MATERIAL_EXPENSE).class_id" => CL_MATERIAL_EXPENSE,
 		));
 arr($ol);die();
@@ -220,7 +229,7 @@ arr($ol);die();
 		$odl = new object_data_list(
 			array(
 				"class_id" => CL_MRP_JOB,
-				"RELTYPE_MRP_RESOURCE.RELTYPE_MRP_OWNER.oid" => $this->prop("mrp_workspace"),
+				"RELTYPE_MRP_RESOURCE.workspace" => $this->prop("mrp_workspace"),
 				"state" => MRP_STATUS_PLANNED,
 			),
 			array(
