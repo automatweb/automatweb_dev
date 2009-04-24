@@ -1374,11 +1374,11 @@ class html
 	public static function span($args = array())
 	{
 		extract($args);
-		$textsize = ($textsize ? 'font-size: ' . $textsize . ';' : "");
-		$fontweight = ($fontweight ? 'font-weight: ' . $fontweight . ';' : "");
+		$textsize = (!empty($textsize) ? 'font-size: ' . $textsize . ';' : "");
+		$fontweight = (!empty($fontweight) ? 'font-weight: ' . $fontweight . ';' : "");
 		$style = (!empty($textsize) or !empty($fontweight)) ? " style=\"{$textsize}{$fontweight}\"" : "";
-		$class = ($class ? ' class="' . $class . '"' : "");
-		$id = ($id ? " id=\"{$id}\"" : "");
+		$class = (!empty($class) ? ' class="' . $class . '"' : "");
+		$id = (!empty($id) ? " id=\"{$id}\"" : "");
 		$content = isset($content) ? $content : "";
 		return "<span{$class}{$style}{$id}>{$content}</span>";
 	}
@@ -1394,6 +1394,8 @@ class html
 		examples: "bold", "normal"
 	@param content optional type=string
 		html to insert between div tags
+	@param id optional type=string
+		div id
 	@returns string/html
 
 	@comments
@@ -1409,6 +1411,19 @@ class html
 		$id = ($id ? " id=\"{$id}\"" : "");
 		$content = isset($content) ? $content : "";
 		return "<div{$class}{$style}{$id}>{$content}</div>";
+	}
+
+	/**Bold text
+	@attrib api=1 params=pos
+	@param content required type=string
+		html to insert between div tags
+	@returns string/html
+	@comments
+		draws <b>$content</b>
+	**/
+	public static function bold($content)
+	{
+		return "<b>{$content}</b>";
 	}
 
 	/**

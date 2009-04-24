@@ -101,7 +101,7 @@ class mysql
 			$ts_s = $sec + $micro;
 		}
 
-		if (!empty($GLOBALS["cfg"]["debug"]["query_profile"]) && $_GET["QD"] == 1)
+		if (!empty($GLOBALS["cfg"]["debug"]["query_profile"]) && ifset($_GET, "QD") == 1)
 		{
 			// collect queries by function name
 			// go over functions in the backtrace and add query counts for each of them

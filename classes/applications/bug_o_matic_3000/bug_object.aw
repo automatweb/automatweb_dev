@@ -5,7 +5,7 @@
 
 class bug_object extends _int_object
 {
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		// before saving, set default props if they are not set yet
 		if (!is_oid($this->id()))
@@ -13,7 +13,7 @@ class bug_object extends _int_object
 			$this->_set_default_bug_props();
 		}
 
-		$res =  parent::save();
+		$res = parent::save($exclusive, $previous_state);
 
 		$this->update_all_rows();
 

@@ -591,11 +591,11 @@ class cfgutils extends aw_template
 								};
 							};
 						}
-						else if (is_array($_tmp[$key]) && in_array($val,$_tmp[$key]))
+						else if (isset($_tmp[$key]) && is_array($_tmp[$key]) && in_array($val,$_tmp[$key]))
 						{
 							$pass++;
 						}
-						else if ($_tmp[$key] == $val)
+						else if (ifset($_tmp, $key) == $val)
 						{
 							$pass++;
 						};

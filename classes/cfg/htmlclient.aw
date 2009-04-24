@@ -1239,7 +1239,8 @@ class htmlclient extends aw_template
 				break;
 			case "hidden":
 				// hidden elements end up in the orb_vars
-				$this->orb_vars[$item["name"]] = $item["value"];
+				$this->orb_vars[$arr["name"]] = ifset($arr, "value");
+				$retval = "";
 				break;
 
 			default:

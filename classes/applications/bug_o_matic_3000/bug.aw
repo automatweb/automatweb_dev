@@ -197,6 +197,10 @@ define("BUG_STATUS_CLOSED", 5);
 
 				@property times_chart type=google_chart no_caption=1 parent=data_r_charts store=no
 
+		@layout data_r_sitecopy type=vbox parent=content_right closeable=1 area_caption=Arenduskoopia
+
+				@property site_copy type=text no_caption=1 parent=data_r_sitecopy store=no
+
 
 	@property submit2 type=submit store=no no_caption=1
 	@caption Salvesta
@@ -369,7 +373,7 @@ class bug extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["from_problem"] = $_GET["from_problem"];
+		$arr["from_problem"] = ifset($_GET, "from_problem");
 		$arr["do_split"] = "0";
 		$arr["post_ru"] = get_ru();
 	}
@@ -377,7 +381,7 @@ class bug extends class_base
 	function callback_on_load($arr)
 	{
 		$this->cx = get_instance("cfg/cfgutils");
-		$pt = $arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"];
+		$pt = !empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : $arr["request"]["id"];
 		if($pt && $this->can("view", $pt) && obj($pt)->class_id() == CL_DEVELOPMENT_ORDER)
 		{
 			$devo = obj($pt);
@@ -461,6 +465,15 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "site_copy":
+				if($_GET["debug"])
+				{
+					arr("asd");
+				}
+				$prop["value"] = '<div id="site_copy"></div>';
+				load_javascript("site_copy.js");
+				break;
+
 			case "send_bill":
 				return PROP_IGNORE;
 				if($arr["new"])
@@ -497,7 +510,7 @@ class bug extends class_base
 					$cmo = $cn->to();
 					if($cmo->prop("add_wh"))
 					{
-						$times[$cmo->createdby()] += $cmo->prop("add_wh");
+						$times[$cmo->createdby()] = ifset($times, $cmo->createdby()) + $cmo->prop("add_wh");
 					}
 				}
 				foreach($times as $uid => $time)
@@ -562,7 +575,7 @@ class bug extends class_base
 						$d = date('d', $cr);
 					}
 					$key = mktime(0,0,0,date('m', $cr), $d, date('Y', $cr));
-					$times[$key] += $cmo->prop("add_wh");
+					$times[$key] = ifset($times, $key) + $cmo->prop("add_wh");
 				}
 				if($time == $week)
 				{
@@ -577,7 +590,7 @@ class bug extends class_base
 				$sum = 0;
 				for($i = mktime(0,0,0, date('m', $crd), $d, date('Y', $crd)); $i < time(); $i = mktime(0,0,0, date('m', $i), date('d', $i) + $time / (24 * 60 * 60), date('Y', $i)))
 				{
-					$sum += $times[$i];
+					$sum += ifset($times, $i);
 					$data[] = $sum;
 				}
 				if(count($data) == 1)
@@ -655,7 +668,7 @@ class bug extends class_base
 					$co = obj($arr["obj_inst"]->prop("customer"));
 				}
 				else
-				if ($arr["request"]["from_problem"])
+				if (!empty($arr["request"]["from_problem"]))
 				{
 					$tmp = obj($arr["request"]["from_problem"]);
 					$co = obj($tmp->prop("customer"));
@@ -734,7 +747,7 @@ class bug extends class_base
 				break;
 
 			case "deadline":
-				if ($arr["request"]["from_req"])
+				if (!empty($arr["request"]["from_req"]))
 				{
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = $r->prop("planned_time");
@@ -913,13 +926,13 @@ class bug extends class_base
 
 			case "bug_app":
 				$prop["options"] = array("" => t("--vali t&uuml;&uuml;p--"));
-				$this->bug_app_value = $prop["value"];
+				$this->bug_app_value = ifset($prop, "value");
 				break;
 
 			case "bug_priority":
 			case "bug_severity":
 				$prop["options"] = $this->get_priority_list();
-				if ($arr["request"]["from_req"])
+				if (!empty($arr["request"]["from_req"]))
 				{
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = (int)($r->prop("pri")/2);
@@ -932,7 +945,7 @@ class bug extends class_base
 			case "monitors":
 				if ($arr["new"] || true)
 				{
-					foreach($this->parent_options[$prop["name"]] as $key => $val)
+					foreach(safe_array(ifset($this->parent_options, $prop["name"])) as $key => $val)
 					{
 						$key_o = obj($key);
 						if ($key_o->class_id() == CL_CRM_PERSON)
@@ -945,14 +958,14 @@ class bug extends class_base
 					$p = obj($u->get_current_person());
 					$tmp[$p->id()] = $p->name();
 
-					if ($prop["multiple"] == 1 && $arr["new"])
+					if (ifset($prop, "multiple") == 1 && $arr["new"])
 					{
 					//	$prop["value"] = $this->make_keys(array_keys($tmp));
 						$prop["value"] = array($p->id(), $p->id());
 					}
 
 					// find tracker for the bug and get people list from that
-					$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+					$po = obj(!empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : $arr["request"]["id"]);
 					$pt = $po->path();
 					$bt_obj = null;
 					foreach($pt as $pi)
@@ -987,7 +1000,7 @@ class bug extends class_base
 					}
 				}
 
-				if ($arr["request"]["from_req"])
+				if (!empty($arr["request"]["from_req"]))
 				{
 					$r = obj($arr["request"]["from_req"]);
 					$prop["options"][$r->prop("req_p")] = $r->prop("req_p.name");
@@ -1068,7 +1081,7 @@ class bug extends class_base
 					$prop["options"][$tmp->id()] = $tmp->name();
 				}
 
-				if ($arr["request"]["set_proj"])
+				if (!empty($arr["request"]["set_proj"]))
 				{
 					$prop["value"] = $arr["request"]["set_proj"];
 				}
@@ -1081,7 +1094,7 @@ class bug extends class_base
 					}
 				}
 
-				if ($arr["request"]["from_req"])
+				if (!empty($arr["request"]["from_req"]))
 				{
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = $r->prop("project");
@@ -1113,7 +1126,7 @@ class bug extends class_base
 					$prop["options"] = array("" => t("--vali--")) + $opts;
 				}
 
-				if ($this->can("view", $arr["request"]["alias_to_org"]))
+				if (isset($arr["request"]["alias_to_org"]) && $this->can("view", $arr["request"]["alias_to_org"]))
 				{
 					$ao = obj($arr["request"]["alias_to_org"]);
 					if ($ao->class_id() == CL_CRM_PERSON)
@@ -1139,7 +1152,7 @@ class bug extends class_base
 						$prop["options"][$key] = $val;
 					}
 				}
-				if ($arr["request"]["from_req"])
+				if (!empty($arr["request"]["from_req"]))
 				{
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = $r->prop("req_co");
@@ -1206,7 +1219,7 @@ class bug extends class_base
 				break;
 
 			case "bug_add_real":
-				if(!$prop["value"])
+				if(empty($prop["value"]))
 				{
 					$prop["value"] = 0.00;
 				}
@@ -1219,7 +1232,7 @@ class bug extends class_base
 				));
 				break;
 			case "bug_add_guess":
-				$prop["value"] == "";
+				$prop["value"] = "";
 				break;
 		};
 		return $retval;
@@ -1709,13 +1722,9 @@ class bug extends class_base
 		unset($tmp_options[""]);
 		uksort($tmp_options, array($this, "__sort_ppl"));
 		$options = array();
-		if(!is_array($prop["value"]))
+		if(!empty($prop["value"]))
 		{
-			$vals = array($prop["value"]);
-		}
-		elseif($prop["value"])
-		{
-			$vals = $prop["value"];
+			$vals = (array)$prop["value"];
 		}
 		else
 		{
@@ -1724,7 +1733,7 @@ class bug extends class_base
 		$options[""] = $prop["options"][""];
 		foreach($vals as $value)
 		{
-			$options[$value] = $prop["options"][$value];
+			$options[$value] = ifset($prop, "options", $value);
 		}
 		if(!$arr["new"])
 		{
@@ -3160,7 +3169,7 @@ die($email);
 			{
 				if ($pd["group"] == $gn)
 				{
-					$ret["prop_".$pn] = "&nbsp;&nbsp;&nbsp;".substr($pd["caption"], 0, 20);
+					$ret["prop_".$pn] = str_repeat("&nbsp;", 3).substr(ifset($pd, "caption"), 0, 20);
 				}
 			}
 		}
@@ -3823,7 +3832,7 @@ EOF;
 		{
 			$type_app .=  "
  				opts[$t] = new Array()";
-			foreach($option as $oid => $name)
+			foreach(safe_array($option) as $oid => $name)
 			{
 				$type_app .= "
 				opts[$t][$oid] = '$name'";
@@ -3854,7 +3863,7 @@ EOF;
 			bug_app.value = '".$this->bug_app_value."';";
 		}
 
-		if ($arr["request"]["group"] == "" || $arr["request"]["general"] == "")
+		if (empty($arr["request"]["group"]) || empty($arr["request"]["general"]))
 		{
 			return $hide_fb.$maintainers.$s_bug_stopper_watch_v2.$type_app;
 		}
@@ -3950,8 +3959,8 @@ EOF;
 		foreach($conn as $c)
 		{
 			$cmo = $c->to();
-			$ppl_r_times[$cmo->createdby()] += $cmo->prop("add_wh");
-			$ppl_g_times[$cmo->createdby()] += $cmo->prop("add_wh_guess");
+			$ppl_r_times[$cmo->createdby()] = $cmo->prop("add_wh") + ifset($ppl_r_times, $cmo->createdby());
+			$ppl_g_times[$cmo->createdby()] = $cmo->prop("add_wh_guess") + ifset($ppl_g_times, $cmo->createdby());
 		}
 		$ui = get_instance(CL_USER);
 		$total = 0;
@@ -3967,11 +3976,11 @@ EOF;
 				$total += $time;
 			}
 		}
-		if($arr["prop"]["name"] == "num_hrs_guess" && count($values) > 1)
+		if($arr["prop"]["name"] == "num_hrs_guess" && isset($values) && count($values) > 1)
 		{
 			$values[] = t("Kokku:")." ".$total;
 		}
-		return implode("<br />\n", $values);
+		return isset($values) ? implode("<br />\n", $values) : "";
 	}
 
 	function get_finance_types()
@@ -3985,7 +3994,7 @@ EOF;
 
 	function filter_bug_statuses($statuses, $arr)
 	{
-		$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+		$po = obj(!empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : $arr["request"]["id"]);
 		$pt = $po->path();
 		$bt = null;
 		foreach($pt as $pi)
@@ -4019,7 +4028,7 @@ EOF;
 			}
 			foreach($statuses as $stid => $status)
 			{
-				if($filter[$stid] == "no")
+				if(ifset($filter, $stid) == "no")
 				{
 					unset($statuses[$stid]);
 				}

@@ -2,7 +2,10 @@
 // bug_tracker.aw - BugTrack
 
 define("MENU_ITEM_LENGTH", 20);
-define("BUG_STATUS_CLOSED", 5);
+if(!defined("BUG_STATUS_CLOSED"))
+{
+	define("BUG_STATUS_CLOSED", 5);
+}
 
 /*
 
