@@ -119,7 +119,7 @@ class toolbar extends aw_template
 		global $mc_counter;
 		$mc_counter++;
 
-		$id = empty($arr["href_id"]) ? "" : " id=\"{$arr[href_id]}\"";
+		$id = empty($arr["href_id"]) ? "" : " id=\"".$arr["href_id"]."\"";
 		$onclick = empty($arr["onClick"]) ? "" : " onclick=\"{$arr["onClick"]}\"";
 
 		if (!empty($arr["link"]))

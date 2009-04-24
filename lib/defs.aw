@@ -543,7 +543,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			$ret = array(0 => "");
 		}
 
-		$field = ($field) ? $field : "name";
+		$field = !empty($field) ? $field : "name";
 
 		$trans = array_flip(get_html_translation_table(HTML_ENTITIES));
 
