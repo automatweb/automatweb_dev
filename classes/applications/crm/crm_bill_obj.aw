@@ -2092,6 +2092,7 @@ class crm_bill_obj extends _int_object
 				)
 			)),
 			"oid" => $this->id(),
+			"CL_CRM_BILL.RELTYPE_ROW.writeoff" => new obj_predicate_not(1),
 		));
 		return $ol->count();
 	}
