@@ -1285,7 +1285,11 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		$impvars = array("lang_id","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order","cal","date", "project", "view");
 		foreach($impvars as $k)
 		{
-			if (isset($_REQUEST[$k]))
+			if (isset($GLOBALS[$k]))
+			{
+				aw_global_set($k, $GLOBALS[$k]);
+			}
+			elseif (isset($_REQUEST[$k]))
 			{
 				aw_global_set($k,$_REQUEST[$k]);
 			}
