@@ -827,6 +827,8 @@ class html
 		If set, the button is disabled
 	@param onclick optional type=string
 		stuff what will happen if you click the button - javascript
+	@param id optional type=string
+		button id
 	@returns string/html submit button
 	**/
 	public static function button($args = array())
@@ -839,8 +841,9 @@ class html
 		$name = !empty($name) ? 'name="'.$name.'" ' : "";
 		$class = !empty($class) ? " class=\"{$class}\"" : "";
 		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "";
+		$id = !empty($id) ? " id=\"{$id}\"" : "";
 
-		return "<input type='{$type}' {$name}value='{$value}'{$onclick}{$class}{$disabled}{$textsize} />\n";
+		return "<input type='{$type}' {$name}value='{$value}'{$id}{$onclick}{$class}{$disabled}{$textsize} />\n";
 	}
 
 	/**Time selector

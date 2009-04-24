@@ -41,6 +41,11 @@ class relpicker extends  core
 		@param value optional
 			Value for relpicker. array if multiple, int otherwise
 
+		@param width optional type=int
+			Select width
+
+		@param disabled optional type=int
+
 		@returns The HTML of the relpicker.
 
 		@examples
@@ -138,6 +143,8 @@ class relpicker extends  core
 			"selected" => $selected,
 			"multiple" => $multiple,
 			"size" => $size,
+			"width" => $width,
+			"disabled" => $disabled,
 		));
 
 		if($buttonspos == "bottom")
@@ -172,6 +179,24 @@ class relpicker extends  core
 //				"url" => html::get_change_url($selected_id, array("return_url" => get_ru())),
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
 				"title" => t("Muuda"),
+			));
+		}
+		elseif(is_array($selected) && !$no_edit)
+		{	
+			$pm = get_instance("vcl/popup_menu");
+			$pm->begin_menu(str_replace(array("[", "]"), "", $name)."_rp_editbtn");
+			foreach($selected as $id)
+			{
+				if($this->can("edit", $id))
+				{
+					$pm->add_item(array(
+						"text" => obj($id)->name(),
+						"link" => html::get_change_url($id, array("return_url" => get_ru())),
+					));
+				}
+			}
+			$r .= " ".$pm->get_menu(array(
+				"icon" => "edit.gif",
 			));
 		}
 		if(!$no_edit)
@@ -360,6 +385,29 @@ class relpicker extends  core
 				"url" => html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru())),
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
 				"title" => t("Muuda"),
+			));
+		}
+		elseif (
+			isset($val["type"]) && $val["type"] === "select" &&
+			is_object($this->obj) && ((isset($val["value"]) && is_array($val["value"]) && $this->can("edit", $val["value"])) ||
+			(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && is_array($this->obj->prop($val["name"])))) &&
+			empty($val["no_edit"])
+		)
+		{
+			$pm = get_instance("vcl/popup_menu");
+			$pm->begin_menu(str_replace(array("[", "]"), "", $val["name"])."_rp_editbtn");
+			foreach($this->obj->prop($val["name"]) as $id)
+			{
+				if($this->can("edit", $id))
+				{
+					$pm->add_item(array(
+						"text" => obj($id)->name(),
+						"link" => html::get_change_url($id, array("return_url" => get_ru())),
+					));
+				}
+			}
+			$val["post_append_text"] .= " ".$pm->get_menu(array(
+				"icon" => "edit.gif",
 			));
 		}
 
