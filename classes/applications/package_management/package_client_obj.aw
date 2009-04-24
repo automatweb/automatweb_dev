@@ -238,7 +238,10 @@ class package_client_obj extends _int_object
 //testiks
 				$file_name = basename($path);
 				$location =  dirname($dat["name"]);
-				if($file_version)$file_version = $data["file_versions"][$dat["name"]];
+				if($file_version)
+				{
+					$file_version = $data["file_versions"][$dat["name"]];
+				}
 				$ext = $fs = "";
 
 				$newfile_arr = explode("." , $file_name);
@@ -254,35 +257,54 @@ class package_client_obj extends _int_object
 					$fs = $file_name;
 				}
 				
-
 			//andmebaasi kirje sellest installist
 				if(!$file_version)$file_version = $data["file_versions"]['/'.$dat["name"]];
-				$sql = "insert into ".$this->db_table_name."(
-					file_name,
-					file_version,
-					file_location,
-					class_name,
-					file_ext,
-					package_name,
-					package_version,
-					package_id,
-					used,
-					installed_date,
-					dependences
-				) values (
-					'".$file_name."',
-					'".$file_version."',
-					'".$location."',
-					'".$fs."',
-					'".$ext."',
-					'".$data["name"]."',
-					'".$data["version"]."',
-					".$data["package_id"].",
-					1,
-					".time().",
-					'123'
-				)";
+				$classes = array($fs => $fs);
 
+				if($ext == "aw")//iga klass eraldi
+				{
+					$filea = file($path);
+					foreach($filea as $file)
+					{
+						$strMatchesArray = array();
+						preg_match_all('/class[\s]+([\w]*)/i', $file, $strMatchesArray);
+						
+						if($strMatchesArray[1][0])
+						{
+							$classes[$strMatchesArray[1][0]] = $strMatchesArray[1][0];
+	
+						}
+					}
+				}
+
+				foreach($classes as $class)
+				{
+					$sql = "insert into ".$this->db_table_name."(
+						file_name,
+						file_version,
+						file_location,
+						class_name,
+						file_ext,
+						package_name,
+						package_version,
+						package_id,
+						used,
+						installed_date,
+						dependences
+					) values (
+						'".$file_name."',
+						'".$file_version."',
+						'".$location."',
+						'".$class."',
+						'".$ext."',
+						'".$data["name"]."',
+						'".$data["version"]."',
+						".$data["package_id"].",
+						1,
+						".time().",
+						'123'
+					)";
+				}
 				$this->uninstall_file(array(
 					"name" => $file_name,
 					"location" => $location,
@@ -314,7 +336,11 @@ class package_client_obj extends _int_object
 					$fs = $file_name;
 				}
 				$newfile = aw_ini_get("basedir").'/'.$location."/".$fs."_".$file_version.".".$ext;
+				$newfile_without_version = aw_ini_get("basedir").'/'.$location."/".$fs.".".$ext;
+				
 				$success = copy($temp_path, $newfile);
+				$success2 = copy($temp_path, $newfile_without_version);//selle paneb nii, et m6ni fail, mida ei kutsutaks v2lja versiooni j2rgi, m6juks ka
+
 				unlink($temp_path);
 				print ($success? "success" : "fail")." <br>\n";	
 				print $newfile." <br>\n";	
