@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="relationmgr" folder="www/automatweb_cvs/classes/vcl" extends="aw_template">
+	<class name="relationmgr" folder="www/dev/terryf/automatweb_dev/classes/vcl" extends="aw_template">
 		<action name="disp_relmgr" all_args="1">
 			<function name="disp_relmgr">
 				<arguments>

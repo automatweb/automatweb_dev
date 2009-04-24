@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="site_copy" folder="www/automatweb_cvs/classes/contentmgmt/site_copy" extends="class_base">
+	<class name="site_copy" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt/site_copy" extends="class_base">
 		<action name="invoke" nologin="1" all_args="1">
 			<function name="invoke">
 				<arguments>
@@ -47,7 +47,16 @@
 			<function name="add_site">
 				<arguments>
 					<required name="url" type="string" />
+					<required name="email" type="string" />
 					<optional name="cvs" type="boolean" default="false" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="check_site" nologin="1">
+			<function name="check_site">
+				<arguments>
+					<required name="url" type="string" />
 				</arguments>
 			</function>
 		</action>

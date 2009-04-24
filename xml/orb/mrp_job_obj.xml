@@ -12,18 +12,6 @@
 			</function>
 		</action>
 
-		<action name="set_used_material_assessment">
-			<function name="set_used_material">
-				<arguments>
-					<required name="product" type="oid" />
-					<required name="amount" type="int" />
-					<optional name="unit" type="oid" />
-					<optional name="movement" type="int" />
-					<optional name="planning" type="int" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="get_person_work_hours">
 			<function name="get_person_hours">
 				<arguments>
@@ -52,6 +40,15 @@
 					<optional name="average" type="boolean" />
 					<optional name="count" type="boolean" />
 					<optional name="convert_to_hours" type="boolean" default="true" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_material_expenses">
+			<function name="get_material_expenses">
+				<arguments>
+					<required name="id" type="int/array" />
+					<optional name="odl" type="bool" default="false" />
 				</arguments>
 			</function>
 		</action>

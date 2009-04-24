@@ -35,8 +35,11 @@
 		<action name="get_order_rows">
 			<function name="get_order_rows">
 				<arguments>
-					<optional name="product" type="clid" />
+					<optional name="product" type="int" />
 					<optional name="date" type="int" />
+					<optional name="job" type="int" />
+					<required name="order_type" type="string" />
+					<optional name="order_status" type="int" />
 				</arguments>
 			</function>
 		</action>
