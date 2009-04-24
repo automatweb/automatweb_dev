@@ -80,6 +80,12 @@ if (substr($pi, 0, strlen("/class=file")) == "/class=file")
 	parse_str($pi, $_GET);
 	extract($_GET);
 }
+elseif (substr($pi, 0, strlen("/class=flv_file")) == "/class=flv_file")
+{
+	$pi = substr(str_replace("/", "&", str_replace("?", "&", $pi)), 1);
+	parse_str($pi, $_GET);
+	extract($_GET);
+}
 else
 {
 	$_SERVER["REQUEST_URI"] = isset($_SERVER['REQUEST_URI']) ? preg_replace("|\?automatweb=[^&]*|","", $_SERVER["REQUEST_URI"]) : "";

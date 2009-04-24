@@ -234,6 +234,26 @@ class flv_file extends class_base
 		return $retval;
 	}
 	
+	function parse_alias($args = array())
+	{
+		extract($args);
+		$o = obj($alias["to"]);
+		
+		if (!empty($alias["aliaslink"]))
+		{
+			return $this->show(array(
+				"id" => $o->id(),
+				"in_popup" => true,
+			));
+		}
+		else
+		{
+			return $this->show(array(
+				"id" => $o->id(),
+			));
+		}
+	}
+	
 	/**
 		@attrib name=view params=name nologin="1" default="0"
 		@param id required
@@ -296,19 +316,41 @@ class flv_file extends class_base
 			$image_file_name = end(explode("/", $o_img->prop("file")));
 			$s_img_url = image::get_url($o_img->prop("file"));
 		}
-	
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			// id has to be unique. if one puts more than 1 same vidoe on same page then it does not work in opera
-			// works in firefox though. don't know about other browsers.
-			"id" => "aw_flvplayer_".$o->id(),
-			"name" => $o->prop("name"),
-			"file" => $s_url,
-			"width" => $o->prop("width")?$o->prop("width"):300,
-			"height" => $o->prop("height")?$o->prop("height"):250,
-			"image_url" => $s_img_url,
-			
-		));
+		
+		if($arr["in_popup"])
+		{
+			$popup_width_extra = 0;
+			$popup_height_extra = 0;
+			$this->read_template("popup.tpl");
+			$vars = array(
+				// id has to be unique. if one puts more than 1 same vidoe on same page then it does not work in opera
+				// works in firefox though. don't know about other browsers.
+				"id" => "aw_flvplayer_".$o->id(),
+				"name" => $o->prop("name"),
+				"file" => $s_url,
+				"width" => $o->prop("width")?$o->prop("width"):300,
+				"height" => $o->prop("height")?$o->prop("height"):250,
+				"popup_width" => $o->prop("width")?$o->prop("width")+$popup_width_extra:300+$popup_width_extra,
+				"popup_height" => $o->prop("height")?$o->prop("height")+$popup_height_extra:250+$popup_height_extra,
+				"image_url" => $s_img_url,
+			);
+		}
+		else
+		{
+			$this->read_template("show.tpl");
+			$vars = array(
+				// id has to be unique. if one puts more than 1 same vidoe on same page then it does not work in opera
+				// works in firefox though. don't know about other browsers.
+				"id" => "aw_flvplayer_".$o->id(),
+				"name" => $o->prop("name"),
+				"file" => $s_url,
+				"width" => $o->prop("width")?$o->prop("width"):300,
+				"height" => $o->prop("height")?$o->prop("height"):250,
+				"image_url" => $s_img_url,
+			);
+		}
+		
+		$this->vars($vars);
 		return $this->parse();
 	}
 }
