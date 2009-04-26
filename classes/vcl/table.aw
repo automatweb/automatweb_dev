@@ -3133,7 +3133,7 @@ class vcl_table extends aw_table
 					$val = html::get_change_url($o->id(), array("return_url" => get_ru()), "Muuda");
 				}
 				else
-				if ($v["_type"] == "rel")
+				if (ifset($v, "_type") == "rel")
 				{
 					$val = html::obj_change_url($o->prop($v["name"]));
 				}
