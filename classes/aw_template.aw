@@ -828,7 +828,7 @@ class aw_template extends core
 		}
 	}
 
-	/** imports variables into the current template, overwriting the previous variables of the same name. DOES NOT escapes php code
+	/** imports variables into the current template, overwriting the previous variables of the same name. DOES NOT escape php code
 		@attrib api=1
 
 		@param params required type=array
@@ -934,7 +934,8 @@ class aw_template extends core
 		else
 		{
 			$src = localparse($val, $this->vars);
-		};
+		}
+
 		// v6tame selle maha ka .. this is NOT a good place for that
 		//aw_session_del("status_msg", true);
 
@@ -946,6 +947,7 @@ class aw_template extends core
 			}
 	   		$this->vars[$object] .= $src;
 		}
+
 		if ($this->debug_mode == 1 && isset($_GET["TPL"]) && $_GET["TPL"] == 2 && $object == "MAIN")
 		{
 			print "Available variables for: " . $this->template_filename;
@@ -993,7 +995,7 @@ class aw_template extends core
 				$cur_src.=$line;
 			}
 			else
-			if (preg_match("/<!-- SUB: (.*) -->/",$line, $mt))
+			if (preg_match("/<!-- SUB: (.*) -->/S",$line, $mt))
 			{
 				// start new subtemplate
 				$this->req_read_tpl($fq_name.".".$mt[1],$mt[1],$cur_name);
@@ -1001,7 +1003,7 @@ class aw_template extends core
 				$cur_src.="{VAR:".$mt[1]."}";
 			}
 			else
-			if (preg_match("/^(.*)<!-- END SUB: (.*) -->/",$line, $mt))
+			if (preg_match("/^(.*)<!-- END SUB: (.*) -->/S",$line, $mt))
 			{
 				/* This avoid obligatory newline after each block, making templates more flexible..
 				/use eg
@@ -1016,7 +1018,7 @@ class aw_template extends core
 				if ($this->use_eval)
 				{
 					$xsrc = str_replace("\"","\\\"",$cur_src);
-					$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/","\".(isset(\$vars['\$1']) ? \$vars['\$1'] : null).\"",$xsrc);
+					$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/S","\".(isset(\$vars['\$1']) ? \$vars['\$1'] : null).\"",$xsrc);
 				};
 
 				$this->templates[$cur_name] = $cur_src;	// ugh, this line for aliasmanager and image_inplace compatibility :(
@@ -1035,7 +1037,7 @@ class aw_template extends core
 		if ($this->use_eval)
 		{
 			$xsrc = str_replace("\"","\\\"",$cur_src);
-			$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/","\".(isset(\$vars['\$1']) ? \$vars['\$1'] : null).\"",$xsrc);
+			$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/S","\".(isset(\$vars['\$1']) ? \$vars['\$1'] : null).\"",$xsrc);
 		};
 
 		$this->templates[$cur_name] = $cur_src;	// ugh, this line for aliasmanager and image_inplace compatibility :(
