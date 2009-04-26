@@ -614,7 +614,7 @@ class htmlclient extends aw_template
 				// track usage of submit button, if one does not exist in class properties
 				// then we add one ourself. This is not a good way to do this, but hey ..
 				// and it gets worse...
-				if (isset($item["type"]) && $item["type"] == "submit")
+				if (isset($item["type"]) && $item["type"] === "submit")
 				{
 					$this->submit_done = true;
 				}
@@ -1651,6 +1651,8 @@ class htmlclient extends aw_template
 	{
 		// support TOP and LEFT for now only
 		$captionside = "LEFT";
+		$s_help_popup = "";
+		$errmsg = "";
 
 		if (isset($arr["captionside"]))
 		{
@@ -1662,23 +1664,13 @@ class htmlclient extends aw_template
 			}
 		}
 
-		// reset all captions
-		$this->vars_safe(array(
-			"caption" => empty($arr["caption"]) ? null : $arr["caption"],
-			"CAPTION_LEFT" => "",
-			"CAPTION_TOP" => "",
-			"element" => $this->draw_element($arr),
-			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
-			"GRID_ERR_MSG" => ""
-		));
-
+		// errmsg
 		if (!empty($arr["error"]))
 		{
-			$this->vars_safe(array(
-				"GRID_ERR_MSG" => $this->parse("GRID_ERR_MSG")
-			));
+			$errmsg = $this->parse("GRID_ERR_MSG");
 		}
 
+		// prop help
 		if ( isset($this->tooltip_index) )
 		{
 			$this->tooltip_index++;
@@ -1687,34 +1679,34 @@ class htmlclient extends aw_template
 		{
 			$this->tooltip_index = 1;
 		}
-		
-		$this->vars(array(
-			"tooltip_index" => $this->tooltip_index,
-			"comment" => ifset($arr, "comment"),
-		));
+
 		if(isset($arr["comment"]) && strlen($arr["comment"]))
 		{
+			$this->vars(array(
+				"tooltip_index" => $this->tooltip_index,
+				"comment" => $arr["comment"]
+			));
 			$s_help_popup = $this->parse("HELP_POPUP");
-		}
-		else
-		{
-			$s_help_popup = "";
 		}
 
 		// name refers to a VAR inside the template
-		$caption_template = "CAPTION_" . $captionside;
+		$caption_template = "CAPTION_" . $captionside; // TOP or LEFT
+
+		// main vars
 		$this->vars_safe(array(
+			"caption" => empty($arr["caption"]) ? null : $arr["caption"],
+			"CAPTION_LEFT" => "",
+			"CAPTION_TOP" => "",
+			"element" => $this->draw_element($arr),
+			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
+			"GRID_ERR_MSG" => $errmsg,
 			$caption_template => $this->parse($caption_template),
-			"HELP_POPUP" => $s_help_popup,
+			"HELP_POPUP" => $s_help_popup
 		));
-		$tpl = "GRIDITEM";
 
-		if (!empty($arr["no_caption"]))
-		{
-			$tpl = "GRIDITEM_NO_CAPTION";
-		}
-
-		return $this->parse($tpl);
+		$tpl = empty($arr["no_caption"]) ? "GRIDITEM" : "GRIDITEM_NO_CAPTION";
+		$src = $this->parse($tpl);
+		return $src;
 	}
 
 	private function my_get_ru($class)
