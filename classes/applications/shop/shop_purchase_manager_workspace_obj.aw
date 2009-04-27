@@ -184,7 +184,10 @@ class shop_purchase_manager_workspace_obj extends _int_object
 		updates/creates orders according to mrp_jobs
 	**/
 	function update_orders()
-	{return;
+	{
+		//waiting for a storage fix for the next ol
+	if(false)
+	{
 		$job = obj();
 		$job->set_class_id(CL_MRP_JOB);
 
@@ -196,7 +199,7 @@ class shop_purchase_manager_workspace_obj extends _int_object
 			//"RELTYPE_MRP_RESOURCE.workspace" => $this->prop("mrp_workspace"),
 			"RELTYPE_JOB(CL_MATERIAL_EXPENSE).class_id" => CL_MATERIAL_EXPENSE,
 		));
-arr($ol);die();
+	arr($ol);die();
 		$ol2 = new object_list(array(
 			"class_id" => CL_MATERIAL_EXPENSE,
 			"job" => $ol->ids(),
@@ -224,13 +227,13 @@ arr($ol);die();
 				"products" => $prods,
 			));
 		}
-
+	}
 		//find all planned jobs' dates
 		$odl = new object_data_list(
 			array(
 				"class_id" => CL_MRP_JOB,
-				"RELTYPE_MRP_RESOURCE.workspace" => $this->prop("mrp_workspace"),
-				"state" => MRP_STATUS_PLANNED,
+				"RELTYPE_JOB(CL_SHOP_SELL_ORDER).class_id" => CL_SHOP_SELL_ORDER,
+				"state" => mrp_job_obj::STATE_PLANNED,
 			),
 			array(
 				CL_MRP_JOB => array("oid", "starttime"),

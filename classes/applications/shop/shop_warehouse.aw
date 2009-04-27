@@ -7339,7 +7339,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				}
 				else
 				{
-					$filt_start = time();
+					$filt_start = mktime(0, 0, 0, date('m'), date('d') - date('N'), date('Y'));
 					$filt_end = mktime(0, 0, 0, date('m'), date('d') + 7 - date('N'), date('Y'));
 				}
 		}
@@ -7373,6 +7373,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"class_id" => CL_MRP_JOB,
 			"starttime" => $filt,
 			"RELTYPE_MRP_PROJECT.workspace" => $arr["obj_inst"]->prop("mrp_workspace"),
+			"RELTYPE_JOB(CL_MATERIAL_EXPENSE).class_id" => CL_MATERIAL_EXPENSE,
 		);
 		if($no = $arr["request"]["status_orders_s_case_no"])
 		{
