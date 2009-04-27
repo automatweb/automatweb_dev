@@ -6501,7 +6501,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		foreach($oi->states as $id => $state)
 		{
 			$odl = new object_data_list(array(
-				"class_id" => $arr["request"]["group"] == "purchase_orders" ? CL_SHOP_PURCHASE_ORDER : CL_SHOP_SELL_ORDER,
+				"class_id" => $arr["request"]["group"] == "sell_orders" ? CL_SHOP_SELL_ORDER : CL_SHOP_PURCHASE_ORDER,
 				"order_status" => $id,
 			),
 			array(
@@ -7694,7 +7694,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			}
 
 			$orders = $wso->get_order_rows(array(
-				"date" => ($d = $arr["request"]["status_orders_s_date"]) ? date_edit::get_timestamp($d) : 0,
+				"date" => 0,
 				"product" => $oid,
 				"order_type" => "CL_SHOP_PURCHASE_ORDER",
 				"order_status" => ORDER_STATUS_CONFIRMED,
