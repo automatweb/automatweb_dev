@@ -22,7 +22,6 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <no_caption>1</no_caption>
             <prop_cb>1</prop_cb>
             <field>show_not_logged</field>
             <caption>N&amp;amp;auml;htav v&amp;amp;auml;lja loginud kasutajatele</caption>
@@ -33,7 +32,6 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <no_caption>1</no_caption>
             <prop_cb>1</prop_cb>
             <field>show_logged</field>
             <caption>N&amp;amp;auml;htav sisse loginud kasutajatele</caption>
@@ -44,7 +42,6 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <no_caption>1</no_caption>
             <prop_cb>1</prop_cb>
             <field>show_others</field>
             <caption>N&amp;amp;auml;htav muudele applikatsioonidele</caption>

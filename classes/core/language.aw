@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.30 2008/12/03 09:56:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.31 2009/04/27 15:38:22 markop Exp $
 // language.aw - Keel 
 /*
 
@@ -19,13 +19,13 @@
 @caption Aktiivne
 
 
-@property show_not_logged type=checkbox ch_value=1 no_caption=1 prop_cb=1 table=languages field=show_not_logged
+@property show_not_logged type=checkbox ch_value=1 prop_cb=1 table=languages field=show_not_logged
 @caption N&auml;htav v&auml;lja loginud kasutajatele
 
-@property show_logged type=checkbox ch_value=1 no_caption=1 prop_cb=1 table=languages field=show_logged
+@property show_logged type=checkbox ch_value=1 prop_cb=1 table=languages field=show_logged
 @caption N&auml;htav sisse loginud kasutajatele
 
-@property show_others type=checkbox ch_value=1 no_caption=1 prop_cb=1 table=languages field=show_others
+@property show_others type=checkbox ch_value=1 prop_cb=1 table=languages field=show_others
 @caption N&auml;htav muudele applikatsioonidele
 
 
