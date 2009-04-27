@@ -1431,7 +1431,7 @@ class grid_editor extends class_base
 
 				if ($tmp === "")
 				{
-					$tmp = "<img src='".aw_ini_get("baseurl")."/automatweb/images/transparent.gif' width='1' height='1'>";
+					$tmp = '<img src="'.aw_ini_get("baseurl").'/automatweb/images/transparent.gif" width="1" height="1" alt="" />';
 				}
 				$cs .= $tmp;
 
