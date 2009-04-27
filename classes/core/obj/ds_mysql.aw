@@ -509,7 +509,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
-				if ($prop['type'] == 'range') // range support by dragut
+				if (ifset($prop, 'type') == 'range') // range support by dragut
 				{
 					$fields[] = $table.".`".$prop["field"]."_from` AS `".$prop["name"]."_from`";
 					$fields[] = $table.".`".$prop["field"]."_to` AS `".$prop["name"]."_to`";
@@ -1541,6 +1541,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$row["acldata"] = safe_array(aw_unserialize($row["acldata"], false, true));
 						$acldata[$row["oid"]] = $row;
 					}
+					$GLOBALS["__obj_sys_acl_memc"][$row["oid"]] = array(
+						"status" => $row["status"],
+						"brother_of" => $row["brother_of"],
+						"acldata" => $row["acldata"],
+						"parent" => $row["parent"]
+					);
 				}
 				return array($ret, $this->meta_filter, $acldata, $parentdata, $objdata, $ret2, $has_sql_func);
 			}

@@ -2103,7 +2103,7 @@ class _int_object
 		// so we have to do it here as well to fix the in-between state to the correct one right now
 		$GLOBALS["objects"][$this->obj["oid"]] =& $this;
 
-		if (is_array($this->obj["_create_connections"]))
+		if (isset($this->obj["_create_connections"]) && is_array($this->obj["_create_connections"]))
 		{
 			foreach($this->obj["_create_connections"] as $new_conn)
 			{
@@ -2114,7 +2114,7 @@ class _int_object
 				}
 			};
 		};
-		if (is_array($this->obj["_create_brothers"]))
+		if (isset($this->obj["_create_brothers"]) && is_array($this->obj["_create_brothers"]))
 		{
 			foreach($this->obj["_create_brothers"] as $bro_args)
 			{

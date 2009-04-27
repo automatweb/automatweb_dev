@@ -531,7 +531,6 @@ class _int_object_loader extends core
 		$cur_oid = $oid;
 		$do_orig = false;
 		$cnt = 0;
-
 		while ($cur_oid > 0)
 		{
 			$tmp = null;
