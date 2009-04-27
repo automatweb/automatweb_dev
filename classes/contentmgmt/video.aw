@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.10 2008/01/31 13:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.11 2009/04/27 14:19:29 hannes Exp $
 // video.aw - Video 
 /*
 
@@ -156,7 +156,7 @@ class video extends class_base
 				$this->vars(array(
 					"vid_url" => $this->trans_get_val($ob, $format[0]),
 					//"vid_url_capt" => $ob->prop($format[1]),
-					"vid_url_capt" => $this->trans_get_val($ob, "name"),
+					"vid_url_capt" => str_replace("&", "&amp;", $this->trans_get_val($ob, "name")),
 				));
 				$this->vars(array(
 					$format[2] => $this->parse($format[2])

@@ -33,10 +33,10 @@ class links_display
 		$vars = array(
 			"style_class" => $style_class,
 			"url" => $url,
-			"caption" => $caption,
+			"caption" => str_replace("&", "&amp;", $caption),
 			"target" => $target,
 			"img" => $this->img,
-			"real_link" => $this->real_link,
+			"real_link" => str_replace("&", "&amp;", $this->real_link),
 			"alt" => $alt,
 			"comment" => $this->cur_link->comment()
 		);
