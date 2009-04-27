@@ -466,10 +466,6 @@ class bug extends class_base
 		switch($prop["name"])
 		{
 			case "site_copy":
-				if($_GET["debug"])
-				{
-					arr("asd");
-				}
 				$prop["value"] = '<div id="site_copy"></div>';
 				load_javascript("site_copy.js");
 				break;
@@ -1771,7 +1767,7 @@ class bug extends class_base
 		);
 		$u = get_instance(CL_USER);
 		$us = get_instance("users");
-		if (true || in_array($bug->prop("bug_status"), $states))
+		if (false && in_array($bug->prop("bug_status"), $states))
 		{
 			$crea = $bug->createdby();
 			$_oid = $us->get_oid_for_uid($crea);
@@ -3508,7 +3504,7 @@ die($email);
 					}
 				}
 			}
-			if(!$canclose)
+			if(!$canclose && false)
 			{
 				$retval = PROP_FATAL_ERROR;
 				$prop["error"] = t("Puuduvad &otilde;igused bugi sulgeda!");
