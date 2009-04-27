@@ -95,4 +95,62 @@ class shop_product_obj extends _int_object
 
 		return $units;
 	}
+
+	/**
+		@attrib name=get_discount api=1
+
+		@param oid optional type=oid
+		@param group optional type=oid
+		@param crm_category optional type=oid
+		@param org optional type=oid
+		@param person optional type=oid
+		@param warehouse optional type=oid
+		@param prod_category optional type=oid
+	**/
+	public function get_discount($oid = null, $params)
+	{
+		extract($params);
+		if(!$oid)
+		{
+			$params = array(
+				"class_id" => CL_SHOP_PRICE_LIST,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"sort_by" => "jrk asc",
+			);
+			foreach(array("group", "org", "crm_categories" => "crm_category", "person", "warehouse") as $var1 => $var2)
+			{
+				if($$var2)
+				{
+					$params[is_string($var1) ? $var1 : $var2."s"] = $$var2;
+				}
+			}arr($params);
+			$ol = new object_list($params);
+			$o = $ol->begin();
+		}
+		elseif($this->can("view", $oid))
+		{
+			$o = obj($oid);
+		}
+		if($o)
+		{
+			if($prod_category && $crm_category)
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"pricelist" => $o->id(),
+					"crm_category" => $crm_category,
+					"prod_category" => $prod_category,
+				));
+				$do = $ol->begin();
+				if($do)
+				{
+					return $do->prop("discount");
+				}
+			}
+			return $o->prop("discount");
+		}
+	}
 }

@@ -96,6 +96,24 @@
             <field>base_price</field>
             <caption>Baashindade alusel</caption>
       </property>
+      <property>
+            <name>clients_tb</name>
+            <table>aw_shop_price_list</table>
+            <group>clients_matrix</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>clients_tb</field>
+      </property>
+      <property>
+            <name>clients_matrix</name>
+            <table>aw_shop_price_list</table>
+            <group>clients_matrix</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>clients_matrix</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRICE_LIST</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -104,6 +122,11 @@
             <prop_cb>1</prop_cb>
             <maintainer>robert</maintainer>
       </classinfo>
+      <groupinfo>
+            <clients_matrix>
+                  <caption>Kliendigrupid</caption>
+            </clients_matrix>
+      </groupinfo>
       <tableinfo>
             <aw_shop_price_list>
                   <master_index>brother_of</master_index>
@@ -142,6 +165,16 @@
                   <clid>CL_SHOP_WAREHOUSE</clid>
                   <caption>Ladu</caption>
             </WAREHOUSE>
+            <MATRIX_CATEGORY>
+                  <value>7</value>
+                  <clid>CL_SHOP_PRODUCT_CATEGORY</clid>
+                  <caption>Kaubagrupp</caption>
+            </MATRIX_CATEGORY>
+            <MATRIX_ORG_CAT>
+                  <value>8</value>
+                  <clid>CL_CRM_CATEGORY</clid>
+                  <caption>Kliendigrupp</caption>
+            </MATRIX_ORG_CAT>
       </reltypes>
 </properties>
 

@@ -37,6 +37,13 @@
 @property base_price type=checkbox field=base_price
 @caption Baashindade alusel
 
+@groupinfo clients_matrix caption=Kliendigrupid
+@default group=clients_matrix
+
+@property clients_tb type=toolbar no_caption=1
+
+@property clients_matrix type=table no_caption=1
+
 @reltype GROUP value=1 clid=CL_GROUP
 @caption Grupp
 
@@ -54,6 +61,12 @@
 
 @reltype WAREHOUSE value=6 clid=CL_SHOP_WAREHOUSE
 @caption Ladu
+
+@reltype MATRIX_CATEGORY value=7 clid=CL_SHOP_PRODUCT_CATEGORY
+@caption Kaubagrupp
+
+@reltype MATRIX_ORG_CAT value=8 clid=CL_CRM_CATEGORY
+@caption Kliendigrupp
 */
 
 class shop_price_list extends class_base
@@ -90,9 +103,192 @@ class shop_price_list extends class_base
 		return $retval;
 	}
 
+	function _get_clients_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+
+		$tb->add_search_button(array(
+			"pn" => "add_crm_cat",
+			"multiple" => 1,
+			"clid" => CL_CRM_CATEGORY,
+		));
+		$tb->add_menu_button(array(
+			"name" => "del_crm_cat",
+			"img" => "delete.gif",
+			"tooltip" => t("Eemalda kliendigrupp"),
+		));
+		foreach($arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_MATRIX_ORG_CAT",
+		)) as $c)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "del_crm_cat",
+				"text" => $c->to()->name(),
+				"link" => aw_url_change_var("del_crm_cat", $c->prop("to")),
+			));
+		}
+		
+		$tb->add_search_button(array(
+			"pn" => "add_prod_cat",
+			"multiple" => 1,
+			"clid" => CL_SHOP_PRODUCT_CATEGORY,
+			"name" => "add_prod_cat",
+		));
+		$tb->add_menu_button(array(
+			"name" => "del_prod_cat",
+			"img" => "delete.gif",
+			"tooltip" => t("Eemalda tootegrupp"),
+		));
+		foreach($arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_MATRIX_CATEGORY",
+		)) as $c)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "del_prod_cat",
+				"text" => $c->to()->name(),
+				"link" => aw_url_change_var("del_prod_cat", $c->prop("to")),
+			));
+		}
+
+		$tb->add_save_button();
+	}
+
+	function _set_clients_matrix($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"pricelist" => $arr["obj_inst"]->id(),
+		));
+		foreach($ol->arr() as $oid => $o)
+		{
+			$data[$o->prop("crm_category")][$o->prop("prod_category")] = $oid;
+		}
+		foreach($arr["request"]["discount"] as $crm_cat => $data)
+		{
+			foreach($data as $prod_cat => $discount)
+			{
+				if($oid = $data[$crm_cat][$prod_cat])
+				{
+					$o = obj($oid);
+					$o->set_prop("discount", $discount);
+					$o->save();
+				}
+				else
+				{
+					$o = obj();
+					$o->set_class_id(CL_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT);
+					$o->set_name(sprintf(t("%s kliendigrupi allahindlus"), $arr["obj_inst"]->name()));
+					$o->set_parent($arr["obj_inst"]->id());
+					$o->set_prop("pricelist", $arr["obj_inst"]->id());
+					$o->set_prop("crm_category", $crm_cat);
+					$o->set_prop("prod_category", $prod_cat);
+					$o->set_prop("discount", $discount);
+					$o->save();
+				}
+			}
+		}
+		if($oids = $arr["request"]["add_crm_cat"])
+		{
+			foreach(explode(",", $oids) as $oid)
+			{
+				$arr["obj_inst"]->connect(array(
+					"type" => "RELTYPE_MATRIX_ORG_CAT",
+					"to" => $oid,
+				));
+			}
+		}
+		if($oids = $arr["request"]["add_prod_cat"])
+		{
+			foreach(explode(",", $oids) as $oid)
+			{
+				$arr["obj_inst"]->connect(array(
+					"type" => "RELTYPE_MATRIX_CATEGORY",
+					"to" => $oid,
+				));
+			}
+		}
+	}
+
+	function _get_clients_matrix($arr)
+	{
+		foreach(array("crm", "prod") as $var)
+		{
+			$c = $arr["request"]["del_".$var."_cat"];
+			if($c && $arr["obj_inst"]->is_connected_to(array("to" => $c)))
+			{
+				$arr["obj_inst"]->disconnect(array(
+					"from" => $c,
+				));
+				$ol = new object_list(array(
+					"class_id" => CL_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"pricelist" => $arr["obj_inst"]->id(),
+					$var."_category" => $c,
+				));
+				$ol->delete();
+			}
+		}
+
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "prod_cat",
+			"caption" => t("Tootegrupp"),
+			"align" => "center",
+		));
+
+		$org_cats = array();
+		foreach($arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_MATRIX_ORG_CAT",
+		)) as $c)
+		{
+			$org_cats[] = $c->to();
+			$t->define_field(array(
+				"name" => "org_cat".$c->prop("to"),
+				"caption" => $c->to()->name(),
+				"align" => "center",
+			));
+		}
+		$t->set_sortable(false);
+
+		$data = array();
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"pricelist" => $arr["obj_inst"]->id(),
+		));
+		foreach($ol->arr() as $o)
+		{
+			$data[$o->prop("crm_category")][$o->prop("prod_category")] = $o->prop("discount");
+		}
+
+		foreach($arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_MATRIX_CATEGORY",
+		)) as $c)
+		{
+			$t_data = array();
+			foreach($org_cats as $o)
+			{
+				$t_data["org_cat".$o->id()] = html::textbox(array(
+					"name" => "discount[".$o->id()."][".$c->prop("to")."]",
+					"value" => $data[$o->id()][$c->prop("to")],
+					"size" => 5,
+				));
+			}
+			$t_data["prod_cat"] = $c->to()->name();
+			$t->define_data($t_data);
+		}
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["add_crm_cat"] = "";
+		$arr["add_prod_cat"] = "";
 	}
 
 	function show($arr)
