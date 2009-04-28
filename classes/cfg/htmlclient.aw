@@ -465,10 +465,10 @@ class htmlclient extends aw_template
 				}
 			}
 		}
+		$tpl_vars["element_name"] = $args["name"];
 
 		if($datesub)
 		{
-			$tpl_vars["element_name"] = $args["name"];
 			$add2 = "DATE_";
 		}
 		// I wanda mis kammi ma selle tmp-iga tegin
