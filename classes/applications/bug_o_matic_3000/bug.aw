@@ -2332,7 +2332,7 @@ class bug extends class_base
 //print "kasutaja: ".aw_global_get("uid");
 		$p = get_current_person()->id();
 		$o = $bug->get_last_comment();
-		if($o->created() > (time() - 180) && $o->createdby() == aw_global_get("uid"))
+		if($o !== false && $o->created() > (time() - 180) && $o->createdby() == aw_global_get("uid"))
 		{
 			$o->set_comment(trim($o->comment() . "\n" . $comment));
 			if(!$o->prop("prev_state") &&  $old_state)
