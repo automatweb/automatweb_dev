@@ -35,9 +35,9 @@ class aw_table extends aw_template
 	protected $cfgform;
 
 	protected $cfg_data = array();
-	protected $rowdefs = array();
+	public $rowdefs = array();
 	protected $rowdefs_key_index = array();
-	protected $data = array();
+	public $data = array();
 	protected $all_data = array();
 	protected $actions = array();
 	protected $col_styles = array();

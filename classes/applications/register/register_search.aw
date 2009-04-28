@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.54 2008/08/28 11:00:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.55 2009/04/28 10:14:41 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -385,19 +385,19 @@ class register_search extends class_base
 	{
 		aw_global_set("no_cache", 1);
 		$ob = new object($arr["id"]);
-		$request = array("rsf" => $GLOBALS["rsf"]);
-		if ($GLOBALS["search_butt"])
+		$request = array("rsf" => $_REQUEST["rsf"]);
+		if ($_REQUEST["search_butt"])
 		{
-			$request["search_butt"] = $GLOBALS["search_butt"];
+			$request["search_butt"] = $_REQUEST["search_butt"];
 		}
 
 		if (!$request["search_butt"] && is_array($request["rsf"]) && count($request["rsf"]))
 		{
 			$request["search_butt"] = 1;
 		}
-		if ($GLOBALS["ft_page"])
+		if ($_REQUEST["ft_page"])
 		{
-			$request["ft_page"] = $GLOBALS["ft_page"];
+			$request["ft_page"] = $_REQUEST["ft_page"];
 		}
 
 		if ($ob->prop("show_all_right_away"))
@@ -958,13 +958,13 @@ class register_search extends class_base
 		enter_function("register_search::show::dsrt::gsr::finit");
 		$tdata = $o->meta("tdata");
 
-		if ($GLOBALS["sortby"] != "")
+		if ($_REQUEST["sortby"] != "")
 		{
-			$sp = $f_props[$GLOBALS["sortby"]];
+			$sp = $f_props[$_REQUEST["sortby"]];
 			if ($sp)
 			{
-				$this->quote(&$GLOBALS["sort_order"]);
-				$filter["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
+				$this->quote(&$_REQUEST["sort_order"]);
+				$filter["sort_by"] = $sp["table"].".".$sp["field"]." ".$_REQUEST["sort_order"];
 			}
 		}
 		else
