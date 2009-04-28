@@ -2330,7 +2330,7 @@ class bug extends class_base
 			$this->notify_monitors($bug, $comment);
 		}
 //print "kasutaja: ".aw_global_get("uid");
-
+		$p = get_current_person()->id();
 		$o = $bug->get_last_comment();
 		if($o->created() > (time() - 180) && $o->createdby() == aw_global_get("uid"))
 		{
@@ -2348,6 +2348,7 @@ class bug extends class_base
 			$o->set_prop("time_to_cust", ($o->prop("time_to_cust") + $add_wh_cust));
 			$o->set_prop("time_guess", ($o->prop("time_guess") + $add_wh_guess));
 			$o->set_prop("show_to_all", $this->comment_for_all);
+			$o->set_prop("impl" , $p);
 			$o->save();
 		}
 		else
@@ -2372,7 +2373,7 @@ class bug extends class_base
 			));
 		}
 	
-		$p = get_current_person()->id();
+
 		if($add_wh_guess)
 		{
 			$gbp = $bug->meta("guess_by_p");
