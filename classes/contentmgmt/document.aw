@@ -2616,7 +2616,7 @@ class document extends aw_template
 			"ala" => $ala,
 			"tehnika" => $tehnika,
 			"title" => $inf->title,
-			"reforb" => $this->mk_reforb("submit_feedback", array("docid" => $section))
+			"reforb" => $this->mk_reforb("submit_feedback", array("docid" => $section, "print" => $print ? $print : null)))
 		));
 		return $this->parse();
 	}
@@ -2640,7 +2640,12 @@ class document extends aw_template
 		$arr["title"] = $inf->title;
 		$feedback->add_feedback($arr);
 		$this->_log(ST_DOCUMENT, SA_SEND, "$eesnimi $perenimi , email:$mail saatis feedbacki", $docid);
-		return $this->mk_my_orb("thanks", array("section" => $docid,"eesnimi" => $eesnimi));
+		$params = array("section" => $docid,"eesnimi" => $eesnimi);
+		if($print)
+		{
+			$params["print"] = $print;
+		}
+		return $this->mk_my_orb("thanks", $params);
 	}
 
 	/**
