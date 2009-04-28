@@ -1593,7 +1593,7 @@ class crm_bill_obj extends _int_object
 			$person = obj($user_inst->get_current_person());
 			$ret[$u->get_user_mail_address()] = $person->name() . " <" . $u->get_user_mail_address() . ">";
 		}
-		return join("," , $ret);
+		return $ret;
 	}
 
 	public function get_mail_targets()
@@ -1606,19 +1606,34 @@ class crm_bill_obj extends _int_object
 		}
 */
 		$bill_targets = $this->meta("bill_targets");
-
+		$bill_t_names = $this->meta("bill_t_names");
 		if($this->prop("bill_mail_to"))
 		{
-			$res[$this->prop("bill_mail_to")] = $this->prop("bill_mail_to");
+			if(is_array($bill_t_names) && sizeof($bill_t_names) && $bill_t_names[0])
+			{
+				$res[$this->prop("bill_mail_to")] = $bill_t_names[0] . " <" . $this->prop("bill_mail_to") . ">";
+			}
+			else
+			{
+				$res[$this->prop("bill_mail_to")] = $this->prop("bill_mail_to");
+			}
 		}
 
 		$ol = new object_list();
-		if($this->get_customer_data("bill_person"))$ol->add($this->get_customer_data("bill_person"));
+		if($this->get_customer_data("bill_person"))
+		{
+			$ol->add($this->get_customer_data("bill_person"));
+		}
 		foreach($ol->arr() as $mail_person)
 		{
  			if(!(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$mail_person->id()]))
 			{
-				$res[$mail_person->get_mail($this->prop("customer"))]  = $mail_person->name() . " <" . $mail_person->get_mail($this->prop("customer")) . ">";
+				$name = $mail_person->name();
+				if(is_array($bill_t_names) && sizeof($bill_t_names) && $bill_t_names[$mail_person->id()])
+				{
+					$name = $bill_t_names[$mail_person->id()];
+				}
+				$res[$mail_person->get_mail($this->prop("customer"))]  = $name . " <" . $mail_person->get_mail($this->prop("customer")) . ">";
 			}
 		}
 
@@ -1626,7 +1641,12 @@ class crm_bill_obj extends _int_object
 		{
 			if(!(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$id]))
 			{
-				$res[$mail] = $this->get_customer_name() . " <" . $mail . ">";
+				$name = $this->get_customer_name();
+				if(is_array($bill_t_names) && sizeof($bill_t_names) && $bill_t_names[$id])
+				{
+					$name = $bill_t_names[$id];
+				}
+				$res[$mail] = $name . " <" . $mail . ">";
 			}
 		}
 		return $res;
@@ -1771,14 +1791,14 @@ class crm_bill_obj extends _int_object
 	private function get_bill_target_name()
 	{
 		$ret = "";
-		if($this->prop("bill_rec_name"))
-		{
-			$ret = $this->prop("bill_rec_name");
-		}
-		else
-		{
+//		if($this->prop("bill_rec_name"))
+//		{
+//			$ret = $this->prop("bill_rec_name");
+//		}
+//		else
+//		{
 			$ret = $this->get_customer_name();
-		}
+//		}
 		return $ret;
 	}
 
@@ -1888,7 +1908,7 @@ class crm_bill_obj extends _int_object
 	**/
 	public function send_bill($preview = null,$add = null)
 	{
-		$addresses = $this->get_mail_targets();//arr($addresses);
+		$addresses = $this->get_mail_targets();
 		$subject = $this->get_mail_subject();
 		$from = $this->get_mail_from();
 		$from_name = $this->get_mail_from_name();
@@ -1909,7 +1929,7 @@ class crm_bill_obj extends _int_object
 			"subject" => $subject,
 			"to" => join("," , $addresses),
 			"body" => $body,
-			"bcc" => $this->get_bcc(),
+			"bcc" => join("," , $this->get_bcc()),
 		));
 
 		$mimeregistry = get_instance("core/aw_mime_types");
@@ -1961,7 +1981,7 @@ class crm_bill_obj extends _int_object
 			die("Arve saatmine eba&otilde;nnestus");
 		}
 		$ret.= t("saatis arve aadressidele:")."<br>";
-		$addresses[]= $this->get_bcc();
+		$addresses[]= join("," , $this->get_bcc());
 		$ret.= join ("<br>" , $addresses);
 
 

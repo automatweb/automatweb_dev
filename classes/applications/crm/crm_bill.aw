@@ -142,9 +142,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property bill_targets type=table store=no no_caption=1 parent=almost_bottom
 	@caption Arve saajad
- 
-	@property bill_rec_name type=textbox table=objects field=meta method=serialize parent=almost_bottom
-	@caption Arve saaja nimi
 
 	@property bill_rows type=text store=no no_caption=1 parent=bottom
 	@caption Arveread
@@ -1125,6 +1122,7 @@ class crm_bill extends class_base
 
 	private function set_bill_targets($arr)
 	{
+		$arr["obj_inst"]->set_meta("bill_t_names" , $arr["request"]["bill_t_names"]);
 		$arr["obj_inst"]->set_meta("bill_targets" , $arr["request"]["bill_targets"]);
 	}
 
@@ -1193,10 +1191,29 @@ class crm_bill extends class_base
 		));
 
 		$t->define_field(array(
-			"name" => "name",
+			"name" => "sel2",
+			"caption" => "",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "name2",
 			"caption" => t("Nimi"),
 			"align" => "center",
 		));
+		$t->define_field(array(
+			"name" => "name_over",
+			"caption" => "",
+			"align" => "center",
+			"parent" => "name2",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "",
+			"align" => "center",
+			"parent" => "name2",
+		));
+
 		$t->define_field(array(
 			"name" => "rank",
 			"caption" => t("Ametinimetus"),
@@ -1213,7 +1230,7 @@ class crm_bill extends class_base
 			"align" => "center",
 		));
 		$bill_targets = $arr["obj_inst"]->meta("bill_targets");
-
+		$bill_t_names = $arr["obj_inst"]->meta("bill_t_names");
 		foreach($arr["obj_inst"]->get_mail_persons()->arr() as $mail_person)
 		{
 			if($mail_person->class_id() == CL_CRM_PERSON)
@@ -1228,7 +1245,7 @@ class crm_bill extends class_base
 						"name" => "bill_targets[".$mail_person->id()."]",
 						"checked" => !(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$mail_person->id()]),
 						"ch_value" => $mail_person->id()
-					))
+					)),"sel2" => "bcc"
 				));
 			}
 		}
@@ -1244,6 +1261,11 @@ class crm_bill extends class_base
 					"name" => "bill_targets[".$id."]",
 					"checked" => !(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$id]),
 					"ch_value" => $id
+				)),
+				"name_over" => html::textbox(array(
+					"name" => "bill_t_names[".$id."]",
+					"value" => $bill_t_names[$id],
+					"size" => 20
 				))
 			));
 		}
@@ -1252,14 +1274,19 @@ class crm_bill extends class_base
 		{
 			$t->define_data(array(
 				"mail" => $arr["obj_inst"]->prop("bill_mail_to"),
+				"name_over" => html::textbox(array(
+					"name" => "bill_t_names[0]",
+					"value" => $bill_t_names[0],
+					"size" => 20
+				)),
 			));
 		}
-
 
 		if($arr["obj_inst"]->set_crm_settings() && $arr["obj_inst"]->crm_settings->prop("bill_mail_to"))
 		{
 			$t->define_data(array(
 				"mail" => $arr["obj_inst"]->crm_settings->prop("bill_mail_to"),
+				"sel2" => "bcc"
 			));
 		}
 		if (aw_global_get("uid_oid") != "")
@@ -1279,6 +1306,7 @@ class crm_bill extends class_base
 			$t->define_data(array(
 				"name" => $person->name(),
 				"mail" =>$mail,
+				"sel2" => "bcc"
 			));
 		}
 
@@ -4218,8 +4246,6 @@ class crm_bill extends class_base
 		$has_val = 1;
 		$has_val = !$arr["obj_inst"]->has_not_initialized_rows();
 
-
-
 		$tb->add_menu_button(array(
 			"name" => "new",
 			"tooltip" => t("Uus"),
@@ -4990,7 +5016,7 @@ class crm_bill extends class_base
 		$htmlc->add_property(array(
 			"name" => "bcc",
 			"type" => "text",
-			"value" => htmlspecialchars($obj->get_bcc()),
+			"value" => htmlspecialchars(join("\n" , $obj->get_bcc())),
 			"caption" => t("Bcc:"),
 		));
 

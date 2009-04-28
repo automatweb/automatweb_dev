@@ -353,16 +353,6 @@
             <caption>Arve saajad</caption>
       </property>
       <property>
-            <name>bill_rec_name</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <parent>almost_bottom</parent>
-            <caption>Arve saaja nimi</caption>
-      </property>
-      <property>
             <name>bill_rows</name>
             <table>objects</table>
             <group>general</group>
