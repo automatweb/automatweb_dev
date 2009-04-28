@@ -99,7 +99,7 @@ function aw_keyhandler_init(event)
 		<div id="aw_object_quickadd_results" style="display: none;" ></div>';
 	$("body").append(html);
 
-	$.get("{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts", {}, function (d) 
+	$.get("{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_xml", {}, function (d) 
 		{ 
 			eval(d); 
 			// fetch items on demand

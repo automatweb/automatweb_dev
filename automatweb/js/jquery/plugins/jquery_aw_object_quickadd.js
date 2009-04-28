@@ -54,7 +54,7 @@ var awoq_initDone = false;
 			}
 			
 			$.getJSON("/automatweb/orb.aw?class=aw_object_quickadd&action=get_objects", {}, function (items) 
-				{  
+				{
 					awoq_initDone = true;
 					d_input.autocomplete(items, 
 						{
