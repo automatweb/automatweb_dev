@@ -163,7 +163,7 @@ class bug_object extends _int_object
 		));
 		if(!sizeof($comments))
 		{
-			return "";
+			return false;
 		}
 		$comments = array_values($comments);
 		$connection = $comments[sizeof($comments) - 1];
