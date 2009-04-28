@@ -2330,23 +2330,48 @@ class bug extends class_base
 			$this->notify_monitors($bug, $comment);
 		}
 //print "kasutaja: ".aw_global_get("uid");
-		$o = obj();
-		$o->set_parent($bug->id());
-		$o->set_class_id(CL_TASK_ROW);
-		$o->set_prop("done" , 1);
-		$o->set_prop("task" , $bug->id());
-		$o->set_comment(trim($comment));
-		$o->set_prop("prev_state", $old_state);
-		$o->set_prop("new_state", $new_state);
-		$o->set_prop("add_wh", $add_wh);
-		$o->set_prop("add_wh_cust", $add_wh_cust);
-		$o->set_prop("add_wh_guess", $add_wh_guess);
-		$o->set_prop("show_to_all", $this->comment_for_all);
-		$o->save();
-		$bug->connect(array(
-			"to" => $o->id(),
-			"type" => "RELTYPE_COMMENT"
-		));
+
+		$o = $bug->get_last_comment();
+		if($o->created() > (time() - 180) && $o->createdby() == aw_global_get("uid"))
+		{
+			$o->set_comment(trim($o->comment() . "\n" . $comment));
+			if(!$o->prop("prev_state") &&  $old_state)
+			{
+				$o->set_prop("prev_state", $old_state);
+			}
+			if($new_state)
+			{
+				$o->set_prop("new_state", $new_state);
+			}
+			
+			$o->set_prop("time_real", ($o->prop("time_real") + $add_wh));
+			$o->set_prop("time_to_cust", ($o->prop("time_to_cust") + $add_wh_cust));
+			$o->set_prop("time_guess", ($o->prop("time_guess") + $add_wh_guess));
+			$o->set_prop("show_to_all", $this->comment_for_all);
+			$o->save();
+		}
+		else
+		{
+
+			$o = obj();
+			$o->set_parent($bug->id());
+			$o->set_class_id(CL_TASK_ROW);
+			$o->set_prop("done" , 1);
+			$o->set_prop("task" , $bug->id());
+			$o->set_comment(trim($comment));
+			$o->set_prop("prev_state", $old_state);
+			$o->set_prop("new_state", $new_state);
+			$o->set_prop("add_wh", $add_wh);
+			$o->set_prop("add_wh_cust", $add_wh_cust);
+			$o->set_prop("add_wh_guess", $add_wh_guess);
+			$o->set_prop("show_to_all", $this->comment_for_all);
+			$o->save();
+			$bug->connect(array(
+				"to" => $o->id(),
+				"type" => "RELTYPE_COMMENT"
+			));
+		}
+	
 		$p = get_current_person()->id();
 		if($add_wh_guess)
 		{
@@ -2793,13 +2818,8 @@ $diff = explode("*" , $result["diff"]);
 
 	function add_to_last_comment($bug, $msg)
 	{
-		$comments = $bug->connections_from(array(
-			"type" => "RELTYPE_COMMENT",
-		));
-		foreach($comments as $c)
-		{
-			$comm = obj($c->prop("to"));
-		}
+		$comm = $bug->get_last_comment();
+
 		if(is_object($comm) && ($comm->modified() + 120 > time()))
 		{
 			$comment = $comm->comment();
