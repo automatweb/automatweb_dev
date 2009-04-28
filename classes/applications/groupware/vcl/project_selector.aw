@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.14 2009/02/04 10:56:19 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.15 2009/04/28 14:03:56 robert Exp $
 /*
 @classinfo maintainer=kristo
 */
@@ -129,6 +129,8 @@ class project_selector extends core
 		// figure out all current brothers
 		$olist = new object_list(array(
 			"brother_of" => $orig->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
 		));
 
 		// determine all projects that this event is part of,
