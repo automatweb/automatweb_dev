@@ -14,6 +14,7 @@ td.VclGanttColumn
 {
 	padding-top: 0px;
 	padding-bottom: 0px;
+	white-space: nowrap;
 }
 
 .VclGanttColumn a:hover, .VclGanttSubdivision a:hover
