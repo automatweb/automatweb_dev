@@ -340,6 +340,35 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 ------------------------------------------------------------------
 
+@groupinfo mails caption="Kirjad" submit=no parent=general
+@default group=mails
+
+@property mails_tb type=toolbar no_caption=1
+
+@layout mails_lt type=hbox width=10%:90%
+	@layout mails_left type=vbox parent=mails_lt
+		@layout mailsl_tree type=vbox parent=mails_left
+			@property mails_tree type=treeview parent=mailsl_tree no_caption=1
+		@layout mails_search type=vbox parent=mails_left closeable=1 area_caption=Kirjade&nbsp;otsing
+
+			@property mails_s_name type=textbox size=15 store=no captionside=top parent=mails_search
+			@caption Teema
+	
+			@property mails_s_content type=textbox size=15 store=no captionside=top parent=mails_search
+			@caption Sisu
+
+			@property mails_s_customer type=textbox size=15 store=no captionside=top parent=mails_search
+			@caption Klient
+	
+			@property mails_s_sbt type=submit store=no no_caption=1 parent=mails_search
+			@caption Otsi
+
+		@layout mails_table_l type=hbox parent=mails_lt
+			@property mails_tbl type=table store=no no_caption=1 parent=mails_table_l
+
+----------------------
+
+
 @groupinfo settings caption="Muud seaded" parent=general
 @default group=settings
 
@@ -1879,6 +1908,11 @@ class crm_person extends class_base
 		$personnel_management_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 		switch($data["name"])
 		{
+			case "mails_s_name":
+			case "mails_s_content":
+			case "mails_s_customer":
+				$data["value"] = $arr["request"][$data["name"]];
+				break;
 			case "birthday":
 				$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
 				if($pm->yob_from)
@@ -1899,6 +1933,9 @@ class crm_person extends class_base
 				}
 				break;
 
+			case "mails_tbl":
+				$this->_get_mails_tbl($arr);
+				break;
 			case "current_job_edit":
 				if($arr["obj_inst"]->not_working)
 				{
@@ -4147,6 +4184,89 @@ class crm_person extends class_base
 
 	}
 
+	function _get_mails_tbl($arr)
+	{
+	
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"caption" => t("Saatja nimi"),
+			"name" => "sender",
+			"align" => "left",
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"caption" => t("Teema"),
+			"name" => "subject",
+			"align" => "left",
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"caption" => t("Aeg"),
+			"name" => "time",
+			"align" => "left",
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"caption" => t("Aadressidele"),
+			"name" => "to",
+			"align" => "left",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"caption" => t("Sisu"),
+			"name" => "content",
+			"align" => "left",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"caption" => t("Manused"),
+			"name" => "attachments",
+			"align" => "left",
+			"sortable" => 1,
+		));
+
+		$user_inst = get_instance(CL_USER);
+
+		$mails = $arr["obj_inst"]->get_recieved_mails(array(
+			"subject" => $arr["request"]["mails_s_name"],
+			"content" => $arr["request"]["mails_s_content"],
+			"customer" => $arr["request"]["mails_s_customer"],
+		));
+		foreach($mails->arr() as $mail)
+		{
+			$user = $mail->createdby();
+			$person = $user_inst->get_person_for_uid($user);
+			$data = array();
+			$data["time"] = date("d.m.Y H:i" , $mail->created());
+			$data["subject"] = $mail->name();
+			$data["sender"] = $person->name();
+			$data["content"] = $mail->prop("message");
+			$addr = explode("," , htmlspecialchars($mail->prop("mto")));
+			
+			$data["to"] = join("<br>" , $addr);
+
+			$data["attachments"] = "";
+			$aos = $mail->prop("attachments");
+			foreach($aos as $ao)
+			{
+				$o = obj($ao);
+				$file_data = $o->get_file();
+				$data["attachments"].= "<br>\n".html::href(array(
+					"caption" => html::img(array(
+						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/pdf_upload.gif",
+						"border" => 0,
+					)).$o->name()." (".filesize($file_data["properties"]["file"])." B)",
+					"url" => $o->get_url(),
+				));
+			}
+			$t->define_data($data);
+		}
+	}
+
+
 	function do_jobs_table($arr)
 	{
 		$table =& $arr["prop"]["vcl_inst"];
@@ -5078,6 +5198,12 @@ class crm_person extends class_base
 	function callback_mod_retval($arr)
 	{
 		$arr["args"]["cv_tpl"] = $arr["request"]["cv_tpl"];
+		if($arr["request"]["group"] == "mails")
+		{
+			$arr["args"]["mails_s_name"] = $arr["request"]["mails_s_name"];
+			$arr["args"]["mails_s_content"] = $arr["request"]["mails_s_content"];
+			$arr["args"]["mails_s_customer"] = $arr["request"]["mails_s_customer"];
+		}
 	}
 
 	function callback_mod_reforb($arr)
@@ -5243,6 +5369,16 @@ class crm_person extends class_base
 		}
 
 		return $usecase;
+	}
+
+
+	function callback_mod_layout(&$arr)
+	{
+		if ($arr["name"] == "mails_table_l")
+		{
+			$arr["area_caption"] = sprintf(t("Isikule %s saadetud kirjad"), $arr["obj_inst"]->name());
+		}
+		return true;
 	}
 
 	function callback_get_cfgform($arr)

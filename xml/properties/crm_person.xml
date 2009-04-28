@@ -802,6 +802,82 @@
             <field>docs_tbl</field>
       </property>
       <property>
+            <name>mails_tb</name>
+            <table>kliendibaas_isik</table>
+            <group>mails</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mails_tb</field>
+      </property>
+      <property>
+            <name>mails_tree</name>
+            <table>kliendibaas_isik</table>
+            <group>mails</group>
+            <type>treeview</type>
+            <parent>mailsl_tree</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mails_tree</field>
+      </property>
+      <property>
+            <name>mails_s_name</name>
+            <table>kliendibaas_isik</table>
+            <group>mails</group>
+            <type>textbox</type>
+            <size>15</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>mails_search</parent>
+            <field>mails_s_name</field>
+            <caption>Teema</caption>
+      </property>
+      <property>
+            <name>mails_s_content</name>
+            <table>kliendibaas_isik</table>
+            <group>mails</group>
+            <type>textbox</type>
+            <size>15</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>mails_search</parent>
+            <field>mails_s_content</field>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>mails_s_customer</name>
+            <table>kliendibaas_isik</table>
+            <group>mails</group>
+            <type>textbox</type>
+            <size>15</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>mails_search</parent>
+            <field>mails_s_customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>mails_s_sbt</name>
+            <table>kliendibaas_isik</table>
+            <group>mails</group>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>mails_search</parent>
+            <field>mails_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>mails_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>mails</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>mails_table_l</parent>
+            <field>mails_tbl</field>
+      </property>
+      <property>
             <name>templates</name>
             <table>objects</table>
             <group>settings</group>
@@ -2077,6 +2153,11 @@
                   <submit>no</submit>
                   <parent>general</parent>
             </documents_all>
+            <mails>
+                  <caption>Kirjad</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </mails>
             <settings>
                   <caption>Muud seaded</caption>
                   <parent>general</parent>
@@ -2711,6 +2792,37 @@
                   <group>documents_all</group>
                   <area_caption></area_caption>
             </docs_s_but_row>
+            <mails_lt>
+                  <type>hbox</type>
+                  <width>10%:90%</width>
+                  <group>mails</group>
+                  <area_caption></area_caption>
+            </mails_lt>
+            <mails_left>
+                  <type>vbox</type>
+                  <parent>mails_lt</parent>
+                  <group>mails</group>
+                  <area_caption></area_caption>
+            </mails_left>
+            <mailsl_tree>
+                  <type>vbox</type>
+                  <parent>mails_left</parent>
+                  <group>mails</group>
+                  <area_caption></area_caption>
+            </mailsl_tree>
+            <mails_search>
+                  <type>vbox</type>
+                  <parent>mails_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kirjade&amp;amp;nbsp;otsing</area_caption>
+                  <group>mails</group>
+            </mails_search>
+            <mails_table_l>
+                  <type>hbox</type>
+                  <parent>mails_lt</parent>
+                  <group>mails</group>
+                  <area_caption></area_caption>
+            </mails_table_l>
       </layout>
 </properties>
 

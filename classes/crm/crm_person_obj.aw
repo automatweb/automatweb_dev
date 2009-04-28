@@ -1622,6 +1622,48 @@ class crm_person_obj extends _int_object
 		));
 		return $ol;
 	}
+
+	public function get_recieved_mails($arr = array())
+	{
+		$adress_objects = $this->emails();
+		$options = array();
+		$mails = new object_list();
+/*		foreach($adress_objects->arr() as $address_object)
+		{
+			$ml = new object_list(array(
+				"site_id" => array(),
+				"lang_id" => array(),
+				"class_id" => CL_MESSAGE,
+				"mto" => "%".$adress_object->prop("mail")."%",
+			));
+			$mails->add($ml->ids());
+		}*/
+
+		$filter = array(
+			"site_id" => array(),
+			"lang_id" => array(),
+			"class_id" => CL_MESSAGE,
+			"CL_MESSAGE.RELTYPE_TO_MAIL_ADDRESS" => $adress_objects->ids(),
+		);
+
+		if($arr["subject"])
+		{
+			$filter["name"] = "%".$arr["subject"]."%";
+		}
+
+		if($arr["content"])
+		{
+			//$filter["message"] = "%".$arr["subject"]."%";//see porno ei t66ta ju kui metas kirja sisu
+		}
+
+		if($arr["customer"])
+		{
+			$filter["CL_MESSAGE.RELTYPE_CUSTOMER.name"] = "%".$arr["customer"]."%";
+		}
+
+		$mails->add(new object_list($filter));
+		return $mails;
+	}
 }
 
 ?>
