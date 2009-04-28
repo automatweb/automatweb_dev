@@ -3993,12 +3993,13 @@ class crm_person extends class_base
 	// .. this will then create the opposite connection.
 	function on_connect_org_to_person($arr)
 	{
-		$conn = $arr["connection"];
+		return false;//n2iteks kliendihalduri puhul pole t88suhet vaja
+/*		$conn = $arr["connection"];
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PERSON)
 		{
 			$target_obj->add_work_relation(array("org" => $conn->prop("from")));
-		};
+		};*/
 	}
 
 	// Invoked when a connection from organization to person is removed
