@@ -46,7 +46,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>impl</field>
-            <caption>Hankija</caption>
+            <caption>Tarnija</caption>
       </property>
       <property>
             <name>transport</name>
@@ -109,14 +109,6 @@
             <field>articles_tbl</field>
       </property>
       <property>
-            <name>gen_submit</name>
-            <table>aw_shop_delivery_note</table>
-            <group>general</group>
-            <type>button</type>
-            <store>no</store>
-            <field>gen_submit</field>
-      </property>
-      <property>
             <name>bills_tb</name>
             <table>aw_shop_delivery_note</table>
             <group>bills</group>
@@ -145,7 +137,6 @@
       <groupinfo>
             <general>
                   <caption>&amp;amp;Uuml;ldine</caption>
-                  <submit>no</submit>
             </general>
             <bills>
                   <caption>Arved</caption>
