@@ -39,7 +39,7 @@ class db_feedback extends aw_template
 		$host = gethostbyaddr($ip);
 		if ($more == "")
 		{
-			header("Location: ".aw_ini_get("baseurl")."/?class=document&action=feedback&section=$docid&e=1");
+			header("Location: ".aw_ini_get("baseurl")."/?class=document&action=feedback&section=$docid&e=1".($print ? "&print=".$print : ""));
 			die();
 		}
 		$msg = "
