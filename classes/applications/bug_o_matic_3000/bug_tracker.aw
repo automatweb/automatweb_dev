@@ -3608,6 +3608,113 @@ class bug_tracker extends class_base
 
 		$arr["prop"]["value"] = $chart->draw_chart ();
 	}
+	
+	/**
+	@attrib name=aw_firefoxtools_gantt
+	**/
+	function aw_firefoxtools_gantt($arr)
+	{
+		$chart = get_instance ("vcl/gantt_chart");
+		$udata = is_object($arr["obj_inst"]) ? $arr["obj_inst"]->meta("gantt_user_ends") : array();
+		$cur = aw_global_get("uid_oid");
+		if($cs = $udata[$cur])
+		{
+			$columns = $cs;
+		}
+		else
+		{
+			$columns = 7;
+		}
+		$this->gt_days_in_col = 1;
+		if($columns > 10)
+		{
+			$this->gt_days_in_col = ceil($columns/10);
+			$columns = 10;
+		}
+		$col_length = $this->gt_days_in_col*24*60*60;
+
+		if ($this->can("view", $arr["request"]["filt_p"]))
+		{
+			$p = obj($arr["request"]["filt_p"]);
+		}
+		else
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+		}
+
+		if (is_object($arr["obj_inst"]))
+		{
+			$this->combined_priority_formula = $arr["obj_inst"]->prop("combined_priority_formula"); // required by get_undone_bugs_by_p(), __gantt_sort()
+		}
+
+		classload("core/date/date_calc");
+		$range_start = get_day_start();
+		$range_end = time() + $columns * $col_length;
+
+		$subdivisions = 1;
+
+		$has = false;
+		$gt_list = $this->get_undone_bugs_by_p($p);
+		$bi = get_instance(CL_BUG);
+		$out = "menu = [";
+		foreach($gt_list as $gt)
+		{
+			$cdata = $this->get_gantt_bug_colors($gt);
+
+			$nm = parse_obj_name($gt->name());
+			if ($gt->customer)
+			{
+				if ($gt->prop("customer.short_name") != "")
+				{
+					$nm .= " / ".$gt->prop("customer.short_name");
+				}
+				else
+				{
+					$nm .= " / ".$gt->prop("customer.name");
+				}
+			}
+			if ($gt->finance_type)
+			{
+				$ft = get_instance(CL_BUG)->get_finance_types();
+				$nm .= " / ".$ft[$gt->finance_type];
+			}
+
+			$out .= '{"name":"'.$nm.'",'.
+				'"url":"'.html::get_change_url($gt->id()).'",'.
+				'"class":"'.$cdata["class"].'"'.
+			"},\n";
+			
+			/*
+			$chart->add_row (array (
+				"name" => ,
+				"title" => $nm,
+				"uri" => html::get_change_url(
+					$gt->id(),
+					array("return_url" => get_ru())
+				),
+				"row_name_class" => ,
+			));
+			*/
+			if ($arr["ret_b"] && $gt->id() == $arr["ret_b"]->id())
+			{
+				$has = true;
+			}
+		}
+		$out .= '		];';
+		echo $out;
+		
+		/*
+		if (!$has && $arr["ret_b"])
+		{
+			$gt_list[] = $arr["ret_b"];
+			usort($gt_list, array(&$this, "__gantt_sort"));
+		}
+		arr($gt_list);
+		arr($cdata);
+		*/
+		die();
+	}
 
 	function check_sect(&$sect, &$curday)
 	{

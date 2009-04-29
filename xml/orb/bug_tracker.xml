@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="bug_tracker" folder="www/dev/terryf/automatweb_dev/classes/applications/bug_o_matic_3000" extends="class_base">
+	<class name="bug_tracker" folder="www/dev/hannes/automatweb_dev/classes/applications/bug_o_matic_3000" extends="class_base">
 		<action name="proj_tree_level" all_args="1">
 			<function name="proj_tree_level">
 				<arguments>
@@ -104,6 +104,13 @@
 
 		<action name="list_only_fetch" all_args="1">
 			<function name="list_only_fetch">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="aw_firefoxtools_gantt">
+			<function name="aw_firefoxtools_gantt">
 				<arguments>
 				</arguments>
 			</function>
