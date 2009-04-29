@@ -3661,7 +3661,7 @@ class bug_tracker extends class_base
 		$i = 0;
 		foreach($gt_list as $gt)
 		{
-			if($i==15)
+			if($i==30)
 			{
 				continue;
 			}
@@ -3688,38 +3688,17 @@ class bug_tracker extends class_base
 			$out .= '{"name":"'.$nm.'",'.
 				'"url":"'.html::get_change_url($gt->id()).'",'.
 				'"class":"'.$cdata["class"].'"'.
-			"},\n";
+			"},";
 			
-			/*
-			$chart->add_row (array (
-				"name" => ,
-				"title" => $nm,
-				"uri" => html::get_change_url(
-					$gt->id(),
-					array("return_url" => get_ru())
-				),
-				"row_name_class" => ,
-			));
-			*/
 			if ($arr["ret_b"] && $gt->id() == $arr["ret_b"]->id())
 			{
 				$has = true;
 			}
 			$i++;
 		}
-		$out .= '		];';
-		echo $out;
-		
-		/*
-		if (!$has && $arr["ret_b"])
-		{
-			$gt_list[] = $arr["ret_b"];
-			usort($gt_list, array(&$this, "__gantt_sort"));
-		}
-		arr($gt_list);
-		arr($cdata);
-		*/
-		die();
+		$out .= '];';
+		$out = utf8_encode($out);
+		die($out);
 	}
 
 	function check_sect(&$sect, &$curday)
