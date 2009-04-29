@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="objects" folder="core" extends="core">
+	<class name="objects" folder="www/dev/marko/automatweb_dev/classes/core" extends="core">
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
@@ -70,6 +70,20 @@
 			<function name="orb_serialize">
 				<arguments>
 					<required name="oid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_xml">
+			<function name="get_xml">
+				<arguments>
+					<required name="oid" type="oid" />
+					<optional name="copy_subobjects" type="bool" />
+					<optional name="copy_subfolders" type="bool" />
+					<optional name="copy_subdocs" type="bool" />
+					<optional name="copy_rels" type="bool" />
+					<optional name="new_rels" type="bool" />
+					<optional name="no_header" type="bool" />
 				</arguments>
 			</function>
 		</action>

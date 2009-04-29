@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.8 2008/06/20 09:34:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.9 2009/04/29 14:49:06 markop Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 /*
 @classinfo  maintainer=kristo
@@ -185,6 +185,53 @@ class objects extends core
 	function orb_serialize($arr)
 	{
 		return parent::serialize($arr);
+	}
+
+	/** returns the object's data in xml
+		@attrib api=1 params=name name=get_xml
+
+		@param oid required type=oid
+			object id
+
+		@param copy_subobjects optional type=bool
+			If true, all subobjects are also in the xml
+
+		@param copy_subfolders optional type=bool
+			If true, all subfolders are in the xml as well
+
+		@param copy_subdocs optional type=bool
+			If true, all documnents under the current object are in the xml as well
+
+		@param copy_rels optional type=bool
+			If true, connections for the object are copied, but not the objects they point to
+
+		@param new_rels optional type=bool
+			If true, connections from the objects are copied, and the objects they point to, are also copied
+
+		@param no_header optional type=bool
+			If true, returned xml string will not have xml header. Default false.
+
+		@errors
+			none
+
+		@returns
+			string containing xml that contains the object data
+
+		@examples:
+			$o = obj(1);
+
+			$xml = $obj_inst->get_xml(array(
+				"oid" => $o->id(),
+				"copy_subobjects" => true,
+				"new_rels" => true
+			));
+
+			$new_obj = object::from_xml($xml, 6); // copies all objects and their relations from object 1 to object 6
+	**/
+	function get_xml($options)
+	{
+		$o = obj($options["oid"]);
+		return str_replace("&amp;lt;" , "<" , $o->get_xml($options));
 	}
 }
 
