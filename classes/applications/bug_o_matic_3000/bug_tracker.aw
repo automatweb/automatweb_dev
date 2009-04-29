@@ -3658,8 +3658,13 @@ class bug_tracker extends class_base
 		$gt_list = $this->get_undone_bugs_by_p($p);
 		$bi = get_instance(CL_BUG);
 		$out = "menu = [";
+		$i = 0;
 		foreach($gt_list as $gt)
 		{
+			if($i==15)
+			{
+				continue;
+			}
 			$cdata = $this->get_gantt_bug_colors($gt);
 
 			$nm = parse_obj_name($gt->name());
@@ -3700,6 +3705,7 @@ class bug_tracker extends class_base
 			{
 				$has = true;
 			}
+			$i++;
 		}
 		$out .= '		];';
 		echo $out;
