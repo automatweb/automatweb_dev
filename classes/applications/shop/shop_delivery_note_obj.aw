@@ -64,7 +64,9 @@ class shop_delivery_note_obj extends _int_object
 			{
 				$this->create_dn_row(array(
 					"dno" => $dno,
-					"d" => $d,
+					"unit" => $d["unit"],
+					"amount" => $d["amount"],
+					"price" => $d["price"],
 					"name" => $name,
 					"prod" => $prod,
 				));
