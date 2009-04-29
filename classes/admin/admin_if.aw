@@ -1043,10 +1043,10 @@ class admin_if extends class_base
 
 		if (aw_ini_get("admin_if.no_copy_feedback"))
 		{
-			return $this->mk_my_orb("submit_copy_feedback", array("ret_to_orb" => 1, "reforb" => 1, "ser_type" => 2, "ser_rels" => 1, "parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url));
+			return $this->mk_my_orb("submit_copy_feedback", array("ret_to_orb" => 1, "reforb" => 1, "ser_type" => 2, "ser_rels" => 1, "parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url, "login" => $login));
 		}
 
-		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url));
+		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url , "login" => $login));
 	}
 
 	/**
@@ -1057,7 +1057,7 @@ class admin_if extends class_base
 		@param period optional
 		@param sel optional
 		@param return_url optional
-		
+		@param login optional
 		@returns
 
 
@@ -1116,6 +1116,7 @@ class admin_if extends class_base
 		$hc->finish_output(array(
 			"data" => array(
 				"action" => "submit_copy_feedback",
+				"login" => $login,
 				"parent" => $parent,
 				"period" => $period,
 				"sel" => $sel,
@@ -1155,14 +1156,70 @@ class admin_if extends class_base
 		$copied_objects = array();
 		if (is_array($sel))
 		{
-			foreach($sel as $oid => $one)
+			if (!empty($login))
 			{
-				$o = obj($oid);
-				$copied_objects[$oid] = $o->get_xml($params);
+				$rels = array();
+				if (is_array($sel))
+				{
+					// ok, so how do I add objects to here?
+					foreach($sel as $oid => $one)
+					{
+	//					aw_global_set("xmlrpc_dbg",1);
+						$r = $this->_search_mk_call(array("oid" => $oid),$login);
+	
+						if ($r !== false)
+						{
+							if (is_array($r["connections"]))
+							{
+								$rels = $rels + $r["connections"];
+							};
+							$copied_objects[$oid] = $r;
+							$ra = aw_unserialize($r);
+	//					echo "r = $r <br />ra = <pre>", var_dump($ra),"</pre> <br />";
+						}
+					}
+				}
+				foreach($rels as $rel_id)
+				{
+					$r = $this->_search_mk_call(array("oid" => $rel_id["to"]), $login);
+					if ($r !== false)
+					{
+						$copied_objects[$rel_id["to"]] = $r;
+					};
+				};
+			}
+			else
+			{
+				foreach($sel as $oid => $one)
+				{
+					$o = obj($oid);
+					$copied_objects[$oid] = $o->get_xml($params);
+				}
 			}
 		}
 		aw_session_set("copied_objects", $copied_objects);
 		return !empty($return_url) ? $return_url : self::get_link_for_obj($parent,$period);
+	}
+
+	function _check_lock_write()
+	{
+		;
+	}
+
+	function _search_mk_call($params, $login = null)
+	{
+		$_parms = array(
+			"class" => "objects",
+			"action" => "get_xml",
+			"params" => $params
+		);
+		if (!empty($login))
+		{
+			$_parms["method"] = "xmlrpc";
+			$_parms["login_obj"] = $login;
+		}
+		$ret =  $this->do_orb_method_call($_parms);
+		return $ret;
 	}
 
 	/** pastes the cut objects
