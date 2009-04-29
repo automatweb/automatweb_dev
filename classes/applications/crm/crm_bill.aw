@@ -579,6 +579,10 @@ class crm_bill extends class_base
 				break;
 
 			case "bill_rows":
+				if ($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
 				$this->_bill_rows($arr);
 				break;
 
@@ -4572,27 +4576,29 @@ class crm_bill extends class_base
 			"confirm" => t("Oled kindel et kanda valitud read uuele arvele?"),
 			"action" => "form_new_bill"
 		));
-
-		$tb->add_menu_button(array(
-			"name" => "bill_dno",
-			"img" => "copy.gif",
-			"tooltip" => t("Kanna arve read saatelehele"),
-		));
-		foreach($arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_DELIVERY_NOTE",
-		)) as $c)
+		if(!$arr["new"])
 		{
+			$tb->add_menu_button(array(
+				"name" => "bill_dno",
+				"img" => "copy.gif",
+				"tooltip" => t("Kanna arve read saatelehele"),
+			));
+			foreach($arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_DELIVERY_NOTE",
+			)) as $c)
+			{
+				$tb->add_menu_item(array(
+					"parent" => "bill_dno",
+					"url" => "javascript: var cf = document.forms.changeform; cf.action.value = 'move_rows_to_dn'; cf.dno.value='".$c->prop("to")."'; cf.submit()",
+					"text" => $c->to()->name(),
+				));
+			}
 			$tb->add_menu_item(array(
 				"parent" => "bill_dno",
-				"url" => "javascript: var cf = document.forms.changeform; cf.action.value = 'move_rows_to_dn'; cf.dno.value='".$c->prop("to")."'; cf.submit()",
-				"text" => $c->to()->name(),
+				"url" => "javascript: var cf = document.forms.changeform; cf.action.value = 'move_rows_to_dn'; cf.dno.value='new'; cf.submit()",
+				"text" => t("Uus saateleht"),
 			));
 		}
-		$tb->add_menu_item(array(
-			"parent" => "bill_dno",
-			"url" => "javascript: var cf = document.forms.changeform; cf.action.value = 'move_rows_to_dn'; cf.dno.value='new'; cf.submit()",
-			"text" => t("Uus saateleht"),
-		));
 	}
 
 	function set_current_settings()
@@ -5447,6 +5453,10 @@ class crm_bill extends class_base
 
 	function _get_dn_confirm_tbl($arr)
 	{
+		if($arr["new"])
+		{
+			return PROP_IGNORE;
+		}
 		$t = &$arr["prop"]["vcl_inst"];
 
 		$t->set_titlebar_display(false);

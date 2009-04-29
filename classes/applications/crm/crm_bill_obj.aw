@@ -2470,7 +2470,7 @@ class crm_bill_obj extends _int_object
 		{
 			$row = obj($oid);
 			$row->set_meta("dno", $dno->id());
-			//$row->save();
+			$row->save();
 		}
 	}
 
@@ -2481,7 +2481,7 @@ class crm_bill_obj extends _int_object
 			return $set;
 		}
 		$impl = $this->prop("impl");
-		if($this->can("view", $impl))
+		if(is_oid($this->id()) && $this->can("view", $impl))
 		{
 			$conn = obj($impl)->connections_to(array(
 				"from.class_id" => CL_SHOP_WAREHOUSE_CONFIG,
