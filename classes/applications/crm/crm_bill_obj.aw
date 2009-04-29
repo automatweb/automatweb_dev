@@ -2419,6 +2419,92 @@ class crm_bill_obj extends _int_object
 		$nb->add_rows(array("objects" => $rows));//arr($this->mk_my_orb("change", array("id" => $nb->id()), CL_CRM_BILL));
 		return $nb->id();
 	}
+
+	function move_rows_to_dn($arr)
+	{
+		$o = obj();
+		$o->set_class_id(CL_SHOP_DELIVERY_NOTE);
+		foreach($arr["sel_rows"] as $tmp => $oid)
+		{
+			$row = obj($oid);
+			if(!$row->meta("dno"))
+			{
+				$rows[$row->prop("prod")] = array(
+					"amount" => $row->prop("amt"),
+					"unit" => is_oid($row->prop("unit")) ? $row->prop("unit") : null,
+					"price" => $row->prop("price"),
+				);
+			}
+		}
+		if($arr["dno"] == "new")
+		{
+			$dno = $o->create_dn(sprintf(t("%s saateleht #%s"), $this->name(), count($this->connections_from(array(
+				"type" => "RELTYPE_DELIVERY_NOTE"
+			))) + 1), $arr["id"], array(
+				"from_warehouse" => $this->prop("warehouse"),
+				"customer" => $this->prop("customer"),
+				"impl" => $this->prop("impl"),
+				"currency" => $this->prop("currency"),
+				"rows" => $rows,
+			));
+			$this->connect(array(
+				"to" => $dno->id(),
+				"type" => "RELTYPE_DELIVERY_NOTE",
+			));
+			$dno->connect(array(
+				"to" => $arr["id"],
+				"type" => "RELTYPE_BILL",
+			));
+		}
+		elseif($this->can("view", $arr["dno"]))
+		{
+			$dno = obj($arr["dno"]);
+			foreach($rows as $prod => $row)
+			{
+				$row["prod"] = $prod;
+				$row["dno"] = $dno;
+				$o->create_dn_row($row);
+			}
+		}
+		foreach($arr["sel_rows"] as $tmp => $oid)
+		{
+			$row = obj($oid);
+			$row->set_meta("dno", $dno->id());
+			//$row->save();
+		}
+	}
+
+	function awobj_get_warehouse()
+	{
+		if($set = parent::prop("warehouse"))
+		{
+			return $set;
+		}
+		$impl = $this->prop("impl");
+		if($this->can("view", $impl))
+		{
+			$conn = obj($impl)->connections_to(array(
+				"from.class_id" => CL_SHOP_WAREHOUSE_CONFIG,
+				"type" => "RELTYPE_MANAGER_CO",
+			));
+			$ids = array();
+			foreach($conn as $c)
+			{
+				$ids[] = $c->prop("from");
+			}
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_WAREHOUSE,
+				"conf" => $ids,
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+			if($ol->count() == 1)
+			{
+				return $ol->begin()->id();
+			}
+		}
+		return null;
+	}
 }
 
 ?>

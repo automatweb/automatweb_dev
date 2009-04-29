@@ -335,6 +335,8 @@ class mrp_job_obj extends _int_object
 					"amount" => $arr["amount"][$prod],
 				);
 			}
+			$dn = obj();
+			$dn->set_class_id(CL_SHOP_DELIVERY_NOTE);
 			if(!count($conn))
 			{
 				$o = obj();
@@ -343,13 +345,34 @@ class mrp_job_obj extends _int_object
 				$o->set_name(sprintf(t("Materjali liikumisseos t&ouml;&ouml;ga %s"), $this->name()));
 				$o->set_prop("job", $this->id());
 				$o->save();
-				$o->create_dn($o, $data);
+				$dn = obj();
+				$dn->set_class_id(CL_SHOP_DELIVERY_NOTE);
+				$dno = $dn->create_dn(sprintf(t("%s saateleht"), $this->name()), $o->id(), array("rows" => $data));
+				$job = $o->prop("job");
+				if($this->can("view", $job))
+				{
+					$case = obj($job)->get_first_obj_by_reltype("RELTYPE_MRP_PROJECT");
+				}
+				if($case)
+				{
+					$dno->set_prop("number", $case->name());
+					$wh = $case->prop("warehouse");
+				}
+				$dno->set_prop("from_warehouse", $wh);
+				$dno->save();
+				$o->set_prop("dn", $dno->id());
+				$o->save();
 			}
 			else
 			{
 				foreach($conn as $c)
 				{
-					$c->from()->update_dn_rows($c->from(), $data);
+					$dn = $c->from()->prop("dn");
+					if($dn && $this->can("view", $dn))
+					{
+						$dno = obj($dn);
+						$dno->update_dn_rows($data);
+					}
 				}
 			}
 			

@@ -5904,14 +5904,12 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$t = &$arr["prop"]["vcl_inst"];
 
 		$t->define_field(array(
-			"sortable" => 1,
 			"name" => "product",
 			"caption" => t("Artikkel"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
-			"sortable" => 1,
 			"name" => "from_wh",
 			"caption" => t("Laost"),
 			"align" => "center"
@@ -5922,7 +5920,6 @@ $oo = get_instance(CL_SHOP_ORDER);
 		if($group != "storage_writeoffs")
 		{
 			$t->define_field(array(
-				"sortable" => 1,
 				"name" => "to_wh",
 				"caption" => t("Lattu"),
 				"align" => "center"
@@ -5930,32 +5927,37 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 
 		$t->define_field(array(
-			"sortable" => 1,
 			"name" => "created",
 			"caption" => t("Kuup&auml;ev"),
 			"align" => "center",
-			"type" => "time",
-			"format" => "m.d.Y H:i"
 		));
 
 		$t->define_field(array(
 			"name" => "amount",
 			"caption" => t("Kogus"),
 			"align" => "center",
-			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "dn",
 			"caption" => t("Saateleht"),
 			"align" => "center",
-			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "bill",
+			"caption" => t("Arve"),
+			"align" => "center",
 		));
 
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
 		));
+
+		$t->set_rgroupby(array("prod" => "prod"));
+		$t->set_default_sortby("total");
+		$t->set_default_sorder("asc");
 	}
 
 	private function _get_movements_ol($arr)
@@ -6013,10 +6015,18 @@ $oo = get_instance(CL_SHOP_ORDER);
 				));
 			}
 		}
+		if(!$arr["request"][$group."_s_from"])
+		{
+			$arr["request"][$group."_s_from"] = mktime(0, 0, 0, date('m'), 1, date('Y'));
+		}
+		if(!$arr["request"][$group."_s_to"])
+		{
+			$arr["request"][$group."_s_to"] = mktime(0, 0, 0, date('m')+1, 0, date('Y'));
+		}
 		if(($from = $arr["request"][$group."_s_from"]) || ($arr["request"][$group."_s_to"]))
 		{
-			$to = date_edit::get_timestamp($arr["request"][$group."_s_to"]);
-			$from = date_edit::get_timestamp($from);
+			$to = is_numeric($arr["request"][$group."_s_to"]) ? $arr["request"][$group."_s_to"] : date_edit::get_timestamp($arr["request"][$group."_s_to"]);
+			$from = is_numeric($arr["request"][$group."_s_from"]) ? $arr["request"][$group."_s_from"] : date_edit::get_timestamp($arr["request"][$group."_s_from"]);
 			if($from > 0 && $to > 0)
 			{
 				$to += 24 * 60 * 60 -1;
@@ -6073,6 +6083,30 @@ $oo = get_instance(CL_SHOP_ORDER);
 		return $ol;
 	}
 
+	function _get_storage_movements_s_from($arr)
+	{
+		if(!$arr["request"][$arr["prop"]["name"]])
+		{
+			$arr["prop"]["value"] = mktime(0, 0, 0, date('m'), 1, date('Y'));
+		}
+		else
+		{
+			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+		}
+	}
+
+	function _get_storage_movements_s_to($arr)
+	{
+		if(!$arr["request"][$arr["prop"]["name"]])
+		{
+			$arr["prop"]["value"] = mktime(0, 0, 0, date('m')+1, 0, date('Y'));
+		}
+		else
+		{
+			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+		}
+	}
+
 	function _get_storage_movements(&$arr)
 	{
 		$this->_init_storage_movements_tbl($arr);
@@ -6093,26 +6127,42 @@ $oo = get_instance(CL_SHOP_ORDER);
 					$data[$obj] = html::obj_change_url(${$obj}, parse_obj_name(${$obj}->name()));
 				}
 			}
-			/*if($product)
-			{
-				$units = $product->instance()->get_units($product);arr($o->prop("unit")." vs ".$units[0]);
-				if($o->prop("unit") != $units[0])
-				{arr($o->id());
-					continue;
-				}
-			}*/
-			$data["created"] = $o->created();
+			$data["prod"] = obj($o->prop("product"))->name();
+			$data["created"] = date('d.m.Y, H:i', $o->created());
 			$data["amount"] = $o->prop("amount")." ".$o->prop("unit.unit_code");
+			$total[$o->prop("product")][$o->prop("unit")] += $o->prop("amount");
 			if($this->can("view", ($id = $o->prop("delivery_note"))))
 			{
 				$dno = obj($id);
 				$cnum = $dno->prop("number");
 				$data["dn"] = html::obj_change_url($dno, $cnum ? $cnum : t("(Number puudub)"));
+				$conn = $dno->connections_to(array(
+					"type" => "RELTYPE_DELIVERY_NOTE",
+					"from.class_id" => CL_CRM_BILL,
+				));
+				$bills = array();
+				foreach($conn as $c)
+				{
+					$no = $c->from()->prop("bill_no");
+					$bills[] = html::obj_change_url($c->from(), $no ? $no : t("(Number puudub)"));
+				}
+				$data["bill"] = implode(", ", $bills);
 			}
 			$t->define_data($data);
 		}
-
-		$t->sort_by();
+	
+		foreach($total as $prod => $data)
+		{
+			foreach($data as $unit => $total)
+			{
+				$t->define_data(array(
+					"prod" => obj($prod)->name(),
+					"product" => sprintf(t("Kokku (%s):"), obj($unit)->prop("unit_code")),
+					"amount" => $total." ".obj($unit)->prop("unit_code"),
+					"total" => 1,
+				));
+			}
+		}
 	}
 
 	function _get_storage_writeoffs_toolbar(&$arr)

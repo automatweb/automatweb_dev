@@ -231,6 +231,9 @@ class html
 	@param onkeyup optional type=string
 		if set, onkeyup=$onkeyup.
 
+	@param class optional type=string
+		textbox's css class
+
 	@returns string / html textbox
 
 	@comment creates html textbox
@@ -258,6 +261,7 @@ class html
 		$onchange = !empty($onChange) ? " onchange=\"{$onChange}\"" : "";
 		$onkeyup = isset($onkeyup) ? " onkeyup=\"{$onkeyup}\"" : '';
 		$style = isset($style) ? " style=\"{$style}\"":"";
+		$class = isset($class) ? " class=\"{$class}\"":"";
 		if(!isset($selected) && strlen($value) > 0)
 		{
 			$selected = (array) $value;
@@ -397,7 +401,7 @@ class html
 			$value = isset($content) ? $content : "";
 		}
 
-		return "<input type=\"text\" id=\"{$id}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$style}{$onkeypress}{$onkeyup}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti}{$ac_off}{$onchange} />{$post_append_text}\n{$value_elem}{$autocomplete}";
+		return "<input type=\"text\" id=\"{$id}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$style}{$onkeypress}{$onkeyup}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti}{$ac_off}{$onchange}{$class} />{$post_append_text}\n{$value_elem}{$autocomplete}";
 	}
 
 	/**

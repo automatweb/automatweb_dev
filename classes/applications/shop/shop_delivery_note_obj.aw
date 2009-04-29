@@ -20,6 +20,101 @@ class shop_delivery_note_obj extends _int_object
 		return parent::prop("delivery_date");
 	}
 
+	function update_dn($data)
+	{
+		$dno = $this;
+		$dno->set_prop("from_warehouse", $data["from_warehouse"]);
+		$dno->set_prop("customer", $data["customer"]);
+		$dno->set_prop("impl", $data["impl"]);
+		$dno->set_prop("currency", $data["currency"]);
+		$dno->save();
+		if(is_array($data["rows"]))
+		{
+			$dno->update_dn_rows($data["rows"]);
+		}
+	}
+
+	function update_dn_rows($data)
+	{
+		$dno = $this;
+		$conn = $dno->connections_from(array(
+			"type" => "RELTYPE_ROW",
+		));
+		$name = $dno->name();
+		foreach($conn as $c)
+		{
+			$row = $c->to();
+			$prod = $row->prop("product");
+			if($data[$prod])
+			{
+				$set_prods[$prod] = $prod;
+				$row->set_prop("amount", $data[$prod]["amount"]);
+				$row->set_prop("unit", $data[$prod]["unit"]);
+				$row->set_prop("price", $data[$prod]["price"]);
+				$row->save();
+			}
+			else
+			{
+				$row->delete();
+			}	
+		}
+		foreach($data as $prod => $d)
+		{
+			if(!$set_prods[$prod])
+			{
+				$this->create_dn_row(array(
+					"dno" => $dno,
+					"d" => $d,
+					"name" => $name,
+					"prod" => $prod,
+				));
+			}
+		}
+	}
+
+	function create_dn($name, $parent, $data)
+	{
+		$dno = obj();
+		$dno->set_class_id(CL_SHOP_DELIVERY_NOTE);
+		$dno->set_parent($parent);
+		$dno->set_name($name);
+		$dno->set_prop("from_warehouse", $data["from_warehouse"]);
+		$dno->set_prop("customer", $data["customer"]);
+		$dno->set_prop("impl", $data["impl"]);
+		$dno->set_prop("currency", $data["currency"]);
+		$dno->save();
+		foreach($data["rows"] as $prod => $d)
+		{
+			$this->create_dn_row(array(
+				"dno" => $dno,
+				"amount" => $d["amount"],
+				"unit" => $d["unit"],
+				"price" => $d["price"],
+				"name" => $name,
+				"prod" => $prod,
+			));
+		}
+		return $dno;
+	}
+
+	function create_dn_row($arr)
+	{
+		extract($arr);
+		$o = obj();
+		$o->set_class_id(CL_SHOP_DELIVERY_NOTE_ROW);
+		$o->set_parent($dno->id());
+		$o->set_name(sprintf(t("%s rida"), $dno->name()));
+		$o->set_prop("amount", $amount);
+		$o->set_prop("unit", $unit);
+		$o->set_prop("product", $prod);
+		$o->set_prop("price", $price);
+		$o->save();
+		$dno->connect(array(
+			"to" => $o,
+			"reltype" => "RELTYPE_ROW",
+		));
+	}
+
 	/**
 	@attrib name=create_movement api=1
 		
@@ -111,6 +206,11 @@ class shop_delivery_note_obj extends _int_object
 			$prod_id = $row->prop("product");
 			$prod = obj($prod_id);
 			$units = $pi->get_units($prod);
+			if(!count($units))
+			{
+				aw_session_set("dn_err", sprintf(t("Tootel %s pole m&auml;&auml;ratud p&otilde;hi&uuml;hikut"), $prod->name()));
+				return false;
+			}
 			foreach($units as $i=>$unit)
 			{
 				if(!$i && !$this->can("view", $unit))
@@ -123,8 +223,8 @@ class shop_delivery_note_obj extends _int_object
 					$ch_amt = $this->get_wh_amount($row, $this, true, $unit);
 					if(!is_numeric($ch_amt))
 					{
-						aw_session_set("dn_err", sprintf(t("Tootel %s puudub l&auml;htelaos antud parameetritega laoseis"), $prod->name()));
-						return false;
+						//aw_session_set("dn_err", sprintf(t("Tootel %s puudub l&auml;htelaos antud parameetritega laoseis"), $prod->name()));
+						//return false;
 					}
 				}
 				if($unit != $row->prop("unit") && $unit && $this->can("view", $unit))

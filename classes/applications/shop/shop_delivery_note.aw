@@ -4,7 +4,7 @@
 @tableinfo aw_shop_delivery_note master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_shop_delivery_note
-@groupinfo general caption=&Uuml;ldine submit=no
+@groupinfo general caption=&Uuml;ldine
 @default group=general
 
 	@property number type=textbox
@@ -23,7 +23,7 @@
 	@caption Klient
 
 	@property impl type=textbox
-	@caption Hankija
+	@caption Tarnija
 
 	@property transport type=textbox
 	@caption Transport
@@ -43,8 +43,6 @@
 	@property articles_tb store=no no_caption=1 type=toolbar
 
 	@property articles_tbl store=no no_caption=1 type=table
-
-	@property gen_submit type=button store=no
 
 @groupinfo bills caption=Arved
 @default group=bills
@@ -105,18 +103,16 @@ class shop_delivery_note extends class_base
 				}
 				break;
 
-			case "gen_submit":
-				$prop["class"] = "sbtbutton";
-				$prop["onclick"] = "dn_submit()";
-				$prop["caption"] = t("Salvesta");
-				break;
-
 			case "to_warehouse":
 			case "from_warehouse":
 			case "customer":
 			case "impl":
 			case "currency":
-				if($this->can("view", $prop["value"]))
+				if(!$prop["value"])
+				{
+					$prop["selected"] = "";
+				}
+				elseif($this->can("view", $prop["value"]))
 				{
 					$o = obj($prop["value"]);
 					$prop["selected"] = array($prop["value"] => $o->name());
@@ -916,119 +912,6 @@ class shop_delivery_note extends class_base
 		return $ac->finish_ac($res);
 	}
 
-	function callback_generate_scripts($arr)
-	{
-		$g = $arr["request"]["group"];
-		if($g == "general" || empty($g) && !$arr["new"])
-		{
-			$js = "
-			var approved = ".($arr["obj_inst"]->prop("approved")?1:0)."
-			var amounts = Array()
-			var names = Array()";
-			$conn = $arr["obj_inst"]->connections_from(array(
-				"type" => "RELTYPE_ROW",
-			));
-			$fwh = $arr["obj_inst"]->prop("from_warehouse");
-			foreach($conn as $c)
-			{
-				$row = $c->to();
-				$amount = $arr["obj_inst"]->get_wh_amount($row, $arr["obj_inst"], true);
-				if(!$fwh)
-				{
-					$val = "\"ok\"";
-				}
-				elseif(!is_numeric($amount))
-				{
-					$val = "\"none\"";
-				}
-				else
-				{
-					$val = $amount;
-				}
-				$js .= "
-				amounts[".$row->id()."] = ".$val."
-				names[".$row->id()."] = \"".html_entity_decode($row->prop("product.name"))."\"";
-			}
-			$js .= "
-			function dn_submit()
-			{
-				var approved_f = aw_get_el(\"approved\")
-				if(approved_f.checked && !approved)
-				{
-					var form = document.forms.changeform
-					var len = form.elements.length
-					count = 0
-					ask_els = Array()
-					ask_nums = Array()
-					proceed = 1
-					for(i = 0; i < len; i++)
-					{
-						el = form.elements[i]
-						if (el.name.indexOf(\"rows\") != -1 && el.name.indexOf(\"[amount]\") != -1)
-						{
-							tmp = el.name.split(\"[\")
-							tmp = tmp[1].split(\"]\")
-							num = parseInt(tmp[0]);
-							if(amounts[parseInt(num)] == \"none\")
-							{
-								proceed = \"no\"
-								name = names[num]
-								break
-							}
-							else if(el.value > amounts[num])
-							{
-								ask_els[count] = el
-								ask_nums[count] = num
-								proceed = \"ask\"
-								count++
-							}
-						}
-					}
-				}
-				else
-				{
-					proceed = 1
-				}
-				if(proceed == \"ask\")
-				{
-					for(i = 0; i<count; i++)
-					{
-						el = ask_els[i]
-						num = ask_nums[i]
-						var confm = confirm(\"Artiklil, millel on koguseks m".html_entity_decode("&auml;")."rgitud \"+el.value+\", on l".html_entity_decode("&auml;")."htelaos j".html_entity_decode("&auml;")."".html_entity_decode("&auml;")."k ainult \"+amounts[num]+\", saatelehe kinnitamisel j".html_entity_decode("&auml;")."".html_entity_decode("&auml;")."b laoseis negatiivseks\")
-						if(!confm)
-						{
-							proceed = 0
-							break
-						}
-						else
-						{
-							proceed = 1
-						}
-					}
-				}
-				if(proceed == 1)
-				{
-					submit_changeform(\"\")
-				}
-				else if(proceed == \"no\")
-				{
-					alert(\"Artiklil \"+name+\" puudub l".html_entity_decode("&auml;")."htelaos laoseis\")
-				}
-			}";
-			return $js;
-		}
-		else
-		{
-			$js = "
-		function dn_submit()
-		{
-			submit_changeform(\"\")
-		}";
-		}
-		return $js;
-	}
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
@@ -1086,6 +969,30 @@ class shop_delivery_note extends class_base
 				break;
 		}
 		return false;
+	}
+
+	/**
+	@attrib name=create_movement all_args=1
+	**/
+	function create_movement($arr)
+	{
+		$o = obj($arr["id"]);
+		if(!$o->prop("approved"))
+		{
+			$ret = $o->create_movement($arr);
+		}
+		if(!$ret)
+		{
+			$err = aw_global_get("dn_err");
+			aw_session_del("dn_err");
+			die($err);
+		}
+		else
+		{
+			$o->set_prop("approved", 1);
+			$o->save();
+		}
+		die();
 	}
 }
 

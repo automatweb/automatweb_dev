@@ -26,7 +26,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 				@layout top_right type=vbox parent=right_split closeable=1 area_caption=Kliendi&nbsp;andmed
 
-				@layout bottom_right type=vbox parent=right_split closeable=1 area_caption=Ladu
+				@layout bottom_right type=hbox parent=right_split closeable=1 area_caption=Ladu width=50%:50%
+
+					@layout bottom_right_left type=vbox parent=bottom_right
+					
+					@layout bottom_right_right type=vbox parent=bottom_right
+				
 		@layout almost_bottom parent=main_split type=vbox closeable=1 area_caption=Arve&nbsp;saajad
  
 		@layout bottom parent=main_split type=vbox closeable=1 area_caption=Read
@@ -95,7 +100,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@caption Allkirjastajad
 
 
-
 	// top right lyt
 	@property customer_name type=textbox table=aw_crm_bill field=aw_customer_name parent=top_right
 	@caption Kliendi nimi
@@ -106,38 +110,44 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property customer_code type=textbox table=aw_crm_bill field=aw_customer_code parent=top_right
 	@caption Kliendikood
 
+	@property ctp_text type=textbox table=objects field=meta method=serialize parent=top_right
+	@caption Kontaktisik vabatekstina
+
 	@property customer_address type=textbox table=aw_crm_bill field=aw_customer_address parent=top_right
 	@caption Kliendi aadress
 
-	@property customer_add_meta_cb type=callback callback=customer_add_meta_cb store=no
+	@property customer_add_meta_cb type=callback callback=customer_add_meta_cb store=no parent=top_right
 	
 	@property customer_address_meta type=text no_caption=1 parent=top_right
 	@caption Kliendi aadressi muutujad metas
-	
-	@property ctp_text type=textbox table=objects field=meta method=serialize parent=top_right
-	@caption Kontaktisik vabatekstina
 
 
 
 	// bottom right lyt
-	@property warehouse type=relpicker table=aw_crm_bill field=aw_warehouse reltype=RELTYPE_WAREHOUSE parent=bottom_right
+
+	@property warehouse_info type=text table=aw_crm_bill store=no parent=bottom_right_left
+	@caption Info
+
+	@property warehouse type=relpicker table=aw_crm_bill field=aw_warehouse reltype=RELTYPE_WAREHOUSE parent=bottom_right_left
 	@caption Ladu
 
-	@property price_list type=relpicker table=aw_crm_bill field=aw_price_list reltype=RELTYPE_PRICE_LIST parent=bottom_right
+	@property price_list type=relpicker table=aw_crm_bill field=aw_price_list reltype=RELTYPE_PRICE_LIST parent=bottom_right_left
 	@caption Hinnakiri
 
-	@property transfer_method table=aw_crm_bill type=relpicker field=aw_transfer_method reltype=RELTYPE_TRANSFER_METHOD parent=bottom_right
+	@property transfer_method table=aw_crm_bill type=relpicker field=aw_transfer_method reltype=RELTYPE_TRANSFER_METHOD parent=bottom_right_left
 	@caption L&auml;hetusviis
 	
-	@property transfer_condition table=aw_crm_bill type=relpicker field=aw_transfer_condition reltype=RELTYPE_TRANSFER_CONDITION parent=bottom_right
+	@property transfer_condition table=aw_crm_bill type=relpicker field=aw_transfer_condition reltype=RELTYPE_TRANSFER_CONDITION parent=bottom_right_left
 	@caption L&auml;hetustingimus
 
-	@property selling_order type=relpicker table=aw_crm_bill field=aw_selling_order reltype=RELTYPE_SELLING_ORDER parent=bottom_right
+	@property selling_order type=relpicker table=aw_crm_bill field=aw_selling_order reltype=RELTYPE_SELLING_ORDER parent=bottom_right_left
 	@caption M&uuml;&uuml;gitellimus
 
-	@property transfer_address type=relpicker table=aw_crm_bill reltype=RELTYPE_ADDRESS field=aw_transfer_address parent=bottom_right
+	@property transfer_address type=relpicker table=aw_crm_bill reltype=RELTYPE_ADDRESS field=aw_transfer_address parent=bottom_right_left
 	@caption L&auml;hetusaadress
 	
+	@property dn_confirm_tbl type=table no_caption=1 parent=bottom_right_right
+
 	// bottom lyt
 
 	@property bill_targets type=table store=no no_caption=1 parent=almost_bottom
@@ -352,7 +362,17 @@ class crm_bill extends class_base
 		{
 			$arr["obj_inst"]->add_rows(array("objects" => array($arr["request"]["add_bug"])));
 		}
-
+		foreach($arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_DELIVERY_NOTE",
+		)) as $c)
+		{
+			$c->to()->update_dn(array(
+				"from_warehouse" => $arr["obj_inst"]->prop("warehouse"),
+				"customer" => $arr["obj_inst"]->prop("customer"),
+				"impl" => $arr["obj_inst"]->prop("impl"),
+				"currency" => $arr["obj_inst"]->prop("currency"),
+			));
+		}
 	}
 
 	function get_bill_cust_data_object($bill)
@@ -677,6 +697,59 @@ class crm_bill extends class_base
 
 			case "bill_mail_legend":
 				$prop["value"] = $this->get_mail_legend();
+				break;
+
+			case "warehouse":
+				$ids = array();
+				foreach(array("impl", "customer") as $var)
+				{
+					if($co = $arr["obj_inst"]->prop($var))
+					{
+						$conn = obj($co)->connections_to(array(
+							"from.class_id" => CL_SHOP_WAREHOUSE_CONFIG,
+							"type" => "RELTYPE_MANAGER_CO",
+						));
+						foreach($conn as $c)
+						{
+							$ids[] = $c->prop("from");
+						}
+					}
+				}
+				$ol = new object_list(array(
+					"class_id" => CL_SHOP_WAREHOUSE,
+					"conf" => $ids,
+					"site_id" => array(),
+					"lang_id" => array(),
+				));
+				$val = array();
+				if($this->can("view", $prop["value"]) && !in_array($prop["value"], $ids))
+				{
+					$val = array($prop["value"] => obj($prop["value"])->name());
+				}
+				$prop["options"] = array(
+					0 => t("--vali--"),
+				) + $val + $ol->names();
+				break;
+
+			case "warehouse_info":
+				$wh = $arr["obj_inst"]->prop("warehouse");
+				if($this->can("view", $wh))
+				{
+					$conf = obj($wh)->prop("conf");
+				}
+				$cos = array();
+				if($this->can("view", $conf))
+				{
+					$cos = obj($conf)->prop("manager_cos");
+				}
+				if(in_array($arr["obj_inst"]->prop("customer"), $cos))
+				{
+					$arr["prop"]["value"] = "<span style='color:red;'>".t("Tegu on ostuarvega")."</span>";
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
 				break;
 		};
 		return $retval;
@@ -1106,6 +1179,7 @@ class crm_bill extends class_base
 		{
 			$arr["project"] = $_GET["project"];
 		}
+		$arr["dno"] = "";
 	}
 
 	function _dn_tb($arr)
@@ -1814,17 +1888,11 @@ class crm_bill extends class_base
 							"ch_value" => 1,
 							"checked" => $agreement_price["has_tax"] == 1 ? true : false
 						)),
-						"prod" => html::select(array(
+						"prod" => html::textbox(array(
 							"name" => "agreement_price[".$x."][prod]",
-							"options" => $r_prods,
-							"value" => $agreement_price["prod"]
-						))." ".html::popup(array(
-							"width" => 800,
-							"height" => 500,
-							"scrollbars" => 1,
-							"url" => $this->mk_my_orb("do_search", array("pn" => "agreement_price[".$x."][prod]", "clid" => CL_SHOP_PRODUCT, "tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
-							"caption" => t("Vali")
-						)),
+							"size" => 20,
+							"class" => "prod_box",
+						))."<script>$('.prod_box').autocomplete('".$this->mk_my_orb("get_prod_list")."')</script>",
 						"sel" => html::checkbox(array(
 							"name" => "sel_rows[]",
 							"value" => $id
@@ -2041,7 +2109,7 @@ class crm_bill extends class_base
 			die(0);
 		}
 		$o = obj($arr["id"]);
-		$props = array("name" , "comment" , "date" , "price" , "amt", "prod", "unit");
+		$props = array("name" , "comment" , "date" , "price" , "amt", "unit");
 		foreach($props as $prop)
 		{
 			if(isset($arr[$prop]))
@@ -2049,6 +2117,15 @@ class crm_bill extends class_base
 				$o->set_prop($prop , iconv("UTF-8", aw_global_get("charset"), $arr[$prop]));
 			}
 		}
+
+		if(isset($arr["prod"]))
+		{
+			$tmp = explode("(", $arr["prod"]);
+			$tmp2 = explode(")", $tmp[count($tmp)-1]);
+			$prod = $tmp2[0];
+			$o->set_prop("prod", $prod);
+		}
+
 		if($arr["name"])
 		{
 			$o->set_prop("desc" , iconv("UTF-8", aw_global_get("charset"), $arr["name"]));
@@ -2081,6 +2158,31 @@ class crm_bill extends class_base
 		}
 		
 		$o->save();
+		
+		if($o->meta("dno"))
+		{
+			$conn = $o->connections_to(array(
+				"from.class_id" => CL_CRM_BILL,
+				"type" => "RELTYPE_ROW",
+			));
+			$cn = reset($conn);
+			foreach($cn->from()->connections_from(array(
+				"type" => "RELTYPE_ROW",
+			)) as $c)
+			{
+				$row = $c->to();
+				if($row->meta("dno") == $o->meta("dno"))
+				{
+					$rows[$row->prop("prod")] = array(
+						"amount" => $row->prop("amt"),
+						"unit" => is_oid($row->prop("unit")) ? $row->prop("unit") : null,
+						"price" => $row->prop("price"),
+					);
+				}
+			}
+			obj($o->meta("dno"))->update_dn_rows($rows);
+		}
+		
 		die(var_dump($arr));
 	}
 
@@ -2233,21 +2335,45 @@ class crm_bill extends class_base
 				));
 				break;
 			case "prod":
-				$ret.=html::select(array(
+				if(!$row->meta("dno"))
+				{
+					$m = new popup_menu;
+					$m->begin_menu("move_rows_to_dn_".$id);
+					$bill = reset($row->connections_to(array("type" => "RELTYPE_ROW", "from.class_id" => CL_CRM_BILL)))->from();
+					foreach($bill->connections_from(array(
+						"type" => "RELTYPE_DELIVERY_NOTE",
+					)) as $c)
+					{
+						$m->add_item(array(
+							"parent" => "move_rows_to_dn_".$id,
+							"url" => "javascript:void(0)", 
+							"onClick" => "$.get('".$this->mk_my_orb("move_rows_to_dn", array(
+								"sel_rows[0]" => $id,
+								"dno" => $c->prop("to"),
+								"id" => $bill->id(),
+							))."');$('#dn_info_$id').html('".sprintf(t("Saatelehel %s"), htmlentities($c->prop("to.name")))."');",
+							"text" => $c->to()->name(),
+						));
+					}
+					$m->add_item(array(
+						"parent" => "move_rows_to_dn_".$id,
+						"url" => "javascript:void(0)",
+						"onClick" => "$.get('".$this->mk_my_orb("move_rows_to_dn", array(
+							"sel_rows[0]" => $id,
+							"dno" => "new",
+							"id" => $bill->id(),
+						))."');$('#dn_info_$id').html('".sprintf(t("Saatelehel %s"), "")."');",
+						"text" => t("Uus saateleht"),
+					));
+				}
+				$ret.=html::textbox(array(
 					"name" => "rows[$id][prod]",
-					"options" => $row->get_prod_selection(),
-					"value" => $row->prop("prod")
-				))."  ".html::popup(array(
-					"width" => 800,
-					"height" => 500,
-					"scrollbars" => 1,
-					"url" => $this->mk_my_orb("do_search", array(
-						"pn" => "rows[$id][prod]",
-						"clid" => CL_SHOP_PRODUCT,
-						"no_submit" => 1,
-						"tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
-					"caption" => t("Vali")
-				));
+					"size" => 20,
+					"value" => $row->prop("prod") ? sprintf("%s (%s)", $row->prop("prod.name"), $row->prop("prod")) : "",
+					"class" => "prod_box",
+				))."<br />".($row->meta("dno") ? sprintf(t("Saatelehel %s"), obj($row->meta("dno"))->name()) : "<div id='dn_info_$id'>".t("Liiguta saatelehele:").$m->get_menu(array(
+					"icon" => "copy.gif",
+				))."</div>");
 				break;
 			case "person":
 				$ret.=html::select(array(
@@ -2373,7 +2499,7 @@ class crm_bill extends class_base
 				));
 				break;
 			case "prod":
-				$ret.=$row->prop("prod.name");
+				$ret.=$row->prop("prod.name").(($dn = $row->meta("dno")) ? "<br />".sprintf(t("(Saatelehel %s)"), obj($dn)->name()): "");
 				break;
 			case "person":
 				$ret.=join("<br>" , $row->get_person_selection());
@@ -4016,6 +4142,13 @@ class crm_bill extends class_base
 				{
 					unset($arr["request"]["agreement_price"][$key]);
 				}
+				if(isset($arr["request"]["agreement_price"][$key]["prod"]))
+				{
+					$tmp = explode("(", $arr["request"]["agreement_price"][$key]["prod"]);
+					$tmp2 = explode(")", $tmp[count($tmp)-1]);
+					$prod = $tmp2[0];
+					$arr["request"]["agreement_price"][$key]["prod"] = $prod;
+				}
 			}
 		}
 		$arr["obj_inst"]->set_meta("agreement_price", $arr["request"]["agreement_price"]);
@@ -4116,6 +4249,7 @@ class crm_bill extends class_base
 	function callback_generate_scripts($arr)
 	{
 		$url = $this->mk_my_orb("get_comment_for_prod");
+		$prod_url = $this->mk_my_orb("get_prod_list");
 		return '
 			function edit_row(id)
 			{
@@ -4127,7 +4261,9 @@ class crm_bill extends class_base
 						x.innerHTML=html;});
 					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "prod"}, function (html) {
 						x=document.getElementById("row_"+id +"_prod");
-						x.innerHTML=html;});
+						x.innerHTML=html;
+					$(".prod_box").autocomplete("'.$prod_url.'")});
+
 					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "person"}, function (html) {
 						x=document.getElementById("row_" + id + "_person");
 						x.innerHTML=html;});
@@ -4437,6 +4573,26 @@ class crm_bill extends class_base
 			"action" => "form_new_bill"
 		));
 
+		$tb->add_menu_button(array(
+			"name" => "bill_dno",
+			"img" => "copy.gif",
+			"tooltip" => t("Kanna arve read saatelehele"),
+		));
+		foreach($arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_DELIVERY_NOTE",
+		)) as $c)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "bill_dno",
+				"url" => "javascript: var cf = document.forms.changeform; cf.action.value = 'move_rows_to_dn'; cf.dno.value='".$c->prop("to")."'; cf.submit()",
+				"text" => $c->to()->name(),
+			));
+		}
+		$tb->add_menu_item(array(
+			"parent" => "bill_dno",
+			"url" => "javascript: var cf = document.forms.changeform; cf.action.value = 'move_rows_to_dn'; cf.dno.value='new'; cf.submit()",
+			"text" => t("Uus saateleht"),
+		));
 	}
 
 	function set_current_settings()
@@ -5289,5 +5445,61 @@ class crm_bill extends class_base
 		}
 	}
 
+	function _get_dn_confirm_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->set_titlebar_display(false);
+		$t->set_caption(t("Saatelehed"));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Saateleht"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "action",
+			"caption" => t("Tegevus"),
+			"align" => "center",
+		));
+		foreach($arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_DELIVERY_NOTE",
+		)) as $c)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($c->to()),
+				"action" => $c->to()->prop("approved") ? t("Kinnitatud") : "<div id='confirm_dn_".$c->prop("to")."'>".html::button(array(
+					"onclick" => "var proceed = confirm('".html_entity_decode(t("Olete kindel? J&auml;tkamisel tehakse lao liikumised"))."'); if(proceed) { $.get('".$this->mk_my_orb("create_movement", array("id" => $c->prop("to")), CL_SHOP_DELIVERY_NOTE)."', function(data){if(data.length) { alert('".html_entity_decode(t("Kinnitamine eba&otilde;nnestus."))." '+data);} else { $('#confirm_dn_".$c->prop("to")."').html('".t("Kinnitatud")."'); } }); }",
+					"value" => t("Kinnita"),
+				)),
+			));
+		}
+	}
+
+	/**
+	@attrib name=get_prod_list all_args=1
+	**/
+	function get_prod_list($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"name" => $arr["q"]."%",
+		));
+		foreach($ol->names() as $oid => $name)
+		{
+			echo sprintf("%s (%s)\n", $name, $oid);
+		}
+		die();
+	}
+
+	/**
+	@attrib name=move_rows_to_dn all_args=1
+	**/
+	function move_rows_to_dn($arr)
+	{
+		obj($arr["id"])->move_rows_to_dn($arr);
+		return $arr["post_ru"];
+	}
 }
 ?>
