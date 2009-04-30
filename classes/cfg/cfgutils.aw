@@ -682,6 +682,7 @@ class cfgutils extends aw_template
 			$file = basename($args["file"]);
 		}
 
+		$tft = 0;
 		$adm_ui_lc = null;
 		if (aw_ini_isset("user_interface.default_language"))
 		{
@@ -690,22 +691,51 @@ class cfgutils extends aw_template
 			if (file_exists($trans_fn))
 			{
 				require_once($trans_fn);
+				$tft = filemtime($trans_fn);
 			}
+		}
+
+
+		$sc = $GLOBALS["cfg"]["classes"][$clid]["site_class"];
+		if ($sc)
+		{
+			$ts = is_readable(aw_ini_get("site_basedir")."/xml/properties/".$file.".xml") ? filemtime(aw_ini_get("site_basedir")."/xml/properties/".$file.".xml") : null;
+		}
+		else
+		{
+			$ts = is_readable(aw_ini_get("basedir")."/xml/properties/".$file.".xml") ? filemtime(aw_ini_get("basedir")."/xml/properties/".$file.".xml") : null;
 		}
 
 		$args["adm_ui_lc"] = $adm_ui_lc;
 		$key = md5(serialize($args));
-		$ret = $this->load_properties_unc($args);
-		$cache_d = array(
-			"groupinfo" => $this->groupinfo,
-			"tableinfo" => $this->tableinfo,
-			"classinfo" => $this->classinfo,
-			"relinfo" => $this->relinfo,
-			"propdef" => $this->propdef,
-			"ret" => $ret
-		);
-		$this->cache->file_set($key, aw_serialize($cache_d, SERIALIZE_PHP_FILE));
+		$res = $this->cache->file_get_ts($key, max($ts, $tft));
+		$cache_d = null;
+		if ($res)
+		{
+			$cache_d = aw_unserialize($res);
+		}
 
+		if (is_array($cache_d) && !$sc)
+		{
+			foreach($cache_d as $k => $v)
+			{
+				$this->$k = $v;
+			}
+			$ret = $cache_d["ret"];
+		}
+		else
+		{
+			$ret = $this->load_properties_unc($args);
+			$cache_d = array(
+				"groupinfo" => $this->groupinfo,
+				"tableinfo" => $this->tableinfo,
+				"classinfo" => $this->classinfo,
+				"relinfo" => $this->relinfo,
+				"propdef" => $this->propdef,
+				"ret" => $ret
+			);
+			$this->cache->file_set($key, aw_serialize($cache_d, SERIALIZE_PHP_FILE));
+		}
 		return $ret;
 	}
 
