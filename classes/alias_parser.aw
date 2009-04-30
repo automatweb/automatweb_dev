@@ -255,7 +255,8 @@ class alias_parser extends core
 		$als = $obj->meta("aliaslinks");
 
 		$ids = array();
-		foreach($obj->connections_from() as $c)
+		$cf = $obj->connections_from();
+		foreach($cf as $c)
 		{
 			$ids[] = $c->prop("to");
 		}
@@ -263,22 +264,21 @@ class alias_parser extends core
 		// fetch objs in object_list, it's fastah
 		if (count($ids))
 		{
-			$ol = new object_list(array("oid" => $ids));
+			$ol = new object_list(array("oid" => $ids, "lang_id" => array(), "site_id" => array()));
 			$ol->arr();
 		}
 
-		foreach($obj->connections_from() as $c)
+		foreach($cf as $c)
 		{
 			$tp = $c->prop();
 			$tp["aliaslink"] = isset($als[$c->prop("to")]) ? $als[$c->prop("to")] : null;
 			$tp["source"] = $tp["from"];
-			$to = $c->to();
 
-			$tp["target"] = $to->id();
-			$tp["to"] = $to->id();
+			$tp["target"] = $tp["to"];
+			$tp["to"] = $tp["to"];
 			$tp["class_id"] = $tp["to.class_id"];
 			$tp["name"] = $tp["to.name"];
-			$retval[$c->prop("to.class_id")][$c->prop("idx")] = $tp;
+			$retval[$tp["to.class_id"]][$tp["idx"]] = $tp;
 		}
 		return $retval;
 	}
