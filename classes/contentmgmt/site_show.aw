@@ -135,11 +135,11 @@ class site_show extends class_base
 		}
 
 		$this->do_check_properties(&$arr);
-
+		
 		$apd = get_instance("layout/active_page_data");
 		$awt->start("xshow2");
 		$rv = $this->do_show_template($arr);
-
+		
 		$awt->stop("xshow2");
 		$apd->on_shutdown_get_styles($rv);
 		return $rv;
@@ -328,6 +328,7 @@ class site_show extends class_base
 			$si->init_gen_site_html(array(
 				"tpldir" => &$arr["tpldir"],
 				"template" => &$arr["template"],
+				"inst" => &$this
 			));
 		}
 
@@ -501,7 +502,6 @@ class site_show extends class_base
 				}
 			}
 		}
-
 		if (is_array($sub_callbacks))
 		{
 			// ok, check if the new and better OO (TM) way exists
@@ -762,15 +762,24 @@ class site_show extends class_base
 
 				$lm = array();
 				$ilm = array();
-				foreach($obj->connections_from(array("type" => array(6,2))) as $c)	// doc source, doc ignore
+
+				if (isset($arr["dsdi_cache"]))
 				{
-					if ($c->prop("reltype") == 6)
+					$ilm = safe_array($arr["dsdi_cache"][6]);
+					$lm = safe_array($arr["dsdi_cache"][2]);
+				}
+				else
+				{
+					foreach($obj->connections_from(array("type" => array(6,2))) as $c)	// doc source, doc ignore
 					{
-						$ilm[$c->prop("to")] = $c->prop("to");
-					}
-					else
-					{
-						$lm[$c->prop("to")] = $c->prop("to");
+						if ($c->prop("reltype") == 6)
+						{
+							$ilm[$c->prop("to")] = $c->prop("to");
+						}
+						else
+						{
+							$lm[$c->prop("to")] = $c->prop("to");
+						}
 					}
 				}
 
@@ -819,11 +828,18 @@ class site_show extends class_base
 				}
 				else
 				{
-					$promo_kws = $obj->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD"));
-					$kwns = array();
-					foreach($promo_kws as $promo_kw)
+					if (isset($arr["dsdi_cache"]))
 					{
-						$kwns[] = $promo_kw->prop("to");
+						$kwns = safe_array($arr["dsdi_cache"][5]);
+					}
+					else
+					{
+						$promo_kws = $obj->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD"));
+						$kwns = array();
+						foreach($promo_kws as $promo_kw)
+						{
+							$kwns[] = $promo_kw->prop("to");
+						}
 					}
 				}
 				if (count($kwns))
@@ -1543,6 +1559,8 @@ class site_show extends class_base
 		$sel_menu_o_img_url = "";
 
 
+		if ($this->is_template("SEL_MENU_IMAGE") || $this->template_has_var_full("sel_menu_image", true))
+		{
 		$cnt = count($this->path);
 		for($i = $cnt-1; $i > -1; $i--)
 		{
@@ -1637,6 +1655,8 @@ class site_show extends class_base
 				$sius[$nr] = $dat["url"];
 			}
 		}
+		}
+
 		$smn = $this->sel_section_obj->trans_get_val("name");
 		$smc = $this->sel_section_obj->comment();
 		if (aw_ini_get("menuedit.strip_tags"))
@@ -1715,6 +1735,8 @@ class site_show extends class_base
 			"NO_SEL_MENU_IMAGE_URL" => $no_smu
 		));
 
+		if ($this->is_template("HAS_SEL_MENU_IMAGE_URL") || $this->is_template("NO_SEL_MENU_IMAGE_URL"))
+		{
 		// menu img addon (sel_menu_image_skin_url)
 		$ss = get_instance(CL_SITE_STYLES);
 		$ol = new object_list(array(
@@ -1753,7 +1775,8 @@ class site_show extends class_base
 		{
 			$this->parse("NO_SEL_MENU_IMAGE_URL");
 		}
-		tm::e(__CLASS__, __FUNCTION__);
+
+		}
 	}
 
 	////
@@ -2546,17 +2569,29 @@ class site_show extends class_base
 		}
 
 		// insert sel images
-		foreach(safe_array($this->properties["images"]) as $nr => $id)
+		if ($this->template_has_var_full("path_menu_image", true))
 		{
-			$url = $this->image->get_url_by_id($id);
-			$this->vars(array(
-				"path_menu_image_".$nr."_url" => $url,
-				"path_menu_image_".$nr => html::img(array(
-					"url" => $url,
-					"alt" => " ",
-					"title" => " "
-				))
-			));
+			if (count(safe_array($this->properties["images"])))
+			{
+				$ol = new object_list(array(
+					"lang_id" => array(),
+					"site_id" => array(),
+					"oid" => safe_array($this->properties["images"])
+				));
+				$ol->arr();	// preload at once
+			}
+			foreach(safe_array($this->properties["images"]) as $nr => $id)
+			{
+				$url = $this->image->get_url_by_id($id);
+				$this->vars(array(
+					"path_menu_image_".$nr."_url" => $url,
+					"path_menu_image_".$nr => html::img(array(
+						"url" => $url,
+						"alt" => " ",
+						"title" => " "
+					))
+				));
+			}
 		}
 
 		$isfp = $section == $frontpage && empty($_GET["class"]);
@@ -2920,8 +2955,13 @@ class site_show extends class_base
 			}
 			else
 			{
-				if (((!$this->brother_level_from && !$o->is_brother()) || aw_ini_get("menuedit.show_real_location"))&& ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
+//				if (((!$this->brother_level_from && !$o->is_brother()) || aw_ini_get("menuedit.show_real_location"))&& ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
+if (!$this->brother_level_from && !$o->is_brother() && ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
 				{
+if ($o->id() == 14385 && aw_global_get("uid") == "kix")
+{
+die("r");
+}
 					if (aw_ini_get("menuedit.long_menu_aliases"))
 					{
 						if (aw_ini_get("ini_rootmenu"))
@@ -2966,7 +3006,7 @@ class site_show extends class_base
 				}
 				else
 				{
-					if (($o->is_brother() || $this->brother_level_from) && !aw_ini_get("menuedit.show_real_location"))
+					if (($o->is_brother() || $this->brother_level_from) /*&& !aw_ini_get("menuedit.show_real_location")*/)
 					{
 						$link .= "?section=".$o->id()."&path=".join(",", $this->_cur_menu_path);
 					}
@@ -3051,29 +3091,42 @@ class site_show extends class_base
 		// right. now, do the template compiler bit
 		$awt->start("build-popups");
 
+		enter_function("site_show::do_show_template::1");
 		if (!($this->compiled_filename = $this->get_cached_compiled_filename($arr)))
 		{
 			$this->compiled_filename = $this->cache_compile_template($tpldir, $arr["template"]);
 		}
+		exit_function("site_show::do_show_template::1");
 		$awt->stop("build-popups");
 
+		enter_function("site_show::do_show_template::2");
+
+		enter_function("site_show::do_show_template::2:1");
 		$this->read_template($arr["template"]);
+		exit_function("site_show::do_show_template::2:1");
 
 		// import language constants
+		enter_function("site_show::do_show_template::2:2");
 		lc_site_load("menuedit",$this);
+		exit_function("site_show::do_show_template::2:2");
+		
 		enter_function("do_sub_callbacks");
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
 		exit_function("do_sub_callbacks");
 
-		$awt->start("do-show-template");
+		exit_function("site_show::do_show_template::2");
 
+		$awt->start("do-show-template");
+		enter_function("site_show::do_show_template::3");
 		if (($docc = $this->do_show_documents($arr)) != "")
 		{
 			$awt->stop("do-show-template");
 			tm::e(__CLASS__, __FUNCTION__);
 			return $docc;
 		}
+		exit_function("site_show::do_show_template::3");
 
+		enter_function("site_show::do_show_template::4");
 		$awt->stop("do-show-template");
 		$this->import_class_vars($arr);
 
@@ -3084,17 +3137,27 @@ class site_show extends class_base
 
 		$this->make_langs();
 
+		exit_function("site_show::do_show_template::4");
+
+		enter_function("site_show::do_show_template::5");
 		classload("core/util/minify_js_and_css");
 		minify_js_and_css::parse_site_header(& $this);
+		
+		exit_function("site_show::do_show_template::5");
 
+		enter_function("site_show::do_show_template::7");
 		// execute menu drawing code
 		$awt->start("part2");
 		$this->do_draw_menus($arr);
 		$awt->stop("part2");
-
+		exit_function("site_show::do_show_template::7");
+		
+		enter_function("site_show::do_show_template::6");
 		// repeated here, so you can use things both ways
 		$this->do_menu_images();
+		exit_function("site_show::do_show_template::6");
 
+		enter_function("site_show::do_show_template::8");
 		$awt->start("part3");
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array(), true);
 		$awt->stop("part3");
@@ -3114,6 +3177,7 @@ class site_show extends class_base
 		$rv = $this->parse();
 
 		$rv .= $this->build_popups();
+		exit_function("site_show::do_show_template::8");
 		tm::e(__CLASS__, __FUNCTION__);
 		return $rv;
 	}

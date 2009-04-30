@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 @classinfo  maintainer=kristo
 */
@@ -35,13 +35,12 @@ class promo_display implements main_subtemplate_handler
 		$filter = array();
 		$filter["status"] = STAT_ACTIVE;
 		$filter["class_id"] = CL_PROMO;
-		//$filter["sort_by"] = "objects.jrk";
 
 		if (aw_ini_get("menuedit.lang_menus"))
 		{
 			$filter["lang_id"] = aw_global_get("lang_id");
 		}
-		//$filter["lang_id"] = array();
+
 
 		enter_function("promo_get_list");
 		$list = new object_list($filter);
@@ -49,7 +48,35 @@ class promo_display implements main_subtemplate_handler
 		$parr = $list->arr();
 		$list->sort_by(array("prop" => "ord"));
 		$parr = $list->arr();
+
 		exit_function("promo_get_list");
+
+		// pre-fetch all RELTYPE_ASSIGNED_MENU's for all containers
+		$con = new connection();
+		$assigned_menu_conns = $con->find(array(
+			"from" => $list->ids(),
+			"from.class_id" => CL_PROMO,
+			"type" => "RELTYPE_ASSIGNED_MENU"
+		));
+		$assigned_menu_conns_by_promo = array();
+		foreach($assigned_menu_conns as $assigned_menu_con)
+		{
+			$assigned_menu_conns_by_promo[$assigned_menu_con["from"]][$assigned_menu_con["to"]] = $assigned_menu_con["to"];
+		}
+
+		// prefetch RELTYPE_NO_SHOW_MENU conns
+		$noshow_menu_conns = $con->find(array(
+			"from" => $list->ids(),
+			"from.class_id" => CL_PROMO,
+			"type" => "RELTYPE_NO_SHOW_MENU"
+		));
+		$noshow_menu_conns_by_promo = array();
+		foreach($noshow_menu_conns as $noshow_menu_con)
+		{
+			$noshow_menu_conns_by_promo[$noshow_menu_con["from"]][$noshow_menu_con["to"]] = $noshow_menu_con["to"];
+		}
+
+
 
 		$tplmgr = get_instance("templatemgr");
 		$promos = array();
@@ -60,6 +87,9 @@ class promo_display implements main_subtemplate_handler
 		$tpldir = aw_ini_get("tpldir");
 		$no_acl_checks = aw_ini_get("menuedit.no_view_acl_checks");
 		$promo_areas = aw_ini_get("promo.areas");
+
+		$displayed_promos = array();
+
 		foreach($parr as $o)
 		{
 if (!empty($_GET["PROMO_DBG"]))
@@ -115,12 +145,7 @@ if (!empty($_GET["PROMO_DBG"]))
 
 			$show_promo = false;
 			
-			//$msec = $o->meta("section");
-			$msec = array();
-			foreach($o->connections_from(array("type" => "RELTYPE_ASSIGNED_MENU")) as $c)
-			{
-				$msec[$c->prop("to")] = $c->prop("to");
-			}
+			$msec = $assigned_menu_conns_by_promo[$o->id()];
 
 			$section_include_submenus = $o->meta("section_include_submenus");
 
@@ -160,9 +185,9 @@ if (!empty($_GET["PROMO_DBG"]))
 }
 			// do ignore menus
 			$ign_subs = $o->meta("section_no_include_submenus");
-			foreach($o->connections_from(array("type" => "RELTYPE_NO_SHOW_MENU")) as $ignore_menu)
+
+			foreach($noshow_menu_conns_by_promo[$o->id()] as $ignore_menu_to)
 			{
-				$ignore_menu_to = $ignore_menu->prop("to");
 				if ($inst->sel_section_real == $ignore_menu_to)
 				{
 					$show_promo = false;
@@ -226,6 +251,25 @@ if (!empty($_GET["PROMO_DBG"]))
 }
 			if ($show_promo)
 			{
+				$displayed_promos[$o->id()] = $o;
+			}
+		}
+
+		// prefetch doc sources and doc ignores for all displayed promos
+		$dsdi_cache = $con->find(array(
+			"from" => array_keys($displayed_promos),
+			"type" => array(6,2,5)
+		));
+		$dsdi_list_by_promo = array();
+		foreach($dsdi_cache as $dsdi_con)
+		{
+			$dsdi_list_by_promo[$dsdi_con["from"]][$dsdi_con["type"]][$dsdi_con["to"]] = $dsdi_con["to"];
+		}
+
+	
+
+			foreach($displayed_promos as $o)
+			{
 				enter_function("show_promo::".$o->name());
 				// visible. so show it
 				// get list of documents in this promo box
@@ -278,11 +322,22 @@ if (!empty($_GET["PROMO_DBG"]))
 				{
 					enter_function("mainc-contentmgmt/promo-read_docs-old");
 					// get_default_document prefetches docs by itself so no need to do list here
+if ($_GET["PROMO_DBG"] == 1)
+{
+$_GET["INTENSE_DUKE"] = 1;
+obj_set_opt("no_cache", 1);
+}
 					$docid = $inst->get_default_document(array(
 						"obj" => $o,
-						"all_langs" => true
+						"all_langs" => true,
+						"dsdi_cache" => !isset($dsdi_list_by_promo[$o->id()]) ? array() : $dsdi_list_by_promo[$o->id()]
 					));
 					exit_function("mainc-contentmgmt/promo-read_docs-old");
+if ($_GET["PROMO_DBG"] == 1)
+{
+$_GET["INTENSE_DUKE"] = 0;
+	echo "version1 <br>";
+}
 				}
 if (!empty($_GET["PROMO_DBG"]))
 {
@@ -372,10 +427,11 @@ if (!empty($_GET["PROMO_DBG"]))
 						"vars" => array("doc_ord_num" => $d_cnt+1),
 						"not_last_in_list" => (($d_cnt+1) < $d_total)
 					));
-if (!empty($_GET["PROMO_DBG"]))
-				{
-					echo "doc $d cont = ".htmlentities($cont)." <br>";
-				}
+
+					if (!empty($_GET["PROMO_DBG"]))
+					{
+						echo "doc $d cont = ".htmlentities($cont)." <br>";
+					}
 					exit_function("promo-prev");
 					$pr_c .= $cont;
 					// X marks the spot
@@ -541,7 +597,6 @@ if (!empty($_GET["PROMO_DBG"]))
 					"", "content" => "","url" => ""));
 				exit_function("show_promo::".$o->name());
 			}
-		};
 
 		$inst->vars_safe($promos);
 	}
