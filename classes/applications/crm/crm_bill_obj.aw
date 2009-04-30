@@ -48,6 +48,18 @@ class crm_bill_obj extends _int_object
 	{
 		if(!is_oid($this->id()))
 		{
+			if(!$this->prop("bill_accounting_date"))
+			{
+				if($this->prop("bill_date"))
+				{
+					$this->set_prop("bill_accounting_date" , $this->prop("bill_date"));
+				}
+				else
+				{
+					$this->set_prop("bill_accounting_date" , time());
+				}
+			}
+
 			unset($_SESSION["bill_change_comments"]);
 		}
 		$this->set_prop("sum", $this->_calc_sum());

@@ -51,6 +51,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property bill_date type=date_select table=aw_crm_bill field=aw_date parent=top_left
 	@caption Kuup&auml;ev
 
+	@property bill_accounting_date type=date_select table=aw_crm_bill field=aw_bill_accounting_date parent=top_left
+	@caption Raamatupidamise kuup&auml;ev
+
 	@property bill_due_date_days type=textbox table=aw_crm_bill field=aw_due_date_days size=5 parent=top_left
 	@caption Makset&auml;htaeg (p&auml;evi)
 
@@ -4877,6 +4880,7 @@ class crm_bill extends class_base
 			case "aw_transfer_address":
 			case "aw_approved":
 			case "aw_currency":
+			case "aw_bill_accounting_date":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "int"

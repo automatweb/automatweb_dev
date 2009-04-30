@@ -59,6 +59,15 @@
             <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
+            <name>bill_accounting_date</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_bill_accounting_date</field>
+            <parent>top_left</parent>
+            <caption>Raamatupidamise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
             <name>bill_due_date_days</name>
             <table>aw_crm_bill</table>
             <group>general</group>

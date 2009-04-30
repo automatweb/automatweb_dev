@@ -1457,6 +1457,13 @@ exit_function("bills_impl::_get_bill_task_list");
 	{
 
 		//arr(new object_list(array("CL_CRM_PERSON.RELTYPE_ISIK(CL_PROJECT)" => array(), "class_id" => CL_CRM_PERSON)));
+		if(!isset($arr["request"]["st"]))
+		{
+			if(is_object($current_co = get_current_company()) && $current_co->id() != $arr["obj_inst"]->id())
+			{
+				$arr["request"]["st"] = "cust_".$arr["obj_inst"]->id();
+			}
+		}
 
 		if($arr["request"]["show_bill_balance"]) $this->show_bill_balance = 1;
 		$t =& $arr["prop"]["vcl_inst"];
@@ -1465,7 +1472,6 @@ exit_function("bills_impl::_get_bill_task_list");
 			$t = $arr["obj_inst"]->get_all_customers_without_client_relation();
 			return 1;
 		}
-
 
 		if($arr["request"]["bill_s_with_tax"] == 0)
 		{
@@ -2707,9 +2713,17 @@ exit_function("bills_impl::_get_bill_task_list");
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
 		$var = "st";
+
 		if(!isset($_GET[$var]))
 		{
-			$_GET[$var] = 10;
+			if(is_object($current_co = get_current_company()) && $current_co->id() != $arr["obj_inst"]->id())
+			{
+				$_GET[$var] = "cust_".$arr["obj_inst"]->id();
+			}
+			else
+			{
+				$_GET[$var] = 10;
+			}
 		}
 		classload("core/icons");
 

@@ -157,6 +157,10 @@ class crm_company_cust_impl extends class_base
 				$format .= t(', milles %s on osaline');
 			}
 		}
+		elseif(get_current_company() && get_current_company()->id() != $arr['obj_inst']->id())
+		{
+			$format = t('%s projektid');
+		}
 		else
 		{
 			$user_obj = obj($u->get_current_person());
