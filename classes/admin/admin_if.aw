@@ -1165,8 +1165,8 @@ class admin_if extends class_base
 					foreach($sel as $oid => $one)
 					{
 	//					aw_global_set("xmlrpc_dbg",1);
-						$r = $this->_search_mk_call(array("oid" => $oid),$login);
-	
+						$r = $this->_search_mk_call(array("oid" => $oid, "encode" => 1),$login);
+						$r = base64_decode($r);
 						if ($r !== false)
 						{
 							if (is_array($r["connections"]))
@@ -1181,7 +1181,8 @@ class admin_if extends class_base
 				}
 				foreach($rels as $rel_id)
 				{
-					$r = $this->_search_mk_call(array("oid" => $rel_id["to"]), $login);
+					$r = $this->_search_mk_call(array("oid" => $rel_id["to"], "encode" => 1), $login);
+					$r = base64_decode($r);
 					if ($r !== false)
 					{
 						$copied_objects[$rel_id["to"]] = $r;
