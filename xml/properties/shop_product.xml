@@ -395,6 +395,34 @@
             <caption>Maksimumkogus laos</caption>
       </property>
       <property>
+            <name>amount_limits_re</name>
+            <table>objects</table>
+            <group>general_limits</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_AMOUNT_LIMIT</reltype>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>start</num_1>
+                  <num_2>end</num_2>
+                  <num_3>time</num_3>
+                  <num_4>length</num_4>
+                  <num_5>recur_type</num_5>
+                  <num_6>recur_interval</num_6>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>start</num_1>
+                  <num_2>end</num_2>
+                  <num_3>time</num_3>
+                  <num_4>length</num_4>
+                  <num_5>recur_type</num_5>
+                  <num_6>recur_interval</num_6>
+            </table_fields>
+            <field>amount_limits_re</field>
+            <caption>Kogusepiirangud</caption>
+      </property>
+      <property>
             <name>match_prod</name>
             <table>objects</table>
             <group>general_match_prod</group>
@@ -417,6 +445,24 @@
             <store>connect</store>
             <multiple>1</multiple>
             <caption>Asendustooted</caption>
+      </property>
+      <property>
+            <name>purveyance_tb</name>
+            <table>objects</table>
+            <group>general_purveyance</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>purveyance_tb</field>
+      </property>
+      <property>
+            <name>purveyance_tbl</name>
+            <table>objects</table>
+            <group>general_purveyance</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>purveyance_tbl</field>
       </property>
       <property>
             <name>packaging</name>
@@ -1274,6 +1320,10 @@
                   <caption>Asendustooted</caption>
                   <parent>general</parent>
             </general_replacement_prods>
+            <general_purveyance>
+                  <caption>Tarneajad</caption>
+                  <parent>general</parent>
+            </general_purveyance>
             <packaging>
                   <caption>Pakendid</caption>
             </packaging>
@@ -1491,6 +1541,11 @@
                   <clid>CL_SHOP_UNIT_FORMULA</clid>
                   <caption>&amp;amp;Uuml;hikute valem</caption>
             </UNIT_FORMULA>
+            <AMOUNT_LIMIT>
+                  <value>31</value>
+                  <clid>CL_SHOP_AMOUNT_LIMIT</clid>
+                  <caption>Kogusepiirang</caption>
+            </AMOUNT_LIMIT>
       </reltypes>
       <layout>
             <gen_split>

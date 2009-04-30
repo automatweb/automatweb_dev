@@ -418,22 +418,6 @@
             <field>arrivals_tb</field>
       </property>
       <property>
-            <name>arrival_company_folder</name>
-            <table>objects</table>
-            <group>
-                  <num_0>arrivals</num_0>
-                  <num_1>arrivals_by_company</num_1>
-            </group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ARRIVAL_COMPANY_FOLDER</reltype>
-            <multiple>1</multiple>
-            <size>3</size>
-            <captionside>top</captionside>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Organisatsioonide kaust</caption>
-      </property>
-      <property>
             <name>arrival_prod_tree</name>
             <table>objects</table>
             <group>arrivals</group>
@@ -2552,11 +2536,6 @@
                   <clid>CL_SHOP_WAREHOUSE_INVENTORY</clid>
                   <caption>Inventuur</caption>
             </INVENTORY>
-            <ARRIVAL_COMPANY_FOLDER>
-                  <value>13</value>
-                  <clid>CL_MENU</clid>
-                  <caption>Organisatsioonide kaust</caption>
-            </ARRIVAL_COMPANY_FOLDER>
       </reltypes>
       <layout>
             <productgroups_c>

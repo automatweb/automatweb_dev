@@ -156,6 +156,19 @@
             <caption>Tootekategooriate puud ei kuvata</caption>
       </property>
       <property>
+            <name>arrival_company_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ARRIVAL_COMPANY_FOLDER</reltype>
+            <multiple>1</multiple>
+            <size>3</size>
+            <parent>left</parent>
+            <caption>Tarnefirmade kaust</caption>
+      </property>
+      <property>
             <name>prod_fld</name>
             <table>objects</table>
             <group>general</group>
@@ -369,6 +382,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Toote l&amp;amp;uuml;hikoodi kontroller</caption>
             </CODE_CONTROLLER>
+            <ARRIVAL_COMPANY_FOLDER>
+                  <value>9</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Organisatsioonide kaust</caption>
+            </ARRIVAL_COMPANY_FOLDER>
       </reltypes>
       <layout>
             <split>

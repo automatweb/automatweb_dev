@@ -56,6 +56,9 @@
 
 			@property no_prodg_tree type=checkbox ch_value=1 parent=left
 			@caption Tootekategooriate puud ei kuvata
+			
+			@property arrival_company_folder type=relpicker reltype=RELTYPE_ARRIVAL_COMPANY_FOLDER multiple=1 size=3 field=meta method=serialize parent=left
+			@caption Tarnefirmade kaust
 
 		@layout right type=vbox area_caption=Kaustad closeable=1 parent=split
 
@@ -135,6 +138,9 @@
 
 @reltype CODE_CONTROLLER value=8 clid=CL_CFGCONTROLLER
 @caption Toote l&uuml;hikoodi kontroller
+
+@reltype ARRIVAL_COMPANY_FOLDER value=9 clid=CL_MENU
+@caption Organisatsioonide kaust
 */
 
 define("SEND_AW_MAIL", 1);

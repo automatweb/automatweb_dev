@@ -161,10 +161,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 	@property arrivals_tb type=toolbar no_caption=1
 
-	@property arrival_company_folder type=relpicker reltype=RELTYPE_ARRIVAL_COMPANY_FOLDER multiple=1 size=3 captionside=top field=meta method=serialize group=arrivals,arrivals_by_company
-	@caption Organisatsioonide kaust
-
-
 	@layout arrival_prod_split type=hbox width=20%:80%
 
 		@layout arrival_prod_left type=vbox parent=arrival_prod_split
@@ -866,9 +862,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 @reltype INVENTORY value=12 clid=CL_SHOP_WAREHOUSE_INVENTORY
 @caption Inventuur
-
-@reltype ARRIVAL_COMPANY_FOLDER value=13 clid=CL_MENU
-@caption Organisatsioonide kaust
 
 */
 define("QUANT_UNDEFINED", 0);
@@ -1801,7 +1794,7 @@ class shop_warehouse extends class_base
 			"class_id" => CL_CRM_COMPANY,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"parent" => $arr["obj_inst"]->prop("arrival_company_folder"),
+			"parent" => $this->config->prop("arrival_company_folder"),
 			"sort_by" => "name asc",
 		));
 		$companies = array(0 => t("--vali--")) + $c_ol->names();
@@ -1931,7 +1924,7 @@ class shop_warehouse extends class_base
 			"class_id" => CL_CRM_COMPANY,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"parent" => $arr["obj_inst"]->prop("arrival_company_folder"),
+			"parent" => $this->config->prop("arrival_company_folder"),
 			"sort_by" => "name asc",
 		));
 		$weekdays = array(
@@ -2679,7 +2672,7 @@ class shop_warehouse extends class_base
 			$params["oid"] = isset($params["oid"])?array_intersect($params["oid"], $oids):$oids;
 		}
 		// get items arr
-		if(!($cat = $arr["request"][$group."_s_art_cat"]) && !($cat = $arr["request"][$group."_s_cat"]))
+		if(!($cat = $arr["request"][$group."_s_art_cat"]))
 		{
 			$cat = $arr["request"]["pgtf"];
 		}
@@ -7292,17 +7285,15 @@ $oo = get_instance(CL_SHOP_ORDER);
 		if($ws = $arr["obj_inst"]->prop("mrp_workspace"))
 		{
 			$t->start_tree(array(
+				"has_root" => true,
+				"root_name" => t("Ressursid"),
+				"root_url" => aw_url_change_var(array("filt_res"=> null)),
+				"root_icon" => icons::get_icon_url(CL_MENU),
 				"type" => TREE_DHTML,
 				"tree_id" => "status_orders_res_tree",
 				"persist_state" => 1,
 			));
 			$pt = obj($ws)->prop ("resources_folder");
-			$t->add_item(0, array(
-				"id" => "res".$pt,
-				"name" => obj($pt)->name(),
-				"iconurl" => icons::get_icon_url(CL_MENU),
-				"url" => "#",
-			));
 			$ol = new object_list(array(
 				"parent" => $pt,
 				"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
@@ -7310,11 +7301,11 @@ $oo = get_instance(CL_SHOP_ORDER);
 			));
 			foreach($ol->arr() as $oid => $o)
 			{
-				$t->add_item("res".$pt, array(
+				$t->add_item(0, array(
 					"id" => "res".$oid,
 					"name" => $o->name(),
 					"iconurl" => icons::get_icon_url($o->class_id()),
-					"url" => aw_url_change_var("filt_res", $oid),
+					"url" => aw_url_change_var("filt_res", ($o->class_id() == CL_MRP_RESOURCE) ? $oid : null),
 				));
 				if($o->class_id() == CL_MENU)
 				{
@@ -7344,11 +7335,11 @@ $oo = get_instance(CL_SHOP_ORDER);
 		));
 		foreach($ol->arr() as $oid => $o)
 		{
-			$t->add_item("res".$pt, array(
+			$t->add_item($pt, array(
 				"id" => $oid,
 				"name" => $o->name(),
 				"iconurl" => icons::get_icon_url($o->class_id()),
-				"url" => aw_url_change_var("filt_res", $oid),
+				"url" => aw_url_change_var("res_filt", ($o->class_id() == CL_MRP_RESOURCE) ? $oid : ""),
 			));
 			if($o->class_id() == CL_MENU)
 			{
@@ -7401,7 +7392,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		);
 	}
 
-	private function _get_jobs_for_time($arr, $filters = false)
+	private function _get_jobs_for_time($arr)
 	{
 		$time = $arr["request"]["filt_time"];
 		$min = 0;
@@ -7427,28 +7418,17 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"RELTYPE_MRP_PROJECT.workspace" => $arr["obj_inst"]->prop("mrp_workspace"),
 			"RELTYPE_JOB(CL_MATERIAL_EXPENSE).class_id" => CL_MATERIAL_EXPENSE,
 		);
-
-		if($filters)
+		if($no = $arr["request"]["status_orders_s_case_no"])
 		{
-			if($no = $arr["request"]["status_orders_s_case_no"])
-			{
-				$params["RELTYPE_MRP_PROJECT.name"] = "%".$no."%";
-			}
-			elseif($case = $arr["request"]["filt_case"])
-			{
-				$params["RELTYPE_MRP_PROJECT.oid"] = $case;
-			}
-			if($res = $arr["request"]["filt_res"])
-			{
-				if(obj($res)->class_id() == CL_MENU)
-				{
-					$ot = new object_tree(array(
-						"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
-						"parent" => $res,
-					));
-				}
-				$params["RELTYPE_MRP_RESOURCE.oid"] = $ot->ids();
-			}
+			$params["RELTYPE_MRP_PROJECT.name"] = "%".$no."%";
+		}
+		elseif($case = $arr["request"]["filt_case"])
+		{
+			$params["RELTYPE_MRP_PROJECT.oid"] = $case;
+		}
+		if($res = $arr["request"]["res_filt"])
+		{
+			$params["RELTYPE_MRP_RESOURCE.oid"] = $res;
 		}
 
 		if($arr["request"]["status_orders_opt1"] == "order")
@@ -7678,7 +7658,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		$this->_init_status_orders(&$arr);
 
-		$job_ol = $this->_get_jobs_for_time($arr, true);
+		$job_ol = $this->_get_jobs_for_time($arr);
 		$params = array(
 			"class_id" => CL_SHOP_PRODUCT,
 		);
@@ -7723,7 +7703,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			$data = array(
 				"oid" => $oid,
-				"name" => html::obj_change_url($o).(($c = $o->prop("code")) ? " (".$c.")" : ""),
+				"name" => html::obj_change_url($o),
 				"product" => $oid,
 			);
 			
@@ -7973,7 +7953,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				$group = "purchase_orders";
 				break;
 			case "arrivals":
-				$group = "arrival_prod";
+				$group = "arrivals";
 				break;
 			default:
 				$group = $arr["request"]["group"];
