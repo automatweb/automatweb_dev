@@ -15,7 +15,8 @@ function generic_loader()
 	// on page load
 	if(/*window.onload &&*/ load_auto_{VAR:tree_num} && level_{VAR:tree_num} < open_nodes_{VAR:tree_num}.length)
 	{
-		load_tree_state_{VAR:tree_num}();
+		load_tree_state_1();
+		load_tree_state_2();
 	}
 }
 function load_beneath_{VAR:tree_num}()
