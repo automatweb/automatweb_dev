@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.9 2009/04/29 14:49:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.10 2009/04/30 09:51:04 markop Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 /*
 @classinfo  maintainer=kristo
@@ -193,6 +193,9 @@ class objects extends core
 		@param oid required type=oid
 			object id
 
+		@param encode optional type=boolean
+			if set, encodes the data  with base64.
+
 		@param copy_subobjects optional type=bool
 			If true, all subobjects are also in the xml
 
@@ -231,7 +234,12 @@ class objects extends core
 	function get_xml($options)
 	{
 		$o = obj($options["oid"]);
-		return str_replace("&amp;lt;" , "<" , $o->get_xml($options));
+		$xml = $o->get_xml($options);
+		if($options["encode"])
+		{
+			return base64_encode($xml);
+		}
+		return $xml;
 	}
 }
 
