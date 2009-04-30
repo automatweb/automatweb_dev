@@ -665,6 +665,9 @@ class toolbar extends aw_template
 	/** Adds search button to the toolbar
 		@attrib api=1
 
+		@param name optional type=string
+			Name for button. Required if you want many of those on one toolbar
+
 		@param pn required type=string
 			The html element name to stick the search results to
 
@@ -681,7 +684,7 @@ class toolbar extends aw_template
 		$url = $this->mk_my_orb("do_search", $arr, "popup_search");
 		$s = t("Otsi");
 		$this->add_button(array(
-			"name" => "search",
+			"name" => $arr["name"] ? $arr["name"] : "search",
 			"img" => "search.gif",
 			"url" => "javascript:aw_popup_scroll('$url','$s',".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
 			"tooltip" => t("Otsi"),
