@@ -4514,8 +4514,8 @@ class crm_bill extends class_base
 			"parent" => "send_bill",
 			"url" => $this->mk_my_orb("change", array(
 				"id" => $arr["obj_inst"]->id(),
-				"group" => "sent_mails"), CL_CRM_BILL),
-			"text" => t("Saadetud kirjad")
+				"group" => "bill_mail"), CL_CRM_BILL),
+			"text" => t("Kirjade seaded")
 		));
 
 		if(!$this->crm_settings || !$this->crm_settings->prop("bill_hide_pwr"))

@@ -2419,7 +2419,6 @@ class crm_bill_obj extends _int_object
 			"transfer_condition",
 			"selling_order",
 			"transfer_address",
-			"bill_rec_name",
 			"show_oe_add",
 			"project",
 		);
