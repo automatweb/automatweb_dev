@@ -13,10 +13,18 @@ from_click_{VAR:tree_num} = false;
 function generic_loader()
 {
 	// on page load
-	if(/*window.onload &&*/ load_auto_{VAR:tree_num} && level_{VAR:tree_num} < open_nodes_{VAR:tree_num}.length)
+	if(load_auto_{VAR:tree_num} && level_{VAR:tree_num} < open_nodes_{VAR:tree_num}.length)
 	{
-		load_tree_state_1();
-		load_tree_state_2();
+		i = 1;
+		while(true)
+		{
+			eval("load_tree_state_"+i+"()");
+			if (typeof(eval("load_tree_state_"+i+"()"))=="undefined")
+			{
+				break;
+			}
+			i++;
+		}
 	}
 }
 function load_beneath_{VAR:tree_num}()
