@@ -1689,17 +1689,30 @@ EOF;
 	**/
 	function get_person_for_uid($uid)
 	{
+		static $cache;
+		if (!is_array($cache))
+		{
+			$cache = array();
+		}
+		if (isset($cache[$uid]))
+		{
+			return $cache[$uid];
+		}
 		$oid = $this->users->get_oid_for_uid($uid);
 		if (!$oid || !$this->can("view", $oid))
 		{
+			$cache[$uid] = obj();
 			return obj();
 		}
 		$tmp = $this->get_person_for_user(obj($oid));
 		if (!$this->can("view", $tmp))
 		{
+			$cache[$uid] = obj();
 			return obj();
 		}
-		return obj($this->get_person_for_user(obj($oid)));
+		$rv = obj($this->get_person_for_user(obj($oid)));
+		$cache[$uid] = $rv;
+		return $rv;
 	}
 
 	/**

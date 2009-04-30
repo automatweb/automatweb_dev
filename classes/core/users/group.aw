@@ -1168,7 +1168,7 @@ class group extends class_base
 		{
 			$nlg_oid = $c->get_simple_config("non_logged_in_users_group_oid");
 		}
-
+		
 		if (!$nlg_oid)
 		{
 			$nlg_gid = $c->get_simple_config("non_logged_in_users_group");

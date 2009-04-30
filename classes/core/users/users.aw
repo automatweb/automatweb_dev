@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.20 2009/04/09 11:48:28 voldemar Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.21 2009/04/30 11:54:12 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -440,7 +440,6 @@ die();
 		{
 			$_SESSION["nliug"] = null;
 		}
-
 		if (($uid = aw_global_get("uid")) != "")
 		{
 			if(empty($_SESSION["uid_oid"]))

@@ -196,7 +196,11 @@ class doc_display extends aw_template
 		}
 		
 		$uinst = get_instance(CL_USER);
-		$mb_person = $uinst->get_person_for_uid($doc->prop("modifiedby"));
+		$mb_person = obj();
+		if ($this->template_has_var_full("modified_by"))
+		{
+			$mb_person = $uinst->get_person_for_uid($doc->prop("modifiedby"));
+		}
 		$this->vars($al->get_vars());
 		
 		$lang_id = aw_global_get("lang_id");
