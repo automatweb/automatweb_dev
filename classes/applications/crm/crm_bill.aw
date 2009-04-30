@@ -4068,6 +4068,7 @@ class crm_bill extends class_base
 
 	function _save_rows($arr)
 	{
+		$u = get_instance(CL_USER);
 		foreach(safe_array($arr["request"]["rows"]) as $oid => $row)
 		{
 			$new = false;
@@ -4077,7 +4078,6 @@ class crm_bill extends class_base
 				$pt = $arr["obj_inst"]->id();
 				if (!is_oid($pt))
 				{
-					$u = get_instance(CL_USER);
 					$pt = $u->get_current_company();
 				}
 				$o->set_parent($pt);
@@ -4128,6 +4128,8 @@ class crm_bill extends class_base
 				));
 			}
 		}
+
+		$seti = get_instance(CL_CRM_SETTINGS);
 		
 		//summa igeks
 		if(is_array($arr["request"]["agreement_price"]))
@@ -4138,7 +4140,6 @@ class crm_bill extends class_base
 				
 				$arr["request"]["agreement_price"][$key]["comment"] = $agreement_price["name"];
 				//vaikimisi artikkel ka
-				$seti = get_instance(CL_CRM_SETTINGS);
 				$sts = $seti->get_current_settings();
 				if ($sts && !$arr["request"]["agreement_price"][$key]["prod"])
 				{
@@ -4507,6 +4508,14 @@ class crm_bill extends class_base
 			"url" => "#",
 			"onClick" => $onclick,
 			"text" => t("Saada arve pdf koos lisaga")
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "send_bill",
+			"url" => $this->mk_my_orb("change", array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "sent_mails"), CL_CRM_BILL),
+			"text" => t("Saadetud kirjad")
 		));
 
 		if(!$this->crm_settings || !$this->crm_settings->prop("bill_hide_pwr"))

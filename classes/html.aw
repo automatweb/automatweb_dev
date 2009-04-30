@@ -697,7 +697,8 @@ class html
 
 		if (isset($onclick))
 		{
-			$onc = " onclick='{$onclick}'";
+			$onclick = str_replace("\"", "\\\"", $onclick);
+			$onc = " onclick=\"{$onclick}\"";
 		}
 
 		$id = str_replace(array("[", "]"), "_", $name);
@@ -705,9 +706,9 @@ class html
 		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 
 		
-		$tpl = get_instance("htmlclient");
-		$tpl->read_template("default.tpl");
-		if($tpl->is_template("CHECKBOX"))
+	//	$tpl = get_instance("cfg/htmlclient");//ma ei tea, yle 1.5 sekundi v6idab m6nest vaatest selle v6lja kommenteerimisega n2iteks
+		//$tpl->read_template("default.tpl");
+		if(false and $tpl->is_template("CHECKBOX"))
 		{
 			$tpl->vars(array(
 				"name" => $name,
