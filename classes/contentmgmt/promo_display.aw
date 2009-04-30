@@ -100,22 +100,6 @@ if (!empty($_GET["PROMO_DBG"]))
 			{
 				continue;
 			}
-			if (!$o->prop("tpl_lead"))
-			{
-				$tpl_filename = $default_tpl_filename;
-				if (!$default_tpl_filename)
-				{
-					continue;
-				}
-			}
-			else
-			{
-				// find the file for the template by id. sucks. we should join the template table
-				// on the menu template I guess
-				$tpl_filename = $tplmgr->get_template_file_by_id(array(
-					"id" => $o->prop("tpl_lead"),
-				));
-			}
 			
 			$promo_link = $this->get_promo_link($o);
 
@@ -373,6 +357,24 @@ if (!empty($_GET["PROMO_DBG"]))
 				$d_cnt = 0;
 				$d_total = count($docid);
 				aw_global_set("in_promo_display", $o->id());
+
+				if (!$o->prop("tpl_lead"))
+				{
+					$tpl_filename = $default_tpl_filename;
+					if (!$default_tpl_filename)
+					{
+						continue;
+					}
+				}
+				else
+				{
+					// find the file for the template by id. sucks. we should join the template table
+					// on the menu template I guess
+					$tpl_filename = $tplmgr->get_template_file_by_id(array(
+						"id" => $o->prop("tpl_lead"),
+					));
+				}
+
 				$set_tpl_filename = $tpl_filename;
 				enter_function("mainc-contentmgmt/promo-show-docs");
 
