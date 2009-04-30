@@ -2616,6 +2616,11 @@ class crm_person extends class_base
 				if ($arr["new"] || !($tmp = $this->has_user($arr["obj_inst"])))
 				{
 					$data["type"] = "textbox";
+					if(!$arr["obj_inst"]->company_property("do_create_users"))
+					{
+						$data["error"] = t("Isikule kasutaja tegemiseks peab olema organisatsioonis, kus ta on t&ouml;&ouml;taja, valitud 'Kas isikud on kasutajad' seade");
+						//return PROP_ERROR;
+					}
 				}
 				else
 				{

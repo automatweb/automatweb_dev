@@ -1623,6 +1623,10 @@ class crm_person_obj extends _int_object
 		return $ol;
 	}
 
+	/** returns all mail objects sent to person
+		@attrib api=1
+		@returns object list
+	**/
 	public function get_recieved_mails($arr = array())
 	{
 		$adress_objects = $this->emails();
@@ -1663,6 +1667,21 @@ class crm_person_obj extends _int_object
 
 		$mails->add(new object_list($filter));
 		return $mails;
+	}
+
+	/** returns persons company property value
+		@attrib api=1 params=pos
+		@param prop required type=string
+			company property name
+		@returns object list
+	**/
+	public function company_property($prop)
+	{
+		if(is_object($co = $this->company()))
+		{
+			return $co->prop($prop);
+		}
+		return null;
 	}
 }
 
