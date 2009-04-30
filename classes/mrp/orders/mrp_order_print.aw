@@ -359,6 +359,16 @@ class mrp_order_print extends mrp_order
 		$this->_fwd_case_set($arr);
 	}
 
+	function _set_resource_price($arr)
+	{
+		$arr["obj_inst"]->set_meta("sel_covers_job_res", $arr["request"]["sel_covers_job_res"]);
+	}
+
+	function _set_material_price($arr)
+	{
+		$arr["obj_inst"]->set_meta("sel_covers_mat", $arr["request"]["sel_covers_mat"]);
+	}
+
 	function _set_resource_tree($arr)
 	{
 		$this->_fwd_case_set($arr);
@@ -539,6 +549,7 @@ class mrp_order_print extends mrp_order
 				{
 					$mo = obj($material_id);
 					$data = array("material" => $mo->name());
+					$pr_by_v = array();
 					for($i = $from; $i <= $to; $i++)
 					{
 						$v = $amt + ($i * 1000);
@@ -546,6 +557,7 @@ class mrp_order_print extends mrp_order
 						foreach($mp as $mp_k => $mp_v)
 						{
 							$sums[$v][$mp_k] += $mp_v;
+							$pr_by_v[$v] = $mp_v;
 						}
 						$tmp = join(" ", $mp);
 						if ($v == $amt)
@@ -555,6 +567,35 @@ class mrp_order_print extends mrp_order
 						$data[$v] = $tmp;
 					}
 					$t->define_data($data);
+
+					$sel_covers_mat = $arr["obj_inst"]->meta("sel_covers_mat");
+
+					// get all applicable covers for resource
+					foreach($material->get_all_covers_for_material() as $cover)
+					{
+						$data = array(
+							"material" => "<i>".sprintf(t("Kate: %s:"), $cover->name)."</i>"." ".html::checkbox(array(
+								"name" => "sel_covers_mat[".$material->id()."][".$cover->id()."]",
+								"value" => $cover->id(),
+								"checked" => isset($sel_covers_mat[$material->id()][$cover->id()])
+							))
+						);
+						for($i = $from; $i <= $to; $i++)
+						{
+							$v = $amt + ($i * 1000);
+							$tmp = $cover->get_price_for_order_and_amt_and_price($arr["obj_inst"], $v, $pr_by_amt[$v]);
+							if (isset($sel_covers_mat[$material->id()][$cover->id()]))
+							{
+								$sums[$v] += $tmp;
+							}
+							if ($v == $amt)
+							{
+								$tmp = html::strong($tmp);
+							}
+							$data[$v] = $tmp;
+						}
+						$t->define_data($data);
+					}
 				}
 			}
 			foreach($sums as $k => $v)
@@ -601,6 +642,7 @@ class mrp_order_print extends mrp_order
 				$unit = 0;
 				$price = array();
 				$purchase_price = 0;
+				$pr_by_amt = array();
 				if (isset($material_expenses[$material->product]))
 				{
 					$amt = $material_expenses[$material->product]->amount;
@@ -610,7 +652,9 @@ class mrp_order_print extends mrp_order
 					
 					foreach($cur_list as $cur_id => $cur_name)
 					{
-						$tot_mat_price[$cur_id] += ($material->product()->price_get_by_currency(obj($cur_id)) * $amt);
+						$tmp = ($material->product()->price_get_by_currency(obj($cur_id)) * $amt);
+						$tot_mat_price[$cur_id] += $tmp;
+						$pr_by_amt[$amt] = $tmp;
 					}
 				}
 			}
@@ -653,10 +697,12 @@ class mrp_order_print extends mrp_order
 			{
 				$resource = $job->get_resource();
 				$data = array("resource" => $resource->name);
+				$pr_by_amt = array();
 				for($i = $from; $i <= $to; $i++)
 				{
 					$v = $amt + ($i * 1000);
 					$tmp = $this->_get_resource_price_for_amt_and_resource($arr["obj_inst"], $v, $resource);
+					$pr_by_amt[$v] = $tmp;
 					$sums[$v] += $tmp;
 					if ($v == $amt)
 					{
@@ -665,6 +711,35 @@ class mrp_order_print extends mrp_order
 					$data[$v] = $tmp;
 				}
 				$t->define_data($data);
+
+				$sel_covers_job_res = $arr["obj_inst"]->meta("sel_covers_job_res");
+
+				// get all applicable covers for resource
+				foreach($resource->get_all_covers_for_resource() as $cover)
+				{
+					$data = array(
+						"resource" => "<i>".sprintf(t("Kate: %s:"), $cover->name)."</i>"." ".html::checkbox(array(
+							"name" => "sel_covers_job_res[".$job->id()."][".$resource->id()."][".$cover->id()."]",
+							"value" => $cover->id(),
+							"checked" => isset($sel_covers_job_res[$job->id()][$resource->id()][$cover->id()])
+						))
+					);
+					for($i = $from; $i <= $to; $i++)
+					{
+						$v = $amt + ($i * 1000);
+						$tmp = $cover->get_price_for_order_and_amt_and_price($arr["obj_inst"], $v, $pr_by_amt[$v]);
+						if (isset($sel_covers_job_res[$job->id()][$resource->id()][$cover->id()]))
+						{
+							$sums[$v] += $tmp;
+						}
+						if ($v == $amt)
+						{
+							$tmp = html::strong($tmp);
+						}
+						$data[$v] = $tmp;
+					}
+					$t->define_data($data);
+				}
 			}
 			$sums[$amt] = html::strong($sums[$amt]);
 			$sums["resource"] = html::strong("Kokku");
@@ -802,6 +877,7 @@ class mrp_order_print extends mrp_order
 	function _get_preview($arr)
 	{
 		$arr["prop"]["value"] = $this->generate_preview($arr["obj_inst"]);
+		die($arr["prop"]["value"]);
 	}
 
 	public function generate_preview($o)

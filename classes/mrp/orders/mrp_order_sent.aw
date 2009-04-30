@@ -61,7 +61,7 @@ class mrp_order_sent extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 
-		if ($arr["new"] && $this->can("view", $arr["request"]["oc"]) && $prop["name"] != "name")
+		if ($arr["new"] && $this->can("view", ifset($arr["request"], "oc")) && $prop["name"] != "name")
 		{
 			$oc = obj($arr["request"]["oc"]);
 			if ($this->can("view", $oc->mail_template))
@@ -193,7 +193,10 @@ class mrp_order_sent extends class_base
 		$files = array();
 		if ($arr["new"])
 		{
-			$files[] = obj($arr["request"]["file"]);
+			if ($this->can("view", ifset($arr["request"], "file")))
+			{
+				$files[] = obj($arr["request"]["file"]);
+			}
 		}
 		else
 		{
@@ -296,10 +299,13 @@ class mrp_order_sent extends class_base
 
 	function _get_send_to_mail($arr)
 	{
-		if ($arr["new"])
+		if ($arr["new"] && $this->can("view", $arr["request"]["alias_to"]))
 		{
 			$offer = obj($arr["request"]["alias_to"]);
-			$arr["prop"]["value"] = $offer->get_contact_mail();
+			if ($offer->class_id() == CL_MRP_ORDER_PRINT)
+			{
+				$arr["prop"]["value"] = $offer->get_contact_mail();
+			}
 		}
 	}
 
@@ -308,7 +314,10 @@ class mrp_order_sent extends class_base
 		if ($arr["new"])
 		{
 			$offer = obj($arr["request"]["alias_to"]);
-			$arr["prop"]["value"] = $offer->get_contact_name();
+			if ($offer->class_id() == CL_MRP_ORDER_PRINT)
+			{
+				$arr["prop"]["value"] = $offer->get_contact_name();
+			}
 		}
 	}
 }

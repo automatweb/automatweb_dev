@@ -188,6 +188,20 @@ class mrp_resource_obj extends _int_object
 		return $this->workspace;
 	}
 
+	/**
+		@attrib api=1
+	**/
+	public function get_all_covers_for_resource()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_ORDER_COVER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_MRP_ORDER_COVER.RELTYPE_APPLIES_RESOURCE" => $this->id()
+		));
+		return $ol->arr();
+	}
+
 /**
 	@attrib params=pos api=1
 	@param workspace type=CL_MRP_WORKSPACE

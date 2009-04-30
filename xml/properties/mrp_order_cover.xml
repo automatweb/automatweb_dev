@@ -1,31 +1,76 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>cover_type</name>
+            <table>aw_mrp_order_cover</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_cover_type</field>
+            <caption>Katte t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>cover_amt</name>
             <table>aw_mrp_order_cover</table>
             <group>general</group>
             <type>textbox</type>
             <size>10</size>
             <field>aw_cover_amt</field>
-            <caption>Katte summa</caption>
+            <caption>Katte summa v&amp;amp;otilde;i protsent</caption>
       </property>
       <property>
-            <name>cover_tot_price_pct</name>
+            <name>applies_all</name>
             <table>aw_mrp_order_cover</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>10</size>
-            <field>aw_cover_tot_price_pct</field>
-            <caption>Katte protsent hinnalt</caption>
+            <group>applies</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <field>aw_applies_all</field>
+            <parent>applies_all_lay</parent>
+            <caption>Kehtib kogusummale</caption>
       </property>
       <property>
-            <name>cover_amt_piece</name>
+            <name>applies_resources_tb</name>
             <table>aw_mrp_order_cover</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>10</size>
-            <field>aw_cover_amt_piece</field>
-            <caption>Kate t&amp;amp;uuml;kilt</caption>
+            <group>applies</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>applies_resources_lay</parent>
+            <field>applies_resources_tb</field>
+            <caption>Kehtib resurssidele toolbar</caption>
+      </property>
+      <property>
+            <name>applies_resources</name>
+            <table>aw_mrp_order_cover</table>
+            <group>applies</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>applies_resources_lay</parent>
+            <field>applies_resources</field>
+            <caption>Kehtib resurssidele</caption>
+      </property>
+      <property>
+            <name>applies_materials_tb</name>
+            <table>aw_mrp_order_cover</table>
+            <group>applies</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>applies_materials_lay</parent>
+            <field>applies_materials_tb</field>
+            <caption>Kehtib materjalidele toolbar</caption>
+      </property>
+      <property>
+            <name>applies_materials</name>
+            <table>aw_mrp_order_cover</table>
+            <group>applies</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>applies_materials_lay</parent>
+            <field>applies_materials</field>
+            <caption>Kehtib materjalidele</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_ORDER_COVER</syslog_type>
@@ -35,6 +80,11 @@
             <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
+      <groupinfo>
+            <applies>
+                  <caption>Kehtimine</caption>
+            </applies>
+      </groupinfo>
       <tableinfo>
             <aw_mrp_order_cover>
                   <master_index>brother_of</master_index>
@@ -42,5 +92,37 @@
                   <index>aw_oid</index>
             </aw_mrp_order_cover>
       </tableinfo>
+      <reltypes>
+            <APPLIES_RESOURCE>
+                  <value>1</value>
+                  <clid>CL_MRP_RESOURCE</clid>
+                  <caption>Kehtib ressursile</caption>
+            </APPLIES_RESOURCE>
+            <APPLIES_PROD>
+                  <value>2</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Kehtib tootele</caption>
+            </APPLIES_PROD>
+      </reltypes>
+      <layout>
+            <applies_all_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kehtib&amp;amp;nbsp;k&amp;amp;otilde;ikidele</area_caption>
+                  <group>applies</group>
+            </applies_all_lay>
+            <applies_resources_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kehtib&amp;amp;nbsp;ressurssidele</area_caption>
+                  <group>applies</group>
+            </applies_resources_lay>
+            <applies_materials_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kehtib&amp;amp;nbsp;materjalidele</area_caption>
+                  <group>applies</group>
+            </applies_materials_lay>
+      </layout>
 </properties>
 

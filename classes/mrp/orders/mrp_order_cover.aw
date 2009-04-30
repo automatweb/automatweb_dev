@@ -6,14 +6,43 @@
 @default table=aw_mrp_order_cover
 @default group=general
 
+	@property cover_type type=select field=aw_cover_type
+	@caption Katte t&uuml;&uuml;p
+
 	@property cover_amt type=textbox size=10 field=aw_cover_amt
-	@caption Katte summa
+	@caption Katte summa v&otilde;i protsent
 
-	@property cover_tot_price_pct type=textbox size=10 field=aw_cover_tot_price_pct
-	@caption Katte protsent hinnalt
+@default group=applies
 
-	@property cover_amt_piece type=textbox size=10 field=aw_cover_amt_piece
-	@caption Kate t&uuml;kilt
+	@layout applies_all_lay type=vbox closeable=1 area_caption=Kehtib&nbsp;k&otilde;ikidele
+
+		@property applies_all type=checkbox ch_value=1 default=1 field=aw_applies_all parent=applies_all_lay
+		@caption Kehtib kogusummale
+
+	@layout applies_resources_lay type=vbox closeable=1 area_caption=Kehtib&nbsp;ressurssidele
+
+		@property applies_resources_tb type=toolbar store=no no_caption=1 parent=applies_resources_lay
+		@caption Kehtib resurssidele toolbar
+
+		@property applies_resources type=table store=no no_caption=1 parent=applies_resources_lay
+		@caption Kehtib resurssidele
+
+	@layout applies_materials_lay type=vbox closeable=1 area_caption=Kehtib&nbsp;materjalidele
+
+		@property applies_materials_tb type=toolbar store=no no_caption=1 parent=applies_materials_lay
+		@caption Kehtib materjalidele toolbar
+
+		@property applies_materials type=table store=no no_caption=1 parent=applies_materials_lay
+		@caption Kehtib materjalidele
+
+@groupinfo applies caption="Kehtimine"
+
+@reltype APPLIES_RESOURCE value=1 clid=CL_MRP_RESOURCE
+@caption Kehtib ressursile
+
+@reltype APPLIES_PROD value=2 clid=CL_SHOP_PRODUCT
+@caption Kehtib tootele
+
 */
 
 class mrp_order_cover extends class_base
@@ -53,6 +82,8 @@ class mrp_order_cover extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["search_res"] = "0";
+		$arr["search_mat"] = "0";
 	}
 
 	function show($arr)
@@ -83,7 +114,67 @@ class mrp_order_cover extends class_base
 					"type" => "double"
 				));
 				return true;
+
+			case "aw_applies_all":
+			case "aw_cover_type":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
 		}
+	}
+
+	function _get_applies_resources_tb($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_search_button(array(
+			"pn" => "search_res",
+			"clid" => array(CL_MRP_RESOURCE),
+		));
+		$tb->add_delete_rels_button();
+	}
+
+	function _get_applies_materials_tb($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_search_button(array(
+			"pn" => "search_mat",
+			"clid" => array(CL_SHOP_PRODUCT),
+		));
+		$tb->add_delete_rels_button();
+	}
+
+	function _get_applies_materials($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_APPLIES_PROD"))),
+			array("name", "created", "createdby_person"),
+			CL_SHOP_PRODUCT
+		);
+	}
+
+	function _get_applies_resources($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_APPLIES_RESOURCE"))),
+			array("name", "created", "createdby_person"),
+			CL_MRP_RESOURCE
+		);
+	}
+
+	function callback_post_save($arr)
+	{
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["search_res"], "RELTYPE_APPLIES_RESOURCE");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["search_mat"], "RELTYPE_APPLIES_PROD");
+	}
+
+	function _get_cover_type($arr)
+	{
+		$arr["prop"]["options"] = $arr["obj_inst"]->get_cover_types();
 	}
 }
 

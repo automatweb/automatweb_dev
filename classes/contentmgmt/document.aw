@@ -2608,7 +2608,7 @@ class document extends aw_template
 			$tehnika .= "<tr><td align='right'><input type='checkbox' name='tehnika[]'  value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
 
-   	$this->vars(array(
+	   	$this->vars(array(
 			"docid" => $section,
 			"tekst" => $tekst,
 			"kujundus" => $kujundus,
@@ -2616,7 +2616,7 @@ class document extends aw_template
 			"ala" => $ala,
 			"tehnika" => $tehnika,
 			"title" => $inf->title,
-			"reforb" => $this->mk_reforb("submit_feedback", array("docid" => $section, "print" => $print ? $print : null)))
+			"reforb" => $this->mk_reforb("submit_feedback", array("docid" => $section, "print" => $print ? $print : null))
 		));
 		return $this->parse();
 	}

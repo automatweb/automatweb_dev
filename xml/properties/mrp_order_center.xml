@@ -113,12 +113,23 @@
             <field>co_tb</field>
       </property>
       <property>
+            <name>cover_tree</name>
+            <table>aw_mrp_order_center</table>
+            <group>covers</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>cover_left</parent>
+            <field>cover_tree</field>
+      </property>
+      <property>
             <name>co_table</name>
             <table>aw_mrp_order_center</table>
             <group>covers</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>cover_split</parent>
             <field>co_table</field>
       </property>
       <classinfo>
@@ -224,6 +235,19 @@
                   <area_caption>Filter</area_caption>
                   <group>customer</group>
             </customer_left_top>
+            <cover_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>covers</group>
+                  <area_caption></area_caption>
+            </cover_split>
+            <cover_left>
+                  <type>vbox</type>
+                  <parent>cover_split</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Millele&amp;amp;nbsp;kehtib</area_caption>
+                  <group>covers</group>
+            </cover_left>
       </layout>
 </properties>
 

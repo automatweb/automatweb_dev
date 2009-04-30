@@ -153,4 +153,19 @@ class shop_product_obj extends _int_object
 			return $o->prop("discount");
 		}
 	}
+
+	/**
+		@attrib api=1
+	**/
+	public function get_all_covers_for_material()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_ORDER_COVER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_MRP_ORDER_COVER.RELTYPE_APPLIES_PROD" => $this->id()
+		));
+		return $ol->arr();
+	}
+	
 }

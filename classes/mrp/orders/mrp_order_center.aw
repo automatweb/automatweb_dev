@@ -55,7 +55,13 @@
 
 	@property co_tb type=toolbar store=no no_caption=1
 
-	@property co_table type=table store=no no_caption=1
+	@layout cover_split type=hbox width=20%:80%
+
+		@layout cover_left type=vbox parent=cover_split closeable=1 area_caption=Millele&nbsp;kehtib
+
+			@property cover_tree type=treeview store=no no_caption=1 parent=cover_left
+
+		@property co_table type=table store=no no_caption=1 parent=cover_split
 
 
 @groupinfo customer caption="Kliendid" submit=no
@@ -120,6 +126,7 @@ class mrp_order_center extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["apply"] = $_GET["apply"];
 	}
 
 	function show($arr)
@@ -483,17 +490,215 @@ class mrp_order_center extends class_base
 
 	function _get_co_tb($arr)
 	{
-		$arr["prop"]["vcl_inst"]->add_new_button(array(CL_MRP_ORDER_COVER), $arr["obj_inst"]->id(), 5 /* MRP_COVER */);
+		$can_add = false;
+		$apply = ifset($arr["request"], "apply");
+		if (is_oid($apply))
+		{
+			$o = obj($apply);
+			if ($o->class_id() != CL_MENU)
+			{
+				$can_add = true;
+			}
+		}
+		else
+		if ($apply == "general")
+		{
+			$can_add = true;
+		}
+		if ($can_add)
+		{
+			$arr["prop"]["vcl_inst"]->add_new_button(array(CL_MRP_ORDER_COVER), $arr["obj_inst"]->id(), 5 /* MRP_COVER */, array("apply" => $apply));
+		}
 		$arr["prop"]["vcl_inst"]->add_delete_button();
+
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "copy",
+			"img" => "copy.gif",
+			"action" => "copy_covers",
+			"tooltip" => t("Kopeeri")
+		));
+
+		if (is_array($_SESSION["moc_copy"]) && count($_SESSION["moc_copy"]) && $can_add)
+		{
+			$arr["prop"]["vcl_inst"]->add_button(array(
+				"name" => "paste",
+				"img" => "paste.gif",
+				"action" => "paste_covers",
+				"tooltip" => t("Kleebi")
+			));
+		}
+	}
+
+	private function _init_co_table($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
 	}
 
 	function _get_co_table($arr)
 	{
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_co_table($t);
+
+		$apply = ifset($arr["request"], "apply");
+
+		$filt = array(
+			"class_id" => CL_MRP_ORDER_COVER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_MRP_ORDER_COVER.RELTYPE_MRP_COVER(CL_MRP_ORDER_CENTER).id" => $arr["obj_inst"]->id()
+		);
+
+		if ($apply == "general")
+		{
+			$filt["applies_all"] = 1;
+		}
+		else
+		if ($apply == "resource")
+		{
+			$filt["CL_MRP_ORDER_COVER.RELTYPE_APPLIES_RESOURCE.id"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
+		}
+		else
+		if ($apply == "prod")
+		{
+			$filt["CL_MRP_ORDER_COVER.RELTYPE_APPLIES_PROD.id"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
+		}
+		else
+		if ($this->can("view", $apply))
+		{
+			$o = obj($apply);
+			switch($o->class_id())
+			{
+				case CL_MRP_RESOURCE:
+					$filt["CL_MRP_ORDER_COVER.RELTYPE_APPLIES_RESOURCE.id"] = $o->id();
+					break;
+
+				case CL_SHOP_PRODUCT:
+					$filt["CL_MRP_ORDER_COVER.RELTYPE_APPLIES_PROD.id"] = $o->id();
+					break;
+
+				default:
+					$filt["lang_id"] = -1;
+					break;
+			}
+		}
+
+		$ol = new object_list($filt);
 		$arr["prop"]["vcl_inst"]->table_from_ol(
-			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_MRP_COVER"))),
+			$ol,
 			array("name", "created"),
 			CL_MRP_ORDER_COVER
 		);
+	}
+
+	function _get_cover_tree($arr)
+	{
+		$tv = $arr["prop"]["vcl_inst"];
+		$tv->add_item(0, array(
+			"id" => "general",
+			"name" => t("Kehtivad kogusummale"),
+			"url" => aw_url_change_var(array("apply" => "general"))
+		));
+		$tv->add_item(0, array(
+			"id" => "resource",
+			"name" => t("Kehtivad resurssidele"),
+			"url" => aw_url_change_var(array("apply" => "resource"))
+		));
+		$this->_insert_resource_items($tv, $arr["obj_inst"], "resource");
+		$tv->add_item(0, array(
+			"id" => "prod",
+			"name" => t("Kehtivad materjalidele"),
+			"url" => aw_url_change_var(array("apply" => "prod"))
+		));
+		$this->_insert_prod_items($tv, $arr["obj_inst"], "prod");
+
+		$tv->set_selected_item(ifset($arr["request"], "apply"));
+	}
+
+	private function _insert_resource_items($tv, $o, $parent)
+	{
+		$fld = $o->mrp_workspace()->resources_folder;
+		$ot = new object_tree(array(
+			"parent" => $fld,
+			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$ol = $ot->to_list();
+		foreach($ol->arr() as $item)
+		{
+			$tv->add_item($item->parent() == $fld ? $parent : $item->parent(), array(
+				"id" => $item->id(),
+				"name" => $item->name(),
+				"url" => aw_url_change_var(array("apply" => $item->id())),
+				"iconurl" => icons::get_icon_url($item)
+			));
+		}
+	}
+
+	private function _insert_prod_items($tv, $o, $parent)
+	{
+		$fld = $o->mrp_workspace()->prop("RELTYPE_PURCHASING_MANAGER.conf.prod_fld");
+
+		$ot = new object_tree(array(
+			"parent" => $fld,
+			"class_id" => array(CL_MENU, CL_SHOP_PRODUCT),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$ol = $ot->to_list();
+		foreach($ol->arr() as $item)
+		{
+			$tv->add_item($item->parent() == $fld ? $parent : $item->parent(), array(
+				"id" => $item->id(),
+				"name" => $item->name(),
+				"url" => aw_url_change_var(array("apply" => $item->id())),
+				"iconurl" => icons::get_icon_url($item)
+			));
+		}
+	}
+
+	/**
+		@attrib name=copy_covers
+	**/
+	function copy_covers($arr)
+	{
+		$_SESSION["moc_copy"] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=paste_covers
+	**/
+	function paste_covers($arr)
+	{
+		foreach(safe_array($_SESSION["moc_copy"]) as $item)
+		{
+			$item = obj($item);
+			if ($arr["apply"] == "general")
+			{
+				$item->add_applies_general();
+			}
+			else
+			if (is_oid($arr["apply"]))
+			{
+				$o = obj($arr["apply"]);
+				if ($o->class_id() == CL_MRP_RESOURCE)
+				{
+					$item->add_applies_resource($o);
+				}
+				else
+				if ($o->class_id() == CL_SHOP_PRODUCT)
+				{
+					$item->add_applies_prod($o);
+				}
+			}
+		}
+		unset($_SESSION["moc_copy"]);
+		return $arr["post_ru"];
 	}
 }
 

@@ -33,8 +33,8 @@ class mrp_order_print_obj extends mrp_order_obj
 	function get_total_price_for_amt($amt, $do_cov = false)
 	{
 		$pr = 0;
-		$pr += $this->_get_mat_price($amt);
-		$pr += $this->_get_res_price($amt);
+		$pr += $this->_get_mat_price($amt, $do_cov);
+		$pr += $this->_get_res_price($amt, $do_cov);
 		if ($do_cov)
 		{
 			$pr += $this->_get_cov_price($amt);
@@ -53,9 +53,12 @@ class mrp_order_print_obj extends mrp_order_obj
 		return $sum;
 	}
 
-	protected function _get_mat_price($amt)
+	protected function _get_mat_price($amt, $do_cov = false)
 	{	
 		$sums = array();
+
+		$sel_covers_mat = $this->meta("sel_covers_mat");
+
 		foreach($this->get_job_list() as $job)
 		{
 			$material_expenses = $job->get_material_expense_list();
@@ -67,6 +70,18 @@ class mrp_order_print_obj extends mrp_order_obj
 				$mp = $this->_get_mat_price_for_amt($this, $amt, $mo, $row);
 				foreach($mp as $mp_k => $mp_v)
 				{
+
+					if ($do_cov)
+					{
+						foreach(safe_array($sel_covers_mat[$material_id]) as $cover_id)
+						{
+							if ($this->can("view", $cover_id))
+							{
+								$cover = obj($cover_id);
+								$mp_v += $cover->get_price_for_order_and_amt_and_price($this, $amt, $mp_v);
+							}
+						}
+					}
 					$sums[$mp_k] += $mp_v;
 				}
 			}
@@ -95,16 +110,31 @@ class mrp_order_print_obj extends mrp_order_obj
 		return $tot_mat_price;
 	}
 
-	protected function _get_res_price($amt)
+	protected function _get_res_price($amt, $do_cov = false)
 	{
 		$pricelist = obj($this->prop("mrp_pricelist"));
+
+		$sel_covers_job_res = $this->meta("sel_covers_job_res");
 
 		$pr = 0;
 		foreach($this->get_job_list() as $job)
 		{
 			$resource = $job->get_resource();
 
-			$pr += $pricelist->get_price_for_resource_and_amount($resource, $amt);
+			$tmp = $pricelist->get_price_for_resource_and_amount($resource, $amt);
+			$pr += $tmp;
+
+			if ($do_cov)
+			{
+				foreach(safe_array($sel_covers_job_res[$job->id()][$resource->id()]) as $cover_id)
+				{
+					if ($this->can("view", $cover_id))
+					{
+						$cover = obj($cover_id);
+						$pr += $cover->get_price_for_order_and_amt_and_price($this, $amt, $tmp);
+					}
+				}
+			}
 		}
 		return $pr;
 	}
