@@ -7,7 +7,7 @@ class doc_obj extends _int_object
 	{
 		switch($n)
 		{
-			case "show_to_country":
+			/*case "show_to_country":
 				$inst = $this->instance();
 				$tbl = $inst->db_get_table("documents");
 				if (!isset($tbl["fields"]["show_to_country"]))
@@ -17,7 +17,7 @@ class doc_obj extends _int_object
 						"type" => "varchar(255)"
 					));
 				}
-			break;
+			break;*/
 		}
 		return parent::prop($n);
 	}
