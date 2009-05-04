@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.31 2009/04/27 15:38:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.32 2009/05/04 12:07:20 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -457,6 +457,18 @@ class language extends class_base
 		die($pm->get_menu(array(
 			"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 		)));
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "show_logged":
+			case "show_others":
+			case "show_not_logged":
+				$this->db_add_col($t, array("name" => $f, "type" => "int"));
+				return true;
+		}
 	}
 }
 ?>
