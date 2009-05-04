@@ -242,7 +242,7 @@ jQuery.aw_releditor = function(arr) {
 	function _get_delete_index(s_input_name)
 	{
 		// i don't undrestand why I had to doublescape: \\[
-		var re  =  new RegExp(".*_(.*)jQuery", "g").exec(s_input_name);
+		var re  =  new RegExp(".*_(.*)$", "g").exec(s_input_name);
 		return re[1];
 	}
 
@@ -253,7 +253,7 @@ jQuery.aw_releditor = function(arr) {
 	function _get_prop_name(s_input_name)
 	{
 		// i don't undrestand why I had to doublescape: \\[
-		var re  =  new RegExp("^.+\\[[0-9]+\\](.*)jQuery", "g").exec(s_input_name);
+		var re  =  new RegExp("^.+\\[[0-9]+\\](.*)$", "g").exec(s_input_name);
 		return re[1];
 	}
 	
@@ -263,7 +263,7 @@ jQuery.aw_releditor = function(arr) {
 	function _get_form_index_from_edit_button(s_name)
 	{
 		// i don't undrestand why I had to doublescape: \\[
-		var re  =  new RegExp("^.*_.*_(.*)jQuery", "g").exec(s_name);
+		var re  =  new RegExp("^.*_.*_(.*)$", "g").exec(s_name);
 		return re[1];
 	}
 	
@@ -273,7 +273,7 @@ jQuery.aw_releditor = function(arr) {
 	function is_aw_date_selectbox(s_name)
 	{
 		out = new Array()
-		var re  =  new RegExp("^.+\\[[0-9]+\\](\\[.*?\\])\\[(.*?)\\]jQuery", "g").exec(s_name);
+		var re  =  new RegExp("^.+\\[[0-9]+\\](\\[.*?\\])\\[(.*?)\\]$", "g").exec(s_name);
 		if (re)
 		{
 			if (re[2])
