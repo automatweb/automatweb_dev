@@ -10,8 +10,8 @@ if ( typeof jQuery == "undefined" )
 <!-- END SUB: start -->
 		<!-- SUB: button -->
 		{VAR:surround_start}
-		<div nowrap class="tb_but" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
-		<a href="{VAR:url}" onClick="{VAR:onClick}" name="{VAR:name}" target="{VAR:target}" {VAR:href_id}><img style="button" src="{VAR:img_url}" border="0"></a>
+		<div nowrap class="tb_but" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'">
+		<a href="{VAR:url}" onClick="{VAR:onClick}" name="{VAR:name}" target="{VAR:target}" {VAR:href_id}><img style="button" src="{VAR:img_url}" border="0" title="{VAR:tooltip}" alt="{VAR:tooltip}" /></a>
 		</div>
 		{VAR:surround_end}
 		<!-- END SUB: button -->
@@ -20,18 +20,18 @@ if ( typeof jQuery == "undefined" )
 		<div nowrap class="aw04toolbarbutton">
 			<table border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td><span style="position: relative; width: 100%; height: 100%;"><img src="{VAR:img_url}" border="0"><span style="position: absolute;  top: 0px; left: 0px; background: transparent url('{VAR:imgbase}/disabled_background.gif'); width: 100%; height: 100%; font-size: 2px;">&nbsp;</span></span></td>
+					<td><span style="position: relative; width: 100%; height: 100%;"><img src="{VAR:img_url}" border="0" title="{VAR:tooltip}" alt="{VAR:tooltip}" /><span style="position: absolute;  top: 0px; left: 0px; background: transparent url('{VAR:imgbase}/disabled_background.gif'); width: 100%; height: 100%; font-size: 2px;">&nbsp;</span></span></td>
 				</tr>
 			</table>
 		</div>
 		<!-- END SUB: button_disabled -->
 
 		<!-- SUB: menu_button -->
-		<div nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
+		<div nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'">
 			<table cellpadding=0 cellspacing=0>
 				<tr>
 					<td valign='bottom'>
-					<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" alt="" border="0"></a>
+					<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" title="{VAR:tooltip}" alt="{VAR:tooltip}" border="0" /></a>
 					</td>
 					<td valign='bottom'>
 						<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/downarr.png" alt="" border="0"></a></td>
@@ -42,14 +42,14 @@ if ( typeof jQuery == "undefined" )
 		<!-- END SUB: menu_button -->
 
 		<!-- SUB: menu_button_lod -->
-		<div id='tb_lod_{VAR:lod_name}' nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
+		<div id='tb_lod_{VAR:lod_name}' nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'">
 			<table cellpadding=0 cellspacing=0>
 				<tr>
 					<td valign='bottom'>
-					<a href="javascript:void(0);" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:img_url}" border="0"  width="16" height="16" ></a>
+					<a href="javascript:void(0);" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:img_url}" border="0"  width="16" height="16" title="{VAR:tooltip}" alt="{VAR:tooltip}" /></a>
 					</td>
 					<td valign='bottom'>
-						<a href="javascript:void(0);" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:imgbase}/downarr.png" border="0"  width="7" height="4" ></a></td>
+						<a href="javascript:void(0);" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:imgbase}/downarr.png" border="0"  width="7" height="4" title="{VAR:tooltip}" alt="{VAR:tooltip}" /></a></td>
 					</a>
 				</tr>
 			</table>
