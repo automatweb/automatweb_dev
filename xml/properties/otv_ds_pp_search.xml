@@ -96,6 +96,11 @@
                   <clid>CL_OTV_DS_POSTIPOISS</clid>
                   <caption>postipoisi andmeallikas</caption>
             </PP>
+            <CONTROLLER>
+                  <value>2</value>
+                  <clid>CL_CFG_CONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CONTROLLER>
       </reltypes>
 </properties>
 

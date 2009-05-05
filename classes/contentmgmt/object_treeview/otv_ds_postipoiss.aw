@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.33 2009/04/23 10:35:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.34 2009/05/05 13:21:08 markop Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -43,10 +43,8 @@ class otv_ds_postipoiss extends class_base
 		"jrk_nr" => "J&auml;rjekord",
 		"juurdepaasupiirang" => "Juurdep&auml;&auml;s",
 		"paritolu" => "P&auml;ritolu",
-		"liik" => "Liik",
 		"indeks" => "Indeks",
 		"suund" => "Suund",
-		"teemad" => "Teemad",
 		"info" => "Info",
 		"kellele" => "Kellele",
 		"kellelt" => "Kellelt",
@@ -61,7 +59,11 @@ class otv_ds_postipoiss extends class_base
 		"tahtaeg" => "Tahtaeg",
 		"toimik" => "Toimik",
 		"vastamiskuupaev" => "Vastamiskuupaev"*/
-		
+		"liik" => "Liik",
+		"seosed" => "seosed",
+		"teemad" => "Teemad",
+		"saatja_viide" => "Saatja indeks",
+		"saatja_kuupaev" => "Saatja kuupaev",		
 		"regist_nr" => "Nr.",
 		"indeks" => "Dokument",
 		"reg_kpv" => "Registreeritud",
@@ -146,6 +148,7 @@ class otv_ds_postipoiss extends class_base
 					}
 					$arr['obj_inst']->set_meta("aw_otv_ds_pp_cache_fields_to_xml", $fields);
 				}
+				$arr["obj_inst"]->set_meta("is_date_fields", $arr["request"]["is_date_fields"]);
 				break;
 
 		}
@@ -429,7 +432,7 @@ class otv_ds_postipoiss extends class_base
 		$this->vars($fd);
 		$lineno = 0;
 		foreach($this->all_cols as $f_n => $f_v)
-		{
+		{//if(aw_global_get("uid") == "struktuur") arr($fd);
 			if (substr($f_n, 0, 3) == "sep" && $hasc)
 			{
 				$lines .= $this->parse("LINE_SEP");
@@ -488,7 +491,14 @@ class otv_ds_postipoiss extends class_base
 			"FILE" => $str
 		));
 		
-		if (trim($str) != "")
+		if($fd["suund"] == "sissetulev")//jube h2kk........
+		{
+			$this->vars(array(
+				"INCOMING" => $this->parse("INCOMING")
+			));
+		}
+		
+		if (trim($str) != "" && !($fd["juurdepaasupiirang"] == "Salajane" || $fd["juurdepaasupiirang"] == "Asutusesiseseks kasutamiseks" || $fd["juurdepaasupiirang"] == "Juurdepääsupiirang eraelulistele isikuandmetele")) //h2kk
 		{
 			$this->vars(array(
 				"HAS_FILES" => $this->parse("HAS_FILES")
@@ -657,7 +667,7 @@ class otv_ds_postipoiss extends class_base
 		if ($c_mtime > $mtime && $cache_count == $file_cnt)
 		{
 			echo "Cache on uuem kui failid, uuendada pole vaja (".date("d.m.Y H:i", $c_mtime)." > ".date("d.m.Y H:i", $mtime).") !<br>";
-			return;
+		//	return;
 		}
 		$this->db_query("DELETE FROM aw_otv_ds_pp_cache WHERE aw_pp_id = '".$o->id()."'");
 		$this->db_query("DELETE FROM aw_otv_ds_pp_cache_file2folder WHERE aw_pp_id = '".$o->id()."'");
@@ -666,6 +676,8 @@ class otv_ds_postipoiss extends class_base
 
 		$db_to_xml_connections = $o->meta("aw_otv_ds_pp_cache_fields_to_xml");
 
+		$is_date_fields = $o->meta("is_date_fields");
+		
 		foreach($dc as $fe)
 		{
 			if (substr($fe, -3) != "xml")
@@ -708,6 +720,13 @@ class otv_ds_postipoiss extends class_base
 				if (!is_array($k))
 				{
 					$db_field = array_search($k, $db_to_xml_connections);
+					if ($is_date_fields[$db_field])
+					{
+						list($d,$m, $y) = explode(".", $v);
+						list($y, $tm) = explode(" ", $y);
+						list($hr, $min) = explode(":", $tm);
+						$v = mktime((int)$hr, (int)$min, 0, (int)$m, (int)$d, (int)$y);
+					}
 					if ($db_field !== false)
 					{
 						// here i have aw_ prefix  already in field name, so i remove it here
@@ -720,7 +739,6 @@ class otv_ds_postipoiss extends class_base
 					}
 				}
 			}
-
 			$data["pp_id"] = $o->id();
 			$data["mtime"] = time();
 			$data["dok_nr"] = $fd["tegevused"]["tegevus"]["dok_nr"];
@@ -776,9 +794,14 @@ class otv_ds_postipoiss extends class_base
 			"name" => "xml_field",
 			"caption" => t("XML v&auml;li"),
 		));
+                $t->define_field(array(
+                        "name" => "is_date",
+                        "caption" => t("Kuup&auml;ev tekstina"),
+                ));
 
 		$aw_otv_ds_pp_cache_fields = $this->db_get_table("aw_otv_ds_pp_cache");
 		$saved_fields = $arr['obj_inst']->meta("aw_otv_ds_pp_cache_fields_to_xml");
+		$is_date_fields = $arr['obj_inst']->meta("is_date_fields");
 		foreach ($aw_otv_ds_pp_cache_fields['fields'] as $field_name => $field_data)
 		{
 			$t->define_data(array(
@@ -787,6 +810,11 @@ class otv_ds_postipoiss extends class_base
 					"name" => "aw_otv_ds_pp_cache_fields_to_xml[".$field_name."]",
 					"value" => $saved_fields[$field_name],
 				)),
+				"is_date" => html::checkbox(array(
+					"name" => "is_date_fields[$field_name]",
+					"value" => 1,
+					"checked" => $is_date_fields[$field_name]
+				))
 			));
 		}
 

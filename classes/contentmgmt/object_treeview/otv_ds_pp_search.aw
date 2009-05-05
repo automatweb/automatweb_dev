@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.13 2009/04/23 12:03:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.14 2009/05/05 13:21:08 markop Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -43,6 +43,9 @@
 
 @reltype PP value=1 clid=CL_OTV_DS_POSTIPOISS
 @caption postipoisi andmeallikas
+
+@reltype CONTROLLER value=2 clid=CL_CFG_CONTROLLER
+@caption Kontroller
 
 */
 
@@ -123,10 +126,25 @@ class otv_ds_pp_search extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
+			"name" => "controller",
+			"caption" => t("Kontroller"),
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "caption",
 			"caption" => t("Tekst"),
 			"align" => "center"
 		));
+	}
+
+	function get_controllers($o)
+	{
+		$ret = array("" => "");
+		foreach($o->connections_from(array("type" => "RELTYPE_CONTROLLER")) as $c)
+		{
+			$ret[$c->prop("to")] = $c->prop("to.name");
+		}
+		return $ret;
 	}
 
 	function do_sform_t_tbl($arr)
@@ -140,6 +158,8 @@ class otv_ds_pp_search extends class_base
 		$flds = $i->get_fields();
 
 		$flds["__fulltext"] = t("T&auml;istekstiotsing");
+
+		$controller_selection = $this->get_controllers($arr["obj_inst"]);
 
 		foreach($flds as $fldid => $fldc)
 		{
@@ -168,6 +188,11 @@ class otv_ds_pp_search extends class_base
 					"name" => "td[$fldid][type]",
 					"value" => $td[$fldid]["type"],
 					"options" => $this->types,
+				)),
+				"controller" => html::select(array(
+					"name" => "td[$fldid][controller]",
+					"value" => $td[$fldid]["controller"],
+					"options" => $controller_selection,
 				)),
 			));
 		}
@@ -381,6 +406,17 @@ class otv_ds_pp_search extends class_base
 					);
 					break;
 			}
+			if($this->can("view" , $fld_dat["controller"]))
+			{
+				$prop = "";
+				$fc = get_instance(CL_FORM_CONTROLLER);
+				$show = $fc->eval_controller($fld_dat["controller"], $ret[$fld]);
+
+				if($show)
+				{
+					$ret[$fld] = $show;
+				}
+			}
 		}
 		
 		return $ret;
@@ -430,16 +466,18 @@ class otv_ds_pp_search extends class_base
 		$td = safe_array($o->meta("stbl"));
 
 		$datecols = array();
-		foreach($td as $tf_n => $tf_d)
+/*		foreach($td as $tf_n => $tf_d)
 		{
 			if ($tf_d["is_date"] == 1)
 			{
 				$datecols[] = "aw_".$tf_n;
 			}
 		}
-
+*/
 		$sql = $this->get_search_sql($o, $req);
+//		if(aw_global_get("uid") == "markop"){ arr($sql);}
 		$this->db_query($sql);
+//		if(aw_global_get("uid") == "markop"){ die();}
 		while ($row = $this->db_next())
 		{
 			if ($td["__viewcol"])
@@ -449,13 +487,14 @@ class otv_ds_pp_search extends class_base
 					"caption" => $row["aw_".$td["__viewcol"]]
 				));
 			}
-
+/*
 			foreach($datecols as $date_col)
 			{
 				list($_d, $_m, $_y) = explode(".", $row[$date_col]);
 				$row[$date_col] = mktime(4,0,0, $_m, $_d, $_y);
+				if(aw_global_get("uid") == "markop")arr($row[$date_col]);
 			}
-
+*/
 			$ta = array();
 			foreach($row as $k => $v)
 			{
@@ -482,7 +521,22 @@ class otv_ds_pp_search extends class_base
 				continue;
 			}
 
-			if ($fld == "__fulltext")
+			if ($fld == "teemad" && $this->can("view" , $o->prop("pp")) && $req[$fld])
+			{
+				$i = get_instance(CL_OTV_DS_POSTIPOISS);
+				$folders = $i->get_folders(obj($o->prop("pp")));
+				$values = array($req[$fld]);
+				foreach($folders as $folder)
+				{
+					if($folder["parent"] == $req[$fld])
+					{
+						$values[] = $folder["id"];
+					}
+				}
+				$pts[] = "aw_".$fld." IN (".join("," , $values).") ";
+				//arr($values);
+			}
+			elseif ($fld == "__fulltext")
 			{
 				if ($req["__fulltext"] != "")
 				{
@@ -507,13 +561,30 @@ class otv_ds_pp_search extends class_base
 				switch($fld_dat["type"])
 				{
 					case 1:
-						$pts[] = " aw_".$fld."='".$req[$fld]."' ";
+						$pts[] = "aw_".$fld."='".$req[$fld]."' ";
+						/*$pts[] = "(aw_".$fld."='".$req[$fld]."' OR 
+							  aw_".$fld." LIKE '%".$req[$fld].",%' OR
+							aw_".$fld." LIKE '%,".$req[$fld]."%' )";*/
 						break;
 					case 2:
 					case 3:
 						$from = date_edit::get_timestamp($req[$fld]);
 						$to = date_edit::get_timestamp($req[$fld."_to"]);
-						$pts[] = " aw_".$fld." BETWEEN '".$from."' AND '".$to."'";
+						if($from != $to)
+						{
+							if(!($from > 1))
+							{
+								$pts[] = " aw_".$fld." < '".$to."'";
+							}
+							elseif(!($to > 1))
+							{
+								$pts[] = " aw_".$fld." > '".$from."'";
+							}
+							elseif($to > $from)
+							{
+								$pts[] = " aw_".$fld." BETWEEN '".$from."' AND '".$to."'";
+							}
+						}
 						break;
 					default: 
 						$pts[] = " aw_".$fld." LIKE '%".$req[$fld]."%' ";

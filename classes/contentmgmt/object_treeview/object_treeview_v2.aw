@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.124 2009/04/23 10:35:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.125 2009/05/05 13:21:08 markop Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -465,6 +465,8 @@ class object_treeview_v2 extends class_base
 				$arr["obj_inst"]->set_meta("sel_columns_sortable", $arr["request"]["column_sortable"]);
 				$arr["obj_inst"]->set_meta("sel_columns_controller", $arr["request"]["column_view_controller"]);
 				$arr["obj_inst"]->set_meta("sel_columns_date_as_text", $arr["request"]["column_date_as_text"]);
+				$arr["obj_inst"]->set_meta("sel_columns_show_as_date", $arr["request"]["column_show_as_date"]);
+
 ////
 // don't save empty fields
 				$valid_column_fields = array();
@@ -1307,7 +1309,12 @@ class object_treeview_v2 extends class_base
 			"sortable" => 1,
 			"align" => "center",
 		));
-
+		$t->define_field(array(
+			"name" => "show_as_date",
+			"caption" => t("Kuup&auml;ev"),
+			"sortable" => 1,
+			"align" => "center",
+		));
 		$t->define_field(array(
 			"name" => "fields",
 			"caption" => t("Milliste v&auml;ljade sisu n&auml;idata<br>Eraldaja&nbsp;&nbsp;|&nbsp;&nbsp;Vasak&nbsp;tekst&nbsp;&nbsp;|&nbsp;&nbsp;V&auml;li&nbsp;&nbsp;|&nbsp;&nbsp;Parem&nbsp;tekst"),
@@ -1330,6 +1337,7 @@ class object_treeview_v2 extends class_base
 		$cols_sortable = $arr["obj_inst"]->meta("sel_columns_sortable");
 		$cols_fields = $arr["obj_inst"]->meta("sel_columns_fields");
 		$cols_date_as_text = $arr["obj_inst"]->meta("sel_columns_date_as_text");
+		$cols_show_as_date = $arr["obj_inst"]->meta("sel_columns_show_as_date");
 		$cols_view_controllers = $arr['obj_inst']->meta("sel_columns_controller");
 
 		$ob = $arr["obj_inst"];
@@ -1361,7 +1369,7 @@ class object_treeview_v2 extends class_base
 		}
 		foreach($cold as $colid => $coln)
 		{
-			$date_as_text = $text = $editable = $sortable = $fields = $sep_before = $sep_after = $controller = "";
+			$show_as_date = $date_as_text = $text = $editable = $sortable = $fields = $sep_before = $sep_after = $controller = "";
 
 
 			if ($cols[$colid])
@@ -1398,6 +1406,12 @@ class object_treeview_v2 extends class_base
 					"name" => "column_date_as_text[".$colid."]",
 					"value" => 1,
 					"checked" => $cols_date_as_text[$colid],
+				));
+		
+				$show_as_date = html::checkbox(array(
+					"name" => "column_show_as_date[".$colid."]",
+					"value" => 1,
+					"checked" => $cols_show_as_date[$colid],
 				));
 				$controller = html::select(array(
 					"name" => "column_view_controller[".$colid."]",
@@ -1486,7 +1500,8 @@ class object_treeview_v2 extends class_base
 				"sep_before" => $sep_before,
 				"sep_after" => $sep_after,
 				"controller" => $controller,
-				"date_as_text" => $date_as_text
+				"date_as_text" => $date_as_text,
+				"show_as_date" => $show_as_date
 			));
 		}
 
@@ -1786,7 +1801,8 @@ class object_treeview_v2 extends class_base
 		$sep_before = $parms["tree_obj_ih"]->meta("sel_columns_sep_before");
 		$sep_after = $parms["tree_obj_ih"]->meta("sel_columns_sep_after");
 		$date_as_text = $parms["tree_obj_ih"]->meta("sel_columns_date_as_text");
-
+		$show_as_date = $parms["tree_obj_ih"]->meta("sel_columns_show_as_date");
+		
 		$formatv = array(
 			"show" => $url,
 			"name" => $name,
@@ -1843,7 +1859,7 @@ class object_treeview_v2 extends class_base
 
 		$trs = safe_array($parms['tree_obj_ih']->meta("transform_cols"));
 		// columns
-		$str = "";
+		$str = "";//if(aw_global_get("uid") == "struktuur"){arr($date_as_text);}
 		foreach($col_list as $colid => $coln)
 		{
 			if ($sel_cols[$colid] == 1)
@@ -1853,7 +1869,7 @@ class object_treeview_v2 extends class_base
 					$content = $formatv[$colid];
 				}
 				else 
-				if (strpos($sel_columns_full_prop_info[$colid]['type'], "date") !== false)
+				if (strpos($sel_columns_full_prop_info[$colid]['type'], "date") !== false || !empty($show_as_date[$colid]))
 				{
 					$content = date("d.m.Y", $arr[$colid]);
 				}
