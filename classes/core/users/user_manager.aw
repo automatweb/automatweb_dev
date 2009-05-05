@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.19 2009/04/09 08:40:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.20 2009/05/05 15:43:10 instrumental Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -900,7 +900,7 @@ class user_manager extends class_base
 			),
 			array(
 				'name' => 'name',
-				'caption' => t("P&auml;risnimi"),
+				'caption' => t("Isik"),
 			),
 			array(
 				'name' => 'company',
@@ -983,6 +983,7 @@ class user_manager extends class_base
 				$r = $arr["request"];
 				$ol_args = array(
 					"class_id" => CL_USER,
+					"brother_of" => new obj_predicate_prop("id"),
 					"parent" => array(),
 					"status" => array(),
 					"lang_id" => array(),
@@ -1128,6 +1129,8 @@ class user_manager extends class_base
 				'username' => $popup_menu->get_menu(array(
 					"text" => parse_obj_name($o->prop('uid')),
 				)),
+				"name" => html::obj_change_url(user::get_person_for_user($o)),
+				/*
 				'name' => html::href(array(
 					'caption' => strlen($o->prop('real_name')) ? $o->prop('real_name') : '('.t("nimetu").')',
 					'url' => $this->mk_my_orb("change", array(
@@ -1135,6 +1138,7 @@ class user_manager extends class_base
 						'return_url' => get_ru()
 					), CL_USER),
 				)),
+				*/
 				'company' => join(', ', $companies),
 				'mail' => $o->prop('email'),
 				'last_active' => $o->prop('lastaction') ? date($df[2], $o->prop('lastaction')) : t("Pole kunagi sisse loginud"),
