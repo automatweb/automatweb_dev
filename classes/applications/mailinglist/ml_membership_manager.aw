@@ -104,8 +104,19 @@ class ml_membership_manager extends class_base
 
 		$inst = get_instance(CL_ML_MEMBER);
 
-		$mail_id = obj(get_instance(CL_USER)->get_current_person())->prop("email");
-		if(!is_oid($mail_id))
+		$p_obj = obj(get_instance(CL_USER)->get_current_person());
+		$mail_id = $p_obj->prop("email");
+		if((!is_oid($mail_id) || !$this->can("view", $mail_id)) && is_oid($p_obj->id()))
+		{
+			$mail_obj = $p_obj->get_first_obj_by_reltype("RELTYPE_EMAIL");
+			if(is_object($mail_obj))
+			{
+				$mail_id = $mail_obj->id();
+				$p_obj->set_prop("email", $mail_id);
+				$p_obj->save();
+			}
+		}
+		if(!is_oid($mail_id) || !$this->can("view", $mail_id))
 		{
 			return PROP_IGNORE;
 		}
@@ -142,8 +153,16 @@ class ml_membership_manager extends class_base
 	public function _set_membership($arr)
 	{
 		$inst = get_instance(CL_ML_MEMBER);
-		$mail_id = obj(get_instance(CL_USER)->get_current_person())->prop("email");
-		if(is_oid($mail_id))
+		$p_obj = obj(get_instance(CL_USER)->get_current_person());
+		$mail_id = $p_obj->prop("email");
+		if((!is_oid($mail_id) || !$this->can("view", $mail_id)) && is_oid($p_obj->id()))
+		{
+			$mail_obj = $p_obj->get_first_obj_by_reltype("RELTYPE_EMAIL");
+			$mail_id = $mail_obj->id();
+			$p_obj->set_prop("email", $mail_id);
+			$p_obj->save();
+		}
+		if(is_oid($mail_id) && $this->can("view", $mail_id))
 		{
 			$mail = obj($mail_id);
 			$subscribed = array();
@@ -164,8 +183,11 @@ class ml_membership_manager extends class_base
 						"lang_id" => array(),
 						"site_id" => array(),
 					));
-					$unsubscribed = array_merge($unsubscribed, $ol->ids());
-					$ol->delete();
+					if($ol->count() > 0)
+					{
+						$unsubscribed[] = $k;
+						$ol->delete();
+					}
 				}
 			}
 			if($arr["obj_inst"]->send_mail && is_oid($arr["obj_inst"]->ml_list) && $this->can("view", $arr["obj_inst"]->ml_list))
