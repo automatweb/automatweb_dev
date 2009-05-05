@@ -467,6 +467,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
+            <multiple>1</multiple>
             <caption>Objektipuu alati n&amp;amp;auml;htaval klassides</caption>
       </property>
       <property>

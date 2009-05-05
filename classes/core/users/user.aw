@@ -189,7 +189,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
         @property object_tree_classes_inherit_from type=relpicker field=meta method=serialize table=objects reltype=RELTYPE_USER
         @caption P&auml;ri puu objektid kasutajalt
 
-        @property object_tree_classes type=select field=meta method=serialize table=objects
+        @property object_tree_classes type=select field=meta method=serialize table=objects multiple=1
         @caption Objektipuu alati n&auml;htaval klassides
 
 	@property nfy_hd type=text subtitle=1 store=no
