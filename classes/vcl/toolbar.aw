@@ -668,6 +668,9 @@ class toolbar extends aw_template
 		@param name optional type=string
 			Name for button. Required if you want many of those on one toolbar
 
+		@param tooltip optional type=string default=Otsi
+			Custom tooltip for button. Defaults to "Otsi"
+	
 		@param pn required type=string
 			The html element name to stick the search results to
 
@@ -682,12 +685,12 @@ class toolbar extends aw_template
 	function add_search_button($arr)
 	{
 		$url = $this->mk_my_orb("do_search", $arr, "popup_search");
-		$s = t("Otsi");
+		$s = !empty($arr['tooltip']) ? $arr['tooltip'] : t("Otsi");
 		$this->add_button(array(
 			"name" => $arr["name"] ? $arr["name"] : "search",
 			"img" => "search.gif",
 			"url" => "javascript:aw_popup_scroll('$url','$s',".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
-			"tooltip" => t("Otsi"),
+			"tooltip" => $s
 		));
 		/* We can't use this, cuz the HTML that popup_search::get_popup_search_link provides, differs from the one we get from toolbar::add_button.
 		$i = get_instance("vcl/popup_search");
