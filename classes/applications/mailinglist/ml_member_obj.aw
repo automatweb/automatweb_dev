@@ -148,6 +148,7 @@ class ml_member_obj extends _int_object
 		return parent::save();
 	}
 */
+	/*	object::set_prop(brother_of, ): no property brother_of defined for current object! 
 	function delete()
 	{
 		$ol = new object_list(array(
@@ -169,6 +170,7 @@ class ml_member_obj extends _int_object
 		}
 		return parent::delete();
 	}
+	*/
 
 	private function conns_remain_unchanged($conns)
 	{
