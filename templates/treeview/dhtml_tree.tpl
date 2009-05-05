@@ -1,3 +1,4 @@
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript">
 
 var feeding_node;
