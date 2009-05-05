@@ -1,5 +1,44 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>data_source</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Andmeallikas</caption>
+      </property>
+      <property>
+            <name>aw_warehouses_tb</name>
+            <table>aw_warehouse_import</table>
+            <group>aw_warehouses</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>aw_warehouses_tb</field>
+            <caption>AW Laod toolbar</caption>
+      </property>
+      <property>
+            <name>aw_warehouses</name>
+            <table>aw_warehouse_import</table>
+            <group>aw_warehouses</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>aw_warehouses</field>
+            <caption>AW Laod</caption>
+      </property>
+      <property>
+            <name>config_table</name>
+            <table>aw_warehouse_import</table>
+            <group>import_warehouses</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>config_table</field>
+            <caption>Seaded</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_WAREHOUSE_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -8,6 +47,46 @@
             <prop_cb>1</prop_cb>
             <maintainer>smeedia</maintainer>
       </classinfo>
+      <groupinfo>
+            <general_general>
+                  <parent>general</parent>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+            </general_general>
+            <aw_warehouses>
+                  <parent>general</parent>
+                  <caption>AW Laod</caption>
+            </aw_warehouses>
+            <import_warehouses>
+                  <parent>general</parent>
+                  <caption>Imporditavad laod</caption>
+            </import_warehouses>
+            <import_status>
+                  <caption>Importide staatus</caption>
+            </import_status>
+            <product_status>
+                  <caption>Toodete import</caption>
+                  <parent>import_status</parent>
+            </product_status>
+            <product_prices>
+                  <caption>Toodete hinnad</caption>
+                  <parent>import_status</parent>
+            </product_prices>
+            <product_amounts>
+                  <caption>Toodete laoseisud</caption>
+                  <parent>import_status</parent>
+            </product_amounts>
+            <pricelists>
+                  <caption>Hinnakirjad</caption>
+                  <parent>import_status</parent>
+            </pricelists>
+            <customers>
+                  <caption>Kliendid</caption>
+                  <parent>import_status</parent>
+            </customers>
+            <import_timing>
+                  <caption>Importide ajastus</caption>
+            </import_timing>
+      </groupinfo>
       <tableinfo>
             <aw_warehouse_import>
                   <master_index>brother_of</master_index>
@@ -15,5 +94,12 @@
                   <index>aw_oid</index>
             </aw_warehouse_import>
       </tableinfo>
+      <reltypes>
+            <WAREHOUSE>
+                  <value>2</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </WAREHOUSE>
+      </reltypes>
 </properties>
 
