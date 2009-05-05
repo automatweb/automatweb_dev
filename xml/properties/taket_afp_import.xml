@@ -18,6 +18,33 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>local_products_file</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kohalik toodete fail</caption>
+      </property>
+      <property>
+            <name>warehouses_table</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>table</type>
+            <store>no</store>
+            <field>warehouses_table</field>
+            <caption>Laod</caption>
+      </property>
+      <property>
+            <name>import_link</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>text</type>
+            <store>no</store>
+            <field>import_link</field>
+            <caption>Import</caption>
+      </property>
+      <property>
             <name>warehouse</name>
             <group>general</group>
             <table>objects</table>
@@ -25,7 +52,17 @@
             <reltype>RELTYPE_WAREHOUSE</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Ladu</caption>
+            <caption>Ladu (ilmselt ei peaks siin olema)</caption>
+      </property>
+      <property>
+            <name>prod_fld</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROD_FLD</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Toodete kaust (ilmselt ei peaks siin olema)</caption>
       </property>
       <property>
             <name>org_fld</name>
@@ -35,7 +72,7 @@
             <reltype>RELTYPE_ORG_FLD</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Organisatsioonide kaust</caption>
+            <caption>Organisatsioonide kaust (ilmselt ei peaks siin olema)</caption>
       </property>
       <property>
             <name>amount</name>
@@ -45,7 +82,7 @@
             <field>meta</field>
             <method>serialize</method>
             <default>5000</default>
-            <caption>Mitu rida korraga importida</caption>
+            <caption>Mitu rida korraga importida (ilmselt ei peaks siin olema)</caption>
       </property>
       <property>
             <name>code_ctrl</name>
@@ -88,6 +125,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Organisatsioonide kaust</caption>
             </ORG_FLD>
+            <PROD_FLD>
+                  <value>4</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Toodete kaust</caption>
+            </PROD_FLD>
       </reltypes>
 </properties>
 
