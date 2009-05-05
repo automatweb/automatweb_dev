@@ -3,13 +3,59 @@
 class taket_afp_import_obj extends _int_object
 {
 	private $prod_fld;
-	private $warehouse;
+	private $org_fld;
+
+	private $warehouse; // ???
+	private $warehouses = array();
+
+	// short code controller
 	private $controller_inst;
 	private $controller_id;
-	private $db_obj; // this is a cache class, i use it to make sb queries
+
+	// this is a cache class, i use it to make db queries
+	private $db_obj; 
 
 	function get_data($arr)
 	{
+		$this->init_vars();
+		$this->print_line("Make a query so the remote files would be created::");
+		$this->create_remote_files();
+
+		$this->print_line("Download files:");
+		$this->download_data_files();
+
+		$this->generate_products_xml();
+
+		exit(1);
+	}
+
+	private function init_vars()
+	{
+		// ERROR REPORTING
+		automatweb::$instance->mode(automatweb::MODE_DBG);
+
+		// this will take some time
+		aw_set_exec_time(AW_LONG_PROCESS);
+
+		// controller for short product codes ...
+		if($this->controller_id = $this->prop("code_ctrl"))
+		{
+			$this->controller_inst = get_instance(CL_CFGCONTROLLER);	
+		}
+
+		$this->db_obj = $GLOBALS["object_loader"]->cache;
+		
+		$this->warehouses = $this->get_warehouses();
+
+		$this->prod_fld = $this->get_products_folder();
+		$this->org_fld = $this->get_suppliers_folder();
+	}
+
+	public function get_products_folder()
+	{
+		// I actually doubt that it is necessary to have products folder here 
+		// It belongs to this soon-to-come products import to warehouses class
+		// where i can configure how and where the prods will be imported
 		$wh = $this->prop("warehouse");
 
 		if($this->can("view", $wh))
@@ -32,7 +78,11 @@ class taket_afp_import_obj extends _int_object
 		{
 			die(t("Lao toodete kataloogi alla ei ole &otilde;igusi lisamiseks"));
 		}
+		return $prod_fld;
+	}
 
+	public function get_suppliers_folder()
+	{
 		$org_fld = $this->prop("org_fld");
 
 		if(!$org_fld)
@@ -43,58 +93,10 @@ class taket_afp_import_obj extends _int_object
 		{
 			die(t("Organisatsioonide kataloogi alla ei ole &otilde;igusi lisamiseks"));
 		}
-/* ???
-// might become handy actually, if I want to eventually some kind of products searching / loading things put into search class ...
-// but for now it is not needed 
-		$ol = new object_list(array(
-			"class_id" => CL_TAKET_SEARCH,
-			"site_id" => array(),
-			"lang_id" => array(),
-		));
-		$s_o = $ol->begin();
-		if(!$s_o)
-		{
-			die(t("S&uuml;steemis puudub taketi otsingu objekt"));
-		}
-*/
-		// controller for short product codes ...
-		if($this->controller_id = $this->prop("code_ctrl"))
-		{
-			$this->controller_inst = get_instance(CL_CFGCONTROLLER);	
-		}
 
-		$this->db_obj = $GLOBALS["object_loader"]->cache;
-		
-		$this->load_warehouses();
-/* ???
-		$this->whs[0] = $s_o->prop("warehouse0");
-		$this->whs[1] = $s_o->prop("warehouse1");
-		$this->whs[2] = $s_o->prop("warehouse2");
-		$this->whs[3] = $s_o->prop("warehouse3");
-		$this->whs[4] = $s_o->prop("warehouse4");
-		$this->whs[5] = $s_o->prop("warehouse5");
-*/
-		$this->prod_fld = $prod_fld;
-		$this->org_fld = $org_fld;
-
-		if ($arr['from_file'] == 1)
-		{
-			$this->get_data_from_file($arr);
-			return;
-		}
-
-		// this here probably never is needed ...
-		define('AMOUNT', $this->prop("amount"));
-		
-		require(aw_ini_get("basedir")."addons/ixr/IXR_Library.inc.php");
-	
-		$c = new IXR_Client("84.50.96.150", "/xmlrpc/index.php", "8080");
-		$c2 = new IXR_Client("84.50.96.150", "/xmlrpc/index.php", "8080");
-
-		$this->download($c, $c2);
-
+		return $org_fld;
 	}
-
+/*
 	private function download($c, $c2)
 	{
 		aw_set_exec_time(AW_LONG_PROCESS);
@@ -209,12 +211,136 @@ class taket_afp_import_obj extends _int_object
 		echo "[Iterations count: ".(float)($prod_offset / AMOUNT)." Overall time: ".(float)($overall_end - $overall_start)."]\n";
 		die();
 	}
+*/
+	private function create_remote_files()
+	{
+		$warehouses = $this->get_warehouses();
 
+		// Create products file in first (Kadaka) server
+		// TODO I should make it configurable which warehouse is used to get products from
+		$warehouse = new object(reset($warehouses));
+		$url = new aw_uri($warehouse->comment().'/index.php');
+		$url->set_arg('create_products_file', 1);
+
+		$this->print_line("Creating products file ... ", false);
+		$result = file_get_contents($url->get());
+		$this->print_line($result);
+
+		$urls = array();
+		foreach ($warehouses as $oid)
+		{
+			$warehouse = new object($oid);
+			$url = new aw_uri($warehouse->comment().'/index.php');
+			$url->set_arg('create_amounts_file', 1);
+
+			$urls[] = $url->get();
+		}
+
+		$this->print_line("Create amounts files (parallel)");
+		$res = $this->parallel_url_fetch($urls);
+		arr($res);
+
+		$this->print_line("Remote files created");
+	}
+
+	private function download_data_files() 
+	{
+		$this->print_line("Start downloading files");
+
+		$this->download_products_file();
+
+		$this->download_amounts_file();
+
+		$this->print_line("downloads done");
+	}
+
+	private function download_products_file()
+	{
+		$warehouses = $this->get_warehouses();
+
+		// lets download products file:
+		$wh = new object(reset($warehouses));
+		$adr = new aw_uri($wh->comment()."/prods.csv");
+
+		$dest_fld = aw_ini_get('site_basedir').'/files/products.csv';
+
+		$wget_command = 'wget -O '.$dest_fld.' "'.$adr->get().'"';
+
+		$this->print_line("Download products file ... ", false);
+		shell_exec($wget_command);
+	
+		$this->print_line("[done]");
+	}
+
+	private function download_amounts_file()
+	{
+		$warehouses = $this->get_warehouses();
+
+		$this->print_line("Download amounts files ... ");
+		// download amounts files
+		foreach ($warehouses as $oid => $name)
+		{
+			$o = new object($oid);
+			$adr = $o->comment();
+
+			$download_urls[$oid] = $adr."/amounts.csv";
+		}
+
+		$res = $this->parallel_url_fetch($download_urls);
+
+		foreach ($res as $oid => $v)
+		{
+			$filename = aw_ini_get('site_basedir').'/files/amounts_'.$oid.'.csv';
+			file_put_contents($filename, $v);
+			$this->print_line("saved file: ".$filename);
+		}
+	}
+
+	function generate_products_xml()
+	{
+		// TODO should make it configurable
+		$path = aw_ini_get('site_basedir').'/files/products.csv';
+		$lines = file($path);
+
+	
+		$keys = explode("\t", trim($lines[0]));
+		unset($lines[0]);
+
+		foreach ($lines as $line)
+		{
+			$items = explode("\t", $line);
+
+			foreach ($items as $k => $v)
+			{
+				$items[$k] = trim(urldecode($v));
+			}
+
+			$prod = array_combine($keys, $items);
+			$prods[$prod['product_code']] = $prod;
+
+			$suppliers[$prod['supplier_id']] = $prod['supplier_name'];
+		}
+
+		$xml = new SimpleXMLElement("<?xml version='1.0'?><products></products>");
+		
+		foreach ($prods as $code => $data)
+		{
+			$product = $xml->addChild('product');
+			foreach ($data as $key => $value)
+			{
+				$product->addChild($key, utf8_encode(htmlentities($value)));
+			}
+		}
+		$xml->asXML(aw_ini_get('site_basedir').'/files/products.xml');
+	}
+
+	// obsolete
 	public function get_data_from_file($arr)
 	{
-		// ERROR REPORTING
-		ini_set('display_errors', "stdout");
-		error_reporting(E_ALL);
+		$this->init_vars();
+
+		// get data files
+		$this->download_data_files();
 
 		if($cid = $this->prop("code_ctrl"))
 		{
@@ -250,8 +376,6 @@ class taket_afp_import_obj extends _int_object
 //		$this->update_suppliers($suppliers);
 
 		$this->update_products($prods);
-
-//		$o = new object($arr['oid']);
 
 		$end = $this->microtime_float();
 
@@ -497,6 +621,9 @@ class taket_afp_import_obj extends _int_object
 
 		$oid = $this->db_obj->db_last_insert_id();
 
+		// brother_of value has to be the same as oid
+		$this->db_obj->db_query("UPDATE objects set brother_of = ".$oid." WHERE oid = ".$oid);
+
 		$sql = "
 			INSERT INTO 
 				aw_shop_products 
@@ -508,7 +635,6 @@ class taket_afp_import_obj extends _int_object
 				short_code = '".$this->apply_controller($data['product_code'])."'
 		";
 		$this->db_obj->db_query($sql);
-		echo "Insert new product: code: (".$data['product_code'].") || oid: ".$oid."<br />\n";
 		return $oid;
 	}
 
@@ -520,7 +646,8 @@ class taket_afp_import_obj extends _int_object
 				objects
 			SET
 				name = '".addslashes($data['product_name'])."',
-				comment = '".addslashes($data['product_code'])."'
+				comment = '".addslashes($data['product_code'])."',
+				brother_of = ".$oid."
 			WHERE
 				oid = ".$oid."
 		";
@@ -631,6 +758,9 @@ class taket_afp_import_obj extends _int_object
 		$this->db_obj->db_query($sql);
 
 		$oid = $this->db_obj->db_last_insert_id();
+		
+		// brother_of value has to be the same as oid
+		$this->db_obj->db_query("UPDATE objects set brother_of = ".$oid." WHERE oid = ".$oid);
 
 		$sql = "
 			INSERT INTO 
@@ -651,7 +781,8 @@ class taket_afp_import_obj extends _int_object
 			UPDATE 
 				objects
 			SET
-				name = '".addslashes($data['product_name'])."'
+				name = '".addslashes($data['product_name'])."',
+				brother_of = ".$oid."
 			WHERE
 				oid = ".$oid."
 		";
@@ -681,6 +812,399 @@ class taket_afp_import_obj extends _int_object
 	
 	}
 
+
+	public function import_amounts($arr)
+	{
+
+		$this->init_vars();
+
+		// i need here:
+		// product objects ids <-> product codes lookup table
+		// so i can check if the product code has amount object with current warehouse or not ...
+		// create the product_oids <-> product_codes lut
+		$products_lut = array();
+		$sql = "
+			select
+				aw_oid,
+				code
+			from 
+				aw_shop_products
+		";
+		$this->db_obj->db_query($sql);
+		while ($row = $this->db_obj->db_next()){
+			$products_lut[$row['code']] = $row['aw_oid'];
+		}
+
+		foreach ($this->get_warehouses() as $oid)
+		{
+			$wh_obj = new object($oid);
+			echo "Update amounts in warehouse ".$wh_oid->name().": <br />\n";
+			flush();
+			$this->update_amounts($oid, $products_lut);
+		}
+	
+		exit();
+	}
+
+	// update amounts data in a warehouse
+	private function update_amounts($warehouse_oid, $products_lut)
+	{
+		if (!$this->can('view', $warehouse_oid))
+		{
+			echo "Couldn't load the Warehouse object (".$warehouse_oid.") <br />\n";
+			return false;
+		}
+
+		// I need existing amounts data from AW:
+		$sql = "
+			select
+				aw_oid,
+				amount,
+				warehouse,
+				product
+			from
+				aw_shop_warehouse_amount
+			where
+				warehouse = ".$warehouse_oid."
+		";
+		$existing_amounts_data = array();
+		$this->db_obj->db_query($sql);
+		while ($r = $this->db_obj->db_next())
+		{
+			$existing_amounts_data[$r['product']] = $r;
+		}
+		
+		$wh_obj = new object($warehouse_oid);
+		$amounts_data = file($wh_obj->comment()."/amounts.csv");
+		foreach ($amounts_data as $line)
+		{
+			$items = explode("\t", $line);
+			$product_oid = $products_lut[trim($items[0])];
+			if (empty($product_oid))
+			{
+				continue;
+			}
+			
+			if (empty($existing_amounts_data[$product_oid]))
+			{
+				// we don't have the amount object for this product in current warehouse
+				$this->add_amount_sql(array(
+					'product_code' => $items[0],
+					'product_oid' => $product_oid,
+					'amount' => trim($items[1]),
+					'warehouse_name' => $wh_obj->name(),
+					'warehouse_oid' => $warehouse_oid
+				));
+				echo "INSERT: ".$wh_obj->name()." - ".$items[0]." - ".$product_oid." - ".$items[1]."<br />\n";
+			}
+			else
+			{
+			
+				$this->update_amount_sql($existing_amounts_data[$product_oid]['aw_oid'], array(
+					'product_code' => $items[0],
+					'product_oid' => $product_oid,
+					'amount' => trim($items[1]),
+					'warehouse_name' => $wh_obj->name(),
+					'warehouse_oid' => $warehouse_oid
+				));
+				echo "UPDATE: ".$wh_obj->name()." - ".$items[0]." - ".$product_oid." - ".$items[1]."<br />\n";
+			
+			}
+			flush();
+		}
+	}
+
+	////
+	// product_code
+	// warehouse_name
+	// warehouse_oid
+	// amount
+	// product_oid
+	private function add_amount_sql($data)
+	{
+		$obj_base = $this->db_obj->db_fetch_array("select * from objects where class_id = '".CL_SHOP_WAREHOUSE_AMOUNT."' limit 1");
+		$obj_base = reset($obj_base);
+		$obj_base['oid'] = 0;
+		$obj_base['createdby'] = '110';
+		$obj_base['modifiedby'] = '110';
+		$obj_base['parent'] = $data['parent'];
+		// i should add prod code as well actually, to make the name more informative and therefore useful
+		$name = sprintf(t("Toote %s laoseis %s laos"), $data['product_code'], $data['warehouse_name']);
+		$obj_base['name'] = addslashes($name);
+
+		$sql = "
+			INSERT INTO 
+				objects 
+			VALUES (".implode(',', map('"%s"', $obj_base)).");
+		";
+
+		$this->db_obj->db_query($sql);
+
+		$oid = $this->db_obj->db_last_insert_id();
+
+		// brother_of value has to be the same as oid
+		$this->db_obj->db_query("UPDATE objects set brother_of = ".$oid." WHERE oid = ".$oid);
+
+		$sql = "
+			INSERT INTO 
+				aw_shop_warehouse_amount
+			SET
+				aw_oid = ".$oid.",
+				warehouse = ".$data['warehouse_oid'].",
+				amount = ".$data['amount'].",
+				product = ".$data['product_oid']."
+		";
+		$this->db_obj->db_query($sql);
+	
+	}
+
+	////
+	// product_code
+	// warehouse_name
+	// warehouse_oid
+	// amount
+	// product_oid
+	private function update_amount_sql($oid, $data)
+	{
+		$name = sprintf(t("Toote %s laoseis %s laos"), $data['product_code'], $data['warehouse_name']);
+		$sql = "
+			UPDATE 
+				objects
+			SET
+				name = '".addslashes($name)."',
+				brother_of = ".$oid."
+			WHERE
+				oid = ".$oid."
+		";
+		$this->db_obj->db_query($sql);
+
+		$sql = "
+			UPDATE
+				aw_shop_warehouse_amount
+			SET
+				warehouse = ".$data['warehouse_oid'].",
+				amount = ".$data['amount'].",
+				product = ".$data['product_oid']."
+			WHERE
+				aw_oid = ".$oid."
+		";
+		$this->db_obj->db_query($sql);
+	}
+
+	private function delete_amount_sql($oid)
+	{
+		$sql = "DELETE FROM objects WHERE oid = ".$oid;
+		$this->db_obj->db_query($sql);
+
+		$sql = "DELETE FROM aw_shop_warehouse_amount WHERE aw_oid = ".$oid;
+		$this->db_obj->db_query($sql);
+	}
+
+	public function import_prices($arr)
+	{
+		$this->init_vars();
+
+		$prices_data = $this->get_prices_data();
+		$products_data = $this->get_products_lut();
+
+		$existing_prices_data = array();
+		$sql = "select oid,parent from objects where class_id = ". CL_SHOP_ITEM_PRICE." and status > 0";
+		$this->db_obj->db_query($sql);
+		while ($row = $this->db_obj->db_next())
+		{
+			$existing_prices_data[$row['parent']] = $row['oid'];
+		}
+		arr(count($products_data));
+		foreach ($products_data as $code => $prod_oid)
+		{
+			if (!isset($prices_data[$code]))
+			{
+				echo "No price for product ".$code." (".$prod_oid.")<br />\n";
+				continue;
+			}
+			$prices = $prices_data[$code];
+			if (empty($existing_prices_data[$prod_oid]))
+			{
+				$this->add_price_sql(array(
+					'product_oid' => $prod_oid,
+					'product_code' => $code,
+					'price' => $prices['price']
+				));
+				echo "Add price ".$prices['price']." to product ".$code." (".$prod_oid.")<br />\n";
+			}
+			else
+			{
+				$this->update_price_sql($existing_prices_data[$prod_oid], array(
+					'product_oid' => $prod_oid,
+					'product_code' => $code,
+					'price' => $prices['price']
+				));
+				echo "Update price ".$prices['price']." to product ".$code." (".$prod_oid.")<br />\n";
+			
+			}
+		}
+
+		die('done');
+	}
+
+	private function add_price_sql($data)
+	{
+		$obj_base = $this->db_obj->db_fetch_array("select * from objects where class_id = '".CL_SHOP_ITEM_PRICE."' limit 1");
+		$obj_base = reset($obj_base);
+		$obj_base['oid'] = 0;
+		$obj_base['createdby'] = '110';
+		$obj_base['modifiedby'] = '110';
+		$obj_base['parent'] = $data['product_oid'];
+		// i should add prod code as well actually, to make the name more informative and therefore useful
+		$name = sprintf(t("%s hind"), $data['product_code']);
+		$obj_base['name'] = addslashes($name);
+		$obj_base['acldata'] = '';
+
+		$sql = "
+			INSERT INTO 
+				objects 
+			VALUES (".implode(',', map('"%s"', $obj_base)).");
+		";
+
+		$this->db_obj->db_query($sql);
+
+		$oid = $this->db_obj->db_last_insert_id();
+
+		// brother_of value has to be the same as oid
+		$this->db_obj->db_query("UPDATE objects set brother_of = ".$oid." WHERE oid = ".$oid);
+
+		$sql = "
+			INSERT INTO 
+				aw_shop_item_prices
+			SET
+				aw_oid = ".$oid.",
+				price = ".(int)$data['price'].",
+				product = ".$data['product_oid']."
+		";
+		$this->db_obj->db_query($sql);
+	
+	}
+
+	////
+	// product_code
+	// warehouse_name
+	// warehouse_oid
+	// amount
+	// product_oid
+	private function update_price_sql($oid, $data)
+	{
+		$name = sprintf(t("%s hind"), $data['product_code']);
+		$obj_base['name'] = addslashes($name);
+
+		$sql = "
+			UPDATE 
+				objects
+			SET
+				name = '".addslashes($name)."',
+				brother_of = ".$oid."
+			WHERE
+				oid = ".$oid."
+		";
+		$this->db_obj->db_query($sql);
+
+		$sql = "
+			UPDATE
+				aw_shop_item_prices
+			SET
+				price = ".(int)$data['price'].",
+				product = ".$data['product_oid']."
+			WHERE
+				aw_oid = ".$oid."
+		";
+		$this->db_obj->db_query($sql);
+	}
+
+	private function delete_price_sql($oid)
+	{
+		$sql = "DELETE FROM objects WHERE oid = ".$oid;
+		$this->db_obj->db_query($sql);
+
+		$sql = "DELETE FROM aw_shop_item_prices WHERE aw_oid = ".$oid;
+		$this->db_obj->db_query($sql);
+	}
+
+	public function get_prices_data()
+	{
+		$data_file = $this->get_products_file();
+		$lines = file($data_file);
+		
+		unset($lines[0]);
+
+		$result = array();
+		foreach ($lines as $line)
+		{
+			$fields = explode("\t", $line);
+			$result[trim($fields[0])] = array(
+				'price' => $fields[6],
+				'special_price' => $fields[7]
+			);
+		}
+		return $result;
+	}
+
+	public function get_pricelist_data()
+	{
+		$this->init_vars();
+		$whs = $this->get_warehouses();
+		$wh = new object(reset($whs));
+		$url = new aw_uri($wh->comment().'/index.php?get_discount_rules=1');
+		$data = unserialize(file_get_contents($url->get()));
+
+		$xml = new SimpleXMLElement("<customer_discounts />");
+		
+		foreach ($data as $value)
+		{
+			$product_cat = $xml->addChild('product_category');
+			foreach ($value as $k => $v)
+			{
+				switch( $k )
+				{
+					case 'KAT_KOODI':
+						$product_cat->addChild('name', utf8_encode($v));
+						break;
+					case 'KAT_ALARAJA':
+						$product_cat->addChild('lower_limit', utf8_encode($v));
+						break;
+					case 'KAT_YLARAJA':
+						$product_cat->addChild('upper_limit', utf8_encode($v));
+						break;
+					default:
+						$client_cat = $product_cat->addChild('client_category');
+						$client_cat->addChild('name', str_replace('KAT_ALE', '', $k));
+						$client_cat->addChild('value', $v);
+				}
+			}
+		}
+		return $xml->asXML();
+	}
+
+	public function get_products_lut()
+	{
+		$products_lut = array();
+		$sql = "
+			select
+				aw_oid,
+				code
+			from 
+				aw_shop_products
+		";
+		$this->db_obj->db_query($sql);
+		while ($row = $this->db_obj->db_next()){
+			$products_lut[$row['code']] = $row['aw_oid'];
+		}
+		return $products_lut;
+	}
+
+	public function get_products_file()
+	{
+		return aw_ini_get('site_basedir').'/files/products.csv';
+	}
+
 	private function apply_controller($code)
 	{
 		if($this->controller_inst)
@@ -690,8 +1214,14 @@ class taket_afp_import_obj extends _int_object
 		return false;
 	}
 
-	private function load_warehouses()
+	// query warehouses
+	public function get_warehouses()
 	{
+		if (!empty($this->warehouses))
+		{
+			return $this->warehouses;
+		}
+
 		$conns = $this->connections_from(array(
 			'type' => 'RELTYPE_WAREHOUSE',
 			'sort_by_num' => 'to.jrk',
@@ -700,54 +1230,60 @@ class taket_afp_import_obj extends _int_object
 
 		foreach ($conns as $conn)
 		{
-			$this->warehouses[$conn->prop('to')] = $conn->prop('to.name')." (".$conn->prop('to.jrk').")";
+			$this->warehouses[$conn->prop('to')] = $conn->prop('to');
 		}
+		return $this->warehouses;
 		
 	}
 
-/*
-	private function get_changed_products($prods)
+	function parallel_url_fetch($d)
 	{
-		$start = $this->microtime_float();
-		$odl = new object_data_list(
-			array(
-				'class_id' => CL_SHOP_PRODUCT
-			),
-			array(
-				CL_SHOP_PRODUCT => array(
-					'oid' => 'oid',
-					'name' => 'name',
-					'code' => 'product_code',
-					'search_term' => 'search_term',
-					'user1' => 'replacement_product_code'
-				)
-			)
-		);
+		$mh = curl_multi_init();
 
-		$counter=0;
-		foreach ($odl->arr() as $v)
+		$ch = array();
+		foreach($d as $nr => $url)
 		{
-			if ($this->is_product_changed($v, $prods[$v['product_code']])){
-				unset($prods[$v['product_code']]);
-				$counter++;
-			}
-			else
-			{
-				// product is changed, so lets remember the oid it has:
-				$prods[$v['product_code']]['oid'] = $v['oid'];
-			}
+			$ch[$nr] = curl_init();
+			curl_setopt($ch[$nr], CURLOPT_URL, $url);
+			curl_setopt($ch[$nr], CURLOPT_HEADER, 0);
+			curl_setopt($ch[$nr], CURLOPT_RETURNTRANSFER, true);
+			curl_multi_add_handle($mh, $ch[$nr]);
 		}
-		$end = $this->microtime_float();
-		echo "check time: ".(float)($end - $start)." [ $counter ]<br />\n";
 
-		return $prods;
+		$running = null;
+		//execute the handles
+		do 
+		{
+		    curl_multi_exec( $mh, $running );
+		} 
+		while ( $running > 0 );
+
+		$rv = array();
+		foreach($d as $nr => $url)
+		{
+			$rv[$nr] = curl_multi_getcontent($ch[$nr]);
+			curl_multi_remove_handle($mh, $ch[$nr]);
+		}
+
+		curl_multi_close($mh);
+
+		return $rv;
 	}
-*/
 
 	private function microtime_float()
 	{
 		list($usec, $sec) = explode(" ", microtime());
 		return ((float)$usec + (float)$sec);
+	}
+
+	private function print_line($str, $break = true)
+	{
+		echo $str;
+		if ($break === true)
+		{
+			echo "<br />\n";
+		}
+		flush();
 	}
 }
 

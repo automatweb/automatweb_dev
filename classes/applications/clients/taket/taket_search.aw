@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_search.aw,v 1.5 2009/04/17 08:06:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_search.aw,v 1.6 2009/05/05 13:50:21 dragut Exp $
 // taket_search.aw - Taketi Otsing 
 /*
 
@@ -129,9 +129,14 @@ class taket_search extends class_base implements main_subtemplate_handler
 
 		$this->read_template('search.tpl');
 
+		enter_function("taket_search::compose_params");
 		$param = $this->compose_params($arr);
+		exit_function("taket_search::compose_params");
 
-		$data = $this->get_products($param);
+		enter_function("taket_search::get_products");
+	//	$data = $this->get_products($param);
+		$data = $this->get_products($arr);
+		exit_function("taket_search::get_products");
 
 		exit_function("taket_search::parse_submit_info:1");
 		enter_function("taket_search::parse_submit_info:2");
@@ -141,61 +146,16 @@ class taket_search extends class_base implements main_subtemplate_handler
 
 		if($product_ids)
 		{
+			$amounts = $this->get_amounts(array(
+				'product_ids' => $product_ids
+			));
 		/*
-			$amt_ol = new object_list(array(
-				"class_id" => CL_SHOP_WAREHOUSE_AMOUNT,
-				"product" => $product_ids,
-				"site_id" => array(),
-				"lang_id" => array(),
+			// lets leave the purveyances alone at the moment
+			// I wonder anyway how the heck one will update those objects? Nobody will be setting them by hand per product ...
+			$purveyances = $this->get_purveyances(array(
+				'product_ids' => $product_ids
 			));
 		*/
-			$amt_ol = new object_data_list(
-				array(
-				"class_id" => CL_SHOP_WAREHOUSE_AMOUNT,
-				"product" => $product_ids,
-				"site_id" => array(),
-				"lang_id" => array(),
-				),
-				array(
-					CL_SHOP_WAREHOUSE_AMOUNT => array(
-						'amount',
-						'product',
-						'warehouse'
-					)
-				)
-			);
-
-			foreach($amt_ol->arr() as $o)
-			{
-			//	$data[$o->prop("product")]["amounts"][$o->prop("warehouse")] = $o->prop("amount");
-				$data[$o["product"]]["amounts"][$o["warehouse"]] = $o["amount"];
-			}
-	
-			$org_ol = new object_data_list(array(
-				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
-				"product" => $product_ids,
-				"site_id" => array(),
-				"lang_id" => array(),
-			),
-			array(
-				CL_SHOP_PRODUCT_PURVEYANCE => array(
-					"product" => "product", 
-					"warehouse" => "warehouse",
-					"date1" => "date1",
-					"date2" => "date2",
-					"days" => "days",
-					"weekday" => "weekday"
-				)
-			));
-			foreach($org_ol->arr() as $o)
-			{
-				$data[$o["product"]]["supplier_times"][$o["warehouse"]] = array(
-					"date1" => $o["date1"],
-					"date2" => $o["date2"],
-					"days" => $o["days"],
-					"day1" => $o["weekday"],
-				);
-			}	
 		}
 
 		exit_function("taket_search::parse_submit_info:2:1");
@@ -225,20 +185,26 @@ class taket_search extends class_base implements main_subtemplate_handler
 			for($i = 0; $i < 6; $i++)
 			{
 				$whid = $obj_inst->prop("warehouse".$i);
-				if($value["quantity"] <= $value['amounts'][$whid] && $value['amounts'][$whid])
+				$amount = $amounts[$value['oid']][$whid]['amount'];
+				if($value["amount"] <= $amount && $amount)
 				{
 					$in_stock[$value["oid"]][$i] = $this->parse('instockyes');
+					$in_stock[$value["oid"]][$whid] = $this->parse('instockyes');
 				}
 				//this product is out of stock
 				else
 				{
-					if($value['amounts'][$whid] > 0)
+					if($amount > 0)
 					{
 						$in_stock[$value["oid"]][$i] = $this->parse('instockpartially');
+						$in_stock[$value["oid"]][$whid] = $this->parse('instockpartially');
 					}
 					else
 					{
-						$in_stock[$value["oid"]][$i] =  $this->_get_date_by_supplier_id($value["supplier_times"][$whid]);
+					//	$in_stock[$value["oid"]][$i] =  $this->_get_date_by_supplier_id($value["supplier_times"][$whid]);
+					//	$in_stock[$value["oid"]][$whid] =  $this->_get_date_by_supplier_id($value["supplier_times"][$whid]);
+
+						$in_stock[$value["oid"]][$i] =  '-';
 					}
 				}
 			}
@@ -289,12 +255,18 @@ class taket_search extends class_base implements main_subtemplate_handler
 
 		// add all warehouse urls here
 		$urls = array(
-			0 => "http://84.50.96.150:8080/xmlrpc/index.php?db=1&".http_build_query(array("pc" => $page_prod_codes)),
-		//	1 => "http://88.196.208.74:8888/xmlrpc/index.php?db=1&".http_build_query(array("pc" => $page_prod_codes))
+			0 => "http://88.196.208.74:8888/xmlrpc/index.php?db=1&".http_build_query(array("pc" => $page_prod_codes))
+		//	1 => "http://84.50.96.150:8080/xmlrpc/index.php?db=1&".http_build_query(array("pc" => $page_prod_codes)),
 		);
 
 		$prs = $this->parallel_price_fetch($urls);
-		$prices = $prs[0];
+	//	$prices = $prs[0];
+		
+		$prices = array();
+		foreach ($prs[0] as $price_data)
+		{
+			$prices[$price_data['product_code']] = $price_data;
+		}
 
 		exit_function("taket_search::parse_submit_info:2:4");
 		exit_function("taket_search::parse_submit_info:2");
@@ -302,12 +274,13 @@ class taket_search extends class_base implements main_subtemplate_handler
 // this here is temporary as well - i think there should be better place to put this TAKET data into session! --dragut
 taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 
+//automatweb::$instance->mode(automatweb::MODE_DBG);
 		enter_function("taket_search::parse_submit_info:3");
 		// tsykkel yle toodete, joonistatakse toodete tabel
 		foreach($data as $value)
 		{
-			// XXX tmp:
-			$value['price'] = $prices[$value['product_code']]['price'];
+			// lets add the prices data to value array ...
+			$value += $prices[$value['product_code']];
 
 			//have to determine the discount for this user/*
 			$wx = 1;
@@ -323,7 +296,7 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 			{
 				$wx = 1.18;
 			}
-			$value['discount'] = (int)$value['kat_ale'.$_SESSION['TAKET']['ale']];
+			$value['discount'] = (int)$prices[$value['product_code']]['discount_'.$_SESSION['TAKET']['ale']];
 			if(!((int)$value['discount']))
 			{
 				$value['discount'] = 0;
@@ -337,13 +310,15 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 			{
 				$value['price'] = number_format(($value['price']/$wx), 2, '.', '');
 			}
-			if($value["tarjoushinta"] <= 0)
+
+			// special price (tarhoushinta)
+			if($value["special_price"] <= 0)
 			{
-				$value["tarjoushinta"] = "-";
+				$value["special_price"] = "-";
 			}
 			else
 			{
-				$value["tarjoushinta"] = number_format(($value["special_price"]/$wx), 2, '.', '');
+				$value["special_price"] = number_format(($value["special_price"]/$wx), 2, '.', '');
 			}
 			$value['finalPrice'] = number_format($value['price'] * ((100 - $value['discount']) / 100), 2, '.', '');
 
@@ -582,6 +557,52 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 
 	function get_products($param)
 	{
+		// lets try to make a sql query directly to aw_shop_products table
+		$sql = "
+			SELECT
+				aw_oid as oid,
+				code as product_code,
+				search_term,
+				user1 as replacement_product_code
+			FROM
+				aw_shop_products
+			WHERE
+				code like '%".$param['tootekood']."%' or 
+				short_code like '%".$param['tootekood']."%' or 
+				search_term like '%".$param['tootekood']."%' 
+			LIMIT 0,200
+		";
+		$sql = "
+			SELECT
+				aw_oid as oid
+			FROM
+				aw_shop_products
+			WHERE
+				code like '%".$param['tootekood']."%' or 
+				short_code like '%".$param['tootekood']."%' or 
+				search_term like '%".$param['tootekood']."%' 
+			LIMIT 0,200
+		";
+
+		enter_function("get_products::1");
+		$this->db_query($sql);
+		exit_function("get_products::1");
+		enter_function("get_products::2");
+		while ($r = $this->db_next())
+		{
+			$data[$r['oid']] = $r['oid'];
+		}
+		exit_function("get_products::2");
+//		return $data;
+//arr($data);
+		enter_function("get_products::3");
+		$param = array(
+			'class_id' => CL_SHOP_PRODUCT,
+			'oid' => $data,
+			"lang_id" => array(),
+			"site_id" => array()
+		);
+		// search with storage
 		$fetch = array(
 			CL_SHOP_PRODUCT => array(
 				'code' => 'product_code',
@@ -590,12 +611,14 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 				'user1' => 'replacement_product_code'
 			)
 		);
-
+		$param["join_strategy"] = "data";
 		$odl = new object_data_list($param, $fetch);
 
 		$products = $odl->arr();
 		$product_ids = array_keys($products);
+		exit_function("get_products::3");
 
+		enter_function("get_products::4");
 		// get replacement products:
 		$replacements = array();
 		foreach ($products as $item)
@@ -618,7 +641,7 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 			);
 			$replacements = $repl_odl->arr();
 		}
-
+		exit_function("get_products::4");	
 		return $products + $replacements;
 /*
 		$prods = array();
@@ -682,6 +705,91 @@ taket_users_import::update_user_info(array('uid' => aw_global_get('uid')));
 		}
 		return $data;
 */
+	}
+
+	function get_amounts($arr)
+	{
+		$product_ids = $arr['product_ids'];
+
+		// anyway, the storage here is slow as hell as usual, so lets try to solve this with plain sql:
+		$sql = "
+			SELECT
+				amount,
+				product,
+				warehouse
+			FROM
+				aw_shop_warehouse_amount
+			WHERE
+				product IN (".implode(',', $product_ids).")
+		";
+
+		$this->db_query($sql);
+		while ($row = $this->db_next())
+		{
+			$result[$row['product']][$row['warehouse']] = $row;
+		}
+
+		return $result;
+
+		// for some reason, this object_data_list doesn't found any amount data, though, there are some!
+		// mkai, this might be related to fact, that there should be connection from amount obj to product obj
+		// but right now there isn't any - there is only product id saved to amount object's property --dragut
+		$amt_ol = new object_data_list(
+			array(
+			"class_id" => CL_SHOP_WAREHOUSE_AMOUNT,
+			"product" => $product_ids,
+			"site_id" => array(),
+			"lang_id" => array(),
+			),
+			array(
+				CL_SHOP_WAREHOUSE_AMOUNT => array(
+					'amount',
+					'product',
+					'warehouse'
+				)
+			)
+		);
+/*
+		foreach($amt_ol->arr() as $o)
+		{
+			$data[$o["product"]]["amounts"][$o["warehouse"]] = $o["amount"];
+		}
+*/
+		return $amt_ol->arr();
+	}
+
+	function get_purveyances($arr)
+	{
+		$product_ids = $arr['product_ids'];
+
+		$org_ol = new object_data_list(array(
+			"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+			"product" => $product_ids,
+			"site_id" => array(),
+			"lang_id" => array(),
+		),
+		array(
+			CL_SHOP_PRODUCT_PURVEYANCE => array(
+				"product" => "product", 
+				"warehouse" => "warehouse",
+				"date1" => "date1",
+				"date2" => "date2",
+				"days" => "days",
+				"weekday" => "weekday"
+			)
+		));
+	/*
+		foreach($org_ol->arr() as $o)
+		{
+			$data[$o["product"]]["supplier_times"][$o["warehouse"]] = array(
+				"date1" => $o["date1"],
+				"date2" => $o["date2"],
+				"days" => $o["days"],
+				"day1" => $o["weekday"],
+			);
+		}
+	*/
+		return $org_ol->arr();
 	}
 
 	function on_get_subtemplate_content($arr)

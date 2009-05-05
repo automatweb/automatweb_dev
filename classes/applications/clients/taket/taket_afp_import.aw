@@ -11,17 +11,30 @@
 @property name type=textbox
 @caption Nimi
 
+@property local_products_file type=textbox field=meta method=serialize
+@caption Kohalik toodete fail
+
+@property warehouses_table type=table
+@caption Laod
+
+@property import_link type=text store=no
+@caption Import
+
 @property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE field=meta method=serialize
-@caption Ladu
+@caption Ladu (ilmselt ei peaks siin olema)
+
+@property prod_fld type=relpicker reltype=RELTYPE_PROD_FLD field=meta method=serialize
+@caption Toodete kaust (ilmselt ei peaks siin olema)
 
 @property org_fld type=relpicker reltype=RELTYPE_ORG_FLD field=meta method=serialize
-@caption Organisatsioonide kaust
+@caption Organisatsioonide kaust (ilmselt ei peaks siin olema)
 
 @property amount type=textbox field=meta method=serialize default=5000
-@caption Mitu rida korraga importida
+@caption Mitu rida korraga importida (ilmselt ei peaks siin olema)
 
 @property code_ctrl type=relpicker reltype=RELTYPE_CODE_CONTROLLER field=meta method=serialize
 @caption L&uuml;hikese koodi kontroller
+
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption Ladu
@@ -31,9 +44,12 @@
 
 @reltype ORG_FLD value=3 clid=CL_MENU
 @caption Organisatsioonide kaust
+
+@reltype PROD_FLD value=4 clid=CL_MENU
+@caption Toodete kaust
 */
 
-class taket_afp_import extends class_base
+class taket_afp_import extends class_base implements warehouse_import_if
 {
 	function taket_afp_import()
 	{
@@ -77,17 +93,66 @@ class taket_afp_import extends class_base
 			"img" => "import.gif",
 			"tooltip" => t("Impordi tooteandmed"),
 		));
+	}
 
-		$tb->add_button(array(
-			"name" => "import_data_from_file",
-			"action" => "import_data_from_file",
-			"img" => "import.gif",
-			"tooltip" => t("Impordi tooteandmed failist"),
+	function _get_warehouses_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'warehouse',
+			'caption' => t('Ladu')
 		));
+
+		$t->define_field(array(
+			'name' => 'address',
+			'caption' => t('Aadress')
+		));
+
+		$warehouses = $arr['obj_inst']->get_warehouses();
+
+		foreach ($warehouses as $wh_oid)
+		{
+			$wh = new object($wh_oid);
+
+			$t->define_data(array(
+				'warehouse' => $wh->name(),
+				'address' => $wh->comment()
+			));
+		}
+
+	}
+
+	function _get_import_link($arr)
+	{
+		$links[] = html::href(array(
+			'caption' => t('K&auml;ivita import'),
+			'url' => $this->mk_my_orb('import_data', array(
+				'id' => $arr['obj_inst']->id(),
+				'return_url' => get_ru()
+			))
+		));
+		$links[] = html::href(array(
+			'caption' => t('Laoseisu import'),
+			'url' => $this->mk_my_orb('import_amounts', array(
+				'id' => $arr['obj_inst']->id(),
+				'return_url' => get_ru()
+			))
+		));
+		$links[] = html::href(array(
+			'caption' => t('Hindade import'),
+			'url' => $this->mk_my_orb('import_prices', array(
+				'id' => $arr['obj_inst']->id(),
+				'return_url' => get_ru()
+			))
+		));
+	
+		$arr['prop']['value'] = implode(' | ', $links);
 	}
 
 	/**
-	@attrib name=import_data
+	@attrib name=import_data all_args=1
 	**/
 	function import_data($arr)
 	{
@@ -99,14 +164,25 @@ class taket_afp_import extends class_base
 	}
 
 	/**
-	@attrib name=import_data_from_file
+		@attrib name=import_amounts all_args=1
 	**/
-	function import_data_from_file($arr)
+	function import_amounts($arr)
 	{
-		$arr['from_file'] = 1;
 		if($this->can("view", $arr["id"]))
 		{
-			obj($arr["id"])->get_data($arr);
+			obj($arr["id"])->import_amounts($arr);
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=import_prices all_args=1
+	**/
+	function import_prices($arr)
+	{
+		if($this->can("view", $arr["id"]))
+		{
+			obj($arr["id"])->import_prices($arr);
 		}
 		return $arr["post_ru"];
 	}
@@ -114,6 +190,11 @@ class taket_afp_import extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function get_warehouse_list()
+	{
+		
 	}
 }
 
