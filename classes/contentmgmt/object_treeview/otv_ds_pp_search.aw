@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.14 2009/05/05 13:21:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.15 2009/05/06 13:41:44 markop Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -30,6 +30,9 @@
 
 @property stbl_t type=table no_caption=1
 @caption Otsinguvormi tulemuste tabel
+
+@property result_default_order type=select
+@caption Otsinguvormi vaikimisi j&auml;rjestuse suund
 
 
 @groupinfo srch caption="Otsi" submit_method=get
@@ -82,6 +85,9 @@ class otv_ds_pp_search extends class_base
 
 			case "srch_res":
 				$this->do_srch_res_t($arr);
+				break;
+			case "result_default_order":
+				$prop["options"] = array("0" => t("Kasvav") , "desc" => t("kahanev"));
 				break;
 		};
 		return $retval;
@@ -456,7 +462,11 @@ class otv_ds_pp_search extends class_base
 		}
 
 		if ($td["__defaultsort"] != "")
-		{	
+		{
+			if($o->prop("result_default_order"))
+			{
+				$t->set_default_sorder($o->prop("result_default_order"));
+			}
 			$t->set_default_sortby("aw_".$td["__defaultsort"]);
 		}
 	}

@@ -53,6 +53,15 @@
             <caption>Otsinguvormi tulemuste tabel</caption>
       </property>
       <property>
+            <name>result_default_order</name>
+            <table>objects</table>
+            <group>stbl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Otsinguvormi vaikimisi j&amp;amp;auml;rjestuse suund</caption>
+      </property>
+      <property>
             <name>srch</name>
             <table>objects</table>
             <group>srch</group>
