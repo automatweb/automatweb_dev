@@ -496,6 +496,16 @@ class doc extends class_base
 				$this->_comments_tbl($arr);
 				break;
 		};
+		
+		if(in_array($data["name"], array("content", "lead")) && !empty($data["richtext"]))
+		{
+			$cb_nobreaks = $arr["obj_inst"]->meta("cb_nobreaks");
+			if(empty($cb_nobreaks[$data["name"]]))
+			{
+				$data["value"] = nl2br($data["value"]);
+			}
+		}
+
 		return $retval;
 	}
 
