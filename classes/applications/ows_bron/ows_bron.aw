@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.51 2009/04/01 10:54:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.52 2009/05/06 13:12:00 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -3010,6 +3010,96 @@ $rate_ids = array();
 			"CURRENCIES" => $tmp,
 		));
 
+//javascript
+		// hotel indices
+		$hotel_ids = array(
+			"27" => "OLY",
+			"37" => "CENT",
+			"39" => "PARK",
+			"40" => "LAT",
+			"42" => "LIET",
+			"17380" => "NER",
+			"41" => "RIDZ",
+			"18941" => "ELIZ"
+		);
+
+		$error = false;
+		if (isset($_GET["i_location"]) and isset($hotel_ids[$_GET["i_location"]]))
+		{
+			$resort = $hotel_ids[$_GET["i_location"]];
+		}
+
+		if (!empty($resort))
+		{
+			$cache = new cache();
+			$key = "RevalORSService_GetRoomsDayTypes_" . $resort;
+			$expiration_comparison_timestamp = time() - 3600;// if cached version older, re-read
+			$js_array = $cache->file_get_ts($key, $expiration_comparison_timestamp);
+			if (true || false === $js_array)
+			{
+				$colour_index = array(
+					"A" => "high",
+					"B" => "medium",
+					"C" => "medium",
+					"D" => "medium",
+					"E" => "low",
+					"F" => "low",
+					"G" => "low"
+				);
+		
+				$from = date("Y").'-'.date("m").'-'.date("d").'T00:00:00';
+				$to = time() + 180*86400;
+				$to = date("Y", $to).'-'.date("m", $to).'-'.date("d", $to).'T00:00:00';
+		
+				$parameters = array();
+				$parameters["Resort"] = $resort;
+				$parameters["FirstDate"] = $from;
+				$parameters["LastDate"] = $to;
+				$return = $this->do_orb_method_call(array(
+					"action" => "GetRoomsDayTypes",
+					"class" => "http://revalhotels.com/ORS/webservices/",
+					"ns_end" => "/",
+					"params" => $parameters,
+					"method" => "soap",
+					"server" => "http://195.250.171.36/RevalORSService/RRCServices.asmx"
+				));
+		
+				if (isset($return["GetRoomsDayTypesResult"]["RoomsDayTypeClass"]))
+				{
+					$result = $return["GetRoomsDayTypesResult"]["RoomsDayTypeClass"];
+		
+					$js_array = array();
+		
+					foreach ($result as $data)
+					{
+						$date = explode("-", $data["DayTypeDate"], 3);
+						$date = $date[0] . "-" . (int) $date[1] . "-" . (int) substr($date[2], 0, 2);
+						$colour = $colour_index[$data["RoomsDayType"]];
+		
+						$js_array[] = "'" . $date . "': '" . $colour . "'";
+					}
+		
+					$js_array = "var predefDateBG = {\n" . implode(",\n", $js_array) . "\n};";
+		
+					// write to cache
+					$cache->file_set($key, serialize($js_array));
+				}
+				else
+				{
+					$error = "Error reading data";
+				}
+			}
+			elseif (!$error)
+			{ // return cached version
+			/* dbg */ if ($dbg) { echo "reading from cache<br />";var_dump($js_array); }
+				$js_array = unserialize($js_array);
+			}
+		}
+		else
+		{
+			$js_array = "var predefDateBG = {};";
+		}
+		$this->vars(array("javascript" =>   $js_array));
 
 		return $this->parse();
 	}
