@@ -841,7 +841,7 @@ class bug_tracker extends class_base
 				$prop["value"] = '<div style="color:black">'.t("Fatal error").'</div>';
 				$prop["value"] .= '<div style="color:green">'.t("Vajab tagasisidet").'</div>';
 				$prop["value"] .= '<div style="color:red">'.t("T&auml;htaeg &uuml;le").'</div>';
-				$prop["value"] .= '<div style="color:yellow">'.t("T&auml;htaeg l&auml;hedal").'</div>';
+				$prop["value"] .= '<div style="color:orange">'.t("T&auml;htaeg l&auml;hedal").'</div>';
 				break;
 
 			case "sp_tb":
