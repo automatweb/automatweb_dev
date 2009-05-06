@@ -3157,6 +3157,9 @@ class task extends class_base
 					"reltype" => "RELTYPE_ROW",
 				));
 				$task->connect(array("to"=> $row, "type" => "RELTYPE_ROW"));
+				$ro = obj($row);
+				$ro->set_prop("task" , $task->id());
+				$ro->save();
 			}
 		}
 		else
