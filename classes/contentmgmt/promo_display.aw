@@ -247,7 +247,7 @@ if (!empty($_GET["PROMO_DBG"]))
 		$dsdi_list_by_promo = array();
 		foreach($dsdi_cache as $dsdi_con)
 		{
-			$dsdi_list_by_promo[$dsdi_con["from"]][$dsdi_con["type"]][$dsdi_con["to"]] = $dsdi_con["to"];
+			$dsdi_list_by_promo[$dsdi_con["from"]][$dsdi_con["reltype"]][$dsdi_con["to"]] = $dsdi_con["to"];
 		}
 
 	
