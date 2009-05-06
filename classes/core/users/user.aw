@@ -1722,7 +1722,7 @@ EOF;
 		@returns
 		Person object id
 	**/
-	public static function get_person_for_user(object $u)
+	public function get_person_for_user(object $u)
 	{
 		aw_disable_acl();
 		$person_c = $u->connections_from(array(
@@ -1779,7 +1779,7 @@ EOF;
 		else
 		{
 			aw_restore_acl();
-			if (aw_global_get("uid") == $u->prop("uid") && !self::can("edit", $person_c->prop("to")))
+			if (aw_global_get("uid") == $u->prop("uid") && !$this->can("edit", $person_c->prop("to")))
 			{
 				aw_disable_acl();
 				$p = obj($person_c->prop("to"));
