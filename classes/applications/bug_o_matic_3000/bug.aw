@@ -332,6 +332,7 @@ define("BUG_FATALERROR", 11);
 define("BUG_TESTING", 12);
 define("BUG_VIEWING", 13);
 define("BUG_DEVORDER", 14);
+define("BUG_VIEWED", 15);
 
 class bug extends class_base
 {
@@ -347,13 +348,14 @@ class bug extends class_base
 			BUG_INPROGRESS => t("Tegemisel"),
 			BUG_DONE => t("Valmis"),
 			BUG_VIEWING => t("&Uuml;levaatamisel"),
+			BUG_VIEWED => t("&Uuml;le vaadatud"),
 			BUG_TESTING => t("Testimisel"),
 			BUG_TESTED => t("Testitud"),
 			BUG_CLOSED => t("Suletud"),
 			BUG_INCORRECT => t("Vale teade"),
 			BUG_NOTREPEATABLE => t("Kordamatu"),
 			BUG_NOTFIXABLE => t("Parandamatu"),
-			BUG_WONTFIX => t("Ei paranda"),
+			BUG_WONTFIX => t("Ei tee"),
 			BUG_FEEDBACK => t("Vajab tagasisidet"),
 			BUG_FATALERROR => t("Fatal error"),
 			BUG_DEVORDER => t("Arendustellimus"),
@@ -1561,6 +1563,7 @@ class bug extends class_base
 					//$this->_add_comment($arr["obj_inst"], $com);
 					$this->add_comments[] = $com;
 					$this->notify_monitors = true;
+					$this->newwho = $prop["value"];
 				}
 				if($this->who_set)
 				{
@@ -1753,7 +1756,7 @@ class bug extends class_base
 		return strcasecmp($o1->prop("lastname"), $o2->prop("lastname"));
 	}
 
-	function notify_monitors($bug, $comment)
+	function notify_monitors($bug, $comment, $old_state = null, $new_state = null)
 	{
 		$monitors = $bug->prop("monitors");
 		// if the status is right, then add the creator of the bug to the list
@@ -1812,17 +1815,24 @@ class bug extends class_base
 					$new_s = $this->_cust_new_status;
 				}
 			}
+			if(stripos($comment, "kellele muudeti") !== false && $bt->prop("send_newwho_mails"))
+			{
+				$newwho = $bug->prop("who");
+			}
 		}
 		elseif($bug->class_id() == CL_DEVELOPMENT_ORDER)
 		{
 			$mails_var = "st_mail_groups_devo";
 			$get_mg = true;
+			$old_s = $old_state;
+			$new_s = $new_state;
 		}
 		if($bt && $get_mg)
 		{
 			$mg = $bt->meta($mails_var);
 		}
 		$pi = get_instance(CL_CRM_PERSON);
+		$adrs = array();
 		foreach(array_unique($monitors) as $person)
 		{
 			if(!$this->can("view", $person))
@@ -1874,6 +1884,10 @@ class bug extends class_base
 				{
 					$cont = true;
 				}
+				if(!$bt_send && $newwho && $newwho == $person)
+				{
+					$cont = false;
+				}
 			}
 			elseif($this->comment_for_all  || $this->new_bug)
 			{
@@ -1888,17 +1902,19 @@ class bug extends class_base
 			{
 				$email_obj = new object($email);
 				$addr = $email_obj->prop("mail");
-				if (is_email($addr))
+				if (is_email($addr) && array_search($addr, $adrs) === false)
 				{
-					$notify_addresses[] = $addr;
+					$adrs[] = $addr;
+					$notify_addresses[] = array("adr" => $addr, "person" => $person_obj);
 				};
-			};
-		};
+			}
+		}
 		$addrs = explode(",",$bug->prop("bug_mail"));
 		foreach($addrs as $addr)
 		{
-			if (is_email($addr))
+			if (is_email($addr) && array_search($addr, $adrs) === false)
 			{
+				$adrs[] = $addr;
 				$notify_addresses[] = $addr;
 			};
 		};
@@ -1907,13 +1923,57 @@ class bug extends class_base
 		{
 			return false;
 		};
-		foreach(array_unique($notify_addresses) as $adr)
+		foreach($notify_addresses as $data)
 		{
+			$adr = $data["adr"] ? $data["adr"] : $data;
 			$oid = $bug->id();
 			$name = $bug->name();
 			$uid = aw_global_get("uid");
 
-			$msgtxt = t("Bug") . ": " . $this->mk_my_orb("change",array("id" => $oid)) . "\n";
+			$admin = true;
+			if($data["person"])
+			{
+				$uo = $pi->has_user($data["person"]);
+				$conn = $uo->connections_from(array(
+					"type" => "RELTYPE_GRP",
+				));
+				$hi_pri = 0;
+				foreach($conn as $c)
+				{
+					$pri = $c->to()->prop("priority");
+					if($pri > $hi_pri)
+					{
+						$grp = $c->to();
+					}
+				}
+				if($grp->prop("can_admin_interface"))
+				{
+					$admin = true;
+				}
+				else
+				{
+					$admin = false;
+				}
+			}
+
+			$bug_url = $this->mk_my_orb("change", array("id" => $oid), CL_BUG, $admin);
+			if(!$admin)
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_BUGTRACK_DISPLAY,
+					"site_id" => array(),
+					"lang_id" => array(),
+				));
+				$o = $ol->begin();
+				if($o)
+				{
+					$sect = $o->prop("bug_doc");
+					$bug_url = $this->mk_my_orb("change", array("section" => $sect, "id" => $oid), CL_BUG, $admin);
+				}
+				$bug_url = str_replace(array("orb.aw", "automatweb/"), "", $bug_url);
+			}
+
+			$msgtxt = t("Bug") . ": " . $bug_url . "\n";
 			$msgtxt .= t("Summary") . ": " . $name . "\n";
 			$msgtxt .= t("URL") . ": " . $bug->prop("bug_url") . "\n";
 			$msgtxt .= t("Status"). ": " . $this->bug_statuses[$bug->prop("bug_status")] . "\n";
@@ -2325,9 +2385,9 @@ class bug extends class_base
 			return;
 		}
 		// email any persons interested in status changes of that bug
-		if ($notify)
+		if ($notify || true)
 		{
-			$this->notify_monitors($bug, $comment);
+			$this->notify_monitors($bug, $comment, $old_state, $new_state);
 		}
 //print "kasutaja: ".aw_global_get("uid");
 		$p = get_current_person()->id();

@@ -121,6 +121,9 @@ if(!defined("BUG_STATUS_CLOSED"))
 	@property send_monitor_mails type=checkbox ch_value=1 default=1 field=meta method=serialize
 	@caption Saada j&auml;lgijatele meile
 
+	@property send_newwho_mails type=checkbox ch_value=1 default=0 field=meta method=serialize
+	@caption Saada uuele tegijale alati meil
+
 	@property dorder_mail_contents type=textarea rows=10 cols=50 field=meta method=serialize
 	@caption Arendustellimuse loomise meil
 
@@ -953,6 +956,13 @@ class bug_tracker extends class_base
 				else
 				{
 					$prop["value"] = $arr["request"][$prop["name"]];
+				}
+				break;
+
+			case "send_newwho_mails":
+				if($arr["obj_inst"]->prop("send_monitor_mails"))
+				{
+					return PROP_IGNORE;
 				}
 				break;
 		}

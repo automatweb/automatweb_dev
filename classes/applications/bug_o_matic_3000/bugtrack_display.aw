@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.24 2009/02/06 13:33:28 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.25 2009/05/06 11:07:18 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -165,7 +165,7 @@ class bugtrack_display extends class_base
 	{
 		foreach($ol->arr() as $oid => $obj)
 		{
-			if($arr["request"]["group"] == "solved" && ($obj->prop("bug_status")!=3 && $obj->prop("bug_status")!=9))
+			if($arr["request"]["group"] == "solved" && ($obj->prop("bug_status")!=3 && $obj->prop("bug_status")!=9) && $obj->prop("bug_status") != 13 && $obj->prop("bug_status") != 15 && $obj->prop("bug_status") != 6 && $obj->prop("bug_status") != 7 && $obj->prop("bug_status") != 8)
 			{
 				continue;
 			}
@@ -210,6 +210,12 @@ class bugtrack_display extends class_base
 					{
 						$value = $obj->prop($field["bugprop"]);
 						if($field["bugprop"] == "bug_status")
+						{
+							$b = get_instance(CL_BUG);
+							$statuses = $b->get_status_list();
+							$value = $statuses[$value];
+						}
+						elseif($field["bugprop"] == "cust_status")
 						{
 							$b = get_instance(CL_BUG);
 							$statuses = $b->get_status_list();
