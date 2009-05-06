@@ -1579,6 +1579,25 @@ class event_search extends class_base
 			$si = __get_site_instance();
 			$has_proc = method_exists($si, "handle_parse_event_field");
 
+			$col_count = 0;
+			//teeb enne
+			foreach($tabledef as $key => $propdef)
+			{
+				if(!$propdef["active"])
+				{
+					continue;
+				}
+				if($key == "content")
+				{
+					continue;
+				}
+				$col_count++;
+			}
+			$this->vars(array(
+				"col_count" => $col_count,
+			));
+
+
 			$aliasmrg = get_instance("alias_parser");
 			foreach($groups as $gkey => $edata)
 			{
