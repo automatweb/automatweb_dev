@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.151 2009/02/12 11:03:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.152 2009/05/06 12:31:20 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -1486,7 +1486,7 @@ class planner extends class_base
 					$c = array();
 					foreach($event["parts"] as $part)
 					{
-						list($fn, $ln) = explode(" ", $part["name"]);
+						list($fn, $ln) = explode(" ", trim($part["name"]));
 						
 						$c[] = html::href(array(
 							"caption" => $fn,
