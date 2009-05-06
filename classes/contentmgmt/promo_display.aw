@@ -101,7 +101,6 @@ if (!empty($_GET["PROMO_DBG"]))
 				continue;
 			}
 			
-			$promo_link = $this->get_promo_link($o);
 
 			$found = false;
 
@@ -502,6 +501,7 @@ if (!empty($_GET["PROMO_DBG"]))
 					$image = $i->make_img_tag($image_url);
 				}
 
+				$promo_link = $this->get_promo_link($o);
 				$inst->vars_safe(array(
 					"comment" => $o->trans_get_val("comment"),
 					"title" => $o->trans_get_val("name"), 
