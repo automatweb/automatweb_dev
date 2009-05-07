@@ -3626,6 +3626,7 @@ class bug_tracker extends class_base
 	function aw_firefoxtools_gantt($arr)
 	{
 		$chart = $this->_gantt(& $arr);
+		die($chart->draw_chart ());
 		$rows = $chart->get_rows();
 
 		$out = "menu = [";

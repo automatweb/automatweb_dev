@@ -232,6 +232,7 @@ class gantt_chart extends class_base
 	public function get_rows ($arr)
 	{
 		$rows = array();
+		$this->sort_data ();
 		foreach ($this->rows as $row)
 		{
 			$rows[] = $row;
