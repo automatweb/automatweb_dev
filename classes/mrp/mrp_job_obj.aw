@@ -87,7 +87,9 @@ class mrp_job_obj extends _int_object
 					throw new awex_obj_class("Invalid resource parameter. Not a resource object");
 				}
 
-				$this->set_prop("resource", $resource->id());
+				$this->awobj_set_resource($resource->id());
+
+				// init with resource defaults
 				$this->set_prop("pre_buffer", $resource->prop("default_pre_buffer"));
 				$this->set_prop("post_buffer", $resource->prop("default_post_buffer"));
 				$this->set_prop("min_batches_to_continue_wf", $resource->prop("default_min_batches_to_continue_wf"));
@@ -376,7 +378,7 @@ class mrp_job_obj extends _int_object
 					}
 				}
 			}
-			
+
 			if($this->prop("state") == self::STATE_PLANNED)
 			{
 				$ws = $res->prop("workspace");
@@ -606,7 +608,7 @@ class mrp_job_obj extends _int_object
 		foreach($ol->arr() as $o){$o->set_prop("used_amount", $amount);$o->save();}
 	}
 
-/** Inserts job to schedule or reschedules it
+/** Sets job ready to be scheduled. Applies to new and aborted jobs
     @attrib api=1 params=pos
 	@returns void
 	@errors
@@ -1758,9 +1760,24 @@ class mrp_job_obj extends _int_object
 		return $r;
 	}
 
-	public function awobj_set_resource($value)
+	public function awobj_set_resource($resource_id)
 	{
-		// import resource defaults, if not set
+		$resource = obj($resource_id, array(), CL_MRP_RESOURCE);
+		$this->connect (array (
+			"to" => $resource,
+			"reltype" => "RELTYPE_MRP_RESOURCE"
+		));
+		return parent::set_prop("resource", $resource_id);
+	}
+
+	public function awobj_set_project($project_id)
+	{
+		$project = obj($project_id, array(), CL_MRP_CASE);
+		$this->connect (array (
+			"to" => $project,
+			"reltype" => "RELTYPE_MRP_PROJECT"
+		));
+		return parent::set_prop("project", $project_id);
 	}
 
 	protected function request_rescheduling()
