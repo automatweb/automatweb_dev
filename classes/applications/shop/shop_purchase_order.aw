@@ -510,7 +510,7 @@ class shop_purchase_order extends class_base
 			"name" => "required",
 		));
 		$t->define_field(array(
-			"caption" => t("Kogus"),
+			"caption" => t("Tellitud kogus"),
 			"align" => "center",
 			"name" => "amount",
 		));

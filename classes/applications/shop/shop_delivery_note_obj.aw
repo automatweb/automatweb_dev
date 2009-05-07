@@ -158,20 +158,24 @@ class shop_delivery_note_obj extends _int_object
 			$row = $c->to();
 			if(!$row->prop("unit"))
 			{
-				aw_session_set("dn_err", t("Igal tootel tuleb &uuml;hik m&auml;&auml;rata."));
-				return false;
+				$this->movement_error(t("Igal tootel tuleb &uuml;hik m&auml;&auml;rata."));
 			}
 			if(!$row->prop("amount"))
 			{
-				aw_session_set("dn_err",  t("Igal tootel tuleb kogus m&auml;&auml;rata."));
-				return false;
+				$this->movement_error(t("Igal tootel tuleb kogus m&auml;&auml;rata."));
 			}
 			if($wo)
 			{
 				if($twh || $row->prop("warehouse"))
 				{
-					aw_session_set("dn_err",  t("Mahakandmist ei saa teostada, kuna on m&auml;&auml;ratud sihtladu"));
-					return false;
+					$this->movement_error(t("Mahakandmist ei saa teostada, kuna on m&auml;&auml;ratud sihtladu"));
+				}
+			}
+			else
+			{
+				if(!$twh && !$fwh && !$row->prop("warehouse"))
+				{
+					$this->movement_error(t("Ladu on m&auml;&auml;ramata"));
 				}
 			}
 			if($twh && !$fwh)
@@ -179,15 +183,13 @@ class shop_delivery_note_obj extends _int_object
 				$def_cur = obj($twh)->prop("conf.def_currency");
 				if(!$def_cur)
 				{
-					aw_session_set("dn_err",  t("Sihtlao seadetes puudub vaikimisi valuuta"));
-					return false;
+					$this->movement_error(t("Sihtlao seadetes puudub vaikimisi valuuta"));
 				}
 				$sum = $row->prop("price");
 				$cur = $this->prop("currency");
 				if(!$cur)
 				{
-					aw_session_set("dn_err", t("Valuuta on m&auml;&auml;ramata"));
-					return false;
+					$this->movement_error(t("Valuuta on m&auml;&auml;ramata"));
 				}
 				$base_prices[$row->id()] = $sum;
 				if($cur != $def_cur)
@@ -199,8 +201,7 @@ class shop_delivery_note_obj extends _int_object
 					));
 					if($sum == $newsum && $sum)
 					{
-						aw_session_set("dn_err", sprintf(t("Puudub kurss valuutade %s ja %s vahel"), obj($cur)->name(), obj($def_cur)->name()));
-						return false;
+						$this->movement_error(sprintf(t("Puudub kurss valuutade %s ja %s vahel"), obj($cur)->name(), obj($def_cur)->name()));
 					}
 					$base_prices[$row->id()] = $newsum;
 				}
@@ -210,15 +211,13 @@ class shop_delivery_note_obj extends _int_object
 			$units = $pi->get_units($prod);
 			if(!count($units))
 			{
-				aw_session_set("dn_err", sprintf(t("Tootel %s pole m&auml;&auml;ratud p&otilde;hi&uuml;hikut"), $prod->name()));
-				return false;
+				$this->movement_error(sprintf(t("Tootel %s pole m&auml;&auml;ratud p&otilde;hi&uuml;hikut"), $prod->name()));
 			}
 			foreach($units as $i=>$unit)
 			{
 				if(!$i && !$this->can("view", $unit))
 				{
-					aw_session_set("dn_err", sprintf(t("Tootel %s pole m&auml;&auml;ratud p&otilde;hi&uuml;hikut"), $prod->name()));
-					return false;
+					$this->movement_error(sprintf(t("Tootel %s pole m&auml;&auml;ratud p&otilde;hi&uuml;hikut"), $prod->name()));
 				}
 				if($this->prop("from_warehouse"))
 				{
@@ -249,8 +248,7 @@ class shop_delivery_note_obj extends _int_object
 					{
 						$from_unit = obj($row->prop("unit"));
 						$to_unit = obj($unit);
-						aw_session_set("dn_err", sprintf(t("Tootel %s puudub arvutusvalem %s -> %s"), $prod->name(), $from_unit->name(), $to_unit->name()));
-						return false;
+						$this->movement_error(sprintf(t("Tootel %s puudub arvutusvalem %s -> %s"), $prod->name(), $from_unit->name(), $to_unit->name()));
 					}
 				}
 				elseif($unit == $row->prop("unit"))
@@ -259,6 +257,11 @@ class shop_delivery_note_obj extends _int_object
 				}
 			}
 			$prod_units[$prod_id] = $units;
+		}
+		$err = aw_global_get("dn_err");
+		if(count($err))
+		{
+			return false;
 		}
 		foreach($conn as $c)
 		{
@@ -329,6 +332,20 @@ class shop_delivery_note_obj extends _int_object
 			}
 		}
 		return true;
+	}
+
+	private function movement_error($msg)
+	{
+		$err = aw_global_get("dn_err");
+		if(!is_array($err))
+		{
+			$err = array($msg);
+		}
+		else
+		{
+			$err[] = $msg;
+		}
+		aw_session_set("dn_err", array_unique($err));
 	}
 
 	function create_movement_from_param($arr)

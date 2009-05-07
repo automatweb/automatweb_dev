@@ -150,7 +150,7 @@ class shop_delivery_note extends class_base
 					if(!$ret)
 					{
 						$err = aw_global_get("dn_err");
-						$prop["error"] = $err;
+						$prop["error"] = implode("<br />", $err);
 						$retval = PROP_FATAL_ERROR;
 						aw_session_del("dn_err");
 					}
@@ -212,11 +212,45 @@ class shop_delivery_note extends class_base
 				$prodid = null;
 				if($id = $row["name"])
 				{
-					$prodid = $id;
+					if(!$this->can("view", $id))
+					{
+						$ol = new object_list(array(
+							"class_id" => CL_SHOP_PRODUCT,
+							"site_id" => array(),
+							"lang_id" => array(),
+							"name" => $id,
+						));
+						$o = $ol->begin();
+						if($o)
+						{
+							$prodid = $o->id();
+						}
+					}
+					else
+					{
+						$prodid = $id;
+					}
 				}
 				if($id = $row["code"])
 				{
-					$prodid = $id;
+					if(!$this->can("view", $id))
+					{
+						$ol = new object_list(array(
+							"class_id" => CL_SHOP_PRODUCT,
+							"site_id" => array(),
+							"lang_id" => array(),
+							"code" => $id,
+						));
+						$o = $ol->begin();
+						if($o)
+						{
+							$prodid = $o->id();
+						}
+					}
+					else
+					{
+						$prodid = $id;
+					}
 				}
 				if($prodid)
 				{
@@ -790,7 +824,7 @@ class shop_delivery_note extends class_base
 			"product" => $prodid,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"limit" => 200,
+			"limit" => 1000,
 			"type" => 1,
 		));
 		$res = array();
@@ -814,7 +848,7 @@ class shop_delivery_note extends class_base
 			"product" => $prodid,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"limit" => 200,
+			"limit" => 1000,
 			"type" => 2,
 		));
 		$res = array();
@@ -863,7 +897,7 @@ class shop_delivery_note extends class_base
 			"class_id" => CL_SHOP_PRODUCT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"limit" => 200,
+			"limit" => 1000,
 		));
 		$res = array();
 		foreach($ol->arr() as $o)
@@ -902,7 +936,7 @@ class shop_delivery_note extends class_base
 			"class_id" => $clids,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"limit" => 200,
+			"limit" => 1000,
 		));
 		$res = array();
 		foreach($ol->arr() as $o)

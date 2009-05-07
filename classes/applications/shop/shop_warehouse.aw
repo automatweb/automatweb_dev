@@ -2106,7 +2106,7 @@ class shop_warehouse extends class_base
 		$tb->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
-			"tooltip" => t("Lisa uus tootegrupp"),
+			"tooltip" => t("Tootegrupp"),
 			"url" => $this->mk_my_orb("new", array(
 				"parent" => ($p = $prop["request"]["pgtf"])?$p:$this->prod_type_fld,
 				"return_url" => get_ru(),
@@ -3232,7 +3232,7 @@ class shop_warehouse extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "create_pkt",
-			"text" => t("Lisa pakett"),
+			"text" => t("Pakett"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->pkt_tree_root,
 				"alias_to" => $data["obj_inst"]->id(),
@@ -4023,7 +4023,7 @@ class shop_warehouse extends class_base
 			}
 			$tb->add_menu_item(array(
 				"parent" => $npt,
-				"text" => t("Lisa saateleht"),
+				"text" => t("Saateleht"),
 				"link" => $this->mk_my_orb("new", array(
 					"parent" => $pt,
 					"return_url" => get_ru()
@@ -4032,7 +4032,7 @@ class shop_warehouse extends class_base
 
 			$tb->add_menu_item(array(
 				"parent" => $npt,
-				"text" => t("Lisa arve"),
+				"text" => t("Arve"),
 				"link" => $this->mk_my_orb("new", array(
 					"parent" => $pt,
 					"return_url" => get_ru(),
@@ -4175,7 +4175,7 @@ class shop_warehouse extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "create_order",
-			"text" => t("Lisa tellimus"),
+			"text" => t("Tellimus"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->order_fld,
 				"alias_to" => $data["obj_inst"]->id(),
@@ -4393,7 +4393,7 @@ class shop_warehouse extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "create_order",
-			"text" => t("Lisa tellimus"),
+			"text" => t("Tellimus"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->order_fld,
 				"alias_to" => $data["obj_inst"]->id(),
@@ -5872,7 +5872,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				}
 				$tb->add_menu_item(array(
 					"parent" => $npt,
-					"text" => t("Lisa saateleht"),
+					"text" => t("Saateleht"),
 					"link" => $this->mk_my_orb("new", array(
 						"parent" => $pt,
 						"return_url" => get_ru()
@@ -6522,7 +6522,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			$pt = $wh->prop("conf.order_fld");
 			$tb->add_menu_item(array(
 				"parent" => $npt,
-				"text" => t("Lisa tellimus"),
+				"text" => t("Tellimus"),
 				"link" => $this->mk_my_orb("new", array(
 					"parent" => $pt,
 					"return_url" => get_ru(),
@@ -7282,6 +7282,14 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 	}
 
+	function _get_status_orders_s_case_no($arr)
+	{
+		if($this->can("view", $arr["request"]["filt_case"]))
+		{
+			$arr["prop"]["value"] = obj($arr["request"]["filt_case"])->prop("name");
+		}
+	}
+
 	function _get_status_orders_res_tree($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -7568,13 +7576,27 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"chgbgcolor" => "bgcolor",
 		));
 
+		if($arr["levels"])
+		{
+			$t->define_field(array(
+				"name" => "required",
+				"caption" => t("Vajadused"),
+			));
+				
+			$t->define_field(array(
+				"name" => "ordered",
+				"caption" => t("Tellitud"),
+			));
+		}
+
 		for($i = 0; $i <= $arr["levels"]; $i++)
 		{
 			$t->define_field(array(
 				"name" => "required_".$i,
-				"caption" => $i?sprintf(t("Vajadus %s"), $i+1) : t("Vajadus"),
+				"caption" => $arr["levels"] ? sprintf("&Uuml;hik %s", $i + 1) : t("Vajadus"),
 				"align" => "center",
 				"chgbgcolor" => "bgcolor",
+				"parent" => $arr["levels"] ? "required" : null,
 			));
 		}
 
@@ -7582,14 +7604,29 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			$t->define_field(array(
 				"name" => "ordered_".$i,
-				"caption" => $i?sprintf(t("Tellitud %s"), $i+1) : t("Tellitud"),
+				"caption" => $arr["levels"] ? sprintf("&Uuml;hik %s", $i + 1) : t("Tellitud"),
 				"align" => "center",
 				"chgbgcolor" => "bgcolor",
+				"parent" => $arr["levels"] ? "ordered" : null,
 			));
 		}
 
 		foreach($arr["warehouses"] as $wh)
 		{
+			if($arr["levels"])
+			{
+				$t->define_field(array(
+					"name" => "amount_".$wh,
+					"caption" => t("Kogused"),
+					"parent" => "wh_".$wh,
+				));
+				$t->define_field(array(
+					"name" => "diff_".$wh,
+					"caption" => t("Vahed"),
+					"parent" => "wh_".$wh,
+				));
+			}
+
 			if(!$this->can("view", $wh))
 			{
 				continue;
@@ -7600,24 +7637,24 @@ $oo = get_instance(CL_SHOP_ORDER);
 			));
 			for($i = 0; $i <= $arr["levels"]; $i++)
 			{
-				$cp = $i?sprintf(t("%s %s"),"Kogus", $i+1):t("Kogus");
+				$cp = $arr["levels"] ? sprintf("&Uuml;hik %s", $i + 1) : t("Kogus");
 				$t->define_field(array(
 					"name" => "amount_".$wh."_".$i,
 					"caption" => $cp,
 					"align" => "center",
-					"parent" => "wh_".$wh,
 					"chgbgcolor" => "bgcolor",
+					"parent" => $arr["levels"] ? "amount_".$wh : "wh_".$wh,
 				));
 			}
 			for($i = 0; $i <= $arr["levels"]; $i++)
 			{
-				$cp = $i?sprintf(t("%s %s"),"Vahe", $i+1):t("Vahe");
+				$cp = $arr["levels"] ? sprintf("&Uuml;hik %s", $i + 1) : t("Vahe");
 				$t->define_field(array(
 					"name" => "diff_".$wh."_".$i,
 					"caption" => $cp,
 					"align" => "center",
-					"parent" => "wh_".$wh,
 					"chgbgcolor" => "bgcolor",
+					"parent" => $arr["levels"] ? "diff_".$wh : "wh_".$wh,
 				));
 			}
 		}
@@ -7751,15 +7788,20 @@ $oo = get_instance(CL_SHOP_ORDER);
 			{
 				foreach($$var[0]->arr() as $row)
 				{
+					$req_amt = "";
 					for($i = 0; $i <= $levels; $i++)
 					{
+						if(!$units[$i])
+						{
+							continue;
+						}
 						if($row->prop("unit") == $units[$i])
 						{
-							$req_amt = $row->prop("amount");
+							$req_amt[$i] = $row->prop("amount");
 						}
 						if(isset($req_amt))
 						{
-							$data[$var[1]."_".$i] += $req_amt;
+							$data[$var[1]."_".$i] += $req_amt[$i];
 						}
 						else
 						{
@@ -7772,7 +7814,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 							));
 							if($fo)
 							{
-								$data[$var[1]."_".$i] += $req_amt = round($ufi->calc_amount(array(
+								$data[$var[1]."_".$i] += $req_amt[$i] = round($ufi->calc_amount(array(
 									"amount" => $row->prop("amount"),
 									"prod" => $o,
 									"obj" => $fo,
@@ -7799,7 +7841,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 						);
 						for($i = 0; $i <= $levels; $i++)
 						{
-							$job_data["required_".$i] = sprintf("%s %s", $req_amt, obj($units[$i])->prop("unit_code"));
+							$job_data["required_".$i] = sprintf("%s %s", $req_amt[$i], obj($units[$i])->prop("unit_code"));
 						}
 						$t->define_data($job_data);
 					}
