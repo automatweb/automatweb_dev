@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.21 2009/04/30 11:54:12 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.22 2009/05/07 12:24:36 instrumental Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -1100,6 +1100,26 @@ die();
 			}
 		}
 		return null;
+	}
+
+	public static function get_oid_for_gid($gid)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_GROUP,
+			"gid" => $gid,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 1,
+		));
+		if($ol->count())
+		{
+			$ids = $ol->ids();
+			return reset($ids);
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.24 2008/12/10 11:33:19 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.25 2009/05/07 12:24:34 instrumental Exp $
 
 // task_row.aw - Toimetuse rida 
 /*
@@ -183,6 +183,12 @@ class task_row extends class_base
 
 	function do_db_upgrade($t, $f)
 	{
+		if($t === "aw_task_rows" && $f == "")
+		{
+			$this->db_query("CREATE TABLE aw_task_rows (aw_oid int primary key)");
+			return true;
+		}
+
 		switch($f)
 		{
 			case "aw_to_bill_date":
