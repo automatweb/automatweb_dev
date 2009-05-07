@@ -3624,90 +3624,25 @@ class bug_tracker extends class_base
 	**/
 	function aw_firefoxtools_gantt($arr)
 	{
-		$chart = get_instance ("vcl/gantt_chart");
-		$udata = is_object($arr["obj_inst"]) ? $arr["obj_inst"]->meta("gantt_user_ends") : array();
-		$cur = aw_global_get("uid_oid");
-		if($cs = $udata[$cur])
-		{
-			$columns = $cs;
-		}
-		else
-		{
-			$columns = 7;
-		}
-		$this->gt_days_in_col = 1;
-		if($columns > 10)
-		{
-			$this->gt_days_in_col = ceil($columns/10);
-			$columns = 10;
-		}
-		$col_length = $this->gt_days_in_col*24*60*60;
-
-		if ($this->can("view", $arr["request"]["filt_p"]))
-		{
-			$p = obj($arr["request"]["filt_p"]);
-		}
-		else
-		{
-			$u = get_instance(CL_USER);
-			$p = obj($u->get_current_person());
-		}
-
-		if (is_object($arr["obj_inst"]))
-		{
-			$this->combined_priority_formula = $arr["obj_inst"]->prop("combined_priority_formula"); // required by get_undone_bugs_by_p(), __gantt_sort()
-		}
-
-		classload("core/date/date_calc");
-		$range_start = get_day_start();
-		$range_end = time() + $columns * $col_length;
-
-		$subdivisions = 1;
-
-		$has = false;
-		$gt_list = $this->get_undone_bugs_by_p($p);
-		$bi = get_instance(CL_BUG);
+		$this->_gantt(& $arr);		
+		preg_match_all("/VclGanttChartTablebt_gantt.*(<table.*<\/table>).*/imsU", $arr["prop"]["value"], $mt);
+		$s_gant_table = $mt[1][0];
+		preg_match_all("/<tr.*(<td class=\"awmenuedittabletext\s(.*)\".*<a href=\"(.*)\".*\>(.*)<\/a>.*<\/td>)/imsU", $s_gant_table, $mt2);
+		
+		$bug_count = count($mt2[2]);
 		$out = "menu = [";
-		$i = 0;
-		foreach($gt_list as $gt)
+		for($i=0;$i<$bug_count;$i++)
 		{
-			if($i==30)
-			{
-				continue;
-			}
-			$cdata = $this->get_gantt_bug_colors($gt);
-
-			$nm = parse_obj_name($gt->name());
-			if ($gt->customer)
-			{
-				if ($gt->prop("customer.short_name") != "")
-				{
-					$nm .= " / ".$gt->prop("customer.short_name");
-				}
-				else
-				{
-					$nm .= " / ".$gt->prop("customer.name");
-				}
-			}
-			if ($gt->finance_type)
-			{
-				$ft = get_instance(CL_BUG)->get_finance_types();
-				$nm .= " / ".$ft[$gt->finance_type];
-			}
-
-			$out .= '{"name":"'.$nm.'",'.
-				'"url":"'.html::get_change_url($gt->id()).'",'.
-				'"class":"'.$cdata["class"].'"'.
-			"},";
+			$name = utf8_encode(html_entity_decode($mt2[4][$i]));
+			$url = $mt2[3][$i];
+			$class = $mt2[2][$i];
 			
-			if ($arr["ret_b"] && $gt->id() == $arr["ret_b"]->id())
-			{
-				$has = true;
-			}
-			$i++;
+			$out .= '{"name":"'.$name.'",'.
+				'"url":"'.$url.'",'.
+				'"class":"'.$class.'"'.
+			"},";
 		}
 		$out .= '];';
-		$out = utf8_encode($out);
 		die($out);
 	}
 
