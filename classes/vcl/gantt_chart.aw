@@ -224,6 +224,20 @@ class gantt_chart extends class_base
 			"name_class" => $row_name_class,
 		);
 	}
+	
+	/** Get protected rows. Used in bug_gracker.aw -> aw_firefoxtools_gantt
+		@errors none
+		@returns array
+	**/
+	public function get_rows ($arr)
+	{
+		$rows = array();
+		foreach ($this->rows as $row)
+		{
+			$rows[] = $row;
+		}
+		return $rows;
+	}
 
 	/** Defines column. Columns can be defined only after calling configure_chart.
 		@attrib api=1 params=name
@@ -378,7 +392,7 @@ class gantt_chart extends class_base
 		$collapsed = false;
 		$this->pending_bars = array ();
 		$this->read_template ("chart_" . $this->style . ".tpl");
-
+		
 		foreach ($this->rows as $row)
 		{
 			$row_contents = "";

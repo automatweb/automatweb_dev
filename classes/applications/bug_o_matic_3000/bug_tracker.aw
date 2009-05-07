@@ -3617,6 +3617,7 @@ class bug_tracker extends class_base
 		}
 
 		$arr["prop"]["value"] = $chart->draw_chart ();
+		return $chart;
 	}
 	
 	/**
@@ -3624,18 +3625,15 @@ class bug_tracker extends class_base
 	**/
 	function aw_firefoxtools_gantt($arr)
 	{
-		$this->_gantt(& $arr);		
-		preg_match_all("/VclGanttChartTablebt_gantt.*(<table.*<\/table>).*/imsU", $arr["prop"]["value"], $mt);
-		$s_gant_table = $mt[1][0];
-		preg_match_all("/<tr.*(<td class=\"awmenuedittabletext\s(.*)\".*<a href=\"(.*)\".*\>(.*)<\/a>.*<\/td>)/imsU", $s_gant_table, $mt2);
-		
-		$bug_count = count($mt2[2]);
+		$chart = $this->_gantt(& $arr);
+		$rows = $chart->get_rows();
+
 		$out = "menu = [";
-		for($i=0;$i<$bug_count;$i++)
+		foreach($rows as $row)
 		{
-			$name = utf8_encode(html_entity_decode($mt2[4][$i]));
-			$url = $mt2[3][$i];
-			$class = $mt2[2][$i];
+			$name = utf8_encode(html_entity_decode($row["title"]));
+			$url = $row["uri"];
+			$class = $row["name_class"];
 			
 			$out .= '{"name":"'.$name.'",'.
 				'"url":"'.$url.'",'.
