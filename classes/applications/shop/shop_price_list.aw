@@ -108,6 +108,7 @@ class shop_price_list extends class_base
 		$tb = &$arr["prop"]["vcl_inst"];
 
 		$tb->add_search_button(array(
+			"tooltip" => t("Otsi kliendi kategooria"),
 			"pn" => "add_crm_cat",
 			"multiple" => 1,
 			"clid" => CL_CRM_CATEGORY,
@@ -129,6 +130,7 @@ class shop_price_list extends class_base
 		}
 		
 		$tb->add_search_button(array(
+			"tooltip" => t("Otsi toote kategooria"),
 			"pn" => "add_prod_cat",
 			"multiple" => 1,
 			"clid" => CL_SHOP_PRODUCT_CATEGORY,

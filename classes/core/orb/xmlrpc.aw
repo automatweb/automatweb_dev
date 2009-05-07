@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.5 2008/05/07 10:50:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.6 2009/05/07 13:19:28 kristo Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -81,7 +81,6 @@ class xmlrpc extends aw_template
 			echo "resp xml = <pre>", htmlspecialchars($xml),"</pre> <br />---------------------------<br/>";
 		}
 		$result = array();
-
 		$parser = xml_parser_create();
 		xml_parse_into_struct($parser,$xml,&$this->vals,&$tags); 
 		$err = xml_get_error_code($parser);
@@ -95,7 +94,7 @@ class xmlrpc extends aw_template
 			{
 				$lines = explode("\n", $xml);
 				echo htmlspecialchars($lines[xml_get_current_line_number($parser)-1])." <br>";
-				$this->raise_error(ERR_XML_PARSER_ERROR,sprintf(t("Viga XML-RPC p2ringu vastuse dekodeerimisel: %s on line %s!"), xml_error_string($err),xml_get_current_line_number($parser)), true,false);
+				$this->raise_error(ERR_XML_PARSER_ERROR,sprintf(t("Viga XML-RPC p2ringu vastuse dekodeerimisel: %s on line %s! %s"), xml_error_string($err),xml_get_current_line_number($parser),$xml), true,false);
 			}
 		}
 		xml_parser_free($parser); 

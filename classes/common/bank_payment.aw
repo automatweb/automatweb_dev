@@ -46,6 +46,8 @@
 		@property not_clickable_ref type=checkbox parent=general_right no_caption=1
 		@caption &Auml;ra kuva viitenumbrit lingina
 
+		@property credit_card_log_upload type=fileupload reltype=RELTYPE_CCL_UPLOAD form=+emb
+		@caption Lisa reproduktsioon
 
 @groupinfo bank caption="Pankade info"
 
@@ -127,6 +129,8 @@
 @reltype RETURN_CTR value=7 clid=CL_CFGCONTROLLER
 @caption Makse kinnituse kontroller
 
+@reltype CCL_UPLOAD value=19 clid=CL_FILE
+@caption Reproduktsioon
 */
 
 class bank_payment extends class_base

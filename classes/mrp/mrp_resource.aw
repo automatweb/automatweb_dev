@@ -6,6 +6,7 @@
 	@groupinfo grp_general2 caption="Andmed" parent=general
 	@groupinfo grp_resource_settings caption="Seaded" parent=general
 @groupinfo grp_resource_schedule caption="Kalender"
+@groupinfo grp_resource_gantt caption="T&ouml;&ouml;voog" submit=no
 @groupinfo grp_resource_joblist caption="T&ouml;&ouml;leht" submit=no
 	@groupinfo grp_resource_joblist_todo caption="Eesseisvad t&ouml;&ouml;d" submit=no parent=grp_resource_joblist
 	@groupinfo grp_resource_joblist_done caption="Tehtud t&ouml;&ouml;d" submit=no parent=grp_resource_joblist
@@ -16,6 +17,7 @@
 	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
 	@groupinfo grp_resource_unavailable_una caption="Kinnised ajad" parent=grp_resource_unavailable
 @groupinfo grp_resource_materials caption="Materjalid" submit=no confirm_save_data=1
+@groupinfo grp_resource_operators caption="Inimesed" submit=no confirm_save_data=1
 
 @default table=objects
 
@@ -39,6 +41,10 @@
 
 @default group=grp_resource_schedule
 	@property resource_calendar type=text store=no no_caption=1
+	@caption T&ouml;&ouml;d
+
+@default group=grp_resource_gantt
+	@property resource_gantt type=text store=no no_caption=1
 	@caption T&ouml;&ouml;d
 
 @default group=grp_resource_joblist_todo,grp_resource_joblist_done,grp_resource_joblist_aborted
@@ -122,6 +128,13 @@
 		@layout materials_split_right parent=materials_split type=vbox
 
 			@property materials_sel_tbl type=table parent=materials_split_right no_caption=1
+
+@default group=grp_resource_operators
+
+	@property operators_tlb type=toolbar no_caption=1 store=no
+
+	@property operators_tbl type=table no_caption=1 store=no
+	@caption Ressursi operaatorid
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
@@ -235,10 +248,6 @@ class mrp_resource extends class_base
 
 		switch($prop["name"])
 		{
-			case "cal_tb";
-				$this->_get_cal_tb($arr);
-				break;
-
 			case "production_feedback_option_values":
 				$prop["value"] = implode(", ", $prop["value"]);
 				break;
@@ -823,7 +832,7 @@ class mrp_resource extends class_base
 				"CL_MRP_JOB.project(CL_MRP_CASE).state" => $applicable_project_states,
 			),
 			array(
-				CL_MRP_JOB => array("project", "exec_order", "state", "starttime", "RELTYPE_MRP_RESOURCE.name", "length"),
+				CL_MRP_JOB => array("project", "exec_order", "state", "starttime", "resource(CL_MRP_RESOURCE).name", "length"),
 			)
 		);
 		$jobs = $list->arr();
@@ -889,7 +898,7 @@ class mrp_resource extends class_base
 				"deadline" => $p->prop("due_date"),
 				"trykiarv" => $p->prop("trykiarv"),
 				"trykiarv_notes" => $p->prop("trykiarv_notes"),
-				"resource" => $job["RELTYPE_MRP_RESOURCE.name"],
+				"resource" => $job["resource(CL_MRP_RESOURCE).name"],
 			);
 			if($times)
 			{
@@ -1201,6 +1210,249 @@ class mrp_resource extends class_base
 		return $evstr;
 	}
 
+	protected function resource_gantt_add_unavail($o, $chart, $row_id, $start, $length)
+	{
+		static $periods;
+		if(!isset($periods))
+		{
+			$periods = get_instance(CL_MRP_SCHEDULE)->get_unavailable_periods_for_range(array(
+				"mrp_resource" => $o->id(),
+				"mrp_start" => $start,
+				"mrp_length" => $length
+			));
+		}
+
+		foreach($periods as $s => $e)
+		{
+			$chart->add_bar(array(
+				"id" => "unavail_{$s}_{$e}_{$row_id}",
+				"row" => $row_id,
+				"start" => $s,
+				"colour" => MRP_COLOUR_UNAVAILABLE,
+				"length" => $e - $s,
+				"layer" => 0,
+				"title" => "Kinnine aeg (" . date (MRP_DATE_FORMAT, $s) . " - " . date (MRP_DATE_FORMAT, $e) . ")"
+			));
+		}
+	}
+
+	public function _get_operators_tlb($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_button(array(
+			"img" => "search.gif",
+		));
+	}
+
+	protected function _init_operators_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser();
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Isik"),
+			"align" => "center",
+			"sortable" => true,
+		));
+	}
+
+	public function _get_operators_tbl($arr)
+	{
+		$this->_init_operators_tbl($arr);
+		$t = &$arr["prop"]["vcl_inst"];
+
+		foreach($arr["obj_inst"]->get_operators()->names() as $oid => $name)
+		{
+			$t->define_data(array(
+				"oid" => $oid,
+				"name" => parse_obj_name($name),
+			));
+		}
+	}
+
+	public function _get_resource_gantt($arr)
+	{
+		$workspace = $this_object = $this->workspace;
+
+		### update schedule
+		$schedule = get_instance (CL_MRP_SCHEDULE);
+		$schedule->create (array("mrp_workspace" => $workspace->id()));
+
+		$time =  time();
+		$chart = get_instance ("vcl/gantt_chart");
+		$columns = (int) (isset($arr["request"]["mrp_chart_length"]) ? $arr["request"]["mrp_chart_length"] : 7);
+		$range_start = (int) (isset($arr["request"]["mrp_chart_start"]) ? $arr["request"]["mrp_chart_start"] : $this->get_week_start ());
+		$range_end = (int) ($range_start + $columns * 86400);
+		$hilighted_project = (int) (isset($arr["request"]["mrp_hilight"]) ? $arr["request"]["mrp_hilight"] : false);
+		$hilighted_jobs = array ();
+
+		switch ($columns)
+		{
+			case 1:
+				$subdivisions = 24;
+				break;
+
+			default:
+				$subdivisions = 3;
+		}
+
+		$ids = array(-1);
+
+		$sql = "
+		SELECT
+			j.oid as jid
+		FROM
+			mrp_job j
+			LEFT JOIN mrp_schedule s ON j.oid = s.oid
+		WHERE
+			j.resource = '".$arr["obj_inst"]->id()."' AND 
+			(
+				s.starttime < $range_end
+				AND s.starttime + j.planned_length > $range_start
+				AND j.state = '".MRP_STATUS_PLANNED."'
+			OR
+				j.started < $range_end
+				AND j.finished > $range_start
+				AND j.state = '".MRP_STATUS_DONE."'
+			OR
+				j.started < $range_end
+				AND j.started + j.planned_length > $range_start
+				AND j.state IN ('".implode("','", array(MRP_STATUS_SHIFT_CHANGE, MRP_STATUS_PAUSED))."')
+			OR
+				j.state = '".MRP_STATUS_INPROGRESS."'
+			)
+		";
+		foreach($this->db_fetch_array($sql) as $row)
+		{
+			$ids[] = $row["jid"];
+		}
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"oid" => $ids,
+				"resource" => $arr["obj_inst"]->id(),
+				"parent" => $workspace->prop("jobs_folder"),
+				new obj_predicate_sort(array(
+					"starttime" => "asc"
+					/*	Won't work at this moment.
+					"project(CL_MRP_CASE).name" => "asc"
+					*/
+				)),
+			), 
+			array(
+				CL_MRP_JOB => array("project", "project(CL_MRP_CASE).name" => "project_name", "state", "started", "finished", "planned_length", "starttime"),
+			)
+		);
+
+		// Have to sort by project manually, whatta bummer!
+		$jobs_by_project = array();
+		$project_names = array();
+		foreach($odl->arr() as $o)
+		{
+			$jobs_by_project[$o["project"]][$o["oid"]] = $o;
+			$project_names[$o["project"]] = $o["project_name"];
+		}
+		asort($project_names);
+
+		foreach($project_names as $project => $project_name)
+		{
+			$chart->add_row (array (
+				"name" => $project,
+				"title" => $project_name,
+				"type" => "separator",
+			));
+
+			foreach($jobs_by_project[$project] as $job)
+			{
+				$chart->add_row(array(
+					"name" => "row_".$job["oid"],
+					"title" => $job["name"],
+					"uri" => html::get_change_url(
+						$job["oid"],
+						array("return_url" => get_ru())
+					)
+				));
+
+				### get start&length according to job state
+				switch ($job["state"])
+				{
+					case MRP_STATUS_DONE:
+						$start = max($range_start, $job["started"]);
+						$length = min($range_end, $job["finished"]) - $start;
+	//					echo date(MRP_DATE_FORMAT, $start) . "-" . date(MRP_DATE_FORMAT, $start + $length) . "<br>";
+						break;
+
+					case MRP_STATUS_PLANNED:
+						$start = max($range_start, $job["starttime"]);
+						$length = $job["planned_length"];
+						break;
+
+					case MRP_STATUS_SHIFT_CHANGE:
+					case MRP_STATUS_PAUSED:
+					case MRP_STATUS_INPROGRESS:
+						$start = max($range_start, $job["started"]);
+						$length = (($start + $job["planned_length"]) < $time) ? ($time - $start) : $job["planned_length"];
+						break;
+				}
+
+				$colour = mrp_workspace::$state_colours[$job["state"]];
+				$colour = $job["project"] == $hilighted_project ? MRP_COLOUR_HILIGHTED : $colour;
+
+				$chart->add_bar(array (
+					"id" => $job["oid"],
+					"row" => "row_".$job["oid"],
+					"start" => $start,
+					"colour" => $colour,
+					"length" => $length,
+					"layer" => 1,
+					"uri" => aw_url_change_var ("mrp_hilight", $job["project"]),
+					"title" => $job["name"] . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
+				));
+
+				$this->resource_gantt_add_unavail($arr["obj_inst"], $chart, "row_".$job["oid"], $range_start, $range_end - $range_start);
+			}
+		}
+
+		### config
+		$chart->configure_chart (array (
+			"chart_id" => "master_schedule_chart",
+			"style" => "aw",
+			"start" => $range_start,
+			"end" => $range_end,
+			"columns" => $columns,
+			"caption" => sprintf(t("Ressursi '%s' t&ouml;&ouml;voog"), $arr["obj_inst"]->name()),
+			"footer" => $this_object->instance()->draw_colour_legend(),
+			"subdivisions" => $subdivisions,
+			"timespans" => $subdivisions,
+			"width" => 850,
+			"row_height" => 10,
+			"row_dfn" => t("Projekt/t&ouml;&ouml;"),
+			"navigation" => $this_object->instance()->create_chart_navigation($arr)
+		));
+
+		### define columns
+		$i = 0;
+		$days = array ("P", "E", "T", "K", "N", "R", "L");
+
+		while ($i < $columns)
+		{
+			$day_start = ($range_start + ($i * 86400));
+			$day = date ("w", $day_start);
+			$date = date ("j/m/Y", $day_start);
+			$uri = aw_url_change_var ("mrp_chart_length", 1);
+			$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
+			$chart->define_column (array (
+				"col" => ($i + 1),
+				"title" => $days[$day] . " - " . $date,
+				"uri" => $uri,
+			));
+			$i++;
+		}
+
+		$arr["prop"]["value"] = $chart->draw_chart();
+	}
+
 	public function _get_resource_deviation_chart($arr)
 	{
 		$arr["request"]["mrp_tree_active_item"] = $arr["obj_inst"]->id();
@@ -1510,7 +1762,7 @@ class mrp_resource extends class_base
 		$owner = $arr["obj_inst"]->prop("workspace");
 		if($owner)
 		{
-			$whs = $owner->prop("warehouse");
+			$whs = $owner->prop("purchasing_manager");
 		}
 		if(count($whs))
 		{

@@ -281,6 +281,39 @@ class mrp_resource_obj extends _int_object
 	}
 
 	/**
+		@attrib name=get_materials params=name
+
+		@param id required type=int
+
+		@param odl optional type=bool default=false
+
+		@returns object_list/object_data_list of materials (shop_products)
+
+	**/
+	public static function get_materials($arr)
+	{
+		$prms = array(
+			"class_id" => CL_SHOP_PRODUCT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"RELTYPE_PRODUCT(CL_MATERIAL_EXPENSE_CONDITION).resource" => $arr["id"],
+		);
+		if(empty($arr["odl"]))
+		{
+			return new object_list($prms);
+		}
+		else
+		{
+			return new object_data_list(
+				$prms,
+				array(
+					CL_SHOP_PRODUCT => array("name")
+				)
+			);
+		}
+	}
+
+	/**
 	@attrib api=1 params=pos
 	@returns array of material_expense_condition objects
 		Objects that refer to products that can be used as input materials on this resource. Object id-s as index.
@@ -1059,7 +1092,7 @@ class mrp_resource_obj extends _int_object
 		@returns Array of planned hours by resource if parameter id is array, planned hours as int otherwise.
 
 	**/
-	public function get_planned_hours($arr)
+	public static function get_planned_hours($arr)
 	{
 		/*
 		InstruMental: Kuidas ma object_listis ytlen, et anna mulle k6ik objektid, mille prop1 ja prop2 summa on suurem kui n?
@@ -1082,7 +1115,7 @@ class mrp_resource_obj extends _int_object
 				LEFT JOIN mrp_schedule s ON o.brother_of = s.oid
 			WHERE
 				s.starttime < $to
-				AND s.starttime + m.length > 0
+				AND s.starttime + m.length > $from
 				AND o.status IN ({$status})
 				AND m.resource IN ({$resource_ids})
 			GROUP BY m.resource
@@ -1101,6 +1134,55 @@ class mrp_resource_obj extends _int_object
 		}
 
 		return is_array($arr["id"]) ? $p : reset($p);
+	}
+
+	/**
+		@attrib name=get_operators api=1
+	**/
+	public function get_operators()
+	{
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MRP_RESOURCE_OPERATOR,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"resource" => $this->id(),
+						"all_resources" => 1,
+					),
+				))
+			),
+			array(
+				CL_MRP_RESOURCE_OPERATOR => array("unit", "profession")
+			)
+		);
+		$secs = $odl->get_element_from_all("unit");
+		$pros = $odl->get_element_from_all("profession");
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MRP_RESOURCE_OPERATOR,
+				"unit" => $secs,
+				"all_section_resources" => 1,
+			), 
+			array(
+				CL_MRP_RESOURCE_OPERATOR => array("profession")
+			)
+		);
+		$pros = array_merge($pros, $odl->get_element_from_all("profession"));
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_RANK" => $pros,
+					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_PROFESSION" => $pros,
+				),
+			)),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		return $ol;
 	}
 }
 

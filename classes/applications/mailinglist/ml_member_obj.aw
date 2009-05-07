@@ -151,7 +151,7 @@ class ml_member_obj extends _int_object
 	/*	object::set_prop(brother_of, ): no property brother_of defined for current object! 
 	function delete()
 	{
-		$ol = new object_list(array(
+/*		$ol = new object_list(array(
 			"class_id" => CL_ML_MEMBER,
 			"mail" => $this->prop("mail"),
 			"lang_id" => array(),
@@ -167,7 +167,7 @@ class ml_member_obj extends _int_object
 				$o -> set_prop("brother_of" , $id);
 				$o->save();
 			}
-		}
+		}*/
 		return parent::delete();
 	}
 	*/

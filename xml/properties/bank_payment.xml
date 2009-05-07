@@ -116,6 +116,21 @@
             <caption>&amp;amp;Auml;ra kuva viitenumbrit lingina</caption>
       </property>
       <property>
+            <name>credit_card_log_upload</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>fileupload</type>
+            <reltype>RELTYPE_CCL_UPLOAD</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Lisa reproduktsioon</caption>
+      </property>
+      <property>
             <name>bank</name>
             <table>objects</table>
             <field>meta</field>
@@ -351,6 +366,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Makse kinnituse kontroller</caption>
             </RETURN_CTR>
+            <CCL_UPLOAD>
+                  <value>19</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Reproduktsioon</caption>
+            </CCL_UPLOAD>
       </reltypes>
       <layout>
             <general_l>

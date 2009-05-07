@@ -9,7 +9,8 @@
                   <num_0>grp_case_schedule_gantt</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
-                  <num_3>grp_case_data</num_3>
+                  <num_3>grp_case_materials</num_3>
+                  <num_4>grp_case_data</num_4>
             </group>
             <editonly>1</editonly>
             <field>workflow_toolbar</field>
@@ -44,8 +45,9 @@
                   <num_0>grp_case_schedule_gantt</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
-                  <num_3>grp_case_data</num_3>
-                  <num_4>grp_case_view</num_4>
+                  <num_3>grp_case_materials</num_3>
+                  <num_4>grp_case_data</num_4>
+                  <num_5>grp_case_view</num_5>
             </group>
             <type>textbox</type>
             <table>objects</table>
@@ -74,8 +76,9 @@
                   <num_0>grp_case_schedule_gantt</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
-                  <num_3>grp_case_data</num_3>
-                  <num_4>grp_case_view</num_4>
+                  <num_3>grp_case_materials</num_3>
+                  <num_4>grp_case_data</num_4>
+                  <num_5>grp_case_view</num_5>
             </group>
             <table>mrp_case</table>
             <type>text</type>
@@ -114,8 +117,9 @@
                   <num_0>grp_case_schedule_gantt</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
-                  <num_3>grp_case_data</num_3>
-                  <num_4>grp_case_view</num_4>
+                  <num_3>grp_case_materials</num_3>
+                  <num_4>grp_case_data</num_4>
+                  <num_5>grp_case_view</num_5>
             </group>
             <table>mrp_case</table>
             <type>relpicker</type>
@@ -434,6 +438,28 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
+            <name>materials_tree</name>
+            <group>grp_case_materials</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>materials_tree</parent>
+      </property>
+      <property>
+            <name>materials_table</name>
+            <group>grp_case_materials</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
+      </property>
+      <property>
             <name>schedule_chart</name>
             <group>grp_case_schedule_gantt</group>
             <table>objects</table>
@@ -502,6 +528,7 @@
             <syslog_type>ST_MRP_CASE</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
             <confirm_save_data>1</confirm_save_data>
             <maintainer>voldemar</maintainer>
       </classinfo>
@@ -514,9 +541,17 @@
                   <caption>Projekti andmed</caption>
                   <parent>general</parent>
             </grp_case_data>
+            <grp_case_formula>
+                  <caption>Tooteretsept</caption>
+            </grp_case_formula>
             <grp_case_workflow>
-                  <caption>Ressursid ja t&amp;amp;ouml;&amp;amp;ouml;voog</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;voog</caption>
+                  <parent>grp_case_formula</parent>
             </grp_case_workflow>
+            <grp_case_materials>
+                  <caption>Materjalid</caption>
+                  <parent>grp_case_formula</parent>
+            </grp_case_materials>
             <grp_case_view>
                   <caption>Vaatleja t&amp;amp;ouml;&amp;amp;ouml;laud</caption>
                   <submit>no</submit>
@@ -588,8 +623,9 @@
                   <width>25%:75%</width>
                   <group>
                         <num_0>grp_case_workflow</num_0>
-                        <num_1>grp_case_schedule_gantt</num_1>
-                        <num_2>grp_case_view</num_2>
+                        <num_1>grp_case_materials</num_1>
+                        <num_2>grp_case_schedule_gantt</num_2>
+                        <num_3>grp_case_view</num_3>
                   </group>
                   <area_caption></area_caption>
             </vsplitbox>
@@ -598,8 +634,9 @@
                   <parent>vsplitbox</parent>
                   <group>
                         <num_0>grp_case_workflow</num_0>
-                        <num_1>grp_case_schedule_gantt</num_1>
-                        <num_2>grp_case_view</num_2>
+                        <num_1>grp_case_materials</num_1>
+                        <num_2>grp_case_schedule_gantt</num_2>
+                        <num_3>grp_case_view</num_3>
                   </group>
                   <area_caption></area_caption>
             </left_pane>
@@ -610,8 +647,9 @@
                   <closeable>1</closeable>
                   <group>
                         <num_0>grp_case_workflow</num_0>
-                        <num_1>grp_case_schedule_gantt</num_1>
-                        <num_2>grp_case_view</num_2>
+                        <num_1>grp_case_materials</num_1>
+                        <num_2>grp_case_schedule_gantt</num_2>
+                        <num_3>grp_case_view</num_3>
                   </group>
             </general_info>
             <resource_tree>
@@ -621,6 +659,13 @@
                   <closeable>1</closeable>
                   <group>grp_case_workflow</group>
             </resource_tree>
+            <materials_tree>
+                  <type>vbox</type>
+                  <parent>left_pane</parent>
+                  <area_caption>Vali&amp;amp;nbsp;kasutatavad&amp;amp;nbsp;materjalid</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_case_materials</group>
+            </materials_tree>
             <charts>
                   <type>hbox</type>
                   <width>50%:50%</width>

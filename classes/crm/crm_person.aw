@@ -1136,8 +1136,10 @@ class crm_person extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$form = &$arr["request"];
+
 		switch($prop["name"])
 		{
+
 			case "show_cnt":
 				// This property is only set from code.
 				$retval = PROP_IGNORE;

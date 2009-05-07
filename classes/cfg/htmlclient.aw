@@ -22,7 +22,7 @@ class htmlclient extends aw_template
 		{
 			$this->no_form = true;
 		}
-		$tpldir = isset($arr["tpldir"]) ? $arr["tpldir"] : "htmlclient";
+		$tpldir = empty($arr["tpldir"]) ? "htmlclient" : $arr["tpldir"];
 		$this->init(array("tpldir" => $tpldir));
 		$this->res = "";
 		$this->layout_mode = "default";
@@ -1663,6 +1663,17 @@ class htmlclient extends aw_template
 					break;
 			}
 		}
+
+		// reset all captions
+		$this->vars_safe(array(
+			"caption" => empty($arr["caption"]) ? null : $arr["caption"],
+			"CAPTION_LEFT" => "",
+			"CAPTION_TOP" => "",
+			"element" => $this->draw_element($arr),
+			"element_name" => $arr["name"],
+			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
+			"GRID_ERR_MSG" => ""
+		));
 
 		// errmsg
 		if (!empty($arr["error"]))

@@ -294,7 +294,8 @@ class mrp_job_obj extends _int_object
 	**/
 	function save_materials($arr)
 	{
-		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+//		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+		$res = obj($this->prop("resource"));
 		if($res)
 		{
 			$conn = $res->connections_to(array(
@@ -1796,7 +1797,8 @@ class mrp_job_obj extends _int_object
 			aw_restore_acl();
 		}
 
-		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+//		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+		$res = obj($this->prop("resource"));
 		if($res)
 		{
 			$ws = $res->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
@@ -2148,7 +2150,7 @@ class mrp_job_obj extends _int_object
 			return new object_data_list(
 				$prms,
 				array(
-					CL_MATERIAL_EXPENSE => array("product", "product.name" => "product_name", "amount", "unit", "planning", "movement", "job")
+					CL_MATERIAL_EXPENSE => array("product", "product.name" => "product_name", "amount", "unit", "planning", "movement", "job", "job.state")
 				)
 			);
 		}

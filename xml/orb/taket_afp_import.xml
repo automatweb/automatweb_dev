@@ -22,5 +22,12 @@
 			</function>
 		</action>
 
+		<action name="get_users_data" all_args="1">
+			<function name="make_master_import_happy">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

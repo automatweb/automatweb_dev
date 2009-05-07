@@ -9,7 +9,7 @@
 <link rel="shortcut icon" href="/img/favicon.ico">
 
 <META NAME="Generator" CONTENT="AutomatWeb&reg;">
-<META NAME="Author" CONTENT="Struktuur Meedia">
+<META NAME="Author" CONTENT="Struktuur Varahaldus">
 
 		<meta name="Keywords" content="{VAR:keywords}">
 		<meta name="Description" content="{VAR:description}">
@@ -700,7 +700,7 @@ src="{VAR:baseurl}/img/intranet/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT="">
 <IMG src="{VAR:baseurl}/img/joon_gray.gif" WIDTH="780" HEIGHT="1" BORDER=0 ALT=""><br>
 <br>
 <span class="topmenu">
-AutomatWeb® on Struktuur Meedia registreeritud kaubamärk.<br>
+AutomatWeb® on Struktuur Varahalduse registreeritud kaubamärk.<br>
 Kõik õigused kaitstud 1999-2003.
 </span><br><br>
 <!--END FOOTER-->

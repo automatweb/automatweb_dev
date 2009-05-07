@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_db" folder="www/dev/terryf/automatweb_dev/classes/crm" extends="class_base">
+	<class name="crm_db" folder="www/automatweb_cvs/classes/crm" extends="class_base">
 		<action name="delete_organizations" all_args="1">
 			<function name="delete_organizations">
 				<arguments>

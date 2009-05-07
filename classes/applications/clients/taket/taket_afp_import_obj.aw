@@ -1236,6 +1236,20 @@ class taket_afp_import_obj extends _int_object
 		
 	}
 
+	// this is for personnel import and it should return php array with data
+	// and the personnel import can make persons and stuff out of this data (hopefully)
+	public function get_users_data($arr)
+	{
+		$whs = $this->get_warehouses();	
+		$wh = new object(reset($whs));
+		$adr = $wh->comment();
+		$data = file_get_contents($adr.'/index.php?get_users_data=1');
+arr('foobar');
+		arr($data);
+		exit();
+		
+	}
+
 	function parallel_url_fetch($d)
 	{
 		$mh = curl_multi_init();

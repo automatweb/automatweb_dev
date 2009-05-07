@@ -1062,7 +1062,8 @@ class mrp_job extends class_base
 	{
 		$t = $arr["prop"]["vcl_inst"];
 		$this->init_materials_tbl(&$t);
-		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+//		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
+		$res = obj($arr["obj_inst"]->prop("resource"));
 		if($res)
 		{
 			$t->set_caption(sprintf(t("Ressursil %s kasutatavad materjalid"), $res->name()));
@@ -1122,7 +1123,6 @@ class mrp_job extends class_base
 		$units = $po->instance()->get_units($po);
 		foreach($units as $i => $unit)
 		{
-			$unit = obj($unit);
 			if(!$unit)
 			{
 				unset($units[$i]);

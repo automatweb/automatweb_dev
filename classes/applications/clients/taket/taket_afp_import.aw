@@ -187,6 +187,21 @@ class taket_afp_import extends class_base implements warehouse_import_if
 		return $arr["post_ru"];
 	}
 
+	/**
+		@attrib name=get_users_data all_args=1
+	**/
+	function make_master_import_happy($arr)
+	{
+	arr($arr);
+	arr($this);
+		$data = array();
+		if($this->can("view", $arr["id"]))
+		{
+			$data = obj($arr["id"])->get_users_data($arr);
+		}
+		return $data;
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();

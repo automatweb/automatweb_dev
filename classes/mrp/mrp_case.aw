@@ -4,14 +4,16 @@
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_change)
 
-@classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
+@classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1 prop_cb=1 confirm_save_data=1 maintainer=voldemar
 
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
 @tableinfo mrp_case_schedule index=oid master_table=objects master_index=oid
 
-@groupinfo grp_general caption="&Uuml;ldine" parent=general
-@groupinfo grp_case_data caption="Projekti andmed" parent=general
-@groupinfo grp_case_workflow caption="Ressursid ja t&ouml;&ouml;voog"
+	@groupinfo grp_general caption="&Uuml;ldine" parent=general
+	@groupinfo grp_case_data caption="Projekti andmed" parent=general
+@groupinfo grp_case_formula caption="Tooteretsept"
+	@groupinfo grp_case_workflow caption="T&ouml;&ouml;voog" parent=grp_case_formula
+	@groupinfo grp_case_materials caption="Materjalid" parent=grp_case_formula
 @groupinfo grp_case_view caption="Vaatleja t&ouml;&ouml;laud" submit=no
 @groupinfo grp_case_schedule caption="Tellimuse t&ouml;&ouml;voog" submit=no
 	@groupinfo grp_case_schedule_gantt caption="T&ouml;&ouml;voo diagramm" submit=no parent=grp_case_schedule
@@ -20,12 +22,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @groupinfo grp_case_log caption="Ajalugu" submit=no
 
 
-@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data editonly=1
+@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data editonly=1
 @property workflow_errors type=text store=no no_caption=1 group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data
 @property header type=text store=no no_caption=1 group=grp_general,grp_case_data
 
 @default group=grp_general
-	@property name type=textbox table=objects field=name group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data,grp_case_view parent=general_info
+	@property name type=textbox table=objects field=name group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data,grp_case_view parent=general_info
 	@caption Projekti nr.
 
 	@property comment type=textbox table=objects field=comment
@@ -35,7 +37,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @default table=mrp_case
 	@property workspace type=hidden
 
-	@property state type=text group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data,grp_case_view editonly=1 parent=general_info
+	@property state type=text group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data,grp_case_view editonly=1 parent=general_info
 	@caption Staatus
 
 	@property starttime type=datetime_select
@@ -47,7 +49,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
 
-	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_data,grp_case_view editonly=1 parent=general_info
+	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data,grp_case_view editonly=1 parent=general_info
 	@caption Klient
 
 	@property progress type=hidden
@@ -156,12 +158,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default group=grp_case_workflow
-	@layout vsplitbox type=hbox width=25%:75% group=grp_case_workflow,grp_case_schedule_gantt,grp_case_view
-		@layout left_pane type=vbox parent=vsplitbox group=grp_case_workflow,grp_case_schedule_gantt,grp_case_view
-			@layout general_info type=vbox parent=left_pane area_caption=Projekti&nbsp;&uuml;ldandmed closeable=1 group=grp_case_workflow,grp_case_schedule_gantt,grp_case_view
+	@layout vsplitbox type=hbox width=25%:75% group=grp_case_workflow,grp_case_materials,grp_case_schedule_gantt,grp_case_view
+		@layout left_pane type=vbox parent=vsplitbox group=grp_case_workflow,grp_case_materials,grp_case_schedule_gantt,grp_case_view
+			@layout general_info type=vbox parent=left_pane area_caption=Projekti&nbsp;&uuml;ldandmed closeable=1 group=grp_case_workflow,grp_case_materials,grp_case_schedule_gantt,grp_case_view
 			@layout resource_tree type=vbox parent=left_pane area_caption=Ressursid&nbsp;kategooriate&nbsp;kaupa closeable=1
 				@property resource_tree type=text store=no no_caption=1 parent=resource_tree
 		@property workflow_table type=table store=no no_caption=1 parent=vsplitbox
+
+@default group=grp_case_materials
+	#layout vsplitbox type=hbox width=25%:75%
+		#layout left_pane type=vbox parent=vsplitbox
+		@layout materials_tree type=vbox parent=left_pane area_caption=Vali&nbsp;kasutatavad&nbsp;materjalid closeable=1
+				@property materials_tree type=treeview store=no no_caption=1 parent=materials_tree
+		@property materials_table type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_case_schedule_gantt
@@ -335,7 +344,7 @@ class mrp_case extends class_base
 		$retval = PROP_OK;
 		$this_object = $arr["obj_inst"];
 
-		$txt_grps = array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view");
+		$txt_grps = array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_formula", "grp_case_materials", "grp_case_view");
 
 		switch($prop["name"])
 		{
@@ -496,10 +505,6 @@ class mrp_case extends class_base
 				$this->_do_log($arr);
 				break;
 
-			case "case_view":
-				$this->_case_view($arr);
-				break;
-
 			case "states_chart":
 				$c = $arr["prop"]["vcl_inst"];
 				$c->set_type(GCHART_PIE_3D);
@@ -564,7 +569,7 @@ class mrp_case extends class_base
 						"CL_MRP_JOB.RELTYPE_MRP_PROJECT_JOB(CL_MRP_CASE)" => $this_object->id(),
 					),
 					array(
-						CL_MRP_JOB => array("RELTYPE_MRP_RESOURCE.oid" => "res", "RELTYPE_MRP_RESOURCE.name" => "res_nm", "length"),
+						CL_MRP_JOB => array("resource" => "res", "resource(CL_MRP_RESOURCE).name" => "res_nm", "length"),
 					)
 				);
 				foreach($odl->arr() as $oid => $odata)
@@ -581,10 +586,6 @@ class mrp_case extends class_base
 				));
 				break;
 
-			case "job_charts_tbl":
-				$this->_get_job_charts_tbl($arr);
-				break;
-
 			case "warehouse":
 				$ws = $arr["obj_inst"]->prop("workspace");
 				if($ws && $whs = $ws->prop("warehouse"))
@@ -598,6 +599,278 @@ class mrp_case extends class_base
 		}
 
 		return $retval;
+	}
+
+	function _get_materials_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"CL_MRP_JOB.RELTYPE_MRP_PROJECT_JOB(CL_MRP_CASE)" => $arr["obj_inst"]->id(),
+				new obj_predicate_sort(array("exec_order" => "ASC")),
+			),
+			array(
+				CL_MRP_JOB => array("resource", "state"),
+			)
+		);
+
+		$t->add_item(0, array(
+			"id" => "all_jobs",
+			"name" => t("Materjalid t&ouml;&ouml;de kaupa"),
+			"url" => aw_url_change_var("job_id", NULL),
+		));
+
+		$msg = t("Valitud t&ouml;&ouml; staatus ei luba materjale lisada!");
+		$applicable_states = array(
+			mrp_job_obj::STATE_NEW,
+			mrp_job_obj::STATE_PLANNED,
+			mrp_job_obj::STATE_ABORTED
+		);
+
+		foreach($odl->arr() as $jid => $jdata)
+		{
+			$disabled = !in_array($jdata["state"], $applicable_states);
+			$t->add_item("all_jobs", array(
+				"id" => $jid,
+				"name" => $jdata["name"],
+				"url" => aw_url_change_var("job_id", $jid),
+				"iconurl" => icons::get_icon_url(CL_MENU),
+			));
+			foreach(mrp_resource_obj::get_materials(array("id" => $jdata["resource"], "odl" => true))->arr() as $mid => $mdata)
+			{
+				$t->add_item($jid, array(
+					"id" => $jid."_".$mid,
+					"name" => $mdata["name"],
+					"url" => $disabled ? "javascript:(alert('$msg'))" : "javascript:add_material($mid, $jid)",
+					"onclick" => "alert(this.value);",
+					"iconurl" => icons::get_icon_url(CL_SHOP_PRODUCT),
+					/*"ajax" => array(
+						array(
+							"prop" => "materials_table",
+							"url" => $this->mk_my_orb("", array()),
+						)
+					),*/
+				));
+			}
+		}
+
+		$t->add_item(0, array(
+			"id" => "all_materials",
+			"name" => t("Materjalid kategooriate kaupa"),
+			"url" => "javascript:void(0)",
+		));
+
+		$whi = get_instance(CL_SHOP_WAREHOUSE);
+		$resi = get_instance(CL_MRP_RESOURCE);
+		$owner = $arr["obj_inst"]->prop("workspace");
+		if($owner)
+		{
+			$whs = $owner->prop("purchasing_manager");
+		}
+		if(count($whs))
+		{
+			$arr["warehouses"] = $whs;
+			$pt = $whi->get_warehouse_configs($arr, "prod_type_fld");
+			$ol = new object_list(array(
+				"parent" => $pt,
+				"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+			$this->insert_materials_tree_stuff($t, $ol->names());
+		}
+	}
+
+	protected function insert_materials_tree_stuff($t, $datas)
+	{
+		foreach($datas as $oid => $data)
+		{
+			if(!is_array($data))
+			{
+				$data = array(
+					"parent" => "all_materials",
+					"name" => $data,
+					"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+				);
+			}
+
+			$t->add_item($data["parent"], array(
+				"id" => $oid,
+				"name" => $data["name"],
+				"url" => $data["class_id"] == CL_SHOP_PRODUCT ? "javascript:add_material($oid, 0)" : "javascript:void(0)",
+				"iconurl" => icons::get_icon_url(($data["class_id"] == CL_SHOP_PRODUCT) ? $data["class_id"] : CL_MENU),
+			));
+
+			if(!empty($data["category"]))
+			{
+				foreach((array)$data["category"] as $cat)
+				{
+					$t->add_item($cat, array(
+						"id" => $oid,
+						"name" => $data["name"],
+						"url" => $data["class_id"] == CL_SHOP_PRODUCT ? "javascript:add_material($oid, 0)" : "javascript:void(0)",
+						"iconurl" => icons::get_icon_url(($data["class_id"] == CL_SHOP_PRODUCT) ? $data["class_id"] : CL_MENU),
+					));
+				}
+			}
+		}
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => array(CL_SHOP_PRODUCT, CL_SHOP_PRODUCT_CATEGORY),
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"class_id" => CL_SHOP_PRODUCT,
+								"CL_SHOP_PRODUCT.RELTYPE_CATEGORY" => array_keys($datas),
+							),
+						)),
+						"parent" => array_keys($datas),
+					),
+				))
+			),
+			array(
+				CL_SHOP_PRODUCT => array("class_id", "parent", "RELTYPE_CATEGORY.oid" => "category"),
+				CL_SHOP_PRODUCT_CATEGORY => array("class_id", "parent"),
+			)
+		);
+		if($odl->count())
+		{
+			$this->insert_materials_tree_stuff($t, $odl->arr());
+		}
+	}
+
+	function _init_materials_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "material",
+			"caption" => t("Materjal"),
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+			"align"=> "center",
+		));
+		$t->define_field(array(
+			"name" => "unit",
+			"caption" => t("&Uuml;hik"),
+			"align"=> "center",
+		));
+		$t->define_field(array(
+			"name" => "planning",
+			"caption" => t("Tarnetingimus planeerimisel"),
+			"align"=> "center",
+		));
+		$t->define_field(array(
+			"name" => "movement",
+			"caption" => t("Materjali liikumine materjalilaost"),
+			"align"=> "center",
+		));
+		$t->define_field(array(
+			"name" => "job",
+			"caption" => t("T&ouml;&ouml;"),
+			"align"=> "center",
+		));
+	}
+
+	function _get_materials_table($arr)
+	{
+		$this->_init_materials_table($arr);
+
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$jobs = $arr["obj_inst"]->get_job_names();
+
+		$data = mrp_job_obj::get_material_expenses(array(
+			"id" => isset($arr["request"]["job_id"]) ? $arr["request"]["job_id"] : array_keys($jobs),
+			"odl" => true,
+		));
+
+		$mec_o = obj(null, array(), CL_MATERIAL_EXPENSE_CONDITION);
+		$plan_ops = $mec_o->planning_options();
+		$move_ops = $mec_o->movement_options();
+
+		$applicable_states = array(
+			mrp_job_obj::STATE_NEW,
+			mrp_job_obj::STATE_PLANNED,
+			mrp_job_obj::STATE_ABORTED
+		);
+
+		foreach($data->arr() as $oid => $odata)
+		{
+			$disabled = !in_array($odata["job.state"], $applicable_states);
+			$prod_obj = obj($odata["product"]);
+			$t->define_data(array(
+				"material" => html::obj_change_url($prod_obj).html::hidden(array(
+					"name" => "materials_table[$oid][product]",
+					"value" => $odata["product"],
+				)),
+				"amount" => html::textbox(array(
+					"name" => "materials_table[$oid][amount]",
+					"size" => 4,
+					"value" => $odata["amount"],
+					"disabled" => $disabled,
+				)),
+				"unit" => mrp_job::get_materials_unitselect($prod_obj, $odata["unit"], $odata["job"]),
+				"planning" => html::select(array(
+					"name" => "materials_table[$oid][planning]",
+					"options" => $plan_ops,
+					"value" => $odata["planning"],
+					"disabled" => $disabled,
+				)),
+				"movement" => html::select(array(
+					"name" => "materials_table[$oid][movement]",
+					"options" => $move_ops,
+					"value" => $odata["movement"],
+					"disabled" => $disabled,
+				)),
+				"job" => html::select(array(
+					"name" => "materials_table[$oid][job]",
+					"options" => array("" => t("--vali--")) + $jobs,
+					"value" => $odata["job"],
+					"disabled" => $disabled,
+				)),
+			));
+		}
+	}
+
+	function _set_materials_table($arr)
+	{
+		$applicable_states = array(
+			mrp_job_obj::STATE_NEW,
+			mrp_job_obj::STATE_PLANNED,
+			mrp_job_obj::STATE_ABORTED
+		);
+
+		foreach($arr["request"]["materials_table"] as $tmp)
+		{
+			$material_expenses[$tmp["job"]]["amount"][$tmp["product"]] = $tmp["amount"];
+			$material_expenses[$tmp["job"]]["movement"][$tmp["product"]] = $tmp["movement"];
+			$material_expenses[$tmp["job"]]["planning"][$tmp["product"]] = $tmp["planning"];
+		}
+		foreach($arr["request"]["jobs"] as $job => $units)
+		{
+			foreach($units["unit"] as $product => $unit)
+			{
+				$material_expenses[$job]["unit"][$product] = $unit;
+			}
+		}
+
+		foreach($material_expenses as $jid => $data)
+		{
+			if($this->can("view", $jid) && in_array(obj($jid)->prop("state"), $applicable_states))
+			{
+				$job = obj($jid);
+				$job->save_materials($data);
+			}
+		}
 	}
 
 	function _get_job_charts_tbl($arr)
@@ -620,10 +893,10 @@ class mrp_case extends class_base
 			array(
 				"class_id" => CL_MRP_JOB,
 				"CL_MRP_JOB.RELTYPE_MRP_PROJECT_JOB(CL_MRP_CASE)" => $arr["obj_inst"]->id(),
-				"sort_by" => "objects.oid"
+				new obj_predicate_sort(array("exec_order" => "ASC")),
 			),
 			array(
-				CL_MRP_JOB => array("length", "started", "finished"),
+				CL_MRP_JOB => array("length", "real_length", "length_deviation"),
 			)
 		);
 		$jobs = array_values($odl->arr());
@@ -649,17 +922,10 @@ class mrp_case extends class_base
 						"color" => "e1e1e1",
 					),
 				));
-				// ARVUTA TEGELIK
-				$this->db_query("SELECT * FROM mrp_stats WHERE job_oid = '".$job["oid"]."'");
-				$real_len = 0;
-				while ($row = $this->db_next())
-				{
-					$real_len += $row["length"];
-				}
 				$plan = $job["length"];
-				$real = $job["started"] && $job["finished"] ? $real_len : false;
-				$deviation = $real !== false ? $real - $plan : 0;
-				$real = $real === false ? 0 : round($real/3600, 1);
+				$real = $job["real_length"];
+				$deviation = $job["length_deviation"];
+				$real = round($real/3600, 1);
 				$plan = round($plan/3600, 1);
 				$deviation = round($deviation/3600, 1);
 				$c->add_data(array(
@@ -770,7 +1036,7 @@ class mrp_case extends class_base
 				return PROP_IGNORE;
 
 			case "name":
-				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
+				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_formula", "grp_case_materials",  "grp_case_view")))
 				{
 					return PROP_IGNORE;
 				}
@@ -793,7 +1059,7 @@ class mrp_case extends class_base
 				break;
 
 			case "customer":
-				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_view")))
+				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_formula", "grp_case_materials", "grp_case_view")))
 				{
 					return PROP_IGNORE;
 				}
@@ -1289,7 +1555,7 @@ class mrp_case extends class_base
 		$toolbar = $arr["prop"]["toolbar"];
 
 		### delete button
-		if (isset($arr["request"]["group"]) and $arr["request"]["group"] === "grp_case_workflow")
+		if (isset($arr["request"]["group"]) and in_array($arr["request"]["group"], array("grp_case_workflow", "grp_case_formula", "grp_case_materials")))
 		{
 			$disabled = false;
 		}
@@ -2535,15 +2801,27 @@ class mrp_case extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
-			"name" => "planned_length",
-			"caption" => t("Planeeritud kestus"),
-			"align" => "center"
+			"name" => "length",
+			"caption" => t("Kestus"),
 		));
-		$t->define_field(array(
-			"name" => "real_len",
-			"caption" => t("Tegelik kestus"),
-			"align" => "center"
-		));
+			$t->define_field(array(
+				"name" => "planned_length",
+				"caption" => t("Planeeritud"),
+				"align" => "right",
+				"parent" => "length",
+			));
+			$t->define_field(array(
+				"name" => "real_len",
+				"caption" => t("Tegelik"),
+				"align" => "right",
+				"parent" => "length",
+			));
+			$t->define_field(array(
+				"name" => "len_dev",
+				"caption" => t("H&auml;lve"),
+				"align" => "right",
+				"parent" => "length",
+			));
 		$t->define_field(array(
 			"name" => "start",
 			"caption" => t("Algus"),
@@ -2565,7 +2843,7 @@ class mrp_case extends class_base
 		));
 	}
 
-	function _case_view($arr)
+	function _get_case_view($arr)
 	{
 		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_case_view_t($t);
@@ -2596,28 +2874,16 @@ class mrp_case extends class_base
 			### get & process field values
 			$resource_name = $resource->name () ? $resource->name () : "...";
 
-			$this->db_query("SELECT * FROM mrp_stats WHERE job_oid = ".$job->id());
-			$real_len = 0;
-			$real_start = 0;
-			$real_end = 0;
-			$real_empl = "";
-			while ($row = $this->db_next())
-			{
-				$real_len += $row["length"];
-				$real_start = $real_start == 0 ? $row["start"] : min($row["start"], $real_start);
-				$real_end = $real_end == 0 ? $row["end"] : max($row["end"], $real_end);
-				$real_empl = $row["person_name"];
-			}
-
 			$t->define_data(array(
 				"ord" => $job->prop("exec_order"),
 				"pred" => $prerequisites,
 				"resource" => $resource_name,
 				"state" => $state,
 				"planned_length" => round($job->prop("planned_length") / 3600.0, 2),
-				"real_len" => round($real_len / 3600.0, 2),
-				"start" => $real_start,
-				"end" => $real_end,
+				"real_len" => round($job->prop("real_length") / 3600.0, 2),
+				"len_dev" => round($job->prop("length_deviation") / 3600.0, 2).sprintf(t(" (%s %%)"), $job->prop("planned_length") == 0 && $job->prop("length_deviation") == 0 ? "0" : ($job->prop("planned_length") == 0 ? "&#8734;" : round(($job->prop("length_deviation")/$job->prop("planned_length"))*100, 2))),
+				"start" => $job->prop("started"),
+				"end" => $job->prop("finished"),
 				"employee" => $real_empl
 			));
 		}
@@ -2646,6 +2912,85 @@ class mrp_case extends class_base
 					return true;
 			}
 		}
+	}
+
+	/**
+		@attrib name=add_material params=name all_args=1
+	**/
+	public function add_material($arr)
+	{
+		$t = new vcl_table();
+		$t->set_titlebar_display(false);
+		$this->_init_materials_table(array(
+			"prop" => array(
+				"vcl_inst" => &$t,
+			),
+		));
+
+		/*
+		$material_expense = obj();
+		$material_expense->set_class_id(CL_MATERIAL_EXPENSE);
+		$oid = $material_expense->save();
+		*/
+
+		$mec_o = obj(null, array(), CL_MATERIAL_EXPENSE_CONDITION);
+		$plan_ops = $mec_o->planning_options();
+		$move_ops = $mec_o->movement_options();
+
+		$jobs = obj($arr["id"])->get_job_names();
+
+		$prod_obj = obj($arr["material_id"]);
+
+		$id = $arr["job_id"]."_".$arr["material_id"];
+
+		$t->define_data(array(
+			"material" => html::obj_change_url($prod_obj).html::hidden(array(
+				"name" => "materials_table[$id][product]",
+				"value" => $arr["material_id"],
+			)),
+			"amount" => html::textbox(array(
+				"name" => "materials_table[$id][amount]",
+				"size" => 4,
+			)),
+			"unit" => mrp_job::get_materials_unitselect($prod_obj, NULL, $arr["job_id"]),
+			"planning" => html::select(array(
+				"name" => "materials_table[$id][planning]",
+				"options" => $plan_ops,
+			)),
+			"movement" => html::select(array(
+				"name" => "materials_table[$id][movement]",
+				"options" => $move_ops,
+			)),
+			"job" => html::select(array(
+				"name" => "materials_table[$id][job]",
+				"options" => array("" => t("--vali--")) + $jobs,
+				"value" => $arr["job_id"],
+			)),
+		));
+		$ret = $t->get_html(true);
+		$ret = str_replace(array("<table border='0' width='100%' cellspacing='1' cellpadding='3' class='awmenuedittabletag'>", "</table>"), "", $ret);
+		die($ret);
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		return '
+function add_material(mid, jid)
+{
+	$("div[name=\'materials_table\']").children().children().children().children().each(function()
+	{
+		o = $(this);
+		$.ajax({
+			url: "'.$this->mk_my_orb("add_material", array("id" => $arr["request"]["id"])).'",
+			data: "material_id="+mid+"&job_id="+jid,
+			success: function(html)
+			{
+				o.append(html);
+			}
+		});
+	});
+}
+		';
 	}
 }
 

@@ -70,7 +70,10 @@
       <reltypes>
             <SLAVE_OBJ>
                   <value>1</value>
-                  <clid>CL_UT_IMPORT</clid>
+                  <clid>
+                        <num_0>CL_UT_IMPORT</num_0>
+                        <num_1>CL_TAKET_AFP_IMPORT</num_1>
+                  </clid>
                   <caption>Massiivi vormistaja</caption>
             </SLAVE_OBJ>
             <CRM_DB>

@@ -422,10 +422,6 @@ class doc extends class_base
 				$this->kw_tb($arr);
 				break;
 
-			case "content":
-				$data["value"] = htmlspecialchars($data["value"]);
-				break;
-
 			case "name":
 				$retval = PROP_IGNORE;
 				break;

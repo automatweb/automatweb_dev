@@ -256,7 +256,8 @@ class mrp_schedule extends db_connector
 			throw new awex_mrp_schedule_workspace("Workspace not defined");
 		}
 
-		if ($not_win32)
+		// Ee, lock ei t88ta vist
+		if (false && $not_win32)
 		{
 			### get and acquire semaphore for given workspace
 			$sem_id = sem_get($workspace_id, 1, 0666, 1);

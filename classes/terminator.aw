@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.8 2009/04/17 08:06:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.9 2009/05/07 13:18:42 kristo Exp $
 // terminator.aw - The Terminator
 /*
 
@@ -66,11 +66,23 @@ class terminator extends class_base
 		));
 		return $this->parse();
 	}
+	function inverse($x) {
+		if (!$x) {
+			throw new Exception('Division by zero.');
+		}
+		else return 1/$x;
+	}
 
 	function KAAREL($arr)
 	{
-		$url = "asdasdasd";
-		print file_get_contents("http://sitecopy.struktuur.ee/orb.aw?class=site_copy&action=add_site&url={$url}&cvs={$cvs}");
+		try {
+			echo $this->inverse(5) . "\n";
+			echo $this->inverse(0) . "\n";
+			echo $this->inverse(5) . "\n";
+			echo $this->inverse(5) . "\n";
+		} catch (Exception $e) {
+			echo 'Caught exception: ',  $e->getMessage(), "\n";
+		}
 	}
 }
 ?>

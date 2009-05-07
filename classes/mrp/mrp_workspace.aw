@@ -1987,7 +1987,7 @@ class mrp_workspace extends class_base
 			$odl = new object_data_list(
 				array(
 					"class_id" => CL_MRP_JOB,
-					"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $id,
+					"resource" => $id,
 					"state" => MRP_STATUS_DONE,
 					"finished" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
 					new obj_predicate_sort(array("finished" => "ASC")),//!!! miks sort selline on? milleks seda vaja kui ikkag sql lihtsalt kuskil?
@@ -2420,12 +2420,12 @@ class mrp_workspace extends class_base
 		$odl = new object_data_list(
 			array(
 				"class_id" => CL_MRP_JOB,
-				"CL_MRP_JOB.RELTYPE_MRP_RESOURCE" => $ids,
-				"CL_MRP_JOB.state" => mrp_job_obj::STATE_DONE,
-				"CL_MRP_JOB.finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end + 24*3600 - 1, "int"),
+				"resource" => $ids,
+				"state" => mrp_job_obj::STATE_DONE,
+				"finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $start, $end + 24*3600 - 1, "int"),
 			),
 			array(
-				CL_MRP_JOB => array("real_length", "length", "started", "finished", "RELTYPE_MRP_RESOURCE.oid"),
+				CL_MRP_JOB => array("real_length", "length", "started", "finished", "resource"),
 			)
 		);
 
@@ -2440,12 +2440,12 @@ class mrp_workspace extends class_base
 			"convert_to_hours" => false,
 		));
 
-		$res["real"] = $data[MRP_STATUS_INPROGRESS] + $res["real"];
-		$res["paus"] = $data[MRP_STATUS_PAUSED] + $res["paus"];
+		$res["real"] = $data[MRP_STATUS_INPROGRESS] + safe_array($res["real"]);
+		$res["paus"] = $data[MRP_STATUS_PAUSED] + safe_array($res["paus"]);
 
 		foreach($o_datas as $oid => $o)
 		{
-			$k = $o["RELTYPE_MRP_RESOURCE.oid"];
+			$k = $o["resource"];
 			$plan = $o["real_length"] ? $o["length"] * $res["real"][$k] / $o["real_length"] : 0;
 
 			$res["plan"][$k] = (int) (isset($res["plan"][$k]) ? $res["plan"][$k] + $plan : $plan);
@@ -2867,7 +2867,7 @@ class mrp_workspace extends class_base
 					$clid = CL_MRP_RESOURCE;
 
 					// Additionnal data
-					$planned = get_instance("mrp_resource_obj")->get_planned_hours(array(
+					$planned = mrp_resource_obj::get_planned_hours(array(
 						"from" => $from,
 						"to" => $to,
 						"id" => $data_prms["resource"],
@@ -5505,9 +5505,6 @@ class mrp_workspace extends class_base
 			return;
 		}
 
-		$all_resources = $arr["obj_inst"]->meta("umgr_all_resources");
-		$dept_resources = $arr["obj_inst"]->meta("umgr_dept_resources");
-
 		$resource_tree = new object_tree(array(
 			"parent" => $arr["obj_inst"]->prop ("resources_folder"),
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
@@ -5531,6 +5528,8 @@ class mrp_workspace extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$prof2res[$o->prop("profession")] = $o->prop("resource");
+			$all_resources[$o->prop("profession")] = $o->prop("all_resources");
+			$dept_resources[$o->prop("profession")] = $o->prop("all_section_resources");
 		}
 
 		$unit = obj($arr["request"]["unit"]);
@@ -5538,28 +5537,32 @@ class mrp_workspace extends class_base
 
 		foreach($unit->connections_from(array("type" => "RELTYPE_PROFESSIONS")) as $c)
 		{
+			$all_res = $all_resources[$c->prop("to")];
 			$t->define_data(array(
 				"name" => $c->prop("to.name"),
 				"sel_resource" => html::select(array(
-					"name" => "prof2res[".$c->prop("to")."]",
+					"name" => "user_mgr[".$c->prop("to")."][resource]",
 					"options" => $resources,
-					"value" => $prof2res[$c->prop("to")]
+					"value" => $prof2res[$c->prop("to")],
+					"multiple" => 1,
+					"size" => 4,
+					"disabled" => $all_res,
 				)),
 				"all_resources" => html::checkbox(array(
-					"name" => "all_resources[".$c->prop("to")."]",
+					"name" => "user_mgr[".$c->prop("to")."][all_resources]",
 					"value" => 1,
 					"checked" => $all_resources[$c->prop("to")],
 				)).html::hidden(array(
-					"name" => "old_all_resources[".$c->prop("to")."]",
+					"name" => "user_mgr[".$c->prop("to")."][old_all_resources]",
 					"value" => $all_resources[$c->prop("to")]
 				)),
 				"dept_resources" => html::checkbox(array(
-					"name" => "dept_resources[".$c->prop("to")."]",
+					"name" => "user_mgr[".$c->prop("to")."][all_section_resources]",
 					"value" => 1,
 					"checked" => $dept_resources[$c->prop("to")],
 				)).html::hidden(array(
-					"name" => "old_dept_resources[".$c->prop("to")."]",
-                                        "value" => $dept_resources[$c->prop("to")]
+					"name" => "user_mgr[".$c->prop("to")."][old_all_section_resources]",
+					"value" => $dept_resources[$c->prop("to")]
 				)),
 				"change" => html::get_change_url($c->prop("to"), array(), "Muuda")
 			));
@@ -5595,17 +5598,12 @@ class mrp_workspace extends class_base
 		$existing_rels = array();
 		foreach($operators->arr() as $o)
 		{
-			$existing_rels[$o->prop("profession")] = array(
-				"res" => $o->prop("resource"),
-				"rel" => $o
-			);
+			$existing_rels[$o->prop("profession")] = $o;
 		}
 
-		// create new rels for new ones
-		// modify exitsing ones
-		foreach(safe_array($arr["prof2res"]) as $prof => $res)
+		foreach(safe_array(ifset($arr, "user_mgr")) as $prof => $data)
 		{
-			if (!is_oid($prof) || !is_oid($res))
+			if(!is_oid($prof))
 			{
 				continue;
 			}
@@ -5618,71 +5616,25 @@ class mrp_workspace extends class_base
 				$rel->set_parent($arr["id"]);
 				$prof_o = obj($prof);
 				$res_o = obj($res);
-				$rel->set_name("ametinimetus ".$prof_o->name()." => ressurss ".$res_o->name());
+				$rel->set_name("Ametinimetus ".$prof_o->name()." => ressurss ".$res_o->name());
 				$rel->set_prop("profession", $prof);
 				$rel->set_prop("resource", $res);
 				$rel->set_prop("unit", $arr["unit"]);
 				$rel->save();
 			}
 			else
-			if ($existing_rels[$prof]["res"] != $res)
 			{
-				// change cur
-				$rel = $existing_rels[$prof]["rel"];
-				$rel->set_prop("resource", $res);
+				// change current
+				$rel = $existing_rels[$prof];
+				if(empty($data["all_resources"]))
+				{
+					$rel->set_prop("resource", $data["resource"]);
+				}
+				$rel->set_prop("all_resources", empty($data["all_resources"]) ? 0 : 1);
+				$rel->set_prop("all_section_resources", empty($data["all_section_resources"]) ? 0 : 1);
 				$rel->save();
 			}
-
-			unset($existing_rels[$prof]);
 		}
-
-		// delete deleted ones
-		foreach($existing_rels as $prof => $rel)
-		{
-			if (empty($prof2res[$prof]))
-			{
-				$rel["rel"]->delete();
-			}
-		}
-
-		$o = obj($arr["id"]);
-		$oldal = safe_array($o->meta("umgr_all_resources"));
-		foreach(safe_array($arr["old_all_resources"]) as $k => $v)
-		{
-			if ($arr["all_resources"][$k] != $v)
-			{
-				$oldal[$k] = $arr["all_resources"][$k];
-			}
-		}
-
-		foreach(safe_array($arr["all_resources"]) as $k => $v)
-		{
-			if ($arr["all_resources"][$k] != $arr["old_all_resources"][$k])
-			{
-					$oldal[$k] = $arr["all_resources"][$k];
-			}
-		}
-
-		$o->set_meta("umgr_all_resources", $oldal);
-
-		$oldal = safe_array($o->meta("umgr_dept_resources"));
-		foreach(safe_array($arr["old_dept_resources"]) as $k => $v)
-		{
-			if ($arr["dept_resources"][$k] != $v)
-			{
-				$oldal[$k] = $arr["dept_resources"][$k];
-			}
-		}
-		foreach(safe_array($arr["dept_resources"]) as $k => $v)
-		{
-			if ($arr["dept_resources"][$k] != $arr["old_dept_resources"][$k])
-			{
-					$oldal[$k] = $arr["dept_resources"][$k];
-			}
-		}
-
-		$o->set_meta("umgr_dept_resources", $oldal);
-		$o->save();
 
 		// cleverly return
 		return $arr["return_url"];
@@ -6464,7 +6416,7 @@ class mrp_workspace extends class_base
 			$len  = sprintf ("%02d", floor($length / 3600)).":";
 			$len .= sprintf ("%02d", floor(($length % 3600) / 60));
 
-			$resource_str = $job["RELTYPE_MRP_RESOURCE.name"];
+			$resource_str = $job["resource(CL_MRP_RESOURCE).name"];
 			if ($this->can("edit", $job["resource"]))
 			{
 				$resource_str = html::obj_change_url($job["resource"]);
@@ -6784,7 +6736,7 @@ class mrp_workspace extends class_base
 					"starttime",
 					"remaining_length",
 					"exec_order",
-					"RELTYPE_MRP_RESOURCE.name",
+					"resource(CL_MRP_RESOURCE).name",
 				),
 			)
 		);
@@ -6819,7 +6771,10 @@ class mrp_workspace extends class_base
 		{
 			// get professions for resources
 			$prof = $op->prop("profession");
-			$persons[$op->prop("resource")][$prof] = $prof;
+			foreach($op->prop("resource") as $res)
+			{
+				$persons[$res][$prof] = $prof;
+			}
 			$profs[$prof] = $prof;
 		}
 
@@ -7886,6 +7841,28 @@ END ajutine
 			}
 
 			exit ($tree->finalize_tree(array("rootnode" => $arr["parent"])));
+		}
+	}
+
+	public function callback_generate_scripts($arr)
+	{
+		if($arr["request"]["group"] == "grp_users_mgr")
+		{
+			return "
+$(document).ready(function(){
+	$(\"input[type='checkbox'][name$='][all_resources]']\").click(function(){
+		o = $(this);
+		if(o.attr('checked'))
+		{
+			$(\"select[name^='\"+o.attr('name').replace('all_resources', 'resource')+\"']\").attr('disabled', 'disabled');
+		}
+		else
+		{
+			$(\"select[name^='\"+o.attr('name').replace('all_resources', 'resource')+\"']\").removeAttr('disabled');
+		}
+	});
+});
+			";
 		}
 	}
 }

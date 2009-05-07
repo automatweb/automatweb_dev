@@ -59,6 +59,17 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;d</caption>
       </property>
       <property>
+            <name>resource_gantt</name>
+            <table>objects</table>
+            <group>grp_resource_gantt</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;d</caption>
+      </property>
+      <property>
             <name>job_time_tree</name>
             <table>objects</table>
             <group>
@@ -330,6 +341,27 @@
             <store>no</store>
       </property>
       <property>
+            <name>operators_tlb</name>
+            <table>objects</table>
+            <group>grp_resource_operators</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>operators_tbl</name>
+            <table>objects</table>
+            <group>grp_resource_operators</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Ressursi operaatorid</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
@@ -360,6 +392,10 @@
             <grp_resource_schedule>
                   <caption>Kalender</caption>
             </grp_resource_schedule>
+            <grp_resource_gantt>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;voog</caption>
+                  <submit>no</submit>
+            </grp_resource_gantt>
             <grp_resource_joblist>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;leht</caption>
                   <submit>no</submit>
@@ -398,6 +434,11 @@
                   <submit>no</submit>
                   <confirm_save_data>1</confirm_save_data>
             </grp_resource_materials>
+            <grp_resource_operators>
+                  <caption>Inimesed</caption>
+                  <submit>no</submit>
+                  <confirm_save_data>1</confirm_save_data>
+            </grp_resource_operators>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

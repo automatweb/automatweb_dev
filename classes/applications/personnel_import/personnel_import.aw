@@ -29,7 +29,7 @@
 
 @groupinfo autoimport caption="Automaatne import"
 
-@reltype SLAVE_OBJ value=1 clid=CL_UT_IMPORT
+@reltype SLAVE_OBJ value=1 clid=CL_UT_IMPORT,CL_TAKET_AFP_IMPORT
 @caption Massiivi vormistaja
 
 @reltype CRM_DB value=2 clid=CL_CRM_DB

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource_operator.aw,v 1.3 2008/01/31 13:54:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource_operator.aw,v 1.4 2009/05/07 13:19:31 kristo Exp $
 // mrp_resource_operator.aw - Operaator 
 /*
 
@@ -14,20 +14,26 @@
 @property profession type=relpicker reltype=RELTYPE_PROFESSION 
 @caption Ametinimetus
 
-@property resource type=relpicker reltype=RELTYPE_RESOURCE
-@caption Resurss
-
 @property unit type=relpicker reltype=RELTYPE_UNIT
 @caption &Uuml;ksus
 
+@property resource type=relpicker multiple=1 reltype=RELTYPE_RESOURCE store=connect
+@caption Ressurss
+
+@property all_resources type=checkbox field=aw_all_resources
+@caption N&auml;ita k&otilde;ikide ressurside t&ouml;id
+
+@property all_section_resources type=checkbox field=aw_all_section_resources
+@caption N&auml;ita osakonna ressurside t&ouml;id
+
 @reltype PROFESSION value=1 clid=CL_CRM_PROFESSION
-@caption ametinimetus
+@caption Ametinimetus
 
 @reltype RESOURCE value=2 clid=CL_MRP_RESOURCE
-@caption resurss
+@caption Ressurss
 
 @reltype UNIT value=3 clid=CL_CRM_SECTION
-@caption osakond
+@caption Osakond
 
 */
 
@@ -95,6 +101,25 @@ class mrp_resource_operator extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function do_db_upgrade($table, $field, $q, $err)
+	{
+		if ("aw_mrp_resource_operator" === $table)
+		{
+			ini_set("ignore_user_abort", "1");
+
+			switch($field)
+			{
+				case "aw_all_resources":
+				case "aw_all_section_resources":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(1) UNSIGNED"
+					));
+					return true;
+			}
+		}
 	}
 }
 ?>

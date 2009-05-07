@@ -763,7 +763,7 @@ class bug extends class_base
 						}
 					}
 					$bdd = $bt->prop("bug_def_deadline");
-					if($bdd>0)
+					if($bdd > 0)
 					{
 						$prop["value"] = time() + $bdd*24*60*60;
 					}

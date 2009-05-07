@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.80 2009/02/10 15:33:40 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.81 2009/05/07 13:19:25 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -26,7 +26,7 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 	@caption Kas kasutaja logitakse automaatselt sisse liitumisel
 
 	@property send_join_mail type=checkbox ch_value=1 field=meta method=serialize 
-	@caption Kas liitumisel saadetakse meil
+	@caption Kas 7.05.2009saadetakse meil
 
 	@property users_blocked_by_default type=checkbox ch_value=1 field=meta method=serialize 
 	@caption Kasutajad vaikimisi blokeeritud
@@ -552,7 +552,7 @@ class join_site extends class_base
 
 			foreach($props as $nprop)
 			{
-				if (!$this->prop_types[$nprop["type"]] && $nprop["name"]!="phone")
+				if (empty($this->prop_types[$nprop["type"]]) && ifset($nprop, "name") != "phone")
 				{
 					continue;
 				}
@@ -560,7 +560,7 @@ class join_site extends class_base
 				$req = html::checkbox(array(
 					"name" => "required[$clid][".$nprop["name"]."]",
 					"value" => 1,
-					"checked" => ($required[$clid][$nprop["name"]] == 1)
+					"checked" => isset($required[$clid][$nprop["name"]]) && $required[$clid][$nprop["name"]] == 1
 				));
 				if ($clid == CL_USER)
 				{
@@ -574,11 +574,11 @@ class join_site extends class_base
 				}
 
 				$prop["vcl_inst"]->define_data(array(
-					"prop" => str_repeat("&nbsp;", 10).$nprop["caption"]." (".$nprop["name"].")",
+					"prop" => str_repeat("&nbsp;", 10).ifset($nprop, "caption")." (".ifset($nprop, "name").")",
 					"visible" => html::checkbox(array(
 						"name" => "visible[$clid][".$nprop["name"]."]",
 						"value" => 1,
-						"checked" => ($visible[$clid][$nprop["name"]] == 1)
+						"checked" => isset($visible[$clid][$nprop["name"]]) && $visible[$clid][$nprop["name"]] == 1
 					)),
 					"required" => $req
 				));

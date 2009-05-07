@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.51 2009/04/09 08:40:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.52 2009/05/07 13:19:29 kristo Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1419,9 +1419,10 @@ class persons_webview extends class_base
 		{
 			$vars["org_rel_comment"] = $or->prop("comment");
 			$vars["room"] = $or->prop("room");
-			$vars["profession"] = $or->prop("profession.name");
 		}
 
+		$vars["profession"] = reset($worker->get_profession_selection($this->company->id()));
+		$vars["rank"] = $vars["profession"];
 		//kraad
 		$degree = $worker->get_first_obj_by_reltype("RELTYPE_DEGREE");
 		if(is_object($degree))

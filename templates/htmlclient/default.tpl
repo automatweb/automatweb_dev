@@ -132,7 +132,7 @@ this.disabled=true;self.disabled=true;
 		<!-- END SUB: GRIDITEM -->
 
 		<!-- SUB: GRIDITEM_NO_CAPTION -->
-		<div class="aw04gridcell_no_caption">{VAR:element}</div>
+		<div class="aw04gridcell_no_caption" name="{VAR:element_name}">{VAR:element}</div>
 		<!-- END SUB: GRIDITEM_NO_CAPTION -->
 
 		<!-- SUB: GRID_HBOX_OUTER -->
