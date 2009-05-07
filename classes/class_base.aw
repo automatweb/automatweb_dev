@@ -6370,7 +6370,7 @@ class class_base extends aw_template
 			$retval .= $function_draft;
 		}
 
-		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && empty($arr["request"]["group"]) || $arr["request"]["group"] !== "relationmgr")
+		if(aw_ini_get("user_interface.content_trans") && empty($arr["new"]) && (empty($arr["request"]["group"]) || $arr["request"]["group"] !== "relationmgr"))
 		{
 			if(@$arr["request"]["class"] === "admin_if" || @$arr["request"]["class"] === "personnel_management" && @$arr["request"]["group"] === "offers")
 			{
