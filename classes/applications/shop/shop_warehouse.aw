@@ -13,6 +13,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@caption Nimi
 	@comment Objekti nimi
 
+	@property short_name type=textbox field=meta method=serialize
+	@caption L&uuml;hend
+
 	@property comment type=textbox
 	@caption Kommentaar
 	@comment Vabas vormis tekst objekti kohta

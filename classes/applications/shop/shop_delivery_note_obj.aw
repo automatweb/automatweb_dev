@@ -494,9 +494,13 @@ class shop_delivery_note_obj extends _int_object
 			"site_id" => array(),
 			"lang_id" => array(),
 		));
-		$res = array(0 => t("--vali--")) + $ol->names();
-		natcasesort($res);
-		return $res;	
+		foreach($ol->arr() as $oid => $o)
+		{
+			$whss[$oid] = $o->prop("short_name") ? $o->prop("short_name") : $o->name();
+		}
+		$whs = array(0=>t("--vali--")) + $whs;
+		natcasesort($whs);
+		return $whs;	
 	}
 
 	function _get_article_code_chooser()

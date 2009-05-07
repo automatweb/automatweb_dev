@@ -54,7 +54,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>transport</field>
-            <caption>Transport</caption>
+            <caption>Transpordikulu</caption>
       </property>
       <property>
             <name>customs</name>
@@ -62,7 +62,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>customs</field>
-            <caption>Toll</caption>
+            <caption>Tollikulu</caption>
       </property>
       <property>
             <name>currency</name>

@@ -26,10 +26,10 @@
 	@caption Tarnija
 
 	@property transport type=textbox
-	@caption Transport
+	@caption Transpordikulu
 
 	@property customs type=textbox
-	@caption Toll
+	@caption Tollikulu
 
 	@property currency type=textbox
 	@caption Valuuta
@@ -533,7 +533,7 @@ class shop_delivery_note extends class_base
 				if($this->can("view", $unit))
 				{
 					$uo = obj($unit);
-					$vals["unit_list"][$unit] = $uo->name();
+					$vals["unit_list"][$unit] = $uo->prop("unit_code") ? $uo->prop("unit_code") : $uo->name();
 				}
 			}
 			$data = array(
