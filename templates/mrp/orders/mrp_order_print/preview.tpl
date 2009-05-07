@@ -1,101 +1,116 @@
-<style type="text/css">
-#contact { border: 0; font-family: Verdana; font-size: 10px; margin: 2em; width: 80%; }
-#contact tr.even td.value { background: #f6f6f6; }
-#contact tr td { }
-#contact tr td.caption { font-weight: bold; padding: 4px 8px; text-align: right; width: 20%; }
-#contact tr td.value { padding: 4px 8px; width: 80%; }
-#contact tr td.logo { font-weight: bold; padding: 4px 8px 4em 8px;; text-align: right; width: 20%; }
+<font size="2" face="Arial">
 
-#mrp { border: 0; font-family: Verdana; font-size: 10px; margin: 2em; width: 80%; }
-#mrp tr.even td.value { background: #f6f6f6; }
-#mrp tr td {  }
-#mrp tr td.caption { font-weight: bold; padding: 4px 8px; text-align: right; width: 20%; }
-#mrp tr td.value { padding: 4px 8px; width: 80%; }
-#mrp tr td.price { color: red; }
-</style>
+<!-- demo header -->
 
-<table id="contact" cellpadding="0" cellspacing="0">
+<table border="0" cellpadding="4" cellspacing="0" width="100%">
 	<tr>
-		<td class="logo">{VAR:orderer_logo}</td>
-		<td></td>
-	</tr>
-	<tr class="even">
-		<td class="caption">TELLIJA:</td>
-		<td class="value">{VAR:orderer_name}</td>
-	</tr>
-	<tr>
-		<td class="caption">AADRESS:</td>
-		<td class="value">{VAR:orderer_address}</td>
-	</tr>
-	<tr class="even">
-		<td class="caption">TELEFON:</td>
-		<td class="value">{VAR:orderer_phone}</td>
-	</tr>
-	<tr>
-		<td class="caption">FAX:</td>
-		<td class="value">{VAR:orderer_fax}</td>
-	</tr>
-	<tr class="even">
-		<td class="caption">KONTAKTISIK:</td>
-		<td class="value">{VAR:orderer_contact}</td>
+		<td width="50%"><img src="http://www.reusner.ee/img/logo.png" width="162" height="55"></td>
+		<td width="50%">
+			<strong>Reusner AS</strong><br>
+			Lõuka 10, 13521 Tallinn<br>
+			Tel: 6 807 100<br>
+			Faks: 6 517 575<br>
+			E-mail: info@reusner.ee 
+		</td>
 	</tr>
 </table>
 
-<table id="mrp" cellpadding="0" cellspacing="0">
-	<tr>
-		<td class="caption">TELLIMUSE NIMI:</td>
-		<td class="value">{VAR:name}</td>
+<br>
+
+<h1>{VAR:name}</h1>
+
+<br>
+
+<!-- tellija logo: {VAR:orderer_logo} -->
+
+<table id="orderer" bgcolor="#efefef" border="1" bordercolor="#ffffff" cellpadding="4" cellspacing="0" width="100%" style="border-collapse: collapse;">
+	<tr bgcolor="#bbbbbb">
+		<th colspan="2">Tellija andmed</th>
 	</tr>
 	<tr class="even">
-		<td class="caption">TR&Uuml;KIARV:</td>
-		<td class="value">{VAR:amount}</td>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Tellija:</strong></td>
+		<td class="value" width="75%">{VAR:orderer_name}&#32;</td>
 	</tr>
 	<tr>
-		<td class="caption">MAHT:</td>
-		<td class="value">{VAR:e_num_pages}</td>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Aadress:</strong></td>
+		<td class="value" width="75%">{VAR:orderer_address}&#32;</td>
 	</tr>
 	<tr class="even">
-		<td class="caption">FORMAAT:</td>
-		<td class="value">{VAR:e_format}</td>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Telefon:</strong></td>
+		<td class="value" width="75%">{VAR:orderer_phone}&#32;</td>
 	</tr>
 	<tr>
-		<td class="caption">KAANED:</td>
-		<td class="value">{VAR:e_covers}</td>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Faks:</strong></td>
+		<td class="value" width="75%">{VAR:orderer_fax}&#32;</td>
 	</tr>
 	<tr class="even">
-		<td class="caption">V&Auml;RVILISUS (kaaned):</td>
-		<td class="value">{VAR:e_cover_colour}</td>
-	</tr>
-	<tr>
-		<td class="caption">V&Auml;RVILISUS (sisu):</td>
-		<td class="value">{VAR:e_main_colour}</td>
-	</tr>
-	<tr class="even">
-		<td class="caption">PABER (kaaned):</td>
-		<td class="value">{VAR:e_cover_paper}</td>
-	</tr>
-	<tr>
-		<td class="caption">PABER (sisu):</td>
-		<td class="value">{VAR:e_main_paper}</td>
-	</tr>
-	<tr class="even">
-		<td class="caption">K&Ouml;IDE V&Otilde;I KINNITUS:</td>
-		<td class="value">{VAR:e_binding}</td>
-	</tr>
-	<tr>
-		<td class="caption">M&Otilde;&Otilde;DUD:</td>
-		<td class="value">{VAR:e_measures}</td>
-	</tr>
-	<tr class="even">
-		<td class="caption">MATERIALID:</td>
-		<td class="value">{VAR:e_materials}</td>
-	</tr>
-	<tr>
-		<td class="caption">J&Auml;RELT&Ouml;&Ouml;TLUS:</td>
-		<td class="value">{VAR:e_post_processing}</td>
-	</tr>
-	<tr class="even">
-		<td class="caption price">HIND:</td>
-		<td class="value price">{VAR:price}</td>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Kontaktisik:</strong></td>
+		<td class="value" width="75%">{VAR:orderer_contact}&#32;</td>
 	</tr>
 </table>
+
+<br><br><br>
+
+<table id="data" bgcolor="#efefef" border="1" bordercolor="#ffffff" cellpadding="4" cellspacing="0" width="100%" style="border-collapse: collapse;">
+	<tr bgcolor="#bbbbbb">
+		<th colspan="2">Tellimuse andmed</th>
+	</tr>
+	<tr>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Tellimuse nimi:</strong></td>
+		<td class="value" width="75%">{VAR:name}&#32;</td>
+	</tr>
+	<tr class="even">
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Tr&uuml;kiarv:</strong></td>
+		<td class="value" width="75%">{VAR:amount}&#32;</td>
+	</tr>
+	<tr>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Maht:</strong></td>
+		<td class="value" width="75%">{VAR:e_num_pages}&#32;</td>
+	</tr>
+	<tr class="even">
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Formaat:</strong></td>
+		<td class="value" width="75%">{VAR:e_format}&#32;</td>
+	</tr>
+	<tr>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Kaaned:</strong></td>
+		<td class="value" width="75%">{VAR:e_covers}&#32;</td>
+	</tr>
+	<tr class="even">
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Paber (kaaned):</strong></td>
+		<td class="value" width="75%">{VAR:e_cover_paper}&#32;</td>
+	</tr>
+	<tr>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Paber (sisu):</strong></td>
+		<td class="value" width="75%">{VAR:e_main_paper}&#32;</td>
+	</tr>
+	<tr class="even">
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Värvilisus (kaaned):</strong></td>
+		<td class="value" width="75%">{VAR:e_cover_colour}&#32;</td>
+	</tr>
+	<tr>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>V&auml;rvilisus (sisu):</strong></td>
+		<td class="value" width="75%">{VAR:e_main_colour}&#32;</td>
+	</tr>
+	<tr class="even">
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>K&ouml;ide v&otilde;i kinnitus:</strong></td>
+		<td class="value" width="75%">{VAR:e_binding}&#32;</td>
+	</tr>
+	<tr>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>M&otilde;&otilde;dud:</strong></td>
+		<td class="value" width="75%">{VAR:e_measures}&#32;</td>
+	</tr>
+	<tr class="even">
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Materjalid:</strong></td>
+		<td class="value" width="75%">{VAR:e_materials}&#32;</td>
+	</tr>
+	<tr>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>J&auml;relt&ouml;&ouml;tlus:</strong></td>
+		<td class="value" width="75%">{VAR:e_post_processing}&#32;</td>
+	</tr>
+	<tr class="even">
+		<td class="caption price" bgcolor="#dddddd" width="25%"><strong><font color="red">Hind:</font></strong></td>
+		<td class="value price" width="75%"><strong><font color="red">{VAR:price}&#32;</font></strong></td>
+	</tr>
+</table>
+
+</font>

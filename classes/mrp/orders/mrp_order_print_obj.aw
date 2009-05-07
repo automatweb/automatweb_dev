@@ -4,6 +4,17 @@ class mrp_order_print_obj extends mrp_order_obj
 {
 	private $sel_cover_list;
 
+	function get_applicable_warehouse()
+	{
+		$mrp_ws = obj($this->prop("workspace"))->mrp_workspace()->prop("RELTYPE_PURCHASING_MANAGER.id");
+		if (is_array($mrp_ws))
+		{
+			$mrp_ws = reset($mrp_ws);
+		}
+
+		return obj($mrp_ws);
+	}
+
 	function get_job_list()
 	{
 		// jobs from case
@@ -59,32 +70,25 @@ class mrp_order_print_obj extends mrp_order_obj
 
 		$sel_covers_mat = $this->meta("sel_covers_mat");
 
-		foreach($this->get_job_list() as $job)
+		foreach($this->connections_from(array("type" => "RELTYPE_REQUESTED_MATERIAL")) as $c)
 		{
-			$material_expenses = $job->get_material_expense_list();
-
-			foreach($material_expenses as $material_id => $row)
+			$mo = obj($c->to()->material);
+			$mp = $this->_get_mat_price_for_amt($this, $amt, $mo, $c->to());
+			foreach($mp as $mp_k => $mp_v)
 			{
-				$mo = obj($material_id);
-
-				$mp = $this->_get_mat_price_for_amt($this, $amt, $mo, $row);
-				foreach($mp as $mp_k => $mp_v)
+				if ($do_cov)
 				{
-
-					if ($do_cov)
+					foreach(safe_array($sel_covers_mat[$mo->id()]) as $cover_id)
 					{
-						foreach(safe_array($sel_covers_mat[$material_id]) as $cover_id)
+						if ($this->can("view", $cover_id))
 						{
-							if ($this->can("view", $cover_id))
-							{
-								$cover = obj($cover_id);
-								$mp_v += $cover->get_price_for_order_and_amt_and_price($this, $amt, $mp_v);
-							}
+							$cover = obj($cover_id);
+							$mp_v += $cover->get_price_for_order_and_amt_and_price($this, $amt, $mp_v);
 						}
 					}
-					$sums[$mp_k] += $mp_v;
 				}
-			}
+				$sums[$mp_k] += $mp_v;
+			}			
 		}
 		return join(" ", $sums);
 	}
@@ -122,6 +126,10 @@ class mrp_order_print_obj extends mrp_order_obj
 			$resource = $job->get_resource();
 
 			$tmp = $pricelist->get_price_for_resource_and_amount($resource, $amt);
+			if ($job->length > 0)
+			{
+				$tmp += $pricelist->get_price_for_resource_and_time($resource, $job->length / 3600);
+			}
 			$pr += $tmp;
 
 			if ($do_cov)
@@ -144,7 +152,12 @@ class mrp_order_print_obj extends mrp_order_obj
 		$pricelist = obj($this->prop("mrp_pricelist"));
 
 		$resource = $job->get_resource();
-		return $pricelist->get_price_for_resource_and_amount($resource, $this->prop("amount"));
+		$rv = $pricelist->get_price_for_resource_and_amount($resource, $this->prop("amount"));
+		if ($job->length > 0)
+		{
+			$rv += $pricelist->get_price_for_resource_and_time($resource, $job->length / 3600);
+		}
+		return $rv;
 	}
 
 	function get_selected_covers()
@@ -264,6 +277,18 @@ class mrp_order_print_obj extends mrp_order_obj
 			t("4/0 - &uuml;helt poolt CMYK t&auml;isv&auml;rvitr&uuml;kis (saab tr&uuml;kkida v&auml;rvilisi fotosid)"),
 			t("4/4 - m&otilde;lemalt poolt v&auml;rviline")
 		);
+	}
+
+	public function get_used_materials()
+	{
+		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_REQUESTED_MATERIAL")));
+		$rv = array();
+		foreach($ol->arr() as $o)
+		{
+			$rv[$o->material] = $o;
+		}
+
+		return $rv;
 	}
 }
 

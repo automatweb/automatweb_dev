@@ -68,6 +68,12 @@ class mrp_order_cover_obj extends _int_object
 	{
 		$this->connect(array("to" => $prod->id(), "reltype" => "RELTYPE_APPLIES_PROD"));
 	}
+
+	public function move_to_group($gp)
+	{
+		$this->set_prop("belongs_group", $gp->id());
+		$this->save();
+	}
 }
 
 ?>

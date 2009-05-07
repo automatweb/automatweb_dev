@@ -50,7 +50,8 @@ class mrp_pricelist_obj extends _int_object
 			"lang_id" => array(),
 			"site_id" => array(),
 			"pricelist" => $this->id(),
-			"resource" => $res->id()
+			"resource" => $res->id(),
+			"row_type" => mrp_pricelist_row_obj::ROW_TYPE_AMOUNT
 		));
 		return $ol->arr();
 	}
@@ -66,6 +67,61 @@ class mrp_pricelist_obj extends _int_object
 				$r->set_class_id(CL_MRP_PRICELIST_ROW);
 				$r->set_name(sprintf(t("Hinnakirja %s rida ressursile %s"), $this->name(), $res->name()));
 				$r->pricelist = $this->id();
+				$r->row_type = mrp_pricelist_row_obj::ROW_TYPE_AMOUNT;
+				$r->set_prop("resource", $res->id());
+			}
+			else
+			if ($this->can("view", $idx))
+			{
+				$r = obj($idx);
+			}
+			else
+			{
+				continue;
+			}
+
+			if ($row["cnt_from"] < 1 && $row["cnt_to"] < 1)
+			{
+				if (is_oid($r->id()))
+				{
+					$r->delete();
+				}
+				continue;
+			}
+
+			$r->item_price = $row["item_price"];
+			$r->config_price = $row["config_price"];
+			$r->cnt_from = $row["cnt_from"];
+			$r->cnt_to = $row["cnt_to"];
+			$r->save();
+		}
+	}
+
+	function get_ranges_for_resource_hr($res)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_PRICELIST_ROW,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"pricelist" => $this->id(),
+			"resource" => $res->id(),
+			"row_type" => mrp_pricelist_row_obj::ROW_TYPE_HOUR
+		));
+		return $ol->arr();
+	}
+
+	function set_ranges_for_resource_hr($res, $d)
+	{
+		foreach(safe_array($d) as $idx => $row)
+		{
+			if ($idx == -1)
+			{
+				$r = obj();
+				$r->set_parent($this->id());
+				$r->set_class_id(CL_MRP_PRICELIST_ROW);
+				$r->set_name(sprintf(t("Hinnakirja %s rida ressursile %s"), $this->name(), $res->name()));
+				$r->pricelist = $this->id();
+				$r->row_type = mrp_pricelist_row_obj::ROW_TYPE_HOUR;
 				$r->set_prop("resource", $res->id());
 			}
 			else
@@ -102,6 +158,7 @@ class mrp_pricelist_obj extends _int_object
 			"site_id" => array(),
 			"lang_id" => array(),
 			"pricelist" => $this->id(),
+			"row_type" => mrp_pricelist_row_obj::ROW_TYPE_AMOUNT,
 			"resource" => $resource->id(),
 			"cnt_from" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $amount),
 			"cnt_to" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $amount)
@@ -113,6 +170,27 @@ class mrp_pricelist_obj extends _int_object
 		}
 		$row = $ol->begin();
 		return $row->config_price + ($row->item_price * $amount);
+	}
+
+	function get_price_for_resource_and_time($resource, $time)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_PRICELIST_ROW,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"pricelist" => $this->id(),
+			"row_type" => mrp_pricelist_row_obj::ROW_TYPE_HOUR,
+			"resource" => $resource->id(),
+			"cnt_from" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $time),
+			"cnt_to" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $time)
+		));
+
+		if (!$ol->count())
+		{
+			return 0;
+		}
+		$row = $ol->begin();
+		return $row->config_price + ($row->item_price * $time);
 	}
 }
 

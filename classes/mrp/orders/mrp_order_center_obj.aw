@@ -67,7 +67,7 @@ class mrp_order_center_obj extends _int_object
 
 	public function get_all_covers()
 	{
-		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_MRP_COVER")));
+		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_MRP_COVER", "to.class_id" => CL_MRP_ORDER_COVER, "to.status" => object::STAT_ACTIVE)));
 		return $ol->arr();
 	}
 }

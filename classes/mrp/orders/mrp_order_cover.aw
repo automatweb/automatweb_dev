@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_MRP_ORDER_COVER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
+@classinfo syslog_type=ST_MRP_ORDER_COVER relationmgr=yes no_comment=1 prop_cb=1 maintainer=kristo
 @tableinfo aw_mrp_order_cover master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_mrp_order_cover
@@ -14,9 +14,12 @@
 
 @default group=applies
 
+		@property belongs_group type=relpicker reltype=RELTYPE_APPLIES_GROUP field=aw_group
+		@caption Kuulub gruppi
+
 	@layout applies_all_lay type=vbox closeable=1 area_caption=Kehtib&nbsp;k&otilde;ikidele
 
-		@property applies_all type=checkbox ch_value=1 default=1 field=aw_applies_all parent=applies_all_lay
+		@property applies_all type=checkbox ch_value=1 default=1 field=aw_applies_all 
 		@caption Kehtib kogusummale
 
 	@layout applies_resources_lay type=vbox closeable=1 area_caption=Kehtib&nbsp;ressurssidele
@@ -42,6 +45,9 @@
 
 @reltype APPLIES_PROD value=2 clid=CL_SHOP_PRODUCT
 @caption Kehtib tootele
+
+@reltype APPLIES_GROUP value=3 clid=CL_MRP_ORDER_COVER_GROUP
+@caption Asub grupis
 
 */
 
@@ -117,6 +123,7 @@ class mrp_order_cover extends class_base
 
 			case "aw_applies_all":
 			case "aw_cover_type":
+			case "aw_group":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

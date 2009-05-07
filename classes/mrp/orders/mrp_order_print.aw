@@ -28,7 +28,13 @@
 
 @default group=grp_case_materials
 
-	@property materials_table type=table store=no no_caption=1
+	@layout main_split type=hbox width=20%:80%
+
+		@layout tree_border type=vbox closeable=1 area_caption=Materjalide&nbsp;kaustad parent=main_split
+
+			@property materials_tree type=treeview no_caption=1 store=no parent=tree_border
+
+		@property materials_table type=table store=no no_caption=1 parent=main_split
 
 @default group=price
 
@@ -135,11 +141,14 @@
 @reltype COVER_PAPER value=13 clid=CL_SHOP_PRODUCT
 @caption Kaanepaber
 
-@reltype SAVED_FILE value=1 clid=CL_FILE
+@reltype SAVED_FILE value=15 clid=CL_FILE
 @caption Salvestatud pakkumine
 
-@reltype SENT_OFFER value=2 clid=CL_MRP_ORDER_SENT
+@reltype SENT_OFFER value=16 clid=CL_MRP_ORDER_SENT
 @caption Saadetud pakkumine
+
+@reltype REQUESTED_MATERIAL value=14 clid=CL_MRP_ORDER_REQUESTED_MATERIAL
+@caption Soovitud materjal
 
 */
 
@@ -219,9 +228,15 @@ class mrp_order_print extends mrp_order
 		return $retval;
 	}
 
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["tf"] = $arr["request"]["tf"];
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["tf"] = $_GET["tf"];
 	}
 
 	function show($arr)
@@ -317,7 +332,7 @@ class mrp_order_print extends mrp_order
 		$t->remove_field("post_buffer");
 		$t->remove_field("prerequisites");
 		$t->remove_field("comment");
-		$t->remove_field("length");
+		//$t->remove_field("length");
 		$t->define_field(array(
 			"name" => "sales_comment",
 			"caption" => t("M&uuml;&uuml;gi kommentaar"),
@@ -387,9 +402,10 @@ class mrp_order_print extends mrp_order
 		foreach(safe_array($arr["request"]["sc"]) as $id => $comm)
 		{
 			$jo = obj($id);
-			if ($jo->sales_comment != $comm)
+			if ($jo->sales_comment != $comm || $jo->length != ($arr["request"]["mrp_workflow_job-".$id."-length"]*3600))
 			{
 				$jo->sales_comment = $comm; 
+				$jo->set_prop("length", ($arr["request"]["mrp_workflow_job-".$id."-length"] * 3600));
 				$jo->save();
 			}
 		}
@@ -452,9 +468,53 @@ class mrp_order_print extends mrp_order
 		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_materials_table($t);
 
-		$mj = get_instance(CL_MRP_JOB);
-
 		$cur_list = get_instance(CL_CURRENCY)->get_list(RET_NAME);
+
+		$used_materials = $arr["obj_inst"]->get_used_materials();
+
+		$wh = $arr["obj_inst"]->get_applicable_warehouse()->conf()->prod_fld;
+		if (!empty($arr["request"]["tf"]))
+		{
+			$wh = $arr["request"]["tf"];
+		}
+
+		// list all prods from folder and set amounts
+		$ol = new object_list(array(
+			"parent" => $wh,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_SHOP_PRODUCT
+		));
+		$mj = get_instance(CL_MRP_JOB);
+		foreach($ol->arr() as $material)
+		{
+			$amt = 0;
+			$unit = 0;
+			if (isset($used_materials[$material->id]))
+			{
+				$amt = $used_materials[$material->id]->amount;
+				$unit = $used_materials[$material->id]->unit;
+			}
+
+			$price = array();
+			foreach($cur_list as $cur_id => $cur_name)
+			{
+				$price[] = ($material->price_get_by_currency(obj($cur_id)) * $amt)." ".$cur_name;
+			}
+			$purchase_price = $material->purchase_price * $amt;
+				
+
+			$t->define_data(array(
+				"material" => html::obj_change_url($material),
+				"amount" => html::textbox(array("name" => "mat[".$material->id."]", "size" => 5, "value" => $amt)),
+				"sales_price" => join(" ", $price),
+				"purchase_price" => $purchase_price,
+				"unit" => $mj->get_materials_unitselect($material, $unit, $material->id()),
+			));
+		}
+
+		return;
+
 
 		// put all jobs in table and for each job list all possible materials and let the user pick some
 		foreach($arr["obj_inst"]->get_job_list() as $job)
@@ -499,6 +559,50 @@ class mrp_order_print extends mrp_order
 
 	function _set_materials_table($arr)
 	{
+		$used_materials = $arr["obj_inst"]->get_used_materials();
+
+		$wh = $arr["obj_inst"]->get_applicable_warehouse()->conf()->prod_fld;
+		if (!empty($arr["request"]["tf"]))
+		{
+			$wh = $arr["request"]["tf"];
+		}
+
+		// list all prods from folder and set amounts
+		$ol = new object_list(array(
+			"parent" => $wh,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_SHOP_PRODUCT
+		));
+		$mj = get_instance(CL_MRP_JOB);
+		foreach($ol->arr() as $material)
+		{
+			if ($arr["request"]["mat"][$material->id()] > 0)
+			{
+				if (isset($used_materials[$material->id()]))
+				{
+					$used_materials[$material->id()]->amount = $arr["request"]["mat"][$material->id()];
+					$used_materials[$material->id()]->save();
+				}
+				else
+				{
+					$usm = obj();	
+					$usm->set_parent($arr["obj_inst"]->id());
+					$usm->set_class_id(CL_MRP_ORDER_REQUESTED_MATERIAL);
+					$usm->set_prop("material", $material->id());
+					$usm->set_prop("amount", $arr["request"]["mat"][$material->id()]);
+					$usm->save();
+					$arr["obj_inst"]->connect(array("to" => $usm->id(), "type" => "RELTYPE_REQUESTED_MATERIAL"));
+				}
+			}
+			else
+			if (isset($used_materials[$material->id()]))
+			{
+				$used_materials[$material->id()]->delete();
+			}
+			
+		}
+		return;
 		$mj = get_instance(CL_MRP_JOB);
 
 		// put all jobs in table and for each job list all possible materials and let the user pick some
@@ -541,19 +645,17 @@ class mrp_order_print extends mrp_order
 				));
 				$sums[$v] = array();
 			}
-			foreach($arr["obj_inst"]->get_job_list() as $job)
-			{
-				$material_expenses = $job->get_material_expense_list();
 
-				foreach($material_expenses as $material_id => $row)
+
+				foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_REQUESTED_MATERIAL")) as $c)
 				{
-					$mo = obj($material_id);
+					$mo = obj($c->to()->material);
 					$data = array("material" => $mo->name());
 					$pr_by_v = array();
 					for($i = $from; $i <= $to; $i++)
 					{
 						$v = $amt + ($i * 1000);
-						$mp = $this->_get_mat_price_for_amt($arr["obj_inst"], $v, $mo, $row);
+						$mp = $this->_get_mat_price_for_amt($arr["obj_inst"], $v, $mo, $c->to());
 						foreach($mp as $mp_k => $mp_v)
 						{
 							$sums[$v][$mp_k] += $mp_v;
@@ -571,22 +673,25 @@ class mrp_order_print extends mrp_order
 					$sel_covers_mat = $arr["obj_inst"]->meta("sel_covers_mat");
 
 					// get all applicable covers for resource
-					foreach($material->get_all_covers_for_material() as $cover)
+					foreach($mo->get_all_covers_for_material() as $cover)
 					{
 						$data = array(
 							"material" => "<i>".sprintf(t("Kate: %s:"), $cover->name)."</i>"." ".html::checkbox(array(
-								"name" => "sel_covers_mat[".$material->id()."][".$cover->id()."]",
+								"name" => "sel_covers_mat[".$mo->id()."][".$cover->id()."]",
 								"value" => $cover->id(),
-								"checked" => isset($sel_covers_mat[$material->id()][$cover->id()])
+								"checked" => isset($sel_covers_mat[$mo->id()][$cover->id()])
 							))
 						);
 						for($i = $from; $i <= $to; $i++)
 						{
 							$v = $amt + ($i * 1000);
-							$tmp = $cover->get_price_for_order_and_amt_and_price($arr["obj_inst"], $v, $pr_by_amt[$v]);
-							if (isset($sel_covers_mat[$material->id()][$cover->id()]))
+							$tmp = $cover->get_price_for_order_and_amt_and_price($arr["obj_inst"], $v, $pr_by_v[$v]);
+							if (isset($sel_covers_mat[$mo->id()][$cover->id()]))
 							{
-								$sums[$v] += $tmp;
+								foreach($sums[$v] as $_sum_k => $_sum_v)
+								{
+									$sums[$v][$_sum_k] += $tmp;
+								}
 							}
 							if ($v == $amt)
 							{
@@ -596,7 +701,6 @@ class mrp_order_print extends mrp_order
 						}
 						$t->define_data($data);
 					}
-				}
 			}
 			foreach($sums as $k => $v)
 			{
@@ -701,7 +805,7 @@ class mrp_order_print extends mrp_order
 				for($i = $from; $i <= $to; $i++)
 				{
 					$v = $amt + ($i * 1000);
-					$tmp = $this->_get_resource_price_for_amt_and_resource($arr["obj_inst"], $v, $resource);
+					$tmp = $this->_get_resource_price_for_amt_and_resource($arr["obj_inst"], $v, $resource, $job);
 					$pr_by_amt[$v] = $tmp;
 					$sums[$v] += $tmp;
 					if ($v == $amt)
@@ -748,12 +852,16 @@ class mrp_order_print extends mrp_order
 		$t->set_sortable(false);
 	}
 
-	private function _get_resource_price_for_amt_and_resource($o, $v, $resource)
+	private function _get_resource_price_for_amt_and_resource($o, $v, $resource, $job)
 	{
 		// get pricelist and go over all resources in the job list and calc prices for those
 		$pricelist = $o->mrp_pricelist();
 		$pr = 0;
 		$pr += $pricelist->get_price_for_resource_and_amount($resource, $v);
+		if ($job->length > 0)
+		{
+			$pr += $pricelist->get_price_for_resource_and_time($resource, $job->length / 3600);
+		}
 
 		return $pr;
 	}
@@ -761,7 +869,7 @@ class mrp_order_print extends mrp_order
 	function _get_cover_price($arr)
 	{	
 		$t = $arr["prop"]["vcl_inst"];
-		$t->set_caption(t("Katete hind vastavalt kogustele"));
+		$t->set_caption(t("Koguhinnale kehtivad katted"));
 		$amt = $arr["obj_inst"]->amount;
 		$data = array();
 		if ($amt > 1000)
@@ -877,7 +985,7 @@ class mrp_order_print extends mrp_order
 	function _get_preview($arr)
 	{
 		$arr["prop"]["value"] = $this->generate_preview($arr["obj_inst"]);
-		die($arr["prop"]["value"]);
+//		die($arr["prop"]["value"]);
 	}
 
 	public function generate_preview($o)
@@ -1035,6 +1143,7 @@ class mrp_order_print extends mrp_order
 		}
 
 		$t->set_caption(t("Salvestatud pakkumised"));
+		$t->set_default_sortby("created");
 	}
 
 	public function _init_sent_table($t)
@@ -1085,6 +1194,7 @@ class mrp_order_print extends mrp_order
 		}
 
 		$t->set_caption(t("Saadetud pakkumised"));
+		$t->set_default_sortby("date");
 	}
 
 	public function _init_pending_table($t)
@@ -1129,11 +1239,32 @@ class mrp_order_print extends mrp_order
 		}
 
 		$t->set_caption(t("Toimetamisel pakkumised"));
+		$t->set_default_sortby("date");
 	}
 
 	public function _get_prev_tb($arr)
 	{
 		$arr["prop"]["vcl_inst"]->add_delete_button();
+	}
+
+	public function _get_materials_tree($arr)
+	{
+		$wh = $arr["obj_inst"]->get_applicable_warehouse()->conf()->prod_fld;
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+			"root_item" => obj($wh),
+			"tree_opts" => array(
+				"type" => TREE_DHTML,
+				"persist_state" => true,
+				"tree_id" => "procurement_center",
+			),
+			"ot" => new object_tree(array(
+				"class_id" => CL_MENU,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $wh
+			)),
+			"var" => "tf",
+		));
 	}
 }
 

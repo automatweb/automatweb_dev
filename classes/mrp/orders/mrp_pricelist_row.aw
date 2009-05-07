@@ -24,6 +24,9 @@
 	@property item_price type=textbox size=5 field=aw_item_price
 	@caption T&uuml;ki hind
 
+	@property row_type type=hidden field=aw_row_type
+	@caption Rea t&uuml;&uuml;p
+
 @reltype PRICELIST value=1 clid=CL_MRP_PRICELIST
 @caption Hinnakiri
 
@@ -94,9 +97,11 @@ class mrp_pricelist_row extends class_base
 			case "aw_resource":
 			case "aw_cnt_from":
 			case "aw_cnt_to":
+			case "aw_row_type":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => "int"
+					"type" => "int",
+					"default" => 0
 				));
 				return true;
 

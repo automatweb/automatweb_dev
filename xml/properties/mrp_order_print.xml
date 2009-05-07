@@ -120,12 +120,23 @@
             <field>workflow_table</field>
       </property>
       <property>
+            <name>materials_tree</name>
+            <table>aw_mrp_order_print</table>
+            <group>grp_case_materials</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>tree_border</parent>
+            <field>materials_tree</field>
+      </property>
+      <property>
             <name>materials_table</name>
             <table>aw_mrp_order_print</table>
             <group>grp_case_materials</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>main_split</parent>
             <field>materials_table</field>
       </property>
       <property>
@@ -460,15 +471,20 @@
                   <caption>Kaanepaber</caption>
             </COVER_PAPER>
             <SAVED_FILE>
-                  <value>1</value>
+                  <value>15</value>
                   <clid>CL_FILE</clid>
                   <caption>Salvestatud pakkumine</caption>
             </SAVED_FILE>
             <SENT_OFFER>
-                  <value>2</value>
+                  <value>16</value>
                   <clid>CL_MRP_ORDER_SENT</clid>
                   <caption>Saadetud pakkumine</caption>
             </SENT_OFFER>
+            <REQUESTED_MATERIAL>
+                  <value>14</value>
+                  <clid>CL_MRP_ORDER_REQUESTED_MATERIAL</clid>
+                  <caption>Soovitud materjal</caption>
+            </REQUESTED_MATERIAL>
       </reltypes>
       <layout>
             <vsplitbox>
@@ -497,6 +513,19 @@
                   <closeable>1</closeable>
                   <group>grp_case_workflow</group>
             </resource_tree>
+            <main_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>grp_case_materials</group>
+                  <area_caption></area_caption>
+            </main_split>
+            <tree_border>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Materjalide&amp;amp;nbsp;kaustad</area_caption>
+                  <parent>main_split</parent>
+                  <group>grp_case_materials</group>
+            </tree_border>
       </layout>
 </properties>
 

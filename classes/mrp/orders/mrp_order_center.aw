@@ -481,9 +481,11 @@ class mrp_order_center extends class_base
 
 	function _get_pr_table($arr)
 	{
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_MRP_PRICELIST")));
+		$ol->add(new object_list(array("class_id" => CL_SHOP_PRICE_LIST, "lang_id" => array(), "site_id" => array())));
 		$arr["prop"]["vcl_inst"]->table_from_ol(
-			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_MRP_PRICELIST"))),
-			array("name", "created", "act_from", "act_to"),
+			$ol,
+			array("name", "created", "act_from", "act_to", "class_id"),
 			CL_MRP_PRICELIST
 		);
 	}
@@ -507,7 +509,14 @@ class mrp_order_center extends class_base
 		}
 		if ($can_add)
 		{
-			$arr["prop"]["vcl_inst"]->add_new_button(array(CL_MRP_ORDER_COVER), $arr["obj_inst"]->id(), 5 /* MRP_COVER */, array("apply" => $apply));
+			if ($apply == "general")
+			{
+				$arr["prop"]["vcl_inst"]->add_new_button(array(CL_MRP_ORDER_COVER, CL_MRP_ORDER_COVER_GROUP), $arr["obj_inst"]->id(), 5 /* MRP_COVER */, array("apply" => $apply));
+			}
+			else
+			{
+				$arr["prop"]["vcl_inst"]->add_new_button(array(CL_MRP_ORDER_COVER), $arr["obj_inst"]->id(), 5 /* MRP_COVER */, array("apply" => $apply));
+			}
 		}
 		$arr["prop"]["vcl_inst"]->add_delete_button();
 
@@ -549,8 +558,10 @@ class mrp_order_center extends class_base
 			"class_id" => CL_MRP_ORDER_COVER,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"CL_MRP_ORDER_COVER.RELTYPE_MRP_COVER(CL_MRP_ORDER_CENTER).id" => $arr["obj_inst"]->id()
+//			"CL_MRP_ORDER_COVER.RELTYPE_MRP_COVER(CL_MRP_ORDER_CENTER).id" => $arr["obj_inst"]->id()
 		);
+
+		$where = t("igalpool");
 
 		if ($apply == "general")
 		{
@@ -560,11 +571,13 @@ class mrp_order_center extends class_base
 		if ($apply == "resource")
 		{
 			$filt["CL_MRP_ORDER_COVER.RELTYPE_APPLIES_RESOURCE.id"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
+			$where = t("ressurssidele");
 		}
 		else
 		if ($apply == "prod")
 		{
 			$filt["CL_MRP_ORDER_COVER.RELTYPE_APPLIES_PROD.id"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
+			$where = t("materjalidele");
 		}
 		else
 		if ($this->can("view", $apply))
@@ -574,10 +587,17 @@ class mrp_order_center extends class_base
 			{
 				case CL_MRP_RESOURCE:
 					$filt["CL_MRP_ORDER_COVER.RELTYPE_APPLIES_RESOURCE.id"] = $o->id();
+					$where = sprintf(t("ressursile %s"), $o->name());
 					break;
 
 				case CL_SHOP_PRODUCT:
 					$filt["CL_MRP_ORDER_COVER.RELTYPE_APPLIES_PROD.id"] = $o->id();
+					$where = sprintf(t("materjalile %s"), $o->name());
+					break;
+
+				case CL_MRP_ORDER_COVER_GROUP:
+					$filt["CL_MRP_ORDER_COVER.RELTYPE_APPLIES_GROUP.id"] = $o->id();
+					$where = sprintf(t("grupis %s"), $o->name());
 					break;
 
 				default:
@@ -592,6 +612,9 @@ class mrp_order_center extends class_base
 			array("name", "created"),
 			CL_MRP_ORDER_COVER
 		);
+
+
+		$arr["prop"]["vcl_inst"]->set_caption(sprintf(t("Katted, mis kehtivad %s"), $where));
 	}
 
 	function _get_cover_tree($arr)
@@ -602,6 +625,7 @@ class mrp_order_center extends class_base
 			"name" => t("Kehtivad kogusummale"),
 			"url" => aw_url_change_var(array("apply" => "general"))
 		));
+		$this->_insert_folder_items($tv, $arr["obj_inst"], "general");
 		$tv->add_item(0, array(
 			"id" => "resource",
 			"name" => t("Kehtivad resurssidele"),
@@ -616,6 +640,27 @@ class mrp_order_center extends class_base
 		$this->_insert_prod_items($tv, $arr["obj_inst"], "prod");
 
 		$tv->set_selected_item(ifset($arr["request"], "apply"));
+	}
+
+	private function _insert_folder_items($tv, $o, $parent)
+	{
+		$fld = $o->id;
+		$ot = new object_tree(array(
+			"parent" => $fld,
+			"class_id" => array(CL_MRP_ORDER_COVER_GROUP),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$ol = $ot->to_list();
+		foreach($ol->arr() as $item)
+		{
+			$tv->add_item($item->parent() == $fld ? $parent : $item->parent(), array(
+				"id" => $item->id(),
+				"name" => $item->name(),
+				"url" => aw_url_change_var(array("apply" => $item->id())),
+				"iconurl" => icons::get_icon_url($item)
+			));
+		}
 	}
 
 	private function _insert_resource_items($tv, $o, $parent)
@@ -694,6 +739,11 @@ class mrp_order_center extends class_base
 				if ($o->class_id() == CL_SHOP_PRODUCT)
 				{
 					$item->add_applies_prod($o);
+				}
+				else
+				if ($o->class_id() == CL_MRP_ORDER_COVER_GROUP)
+				{
+					$item->move_to_group($o);
 				}
 			}
 		}

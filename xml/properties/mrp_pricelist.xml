@@ -19,7 +19,7 @@
       <property>
             <name>res_folder_tree</name>
             <table>aw_mrp_pricelist</table>
-            <group>res_prices</group>
+            <group>res_prices_amt</group>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -29,12 +29,32 @@
       <property>
             <name>res_prices</name>
             <table>aw_mrp_pricelist</table>
-            <group>res_prices</group>
+            <group>res_prices_amt</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <parent>main_split</parent>
             <field>res_prices</field>
+      </property>
+      <property>
+            <name>res_folder_tree_hr</name>
+            <table>aw_mrp_pricelist</table>
+            <group>res_prices_hr</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>left_tree_hr</parent>
+            <field>res_folder_tree_hr</field>
+      </property>
+      <property>
+            <name>res_prices_hr</name>
+            <table>aw_mrp_pricelist</table>
+            <group>res_prices_hr</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>main_split_hr</parent>
+            <field>res_prices_hr</field>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_PRICELIST</syslog_type>
@@ -48,6 +68,14 @@
             <res_prices>
                   <caption>Ressursside hinnad</caption>
             </res_prices>
+            <res_prices_amt>
+                  <parent>res_prices</parent>
+                  <caption>T&amp;amp;uuml;kkide hinnad</caption>
+            </res_prices_amt>
+            <res_prices_hr>
+                  <parent>res_prices</parent>
+                  <caption>Tundide hinnad</caption>
+            </res_prices_hr>
       </groupinfo>
       <tableinfo>
             <aw_mrp_pricelist>
@@ -60,7 +88,7 @@
             <main_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>res_prices</group>
+                  <group>res_prices_amt</group>
                   <area_caption></area_caption>
             </main_split>
             <left_tree>
@@ -68,8 +96,21 @@
                   <closeable>1</closeable>
                   <area_caption>Resursside&amp;amp;nbsp;kaustad</area_caption>
                   <parent>main_split</parent>
-                  <group>res_prices</group>
+                  <group>res_prices_amt</group>
             </left_tree>
+            <main_split_hr>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>res_prices_hr</group>
+                  <area_caption></area_caption>
+            </main_split_hr>
+            <left_tree_hr>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Resursside&amp;amp;nbsp;kaustad</area_caption>
+                  <parent>main_split_hr</parent>
+                  <group>res_prices_hr</group>
+            </left_tree_hr>
       </layout>
 </properties>
 

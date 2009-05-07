@@ -18,6 +18,15 @@
             <caption>Katte summa v&amp;amp;otilde;i protsent</caption>
       </property>
       <property>
+            <name>belongs_group</name>
+            <table>aw_mrp_order_cover</table>
+            <group>applies</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_APPLIES_GROUP</reltype>
+            <field>aw_group</field>
+            <caption>Kuulub gruppi</caption>
+      </property>
+      <property>
             <name>applies_all</name>
             <table>aw_mrp_order_cover</table>
             <group>applies</group>
@@ -25,7 +34,6 @@
             <ch_value>1</ch_value>
             <default>1</default>
             <field>aw_applies_all</field>
-            <parent>applies_all_lay</parent>
             <caption>Kehtib kogusummale</caption>
       </property>
       <property>
@@ -76,7 +84,6 @@
             <syslog_type>ST_MRP_ORDER_COVER</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
-            <no_status>1</no_status>
             <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
@@ -103,6 +110,11 @@
                   <clid>CL_SHOP_PRODUCT</clid>
                   <caption>Kehtib tootele</caption>
             </APPLIES_PROD>
+            <APPLIES_GROUP>
+                  <value>3</value>
+                  <clid>CL_MRP_ORDER_COVER_GROUP</clid>
+                  <caption>Asub grupis</caption>
+            </APPLIES_GROUP>
       </reltypes>
       <layout>
             <applies_all_lay>

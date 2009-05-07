@@ -509,6 +509,16 @@
             <field>times_chart</field>
       </property>
       <property>
+            <name>site_copy</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>data_r_sitecopy</parent>
+            <store>no</store>
+            <field>site_copy</field>
+      </property>
+      <property>
             <name>submit2</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -942,6 +952,13 @@
                   <area_caption>Graafikud</area_caption>
                   <group>general</group>
             </data_r_charts>
+            <data_r_sitecopy>
+                  <type>vbox</type>
+                  <parent>content_right</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Arenduskoopia</area_caption>
+                  <group>general</group>
+            </data_r_sitecopy>
       </layout>
 </properties>
 

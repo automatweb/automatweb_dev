@@ -197,6 +197,7 @@ class mrp_resource_obj extends _int_object
 			"class_id" => CL_MRP_ORDER_COVER,
 			"lang_id" => array(),
 			"site_id" => array(),
+			"status" => object::STAT_ACTIVE,
 			"CL_MRP_ORDER_COVER.RELTYPE_APPLIES_RESOURCE" => $this->id()
 		));
 		return $ol->arr();

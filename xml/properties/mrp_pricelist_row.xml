@@ -54,6 +54,14 @@
             <field>aw_item_price</field>
             <caption>T&amp;amp;uuml;ki hind</caption>
       </property>
+      <property>
+            <name>row_type</name>
+            <table>aw_mrp_pricelist_row</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>aw_row_type</field>
+            <caption>Rea t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_PRICELIST_ROW</syslog_type>
             <relationmgr>yes</relationmgr>
