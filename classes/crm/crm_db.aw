@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.63 2009/03/11 15:20:45 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.64 2009/05/07 11:25:57 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop prop_cb=1
@@ -823,7 +823,12 @@ class crm_db extends class_base
 	{
 		$all_letters = range("A", "Z");
 
-		$let = array(html_entity_decode("&Otilde;"), html_entity_decode("&Auml;"), html_entity_decode("&Ouml;"), html_entity_decode("&Uuml;"));
+		$let = array(
+			html_entity_decode("&Otilde;", ENT_NOQUOTES, aw_global_get("charset")),
+			html_entity_decode("&Auml;", ENT_NOQUOTES, aw_global_get("charset")),
+			html_entity_decode("&Ouml;", ENT_NOQUOTES, aw_global_get("charset")),
+			html_entity_decode("&Uuml;", ENT_NOQUOTES, aw_global_get("charset"))
+		);
 		foreach($let as $l)
 		{
 			$all_letters[] = $l;
