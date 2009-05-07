@@ -146,9 +146,9 @@ class locale
 			$lc = self::get_lc();
 		}
 
+		$method = array("awlc_number_{$lc}", "get_lc_money_text");
 		$lc = self::get_lc();
 		if (is_readable(AW_DIR . "classes/core/locale/number/number_{$lc}" . AW_FILE_EXT))
-		if (is_callable($method))
 		{
 			$number = call_user_func($method, $number, $currency);
 		}
