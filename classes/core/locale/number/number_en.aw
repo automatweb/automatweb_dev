@@ -88,7 +88,7 @@ class awlc_number_en implements awlc_number
 	{
 		$lastpart = substr($number,strpos($number,".")+1);
 		$number = str_replace(",","",$number);
-		$res = $this->get_lc_number($number);
+		$res = self::get_lc_number($number);
 
 		$currency1 = aw_global_get("currency1");
 		$currency2 = aw_global_get("currency2");
@@ -130,10 +130,10 @@ class awlc_number_en implements awlc_number
 		if($small_unit_meta["en"]) $small_unit = $small_unit_meta["en"];
 		else $small_unit = $currency->prop("small_unit_name");
 
-		$res = $this->get_lc_number($eek)." ".$unit;
+		$res = self::get_lc_number($eek)." ".$unit;
 		if ($cent > 0)
 		{
-			$res .= " and ".$this->get_lc_number($cent)." ".$small_unit;
+			$res .= " and ". self::get_lc_number($cent)." ".$small_unit;
 		}
 		return $res;
 	}

@@ -84,10 +84,10 @@ class awlc_number_et implements awlc_number
 			$currency->set_prop("small_unit_name", "senti");
 		}
 
-		$res = $this->get_lc_number($eek)." ".$currency->prop("unit_name");
+		$res = self::get_lc_number($eek)." ".$currency->prop("unit_name");
 		if ($cent > 0)
 		{
-			$res .= " ja ".$this->get_lc_number($cent)." ".$currency->prop("small_unit_name");
+			$res .= " ja ". self::get_lc_number($cent)." ".$currency->prop("small_unit_name");
 		}
 		else
 		{
