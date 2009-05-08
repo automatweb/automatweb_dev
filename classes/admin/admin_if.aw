@@ -1092,6 +1092,7 @@ class admin_if extends class_base
 				"1" => t("Kopeeri alammen&uuml;&uuml;d"),
 				"3" => t("Kopeeri dokumendid"),
 			),
+			"value" => 2
 		));
 		$hc->add_property(array(
 			"name" => "rels",
@@ -1107,6 +1108,7 @@ class admin_if extends class_base
 				"1" => t("Seosta samade objektidega"),
 				"2" => t("Loo uued seotud objektid"),
 			),
+			"value" => 1
 		));
 		$hc->add_property(array(
 			"name" => "submit_override",
@@ -1240,7 +1242,8 @@ class admin_if extends class_base
 
 		foreach(safe_array(aw_global_get("copied_objects")) as $oid => $xml)
 		{
-			$oid = object::from_xml($xml, $arr["parent"]);
+			$o = new object();
+			$oid = $o->from_xml($xml, $arr["parent"]);
 		}
 		$_SESSION["copied_objects"] = false;
 
