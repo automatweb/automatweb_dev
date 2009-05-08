@@ -3622,7 +3622,7 @@ class bug_tracker extends class_base
 	
 	/**
 	@attrib name=aw_firefoxtools_gantt
-	@param id required
+	@param id required type=int
 	**/
 	function aw_firefoxtools_gantt($arr)
 	{
