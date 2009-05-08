@@ -7,7 +7,7 @@ if(!defined("BUG_STATUS_CLOSED"))
 	define("BUG_STATUS_CLOSED", 5);
 }
 
-/*
+/* 
 
 @classinfo syslog_type=ST_BUG_TRACKER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
 
@@ -317,8 +317,8 @@ if(!defined("BUG_STATUS_CLOSED"))
 
 @default group=settings_g
 
-	@property agroup type=relpicker reltype=RELTYPE_AGROUP field=meta method=serialize multiple=1 store=connect
-	@caption Grupid, mis saavad buge sulgeda
+	property agroup type=relpicker reltype=RELTYPE_AGROUP field=meta method=serialize multiple=1 store=connect
+	caption Grupid, mis saavad buge sulgeda
 
 	@property fb_folder type=relpicker reltype=RELTYPE_FB_FOLDER field=meta method=serialize
 	@caption Tagasiside bugide kaust
