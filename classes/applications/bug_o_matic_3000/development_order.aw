@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.24 2009/03/16 08:55:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.25 2009/05/08 07:17:25 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -798,6 +798,7 @@ class development_order extends class_base
 		$statuses = array(
 			1 => t("Koosk&otilde;lastamisel"),
 			13 => t("&Uuml;levaatamisel"),
+			15 => t("&Uuml;le vaadatud"),
 			2 => t("Tellitud"),
 			3 => t("Valmis"),
 			12 => t("Testimisel"),
@@ -806,7 +807,7 @@ class development_order extends class_base
 			6 => t("Vale teade"),
 			7 => t("Kordamatu"),
 			8 => t("Parandamatu"),
-			9 => t("Ei paranda"),
+			9 => t("Ei tee"),
 			10 => t("Vajab tagasisidet"),
 			11 => t("Fatal error"),
 		);
