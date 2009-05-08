@@ -3653,19 +3653,22 @@ class bug_tracker extends class_base
 	**/
 	function aw_firefoxtools_new_bug_url($arr)
 	{
+		$tree = array();
+	
 		$bug_url = $arr["bug_url"];
 		$arr["obj_inst"] = obj($arr["id"]);
 		
 		$ol = new object_list(array(
 			"class_id" => CL_BUG,
 			"bug_url" => "%$bug_url%",
-			"limit" => "0,1",
+			"limit" => "0,3",
 		));
 		
 		// find parent folder of bug even if under subbugs
 		if($ol->count())
 		{
 			$bug = $ol->begin();
+			array_push($tree, $bug);
 			$parent_id = $bug->parent();
 			$i = 0;
 			while(true)
@@ -3674,23 +3677,32 @@ class bug_tracker extends class_base
 					"oid" => $parent_id,
 				));
 				$o = $ol->begin();
-				if($o->class_id()==CL_MENU)
+				if($o->prop("name")=="Kliendid")
 				{
-					die($o->id());
+					array_push($tree, $o);
+					$tree = array_reverse($tree);
+					
+					// check if we found correct place for our new bug
+					if($tree[0]->name()=="Kliendid" &&
+						strlen($tree[1]->name())==1 )
+					{
+						die("http://intranet.automatweb.com/automatweb/orb.aw?class=bug&action=new&parent=".$tree[2]->id());
+					}
+					die("error1");
 				}
 				else
 				{
 					$parent_id = $o->parent();
+					array_push($tree, $o);
 				}
 				$i++;
 				if ($i==15)
 				{
-					die("crap");
+					die("error2");
 				}
 			}
 		}
-		
-		die("F");
+		die("error3");
 	}
 
 	function check_sect(&$sect, &$curday)
