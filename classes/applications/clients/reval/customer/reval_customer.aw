@@ -344,7 +344,8 @@ class reval_customer extends class_base
 
 	private function _insert_web_bookings($limit = null, $arr)
 	{
-		$book_data = $this->do_call("GetCustomerLastTwoYearBookings", array(
+//		$book_data = $this->do_call("GetCustomerLastTwoYearBookings", array(
+		$book_data = $this->do_call("GetCustomerBookings", array(
 			"customerId" => $this->get_cust_id(),
 			"webLanguageId" => $this->_get_web_language_id()
 		), "Customers");
