@@ -696,7 +696,7 @@ class cfgutils extends aw_template
 		}
 
 
-		$sc = $GLOBALS["cfg"]["classes"][$clid]["site_class"];
+		$sc = ifset($GLOBALS, "cfg", "classes", $clid, "site_class");
 		if ($sc)
 		{
 			$ts = is_readable(aw_ini_get("site_basedir")."/xml/properties/".$file.".xml") ? filemtime(aw_ini_get("site_basedir")."/xml/properties/".$file.".xml") : null;

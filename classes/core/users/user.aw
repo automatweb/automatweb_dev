@@ -1661,7 +1661,7 @@ EOF;
 		@returns
 		Current persons oid
 	**/
-	function get_current_person()
+	public static function get_current_person()
 	{
 		if (aw_global_get("uid_oid") == "")
 		{
@@ -1673,7 +1673,7 @@ EOF;
 			aw_disable_acl();
 			$u = obj(aw_global_get("uid_oid"));
 			aw_restore_acl();
-			$retval = $this->get_person_for_user($u);
+			$retval = self::get_person_for_user($u);
 		}
 		return $retval;
 	}
@@ -1722,7 +1722,7 @@ EOF;
 		@returns
 		Person object id
 	**/
-	public function get_person_for_user(object $u)
+	public static function get_person_for_user(object $u)
 	{
 		aw_disable_acl();
 		$person_c = $u->connections_from(array(
@@ -1779,7 +1779,7 @@ EOF;
 		else
 		{
 			aw_restore_acl();
-			if (aw_global_get("uid") == $u->prop("uid") && !$this->can("edit", $person_c->prop("to")))
+			if (aw_global_get("uid") == $u->prop("uid") && !self::can("edit", $person_c->prop("to")))
 			{
 				aw_disable_acl();
 				$p = obj($person_c->prop("to"));
@@ -1802,7 +1802,7 @@ EOF;
 		@returns
 		The company id
 	**/
-	function get_company_for_person($person)
+	public static function get_company_for_person($person)
 	{
 	//	aw_disable_acl();
 		$p_o = obj($person);
@@ -1844,15 +1844,15 @@ EOF;
 		@returns
 		The company id
 	**/
-	function get_current_company()
+	public static function get_current_company()
 	{
 		static $retval;
 		if ($retval === null)
 		{
-			$person = $this->get_current_person();
+			$person = self::get_current_person();
 			if ($person)
 			{
-				$retval = $this->get_company_for_person($person);
+				$retval = self::get_company_for_person($person);
 			}
 			else
 			{

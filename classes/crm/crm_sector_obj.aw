@@ -5,12 +5,12 @@
 
 class crm_sector_obj extends _int_object
 {
-	function trans_get_val($prop)
+	public function trans_get_val($prop, $lang_id = false, $ignore_status = false)
 	{
-		return parent::trans_get_val($prop == "name" ? "tegevusala" : $prop);
+		return parent::trans_get_val($prop == "name" ? "tegevusala" : $prop, $lang_id, $ignore_status);
 	}
 
-	function meta($k)
+	function meta($k = false)
 	{
 		if($k === "menu_images" || $k === "active_menu_images")
 		{

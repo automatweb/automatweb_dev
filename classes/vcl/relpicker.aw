@@ -703,7 +703,7 @@ class relpicker extends  core
 			"type" => "textbox",
 			"store" => "no",
 			"caption" => $arr["prop"]["caption"],
-			"parent" => $arr["prop"]["parent"],
+			"parent" => ifset($arr, "prop", "parent"),
 		);
 		$ri = $arr["obj_inst"]->get_relinfo();
 		if(!is_array($ri) || !sizeof($ri))

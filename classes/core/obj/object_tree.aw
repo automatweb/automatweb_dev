@@ -356,7 +356,7 @@ class object_tree extends _int_obj_container_base
 	function level($param)
 	{
 		$oid = $GLOBALS["object_loader"]->param_to_oid($param);
-		$tmp =  (is_array($this->tree[$oid]) ? $this->tree[$oid] : array());
+		$tmp =  (isset($this->tree[$oid]) && is_array($this->tree[$oid]) ? $this->tree[$oid] : array());
 		$ret = array();
 		foreach($tmp as $oid => $a)
 		{

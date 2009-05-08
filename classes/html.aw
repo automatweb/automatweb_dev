@@ -302,7 +302,7 @@ class html
 
 			$autocomplete .= '<script type="text/javascript">';
 
-			if ($option_is_tuple)
+			if (!empty($option_is_tuple))
 			{
 				$autocomplete .= "var awAc_{$js_name} = new awActb(document.getElementsByName('{$name}_awAutoCompleteTextbox')[0], document.getElementsByName('{$name}')[0]);\n";
 			}
@@ -311,7 +311,7 @@ class html
 				$autocomplete .= "var awAc_{$js_name} = new awActb(document.getElementsByName('{$name}')[0]);\n";
 			}
 
-			if (is_array($options))
+			if (isset($options) && is_array($options))
 			{
 				$autocomplete .= "var awAc_{$js_name}Opts = new Array();\n";
 
@@ -324,7 +324,7 @@ class html
 			}
 			else
 			{
-				if ($autocomplete_source_method)
+				if (!empty($autocomplete_source_method))
 				{
 					$autocomplete_source_class = $autocomplete_source_class ? $autocomplete_source_class : $_GET["class"];
 					$params = array(
@@ -340,22 +340,22 @@ class html
 				$autocomplete .= "awAc_{$js_name}.actb_setParams(" . (count ($autocomplete_params) ? "new Array ('" . implode ("','", $autocomplete_params) . "')" : "new Array ()") . ");\n";
 			}
 
-			if ($textsize)
+			if (!empty($textsize))
 			{
 				$autocomplete .= "awAc_{$js_name}.actb_fontSize = '{$textsize}';\n";
 			}
 
-			if ($autocomplete_limit)
+			if (!empty($autocomplete_limit))
 			{
 				$autocomplete .= "awAc_{$js_name}.actb_lim = {$autocomplete_limit};\n";
 			}
 
-			if ($autocomplete_match_anywhere)
+			if (!empty($autocomplete_match_anywhere))
 			{
 				$autocomplete .= "awAc_{$js_name}.actb_firstText = false;\n";
 			}
 
-			if (is_array($autocomplete_delimiters) and count($autocomplete_delimiters))
+			if (isset($autocomplete_delimiters) && is_array($autocomplete_delimiters) and count($autocomplete_delimiters))
 			{
 				$autocomplete .= "awAc_{$js_name}.actb_delimiter = new Array ('" . implode ("','", $autocomplete_delimiters) . "');\n";
 			}
@@ -380,7 +380,7 @@ class html
 			{
 				$content = "";
 
-				if (is_array($autocomplete_delimiters))
+				if (isset($autocomplete_delimiters) && is_array($autocomplete_delimiters))
 				{
 					$delimiter = reset($autocomplete_delimiters);
 					$content = implode($delimiter, $selected);

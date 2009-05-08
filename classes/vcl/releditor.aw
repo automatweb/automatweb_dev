@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.176 2009/04/23 09:10:46 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.177 2009/05/08 10:42:01 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -506,7 +506,7 @@ class releditor extends core
 
 	function init_rel_editor($arr)
 	{
-		if($arr["prop"]["mode"] == "manager2")
+		if(ifset($arr, "prop", "mode") == "manager2")
 		{
 			return $this->init_new_manager($arr);
 		}

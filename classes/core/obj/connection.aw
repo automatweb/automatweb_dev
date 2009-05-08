@@ -195,7 +195,7 @@ class connection
 				echo "from = $result[from] , to = $retult[to] <br>";
 			}
 	**/
-	function find($param)
+	public static function find($param)
 	{
 		if (isset($GLOBALS["OBJ_TRACE"]) && $GLOBALS["OBJ_TRACE"])
 		{

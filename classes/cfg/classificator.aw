@@ -105,7 +105,7 @@ class classificator extends class_base
 			else
 			{
 				// try to figure out values from some place else
-				$connections = $prop["value"];
+				$connections = ifset($prop, "value");
 			}
 
 			if (empty($prop["value"]))
@@ -128,7 +128,7 @@ class classificator extends class_base
 
 		if (empty($use_type))
 		{
-			$use_type = $prop["mode"];
+			$use_type = ifset($prop, "mode");
 		}
 
 		if ($this->view)
@@ -251,7 +251,7 @@ class classificator extends class_base
 		}
 
 		//if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
-		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->meta("object_type")))
+		if (isset($arr["obj_inst"]) && is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->meta("object_type")))
 		{
 			$custom_ff = $arr["obj_inst"]->meta("object_type");
 			if ($this->can("view", $custom_ff))

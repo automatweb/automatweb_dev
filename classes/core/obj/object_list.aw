@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.73 2009/04/06 12:41:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.74 2009/05/08 10:42:15 instrumental Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -1075,7 +1075,7 @@ class object_list extends _int_obj_container_base
 
 	function _int_get_at($oid)
 	{
-		if (!is_object($this->list[$oid]) && is_oid($oid) && $GLOBALS["object_loader"]->ds->can("view", $oid))
+		if ((!isset($this->list[$oid]) || !is_object($this->list[$oid])) && is_oid($oid) && $GLOBALS["object_loader"]->ds->can("view", $oid))
 		{
 			$this->list[$oid] = new object($oid);
 		}

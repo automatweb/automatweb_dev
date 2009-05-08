@@ -5134,7 +5134,7 @@ class cfgform extends class_base
 			$list = $o->get_property_list();
 			foreach($list as $lid => $li)
 			{
-				if($li["caption"])
+				if(!empty($li["caption"]))
 				{
 				//if(strpos($li["type"], "text")>-1 && $li["caption"])
 					$goodprops[$lid] = $li["caption"];
