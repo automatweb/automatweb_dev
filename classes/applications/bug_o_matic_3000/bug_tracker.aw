@@ -3645,6 +3645,53 @@ class bug_tracker extends class_base
 		$out .= '];';
 		die($out);
 	}
+	
+	/**
+	@attrib name=aw_firefoxtools_new_bug_url
+	@param id required type=int
+	@param bug_url required type=string
+	**/
+	function aw_firefoxtools_new_bug_url($arr)
+	{
+		$bug_url = $arr["bug_url"];
+		$arr["obj_inst"] = obj($arr["id"]);
+		
+		$ol = new object_list(array(
+			"class_id" => CL_BUG,
+			"bug_url" => "%$bug_url%",
+			"limit" => "0,1",
+		));
+		
+		// find parent folder of bug even if under subbugs
+		if($ol->count())
+		{
+			$bug = $ol->begin();
+			$parent_id = $bug->parent();
+			$i = 0;
+			while(true)
+			{
+				$ol = new object_list(array(
+					"oid" => $parent_id,
+				));
+				$o = $ol->begin();
+				if($o->class_id()==CL_MENU)
+				{
+					die($o->id());
+				}
+				else
+				{
+					$parent_id = $o->parent();
+				}
+				$i++;
+				if ($i==15)
+				{
+					die("crap");
+				}
+			}
+		}
+		
+		die("F");
+	}
 
 	function check_sect(&$sect, &$curday)
 	{
