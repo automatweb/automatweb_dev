@@ -145,13 +145,16 @@ class shop_purchase_order extends class_base
 			return;
 		}
 		$arr["add_art"] = 0;
-		$conn = obj($arr["id"])->connections_from(array(
-			"type" => "RELTYPE_ROW",
-		));
-		foreach($conn as $c)
+		if($arr["id"])
 		{
-			$o = $c->to();
-			$arr["rows"][$o->id()]["tax_rate"] = $o->prop("tax_rate");
+			$conn = obj($arr["id"])->connections_from(array(
+				"type" => "RELTYPE_ROW",
+			));
+			foreach($conn as $c)
+			{
+				$o = $c->to();
+				$arr["rows"][$o->id()]["tax_rate"] = $o->prop("tax_rate");
+			}
 		}
 	}
 
