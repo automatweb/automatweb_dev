@@ -3622,11 +3622,12 @@ class bug_tracker extends class_base
 	
 	/**
 	@attrib name=aw_firefoxtools_gantt
+	@param id required
 	**/
 	function aw_firefoxtools_gantt($arr)
 	{
+		$arr["obj_inst"] = obj($arr["id"]);
 		$chart = $this->_gantt(& $arr);
-		die($chart->draw_chart ());
 		$rows = $chart->get_rows();
 
 		$out = "menu = [";
