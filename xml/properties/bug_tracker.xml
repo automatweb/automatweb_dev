@@ -895,18 +895,6 @@
             <caption>Otsingu tulemused</caption>
       </property>
       <property>
-            <name>agroup</name>
-            <table>objects</table>
-            <group>settings_g</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_AGROUP</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <multiple>1</multiple>
-            <store>connect</store>
-            <caption>Grupid, mis saavad buge sulgeda</caption>
-      </property>
-      <property>
             <name>fb_folder</name>
             <table>objects</table>
             <group>settings_g</group>
