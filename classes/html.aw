@@ -1409,6 +1409,10 @@ class html
 		html to insert between div tags
 	@param id optional type=string
 		div id
+	@param border optional type=string
+	@param padding optional type=string
+
+
 	@returns string/html
 
 	@comments
@@ -1417,9 +1421,29 @@ class html
 	public static function div($args = array())
 	{
 		extract($args);
-		$textsize = ($textsize ? 'font-size: ' . $textsize . ';' : "");
-		$fontweight = ($fontweight ? 'font-weight: ' . $fontweight . ';' : "");
-		$style = (!empty($textsize) or !empty($fontweight)) ? " style=\"{$textsize}{$fontweight}\"" : "";
+		$style_props = array(
+			"border" => "border",
+			"textsize" => "font-size",
+			"fontweight" => "font-weight",
+			"padding" => "padding",
+		);
+
+		$style = "";
+		$styles = array();
+		foreach($args as $key => $val)
+		{
+			if($style_props[$key])
+			{
+				$styles[] = $style_props[$key].": " . $val . ";";
+
+			}
+		}
+
+		if(sizeof($styles))
+		{
+			$style=" style=\" ".join(" " , $styles)."\"";
+		}
+
 		$class = ($class ? ' class="' . $class . '"' : "");
 		$id = ($id ? " id=\"{$id}\"" : "");
 		$content = isset($content) ? $content : "";

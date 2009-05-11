@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.165 2009/05/11 12:46:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.166 2009/05/11 16:26:32 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -1772,6 +1772,9 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "project_estimated_table":
+				$arr["obj_inst"]->set_prop("budget" , $arr["request"]["budget"]);
+				break;
 			case "prods_toolbar":
 				$ps = get_instance("vcl/popup_search");
 				$ps->do_create_rels($arr["obj_inst"], $arr["request"]["prod_search_res"], 24);
@@ -6388,7 +6391,7 @@ class project extends class_base
 			case "planned_work_time":
 			case "average_hr_price":
 			case "planned_other_expenses":
-			case "budget":
+			case "aw_budget":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "double"
@@ -8279,6 +8282,106 @@ arr($stats_by_ppl);
 		}
 	}
 
+	/** returns project product selection
+		@attrib api=1
+		@returns array
+	**/
+	public function get_prod_selection()
+	{
+		$prods = array("" => t("--vali--"));
+		// get prords from co
+		$u = get_instance(CL_USER);
+		$co = obj($u->get_current_company());
+		$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+		if ($wh)
+		{
+			$wh_i = $wh->instance();
+			$pkts = $wh_i->get_packet_list(array(
+				"id" => $wh->id()
+			));
+			foreach($pkts as $pko)
+			{
+				$prods[$pko->id()] = $pko->name();
+			}
+		}
+		return $prods;
+	}
+
+	/** returns bill unit selection
+		@attrib api=1
+		@returns array
+	**/
+	public function get_unit_selection()
+	{
+		if($this->unit_selection)
+		{
+			return $this->unit_selection;
+		}
+		// get prords from co
+		$filter = array(
+			"class_id" => CL_UNIT,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_UNIT => array(
+					new obj_sql_func(OBJ_SQL_UNIQUE, "name", "objects.name"),
+				)
+			)
+		);
+
+		$names = $t->get_element_from_all("name");
+
+		foreach($names as $id => $name)
+		{
+			if($name)
+			{
+				$prods[$this->get_unit_id($name)] = $name;
+			}
+		}
+		$this->unit_selection = $prods;
+		return $prods;
+	}
+
+	/** returns bill unit selection
+		@attrib api=1
+		@returns array
+	**/
+	public function get_suply_selection()
+	{
+		if($this->suply_selection)
+		{
+			return $this->suply_selection;
+		}
+		// get prords from co
+		$filter = array(
+			"class_id" => CL_SHOP_WAREHOUSE,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 20,
+		);
+
+		$ol = new object_list($filter);
+		
+
+		$this->suply_selection = $ol->names();
+		return $prods;
+	}
+
+	private function get_unit_id($name)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_UNIT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $name,
+		));
+		return reset($ol->ids());
+	}
+
 	/**
 		@attrib name=get_income_spot_table
 		@param id required type=oid
@@ -8308,9 +8411,14 @@ arr($stats_by_ppl);
 			foreach($incomes->ids() as $income)
 			{
 				$val.= "<hr>".html::div(array(
-					"content" => $this->draw_expense_spots_table(array("id" => $income)),
+					"content" => html::div(array(
+						"content" => html::bold(t("Projekti tulukoht")),
+						"class" => "pais",
+					)).$this->draw_expense_spots_table(array("id" => $income)),
 					"id" => "project_expense_table_".$income,
-				))."<br>";
+					"border" => "3px solid rgb(0, 0, 0)",
+					"padding" => "15px",
+				))."<br><br><br><br><br>";
 			}
 		}
 		if($arr["die"])
@@ -8341,6 +8449,66 @@ arr($stats_by_ppl);
 		return $t2->draw(array("no_titlebar" => 1));
 	}
 
+	/**
+		@attrib name=save_income_table all_args=1
+	**/
+	public function save_income_table($arr)
+	{
+		$o = obj($arr["id"]);
+		$vars = array("product" , "unit" , "amount" , "unit_price" , "incoming_income" , "ready");
+		foreach($vars as $var)
+		{
+			$o->set_prop($var , $arr[$var]);
+		}
+		$o->save();
+		return $o->id();
+	}
+
+	/**
+		@attrib name=save_expense_spot_table all_args=1
+	**/
+	public function save_expense_spot_table($arr)
+	{
+
+		$o = obj($arr["id"]);
+		$vars = array("product" , "unit" , "amount" ,  "incoming_income" , "ready");
+		$row_vars = array("product" , "unit" , "amount" , "unit_price" , "supplier");
+
+		foreach($vars as $var)
+		{
+			$o->set_prop($var , $arr[$var]);
+		}
+		$o->save();
+
+		$rows = array();
+
+		foreach($arr as $key => $val)
+		{
+			if(substr($key , 0 , 4) == "row_");
+			$data = explode( "_" , $key);
+			$rows[] = $data[1];
+		}
+		if(sizeof($rows))
+		{
+			$ol = new object_list();
+			$ol -> add($rows);
+
+			foreach($ol->arr() as $row)
+			{
+				foreach($row_vars as $var)
+				{
+					if($arr["row_".$row->id()."_".$var])
+					{
+						$row->set_prop($var , $arr["row_".$row->id()."_".$var]);
+					}
+				}
+				$row->save();
+			}
+		}
+
+
+		return $o->id();
+	}
 
 
 	/**
@@ -8348,10 +8516,13 @@ arr($stats_by_ppl);
 		@param id required type=oid
 			project id
 		@param die optional type=boolean
+		@param change optional type=boolean
 	**/
 	public function draw_expense_spots_table($arr)
 	{
 		$o = obj($arr["id"]);
+		$change = $arr["change"];
+
 		$id = $o->id();
 		$val= "";
 
@@ -8380,10 +8551,24 @@ arr($stats_by_ppl);
 		));
 
 		$t->define_data(array(
-			"name" => $o->prop("product.name"),
-			"unit" => $o->prop("unit.name"),
-			"amount" => $o->prop("amount"),
-			"price" => $o->prop("unit_price"),
+			"name" => $change ? html::select(array(
+				"name" => "project_income[".$id."][product]",
+				"value" => $o->prop("product"),
+				"options" => $this->get_prod_selection(),
+			)) :  $o->prop("product.name"),
+			"unit" => $change ? html::select(array(
+				"name" => "project_income[".$id."][unit]",
+				"value" => $o->prop("unit"),
+				"options" => $this->get_unit_selection(),
+			)) :  $o->prop("unit.name"),
+			"amount" => $change ? html::textbox(array(
+				"name" => "project_income[".$id."][amount]",
+				"value" => $o->prop("amount")
+			)) : $o->prop("amount"),
+			"price" => $change ? html::textbox(array(
+				"name" => "project_income[".$id."][unit_price]",
+				"value" => $o->prop("unit_price")
+			)) :$o->prop("unit_price"),
 			"sum" => $o->prop("unit_price")*$o->prop("amount"),
 		));	
 
@@ -8402,17 +8587,31 @@ arr($stats_by_ppl);
 		);
 		$table_dat[] = array(
 			"name" => t("Projektiosa valmidustase"),
-			"value" => html::textbox(array(
-				"name" => "asdfasd",
-			)),
+			"value" => $change ? html::textbox(array(
+				"name" => "project_income[".$id."][ready]",
+				"value" => $o->prop("ready")
+			)) : $o->prop("ready"),
 		);
 		$table_dat[] = array(
 			"name" => t("Viittulu "),
-			"value" => html::textbox(array(
-				"name" => "asdfasd",
-			)),
+			"value" => $change ? html::textbox(array(
+				"name" => "project_income[".$id."][incoming_income]",
+				"value" => $o->prop("incoming_income")
+			)) : $o->prop("incoming_income"),
 		);
 		$val.= $this->do_fckng_table($table_dat);
+
+
+		if($change)
+		{
+			$vars = array("product" , "unit" , "amount" , "unit_price" , "incoming_income" , "ready");
+			$ajax_vars = array();
+			foreach($vars as $var)
+			{
+				$ajax_vars[] = $var.": document.getElementsByName('project_income[".$id."][".$var."]')[0].value\n";
+
+			}
+		}
 
 		$val.= html::button(array(
 			"value" => t("Lisa uus kulukoht"),
@@ -8425,16 +8624,32 @@ arr($stats_by_ppl);
 				x=document.getElementById('project_expense_table_".$id."');
 				x.innerHTML=html;});
 				}",
-		))."<br>";
+		)).
+		html::button(array(
+			"value" => $change ? t("Salvesta tulukoht") : t("Muuda tulukohta"),
+			"name" => "change_income_table",
+			"onclick" =>  ($change ? ("$.post('/automatweb/orb.aw?class=project&action=save_income_table',{id: ".$id." , ".join(", " , $ajax_vars)."},function(data){load_new_data".$id."();});")
+					: "load_new_data".$id."();").
+				"
+				function load_new_data".$id."()
+				{
+				$.get('/automatweb/orb.aw',{class: 'project', action: 'draw_expense_spots_table', die: 1,id: '".$id."',change: '".($change ? "0": "1")."'}, function (html) {
+				x=document.getElementById('project_expense_table_".$id."');
+				x.innerHTML=html;});
+				}",
+		))
+		."<br>";
 
 		$expenses = $o->get_expense_spots();
 		if($expenses->count())
 		{
 			foreach($expenses->ids() as $expense)
 			{
-				$val.= html::div(array(
+				$val.= "<hr>".html::div(array(
+					"border" => "1px solid rgb(0, 0, 0);",
 					"content" => $this->draw_expense_spot_table(array("id" => $expense)),
 					"id" => "project_one_expense_table".$expense,
+					"padding" => "15px",
 				))."<br>";
 			}
 		}
@@ -8450,11 +8665,38 @@ arr($stats_by_ppl);
 		@param id required type=oid
 			project id
 		@param die optional type=boolean
+		@param change optional type=boolean
 	**/
 	public function draw_expense_spot_table($arr)
 	{
 		$o = obj($arr["id"]);
+		$c = $arr["change"];//makes stuff editable
 		$id = $o->id();
+		$rows = $o->get_rows();
+		$ajax_vars = array();
+		if($c)
+		{
+			$vars = array("product" , "unit" , "amount" , "incoming_income" , "ready");
+			foreach($vars as $var)
+			{
+				$ajax_vars[] = $var.": document.getElementsByName('expense_spot[".$id."][".$var."]')[0].value\n";
+
+			}
+		}
+		
+		if($c && $rows->count())
+		{
+			$row_ajax_vars = array();
+			$vars = array("product" , "unit" , "amount" , "unit_price" , "supplier");
+			foreach($vars as $var)
+			{
+				foreach($rows->ids() as $rowid)
+				{
+					$row_ajax_vars[] = "row_".$rowid."_".$var.": document.getElementsByName('row[".$rowid."][".$var."]')[0].value\n";
+				}
+			}
+		}
+
 		$button = html::button(array(
 			"value" => t("Lisa uus rida"),
 			"name" => "add_expense_spot",
@@ -8463,6 +8705,19 @@ arr($stats_by_ppl);
 				function load_new_data".$id."()
 				{
 				$.get('/automatweb/orb.aw',{class: 'project', action: 'draw_expense_spot_table', die: 1,id: '".$id."'}, function (html) {
+				x=document.getElementById('project_one_expense_table".$id."');
+				x.innerHTML=html;});
+				}",
+		));
+		$button2 = html::button(array(
+			"value" => $c ? t("Salvesta kulukoht") : t("Muuda kulukohta"),
+			"name" => "change_expense_spot",
+			"onclick" =>  ($c ? ("$.post('/automatweb/orb.aw?class=project&action=save_expense_spot_table',{id: ".$id." , ".join(", " , $ajax_vars).($rows->count() ? (" , " . join(", " , $row_ajax_vars)) : "" )."},function(data){load_new_data".$id."();});")
+					: "load_new_data".$id."();").
+				"
+				function load_new_data".$id."()
+				{
+				$.get('/automatweb/orb.aw',{class: 'project', action: 'draw_expense_spot_table', die: 1,id: '".$id."',change: '".($c ? "0": "1")."'}, function (html) {
 				x=document.getElementById('project_one_expense_table".$id."');
 				x.innerHTML=html;});
 				}",
@@ -8480,80 +8735,127 @@ arr($stats_by_ppl);
 		$t->define_field(array(
 			"name" => "spot_name",
 //			"caption" => t("Nimetus"),
-			"parent" => "name"
+			"parent" => "name",
+			"chgbgcolor" => "color"
 		));
 		$t->define_field(array(
 			"name" => "row_name",
 //			"caption" => t("Nimetus"),
-			"parent" => "name"
+			"parent" => "name",
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_field(array(
 			"name" => "unit",
 			"caption" => t("&Uuml;hik"),
+			"chgbgcolor" => "color"
 		));
 		$t->define_field(array(
 			"name" => "amount",
 			"caption" => t("Kogus"),
+			"chgbgcolor" => "color"
 		));	
 		$t->define_field(array(
 			"name" => "price",
 			"caption" => t("&Uuml;hiku omahind"),
+			"chgbgcolor" => "color"
 		));
 		$t->define_field(array(
 			"name" => "sum",
 			"caption" => t("Summa/Eelarve"),
+			"chgbgcolor" => "color"
 		));
 		$t->define_field(array(
 			"name" => "supplier",
 			"caption" => t("Tarnija/Hankija"),
+			"chgbgcolor" => "color"
 		));
 
-		$t->set_header("");
+		$t->set_header(sprintf(t("Projekti %s kulukoht %s"), "" , $o->prop("product.name")));
+		//$t->set_header($o->name());
+		
 
 		$t->define_data(array(
-			"spot_name" => $o->prop("product.name"),
-			"unit" => $o->prop("unit.name"),
-			"amount" => $o->prop("amount"),
-		//	"price" => $o->prop("unit_price"),
+			"spot_name" => $c ? html::select(array(
+				"name" => "expense_spot[".$id."][product]",
+				"value" => $o->prop("product"),
+				"options" => $this->get_prod_selection(),
+			)) :  $o->prop("product.name"),
+			"unit" => $c ? html::select(array(
+				"name" => "expense_spot[".$id."][unit]",
+				"value" => $o->prop("unit"),
+				"options" => $this->get_unit_selection(),
+			)) :  $o->prop("unit.name"),
+			"amount" => $c ? html::textbox(array(
+				"name" => "expense_spot[".$id."][amount]",
+				"value" => $o->prop("amount")
+			)) : $o->prop("amount"),
+			"supplier" => $c ? html::select(array(
+				"name" => "expense_spot[".$id."][supplier]",
+				"value" => $o->prop("supplier"),
+				"options" => $this->get_suply_selection(),
+			)) :$o->prop("supplier.name"),
 			"sum" => $o->prop("unit_price")*$o->prop("amount"),
-			"supplier" => $o->prop("supplier"),
-		));	
+			"color" => "gray",
+		));
 
-		$rows = $o->get_rows();
 		if($rows->count())
 		{
 			foreach($rows->arr() as $row)
 			{
 				$t->define_data(array(
-					"row_name" => $o->prop("product.name"),
-					"unit" => $o->prop("unit.name"),
-					"amount" => $o->prop("amount"),
-					"price" => $o->prop("unit_price"),
-					"sum" => $o->prop("unit_price")*$o->prop("amount"),
-					"supplier" => $o->prop("supplier"),
+					"row_name" => $c ? html::select(array(
+						"name" => "row[".$row->id()."][product]",
+						"value" => $row->prop("product"),
+						"options" => $this->get_prod_selection(),
+					)) :  $row->prop("product.name"),
+					"unit" => $c ? html::select(array(
+						"name" => "row[".$row->id()."][unit]",
+						"value" => $row->prop("unit"),
+						"options" => $this->get_unit_selection(),
+					)) :  $row->prop("unit.name"),
+					"amount" => $c ? html::textbox(array(
+						"name" => "row[".$row->id()."][amount]",
+						"value" => $row->prop("amount")
+					)) : $row->prop("amount"),
+					"price" => $c ? html::textbox(array(
+						"name" => "row[".$row->id()."][unit_price]",
+						"value" => $row->prop("unit_price")
+					)) : $row->prop("unit_price"),
+					"sum" => $row->prop("unit_price")*$row->prop("amount"),
+					"supplier" => $c ? html::select(array(
+						"name" => "row[".$row->id()."][supplier]",
+						"value" => $row->prop("supplier"),
+						"options" => $this->get_suply_selection(),
+					)) : $row->prop("supplier"),
 				));	
 
 				$amount = 0;
 	
-				$t->define_data(array(
+				 if(!$c) $t->define_data(array(
 					"row_name" => "	 	 -".t("s.h. juba kasutatud"),
 					//"unit" => $o->prop("unit.name"),
 					"amount" => $amount,
-					"price" => $o->prop("unit_price"),
-					"sum" => $o->prop("unit_price")*$amount,
+					"price" => $row->prop("unit_price"),
+					"sum" => $row->prop("unit_price")*$amount,
 	//				"supplier" => $o->prop("supplier"),
 				));	
 			}
 		}
 
 		$t->define_data(array(
-			"spot_name" => t("Kokku:"),
-			"row_name" => t("M&auml;&auml;ratud kogus"),
-			"unit" => t("M&auml;&auml;ramata kogus"),
-			"amount" => t("Jooksev maksumus"),
-			"price" => t("M&auml;&auml;ramata eelarve osa"),
-			"sum" => t("Eelarvest v&auml;lja l&auml;lja läinud summa"),
+			"spot_name" => "<br>",
+			"color" => "white",
+		));
+
+		$t->define_data(array(
+			"spot_name" => html::bold(t("Kokku:")),
+			"row_name" => html::bold(t("M&auml;&auml;ratud kogus")),
+			"unit" => html::bold(t("M&auml;&auml;ramata kogus")),
+			"amount" => html::bold(t("Jooksev maksumus")),
+			"price" => html::bold(t("M&auml;&auml;ramata eelarve osa")),
+			"sum" => html::bold(t("Eelarvest v&auml;lja l&auml;lja läinud summa")),
+			"color" => "white",
 		));
 		$t->define_data(array(
 			"row_name" => 70,
@@ -8567,7 +8869,8 @@ arr($stats_by_ppl);
 			"unit" => 70,
 			"price" => 7100,
 		));
-		$val.=$t->draw();
+		$val.= $button.$button2."<br>";
+		$val.= $t->draw();
 
 		$real_ready = 53.38;
 		$income = 1231231.43;
@@ -8582,15 +8885,17 @@ arr($stats_by_ppl);
 		);
 		$table_dat[] = array(
 			"name" => t("Projektiosa valmidustase"),
-			"value" => html::textbox(array(
-				"name" => "asdfasd",
-			)),
+			"value" =>  $c ? html::textbox(array(
+				"name" => "expense_spot[".$id."][ready]",
+				"value" => $o->prop("ready")
+			)) : $o->prop("ready"),
 		);
 		$table_dat[] = array(
 			"name" => t("Viittulu "),
-			"value" => html::textbox(array(
-				"name" => "asdfasd",
-			)),
+			"value" =>  $c ? html::textbox(array(
+				"name" => "expense_spot[".$id."][incoming_income]",
+				"value" => $o->prop("incoming_income")
+			)) : $o->prop("incoming_income"),
 		);
 		$val.= $this->do_fckng_table($table_dat);
 

@@ -1266,5 +1266,30 @@ class project_obj extends _int_object
 		return 1;
 	}
 
+	/** returns project product selection
+		@attrib api=1
+		@returns array
+	**/
+	public function get_prod_selection()
+	{
+		$prods = array("" => t("--vali--"));
+		// get prords from co
+		$u = get_instance(CL_USER);
+		$co = obj($u->get_current_company());
+		$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+		if ($wh)
+		{
+			$wh_i = $wh->instance();
+			$pkts = $wh_i->get_packet_list(array(
+				"id" => $wh->id()
+			));
+			foreach($pkts as $pko)
+			{
+				$prods[$pko->id()] = $pko->name();
+			}
+		}
+		return $prods;
+	}
+
 }
 ?>

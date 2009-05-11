@@ -177,11 +177,26 @@
 			</function>
 		</action>
 
+		<action name="save_income_table" all_args="1">
+			<function name="save_income_table">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_expense_spot_table" all_args="1">
+			<function name="save_expense_spot_table">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="draw_expense_spots_table">
 			<function name="draw_expense_spots_table">
 				<arguments>
 					<required name="id" type="oid" />
 					<optional name="die" type="boolean" />
+					<optional name="change" type="boolean" />
 				</arguments>
 			</function>
 		</action>
@@ -191,6 +206,7 @@
 				<arguments>
 					<required name="id" type="oid" />
 					<optional name="die" type="boolean" />
+					<optional name="change" type="boolean" />
 				</arguments>
 			</function>
 		</action>
