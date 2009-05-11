@@ -6,6 +6,40 @@
 @default table=aw_crm_cash_cow
 @default group=general
 
+@property product type=relpicker reltype=RELTYPE_PRODUCT
+@caption Artikkel
+
+@property unit type=relpicker reltype=RELTYPE_UNIT
+@caption &Uuml;hik
+
+@property amount type=textbox
+@caption Kogus
+
+@property unit_price type=textbox
+@caption &Uuml;hiku hind
+
+@property sum type=text
+@caption Summa
+
+
+
+@property ready type=textbox
+@caption Projektiosa valmidustase
+
+@property incoming_income type=textbox
+@caption Viittulu
+
+
+
+@reltype EXPENSE value=1 clid=CL_CRM_EXPENSE_SPOT
+@caption Kulukoht
+
+@reltype PRODUCT value=2 clid=CL_SHOP_PRODUCT
+@caption Artikkel
+
+@reltype UNIT value=3 clid=CL_UNIT
+@caption &Uuml;hik
+
 */
 
 class crm_cash_cow extends class_base
@@ -22,6 +56,7 @@ class crm_cash_cow extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		//	$this->db_query("DROP TABLE aw_crm_cash_cow");
 
 		switch($prop["name"])
 		{
@@ -61,16 +96,27 @@ class crm_cash_cow extends class_base
 	{
 		if ($f == "")
 		{
-			$this->db_query("CREATE TABLE aw_crm_cash_cow(aw_oid int primary key)");
+			$this->db_query("CREATE TABLE aw_crm_cash_cow(aw_oid int primary key, product int, unit int, unit_price double, sum double, amount double)");
 			return true;
 		}
 
 		switch($f)
 		{
-			case "":
+			case "product":
+			case "unit":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
+				));
+				return true;
+			case "unit_price":
+			case "sum":
+			case "amount":
+			case "ready":
+			case "incoming_income":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
 				));
 				return true;
 		}

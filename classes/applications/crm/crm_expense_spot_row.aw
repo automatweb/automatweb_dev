@@ -6,6 +6,35 @@
 @default table=aw_crm_expense_spot_row
 @default group=general
 
+@property product type=relpicker reltype=RELTYPE_PRODUCT
+@caption Artikkel
+
+@property unit type=relpicker reltype=RELTYPE_UNIT
+@caption &Uuml;hik
+
+@property amount type=textbox
+@caption Kogus
+
+@property unit_price type=textbox
+@caption &Uuml;hiku omahind
+
+@property sum type=textbox
+@caption Summa/Eelarve
+
+@property supplier type=relpicker reltype=RELTYPE_SUPPLIER
+@caption Tarnija/Hankija
+
+
+@reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
+@caption Toode
+
+@reltype UNIT value=2 clid=CL_UNIT
+@caption &Uuml;hik
+
+@reltype SUPPLIER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Tarnija/Hankija
+
+
 */
 
 class crm_expense_spot_row extends class_base
@@ -67,10 +96,20 @@ class crm_expense_spot_row extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "product":
+			case "unit":
+			case "supplier":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
+				));
+				return true;
+			case "unit_price":
+			case "sum":
+			case "amount":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
 				));
 				return true;
 		}

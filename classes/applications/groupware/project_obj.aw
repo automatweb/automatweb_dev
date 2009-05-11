@@ -1230,5 +1230,41 @@ class project_obj extends _int_object
 		return $sum;
 	}
 
+	/** Returns project income spots
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_cash_cows()
+	{
+		$ol = new object_list();
+		foreach($this->connections_from(array("type" => "RELTYPE_CASH_COW")) as $c)
+		{
+			$ol->add($c->prop("to"));
+		}
+		return $ol;
+	}
+
+	/** Add new income spot
+		@attrib api=1
+	**/
+	public function add_cash_cow()
+	{
+		$o = new object();
+		$o->set_class_id(CL_CRM_CASH_COW);
+		$o->set_parent($this->id());
+		$o->set_name($this->name()." ".t("Tulukoht"));
+		$o->save();
+		$this->connect(array(
+			"to" => $o->id(),
+			"type" => "RELTYPE_CASH_COW"
+		));
+		return $o->id();
+	}
+
+	public function has_not_guessed_expenses()
+	{
+		return 1;
+	}
+
 }
 ?>
