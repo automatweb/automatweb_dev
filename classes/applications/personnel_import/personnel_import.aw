@@ -149,7 +149,7 @@ class personnel_import extends class_base
 		{
 			if(empty($lde["ext_id"]))
 				continue;
-			if(is_oid($organizations[$lde["ext_id"]]))
+			if(isset($organizations[$lde["ext_id"]]) && is_oid($organizations[$lde["ext_id"]]))
 			{
 				print "SKIPPED! We already have an object (".$organizations[$lde["ext_id"]].") with external ID (".$lde["ext_id"]."). Why do we have this here? -> ".$lde["oid"]."<br>";
 				flush();
@@ -249,7 +249,7 @@ class personnel_import extends class_base
 				$persons_byname[$lde["lastname"]][$lde["firstname"]] = $lde["oid"];
 				continue;
 			}
-			if(is_oid($persons[$lde["pid"]]))
+			if(isset($persons[$lde["pid"]]) && is_oid($persons[$lde["pid"]]))
 			{
 				print "SKIPPED! We already have an object (".$persons[$lde["pid"]].") with personal ID (".$lde["pid"]."). Why do we have this here? -> ".$lde["oid"]."<br>";
 				flush();
