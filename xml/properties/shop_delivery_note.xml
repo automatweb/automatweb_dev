@@ -20,7 +20,8 @@
             <name>from_warehouse</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FROM_WAREHOUSE</reltype>
             <field>from_warehouse</field>
             <caption>Laost</caption>
       </property>
@@ -28,7 +29,8 @@
             <name>to_warehouse</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TO_WAREHOUSE</reltype>
             <field>to_warehouse</field>
             <caption>Lattu</caption>
       </property>
@@ -36,7 +38,8 @@
             <name>customer</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUST</reltype>
             <field>customer</field>
             <caption>Klient</caption>
       </property>
@@ -44,7 +47,8 @@
             <name>impl</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMPL</reltype>
             <field>impl</field>
             <caption>Tarnija</caption>
       </property>
@@ -68,7 +72,8 @@
             <name>currency</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CURRENCY</reltype>
             <field>currency</field>
             <caption>Valuuta</caption>
       </property>

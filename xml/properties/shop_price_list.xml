@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>short_name</name>
+            <table>aw_shop_price_list</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>short_name</field>
+            <caption>L&amp;amp;uuml;hend</caption>
+      </property>
+      <property>
             <name>valid_from</name>
             <table>aw_shop_price_list</table>
             <group>general</group>

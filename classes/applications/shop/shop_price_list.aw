@@ -7,6 +7,9 @@
 @default table=aw_shop_price_list
 @default group=general
 
+@property short_name type=textbox
+@caption L&uuml;hend
+
 @property valid_from type=date_select field=valid_from
 @caption Kehtib alates
 
@@ -328,6 +331,7 @@ class shop_price_list extends class_base
 			case "categories":
 			case "org_cats":
 			case "discount":
+			case "short_name":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(255)"

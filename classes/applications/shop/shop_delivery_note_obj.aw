@@ -511,9 +511,10 @@ class shop_delivery_note_obj extends _int_object
 			"site_id" => array(),
 			"lang_id" => array(),
 		));
+		$whs = array();
 		foreach($ol->arr() as $oid => $o)
 		{
-			$whss[$oid] = $o->prop("short_name") ? $o->prop("short_name") : $o->name();
+			$whs[$oid] = $o->prop("short_name") ? $o->prop("short_name") : $o->name();
 		}
 		$whs = array(0=>t("--vali--")) + $whs;
 		natcasesort($whs);

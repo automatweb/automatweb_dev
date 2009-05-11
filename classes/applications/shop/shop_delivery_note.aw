@@ -13,16 +13,16 @@
 	@property delivery_date type=date_select
 	@caption Kuup&auml;ev
 
-	@property from_warehouse type=textbox
+	@property from_warehouse type=relpicker reltype=RELTYPE_FROM_WAREHOUSE
 	@caption Laost
 	
-	@property to_warehouse type=textbox
+	@property to_warehouse type=relpicker reltype=RELTYPE_TO_WAREHOUSE
 	@caption Lattu
 
-	@property customer type=textbox
+	@property customer type=relpicker reltype=RELTYPE_CUST
 	@caption Klient
 
-	@property impl type=textbox
+	@property impl type=relpicker reltype=RELTYPE_IMPL
 	@caption Tarnija
 
 	@property transport type=textbox
@@ -31,7 +31,7 @@
 	@property customs type=textbox
 	@caption Tollikulu
 
-	@property currency type=textbox
+	@property currency type=relpicker reltype=RELTYPE_CURRENCY
 	@caption Valuuta
 
 	@property writeoff type=checkbox ch_value=1
@@ -103,28 +103,6 @@ class shop_delivery_note extends class_base
 				}
 				break;
 
-			case "to_warehouse":
-			case "from_warehouse":
-			case "customer":
-			case "impl":
-			case "currency":
-				if(!$prop["value"])
-				{
-					$prop["selected"] = "";
-				}
-				elseif($this->can("view", $prop["value"]))
-				{
-					$o = obj($prop["value"]);
-					$prop["selected"] = array($prop["value"] => $o->name());
-				}
-				elseif($this->can("view", $arr["request"][$prop["name"]]))
-				{
-					$o = obj($arr["request"][$prop["name"]]);
-					$prop["selected"] = array($o->id() => $o->name());
-				}
-				$prop["option_is_tuple"] = 1;
-				$prop["autocomplete_source"] = $this->mk_my_orb("prop_autocomplete_source");
-				break;
 			case "writeoff":
 				if($v = $arr["request"][$prop["name"]])
 				{
@@ -155,47 +133,6 @@ class shop_delivery_note extends class_base
 						aw_session_del("dn_err");
 					}
 				}
-				break;
-			case "to_warehouse":
-			case "from_warehouse":
-			case "customer":
-			case "impl":
-			case "currency":
-				$ac_props = $this->get_ac_props();
-				$rt = $ac_props[$prop["name"]]["reltype"];
-				$val = $prop["value"];
-				$isval = $this->can("view", $val);
-
-				if(!$arr["new"] && ($this->can("view", $arr["obj_inst"]->prop($prop["name"]))  && $arr["obj_inst"]->is_connected_to(array("type" => $rt, "to" => $arr["obj_inst"]->prop($prop["name"])))))
-				{
-					$arr["obj_inst"]->disconnect(array(
-						"from" => $arr["obj_inst"]->prop($prop["name"]),
-						"type" => $rt,
-					));
-				}
-				switch($prop["name"])
-				{
-					case "impl":
-						if(!$isval && strlen($val))
-						{
-							$conf = $this->can("view",($_t = $arr["request"]["from_warehouse"]))?obj($_t)->prop("conf"):false;
-							$cur_org = get_current_company()->id();
-							$parent = $this->can("view", $conf)?(($fld = obj($conf)->prop("purchaser_fld"))?$fld:$cur_org):$cur_org;
-							$org = obj();
-							$org->set_class_id(CL_CRM_COMPANY);
-							$org->set_name($val);
-							$org->set_parent($parent);
-							$org->save();
-							$arr["obj_inst"]->connect(array(
-								"to" => $org->id(),
-								"type" => $rt,
-							));
-							$val = $org->id();
-							$isval = $this->can("view", $val);
-						}
-						break;
-				}
-				$arr["obj_inst"]->set_prop($prop["name"], $val);
 				break;
 		}
 
@@ -306,47 +243,8 @@ class shop_delivery_note extends class_base
 			$ro->set_prop("price", $data["price"]);
 			$ro->save();
 		}
-		$this->create_ac_prop_rels($arr);
 	}
 
-	function create_ac_prop_rels($arr)
-	{
-		$ac_props = $this->get_ac_props();
-		foreach($ac_props as $prop=>$p)
-		{
-			$val = $arr["obj_inst"]->prop($prop);
-			$isval = $this->can("view", $val);
-			if($isval)
-			{
-				$arr["obj_inst"]->connect(array(
-					"to" => $val,
-					"type" => $p["reltype"],
-				));
-			}
-		}
-	}
-
-	function get_ac_props()
-	{
-		$ac_props = array(
-			"to_warehouse" => array(
-				"reltype" => "RELTYPE_TO_WAREHOUSE",
-			),
-			"from_warehouse" => array(
-				"reltype" => "RELTYPE_FROM_WAREHOUSE",
-			),
-			"customer" => array(
-				"reltype" => "RELTYPE_CUST",
-			),
-			"impl" => array(
-				"reltype" => "RELTYPE_IMPL",
-			),
-			"currency" => array(
-				"reltype" => "RELTYPE_CURRENCY"
-			),
-		);
-		return $ac_props;
-	}
 
 	function _get_articles_tb($arr)
 	{
@@ -903,45 +801,6 @@ class shop_delivery_note extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$res[$o->id()] = $o->prop($prop);
-		}
-		return $ac->finish_ac($res);
-	}
-
-	/**
-	@attrib name=prop_autocomplete_source all_args=1
-	**/
-	function articles_prop_autocomplete_source($arr)
-	{
-		$ac = get_instance("vcl/autocomplete");
-		$arr = $ac->get_ac_params($arr);
-		$requester = substr($arr["requester"], 0, strpos($arr["requester"], "_awAuto"));
-		switch($requester)
-		{
-			case "from_warehouse":
-			case "to_warehouse":
-				$clids = array(CL_SHOP_WAREHOUSE);
-				break;
-			case "customer":
-			case "impl":
-				$clids = array(CL_CRM_PERSON, CL_CRM_COMPANY);
-				break;
-			case "currency":
-				$clids = array(CL_CURRENCY);
-				break;
-			default:
-				$clids = array(CL_MENU);
-				break;
-		}
-		$ol = new object_list(array(
-			"class_id" => $clids,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"limit" => 1000,
-		));
-		$res = array();
-		foreach($ol->arr() as $o)
-		{
-			$res[$o->id()] = $o->name;
 		}
 		return $ac->finish_ac($res);
 	}

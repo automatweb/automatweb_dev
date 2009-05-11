@@ -262,7 +262,7 @@ tree_id_{VAR:tree_num} = '{VAR:tree_id}';
 </style>
 <!-- SUB: HAS_ROOT -->
 <div class="nodetext">
-<a href="{VAR:rooturl}" target="{VAR:target}"><img style="vertical-align: middle;" src="{VAR:icon_root}" border="0">{VAR:rootname}</a>
+<img style="vertical-align: middle;" src="{VAR:icon_root}" border="0"> <a href="{VAR:rooturl}" target="{VAR:target}">{VAR:rootname}</a>
 </div>
 <!-- END SUB: HAS_ROOT -->
 <!-- hästi tore oleks, kui ma saaks need folderite ikoonid kuidagi automaatselt lisada -->

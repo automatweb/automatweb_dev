@@ -687,72 +687,62 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@caption M&uuml;&uuml;gitellimused
 
 
+@default group=shop_orders
+	
+	@property shop_orders_toolbar type=toolbar no_caption=1
 
+	@layout shop_orders_split type=hbox width=20%:80%
 
-/////////////////////////////////////////////////////////////////////////// OLDER, PLEASE REVIEW
-#otsing
-@property find_name type=textbox store=no group=order_confirmed,order_unconfirmed
-@caption Nimi
+		@layout shop_orders_left type=vbox parent=shop_orders_split
 
-@property find_start type=date_select group=order_confirmed,order_unconfirmed
-@caption Alates
+			@layout shop_orders_tree type=vbox parent=shop_orders_left area_caption=Poe&nbsp;tellimuste&nbsp;staatused closeable=1
 
-@property find_end type=date_select store=no group=order_confirmed,order_unconfirmed
-@caption Kuni
+				@property shop_orders_tree type=treeview no_caption=1 parent=shop_orders_tree
 
-@property do_find type=submit store=no group=order_confirmed,order_unconfirmed
-@caption Otsi
+			@layout shop_orders_search type=vbox closeable=1 area_caption=Poe&nbsp;tellimuste&nbsp;otsing parent=shop_orders_left
 
-@property order_undone_tb type=toolbar store=no group=order_undone no_caption=1
-@property order_undone type=table store=no group=order_undone no_caption=1
+				@property shop_orders_s_uname type=textbox parent=shop_orders_search store=no captionside=top size=20
+				@caption Tellija kasutajanimi
+				
+				@property shop_orders_s_pname type=textbox parent=shop_orders_search store=no captionside=top size=20
+				@caption Tellija isikunimi
+				
+				@property shop_orders_s_oname type=textbox parent=shop_orders_search store=no captionside=top size=20
+				@caption Organisatsiooni nimi
+				
+				@property shop_orders_s_oid type=textbox size=8 parent=shop_orders_search store=no captionside=top size=20
+				@caption Tellimuse ID
+				
+				@property shop_orders_s_prod type=textbox parent=shop_orders_search store=no captionside=top size=20
+				@caption Toote nimi
+				
+				@property shop_orders_s_from type=date_select parent=shop_orders_search store=no captionside=top
+				@caption Tellimuse ajavahemik (alates)
+				
+				@property shop_orders_s_to type=date_select parent=shop_orders_search store=no captionside=top
+				@caption Tellimuse ajavahemik (kuni)
+				
+				@property osearch_submit type=submit parent=shop_orders_search
+				@caption Otsi
+				
 
-@property order_unconfirmed_toolbar type=toolbar no_caption=1 group=order_unconfirmed store=no
-@property order_unconfirmed type=table store=no group=order_unconfirmed no_caption=1
+		@layout shop_orders_right type=vbox parent=shop_orders_split
 
-@property order_confirmed_toolbar type=toolbar no_caption=1 group=order_confirmed store=no
-@property order_confirmed type=table store=no group=order_confirmed no_caption=1
+			@property shop_orders_table type=table no_caption=1 parent=shop_orders_right
 
-@layout hbox_oc type=hbox group=order_orderer_cos
+@default group=order_undone
 
-@property order_orderer_cos_tree type=text store=no parent=hbox_oc group=order_orderer_cos no_caption=1
-@property order_orderer_cos type=table store=no parent=hbox_oc group=order_orderer_cos no_caption=1
+	@property order_undone_tb type=toolbar no_caption=1
+	@property order_undone type=table no_caption=1
 
-@property osearch_uname type=textbox group=order_search store=no
-@caption Tellija kasutajanimi
+@default group=order_orderer_cos
 
-@property osearch_pname type=textbox group=order_search store=no
-@caption Tellija isikunimi
-
-@property osearch_oname type=textbox group=order_search store=no
-@caption Organisatsiooni nimi
-
-@property osearch_oid type=textbox size=8 group=order_search store=no
-@caption Tellimuse ID
-
-@property osearch_prodname type=textbox group=order_search store=no
-@caption Toote nimi
-
-@property osearch_from type=chooser group=order_search store=no
-@caption Otsi staatuse j&auml;rgi
-
-@property osearch_odates type=date_select group=order_search store=no
-@caption Tellimuse ajavahemik (alates)
-
-@property osearch_odatee type=date_select group=order_search store=no
-@caption Tellimuse ajavahemik (kuni)
-
-@property osearch_hidden type=hidden value=1 group=order_search store=no
-@caption Otsing
-
-@property osearch_submit type=submit group=order_search
-@caption Otsi
-
-@property osearch_table type=table group=order_search no_caption=1
-@caption Tulemuste tabel
+	@layout hbox_oc type=hbox
+	
+		@property order_orderer_cos_tree type=text store=no parent=hbox_oc no_caption=1
+		@property order_orderer_cos type=table store=no parent=hbox_oc no_caption=1
 
 // search tab
-@groupinfo search caption="Otsing" submit_method=get
-@groupinfo search_search caption="Otsing" parent=search submit_method=get
 
 @default group=search_search
 	@property search_tb type=toolbar store=no no_caption=1
@@ -770,8 +760,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@property search_cur_ord type=table store=no no_caption=1
 	@caption Hetke tellimus tabel
 
-
-@groupinfo order_current parent=search caption="Pakkumine"
 
 @property order_current_toolbar type=toolbar no_caption=1 group=order_current store=no
 @property order_current_table type=table store=no group=order_current no_caption=1
@@ -791,6 +779,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@groupinfo general_sub parent=general caption="&Uuml;ldine"
 	@groupinfo general_settings parent=general caption="Seaded"
 	@groupinfo productgroups caption="Tootegrupid" submit=no parent=general
+	@groupinfo search_search caption="A Otsing" parent=general submit_method=get
+	@groupinfo order_current parent=general caption="A Pakkumine"
 
 @groupinfo articles caption="Artiklid"
 
@@ -799,32 +789,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@groupinfo arrivals caption="Tarneajad" submit=no parent=articles
 	@groupinfo arrivals_by_company caption="Firmade tarneajad" parent=articles
 
-@groupinfo storage caption="Muutused"
-
-	@groupinfo storage_income parent=storage caption="Sissetulekud"
-	@groupinfo storage_export parent=storage caption="V&auml;ljaminekud"
-	@groupinfo storage_movements parent=storage caption="Liikumised" submit=no
-	@groupinfo storage_writeoffs parent=storage caption="Mahakandmised" submit=no
 
 @groupinfo status caption="Laoseis"
 
 	@groupinfo status_status caption="Laoseis" parent=status
-	@groupinfo status_prognosis caption="Prognoos" parent=status
+#	@groupinfo status_prognosis caption="Prognoos" parent=status
+	@groupinfo storage_income parent=status caption="Sissetulekud"
+	@groupinfo storage_export parent=status caption="V&auml;ljaminekud"
+	@groupinfo storage_movements parent=status caption="Liikumised" submit=no
+	@groupinfo storage_writeoffs parent=status caption="Mahakandmised" submit=no
 	@groupinfo status_inventories caption="Inventuurid" parent=status
 	@groupinfo status_orders caption="Vajadused" parent=status
 
-@groupinfo purchases caption="Laotellimused"
-
+@groupinfo purchases caption="Ost"
 	@groupinfo purchase_orders caption="Ostutellimused" parent=purchases
-	@groupinfo sell_orders caption="M&uuml;&uuml;gitellimused" parent=purchases
 
-@groupinfo order caption="Tellimused"
+@groupinfo sales caption="M&uuml;&uuml;k"
 
-	@groupinfo order_unconfirmed parent=order caption="Kinnitamata"
-	@groupinfo order_confirmed parent=order caption="Kinnitatud"
-	@groupinfo order_undone parent=order caption="T&auml;itmata tellimused"
-	@groupinfo order_orderer_cos parent=order caption="Tellijad"
-	@groupinfo order_search parent=order caption="Otsing" submit_method=get
+	@groupinfo sell_orders caption="M&uuml;&uuml;gitellimused" parent=sales
+	@groupinfo shop_orders caption="Poe tellimused" parent=sales
+	@groupinfo order_undone parent=sales caption="T&auml;itmata poe tellimused"
+	@groupinfo order_orderer_cos parent=sales caption="A Tellijad"
 
 ////////// reltypes
 @reltype CONFIG value=1 clid=CL_SHOP_WAREHOUSE_CONFIG
@@ -923,31 +908,17 @@ class shop_warehouse extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "find_name":
-			case "find_start":
-			case "find_end":
-				$search_data = $arr["obj_inst"]->meta("search_data");
-				$prop["value"] = $search_data[$prop["name"]];
-				break;
-
-			case "osearch_from":
-				$prop["options"] = array(
-					0 => t("k&otilde;ik"),
-					1 => t("kinnitatud"),
-					2 => t("kinnitamata"),
-				);
-			case "osearch_uname":
-			case "osearch_pname":
-			case "osearch_oname":
-			case "osearch_oid":
-			case "osearch_prodname":
-			case "osearch_odates":
-			case "osearch_odatee":
+			case "shop_orders_s_uname":
+			case "shop_orders_s_pname":
+			case "shop_orders_s_oname":
+			case "shop_orders_s_oid":
+			case "shop_orders_s_prod":
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
-
-			case "osearch_table":
-				$this->do_search_tbl($arr);
+			case "shop_orders_s_from":
+			case "shop_orders_s_to":
+				$prop["format"] = array("day_textbox", "month_textbox", "year_textbox");
+				$prop["value"] = $arr["request"][$prop["name"]] ?  date_edit::get_timestamp($arr["request"][$prop["name"]]) : time();
 				break;
 
 			case "products_toolbar":
@@ -987,26 +958,11 @@ class shop_warehouse extends class_base
 				$this->get_products_list($arr);
 				break;
 
-			case "order_unconfirmed_toolbar":
-				$this->mk_order_unconfirmed_toolbar($arr);
-				break;
-
 			case "order_undone":
 				$this->do_order_undone_tbl($arr);
 				break;
 			case "order_undone_tb":
 				$this->do_order_undone_tb($arr);
-				break;
-			case "order_unconfirmed":
-				$this->do_order_unconfirmed_tbl($arr);
-				break;
-
-			case "order_confirmed_toolbar":
-				$this->mk_order_confirmed_toolbar($arr);
-				break;
-
-			case "order_confirmed":
-				$this->do_order_confirmed_tbl($arr);
 				break;
 
 			case "order_orderer_cos":
@@ -1107,6 +1063,7 @@ class shop_warehouse extends class_base
 					{
 						$prop["value"] = -1;
 					}
+					$prop["format"] = array("day_textbox", "month_textbox", "year_textbox");
 					break;
 
 				case "warehouse":
@@ -1181,20 +1138,12 @@ class shop_warehouse extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "find_name":
-				unset($arr["request"]["rawdata"]["rawdata"]);
-				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
-				break;
 			case "storage_income":
 				$this->save_storage_inc_tbl($arr);
 				break;
 
 			case "storage_export":
 				$this->save_storage_exp_tbl($arr);
-				break;
-
-			case "order_unconfirmed":
-				$this->save_order_unconfirmed_tbl($arr);
 				break;
 
 			case "products_list":
@@ -1256,13 +1205,9 @@ class shop_warehouse extends class_base
 		}
 	}
 
-	function do_search_tbl($arr)
+	function _get_osearch_table($arr)
 	{
 		$srch = $arr["request"];
-		if(!$srch["osearch_hidden"])
-		{
-			return;
-		}
 		$fields = array(
 			"id" => t("Tellimus"),
 			"prodname" => t("Toode"),
@@ -1402,7 +1347,7 @@ class shop_warehouse extends class_base
 			));
 			$mt++;
 		}
-		$t->table_header = t("<center>Leiti ".$mt." kirjet</center>");
+		$t->set_caption(t("<center>Otsingule vastab ".$mt." tellimust</center>"));
 
 	}
 
@@ -1578,6 +1523,207 @@ class shop_warehouse extends class_base
 		return -1;
 	}
 
+	function _get_shop_orders_toolbar($arr)
+	{
+		$tb =& $arr["prop"]["toolbar"];
+
+		$tb->add_menu_button(array(
+			"name" => "create_order",
+			"tooltip" => t("Uus tellimus")
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "create_order",
+			"text" => t("Tellimus"),
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->order_fld,
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 5, //RELTYPE_ORDER,
+				"return_url" => get_ru()
+			), CL_SHOP_ORDER)
+		));
+		$tb->add_button(array(
+			"name" => "print",
+			"tooltip" => t("Prindi tellimused"),
+			"img" => "print.gif",
+			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('print_orders')",
+//			"url" => $this->mk_my_orb("print_orders", array(
+//				"id" => $arr["obj_inst"]->id(),
+//				"return_url" => get_ru()
+//			), CL_ORDERS_MANAGER)
+		));
+
+		$tb->add_button(array(
+			"name" => "confirm",
+			"img" => "save.gif",
+			"tooltip" => t("Kinnita tellimused"),
+			"action" => "confirm_orders",
+			"confirm" => t("Oled kindel, et soovid valitud tellimused kinnitada?"),
+		));
+	}
+
+	function _get_shop_orders_tree($arr)
+	{
+		$s = $arr["request"]["shop_orders_s_status"];
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "shop_orders_tree",
+		));
+		$t->add_item(0, array(
+			"name" => ($s == 1) ? "<strong>" .t("Kinnitatud")."</strong>" : t("Kinnitatud"),
+			"url" => aw_url_change_var("shop_orders_s_status", 1),
+			"id" => "confirmed",
+		));
+		$t->add_item(0, array(
+			"name" => ($s == -1) ? "<strong>" .t("Kinnitamata")."</strong>" : t("Kinnitamata"),
+			"url" => aw_url_change_var("shop_orders_s_status", -1),
+			"id" => "unconfirmed",
+		));
+		$t->add_item(0, array(
+			"name" => ($s == "") ? "<strong>" .t("K&otilde;ik")."</strong>" : t("K&otilde;ik"),
+			"url" => aw_url_change_var("shop_orders_s_status", null),
+			"id" => "all",
+		));
+	}
+
+	private function _init_shop_orders_table($t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Tellimus"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "prod",
+			"caption" => t("Tooted"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "uname",
+			"caption" => t("Kasutaja"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "pname",
+			"caption" => t("Isik"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "oname",
+			"caption" => t("Organisatsioon"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"align" => "center",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Telliti"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y",
+			"sortable" => true,
+		));
+
+		$t->set_caption(t("Poe tellimuste otsingu tulemused"));
+	}
+
+	function _get_shop_orders_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_shop_orders_table(&$t);
+		$ol = $this->_get_shop_orders_ol($arr["request"]);
+		foreach($ol->arr() as $oid => $o)
+		{
+			$p = $o->prop("orderer_person");
+			if($this->can("view", $p))
+			{
+				$po = obj($p);
+				$uo = crm_person::has_user($po);
+			}
+			$c = $o->prop("orderer_company");
+			if($this->can("view", $co))
+			{
+				$co = obj($c);
+			}
+			$t->define_data(array(
+				"name" => html::obj_change_url($o, $o->name() ? $o->name() : t("(nimetu)"))." (".$oid.")",
+				"oid" => $oid,
+				"pname" => $po ? html::obj_change_url($po) : null,
+				"uname" => $uo ? html::obj_change_url($uo) : null,
+				"oname" => $co ? html::obj_change_url($co) : null,
+				"status" => $o->prop("confirmed") ? t("Kinnitatud") : t("Kinnitamata"),
+				"date" => $o->created(),
+			));
+		}
+	}
+
+	function _get_shop_orders_ol($arr)
+	{
+		$s = "shop_orders_s_";
+		if($arr[$s."status"])
+		{
+			$params["confirmed"] = ($arr[$s."status"] > 0) ? 1 : new obj_predicate_not(1);
+		}
+		if($arr[$s."uname"])
+		{
+			$params["orderer_person.RELTYPE_PERSON(CL_USER).name"] = "%".$arr[$s."uname"]."%";
+		}
+		if($arr[$s."pname"])
+		{
+			$params["orderer_person.name"] = "%".$arr[$s."pname"]."%";
+		}
+		if($arr[$s."oname"])
+		{
+			$params["orderer_company.name"] = "%".$arr[$s."oname"]."%";
+		}
+		if($arr[$s."oid"])
+		{
+			$params["oid"] = $arr[$s."oid"];
+		}
+		if($arr[$s."prod"])
+		{
+			$params["RELTYPE_PRODUCT.name"] = "%".$arr[$s."prod"]."%";
+		}
+		$f = date_edit::get_timestamp($arr[$s."from"]);
+		$t = date_edit::get_timestamp($arr[$s."to"]);
+		if($f > 0 && $t > 0)
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, mktime(0,0,0,date('m', $f),date('d', $f),date('Y', $f)), mktime(23,59,59,date('m', $t),date('d', $t),date('Y', $t)));
+		}
+		elseif($f > 0)
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, mktime(0,0,0,date('m',$f),date('d',$f),date('Y',$f)));
+		}
+		elseif($t > 0)
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, mktime(23,59,59,date('m', $t),date('d', $t),date('Y', $t)));
+		}
+		elseif(!isset($arr[$s."from"]))
+		{
+			$params["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, mktime(0,0,0,date('m'),date('d'),date('Y')), mktime(23,59,59,date('m'),date('d'),date('Y')));
+		}
+		$params["class_id"] = CL_SHOP_ORDER;
+		$params["site_id"] = array();
+		$params["lang_id"] = array();
+
+		$ol = new object_list($params);
+		return $ol;
+	}
+
 	/**
 		@attrib name=unsent_table
 		@param client optional type=id acl=view
@@ -1617,6 +1763,7 @@ class shop_warehouse extends class_base
 
 		$tb->add_button(array(
 			"name" => "xls",
+			"img" => "ftype_xls.gif",
 			"tooltip" => t("Exceli-tabeli vormis"),
 			"url" => $this->mk_my_orb("undone_xls", array(
 				"id" => $arr["obj_inst"]->id(),
@@ -1775,7 +1922,7 @@ class shop_warehouse extends class_base
 		));
 		$t->define_field(array(
 			"name" => "weekday",
-			"caption" => t("Tarnep&auml;ev"),
+			"caption" => t("P&auml;ev"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -1801,16 +1948,6 @@ class shop_warehouse extends class_base
 			"sort_by" => "name asc",
 		));
 		$companies = array(0 => t("--vali--")) + $c_ol->names();
-		$weekdays = array(
-			0 => t("--vali--"),
-			1 => t("Esmasp&auml;ev"),
-			2 => t("Teisip&auml;ev"),
-			3 => t("Kolmap&auml;ev"),
-			4 => t("Neljap&auml;ev"),
-			5 => t("Reede"),
-			6 => t("Laup&auml;ev"),
-			7 => t("P&uuml;hap&auml;ev"),
-		);
 		$arr["warehouses"] = array($arr["obj_inst"]->id());
 		$res = $this->get_products_list_ol($arr);
 		$ol = new object_list(array(
@@ -1820,6 +1957,10 @@ class shop_warehouse extends class_base
 			"warehouse" => $arr["obj_inst"]->id(),
 			"product" => $res["ol"]->ids(),
 		));
+		for($i = 1; $i <=7; $i++)
+		{
+			$weekdays[$i] = locale::get_lc_weekday($i, true, true);
+		}
 		$ol->arr();
 		foreach($res["ol"]->arr() as $prodid => $prod)
 		{
@@ -1832,7 +1973,7 @@ class shop_warehouse extends class_base
 			));
 			$o = $ol->begin();
 			$t->define_data(array(
-				"prod" => $prod->name(),
+				"prod" => html::obj_change_url($prod),
 				"company" => html::select(array(
 					"options" => $companies,
 					"name" => "arrivals[".$prodid."][org]",
@@ -1851,10 +1992,12 @@ class shop_warehouse extends class_base
 				"date1" => html::date_select(array(
 					"name" => "arrivals[".$prodid."][date1]",
 					"value" => $o ? (($d = $o->prop("date1"))? $d : -1) : -1,
+					"format" => array("day_textbox", "month_textbox", "year_textbox"),
 				)),
 				"date2" => html::date_select(array(
 					"name" => "arrivals[".$prodid."][date2]",
 					"value" => $o ? (($d = $o->prop("date2"))? $d : -1) : - 1,
+					"format" => array("day_textbox", "month_textbox", "year_textbox"),
 				)),
 			));
 		}
@@ -1930,20 +2073,13 @@ class shop_warehouse extends class_base
 			"parent" => $this->config->prop("arrival_company_folder"),
 			"sort_by" => "name asc",
 		));
-		$weekdays = array(
-			0 => t("--vali--"),
-			1 => t("Esmasp&auml;ev"),
-			2 => t("Teisip&auml;ev"),
-			3 => t("Kolmap&auml;ev"),
-			4 => t("Neljap&auml;ev"),
-			5 => t("Reede"),
-			6 => t("Laup&auml;ev"),
-			7 => t("P&uuml;hap&auml;ev"),
-		);
+		for($i = 1; $i <=7; $i++)
+		{
+			$weekdays[$i] = locale::get_lc_weekday($i, true, true);
+		}
 		foreach($c_ol->arr() as $oid => $o)
 		{
 			$t->define_data(array(
-				"prod" => $o->name(),
 				"company" => html::obj_change_url($o),
 				"weekday" => html::select(array(
 					"options" => $weekdays,
@@ -1958,10 +2094,12 @@ class shop_warehouse extends class_base
 				"date1" => html::date_select(array(
 					"name" => "arrivals[".$oid."][date1]",
 					"value" => ($d = $o->prop("purveyance_date1"))? $d : -1,
+					"format" => array("day_textbox", "month_textbox", "year_textbox"),
 				)),
 				"date2" => html::date_select(array(
 					"name" => "arrivals[".$oid."][date2]",
 					"value" => ($d = $o->prop("purveyance_date2"))? $d : -1,
+					"format" => array("day_textbox", "month_textbox", "year_textbox"),
 				)),
 			));
 		}
@@ -4164,418 +4302,6 @@ class shop_warehouse extends class_base
 		), CL_SHOP_WAREHOUSE_RECEPTION);
 	}
 
-	function mk_order_unconfirmed_toolbar(&$data)
-	{
-		$tb =& $data["prop"]["toolbar"];
-
-		$tb->add_menu_button(array(
-			"name" => "create_order",
-			"tooltip" => t("Uus tellimus")
-		));
-
-		$tb->add_menu_item(array(
-			"parent" => "create_order",
-			"text" => t("Tellimus"),
-			"link" => $this->mk_my_orb("new", array(
-				"parent" => $this->order_fld,
-				"alias_to" => $data["obj_inst"]->id(),
-				"reltype" => 5, //RELTYPE_ORDER,
-				"return_url" => get_ru()
-			), CL_SHOP_ORDER)
-		));
-		$tb->add_button(array(
-			"name" => "confirm",
-			"img" => "save.gif",
-			"tooltip" => t("Kinnita tellimused"),
-			"action" => "confirm_orders",
-			"confirm" => t("Oled kindel, et soovid valitud tellimused kinnitada?"),
-		));
-		$tb->add_button(array(
-			"name" => "print",
-			"tooltip" => t("Prindi tellimused"),
-			"img" => "print.gif",
-			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('print_orders')",
-//			"url" => $this->mk_my_orb("print_orders", array(
-//				"id" => $arr["obj_inst"]->id(),
-//				"return_url" => get_ru()
-//			), CL_ORDERS_MANAGER)
-		));
-	}
-
-	function do_order_unconfirmed_tbl(&$arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_order_unconfirmed_tbl($t);
-
-		// list orders from order folder
-
-		$filter = array(
-			"class_id" => CL_SHOP_ORDER,
-			"confirmed" => 0
-		);
-		$search_data = $arr["obj_inst"]->meta("search_data");
-		if($search_data["find_name"])
-		{
-			$filter [] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_SHOP_ORDER.orderer_person.name" => "%".$search_data["find_name"]."%",
-					"CL_SHOP_ORDER.orderer_company.name" => "%".$search_data["find_name"]."%",
-					"name" => "%".$search_data["find_name"]."%",
-			)));
-		}
-
-		if((date_edit::get_timestamp($search_data["find_start"]) > 1)|| (date_edit::get_timestamp($search_data["find_end"]) > 1))
-		{
-			if(date_edit::get_timestamp($search_data["find_start"]) > 1)
-			{
-				$from = date_edit::get_timestamp($search_data["find_start"]);
-			}
-			else
-			{
-				 $from = 0;
-			}
-			if(date_edit::get_timestamp($search_data["find_end"]) > 1)
-			{
-				$to = date_edit::get_timestamp($search_data["find_end"]);
-			}
-			else
-			{
-				$to = time()*666;
-			}
-			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 24*3600));
-		}
-
-		$ol = new object_list($filter);
-
-		foreach($ol->arr() as $o)
-		{
-			$mb = $o->modifiedby();
-			if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_company")))
-			{
-				$_person = obj($o->prop("orderer_person"));
-				$mb = $_person->name();
-			}
-			else
-			if (is_oid($o->prop("oc")))
-			{
-				$oc = obj($o->prop("oc"));
-				if (($pp = $oc->prop("data_form_person")))
-				{
-					$_ud = $o->meta("user_data");
-					$mb = $_ud[$pp];
-				}
-			}
-
-			if (is_oid($o->prop("orderer_company")) && $this->can("view", $o->prop("orderer_company")))
-			{
-				$_comp = obj($o->prop("orderer_company"));
-				$mb .= " / ".$_comp->name();
-			}
-			else
-			if (is_oid($o->prop("oc")))
-			{
-				$oc = obj($o->prop("oc"));
-				if (($pp = $oc->prop("data_form_company")))
-				{
-					$_ud = $o->meta("user_data");
-					$mb = $_ud[$pp];
-				}
-			}
-			$color = "";
-			$pd_data = $o->meta("ord_item_data");
-			foreach($pd_data as $prod)
-			{
-				foreach($prod as $p)
-				{
-					if($p["unsent"])
-					{
-						$color = "#BBCCEE";
-						break;
-					}
-				}
-				if($color) break;
-			}
-			$t->define_data(array(
-				"id" => $o->id(),
-				"name" => $o->name(),
-				"modifiedby" => $mb,
-				"modified" => $o->created(),
-				"view" => html::href(array(
-					"url" => $this->mk_my_orb("change", array(
-						"id" => $o->id(),
-						"group" => "items",
-						"return_url" =>get_ru(),// urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
-					), CL_SHOP_ORDER),
-					"caption" => t("Vaata")
-				)),
-				"confirm" => html::checkbox(array(
-					"name" => "confirm[".$o->id()."]",
-					"value" => 1
-				)),
-				"price" => $o->prop("sum"),
-				"color" => $color,
-			));
-		}
-		$t->set_default_sortby("modified");
-		$t->set_default_sorder("DESC");
-		$t->sort_by();
-	}
-
-	private function _init_order_unconfirmed_tbl(&$t)
-	{
-		$t->define_field(array(
-			"name" => "id",
-			"caption" => t("ID"),
-			"sortable" => 1,
-			"chgbgcolor" => "color",
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-			"sortable" => 1,
-			"chgbgcolor" => "color",
-		));
-
-		$t->define_field(array(
-			"name" => "price",
-			"caption" => t("Hind"),
-			"align" => "center",
-			"chgbgcolor" => "color",
-		));
-/*
-		$t->define_field(array(
-			"name" => "confirm",
-			"caption" => t("Kinnita"),
-			"align" => "center",
-			"chgbgcolor" => "color",
-		));
-*/
-		$t->define_field(array(
-			"name" => "modifiedby",
-			"caption" => t("Kes"),
-			"align" => "center",
-			"sortable" => 1,
-			"chgbgcolor" => "color",
-		));
-
-		$t->define_field(array(
-			"name" => "modified",
-			"caption" => t("Millal"),
-			"type" => "time",
-			"format" => "d.m.Y H:i",
-			"align" => "center",
-			"sortable" => 1,
-			"chgbgcolor" => "color",
-		));
-
-		$t->define_field(array(
-			"name" => "view",
-			"caption" => t("Vaata"),
-			"align" => "center",
-			"chgbgcolor" => "color",
-		));
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "id",
-		));
-
-	}
-
-	function mk_order_confirmed_toolbar(&$data)
-	{
-		$tb =& $data["prop"]["toolbar"];
-
-		$tb->add_menu_button(array(
-			"name" => "create_order",
-			"tooltip" => t("Uus tellimus")
-		));
-
-		$tb->add_menu_item(array(
-			"parent" => "create_order",
-			"text" => t("Tellimus"),
-			"link" => $this->mk_my_orb("new", array(
-				"parent" => $this->order_fld,
-				"alias_to" => $data["obj_inst"]->id(),
-				"reltype" => 5, //RELTYPE_ORDER,
-				"return_url" => get_ru()
-			), CL_SHOP_ORDER)
-		));
-		$tb->add_button(array(
-			"name" => "print",
-			"tooltip" => t("Prindi tellimused"),
-			"img" => "print.gif",
-			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('print_orders')",
-//			"url" => $this->mk_my_orb("print_orders", array(
-//				"id" => $arr["obj_inst"]->id(),
-//				"return_url" => get_ru()
-//			), CL_ORDERS_MANAGER)
-		));
-	}
-
-	function do_order_confirmed_tbl(&$arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_order_confirmed_tbl($t);
-
-		// list orders from order folder
-
-		$filter = array(
-			"class_id" => CL_SHOP_ORDER,
-			"confirmed" => 1
-		);
-		$search_data = $arr["obj_inst"]->meta("search_data");
-		if($search_data["find_name"])
-		{
-			$filter [] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_SHOP_ORDER.orderer_person.name" => "%".$search_data["find_name"]."%",
-					"CL_SHOP_ORDER.orderer_company.name" => "%".$search_data["find_name"]."%",
-			)));
-		}
-
-		if((date_edit::get_timestamp($search_data["find_start"]) > 1)|| (date_edit::get_timestamp($search_data["find_end"]) > 1))
-		{
-			if(date_edit::get_timestamp($search_data["find_start"]) > 1)
-			{
-				$from = date_edit::get_timestamp($search_data["find_start"]);
-			}
-			else
-			{
-				 $from = 0;
-			}
-			if(date_edit::get_timestamp($search_data["find_end"]) > 1)
-			{
-				$to = date_edit::get_timestamp($search_data["find_end"]);
-			}
-			else
-			{
-				$to = time()*666;
-			}
-			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 24*3600));
-		}
-
-		$ol = new object_list($filter);
-
-
-		foreach($ol->arr() as $o)
-		{
-			$mb = $o->modifiedby();
-			if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_person")))
-			{
-				$_person = obj($o->prop("orderer_person"));
-				$mb = $_person->name();
-			}
-			else
-			if (is_oid($o->prop("oc")))
-			{
-				$oc = obj($o->prop("oc"));
-				if (($pp = $oc->prop("data_form_person")))
-				{
-					$_ud = $o->meta("user_data");
-					$mb = $_ud[$pp];
-				}
-			}
-
-			if (is_oid($o->prop("orderer_company")) && $this->can("view", $o->prop("orderer_company")))
-			{
-				$_comp = obj($o->prop("orderer_company"));
-				$mb .= " / ".$_comp->name();
-			}
-			else
-			if (is_oid($o->prop("oc")))
-			{
-				$oc = obj($o->prop("oc"));
-				if (($pp = $oc->prop("data_form_company")))
-				{
-					$_ud = $o->meta("user_data");
-					$mb = $_ud[$pp];
-				}
-			}
-			$t->define_data(array(
-				"id" => $o->id(),
-				"name" => $o->name(),
-				"madeby" => $mb,
-				"modifiedby" => $o->modifiedby(),
-				"modified" => $o->modified(),
-				"view" => html::href(array(
-					"url" => $this->mk_my_orb("change", array(
-						"id" => $o->id(),
-						"group" => "items",
-						"return_url" => get_ru(),
-					), CL_SHOP_ORDER),
-					"caption" => t("Vaata")
-				)),
-				"price" => $o->prop("sum")
-			));
-		}
-	}
-
-	private function _init_order_confirmed_tbl(&$t)
-	{
-		$t->define_field(array(
-			"name" => "id",
-			"caption" => t("ID"),
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "price",
-			"caption" => t("Hind"),
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "madeby",
-			"caption" => t("Kes"),
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "modifiedby",
-			"caption" => t("Kinnitas"),
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "modified",
-			"caption" => t("Millal"),
-			"type" => "time",
-			"format" => "d.m.Y H:i",
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "view",
-			"caption" => t("Vaata"),
-			"align" => "center"
-		));
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "id",
-		));
-
-	}
-
-	function save_order_unconfirmed_tbl(&$arr)
-	{
-		$re = get_instance(CL_SHOP_ORDER);
-
-		$awa = new aw_array($arr["request"]["confirm"]);
-		foreach($awa->get() as $inc => $one)
-		{
-			if ($one == 1)
-			{
-				// confirm reception
-				$re->do_confirm(obj($inc));
-			}
-		}
-	}
-
 	private function _init_order_orderer_cos_tbl(&$t)
 	{
 		$t->define_field(array(
@@ -5554,6 +5280,10 @@ class shop_warehouse extends class_base
 			$arr["filt_case"] = $request["filt_case"];
 			$arr["filt_res"] = $request["filt_res"];
 		}
+		if($request["group"] == "shop_orders")
+		{
+			$arr["shop_orders_s_status"] = $request["shop_orders_s_status"];
+		}
 	}
 
 	function callback_mod_retval($arr)
@@ -5590,6 +5320,15 @@ class shop_warehouse extends class_base
 			{
  				$arr["args"][$var] = $arr["request"][$var];
 			}
+		}
+		if($arr["request"]["group"] == "shop_orders")
+		{
+			$vars = array("oname", "uname", "pname", "prod", "oid", "from", "to", "status");
+			foreach($vars as $var)
+			{
+				$v = "shop_orders_s_".$var;
+				$arr["args"][$v] = $arr["request"][$v];
+			} 
 		}
 	}
 
@@ -6089,6 +5828,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 		}
+		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
 
 	function _get_storage_movements_s_to($arr)
@@ -6101,6 +5841,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 		}
+		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
 
 	function _get_storage_movements(&$arr)

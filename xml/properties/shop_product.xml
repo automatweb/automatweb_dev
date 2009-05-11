@@ -5,7 +5,7 @@
             <table>objects</table>
             <group>general_general</group>
             <type>textbox</type>
-            <parent>gen_left</parent>
+            <parent>gen_gen</parent>
             <field>name</field>
             <caption>Nimi</caption>
             <comment>Objekti nimi</comment>
@@ -15,7 +15,7 @@
             <table>objects</table>
             <group>general_general</group>
             <type>textbox</type>
-            <parent>gen_left</parent>
+            <parent>gen_gen</parent>
             <field>comment</field>
             <caption>Kommentaar</caption>
             <comment>Vabas vormis tekst objekti kohta</comment>
@@ -26,7 +26,7 @@
             <group>general_general</group>
             <type>status</type>
             <default>1</default>
-            <parent>gen_left</parent>
+            <parent>gen_gen</parent>
             <field>status</field>
             <caption>Aktiivne</caption>
             <comment>Kas objekt on aktiivne</comment>
@@ -37,10 +37,29 @@
             <group>general_general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <parent>gen_left</parent>
+            <parent>gen_gen</parent>
             <disabled>1</disabled>
             <field>content_package</field>
             <caption>Sisupaketi tooteobjekt</caption>
+      </property>
+      <property>
+            <name>short_name</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>aw_short_name</field>
+            <parent>gen_gen</parent>
+            <caption>L&amp;amp;uuml;hinimetus</caption>
+      </property>
+      <property>
+            <name>item_type</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ITEM_TYPE</reltype>
+            <field>aw_type_id</field>
+            <parent>gen_gen</parent>
+            <caption>Toote t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>price_settings</name>
@@ -51,168 +70,8 @@
             <field>meta</field>
             <method>serialize</method>
             <reltype>RELTYPE_PRICE_SETTINGS</reltype>
-            <parent>gen_left</parent>
+            <parent>gen_prices_prop_left</parent>
             <caption>Hinnakujundus</caption>
-      </property>
-      <property>
-            <name>short_name</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>textbox</type>
-            <field>aw_short_name</field>
-            <parent>gen_left</parent>
-            <caption>L&amp;amp;uuml;hinimetus</caption>
-      </property>
-      <property>
-            <name>units_tbl</name>
-            <table>objects</table>
-            <group>general_general</group>
-            <type>table</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>gen_left</parent>
-            <field>units_tbl</field>
-            <caption>&amp;amp;Uuml;hikud</caption>
-      </property>
-      <property>
-            <name>prev_sales_price_tbl</name>
-            <table>objects</table>
-            <group>general_general</group>
-            <type>table</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>gen_left</parent>
-            <field>prev_sales_price_tbl</field>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;gihinnad</caption>
-      </property>
-      <property>
-            <name>prev_purchase_price_tbl</name>
-            <table>objects</table>
-            <group>general_general</group>
-            <type>table</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>gen_left</parent>
-            <field>prev_purchase_price_tbl</field>
-            <caption>Ostuhinnad</caption>
-      </property>
-      <property>
-            <name>brand</name>
-            <table>objects</table>
-            <group>general_general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_BRAND</reltype>
-            <store>connect</store>
-            <parent>gen_left</parent>
-            <multiple>1</multiple>
-            <field>brand</field>
-            <caption>Brand</caption>
-      </property>
-      <property>
-            <name>brand_series</name>
-            <table>objects</table>
-            <group>general_general</group>
-            <type>text</type>
-            <store>no</store>
-            <parent>gen_left</parent>
-            <field>brand_series</field>
-            <caption>Brandisarjad</caption>
-      </property>
-      <property>
-            <name>price_cur</name>
-            <table>objects</table>
-            <group>general_general</group>
-            <type>table</type>
-            <store>no</store>
-            <parent>gen_left</parent>
-            <field>price_cur</field>
-            <caption>Hinnad valuutades</caption>
-      </property>
-      <property>
-            <name>price</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>textbox</type>
-            <field>price</field>
-            <size>10</size>
-            <parent>gen_left</parent>
-            <caption>Hind</caption>
-            <comment>M&amp;amp;uuml;&amp;amp;uuml;gi hind</comment>
-      </property>
-      <property>
-            <name>purchase_price</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>textbox</type>
-            <field>purchase_price</field>
-            <size>10</size>
-            <parent>gen_left</parent>
-            <caption>Ostu hind</caption>
-      </property>
-      <property>
-            <name>must_order_num</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>textbox</type>
-            <field>must_order_num</field>
-            <size>5</size>
-            <parent>gen_left</parent>
-            <caption>Mitu peab korraga tellima</caption>
-      </property>
-      <property>
-            <name>code</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>textbox</type>
-            <field>code</field>
-            <parent>gen_right</parent>
-            <caption>Kood</caption>
-      </property>
-      <property>
-            <name>short_code</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>textbox</type>
-            <field>short_code</field>
-            <parent>gen_right</parent>
-            <caption>L&amp;amp;uuml;hikood</caption>
-      </property>
-      <property>
-            <name>barcode</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>textbox</type>
-            <field>barcode</field>
-            <parent>gen_right</parent>
-            <caption>Ribakood</caption>
-      </property>
-      <property>
-            <name>min_order_amt</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>textbox</type>
-            <field>aw_min_order_amt</field>
-            <parent>gen_right</parent>
-            <caption>Minimaalne tellimiskogus</caption>
-      </property>
-      <property>
-            <name>max_order_amt</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>textbox</type>
-            <field>aw_max_order_amt</field>
-            <parent>gen_right</parent>
-            <caption>Maksimaalne tellimiskogus</caption>
-      </property>
-      <property>
-            <name>item_type</name>
-            <table>aw_shop_products</table>
-            <group>general_general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ITEM_TYPE</reltype>
-            <field>aw_type_id</field>
-            <parent>gen_right</parent>
-            <caption>Toote t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>tax_rate</name>
@@ -223,8 +82,136 @@
             <field>meta</field>
             <method>serialize</method>
             <reltype>RELTYPE_TAX_RATE</reltype>
-            <parent>gen_right</parent>
+            <parent>gen_prices_prop_left</parent>
             <caption>Maksum&amp;amp;auml;&amp;amp;auml;r</caption>
+      </property>
+      <property>
+            <name>price</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>price</field>
+            <size>10</size>
+            <parent>gen_prices_prop_right</parent>
+            <caption>Hind</caption>
+            <comment>M&amp;amp;uuml;&amp;amp;uuml;gi hind</comment>
+      </property>
+      <property>
+            <name>purchase_price</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>purchase_price</field>
+            <size>10</size>
+            <parent>gen_prices_prop_right</parent>
+            <caption>Ostu hind</caption>
+      </property>
+      <property>
+            <name>prev_sales_price_tbl</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>table</type>
+            <store>no</store>
+            <parent>gen_prices_tbl</parent>
+            <no_caption>1</no_caption>
+            <field>prev_sales_price_tbl</field>
+      </property>
+      <property>
+            <name>prev_purchase_price_tbl</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>gen_prices_tbl</parent>
+            <field>prev_purchase_price_tbl</field>
+      </property>
+      <property>
+            <name>price_cur</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>table</type>
+            <store>no</store>
+            <parent>gen_prices_tbl</parent>
+            <no_caption>1</no_caption>
+            <field>price_cur</field>
+      </property>
+      <property>
+            <name>code</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>code</field>
+            <parent>gen_data</parent>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>short_code</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>short_code</field>
+            <parent>gen_data</parent>
+            <caption>L&amp;amp;uuml;hikood</caption>
+      </property>
+      <property>
+            <name>barcode</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>barcode</field>
+            <parent>gen_data</parent>
+            <caption>Ribakood</caption>
+      </property>
+      <property>
+            <name>brand</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BRAND</reltype>
+            <store>connect</store>
+            <parent>gen_data</parent>
+            <multiple>1</multiple>
+            <field>brand</field>
+            <caption>Brand</caption>
+      </property>
+      <property>
+            <name>brand_series</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>gen_data</parent>
+            <field>brand_series</field>
+            <caption>Brandisarjad</caption>
+      </property>
+      <property>
+            <name>min_order_amt</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>aw_min_order_amt</field>
+            <parent>gen_wh</parent>
+            <caption>Minimaalne tellimiskogus</caption>
+      </property>
+      <property>
+            <name>max_order_amt</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>aw_max_order_amt</field>
+            <parent>gen_wh</parent>
+            <caption>Maksimaalne tellimiskogus</caption>
+      </property>
+      <property>
+            <name>must_order_num</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>must_order_num</field>
+            <size>5</size>
+            <parent>gen_wh</parent>
+            <caption>Mitu peab korraga tellima</caption>
       </property>
       <property>
             <name>serial_number_based</name>
@@ -232,7 +219,7 @@
             <group>general_general</group>
             <type>chooser</type>
             <field>aw_serial_number_based</field>
-            <parent>gen_right</parent>
+            <parent>gen_wh</parent>
             <caption>Seerianumbrip&amp;amp;otilde;hine arvestus</caption>
       </property>
       <property>
@@ -241,8 +228,18 @@
             <group>general_general</group>
             <type>chooser</type>
             <field>aw_order_based</field>
-            <parent>gen_right</parent>
+            <parent>gen_wh</parent>
             <caption>Partiip&amp;amp;otilde;hine arvestus</caption>
+      </property>
+      <property>
+            <name>units_tbl</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>gen_wh</parent>
+            <field>units_tbl</field>
       </property>
       <property>
             <name>balance</name>
@@ -426,24 +423,45 @@
             <name>match_prod</name>
             <table>objects</table>
             <group>general_match_prod</group>
-            <type>relpicker</type>
+            <type>releditor</type>
             <reltype>RELTYPE_MATCH_PROD</reltype>
+            <mode>manager</mode>
+            <props>
+                  <num_0>jrk</num_0>
+                  <num_1>name</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>jrk</num_1>
+            </table_fields>
+            <table_edit_fields>jrk</table_edit_fields>
             <field>meta</field>
             <method>serialize</method>
-            <store>connect</store>
-            <multiple>1</multiple>
+            <clone_link>1</clone_link>
+            <filt_edit_fields>1</filt_edit_fields>
+            <direct_links>1</direct_links>
             <caption>Kokkusobivad tooted</caption>
       </property>
       <property>
             <name>replacement_prods</name>
             <table>objects</table>
             <group>general_replacement_prods</group>
-            <type>relpicker</type>
+            <type>releditor</type>
             <reltype>RELTYPE_REPLACEMENT_PROD</reltype>
+            <mode>manager</mode>
+            <props>
+                  <num_0>jrk</num_0>
+                  <num_1>name</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>jrk</num_1>
+            </table_fields>
+            <table_edit_fields>jrk</table_edit_fields>
             <field>meta</field>
             <method>serialize</method>
-            <store>connect</store>
-            <multiple>1</multiple>
+            <clone_link>1</clone_link>
+            <filt_edit_fields>1</filt_edit_fields>
             <caption>Asendustooted</caption>
       </property>
       <property>
@@ -1555,18 +1573,68 @@
             </gen_split>
             <gen_left>
                   <type>vbox</type>
-                  <area_caption>Andmed</area_caption>
-                  <closeable>1</closeable>
                   <parent>gen_split</parent>
                   <group>general_general</group>
+                  <area_caption></area_caption>
             </gen_left>
+            <gen_gen>
+                  <type>vbox</type>
+                  <area_caption>&amp;amp;Uuml;ldine</area_caption>
+                  <closeable>1</closeable>
+                  <parent>gen_left</parent>
+                  <group>general_general</group>
+            </gen_gen>
+            <gen_prices>
+                  <type>vbox</type>
+                  <area_caption>Hinnad</area_caption>
+                  <closeable>1</closeable>
+                  <parent>gen_left</parent>
+                  <group>general_general</group>
+            </gen_prices>
+            <gen_prices_prop>
+                  <type>hbox</type>
+                  <parent>gen_prices</parent>
+                  <group>general_general</group>
+                  <area_caption></area_caption>
+            </gen_prices_prop>
+            <gen_prices_prop_left>
+                  <type>vbox</type>
+                  <parent>gen_prices_prop</parent>
+                  <group>general_general</group>
+                  <area_caption></area_caption>
+            </gen_prices_prop_left>
+            <gen_prices_prop_right>
+                  <type>vbox</type>
+                  <parent>gen_prices_prop</parent>
+                  <group>general_general</group>
+                  <area_caption></area_caption>
+            </gen_prices_prop_right>
+            <gen_prices_tbl>
+                  <type>vbox</type>
+                  <parent>gen_prices</parent>
+                  <group>general_general</group>
+                  <area_caption></area_caption>
+            </gen_prices_tbl>
             <gen_right>
                   <type>vbox</type>
-                  <area_caption>Koodid</area_caption>
-                  <closeable>1</closeable>
                   <parent>gen_split</parent>
                   <group>general_general</group>
+                  <area_caption></area_caption>
             </gen_right>
+            <gen_data>
+                  <type>vbox</type>
+                  <area_caption>Andmed</area_caption>
+                  <closeable>1</closeable>
+                  <parent>gen_right</parent>
+                  <group>general_general</group>
+            </gen_data>
+            <gen_wh>
+                  <type>vbox</type>
+                  <area_caption>Lao&amp;amp;nbsp;andmed</area_caption>
+                  <closeable>1</closeable>
+                  <parent>gen_right</parent>
+                  <group>general_general</group>
+            </gen_wh>
             <gentms_main>
                   <type>hbox</type>
                   <group>general_time_settings</group>

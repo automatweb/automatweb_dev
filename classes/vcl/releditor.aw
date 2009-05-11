@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.177 2009/05/08 10:42:01 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.178 2009/05/11 13:03:35 robert Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -739,29 +739,6 @@ class releditor extends core
 			$act_props[$tabledef["name"]] = $tabledef;
 		};
 
-		// "form" does not need a caption
-		if ($visual === "manager")
-		{
-			if ("new" === $form_type || (isset($arr["prop"]["always_show_add"]) && $arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id)))
-			{
-				$act_props = array($this->elname . "_caption" => array(
-					"name" => $this->elname . "_caption",
-					"type" => "text",
-					"value" => (empty($prop["no_caption"]) ? $prop["caption"] . " - " : "") . t("Uus"),
-					"subtitle" => 1,
-				)) + $act_props;
-			}
-			elseif (empty($prop["no_caption"]))
-			{
-				$act_props = array($this->elname . "_caption" => array(
-					"name" => $this->elname . "_caption",
-					"type" => "text",
-					"value" => $prop["caption"],
-					"subtitle" => 1,
-				)) + $act_props;
-			}
-		}
-
 		$obj_inst = false;
 
 		// load the first connection.
@@ -1342,6 +1319,7 @@ class releditor extends core
 		$awt->set_default_sortby(array("_sort_jrk"=>"_sort_jrk", "_sort_name"=>"_sort_name"));
 		$awt->sort_by();
 		$awt->set_sortable(false);
+		$awt->set_caption($arr["prop"]["caption"]);
 
 		$rv = array(
 			"name" => $this->elname . "_table",
