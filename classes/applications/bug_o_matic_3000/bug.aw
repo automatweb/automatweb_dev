@@ -1937,22 +1937,19 @@ class bug extends class_base
 				$conn = $uo->connections_from(array(
 					"type" => "RELTYPE_GRP",
 				));
-				$hi_pri = 0;
+				$admin = false;
 				foreach($conn as $c)
 				{
 					$pri = $c->to()->prop("priority");
 					if($pri > $hi_pri)
 					{
 						$grp = $c->to();
+						if($grp->prop("can_admin_interface"))
+						{
+							$admin = true;
+						}
+						break;
 					}
-				}
-				if($grp->prop("can_admin_interface"))
-				{
-					$admin = true;
-				}
-				else
-				{
-					$admin = false;
 				}
 			}
 
