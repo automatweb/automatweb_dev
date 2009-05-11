@@ -22,6 +22,16 @@ var FCKClearStyles = new Object() ;
 
 FCKClearStyles.CleanWordHTML = function(str)
 {
+	// nuke span tags
+	str = str.replace(/<span.+?>|<\/span>|<font.+?>|<\/font>/gi,"");
+	//str = str.replace(/<p.+?>/gi,"<p>");
+	str = str.replace(/class=".*?"/gi,"");
+	str = str.replace(/style=".*?"/gi,"");
+	str = str.replace(/<!--.+?-->/gi,"");
+	str = str.replace(/<o:p>/gi,"");
+	str = str.replace(/<\/o:p>/gi,"");
+	str = str.replace(/(&nbsp;)+/gi,"&nbsp;");
+
 	str = str.replace(/<o:p>\s*<\/o:p>/g, "") ;
 	str = str.replace(/<o:p>.*?<\/o:p>/g, "&nbsp;") ;
 	str = str.replace( /\s*mso-[^:]+:[^;"]+;?/gi, "" ) ;
@@ -56,6 +66,7 @@ FCKClearStyles.CleanWordHTML = function(str)
 	str = str.replace( /<H6([^>]*)>/gi, '' ) ;
 	str = str.replace( /<\/H\d>/gi, '<br>' ) ; //remove this to take out breaks where Heading tags were
 	str = str.replace( /<(U|I|STRIKE)>&nbsp;<\/\1>/g, '&nbsp;' ) ;
+	str = str.replace( /<STYLE\s*[^>]*><\/STYLE>/gi, '' ) ;
 	if (!document.all) // If Internet Explorer. 
 	{
 		str = str.replace( /<(B|b)>&nbsp;<\/\b|B>/g, '' ) ;
@@ -65,10 +76,11 @@ FCKClearStyles.CleanWordHTML = function(str)
 	str = str.replace( /<([^\s>]+)[^>]*>\s*<\/\1>/g, '' ) ;
 	//some RegEx code for the picky browsers
 	var re = new RegExp("(<P)([^>]*>.*?)(<\/P>)","gi") ;
-	str = str.replace( re, "<div$2</div>" ) ;
+	str = str.replace( re, "<p$2</p>" ) ;
 	var re2 = new RegExp("(<font|<FONT)([^*>]*>.*?)(<\/FONT>|<\/font>)","gi") ;
-	str = str.replace( re2, "<div$2</div>") ;
+	str = str.replace( re2, "<p$2</p>") ;
 	str = str.replace( /size|SIZE = ([\d]{1})/g, '' ) ;
+
 	
 	return str ;
 }
