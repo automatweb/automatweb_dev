@@ -192,12 +192,10 @@ class taket_afp_import extends class_base implements warehouse_import_if
 	**/
 	function make_master_import_happy($arr)
 	{
-	arr($arr);
-	arr($this);
 		$data = array();
-		if($this->can("view", $arr["id"]))
+		if($this->can("view", $arr["slave_obj_id"]))
 		{
-			$data = obj($arr["id"])->get_users_data($arr);
+			$data = obj($arr["slave_obj_id"])->get_users_data($arr);
 		}
 		return $data;
 	}
@@ -209,7 +207,111 @@ class taket_afp_import extends class_base implements warehouse_import_if
 
 	function get_warehouse_list()
 	{
+		return array(
+			1 => array(
+				"name" => "Taketi Kadaka ladu",
+				"info" => "http://88.196.208.74:8888/xmlrpc"
+			),
+			2 => array(
+				"name" => "Taketi Punane tn (Lasnamäe) ladu",
+				"info" => "http://217.159.218.130:8888/xmlrpc"
+			),
+			3 => array(
+				"name" => "Taketi Paavli ladu",
+				"info" => "http://87.119.170.162:8888"
+			),
+			4 => array(
+				"name" => "Taketi Tartu ladu",
+				"info" => "http://84.50.96.150:8080/xmlrpc"
+			),
+			5 => array(
+				"name" => "Taketi Pärnu ladu",
+				"info" => "http://217.159.141.2:8080"
+			),
+			6 => array(
+				"name" => "Taketi Viljandi ladu",
+				"info" => "http://194.126.111.58:8888"
+			)
+		);
+	}
+
+	function fetch_product_xml($import_object, $xml_done_callback_url, $wh_id)
+	{
+		$whl = $this->get_warehouse_list();
+		$whd = $whl[$wh_id];
+
+		$url = new aw_uri($whd["info"].'/index.php');
+		$url->set_arg('create_products_file', 1);
+
+		$this->print_line("Creating products file ... ", false);
+		$result = file_get_contents($url->get());
+		$this->print_line($result);
 		
+
+		$adr = new aw_uri($whd["info"]."/prods.csv");
+		$dest_fld = aw_ini_get('site_basedir').'/files/products.csv';
+
+		$wget_command = 'wget -O '.$dest_fld.' "'.$adr->get().'"';
+
+		$this->print_line("Download products file ... ", false);
+		shell_exec($wget_command);
+	
+		$this->print_line("[done]");
+
+		$xml_done_callback_url .= "&prod_xml=".$this->generate_products_xml();
+		die("no go here ".html::href(array("url" => $xml_done_callback_url)));
+	}
+
+
+	function generate_products_xml()
+	{
+		// TODO should make it configurable
+		$path = aw_ini_get('site_basedir').'/files/products.csv';
+		$lines = file($path);
+
+	
+		$keys = explode("\t", trim($lines[0]));
+		unset($lines[0]);
+
+		foreach ($lines as $line)
+		{
+			$items = explode("\t", $line);
+
+			foreach ($items as $k => $v)
+			{
+				$items[$k] = trim(urldecode($v));
+			}
+
+			$prod = array_combine($keys, $items);
+			$prods[$prod['product_code']] = $prod;
+
+			$suppliers[$prod['supplier_id']] = $prod['supplier_name'];
+		}
+
+		$xml = new SimpleXMLElement("<?xml version='1.0'?><products></products>");
+		
+		foreach ($prods as $code => $data)
+		{
+			$product = $xml->addChild('product');
+			foreach ($data as $key => $value)
+			{
+				$product->addChild($key, utf8_encode(str_replace("&", "&amp;", htmlentities($value))));
+			}
+		}
+		$prod_file = aw_ini_get('site_basedir').'/files/products.xml';
+		$xml->asXML($prod_file);
+
+		return $prod_file;
+	}
+
+	private function print_line($str, $break = true)
+	{
+		echo $str;
+		if ($break === true)
+		{
+			echo "<br />\n";
+		}
+		flush();
 	}
 }
 
