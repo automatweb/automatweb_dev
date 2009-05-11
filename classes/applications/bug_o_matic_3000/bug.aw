@@ -1940,15 +1940,10 @@ class bug extends class_base
 				$admin = false;
 				foreach($conn as $c)
 				{
-					$pri = $c->to()->prop("priority");
-					if($pri > $hi_pri)
+					$grp = $c->to();
+					if($grp->prop("can_admin_interface"))
 					{
-						$grp = $c->to();
-						if($grp->prop("can_admin_interface"))
-						{
-							$admin = true;
-						}
-						break;
+						$admin = true;
 					}
 				}
 			}
