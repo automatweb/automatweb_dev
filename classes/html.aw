@@ -680,6 +680,11 @@ class html
 			$capt .= $label;
 		}
 
+		if(!$caption && $orig_caption)
+		{
+			$caption = $orig_caption;
+		}
+
 		if (isset($caption))
 		{
 			$capt .= (isset($nbsp) && $nbsp ? "&nbsp;" : " ") . $caption;
