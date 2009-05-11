@@ -28,7 +28,10 @@ ini_set("memory_limit", "900M");
 		automatweb::$instance->bc();
 		automatweb::$instance->load_config_files($cfg_files, $cache_file);
 		$request = aw_request::autoload();
-		if($_GET["debug"]){automatweb::$instance->mode(automatweb::MODE_DBG);}
+		if(!empty($_GET["debug"]))
+		{
+			automatweb::$instance->mode(automatweb::MODE_DBG);
+		}
 		automatweb::$instance->set_request($request);
 		automatweb::$instance->exec();
 		automatweb::$result->send();
