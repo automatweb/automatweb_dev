@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.26 2009/05/11 07:50:48 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.27 2009/05/11 07:53:09 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -173,7 +173,7 @@ class bugtrack_display extends class_base
 			{
 				continue;
 			}
-			elseif($arr["request"]["group"] == "tasks" && in_array($obj->prop("bug_status"), rray(3,6,7,8,9,13,15)))
+			elseif($arr["request"]["group"] == "tasks" && in_array($obj->prop("bug_status"), array(3,6,7,8,9,13,15)))
 			{
 				continue;
 			}
