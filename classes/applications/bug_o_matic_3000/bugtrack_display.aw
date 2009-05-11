@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.25 2009/05/06 11:07:18 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.26 2009/05/11 07:50:48 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -165,7 +165,7 @@ class bugtrack_display extends class_base
 	{
 		foreach($ol->arr() as $oid => $obj)
 		{
-			if($arr["request"]["group"] == "solved" && ($obj->prop("bug_status")!=3 && $obj->prop("bug_status")!=9) && $obj->prop("bug_status") != 13 && $obj->prop("bug_status") != 15 && $obj->prop("bug_status") != 6 && $obj->prop("bug_status") != 7 && $obj->prop("bug_status") != 8)
+			if($arr["request"]["group"] == "solved" && (!in_array($obj->prop("bug_status"), array(3,6,7,8,9,13,15))))
 			{
 				continue;
 			}
@@ -173,7 +173,7 @@ class bugtrack_display extends class_base
 			{
 				continue;
 			}
-			elseif($arr["request"]["group"] == "tasks" && ($obj->prop("bug_status")==5 || $obj->prop("bug_status")==3 || $obj->prop("bug_status")==9))
+			elseif($arr["request"]["group"] == "tasks" && in_array($obj->prop("bug_status"), rray(3,6,7,8,9,13,15)))
 			{
 				continue;
 			}
