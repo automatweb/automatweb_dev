@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.27 2009/04/09 08:40:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.28 2009/05/11 08:15:40 dragut Exp $
 // phone.aw - Telefon
 /*
 
@@ -231,6 +231,12 @@ class crm_phone extends class_base
 
 		switch($field)
 		{
+			case "aw_is_public":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int"
+				));
+				return true;
 			case "aw_phone_type":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
