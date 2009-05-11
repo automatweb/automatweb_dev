@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.166 2009/05/11 16:26:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.167 2009/05/11 17:54:28 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -8368,7 +8368,7 @@ arr($stats_by_ppl);
 		
 
 		$this->suply_selection = $ol->names();
-		return $prods;
+		return $this->suply_selection;
 	}
 
 	private function get_unit_id($name)
@@ -8469,9 +8469,8 @@ arr($stats_by_ppl);
 	**/
 	public function save_expense_spot_table($arr)
 	{
-
 		$o = obj($arr["id"]);
-		$vars = array("product" , "unit" , "amount" ,  "incoming_income" , "ready");
+		$vars = array("product" , "unit" , "amount" ,  "incoming_income" , "ready","supplier");
 		$row_vars = array("product" , "unit" , "amount" , "unit_price" , "supplier");
 
 		foreach($vars as $var)
@@ -8563,11 +8562,13 @@ arr($stats_by_ppl);
 			)) :  $o->prop("unit.name"),
 			"amount" => $change ? html::textbox(array(
 				"name" => "project_income[".$id."][amount]",
-				"value" => $o->prop("amount")
+				"value" => $o->prop("amount"),
+				"size" => 5,
 			)) : $o->prop("amount"),
 			"price" => $change ? html::textbox(array(
 				"name" => "project_income[".$id."][unit_price]",
-				"value" => $o->prop("unit_price")
+				"value" => $o->prop("unit_price"),
+				"size" => 5,
 			)) :$o->prop("unit_price"),
 			"sum" => $o->prop("unit_price")*$o->prop("amount"),
 		));	
@@ -8676,7 +8677,7 @@ arr($stats_by_ppl);
 		$ajax_vars = array();
 		if($c)
 		{
-			$vars = array("product" , "unit" , "amount" , "incoming_income" , "ready");
+			$vars = array("product" , "unit" , "amount" , "incoming_income" , "ready","supplier");
 			foreach($vars as $var)
 			{
 				$ajax_vars[] = $var.": document.getElementsByName('expense_spot[".$id."][".$var."]')[0].value\n";
@@ -8788,7 +8789,8 @@ arr($stats_by_ppl);
 			)) :  $o->prop("unit.name"),
 			"amount" => $c ? html::textbox(array(
 				"name" => "expense_spot[".$id."][amount]",
-				"value" => $o->prop("amount")
+				"value" => $o->prop("amount"),
+				"size" => 8,
 			)) : $o->prop("amount"),
 			"supplier" => $c ? html::select(array(
 				"name" => "expense_spot[".$id."][supplier]",
@@ -8816,18 +8818,20 @@ arr($stats_by_ppl);
 					)) :  $row->prop("unit.name"),
 					"amount" => $c ? html::textbox(array(
 						"name" => "row[".$row->id()."][amount]",
-						"value" => $row->prop("amount")
+						"value" => $row->prop("amount"),
+						"size" => 8,
 					)) : $row->prop("amount"),
 					"price" => $c ? html::textbox(array(
 						"name" => "row[".$row->id()."][unit_price]",
-						"value" => $row->prop("unit_price")
+						"value" => $row->prop("unit_price"),
+						"size" => 8,
 					)) : $row->prop("unit_price"),
 					"sum" => $row->prop("unit_price")*$row->prop("amount"),
 					"supplier" => $c ? html::select(array(
 						"name" => "row[".$row->id()."][supplier]",
 						"value" => $row->prop("supplier"),
 						"options" => $this->get_suply_selection(),
-					)) : $row->prop("supplier"),
+					)) : $row->prop("supplier.name"),
 				));	
 
 				$amount = 0;
