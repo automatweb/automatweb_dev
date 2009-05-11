@@ -268,6 +268,14 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
+            <name>budget</name>
+            <table>aw_projects</table>
+            <group>info_t</group>
+            <type>textbox</type>
+            <field>aw_budget</field>
+            <caption>Eelarve</caption>
+      </property>
+      <property>
             <name>proj_type</name>
             <table>aw_projects</table>
             <group>info_t</group>
@@ -499,6 +507,27 @@
             <no_caption>1</no_caption>
             <parent>income_right_lay</parent>
             <field>income_table</field>
+      </property>
+      <property>
+            <name>project_estimated_table</name>
+            <table>objects</table>
+            <group>estimate</group>
+            <type>text</type>
+            <parent>estimate_general</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>project_estimated_table</field>
+            <caption>Projekti eelarvestamise &amp;amp;uuml;ldinfo</caption>
+      </property>
+      <property>
+            <name>income_spot_table</name>
+            <table>objects</table>
+            <group>estimate</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>income_spot_layout</parent>
+            <field>income_spot_table</field>
       </property>
       <property>
             <name>trans</name>
@@ -1163,6 +1192,10 @@
                   <parent>general</parent>
                   <caption>&amp;amp;Uuml;ldandmed</caption>
             </general2>
+            <estimate>
+                  <caption>Eelarvestamine</caption>
+                  <parent>general</parent>
+            </estimate>
             <income>
                   <caption>Tulud</caption>
                   <parent>general</parent>
@@ -1468,6 +1501,11 @@
                   <clid>CL_PROJECT_CATEGORY</clid>
                   <caption>Kategooria</caption>
             </CATEGORY>
+            <CASH_COW>
+                  <value>26</value>
+                  <clid>CL_CRM_CASH_COW</clid>
+                  <caption>Tulukoht</caption>
+            </CASH_COW>
       </reltypes>
       <layout>
             <up_bit>
@@ -1551,6 +1589,17 @@
                   <area_caption>Projekti&amp;amp;nbsp;tulud</area_caption>
                   <group>income</group>
             </income_right_lay>
+            <estimate_general>
+                  <type>hbox</type>
+                  <area_caption>Projekti&amp;amp;nbsp;eelarve</area_caption>
+                  <group>estimate</group>
+            </estimate_general>
+            <income_spot_layout>
+                  <closeable>1</closeable>
+                  <type>hbox</type>
+                  <area_caption>Tulukohad</area_caption>
+                  <group>estimate</group>
+            </income_spot_layout>
             <bills>
                   <type>hbox</type>
                   <width>20%:80%</width>
