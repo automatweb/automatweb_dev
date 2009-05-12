@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.75 2009/05/12 11:20:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.76 2009/05/12 14:05:20 kristo Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -127,6 +127,7 @@ class object_list extends _int_obj_container_base
 				$param = array(
 					"class_id" => array(),
 					"site_id" => array(),
+					"lang_id" => array(),
 					"oid" => $arr
 				);
 			}
