@@ -619,10 +619,17 @@ class aw_template extends core
 				));
 			}
 	**/
-	function template_has_var_full($varname)
+	function template_has_var_full($varname, $partial = false)
 	{
 		$tmp = join("\n", $this->v2_arr);
-		return strpos($tmp,"{VAR:" . $varname . "}") !== false;
+		if ($partial)
+		{
+			return strpos($tmp,"{VAR:" . $varname) !== false;
+		}
+		else
+		{
+			return strpos($tmp,"{VAR:" . $varname . "}") !== false;
+		}
 	}
 
 	/** checks if the SUB $parent is the immediate parent of the SUB $tpl
@@ -1134,6 +1141,7 @@ class aw_template extends core
 
 	private function _record_template_load($fn)
 	{
+		return;
 		if (strpos($fn, aw_ini_get("site_basedir")) !== false)
 		{
 			$f = fopen(aw_ini_get("site_basedir")."/files/template_log_".date("Y_m").".log", "a");

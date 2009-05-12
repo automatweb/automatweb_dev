@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.74 2009/05/08 10:42:15 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.75 2009/05/12 11:20:03 kristo Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -114,16 +114,21 @@ class object_list extends _int_obj_container_base
 			$tmp = reset($param);
 			if (is_object($tmp) && get_class($tmp) == "connection")
 			{
+				// rewrite filter to get all objects from conn, so we use magic from ->begin() to get them all at once
 				$arr = array();
 				foreach($param as $c)
 				{
-					if ($GLOBALS["object_loader"]->ds->can("view", $c->prop("to")))
-					{
-						$arr[$c->prop("to")] = $c->prop("to");
-					}
+					$arr[] = $c->prop("to");
 				}
-				$this->add($arr);
-				return;
+				if (!count($arr))
+				{
+					return;
+				}
+				$param = array(
+					"class_id" => array(),
+					"site_id" => array(),
+					"oid" => $arr
+				);
 			}
 		}
 

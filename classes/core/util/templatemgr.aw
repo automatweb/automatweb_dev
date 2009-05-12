@@ -1,7 +1,7 @@
 <?php
 /**
 A class to help manage template files. 
-$Header: /home/cvs/automatweb_dev/classes/core/util/templatemgr.aw,v 1.2 2009/01/05 13:10:44 hannes Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/util/templatemgr.aw,v 1.3 2009/05/12 11:20:10 kristo Exp $
 @classinfo  maintainer=kristo
 **/
 class templatemgr extends aw_template
@@ -101,17 +101,18 @@ class templatemgr extends aw_template
 	function get_template_file_by_id($args = array())
 	{
 		$id = (int)$args["id"];
-		if (!($ret = aw_cache_get("templatemgr::get_template_file_by_id", $id)))
+
+		static $cache = null;
+		if ($cache === null)
 		{
-			// if no cache, read all templates into cache - this should be a bit faster than several queries
+			$cache = array();
 			$this->db_query("SELECT id,filename FROM template");
 			while ($row = $this->db_next())
 			{
-				aw_cache_set("templatemgr::get_template_file_by_id", $row["id"], $row["filename"]);
+				$cache[$row["id"]] = $row["filename"];
 			}
-			$ret = aw_cache_get("templatemgr::get_template_file_by_id", $id);
 		}
-		return $ret;
+		return $cache[$id];
 	}
 
 	/** returns a list of all template folders that are for this site 

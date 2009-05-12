@@ -100,21 +100,42 @@ class user_object extends _int_object
 	**/
 	function get_groups_for_user()
 	{
-		$ol = get_instance(CL_USER)->get_groups_for_user(parent::prop("uid"));
-		$rv = $ol->arr();
+		$ol2 = new object_list($this->connections_from(array("type" => "RELTYPE_GRP")));
+		$rv = $ol2->arr();
+
+                // now, the user's own group is not in this list probably, so we go get that as well
+		$ol = new object_list(array(
+			"class_id" => array(CL_GROUP, CL_USER_GROUP),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $this->name(),
+			"type" => GRP_DEFAULT
+		));
+                foreach($ol->arr() as $tmp)
+		{
+			$rv[$tmp->id()] = $tmp;
+		}
+                uasort($rv, array(&$this, "_pri_sort"));
+                return $rv;
+
+		$ol3 = new object_list(array(
+			"class_id" => array(CL_GROUP, CL_USER_GROUP),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_GROUP.RELTYPE_GRP(CL_USER).id" => $this->id()
+		));
+		
 		// now, the user's own group is not in this list probably, so we go get that as well
 		$ol = new object_list(array(
 			"class_id" => array(CL_GROUP, CL_USER_GROUP),
-			"name" => $this->name(),
 			"lang_id" => array(),
 			"site_id" => array(),
+			"name" => $this->name(),
 			"type" => GRP_DEFAULT
 		));
-		if ($ol->count())
-		{
-			$mg = $ol->begin();
-			$rv[$mg->id()] = $mg;
-		}
+		$ol->add($ol3->arr());
+
+		$rv = $ol->arr();
 		uasort($rv, array(&$this, "_pri_sort"));
 		return $rv;
 	}
