@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.167 2009/05/11 17:54:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.168 2009/05/12 15:54:00 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -8334,6 +8334,8 @@ arr($stats_by_ppl);
 		);
 
 		$names = $t->get_element_from_all("name");
+		$prods[""] = t("M&auml;&auml;ramata");
+
 
 		foreach($names as $id => $name)
 		{
@@ -8462,6 +8464,19 @@ arr($stats_by_ppl);
 		}
 		$o->save();
 		return $o->id();
+	}
+
+	/**
+		@attrib name=delete_expense all_args=1
+	**/
+	public function delete_expense($arr)
+	{
+		$o = obj($arr["id"]);
+		if($o->class_id() == CL_CASH_COW || $o->class_id() == CL_CRM_EXPENSE_SPOT || $o->class_id() == CL_CRM_EXPENSE_SPOT_ROW)
+		{
+			$o->delete();
+			return true;
+		}
 	}
 
 	/**
@@ -8638,8 +8653,14 @@ arr($stats_by_ppl);
 				x=document.getElementById('project_expense_table_".$id."');
 				x.innerHTML=html;});
 				}",
-		))
-		."<br>";
+		)).
+		html::button(array(
+			"value" => t("Kustuta tulukoht"),
+			"name" => "change_income_table",
+			"onclick" =>  "$.get('/automatweb/orb.aw',{class: 'project', action: 'delete_expense', die: 1,id: '".$id."'}, function (html) {
+					x=document.getElementById('project_expense_table_".$id."');
+					x.parentNode.removeChild(x);})",
+		))."<br>";
 
 		$expenses = $o->get_expense_spots();
 		if($expenses->count())
@@ -8722,7 +8743,15 @@ arr($stats_by_ppl);
 				x=document.getElementById('project_one_expense_table".$id."');
 				x.innerHTML=html;});
 				}",
-		))."<br>";
+		));
+		
+		$delete_button = html::button(array(
+			"value" => t("Kustuta tulukoht"),
+			"name" => "change_income_table",
+			"onclick" =>  "$.get('/automatweb/orb.aw',{class: 'project', action: 'delete_expense', die: 1,id: '".$id."'}, function (html) {
+					x=document.getElementById('project_one_expense_table".$id."');
+					x.parentNode.removeChild(x);})",
+		));
 
 		$val = "";
 
@@ -8771,6 +8800,11 @@ arr($stats_by_ppl);
 			"caption" => t("Tarnija/Hankija"),
 			"chgbgcolor" => "color"
 		));
+		$t->define_field(array(
+			"name" => "delete",
+			"caption" => t("X"),
+			"chgbgcolor" => "color"
+		));
 
 		$t->set_header(sprintf(t("Projekti %s kulukoht %s"), "" , $o->prop("product.name")));
 		//$t->set_header($o->name());
@@ -8789,15 +8823,15 @@ arr($stats_by_ppl);
 			)) :  $o->prop("unit.name"),
 			"amount" => $c ? html::textbox(array(
 				"name" => "expense_spot[".$id."][amount]",
-				"value" => $o->prop("amount"),
+				"value" => $o->get_amount(),
 				"size" => 8,
-			)) : $o->prop("amount"),
+			)) : $o->get_amount(),
 			"supplier" => $c ? html::select(array(
 				"name" => "expense_spot[".$id."][supplier]",
 				"value" => $o->prop("supplier"),
 				"options" => $this->get_suply_selection(),
 			)) :$o->prop("supplier.name"),
-			"sum" => $o->prop("unit_price")*$o->prop("amount"),
+			"sum" => $o->get_sum(),
 			"color" => "gray",
 		));
 
@@ -8832,6 +8866,18 @@ arr($stats_by_ppl);
 						"value" => $row->prop("supplier"),
 						"options" => $this->get_suply_selection(),
 					)) : $row->prop("supplier.name"),
+					"delete" => html::href(array(
+						"url" => "javascript:;",
+						"onclick" => '$.get("/automatweb/orb.aw",{class: "project", action: "delete_expense", die: 1,id: "'.$row->id().'"}, function (asd) {
+							$.get("/automatweb/orb.aw",{class: "project", action: "draw_expense_spot_table", die: 1,id: "'.$id.'"}, function (html) {
+								x=document.getElementById("project_one_expense_table'.$id.'");
+								x.innerHTML=html;
+							});}
+						);',
+						"caption" => html::img(array(
+							"url" => aw_ini_get("baseurl").'/automatweb/images/icons/delete.gif',
+						)),
+					)),
 				));	
 
 				$amount = 0;
@@ -8858,12 +8904,14 @@ arr($stats_by_ppl);
 			"unit" => html::bold(t("M&auml;&auml;ramata kogus")),
 			"amount" => html::bold(t("Jooksev maksumus")),
 			"price" => html::bold(t("M&auml;&auml;ramata eelarve osa")),
-			"sum" => html::bold(t("Eelarvest v&auml;lja l&auml;lja läinud summa")),
+			"sum" => html::bold(t("Eelarvest &uuml;le l&auml;inud summa")),
 			"color" => "white",
 		));
+		
+		$assigned = $o->get_assigned_amount();
 		$t->define_data(array(
-			"row_name" => 70,
-			"unit" => 70,
+			"row_name" => $assigned,
+			"unit" => $o->get_amount() - $assigned,
 			"amount" => 0,
 			"price" => 13300,
 			"sum" => 300,
@@ -8873,7 +8921,7 @@ arr($stats_by_ppl);
 			"unit" => 70,
 			"price" => 7100,
 		));
-		$val.= $button.$button2."<br>";
+		$val.= $button.$button2.$delete_button."<br>";
 		$val.= $t->draw();
 
 		$real_ready = 53.38;

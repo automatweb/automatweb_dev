@@ -33,6 +33,57 @@ class crm_expense_spot_obj extends _int_object
 		return $o->id();
 	}
 
+	/** gets expense amount
+		@attrib api=1
+	**/
+	public function get_amount()
+	{
+		if($this->prop("amount"))
+		{
+			return $this->prop("amount");
+		}
+		else
+		{
+			$amt = 0;
+			$rows = $this->get_rows();
+			foreach($rows->arr() as $row)
+			{
+				$amt+= $row->prop("amount");
+			}
+			return $amt;
+		}
+
+	}
+
+	/** gets expense sum
+		@attrib api=1
+	**/
+	public function get_sum()
+	{
+		$sum = 0;
+		$rows = $this->get_rows();
+		foreach($rows->arr() as $row)
+		{
+			$sum+= $row->prop("amount")*$row->prop("unit_price");
+		}
+		return $sum;
+	}
+
+	/** gets expense assigned amount
+		@attrib api=1
+	**/
+	public function get_assigned_amount()
+	{
+		$amt = 0;
+		$rows = $this->get_rows();
+		foreach($rows->arr() as $row)
+		{
+			$amt+= $row->prop("amount");
+		}
+		return $amt;
+	}
+	
+
 }
 
 ?>

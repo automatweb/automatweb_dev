@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="project" folder="www/dev/marko/automatweb_dev/classes/applications/groupware" extends="class_base">
+	<class name="project" folder="www/automatweb_cvs/classes/applications/groupware" extends="class_base">
 		<action name="wtf">
 			<function name="wtf">
 				<arguments>
@@ -179,6 +179,13 @@
 
 		<action name="save_income_table" all_args="1">
 			<function name="save_income_table">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_expense" all_args="1">
+			<function name="delete_expense">
 				<arguments>
 				</arguments>
 			</function>
