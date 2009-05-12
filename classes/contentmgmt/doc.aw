@@ -378,6 +378,7 @@ class doc extends class_base
 
 	function get_property($arr)
 	{
+
 		// let site mod props
 		$si = __get_site_instance();
 		if ($si)
@@ -745,12 +746,12 @@ class doc extends class_base
 			{
 				$obj_inst->set_prop("nobreaks",1);
 			}
-			if ($cff->prop("on_save_settings_remove_word_html") == 1)
-			{
+			//if ($cff->prop("on_save_settings_remove_word_html") == 1)
+			//{
 				$obj_inst->set_prop("content",$this->_doc_clean_html($obj_inst->prop("content")));
 				$obj_inst->set_prop("lead",$this->_doc_clean_html($obj_inst->prop("lead")));
 				$obj_inst->set_prop("moreinfo",$this->_doc_clean_html($obj_inst->prop("moreinfo")));
-			}
+			//}
 		}
 
 		$old_tm = $obj_inst->prop("tm");
