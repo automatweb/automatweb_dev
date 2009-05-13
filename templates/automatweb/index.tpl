@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
 	<title>{VAR:html_title} {VAR:title_action}</title>
 	<link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico" />
-	<!-- SUB MINIFY_JS_AND_CSS -->
+	<!-- SUB: MINIFY_JS_AND_CSS -->
 	<link href="{VAR:baseurl}/automatweb/css/style.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/jquery-1.2.3.min.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_timer.js"></script>
@@ -40,7 +40,7 @@
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw_help.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
-	<!-- END SUB MINIFY_JS_AND_CSS -->
+	<!-- END SUB: MINIFY_JS_AND_CSS -->
 	{VAR:javascript}
 	<script type="text/javascript">
 	xchanged = 0;
