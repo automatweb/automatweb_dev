@@ -872,6 +872,64 @@ class doc extends class_base
 	// clean word
 	private function _doc_clean_html($html)
 	{
+		$options = array(
+			"wrap" => 72,
+			"indent" => true,
+			
+			"add-xml-decl" => false,
+			"add-xml-space" => false,
+			//"alt-text" => "",
+			"anchor-as-name" => true,
+			"assume-xml-procins" => false,
+			"bare" => true,
+			"clean" => true,
+			//"css-prefix" => "c",
+			"decorate-inferred-ul" => false,
+			//"doctype" => "auto",
+			"drop-empty-paras" => true,
+			"drop-font-tags" => true,
+			"drop-proprietary-attributes" => true,
+			"enclose-block-text" => true,
+			"enclose-text" => false,
+			"escape-cdata" => true,
+			"fix-backslash" => true,
+			"fix-bad-comments" => true,
+			"fix-uri" => true,
+			"hide-comments" => true,
+			"hide-endtags" => false,
+			"indent-cdata" => false,
+			"input-xml" => false,
+			"join-classes" => true,
+			"join-styles" => true,
+			"literal-attributes" => false,
+			"logical-emphasis" => true,
+			"lower-literals" => true,
+			"merge-divs" => "auto",
+			"merge-spans" => "auto",
+			"ncr" => true,
+			//new-blocklevel-tags 	Tag names 	-
+			//new-empty-tags 	Tag names 	-
+			//new-inline-tags 	Tag names 	-
+			//new-pre-tags 	Tag names 	-
+			"numeric-entities" => false,
+			//output-html 	Boolean 	no
+			"output-xhtml" => true,
+			//output-xml 	Boolean 	no
+			"preserve-entities" => false,
+			"quote-ampersand" => true,
+			"quote-marks" => true,
+			"quote-nbsp" => true,
+			"repeated-attributes" => "keep-last",
+			"replace-color" => true,
+			"show-body-only" => true,
+			"uppercase-attributes" => false,
+			"uppercase-tags" => false,
+			"word-2000" => true,
+		);
+	
+		$tidy = tidy_parse_string($html, $options);
+		tidy_clean_repair($tidy);
+	/*
 		$html = ereg_replace("<(/)?(meta|title|style|font|span|del|ins)[^>]*>","",$html);
 
 		// another pass over the html 2x times, removing unwanted attributes
@@ -884,7 +942,8 @@ class doc extends class_base
 			array("", "<p>", "<h\\1>"),
 			$html
 		);
-		return $html;
+		*/
+		return $tidy;
 	}
 	
 	private function gen_navtoolbar($arr)
