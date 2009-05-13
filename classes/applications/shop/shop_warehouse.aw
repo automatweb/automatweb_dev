@@ -3891,13 +3891,13 @@ class shop_warehouse extends class_base
 	function get_warehouse_configs($arr, $prop = null)
 	{
 		$cfgs = array();
-		if(!is_array($arr["warehouses"]) && $this->config)
+		if(!is_array($arr["warehouses"]) && !empty($this->config))
 		{
 			$cfgs[] = $this->config;
 		}
 		else
 		{
-			foreach($arr["warehouses"] as $wh)
+			foreach(safe_array($arr["warehouses"]) as $wh)
 			{
 				if($this->can("view", $wh))
 				{

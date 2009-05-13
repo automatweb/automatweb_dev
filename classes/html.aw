@@ -761,8 +761,9 @@ class html
 		$checked = checked($checked);
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 		$onc = empty($onclick) ? "" : " onclick=\"{$onclick}\"";
+		$caption = empty($arr["caption"]) ? "" : $arr["caption"];
 
-		if (isset($textsize) && $textsize and isset($caption) && $caption)
+		if (!empty($textsize) && !empty($caption))
 		{
 			$caption = '<span style="font-size: ' . $textsize . ';">' . $caption . '</span>';
 		}
