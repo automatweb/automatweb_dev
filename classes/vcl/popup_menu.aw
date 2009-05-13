@@ -10,6 +10,8 @@ class popup_menu extends aw_template
 	{
 		$this->init("vcl/popup_menu");
 		$this->items = array();
+
+		$this->read_template("js_popup_menu.tpl");
 	}
 	/** 
 
@@ -116,7 +118,7 @@ class popup_menu extends aw_template
 	/** adds a separator line between menu isems that can not be clicked
 		@attrib api=1
 	**/
-	function add_separator($arr = array())
+	function add_separator($arr)
 	{
 		//$this->items[] = array("__is_sep" => 1);
 		if (!$arr["parent"])
@@ -184,8 +186,6 @@ class popup_menu extends aw_template
 	**/
 	function get_menu($param = NULL)
 	{
-		$this->read_template("js_popup_menu.tpl");
-
 		if (!isset($param["icon"]))
 		{
 			$icon = $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif";
@@ -245,7 +245,6 @@ class popup_menu extends aw_template
 			{
 				el = document.getElementById(\"lod_".$this->menu_id."\");
 				el.innerHTML=aw_get_url_contents(\"".$param["load_on_demand_url"]."\");
-
 				nhr=document.getElementById(\"href_".$this->menu_id."\");
 				if (document.createEvent) {evObj = document.createEvent(\"MouseEvents\");evObj.initEvent( \"click\", true, true );nhr.dispatchEvent(evObj);} 
 				else { 

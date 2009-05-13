@@ -313,7 +313,7 @@ class mysql
 	{
 		if (is_array($arr))
 		{
-			while(list($k,$v) = each($arr))
+			foreach($arr as $k => $v)
 			{
 				if (is_array($arr[$k]))
 				{
@@ -324,7 +324,6 @@ class mysql
 					$arr[$k] = stripslashes($arr[$k]);
 				};
 			};
-			reset($arr);
 		}
 		else
 		{

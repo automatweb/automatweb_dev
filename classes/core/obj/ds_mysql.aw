@@ -166,7 +166,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	//	objdata - result of this::get_objdata
 	function read_properties($arr)
 	{
-		extract($arr);
+		$properties = $arr["properties"];
+		$tableinfo = $arr["tableinfo"];
+		$objdata = $arr["objdata"];
+
 		if (!empty($GLOBALS["object2version"][$objdata["oid"]]) && $GLOBALS["object2version"][$objdata["oid"]] != "_act")
 		{
 			$arr["objdata"]["load_version"] = $GLOBALS["object2version"][$objdata["oid"]];
@@ -324,17 +327,24 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if (isset($this->read_properties_data_cache[$object_id]))
 				{
 					$data = $this->read_properties_data_cache[$object_id];
-					$this->dequote($data);
 				}
 				else
 				{
 					$data = $this->db_fetch_row($q);
-					$this->dequote($data);
 				}
 
+				// this saves loads of is_array calls in the generic method
 				if (is_array($data))
 				{
+					foreach($data as $_k => $_v)
+					{
+						$data[$_k] = stripslashes($_v);
+					}
 					$ret += $data;
+				}
+				else
+				{
+					$data = stripslashes($data);
 				}
 
 				foreach($tbl2prop[$table] as $prop)

@@ -44,12 +44,68 @@ class admin_if extends class_base
 	/** this stores a list of {clid => class name } for each class that implements the admin if modifier interface **/
 	private $modifiers_by_clid;
 
+	private $pm;
+	private $url_template;
+	private $url_template_reforb;
+
 	function admin_if()
 	{
 		$this->init(array(
 			"tpldir" => "workbench",
 			"clid" => CL_ADMIN_IF
 		));
+
+		$this->data_list_ot_flds = array(
+			"" => array(
+				"modifiedby" => "modifiedby",
+				"modified" => "modified",
+				"oid" => "oid",
+				"class_id" => "class_id",
+				"lang_id" => "lang_id",
+				"comment" => "comment",
+				"name" => "name",
+				"brother_of" => "brother_of",
+				"jrk" => "ord",
+				"status" => "status"
+			)
+		);
+
+		// init get_popup_data stuff
+		$this->pm = get_instance("vcl/popup_menu");
+
+		$this->post_ru_append = "&return_url=".urlencode(get_ru());
+		$this->change_url_template = str_replace("__", "%s", $this->mk_my_orb("change", array(
+			"id" => "__",
+			"parent" => "__",
+			"period" => "__",
+			"group" => "__"
+		), "__",true,true));
+
+
+		$this->if_cut_url_template = str_replace("__", "%s", $this->mk_my_orb("if_cut", array(
+			"reforb" => 1,
+			"id" => "__",
+			"parent" => "__",
+			"sel[__]" => "1",
+		), "admin_if",true,true));
+
+
+		$this->if_copy_template = str_replace("__", "%s", $this->mk_my_orb("if_copy", array(
+			"reforb" => 1, 
+			"id" => "__", 
+			"parent" => "__",
+			"sel[__]" => "1",
+			"period" => "__"
+		), "admin_if",true,true));
+
+		$this->if_delete_template = str_replace("__", "%s", $this->mk_my_orb("if_delete", array(
+			"ret_id" => "__", 
+			"reforb" => 1, 
+			"id" => "__", 
+			"parent" => "__",
+			"sel[$id]" => "1",
+			"period" => "__"
+		), "admin_if",true,true));
 	}
 
 	function _get_info_text($arr)
@@ -285,20 +341,23 @@ class admin_if extends class_base
 			"lang_id" => array(),
 			"sort_by" => "objects.parent,objects.jrk,objects.created"
 		);
-		$ol = new object_list($filt);
+		$ol = new object_data_list(
+			$filt,
+			$this->data_list_ot_flds
+		);
 
 		$second_level_parents = array();
 		foreach($ol->arr() as $menu)
 		{
-			if (isset($has_items[$menu->id()]))
+			if (isset($has_items[$menu["oid"]]))
 			{
 				continue;
 			}
-			$rs = $this->resolve_item_new($menu);
+			$rs = $this->resolve_item_new_arr($menu);
 			if ($rs !== false)
 			{
 				$tree->add_item($rs["parent"], $rs);
-				$has_items[$menu->id()] = 1;
+				$has_items[$rs["oid"]] = 1;
 				// also, gather all id's of objects that were inserted in the tree, so that
 				// we can also get their submenus so that the tree know is they have subitems
 				$second_level_parents[$rs["id"]] = $rs["id"];
@@ -307,7 +366,7 @@ class admin_if extends class_base
 
 		if (count($second_level_parents))
 		{
-			$ol = new object_list(array(
+			$ol = new object_data_list(array(
 				"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
 				"parent" => $second_level_parents,
 				"CL_MENU.type" => new obj_predicate_not(array(MN_FORM_ELEMENT, MN_HOME_FOLDER)),
@@ -320,18 +379,18 @@ class admin_if extends class_base
 				)),
 				"site_id" => array(),
 				"sort_by" => "objects.parent,objects.jrk,objects.created"
-			));
+			), $this->data_list_ot_flds);
 			foreach($ol->arr() as $menu)
 			{
-				if (isset($has_items[$menu->id()]))
+				if (isset($has_items[$menu["oid"]]))
 				{
 					continue;
 				}
-				$rs = $this->resolve_item_new($menu);
+				$rs = $this->resolve_item_new_arr($menu);
 				if ($rs !== false)
 				{
 					$tree->add_item($rs["parent"], $rs);
-					$has_items[$menu->id()] = 1;
+					$has_items[$rs["id"]] = 1;
 				}
 			}
 		}
@@ -342,7 +401,6 @@ class admin_if extends class_base
 			$this->mk_home_folder_new();
 
 			// shortcuts for the programs
-			$this->sufix = "ad";
 			$this->mk_admin_tree_new();
 		};
 
@@ -373,80 +431,50 @@ class admin_if extends class_base
 		die($t->finalize_tree());
 	}
 
-	private function resolve_item_new($m)
+	private function resolve_item_new_arr($m, $adminf = null)
 	{
-		enter_function("admin_folders::resolve_item_new");
-		$arr = array("parent" => $m->parent());
-		$arr["id"] = $m->id();
-		if ($this->period > 0 && $m->prop("periodic") != 1)
+		if ($this->period > 0 && $m["periodic"] != 1)
 		{
-			exit_function("admin_folders::resolve_item_new");
 			return false;
-		};
-		$baseurl = aw_ini_get("baseurl");
-		$ext = aw_ini_get("ext");
+		}
 
 		$iconurl = "";
-		if ($m->class_id() == CL_PROMO)
-		{
-			$iconurl = icons::get_icon_url("promo_box","");
-		}
-		else
-		if ($m->class_id() == CL_BROTHER)
+		if ($m["class_id"] == CL_BROTHER)
 		{
 			$iconurl = icons::get_icon_url("brother","");
 		}
 		else
-		if ($m->prop("admin_feature") > 0)
+		if ($adminf > 0)
 		{
-			$iconurl = icons::get_feature_icon_url($m->prop("admin_feature"));
+			$iconurl = icons::get_feature_icon_url($adminf);
 		};
 
-		if ($this->can("view", $m->meta("sel_icon")))
-		{
-			$im = get_instance(CL_IMAGE);
-			$iconurl = $im->get_url_by_id($m->meta("sel_icon"));
-		}
-
 		// if all else fails ..
-		$arr["iconurl"] = $iconurl;
+		$m["iconurl"] = $iconurl;
 
-		if ($m->prop("admin_feature"))
+		if ($adminf)
 		{
 			$prog = aw_ini_get("programs");
-			$arr["url"] = $prog[$m->prop("admin_feature")]["url"];
+			$m["url"] = $prog[$adminf]["url"];
+
+			if (empty($m["url"]))
+			{
+				$m["url"] = "about:blank";
+			}
 		}
 		else
 		{
-			$arr["url"] = aw_url_change_var("parent", $arr["id"], $this->curl);
+			$m["url"] = aw_url_change_var("parent", $m["oid"], $this->curl);
 		};
 
-		if (empty($arr["url"]))
+		$m["name"] = parse_obj_name($this->_fake_trans_get_val_name($m));
+		if ($this->selp == $m["oid"])
 		{
-			$arr["url"] = "about:blank";
-		};
-		$arr["name"] = parse_obj_name($m->trans_get_val("name"));
-		if ($this->selp == $m->id())
-		{
-			$arr["name"] = "<b>".$arr["name"]."</b>";
+			$m["name"] = "<b>".$m["name"]."</b>";
 		}
 
-		// tshekime et kas menyyl on submenyysid
-		// kui on, siis n2itame alati
-		// kui pole, siis tshekime et kas n2idatakse perioodilisi dokke
-		// kui n2idatakse ja menyy on perioodiline, siis n2itame menyyd
-		// kui pole perioodiline siis ei n2ita
-		$rv = true;
-
-		/*if ($this->period > 0)
-		{
-			if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] == 0))
-			{
-				//$rv = false;
-			};
-		};*/
-		exit_function("admin_folders::resolve_item_new");
-		return $rv ? $arr : false;
+		$m["id"] = $m["oid"];
+		return $m;
 	}
 
 	private function mk_home_folder_new()
@@ -466,7 +494,7 @@ class admin_if extends class_base
 			"iconurl" => icons::get_icon_url("homefolder",""),
 			"url" => aw_url_change_var("parent",$hf->id(), $this->curl),
 		));
-		$ol = new object_list(array(
+		$ol = new object_data_list(array(
 			"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
 			"parent" => $hf->id(),
 			"CL_MENU.type" => new obj_predicate_not(array(MN_HOME_FOLDER)),
@@ -479,10 +507,10 @@ class admin_if extends class_base
 			)),
 			"site_id" => array(),
 			"sort_by" => "objects.parent,objects.jrk,objects.created"
-		));
+		), $this->data_list_ot_flds);
 		foreach($ol->arr() as $menu)
 		{
-			$rs = $this->resolve_item_new($menu);
+			$rs = $this->resolve_item_new_arr($menu);
 			if ($rs !== false)
 			{
 				$this->tree->add_item($rs["parent"], $rs);
@@ -494,7 +522,9 @@ class admin_if extends class_base
 	private function mk_admin_tree_new()
 	{
 		// make this one level only, so we save a lot on the headaches
-		$ol = new object_list(array(
+		$tmp = $this->data_list_ot_flds;
+		$tmp[CL_MENU]["admin_feature"] = "admin_feature";
+		$ol = new object_data_list(array(
 			"class_id" => CL_MENU,
 			"parent" => aw_ini_get("amenustart"),
 			"status" => STAT_ACTIVE,
@@ -502,7 +532,7 @@ class admin_if extends class_base
 			"site_id" => array(),
 			"lang_id" => array(),
 			"sort_by" => "objects.parent,objects.jrk,objects.created"
-		));
+		), $tmp);
 		$rn = empty($this->use_parent) ? aw_ini_get("admin_rootmenu2") : $this->use_parent;
 		$rn = is_array($rn) ? reset($rn) : $rn;
 		if ($this->force_0_parent)
@@ -513,7 +543,7 @@ class admin_if extends class_base
 		$this->period = null;
 		foreach($ol->arr() as $menu)
 		{
-			$rs = $this->resolve_item_new($menu);
+			$rs = $this->resolve_item_new_arr($menu, $menu["admin_feature"]);
 			if ($rs !== false)
 			{
 				$rs["id"] .= "ad";
@@ -638,107 +668,118 @@ class admin_if extends class_base
 		$trans = aw_ini_get("user_interface.full_content_trans") ? true : false;
 
 		$filt = $this->_get_object_list_filter($parent, $period);
-		$ob_cnt = new object_list($filt);
+		$ob_cnt = new object_data_list(
+			$filt,
+			array(
+				"" => array(new obj_sql_func(OBJ_SQL_COUNT, "cnt", "*"))
+			)
+		);
+		$tmp = $ob_cnt->arr();
+		$object_count = $tmp[0]["cnt"];
 
 		$ft_page = isset($arr["request"]["ft_page"]) ? $arr["request"]["ft_page"] : null;
 		$filt[] = new obj_predicate_limit($per_page, $ft_page * $per_page);
-		$ob = new object_list($filt);
+		
+		$ob = new object_data_list(
+			$filt,
+			$this->data_list_ot_flds
+		);
 
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->setup_rf_table($t, $ob_cnt->count(), $per_page);
+		$this->setup_rf_table($t, $object_count, $per_page);
 
 		$this->_init_admin_modifier_list();
-		foreach($ob->arr() as $row_o)
+		foreach($ob->arr() as $row_d)
 		{
 			$row = array(
-				"modifiedby" => $row_o->modifiedby(),
-				"modified" => $row_o->modified(),
-				"oid" => $row_o->id()
+				"modifiedby" => $row_d["modifiedby"],
+				"modified" => $row_d["modified"],
+				"oid" => $row_d["oid"]
 			);
-			$can_change = $this->can("edit", $row_o->id());
+			$can_change = $this->can("edit", $row_d["oid"]);
 
 			$row["is_menu"] = 0;
-			if (in_array($row_o->class_id(),$containers))
+			if (in_array($row_d["class_id"],$containers))
 			{
-				$chlink = aw_url_change_var("parent", $row_o->id());
+				$chlink = aw_url_change_var("parent", $row_d["oid"]);
 				$row["is_menu"] = 1;
 			}
 			else
 			{
 				$grp = null;
-				if ($trans && aw_global_get("ct_lang_id") != $row_o->lang_id())
+				if ($trans && aw_global_get("ct_lang_id") != $row_d["lang_id"])
 				{
 					$grp = "transl";
 				}
 				if ($can_change)
 				{
-					$chlink = $this->mk_my_orb("change", array("id" => $row_o->id(), "period" => $period, "group" => $grp),$row_o->class_id());
+					$chlink = $this->mk_my_orb("change", array("id" => $row_d["oid"], "period" => $period, "group" => $grp),$row_d["class_id"]);
 				}
 				else
 				{
-					$chlink = $this->mk_my_orb("view", array("id" => $row_o->id(), "period" => $period, "group" => $grp),$row_o->class_id());
+					$chlink = $this->mk_my_orb("view", array("id" => $row_d["oid"], "period" => $period, "group" => $grp),$row_d["class_id"]);
 				}
 			}
 
 			$row["name"] = html::href(array(
 				"url" => $chlink,
-				"title" => strip_tags($row_o->comment()),
-				"caption" => parse_obj_name($row_o->trans_get_val("name"))
+				"title" => strip_tags($row_d["comment"]),
+				"caption" => parse_obj_name($this->_fake_trans_get_val_name($row_d))
 			));
 
-			$row["cutcopied"] = isset($sel_objs[$row_o->id()]) ? "#E2E2DB" : "#FCFCF4";
+			$row["cutcopied"] = isset($sel_objs[$row_d["oid"]]) ? "#E2E2DB" : "#FCFCF4";
 
 			$row["java"] = $this->get_popup_data(array(
-				"obj" => obj($row_o->id()),
+				"obj" => $row_d,
 				"period" => $period
 			));
-			$title = sprintf(t("Objekti id on %s"), $row_o->id());
+			$title = sprintf(t("Objekti id on %s"), $row_d["oid"]);
 			$row["icon"] = html::img(array(
-				"url" => icons::get_icon_url($row_o->class_id(),$row_o->name()),
+				"url" => icons::get_icon_url($row_d["class_id"],$row_d["name"]),
 				"alt" => $title,
 				"title" => $title,
 			));
 
-			$row["class_id"] = isset($clss[$row_o->class_id()]) ? $clss[$row_o->class_id()]["name"] : ""; 
-			if ($row["oid"] != $row_o->brother_of())
+			$row["class_id"] = $clss[$row_d["class_id"]]["name"];
+			if ($row["oid"] != $row_d["brother_of"])
 			{
 				$row["class_id"] .= " (vend)";
 			}
 
-			$row["hidden_jrk"] = $row_o->ord();
-			$row["status_val"] = $row_o->status();
+			$row["hidden_jrk"] = $row_d["ord"];
+			$row["status_val"] = $row_d["status"];
 
 			if ($can_change)
 			{
 				$row["jrk"] = html::hidden(array(
-					"name" => "old[jrk][".$row_o->id()."]",
-					"value" => $row_o->ord()
+					"name" => "old[jrk][".$row_d["oid"]."]",
+					"value" => $row_d["ord"]
 				)).html::textbox(array(
-					"name" => "new[jrk][".$row_o->id()."]",
-					"value" => $row_o->ord(),
+					"name" => "new[jrk][".$row_d["oid"]."]",
+					"value" => $row_d["ord"],
 					"class" => "formtext",
 					"size" => "3"
 				));
 				$row["status"] = html::hidden(array(
-					"name" =>  "old[status][".$row_o->id()."]",
-					"value" => $row_o->status()
+					"name" =>  "old[status][".$row_d["oid"]."]",
+					"value" => $row_d["status"]
 				)).html::checkbox(array(
-					"name" => "new[status][".$row_o->id()."]",
+					"name" => "new[status][".$row_d["id"]."]",
 					"value" => "2",
-					"checked" => ($row_o->status() == STAT_ACTIVE)
+					"checked" => ($row_d["status"] == STAT_ACTIVE)
 				));
 				$row["select"] = html::checkbox(array(
-					"name" => "sel[".$row_o->id()."]",
+					"name" => "sel[".$row_d["oid"]."]",
 					"value" => "1"
 				));
 			}
 			else
 			{
-				$row["status"] = $row_o->status() == STAT_NOTACTIVE ? t("Mitteaktiivne") : t("Aktiivne");
+				$row["status"] = $row_d["status"] == STAT_NOTACTIVE ? t("Mitteaktiivne") : t("Aktiivne");
 				$row["select"] = "&nbsp;";
 			}
 
-			$this->_call_admin_modifier_for_row($row_o->class_id(), $row);
+			$this->_call_admin_modifier_for_row($row_d["class_id"], $row);
 
 			$t->define_data($row);
 		}
@@ -818,67 +859,55 @@ class admin_if extends class_base
 	private function get_popup_data($args = array())
 	{
 		$obj = $args["obj"];
-		$id = $obj->id();
-		$parent = $obj->parent();
-		$clid = $obj->class_id();
+		$id = $obj["oid"];
+		$parent = $obj["parent"];
+		$clid = $obj["class_id"];
 		$period = $args["period"];
 
-		$pm = get_instance("vcl/popup_menu");
-		$pm->begin_menu("aif_".$obj->id());
+		$this->pm->begin_menu("aif_".$obj["oid"]);
 
-		$pm->add_item(array(
+		$this->pm->add_item(array(
 			"text" => t("Ava"),
 			"link" => aw_url_change_var("parent", $id)
 		));
 
 		$grp = null;
-		if (aw_ini_get("user_interface.full_content_trans")  && aw_global_get("ct_lang_id") != $obj->lang_id())
+		if (aw_ini_get("user_interface.full_content_trans")  && aw_global_get("ct_lang_id") != $obj["lang_id"])
 		{
 			$grp = "transl";
 		}
 
+		$class = basename($GLOBALS["cfg"]["classes"][$clid]["file"]);
 		if ($this->can("edit", $id))
 		{
-			$pm->add_item(array(
-				"link" => $this->mk_my_orb("change", array(
-					"id" => $id,
-					"parent" => $parent,
-					"period" => $period,
-					"return_url" => get_ru(),
-					"group" => $grp
-				), $clid,true,true),
+			$this->pm->add_item(array(
+				"link" => sprintf($this->change_url_template, $class, $id, $parent, $period, $grp).$this->post_ru_append,
 				"text" => t("Muuda")
 			));
 
-			$pm->add_item(array(
-				"link" => $this->mk_my_orb("if_cut", array(
-					"reforb" => 1,
-					"id" => $id,
-					"parent" => $parent,
-					"sel[$id]" => "1",
-					"return_url" => get_ru()
-				), "admin_if",true,true),
+			$this->pm->add_item(array(
+				"link" => sprintf($this->if_cut_url_template, $id, $parent, $id).$this->post_ru_append,
 				"text" => t("L&otilde;ika")
 			));
 		}
 
-		$pm->add_item(array(
-			"link" => $this->mk_my_orb("if_copy", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_if",true,true),
+		$this->pm->add_item(array(
+			"link" => sprintf($this->if_copy_template, $id, $parent, $id, $period).$this->post_ru_append,
 			"text" => t("Kopeeri")
 		));
 
 		if ($this->can("delete", $id))
 		{
-			$delurl = $this->mk_my_orb("if_delete", array("ret_id" => $_GET["id"], "reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_if",true,true);
+			$delurl = sprintf($this->if_delete_template, $_GET["id"], $id, $parent, $period);
 			$delurl = "javascript:if(confirm('".t("Kustutada valitud objektid?")."')){window.location='$delurl';};";
 
-			$pm->add_item(array(
+			$this->pm->add_item(array(
 				"link" => $delurl,
 				"text" => t("Kustuta")
 			));
 		}
 
-		return $pm->get_menu();
+		return $this->pm->get_menu();
 	}
 
 	private function generate_new($tb, $i_parent, $period)
@@ -905,6 +934,9 @@ class admin_if extends class_base
 			$c->file_set("newbtn_tree_cache_".aw_global_get("uid"), serialize($tree));
 		}
 
+		$new_url_template = str_replace("__", "%s", $this->mk_my_orb("new",array("parent" => "__"),"__"));
+		$obn = aw_ini_get("baseurl")."/automatweb/orb.aw";
+
 		foreach($tree as $item_id => $item_collection)
 		{
 			foreach($item_collection as $el_id => $el_data)
@@ -913,22 +945,21 @@ class admin_if extends class_base
 
 				if (!empty($el_data["clid"]))
 				{
-					$url = $this->mk_my_orb("new",array("parent" => $i_parent),$el_data["clid"]);
-					$url = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $url);
+					$url = sprintf($new_url_template, basename($el_data["file"]), $i_parent);
+					$url = str_replace($obn, "", $url);
 					$tb->add_menu_item(array(
 						"name" => (empty($el_data["id"]) ? $el_id : $el_data["id"]),
 						"parent" => $parnt,
 						"text" => $el_data["name"],
-						//"url" => str_replace (aw_ini_get("baseurl"), "", $this->mk_my_orb("new",array("parent" => "--pt--"),$el_data["clid"])),
 						"url" => $url,
 					));
 				}
 				else
 				if (!empty($el_data["link"]))
 				{
-					$url = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $el_data["link"]);
-					//$url = str_replace("--pt--", $arr["parent"], $el_data["link"]);
+					$url = str_replace($obn, "", $el_data["link"]);
 					$url =  str_replace("--pt--", $i_parent, str_replace("--pr--", $period, $url));
+
 					// docs menu has links ..
 					$tb->add_menu_item(array(
 						"name" => (empty($el_data["id"]) ? $el_id : $el_data["id"]),
@@ -1046,7 +1077,7 @@ class admin_if extends class_base
 			return $this->mk_my_orb("submit_copy_feedback", array("ret_to_orb" => 1, "reforb" => 1, "ser_type" => 2, "ser_rels" => 1, "parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url, "login" => $login));
 		}
 
-		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url , "login" => $login));
+		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url, "login" => $login));
 	}
 
 	/**
@@ -1058,6 +1089,7 @@ class admin_if extends class_base
 		@param sel optional
 		@param return_url optional
 		@param login optional
+		
 		@returns
 
 
@@ -2006,6 +2038,71 @@ class admin_if extends class_base
 				"link" => aw_url_change_var("period", $id)
 			));
 		}
+	}
+
+	private function _fake_trans_get_val_name($row_d)
+	{
+		if (empty($GLOBALS["cfg"]["user_interface"]["content_trans"]) && empty($GLOBALS["cfg"]["user_interface"]["full_content_trans"]) && empty($GLOBALS["cfg"]["user_interface"]["trans_classes"]))
+		{
+			return $row_d["name"];
+		}
+
+		if ($row_d["oid"] != $row_d["brother_of"])
+		{
+			$tmp = obj($row_d["brother_of"]);
+			if ($tmp->id() != $row_d["oid"]) // if no view access for original, bro can return the same object
+			{
+				return $tmp->trans_get_val("name");
+			}
+		}
+
+		if ($row_d["class_id"] == CL_LANGUAGE)
+		{
+			$tmp = obj($row_d["oid"]);
+			return $tmp->trans_get_val("name");
+		}
+
+		$val = $row_d["name"];
+
+		$trans = false;
+		$cur_lid = false;
+		if (!empty($GLOBALS["cfg"]["user_interface"]["content_trans"]) && ($cur_lid = aw_global_get("lang_id")) != $row_d["lang_id"])
+		{
+			$trans = true;
+		}
+
+		if ((!empty($GLOBALS["cfg"]["user_interface"]["full_content_trans"]) || !empty($GLOBALS["cfg"]["user_interface"]["trans_classes"][$row_d["class_id"]])) &&
+			($cl = aw_global_get($GLOBALS["cfg"]["user_interface"]["full_content_trans"] ? "ct_lang_id" : "lang_id")) != $row_d["lang_id"])
+		{
+			$trans = true;
+			$cur_lid = $cl;
+		}
+
+		// If the language id is given, ignore the stuff above.
+		if($lang_id !== false && $lang_id != $row_d["lang_id"])
+		{
+			$trans = true;
+			$cur_lid = $lang_id;
+		}
+
+		$m = aw_unserialize($row_d["metadata"]);
+
+		if ($trans)
+		{
+			if (isset($m["translations"]))
+			{
+				$trs = $m["translations"];
+				if (isset($trs[$cur_lid]) && ($m["trans_".$cur_lid."_status"] == 1 || $ignore_status))
+				{
+					if ($trs[$cur_lid]["name"] == "")
+					{
+						return $val;
+					}
+					$val = $trs[$cur_lid]["name"];
+				}
+			}
+		}
+		return $val;
 	}
 }
 
