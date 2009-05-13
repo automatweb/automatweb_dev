@@ -71,9 +71,9 @@ FCKClearStyles.CleanWordHTML = function(str)
 	{
 		str = str.replace( /<(B|b)>&nbsp;<\/\b|B>/g, '' ) ;
 	}
-	str = str.replace( /<([^\s>]+)[^>]*>\s*<\/\1>/g, '' ) ;
-	str = str.replace( /<([^\s>]+)[^>]*>\s*<\/\1>/g, '' ) ;
-	str = str.replace( /<([^\s>]+)[^>]*>\s*<\/\1>/g, '' ) ;
+	//str = str.replace( /<([^\s>]+)[^>]*>\s*<\/\1>/g, '' ) ;
+	//str = str.replace( /<([^\s>]+)[^>]*>\s*<\/\1>/g, '' ) ;
+	//str = str.replace( /<([^\s>]+)[^>]*>\s*<\/\1>/g, '' ) ;
 	//some RegEx code for the picky browsers
 	var re = new RegExp("(<P)([^>]*>.*?)(<\/P>)","gi") ;
 	str = str.replace( re, "<p$2</p>" ) ;
