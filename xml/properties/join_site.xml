@@ -45,7 +45,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kas liitumisel saadetakse meil</caption>
+            <caption>Kas 7.05.2009saadetakse meil</caption>
       </property>
       <property>
             <name>users_blocked_by_default</name>
