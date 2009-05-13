@@ -4,7 +4,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 @tableinfo aw_crm_bill index=aw_oid master_index=brother_of master_table=objects
 @classinfo syslog_type=ST_CRM_BILL relationmgr=yes no_status=1 prop_cb=1 confirm_save_data=1 maintainer=markop
 @default table=objects
-
+ 
 @default group=general
 
 	@property billp_tb type=toolbar store=no no_caption=1
@@ -1306,6 +1306,11 @@ class crm_bill extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "co",
 			"caption" => t("Organisatsioon"),
 			"align" => "center",
@@ -1326,7 +1331,9 @@ class crm_bill extends class_base
 						"name" => "bill_targets[".$mail_person->id()."]",
 						"checked" => !(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$mail_person->id()]),
 						"ch_value" => $mail_person->id()
-					)),"sel2" => "bcc"
+					)),
+					"sel2" => "bcc",
+					"phone" => $mail_person->get_phone($arr["obj_inst"]->prop("customer")),
 				));
 			}
 		}
@@ -3047,6 +3054,7 @@ class crm_bill extends class_base
 	{
 		$b = obj($arr["id"]);
 		$stats = get_instance("applications/crm/crm_company_stats_impl");
+		$currency = $b->get_bill_currency_id();
 		$tpl = "show";
 		$lc = "et";
 		if ($this->can("view", $b->prop("language")))
@@ -3122,11 +3130,6 @@ class crm_bill extends class_base
 					$ord_country = $this->get_customer_address($b->id() , "country");
 				}
 			}
-
-			if ($this->can("view", $ord->prop("currency")))
-			{
-				$ord_cur = obj($ord->prop("currency"));
-			}
 		}
 
 		if ($b->prop("ctp_text") != "")
@@ -3150,7 +3153,7 @@ class crm_bill extends class_base
 			"orderer_code" => $this->get_customer_code($b->id()),
 			"orderer_corpform" => $ord->prop("ettevotlusvorm.shortname"),
 			"ord_penalty_pct" => number_format($bpct, 2),
-			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
+			"ord_currency_name" => $b->get_bill_currency_name(),
 			"orderer_addr" => $this->get_customer_address($b->id())." ".$ord_index,
 			"orderer_city" => $this->get_customer_address($b->id() , "city"),
 			"orderer_county" => $ord_county,
@@ -3467,7 +3470,7 @@ class crm_bill extends class_base
 			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
 			"tax" => number_format($tax, 2,".", " "),
 			"total" => number_format($sum, 2, ".", " "),
-			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc)
+			"total_text" => locale::get_lc_money_text($sum, obj($currency), $lc)
 		));
 		$res =  $this->parse();
 		if (false && !$_GET["gen_print"])
@@ -3683,7 +3686,8 @@ class crm_bill extends class_base
 		}
 
 		$ord = obj();
-		$ord_cur = obj();
+		$currency = $b->get_bill_currency_id();
+		$cur = obj($currency);
 		if ($this->can("view", $b->prop("customer")))
 		{
 			$ord = obj($b->prop("customer"));
@@ -3710,11 +3714,6 @@ class crm_bill extends class_base
 				$aps .= " ".$ct->prop("postiindeks");
 				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
 			}
-
-			if ($this->can("view", $ord->prop("currency")))
-			{
-				$ord_cur = obj($ord->prop("currency"));
-			}
 		}
 
 		$impl_vars = $this->implementor_vars($b->prop("impl"));
@@ -3728,7 +3727,7 @@ class crm_bill extends class_base
 		$this->vars(array(
 			"orderer_name" => $ord->name(),
 			"orderer_corpform" => $ord->prop("ettevotlusvorm.shortname"),
-			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
+			"ord_currency_name" => $b->get_bill_currency_name(),
 			"ord_penalty_pct" => number_format($bpct, 2),
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
@@ -3812,7 +3811,7 @@ class crm_bill extends class_base
 			"total_wo_tax" => number_format($this->sum_wo_tax, 2,".", " "),
 			"tax" => number_format($this->tax, 2,"." , " "),
 			"total" => number_format($this->sum, 2,".", " "),
-			"total_text" => locale::get_lc_money_text($this->sum, $ord_cur, $lc),
+			"total_text" => locale::get_lc_money_text($this->sum, $cur, $lc),
 			"tot_amt" => $stats->hours_format($tot_amt),
 			"page_no" => $page_no,
 		));
