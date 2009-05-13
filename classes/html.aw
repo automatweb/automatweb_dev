@@ -680,7 +680,7 @@ class html
 			$capt .= $label;
 		}
 
-		if(!$caption && $orig_caption)
+		if(empty($caption) && !empty($orig_caption))
 		{
 			$caption = $orig_caption;
 		}
