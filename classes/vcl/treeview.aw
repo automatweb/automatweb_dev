@@ -658,14 +658,19 @@ class treeview extends class_base
 			}
 			$this->auto_open = "''".$this->auto_open_tmp;
 		}
-		aw_global_set("dhtml_tree_count", (empty($_GET["tree_num"]) ? aw_global_get("dhtml_tree_count") + 1 : $_GET["tree_num"]));
+		$tree_nums = aw_global_get("dhtml_tree_count");
+		if(!$tree_nums[$this->tree_id])
+		{
+			$tree_nums[$this->tree_id] = empty($_GET["tree_num"]) ? count($tree_nums) + 1 : $_GET["tree_num"];
+		}
+		aw_global_set("dhtml_tree_count", $tree_nums);
 		$this->vars(array(
 			"target" => isset($this->tree_dat["url_target"]) ? $this->tree_dat["url_target"] : null,
 			"open_nodes" => $this->auto_open,
 			"level" => $level,
 			"load_auto" => isset($_REQUEST["load_auto"])?$_REQUEST["load_auto"]:"true",
 			"tree_id" => $this->tree_id,
-			"tree_num" => aw_global_get("dhtml_tree_count"),
+			"tree_num" => $tree_nums[$this->tree_id],
 			"charset" => $t->get_charset()
 		));
 
