@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.76 2009/05/12 14:05:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.77 2009/05/13 08:45:39 kristo Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -9,6 +9,7 @@ class object_list extends _int_obj_container_base
 {
 	var $list = array();	// array of objects in the current list
 	var $list_names = array();
+	var $list_objdata = array();
 
 	/** creates the object list, can also initialize it with objects
 		@attrib api=1

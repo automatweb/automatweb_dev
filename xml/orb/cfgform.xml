@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cfgform" folder="www/dev/terryf/automatweb_dev/classes/cfg" extends="class_base">
+	<class name="cfgform" folder="www/automatweb_cvs/classes/cfg" extends="class_base">
 		<action name="remove_tbl_field">
 			<function name="remove_tbl_field">
 				<arguments>

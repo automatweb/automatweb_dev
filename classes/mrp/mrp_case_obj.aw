@@ -58,7 +58,10 @@ class mrp_case_obj extends _int_object
 				if(is_oid($seller) && $this->can("view", $seller))
 				{
 					// Make customer data object if doesn't exist.
-					obj($oid)->get_customer_relation(obj($seller), true);
+					if (obj($oid)->class_id() == CL_CRM_COMPANY)
+					{
+						obj($oid)->get_customer_relation(obj($seller), true);
+					}
 				}
 			}
 			catch(awex_mrp_case_workspace $E)

@@ -2864,8 +2864,11 @@ class _int_object
 
 	function __destruct()
 	{
-		$inst = aw_locker::instance();
-		$inst->unlock("object", $this->obj["oid"]);
+		if (isset($this->obj["oid"]))
+		{
+			$inst = aw_locker::instance();
+			$inst->unlock("object", $this->obj["oid"]);
+		}
 	}
 
 	// returns object reference container (object class object) to be used by calls to other objects

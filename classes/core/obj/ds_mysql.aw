@@ -1497,7 +1497,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$f_unser = aw_unserialize($row[$f_mf], false, true);
 						foreach($f_keys as $f_key_name)
 						{
-							$row[$f_key_name] = $f_unser[$f_key_name];
+							if (isset($f_unser[$f_key_name]))
+							{
+								$row[$f_key_name] = $f_unser[$f_key_name];
+							}
+							else
+							{
+								$row[$f_key_name] = null;
+							}
 						}
 						unset($row[$f_mf]);
 					}
@@ -1527,25 +1534,28 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 					$ret[$row["oid"]] = $row["name"];
 
-					$parentdata[$row["oid"]] = $row["parent"];
+					if (isset($row["parent"]))
+					{
+						$parentdata[$row["oid"]] = $row["parent"];
+					}
 
 					$objdata[$row["oid"]] = array(
-						"brother_of" => $row["brother_of"],
+						"brother_of" => isset($row["brother_of"]) ? $row["brother_of"] : null,
 						"status" => $row["status"],
-						"class_id" => $row["class_id"],
-						"jrk" => ifset($row, "jrk"),
+						"class_id" => isset($row["class_id"]) ? $row["class_id"] : null,
+						"jrk" => isset($row["jrk"]) ? $row["jrk"] : null ,
 					);
 
-					if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+					if ($GLOBALS["cfg"]["acl"]["use_new_acl"] && isset($row["acldata"]))
 					{
 						$row["acldata"] = safe_array(aw_unserialize($row["acldata"], false, true));
 						$acldata[$row["oid"]] = $row;
 					}
 					$GLOBALS["__obj_sys_acl_memc"][$row["oid"]] = array(
 						"status" => $row["status"],
-						"brother_of" => $row["brother_of"],
-						"acldata" => $row["acldata"],
-						"parent" => $row["parent"]
+						"brother_of" => isset($row["brother_of"]) ? $row["brother_of"] : null,
+						"acldata" => isset($row["acldata"]) ? $row["acldata"] : null,
+						"parent" => isset($row["parent"]) ? $row["parent"] : null
 					);
 				}
 				return array($ret, $this->meta_filter, $acldata, $parentdata, $objdata, $ret2, $has_sql_func);

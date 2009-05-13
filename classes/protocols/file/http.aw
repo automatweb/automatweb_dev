@@ -25,6 +25,7 @@ class http
 	**/
 	function get($url, $sess = null, $cook_name = "automatweb")
 	{
+		$max_len = 0;
 //echo "enter get $url sess = $sess , nm = $cook_name <br>";
 		enter_function("http::get");
 		$data = parse_url($url);

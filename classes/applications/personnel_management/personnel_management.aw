@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.97 2009/04/16 07:48:10 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.98 2009/05/13 08:45:33 kristo Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -8,13 +8,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 @classinfo syslog_type=ST_PERSONNEL_MANAGEMENT relationmgr=yes r2=yes no_name=1 no_status=1 no_comment=1 prop_cb=1 maintainer=instrumental
 @default table=objects
 
-@groupinfo settings caption="Seaded"
-@default group=settings
+@groupinfo general caption="Seaded"
 
-	@groupinfo general2 caption="&Uuml;ldine" parent=settings
+	@groupinfo general2 caption="&Uuml;ldine" parent=general
 	@default group=general2
 
-		@property name type=textbox field=name group=settings
+		@property pm_name type=textbox field=name
 		@caption Nimi
 
 @default field=meta
@@ -86,7 +85,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property auto_archive_days type=textbox size=4
 		@caption Mitu p&auml;eva p&auml;rast kandideerimist&auml;htaega t&ouml;&ouml;pakkumine arhiveeritakse
 
-	@groupinfo notify caption="Teavitamine" parent=settings
+	@groupinfo notify caption="Teavitamine" parent=general
 	@default group=notify
 
 		@property notify_mail type=textbox
@@ -118,7 +117,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property notify_loc_tbl type=table store=no
 		@caption
 
-	@groupinfo search_conf caption="T&ouml;&ouml;otsijad/kandideerijad" parent=settings
+	@groupinfo search_conf caption="T&ouml;&ouml;otsijad/kandideerijad" parent=general
 	@default group=search_conf
 
 		@property perpage type=textbox size=4 group=employer_conf,search_conf
@@ -133,7 +132,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property search_conf_tbl type=table
 		@caption Tulemuste tabeli v&auml;ljad
 
-	@groupinfo skill_conf caption="Oskused" parent=settings
+	@groupinfo skill_conf caption="Oskused" parent=general
 	@default group=skill_conf
 
 		@property skill_manager type=relpicker reltype=RELTYPE_SKILL_MANAGER
@@ -151,7 +150,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property yob_to type=textbox size=4
 		@caption S&uuml;nniaasta kuni
 
-	@groupinfo job_offer_conf caption="T&ouml;&ouml;pakkumised" parent=settings
+	@groupinfo job_offer_conf caption="T&ouml;&ouml;pakkumised" parent=general
 	@default group=job_offer_conf
 
 		@property cv_tpl type=select
@@ -175,7 +174,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property notify_me_tpl type=relpicker reltype=RELTYPE_NOTIFICATION_TPL store=connect
 		@caption Kandidatuurist teavitamise kiri
 
-	@groupinfo employer_conf caption="T&ouml;&ouml;pakkujad" parent=settings
+	@groupinfo employer_conf caption="T&ouml;&ouml;pakkujad" parent=general
 	@default group=employer_conf
 
 		@property remove_job_offers_with_employer type=checkbox ch_value=1 field=meta method=serialize
@@ -184,7 +183,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property show_all_employers type=checkbox ch_value=1 field=meta method=serialize
 		@caption T&ouml;&ouml;pakkujad vaate avamisel kuvatakse k&otilde;ik t&ouml;&ouml;pakkujad
 
-	@groupinfo job_wanted_conf caption="T&ouml;&ouml;soovid" parent=settings
+	@groupinfo job_wanted_conf caption="T&ouml;&ouml;soovid" parent=general
 	@default group=job_wanted_conf
 
 		@property location_conf type=select multiple=1
@@ -193,7 +192,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property location_2_conf type=select multiple=1
 		@caption Asukoht (teine valik)
 
-	@groupinfo cfgforms caption="Seadete vormid" parent=settings
+	@groupinfo cfgforms caption="Seadete vormid" parent=general
 	@default group=cfgforms
 
 		@property default_offers_cfgform type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
@@ -223,7 +222,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property cff_job_offer type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
 		@caption T&ouml;&ouml;pakkumise seadetevorm
 
-	@groupinfo rights caption="Objektide n&auml;gemiseks vajalikud &otilde;igused" parent=settings
+	@groupinfo rights caption="Objektide n&auml;gemiseks vajalikud &otilde;igused" parent=general
 	@default group=rights
 
 		@property needed_acl_employee type=select multiple=1 field=meta method=serialize
@@ -235,7 +234,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property needed_acl_job_offer type=select multiple=1 field=meta method=serialize
 		@caption T&ouml;&ouml;pakkumised
 
-	@groupinfo show_cnt caption="Vaatamiste loendamine" parent=settings
+	@groupinfo show_cnt caption="Vaatamiste loendamine" parent=general
 	@default group=show_cnt
 
 		@property show_cnt_person type=relpicker reltype=RELTYPE_SHOW_CNT multiple=1 field=meta method=serialize
@@ -244,7 +243,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property show_cnt_job_offer type=relpicker reltype=RELTYPE_SHOW_CNT multiple=1 field=meta method=serialize
 		@caption Grupid, kelle t&ouml;&ouml;pakkumise vaatamisi loendatakse
 
-	@groupinfo variables caption="Muutujate haldus" parent=settings
+	@groupinfo variables caption="Muutujate haldus" parent=general
 	@default group=variables
 
 		@property vars_tlb type=toolbar store=no no_caption=1
@@ -1974,15 +1973,15 @@ class personnel_management extends class_base
 	{
 		enter_function("personnel_management::employers_tbl_data");
 
-		if(!is_oid($arr["obj_inst"]->employers_fld))
-		{
-			return array();
-		}
-
 		$prms = array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
 			"parent" => $arr["obj_inst"]->employers_fld,
 		);
+
+		if(!is_oid($arr["obj_inst"]->employers_fld))
+		{
+			unset($prms["parent"]);
+		}
 		if(isset($arr["class_id"]))
 		{
 			$prms["class_id"] = $arr["class_id"];
@@ -4090,7 +4089,7 @@ class personnel_management extends class_base
 
 			$t->define_data(array(
 				"id" => $obj->id(),
-				"name" => html::get_change_url($obj->id(), array("return_url" => get_ru()), $obj->name()),
+				"name" => html::get_change_url($obj->id(), array("return_url" => get_ru()), parse_obj_name($obj->name())),
 				"profession" => $obj->prop("profession.name"),
 				"org" => html::get_change_url($obj->prop("company"), array("return_url" => get_ru()), $obj->prop("company.name")),
 				"location" => $loc,
@@ -4280,7 +4279,7 @@ class personnel_management extends class_base
 		}
 	}
 
-	function parse_alias($arr)
+	public function parse_alias($arr = array())
 	{
 		$obj = obj($arr["id"]);
 		$this->read_template("show.tpl");

@@ -16,6 +16,8 @@
 					<optional name="options" type="array" />
 					<optional name="buttonspos" type="string" />
 					<optional name="value" />
+					<optional name="width" type="int" />
+					<optional name="disabled" type="int" />
 				</arguments>
 			</function>
 		</action>

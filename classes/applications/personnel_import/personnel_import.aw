@@ -9,25 +9,26 @@
 @default field=meta
 @default method=serialize
 
-@property slave_obj type=relpicker reltype=RELTYPE_SLAVE_OBJ
-@caption Massiivi vormistaja
+	@property slave_obj type=relpicker reltype=RELTYPE_SLAVE_OBJ
+	@caption Massiivi vormistaja
 
-@property last_import type=text
-@caption Viimane import toimus
+	@property last_import type=text
+	@caption Viimane import toimus
 
-@property import type=text store=no
-@caption Import
+	@property import type=text store=no
+	@caption Import
 
 @groupinfo settings caption="Seaded"
 @default group=settings
 
-@property crm_db_id type=relpicker reltype=RELTYPE_CRM_DB
-@caption Kasutatav kliendibaas
-
-@property recur_edit type=releditor reltype=RELTYPE_RECURRENCE use_form=emb group=autoimport rel_id=first
-@caption Automaatse impordi seadistamine
+	@property crm_db_id type=relpicker reltype=RELTYPE_CRM_DB
+	@caption Kasutatav kliendibaas
 
 @groupinfo autoimport caption="Automaatne import"
+@default group=autoimport
+
+	@property recur_edit type=releditor reltype=RELTYPE_RECURRENCE use_form=emb group=autoimport rel_id=first
+	@caption Automaatse impordi seadistamine
 
 @reltype SLAVE_OBJ value=1 clid=CL_UT_IMPORT,CL_TAKET_AFP_IMPORT
 @caption Massiivi vormistaja
@@ -97,10 +98,6 @@ class personnel_import extends class_base
 		aw_set_exec_time(AW_LONG_PROCESS);
 		ini_set("memory_limit", "800M");
 
-		// NO CACHE
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
-
 		$o = new object($arr["id"]);
 
 		$crm_db_id = $o->prop("crm_db_id");
@@ -134,21 +131,28 @@ class personnel_import extends class_base
 
 		print "Gathering data of existing CL_CRM_COMPANY objects...<br>";
 		flush();
+		$organizations_parent = $crm_db->prop('dir_firma');
+		if (empty($organizations_parent))
+		{
+			$organizations_parent = $dir_default;
+		}
 		$organizations_arr = new object_data_list(
 			array(
 				"class_id" => CL_CRM_COMPANY,
-				"parent" => $dir_default
+				"parent" => $organizations_parent
 			),
 			array
 			(
 				CL_CRM_COMPANY => array("oid" => "oid", "subclass" => "ext_id")
 			)
 		);
-//		arr($organizations_arr->list_data);
+
 		foreach($organizations_arr->list_data as $lde)
 		{
 			if(empty($lde["ext_id"]))
+			{
 				continue;
+			}
 			if(isset($organizations[$lde["ext_id"]]) && is_oid($organizations[$lde["ext_id"]]))
 			{
 				print "SKIPPED! We already have an object (".$organizations[$lde["ext_id"]].") with external ID (".$lde["ext_id"]."). Why do we have this here? -> ".$lde["oid"]."<br>";
@@ -158,7 +162,6 @@ class personnel_import extends class_base
 			$organizations[$lde["ext_id"]] = $lde["oid"];
 			$doomed_organizations[$lde["oid"]] = 1;
 		}
-//		arr($organizations);
 
 
 		print "Gathering data of existing CL_CRM_PROFESSION objects...<br>";
@@ -325,7 +328,7 @@ class personnel_import extends class_base
 				print "Creating new CL_CRM_COMPANY object. External ID - ".$ext_id.".<br>";
 				$so = new object;
 				$so->set_class_id(CL_CRM_COMPANY);
-				$so->set_parent($dir_default);
+				$so->set_parent($organizations_parent);
 			}
 			$so->set_name($organization["NAME"]);
 			$so->set_subclass($ext_id);

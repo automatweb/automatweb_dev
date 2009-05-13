@@ -1132,7 +1132,7 @@ class mrp_order_print extends mrp_order
 					"caption" => t("Saada"),
 					"url" => html::get_new_url(CL_MRP_ORDER_SENT, $arr["obj_inst"]->id(), array(
 						"alias_to" => $arr["obj_inst"]->id(),
-						"reltype" => 2,
+						"reltype" => 16,
 						"return_url" => get_ru(),
 						"oc" => $arr["obj_inst"]->workspace,
 						"file" => $item->id()

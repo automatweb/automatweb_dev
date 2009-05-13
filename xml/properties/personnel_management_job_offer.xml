@@ -344,15 +344,6 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine PDF-failina</caption>
       </property>
       <property>
-            <name>apply</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>apply</field>
-            <caption>Kandideerin</caption>
-      </property>
-      <property>
             <name>rate_scale</name>
             <table>objects</table>
             <group>general</group>

@@ -1,9 +1,9 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>name</name>
+            <name>pm_name</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>general2</group>
             <type>textbox</type>
             <field>name</field>
             <caption>Nimi</caption>
@@ -2205,52 +2205,52 @@
             <maintainer>instrumental</maintainer>
       </classinfo>
       <groupinfo>
-            <settings>
+            <general>
                   <caption>Seaded</caption>
-            </settings>
+            </general>
             <general2>
                   <caption>&amp;amp;Uuml;ldine</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </general2>
             <notify>
                   <caption>Teavitamine</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </notify>
             <search_conf>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad/kandideerijad</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </search_conf>
             <skill_conf>
                   <caption>Oskused</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </skill_conf>
             <job_offer_conf>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumised</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </job_offer_conf>
             <employer_conf>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkujad</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </employer_conf>
             <job_wanted_conf>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;soovid</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </job_wanted_conf>
             <cfgforms>
                   <caption>Seadete vormid</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </cfgforms>
             <rights>
                   <caption>Objektide n&amp;amp;auml;gemiseks vajalikud &amp;amp;otilde;igused</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </rights>
             <show_cnt>
                   <caption>Vaatamiste loendamine</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </show_cnt>
             <variables>
                   <caption>Muutujate haldus</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </variables>
             <employee>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad</caption>

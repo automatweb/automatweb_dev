@@ -16,7 +16,9 @@
 @groupinfo grp_resource_unavailable caption="T&ouml;&ouml;ajad"
 	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
 	@groupinfo grp_resource_unavailable_una caption="Kinnised ajad" parent=grp_resource_unavailable
-@groupinfo grp_resource_materials caption="Materjalid" submit=no confirm_save_data=1
+@groupinfo grp_resource_materials caption="Materjalid"
+	@groupinfo grp_resource_materials_report caption="Aruanne" parent=grp_resource_materials
+	@groupinfo grp_resource_materials_config caption="Seaded" submit=no confirm_save_data=1 parent=grp_resource_materials
 @groupinfo grp_resource_operators caption="Inimesed" submit=no confirm_save_data=1
 
 @default table=objects
@@ -115,19 +117,31 @@
 	@comment Formaat: alguskuup&auml;ev.kuu, tund:minut - l&otilde;ppkuup&auml;ev.kuu, tund:minut; alguskuup&auml;ev.kuu, ...
 	@caption Kinnised p&auml;evad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...)
 
-@default group=grp_resource_materials
+@default group=grp_resource_materials_config
 
 	@property materials_tb type=toolbar no_caption=1
-
-	@layout materials_split type=hbox width=25%:75%
-
-		@layout materials_tree_box parent=materials_split type=vbox area_caption=Materjalid closeable=1
 
 			@property materials_tree type=treeview parent=materials_tree_box no_caption=1
 
 		@layout materials_split_right parent=materials_split type=vbox
 
-			@property materials_sel_tbl type=table parent=materials_split_right no_caption=1
+@default group=grp_resource_materials_report
+
+	@layout materials_report_split type=hbox width=25%:75%
+
+		@layout materials_report_left parent=materials_report_split type=vbox
+
+			@layout materials_report_time_tree type=vbox parent=materials_report_left area_caption=Vali&nbsp;ajavahemik closeable=1
+
+				@property materials_report_time_tree type=treeview store=no no_caption=1 parent=materials_report_time_tree
+
+			@layout materials_report_materials_tree type=vbox parent=materials_report_left area_caption=Vali&nbsp;materjalid closeable=1
+
+				@property materials_report_materials_tree type=treeview store=no no_caption=1 parent=materials_report_materials_tree
+
+		@layout materials_report_right parent=materials_report_split type=vbox
+
+			@property materials_report_table type=table store=no parent=materials_report_right
 
 @default group=grp_resource_operators
 
@@ -371,7 +385,7 @@ class mrp_resource extends class_base
 			$arr["mrp_workspace"] = $this->workspace->id ();
 		}
 
-		if($arr["group"] === "grp_resource_materials")
+		if($arr["group"] === "grp_resource_materials_config")
 		{
 			$arr["pgtf"] = automatweb::$request->arg("pgtf");
 			$arr["add_ids"] = "";
@@ -563,7 +577,7 @@ class mrp_resource extends class_base
 		$this_object = $arr["obj_inst"];
 		$this->workspace->save ();
 
-		if(isset($arr["request"]["group"]) and $arr["request"]["group"] === "grp_resource_materials")
+		if(isset($arr["request"]["group"]) and $arr["request"]["group"] === "grp_resource_materials_config")
 		{
 			$add_ids = explode(",", $arr["request"]["add_ids"]);
 			foreach($add_ids as $oid)
@@ -1236,6 +1250,21 @@ class mrp_resource extends class_base
 		}
 	}
 
+	protected function _init_materials_report_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+	}
+
+	public function _get_materials_report_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+	}
+
+	public function _get_materials_report_time_tree($arr)
+	{
+		return get_instance(CL_MRP_WORKSPACE)->_get_time_tree($arr);
+	}
+
 	public function _get_operators_tlb($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -1667,7 +1696,7 @@ class mrp_resource extends class_base
 
 	function callback_generate_scripts($arr)
 	{
-		if(isset($arr["request"]["group"]) and $arr["request"]["group"] === "grp_resource_materials")
+		if(isset($arr["request"]["group"]) and $arr["request"]["group"] === "grp_resource_materials_config")
 		{
 			$conn = $arr["obj_inst"]->connections_to(array(
 				"from.class_id" => CL_MATERIAL_EXPENSE_CONDITION,
@@ -1941,7 +1970,7 @@ class mrp_resource extends class_base
 			return false;
 		}
 
-		if ($arr["id"] === "transl" && (aw_ini_get("user_interface.content_trans") != 1 && !$trc[$this->clid]))
+		if (in_array($arr["id"], array("grp_resource_materials", "grp_resource_materials_report")))
 		{
 			$arr["link"] = aw_url_change_var("timespan", "current_week", $arr["link"]);
 		}

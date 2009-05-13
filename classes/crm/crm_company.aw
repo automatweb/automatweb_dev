@@ -7368,7 +7368,7 @@ class crm_company extends class_base
 				}
 				";
 				
-				$url_quick_task_entry = html::get_new_url(CL_TASK_QUICK_ENTRY, $arr["request"]["id"]);
+				$url_quick_task_entry = html::get_new_url(CL_TASK_QUICK_ENTRY, $arr["request"]["id"], array("in_popup" => 1));
 				$sc .= "
 				$.hotkeys.add('x',function(e){ 
 					if (e.target.tagName.toLowerCase() != 'textarea' &&

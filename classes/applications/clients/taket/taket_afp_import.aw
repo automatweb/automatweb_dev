@@ -313,6 +313,113 @@ class taket_afp_import extends class_base implements warehouse_import_if
 		}
 		flush();
 	}
+
+	public function get_pricelist_xml()
+	{
+		$this->init_vars();
+		$whs = $this->get_warehouses();
+		$wh = new object(reset($whs));
+		$url = new aw_uri($wh->comment().'/index.php?get_discount_rules=1');
+		$data = unserialize(file_get_contents($url->get()));
+
+		$xml = new SimpleXMLElement("<customer_discounts />");
+
+		foreach ($data as $value)
+		{
+			$product_cat = $xml->addChild('product_category');
+			foreach ($value as $k => $v)
+			{
+				switch( $k )
+				{
+					case 'KAT_KOODI':
+						$product_cat->addChild('name', utf8_encode($v));
+						break;
+
+					case 'KAT_ALARAJA':
+						$product_cat->addChild('lower_limit', utf8_encode($v));
+						break;
+
+					case 'KAT_YLARAJA':
+						$product_cat->addChild('upper_limit', utf8_encode($v));
+						break;
+
+					default:
+						$client_cat = $product_cat->addChild('client_category');
+						$client_cat->addChild('name', str_replace('KAT_ALE', '', $k));
+						$client_cat->addChild('value', $v);
+				}
+			}
+		}
+		return $xml->asXML();
+	}
+
+	function get_amounts_xml($wh_id = null)
+	{
+		$wl = $this->get_warehouse_list();
+		$url = $wl[$wh_id]["info"];
+
+		$turl = new aw_uri($url.'/index.php');
+		$turl->set_arg('create_amounts_file', 1);
+		get_instance("http")->get($turl->get());
+
+
+		$amounts_data = file($url."/amounts.csv");
+		$total = count($amounts_data);
+			
+		$xml = new SimpleXMLElement("<amounts />");	
+
+		foreach ($amounts_data as $line)
+		{
+			$items = explode("\t", $line);	
+			$p = $xml->addChild("product");
+			$p->addChild("product_code", trim($items[0]));
+			$p->addChild("amount", trim($items[1]));
+		}
+		return $xml->asXML();
+	}
+
+	function get_prices_xml()
+	{
+		aw_set_exec_time(AW_LONG_PROCESS);
+
+		$wl = $this->get_warehouse_list();
+
+		$url = new aw_uri($wl[1]["info"].'/index.php');
+		$url->set_arg('create_products_file', 1);
+
+		$this->print_line("Creating products file ... ", false);
+		$result = file_get_contents($url->get());
+
+
+		$adr = new aw_uri($wl[1]["info"]."/prods.csv");
+		$dest_fld = aw_ini_get('site_basedir').'/files/products.csv';
+
+		$wget_command = 'wget -O '.$dest_fld.' "'.$adr->get().'"';
+
+		$this->print_line("Download products file ... ", false);
+		shell_exec($wget_command);
+	
+		$this->print_line("[done]");
+
+
+		$lines = file($dest_fld);
+		unset($lines[0]);
+
+		$xml = new SimpleXMLElement("<amounts />");	
+
+		$result = array();
+		foreach ($lines as $line)
+		{
+			$fields = explode("\t", $line);
+
+			$p = $xml->addChild("product");
+			$p->addChild("product_code", trim($fields[0]));
+			$p->addChild("price", trim($fields[6]));
+			$p->addChild("special_price", trim($fields[7]));
+		}
+
+		return $xml->asXML();
+	}
 }
 
 ?>

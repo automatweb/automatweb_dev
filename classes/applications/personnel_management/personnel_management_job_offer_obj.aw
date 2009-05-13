@@ -77,6 +77,30 @@ class personnel_management_job_offer_obj extends _int_object
 		}
 	}
 	
+	function awobj_get_company()
+	{
+		if(!is_oid($this->id()))
+		{
+			return user::get_current_company();
+		}
+		else
+		{
+			return parent::prop("company");
+		}
+	}
+	
+	function awobj_get_contact()
+	{
+		if(!is_oid($this->id()))
+		{
+			return user::get_current_person();
+		}
+		else
+		{
+			return parent::prop("contact");
+		}
+	}
+	
 	function get_candidates($arr = array())
 	{
 		$ret = new object_list();
@@ -112,7 +136,7 @@ class personnel_management_job_offer_obj extends _int_object
 		$show_cnt_conf = get_instance("personnel_management_obj")->get_show_cnt_conf();
 		$usr = get_instance(CL_USER);
 		$u = $usr->get_current_user();
-		$g = $show_cnt_conf[CL_PERSONNEL_MANAGEMENT_JOB_OFFER][$action]["groups"];
+		$g = ifset($show_cnt_conf, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, $action, "groups");
 		if($usr->is_group_member($u, $g) && is_oid($id))
 		{
 			$o = obj($id);
@@ -152,14 +176,14 @@ Your Personnel Management"), $this->name()),
 		}
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		if(parent::prop("confirmed") && !parent::meta("confirmation_mail_sent"))
 		{
 			$this->notify_me_of_confirmation();
 			parent::set_meta("confirmation_mail_sent", 1);
 		}
-		return parent::save();
+		return parent::save($exclusive, $previous_state);
 	}
 }
 

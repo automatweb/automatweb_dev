@@ -813,8 +813,9 @@ class taket_afp_import_obj extends _int_object
 	}
 
 
-	public function import_amounts($arr)
+	public function import_amounts($arr, $that)
 	{
+		$that->_update_status("amounts", warehouse_import_if::STATE_FETCHING, 0);
 
 		$this->init_vars();
 
@@ -835,19 +836,22 @@ class taket_afp_import_obj extends _int_object
 			$products_lut[$row['code']] = $row['aw_oid'];
 		}
 
+		$total = count($products_lut);
+		$that->_update_status("amounts", warehouse_import_if::STATE_PROCESSING, 0, $total);
+
 		foreach ($this->get_warehouses() as $oid)
 		{
 			$wh_obj = new object($oid);
-			echo "Update amounts in warehouse ".$wh_oid->name().": <br />\n";
+			echo "Update amounts in warehouse ".$wh_obj->name().": <br />\n";
 			flush();
-			$this->update_amounts($oid, $products_lut);
+			$this->update_amounts($oid, $products_lut, $that);
 		}
 	
 		exit();
 	}
 
 	// update amounts data in a warehouse
-	private function update_amounts($warehouse_oid, $products_lut)
+	private function update_amounts($warehouse_oid, $products_lut, $that)
 	{
 		if (!$this->can('view', $warehouse_oid))
 		{
@@ -876,6 +880,7 @@ class taket_afp_import_obj extends _int_object
 		
 		$wh_obj = new object($warehouse_oid);
 		$amounts_data = file($wh_obj->comment()."/amounts.csv");
+		$total = count($amounts_data);
 		foreach ($amounts_data as $line)
 		{
 			$items = explode("\t", $line);
@@ -911,6 +916,16 @@ class taket_afp_import_obj extends _int_object
 			
 			}
 			flush();
+
+			if ((++$counter % 100) == 1)
+			{
+				$that->_update_status("amounts", warehouse_import_if::STATE_PROCESSING, $counter, $total, sprintf(t("Import laost %s"), $wh_obj->name()));
+				if ($that->need_to_stop_now("amounts"))
+				{
+					$that->_end_import_from_flag("amounts");
+					die("stopped for flag");
+				}
+			} 
 		}
 	}
 
@@ -1000,9 +1015,11 @@ class taket_afp_import_obj extends _int_object
 		$this->db_obj->db_query($sql);
 	}
 
-	public function import_prices($arr)
+	public function import_prices($arr, $that)
 	{
 		$this->init_vars();
+
+		$that->_update_status("prices", warehouse_import_if::STATE_FETCHING, 0);
 
 		$prices_data = $this->get_prices_data();
 		$products_data = $this->get_products_lut();
@@ -1014,7 +1031,11 @@ class taket_afp_import_obj extends _int_object
 		{
 			$existing_prices_data[$row['parent']] = $row['oid'];
 		}
-		arr(count($products_data));
+		$total = count($products_data);
+		arr($total);
+
+		$that->_update_status("prices", warehouse_import_if::STATE_PROCESSING, 0, $total);
+		$counter = 0;
 		foreach ($products_data as $code => $prod_oid)
 		{
 			if (!isset($prices_data[$code]))
@@ -1042,9 +1063,17 @@ class taket_afp_import_obj extends _int_object
 				echo "Update price ".$prices['price']." to product ".$code." (".$prod_oid.")<br />\n";
 			
 			}
-		}
 
-		die('done');
+			if ((++$counter % 100) == 1)
+			{
+				$that->_update_status("prices", warehouse_import_if::STATE_PROCESSING, $counter, $total);
+				if ($that->need_to_stop_now("prices"))
+				{
+					$that->_end_import_from_flag("prices");
+					die("stopped for flag");
+				}
+			} 
+		}
 	}
 
 	private function add_price_sql($data)
@@ -1244,9 +1273,29 @@ class taket_afp_import_obj extends _int_object
 		$wh = new object(reset($whs));
 		$adr = $wh->comment();
 		$data = file_get_contents($adr.'/index.php?get_users_data=1');
-arr('foobar');
+
 		arr($data);
-		exit();
+
+		$r = array();
+
+		$lines = explode("\n", $data);
+		$keys = explode("\t", $lines[0]);
+		unset($lines[0]);
+		foreach ($lines as $id => $line)
+		{
+
+			$items = array_combine($keys, explode("\t", $line));
+			$r['PERSONS'][$items['CLIENT_NR']]['USER'] = $items['CLIENT_NR'];
+			$r['PERSONS'][$items['CLIENT_NR']]['PID'] = $items['CLIENT_NR'];
+			$r['PERSONS'][$items['CLIENT_NR']]['FNAME'] = $items['FIRST_NAME'];
+			$r['PERSONS'][$items['CLIENT_NR']]['LNAME'] = $items['LAST_NAME'];
+			$r['PERSONS'][$items['CLIENT_NR']]['EMAILS'][0] = $items['EMAIL'];
+			$r['PERSONS'][$items['CLIENT_NR']]['PHONES']['MOBILE'][0] = $items['GSM'];
+			// company name ? $items['COMPANY_NAME'];
+			$r['ORGANIZATIONS'][$items['CLIENT_NR']]['NAME'] = $items['COMPANY_NAME'];
+		}
+		return $r;
+
 		
 	}
 

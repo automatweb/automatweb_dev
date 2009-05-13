@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.68 2009/04/16 10:22:38 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.69 2009/05/13 08:45:33 kristo Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -120,9 +120,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property job_offer_pdf type=text
 @caption T&ouml;&ouml;pakkumine PDF-failina
-
-@property apply type=text store=no
-@caption Kandideerin
 
 @property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE store=connect
 @caption Hindamise skaala
@@ -342,7 +339,7 @@ class personnel_management_job_offer extends class_base
 			case "sect":
 				$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
 				$secs = $cp->get_sections();
-				$prop["options"] = is_array($prop["options"]) ? $prop["options"] : array();
+				$prop["options"] = isset($prop["options"]) && is_array($prop["options"]) ? $prop["options"] : array();
 				$prop["options"] += array(0 => t("--vali--")) + $secs->names();
 				break;
 
@@ -532,18 +529,18 @@ class personnel_management_job_offer extends class_base
 				break;
 
 			case "job_offer_pdf":
-				$prop["value"] = html::href(array(
-					"caption" => t("T&ouml;&ouml;pakkumine PDF-formaadis"),
-					"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id(), "oid" => $arr["obj_inst"]->id())),
-					"target" => "_blank",
-				));
-				break;
-
-			case "apply":
-				$prop["value"] = html::href(array(
-					"caption" => t("Kandideerin"),
-					"url" => $this->mk_my_orb("new", array("alias_to" => $arr["obj_inst"]->id(), "reltype" => 1, "parent" => $arr["obj_inst"]->id(), "return_url" => get_ru()), CL_PERSONNEL_MANAGEMENT_CANDIDATE),
-				));
+				if(empty($arr["new"]))
+				{
+					$prop["value"] = html::href(array(
+						"caption" => t("T&ouml;&ouml;pakkumine PDF-formaadis"),
+						"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id(), "oid" => $arr["obj_inst"]->id())),
+						"target" => "_blank",
+					));
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
 				break;
 
 			case "start_working":
@@ -557,7 +554,7 @@ class personnel_management_job_offer extends class_base
 					"asap" => t("Niipea kui v&otilde;imalik"),
 					"date_select" => $date_edit->gen_edit_form("start_working_date", time()),
 				);
-				if(!$prop["value"])
+				if(empty($prop["value"]))
 				{
 					$prop["value"] = "asap";
 				}
@@ -608,15 +605,23 @@ class personnel_management_job_offer extends class_base
 				break;
 
 			case "contact":
-				if(!is_oid($prop["value"]))
+				if(!isset($prop["value"]) || !is_oid($prop["value"]) || !empty($arr["new"]))
 				{
 					unset($prop["options"]);
 					$props = get_instance(CL_CFGFORM)->get_property_list(CL_PERSONNEL_MANAGEMENT_JOB_OFFER);
-					$prop["value"] = "";
 					$prop["post_append_text"] = "";
 					$prop["type"] = "textbox";
 					$prop["autocomplete_source"] = $this->mk_my_orb("autocomp_contact");
 					$prop["autocomplete_params"] = array_key_exists("company", $props) ? array("company", "id") : array("id");
+					$prop["option_is_tuple"] = true;
+					if(is_oid($prop["value"]))
+					{
+						$prop["selected"] = array($prop["value"] => obj($prop["value"])->name());
+					}
+					else
+					{
+						$prop["value"] = "";
+					}
 				}
 				break;
 
@@ -1322,7 +1327,7 @@ class personnel_management_job_offer extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] === "send_email_sms" && $_GET["group"] !== "send_email_sms")
+		if ($arr["id"] === "send_email_sms" && ifset($_GET, "group") !== "send_email_sms")
 		{
 			return false;
 		}
@@ -1695,7 +1700,7 @@ class personnel_management_job_offer extends class_base
 		$arr["obj_inst"]->set_prop("offer_cfgform", $new_cfgform_id);
 	}
 
-	function parse_alias($arr)
+	public function parse_alias($arr = array())
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
@@ -2107,13 +2112,13 @@ class personnel_management_job_offer extends class_base
 		$f = '
 			function typical_select_data()
 			{
-				$.getJSON("'.$this->mk_my_orb("typical_data").'", {id: $("#typical_select").val(), fbtype: "'.(($arr["request"]["email"]) ? "email" : "sms").'"}, function(data) {'.(($arr["request"]["email"]) ? '
+				$.getJSON("'.$this->mk_my_orb("typical_data").'", {id: $("#typical_select").val(), fbtype: "'.(!empty($arr["request"]["email"]) ? "email" : "sms").'"}, function(data) {'.(!empty($arr["request"]["email"]) ? '
 					aw_get_el("subject").value = data.subject.toString();' : '').'
 					aw_get_el("message").value = data.message.toString();
 				});
 			}
 			';
-		if($arr["request"]["group"] == "custom_cfgform")
+		if(ifset($arr, "request", "group") == "custom_cfgform")
 		{
 			$f .= "
 			function save_cfgform()
@@ -2486,7 +2491,7 @@ class personnel_management_job_offer extends class_base
 
 	function callback_just_saved_msg($arr)
 	{
-		if($arr["group"] == "send_email_sms")
+		if(ifset($arr, "group") == "send_email_sms")
 		{
 			return t("S&otilde;num saadetud!");
 		}
@@ -2613,10 +2618,13 @@ class personnel_management_job_offer extends class_base
 
 	public function callback_on_load($arr)
 	{
-		get_instance("personnel_management_job_offer_obj")->handle_show_cnt(array(
-			"action" => $arr["request"]["action"],
-			"id" => $arr["request"]["id"],
-		));
+		if(isset($arr["request"]["id"]) && is_oid($arr["request"]["id"]))
+		{
+			get_instance("personnel_management_job_offer_obj")->handle_show_cnt(array(
+				"action" => $arr["request"]["action"],
+				"id" => $arr["request"]["id"],
+			));
+		}
 	}
 }
 ?>
