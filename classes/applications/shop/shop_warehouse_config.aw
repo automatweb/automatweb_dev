@@ -42,6 +42,9 @@
 			@property manager_cos type=relpicker reltype=RELTYPE_MANAGER_CO multiple=1 parent=left
 			@caption Haldurfirmad
 
+			@property owner type=relpicker reltype=RELTYPE_MANAGER_CO parent=left
+			@caption Lao omanik
+
 			@property sell_prods type=checkbox ch_value=1 parent=left
 			@caption Ladu m&uuml;&uuml;b tooteid, mitte pakendeid
 

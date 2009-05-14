@@ -101,6 +101,17 @@
             <caption>Haldurfirmad</caption>
       </property>
       <property>
+            <name>owner</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MANAGER_CO</reltype>
+            <parent>left</parent>
+            <caption>Lao omanik</caption>
+      </property>
+      <property>
             <name>sell_prods</name>
             <table>objects</table>
             <group>general</group>
