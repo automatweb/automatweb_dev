@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.102 2009/04/09 08:52:37 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.103 2009/05/14 13:08:46 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1648,6 +1648,19 @@ class rfp_manager extends class_base
 				"flags" => OBJ_FLAG_IS_SELECTED
 			)
 		));
+		if (sizeof($ol->ids()) > 0)
+		{
+			$first = $ol->begin();
+			$active = $first->id();
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => $this->clid,
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+		}
 		if (sizeof($ol->ids()) > 0)
 		{
 			$first = $ol->begin();
