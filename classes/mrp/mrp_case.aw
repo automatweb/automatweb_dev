@@ -33,8 +33,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@property comment type=textbox table=objects field=comment
 	@caption Projekti nimetus
 
-
 @default table=mrp_case
+	@property order_quantity type=textbox datatype=int
+	@caption Tellimuse kogus
+
 	@property workspace type=hidden
 
 	@property state type=text group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data,grp_case_view editonly=1 parent=general_info
@@ -113,6 +115,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@property kaane_paber type=textbox
 	@caption Kaane paber
 
+// deprecated, use 'order_quantity' instead
 	@property trykiarv type=textbox
 	@caption Tr&uuml;kiarv
 
@@ -394,7 +397,7 @@ class mrp_case extends class_base
 				break;
 
 			case "state":
-				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : "M&auml;&auml;ramata";
+				$prop["value"] = empty($this->states[$prop["value"]]) ? t("M&auml;&auml;ramata") : $this->states[$prop["value"]];
 				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], $txt_grps))
 				{
 					$prop["caption"] .= ":";
@@ -402,7 +405,7 @@ class mrp_case extends class_base
 				break;
 
 			case "planned_date":
-				$date = $prop["value"] ? date (MRP_DATE_FORMAT, $prop["value"]) : "Planeerimata";
+				$date = empty($prop["value"]) ? t("Planeerimata") : date(MRP_DATE_FORMAT, $prop["value"]);
 				$prop["value"] = $date;
 				break;
 
@@ -1034,6 +1037,14 @@ class mrp_case extends class_base
 
 			case "workspace":
 				return PROP_IGNORE;
+
+			case "order_quantity":
+				if(empty($prop["value"]) or $prop["value"] < 1)
+				{
+					$prop["error"] = t("Tellimuse kogus peab olema nullist suurem");
+					$retval = PROP_FATAL_ERROR;
+				}
+				break;
 
 			case "name":
 				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_formula", "grp_case_materials",  "grp_case_view")))
@@ -2900,6 +2911,31 @@ class mrp_case extends class_base
 
 			switch($field)
 			{
+				case "order_quantity":
+					$this->db_add_col($table, array(
+						"name" => "order_quantity",
+						"type" => "INT(11) UNSIGNED NOT NULL"
+					));
+					aw_disable_acl();
+					$prjs = new object_list(array(
+						"class_id" => CL_MRP_CASE,
+						"status" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
+					));
+					for ($prj = $prjs->begin (); !$prjs->end (); $prj = $prjs->next ())
+					{
+						if ($prj->prop("trykiarv"))
+						{
+							$prj->set_prop("order_quantity", $prj->prop("trykiarv"));
+						}
+						else
+						{
+							$prj->set_prop("order_quantity", 1);
+						}
+					}
+					$prjs->save();
+					aw_restore_acl();
+					return true;
+
 				case "warehouse":
 				case "workspace":
 				case "finished":

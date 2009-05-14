@@ -883,10 +883,10 @@ class mrp_job_obj extends _int_object
 			}
 			elseif ($this->prop("done") < 1)
 			{ // set whole order quantity done when no specific data entered
-				$this->set_prop ("done", $this->mrp_project->prop("trykiarv")*$this->prop("component_quantity"));
+				$this->set_prop ("done", $this->mrp_project->prop("order_quantity")*$this->prop("component_quantity"));
 			}
 
-			if ($this->prop("done") >= $this->mrp_project->prop("trykiarv")*$this->prop("component_quantity"))
+			if ($this->prop("done") >= $this->mrp_project->prop("order_quantity")*$this->prop("component_quantity"))
 			{ // whole job done
 				// free resource
 				try

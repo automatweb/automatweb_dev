@@ -346,11 +346,11 @@ class mrp_schedule extends db_connector
 		$resources = array ();
 		$resource_tree = new object_tree (array (
 			"parent" => $workspace->prop ("resources_folder"),
-			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
+			"class_id" => array (CL_MENU, CL_MRP_RESOURCE)
 		));
 		$list = $resource_tree->to_list ();
 		$list->filter (array (
-			"class_id" => CL_MRP_RESOURCE,
+			"class_id" => CL_MRP_RESOURCE
 		));
 		$resources = $list->ids ();
 
@@ -493,6 +493,7 @@ class mrp_schedule extends db_connector
 				"progress" => $project["progress"],
 				"due_date" => $project["due_date"],
 				"customer_priority" => $project["customer_priority"],
+				"order_quantity" => $project["order_quantity"],
 				"project_priority" => $project["project_priority"],
 				"state" => $project["state"]
 			);
@@ -745,8 +746,14 @@ class mrp_schedule extends db_connector
 						{
 							foreach ($successor_index[$job["oid"]] as $successor_id)
 							{
-								$tmp = ($scheduled_start + $scheduled_length + $job["post_buffer"]); // time when currently scheduled job allows next job in workflow to start
+								$parallel_part_time_est = // time that is estimated to take to finish producing/processing job items after continuing project on workflow's next resource
+								$job["planned_length"] * 1 -
+								($job["batch_size"]*$job["min_batches_to_continue_wf"])/($project["order_quantity"]*$job["component_quantity"]); // parallelly/sequentially processable item count quotient
 
+								// time when currently scheduled job allows next job in workflow to start
+								$tmp = $scheduled_start + $scheduled_length + $job["post_buffer"] - $parallel_part_time_est;
+
+								//  ...
 								if (!isset($starttime_index[$successor_id]) or $tmp > $starttime_index[$successor_id])
 								{
 									$starttime_index[$successor_id] = $tmp;

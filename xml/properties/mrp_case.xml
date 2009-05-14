@@ -64,6 +64,15 @@
             <caption>Projekti nimetus</caption>
       </property>
       <property>
+            <name>order_quantity</name>
+            <group>grp_general</group>
+            <table>mrp_case</table>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <field>order_quantity</field>
+            <caption>Tellimuse kogus</caption>
+      </property>
+      <property>
             <name>workspace</name>
             <group>grp_general</group>
             <table>mrp_case</table>

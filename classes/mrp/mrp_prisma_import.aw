@@ -34,7 +34,7 @@ class mrp_prisma_import extends class_base
 			"kaane_lakk_muu" => "Kaane lakk/muu",
 			"sisu_paber" => "Sisu paber",
 			"kaane_paber" => "Kaane paber",
-			"trykiarv" => "Tr".chr(252)."kiarv",
+			"order_quantity" => "Tr".chr(252)."kiarv",
 			"trykise_ehitus" => "Tr".chr(252)."kise ehitus",
 			"kromaliin" => "Kromalin",
 			"makett" => "Makett",

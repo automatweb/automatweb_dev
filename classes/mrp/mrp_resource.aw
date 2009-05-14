@@ -910,7 +910,7 @@ class mrp_resource extends class_base
 				"remaining_length" => isset($job["remaining_length"]) ? number_format($job["remaining_length"]/3600, 2) : 0,
 				"client" => $client,
 				"deadline" => $p->prop("due_date"),
-				"trykiarv" => $p->prop("trykiarv"),
+				"trykiarv" => $p->prop("order_quantity"),
 				"trykiarv_notes" => $p->prop("trykiarv_notes"),
 				"resource" => $job["resource(CL_MRP_RESOURCE).name"],
 			);
@@ -1334,7 +1334,7 @@ class mrp_resource extends class_base
 			mrp_job j
 			LEFT JOIN mrp_schedule s ON j.oid = s.oid
 		WHERE
-			j.resource = '".$arr["obj_inst"]->id()."' AND 
+			j.resource = '".$arr["obj_inst"]->id()."' AND
 			(
 				s.starttime < $range_end
 				AND s.starttime + j.planned_length > $range_start
@@ -1368,7 +1368,7 @@ class mrp_resource extends class_base
 					"project(CL_MRP_CASE).name" => "asc"
 					*/
 				)),
-			), 
+			),
 			array(
 				CL_MRP_JOB => array("project", "project(CL_MRP_CASE).name" => "project_name", "state", "started", "finished", "planned_length", "starttime"),
 			)
@@ -1988,7 +1988,7 @@ class mrp_resource extends class_base
 				}
 				else
 				{
-					if($_GET["group"] === "grp_resource_joblist_done")
+					if(isset($_GET["group"]) and $_GET["group"] === "grp_resource_joblist_done")
 					{
 						$arr["area_caption"] = sprintf(t("Ressursi '%s' tehtud t&ouml;&ouml;d"), parse_obj_name($arr["obj_inst"]->name()));
 					}

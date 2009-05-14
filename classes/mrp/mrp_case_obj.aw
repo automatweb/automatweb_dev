@@ -36,12 +36,6 @@ class mrp_case_obj extends _int_object
 		}
 	}
 
-	public function awobj_set_trykiarv($value)
-	{
-		//!!! selle muutmine peab vist vaatama t88d l2bi ja kui on v2hem ekspemlare tehtud kui uus v22rtus siis panema nende staatused 'not done' lisaks, kui t88d on tehtud siis ei saa trykiarvu v2hendada, kui projekt on arhiveeritud (v6i ka valmis?) siis ei saa trykiarvu enam muuta
-		return parent::set_prop("trykiarv", $value);
-	}
-
 	/**	Create customer data object for workspace owner and project customer if no customer data object for those two exists.
 		@attrib api=1 params=pos
 
@@ -58,10 +52,7 @@ class mrp_case_obj extends _int_object
 				if(is_oid($seller) && $this->can("view", $seller))
 				{
 					// Make customer data object if doesn't exist.
-					if (obj($oid)->class_id() == CL_CRM_COMPANY)
-					{
-						obj($oid)->get_customer_relation(obj($seller), true);
-					}
+					obj($oid)->get_customer_relation(obj($seller), true);
 				}
 			}
 			catch(awex_mrp_case_workspace $E)
@@ -90,10 +81,10 @@ class mrp_case_obj extends _int_object
 		return parent::set_prop("workspace", $workspace->id());
 	}
 
-	/*public function awobj_set_state($value)
+	public function awobj_set_state($value)
 	{
 		throw new awex_obj_readonly("State is a read-only property");
-	}*/
+	}
 
 /**
 	@attrib params=pos api=1
@@ -129,7 +120,7 @@ class mrp_case_obj extends _int_object
 						}
 						else
 						{
-							throw new awex_mrp_case_workspace("Workspace not defined");
+							throw new awex_mrp_case_workspace("Workspace not defined. Stored value: " . var_export($workspace, true));
 						}
 					}
 				}
@@ -144,13 +135,24 @@ class mrp_case_obj extends _int_object
 
 			if ($E)
 			{
-				$e = new awex_mrp_case_workspace("Workspace not defined");
+				$e = new awex_mrp_case_workspace("Workspace not defined. Stored value: " . var_export($workspace, true));
 				$e->set_forwarded_exception($E);
 				throw $e;
 			}
 			$this->workspace = $workspace;
 		}
 		return $this->workspace;
+	}
+
+	public function awobj_set_order_quantity($value)
+	{
+		//!!! selle muutmine peab vist vaatama t88d l2bi ja kui on v2hem ekspemlare tehtud kui uus v22rtus siis panema nende staatused 'not done' lisaks, kui t88d on tehtud siis ei saa trykiarvu v2hendada, kui projekt on arhiveeritud (v6i ka valmis?) siis ei saa trykiarvu enam muuta
+		settype($value, "int");
+		if ($value < 1)
+		{
+			throw new awex_mrp_case_type("order_quantity can't be 0 or negative.");
+		}
+		return parent::set_prop("order_quantity", $value);
 	}
 
 /**
@@ -198,6 +200,19 @@ class mrp_case_obj extends _int_object
 			$workspace = $this->awobj_get_workspace();
 			$projects_folder = $workspace->prop ("projects_folder");
 			$this->set_parent ($projects_folder);
+		}
+
+		// order_quantity must be set
+		if ($this->prop("order_quantity") < 1)
+		{
+			if (($this->prop("trykiarv") > 1))
+			{
+				$this->awobj_set_order_quantity($this->prop("trykiarv"));
+			}
+			else
+			{
+				throw new awex_mrp_case("order_quantity not set, can't save.");
+			}
 		}
 
 		$r = parent::save($exclusive, $previous_state);
