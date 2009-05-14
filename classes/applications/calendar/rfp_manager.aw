@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.104 2009/05/14 13:09:58 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.105 2009/05/14 14:04:17 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1666,7 +1666,7 @@ class rfp_manager extends class_base
 			$first = $ol2->begin();
 			$active = $first->id();
 		}
-		else
+		elseif($ol2)
 		{
 			$rfpm = obj();
 			$rfpm->set_class_id(CL_RFP_MANAGER);
