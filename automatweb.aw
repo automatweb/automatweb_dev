@@ -401,6 +401,17 @@ class automatweb
 	**/
 	public function mode($id = null)
 	{
+		// For quick debugging -kaarel 14.05.2009
+		// Hannes will add this to his AW Mozilla add-on, so debugging will be SO much easier!
+		if($id !== null && !empty($_COOKIE["manual_automatweb_mode"]))
+		{
+			$tmp_id = constant("self::MODE_".$_COOKIE["manual_automatweb_mode"]);
+			if($tmp_id !== NULL)
+			{
+				$id = $tmp_id;
+			}
+		}
+
 		if ((self::MODE_DEFAULT === $id) or (self::MODE_PRODUCTION === $id))
 		{
 			error_reporting(0);
