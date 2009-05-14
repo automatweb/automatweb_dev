@@ -3639,7 +3639,7 @@ class bug_tracker extends class_base
 			
 			$out .= '{"name":"'.$name.'",'.
 				'"url":"'.$url.'",'.
-				'"class":"'.$class.'"'.
+				'"class":"'.strtolower($class).'"'.
 			"},";
 		}
 		$out .= '];';
