@@ -30,6 +30,53 @@ class mrp_workspace_obj extends _int_object
 			throw $e;
 		}
 	}
+
+	public function get_all_mrp_customers($arr = array())
+	{
+		$filter = array(
+			"class_id" => CL_MRP_CASE,
+			"CL_MRP_CASE.customer" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		);
+		if($arr["name"])
+		{
+			$filter["CL_MRP_CASE.customer.name"] = $arr["name"]."%";
+
+		}
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_MRP_CASE=>  array(new obj_sql_func(OBJ_SQL_UNIQUE, "customer", "mrp_case.customer"))
+			)
+		);
+
+		return $t->get_element_from_all("customer");
+	}
+
+	public function get_all_mrp_cases_data()
+	{
+		$filter = array(
+			"class_id" => CL_MRP_CASE,
+			"CL_MRP_CASE.customer" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_MRP_CASE=>  array("customer")
+			)
+		);
+		return $t->list_data;
+	}
+
+	public function set_priors($priors = array())
+	{
+		$c = $this->prop("owner");
+		$o = obj($c);
+		foreach($priors as $cust => $p)
+		{
+			$o->set_customer_prop($cust , "priority" , $p);
+		}
+	}
 }
 
 /** Generic workspace error **/

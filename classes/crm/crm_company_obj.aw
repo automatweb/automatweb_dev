@@ -1505,15 +1505,31 @@ class crm_company_obj extends _int_object
 
 	public function get_customer_prop($co , $prop)
 	{
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-			"buyer" => $co,
-			"seller" => $this->id()
-		));
-		if ($ol->count())
+		if($co)
 		{
-			$o = $ol->begin();//arr($o->prop($prop));
-			return $o->prop($prop);
+
+			$o = obj($co);
+			$rel = $o->get_customer_relation($this);
+			if(!is_object($rel))
+			{
+				return;
+			}
+			return $rel->prop($prop);
+		}
+		else return "";
+
+	}
+
+	public function set_customer_prop($co , $prop,$value = null)
+	{
+		if($value != null)
+		{
+
+			$o = obj($co);
+			$rel = $o->get_customer_relation($this , 1);
+			$ret = $rel->set_prop($prop , $value);
+			$rel->save();
+			return $ret;
 		}
 		else return "";
 

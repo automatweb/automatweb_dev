@@ -149,6 +149,14 @@
 			</function>
 		</action>
 
+		<action name="ajax_update_projects_table" all_args="1">
+			<function name="ajax_update_projects_table">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="cust_search_pop">
 			<function name="cust_search_pop">
 				<arguments>
@@ -166,20 +174,19 @@
 			</function>
 		</action>
 
+		<action name="ajax_save_priors" all_args="1">
+			<function name="ajax_save_priors">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="get_projects_subtree">
 			<function name="get_projects_subtree">
 				<arguments>
 					<required name="id" type="int" />
 					<required name="parent" />
 					<required name="url" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="ajax_update_projects_table" all_args="1">
-			<function name="ajax_update_projects_table">
-				<arguments>
-					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>

@@ -86,33 +86,33 @@
 	@layout customers_box type=vbox parent=vsplitbox
 	@layout customers_tree_box type=vbox closeable=1 area_caption=Kliendid parent=customers_box
 	@property customers_tree type=treeview store=no no_caption=1 parent=customers_tree_box
-	@property customers_list type=table store=no no_caption=1 parent=vsplitbox
+	@property customers_list type=table store=no no_caption=1 parent=customers_search_table
 	@property customers_list_proj type=table store=no no_caption=1 parent=vsplitbox
 
 	@layout customers_search_box type=vbox closeable=1 area_caption=Klientide&nbsp;otsing parent=customers_box
-		@property cs_name type=textbox view_element=1 parent=customers_search_box store=no
+		@property cs_name type=textbox view_element=1 parent=customers_search_box store=no size=33
 		@caption Nimi
 
-		@property cs_firmajuht type=textbox view_element=1 parent=customers_search_box store=no
+		@property cs_firmajuht type=textbox view_element=1 parent=customers_search_box store=no size=33
 		@caption Kontaktisik
 
-		@property cs_contact type=textbox view_element=1 parent=customers_search_box store=no
+		@property cs_contact type=textbox view_element=1 parent=customers_search_box store=no size=33
 		@caption Aadress
 
-		@property cs_phone type=textbox view_element=1 parent=customers_search_box store=no
+		@property cs_phone type=textbox view_element=1 parent=customers_search_box store=no size=33
 		@caption Telefon
 
-		@property cs_reg_nr type=textbox view_element=1 parent=customers_search_box store=no
+		@property cs_reg_nr type=textbox view_element=1 parent=customers_search_box store=no size=33
 		@caption Kood
 
-		@property cs_status type=textbox view_element=1 parent=customers_search_box store=no
+		@property cs_status type=textbox view_element=1 parent=customers_search_box store=no size=33
 		@caption Staatus
 
 		@property cs_submit type=submit value=Otsi view_element=1 parent=customers_search_box store=no
 		@caption Otsi
 
 	@layout customers_search_table type=hbox closeable=1 area_caption=Projektide&nbsp;nimekiri parent=vsplitbox
-	@property cs_result type=table no_caption=1  parent=customers_search_table
+		@property cs_result type=table no_caption=1 parent=
 
 
 @default group=grp_projects
@@ -5684,7 +5684,7 @@ class mrp_workspace extends class_base
 
 		$t->add_menu_item(array(
 			"parent" => "add_menu",
-			"text" => t('Lisa kategooria'),
+			"text" => t('Kategooria'),
 			"link" => html::get_new_url(CL_CRM_CATEGORY, $co->id(), array(
 				"alias_to" => (empty($arr["request"]["cat"]) ? $co->id() : $arr["request"]["cat"]),
 				"reltype" => (empty($arr["request"]["cat"]) ? 30 : 2),
@@ -5697,7 +5697,7 @@ class mrp_workspace extends class_base
 		{
 			$t->add_menu_item(array(
 				"parent" => "add_menu",
-				"text" => t('Lisa klient'),
+				"text" => t('Klient'),
 				"link" => html::get_new_url(CL_CRM_COMPANY, $co->id(), array(
 					"alias_to" => ($arr["request"]["cat"] ? $arr["request"]["cat"] : $co->id()),
 					"reltype" => 3,
@@ -5706,6 +5706,12 @@ class mrp_workspace extends class_base
 			));
 		}
 
+		$t->add_button(array(
+			"name" => "save_priors",
+			"tooltip" => t("Salvesta prioriteedid"),
+			"img" => "save.gif",
+			"url" => "javascript:update_priors();"
+		));
 
 		/*$t->add_button(array(
 			"name" => "delete",
@@ -5730,6 +5736,23 @@ class mrp_workspace extends class_base
 		$t = $arr["prop"]["vcl_inst"];
 		classload("core/icons");
 
+
+		$cases = $arr["obj_inst"]->get_all_mrp_cases_data();
+		$customers = new object_list();
+		$customer_count = array();
+		foreach($cases as $data)
+		{
+			$customer_count[$data["customer"]]++;
+		}
+		foreach($customer_count as $id => $count)//ei k6ike panna, sest miskeid nulle ja asju tuleb alati sisse ja siis annab errorit
+		{
+			if($this->can("view" , $id))
+			{
+				$customers->add($id);
+			}
+		}
+
+
 		$t->add_item(0, array(
 			"id" => "cats",
 			"name" => t("Kliendid kategooriate kaupa"),
@@ -5741,7 +5764,8 @@ class mrp_workspace extends class_base
 
 		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 		{
-			$nm = $c->prop("to.name");
+			$count = $this->_req_create_customers_tree($c->to(), $t);
+			$nm = $c->prop("to.name")." (".$count.")";
 			$t->add_item("cats", array(
 				"id" => $c->prop("to"),
 				"name" => (isset($arr["request"]["cat"]) and $arr["request"]["cat"] == $c->prop("to")) ? "<b>".$nm."</b>" : $nm,
@@ -5750,7 +5774,6 @@ class mrp_workspace extends class_base
 					"cust" => null
 				)),
 			));
-			$this->_req_create_customers_tree($c->to(), $t);
 		}
 
 		if (isset($arr["request"]["cs_name"]))
@@ -5775,25 +5798,47 @@ class mrp_workspace extends class_base
 			))
 		));
 		$A_to_Z = array();
-		foreach($co->get_customers_by_customer_data_objs()->names() as $oid => $name)
+//		$customers = $co->get_customers_by_customer_data_objs();
+//		$customers -> add($arr["obj_inst"]->get_all_mrp_customers());
+
+		foreach($customers->names() as $oid => $name)
 		{
 			$char = strtoupper(substr(trim($name), 0, 1));
-			$A_to_Z[$char] = 1;
+			if(!isset($A_to_Z[$char]))
+			{
+				$A_to_Z[$char] = 1;
+			}
+			else
+			{
+				$A_to_Z[$char]++;
+			}
+			$nm = parse_obj_name($name)." (".$customer_count[$oid].")";
+			if($arr["request"]["cust"] == $oid)
+			{
+				$nm = html::bold($nm);
+			}
+
 			$t->add_item("alph_".$char, array(
 				"id" => $oid,
-				"name" => parse_obj_name($name),
+				"name" => $nm,
 				"url" => aw_url_change_var(array(
 					"cust" => $oid,
 					"cat" => null
 				)),
+				"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
 			));
 		}
 		ksort($A_to_Z);
-		foreach(array_keys($A_to_Z) as $char)
+		foreach($A_to_Z as $char => $count)
 		{
+			$nm = $char." (" . $count. ")";
+			if($arr["request"]["alph"] == $char)
+			{
+				$nm = html::bold($nm);
+			}
 			$t->add_item("alph", array(
 				"id" => "alph_".$char,
-				"name" => $char,
+				"name" => $nm,
 				"url" => aw_url_change_var(array(
 					"cust" => null,
 					"cat" => null,
@@ -5819,6 +5864,7 @@ class mrp_workspace extends class_base
 			$this->_req_create_customers_tree($c->to(), $t);
 		}
 
+		$count = 0;
 		foreach($co->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 		{
 			$nm = $c->prop("to.name");
@@ -5831,7 +5877,9 @@ class mrp_workspace extends class_base
 				), false, get_ru()),
 				"iconurl" => icons::get_icon_url($c->prop("to.class_id"))
 			));
+			$count++;
 		}
+		return $count;
 	}
 
 	function _init_cust_list_t(&$t)
@@ -5880,33 +5928,56 @@ class mrp_workspace extends class_base
 	function create_customers_list($arr)
 	{
 		$retval = PROP_IGNORE;
+		$co_id = $arr["obj_inst"]->prop("owner");
+		if (!$this->can("view", $co_id))
+		{
+			return;
+		}
+		else
+		{
+			$co = obj($co_id);
+		}
 
-		if (empty($arr["request"]["cust"]) and !isset($arr["request"]["cs_name"]))
+		if (empty($arr["request"]["cust"]) and !isset($arr["request"]["cs_name"]) || $arr["request"]["alph"])
 		{
 			$t = $arr["prop"]["vcl_inst"];
 			$this->_init_cust_list_t($t);
+
+			$customers = new object_list();
 
 			if (isset($arr["request"]["cat"]) and is_oid($arr["request"]["cat"]))
 			{
 				// get customers from cat
 				$cat = obj($arr["request"]["cat"]);
 				$t->set_caption(sprintf(t("Kliendid kategoorias '%s'"), $cat->name()));
-
 				foreach($cat->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 				{
-					$addr = "";
-
-					$cust = $c->to();
-
-					$t->define_data(array(
-						"name" => html::get_change_url($c->prop("to"), array("return_url" => get_ru()), $c->prop("to.name")),
-						"address" => $cust->prop_str("contact"),
-						"phone" => $cust->prop_str("phone_id"),
-						"email" => $cust->prop_str("email_id"),
-						"oid" => $cust->id(),
-						"priority" => $cust->prop("priority")
-					));
+					$customers->add($c->prop("to"));
 				}
+			}
+			elseif($arr["request"]["alph"])
+			{
+				$t->set_caption(sprintf(t("'%s' t&auml;hega algavate klientide nimekiri"), $arr["request"]["alph"]));
+				$customers_data = $arr["obj_inst"]->get_all_mrp_customers(array("name" => $arr["request"]["alph"]));
+				foreach($customers_data as $customer)
+				{
+					if($this->can("view" , $customer))
+					{
+						$customers->add($customer);
+					}
+				}
+			}
+
+			foreach($customers->arr() as $cust)
+			{
+				$t->define_data(array(
+					"name" => html::get_change_url($cust->id(), array("return_url" => get_ru()), $cust->name()),
+					"address" => $cust->prop_str("contact"),
+					"phone" => join (" ," , $cust->get_phones()),
+					"email" => $cust->get_mail(),
+					"oid" => $cust->id(),
+					"priority" => html::textbox(array("size" => 5 , "name" => "priority[".$cust->id()."]" , "value" => $co->get_customer_prop($cust->id() , "priority"))),
+				));
 			}
 
 			$retval = PROP_OK;
@@ -7179,6 +7250,12 @@ class mrp_workspace extends class_base
 	{
 		switch($arr["name"])
 		{
+			case "customers_search_table":
+				if($arr["request"]["alph"] ||  $arr["request"]["cat"])
+				{
+					$arr["area_caption"] = t("Klientide nimekiri");
+				}
+				break;
 			case "persons_personnel_tree":
 				if($arr["request"]["group"] == "my_stats")
 				{
@@ -7847,6 +7924,16 @@ END ajutine
 	}
 
 	/**
+		@attrib name=ajax_save_priors all_args=1
+	**/
+	public function ajax_save_priors($arr)
+	{
+		$o = obj($arr["id"]);
+		$o->set_priors($arr["priority"]);
+		die("1");
+	}
+
+	/**
 		@attrib name=get_projects_subtree
 		@param id required type=int
 		@param parent required
@@ -7935,6 +8022,23 @@ END ajutine
 
 	public function callback_generate_scripts($arr)
 	{
+		if($arr["request"]["group"] == "grp_customers")
+		{
+			return "
+				function update_priors()
+				{
+					var a=document.getElementsByName('sp_status');
+					var result=[];
+					//for (var i=0; i<a.length; i++) {
+					//	a[i].checked?result.push(a[i].value):'';
+					//}
+					result = $('input[name^=priority]');
+					$.get('/automatweb/orb.aw?class=mrp_workspace&action=ajax_save_priors&'+result.serialize(),{
+							id: ".$arr["obj_inst"]->id()."},function(html){
+						alert('".t("Prioriteedid salvestatud")."');
+					});
+				}";
+		}
 		if($arr["request"]["group"] == "grp_projects")
 		{
 			$vars = array("sp_name" , "sp_comment" , "sp_customer");

@@ -38,7 +38,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vsplitbox</parent>
+            <parent>customers_search_table</parent>
       </property>
       <property>
             <name>customers_list_proj</name>
@@ -61,6 +61,7 @@
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
             <store>no</store>
+            <size>33</size>
             <caption>Nimi</caption>
       </property>
       <property>
@@ -73,6 +74,7 @@
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
             <store>no</store>
+            <size>33</size>
             <caption>Kontaktisik</caption>
       </property>
       <property>
@@ -85,6 +87,7 @@
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
             <store>no</store>
+            <size>33</size>
             <caption>Aadress</caption>
       </property>
       <property>
@@ -97,6 +100,7 @@
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
             <store>no</store>
+            <size>33</size>
             <caption>Telefon</caption>
       </property>
       <property>
@@ -109,6 +113,7 @@
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
             <store>no</store>
+            <size>33</size>
             <caption>Kood</caption>
       </property>
       <property>
@@ -121,6 +126,7 @@
             <view_element>1</view_element>
             <parent>customers_search_box</parent>
             <store>no</store>
+            <size>33</size>
             <caption>Staatus</caption>
       </property>
       <property>
@@ -144,7 +150,6 @@
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
-            <parent>customers_search_table</parent>
             <store>no</store>
       </property>
       <property>
