@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_warehouse" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
+	<class name="shop_warehouse" folder="www/dev/robert/automatweb_dev/classes/applications/shop" extends="class_base">
 		<action name="unsent_table">
 			<function name="unsent_table">
 				<arguments>
@@ -143,6 +143,13 @@
 
 		<action name="create_purchase_order">
 			<function name="create_purchase_order">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_clients_groups_tree_level" all_args="1">
+			<function name="_get_clients_groups_tree_level">
 				<arguments>
 				</arguments>
 			</function>

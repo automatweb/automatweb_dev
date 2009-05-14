@@ -71,7 +71,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 				@property prod_tree type=treeview parent=prod_tree_lay store=no no_caption=1
 
-				@property prod_cat_tree type=treeview parent=prod_tree_lay store=no no_caption=1
+				@property prod_cat_tree type=treeview group=products parent=prod_tree_lay store=no no_caption=1
 
 			@layout prod_left_search type=vbox parent=prod_left area_caption=Otsing closeable=1
 
@@ -203,109 +203,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@caption Info
 	
 	@property arrivals_bc_table type=table no_caption=1
-
-
-@default group=storage_income
-
-	@property storage_income_toolbar type=toolbar no_caption=1 store=no
-
-	@layout storage_income_split type=hbox width=20%:80%
-
-		@layout storage_income_left type=vbox parent=storage_income_split
-
-			@layout storage_income_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_income_left
-
-				@property storage_income_tree type=treeview parent=storage_income_tree_lay store=no no_caption=1
-
-				@property storage_income_prod_tree type=treeview parent=storage_income_tree_lay store=no no_caption=1
-
-			@layout storage_income_left_search type=vbox parent=storage_income_left area_caption=Otsing closeable=1
-
-				@property storage_income_s_acquiredby type=textbox store=no captionside=top size=30 parent=storage_income_left_search
-				@caption Tarnija
-
-				@property storage_income_s_type type=chooser store=no captionside=top size=30 parent=storage_income_left_search
-				@caption T&uuml;&uuml;p
-
-				@property storage_income_s_number type=textbox store=no captionside=top size=30 parent=storage_income_left_search
-				@caption Number
-
-				@property storage_income_s_status  type=chooser store=no captionside=top size=30 parent=storage_income_left_search
-				@caption Staatus
-
-				@property storage_income_s_from type=date_select store=no captionside=top parent=storage_income_left_search
-				@caption Alates
-
-				@property storage_income_s_to type=date_select store=no captionside=top size=30 parent=storage_income_left_search
-				@caption Kuni
-
-				@property storage_income_s_article type=textbox store=no captionside=top size=30  parent=storage_income_left_search
-				@caption Artikkel
-
-				@property storage_income_s_articlecode type=textbox store=no captionside=top size=30  parent=storage_income_left_search
-				@caption Artikli kood
-
-				@property storage_income_s_art_cat type=select store=no captionside=top  parent=storage_income_left_search
-				@caption Artikli kategooria
-
-				@property storage_income_s_sbt type=submit store=no captionside=top  parent=storage_income_left_search value="Otsi"
-				@caption Otsi
-
-
-		@property storage_income type=table store=no no_caption=1  parent=storage_income_split
-		@caption Sissetulekud
-
-
-@default group=storage_export
-
-	@property storage_export_toolbar type=toolbar no_caption=1 store=no
-
-	@layout storage_export_split type=hbox width=20%:80%
-
-		@layout storage_export_left type=vbox parent=storage_export_split
-
-			@layout storage_export_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_export_left
-
-				@property storage_export_tree type=treeview parent=storage_export_tree_lay store=no no_caption=1
-
-				@property storage_export_prod_tree type=treeview parent=storage_export_tree_lay store=no no_caption=1
-
-			@layout storage_export_left_search type=vbox parent=storage_export_left area_caption=Otsing closeable=1
-
-				@property storage_export_s_acquiredby type=textbox store=no captionside=top size=30 parent=storage_export_left_search
-				@caption Tarnija
-
-				@property storage_export_s_type type=chooser store=no captionside=top size=30 parent=storage_export_left_search
-				@caption T&uuml;&uuml;p
-
-				@property storage_export_s_number type=textbox store=no captionside=top size=30 parent=storage_export_left_search
-				@caption Number
-
-				@property storage_export_s_status type=chooser store=no captionside=top size=30 parent=storage_export_left_search
-				@caption Staatus
-
-				@property storage_export_s_from type=date_select store=no captionside=top parent=storage_export_left_search
-				@caption Alates
-
-				@property storage_export_s_to type=date_select store=no captionside=top size=30 parent=storage_export_left_search
-				@caption Kuni
-
-				@property storage_export_s_article type=textbox store=no captionside=top size=30  parent=storage_export_left_search
-				@caption Artikkel
-
-				@property storage_export_s_articlecode type=textbox store=no captionside=top size=30  parent=storage_export_left_search
-				@caption Artikli kood
-
-				@property storage_export_s_art_cat type=select store=no captionside=top  parent=storage_export_left_search
-				@caption Artikli kategooria
-
-				@property storage_export_s_sbt type=submit store=no captionside=top  parent=storage_export_left_search value="Otsi"
-				@caption Otsi
-
-
-		@property storage_export type=table store=no no_caption=1  parent=storage_export_split
-		@caption V&auml;ljaminekud
-
 
 @default group=storage_movements
 
@@ -451,70 +348,69 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 
 		@property storage_status type=table store=no no_caption=1  parent=storage_status_split
-		@caption Laoseis
 
 
-@default group=status_prognosis
+#@default group=status_prognosis
 
-	@property storage_prognosis_toolbar type=toolbar no_caption=1 store=no
+	#@property storage_prognosis_toolbar type=toolbar no_caption=1 store=no
 
-	@layout storage_prognosis_split type=hbox width=20%:80%
+	#@layout storage_prognosis_split type=hbox width=20%:80%
 
-		@layout storage_prognosis_left type=vbox parent=storage_prognosis_split
+	#	@layout storage_prognosis_left type=vbox parent=storage_prognosis_split
 
-			@layout storage_prognosis_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_prognosis_left
+	#		@layout storage_prognosis_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_prognosis_left
 
-				@property storage_prognosis_tree type=treeview parent=storage_prognosis_tree_lay store=no no_caption=1
+	#			@property storage_prognosis_tree type=treeview parent=storage_prognosis_tree_lay store=no no_caption=1
 
-				@property storage_prognosis_tree2 type=treeview parent=storage_prognosis_tree_lay store=no no_caption=1
+	#			@property storage_prognosis_tree2 type=treeview parent=storage_prognosis_tree_lay store=no no_caption=1
 
-			@layout storage_prognosis_left_search type=vbox parent=storage_prognosis_left area_caption=Otsing closeable=1
+	#		@layout storage_prognosis_left_search type=vbox parent=storage_prognosis_left area_caption=Otsing closeable=1
 
-				@property storage_prognosis_s_name type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
-				@caption Nimi
+	#			@property storage_prognosis_s_name type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
+	#			@caption Nimi
 
-				@property storage_prognosis_s_code type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
-				@caption Kood
+	#			@property storage_prognosis_s_code type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
+	#			@caption Kood
 
-				@property storage_prognosis_s_barcode type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
-				@caption Ribakood
+	#			@property storage_prognosis_s_barcode type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
+	#			@caption Ribakood
 
-				@property storage_prognosis_s_art_cat type=select store=no captionside=top parent=storage_prognosis_left_search
-				@caption Kategooria
+	#			@property storage_prognosis_s_art_cat type=select store=no captionside=top parent=storage_prognosis_left_search
+	#			@caption Kategooria
 
-				@property storage_prognosis_s_count type=chooser store=no captionside=top size=30 parent=storage_prognosis_left_search
-				@caption Laoseis
+	#			@property storage_prognosis_s_count type=chooser store=no captionside=top size=30 parent=storage_prognosis_left_search
+	#			@caption Laoseis
 
-				@property storage_prognosis_s_price type=textbox store=no captionside=top size=30  parent=storage_prognosis_left_search
-				@caption Hind
+	#			@property storage_prognosis_s_price type=textbox store=no captionside=top size=30  parent=storage_prognosis_left_search
+	#			@caption Hind
 
-				@property storage_prognosis_s_pricelist type=select store=no captionside=top  parent=storage_prognosis_left_search
-				@caption Hinnakiri
+	#			@property storage_prognosis_s_pricelist type=select store=no captionside=top  parent=storage_prognosis_left_search
+	3			@caption Hinnakiri
 
-				@property storage_prognosis_s_below_min type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search no_caption=1
-				@caption Alla miinimumi
+	#			@property storage_prognosis_s_below_min type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search no_caption=1
+	#			@caption Alla miinimumi
 
-				@property storage_prognosis_s_show_pieces type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search no_caption=1
-				@caption Kuva t&uuml;kkidena
+	#			@property storage_prognosis_s_show_pieces type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search no_caption=1
+	#			@caption Kuva t&uuml;kkidena
 
-				@property storage_prognosis_s_show_batches type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search no_caption=1
-				@caption Kuva partiidena
+	#			@property storage_prognosis_s_show_batches type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search no_caption=1
+	#			@caption Kuva partiidena
 
-				@property storage_prognosis_s_date type=date_select ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
-				@caption Kuup&auml;ev
+	#			@property storage_prognosis_s_date type=date_select ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
+	#			@caption Kuup&auml;ev
 
-				@property storage_prognosis_s_sales_order_status type=chooser ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
-				@caption M&uuml;&uuml;gitellimuste staatus
+	#			@property storage_prognosis_s_sales_order_status type=chooser ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
+	#			@caption M&uuml;&uuml;gitellimuste staatus
 
-				@property storage_prognosis_s_purchase_order_status type=chooser ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
-				@caption Ostutellimuste staatus
+	#			@property storage_prognosis_s_purchase_order_status type=chooser ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
+	#			@caption Ostutellimuste staatus
 
-				@property storage_prognosis_s_sbt type=submit store=no captionside=top  parent=storage_prognosis_left_search value="Otsi"
-				@caption Otsi
+	#			@property storage_prognosis_s_sbt type=submit store=no captionside=top  parent=storage_prognosis_left_search value="Otsi"
+	#			@caption Otsi
 
 
-		@property storage_prognosis type=table store=no no_caption=1  parent=storage_prognosis_split
-		@caption Laoseis
+	#	@property storage_prognosis type=table store=no no_caption=1  parent=storage_prognosis_split
+	#	@caption Laoseis
 
 
 @default group=status_inventories
@@ -557,7 +453,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 			@layout status_orders_time_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;ajavahemik parent=status_orders_left
 
-				@property status_orders_time_tree type=treeview parent=status_orders_time_tree_lay store=no no_caption=1
+				@property status_orders_time_tree type=treeview parent=status_orders_time_tree_lay store=no no_caption=1 group=status_orders
 
 			@layout status_orders_case_tree_lay type=vbox closeable=1 area_caption=Vali&nbsp;tellimus parent=status_orders_left
 
@@ -590,10 +486,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property status_orders_s_case_no type=textbox store=no captionside=top size=30 parent=status_orders_left_search
 				@caption Tellimuse nr
 
-				@property status_orders_s_start type=date_select ch_value=1 store=no captionside=top size=30  parent=status_orders_left_search
+				@property status_orders_s_start type=date_select store=no captionside=top size=30  parent=status_orders_left_search
 				@caption Ajavahemiku algus
 
-				@property status_orders_s_end type=date_select ch_value=1 store=no captionside=top size=30  parent=status_orders_left_search
+				@property status_orders_s_end type=date_select store=no captionside=top size=30  parent=status_orders_left_search
 				@caption Ajavahemiku l&otilde;pp
 
 				@property status_orders_s_sbt type=submit store=no captionside=top  parent=status_orders_left_search value="Otsi"
@@ -609,9 +505,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@layout purchase_orders_left type=vbox parent=purchase_orders_split
 
-			@layout purchase_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=purchase_orders_left
+			@layout purchase_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri&nbsp;staatuse&nbsp;j&auml;rgi parent=purchase_orders_left
 
 				@property purchase_orders_tree type=treeview parent=purchase_orders_tree_lay store=no no_caption=1
+
+			@layout purchase_orders_time_lay type=vbox closeable=1 area_caption=Filtreeri&nbsp;ajavahemiku&nbsp;j&auml;rgi parent=purchase_orders_left
+
+				@property purchase_orders_time_tree type=treeview no_caption=1 parent=purchase_orders_time_lay
+
+			@layout purchase_orders_cust_lay type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=purchase_orders_left
+
+				@property purchase_orders_cust_tree type=treeview no_caption=1 parent=purchase_orders_cust_lay
 
 			@layout purchase_orders_left_search type=vbox parent=purchase_orders_left area_caption=Otsing closeable=1
 
@@ -643,6 +547,120 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@property purchase_orders type=table store=no no_caption=1  parent=purchase_orders_split
 		@caption Ostutellimused
 
+@default group=purchase_notes
+
+	@property purchase_notes_toolbar type=toolbar no_caption=1
+
+	@layout purchase_notes_split type=hbox width=20%:80%
+
+		@layout purchase_notes_left type=vbox parent=purchase_notes_split
+
+			@layout purchase_notes_status type=vbox closeable=1 area_caption=Filtreeri&nbsp;staatuse&nbsp;j&auml;rgi parent=purchase_notes_left
+
+				@property purchase_notes_status_tree type=treeview no_caption=1 parent=purchase_notes_status
+
+			@layout purchase_notes_time type=vbox closeable=1 area_caption=Filtreeri&nbsp;perioodi&nbsp;j&auml;rgi parent=purchase_notes_left
+
+				@property purchase_notes_time_tree type=treeview no_caption=1 parent=purchase_notes_time
+
+			@layout purchase_notes_prod type=vbox closeable=1 area_caption=Filtreeri&nbsp;tootegrupi&nbsp;j&auml;rgi parent=purchase_notes_left
+
+				@property purchase_notes_prod_tree type=treeview no_caption=1 parent=purchase_notes_prod
+
+			@layout purchase_notes_cust type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=purchase_notes_left
+				
+				@property purchase_notes_cust_tree type=treeview no_caption=1 parent=purchase_notes_cust
+				
+			@layout purchase_notes_left_search type=vbox closeable=1 area_caption=Filtreeri&nbsp;otsinguga parent=purchase_notes_left
+
+				@property purchase_notes_s_acquiredby type=textbox store=no captionside=top size=30 parent=purchase_notes_left_search
+				@caption Tarnija
+
+				@property purchase_notes_s_number type=textbox store=no captionside=top size=30 parent=purchase_notes_left_search
+				@caption Number
+
+				@property purchase_notes_s_status type=chooser store=no captionside=top size=30 parent=purchase_notes_left_search
+				@caption Staatus
+
+				@property purchase_notes_s_from type=date_select store=no captionside=top parent=purchase_notes_left_search
+				@caption Alates
+
+				@property purchase_notes_s_to type=date_select store=no captionside=top size=30 parent=purchase_notes_left_search
+				@caption Kuni
+
+				@property purchase_notes_s_article type=textbox store=no captionside=top size=30  parent=purchase_notes_left_search
+				@caption Artikkel
+
+				@property purchase_notes_s_articlecode type=textbox store=no captionside=top size=30  parent=purchase_notes_left_search
+				@caption Artikli kood
+
+				@property purchase_notes_s_art_cat type=select store=no captionside=top  parent=purchase_notes_left_search
+				@caption Artikli kategooria
+
+				@property purchase_notes_s_sbt type=submit store=no captionside=top  parent=purchase_notes_left_search value="Otsi"
+				@caption Otsi
+
+		@layout purchase_notes_right type=vbox parent=purchase_notes_split
+
+			@property purchase_notes type=table no_caption=1 parent=purchase_notes_right
+
+@default group=purchase_bills
+
+	@property purchase_bills_toolbar type=toolbar no_caption=1
+
+	@layout purchase_bills_split type=hbox width=20%:80%
+
+		@layout purchase_bills_left type=vbox parent=purchase_bills_split
+
+			@layout purchase_bills_status type=vbox closeable=1 area_caption=Filtreeri&nbsp;staatuse&nbsp;j&auml;rgi parent=purchase_bills_left
+
+				@property purchase_bills_status_tree type=treeview no_caption=1 parent=purchase_bills_status
+
+			@layout purchase_bills_time type=vbox closeable=1 area_caption=Filtreeri&nbsp;perioodi&nbsp;j&auml;rgi parent=purchase_bills_left
+
+				@property purchase_bills_time_tree type=treeview no_caption=1 parent=purchase_bills_time
+
+			@layout purchase_bills_prod type=vbox closeable=1 area_caption=Filtreeri&nbsp;tootegrupi&nbsp;j&auml;rgi parent=purchase_bills_left
+
+				@property purchase_bills_prod_tree type=treeview no_caption=1 parent=purchase_bills_prod
+
+			@layout purchase_bills_cust type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=purchase_bills_left
+				
+				@property purchase_bills_cust_tree type=treeview no_caption=1 parent=purchase_bills_cust
+				
+			@layout purchase_bills_left_search type=vbox closeable=1 area_caption=Filtreeri&nbsp;otsinguga parent=purchase_bills_left
+
+				@property purchase_bills_s_acquiredby type=textbox store=no captionside=top size=30 parent=purchase_bills_left_search
+				@caption Tarnija
+
+				@property purchase_bills_s_number type=textbox store=no captionside=top size=30 parent=purchase_bills_left_search
+				@caption Number
+
+				@property purchase_bills_s_status type=chooser store=no captionside=top size=30 parent=purchase_bills_left_search
+				@caption Staatus
+
+				@property purchase_bills_s_from type=date_select store=no captionside=top parent=purchase_bills_left_search
+				@caption Alates
+
+				@property purchase_bills_s_to type=date_select store=no captionside=top size=30 parent=purchase_bills_left_search
+				@caption Kuni
+
+				@property purchase_bills_s_article type=textbox store=no captionside=top size=30  parent=purchase_bills_left_search
+				@caption Artikkel
+
+				@property purchase_bills_s_articlecode type=textbox store=no captionside=top size=30  parent=purchase_bills_left_search
+				@caption Artikli kood
+
+				@property purchase_bills_s_art_cat type=select store=no captionside=top  parent=purchase_bills_left_search
+				@caption Artikli kategooria
+
+				@property purchase_bills_s_sbt type=submit store=no captionside=top  parent=purchase_bills_left_search value="Otsi"
+				@caption Otsi
+
+		@layout purchase_bills_right type=vbox parent=purchase_bills_split
+
+			@property purchase_bills type=table no_caption=1 parent=purchase_bills_right
+
 
 @default group=sell_orders
 
@@ -655,6 +673,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 			@layout sell_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=sell_orders_left
 
 				@property sell_orders_tree type=treeview parent=sell_orders_tree_lay store=no no_caption=1
+
+			@layout sell_orders_time_lay type=vbox closeable=1 area_caption=Filtreeri&nbsp;ajavahemiku&nbsp;j&auml;rgi parent=sell_orders_left
+
+				@property sell_orders_time_tree type=treeview no_caption=1 parent=sell_orders_time_lay
+
+			@layout sell_orders_cust_lay type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=sell_orders_left
+
+				@property sell_orders_cust_tree type=treeview no_caption=1 parent=sell_orders_cust_lay
 
 			@layout sell_orders_left_search type=vbox parent=sell_orders_left area_caption=Otsing closeable=1
 
@@ -686,6 +712,133 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@property sell_orders type=table store=no no_caption=1  parent=sell_orders_split
 		@caption M&uuml;&uuml;gitellimused
 
+@default group=sales_notes
+
+	@property sales_notes_toolbar type=toolbar no_caption=1
+
+	@layout sales_notes_split type=hbox width=20%:80%
+
+		@layout sales_notes_left type=vbox parent=sales_notes_split
+
+			@layout sales_notes_status type=vbox closeable=1 area_caption=Filtreeri&nbsp;staatuse&nbsp;j&auml;rgi parent=sales_notes_left
+
+				@property sales_notes_status_tree type=treeview no_caption=1 parent=sales_notes_status
+
+			@layout sales_notes_time type=vbox closeable=1 area_caption=Filtreeri&nbsp;perioodi&nbsp;j&auml;rgi parent=sales_notes_left
+
+				@property sales_notes_time_tree type=treeview no_caption=1 parent=sales_notes_time
+
+			@layout sales_notes_prod type=vbox closeable=1 area_caption=Filtreeri&nbsp;tootegrupi&nbsp;j&auml;rgi parent=sales_notes_left
+
+				@property sales_notes_prod_tree type=treeview no_caption=1 parent=sales_notes_prod
+
+			@layout sales_notes_cust type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=sales_notes_left
+				
+				@property sales_notes_cust_tree type=treeview no_caption=1 parent=sales_notes_cust
+
+			@layout sales_notes_left_search type=vbox closeable=1 area_caption=Filtreeri&nbsp;otsinguga parent=sales_notes_left
+
+				@property sales_notes_s_acquiredby type=textbox store=no captionside=top size=30 parent=sales_notes_left_search
+				@caption Tarnija
+
+				@property sales_notes_s_number type=textbox store=no captionside=top size=30 parent=sales_notes_left_search
+				@caption Number
+
+				@property sales_notes_s_status type=chooser store=no captionside=top size=30 parent=sales_notes_left_search
+				@caption Staatus
+
+				@property sales_notes_s_from type=date_select store=no captionside=top parent=sales_notes_left_search
+				@caption Alates
+
+				@property sales_notes_s_to type=date_select store=no captionside=top size=30 parent=sales_notes_left_search
+				@caption Kuni
+
+				@property sales_notes_s_article type=textbox store=no captionside=top size=30  parent=sales_notes_left_search
+				@caption Artikkel
+
+				@property sales_notes_s_articlecode type=textbox store=no captionside=top size=30  parent=sales_notes_left_search
+				@caption Artikli kood
+
+				@property sales_notes_s_art_cat type=select store=no captionside=top  parent=sales_notes_left_search
+				@caption Artikli kategooria
+
+				@property sales_notes_s_sbt type=submit store=no captionside=top  parent=sales_notes_left_search value="Otsi"
+				@caption Otsi
+
+		@layout sales_notes_right type=vbox parent=sales_notes_split
+
+			@property sales_notes type=table no_caption=1 parent=sales_notes_right
+
+@default group=sales_bills
+
+	@property sales_bills_toolbar type=toolbar no_caption=1
+
+	@layout sales_bills_split type=hbox width=20%:80%
+
+		@layout sales_bills_left type=vbox parent=sales_bills_split
+
+			@layout sales_bills_status type=vbox closeable=1 area_caption=Filtreeri&nbsp;staatuse&nbsp;j&auml;rgi parent=sales_bills_left
+
+				@property sales_bills_status_tree type=treeview no_caption=1 parent=sales_bills_status
+
+			@layout sales_bills_time type=vbox closeable=1 area_caption=Filtreeri&nbsp;perioodi&nbsp;j&auml;rgi parent=sales_bills_left
+
+				@property sales_bills_time_tree type=treeview no_caption=1 parent=sales_bills_time
+
+			@layout sales_bills_prod type=vbox closeable=1 area_caption=Filtreeri&nbsp;tootegrupi&nbsp;j&auml;rgi parent=sales_bills_left
+
+				@property sales_bills_prod_tree type=treeview no_caption=1 parent=sales_bills_prod
+
+			@layout sales_bills_cust type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=sales_bills_left
+				
+				@property sales_bills_cust_tree type=treeview no_caption=1 parent=sales_bills_cust
+				
+			@layout sales_bills_left_search type=vbox closeable=1 area_caption=Filtreeri&nbsp;otsinguga parent=sales_bills_left
+
+				@property sales_bills_s_acquiredby type=textbox store=no captionside=top size=30 parent=sales_bills_left_search
+				@caption Tarnija
+
+				@property sales_bills_s_number type=textbox store=no captionside=top size=30 parent=sales_bills_left_search
+				@caption Number
+
+				@property sales_bills_s_status type=chooser store=no captionside=top size=30 parent=sales_bills_left_search
+				@caption Staatus
+
+				@property sales_bills_s_from type=date_select store=no captionside=top parent=sales_bills_left_search
+				@caption Alates
+
+				@property sales_bills_s_to type=date_select store=no captionside=top size=30 parent=sales_bills_left_search
+				@caption Kuni
+
+				@property sales_bills_s_article type=textbox store=no captionside=top size=30  parent=sales_bills_left_search
+				@caption Artikkel
+
+				@property sales_bills_s_articlecode type=textbox store=no captionside=top size=30  parent=sales_bills_left_search
+				@caption Artikli kood
+
+				@property sales_bills_s_art_cat type=select store=no captionside=top  parent=sales_bills_left_search
+				@caption Artikli kategooria
+
+				@property sales_bills_s_sbt type=submit store=no captionside=top  parent=sales_bills_left_search value="Otsi"
+				@caption Otsi
+
+		@layout sales_bills_right type=vbox parent=sales_bills_split
+
+			@property sales_bills type=table no_caption=1 parent=sales_bills_right
+
+	@layout clients_split type=hbox width=20%:80% group=purchase_clients,sales_clients
+
+		@layout clients_left type=vbox group=purchase_clients,sales_clients parent=clients_split
+
+			@layout clients_groups_lay type=vbox area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi group=purchase_clients,sales_clients parent=clients_left
+
+				@property clients_groups_tree type=treeview no_caption=1  group=purchase_clients,sales_clients parent=clients_groups_lay
+
+			@layout clients_alphabet_lay type=vbox area_caption=Filtreeri&nbsp;nime&nbsp;j&auml;rgi group=purchase_clients,sales_clients parent=clients_left
+
+				@property clients_alphabet_tree type=treeview no_caption=1  group=purchase_clients,sales_clients parent=clients_alphabet_lay
+
+		@property clients_tbl type=table no_caption=1 group=purchase_clients,sales_clients parent=clients_split
 
 @default group=shop_orders
 	
@@ -794,8 +947,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 	@groupinfo status_status caption="Laoseis" parent=status
 #	@groupinfo status_prognosis caption="Prognoos" parent=status
-	@groupinfo storage_income parent=status caption="Sissetulekud"
-	@groupinfo storage_export parent=status caption="V&auml;ljaminekud"
 	@groupinfo storage_movements parent=status caption="Liikumised" submit=no
 	@groupinfo storage_writeoffs parent=status caption="Mahakandmised" submit=no
 	@groupinfo status_inventories caption="Inventuurid" parent=status
@@ -803,10 +954,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 @groupinfo purchases caption="Ost"
 	@groupinfo purchase_orders caption="Ostutellimused" parent=purchases
+	@groupinfo purchase_notes caption="Ostusaatelehed" parent=purchases
+	@groupinfo purchase_bills caption="Ostuarved" parent=purchases
+	@groupinfo purchase_clients caption="Ostukliendid" parent=purchases
 
 @groupinfo sales caption="M&uuml;&uuml;k"
 
 	@groupinfo sell_orders caption="M&uuml;&uuml;gitellimused" parent=sales
+	@groupinfo sales_notes caption="M&uuml;&uuml;gisaatelehed" parent=sales
+	@groupinfo sales_bills caption="M&uuml;&uuml;giarved" parent=sales
+	@groupinfo sales_clients caption="M&uuml;&uuml;gikliendid" parent=sales
 	@groupinfo shop_orders caption="Poe tellimused" parent=sales
 	@groupinfo order_undone parent=sales caption="T&auml;itmata poe tellimused"
 	@groupinfo order_orderer_cos parent=sales caption="A Tellijad"
@@ -892,6 +1049,8 @@ class shop_warehouse extends class_base
 
 	function get_property($arr)
 	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
 		if($arr["request"]["action"] != "new" && $arr["prop"]["name"] == "no_new_config")
 		{
 			return PROP_IGNORE;
@@ -900,12 +1059,60 @@ class shop_warehouse extends class_base
 		{
 			return PROP_OK;
 		}
+		switch($prop["name"])
+		{
+			case "purchase_notes_s_from":
+			case "purchase_bills_s_from":
+			case "sales_notes_s_from":
+			case "sales_bills_s_from":
+			case "purchase_orders_s_from":
+			case "sell_orders_s_from":
+				return $this->_get_status_orders_s_start(&$arr);
+				break;
+			case "purchase_notes_s_to":
+			case "purchase_bills_s_to":
+			case "sales_notes_s_to":
+			case "sales_bills_s_to":
+			case "purchase_orders_s_to":
+			case "sell_orders_s_to":
+				return $this->_get_status_orders_s_end(&$arr);
+				break;
+			case "sales_bills_s_status":
+			case "purchase_bills_s_status":
+				$prop["options"] = get_instance(CL_CRM_BILL)->states + array("" => t("K&otilde;ik"));
+				$prop["value"] = $arr["request"][$prop["name"]] ? $arr["request"][$prop["name"]] : "";
+				$prop["orient"] = "vertical";
+				return $retval;
+				break;
+			case "purchase_notes_s_acquiredby":
+			case "purchase_bills_s_acquiredby":
+			case "sales_notes_s_acquiredby":
+			case "sales_bills_s_acquiredby":
+			case "purchase_orders_s_purchaser":
+			case "sell_orders_s_buyer":
+				if($v = $arr["request"][$prop["name"]])
+				{
+					$prop["value"] = $v;
+				}
+				elseif($v = $arr["request"]["filt_cust"])
+				{
+					if($this->can("view", $v))
+					{
+						$co = obj($v);
+					}
+					if($co && $co->class_id() == CL_CRM_COMPANY)
+					{
+						$prop["value"] = $co->name();
+					}
+				}
+				return $retval;
+				break;
+				
+		}
 		if($ret = $this->process_search_param($arr))
 		{
 			return $ret;
 		}
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
 		switch($prop["name"])
 		{
 			case "shop_orders_s_uname":
@@ -1092,7 +1299,7 @@ class shop_warehouse extends class_base
 							STORAGE_FILTER_UNCONFIRMED => t("Kinnitamata"),
 						);
 					}
-					$prop["value"] = $arr["request"][$prop["name"]];
+					$prop["value"] =  $arr["request"][$prop["name"]] ? $arr["request"][$prop["name"]] : STORAGE_FILTER_CONFIRMATION_ALL;
 					break;
 
 				case "direction":
@@ -2354,7 +2561,14 @@ class shop_warehouse extends class_base
 			$url = aw_url_change_var(array("pgtf" => $o->id(), $group."_s_art_cat" => $o->id(), "ptf" => null));
 			$this->insert_prodg_tree_item($tree, $o, $url);
 		}
-		$tree->set_selected_item(automatweb::$request->arg("pgtf"));
+		$tree->add_item(0, array(
+			"url" => aw_url_change_var(array("pgtf" => null, $group."_s_art_cat" => null, "ptf" => null)),
+			"id" => "all",
+			"name" => t("K&otilde;ik"),
+			"iconurl" => icons::get_icon_url(CL_MENU),
+		));
+		$v = automatweb::$request->arg("pgtf");
+		$tree->set_selected_item($v ? $v : "all");
 	}
 
 	/**
@@ -3710,11 +3924,11 @@ class shop_warehouse extends class_base
 	private function _get_storage_ol($arr)
 	{
 		$group = $this->get_search_group($arr);
-		if($arr["request"][$group."_s_type"] == STORAGE_FILTER_BILLS)
+		if($arr["request"][$group."_s_type"] == STORAGE_FILTER_BILLS || strpos($group, "bills"))
 		{
 			$bills = 1;
 		}
-		elseif($arr["request"][$group."_s_type"] == STORAGE_FILTER_DNOTES)
+		elseif($arr["request"][$group."_s_type"] == STORAGE_FILTER_DNOTES || strpos($group, "notes"))
 		{
 			$dnotes = 1;
 		}
@@ -3755,6 +3969,11 @@ class shop_warehouse extends class_base
 		{
 			$timefilter = new obj_predicate_compare(OBJ_COMP_LESS, $t);
 		}
+		elseif(!isset($arr["request"][$group."_s_from"]) && (strpos($group, "sales") !== false || strpos($group, "purchase") !== false) && $arr["request"]["filt_time"] != "all")
+		{
+			$v = $this->_get_status_orders_time_filt();
+			$timefilter = new obj_predicate_compare(OBJ_COMP_BETWEEN, $v["filt_start"], $v["filt_end"]);
+		}
 		$prod_ol = $this->get_art_filter_ol($arr);
 		if($dnotes)
 		{
@@ -3781,17 +4000,34 @@ class shop_warehouse extends class_base
 			{
 				$params["number"] = "%".$no."%";
 			}
-			if($arr["request"]["group"] == "storage_income" || $arr["request"]["group"] == "storage")
+			if($arr["request"]["group"] == "storage_income" || $arr["request"]["group"] == "storage" || strpos($group, "purchase") !== false)
 			{
 				$prop = "to_warehouse";
 				$sprop = "impl";
 			}
-			elseif($arr["request"]["group"] == "storage_export")
+			elseif($arr["request"]["group"] == "storage_export" || strpos($group, "sales") !== false)
 			{
 				$prop = "from_warehouse";
 				$sprop = "customer";
 			}
-			if($co = $arr["request"][$group."_s_acquiredby"])
+			if($arr["request"][$group."_s_acquiredby"])
+			{
+				$co = $arr["request"][$group."_s_acquiredby"];
+			}
+			elseif($this->can("view", $arr["request"]["filt_cust"]))
+			{
+				$co = obj($arr["request"]["filt_cust"]);
+				if($co->class_id() == CL_CRM_CATEGORY)
+				{
+					$params["CL_SHOP_DELIVERY_NOTE.".$sprop.".RELTYPE_CUSTOMER(CL_CRM_CATEGORY)"] = $co->id();
+					unset($co);
+				}
+				else
+				{
+					$co = $co->name();
+				}
+			}
+			if($co)
 			{
 				$params["CL_SHOP_DELIVERY_NOTE.".$sprop.".name"] = "%".$co."%";
 			}
@@ -3842,18 +4078,35 @@ class shop_warehouse extends class_base
 				{
 					$params["bill_no"] = "%".$no."%";
 				}
-				if($arr["request"]["group"] == "storage_income" || $arr["request"]["group"] == "storage")
+				if($arr["request"]["group"] == "storage_income" || $arr["request"]["group"] == "storage" || strpos($group, "purchase") !== false)
 				{
 					$prop = "customer";
 					$sprop = "impl";
 				}
-				elseif($arr["request"]["group"] == "storage_export")
+				elseif($arr["request"]["group"] == "storage_export" || strpos($group, "sales") !== false)
 				{
 					$prop = "impl";
 					$sprop = "customer";
 				}
 				$params[$prop] = $cos;
-				if($co = $arr["request"][$group."_s_acquiredby"])
+				if($arr["request"][$group."_s_acquiredby"])
+				{
+					$co = $arr["request"][$group."_s_acquiredby"];
+				}
+				elseif($this->can("view", $arr["request"]["filt_cust"]))
+				{
+					$co = obj($arr["request"]["filt_cust"]);
+					if($co->class_id() == CL_CRM_CATEGORY)
+					{
+						$params["CL_CRM_BILL.".$sprop.".RELTYPE_CUSTOMER(CL_CRM_CATEGORY)"] = $co->id();
+						unset($co);
+					}
+					else
+					{
+						$co = $co->name();
+					}
+				}
+				if($co)
 				{
 					$params["CL_CRM_BILL.".$sprop.".name"] = "%".$co."%";
 				}
@@ -3936,7 +4189,14 @@ class shop_warehouse extends class_base
 						}
 						elseif($val = $this->config->prop($prop))
 						{
-							$vals[$val] = $val;
+							if(is_array($val))
+							{
+								$vals = $vals + $val;
+							}
+							else
+							{
+								$vals[$val] = $val;
+							}
 						}
 					}
 					else
@@ -4082,7 +4342,8 @@ class shop_warehouse extends class_base
 		$t->define_field(array(
 			"name" => "relations",
 			"caption" => t("Seosed"),
-			"align" => "center"
+			"align" => "center",
+			"width" => 100,
 		));
 
 		$t->define_field(array(
@@ -5273,16 +5534,23 @@ class shop_warehouse extends class_base
 		$arr["ptf"] = $request["ptf"];
 		$arr["pgtf"] = $request["pgtf"];
 		$arr["post_ru"] = post_ru();
-		if($request["group"] == "status_orders")
-		{
-			$arr["add_rows_order"] = 0;
-			$arr["filt_time"] = $request["filt_time"];
-			$arr["filt_case"] = $request["filt_case"];
-			$arr["filt_res"] = $request["filt_res"];
-		}
-		if($request["group"] == "shop_orders")
-		{
-			$arr["shop_orders_s_status"] = $request["shop_orders_s_status"];
+		switch($request["group"])
+		{	
+			case "status_orders":
+				$arr["add_rows_order"] = 0;
+				$arr["filt_time"] = $request["filt_time"];
+				$arr["filt_case"] = $request["filt_case"];
+				$arr["filt_res"] = $request["filt_res"];
+				break;
+			case "shop_orders":
+				$arr["shop_orders_s_status"] = $request["shop_orders_s_status"];
+				break;
+			case "purchase_notes":
+			case "sales_notes":
+			case "purchase_bills":
+			case "sales_bills":
+				$arr["filt_time"] = $request["filt_time"];
+				break;
 		}
 	}
 
@@ -5297,6 +5565,7 @@ class shop_warehouse extends class_base
 			$arr["args"]["pgtf"] = $arr["request"]["pgtf"];
 		}
 		$group = $this->get_search_group($arr);
+		$g = $arr["request"]["group"];
 		if(!$arr["request"][$group."_s_cat"])
 		{
 			$arr["args"]["pgtf"] = null;
@@ -5308,7 +5577,7 @@ class shop_warehouse extends class_base
 		$vars = obj($arr["request"]["id"])->get_property_list();
 		foreach($vars as $var => $c)
 		{
-			if($this->is_search_param($var) && isset($arr["request"][$var]))
+			if($this->is_search_param($var) && array_key_exists($var, $arr["request"]))
 			{
 				$arr["args"][$var] = $arr["request"][$var];
 			}
@@ -5321,7 +5590,7 @@ class shop_warehouse extends class_base
  				$arr["args"][$var] = $arr["request"][$var];
 			}
 		}
-		if($arr["request"]["group"] == "shop_orders")
+		if($g == "shop_orders")
 		{
 			$vars = array("oname", "uname", "pname", "prod", "oid", "from", "to", "status");
 			foreach($vars as $var)
@@ -5329,6 +5598,13 @@ class shop_warehouse extends class_base
 				$v = "shop_orders_s_".$var;
 				$arr["args"][$v] = $arr["request"][$v];
 			} 
+		}
+		if(in_array($g, array("purchase_notes", "sales_notes", "purchase_bills", "sales_bills")))
+		{
+			foreach(array("acquiredby", "number", "status", "from", "to", "article", "articlecode", "art_cat") as $var)
+			{
+				$arr["args"][$g."_s_".$var] = $arr["request"][$g."_s_".$var];
+			}
 		}
 	}
 
@@ -6307,43 +6583,57 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$ol = new object_list();
 		$group = $this->get_search_group($arr);
 
+		$co_prop = "purchaser";
 		if($group == "purchase_orders")
 		{
-			$co_prop = "customer";
+			$co_filt = "purchaser";
 			$class_id = CL_SHOP_PURCHASE_ORDER;
 		}
 		elseif($group == "sell_orders")
 		{
-			$co_prop = "buyer";
+			$co_filt = "buyer";
 			$class_id = CL_SHOP_SELL_ORDER;
 		}
 		else
 		{
 			return $ol;
 		}
-		if($co = $arr["request"][$group."_s_purchaser"])
-		{
-			$params[$class_id.".purchaser.name"] = "%".$co."%";
-		}
 		if($n = $arr["request"][$group."_s_number"])
 		{
 			$params["number"] = "%".$n."%";
 		}
-		if($co = $arr["request"][$group."_s_".$co_prop])
+		if($co = $arr["request"][$group."_s_".$co_filt])
 		{
-			$params[$class_id.".related_orders.purchaser.name"] = "%".$co."%";
+			$co = $arr["request"][$group."_s_".$co_filt];
+		}
+		elseif($this->can("view", $arr["request"]["filt_cust"]))
+		{
+			$co = obj($arr["request"]["filt_cust"]);
+			if($co->class_id() == CL_CRM_CATEGORY)
+			{
+				$params[$co_prop.".RELTYPE_CUSTOMER(CL_CRM_CATEGORY)"] = $co->id();
+				unset($co);
+			}
+			else
+			{
+				$co = $co->name();
+			}
+		}
+		if($co)
+		{
+			$params[$co_prop.".name"] = "%".$co."%";
 		}
 		if($sm = $arr["request"][$group."_s_sales_manager"])
 		{
-			$params[$class_id.".job.RELTYPE_MRP_MANAGER.name"] = "%".$sm."%";
+			$params["job.RELTYPE_MRP_MANAGER.name"] = "%".$sm."%";
 		}
 		if($jn = $arr["request"][$group."_s_job_name"])
 		{
-			$params[$class_id.".job.comment"] = "%".$jn."%";
+			$params["job.comment"] = "%".$jn."%";
 		}
 		if($jno = $arr["request"][$group."_s_job_number"])
 		{
-			$params[$class_id.".job.name"] = "%".$jno."%";
+			$params["job.name"] = "%".$jno."%";
 		}
 		if($s = $arr["request"][$group."_s_status"])
 		{
@@ -6367,6 +6657,11 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			$t += 24 * 60 * 60 -1;
 			$params["date"] = new obj_predicate_compare(OBJ_COMP_LESS, $t);
+		}
+		elseif(!isset($arr["request"][$group."_s_from"]) && $arr["request"]["filt_time"] != "all")
+		{
+			$v = $this->_get_status_orders_time_filt();
+			$timefilter = new obj_predicate_compare(OBJ_COMP_BETWEEN, $v["filt_start"], $v["filt_end"]);
 		}
 		$prods = $this->get_art_filter_ol($arr);
 		if($prods)
@@ -6779,21 +7074,39 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"tree_id" => "prodg_tree_s",
 			"persist_state" => 1,
 		));
-		$end = $this->_get_status_orders_time_tree_end(obj($arr["id"]));
+		if(isset($arr["end"]))
+		{
+			$end = $arr["end"];
+			$start = $arr["start"];
+		}
+		else
+		{
+			$end = $this->_get_status_orders_time_tree_end(obj($arr["id"]));
+		}
 		if($end)
 		{
 			switch($tmp[0])
 			{
 				case "year":
-					$start = 1;
-					$end = 12;
-					if(date('Y') == $tmp[1])
+					if($start && date('Y', $start) == $tmp[1])
+					{
+						$start = date('m', mktime(0,0,0, date('m', $start),1,$tmp[1]));
+					}
+					elseif(date('Y') == $tmp[1])
 					{
 						$start = date('m', mktime(0,0,0,date('m'),1,$tmp[1]));
+					}
+					else
+					{
+						$start = 1;
 					}
 					if(date('Y', $end) == $tmp[1])
 					{
 						$end = date('m', mktime(0,0,0,date('m', $end),1,$tmp[1]));
+					}
+					else
+					{
+						$end = 12;
 					}
 					for($i = $start; $i <= $end; $i++)
 					{
@@ -6807,15 +7120,25 @@ $oo = get_instance(CL_SHOP_ORDER);
 					}
 					break;
 				case "month":
-					$start = 1;
-					$end = date('d', mktime(0,0,1,$tmp[1]+1,0,$tmp[2]));
-					if(date('m.Y') == $tmp[1].".".$tmp[2])
+					if($start && date('m.Y', $start) == $tmp[1].".".$tmp[2])
+					{
+						$start = date('d', mktime(0,0,1,date('m', $start), date('d', $start),$tmp[2]));
+					}
+					elseif(date('m.Y') == $tmp[1].".".$tmp[2])
 					{
 						$start = date('d', mktime(0,0,1,date('m'),date('d'),$tmp[2]));
+					}
+					else
+					{
+						$start = 1;
 					}
 					if(date('m.Y', $end) == $tmp[1].".".$tmp[2])
 					{
 						$end = date('d', mktime(0,0,1,date('m', $end),date('d', $end),$tmp[2]));
+					}
+					else
+					{
+						$end = date('d', mktime(0,0,1,$tmp[1]+1,0,$tmp[2]));
 					}
 					for($i = $start; $i <= $end; $i++)
 					{
@@ -6841,12 +7164,18 @@ $oo = get_instance(CL_SHOP_ORDER);
 	{
 		$t = $arr["prop"]["vcl_inst"];
 	
-		$gbf = $this->mk_my_orb("get_status_orders_time_tree_level",array(
+		$params = array(
 			"set_retu" => get_ru(),
 			"filt_time" => automatweb::$request->arg("filt_time"),
 			"id" => $arr["obj_inst"]->id(),
-			"parent" => " ",
-		), CL_SHOP_WAREHOUSE);
+		);
+		if($arr["start"])
+		{
+			$params["start"] = $arr["start"];
+			$params["end"] = $arr["end"];
+		}
+		$params["parent"] = " ";
+		$gbf = $this->mk_my_orb("get_status_orders_time_tree_level", $params, CL_SHOP_WAREHOUSE);
 
 		$t->start_tree(array(
 			"has_root" => true,
@@ -6884,10 +7213,21 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"url" => aw_url_change_var("filt_time", "nextmonth"),
 		));
 
-		$end = $this->_get_status_orders_time_tree_end($arr["obj_inst"]);
+		if(isset($arr["end"]))
+		{
+			$end = $arr["end"];
+			$start = $arr["start"];
+		}
+		else
+		{
+			$end = $this->_get_status_orders_time_tree_end($arr["obj_inst"]);
+		}
 		if($end)
 		{
-			$start = time();
+			if(!$start)
+			{
+				$start = time();
+			}
 			for($i = date('Y', $start); $i <= date('Y', $end); $i++)
 			{
 				$t->add_item(0, array(
@@ -6899,6 +7239,17 @@ $oo = get_instance(CL_SHOP_ORDER);
 				$t->add_item("year_".$i, array());
 			}
 		}
+
+		if($arr["all"])
+		{
+			$t->add_item(0, array(
+				"name" => t("K&otilde;ik"),
+				"id" => "all",
+				"iconurl" => icons::get_icon_url(CL_MENU),
+				"url" => aw_url_change_var("filt_time", "all"),
+			));
+		}	
+
 		if(!$arr["request"]["status_orders_s_start"])
 		{
 			$t->set_selected_item(($f = automatweb::$request->arg("filt_time")) ? $f : "thisweek");
@@ -7008,6 +7359,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			$arr["prop"]["value"] = $r;
 		}
+		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
 
 	function _get_status_orders_s_end($arr)
@@ -7021,6 +7373,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			$arr["prop"]["value"] = $r;
 		}
+		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
 
 	function _get_status_orders_s_case_no($arr)
@@ -7104,8 +7457,8 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 	private function _get_status_orders_time_filt($arr)
 	{
-		$s1 = $arr["request"]["status_orders_s_start"];
-		$s2 = $arr["request"]["status_orders_s_end"];
+		$s1 = $arr["start"];
+		$s2 = $arr["end"];
 		if($s1 && $s2)
 		{
 			return array(
@@ -7164,6 +7517,9 @@ $oo = get_instance(CL_SHOP_ORDER);
 				$max = $ol2->begin()->prop("days");
 			}
 		}
+		
+		$arr["start"] = $arr["request"]["status_orders_s_start"];
+		$arr["end"] = $arr["request"]["status_orders_s_end"];
 		extract($this->_get_status_orders_time_filt($arr));
 		$filt = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $filt_start - $max * 24 * 60 * 60, $filt_end);
 		$params = array(
@@ -7503,7 +7859,9 @@ $oo = get_instance(CL_SHOP_ORDER);
 			);
 			
 			$units = $pi->get_units($o);
-
+			
+			$arr["start"] = $arr["request"]["status_orders_s_start"];
+			$arr["end"] = $arr["request"]["status_orders_s_end"];
 			$times = $this->_get_status_orders_time_filt($arr);
 
 			$add_time = 0;
@@ -7725,7 +8083,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 	private function get_search_param_groups()
 	{
-		return array("prod", "storage_income", "storage_export", "storage_status", "storage_movements", "storage_writeoffs", "storage_prognosis", "storage_inventories", "purchase_orders", "sell_orders", "arrival_prod", "status_orders",);
+		return array("prod", "storage_income", "storage_export", "storage_status", "storage_movements", "storage_writeoffs", "storage_prognosis", "storage_inventories", "purchase_orders", "sell_orders", "arrival_prod", "status_orders","purchase_notes","purchase_bills","sales_notes","sales_bills");
 	}
 
 	private function get_search_group($arr)
@@ -7754,6 +8112,12 @@ $oo = get_instance(CL_SHOP_ORDER);
 				break;
 			case "arrivals":
 				$group = "arrival_prod";
+				break;
+			case "purchases":
+				$group = "purchase_orders";
+				break;
+			case "sales":
+				$group = "sell_orders";
 				break;
 			default:
 				$group = $arr["request"]["group"];
@@ -7885,6 +8249,557 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$o->set_name($name);
 		$o->save();
 		$conf->set_prop($fld, $o->id());
+	}
+
+	function _get_purchase_notes_time_tree($arr)
+	{
+		if(!$arr["warehouses"])
+		{
+			$arr["warehouses"] = array($arr["obj_inst"]->id());
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_DELIVERY_NOTE,
+			($arr["prop"]["name"] == "purchase_notes_time_tree" ? "to_warehouse" : "from_warehouse") => $arr["warehouses"],
+			"site_id" => array(),
+			"lang_id" => array(),
+			"sort_by" => "delivery_date asc",
+			"limit" => "0,1",
+		));
+		$start_o = $ol->begin();
+		if($start_o)
+		{
+			$start = $start_o->prop("delivery_date");
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_DELIVERY_NOTE,
+				($arr["prop"]["name"] == "purchase_notes_time_tree" ? "to_warehouse" : "from_warehouse") => $arr["warehouses"],
+				"site_id" => array(),
+				"lang_id" => array(),
+				"sort_by" => "delivery_date desc",
+				"limit" => "0,1",
+			));
+			$end_o = $ol->begin();
+			$end = $end_o->prop("delivery_date");
+		}
+		$arr["start"] = $start;
+		$arr["end"] = $end;
+		$arr["all"] = true;
+		return $this->_get_status_orders_time_tree(&$arr);
+	}
+
+	function _get_purchase_bills_time_tree($arr)
+	{
+		if(!$arr["warehouses"])
+		{
+			$arr["warehouses"] = array($arr["obj_inst"]->id());
+		}
+		$cos = $this->get_warehouse_configs($arr, "manager_cos");
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_BILL,
+			($arr["prop"]["name"] == "purchase_bills_time_tree" ? "customer" : "impl") => $cos,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"sort_by" => "aw_date asc",
+			"limit" => "0,1",
+		));
+		$start_o = $ol->begin();
+		if($start_o)
+		{
+			$start = $start_o->prop("delivery_date");
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_BILL,
+				($arr["prop"]["name"] == "purchase_bills_time_tree" ? "customer" : "impl") => $cos,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"sort_by" => "aw_date desc",
+				"limit" => "0,1",
+			));
+			$end_o = $ol->begin();
+			$end = $end_o->prop("bill_date");
+		}
+		$arr["start"] = $start;
+		$arr["end"] = $end;
+		$arr["all"] = true;
+		return $this->_get_status_orders_time_tree(&$arr);
+	}
+
+	function _get_sales_notes_time_tree($arr)
+	{
+		return $this->_get_purchase_notes_time_tree(&$arr);
+	}
+
+	function _get_sales_bills_time_tree($arr)
+	{
+		return $this->_get_purchase_bills_time_tree(&$arr);
+	}
+
+	function _get_purchase_notes_prod_tree($arr)
+	{
+		return $this->mk_prodg_tree(&$arr);
+	}
+
+	function _get_purchase_bills_prod_tree($arr)
+	{
+		return $this->mk_prodg_tree(&$arr);
+	}
+
+	function _get_sales_notes_prod_tree($arr)
+	{
+		return $this->mk_prodg_tree(&$arr);
+	}
+
+	function _get_sales_bills_prod_tree($arr)
+	{
+		return $this->mk_prodg_tree(&$arr);
+	}
+
+	function _get_purchase_notes_cust_tree($arr)
+	{
+		return $this->_get_purchase_cust_groups_tree(&$arr);
+	}
+
+	function _get_purchase_bills_cust_tree($arr)
+	{
+		return $this->_get_purchase_cust_groups_tree(&$arr);
+	}
+
+	function _get_sales_notes_cust_tree($arr)
+	{
+		return $this->_get_purchase_cust_groups_tree(&$arr);
+	}
+
+	function _get_sales_bills_cust_tree($arr)
+	{
+		return $this->_get_purchase_cust_groups_tree(&$arr);
+	}
+
+	function _get_purchase_cust_groups_tree($arr)
+	{
+		$arr["show_subs"] = true;
+		return $this->_get_clients_groups_tree(&$arr);
+	}
+
+	function _get_purchase_notes_status_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "notes_status_tree",
+			"persist_state" => true,
+			"has_root" => false,
+			"get_branch_func" => null,
+		));
+		$group = $this->get_search_group($arr);
+
+		$t->add_item(0, array(
+			"id" => "sl_unc",
+			"url" => aw_url_change_var($group."_s_status", STORAGE_FILTER_UNCONFIRMED),
+			"name" => t("Kinnitamata")
+		));
+		$t->add_item(0, array(
+			"id" => "sl_conf",
+			"url" => aw_url_change_var($group."_s_status", STORAGE_FILTER_CONFIRMED),
+			"name" => t("Kinnitatud")
+		));
+		$t->add_item(0, array(
+			"id" => "sl_all",
+			"url" => aw_url_change_var($group."_s_status", null),
+			"name" => t("K&otilde;ik")
+		));
+
+		$v = automatweb::$request->arg($group."_s_status");
+		$t->set_selected_item(($v == STORAGE_FILTER_UNCONFIRMED) ? "sl_unc" : ($v ? "sl_conf" : "sl_all"));
+	}
+
+	function _get_purchase_bills_status_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "bills_status_tree",
+		));
+		$group = $this->get_search_group($arr);
+	
+		$bi = get_instance(CL_CRM_BILL);
+
+		foreach($bi->states as $id => $state)
+		{
+			$t->add_item(0, array(
+				"id" => "st_".$id,
+				"url" => aw_url_change_var($group."_s_status", $id),
+				"name" => $state
+			));
+		}
+
+		$t->add_item(0, array(
+			"id" => "all",
+			"url" => aw_url_change_var($group."_s_status", null),
+			"name" => t("K&otilde;ik"),
+		));
+		
+		$v = automatweb::$request->arg($group."_s_status");
+
+		$t->set_selected_item($v === null ? "all" : "st_".$v);
+	}
+
+	function _get_sales_notes_status_tree($arr)
+	{
+		return $this->_get_purchase_notes_status_tree(&$arr);
+	}
+
+	function _get_sales_bills_status_tree($arr)
+	{
+		return $this->_get_purchase_bills_status_tree(&$arr);
+	}
+
+	function _get_purchase_notes($arr)
+	{
+		$this->_get_storage_income(&$arr);
+		$arr["prop"]["vcl_inst"]->set_caption("Ostusaatelehed");
+	}
+
+	function _get_purchase_bills($arr)
+	{
+		$this->_get_storage_income(&$arr);
+		$arr["prop"]["vcl_inst"]->set_caption("Ostuarved");
+	}
+
+	function _get_sales_notes($arr)
+	{
+		$this->_get_storage_export(&$arr);
+		$arr["prop"]["vcl_inst"]->set_caption("M&uuml;&uuml;gisaatelehed");
+	}
+
+	function _get_sales_bills($arr)
+	{
+		$this->_get_storage_export(&$arr);
+		$arr["prop"]["vcl_inst"]->set_caption("M&uuml;&uuml;giarved");
+	}
+
+	function _get_purchase_notes_toolbar($arr)
+	{
+		$tb =& $arr["prop"]["toolbar"];
+
+		$tb->add_menu_button(array(
+			"name" => "create_new",
+			"tooltip" => t("Uus")
+		));
+
+		if(!$arr["warehouses"] && $arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
+		{
+			$whs = array($arr["obj_inst"]);
+		}
+		else
+		{
+			foreach($arr["warehouses"] as $wh)
+			{
+				if($this->can("view", $wh))
+				{
+					$whs[$wh] = obj($wh);
+				}
+			}
+		}
+		$npt = "create_new";
+		foreach($whs as $whid)
+		{
+			$who = obj($whid);
+			$pt = $who->prop("conf.".(($arr["prop"]["name"] == "storage_export_toolbar" || strpos("sales", $arr["request"]["group"]) !== false) ? "export_fld" : "reception_fld"));
+			if(!$pt)
+			{
+				continue;
+			}
+			if(count($whs) > 1)
+			{
+				$tb->add_sub_menu(array(
+					"name" => "wh_".$whid,
+					"text" => $who->name(),
+					"parent" => "create_new",
+				));
+				$npt = "wh_".$whid;
+			}
+			if(strpos($arr["request"]["group"], "notes") !== false)
+			{
+				$tb->add_menu_item(array(
+					"parent" => $npt,
+					"text" => t("Saateleht"),
+					"link" => $this->mk_my_orb("new", array(
+						"parent" => $pt,
+						"return_url" => get_ru()
+					), CL_SHOP_DELIVERY_NOTE)
+				));
+			}
+			else
+			{
+				$tb->add_menu_item(array(
+					"parent" => $npt,
+					"text" => t("Arve"),
+					"link" => $this->mk_my_orb("new", array(
+						"parent" => $pt,
+						"return_url" => get_ru(),
+					), CL_CRM_BILL),
+				));
+			}
+		}
+
+		$tb->add_delete_button();
+		$tb->add_save_button();
+	}
+		
+	function _get_purchase_bills_toolbar($arr)
+	{
+		return $this->_get_purchase_notes_toolbar(&$arr);
+	}
+
+	function _get_sales_notes_toolbar($arr)
+	{
+		return $this->_get_purchase_notes_toolbar(&$arr);
+	}
+
+	function _get_sales_bills_toolbar($arr)
+	{
+		return $this->_get_purchase_notes_toolbar(&$arr);
+	}
+
+	function _get_clients_groups_tree($arr)
+	{
+		$owner = $this->config->prop("owner");
+		if(!$this->can("view", $owner))
+		{
+			return;
+		}
+		$gbf = $this->mk_my_orb("get_clients_groups_tree_level", array(
+			"set_retu" => get_ru(),
+			"filt_cust" => $arr["request"]["filt_cust"],
+			"show_subs" => $arr["show_subs"],
+			"parent" => " ",
+		), CL_SHOP_WAREHOUSE);
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->start_tree(array(
+			"has_root" => true,
+			"root_name" => t("Kliendigrupid"),
+			"root_url" => aw_url_change_var(array("filt_cust" => null)),
+			"root_icon" => icons::get_icon_url(CL_MENU),
+			"type" => TREE_DHTML,
+			"tree_id" => "client_groups_tree",
+			"persist_state" => 1,
+			"get_branch_func" => $gbf,
+		));
+		$conn = obj($owner)->connections_from(array(
+			"type" => "RELTYPE_CATEGORY"
+		));
+		foreach($conn as $c)
+		{
+			$t->add_item(0, array(
+				"id" => $c->prop("to"),
+				"name" => $c->prop("to.name"),
+				"url" => aw_url_change_var("filt_cust", $c->prop("to")),
+			));
+			$conn = $c->to()->connections_from(array(
+				"type" => "RELTYPE_CATEGORY"
+			));
+			if(count($conn))
+			{
+				$t->add_item($c->prop("to"), array());
+			}
+			if($arr["show_subs"])
+			{
+				$conn = $c->to()->connections_from(array(
+					"type" => "RELTYPE_CUSTOMER",
+				));
+				if(count($conn))
+				{
+					$t->add_item($c->prop("to"), array());
+				}
+			}
+		}
+		$t->set_selected_item(automatweb::$request->arg("filt_cust"));
+	}
+
+	/**
+	@attrib name=get_clients_groups_tree_level all_args=1
+	**/
+	function _get_clients_groups_tree_level($arr)
+	{
+		$t = get_instance("vcl/treeview");
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"branch" => 1,
+			"tree_id" => "client_groups_tree",
+		));
+		$pt = $arr["parent"];
+		$conn = obj($pt)->connections_from(array(
+			"type" => "RELTYPE_CATEGORY"
+		));
+		foreach($conn as $c)
+		{
+			$t->add_item(0, array(
+				"id" => $c->prop("to"),
+				"name" => $c->prop("to.name"),
+				"url" => aw_url_change_var(array("filt_cust" => $c->prop("to")), false, $arr["set_retu"]),
+			));
+			$conn = $c->to()->connections_from(array(
+				"type" => "RELTYPE_CATEGORY"
+			));
+			if(count($conn))
+			{
+				$t->add_item($c->prop("to"), array());
+			}
+			if($arr["show_subs"])
+			{
+				$conn = $c->to()->connections_from(array(
+					"type" => "RELTYPE_CUSTOMER",
+				));
+				if(count($conn))
+				{
+					$t->add_item($c->prop("to"), array());
+				}
+			}
+		}
+		if($arr["show_subs"])
+		{
+			$conn = obj($pt)->connections_from(array(
+				"type" => "RELTYPE_CUSTOMER",
+			));
+			if(count($conn))
+			{
+				foreach($conn as $c)
+				{
+					$t->add_item(0, array(
+						"id" => $c->prop("to"),
+						"name" => $c->prop("to.name"),
+						"url" => aw_url_change_var(array("filt_cust" => $c->prop("to")), false, $arr["set_retu"]),
+						"iconurl" => icons::get_icon_url($c->prop("to.class_id")),
+					));
+				}
+			}
+		}
+		$t->set_selected_item(automatweb::$request->arg("filt_cust"));
+		die($t->finalize_tree());
+	}
+
+	function _get_clients_alphabet_tree($arr)
+	{
+		$owner = $this->config->prop("owner");
+		if(!$this->can("view", $owner))
+		{
+			return;
+		}
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "clients_alphabet_tree",
+		));
+		$t->add_item(0, array(
+			"id" => "root",
+			"name" => t("T&auml;hestik"),
+			"url" => "#",
+		));
+		$g = $arr["request"]["group"];
+		$odl = new object_data_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"CL_CRM_COMPANY.RELTYPE_".(strpos($g, "sales") !== false ? "BUYER" : "SELLER")."(CL_CRM_COMPANY_CUSTOMER_DATA).RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER").".oid" => $owner,
+			"site_id" => array(),
+			"class_id" => array(),
+		),
+		array(
+			CL_CRM_COMPANY => array("name" => "name"),
+		));
+		$letters = array();
+		foreach($odl->arr() as $o)
+		{
+			$letters[strtolower(substr($o["name"],0,1))]++;
+		}
+		ksort($letters);
+		foreach($letters as $l => $c)
+		{
+			$t->add_item("root", array(
+				"id" => $l,
+				"name" => sprintf("%s (%s)", strtoupper($l), $c),
+				"url" => aw_url_change_var("filt_cust_name", $l),
+			));
+		}
+		$t->set_selected_item(automatweb::$request->arg("filt_cust_name"));
+	}
+
+	function _get_clients_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+
+		$t->set_caption("Kliendid");
+
+		$g = $arr["request"]["group"];
+		$owner = $this->config->prop("owner");
+		if(!$this->can("view", $owner))
+		{
+			return;
+		}
+		if(!$arr["request"]["filt_cust"] && !$arr["request"]["filt_cust_name"])
+		{
+			return;
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"CL_CRM_COMPANY.RELTYPE_".(strpos($g, "sales") !== false ? "BUYER" : "SELLER")."(CL_CRM_COMPANY_CUSTOMER_DATA).RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER").".oid" => $owner,
+			"site_id" => array(),
+			"class_id" => array(),
+			"name" => ($f = $arr["request"]["filt_cust_name"]) ? $f."%" : array(),
+			"CL_CRM_COMPANY.RELTYPE_CUSTOMER(CL_CRM_CATEGORY).oid" => ($f = $arr["request"]["filt_cust"]) ? $f : array(),
+		));	
+		foreach($ol->arr() as $oid => $o)
+		{
+			$t->define_data(array(
+				"name" => $o->name(),
+			));
+		}
+	}
+
+	function _get_sell_orders_time_tree($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => $arr["prop"]["name"] == "sell_orders_time_tree" ? CL_SHOP_SELL_ORDER : CL_SHOP_PURCHASE_ORDER,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"sort_by" => "aw_date asc",
+			"limit" => "0,1",
+			"date" => new obj_predicate_not(null),
+		));
+		$start_o = $ol->begin();
+		if($start_o)
+		{
+			$start = $start_o->prop("date");
+			$ol = new object_list(array(
+				"class_id" => $arr["prop"]["name"] == "sell_orders_time_tree" ? CL_SHOP_SELL_ORDER : CL_SHOP_PURCHASE_ORDER,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"sort_by" => "aw_date desc",
+				"limit" => "0,1",
+				"date" => new obj_predicate_not(null),
+			));
+			$end_o = $ol->begin();
+			$end = $end_o->prop("date");
+		}
+		$arr["start"] = $start;
+		$arr["end"] = $end;
+		$arr["all"] = true;
+		return $this->_get_status_orders_time_tree(&$arr);
+	}
+
+	function _get_sell_orders_cust_tree($arr)
+	{
+		return $this->_get_purchase_cust_groups_tree(&$arr);
+	}
+
+	function _get_purchase_orders_time_tree($arr)
+	{
+		return $this->_get_sell_orders_time_tree(&$arr);
+	}
+
+	function _get_purchase_orders_cust_tree($arr)
+	{
+		return $this->_get_purchase_cust_groups_tree(&$arr);
 	}
 }
 
