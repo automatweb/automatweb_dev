@@ -1262,6 +1262,15 @@ class admin_if extends class_base
 	**/
 	function if_paste($arr)
 	{
+		if (!$arr["parent"])
+		{
+			$arr["parent"] = aw_ini_get("rootmenu");
+			if (is_array($arr["parent"]))
+			{
+				$arr["parent"] = reset($arr["parent"]);
+			}
+		}
+
 		foreach(safe_array(aw_global_get("cut_objects")) as $oid)
 		{
 			if ($oid != $arr["parent"])
