@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.34 2009/05/05 13:21:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.35 2009/05/14 06:56:00 markop Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -498,7 +498,7 @@ class otv_ds_postipoiss extends class_base
 			));
 		}
 		
-		if (trim($str) != "" && !($fd["juurdepaasupiirang"] == "Salajane" || $fd["juurdepaasupiirang"] == "Asutusesiseseks kasutamiseks" || $fd["juurdepaasupiirang"] == "Juurdepääsupiirang eraelulistele isikuandmetele")) //h2kk
+		if (!($fd["juurdepaasupiirang"] == "Salajane" || $fd["juurdepaasupiirang"] == "Asutusesiseseks kasutamiseks" || $fd["juurdepaasupiirang"] == "Juurdepääsupiirang eraelulistele isikuandmetele")) //h2kk
 		{
 			$this->vars(array(
 				"HAS_FILES" => $this->parse("HAS_FILES")
