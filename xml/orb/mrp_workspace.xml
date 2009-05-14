@@ -176,5 +176,13 @@
 			</function>
 		</action>
 
+		<action name="ajax_update_projects_table" all_args="1">
+			<function name="ajax_update_projects_table">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -52,17 +52,6 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
-            <name>cs_result</name>
-            <group>grp_customers</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <parent>vsplitbox</parent>
-            <store>no</store>
-      </property>
-      <property>
             <name>cs_name</name>
             <group>grp_customers</group>
             <table>objects</table>
@@ -148,6 +137,17 @@
             <caption>Otsi</caption>
       </property>
       <property>
+            <name>cs_result</name>
+            <group>grp_customers</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>customers_search_table</parent>
+            <store>no</store>
+      </property>
+      <property>
             <name>projects_toolbar</name>
             <group>grp_projects</group>
             <table>objects</table>
@@ -200,6 +200,8 @@
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
             <store>no</store>
+            <captionside>top</captionside>
+            <size>33</size>
             <caption>Number</caption>
       </property>
       <property>
@@ -212,6 +214,8 @@
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
             <store>no</store>
+            <captionside>top</captionside>
+            <size>33</size>
             <caption>Nimetus</caption>
       </property>
       <property>
@@ -224,6 +228,8 @@
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
             <store>no</store>
+            <captionside>top</captionside>
+            <size>33</size>
             <caption>Klient</caption>
       </property>
       <property>
@@ -236,6 +242,7 @@
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
             <store>no</store>
+            <captionside>top</captionside>
             <default>-1</default>
             <caption>Alustamisaeg (materjalide saabumine) alates</caption>
       </property>
@@ -249,8 +256,37 @@
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
             <store>no</store>
+            <captionside>top</captionside>
             <default>-1</default>
             <caption>T&amp;amp;auml;htaeg alates</caption>
+      </property>
+      <property>
+            <name>sp_start_date_start</name>
+            <group>grp_projects</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <default>-1</default>
+            <caption>Lisatud alates</caption>
+      </property>
+      <property>
+            <name>sp_start_date_end</name>
+            <group>grp_projects</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <default>-1</default>
+            <caption>Lisatud kuni</caption>
       </property>
       <property>
             <name>sp_status</name>
@@ -263,6 +299,7 @@
             <size>5</size>
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
+            <captionside>top</captionside>
             <store>no</store>
             <caption>Staatus</caption>
       </property>
@@ -1233,8 +1270,8 @@
             <cols>50</cols>
             <store>no</store>
             <parent>comment_hbox</parent>
-            <no_caption>1</no_caption>
-            <caption>Kommentaar</caption>
+            <captionside>top</captionside>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; kommentaar</caption>
       </property>
       <property>
             <name>pj_change_comment_history</name>
@@ -1322,8 +1359,7 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
-            <parent>resource_hbox</parent>
-            <no_caption>1</no_caption>
+            <parent>printer_right</parent>
             <caption>Ressurss</caption>
       </property>
       <property>
@@ -1334,8 +1370,8 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
-            <parent>resource_hbox</parent>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml; kommentaar</caption>
+            <parent>printer_right</parent>
+            <caption>Kommentaar</caption>
       </property>
       <property>
             <name>pj_state</name>
@@ -1802,6 +1838,13 @@
                   <parent>customers_box</parent>
                   <group>grp_customers</group>
             </customers_search_box>
+            <customers_search_table>
+                  <type>hbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Projektide&amp;amp;nbsp;nimekiri</area_caption>
+                  <parent>vsplitbox</parent>
+                  <group>grp_customers</group>
+            </customers_search_table>
             <projects_box>
                   <type>vbox</type>
                   <parent>vsplitbox</parent>

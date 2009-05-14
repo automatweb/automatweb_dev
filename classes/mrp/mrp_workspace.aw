@@ -88,7 +88,6 @@
 	@property customers_tree type=treeview store=no no_caption=1 parent=customers_tree_box
 	@property customers_list type=table store=no no_caption=1 parent=vsplitbox
 	@property customers_list_proj type=table store=no no_caption=1 parent=vsplitbox
-	@property cs_result type=table no_caption=1 parent=vsplitbox
 
 	@layout customers_search_box type=vbox closeable=1 area_caption=Klientide&nbsp;otsing parent=customers_box
 		@property cs_name type=textbox view_element=1 parent=customers_search_box store=no
@@ -112,6 +111,9 @@
 		@property cs_submit type=submit value=Otsi view_element=1 parent=customers_search_box store=no
 		@caption Otsi
 
+	@layout customers_search_table type=hbox closeable=1 area_caption=Projektide&nbsp;nimekiri parent=vsplitbox
+	@property cs_result type=table no_caption=1  parent=customers_search_table
+
 
 @default group=grp_projects
 	@property projects_toolbar type=toolbar store=no no_caption=1
@@ -119,25 +121,34 @@
 	@layout projtree_box type=vbox closeable=1 area_caption=Projektid parent=projects_box
 	@property projects_tree type=text store=no no_caption=1 parent=projtree_box
 	@property projects_list type=table store=no no_caption=1 parent=vsplitbox
+
+
+
 	@property sp_result type=table no_caption=1 parent=vsplitbox
 
 	@layout projects_search_box type=vbox closeable=1 area_caption=Projektide&nbsp;otsing parent=projects_box
-		@property sp_name type=textbox view_element=1 parent=projects_search_box store=no
+		@property sp_name type=textbox view_element=1 parent=projects_search_box store=no captionside=top size=33
 		@caption Number
 
-		@property sp_comment type=textbox view_element=1 parent=projects_search_box store=no
+		@property sp_comment type=textbox view_element=1 parent=projects_search_box store=no captionside=top size=33
 		@caption Nimetus
 
-		@property sp_customer type=textbox view_element=1 parent=projects_search_box store=no
+		@property sp_customer type=textbox view_element=1 parent=projects_search_box store=no captionside=top size=33
 		@caption Klient
 
-		@property sp_starttime type=date_select view_element=1 parent=projects_search_box store=no default=-1
+		@property sp_starttime type=date_select view_element=1 parent=projects_search_box store=no captionside=top default=-1
 		@caption Alustamisaeg (materjalide saabumine) alates
 
-		@property sp_due_date type=date_select view_element=1 parent=projects_search_box store=no default=-1
+		@property sp_due_date type=date_select view_element=1 parent=projects_search_box store=no captionside=top default=-1
 		@caption T&auml;htaeg alates
 
-		@property sp_status type=select multiple=1 size=5 view_element=1 parent=projects_search_box store=no
+		@property sp_start_date_start type=date_select view_element=1 parent=projects_search_box store=no captionside=top default=-1
+		@caption Lisatud alates
+
+		@property sp_start_date_end type=date_select view_element=1 parent=projects_search_box store=no captionside=top default=-1
+		@caption Lisatud kuni
+
+		@property sp_status type=select multiple=1 size=5 view_element=1 parent=projects_search_box captionside=top store=no
 		@caption Staatus
 
 		@property sp_submit type=button view_element=1 parent=projects_search_box store=no
@@ -431,8 +442,8 @@
 			@layout comment_hbox type=hbox width=40%:60% parent=printer_right
 			@caption Kommentaar
 
-			@property pj_change_comment type=textarea rows=5 cols=50 store=no parent=comment_hbox no_caption=1
-			@caption Kommentaar
+			@property pj_change_comment type=textarea rows=5 cols=50 store=no parent=comment_hbox captionside=top
+			@caption T&ouml;&ouml; kommentaar
 
 			@property pj_change_comment_history type=text store=no parent=comment_hbox no_caption=1
 
@@ -463,11 +474,11 @@
 			@layout resource_hbox type=hbox width="50%:50%" parent=printer_right
 			@caption Ressurss
 
-			@property pj_resource type=text store=no parent=resource_hbox no_caption=1
+			@property pj_resource type=text store=no parent=printer_right
 			@caption Ressurss
 
-			@property pj_job_comment type=text store=no parent=resource_hbox
-			@caption T&ouml;&ouml; kommentaar
+			@property pj_job_comment type=text store=no parent=printer_right
+			@caption Kommentaar
 
 			@property pj_state type=text store=no parent=printer_right
 			@caption Staatus
@@ -677,8 +688,8 @@ class mrp_workspace extends class_base
 	**/
 	function save_pj_comment($arr)
 	{
-		$job = get_instance(CL_MRP_JOB);
-		$job->add_comment($arr["pj_job"], $arr["pj_change_comment"]);
+		$job = obj($arr["pj_job"]);
+		$job->add_comment($arr["pj_change_comment"]);
 		$job->save();
 		return $arr["post_ru"];
 	}
@@ -1164,8 +1175,7 @@ class mrp_workspace extends class_base
 						break;
 
 					case "state":
-						$j = get_instance(CL_MRP_JOB);
-						$prop["value"] = "<span style='padding: 5px; background: ".self::$state_colours[$job->prop($rpn)]."'>".$j->states[$job->prop($rpn)]."<span>";
+						$prop["value"] = "<span style='padding: 5px; background: ".self::$state_colours[$job->prop($rpn)]."'>".mrp_job_obj::get_state_names($job->prop($rpn))."<span>";
 						break;
 
 					case "case_header":
@@ -1308,12 +1318,22 @@ class mrp_workspace extends class_base
 					'&sp_status=\'+document.forms[\'changeform\'].sp_status.value+\''.
 					'&sp_customer=\'+document.forms[\'changeform\'].sp_customer.value'
 				;
+				$prop["onclick"] = "update_projects_div();";
 				break;
 
 			// project search parameters
 			case "sp_status":
-				$prop["options"] = array("" => t("K&otilde;ik")) + $this->states;
-				$prop["value"] = isset($arr["request"]["sp_status"]) ? $arr["request"]["sp_status"] : array();
+				//$prop["options"] = array("" => t("K&otilde;ik")) + $this->states;
+				//$prop["value"] = isset($arr["request"]["sp_status"]) ? $arr["request"]["sp_status"] : array();
+				$prop["type"] = "text";
+				$prop["value"] = "";
+				foreach($this->states as $state => $name)
+				{
+					$prop["value"].=html::checkbox(array(
+						"value" => 1,
+						"name" => "sp_status[".$state."]",
+					))." ".$name."<br>";
+				}
 				break;
 
 			case "sp_name":
@@ -3669,7 +3689,8 @@ class mrp_workspace extends class_base
 			unset($tree_prms["node_actions"]);
 		}
 
-		$tree = treeview::tree_from_objects($tree_prms);
+		$treeview_inst = new treeview;
+		$tree = $treeview_inst->tree_from_objects($tree_prms);
 
 		if (isset($arr["prop"]["value"]))
 		{
@@ -4075,6 +4096,7 @@ class mrp_workspace extends class_base
 	function create_projects_list ($arr = array ())
 	{
 		$table = $arr["prop"]["vcl_inst"];
+
 		$this_object = $arr["obj_inst"];
 		$table->name = "projects_list_" . $this->list_request;
 
@@ -4214,7 +4236,13 @@ class mrp_workspace extends class_base
 		}
 
 		$jobs_folder = $this_object->prop ("jobs_folder");
+
 		$return_url = get_ru();
+
+		if(!$list)
+		{
+			$list = new object_list();
+		}
 
 		$projects = $list->arr ();
 		$bg_colour = "";
@@ -5163,8 +5191,7 @@ class mrp_workspace extends class_base
 					}
 					else
 					{
-						$o->set_prop("state", MRP_STATUS_RESOURCE_INACTIVE);
-						$o->save();
+						$o->delete();
 					}
 				}
 				elseif ($this->can ("delete", $o->id()))
@@ -6771,7 +6798,7 @@ class mrp_workspace extends class_base
 		{
 			// get professions for resources
 			$prof = $op->prop("profession");
-			foreach($op->prop("resource") as $res)
+			foreach(safe_array($op->prop("resource")) as $res)
 			{
 				$persons[$res][$prof] = $prof;
 			}
@@ -7256,6 +7283,7 @@ class mrp_workspace extends class_base
 				"size" => "5",
 				"textsize" => "12px",
 				"value" => $row["priority"],
+				"maxlength" => "10",
 			));
 		}
 		else
@@ -7343,6 +7371,28 @@ class mrp_workspace extends class_base
 				}
 			}
 
+
+			if (!empty($arr["request"]["sp_start_date_start"]) || !empty($arr["request"]["sp_start_date_end"]))
+			{
+				$tmp = date_edit::get_timestamp($arr["request"]["sp_start_date_start"]);
+				$arr["request"]["sp_start_date_end"]["day"]++;//kaasaarvatud see p2ev
+				$tmp2 = date_edit::get_timestamp($arr["request"]["sp_start_date_end"]);
+				if ($tmp > 100 && $tmp2 > 100)
+				{
+					$filt["created"] =  new obj_predicate_compare (OBJ_COMP_BETWEEN, $tmp, $tmp2);
+				}
+				elseif ($tmp2 > 100)
+				{
+					$filt["created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $tmp2);
+				}
+				elseif($tmp > 100)
+				{
+					$filt["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $tmp);
+				}
+
+			}
+
+
 			/// prj status
 			if (!empty($arr["request"]["sp_status"]))
 			{
@@ -7359,6 +7409,9 @@ class mrp_workspace extends class_base
 				$results = new object_list($filt);
 			}
 
+
+
+//if(aw_global_get("uid") == "struktuur.markop") {arr($results);arr($filt);arr($arr["request"]);}
 			$this->list_request = "search";
 			$this->projects_list_objects_count = $results->count();
 			$arr["search_res"] = $results;
@@ -7367,6 +7420,42 @@ class mrp_workspace extends class_base
 		}
 
 		return $retval;
+	}
+
+	/**
+		@attrib name=ajax_update_projects_table all_args=1
+		@param id required type=int
+	**/
+	function ajax_update_projects_table($arr)
+	{
+		classload("vcl/table");
+		$t = new vcl_table();
+
+		$arr["prop"] = array("vcl_inst" => $t);
+		$arr["obj_inst"] = obj(6103);
+
+		$date_fields = array("sp_starttime" , "sp_due_date" , "sp_start_date_start" , "sp_start_date_end");
+		foreach($date_fields as $var)
+		{
+			$arr["request"][$var]["day"] = $arr[$var."_day"];
+			$arr["request"][$var]["month"] = $arr[$var."_month"];
+			$arr["request"][$var]["year"] = $arr[$var."_year"];
+		}
+		$arr["request"]["sp_name"] = $arr["sp_name"];
+		$arr["request"]["sp_comment"] = $arr["sp_comment"];
+		$arr["request"]["sp_customer"] = $arr["sp_customer"];
+//		$arr["request"]["sp_due_date"] = $arr["sp_due_date"];
+//		$arr["request"]["sp_starttime"] = $arr["sp_starttime"];
+
+		if($arr["sp_status"])
+		{
+			$arr["request"]["sp_status"] = array_keys($arr["sp_status"]);
+		}
+		$arr["request"]["sp_search"] = 1;
+
+		$this->_sp_result($arr);
+		print iconv(aw_global_get("charset"), "UTF-8", $t->get_html());
+		die("Test");
 	}
 
 	function _cs_result($arr)
@@ -7846,6 +7935,47 @@ END ajutine
 
 	public function callback_generate_scripts($arr)
 	{
+		if($arr["request"]["group"] == "grp_projects")
+		{
+			$vars = array("sp_name" , "sp_comment" , "sp_customer");
+			$date_fields = array("sp_starttime" , "sp_due_date" , "sp_start_date_start" , "sp_start_date_end");
+			$ajax_vars = array();
+			foreach($vars as $var)
+			{
+				$ajax_vars[] = $var.": document.getElementsByName('".$var."')[0].value\n";
+			}
+
+			foreach($date_fields as $var)
+			{
+				$ajax_vars[] = $var."_"."day: document.getElementsByName('".$var."[day]')[0].value\n";
+				$ajax_vars[] = $var."_"."month: document.getElementsByName('".$var."[month]')[0].value\n";
+				$ajax_vars[] = $var."_"."year: document.getElementsByName('".$var."[year]')[0].value\n";
+			}
+
+			return "
+
+				function update_projects_div()
+				{
+					var a=document.getElementsByName('sp_status');
+					var result=[];
+					//for (var i=0; i<a.length; i++) {
+					//	a[i].checked?result.push(a[i].value):'';
+					//}
+					result = $('input[name^=sp_status]');
+
+
+					button=document.getElementsByName('sp_submit')[0];
+					button.disabled = true;
+					$.post('/automatweb/orb.aw?class=mrp_workspace&action=ajax_update_projects_table&'+result.serialize(),{
+							id: ".$arr["obj_inst"]->id()."
+							, ".join(", " , $ajax_vars)."},function(html){
+						x=document.getElementsByName('projects_list');
+						x[0].innerHTML = html;
+						button.disabled = false;
+					});
+				}";
+		}
+	
 		if($arr["request"]["group"] == "grp_users_mgr")
 		{
 			return "
