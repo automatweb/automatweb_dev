@@ -103,7 +103,7 @@ class admin_if extends class_base
 			"reforb" => 1, 
 			"id" => "__", 
 			"parent" => "__",
-			"sel[$id]" => "1",
+			"sel[__]" => "1",
 			"period" => "__"
 		), "admin_if",true,true));
 	}
@@ -898,7 +898,7 @@ class admin_if extends class_base
 
 		if ($this->can("delete", $id))
 		{
-			$delurl = sprintf($this->if_delete_template, $_GET["id"], $id, $parent, $period);
+			$delurl = sprintf($this->if_delete_template, $_GET["id"], $id, $parent, $id, $period);
 			$delurl = "javascript:if(confirm('".t("Kustutada valitud objektid?")."')){window.location='$delurl';};";
 
 			$this->pm->add_item(array(
