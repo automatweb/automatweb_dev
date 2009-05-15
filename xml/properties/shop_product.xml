@@ -191,7 +191,9 @@
             <group>general_general</group>
             <type>textbox</type>
             <field>aw_min_order_amt</field>
-            <parent>gen_wh</parent>
+            <parent>gen_wh_left</parent>
+            <size>5</size>
+            <captionside>top</captionside>
             <caption>Minimaalne tellimiskogus</caption>
       </property>
       <property>
@@ -200,7 +202,9 @@
             <group>general_general</group>
             <type>textbox</type>
             <field>aw_max_order_amt</field>
-            <parent>gen_wh</parent>
+            <parent>gen_wh_left</parent>
+            <size>5</size>
+            <captionside>top</captionside>
             <caption>Maksimaalne tellimiskogus</caption>
       </property>
       <property>
@@ -210,8 +214,20 @@
             <type>textbox</type>
             <field>must_order_num</field>
             <size>5</size>
-            <parent>gen_wh</parent>
+            <parent>gen_wh_left</parent>
+            <captionside>top</captionside>
             <caption>Mitu peab korraga tellima</caption>
+      </property>
+      <property>
+            <name>min_wh_order_amt</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>aw_min_wh_order_amt</field>
+            <parent>gen_wh_right</parent>
+            <size>5</size>
+            <captionside>top</captionside>
+            <caption>Minimaalne sisseostu kogus</caption>
       </property>
       <property>
             <name>serial_number_based</name>
@@ -219,7 +235,8 @@
             <group>general_general</group>
             <type>chooser</type>
             <field>aw_serial_number_based</field>
-            <parent>gen_wh</parent>
+            <parent>gen_wh_right</parent>
+            <captionside>top</captionside>
             <caption>Seerianumbrip&amp;amp;otilde;hine arvestus</caption>
       </property>
       <property>
@@ -228,7 +245,8 @@
             <group>general_general</group>
             <type>chooser</type>
             <field>aw_order_based</field>
-            <parent>gen_wh</parent>
+            <parent>gen_wh_right</parent>
+            <captionside>top</captionside>
             <caption>Partiip&amp;amp;otilde;hine arvestus</caption>
       </property>
       <property>
@@ -1635,6 +1653,24 @@
                   <parent>gen_right</parent>
                   <group>general_general</group>
             </gen_wh>
+            <gen_wh_split>
+                  <type>hbox</type>
+                  <parent>gen_wh</parent>
+                  <group>general_general</group>
+                  <area_caption></area_caption>
+            </gen_wh_split>
+            <gen_wh_left>
+                  <type>vbox</type>
+                  <parent>gen_wh_split</parent>
+                  <group>general_general</group>
+                  <area_caption></area_caption>
+            </gen_wh_left>
+            <gen_wh_right>
+                  <type>vbox</type>
+                  <parent>gen_wh_split</parent>
+                  <group>general_general</group>
+                  <area_caption></area_caption>
+            </gen_wh_right>
             <gentms_main>
                   <type>hbox</type>
                   <group>general_time_settings</group>

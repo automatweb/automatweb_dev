@@ -134,6 +134,10 @@ class shop_purchase_order extends class_base
 	function _get_order_status($arr)
 	{
 		$arr["prop"]["options"] = $this->states;
+		if(!$arr["prop"]["value"])
+		{
+			$arr["prop"]["value"] = ORDER_STATUS_INPROGRESS;
+		}
 	}
 
 	function callback_mod_reforb($arr, $request)
