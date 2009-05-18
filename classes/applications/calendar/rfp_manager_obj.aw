@@ -110,7 +110,7 @@ class rfp_manager_obj extends _int_object
 			{
 				$new_data[$pk]["prices"][$pr] = $prdata;
 			}
-		}arr($new_data);
+		}
 		$this->set_meta("pk_prices", $new_data);
 	}
 
