@@ -74,6 +74,14 @@
             <caption>Isikukood</caption>
       </property>
       <property>
+            <name>external_id</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>hidden</type>
+            <field>aw_external_id</field>
+            <caption>Siduss&amp;amp;uuml;steemi id</caption>
+      </property>
+      <property>
             <name>birthday</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
