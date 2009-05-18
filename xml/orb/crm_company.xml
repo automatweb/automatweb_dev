@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_company" folder="www/automatweb_cvs/classes/crm" extends="class_base">
+	<class name="crm_company" folder="www/dev/terryf/automatweb_dev/classes/crm" extends="class_base">
 		<action name="delete_selected_objects">
 			<function name="delete_selected_objects">
 				<arguments>

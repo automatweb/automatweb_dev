@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.9 2009/04/09 08:39:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.10 2009/05/18 06:47:33 kristo Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 @classinfo syslog_type=ST_TAKET_USERS_IMPORT relationmgr=yes
@@ -11,7 +11,7 @@
 @property store=no method=Import
 */
 
-class taket_users_import extends class_base
+class taket_users_import extends class_base implements customer_import_datasource
 {
 	function taket_users_import()
 	{
@@ -23,6 +23,25 @@ class taket_users_import extends class_base
 		));
 	}
 
+
+	function get_customer_list_xml()
+	{
+	}
+
+	function get_category_list_xml()
+	{
+		$gud = file_get_contents("http://88.196.208.74:8888/xmlrpc/index.php?get_users_data=1");
+	die($gud);
+	}
+
+	function get_person_list_xml()
+	{
+	}
+
+	function get_user_list_xml()
+	{
+
+	}
 
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown

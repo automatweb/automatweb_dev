@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mrp_job" folder="www/automatweb_cvs/classes/mrp" extends="class_base">
+	<class name="mrp_job" folder="www/dev/terryf/automatweb_dev/classes/mrp" extends="class_base">
 		<action name="start">
 			<function name="start">
 				<arguments>

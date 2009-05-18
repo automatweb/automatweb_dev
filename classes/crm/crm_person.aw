@@ -48,6 +48,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property personal_id type=textbox size=13 maxlength=11
 @caption Isikukood
 
+@property external_id type=hidden field=aw_external_id
+@caption Siduss&uuml;steemi id
+
 @property birthday type=date_select year_from=1930 year_to=2010 default=-1 save_format=iso8601
 @caption S&uuml;nniaeg
 
@@ -5170,6 +5173,7 @@ class crm_person extends class_base
 			case "cvactive":
 			case "cvapproved":
 			case "show_cnt":
+			case "aw_external_id":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "int",

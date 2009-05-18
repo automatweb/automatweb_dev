@@ -37,7 +37,7 @@ class class_index
 	**/
 	public static function update($full_update = true)
 	{
-return;
+//return;
 		// ...
 		$max_execution_time_prev_val = ini_get("max_execution_time");
 		set_time_limit(self::UPDATE_EXEC_TIMELIMIT);
