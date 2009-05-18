@@ -1777,18 +1777,26 @@ class shop_warehouse extends class_base
 			"type" => TREE_DHTML,
 			"tree_id" => "shop_orders_tree",
 		));
+		$ol1 = new object_data_list(array(
+			"class_id" => CL_SHOP_ORDER,
+			"confirmed" => 1,
+		));
+		$ol2 = new object_list(array(
+			"class_id" => CL_SHOP_ORDER,
+			"confirmed" => new obj_predicate_not(1),
+		));
 		$t->add_item(0, array(
-			"name" => ($s == 1) ? "<strong>" .t("Kinnitatud")."</strong>" : t("Kinnitatud"),
+			"name" => sprintf("%s (%s)", ($s == 1) ? "<strong>" .t("Kinnitatud")."</strong>" : t("Kinnitatud"), $ol1->count()),
 			"url" => aw_url_change_var("shop_orders_s_status", 1),
 			"id" => "confirmed",
 		));
 		$t->add_item(0, array(
-			"name" => ($s == -1) ? "<strong>" .t("Kinnitamata")."</strong>" : t("Kinnitamata"),
+			"name" => sprintf("%s (%s)", ($s == -1) ? "<strong>" .t("Kinnitamata")."</strong>" : t("Kinnitamata"), $ol2->count()),
 			"url" => aw_url_change_var("shop_orders_s_status", -1),
 			"id" => "unconfirmed",
 		));
 		$t->add_item(0, array(
-			"name" => ($s == "") ? "<strong>" .t("K&otilde;ik")."</strong>" : t("K&otilde;ik"),
+			"name" => sprintf("%s (%s)", ($s == "") ? "<strong>" .t("K&otilde;ik")."</strong>" : t("K&otilde;ik"), $ol1->count() + $ol2->count()),
 			"url" => aw_url_change_var("shop_orders_s_status", null),
 			"id" => "all",
 		));
@@ -6560,20 +6568,18 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$group = $this->get_search_group($arr);
 		$var = $group."_s_status";
 		$disp = $arr["request"][$var];
-		
+		$total = 0;
+
 		foreach($oi->states as $id => $state)
 		{
-			$odl = new object_data_list(array(
+			$ol = new object_list(array(
 				"class_id" => $arr["request"]["group"] == "sell_orders" ? CL_SHOP_SELL_ORDER : CL_SHOP_PURCHASE_ORDER,
 				"order_status" => $id,
-			),
-			array(
-				array("name" => "name"),
 			));
 			$t->add_item(0, array(
 				"id" => "state_".$id,
 				"url" => aw_url_change_var($var, $id),
-				"name" => sprintf("%s (%s)", $disp == $id ? "<b>".$state."</b>" : $state, $odl->count()),
+				"name" => sprintf("%s (%s)", $disp == $id ? "<b>".$state."</b>" : $state, $ol->count()),
 			));
 		}
 	}
@@ -7189,7 +7195,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		));
 
 		$t->add_item(0, array(
-			"name" => t("See n&auml;dal"),
+			"name" => t("K&auml;esolev n&auml;dal"),
 			"id" => "thisweek",
 			"iconurl" => icons::get_icon_url(CL_MENU),
 			"url" => aw_url_change_var("filt_time", ""),
@@ -7201,7 +7207,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"url" => aw_url_change_var("filt_time", "nextweek"),
 		));
 		$t->add_item(0, array(
-			"name" => t("See kuu"),
+			"name" => t("K&auml;esolev kuu"),
 			"id" => "thismonth",
 			"iconurl" => icons::get_icon_url(CL_MENU),
 			"url" => aw_url_change_var("filt_time", "thismonth"),
