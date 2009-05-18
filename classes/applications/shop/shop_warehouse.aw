@@ -6581,7 +6581,13 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"url" => aw_url_change_var($var, $id),
 				"name" => sprintf("%s (%s)", $disp == $id ? "<b>".$state."</b>" : $state, $ol->count()),
 			));
+			$total += $ol->count();
 		}
+		$t->add_item(0, array(
+			"id" => "state_all",
+			"url" => aw_url_change_var($var, STORAGE_STATUS_CONFIRMATION_ALL),
+			"name" => sprintf("%s (%s)", $disp == $id ? "<b>".t("K&otilde;ik")."</b>" : t("K&otilde;ik"), $total),
+		));
 	}
 
 	function _get_orders_ol($arr)
@@ -6646,6 +6652,10 @@ $oo = get_instance(CL_SHOP_ORDER);
 			if($s != STORAGE_FILTER_CONFIRMATION_ALL)
 			{
 				$params["order_status"] = $s;
+			}
+			else
+			{
+				$params["order_status"] = new obj_predicate_anything();
 			}
 		}
 		$t = date_edit::get_timestamp($arr["request"][$group."_s_to"]);
