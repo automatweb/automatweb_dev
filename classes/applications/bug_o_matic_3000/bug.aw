@@ -1976,7 +1976,16 @@ class bug extends class_base
 			$msgtxt .= strip_tags($comment)."\n";
 			$msgtxt .= strip_tags($this->_get_comment_list($bug, "desc", false));
 
-			send_mail($adr,"Bug #" . $oid . ": " . $name . " : " . $uid . " lisas kommentaari",$msgtxt,"From: automatweb@automatweb.com");
+			try
+			{
+				$from = aw_ini_get("bugtrack.mails_from");
+			}
+			catch(Exception $e)
+			{
+				$from = "automatweb@automatweb.com";
+			}
+
+			send_mail($adr,"Bug #" . $oid . ": " . $name . " : " . $uid . " lisas kommentaari",$msgtxt,"From: ".$from);
 		}
 	}
 
