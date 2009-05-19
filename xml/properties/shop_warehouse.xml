@@ -2188,6 +2188,18 @@
             <field>sales_bills</field>
       </property>
       <property>
+            <name>clients_toolbar</name>
+            <table>objects</table>
+            <group>
+                  <num_0>purchase_clients</num_0>
+                  <num_1>sales_clients</num_1>
+            </group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>clients_toolbar</field>
+      </property>
+      <property>
             <name>clients_groups_tree</name>
             <table>objects</table>
             <group>

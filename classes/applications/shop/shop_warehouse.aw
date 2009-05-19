@@ -826,6 +826,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 			@property sales_bills type=table no_caption=1 parent=sales_bills_right
 
+	@property clients_toolbar type=toolbar no_caption=1 group=purchase_clients,sales_clients
+
 	@layout clients_split type=hbox width=20%:80% group=purchase_clients,sales_clients
 
 		@layout clients_left type=vbox group=purchase_clients,sales_clients parent=clients_split
@@ -1260,16 +1262,7 @@ class shop_warehouse extends class_base
 
 				case "to":
 				case "from":
-					$d = $arr["request"][$prop["name"]];
-					$chk = mktime(0, 0, 0, $d["month"], $d["day"], $d["year"]);
-					if($chk>1 && isset($arr["request"][$prop["name"]]))
-					{
-						$prop["value"] = $arr["request"][$prop["name"]];
-					}
-					else
-					{
-						$prop["value"] = -1;
-					}
+					$prop["value"] = date_edit::get_timestamp($arr["request"][$prop["name"]]);
 					$prop["format"] = array("day_textbox", "month_textbox", "year_textbox");
 					break;
 
@@ -5587,6 +5580,16 @@ class shop_warehouse extends class_base
 		{
 			if($this->is_search_param($var) && array_key_exists($var, $arr["request"]))
 			{
+				if(strpos($var, "from") || strpos($var, "to") || strpos($var, "start") || strpos($var, "end") && is_array($arr["request"][$var]))
+				{
+					foreach($arr["request"][$var] as $vr => $vl)
+					{
+						if(!$vl)
+						{
+							$arr["request"][$var][$vr] = "-";
+						}
+					}
+				}
 				$arr["args"][$var] = $arr["request"][$var];
 			}
 		}
@@ -5600,18 +5603,41 @@ class shop_warehouse extends class_base
 		}
 		if($g == "shop_orders")
 		{
-			$vars = array("oname", "uname", "pname", "prod", "oid", "from", "to", "status");
+			$vars = array("oname", "uname", "pname", "prod", "oid", "status");
 			foreach($vars as $var)
 			{
 				$v = "shop_orders_s_".$var;
 				$arr["args"][$v] = $arr["request"][$v];
-			} 
+			}
+			foreach(array("to", "from") as $var)
+			{
+				$v = "shop_orders_s_".$var;
+				foreach($arr["request"][$v] as $vr => $vl)
+				{
+					if(!$vl)
+					{
+						 $arr["request"][$v][$vr] = "-";
+					}
+				}
+				$arr["args"][$v] = $arr["request"][$v] ;
+			}
 		}
 		if(in_array($g, array("purchase_notes", "sales_notes", "purchase_bills", "sales_bills")))
 		{
-			foreach(array("acquiredby", "number", "status", "from", "to", "article", "articlecode", "art_cat") as $var)
+			foreach(array("acquiredby", "number", "status", "article", "articlecode", "art_cat") as $var)
 			{
 				$arr["args"][$g."_s_".$var] = $arr["request"][$g."_s_".$var];
+			}
+			foreach(array("to", "from") as $var)
+			{
+				foreach($arr["request"][$g."_s_".$var] as $vr => $vl)
+				{
+					if(!$vl)
+					{
+						 $arr["request"][$g."_s_".$var][$vr] = "-";
+					}
+				}
+				$arr["args"][$g."_s_".$var] = $arr["request"][$g."_s_".$var] ;
 			}
 		}
 	}
@@ -6110,7 +6136,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 		else
 		{
-			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+			$arr["prop"]["value"] = date_edit::get_timestamp($arr["request"][$arr["prop"]["name"]]);
 		}
 		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
@@ -6123,7 +6149,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 		else
 		{
-			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+			$arr["prop"]["value"] = date_edit::get_timestamp($arr["request"][$arr["prop"]["name"]]);
 		}
 		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
@@ -7373,7 +7399,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 		else
 		{
-			$arr["prop"]["value"] = $r;
+			$arr["prop"]["value"] = date_edit::get_timestamp($r);
 		}
 		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
@@ -7387,7 +7413,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 		else
 		{
-			$arr["prop"]["value"] = $r;
+			$arr["prop"]["value"] = date_edit::get_timestamp($r);
 		}
 		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
@@ -8710,12 +8736,13 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"url" => "#",
 		));
 		$g = $arr["request"]["group"];
-		$odl = new object_data_list(array(
+		$params = array(
 			"class_id" => CL_CRM_COMPANY,
 			"CL_CRM_COMPANY.RELTYPE_".(strpos($g, "sales") !== false ? "BUYER" : "SELLER")."(CL_CRM_COMPANY_CUSTOMER_DATA).RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER").".oid" => $owner,
 			"site_id" => array(),
 			"class_id" => array(),
-		),
+		);arr($params);
+		$odl = new object_data_list($params,
 		array(
 			CL_CRM_COMPANY => array("name" => "name"),
 		));
@@ -8736,12 +8763,115 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$t->set_selected_item(automatweb::$request->arg("filt_cust_name"));
 	}
 
+	function _get_clients_toolbar($arr)
+	{
+		$owner = $this->config->prop("owner");
+		if(!$this->can("view", $owner))
+		{
+			return;
+		}
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_menu_button(array(
+			'name'=>'add_item',
+			'tooltip'=> t('Uus')
+		));
+
+		$lp = array(
+			'parent' => $arr['obj_inst']->id(),
+			'return_url' => get_ru(),
+		);
+		if($this->can("view", $arr["request"]["filt_cust"]) && obj($arr["request"]["filt_cust"])->class_id() == CL_CRM_CATEGORY)
+		{
+			$lp['alias_to'] = $cat;
+			$lp['reltype'] = 3; // crm_company.CUSTOMER,
+		}
+		if ($arr["request"]["group"] == "sales_clients")
+		{
+			$lp["set_as_is_cust"] = 1;
+		}
+		elseif ($arr["request"]["group"] == "purchase_clients")
+		{
+			$lp["set_as_is_buyer"] = 1;
+		}
+		$t->add_menu_item(array(
+			'parent'=> "add_item",
+			'text' => t("Organisatsioon"),
+			'link' => $this->mk_my_orb('new',$lp,
+				'crm_company'
+			)
+		));
+
+		$alias_to = $parent = $owner;
+		$rt = 30;
+
+		if($this->can("view", $arr["request"]["filt_cust"]) && obj($arr["request"]["filt_cust"])->class_id() == CL_CRM_CATEGORY)
+		{
+			$alias_to = $arr["request"]["filt_cust"];
+			$parent = $arr["request"]["filt_cust"];
+			$rt = 2;
+		}
+
+		$t->add_menu_item(array(
+			'parent'=>'add_item',
+			'text' => t('Kategooria'),
+			'link' => $this->mk_my_orb('new',array(
+					'parent' => $parent,
+					'alias_to' => $alias_to,
+					'reltype' => $rt, //RELTYPE_CATEGORY
+					'return_url' => get_ru()
+				),
+				'crm_category'
+			)
+		));
+	}
+
 	function _get_clients_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "address",
+			"caption" => t("Aadress"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => t("Kontakt"),
+			"align" => "center",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t('Telefon'),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "fax",
+			"caption" => t('Faks'),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "client_manager",
+			"caption" => t("Kliendihaldur"),
+			"sortable" => 1,
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "customer_rel_creator",
+			"caption" => t("Kliendisuhte looja"),
+			"sortable" => 1,
+			"align" => "center",
 		));
 
 		$t->set_caption("Kliendid");
@@ -8756,18 +8886,48 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			return;
 		}
-		$ol = new object_list(array(
+		$params = array(
 			"class_id" => CL_CRM_COMPANY,
 			"CL_CRM_COMPANY.RELTYPE_".(strpos($g, "sales") !== false ? "BUYER" : "SELLER")."(CL_CRM_COMPANY_CUSTOMER_DATA).RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER").".oid" => $owner,
 			"site_id" => array(),
 			"class_id" => array(),
 			"name" => ($f = $arr["request"]["filt_cust_name"]) ? $f."%" : array(),
 			"CL_CRM_COMPANY.RELTYPE_CUSTOMER(CL_CRM_CATEGORY).oid" => ($f = $arr["request"]["filt_cust"]) ? $f : array(),
-		));	
+		);
+		$ol = new object_list($params);	
 		foreach($ol->arr() as $oid => $o)
 		{
+			if ($this->can("view", $o->prop("phone_id")))
+			{
+				$phone = obj($o->prop("phone_id"));
+				$phone = $phone->name();
+			}
+
+			if ($this->can("view", $o->prop("telefax_id")))
+			{
+				$fax = obj($o->prop("telefax_id"));
+				$fax = $fax->name();
+			}
+
+			$mail = "";
+			if ($this->can("view", $o->prop("email_id")))
+			{
+				$mail_obj = new object($o->prop("email_id"));
+				$mail = $mail_obj->prop("mail");
+				$mail = empty($mail) ? "" : html::href(array(
+					"url" => "mailto:" . $mail,
+					"caption" => $mail
+				));
+			}
+
 			$t->define_data(array(
-				"name" => $o->name(),
+				"name" => html::obj_change_url($o),
+				"address" => $o->prop("RELTYPE_ADDRESS.name"),
+				"email" => $mail,
+				"phone" => $phone,
+				"fax" => $fax,
+				"client_manager" => html::obj_change_url($o->prop("client_manager")),
+				"customer_rel_creator" => $o->get_cust_rel_creator_name(),
 			));
 		}
 	}
