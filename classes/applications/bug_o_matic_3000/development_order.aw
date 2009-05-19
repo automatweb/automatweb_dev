@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.26 2009/05/19 11:00:14 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.27 2009/05/19 11:55:10 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -194,12 +194,6 @@ class development_order extends class_base
 					$project = obj($arr["request"]["project"]);
 					$prop["value"] = $project->get_orderer();
 					$prop["options"] = array($prop["value"] => get_name($prop["value"]));
-				}
-				break;
-			case "bug_feedback_p":
-				if ($arr["obj_inst"]->prop("bug_status") != 10)
-				{
-					return PROP_IGNORE;
 				}
 				break;
 
@@ -409,6 +403,7 @@ class development_order extends class_base
 				break;
 
 			case "bug_status":
+				$prop["onchange"] = "if(this.value==10){ $('#settings_col1_outer .sisu3:eq(1)').css('display', 'block') }";
 				$prop["options"] = get_instance(CL_BUG)->filter_bug_statuses($this->get_status_list(), $arr);
 				break;
 
@@ -1048,6 +1043,15 @@ class development_order extends class_base
 		$o->set_meta("cart", $cart);
 		$o->save();
 		return $arr["post_ru"];
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		return '
+		if ($("#bug_status").val() != 10)
+		{
+			$("#bug_feedback_p").parent().parent().css("display", "none");
+		}';
 	}
 }
 ?>

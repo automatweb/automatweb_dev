@@ -2700,14 +2700,19 @@ class bug extends class_base
 				}
 			}
 			$c = new connection();
-			$people = $c->find(array(
-				"from.class_id" => CL_CRM_PERSON,
-				"type" => "RELTYPE_RANK",
+			$wrl = $c->find(array(
+				"from.class_id" => CL_CRM_PERSON_WORK_RELATION,
+				"type" => "RELTYPE_PROFESSION",
 				"to" => $highest->id()
 			));
-			foreach($people as $p)
+			foreach($wrl as $c)
 			{
-				$person = obj($p["from"]);
+				foreach(obj($c["from"])->connections_to(array(
+					"from.class_id" => CL_CRM_PERSON,
+				)) as $c2)
+				{
+					$person = $c2->from();
+				}
 			}
 		}
 
@@ -2726,7 +2731,7 @@ class bug extends class_base
 				$sect = $c->prop("from");
 			}
 			$o->set_prop("orderer_unit", $sect);
-			$o->set_prop("monitors", array($creator->id(), get_current_person()->id()));
+			$o->set_prop("monitors", array($creator->id(), get_current_person()->id(), $person->id()));
 		}
 
 		$o->save();
@@ -2789,17 +2794,18 @@ class bug extends class_base
 			);
 			$mail_contents = str_replace($find, $replace, $mail);
 			$mails[] = $person->get_first_obj_by_reltype("RELTYPE_EMAIL");
-		}
-		$mails[] = $creator->get_first_obj_by_reltype("RELTYPE_EMAIL");
-
-		foreach($mails as $mail)
-		{
-			if($mail)
+		
+			$mails[] = $creator->get_first_obj_by_reltype("RELTYPE_EMAIL");
+	
+			foreach($mails as $mail)
 			{
-				$adr = $mail->prop("mail");
-				send_mail($adr, "Lisati arendustellimus", $mail_contents, "From: bugtrack@".substr(strstr(aw_ini_get("baseurl"), "//"), 2));
+				if($mail)
+				{
+					$adr = $mail->prop("mail");
+					send_mail($adr, "Lisati arendustellimus", $mail_contents, "From: bugtrack@".substr(strstr(aw_ini_get("baseurl"), "//"), 2));
+				}
+	
 			}
-
 		}
 
 		die("<script> window.location = '".$this->mk_my_orb("change", array("id" => $o->id(), "return_url" => $arr["request"]["return_url"]), CL_DEVELOPMENT_ORDER)."' </script>");
