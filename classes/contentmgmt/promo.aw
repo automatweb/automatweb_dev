@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.112 2008/09/04 09:30:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.113 2009/05/19 11:05:46 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -1089,7 +1089,10 @@ class promo extends class_base implements main_subtemplate_handler
 				))));
 
 				$box->set_meta("version", 2);
-				$box->save();
+				if ($box->can("edit"))
+				{
+					$box->save();
+				}
 			}
 		}
 	}
