@@ -28,7 +28,7 @@ class aw_uri
 	private $string;
 
 	// uri character classes
-	public $reserved_chars = array(";", "/", "?", ":", "@",  "&", "=", "+", ",", "$");
+	public $reserved_chars = array(";", "/", "?", ":", "@",  "&", "=", "+", ",", '$');
 
 	// ...
 	protected $updated = false;
