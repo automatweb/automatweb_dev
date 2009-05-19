@@ -2383,8 +2383,11 @@ class bug extends class_base
 		}
 //print "kasutaja: ".aw_global_get("uid");
 		$p = get_current_person()->id();
-		$o = $bug->get_last_comment();
-		if($o !== false && $o->created() > (time() - 180) && $o->createdby() == aw_global_get("uid"))
+		if($bug->class_id() == CL_BUG)
+		{
+			$o = $bug->get_last_comment();
+		}
+		if(is_object($o)  && $o->created() > (time() - 180) && $o->createdby() == aw_global_get("uid"))
 		{
 			$o->set_comment(trim($o->comment() . "\n" . $comment));
 			if(!$o->prop("prev_state") &&  $old_state)
@@ -2785,15 +2788,15 @@ class bug extends class_base
 				$o->id(),
 			);
 			$mail_contents = str_replace($find, $replace, $mail);
-			$mails[] = $person->prop("email");
+			$mails[] = $person->get_first_obj_by_reltype("RELTYPE_EMAIL");
 		}
-		$mails[] = $creator->prop("email");
+		$mails[] = $creator->get_first_obj_by_reltype("RELTYPE_EMAIL");
 
 		foreach($mails as $mail)
 		{
-			if($this->can("view", $mail))
+			if($mail)
 			{
-				$adr = obj($mail)->prop("mail");
+				$adr = $mail->prop("mail");
 				send_mail($adr, "Lisati arendustellimus", $mail_contents, "From: bugtrack@".substr(strstr(aw_ini_get("baseurl"), "//"), 2));
 			}
 

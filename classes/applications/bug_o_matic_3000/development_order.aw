@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.25 2009/05/08 07:17:25 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.26 2009/05/19 11:00:14 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -471,6 +471,12 @@ class development_order extends class_base
 				if ($arr["new"])
 				{
 					$prop["value"] = $p->prop("org_section");
+				}
+				break;
+			case "reason":
+				if($prop["value"])
+				{
+					$prop["type"] = "text";
 				}
 				break;
 		};
