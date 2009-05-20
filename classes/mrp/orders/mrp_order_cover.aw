@@ -487,23 +487,27 @@ class mrp_order_cover extends class_base
 		{
 			// get customers for category
 			$custs = array();
-			foreach(obj($r["s_customer"])->connections_from(array("type" => "RELTPE_CUSTOMER")) as $c)
+			foreach(obj($r["s_customer"])->connections_from(array("type" => 3)) as $c)
 			{
 				$custs[] = $c->prop("to");
+			}
+			if (count($custs) == 0)
+			{
+				$custs = -1;
 			}
 			$filt["customer"] = $custs;
 		}
 
-		if (empty($r["s_period"]))
+		if (empty($r["s_period"]) || $r["s_period"] == "cur_mon")
 		{
-			$filt["created"] = new obj_predicate_compare(OBJ_COMP_GREATER, mktime(0,0, 0, 1, date("m"), date("Y")));
+			$filt["created"] = new obj_predicate_compare(OBJ_COMP_GREATER, mktime(0,0, 0, date("m"), 1, date("Y")));
 		}
 		else
 		{
 			switch($r["s_period"])
 			{
 				case "prev_mon":
-					$filt["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, mktime(0,0, 0, 1, date("m")-1, date("Y")), mktime(0,0, 0, 1, date("m"), date("Y")));
+					$filt["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, mktime(0,0, 0,  date("m")-1, 1, date("Y")), mktime(0,0, 0, date("m"), 1, date("Y")));
 					break;
 
 				case "total":
