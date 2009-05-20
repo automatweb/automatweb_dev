@@ -205,6 +205,7 @@ class obj_xml_gen
 		{
 			foreach($obj_list as $o)
 			{
+				$als = $o->meta("aliaslinks");
 				foreach($o->connections_from() as $c)
 				{
 					$to = $c->to();
@@ -226,6 +227,7 @@ class obj_xml_gen
 						$xml .= "\t\t<to_xml>".$id_map[$c->prop("to")]."</to_xml>\n";
 					}
 					$xml .= "\t\t<reltype>".$c->prop("reltype")."</reltype>\n";
+					$xml .= "\t\t<aliaslink>".$als[$c->prop("to")]."</aliaslink>\n";
 					$xml .= "\t</rel>\n";
 				}
 			}
@@ -297,6 +299,14 @@ echo "<pre>".htmlentities($xml)."</pre>";
 				"to" => $new_to->id(),
 				"type" => $rel["reltype"]
 			));
+	
+			if ($rel["aliaslink"])
+			{
+				$lls = $new_obj->meta("aliaslinks");
+				$lls[$new_to->id()] = 1;
+				$new_obj->set_meta("aliaslinks", $lls);
+				$new_obj->save();
+			}
 		}
 
 		return $oid;
