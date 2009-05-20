@@ -18,7 +18,12 @@ class mrp_order_print_obj extends mrp_order_obj
 	function get_job_list()
 	{
 		// jobs from case
-		return $this->get_case()->get_job_list();
+		$case = $this->get_case();
+		if (!$case)
+		{
+			return array();
+		}
+		return $case->get_job_list();
 	}
 
 	function set_prop($k, $v)
@@ -51,6 +56,21 @@ class mrp_order_print_obj extends mrp_order_obj
 			$pr += $this->_get_cov_price($amt);
 		}
 		return $pr;
+	}
+
+	function get_materials_price($do_cov = true)
+	{
+		return $this->_get_mat_price($this->prop("amount"), $do_cov);
+	}
+
+	function get_cover_price()
+	{
+		return $this->_get_cov_price($this->prop("amount"));
+	}
+
+	function get_resource_price($do_cov = true)
+	{
+		return $this->_get_res_price($this->prop("amount"), $do_cov);
 	}
 
 	protected function _get_cov_price($amt)

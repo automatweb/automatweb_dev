@@ -642,6 +642,7 @@ class aw_table extends aw_template
 		// grouping - whenever a value of one of these elements changes an extra row gets inserted into the table
 		$this->rgroupby = isset($params["rgroupby"]) ? $params["rgroupby"] : $this->rgroupby;
 		$this->rgroupsortdat = isset($params["rgroupsortdat"]) ? $params["rgroupsortdat"] : "";
+		$this->rgroupdat = isset($params["rgroupdat"]) ? $params["rgroupdat"] : "";
 		$this->vgroupby = isset($params["vgroupby"]) ? $params["vgroupby"] : "";
 		$this->vgroupdat = isset($params["vgroupdat"]) ? $params["vgroupdat"] : "";
 
@@ -1178,52 +1179,58 @@ class aw_table extends aw_template
 					$row_style = $this->tr_active;
 				};
 
+				$tmp = "";
+				if (isset($rgroupby) && is_array($rgroupby))
+				{
+					// XXY siin peaks yhe colspani v2hemaks v6tma
+					$tmp = $this->do_col_rgrouping($rgroupby, $this->rgroupdat, $rgroupby_sep, $v, $rowid, $row_style);
+				};
+
+
+				if ($tmp != "")
+				{
+					$counter = 1;
+					if ($this->group_style)
+					{
+						$row_style = $this->group_style;
+					}
+				}
+
 				// rida algab
 				// rowid/domid is needed for the selector script
 				$rowid = $this->prefix . $this->id . $counter;
 				$tbl .= "<tr id='$rowid' class='$row_style'>";
 
-
-				$tmp = "";
-				if (isset($rgroupby) && is_array($rgroupby))
-				{
-					// XXY siin peaks yhe colspani v2hemaks v6tma
-					$tmp = $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v, $rowid, $row_style);
-				};
-				if ($tmp != "")
-				{
-					$counter = 1;
-				}
-
 				$tbl .= $tmp;
-					if ($this->use_chooser)
+
+				if ($this->use_chooser)
+				{
+					$chooser_value = isset($v[$this->chooser_config["field"]]) ? $v[$this->chooser_config["field"]] : "";
+					$name = $this->chooser_config["name"] . "[${chooser_value}]";
+					$onclick = "";
+					if ($this->chooser_hilight)
 					{
-						$chooser_value = isset($v[$this->chooser_config["field"]]) ? $v[$this->chooser_config["field"]] : "";
-						$name = $this->chooser_config["name"] . "[${chooser_value}]";
-						$onclick = "";
-						if ($this->chooser_hilight)
-						{
-							$onclick = " onclick=\"hilight(this,'${rowid}')\" ";
-						};
-						$stl = "";
-						if (!empty($this->chooser_config["chgbgcolor"]) && !empty($v[$this->chooser_config["chgbgcolor"]]))
-						{
-							$stl =  "style=\"background:".$v[$this->chooser_config["chgbgcolor"]]."\"";
-						}
-						$width = "";
-						if(!empty($this->chooser_config["width"]))
-						{
-							$width = " width=\"".$this->chooser_config["width"]."\"";
-						}
-						if($chooser_value)
-						{
-							$tbl .= "<td align='center' ".$stl.$width."><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick} ".(!empty($v[$this->chooser_config["name"]]) ? "checked" : "")."></td>";
-						}
-						else
-						{
-							$tbl .= "<td align='center'>&nbsp;</td>";
-						}
+						$onclick = " onclick=\"hilight(this,'${rowid}')\" ";
 					};
+					$stl = "";
+					if (!empty($this->chooser_config["chgbgcolor"]) && !empty($v[$this->chooser_config["chgbgcolor"]]))
+					{
+						$stl =  "style=\"background:".$v[$this->chooser_config["chgbgcolor"]]."\"";
+					}
+					$width = "";
+					if(!empty($this->chooser_config["width"]))
+					{
+						$width = " width=\"".$this->chooser_config["width"]."\"";
+					}
+					if($chooser_value)
+					{
+						$tbl .= "<td align='center' ".$stl.$width."><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick} ".(!empty($v[$this->chooser_config["name"]]) ? "checked" : "")."></td>";
+					}
+					else
+					{
+						$tbl .= "<td align='center'>&nbsp;</td>";
+					}
+				};
 
 				$cols = 0;
 
@@ -2337,6 +2344,7 @@ echo dbg::short_backtrace();
 					));
 				}
 				$val = "";
+
 				if (is_array($rgroupdat[$rgel]))
 				{
 					$val .= $rgroupby_sep[$rgel]["pre"];

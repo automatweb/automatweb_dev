@@ -80,6 +80,46 @@
             <field>applies_materials</field>
             <caption>Kehtib materjalidele</caption>
       </property>
+      <property>
+            <name>stats_period</name>
+            <table>aw_mrp_order_cover</table>
+            <group>stats</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_period_lay</parent>
+            <field>stats_period</field>
+      </property>
+      <property>
+            <name>stats_customer</name>
+            <table>aw_mrp_order_cover</table>
+            <group>stats</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_customer_lay</parent>
+            <field>stats_customer</field>
+      </property>
+      <property>
+            <name>stats_status</name>
+            <table>aw_mrp_order_cover</table>
+            <group>stats</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_status_lay</parent>
+            <field>stats_status</field>
+      </property>
+      <property>
+            <name>stats_table</name>
+            <table>aw_mrp_order_cover</table>
+            <group>stats</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_split</parent>
+            <field>stats_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_ORDER_COVER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -91,6 +131,10 @@
             <applies>
                   <caption>Kehtimine</caption>
             </applies>
+            <stats>
+                  <caption>Aruanded</caption>
+                  <submit>no</submit>
+            </stats>
       </groupinfo>
       <tableinfo>
             <aw_mrp_order_cover>
@@ -135,6 +179,39 @@
                   <area_caption>Kehtib&amp;amp;nbsp;materjalidele</area_caption>
                   <group>applies</group>
             </applies_materials_lay>
+            <stats_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>stats</group>
+                  <area_caption></area_caption>
+            </stats_split>
+            <left_bit>
+                  <type>vbox</type>
+                  <parent>stats_split</parent>
+                  <group>stats</group>
+                  <area_caption></area_caption>
+            </left_bit>
+            <stats_period_lay>
+                  <type>vbox</type>
+                  <parent>left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Perioodi&amp;amp;nbsp;filter</area_caption>
+                  <group>stats</group>
+            </stats_period_lay>
+            <stats_customer_lay>
+                  <type>vbox</type>
+                  <parent>left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kliendi&amp;amp;nbsp;filter</area_caption>
+                  <group>stats</group>
+            </stats_customer_lay>
+            <stats_status_lay>
+                  <type>vbox</type>
+                  <parent>left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Tellimuse&amp;amp;nbsp;staatuse&amp;amp;nbsp;filter</area_caption>
+                  <group>stats</group>
+            </stats_status_lay>
       </layout>
 </properties>
 
