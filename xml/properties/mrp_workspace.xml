@@ -52,6 +52,17 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
+            <name>customers_time_tree</name>
+            <group>grp_customers</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>customers_time_box</parent>
+      </property>
+      <property>
             <name>cs_name</name>
             <group>grp_customers</group>
             <table>objects</table>
@@ -172,6 +183,17 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>projtree_box</parent>
+      </property>
+      <property>
+            <name>projects_time_tree</name>
+            <group>grp_projects</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>projtreetime_box</parent>
       </property>
       <property>
             <name>projects_list</name>
@@ -344,6 +366,17 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>resources_tree_box</parent>
+      </property>
+      <property>
+            <name>pp_resources</name>
+            <group>my_resources</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <parent>resources_tree_box</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>resource_deviation_chart</name>
@@ -1079,6 +1112,26 @@
             <store>no</store>
       </property>
       <property>
+            <name>printer_time_tree</name>
+            <group>grp_printer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <parent>printer_time_tree_l</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>printer_resource_tree</name>
+            <group>grp_printer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <parent>printer_resource_tree_l</parent>
+            <store>no</store>
+      </property>
+      <property>
             <name>ps_resource</name>
             <group>grp_printer</group>
             <table>objects</table>
@@ -1098,6 +1151,7 @@
             <type>textbox</type>
             <parent>printer_search</parent>
             <captionside>top</captionside>
+            <size>33</size>
             <caption>Projekt</caption>
       </property>
       <property>
@@ -1164,17 +1218,6 @@
             <parent>ppl_data</parent>
             <store>no</store>
             <caption>Organisatsioon:</caption>
-      </property>
-      <property>
-            <name>pp_resources</name>
-            <group>grp_printer</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <parent>ppl_resources</parent>
-            <no_caption>1</no_caption>
-            <store>no</store>
       </property>
       <property>
             <name>pp_birthdays</name>
@@ -1836,6 +1879,13 @@
                   <parent>customers_box</parent>
                   <group>grp_customers</group>
             </customers_tree_box>
+            <customers_time_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Projekti&amp;amp;nbsp;t&amp;amp;auml;htaja&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <parent>customers_box</parent>
+                  <group>grp_customers</group>
+            </customers_time_box>
             <customers_search_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
@@ -1859,10 +1909,17 @@
             <projtree_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Projektid</area_caption>
+                  <area_caption>Projektid&amp;amp;nbsp;staatuste&amp;amp;nbsp;kaupa</area_caption>
                   <parent>projects_box</parent>
                   <group>grp_projects</group>
             </projtree_box>
+            <projtreetime_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Lisamise&amp;amp;nbsp;kuup&amp;amp;auml;eva&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <parent>projects_box</parent>
+                  <group>grp_projects</group>
+            </projtreetime_box>
             <projects_search_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
@@ -1881,6 +1938,14 @@
                         <num_2>my_resources</num_2>
                   </group>
             </resources_tree_box>
+            <ppl_resources>
+                  <type>vbox_sub</type>
+                  <parent>resources_tree_box</parent>
+                  <area_caption>Minu&amp;amp;nbsp;ressursid</area_caption>
+                  <closeable>1</closeable>
+                  <no_padding>1</no_padding>
+                  <group>my_resources</group>
+            </ppl_resources>
             <right_pane>
                   <type>vbox</type>
                   <parent>vsplitbox</parent>
@@ -2172,9 +2237,23 @@
                   <type>vbox</type>
                   <parent>printer_left</parent>
                   <closeable>1</closeable>
-                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;puu</area_caption>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;staatused</area_caption>
                   <group>grp_printer</group>
             </printer_tree>
+            <printer_time_tree_l>
+                  <type>vbox</type>
+                  <parent>printer_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;d&amp;amp;nbsp;kuup&amp;amp;auml;evade&amp;amp;nbsp;kaupa</area_caption>
+                  <group>grp_printer</group>
+            </printer_time_tree_l>
+            <printer_resource_tree_l>
+                  <type>vbox</type>
+                  <parent>printer_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;d&amp;amp;nbsp;ressursside&amp;amp;nbsp;kaupa</area_caption>
+                  <group>grp_printer</group>
+            </printer_resource_tree_l>
             <printer_search>
                   <type>vbox</type>
                   <parent>printer_left</parent>
@@ -2195,14 +2274,6 @@
                   <group>grp_printer</group>
                   <area_caption></area_caption>
             </ppl_data>
-            <ppl_resources>
-                  <type>vbox_sub</type>
-                  <parent>printer_personal</parent>
-                  <area_caption>Minu&amp;amp;nbsp;ressursid</area_caption>
-                  <closeable>1</closeable>
-                  <no_padding>1</no_padding>
-                  <group>grp_printer</group>
-            </ppl_resources>
             <ppl_birthdays>
                   <type>vbox_sub</type>
                   <parent>printer_personal</parent>

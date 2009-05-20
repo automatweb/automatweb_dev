@@ -89,6 +89,9 @@
 	@property customers_list type=table store=no no_caption=1 parent=customers_search_table
 	@property customers_list_proj type=table store=no no_caption=1 parent=vsplitbox
 
+	@layout customers_time_box type=vbox closeable=1 area_caption=Projekti&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=customers_box
+		@property customers_time_tree type=treeview store=no no_caption=1 parent=customers_time_box
+
 	@layout customers_search_box type=vbox closeable=1 area_caption=Klientide&nbsp;otsing parent=customers_box
 		@property cs_name type=textbox view_element=1 parent=customers_search_box store=no size=33
 		@caption Nimi
@@ -118,11 +121,13 @@
 @default group=grp_projects
 	@property projects_toolbar type=toolbar store=no no_caption=1
 	@layout projects_box type=vbox parent=vsplitbox
-	@layout projtree_box type=vbox closeable=1 area_caption=Projektid parent=projects_box
+	@layout projtree_box type=vbox closeable=1 area_caption=Projektid&nbsp;staatuste&nbsp;kaupa parent=projects_box
 	@property projects_tree type=text store=no no_caption=1 parent=projtree_box
+
+	@layout projtreetime_box type=vbox closeable=1 area_caption=Lisamise&nbsp;kuup&auml;eva&nbsp;j&auml;rgi parent=projects_box
+	@property projects_time_tree type=treeview store=no no_caption=1 parent=projtreetime_box
+
 	@property projects_list type=table store=no no_caption=1 parent=vsplitbox
-
-
 
 	@property sp_result type=table no_caption=1 parent=vsplitbox
 
@@ -158,7 +163,13 @@
 @default group=grp_resources_manage,grp_resources_load,my_resources
 	@property resources_toolbar type=toolbar store=no no_caption=1 group=grp_resources_manage
 	@layout resources_tree_box type=vbox closeable=1 area_caption=Ressursid&nbsp;&amp;&nbsp;kategooriad parent=vsplitbox
+
+
+@layout ppl_resources type=vbox_sub parent=resources_tree_box area_caption=Minu&nbsp;ressursid closeable=1 no_padding=1 group=my_resources parent=resources_tree_box
 		@property resources_tree type=text store=no no_caption=1 parent=resources_tree_box
+		@property pp_resources type=table parent=resources_tree_box no_caption=1 store=no group=my_resources
+
+
 	@layout right_pane type=vbox parent=vsplitbox
 		@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=right_pane group=grp_resources_load,my_resources
 			@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no group=grp_resources_load,my_resources
@@ -378,16 +389,22 @@
 
 		@layout printer_left type=vbox parent=printer_master
 
-			@layout printer_tree type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;de&nbsp;puu
+			@layout printer_tree type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;de&nbsp;staatused
 
 				@property printer_tree type=treeview parent=printer_tree store=no
+
+			@layout printer_time_tree_l type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;d&nbsp;kuup&auml;evade&nbsp;kaupa
+				@property printer_time_tree type=treeview parent=printer_time_tree_l store=no
+
+			@layout printer_resource_tree_l type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;d&nbsp;ressursside&nbsp;kaupa
+				@property printer_resource_tree type=treeview parent=printer_resource_tree_l store=no
 
 			@layout printer_search type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;de&nbsp;otsing
 
 				@property ps_resource type=select parent=printer_search captionside=top
 				@caption Resurss
 
-				@property ps_project type=textbox parent=printer_search captionside=top
+				@property ps_project type=textbox parent=printer_search captionside=top size=33
 				@caption Projekt
 
 				@property ps_submit type=submit parent=printer_search
@@ -410,10 +427,6 @@
 
 					@property pp_company type=text parent=ppl_data store=no
 					@caption Organisatsioon:
-
-				@layout ppl_resources type=vbox_sub parent=printer_personal area_caption=Minu&nbsp;ressursid closeable=1 no_padding=1
-
-					@property pp_resources type=table parent=ppl_resources no_caption=1 store=no
 
 				@layout ppl_birthdays type=vbox_sub parent=printer_personal area_caption=Meie&nbsp;t&ouml;&ouml;tajate&nbsp;s&uuml;nnip&auml;evad closeable=1 no_padding=1
 
@@ -900,6 +913,37 @@ class mrp_workspace extends class_base
 				$sort_by,
 				"planned_date" => $tmp,//!!! to enable sorting by planned_date which is in mrp_case_schedule table
 			);
+	
+			if($arr["request"]["timespan"])
+			{
+				switch($arr["request"]["timespan"])
+				{
+					case "current_week":
+						list($Y, $M, $D, $N) = explode("-", date("Y-n-j-N"));
+						$from = mktime(0, 0, 0, $M, $D-$N+1, $Y);
+						$to = mktime(23, 59, 59, $M, $D+7-$N, $Y);
+						break;
+
+					case "last_week":
+						list($Y, $M, $D, $N) = explode("-", date("Y-n-j-N"));
+						$from = mktime(0, 0, 0, $M, $D-$N-6, $Y);
+						$to = mktime(23, 59, 59, $M, $D-$N, $Y);
+						break;
+
+					case "current_month":
+						list($Y, $M) = explode("-", date("Y-n"));
+						$from = mktime(0, 0, 0, $M, 1, $Y);
+						$to = mktime(23, 59, 59, $M+1, 0, $Y);
+						break;
+
+					case "last_month":
+						list($Y, $M) = explode("-", date("Y-n"));
+						$from = mktime(0, 0, 0, $M-1, 1, $Y);
+						$to = mktime(23, 59, 59, $M, 0, $Y);
+						break;
+				}
+				$args["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $from, $to, "int");
+			}
 
 			### get list
 			if (strstr($this->list_request, "archived_"))
@@ -1363,7 +1407,11 @@ class mrp_workspace extends class_base
 			case "projects_tree":
 				$this->create_projects_tree ($arr);
 				break;
-
+			case "projects_time_tree":
+			case "customers_time_tree":
+			case "printer_time_tree":
+				$this->_get_projects_time_tree($arr);
+				break;
 			case "projects_list":
 				if (empty($arr["request"]["sp_search"]))
 				{
@@ -1425,6 +1473,11 @@ class mrp_workspace extends class_base
 					aw_session_del("mrp_errors");
 				}
 				break;
+			case "printer_resource_tree":
+				if (!empty($arr["request"]["pj_job"]))
+				{
+					$retval = PROP_IGNORE;
+				}
 			case "my_resources_tree":
 			case "resources_tree":
 				$this->create_resources_tree ($arr);
@@ -3024,6 +3077,46 @@ class mrp_workspace extends class_base
 		}
 		}
 
+	function _get_projects_time_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_selected_item(isset($arr["request"]["timespan"]) ? $arr["request"]["timespan"] : "all");
+		$branches = array(
+			0 => array(
+				"all" => t("K&otilde;ik"),
+				"current_week" => t("K&auml;esolev n&auml;dal"),
+				"last_week" => t("M&ouml;&ouml;dunud n&auml;dal"),
+				"current_month" => t("K&auml;esolev kuu"),
+				"last_month" => t("M&ouml;&ouml;dunud kuu"),
+			),
+		);
+
+//		$from_to = $this->db_fetch_row("SELECT MIN(aw_tm) as 'from', MAX(aw_tm) as 'to' FROM mrp_job_rows WHERE aw_tm > 0;");
+/*		$tm = $from_to["from"];
+		while($tm < $from_to["to"])
+		{
+			list($M, $D, $Y) = explode("-", date("n-j-Y", $tm));
+			$branches[0]["date_".$Y] = $Y;
+			$branches["date_".$Y]["date_".$Y."_".$M] = sprintf(t("%s %u"), locale::get_lc_month($M), $Y);
+			$branches["date_".$Y."_".$M]["date_".$Y."_".$M."_".$D] = sprintf(t("%u. %s %u"), $D, locale::get_lc_month($M), $Y);
+			$tm = mktime(0, 0, 0, $M, $D+1, $Y);
+		}
+*/
+		foreach($branches as $parent => $branch)
+		{
+			foreach($branch as $id => $caption)
+			{
+				$t->add_item($parent, array(
+					"id" => $id,
+					"name" => $caption,
+					"url" => aw_url_change_var(array(
+						"timespan" => $id === "all" ? NULL : $id,
+					)),
+				));
+			}
+		}
+	}
+
 	function format_hours($n)
 	{
 		if(empty($this->hours_report_time_format))
@@ -3619,6 +3712,19 @@ class mrp_workspace extends class_base
 		return $resources;
 	}
 
+	private function get_resources_parents($menu)
+	{
+		if($this->can("view" , $menu))
+		{
+			$menu = obj($menu);
+			if($menu->parent() != $this->resources_folder)
+			{
+				$this->my_resources_menus[$menu->parent()] = $menu->parent();
+				$this->get_resources_parents($menu->parent());
+			}
+		}
+	}
+
 	function create_resources_tree ($arr = array(), $attrb = "mrp_tree_active_item")
 	{
 		$this_object = $arr["obj_inst"];
@@ -3629,8 +3735,26 @@ class mrp_workspace extends class_base
 		### resource tree
 		$resources_folder = $this_object->prop ("resources_folder");
 
-		if($arr["request"]["group"] == "my_resources")
+		if($arr["request"]["group"] == "my_resources" || $arr["request"]["group"] = "grp_printer_general")
 		{
+			$resids = $this->get_cur_printer_resources(array(
+				"ws" => $arr["obj_inst"],
+				"ign_glob" => true
+			));
+			$res_ol = new object_list();
+			if (count($resids))
+			{
+				$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
+			}
+
+			$this->resources_folder = $resources_folder;
+			$this->my_resources_menus = array();
+			foreach($res_ol->arr() as $res_o)
+			{
+				$this->my_resources_menus[$res_o->parent()] = $res_o->parent();
+				$this->get_resources_parents($res_o->parent());
+			}
+
 			$filter = array(
 				"parent" => $resources_folder,
 				"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
@@ -3638,8 +3762,8 @@ class mrp_workspace extends class_base
 				new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"CL_MRP_RESOURCE.oid" => $this->get_my_resources(),
-						"class_id" => CL_MENU,
+						"CL_MRP_RESOURCE.oid" => $res_ol->ids(),
+						"CL_MENU.oid" => $this->my_resources_menus,
 					)
 				)),
 			);
@@ -5968,8 +6092,29 @@ class mrp_workspace extends class_base
 				}
 			}
 
+
+			if($arr["request"]["timespan"])
+			{
+				$time = $this->get_hours_from_to();
+				$filter = array(
+					"class_id" => CL_MRP_CASE,
+					"customer" => $customers->ids(),
+				);
+				$filter["due_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $time[0], $time[1], "int");
+				$ol = new object_list($filter);
+				$project_customers = array();
+				foreach($ol->arr() as $o)
+				{
+					$project_customers[$o->prop("customer")] = $o->prop("customer");
+				}
+			}
+
 			foreach($customers->arr() as $cust)
 			{
+				if($arr["request"]["timespan"] && !in_array($cust->id() , $project_customers))
+				{
+					continue;
+				}
 				$t->define_data(array(
 					"name" => html::get_change_url($cust->id(), array("return_url" => get_ru()), $cust->name()),
 					"address" => $cust->prop_str("contact"),
@@ -6038,10 +6183,44 @@ class mrp_workspace extends class_base
 			$this->_init_cust_list_proj_t($t);
 
 			$cust = obj($arr["request"]["cust"]);
-			$ol = new object_list(array(
+
+			$filter = array(
 				"class_id" => CL_MRP_CASE,
 				"customer" => $cust->id()
-			));
+			);
+
+			if($arr["request"]["timespan"])
+			{
+				switch($arr["request"]["timespan"])
+				{
+					case "current_week":
+						list($Y, $M, $D, $N) = explode("-", date("Y-n-j-N"));
+						$from = mktime(0, 0, 0, $M, $D-$N+1, $Y);
+						$to = mktime(23, 59, 59, $M, $D+7-$N, $Y);
+						break;
+					case "last_week":
+						list($Y, $M, $D, $N) = explode("-", date("Y-n-j-N"));
+						$from = mktime(0, 0, 0, $M, $D-$N-6, $Y);
+						$to = mktime(23, 59, 59, $M, $D-$N, $Y);
+					break;
+	
+					case "current_month":
+						list($Y, $M) = explode("-", date("Y-n"));
+						$from = mktime(0, 0, 0, $M, 1, $Y);
+						$to = mktime(23, 59, 59, $M+1, 0, $Y);
+					break;
+	
+					case "last_month":
+						list($Y, $M) = explode("-", date("Y-n"));
+						$from = mktime(0, 0, 0, $M-1, 1, $Y);
+						$to = mktime(23, 59, 59, $M, 0, $Y);
+						break;
+				}
+				$filter["due_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $from, $to, "int");
+			}
+
+			$ol = new object_list($filter);
+			
 			foreach($ol->arr() as $case)
 			{
 				$t->define_data(array(
@@ -6181,15 +6360,34 @@ class mrp_workspace extends class_base
 		));
 	}
 
+	private function get_all_cat_resources($id)
+	{
+		$resource_tree_filter = array(
+			"parent" => $id,
+			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+			"sort_by" => "objects.jrk",
+		);
+		$resource_tree = new object_tree($resource_tree_filter);
+		return $resource_tree->ids();
+	}
+
 	function _printer_jobs($arr)
 	{
 		$t = $arr["prop"]["vcl_inst"];
 		$grp = isset($arr["prop"]["branch_id"]) ? $arr["prop"]["branch_id"] : "grp_printer_current";
 		$this->_init_printer_jobs_t($t, $grp);
 
-		$res = $this->get_cur_printer_resources(array(
-			"ws" => $arr["obj_inst"]
-		));
+
+		if($arr["request"]["mrp_tree_active_item"])
+		{
+			$res = $this->get_all_cat_resources($arr["request"]["mrp_tree_active_item"]);
+		}
+		else
+		{
+			$res = $this->get_cur_printer_resources(array(
+				"ws" => $arr["obj_inst"]
+			));
+		}
 
 		$per_page = $arr["obj_inst"]->prop("pv_per_page");
 		$proj_states = false;
@@ -6391,7 +6589,8 @@ class mrp_workspace extends class_base
 			"limit" => $limit,
 			"states" => $states,
 			"sort_by" => $sby,
-			"proj_states" => $proj_states
+			"proj_states" => $proj_states,
+			"timespan" => $arr["request"]["timespan"],
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -6793,6 +6992,36 @@ class mrp_workspace extends class_base
 			"sort_by" => isset($arr["sort_by"]) ? $arr["sort_by"] : "mrp_schedule.starttime",
 //!!!
 		);
+
+		if($arr["timespan"])
+		{
+			switch($arr["timespan"])
+			{
+				case "current_week":
+					list($Y, $M, $D, $N) = explode("-", date("Y-n-j-N"));
+					$from = mktime(0, 0, 0, $M, $D-$N+1, $Y);
+					$to = mktime(23, 59, 59, $M, $D+7-$N, $Y);
+					break;
+				case "last_week":
+					list($Y, $M, $D, $N) = explode("-", date("Y-n-j-N"));
+					$from = mktime(0, 0, 0, $M, $D-$N-6, $Y);
+					$to = mktime(23, 59, 59, $M, $D-$N, $Y);
+				break;
+
+				case "current_month":
+					list($Y, $M) = explode("-", date("Y-n"));
+					$from = mktime(0, 0, 0, $M, 1, $Y);
+					$to = mktime(23, 59, 59, $M+1, 0, $Y);
+				break;
+
+				case "last_month":
+					list($Y, $M) = explode("-", date("Y-n"));
+					$from = mktime(0, 0, 0, $M-1, 1, $Y);
+					$to = mktime(23, 59, 59, $M, 0, $Y);
+					break;
+			}
+			$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $from, $to, "int");
+		}
 
 		if(!empty($arr["limit"]))
 		{
@@ -7251,7 +7480,7 @@ class mrp_workspace extends class_base
 		switch($arr["name"])
 		{
 			case "customers_search_table":
-				if($arr["request"]["alph"] ||  $arr["request"]["cat"])
+				if(!empty($arr["request"]["alph"]) || !empty($arr["request"]["cat"]))
 				{
 					$arr["area_caption"] = t("Klientide nimekiri");
 				}
@@ -7550,11 +7779,13 @@ class mrp_workspace extends class_base
 			}
 			else
 			{
+
 				$filt = array(
 					"class_id" => CL_CRM_COMPANY,
 					"name" => "%".$arr["request"]["cs_name"]."%",
 					"reg_nr" => "%".$arr["request"]["cs_reg_nr"]."%",
 				);
+
 				if ($arr["request"]["cs_firmajuht"] != "")
 				{
 					$filt["CL_CRM_COMPANY.firmajuht(CL_CRM_PERSON).name"] = "%".$arr["request"]["cs_firmajuht"]."%";
