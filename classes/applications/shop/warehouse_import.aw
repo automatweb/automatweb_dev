@@ -542,11 +542,11 @@ class warehouse_import extends class_base
 // If it is needed to debug the imports, then comment the following lines until 'flush()'
 		// let the user continue with their business
 		ignore_user_abort(1);
-                header("Content-Type: image/gif");
-                header("Content-Length: 43");
-                header("Connection: close");
-                echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
-                flush();
+		header("Content-Type: image/gif");
+		header("Content-Length: 43");
+		header("Connection: close");
+		echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
+		flush();
 
 		aw_set_exec_time(AW_LONG_PROCESS);
 
