@@ -226,59 +226,6 @@ class warehouse_import extends class_base
 		$arr["obj_inst"]->set_import_matrix($arr["request"]["imp"]);
 	}
 
-	function _get_import($arr)
-	{
-		$links[] = html::href(array(
-			'caption' => t('Hindade import'),
-			'url' => $this->mk_my_orb('import_prices', array(
-				'id' => $arr['obj_inst']->id(),
-				'return_url' => get_ru()
-			)),
-		));
-
-		$links[] = html::href(array(
-			'caption' => t('Hinnakirja import'),
-			'url' => $this->mk_my_orb('import_price_list', array(
-				'id' => $arr['obj_inst']->id(),
-				'return_url' => get_ru()
-			)),
-		));
-
-		$arr['prop']['value'] = implode(', ', $links);
-
-		return PROP_OK;
-	}
-
-	/**
-		@attrib name=import_prices all_args=1
-	**/
-	function import_prices($arr)
-	{
-		if (!$this->can('view', $arr['id']))
-		{
-			exit($arr['id'].' is not readable');
-		}
-		$o = new object($arr['id']);
-	}
-
-	/**
-		@attrib name=import_price_list all_args=1
-	**/
-	function import_price_list($arr)
-	{
-	//	automatweb::$instance->mode(automatweb::MODE_DBG);
-		if (!$this->can('view', $arr['id']))
-		{
-			exit($arr['id'].' is not readable');
-		}
-
-		$o = new object($arr['id']);
-
-	//	$o->clear_price_list();
-	//	exit('delete done');
-		$o->update_price_list();
-	}
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
