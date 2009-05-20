@@ -226,7 +226,7 @@ class taket_afp_import extends class_base implements warehouse_import_if
 			),
 			5 => array(
 				"name" => "Taketi Pärnu ladu",
-				"info" => "http://217.159.141.2:8080"
+				"info" => "http://90.190.6.38:8080"
 			),
 			6 => array(
 				"name" => "Taketi Viljandi ladu",
