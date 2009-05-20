@@ -361,6 +361,7 @@ class warehouse_import extends class_base
 	function _get_config_table($arr)
 	{
 		$t = $arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
 		$this->_init_config_table($t);
 
 		foreach($arr["obj_inst"]->list_external_warehouses() as $id => $data)
@@ -562,6 +563,7 @@ class warehouse_import extends class_base
 		$url = $this->mk_my_orb("run_backgrounded", array("wh_id" => $wh_id, "act" => $act, "id" => $id));
 		$url = str_replace("/automatweb", "", $url);
 		$h = new http;
+	//	exit($url);
 		$h->get($url);
 	}
 
@@ -590,6 +592,7 @@ class warehouse_import extends class_base
 		session_write_close();
 		while(ob_get_level()) { ob_end_clean(); }
 
+// If it is needed to debug the imports, then comment the following lines until 'flush()'
 		// let the user continue with their business
 		ignore_user_abort(1);
                 header("Content-Type: image/gif");
@@ -597,6 +600,7 @@ class warehouse_import extends class_base
                 header("Connection: close");
                 echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
                 flush();
+
 		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$act = $arr["act"];
