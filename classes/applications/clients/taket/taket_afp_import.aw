@@ -316,10 +316,11 @@ class taket_afp_import extends class_base implements warehouse_import_if
 
 	public function get_pricelist_xml()
 	{
-		$this->init_vars();
-		$whs = $this->get_warehouses();
-		$wh = new object(reset($whs));
-		$url = new aw_uri($wh->comment().'/index.php?get_discount_rules=1');
+		$wl = $this->get_warehouse_list();
+//		$whs = $this->get_warehouses();
+//		$wh = new object(reset($whs));
+		$wh = reset($wl);
+		$url = new aw_uri($wh['info'].'/index.php?get_discount_rules=1');
 		$data = unserialize(file_get_contents($url->get()));
 
 		$xml = new SimpleXMLElement("<customer_discounts />");

@@ -1175,7 +1175,7 @@ class taket_afp_import_obj extends _int_object
 		}
 		return $result;
 	}
-
+/*
 	public function get_pricelist_data()
 	{
 		$this->init_vars();
@@ -1211,7 +1211,7 @@ class taket_afp_import_obj extends _int_object
 		}
 		return $xml->asXML();
 	}
-
+*/
 	public function get_products_lut()
 	{
 		$products_lut = array();

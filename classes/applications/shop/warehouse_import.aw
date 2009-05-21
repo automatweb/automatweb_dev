@@ -433,6 +433,8 @@ class warehouse_import extends class_base
 		if (($prev = $o->get_import_log($type, $wh_id)))
 		{
 			$tb = new vcl_table();
+			$tb->set_sortable(false);
+
 			$tb->define_field(array(
 				"caption" => t("Alustati"),
 				"name" => "start",
@@ -510,7 +512,7 @@ class warehouse_import extends class_base
 		$url = $this->mk_my_orb("run_backgrounded", array("wh_id" => $wh_id, "act" => $act, "id" => $id));
 		$url = str_replace("/automatweb", "", $url);
 		$h = new http;
-	//	exit($url);
+		exit($url);  // DEBUG:
 		$h->get($url);
 	}
 
@@ -538,7 +540,7 @@ class warehouse_import extends class_base
 	{
 		session_write_close();
 		while(ob_get_level()) { ob_end_clean(); }
-
+/**/
 // If it is needed to debug the imports, then comment the following lines until 'flush()'
 		// let the user continue with their business
 		ignore_user_abort(1);
@@ -547,7 +549,7 @@ class warehouse_import extends class_base
 		header("Connection: close");
 		echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
 		flush();
-
+/**/
 		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$act = $arr["act"];

@@ -110,14 +110,28 @@ class warehouse_import_obj extends _int_object
 		return $result;
 	}
 
-	// Should return the price list object which is used in import
-	// It is definitely not the best way to that - I probably need to ask this info from warehouses config ...
+	// I need to add here, that one can configure pricelist in import object as well ...
 	public function get_price_list()
 	{
-		$ol = new object_list(array(
-			'class_id' => CL_SHOP_PRICE_LIST
-		));
-		return $ol->begin();
+		$whs = $this->list_aw_warehouses();
+		$first_wh_id = key($whs);
+
+		if ($this->can('view', $first_wh_id))
+		{
+			$wh_obj = new object($first_wh_id);
+			$wh_conf_id = $wh_obj->prop('conf');
+		}
+
+		if ($this->can('view', $wh_conf_id))
+		{
+			$wh_conf = new object($wh_conf_id);
+			$price_list_id = $wh_conf->prop('def_price_list');
+		}
+
+		if ($this->can('view', $price_list_id))
+		{
+			return new object($price_list_id);
+		}
 	}
 
 	public function update_price_list()
@@ -125,18 +139,20 @@ class warehouse_import_obj extends _int_object
 		$this->_start_import("pricelists");
 		$this->_update_status("pricelists", warehouse_import_if::STATE_FETCHING, null, 0);
 
+		$ds = get_instance($this->prop('data_source'));
+/*
 		$ol = new object_list(array(
 			'class_id' => CL_TAKET_AFP_IMPORT
 		));
 		$ds = $ol->begin();
-
+*/
 		// get the pricelist data as XML
-		$xml_data = $ds->get_pricelist_data();	
-		
+		$xml_data = $ds->get_pricelist_xml();
+
 		$xml = new SimpleXMLElement($xml_data);
 
 		$price_list_obj = $this->get_price_list();
-		// product categories ... 
+
 		$product_categories = $this->get_product_categories();
 		$client_categories = $this->get_client_categories();
 
@@ -145,6 +161,7 @@ class warehouse_import_obj extends _int_object
 		$total = count($xml->product_category);
 		$this->_update_status("pricelists", warehouse_import_if::STATE_PROCESSING, null, 0, $total);
 
+		$counter = 0;
 		foreach ($xml->product_category as $cat)
 		{
 			// need to create product_category
@@ -152,9 +169,9 @@ class warehouse_import_obj extends _int_object
 			if ($prod_cat_oid === false)
 			{
 				$prod_cat = new object();
-				$prod_cat->set_name($cat->name);
 				$prod_cat->set_class_id(CL_SHOP_PRODUCT_CATEGORY);
 				$prod_cat->set_parent($price_list_obj->id());
+				$prod_cat->set_name($cat->name);
 				$prod_cat_oid = $prod_cat->save();
 
 				$product_categories[$prod_cat_oid] = (string)$cat->name;
