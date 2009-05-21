@@ -9,6 +9,9 @@
 	@property data_source type=select table=objects field=meta method=serialize
 	@caption Andmeallikas
 
+	@property price_list type=select table=objects field=meta method=serialize
+	@caption Hinnakiri
+
 @default group=aw_warehouses 
 
 	@property aw_warehouses_tb type=toolbar store=no no_caption=1
@@ -267,6 +270,19 @@ class warehouse_import extends class_base
 	function _get_data_source($arr)
 	{
 		$arr["prop"]["options"] = array("" => t("--vali--")) + $this->make_keys(class_index::get_classes_by_interface("warehouse_import_if"));
+	}
+
+	function _get_price_list($arr)
+	{
+		$arr["prop"]["options"] = array("" => t("--vali--"));
+
+		$ol = new object_list(array(
+			'class_id' => CL_SHOP_PRICE_LIST
+		));
+		foreach ($ol->arr() as $oid => $o)
+		{
+			$arr['prop']['options'][$oid] = $o->name();
+		}
 	}
 
 	function _get_aw_warehouses_tb($arr)

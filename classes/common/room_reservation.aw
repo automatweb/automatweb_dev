@@ -315,7 +315,10 @@ class room_reservation extends class_base
 		aw_session_set("no_cache", 1);
 		global $level;
 		enter_function("room_reservation::parse_alias");
-
+if(!$level)
+{
+	$level = $_GET["level"];
+}
 		//antud juhul peaks objektist v6tma info hoopis... peaks olema just tagasi pangamakselt tulnud
 		if($_GET["preview"])
 		{

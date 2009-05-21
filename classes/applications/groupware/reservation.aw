@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.160 2009/03/24 15:04:47 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.161 2009/05/21 16:02:34 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1542,7 +1542,14 @@ class reservation extends class_base
 			$amount = $arr["obj_inst"]->meta("amount");
 			$discount = $this->get_product_discount($arr["obj_inst"]->id());
 		}
-		$room = obj($arr["obj_inst"]->prop("resource"));
+		if($this->can("view" , $arr["room"]))
+		{
+			$room = obj($arr["room"]);
+		}
+		else
+		{
+			$room = obj($arr["obj_inst"]->prop("resource"));
+		}
 		//arr($prod_list);
 		$warehouse = obj($room->prop("warehouse"));
 		if(is_oid($warehouse->prop("conf")))
@@ -1675,7 +1682,7 @@ class reservation extends class_base
 			)),
 		));
 
-		$set_doscount = $this->get_products_discount($arr["obj_inst"]->id());
+		$set_doscount = $arr["obj_inst"] ? $this->get_products_discount($arr["obj_inst"]->id()) : 0;
 
 		if($total_price_set) $sum = $total_price_set;
 		$disc = $sum * ($set_doscount / 100.0);

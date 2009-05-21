@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.38 2008/08/07 11:39:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.39 2009/05/21 16:00:10 markop Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -645,7 +645,8 @@ class shop_product_packaging extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_CURRENCY,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"sort_by" => "name asc",
 		));
 		$prs = $arr["obj_inst"]->meta("cur_prices");
 		foreach($ol->arr() as $cur)
@@ -659,6 +660,7 @@ class shop_product_packaging extends class_base
 				"cur" => $cur->name()
 			));
 		}
+		$t->set_sortable(false);
 	}
 
 	/** Returns the list of amount limits for the product.

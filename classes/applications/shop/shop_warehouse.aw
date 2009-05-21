@@ -7697,7 +7697,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		foreach($ol->arr() as $oid => $o)
 		{
-			$date = $o->prop("date");
+			$date = $o->created();
 			$tb->add_menu_item(array(
 				"parent" => "move_to_order_w".($nw - date('W', $date) + 1),
 				"text" => sprintf("%s (%s)", date('d.m.Y', $date), ($p = $o->prop("purchaser")) ? obj($p)->name() : t("Tundmatu tarnija")),

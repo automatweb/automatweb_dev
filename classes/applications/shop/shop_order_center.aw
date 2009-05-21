@@ -862,6 +862,10 @@ class shop_order_center extends class_base
 
 	function get_prod_layout_for_folder($soc, $section)
 	{
+		if(!$section)
+		{
+			return false;
+		}
 		$il = $soc->meta("itemlayouts");
 		$_p = obj($section);
 		foreach(array_reverse($_p->path()) as $p)
@@ -877,6 +881,10 @@ class shop_order_center extends class_base
 	function get_prod_table_layout_for_folder($soc, $section)
 	{
 		$il = $soc->meta("tblayouts");
+		if(!$section)
+		{
+			return false;
+		}
 		$_p = obj($section);
 		foreach(array_reverse($_p->path()) as $p)
 		{
