@@ -512,7 +512,7 @@ class warehouse_import extends class_base
 		$url = $this->mk_my_orb("run_backgrounded", array("wh_id" => $wh_id, "act" => $act, "id" => $id));
 		$url = str_replace("/automatweb", "", $url);
 		$h = new http;
-		exit($url);  // DEBUG:
+//		exit($url);  // DEBUG:
 		$h->get($url);
 	}
 
