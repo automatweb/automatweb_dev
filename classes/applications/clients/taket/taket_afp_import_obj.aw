@@ -1175,43 +1175,7 @@ class taket_afp_import_obj extends _int_object
 		}
 		return $result;
 	}
-/*
-	public function get_pricelist_data()
-	{
-		$this->init_vars();
-		$whs = $this->get_warehouses();
-		$wh = new object(reset($whs));
-		$url = new aw_uri($wh->comment().'/index.php?get_discount_rules=1');
-		$data = unserialize(file_get_contents($url->get()));
 
-		$xml = new SimpleXMLElement("<customer_discounts />");
-		
-		foreach ($data as $value)
-		{
-			$product_cat = $xml->addChild('product_category');
-			foreach ($value as $k => $v)
-			{
-				switch( $k )
-				{
-					case 'KAT_KOODI':
-						$product_cat->addChild('name', utf8_encode($v));
-						break;
-					case 'KAT_ALARAJA':
-						$product_cat->addChild('lower_limit', utf8_encode($v));
-						break;
-					case 'KAT_YLARAJA':
-						$product_cat->addChild('upper_limit', utf8_encode($v));
-						break;
-					default:
-						$client_cat = $product_cat->addChild('client_category');
-						$client_cat->addChild('name', str_replace('KAT_ALE', '', $k));
-						$client_cat->addChild('value', $v);
-				}
-			}
-		}
-		return $xml->asXML();
-	}
-*/
 	public function get_products_lut()
 	{
 		$products_lut = array();
