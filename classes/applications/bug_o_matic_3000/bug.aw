@@ -1038,6 +1038,16 @@ class bug extends class_base
 					}
 					$prop["options"] += $ppl;
 				}
+				if($prop["name"] == "bug_feedback_p")
+				{
+					foreach($arr["obj_inst"]->prop("monitors") as $oid)
+					{
+						if($this->can("view", $oid))
+						{
+							$prop["options"][$oid] = obj($oid)->name();
+						}
+					}
+				}
 				$this->_sort_bug_ppl(&$arr);
 				break;
 
@@ -2802,15 +2812,32 @@ class bug extends class_base
 				$o->id(),
 			);
 			$mail_contents = str_replace($find, $replace, $mail);
-			$mails[] = $person->get_first_obj_by_reltype("RELTYPE_EMAIL");
-		
-			$mails[] = $creator->get_first_obj_by_reltype("RELTYPE_EMAIL");
+			$mail = $person->get_first_obj_by_reltype("RELTYPE_EMAIL");
+			if(!$mail)
+			{
+				$mid = $person->prop("email");
+				if($this->can("view", $mid))
+				{
+					$mail = obj($mid);
+				}
+			}
+			$mails[] = $mail;
+			$mail = $creator->get_first_obj_by_reltype("RELTYPE_EMAIL");
+			if(!$mail)
+			{
+				$mid = $creator->prop("email");
+				if($this->can("view", $mid))
+				{
+					$mail = obj($mid);
+				}
+			}
+			$mails[] = $mail;
 	
 			foreach($mails as $mail)
 			{
 				if($mail)
 				{
-					$adr = $mail->prop("mail");
+					$adr = $mail->prop("mail");arr($adr);
 					send_mail($adr, "Lisati arendustellimus", $mail_contents, "From: bugtrack@".substr(strstr(aw_ini_get("baseurl"), "//"), 2));
 				}
 	

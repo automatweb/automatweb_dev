@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.27 2009/05/19 11:55:10 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.28 2009/05/21 07:11:50 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -282,6 +282,7 @@ class development_order extends class_base
 				break;
 
 			case "monitors":
+			case "bug_feedback_p":
 				if ($arr["new"] || true)
 				{
 					foreach($this->parent_options[$prop["name"]] as $key => $val)
@@ -310,6 +311,7 @@ class development_order extends class_base
 					{
 						if ($pi->class_id() == CL_BUG_TRACKER)
 						{
+							$bt_obj = $pi;
 							$bt = $pi->instance();
 							foreach($bt->get_people_list($pi) as $pid => $pnm)
 							{
@@ -325,6 +327,51 @@ class development_order extends class_base
 					$prop["options"][$tmp->id()] = $tmp->name();
 				}
 
+				if ($prop["name"] == "monitors" && (!$bt_obj || !$bt_obj->prop("bug_only_bt_ppl")))
+				{
+					$u = get_instance(CL_USER);
+					$cur = obj($u->get_current_person());
+					$sections = $cur->connections_from(array(
+							"class_id" => CL_CRM_SECTION,
+      							"type" => "RELTYPE_SECTION"
+					));
+					$ppl = array();
+					foreach($sections as $s)
+					{
+						$sc = obj($s->conn["to"]);
+						$profs = $sc->connections_from(array(
+							"class_id" => CL_CRM_PROFESSION,
+	       						"type" => "RELTYPE_PROFESSIONS"
+					  	));
+						foreach($profs as $p)
+						{
+							$professions[$p->conn["to"]] = $p->conn["to"];
+						}
+					}
+					$c = new connection();
+					$people = $c->find(array(
+						"from.class_id" => CL_CRM_PERSON,
+     						 "type" => "RELTYPE_RANK",
+    						  "to" => $professions
+					));
+					foreach($people as $person)
+					{
+						$ob = obj($person["from"]);
+						$ppl[$ob->id()] = $ob->name();
+					}
+					$prop["options"] += $ppl;
+				}
+				if($prop["name"] == "bug_feedback_p")
+				{
+					foreach($arr["obj_inst"]->prop("monitors") as $oid)
+					{
+						if($this->can("view", $oid))
+						{
+							$prop["options"][$oid] = obj($oid)->name();
+						}
+					}
+				}
+
 				if (is_array($prop["value"]))
 				{
 					foreach($prop["value"] as $val)
@@ -335,36 +382,6 @@ class development_order extends class_base
 							$prop["options"][$tmp->id()] = $tmp->name();
 						}
 					}
-				}
-				$u = get_instance(CL_USER);
-				$cur = obj($u->get_current_person());
-				$sections = $cur->connections_from(array(
-					"class_id" => CL_CRM_SECTION,
-     					 "type" => "RELTYPE_SECTION"
-				));
-				$ppl = array();
-				foreach($sections as $s)
-				{
-					$sc = obj($s->conn["to"]);
-					$profs = $sc->connections_from(array(
-						"class_id" => CL_CRM_PROFESSION,
-      						"type" => "RELTYPE_PROFESSIONS"
-					));
-					foreach($profs as $p)
-					{
-						$professions[$p->conn["to"]] = $p->conn["to"];
-					}
-				}
-				$c = new connection();
-				$people = $c->find(array(
-					"from.class_id" => CL_CRM_PERSON,
-      					"type" => "RELTYPE_RANK",
-     					"to" => $professions
-				));
-				foreach($people as $person)
-				{
-					$ob = obj($person["from"]);
-					$ppl[$ob->id()] = $ob->name();
 				}
 				
 				$orderers = $arr["obj_inst"]->prop("orderer");
