@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="content_package_price_conditions" folder="contentmgmt/content_package" extends="class_base">
+	</class>
+</orb>
+		
