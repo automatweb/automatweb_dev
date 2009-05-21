@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.10 2009/05/18 06:47:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.11 2009/05/21 11:46:14 kristo Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 @classinfo syslog_type=ST_TAKET_USERS_IMPORT relationmgr=yes
@@ -26,16 +26,172 @@ class taket_users_import extends class_base implements customer_import_datasourc
 
 	function get_customer_list_xml()
 	{
+		$gud = file("http://88.196.208.74:8888/xmlrpc/index.php?get_users_data=1");
+		$first = true;
+		$customers = array();
+		foreach($gud as $line)
+		{
+			if ($first)
+			{
+				$first = false;
+				continue;
+			}
+
+			$fields = explode("\t", trim($line));
+			$id = trim($fields[0]);
+			if (isset($customers[$id]))
+			{
+				// add category
+				$customers[$id]["categories"][] = trim($fields["18"]);
+			}
+			else
+			{
+				$currency = null;
+				$cur = trim($fields[13]);
+				if ($cur != "")
+				{
+					$currency = currency::find_by_symbol($cur)->id();
+				}
+				$customers[$id] = array(
+					"extern_id" => $id,
+					"name" => trim($fields[3]),
+					"fake_address_address" => trim($fields[4]),
+					"fake_address_postal_code" => trim($fields[6]),
+					"fake_email" => trim($fields[7]),
+					"fake_phone" => trim($fields[8]),
+					"fake_mobile" => trim($fields[11]),
+					"fake_url" => trim($fields[12]),
+					"currency" => $currency,
+					"fake_address_country" => trim($fields[14]),
+					"language" => trim($fields[15]),
+					"categories" => array(trim($fields["18"]))
+				);
+			}
+		}
+
+		$xml = new SimpleXMLElement("<?xml version='1.0'?><customers></customers>");
+		foreach($customers as $cust)
+		{
+			if (trim($cust["name"]) == "")
+			{
+				continue;
+			}
+			$cat = $xml->addChild("customer");
+			$cat->addChild("name", $this->_t($cust["name"]));
+			$cat->addChild("extern_id", $this->_t($cust["extern_id"]));
+			$cat->addChild("fake_address_address", $this->_t($cust["fake_address_address"]));
+			$cat->addChild("fake_address_postal_code", $this->_t($cust["fake_address_postal_code"]));
+			$cat->addChild("fake_email", $this->_t($cust["fake_email"]));
+			$cat->addChild("fake_phone", $this->_t($cust["fake_phone"]));
+			$cat->addChild("fake_mobile", $this->_t($cust["fake_mobile"]));
+			$cat->addChild("fake_url", $this->_t($cust["fake_url"]));
+			$cat->addChild("fake_address_country", $this->_t($cust["fake_address_country"]));
+//			$cat->addChild("language", $cust["language"]);
+
+			$cats = $cat->addChild("categories");
+			foreach($cust["categories"] as $catx)
+			{
+				$cats->addChild("category", $this->_t($catx));
+			}
+		}
+		return $xml->asXML();
+	}
+
+	function _t($s)
+	{
+		return str_replace("&", "&amp;", htmlentities($s));
 	}
 
 	function get_category_list_xml()
 	{
-		$gud = file_get_contents("http://88.196.208.74:8888/xmlrpc/index.php?get_users_data=1");
-	die($gud);
+		$gud = file("http://88.196.208.74:8888/xmlrpc/index.php?get_users_data=1");
+		$first = true;
+		$groups = array();
+		foreach($gud as $line)
+		{
+			if ($first)
+			{
+				$first = false;
+				continue;
+			}
+
+			$fields = explode("\t", trim($line));
+			$groups[trim($fields[18])] = trim($fields[18]);
+		}
+
+		$xml = new SimpleXMLElement("<?xml version='1.0'?><categories></categories>");
+		foreach($groups as $group)
+		{
+			if (trim($group) == "")
+			{
+				continue;
+			}
+			$cat = $xml->addChild("category");
+			$cat->addChild("name", $group);
+			$cat->addChild("extern_id", $group);
+		}
+		return $xml->asXML();
 	}
 
 	function get_person_list_xml()
 	{
+//		$gud = file("http://88.196.208.74:8888/xmlrpc/index.php?get_users_data=1");
+		$gpd = file("http://88.196.208.74:8888/xmlrpc/index.php?get_persons_data=1");
+
+		$first = true;
+		$customers = array();
+		foreach($gpd as $line)
+		{
+			if ($first)
+			{
+				$first = false;
+			$fields = explode("\t", trim($line));
+//die(dbg::dump($fields));
+				continue;
+			}
+
+			$fields = explode("\t", trim($line));
+			$id = trim($fields[0]);
+			if (!isset($customers[$id]))
+			{
+				$customers[$id] = array(
+					"extern_id" => $id,
+					"extern_customer_id" => trim($fields[1]),
+					"name" => trim($fields[4]),
+					"first_name" => trim($fields[2]),
+					"last_name" => trim($fields[3]),
+					"rank" => trim($fields[5]),
+					"fake_phone" => trim($fields[6]),
+					"fake_mobile" => trim($fields[7]),
+					"fake_fax" => trim($fields[8]),
+					"fake_email" => trim($fields[9]),
+					"comment" => trim($fields[10]),
+				);
+			}
+		}
+
+		$xml = new SimpleXMLElement("<?xml version='1.0'?><persons></persons>");
+		foreach($customers as $cust)
+		{
+			if (trim($cust["name"]) == "")
+			{
+				continue;
+			}
+			$cat = $xml->addChild("person");
+			$cat->addChild("name", $this->_t($cust["name"]));
+			$cat->addChild("firstname", $this->_t($cust["first_name"]));
+			$cat->addChild("lastname", $this->_t($cust["last_name"]));
+			$cat->addChild("external_id", $this->_t($cust["extern_id"]));
+			$cat->addChild("company_external_id", $this->_t($cust["extern_customer_id"]));
+
+			$cat->addChild("rank", $this->_t($cust["rank"]));
+			$cat->addChild("fake_email", $this->_t($cust["fake_email"]));
+			$cat->addChild("fake_phone", $this->_t($cust["fake_phone"]));
+			$cat->addChild("fake_mobile", $this->_t($cust["fake_mobile"]));
+			$cat->addChild("fake_fax", $this->_t($cust["fake_fax"]));
+			$cat->addChild("comment", $this->_t($cust["comment"]));
+		}
+		return $xml->asXML();
 	}
 
 	function get_user_list_xml()

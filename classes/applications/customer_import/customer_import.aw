@@ -121,7 +121,7 @@ class customer_import extends class_base
 
 	function _get_imp_status($arr)
 	{	
-		$arr["prop"]["value"] = $this->_describe_import($arr["obj_inst"], "pricelists", "RELTYPE_PRICE_LISTS_REPEATER");
+		$arr["prop"]["value"] = $this->_describe_import($arr["obj_inst"], "customer", "RELTYPE_PRICE_LISTS_REPEATER");
 	}
 
 	private function _describe_import($o, $type, $rt, $wh_id = null)
@@ -233,7 +233,9 @@ class customer_import extends class_base
 					"reason" => $entry["reason"]
 				));
 			}
-
+			$tb->set_default_sortby("end");
+			$tb->set_default_sorder("desc");
+			$tb->sort_by();
 			$tb->set_caption(t("Eelneva 10 impordi info"));
 			$t .= "<br/>".$tb->get_html();
 		}
@@ -261,6 +263,7 @@ class customer_import extends class_base
 		$url = str_replace("/automatweb", "", $url);
 		$h = new http;
 		$h->get($url);
+		sleep(1);
 	}
 
 	/**
@@ -289,12 +292,12 @@ class customer_import extends class_base
 		while(ob_get_level()) { ob_end_clean(); }
 
 		// let the user continue with their business
-/*		ignore_user_abort(1);
+		ignore_user_abort(1);
                 header("Content-Type: image/gif");
                 header("Content-Length: 43");
                 header("Connection: close");
                 echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
-                flush();*/
+                flush();
 		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$act = $arr["act"];
@@ -311,6 +314,12 @@ class customer_import extends class_base
 	{
 		$this->run_backgrounded("real_customer_import", $arr["id"]);
 		return $arr["post_ru"];
+	}
+
+	function resume_customer_import($id)
+	{
+		$o = obj($id);
+		$o->resume_from_process_switch();
 	}
 
 	function real_customer_import($id)

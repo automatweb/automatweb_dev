@@ -37,6 +37,54 @@ class customer_import_obj extends _int_object
 		return $pidinfo;
 	}
 
+	private function do_process_switch()
+	{
+		// save state
+		$this->_save_state();
+
+		// begin new process and tell it to restore state
+		$this->_spawn_resume_process();
+
+		// redirect status scoreboard to new process
+			// actually this should happen automatically?
+
+		// kill this process
+		die();
+	}
+
+	private function _save_state()
+	{
+		
+	}
+
+	private function _resume_state()
+	{
+		
+	}
+
+	private function _spawn_resume_process()
+	{
+		$i = get_instance("customer_import");
+		$url = $i->mk_my_orb("run_backgrounded", array("act" => "resume_customer_import", "id" => $this->id()), "customer_import");
+		$url = str_replace("/automatweb", "", $url);
+		$h = new http;
+		$h->get($url);
+	}
+
+	public function resume_from_process_switch()
+	{
+		sleep(2);
+		// get old state
+		$old_state = $this->_get_saved_state();
+		$this->cover_customer_import_state($old_state);
+	}
+
+	function _get_saved_state()
+	{
+		// read from file
+		list($tm, $pid, $status) = $this->full_import_status("customer");
+		return $status;
+	}
 
 	static private function _status_fn($type, $wh_id = "")
 	{
@@ -222,19 +270,79 @@ class customer_import_obj extends _int_object
 
 	function start_customer_import()
 	{
+		get_instance("users")->login(array("uid" => "kristo", "password" => "jobu13"));
+		aw_set_exec_time(AW_LONG_PROCESS);
 		while (ob_get_level()) { ob_end_clean(); }
 		$this->_start_import("customer");
 
-		$i = get_instance($this->prop("data_source"));
-
-		$this->_categories($i);
-		$this->_customers($i);
-		$this->_persons($i);
-		$this->_users($i);
-
+		$this->cover_customer_import_state(customer_import_datasource::STATE_STARTING);
 		// finish
 		$this->_end_import("customer");
-		
+
+
+		$i = get_instance($this->prop("data_source"));
+
+//		$this->_categories($i);
+	//	$this->_customers($i);
+
+		$this->_persons($i);
+die("catz done");
+//		$this->_users($i);
+
+	}
+
+	private 		$lut = array(
+			customer_import_datasource::STATE_STARTING => "_start",
+			customer_import_datasource::STATE_PROCESS_CATEGORY_XML => "_categories",
+			customer_import_datasource::STATE_PROCESS_CUSTOMER_XML => "_customers",
+			customer_import_datasource::STATE_PROCESS_PERSON_XML => "_persons",
+			customer_import_datasource::STATE_PROCESS_USER_XML => "_users",
+			customer_import_datasource::STATE_FINISHING => "_finish"
+		);
+
+
+	private function _state_mapper($state)
+	{
+		return $this->lut[$state];
+	}
+
+	function _get_next_state($old_state)
+	{
+		foreach($this->lut as $state => $d)
+		{
+			if ($state > $old_state)
+			{
+				return $state;
+			}
+		}
+		return null;
+	}
+
+	function cover_customer_import_state($old_state)
+	{
+echo "enter cover state $old_state <br>";
+		// get processor function for next state
+		$next = $this->_get_next_state($old_state);
+echo "next = $next <br>";
+		if ($next === null)
+		{
+			return;
+		}
+		$func = $this->_state_mapper($next);
+echo "func = $func <br>";
+		// run it
+		$i = get_instance($this->prop("data_source"));
+		$this->$func($i);
+		// switch process
+echo "switching process <br>";
+		$this->do_process_switch();
+	}
+
+
+	private function _finish($i)
+	{
+		$this->_end_import("customer");
+		die("all done");
 	}
 
 	private function _users($i)
@@ -243,11 +351,11 @@ class customer_import_obj extends _int_object
 		$this->_update_status("customer", customer_import_datasource::STATE_FETCH_USER_XML);
 		$xml = $i->get_user_list_xml();
 		
-		$sx = new SimpleXMLElement($xml);
-		$total = count($sx->user);
+//		$sx = new SimpleXMLElement($xml);
+//		$total = count($sx->user);
 
 		$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_USER_XML, null, 0, $total); 
-
+return;
 		// process
 		$this->_do_customer_import_process_users($sx);
 	}
@@ -274,10 +382,10 @@ class customer_import_obj extends _int_object
 
 			if ((++$counter % 10) == 1)
 			{
-				$this->_update_status("customers", customer_import_datasource::STATE_PROCESS_USER_XML, null, $counter, $total);
-				if ($this->need_to_stop_now("customers"))
+				$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_USER_XML, null, $counter, $total);
+				if ($this->need_to_stop_now("customer"))
 				{
-					$this->_end_import_from_flag("customers");
+					$this->_end_import_from_flag("customer");
 					die("stopped for flag");
 				}
 			}
@@ -365,7 +473,7 @@ class customer_import_obj extends _int_object
 		// status fetch xml
 		$this->_update_status("customer", customer_import_datasource::STATE_FETCH_PERSON_XML);
 		$xml = $i->get_person_list_xml();
-		
+
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->person);
 
@@ -379,31 +487,37 @@ class customer_import_obj extends _int_object
 	{
 		$cur_list = $this->_list_current_persons();
 		$total = count($sx->person);
+
+		$existing_customers = $this->_list_current_customers();
+
 		$counter = 0;
 		foreach($sx->person as $cat)
 		{
-			$ext_id = (string)$cat->extern_id;
+			$ext_id = (string)$cat->external_id;
 			if (isset($cur_list[$ext_id]))
 			{
 				// update existing
-				$this->_update_existing_person($cat, $cur_list[$ext_id]);
+echo "upd existing ".((string)$cat->name)." <br>";
+				$this->_update_existing_person($cat, $cur_list[$ext_id], false, $existing_customers);
 				unset($cur_list[$ext_id]);
 			}
 			else
 			{
 				// add new
-				$this->_add_new_person($cat);
+echo "add new ".((string)$cat->name)." <br>";
+				$this->_add_new_person($cat, $existing_customers);
 			}
 
 			if ((++$counter % 10) == 1)
 			{
-				$this->_update_status("customers", customer_import_datasource::STATE_PROCESS_PERSON_XML, null, $counter, $total);
-				if ($this->need_to_stop_now("customers"))
+				$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_PERSON_XML, null, $counter, $total);
+				if ($this->need_to_stop_now("customer"))
 				{
-					$this->_end_import_from_flag("customers");
+					$this->_end_import_from_flag("customer");
 					die("stopped for flag");
 				}
 			}
+//die("uandun");
 		}
 
 		foreach($cur_list as $ext_id => $cat)
@@ -422,20 +536,27 @@ class customer_import_obj extends _int_object
 		$d = array();
 		foreach($ol->arr() as $o)
 		{
-			$d[$o->external_id] = $o;
+//echo dbg::dump($o->external_id);
+			if ($o->external_id != "")
+			{
+				$d[$o->external_id] = $o;
+			}
 		}
+//echo (dbg::dump($d));
 		return $d;
 	}
 
-	private function _update_existing_person($external, $aw, $mod = false)
+	private function _update_existing_person($external, $aw, $mod = false, $existing_customers)
 	{
 		// check if different
 		foreach($external as $key => $value) 
 		{
-			if ($aw->$key != $value)
+			$value = (string)$value;
+//echo "key = $key , val = $value <br>";
+			if ($aw->is_property($key) && $aw->$key != $value)
 			{
 				$mod = true;
-				$aw->set_prop($key, $value);
+				$aw->set_prop($key, html_entity_decode($value, ENT_COMPAT, aw_global_get("charset")));
 			}
 		}
 
@@ -443,28 +564,42 @@ class customer_import_obj extends _int_object
 		{
 			$aw->save();
 		}
+
+		// connect to company
+		if (isset($existing_customers[(string)$external->company_external_id]))
+		{
+			$co = $existing_customers[(string)$external->company_external_id];
+			$co->add_employees(array("id" => $aw->id()));
+echo "added to co ".dbg::dump($co->name)." <br>";
+		}
+echo "updated ".html::obj_change_url($aw)." <br>";
 	}
 
-	private function _add_new_person($external)
+	private function _add_new_person($external, $exc)
 	{
 		$aw = obj();
 		$aw->set_class_id(CL_CRM_PERSON);
 		$aw->set_parent($this->id());
-		$this->_update_existing_person($external, $aw, true);
+		$aw->save();
+		$this->_update_existing_person($external, $aw, true, $exc);
 	}
 
 	private function _delete_unused_person($aw)
 	{
 		// TODO: implement
+echo "delete ".$aw->name()." <br>";
+		$aw->delete();
 	}
 
 
 	private function _customers($i)
 	{
+
 		// status fetch xml
 		$this->_update_status("customer", customer_import_datasource::STATE_FETCH_CUSTOMER_XML);
 		$xml = $i->get_customer_list_xml();
-		
+
+		//die("<pre>".htmlentities($xml));
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->customer);
 
@@ -479,27 +614,35 @@ class customer_import_obj extends _int_object
 		$cur_list = $this->_list_current_customers();
 		$total = count($sx->customer);
 		$counter = 0;
+
+		$existing_cats = $this->_list_current_categories();
+//echo dbg::dump($cur_list);
+//die(dbg::dump($cur_list));
+//die(dbg::dump($sx));
 		foreach($sx->customer as $cat)
 		{
 			$ext_id = (string)$cat->extern_id;
+//echo "extid = ".dbg::dump($cat)." <br>";
 			if (isset($cur_list[$ext_id]))
 			{
 				// update existing
-				$this->_update_existing_customer($cat, $cur_list[$ext_id]);
+echo "upd existing ".dbg::dump($cat->name)." <br>";
+				$this->_update_existing_customer($cat, $cur_list[$ext_id], false, $existing_cats);
 				unset($cur_list[$ext_id]);
 			}
 			else
 			{
 				// add new
-				$this->_add_new_customer($cat);
+echo "add new ".dbg::dump($cat->name)." <br>";
+				$this->_add_new_customer($cat, $existing_cats);
 			}
 
 			if ((++$counter % 10) == 1)
 			{
-				$this->_update_status("customers", customer_import_datasource::STATE_PROCESS_CUSTOMER_XML, null, $counter, $total);
-				if ($this->need_to_stop_now("customers"))
+				$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_CUSTOMER_XML, null, $counter, $total);
+				if ($this->need_to_stop_now("customer"))
 				{
-					$this->_end_import_from_flag("customers");
+					$this->_end_import_from_flag("customer");
 					die("stopped for flag");
 				}
 			}
@@ -507,6 +650,7 @@ class customer_import_obj extends _int_object
 
 		foreach($cur_list as $ext_id => $cat)
 		{
+echo "delete unused ".dbg::dump($cat)." <br>";
 			$this->_delete_unused_customer($cat);
 		}
 	}
@@ -522,16 +666,16 @@ class customer_import_obj extends _int_object
 		return $d;
 	}
 
-	private function _update_existing_customer($external, $aw)
+	private function _update_existing_customer($external, $aw, $mod = false, $existing_cats)
 	{
 		// check if different
-		$mod = false;
 		foreach($external as $key => $value) 
 		{
-			if ($aw->$key != $value)
+			$value = (string)$value;
+			if ($aw->is_property($key) && $aw->$key != $value)
 			{
 				$mod = true;
-				$aw->set_prop($key, $value);
+				$aw->set_prop($key, html_entity_decode($value, ENT_COMPAT, aw_global_get("charset")));
 			}
 		}
 
@@ -539,13 +683,34 @@ class customer_import_obj extends _int_object
 		{
 			$aw->save();
 		}
+
+		// categories
+		foreach($external->categories->category as $cat)
+		{
+//			echo "category = ".(dbg::dump());
+			// get cat by ext id
+			$cato = $existing_cats[(string)$cat];
+//echo "cat id = ".((string)$cat)." o = ".dbg::dump($cato)." <br>";
+			if ($cato)
+			{
+				$cato->connect(array(
+					"to" => $aw->id(),
+					"type" => "RELTYPE_CUSTOMER"
+				));
+			}
+		}
+echo "updated ".html::obj_change_url($aw)." <br>";
 	}
 
-	private function _add_new_customer($external)
+	private function _add_new_customer($external, $existing_cats)
 	{
 		$co = obj($this->prop("company"));
-		$aw = obj($co->add_customer((string)$external->name));
-		$this->_update_existing_person($external, $aw, true);
+		//$aw = obj($co->add_customer((string)$external->name));
+		$aw = obj();
+		$aw->set_class_id(CL_CRM_COMPANY);
+		$aw->set_parent($co->id());
+		$this->_update_existing_customer($external, $aw, true, $existing_cats);
+		$aw->get_customer_relation($co, true);
 	}
 
 	private function _delete_unused_customer($aw)
@@ -558,7 +723,7 @@ class customer_import_obj extends _int_object
 		// status fetch xml
 		$this->_update_status("customer", customer_import_datasource::STATE_FETCH_CATEGORY_XML);
 		$xml = $i->get_category_list_xml();
-		
+
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->category);
 
@@ -570,30 +735,35 @@ class customer_import_obj extends _int_object
 
 	private function _do_customer_import_process_categories($sx)
 	{
+//automatweb::$instance->mode(automatweb::MODE_REASONABLE);
 		$cur_list = $this->_list_current_categories();
+echo "git existing as ".dbg::dump($cur_list)." <br>";
 		$total = count($sx->category);
 		$counter = 0;
+
 		foreach($sx->category as $cat)
 		{
 			$ext_id = (string)$cat->extern_id;
 			if (isset($cur_list[$ext_id]))
 			{
 				// update existing
+echo "update existing ".dbg::dump($cat)." <br>";
 				$this->_update_existing_cat($cat, $cur_list[$ext_id]);
 				unset($cur_list[$ext_id]);
 			}
 			else
 			{
 				// add new
+echo "add new ".dbg::dump($cat)." <br>";
 				$this->_add_new_cat($cat);
 			}
 
 			if ((++$counter % 10) == 1)
 			{
-				$this->_update_status("customers", customer_import_datasource::STATE_PROCESS_CATEGORY_XML, null, $counter, $total);
-				if ($this->need_to_stop_now("customers"))
+				$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_CATEGORY_XML, null, $counter, $total);
+				if ($this->need_to_stop_now("customer"))
 				{
-					$this->_end_import_from_flag("customers");
+					$this->_end_import_from_flag("customer");
 					die("stopped for flag");
 				}
 			}
@@ -601,6 +771,7 @@ class customer_import_obj extends _int_object
 
 		foreach($cur_list as $ext_id => $cat)
 		{
+echo "delete ".dbg::dump($cat)." <br>";
 			$this->_delete_unused_cat($cat);
 		}
 	}
@@ -612,10 +783,7 @@ class customer_import_obj extends _int_object
 		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 		{
 			$t = $c->to();
-			if ($t->prop("extern_id"))
-			{
-				$existing[$c->prop("to")] = $t;
-			}
+			$existing[$t->prop("extern_id")] = $t;
 		}
 		return $existing;
 	}
@@ -625,6 +793,7 @@ class customer_import_obj extends _int_object
 		// check if different
 		foreach($external as $key => $value) 
 		{
+			$value = (string)$value;
 			if ($aw->$key != $value)
 			{
 				$mod = true;
