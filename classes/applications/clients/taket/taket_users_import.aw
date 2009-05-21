@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.11 2009/05/21 11:46:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.12 2009/05/21 13:35:53 dragut Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 @classinfo syslog_type=ST_TAKET_USERS_IMPORT relationmgr=yes
@@ -8,7 +8,7 @@
 @default group=general
 
 @groupinfo caption=Impordi
-@property store=no method=Import
+@property import type=text store=no method=Import
 */
 
 class taket_users_import extends class_base implements customer_import_datasource
