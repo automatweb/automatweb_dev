@@ -105,7 +105,7 @@ function unloadHandler()
 				 //alert( "Data Saved: " + msg );
 				},
 				error: function(msg){
-					alert( "{VAR:msg_leave_error}");
+					//alert( "{VAR:msg_leave_error}");
 				}
 
 			});
