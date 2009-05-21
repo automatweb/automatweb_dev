@@ -1265,6 +1265,7 @@ class html
 	**/
 	public static function href($args = array())
 	{
+
 		extract($args);
 		if (!isset($onClick) && isset($onclick))
 		{
@@ -1574,9 +1575,8 @@ class html
 	**/
 	public static function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
 	{
-		$inst = get_instance(CL_FILE);
 
-		if (!$inst->can("view", $oid))
+		if (!$GLOBALS["object_loader"]->cache->can("view", $oid))
 		{
 			if ($caption != "")
 			{
@@ -1588,7 +1588,7 @@ class html
 		$obj = obj($oid);
 		$params["id"] = $obj->id();
 
-		if ((!isset($_GET["action"]) || $_GET["action"] !== "view") && $inst->can("edit", $oid))
+		if ((!isset($_GET["action"]) || $_GET["action"] !== "view") && $GLOBALS["object_loader"]->cache->can("edit", $oid))
 		{
 			$act = "change";
 		}
@@ -1602,8 +1602,6 @@ class html
 			$params["section"] = $_GET["section"];
 		}
 
-		$retval = $inst->mk_my_orb($act, $params, $obj->class_id());
-
 		if($caption || (is_integer($caption) && $caption == 0))
 		{
 			$retval = html::href(array(
@@ -1611,6 +1609,11 @@ class html
 				"caption" => $caption,
 				"title" => $title
 			));
+		}
+		else
+		{
+			$inst = get_instance(CL_FILE);
+			$retval = $inst->mk_my_orb($act, $params, $obj->class_id());
 		}
 
 		return $retval;

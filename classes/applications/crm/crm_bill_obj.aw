@@ -215,8 +215,7 @@ class crm_bill_obj extends _int_object
 	function get_bill_needs_payment($arr)
 	{
 		$payment = $arr["payment"];
-		$bi = get_instance(CL_CRM_BILL);
-		$bill_sum = $bi->get_bill_sum($this);
+		$bill_sum = $this->get_bill_sum();
 		$sum = 0;
 		foreach($this->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
 		{

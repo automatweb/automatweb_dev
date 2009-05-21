@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.168 2009/05/12 15:54:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.169 2009/05/21 15:56:00 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -4310,9 +4310,9 @@ class project extends class_base
 			'tooltip' => t('Loo arve'),
 			'action' => "create_bill",
 		));
-
-		$bills = $arr["obj_inst"]->get_all_customer_bills(array("status" =>  0));
-
+		enter_function("bills::all_cust_bills");
+		$bills = $arr["obj_inst"]->get_bills(array("status" =>  0));
+exit_function("bills::all_cust_bills");
 		if($bills->count())
 		{
 			$tb->add_menu_button(array(
@@ -4560,7 +4560,7 @@ class project extends class_base
 				$hr_price = $row->prop("task.hr_price");
 				$t->define_data(array(
 					"oid" => $row->id(),
-					"name" => $row->prop("content"),
+					"name" =>  html::obj_change_url($row , $row->prop("content") ? htmlspecialchars($row->prop("content")) : t("...") , array("group" => "rows")),
 					"hrs_cust" => $this->stats->hours_format($row->prop("time_to_cust")),
 					"hrs" => $this->stats->hours_format($row->prop("hours_real")),
 					"hr_price" => number_format($hr_price,2),
@@ -4598,16 +4598,18 @@ class project extends class_base
 			$this->hour_prices[$bug->id()] = $bug->prop("hr_price");
 			$bug_data = array(
 				"open" => html::href(array(
-					"url" => "#", //aw_url_change_var("proj", $p),
+					"url" => "javascript:void(0)", //aw_url_change_var("proj", $p),
 					"onClick" => "el=document.getElementById(\"bug".$bug->id()."\"); if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){if (el.style.display == \"block\") { d = \"none\";} else { d = \"block\";} } else { if (el.style.display == \"table-row\") {  d = \"none\"; } else {d = \"table-row\";} }  el.style.display=d;",
 					"caption" => t("Ava")
 				)),
-				"name" => $bug->name().$lister,
 				"hr_price" => number_format($this->hour_prices[$bug->id()],2),
 				"set_date" => date("d.m.Y" , ($bug->prop("to_bill_date"))),
 				"date" => date("d.m.Y" , $this->bug_start[$bug->id()]) . " - ".date("d.m.Y" , $this->bug_end[$bug->id()]),
 				"oid" => $bug->id(),
 			);
+			$bug_data["name"] = html::href(array(
+				"caption" => $bug->name() ? htmlspecialchars($bug->name()) : t("..."),
+				"url" => html::obj_change_url($bug , array()))).$lister;
 			$bug_data["hrs"] = $this->stats->hours_format($this->bug_real_hours[$bug->id()]);
 			$bug_data["hrs_cust"] = $this->stats->hours_format($this->bug_hours[$bug->id()]);
 			$bug_data["sum"] = number_format(($this->bug_hours[$bug->id()] * $this->hour_prices[$bug->id()]),2);

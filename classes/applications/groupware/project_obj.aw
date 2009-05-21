@@ -516,6 +516,12 @@ class project_obj extends _int_object
 	private function get_bills_filter($status = null)
 	{
 		$ids = array();
+		$task_rows = $this->get_rows_data();
+		foreach($task_rows as $tr)
+		{
+			$ids[$tr["bill_id"]] = $tr["bill_id"];
+		}
+/*
 		$task_rows = new object_list(array(
 			"class_id" => CL_TASK_ROW,
 			"lang_id" => array(),
@@ -527,7 +533,7 @@ class project_obj extends _int_object
 		{
 			$ids[$tr->prop("bill")] = $tr->prop("bill");
 		}
-
+*/
 		if(!sizeof($ids))
 		{
 			$ids[] = 1;

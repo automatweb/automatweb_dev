@@ -77,13 +77,10 @@ class crm_bill_payment_obj extends _int_object
 			"lang_id" => array(),
 			"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $this->id(),
 		));
-
-		$bi = get_instance(CL_CRM_BILL);
 		foreach($ol->arr() as $o)
 		{
 			//$bill_sum = $bi->get_bill_sum($o);
-			$bill_sum = $bi->get_bill_needs_payment(array(
-				"bill" => $o,
+			$bill_sum = $o->get_bill_needs_payment(array(
 				"payment" => $this->id()
 			));
 			if($b && $b == $o->id())
@@ -92,12 +89,10 @@ class crm_bill_payment_obj extends _int_object
 			}
 			$sum = $sum - $bill_sum;
 		}
-
 		if($sum < 0)
 		{
 			$sum = 0;
 		}
-
 		return $sum;
 	}
 

@@ -1455,8 +1455,6 @@ exit_function("bills_impl::_get_bill_task_list");
 
 	function _get_bills_list($arr)
 	{
-
-		//arr(new object_list(array("CL_CRM_PERSON.RELTYPE_ISIK(CL_PROJECT)" => array(), "class_id" => CL_CRM_PERSON)));
 		if(!isset($arr["request"]["st"]))
 		{
 			if(is_object($current_co = get_current_company()) && $current_co->id() != $arr["obj_inst"]->id())
@@ -1464,15 +1462,10 @@ exit_function("bills_impl::_get_bill_task_list");
 				$arr["request"]["st"] = "cust_".$arr["obj_inst"]->id();
 			}
 		}
-
-		if($arr["request"]["show_bill_balance"]) $this->show_bill_balance = 1;
-		$t =& $arr["prop"]["vcl_inst"];
-		if($_GET["get_all_customers_without_client_relation"])
+		if($arr["request"]["show_bill_balance"])
 		{
-			$t = $arr["obj_inst"]->get_all_customers_without_client_relation();
-			return 1;
+			$this->show_bill_balance = 1;
 		}
-
 		if($arr["request"]["bill_s_with_tax"] == 0)
 		{
 			$tax_add = 2;
@@ -1482,16 +1475,22 @@ exit_function("bills_impl::_get_bill_task_list");
 			$tax_add = $arr["request"]["bill_s_with_tax"];
 		}
 		$cg = $arr["request"]["currency_grouping"];
+
+		$t =& $arr["prop"]["vcl_inst"];
+		if($_GET["get_all_customers_without_client_relation"])
+		{
+			$t = $arr["obj_inst"]->get_all_customers_without_client_relation();
+			return 1;
+		}
+
+		$this->_init_bills_list_t($t, $arr["request"]);
+
 		$d = get_instance("applications/crm/crm_data");
-		if(!$arr["request"]["bill_s_with_tax"])
-		{
-			$tax_add = 2;
-		}
-		else
-		{
-			$tax_add = $arr["request"]["bill_s_with_tax"];
-		}
-		
+		$bill_i = get_instance(CL_CRM_BILL);
+		$curr_inst = get_instance(CL_CURRENCY);
+		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
+		$pop = get_instance("vcl/popup_menu");
+
 		if ($arr["request"]["group"] == "bills_monthly")
 		{
 			$bills = $d->get_bills_by_co($arr["obj_inst"], array("monthly" => 1));
@@ -1565,7 +1564,7 @@ exit_function("bills_impl::_get_bill_task_list");
 				$filt["state"] = "0";
 			}
 			else
-			{//arr($arr["request"]);
+			{
 				if ($arr["request"]["bill_s_cust"] != "")
 				{
 					$filt["customer"] = "%".$arr["request"]["bill_s_cust"]."%";
@@ -1602,16 +1601,14 @@ exit_function("bills_impl::_get_bill_task_list");
 					$filt["state"] = $arr["request"]["bill_s_status"];
 				}
 			}
+
 			$bills = $d->get_bills_by_co($arr["obj_inst"], $filt);
+
 			$format = t('%s arved');
 		}
 
 		//$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
-		$this->_init_bills_list_t($t, $arr["request"]);
-		$bill_i = get_instance(CL_CRM_BILL);
-		$curr_inst = get_instance(CL_CURRENCY);
-		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
 		$company_curr = $co_stat_inst->get_company_currency();
 
 		if ($arr["request"]["export_hr"] > 0)
@@ -1628,6 +1625,7 @@ exit_function("bills_impl::_get_bill_task_list");
 		$balance = 0;
 		foreach($bills->arr() as $bill)
 		{
+enter_function("bill::start");
 			$cust = "";
 			$cm = "";
 			$payments_total = 0;
@@ -1650,9 +1648,10 @@ exit_function("bills_impl::_get_bill_task_list");
 					"width" => 100,
 				));
 			}
-
-			$cursum = $own_currency_sum = $bill_i->get_bill_sum($bill,$tax_add);
-			$curid = $bill->prop("customer.currency");
+exit_function("bill::start");
+enter_function("bill::startcurr");
+			$cursum = $own_currency_sum = $bill->get_bill_sum();//$bill_i->get_bill_sum($bill,$tax_add);
+			$curid = $bill->get_bill_currency_id();
 			$cur_name = $bill->get_bill_currency_name();
 			if($company_curr && $curid && ($company_curr != $curid))
 			{
@@ -1670,8 +1669,9 @@ exit_function("bills_impl::_get_bill_task_list");
 			{
 				$sum_str = number_format($own_currency_sum, 2);
 			}
+exit_function("bill::startcurr");
+enter_function("bill::start0");
 
-			$pop = get_instance("vcl/popup_menu");
 			$pop->begin_menu("bill_".$bill->id());
 			$pop->add_item(Array(
 				"text" => t("Prindi arve"),
@@ -1712,7 +1712,8 @@ exit_function("bills_impl::_get_bill_task_list");
 				"oid" => $bill->id(),
 				"print" => $pop->get_menu(),
 			);
-
+exit_function("bill::start0");
+enter_function("bill::start1");
 			if($bill->prop("state") == 1)
 			{
 				$bill_data["payment_over_date"] = $bill->get_payment_over_date();
@@ -1722,7 +1723,7 @@ exit_function("bills_impl::_get_bill_task_list");
 					$bill_data["color"] = "#FF9999";
 				}
 			}
-
+exit_function("bill::start1");
 /*
 			//laekunud summa
 			if($payments_sum = $bill->get_payments_sum())
@@ -1741,7 +1742,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			{
 				$bill_data["payment_date"] = $payment_date;
 			}
-*/			
+*/			enter_function("bill::project_leaders");
 			$project_leaders = $bill->project_leaders();
 			if($project_leaders->count())
 			{
@@ -1754,7 +1755,8 @@ exit_function("bills_impl::_get_bill_task_list");
 					));
 				}
 				$bill_data["project_leader"] = join("<br>" , $pl_array);
-			}
+			}exit_function("bill::project_leaders");
+			enter_function("bill::balance");
 			if($arr["request"]["show_bill_balance"])
 			{
 				$curr_balance = $bill->get_bill_needs_payment();
@@ -1797,7 +1799,7 @@ exit_function("bills_impl::_get_bill_task_list");
 				$balance += $total_balance;
 //				$bill_data["balance"] = number_format($bill_data["balance"], 2);
 			}
-
+exit_function("bill::balance");
 			$t->define_data($bill_data);
 			// number_format here to round the number the same way in the add, so the sum is correct
 			$sum+= number_format($own_currency_sum,2,".", "");
@@ -2859,6 +2861,33 @@ d)
 		}
 
 		$tv->add_item(0,array(
+			"name" => t("&Uuml;ksus"),
+			"id" => "unit",
+//			"url" => aw_url_change_var($var, $stat_id+10),
+		));
+
+		$units = $arr["obj_inst"]->get_sections();
+		$unames = $units->names();
+		asort($unames);
+		foreach($unames as $id => $name)
+		{
+			if(!$name)
+			{
+				continue;
+			}
+			if (isset($_GET[$var]) && $_GET[$var] == "unit_".$id)
+			{
+				$name = "<b>".$name."</b>";
+			}
+			$tv->add_item("unit",array(
+				"name" => $name,
+				"id" => "custman".$id,
+//				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
+				"url" => aw_url_change_var($var, "unit_".$id),
+			));
+		}
+
+		$tv->add_item(0,array(
 			"name" => t("Klient"),
 			"id" => "cust",
 //			"url" => aw_url_change_var($var, $stat_id+10),
@@ -3079,6 +3108,16 @@ d)
 
 		$ol = new object_list();
 		$ol->add($t->get_element_from_all("client_manager"));
+		return $ol;
+	}
+
+	private function all_units()
+	{
+		$filter = array(
+			"class_id" => CL_CRM_SECTION,
+		);
+
+		$ol = new object_list($filter);
 		return $ol;
 	}
 
