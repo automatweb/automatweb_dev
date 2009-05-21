@@ -692,7 +692,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 	**/
 	function create_links($src)
 	{
-		$src = preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))([^\s\)]+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $src);
+		$src = preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))([^\s\)\<]+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $src);
 		if (!aw_ini_get("menuedit.protect_emails"))
 		{
 			$src = preg_replace("/([\w*|\.|\-]*?)@([\w*|\.]*?)/imsU","<a href='mailto:$1@$2'>$1@$2</a>",$src);
