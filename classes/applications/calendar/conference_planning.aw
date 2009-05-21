@@ -546,7 +546,7 @@ class conference_planning extends class_base
 				// add element to active view
 				if($isv) // a view is selected
 				{
-					$act_view_name = strlen($_t = $views[$view_no]["trans"][aw_global_get("ct_lang_lc")])?$_t:$views[$view_no]["trans"][CP_DEFAULT_LANG];
+					$act_view_name = strlen($_t = $views[$view_no]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$views[$view_no]["trans"][CP_DEFAULT_LANG];
 					$to_view = sprintf(t("Vaatesse '%s', elemendi ette"), "<b>".$this->show_cs($act_view_name)."</b>");
 					$add_elem_to_view = sprintf(t("Vaatesse '%s'"), "<b>".$this->show_cs($act_view_name)."</b>");
 
@@ -633,7 +633,7 @@ class conference_planning extends class_base
 					// loop over elements ad add those to separator & textrow submenus
 					foreach($views[$view_no]["elements"] as $el_id => $e)
 					{
-						$name = strlen($_t = $e["trans"][aw_global_get("ct_lang_lc")])?$_t:$e["trans"][CP_DEFAULT_LANG];
+						$name = strlen($_t = $e["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$e["trans"][CP_DEFAULT_LANG];
 						$name = $this->show_cs($name);
 						$name = ($e["type"] == TYPE_SEPARATOR)?"<b>".$name."</b>":$name;
 						$name = ($e["type"] == TYPE_TEXT)?"<i>".$name."</i>":$name;
@@ -710,7 +710,7 @@ class conference_planning extends class_base
 						"img" => "refresh.gif",
 					));
 					// move view
-					$vname = strlen($_t = $views[$view_no]["trans"][aw_global_get("ct_lang_lc")])?$_t:$views[$view_no]["trans"][CP_DEFAULT_LANG];
+					$vname = strlen($_t = $views[$view_no]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$views[$view_no]["trans"][CP_DEFAULT_LANG];
 					$tb->add_sub_menu(array(
 						"parent" => "move",
 						"name" => "move_view",
@@ -728,7 +728,7 @@ class conference_planning extends class_base
 
 					foreach($views as $vid => $v)
 					{
-						$name = strlen($_t = $v["trans"][aw_global_get("ct_lang_lc")])?$_t:$v["trans"][CP_DEFAULT_LANG];
+						$name = strlen($_t = $v["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$v["trans"][CP_DEFAULT_LANG];
 						$name = $this->show_cs($name);
 						if($vid == $view_no)
 						{
@@ -768,7 +768,7 @@ class conference_planning extends class_base
 					// move element
 					if($ise)
 					{
-						$ename = strlen($_t = $views[$view_no]["elements"][$element]["trans"][aw_global_get("ct_lang_lc")])?$_t:$views[$view_no]["elements"][$element]["trans"][CP_DEFAULT_LANG];
+						$ename = strlen($_t = $views[$view_no]["elements"][$element]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$views[$view_no]["elements"][$element]["trans"][CP_DEFAULT_LANG];
 						$tb->add_sub_menu(array(
 							"parent" => "move",
 							"name" => "move_element",
@@ -786,7 +786,7 @@ class conference_planning extends class_base
 						{
 
 							$self = ($eid == $element);
-							$name = strlen($_t = $e["trans"][aw_global_get("ct_lang_lc")])?$_t:$e["trans"][CP_DEFAULT_LANG];
+							$name = strlen($_t = $e["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$e["trans"][CP_DEFAULT_LANG];
 							$name = $this->show_cs($name);
 							if($self)
 							{
@@ -850,7 +850,7 @@ class conference_planning extends class_base
 				));
 				foreach($views as $vid => $view)
 				{
-					$vname = strlen($_t = $view["trans"][aw_global_get("ct_lang_lc")])?$_t:$view["trans"][CP_DEFAULT_LANG];
+					$vname = strlen($_t = $view["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$view["trans"][CP_DEFAULT_LANG];
 					$tb->add_menu_item(array(
 						"parent" => "remove_view",
 						"text" => $this->show_cs($vname),
@@ -869,7 +869,7 @@ class conference_planning extends class_base
 						"text" => t("Element"),
 					));
 
-					$vname = strlen($_t = $views[$view_no]["trans"][aw_global_get("ct_lang_lc")])?$_t:$views[$view_no]["trans"][CP_DEFAULT_LANG];
+					$vname = strlen($_t = $views[$view_no]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$views[$view_no]["trans"][CP_DEFAULT_LANG];
 					$tb->add_menu_item(array(
 						"parent" => "remove_element",
 						"text" => sprintf(t("Vaatest '%s'"), "<b>".$this->show_cs($vname)."</b>"),
@@ -880,7 +880,7 @@ class conference_planning extends class_base
 					));
 					foreach($views[$view_no]["elements"] as $eid => $e)
 					{
-						$name = strlen($_t = $e["trans"][aw_global_get("ct_lang_lc")])?$_t:$e["trans"][CP_DEFAULT_LANG];
+						$name = strlen($_t = $e["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$e["trans"][CP_DEFAULT_LANG];
 						$name = $this->show_cs($name);
 						if($e["type"] == TYPE_SEPARATOR)
 						{
@@ -965,7 +965,7 @@ class conference_planning extends class_base
 					unset($request["element"]);
 					$request["view_no"] = $id;
 
-					$name = strlen($_t = $view["trans"][aw_global_get("ct_lang_lc")])?$_t:$view["trans"][CP_DEFAULT_LANG];
+					$name = strlen($_t = $view["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$view["trans"][CP_DEFAULT_LANG];
 					$name = $this->show_cs($name);
 					$name = strlen($name)?$name:t("Nimetu");
 					$name = ($arr["request"]["view_no"] == $id && strlen($arr["request"]["view_no"]) && empty($arr["request"]["element"]))?"<b>".$name."</b>":$name;
@@ -982,7 +982,7 @@ class conference_planning extends class_base
 						$request["element"] = $el_id;
 
 						$data = $this->get_form_elements_data($element["name"]);
-						$name = strlen($_t = $element["trans"][aw_global_get("ct_lang_lc")])?$_t:$element["trans"][CP_DEFAULT_LANG];
+						$name = strlen($_t = $element["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))])?$_t:$element["trans"][CP_DEFAULT_LANG];
 						$name = $this->show_cs($name);
 
 						if(!strlen(trim($name)))
@@ -1046,13 +1046,13 @@ class conference_planning extends class_base
 
 	function show_cs($str, $lang_from = false)
 	{
-		$charset_from = $lang_from?$this->lang_charset[$lang_from]:$this->lang_charset[aw_global_get("ct_lang_lc")];
+		$charset_from = $lang_from?$this->lang_charset[$lang_from]:$this->lang_charset[(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))];
 		return strlen($_t = iconv($charset_from, "UTF-8", $str))?$_t:"";
 	}
 
 	function save_cs($str, $lang_to = false)
 	{
-		$charset_to = $lang_to?$this->lang_charset[$lang_to]:$this->lang_charset[aw_global_get("ct_lang_lc")];
+		$charset_to = $lang_to?$this->lang_charset[$lang_to]:$this->lang_charset[(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))];
 		return strlen($_t = iconv("UTF-8", $charset_to, $str))?$_t:"";
 	}
 
@@ -1156,7 +1156,7 @@ class conference_planning extends class_base
 					$new[] = array(
 						"name" => ($arr["type"] == TYPE_TEXT)?"text":"separator",
 						"trans" => array(
-							aw_global_get("ct_lang_lc") => ($arr["type"] == TYPE_TEXT)?t("Tekst"):t("Eraldaja"),
+							(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC")) => ($arr["type"] == TYPE_TEXT)?t("Tekst"):t("Eraldaja"),
 						),
 						"type" => $arr["type"],
 					);
@@ -1168,7 +1168,7 @@ class conference_planning extends class_base
 				$new[] = array(
 					"name" => ($arr["type"] == TYPE_TEXT)?"text":"separator",
 					"trans" => array(
-						aw_global_get("ct_lang_lc") => ($arr["type"] == TYPE_TEXT)?t("Tekst"):t("Eraldaja"),
+						(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC")) => ($arr["type"] == TYPE_TEXT)?t("Tekst"):t("Eraldaja"),
 					),
 					"type" => $arr["type"],
 				);
@@ -1232,7 +1232,7 @@ class conference_planning extends class_base
 			$views = aw_unserialize($obj->prop("help_views"));
 			$view = &$views[]; //$views[]["elements"] = array();
 			$view["elements"] = array();
-			$view["trans"][aw_global_get("ct_lang_lc")] = t("Nimetu vaade");
+			$view["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))] = t("Nimetu vaade");
 			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
 			$obj->save();
 		}
@@ -1257,7 +1257,7 @@ class conference_planning extends class_base
 				"name" => $arr["element"],
 				"type" => TYPE_ELEMENT,
 				"trans" => array(
-					aw_global_get("ct_lang_lc") => $arr["caption"]?$arr["caption"]:t("Nimetu element"),
+					(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC")) => $arr["caption"]?$arr["caption"]:t("Nimetu element"),
 				),
 			);
 			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
@@ -1868,7 +1868,7 @@ class conference_planning extends class_base
 		{
 			return "";
 		}
-		$lang = aw_global_get("ct_lang_lc");
+		$lang = (aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"));
 
 		// get options
 		if($this->can("view", ($ch = $el["choices"])))
@@ -2154,8 +2154,8 @@ class conference_planning extends class_base
 			$i++;
 			$act = ($i == $no)?"ACT_":"";
 			$href = (strlen($no) &&  $i < $no)?"_HREF":"";
-			$caption = $views[$key]["trans"][aw_global_get("ct_lang_lc")]?$views[$key]["trans"][aw_global_get("ct_lang_lc")]:$views[$key]["trans"][CP_DEFAULT_LANG];
-			$caption_i_plus_one = $views[$keys[$i+1]]["trans"][aw_global_get("ct_lang_lc")]?$views[$keys[$i+1]]["trans"][aw_global_get("ct_lang_lc")]:$views[$keys[$i+1]]["trans"][CP_DEFAULT_LANG];
+			$caption = $views[$key]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))]?$views[$key]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))]:$views[$key]["trans"][CP_DEFAULT_LANG];
+			$caption_i_plus_one = $views[$keys[$i+1]]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))]?$views[$keys[$i+1]]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))]:$views[$keys[$i+1]]["trans"][CP_DEFAULT_LANG];
 			if($i == 1)
 			{
 				$this->vars(array(
