@@ -574,7 +574,17 @@ class conference_planning extends class_base
 					uasort($list, array($this, "__callback_sort_prplist"));
 					foreach($list as $_data)
 					{
-						$groups[$_data["group"]] = $_data["group"];
+						if(is_array($_data["group"]))
+						{
+							foreach($_data["group"] as $g)
+							{
+								$groups[$g] = $g;
+							}
+						}
+						else
+						{
+							$groups[$_data["group"]] = $_data["group"];
+						}
 					}
 					foreach($groups as $group)
 					{
@@ -587,17 +597,24 @@ class conference_planning extends class_base
 
 					foreach($list as $prp => $data)
 					{
-						$tb->add_menu_item(array(
-							"parent" => "add_elem_".$data["group"],
-							"text" => ($data["caption"])?$this->show_cs($data["caption"]):$prp,
-							"link" => $this->mk_my_orb("add_element_to_view", array(
-								"element" => $prp,
-								"view_no" => $view_no,
-								"planner" => $arr["obj_inst"]->id(),
-								"return_url" => get_ru(),
-								"caption" => $data["caption"]?$data["caption"]:$prp,
-							)),
-						));
+						if(!is_array($data["group"]))
+						{
+							$data["group"] = array($data["group"]);
+						}
+						foreach($data["group"] as $g)
+						{
+							$tb->add_menu_item(array(
+								"parent" => "add_elem_".$g,
+								"text" => ($data["caption"])?$this->show_cs($data["caption"]):$prp,
+								"link" => $this->mk_my_orb("add_element_to_view", array(
+									"element" => $prp,
+									"view_no" => $view_no,
+									"planner" => $arr["obj_inst"]->id(),
+									"return_url" => get_ru(),
+									"caption" => $data["caption"]?$data["caption"]:$prp,
+								)),
+							));
+						}
 					}
 
 					// add separator to view
