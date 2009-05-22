@@ -954,6 +954,16 @@ default group=org_objects
 			@property bills_tree type=treeview store=no no_caption=1 parent=bills_list_u group=bills_list
 			@caption Arvete puu
 
+		@layout bills_list_stats type=vbox parent=bills_list_l closeable=1 area_caption=Arve&nbsp;staatus
+
+			@property bills_stats_tree type=treeview store=no no_caption=1 parent=bills_list_stats group=bills_list
+			@caption Arvete puu
+
+		@layout bills_list_time type=vbox parent=bills_list_l closeable=1 area_caption=Periood
+
+			@property bills_time_tree type=treeview store=no no_caption=1 parent=bills_list_time group=bills_list
+			@caption Arvete puu
+
 		@layout bills_list_s type=vbox parent=bills_list_l closeable=1 area_caption=Otsing
 
 
@@ -3009,6 +3019,8 @@ class crm_company extends class_base
 			case 'bill_tb':
 			case 'bills_list':
 			case 'bills_tree':
+			case 'bills_stats_tree':
+			case 'bills_time_tree':
 			case 'bills_tb':
 			case 'bills_mon_tb':
 			case "bill_s_client_mgr":
@@ -8153,7 +8165,7 @@ class crm_company extends class_base
 		@param id required
 		@param cfgform optional
 	**/
-	function view($arr)
+	function view($arr = array())
 	{
 		if ($arr["cfgform"])
 		{

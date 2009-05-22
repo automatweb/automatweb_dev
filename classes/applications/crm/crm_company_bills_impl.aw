@@ -1451,7 +1451,42 @@ exit_function("bills_impl::_get_bill_task_list");
 		));
 	}
 
-	
+	private function get_range($val)
+	{
+		switch($val)
+		{
+			case "period_last":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-1, 0, date("Y")),
+					"to" => mktime(0,0,0, date("m"), 0, date("Y")),
+				);
+			break;
+			case "period_current":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m"), 0, date("Y")),
+					"to" => mktime(0,0,0, date("m")+1, 0, date("Y")),
+				);
+			break;
+			case "period_next":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")+1, 0, date("Y")),
+					"to" => mktime(0,0,0, date("m")+2, 0, date("Y")),
+				);
+			case "period_year":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, 0, 0, date("Y")),
+					"to" => mktime(0,0,0, 0, 0, date("Y")+1),
+				);
+			case "period_lastyear":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, 0, 0, date("Y")-1),
+					"to" => mktime(0,0,0,0 , 0, date("Y")),
+				);
+			break;
+			default :return null;
+		}
+		return $filt["bill_date_range"];
+	}
 
 	function _get_bills_list($arr)
 	{
@@ -1462,6 +1497,7 @@ exit_function("bills_impl::_get_bill_task_list");
 				$arr["request"]["st"] = "cust_".$arr["obj_inst"]->id();
 			}
 		}
+
 		if($arr["request"]["show_bill_balance"])
 		{
 			$this->show_bill_balance = 1;
@@ -1499,34 +1535,11 @@ exit_function("bills_impl::_get_bill_task_list");
 		else
 		{
 			$filt = array();
-			if($arr["request"]["st"])
+			if($arr["request"]["st"] || $arr["request"]["timespan"] || $arr["request"]["bill_status"])
 			{
 				$stuff = explode("_" , $arr["request"]["st"]);
 				switch($stuff[0])
 				{
-					case "period":
-						switch($stuff[1])
-						{
-							case "last":
-								$filt["bill_date_range"] = array(
-									"from" => mktime(0,0,0, date("m")-1, 0, date("Y")),
-									"to" => mktime(0,0,0, date("m"), 0, date("Y")),
-								);
-							break;
-							case "current":
-								$filt["bill_date_range"] = array(
-									"from" => mktime(0,0,0, date("m"), 0, date("Y")),
-									"to" => mktime(0,0,0, date("m")+1, 0, date("Y")),
-								);
-							break;
-							case "next":
-								$filt["bill_date_range"] = array(
-									"from" => mktime(0,0,0, date("m")+1, 0, date("Y")),
-									"to" => mktime(0,0,0, date("m")+2, 0, date("Y")),
-								);
-							break;
-						}
-						break;
 					case "prman":
 						$filt["project_mgr"] = $stuff[1];
 					break;
@@ -1546,9 +1559,17 @@ exit_function("bills_impl::_get_bill_task_list");
 						$filt["state"] = $arr["request"]["st"]-10;
 					}
 				}
-				if(isset($stuff[2]))
+//				if(isset($stuff[2]))
+//				{
+//					$filt["state"] = $stuff[2];
+//				}
+				if( $arr["request"]["bill_status"])
 				{
-					$filt["state"] = $stuff[2];
+					$filt["state"] = $arr["request"]["bill_status"] - 10;
+				}
+				if( $arr["request"]["timespan"])
+				{
+					$filt["bill_date_range"] = $this->get_range($arr["request"]["timespan"]);
 				}
 			}
 			elseif ($arr["request"]["bill_s_from"] == "")
@@ -2711,6 +2732,80 @@ exit_function("bill::balance");
 		return;
 	}
 
+
+	function _get_bills_stats_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "bill_status";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all_stats");
+
+		classload("core/icons");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_stats_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik staatused"),
+			"id" => "all_stats",
+			"url" => aw_url_change_var($var, null),
+		));
+		$bills_inst = get_instance(CL_CRM_BILL);
+
+		foreach($bills_inst->states as $id => $caption)
+		{
+			$tv->add_item("all_stats", array(
+				"id" => "".($id+10)."",
+				"name" => $caption,
+				"url" => aw_url_change_var(array(
+					$var => ($id+10),
+				)),
+				"iconurl" => icons::get_icon_url(CL_CRM_BILL),
+			));
+		}
+	}
+
+	function _get_bills_time_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "timespan";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "period_current");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_time_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik ajavahemikud"),
+			"id" => "all_time",
+			"url" => aw_url_change_var($var, null),
+		));
+
+		$branches = array(
+//			"all" => t("K&otilde;ik"),
+			"period_last" => t("Eelmine kuu"),
+			"period_current" => t("K&auml;esolev kuu"),
+			"period_next" => t("J&auml;rgmine kuu"),
+			"period_year" => t("K&auml;esolev aasta"),
+			"period_lastyear" => t("Eelmine aasta"),
+		);
+
+		foreach($branches as $id => $caption)
+		{
+			$tv->add_item("all_time", array(
+				"id" => $id,
+				"name" => $caption,
+				"url" => aw_url_change_var(array(
+					$var => $id,
+				)),
+			));
+		}
+	}
+
 	function _get_bills_tree($arr)
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
@@ -2729,12 +2824,21 @@ exit_function("bill::balance");
 		}
 		classload("core/icons");
 
+		$bills_data = $this->all_bills_data($arr["request"]["timespan"] , $arr["request"]["bill_status"] - 10);
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"persist_state" => true,
 			"tree_id" => "proj_bills_tree",
 		));
 
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all_bills");
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik"),
+			"id" => "all_bills",
+			"url" => aw_url_change_var($var, null),
+		));
 
 		$bills_inst = get_instance(CL_CRM_BILL);
 		$states = $bills_inst->states;
@@ -2882,7 +2986,7 @@ d)
 			$tv->add_item("unit",array(
 				"name" => $name,
 				"id" => "custman".$id,
-//				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
+				"iconurl" => icons::get_icon_url(CL_CRM_SECTION),
 				"url" => aw_url_change_var($var, "unit_".$id),
 			));
 		}
@@ -2942,7 +3046,7 @@ d)
 				));
 			}
 		}
-
+/*
 		$tv->add_item(0,array(
 			"name" => t("Periood"),
 			"id" => "period",
@@ -3089,7 +3193,7 @@ d)
  					"url" => aw_url_change_var($var, "period_all_".$status),
  				));
  			}
- 		}
+ 		}*/
 	}
 
 	public function all_client_managers()
@@ -3121,7 +3225,7 @@ d)
 		return $ol;
 	}
 
-	private function all_bills_data($filt)
+	private function all_bills_data($filt = null , $stat = null)
 	{
 		$filter = array(
 			"class_id" => CL_CRM_BILL,
@@ -3146,11 +3250,16 @@ d)
 			$filter["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, mktime(0,0,0, date("m")+1, 0, date("Y")), mktime(0,0,0, date("m")+2, 0, date("Y")));
 		}
 
+		if($stat != "")
+		{
+			$filter["state"] = $stat;
+		}
+
 		$t = new object_data_list(
 			$filter,
 			array(
 				CL_CRM_BILL => array(
-					"impl","state"
+					"impl","state","customer"
 				),
 			)
 		);

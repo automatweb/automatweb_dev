@@ -2806,6 +2806,28 @@
             <caption>Arvete puu</caption>
       </property>
       <property>
+            <name>bills_stats_tree</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>bills_list_stats</parent>
+            <field>bills_stats_tree</field>
+            <caption>Arvete puu</caption>
+      </property>
+      <property>
+            <name>bills_time_tree</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>bills_list_time</parent>
+            <field>bills_time_tree</field>
+            <caption>Arvete puu</caption>
+      </property>
+      <property>
             <name>bill_s_cust</name>
             <table>objects</table>
             <group>bills_list</group>
@@ -5418,6 +5440,20 @@
                   <area_caption>Arved</area_caption>
                   <group>bills_list</group>
             </bills_list_u>
+            <bills_list_stats>
+                  <type>vbox</type>
+                  <parent>bills_list_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Arve&amp;amp;nbsp;staatus</area_caption>
+                  <group>bills_list</group>
+            </bills_list_stats>
+            <bills_list_time>
+                  <type>vbox</type>
+                  <parent>bills_list_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Periood</area_caption>
+                  <group>bills_list</group>
+            </bills_list_time>
             <bills_list_s>
                   <type>vbox</type>
                   <parent>bills_list_l</parent>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.169 2009/05/21 15:56:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.170 2009/05/22 16:04:38 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -4454,6 +4454,7 @@ exit_function("bills::all_cust_bills");
 			"name" => "open",
 			"align" => "center",
 //			"sortable" => 1
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_field(array(
@@ -4461,6 +4462,7 @@ exit_function("bills::all_cust_bills");
 			"name" => "name",
 			"align" => "center",
 //			"sortable" => 1
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_field(array(
@@ -4468,6 +4470,7 @@ exit_function("bills::all_cust_bills");
 			"name" => "hrs",
 			"align" => "right",
 //			"sortable" => 1
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_field(array(
@@ -4475,6 +4478,7 @@ exit_function("bills::all_cust_bills");
 			"name" => "hrs_cust",
 			"align" => "right",
 //			"sortable" => 1
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_field(array(
@@ -4482,13 +4486,15 @@ exit_function("bills::all_cust_bills");
 			"name" => "hr_price",
 			"align" => "right",
 //			"sortable" => 1
-		));
+			"chgbgcolor" => "color"
+		)); 
 
 		$t->define_field(array(
 			"caption" => t("Summa"),
 			"name" => "sum",
 			"align" => "right",
 //			"sortable" => 1
+			"chgbgcolor" => "color"
 		));
 /*
 		$t->define_field(array(
@@ -4508,11 +4514,13 @@ exit_function("bills::all_cust_bills");
 //			"sortable" => 1,
 //			"type" => "time",
 //			"format" => "d.m.Y"
+			"chgbgcolor" => "color"
 		));
 
 		$t->define_chooser(array(
 			"field" => "oid",
-			"name" => "sel"
+			"name" => "sel",
+			"chgbgcolor" => "color"
 		));
 
 		$rows = new object_list();
@@ -4579,6 +4587,8 @@ exit_function("bills::all_cust_bills");
 		$this->bug_hours = array();
 		$this->bug_real_hours = array();
 
+		$ready = array(3,4,5,6,7,8,9,11);
+
 		foreach($bugs->arr() as $bug)
 		{
 			$lister = "<span id='bug".$bug->id()."' name=bug_comments_table style='display: none;'>";
@@ -4592,6 +4602,7 @@ exit_function("bills::all_cust_bills");
 					"vcl_inst" => &$table
 				)
 			);
+
 			$this->_get_bug_row_list($params);
 			$lister .= $table->draw();
 			$lister .= "</span>";
@@ -4607,6 +4618,10 @@ exit_function("bills::all_cust_bills");
 				"date" => date("d.m.Y" , $this->bug_start[$bug->id()]) . " - ".date("d.m.Y" , $this->bug_end[$bug->id()]),
 				"oid" => $bug->id(),
 			);
+			if(in_array($bug->prop("bug_status") , $ready))
+			{
+				$bug_data["color"] = "#99FF66";
+			}
 			$bug_data["name"] = html::href(array(
 				"caption" => $bug->name() ? htmlspecialchars($bug->name()) : t("..."),
 				"url" => html::obj_change_url($bug , array()))).$lister;
