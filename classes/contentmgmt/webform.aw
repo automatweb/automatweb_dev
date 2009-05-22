@@ -807,7 +807,6 @@ class webform extends class_base
 			$dir->set_name("Sisestused ".$arr["obj_inst"]->id());
 			$dir->save();
 			$dir->acl_set($group, array("can_add" => 1, "can_view" => 1));
-			$dir->save();
 
 			$register = obj();
 			$register->set_parent($arr["obj_inst"]->parent());
