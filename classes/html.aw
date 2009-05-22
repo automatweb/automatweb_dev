@@ -1602,6 +1602,9 @@ class html
 			$params["section"] = $_GET["section"];
 		}
 
+		$inst = get_instance(CL_FILE);
+		$retval = $inst->mk_my_orb($act, $params, $obj->class_id());
+
 		if($caption || (is_integer($caption) && $caption == 0))
 		{
 			$retval = html::href(array(
@@ -1609,11 +1612,6 @@ class html
 				"caption" => $caption,
 				"title" => $title
 			));
-		}
-		else
-		{
-			$inst = get_instance(CL_FILE);
-			$retval = $inst->mk_my_orb($act, $params, $obj->class_id());
 		}
 
 		return $retval;
