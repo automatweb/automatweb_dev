@@ -28,7 +28,6 @@ FCKClearStyles.CleanWordHTML = function(str)
 	str = str.replace(/<span.+?>|<\/span>|<font.+?>|<\/font>/gi,"");
 	//str = str.replace(/<p.+?>/gi,"<p>");
 	str = str.replace(/class=".*?"/gi,"");
-	str = str.replace(/style=".*?"/gi,"");
 	str = str.replace(/<!--.+?-->/gi,"");
 	str = str.replace(/<o:p>/gi,"");
 	str = str.replace(/<\/o:p>/gi,"");
@@ -41,7 +40,7 @@ FCKClearStyles.CleanWordHTML = function(str)
 	str = str.replace( /\s*MARGIN: 0cm 0cm 0pt\s*"/gi, "\"" ) ;
 	str = str.replace( /\s*TEXT-INDENT: 0cm\s*;/gi, "" ) ;
 	str = str.replace( /\s*TEXT-INDENT: 0cm\s*"/gi, "\"" ) ;
-	str = str.replace( /\s*TEXT-ALIGN: [^\s;]+;?"/gi, "\"" ) ;
+	//str = str.replace( /\s*TEXT-ALIGN: [^\s;]+;?"/gi, "\"" ) ;
 	str = str.replace( /\s*PAGE-BREAK-BEFORE: [^\s;]+;?"/gi, "\"" ) ;
 	str = str.replace( /\s*FONT-VARIANT: [^\s;]+;?"/gi, "\"" ) ;
 	str = str.replace( /\s*tab-stops:[^;"]*;?/gi, "" ) ;
@@ -50,7 +49,7 @@ FCKClearStyles.CleanWordHTML = function(str)
 	str = str.replace( /\s*face=[^ >]*/gi, "" ) ;
 	str = str.replace( /\s*FONT-FAMILY:[^;"]*;?/gi, "" ) ;
 	str = str.replace(/<(\w[^>]*) class=([^ |>]*)([^>]*)/gi, "<$1$3") ;
-	str = str.replace( /<(\w[^>]*) style="([^\"]*)"([^>]*)/gi, "<$1$3" ) ;
+	//str = str.replace( /<(\w[^>]*) style="([^\"]*)"([^>]*)/gi, "<$1$3" ) ;
 	str = str.replace( /\s*style="\s*"/gi, '' ) ;
 	str = str.replace( /<SPAN\s*[^>]*>\s*&nbsp;\s*<\/SPAN>/gi, '&nbsp;' ) ;
 	str = str.replace( /<SPAN\s*[^>]*><\/SPAN>/gi, '' ) ;
