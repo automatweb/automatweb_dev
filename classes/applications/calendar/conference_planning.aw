@@ -601,7 +601,7 @@ class conference_planning extends class_base
 						{
 							$data["group"] = array($data["group"]);
 						}
-						foreach($data["group"] as $g)
+						foreach(array_unique($data["group"]) as $g)
 						{
 							$tb->add_menu_item(array(
 								"parent" => "add_elem_".$g,
@@ -1144,7 +1144,7 @@ class conference_planning extends class_base
 
 	function __callback_filter_prplist($a)
 	{
-		return substr($a["name"],0,5) == "data_";
+		return (substr($a["name"],0,5) == "data_" && substr($a["name"], -5,5) != "admin");
 	}
 
 	function __callback_sort_prplist($a, $b)
