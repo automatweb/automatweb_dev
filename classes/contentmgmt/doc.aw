@@ -1797,31 +1797,6 @@ class doc extends class_base
 		die();
 	}
 	
-	/**
-		@attrib name=clean_up_html
-	**/
-	function clean_up_html($arr)
-	{
-		header('Content-Type: text/html; charset=utf-8'); 
-		$html = $_POST["html"];
-		$html = iconv(aw_global_get("charset"),"UTF-8", $html);
-		
-		$html = ereg_replace("<(/)?(meta|title|style|font|span|del|ins)[^>]*>","",$html);
-
-		// another pass over the html 2x times, removing unwanted attributes
-		$html = ereg_replace("<([^>]*)(class|lang|style|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
-		$html = ereg_replace("<([^>]*)(class|lang|style|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
-		
-		// finishing up - maby should make optional
-		$html = preg_replace(
-			array("/<!--.*-->/imsU", "/\<p\s*\>/imsU", "/\<h([0-9])\s*\>/imsU", ),
-			array("", "<p>", "<h\\1>"),
-			$html
-		);
-		
-		die($html);
-	}
-
 	function callback_generate_scripts($arr)
 	{
 $rv = <<<EOF
