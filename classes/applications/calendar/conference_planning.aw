@@ -1836,7 +1836,7 @@ class conference_planning extends class_base
 		$cp = obj($arr["conference_planner"]);
 		$this->cp = $cp;
 		$active_view = $GLOBALS["_GET"]["view_no"];
-		$active_view = (!strlen($active_view) || $active_view < 1)?1:$active_view;
+		$active_view = (!strlen($active_view) || $active_view < 1) ? 1 : $active_view;
 
 		$html["yah_bar"] = $this->parse_yah_bar($cp, $arr["id"], $active_view);
 		$html["active_view"] = $this->parse_active_view($cp, $arr["id"], $active_view);
@@ -2161,23 +2161,26 @@ class conference_planning extends class_base
 		$this->read_template("views.tpl");
 
 		$views = aw_unserialize($cp->prop("help_views"));
-		$fid = reset(array_keys($views));
-		$lid = end(array_keys($views));
-		$keys = array_keys($views);
-		$no_i = array_search($no, $keys);
+		$fid = reset(array_keys($views));	// Esimese vaate indeks vaadete massiivis
+		$lid = end(array_keys($views));		// Viimase vaate indeks vaadete massiivis
+		$keys = array_keys($views);			// Vaadete massiivi indeksid
+		// $no-1 sellep2rast, et vaated on 0 kuni n-1, mitte 1 kuni n.
+		$no_i = array_search($no-1, $keys);	// K2esoleva vaate indeks "vaadete massiivi indeksite" ($keys) massiivis
 
 		foreach($keys as $i => $key)
 		{
-			$i++;
-			$act = ($i == $no)?"ACT_":"";
-			$href = (strlen($no) &&  $i < $no)?"_HREF":"";
-			$caption = $views[$key]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))]?$views[$key]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))]:$views[$key]["trans"][CP_DEFAULT_LANG];
-			$caption_i_plus_one = $views[$keys[$i+1]]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))]?$views[$keys[$i+1]]["trans"][(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))]:$views[$keys[$i+1]]["trans"][CP_DEFAULT_LANG];
-			if($i == 1)
+			$lang_id = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
+
+			// $no-1 sellep2rast, et vaated on 0 kuni n-1, mitte 1 kuni n.
+			$act = ($i == $no-1) ? "ACT_" : "";
+			// $no-1 sellep2rast, et vaated on 0 kuni n-1, mitte 1 kuni n.
+			$href = (strlen($no) &&  $i < $no-1) ? "_HREF" : "";
+			$caption = $views[$key]["trans"][$lang_id] ? $views[$key]["trans"][$lang_id] : $views[$key]["trans"][CP_DEFAULT_LANG];
+			$caption_i_plus_one = $views[$keys[$i+1]]["trans"][$lang_id] ? $views[$keys[$i+1]]["trans"][$lang_id] : $views[$keys[$i+1]]["trans"][CP_DEFAULT_LANG];
+			if($i == 0)
 			{
 				$this->vars(array(
-					"step_nr" => $i,
-					//"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
+					"step_nr" => $i+1,
 					"caption" => $caption,
 					"url" => aw_ini_get("baseurl")."/".$doc."?view_no=".$i,
 				));
@@ -2191,8 +2194,7 @@ class conference_planning extends class_base
 					$last = "_LAST";
 				}
 				$this->vars(array(
-					"step_nr" => $i,
-					//"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
+					"step_nr" => $i+1,
 					"caption" => $caption,
 					"url" => aw_ini_get("baseurl")."/".$doc."?view_no=".$i,
 				));
@@ -2201,8 +2203,7 @@ class conference_planning extends class_base
 			elseif($no_i == (count($views) - 1))
 			{
 				$this->vars(array(
-					"step_nr" => $i,
-					//"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
+					"step_nr" => $i+1,
 					"caption" => $caption,
 				));
 				$yah[] = $this->parse("YAH_LAST_BTN_AFTER");
@@ -2210,8 +2211,7 @@ class conference_planning extends class_base
 			elseif($no_i != ($i - 1))
 			{
 				$this->vars(array(
-					"step_nr" => $i,
-					//"caption" => strlen($act)?$views[$key]["trans"][aw_global_get("ct_lang_lc")]:"",
+					"step_nr" => $i+1,
 					"caption" => $caption,
 				));
 				$yah[] = $this->parse($act."YAH_LAST_BTN".$href);
@@ -2219,8 +2219,7 @@ class conference_planning extends class_base
 			if(strlen($act) && $no_i != (count($views) - 1) && $i < count($views))
 			{
 				$this->vars(array(
-					"step_nr" => ($i+1),
-					//"caption" => $views[$keys[$i+1]]["trans"][aw_global_get("ct_lang_lc")],
+					"step_nr" => ($i+2),
 					"caption" => $caption_i_plus_one,
 				));
 				$yah[] = $this->parse("YAH_BTN_AFTER");
