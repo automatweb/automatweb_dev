@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.159 2009/04/09 09:37:04 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.160 2009/05/22 12:04:29 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2847,7 +2847,7 @@ foreach($ol->arr() as $o)
 						);
 						if(!($to > 1))$this->member_count++;
 					}
-					if(!$all) $this->already_found[$row["mail"]] = $od["mail"];
+					if(!$all) $this->already_found[$od["mail"]] = $od["mail"];
 				}
 			}
 			elseif ($source_obj->class_id() == CL_GROUP)
