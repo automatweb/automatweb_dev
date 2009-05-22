@@ -748,9 +748,9 @@ class doc extends class_base
 			}
 			//if ($cff->prop("on_save_settings_remove_word_html") == 1)
 			//{
-				$obj_inst->set_prop("content",$this->_doc_clean_html($obj_inst->prop("content")));
-				$obj_inst->set_prop("lead",$this->_doc_clean_html($obj_inst->prop("lead")));
-				$obj_inst->set_prop("moreinfo",$this->_doc_clean_html($obj_inst->prop("moreinfo")));
+				//$obj_inst->set_prop("content",$this->_doc_clean_html($obj_inst->prop("content")));
+				//$obj_inst->set_prop("lead",$this->_doc_clean_html($obj_inst->prop("lead")));
+				//$obj_inst->set_prop("moreinfo",$this->_doc_clean_html($obj_inst->prop("moreinfo")));
 			//}
 		}
 
@@ -1796,6 +1796,31 @@ class doc extends class_base
 
 		die();
 	}
+	
+	/**
+		@attrib name=clean_up_html
+	**/
+	function clean_up_html($arr)
+	{
+		header('Content-Type: text/html; charset=utf-8'); 
+		$html = $_POST["html"];
+		$html = iconv(aw_global_get("charset"),"UTF-8", $html);
+		
+		$html = ereg_replace("<(/)?(meta|title|style|font|span|del|ins)[^>]*>","",$html);
+
+		// another pass over the html 2x times, removing unwanted attributes
+		$html = ereg_replace("<([^>]*)(class|lang|style|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
+		$html = ereg_replace("<([^>]*)(class|lang|style|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
+		
+		// finishing up - maby should make optional
+		$html = preg_replace(
+			array("/<!--.*-->/imsU", "/\<p\s*\>/imsU", "/\<h([0-9])\s*\>/imsU", ),
+			array("", "<p>", "<h\\1>"),
+			$html
+		);
+		
+		die($html);
+	}
 
 	function callback_generate_scripts($arr)
 	{
@@ -1813,7 +1838,7 @@ function awDocUnloadHandler()
 		success: function(msg){
 		},
 		error: function(msg){
-			alert( "{VAR:msg_leave_error}");
+			//alert( "{VAR:msg_leave_error}");
 		}
 	});
 }
