@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.35 2009/05/14 06:56:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.36 2009/05/22 14:15:03 markop Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -62,7 +62,7 @@ class otv_ds_postipoiss extends class_base
 		"liik" => "Liik",
 		"seosed" => "seosed",
 		"teemad" => "Teemad",
-		"saatja_viide" => "Saatja indeks",
+		"saatja_indeks" => "Saatja indeks",
 		"saatja_kuupaev" => "Saatja kuupaev",		
 		"regist_nr" => "Nr.",
 		"indeks" => "Dokument",
@@ -71,7 +71,7 @@ class otv_ds_postipoiss extends class_base
 		"toimik" => "Toimik",
 		"sep1" => "",
 		"saatja_kpv" => "Saatja kuup&auml;ev",
-		"saatja_indeks" => "Saatja nr.",
+//		"saatja_indeks" => "Saatja nr.",
 		"sep2" => "",
 		"pool1" => "Lepingu pool",
 		"kellelt" => "Kellelt",
