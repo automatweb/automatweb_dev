@@ -44,6 +44,7 @@ function load_tree_state_{VAR:tree_num}()
 	}
 	for(i=level_{VAR:tree_num};i < open_nodes_{VAR:tree_num}.length;i++)
 	{
+		
 		data = false;
 		thisElem = document.getElementById(open_nodes_{VAR:tree_num}[i]);
 		if(thisElem)
@@ -63,6 +64,7 @@ function load_tree_state_{VAR:tree_num}()
 		{
 			toggle_children_{VAR:tree_num}(node,1);
 		}
+
 		break;
 	}
 }
