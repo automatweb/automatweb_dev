@@ -692,7 +692,12 @@ class crm_bill_obj extends _int_object
 		return $this->prop("customer");
 	}
 
-	private function add_row($id = null)
+
+	/** adds new row to bill
+		@attrib api=1 params=pos
+		@returns
+	**/
+	public function add_row($id = null)
 	{
 		if(is_oid($id))
 		{
@@ -704,6 +709,13 @@ class crm_bill_obj extends _int_object
 			$br->set_class_id(CL_CRM_BILL_ROW);
 		}
 		$br->set_parent($this->id());
+
+		$br->set_prop("date", date("d.m.Y", time()));
+		if($this->set_crm_settings() && $this->crm_settings->prop("bill_default_unit"))
+		{
+			$br->set_prop("unit" , $this->crm_settings->prop("bill_default_unit"));
+		}
+
 		$br->save();
 		$this->add_bill_comment_data(t("Lisati rida ID-ga"." ".$br->id()));
 		$this->connect(array(
@@ -771,7 +783,7 @@ class crm_bill_obj extends _int_object
 				case CL_TASK:
 					if($work->prop("deal_price"))
 					{
-						$agreement = $this->meta("agreement_price");
+						$agreement = $this->get_agreement_price();
 						if(!is_array($agreement))
 						{
 							$agreement = array();
@@ -1035,7 +1047,7 @@ class crm_bill_obj extends _int_object
 	**/
 	public function get_sum()
 	{
-		$agreement = $this->meta("agreement_price");
+		$agreement = $this->get_agreement_price();
 		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
 		if($agreement[0]["sum"] && $agreement[0]["price"] && strlen($agreement[0]["name"]) > 0) 
 		{
@@ -1186,7 +1198,7 @@ class crm_bill_obj extends _int_object
 		$tax = 0;
 		$sum = 0;
 		
-		$agreement_price = $this->meta("agreement_price");
+		$agreement_price = $this->get_agreement_price();
 		if(is_array($agreement_price) && $agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0)
 		{
 			$rows = $agreement_price;
@@ -2428,6 +2440,31 @@ class crm_bill_obj extends _int_object
 		$nb->save();
 		$nb->add_rows(array("objects" => $rows));//arr($this->mk_my_orb("change", array("id" => $nb->id()), CL_CRM_BILL));
 		return $nb->id();
+	}
+
+	/** returns bill agreement price
+		@attrib api=1
+		@returns array
+	**/
+	public function get_agreement_price()
+	{
+		if($this->use_agreement_price())
+		{
+			return $this->meta("agreement_price");
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public function use_agreement_price()
+	{
+		if(!$this->set_crm_settings() || !$this->crm_settings->prop("bill_no_agreement_price"))
+		{
+			return 1;
+		}
+		return 0;
 	}
 
 	function move_rows_to_dn($arr)

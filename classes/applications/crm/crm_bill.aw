@@ -590,6 +590,20 @@ class crm_bill extends class_base
 				break;
 
 			case "customer_name":
+				$search_url = $this->mk_my_orb( "do_search", array("pn" => "customer" , "clid" => array(CL_CRM_PERSON, CL_CRM_COMPANY))  , "popup_search");
+				$prop["post_append_text"] = " ". html::href(array(
+					"url" => "javascript:x=document.getElementsByName('customer_name')[0];x.value=null;aw_popup_scroll('".$search_url."','Otsing',1100,700)",
+					"caption" => html::img(array(
+						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/search.gif",
+						"border" => 0,
+					)),
+					"title" => t("Otsi")
+				));
+
+
+//javascript:aw_popup_scroll('http://intranet.automatweb.com/automatweb/orb.aw?class=popup_search&action=do_search&id=219175&pn=customer&clid[0]=129&clid[1]=145&multiple=','Otsing',800,500)
+
+
 			case "customer_code":
 			case "customer_address":
 				if(!$arr["obj_inst"]->prop("customer_name"))
@@ -625,7 +639,7 @@ class crm_bill extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
+				$agreement_prices = $arr["obj_inst"]->get_agreement_price();
 				if(is_array($agreement_price) && $agreement_prices[0]["price"] && strlen($agreement_prices[0]["name"]) > 0)
 				{
 					$sum = 0;
@@ -889,9 +903,16 @@ class crm_bill extends class_base
 
 			case "customer":
 				// check if the 
-				if($prop["name"] == "customer" && isset($arr["request"]["customer_name"]))
+				if($prop["name"] == "customer")
 				{
-					return PROP_IGNORE;
+					if(isset($arr["request"]["customer_name"]) && !$this->can("view" , $prop["value"]))
+					{
+						return PROP_IGNORE;
+					}
+					elseif($this->can("view" , $prop["value"]))
+					{
+						$arr["obj_inst"] -> set_prop("customer_name" ,null);
+					}
 				}
 				if(!is_oid($prop["value"]))
 				{
@@ -1182,6 +1203,7 @@ class crm_bill extends class_base
 		$arr["reconcile_price"] = -1;
 		$arr["new_payment"] = "";
 		$arr["add_dn"] = 0;
+		$arr["customer"] = "";
 		if($_GET["project"])
 		{
 			$arr["project"] = $_GET["project"];
@@ -1780,10 +1802,12 @@ class crm_bill extends class_base
 		}
 		$t->set_sortable(false);
 
-		if($arr["obj_inst"]->meta("agreement_price"))
+		$agreement_prices = $arr["obj_inst"]->get_agreement_price();
+
+		if($agreement_prices)
 		{
 			$sum = 0;
-			foreach($arr["obj_inst"]->meta("agreement_price") as $agreement_price)
+			foreach($agreement_prices as $agreement_price)
 			{
 				$sum+= $agreement_price["sum"];
 			}
@@ -1801,12 +1825,15 @@ class crm_bill extends class_base
 		}
 */
 		//kokkuleppe hind
-		$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
 		if(!is_array($agreement_prices[0]) && is_array($agreement_prices)) $agreement_prices = array($agreement_prices);//endiste kokkuleppehindade jaoks mis pold massiivis
 		if($agreement_prices == null) $agreement_prices = array();
 // 		if(is_array($agreement_prices[0]))
 // 		{
+
+		if($arr["obj_inst"]->use_agreement_price())
+		{
 			$agreement_prices[] = array();
+		}
 			$x = 0;
 			foreach($agreement_prices as $key => $agreement_price)
 			{
@@ -2780,7 +2807,7 @@ class crm_bill extends class_base
 
 	function get_sum($bill)
 	{
-		$agreement = $bill->meta("agreement_price");
+		$agreement = $bill->get_agreement_price();
 		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
 		if($agreement[0]["sum"] && $agreement[0]["price"] && strlen($agreement[0]["name"]) > 0) 
 		{
@@ -2797,7 +2824,7 @@ class crm_bill extends class_base
 	//returns bill sum without other expenses
 	function get_sum_wo_exp($bill)
 	{
-		$agreement = $bill->meta("agreement_price");
+		$agreement = $bill->get_agreement_price();
 		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
 		if($agreement[0]["sum"] && $agreement[0]["price"] && strlen($agreement[0]["name"]) > 0) 
 		{
@@ -3215,7 +3242,7 @@ class crm_bill extends class_base
 		$tax = 0;
 		$sum = 0;
 		
-		$agreement = $b->meta("agreement_price");
+		$agreement = $b->get_agreement_price();
 		if($agreement["price"] && $agreement["name"]) $agreement = array($agreement); // kui on vanast ajast jnud
 		if($agreement[0]["price"] && strlen($agreement[0]["name"]) > 0 )//kui kokkuleppehind on tidetud, siis rohkem ridu ei ole nha
 		{
@@ -3982,7 +4009,7 @@ class crm_bill extends class_base
 		$tax = 0;
 		$sum = 0;
 		
-		$agreement_price = $b->meta("agreement_price");
+		$agreement_price = $b->get_agreement_price();
 		if(is_array($agreement_price) && $agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0)
 		{
 			$rows = $agreement_price;
@@ -4128,38 +4155,41 @@ class crm_bill extends class_base
 			}
 		}
 
-		$seti = get_instance(CL_CRM_SETTINGS);
-		
-		//summa igeks
-		if(is_array($arr["request"]["agreement_price"]))
+		if($arr["obj_inst"]->use_agreement_price())
 		{
-			foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
+			$seti = get_instance(CL_CRM_SETTINGS);
+			
+			//summa igeks
+			if(is_array($arr["request"]["agreement_price"]))
 			{
-				//comment on see mis nagu nitama hakkab... et paneb selle samaks mis nimi
-				
-				$arr["request"]["agreement_price"][$key]["comment"] = $agreement_price["name"];
-				//vaikimisi artikkel ka
-				$sts = $seti->get_current_settings();
-				if ($sts && !$arr["request"]["agreement_price"][$key]["prod"])
+				foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
 				{
-					$arr["request"]["agreement_price"][$key]["prod"] = $sts->prop("bill_def_prod");
-				}
-				$arr["request"]["agreement_price"][$key]["sum"] = str_replace("," , "." , $arr["request"]["agreement_price"][$key]["price"])*str_replace("," , "." , $arr["request"]["agreement_price"][$key]["amt"]);
-				if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && !$arr["request"]["agreement_price"][$key]["atm"]) 
-				{
-					unset($arr["request"]["agreement_price"][$key]);
-				}
-				if(isset($arr["request"]["agreement_price"][$key]["prod"]))
-				{
-					$tmp = explode("(", $arr["request"]["agreement_price"][$key]["prod"]);
-					$tmp2 = explode(")", $tmp[count($tmp)-1]);
-					$prod = $tmp2[0];
-					$arr["request"]["agreement_price"][$key]["prod"] = $prod;
+					//comment on see mis nagu nitama hakkab... et paneb selle samaks mis nimi
+					
+					$arr["request"]["agreement_price"][$key]["comment"] = $agreement_price["name"];
+					//vaikimisi artikkel ka
+					$sts = $seti->get_current_settings();
+					if ($sts && !$arr["request"]["agreement_price"][$key]["prod"])
+					{
+						$arr["request"]["agreement_price"][$key]["prod"] = $sts->prop("bill_def_prod");
+					}
+					$arr["request"]["agreement_price"][$key]["sum"] = str_replace("," , "." , $arr["request"]["agreement_price"][$key]["price"])*str_replace("," , "." , $arr["request"]["agreement_price"][$key]["amt"]);
+					if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && !$arr["request"]["agreement_price"][$key]["atm"]) 
+					{
+						unset($arr["request"]["agreement_price"][$key]);
+					}
+					if(isset($arr["request"]["agreement_price"][$key]["prod"]))
+					{
+						$tmp = explode("(", $arr["request"]["agreement_price"][$key]["prod"]);
+						$tmp2 = explode(")", $tmp[count($tmp)-1]);
+						$prod = $tmp2[0];
+						$arr["request"]["agreement_price"][$key]["prod"] = $prod;
+					}
 				}
 			}
+			$arr["obj_inst"]->set_meta("agreement_price", $arr["request"]["agreement_price"]);
+
 		}
-		$arr["obj_inst"]->set_meta("agreement_price", $arr["request"]["agreement_price"]);
-		$arr["obj_inst"]->save();
 	}
 
 	/**
@@ -4177,10 +4207,7 @@ class crm_bill extends class_base
 			if($row["jrk"] > $jrk-10) $jrk = $row["jrk"]+10;
 		}
 
-		$row = obj();
-		$row->set_parent($bill->id());
-		$row->set_class_id(CL_CRM_BILL_ROW);
-		$row->set_prop("date", date("d.m.Y", time()));
+		$row = $bill->add_row();
 		$row->set_meta("jrk" , $jrk);
 		$row->save();
 

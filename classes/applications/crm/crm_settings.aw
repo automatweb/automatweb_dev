@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.34 2009/03/11 17:00:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.35 2009/05/25 15:11:41 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -23,9 +23,6 @@
 
 	@property customer_employer_cfgform type=relpicker reltype=RELTYPE_CFGFORM table=objects field=meta method=serialize
 	@caption Kliendi t&ouml;&ouml;taja seadete vorm
-
-	@property bill_def_prod type=relpicker reltype=RELTYPE_PROD table=objects field=meta method=serialize
-	@caption Vaikimisi toode arve ridadel
 
 	@property controller_proj type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize
 	@caption Projekti kontroller
@@ -71,9 +68,6 @@
 
 	@property show_files_and_docs_in_tree type=checkbox ch_value=1 table=objects field=meta
 	@caption N&auml;ita puus faile ja dokumente
-
-	@property billable_only_by_mrg type=checkbox ch_value=1 table=objects field=meta
-	@caption Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur
 
 	@property default_task_rows_bills_filter type=select table=objects field=meta
 	@caption Toimetuse ridades valitud Arve tulba vaikimisi filter
@@ -153,8 +147,10 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 	@caption Staatuste piirangud
 
 
-
 @default group=bill
+
+	@property billable_only_by_mrg type=checkbox ch_value=1 table=objects field=meta
+	@caption Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur
 
 	@property bill_mail_to type=textbox field=meta method=serialize
 	@caption Kellele meil saata
@@ -179,6 +175,16 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 
 	@property bill_hide_cr type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption Peita koonda read nupp
+
+	@property bill_no_agreement_price type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption &Auml;ra kasuta kokkuleppehinda
+
+	@property bill_def_prod type=relpicker reltype=RELTYPE_PROD table=objects field=meta method=serialize
+	@caption Vaikimisi toode arve ridadel
+
+	@property bill_default_unit type=select table=objects field=meta method=serialize
+	@caption Vaikimisi &Uuml;hik
+
 
 @groupinfo tables caption="Tabelid"
 @groupinfo whom caption="Kellele kehtib"
@@ -316,6 +322,33 @@ class crm_settings extends class_base
 			case "bill_mail_legend":
 				$bill = get_instance(CL_CRM_BILL);
 				$prop["value"] = $bill->get_mail_legend();
+				break;
+			case "bill_default_unit":
+				$filter = array(
+					"class_id" => CL_UNIT,
+					"lang_id" => array(),
+					"site_id" => array(),
+				);
+				$prop["options"] = array("" => "");
+				$t = new object_data_list(
+					$filter,
+					array(
+						CL_UNIT => array(
+							new obj_sql_func(OBJ_SQL_UNIQUE, "name", "objects.name"),
+						)
+					)
+				);
+				$names = $t->get_element_from_all("name");
+				foreach($names as $name)
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_UNIT,
+						"lang_id" => array(),
+						"site_id" => array(),
+						"name" => $name,
+					));
+					$prop["options"][reset($ol->ids())] = $name;
+				}
 				break;
 		}
 		return $retval;

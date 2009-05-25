@@ -407,6 +407,25 @@
             <method>serialize</method>
             <caption>Peita koonda read nupp</caption>
       </property>
+      <property>
+            <name>bill_no_agreement_price</name>
+            <table>objects</table>
+            <group>bill</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;amp;Auml;ra kasuta kokkuleppehinda</caption>
+      </property>
+      <property>
+            <name>bill_default_unit</name>
+            <table>objects</table>
+            <group>bill</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi &amp;amp;Uuml;hik</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SETTINGS</syslog_type>
             <relationmgr>yes</relationmgr>
