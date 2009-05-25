@@ -3105,6 +3105,11 @@ class shop_warehouse extends class_base
 			$ot->add(new object_list($sparams));
 		}
 		$pi = get_instance(CL_SHOP_PRODUCT);
+		// for now the replacement products are in user1 field
+		// but i think it should be different, when we have cleared up in what way the replacement products really should be represented
+		// like are they real products? or just can they be real products? are they just strings connecting different products? --dragut
+		$replacement_products = $this->find_replacement_products($ot);
+		$ot->add($replacement_products);
 		foreach($ot->arr() as $o)
 		{
 			$remove = $below_min = $chk_min = $prodtotal = 0;
@@ -3176,12 +3181,31 @@ class shop_warehouse extends class_base
 			$res["amounts"][$o->id()]["total"] = $prodtotal;
 
 		}
+
 		if($group == "storage_prognosis")
 		{
 			$this->calc_prognosis_amounts($res, $arr);
 		}
 		$res["ol"] = $ot;
 		return $res;
+	}
+
+	private function find_replacement_products($prods)
+	{
+		if ($prods->count() <= 0)
+		{
+			return new object_list();
+		}
+		foreach ($prods->arr() as $prod_id => $prod)
+		{
+			$replacements_codes[$prod_id] = $prod->prop('user1');
+		}
+
+		$ol = new object_list(array(
+			'class_id' => CL_SHOP_PRODUCT,
+			'user1' => $replacements_codes
+		));
+		return $ol;
 	}
 
 	private function ol_remove_prod(&$ol, $ro)
@@ -8741,7 +8765,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"CL_CRM_COMPANY.RELTYPE_".(strpos($g, "sales") !== false ? "BUYER" : "SELLER")."(CL_CRM_COMPANY_CUSTOMER_DATA).RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER").".oid" => $owner,
 			"site_id" => array(),
 			"class_id" => array(),
-		);arr($params);
+		);
 		$odl = new object_data_list($params,
 		array(
 			CL_CRM_COMPANY => array("name" => "name"),
