@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.28 2009/05/21 07:11:50 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.29 2009/05/25 10:18:48 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -383,7 +383,7 @@ class development_order extends class_base
 						}
 					}
 				}
-				
+				$ppl = array();
 				$orderers = $arr["obj_inst"]->prop("orderer");
 				foreach($orderers as $orderer)
 				{
@@ -557,33 +557,15 @@ class development_order extends class_base
 					$com = sprintf(t("Staatus muudeti %s => %s"), $statuses[$old], $statuses[$prop["value"]]);
 					$this->add_comments[] = $com;
 				}
-				if ($prop["value"] == 10 && $this->_ac_old_state != 10)
-				{
-					$bug = $arr["obj_inst"];
-					$u = get_instance(CL_USER);
-					if(!$arr["new"])
-					{
-						// set the creator as the feedback from person
-						$bbug = $bug->get_first_obj_by_reltype("RELTYPE_MAIN_BUG");
-						if($bbug)
-						{
-							$p = $u->get_person_for_uid($bbug->createdby());
-						}
-						else
-						{
-							$p = $u->get_person_for_uid($bug->createdby());
-						}
-					}
-					else
-					{
-						$p = obj($u->get_current_person());
-					}
-					$bug->set_prop("bug_feedback_p", $p->id());
-					$this->_set_feedback = $p->id();
-				}
 				break;
 			case "com":
 				if(!$arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case "reason":
+				if($arr["obj_inst"]->prop("reason"))
 				{
 					return PROP_IGNORE;
 				}

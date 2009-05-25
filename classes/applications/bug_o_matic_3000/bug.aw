@@ -1928,7 +1928,7 @@ class bug extends class_base
 				$notify_addresses[] = $addr;
 			};
 		};
-
+die(arr($notify_addresses));
 		if (sizeof($notify_addresses) == 0)
 		{
 			return false;
@@ -2341,17 +2341,22 @@ class bug extends class_base
 			));
 			$com_str .= $this->parse("COMMENT");
 		}
+		$base_author = $o->prop("bug_createdby");
+		if(!$base_author)
+		{
+			$base_author = $o->createdby();
+		}
 		if($base_com)
 		{
-			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("bug_content"))))));
+			$main_c = "<b>".$base_author." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("bug_content"))))));
 		}
 		elseif($o->prop("com"))
 		{
-			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("com"))))));
+			$main_c = "<b>".$base_author." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("com"))))));
 		}
 		else
 		{
-			$main_c = '<b>'.$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br> Tellimus loodi";
+			$main_c = '<b>'.$base_author." @ ".date("d.m.Y H:i", $o->created())."</b><br> Tellimus loodi";
 		}
 		$this->vars(array(
 			"main_text" => $so == "asc" ? $main_c : "",
@@ -2755,6 +2760,21 @@ class bug extends class_base
 
 		$o->save();
 
+		if($com = $arr["request"]["bug_content_comm"])
+		{
+			$cm = obj();
+			$cm->set_class_id(CL_TASK_ROW);
+			$cm->set_parent($o->id());
+			$cm->set_prop("done", 1);
+			$cm->set_prop("task", $o->id());
+			$cm->set_comment(trim($com));
+			$cm->save();
+			$o->connect(array(
+				"to" => $cm->id(),
+				"type" => "RELTYPE_COMMENT",
+			));
+		}
+
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FILE")) as $c)
 		{
 			$o->connect(array(
@@ -2797,21 +2817,8 @@ class bug extends class_base
 		$mails = array();
 		if($person)
 		{
-			$mail = $bt->prop("dorder_mail_contents");
+			$mail_text = $bt->prop("dorder_mail_contents");
 
-			$find = array(
-				"#added_by#",
-				"#confirmation_by#",
-				"#dev_url#",
-				"#dev_id#",
-			);
-			$replace = array(
-				$creator->name(),
-				$person->name(),
-				$this->mk_my_orb("change", array("id" => $o->id()), CL_DEVELOPMENT_ORDER),
-				$o->id(),
-			);
-			$mail_contents = str_replace($find, $replace, $mail);
 			$mail = $person->get_first_obj_by_reltype("RELTYPE_EMAIL");
 			if(!$mail)
 			{
@@ -2821,7 +2828,7 @@ class bug extends class_base
 					$mail = obj($mid);
 				}
 			}
-			$mails[] = $mail;
+			$mails["person"] = $mail;
 			$mail = $creator->get_first_obj_by_reltype("RELTYPE_EMAIL");
 			if(!$mail)
 			{
@@ -2831,13 +2838,56 @@ class bug extends class_base
 					$mail = obj($mid);
 				}
 			}
-			$mails[] = $mail;
+			$mails["creator"] = $mail;
 	
-			foreach($mails as $mail)
+			foreach($mails as $id => $mail)
 			{
 				if($mail)
 				{
-					$adr = $mail->prop("mail");arr($adr);
+					$uo = get_instance(CL_CRM_PERSON)->has_user($$id);
+					$conn = $uo->connections_from(array(
+						"type" => "RELTYPE_GRP",
+					));
+					$admin = false;
+					foreach($conn as $c)
+					{
+						$grp = $c->to();
+						if($grp->prop("can_admin_interface"))
+						{
+							$admin = true;
+						}
+					}
+	
+					$bug_url = $this->mk_my_orb("change", array("id" => $o->id()), CL_DEVELOPMENT_ORDER, $admin);
+					if(!$admin)
+					{
+						$ol = new object_list(array(
+							"class_id" => CL_BUGTRACK_DISPLAY,
+							"site_id" => array(),
+							"lang_id" => array(),
+						));
+						$bdo = $ol->begin();
+						if($bdo)
+						{
+							$sect = $bdo->prop("order_doc");
+							$bug_url = $this->mk_my_orb("change", array("section" => $sect, "id" => $o->id()), CL_DEVELOPMENT_ORDER, $admin);
+						}
+						$bug_url = str_replace(array("orb.aw", "automatweb/"), "", $bug_url);
+					}
+					$find = array(
+						"#added_by#",
+						"#confirmation_by#",
+						"#dev_url#",
+						"#dev_id#",
+					);
+					$replace = array(
+						$creator->name(),
+						$person->name(),
+						$bug_url,
+						$o->id(),
+					);
+					$mail_contents = str_replace($find, $replace, $mail_text);
+					$adr = $mail->prop("mail");
 					send_mail($adr, "Lisati arendustellimus", $mail_contents, "From: bugtrack@".substr(strstr(aw_ini_get("baseurl"), "//"), 2));
 				}
 	
