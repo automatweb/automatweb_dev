@@ -164,6 +164,15 @@
             <caption>Ribakood</caption>
       </property>
       <property>
+            <name>type_code</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>type_code</field>
+            <parent>gen_data</parent>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;bi kood</caption>
+      </property>
+      <property>
             <name>brand</name>
             <table>objects</table>
             <group>general_general</group>
