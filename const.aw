@@ -348,7 +348,7 @@ function lc_init()
 
 			foreach($GLOBALS["cfg"]["syslog"]["actions"] as $actid => $ad)
 			{
-				if (($_tmp = t2("syslog.action.".$ad["def"])) != "")
+				if (!empty($ad["def"]) && ($_tmp = t2("syslog.action.".$ad["def"])) != "")
 				{
 					$GLOBALS["cfg"]["syslog"]["actions"][$actid]["name"] = $_tmp;
 				}
