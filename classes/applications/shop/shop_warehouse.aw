@@ -8677,7 +8677,13 @@ $oo = get_instance(CL_SHOP_ORDER);
 				}
 			}
 		}
-		$t->set_selected_item(automatweb::$request->arg("filt_cust"));
+		$t->add_item(0, array(
+			"id" => "all",
+			"name" => t("K&otilde;ik"),
+			"url" => aw_url_change_var("filt_cust", null),
+		));
+		$f = automatweb::$request->arg("filt_cust");
+		$t->set_selected_item($f ? $f : "all");
 	}
 
 	/**
@@ -8738,7 +8744,8 @@ $oo = get_instance(CL_SHOP_ORDER);
 				}
 			}
 		}
-		$t->set_selected_item(automatweb::$request->arg("filt_cust"));
+		$f = automatweb::$request->arg("filt_cust");
+		$t->set_selected_item($f ? $f : "all");
 		die($t->finalize_tree());
 	}
 
@@ -8774,6 +8781,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		foreach($odl->arr() as $o)
 		{
 			$letters[strtolower(substr($o["name"],0,1))]++;
+			$total++;
 		}
 		ksort($letters);
 		foreach($letters as $l => $c)
@@ -8784,7 +8792,13 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"url" => aw_url_change_var("filt_cust_name", $l),
 			));
 		}
-		$t->set_selected_item(automatweb::$request->arg("filt_cust_name"));
+		$t->add_item(0, array(
+			"id" => "all",
+			"name" => sprintf("%s (%s)", t("K&otilde;ik"), $total),
+			"url" => aw_url_change_var("filt_cust_name", null),
+		));
+		$f = automatweb::$request->arg("filt_cust_name");
+		$t->set_selected_item($f ? $f : "all");
 	}
 
 	function _get_clients_toolbar($arr)
