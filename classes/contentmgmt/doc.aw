@@ -875,8 +875,8 @@ class doc extends class_base
 		$html = ereg_replace("<(/)?(meta|title|style|font|span|del|ins)[^>]*>","",$html);
 		
 		// another pass over the html 2x times, removing unwanted attributes
-		$html = ereg_replace("<([^>]*)(class|lang|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
-		$html = ereg_replace("<([^>]*)(class|lang|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
+		//$html = ereg_replace("<([^>]*)(class|lang|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
+		//$html = ereg_replace("<([^>]*)(class|lang|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
 		
 		// finishing up - maby should make optional
 		$html = preg_replace(
