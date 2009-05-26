@@ -6,6 +6,11 @@
 @default table=aw_personnel_management_job_offer_condition_group
 @default group=general
 
+### RELTYPES
+
+@reltype CONDITION value=1 clid=CL_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION
+@caption Tingimus
+
 */
 
 class personnel_management_job_offer_condition_group extends class_base

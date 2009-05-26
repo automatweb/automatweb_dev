@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.69 2009/05/13 08:45:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.70 2009/05/26 14:05:54 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -14,124 +14,124 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @default table=objects
 @default group=general
 
-@property toolbar type=toolbar no_caption=1
+	@property toolbar type=toolbar no_caption=1
 
-@property show_cnt type=hidden field=show_cnt table=personnel_management_job_offer
-@caption Vaatamisi
+	@property show_cnt type=hidden field=show_cnt table=personnel_management_job_offer
+	@caption Vaatamisi
 
-@property name type=textbox
-@caption Nimi
+	@property name type=textbox
+	@caption Nimi
 
-@property jo_type type=classificator reltype=RELTYPE_TYPE store=connect
-@caption T&uuml;&uuml;p
+	@property jo_type type=classificator reltype=RELTYPE_TYPE store=connect
+	@caption T&uuml;&uuml;p
 
-@property keywords type=textbox field=keywords table=personnel_management_job_offer
-@caption M&auml;rks&otilde;nad
+	@property keywords type=textbox field=keywords table=personnel_management_job_offer
+	@caption M&auml;rks&otilde;nad
 
-@property status type=status
-@caption Aktiivne
+	@property status type=status
+	@caption Aktiivne
 
-@property confirmed type=checkbox ch_value=1 field=confirmed table=personnel_management_job_offer
-@caption Kinnitatud
+	@property confirmed type=checkbox ch_value=1 field=confirmed table=personnel_management_job_offer
+	@caption Kinnitatud
 
-@property archive type=checkbox ch_value=1 table=personnel_management_job_offer field=archive default=0
-@caption Arhiveeritud
+	@property archive type=checkbox ch_value=1 table=personnel_management_job_offer field=archive default=0
+	@caption Arhiveeritud
 
-@property company type=relpicker reltype=RELTYPE_ORG store=connect mode=autocomplete option_is_tuple=1
-@caption Organisatsioon
+	@property company type=relpicker reltype=RELTYPE_ORG store=connect mode=autocomplete option_is_tuple=1
+	@caption Organisatsioon
 
-@property sect type=relpicker reltype=RELTYPE_SECTION store=connect
-@caption Osakond
+	@property sect type=relpicker reltype=RELTYPE_SECTION store=connect
+	@caption Osakond
 
-@property contact type=relpicker reltype=RELTYPE_CONTACT store=connect
-@caption Kontaktisik
+	@property contact type=relpicker reltype=RELTYPE_CONTACT store=connect
+	@caption Kontaktisik
 
-@property start type=date_select table=personnel_management_job_offer field=jo_start
-@caption Konkursi algusaeg
+	@property start type=date_select table=personnel_management_job_offer field=jo_start
+	@caption Konkursi algusaeg
 
-@property end type=date_select table=personnel_management_job_offer field=jo_end
-@caption Konkursi t&auml;htaeg
+	@property end type=date_select table=personnel_management_job_offer field=jo_end
+	@caption Konkursi t&auml;htaeg
 
-@property endless type=checkbox ch_value=1 table=personnel_management_job_offer field=endless
-@caption T&auml;htajatu
+	@property endless type=checkbox ch_value=1 table=personnel_management_job_offer field=endless
+	@caption T&auml;htajatu
 
-@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect mode=autocomplete option_is_tuple=1
-@caption Ametikoht
+	@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect mode=autocomplete option_is_tuple=1
+	@caption Ametikoht
 
-@property job_type type=classificator reltype=RELTYPE_JOB_TYPE store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
-@caption Positsioon
+	@property job_type type=classificator reltype=RELTYPE_JOB_TYPE store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
+	@caption Positsioon
 
-@property load type=classificator reltype=RELTYPE_LOAD store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
-@caption T&ouml;&ouml;koormus
+	@property load type=classificator reltype=RELTYPE_LOAD store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
+	@caption T&ouml;&ouml;koormus
 
-@property field type=relpicker reltype=RELTYPE_FIELD store=connect
-@caption Valdkond (muutuja)
+	@property field type=relpicker reltype=RELTYPE_FIELD store=connect
+	@caption Valdkond (muutuja)
 
-@property sector type=relpicker reltype=RELTYPE_SECTOR multiple=1 store=connect
-@caption Tegevusala (tegevusala objekt)
+	@property sector type=relpicker reltype=RELTYPE_SECTOR multiple=1 store=connect
+	@caption Tegevusala (tegevusala objekt)
 
-#@property location type=relpicker reltype=RELTYPE_LOCATION store=connect
-#@caption Asukoht
+	#@property location type=relpicker reltype=RELTYPE_LOCATION store=connect
+	#@caption Asukoht
 
-@property loc_country type=relpicker reltype=RELTYPE_COUNTRY store=connect mode=autocomplete option_is_tuple=1
-@caption Riik
+	@property loc_country type=relpicker reltype=RELTYPE_COUNTRY store=connect mode=autocomplete option_is_tuple=1
+	@caption Riik
 
-@property loc_area type=relpicker reltype=RELTYPE_AREA store=connect mode=autocomplete option_is_tuple=1
-@caption Piirkond
+	@property loc_area type=relpicker reltype=RELTYPE_AREA store=connect mode=autocomplete option_is_tuple=1
+	@caption Piirkond
 
-@property loc_county type=relpicker reltype=RELTYPE_COUNTY store=connect mode=autocomplete option_is_tuple=1
-@caption Maakond
+	@property loc_county type=relpicker reltype=RELTYPE_COUNTY store=connect mode=autocomplete option_is_tuple=1
+	@caption Maakond
 
-@property loc_city type=relpicker reltype=RELTYPE_CITY store=connect mode=autocomplete option_is_tuple=1
-@caption Linn
+	@property loc_city type=relpicker reltype=RELTYPE_CITY store=connect mode=autocomplete option_is_tuple=1
+	@caption Linn
 
-@property workinfo type=textarea rows=15 cols=60 table=personnel_management_job_offer field=workinfo
-@caption T&ouml;&ouml; sisu
+	@property workinfo type=textarea rows=15 cols=60 table=personnel_management_job_offer field=workinfo
+	@caption T&ouml;&ouml; sisu
 
-@property requirements type=textarea rows=15 cols=60 table=personnel_management_job_offer field=requirements
-@caption N&otilde;udmised kandidaadile
+	@property requirements type=textarea rows=15 cols=60 table=personnel_management_job_offer field=requirements
+	@caption N&otilde;udmised kandidaadile
 
-@property suplementary type=textarea rows=15 cols=60 table=personnel_management_job_offer field=suplementary
-@caption Kasuks tuleb
+	@property suplementary type=textarea rows=15 cols=60 table=personnel_management_job_offer field=suplementary
+	@caption Kasuks tuleb
 
-@property weoffer type=textarea rows=15 cols=60 table=personnel_management_job_offer field=weoffer
-@caption Omalt poolt pakume
+	@property weoffer type=textarea rows=15 cols=60 table=personnel_management_job_offer field=weoffer
+	@caption Omalt poolt pakume
 
-@property info type=textarea rows=15 cols=60 table=personnel_management_job_offer field=info
-@caption Lisainfo
+	@property info type=textarea rows=15 cols=60 table=personnel_management_job_offer field=info
+	@caption Lisainfo
 
-@property salary type=textbox table=personnel_management_job_offer field=salary
-@caption Palk
+	@property salary type=textbox table=personnel_management_job_offer field=salary
+	@caption Palk
 
-@property autoinfo type=checkbox ch_value=1 table=personnel_management_job_offer field=autoinfo
-@caption Kuva lisainfot automaatselt
+	@property autoinfo type=checkbox ch_value=1 table=personnel_management_job_offer field=autoinfo
+	@caption Kuva lisainfot automaatselt
 
-@property motivation_letter type=checkbox ch_value=1 table=personnel_management_job_offer field=motivation_letter
-@caption Vajalik motivatsioonikiri
+	@property motivation_letter type=checkbox ch_value=1 table=personnel_management_job_offer field=motivation_letter
+	@caption Vajalik motivatsioonikiri
 
-@property start_working type=chooser table=personnel_management_job_offer field=start_working
-@caption T&ouml;&ouml;leasumise aeg
+	@property start_working type=chooser table=personnel_management_job_offer field=start_working
+	@caption T&ouml;&ouml;leasumise aeg
 
-@property job_offer_file_url type=text store=no
-@caption T&ouml;&ouml;pakkumise fail
+	@property job_offer_file_url type=text store=no
+	@caption T&ouml;&ouml;pakkumise fail
 
-@property job_offer_file type=releditor reltype=RELTYPE_JOB_OFFER_FILE rel_id=first props=file table=objects field=meta method=serialize
-@caption T&ouml;&ouml;pakkumine failina
+	@property job_offer_file type=releditor reltype=RELTYPE_JOB_OFFER_FILE rel_id=first props=file table=objects field=meta method=serialize
+	@caption T&ouml;&ouml;pakkumine failina
 
-@property job_offer_pdf type=text
-@caption T&ouml;&ouml;pakkumine PDF-failina
+	@property job_offer_pdf type=text
+	@caption T&ouml;&ouml;pakkumine PDF-failina
 
-@property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE store=connect
-@caption Hindamise skaala
+	@property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE store=connect
+	@caption Hindamise skaala
 
-@property udef_classificator_1 type=classificator reltype=RELTYPE_UDEF_CLASSIFICATOR_1 store=connect
-@caption Kasutajadefineeritud klassifikaator 1
+	@property udef_classificator_1 type=classificator reltype=RELTYPE_UDEF_CLASSIFICATOR_1 store=connect
+	@caption Kasutajadefineeritud klassifikaator 1
 
-@property udef_textbox_1 type=textbox table=personnel_management_job_offer field=udef_textbox_1
-@caption Kasutajadefineeritud tekstikast 1
+	@property udef_textbox_1 type=textbox table=personnel_management_job_offer field=udef_textbox_1
+	@caption Kasutajadefineeritud tekstikast 1
 
-@property notify_me type=checkbox ch_value=1
-@caption Soovin teadet kandideerimisest e-postiga
+	@property notify_me type=checkbox ch_value=1
+	@caption Soovin teadet kandideerimisest e-postiga
 
 @groupinfo candidate caption=Kandideerimised submit=no
 @default group=candidate
@@ -141,6 +141,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@property candidate_add type=hidden store=no
 
 	@property candidate_table type=table no_caption=1
+
+@groupinfo conditions caption=Tingimused submit=no
+@default group=conditions
+
+	@property conditions_toolbar type=toolbar no_caption=1 no_rte_button=1
+
+	@layout conditions_split type=hbox width=25%:75%
+
+		@layout condition_groups_tree type=vbox parent=conditions_split area_caption=Tingimuste&nbsp;grupid
+			
+			@property condition_groups_tree type=treeview no_caption=1 store=no parent=condition_groups_tree
+
+		@layout conditions_table type=vbox parent=conditions_split
+
+			@property conditions_table type=table no_caption=1 store=no parent=conditions_table
 
 @groupinfo custom_cfgform caption=CV&nbsp;v&auml;ljad no_submit=1
 @default group=custom_cfgform
@@ -295,6 +310,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @reltype NOTIFY_ME_OF_CONFIRMATION value=26 clid=CL_ML_MEMBER
 @caption E-postiaadress, kuhu teatada aktiveerimisest
+
+@reltype CONDITION_GROUP value=27 clid=CL_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION_GROUP
+@caption T&ouml;&ouml;pakkumise tingimuste grupp
 
 */
 
@@ -684,6 +702,92 @@ class personnel_management_job_offer extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	protected function _init_conditions_table($arr)
+	{
+		$condition_group = obj((int)automatweb::$request->arg("condition_group_id"));
+
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->set_caption(sprintf(t("Tingimuste grupi '%s' tingimused"), $condition_group->name()));
+
+		$t->define_chooser();
+		$t->define_field(array(
+			"name" => "prop",
+			"caption" => t("Omadus"),
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Tingimuse t&uuml;&uuml;p"),
+		));
+		$t->define_field(array(
+			"name" => "value",
+			"caption" => t("Tingimuse v&auml;&auml;rtus"),
+		));
+	}
+
+	public function _get_conditions_table($arr)
+	{
+		$condition_group_id = (int)automatweb::$request->arg("condition_group_id");
+		if(is_oid($condition_group_id) && $this->can("view", $condition_group_id))
+		{
+			$this->_init_conditions_table($arr);
+			$t = &$arr["prop"]["vcl_inst"];
+
+			$odl = new object_data_list(
+				array(
+					"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"RELTYPE_CONDITION(CL_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION_GROUP).id" => $condition_group_id,
+				),
+				array(
+					CL_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION => array("prop", "type", "value"),
+				)
+			);
+
+			foreach($odl->arr() as $oid => $odata)
+			{
+				$t->define_data(array(
+					"oid" => $oid,
+					"prop" => $odata["prop"],
+					"type" => $odata["type"],
+					"value" => $odata["value"],
+				));
+			}
+		}
+	}
+
+	public function _get_condition_groups_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CONDITION_GROUP")));
+		foreach($ol->names() as $oid => $name)
+		{
+			$t->add_item("condition_groups", array(
+				"id" => $oid,
+				"name" => $name,
+				"url" => aw_url_change_var("condition_group_id", $oid)
+			));
+		}
+		
+		$t->add_item(0, array(
+			"id" => "condition_groups",
+			"name" => sprintf(t("Tingimuste grupid (%u)"), $ol->count()),
+			"url" => aw_url_change_var("condition_group_id", NULL),
+		));
+
+		$t->set_selected_item(in_array(automatweb::$request->arg("condition_group_id"), $ol->ids()) ? (int)automatweb::$request->arg("condition_group_id") : "condition_groups");
+	}
+
+	public function _get_conditions_toolbar($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->add_new_button(array(CL_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION_GROUP), $arr["obj_inst"]->id(), 27);
+		$t->add_delete_button();
 	}
 
 	function _get_sent_fb_email_tbl($arr)
@@ -2118,18 +2222,39 @@ class personnel_management_job_offer extends class_base
 				});
 			}
 			';
-		if(ifset($arr, "request", "group") == "custom_cfgform")
+		if(automatweb::$request->arg("group") === "custom_cfgform")
 		{
 			$f .= "
-			function save_cfgform()
-			{
-				if(aw_get_el('save_cfgform').checked)
+				function save_cfgform()
 				{
-					aw_get_el('new_cfgform_name').value = prompt('".t("Sisestage salvestatava seadetevormi nimi:")."');
+					if(aw_get_el('save_cfgform').checked)
+					{
+						aw_get_el('new_cfgform_name').value = prompt('".t("Sisestage salvestatava seadetevormi nimi:")."');
+					}
 				}
-			}
 
-			aw_submit_handler = save_cfgform;";
+				aw_submit_handler = save_cfgform;
+			";
+		}
+		if(automatweb::$request->arg("group") === "conditions")
+		{
+			$f .= '
+				function add_material(mid, jid)
+				{
+					$("div[name=\'materials_table\']").children().children().children().children().each(function()
+					{
+						o = $(this);
+						$.ajax({
+							url: "'.$this->mk_my_orb("add_material", array("id" => $arr["request"]["id"])).'",
+							data: "material_id="+mid+"&job_id="+jid,
+							success: function(html)
+							{
+								o.append(html);
+							}
+						});
+					});
+				}
+			';
 		}
 		return $f;
 	}

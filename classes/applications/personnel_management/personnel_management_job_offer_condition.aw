@@ -6,6 +6,15 @@
 @default table=aw_personnel_management_job_offer_condition
 @default group=general
 
+	@property prop type=textbox field=aw_prop
+	@caption Omadus
+
+	@property type type=select field=aw_type
+	@caption T&uuml;&uuml;p
+
+	@property value type=textbox field=aw_value
+	@caption V&auml;&auml;rtus
+
 */
 
 class personnel_management_job_offer_condition extends class_base
@@ -67,10 +76,18 @@ class personnel_management_job_offer_condition extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_type":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
+				));
+				return true;
+
+			case "aw_prop":
+			case "aw_value":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "text"
 				));
 				return true;
 		}
