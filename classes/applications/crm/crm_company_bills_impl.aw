@@ -938,7 +938,6 @@ exit_function("bills_impl::_get_bill_task_list");
 		}
 	}
 
-
 	function _get_bill_tb($arr)
 	{
 		$_SESSION["create_bill_ru"] = get_ru();
@@ -1563,26 +1562,37 @@ exit_function("bills_impl::_get_bill_task_list");
 //				{
 //					$filt["state"] = $stuff[2];
 //				}
+
+				
+
 				if( $arr["request"]["bill_status"])
 				{
 					$filt["state"] = $arr["request"]["bill_status"] - 10;
 				}
-				if( $arr["request"]["timespan"])
+				
+				if($arr["request"]["timespan"])
 				{
 					$filt["bill_date_range"] = $this->get_range($arr["request"]["timespan"]);
+				}
+				if(!isset($arr["request"]["timespan"]))
+				{
+					$filt["bill_date_range"] = array(
+						"from" => mktime(0,0,0, date("m"), 0, date("Y")),
+						"to" => mktime(0,0,0, date("m")+1, 0, date("Y")),
+					);
 				}
 			}
 			elseif ($arr["request"]["bill_s_from"] == "")
 			{
 				// init default search opts
-				$u = get_instance(CL_USER);
-				$p = obj($u->get_current_person());
-				$filt["client_mgr"] = $p->name();
+				//$u = get_instance(CL_USER);
+				//$p = obj($u->get_current_person());
+				//$filt["client_mgr"] = $p->name();
 				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, date("m"), date("d"), date("Y")-1),
-					"to" => time()
+					"from" => mktime(0,0,0, date("m"), 0, date("Y")),
+					"to" => mktime(0,0,0, date("m")+1, 0, date("Y")),
 				);
-				$filt["state"] = "0";
+//				$filt["state"] = "0";
 			}
 			else
 			{
@@ -2747,8 +2757,26 @@ exit_function("bill::balance");
 			"tree_id" => "proj_bills_stats_tree",
 		));
 
+		$filter = $this->_get_bills_filter($arr);
+		unset($filter["state"]);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_CRM_BILL => array(
+					"state"
+				),
+			)
+		);
+
+		$count = array();
+		foreach($t->list_data as $data)
+		{
+			$count[$data["state"]]++;
+		}
+
 		$tv->add_item(0,array(
-			"name" => t("K&otilde;ik staatused"),
+			"name" => t("K&otilde;ik staatused").(array_sum($count)? "(".array_sum($count).")" : ""),
 			"id" => "all_stats",
 			"url" => aw_url_change_var($var, null),
 		));
@@ -2758,13 +2786,61 @@ exit_function("bill::balance");
 		{
 			$tv->add_item("all_stats", array(
 				"id" => "".($id+10)."",
-				"name" => $caption,
+				"name" => $caption.($count[$id]? " (".$count[$id].")" : ""),
 				"url" => aw_url_change_var(array(
 					$var => ($id+10),
 				)),
 				"iconurl" => icons::get_icon_url(CL_CRM_BILL),
 			));
 		}
+	}
+
+	function _get_bills_filter($arr)
+	{
+		$filter = array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+		$stuff = explode("_" , $arr["request"]["st"]);
+		switch($stuff[0])
+		{
+			case "prman":
+				$filter["RELTYPE_PROJECT.proj_mgr"] = $stuff[1];
+			break;
+			case "custman":
+				$filter["customer.client_mgr"] = $stuff[1];
+			break;
+			case "cust":
+				$filter["customer"] = $stuff[1];
+			break;
+				default:
+				if($arr["request"]["st"] > 1)
+				{
+					$filter["state"] = $arr["request"]["st"]-10;
+				}
+		}
+		if( $arr["request"]["bill_status"])
+		{
+			$filter["state"] = $arr["request"]["bill_status"] - 10;
+		}
+		
+		if($arr["request"]["timespan"])
+		{
+			$bill_date_range = $this->get_range($arr["request"]["timespan"]);
+		}
+		if(!isset($arr["request"]["timespan"]))
+		{
+			$bill_date_range = array(
+				"from" => mktime(0,0,0, date("m"), 0, date("Y")),
+				"to" => mktime(0,0,0, date("m")+1, 0, date("Y")),
+			);
+		}
+		if(is_array($bill_date_range))
+		{
+			$filter["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $bill_date_range["from"], $bill_date_range["to"]);
+		}
+		return $filter;
 	}
 
 	function _get_bills_time_tree($arr)
@@ -2782,7 +2858,7 @@ exit_function("bill::balance");
 		$tv->add_item(0,array(
 			"name" => t("K&otilde;ik ajavahemikud"),
 			"id" => "all_time",
-			"url" => aw_url_change_var($var, null),
+			"url" => aw_url_change_var($var, "all_time"),
 		));
 
 		$branches = array(
@@ -2919,7 +2995,7 @@ d)
 				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
 				"url" => aw_url_change_var($var, "prman_".$id),
 			));
-
+/*
 			if(sizeof($pm_statuses))
 			{
 				foreach($pm_statuses as $status => $st_count)
@@ -2937,7 +3013,7 @@ d)
 						"url" => aw_url_change_var($var, "prman_".$id."_".$status),
 					));
 				}
-			}
+			}*/
 		}
 
 		$tv->add_item(0,array(
