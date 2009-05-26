@@ -2579,10 +2579,36 @@ class shop_warehouse extends class_base
 			$url = aw_url_change_var(array("pgtf" => $o->id(), $group."_s_art_cat" => $o->id(), "ptf" => null));
 			$this->insert_prodg_tree_item($tree, $o, $url, null, $arr["request"]);
 		}
+		$g = $this->get_search_group($arr);
+		$arr["request"]["pgtf"] = null;
+		$arr["request"][$g."_s_art_cat"] = null;
+		switch($g)
+		{
+			case "arrival_prod":
+			case "prod":
+			case "storage_status":
+				$ol = $this->get_products_list_ol($arr);
+				$count = $ol["ol"]->count();
+				break;
+			case "storage_movements":
+			case "storage_writeoffs":
+				unset($filt["ptf"]);
+				$ol = $this->_get_movements_ol($arr);
+				$count = $ol->count();
+				break;
+			case "purchase_notes":
+			case "purchase_bills":
+			case "sales_notes":
+			case "sales_bills":
+				$arr["warehouses"] = array($arr["obj_inst"]->id());
+				$ol = $this->_get_storage_ol($arr);
+				$count = $ol->count();
+				break;
+		}
 		$tree->add_item(0, array(
 			"url" => aw_url_change_var(array("pgtf" => null, $group."_s_art_cat" => null, "ptf" => null)),
 			"id" => "all",
-			"name" => t("K&otilde;ik"),
+			"name" => t("K&otilde;ik").(isset($count) ? " (".$count.")" : ""),
 			"iconurl" => icons::get_icon_url(CL_MENU),
 		));
 		$v = automatweb::$request->arg("pgtf");
@@ -2595,6 +2621,7 @@ class shop_warehouse extends class_base
 	function get_prodg_tree_level($arr)
 	{
 		parse_str($_SERVER['QUERY_STRING'], $arr);
+		$this->config = obj(obj($arr["id"])->prop("conf"));
 		$tree = get_instance("vcl/treeview");
 		$arr["parent"] = trim($arr["parent"]);
 		$tree->start_tree(array (
@@ -6850,7 +6877,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				$params["oid"] = array(-1);
 			}
 		}
-		if(count($params) || $arr["request"]["just_saved"])
+		if(count($params) || $arr["request"]["just_saved"] || $arr["request"]["filt_time"] == "all")
 		{
 			$wh = $arr["warehouses"];
 			if(!$wh && $arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
