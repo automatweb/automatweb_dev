@@ -107,7 +107,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property customer_name type=textbox table=aw_crm_bill field=aw_customer_name parent=top_right
 	@caption Kliendi nimi
 	
-	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete parent=top_right
+	@property customer type=relpicker table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST parent=top_right
 	@caption Klient
 
 	@property customer_code type=textbox table=aw_crm_bill field=aw_customer_code parent=top_right
@@ -155,6 +155,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property bill_targets type=table store=no no_caption=1 parent=almost_bottom
 	@caption Arve saajad
+ 
+	@property bill_rec_name type=textbox table=objects field=meta method=serialize parent=almost_bottom
+	@caption Arve saaja nimi
 
 	@property bill_rows type=text store=no no_caption=1 parent=bottom
 	@caption Arveread
@@ -590,20 +593,6 @@ class crm_bill extends class_base
 				break;
 
 			case "customer_name":
-				$search_url = $this->mk_my_orb( "do_search", array("pn" => "customer" , "clid" => array(CL_CRM_PERSON, CL_CRM_COMPANY))  , "popup_search");
-				$prop["post_append_text"] = " ". html::href(array(
-					"url" => "javascript:x=document.getElementsByName('customer_name')[0];x.value=null;aw_popup_scroll('".$search_url."','Otsing',1100,700)",
-					"caption" => html::img(array(
-						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/search.gif",
-						"border" => 0,
-					)),
-					"title" => t("Otsi")
-				));
-
-
-//javascript:aw_popup_scroll('http://intranet.automatweb.com/automatweb/orb.aw?class=popup_search&action=do_search&id=219175&pn=customer&clid[0]=129&clid[1]=145&multiple=','Otsing',800,500)
-
-
 			case "customer_code":
 			case "customer_address":
 				if(!$arr["obj_inst"]->prop("customer_name"))
@@ -625,7 +614,6 @@ class crm_bill extends class_base
 				{
 					$prop["value"] = $this->customer_object->id();
 				}
-				$prop["autocomplete_class_id"] = array(CRM_PERSON,CRM_COMPANY);
 				break;
 			
 			case "bill_due_date_days":
@@ -639,7 +627,7 @@ class crm_bill extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$agreement_prices = $arr["obj_inst"]->get_agreement_price();
+				$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
 				if(is_array($agreement_price) && $agreement_prices[0]["price"] && strlen($agreement_prices[0]["name"]) > 0)
 				{
 					$sum = 0;
@@ -888,7 +876,7 @@ class crm_bill extends class_base
 			case "customer_name":
 			case "customer_code":
 			case "customer_address":
-				if($arr["request"]["customer"] || $arr["request"]["customer_awAutoCompleteTextbox"])
+				if($arr["request"]["customer"])
 				{
 					return PROP_IGNORE;
 				}
@@ -903,36 +891,9 @@ class crm_bill extends class_base
 
 			case "customer":
 				// check if the 
-				if($prop["name"] == "customer")
+				if($prop["name"] == "customer" && isset($arr["request"]["customer_name"]))
 				{
-					if(isset($arr["request"]["customer_name"]) && !$this->can("view" , $prop["value"]))
-					{
-						return PROP_IGNORE;
-					}
-					elseif($this->can("view" , $prop["value"]))
-					{
-						$arr["obj_inst"] -> set_prop("customer_name" ,null);
-					}
-				}
-				if(!is_oid($prop["value"]))
-				{
-					if(is_oid($arr["request"]["customer_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["customer_awAutoCompleteTextbox"]))
-					{
-						$prop["value"] = $arr["request"]["customer_awAutoCompleteTextbox"];
-					}
-					else
-					{
-						$ol = new object_list(array(
-							"name" => $arr["request"]["customer_awAutoCompleteTextbox"],
-							"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-							"lang_id" => array(),
-						));
-						$cust_obj = $ol->begin();
-						if(is_object($cust_obj))
-						{
-							$prop["value"] = $cust_obj->id();
-						}
-					}
+					return PROP_IGNORE;
 				}
 				if ($this->can("view", $prop["value"]) && (($arr["obj_inst"]->prop("bill_due_date_days") == 0) || ($arr["obj_inst"]->prop("bill_due_date_days") == null)))
 				{
@@ -1203,7 +1164,6 @@ class crm_bill extends class_base
 		$arr["reconcile_price"] = -1;
 		$arr["new_payment"] = "";
 		$arr["add_dn"] = 0;
-		$arr["customer"] = "";
 		if($_GET["project"])
 		{
 			$arr["project"] = $_GET["project"];
@@ -1225,7 +1185,6 @@ class crm_bill extends class_base
 
 	private function set_bill_targets($arr)
 	{
-		$arr["obj_inst"]->set_meta("bill_t_names" , $arr["request"]["bill_t_names"]);
 		$arr["obj_inst"]->set_meta("bill_targets" , $arr["request"]["bill_targets"]);
 	}
 
@@ -1294,29 +1253,10 @@ class crm_bill extends class_base
 		));
 
 		$t->define_field(array(
-			"name" => "sel2",
-			"caption" => "",
-			"align" => "center",
-		));
-
-		$t->define_field(array(
-			"name" => "name2",
+			"name" => "name",
 			"caption" => t("Nimi"),
 			"align" => "center",
 		));
-		$t->define_field(array(
-			"name" => "name_over",
-			"caption" => "",
-			"align" => "center",
-			"parent" => "name2",
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => "",
-			"align" => "center",
-			"parent" => "name2",
-		));
-
 		$t->define_field(array(
 			"name" => "rank",
 			"caption" => t("Ametinimetus"),
@@ -1338,7 +1278,7 @@ class crm_bill extends class_base
 			"align" => "center",
 		));
 		$bill_targets = $arr["obj_inst"]->meta("bill_targets");
-		$bill_t_names = $arr["obj_inst"]->meta("bill_t_names");
+
 		foreach($arr["obj_inst"]->get_mail_persons()->arr() as $mail_person)
 		{
 			if($mail_person->class_id() == CL_CRM_PERSON)
@@ -1371,11 +1311,6 @@ class crm_bill extends class_base
 					"name" => "bill_targets[".$id."]",
 					"checked" => !(is_array($bill_targets) && sizeof($bill_targets) && !$bill_targets[$id]),
 					"ch_value" => $id
-				)),
-				"name_over" => html::textbox(array(
-					"name" => "bill_t_names[".$id."]",
-					"value" => $bill_t_names[$id],
-					"size" => 20
 				))
 			));
 		}
@@ -1384,19 +1319,14 @@ class crm_bill extends class_base
 		{
 			$t->define_data(array(
 				"mail" => $arr["obj_inst"]->prop("bill_mail_to"),
-				"name_over" => html::textbox(array(
-					"name" => "bill_t_names[0]",
-					"value" => $bill_t_names[0],
-					"size" => 20
-				)),
 			));
 		}
+
 
 		if($arr["obj_inst"]->set_crm_settings() && $arr["obj_inst"]->crm_settings->prop("bill_mail_to"))
 		{
 			$t->define_data(array(
 				"mail" => $arr["obj_inst"]->crm_settings->prop("bill_mail_to"),
-				"sel2" => "bcc"
 			));
 		}
 		if (aw_global_get("uid_oid") != "")
@@ -1416,7 +1346,6 @@ class crm_bill extends class_base
 			$t->define_data(array(
 				"name" => $person->name(),
 				"mail" =>$mail,
-				"sel2" => "bcc"
 			));
 		}
 
@@ -1802,12 +1731,10 @@ class crm_bill extends class_base
 		}
 		$t->set_sortable(false);
 
-		$agreement_prices = $arr["obj_inst"]->get_agreement_price();
-
-		if($agreement_prices)
+		if($arr["obj_inst"]->meta("agreement_price"))
 		{
 			$sum = 0;
-			foreach($agreement_prices as $agreement_price)
+			foreach($arr["obj_inst"]->meta("agreement_price") as $agreement_price)
 			{
 				$sum+= $agreement_price["sum"];
 			}
@@ -1825,15 +1752,12 @@ class crm_bill extends class_base
 		}
 */
 		//kokkuleppe hind
+		$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
 		if(!is_array($agreement_prices[0]) && is_array($agreement_prices)) $agreement_prices = array($agreement_prices);//endiste kokkuleppehindade jaoks mis pold massiivis
 		if($agreement_prices == null) $agreement_prices = array();
 // 		if(is_array($agreement_prices[0]))
 // 		{
-
-		if($arr["obj_inst"]->use_agreement_price())
-		{
 			$agreement_prices[] = array();
-		}
 			$x = 0;
 			foreach($agreement_prices as $key => $agreement_price)
 			{
@@ -2505,7 +2429,7 @@ class crm_bill extends class_base
 			case "unit":
 				$price_cc = "";//hind oma organisatsiooni valuutas
 				$sum_cc = "";//summa oma organisatsiooni valuutas
-				if(is_object($arr["obj_inst"]))
+				if(is_object($arr["obj_inst"]) && !$arr["new"])
 				{
 					$bcurrency = $arr["obj_inst"]->get_bill_currency_id();
 					$date = $arr["obj_inst"]->prop("bill_date");
@@ -2807,7 +2731,7 @@ class crm_bill extends class_base
 
 	function get_sum($bill)
 	{
-		$agreement = $bill->get_agreement_price();
+		$agreement = $bill->meta("agreement_price");
 		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
 		if($agreement[0]["sum"] && $agreement[0]["price"] && strlen($agreement[0]["name"]) > 0) 
 		{
@@ -2824,7 +2748,7 @@ class crm_bill extends class_base
 	//returns bill sum without other expenses
 	function get_sum_wo_exp($bill)
 	{
-		$agreement = $bill->get_agreement_price();
+		$agreement = $bill->meta("agreement_price");
 		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
 		if($agreement[0]["sum"] && $agreement[0]["price"] && strlen($agreement[0]["name"]) > 0) 
 		{
@@ -3242,7 +3166,7 @@ class crm_bill extends class_base
 		$tax = 0;
 		$sum = 0;
 		
-		$agreement = $b->get_agreement_price();
+		$agreement = $b->meta("agreement_price");
 		if($agreement["price"] && $agreement["name"]) $agreement = array($agreement); // kui on vanast ajast jnud
 		if($agreement[0]["price"] && strlen($agreement[0]["name"]) > 0 )//kui kokkuleppehind on tidetud, siis rohkem ridu ei ole nha
 		{
@@ -4009,7 +3933,7 @@ class crm_bill extends class_base
 		$tax = 0;
 		$sum = 0;
 		
-		$agreement_price = $b->get_agreement_price();
+		$agreement_price = $b->meta("agreement_price");
 		if(is_array($agreement_price) && $agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0)
 		{
 			$rows = $agreement_price;
@@ -4155,41 +4079,38 @@ class crm_bill extends class_base
 			}
 		}
 
-		if($arr["obj_inst"]->use_agreement_price())
+		$seti = get_instance(CL_CRM_SETTINGS);
+		
+		//summa igeks
+		if(is_array($arr["request"]["agreement_price"]))
 		{
-			$seti = get_instance(CL_CRM_SETTINGS);
-			
-			//summa igeks
-			if(is_array($arr["request"]["agreement_price"]))
+			foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
 			{
-				foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
+				//comment on see mis nagu nitama hakkab... et paneb selle samaks mis nimi
+				
+				$arr["request"]["agreement_price"][$key]["comment"] = $agreement_price["name"];
+				//vaikimisi artikkel ka
+				$sts = $seti->get_current_settings();
+				if ($sts && !$arr["request"]["agreement_price"][$key]["prod"])
 				{
-					//comment on see mis nagu nitama hakkab... et paneb selle samaks mis nimi
-					
-					$arr["request"]["agreement_price"][$key]["comment"] = $agreement_price["name"];
-					//vaikimisi artikkel ka
-					$sts = $seti->get_current_settings();
-					if ($sts && !$arr["request"]["agreement_price"][$key]["prod"])
-					{
-						$arr["request"]["agreement_price"][$key]["prod"] = $sts->prop("bill_def_prod");
-					}
-					$arr["request"]["agreement_price"][$key]["sum"] = str_replace("," , "." , $arr["request"]["agreement_price"][$key]["price"])*str_replace("," , "." , $arr["request"]["agreement_price"][$key]["amt"]);
-					if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && !$arr["request"]["agreement_price"][$key]["atm"]) 
-					{
-						unset($arr["request"]["agreement_price"][$key]);
-					}
-					if(isset($arr["request"]["agreement_price"][$key]["prod"]))
-					{
-						$tmp = explode("(", $arr["request"]["agreement_price"][$key]["prod"]);
-						$tmp2 = explode(")", $tmp[count($tmp)-1]);
-						$prod = $tmp2[0];
-						$arr["request"]["agreement_price"][$key]["prod"] = $prod;
-					}
+					$arr["request"]["agreement_price"][$key]["prod"] = $sts->prop("bill_def_prod");
+				}
+				$arr["request"]["agreement_price"][$key]["sum"] = str_replace("," , "." , $arr["request"]["agreement_price"][$key]["price"])*str_replace("," , "." , $arr["request"]["agreement_price"][$key]["amt"]);
+				if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && !$arr["request"]["agreement_price"][$key]["atm"]) 
+				{
+					unset($arr["request"]["agreement_price"][$key]);
+				}
+				if(isset($arr["request"]["agreement_price"][$key]["prod"]))
+				{
+					$tmp = explode("(", $arr["request"]["agreement_price"][$key]["prod"]);
+					$tmp2 = explode(")", $tmp[count($tmp)-1]);
+					$prod = $tmp2[0];
+					$arr["request"]["agreement_price"][$key]["prod"] = $prod;
 				}
 			}
-			$arr["obj_inst"]->set_meta("agreement_price", $arr["request"]["agreement_price"]);
-
 		}
+		$arr["obj_inst"]->set_meta("agreement_price", $arr["request"]["agreement_price"]);
+		$arr["obj_inst"]->save();
 	}
 
 	/**
@@ -4207,7 +4128,10 @@ class crm_bill extends class_base
 			if($row["jrk"] > $jrk-10) $jrk = $row["jrk"]+10;
 		}
 
-		$row = $bill->add_row();
+		$row = obj();
+		$row->set_parent($bill->id());
+		$row->set_class_id(CL_CRM_BILL_ROW);
+		$row->set_prop("date", date("d.m.Y", time()));
 		$row->set_meta("jrk" , $jrk);
 		$row->save();
 
@@ -4415,6 +4339,8 @@ class crm_bill extends class_base
 
 		$has_val = 1;
 		$has_val = !$arr["obj_inst"]->has_not_initialized_rows();
+
+
 
 		$tb->add_menu_button(array(
 			"name" => "new",
@@ -5217,7 +5143,7 @@ class crm_bill extends class_base
 		$htmlc->add_property(array(
 			"name" => "bcc",
 			"type" => "text",
-			"value" => htmlspecialchars(join("\n" , $obj->get_bcc())),
+			"value" => htmlspecialchars($obj->get_bcc()),
 			"caption" => t("Bcc:"),
 		));
 
