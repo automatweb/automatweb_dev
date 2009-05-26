@@ -748,9 +748,9 @@ class doc extends class_base
 			}
 			//if ($cff->prop("on_save_settings_remove_word_html") == 1)
 			//{
-				//$obj_inst->set_prop("content",$this->_doc_clean_html($obj_inst->prop("content")));
-				//$obj_inst->set_prop("lead",$this->_doc_clean_html($obj_inst->prop("lead")));
-				//$obj_inst->set_prop("moreinfo",$this->_doc_clean_html($obj_inst->prop("moreinfo")));
+				$obj_inst->set_prop("content",$this->_doc_clean_html($obj_inst->prop("content")));
+				$obj_inst->set_prop("lead",$this->_doc_clean_html($obj_inst->prop("lead")));
+				$obj_inst->set_prop("moreinfo",$this->_doc_clean_html($obj_inst->prop("moreinfo")));
 			//}
 		}
 
@@ -873,15 +873,15 @@ class doc extends class_base
 	private function _doc_clean_html($html)
 	{
 		$html = ereg_replace("<(/)?(meta|title|style|font|span|del|ins)[^>]*>","",$html);
-
+		
 		// another pass over the html 2x times, removing unwanted attributes
-		$html = ereg_replace("<([^>]*)(class|lang|style|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
-		$html = ereg_replace("<([^>]*)(class|lang|style|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
+		$html = ereg_replace("<([^>]*)(class|lang|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
+		$html = ereg_replace("<([^>]*)(class|lang|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
 		
 		// finishing up - maby should make optional
 		$html = preg_replace(
-			array("/<!--.*-->/imsU", "/\<p\s*\>/imsU", "/\<h([0-9])\s*\>/imsU"),
-			array("", "<p>", "<h\\1>"),
+			array("/<!--.*-->/imsU", "/\<h([0-9])\s*\>/imsU"),
+			array("", "<h\\1>"),
 			$html
 		);
 		return $html;
