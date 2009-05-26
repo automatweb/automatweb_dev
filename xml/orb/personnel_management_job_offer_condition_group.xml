@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="personnel_management_job_offer_condition_group" folder="applications/personnel_management" extends="class_base">
+	</class>
+</orb>
+		
