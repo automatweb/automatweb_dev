@@ -1288,7 +1288,7 @@ class bug extends class_base
 						$bt = $pi;
 					}
 				}
-				if (!$this->can("view", $arr["request"]["who"]))
+				if (!$this->can("view", $arr["request"]["who"]) && !$arr["obj_inst"]->prop("who"))
 				{
 					if($bt)
 					{
@@ -1928,7 +1928,7 @@ class bug extends class_base
 				$notify_addresses[] = $addr;
 			};
 		};
-die(arr($notify_addresses));
+
 		if (sizeof($notify_addresses) == 0)
 		{
 			return false;
