@@ -24,7 +24,7 @@ class relationmgr extends aw_template
 			$this->parent = $arr["obj_inst"]->parent();
 		}
 		$this->_init_relations($arr);
-		if($arr["request"]["srch"] == 1)
+		if(isset($arr["request"]["srch"]) && $arr["request"]["srch"] == 1)
 		{
 			return $this->_show_search($arr);
 		}
@@ -149,7 +149,7 @@ class relationmgr extends aw_template
 		$relinfo = $tmpo->get_relinfo();
 		foreach($relinfo as $key => $rel)
 		{
-			if(!$reltypes[$rel["value"]] && !$rel["hidden"])
+			if(empty($reltypes[$rel["value"]]) && empty($rel["hidden"]))
 			{
 				$reltypes[$rel["value"]] = $rel["caption"];
 			}
@@ -190,7 +190,7 @@ class relationmgr extends aw_template
 		);
 		foreach($arr["relinfo"] as $key => $rel)
 		{
-			if(!$rel["hidden"])
+			if(empty($rel["hidden"]))
 			{
 				$tmp = array();
 				foreach($rel["clid"] as $val)
@@ -202,7 +202,7 @@ class relationmgr extends aw_template
 			}
 		}
 		$this->reltypes = $this->_get_reltypes($arr["obj_inst"]->class_id());
-		if (is_array($arr["property"]["configured_rels"]))
+		if (isset($arr["property"]["configured_rels"]) && is_array($arr["property"]["configured_rels"]))
 		{
 			$this->rel_classes = $this->rel_classes + $arr["property"]["configured_rels"];
 			$this->reltypes = $this->reltypes + $arr["property"]["configured_rel_names"];
@@ -657,9 +657,9 @@ class relationmgr extends aw_template
 	function _make_toolbar($arr)
 	{
 		$tb = get_instance("vcl/toolbar");
-		if(!$_SESSION["rel_reverse"][$arr["request"]["id"]])
+		if(empty($_SESSION["rel_reverse"][$arr["request"]["id"]]))
 		{
-			$objtype = $arr["request"]["aselect"];
+			$objtype = ifset($arr, "request", "aselect");
 			if (is_array($objtype) && (count($objtype) == 1))
 			{
 				$objtype = array_pop($objtype);
@@ -672,9 +672,11 @@ class relationmgr extends aw_template
 				$objtype = NULL;
 			}
 			$this->read_template("selectboxes.tpl");
+			$rels1 = "";
+			$defaults1 = "";
 			foreach($this->reltypes as $k => $v)
 			{
-				$dval = true;
+//				$dval = true;
 				$single_select = "capt_new_object";
 				$sele = NULL;
 				$vals = $this->true_rel_classes[$k];
@@ -694,7 +696,9 @@ class relationmgr extends aw_template
 				}
 				if(!empty($vals))
 				{
-					$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
+					// Whatta fuck is $dvals ?? -kaarel 27.05.2009
+//					$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
+					$rels1 .= 'listB.addOptions("'.$k.'",'.$vals.");\n";
 				}
 				if ($objtype && $this->reltype == $k)
 				{
@@ -721,13 +725,13 @@ class relationmgr extends aw_template
 				html::select(array(
 					"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => t('Seose t&uuml;&uuml;p')) + $this->reltypes),
 					"name" => "reltype",
-					"selected" => $this->reltype,
+					"selected" => isset($this->reltype) ? $this->reltype : NULL,
 					'onchange' => "listB.populate();",
 				))
 			);
 			$tb->add_cdata('<select NAME="aselect" style="width:200px"><script LANGUAGE="JavaScript">listB.printOptions()</SCRIPT></select>');
 			$ru_var = get_ru();
-			if($arr["request"]["searched"] == 1)
+			if(isset($arr["request"]["searched"]) && $arr["request"]["searched"] == 1)
 			{
 				$ru_var = urlencode($arr["request"]["return_url"]);
 			}
@@ -738,7 +742,7 @@ class relationmgr extends aw_template
 				"url" => "javascript:create_new_object()",
 				"tooltip" => t("Lisa uus objekt"),
 			));
-			if($arr["request"]["srch"] == 1)
+			if(isset($arr["request"]["srch"]) && $arr["request"]["srch"] == 1)
 			{
 				$tb->add_button(array(
 					"name" => "search",
@@ -766,7 +770,7 @@ class relationmgr extends aw_template
 				"url" => "javascript:window.location.reload()",
 			));
 			
-			if($arr["request"]["srch"] == 1)
+			if(isset($arr["request"]["srch"]) && $arr["request"]["srch"] == 1)
 			{
 				if ($this->search_results > 0)
 				{
@@ -808,7 +812,7 @@ class relationmgr extends aw_template
 				"tooltip" => t("Kopeeri seos(ed)"),
 				"action" => "rel_copy",
 			));
-			if ((is_array($_SESSION["rel_cut"]) && count($_SESSION["rel_cut"])) || (is_array($_SESSION["rel_copied"]) && count($_SESSION["rel_copied"])))
+			if (isset($_SESSION["rel_cut"]) && (is_array($_SESSION["rel_cut"]) && count($_SESSION["rel_cut"])) || isset($_SESSION["rel_copied"]) && (is_array($_SESSION["rel_copied"]) && count($_SESSION["rel_copied"])))
 			{
 				$tb->add_button(array(
 					"name" => "rel_paste",
@@ -918,7 +922,7 @@ class relationmgr extends aw_template
 		classload("core/icons");
 		$pr = array();
 		
-		$tb = &$this->_make_toolbar($arr);
+		$tb = $this->_make_toolbar($arr);
 		$this->read_template("list_aliases.tpl");
 
 		$this->vars(array(
