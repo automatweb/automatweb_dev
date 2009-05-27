@@ -1,5 +1,31 @@
 <?php
 
+// Returns true if the error is to be ignored
+// Please add a reason to every "return true;"!
+function aw_ignore_error($errno, $errstr, $errfile, $errline, $context)
+{
+	if($errstr === "Declaration of _int_object_loader::_log() should be compatible with that of core::_log()")
+	{
+		/*
+			You make them compatible! -kaarel 27.05.2009
+			_int_object_loader::_log($new, $oid, $name, $clid = NULL)
+			_log($type, $action, $text, $oid = 0, $honor_ini = true, $object_name = null)
+		*/
+		return true;
+	}
+	if($errstr === "Declaration of site_cache::show() should be compatible with that of core::show()")
+	{
+		/*
+			Making either of these compatible with the other one just creates more notices! -kaarel 27.05.2009
+			site_cache::show($args = array())
+			core::show($args)
+		*/
+		return true;
+	}
+
+	return false;
+}
+
 // all errors and exceptions are channeled to exception handlers
 function aw_exception_handler($e)
 {
@@ -75,6 +101,11 @@ function aw_dbg_exception_handler($e)
 
 function aw_error_handler($errno, $errstr, $errfile, $errline, $context)
 {
+	if(aw_ignore_error($errno, $errstr, $errfile, $errline, $context))
+	{
+		return true;
+	}
+
 	// generate and throw exception when fatal error occurs. ignore all other errors
 	if (aw_is_fatal_error($errno))
 	{
@@ -90,6 +121,11 @@ function aw_error_handler($errno, $errstr, $errfile, $errline, $context)
 
 function aw_dbg_error_handler($errno, $errstr, $errfile, $errline, $context)
 {
+	if(aw_ignore_error($errno, $errstr, $errfile, $errline, $context))
+	{
+		return true;
+	}
+
 	$class = aw_get_error_exception_class($errno);
 	if (aw_is_fatal_error($errno))
 	{ // generate and throw exception when fatal error occurs
@@ -109,6 +145,11 @@ function aw_dbg_error_handler($errno, $errstr, $errfile, $errline, $context)
 
 function aw_reasonable_error_handler($errno, $errstr, $errfile, $errline, $context)
 {
+	if(aw_ignore_error($errno, $errstr, $errfile, $errline, $context))
+	{
+		return true;
+	}
+
 	static $file_cache = array();
 	$current_user_is_maintainer = false;
 
