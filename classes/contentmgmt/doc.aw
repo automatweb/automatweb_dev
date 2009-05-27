@@ -878,6 +878,13 @@ class doc extends class_base
 		//$html = ereg_replace("<([^>]*)(class|lang|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
 		//$html = ereg_replace("<([^>]*)(class|lang|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$html);
 		
+		// kill table cell style tag
+		preg_match_all("/<td.*>/imsU", $html, $mt);
+		foreach($mt[0] as $key=>$td)
+		{
+			$html = str_replace($td, ereg_replace("<([^>]*)(style)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$td), $html);
+		}
+		
 		// finishing up - maby should make optional
 		$html = preg_replace(
 			array("/<!--.*-->/imsU", "/\<h([0-9])\s*\>/imsU"),
