@@ -882,7 +882,7 @@ class doc extends class_base
 		preg_match_all("/<td.*>/imsU", $html, $mt);
 		foreach($mt[0] as $key=>$td)
 		{
-			$html = str_replace($td, ereg_replace("<([^>]*)(style)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>","<\\1>",$td), $html);
+			$html = str_replace($td, preg_replace("/^(<td.*)(style=\".*\")(.*>)$/isU","\\1 \\3",$td), $html);
 		}
 		
 		// finishing up - maby should make optional
