@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.53 2009/05/08 16:08:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.54 2009/05/27 12:00:30 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -943,8 +943,8 @@ class persons_webview extends class_base
 		{
 			$file_inst = get_instance(CL_FILE);
 			$directive_obj = obj($directive);
-			$directive_obj->prop("name");
-			$profession_with_directive = '<a href ="'.$file_inst->get_url($directive , $directive_obj->prop("name")).'"  target=_new> '. $profession_with_directive.' </a>';
+			$directive_obj->trans_get_val("name");
+			$profession_with_directive = '<a href ="'.$file_inst->get_url($directive , $directive_obj->trans_get_val("name")).'"  target=_new> '. $profession_with_directive.' </a>';
 		}
 		//kirjutab yle k6ik juhendi muutujad, kui on viide olemas
 		if($directive_link)
@@ -1337,7 +1337,7 @@ class persons_webview extends class_base
 		{
 			$vars["org_rel_comment"] = $or->prop("comment");
 			$vars["room"] = $or->prop("room");
-			$vars["profession"] = $or->prop("profession.name");
+			$vars["profession"] = $or->trans_get_val("profession.name");
 		}
 
 		//kraad
