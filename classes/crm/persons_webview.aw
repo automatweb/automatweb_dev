@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.54 2009/05/27 12:00:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.55 2009/05/27 12:54:13 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -398,7 +398,7 @@ class persons_webview extends class_base
 		return $this->mk_my_orb("parse_alias",
 			array(
 				"id" => $_SESSION["persons_webview"],
-				"section" => $o->id(),
+				"section_o" => $o->id(),
 				"view" => 1,
 				"level" => $this->jrks[$o->id()],
 				"company_id" => $_SESSION["company"],
@@ -664,7 +664,7 @@ class persons_webview extends class_base
 	{
 		extract($_GET); 
 		//global $view , $id, $section, $level, $company_id, $section_id;
-		if(is_oid($id) && is_oid($section)) // juhul kui asi pole dokumendi sees vaid tulev kuskiklt urlist
+		if(is_oid($id) && is_oid($section_o)) // juhul kui asi pole dokumendi sees vaid tulev kuskiklt urlist
 		{
 			$this->view_obj = obj($id);
 		}
@@ -677,11 +677,17 @@ class persons_webview extends class_base
 
 		$this->meta = $this->view_obj->meta();
 		$this->view_no = $view;
-		if($view) $this->view = $this->meta["view"][$view]; // juhul kui tuleb kuskilt urlist miski tase,... 
-		else $this->view = $this->meta["view"][0]; // algul paneb siis metasse esimese (default) taseme vaate,... 
+		if($view)
+		{
+			$this->view = $this->meta["view"][$view]; // juhul kui tuleb kuskilt urlist miski tase,... 
+		}
+		else
+		{
+			 $this->view = $this->meta["view"][0]; // algul paneb siis metasse esimese (default) taseme vaate,... 
+		}
 		
-		if(is_oid($section)){
-			$section_obj = obj($section);
+		if($this->can("view" , $section_o)){
+			$section_obj = obj($section_o);
 			if($section_obj->class_id() == CL_CRM_PERSON)
 			{
 				$template = $this->view["template"];
@@ -826,7 +832,7 @@ class persons_webview extends class_base
 		$secvars["next_level_link"] = $this->mk_my_orb("parse_alias",
 			array(
 				"id" => $this->view_obj->id(),
-				"section" => $section->id(),
+				"section_o" => $section->id(),
 				"view" => (1 + $this->view_no),
 				"level" => $this->jrks[$section->id()],
 				"company_id"	=> $this->company->id(),
@@ -1234,7 +1240,7 @@ class persons_webview extends class_base
 		$next_level_link = $this->mk_my_orb("parse_alias",
 			array(
 				"id" => $this->view_obj->id(),
-				"section" => $worker->id(),
+				"section_o" => $worker->id(),
 				"view" => (1 + $this->view_no),
 				"company_id" => $this->company->id(),
 				"section_id"	=> $this->section->id()
