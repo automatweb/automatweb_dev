@@ -2348,6 +2348,10 @@ class webform extends class_base
 		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$cfgform = $obj_inst->get_first_obj_by_reltype("RELTYPE_CFGFORM");
 		$register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER");
+		if (!$register)
+		{
+			$register = obj();
+		}
 		//$prplist = safe_array($cfgform->meta("cfg_proplist"));
 		$cf = $cfgform->instance();
 		$prplist = $cf->get_cfg_proplist($cfgform->id());
@@ -2398,6 +2402,10 @@ class webform extends class_base
 			}
 
 			$register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER");
+			if (!$register)
+			{
+				$register = obj();
+			}
 			$o = obj();
 			$o->set_class_id(CL_REGISTER_DATA);
 			$o->set_parent($register->prop("data_rootmenu"));
@@ -2488,6 +2496,10 @@ class webform extends class_base
 				}
 				else
 				{
+					if (!is_oid($o->id()))
+					{
+						$o->save();
+					}
 					$name .= " ".$o->prop_str($key); //$arr[$key];
 				}
 			}
