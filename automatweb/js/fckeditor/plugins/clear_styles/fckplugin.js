@@ -38,6 +38,7 @@ FCKClearStyles.CleanWordHTML = function(str)
 	str = str.replace( /\s*mso-[^:]+:[^;"]+;?/gi, "" ) ;
 	str = str.replace( /\s*MARGIN: 0cm 0cm 0pt\s*;/gi, "" ) ;
 	str = str.replace( /\s*MARGIN: 0mm 0mm 0pt\s*;/gi, "" ) ;
+	str = str.replace( /\s*MARGIN: 0mm 0mm 0pt/gi, "" ) ;
 	str = str.replace( /\s*MARGIN: 0cm 0cm 0pt\s*"/gi, "\"" ) ;
 	str = str.replace( /\s*TEXT-INDENT: 0cm\s*;/gi, "" ) ;
 	str = str.replace( /\s*TEXT-INDENT: 0cm\s*"/gi, "\"" ) ;
