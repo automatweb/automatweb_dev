@@ -62,16 +62,9 @@
 @property taxed type=chooser field=aw_taxed
 @caption Maks
 
+@property art_toolbar type=toolbar no_caption=1 store=no
 
-@default group=articles
-
-	@property art_toolbar type=toolbar no_caption=1 store=no
-
-	@property articles type=table store=no no_caption=1
-	@caption Artiklid
-
-
-@groupinfo articles caption="Artiklid"
+@property articles type=table store=no no_caption=1
 
 @reltype PURCHASER value=1 clid=CL_CRM_COMPANY
 @caption Hankija
@@ -398,7 +391,7 @@ class shop_purchase_order extends class_base
 				),
 				"multiple" => 0,
 			), "popup_search");
-			$url = "javascript:aw_popup_scroll(\"".$url."\",\"".t("Otsi")."\",550,500)";
+			$url = "javascript:aw_popup_scroll('".$url."','".t("Otsi")."',550,500)";
 			$tax = html::href(array(
 				"caption" => html::img(array(
 					"url" => "images/icons/search.gif",
@@ -441,21 +434,28 @@ class shop_purchase_order extends class_base
 			{
 				$data["add"] = t("Lisa uus");
 			}
+			$url = $this->mk_my_orb("do_search", array(
+				"pn" => "rows[".$id."][prodname]",
+				"clid" => array(
+					CL_SHOP_PRODUCT
+				),
+				"tbl_props" => array("oid", "name", "code", "parent"),
+				"multiple" => 0,
+				"no_submit" => 1,
+			), "shop_product_popup_search");
+			$url = "javascript:aw_popup_scroll('".$url."','".t("Otsi")."',600,500)";
+			$s = html::href(array(
+				"caption" => html::img(array(
+					"url" => "images/icons/search.gif",
+					"border" => 0
+				)),
+				"url" => $url
+			));
 			$data["name"] = html::textbox(array(
 				"name" => "rows[".$id."][prodname]",
-				"autocomplete_class_id" => CL_SHOP_PRODUCT,
 				"size" => 10,
-				"option_is_tuple" => 1,
 				"value" => $name_val,
-			));
-			$data["code"] = html::textbox(array(
-				"name" => "rows[".$id."][prodcode]",
-				"size" => 10,
-				"autocomplete_source" => $this->mk_my_orb("articles_add_autocomplete_source", array(), CL_SHOP_DELIVERY_NOTE),
-				"autocomplete_params" => array(),
-				"option_is_tuple" => 1,
-				"value" => $code_val,
-			));
+			)).$s;
 			$data["add_num"] = $id;
 		}
 		$data["amount"] = html::textbox(array(

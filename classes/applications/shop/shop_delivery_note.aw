@@ -259,6 +259,18 @@ class shop_delivery_note extends class_base
 			"name" => "delete_article_rels",
 			"action" => "del_article_rels",
 		));
+
+		$tb->add_menu_button(array(
+			"name" => "bills",
+			"text" => t("Arve"),
+			"tooltip" => t("Kanna valitud read arvele"),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "bills",
+			"text" => t("Uus arve"),
+			"link" => "javascript:void(0)",
+			"onClick" => "cf = document.forms.changeform; cf.elements.action.value = 'create_bill'; cf.submit();",
+		));
 	}
 
 	function _init_articles_tbl($t)
@@ -268,14 +280,14 @@ class shop_delivery_note extends class_base
 			"field" => "oid",
 		));
 		$t->define_field(array(
-			"caption" => t("Artiklikood"),
-			"align"=> "center",
-			"name" => "code",
-		));
-		$t->define_field(array(
 			"caption" => t("Nimetus"),
 			"align"=> "center",
 			"name" => "name",
+		));
+		$t->define_field(array(
+			"caption" => t("Artiklikood"),
+			"align"=> "center",
+			"name" => "code",
 		));
 		$t->define_field(array(
 			"caption" => t("Seerianumber"),
@@ -563,23 +575,28 @@ class shop_delivery_note extends class_base
 				$vals["unit"] = $units[0];
 				$vals["amount"] = $arr["amts"][$oid];
 			}
+			$url = $this->mk_my_orb("do_search", array(
+				"pn" => $name."[name]",
+				"clid" => array(
+					CL_SHOP_PRODUCT
+				),
+				"tbl_props" => array("oid", "name", "code", "parent"),
+				"multiple" => 0,
+				"no_submit" => 1,
+			), "shop_product_popup_search");
+			$url = "javascript:aw_popup_scroll('".$url."','".t("Otsi")."',600,500)";
+			$s = html::href(array(
+				"caption" => html::img(array(
+					"url" => "images/icons/search.gif",
+					"border" => 0
+				)),
+				"url" => $url
+			));
 			$data = array(
-				"code" => html::textbox(array(
-					"name" => $name."[code]",
-					"size" => 10,
-					"autocomplete_source" => $this->mk_my_orb("articles_add_autocomplete_source"),
-					"autocomplete_params" => array(),
-					"option_is_tuple" => 1,
-					"selected" => array($prodid => $c),
-				)),
-				"name" => html::textbox(array(
-					"name" => $name."[name]",
-					"size" => 10,
-					"autocomplete_source" => $this->mk_my_orb("articles_add_autocomplete_source"),
-					"autocomplete_params" => array(),
-					"option_is_tuple" => 1,
-					"selected" => array($prodid => $n),
-				)),
+				"name" => "<div style=\"width: 130px;\">".html::textbox(array(
+						"name" => $name."[name]",
+						"size" => 10,
+					)).$s."</div>",
 				"add" => t("<strong>Lisa uus</strong>"),
 				"serial_no" => html::textbox(array(
 					"name" => $name."[serial_no]",
@@ -776,35 +793,6 @@ class shop_delivery_note extends class_base
 		return $ac->finish_ac($res);
 	}
 
-	/**
-	@attrib name=articles_add_autocomplete_source all_args=1
-	**/
-	function articles_add_autocomplete_source($arr)
-	{
-		$ac = get_instance("vcl/autocomplete");
-		$arr = $ac->get_ac_params($arr);
-		if(strpos($_SERVER['QUERY_STRING'], "name")!==false)
-		{
-			$prop = "name";
-		}
-		else
-		{
-			$prop = "code";
-		}
-		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRODUCT,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"limit" => 1000,
-		));
-		$res = array();
-		foreach($ol->arr() as $o)
-		{
-			$res[$o->id()] = $o->prop($prop);
-		}
-		return $ac->finish_ac($res);
-	}
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
@@ -886,6 +874,16 @@ class shop_delivery_note extends class_base
 			$o->save();
 		}
 		die();
+	}
+
+	/**
+	@attrib name=create_bill all_args=1
+	**/
+	function create_bill($arr)
+	{
+		$o = obj($arr["id"]);
+		$o->create_bill($arr);
+		return $arr["post_ru"];
 	}
 }
 

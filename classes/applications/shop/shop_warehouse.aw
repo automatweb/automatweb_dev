@@ -6775,7 +6775,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$t->add_item(0, array(
 			"id" => "state_all",
 			"url" => aw_url_change_var($var, STORAGE_FILTER_CONFIRMATION_ALL),
-			"name" => sprintf("%s (%s)", $disp == $id ? "<b>".t("K&otilde;ik")."</b>" : t("K&otilde;ik"), $total),
+			"name" => sprintf("%s (%s)", (!$disp || $disp == STORAGE_FILTER_CONFIRMATION_ALL) ? "<b>".t("K&otilde;ik")."</b>" : t("K&otilde;ik"), $total),
 		));
 	}
 
@@ -9130,6 +9130,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"url" => "#",
 		));
 		$g = $arr["request"]["group"];
+		unset($arr["request"]["filt_cust_name"]);
 		$ol = $this->_get_clients_ol($arr);
 		$letters = array();
 		foreach($ol->names() as $oid => $name)
@@ -9233,6 +9234,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"class_id" => array(),
 			"name" => ($f = $arr["request"]["filt_cust_name"]) ? $f."%" : array(),
 			"CL_CRM_COMPANY.RELTYPE_CUSTOMER(CL_CRM_CATEGORY).oid" => ($f = $arr["request"]["filt_cust"]) ? $f : array(),
+			"limit" => "0,200",
 		);
 		$ol = new object_list($params);	
 		return $ol;
@@ -9247,6 +9249,15 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"sortable" => 1,
 			"align" => "center",
 		));
+
+		$t->define_field(array(
+			"name" => "rel",
+			"caption" => t("Kliendisuhe"),
+			"sortable" => 1,
+			"align" => "center",
+			"width" => 160
+		));
+
 		$t->define_field(array(
 			"name" => "address",
 			"caption" => t("Aadress"),
@@ -9294,10 +9305,6 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			return;
 		}
-		if(!$arr["request"]["filt_cust"] && !$arr["request"]["filt_cust_name"])
-		{
-			return;
-		}
 		$ol = $this->_get_clients_ol($arr);
 		foreach($ol->arr() as $oid => $o)
 		{
@@ -9324,7 +9331,18 @@ $oo = get_instance(CL_SHOP_ORDER);
 				));
 			}
 
+			$conn = $o->connections_to(array(
+				"type" => "RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER"),
+				"from.class_id" => CL_CRM_COMPANY_CUSTOMER_DATA
+			));
+			$c = reset($conn);
+			if($c)
+			{
+				$rel = html::obj_change_url($c->from(), ($n = $c->from()->name()) ? $n : t("(nimetu)"));
+			}
+
 			$t->define_data(array(
+				"rel" => $rel,
 				"name" => html::obj_change_url($o),
 				"address" => $o->prop("RELTYPE_ADDRESS.name"),
 				"email" => $mail,

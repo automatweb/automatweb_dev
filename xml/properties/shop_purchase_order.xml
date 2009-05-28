@@ -173,7 +173,7 @@
       <property>
             <name>art_toolbar</name>
             <table>aw_shop_purcahse_orders</table>
-            <group>articles</group>
+            <group>general</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -182,12 +182,11 @@
       <property>
             <name>articles</name>
             <table>aw_shop_purcahse_orders</table>
-            <group>articles</group>
+            <group>general</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>articles</field>
-            <caption>Artiklid</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SHOP_PURCHASE_ORDER</syslog_type>
@@ -196,11 +195,6 @@
             <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
-      <groupinfo>
-            <articles>
-                  <caption>Artiklid</caption>
-            </articles>
-      </groupinfo>
       <tableinfo>
             <aw_shop_purcahse_orders>
                   <master_index>brother_of</master_index>

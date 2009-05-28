@@ -1812,6 +1812,23 @@ class crm_bill extends class_base
 					));
 
 
+					$url = $this->mk_my_orb("do_search", array(
+						"pn" => "agreement_price[".$x."][prod]",
+						"clid" => array(
+							CL_SHOP_PRODUCT
+						),
+						"tbl_props" => array("oid", "name", "code", "parent"),
+						"multiple" => 0,
+						"no_submit" => 1,
+					), "shop_product_popup_search");
+					$url = "javascript:aw_popup_scroll('".$url."','".t("Otsi")."',600,500)";
+					$prod_s = html::href(array(
+						"caption" => html::img(array(
+							"url" => "images/icons/search.gif",
+							"border" => 0
+						)),
+						"url" => $url
+					));
 					$t->define_data(array(
 						"name" => t("Kokkuleppehind")." ".($x+1)."<br>".html::textbox(array(
 							"name" => "agreement_price[".$x."][date]",
@@ -1857,7 +1874,7 @@ class crm_bill extends class_base
 							"name" => "agreement_price[".$x."][prod]",
 							"size" => 20,
 							"class" => "prod_box",
-						))."<script>$('.prod_box').autocomplete('".$this->mk_my_orb("get_prod_list")."')</script>",
+						)).$prod_s,
 						"sel" => html::checkbox(array(
 							"name" => "sel_rows[]",
 							"value" => $id
@@ -2083,12 +2100,9 @@ class crm_bill extends class_base
 			}
 		}
 
-		if(isset($arr["prod"]))
+		if(isset($arr["prod"]) && $this->can("view", $arr["prod"]) && obj($arr["prod"])->class_id() == CL_SHOP_PRODUCT)
 		{
-			$tmp = explode("(", $arr["prod"]);
-			$tmp2 = explode(")", $tmp[count($tmp)-1]);
-			$prod = $tmp2[0];
-			$o->set_prop("prod", $prod);
+			$o->set_prop("prod", $arr["prod"]);
 		}
 
 		if($arr["name"])
@@ -2331,12 +2345,28 @@ class crm_bill extends class_base
 						"text" => t("Uus saateleht"),
 					));
 				}
+				$url = $this->mk_my_orb("do_search", array(
+					"pn" => "rows[$id][prod]",
+					"clid" => array(
+						CL_SHOP_PRODUCT
+					),
+					"tbl_props" => array("oid", "name", "code", "parent"),
+					"multiple" => 0,
+					"no_submit" => 1,
+				), "shop_product_popup_search");
+				$url = "javascript:aw_popup_scroll('".$url."','".t("Otsi")."',600,500)";
+				$s = html::href(array(
+					"caption" => html::img(array(
+						"url" => "images/icons/search.gif",
+						"border" => 0
+					)),
+					"url" => $url
+				));
 				$ret.=html::textbox(array(
 					"name" => "rows[$id][prod]",
 					"size" => 20,
-					"value" => $row->prop("prod") ? sprintf("%s (%s)", $row->prop("prod.name"), $row->prop("prod")) : "",
-					"class" => "prod_box",
-				))."<br />".($row->meta("dno") ? sprintf(t("Saatelehel %s"), obj($row->meta("dno"))->name()) : "<div id='dn_info_$id'>".t("Liiguta saatelehele:").$m->get_menu(array(
+					"value" => $row->prop("prod"),
+				)).$s."<br />".($row->meta("dno") ? sprintf(t("Saatelehel %s"), obj($row->meta("dno"))->name()) : "<div id='dn_info_$id'>".t("Liiguta saatelehele:").$m->get_menu(array(
 					"icon" => "copy.gif",
 				))."</div>");
 				break;
@@ -4207,7 +4237,6 @@ class crm_bill extends class_base
 	function callback_generate_scripts($arr)
 	{
 		$url = $this->mk_my_orb("get_comment_for_prod");
-		$prod_url = $this->mk_my_orb("get_prod_list");
 		return '
 			function edit_row(id)
 			{
@@ -4219,9 +4248,7 @@ class crm_bill extends class_base
 						x.innerHTML=html;});
 					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "prod"}, function (html) {
 						x=document.getElementById("row_"+id +"_prod");
-						x.innerHTML=html;
-					$(".prod_box").autocomplete("'.$prod_url.'")});
-
+						x.innerHTML=html;});
 					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "person"}, function (html) {
 						x=document.getElementById("row_" + id + "_person");
 						x.innerHTML=html;});
@@ -5448,24 +5475,6 @@ class crm_bill extends class_base
 				)),
 			));
 		}
-	}
-
-	/**
-	@attrib name=get_prod_list all_args=1
-	**/
-	function get_prod_list($arr)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRODUCT,
-			"site_id" => array(),
-			"lang_id" => array(),
-			"name" => $arr["q"]."%",
-		));
-		foreach($ol->names() as $oid => $name)
-		{
-			echo sprintf("%s (%s)\n", $name, $oid);
-		}
-		die();
 	}
 
 	/**

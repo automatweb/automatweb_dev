@@ -54,18 +54,10 @@
 @property taxed type=chooser field=aw_taxed
 @caption Maks
 
+@property art_toolbar type=toolbar no_caption=1 store=no
 
-@default group=articles
+@property articles type=table store=no no_caption=1
 
-	@property art_toolbar type=toolbar no_caption=1 store=no
-
-	@property articles type=table store=no no_caption=1
-	@caption Artiklid
-
-
-@groupinfo articles caption="Artiklid"
-
-		
 
 @reltype PURCHASER value=1 clid=CL_CRM_COMPANY
 @caption Hankija
