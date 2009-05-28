@@ -3647,6 +3647,53 @@ class bug_tracker extends class_base
 	}
 	
 	/**
+	@attrib name=aw_firefoxtools_bugs_history
+	**/
+	function aw_firefoxtools_bugs_history($arr)
+	{
+		$cur_p = get_current_person();
+		$prevm = time()-3600*24*10;
+		$filter = array(
+			"class_id" => array(CL_TASK_ROW),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, $prevm),
+			"sort_by" => "objects.createdby, objects.created",
+			"impl" => $cur_p->id(),
+			"limit" => 40,
+		);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_TASK_ROW => array(
+					"task"
+				),
+			)
+		);
+		$tasks = array();
+		$count = 0;
+		foreach($t->list_data as $data)
+		{
+			if($count >= 10) break;
+			if(!$tasks[$data["oid"]] && $this->can("view" , $data["oid"]))
+			{
+				$tasks[$data["oid"]] = $data["oid"];
+			}
+			$count++;
+		}
+
+		$ol = new object_list();
+		if(sizeof($tasks))
+		{
+			$ol->add($tasks);
+		}
+		
+		arr($ol);
+		die($out);
+	}
+	
+	/**
 	@attrib name=aw_firefoxtools_new_bug_url
 	@param id required type=int
 	@param bug_url required type=string
