@@ -158,14 +158,14 @@ class treeview extends class_base
 
 		@attrib name=show params=name default="0"
 
-		@param id required
+		@param id required type=int
 
 		@returns
 
 		@comment
 
 	**/
-	function show($args = array())
+	function show($args)
 	{
 		extract($args);
 		$obj = obj($id);
@@ -363,7 +363,7 @@ class treeview extends class_base
 			$this->features[LOAD_ON_DEMAND] = 1;
 		}
 
-		if (($this->tree_type == TREE_DHTML or $this->tree_type == TREE_DHTML_WITH_CHECKBOXES or $this->tree_type == TREE_DHTML_WITH_BUTTONS) && !empty($this->tree_id) && $arr["persist_state"])
+		if (($this->tree_type == TREE_DHTML or $this->tree_type == TREE_DHTML_WITH_CHECKBOXES or $this->tree_type == TREE_DHTML_WITH_BUTTONS) && !empty($this->tree_id) && !empty($arr["persist_state"]))
 		{
 			$this->features[PERSIST_STATE] = 1;
 		}
@@ -659,7 +659,7 @@ class treeview extends class_base
 			$this->auto_open = "''".$this->auto_open_tmp;
 		}
 		$tree_nums = aw_global_get("dhtml_tree_count");
-		if(!$tree_nums[$this->tree_id])
+		if(empty($tree_nums[$this->tree_id]))
 		{
 			$tree_nums[$this->tree_id] = empty($_GET["tree_num"]) ? count($tree_nums) + 1 : $_GET["tree_num"];
 		}

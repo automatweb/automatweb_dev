@@ -1221,7 +1221,7 @@ class shop_warehouse extends class_base
 					{
 						$prop["value"] = $arr["request"][$prop["name"]];
 					}
-					elseif($tf = $arr["request"]["pgtf"])
+					elseif($tf = automatweb::$request->arg("pgtf"))
 					{
 						$prop["value"] = $tf;
 					}
@@ -1325,7 +1325,7 @@ class shop_warehouse extends class_base
 					break;
 
 				default:
-					$prop["value"] = $arr["request"][$prop["name"]];
+					$prop["value"] = automatweb::$request->arg($prop["name"]);
 			}
 			return PROP_OK;
 		}
@@ -2352,7 +2352,7 @@ class shop_warehouse extends class_base
 
 		$tb->add_save_button();
 
-		if($data["request"]["ptf"] && !$data["request"]["pgtf"])
+		if(automatweb::$request->arg("ptf") && !automatweb::$request->arg("pgtf"))
 		{
 			if(!$this->prod_tree_root)
 			{
@@ -2402,7 +2402,7 @@ class shop_warehouse extends class_base
 				//"action" => "paste_products"
 			));
 		}
-		elseif(!$data["request"]["ptf"] && $data["request"]["pgtf"])
+		elseif(!automatweb::$request->arg("ptf") && automatweb::$request->arg("pgtf"))
 		{
 			$tb->add_menu_item(array(
 				"parent" => "new",
@@ -2545,11 +2545,11 @@ class shop_warehouse extends class_base
 			"pgtf" => automatweb::$request->arg("pgtf"),
 			"id" => $arr["obj_inst"]->id(),
 		);
-		if($arr["request"]["filt_time"])
+		if(!empty($arr["request"]["filt_time"]))
 		{
 			$params["filt_time"] = $arr["request"]["filt_time"];
 		}
-		if($arr["request"]["filt_cust"])
+		if(!empty($arr["request"]["filt_cust"]))
 		{
 			$params["filt_cust"] = $arr["request"]["filt_cust"];
 		}
@@ -2865,7 +2865,7 @@ class shop_warehouse extends class_base
 			}
 		}
 		$params["id"] = $arr["obj_inst"]->id();
-		$params["ptf"] = $arr["request"]["ptf"];
+		$params["ptf"] = automatweb::$request->arg("ptf");
 		$params["group"] = $arr["request"]["group"];
 		$params["parent"] = " ";
 		$gbf = $this->mk_my_orb("get_prod_tree_level",$params, CL_SHOP_WAREHOUSE);
@@ -3086,11 +3086,12 @@ class shop_warehouse extends class_base
 	private function get_products_list_ol($arr)
 	{
 		$oids = array();
-		if($name = $arr["request"]["prod_s_name"])
+		$params = array();
+		if($name = automatweb::$request->arg("prod_s_name"))
 		{
 			$params["name"] = "%".$name."%";
 		}
-		if($code = $arr["request"]["prod_s_code"])
+		if($code = automatweb::$request->arg("prod_s_code"))
 		{
 			if($this->config && $cid = $this->config->prop("short_code_ctrl"))
 			{
@@ -3108,12 +3109,12 @@ class shop_warehouse extends class_base
 				$params["code"] = "%".$code."%";
 			}
 		}
-		if($barcode = $arr["request"]["prod_s_barcode"])
+		if($barcode = automatweb::$request->arg("prod_s_barcode"))
 		{
 			$params["barcode"] = "%".$varcode."%";
 		}
 		$group = $this->get_search_group($arr);
-		if(($from = $arr["request"][$group."_s_price_from"]) || ( $arr["request"][$group."_s_price_to"]))
+		if(($from = automatweb::$request->arg($group."_s_price_from")) || ( automatweb::$request->arg($group."_s_price_to")))
 		{
 			$to = $arr["request"][$group."_s_price_to"];
 			$cparams = array(
@@ -3147,9 +3148,9 @@ class shop_warehouse extends class_base
 			$params["oid"] = isset($params["oid"])?array_intersect($params["oid"], $oids):$oids;
 		}
 		// get items arr
-		if(!($cat = $arr["request"][$group."_s_art_cat"]) && !($cat = $arr["request"][$group."_s_cat"]))
+		if(!($cat = automatweb::$request->arg($group."_s_art_cat")) && !($cat = automatweb::$request->arg($group."_s_cat")))
 		{
-			$cat = $arr["request"]["pgtf"];
+			$cat = automatweb::$request->arg("pgtf");
 		}
 		if ($this->can("view", $cat))
 		{
@@ -3166,17 +3167,17 @@ class shop_warehouse extends class_base
 			$params["class_id"] = CL_SHOP_PRODUCT;
 			$params["oid"] = isset($params["oid"])?array_intersect($params["oid"], $oids):$oids;
 		}
-		elseif($this->can("view", $arr["request"]["ptf"]))
+		elseif($this->can("view", automatweb::$request->arg("ptf")))
 		{
 			$params["parent"] = $arr["request"]["ptf"];
 			$params["class_id"] = array(CL_MENU, CL_SHOP_PRODUCT);
 		}
-		if(count($params) || $arr["request"]["just_saved"])
+		if(count($params) || automatweb::$request->arg("just_saved"))
 		{
 			$show = 1;
 		}
 		$params["limit"] = "0,100";
-		if(!$show)
+		if(empty($show))
 		{
 			foreach($arr["request"] as $var => $val)
 			{
@@ -3186,9 +3187,9 @@ class shop_warehouse extends class_base
 				}
 			}
 		}
-		if($show)
+		if(!empty($show))
 		{
-			if(!$params["class_id"])
+			if(empty($params["class_id"]))
 			{
 				$params["class_id"] = CL_SHOP_PRODUCT;
 			}
@@ -3204,8 +3205,8 @@ class shop_warehouse extends class_base
 		{
 			$ot = new object_list();
 		}
-		$p = $arr["request"][$group."_s_show_pieces"];
-		$s = $arr["request"][$group."_s_show_batches"];
+		$p = automatweb::$request->arg($group."_s_show_pieces");
+		$s = automatweb::$request->arg($group."_s_show_batches");
 		if(($p || $s) && $ot->count())
 		{
 			$sparams["class_id"] = CL_SHOP_PRODUCT_SINGLE;
@@ -3236,7 +3237,7 @@ class shop_warehouse extends class_base
 			{
 				$prodid = $o->id();
 				$single = null;
-				if(!$res["units"][$prodid])
+				if(empty($res["units"][$prodid]))
 				{
 					$res["units"][$prodid] = $pi->get_units(obj($prodid));
 				}
@@ -3246,7 +3247,7 @@ class shop_warehouse extends class_base
 				$prodid = $o->prop("product");
 				$single = $o->id();
 			}
-			foreach($arr["warehouses"] as $wh)
+			foreach(safe_array(ifset($arr, "warehouses")) as $wh)
 			{
 				foreach($res["units"][$prodid] as $unit)
 				{
@@ -3282,7 +3283,7 @@ class shop_warehouse extends class_base
 				$prodtotal += $res["amounts"][$o->id()][$wh][$res["units"][$prodid][0]];
 			}
 			$a = $prodtotal;
-			if(($q = $arr["request"][$group."_s_count"]) && $o->class_id() == CL_SHOP_PRODUCT)
+			if(($q = automatweb::$request->arg($group."_s_count")) && $o->class_id() == CL_SHOP_PRODUCT)
 			{
 				if(($q == QUANT_NEGATIVE && $a >= 0) || ($q == QUANT_ZERO && $a != 0) || ($q == QUANT_POSITIVE && $a <= 0))
 				{
@@ -3343,11 +3344,11 @@ class shop_warehouse extends class_base
 	{
 		$tb = $arr["prop"]["vcl_inst"];
 		$group = $this->get_search_group($arr);
-		if ($this->can("view", $arr["request"]["pgtf"]))
+		if ($this->can("view", automatweb::$request->arg("pgtf")))
 		{
 			$tb->set_caption(sprintf(t("Artiklid kategoorias %s"), obj($arr["request"]["pgtf"])->path_str(array("start_at" => $this->config->prop("prod_type_fld")))));
 		}
-		elseif($this->can("view", $arr["request"]["ptf"]))
+		elseif($this->can("view", automatweb::$request->arg("ptf")))
 		{
 			$tb->set_caption(sprintf(t("Artiklid kaustas %s"), obj($arr["request"]["ptf"])->path_str(array("start_at" => $this->config->prop("prod_fld")))));
 		}
@@ -3524,7 +3525,7 @@ class shop_warehouse extends class_base
 			"caption" => t("FIFO"),
 			"align" => "center"
 		));
-		if((!isset($arr["request"][$group."_s_pricelist"]) && $this->def_price_list) || $arr["request"][$group."_s_pricelist"])
+		if((!isset($arr["request"][$group."_s_pricelist"]) && $this->def_price_list) || automatweb::$request->arg($group."_s_pricelist"))
 		{
 			$t->define_field(array(
 				"sortable" => 1,
@@ -3602,7 +3603,7 @@ class shop_warehouse extends class_base
 			));
 		}
 
-		if(!$arr["request"]["pgtf"] && $arr["request"]["pgtf"] != $this->prod_type_fld && !$arr["request"][$group."_s_cat"])
+		if(!automatweb::$request->arg("pgtf") && automatweb::$request->arg("pgtf") != $this->prod_type_fld && !automatweb::$request->arg($group."_s_cat"))
 		{
 			$t->define_field(array(
 				"name" => "cat",
@@ -4294,13 +4295,13 @@ class shop_warehouse extends class_base
 	function get_warehouse_configs($arr, $prop = null)
 	{
 		$cfgs = array();
-		if(!is_array($arr["warehouses"]) && !empty($this->config))
+		if(isset($arr["warehouses"]) && !is_array($arr["warehouses"]) && !empty($this->config))
 		{
 			$cfgs[] = $this->config;
 		}
 		else
 		{
-			foreach(safe_array($arr["warehouses"]) as $wh)
+			foreach(safe_array(ifset($arr, "warehouses")) as $wh)
 			{
 				if($this->can("view", $wh))
 				{
@@ -4333,7 +4334,7 @@ class shop_warehouse extends class_base
 					$vals = array();
 					if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 					{
-						if($val = $this->$prop)
+						if(isset($this->$prop) && $val = $this->$prop)
 						{
 							$vals[$val] = $val;
 						}
@@ -5681,19 +5682,30 @@ class shop_warehouse extends class_base
 
 	function callback_mod_reforb($arr, $request)
 	{
-		$arr["ptf"] = $request["ptf"];
-		$arr["pgtf"] = $request["pgtf"];
+		$args_to_transfer = array("ptf", "pgtf");
+		foreach($args_to_transfer as $arg_to_transfer)
+		{
+			if(isset($request[$arg_to_transfer]))
+			{
+				$arr[$arg_to_transfer] = $request[$arg_to_transfer];
+			}
+		}
+
 		$arr["post_ru"] = post_ru();
-		switch($request["group"])
-		{	
-			case "status_orders":
-				$arr["add_rows_order"] = 0;
-				$arr["filt_case"] = $request["filt_case"];
-				$arr["filt_res"] = $request["filt_res"];
-				break;
-			case "shop_orders":
-				$arr["shop_orders_s_status"] = $request["shop_orders_s_status"];
-				break;
+
+		if(isset($request["group"]))
+		{
+			switch($request["group"])
+			{	
+				case "status_orders":
+					$arr["add_rows_order"] = 0;
+					$arr["filt_case"] = $request["filt_case"];
+					$arr["filt_res"] = $request["filt_res"];
+					break;
+				case "shop_orders":
+					$arr["shop_orders_s_status"] = $request["shop_orders_s_status"];
+					break;
+			}
 		}
 	}
 

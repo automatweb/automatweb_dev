@@ -764,7 +764,7 @@ class admin_if extends class_base
 					"name" =>  "old[status][".$row_d["oid"]."]",
 					"value" => $row_d["status"]
 				)).html::checkbox(array(
-					"name" => "new[status][".$row_d["id"]."]",
+					"name" => "new[status][".$row_d["oid"]."]",
 					"value" => "2",
 					"checked" => ($row_d["status"] == STAT_ACTIVE)
 				));
@@ -2094,7 +2094,7 @@ class admin_if extends class_base
 			$cur_lid = $lang_id;
 		}
 
-		$m = aw_unserialize($row_d["metadata"]);
+		$m = aw_unserialize(ifset($row_d, "metadata"));
 
 		if ($trans)
 		{

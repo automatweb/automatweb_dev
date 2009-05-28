@@ -296,7 +296,7 @@ class shop_order_center extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["group"] === "delivery_cfg" and !$arr["obj_inst"]->prop("show_delivery"))
+		if (ifset($arr, "group") === "delivery_cfg" and !$arr["obj_inst"]->prop("show_delivery"))
 		{
 			return false;
 		}
@@ -618,7 +618,7 @@ class shop_order_center extends class_base
 		));
 		foreach($GLOBALS["properties"][CL_SHOP_PRODUCT] as $pn => $pd)
 		{
-			$elements[$pn] = $pd["caption"];
+			$elements[$pn] = isset($pd["caption"]) ? $pd["caption"] : $pd["name"];
 		}
 		$elements["jrk"] = t("J&auml;rjekord");
 
@@ -1583,7 +1583,7 @@ class shop_order_center extends class_base
 
 		foreach($clss as $clid => $clinf)
 		{
-			if ($clinf["site_class"] == 1)
+			if (isset($clinf["site_class"]) && $clinf["site_class"] == 1)
 			{
 				// check if site class implements interface
 				$anal = get_instance("aw_code_analyzer");
@@ -1640,7 +1640,7 @@ class shop_order_center extends class_base
 		foreach(obj()->set_class_id(CL_SHOP_PRODUCT)->get_property_list() as $field_name => $field_data)
 		{
 			$t->define_data(array(
-				"field" => $field_data["caption"]." [$field_name]",
+				"field" => ifset($field_data, "caption")." [$field_name]",
 				"select" => html::checkbox(array(
 					"name" => "prop_filter_select[$field_name]",
 					"value" => 1,

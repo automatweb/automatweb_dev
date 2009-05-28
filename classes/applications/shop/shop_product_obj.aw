@@ -74,6 +74,7 @@ class shop_product_obj extends _int_object
 		}
 		else
 		{
+			$cato = false;
 			if($dc = $this->meta("def_cat"))
 			{
 				$cato = obj($dc);
@@ -167,6 +168,26 @@ class shop_product_obj extends _int_object
 			"CL_MRP_ORDER_COVER.RELTYPE_APPLIES_PROD" => $this->id()
 		));
 		return $ol->arr();
+	}
+
+	/** Returns the list of replacement products
+		@attrib name=get_discount api=1
+	**/
+	public function get_replacement_prods($arr)
+	{
+		$ol = new object_list(array(
+			'class_id' => CL_SHOP_PRODUCT,
+			'type_code' => $this->prop('type_code'),
+		));
+		// siia tuleks veel see juurde ilmselt teha, et kuidagi lisada siia need asendustooted mis on yle aw seoste ...
+		$conns = $this->connections_from(array(
+			'type' => 'RELTYPE_REPLACEMENT_PROD'
+		));
+		foreach ($conns as $conn)
+		{
+			$ol->add($conn->to());
+		}
+		return $ol->arr();	
 	}
 	
 }
