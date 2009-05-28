@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.81 2009/05/07 13:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.82 2009/05/28 12:12:15 markop Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -902,6 +902,25 @@ class join_site extends class_base
 				"name_prefix" => $wn
 			));
 
+			//miskid valikud tsekituks, kui on liitumise objektis nii m22ratud
+			foreach($selected as $clid => $stuff)
+			{
+				foreach($stuff as $id => $value)
+				{
+					if($value)
+					{
+						if(is_array($xp["typo_".$clid."_".$id]["options"]))
+						{
+							$value = array_keys($xp["typo_".$clid."_".$id]["options"]);
+							foreach($value as $asd)
+							{
+								$xp["typo_".$clid."_".$id]["value"][$asd] = $asd;
+							}
+						}
+					}
+				}
+			}
+
 			$cf_sd = $sessd[$wn];
 			foreach($xp as $xprop)
 			{
@@ -1632,6 +1651,7 @@ class join_site extends class_base
 	{
 		$visible = $ob->meta("visible");
 		$required = $ob->meta("required");
+		$selected = $ob->meta("selected");
 		$propn = $ob->meta("propn");
 		$je = aw_global_get("join_err");
 
@@ -2568,6 +2588,11 @@ class join_site extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "selected",
+			"caption" => t("Vaikimisi valitud"),
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "break_in_el",
 			"caption" => t("Reavahetus sisu vahel"),
 			"align" => "center"
@@ -2578,6 +2603,7 @@ class join_site extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_prop_settings($t);
+		$selected = $arr["obj_inst"]->meta("selected");
 		$clss = aw_ini_get("classes");
 		$types = $arr["obj_inst"]->meta("types");
 		$breaks = $arr["obj_inst"]->meta("el_breaks");
@@ -2611,7 +2637,12 @@ class join_site extends class_base
 						"name" => "breaks[$clid][$pn]",
 						"value" => 1,
 						"checked" => $breaks[$clid][$pn] == 1
-					)) : "" 
+					)) : "" ,
+					"selected" => html::checkbox(array(
+						"name" => "selected[$clid][$pn]",
+						"value" => 1,
+						"checked" => $selected[$clid][$pn] == 1
+					)),
 				));
 			}
 		}
@@ -2622,6 +2653,7 @@ class join_site extends class_base
 	{
 		$arr["obj_inst"]->set_meta("types", $arr["request"]["types"]);
 		$arr["obj_inst"]->set_meta("el_breaks", $arr["request"]["breaks"]);
+		$arr["obj_inst"]->set_meta("selected", $arr["request"]["selected"]);
 	}
 
 	function _update_address_from_req($o, $r)
