@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.59 2009/01/16 11:37:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.60 2009/05/28 08:32:37 dragut Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1 maintainer=kristo
@@ -1082,7 +1082,7 @@ $dbi->db_connect(array(
 		$site['vhost_file'] = aw_ini_get('install.vhost_folder').$site_url;
 		$site['server_ip'] = aw_ini_get('install.default_ip');
 		$site['admin_folder'] = aw_ini_get('install.admin_folder');
-		$site['db_name'] = str_replace(".","",$site_url);
+		$site['db_name'] = str_replace(array(".", "-"),"",$site_url);
 		// db users in mysql MUST begin with a letter, not number ...
 		$site['db_user'] = "a".substr(md5(str_replace(".","",$site_url)), 0, 14);
 		$site['db_pwd'] = generate_password();
