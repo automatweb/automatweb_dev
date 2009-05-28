@@ -17,9 +17,17 @@
             <caption>Tabid</caption>
       </property>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general_gen</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>subclass</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_gen</group>
             <type>select</type>
             <newonly>1</newonly>
             <field>subclass</field>
@@ -28,7 +36,7 @@
       <property>
             <name>ctype</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_gen</group>
             <type>text</type>
             <editonly>1</editonly>
             <field>subclass</field>
@@ -37,7 +45,7 @@
       <property>
             <name>use_output</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -47,7 +55,7 @@
       <property>
             <name>xml_definition</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>fileupload</type>
@@ -57,7 +65,7 @@
       <property>
             <name>preview</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
@@ -68,12 +76,67 @@
       <property>
             <name>use_in_releditor</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>V&amp;amp;otilde;imalda kasutamist releditoris</caption>
+      </property>
+      <property>
+            <name>properties_tb</name>
+            <table>objects</table>
+            <group>props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>properties_tree</name>
+            <table>objects</table>
+            <group>props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>props_tree_lay</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>properties_info</name>
+            <table>objects</table>
+            <group>props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>props_info_lay</parent>
+      </property>
+      <property>
+            <name>properties_table</name>
+            <table>objects</table>
+            <group>props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>props_table_lay</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>post_save_controllers</name>
+            <table>objects</table>
+            <group>props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <size>3</size>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <parent>props_post_save</parent>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>edit_groups_tb</name>
@@ -84,7 +147,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Tabide toolbar</caption>
+            <caption>Kaartide toolbar</caption>
       </property>
       <property>
             <name>edit_groups</name>
@@ -95,7 +158,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Muuda tabe</caption>
+            <caption>Muuda kaarte</caption>
       </property>
       <property>
             <name>add_grp_return</name>
@@ -139,7 +202,7 @@
             <type>select</type>
             <store>no</store>
             <parent>add_grp</parent>
-            <caption>Millise tabi alla</caption>
+            <caption>Millise kaardi alla</caption>
       </property>
       <property>
             <name>group_movement</name>
@@ -150,31 +213,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Tabide vaheline liikumine</caption>
-      </property>
-      <property>
-            <name>navtoolbar</name>
-            <table>objects</table>
-            <group>layout_props</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <editonly>1</editonly>
-            <caption>Toolbar</caption>
-      </property>
-      <property>
-            <name>layout</name>
-            <table>objects</table>
-            <group>layout_props</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>callback</type>
-            <callback>callback_gen_layout</callback>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <caption>Layout</caption>
+            <caption>Kaartide vaheline liikumine</caption>
       </property>
       <property>
             <name>layouts_toolbar</name>
@@ -235,84 +274,6 @@
             <store>no</store>
             <multiple>1</multiple>
             <caption>N&amp;amp;auml;itamise kontroller</caption>
-      </property>
-      <property>
-            <name>availtoolbar</name>
-            <table>objects</table>
-            <group>avail</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <editonly>1</editonly>
-            <caption>Av. Toolbar</caption>
-      </property>
-      <property>
-            <name>availprops</name>
-            <table>objects</table>
-            <group>avail</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <caption>K&amp;amp;otilde;ik omadused</caption>
-      </property>
-      <property>
-            <name>subaction</name>
-            <table>objects</table>
-            <group>
-                  <num_0>layout_props</num_0>
-                  <num_1>avail</num_1>
-            </group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <store>no</store>
-            <caption>Subaction (sys)</caption>
-      </property>
-      <property>
-            <name>post_save_controllers</name>
-            <table>objects</table>
-            <group>set_controllers</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <size>3</size>
-            <reltype>RELTYPE_CONTROLLER</reltype>
-            <caption>Salvestamisj&amp;amp;auml;rgne kontroller</caption>
-      </property>
-      <property>
-            <name>prop_submit_controllers</name>
-            <table>objects</table>
-            <group>set_controllers</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <subtitle>1</subtitle>
-            <caption>Omaduste kontrollerid</caption>
-      </property>
-      <property>
-            <name>gen_submit_controllers</name>
-            <table>objects</table>
-            <group>set_controllers</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>callback</type>
-            <callback>gen_controller_props</callback>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>gen_view_controllers</name>
-            <table>objects</table>
-            <group>get_controllers</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>callback</type>
-            <callback>gen_view_controller_props</callback>
-            <caption>Kontrollerid</caption>
       </property>
       <property>
             <name>default_table</name>
@@ -715,69 +676,60 @@
             <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
-            <groupdata>
-                  <caption>Tabid</caption>
-            </groupdata>
-            <groupdata_a>
-                  <caption>Tabid</caption>
-                  <parent>groupdata</parent>
-            </groupdata_a>
-            <groupdata_b>
-                  <caption>Liikumine</caption>
-                  <parent>groupdata</parent>
-            </groupdata_b>
-            <layout>
-                  <caption>Layout</caption>
-            </layout>
-            <layout_props>
-                  <caption>Omadused</caption>
-                  <parent>layout</parent>
-            </layout_props>
-            <layout_layouts>
-                  <caption>Layoudid</caption>
-                  <parent>layout</parent>
-            </layout_layouts>
-            <layout_tables>
-                  <caption>Tabelid</caption>
-                  <parent>layout</parent>
-            </layout_tables>
-            <avail>
-                  <caption>K&amp;amp;otilde;ik omadused</caption>
-            </avail>
-            <controllers>
-                  <caption>Kontrollerid</caption>
-            </controllers>
-            <set_controllers>
-                  <caption>Salvestamine</caption>
-                  <parent>controllers</parent>
-            </set_controllers>
-            <get_controllers>
-                  <caption>N&amp;amp;auml;itamine</caption>
-                  <parent>controllers</parent>
-            </get_controllers>
-            <settings>
-                  <caption>Seaded</caption>
-            </settings>
+            <general>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+            </general>
+            <general_gen>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>general</parent>
+            </general_gen>
             <defaults>
                   <caption>Omaduste v&amp;amp;auml;&amp;amp;auml;rtused</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </defaults>
             <system>
                   <caption>Vormi seaded</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </system>
             <cfgview_settings>
                   <caption>Klass aliasena</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </cfgview_settings>
             <orb_settings>
                   <caption>ORB seaded</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </orb_settings>
             <view_settings>
                   <caption>Liidese kuvamine</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </view_settings>
+            <properties>
+                  <caption>Seadistus</caption>
+            </properties>
+            <props>
+                  <caption>Omadused</caption>
+                  <parent>properties</parent>
+            </props>
+            <groupdata_a>
+                  <caption>Tabid</caption>
+                  <parent>properties</parent>
+            </groupdata_a>
+            <groupdata_b>
+                  <caption>Tabide liikumine</caption>
+                  <parent>properties</parent>
+            </groupdata_b>
+            <layout_layouts>
+                  <caption>Layoudid</caption>
+                  <parent>properties</parent>
+            </layout_layouts>
+            <layout_tables>
+                  <caption>Tabelid</caption>
+                  <parent>properties</parent>
+            </layout_tables>
+            <show_props>
+                  <caption>Gruppide &amp;amp;otilde;igused</caption>
+                  <parent>properties</parent>
+            </show_props>
             <translate>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </translate>
@@ -829,9 +781,6 @@
                   <caption>lang</caption>
                   <parent>translate</parent>
             </lang_12>
-            <show_props>
-                  <caption>Omadused grupiti</caption>
-            </show_props>
             <transl>
                   <caption>T&amp;amp;otilde;lgi seadete vormi</caption>
             </transl>
@@ -879,11 +828,50 @@
             </RU_CONTROLLER>
       </reltypes>
       <layout>
+            <props_lay>
+                  <type>hbox</type>
+                  <width>10%:90%</width>
+                  <group>props</group>
+                  <area_caption></area_caption>
+            </props_lay>
+            <props_tree_lay>
+                  <parent>props_lay</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Gruppide&amp;amp;nbsp;puu</area_caption>
+                  <group>props</group>
+            </props_tree_lay>
+            <props_right>
+                  <type>vbox</type>
+                  <parent>props_lay</parent>
+                  <group>props</group>
+                  <area_caption></area_caption>
+            </props_right>
+            <props_info_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Info</area_caption>
+                  <parent>props_right</parent>
+                  <group>props</group>
+            </props_info_lay>
+            <props_table_lay>
+                  <type>vbox</type>
+                  <parent>props_right</parent>
+                  <group>props</group>
+                  <area_caption></area_caption>
+            </props_table_lay>
+            <props_post_save>
+                  <parent>props_right</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Salvestamisj&amp;amp;auml;rgne&amp;amp;nbsp;kontroller</area_caption>
+                  <group>props</group>
+            </props_post_save>
             <add_grp>
                   <type>vbox</type>
                   <group>groupdata_a</group>
                   <area_caption></area_caption>
-                  <caption>Lisa uus tab</caption>
+                  <caption>Lisa uus kaart</caption>
             </add_grp>
             <mlist>
                   <type>hbox</type>

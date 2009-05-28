@@ -29,6 +29,7 @@
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_unload_handler.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_popup.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.tooltip.min.js"></script>
+	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.rightClick.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
