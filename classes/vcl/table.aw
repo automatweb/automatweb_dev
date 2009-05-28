@@ -913,6 +913,10 @@ class aw_table extends aw_template
 		If this is set, this table has pages
 	@param rgroupby optional type=string
 		If it is set, calculates how many elements are there in each rgroup and puts them in $this->rgroupcounts
+	@param no_table_tags optional type=bool
+		If this is set, the table will be drawn without <table> and </table> tags
+	@param no_chooser_script optional type=bool
+		If this is set, the table will be drawn without chooser javascript
 	@return string/html table
 	@example
 		classload("vcl/table");
@@ -949,7 +953,7 @@ class aw_table extends aw_template
 			"has_pages" => 1
 		));
 	**/
-	function draw($arr = array())
+	public function draw($arr = array())
 	{
 		// v&auml;ljastab tabeli
 		if (!is_array($this->rowdefs))
@@ -1101,7 +1105,7 @@ class aw_table extends aw_template
 		*/
 
 		// moodustame tabeli alguse
-		if (is_array($this->tableattribs))
+		if (empty($arr["no_table_tags"]) && is_array($this->tableattribs))
 		{
 			$tmp = $this->tableattribs;
 			$tmp["name"] = "table";
@@ -1527,7 +1531,7 @@ class aw_table extends aw_template
 		}
 
 		// tabel kinni
-		if (is_array($this->tableattribs))
+		if (empty($arr["no_table_tags"]) && is_array($this->tableattribs))
 		{
 			$tbl .= "</table>\n";
 		}
@@ -2016,7 +2020,7 @@ class aw_table extends aw_template
 			);
 			$this->filter_index[$filter_key] = $args["name"];
 
-			if (is_array ($args["filter_options"]))
+			if (isset ($args["filter_options"]) && is_array ($args["filter_options"]))
 			{
 				if (!empty ($args["filter_options"]["selected"]))
 				{
@@ -2753,7 +2757,7 @@ echo dbg::short_backtrace();
 			foreach($this->rowdefs as $k => $v)
 			{
 				$filter_style = "filter_normal";
-				$filter_key = $this->filters[$v['name']]['key'];
+				$filter_key = ifset($this->filters, $v['name'], 'key');
 
 				### add filter if defined for current column
 				if (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] == "select")
@@ -2768,7 +2772,7 @@ echo dbg::short_backtrace();
 					$args = array (
 						"name" => $filter_name,
 						"options" => $filter_values,
-						"value" => $this->selected_filters[$filter_key]["filter_selection"],
+						"value" => ifset($this->selected_filters, $filter_key, "filter_selection"),
 						"class" => "filterSelect",
 						"onchange" => "xchanged=1;window.location='{$url}{$sep}{$filter_name}={$filter_key},'+this.options[this.selectedIndex].value+','+this.options[this.selectedIndex].text"
 					);

@@ -289,7 +289,7 @@ $sf->vars(array(
 	"charset" => $charset,
 	"title_action" => $ta,
 	"html_title" => $html_title,
-	"MINIFY_JS_AND_CSS" => minify_js_and_css::parse_admin_header($sf->parse("MINIFY_JS_AND_CSS")),
+	"MINIFY_JS_AND_CSS" => aw_ini_get("site_id") != 477 ? (minify_js_and_css::parse_admin_header($sf->parse("MINIFY_JS_AND_CSS"))) : $sf->parse("MINIFY_JS_AND_CSS"),
 	"POPUP_MENUS" => $cache->file_get("aw_toolbars_".aw_global_get("uid")),
 ));
 $cache->file_set("aw_toolbars_".aw_global_get("uid"), "");
@@ -393,7 +393,7 @@ if (isset($_SESSION["user_history_count"]) and $_SESSION["user_history_count"] >
 	if (!empty($bits["group"]))
 	{
 		$gl = $o->get_group_list();
-		$st .= " - ".$gl[$bits["group"]]["caption"];
+		$st .= " - ".ifset($gl, $bits["group"], "caption");
 	}
 
 	if ($st != "")

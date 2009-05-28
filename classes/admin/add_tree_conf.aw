@@ -306,18 +306,18 @@ class add_tree_conf extends class_base
 			{
 				// also, if the class is in some groups and for all those groups access has been turned off
 				// do not show the alias
-				$grp = explode(",",$clss[$clid]["parents"]);
+				$grp = explode(",", ifset($clss, $clid, "parents"));
 				$show = false;
 				foreach($grp as $g)
 				{
 					// must check group parents as well :(
 					// but CL_MENU has no parent (g == 0) and we have to deal with it -- duke
-					$has_grp = $v["fld"][$g] || $g == 0;
+					$has_grp = !empty($v["fld"][$g]) || $g == 0;
 					if ($has_grp && $g != 0)
 					{
 						while ($g)
 						{
-							if (!$v["fld"][$g])
+							if (empty($v["fld"][$g]))
 							{
 								$has_grp = false;
 								break;
@@ -431,7 +431,7 @@ class add_tree_conf extends class_base
 			foreach($grp as $g)
 			{
 				// must check group parents as well :(
-				$has_grp = $v["fld"][$g];
+				$has_grp = !empty($v["fld"][$g]);
 				if ($has_grp)
 				{
 					while ($g)
@@ -501,7 +501,7 @@ class add_tree_conf extends class_base
 			$tmp[$key] = array();
 			foreach($val as $class => $vadeva)
 			{
-				if(!($us[$class] == 1))
+				if(!isset($us[$class]) || $us[$class] != 1)
 				{
 					continue;
 				}
@@ -509,17 +509,17 @@ class add_tree_conf extends class_base
 				{
 					// also, if the class is in some groups and for all those groups access has been turned off
 					// do not show the alias
-					$grp = explode(",",$clss[$class]["parents"]);
+					$grp = explode(",", ifset($clss, $class, "parents"));
 					$show = false;
 					foreach($grp as $g)
 					{
 						// must check group parents as well :(
-						$has_grp = $v["fld"][$g];
+						$has_grp = !empty($v["fld"][$g]);
 						if ($has_grp)
 						{
 							while ($g)
 							{
-								if (!$v["fld"][$g])
+								if (empty($v["fld"][$g]))
 								{
 									$has_grp = false;
 									break;

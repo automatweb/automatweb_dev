@@ -509,13 +509,13 @@ class _int_object
 			}
 		}
 
-		$skip = is_oid($param["start_at"]) ? true : false;
+		$skip = isset($param["start_at"]) && is_oid($param["start_at"]) ? true : false;
 		$ret = array();
 		for(; $i < $cnt; $i++)
 		{
-			if (is_object($pt[$i]))
+			if (isset($pt[$i]) && is_object($pt[$i]))
 			{
-				if (is_oid($param["start_at"]) && $pt[$i]->id() == $param["start_at"])
+				if (isset($param["start_at"]) && is_oid($param["start_at"]) && $pt[$i]->id() == $param["start_at"])
 				{
 					$skip = false;
 				}
@@ -2245,7 +2245,7 @@ class _int_object
 		$parent = $this->id();
 		$cnt = 0;
 
-		if ($param["full_path"])
+		if (!empty($param["full_path"]))
 		{
 			$rootmenu = 1;
 			$add = false;
@@ -2275,7 +2275,7 @@ class _int_object
 				$t = new object($parent);
 				aw_global_set("__from_raise_error", $__from_raise_error);
 
-				if (is_oid($param["to"]) && $t->id() == $param["to"])
+				if (isset($param["to"]) && is_oid($param["to"]) && $t->id() == $param["to"])
 				{
 					$add = false;
 					break;
@@ -2315,7 +2315,7 @@ class _int_object
 		}
 
 		$ret = array_reverse($ret);
-		if ($param["no_self"])
+		if (!empty($param["no_self"]))
 		{
 			array_pop($ret);
 		}

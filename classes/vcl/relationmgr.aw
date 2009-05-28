@@ -269,7 +269,8 @@ class relationmgr extends aw_template
 			{
 				$this->vars(array(
 					"def_parent" => $def_val,
-					"period" => $period,
+					// This is never set!
+//					"period" => $period,
 					"id" => $arr["obj_inst"]->id(),
 					"return_url" => urlencode($return_url),
 					"def_fld_clid" => $def_clid
@@ -1048,7 +1049,7 @@ class relationmgr extends aw_template
 		$alinks = $arr["obj_inst"]->meta("aliaslinks");
 
 		$classes = aw_ini_get("classes");
-		if($_SESSION["rel_reverse"][$arr["request"]["id"]])
+		if(!empty($_SESSION["rel_reverse"][$arr["request"]["id"]]))
 		{
 			$conn = $arr["obj_inst"]->connections_to();
 			$cn = "from";
@@ -1170,7 +1171,8 @@ class relationmgr extends aw_template
 			{
 				$this->vars(array(
 					"def_parent" => $def_val,
-					"period" => $period,
+					// This is never set!
+//					"period" => $period,
 					"id" => $arr["obj_inst"]->id(),
 					"return_url" => urlencode($return_url),
 					"def_fld_clid" => $def_clid
@@ -1194,7 +1196,8 @@ class relationmgr extends aw_template
 			"class_ids" => $this->clid_list,
 			"id" => $arr["obj_inst"]->id(),
 			"return_url" => urlencode(get_ru()),
-			"period" => $period,
+			// This is never set!
+//			"period" => $period,
 			"search_url" => aw_ini_get("baseurl").aw_url_change_var(array("srch" => 1)),
 		));
 		/*
