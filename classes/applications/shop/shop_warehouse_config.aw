@@ -101,6 +101,9 @@
 			@property short_code_ctrl type=relpicker reltype=RELTYPE_CODE_CONTROLLER parent=right
 			@caption Toote l&uuml;hikoodi kontroller
 
+			@property prod_tree_clids type=select multiple=1 size=4 parent=right
+			@caption Klassid, mida toodete puus kuvatakse
+
 @default group=units
 
 	@property units_table type=table store=no no_caption=1
@@ -165,6 +168,10 @@ class shop_warehouse_config extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "prod_tree_clids":
+				$data["options"] = get_class_picker(array("field" => "name"));
+				break;
+
 			case "prodg_tree":
 				$whi = get_instance(CL_SHOP_WAREHOUSE);
 				$whi->prod_type_fld = $arr["obj_inst"]->prop("prod_type_fld");
@@ -281,7 +288,7 @@ class shop_warehouse_config extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = get_ru();
-		$arr["pgtf"] = $_GET["pgtf"];
+		$arr["pgtf"] = automatweb::$request->arg("pgtf");
 	}
 
 	function callback_mod_retval($arr)

@@ -659,7 +659,7 @@ class shop_order_center extends class_base
 		$t->set_sortable(false);
 	}
 
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
@@ -694,7 +694,7 @@ class shop_order_center extends class_base
 		{
 			$ol = new object_list(array(
 				"parent" => $parent->id(),
-				"class_id" => CL_MENU,
+				"class_id" => $conf->prop("prod_tree_clids"),
 				"sort_by" => "objects.jrk,objects.created",
 				"status" => STAT_ACTIVE
 			));
@@ -713,7 +713,7 @@ class shop_order_center extends class_base
 		{
 			$ol = new object_list(array(
 				"parent" => $conf->prop("pkt_fld"),
-				"class_id" => CL_MENU,
+				"class_id" => $conf->prop("prod_tree_clids"),
 				"sort_by" => "objects.jrk,objects.created",
 				"status" => STAT_ACTIVE
 			));
@@ -821,12 +821,12 @@ class shop_order_center extends class_base
 				"only_active" => $soc->prop("only_active_items")
 			));
 		}
-		if ($this->can("view", $arr["show_prod"]))
+		if (!empty($arr["show_prod"]) && $this->can("view", $arr["show_prod"]))
 		{
 			$pl = array(obj($arr["show_prod"]));
 		}
 
-		if (is_array($arr["f"]))
+		if (isset($arr["f"]) && is_array($arr["f"]))
 		{
 			$this->do_filter_packet_list($pl, $arr["f"], $soc);
 		}
@@ -870,7 +870,7 @@ class shop_order_center extends class_base
 		$_p = obj($section);
 		foreach(array_reverse($_p->path()) as $p)
 		{
-			if ($il[$p->id()])
+			if (!empty($il[$p->id()]))
 			{
 				return obj($il[$p->id()]);
 			}
@@ -888,7 +888,7 @@ class shop_order_center extends class_base
 		$_p = obj($section);
 		foreach(array_reverse($_p->path()) as $p)
 		{
-			if ($il[$p->id()])
+			if (!empty($il[$p->id()]))
 			{
 				return obj($il[$p->id()]);
 			}
@@ -918,7 +918,7 @@ class shop_order_center extends class_base
 		));
 		$tl_inst = $t_layout->instance();
 		$tl_inst->start_table($t_layout, $soc);
-		if($this->web_discount)
+		if(!empty($this->web_discount))
 		{
 			$tl_inst->web_discount = $this->web_discount;
 		}
@@ -934,7 +934,7 @@ class shop_order_center extends class_base
 			$this->_init_draw_prod();
 			foreach($arr["pl_on_page"] as $o)
 			{
-				$this->_draw_one_prod($o, $tl_inst, $layout, $soc, $l_inst, $soce, $arr["prod_link_cb"]);
+				$this->_draw_one_prod($o, $tl_inst, $layout, $soc, $l_inst, $soce, ifset($arr, "prod_link_cb"));
 			}
 			$tl_inst->cnt = $arr["total_count"];
 		}
@@ -945,7 +945,7 @@ class shop_order_center extends class_base
 				$tl_inst->cnt++;
 				if ($tl_inst->is_on_cur_page())
 				{
-					$this->_draw_one_prod($o, $tl_inst, $layout, $soc, $l_inst, $soce, $arr["prod_link_cb"]);
+					$this->_draw_one_prod($o, $tl_inst, $layout, $soc, $l_inst, $soce, ifset($arr, "prod_link_cb"));
 					$tl_inst->cnt--;
 				}
 				$this->last_menu =  $o->parent();
@@ -966,7 +966,7 @@ class shop_order_center extends class_base
 		$i = $o->instance();
 		$oid = $o->id();
 		$tl_inst->add_product($i->do_draw_product(array(
-			"bgcolor" => $this->xi % 2 ? "cartbgcolor1" : "cartbgcolor2",
+			"bgcolor" => isset($this->xi) && $this->xi % 2 ? "cartbgcolor1" : "cartbgcolor2",
 			"prod" => $o,
 			"layout" => $layout,
 			"oc_obj" => $soc,
@@ -974,7 +974,7 @@ class shop_order_center extends class_base
 			"quantity" => $soce[$oid]["ordered_num_enter"],
 			"is_err" => $soce[$oid]["is_err"],
 			"prod_link_cb" => $prod_link_cb,
-			"last_product_menu" => $this->last_menu,
+			"last_product_menu" => isset($this->last_menu) ? $this->last_menu : NULL,
 			"soce" => $soce,
 		)));
 		$this->xi++;

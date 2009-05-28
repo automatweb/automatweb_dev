@@ -65,10 +65,10 @@ class core extends acl_base
 	}
 
 	////
-	// !Setter for object
+	// !Getter for object
 	function get_opt($key)
 	{
-		return $this->$key;
+		return isset($this->$key) ? $this->$key : NULL;
 	}
 
 	/** This function writes an entry to the aw syslog table. This is automatically called for most actions, via classbase, but if you perform any special actions in your class, that should be logged, then use this function to log the action.

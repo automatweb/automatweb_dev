@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.23 2008/06/11 14:14:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.24 2009/05/28 09:53:16 instrumental Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -80,6 +80,7 @@ class shop_product_table_layout extends class_base
 		$this->read_template($tpl);
 		lc_site_load("shop_order_center", &$this);
 		$soce = new aw_array(aw_global_get("soc_err"));
+		$err = "";
 		foreach($soce->get() as $prid => $errmsg)
 		{
 			if (!$errmsg["is_err"])
@@ -200,7 +201,7 @@ class shop_product_table_layout extends class_base
 		{
 			$sect = aw_global_get("ct_lang_lc")."/".$sect;
 		}
-		if($this->web_discount)
+		if(!empty($this->web_discount))
 		{
 			$wd = $this->web_discount;
 		}

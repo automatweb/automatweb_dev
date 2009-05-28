@@ -82,7 +82,7 @@ class shop_order_cart extends class_base
 		}
 		else
 		{
-			return $_SESSION["cart"];
+			return ifset($_SESSION, "cart");
 		}
 	}
 
@@ -98,7 +98,7 @@ class shop_order_cart extends class_base
 		$_SESSION["cart"] = $cart;
 	}
 
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
@@ -1192,7 +1192,7 @@ class shop_order_cart extends class_base
 	{
 		$total = 0;
 
-		$awa = new aw_array($_SESSION["cart"]["items"]);
+		$awa = new aw_array(ifset($_SESSION, "cart", "items"));
 		foreach($awa->get() as $iid => $quantx)
 		{
 			if(!is_oid($iid) || !$this->can("view", $iid))
@@ -1266,7 +1266,7 @@ class shop_order_cart extends class_base
 	function get_item_in_cart($arr)
 	{
 		$it = !$arr["it"] ? 0 : $arr["it"];
-		return safe_array($_SESSION["cart"]["items"][$arr["iid"]][$it]);
+		return safe_array(ifset($_SESSION, "cart", "items", $arr["iid"], $it));
 	}
 
 	function clear_cart($oc)

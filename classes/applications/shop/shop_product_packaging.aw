@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.39 2009/05/21 16:00:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.40 2009/05/28 09:53:16 instrumental Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -354,7 +354,7 @@ class shop_product_packaging extends class_base
 		return $retval;
 	}	
 
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
@@ -382,12 +382,14 @@ class shop_product_packaging extends class_base
 	function do_draw_product($arr)
 	{
 		extract($arr);
+		$it = isset($arr["it"]) ? $arr["it"] : NULL;
 		$pr_i = get_instance(CL_SHOP_PRODUCT);
 
 		$pi = $prod;
-		if(!$prod = reset($pi->connections_to(array(
+		$prods = $pi->connections_to(array(
 			"from.class_id" => CL_SHOP_PRODUCT,
-		))))
+		));
+		if(!$prod = reset($prods))
 		{
 			//return NULL;
 			$prod = obj();
@@ -412,7 +414,7 @@ class shop_product_packaging extends class_base
 		$rp_all_cur = "";
 		foreach(safe_array($pi->meta("cur_prices")) as $cur_id => $cur_price)
 		{
-			if (!cur_price != "")
+			if ($cur_price != "")
 			{
 				$cur_obj = obj($cur_id);
 				$rp_all_cur .= " ".number_format($cur_price, 2)." ".$cur_obj->name();
@@ -437,7 +439,7 @@ class shop_product_packaging extends class_base
 			"obj_price" => $this->get_price($pi),
 			"obj_price_all_cur" => $rp_all_cur,
 			"obj_tot_price" => number_format(((int)($arr["quantity"]) * $this->get_calc_price($pi)), 2),
-			"read_price_total" => number_format(((int)($arr["quantity"]) * str_replace(",", "", $inf["data"]["read_price"])), 2),
+			"read_price_total" => number_format(((int)($arr["quantity"]) * str_replace(",", "", ifset($inf, "data", "read_price"))), 2),
 			"id" => $prod->id(),
 			"trow_id" => "trow".$prod->id(),
 			"err_class" => ($arr["is_err"] ? "class='selprod'" : ""),
@@ -530,7 +532,7 @@ class shop_product_packaging extends class_base
 
 		// order data
 		$soc = get_instance(CL_SHOP_ORDER_CART);
-		$awa = $soc->get_item_in_cart(array("iid" => $pi->id(), "it" => $arr["it"]));
+		$awa = $soc->get_item_in_cart(array("iid" => $pi->id(), "it" => $it));
 		//$awa = new aw_array($inf["data"]);
 		foreach($awa as $datan => $datav)
 		{
@@ -546,7 +548,7 @@ class shop_product_packaging extends class_base
 		}
 		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
 
-		if ($awa["url"] != "")
+		if (!empty($awa["url"]))
 		{
 			$l_inst->vars_safe(Array(
 				"URL_IN_DATA" => $l_inst->parse("URL_IN_DATA")

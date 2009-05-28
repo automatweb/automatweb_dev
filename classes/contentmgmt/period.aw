@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.6 2009/01/13 13:31:07 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.7 2009/05/28 09:53:12 instrumental Exp $
 // period.aw - periods
 /*
 
@@ -600,7 +600,7 @@ class period extends class_base implements request_startup
 
 	}
 
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}

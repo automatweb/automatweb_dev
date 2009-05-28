@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.16 2009/04/22 10:05:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.17 2009/05/28 09:53:09 instrumental Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 @classinfo  maintainer=hannes
@@ -283,7 +283,7 @@ class minify_js_and_css extends class_base
 		return $s_out;
 	}
 	
-	function parse_site_header($that)
+	public static function parse_site_header($that)
 	{
 		if ($that->is_template("MINIFY_JS_AND_CSS") )
 		{

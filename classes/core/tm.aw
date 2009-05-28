@@ -7,7 +7,7 @@ class tm
 
 	public static function s($class, $func, $desc = "")
 	{
-		if (!is_array(self::$tms[$class][$func][$desc]))
+		if (!isset(self::$tms[$class][$func][$desc]) || !is_array(self::$tms[$class][$func][$desc]))
 		{
 			self::$tms[$class][$func][$desc] = array(
 				"tm" => 0,

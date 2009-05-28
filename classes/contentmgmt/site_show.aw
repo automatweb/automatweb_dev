@@ -2798,6 +2798,7 @@ class site_show extends class_base
 	{
 		tm::s(__CLASS__, __FUNCTION__);
 		$this->skip = false;
+		$link = "";
 		$link_str = $o->trans_get_val("link");
 		if ($this->can("view", $o->meta("linked_obj")) && $o->meta("linked_obj") != $o->id())
 		{
@@ -2840,7 +2841,7 @@ class site_show extends class_base
 				{
 					$this->skip = true;
 				}
-				if ($_act == "change" && !$this->can("edit", $meth["values"]["id"]))
+				if ($_act == "change" && !$this->can("edit", ifset($meth, "values", "id")))
 				{
 					$this->skip = true;
 				}
@@ -2958,10 +2959,6 @@ class site_show extends class_base
 //				if (((!$this->brother_level_from && !$o->is_brother()) || aw_ini_get("menuedit.show_real_location"))&& ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
 if (!$this->brother_level_from && !$o->is_brother() && ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
 				{
-if ($o->id() == 14385 && aw_global_get("uid") == "kix")
-{
-die("r");
-}
 					if (aw_ini_get("menuedit.long_menu_aliases"))
 					{
 						if (aw_ini_get("ini_rootmenu"))
@@ -2985,7 +2982,7 @@ die("r");
 						}
 
 						$link .= join("/",$alp);
-						if (sizeof($tmp) > 0)
+						if (isset($tmp) && sizeof($tmp) > 0)
 						{
 							$link .= "/";
 						};

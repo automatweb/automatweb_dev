@@ -400,7 +400,7 @@ class menuedit extends aw_template implements request_startup
 						$path_for_obj = substr($cand_path,0,-1);
 						if ($path_for_obj == $section)
 						{
-							if ($obj)
+							if (!empty($obj))
 							{
 								$tmp = obj($cand_id);
 								if ($tmp->ord() < $obj->ord())

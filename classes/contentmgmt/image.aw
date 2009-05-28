@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.47 2009/04/27 10:03:25 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.48 2009/05/28 09:53:12 instrumental Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1036,7 +1036,7 @@ class image extends class_base
 		@examples
 			none
 	**/
-	function check_url($url)
+	public static function check_url($url)
 	{
 		if ($url == "")
 		{
@@ -1110,7 +1110,7 @@ class image extends class_base
 		@examples
 			none
 	**/
-	function make_img_tag($url, $alt = "", $size = array(), $arr = array())
+	public static function make_img_tag($url, $alt = "", $size = array(), $arr = array())
 	{
 		$tag = isset($size["height"]) ?" height=\"".$size["height"]."\"":"";
 		$tag .= isset($size["width"]) ?" width=\"".$size["width"]."\"":"";

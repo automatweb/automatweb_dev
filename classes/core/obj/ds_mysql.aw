@@ -2593,7 +2593,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if (!$join["to_class"] && $this->join_data[$pos-1]["via"] === "rel")
 				{
 					$prev = $this->join_data[$pos-1];
-					$prev_prev = $this->join_data[$pos-2];
+					$prev_prev = ifset($this->join_data, $pos-2);
 
 					$this->_do_add_class_id($join["from_class"]);
 					// join from rel to prop
@@ -2615,7 +2615,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					else
 					{
-						$tbl = $tbl_r = reset(array_keys($new_t));
+						$new_t_keys = array_keys($new_t);
+						$tbl = $tbl_r = reset($new_t_keys);
 						$field = $new_t[$tbl]["index"];
 					}
 
@@ -2936,7 +2937,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					"via" => "prop",
 					"prop" => $pp,
 					"from_class" => $cur_clid,
-					"to_class" => $new_clid,
+					"to_class" => isset($new_clid) ? $new_clid : NULL,
 					"table" => $table,
 					"field" => $field
 				);
