@@ -1352,7 +1352,7 @@ class htmlclient extends aw_template
 			{
 				if (!empty($pval["parent"]))
 				{
-					$gx = $this->lp_chain[$pval["parent"]];
+					$gx = ifset($this->lp_chain, $pval["parent"]);
 					while (isset($this->lp_chain[$gx]) and $this->lp_chain[$gx] != "_main")
 					{
 						$gx = $this->lp_chain[$gx];
@@ -1510,7 +1510,11 @@ class htmlclient extends aw_template
 			if (!empty($ldata["area_caption"]))
 			{
 				$u = get_instance(CL_USER);
-				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
+				$state = $u->get_layer_state(array(
+					"u_class" => automatweb::$request->arg("class"),
+					"u_group" => automatweb::$request->arg("group"),
+					"u_layout" => $layout_name
+				));
 
 				if (!empty($ldata["closeable"]))
 				{
@@ -1520,13 +1524,13 @@ class htmlclient extends aw_template
 						"open_text" => t("Lahti"),
 						"start_text" => $state ? t("Kinni") : t("Lahti"),
 						"open_layer_url" => $this->mk_my_orb("open_layer", array(
-							"u_class" => $_GET["class"],
-							"u_group" => $_GET["group"],
+							"u_class" => automatweb::$request->arg("class"),
+							"u_group" => automatweb::$request->arg("group"),
 							"u_layout" => $layout_name
 						), "user"),
 						"close_layer_url" => $this->mk_my_orb("close_layer", array(
-							"u_class" => $_GET["class"],
-							"u_group" => $_GET["group"],
+							"u_class" => automatweb::$request->arg("class"),
+							"u_group" => automatweb::$request->arg("group"),
 							"u_layout" => $layout_name
 						), "user"),
 						"closer_state" => $state ? "up" : "down"
