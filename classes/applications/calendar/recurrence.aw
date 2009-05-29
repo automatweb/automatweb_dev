@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.14 2009/04/09 10:38:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.15 2009/05/29 06:41:01 dragut Exp $
 // recurrence.aw - Kordus
 /*
 
@@ -559,7 +559,7 @@ class recurrence extends class_base
 	**/
 	function get_next_event($arr)
 	{
-		$time = ($arr["time"]) ? $arr["time"] : time();
+		$time = (!empty($arr["time"])) ? $arr["time"] : time();
 		$o = new object($arr["id"]);
 		$q = "SELECT recur_start FROM recurrence WHERE recur_id = ". $o->id() . " AND recur_start >= " . $time . " ORDER BY recur_start LIMIT 1";
 		$this->db_query($q);
