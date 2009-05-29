@@ -2838,10 +2838,18 @@ class shop_warehouse extends class_base
 		{
 			return PROP_IGNORE;
 		}
+		
+		$clids = CL_MENU;
 		if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 		{
 			$pt = $this->prod_fld;
 			$root_name = obj($pt)->name();
+
+			$_clids = $this->get_warehouse_configs($arr, "prod_tree_clids");
+			if(is_array($_clids) && count($_clids) > 0)
+			{
+				$clids = $_clids;
+			}
 		}
 		else
 		{
@@ -2850,7 +2858,7 @@ class shop_warehouse extends class_base
 		}
 		$ol = new object_list(array(
 			"parent" => $pt,
-			"class_id" => CL_MENU,
+			"class_id" => $clids,
 			"site_id" => array(),
 			"lang_id" => array(),
 			"sort_by" => "objects.jrk"
@@ -2867,6 +2875,7 @@ class shop_warehouse extends class_base
 		$params["id"] = $arr["obj_inst"]->id();
 		$params["ptf"] = automatweb::$request->arg("ptf");
 		$params["group"] = $arr["request"]["group"];
+		$params["clids"] = $clids;
 		$params["parent"] = " ";
 		$gbf = $this->mk_my_orb("get_prod_tree_level",$params, CL_SHOP_WAREHOUSE);
 		$tree->start_tree(array(
@@ -2882,7 +2891,7 @@ class shop_warehouse extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$url = aw_url_change_var(array("ptf" => $o->id(), "pgtf" => null, $g."_s_art_cat" => null));
-			$this->insert_prod_tree_item(&$tree, $o, $url, $arr["request"]);
+			$this->insert_prod_tree_item(&$tree, $o, $url, $arr["request"], $clids);
 		}
 		$tree->set_selected_item(trim(automatweb::$request->arg("ptf")));
 	}
@@ -2892,6 +2901,12 @@ class shop_warehouse extends class_base
 	**/
 	function get_prod_tree_level($arr)
 	{
+		$clids = CL_MENU;
+		if(isset($arr["clids"]) && (is_class_id($arr["clids"]) || is_array($arr["clids"]) && count($arr["clids"]) > 0))
+		{
+			$clids = $arr["clids"];
+		}
+
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree(array (
 			"type" => TREE_DHTML,
@@ -2901,7 +2916,7 @@ class shop_warehouse extends class_base
 		$arr["parent"] = trim($arr["parent"]);
 		$ol = new object_list(array(
 			"parent" => $arr["parent"],
-			"class_id" => CL_MENU,
+			"class_id" => $clids,
 			"site_id" => array(),
 			"lang_id" => array(),
 			"sort_by" => "objects.jrk"
@@ -2912,13 +2927,13 @@ class shop_warehouse extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$url = aw_url_change_var(array("ptf" => $o->id(), "pgtf" => null, $g."_s_art_cat" => null), false, $arr["set_retu"]);
-			$this->insert_prod_tree_item(&$tree, $o, $url, $arr);
+			$this->insert_prod_tree_item(&$tree, $o, $url, $arr, $clids);
 		}
 		$tree->set_selected_item(trim(automatweb::$request->arg("ptf")));
 		die($tree->finalize_tree());
 	}
 
-	private function insert_prod_tree_item($tree, $o, $url, $filt)
+	private function insert_prod_tree_item($tree, $o, $url, $filt, $clids = CL_MENU)
 	{
 		$g = $this->get_search_group(array(
 			"request" => $filt,
@@ -2955,7 +2970,7 @@ class shop_warehouse extends class_base
 		));
 		$check_ol = new object_list(array(
 			"parent" => $o->id(),
-			"class_id" => CL_MENU,
+			"class_id" => $clids,
 		));
 		if($check_ol->count())
 		{
@@ -3270,7 +3285,7 @@ class shop_warehouse extends class_base
 						}
 					}
 				}
-				if($arr["request"][$group."_s_below_min"] && $o->class_id() == CL_SHOP_PRODUCT)
+				if(automatweb::$request->arg($group."_s_below_min") && $o->class_id() == CL_SHOP_PRODUCT)
 				{
 					$chk_min = 1;
 					$a = $res["amounts"][$o->id()][$wh][$res["units"][$prodid][0]];
@@ -3280,7 +3295,7 @@ class shop_warehouse extends class_base
 						$below_min = 1;
 					}
 				}
-				$prodtotal += $res["amounts"][$o->id()][$wh][$res["units"][$prodid][0]];
+				$prodtotal += isset($res["amounts"][$o->id()][$wh][$res["units"][$prodid][0]]) ? $res["amounts"][$o->id()][$wh][$res["units"][$prodid][0]] : 0;
 			}
 			$a = $prodtotal;
 			if(($q = automatweb::$request->arg($group."_s_count")) && $o->class_id() == CL_SHOP_PRODUCT)
@@ -3316,15 +3331,28 @@ class shop_warehouse extends class_base
 		{
 			return new object_list();
 		}
+		$replacements_codes = array();
+
 		foreach ($prods->arr() as $prod_id => $prod)
 		{
-			$replacements_codes[$prod_id] = $prod->prop('user1');
+			if($replacement_code = $prod->prop('user1'))
+			{
+				$replacements_codes[$prod_id] = $replacement_code;
+			}
 		}
 
-		$ol = new object_list(array(
-			'class_id' => CL_SHOP_PRODUCT,
-			'user1' => $replacements_codes
-		));
+		if(count($replacements_codes) > 0)
+		{
+			$ol = new object_list(array(
+				'class_id' => CL_SHOP_PRODUCT,
+				'user1' => $replacements_codes
+			));
+		}
+		else
+		{
+			$ol = new object_list();
+		}
+
 		return $ol;
 	}
 
@@ -3456,7 +3484,7 @@ class shop_warehouse extends class_base
 				"clid" => $o->class_id(),
 				"type" => ($o->class_id() == CL_SHOP_PRODUCT)?"":t("&Uuml;ksiktooted"),
 			);
-			if($this->def_price_list || $arr["request"][$group."_s_pricelist"])
+			if($this->def_price_list || automatweb::$request->arg($group."_s_pricelist"))
 			{
 				$data["sales_price"] = $pi->calc_price($o, $this->get_warehouse_configs($arr, "def_currency"), $arr["request"][$group."_s_pricelist"]);
 			}
