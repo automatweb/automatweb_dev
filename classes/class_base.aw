@@ -63,6 +63,7 @@ define('RELTYPE_ORIGINAL',103);
 
 class class_base extends aw_template
 {
+	var $id;
 	var $clid;
 	var $tmp_cfgform;
 	var $classinfo;
@@ -83,7 +84,9 @@ class class_base extends aw_template
 	var $translation_lang_id;
 	var $transl_grp_name;
 	var $is_translated;
+	var $request = array();
 
+	protected $_cfg_props;
 	protected $classconfig;
 
 	function class_base($args = array())
@@ -129,65 +132,61 @@ class class_base extends aw_template
 		$this->parent = $arr["parent"];
 		$this->id = "";
 		$this->new = 1;
-		$this->obj_inst = new object();
-
-		$clss = aw_ini_get("classes");
-
-		if ("menu" !== $arr["class"] && empty($clss[$this->clid]["site_class"]) && $this->obj_inst->class_id() != CL_RELATION)
-		{
-			if (true || class_index::is_extension_of($arr["class"], "class_base"))
-			{
-				$clid = aw_ini_get("class_lut." . $arr["class"]);
-				$this->obj_inst->set_class_id($clid);
-			}
-			else
-			{
-				throw new aw_exception("Invalid class for new object.");
-			}
-		}
-
 		$this->reltype = isset($arr["reltype"]) ? $arr["reltype"] : "";
-	}
 
-	function load_storage_object($arr)
-	{
-		if (isset($arr["id"]))
+		if (aw_ini_isset("class_lut.{$arr["class"]}") and "menu" !== $arr["class"] and (!aw_ini_isset("classes." . $this->clid . ".site_class") or !aw_ini_get("classes." . $this->clid . ".site_class")))
 		{
-			$this->id = $arr["id"];
-			$this->obj_inst = new object($this->id);
-
-			try
-			{
-				$clid = aw_ini_get("class_lut." . $arr["class"]);
-			}
-			catch (Exception $e)
-			{
-				$clid = null;
-			}
-
-			if($this->obj_inst->class_id() != $clid && is_admin() && $this->obj_inst->class_id() != CL_RELATION && $this->obj_inst->class_id() != 40)
-			{
-				throw new aw_exception("Given class doesn't match the object's class_id");
-			}
-
+			$clid = aw_ini_get("class_lut.{$arr["class"]}");
+			$ca = isset($arr["constructor_args"]) ? $arr["constructor_args"] : array();
+			$this->obj_inst = obj(null, $ca, $clid);
 		}
 		else
 		{
 			$this->obj_inst = new object();
-			try
+		}
+	}
+
+	function load_storage_object($arr)
+	{
+		if (empty($arr["id"]))
+		{
+			return $this->init_storage_object($arr);
+		}
+
+		$id = $arr["id"];
+
+		// try to load object with $id
+		if (isset($arr["class"]))
+		{
+			if (aw_ini_isset("class_lut.{$arr["class"]}"))
 			{
-				$clid = aw_ini_get("class_lut." . $arr["class"]);
-				$this->obj_inst->set_class_id($clid);
+				$clid = aw_ini_get("class_lut.{$arr["class"]}");
+				$ca = isset($arr["constructor_args"]) ? $arr["constructor_args"] : array();
+
+				try
+				{
+					$this->obj_inst = obj($id, $ca, $clid);
+				}
+				catch (awex_obj_class $e)
+				{ // id doesn't 'match' class. load a new object of that class to show new object editing form
+					return $this->init_storage_object($arr);
+				}
 			}
-			catch (Exception $e)
+			else
 			{
+				throw new aw_exception("Invalid class {$arr["class"]}");
 			}
+		}
+		else
+		{
+			// no class argument given, just load object with given id
+			$this->obj_inst = new object($id);
 		}
 
 		$this->parent = "";
-
 		$this->use_mode = "edit";
 		$this->subgroup = isset($args["subgroup"]) ? $args["subgroup"] : "";
+		$this->id = $id;
 	}
 
 
@@ -248,7 +247,6 @@ class class_base extends aw_template
 
 		$awt->start("cb-change");
 		$this->init_class_base();
-
 		$cb_values = aw_global_get("cb_values");
 		$has_errors = false;
 
@@ -273,6 +271,7 @@ class class_base extends aw_template
 		{
 			$this->no_buttons = true;
 		}
+
 		if ($args["action"] === "new")
 		{
 			$this->init_storage_object($args);
@@ -366,7 +365,7 @@ class class_base extends aw_template
 		{
 			$f = obj($this->cfgform_id);
 			$grps = safe_array($f->meta("cfg_groups"));
-			if($grps[$this->use_group]["grpview"] == 1)
+			if(!empty($grps[$this->use_group]["grpview"]))
 			{
 				$defview = 1;
 			}
@@ -487,10 +486,10 @@ class class_base extends aw_template
 			$new_uri = aw_url_change_var(array("cb_part" => 1));
 			$cli = get_instance("cfg/" . $this->output_client, array("layout_mode" => "fixed_toolbar"));
 
-			if ($args["no_rte"] == 1)
+			if (!empty($args["no_rte"]))
 			{
 				$new_uri .= "&no_rte=1";
-			};
+			}
 			$cli->rte_type = $this->classinfo(array("name" => "allow_rte"));
 			$properties["iframe_container"] = array(
 				"type" => "iframe",
@@ -539,7 +538,7 @@ class class_base extends aw_template
 			$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 			if (!empty($lm))
 			{
-				if ($this->use_mode == "new")
+				if ($this->use_mode === "new")
 				{
 					$cli->set_form_target("_parent");
 				};
@@ -557,7 +556,7 @@ class class_base extends aw_template
 
 			$use_layout = isset($this->classinfo["layout"]) ? $this->classinfo["layout"] : "";
 			// XXX: cfgform seemingly overwrites classinfo
-			if ($use_layout == "boxed")
+			if ($use_layout === "boxed")
 			{
 				$cli->set_form_layout($use_layout);
 				if (is_callable(array($this->inst,"get_content_elements")))
@@ -937,7 +936,7 @@ class class_base extends aw_template
 		}
 
 
-		if (isset($args["form"]) && ($args["form"] == "new" || $args["form"] == "change"))
+		if (isset($args["form"]) && ($args["form"] === "new" || $args["form"] === "change"))
 		{
 			$orb_action = "change";
 		}
@@ -1134,11 +1133,11 @@ class class_base extends aw_template
 		}
 		$form_data = null;
 		// since submit should never change the return url, make sure we get at it later
-		$real_return_url = $args["return_url"];
+		$real_return_url = empty($args["return_url"]) ? "" : $args["return_url"];
 
 		// check whether this current class is based on class_base
 		$this->init_class_base();
-		$this->orb_action = $args["action"];
+		$this->orb_action = empty($args["action"]) ? "submit" : $args["action"];
 
 		$this->is_translated = 0;
 		// object framework does it's own quoting
@@ -1316,7 +1315,7 @@ class class_base extends aw_template
 			));
 			$retval = $override_retval ? $override_retval : $retval;
 		}
-		
+
 		if (empty($retval))
 		{
 			if (isset($this->id_only))
@@ -2435,7 +2434,7 @@ class class_base extends aw_template
 			$val["type"] = "text";
 		}
 
-		if (isset($val["orig_type"]) && $val["orig_type"] == "select" && isset($val["value"]) && !is_array($val["value"]) && isset($val["options"][$val["value"]]) && $val["options"][$val["value"]] != "" && $this->view == 1)
+		if (isset($val["orig_type"]) && $val["orig_type"] == "select" && isset($val["value"]) && is_scalar($val["value"]) && isset($val["options"][$val["value"]]) && $val["options"][$val["value"]] != "" && $this->view == 1)
 		{
 			$val["value"] = $val["options"][$val["value"]];
 		}
@@ -2975,12 +2974,12 @@ class class_base extends aw_template
 			if ($val["name"] === "comment" && !empty($this->classinfo["no_comment"]))
 			{
 				continue;
-			};
+			}
+
 			if ($val["type"] === "textarea" && $has_rte == false)
 			{
 				unset($val["richtext"]);
-			};
-
+			}
 
 			if (isset($val["emb"]) && $val["emb"] == 1)
 			{
@@ -2988,7 +2987,7 @@ class class_base extends aw_template
 				// and there is no need to do that again
 				$resprops[$key] = $val;
 				continue;
-			};
+			}
 
 			//if (($val["type"] == "toolbar") && !is_object($val["toolbar"]))
 			if ($val["type"] == "toolbar")
@@ -2997,30 +2996,27 @@ class class_base extends aw_template
 				{
 					$val["vcl_inst"]->set_opt("button_target","contentarea");
 				};
-			};
-
-			if (($val["type"] == "relmanager") && !is_object($val["vcl_inst"]))
+			}
+			elseif (($val["type"] == "relmanager") && !is_object($val["vcl_inst"]))
 			{
 				classload("vcl/relmanager");
 				$val["vcl_inst"] = new relmanager();
-			};
-
-			if ( ($val['type'] == 'range') && !is_object($val['vcl_inst']) )
+			}
+			elseif ( ($val['type'] === 'range') && !is_object($val['vcl_inst']) )
 			{
 				classload('vcl/range');
 				$val['vcl_inst'] = new range();
 			}
-
-			if (($val["type"] == "calendar") && !is_object($val["vcl_inst"]))
+			elseif (($val["type"] === "calendar") && (!isset($val["vcl_inst"]) or !is_object($val["vcl_inst"])))
 			{
 				classload("vcl/calendar");
 				$val["vcl_inst"] = new vcalendar();
-			};
+			}
 
 			if (!empty($val["parent"]) && empty($this->layoutinfo[$val["parent"]]))
 			{
 				$remap_children = true;
-			};
+			}
 
 			$name = $val["name"];
 			if (is_array($val) && $val["type"] !== "callback" && $val["type"] !== "submit")
@@ -3103,15 +3099,13 @@ class class_base extends aw_template
 			{
 				// do nothing
 			}
-			else
-			if ($status == PROP_ERROR)
+			elseif ($status == PROP_ERROR)
 			{
 				$val["type"] = "text";
-				$val["value"] = "Viga: $val[error]";
+				$val["value"] = empty($val["error"]) ? t("Viga") : "Viga: {$val["error"]}";
 				$resprops[$key] = $val;
 			}
-			else
-			if ($val["type"] === "hidden")
+			elseif ($val["type"] === "hidden")
 			{
 				$resprops[$name] = $val;
 			}
@@ -3552,7 +3546,7 @@ class class_base extends aw_template
 		{
 			return false;
 		}
-		$obj = &obj($config_id);
+		$obj = obj($config_id);
 		return $obj->meta("view_controllers");
 	}
 
@@ -3732,7 +3726,6 @@ class class_base extends aw_template
 			}
 
 			$new = true;
-			$this->id = $id;
 		}
 
 		$args["new"] = $this->new = $new;
@@ -3761,7 +3754,7 @@ class class_base extends aw_template
 		$filter["rel"] = $this->is_rel;
 		$filter["ignore_layout"] = 1;
 
-		if ($args["cfgform"])
+		if (!empty($args["cfgform"]))
 		{
 			$filter["cfgform_id"] = $args["cfgform"];
 			$this->cfgform_id = $args["cfgform"];
@@ -3798,7 +3791,7 @@ class class_base extends aw_template
 
 		$errors = $this->validate_data(array(
 			"request" => $args,
-			"cfgform_id" => $args["cfgform"],
+			"cfgform_id" => $this->cfgform_id,
 			"props" => &$properties,
 			"obj_inst" => &$o
 		));
@@ -4074,7 +4067,7 @@ class class_base extends aw_template
 			{
 				if (is_array($args["rawdata"][$name]))
 				{
-					if ($property["save_format"] === "iso8601")
+					if (isset($property["save_format"]) and $property["save_format"] === "iso8601")
 					{
 						$dt = $args["rawdata"][$name];
 						if ($dt["year"] < 1 || $dt["month"] < 1 || $dt["day"] < 1)
@@ -4892,14 +4885,12 @@ class class_base extends aw_template
 			// deal with properties belonging to multiple groups
 			$propgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);
 
-			$x_tmp = $propgroups;
-
 			// ah, I alright .. propgroups decides whether a group is shown
 			// and I need to know that information for each group in my path
 
 			// now, what do I do with groups that are more than one level deep .. well, I guess
 			// I'm just ignoring those for now
-			foreach($x_tmp as $pkey)
+			foreach($propgroups as $k => $pkey)
 			{
 				if (is_array($pkey))
 				{
@@ -4910,6 +4901,7 @@ class class_base extends aw_template
 							$propgroups[] = $rgroupmap[$pkey2];
 						}
 					}
+					unset($propgroups[$k]);
 				}
 				elseif (!empty($rgroupmap[$pkey]))
 				{
@@ -4949,12 +4941,14 @@ class class_base extends aw_template
 			{
 				$propdata = $val;
 			}
-			if ($propdata["type"] == "submit")
+
+			if (isset($propdata["type"]) && $propdata["type"] === "submit")
 			{
 				$propdata["value"] = $propdata["caption"];
 			}
+
 			// XXX: cfgform defaults are supported for checkboxes only right now
-			if ($propdata["type"] == "checkbox" && empty($val["default"]))
+			if (isset($propdata["type"]) && $propdata["type"] === "checkbox" && empty($val["default"]))
 			{
 				unset($propdata["default"]);
 			}
@@ -4969,11 +4963,11 @@ class class_base extends aw_template
 			// skip anything that is not in the active group
 			if (empty($this->cb_no_groups) && !in_array($use_group,$propgroups))
 			{
-				if (($key == "needs_translation" || $key == "is_translated") && ($use_group == "general2" || $use_group == "general_sub"))
+				if (($key === "needs_translation" || $key === "is_translated") && ($use_group === "general2" || $use_group === "general_sub"))
 				{
 					$tmp[$key] = $propdata;
 				}
-				if (!(($key == "needs_translation" || $key == "is_translated") && ($use_group == "general2" || $use_group == "general_sub")))
+				if (!(($key === "needs_translation" || $key === "is_translated") && ($use_group === "general2" || $use_group === "general_sub")))
 				{
 					continue;
 				}
@@ -6370,9 +6364,14 @@ class class_base extends aw_template
 			$retval .= $function_draft;
 		}
 
-		if(aw_ini_get("user_interface.content_trans") && empty($arr["new"]) && (empty($arr["request"]["group"]) || $arr["request"]["group"] !== "relationmgr"))
+		if(aw_ini_get("user_interface.content_trans") && empty($arr["new"]) && empty($arr["request"]["group"]) || isset($arr["request"]["group"]) && $arr["request"]["group"] !== "relationmgr")
 		{
-			if(@$arr["request"]["class"] === "admin_if" || @$arr["request"]["class"] === "personnel_management" && @$arr["request"]["group"] === "offers")
+			if (!isset($arr["request"]["class"]))
+			{
+				$arr["request"]["class"] = "";
+			}
+
+			if($arr["request"]["class"] === "admin_if" || $arr["request"]["class"] === "personnel_management" && isset($arr["request"]["group"]) && isset($arr["request"]["group"]) && $arr["request"]["group"] === "offers")
 			{
 				$if_clause = "
 				anything_changed = false;
@@ -6399,7 +6398,7 @@ class class_base extends aw_template
 			else
 			{
 				$if_clause2 = "el_exists('status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1)."') == 1";
-				if(@$arr["request"]["class"] === "language")
+				if($arr["request"]["class"] === "language")
 				{
 					$status_variable = "lang_status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1);
 				}
