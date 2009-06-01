@@ -439,7 +439,7 @@ class languages extends aw_template implements request_startup
 		}
 		if (!aw_global_get("ct_lang_id") && aw_ini_get("user_interface.full_content_trans") && ($ct_lc = aw_ini_get("user_interface.default_language")))
 		{
-			if ($_COOKIE["ct_lang_id"])
+			if (!empty($_COOKIE["ct_lang_id"]))
 			{
 				$ct_id = $_COOKIE["ct_lang_id"];
 				$ct_lc = $_COOKIE["ct_lang_lc"];
