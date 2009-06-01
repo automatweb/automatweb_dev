@@ -35,8 +35,9 @@ class http
 		$host = str_replace("https://", "", $host);
 
 		$port = (!empty($data["port"]) ? $data["port"] : 80);
+		$fragment = (!empty($data["fragment"])) ? "#".$data["fragment"] : "";
 
-		$y_url = $data["path"].($data["query"] != "" ? "?".$data["query"] : "").($data["fragment"] != "" ? "#".$data["fragment"] : "");
+		$y_url = $data["path"].($data["query"] != "" ? "?".$data["query"] : "").$fragment;
 		if ($y_url == "")
 		{
 			$y_url = "/";
