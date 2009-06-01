@@ -2,6 +2,65 @@
 
 class warehouse_import_obj extends _int_object
 {
+
+	private $controller_inst;
+	private $controller_id;
+	private $prod_fld;
+	private $db_obj;
+
+	private function init_vars()
+	{
+		// ERROR REPORTING
+	//	automatweb::$instance->mode(automatweb::MODE_DBG);
+
+		// controller for short product codes ...
+		if($this->controller_id = $this->prop("code_ctrl"))
+		{
+			$this->controller_inst = get_instance(CL_CFGCONTROLLER);	
+		}
+	//	$this->prod_fld = $this->get_products_folder;
+		$this->db_obj = $GLOBALS["object_loader"]->cache;
+	}
+
+	private function apply_controller($code)
+	{
+		if($this->controller_inst)
+		{
+			return $this->controller_inst->check_property($this->controller_id, null, $code, null, null, null);
+		}
+		return false;
+	}
+
+	private function get_products_folder()
+	{
+		// I actually doubt that it is necessary to have products folder here 
+		// It belongs to this soon-to-come products import to warehouses class
+		// where i can configure how and where the prods will be imported
+		$wh = $this->prop("warehouse");
+
+		if($this->can("view", $wh))
+		{
+			$who = obj($wh);
+			$cid = $who->prop("conf");
+			$this->warehouse = $wh;
+		}
+		if($this->can("view", $cid))
+		{
+			$co = obj($cid);
+			$prod_fld = $co->prop("prod_fld");
+		}
+
+		if(!$prod_fld)
+		{
+			die(t("Lao toodete kataloog on m&auml;&auml;ramata"));
+		}
+		elseif(!$this->can("add", $prod_fld))
+		{
+			die(t("Lao toodete kataloogi alla ei ole &otilde;igusi lisamiseks"));
+		}
+		return $prod_fld;
+	}
+
 	public function list_aw_warehouses()
 	{
 		$wh_conns = $this->connections_from(array(
@@ -113,6 +172,13 @@ class warehouse_import_obj extends _int_object
 	// I need to add here, that one can configure pricelist in import object as well ...
 	public function get_price_list()
 	{
+		// I'm not really sure about this here - I think it is logical, if the price_list is asked from warehouse - cause what is the other purpose for the price list anyway ? --dragut
+		$price_list_id = $this->prop('price_list');
+		if ($this->can('view', $price_list_id))
+		{
+			return new object($price_list_id);
+		}
+
 		$whs = $this->list_aw_warehouses();
 		$first_wh_id = key($whs);
 
@@ -134,20 +200,39 @@ class warehouse_import_obj extends _int_object
 		}
 	}
 
+	private function _get_xml_fn($type)
+	{
+		$fn = aw_ini_get("site_basedir")."/files/warehouse_import";
+		if (!is_dir($fn))
+		{
+			mkdir($fn);
+			chmod($fn, 0777);
+		}
+
+		list($tm) = $this->full_import_status($type);
+
+		$fn .= "/xml_".$type."_".$tm.".xml";
+		return $fn;
+	}
+
+	private function _write_xml_file($type, $xml)
+	{
+		$fn = $this->_get_xml_fn($type);
+		$f = fopen($fn, "w");
+		fwrite($f, $xml);
+		fclose($f);
+	}
+
 	public function update_price_list()
 	{
 		$this->_start_import("pricelists");
 		$this->_update_status("pricelists", warehouse_import_if::STATE_FETCHING, null, 0);
 
 		$ds = get_instance($this->prop('data_source'));
-/*
-		$ol = new object_list(array(
-			'class_id' => CL_TAKET_AFP_IMPORT
-		));
-		$ds = $ol->begin();
-*/
+
 		// get the pricelist data as XML
 		$xml_data = $ds->get_pricelist_xml();
+		$this->_write_xml_file("pricelists", $xml_data);
 
 		$xml = new SimpleXMLElement($xml_data);
 
@@ -536,6 +621,8 @@ class warehouse_import_obj extends _int_object
 		$i = get_instance($this->prop("data_source"));
 		$xml = $i->get_prices_xml();
 		
+		$this->_write_xml_file("prices", $xml);
+
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->product);
 		$this->_update_status("prices", warehouse_import_if::STATE_PROCESSING, null, 0, $total); 
@@ -731,6 +818,8 @@ class warehouse_import_obj extends _int_object
 		$i = get_instance($this->prop("data_source"));
 		$xml = $i->get_amounts_xml($this->warehouse_mapper("amounts", $wh_id));
 		
+		$this->_write_xml_file("amounts", $xml);
+
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->product);
 		$this->_update_status("amounts", warehouse_import_if::STATE_PROCESSING, $wh_id, 0, $total); 
@@ -922,31 +1011,115 @@ flush();
 
 	public function process_product_xml($xml_filename)
 	{
+	//	while (ob_get_level()) { ob_end_clean(); }
 		// get aw prods
-		$this->_list_aw_prods(obj(119));
+	//	$this->_list_aw_prods(obj(119));
+		$path = aw_ini_get('server.tmpdir').'/warehouse_import_prods';
+
+		if (!is_dir($path))
+		{
+			mkdir($path);
+			chmod($path, 0777);
+		}
 
 		// parse prods from xml
 		$sx = simplexml_load_file($xml_filename);
 
-
+		$counter = 1;
+		$slice = array();
 		foreach($sx->product as $prod)
 		{
-			die(dbg::dump($prod));
-		}
+	//		die(dbg::dump($prod));
+			$tmp_arr[] = $prod->asXML();
+			$product_codes[] = $prod->product_code;
+			if (($counter % 1000) == 0)
+			{
+				$file = $path.'/prods_chunk_'.$counter;
+				file_put_contents($file, serialize($tmp_arr));
+				$tmp_arr = array();
+				$h = new http;
+				$url = aw_ini_get('baseurl').'/?class=warehouse_import&action=run_backgrounded&act=process_product_chunk&file='.$file.'&id='.$this->id().'&wh_id=1';
+				$h->get($url);
+			}
 
-		
+			$counter++;
+		}
 
 		// import new
 		// update existing
 		// delete old	
 	}
 
-	private function _list_aw_prods($warehouse)
+	public function process_prods_chunk($file)
 	{
+		file_put_contents('/tmp/warehouse_import_prods/status.txt', "process_prod_chunk\n", FILE_APPEND);
+		$this->init_vars();
+		$data = unserialize(file_get_contents($file));
+		$products = array();
+		foreach (safe_array($data) as $k => $v)
+		{
+			$sxmlo = simplexml_load_string($v);
+			// i have to get the product codes and ask the aw objects for those codes
+			// then i need to update the objects or add the objects if they don't exist
+			// i should keep track what i have imported/updated, so i can delete those which are obsolote at the end
+			$products[(string)$sxmlo->product_code] = array(
+				'product_name' => (string)$sxmlo->product_name,
+				'product_code' => (string)$sxmlo->product_code,
+				'search_term' => (string)$sxmlo->search_term,
+				'replacement_product_code' => (string)$sxmlo->replacement_product_code,
+				'short_code' => (string)$sxmlo->short_code
+			);
+		}
+
+		$existing_prods = $this->_list_aw_prods(array(
+			'warehouse' => new object(119),
+			'product_codes' => array_keys($products)
+		));
+
+		$updated_prods = array();
+		foreach ($existing_prods as $oid => $prod_data)
+		{
+			$code = $prod_data['code'];
+
+			// the idea is, that if I have already added or updated a product with this code
+			// then now it is a duplicate, so I need to delete it:
+			if (!empty($updated_prods[$code]))
+			{
+				$this->delete_product_sql($oid);
+				arr('Delete product '.$code);
+				continue;
+			}
+
+		//	arr($products[$code]);
+			if (empty($products[$code]))
+			{
+				// there isn't a product with such product code, so lets create it:
+				$this->add_product_sql($products[$code]);
+				arr('add product '.$code);
+			}
+			else
+			{
+				// the product exists, so lets update it
+				$this->update_product_sql($oid, $products[$code]);
+				arr('update product '.$code);
+			}
+			$updated_prods[$code] = $code;
+		}
+	//	exit('end for now');
+	//	file_put_contents($file, '');
+		$x = unlink($file);
+		var_dump($x);
+	}
+
+	private function _list_aw_prods($arr)
+	{
+		$warehouse = $arr['warehouse'];
+		$product_codes = $arr['product_codes'];
+
 		// get all folders from warehouse so we can filter prods only in that house
 		list($fld, $ot) = $warehouse->instance()->get_packet_folder_list(array("id" => $warehouse->id()));
 
-		$ids = array($fld => $fld);
+		$ids = array($fld->id() => $fld->id());
 		foreach($ot->ids() as $id)
 		{
 			$ids[$id] = $id;
@@ -956,7 +1129,8 @@ flush();
 		$odl = new object_data_list(
 			array(
 				"class_id" => CL_SHOP_PRODUCT,
-				"parent" => $ids
+				"parent" => $ids,
+				'code' => $product_codes
 			),
 			array(
 				CL_SHOP_PRODUCT => array(
@@ -978,7 +1152,7 @@ flush();
 					"item_type" => "item_type",
 					"item_count" => "item_count",
 					"match_prod" => "match_prod",
-					"replacement_prods" => "replacement_prods",
+					"type_code" => "type_code",
 					"color" => "color",
 					"height" => "height",
 					"width" => "width",
@@ -1057,6 +1231,7 @@ flush();
 		echo "listing aw products <br>\n";
 		flush();
 		$tmp =  $odl->arr();
+		$cnt = 0;
 		foreach($tmp as $oid => $data)
 		{
 			if ((++$cnt % 1000) == 1)
@@ -1064,12 +1239,108 @@ flush();
 				echo ".. $cnt <br>\n";
 				flush();
 			}
-			$rv[$data["ItemNo"]] = $data;
+		//	$rv[$data["ItemNo"]] = $data;
+			$rv[$data["oid"]] = $data;
 		}
 		echo "got ".count($rv)." items <br>\n";
 		flush();
 		return $rv;
 	}
+
+	// I'll assume here, that the product object doesn't exist in aw
+	// So I need to add a line in objects table, aw_shop_products table 
+	/*
+		product_name
+		product_code
+		search_term
+		replacement_product_code // I should change it to type code
+		short_code
+	*/
+	private function add_product_sql($data)
+	{
+		$obj_base = $this->db_obj->db_fetch_array("select * from objects where class_id = '".CL_SHOP_PRODUCT."' limit 1");
+		$obj_base = reset($obj_base);
+		$obj_base['oid'] = 0;
+		$obj_base['createdby'] = '110';
+		$obj_base['modifiedby'] = '110';
+
+		$obj_base['name'] = addslashes($data['product_name']);
+		$obj_base['comment'] = addslashes($data['product_code']);
+		$sql = "
+			INSERT INTO 
+				objects 
+			VALUES (".implode(',', map('"%s"', $obj_base)).");
+		";
+
+		$this->db_obj->db_query($sql);
+
+		$oid = $this->db_obj->db_last_insert_id();
+
+		// brother_of value has to be the same as oid
+		$this->db_obj->db_query("UPDATE objects set brother_of = ".$oid." WHERE oid = ".$oid);
+
+		$sql = "
+			INSERT INTO 
+				aw_shop_products 
+			SET
+				aw_oid = ".$oid.",
+				code = '".addslashes($data['product_code'])."',
+				search_term = '".addslashes($data['search_term'])."',
+				type_code = '".addslashes($data['replacement_product_code'])."',
+				short_code = '".$this->apply_controller($data['product_code'])."'
+		";
+		$this->db_obj->db_query($sql);
+		return $oid;
+	}
+
+	// the product object exists in the system, so i need to update the data
+	/*
+		oid
+
+		product_name
+		product_code
+		search_term
+		replacement_product_code // I should change it to type code
+		short_code
+	*/
+	private function update_product_sql($oid, $data)
+	{
+		$sql = "
+			UPDATE 
+				objects
+			SET
+				name = '".addslashes($data['product_name'])."',
+				comment = '".addslashes($data['product_code'])."',
+				brother_of = ".$oid."
+			WHERE
+				oid = ".$oid."
+		";
+		$this->db_obj->db_query($sql);
+
+		$sql = "
+			UPDATE
+				aw_shop_products
+			SET
+				code = '".addslashes($data['product_code'])."',
+				search_term = '".addslashes($data['search_term'])."',
+				type_code = '".addslashes($data['replacement_product_code'])."',
+				short_code = '".$this->apply_controller($data['product_code'])."'
+			WHERE
+				aw_oid = ".$oid."
+		";
+		$this->db_obj->db_query($sql);
+	}
+
+	// maybe i don't have to make this one with sql-s?
+	private function delete_product_sql($oid)
+	{
+		$sql = "DELETE FROM objects WHERE oid = ".$oid;
+		$this->db_obj->db_query($sql);
+
+		$sql = "DELETE FROM aw_shop_products WHERE aw_oid = ".$oid;
+		$this->db_obj->db_query($sql);
+	}
+
 }
 
 ?>

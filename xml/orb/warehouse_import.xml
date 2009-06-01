@@ -1,16 +1,10 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="warehouse_import" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
-		<action name="import_prices" all_args="1">
-			<function name="import_prices">
+		<action name="view_xml">
+			<function name="view_xml">
 				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="import_price_list" all_args="1">
-			<function name="import_price_list">
-				<arguments>
+					<required name="fn" />
 				</arguments>
 			</function>
 		</action>
@@ -42,6 +36,7 @@
 				<arguments>
 					<required name="id" />
 					<optional name="wh_id" />
+					<optional name="file" />
 					<required name="act" />
 				</arguments>
 			</function>
@@ -88,6 +83,15 @@
 				<arguments>
 					<required name="id" type="int" acl="view" />
 					<required name="prod_xml" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="process_product_chunk">
+			<function name="process_product_chunk">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="file" />
 				</arguments>
 			</function>
 		</action>

@@ -489,16 +489,31 @@ class warehouse_import extends class_base
 				"name" => "reason",
 				"align" => "center",
 			));
+			$tb->define_field(array(
+				"caption" => t("XML Failid"),
+				"name" => "xmls",
+				"align" => "center",
+			));
 
 			foreach($prev as $entry)
 			{
+				$xmls = array();
+				$pt = aw_ini_get("site_basedir")."/files/warehouse_import/xml_".$type."_".$entry["full_status"][0].".xml";
+				foreach(glob($pt) as $item)
+				{
+					$xmls[] = html::href(array(
+						"url" => $this->mk_my_orb("view_xml", array("fn" => basename($item))),
+						"caption" => basename($item)
+					));
+				}
 				$tb->define_data(array(
 					"start" => $entry["full_status"][0],
 					"end" => $entry["finish_tm"],
 					"success" => $entry["success"] ? t("Jah") : t("Ei"),
 					"prod_count" => $entry["full_status"][4],
 					"total" => $entry["full_status"][5],
-					"reason" => $entry["reason"]
+					"reason" => $entry["reason"],
+					"xmls" => join(", ", $xmls)
 				));
 			}
 
@@ -508,6 +523,62 @@ class warehouse_import extends class_base
 
 		return $t;
 	}
+
+	/**
+		@attrib name=view_xml 
+		@param fn required
+	**/
+	function view_xml($arr)
+	{
+		$fn = aw_ini_get("site_basedir")."/files/warehouse_import/".basename(realpath($arr["fn"]));
+		if (file_exists($fn))
+		{
+			echo '<pre>' . $this->xmlpp(file_get_contents($fn), true) . '</pre>';  
+			die();
+		}
+		die();
+	}
+
+	function xmlpp($xml, $html_output=false) 
+	{
+		$xml_obj = new SimpleXMLElement($xml);
+		$level = 4;
+		$indent = 0; // current indentation level
+		$pretty = array();
+
+		// get an array containing each XML element
+		$xml = explode("\n", preg_replace('/>\s*</', ">\n<", $xml_obj->asXML()));
+
+		// shift off opening XML tag if present
+		if (count($xml) && preg_match('/^<\?\s*xml/', $xml[0])) 
+		{
+			$pretty[] = array_shift($xml);
+		}
+
+		foreach ($xml as $el) 
+		{
+			if (preg_match('/^<([\w])+[^>\/]*>$/U', $el)) 
+			{
+				// opening tag, increase indent
+				$pretty[] = str_repeat(' ', $indent) . $el;
+				$indent += $level;
+			} 
+			else 
+			{
+				if (preg_match('/^<\/.+>$/', $el)) 
+				{
+					$indent -= $level;// closing tag, decrease indent
+				}
+				if ($indent < 0) 
+				{
+					$indent += $level;
+				}
+				$pretty[] = str_repeat(' ', $indent) . $el;
+			}
+		}	 
+		$xml = implode("\n", $pretty);	 
+		return ($html_output) ? htmlentities($xml) : $xml;
+ 	}
 
 	/**
 		@attrib name=reset_import
@@ -521,15 +592,6 @@ class warehouse_import extends class_base
 		$o = obj($arr["id"]);
 		$o->reset_import($arr["type"], $arr["wh_id"]);
 		return $arr["post_ru"];
-	}
-
-	function run_backgrounded($act, $id, $wh_id = null)
-	{
-		$url = $this->mk_my_orb("run_backgrounded", array("wh_id" => $wh_id, "act" => $act, "id" => $id));
-		$url = str_replace("/automatweb", "", $url);
-		$h = new http;
-//		exit($url);  // DEBUG:
-		$h->get($url);
 	}
 
 	/**
@@ -546,10 +608,20 @@ class warehouse_import extends class_base
 		return $arr["post_ru"];
 	}
 
+	function run_backgrounded($act, $id, $wh_id = null)
+	{
+		$url = $this->mk_my_orb("run_backgrounded", array("wh_id" => $wh_id, "act" => $act, "id" => $id));
+		$url = str_replace("/automatweb", "", $url);
+		$h = new http;
+//		exit($url);  // DEBUG:
+		$h->get($url);
+	}
+
 	/**
 		@attrib name=run_backgrounded nologin="1"
 		@param id required
 		@param wh_id optional
+		@param file optional
 		@param act required
 	**/
 	function do_run_bg($arr)
@@ -569,7 +641,7 @@ class warehouse_import extends class_base
 		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$act = $arr["act"];
-		$this->$act($arr["id"], $arr["wh_id"]);
+		$this->$act($arr["id"], $arr["wh_id"], $arr['file']);
 		die("all done!");
 	}
 
@@ -643,9 +715,6 @@ class warehouse_import extends class_base
 		$o->update_price_list();
 	}
 
-
-
-
 	/**
 		@attrib name=do_products_import
 		@param id required type=int acl=view
@@ -664,7 +733,21 @@ class warehouse_import extends class_base
 	function callback_xml_done($arr)
 	{
 		$o = obj($arr["id"]);
+		// process xml peaks nyyd jagama selle faili v2iksemateks tykkideks ja salvestama need failid kuskile kausta 2ra
 		$o->process_product_xml($arr["prod_xml"]);
+
+	}
+
+	/**
+		@attrib name=process_product_chunk
+		@param id required type=int acl=view
+		@param file required 
+	**/
+	function process_product_chunk($id, $wh_id, $file)
+	{
+		$o = obj($id);
+		$o->process_prods_chunk($file);
+
 	}
 }
 
