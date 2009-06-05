@@ -499,15 +499,14 @@ a img { border: 0; }
 	border-bottom: 1px solid #bdbdbd;
 	border-left: 1px solid #fff;
 	height: 26px;
-	padding: 3px 9px;
+	padding: 0px 4px;
 	margin-bottom: 1px;
 	margin-right: -10px;
+	width: 100%;
 }
 #toimingud .v {
-	float: left;
 /*	padding: 3px 0 0 2px; */
 	vertical-align: middle;
-	width: 75%;
 }
 
 #toimingud .tb_but {
@@ -537,7 +536,7 @@ a img { border: 0; }
 }
 */
 #toimingud .p {
-	float: right;
+	text-align: right;
 	margin-right: 5px;
 	margin-top: 2px;
 }
