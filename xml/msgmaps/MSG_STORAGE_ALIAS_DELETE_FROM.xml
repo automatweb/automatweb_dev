@@ -91,18 +91,18 @@
       <param>CL_CONTENT_ITEM</param>
 </num_17>
 <num_18>
-      <class>/contentmgmt/reminder</class>
-      <func>on_rdisconnect_from</func>
+      <class>/contentmgmt/timing</class>
+      <func>on_tdisconnect_from</func>
       <param>CL_DOCUMENT</param>
 </num_18>
 <num_19>
       <class>/contentmgmt/timing</class>
       <func>on_tdisconnect_from</func>
-      <param>CL_DOCUMENT</param>
+      <param>CL_MENU</param>
 </num_19>
 <num_20>
-      <class>/contentmgmt/timing</class>
-      <func>on_tdisconnect_from</func>
-      <param>CL_MENU</param>
+      <class>/contentmgmt/aw_reminder</class>
+      <func>on_rdisconnect_from</func>
+      <param>CL_DOCUMENT</param>
 </num_20>
 </xml>
