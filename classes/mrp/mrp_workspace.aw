@@ -9,6 +9,8 @@
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=general submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=general submit=no
 	@groupinfo grp_worksheet caption="T&ouml;&ouml;lehed" parent=general submit_method=get
+	@groupinfo grp_res_settings caption="Ressursside parameetrid" parent=general  submit=no
+	@groupinfo grp_res_formats caption="Ressursside formaadid" parent=general  submit=no
 
 @groupinfo grp_customers caption="Kliendid" submit=no submit_method=get
 @groupinfo grp_projects caption="Projektid" confirm_save_data=1
@@ -575,6 +577,33 @@
 
 	@property ws_tbl type=table store=no no_caption=1
 
+@default group=grp_res_settings
+
+	@property res_settings_tb type=toolbar store=no no_caption=1
+	
+
+	@layout grp_res_settings_splitter type=hbox 
+
+		@layout grp_res_settings_tree_vb type=vbox closeable=1 area_caption=Seadete&nbsp;kategooriad parent=grp_res_settings_splitter
+
+			@property grp_res_settings_tree type=treeview store=no no_caption=1 parent=grp_res_settings_tree_vb
+
+		@property grp_res_settings_table type=table store=no no_caption=1 parent=grp_res_settings_splitter
+
+@default group=grp_res_formats
+
+	@property res_formats_tb type=toolbar store=no no_caption=1
+	
+
+	@layout grp_res_formats_splitter type=hbox 
+
+		@layout grp_res_formats_tree_vb type=vbox closeable=1 area_caption=Formaatide&nbsp;kategooriad parent=grp_res_formats_splitter
+
+			@property grp_res_formats_tree type=treeview store=no no_caption=1 parent=grp_res_formats_tree_vb
+
+		@property grp_res_formats_table type=table store=no no_caption=1 parent=grp_res_formats_splitter
+
+
 // --------------- RELATION TYPES ---------------------
 
 @reltype MRP_FOLDER value=1 clid=CL_MENU
@@ -591,6 +620,12 @@
 
 @reltype PURCHASING_MANAGER clid=CL_SHOP_PURCHASE_MANAGER_WORKSPACE value=6
 @caption Materjalide hankimise keskkond
+
+@reltype RESOURCE_SETTING clid=CL_MRP_RESOURCE_SETTING_CATEGORY,CL_MRP_RESOURCE_SETTING value=7
+@caption Ressursside seaded
+
+@reltype RESOURCE_FORMAT clid=CL_MRP_RESOURCE_FORMAT_CATEGORY,CL_MRP_ORDER_PRINT_FORMAT value=8
+@caption Ressursside formaadid
 */
 
 require_once "mrp_header.aw";
@@ -729,6 +764,107 @@ class mrp_workspace extends class_base
 		}
 
 		return $arr["post_ru"];
+	}
+
+	private function _get_res_set_pt($arr)
+	{
+		return isset($arr["request"]["res_fld"]) ? $arr["request"]["res_fld"] : $arr["obj_inst"]->id();
+	}
+
+	public function _get_res_settings_tb($arr)
+	{
+		$pt = $this->_get_res_set_pt($arr);
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(isset($arr["request"]["res_fld"]) ? array(CL_MRP_RESOURCE_SETTING_CATEGORY, CL_MRP_RESOURCE_SETTING) : array(CL_MRP_RESOURCE_SETTING_CATEGORY), $pt, 7);
+		$tb->add_delete_button();
+	}
+
+	public function _get_grp_res_settings_table($arr)
+	{
+		$pt = $this->_get_res_set_pt($arr);
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			new object_list(obj($pt)->connections_from(array("type" => "RELTYPE_RESOURCE_SETTING"))),
+			array("name", "class_id", "createdby_person", "created", "modifiedby_person", "modified"),
+			CL_MRP_RESOURCE_SETTING
+		);
+	}
+
+	public function _get_grp_res_settings_tree($arr)
+	{
+		$this->_req_res_settings_tree($arr["prop"]["vcl_inst"], $arr["obj_inst"], 0);
+		$arr["prop"]["vcl_inst"]->set_selected_item($arr["request"]["res_fld"]);
+		$arr["prop"]["vcl_inst"]->set_root_url(aw_url_change_var("res_fld", null));
+		$arr["prop"]["vcl_inst"]->set_root_name($arr["obj_inst"]->name());
+		$arr["prop"]["vcl_inst"]->set_root_icon(icons::get_icon_url(CL_MENU));
+	}
+
+	private function _req_res_settings_tree($t, $pto, $pt)
+	{
+		foreach($pto->connections_from(array("type" => "RELTYPE_RESOURCE_SETTING")) as $c)
+		{
+			$o = $c->to();
+			if ($o->class_id() == CL_MRP_RESOURCE_SETTING_CATEGORY)
+			{
+				$t->add_item($pt, array(
+					"id" => $o->id(),
+					"name" => $o->name(),
+					"url" => aw_url_change_var("res_fld", $o->id()),
+					"icon" => icons::get_icon_url($o->class_id() == CL_MRP_RESOURCE_SETTING_CATEGORY ? CL_MENU : $o->class_id())
+				));
+				$this->_req_res_settings_tree($t, $o, $o->id());
+			}
+		}
+	}
+
+
+	private function _get_res_fmt_pt($arr)
+	{
+		return isset($arr["request"]["res_fld"]) ? $arr["request"]["res_fld"] : $arr["obj_inst"]->id();
+	}
+
+	public function _get_res_formats_tb($arr)
+	{
+		$pt = $this->_get_res_fmt_pt($arr);
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(isset($arr["request"]["res_fld"]) ? array(CL_MRP_RESOURCE_FORMAT_CATEGORY, CL_MRP_ORDER_PRINT_FORMAT) : array(CL_MRP_RESOURCE_FORMAT_CATEGORY), $pt, 8);
+		$tb->add_delete_button();
+	}
+
+	public function _get_grp_res_formats_table($arr)
+	{
+		$pt = $this->_get_res_fmt_pt($arr);
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			new object_list(obj($pt)->connections_from(array("type" => "RELTYPE_RESOURCE_FORMAT"))),
+			array("name", "class_id", "createdby_person", "created", "modifiedby_person", "modified"),
+			CL_MRP_ORDER_PRINT_FORMAT
+		);
+	}
+
+	public function _get_grp_res_formats_tree($arr)
+	{
+		$this->_req_res_format_tree($arr["prop"]["vcl_inst"], $arr["obj_inst"], 0);
+		$arr["prop"]["vcl_inst"]->set_selected_item($arr["request"]["res_fld"]);
+		$arr["prop"]["vcl_inst"]->set_root_url(aw_url_change_var("res_fld", null));
+		$arr["prop"]["vcl_inst"]->set_root_name($arr["obj_inst"]->name());
+		$arr["prop"]["vcl_inst"]->set_root_icon(icons::get_icon_url(CL_MENU));
+	}
+
+	private function _req_res_format_tree($t, $pto, $pt)
+	{
+		foreach($pto->connections_from(array("type" => "RELTYPE_RESOURCE_FORMAT")) as $c)
+		{
+			$o = $c->to();
+			if ($o->class_id() == CL_MRP_RESOURCE_FORMAT_CATEGORY)
+			{
+				$t->add_item($pt, array(
+					"id" => $o->id(),
+					"name" => $o->name(),
+					"url" => aw_url_change_var("res_fld", $o->id()),
+					"icon" => icons::get_icon_url($o->class_id() == CL_MRP_RESOURCE_FORMAT_CATEGORY ? CL_MENU : $o->class_id())
+				));
+				$this->_req_res_format_tree($t, $o, $o->id());
+			}
+		}
 	}
 
 

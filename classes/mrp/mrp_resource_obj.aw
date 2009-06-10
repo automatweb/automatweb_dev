@@ -1021,7 +1021,10 @@ class mrp_resource_obj extends _int_object
 						}
 						catch (Exception $e)
 						{
-							unset($this->thread_index[$job->id()]);
+							if ($job)
+							{
+								unset($this->thread_index[$job->id()]);
+							}
 						}
 					}
 					$this->threads[] = $thread;
