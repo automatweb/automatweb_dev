@@ -1895,6 +1895,13 @@ class crm_company extends class_base
 
 			$tli = $this_level_id;
 
+			if (!empty($arr["name_format_cb"]))
+			{
+				$inst = &$arr["name_format_cb"][0];
+				$func = $arr["name_format_cb"][1];
+				$inst->$func($tree_node_info);
+			}
+
 			$tree->add_item($tli,$tree_node_info);
 			//$this->generate_tree(&$tree,&$tmp_obj,&$node_id,$tmp_type,&$skip, &$attrib, $leafs);
 			$this->generate_tree(array(
@@ -1908,6 +1915,7 @@ class crm_company extends class_base
 						"edit_mode" => isset($edit_mode) ? $edit_mode : NULL,
 						"show_people" => $show_people,
 						"url" => $origurl,
+						"name_format_cb" => $arr["name_format_cb"]
 			));
 		}
 		if($_GET['group'] == 'relorg_s')
