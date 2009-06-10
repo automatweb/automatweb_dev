@@ -248,7 +248,7 @@ class mrp_job_obj extends _int_object
 		return parent::set_prop($k, $v);
 	}
 
-	private function get_real($k)
+	private function get_real()
 	{
 		$job_id = $this->id();
 		$v = $this->instance()->db_fetch_field("
@@ -383,6 +383,7 @@ class mrp_job_obj extends _int_object
 			{
 				$ws = $res->prop("workspace");
 			}
+			$conn = array();
 			if($ws)
 			{
 				$conn = $ws->connections_to(array(
@@ -871,20 +872,21 @@ class mrp_job_obj extends _int_object
 			if (isset($quantity))
 			{ // part of job done
 				$this->set_prop ("done", $this->prop("done") + $quantity);
-
-				// set who did them. set time
-				$i = $this->instance();
-				$i->db_query("
-					INSERT INTO mrp_job_progress
-						(aw_job_id, aw_case_id, aw_resource_id, aw_uid_oid, aw_quantity, aw_entry_time)
-					VALUES
-						('".$this->id()."', '".$this->prop("project")."', '".$this->prop("resource")."', '".aw_global_get("uid_oid")."', '{$quantity}', '".time()."')
-				");
 			}
 			elseif ($this->prop("done") < 1)
 			{ // set whole order quantity done when no specific data entered
-				$this->set_prop ("done", $this->mrp_project->prop("order_quantity")*$this->prop("component_quantity"));
+				$quantity = $this->mrp_project->prop("order_quantity")*$this->prop("component_quantity");
+				$this->set_prop ("done", $quantity);
 			}
+
+			// set who did them. set time
+			$i = $this->instance();
+			$i->db_query("
+				INSERT INTO mrp_job_progress
+					(aw_job_id, aw_case_id, aw_resource_id, aw_pid_oid, aw_uid_oid, aw_quantity, aw_entry_time)
+				VALUES
+					('".$this->id()."', '".$this->prop("project")."', '".$this->prop("resource")."', '".get_instance("user")->get_current_person()."', '".aw_global_get("uid_oid")."', '{$quantity}', '".time()."')
+			");
 
 			if ($this->prop("done") >= $this->mrp_project->prop("order_quantity")*$this->prop("component_quantity"))
 			{ // whole job done
@@ -2156,7 +2158,9 @@ class mrp_job_obj extends _int_object
 			"class_id" => CL_MATERIAL_EXPENSE,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"job" => $arr["id"],
+			// The array(-1) is for the case if id param is empty.
+ 			"job" => array_merge(array(-1), (array)$arr["id"]),
+ 			"product" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
 		);
 		if(empty($arr["odl"]))
 		{
@@ -2171,6 +2175,166 @@ class mrp_job_obj extends _int_object
 				)
 			);
 		}
+	}
+
+	public function get_progress()
+	{
+		$progress = $this->get_progress_for_job_id(array(
+			"job" => $this->id(),
+		));
+		return reset($progress);
+	}
+
+	/**
+		@attrib name=get_progress_for_id api=1 params=name
+
+		@param job optional type=int/array
+
+		@param case optional type=int/array
+
+		@param resource optional type=int/array
+
+		@param person optional type=int/array
+
+		@param from optional type=int
+
+		@param to optional type=int
+
+		@param groupby optional type=string/array default=job
+			Can be string e.g. "resource" or array e.g. array("resource", "job").
+			All possible values: job, case, person.
+	**/
+	public static function get_progress_for_params($arr)
+	{	
+		$q = "
+			SELECT
+				%s
+			FROM
+				mrp_job_progress
+			WHERE
+				%s
+			GROUP BY
+				%s
+		";
+
+		$select = "SUM(aw_quantity) as quantity";
+		if(empty($arr["groupby"]))
+		{
+			$arr["groupby"] = "aw_job_id";
+		}
+		$groupby_fields = array();
+		foreach((array)$arr["groupby"] as $groupby_element)
+		{
+			$groupby = empty($groupby) ? "" : $groupby.",";
+			switch($groupby_element)
+			{
+				case "job":
+					$groupby .= "aw_job_id";
+					$select .= ",aw_job_id";
+
+					$groupby_fields[] = "aw_job_id";
+					break;
+
+				case "case":
+					$groupby .= "aw_case_id";
+					$select .= ",aw_case_id";
+
+					$groupby_fields[] = "aw_case_id";
+					break;
+
+				case "person":
+					$groupby .= "aw_pid_oid";
+					$select .= ",aw_pid_oid";
+
+					$groupby_fields[] = "aw_pid_oid";
+					break;
+
+				case "resource":
+					$groupby .= "aw_resource_id";
+					$select .= ",aw_resource_id";
+
+					$groupby_fields[] = "aw_resource_id";
+					break;
+
+				case "month":
+					$groupby .= "year(from_unixtime(aw_entry_time)),month(from_unixtime(aw_entry_time))";
+					$select .= ",year(from_unixtime(aw_entry_time)),month(from_unixtime(aw_entry_time))";
+
+					$groupby_fields[] = "year(from_unixtime(aw_entry_time))";
+					$groupby_fields[] = "month(from_unixtime(aw_entry_time))";
+					break;
+
+				case "week":
+					$groupby .= "year(from_unixtime(aw_entry_time)),week(from_unixtime(aw_entry_time), 3)";
+					$select .= ",year(from_unixtime(aw_entry_time)),week(from_unixtime(aw_entry_time), 3)";
+
+					$groupby_fields[] = "year(from_unixtime(aw_entry_time))";
+					$groupby_fields[] = "week(from_unixtime(aw_entry_time), 3)";
+					break;
+			}
+		}
+
+		$where = "";
+		// Handle the OIDs
+		$possible_fields = array(
+			"job" => "aw_job_id",
+			"case" => "aw_case_id",
+			"resource" => "aw_resource_id",
+			"person" => "aw_pid_oid",
+		);
+		foreach($possible_fields as $possible_field => $table_field)
+		{
+			if(!empty($arr[$possible_field]))
+			{
+				if(strlen($where) > 0)
+				{
+					$where .= " AND ";
+				}
+				$where .= $table_field." IN (".implode(",", (array)$arr[$possible_field]).")";
+			}
+		}
+
+		// Handle the timespan
+		if(isset($arr["from"]) && isset($arr["to"]))
+		{
+			if(strlen($where) > 0)
+			{
+				$where .= " AND ";
+			}
+			$where .= "aw_entry_time BETWEEN '".$arr["from"]."' AND '".$arr["to"]."'";
+		}
+		elseif(isset($arr["from"]))
+		{
+			if(strlen($where) > 0)
+			{
+				$where .= " AND ";
+			}
+			$where .= "aw_entry_time >= '".$arr["from"]."'";
+		}
+		elseif(isset($arr["to"]))
+		{
+			if(strlen($where) > 0)
+			{
+				$where .= " AND ";
+			}
+			$where .= "aw_entry_time <= '".$arr["to"]."'";
+		}
+
+		if(empty($where))
+		{
+			$where = "1=1";
+		}
+
+		$job = new mrp_job;
+		$rows = $job->db_fetch_array(sprintf($q, $select, $where, $groupby));
+
+		$ret = array();
+		foreach($rows as $row)
+		{
+			eval('$ret[$row["'.implode('"]][$row["', $groupby_fields).'"]] = $row["quantity"];');
+		}
+
+		return $ret;
 	}
 }
 

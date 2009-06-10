@@ -302,9 +302,9 @@ class mrp_schedule extends db_connector
 		elseif ($not_win32)
 		{
 	  		### Release&remove semaphore. Stop, no rescheduling needed
-			if (!sem_release($sem_id))
+			if (!isset($sem_id) || !sem_release($sem_id))
 			{
-				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
+				if (isset($_GET["show_errors"]) && $_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
 				// error::raise(array(
 					// "msg" => t("Planeerimisluku avamine eba&otilde;nnestus!"),
 					// "fatal" => false,
@@ -312,9 +312,9 @@ class mrp_schedule extends db_connector
 				// ));
 			}
 
-			if (!sem_remove($sem_id))
+			if (!isset($sem_id) || !sem_remove($sem_id))
 			{
-				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
+				if (!empty($_GET["show_errors"])) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
 				// error::raise(array(
 					// "msg" => t("Planeerimisluku kustutamine eba&otilde;nnestus!"),
 					// "fatal" => false,
@@ -1768,7 +1768,7 @@ class mrp_schedule extends db_connector
 		### add separate unavailable periods
 		foreach ($this->resource_data[$resource_id]["unavailable_periods"] as $period_start => $period_end)
 		{
-			if ($period_end > $closest_periods[$period_start])
+			if ($period_end > ifset($closest_periods, $period_start))
 			{
 				$closest_periods[$period_start] = $period_end;
 			}

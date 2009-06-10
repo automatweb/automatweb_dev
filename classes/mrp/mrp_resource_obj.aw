@@ -42,6 +42,7 @@ class mrp_resource_obj extends _int_object
 		{
 			### set status
 			$this->set_prop ("state", self::STATE_AVAILABLE);
+			$this->set_prop ("production_feedback_option_values", array(1));
 		}
 	}
 
@@ -150,8 +151,17 @@ class mrp_resource_obj extends _int_object
 				$workspace = new object(parent::prop("workspace"));
 				if (!$workspace->is_a(CL_MRP_WORKSPACE))
 				{
-					// try backward compatibility
-					$workspace = $this->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+					if(is_oid($this->id()))
+					{
+						// try backward compatibility
+						$workspace = $this->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+					}
+					// NEW
+					else
+					{
+						$request = aw_request::autoload();
+						$workspace = obj($request->arg("mrp_workspace"));
+					}
 
 					if ($workspace instanceof object and CL_MRP_WORKSPACE == $workspace->class_id())
 					{ // save new format
@@ -212,7 +222,7 @@ class mrp_resource_obj extends _int_object
 **/
 	public function awobj_set_workspace(object $workspace)
 	{
-		if (!$workspace->is_a(CL_MRP_WORKSPACE))
+		if (!is_object($workspace) || !$workspace->is_a(CL_MRP_WORKSPACE))
 		{
 			throw new awex_obj_type("Workspace not a mrp_workspace object");
 		}
@@ -239,6 +249,15 @@ class mrp_resource_obj extends _int_object
 	**/
 	public function awobj_set_production_feedback_option_values($value)
 	{
+		if(!is_oid($this->id()))	// NEW
+		{
+			$value = array(1);
+		}
+		elseif(aw_global_get("uid") == "struktuur.instrumental")
+		{
+			arr($this->id(), true);
+		}
+		
 		if (!is_array($value))
 		{
 			throw new awex_obj_type("Array required.");
@@ -530,10 +549,13 @@ class mrp_resource_obj extends _int_object
 				$recurrence_starttime_minutes = $recurrence_starttime[1] ? (int) $recurrence_starttime[1] : 0;
 				$recurrence_starttime = $recurrence_starttime_hours * 3600 + $recurrence_starttime_minutes * 60;
 
+				$length = round (aw_math_calc::string2float($recurrence->prop ("length")) * 3600);
+				$time = $recurrence_starttime;
+
 				$recurrent_unavailable_periods[] = array (
-					"length" => round (aw_math_calc::string2float($recurrence->prop ("length")) * 3600),
+					"length" => $length,
 					"start" => $recurrence->prop ("start"),
-					"time" => $recurrence_starttime,
+					"time" => $time,
 					"end" => $recurrence->prop ("end"),
 					"max_span" => $recurrence->prop ("end") + $time + $length,
 					"interval" => $interval,

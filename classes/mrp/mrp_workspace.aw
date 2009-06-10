@@ -21,9 +21,12 @@
 	@groupinfo grp_resources_load caption="Koormus" parent=grp_resources
 	@groupinfo grp_resources_manage caption="Haldus" parent=grp_resources
 	@groupinfo grp_resources_hours_report caption="T&ouml;&ouml;ajaaruanne" parent=grp_resources submit=no
-@groupinfo grp_persons caption="Inimesed"
+@groupinfo grp_persons caption="Aruanded"
 	@groupinfo grp_persons_hours_report caption="T&ouml;&ouml;ajaaruanne" parent=grp_persons
 	@groupinfo grp_persons_jobs_report caption="Tehtud t&ouml;&ouml;d inimeste kaupa" parent=grp_persons
+	@groupinfo grp_persons_quantity_report caption="T&uuml;kiarvestuse aruanne" parent=grp_persons
+	@groupinfo grp_material_report caption="Materiali aruanne" parent=grp_persons
+
 
 @groupinfo grp_printer_general caption="Operaatori vaade" submit=no
 @groupinfo grp_printer caption="T&ouml;&ouml;d" submit=no parent=grp_printer_general
@@ -129,6 +132,10 @@
 	@layout projtreetime_box type=vbox closeable=1 area_caption=Lisamise&nbsp;kuup&auml;eva&nbsp;j&auml;rgi parent=projects_box
 	@property projects_time_tree type=treeview store=no no_caption=1 parent=projtreetime_box
 
+	@layout project_customers_tree_box type=vbox closeable=1 area_caption=Kliendi parent=projects_box
+	@property project_customers_tree type=treeview store=no no_caption=1 parent=project_customers_tree_box
+
+
 	@property projects_list type=table store=no no_caption=1 parent=vsplitbox
 
 	@property sp_result type=table no_caption=1 parent=vsplitbox
@@ -169,7 +176,7 @@
 
 @layout ppl_resources type=vbox_sub parent=resources_tree_box area_caption=Minu&nbsp;ressursid closeable=1 no_padding=1 group=my_resources parent=resources_tree_box
 		@property resources_tree type=text store=no no_caption=1 parent=resources_tree_box
-		@property pp_resources type=table parent=resources_tree_box no_caption=1 store=no group=my_resources
+#		@property pp_resources type=table parent=resources_tree_box no_caption=1 store=no group=my_resources
 
 
 	@layout right_pane type=vbox parent=vsplitbox
@@ -197,16 +204,36 @@
 			@layout resources_hours_tbl type=vbox closeable=1 parent=resources_hours_right area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;ressursside&nbsp;kaupa
 				@property resources_hours_tbl type=table no_caption=1 parent=resources_hours_tbl store=no
 
-@default group=grp_persons_hours_report,grp_persons_jobs_report,my_stats
+@default group=grp_persons_hours_report,grp_persons_jobs_report,my_stats,grp_persons_quantity_report
 	@layout grp_persons_full type=hbox width=20%:80%
 		@layout grp_persons_left type=vbox parent=grp_persons_full
 			@layout persons_time_tree type=vbox parent=grp_persons_left area_caption=Vali&nbsp;ajavahemik
 				@property persons_time_tree type=treeview store=no no_caption=1 parent=persons_time_tree
 			@layout persons_personnel_tree type=vbox parent=grp_persons_left area_caption=Vali&nbsp;inimesed&#44;&nbsp;kelle&nbsp;t&ouml;&ouml;tunde&nbsp;soovid&nbsp;n&auml;ha
 				@property persons_personnel_tree type=treeview store=no no_caption=1 parent=persons_personnel_tree
+			@layout persons_resource_span_tree type=vbox parent=grp_persons_left area_caption=Vali&nbsp;ressursid group=grp_persons_quantity_report
+				@property persons_resource_span_tree type=treeview store=no no_caption=1 parent=persons_resource_span_tree group=grp_persons_quantity_report
 			@layout persons_other_options type=vbox parent=grp_persons_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
 
 		@layout grp_persons_right type=vbox parent=grp_persons_full
+
+
+@default group=grp_material_report
+	@layout grp_material_report_full type=hbox width=20%:80%
+		@layout grp_material_report_left type=vbox parent=grp_material_report_full
+			@layout grp_material_tree type=vbox parent=grp_material_report_left area_caption=Materjal
+				@property grp_material_tree type=treeview store=no no_caption=1 parent=grp_material_tree
+
+			@layout grp_material_time_tree type=vbox parent=grp_material_report_left area_caption=Ajavahemik
+				@property grp_material_time_tree type=treeview store=no no_caption=1 parent=grp_material_time_tree
+			@layout grp_material_personnel_tree type=vbox parent=grp_material_report_left area_caption=Inimesed
+				@property grp_material_personnel_tree type=treeview store=no no_caption=1 parent=grp_material_personnel_tree
+			@layout grp_material_resource_span_tree type=vbox parent=grp_material_report_left area_caption=Ressursid
+				@property grp_material_resource_span_tree type=treeview store=no no_caption=1 parent=grp_material_resource_span_tree
+			@layout grp_material_other_options type=vbox parent=grp_material_report_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
+
+		@layout grp_material_report_right type=vbox parent=grp_grp_material_full
+
 
 @default group=grp_persons_jobs_report
 	#layout grp_persons_full type=hbox width=20%:80%
@@ -216,8 +243,30 @@
 				@caption Kuva t&ouml;id, mida on teinud ainult valitud isik
 				@comment Omab m&otilde;ju ainult &uuml;he isiku t&ouml;&ouml;de kuvamisel
 		#layout grp_persons_right type=vbox parent=grp_persons_full
-			@layout persons_jobs_tbl type=vbox parent=grp_persons_right area_caption=Tehtud&nbsp;t&ouml&ouml;d
-				@property persons_jobs_tbl type=table store=no parent=persons_jobs_tbl no_caption=1
+			@property persons_jobs_tbl type=table store=no parent=grp_persons_right no_caption=1
+
+@default group=grp_persons_quantity_report
+	#layout grp_persons_full type=hbox width=20%:80%
+		#layout grp_persons_left type=vbox parent=grp_persons_full
+			#layout persons_other_options type=vbox parent=grp_persons_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
+				@property poo_quantity_broup_by type=chooser multiple=1 orient=vertical parent=persons_other_options captionside=top
+				@caption Grupeerimine
+		#layout grp_persons_right type=vbox parent=grp_persons_full
+			@layout grp_persons_right_split_1 type=hbox width=50%:50% parent=grp_persons_right
+				@layout grp_persons_right_split_1_left type=vbox parent=grp_persons_right_split_1 closeable=1 area_caption=T&uuml;kiarvestus&nbsp;inimeste&nbsp;l&otilde;ikes
+					@property persons_quantity_chart_quantity_by_person type=google_chart store=no no_caption=1 parent=grp_persons_right_split_1_left
+				@layout grp_persons_right_split_1_right type=vbox parent=grp_persons_right_split_1 closeable=1 area_caption=T&uuml;kiarvestus&nbsp;ressursside&nbsp;l&otilde;ikes
+					@property persons_quantity_chart_quantity_by_resource type=google_chart store=no no_caption=1 parent=grp_persons_right_split_1_right
+			@layout grp_persons_right_split_2 type=hbox width=50%:50% parent=grp_persons_right
+				@layout grp_persons_right_split_2_left type=vbox parent=grp_persons_right_split_2 closeable=1 area_caption=T&uuml;kiarvestus&nbsp;projektide&nbsp;l&otilde;ikes
+					@property persons_quantity_chart_quantity_by_case type=google_chart store=no no_caption=1 parent=grp_persons_right_split_2_left
+				@layout grp_persons_right_split_2_right type=vbox parent=grp_persons_right_split_2 closeable=1 area_caption=T&uuml;kiarvestus&nbsp;t&ouml;&ouml;de&nbsp;l&otilde;ikes
+					@property persons_quantity_chart_quantity_by_job type=google_chart store=no no_caption=1 parent=grp_persons_right_split_2_right
+			@layout grp_persons_right_split_3 type=vbox parent=grp_persons_right closeable=1 area_caption=T&uuml;kiarvestus&nbsp;inimeste&nbsp;kaupa&nbsp;kuude&nbsp;l&otilde;ikes
+				@property persons_quantity_chart_quantity_by_person_in_month type=google_chart store=no no_caption=1 parent=grp_persons_right_split_3
+			@layout grp_persons_right_split_4 type=vbox parent=grp_persons_right closeable=1 area_caption=T&uuml;kiarvestus&nbsp;inimeste&nbsp;kaupa&nbsp;n&auml;dalate&nbsp;l&otilde;ikes
+				@property persons_quantity_chart_quantity_by_person_in_week type=google_chart store=no no_caption=1 parent=grp_persons_right_split_4
+			@property persons_quantity_tbl type=table store=no parent=grp_persons_right no_caption=1
 
 @default group=grp_persons_hours_report,my_stats
 	#layout grp_persons_full type=hbox width=20%:80%
@@ -233,9 +282,9 @@
 					@property pauses_by_resource_chart type=google_chart store=no parent=pauses_by_resource_chart no_caption=1 group=grp_persons_hours_report,my_stats
 			@layout persons_hours_chart type=vbox closeable=1 parent=grp_persons_right area_caption=T&ouml;&ouml;tundide&nbsp;graafik&nbsp;inimeste&nbsp;kaupa group=grp_persons_hours_report,my_stats
 				@property persons_hours_chart type=text no_caption=1 parent=persons_hours_chart store=no group=grp_persons_hours_report,my_stats
-			@layout persons_hours_tbl type=vbox closeable=1 parent=grp_persons_right area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;inimeste&nbsp;kaupa group=grp_persons_hours_report,my_stats
+			@layout persons_hours_tbl type=vbox closeable=1 parent=grp_persons_right no_padding=1 area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;inimeste&nbsp;kaupa group=grp_persons_hours_report,my_stats
 				@property persons_hours_tbl type=table no_caption=1 parent=persons_hours_tbl store=no group=grp_persons_hours_report,my_stats
-			@layout persons_detailed_hours_tbl type=vbox closeable=1 parent=grp_persons_right area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;t&ouml;&ouml;&nbsp;kaupa group=grp_persons_hours_report,my_stats
+			@layout persons_detailed_hours_tbl type=vbox closeable=1 parent=grp_persons_right no_padding=1 area_caption=T&ouml;&ouml;tundide&nbsp;tabel&nbsp;t&ouml;&ouml;&nbsp;kaupa group=grp_persons_hours_report,my_stats
 				@property persons_detailed_hours_tbl type=table no_caption=1 parent=persons_detailed_hours_tbl store=no group=grp_persons_hours_report,my_stats
 
 @default group=grp_schedule_gantt
@@ -256,19 +305,33 @@
 
 @default group=grp_schedule_google
 
-	@layout charts_1 type=hbox width=50%:50%
+	@layout charts_split type=hbox width=25%:75%
 
-		@layout states_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;staatuste&nbsp;kaupa parent=charts_1 closeable=1
+		@layout charts_left type=vbox parent=charts_split
 
-			@property states_chart type=google_chart no_caption=1 parent=states_chart store=no
+			@layout charts_clients_tree type=vbox parent=charts_left area_caption=Vali&nbsp;klient/kliendikategooria
 
-		@layout deadline_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=charts_1 closeable=1
+				@property charts_clients_tree type=treeview store=no no_caption=1 parent=charts_clients_tree
 
-			@property deadline_chart type=google_chart no_caption=1 parent=deadline_chart store=no
+			@layout charts_time_tree type=vbox parent=charts_left area_caption=Vali&nbsp;ajavahemik
 
-	@layout clients_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;klientide&nbsp;kaupa&nbsp;(TOP&nbsp;20) closeable=1
+				@property charts_time_tree type=treeview store=no no_caption=1 parent=charts_time_tree
 
-		@property clients_chart type=google_chart no_caption=1 parent=clients_chart store=no
+		@layout charts_right type=vbox parent=charts_split
+
+			@layout charts_1 type=hbox width=50%:50% parent=charts_right
+
+				@layout states_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;staatuste&nbsp;kaupa parent=charts_1 closeable=1
+
+					@property states_chart type=google_chart no_caption=1 parent=states_chart store=no
+
+				@layout deadline_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;t&auml;htaja&nbsp;j&auml;rgi parent=charts_1 closeable=1
+
+					@property deadline_chart type=google_chart no_caption=1 parent=deadline_chart store=no
+
+			@layout clients_chart type=vbox area_caption=K&auml;imasolevad&nbsp;projektid&nbsp;klientide&nbsp;kaupa&nbsp;(TOP&nbsp;20) closeable=1 parent=charts_right
+
+				@property clients_chart type=google_chart no_caption=1 parent=clients_chart store=no
 
 @default group=grp_users_tree
 	@property user_list_toolbar type=toolbar store=no no_caption=1
@@ -393,13 +456,13 @@
 
 			@layout printer_tree type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;de&nbsp;staatused
 
-				@property printer_tree type=treeview parent=printer_tree store=no
+				@property printer_tree type=treeview parent=printer_tree store=no no_caption=1
 
 			@layout printer_time_tree_l type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;d&nbsp;kuup&auml;evade&nbsp;kaupa
-				@property printer_time_tree type=treeview parent=printer_time_tree_l store=no
+				@property printer_time_tree type=treeview parent=printer_time_tree_l store=no no_caption=1
 
 			@layout printer_resource_tree_l type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;d&nbsp;ressursside&nbsp;kaupa
-				@property printer_resource_tree type=treeview parent=printer_resource_tree_l store=no
+				@property printer_resource_tree type=treeview parent=printer_resource_tree_l store=no no_caption=1
 
 			@layout printer_search type=vbox parent=printer_left closeable=1 area_caption=T&ouml;&ouml;de&nbsp;otsing
 
@@ -434,16 +497,16 @@
 
 					@property pp_birthdays type=table parent=ppl_birthdays no_caption=1 store=no
 
-		@layout printer_right type=vbox parent=printer_master area_caption=T
+		@layout printer_right_m type=vbox parent=printer_master
 
-			@layout printer_legend_box type=vbox no_caption=1 closeable=0 parent=printer_right
-			@property printer_legend type=text no_caption=1 parent=printer_legend_box
+		@layout printer_right type=vbox parent=printer_master parent=printer_right_m
 
 			@property printer_jobs_prev_link type=text store=no no_caption=1 parent=printer_right
 
 			@property printer_jobs type=table no_caption=1 parent=printer_right
 
 			@property printer_jobs_next_link type=text store=no no_caption=1 parent=printer_right
+
 
 			@property pj_toolbar type=toolbar store=no no_caption=1 parent=printer_right
 			@caption Muuda staatust
@@ -465,89 +528,98 @@
 			@property pj_title_job_data type=text store=no subtitle=1 parent=printer_right
 			@caption T&ouml;&ouml; andmed
 
-			@property pj_starttime type=text store=no parent=printer_right
-			@caption Algus
+				@property pj_starttime type=text store=no parent=printer_right
+				@caption Algus
 
-			@property pj_length type=text store=no parent=printer_right
-			@caption Plaanitud kestus (h)
+				@property pj_length type=text store=no parent=printer_right
+				@caption Plaanitud kestus (h)
 
-			@property pj_minstart type=datetime_select store=no parent=printer_right
-			@caption Arvatav j&auml;tkamisaeg
+				@property pj_minstart type=datetime_select store=no parent=printer_right
+				@caption Arvatav j&auml;tkamisaeg
 
-			@property pj_remaining_length type=textbox store=no parent=printer_right
-			@caption Arvatav l&otilde;petamiseks kuluv aeg (h)
+				@property pj_remaining_length type=textbox store=no parent=printer_right
+				@caption Arvatav l&otilde;petamiseks kuluv aeg (h)
 
-			@property pj_submit type=submit store=no parent=printer_right
-			@caption Salvesta
+				@property pj_submit type=submit store=no parent=printer_right
+				@caption Salvesta
 
-			property pj_pre_buffer type=text store=no parent=printer_right
-			caption Eelpuhveraeg (h)
+				property pj_pre_buffer type=text store=no parent=printer_right
+				caption Eelpuhveraeg (h)
 
-			property pj_post_buffer type=text store=no parent=printer_right
-			caption J&auml;relpuhveraeg (h)
+				property pj_post_buffer type=text store=no parent=printer_right
+				caption J&auml;relpuhveraeg (h)
 
-			@layout resource_hbox type=hbox width="50%:50%" parent=printer_right
-			@caption Ressurss
+				@layout resource_hbox type=hbox width="50%:50%" parent=printer_right
+				@caption Ressurss
 
-			@property pj_resource type=text store=no parent=printer_right
-			@caption Ressurss
+				@property pj_resource type=text store=no parent=printer_right
+				@caption Ressurss
 
-			@property pj_job_comment type=text store=no parent=printer_right
-			@caption Kommentaar
+				@property pj_job_comment type=text store=no parent=printer_right
+				@caption Kommentaar
 
-			@property pj_state type=text store=no parent=printer_right
-			@caption Staatus
+				@property pj_state type=text store=no parent=printer_right
+				@caption Staatus
 
 			@property pjp_title_proj_data type=text store=no subtitle=1 parent=printer_right
 			@caption Projekti andmed
 
-			@property pjp_format type=text store=no parent=printer_right
-			@caption Formaat
+				@property pjp_name type=text store=no parent=printer_right
+				@caption Projekti number
 
-			@property pjp_sisu_lk_arv type=text store=no parent=printer_right
-			@caption Sisu lk arv
+				@property pjp_comment type=text store=no parent=printer_right
+				@caption Projekti nimetus
 
-			@property pjp_kaane_lk_arv type=text store=no parent=printer_right
-			@caption Kaane lk arv
+				@property pjp_customer type=text store=no parent=printer_right
+				@caption Klient
 
-			@property pjp_sisu_varvid type=text store=no parent=printer_right
-			@caption Sisu v&auml;rvid
+				@property pjp_format type=text store=no parent=printer_right
+				@caption Formaat
 
-			@property pjp_sisu_varvid_notes type=text store=no parent=printer_right
-			@caption Sisu v&auml;rvid Notes
+				@property pjp_sisu_lk_arv type=text store=no parent=printer_right
+				@caption Sisu lk arv
 
-			@property pjp_sisu_lakk_muu type=text store=no parent=printer_right
-			@caption Sisu lakk/muu
+				@property pjp_kaane_lk_arv type=text store=no parent=printer_right
+				@caption Kaane lk arv
 
-			@property pjp_kaane_varvid type=text store=no parent=printer_right
-			@caption Kaane v&auml;rvid
+				@property pjp_sisu_varvid type=text store=no parent=printer_right
+				@caption Sisu v&auml;rvid
 
-			@property pjp_kaane_varvid_notes type=text store=no parent=printer_right
-			@caption Kaane v&auml;rvid Notes
+				@property pjp_sisu_varvid_notes type=text store=no parent=printer_right
+				@caption Sisu v&auml;rvid Notes
 
-			@property pjp_kaane_lakk_muu type=text store=no parent=printer_right
-			@caption Kaane lakk/muu
+				@property pjp_sisu_lakk_muu type=text store=no parent=printer_right
+				@caption Sisu lakk/muu
 
-			@property pjp_sisu_paber type=text store=no parent=printer_right
-			@caption Sisu paber
+				@property pjp_kaane_varvid type=text store=no parent=printer_right
+				@caption Kaane v&auml;rvid
 
-			@property pjp_kaane_paber type=text store=no parent=printer_right
-			@caption Kaane paber
+				@property pjp_kaane_varvid_notes type=text store=no parent=printer_right
+				@caption Kaane v&auml;rvid Notes
 
-			@property pjp_trykiarv type=text store=no parent=printer_right
-			@caption Tr&uuml;kiarv
+				@property pjp_kaane_lakk_muu type=text store=no parent=printer_right
+				@caption Kaane lakk/muu
 
-			@property pjp_trykise_ehitus type=text store=no parent=printer_right
-			@caption Tr&uuml;kise ehitus
+				@property pjp_sisu_paber type=text store=no parent=printer_right
+				@caption Sisu paber
 
-			@property pjp_kromaliin type=text store=no parent=printer_right
-			@caption Kromalin
+				@property pjp_kaane_paber type=text store=no parent=printer_right
+				@caption Kaane paber
 
-			@property pjp_makett type=text store=no parent=printer_right
-			@caption Makett
+				@property pjp_trykiarv type=text store=no parent=printer_right
+				@caption Tr&uuml;kiarv
 
-			@property pjp_naidis type=text store=no parent=printer_right
-			@caption N&auml;idis
+				@property pjp_trykise_ehitus type=text store=no parent=printer_right
+				@caption Tr&uuml;kise ehitus
+
+				@property pjp_kromaliin type=text store=no parent=printer_right
+				@caption Kromalin
+
+				@property pjp_makett type=text store=no parent=printer_right
+				@caption Makett
+
+				@property pjp_naidis type=text store=no parent=printer_right
+				@caption N&auml;idis
 
 			@property pjp_title_case_wf type=text store=no subtitle=1 parent=printer_right
 			@caption Projekti t&ouml;&ouml;voog
@@ -555,6 +627,11 @@
 			@property pjp_material type=table store=no no_caption=1 parent=printer_right
 
 			@property pjp_case_wf type=table store=no no_caption=1 parent=printer_right
+
+
+		@layout printer_legend_box type=vbox closeable=1 area_caption=Legend parent=printer_right_m
+
+			@property printer_legend type=text no_caption=1 parent=printer_legend_box
 
 
 @default group=grp_login_select_res
@@ -1050,7 +1127,43 @@ class mrp_workspace extends class_base
 				"planned_date" => $tmp,//!!! to enable sorting by planned_date which is in mrp_case_schedule table
 			);
 	
-			if($arr["request"]["timespan"])
+
+			if(!empty($arr["request"]["cat"]) || !empty($arr["request"]["alph"]))
+			{
+				$co_id = $arr["obj_inst"]->prop("owner");
+				if (!$this->can("view", $co_id))
+				{
+					break;
+				}
+				else
+				{
+					$co = obj($co_id);
+				}
+				$customers = new object_list();
+				if (isset($arr["request"]["cat"]) and is_oid($arr["request"]["cat"]))
+				{
+					// get customers from cat
+					$cat = obj($arr["request"]["cat"]);
+					foreach($cat->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+					{
+						$customers->add($c->prop("to"));
+					}
+				}
+				elseif($arr["request"]["alph"])
+				{
+					$customers_data = $co->get_all_customer_ids(array("name" => $arr["request"]["alph"]));
+					foreach($customers_data as $customer)
+					{
+						if($this->can("view" , $customer))
+						{
+							$customers->add($customer);
+						}
+					}
+				}
+				$args["customer"] = $customers->ids();
+			}
+
+			if(!empty($arr["request"]["timespan"]))
 			{
 				switch($arr["request"]["timespan"])
 				{
@@ -1164,6 +1277,12 @@ class mrp_workspace extends class_base
 						break;
 
 					case "aborted_jobs":
+						if(is_array($args["customer"]))
+						{
+							$projects = new object_list ($args);
+							$args["project"] = $projects->ids();
+						}
+
 						$applicable_sortorders = array (
 							"due_date",
 						);
@@ -1178,7 +1297,10 @@ class mrp_workspace extends class_base
 							unset($args["sort_by"]);
 						}
 
+					//	$args["project.customer"] = $args["customer"];
 						unset($args["planned_date"]);
+						unset($args["customer"]);
+
 						$args["class_id"] = CL_MRP_JOB;
 						$args["state"] = MRP_STATUS_ABORTED;
 						$args["parent"] = $this_object->prop ("jobs_folder");
@@ -1187,7 +1309,12 @@ class mrp_workspace extends class_base
 						break;
 
 					case "subcontracts":
-						$this->projects_list_objects = $this->_get_subcontract_job_list($this_object, $limit);
+						if(is_array($args["customer"]))
+						{
+							$projects = new object_list ($args);
+							$args["project"] = $projects->ids();
+						}
+						$this->projects_list_objects = $this->_get_subcontract_job_list($this_object, NULL,$args["project"]);
 						$this->projects_list_objects_count = $this->jobs_subcontracted_count;
 						break;
 				}
@@ -1262,6 +1389,11 @@ class mrp_workspace extends class_base
 				if ($prop["name"] === "pjp_material")
 				{
 					$this->_pjp_material($arr);
+					return PROP_OK;
+				}
+				if ($prop["name"] === "pjp_customer")
+				{
+					$this->_pjp_customer($arr);
 					return PROP_OK;
 				}
 
@@ -1394,10 +1526,13 @@ class mrp_workspace extends class_base
 						break;
 				}
 
+				// Why is this necessary?	-kaarel 3.06.2009
+				/*
 				if ($prop["value"] == "")
 				{
 					$prop["value"] = "&nbsp;";
 				}
+				*/
 			}
 		}
 
@@ -1430,7 +1565,8 @@ class mrp_workspace extends class_base
 				break;
 
 			case "pp_resources":
-				$this->_get_pp_resources($arr);
+				$retval = PROP_IGNORE;
+				//$this->_get_pp_resources($arr);
 				break;
 
 			case "pp_birthdays":
@@ -1637,6 +1773,7 @@ class mrp_workspace extends class_base
 				$this->create_customers_toolbar ($arr);
 				break;
 			case "customers_tree":
+			case "project_customers_tree":
 				$this->create_customers_tree ($arr);
 				break;
 			case "customers_list":
@@ -2104,6 +2241,349 @@ class mrp_workspace extends class_base
 		return $retval;
 	}
 
+	public function _get_persons_quantity_chart_quantity_by_person_in_month($arr)
+	{
+		list($from, $to) = $this->get_hours_from_to();
+		if($to - $from <= 31*24*3600)
+		{
+			return PROP_IGNORE;
+		}
+		return $this->quantity_by_smth_in_time_chart($arr, "m", array("person", "month"));
+	}
+
+	public function _get_persons_quantity_chart_quantity_by_person_in_week($arr)
+	{
+		list($from, $to) = $this->get_hours_from_to();
+		if($to - $from <= 7*24*3600)
+		{
+			return PROP_IGNORE;
+		}
+		return $this->quantity_by_smth_in_time_chart($arr, "W", array("person", "week"));
+	}
+
+	protected function quantity_by_smth_in_time_chart($arr, $type, $groupby = array("person", "month"))
+	{
+		list($from, $to) = $this->get_hours_from_to();
+		$_data = mrp_job_obj::get_progress_for_params(array(
+			"from" => $from,
+			"to" => $to,
+			"person" => $this->get_hours_person($arr),
+			"resource" => $this->get_hours_resource($arr),
+			"groupby" => $groupby,
+		));
+		
+		$data = array();
+		$weeks = array();
+		$months = array();
+		$years = array();
+
+		foreach($_data as $pid => $pdata)
+		{
+			for($y = date("Y", $from); $y <= date("Y", $to); $y++)
+			{
+				$i_from = $y === date("Y", $from) ? date($type, $from) : 1;
+				$i_to = $y === date("Y", $to) ? date($type, $to) : date($t, mktime(0, 0, 0, 12, 31, $y));
+				for($i = (int)$i_from; $i <= $i_to; $i++)
+				{
+					if($i < 10)
+					{
+						$i = "0".$i;
+					}
+					$data[$pid][$y."_".$i] = isset($_data[$pid][$y][(int)$i]) ? $_data[$pid][$y][(int)$i] : 0;
+					
+					switch($type)
+					{
+						case "W":
+							$weeks[$y."_".$i] = (int)$i;
+							break;
+
+						case "m":
+							$months[$y."_".$i] = locale::get_lc_month((int)$i);
+							break;
+					}
+				}
+
+				$years[$y] = $y;
+			}
+			ksort($data[$pid]);
+		}
+
+		$c = &$arr["prop"]["vcl_inst"];
+		$c->use_cache(false);
+		$c->set_type(GCHART_LINE_CHART);
+		$c->set_size(array(
+			"width" => 800,
+			"height" => 200,
+		));
+		$c->set_grid(array(
+			"xstep" => 0,
+			"ystep" => 10,
+		));
+		$c->add_fill(array(
+			"area" => GCHART_FILL_BACKGROUND,
+			"type" => GCHART_FILL_SOLID,
+			"colors" => array(
+				"color" => "e9e9e9",
+			),
+		));
+
+		$ol = new object_list(array(
+			"oid" => array_merge(array(-1), array_keys($data)),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$names = $ol->names();
+
+		$legend_labels = array();
+		$labels = array();
+		$cnt = 0;
+		$max = 0;
+		foreach($data as $pid => $pdata)
+		{
+			if(isset($names[$pid]))
+			{
+				$legend_labels[$pid] = parse_obj_name($names[$pid]);
+				$c->add_data($pdata);
+				$labels = array_keys($pdata);
+			}
+			$cnt++;
+			$pmax = max($pdata);
+			$max = max($max, $pmax);
+		}
+		$c->set_legend(array(
+			"labels" => $legend_labels,
+			"position" => GCHART_POSITION_RIGHT,
+		));
+		$c->set_colors($c->generate_colors($cnt));
+
+		switch($type)
+		{
+			case "W":
+				$c->set_axis(array(
+					GCHART_AXIS_LEFT,
+					GCHART_AXIS_BOTTOM,
+					GCHART_AXIS_BOTTOM,
+				));
+				$c->add_axis_label(1, $weeks);
+				$c->add_axis_label(2, $years);
+				break;
+
+			case "m":
+				$c->set_axis(array(
+					GCHART_AXIS_LEFT,
+					GCHART_AXIS_BOTTOM,
+					GCHART_AXIS_BOTTOM,
+				));
+				$c->add_axis_label(1, $months);
+				$c->add_axis_label(2, $years);
+				break;
+
+			default:
+				$c->set_axis(array(
+					GCHART_AXIS_LEFT,
+					GCHART_AXIS_BOTTOM,
+				));
+				$c->add_axis_label(1, $years);
+				break;
+		}
+		$c->add_axis_range(0, array(0, $max));
+	}
+
+	public function _get_persons_quantity_chart_quantity_by_person($arr)
+	{
+		return $this->quantity_by_smth_chart($arr, "person");
+	}
+
+	public function _get_persons_quantity_chart_quantity_by_resource($arr)
+	{
+		return $this->quantity_by_smth_chart($arr, "resource");
+	}
+
+	public function _get_persons_quantity_chart_quantity_by_case($arr)
+	{
+		return $this->quantity_by_smth_chart($arr, "case");
+	}
+
+	public function _get_persons_quantity_chart_quantity_by_job($arr)
+	{
+		return $this->quantity_by_smth_chart($arr, "job");
+	}
+
+	protected function quantity_by_smth_chart($arr, $groupby = "person")
+	{
+		list($from, $to) = $this->get_hours_from_to();
+		$_data = mrp_job_obj::get_progress_for_params(array(
+			"from" => $from,
+			"to" => $to,
+			"person" => $this->get_hours_person($arr),
+			"resource" => $this->get_hours_resource($arr),
+			"groupby" => $groupby,
+		));
+		$ol = new object_list(array(
+			"oid" => array_merge(array(-1), array_keys($_data)),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$labels = $ol->names();
+
+		$data = array();
+		foreach($labels as $k => $v)
+		{
+			$data[$k] = $_data[$k];
+		}
+
+		$c = &$arr["prop"]["vcl_inst"];
+		$c->use_cache(false);
+		$c->set_type(GCHART_PIE_3D);
+		$c->set_size(array(
+			"width" => 400,
+			"height" => 120,
+		));
+		$c->add_fill(array(
+			"area" => GCHART_FILL_BACKGROUND,
+			"type" => GCHART_FILL_SOLID,
+			"colors" => array(
+				"color" => "e9e9e9",
+			),
+		));
+		$c->add_data($data);
+		$c->set_labels($labels);
+	}
+
+	public function _get_charts_clients_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_item(0, array(
+			"id" => "all",
+			"name" => t("K&otilde;ik"),
+			"url" => aw_url_change_var("clientspan", NULL),
+		));
+
+		$this->create_customers_tree($arr);
+
+		// Hack the URLs
+		foreach($t->get_item_ids() as $id)
+		{
+			$item = $t->get_item($id);
+			$uri = new aw_uri($item["url"]);
+			$special_param = strlen($uri->arg("cat")) ? $uri->arg("cat") : (strlen($uri->arg("cust")) ? $uri->arg("cust") : $uri->arg("alph"));
+			$uri->unset_arg(array("cat", "cust", "alph", "clientspan"));
+			if(!empty($special_param))
+			{
+				$uri->set_arg("clientspan", $special_param);
+			}
+			$item["url"] = $uri->get();
+			$t->set_item($item);
+		}
+
+		$clientspan = automatweb::$request->arg("clientspan");
+		
+		if($this->can("view", $clientspan))
+		{
+			$t->set_selected_item($clientspan);
+		}
+		elseif(!empty($clientspan))
+		{
+			$t->set_selected_item("alph_".$clientspan);
+		}
+		else
+		{
+			$t->set_selected_item("all");
+		}
+	}
+
+	public function _get_charts_time_tree($arr)
+	{
+		return $this->_get_time_tree($arr);
+	}
+
+	public function _get_poo_quantity_broup_by($arr)
+	{
+		$arr["prop"]["options"] = array(
+			"resource" => t("Ressurss"),
+			"case" => t("Projekt"),
+			"job" => t("T&ouml;&ouml;"),
+		);
+	}
+
+	public function _init_persons_quantity_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_caption(t("T&uuml;kiarvestus"));
+
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("T&ouml;&ouml;taja"),
+			"align" => "left"
+		));
+
+		$groupby_captions = array(
+			"resource" => t("Ressurss"),
+			"case" => t("Projekt"),
+			"job" => t("T&ouml;&ouml;"),
+		);
+		foreach(safe_array($arr["obj_inst"]->prop("poo_quantity_broup_by")) as $groupby)
+		{
+			$t->define_field(array(
+				"name" => $groupby,
+				"caption" => $groupby_captions[$groupby],
+				"align" => "left",
+				"sortable" => true,
+			));
+		}
+
+		$t->define_field(array(
+			"name" => "quantity",
+			"caption" => t("Eksemplaride arv"),
+			"align" => "right"
+		));
+	}
+
+	protected function persons_quantity_tbl_insert_data($t, $row, $groupby, $lvl, $data)
+	{
+		if(is_array($data))
+		{
+			foreach($data as $k => $v)
+			{
+				$row[$groupby[$lvl]] = obj($k)->name();
+				$this->persons_quantity_tbl_insert_data($t, $row, $groupby, $lvl +1, $v);
+			}
+		}
+		else
+		{
+			$row["quantity"] = $data;
+			$t->define_data($row);
+		}
+	}
+
+	public function _get_persons_quantity_tbl($arr)
+	{
+		$this->_init_persons_quantity_tbl($arr);
+		$t = &$arr["prop"]["vcl_inst"];
+
+		list($from, $to) = $this->get_hours_from_to();
+		$groupby = array_values(array_merge(array("person"), safe_array($arr["obj_inst"]->prop("poo_quantity_broup_by"))));
+		$data = mrp_job_obj::get_progress_for_params(array(
+			"from" => $from,
+			"to" => $to,
+			"person" => $this->get_hours_person($arr),
+			"resource" => $this->get_hours_resource($arr),
+			"groupby" => $groupby,
+		));
+
+		foreach($data as $person => $data_)
+		{
+			$this->persons_quantity_tbl_insert_data($t, array("person" => obj($person)->name()), $groupby, 1, $data_);
+		}
+
+		$t->set_rgroupby(array(
+			"person" => "person",
+		));
+		$t->set_default_sortby(array_merge(array(
+			"person"
+		), $groupby));
+	}
+
 	public function _get_poo_started_finished_by($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -2308,6 +2788,8 @@ class mrp_workspace extends class_base
 	public function _get_persons_jobs_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->set_caption("Tehtud t&ouml;&ouml;d");
 
 		// Init
 		$t->define_field(array(
@@ -2862,9 +3344,9 @@ class mrp_workspace extends class_base
 		$to = time();
 		if(isset($_GET["timespan"]))
 		{
-			if(substr($_GET["timespan"], 0, 5) === "date_")
+			if(substr(automatweb::$request->arg("timespan"), 0, 5) === "date_")
 			{
-				list($Y, $M, $D) = explode("_", substr($_GET["timespan"], 5));
+				list($Y, $M, $D) = array_merge(explode("_", substr(automatweb::$request->arg("timespan"), 5)), array(NULL, NULL));
 				if($M === NULL)
 				{
 					$from = mktime(0, 0, 0, 1, 1, $Y);
@@ -2985,13 +3467,13 @@ class mrp_workspace extends class_base
 			case "person":
 				$data_prms["person"] = isset($arr["request"]["person_show_jobs"]) ? $arr["request"]["person_show_jobs"] : $this->get_hours_person($arr);
 				$data_prms["person_handling"] = $arr["obj_inst"]->prop("poo_started_finished_by");
-				$data = get_instance("mrp_job_obj")->get_person_hours($data_prms);
+				$data = mrp_job_obj::get_person_hours($data_prms);
 				$clid = CL_CRM_PERSON;
 				break;
 
 			case "resource":
 				$data_prms["resource"] = $this->get_hours_resource($arr);
-				$data = get_instance("mrp_job_obj")->get_resource_hours($data_prms);
+				$data = mrp_job_obj::get_resource_hours($data_prms);
 				$clid = CL_MRP_RESOURCE;
 				break;
 		}
@@ -3118,6 +3600,39 @@ class mrp_workspace extends class_base
 		return $this->hours[$kf];
 	}
 
+	function _get_grp_material_tree($arr)
+	{
+//		$c = $arr["obj_inst"]->prop("owner");
+//		$o = obj($c);
+
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->set_selected_item($arr["request"]["material"] ? $arr["request"]["material"] : "all");
+
+		$t->add_item(0, array(
+			"id" => "all",
+			"name" => t("K&otilde;ik materjalid"),
+		));
+
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT,
+		));
+		foreach($ol->names() as $id => $name)
+		{
+			
+			$t->add_item("all", array(
+				"id" => $id,
+				"name" => $name,
+ 				"iconurl" => icons::get_icon_url(CL_SHOP_PRODUCT),
+			));
+		}
+	}
+
+	function _get_grp_material_personnel_tree($arr)
+	{
+		return $this->_get_persons_personnel_tree($arr);
+	}
+
 	function _get_persons_personnel_tree($arr)
 	{
 		$c = $arr["obj_inst"]->prop("owner");
@@ -3137,6 +3652,7 @@ class mrp_workspace extends class_base
 			"name" => $o->name(),
 			"url" => aw_url_change_var(array(
 				"unit" => NULL,
+				"cat" => NULL,
 			)),
 		));
 		$i->generate_tree(array(
@@ -3153,6 +3669,16 @@ class mrp_workspace extends class_base
 		));
 	}
 
+	public function _get_grp_material_resource_span_tree($arr)
+	{
+		return $this->create_resources_tree($arr, "resource_span");
+	}
+
+	public function _get_persons_resource_span_tree($arr)
+	{
+		return $this->create_resources_tree($arr, "resource_span");
+	}
+
 	public function _get_resources_resource_span_tree($arr)
 	{
 		return $this->create_resources_tree($arr, "resource_span");
@@ -3164,6 +3690,10 @@ class mrp_workspace extends class_base
 	}
 
 	public function _get_persons_time_tree($arr)
+	{
+		return $this->_get_time_tree($arr);
+	}
+	public function _get_grp_material_time_tree($arr)
 	{
 		return $this->_get_time_tree($arr);
 	}
@@ -3179,7 +3709,7 @@ class mrp_workspace extends class_base
 		$t->set_selected_item(isset($arr["request"]["timespan"]) ? $arr["request"]["timespan"] : "all");
 		$branches = array(
 			0 => array(
-				"all" => t("K&otilde;ik"),
+//				"all" => t("K&otilde;ik"),
 				"current_week" => t("K&auml;esolev n&auml;dal"),
 				"last_week" => t("M&ouml;&ouml;dunud n&auml;dal"),
 				"current_month" => t("K&auml;esolev kuu"),
@@ -3871,7 +4401,7 @@ class mrp_workspace extends class_base
 		### resource tree
 		$resources_folder = $this_object->prop ("resources_folder");
 
-		if($arr["request"]["group"] == "my_resources" || $arr["request"]["group"] = "grp_printer_general")
+		if($arr["request"]["group"] == "my_resources" || $arr["request"]["group"] == "grp_printer_general")
 		{
 			$resids = $this->get_cur_printer_resources(array(
 				"ws" => $arr["obj_inst"],
@@ -3944,7 +4474,7 @@ class mrp_workspace extends class_base
 			),
 		);
 
-		if(in_array($arr["request"]["group"], array("grp_resources_load", "grp_resources", "grp_resources_hours_report")))
+		if(in_array($arr["request"]["group"], array("grp_resources_load", "grp_resources", "grp_resources_hours_report", "grp_persons_quantity_report")))
 		{
 			unset($tree_prms["node_actions"]);
 		}
@@ -5598,6 +6128,7 @@ class mrp_workspace extends class_base
 
 	function _user_list($arr)
 	{
+		$arr["prop"]["fields"] = array("image", "name", "phone", "email", "section", "rank");
 		$this->_delegate_co_v($arr, "_get_human_resources");
 	}
 
@@ -5996,6 +6527,7 @@ class mrp_workspace extends class_base
 		$t = $arr["prop"]["vcl_inst"];
 		classload("core/icons");
 
+		$all_customers = $co->get_all_customer_ids();
 
 		$cases = $arr["obj_inst"]->get_all_mrp_cases_data();
 		$customers = new object_list();
@@ -6004,14 +6536,21 @@ class mrp_workspace extends class_base
 		{
 			$customer_count[$data["customer"]]++;
 		}
-		foreach($customer_count as $id => $count)//ei k6ike panna, sest miskeid nulle ja asju tuleb alati sisse ja siis annab errorit
+/*		foreach($customer_count as $id => $count)//ei k6ike panna, sest miskeid nulle ja asju tuleb alati sisse ja siis annab errorit
 		{
 			if($this->can("view" , $id))
 			{
 				$customers->add($id);
 			}
 		}
-
+*/
+		foreach($all_customers as $id)//ei k6ike panna, sest miskeid nulle ja asju tuleb alati sisse ja siis annab errorit
+		{
+			if($this->can("view" , $id))
+			{
+				$customers->add($id);
+			}
+		}
 
 		$t->add_item(0, array(
 			"id" => "cats",
@@ -6049,6 +6588,7 @@ class mrp_workspace extends class_base
 			$t->set_selected_item($arr["request"]["cat"]);
 		}
 
+
 		$t->add_item(0, array(
 			"id" => "alph",
 			"name" => t("Kliendid A - Z"),
@@ -6071,6 +6611,10 @@ class mrp_workspace extends class_base
 			else
 			{
 				$A_to_Z[$char]++;
+			}
+			if(!isset($customer_count[$oid]))
+			{
+				$customer_count[$oid] = 0;
 			}
 			$nm = parse_obj_name($name)." (".$customer_count[$oid].")";
 			if($arr["request"]["cust"] == $oid)
@@ -6173,6 +6717,21 @@ class mrp_workspace extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "contact_person",
+			"caption" => t("Kontaktisik"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+
+		$t->define_field(array(
+			"name" => "cust_manager",
+			"caption" => t("Kliendihaldur"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "priority",
 			"caption" => t("Prioriteet"),
 			"sortable" => 1,
@@ -6218,7 +6777,7 @@ class mrp_workspace extends class_base
 			elseif($arr["request"]["alph"])
 			{
 				$t->set_caption(sprintf(t("'%s' t&auml;hega algavate klientide nimekiri"), $arr["request"]["alph"]));
-				$customers_data = $arr["obj_inst"]->get_all_mrp_customers(array("name" => $arr["request"]["alph"]));
+				$customers_data = $co->get_all_customer_ids(array("name" => $arr["request"]["alph"]));
 				foreach($customers_data as $customer)
 				{
 					if($this->can("view" , $customer))
@@ -6251,13 +6810,17 @@ class mrp_workspace extends class_base
 				{
 					continue;
 				}
+
+				$cust_rel = $cust->get_customer_relation($co);
 				$t->define_data(array(
 					"name" => html::get_change_url($cust->id(), array("return_url" => get_ru()), $cust->name()),
 					"address" => $cust->prop_str("contact"),
 					"phone" => join (" ," , $cust->get_phones()),
 					"email" => $cust->get_mail(),
 					"oid" => $cust->id(),
-					"priority" => html::textbox(array("size" => 5 , "name" => "priority[".$cust->id()."]" , "value" => $co->get_customer_prop($cust->id() , "priority"))),
+					"priority" => html::textbox(array("size" => 5 , "name" => "priority[".$cust->id()."]" , "value" => is_object($cust_rel) ? $cust_rel->prop("priority") : "0")),
+					"contact_person" => is_object($cust_rel) && $cust_rel->prop("buyer_contact_person")?  html::get_change_url($cust_rel->prop("buyer_contact_person"), array("return_url" => get_ru()), $cust_rel->prop("buyer_contact_person.name")) : "",
+					"cust_manager" => is_object($cust_rel) && $cust_rel->prop("client_manager") ? html::get_change_url($cust_rel->prop("client_manager"), array("return_url" => get_ru()), $cust_rel->prop("client_manager.name")) : "",
 				));
 			}
 
@@ -6510,11 +7073,37 @@ class mrp_workspace extends class_base
 	function _printer_jobs($arr)
 	{
 		$t = $arr["prop"]["vcl_inst"];
+
+		if(isset($arr["request"]["pj_job"]) && $this->can("view", $arr["request"]["pj_job"]))
+		{
+			$t->set_header(sprintf(t("T&ouml;&ouml; \"%s\" detailvaade"), obj($arr["request"]["pj_job"])->name()));
+			$t->set_footer(sprintf(t("T&ouml;&ouml; \"%s\" detailvaade"), obj($arr["request"]["pj_job"])->name()));
+		}
+		else
+		{
+			$caps = array(
+				"grp_printer_current" => t("Jooksvad t&ouml;&ouml;d"),
+				"grp_printer_old" => t("Tegemata t&ouml;&ouml;d"),
+				"grp_printer_done" => t("Tehtud t&ouml;&ouml;d"),
+				"grp_printer_aborted" => t("Katkestatud t&ouml;&ouml;d"),
+				"grp_printer_in_progress" => t("K&otilde;ik t&ouml;&ouml;s olevad"),
+				"grp_printer_startable" => t("K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada"),
+				"grp_printer_notstartable" => t("T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada"),
+			);
+			$grp = isset($_GET["branch_id"]) ? $_GET["branch_id"] : "grp_printer_current";
+			if(array_key_exists($grp, $caps))
+			{
+				$t->set_header(html::bold($caps[$grp]));
+				$t->set_footer(html::bold($caps[$grp]));
+			}
+		}
+
+
 		$grp = isset($arr["prop"]["branch_id"]) ? $arr["prop"]["branch_id"] : "grp_printer_current";
 		$this->_init_printer_jobs_t($t, $grp);
 
 
-		if($arr["request"]["mrp_tree_active_item"])
+		if(!empty($arr["request"]["mrp_tree_active_item"]))
 		{
 			$res = $this->get_all_cat_resources($arr["request"]["mrp_tree_active_item"]);
 		}
@@ -6726,7 +7315,7 @@ class mrp_workspace extends class_base
 			"states" => $states,
 			"sort_by" => $sby,
 			"proj_states" => $proj_states,
-			"timespan" => $arr["request"]["timespan"],
+			"timespan" => automatweb::$request->arg("timespan"),
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -7027,9 +7616,12 @@ class mrp_workspace extends class_base
 		$ret = array();
 		foreach($ops->arr() as $op)
 		{
-			if ($this->can("view", $op->prop("resource")))
+			foreach(safe_array($op->prop("resource")) as $resource_id)
 			{
-				$ret[$op->prop("resource")] = $op->prop("resource");
+				if ($this->can("view", $resource_id))
+				{
+					$ret[$resource_id] = $resource_id;
+				}
 			}
 		}
 
@@ -7598,7 +8190,7 @@ class mrp_workspace extends class_base
 			return false;
 		}
 
-		if(in_array($arr["id"], array("grp_persons", "grp_persons_jobs_report", "grp_persons_hours_report", "grp_resources_hours_report")))
+		if(in_array($arr["id"], array("grp_persons", "grp_persons_jobs_report", "grp_persons_hours_report", "grp_resources_hours_report", "grp_persons_quantity_report")))
 		{
 			$arr["link"] = aw_url_change_var("timespan", "current_week", $arr["link"]);
 		}
@@ -7621,14 +8213,19 @@ class mrp_workspace extends class_base
 					$arr["area_caption"] = t("Klientide nimekiri");
 				}
 				break;
+
 			case "persons_personnel_tree":
 				if($arr["request"]["group"] == "my_stats")
 				{
 					return false;
 				}
-				if($arr["request"]["group"] == "grp_persons_jobs_report")
+				elseif($arr["request"]["group"] == "grp_persons_jobs_report")
 				{
 					$arr["area_caption"] = t("Vali inimesed, kelle tehtud t&ouml;id soovid n&auml;ha");
+				}
+				elseif($arr["request"]["group"] == "grp_persons_quantity_report")
+				{
+					$arr["area_caption"] = t("Vali inimesed, kelle t&uuml;kiarvestust soovid n&auml;ha");
 				}
 				break;
 
@@ -7682,7 +8279,7 @@ class mrp_workspace extends class_base
 				}
 				break;
 
-			case "printer_right":
+/*			case "printer_right":
 				if(isset($arr["request"]["pj_job"]) && $this->can("view", $arr["request"]["pj_job"]))
 				{
 					$arr["area_caption"] = sprintf(t("T&ouml;&ouml; \"%s\" detailvaade"), obj($arr["request"]["pj_job"])->name());
@@ -7704,7 +8301,7 @@ class mrp_workspace extends class_base
 						$arr["area_caption"] = $caps[$grp];
 					}
 				}
-				break;
+				break;*/
 		}
 		return true;
 	}
@@ -7990,7 +8587,7 @@ class mrp_workspace extends class_base
 		return '<table cellspacing="4" cellpadding="0">' . $rows . '</table>';
 	}
 
-	function _get_subcontract_job_list($this_object, $limit = NULL)
+	function _get_subcontract_job_list($this_object, $limit = NULL,$projects = array())
 	{
 		if (empty($this->subcontractor_resource_ids))
 		{
@@ -8039,6 +8636,11 @@ class mrp_workspace extends class_base
 				"limit" => $limit,
 				"sort_by" => $sort_by,
 			);
+			if(is_array($projects))
+			{
+				$filter["project"] = $projects;
+			}
+
 			if(isset($tmp))
 			{
 				$filter["starttime"] = $tmp;
@@ -8157,6 +8759,12 @@ class mrp_workspace extends class_base
 			);
 		}
 		return $row["project"];
+	}
+
+	public function _pjp_customer(&$arr)
+	{
+		$job = obj($arr["request"]["pj_job"]);
+		$arr["prop"]["value"] = obj($job->prop("project"))->prop("customer.name");
 	}
 
 	function _pjp_case_wf($arr)

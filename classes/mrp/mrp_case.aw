@@ -27,7 +27,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @property header type=text store=no no_caption=1 group=grp_general,grp_case_data
 
 @default group=grp_general
-	@property name type=textbox table=objects field=name group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data,grp_case_view parent=general_info
+	@property name type=textbox table=objects field=name group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data parent=general_info
 	@caption Projekti nr.
 
 	@property comment type=textbox table=objects field=comment
@@ -39,7 +39,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 	@property workspace type=hidden
 
-	@property state type=text group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data,grp_case_view editonly=1 parent=general_info
+	@property state type=text group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data editonly=1 parent=general_info
 	@caption Staatus
 
 	@property starttime type=datetime_select
@@ -48,10 +48,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@property due_date type=datetime_select
 	@caption Valmimist&auml;htaeg
 
-	@property project_priority type=textbox
+	@property project_priority type=textbox maxlength=10
 	@caption Projekti prioriteet
 
-	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data,grp_case_view editonly=1 parent=general_info
+	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data editonly=1 parent=general_info
 	@caption Klient
 
 	@property progress type=hidden
@@ -161,9 +161,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default group=grp_case_workflow
-	@layout vsplitbox type=hbox width=25%:75% group=grp_case_workflow,grp_case_materials,grp_case_schedule_gantt,grp_case_view
-		@layout left_pane type=vbox parent=vsplitbox group=grp_case_workflow,grp_case_materials,grp_case_schedule_gantt,grp_case_view
-			@layout general_info type=vbox parent=left_pane area_caption=Projekti&nbsp;&uuml;ldandmed closeable=1 group=grp_case_workflow,grp_case_materials,grp_case_schedule_gantt,grp_case_view
+	@layout vsplitbox type=hbox width=25%:75% group=grp_case_workflow,grp_case_materials,grp_case_schedule_gantt
+		@layout left_pane type=vbox parent=vsplitbox group=grp_case_workflow,grp_case_materials,grp_case_schedule_gantt
+			@layout general_info type=vbox parent=left_pane area_caption=Projekti&nbsp;&uuml;ldandmed closeable=1 group=grp_case_workflow,grp_case_materials,grp_case_schedule_gantt
 			@layout resource_tree type=vbox parent=left_pane area_caption=Ressursid&nbsp;kategooriate&nbsp;kaupa closeable=1
 				@property resource_tree type=text store=no no_caption=1 parent=resource_tree
 		@property workflow_table type=table store=no no_caption=1 parent=vsplitbox
@@ -201,7 +201,32 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 
 
 @default group=grp_case_view
-	@property case_view type=table no_caption=1 store=no parent=vsplitbox
+
+	@layout view_general_info type=hbox area_caption=Projekti&nbsp;&uuml;ldandmed closeable=1 width=50%:50%
+
+		@layout view_general_info_left type=vbox parent=view_general_info
+
+			@property vgi_name type=text parent=view_general_info_left
+			@caption Projekti nr.
+
+			@property vgi_comment type=text parent=view_general_info_left
+			@caption Projekti nimetus
+
+			@property vgi_customer type=text parent=view_general_info_left
+			@caption Klient
+
+		@layout view_general_info_right type=vbox parent=view_general_info
+
+			@property vgi_state type=text parent=view_general_info_right
+			@caption Staatus
+
+			@property vgi_due_date type=text parent=view_general_info_right
+			@caption Valmimist&auml;htaeg
+
+			@property vgi_starttime type=text parent=view_general_info_right
+			@caption Alustamisaeg (materjalide saabumine)
+
+	@property case_view type=table no_caption=1 store=no
 
 
 // --------------- RELATION TYPES ---------------------
@@ -349,9 +374,16 @@ class mrp_case extends class_base
 
 		$txt_grps = array("grp_case_schedule", "grp_case_schedule_gantt", "grp_case_workflow", "grp_case_formula", "grp_case_materials", "grp_case_view");
 
+		if(substr($prop["name"], 0, 4) === "vgi_")
+		{
+			$prop["name"] = substr($prop["name"], 4);
+			$prop["value"] = $arr["obj_inst"]->prop($prop["name"]);
+		}
+
 		switch($prop["name"])
 		{
 			case "name":
+			case "comment":
 				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], $txt_grps))
 				{
 					$prop["type"] = "text";
@@ -410,16 +442,16 @@ class mrp_case extends class_base
 				break;
 
 			case "due_date":
-				if ($arr["new"])
-				{
-					$prop["value"] = mktime (18, 00, 00);
-				}
-				break;
-
 			case "starttime":
 				if ($arr["new"])
 				{
 					$prop["value"] = mktime (18, 00, 00);
+				}
+				if(isset($arr["request"]["group"]) and in_array($arr["request"]["group"], $txt_grps))
+				{
+					$prop["type"] = "text";
+					$prop["caption"] .= ":";
+					$prop["value"] = locale::get_lc_date($prop["value"], 7);
 				}
 				break;
 
@@ -682,11 +714,24 @@ class mrp_case extends class_base
 				"site_id" => array(),
 				"lang_id" => array(),
 			));
-			$this->insert_materials_tree_stuff($t, $ol->names());
+			$this->materials_tree_data = array();
+			$this->insert_materials_tree_stuff($ol->names());
+			$this->insert_materials_tree_branches($t);
 		}
 	}
 
-	protected function insert_materials_tree_stuff($t, $datas)
+	protected function insert_materials_tree_branches($t)
+	{
+		foreach($this->materials_tree_data as $pt => $datas)
+		{
+			foreach($datas as $data)
+			{
+				$t->add_item($pt, $data);
+			}
+		}
+	}
+
+	protected function insert_materials_tree_stuff($datas)
 	{
 		foreach($datas as $oid => $data)
 		{
@@ -699,23 +744,23 @@ class mrp_case extends class_base
 				);
 			}
 
-			$t->add_item($data["parent"], array(
+			$this->materials_tree_data[$data["parent"]][$oid] = array(
 				"id" => $oid,
 				"name" => $data["name"],
 				"url" => $data["class_id"] == CL_SHOP_PRODUCT ? "javascript:add_material($oid, 0)" : "javascript:void(0)",
 				"iconurl" => icons::get_icon_url(($data["class_id"] == CL_SHOP_PRODUCT) ? $data["class_id"] : CL_MENU),
-			));
+			);
 
 			if(!empty($data["category"]))
 			{
 				foreach((array)$data["category"] as $cat)
 				{
-					$t->add_item($cat, array(
+					$this->materials_tree_data[$cat][$oid] = array(
 						"id" => $oid,
 						"name" => $data["name"],
 						"url" => $data["class_id"] == CL_SHOP_PRODUCT ? "javascript:add_material($oid, 0)" : "javascript:void(0)",
 						"iconurl" => icons::get_icon_url(($data["class_id"] == CL_SHOP_PRODUCT) ? $data["class_id"] : CL_MENU),
-					));
+					);
 				}
 			}
 		}
@@ -738,13 +783,13 @@ class mrp_case extends class_base
 				))
 			),
 			array(
-				CL_SHOP_PRODUCT => array("class_id", "parent", "RELTYPE_CATEGORY.oid" => "category"),
+				CL_SHOP_PRODUCT => array("class_id", "parent", "CL_SHOP_PRODUCT.RELTYPE_CATEGORY.oid" => "category"),
 				CL_SHOP_PRODUCT_CATEGORY => array("class_id", "parent"),
 			)
 		);
 		if($odl->count())
 		{
-			$this->insert_materials_tree_stuff($t, $odl->arr());
+			$this->insert_materials_tree_stuff($odl->arr());
 		}
 	}
 
@@ -758,7 +803,7 @@ class mrp_case extends class_base
 		));
 		$t->define_field(array(
 			"name" => "amount",
-			"caption" => t("Kogus"),
+			"caption" => t("Planeeritud kogus"),
 			"align"=> "center",
 		));
 		$t->define_field(array(
@@ -791,10 +836,16 @@ class mrp_case extends class_base
 
 		$jobs = $arr["obj_inst"]->get_job_names();
 
-		$data = mrp_job_obj::get_material_expenses(array(
+		$odl = mrp_job_obj::get_material_expenses(array(
 			"id" => isset($arr["request"]["job_id"]) ? $arr["request"]["job_id"] : array_keys($jobs),
 			"odl" => true,
 		));
+
+		$odl_without_job = $arr["obj_inst"]->get_material_expenses_without_job(array(
+			"odl" => true,
+		));
+
+		$data = $odl->arr() + $odl_without_job->arr();
 
 		$mec_o = obj(null, array(), CL_MATERIAL_EXPENSE_CONDITION);
 		$plan_ops = $mec_o->planning_options();
@@ -806,22 +857,22 @@ class mrp_case extends class_base
 			mrp_job_obj::STATE_ABORTED
 		);
 
-		foreach($data->arr() as $oid => $odata)
+		foreach($data as $oid => $odata)
 		{
-			$disabled = !in_array($odata["job.state"], $applicable_states);
+			$disabled = is_oid($odata["job"]) && !in_array($odata["job.state"], $applicable_states);
 			$prod_obj = obj($odata["product"]);
 			$t->define_data(array(
-				"material" => html::obj_change_url($prod_obj).html::hidden(array(
+				"material" => html::obj_change_url($prod_obj).($disabled ? "" : html::hidden(array(
 					"name" => "materials_table[$oid][product]",
 					"value" => $odata["product"],
-				)),
+				))),
 				"amount" => html::textbox(array(
 					"name" => "materials_table[$oid][amount]",
 					"size" => 4,
 					"value" => $odata["amount"],
 					"disabled" => $disabled,
 				)),
-				"unit" => mrp_job::get_materials_unitselect($prod_obj, $odata["unit"], $odata["job"]),
+				"unit" => mrp_job::get_materials_unitselect($prod_obj, $odata["unit"], false, "materials_table[$oid][unit]"),
 				"planning" => html::select(array(
 					"name" => "materials_table[$oid][planning]",
 					"options" => $plan_ops,
@@ -852,19 +903,25 @@ class mrp_case extends class_base
 			mrp_job_obj::STATE_ABORTED
 		);
 
+		$material_expenses = array();
+		$material_expenses_without_job = array();
+
 		foreach($arr["request"]["materials_table"] as $tmp)
 		{
-			$material_expenses[$tmp["job"]]["amount"][$tmp["product"]] = $tmp["amount"];
-			$material_expenses[$tmp["job"]]["movement"][$tmp["product"]] = $tmp["movement"];
-			$material_expenses[$tmp["job"]]["planning"][$tmp["product"]] = $tmp["planning"];
-		}
-		foreach($arr["request"]["jobs"] as $job => $units)
-		{
-			foreach($units["unit"] as $product => $unit)
+			if(!empty($tmp["job"]))
 			{
-				$material_expenses[$job]["unit"][$product] = $unit;
+				$material_expenses[$tmp["job"]]["amount"][$tmp["product"]] = $tmp["amount"];
+				$material_expenses[$tmp["job"]]["movement"][$tmp["product"]] = $tmp["movement"];
+				$material_expenses[$tmp["job"]]["planning"][$tmp["product"]] = $tmp["planning"];
+				$material_expenses[$tmp["job"]]["unit"][$tmp["product"]] = $tmp["unit"];
+			}
+			else
+			{
+				$material_expenses_without_job[$tmp["product"]] = $tmp;
 			}
 		}
+
+		$arr["obj_inst"]->save_materials_without_job($material_expenses_without_job);
 
 		foreach($material_expenses as $jid => $data)
 		{
@@ -1074,6 +1131,8 @@ class mrp_case extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				$arr["obj_inst"]->awobj_set_customer($prop["value"]);
+				return PROP_IGNORE;
 				break;
 
 			case "workflow_table":
@@ -2834,6 +2893,22 @@ class mrp_case extends class_base
 				"parent" => "length",
 			));
 		$t->define_field(array(
+			"name" => "quantity",
+			"caption" => t("T&uuml;kiarvestus"),
+		));
+			$t->define_field(array(
+				"name" => "planned_quantity",
+				"caption" => t("Planeeritud"),
+				"align" => "right",
+				"parent" => "quantity",
+			));
+			$t->define_field(array(
+				"name" => "real_quantity",
+				"caption" => t("Valmis"),
+				"align" => "right",
+				"parent" => "quantity",
+			));
+		$t->define_field(array(
 			"name" => "start",
 			"caption" => t("Algus"),
 			"align" => "center",
@@ -2849,9 +2924,117 @@ class mrp_case extends class_base
 		));
 		$t->define_field(array(
 			"name" => "employee",
-			"caption" => t("T&ouml;&ouml;taja"),
+			"caption" => t("T&ouml;&ouml;tajad"),
 			"align" => "center"
 		));
+	}
+
+	function get_case_view_popup($o)
+	{
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu($o->id());
+
+		### start button
+		if($o->can_start())
+		{
+			$disabled = false;
+		}
+		else
+		{
+			$disabled = true;
+		}
+
+		$pm->add_item(array(
+			"text" => t("Alusta"),
+			"link" => $this->mk_my_orb("start", array(
+					"id" => $o->id(),
+					"return_url" => get_ru()
+				), "mrp_job"),
+			"disabled" => $disabled
+		));
+
+		### done, abort, pause, end_shift buttons
+		if($o->prop("state") == mrp_job_obj::STATE_INPROGRESS)
+		{
+			$disabled_inprogress = false;
+		}
+		else
+		{
+			$disabled_inprogress = true;
+		}
+
+		foreach(obj($o->resource)->prop("production_feedback_option_values") as $value)
+		{
+			if(empty($value))
+			{
+				continue;
+			}
+
+			$url = $this->mk_my_orb("done", array(
+				"id" => $o->id(),
+				"quantity" => $value * $o->prop("batch_size"),
+				"return_url" => get_ru()
+			), "mrp_job");
+
+			$pm->add_item(array(
+				"text" => $value . ($value == 1 ? t(" partii") : t(" partiid")),
+				"link" => $url,
+				"disabled" => $disabled_inprogress
+			));
+		}
+
+		$pm->add_item(array(
+			"text" => t("Valmis"),
+			"link" => $this->mk_my_orb("done", array(
+					"id" => $o->id(),
+					"return_url" => get_ru()
+				), "mrp_job"),
+			"disabled" => $disabled_inprogress
+		));
+		$pm->add_item(array(
+			"text" => t("Paus"),
+			"link" => $this->mk_my_orb("pause", array(
+					"id" => $o->id(),
+					"return_url" => get_ru()
+				), "mrp_job"),
+			"disabled" => $disabled_inprogress
+		));
+		$pm->add_item(array(
+			"text" => t("Vahetuse l&otilde;pp"),
+			"link" => $this->mk_my_orb("end_shift", array(
+					"id" => $o->id(),
+					"return_url" => get_ru()
+				), "mrp_job"),
+			"disabled" => $disabled_inprogress
+		));
+
+		### continue button
+		if ($o->prop("state") == mrp_job_obj::STATE_PAUSED || $o->prop("state") == mrp_job_obj::STATE_SHIFT_CHANGE)
+		{
+			$disabled = false;
+			$action = "scontinue";
+		}
+		elseif ($o->prop("state") == mrp_job_obj::STATE_ABORTED)
+		{
+			$disabled = false;
+			$action = "acontinue";
+		}
+		else
+		{
+			$action = "";
+			$disabled = true;
+		}
+
+		$pm->add_item(array(
+			"text" => t("J&auml;tka"),
+			"link" => $this->mk_my_orb($action, array(
+					"id" => $o->id(),
+					"return_url" => get_ru()
+				), "mrp_job"),
+			"disabled" => $disabled,
+		));
+
+		return $pm;
 	}
 
 	function _get_case_view($arr)
@@ -2862,6 +3045,12 @@ class mrp_case extends class_base
 		$this_object = $arr["obj_inst"];
 		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 
+		$job_ids = array(-1);
+		foreach($connections as $connection)
+		{
+			$job_ids[] = $connection->prop("to");
+		}
+
 		foreach ($connections as $connection)
 		{
 			$job = $connection->to ();
@@ -2869,7 +3058,11 @@ class mrp_case extends class_base
 			$resource_id = $job->prop ("resource");
 			$resource = obj ($resource_id);
 
-			$state = '<span style="color: ' . mrp_workspace::$state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+			$popup_menu = $this->get_case_view_popup($job);
+			$state = $popup_menu->get_menu(array(
+				"text" => '<span style="color: ' . mrp_workspace::$state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>'
+			));
+
 
 			### translate prerequisites from object id-s to execution orders
 			$prerequisites_translated = array ();
@@ -2884,6 +3077,13 @@ class mrp_case extends class_base
 
 			### get & process field values
 			$resource_name = $resource->name () ? $resource->name () : "...";
+			$employees_ol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_CRM_PERSON.RELTYPE_PERSON(CL_MRP_JOB).oid" => $job->id(),
+			));
+			$employees = $employees_ol->names();
 
 			$t->define_data(array(
 				"ord" => $job->prop("exec_order"),
@@ -2892,10 +3092,12 @@ class mrp_case extends class_base
 				"state" => $state,
 				"planned_length" => round($job->prop("planned_length") / 3600.0, 2),
 				"real_len" => round($job->prop("real_length") / 3600.0, 2),
-				"len_dev" => round($job->prop("length_deviation") / 3600.0, 2).sprintf(t(" (%s %%)"), $job->prop("planned_length") == 0 && $job->prop("length_deviation") == 0 ? "0" : ($job->prop("planned_length") == 0 ? "&#8734;" : round(($job->prop("length_deviation")/$job->prop("planned_length"))*100, 2))),
+				"planned_quantity" => (int)$job->prop("component_quantity") * (int)$this_object->prop("order_quantity"),
+				"real_quantity" => (int)$job->prop("done"),
+				"len_dev" => round($job->prop("length_deviation") / 3600.0, 2).sprintf(t(" (%s&nbsp;%%)"), $job->prop("planned_length") == 0 && $job->prop("length_deviation") == 0 ? "0" : ($job->prop("planned_length") == 0 ? "&#8734;" : round(($job->prop("length_deviation")/$job->prop("planned_length"))*100, 2))),
 				"start" => $job->prop("started"),
 				"end" => $job->prop("finished"),
-				"employee" => $real_empl
+				"employee" => implode(", ", $employees),
 			));
 		}
 		$t->set_numeric_field("ord");
@@ -2911,6 +3113,23 @@ class mrp_case extends class_base
 
 			switch($field)
 			{
+				case "aw_trykiarv":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(11) UNSIGNED"
+					));
+					$ol = new object_list(array(
+						"class_id" => CL_MRP_CASE,
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					foreach($ol->arr() as $oid => $o)
+					{
+						$v = $o->meta("trykiarv");
+						$this->db_query("UPDATE mrp_case SET aw_trykiarv = '$v' WHERE oid = '$oid' LIMIT 1;");
+					}
+					return true;
+
 				case "order_quantity":
 					$this->db_add_col($table, array(
 						"name" => "order_quantity",
@@ -2988,7 +3207,7 @@ class mrp_case extends class_base
 				"name" => "materials_table[$id][amount]",
 				"size" => 4,
 			)),
-			"unit" => mrp_job::get_materials_unitselect($prod_obj, NULL, $arr["job_id"]),
+			"unit" => mrp_job::get_materials_unitselect($prod_obj, NULL, false, "materials_table[$id][unit]"),
 			"planning" => html::select(array(
 				"name" => "materials_table[$id][planning]",
 				"options" => $plan_ops,

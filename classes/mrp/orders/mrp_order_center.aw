@@ -166,7 +166,7 @@ class mrp_order_center extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		$arr["apply"] = $_GET["apply"];
+		$arr["apply"] = automatweb::$request->arg("apply");
 	}
 
 	function show($arr)
@@ -229,18 +229,18 @@ class mrp_order_center extends class_base
 
 		foreach($odl->arr() as $oid => $d)
 		{
-			$cnts[$d["state"]]++;
-			$cnts_orderer[$d["orderer_person"]]++;
-			$cnts_seller[$d["seller_person"]]++;
-			$cnts_orderer_stat[$d["orderer_person"]][$d["state"]]++;
-			$cnts_seller_stat[$d["seller_person"]][$d["state"]]++;
+			$cnts[$d["state"]] = isset($cnts[$d["state"]]) ? $cnts[$d["state"]]++ : 1;
+			$cnts_orderer[$d["orderer_person"]] = isset($cnts_orderer[$d["orderer_person"]]) ? $cnts_orderer[$d["orderer_person"]]++ : 1;
+			$cnts_seller[$d["seller_person"]] = isset($cnts_seller[$d["seller_person"]]) ? $cnts_seller[$d["seller_person"]]++ : 1;
+			$cnts_orderer_stat[$d["orderer_person"]][$d["state"]] = isset($cnts_orderer_stat[$d["orderer_person"]][$d["state"]]) ? $cnts_orderer_stat[$d["orderer_person"]][$d["state"]]++ : 1;
+			$cnts_seller_stat[$d["seller_person"]][$d["state"]] = isset($cnts_seller_stat[$d["seller_person"]][$d["state"]]) ? $cnts_seller_stat[$d["seller_person"]][$d["state"]]++ : 1;
 		}
 
 		foreach(mrp_order::get_state_list() as $idx => $stat)
 		{
 			$t->add_item("stat", array(
 				"id" => "stat_".$idx,	
-				"name" => $stat." (".((int)$cnts[$idx]).")",
+				"name" => $stat." (".((int)ifset($cnts, $idx)).")",
 				"url" => aw_url_change_var(array("stat" => "stat_".$idx, "custmgr" => null, "slr" => null))
 			));
 		}
@@ -262,7 +262,7 @@ class mrp_order_center extends class_base
 			{
 				$t->add_item("slr_".$id, array(
 					"id" => "slr_".$id."_stat_".$idx,	
-					"name" => $stat." (".((int)$cnts_seller_stat[$id][$idx]).")",
+					"name" => $stat." (".((int)ifset($cnts_seller_stat, $id, $idx)).")",
 					"url" => aw_url_change_var(array("stat" => "stat_".$idx, "custmgr" => null, "slr" => $id))
 				));
 			}
@@ -293,7 +293,7 @@ class mrp_order_center extends class_base
 		foreach($ol->names() as $id => $nm)
 		{
 			$tnm = strtoupper($nm);
-			$custs[$tnm[0]][] = array($id, $nm);
+			$custs[substr($tnm, 0, 1)][] = array($id, $nm);
 		}
 
 		$t->add_item(0, array(

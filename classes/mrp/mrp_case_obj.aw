@@ -36,6 +36,17 @@ class mrp_case_obj extends _int_object
 		}
 	}
 
+	public function awobj_get_project_priority()
+	{
+		return rtrim(parent::prop("project_priority"), "0.");
+	}
+
+	public function awobj_set_trykiarv($value)
+	{
+		//!!! selle muutmine peab vist vaatama t88d l2bi ja kui on v2hem ekspemlare tehtud kui uus v22rtus siis panema nende staatused 'not done' lisaks, kui t88d on tehtud siis ei saa trykiarvu v2hendada, kui projekt on arhiveeritud (v6i ka valmis?) siis ei saa trykiarvu enam muuta
+		return parent::set_prop("trykiarv", $value);
+	}
+
 	/**	Create customer data object for workspace owner and project customer if no customer data object for those two exists.
 		@attrib api=1 params=pos
 
@@ -634,6 +645,97 @@ class mrp_case_obj extends _int_object
 		### log event
 		$ws = get_instance(CL_MRP_WORKSPACE);
 		$ws->mrp_log($this->id(), NULL, "Projekt v&otilde;eti planeerimisest v&auml;lja");
+	}
+	
+	/**
+		@attrib name=save_materials_without_job api=1 params=pos
+
+		@param data required type=data
+			The structure of data:
+				$data = array(
+					[The OID of the shop product object] => array(
+						[product] => [The OID of the shop product object],
+						[amount] => 1000,
+						[planning] => 0,
+						[movement] => 0,
+						[unit] => [The OID of the unit object],
+					)
+				)
+	**/
+	public function save_materials_without_job($arr)
+	{
+		$ol = $this->get_material_expenses_without_job();
+
+		foreach($ol->arr() as $o)
+		{
+			$prod = $o->prop("product");
+			if(isset($arr[$prod]) && $arr[$prod]["amount"] > 0)
+			{
+				$o->set_prop("amount", $arr[$prod]["amount"]);
+				$o->set_prop("planning", $arr[$prod]["planning"]);
+				$o->set_prop("movement", $arr[$prod]["movement"]);
+				$o->set_prop("unit", $arr[$prod]["unit"]);
+				$o->save();
+			}
+			else
+			{
+				$o->delete();
+			}
+
+			if(isset($arr[$prod]))
+			{
+				unset($arr[$prod]);
+			}
+		}
+
+		foreach($arr as $oid => $exp)
+		{
+			$product = obj($oid);
+			$o = obj();
+			$o->set_class_id(CL_MATERIAL_EXPENSE);
+			$o->set_parent($this->id());
+			$o->set_name(sprintf(t("%s kulu projekti %s jaoks"), $product->name(), $this->name()));
+			$o->set_prop("case", $this->id());
+			$o->set_prop("amount", $exp["amount"]);
+			$o->set_prop("planning", $exp["planning"]);
+			$o->set_prop("movement", $exp["movement"]);
+			$o->set_prop("unit", $exp["unit"]);
+			$o->set_prop("product", $exp["product"]);
+			$o->save();
+		}
+	}
+
+	/**
+		@attrib name=get_material_expenses_without_job params=name
+
+		@param id required type=int/array
+
+		@param odl optional type=bool default=false
+
+	**/
+	public function get_material_expenses_without_job($arr = array())
+	{
+		$prms = array(
+			"class_id" => CL_MATERIAL_EXPENSE,
+			"lang_id" => array(),
+			"site_id" => array(),
+ 			"case" => $this->id(),
+			"job" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, 0),
+ 			"product" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		);
+		if(empty($arr["odl"]))
+		{
+			return new object_list($prms);
+		}
+		else
+		{
+			return new object_data_list(
+				$prms,
+				array(
+					CL_MATERIAL_EXPENSE => array("product", "product.name" => "product_name", "amount", "unit", "planning", "movement", "job", "job.state")
+				)
+			);
+		}
 	}
 }
 

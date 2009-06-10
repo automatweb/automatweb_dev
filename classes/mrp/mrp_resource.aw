@@ -32,7 +32,7 @@
 
 @default field=meta
 @default method=serialize
-	@property workspace type=hidden
+	@property workspace type=hidden editonly=1
 
 	@property state type=text group=grp_general2,grp_resource_maintenance,grp_resource_settings
 	@caption Ressursi staatus
@@ -51,8 +51,11 @@
 
 @default group=grp_resource_joblist_todo,grp_resource_joblist_done,grp_resource_joblist_aborted
 	@layout job_list type=hbox width=20%:80%
-		@layout job_time_tree type=vbox area_caption=Vali&nbsp;kuvatavate&nbsp;t&ouml;&ouml;de&nbsp;ajavahemik parent=job_list
-			@property job_time_tree type=treeview store=no no_caption=1 parent=job_time_tree
+		@layout job_forest type=vbox parent=job_list
+			@layout job_time_tree type=vbox area_caption=Vali&nbsp;kuvatavate&nbsp;t&ouml;&ouml;de&nbsp;ajavahemik parent=job_forest
+				@property job_time_tree type=treeview store=no no_caption=1 parent=job_time_tree
+			@layout job_client_tree type=vbox area_caption=Vali&nbsp;klient parent=job_forest
+				@property job_client_tree type=treeview store=no no_caption=1 parent=job_client_tree
 		@layout job_list_right type=vbox parent=job_list
 			@layout resource_deviation_chart type=vbox closeable=1 area_caption=Ressursi&nbsp;h&auml;lbe&nbsp;muutus&nbsp;ajas parent=job_list_right
 				@property resource_deviation_chart type=google_chart no_caption=1 parent=resource_deviation_chart store=no
@@ -92,7 +95,7 @@
 	@comment Mitu partiid peab olema valmis, et selle t&ouml;&ouml;tlemist saaks j&auml;tkata j&auml;rgmisel ressursil. 0 - kogu tootmistellimus, t&auml;isarv - kogus. T&auml;isarv, mille j&auml;rel on protsendim&auml;rk - mitu protsenti tootmistellimuse mahust peab olema valmis (n&auml;iteks 20%)
 	@caption T&ouml;&ouml;tluspartiisid t&ouml;&ouml;voo j&auml;tkamiseks
 
-	@property production_feedback_option_values type=textarea default=1 rows=5
+	@property production_feedback_option_values type=textarea rows=5
 	@comment Valikud valiminud partiide arvu sisestamiseks t&ouml;&ouml; vaates (ressursioperaatori vaates). T&auml;isarvud, koguste puhul ratsionaalarvud.
 	@caption Tootmise tagasiside valikud
 
@@ -424,6 +427,10 @@ class mrp_resource extends class_base
 
 		switch ($prop["name"])
 		{
+			case "workspace":
+				$prop["value"] = $arr["obj_inst"]->prop("workspace");
+				break;
+
 			case "default_pre_buffer":
 			case "default_post_buffer":
 			case "global_buffer":
@@ -836,15 +843,36 @@ class mrp_resource extends class_base
 			);
 		}
 
+		$prms = array(
+			"class_id" => CL_MRP_JOB,
+			"resource" => $this_object->id (),
+			"state" => $applicable_states,
+			// "starttime" => new obj_predicate_compare (OBJ_COMP_LESS, (time () + 886400)),
+			new obj_predicate_sort(array("starttime" => "ASC")),
+			"CL_MRP_JOB.project(CL_MRP_CASE).state" => $applicable_project_states,
+		);
+
+		$clientspan = automatweb::$request->arg("clientspan");
+		if($this->can("view", $clientspan))
+		{
+			$clientspan_obj = obj($clientspan);
+			if($clientspan_obj->is_a(CL_CRM_COMPANY))
+			{
+				$prms["CL_MRP_JOB.project(CL_MRP_CASE).customer"] = $clientspan;
+			}
+			elseif($clientspan_obj->is_a(CL_CRM_CATEGORY))
+			{
+				// Whattabout alamkategooriad?? Fuck.
+				$prms["CL_MRP_JOB.project(CL_MRP_CASE).customer(CL_CRM_COMPANY).RELTYPE_CUSTOMER(CL_CRM_CATEGORY).id"] = $clientspan;
+			}
+		}
+		elseif(!empty($clientspan))
+		{
+			$prms["CL_MRP_JOB.project(CL_MRP_CASE).customer(CL_CRM_COMPANY).name"] = $clientspan."%";
+		}
+
 		$list = new object_data_list(
-			array(
-				"class_id" => CL_MRP_JOB,
-				"resource" => $this_object->id (),
-				"state" => $applicable_states,
-				// "starttime" => new obj_predicate_compare (OBJ_COMP_LESS, (time () + 886400)),
-				new obj_predicate_sort(array("starttime" => "ASC")),
-				"CL_MRP_JOB.project(CL_MRP_CASE).state" => $applicable_project_states,
-			),
+			$prms,
 			array(
 				CL_MRP_JOB => array("project", "exec_order", "state", "starttime", "resource(CL_MRP_RESOURCE).name", "length"),
 			)
@@ -1488,7 +1516,50 @@ class mrp_resource extends class_base
 		return get_instance("mrp_workspace")->_get_resource_deviation_chart($arr);
 	}
 
-	function _get_job_time_tree($arr)
+	public function _get_job_client_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_item(0, array(
+			"id" => "all",
+			"name" => t("K&otilde;ik"),
+			"url" => aw_url_change_var("clientspan", NULL),
+		));
+
+		$i = new mrp_workspace;
+		$i->create_customers_tree(array_merge($arr, array("obj_inst" => $arr["obj_inst"]->prop("workspace"))));
+
+		// Hack the URLs
+		foreach($t->get_item_ids() as $id)
+		{
+			$item = $t->get_item($id);
+			$uri = new aw_uri($item["url"]);
+			$special_param = strlen($uri->arg("cat")) ? $uri->arg("cat") : (strlen($uri->arg("cust")) ? $uri->arg("cust") : $uri->arg("alph"));
+			$uri->unset_arg(array("cat", "cust", "alph", "clientspan"));
+			if(!empty($special_param))
+			{
+				$uri->set_arg("clientspan", $special_param);
+			}
+			$item["url"] = $uri->get();
+			$t->set_item($item);
+		}
+
+		$clientspan = automatweb::$request->arg("clientspan");
+		
+		if($this->can("view", $clientspan))
+		{
+			$t->set_selected_item($clientspan);
+		}
+		elseif(!empty($clientspan))
+		{
+			$t->set_selected_item("alph_".$clientspan);
+		}
+		else
+		{
+			$t->set_selected_item("all");
+		}
+	}
+
+	public function _get_job_time_tree($arr)
 	{
 		$t = $arr["prop"]["vcl_inst"];
 		$t->set_selected_item(!empty($_GET["timespan"]) ? $_GET["timespan"] : "all");
@@ -1982,22 +2053,48 @@ class mrp_resource extends class_base
 		switch($arr["name"])
 		{
 			case "job_list_table":
+				$clientspan_str = "";
+				$clientspan = automatweb::$request->arg("clientspan");
+				if($this->can("view", $clientspan))
+				{
+					$clientspan_obj = obj($clientspan);
+					if($clientspan_obj->is_a(CL_CRM_COMPANY))
+					{
+						$clientspan_str = sprintf(t(", mille klient on '%s'"), $clientspan_obj->name());
+					}
+					elseif($clientspan_obj->is_a(CL_CRM_CATEGORY))
+					{
+						$clientspan_str = sprintf(t(", mille klient kuulub kliendikategooriasse '%s'"), $clientspan_obj->name());
+					}
+				}
+				elseif(!empty($clientspan))
+				{
+					$clientspan_str = sprintf(t(", mille kliendi nime algust&auml;ht on %s"), $clientspan);
+				}
+
 				if(!empty($for_workspace))
 				{
-					$arr["area_caption"] = sprintf(t("Ressursi '%s' t&ouml;&ouml;d"), parse_obj_name($arr["obj_inst"]->name()));
+					$arr["area_caption"] = sprintf(t("Ressursi '%s' t&ouml;&ouml;d"), parse_obj_name($arr["obj_inst"]->name())).$clientspan_str;
 				}
 				else
 				{
-					if(isset($_GET["group"]) and $_GET["group"] === "grp_resource_joblist_done")
+					if(automatweb::$request->arg("group") === "grp_resource_joblist_done")
 					{
-						$arr["area_caption"] = sprintf(t("Ressursi '%s' tehtud t&ouml;&ouml;d"), parse_obj_name($arr["obj_inst"]->name()));
+						$arr["area_caption"] = sprintf(t("Ressursi '%s' tehtud t&ouml;&ouml;d"), parse_obj_name($arr["obj_inst"]->name())).$clientspan_str;
+					}
+					elseif(automatweb::$request->arg("group") === "grp_resource_joblist_aborted")
+					{
+						$arr["area_caption"] = sprintf(t("Ressursi '%s' katkestatud t&ouml;&ouml;d"), parse_obj_name($arr["obj_inst"]->name())).$clientspan_str;
 					}
 					else
 					{
-						$arr["area_caption"] = sprintf(t("Ressursi '%s' eesseisvad t&ouml;&ouml;d"), parse_obj_name($arr["obj_inst"]->name()));
+						$arr["area_caption"] = sprintf(t("Ressursi '%s' eesseisvad t&ouml;&ouml;d"), parse_obj_name($arr["obj_inst"]->name())).$clientspan_str;
 					}
 				}
 				break;
+
+			case "job_client_tree":
+				$arr["area_caption"] = "Vali kuvatavate t&ouml;&ouml;de klient/kliendikategooria";
 		}
 		return true;
 	}
@@ -2164,6 +2261,25 @@ class mrp_resource extends class_base
 					));
 					break;
 			}
+		}
+
+		$clientspan = automatweb::$request->arg("clientspan");
+		if($this->can("view", $clientspan) && $arr["prop"]["type"] != "treeview")
+		{
+			$clientspan_obj = obj($clientspan);
+			if($clientspan_obj->is_a(CL_CRM_COMPANY))
+			{
+				$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer"] = $clientspan;
+			}
+			elseif($clientspan_obj->is_a(CL_CRM_CATEGORY))
+			{
+				// Whattabout alamkategooriad?? Fuck.
+				$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer(CL_CRM_COMPANY).RELTYPE_CUSTOMER(CL_CRM_CATEGORY).id"] = $clientspan;
+			}
+		}
+		elseif(!empty($clientspan) && $arr["prop"]["type"] != "treeview")
+		{
+			$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer(CL_CRM_COMPANY).name"] = $clientspan."%";
 		}
 
 		return get_instance(CL_MRP_WORKSPACE)->get_next_jobs_for_resources(array(

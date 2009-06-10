@@ -621,9 +621,10 @@ class mrp_order_print extends mrp_order
 		$t->set_caption(t("Materjalide hind vastavalt kogustele"));
 		$amt = $arr["obj_inst"]->amount;
 		$data = array();
-		if ($amt > 1000)
+		$fract = ($amt / 10);
+		if ($amt > $fract)
 		{
-			$from = max(-3, (-floor($amt / 1000))+1);
+			$from = max(-3, (-floor($amt / $fract))+1);
 			$to = abs($from);
 
 			$t->define_field(array(
@@ -636,7 +637,7 @@ class mrp_order_print extends mrp_order
 			$sums = array();
 			for($i = $from; $i <= $to; $i++)
 			{
-				$v = $amt + ($i * 1000);
+				$v = $amt + ($i * $fract);
 				$t->define_field(array(
 					"name" => $v,
 					"caption" => $v,
@@ -654,7 +655,7 @@ class mrp_order_print extends mrp_order
 					$pr_by_v = array();
 					for($i = $from; $i <= $to; $i++)
 					{
-						$v = $amt + ($i * 1000);
+						$v = $amt + ($i * $fract);
 						$mp = $this->_get_mat_price_for_amt($arr["obj_inst"], $v, $mo, $c->to());
 						foreach($mp as $mp_k => $mp_v)
 						{
@@ -684,7 +685,7 @@ class mrp_order_print extends mrp_order
 						);
 						for($i = $from; $i <= $to; $i++)
 						{
-							$v = $amt + ($i * 1000);
+							$v = $amt + ($i * $fract);
 							$tmp = $cover->get_price_for_order_and_amt_and_price($arr["obj_inst"], $v, $pr_by_v[$v]);
 							if (isset($sel_covers_mat[$mo->id()][$cover->id()]))
 							{
@@ -773,7 +774,8 @@ class mrp_order_print extends mrp_order
 		$t->set_caption(t("Resursside kasutuse hind vastavalt kogustele"));
 		$amt = $arr["obj_inst"]->amount;
 		$data = array();
-		if ($amt > 1000)
+		$fract = $amt / 10;
+		if ($amt > $fract)
 		{
 			$t->define_field(array(
 				"name" => "resource",
@@ -781,12 +783,12 @@ class mrp_order_print extends mrp_order
 				"align" => "right",
 				"width" => "20%"
 			));
-			$from = max(-3, (-floor($amt / 1000))+1);
+			$from = max(-3, (-floor($amt / $fract))+1);
 			$to = abs($from);
 			$sums = array();
 			for($i = $from; $i <= $to; $i++)
 			{
-				$v = $amt + ($i * 1000);
+				$v = $amt + ($i * $fract);
 				$t->define_field(array(
 					"name" => $v,
 					"caption" => $v,
@@ -804,7 +806,7 @@ class mrp_order_print extends mrp_order
 				$pr_by_amt = array();
 				for($i = $from; $i <= $to; $i++)
 				{
-					$v = $amt + ($i * 1000);
+					$v = $amt + ($i * $fract);
 					$tmp = $this->_get_resource_price_for_amt_and_resource($arr["obj_inst"], $v, $resource, $job);
 					$pr_by_amt[$v] = $tmp;
 					$sums[$v] += $tmp;
@@ -830,7 +832,7 @@ class mrp_order_print extends mrp_order
 					);
 					for($i = $from; $i <= $to; $i++)
 					{
-						$v = $amt + ($i * 1000);
+						$v = $amt + ($i * $fract);
 						$tmp = $cover->get_price_for_order_and_amt_and_price($arr["obj_inst"], $v, $pr_by_amt[$v]);
 						if (isset($sel_covers_job_res[$job->id()][$resource->id()][$cover->id()]))
 						{
@@ -872,9 +874,10 @@ class mrp_order_print extends mrp_order
 		$t->set_caption(t("Koguhinnale kehtivad katted"));
 		$amt = $arr["obj_inst"]->amount;
 		$data = array();
-		if ($amt > 1000)
+		$fract = $amt / 10;
+		if ($amt > $fract)
 		{
-			$from = max(-3, (-floor($amt / 1000))+1);
+			$from = max(-3, (-floor($amt / $fract))+1);
 			$to = abs($from);
 			$t->define_field(array(
 				"name" => "cover",
@@ -885,7 +888,7 @@ class mrp_order_print extends mrp_order
 			$sums = array();
 			for($i = $from; $i <= $to; $i++)
 			{
-				$v = $amt + ($i * 1000);
+				$v = $amt + ($i * $fract);
 				$t->define_field(array(
 					"name" => $v,
 					"caption" => $v,
@@ -908,7 +911,7 @@ class mrp_order_print extends mrp_order
 				);
 				for($i = $from; $i <= $to; $i++)
 				{
-					$v = $amt + ($i * 1000);
+					$v = $amt + ($i * $fract);
 					$tmp = $this->_get_cover_price_for_amt($arr["obj_inst"], $v, $cover);
 					if (isset($sel_covers[$cover->id()]))
 					{
@@ -946,9 +949,10 @@ class mrp_order_print extends mrp_order
 		$t->set_caption(t("Kogu hind vastavalt kogustele"));
 		$amt = $arr["obj_inst"]->amount;
 		$data = array();
-		if ($amt > 1000)
+		$fract = $amt / 10;
+		if ($amt > $fract)
 		{
-			$from = max(-3, (-floor($amt / 1000))+1);
+			$from = max(-3, (-floor($amt / $fract))+1);
 			$to = abs($from);
 			$t->define_field(array(
 				"name" => "a",
@@ -959,7 +963,7 @@ class mrp_order_print extends mrp_order
 
 			for($i = $from; $i <= $to; $i++)
 			{
-				$v = $amt + ($i * 1000);
+				$v = $amt + ($i * $fract);
 				$t->define_field(array(
 					"name" => $v,
 					"caption" => $v,

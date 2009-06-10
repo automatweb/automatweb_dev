@@ -8,25 +8,83 @@
 @tableinfo mrp_job_rows index=aw_job_id master_table=objects master_index=brother_of
 @tableinfo mrp_job_progress index=aw_job_id master_table=objects master_index=brother_of
 
-@groupinfo data caption="Andmed"
 @groupinfo workflow caption="T&ouml;&ouml;voog"
 @groupinfo materials caption="Materjalid"
 
-
 @property job_toolbar type=toolbar no_caption=1 store=no group=general,workflow
 
-@property real_material_table type=table no_caption=1 store=no group=general,workflow
-
-
 @default group=general
-	@property name type=text
-	@caption Nimi
 
-	@property comment type=textarea table=objects field=comment rows=5
-	@caption Kommentaar
+	@layout general_split type=hbox width=25%:75%
+		
+		@layout general_left type=vbox parent=general_split closeable=1 area_caption=T&ouml;&ouml;&nbsp;&uuml;ldandmed
 
-	@property sales_comment type=textbox table=mrp_job_rows field=aw_sales_comment
-	@caption M&uuml;&uuml;gi kommentaar
+			@property project_name type=text parent=general_left store=no
+			@caption Projekti nr:
+
+			@property project_comment type=text parent=general_left store=no
+			@caption Projekti nimetus:
+
+			@property project_due_date type=text parent=general_left store=no
+			@caption Projekti valmimist&auml;htaeg:
+
+			@property project_customer type=text parent=general_left store=no
+			@caption Klient:
+
+			@property resource type=text parent=general_left table=mrp_job
+			@caption Ressurss:
+
+			@property prerequisites type=text parent=general_left table=mrp_job
+			@caption Eeldust&ouml;&ouml;d:
+
+		@layout general_right type=vbox parent=general_split
+
+			@layout general_left_general type=vbox parent=general_right area_caption=Nimi&nbsp;ja&nbsp;kommentaarid closeable=1
+
+				@property name type=text parent=general_left_general
+				@caption Nimi
+
+				@property comment type=textarea table=objects field=comment rows=5 parent=general_left_general
+				@caption Tootmise kommentaar
+
+@default table=mrp_job
+
+				@property sales_comment type=textarea field=aw_sales_comment rows=5 parent=general_left_general
+				@caption M&uuml;&uuml;gi kommentaar
+
+			@layout general_left_time type=vbox parent=general_right area_caption=Ajalised&nbsp;seaded closeable=1
+
+				@property length type=textbox default=0 parent=general_left_time
+				@caption T&ouml;&ouml; pikkus (h)
+
+				@property pre_buffer type=textbox default=0 parent=general_left_time
+				@caption Eelpuhveraeg (h)
+
+				@property post_buffer type=textbox default=0 parent=general_left_time
+				@caption J&auml;relpuhveraeg (h)
+
+				@property minstart type=datetime_select parent=general_left_time
+				@comment Enne seda kuup&auml;eva, kellaaega ei alustata t&ouml;&ouml;d
+				@caption Varaseim alustusaeg
+
+				@property remaining_length type=textbox default=0 parent=general_left_time
+				@comment Arvatav ajakulu t&ouml;&ouml; j&auml;reloleva osa tegemiseks
+				@caption L&otilde;petamiseks kuluv aeg (h)
+
+			@layout general_left_quantity type=vbox parent=general_right area_caption=T&uuml;kiarvestuse&nbsp;seaded closeable=1
+
+				@property component_quantity type=textbox datatype=int default=1 parent=general_left_quantity
+				@comment Tellimuse eksemplari jaoks vajalik selle t&ouml;&ouml; eksemplaride arv (mitu selle t88 tulemusel valmivat komponenti/eksemplari vaja yhe l6ppeksemplari jaoks)
+				@caption Vajalik eksemplaride arv
+
+				@property batch_size type=textbox default=1 datatype=int parent=general_left_quantity
+				@comment Mitut eksemplari selles t&ouml;&ouml;s soovitakse k&auml;sitleda partiina. Vaikimisiv&auml;&auml;rtus m&auml;&auml;ratud ressursi juures.
+				@caption T&ouml;&ouml;tluspartii suurus
+
+				@property min_batches_to_continue_wf type=textbox default=0 datatype=int parent=general_left_quantity
+				@comment 0 - kogu tellimuse maht
+				@caption Partiisid j&auml;rgmisel ressursil alustamiseks
+
 
 @default group=workflow
 	@property workflow_errors type=text store=no no_caption=1
@@ -46,17 +104,14 @@
 	@property started type=text
 	@caption Alustatud
 
-	@property done type=text default=0 datatype=int
-	@caption Valminud eksemplare
-
 	@property finished type=text
 	@caption L&otilde;petatud
 
 	@property aborted type=text
 	@caption Katkestatud
 
-	@property resource type=text
-	@caption Ressurss
+	@property done type=text default=0 datatype=int
+	@caption Valminud eksemplare
 
 	@property project type=hidden
 	@caption Projekt
@@ -75,43 +130,12 @@
 
 @default group=materials
 
+	@property real_material_table type=table store=no no_caption=1
+	@caption Materjalikulu
+
 	@property materials_sel_tbl type=table no_caption=1
 
 	@property materials_tbl type=table no_caption=1
-
-@default group=data
-	@property length type=textbox default=0
-	@caption T&ouml;&ouml; pikkus (h)
-
-	@property pre_buffer type=textbox default=0
-	@caption Eelpuhveraeg (h)
-
-	@property post_buffer type=textbox default=0
-	@caption J&auml;relpuhveraeg (h)
-
-	@property component_quantity type=textbox datatype=int default=1
-	@comment Tellimuse eksemplari jaoks vajalik selle t&ouml;&ouml; eksemplaride arv (mitu selle t88 tulemusel valmivat komponenti/eksemplari vaja yhe l6ppeksemplari jaoks)
-	@caption Vajalik eksemplaride arv
-
-	@property batch_size type=textbox default=1 datatype=int
-	@comment Mitut eksemplari selles t&ouml;&ouml;s soovitakse k&auml;sitleda partiina. Vaikimisiv&auml;&auml;rtus m&auml;&auml;ratud ressursi juures.
-	@caption T&ouml;&ouml;tluspartii suurus
-
-	@property min_batches_to_continue_wf type=textbox default=0 datatype=int
-	@comment 0 - kogu tellimuse maht
-	@caption Partiisid j&auml;rgmisel ressursil alustamiseks
-
-	@property minstart type=datetime_select
-	@comment Enne seda kuup&auml;eva, kellaaega ei alustata t&ouml;&ouml;d
-	@caption Varaseim alustusaeg
-
-	@property remaining_length type=textbox default=0
-	@comment Arvatav ajakulu t&ouml;&ouml; j&auml;reloleva osa tegemiseks
-	@caption L&otilde;petamiseks kuluv aeg (h)
-
-	@property prerequisites type=text
-	@caption Eeldust&ouml;&ouml;d
-
 
 @default table=objects
 @default field=meta
@@ -254,10 +278,27 @@ class mrp_job extends class_base
 
 		switch($prop["name"])
 		{
-			case "name":
-				$project_name = $this->project->name () ? $this->project->name () : "...";
-				$resource_name = $this->resource->name () ? $this->resource->name () : "...";
-				$prop["value"] = $project_name . " - " . $resource_name;
+			case "project_name":
+			case "project_comment":
+				$prop["value"] = obj($arr["obj_inst"]->prop("project"))->prop(substr($prop["name"], 8));
+				break;
+
+			case "project_customer":
+				$prop["value"] = obj($arr["obj_inst"]->prop("project"))->prop("customer.name");
+				break;
+
+			case "project_due_date":
+				$prop["value"] = locale::get_lc_date(obj($arr["obj_inst"]->prop("project"))->prop("due_date"), 7);
+				break;
+
+			case "person":
+				$ids = array_merge(array(-1), safe_array(ifset($prop, "value")));
+				$ol = new object_list(array(
+					"oid" => $ids,
+				));
+				$prop["type"] = "text";
+				$prop["value"] = implode(", ", $ol->names());
+				unset($prop["post_append_text"]);
 				break;
 
 			case "prerequisites":
@@ -314,7 +355,8 @@ class mrp_job extends class_base
 				break;
 
 			case "state":
-				$prop["value"] = $this_object->get_state_names($prop["value"]);
+				
+				$prop["value"] = "<span style='padding: 5px; background: ".mrp_workspace::$state_colours[$prop["value"]]."'>".mrp_job_obj::get_state_names($prop["value"])."<span>";
 				break;
 
 			case "starttime":
@@ -375,6 +417,9 @@ class mrp_job extends class_base
 
 		switch($prop["name"])
 		{
+			case "person":
+				return PROP_IGNORE;
+
 			case "advised_starttime":
 				if ($this->resource->prop("type") != mrp_resource_obj::TYPE_SUBCONTRACTOR)
 				{
@@ -439,7 +484,7 @@ class mrp_job extends class_base
 		{
 			$url = $this->mk_my_orb("done", array(
 				"id" => $this_object->id(),
-				"quantity" => $value,
+				"quantity" => $value * $this_object->prop("batch_size"),
 				"return_url" => get_ru()
 			), "mrp_job");
 			$toolbar->add_button(array(
@@ -543,16 +588,17 @@ class mrp_job extends class_base
 /**
 	@attrib name=start
 	@param id required type=int
+	@param return_url optional type=string
 **/
 	function start ($arr)
 	{
 		$errors = array ();
-		$return_url = $this->mk_my_orb("change", array(
+		$return_url = empty($arr["return_url"]) ? $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
 			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_job");
+		), "mrp_job") : $arr["return_url"];
 
 		if (is_oid ($arr["id"]))
 		{
@@ -636,7 +682,7 @@ class mrp_job extends class_base
 		$quantity = empty($arr["quantity"]) ? null : $arr["quantity"];
 		$resource = new object($this_object->prop("resource"));
 		$options = $resource->prop("production_feedback_option_values");
-		if (null !== $quantity and !in_array($quantity, $options))
+		if (null !== $quantity and !in_array($quantity/$this_object->prop("batch_size"), $options))
 		{
 			$errors[] = t("Sellist tk. arvestuse valikut ei ole");
 			$errors = (serialize($errors));
@@ -649,7 +695,7 @@ class mrp_job extends class_base
 			$comment = isset($arr["pj_change_comment"]) ? $arr["pj_change_comment"] : "";
 			$this_object->done($quantity, $comment);
 
-			foreach ($arr["material_amount"] as $prod => $amount)
+			foreach (safe_array($arr["material_amount"]) as $prod => $amount)
 			{
 				$this_object->set_used_material(array(
 					"product" => $prod,
@@ -743,16 +789,17 @@ class mrp_job extends class_base
 /**
 	@attrib name=pause
 	@param id required type=int
+	@param return_url optional type=string
 **/
 	function pause($arr)
 	{
 		$errors = array ();
-		$return_url = $this->mk_my_orb("change", array(
+		$return_url = empty($arr["return_url"]) ? $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
 			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_job");
+		), "mrp_job") : $arr["return_url"];
 
 		if (is_oid ($arr["id"]))
 		{
@@ -792,16 +839,17 @@ class mrp_job extends class_base
 /**
 	@attrib name=scontinue
 	@param id required type=int
+	@param return_url optional type=string
 **/
 	function scontinue($arr)
 	{
 		$errors = array ();
-		$return_url = $this->mk_my_orb("change", array(
+		$return_url = empty($arr["return_url"]) ? $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
 			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_job");
+		), "mrp_job") : $arr["return_url"];
 
 		if (is_oid ($arr["id"]))
 		{
@@ -841,16 +889,17 @@ class mrp_job extends class_base
 /**
 	@attrib name=acontinue
 	@param id required type=int
+	@param return_url optional type=string
 **/
 	function acontinue($arr)
 	{
 		$errors = array ();
-		$return_url = $this->mk_my_orb("change", array(
+		$return_url = empty($arr["return_url"]) ? $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
 			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_job");
+		), "mrp_job") : $arr["return_url"];
 
 		if (is_oid ($arr["id"]))
 		{
@@ -927,16 +976,17 @@ class mrp_job extends class_base
 /**
 	@attrib name=end_shift
 	@param id required type=int
+	@param return_url optional type=string
 **/
 	function end_shift($arr)
 	{
 		$errors = array ();
-		$return_url = $this->mk_my_orb("change", array(
+		$return_url = empty($arr["return_url"]) ? $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
 			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_job");
+		), "mrp_job") : $arr["return_url"];
 
 		if (is_oid ($arr["id"]))
 		{
@@ -995,7 +1045,7 @@ class mrp_job extends class_base
 		));
 		$t->define_field(array(
 			"name" => "amount",
-			"caption" => t("Kogus"),
+			"caption" => t("Planeeritud kogus"),
 			"align"=> "center",
 			"chgbgcolor" => "color",
 		));
@@ -1117,9 +1167,15 @@ class mrp_job extends class_base
 		}
 	}
 
-	public static function get_materials_unitselect($po, $value = null, $set_job_oid = false)
+	public static function get_materials_unitselect($po, $value = null, $set_job_oid = false, $name_template = false)
 	{
 		enter_function("mrp_job::get_materials_unitselect");
+		
+		if(!$name_template)
+		{
+			$name_template = $set_job_oid ? "jobs[$set_job_oid][unit][%u]" : "unit[%u]";
+		}
+
 		$units = $po->instance()->get_units($po);
 		foreach($units as $i => $unit)
 		{
@@ -1134,14 +1190,7 @@ class mrp_job extends class_base
 		}
 		if(count($units) == 1)
 		{
-			if ($set_job_oid)
-			{
-				$_name = "jobs[$set_job_oid][unit][".$po->id()."]";
-			}
-			else
-			{
-				$_name = "unit[".$po->id()."]";
-			}
+			$_name = sprintf($name_template, $po->id());
 			$unitselect = obj(reset($units))->name().html::hidden(array(
 				"name" => $_name,
 				"value" => reset($units),
@@ -1152,14 +1201,7 @@ class mrp_job extends class_base
 			$unitselect = "";
 			foreach($unitopts as $unit => $name)
 			{
-				if ($set_job_oid)
-				{
-					$_name = "jobs[$set_job_oid][unit][".$po->id()."]";
-				}
-				else
-				{
-					$_name = "unit[".$po->id()."]";
-				}
+				$_name = sprintf($name_template, $po->id());
 				$unitselect .= html::radiobutton(array(
 					"name" => $_name,
 					"value" => $unit,
@@ -1268,6 +1310,13 @@ class mrp_job extends class_base
 						"type" => "INT(10)"
 					));
 					return true;
+
+				case "aw_sales_comment":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "varchar(255)"
+					));
+					return true;
 			}
 		}
 		elseif("mrp_job_rows" === $table)
@@ -1307,13 +1356,6 @@ class mrp_job extends class_base
 						p.aw_job_state = c.aw_job_previous_state AND
 						c.aw_tm BETWEEN (p.aw_tm + c.aw_job_last_duration - 5) AND (p.aw_tm + c.aw_job_last_duration + 5);");
 					return true;
-
-				case "aw_sales_comment":
-					$this->db_add_col($table, array(
-						"name" => $field,
-						"type" => "varchar(255)"
-					));
-					return true;
 			}
 		}
 		elseif("mrp_job_progress" === $table)
@@ -1331,6 +1373,13 @@ class mrp_job extends class_base
 						aw_entry_time INT(11) UNSIGNED NOT NULL
 					);");
 					return true;
+					
+				case "aw_pid_oid":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(11) UNSIGNED NOT NULL",
+					));
+					break;
 			}
 		}
 	}

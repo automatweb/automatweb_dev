@@ -40,6 +40,7 @@ class mrp_order_obj extends _int_object
 			}
 			$mc->set_parent(obj($this->prop("workspace"))->mrp_workspace()->projects_folder);
 			$mc->set_name($this->prop("name"));
+			$mc->set_prop("trykiarv", $this->prop("amount"));
 			$mc->set_prop("workspace", obj(obj($this->prop("workspace"))->mrp_workspace));
 			$mc->set_prop("order_quantity", 1);
 			$mc->save();

@@ -12,6 +12,9 @@
 @property job type=relpicker reltype=RELTYPE_JOB
 @caption Tegevus
 
+@property case type=relpicker reltype=RELTYPE_CASE field=aw_case
+@caption Projekt
+
 @property amount type=textbox datatype=int
 @caption Planeeritud kogus
 
@@ -38,6 +41,9 @@
 
 @reltype UNIT value=3 clid=CL_UNIT
 @caption &Uuml;hik
+
+@reltype CASE value=4 clid=CL_MRP_JOB
+@caption Projekt
 */
 
 class material_expense extends class_base
@@ -67,6 +73,7 @@ class material_expense extends class_base
 		{
 			case "product":
 			case "job":
+			case "aw_case":
 			case "unit":
 			case "planning":
 			case "movement":
