@@ -6,6 +6,9 @@
 @default table=aw_mrp_order_cover_group
 @default group=general
 
+@reltype MRP_COVER value=5 clid=CL_MRP_ORDER_COVER,CL_MRP_ORDER_COVER_GROUP
+@caption Kate
+
 */
 
 class mrp_order_cover_group extends class_base
