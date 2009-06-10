@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <properties>
       <classinfo>
-            <syslog_type>ST_MRP_ORDER_COVER_GROUP</syslog_type>
+            <syslog_type>ST_MRP_RESOURCE_FORMAT_CATEGORY</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
@@ -9,21 +9,21 @@
             <maintainer>kristo</maintainer>
       </classinfo>
       <tableinfo>
-            <aw_mrp_order_cover_group>
+            <aw_mrp_resource_format_category>
                   <master_index>brother_of</master_index>
                   <master_table>objects</master_table>
                   <index>aw_oid</index>
-            </aw_mrp_order_cover_group>
+            </aw_mrp_resource_format_category>
       </tableinfo>
       <reltypes>
-            <MRP_COVER>
-                  <value>5</value>
+            <RESOURCE_FORMAT>
                   <clid>
-                        <num_0>CL_MRP_ORDER_COVER</num_0>
-                        <num_1>CL_MRP_ORDER_COVER_GROUP</num_1>
+                        <num_0>CL_MRP_RESOURCE_FORMAT_CATEGORY</num_0>
+                        <num_1>CL_MRP_ORDER_PRINT_FORMAT</num_1>
                   </clid>
-                  <caption>Kate</caption>
-            </MRP_COVER>
+                  <value>8</value>
+                  <caption>Ressursside formaadid</caption>
+            </RESOURCE_FORMAT>
       </reltypes>
 </properties>
 

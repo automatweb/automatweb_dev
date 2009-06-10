@@ -1716,6 +1716,70 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>res_settings_tb</name>
+            <group>grp_res_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>grp_res_settings_tree</name>
+            <group>grp_res_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_res_settings_tree_vb</parent>
+      </property>
+      <property>
+            <name>grp_res_settings_table</name>
+            <group>grp_res_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_res_settings_splitter</parent>
+      </property>
+      <property>
+            <name>res_formats_tb</name>
+            <group>grp_res_formats</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>grp_res_formats_tree</name>
+            <group>grp_res_formats</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_res_formats_tree_vb</parent>
+      </property>
+      <property>
+            <name>grp_res_formats_table</name>
+            <group>grp_res_formats</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_res_formats_splitter</parent>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -1751,6 +1815,16 @@
                   <parent>general</parent>
                   <submit_method>get</submit_method>
             </grp_worksheet>
+            <grp_res_settings>
+                  <caption>Ressursside parameetrid</caption>
+                  <parent>general</parent>
+                  <submit>no</submit>
+            </grp_res_settings>
+            <grp_res_formats>
+                  <caption>Ressursside formaadid</caption>
+                  <parent>general</parent>
+                  <submit>no</submit>
+            </grp_res_formats>
             <grp_customers>
                   <caption>Kliendid</caption>
                   <submit>no</submit>
@@ -1849,6 +1923,22 @@
                   <value>6</value>
                   <caption>Materjalide hankimise keskkond</caption>
             </PURCHASING_MANAGER>
+            <RESOURCE_SETTING>
+                  <clid>
+                        <num_0>CL_MRP_RESOURCE_SETTING_CATEGORY</num_0>
+                        <num_1>CL_MRP_RESOURCE_SETTING</num_1>
+                  </clid>
+                  <value>7</value>
+                  <caption>Ressursside seaded</caption>
+            </RESOURCE_SETTING>
+            <RESOURCE_FORMAT>
+                  <clid>
+                        <num_0>CL_MRP_RESOURCE_FORMAT_CATEGORY</num_0>
+                        <num_1>CL_MRP_ORDER_PRINT_FORMAT</num_1>
+                  </clid>
+                  <value>8</value>
+                  <caption>Ressursside formaadid</caption>
+            </RESOURCE_FORMAT>
       </reltypes>
       <layout>
             <vsplitbox>
@@ -2312,6 +2402,30 @@
                   <area_caption></area_caption>
                   <caption>Ressurss</caption>
             </resource_hbox>
+            <grp_res_settings_splitter>
+                  <type>hbox</type>
+                  <group>grp_res_settings</group>
+                  <area_caption></area_caption>
+            </grp_res_settings_splitter>
+            <grp_res_settings_tree_vb>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Seadete&amp;amp;nbsp;kategooriad</area_caption>
+                  <parent>grp_res_settings_splitter</parent>
+                  <group>grp_res_settings</group>
+            </grp_res_settings_tree_vb>
+            <grp_res_formats_splitter>
+                  <type>hbox</type>
+                  <group>grp_res_formats</group>
+                  <area_caption></area_caption>
+            </grp_res_formats_splitter>
+            <grp_res_formats_tree_vb>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Formaatide&amp;amp;nbsp;kategooriad</area_caption>
+                  <parent>grp_res_formats_splitter</parent>
+                  <group>grp_res_formats</group>
+            </grp_res_formats_tree_vb>
       </layout>
 </properties>
 

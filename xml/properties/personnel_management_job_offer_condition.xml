@@ -1,5 +1,29 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>prop</name>
+            <table>aw_personnel_management_job_offer_condition</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_prop</field>
+            <caption>Omadus</caption>
+      </property>
+      <property>
+            <name>type</name>
+            <table>aw_personnel_management_job_offer_condition</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_type</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>value</name>
+            <table>aw_personnel_management_job_offer_condition</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_value</field>
+            <caption>V&amp;amp;auml;&amp;amp;auml;rtus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION</syslog_type>
             <relationmgr>yes</relationmgr>

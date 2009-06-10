@@ -3,7 +3,7 @@
       <property>
             <name>owner_co</name>
             <table>aw_mrp_order_center</table>
-            <group>general</group>
+            <group>gen_gen</group>
             <type>relpicker</type>
             <reltype>RELTYPE_OWNER</reltype>
             <field>aw_owner</field>
@@ -12,7 +12,7 @@
       <property>
             <name>mrp_workspace</name>
             <table>aw_mrp_order_center</table>
-            <group>general</group>
+            <group>gen_gen</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_WORKSPACE</reltype>
             <field>aw_mrp_workspace</field>
@@ -21,7 +21,7 @@
       <property>
             <name>mail_template</name>
             <table>aw_mrp_order_center</table>
-            <group>general</group>
+            <group>gen_gen</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MAIL_TEMPLATE</reltype>
             <field>aw_mail_template</field>
@@ -113,13 +113,23 @@
             <field>co_tb</field>
       </property>
       <property>
+            <name>cover_tree_cats</name>
+            <table>aw_mrp_order_center</table>
+            <group>covers</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>cover_left_top</parent>
+            <field>cover_tree_cats</field>
+      </property>
+      <property>
             <name>cover_tree</name>
             <table>aw_mrp_order_center</table>
             <group>covers</group>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>cover_left</parent>
+            <parent>cover_left_bottom</parent>
             <field>cover_tree</field>
       </property>
       <property>
@@ -132,6 +142,56 @@
             <parent>cover_split</parent>
             <field>co_table</field>
       </property>
+      <property>
+            <name>stats_status</name>
+            <table>aw_mrp_order_center</table>
+            <group>stats</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_status_lay</parent>
+            <field>stats_status</field>
+      </property>
+      <property>
+            <name>stats_period</name>
+            <table>aw_mrp_order_center</table>
+            <group>stats</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_period_lay</parent>
+            <field>stats_period</field>
+      </property>
+      <property>
+            <name>stats_customer</name>
+            <table>aw_mrp_order_center</table>
+            <group>stats</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_customer_lay</parent>
+            <field>stats_customer</field>
+      </property>
+      <property>
+            <name>stats_unit</name>
+            <table>aw_mrp_order_center</table>
+            <group>stats</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_unit_lay</parent>
+            <field>stats_unit</field>
+      </property>
+      <property>
+            <name>stats_table</name>
+            <table>aw_mrp_order_center</table>
+            <group>stats</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_split</parent>
+            <field>stats_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_ORDER_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -141,6 +201,20 @@
             <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
+            <gen_gen>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>general</parent>
+            </gen_gen>
+            <pricelists>
+                  <caption>Hinnakirjad</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </pricelists>
+            <covers>
+                  <caption>Katted</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </covers>
             <customer>
                   <caption>Kliendid</caption>
                   <submit>no</submit>
@@ -153,14 +227,10 @@
                   <parent>order</parent>
                   <submit>no</submit>
             </order_order>
-            <pricelists>
-                  <caption>Hinnakirjad</caption>
+            <stats>
+                  <caption>Aruanded</caption>
                   <submit>no</submit>
-            </pricelists>
-            <covers>
-                  <caption>Katted</caption>
-                  <submit>no</submit>
-            </covers>
+            </stats>
       </groupinfo>
       <tableinfo>
             <aw_mrp_order_center>
@@ -187,7 +257,10 @@
             </MRP_PRICELIST>
             <MRP_COVER>
                   <value>5</value>
-                  <clid>CL_MRP_ORDER_COVER</clid>
+                  <clid>
+                        <num_0>CL_MRP_ORDER_COVER</num_0>
+                        <num_1>CL_MRP_ORDER_COVER_GROUP</num_1>
+                  </clid>
                   <caption>Kate</caption>
             </MRP_COVER>
             <MAIL_TEMPLATE>
@@ -244,10 +317,63 @@
             <cover_left>
                   <type>vbox</type>
                   <parent>cover_split</parent>
+                  <group>covers</group>
+                  <area_caption></area_caption>
+            </cover_left>
+            <cover_left_top>
+                  <type>vbox</type>
+                  <parent>cover_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kategooriad</area_caption>
+                  <group>covers</group>
+            </cover_left_top>
+            <cover_left_bottom>
+                  <type>vbox</type>
+                  <parent>cover_left</parent>
                   <closeable>1</closeable>
                   <area_caption>Millele&amp;amp;nbsp;kehtib</area_caption>
                   <group>covers</group>
-            </cover_left>
+            </cover_left_bottom>
+            <stats_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>stats</group>
+                  <area_caption></area_caption>
+            </stats_split>
+            <left_bit>
+                  <type>vbox</type>
+                  <parent>stats_split</parent>
+                  <group>stats</group>
+                  <area_caption></area_caption>
+            </left_bit>
+            <stats_status_lay>
+                  <type>vbox</type>
+                  <parent>left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Filtreeri&amp;amp;nbsp;staatuse&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <group>stats</group>
+            </stats_status_lay>
+            <stats_period_lay>
+                  <type>vbox</type>
+                  <parent>left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Filtreeri&amp;amp;nbsp;perioodi&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <group>stats</group>
+            </stats_period_lay>
+            <stats_customer_lay>
+                  <type>vbox</type>
+                  <parent>left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Filtreeri&amp;amp;nbsp;kliendi&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <group>stats</group>
+            </stats_customer_lay>
+            <stats_unit_lay>
+                  <type>vbox</type>
+                  <parent>left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Filtreeri&amp;amp;nbsp;&amp;amp;uuml;ksuse&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <group>stats</group>
+            </stats_unit_lay>
       </layout>
 </properties>
 

@@ -10,6 +10,15 @@
             <caption>Andmeallikas</caption>
       </property>
       <property>
+            <name>price_list</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Hinnakiri</caption>
+      </property>
+      <property>
             <name>aw_warehouses_tb</name>
             <table>aw_warehouse_import</table>
             <group>aw_warehouses</group>

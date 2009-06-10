@@ -311,6 +311,18 @@
             <caption>Toote l&amp;amp;uuml;hikoodi kontroller</caption>
       </property>
       <property>
+            <name>prod_tree_clids</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>4</size>
+            <parent>right</parent>
+            <caption>Klassid, mida toodete puus kuvatakse</caption>
+      </property>
+      <property>
             <name>units_table</name>
             <table>objects</table>
             <group>units</group>

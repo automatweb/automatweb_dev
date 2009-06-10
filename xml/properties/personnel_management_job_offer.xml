@@ -408,6 +408,36 @@
             <field>candidate_table</field>
       </property>
       <property>
+            <name>conditions_toolbar</name>
+            <table>objects</table>
+            <group>conditions</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <no_rte_button>1</no_rte_button>
+            <store>no</store>
+            <field>conditions_toolbar</field>
+      </property>
+      <property>
+            <name>condition_groups_tree</name>
+            <table>objects</table>
+            <group>conditions</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>condition_groups_tree</parent>
+            <field>condition_groups_tree</field>
+      </property>
+      <property>
+            <name>conditions_table</name>
+            <table>objects</table>
+            <group>conditions</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>conditions_table</parent>
+            <field>conditions_table</field>
+      </property>
+      <property>
             <name>offer_cfgform</name>
             <table>objects</table>
             <group>custom_cfgform</group>
@@ -616,6 +646,10 @@
                   <caption>Kandideerimised</caption>
                   <submit>no</submit>
             </candidate>
+            <conditions>
+                  <caption>Tingimused</caption>
+                  <submit>no</submit>
+            </conditions>
             <custom_cfgform>
                   <caption>CV&amp;amp;nbsp;v&amp;amp;auml;ljad</caption>
                   <no_submit>1</no_submit>
@@ -774,8 +808,31 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>E-postiaadress, kuhu teatada aktiveerimisest</caption>
             </NOTIFY_ME_OF_CONFIRMATION>
+            <CONDITION_GROUP>
+                  <value>27</value>
+                  <clid>CL_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION_GROUP</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise tingimuste grupp</caption>
+            </CONDITION_GROUP>
       </reltypes>
       <layout>
+            <conditions_split>
+                  <type>hbox</type>
+                  <width>25%:75%</width>
+                  <group>conditions</group>
+                  <area_caption></area_caption>
+            </conditions_split>
+            <condition_groups_tree>
+                  <type>vbox</type>
+                  <parent>conditions_split</parent>
+                  <area_caption>Tingimuste&amp;amp;nbsp;grupid</area_caption>
+                  <group>conditions</group>
+            </condition_groups_tree>
+            <conditions_table>
+                  <type>vbox</type>
+                  <parent>conditions_split</parent>
+                  <group>conditions</group>
+                  <area_caption></area_caption>
+            </conditions_table>
             <send_email_sms>
                   <type>hbox</type>
                   <width>20%80%</width>

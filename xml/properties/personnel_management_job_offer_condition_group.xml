@@ -15,5 +15,12 @@
                   <index>aw_oid</index>
             </aw_personnel_management_job_offer_condition_group>
       </tableinfo>
+      <reltypes>
+            <CONDITION>
+                  <value>1</value>
+                  <clid>CL_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION</clid>
+                  <caption>Tingimus</caption>
+            </CONDITION>
+      </reltypes>
 </properties>
 

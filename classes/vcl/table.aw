@@ -1250,6 +1250,11 @@ class aw_table extends aw_template
 					{
 						continue;
 					}
+
+					if (--$skip_for_colspan > 0)
+					{
+						continue;
+					}
 					$rowspan = 1;
 					$style = false;
 					if (isset($this->vgroupby) && is_array($this->vgroupby))
@@ -1448,6 +1453,7 @@ class aw_table extends aw_template
 
 					$tbl .= str_replace("[__jrk_replace__]",$counter,$val);
 					$tbl .= "</td>\n";
+					$skip_for_colspan = $colspan;
 				};
 
 				// joonistame actionid
@@ -3195,9 +3201,18 @@ class vcl_table extends aw_table
 		$ps["modified"]["caption"] = t("Muudetud");
 		foreach($props as $prop)
 		{
+			$capt = $ps[$prop]["caption"];
+			if ($prop == "createdby_person")
+			{
+				$capt = t("Looja");
+			}
+			if ($prop == "modifiedby_person")
+			{
+				$capt = t("Muutja");
+			}
 			$d = array(
 				"name" => $prop,
-				"caption" => $ps[$prop]["caption"],
+				"caption" => $capt,
 				"align" => "center",
 				"sortable" => 1
 			);
