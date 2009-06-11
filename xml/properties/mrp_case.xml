@@ -47,7 +47,6 @@
                   <num_2>grp_case_workflow</num_2>
                   <num_3>grp_case_materials</num_3>
                   <num_4>grp_case_data</num_4>
-                  <num_5>grp_case_view</num_5>
             </group>
             <type>textbox</type>
             <table>objects</table>
@@ -87,7 +86,6 @@
                   <num_2>grp_case_workflow</num_2>
                   <num_3>grp_case_materials</num_3>
                   <num_4>grp_case_data</num_4>
-                  <num_5>grp_case_view</num_5>
             </group>
             <table>mrp_case</table>
             <type>text</type>
@@ -117,6 +115,7 @@
             <group>grp_general</group>
             <table>mrp_case</table>
             <type>textbox</type>
+            <maxlength>10</maxlength>
             <field>project_priority</field>
             <caption>Projekti prioriteet</caption>
       </property>
@@ -128,7 +127,6 @@
                   <num_2>grp_case_workflow</num_2>
                   <num_3>grp_case_materials</num_3>
                   <num_4>grp_case_data</num_4>
-                  <num_5>grp_case_view</num_5>
             </group>
             <table>mrp_case</table>
             <type>relpicker</type>
@@ -523,6 +521,66 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>vgi_name</name>
+            <group>grp_case_view</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>view_general_info_left</parent>
+            <caption>Projekti nr.</caption>
+      </property>
+      <property>
+            <name>vgi_comment</name>
+            <group>grp_case_view</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>view_general_info_left</parent>
+            <caption>Projekti nimetus</caption>
+      </property>
+      <property>
+            <name>vgi_customer</name>
+            <group>grp_case_view</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>view_general_info_left</parent>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>vgi_state</name>
+            <group>grp_case_view</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>view_general_info_right</parent>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>vgi_due_date</name>
+            <group>grp_case_view</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>view_general_info_right</parent>
+            <caption>Valmimist&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>vgi_starttime</name>
+            <group>grp_case_view</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>view_general_info_right</parent>
+            <caption>Alustamisaeg (materjalide saabumine)</caption>
+      </property>
+      <property>
             <name>case_view</name>
             <group>grp_case_view</group>
             <table>objects</table>
@@ -531,7 +589,6 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>vsplitbox</parent>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_CASE</syslog_type>
@@ -634,7 +691,6 @@
                         <num_0>grp_case_workflow</num_0>
                         <num_1>grp_case_materials</num_1>
                         <num_2>grp_case_schedule_gantt</num_2>
-                        <num_3>grp_case_view</num_3>
                   </group>
                   <area_caption></area_caption>
             </vsplitbox>
@@ -645,7 +701,6 @@
                         <num_0>grp_case_workflow</num_0>
                         <num_1>grp_case_materials</num_1>
                         <num_2>grp_case_schedule_gantt</num_2>
-                        <num_3>grp_case_view</num_3>
                   </group>
                   <area_caption></area_caption>
             </left_pane>
@@ -658,7 +713,6 @@
                         <num_0>grp_case_workflow</num_0>
                         <num_1>grp_case_materials</num_1>
                         <num_2>grp_case_schedule_gantt</num_2>
-                        <num_3>grp_case_view</num_3>
                   </group>
             </general_info>
             <resource_tree>
@@ -701,6 +755,25 @@
                   <closeable>1</closeable>
                   <group>grp_case_schedule_google</group>
             </job_charts>
+            <view_general_info>
+                  <type>hbox</type>
+                  <area_caption>Projekti&amp;amp;nbsp;&amp;amp;uuml;ldandmed</area_caption>
+                  <closeable>1</closeable>
+                  <width>50%:50%</width>
+                  <group>grp_case_view</group>
+            </view_general_info>
+            <view_general_info_left>
+                  <type>vbox</type>
+                  <parent>view_general_info</parent>
+                  <group>grp_case_view</group>
+                  <area_caption></area_caption>
+            </view_general_info_left>
+            <view_general_info_right>
+                  <type>vbox</type>
+                  <parent>view_general_info</parent>
+                  <group>grp_case_view</group>
+                  <area_caption></area_caption>
+            </view_general_info_right>
       </layout>
 </properties>
 

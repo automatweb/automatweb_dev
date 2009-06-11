@@ -94,7 +94,7 @@ class mrp_case_obj extends _int_object
 
 	public function awobj_set_state($value)
 	{
-		throw new awex_obj_readonly("State is a read-only property");
+//		throw new awex_obj_readonly("State is a read-only property");
 	}
 
 /**

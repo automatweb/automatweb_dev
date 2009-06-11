@@ -6,6 +6,15 @@
 @default table=aw_mrp_order_print_format
 @default group=general
 
+	@property width type=textbox size=5 field=aw_width
+	@caption Laius
+
+	@property height type=textbox size=5 field=aw_height
+	@caption K&otilde;rgus
+
+	@property per_sqm type=textbox size=5 field=aw_per_sqm
+	@caption Ruutmeetrile mahub
+
 	@layout applies_resources_lay type=vbox closeable=1 area_caption=Kehtib&nbsp;ressurssidele
 
 		@property applies_resources_tb type=toolbar store=no no_caption=1 parent=applies_resources_lay
@@ -76,10 +85,12 @@ class mrp_order_print_format extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_width":
+			case "aw_height":
+			case "aw_per_sqm":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
 				));
 				return true;
 		}

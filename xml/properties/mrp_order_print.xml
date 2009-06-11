@@ -83,12 +83,50 @@
             <caption>Kogus</caption>
       </property>
       <property>
+            <name>page_count</name>
+            <table>aw_mrp_order_print</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_page_count</field>
+            <size>5</size>
+            <caption>Lehtede arv</caption>
+      </property>
+      <property>
+            <name>colour_page_count</name>
+            <table>aw_mrp_order_print</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_colour_page_count</field>
+            <size>5</size>
+            <caption>V&amp;amp;auml;rviliste lehtede arv</caption>
+      </property>
+      <property>
             <name>deadline</name>
             <table>aw_mrp_order_print</table>
             <group>general</group>
             <type>date_select</type>
             <field>aw_deadline</field>
             <caption>T&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>e_format</name>
+            <table>aw_mrp_order_print</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FORMAT</reltype>
+            <field>aw_e_format</field>
+            <automatic>1</automatic>
+            <no_edit>1</no_edit>
+            <caption>Tr&amp;amp;uuml;kise formaat</caption>
+      </property>
+      <property>
+            <name>e_covers</name>
+            <table>aw_mrp_order_print</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_e_covers</field>
+            <caption>Kaaned?</caption>
       </property>
       <property>
             <name>workflow_errors</name>
@@ -241,34 +279,6 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>sent_table</field>
-      </property>
-      <property>
-            <name>e_format</name>
-            <table>aw_mrp_order_print</table>
-            <group>data</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FORMAT</reltype>
-            <field>aw_e_format</field>
-            <automatic>1</automatic>
-            <no_edit>1</no_edit>
-            <caption>Tr&amp;amp;uuml;kise formaat</caption>
-      </property>
-      <property>
-            <name>e_num_pages</name>
-            <table>aw_mrp_order_print</table>
-            <group>data</group>
-            <type>textbox</type>
-            <field>aw_e_num_pages</field>
-            <caption>Lehtede arv</caption>
-      </property>
-      <property>
-            <name>e_covers</name>
-            <table>aw_mrp_order_print</table>
-            <group>data</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aw_e_num_pages</field>
-            <caption>Kaaned?</caption>
       </property>
       <property>
             <name>e_main_paper</name>

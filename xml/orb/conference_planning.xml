@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="conference_planning" folder="www/automatweb_cvs/classes/applications/calendar" extends="class_base">
+	<class name="conference_planning" folder="www/dev/terryf/automatweb_dev/classes/applications/calendar" extends="class_base">
 		<action name="add_separator_to_view">
 			<function name="add_separator_to_view">
 				<arguments>

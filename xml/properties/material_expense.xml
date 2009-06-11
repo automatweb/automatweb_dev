@@ -19,6 +19,15 @@
             <caption>Tegevus</caption>
       </property>
       <property>
+            <name>case</name>
+            <table>aw_material_expense</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CASE</reltype>
+            <field>aw_case</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
             <name>amount</name>
             <table>aw_material_expense</table>
             <group>general</group>
@@ -100,6 +109,11 @@
                   <clid>CL_UNIT</clid>
                   <caption>&amp;amp;Uuml;hik</caption>
             </UNIT>
+            <CASE>
+                  <value>4</value>
+                  <clid>CL_MRP_JOB</clid>
+                  <caption>Projekt</caption>
+            </CASE>
       </reltypes>
 </properties>
 

@@ -1209,6 +1209,35 @@ class mrp_resource_obj extends _int_object
 		));
 		return $ol;
 	}
+
+	public function get_hours_per_format_amount($format, $amount)
+	{
+		// find active ability, get from that
+		$ability = $this->_get_active_ability($format);
+		if (!$ability)
+		{
+			return 0;
+		}
+		return $amount / $ability->ability_per_hr;
+	}
+
+	private function _get_active_ability($format)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_RESOURCE_ABILITY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_MRP_RESOURCE_ABILITY.RELTYPE_RESOURCE_ABILITY_ENTRY(CL_MRP_RESOURCE)" => $this->id(),
+			"act_from" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
+			"act_to" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+			"format" => $format->id()
+		));
+		if (!$ol->count())
+		{
+			return null;
+		}
+		return $ol->begin();
+	}
 }
 
 class mrp_resource_thread

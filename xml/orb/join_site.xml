@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="join_site" folder="www/automatweb_cvs/classes/contentmgmt/join" extends="class_base">
+	<class name="join_site" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt/join" extends="class_base">
 		<action name="submit_join_form" nologin="1">
 			<function name="submit_join_form">
 				<arguments>

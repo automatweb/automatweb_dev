@@ -12,6 +12,23 @@
 @property amount type=textbox size=10 field=aw_amount
 @caption Kogus
 
+@property pages_with_this type=textbox size=10 field=aw_pages_with_this
+@caption Lehti selle materjaliga
+
+@property for_covers type=checkbox ch_value=1 field=aw_for_covers
+@caption Kaante jaoks
+
+@property connected_job type=relpicker reltype=RELTYPE_MRP_JOB field=aw_connected_job
+@caption Materjaliga seotud t&ouml;&ouml;
+
+@property resource type=relpicker reltype=RELTYPE_RESOURCE field=aw_resource
+@caption Ressurss
+
+@reltype MRP_JOB value=1 clid=CL_MRP_JOB
+@caption Materjaliga seotud t&ouml;&ouml;
+
+@reltype RESOURCE value=2 clid=CL_MRP_RESOURCE
+@caption Ressurss
 */
 
 class mrp_order_requested_material extends class_base
@@ -74,6 +91,10 @@ class mrp_order_requested_material extends class_base
 		switch($f)
 		{
 			case "aw_material":
+			case "aw_for_covers":
+			case "aw_pages_with_this":
+			case "aw_connected_job":
+			case "aw_resource":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

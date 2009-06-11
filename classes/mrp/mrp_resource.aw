@@ -5,6 +5,7 @@
 
 	@groupinfo grp_general2 caption="Andmed" parent=general
 	@groupinfo grp_resource_settings caption="Seaded" parent=general
+	@groupinfo grp_resource_ability caption="J&otilde;udlus" parent=general
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_gantt caption="T&ouml;&ouml;voog" submit=no
 @groupinfo grp_resource_joblist caption="T&ouml;&ouml;leht" submit=no
@@ -102,6 +103,9 @@
 	@property products type=relpicker multiple=1 reltype=RELTYPE_PRODUCT store=connect
 	@caption Ressursil valmistatavad tooted
 
+	@property error_pct type=textbox size=5 field=meta method=serialize
+	@caption Paberi raiskamise %
+
 
 @default group=grp_resource_unavailable_work
 
@@ -124,9 +128,15 @@
 
 	@property materials_tb type=toolbar no_caption=1
 
-			@property materials_tree type=treeview parent=materials_tree_box no_caption=1
+		@layout materials_split type=hbox width=25%:75% 	 
+	  	 
+			@layout materials_tree_box parent=materials_split type=vbox area_caption=Materjalid closeable=1
+
+				@property materials_tree type=treeview parent=materials_tree_box no_caption=1
 
 		@layout materials_split_right parent=materials_split type=vbox
+
+			 @property materials_sel_tbl type=table parent=materials_split_right no_caption=1
 
 @default group=grp_resource_materials_report
 
@@ -160,6 +170,14 @@
 	@caption T&otilde;lgi
 
 
+@default group=grp_resource_ability
+
+	@property ability_toolbar type=toolbar store=no no_caption=1
+	@caption Ressursi j&otilde;udluse toolbar
+
+	@property ability_tbl type=table store=no no_caption=1
+	@caption Ressursi j&otilde;udluse tabel
+
 // --------------- RELATION TYPES ---------------------
 
 @reltype MRP_SCHEDULE value=2 clid=CL_PLANNER
@@ -178,6 +196,9 @@
 
 @reltype PRODUCT value=6 clid=CL_SHOP_PRODUCT
 @caption Ressursil valmistatav toode
+
+@reltype RESOURCE_ABILITY_ENTRY value=7 clid=CL_MRP_RESOURCE_ABILITY
+@caption Ressursi j&otilde;udluse kirje
 
 */
 
@@ -2289,6 +2310,37 @@ class mrp_resource extends class_base
 			"proj_states" => $applicable_project_states,
 			"filter" => $filt,
 		));
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "aw_error_pct":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double",
+				));
+				return true;
+		}
+		return false;
+	}
+
+	function _get_ability_toolbar($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_MRP_RESOURCE_ABILITY), $arr["obj_inst"]->id(), 7 /* RESOURCE_ABILITY_ENTRY */);
+		$tb->add_delete_button();
+	}
+
+	function _get_ability_tbl($arr)
+	{
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RESOURCE_ABILITY_ENTRY"))),
+			array("name", "createdby_person", "created", "act_from", "act_to", "format", "ability_per_hr"),
+			CL_MRP_RESOURCE_ABILITY
+		);
+		$arr["prop"]["vcl_inst"]->set_caption(sprintf(t("Ressursi %s j&otilde;udlused formaatide ja aja l&otilde;ikes"), $arr["obj_inst"]->name()));
 	}
 }
 

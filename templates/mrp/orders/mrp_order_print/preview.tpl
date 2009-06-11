@@ -60,12 +60,20 @@
 		<td class="value" width="75%">{VAR:name}&#32;</td>
 	</tr>
 	<tr class="even">
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>T&auml;htaeg:</strong></td>
+		<td class="value" width="75%">{VAR:deadline}&#32;</td>
+	</tr>
+	<tr class="even">
 		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Tr&uuml;kiarv:</strong></td>
 		<td class="value" width="75%">{VAR:amount}&#32;</td>
 	</tr>
 	<tr>
 		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Maht:</strong></td>
-		<td class="value" width="75%">{VAR:e_num_pages}&#32;</td>
+		<td class="value" width="75%">{VAR:page_count}&#32;</td>
+	</tr>
+	<tr>
+		<td class="caption" bgcolor="#dddddd" width="25%"><strong>V&auml;rviliste lehtede maht:</strong></td>
+		<td class="value" width="75%">{VAR:colour_page_count}&#32;</td>
 	</tr>
 	<tr class="even">
 		<td class="caption" bgcolor="#dddddd" width="25%"><strong>Formaat:</strong></td>
@@ -112,5 +120,43 @@
 		<td class="value price" width="75%"><strong><font color="red">{VAR:price}&#32;</font></strong></td>
 	</tr>
 </table>
+<br><br>
+<table id="data" bgcolor="#efefef" border="1" bordercolor="#ffffff" cellpadding="4" cellspacing="0" width="100%" style="border-collapse: collapse;">
+	<tr bgcolor="#bbbbbb">
+		<th colspan="3">Materjalide kulu</th>
+	</tr>
+	<tr>
+		<td class="value" ><strong>Nimi</strong></td>
+		<td class="value" ><strong>Kogus</strong></td>
+		<td class="value" ><strong>Hind</strong></td>
+	</tr>
 
+	<!-- SUB: MATERIAL_LINE -->
+	<tr>
+		<td class="value" >{VAR:mat_name}</td>
+		<td class="value" >{VAR:mat_amt} kg</td>
+		<td class="value" >{VAR:mat_price}</td>
+	</tr>
+	<!-- END SUB: MATERIAL_LINE -->
+</table>
+
+<br><br>
+<table id="data" bgcolor="#efefef" border="1" bordercolor="#ffffff" cellpadding="4" cellspacing="0" width="100%" style="border-collapse: collapse;">
+	<tr bgcolor="#bbbbbb">
+		<th colspan="3">Resursside kulu</th>
+	</tr>
+	<tr>
+		<td class="value" ><strong>Nimi</strong></td>
+		<td class="value" ><strong>Tundide arv</strong></td>
+		<td class="value" ><strong>Hind</strong></td>
+	</tr>
+
+	<!-- SUB: RESOURCE_LINE -->
+	<tr>
+		<td class="value" >{VAR:resource_name}</td>
+		<td class="value" >{VAR:resource_hrs} tundi</td>
+		<td class="value" >{VAR:resource_price}</td>
+	</tr>
+	<!-- END SUB: MATERIAL_LINE -->
+</table>
 </font>

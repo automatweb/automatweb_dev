@@ -5,6 +5,7 @@
 			<function name="start">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="return_url" type="string" />
 				</arguments>
 			</function>
 		</action>
@@ -31,6 +32,7 @@
 			<function name="pause">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="return_url" type="string" />
 				</arguments>
 			</function>
 		</action>
@@ -39,6 +41,7 @@
 			<function name="scontinue">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="return_url" type="string" />
 				</arguments>
 			</function>
 		</action>
@@ -47,6 +50,7 @@
 			<function name="acontinue">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="return_url" type="string" />
 				</arguments>
 			</function>
 		</action>
@@ -62,6 +66,7 @@
 			<function name="end_shift">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="return_url" type="string" />
 				</arguments>
 			</function>
 		</action>

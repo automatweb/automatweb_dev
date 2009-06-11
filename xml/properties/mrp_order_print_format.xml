@@ -1,6 +1,33 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>width</name>
+            <table>aw_mrp_order_print_format</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_width</field>
+            <caption>Laius</caption>
+      </property>
+      <property>
+            <name>height</name>
+            <table>aw_mrp_order_print_format</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_height</field>
+            <caption>K&amp;amp;otilde;rgus</caption>
+      </property>
+      <property>
+            <name>per_sqm</name>
+            <table>aw_mrp_order_print_format</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_per_sqm</field>
+            <caption>Ruutmeetrile mahub</caption>
+      </property>
+      <property>
             <name>applies_resources_tb</name>
             <table>aw_mrp_order_print_format</table>
             <group>general</group>

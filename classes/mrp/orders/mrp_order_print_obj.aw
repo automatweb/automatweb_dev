@@ -310,6 +310,52 @@ class mrp_order_print_obj extends mrp_order_obj
 
 		return $rv;
 	}
+
+	public function calculate_needed_paper_amount($paper, $material_request = null)
+	{
+		if (!$this->can("view", $this->prop("e_format")))
+		{
+			return 0;
+		}
+
+		// get gramweight, amount of pages, amount of total items, area for format, convert to m2, multiply by gramweight, pages and so on
+		$gramweight = $paper->gramweight;
+
+		$pages_per_sqm = obj($this->prop("e_format"))->per_sqm;
+
+		$page_count = $this->prop("page_count");
+		if (is_object($material_request))
+		{
+			$page_count = $material_request->pages_with_this;
+		}
+		
+		$sqms = ($page_count * $this->prop("amount")) / $pages_per_sqm;
+		$paper_weight_kg = ($sqms * $gramweight) / 1000;
+
+		// add error % from resource for this paper
+		$res = $this->get_default_resource_for_material($paper);
+		if ($res && $res->error_pct > 0)
+		{
+			$paper_weight_kg += ($paper_weight_kg * $res->error_pct) / 100.0;
+		}
+
+		return $paper_weight_kg;
+	}
+
+	function get_default_resource_for_material($mat)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MATERIAL_EXPENSE_CONDITION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"product" => $mat->id()
+		));
+		if (!$ol->count())
+		{
+			return null;
+		}
+		return $ol->begin()->resource();
+	}
 }
 
 ?>

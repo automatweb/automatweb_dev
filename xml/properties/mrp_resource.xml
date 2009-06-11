@@ -23,6 +23,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
+            <editonly>1</editonly>
       </property>
       <property>
             <name>state</name>
@@ -83,6 +84,21 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>job_time_tree</parent>
+      </property>
+      <property>
+            <name>job_client_tree</name>
+            <table>objects</table>
+            <group>
+                  <num_0>grp_resource_joblist_todo</num_0>
+                  <num_1>grp_resource_joblist_done</num_1>
+                  <num_2>grp_resource_joblist_aborted</num_2>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>job_client_tree</parent>
       </property>
       <property>
             <name>resource_deviation_chart</name>
@@ -213,7 +229,6 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <default>1</default>
             <rows>5</rows>
             <comment>Valikud valiminud partiide arvu sisestamiseks t&amp;amp;ouml;&amp;amp;ouml; vaates (ressursioperaatori vaates). T&amp;amp;auml;isarvud, koguste puhul ratsionaalarvud.</comment>
             <caption>Tootmise tagasiside valikud</caption>
@@ -229,6 +244,16 @@
             <reltype>RELTYPE_PRODUCT</reltype>
             <store>connect</store>
             <caption>Ressursil valmistatavad tooted</caption>
+      </property>
+      <property>
+            <name>error_pct</name>
+            <table>objects</table>
+            <group>grp_resource_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Paberi raiskamise %</caption>
       </property>
       <property>
             <name>work_hrs_recur</name>
@@ -330,6 +355,17 @@
             <store>no</store>
       </property>
       <property>
+            <name>materials_sel_tbl</name>
+            <table>objects</table>
+            <group>grp_resource_materials_config</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <parent>materials_split_right</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>materials_report_time_tree</name>
             <table>objects</table>
             <group>grp_resource_materials_report</group>
@@ -393,6 +429,28 @@
             <store>no</store>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
+      <property>
+            <name>ability_toolbar</name>
+            <table>objects</table>
+            <group>grp_resource_ability</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Ressursi j&amp;amp;otilde;udluse toolbar</caption>
+      </property>
+      <property>
+            <name>ability_tbl</name>
+            <table>objects</table>
+            <group>grp_resource_ability</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Ressursi j&amp;amp;otilde;udluse tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_RESOURCE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -410,6 +468,10 @@
                   <caption>Seaded</caption>
                   <parent>general</parent>
             </grp_resource_settings>
+            <grp_resource_ability>
+                  <caption>J&amp;amp;otilde;udlus</caption>
+                  <parent>general</parent>
+            </grp_resource_ability>
             <grp_resource_schedule>
                   <caption>Kalender</caption>
             </grp_resource_schedule>
@@ -498,6 +560,11 @@
                   <clid>CL_SHOP_PRODUCT</clid>
                   <caption>Ressursil valmistatav toode</caption>
             </PRODUCT>
+            <RESOURCE_ABILITY_ENTRY>
+                  <value>7</value>
+                  <clid>CL_MRP_RESOURCE_ABILITY</clid>
+                  <caption>Ressursi j&amp;amp;otilde;udluse kirje</caption>
+            </RESOURCE_ABILITY_ENTRY>
       </reltypes>
       <layout>
             <job_list>
@@ -510,16 +577,36 @@
                   </group>
                   <area_caption></area_caption>
             </job_list>
-            <job_time_tree>
+            <job_forest>
                   <type>vbox</type>
-                  <area_caption>Vali&amp;amp;nbsp;kuvatavate&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;ajavahemik</area_caption>
                   <parent>job_list</parent>
                   <group>
                         <num_0>grp_resource_joblist_todo</num_0>
                         <num_1>grp_resource_joblist_done</num_1>
                         <num_2>grp_resource_joblist_aborted</num_2>
                   </group>
+                  <area_caption></area_caption>
+            </job_forest>
+            <job_time_tree>
+                  <type>vbox</type>
+                  <area_caption>Vali&amp;amp;nbsp;kuvatavate&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;ajavahemik</area_caption>
+                  <parent>job_forest</parent>
+                  <group>
+                        <num_0>grp_resource_joblist_todo</num_0>
+                        <num_1>grp_resource_joblist_done</num_1>
+                        <num_2>grp_resource_joblist_aborted</num_2>
+                  </group>
             </job_time_tree>
+            <job_client_tree>
+                  <type>vbox</type>
+                  <area_caption>Vali&amp;amp;nbsp;klient</area_caption>
+                  <parent>job_forest</parent>
+                  <group>
+                        <num_0>grp_resource_joblist_todo</num_0>
+                        <num_1>grp_resource_joblist_done</num_1>
+                        <num_2>grp_resource_joblist_aborted</num_2>
+                  </group>
+            </job_client_tree>
             <job_list_right>
                   <type>vbox</type>
                   <parent>job_list</parent>
@@ -551,6 +638,19 @@
                         <num_2>grp_resource_joblist_aborted</num_2>
                   </group>
             </job_list_table>
+            <materials_split>
+                  <type>hbox</type>
+                  <width>25%:75%</width>
+                  <group>grp_resource_materials_config</group>
+                  <area_caption></area_caption>
+            </materials_split>
+            <materials_tree_box>
+                  <parent>materials_split</parent>
+                  <type>vbox</type>
+                  <area_caption>Materjalid</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_resource_materials_config</group>
+            </materials_tree_box>
             <materials_split_right>
                   <parent>materials_split</parent>
                   <type>vbox</type>

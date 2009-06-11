@@ -10,9 +10,20 @@
 	@property amount type=textbox size=5 field=aw_amount group=general,price
 	@caption Kogus
 
+	@property page_count type=textbox field=aw_page_count size=5
+	@caption Lehtede arv
+
+	@property colour_page_count type=textbox field=aw_colour_page_count size=5
+	@caption V&auml;rviliste lehtede arv
+
 	@property deadline type=date_select field=aw_deadline
 	@caption T&auml;htaeg
 
+	@property e_format type=relpicker reltype=RELTYPE_FORMAT field=aw_e_format automatic=1 no_edit=1
+	@caption Tr&uuml;kise formaat
+
+	@property e_covers type=checkbox ch_value=1 field=aw_e_covers 
+	@caption Kaaned?
 
 @default group=grp_case_workflow
 
@@ -70,15 +81,6 @@
 	@property sent_table type=table store=no no_caption=1
 
 @default group=data
-
-	@property e_format type=relpicker reltype=RELTYPE_FORMAT field=aw_e_format automatic=1 no_edit=1
-	@caption Tr&uuml;kise formaat
-
-	@property e_num_pages type=textbox field=aw_e_num_pages
-	@caption Lehtede arv
-
-	@property e_covers type=checkbox ch_value=1 field=aw_e_num_pages
-	@caption Kaaned?
 
 	@property e_main_paper type=relpicker reltype=RELTYPE_MAIN_PAPER field=aw_e_main_paper no_edit=1
 	@caption Sisupaber
@@ -269,6 +271,8 @@ class mrp_order_print extends mrp_order
 			case "aw_e_cover_paper":
 			case "aw_e_main_colour":
 			case "aw_e_cover_colour":
+			case "aw_page_count":
+			case "aw_colour_page_count":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -437,18 +441,18 @@ class mrp_order_print extends mrp_order
 	private function _init_materials_table($t)
 	{
 		$t->define_field(array(
+			"name" => "use_for_covers",
+			"caption" => t("Kasuta kaante jaoks"),
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "material",
 			"caption" => t("Materjal"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "unit",
-			"caption" => t("&Uuml;hik"),
-			"align" => "center",
-		));
-		$t->define_field(array(
-			"name" => "amount",
-			"caption" => t("Kogus"),
+			"caption" => t("V&otilde;imalikud &uuml;hikud"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -459,6 +463,54 @@ class mrp_order_print extends mrp_order
 		$t->define_field(array(
 			"name" => "purchase_price",
 			"caption" => t("Ostuhind"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "pages_with_this",
+			"caption" => t("Lehti selle materjaliga"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "calculated_amount",
+			"caption" => t("Arvutatud vajalik kogus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "total_purchase_price",
+			"caption" => t("Ostuhinna summa"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "total_sales_price",
+			"caption" => t("M&uuml;&uuml;gihinna summa"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("L&otilde;plik kogus"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "fin_sales_price",
+			"caption" => t("L&otilde;plik m&uuml;&uuml;gihind"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "resource",
+			"caption" => t("Resurss"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "resource_hours",
+			"caption" => t("Ressursi tunde"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "resource_price",
+			"caption" => t("Ressursi hind"),
 			"align" => "center",
 		));
 	}
@@ -490,71 +542,67 @@ class mrp_order_print extends mrp_order
 		{
 			$amt = 0;
 			$unit = 0;
+			$mat_amt = $arr["obj_inst"]->page_count;
+			$for_covers = 0;
 			if (isset($used_materials[$material->id]))
 			{
 				$amt = $used_materials[$material->id]->amount;
+				$mat_amt = $used_materials[$material->id]->pages_with_this;
 				$unit = $used_materials[$material->id]->unit;
+				$for_covers = $used_materials[$material->id]->for_covers;
 			}
+			if ($mat_amt < 1)
+			{
+				$mat_amt = $arr["obj_inst"]->page_count;
+			}
+
+			// calculate required paper amount
+			$calc_amount = $arr["obj_inst"]->calculate_needed_paper_amount($material, $used_materials[$material->id]);
 
 			$price = array();
+			$price_total = array();
+			$price_fin = array();
 			foreach($cur_list as $cur_id => $cur_name)
 			{
-				$price[] = ($material->price_get_by_currency(obj($cur_id)) * $amt)." ".$cur_name;
+				$pr_tmp = ($material->price_get_by_currency(obj($cur_id)));
+				$price[] = $pr_tmp." ".$cur_name;
+				$price_total[] = number_format($pr_tmp * $calc_amount, 2)." ".$cur_name;
+				$price_fin[] = number_format($pr_tmp * $amt, 2)." ".$cur_name;
 			}
-			$purchase_price = $material->purchase_price * $amt;
+			$purchase_price = $material->purchase_price;
+			$total_purchase_price = $material->purchase_price * $calc_amount;
 				
+			$res = $arr["obj_inst"]->get_default_resource_for_material($material);
+			$resource_hours = "";
+			$resource_price = "";
+			if ($res)
+			{
+				$resource_hours = $res->get_hours_per_format_amount($arr["obj_inst"]->e_format(), $mat_amt * $arr["obj_inst"]->amount);
+
+				$resource_price = obj($arr["obj_inst"]->prop("mrp_pricelist"))->get_price_for_resource_and_amount($res, $arr["obj_inst"]->amount);
+				$resource_price += obj($arr["obj_inst"]->prop("mrp_pricelist"))->get_price_for_resource_and_time($res, $resource_hours);
+				$resource_price = number_format($resource_price, 2);
+			}
 
 			$t->define_data(array(
+				"use" => html::checkbox(array("name" => "use[".$material->id()."]", "value" => 1, "checked" => isset($used_materials[$material->id()]))),
+				"use_for_covers" => html::checkbox(array("name" => "use_for_covers[".$material->id()."]", "value" => 1, "checked" => $for_covers)),
 				"material" => html::obj_change_url($material),
+				"calculated_amount" => sprintf(t("%s kg"), number_format($calc_amount, 2)),
 				"amount" => html::textbox(array("name" => "mat[".$material->id."]", "size" => 5, "value" => $amt)),
+				"pages_with_this" => html::textbox(array("name" => "mat_amts[".$material->id."]", "size" => 5, "value" => $mat_amt)),
 				"sales_price" => join(" ", $price),
-				"purchase_price" => $purchase_price,
+				"total_sales_price" => join(" ", $price_total),
+				"fin_sales_price" => join(" ", $price_fin),
+				"purchase_price" => number_format($purchase_price, 2),
+				"total_purchase_price" => number_format($total_purchase_price, 2),
 				"unit" => $mj->get_materials_unitselect($material, $unit, $material->id()),
+				"resource" => $res ? html::obj_change_url($res) : "",
+				"resource_hours" => $resource_hours,
+				"resource_price" => $resource_price
 			));
 		}
-
-		return;
-
-
-		// put all jobs in table and for each job list all possible materials and let the user pick some
-		foreach($arr["obj_inst"]->get_job_list() as $job)
-		{
-			$material_expenses = $job->get_material_expense_list();
-
-			// for each job list all possible materials
-			$materials = $job->get_resource()->get_possible_materials();
-			foreach($materials as $material)
-			{
-				$amt = 0;
-				$unit = 0;
-				$price = array();
-				$purchase_price = 0;
-				if (isset($material_expenses[$material->product]))
-				{
-					$amt = $material_expenses[$material->product]->amount;
-					$unit = $material_expenses[$material->product]->unit;
-			
-					// get price for set amount/unit
-					
-					foreach($cur_list as $cur_id => $cur_name)
-					{
-						$price[] = ($material->product()->price_get_by_currency(obj($cur_id)) * $amt)." ".$cur_name;
-					}
-					$purchase_price = $material->product()->purchase_price * $amt;
-				}
-				
-				$t->define_data(array(
-					"job" => $job->name(),
-					"material" => $material->product()->name(),
-					"unit" => $mj->get_materials_unitselect($material->product(), $unit, $job->id()),
-					"amount" => html::textbox(array("name" => "jobs[".$job->id()."][amount][".$material->product."]", "size" => 5, "value" => $amt)),
-					"sales_price" => join(" ", $price),
-					"purchase_price" => $purchase_price
-				));
-			}
-		}
-
-		$t->set_rgroupby(array("job" => "job"));
+		$t->set_caption(sprintf(t("Materjalid kaustas %s"), obj($wh)->name()));
 	}
 
 	function _set_materials_table($arr)
@@ -581,8 +629,7 @@ class mrp_order_print extends mrp_order
 			{
 				if (isset($used_materials[$material->id()]))
 				{
-					$used_materials[$material->id()]->amount = $arr["request"]["mat"][$material->id()];
-					$used_materials[$material->id()]->save();
+					$usm = $used_materials[$material->id()];
 				}
 				else
 				{
@@ -590,10 +637,45 @@ class mrp_order_print extends mrp_order
 					$usm->set_parent($arr["obj_inst"]->id());
 					$usm->set_class_id(CL_MRP_ORDER_REQUESTED_MATERIAL);
 					$usm->set_prop("material", $material->id());
-					$usm->set_prop("amount", $arr["request"]["mat"][$material->id()]);
 					$usm->save();
 					$arr["obj_inst"]->connect(array("to" => $usm->id(), "type" => "RELTYPE_REQUESTED_MATERIAL"));
 				}
+
+				$usm->set_prop("amount", $arr["request"]["mat"][$material->id()]);
+				$usm->set_prop("pages_with_this", $arr["request"]["mat_amts"][$material->id()]);
+				$usm->set_prop("for_covers", $arr["request"]["use_for_covers"][$material->id()]);
+
+				$res = $arr["obj_inst"]->get_default_resource_for_material($material);
+				if ($res)
+				{
+					$usm->set_prop("resource", $res->id());
+					if (!$this->can("view", $usm->prop("connected_job")))
+					{
+						// need to create a job for this material
+						$case = get_instance(CL_MRP_CASE);
+						$joid = $case->add_job(array(
+							"obj_inst" => $arr["obj_inst"]->get_case(),
+							"mrp_new_job_resource" => $res->id()
+						));
+						$usm->set_prop("connected_job", $joid);
+					}
+
+					$job = obj($usm->prop("connected_job"));
+					$resource_hours = $res->get_hours_per_format_amount($arr["obj_inst"]->e_format(), $usm->prop("pages_with_this") * $arr["obj_inst"]->amount);
+					$job->set_prop("length", $resource_hours * 3600);
+					$job->set_prop("sales_comment", sprintf(t("Automaatselt lisatud materjali %s kaudu"), $material->name()));
+					$job->save();
+				}
+				else
+				{
+					if ($this->can("view", $usm->prop("connected_job")))
+					{
+						obj($usm->prop("connected_job"))->delete();
+					}
+					$usm->set_prop("resource", null);
+					$usm->set_prop("connected_job", null);
+				}
+				$usm->save();
 			}
 			else
 			if (isset($used_materials[$material->id()]))
@@ -1028,6 +1110,38 @@ class mrp_order_print extends mrp_order
 			"e_main_colour" => $colo[$o->e_main_colour],
 			"e_cover_paper" => $o->e_cover_paper()->name(),
 			"e_main_paper" => $o->e_main_paper()->name(),
+			"amount" => $o->amount,
+			"page_count" => $o->page_count,
+			"colour_page_count" => $o->colour_page_count,
+			"deadline" => date("d.m.Y", $o->deadline),
+		));
+
+		$s = "";
+		foreach($o->get_used_materials() as $mat_request)
+		{
+			$this->vars(array(
+				"mat_name" => $mat_request->material()->name(),
+				"mat_amt" => number_format($mat_request->amount, 2),
+				"mat_price" => $mat_request->get_material_price()
+			));
+			$s .= $this->parse("MATERIAL_LINE");
+		}
+		$this->vars(array(
+			"MATERIAL_LINE" => $s
+		));
+
+		$s = "";
+		foreach($o->get_job_list() as $job)
+		{
+			$this->vars(array(
+				"resource_name" => $job->resource()->name(),
+				"resource_hrs" => number_format($job->length / 3600, 1),
+				"resource_price" => number_format($o->get_price_for_job($job), 2)
+			));
+			$s .= $this->parse("RESOURCE_LINE");
+		}
+		$this->vars(array(
+			"RESOURCE_LINE" => $s
 		));
 
 		return $this->parse();

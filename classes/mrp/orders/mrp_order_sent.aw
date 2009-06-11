@@ -150,6 +150,7 @@ class mrp_order_sent extends class_base
 	{
 		$arr["prop"]["value"] = 
 			t("Sisus kasutatavad m&auml;rgid:")."<br>".
+			t("#weblink# - veebi url pakkumise vaatamiseks")."<br>".
 			t("#klient# - kliendi organisatsiooni nimi")."<br>".
 			t("#kontakt# - kliendi kontaktisiku nimi")."<br>";
 	}
@@ -285,15 +286,22 @@ class mrp_order_sent extends class_base
 		$o->save();
 	}
 
-	private function _format_content($o)
+	function _get_offer($o)
 	{
 		$offer = $o->connections_to(array("from.class_id" => CL_MRP_ORDER_PRINT));
 		$offer = reset($offer);
 		$offer = $offer->from();
+		return $offer;
+	}
+
+	private function _format_content($o)
+	{
+		$offer = $this->_get_offer($o);
 
 		$content = $o->send_content;
 		$content = str_replace("#klient#", $offer->get_customer_name(), $content);
 		$content = str_replace("#kontakt#", $offer->get_contact_name(), $content);
+		$content = str_replace("#weblink#", obj_link($o), $content);
 		return $content;
 	}
 
@@ -319,6 +327,43 @@ class mrp_order_sent extends class_base
 				$arr["prop"]["value"] = $offer->get_contact_name();
 			}
 		}
+	}
+
+	function _agreed($o)
+	{
+		$this->read_template("agreed.tpl");
+		return $this->parse();
+	}
+
+	public function request_execute($o)
+	{
+		if ($_GET["agreed"] == 1)
+		{
+			return $this->_agreed($o);
+		}
+		$this->read_template("web_display.tpl");
+		
+		$offer = $this->_get_offer($o);
+		$this->vars(array(
+			"offer_content" => $offer->instance()->generate_preview($offer),
+			"reforb" => $this->mk_reforb("agree_to_offer", array("id" => $o->id(), "ru" => aw_url_change_var("agreed", 1)))
+		));
+		return $this->parse();
+	}
+
+	/**
+		@attrib name=agree_to_offer
+		@param id required
+		@param ru required
+	**/
+	function agree_to_offer($arr)
+	{
+		$offer = $this->_get_offer(obj($arr["id"]));
+		$offer->set_prop("state", 4);	// accepted
+		aw_disable_acl();
+		$offer->save();
+		aw_restore_acl();
+		return $arr["ru"];
 	}
 }
 

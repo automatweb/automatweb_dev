@@ -196,6 +196,17 @@
             <parent>projtreetime_box</parent>
       </property>
       <property>
+            <name>project_customers_tree</name>
+            <group>grp_projects</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>project_customers_tree_box</parent>
+      </property>
+      <property>
             <name>projects_list</name>
             <group>grp_projects</group>
             <table>objects</table>
@@ -368,17 +379,6 @@
             <parent>resources_tree_box</parent>
       </property>
       <property>
-            <name>pp_resources</name>
-            <group>my_resources</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <parent>resources_tree_box</parent>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
             <name>resource_deviation_chart</name>
             <group>
                   <num_0>grp_resources_load</num_0>
@@ -497,6 +497,7 @@
                   <num_0>grp_persons_hours_report</num_0>
                   <num_1>grp_persons_jobs_report</num_1>
                   <num_2>my_stats</num_2>
+                  <num_3>grp_persons_quantity_report</num_3>
             </group>
             <table>objects</table>
             <field>meta</field>
@@ -512,6 +513,7 @@
                   <num_0>grp_persons_hours_report</num_0>
                   <num_1>grp_persons_jobs_report</num_1>
                   <num_2>my_stats</num_2>
+                  <num_3>grp_persons_quantity_report</num_3>
             </group>
             <table>objects</table>
             <field>meta</field>
@@ -520,6 +522,61 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>persons_personnel_tree</parent>
+      </property>
+      <property>
+            <name>persons_resource_span_tree</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>persons_resource_span_tree</parent>
+      </property>
+      <property>
+            <name>grp_material_tree</name>
+            <group>grp_material_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_material_tree</parent>
+      </property>
+      <property>
+            <name>grp_material_time_tree</name>
+            <group>grp_material_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_material_time_tree</parent>
+      </property>
+      <property>
+            <name>grp_material_personnel_tree</name>
+            <group>grp_material_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_material_personnel_tree</parent>
+      </property>
+      <property>
+            <name>grp_material_resource_span_tree</name>
+            <group>grp_material_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_material_resource_span_tree</parent>
       </property>
       <property>
             <name>poo_job_done_only_by</name>
@@ -542,7 +599,97 @@
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <parent>persons_jobs_tbl</parent>
+            <parent>grp_persons_right</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>poo_quantity_broup_by</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <parent>persons_other_options</parent>
+            <captionside>top</captionside>
+            <caption>Grupeerimine</caption>
+      </property>
+      <property>
+            <name>persons_quantity_chart_quantity_by_person</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_persons_right_split_1_left</parent>
+      </property>
+      <property>
+            <name>persons_quantity_chart_quantity_by_resource</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_persons_right_split_1_right</parent>
+      </property>
+      <property>
+            <name>persons_quantity_chart_quantity_by_case</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_persons_right_split_2_left</parent>
+      </property>
+      <property>
+            <name>persons_quantity_chart_quantity_by_job</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_persons_right_split_2_right</parent>
+      </property>
+      <property>
+            <name>persons_quantity_chart_quantity_by_person_in_month</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_persons_right_split_3</parent>
+      </property>
+      <property>
+            <name>persons_quantity_chart_quantity_by_person_in_week</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>google_chart</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_persons_right_split_4</parent>
+      </property>
+      <property>
+            <name>persons_quantity_tbl</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <parent>grp_persons_right</parent>
             <no_caption>1</no_caption>
       </property>
       <property>
@@ -683,6 +830,28 @@
             <store>no</store>
             <parent>schedule_search_box</parent>
             <caption>N&amp;amp;auml;ita</caption>
+      </property>
+      <property>
+            <name>charts_clients_tree</name>
+            <group>grp_schedule_google</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>charts_clients_tree</parent>
+      </property>
+      <property>
+            <name>charts_time_tree</name>
+            <group>grp_schedule_google</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>charts_time_tree</parent>
       </property>
       <property>
             <name>states_chart</name>
@@ -1110,6 +1279,7 @@
             <type>treeview</type>
             <parent>printer_tree</parent>
             <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>printer_time_tree</name>
@@ -1120,6 +1290,7 @@
             <type>treeview</type>
             <parent>printer_time_tree_l</parent>
             <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>printer_resource_tree</name>
@@ -1130,6 +1301,7 @@
             <type>treeview</type>
             <parent>printer_resource_tree_l</parent>
             <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>ps_resource</name>
@@ -1229,16 +1401,6 @@
             <parent>ppl_birthdays</parent>
             <no_caption>1</no_caption>
             <store>no</store>
-      </property>
-      <property>
-            <name>printer_legend</name>
-            <group>grp_printer</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <parent>printer_legend_box</parent>
       </property>
       <property>
             <name>printer_jobs_prev_link</name>
@@ -1443,6 +1605,39 @@
             <subtitle>1</subtitle>
             <parent>printer_right</parent>
             <caption>Projekti andmed</caption>
+      </property>
+      <property>
+            <name>pjp_name</name>
+            <group>grp_printer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <parent>printer_right</parent>
+            <caption>Projekti number</caption>
+      </property>
+      <property>
+            <name>pjp_comment</name>
+            <group>grp_printer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <parent>printer_right</parent>
+            <caption>Projekti nimetus</caption>
+      </property>
+      <property>
+            <name>pjp_customer</name>
+            <group>grp_printer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <parent>printer_right</parent>
+            <caption>Klient</caption>
       </property>
       <property>
             <name>pjp_format</name>
@@ -1655,6 +1850,16 @@
             <parent>printer_right</parent>
       </property>
       <property>
+            <name>printer_legend</name>
+            <group>grp_printer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>printer_legend_box</parent>
+      </property>
+      <property>
             <name>select_session_resource</name>
             <group>grp_login_select_res</group>
             <table>objects</table>
@@ -1865,7 +2070,7 @@
                   <submit>no</submit>
             </grp_resources_hours_report>
             <grp_persons>
-                  <caption>Inimesed</caption>
+                  <caption>Aruanded</caption>
             </grp_persons>
             <grp_persons_hours_report>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;ajaaruanne</caption>
@@ -1875,6 +2080,14 @@
                   <caption>Tehtud t&amp;amp;ouml;&amp;amp;ouml;d inimeste kaupa</caption>
                   <parent>grp_persons</parent>
             </grp_persons_jobs_report>
+            <grp_persons_quantity_report>
+                  <caption>T&amp;amp;uuml;kiarvestuse aruanne</caption>
+                  <parent>grp_persons</parent>
+            </grp_persons_quantity_report>
+            <grp_material_report>
+                  <caption>Materiali aruanne</caption>
+                  <parent>grp_persons</parent>
+            </grp_material_report>
             <grp_printer_general>
                   <caption>Operaatori vaade</caption>
                   <submit>no</submit>
@@ -2010,6 +2223,13 @@
                   <parent>projects_box</parent>
                   <group>grp_projects</group>
             </projtreetime_box>
+            <project_customers_tree_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kliendi</area_caption>
+                  <parent>projects_box</parent>
+                  <group>grp_projects</group>
+            </project_customers_tree_box>
             <projects_search_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
@@ -2126,6 +2346,7 @@
                         <num_0>grp_persons_hours_report</num_0>
                         <num_1>grp_persons_jobs_report</num_1>
                         <num_2>my_stats</num_2>
+                        <num_3>grp_persons_quantity_report</num_3>
                   </group>
                   <area_caption></area_caption>
             </grp_persons_full>
@@ -2136,6 +2357,7 @@
                         <num_0>grp_persons_hours_report</num_0>
                         <num_1>grp_persons_jobs_report</num_1>
                         <num_2>my_stats</num_2>
+                        <num_3>grp_persons_quantity_report</num_3>
                   </group>
                   <area_caption></area_caption>
             </grp_persons_left>
@@ -2147,6 +2369,7 @@
                         <num_0>grp_persons_hours_report</num_0>
                         <num_1>grp_persons_jobs_report</num_1>
                         <num_2>my_stats</num_2>
+                        <num_3>grp_persons_quantity_report</num_3>
                   </group>
             </persons_time_tree>
             <persons_personnel_tree>
@@ -2157,8 +2380,15 @@
                         <num_0>grp_persons_hours_report</num_0>
                         <num_1>grp_persons_jobs_report</num_1>
                         <num_2>my_stats</num_2>
+                        <num_3>grp_persons_quantity_report</num_3>
                   </group>
             </persons_personnel_tree>
+            <persons_resource_span_tree>
+                  <type>vbox</type>
+                  <parent>grp_persons_left</parent>
+                  <area_caption>Vali&amp;amp;nbsp;ressursid</area_caption>
+                  <group>grp_persons_quantity_report</group>
+            </persons_resource_span_tree>
             <persons_other_options>
                   <type>vbox</type>
                   <parent>grp_persons_left</parent>
@@ -2167,6 +2397,7 @@
                         <num_0>grp_persons_hours_report</num_0>
                         <num_1>grp_persons_jobs_report</num_1>
                         <num_2>my_stats</num_2>
+                        <num_3>grp_persons_quantity_report</num_3>
                   </group>
             </persons_other_options>
             <grp_persons_right>
@@ -2176,15 +2407,114 @@
                         <num_0>grp_persons_hours_report</num_0>
                         <num_1>grp_persons_jobs_report</num_1>
                         <num_2>my_stats</num_2>
+                        <num_3>grp_persons_quantity_report</num_3>
                   </group>
                   <area_caption></area_caption>
             </grp_persons_right>
-            <persons_jobs_tbl>
+            <grp_material_report_full>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>grp_material_report</group>
+                  <area_caption></area_caption>
+            </grp_material_report_full>
+            <grp_material_report_left>
+                  <type>vbox</type>
+                  <parent>grp_material_report_full</parent>
+                  <group>grp_material_report</group>
+                  <area_caption></area_caption>
+            </grp_material_report_left>
+            <grp_material_tree>
+                  <type>vbox</type>
+                  <parent>grp_material_report_left</parent>
+                  <area_caption>Materjal</area_caption>
+                  <group>grp_material_report</group>
+            </grp_material_tree>
+            <grp_material_time_tree>
+                  <type>vbox</type>
+                  <parent>grp_material_report_left</parent>
+                  <area_caption>Ajavahemik</area_caption>
+                  <group>grp_material_report</group>
+            </grp_material_time_tree>
+            <grp_material_personnel_tree>
+                  <type>vbox</type>
+                  <parent>grp_material_report_left</parent>
+                  <area_caption>Inimesed</area_caption>
+                  <group>grp_material_report</group>
+            </grp_material_personnel_tree>
+            <grp_material_resource_span_tree>
+                  <type>vbox</type>
+                  <parent>grp_material_report_left</parent>
+                  <area_caption>Ressursid</area_caption>
+                  <group>grp_material_report</group>
+            </grp_material_resource_span_tree>
+            <grp_material_other_options>
+                  <type>vbox</type>
+                  <parent>grp_material_report_left</parent>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;kuvamise&amp;amp;nbsp;tingimused</area_caption>
+                  <group>grp_material_report</group>
+            </grp_material_other_options>
+            <grp_material_report_right>
+                  <type>vbox</type>
+                  <parent>grp_grp_material_full</parent>
+                  <group>grp_material_report</group>
+                  <area_caption></area_caption>
+            </grp_material_report_right>
+            <grp_persons_right_split_1>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <parent>grp_persons_right</parent>
+                  <group>grp_persons_quantity_report</group>
+                  <area_caption></area_caption>
+            </grp_persons_right_split_1>
+            <grp_persons_right_split_1_left>
+                  <type>vbox</type>
+                  <parent>grp_persons_right_split_1</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;uuml;kiarvestus&amp;amp;nbsp;inimeste&amp;amp;nbsp;l&amp;amp;otilde;ikes</area_caption>
+                  <group>grp_persons_quantity_report</group>
+            </grp_persons_right_split_1_left>
+            <grp_persons_right_split_1_right>
+                  <type>vbox</type>
+                  <parent>grp_persons_right_split_1</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;uuml;kiarvestus&amp;amp;nbsp;ressursside&amp;amp;nbsp;l&amp;amp;otilde;ikes</area_caption>
+                  <group>grp_persons_quantity_report</group>
+            </grp_persons_right_split_1_right>
+            <grp_persons_right_split_2>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <parent>grp_persons_right</parent>
+                  <group>grp_persons_quantity_report</group>
+                  <area_caption></area_caption>
+            </grp_persons_right_split_2>
+            <grp_persons_right_split_2_left>
+                  <type>vbox</type>
+                  <parent>grp_persons_right_split_2</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;uuml;kiarvestus&amp;amp;nbsp;projektide&amp;amp;nbsp;l&amp;amp;otilde;ikes</area_caption>
+                  <group>grp_persons_quantity_report</group>
+            </grp_persons_right_split_2_left>
+            <grp_persons_right_split_2_right>
+                  <type>vbox</type>
+                  <parent>grp_persons_right_split_2</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;uuml;kiarvestus&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;de&amp;amp;nbsp;l&amp;amp;otilde;ikes</area_caption>
+                  <group>grp_persons_quantity_report</group>
+            </grp_persons_right_split_2_right>
+            <grp_persons_right_split_3>
                   <type>vbox</type>
                   <parent>grp_persons_right</parent>
-                  <area_caption>Tehtud&amp;amp;nbsp;t&amp;amp;ouml&amp;amp;ouml;d</area_caption>
-                  <group>grp_persons_jobs_report</group>
-            </persons_jobs_tbl>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;uuml;kiarvestus&amp;amp;nbsp;inimeste&amp;amp;nbsp;kaupa&amp;amp;nbsp;kuude&amp;amp;nbsp;l&amp;amp;otilde;ikes</area_caption>
+                  <group>grp_persons_quantity_report</group>
+            </grp_persons_right_split_3>
+            <grp_persons_right_split_4>
+                  <type>vbox</type>
+                  <parent>grp_persons_right</parent>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;amp;uuml;kiarvestus&amp;amp;nbsp;inimeste&amp;amp;nbsp;kaupa&amp;amp;nbsp;n&amp;amp;auml;dalate&amp;amp;nbsp;l&amp;amp;otilde;ikes</area_caption>
+                  <group>grp_persons_quantity_report</group>
+            </grp_persons_right_split_4>
             <grp_persons_right_top>
                   <type>hbox</type>
                   <parent>grp_persons_right</parent>
@@ -2229,6 +2559,7 @@
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <parent>grp_persons_right</parent>
+                  <no_padding>1</no_padding>
                   <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;tabel&amp;amp;nbsp;inimeste&amp;amp;nbsp;kaupa</area_caption>
                   <group>
                         <num_0>grp_persons_hours_report</num_0>
@@ -2239,6 +2570,7 @@
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <parent>grp_persons_right</parent>
+                  <no_padding>1</no_padding>
                   <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;tabel&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;&amp;amp;nbsp;kaupa</area_caption>
                   <group>
                         <num_0>grp_persons_hours_report</num_0>
@@ -2251,9 +2583,40 @@
                   <area_caption>Otsing</area_caption>
                   <group>grp_schedule_gantt</group>
             </schedule_search_box>
+            <charts_split>
+                  <type>hbox</type>
+                  <width>25%:75%</width>
+                  <group>grp_schedule_google</group>
+                  <area_caption></area_caption>
+            </charts_split>
+            <charts_left>
+                  <type>vbox</type>
+                  <parent>charts_split</parent>
+                  <group>grp_schedule_google</group>
+                  <area_caption></area_caption>
+            </charts_left>
+            <charts_clients_tree>
+                  <type>vbox</type>
+                  <parent>charts_left</parent>
+                  <area_caption>Vali&amp;amp;nbsp;klient/kliendikategooria</area_caption>
+                  <group>grp_schedule_google</group>
+            </charts_clients_tree>
+            <charts_time_tree>
+                  <type>vbox</type>
+                  <parent>charts_left</parent>
+                  <area_caption>Vali&amp;amp;nbsp;ajavahemik</area_caption>
+                  <group>grp_schedule_google</group>
+            </charts_time_tree>
+            <charts_right>
+                  <type>vbox</type>
+                  <parent>charts_split</parent>
+                  <group>grp_schedule_google</group>
+                  <area_caption></area_caption>
+            </charts_right>
             <charts_1>
                   <type>hbox</type>
                   <width>50%:50%</width>
+                  <parent>charts_right</parent>
                   <group>grp_schedule_google</group>
                   <area_caption></area_caption>
             </charts_1>
@@ -2275,6 +2638,7 @@
                   <type>vbox</type>
                   <area_caption>K&amp;amp;auml;imasolevad&amp;amp;nbsp;projektid&amp;amp;nbsp;klientide&amp;amp;nbsp;kaupa&amp;amp;nbsp;(TOP&amp;amp;nbsp;20)</area_caption>
                   <closeable>1</closeable>
+                  <parent>charts_right</parent>
                   <group>grp_schedule_google</group>
             </clients_chart>
             <userlist_tree_box>
@@ -2372,20 +2736,18 @@
                   <no_padding>1</no_padding>
                   <group>grp_printer</group>
             </ppl_birthdays>
-            <printer_right>
+            <printer_right_m>
                   <type>vbox</type>
                   <parent>printer_master</parent>
-                  <area_caption>T</area_caption>
-                  <group>grp_printer</group>
-            </printer_right>
-            <printer_legend_box>
-                  <type>vbox</type>
-                  <no_caption>1</no_caption>
-                  <closeable>0</closeable>
-                  <parent>printer_right</parent>
                   <group>grp_printer</group>
                   <area_caption></area_caption>
-            </printer_legend_box>
+            </printer_right_m>
+            <printer_right>
+                  <type>vbox</type>
+                  <parent>printer_right_m</parent>
+                  <group>grp_printer</group>
+                  <area_caption></area_caption>
+            </printer_right>
             <comment_hbox>
                   <type>hbox</type>
                   <width>40%:60%</width>
@@ -2402,6 +2764,13 @@
                   <area_caption></area_caption>
                   <caption>Ressurss</caption>
             </resource_hbox>
+            <printer_legend_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Legend</area_caption>
+                  <parent>printer_right_m</parent>
+                  <group>grp_printer</group>
+            </printer_legend_box>
             <grp_res_settings_splitter>
                   <type>hbox</type>
                   <group>grp_res_settings</group>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mrp_job_obj" folder="www/automatweb_cvs/classes/mrp" extends="_int_object">
+	<class name="mrp_job_obj" folder="www/dev/terryf/automatweb_dev/classes/mrp" extends="_int_object">
 		<action name="save_materials">
 			<function name="save_materials">
 				<arguments>
@@ -49,6 +49,20 @@
 				<arguments>
 					<required name="id" type="int/array" />
 					<optional name="odl" type="bool" default="false" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_progress_for_id">
+			<function name="get_progress_for_params">
+				<arguments>
+					<optional name="job" type="int/array" />
+					<optional name="case" type="int/array" />
+					<optional name="resource" type="int/array" />
+					<optional name="person" type="int/array" />
+					<optional name="from" type="int" />
+					<optional name="to" type="int" />
+					<optional name="groupby" type="string/array" default="job" />
 				</arguments>
 			</function>
 		</action>

@@ -2363,7 +2363,7 @@ class mrp_case extends class_base
 			"reltype" => "RELTYPE_MRP_PROJECT_JOB",
 		));
 
-		return true;
+		return $job->id();
 	}
 
 	/**
