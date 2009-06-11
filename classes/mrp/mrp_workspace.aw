@@ -25,7 +25,7 @@
 	@groupinfo grp_persons_hours_report caption="T&ouml;&ouml;ajaaruanne" parent=grp_persons
 	@groupinfo grp_persons_jobs_report caption="Tehtud t&ouml;&ouml;d inimeste kaupa" parent=grp_persons
 	@groupinfo grp_persons_quantity_report caption="T&uuml;kiarvestuse aruanne" parent=grp_persons
-	@groupinfo grp_material_report caption="Materiali aruanne" parent=grp_persons
+	@groupinfo grp_material_report caption="Materjali aruanne" parent=grp_persons
 
 
 @groupinfo grp_printer_general caption="Operaatori vaade" submit=no
@@ -221,7 +221,7 @@
 @default group=grp_material_report
 	@layout grp_material_report_full type=hbox width=20%:80%
 		@layout grp_material_report_left type=vbox parent=grp_material_report_full
-			@layout grp_material_tree type=vbox parent=grp_material_report_left area_caption=Materjal
+			@layout grp_material_tree type=vbox parent=grp_material_report_left area_caption=Materjal closeable=1
 				@property grp_material_tree type=treeview store=no no_caption=1 parent=grp_material_tree
 
 			@layout grp_material_time_tree type=vbox parent=grp_material_report_left area_caption=Ajavahemik
@@ -232,7 +232,7 @@
 				@property grp_material_resource_span_tree type=treeview store=no no_caption=1 parent=grp_material_resource_span_tree
 			@layout grp_material_other_options type=vbox parent=grp_material_report_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
 
-		@layout grp_material_report_right type=vbox parent=grp_grp_material_full
+		@property material_stats_table type=table store=no no_caption=1 parent=grp_material_report_full
 
 
 @default group=grp_persons_jobs_report
@@ -3615,7 +3615,10 @@ class mrp_workspace extends class_base
 		));
 
 		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRODUCT,
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"lang_id" => array(),
+			"site_id" => array(),
+	//		"parent.class_id" =>  new obj_predicate_not(CL_SHOP_PRODUCT_CATEGORY),
 		));
 		foreach($ol->names() as $id => $name)
 		{
@@ -3623,8 +3626,33 @@ class mrp_workspace extends class_base
 			$t->add_item("all", array(
 				"id" => $id,
 				"name" => $name,
- 				"iconurl" => icons::get_icon_url(CL_SHOP_PRODUCT),
+				"url" => "javascript:$('[name=material]').val('".$id."');update_material_table();update_products_tree();",
+				"iconurl" => icons::get_icon_url(CL_SHOP_PRODUCT_CATEGORY),
 			));
+			$this->add_cat_leaf($t , $id);
+		}
+	}
+
+	function add_cat_leaf($tv , $parent)
+	{
+		if(!is_oid($parent))
+		{
+			return;
+		}
+		$ol = new object_list(array(
+			"class_id" => array(CL_SHOP_PRODUCT,CL_SHOP_PRODUCT_CATEGORY),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $parent,
+		));
+		foreach($ol->names() as $id => $name)
+		{
+			$tv->add_item($parent,array(
+				"name" => $name,
+				"id" => $id."",
+				"url" => "javascript:$('[name=material]').val('".$id."'); update_material_table();update_products_tree();"//aw_url_change_var("cat", $id),
+			));
+			$this->add_cat_leaf($tv , $id);
 		}
 	}
 
@@ -6167,7 +6195,10 @@ class mrp_workspace extends class_base
 			"cat",
 			"pj_job",
 			"mrp_tree_active_item",
-			"timespan"
+			"timespan",
+			"material",
+			"people",
+			"resource"
 		);
 		foreach($_GET_params_to_keep as $_GET_param_to_keep)
 		{
@@ -8997,6 +9028,39 @@ END ajutine
 
 	public function callback_generate_scripts($arr)
 	{
+		if($arr["request"]["group"] == "grp_material_report")
+		{
+			$js = "
+				function update_material_table()
+				{
+
+					$.post('/automatweb/orb.aw?class=mrp_workspace&action=ajax_update_prop',{
+							id: ".$arr["obj_inst"]->id()."
+							, prop: 'material_stats_table'
+							, people: $('[name=people]').val()
+							, material: $('[name=material]').val()
+							, timespan: $('[name=timespan]').val()
+							, resource: $('[name=resource]').val()}
+							,function(html){
+						x=document.getElementsByName('material_stats_table');
+						x[0].innerHTML = html;//alert(html);
+					});
+				}
+				function update_products_tree()
+				{
+					$.post('/automatweb/orb.aw?class=mrp_workspace&action=ajax_update_prop',{
+						id: ".$arr["obj_inst"]->id()."
+						, prop: 'grp_material_tree'
+						, cat: $('[name=material]').val()}
+						,function(html){
+						x=document.getElementById('grp_material_tree');
+						x.innerHTML = html;alert(html);
+					});
+				}
+";
+			return $js;
+
+		}
 		if($arr["request"]["group"] == "grp_customers")
 		{
 			return "
@@ -9072,6 +9136,93 @@ $(document).ready(function(){
 	});
 });
 			";
+		}
+	}
+
+
+	/**
+		@attrib name=ajax_update_prop all_args=1
+		@param id optional type=int
+		@param prop optional type=string
+	**/
+	function ajax_update_prop($arr)
+	{
+		$property = $arr["prop"];
+		$arr["obj_inst"] = obj($arr["id"]);
+		$arr["request"]["people"] = $arr["people"];
+		$arr["request"]["resource"] = $arr["resource"];
+		$arr["request"]["timespan"] = $arr["timespan"];
+		$arr["request"]["material"] = $arr["material"];
+
+		$arr["request"]["die"] = 1;
+
+		switch($property)
+		{
+			case "material_stats_table":
+				classload("vcl/table");
+				$t = new vcl_table();
+				break;
+			case "grp_material_tree":
+				classload("vcl/treeview");
+				$t = new treeview();
+				break;
+		}
+
+		$arr["prop"] = array("vcl_inst" => $t);
+		$fun = "_get_".$property;
+		$this->$fun($arr);
+		print iconv(aw_global_get("charset"), "UTF-8", $t->get_html());
+		die();
+	}
+
+	function _get_material_stats_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_caption(t("Materjalide kulu"));
+
+		$t->define_field(array(
+			"name" => "material",
+			"caption" => t("Materjal"),
+			"align" => "left"
+		));
+		$t->define_field(array(
+			"name" => "prog",
+			"caption" => t("Prognoositud"),
+			"align" => "right"
+		));
+
+		$t->define_field(array(
+			"name" => "real",
+			"caption" => t("Kulunud"),
+			"align" => "right"
+		));
+
+		$t->define_field(array(
+			"name" => "unit",
+			"caption" => t("&Uuml;&Uuml;hik"),
+			"align" => "left"
+		));
+	
+		$ol = new object_list(array("class_id" => CL_MATERIAL_EXPENSE, "site_id" => array() , "lang_id" => array()));
+
+		$data = array();
+
+		foreach($ol->arr() as $o)
+		{
+			$data[$o->prop("product")]["amount"]+= $o->prop("amount");
+			$data[$o->prop("product")]["used_amount"]+= $o->prop("used_amount");
+			$data[$o->prop("product")]["unit"] = $o->prop("unit");
+		}
+
+		foreach($data as $id => $d)
+		{
+			$t->define_data(array(
+				"unit" => get_name($d["unit"]),
+				"real" => $d["used_amount"],
+				"prog" => $d["amount"],
+				"material" => get_name($id),
+			));
+
 		}
 	}
 }
