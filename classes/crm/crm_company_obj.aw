@@ -539,7 +539,13 @@ class crm_company_obj extends _int_object
 			$o->save();
 		}
 
-		$o->add_work_relation(array("org" => $this->id()));
+		$wr_id = $o->get_work_relation_id(array(
+			"company" => $this->id(),
+		));
+		if (!$wr_id)
+		{
+			$o->add_work_relation(array("org" => $this->id()));
+		}
 		return $o->id();
 	}
 
@@ -1547,6 +1553,33 @@ class crm_company_obj extends _int_object
 		}
 		return $this->prop("address_address")." ".$this->prop("address_city")." ".$this->prop("address_country");
 	}
+
+	public function get_all_customer_ids($arr = array())
+	{
+		$filter = array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"seller" => $this->id(),
+		);
+		if($arr["name"])
+		{
+			$filter["buyer.name"] = $arr["name"]."%";
+		}
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_CRM_COMPANY_CUSTOMER_DATA => array(
+					"buyer"
+				)
+			)
+		);
+
+		$customers = $t->get_element_from_all("buyer");
+		return $customers;
+	}
+
 }
 
 ?>
