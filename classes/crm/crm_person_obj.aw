@@ -97,7 +97,7 @@ class crm_person_obj extends _int_object
 			}
 		}
 
-		return $sections;
+		return $professions;
 	}
 
 	function set_name($v)
