@@ -1,7 +1,7 @@
 <?php
 /*
 @classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
-
+@tableinfo aw_room index=aw_oid master_table=objects master_index=brother_of
 
 @default table=objects
 @default field=meta
@@ -60,10 +60,10 @@
 		@property square_meters type=textbox size=5 parent=general_down
 		@caption Suurus(ruutmeetrites)
 
-		@property normal_capacity type=textbox size=5 parent=general_down
+		@property normal_capacity type=textbox size=5 parent=general_down table=aw_room
 		@caption Normaalne mahutavus
 
-		@property max_capacity type=textbox size=5 parent=general_down
+		@property max_capacity type=textbox size=5 parent=general_down table=aw_room
 		@caption Maksimaalne mahutavus
 
 		@layout buffer_before_l type=hbox width=30%:70% parent=general_down
@@ -91,7 +91,19 @@
 
 		@property settings type=relpicker parent=general_down multiple=1 reltype=RELTYPE_SETTINGS
 		@caption Seaded
+
+		@property category type=relpicker reltype=RELTYPE_CATEGORY parent=general_down table=aw_room
+		@caption Ruumi kategooria
 		
+		@property floor type=textbox parent=general_down table=aw_room size=3
+		@caption Korrus
+
+		@property corps type=textbox parent=general_down table=aw_room size=3
+		@caption Korpus
+
+		@property nr type=textbox parent=general_down table=aw_room size=3
+		@caption Number
+
 		layout concurrent type=hbox closeable=1 area_caption=Samaaegsed&nbsp;broneeringud: parent=general_down
 		
 			property concurrent_brons type=textbox size=5 parent=concurrent no_caption=1
@@ -326,6 +338,9 @@ caption Templeit
 
 @reltype WORKING_SCENARIO value=47 clid=CL_CRM_WORKING_TIME_SCENARIO
 @caption T&ouml;&ouml;aja stsenaariumid
+
+@reltype CATEGORY value=48 clid=CL_ROOM_CATEGORY
+@caption Ruumi kategooria
 */
 
 class room extends class_base
@@ -6914,6 +6929,41 @@ class room extends class_base
 	public function get_time_units()
 	{
 		return $this->time_unit_types;
+	}
+
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "" && $t == "aw_room")
+		{
+			$this->db_query("CREATE TABLE aw_room(aw_oid int primary key,
+				category int
+			)");
+		}
+		else
+		{
+			switch($f)
+			{
+				case "meta":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "text"
+					));
+					break;
+				case "floor":
+				case "corps":
+				case "nr":
+				case "normal_capacity":
+				case "max_capacity":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "int"
+					));
+					break;
+			}
+			return true;
+		}
+		return false;
 	}
 }
 ?>

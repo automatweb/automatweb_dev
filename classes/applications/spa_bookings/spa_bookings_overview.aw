@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.80 2009/04/09 08:39:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.81 2009/06/11 11:32:04 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -16,6 +16,33 @@
 
 	@property groups type=relpicker reltype=RELTYPE_GROUP field=meta method=serialize multiple=1
 	@caption Kasutajagrupid
+
+
+@default group=room_management
+
+	@property room_management_tb type=toolbar store=no no_caption=1
+
+	@layout room_management_split type=hbox width=20%:80%
+
+		@layout room_management_left type=vbox parent=room_management_split
+			@layout room_management_tree type=vbox closeable=1 area_caption=Kategooriad parent=room_management_left
+				@property room_management_tree type=treeview store=no no_caption=1 parent=room_management_tree
+			@layout room_management_type_tree type=vbox closeable=1 area_caption=T&uuml;&uuml;bid parent=room_management_left
+				@property room_management_type_tree type=treeview store=no no_caption=1 parent=room_management_type_tree
+			@layout room_management_capacity_from_tree type=vbox closeable=1 area_caption=mahutavus&nbsp;alates parent=room_management_left
+				@property room_management_capacity_from_tree type=treeview store=no no_caption=1 parent=room_management_capacity_from_tree
+			@layout room_management_capacity_to_tree type=vbox closeable=1 area_caption=Mahutavus&nbsp;kuni parent=room_management_left
+				@property room_management_capacity_to_tree type=treeview store=no no_caption=1 parent=room_management_capacity_to_tree
+			@layout room_management_srch type=vbox closeable=1 area_caption=Otsing parent=room_management_left
+			
+				@property room_management_name type=textbox store=no captionside=top parent=room_management_srch size=22
+				@caption Ruumi nimi
+
+				@property rs_btn type=submit store=no parent=r_srch no_caption=1
+				@caption Otsi
+
+		@property room_management_list type=table store=no no_caption=1 parent=room_management_split
+
 
 @default group=rooms
 
@@ -170,6 +197,8 @@
 
 		@property r_r_list type=table store=no no_caption=1 parent=rr_split
 
+
+@groupinfo room_management caption=Ruumide&nbsp;haldus
 
 @groupinfo rooms caption=Ruumid
 @groupinfo stats caption=Statistika
@@ -437,10 +466,20 @@ class spa_bookings_overview extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["type"] = "";
+		$arr["category"] = "";
+		$arr["from"] = "";
+		$arr["to"] = "";
 	}
 
 	function callback_mod_retval($arr)
 	{
+		$room_s_props = array("to" , "from" , "category" , "type");
+		foreach($room_s_props as $prop)
+		{
+			$arr["args"][$prop] = $arr["request"][$prop];
+		}
+		
 		$arr["args"]["rs_name"] = $arr["request"]["rs_name"];
 		$arr["args"]["rs_booker_name"] = $arr["request"]["rs_booker_name"];
 		$arr["args"]["rs_booking_from"] = $arr["request"]["rs_booking_from"];
@@ -488,6 +527,245 @@ class spa_bookings_overview extends class_base
 			"var" => "tf"
 		));
 	}
+
+	function _get_room_management_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "cat";
+/*
+		$tv = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+			"type" => TREE_DHTML,
+				"tree_id" => "room_cat_tree",
+				"persist_state" => true,
+			),
+			"root_item" => $arr["obj_inst"],
+			"ot" => new object_tree(array(
+				"class_id" => array(CL_ROOM_CATEGORY),
+				"parent" =>  $arr["obj_inst"]->id(),
+			)),
+			"var" => "cat"
+		));*/
+
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "rooms_cat_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik kategooriad"),
+			"id" => "all",
+			"url" => "javascript:$('[name=category]').val('all'); update_rooms_table();update_cat_tb();"//aw_url_change_var("cat", $id),
+
+//			"url" => aw_url_change_var($var, "all"),
+		));
+
+		foreach($arr["obj_inst"]->get_category_names() as $id => $name)
+		{
+			$tv->add_item(0,array(
+				"name" => $name,
+				"id" => $id."",
+				"url" => "javascript:$('[name=category]').val('".$id."'); update_rooms_table();update_cat_tb();"//aw_url_change_var("cat", $id),
+			));
+			$this->add_cat_leaf($tv , $id);
+		}
+	}
+
+	function add_cat_leaf($tv , $parent)
+	{
+		if(!is_oid($parent))
+		{
+			return;
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_ROOM_CATEGORY,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $parent,
+		));
+		foreach($ol->names() as $id => $name)
+		{
+			$tv->add_item($parent,array(
+				"name" => $name,
+				"id" => $id."",
+				"url" => "javascript:$('[name=category]').val('".$id."'); update_rooms_table();update_cat_tb();"//aw_url_change_var("cat", $id),
+			));
+			$this->add_cat_leaf($tv , $id);
+		}
+	}
+
+	function _get_room_management_type_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "type";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "rooms_cat_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik t&uuml;&uuml;bid"),
+			"id" => "all",
+			"url" => aw_url_change_var($var, "all"),
+		));
+	}
+
+	function _get_room_management_capacity_from_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "from";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all");
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "rooms_cat_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik"),
+			"id" => "all",
+			"url" => aw_url_change_var($var, "all"),
+		));
+		$x = 1;
+		while($x <= 10)
+		{
+			$y = 1;
+			while($y <= 10)
+			{
+				$id = ($x-1)*10 + $y;
+				$tv->add_item($x*10000, array(
+					"id" => ($x-1)*10 + $y."",
+					"name" => ($x-1)*10 + $y,
+					"url" => "javascript:$('[name=from]').val('".$id."'); update_rooms_table();update_from_tb();"//aw_url_change_var("cat", $id),
+//					"url" => aw_url_change_var(array(
+//						$var => ($x-1)*10 + $y,
+//					)),
+				));
+				$y++;
+			}
+
+				
+			$tv->add_item(0, array(
+				"id" => $x*10000,
+				"name" => ($x-1)*10 . " - " . $x*10,
+			));
+			$x++;
+		}
+	}
+
+	function _get_room_management_capacity_to_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "to";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "rooms_cat_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik"),
+			"id" => "all",
+			"url" => aw_url_change_var($var, "all"),
+		));
+		$x = 1;
+		while($x <= 10)
+		{
+			$y = 1;
+			while($y <= 10)
+			{
+				$id = ($x-1)*10 + $y;
+				$tv->add_item("to".$x*10000, array(
+					"id" => ($x-1)*10 + $y."",
+					"name" => ($x-1)*10 + $y,
+					"url" => "javascript:$('[name=to]').val('".$id."'); update_rooms_table();update_to_tb();"//aw_url_change_var("cat", $id),
+//					"url" => aw_url_change_var(array(
+//						$var => ($x-1)*10 + $y,
+//					)),
+				));
+				$y++;
+			}
+
+			$tv->add_item(0, array(
+				"id" => "to".$x*10000,
+				"name" => ($x-1)*10 . " - " . $x*10,
+			));
+			$x++;
+		}
+	}
+
+	function _get_room_management_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "left",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "floor",
+			"caption" => t("Korrus"),
+			"align" => "right",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "corps",
+			"caption" => t("Korpus"),
+			"align" => "right",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "nr",
+			"caption" => t("Number"),
+			"align" => "right",
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "normal",
+			"caption" => t("Normaalne mahutavus"),
+			"align" => "right",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "max",
+			"caption" => t("Maksimaalne mahutavus"),
+			"align" => "right",
+			"sortable" => 1,
+		));
+ 		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+		$data = array("cap_to" => $arr["request"]["to"]);
+		$data["cap_from"] = $arr["request"]["from"];
+		$data["cat"] = $arr["request"]["cat"];
+
+		$rooms = $arr["obj_inst"]->get_rooms($data);
+		
+		foreach($rooms->arr() as $room)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($room),
+				"id" => $room->id(),
+				"nr" => $room->prop("nr"),
+				"floor" => $room->prop("floor"),
+				"corps" => $room->prop("corps"),
+				"max" => $room -> prop("max_capacity"),
+				"normal" => $room -> prop("normal_capacity")
+			));
+		}
+	}
+
 
 	function _init_r_list(&$t, $selectah = true)
 	{
@@ -1374,6 +1652,37 @@ class spa_bookings_overview extends class_base
 		if(!$arr["request"]["tf"])$arr["prop"]["value"] = $v;
 	}
 
+	function _get_room_management_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Kategooria"),
+			"link" => "javascript:add_cat();"
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Ruum"),
+			"link" => "javascript:add_room();"
+		));
+
+		$tb->add_button(array(
+			"name" => t("Make room copy"),
+			"img" => "copy.gif",
+			"tooltip" => t("Loo ruumist koopia"),
+			"url" => "javascript:copy_room();"
+		));
+
+		$tb->add_delete_button();
+	}
+
 	function _get_r_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -1480,12 +1789,208 @@ class spa_bookings_overview extends class_base
 		}
 	}
 
+	/**
+		@attrib name=create_new_category params=name all_args=1
+	**/
+	function create_new_category($arr)
+	{
+		$o = new object();
+		$o->set_parent($arr["cat"] ? $arr["cat"] : $arr["id"]);
+		$o->set_name($arr["name"]);
+		$o->set_class_id(CL_ROOM_CATEGORY);
+		$o->save();
+		die();
+	}
+
+
+	/**
+		@attrib name=create_new_room params=name all_args=1
+	**/
+	function create_new_room($arr)
+	{
+		$obj = obj($arr["id"]);
+		$o = new object();
+		$o->set_parent($obj->prop("rooms_folder"));
+		$o->set_name($arr["name"]);
+		$o->set_class_id(CL_ROOM);
+		if(is_oid($arr["cat"]))
+		{
+			$o->set_prop("category" , $arr["cat"]);
+		}
+		$o->save();
+		die();
+	}
+	/**
+		@attrib name=ajax_update_prop all_args=1
+		@param id optional type=int
+		@param prop optional type=string
+	**/
+	function ajax_update_prop($arr)
+	{
+		classload("vcl/table");
+		$t = new vcl_table();
+
+		$property = $arr["prop"];
+		$arr["prop"] = array("vcl_inst" => $t);
+		$arr["obj_inst"] = obj($arr["id"]);
+		$arr["request"]["cat"] = $arr["cat"];
+		$arr["request"]["from"] = $arr["from"];
+		$arr["request"]["to"] = $arr["to"];
+/*
+		$date_fields = array("sp_starttime" , "sp_due_date" , "sp_start_date_start" , "sp_start_date_end");
+		foreach($date_fields as $var)
+		{
+			$arr["request"][$var]["day"] = $arr[$var."_day"];
+			$arr["request"][$var]["month"] = $arr[$var."_month"];
+			$arr["request"][$var]["year"] = $arr[$var."_year"];
+		}
+		$arr["request"]["sp_name"] = $arr["sp_name"];
+		$arr["request"]["sp_comment"] = $arr["sp_comment"];
+		$arr["request"]["sp_customer"] = $arr["sp_customer"];
+//		$arr["request"]["sp_due_date"] = $arr["sp_due_date"];
+//		$arr["request"]["sp_starttime"] = $arr["sp_starttime"];
+
+		if($arr["sp_status"])
+		{
+			$arr["request"]["sp_status"] = array_keys($arr["sp_status"]);
+		}*/
+		$arr["request"]["die"] = 1;
+
+		switch($property)
+		{
+			case "room_management_list":
+				$this->_get_room_management_list($arr);
+				break;
+			case "room_management_tree":
+				classload("vcl/treeview");
+				$t = new treeview();
+				$arr["prop"] = array("vcl_inst" => $t);
+				$this->_get_room_management_tree($arr);
+//				print iconv(aw_global_get("charset"), "UTF-8", $t->get_toolbar());
+//				die();
+				break;
+			case "room_management_capacity_from_tree":
+			case "room_management_capacity_to_tree":
+				classload("vcl/treeview");
+				$t = new treeview();
+				$arr["prop"] = array("vcl_inst" => $t);
+				$fun = "_get_".$property;
+				$this->$fun($arr);
+//				print iconv(aw_global_get("charset"), "UTF-8", $t->get_toolbar());
+//				die();
+				break;
+		}
+		//$this->_sp_result($arr);
+		print iconv(aw_global_get("charset"), "UTF-8", $t->get_html());
+		die();
+	}
+
 
 	function callback_generate_scripts($arr)
 	{
 		if (!is_oid($arr["obj_inst"]->id()))
 		{
 			return;
+		}
+
+		$js = "";
+
+		if($arr["request"]["group"] == "room_management")
+		{
+			
+			$js.= "
+				function update_rooms_table()
+				{
+
+					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
+							id: ".$arr["obj_inst"]->id()."
+							, prop: 'room_management_list'
+							, cat: $('[name=category]').val()
+							, from: $('name=from').val()
+							, to: $('name=to').val()}
+							,function(html){
+						x=document.getElementsByName('room_management_list');
+						x[0].innerHTML = html;
+					});
+//
+//					$.get('/automatweb/orb.aw', {class: 'spa_bookings_overview', action: 'create_new_category', id: '".$arr["obj_inst"]->id()."' , name: my_string, cat: cat}, function (html) {
+//						alert(html);	
+//						update_cat_tb();
+//						}
+//					);
+
+				}
+				function update_cat_tb()
+				{
+					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
+						id: ".$arr["obj_inst"]->id()."
+						, prop: 'room_management_tree'
+						, cat: $('[name=category]').val()}
+						,function(html){
+						x=document.getElementById('room_management_tree');
+						x.innerHTML = html;
+					});
+				}
+				function update_from_tb()
+				{
+					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
+						id: ".$arr["obj_inst"]->id()."
+						, prop: 'room_management_capacity_from_tree'
+						, from: $('[name=from]').val()}
+						,function(html){
+						x=document.getElementById('room_management_capacity_from_tree');
+						x.innerHTML = html;
+					});
+				}
+				function update_to_tb()
+				{
+					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
+						id: ".$arr["obj_inst"]->id()."
+						, prop: 'room_management_capacity_to_tree'
+						, to: $('[name=to]').val()}
+						,function(html){
+						x=document.getElementById('room_management_capacity_to_tree');
+						x.innerHTML = html;
+					});
+				}
+				function add_cat()
+				{
+					var cat = $('[name=category]').val();
+					var my_string = prompt('".t("Sisesta kategooria nimi")."');
+					$.get('/automatweb/orb.aw', {class: 'spa_bookings_overview', action: 'create_new_category',
+						 id: '".$arr["obj_inst"]->id()."' , name: my_string, cat: cat}, function (html) {
+							update_cat_tb();
+						}
+					);
+				}
+				function add_room()
+				{
+					var cat = $('[name=category]').val();
+					var my_string = prompt('".t("Sisesta kategooria nimi")."');
+					$.get('/automatweb/orb.aw', {class: 'spa_bookings_overview', action: 'create_new_room', id: '".$arr["obj_inst"]->id()."' , name: my_string, cat: cat}, function (html) {
+		//			alert(html);	
+					update_rooms_table();
+						}
+					);
+				}
+				function copy_room()
+				{
+					var result = '';
+					$('[name^=sel]').each(function(){
+						if(this.checked){
+							result =result +  ',' + this.value;
+						}
+					});
+
+					$.get('/automatweb/orb.aw', {class: 'spa_bookings_overview', action: 'copy_rooms', id: '".$arr["obj_inst"]->id()."' , sel: result}, function (html) {
+		//				alert(html);	
+						update_rooms_table();
+						}
+					);
+				}
+			";
+
+			return $js;
 		}
 
 		return '
@@ -2748,6 +3253,46 @@ class spa_bookings_overview extends class_base
 			"onClick" => "ad='';f=document.changeform;for(i = 0; i < f.elements.length; i++) {el = f.elements[i];if (el.name.indexOf('persons') == 0 && el.checked) { ad += '&persons[]='+el.value; } }; aw_popup_scroll('".aw_url_change_var("do_print", 2)."'+ad, 'print', 500,500);"
 
 		));
+	}
+
+	/**
+		@attrib name=copy_rooms params=name all_args=1
+	**/
+	function copy_rooms($arr)
+	{
+		$selection = explode("," , $arr["sel"]);
+		
+		foreach($selection as $sel)
+		{
+			if(is_oid($sel))
+			{
+				$o = obj($sel);
+				$new = $o->save_new();
+				$no = obj($new);
+				$name = $o->name();
+				$number = "";
+				$x = strlen($name)-1;
+				while($x > 0)
+				{
+					if(is_numeric($name[$x]))
+					{
+						$number = $name[$x].$number;
+						$name = substr($name , 0 , $x);
+					}
+					else
+					{
+						break;
+					}
+					$x--;
+				}
+				$n = (int)$number;
+//arr($name.($number+1));
+				$no->set_name($name.($number+1));
+					
+				$no->save();
+			}
+		}
+		die();
 	}
 }
 ?>
