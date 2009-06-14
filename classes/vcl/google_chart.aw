@@ -556,9 +556,9 @@ class google_chart extends aw_template
 			//if the chart is cached, there's no need to build it again
 		}
 	**/
-	function use_cache()
+	public function use_cache($use_cache = true)
 	{
-		$this->using_cache = true;
+		$this->using_cache = $use_cache;
 	}
 
 	/**
@@ -928,7 +928,7 @@ class google_chart extends aw_template
 		$high = 0;
 		foreach($this->data as $row)
 		{
-			foreach($row as $num)
+			foreach(safe_array($row) as $num)
 			{
 				if($num > $high)
 				{
@@ -960,6 +960,24 @@ class google_chart extends aw_template
 	private function process_text($text)
 	{
 		return urlencode(iconv(aw_global_get("charset"), "UTF-8", html_entity_decode($text)));
+	}
+
+	/**
+	**/
+	public static function generate_colors($count = 5)
+	{
+		$tmp_colors = array(
+			"ffcc00",
+			"0000ff",
+			"33ffff",
+			"ff0000",
+			"000000",
+			"ff00cc",
+			"ffff00",
+		);
+		$colors = array();
+		$colors = array_slice($tmp_colors, 0, $count);
+		return $colors;
 	}
 }
 ?>
