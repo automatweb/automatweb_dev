@@ -736,6 +736,7 @@ class google_chart extends aw_template
 
 	private function load_from_cache()
 	{
+		$c = get_instance("cache");
 		$url = $c->file_get("gchart_".$this->uniq_id);
 		return html::img(array(
 			"url" => $url,
