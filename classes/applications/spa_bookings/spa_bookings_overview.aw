@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.82 2009/06/15 09:12:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.83 2009/06/15 15:40:37 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -42,6 +42,31 @@
 				@caption Otsi
 
 		@property room_management_list type=table store=no no_caption=1 parent=room_management_split
+
+
+
+@default group=reservation_management
+
+	@property reservation_management_tb type=toolbar store=no no_caption=1
+
+	@layout reservation_management_split type=hbox width=20%:80%
+
+		@layout reservation_management_left type=vbox parent=reservation_management_split
+			@layout reservation_management_tree type=vbox closeable=1 area_caption=Ruumid&nbsp;kategooria&nbsp;kaupa parent=reservation_management_left
+				@property reservation_management_tree type=treeview store=no no_caption=1 parent=reservation_management_tree
+
+			@layout reservation_management_time_tree type=vbox closeable=1 area_caption=Vali&nbsp;ajavahemik parent=reservation_management_left
+				@property reservation_management_time_tree type=treeview parent=reservation_management_time_tree store=no no_caption=1
+
+			@layout reservation_management_srch type=vbox closeable=1 area_caption=Otsing parent=reservation_management_left
+			
+				@property reservation_management_name type=textbox store=no captionside=top parent=reservation_management_srch size=22
+				@caption Ruumi nimi
+
+				@property reservation_management_rs_btn type=button store=no parent=reservation_management_srch no_caption=1
+				@caption Otsi
+
+		@property reservation_management_list type=table store=no no_caption=1 parent=reservation_management_split
 
 
 @default group=rooms
@@ -200,6 +225,8 @@
 
 @groupinfo room_management caption=Ruumide&nbsp;haldus submit=no
 
+@groupinfo reservation_management caption=Broneeringute&nbsp;haldus submit=no
+
 @groupinfo rooms caption=Ruumid
 @groupinfo stats caption=Statistika
 @groupinfo spa_reports caption=SpaAruanded parent=reports
@@ -256,6 +283,9 @@ class spa_bookings_overview extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "reservation_management_time_tree":
+				$this->_get_stats_time_tree($arr);
+				break;
 			case "room_management_rs_btn":
 				$prop["onclick"] = "javascript:update_rooms_table();";//aw_url_change_var("cat", $id),
 				break;
@@ -473,11 +503,13 @@ class spa_bookings_overview extends class_base
 		$arr["category"] = "";
 		$arr["from"] = "";
 		$arr["to"] = "";
+		$arr["room"] = "";
+		$arr["timespan"] = "";
 	}
 
 	function callback_mod_retval($arr)
 	{
-		$room_s_props = array("to" , "from" , "category" , "type");
+		$room_s_props = array("to" , "from" , "category" , "type", "room" , "timespan");
 		foreach($room_s_props as $prop)
 		{
 			$arr["args"][$prop] = $arr["request"][$prop];
@@ -600,6 +632,77 @@ class spa_bookings_overview extends class_base
 		}
 	}
 
+	function _get_reservation_management_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "room";
+
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "rooms_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik kategooriad"),
+			"id" => "all",
+			"url" => "javascript:$('[name=room]').val('all'); update_bron_table();update_room_tree();"//aw_url_change_var("cat", $id),
+		));
+
+		foreach($arr["obj_inst"]->get_category_names() as $id => $name)
+		{
+			$tv->add_item(0,array(
+				"name" => $name,
+				"id" => $id."",
+				"url" => "javascript:$('[name=room]').val('".$id."'); update_bron_table();update_room_tree();",//aw_url_change_var("cat", $id),
+				"iconurl" => icons::get_icon_url(CL_MENU),
+			));
+			$this->add_room_leaf($tv , $id);
+		}
+	}
+
+
+	function add_room_leaf($tv , $parent)
+	{
+		if(!is_oid($parent))
+		{
+			return;
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_ROOM_CATEGORY,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $parent,
+		));
+		foreach($ol->names() as $id => $name)
+		{
+			$tv->add_item($parent,array(
+				"name" => $name,
+				"id" => $id."",
+				"url" => "javascript:$('[name=room]').val('".$id."'); update_bron_table();update_room_tree();",//aw_url_change_var("cat", $id),
+				"iconurl" => icons::get_icon_url(CL_MENU),
+			));
+			$this->add_cat_leaf($tv , $id);
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_ROOM,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"CL_ROOM.RELTYPE_CATEGORY" => $parent,
+		));
+		foreach($ol->names() as $id => $name)
+		{
+			$tv->add_item($parent,array(
+				"name" => $name,
+				"id" => $id."",
+				"iconurl" => icons::get_icon_url(CL_ROOM),
+				"url" => "javascript:$('[name=room]').val('".$id."'); update_bron_table();update_room_tree();"//aw_url_change_var("cat", $id),
+			));
+		}
+	}
+
 	function _get_room_management_type_tree($arr)
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
@@ -704,6 +807,80 @@ class spa_bookings_overview extends class_base
 				"name" => ($x-1)*10 . " - " . $x*10,
 			));
 			$x++;
+		}
+	}
+
+	function _get_reservation_management_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "left",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+			"align" => "left",
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "floor",
+			"caption" => t("Korrus"),
+			"align" => "right",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "corps",
+			"caption" => t("Korpus"),
+			"align" => "right",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "nr",
+			"caption" => t("Number"),
+			"align" => "right",
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "right",
+			"sortable" => 1,
+		));
+
+ 		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+		$data = array();
+		if($this->can("view" , $arr["request"]["room"]))
+		{
+			$room_object = obj($arr["request"]["room"]);
+			if($room_object->class_id() == CL_ROOM)
+			{
+				$data["room"] = $arr["request"]["room"];
+			}
+			else
+			{
+				$data["category"] = $arr["request"]["room"];
+			}
+		}
+
+
+		$data["name"] = $arr["request"]["name"];
+
+		$reservations = $arr["obj_inst"]->get_reservations($data);
+		
+		foreach($reservations->arr() as $reservation)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($reservation,null,array("return_url" => $this->mk_my_orb("change" , array("class" => "spa_bookings_overview","id" => $arr["obj_inst"]->id() , "group" => "room_management" )))),
+				"id" => $reservation->id(),
+			));
 		}
 	}
 
@@ -1843,12 +2020,17 @@ class spa_bookings_overview extends class_base
 		$arr["request"]["from"] = is_numeric($arr["from"]) ? $arr["from"] : "";
 		$arr["request"]["to"] = is_numeric($arr["to"]) ? $arr["to"] : "";
 		$arr["request"]["name"] = $arr["name"];
+		$arr["request"]["room"] = is_numeric($arr["room"]) ? $arr["room"] : "";
+		$arr["request"]["timespan"] = $arr["timespan"];
 		$arr["request"]["die"] = 1;
 
 		switch($property)
 		{
 			case "room_management_list":
 				$this->_get_room_management_list($arr);
+				break;
+			case "reservation_management_list":
+				$this->_get_reservation_management_list($arr);
 				break;
 			case "room_management_tree":
 				classload("vcl/treeview");
@@ -1858,8 +2040,11 @@ class spa_bookings_overview extends class_base
 //				print iconv(aw_global_get("charset"), "UTF-8", $t->get_toolbar());
 //				die();
 				break;
+			case "reservation_management_time_tree":
+				$property = "stats_time_tree";
 			case "room_management_capacity_from_tree":
-			case "room_management_capacity_to_tree":
+			case "room_management_capacity_to_tree":	
+			case "reservation_management_tree":
 				classload("vcl/treeview");
 				$t = new treeview();
 				$arr["prop"] = array("vcl_inst" => $t);
@@ -1884,7 +2069,7 @@ class spa_bookings_overview extends class_base
 
 		$js = "";
 
-		if($arr["request"]["group"] == "room_management")
+		if($arr["request"]["group"] == "room_management" || $arr["request"]["group"] == "reservation_management")
 		{
 			
 			$js.= "
@@ -1908,8 +2093,47 @@ class spa_bookings_overview extends class_base
 //						update_cat_tb();
 //						}
 //					);
-
 				}
+
+				function update_bron_table()
+				{
+
+					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
+							id: ".$arr["obj_inst"]->id()."
+							, prop: 'reservation_management_list'
+							, name: $('[name=reservation_management_name]').val()
+							, room: $('[name=room]').val()
+							, timespan: $('[name=timespan]').val()}
+							,function(html){
+						x=document.getElementsByName('reservation_management_list');
+						x[0].innerHTML = html;
+					});
+				}
+
+				function update_room_tree()
+				{
+					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
+						id: ".$arr["obj_inst"]->id()."
+						, prop: 'reservation_management_tree'
+						, room: $('[name=room]').val()}
+						,function(html){
+						x=document.getElementById('reservation_management_tree');
+						x.innerHTML = html;
+					});
+				}
+
+				function update_time_tree()
+				{
+					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
+						id: ".$arr["obj_inst"]->id()."
+						, prop: 'reservation_management_time_tree'
+						, timespan: $('[name=timespan]').val()}
+						,function(html){
+						x=document.getElementById('reservation_management_time_tree');
+						x.innerHTML = html;
+					});
+				}
+
 				function update_cat_tb()
 				{
 					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
@@ -3262,5 +3486,102 @@ class spa_bookings_overview extends class_base
 		}
 		die();
 	}
+
+	private function get_range($val)
+	{
+		switch($val)
+		{
+			case "period_last_week":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-1, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")-1, 8, date("Y")),
+				);
+			break;
+			case "period_week":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m"), 1, date("Y")),
+					"to" => mktime(0,0,0, date("m"), 8, date("Y")),
+				);
+			break;
+			case "period_last_last":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-2, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")-1, 1, date("Y")),
+				);
+			break;
+			case "period_last":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-1, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m"), 1, date("Y")),
+				);
+			break;
+			case "period_current":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m"), 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")+1, 1, date("Y")),
+				);
+			break;
+			case "period_next":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")+1, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")+2, 1, date("Y")),
+				);
+			break;
+			case "period_year":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, 1, 1, date("Y")),
+					"to" => mktime(0,0,0, 1, 1, date("Y")+1),
+				);
+			break;
+			case "period_lastyear":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, 1, 1, date("Y")-1),
+					"to" => mktime(0,0,0,1 , 1, date("Y")),
+				);
+			break;
+			default :return null;
+		}
+		return $filt["bill_date_range"];
+	}
+
+	function _get_stats_time_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "timespan";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "period_week");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_time_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik ajavahemikud"),
+			"id" => "all_time",
+			"url" => aw_url_change_var($var, "all_time"),
+		));
+
+		$branches = array(
+			"last_week" => t("Eelmine n&auml;dal"),
+			"period_week" => t("K&auml;esolev n&auml;dal"),
+			"period_last_last" => t("&Uuml;leelmine kuu"),
+			"period_last" => t("Eelmine kuu"),
+			"period_current" => t("K&auml;esolev kuu"),
+			"period_next" => t("J&auml;rgmine kuu"),
+			"period_lastyear" => t("Eelmine aasta"),
+			"period_year" => t("K&auml;esolev aasta"),
+		);
+
+		foreach($branches as $id => $caption)
+		{
+			$tv->add_item("all_time", array(
+				"id" => $id,
+				"name" => $caption,
+				"url" => "javascript:$('[name=timespan]').val('".$id."'); update_bron_table();update_time_tree();"//aw_url_change_var("cat", $id),
+			));
+		}
+	}
+
 }
 ?>

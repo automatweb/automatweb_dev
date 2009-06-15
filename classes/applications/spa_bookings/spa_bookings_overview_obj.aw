@@ -52,6 +52,33 @@ class spa_bookings_overview_obj extends _int_object
 		return $ol;
 	}
 
+	public function get_reservations($arr = array())
+	{
+		$filter = array(
+			"class_id" => CL_RESERVATION,
+			"site_id" => array(),
+			"lang_id" => array(),
+		);
+		if(is_oid($arr["room"]))
+		{
+			$filter["resource"] = $arr["room"];
+
+		}
+
+		if(is_oid($arr["category"]))
+		{
+			$filter["CL_RESERVATION.RELTYPE_RESOURCE.RELTYPE_CATEGORY"] = $arr["category"];
+		}
+
+		if($arr["name"])
+		{
+			$filter["name"] = "%".$arr["name"]."%";
+
+		}
+
+		$ol = new object_list($filter);
+		return $ol;
+	}
 
 }
 
