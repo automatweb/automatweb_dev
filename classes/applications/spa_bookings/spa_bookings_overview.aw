@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.81 2009/06/11 11:32:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.82 2009/06/15 09:12:23 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -38,7 +38,7 @@
 				@property room_management_name type=textbox store=no captionside=top parent=room_management_srch size=22
 				@caption Ruumi nimi
 
-				@property rs_btn type=submit store=no parent=r_srch no_caption=1
+				@property room_management_rs_btn type=button store=no parent=room_management_srch no_caption=1
 				@caption Otsi
 
 		@property room_management_list type=table store=no no_caption=1 parent=room_management_split
@@ -198,7 +198,7 @@
 		@property r_r_list type=table store=no no_caption=1 parent=rr_split
 
 
-@groupinfo room_management caption=Ruumide&nbsp;haldus
+@groupinfo room_management caption=Ruumide&nbsp;haldus submit=no
 
 @groupinfo rooms caption=Ruumid
 @groupinfo stats caption=Statistika
@@ -256,6 +256,9 @@ class spa_bookings_overview extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "room_management_rs_btn":
+				$prop["onclick"] = "javascript:update_rooms_table();";//aw_url_change_var("cat", $id),
+				break;
 			case "r_ra_seller":
 				$prop["options"] = array("" => "") + $this->get_all_sellers();
 				$prop["value"] = $arr["request"][$prop["name"]];
@@ -620,7 +623,7 @@ class spa_bookings_overview extends class_base
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
 		$var = "from";
-		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all");
+		$tv->set_selected_item(is_numeric($arr["request"][$var]) ? $arr["request"][$var] : "all");
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"persist_state" => true,
@@ -630,7 +633,8 @@ class spa_bookings_overview extends class_base
 		$tv->add_item(0,array(
 			"name" => t("K&otilde;ik"),
 			"id" => "all",
-			"url" => aw_url_change_var($var, "all"),
+			"url" => "javascript:$('[name=from]').val('all'); update_rooms_table();update_from_tb();"//aw_url_change_var("cat", $id),
+//			"url" => aw_url_change_var($var, "all"),
 		));
 		$x = 1;
 		while($x <= 10)
@@ -663,7 +667,7 @@ class spa_bookings_overview extends class_base
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
 		$var = "to";
-		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all");
+		$tv->set_selected_item(is_numeric($arr["request"][$var]) ? $arr["request"][$var] : "all");
 
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
@@ -674,7 +678,8 @@ class spa_bookings_overview extends class_base
 		$tv->add_item(0,array(
 			"name" => t("K&otilde;ik"),
 			"id" => "all",
-			"url" => aw_url_change_var($var, "all"),
+			"url" => "javascript:$('[name=to]').val('".$id."'); update_rooms_table();update_to_tb();"//aw_url_change_var("cat", $id),
+//			"url" => aw_url_change_var($var, "all"),
 		));
 		$x = 1;
 		while($x <= 10)
@@ -749,13 +754,14 @@ class spa_bookings_overview extends class_base
 		$data = array("cap_to" => $arr["request"]["to"]);
 		$data["cap_from"] = $arr["request"]["from"];
 		$data["cat"] = $arr["request"]["cat"];
+		$data["name"] = $arr["request"]["name"];
 
 		$rooms = $arr["obj_inst"]->get_rooms($data);
 		
 		foreach($rooms->arr() as $room)
 		{
 			$t->define_data(array(
-				"name" => html::obj_change_url($room),
+				"name" => html::obj_change_url($room,null,array("return_url" => $this->mk_my_orb("change" , array("class" => "spa_bookings_overview","id" => $arr["obj_inst"]->id() , "group" => "room_management" )))),
 				"id" => $room->id(),
 				"nr" => $room->prop("nr"),
 				"floor" => $room->prop("floor"),
@@ -1834,26 +1840,9 @@ class spa_bookings_overview extends class_base
 		$arr["prop"] = array("vcl_inst" => $t);
 		$arr["obj_inst"] = obj($arr["id"]);
 		$arr["request"]["cat"] = $arr["cat"];
-		$arr["request"]["from"] = $arr["from"];
-		$arr["request"]["to"] = $arr["to"];
-/*
-		$date_fields = array("sp_starttime" , "sp_due_date" , "sp_start_date_start" , "sp_start_date_end");
-		foreach($date_fields as $var)
-		{
-			$arr["request"][$var]["day"] = $arr[$var."_day"];
-			$arr["request"][$var]["month"] = $arr[$var."_month"];
-			$arr["request"][$var]["year"] = $arr[$var."_year"];
-		}
-		$arr["request"]["sp_name"] = $arr["sp_name"];
-		$arr["request"]["sp_comment"] = $arr["sp_comment"];
-		$arr["request"]["sp_customer"] = $arr["sp_customer"];
-//		$arr["request"]["sp_due_date"] = $arr["sp_due_date"];
-//		$arr["request"]["sp_starttime"] = $arr["sp_starttime"];
-
-		if($arr["sp_status"])
-		{
-			$arr["request"]["sp_status"] = array_keys($arr["sp_status"]);
-		}*/
+		$arr["request"]["from"] = is_numeric($arr["from"]) ? $arr["from"] : "";
+		$arr["request"]["to"] = is_numeric($arr["to"]) ? $arr["to"] : "";
+		$arr["request"]["name"] = $arr["name"];
 		$arr["request"]["die"] = 1;
 
 		switch($property)
@@ -1905,9 +1894,10 @@ class spa_bookings_overview extends class_base
 					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
 							id: ".$arr["obj_inst"]->id()."
 							, prop: 'room_management_list'
+							, name: $('[name=room_management_name]').val()
 							, cat: $('[name=category]').val()
-							, from: $('name=from').val()
-							, to: $('name=to').val()}
+							, from: $('[name=from]').val()
+							, to: $('[name=to]').val()}
 							,function(html){
 						x=document.getElementsByName('room_management_list');
 						x[0].innerHTML = html;
@@ -1983,7 +1973,7 @@ class spa_bookings_overview extends class_base
 					});
 
 					$.get('/automatweb/orb.aw', {class: 'spa_bookings_overview', action: 'copy_rooms', id: '".$arr["obj_inst"]->id()."' , sel: result}, function (html) {
-		//				alert(html);	
+						alert(html);	
 						update_rooms_table();
 						}
 					);
@@ -3267,29 +3257,7 @@ class spa_bookings_overview extends class_base
 			if(is_oid($sel))
 			{
 				$o = obj($sel);
-				$new = $o->save_new();
-				$no = obj($new);
-				$name = $o->name();
-				$number = "";
-				$x = strlen($name)-1;
-				while($x > 0)
-				{
-					if(is_numeric($name[$x]))
-					{
-						$number = $name[$x].$number;
-						$name = substr($name , 0 , $x);
-					}
-					else
-					{
-						break;
-					}
-					$x--;
-				}
-				$n = (int)$number;
-//arr($name.($number+1));
-				$no->set_name($name.($number+1));
-					
-				$no->save();
+				$o->create_copy();
 			}
 		}
 		die();

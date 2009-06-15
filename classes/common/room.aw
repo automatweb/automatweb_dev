@@ -60,10 +60,10 @@
 		@property square_meters type=textbox size=5 parent=general_down
 		@caption Suurus(ruutmeetrites)
 
-		@property normal_capacity type=textbox size=5 parent=general_down table=aw_room
+		@property normal_capacity type=textbox size=5 parent=general_down table=aw_room method=none field=normal_capacity
 		@caption Normaalne mahutavus
 
-		@property max_capacity type=textbox size=5 parent=general_down table=aw_room
+		@property max_capacity type=textbox size=5 parent=general_down table=aw_room method=none field=max_capacity
 		@caption Maksimaalne mahutavus
 
 		@layout buffer_before_l type=hbox width=30%:70% parent=general_down
@@ -92,16 +92,16 @@
 		@property settings type=relpicker parent=general_down multiple=1 reltype=RELTYPE_SETTINGS
 		@caption Seaded
 
-		@property category type=relpicker reltype=RELTYPE_CATEGORY parent=general_down table=aw_room
+		@property category type=relpicker reltype=RELTYPE_CATEGORY parent=general_down table=aw_room  method=none field=category
 		@caption Ruumi kategooria
 		
-		@property floor type=textbox parent=general_down table=aw_room size=3
+		@property floor type=textbox parent=general_down table=aw_room size=3 method=none field=floor
 		@caption Korrus
 
-		@property corps type=textbox parent=general_down table=aw_room size=3
+		@property corps type=textbox parent=general_down table=aw_room size=3 method=none field=corps
 		@caption Korpus
 
-		@property nr type=textbox parent=general_down table=aw_room size=3
+		@property nr type=textbox parent=general_down table=aw_room size=3 method=none field=nr
 		@caption Number
 
 		layout concurrent type=hbox closeable=1 area_caption=Samaaegsed&nbsp;broneeringud: parent=general_down

@@ -868,6 +868,48 @@ class room_obj extends _int_object
 		));
 		return $ol;
 	}
+
+	/** Creates new room with same parameters and connections, and name ++;
+		@attrib api=1
+	**/
+	public function create_copy()
+	{
+		$connections = $this->connections_from();
+		$new = $this->save_new();
+		$no = obj($new);
+		$name = $this->name();
+		$number = "";
+		$x = strlen($name)-1;
+		while($x > 0)
+		{
+			if(is_numeric($name[$x]))
+			{
+				$number = $name[$x].$number;
+				$name = substr($name , 0 , $x);
+			}
+			else
+			{
+				break;
+			}
+			$x--;
+		}
+		$n = (int)$number;
+//arr($name.($number+1));
+		$no->set_name($name.($number+1));
+		$no->save();
+		foreach($connections  as $c)
+		{
+			if(!$no->is_connected_to(array("type" => $c->prop("reltype"), "to" => $c->prop("to"))))
+			{
+				$no->connect(array(
+					"type" => $c->prop("reltype"),
+					"to" => $c->prop("to")
+				));
+			}
+		}
+		return $no->id();
+	}
+
 }
 
 ?>
