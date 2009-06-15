@@ -49,6 +49,9 @@ define("OP_GRP_END", 28);
 
 define("OP_LIST_INIT_END", 29);	// params { level }
 
+define("OP_AUTOGRP_BEGIN", 30);
+define("OP_AUTOGRP_END", 31);
+
 class site_template_compiler extends aw_template
 {
 	function site_template_compiler()
@@ -83,7 +86,9 @@ class site_template_compiler extends aw_template
 			26 => "OP_IF_LOGGED",
 			27 => "OP_GRP_BEGIN",
 			28 => "OP_GRP_END",
-			29 => "OP_LIST_INIT_END"
+			29 => "OP_LIST_INIT_END",
+			30 => "OP_AUTOGRP_BEGIN",
+			31 => "OP_AUTOGRP_END",
 		);
 
 		$this->id_func = (aw_ini_get("menuedit.show_real_location") != 1 ? "brother_of" : "id");
@@ -158,6 +163,11 @@ class site_template_compiler extends aw_template
 			if ($parts[3] == "GRP")
 			{
 				$this->menu_areas[$area]["grps"][$level] = $parts[4];
+				continue;
+			}
+			elseif($parts[3] == "AUTOGRP")
+			{
+				$this->menu_areas[$area]["autogrps"][$level] = $parts[4];
 				continue;
 			}
 
@@ -509,6 +519,20 @@ class site_template_compiler extends aw_template
 			);
 		}
 
+		// autogroups
+		if ($adat["autogrps"][$level])
+		{
+			$this->ops[] = array(
+				"op" => OP_AUTOGRP_BEGIN,
+				"params" => array(
+					"a_parent" => $adat["parent"],
+					"level" => $level,
+					"a_name" => $area,
+					"autogrp_cnt" => $adat["autogrps"][$level]
+				)
+			);
+		}
+
 		// now figure out the code for displaying
 		// menu items
 
@@ -684,6 +708,17 @@ class site_template_compiler extends aw_template
 						"tpl" => $cur_tpl_fqn
 					);
 				}
+				$autogrp_p = false;
+				if ($adat["autogrps"][$level])
+				{
+					$autogrp_p = array(
+						"a_parent" => $adat["parent"],
+						"level" => $level,
+						"a_name" => $area,
+						"autogrp_cnt" => $adat["autogrps"][$level],
+						"tpl" => $cur_tpl_fqn
+					);
+				}
 				$this->ops[] = array(
 					"op" => OP_SHOW_ITEM_INSERT,
 					"params" => array(
@@ -692,7 +727,8 @@ class site_template_compiler extends aw_template
 						"no_image_tpl" => $ldat["no_image_tpl"],
 						"has_comment_tpl" => $ldat["has_comment_tpl"],
 						"no_comment_tpl" => $ldat["no_comment_tpl"],
-						"grp_p" => $grp_p
+						"grp_p" => $grp_p,
+						"autogrp_p" => $autogrp_p
 					)
 				);
 			}
@@ -726,6 +762,20 @@ class site_template_compiler extends aw_template
 					"level" => $level,
 					"a_name" => $area,
 					"grp_cnt" => $adat["grps"][$level],
+					"tpl" => $cur_tpl_fqn,
+					//"stack_pop" => 1
+				)
+			);
+		}
+		elseif ($adat["autogrps"][$level])
+		{
+			$this->ops[] = array(
+				"op" => OP_AUTOGRP_END,
+				"params" => array(
+					"a_parent" => $adat["parent"],
+					"level" => $level,
+					"a_name" => $area,
+					"autogrp_cnt" => $adat["autogrps"][$level],
 					"tpl" => $cur_tpl_fqn,
 					//"stack_pop" => 1
 				)
@@ -1325,6 +1375,11 @@ class site_template_compiler extends aw_template
 			$arr["grp_p"]["no_pop"] = 1;
 			$ret .= $this->_g_op_grp_end($arr["grp_p"]);
 		}
+		elseif ($arr["autogrp_p"])
+		{
+			$arr["autogrp_p"]["no_pop"] = 1;
+			$ret .= $this->_g_op_autogrp_end($arr["autogrp_p"]);
+		}
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 		return $ret;
@@ -1425,10 +1480,12 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\$mmi_cnt = 0; if(empty(\$cnt_menus))\$cnt_menus = 0;\n";
 		$ret .= $this->_gi().$act_count_name." = \$this->_helper_get_act_count(".$list_name.");\n";
 		$ret .= $this->_gi()."for(\n((\"make_menu_item\" == " . $fun_name . ") ? (\$mmi_cnt = 1) : (".$o_name." = ".$list_name."->begin())), ((\"make_menu_item\" == " . $fun_name . ") ? ((".$fun_name."_cb)?(\$tmp_vars_array = " . $inst_name . "->make_menu_item_from_tabs(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus)):\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus))  : (null)),".$loop_counter_name." = 0, ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (\$prev_obj = NULL));\n ((\"make_menu_item\" == " . $fun_name . ") ? is_array(\$tmp_vars_array) : (!".$list_name."->end()));\n ((\"make_menu_item\" == " . $fun_name . ") ? ((".$fun_name."_cb)? \$tmp_vars_array = " . $inst_name . "->make_menu_item_from_tabs(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus):\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus)) : (\$prev_obj = ".$o_name.")), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$o_name." = ".$list_name."->next())), ".$loop_counter_name."++\n)\n";
-		$ret .= $this->_gi()."{\nif(!empty(".$fun_name."_cb))\$cnt_menus++;";
+		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-
-			$ret .= $this->_gi()."\$tmp_vars".$arr["level"]." = \$tmp_vars_array;if (empty(\$mmi_cnt))\n";
+			
+			$ret .= $this->_gi()."if(!empty(".$fun_name."_cb))\$cnt_menus++;\n";
+			$ret .= $this->_gi()."\$tmp_vars".$arr["level"]." = \$tmp_vars_array;\n";
+			$ret .= $this->_gi()."if (empty(\$mmi_cnt))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 
@@ -2302,7 +2359,6 @@ class site_template_compiler extends aw_template
 
 		$tpl = substr($arr["tpl"], strrpos($arr["tpl"], ".")+1);
 
-
 		// if % count
 		$res .= $this->_gi()."if (($loop_counter_name > 0 && ($loop_counter_name % $arr[grp_cnt]) == ".($arr["grp_cnt"] - 1).") || ($loop_counter_name == (".$list_name."->count() - 1)) )\n";
 		$res .= $this->_gi()."{\n";
@@ -2311,7 +2367,8 @@ class site_template_compiler extends aw_template
 			$res .= $this->_gi()."\$this->vars_safe(array(\n";
 			$this->brace_level++;
 
-				$res .= $this->_gi()."\"".$tpl."\" => $content_name\n";
+				$res .= $this->_gi()."\"".$tpl."\" => $content_name,\n";
+				$res .= $this->_gi()."\"".(substr($tpl, -4) == "_SEL" ? substr($tpl, 0, -4) : $tpl."_SEL")."\" => \"\"\n";
 
 			$this->brace_level--;
 			$res .= $this->_gi()."));\n";
@@ -2341,6 +2398,69 @@ class site_template_compiler extends aw_template
 			$this->brace_level--;
 			$res .= $this->_gi()."}\n";
 			$res .= $this->_gi()."\$this->vars_safe(array(\"".$grp_tpl."\" => ".$grp_ct_name."));\n";
+		}
+		return $res;
+	}
+
+	function _g_op_autogrp_begin($arr)
+	{
+		$autogrp_ct_name = "\$autogrp_ct_".$arr["a_parent"]."_".$arr["level"];
+		return $this->_gi()."$autogrp_ct_name = \"\";\n";
+	}
+
+	function _g_op_autogrp_end($arr)
+	{
+		$res = "";
+		$dat = end($this->list_name_stack);
+		$content_name = $dat["content_name"];
+		$o_name = $dat["o_name"];
+		$loop_counter_name = $dat["loop_counter_name"];
+		$list_name = $dat["list_name"];
+
+		$autogrp_ct_name = "\$autogrp_ct_".$arr["a_parent"]."_".$arr["level"];
+		$autogrp_tpl = "MENU_".$arr["a_name"]."_L".$arr["level"]."_AUTOGRP_".$arr["autogrp_cnt"];
+
+		$tpl = substr($arr["tpl"], strrpos($arr["tpl"], ".")+1);
+
+		// if % count
+		$res .= $this->_gi()."if ($loop_counter_name > 0 && ($loop_counter_name + 1) % ceil(".$list_name."->count() / $arr[autogrp_cnt]) == 0 || $loop_counter_name == ".$list_name."->count() - 1)\n";
+		$res .= $this->_gi()."{\n";
+		$this->brace_level++;
+
+			$res .= $this->_gi()."\$this->vars_safe(array(\n";
+			$this->brace_level++;
+
+				$res .= $this->_gi()."\"".$tpl."\" => $content_name,\n";
+				$res .= $this->_gi()."\"".(substr($tpl, -4) == "_SEL" ? substr($tpl, 0, -4) : $tpl."_SEL")."\" => \"\"\n";
+
+			$this->brace_level--;
+			$res .= $this->_gi()."));\n";
+
+			$res .= $this->_gi()."$content_name = \"\";\n";
+			$res .= $this->_gi()."$autogrp_ct_name .= \$this->parse(\"".$autogrp_tpl."\");\n";
+
+		$this->brace_level--;
+		$res .= $this->_gi()."}\n";
+
+		// this->vars(arr[tpl] => $content_name)
+		// parse autogrp tpl
+
+		// insert the same thing that op_loop_list_end does, but for groups
+
+                if ($arr["stack_pop"])                                                                                                      {
+                        $res .= $this->_gi()."array_pop(\$this->_cur_menu_path);\n";
+                }
+
+		// pop one item off the list name stack
+		if (!$arr["no_pop"])
+		{
+			$dat = array_pop($this->list_name_stack);
+			$this->last_list_dat = $dat;
+
+
+			$this->brace_level--;
+			$res .= $this->_gi()."}\n";
+			$res .= $this->_gi()."\$this->vars_safe(array(\"".$autogrp_tpl."\" => ".$autogrp_ct_name."));\n";
 		}
 		return $res;
 	}
