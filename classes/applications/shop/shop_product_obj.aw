@@ -125,7 +125,7 @@ class shop_product_obj extends _int_object
 				{
 					$params[is_string($var1) ? $var1 : $var2."s"] = $$var2;
 				}
-			}arr($params);
+			}
 			$ol = new object_list($params);
 			$o = $ol->begin();
 		}
@@ -173,13 +173,15 @@ class shop_product_obj extends _int_object
 	/** Returns the list of replacement products
 		@attrib name=get_discount api=1
 	**/
-	public function get_replacement_prods($arr)
+	public function get_replacement_products($arr)
 	{
+		// replacement products via type_code
 		$ol = new object_list(array(
 			'class_id' => CL_SHOP_PRODUCT,
 			'type_code' => $this->prop('type_code'),
 		));
-		// siia tuleks veel see juurde ilmselt teha, et kuidagi lisada siia need asendustooted mis on yle aw seoste ...
+		
+		// add replacement products via connections
 		$conns = $this->connections_from(array(
 			'type' => 'RELTYPE_REPLACEMENT_PROD'
 		));
@@ -188,6 +190,39 @@ class shop_product_obj extends _int_object
 			$ol->add($conn->to());
 		}
 		return $ol->arr();	
+	}
+
+	/**
+		@attrib api=1 params=name
+		@param odl optional type=bool
+		@param odl_2nd_param optional type=array
+	**/
+	public function get_packagings($arr = array())
+	{
+		$params = array(
+			"class_id" => CL_SHOP_PRODUCT_PACKAGING,
+			"CL_SHOP_PRODUCT_PACKAGING.RELTYPE_PACKAGING(CL_SHOP_PRODUCT)" => $this->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
+			new obj_predicate_sort(array("jrk" => "ASC")),
+		);
+
+		if(!empty($arr["odl"]))
+		{
+			$odl_2nd_param = !empty($arr["odl_2nd_param"]) ? $arr["odl_2nd_param"] : array(
+				CL_SHOP_PRODUCT_PACKAGING => array("name", "jrk", "price")
+			);
+			$ol = new object_data_list(
+				$params,
+				$odl_2nd_param
+			);
+		}
+		else
+		{
+			$ol = new object_list($params);
+		}
+
+		return $ol;
 	}
 	
 }
