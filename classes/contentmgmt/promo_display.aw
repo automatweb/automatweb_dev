@@ -239,14 +239,19 @@ if (!empty($_GET["PROMO_DBG"]))
 		}
 
 		// prefetch doc sources and doc ignores for all displayed promos
-		$dsdi_cache = $con->find(array(
-			"from" => array_keys($displayed_promos),
-			"type" => array(6,2,5)
-		));
+		$dsdi_cache = array();
 		$dsdi_list_by_promo = array();
-		foreach($dsdi_cache as $dsdi_con)
+		if (count($displayed_promos) > 0)
 		{
-			$dsdi_list_by_promo[$dsdi_con["from"]][$dsdi_con["reltype"]][$dsdi_con["to"]] = $dsdi_con["to"];
+			$dsdi_cache = $con->find(array(
+				"from" => array_keys($displayed_promos),
+				"type" => array(6,2,5)
+			));
+
+			foreach($dsdi_cache as $dsdi_con)
+			{
+				$dsdi_list_by_promo[$dsdi_con["from"]][$dsdi_con["reltype"]][$dsdi_con["to"]] = $dsdi_con["to"];
+			}
 		}
 
 	
