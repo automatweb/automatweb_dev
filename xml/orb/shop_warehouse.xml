@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_warehouse" folder="www/dev/terryf/automatweb_dev/classes/applications/shop" extends="class_base">
+	<class name="shop_warehouse" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
 		<action name="unsent_table">
 			<function name="unsent_table">
 				<arguments>
@@ -27,6 +27,14 @@
 		<action name="get_prod_tree_level" all_args="1">
 			<function name="get_prod_tree_level">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ajax_update_products_table" all_args="1">
+			<function name="ajax_update_products_table">
+				<arguments>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -150,6 +158,13 @@
 
 		<action name="get_clients_groups_tree_level" all_args="1">
 			<function name="_get_clients_groups_tree_level">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="update_products_index">
+			<function name="update_products_index">
 				<arguments>
 				</arguments>
 			</function>
