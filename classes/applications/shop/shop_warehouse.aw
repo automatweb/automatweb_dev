@@ -937,8 +937,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@layout stats_left type=vbox parent=stats_split
 
-			@layout stats_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=stats_left
-				@property stats_tree type=treeview parent=stats_tree_lay store=no no_caption=1
+#			@layout stats_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=stats_left
+#				@property stats_tree type=treeview parent=stats_tree_lay store=no no_caption=1
 
 			@layout stats_time_lay type=vbox closeable=1 area_caption=Ajavahemik parent=stats_left
 				@property stats_time_tree type=treeview no_caption=1 parent=stats_time_lay
@@ -1798,8 +1798,6 @@ class shop_warehouse extends class_base
 	{
 		$srch = $arr["request"];
 
-
-
 		if(!$srch["stats_type"])
 		{
 			$srch["stats_type"] = "all";
@@ -1813,7 +1811,7 @@ class shop_warehouse extends class_base
 
 		$fields = array(
 //			"id" => t("Tellimus"),
-			"prod" => t("Artikkel"),
+//			"prod" => t("Artikkel"),
 			"prod_name" => t("Nimetus"),
 			"weight" => t("kaal (gr/m2)"),
 			"width" => t("Laius (mm)"),
@@ -1822,7 +1820,7 @@ class shop_warehouse extends class_base
 			"outcome" => t("Perioodi v&auml;ljaminek"),
 			"inventory_repair" => t("Inventuuri parandus"),
 			"final_count" => t("Perioodi l&otilde;ppsaldo"),
-			"final_count_check" => t("Perioodi l&otilde;ppsaldo kontroll"),
+//			"final_count_check" => t("Perioodi l&otilde;ppsaldo kontroll"),
 		);
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_sortable(false);
@@ -1835,26 +1833,34 @@ class shop_warehouse extends class_base
 			));
 		}
 
-		$ol = $arr["obj_inst"] -> get_movements();
+		$ol = $arr["obj_inst"] -> get_movements($filter);
+
 		$movements_in = array();
 		$movements_out = array();
-
-		$notes = $arr["obj_inst"] -> get_delivery_note_rows($filter);
+		$movements_after = array();
 
 		foreach($ol->arr() as $note)
 		{
 			if($note->prop("from_wh") == $arr["obj_inst"]->id())
 			{
 				$movements_out[$note->prop("product")]+=$note->prop("amount");
-			}
+			}//arr($note->prop("to_wh")); arr($arr["obj_inst"]->id());
 			if($note->prop("to_wh") == $arr["obj_inst"]->id())
 			{
 				$movements_in[$note->prop("product")]+=$note->prop("amount");
 			}
 		}
 
-		$ol = $products = $arr["obj_inst"] -> get_products();
+		$filter["after_time"] = 1;
+		$after_ol = $arr["obj_inst"] -> get_movements($filter);
+		foreach($after_ol->arr() as $note2)
+		{
+			$movements_after[$note2->prop("product")]+= $note2->prop("amount");
+		}
+
+		$ol = $products = $arr["obj_inst"] -> get_products($filter);
 //		$ol = $arr["obj_inst"] -> get_packagings();
+
 		foreach($ol->arr() as $o)
 		{
 			$amounts = $arr["obj_inst"]->get_amount(array(
@@ -1864,7 +1870,7 @@ class shop_warehouse extends class_base
 			if($amounts->count())
 			{
 				$amount = reset($amounts->arr());
-				$count = $amount->prop("amount");
+				$count = $amount->prop("amount") - $movements_after[$o->id()];
 			}
 			$t->define_data(array(
 				"begin_count" => $count - $movements_in[$o->id()] + $movements_out[$o->id()],
@@ -1874,9 +1880,11 @@ class shop_warehouse extends class_base
 //				"prod_name" => get_name($o->prop("product")),
 //				"id" => html::get_change_url($o->prop("delivery_note"), $vars, $o->prop("delivery_note.name")),
 				"prod_name" => $o->name(),
+				"weight" => $o->prop("gramweight"),
+				"width" => $o->prop("width"),
 			));
 		}
-
+		$t->set_caption(t("Materjalide hulga muutus laos"));
 	}
 
 	function _get_osearch_table($arr)
@@ -3891,10 +3899,10 @@ class shop_warehouse extends class_base
 		return $res;
 	}
 
-	public function get_products_list_from_index($arr, $request)
+	private function get_products_list_from_index($arr)
 	{
 		$params = array();
-		if($code = $request->arg("prod_s_code"))
+		if($code = automatweb::$request->arg("prod_s_code"))
 		{
 			if($this->config && $cid = $this->config->prop("short_code_ctrl"))
 			{
@@ -3907,16 +3915,16 @@ class shop_warehouse extends class_base
 			}
 		}
 
-		if($name = $request->arg("prod_s_name"))
+		if($name = automatweb::$request->arg("prod_s_name"))
 		{
 			$params["name"] = "name like '%".$name."%'";
 		}
 
 		$ol = new object_list();
+
 		if (!empty($params))
 		{
-			$q = "select oid from aw_shop_products_index where ".implode(' AND ', $params)."";
-			$res = $this->db_fetch_array($q);
+			$res = $this->db_fetch_array("select oid from aw_shop_products_index where ".implode(' AND ', $params)."");
 			$oids = array();
 			foreach ($res as $r)
 			{
@@ -4139,7 +4147,7 @@ class shop_warehouse extends class_base
 		switch ($search_method)
 		{
 			case 'index':
-				$res = $this->get_products_list_from_index($arr, automatweb::$request);
+				$res = $this->get_products_list_from_index($arr);
 				break;
 			case 'regular':
 				$res = $this->get_products_list_ol($arr);
@@ -8490,7 +8498,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 	function _get_status_orders_prod_tree($arr)
 	{
-		$this->mk_prodg_tree(&$arr);
+		$this->mk_prodg_tree(&$arr); 
 		$arr["prop"]["vcl_inst"]->add_item(0, array(
 			"name" => t("K&otilde;ik"),
 			"id" => "prod_all",

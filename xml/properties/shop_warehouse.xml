@@ -2503,16 +2503,6 @@
             <field>stats_toolbar</field>
       </property>
       <property>
-            <name>stats_tree</name>
-            <table>objects</table>
-            <group>stats_general</group>
-            <type>treeview</type>
-            <parent>stats_tree_lay</parent>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>stats_tree</field>
-      </property>
-      <property>
             <name>stats_time_tree</name>
             <table>objects</table>
             <group>stats_general</group>
@@ -3584,13 +3574,6 @@
                   <group>stats_general</group>
                   <area_caption></area_caption>
             </stats_left>
-            <stats_tree_lay>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Filtreeri</area_caption>
-                  <parent>stats_left</parent>
-                  <group>stats_general</group>
-            </stats_tree_lay>
             <stats_time_lay>
                   <type>vbox</type>
                   <closeable>1</closeable>

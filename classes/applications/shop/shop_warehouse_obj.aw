@@ -21,6 +21,7 @@ class shop_warehouse_obj extends _int_object
 			timestamp
 		@param to optional type=int
 			timestamp
+		@param after_time optional type=int
 		@returns object list
 	**/
 	public function get_movements($arr)
@@ -45,6 +46,12 @@ class shop_warehouse_obj extends _int_object
 			}
 			$filter["product.RELTYPE_CATEGORY"] = $arr["category"];
 		}
+		
+		if($arr["after_time"])
+		{
+			$arr["from"] = $arr["to"]+1;
+			$arr["to"] = time()*2;
+		}
 
 		if($arr["from"] && $arr["to"])
 		{
@@ -62,7 +69,7 @@ class shop_warehouse_obj extends _int_object
 
 			}
 		}
-
+;
 		return new object_list($filter);
 	}
 
