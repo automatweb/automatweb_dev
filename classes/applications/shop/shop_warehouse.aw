@@ -110,7 +110,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@caption Kuva partiidena
 
 
-				@property prod_s_sbt type=submit store=no captionside=top  parent=prod_left_search value="Otsi"
+				@property prod_s_sbt type=button store=no captionside=top  parent=prod_left_search
 				@caption Otsi
 
 
@@ -929,6 +929,93 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @caption Tellimuse info vorm
 
 
+@default group=stats_general
+
+	@property stats_toolbar type=toolbar no_caption=1 store=no
+
+	@layout stats_split type=hbox width=20%:80%
+
+		@layout stats_left type=vbox parent=stats_split
+
+			@layout stats_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=stats_left
+				@property stats_tree type=treeview parent=stats_tree_lay store=no no_caption=1
+
+			@layout stats_time_lay type=vbox closeable=1 area_caption=Ajavahemik parent=stats_left
+				@property stats_time_tree type=treeview no_caption=1 parent=stats_time_lay
+
+			@layout stats_prod_lay type=vbox closeable=1 area_caption=Toode parent=stats_left
+				@property stats_prod_tree type=treeview no_caption=1 parent=stats_prod_lay
+				@property stats_cat_tree type=treeview parent=stats_prod_lay store=no no_caption=1
+
+		@layout stats_right type=vbox parent=stats_split
+
+			@property stats_table type=table store=no no_caption=1 parent=stats_right
+				@caption Statistika tabel
+
+@default group=stats_balance
+
+	@property stats_balance_toolbar type=toolbar no_caption=1 store=no
+
+	@layout stats_balance_split type=hbox width=20%:80%
+
+		@layout stats_balance_left type=vbox parent=stats_balance_split
+
+			@layout stats_balance_time_lay type=vbox closeable=1 area_caption=Ajavahemik parent=stats_balance_left
+				@property stats_balance_time_tree type=treeview no_caption=1 parent=stats_balance_time_lay
+
+			@layout stats_balance_prod_lay type=vbox closeable=1 area_caption=Toode parent=stats_balance_left
+				@property stats_balance_prod_tree type=treeview no_caption=1 parent=stats_balance_prod_lay
+				@property stats_balance_cat_tree type=treeview parent=stats_balance_prod_lay store=no no_caption=1
+
+		@layout stats_balance_right type=vbox parent=stats_balance_split
+
+			@property stats_balance_table type=table store=no no_caption=1 parent=stats_balance_right
+				@caption Statistika tabel
+
+
+@default group=stats_day
+
+	@property stats_day_toolbar type=toolbar no_caption=1 store=no
+
+	@layout stats_day_split type=hbox width=20%:80%
+
+		@layout stats_day_left type=vbox parent=stats_day_split
+
+			@layout stats_day_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=stats_day_left
+				@property stats_day_tree type=treeview parent=stats_day_tree_lay store=no no_caption=1
+
+			@layout stats_day_time_lay type=vbox closeable=1 area_caption=Ajavahemik parent=stats_day_left
+				@property stats_day_time_tree type=treeview no_caption=1 parent=stats_day_time_lay
+
+			@layout stats_day_prod_lay type=vbox closeable=1 area_caption=Toode parent=stats_day_left
+				@property stats_day_prod_tree type=treeview no_caption=1 parent=stats_day_prod_lay
+				@property stats_day_cat_tree type=treeview parent=stats_day_prod_lay store=no no_caption=1
+
+		@layout stats_day_right type=vbox parent=stats_day_split
+
+			@property stats_day_table type=table store=no no_caption=1 parent=stats_day_right
+				@caption Statistika tabel
+
+@default group=stats_inventory_repair
+
+	@property stats_inventory_repair_toolbar type=toolbar no_caption=1 store=no
+
+	@layout stats_inventory_repair_split type=hbox width=20%:80%
+
+		@layout stats_inventory_repair_left type=vbox parent=stats_inventory_repair_split
+
+			@layout stats_inventory_repair_time_lay type=vbox closeable=1 area_caption=Ajavahemik parent=stats_inventory_repair_left
+				@property stats_inventory_repair_time_tree type=treeview no_caption=1 parent=stats_inventory_repair_time_lay
+
+			@layout stats_inventory_repair_prod_lay type=vbox closeable=1 area_caption=Toode parent=stats_inventory_repair_left
+				@property stats_inventory_repair_prod_tree type=treeview no_caption=1 parent=stats_inventory_repair_prod_lay
+				@property stats_inventory_repair_cat_tree type=treeview parent=stats_inventory_repair_prod_lay store=no no_caption=1
+
+		@layout stats_inventory_repair_right type=vbox parent=stats_inventory_repair_split
+
+			@property stats_inventory_rapair_table type=table store=no no_caption=1 parent=stats_inventory_repair_right
+				@caption Statistika tabel
+
 
 // general subs
 	@groupinfo general_sub parent=general caption="&Uuml;ldine"
@@ -969,6 +1056,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@groupinfo shop_orders caption="Poe tellimused" parent=sales
 	@groupinfo order_undone parent=sales caption="T&auml;itmata poe tellimused"
 	@groupinfo order_orderer_cos parent=sales caption="A Tellijad"
+
+@groupinfo stats caption="Aruanded"
+
+	@groupinfo stats_general caption="&Uuml;ldine aruanne" parent=stats
+	@groupinfo stats_balance caption="Saldo aruanne" parent=stats
+	@groupinfo stats_day caption="P&auml;evade aruanne" parent=stats
+	@groupinfo stats_inventory_repair caption="Inventuuri parandused" parent=stats
 
 ////////// reltypes
 @reltype CONFIG value=1 clid=CL_SHOP_WAREHOUSE_CONFIG
@@ -1049,6 +1143,47 @@ class shop_warehouse extends class_base
 		}
 	}
 
+	function _get_stats_time_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "timespan";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "period_week");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_time_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik ajavahemikud"),
+			"id" => "all_time",
+			"url" => aw_url_change_var($var, "all_time"),
+		));
+
+		$branches = array(
+			"last_week" => t("Eelmine n&auml;dal"),
+			"period_week" => t("K&auml;esolev n&auml;dal"),
+			"period_last_last" => t("&Uuml;leelmine kuu"),
+			"period_last" => t("Eelmine kuu"),
+			"period_current" => t("K&auml;esolev kuu"),
+			"period_next" => t("J&auml;rgmine kuu"),
+			"period_lastyear" => t("Eelmine aasta"),
+			"period_year" => t("K&auml;esolev aasta"),
+		);
+
+		foreach($branches as $id => $caption)
+		{
+			$tv->add_item("all_time", array(
+				"id" => $id,
+				"name" => $caption,
+				"url" => aw_url_change_var(array(
+					$var => $id,
+				)),
+			));
+		}
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -1063,6 +1198,12 @@ class shop_warehouse extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "stats_inventory_repair_time_tree":
+			case "stats_balance_time_tree":
+			case "stats_day_time_tree":
+			case "stats_time_tree":
+				return $this->_get_stats_time_tree($arr);
+				break;
 			case "purchase_notes_s_from":
 			case "purchase_bills_s_from":
 			case "sales_notes_s_from":
@@ -1153,12 +1294,19 @@ class shop_warehouse extends class_base
 			case "storage_list":
 				$this->do_storage_list_tbl($arr);
 				break;
+			case "stats_day_prod_tree":
+			case "stats_balance_prod_tree":
+			case "stats_prod_tree":
 			case "arrival_prod_tree":
+			case "stats_inventory_repair_prod_tree":
 			case "prod_tree":
 				$retval = $this->get_prod_tree($arr);
 				break;
-
+			case "stats_day_cat_tree":
+			case "stats_balance_cat_tree":
+			case "stats_cat_tree":
 			case "arrival_prod_cat_tree":
+			case "stats_inventory_repair_cat_tree":
 			case "prod_cat_tree":
 				$retval = $this->mk_prodg_tree($arr);
 				break;
@@ -1403,6 +1551,332 @@ class shop_warehouse extends class_base
 
 			$arr["obj_inst"]->set_meta("order_cur_pages", $arr["request"]["pgnr"]);
 		}
+	}
+
+	function _get_prod_s_sbt($arr){
+		$arr['prop']['onclick'] = "update_products_table();";
+		return PROP_OK;
+	}
+
+	function _get_stats_inventory_rapair_table($arr)
+	{
+		$srch = $arr["request"];
+
+		$fields = array(
+			"prod" => t("Artikkel"),
+			"prod_name" => t("Nimetus"),
+			"weight" => t("kaal (gr/m2)"),
+			"width" => t("Laius (mm)"),
+			"begin_count" => t("Perioodi algsaldo"),
+			"amount" => t("Kogus kg"),	
+			"len" => t("Kogus jm."),	
+			"price" => t("hind EEK/t"),
+			"balance" => t("Hetke saldo"),
+			"repair" => t("Parandus"),
+		);
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		foreach($fields as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+				"sortable" => 1,
+			));
+		}
+
+		$ol = $arr["obj_inst"] -> get_inventories();
+		$products = $arr["obj_inst"] -> get_products();
+		foreach($ol->arr() as $o)
+		{
+			$t->define_field(array(
+				"name" => $o->prop("date"),
+				"caption" => date("d.m.Y" , $o->prop("date")),
+				"sortable" => 1,
+			));
+		}
+
+		$ol = $arr["obj_inst"] -> get_movements();
+		$notes = $arr["obj_inst"] -> get_delivery_note_rows($filter);
+		$movements = array();
+		foreach($ol->arr() as $note)
+		{
+			$movements[$note->prop("product")]+=$note->prop("amount");
+		}
+
+		foreach($products->arr() as $o)
+		{
+			$amounts = $arr["obj_inst"]->get_amount(array(
+				"prod" => $o->id(),
+			));
+			$count = 0;
+			if($amounts->count())
+			{
+				$amount = reset($amounts->arr());
+				$count = $amount->prop("amount");
+			}
+
+			$t->define_data(array(
+				"prod_name" => $o->name(),
+//				"weight" => t("kaal (gr/m2)"),
+//				"width" => t("Laius (mm)"),
+//				"begin_count" => t("Perioodi algsaldo"),
+//				"amount" => t("Kogus kg"),	
+//				"len" => t("Kogus jm."),	
+//				"price" => t("hind EEK/t"),
+				"balance" => $count,
+				"repair" => $movements[$o->id()],
+			));
+		}
+	}
+
+	function _get_stats_balance_table($arr)
+	{
+		$srch = $arr["request"];
+		$fields = array(
+			"prod_name" => t("Nimetus"),
+			"weight" => t("kaal (gr/m2)"),
+			"width" => t("Laius (mm)"),
+			"begin_count" => t("Perioodi algsaldo"),
+			"amount" => t("Kogus kg"),	
+			"len" => t("Kogus jm."),	
+			"price" => t("hind EEK/t"),
+			"balance" => t("Hetke saldo"),
+			"in" => t("Sisse"),
+			"tell" => t("Tell.nr."),
+			"out" => t("V&auml;lja"),
+			"tell_out" => t("Tell.nr."),
+			"residual" => t("J&auml;&auml;k")
+		);
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		foreach($fields as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+				"sortable" => 1,
+			));
+		}
+	}
+
+
+	function _get_stats_day_table($arr)
+	{
+		$srch = $arr["request"];
+
+		if(!$srch["stats_type"])
+		{
+			$srch["stats_type"] = "all";
+		}
+		$fields = array(
+			"prod_name" => t("Nimetus"),
+			"weight" => t("kaal (gr/m2)"),
+			"width" => t("Laius (mm)"),
+			"sum" => t("Kokku")
+		);
+		if(!$arr["request"]["timespan"])
+		{
+			$arr["request"]["timespan"] = "period_week";
+		}
+		$filter = $this->get_range($arr["request"]["timespan"]);
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		foreach($fields as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+				"sortable" => 1,
+			));
+		}
+
+		$start = $filter["from"];
+		while($start < $filter["to"])
+		{
+			$t->define_field(array(
+				"name" => $start,
+				"caption" => date("d.m.Y" , $start),
+				"sortable" => 1,
+			));
+
+			$start+= 86400;
+		}
+		$filter["category"] = $arr["request"]["pgtf"];
+		$filter["action_type"] = $srch["stats_type"];
+		$ol = $arr["obj_inst"] -> get_movements($filter);//		arr($ol);
+		$data = array();
+		$all = array();
+		foreach($ol->arr() as $o)
+		{
+			$ti = $o->prop("date");
+			$date = mktime(0,0,0,date("m" , $ti) , date("d" , $ti), date("Y" , $ti));
+			$data[$o->prop("product")][$date]+= $o->prop("amount");
+			$all[$o->prop("product")]+=$o->prop("amount");
+		}
+
+
+		$products = $arr["obj_inst"] -> get_products($filter);
+		foreach($products->names() as $id => $name)
+		{
+			$prod_data = array(
+				"prod_name" => $name,
+			);
+			if(is_array($data[$id]))
+			{
+				$prod_data = $prod_data + $data[$id];
+			}
+			if(isset($all[$id]))
+			{
+				$prod_data["sum"] = $all[$id];
+			}
+			$t->define_data($prod_data);
+		}
+	}
+
+	private function get_range($val)
+	{
+		switch($val)
+		{
+			case "period_last_week":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-1, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")-1, 8, date("Y")),
+				);
+			break;
+			case "period_week":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m"), 1, date("Y")),
+					"to" => mktime(0,0,0, date("m"), 8, date("Y")),
+				);
+			break;
+			case "period_last_last":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-2, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")-1, 1, date("Y")),
+				);
+			break;
+			case "period_last":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-1, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m"), 1, date("Y")),
+				);
+			break;
+			case "period_current":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m"), 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")+1, 1, date("Y")),
+				);
+			break;
+			case "period_next":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")+1, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")+2, 1, date("Y")),
+				);
+			break;
+			case "period_year":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, 1, 1, date("Y")),
+					"to" => mktime(0,0,0, 1, 1, date("Y")+1),
+				);
+			break;
+			case "period_lastyear":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, 1, 1, date("Y")-1),
+					"to" => mktime(0,0,0,1 , 1, date("Y")),
+				);
+			break;
+			default :return null;
+		}
+		return $filt["bill_date_range"];
+	}
+
+	function _get_stats_table($arr)
+	{
+		$srch = $arr["request"];
+
+
+
+		if(!$srch["stats_type"])
+		{
+			$srch["stats_type"] = "all";
+		}
+		if(!$arr["request"]["timespan"])
+		{
+			$arr["request"]["timespan"] = "period_week";
+		}
+		$filter = $this->get_range($arr["request"]["timespan"]);
+		$filter["category"] = $arr["request"]["pgtf"];
+
+		$fields = array(
+//			"id" => t("Tellimus"),
+			"prod" => t("Artikkel"),
+			"prod_name" => t("Nimetus"),
+			"weight" => t("kaal (gr/m2)"),
+			"width" => t("Laius (mm)"),
+			"begin_count" => t("Perioodi algsaldo"),
+			"income" => t("Perioodi sissetulek"),
+			"outcome" => t("Perioodi v&auml;ljaminek"),
+			"inventory_repair" => t("Inventuuri parandus"),
+			"final_count" => t("Perioodi l&otilde;ppsaldo"),
+			"final_count_check" => t("Perioodi l&otilde;ppsaldo kontroll"),
+		);
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		foreach($fields as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+				"sortable" => 1,
+			));
+		}
+
+		$ol = $arr["obj_inst"] -> get_movements();
+		$movements_in = array();
+		$movements_out = array();
+
+		$notes = $arr["obj_inst"] -> get_delivery_note_rows($filter);
+
+		foreach($ol->arr() as $note)
+		{
+			if($note->prop("from_wh") == $arr["obj_inst"]->id())
+			{
+				$movements_out[$note->prop("product")]+=$note->prop("amount");
+			}
+			if($note->prop("to_wh") == $arr["obj_inst"]->id())
+			{
+				$movements_in[$note->prop("product")]+=$note->prop("amount");
+			}
+		}
+
+		$ol = $products = $arr["obj_inst"] -> get_products();
+//		$ol = $arr["obj_inst"] -> get_packagings();
+		foreach($ol->arr() as $o)
+		{
+			$amounts = $arr["obj_inst"]->get_amount(array(
+				"prod" => $o->id(),
+			));
+			$count = 0;
+			if($amounts->count())
+			{
+				$amount = reset($amounts->arr());
+				$count = $amount->prop("amount");
+			}
+			$t->define_data(array(
+				"begin_count" => $count - $movements_in[$o->id()] + $movements_out[$o->id()],
+				"final_count" => $count,
+				"income" => $movements_in[$o->id()],
+				"outcome" => $movements_out[$o->id()],
+//				"prod_name" => get_name($o->prop("product")),
+//				"id" => html::get_change_url($o->prop("delivery_note"), $vars, $o->prop("delivery_note.name")),
+				"prod_name" => $o->name(),
+			));
+		}
+
 	}
 
 	function _get_osearch_table($arr)
@@ -2358,14 +2832,7 @@ class shop_warehouse extends class_base
 			{
 				$this->prod_tree_root = $arr["request"]["ptf"];
 			}
-			$tb->add_menu_item(array(
-				"parent" => "new",
-				"text" => t("Kaust"),
-				"link" => $this->mk_my_orb("new", array(
-					"parent" => $this->prod_tree_root,
-					"return_url" => get_ru(),
-				), CL_MENU)
-			));
+			$clids = $this->get_warehouse_configs($data, "prod_tree_clids");
 
 			$tb->add_menu_item(array(
 				"parent" => "new",
@@ -2376,6 +2843,35 @@ class shop_warehouse extends class_base
 					"warehouse" => $data["obj_inst"]->id(),
 				), CL_SHOP_PRODUCT)
 			));
+
+			if($this->can("view", automatweb::$request->arg("ptf")))
+			{
+				$ptf_o = obj(automatweb::$request->arg("ptf"));
+
+				$tb->add_menu_item(array(
+					"parent" => "new",
+					"text" => t("Pakend"),
+					"link" => $this->mk_my_orb("new", array(
+						"parent" => $ptf_o->id(),
+						"return_url" => get_ru(),
+						"alias_to" => $ptf_o->id(),
+						"reltype" => 2,
+					), CL_SHOP_PRODUCT_PACKAGING)
+				));
+			}
+
+			$clid_captions = get_class_picker(array("field" => "name"));
+			foreach($clids as $clid)
+			{
+				$tb->add_menu_item(array(
+					"parent" => "new",
+					"text" => $clid_captions[$clid],
+					"link" => $this->mk_my_orb("new", array(
+						"parent" => $this->prod_tree_root,
+						"return_url" => get_ru(),
+					), $clid)
+				));
+			}
 
 			$tb->add_button(array(
 				"name" => "copy",
@@ -2443,6 +2939,14 @@ class shop_warehouse extends class_base
 		{
 			$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
 		}
+
+		// Add the index update button here for now
+		$tb->add_button(array(
+			'name' => 'update_index',
+			'img' => 'refresh.gif',
+			'action' => 'update_products_index',
+			'tooltip' => t('Uuenda toodete otsingu indeksit'),
+		));
 	}
 
 	function mk_prodg_toolbar(&$prop)
@@ -2831,6 +3335,37 @@ class shop_warehouse extends class_base
 		}
 	}
 
+	function _get_stats_day_tree($arr)
+	{
+		$tree = &$arr["prop"]["vcl_inst"];
+		$tree->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "prod_tree",
+		));
+		$items = array(
+			"all" => t("K&otilde;ik"),
+			"purchases" => t("Ostud"),
+			"whole_out" => t("Terved v&auml;lja"),
+			"back_to_warehouse" => t("Tagastus lattu"),
+			"half_out" => t("Poolikud v&auml;lja"),
+		);
+
+		foreach($items as $name => $caption)
+		{
+			$url = aw_url_change_var(array("stats_type"=> $name));
+			$var = "stats_type";
+			$tree->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all");
+
+			$tree->add_item(0, array(
+				"url" => $url,
+				"name" => $caption,
+				"id" => $name,
+			));
+		}
+	}
+
+
+
 	function get_prod_tree($arr)
 	{
 		$chk = $this->get_warehouse_configs($arr, "no_prod_tree");
@@ -2839,23 +3374,20 @@ class shop_warehouse extends class_base
 			return PROP_IGNORE;
 		}
 		
-		$clids = CL_MENU;
+		$clids = array(CL_MENU);
 		if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 		{
 			$pt = $this->prod_fld;
 			$root_name = obj($pt)->name();
 
-			$_clids = $this->get_warehouse_configs($arr, "prod_tree_clids");
-			if(is_array($_clids) && count($_clids) > 0)
-			{
-				$clids = $_clids;
-			}
+			$clids = $this->get_warehouse_configs($arr, "prod_tree_clids");
 		}
 		else
 		{
 			$pt = $this->get_warehouse_configs($arr, "prod_fld");
 			$root_name = t("Artiklid");
 		}
+
 		$ol = new object_list(array(
 			"parent" => $pt,
 			"class_id" => $clids,
@@ -2877,10 +3409,10 @@ class shop_warehouse extends class_base
 		$params["group"] = $arr["request"]["group"];
 		$params["clids"] = $clids;
 		$params["parent"] = " ";
-		$gbf = $this->mk_my_orb("get_prod_tree_level",$params, CL_SHOP_WAREHOUSE);
+		$gbf = $this->mk_my_orb("get_prod_tree_level", $params, CL_SHOP_WAREHOUSE);
 		$tree->start_tree(array(
 			"has_root" => true,
-			"root_name" => $root_name,
+			"root_name" => trim(automatweb::$request->arg("ptf")) == $pt ? "<strong>".$root_name."</strong>" : $root_name,
 			"root_url" => aw_url_change_var(array("ptf"=> $this->prod_fld, "pgtf"=>null)),
 			"root_icon" => icons::get_icon_url(CL_MENU),
 			"type" => TREE_DHTML,
@@ -2946,11 +3478,20 @@ class shop_warehouse extends class_base
 				$filt["ptf"] = $o->id();
 				unset($filt[$g."_s_art_cat"]);
 				unset($filt["pgtf"]);
-				$ol = $this->get_products_list_ol(array(
-					"request" => $filt,
-				));
-				$count = $ol["ol"]->count();
+				if($o->is_a(CL_SHOP_PRODUCT))
+				{
+					$ol = $o->get_packagings();
+					$count = $ol->count();
+				}
+				else
+				{
+					$ol = $this->get_products_list_ol(array(
+						"request" => $filt,
+					));
+					$count = $ol["ol"]->count();
+				}
 				break;
+
 			case "storage_movements":
 			case "storage_writeoffs":
 				$filt["ptf"] = $o->id();
@@ -2965,7 +3506,7 @@ class shop_warehouse extends class_base
 		}
 		$tree->add_item(0, array(
 			"url" => $url,
-			"name" => sprintf("%s (%s)", $o->name(), $count),
+			"name" => sprintf("%s (%u)", $o->name(), $count),
 			"id" => $o->id(),
 		));
 		$check_ol = new object_list(array(
@@ -3098,6 +3639,30 @@ class shop_warehouse extends class_base
 		}
 	}
 
+	private function decide_search_method($arr)
+	{
+		$fields = array(
+		//	'prod_s_name' => 'prod_s_name',
+		//	'prod_s_code' => 'prod_s_code',
+			'prod_s_barcode' => 'prod_s_barcode',
+			'prod_s_cat' => 'prod_s_cat',
+			'prod_s_count' => 'prod_s_count',
+			'prod_s_price_from' => 'prod_s_price_from',
+			'prod_s_price_to' => 'prod_s_price_to',
+		//	'prod_s_pricelist' => 'prod_s_pricelist'
+		);
+		foreach ($fields as $field)
+		{
+			$value = automatweb::$request->arg($field);
+			if (!empty($value))
+			{
+				return 'regular';
+			}
+		}
+
+		return 'index';
+	}
+
 	private function get_products_list_ol($arr)
 	{
 		$oids = array();
@@ -3128,6 +3693,7 @@ class shop_warehouse extends class_base
 		{
 			$params["barcode"] = "%".$varcode."%";
 		}
+
 		$group = $this->get_search_group($arr);
 		if(($from = automatweb::$request->arg($group."_s_price_from")) || ( automatweb::$request->arg($group."_s_price_to")))
 		{
@@ -3240,11 +3806,11 @@ class shop_warehouse extends class_base
 			$ot->add(new object_list($sparams));
 		}
 		$pi = get_instance(CL_SHOP_PRODUCT);
-		// for now the replacement products are in user1 field
-		// but i think it should be different, when we have cleared up in what way the replacement products really should be represented
-		// like are they real products? or just can they be real products? are they just strings connecting different products? --dragut
-		$replacement_products = $this->find_replacement_products($ot);
-		$ot->add($replacement_products);
+
+	// I'll comment this replacement prods thingie out here for now
+	//	$replacement_products = $this->find_replacement_products($ot);
+	//	$ot->add($replacement_products);
+
 		foreach($ot->arr() as $o)
 		{
 			$remove = $below_min = $chk_min = $prodtotal = 0;
@@ -3325,6 +3891,52 @@ class shop_warehouse extends class_base
 		return $res;
 	}
 
+	public function get_products_list_from_index($arr, $request)
+	{
+		$params = array();
+		if($code = $request->arg("prod_s_code"))
+		{
+			if($this->config && $cid = $this->config->prop("short_code_ctrl"))
+			{
+				$short_code = get_instance(CL_CFGCONTROLLER)->check_property($cid, null, $code, null, null, null);
+				$params[] = "(code like '%".$code."%' or short_code like '%".$short_code."%')";
+			}
+			else
+			{
+				$params[] = "'%".$code."%'";
+			}
+		}
+
+		if($name = $request->arg("prod_s_name"))
+		{
+			$params["name"] = "name like '%".$name."%'";
+		}
+
+		$ol = new object_list();
+		if (!empty($params))
+		{
+			$q = "select oid from aw_shop_products_index where ".implode(' AND ', $params)."";
+			$res = $this->db_fetch_array($q);
+			$oids = array();
+			foreach ($res as $r)
+			{
+				$oids[] = $r['oid'];
+			}
+			if (!empty($oids))
+			{
+				$ol = new object_list(array(
+					'class_id' => CL_SHOP_PRODUCT,
+					'oid' => $oids
+				));
+			}
+		}
+
+		return array(
+			'ol' => $ol,
+		);
+	
+	}
+
 	private function find_replacement_products($prods)
 	{
 		if ($prods->count() <= 0)
@@ -3335,7 +3947,7 @@ class shop_warehouse extends class_base
 
 		foreach ($prods->arr() as $prod_id => $prod)
 		{
-			if($replacement_code = $prod->prop('user1'))
+			if($replacement_code = $prod->prop('type_code'))
 			{
 				$replacements_codes[$prod_id] = $replacement_code;
 			}
@@ -3368,28 +3980,202 @@ class shop_warehouse extends class_base
 		$ol->remove($ro);
 	}
 
+	protected function _init_prod_package_list_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_chooser();
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center",
+			"width" => 60,
+			"sortable" => true,
+			"sorting_field" => "jrk_num",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "left",
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "center",
+			"width" => 60,
+			"sortable" => true,
+			"sorting_field" => "price_num",
+		));
+		if($this->get_warehouse_configs($arr, "show_purveyance"))
+		{
+			$t->define_field(array(
+				"name" => "purveyance",
+				"caption" => t("Tarnijad"),
+				"align" => "left",
+			));
+		}
+
+		$t->set_numeric_field(array("jrk_num", "price_num"));
+	}
+
+	protected function get_products_packages_list($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_prod_package_list_tbl($arr);
+
+		$ptf_o = obj(automatweb::$request->arg("ptf"));
+		$t->set_caption(sprintf(t("Toote '%s' pakendid"), parse_obj_name($ptf_o->name())));
+
+		$data = $ptf_o->get_packagings(array("odl" => true))->arr();
+
+		$show_purveyance = $this->get_warehouse_configs($arr, "show_purveyance");
+		if($show_purveyance)
+		{
+			$purveyance_odl = new object_data_list(
+				array(
+					"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+					"packaging" => array_merge(array(-1), array_keys($data)),
+					"company" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+				),
+				array(
+					CL_SHOP_PRODUCT_PURVEYANCE => array("company.name", "company", "packaging"),
+				)
+			);
+			$purveyance_urls = array();
+			foreach($purveyance_odl->arr() as $pdata)
+			{
+				$purveyance_urls[$pdata["packaging"]][] = html::href(array(
+					"caption" => parse_obj_name($pdata["company.name"]),
+					"url" => $this->mk_my_orb("change", array("id" => $pdata["company"], "return_url" => get_ru()), CL_CRM_COMPANY),
+				));
+			}
+		}
+
+		foreach($data as $oid => $odata)
+		{
+			$row = array(
+				"oid" => $oid,
+				"name" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $oid, "return_url" => get_ru()), CL_SHOP_PRODUCT_PACKAGING),
+					"caption" => parse_obj_name($odata["name"]),
+				)),
+				"price" => html::textbox(array(
+					"name" => "products_list[$oid][price]",
+					"value" => $odata["price"],
+					"size" => 3,
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "products_list[$oid][jrk]",
+					"value" => $odata["jrk"],
+					"size" => 3,
+				)),
+				"price_num" => $odata["price"],
+				"jrk_num" => $odata["price"],
+			);
+
+			if($show_purveyance && isset($purveyance_urls[$oid]))
+			{
+				$row["purveyance"] = implode(", ", $purveyance_urls[$oid]);
+			}
+
+			$t->define_data($row);
+		}
+	}
+	/**
+		@attrib name=ajax_update_products_table all_args=1
+		@param id required type=int
+	**/
+	function ajax_update_products_table($arr)
+	{
+		$this->config = obj(obj($arr["id"])->prop("conf"));
+
+		classload('vcl/table');
+		$t = new vcl_table();
+
+		$arr['prop'] = array('vcl_inst' => $t);
+		$arr['obj_inst'] = new object($arr['id']);
+
+		$this->get_products_list($arr);
+
+		print iconv(aw_global_get("charset"), "UTF-8", $t->get_html());
+
+		exit();
+	}
+
 	function get_products_list(&$arr)
 	{
 		$tb = $arr["prop"]["vcl_inst"];
 		$group = $this->get_search_group($arr);
+		$show_purveyance = $this->get_warehouse_configs($arr, "show_purveyance");
+
 		if ($this->can("view", automatweb::$request->arg("pgtf")))
 		{
 			$tb->set_caption(sprintf(t("Artiklid kategoorias %s"), obj($arr["request"]["pgtf"])->path_str(array("start_at" => $this->config->prop("prod_type_fld")))));
 		}
 		elseif($this->can("view", automatweb::$request->arg("ptf")))
 		{
-			$tb->set_caption(sprintf(t("Artiklid kaustas %s"), obj($arr["request"]["ptf"])->path_str(array("start_at" => $this->config->prop("prod_fld")))));
+			$ptf_o = obj(automatweb::$request->arg("ptf"));
+			if($ptf_o->is_a(CL_SHOP_PRODUCT))
+			{
+				return $this->get_products_packages_list($arr);
+			}
+			else
+			{
+				$tb->set_caption(sprintf(t("Artiklid kaustas %s"), $ptf_o->path_str(array("start_at" => $this->config->prop("prod_fld")))));
+			}
 		}
 		if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 		{
 			$arr["warehouses"] = array($arr["obj_inst"]->id());
 		}
 		$this->_init_prod_list_list_tbl($tb, $arr);
-		$res = $this->get_products_list_ol($arr);
+
+		// lets try to implement here the separate search method thingie
+		// the idea is, that decide_search_method somehow decides if it can search
+		// index table or has to make the complex search --dragut
+		$search_method = $this->decide_search_method($arr);
+	//	arr($search_method);
+		switch ($search_method)
+		{
+			case 'index':
+				$res = $this->get_products_list_from_index($arr, automatweb::$request);
+				break;
+			case 'regular':
+				$res = $this->get_products_list_ol($arr);
+				break;
+		}
+
+	//	$res = $this->get_products_list_ol($arr);
+	//	$res = $this->get_products_list_from_index($arr);
+
 		classload("core/icons");
 		$pi = get_instance(CL_SHOP_PRODUCT);
 		//$ol = $ot->to_list();
 		$ol = $res["ol"]->arr();
+
+		if($show_purveyance)
+		{
+			$purveyance_odl = new object_data_list(
+				array(
+					"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+					"product" => array_merge(array(-1), array_keys($ol)),
+					"company" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+				),
+				array(
+					CL_SHOP_PRODUCT_PURVEYANCE => array("company.name", "company", "product"),
+				)
+			);
+			$purveyance_urls = array();
+			foreach($purveyance_odl->arr() as $pdata)
+			{
+				$purveyance_urls[$pdata["product"]][] = html::href(array(
+					"caption" => parse_obj_name($pdata["company.name"]),
+					"url" => $this->mk_my_orb("change", array("id" => $pdata["company"], "return_url" => get_ru()), CL_CRM_COMPANY),
+				));
+			}
+		}
+
 		foreach($ol as $o)
 		{
 			if ($o->class_id() == CL_MENU)
@@ -3490,7 +4276,7 @@ class shop_warehouse extends class_base
 			}
 			foreach($arr["warehouses"] as $wh)
 			{
-				foreach($res["units"][$prodid] as $i=>$unit)
+				foreach(safe_array($res["units"][$prodid]) as $i=>$unit)
 				{
 					if(!$unit)
 					{
@@ -3510,6 +4296,10 @@ class shop_warehouse extends class_base
 				$cats[] = $c->prop("to.name");
 			}
 			$data["cat"] = implode(',', $cats);
+			if($show_purveyance && isset($purveyance_urls[$o->id()]))
+			{
+				$data["purveyance"] = implode(", ", $purveyance_urls[$o->id()]);
+			}
 			$tb->define_data($data);
 		}
 		$tb->set_numeric_field("hidden_ord");
@@ -3655,6 +4445,16 @@ class shop_warehouse extends class_base
 				"align" => "center"
 			));
 		}
+
+		if($this->get_warehouse_configs($arr, "show_purveyance"))
+		{
+			$t->define_field(array(
+				"name" => "purveyance",
+				"caption" => t("Tarnijad"),
+				"align" => "left",
+			));
+		}
+
 /*		$conf = obj($arr["obj_inst"]->prop("conf"));
 		if (!$conf->prop("no_count"))
 		{
@@ -5559,13 +6359,31 @@ class shop_warehouse extends class_base
 	{
 		if(is_oid($arr["parent"]) && $this->can("add" , $arr["parent"]))
 		{
-			foreach($_SESSION["shop_warehouse"]["cut_products"] as $id)
+			foreach(safe_array(ifset($_SESSION, "shop_warehouse", "cut_products")) as $id)
 			{
 				$o = obj($id);
-				$o->set_parent($arr["parent"]);
-				$o->save();
+				if($o->is_a(CL_SHOP_PRODUCT_PACKAGING))
+				{
+					$conns = $o->connections_to(array(
+						"from.class_id" => CL_SHOP_PRODUCT,
+						"type" => "RELTYPE_PACKAGING",
+					));
+					foreach($conns as $conn)
+					{
+						$conn->delete();
+					}
+					obj($arr["parent"])->connect(array(
+						"to" => $o->id(),
+						"type" => "RELTYPE_PACKAGING",
+					));
+				}
+				else
+				{
+					$o->set_parent($arr["parent"]);
+					$o->save();
+				}
 			}
-			foreach($_SESSION["shop_warehouse"]["copy_products"] as $id)
+			foreach(safe_array(ifset($_SESSION, "shop_warehouse", "copy_products")) as $id)
 			{
 				$o = obj($id);
 				$new_o = new object();
@@ -5577,6 +6395,14 @@ class shop_warehouse extends class_base
 				$new_o->set_name($o->name());
 				$new_o->set_parent($arr["parent"]);
 				$new_o->save();
+
+				if($o->is_a(CL_SHOP_PRODUCT_PACKAGING))
+				{
+					obj($arr["parent"])->connect(array(
+						"to" => $new_o->id(),
+						"type" => "RELTYPE_PACKAGING",
+					));
+				}
 			}
 		}
 		$_SESSION["shop_warehouse"]["copy_products"] = null;
@@ -5743,6 +6569,10 @@ class shop_warehouse extends class_base
 		{
 			$arr["args"]["ptf"] = $arr["request"]["ptf"];
 		}
+		if(isset($arr["request"]["timespan"]))
+		{
+			$arr["args"]["timespan"] = $arr["request"]["timespan"];
+		}
 		if(isset($arr["request"]["pgtf"]))
 		{
 			$arr["args"]["pgtf"] = $arr["request"]["pgtf"];
@@ -5822,6 +6652,41 @@ class shop_warehouse extends class_base
 				$arr["args"][$g."_s_".$var] = $arr["request"][$g."_s_".$var] ;
 			}
 		}
+	}
+
+	public function callback_generate_scripts($arr)
+	{
+		if ($arr['request']['group'] == 'articles')
+		{
+			$vars = array('prod_s_name', 'prod_s_code', 'prod_s_barcode');
+
+			$ajax_vars = array();
+
+			foreach ($vars as $var)
+			{
+				$ajax_vars[] = $var.": document.getElementsByName('".$var."')[0].value\n";
+			}
+			return "
+
+			function update_products_table(){
+
+				var result=[];
+				result = $('input[name^=prod_s]'); 
+
+				button=document.getElementsByName('prod_s_sbt')[0]; 
+				button.disabled = true; 
+				$.post('/automatweb/orb.aw?class=shop_warehouse&action=ajax_update_products_table&id=".$arr['obj_inst']->id()."&'+result.serialize(),{
+					id: ".$arr["obj_inst"]->id()."
+					, ".join(", " , $ajax_vars)."},function(html){  
+						x=document.getElementsByName('products_list');
+						x[0].innerHTML = html; 
+						button.disabled = false;
+				});
+			}
+
+			";
+		}
+		return $js;
 	}
 
 	/** returns a list of config forms that can be used to enter products
@@ -9427,6 +10292,29 @@ $oo = get_instance(CL_SHOP_ORDER);
 	{
 		return $this->_get_purchase_cust_groups_tree(&$arr);
 	}
+
+	/**
+		@attrib name=update_products_index
+	**/
+	function update_products_index($arr)
+	{
+		$res = $this->db_fetch_array('select name, code, short_code, aw_oid from aw_shop_products left join objects on oid = aw_oid');
+		foreach ($res as $r)
+		{
+			$this->db_query("
+				replace 
+					into aw_shop_products_index 
+				set 
+					code = '".addslashes($r['code'])."', 
+					oid = '".$r['aw_oid']."', 
+					short_code = '".addslashes($r['short_code'])."', 
+					name = '".addslashes($r['name'])."'
+			");
+		}
+
+		return $arr['post_ru'];
+	}
+
 }
 
 ?>
