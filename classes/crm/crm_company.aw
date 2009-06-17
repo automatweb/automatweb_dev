@@ -88,6 +88,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 			@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_seller_l
 			@caption Kliendpoolne kontaktisik 3
 
+			@property extern_id type=textbox table=kliendibaas_firma field=extern_id parent=co_bottom_seller_l size=10
+			@caption Siduss&uuml;steemi ID
+
 		@layout co_bottom_seller_r type=vbox parent=co_bottom_seller
 
 			@property cust_priority type=textbox table=kliendibaas_firma  parent=co_bottom_seller_r
@@ -157,9 +160,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 			@property buyer_buyer_contract_person type=relpicker reltype=RELTYPE_CONTACT_PERSON store=no parent=co_bottom_buyer_r prop_cb=1
 			@caption Ostja kontaktisik 1
-
-
-	@property extern_id type=hidden table=kliendibaas_firma field=extern_id no_caption=1
 
 
 @default group=open_hrs
@@ -1825,10 +1825,6 @@ class crm_company extends class_base
 			{
 				$name = '<span class=&quot;'.$style.'&quot;>'.$name.'</span>';
 			}
-			if($conn->prop('to') == $this->active_node)
-			{
-				$name='<b>'.$name.'</b>';
-			}
 
 			$tmp_obj = $conn->to();
 
@@ -1855,6 +1851,12 @@ class crm_company extends class_base
 					"text" => t("Kustuta")
 				));
 				$name = $name." ".$popm->get_menu();
+			}
+
+			if($conn->prop('to') == $this->active_node)
+			{
+//				$name='<b>'.$name.'</b>';
+				$tree->set_selected_item($node_id);
 			}
 
 			$tree_node_info = array(
@@ -1944,8 +1946,8 @@ class crm_company extends class_base
 						"name" => $cat,
 						"iconurl" => icons::get_icon_url(CL_MENU),
 						"url" => aw_url_change_var(array(
-							"tf"=> 'cat'.$id,
-							"name" => $_GET["tf"] == 'cat'.$id ? "<b>".$cat."</b>" : $cat,
+							"tf" => 'cat'.$id,
+//							"name" => $_GET["tf"] == 'cat'.$id ? "<b>".$cat."</b>" : $cat,
 							"customer_search_submit" => null,
 							"customer_search_submit_and_change" => null,
 						), false, $origurl)
@@ -1955,7 +1957,8 @@ class crm_company extends class_base
 					{
 						$tree->add_item('cat'.$id, array(
 							"id" => 'cat'.$o->id(),
-							"name" => $_GET["tf"] == 'st'.$o->id() ? "<b>".$o->name()."</b>" : $o->name(),
+							"name" => $o->name(),
+//							"name" => $_GET["tf"] == 'st'.$o->id() ? "<b>".$o->name()."</b>" : $o->name(),
 							"url" => aw_url_change_var(array(
 								"tf" => 'st'.$o->id(),
 								"category" => 'st_'.$o->id(),
@@ -1963,6 +1966,10 @@ class crm_company extends class_base
 								"customer_search_submit_and_change" => null,
 							), false, $origurl),
 						));
+						if($_GET["tf"] == 'st'.$o->id())
+						{
+							$tree->set_selected_item('cat'.$o->id());
+						}
 						$this->get_s_tree_stuff('cat'.$o->id(), $tree, 0);
 					}
 				}
@@ -2020,11 +2027,6 @@ class crm_company extends class_base
 			$tmp_obj = new object($prof_conn->to());
 			$name = strlen($tmp_obj->prop('name_in_plural'))?$tmp_obj->prop('name_in_plural'):$tmp_obj->prop('name');
 
-			if($tmp_obj->id()==$this->active_node && ($_GET["unit"] == $obj->id()))
-			{
-				$name = '<b>'.$name.'</b>';
-			}
-
 			$url = array();
 			$url = aw_url_change_var(array('cat'=>$prof_conn->prop('to'),$key=>$value), false, $origurl);
 			$tree->add_item($this_level_id,
@@ -2036,6 +2038,10 @@ class crm_company extends class_base
 					"class_id" => $tmp_obj->class_id()
 				)
 			);
+			if($tmp_obj->id()==$this->active_node && ($_GET["unit"] == $obj->id()))
+			{
+				$tree->set_selected_item($node_id);
+			}
 			if($show_people && count($p2s) > 0)
 			{
 
@@ -2052,7 +2058,8 @@ class crm_company extends class_base
 					$name = parse_obj_name($po->name());
 					if($po->id() == $this->active_node && ($_GET["unit"] == $obj->id()))
 					{
-						$name = '<b>'.$name.'</b>';
+//						$name = '<b>'.$name.'</b>';
+						$tree->set_selected_item($po->id());
 					}
 					$tree->add_item($node_id,
 						array(
@@ -2075,7 +2082,8 @@ class crm_company extends class_base
 				$name = parse_obj_name($po->name());
 				if($po->id() == $this->active_node && ($_GET["unit"] == $obj->id()))
 				{
-					$name = '<b>'.$name.'</b>';
+//					$name = '<b>'.$name.'</b>';
+					$tree->set_selected_item($po->id()."_".$po->id());
 				}
 				$tree->add_item($this_level_id,
 					array(
@@ -4009,20 +4017,20 @@ class crm_company extends class_base
 		$this->crm_company_init();
 		if(array_key_exists('request',$arr))
 		{
-			$this->do_search = $arr['request']['contact_search'];
+			$this->do_search = ifset($arr['request'], 'contact_search');
 		}
 		else
 		{
 			$this->do_search = $arr['contact_search'];
 		}
 
-		if(is_oid($arr['request']['cat']))
+		if(is_oid(automatweb::$request->arg('cat')))
 		{
-			$this->cat = $arr['request']['cat'];
+			$this->cat = automatweb::$request->arg('cat');
 		}
 
-		$this->unit=$arr['request']['unit'];
-		$this->category=$arr['request']['category'];
+		$this->unit = automatweb::$request->arg('unit');
+		$this->category = automatweb::$request->arg('category');
 
 		if ( $this->get_cval(aw_global_get('uid').'_crm_projects_search_mode') == CRM_PROJECTS_SEARCH_DETAIL )
 		{
