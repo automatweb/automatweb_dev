@@ -251,6 +251,13 @@
 			#layout persons_other_options type=vbox parent=grp_persons_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
 				@property poo_quantity_broup_by type=chooser multiple=1 orient=vertical parent=persons_other_options captionside=top
 				@caption Grupeerimine
+				@layout poo_quantity_broup_by type=vbox_sub parent=persons_other_options area_caption=Grupeerimine closeable=1
+					@property poo_quantity_broup_by_resource type=button parent=poo_quantity_broup_by captionside=top
+					@caption Ressursside kaupa
+					@property poo_quantity_broup_by_case type=button parent=poo_quantity_broup_by captionside=top
+					@caption Projektide kaupa
+					@property poo_quantity_broup_by_job type=button parent=poo_quantity_broup_by captionside=top
+					@caption T&ouml;&ouml;de kaupa
 		#layout grp_persons_right type=vbox parent=grp_persons_full
 			@layout grp_persons_right_split_1 type=hbox width=50%:50% parent=grp_persons_right
 				@layout grp_persons_right_split_1_left type=vbox parent=grp_persons_right_split_1 closeable=1 area_caption=T&uuml;kiarvestus&nbsp;inimeste&nbsp;l&otilde;ikes
@@ -945,7 +952,7 @@ class mrp_workspace extends class_base
 	}
 
 
-	function callback_pre_edit ($arr)
+	public function callback_pre_edit ($arr)
 	{
 		$this_object = $arr["obj_inst"];
 
@@ -2506,6 +2513,13 @@ class mrp_workspace extends class_base
 		);
 	}
 
+	public function _get_poo_quantity_broup_by_resource($arr)
+	{
+		$prop = &$arr["prop"];
+		$prop["style"] = "font-size: 11px; font-weight:bold; color:#FFFFFF; background-color:#05A6E9;";
+		$prop["onclick"] = "reload_property('persons_quantity_chart_quantity_by_person', {poo_quantity_broup_by_resource: 1})";
+	}
+
 	public function _init_persons_quantity_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -3763,9 +3777,21 @@ class mrp_workspace extends class_base
 				$t->add_item($parent, array(
 					"id" => $id,
 					"name" => $caption,
-					"url" => aw_url_change_var(array(
-						"timespan" => $id === "all" ? NULL : $id,
-					)),
+					"reload" => array(
+						"layouts" => array("grp_persons_right", "resources_hours_right"),
+						/*
+						"props" => array(
+							"persons_quantity_chart_quantity_by_person",
+							"persons_quantity_chart_quantity_by_resource",
+							"persons_quantity_chart_quantity_by_case",
+							"persons_quantity_chart_quantity_by_job",
+							"persons_quantity_chart_quantity_by_person_in_month",
+							"persons_quantity_chart_quantity_by_person_in_week",
+							"persons_quantity_tbl",
+						),
+						*/
+						"params" => array("timespan" => $id === "all" ? NULL : $id),
+					),
 				));
 			}
 		}

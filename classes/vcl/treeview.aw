@@ -924,6 +924,39 @@ class treeview extends class_base
 				$iconurl = $this->cfg["baseurl"] . "/automatweb/images/closed_folder.gif";
 			};
 
+			if(!isset($item['url']) && isset($item['reload']) && !empty($item['reload']["props"]))
+			{
+				load_javascript("reload_properties_layouts.js");
+
+				$reload_params = array();
+				foreach($item["reload"]["params"] as $pkey => $pval)
+				{
+					$reload_params[] = $pkey.":'".$pval."'";
+				}
+				$params = "{".implode(",", $reload_params)."}";
+
+				$props = "['".implode("','", (array)$item['reload']["props"])."']";
+
+				$item["url"] = "javascript:void(0)";
+				$item["onClick"] = "reload_property(".$props.", ".$params.");";
+			}
+			elseif(!isset($item['url']) && isset($item['reload']) && !empty($item['reload']["layouts"]))
+			{
+				load_javascript("reload_properties_layouts.js");
+
+				$reload_params = array();
+				foreach($item["reload"]["params"] as $pkey => $pval)
+				{
+					$reload_params[] = $pkey.":'".$pval."'";
+				}
+				$params = "{".implode(",", $reload_params)."}";
+
+				$layouts = "['".implode("','", (array)$item['reload']["layouts"])."']";
+
+				$item["url"] = "javascript:void(0)";
+				$item["onClick"] = "reload_layout(".$layouts.", ".$params.");";
+			}
+
 			$name = $item["name"];
 			if ($item["id"] === $this->selected_item)
 			{

@@ -222,12 +222,14 @@ class class_base extends aw_template
 		@param alias_to optional
 		@param alias_to_prop optional
 		@param return_url optional
+		@param view_property optional
+		@param view_laoyout optional
 
 		@returns data formatted by the currently used output client. For example a HTML form if htmlclient is used
 
 
 		@comment
-		id _always_ refers to the objects< table. Always. If you want to load
+		id _always_ refers to the objects table. Always. If you want to load
 		any other data, then you'll need to use other field name
 
 	**/
@@ -1014,16 +1016,26 @@ class class_base extends aw_template
 			// LETS STOP ROKKIN'
 			$this->cli->config = count($final_warns)?($this->cli->config + array( "warn" => join("<br/>", $final_warns))):$this->cli->config;
 		}
-		$rv =  $this->gen_output(array(
+		$rv = $this->gen_output(array(
 			"parent" => $this->parent,
 			"content" => isset($content) ? $content : "",
 			//"orb_action" => $this->view == 1 ? "view" : "",
 			"orb_action" => $orb_action,
+			"view_property" => ifset($args, "view_property"),
 		));
 
 		$awt->stop("final-bit");
 		$awt->stop("cb-change");
-		return $rv;
+		
+		if(!empty($args["view_property"]))
+		{
+			$rv = iconv(aw_global_get("charset"), "UTF-8", $rv);
+			die($rv);
+		}
+		else
+		{
+			return $rv;
+		}
 	}
 
 	function _get_sub_layouts($lay)
@@ -1937,6 +1949,11 @@ class class_base extends aw_template
 			"save_message" => $this->just_saved ? $just_saved_msg : null
 		);
 
+		if(!empty($args["view_property"]))
+		{
+			$cli_args["element_only"] = 1;
+		}
+
 		if ($this->can("view", $this->cfgform_id))
 		{
 			$cfgform_o = new object($this->cfgform_id);
@@ -2683,7 +2700,16 @@ class class_base extends aw_template
 			}
 		}
 	}
-
+	
+	/**
+		@attrib name=parse_properties params=name
+		@param properties
+		@param classinfo
+		@param obj_inst
+		@param target_obj
+		@param name_prefix
+		@param object_type_id
+	**/
 	function parse_properties($args = array())
 	{
 		global $awt;
@@ -4994,6 +5020,12 @@ class class_base extends aw_template
 
 			// shouldn't I do some kind of overriding?
 			$tmp[$key] = $propdata;
+		}
+		
+		// If view_property is given we actually only want the HTML of that one property!
+		if(!empty($args["view_property"]))
+		{
+			$tmp = isset($tmp[$args["view_property"]]) ? array($args["view_property"] => $tmp[$args["view_property"]]) : array();
 		}
 
 		$this->use_group = $use_group;

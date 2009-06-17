@@ -884,7 +884,11 @@ class htmlclient extends aw_template
 			));
 		}
 
-		if (!empty($arr["raw_output"]))
+		if (!empty($arr["element_only"]) && count($this->proplist) <= 1)
+		{
+			$rv = !empty($this->vars["element"]) ? $this->vars["element"] : $this->vars["value"];
+		}
+		elseif (!empty($arr["raw_output"]))
 		{
 			$rv = $this->vars["content"];
 		}

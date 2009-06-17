@@ -855,10 +855,11 @@ class html
 		$type = empty($type) ? "button" : $type;
 		$name = !empty($name) ? 'name="'.$name.'" ' : "";
 		$class = !empty($class) ? " class=\"{$class}\"" : "";
+		$style = !empty($style) ? " style=\"{$style}\"" : "";
 		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "";
 		$id = !empty($id) ? " id=\"{$id}\"" : "";
 
-		return "<input type='{$type}' {$name}value='{$value}'{$id}{$onclick}{$class}{$disabled}{$textsize} />\n";
+		return "<input type='{$type}' {$name}value='{$value}'{$id}{$onclick}{$class}{$disabled}{$textsize}{$style} />\n";
 	}
 
 	/**Time selector
