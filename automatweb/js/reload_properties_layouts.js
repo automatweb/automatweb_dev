@@ -17,7 +17,7 @@ function reload_property(props, params)
 			get_property_data["view_property"] = prop;
 
 			$.ajax({
-				url: "http://kaarel.dev.struktuur.ee/automatweb/orb.aw",
+				url: "orb.aw",
 				data: get_property_data,
 				success: function(html){
 					$("div[name='"+prop+"']").html(html);
@@ -44,7 +44,7 @@ function reload_layout(layouts, params)
 			get_property_data["view_layout"] = layout;
 
 			$.ajax({
-				url: "http://kaarel.dev.struktuur.ee/automatweb/orb.aw",
+				url: "orb.aw",
 				data: get_property_data,
 				success: function(html){
 					$("div[id='"+layout+"_outer']").html(html);
