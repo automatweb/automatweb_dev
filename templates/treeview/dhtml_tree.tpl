@@ -1,3 +1,4 @@
+<div id="treeDivWithID_{VAR:tree_id}">
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript">
 
@@ -14,19 +15,20 @@ from_click_{VAR:tree_num} = false;
 function generic_loader()
 {
 	// on page load
-	if(/*window.onload &&*/ load_auto_{VAR:tree_num} && level_{VAR:tree_num} < open_nodes_{VAR:tree_num}.length)
+	if(load_auto_{VAR:tree_num} && level_{VAR:tree_num} < open_nodes_{VAR:tree_num}.length)
 	{
-		try{ load_tree_state_1(); } catch(e) {}
-		try{ load_tree_state_2(); } catch(e) {}
-		try{ load_tree_state_3(); } catch(e) {}
-		try{ load_tree_state_4(); } catch(e) {}
-		try{ load_tree_state_5(); } catch(e) {}
-		try{ load_tree_state_6(); } catch(e) {}
-		try{ load_tree_state_7(); } catch(e) {}
-		try{ load_tree_state_8(); } catch(e) {}
+		i = 1;
+		while(true)
+		{
+			eval("load_tree_state_"+i+"()");
+			if (typeof(eval("load_tree_state_"+i+"()"))=="undefined")
+			{
+				break;
+			}
+			i++;
+		}
 	}
 }
-
 function load_beneath_{VAR:tree_num}()
 {
 	// on iframe load
@@ -44,7 +46,6 @@ function load_tree_state_{VAR:tree_num}()
 	}
 	for(i=level_{VAR:tree_num};i < open_nodes_{VAR:tree_num}.length;i++)
 	{
-		
 		data = false;
 		thisElem = document.getElementById(open_nodes_{VAR:tree_num}[i]);
 		if(thisElem)
@@ -64,7 +65,6 @@ function load_tree_state_{VAR:tree_num}()
 		{
 			toggle_children_{VAR:tree_num}(node,1);
 		}
-
 		break;
 	}
 }
@@ -235,6 +235,20 @@ persist_state_{VAR:tree_num} = '{VAR:persist_state}';
 open_nodes_{VAR:tree_num} = new Array({VAR:open_nodes});
 tree_id_{VAR:tree_num} = '{VAR:tree_id}';
 
+$(document).ready(function(){
+	function attachTreeNodeOnClick(o)
+	{
+		if($(o).attr("tagName") == "A" && $(o).attr("id").substr(-8) != "treenode")
+		{
+			$(o).click(function(){
+				$("a[tree_id='treeDivWithID_{VAR:tree_id}']").removeClass("nodetext_selected");
+				$(o).addClass("nodetext_selected");
+			}).attr("tree_id", "treeDivWithID_{VAR:tree_id}");
+		}
+		$(o).children().each(function(){attachTreeNodeOnClick(this);});
+	}
+	$("#treeDivWithID_{VAR:tree_id}").each(function(){attachTreeNodeOnClick(this);});
+});
 </script>
 <style>
 .iconcontainer {
@@ -259,6 +273,12 @@ tree_id_{VAR:tree_num} = '{VAR:tree_id}';
 
 .nodetext a {
 	color: black;
+	font-weight: normal;
+}
+
+a.nodetext_selected{
+	color: black;
+	font-weight: bold;
 }
 </style>
 <!-- SUB: HAS_ROOT -->
@@ -280,13 +300,14 @@ if(is_numeric(tmp))
 }
 </script>
 <div style="width: 250px">
-<div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children_{VAR:tree_num}(this,{VAR:menu_level});return false;" href="javascript:void();" alt="{VAR:alt}" title="{VAR:alt}"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}" {VAR:onClick} alt="{VAR:alt}" title="{VAR:alt}">{VAR:name}</a>
+<div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children_{VAR:tree_num}(this,{VAR:menu_level});return false;" href="javascript:void();" alt="{VAR:alt}" title="{VAR:alt}"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}" {VAR:onClick} alt="{VAR:alt}" title="{VAR:alt}" id="{VAR:id}_link" {VAR:selected}>{VAR:name}</a>
 <!-- SUB: SUB_NODES -->
 <div id="{VAR:id}" has_data="{VAR:has_data}" data_loaded="{VAR:data_loaded}" style="padding-left: 16px; display: {VAR:display}; ">
 <!-- SUB: SINGLE_NODE -->
-<div class="nodetext"><span class="iconcontainer"><img src="{VAR:iconurl}" border="0" style="vertical-align:middle; margin-left: 16px;"></span>&nbsp;<a target="{VAR:target}" href="{VAR:url}" {VAR:onClick} alt="{VAR:alt}" title="{VAR:alt}">{VAR:name}</a></div>
+<div class="nodetext"><span class="iconcontainer"><img src="{VAR:iconurl}" border="0" style="vertical-align:middle; margin-left: 16px;"></span>&nbsp;<a target="{VAR:target}" href="{VAR:url}" {VAR:onClick} alt="{VAR:alt}" title="{VAR:alt}" id="{VAR:id}_link" {VAR:selected}>{VAR:name}</a></div>
 <!-- END SUB: SINGLE_NODE -->
 </div>
 <!-- END SUB: SUB_NODES -->
 </div></div>
 <!-- END SUB: TREE_NODE -->
+</div>
