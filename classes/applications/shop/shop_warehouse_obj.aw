@@ -239,7 +239,7 @@ class shop_warehouse_obj extends _int_object
 		@param singlecode optional type=int
 		@returns object list of shop_warehouse_amount objects
 	**/
-	function get_amount($arr)
+	function get_amounts($arr)
 	{
 		if(isset($arr["prod"]))
 		{
@@ -277,14 +277,26 @@ class shop_warehouse_obj extends _int_object
 		return false;
 	}
 
-
-
-
-
-
-
-
-
-
+	/** get product's warehouse amount
+		@attrib api=1
+		@param prod optional type=int
+		@param single optional type=int
+		@param unit optional type=int
+		@param singlecode optional type=int
+		@returns double
+	**/
+	function get_amount($arr)
+	{
+		$amounts = $this->get_amounts(array(
+			"prod" => $arr["prod"],
+		));
+		$count = 0;
+		if($amounts->count())
+		{
+			$amount = reset($amounts->arr());
+			$count = $amount->prop("amount");
+		}
+		return $count;
+	}
 
 }

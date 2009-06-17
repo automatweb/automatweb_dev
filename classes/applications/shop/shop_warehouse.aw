@@ -1563,15 +1563,15 @@ class shop_warehouse extends class_base
 		$srch = $arr["request"];
 
 		$fields = array(
-			"prod" => t("Artikkel"),
+//			"prod" => t("Artikkel"),
 			"prod_name" => t("Nimetus"),
 			"weight" => t("kaal (gr/m2)"),
 			"width" => t("Laius (mm)"),
-			"begin_count" => t("Perioodi algsaldo"),
-			"amount" => t("Kogus kg"),	
-			"len" => t("Kogus jm."),	
-			"price" => t("hind EEK/t"),
-			"balance" => t("Hetke saldo"),
+			"begin_count" => t("Perioodi algsaldo (kg)"),
+			"amount" => t("Kogus (kg)"),	
+			"len" => t("Kogus (jm)"),	
+			"price" => t("hind (EEK/t)"),
+			"balance" => t("Hetke saldo (EEK)"),
 			"repair" => t("Parandus"),
 		);
 
@@ -1586,18 +1586,37 @@ class shop_warehouse extends class_base
 			));
 		}
 
-		$ol = $arr["obj_inst"] -> get_inventories();
-		$products = $arr["obj_inst"] -> get_products();
-		foreach($ol->arr() as $o)
+
+		if(!$srch["stats_type"])
 		{
+			$srch["stats_type"] = "all";
+		}
+		if(!$arr["request"]["timespan"])
+		{
+			$arr["request"]["timespan"] = "period_week";
+		}
+		$filter = $this->get_range($arr["request"]["timespan"]);
+		$filter["category"] = $arr["request"]["pgtf"];
+		while($filter["from"] < $filter["to"])
+		{
+			if($filter["from"] > time())
+			{
+				break;
+			}
+			$parent = date("mY" , $filter["from"]);
 			$t->define_field(array(
-				"name" => $o->prop("date"),
-				"caption" => date("d.m.Y" , $o->prop("date")),
+				"name" => $parent,
+				"caption" => date("m.Y" , $filter["from"]),
 				"sortable" => 1,
+
 			));
+			$filter["from"]+= 31*3600*25;
 		}
 
-		$ol = $arr["obj_inst"] -> get_movements();
+		$ol = $arr["obj_inst"] -> get_inventories($filter);
+		$products = $arr["obj_inst"] -> get_products($filter);
+		$ol = $arr["obj_inst"] -> get_movements($filter);
+
 		$notes = $arr["obj_inst"] -> get_delivery_note_rows($filter);
 		$movements = array();
 		foreach($ol->arr() as $note)
@@ -1607,15 +1626,10 @@ class shop_warehouse extends class_base
 
 		foreach($products->arr() as $o)
 		{
-			$amounts = $arr["obj_inst"]->get_amount(array(
+			$amount = $arr["obj_inst"]->get_amount(array(
 				"prod" => $o->id(),
 			));
-			$count = 0;
-			if($amounts->count())
-			{
-				$amount = reset($amounts->arr());
-				$count = $amount->prop("amount");
-			}
+			$count = $amount;
 
 			$t->define_data(array(
 				"prod_name" => $o->name(),
@@ -1627,6 +1641,8 @@ class shop_warehouse extends class_base
 //				"price" => t("hind EEK/t"),
 				"balance" => $count,
 				"repair" => $movements[$o->id()],
+				"width" => $o->prop("width"),
+				"weight" => $o->prop("gramweight"),
 			));
 		}
 	}
@@ -1634,20 +1650,54 @@ class shop_warehouse extends class_base
 	function _get_stats_balance_table($arr)
 	{
 		$srch = $arr["request"];
+		if(!$srch["stats_type"])
+		{
+			$srch["stats_type"] = "all";
+		}
+		if(!$arr["request"]["timespan"])
+		{
+			$arr["request"]["timespan"] = "period_week";
+		}
+		$filter = $this->get_range($arr["request"]["timespan"]);
+		$filter["category"] = $arr["request"]["pgtf"];
+
+		$ol = $arr["obj_inst"] -> get_movements($filter);
+
+		$movements_in = array();
+		$movements_out = array();
+		$movements_after = array();
+
+		foreach($ol->arr() as $note)
+		{
+			if($note->prop("from_wh") == $arr["obj_inst"]->id())
+			{
+				$movements_out[$note->prop("product")][date("mY" , $note->prop("date"))]+=$note->prop("amount");
+			}//arr($note->prop("to_wh")); arr($arr["obj_inst"]->id());
+			if($note->prop("to_wh") == $arr["obj_inst"]->id())
+			{
+				$movements_in[$note->prop("product")][date("mY" , $note->prop("date"))]+=$note->prop("amount");
+			}
+		}
+
+		$filter["after_time"] = 1;
+		$after_ol = $arr["obj_inst"] -> get_movements($filter);
+		foreach($after_ol->arr() as $note2)
+		{
+			$movements_after[$note2->prop("product")]+= $note2->prop("amount");
+		}
+
+		$products = $arr["obj_inst"] -> get_products($filter);
+
+
 		$fields = array(
 			"prod_name" => t("Nimetus"),
 			"weight" => t("kaal (gr/m2)"),
 			"width" => t("Laius (mm)"),
-			"begin_count" => t("Perioodi algsaldo"),
-			"amount" => t("Kogus kg"),	
+			"begin_count" => t("Perioodi algsaldo (kg)"),
+			"amount" => t("Kogus (kg)"),	
 			"len" => t("Kogus jm."),	
 			"price" => t("hind EEK/t"),
 			"balance" => t("Hetke saldo"),
-			"in" => t("Sisse"),
-			"tell" => t("Tell.nr."),
-			"out" => t("V&auml;lja"),
-			"tell_out" => t("Tell.nr."),
-			"residual" => t("J&auml;&auml;k")
 		);
 
 		$t = &$arr["prop"]["vcl_inst"];
@@ -1659,6 +1709,78 @@ class shop_warehouse extends class_base
 				"caption" => $val,
 				"sortable" => 1,
 			));
+		}
+
+		$month_fields = array(
+			"in" => t("Sisse"),
+			"tell" => t("Tell.nr."),
+			"out" => t("V&auml;lja"),
+			"tell_out" => t("Tell.nr."),
+			"residual" => t("J&auml;&auml;k")
+		);
+
+
+		while($filter["from"] < $filter["to"])
+		{
+			if($filter["from"] > time())
+			{
+				break;
+			}
+			$parent = date("mY" , $filter["from"]);
+			$t->define_field(array(
+				"name" => $parent,
+				"caption" => date("m Y" , $filter["from"]),
+				"sortable" => 1,
+
+			));
+			foreach($month_fields as $key => $val)
+			{
+				$t->define_field(array(
+					"name" => $parent.$key,
+					"caption" => $val,
+					"sortable" => 1,
+					"parent" => $parent,
+				));
+			}
+
+			$filter["from"]+= 31*3600*25;
+		}
+
+		foreach($products->arr() as $product)
+		{
+			$balance = $arr["obj_inst"]->get_amount(array(
+				"prod" => $product->id(),
+			));
+			$count = $balance - $movements_after[$product->id()];
+			$begin = $count;
+			if(isset($movements_in[$product->id()]))
+			{
+				$begin-= array_sum($movements_in[$product->id()]);
+			}
+
+			if(isset($movements_out[$product->id()]))
+			{
+				$begin+= array_sum($movements_out[$product->id()]);
+			}
+			$data = array(
+				"prod_name" => $product->name(),
+				"width" => $product->prop("width"),
+				"weight" => $product->prop("gramweight"),
+				"balance" => $balance,
+				"begin_count" => $begin,
+			);
+			
+			foreach($movements_in[$product->id()] as $date => $sum)
+			{
+				$data[$date."in"] = $sum;
+			}
+
+			foreach($movements_out[$product->id()] as $date => $sum)
+			{
+				$data[$date."out"] = $sum;
+			}
+
+			$t->define_data($data);
 		}
 	}
 
@@ -1675,7 +1797,6 @@ class shop_warehouse extends class_base
 			"prod_name" => t("Nimetus"),
 			"weight" => t("kaal (gr/m2)"),
 			"width" => t("Laius (mm)"),
-			"sum" => t("Kokku")
 		);
 		if(!$arr["request"]["timespan"])
 		{
@@ -1685,6 +1806,7 @@ class shop_warehouse extends class_base
 
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_sortable(false);
+
 		foreach($fields as $key => $val)
 		{
 			$t->define_field(array(
@@ -1693,7 +1815,12 @@ class shop_warehouse extends class_base
 				"sortable" => 1,
 			));
 		}
-
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"sortable" => 1,
+			"chgbgcolor" => "bgcolor",
+		));
 		$start = $filter["from"];
 		while($start < $filter["to"])
 		{
@@ -1714,14 +1841,24 @@ class shop_warehouse extends class_base
 		{
 			$ti = $o->prop("date");
 			$date = mktime(0,0,0,date("m" , $ti) , date("d" , $ti), date("Y" , $ti));
-			$data[$o->prop("product")][$date]+= $o->prop("amount");
-			$all[$o->prop("product")]+=$o->prop("amount");
+			if($o->prop("from_wh") == $arr["obj_inst"]->id())
+			{
+				$data[$o->prop("product")][$date]-= $o->prop("amount");
+				$all[$o->prop("product")]-=$o->prop("amount");
+			}
+			if($o->prop("to_wh") == $arr["obj_inst"]->id())
+			{
+				$data[$o->prop("product")][$date]+= $o->prop("amount");
+				$all[$o->prop("product")]+=$o->prop("amount");
+			}
 		}
 
 
 		$products = $arr["obj_inst"] -> get_products($filter);
-		foreach($products->names() as $id => $name)
+		foreach($products->arr() as $o)
 		{
+			$name = $o->name();
+			$id = $o->id();
 			$prod_data = array(
 				"prod_name" => $name,
 			);
@@ -1733,8 +1870,16 @@ class shop_warehouse extends class_base
 			{
 				$prod_data["sum"] = $all[$id];
 			}
+			else
+			{
+				$prod_data["sum"] = 0;
+			}
+			$prod_data["weight"] = $o->prop("gramweight");
+			$prod_data["width"] = $o->prop("width");
+			$prod_data["bgcolor"] = "grey";
 			$t->define_data($prod_data);
 		}
+		$t->set_caption(t("Toodete liikumine laos p&auml;evade l&otilde;ikes"));
 	}
 
 	private function get_range($val)
@@ -1863,15 +2008,11 @@ class shop_warehouse extends class_base
 
 		foreach($ol->arr() as $o)
 		{
-			$amounts = $arr["obj_inst"]->get_amount(array(
+			$count = $arr["obj_inst"]->get_amount(array(
 				"prod" => $o->id(),
 			));
-			$count = 0;
-			if($amounts->count())
-			{
-				$amount = reset($amounts->arr());
-				$count = $amount->prop("amount") - $movements_after[$o->id()];
-			}
+			$count = $count - $movements_after[$o->id()];
+
 			$t->define_data(array(
 				"begin_count" => $count - $movements_in[$o->id()] + $movements_out[$o->id()],
 				"final_count" => $count,
@@ -3649,11 +3790,6 @@ class shop_warehouse extends class_base
 
 	private function decide_search_method($arr)
 	{
-		// Wow-wow! How the hell should my products get indexed?
-		// You have to consider existing sites with existing products!
-		// -kaarel 17.06.2009
-		return "regular";
-
 		$fields = array(
 		//	'prod_s_name' => 'prod_s_name',
 		//	'prod_s_code' => 'prod_s_code',
@@ -4148,7 +4284,7 @@ class shop_warehouse extends class_base
 		// the idea is, that decide_search_method somehow decides if it can search
 		// index table or has to make the complex search --dragut
 		$search_method = $this->decide_search_method($arr);
-
+	//	arr($search_method);
 		switch ($search_method)
 		{
 			case 'index':
@@ -4158,6 +4294,9 @@ class shop_warehouse extends class_base
 				$res = $this->get_products_list_ol($arr);
 				break;
 		}
+
+	//	$res = $this->get_products_list_ol($arr);
+	//	$res = $this->get_products_list_from_index($arr);
 
 		classload("core/icons");
 		$pi = get_instance(CL_SHOP_PRODUCT);
