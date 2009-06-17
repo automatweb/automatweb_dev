@@ -3649,6 +3649,11 @@ class shop_warehouse extends class_base
 
 	private function decide_search_method($arr)
 	{
+		// Wow-wow! How the hell should my products get indexed?
+		// You have to consider existing sites with existing products!
+		// -kaarel 17.06.2009
+		return "regular";
+
 		$fields = array(
 		//	'prod_s_name' => 'prod_s_name',
 		//	'prod_s_code' => 'prod_s_code',
@@ -4143,7 +4148,7 @@ class shop_warehouse extends class_base
 		// the idea is, that decide_search_method somehow decides if it can search
 		// index table or has to make the complex search --dragut
 		$search_method = $this->decide_search_method($arr);
-	//	arr($search_method);
+
 		switch ($search_method)
 		{
 			case 'index':
@@ -4153,9 +4158,6 @@ class shop_warehouse extends class_base
 				$res = $this->get_products_list_ol($arr);
 				break;
 		}
-
-	//	$res = $this->get_products_list_ol($arr);
-	//	$res = $this->get_products_list_from_index($arr);
 
 		classload("core/icons");
 		$pi = get_instance(CL_SHOP_PRODUCT);
