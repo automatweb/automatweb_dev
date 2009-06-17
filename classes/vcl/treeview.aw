@@ -924,7 +924,7 @@ class treeview extends class_base
 				$iconurl = $this->cfg["baseurl"] . "/automatweb/images/closed_folder.gif";
 			};
 
-			if(!isset($item['url']) && isset($item['reload']) && !empty($item['reload']["props"]))
+			if(!isset($item['url']) && isset($item['reload']))
 			{
 				load_javascript("reload_properties_layouts.js");
 
@@ -935,34 +935,37 @@ class treeview extends class_base
 				}
 				$params = "{".implode(",", $reload_params)."}";
 
-				$props = "['".implode("','", (array)$item['reload']["props"])."']";
-
-				$item["url"] = "javascript:void(0)";
-				$item["onClick"] = "reload_property(".$props.", ".$params.");";
-			}
-			elseif(!isset($item['url']) && isset($item['reload']) && !empty($item['reload']["layouts"]))
-			{
-				load_javascript("reload_properties_layouts.js");
-
-				$reload_params = array();
-				foreach($item["reload"]["params"] as $pkey => $pval)
+				$onclick = "";
+				if(!empty($item['reload']["props"]))
 				{
-					$reload_params[] = $pkey.":'".$pval."'";
+					$props = "['".implode("','", (array)$item['reload']["props"])."']";
+					$onclick .= "reload_property(".$props.", ".$params.");";
 				}
-				$params = "{".implode(",", $reload_params)."}";
-
-				$layouts = "['".implode("','", (array)$item['reload']["layouts"])."']";
+				if(!empty($item['reload']["layouts"]))
+				{
+					$layouts = "['".implode("','", (array)$item['reload']["layouts"])."']";
+					$onclick .= "reload_layout(".$layouts.", ".$params.");";
+				}
 
 				$item["url"] = "javascript:void(0)";
-				$item["onClick"] = "reload_layout(".$layouts.", ".$params.");";
+				$item["onClick"] = $onclick;
 			}
 
 			$name = $item["name"];
 			if ($item["id"] === $this->selected_item)
 			{
 				// XXX: Might want to move this into the template
-				$name = "<strong>$name</strong>";
-			};
+//				$name = "<strong>$name</strong>";
+				$this->vars(array(
+					"selected" => "class=\"nodetext_selected\""
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"selected" => ""
+				));
+			}
 
 			$url_target = !isset($item["url_target"]) ? (isset($this->tree_dat["url_target"]) ? $this->tree_dat["url_target"] : null) : $item["url_target"];
 
