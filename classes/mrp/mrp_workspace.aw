@@ -3621,10 +3621,20 @@ class mrp_workspace extends class_base
 
 		$t = &$arr["prop"]["vcl_inst"];
 
-		$t->set_selected_item($arr["request"]["material"] ? $arr["request"]["material"] : "all");
+		if(!isset($arr["request"]["material"]))
+		{
+			$arr["request"]["material"] = "all_materials";
+		}
+
+		$t->set_selected_item($arr["request"]["material"]);
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "grp_material_tree",
+		));
 
 		$t->add_item(0, array(
-			"id" => "all",
+			"id" => "all_materials",
 			"name" => t("K&otilde;ik materjalid"),
 		));
 
@@ -3632,16 +3642,22 @@ class mrp_workspace extends class_base
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 			"lang_id" => array(),
 			"site_id" => array(),
+	//		"parent.parent" =>  $arr["obj_inst"] -> get_warehouses() -> ids(),
 	//		"parent.class_id" =>  new obj_predicate_not(CL_SHOP_PRODUCT_CATEGORY),
 		));
-		foreach($ol->names() as $id => $name)
+		foreach($ol->arr() as $o)
 		{
-			
-			$t->add_item("all", array(
+			if($o->prop("parent.class_id") == CL_SHOP_PRODUCT_CATEGORY)
+			{
+				continue;
+			}
+			$id = $o->id();
+			$name = $o->name();
+			$t->add_item("all_materials", array(
 				"id" => $id,
 				"name" => $name,
 				"url" => "javascript:$('[name=material]').val('".$id."');update_material_table();update_products_tree();",
-				"iconurl" => icons::get_icon_url(CL_SHOP_PRODUCT_CATEGORY),
+				"iconurl" => icons::get_icon_url(CL_MENU),
 			));
 			$this->add_cat_leaf($t , $id);
 		}
@@ -3654,24 +3670,43 @@ class mrp_workspace extends class_base
 			return;
 		}
 		$ol = new object_list(array(
-			"class_id" => array(CL_SHOP_PRODUCT,CL_SHOP_PRODUCT_CATEGORY),
+			"class_id" => array(CL_SHOP_PRODUCT_CATEGORY),
 			"site_id" => array(),
 			"lang_id" => array(),
 			"parent" => $parent,
 		));
+
 		foreach($ol->names() as $id => $name)
 		{
 			$tv->add_item($parent,array(
 				"name" => $name,
 				"id" => $id."",
-				"url" => "javascript:$('[name=material]').val('".$id."'); update_material_table();update_products_tree();"//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=material]').val('".$id."'); update_material_table();update_products_tree();",//aw_url_change_var("cat", $id),
+				"iconurl" => icons::get_icon_url(CL_MENU),
 			));
 			$this->add_cat_leaf($tv , $id);
+		}
+
+		$products = new object_list(array(
+			"class_id" => array(CL_SHOP_PRODUCT),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"CL_SHOP_PRODUCT.RELTYPE_CATEGORY" => $parent,
+		));
+		foreach($products->names() as $id => $name)
+		{
+			$tv->add_item($parent,array(
+				"name" => $name,
+				"id" => $id."",
+				"url" => "javascript:$('[name=material]').val('".$id."'); update_material_table();update_products_tree();",//aw_url_change_var("cat", $id),
+				"iconurl" => icons::get_icon_url(CL_SHOP_PRODUCT),
+			));
 		}
 	}
 
 	function _get_grp_material_personnel_tree($arr)
 	{
+		$arr["leaf_url"] = "javascript:$('[name=person]').val('#id#'); update_material_table();update_person_tree();";
 		return $this->_get_persons_personnel_tree($arr);
 	}
 
@@ -3713,6 +3748,7 @@ class mrp_workspace extends class_base
 
 	public function _get_grp_material_resource_span_tree($arr)
 	{
+		$arr["leaf_url"] = "javascript:$('[name=resource]').val('#id#'); update_material_table();update_resource_tree();";
 		return $this->create_resources_tree($arr, "resource_span");
 	}
 
@@ -3737,7 +3773,41 @@ class mrp_workspace extends class_base
 	}
 	public function _get_grp_material_time_tree($arr)
 	{
-		return $this->_get_time_tree($arr);
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "timespan";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "period_week");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_time_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik ajavahemikud"),
+			"id" => "all_time",
+			"url" => aw_url_change_var($var, "all_time"),
+		));
+
+		$branches = array(
+			"last_week" => t("Eelmine n&auml;dal"),
+			"period_week" => t("K&auml;esolev n&auml;dal"),
+			"period_last_last" => t("&Uuml;leelmine kuu"),
+			"period_last" => t("Eelmine kuu"),
+			"period_current" => t("K&auml;esolev kuu"),
+			"period_next" => t("J&auml;rgmine kuu"),
+			"period_lastyear" => t("Eelmine aasta"),
+			"period_year" => t("K&auml;esolev aasta"),
+		);
+
+		foreach($branches as $id => $caption)
+		{
+			$tv->add_item("all_time", array(
+				"id" => $id,
+				"name" => $caption,
+				"url" => "javascript:$('[name=timespan]').val('".$id."'); update_material_table();update_material_time_tree();"//aw_url_change_var("cat", $id),
+			));
+		}
 	}
 
 	public function _get_my_stats_time_tree($arr)
@@ -3779,17 +3849,7 @@ class mrp_workspace extends class_base
 					"name" => $caption,
 					"reload" => array(
 						"layouts" => array("grp_persons_right", "resources_hours_right"),
-						/*
-						"props" => array(
-							"persons_quantity_chart_quantity_by_person",
-							"persons_quantity_chart_quantity_by_resource",
-							"persons_quantity_chart_quantity_by_case",
-							"persons_quantity_chart_quantity_by_job",
-							"persons_quantity_chart_quantity_by_person_in_month",
-							"persons_quantity_chart_quantity_by_person_in_week",
-							"persons_quantity_tbl",
-						),
-						*/
+						"props" => array("material_stats_table"),
 						"params" => array("timespan" => $id === "all" ? NULL : $id),
 					),
 				));
@@ -6231,6 +6291,10 @@ class mrp_workspace extends class_base
 			if(isset($_GET[$_GET_param_to_keep]))
 			{
 				$arr[$_GET_param_to_keep] = $_GET[$_GET_param_to_keep];
+			}
+			else
+			{
+				$arr[$_GET_param_to_keep] = "";
 			}
 		}
 
@@ -9077,10 +9141,21 @@ END ajutine
 					$.post('/automatweb/orb.aw?class=mrp_workspace&action=ajax_update_prop',{
 						id: ".$arr["obj_inst"]->id()."
 						, prop: 'grp_material_tree'
-						, cat: $('[name=material]').val()}
+						, material: $('[name=material]').val()}
 						,function(html){
 						x=document.getElementById('grp_material_tree');
-						x.innerHTML = html;alert(html);
+						x.innerHTML = html;//alert(html);
+					});
+				}
+				function update_material_time_tree()
+				{
+					$.post('/automatweb/orb.aw?class=mrp_workspace&action=ajax_update_prop',{
+						id: ".$arr["obj_inst"]->id()."
+						, prop: 'grp_material_time_tree'
+						, timespan: $('[name=timespan]').val()}
+						,function(html){
+						x=document.getElementById('grp_material_time_tree');
+						x.innerHTML = html;//alert(html);
 					});
 				}
 ";
@@ -9166,6 +9241,63 @@ $(document).ready(function(){
 	}
 
 
+	private function get_range($val)
+	{
+		switch($val)
+		{
+			case "period_last_week":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-1, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")-1, 8, date("Y")),
+				);
+			break;
+			case "period_week":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m"), 1, date("Y")),
+					"to" => mktime(0,0,0, date("m"), 8, date("Y")),
+				);
+			break;
+			case "period_last_last":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-2, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")-1, 1, date("Y")),
+				);
+			break;
+			case "period_last":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-1, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m"), 1, date("Y")),
+				);
+			break;
+			case "period_current":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m"), 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")+1, 1, date("Y")),
+				);
+			break;
+			case "period_next":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")+1, 1, date("Y")),
+					"to" => mktime(0,0,0, date("m")+2, 1, date("Y")),
+				);
+			break;
+			case "period_year":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, 1, 1, date("Y")),
+					"to" => mktime(0,0,0, 1, 1, date("Y")+1),
+				);
+			break;
+			case "period_lastyear":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, 1, 1, date("Y")-1),
+					"to" => mktime(0,0,0,1 , 1, date("Y")),
+				);
+			break;
+			default :return null;
+		}
+		return $filt["bill_date_range"];
+	}
+
 	/**
 		@attrib name=ajax_update_prop all_args=1
 		@param id optional type=int
@@ -9175,10 +9307,13 @@ $(document).ready(function(){
 	{
 		$property = $arr["prop"];
 		$arr["obj_inst"] = obj($arr["id"]);
-		$arr["request"]["people"] = $arr["people"];
-		$arr["request"]["resource"] = $arr["resource"];
-		$arr["request"]["timespan"] = $arr["timespan"];
-		$arr["request"]["material"] = $arr["material"];
+		foreach($arr as $key => $val)
+		{
+			if(!is_array($val))
+			{
+				$arr["request"][$key] = $val;
+			}
+		}
 
 		$arr["request"]["die"] = 1;
 
@@ -9189,6 +9324,7 @@ $(document).ready(function(){
 				$t = new vcl_table();
 				break;
 			case "grp_material_tree":
+			case "grp_material_time_tree":
 				classload("vcl/treeview");
 				$t = new treeview();
 				break;
@@ -9225,19 +9361,40 @@ $(document).ready(function(){
 
 		$t->define_field(array(
 			"name" => "unit",
-			"caption" => t("&Uuml;&Uuml;hik"),
+			"caption" => t("&Uuml;hik"),
 			"align" => "left"
 		));
-	
-		$ol = new object_list(array("class_id" => CL_MATERIAL_EXPENSE, "site_id" => array() , "lang_id" => array()));
+		$filter = array();
+		if($arr["request"]["timespan"])
+		{
+			$filter = $this->get_range($arr["request"]["timespan"]);
+		}
+		if($this->can("view" , $arr["request"]["material"]))
+		{
+			$mat = obj($arr["request"]["material"]);
+			if($mat->class_id() == CL_SHOP_PRODUCT)
+			{
+				$filter["product"] = $arr["request"]["material"];
+			}
+			else
+			{
+				$filter["category"] = $arr["request"]["material"];
+			}
+		}
+
+		$material_expense_data = $arr["obj_inst"]->get_material_expense_data($filter);	
 
 		$data = array();
 
-		foreach($ol->arr() as $o)
+		foreach($material_expense_data as $med)
 		{
-			$data[$o->prop("product")]["amount"]+= $o->prop("amount");
-			$data[$o->prop("product")]["used_amount"]+= $o->prop("used_amount");
-			$data[$o->prop("product")]["unit"] = $o->prop("unit");
+			if(!isset($data[$med["product"]]))
+			{
+				$data[$med["product"]] = array("amount" => 0, "used_amount" => 0 , "unit" => 0);
+			}
+			$data[$med["product"]]["amount"]+= $med["amount"];
+			$data[$med["product"]]["used_amount"]+= $med["used_amount"];
+			$data[$med["product"]]["unit"] = $med["unit"];
 		}
 
 		foreach($data as $id => $d)

@@ -77,6 +77,69 @@ class mrp_workspace_obj extends _int_object
 			$o->set_customer_prop($cust , "priority" , $p);
 		}
 	}
+
+	/** returns all used warehouses
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_warehouses()
+	{
+		$filter = array("class_id" => CL_SHOP_WAREHOUSE, "lang_id" => array(), "site_id" => array());
+		return new object_list($filter);
+	}
+
+	/** returns material expense data
+		@attrib api=1
+		@param product type=oid
+		@param category type=oid
+			product category object id
+		@param from type=int
+			expenses from timestamp
+		@param to type=oid
+			expenses to timestamp
+		@returns object list
+	**/
+	public function get_material_expense_data($arr = array())
+	{
+		$filter = $this->_get_material_expense_filter($arr);
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_MATERIAL_EXPENSE=>  array("amount" , "used_amount" , "unit", "product")
+			)
+		);
+		return $t->list_data;
+	}
+
+	private function _get_material_expense_filter($arr)
+	{
+		$filter = array("class_id" => CL_MATERIAL_EXPENSE, "site_id" => array() , "lang_id" => array());
+		if($arr["product"])
+		{
+			$filter["product"] = $arr["product"];
+		}
+		if($arr["category"])
+		{
+			$filter["product.RELTYPE_CATEGORY"] = $arr["category"];
+		}
+
+		if($arr["from"] > 0 && $arr["to"] > 0)
+		{
+			$to += 24 * 60 * 60 -1;
+			$filter["RELTYPE_JOB.started"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $arr["from"], $arr["to"]);
+		}
+		elseif($from > 0)
+		{
+			$filter["RELTYPE_JOB.started"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["from"]);
+		}
+		elseif($to > 0)
+		{
+			$to += 24 * 60 * 60 -1;
+			$filter["RELTYPE_JOB.started"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["to"]);
+		}
+		return $filter;
+	}
+
 }
 
 /** Generic workspace error **/
