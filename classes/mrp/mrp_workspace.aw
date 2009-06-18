@@ -25,7 +25,7 @@
 	@groupinfo grp_persons_hours_report caption="T&ouml;&ouml;ajaaruanne" parent=grp_persons
 	@groupinfo grp_persons_jobs_report caption="Tehtud t&ouml;&ouml;d inimeste kaupa" parent=grp_persons
 	@groupinfo grp_persons_quantity_report caption="T&uuml;kiarvestuse aruanne" parent=grp_persons
-	@groupinfo grp_material_report caption="Materjali aruanne" parent=grp_persons
+	@groupinfo grp_material_report caption="Materjali aruanne" parent=grp_persons submit=no
 
 
 @groupinfo grp_printer_general caption="Operaatori vaade" submit=no
@@ -224,16 +224,19 @@
 			@layout grp_material_tree type=vbox parent=grp_material_report_left area_caption=Materjal closeable=1
 				@property grp_material_tree type=treeview store=no no_caption=1 parent=grp_material_tree
 
-			@layout grp_material_time_tree type=vbox parent=grp_material_report_left area_caption=Ajavahemik
+			@layout grp_material_time_tree type=vbox parent=grp_material_report_left area_caption=Ajavahemik closeable=1
 				@property grp_material_time_tree type=treeview store=no no_caption=1 parent=grp_material_time_tree
-			@layout grp_material_personnel_tree type=vbox parent=grp_material_report_left area_caption=Inimesed
+			@layout grp_material_personnel_tree type=vbox parent=grp_material_report_left area_caption=Inimesed closeable=1
 				@property grp_material_personnel_tree type=treeview store=no no_caption=1 parent=grp_material_personnel_tree
-			@layout grp_material_resource_span_tree type=vbox parent=grp_material_report_left area_caption=Ressursid
+			@layout grp_material_resource_span_tree type=vbox parent=grp_material_report_left area_caption=Ressursid closeable=1
 				@property grp_material_resource_span_tree type=treeview store=no no_caption=1 parent=grp_material_resource_span_tree
-			@layout grp_material_other_options type=vbox parent=grp_material_report_left area_caption=T&ouml;&ouml;tundide&nbsp;kuvamise&nbsp;tingimused
+			@layout grp_material_other_options type=vbox parent=grp_material_report_left area_caption=Grupeerimine closeable=1
+				@property resource_stats_grouping type=select store=no no_caption=1 parent=grp_material_other_options
+				@property grp_material_btn type=button store=no parent=grp_material_other_options no_caption=1
+				@caption Grupeeri
+
 
 		@property material_stats_table type=table store=no no_caption=1 parent=grp_material_report_full
-
 
 @default group=grp_persons_jobs_report
 	#layout grp_persons_full type=hbox width=20%:80%
@@ -1545,6 +1548,20 @@ class mrp_workspace extends class_base
 
 		switch($prop["name"])
 		{
+			case "grp_material_btn":
+				return PROP_IGNORE;
+				$prop["onclick"] = "javascript:$('[name=grouping]').val('".$id."');update_material_table();";
+				break;
+			case "resource_stats_grouping":
+				$prop["options"] = array(
+					"0" => t("Ei grupeeri"),
+					"people" => t("Inimeste kaupa"),
+					"section" => t("Osakondade kaupa"),
+					"resource" => t("Ressursside kaupa"),
+					"work" => t("T&ouml;&ouml;de kaupa"),
+				);
+				$prop["onchange"] = "javascript:update_material_table();";
+				break;
 			### printer tab
 			case "printer_tree":
 				$this->_get_printer_tree($arr);
@@ -2289,7 +2306,7 @@ class mrp_workspace extends class_base
 			for($y = date("Y", $from); $y <= date("Y", $to); $y++)
 			{
 				$i_from = $y === date("Y", $from) ? date($type, $from) : 1;
-				$i_to = $y === date("Y", $to) ? date($type, $to) : date($t, mktime(0, 0, 0, 12, 31, $y));
+				$i_to = $y === date("Y", $to) ? date($type, $to) : date($type, mktime(0, 0, 0, 12, 31, $y));
 				for($i = (int)$i_from; $i <= $i_to; $i++)
 				{
 					if($i < 10)
@@ -3656,7 +3673,7 @@ class mrp_workspace extends class_base
 			$t->add_item("all_materials", array(
 				"id" => $id,
 				"name" => $name,
-				"url" => "javascript:$('[name=material]').val('".$id."');update_material_table();update_products_tree();",
+				"url" => "javascript:$('[name=material]').val('".$id."');update_material_table();",
 				"iconurl" => icons::get_icon_url(CL_MENU),
 			));
 			$this->add_cat_leaf($t , $id);
@@ -3681,7 +3698,7 @@ class mrp_workspace extends class_base
 			$tv->add_item($parent,array(
 				"name" => $name,
 				"id" => $id."",
-				"url" => "javascript:$('[name=material]').val('".$id."'); update_material_table();update_products_tree();",//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=material]').val('".$id."'); update_material_table();",
 				"iconurl" => icons::get_icon_url(CL_MENU),
 			));
 			$this->add_cat_leaf($tv , $id);
@@ -3698,7 +3715,7 @@ class mrp_workspace extends class_base
 			$tv->add_item($parent,array(
 				"name" => $name,
 				"id" => $id."",
-				"url" => "javascript:$('[name=material]').val('".$id."'); update_material_table();update_products_tree();",//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=material]').val('".$id."'); update_material_table();",
 				"iconurl" => icons::get_icon_url(CL_SHOP_PRODUCT),
 			));
 		}
@@ -3706,8 +3723,46 @@ class mrp_workspace extends class_base
 
 	function _get_grp_material_personnel_tree($arr)
 	{
-		$arr["leaf_url"] = "javascript:$('[name=person]').val('#id#'); update_material_table();update_person_tree();";
-		return $this->_get_persons_personnel_tree($arr);
+		$c = $arr["obj_inst"]->prop("owner");
+		$o = obj($c);
+
+		$i = get_instance(CL_CRM_COMPANY);
+		$i->active_node = empty($arr["request"]["cat"]) ? (empty($arr["request"]["unit"]) ? $c : $arr["request"]["unit"]) : $arr["request"]["cat"];
+
+		$t = &$arr["prop"]["vcl_inst"];
+		if(empty($_GET["unit"]))
+		{
+			$t->set_selected_item($c);
+		}
+
+		$t->add_item(0, array(
+			"id" => $c,
+			"name" => $o->name(),
+			"url" => aw_url_change_var(array(
+				"unit" => NULL,
+				"cat" => NULL,
+			)),
+		));
+		$i->generate_tree(array(
+			"tree_inst" => &$t,
+			"obj_inst" => $o,
+			"node_id" => $c,
+			"conn_type" => "RELTYPE_SECTION",
+			"attrib" => "unit",
+			"leafs" => true,
+			"show_people" => true,
+			"url" => aw_ini_get("baseurl").aw_url_change_var(array(
+				"person_show_jobs" => NULL,
+			))
+		));
+
+		// Hack the tree with reload stuff
+		foreach($t->get_item_ids() as $id)
+		{
+			$item = $t->get_item($id);
+			$item["url"] = "javascript:$('[name=people]').val('".$id."'); update_material_table();";
+			$t->set_item($item);
+		}
 	}
 
 	function _get_persons_personnel_tree($arr)
@@ -3744,12 +3799,132 @@ class mrp_workspace extends class_base
 				"person_show_jobs" => NULL,
 			))
 		));
+
+		// Hack the tree with reload stuff
+		foreach($t->get_item_ids() as $id)
+		{
+			$item = $t->get_item($id);
+			$url = new aw_uri($item["url"]);
+			$item["reload"] = array(
+				"layouts" => array("grp_persons_right", "resources_hours_right"),
+				"props" => array("material_stats_table"),
+				"params" => array(
+					"unit" => $url->arg("unit"),
+					"cat" => $url->arg("cat")
+				),
+			);
+			unset($item["url"]);
+			$t->set_item($item);
+		}
 	}
 
 	public function _get_grp_material_resource_span_tree($arr)
 	{
-		$arr["leaf_url"] = "javascript:$('[name=resource]').val('#id#'); update_material_table();update_resource_tree();";
-		return $this->create_resources_tree($arr, "resource_span");
+		$this_object = $arr["obj_inst"];
+		$applicable_states = array(
+			MRP_STATUS_RESOURCE_INACTIVE,
+		);
+
+		### resource tree
+		$resources_folder = $this_object->prop ("resources_folder");
+
+		if($arr["request"]["group"] == "my_resources" || $arr["request"]["group"] == "grp_printer_general")
+		{
+			$resids = $this->get_cur_printer_resources(array(
+				"ws" => $arr["obj_inst"],
+				"ign_glob" => true
+			));
+			$res_ol = new object_list();
+			if (count($resids))
+			{
+				$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
+			}
+
+			$this->resources_folder = $resources_folder;
+			$this->my_resources_menus = array();
+			foreach($res_ol->arr() as $res_o)
+			{
+				$this->my_resources_menus[$res_o->parent()] = $res_o->parent();
+				$this->get_resources_parents($res_o->parent());
+			}
+
+			$filter = array(
+				"parent" => $resources_folder,
+				"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+				"sort_by" => "objects.jrk",
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_MRP_RESOURCE.oid" => $res_ol->ids(),
+						"CL_MENU.oid" => $this->my_resources_menus,
+					)
+				)),
+			);
+		}
+		else
+		{
+			$filter = array(
+				"parent" => $resources_folder,
+				"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+				"sort_by" => "objects.jrk",
+				// "CL_MRP_RESOURCE.state" => new obj_predicate_not(array($applicable_states)), // archived res removal std version
+			);
+		}
+
+		$resource_tree = new object_tree($filter);
+
+		// archived res removal backwards compatible version
+		$this->mrp_remove_resources_from_tree = array();
+		$resource_tree->foreach_cb(array(
+			"func" => array(&$this, "cb_remove_inactive_res"),
+			"save" => false,
+		));
+
+		if (count($this->mrp_remove_resources_from_tree))
+		{
+			$resource_tree->remove($this->mrp_remove_resources_from_tree);
+		}
+		// END archived res removal backwards compatible version
+
+		classload("vcl/treeview");
+		$tree_prms = array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML,
+				"tree_id" => "resourcetree",
+				"persist_state" => true,
+			),
+			"root_item" => obj ($resources_folder),
+			"ot" => $resource_tree,
+			"var" => $attrb,
+			"node_actions" => array (
+				CL_MRP_RESOURCE => "change",
+			),
+		);
+
+		if(in_array($arr["request"]["group"], array("grp_resources_load", "grp_resources", "grp_resources_hours_report", "grp_persons_quantity_report")))
+		{
+			unset($tree_prms["node_actions"]);
+		}
+
+		$treeview_inst = new treeview;
+		$tree = $treeview_inst->tree_from_objects($tree_prms);
+		// Hack the tree with reload stuff
+		foreach($tree->get_item_ids() as $id)
+		{
+			$item = $tree->get_item($id);
+			$item["url"] = "javascript:$('[name=resource]').val('".$id."'); update_material_table();";
+			$tree->set_item($item);
+		}
+		if (isset($arr["prop"]["value"]))
+		{
+			$arr["prop"]["value"] .= $tree->finalize_tree ();
+		}
+		else
+		{
+			$arr["prop"]["value"] = $tree->finalize_tree ();
+		}
+
+
 	}
 
 	public function _get_persons_resource_span_tree($arr)
@@ -3805,7 +3980,7 @@ class mrp_workspace extends class_base
 			$tv->add_item("all_time", array(
 				"id" => $id,
 				"name" => $caption,
-				"url" => "javascript:$('[name=timespan]').val('".$id."'); update_material_table();update_material_time_tree();"//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=timespan]').val('".$id."'); update_material_table();",
 			));
 		}
 	}
@@ -9130,6 +9305,7 @@ END ajutine
 							, people: $('[name=people]').val()
 							, material: $('[name=material]').val()
 							, timespan: $('[name=timespan]').val()
+							, grouping: document.getElementById('resource_stats_grouping').value
 							, resource: $('[name=resource]').val()}
 							,function(html){
 						x=document.getElementsByName('material_stats_table');
@@ -9339,14 +9515,51 @@ $(document).ready(function(){
 
 	function _get_material_stats_table($arr)
 	{
+		$group = $arr["request"]["grouping"];
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_caption(t("Materjalide kulu"));
+		$t->set_sortable(false);
 
 		$t->define_field(array(
 			"name" => "material",
 			"caption" => t("Materjal"),
 			"align" => "left"
 		));
+		if($group)
+		{
+			switch($group)
+			{
+				case "work":
+					$t->define_field(array(
+						"name" => "prop",
+						"caption" => t("T&ouml;&ouml;"),
+						"align" => "left"
+					));
+					break;
+				case "people":
+					$t->define_field(array(
+						"name" => "prop",
+						"caption" => t("T&ouml;&ouml;taja"),
+						"align" => "left"
+					));
+					break;
+				case "section":
+					$t->define_field(array(
+						"name" => "prop",
+						"caption" => t("Osakond"),
+						"align" => "left"
+					));
+					break;
+				case "resource":
+					$t->define_field(array(
+						"name" => "prop",
+						"caption" => t("Ressurss"),
+						"align" => "left"
+					));
+					break;
+			}
+
+		}
 		$t->define_field(array(
 			"name" => "prog",
 			"caption" => t("Prognoositud"),
@@ -9365,11 +9578,11 @@ $(document).ready(function(){
 			"align" => "left"
 		));
 		$filter = array();
-		if($arr["request"]["timespan"])
+		if(isset($arr["request"]["timespan"]))
 		{
 			$filter = $this->get_range($arr["request"]["timespan"]);
 		}
-		if($this->can("view" , $arr["request"]["material"]))
+		if(isset($arr["request"]["material"]) && $this->can("view" , $arr["request"]["material"]))
 		{
 			$mat = obj($arr["request"]["material"]);
 			if($mat->class_id() == CL_SHOP_PRODUCT)
@@ -9381,30 +9594,204 @@ $(document).ready(function(){
 				$filter["category"] = $arr["request"]["material"];
 			}
 		}
-
-		$material_expense_data = $arr["obj_inst"]->get_material_expense_data($filter);	
-
-		$data = array();
-
-		foreach($material_expense_data as $med)
+		if(isset($arr["request"]["resource"]) && $this->can("view" , $arr["request"]["resource"]))
 		{
-			if(!isset($data[$med["product"]]))
+			$mat = obj($arr["request"]["resource"]);
+			if($mat->class_id() == CL_MRP_RESOURCE)
 			{
-				$data[$med["product"]] = array("amount" => 0, "used_amount" => 0 , "unit" => 0);
+				$filter["resource"] = $arr["request"]["resource"];
 			}
-			$data[$med["product"]]["amount"]+= $med["amount"];
-			$data[$med["product"]]["used_amount"]+= $med["used_amount"];
-			$data[$med["product"]]["unit"] = $med["unit"];
+			else
+			{
+				$filter["resource"] = $arr["obj_inst"]->get_menu_resources($arr["request"]["resource"]);
+			}
+		}
+		if(isset($arr["request"]["people"]))
+		{
+			if(sizeof(explode("_" , $arr["request"]["people"])) > 1)
+			{
+				$ads = explode("_" , $arr["request"]["people"]);
+				$arr["request"]["people"] = $ads[1];
+			}
+
+			if($this->can("view" , $arr["request"]["people"]))
+			{
+				$mat = obj($arr["request"]["people"]);
+				if($mat->class_id() == CL_CRM_PERSON)
+				{
+					$filter["people"] = $arr["request"]["people"];
+				}
+				elseif($mat->class_id() == CL_CRM_PROFESSION)
+				{
+					$workers = $mat->get_workers();
+					if($workers->count())
+					{
+						$filter["people"] = $workers->ids();
+					}
+					else
+					{
+						$filter["people"] = 1;
+					}
+				}
+				elseif($mat->class_id() == CL_CRM_SECTION)
+				{
+					$workers = $mat->get_worker_selection();
+					if(sizeof($workers))
+					{
+						$filter["people"] = array_keys($workers);
+					}
+					else
+					{
+						$filter["people"] = 1;
+					}
+				}
+			}
 		}
 
-		foreach($data as $id => $d)
+		$data = array();
+		if(!$group)
 		{
-			$t->define_data(array(
-				"unit" => get_name($d["unit"]),
-				"real" => $d["used_amount"],
-				"prog" => $d["amount"],
-				"material" => get_name($id),
-			));
+			$material_expense_data = $arr["obj_inst"]->get_material_expense_data($filter);
+			foreach($material_expense_data as $med)
+			{
+				if(!isset($data[$med["product"]]))
+				{
+					$data[$med["product"]] = array("amount" => 0, "used_amount" => 0 , "unit" => 0);
+				}
+				$data[$med["product"]]["amount"]+= $med["amount"];
+				$data[$med["product"]]["used_amount"]+= $med["used_amount"];
+				$data[$med["product"]]["unit"] = $med["unit"];
+			}
+
+			foreach($data as $id => $d)
+			{
+				$t->define_data(array(
+					"unit" => get_name($d["unit"]),
+					"real" => $d["used_amount"],
+					"prog" => $d["amount"],
+					"material" => get_name($id),
+				));
+			}
+		}
+		else
+		{
+			$gp = "";
+			switch($group)
+			{
+				case "work":
+					$gp = "job";
+					break;
+				case "resource":
+					$gp = "job.resource";
+					break;
+				case "people":
+					$gp = "job.person";
+					break;
+			}
+			switch($group)
+			{
+				case "work":
+				case "resource":
+					$material_expense_data = $arr["obj_inst"]->get_material_expense_data($filter);
+					foreach($material_expense_data as $med)
+					{
+						if(!isset($data[$med["product"]]))
+						{
+							$data[$med["product"]][$med[$gp]]= array("amount" => 0, "used_amount" => 0 , "unit" => 0);
+						}
+						$data[$med["product"]][$med[$gp]]["amount"]+= $med["amount"];
+						$data[$med["product"]][$med[$gp]]["used_amount"]+= $med["used_amount"];
+						$data[$med["product"]][$med[$gp]]["unit"] = $med["unit"];
+					}
+					break;
+				case "people":
+					$material_expenses = $arr["obj_inst"]->get_material_expenses($filter);
+					foreach($material_expenses->arr() as $me)
+					{
+						$persons = $me->prop("job.person");
+						if(!is_array($persons))
+						{
+							$persons = array($persons);
+						}
+						foreach($persons as $person => $name)
+						{
+							if(!isset($data[$me->prop("product")]))
+							{
+								$data[$me->prop("product")][$person]= array("amount" => 0, "used_amount" => 0 , "unit" => 0);
+							}
+							$data[$me->prop("product")][$person]["amount"]+= $me->prop("amount");
+							$data[$me->prop("product")][$person]["used_amount"]+= $me->prop("used_amount");
+							$data[$me->prop("product")][$person]["unit"] = $me->prop("unit");
+						}
+					}
+					break;
+				case "section":
+					$material_expenses = $arr["obj_inst"]->get_material_expenses($filter);
+					$person_list = array();
+					$person_to_section = array();
+					foreach($material_expenses->arr() as $me)
+					{
+						$persons = $me->prop("job.person");
+						if(!is_array($persons))
+						{
+							$persons = array($persons);
+						}
+						foreach($persons as $person)
+						{
+							$person_list[$person] = $person;
+						}
+					}
+
+					$person_ol = new object_list();
+					$person_ol->add($person_list);
+					foreach($person_ol->arr() as $o)
+					{
+						$person_to_section[$o->id()] = array_keys($o->get_section_names());
+					}
+
+					foreach($material_expenses->arr() as $me)
+					{
+						$persons = $me->prop("job.person");
+						if(!is_array($persons))
+						{
+							$persons = array($persons);
+						}
+						foreach($persons as $person)
+						{
+							foreach($person_to_section[$person] as $section)
+							{
+								if(!isset($data[$me->prop("product")]))
+								{
+									$data[$me->prop("product")][$section]= array("amount" => 0, "used_amount" => 0 , "unit" => 0);
+								}
+								$data[$me->prop("product")][$section]["amount"]+= $me->prop("amount");
+								$data[$me->prop("product")][$section]["used_amount"]+= $me->prop("used_amount");
+								$data[$me->prop("product")][$section]["unit"] = $me->prop("unit");
+							}
+						}
+					}
+					break;
+			}
+
+			foreach($data as $id => $d)
+			{
+				$t->define_data(array(
+//					"unit" => get_name($d["unit"]),
+//					"real" => $d["used_amount"],
+//					"prog" => $d["amount"],
+					"material" => "<b>".get_name($id)."</b>",
+				));
+				foreach($d as $prop => $amounts)
+				{
+					$t->define_data(array(
+						"prop" => get_name($prop),
+						"unit" => get_name($amounts["unit"]),
+						"real" => $amounts["used_amount"],
+						"prog" => $amounts["amount"],
+	//					"material" => "<b>".get_name($id)."</b>",
+					));
+				}
+			}
 
 		}
 	}
