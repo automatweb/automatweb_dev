@@ -1917,7 +1917,7 @@ class crm_company extends class_base
 						"edit_mode" => isset($edit_mode) ? $edit_mode : NULL,
 						"show_people" => $show_people,
 						"url" => $origurl,
-						"name_format_cb" => $arr["name_format_cb"]
+						"name_format_cb" => isset($arr["name_format_cb"]) ? $arr["name_format_cb"] : "",
 			));
 		}
 		if($_GET['group'] == 'relorg_s')

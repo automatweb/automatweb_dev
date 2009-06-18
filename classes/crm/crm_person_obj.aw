@@ -1208,7 +1208,7 @@ class crm_person_obj extends _int_object
 		@attrib api=1 params=pos
 		@param co optional type=oid
 			company id
-		@param optional type=array
+		@param sec optional type=array
 			section object ids
 		@return array
 			section names
@@ -1225,7 +1225,7 @@ class crm_person_obj extends _int_object
 			}
 			if((!$co || $co == $o->prop("org")) && $o->prop("section.name"))
 			{
-				$sections[] = $o->prop("section.name");
+				$sections[$o->prop("section")] = $o->prop("section.name");
 			}
 		}
 
