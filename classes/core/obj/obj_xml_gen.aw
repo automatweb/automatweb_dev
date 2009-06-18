@@ -144,6 +144,10 @@ class obj_xml_gen
 			{
 				$val = $id_map[$val];
 			}
+			if($fld == "meta")
+			{
+				$val = serialize($val);
+			}
 			$xml .= "\t\t\t<$fld>".$this->_xml_ser_val($val)."</$fld>\n";
 		}
 		$xml .= "\t\t</ot_flds>\n";
@@ -155,13 +159,6 @@ class obj_xml_gen
 			$xml .= "\t\t\t<$pn>".$this->_xml_ser_val($pv)."</$pn>\n";
 		}
 		$xml .= "\t\t</props>\n";
-		// all meta
-		$xml .= "\t\t<meta>\n";
-		foreach($o->meta() as $pn => $pv)
-		{
-			$xml .= "\t\t\t<$pn>".$this->_xml_ser_val($pv)."</$pn>\n";
-		}
-		$xml .= "\t\t</meta>\n";
 		$xml .= "\t</object>\n";
 		return array($xml, $id);
 	}
