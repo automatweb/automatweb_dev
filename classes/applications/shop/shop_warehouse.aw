@@ -3848,6 +3848,10 @@ class shop_warehouse extends class_base
 
 	private function decide_search_method($arr)
 	{
+              if ($this->can_use_products_index() === false)
+               {
+                       return 'regular';
+               }
 		$fields = array(
 		//	'prod_s_name' => 'prod_s_name',
 		//	'prod_s_code' => 'prod_s_code',
@@ -10522,6 +10526,21 @@ $oo = get_instance(CL_SHOP_ORDER);
 		return $arr['post_ru'];
 	}
 
+       /** Returns true, if it is possible to make a prducts search using the index table
+
+       **/
+       function can_use_products_index()
+       {
+               if ($this->db_get_table('aw_shop_products_index') !== false)
+               {
+                       $count = $this->db_fetch_field("SELECT count(*) AS count FROM aw_shop_products_index", "count");
+                       if ($count > 0)
+                       {
+                               return true;
+                       }
+               }
+               return false;
+       }
 }
 
 ?>
