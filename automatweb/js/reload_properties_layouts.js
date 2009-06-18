@@ -14,15 +14,18 @@ function reload_property(props, params)
 		property = props[i];
 		(function(prop)
 		{
-			get_property_data["view_property"] = prop;
+			if($("div[name='"+prop+"']").size() > 0)
+			{
+				get_property_data["view_property"] = prop;
 
-			$.ajax({
-				url: "orb.aw",
-				data: get_property_data,
-				success: function(html){
-					$("div[name='"+prop+"']").html(html);
-				}
-			});
+				$.ajax({
+					url: "orb.aw",
+					data: get_property_data,
+					success: function(html){
+						$("div[name='"+prop+"']").html(html);
+					}
+				});
+			}
 		})(property);
 	}
 }
@@ -41,15 +44,18 @@ function reload_layout(layouts, params)
 		layout_ = layouts[i];
 		(function(layout)
 		{
-			get_property_data["view_layout"] = layout;
+			if($("div[id='"+layout_+"_outer']").size() > 0)
+			{
+				get_property_data["view_layout"] = layout;
 
-			$.ajax({
-				url: "orb.aw",
-				data: get_property_data,
-				success: function(html){
-					$("div[id='"+layout+"_outer']").html(html);
-				}
-			});
+				$.ajax({
+					url: "orb.aw",
+					data: get_property_data,
+					success: function(html){
+						$("div[id='"+layout+"_outer']").html(html);
+					}
+				});
+			}
 		})(layout_);
 	}
 }
@@ -63,5 +69,4 @@ function insert_params(params)
 			get_property_data[i] = params[i];
 		}
 	}
-//	get_property_data["action"] = "get_object_data";
 }
