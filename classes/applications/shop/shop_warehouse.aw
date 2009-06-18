@@ -1562,11 +1562,29 @@ class shop_warehouse extends class_base
 	{
 		$srch = $arr["request"];
 
-		$fields = array(
-//			"prod" => t("Artikkel"),
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		$t->define_field(array(
+			"name" => "product",
+			"caption" => t("Artikkel"),
+			"sortable" => 1,
+		));
+		$prod_fields = array(
 			"prod_name" => t("Nimetus"),
 			"weight" => t("kaal (gr/m2)"),
 			"width" => t("Laius (mm)"),
+		);
+		foreach($prod_fields as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+				"sortable" => 1,
+				"parent" => "product"
+			));
+		}
+		$fields = array(
+//			"prod" => t("Artikkel"),
 			"begin_count" => t("Perioodi algsaldo (kg)"),
 			"amount" => t("Kogus (kg)"),	
 			"len" => t("Kogus (jm)"),	
@@ -1574,9 +1592,6 @@ class shop_warehouse extends class_base
 			"balance" => t("Hetke saldo (EEK)"),
 			"repair" => t("Parandus"),
 		);
-
-		$t = &$arr["prop"]["vcl_inst"];
-		$t->set_sortable(false);
 		foreach($fields as $key => $val)
 		{
 			$t->define_field(array(
@@ -1688,20 +1703,35 @@ class shop_warehouse extends class_base
 
 		$products = $arr["obj_inst"] -> get_products($filter);
 
-
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		$t->set_caption(t("Lao saldo"));
 		$fields = array(
-			"prod_name" => t("Nimetus"),
-			"weight" => t("kaal (gr/m2)"),
-			"width" => t("Laius (mm)"),
 			"begin_count" => t("Perioodi algsaldo (kg)"),
 			"amount" => t("Kogus (kg)"),	
 			"len" => t("Kogus jm."),	
 			"price" => t("hind EEK/t"),
 			"balance" => t("Hetke saldo"),
 		);
-
-		$t = &$arr["prop"]["vcl_inst"];
-		$t->set_sortable(false);
+		$t->define_field(array(
+			"name" => "product",
+			"caption" => t("Artikkel"),
+			"sortable" => 1,
+		));
+		$prod_fields = array(
+			"prod_name" => t("Nimetus"),
+			"weight" => t("kaal (gr/m2)"),
+			"width" => t("Laius (mm)"),
+		);
+		foreach($prod_fields as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+				"sortable" => 1,
+				"parent" => "product"
+			));
+		}
 		foreach($fields as $key => $val)
 		{
 			$t->define_field(array(
@@ -1793,11 +1823,7 @@ class shop_warehouse extends class_base
 		{
 			$srch["stats_type"] = "all";
 		}
-		$fields = array(
-			"prod_name" => t("Nimetus"),
-			"weight" => t("kaal (gr/m2)"),
-			"width" => t("Laius (mm)"),
-		);
+
 		if(!$arr["request"]["timespan"])
 		{
 			$arr["request"]["timespan"] = "period_week";
@@ -1806,13 +1832,23 @@ class shop_warehouse extends class_base
 
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_sortable(false);
-
-		foreach($fields as $key => $val)
+		$t->define_field(array(
+			"name" => "product",
+			"caption" => t("Artikkel"),
+			"sortable" => 1,
+		));
+		$prod_fields = array(
+			"prod_name" => t("Nimetus"),
+			"weight" => t("kaal (gr/m2)"),
+			"width" => t("Laius (mm)"),
+		);
+		foreach($prod_fields as $key => $val)
 		{
 			$t->define_field(array(
 				"name" => $key,
 				"caption" => $val,
 				"sortable" => 1,
+				"parent" => "product"
 			));
 		}
 		$t->define_field(array(
@@ -1954,12 +1990,13 @@ class shop_warehouse extends class_base
 		$filter = $this->get_range($arr["request"]["timespan"]);
 		$filter["category"] = $arr["request"]["pgtf"];
 
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+
 		$fields = array(
 //			"id" => t("Tellimus"),
 //			"prod" => t("Artikkel"),
-			"prod_name" => t("Nimetus"),
-			"weight" => t("kaal (gr/m2)"),
-			"width" => t("Laius (mm)"),
 			"begin_count" => t("Perioodi algsaldo"),
 			"income" => t("Perioodi sissetulek"),
 			"outcome" => t("Perioodi v&auml;ljaminek"),
@@ -1967,8 +2004,27 @@ class shop_warehouse extends class_base
 			"final_count" => t("Perioodi l&otilde;ppsaldo"),
 //			"final_count_check" => t("Perioodi l&otilde;ppsaldo kontroll"),
 		);
-		$t = &$arr["prop"]["vcl_inst"];
-		$t->set_sortable(false);
+
+		$t->define_field(array(
+			"name" => "product",
+			"caption" => t("Artikkel"),
+			"sortable" => 1,
+		));
+		$prod_fields = array(
+			"prod_name" => t("Nimetus"),
+			"weight" => t("kaal (gr/m2)"),
+			"width" => t("Laius (mm)"),
+		);
+		foreach($prod_fields as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+				"sortable" => 1,
+				"parent" => "product"
+			));
+		}
+
 		foreach($fields as $key => $val)
 		{
 			$t->define_field(array(
@@ -1977,6 +2033,8 @@ class shop_warehouse extends class_base
 				"sortable" => 1,
 			));
 		}
+
+
 
 		$ol = $arr["obj_inst"] -> get_movements($filter);
 
@@ -3790,11 +3848,6 @@ class shop_warehouse extends class_base
 
 	private function decide_search_method($arr)
 	{
-		if ($this->can_use_products_index() === false)
-		{
-			return 'regular';
-		}
-
 		$fields = array(
 		//	'prod_s_name' => 'prod_s_name',
 		//	'prod_s_code' => 'prod_s_code',
@@ -10467,22 +10520,6 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 
 		return $arr['post_ru'];
-	}
-
-	/** Returns true, if it is possible to make a prducts search using the index table
-	
-	**/
-	function can_use_products_index()
-	{
-		if ($this->db_get_table('aw_shop_products_index') !== false)
-		{
-			$count = $this->db_fetch_field("SELECT count(*) AS count FROM aw_shop_products_index", "count");
-			if ($count > 0)
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 
 }
