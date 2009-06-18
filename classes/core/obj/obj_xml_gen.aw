@@ -155,6 +155,13 @@ class obj_xml_gen
 			$xml .= "\t\t\t<$pn>".$this->_xml_ser_val($pv)."</$pn>\n";
 		}
 		$xml .= "\t\t</props>\n";
+		// all meta
+		$xml .= "\t\t<meta>\n";
+		foreach($o->meta() as $pn => $pv)
+		{
+			$xml .= "\t\t\t<$pn>".$this->_xml_ser_val($pv)."</$pn>\n";
+		}
+		$xml .= "\t\t</meta>\n";
 		$xml .= "\t</object>\n";
 		return array($xml, $id);
 	}
@@ -365,12 +372,12 @@ echo "<pre>".htmlentities($xml)."</pre>";
 			}
 		}
 
-		$md = aw_unserialize(trim($data["ot_flds"]["meta"]));
+		$md = aw_unserialize(html_entity_decode(trim($data["ot_flds"]["meta"])));
 		if (is_array($md))
 		{
 			foreach($md as $k => $v)
 			{
-				$v = html_entity_decode($v);
+				$v = $v;
 				$o->set_meta($k, $v);
 			}
 		}
