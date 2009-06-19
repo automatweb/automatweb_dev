@@ -30,6 +30,7 @@
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_popup.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.tooltip.min.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.rightClick.js"></script>
+	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_please_wait_window.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
@@ -195,6 +196,11 @@ $.init_session_modal({
 
 <!-- SUB: POPUP_MENUS -->
 <!-- END SUB: POPUP_MENUS -->
+
+<div id="ajaxLoader" style="display: none;">
+	<img src="/automatweb/images/ajax-loader2.gif" width="220" height="19" alt="" />
+	<div>{VAR:ajax_loader_msg}</div>
+</div>
 
 {VAR:javascript_bottom}
 

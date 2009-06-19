@@ -1543,3 +1543,20 @@ font-size: 10px;
 #aw_object_quickadd_results a.odd {background-color: #CFE7EC; }
 #aw_object_quickadd_results a.even { background-color: white;}
 /* End /automatweb/css/jquery_aw_object_quickadd.css */ 
+
+#ajaxLoader {
+	background: white;
+	position: absolute;
+	z-index: 999;
+	width: 260px;
+	padding: 10px 0;
+	border: 1px solid #0386c7;
+}
+#ajaxLoader img { margin: 0 auto; display: block; }
+#ajaxLoader div {
+	font-size: 11px;
+	font-weight:bold;
+	margin: 0 auto;
+	text-align: center;
+	width: 220px;
+}
