@@ -75,10 +75,71 @@ class spa_bookings_overview_obj extends _int_object
 			$filter["name"] = "%".$arr["name"]."%";
 
 		}
+		if(isset($arr["from"]) && $arr["from"] > 0 && isset($arr["to"]) && $arr["to"] > 0)
+		{
+			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $arr["from"], $arr["to"]);
+		}
+		elseif(isset($arr["from"]) && $arr["from"] > 0)
+		{
+			$filter["end"] = new obj_predicate_compare(OBJ_COMP_GREATER, $arr["from"]);
+		}
+		elseif(isset($arr["to"]) && $arr["to"] > 0)
+		{
+			$to += 24 * 60 * 60 -1;
+			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_LESS, $arr["to"]);
+		}
 
 		$ol = new object_list($filter);
 		return $ol;
 	}
+
+	public function get_max_capacity()
+	{
+		$filter = array(
+			"class_id" => CL_ROOM,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_ROOM => array(
+					new obj_sql_func(OBJ_SQL_MAX, "max_capacity", "max_capacity"),
+				)
+			)
+		);
+		if(is_array($t->get_element_from_all("max_capacity")))
+		{
+			$max = reset($t->get_element_from_all("max_capacity"));
+			if($max > 10)
+			{
+				return $max;
+			}
+		}
+
+		return 10;
+	}
+
+	/** Returns currencies in use
+		@attrib api=1
+		@returns
+			array(
+				cur_oid => cur_name
+			)
+		@comment
+			Actually what this does is just return all system currencies right now, and all the places even don't use this in reservation obj(but they should).
+	 **/
+	function get_currencies()
+	{
+		$ol = new object_list(array(
+			"site_id" => array(),
+			"lang_id" => array(),
+			"class_id" => CL_CURRENCY,
+		));
+		return $ol->names();
+	}
+
 
 }
 

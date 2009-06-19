@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.83 2009/06/15 15:40:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.84 2009/06/19 14:59:25 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -593,7 +593,7 @@ class spa_bookings_overview extends class_base
 		$tv->add_item(0,array(
 			"name" => t("K&otilde;ik kategooriad"),
 			"id" => "all",
-			"url" => "javascript:$('[name=category]').val('all'); update_rooms_table();update_cat_tb();"//aw_url_change_var("cat", $id),
+			"url" => "javascript:$('[name=category]').val('all'); update_rooms_table();"//aw_url_change_var("cat", $id),
 
 //			"url" => aw_url_change_var($var, "all"),
 		));
@@ -603,7 +603,7 @@ class spa_bookings_overview extends class_base
 			$tv->add_item(0,array(
 				"name" => $name,
 				"id" => $id."",
-				"url" => "javascript:$('[name=category]').val('".$id."'); update_rooms_table();update_cat_tb();"//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=category]').val('".$id."'); update_rooms_table();"//aw_url_change_var("cat", $id),
 			));
 			$this->add_cat_leaf($tv , $id);
 		}
@@ -626,7 +626,7 @@ class spa_bookings_overview extends class_base
 			$tv->add_item($parent,array(
 				"name" => $name,
 				"id" => $id."",
-				"url" => "javascript:$('[name=category]').val('".$id."'); update_rooms_table();update_cat_tb();"//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=category]').val('".$id."'); update_rooms_table();",
 			));
 			$this->add_cat_leaf($tv , $id);
 		}
@@ -648,7 +648,7 @@ class spa_bookings_overview extends class_base
 		$tv->add_item(0,array(
 			"name" => t("K&otilde;ik kategooriad"),
 			"id" => "all",
-			"url" => "javascript:$('[name=room]').val('all'); update_bron_table();update_room_tree();"//aw_url_change_var("cat", $id),
+			"url" => "javascript:$('[name=room]').val('all'); update_bron_table();"//aw_url_change_var("cat", $id),
 		));
 
 		foreach($arr["obj_inst"]->get_category_names() as $id => $name)
@@ -656,7 +656,7 @@ class spa_bookings_overview extends class_base
 			$tv->add_item(0,array(
 				"name" => $name,
 				"id" => $id."",
-				"url" => "javascript:$('[name=room]').val('".$id."'); update_bron_table();update_room_tree();",//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=room]').val('".$id."'); update_bron_table();",//aw_url_change_var("cat", $id),
 				"iconurl" => icons::get_icon_url(CL_MENU),
 			));
 			$this->add_room_leaf($tv , $id);
@@ -681,7 +681,7 @@ class spa_bookings_overview extends class_base
 			$tv->add_item($parent,array(
 				"name" => $name,
 				"id" => $id."",
-				"url" => "javascript:$('[name=room]').val('".$id."'); update_bron_table();update_room_tree();",//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=room]').val('".$id."'); update_bron_table();",//aw_url_change_var("cat", $id),
 				"iconurl" => icons::get_icon_url(CL_MENU),
 			));
 			$this->add_cat_leaf($tv , $id);
@@ -698,7 +698,7 @@ class spa_bookings_overview extends class_base
 				"name" => $name,
 				"id" => $id."",
 				"iconurl" => icons::get_icon_url(CL_ROOM),
-				"url" => "javascript:$('[name=room]').val('".$id."'); update_bron_table();update_room_tree();"//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=room]').val('".$id."'); update_bron_table();"//aw_url_change_var("cat", $id),
 			));
 		}
 	}
@@ -739,8 +739,11 @@ class spa_bookings_overview extends class_base
 			"url" => "javascript:$('[name=from]').val('all'); update_rooms_table();update_from_tb();"//aw_url_change_var("cat", $id),
 //			"url" => aw_url_change_var($var, "all"),
 		));
+
+		$max_cap = $arr["obj_inst"]->get_max_capacity();
+
 		$x = 1;
-		while($x <= 10)
+		while($x < $max_cap/10+1)
 		{
 			$y = 1;
 			while($y <= 10)
@@ -784,8 +787,10 @@ class spa_bookings_overview extends class_base
 			"url" => "javascript:$('[name=to]').val('".$id."'); update_rooms_table();update_to_tb();"//aw_url_change_var("cat", $id),
 //			"url" => aw_url_change_var($var, "all"),
 		));
+		$max_cap = $arr["obj_inst"]->get_max_capacity();
+
 		$x = 1;
-		while($x <= 10)
+		while($x < $max_cap/10+1)
 		{
 			$y = 1;
 			while($y <= 10)
@@ -813,6 +818,7 @@ class spa_bookings_overview extends class_base
 	function _get_reservation_management_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_caption(t("Broneeringute nimekiri"));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
@@ -857,6 +863,10 @@ class spa_bookings_overview extends class_base
 			"field" => "id",
 		));
 		$data = array();
+		if(isset($arr["request"]["timespan"]))
+		{
+			$data = $this->get_range($arr["request"]["timespan"]);
+		}
 		if($this->can("view" , $arr["request"]["room"]))
 		{
 			$room_object = obj($arr["request"]["room"]);
@@ -870,16 +880,25 @@ class spa_bookings_overview extends class_base
 			}
 		}
 
-
 		$data["name"] = $arr["request"]["name"];
 
 		$reservations = $arr["obj_inst"]->get_reservations($data);
-		
+		$currencies = $arr["obj_inst"]->get_currencies($data);
 		foreach($reservations->arr() as $reservation)
 		{
+			$sumstuff = array();
+			foreach($reservation->get_sum() as $cur => $sum)
+			{
+				$sumstuff[] = $sum." ".$currencies[$cur];
+			}
 			$t->define_data(array(
 				"name" => html::obj_change_url($reservation,null,array("return_url" => $this->mk_my_orb("change" , array("class" => "spa_bookings_overview","id" => $arr["obj_inst"]->id() , "group" => "room_management" )))),
 				"id" => $reservation->id(),
+				"nr" => $reservation->prop("resource.nr"),
+				"floor" => $reservation->prop("resource.floor"),
+				"corps" => $reservation->prop("resource.corps"),
+				"time" => ($reservation->prop("start1") > 0 ? date("d.m.Y h:i" , $reservation->prop("start1")) : "") . " - " . ($reservation->prop("end") > 0 ? date("d.m.Y h:i" , $reservation->prop("end")) : ""),
+				"price" => join("<br>" , $sumstuff),
 			));
 		}
 	}
@@ -1866,6 +1885,12 @@ class spa_bookings_overview extends class_base
 		$tb->add_delete_button();
 	}
 
+	function _get_reservation_management_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_delete_button();
+	}
+
 	function _get_r_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -2075,7 +2100,9 @@ class spa_bookings_overview extends class_base
 			$js.= "
 				function update_rooms_table()
 				{
-
+					$.please_wait_window.show({
+						'target': $('[name=room_management_list]')
+					});
 					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
 							id: ".$arr["obj_inst"]->id()."
 							, prop: 'room_management_list'
@@ -2084,6 +2111,7 @@ class spa_bookings_overview extends class_base
 							, from: $('[name=from]').val()
 							, to: $('[name=to]').val()}
 							,function(html){
+							    $.please_wait_window.hide();
 						x=document.getElementsByName('room_management_list');
 						x[0].innerHTML = html;
 					});
@@ -2097,7 +2125,9 @@ class spa_bookings_overview extends class_base
 
 				function update_bron_table()
 				{
-
+					$.please_wait_window.show({
+						'target': $('[name=reservation_management_list]')
+					});
 					$.post('/automatweb/orb.aw?class=spa_bookings_overview&action=ajax_update_prop',{
 							id: ".$arr["obj_inst"]->id()."
 							, prop: 'reservation_management_list'
@@ -2105,6 +2135,7 @@ class spa_bookings_overview extends class_base
 							, room: $('[name=room]').val()
 							, timespan: $('[name=timespan]').val()}
 							,function(html){
+							    $.please_wait_window.hide();
 						x=document.getElementsByName('reservation_management_list');
 						x[0].innerHTML = html;
 					});
@@ -3578,7 +3609,7 @@ class spa_bookings_overview extends class_base
 			$tv->add_item("all_time", array(
 				"id" => $id,
 				"name" => $caption,
-				"url" => "javascript:$('[name=timespan]').val('".$id."'); update_bron_table();update_time_tree();"//aw_url_change_var("cat", $id),
+				"url" => "javascript:$('[name=timespan]').val('".$id."'); update_bron_table();"//aw_url_change_var("cat", $id),
 			));
 		}
 	}
