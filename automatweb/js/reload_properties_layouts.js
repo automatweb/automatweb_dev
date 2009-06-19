@@ -10,24 +10,26 @@ function reload_property(props, params) {
 	for(var i = 0; i < props.length; i++) {
 		property = props[i];
 		(function(prop) {
-			if($("div[name='"+prop+"']").size() > 0) {
-				var div = $("div[name='"+prop+"']");
-				get_property_data["view_property"] = prop;
-				
-
+			$("div[name='"+prop+"']").each(function(){
+				div = $(this);
+				$.please_wait_window.show({
+					"target": div
+				});
 				$.ajax({
 					url: "orb.aw",
-					data: get_property_data,
+					data: $.extend({view_property: prop}, get_property_data),
 					success: function(html){
 						div.html(html);
+						$.please_wait_window.hide();
 					}
 				});
-			}
+			});
 		})(property);
 	}
 }
 
 function reload_layout(layouts, params) {
+	console.log(layouts);
 	insert_params(params);
 
 	if(typeof layouts != "object") {
@@ -37,24 +39,21 @@ function reload_layout(layouts, params) {
 	for(var i = 0; i < layouts.length; i++) {
 		layout_ = layouts[i];
 		(function(layout) {
-			if($("div[id='"+layout_+"_outer']").size() > 0) {
-				var div = $("div[id='"+layout+"_outer']");
-				get_property_data["view_layout"] = layout;
-				
-				
+			$("div[id='"+layout_+"_outer']").each(function(){
+				div = $(this);
+				console.log(div);
 				$.please_wait_window.show({
 					"target": div
 				});
-				
 				$.ajax({
 					url: "orb.aw",
-					data: get_property_data,
+					data: $.extend({view_layout: layout}, get_property_data),
 					success: function(html){
-						div.html(html);
+						div.after(html).remove();
 						$.please_wait_window.hide();
 					}
 				});
-			}
+			});
 		})(layout_);
 	}
 }
