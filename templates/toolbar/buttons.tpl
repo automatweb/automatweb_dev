@@ -5,8 +5,8 @@ if ( typeof jQuery == "undefined" )
         document.write("<script src=\"{VAR:baseurl}/automatweb/js/jquery/jquery-1.2.3.min.js\" type=\"text/javascript\"><\/script>");
 }
 </script>
-<div id="toimingud">
-	<div class="v">
+<table id="toimingud">
+	<td class="v">
 <!-- END SUB: start -->
 		<!-- SUB: button -->
 		{VAR:surround_start}
@@ -89,21 +89,21 @@ if ( typeof jQuery == "undefined" )
 			 <div class="cdata">{VAR:data}</div>
 		<!-- END SUB: cdata -->
 
-	</div>
+	</td><!-- mis see on? -->
 
 	<!-- SUB: end -->
 <!--	</div> -->
 	<!-- END SUB: end -->
 
 	<!-- SUB: right_side -->
-	<div class="p">
+	<td class="p">
 		{VAR:right_side_content}
 	<!-- END SUB: right_side -->
 
 <!-- SUB: end -->
-</div>
+</td>
 <!-- END SUB: end -->
 <!-- SUB: real_end -->
-</div>
+</table>
 <br class="clear" />
 <!-- END SUB: real_end -->
