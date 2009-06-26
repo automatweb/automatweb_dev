@@ -44,12 +44,12 @@ class group_membership_obj extends _int_object
 		return parent::set_prop($k, $v);
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		// I need the ID!
 		if(!is_oid(parent::id()))
 		{
-			parent::save();
+			parent::save($exclusive, $previous_state);
 		}
 		// If it's valid right now, it's handled in $this->set_status()
 		if(!parent::prop("membership_forever") && parent::prop("date_start") > time())
@@ -87,7 +87,7 @@ class group_membership_obj extends _int_object
 			));
 			$ol->delete();
 		}
-		return parent::save();
+		return parent::save($exclusive, $previous_state);
 	}
 
 	public function brother_destroyer($arr)
@@ -253,14 +253,12 @@ class group_membership_obj extends _int_object
 	@param user optional type=array/oid
 
 	**/
-	function get_valid_memberships($arr)
+	public static function get_valid_memberships($arr)
 	{
 		enter_function("group_membership_obj::get_valid_memberships");
-		// $group, $user
-		extract($arr);
 
-		$group = (array) $group;
-		$user = (array) $user;
+		$group = isset($arr["group"]) ? (array) $arr["group"] : array();
+		$user = isset($arr["user"]) ? (array) $arr["user"] : array();
 
 		$r = new object_list(array(
 			"class_id" => CL_GROUP_MEMBERSHIP,

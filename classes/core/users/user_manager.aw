@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.20 2009/05/05 15:43:10 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.21 2009/06/26 11:05:41 instrumental Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -114,10 +114,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 
 		@property packages_tbl type=table no_caption=1 store=no
 
-	@groupinfo conditions caption=Tingimused parent=content_packages
-	@default group=conditions
+	@groupinfo price_conditions caption=Hinnatingimused parent=content_packages
+	@groupinfo conditions caption=Sisutingimused parent=content_packages
+	@default group=price_conditions,conditions
 
-		@property conditions_tlb type=toolbar no_caption=1 store=no
+		@property price_conditions_tlb type=toolbar no_caption=1 store=no group=price_conditions
+		@property conditions_tlb type=toolbar no_caption=1 store=no group=conditions
 
 		@layout conditions_ type=hbox width=20%:80%
 
@@ -129,7 +131,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 
 			@layout conditions_right type=vbox parent=conditions_
 
-				@property conditions_tbl type=table no_caption=1 store=no parent=conditions_right
+				@property price_conditions_tbl type=table no_caption=1 store=no parent=conditions_right group=price_conditions
+				@property conditions_tbl type=table no_caption=1 store=no parent=conditions_right group=conditions
 
 	@groupinfo cp_settings caption=Seaded parent=content_packages
 	@default group=cp_settings
@@ -488,9 +491,12 @@ class user_manager extends class_base
 	{
 		$arr['last_parent'] = $this->parent;
 		$arr['ob_group'] = 'um';
-		foreach(safe_array($this->_add_vars) as $var)
+		if(isset($this->_add_vars))
 		{
-			$arr[$var] = "0";
+			foreach(safe_array($this->_add_vars) as $var)
+			{
+				$arr[$var] = "0";
+			}
 		}
 		$arr["post_ru"] = post_ru();
 		$arr["search_button_pressed"] = 0;
@@ -799,20 +805,32 @@ class user_manager extends class_base
 			{
 				foreach($items as $item)
 				{
-					$name = $this->parent == $item ? "<b>".parse_obj_name($treenames[$item])."</b>" : parse_obj_name($treenames[$item]);
+					if($this->parent == $item)
+					{
+						$tree->set_selected_item($item);
+					}
 					$tree->add_item($pt, array(
 						"id" => $item,
-						"name" => $name." (".count($treedata->tree[$item]).")".html::obj_change_url($item, t(" (M)")),
-						"url" => aw_url_change_var(array("parent" => $item, "search_button_pressed" => 0)),
+						"name" => parse_obj_name($treenames[$item])." (".count($treedata->tree[$item]).")".html::obj_change_url($item, t(" (M)")),
+						"reload" => array(
+							"layouts" => array("vbox_users_content", "vbox_ug_content"),
+							"params" => array("parent" => $item, "search_button_pressed" => NULL),
+						),
 						"iconurl" => $ic->get_icon_url(CL_GROUP,""),
 					));
 				}
 			}
-			$name = $this->parent == $parent ? "<b>".parse_obj_name($parent_obj->name())."</b>" : parse_obj_name($parent_obj->name());
+			if($this->parent == $parent)
+			{
+				$tree->set_selected_item($parent);
+			}
 			$tree->add_item(0, array(
 				"id" => $parent,
-				"name" => $name." (".count($treedata->tree[$parent]).")".html::obj_change_url($parent, t(" (M)")),
-				"url" => aw_url_change_var(array("parent" => $parent, "search_button_pressed" => 0)),
+				"name" => parse_obj_name($parent_obj->name())." (".count($treedata->tree[$parent]).")".html::obj_change_url($parent, t(" (M)")),
+				"reload" => array(
+					"layouts" => array("vbox_users_content", "vbox_ug_content"),
+					"params" => array("parent" => $parent),
+				),
 				"iconurl" => $ic->get_icon_url($parent_obj->class_id(),""),
 			));
 		}
@@ -1058,6 +1076,7 @@ class user_manager extends class_base
 		}
 
 		$df = aw_ini_get('config.dateformats');
+		$user_inst = new user;
 		foreach ($users as $u)
 		{
 			$o = obj($u);
@@ -1129,7 +1148,7 @@ class user_manager extends class_base
 				'username' => $popup_menu->get_menu(array(
 					"text" => parse_obj_name($o->prop('uid')),
 				)),
-				"name" => html::obj_change_url(user::get_person_for_user($o)),
+				"name" => html::obj_change_url($user_inst->get_person_for_user($o)),
 				/*
 				'name' => html::href(array(
 					'caption' => strlen($o->prop('real_name')) ? $o->prop('real_name') : '('.t("nimetu").')',
@@ -1566,11 +1585,11 @@ class user_manager extends class_base
 			}
 		}
 
-		if($_GET["parent"] == "root")
+		if(automatweb::$request->arg("parent") == "root")
 		{
 			$parent = "root";
 		}
-		if($_GET["search_button_pressed"])
+		if(automatweb::$request->arg("search_button_pressed"))
 		{
 			$parent = "search";
 		}
@@ -1897,30 +1916,39 @@ class user_manager extends class_base
 			"name" => "sel",
 		));
 		$t->define_field(array(
+			"name" => "priority",
+			"caption" => t("Prioriteet"),
+			"align" => "center",
+			"sortable" => true,
+			"sorting_field" => "priority_numeric",
+		));
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 			"align" => "center",
+			"sortable" => true,
+			"sorting_field" => "name_string",
 		));
 		$t->define_field(array(
 			"name" => "date_start",
 			"caption" => t("Tellimisaja algus"),
 			"align" => "center",
+			"sortable" => true,
+			"sorting_field" => "date_start_numeric"
 		));
 		$t->define_field(array(
 			"name" => "date_end",
 			"caption" => t("Tellimisaja l&otilde;pp"),
 			"align" => "center",
-		));
-		$t->define_field(array(
-			"name" => "duration",
-			"caption" => t("Kasutusaja pikkus"),
-			"align" => "center",
+			"sortable" => true,
+			"sorting_field" => "date_end_numeric"
 		));
 		$t->define_field(array(
 			"name" => "change",
 			"caption" => t("Muuda"),
 			"align" => "center",
 		));
+		$t->set_numeric_field(array("priority_numeric", "date_start_numeric", "date_end_numeric"));
 		return $t;
 	}
 
@@ -1938,35 +1966,36 @@ class user_manager extends class_base
 			));
 			$t->define_data(array(
 				"oid" => $id,
+				"priority" => html::textbox(array(
+					"name" => "packages_tbl[".$id."][priority]",
+					"value" => $od["priority"],
+					"size" => 15,
+				)),
+				"priority_numeric" => $od["priority"],
 				"name" => html::textbox(array(
 					"name" => "packages_tbl[".$id."][name]",
 					"value" => $od["name"],
 				)),
-				"price" => html::textbox(array(
-					"name" => "packages_tbl[".$id."][price]",
-					"value" => $od["duration"],
-					"size" => 4,
-				)),
+				"name_string" => $od["name"],
 				"date_start" => $date_edit->gen_edit_form(
 					"packages_tbl[".$id."][date_start]",
 					$od["date_start"],
-					2003,
-					2010
+					$start = min(date("Y"), date("Y", $od["date_start"])),
+					$start + 10
 				),
+				"date_start_numeric" => $od["date_start"],
 				"date_end" => $date_edit->gen_edit_form(
 					"packages_tbl[".$id."][date_end]",
 					$od["date_end"],
-					2003,
-					2010
+					$start = min(date("Y"), date("Y", $od["date_end"])),
+					$start + 10
 				),
-				"duration" => html::textbox(array(
-					"name" => "packages_tbl[".$id."][duration]",
-					"value" => $od["duration"],
-					"size" => 4,
-				)),
+				"date_end_numeric" => $od["date_end"],
 				"change" => html::obj_change_url($id),
 			));
 		}
+		$t->set_default_sortby(array("priority", "name"));
+		$t->set_default_sorder(array("priority" => "desc", "name" => "asc"));
 	}
 
 	function _get_packages_tlb($arr)
@@ -1988,11 +2017,15 @@ class user_manager extends class_base
 		foreach($this->get_content_packages()->arr() as $id => $od)
 		{
 			$t->add_item(0, array(
-				"id" => $id,
-				"name" => $_GET["contpack"] == $id ? "<b>".$od["name"]."</b>" : $od["name"],
-				"url" => aw_url_change_var("contpack", $id),
+				"id" => (int)$id,
+				"name" => $od["name"],
+				"reload" => array(
+					"layouts" => array("conditions_right"),
+					"params" => array("contpack" => $id),
+				),
 			));
 		}
+		$t->set_selected_item((int)automatweb::$request->arg("contpack"));
 	}
 
 	function get_content_packages()
@@ -2004,7 +2037,7 @@ class user_manager extends class_base
 				"site_id" => array(),
 			),
 			array(
-				CL_CONTENT_PACKAGE => array("name", "price", "date_start", "date_end", "duration"),
+				CL_CONTENT_PACKAGE => array("name", "priority", "date_start", "date_end"),
 			)
 		);
 	}
@@ -2012,6 +2045,16 @@ class user_manager extends class_base
 	function _get_conditions_tbl($arr)
 	{
 		return get_instance(CL_CONTENT_PACKAGE)->_get_conditions_tbl($arr, true);
+	}
+
+	function _get_price_conditions_tbl($arr)
+	{
+		return get_instance(CL_CONTENT_PACKAGE)->_get_prices_tbl($arr, true);
+	}
+
+	function _get_price_conditions_tlb($arr)
+	{
+		return get_instance(CL_CONTENT_PACKAGE)->_get_prices_tlb($arr, true);
 	}
 }
 ?>

@@ -1,5 +1,7 @@
 <?php
 /*
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CONTENT_PACKAGE, on_connect)
+
 @classinfo syslog_type=ST_CONTENT_PACKAGE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=instrumental
 @tableinfo aw_content_package master_index=brother_of master_table=objects index=aw_oid
 
@@ -10,19 +12,16 @@
 	@caption Kasutajagrupi OID
 
 	@property cp_sp type=hidden
-	@caption Toode OID
+	@caption Toote OID
 
-	@property price type=textbox size=4
-	@caption Hind
+	@property priority field=aw_priority type=textbox size=15
+	@caption Prioriteet
 
 	@property date_start type=date_select
 	@caption Tellimisaja algus
 
 	@property date_end type=date_select
 	@caption Tellimisaja l&otilde;pp
-
-	@property duration type=textbox size=4
-	@caption Paketi kasutamise aeg p&auml;evades
 
 @groupinfo subscribers caption=Tellijad
 @default group=subscribers
@@ -33,12 +32,24 @@
 
 	@property subscribers_tmp type=hidden store=no
 
-@groupinfo conditions caption=Tingimused
+@groupinfo prices caption=Hinnatingimused
+@default group=prices
+
+	@property prices_tlb type=toolbar no_caption=1 store=no
+
+	@property prices_tbl type=table no_caption=1 store=no
+
+@groupinfo conditions caption=Sisutingimused
 @default group=conditions
 
 	@property conditions_tlb type=toolbar no_caption=1 store=no
 
 	@property conditions_tbl type=table no_caption=1 store=no
+
+###
+
+@reltype PRICE_CONDITIONS value=1 clid=CL_CONTENT_PACKAGE_PRICE_CONDITIONS
+@caption Hinnatingimused
 
 */
 
@@ -52,22 +63,114 @@ class content_package extends class_base
 		));
 	}
 
-	function get_property($arr)
+	public function _get_priority($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
+		if(!empty($this->new))
 		{
-			case "date_end":
-				$prop["value"] = mktime(0, 0, 0, date("m"), date("d"), date("Y") + 1);
-				break;
+			$arr["prop"]["value"] = 5000;
 		}
-
-		return $retval;
 	}
 
-	function set_property($arr = array())
+	public function _get_date_end($arr)
+	{
+		if(!empty($this->new))
+		{
+			$arr["prop"]["value"] = mktime(0, 0, 0, date("m"), date("d"), date("Y") + 1);
+		}
+	}
+
+	protected function _init_prices_tbl($arr, $name)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->set_caption(sprintf(t("Sisupaketi \"".$name."\" sisutingimused")));
+
+		$t->define_chooser();
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "duration",
+			"caption" => t("Paketi kasutamise aeg p&auml;evades"),
+			"align" => "center",
+		));
+	}
+
+	public function _get_prices_tbl($arr, $use_get = false)
+	{
+		if($use_get && !$this->can("view", automatweb::$request->arg("contpack")))
+		{
+			return false;
+		}
+		elseif($use_get)
+		{
+			$contpack = $_GET["contpack"];
+		}
+		else
+		{
+			$contpack = $arr["obj_inst"]->id();
+		}
+
+		$this->_init_prices_tbl($arr, parse_obj_name(obj($contpack)->name()));
+		$t = &$arr["prop"]["vcl_inst"];
+
+		foreach(obj($contpack)->connections_from(array("type" => "RELTYPE_PRICE_CONDITIONS")) as $conn)
+		{
+			$o = $conn->to();
+			$oid = $o->id();
+
+			$t->define_data(array(
+				"oid" => $oid,
+				"name" => html::obj_change_url($o, parse_obj_name($o->name())),
+				"price" => html::textbox(array(
+					"name" => "prices_tbl[$oid][price]",
+					"value" => $o->price,
+					"size" => 4,
+				)),
+				"duration" => html::textbox(array(
+					"name" => "prices_tbl[$oid][duration]",
+					"value" => (int)$o->duration,
+					"size" => 4,
+				)),
+			));
+		}
+	}
+
+	public function _set_prices_tbl($arr)
+	{
+		foreach(safe_array(ifset($arr, "prop", "value")) as $oid => $data)
+		{
+			if($this->can("edit", $oid))
+			{
+				$o = obj($oid);
+				$o->set_prop("duration", $data["duration"]);
+				$o->set_prop("price", $data["price"]);
+				$o->save();
+			}
+		}
+	}
+
+	public function _get_prices_tlb($arr, $use_url = false)
+	{
+		$contpack = $use_url ? automatweb::$request->arg("contpack") : $arr["obj_inst"]->id();
+		$t = &$arr["prop"]["vcl_inst"];
+
+		if($this->can("view", $contpack))
+		{
+			$t->add_new_button(array(CL_CONTENT_PACKAGE_PRICE_CONDITIONS), $contpack, 1);
+		}
+		$t->add_save_button();
+		$t->add_delete_button();
+	}
+
+	public function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
@@ -119,16 +222,6 @@ class content_package extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
 	function do_db_upgrade($t, $f)
 	{
 		if ($f == "")
@@ -151,6 +244,7 @@ class content_package extends class_base
 			case "duration":
 			case "cp_ug":
 			case "cp_sp":
+			case "aw_priority":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -298,7 +392,7 @@ class content_package extends class_base
 
 	function _get_conditions_tbl($arr, $use_get = false)
 	{
-		if($use_get && !$this->can("view", $_GET["contpack"]))
+		if($use_get && !$this->can("view", automatweb::$request->arg("contpack")))
 		{
 			return false;
 		}
@@ -311,7 +405,7 @@ class content_package extends class_base
 			$contpack = $arr["obj_inst"]->id();
 		}
 
-		$t = $this->init_conditions_tbl($arr, obj($contpack)->name());
+		$t = $this->init_conditions_tbl($arr, parse_obj_name(obj($contpack)->name()));
 		$odl = new object_data_list(
 			array(
 				"class_id" => CL_CONTENT_ITEM,
@@ -322,13 +416,6 @@ class content_package extends class_base
 				CL_CONTENT_ITEM => array("name", "price", "acl_change", "acl_add", "acl_admin", "acl_delete", "acl_view", "objects"),
 			)
 		);
-		if($_GET["kristole"] == 1)
-		{
-			$d = reset($odl->arr());
-			arr($d);
-			arr(obj($d["oid"])->prop("objects"));
-			exit;
-		}
 		foreach($odl->arr() as $id => $od)
 		{
 			$t->define_data(array(
@@ -371,11 +458,11 @@ class content_package extends class_base
 
 	function _get_conditions_tlb($arr, $use_url = false)
 	{
-		$contpack = $use_url ? $_GET["contpack"] : $arr["obj_inst"]->id();
+		$contpack = $use_url ? automatweb::$request->arg("contpack") : $arr["obj_inst"]->id();
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->add_button(array(
 			"name" => "new",
-			"tooltip" => t("Lisa uus sisutingimus"),
+			"tooltip" => t("Sisutingimus"),
 			"img" => "new.gif",
 			"url" => $this->mk_my_orb("new", array("parent" => $arr["obj_inst"]->id(), "contpack" => $contpack, "return_url" => get_ru()), CL_CONTENT_ITEM),
 		));
@@ -421,6 +508,15 @@ class content_package extends class_base
 	function add_subscriber($arr)
 	{
 		return get_instance("content_package_obj")->add_subscriber($arr);
+	}
+
+	function on_connect($arr)
+	{
+		if ($arr["connection"]->prop("to.class_id") == CL_CONTENT_PACKAGE_PRICE_CONDITIONS)
+		{
+			$price_cond = $arr["connection"]->to();
+			$price_cond->save();
+		}
 	}
 }
 

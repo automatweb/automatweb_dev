@@ -2,17 +2,25 @@
 
 class content_package_obj extends _int_object
 {
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		if(!is_oid($this->id()))
 		{
-			parent::save();
+			parent::save($exclusive, $previous_state);
 		}
-		if(!$this->can("view", $this->prop("cp_ug")) || !is_oid($this->prop("cp_ug")))
+		if(!$this->can("edit", $this->prop("cp_ug")) || !is_oid($this->prop("cp_ug")))
 		{
 			// We'll make a usergroup for this content package. There has to be one for every content package.
-			$gid = get_instance(CL_GROUP)->add_group($this->id(), $this->name(), GRP_REGULAR, 5000);
+			$gid = get_instance(CL_GROUP)->add_group($this->id(), $this->name(), GRP_REGULAR, $this->prop("priority"));
+			$sp->set_prop("priority", $this->prop("priority"));
 			$this->set_prop("cp_ug", $gid);
+		}
+		else
+		{
+			$group = obj($this->prop("cp_ug"));
+			$group->set_prop("name", $this->prop("name"));
+			$group->set_prop("priority", $this->prop("priority"));
+			$group->save();
 		}
 
 		if(!$this->can("view", $this->prop("cp_sp")) || !is_oid($this->prop("cp_sp")))
@@ -26,13 +34,12 @@ class content_package_obj extends _int_object
 		{
 			$sp = obj($this->prop("cp_sp"));
 		}
-		// The name and price of the shop product are always the same as the content package's.
+		// The nameof the shop product are always the same as the content package's.
 		$sp->set_name($this->name());
-		$sp->set_prop("price", $this->prop("price"));
-		$sp->set_prop("content_package", 1);
+		$sp->set_prop("content_package", $this->id());
 		$this->set_prop("cp_sp", $sp->save());
 
-		return parent::save();
+		return parent::save($exclusive, $previous_state);
 	}
 
 	/**

@@ -79,6 +79,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property password_hash_timestamp type=hidden table=users field=config method=serialize
 	@property join_grp type=hidden table=users field=join_grp
 
+	@property extern_id type=textbox size=10 field=aw_extern_id table=users 
+	@caption Siduss&uuml;steemi id
+
 @default group=chpwd
 
 	@property passwd type=password store=no
@@ -823,6 +826,8 @@ class user extends class_base
 			$group = obj($g_oid);
 			if ($member[$g_oid] != 1 && $is && isset($gl[$g_oid]))
 			{
+				group::remove_user_from_group($o, $group);
+				/*
 				$user = $o;
 
 				// do the group add trick
@@ -872,6 +877,7 @@ class user extends class_base
 						));
 					}
 				}
+				*/
 			}
 		}
 
@@ -2490,6 +2496,7 @@ EOF;
 				return true;
 			break;
 			case "warning_notification":
+			case "aw_extern_id":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "int",

@@ -991,15 +991,15 @@ class group extends class_base
 
 		@attrib params=pos api=1
 		@param user required type=object
-		User object to be removed from $group
+			User object to be removed from $group
 		@param group required type=object
-		The group object from where the user is removed
+			The group object from where the user is removed
 
 		@comment
 		Removes the $user from $group.
 
 	**/
-	function remove_user_from_group($user, $group)
+	public static function remove_user_from_group($user, $group)
 	{
 		// delete all brothers from the current group
 		$user_brothers = new object_list(array(
@@ -1012,7 +1012,7 @@ class group extends class_base
 		if(aw_ini_get("users.use_group_membership") == 1)
 		{
 			// Deactivate all valid membership objects for this group
-			$ol = get_instance("group_membership_obj")->get_valid_memberships(array("group" => $group->id()));
+			$ol = group_membership_obj::get_valid_memberships(array("group" => $group->id(), "user" => $user->id()));
 			foreach($ol->arr() as $o)
 			{
 				$o->set_status(object::STAT_NOTACTIVE);
@@ -1065,10 +1065,10 @@ class group extends class_base
 				}
 			}
 		}
-		if(aw_ini_get("users.use_group_membership") == 1)
+		if(aw_ini_get("users.use_group_membership") == 1 && $ol->count() > 0)
 		{
 			// Deactivate all valid membership objects for subgroups
-			$ol = $user->get_valid_memberships(array("group" => $ol->ids()));
+			$ol = group_membership_obj::get_valid_memberships(array("group" => $ol->ids(), "user" => $user->id()));
 			foreach($ol->arr() as $o)
 			{
 				$o->set_status(object::STAT_NOTACTIVE);

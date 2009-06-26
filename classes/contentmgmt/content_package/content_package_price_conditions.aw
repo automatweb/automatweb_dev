@@ -6,6 +6,15 @@
 @default table=aw_content_package_price_conditions
 @default group=general
 
+	@property price field=aw_price type=textbox datatype=int size=4
+	@caption Hind
+
+	@property duration field=aw_duration type=textbox datatype=int size=4
+	@caption Paketi kasutamise aeg p&auml;evades
+
+	@property cp_spp type=hidden field=aw_cp_spp
+	@caption Pakendi OID
+
 */
 
 class content_package_price_conditions extends class_base
@@ -18,45 +27,6 @@ class content_package_price_conditions extends class_base
 		));
 	}
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function callback_mod_reforb($arr)
-	{
-		$arr["post_ru"] = post_ru();
-	}
-
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
 	function do_db_upgrade($t, $f)
 	{
 		if ($f == "")
@@ -67,10 +37,12 @@ class content_package_price_conditions extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_price":
+			case "aw_duration":
+			case "aw_cp_spp":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
 				));
 				return true;
 		}
