@@ -459,14 +459,12 @@ flush();
 		$iter = 0;
 
 		while(true)
-
 		{
 
 			if (file_exists($this->stop_file.".".$o->id()))
-
 			{
 
-			echo "calling halt for stop flag <br>\n";
+				echo "calling halt for stop flag <br>\n";
 
 				flush();
 
@@ -474,37 +472,27 @@ flush();
 
 			}
 
-echo "running step <br>\n";
-
-flush();
-
-			$res = $this->bg_run_step($o);
-
-			if ($res == BG_DONE)
-
-			{
-
-			echo "recieved done , breaking <br>\n";
-
+			echo "running step <br>\n";
 			flush();
 
+			$res = $this->bg_run_step($o);
+			if ($res == BG_DONE)
+			{
+				echo "recieved done , breaking <br>\n";
+				flush();
 				break;
-
 			}
 
 
 
 			if (++$iter > $this->bg_checkpoint_steps || $res == BG_FORCE_CHECKPOINT)
-
 			{
 
 				if (method_exists($this, "bg_checkpoint"))
-
 				{
 
-				echo "iter = $iter, calling checkpoint <Br>\n";
-
-				flush();
+					echo "iter = $iter, calling checkpoint <Br>\n";
+					flush();
 
 					$this->bg_checkpoint($o);
 
@@ -514,9 +502,8 @@ flush();
 
 					aw_restore_acl();
 
-				echo "checkpint saved <br>\n";
-
-				flush();
+					echo "checkpoint saved <br>\n";
+					flush();
 
 				}
 
@@ -524,11 +511,9 @@ flush();
 
 			}
 
-
-
 			if (++$log_iter > $this->bg_log_steps)
 			{
-				if (method_exists($this, "bg_write_log_entry"))
+				if (method_exists($this, "bg_run_get_log_entry"))
 				{
 					echo "calling write log entry <br>\n";
 					flush();
@@ -542,24 +527,18 @@ flush();
 
 		}
 
-
-
 		// call finalizer
-
 		if (method_exists($this, "bg_run_finish"))
 		{
-
 			echo "calling finalizer <br>\n";
 			flush();
 
 			$this->bg_run_finish($o);
-
 		}
 
 
 
-		// mark run as donw
-
+		// mark run as done
 		$o->set_meta("bg_run_state", "done");
 
 		aw_disable_acl();
