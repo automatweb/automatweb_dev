@@ -344,13 +344,9 @@ class run_in_background extends class_base
 					echo "process halted, restart immediately <br>";
 
 					// add run scheduler immediately
-
 					$s->add(array(
-
 						"event" => $url,
-
 						"time" => time()
-
 					));
 
 					$o->set_meta("bg_run_log",$o->meta("bg_run_log").t("<br>Protsess j&auml;tkab hiljemalt kahe minuti p&auml;rast"));
@@ -360,7 +356,7 @@ class run_in_background extends class_base
 					$o->save();
 
 					aw_restore_acl();
-					// since scheduler is not runnung, go for it right away
+					// since scheduler is not running, go for it right away
 
 					$this->bg_run(array("id" => $o->id()));
 					continue;
@@ -372,17 +368,11 @@ class run_in_background extends class_base
 
 
 			// get the time it should run a
-
 			if ($o->prop("bg_run_always"))
-
 			{
-
 				$s->add(array(
-
 					"event" => $url,
-
 					"time" => time()
-
 				));
 
 				$o->set_meta("bg_run_log",$o->meta("bg_run_log").t("<br>Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"));
@@ -396,23 +386,17 @@ class run_in_background extends class_base
 				echo "process is done, run always set, restart <br>";
 
 			}
-
 			else
-
 			{
 
 				$recur = $o->get_first_obj_by_reltype("RELTYPE_RECURRENCE");
 
 				if ($recur)
-
 				{
 
 					$s->add(array(
-
 						"event" => $url,
-
 						"rep_id" => $recur->id()
-
 					));
 
 					$o->set_meta("bg_run_log",$o->meta("bg_run_log").t("<br>Protsess k&auml;ivitub j&auml;rgmisel kordusel"));
@@ -436,13 +420,9 @@ class run_in_background extends class_base
 		echo "add scheduler check at ".date("d.m.Y H:i:s", time()+5*60)." <br>";
 
 		// add scheduler check every 5 min
-
 		$s->add(array(
-
 			"event" => $this->mk_my_orb("bg_check_scheduler", array()),
-
 			"time" => time()+5*60
-
 		));
 
 		echo "all done <br>";
@@ -457,13 +437,10 @@ class run_in_background extends class_base
 
 		@attrib name=bg_run nologin=1
 
-
-
 		@param id required type=int
 
 	**/
 	function bg_run($arr)
-
 	{
 
 		echo "enter bg_run $arr[id] <br>\n";
@@ -479,29 +456,19 @@ class run_in_background extends class_base
 		aw_restore_acl();
 
 		if ($this->bg_is_running($o))
-
 		{
-
 			echo "process is already running, will not start another thread!<br>";
-
 			return;
-
 		}
 
 
 
 		// run init
-
 		if (method_exists($this, "bg_run_init"))
-
 		{
-
 			echo "call bg_run_init <br>\n";
-
 			flush();
-
 			$this->bg_run_init($o);
-
 		}
 
 echo "after init, state = ".$o->meta("bg_run_state")." <br>\n";
@@ -509,33 +476,21 @@ echo "after init, state = ".$o->meta("bg_run_state")." <br>\n";
 flush();
 
 		// figure out if this is start or restart
-
 		if ($o->meta("bg_run_state") == "started")
-
 		{
 
 			// and if it is restart, then run restore step
-
 			if (method_exists($this, "bg_run_continue"))
-
 			{
-
-				echo "calling br_run_continue <br>\n";
-
+				echo "calling bg_run_continue <br>\n";
 				flush();
-
 				$this->bg_run_continue($o);
-
 			}
-
 		}
-
 		else
-
 		{
 
 			// mark state as started
-
 			$o->set_meta("bg_run_state", "started");
 
 			$o->set_meta("bg_run_start", time());
@@ -555,14 +510,11 @@ echo "after continue <br>\n";
 flush();
 
 		// get first log entry
-
 		if (method_exists($this, "bg_run_get_log_entry"))
-
 		{
 
-		echo "call get_log_entry <br>\n";
-
-		flush();
+			echo "call get_log_entry <br>\n";
+			flush();
 
 			$this->bg_write_log_entry($this->bg_run_get_log_entry($o), $o);
 
