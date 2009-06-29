@@ -5,19 +5,15 @@
 
 
 define("BG_OK", 0);
-
 define("BG_DONE", 1);
-
 define("BG_FORCE_CHECKPOINT", 2);
 
 
 
 class run_in_background extends class_base
-
 {
 
 	function init($arr)
-
 	{
 
 		parent::init($arr);
@@ -52,7 +48,6 @@ class run_in_background extends class_base
 
 	**/
 	function bg_run_get_property_control($arr)
-
 	{
 
 		$prop =& $arr["prop"];
@@ -62,75 +57,43 @@ class run_in_background extends class_base
 		$fn_s = $this->stop_file.".".$arr["obj_inst"]->id();
 
 		if (file_exists($fn_s))
-
 		{
 
 			$prop["value"] = html::href(array(
-
 				"caption" => t("Reset"),
-
 				"url" => $this->mk_my_orb("bg_control", array(
-
 					"id" => $arr["obj_inst"]->id(),
-
 					"do" => "reset",
-
 					"ru" => get_ru()
-
 				))
-
 			));
-
 		}
-
 		else
-
 		if (file_exists($fn))
-
 		{
 
 			$prop["value"] = html::href(array(
-
 				"caption" => t("Peata"),
-
 				"url" => $this->mk_my_orb("bg_control", array(
-
 					"id" => $arr["obj_inst"]->id(),
-
 					"do" => "stop",
-
 					"ru" => get_ru()
-
 				))
-
 			));
-
 		}
-
 		else
-
 		{
 
 			$prop["value"] = html::href(array(
-
 				"caption" => t("K&auml;ivita"),
-
 				"url" => $this->mk_my_orb("bg_control", array(
-
 					"id" => $arr["obj_inst"]->id(),
-
 					"do" => "start",
-
 					"ru" => get_ru()
-
 				))
-
 			));
-
 		}
-
 		return PROP_OK;
-
 	}
 
 
@@ -193,67 +156,41 @@ class run_in_background extends class_base
 
 	/**
 
-
-
 		@attrib name=bg_control
 
-
-
 		@param id required type=int acl=view
-
 		@param do required
-
-
 
 		@param ru optional
 
 	**/
 	function bg_control($arr)
-
 	{
 
 		$o = obj($arr["id"]);
-
-
-
 		$fn = $this->lock_file.".".$o->id();
-
 		$s = get_instance("scheduler");
 
 		switch($arr["do"])
-
 		{
-
 			case "start":
-
 				$url = $this->mk_my_orb("bg_run", array("id" => $o->id()));
-
 				$s->add(array(
-
 					"event" => $url,
-
 					"time" => time()-1
-
 				));
 
 				$o->set_meta("bg_run_log",t("Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"));
-
 				$o->save();
 
 				break;
 
-
-
 			case "stop":
 
 				touch($this->stop_file.".".$o->id());
-
 				$this->put_file(array(
-
 					"file" => $fn,
-
 					"content" => t("Protsess l&otilde;petab t&ouml;&ouml;d")
-
 				));
 
 				break;
@@ -261,21 +198,16 @@ class run_in_background extends class_base
 
 
 			case "reset":
-
 				unlink($this->stop_file.".".$o->id());
-
 				unlink($this->lock_file.".".$o->id());
 
 				$o->set_meta("bg_run_state", "");
 
 				aw_disable_acl();
-
 				$o->save();
-
 				aw_restore_acl();
 
 				break;
-
 		}
 
 		return $arr["ru"];
@@ -595,19 +527,13 @@ flush();
 
 
 			if (++$log_iter > $this->bg_log_steps)
-
 			{
-
 				if (method_exists($this, "bg_write_log_entry"))
-
 				{
-
-				echo "calling write log entry <br>\n";
-
-				flush();
+					echo "calling write log entry <br>\n";
+					flush();
 
 					$this->bg_write_log_entry($this->bg_run_get_log_entry($o), $o);
-
 				}
 
 				$log_iter = 0;
@@ -621,12 +547,10 @@ flush();
 		// call finalizer
 
 		if (method_exists($this, "bg_run_finish"))
-
 		{
 
-		echo "calling finalizer <br>\n";
-
-		flush();
+			echo "calling finalizer <br>\n";
+			flush();
 
 			$this->bg_run_finish($o);
 
@@ -653,24 +577,18 @@ flush();
 
 
 	function bg_is_running($o)
-
 	{
 		$fn = $this->lock_file.".".$o->id();
 
 		if (file_exists($fn))
-
 		{
 
 			if (filemtime($fn) > (time()-4*60))
-
 			{
-
 				return true;
-
 			}
 
 			unlink($fn);
-
 		}
 
 		return false;
@@ -680,29 +598,21 @@ flush();
 
 
 	function bg_write_log_entry($entry, $o)
-
 	{
 
 		// write status info to lock file
-
 		$f = fopen($this->lock_file.".".$o->id(), "w");
 
 		if ($f)
-
 		{
-
 			fwrite($f, $entry);
-
 			fclose($f);
-
 		}
-
 	}
 
 
 
 	function bg_do_halt($o)
-
 	{
 
 		echo "found stop flag, stopping scheduler <br>";
