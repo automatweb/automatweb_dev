@@ -90,6 +90,15 @@
             <caption>Lisandub k&amp;amp;auml;ibemaks?</caption>
       </property>
       <property>
+            <name>tax</name>
+            <table>aw_crm_bill_rows</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_tax</field>
+            <caption>K&amp;amp;auml;ibemaksu %</caption>
+      </property>
+      <property>
             <name>date</name>
             <table>aw_crm_bill_rows</table>
             <group>general</group>

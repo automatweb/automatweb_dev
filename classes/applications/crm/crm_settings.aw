@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.35 2009/05/25 15:11:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.36 2009/06/29 14:08:27 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -185,6 +185,8 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 	@property bill_default_unit type=select table=objects field=meta method=serialize
 	@caption Vaikimisi &Uuml;hik
 
+	@property bill_default_tax type=relpicker multiple=1 store=connect reltype=RELTYPE_TAX_RATE
+	@caption Vaikimisi k&auml;ibemaks
 
 @groupinfo tables caption="Tabelid"
 @groupinfo whom caption="Kellele kehtib"
@@ -222,6 +224,9 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 
 @reltype MENU value=10 clid=CL_MENU
 @caption Kataloog
+
+@reltype TAX_RATE value=11 clid=CL_CRM_TAX_RATE
+@caption Maksum&auml;&auml;r
 
 */
 

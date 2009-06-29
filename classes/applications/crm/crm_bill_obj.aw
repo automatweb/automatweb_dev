@@ -398,7 +398,7 @@ class crm_bill_obj extends _int_object
 		$data = array();
 		foreach($bugcomments as $comment)
 		{
-			if(!$this->can("view" , $comment))
+			if(!$GLOBALS["object_loader"]->cache->can("view" , $comment))
 			{
 				continue;
 			}
@@ -413,9 +413,13 @@ class crm_bill_obj extends _int_object
 			foreach($day_array as $bug => $bug_comments)
 			{
 				$b = obj($bug);
-				if(!$this->check_if_has_other_customers($b->prop("customer")))
+				if(!($error = $this->check_if_has_other_customers($b->prop("customer"))))
 				{
 					$this->add_bug_row($bug_comments);
+				}
+				else
+				{
+					print $error;
 				}
 			}
 		}
@@ -435,7 +439,7 @@ class crm_bill_obj extends _int_object
 		$data = array();
 		foreach($bugcomments as $comment)
 		{
-			if(!$this->can("view" , $comment))
+			if(!$GLOBALS["object_loader"]->cache->can("view" , $comment))
 			{
 				continue;
 			}
@@ -565,7 +569,17 @@ class crm_bill_obj extends _int_object
 		}
 		if($customer != $this->prop("customer"))
 		{
-			return "on teised kliendid...";
+			if($GLOBALS["object_loader"]->cache->can("view",$customer))
+			{
+				$new_name = get_name($customer);
+
+			}
+			if($GLOBALS["object_loader"]->cache->can("view",$this->prop("customer")))
+			{
+				$old_name = get_name($this->prop("customer"));
+			}
+
+			return "on teised kliendid...\n<br>Arvel oli ".$old_name." , taheti lisada ".$new_name;
 		}
 		return 0;
 	}
@@ -640,8 +654,7 @@ class crm_bill_obj extends _int_object
 	**/
 	public function set_customer($arr)
 	{
-		$bi = get_instance("applications/crm/crm_bill");
-		if ($bi->can("view" , $arr["cust"]))
+		if ($GLOBALS["object_loader"]->cache->can("view" , $arr["cust"]))
 		{
 			$cust = obj();
 			$this->set_prop("customer", $arr["cust"]);
@@ -675,12 +688,12 @@ class crm_bill_obj extends _int_object
 		}
 		
 		//kui eelmiseid ei olnud v6i nad ei m6junud
-		if((!(is_array($arr["tasks"]) || $bi->can("view" , $arr["cust"])) || (!$bi->can("view" , $this->prop("customer")))) && is_array($arr["bugs"]) && sizeof($arr["bugs"]))
+		if((!(is_array($arr["tasks"]) || $GLOBALS["object_loader"]->cache->can("view" , $arr["cust"])) || (!$GLOBALS["object_loader"]->cache->can("view" , $this->prop("customer")))) && is_array($arr["bugs"]) && sizeof($arr["bugs"]))
 		{
 			foreach($arr["bugs"] as $bugc)
 			{
 				$c = obj($bugc);
-				if(($c->class_id() == CL_BUG_COMMENT || $c->class_id() == CL_TASK_ROW)&& $bi->can("view" , $c->prop("parent.customer")))
+				if(($c->class_id() == CL_BUG_COMMENT || $c->class_id() == CL_TASK_ROW)&& $GLOBALS["object_loader"]->cache->can("view" , $c->prop("parent.customer")))
 				{
 					$this->set_prop("customer" , $c->prop("parent.customer"));
 					break;
@@ -707,14 +720,13 @@ class crm_bill_obj extends _int_object
 		{
 			$br = obj();
 			$br->set_class_id(CL_CRM_BILL_ROW);
+			$br->set_prop("date", date("d.m.Y", time()));
+			if($this->set_crm_settings() && $this->crm_settings->prop("bill_default_unit"))
+			{
+				$br->set_prop("unit" , $this->crm_settings->prop("bill_default_unit"));
+			}
 		}
 		$br->set_parent($this->id());
-
-		$br->set_prop("date", date("d.m.Y", time()));
-		if($this->set_crm_settings() && $this->crm_settings->prop("bill_default_unit"))
-		{
-			$br->set_prop("unit" , $this->crm_settings->prop("bill_default_unit"));
-		}
 
 		$br->save();
 		$this->add_bill_comment_data(t("Lisati rida ID-ga"." ".$br->id()));
@@ -793,7 +805,7 @@ class crm_bill_obj extends _int_object
 						$prod = "";
 						if ($sts)
 						{
-							if(is_oid($sts->prop("bill_def_prod")) && $this->can("view",$sts->prop("bill_def_prod")))
+							if(is_oid($sts->prop("bill_def_prod")) && $GLOBALS["object_loader"]->cache->can("view",$sts->prop("bill_def_prod")))
 							{
 								$prod_obj = obj($sts->prop("bill_def_prod"));
 								$prod = $sts->prop("bill_def_prod");
@@ -928,7 +940,12 @@ class crm_bill_obj extends _int_object
 //				$br->set_prop("prod", $row["prod"]);
 				$br->set_prop("price", $this->convert_to_bill_currency($task_o->prop("hr_price") , $task_o->prop("currency")));
 				$br->set_prop("unit", t("tund"));
+
+				//see peaks 2kki seadistattav olema hoopis et kas paneb automaatselt?
 				$br->set_prop("has_tax", 1);
+				$br->set_prop("tax", $br->get_row_tax(1));
+
+
 				$br->set_prop("date", date("d.m.Y", $row->prop("date")));
 				$br->set_prop("people", $row->prop("impl"));
 				// get default prod
@@ -1145,7 +1162,7 @@ class crm_bill_obj extends _int_object
 		$filter = $this->get_bill_rows_filter();
 		$rowsres = array(
 			CL_CRM_BILL_ROW => array(
-				"task_row","prod","price","amt","has_tax"
+				"task_row","prod","price","amt","has_tax","tax"
 			),
 		);
 		$rows_arr = new object_data_list($filter , $rowsres);
@@ -1222,7 +1239,7 @@ class crm_bill_obj extends _int_object
 				$set = false;
 				// get tax from prod
 				$prod = obj($row["prod"]);
-				if ($this->can("view", $prod->prop("tax_rate")))
+				if ($GLOBALS["object_loader"]->cache->can("view", $prod->prop("tax_rate")))
 				{
 					$tr = obj($prod->prop("tax_rate"));
 
@@ -1244,11 +1261,11 @@ class crm_bill_obj extends _int_object
 				}
 			}
 			else
-			if ($row["has_tax"] == 1)
+			if ($row["tax"])
 			{
 				// tax needs to be added
 				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * 0.18);
+				$cur_tax = $row["tax"];
 				$cur_pr = $row["price"];
 			}	
 			else
@@ -1323,6 +1340,7 @@ class crm_bill_obj extends _int_object
 				"id" => $row->id(),
 				"is_oe" => $row->prop("is_oe"),
 				"has_tax" => $row->prop("has_tax"),
+				"tax" => $row->get_row_tax(),
 				"date" => $row->prop("date"),
 				"id" => $row->id(),
 				"persons" => $ppl,
@@ -2175,10 +2193,10 @@ class crm_bill_obj extends _int_object
 				continue;
 			}
 			$kmk = "";
-			if ($this->can("view", $row->prop("prod")))
+			if ($GLOBALS["object_loader"]->cache->can("view", $row->prop("prod")))
 			{
 				$prod = obj($row->prop("prod"));
-				if ($this->can("view", $prod->prop("tax_rate")))
+				if ($GLOBALS["object_loader"]->cache->can("view", $prod->prop("tax_rate")))
 				{
 					$tr = obj($prod->prop("tax_rate"));
 					$kmk = $tr->prop("code");
@@ -2188,7 +2206,7 @@ class crm_bill_obj extends _int_object
 			$ppl = array();
 			foreach((array)$row->prop("people") as $p_id)
 			{
-				if ($this->can("view", $p_id))
+				if ($GLOBALS["object_loader"]->cache->can("view", $p_id))
 				{
 					$ppl[$p_id] = $p_id;	
 				}
@@ -2206,6 +2224,7 @@ class crm_bill_obj extends _int_object
 				"id" => $row->id(),
 				"is_oe" => $row->prop("is_oe"),
 				"has_tax" => $row->prop("has_tax"),
+				"tax" => $row->get_row_tax(),
 				"date" => $row->prop("date"),
 				"id" => $row->id(),
 				"persons" => $ppl,
@@ -2503,7 +2522,7 @@ class crm_bill_obj extends _int_object
 				"type" => "RELTYPE_BILL",
 			));
 		}
-		elseif($this->can("view", $arr["dno"]))
+		elseif($GLOBALS["object_loader"]->cache->can("view", $arr["dno"]))
 		{
 			$dno = obj($arr["dno"]);
 			foreach($rows as $prod => $row)
@@ -2528,7 +2547,7 @@ class crm_bill_obj extends _int_object
 			return $set;
 		}
 		$impl = $this->prop("impl");
-		if(is_oid($this->id()) && $this->can("view", $impl))
+		if(is_oid($this->id()) && ($GLOBALS["object_loader"]->cache->can("view", $impl)))
 		{
 			$conn = obj($impl)->connections_to(array(
 				"from.class_id" => CL_SHOP_WAREHOUSE_CONFIG,

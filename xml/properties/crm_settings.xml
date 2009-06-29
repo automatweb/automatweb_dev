@@ -51,16 +51,6 @@
             <caption>Kliendi t&amp;amp;ouml;&amp;amp;ouml;taja seadete vorm</caption>
       </property>
       <property>
-            <name>bill_def_prod</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PROD</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Vaikimisi toode arve ridadel</caption>
-      </property>
-      <property>
             <name>controller_proj</name>
             <table>objects</table>
             <group>general</group>
@@ -159,15 +149,6 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <caption>N&amp;amp;auml;ita puus faile ja dokumente</caption>
-      </property>
-      <property>
-            <name>billable_only_by_mrg</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <caption>Saata arve saab m&amp;amp;auml;&amp;amp;auml;rata toimetusele vaid kliendihaldur</caption>
       </property>
       <property>
             <name>org_link_menu</name>
@@ -332,6 +313,15 @@
             <caption>Staatuste piirangud</caption>
       </property>
       <property>
+            <name>billable_only_by_mrg</name>
+            <table>objects</table>
+            <group>bill</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <caption>Saata arve saab m&amp;amp;auml;&amp;amp;auml;rata toimetusele vaid kliendihaldur</caption>
+      </property>
+      <property>
             <name>bill_mail_to</name>
             <table>objects</table>
             <group>bill</group>
@@ -418,6 +408,16 @@
             <caption>&amp;amp;Auml;ra kasuta kokkuleppehinda</caption>
       </property>
       <property>
+            <name>bill_def_prod</name>
+            <table>objects</table>
+            <group>bill</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROD</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi toode arve ridadel</caption>
+      </property>
+      <property>
             <name>bill_default_unit</name>
             <table>objects</table>
             <group>bill</group>
@@ -425,6 +425,17 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Vaikimisi &amp;amp;Uuml;hik</caption>
+      </property>
+      <property>
+            <name>bill_default_tax</name>
+            <table>objects</table>
+            <group>bill</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_TAX_RATE</reltype>
+            <field>bill_default_tax</field>
+            <caption>Vaikimisi k&amp;amp;auml;ibemaks</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_SETTINGS</syslog_type>
@@ -502,6 +513,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Kataloog</caption>
             </MENU>
+            <TAX_RATE>
+                  <value>11</value>
+                  <clid>CL_CRM_TAX_RATE</clid>
+                  <caption>Maksum&amp;amp;auml;&amp;amp;auml;r</caption>
+            </TAX_RATE>
       </reltypes>
       <layout>
             <vsplitbox>

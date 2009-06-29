@@ -331,5 +331,84 @@ class crm_bill_row_object extends _int_object
 		return $date;
 	}
 
+	/** returns bill row tax rate
+		@attrib api=1 params=pos
+		@param advise optional type=boolean
+			true: if tax not set, then returns possible value
+		@returns 
+	**/
+	public function get_row_tax($advise = false)
+	{
+		if($this->prop("tax"))
+		{
+			return $this->prop("tax");
+		}
+		if($this->prop("has_tax"))
+		{
+
+			if (!$GLOBALS["object_loader"]->cache->can("view", $this->prop("prod.tax_rate")))
+			{
+				return 18;
+			}
+			else
+			{
+				return $this->prop("prod.tax_rate.tax_amt");
+			}
+		}
+
+		if($advise)
+		{
+			if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("prod.tax_rate")))
+			{
+				return $this->prop("prod.tax_rate.tax_amt");
+			}
+			
+			return $this->get_default_tax();
+
+		}
+
+		return 0;
+	}
+
+	private function set_crm_settings()
+	{
+		if(!$this->crm_settings)
+		{
+			$seti = get_instance(CL_CRM_SETTINGS);
+			$this->crm_settings = $seti->get_current_settings();
+		}
+		if($this->crm_settings)
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	private function get_default_tax()
+	{
+		$res = 0;
+		if($this->prop("date"))
+		{
+			$date = $this->prop("date");
+		}
+		else
+		{
+			$date = time();
+		}
+		$this->set_crm_settings();
+		if($this->crm_settings)
+		{
+			foreach($this->crm_settings->connections_from(array("type" => "RELTYPE_TAX_RATE")) as $c)
+			{
+				$tax = $c->to();
+				$res = $tax->prop("tax_amt");
+				if($tax-> prop("act_from") <= $date && $tax-> prop("act_to") > $date)
+				{
+					return $res;
+				}
+			}
+		}
+		return $res;
+	}
 }
 ?>

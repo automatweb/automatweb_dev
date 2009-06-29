@@ -183,6 +183,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property time_spent_desc type=textbox table=aw_crm_bill field=aw_time_spent_desc
 	@caption Kulunud aeg tekstina
 
+	@property reminder_text type=textbox table=aw_crm_bill field=aw_reminder_text
+	@caption Arve meeldetuletuse juurde minev tekst
+
 	@property monthly_bill type=checkbox ch_value=1 table=aw_crm_bill field=aw_monthly_bill
 	@caption Kuuarve
 
@@ -893,7 +896,38 @@ class crm_bill extends class_base
 				// check if the 
 				if($prop["name"] == "customer" && isset($arr["request"]["customer_name"]))
 				{
+<<<<<<< crm_bill.aw
+					if(isset($arr["request"]["customer_name"]) && !$this->can("view" , $prop["value"]))
+					{
+						return PROP_IGNORE;
+					}
+					elseif($this->can("view" , $prop["value"]))
+					{
+						$arr["obj_inst"] -> set_prop("customer_name" ,null);
+					}
+				}
+				if(!is_oid($prop["value"]))
+				{
+					if(is_oid($arr["request"]["customer_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["customer_awAutoCompleteTextbox"]))
+					{
+						$prop["value"] = $arr["request"]["customer_awAutoCompleteTextbox"];
+					}
+					else
+					{
+						$ol = new object_list(array(
+							"name" => $arr["request"]["customer_awAutoCompleteTextbox"],
+							"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+							"lang_id" => array(),
+						));
+						$cust_obj = $ol->begin();//arr(strlen($arr["request"]["customer_awAutoCompleteTextbox"]));
+						if(is_object($cust_obj))
+						{
+							$prop["value"] = $cust_obj->id();
+						}
+					}
+=======
 					return PROP_IGNORE;
+>>>>>>> 1.225
 				}
 				if ($this->can("view", $prop["value"]) && (($arr["obj_inst"]->prop("bill_due_date_days") == 0) || ($arr["obj_inst"]->prop("bill_due_date_days") == null)))
 				{
@@ -929,7 +963,7 @@ class crm_bill extends class_base
 						}
 					}
 				}
-				if ($prop["name"] == "customer" && ($this->can("view", $prop["value"]) || $this->can("view", $arr["obj_inst"]->prop("customer"))))
+				if ($prop["name"] == "customer")// && ($this->can("view", $prop["value"]) || $this->can("view", $arr["obj_inst"]->prop("customer"))))
 				{
 					if($this->can("view", $prop["value"]))
 					{
@@ -1164,6 +1198,10 @@ class crm_bill extends class_base
 		$arr["reconcile_price"] = -1;
 		$arr["new_payment"] = "";
 		$arr["add_dn"] = 0;
+<<<<<<< crm_bill.aw
+//		$arr["customer"] = "";
+=======
+>>>>>>> 1.225
 		if($_GET["project"])
 		{
 			$arr["project"] = $_GET["project"];
@@ -2124,14 +2162,20 @@ class crm_bill extends class_base
 			}
 			$o->set_prop("people" , explode("," ,$arr["people"]));
 
-		if($arr["has_tax"])
+		if($arr["has_tax"] != "")
 		{
 			if($arr["has_tax"] == "true")
 			{
 				$o->set_prop("has_tax" , 1);
 			}
+			elseif($arr["has_tax"] > 0)
+			{
+				$o->set_prop("tax" , $arr["has_tax"]);
+				$o->set_prop("has_tax" , 1);
+			}
 			else
 			{
+				$o->set_prop("tax" , 0);
 				$o->set_prop("has_tax" , 0);
 			}
 		}
@@ -2187,6 +2231,12 @@ class crm_bill extends class_base
 							a[i].selected?result.push(a[i].value):'';
 						}
 
+						var has_tax = document.getElementsByName('rows[".$id."][has_tax]')[0].value;
+						if(document.getElementsByName('rows[".$id."][has_tax]')[0].type == 'checkbox')
+						{
+							 has_tax = document.getElementsByName('rows[".$id."][has_tax]')[0].checked;
+						}
+
 					$.post('/automatweb/orb.aw?class=crm_bill&action=post_row', {
 						jrk: document.getElementsByName('rows[".$id."][jrk]')[0].value
 						, id: ".$id."
@@ -2195,7 +2245,7 @@ class crm_bill extends class_base
 						, comment: document.getElementsByName('rows[".$id."][comment]')[0].value
 						, prod: document.getElementsByName('rows[".$id."][prod]')[0].value
 						, unit: document.getElementsByName('rows[".$id."][unit]')[0].value
-						, has_tax: document.getElementsByName('rows[".$id."][has_tax]')[0].checked
+						, has_tax: has_tax
 						, date: document.getElementsByName('rows[".$id."][date]')[0].value
 						, jrk: document.getElementsByName('rows[".$id."][jrk]')[0].value
 						, price: document.getElementsByName('rows[".$id."][price]')[0].value
@@ -2240,12 +2290,12 @@ class crm_bill extends class_base
 				)).t("maha kantud")."<br>".html::textbox(array(
 					"name" => "rows[".$row->id()."][comment]",
 					"value" => $row->comment(),
-					"size" => 35
+					"size" => 70
 				))."<br>".html::textarea(array(
 					"name" => "rows[".$row->id()."][name]",
 					"value" => $row->prop("desc"),
 					"rows" => 5,
-					"cols" => 40
+					"cols" => 70
 				))
 					."</td></tr></table>";
 				break;
@@ -2308,9 +2358,32 @@ class crm_bill extends class_base
 				$ret.=$ut->draw(array("no_titlebar" => 1));
 				break;
 			case "has_tax":
-				$ret.=html::checkbox(array(
-					"checked" => $row->prop("has_tax"),
+				if($row->prop("tax"))
+				{
+					$ret.=html::textbox(array(
+						"name" => "rows[$id][has_tax]",
+						"value" => $row->get_row_tax(1),
+						"size" => 3,
+					));
+				}
+				else
+				{
+					$ret.=html::checkbox(array(
+						"checked" => $row->prop("has_tax"),
+						"name" => "rows[$id][has_tax]",
+						"onclick" => "$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'get_row_change_fields', id: ".$row->id().", field: 'tax'}, function (html) {
+							x=document.getElementById('row_' + ".$row->id()." + '_has_tax');
+							x.innerHTML=html;});"
+					));
+				}
+
+
+				break;
+			case "tax":
+				$ret.=html::textbox(array(
 					"name" => "rows[$id][has_tax]",
+					"value" => $row->get_row_tax(1),
+						"size" => 3,
 				));
 				break;
 			case "prod":
@@ -2488,10 +2561,17 @@ class crm_bill extends class_base
 					t("Summa").": ".$row->prop("price")*$row->prop("amt");
 				break;
 			case "has_tax":
-				$ret.=html::checkbox(array(
-					"checked" => $row->prop("has_tax"),
-					"disabled" => 1,
-				));
+				if($row->prop("tax"))
+				{
+					$ret.= $row->prop("tax")." %";
+				}
+				else
+				{
+					$ret.=html::checkbox(array(
+						"checked" => $row->prop("has_tax"),
+						"disabled" => 1,
+					));
+				}
 				break;
 			case "prod":
 				$ret.=$row->prop("prod.name").(($dn = $row->meta("dno")) ? "<br />".sprintf(t("(Saatelehel %s)"), obj($dn)->name()): "");
@@ -3221,17 +3301,7 @@ class crm_bill extends class_base
 			}
 			$cur_tax = 0;
 			$cur_sum = 0;
-			$tax_rate = 0;
-			if (!$this->can("view", $row["prod"]) && $row["has_tax"] == 1)
-			{
-				$tax_rate = 0.18;
-			}
-			else
-			if ($this->can("view", $row["prod"]))
-			{
-				$prod_o = obj($row["prod"]);
-				$tax_rate = (double)$prod_o->prop("tax_rate.tax_amt") / 100.0;
-			}
+			$tax_rate = (double)$row["tax"] / 100.0;
 
 			//kole asi... idee selles, et kuskil seppikus ja sirelis jne on toodetega mingi teema, mida mujal ei kasutata, ja siis ridade kokku koondamine k2iks nagu vaid siis kui toode on sama, a kui ei ole, siis peaks ikka ka saama.... et ma siis olematule tootele kui kommentaari v2li on t2idetud, l2heb tooteks 1
 			if (!$this->can("view", $row["prod"]))
@@ -3346,18 +3416,8 @@ class crm_bill extends class_base
 			$cur_tax = 0;
 			$cur_sum = 0;
 	
-			$tax_rate = 0;
-			if (!$this->can("view", $row["prod"]) && $row["has_tax"] == 1)
-			{
-				$tax_rate = 0.18;
-			}
-			else
-			if ($this->can("view", $row["prod"]))
-			{
-				$prod_o = obj($row["prod"]);
-				$tax_rate = (double)$prod_o->prop("tax_rate.tax_amt") / 100.0;
-			}
-		
+			$tax_rate = (double)$row["tax"] / 100.0;
+
 			if ($tax_rate > 0)
 			{
 				// tax needs to be added
@@ -3574,6 +3634,7 @@ class crm_bill extends class_base
 				"id" => $row->id(),
 				"is_oe" => $row->prop("is_oe"),
 				"has_tax" => $row->prop("has_tax"),
+				"tax" => $row->get_row_tax(),
 				"date" => $row->prop("date"),
 				"id" => $row->id(),
 				"persons" => $ppl,
@@ -3870,11 +3931,11 @@ class crm_bill extends class_base
 			$cur_tax = 0;
 			$cur_sum = 0;
 			
-			if ($row["has_tax"] == 1)
+			if ($row["tax"])
 			{
 				// tax needs to be added
 				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * 0.18);
+				$cur_tax = ($row["sum"] * $row["tax"]);
 				$cur_pr = $this->num($row["price"]);
 			}	
 			else
@@ -3919,12 +3980,13 @@ class crm_bill extends class_base
 			$cur_tax = 0;
 			$cur_sum = 0;
 			
-			if ($row["has_tax"] == 1)
-				{
+			if ($row["tax"])
+			{
 				// tax needs to be added
 				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * 0.18);
+				$cur_tax = ($row["sum"] * $row["tax"]);
 				$cur_pr = $this->num($row["price"]);
+
 			}	
 			else
 			{
@@ -4009,11 +4071,11 @@ class crm_bill extends class_base
 				}
 			}
 			else
-			if ($row["has_tax"] == 1)
+			if ($row["tax"])
 			{
 				// tax needs to be added
 				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * 0.18);
+				$cur_tax = ($row["sum"] * $row["tax"]);
 				$cur_pr = $this->num($row["price"]);
 			}	
 			else
@@ -4098,6 +4160,11 @@ class crm_bill extends class_base
 			$o->set_prop("prod", $row["prod"]);
 			$o->set_prop("has_tax", (int)$row["has_tax"]);
 			$o->set_prop("people", $row["person"]);
+			if($row["has_tax"])
+			{
+				$o->set_prop("tax", $o->get_row_tax(1));
+			}
+
 			$o->save();
 
 			if ($new)
@@ -4207,6 +4274,13 @@ class crm_bill extends class_base
 				{
 					$br->set_prop("prod", $sts->prop("bill_def_prod"));
 				}
+
+				if($row["has_tax"])
+				{
+					$br->set_prop("tax", $br->get_row_tax(1));
+				}
+
+
 				$br->save();
 
 				$br->connect(array(
@@ -4848,10 +4922,17 @@ class crm_bill extends class_base
 	{
 		switch($field)
 		{
+// 			case "aw_km":
+// 				$this->db_add_col($table, array(
+// 					"name" => $field,
+// 					"type" => "double"
+// 				));
+// 				return true;
 			case "aw_customer_name":
 			case "aw_customer_address":
 			case "aw_customer_code":
 			case "aw_time_spent_desc":
+			case "aw_reminder_text":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "varchar(255)"

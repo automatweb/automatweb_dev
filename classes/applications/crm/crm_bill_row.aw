@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.10 2009/03/12 17:17:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.11 2009/06/29 14:08:27 markop Exp $
 // crm_bill_row.aw - Arve rida 
 /*
 
@@ -39,6 +39,9 @@
 
 @property has_tax type=checkbox ch_value=1 field=aw_has_tax
 @caption Lisandub k&auml;ibemaks?
+
+@property tax type=checkbox ch_value=1 field=aw_tax
+@caption K&auml;ibemaksu %
 
 @property date type=textbox field=aw_date
 @caption Kuup&auml;ev
@@ -141,6 +144,12 @@ class crm_bill_row extends class_base
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "int"
+				));
+				return true;
+			case "aw_tax":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "double"
 				));
 				return true;
 		}
