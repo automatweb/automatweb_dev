@@ -4009,7 +4009,7 @@ class crm_bill extends class_base
 			$cur_tax = 0;
 			$cur_sum = 0;
 			$cur_pr = 0;
-			
+/*			enam pole seda vaja, sest rea tegemisel pakub ta seda sama maksu, ja kui salvestab siis on see juba olemas
 			if ($this->can("view", $row["prod"]))
 			{
 				$set = false;
@@ -4036,12 +4036,12 @@ class crm_bill extends class_base
 					$cur_pr = $this->num($row["price"]);
 				}
 			}
-			else
+			else*/
 			if ($row["tax"])
 			{
 				// tax needs to be added
 				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * $row["tax"]);
+				$cur_tax = ($row["sum"] * $row["tax"]/100.0);
 				$cur_pr = $this->num($row["price"]);
 			}	
 			else
