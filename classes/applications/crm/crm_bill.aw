@@ -896,38 +896,7 @@ class crm_bill extends class_base
 				// check if the 
 				if($prop["name"] == "customer" && isset($arr["request"]["customer_name"]))
 				{
-<<<<<<< crm_bill.aw
-					if(isset($arr["request"]["customer_name"]) && !$this->can("view" , $prop["value"]))
-					{
-						return PROP_IGNORE;
-					}
-					elseif($this->can("view" , $prop["value"]))
-					{
-						$arr["obj_inst"] -> set_prop("customer_name" ,null);
-					}
-				}
-				if(!is_oid($prop["value"]))
-				{
-					if(is_oid($arr["request"]["customer_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["customer_awAutoCompleteTextbox"]))
-					{
-						$prop["value"] = $arr["request"]["customer_awAutoCompleteTextbox"];
-					}
-					else
-					{
-						$ol = new object_list(array(
-							"name" => $arr["request"]["customer_awAutoCompleteTextbox"],
-							"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-							"lang_id" => array(),
-						));
-						$cust_obj = $ol->begin();//arr(strlen($arr["request"]["customer_awAutoCompleteTextbox"]));
-						if(is_object($cust_obj))
-						{
-							$prop["value"] = $cust_obj->id();
-						}
-					}
-=======
 					return PROP_IGNORE;
->>>>>>> 1.225
 				}
 				if ($this->can("view", $prop["value"]) && (($arr["obj_inst"]->prop("bill_due_date_days") == 0) || ($arr["obj_inst"]->prop("bill_due_date_days") == null)))
 				{
@@ -1198,10 +1167,7 @@ class crm_bill extends class_base
 		$arr["reconcile_price"] = -1;
 		$arr["new_payment"] = "";
 		$arr["add_dn"] = 0;
-<<<<<<< crm_bill.aw
 //		$arr["customer"] = "";
-=======
->>>>>>> 1.225
 		if($_GET["project"])
 		{
 			$arr["project"] = $_GET["project"];
