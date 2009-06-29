@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.55 2009/05/27 12:54:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.56 2009/06/29 12:58:46 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -527,7 +527,7 @@ class persons_webview extends class_base
 		foreach($o->connections_from(array("clid" => "CL_CRM_PERSON_WORK_RELATION")) as $c)
 		{
 			$rel = $c->to();
-			if($rel->prop("section") == $this->section->id())
+			if($this->section && $rel->prop("section") == $this->section->id())
 			{
 				if($rel->prop("profession.jrk") > $ret)
 				{
@@ -1131,22 +1131,21 @@ class persons_webview extends class_base
 		);
 
 		//pilt                $photo="";
-                $image_inst = get_instance(CL_IMAGE);
-                if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
-                {
-                        $photo = $image_inst->make_img_tag_wl($worker->prop("picture"), NULL, NULL, array(), array("show_title" => false));
-						$vars["photo_url"] = $image_inst->get_url_by_id($worker->prop("picture"));
-                }
-                else
-                {
-                        $photo_obj = $worker->get_first_obj_by_reltype("RELTYPE_PICTURE");
-                        if(is_object($photo_obj))
-                        {
-                                $photo = $image_inst->make_img_tag_wl($photo_obj->id(), NULL, NULL, array(), array("show_title" => false));
-								$vars["photo_url"] = $image_inst->get_url_by_id($photo_obj->id());
-
-                        }
-                }
+		$image_inst = get_instance(CL_IMAGE);
+		if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
+		{
+			$photo = $image_inst->make_img_tag_wl($worker->prop("picture"), NULL, NULL, array(), array("show_title" => false));
+			$vars["photo_url"] = $image_inst->get_url_by_id($worker->prop("picture"));
+		}
+		else
+		{
+			$photo_obj = $worker->get_first_obj_by_reltype("RELTYPE_PICTURE");
+			if(is_object($photo_obj))
+			{
+				$photo = $image_inst->make_img_tag_wl($photo_obj->id(), NULL, NULL, array(), array("show_title" => false));
+				$vars["photo_url"] = $image_inst->get_url_by_id($photo_obj->id());
+			}
+		}
 
 		
 		//igast telefoninumbrid
