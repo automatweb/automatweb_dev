@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/scheduler.aw,v 1.2 2008/05/30 11:29:59 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/scheduler.aw,v 1.3 2009/06/29 13:37:51 dragut Exp $
 @classinfo  maintainer=kristo
 */
 
@@ -223,7 +223,7 @@ class scheduler extends aw_template
 		// try and remove all existing scheduling information for this event
 		if (is_array($this->repdata))
 		{
-			// modifying an array while looping over it can lead to unexcected results
+			// modifying an array while looping over it can lead to unexpected results
 			$tmp = $this->repdata;
 			foreach($tmp as $key => $evnt)
 			{
