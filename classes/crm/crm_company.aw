@@ -6146,6 +6146,10 @@ class crm_company extends class_base
 				{
 					$br->set_prop("prod", $sts->prop("bill_def_prod"));
 				}
+				if($row["has_tax"])
+				{
+					$br->set_prop("tax", $br->get_row_tax(1));
+				}
 				$br->save();
 
 				$br->connect(array(
