@@ -10,21 +10,27 @@
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CFGFORM maintainer=voldemar
 
-	@groupinfo general caption=&Uuml;ldine
-		@groupinfo general_gen caption=&Uuml;ldine parent=general
-	@groupinfo defaults caption="Omaduste v&auml;&auml;rtused" parent=general
-	@groupinfo system caption="Vormi seaded" parent=general
-	@groupinfo cfgview_settings caption="Klass aliasena" parent=general
-	@groupinfo orb_settings caption="ORB seaded" parent=general
-	@groupinfo view_settings caption="Liidese kuvamine" parent=general
+	@groupinfo groupdata caption=Tabid
+		@groupinfo groupdata_a caption=Tabid parent=groupdata
+		@groupinfo groupdata_b caption=Liikumine parent=groupdata
 
-	@groupinfo properties caption=Seadistus
-		@groupinfo props caption=Omadused parent=properties
-		@groupinfo groupdata_a caption=Tabid parent=properties
-		@groupinfo groupdata_b caption="Tabide liikumine" parent=properties
-		@groupinfo layout_layouts caption=Layoudid parent=properties
-		@groupinfo layout_tables caption=Tabelid parent=properties
-		@groupinfo show_props caption="Gruppide &otilde;igused" parent=properties
+	@groupinfo layout caption=Layout
+		@groupinfo layout_props caption=Omadused parent=layout
+		@groupinfo layout_layouts caption=Layoudid parent=layout
+		@groupinfo layout_tables caption=Tabelid parent=layout
+
+	@groupinfo avail caption="K&otilde;ik omadused"
+	@groupinfo controllers caption="Kontrollerid"
+
+	@groupinfo set_controllers caption=Salvestamine parent=controllers
+	@groupinfo get_controllers caption=N&auml;itamine parent=controllers
+
+	@groupinfo settings caption="Seaded"
+	@groupinfo defaults caption="Omaduste v&auml;&auml;rtused" parent=settings
+	@groupinfo system caption="Vormi seaded" parent=settings
+	@groupinfo cfgview_settings caption="Klass aliasena" parent=settings
+	@groupinfo orb_settings caption="ORB seaded" parent=settings
+	@groupinfo view_settings caption="Liidese kuvamine" parent=settings
 
 	@groupinfo translate caption="T&otilde;lgi"
 		@groupinfo lang_1 caption="lang" parent=translate
@@ -39,6 +45,7 @@
 		@groupinfo lang_10 caption="lang" parent=translate
 		@groupinfo lang_11 caption="lang" parent=translate
 		@groupinfo lang_12 caption="lang" parent=translate
+	@groupinfo show_props caption="Omadused grupiti"
 	@groupinfo transl caption="T&otilde;lgi seadete vormi"
 
 
@@ -50,11 +57,7 @@
 		@caption Tabid
 
 
-	@default group=general_gen
-		
-		@property name type=textbox field=name table=objects
-		@caption Nimi
-
+	@default group=general
 		@property subclass type=select newonly=1
 		@caption Klass
 
@@ -75,39 +78,16 @@
 		@property use_in_releditor type=checkbox ch_value=1
 		@caption V&otilde;imalda kasutamist releditoris
 
-	@default group=props
-	
-		@property properties_tb type=toolbar no_caption=1
-
-		@layout props_lay type=hbox width=10%:90%
-
-			@layout props_tree_lay parent=props_lay type=vbox closeable=1 area_caption=Gruppide&nbsp;puu
-			
-				@property properties_tree type=treeview no_caption=1 parent=props_tree_lay
-				
-			@layout props_right type=vbox parent=props_lay
-
-				@layout props_info_lay type=vbox closeable=1 area_caption=Info parent=props_right
-				
-					@property properties_info type=text no_caption=1 parent=props_info_lay
-
-				@layout props_table_lay type=vbox parent=props_right
-
-					@property properties_table type=table no_caption=1 parent=props_table_lay
-	
-				@layout props_post_save parent=props_right type=vbox closeable=1 area_caption=Salvestamisj&auml;rgne&nbsp;kontroller
-
-					@property post_save_controllers type=relpicker multiple=1 size=3 reltype=RELTYPE_CONTROLLER parent=props_post_save no_caption=1
 
 	@default group=groupdata_a
 		@property edit_groups_tb type=toolbar no_caption=1 store=no
-		@caption Kaartide toolbar
+		@caption Tabide toolbar
 
 		@property edit_groups type=table no_caption=1 store=no
-		@caption Muuda kaarte
+		@caption Muuda tabe
 
 		@layout add_grp type=vbox
-		@caption Lisa uus kaart
+		@caption Lisa uus tab
 			@property add_grp_return type=text store=no parent=add_grp
 			@caption
 
@@ -119,12 +99,20 @@
 			@caption Pealkiri
 
 			@property add_grp_parent type=select store=no parent=add_grp
-			@caption Millise kaardi alla
+			@caption Millise tabi alla
 
 
 	@default group=groupdata_b
 		@property group_movement type=table store=no no_caption=1
-		@caption Kaartide vaheline liikumine
+		@caption Tabide vaheline liikumine
+
+
+	@default group=layout_props
+		@property navtoolbar type=toolbar store=no no_caption=1 editonly=1
+		@caption Toolbar
+
+		@property layout type=callback callback=callback_gen_layout store=no no_caption=1
+		@caption Layout
 
 
 	@default group=layout_layouts
@@ -143,6 +131,27 @@
 
 		@property tables_controller type=relpicker reltype=RELTYPE_TABLE_CONTROLLER store=no multiple=1
 		@caption N&auml;itamise kontroller
+
+	@property availtoolbar type=toolbar group=avail store=no no_caption=1 editonly=1
+	@caption Av. Toolbar
+
+	@property availprops type=table store=no group=avail no_caption=1
+	@caption K&otilde;ik omadused
+
+	@property subaction type=hidden store=no group=layout_props,avail
+	@caption Subaction (sys)
+
+	@property post_save_controllers type=relpicker multiple=1 size=3 group=set_controllers reltype=RELTYPE_CONTROLLER
+	@caption Salvestamisj&auml;rgne kontroller
+
+	@property prop_submit_controllers type=text subtitle=1 group=set_controllers
+	@caption Omaduste kontrollerid
+
+	@property gen_submit_controllers type=callback callback=gen_controller_props group=set_controllers no_caption=1
+
+
+	@property gen_view_controllers type=callback callback=gen_view_controller_props group=get_controllers
+	@caption Kontrollerid
 
 	@property default_table type=table group=defaults no_caption=1
 	@caption Vaikimisi v&auml;&auml;rtused
@@ -249,6 +258,8 @@
 
 	@property awcb_confirm_save_data type=checkbox ch_value=1 default=0
 	@caption Salvestamise kontroll lehelt lahkumisel
+
+
 
 // ---------- RELATIONS -------------
 	@reltype PROP_GROUP value=1 clid=CL_MENU
@@ -514,6 +525,18 @@ class cfgform extends class_base
 				$data["value"] = $iu . " " . $tmp[$clid]["name"] . " [" . basename($tmp[$clid]["file"]) . "]";
 				break;
 
+			case "navtoolbar":
+				$this->gen_navtoolbar($arr);
+				break;
+
+			case "availtoolbar":
+				$this->gen_availtoolbar($arr);
+				break;
+
+			case "availprops":
+				$this->gen_avail_props($arr);
+				break;
+
 			case "default_table":
 				$this->gen_default_table($arr);
 				break;
@@ -635,19 +658,6 @@ class cfgform extends class_base
 				{
 					unset($data["options"][$name]);
 				}
-				break;
-
-			case "properties_tree":
-				return $this->get_properties_tree($arr);
-
-			case "properties_tb":
-				return $this->get_properties_tb($arr);
-
-			case "properties_table":
-				return $this->get_properties_table($arr);
-
-			case "properties_info":
-				$data["value"] = t("Lisavalikute saamiseks klikake parema nupuga omadusele");
 				break;
 		}
 
@@ -1159,25 +1169,6 @@ class cfgform extends class_base
 		$this->grplist = $this->cfg_groups = safe_array($obj->meta("cfg_groups"));
 		$this->prplist = $this->cfg_proplist = safe_array($obj->meta("cfg_proplist"));
 		$this->layout = $this->cfg_layout = safe_array($obj->meta("cfg_layout"));
-		$this->hidden_props = safe_array($obj->meta("cfg_hidden_props"));
-
-		//if hidden props aren't saved, put them in the meta, because we want to keep their settings too
-		if(!is_array($this->hidden_props))
-		{
-			$this->hidden_props = array();
-			foreach($this->all_props as $name => $data)
-			{
-				if(!$this->prplist[$name])
-				{
-					$data["hidden"] = 1;
-					$this->hidden_props[$name] = $data;
-				}
-			}
-			$obj->set_meta("cfg_hidden_props", $this->hidden_props);
-			aw_disable_acl();
-			$obj->save();
-			aw_restore_acl();
-		}
 
 		// fix old cfgform objects where cfg_proplist contained only configured attributes
 		if (!$obj->meta("cfg_proplist_format_updated"))
@@ -1259,30 +1250,10 @@ class cfgform extends class_base
 				break;
 
 			case "gen_submit_controllers":
-				foreach($arr["request"]["controllers"] as $prop => $ctrls)
-				{
-					foreach($ctrls as $ctrl)
-					{
-						$arr["obj_inst"]->connect(array(
-							"type" => "RELTYPE_CONTROLLER",
-							"to" => $ctrl,
-						));
-					}
-				}
 				$arr["obj_inst"]->set_meta("controllers", $arr["request"]["controllers"]);
 				break;
 
 			case "gen_view_controllers":
-				foreach($arr["request"]["view_controllers"] as $prop => $ctrls)
-				{
-					foreach($ctrls as $ctrl)
-					{
-						$arr["obj_inst"]->connect(array(
-							"type" => "RELTYPE_VIEWCONTROLLER",
-							"to" => $ctrl,
-						));
-					}
-				}
 				$arr["obj_inst"]->set_meta("view_controllers", $arr["request"]["view_controllers"]);
 				break;
 
@@ -1354,6 +1325,14 @@ class cfgform extends class_base
 				{
 					$this->cff_init_from_class($arr["obj_inst"], $arr["request"]["subclass"], false);
 				}
+				break;
+
+			case "availprops":
+				$this->add_new_properties($arr);
+				break;
+
+			case "layout":
+				$this->save_layout($arr);
 				break;
 
 			case "layouts_table":
@@ -1451,10 +1430,6 @@ class cfgform extends class_base
 					return PROP_IGNORE;
 				}
 				break;
-
-			case "properties_table":
-				$this->set_properties_table($arr);
-				break;
 		}
 		return $retval;
 	}
@@ -1536,12 +1511,6 @@ class cfgform extends class_base
 	{
 		$arr["post_ru"] = get_ru();
 		$arr["cfgform_add_grp"] = isset($request["cfgform_add_grp"]) ? $request["cfgform_add_grp"] : "";
-		if($request["group"] == "props" || $request["group"] == "properties")
-		{
-			$arr["sel_grp"] = $request["sel_grp"];
-			$arr["move_group"] = "";
-			$arr["move_layout"] = "";
-		}
 	}
 
 	function callback_mod_retval($arr)
@@ -1562,11 +1531,6 @@ class cfgform extends class_base
 		if ($arr["request"]["chtbl"])
 		{
 			$arr["args"]["chtbl"] = $arr["request"]["chtbl"];
-		}
-		
-		if($arr["request"]["group"] == "props" || $arr["request"]["group"] == "properties")
-		{
-			$arr["args"]["sel_grp"] = $arr["request"]["sel_grp"];
 		}
 	}
 
@@ -1726,15 +1690,8 @@ class cfgform extends class_base
 				}
 
 				$this->cfg_proplist[$key] = $val;
-				
-				if($val["hidden"])
-				{
-					unset($this->cfg_proplist[$key]);
-					$this->hidden_props[$key] = $val;
-				}
 			}
-			
-			$o->set_meta("cfg_hidden_props", $this->hidden_props);
+
 			$o->set_meta("cfg_proplist",$this->cfg_proplist);
 		}
 	}
@@ -2377,6 +2334,580 @@ class cfgform extends class_base
 		return ($a["ord"] == $b["ord"]) ? 0 : (($a["ord"] < $b["ord"]) ? -1 : 1);
 	}
 
+	////
+	// !
+	function callback_gen_layout($arr = array())
+	{
+		$this->read_template("layout.tpl");
+		$used_props = $by_group = $by_layout = $layouts_by_grp = array();
+		$by_group = array();
+
+		if (isset($this->cfg_groups))
+		{
+			foreach($this->cfg_groups as $key => $val)
+			{
+				// we should not have numeric group id-s
+				// actually it's more about a few ghosts I had lying
+				// around, and this will get rid of them but we
+				// really don't NEED numeric group id-s
+				// /me does the jedi mind trick - duke
+				if (!is_numeric($key))
+				{
+					$by_group[$key] = array();
+				}
+			}
+		}
+
+		if (isset($this->cfg_proplist))
+		{
+			foreach($this->cfg_proplist as $property)
+			{
+				if (!empty($property["group"]))
+				{
+					$layout_grp = "";
+
+					if (isset($property["parent"]) and array_key_exists($property["parent"], $this->cfg_layout))
+					{
+						$by_layout[$property["parent"]][] = $property;
+						$layout_grp = $this->cfg_layout[$property["parent"]]["group"];
+					}
+
+					$i = false;
+					foreach((array) $property["group"] as $gkey)
+					{
+						if ($gkey !== $layout_grp)
+						{
+							if ($i)
+							{
+								$property["cfgf_property_editing_disabled"] = true;
+							}
+							else
+							{
+								$i = true;
+							}
+
+							$by_group[$gkey][] = $property;
+						}
+					}
+				}
+			}
+		}
+
+		if (isset($this->cfg_layout))
+		{
+			foreach ($this->cfg_layout as $name => $data)
+			{
+				if (array_key_exists($data["group"], $this->cfg_groups))
+				{
+					array_unshift($by_group[$data["group"]], $name);
+				}
+			}
+		}
+
+		$c = "";
+		$cnt = 0;
+		foreach($by_group as $key => $proplist)
+		{
+			$grp_id = str_replace("_", "-", $key);
+			$caption = $this->cfg_groups[$key]["caption"]." ($key)";
+
+			$this->vars(array(
+				"grp_caption" => empty($this->cfg_groups[$key]["parent"]) ? "<b>" . $caption . "</b>" : $caption,
+				"grpid" => $key,
+			));
+
+			$sc = "";
+			$clid = $arr["obj_inst"]->subclass();
+
+			foreach($proplist as $tmp)
+			{
+				if (is_array($tmp))
+				{
+					$layout = false;
+					$properties = array($tmp);
+				}
+				else
+				{
+					$layout = $tmp;
+					$layout_props = "";
+					$properties = $by_layout[$layout];
+				}
+
+				foreach (safe_array($properties) as $property)
+				{
+					$cnt++;
+					$prpdata = $this->all_props[$property["name"]];
+
+					if (!$prpdata)
+					{
+						continue;
+					}
+
+					if (empty($property["cfgf_property_editing_disabled"]))
+					{
+						// additional options
+						switch ($property["type"])
+						{
+							case "classificator":
+								$this->vars(array(
+									"sort_callback_caption" => t("Sorteerimise callback"),
+									"sort_callback" => $property["sort_callback"],
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("classificator_options");
+								$this->vars(array("classificator_options" => ""));
+								break;
+
+							case "image_verification":
+								$this->vars(array(
+									"width_caption" => t("Laius"),
+									"width" => $property["width"],
+									"height_caption" => t("K&otilde;rgus"),
+									"height" => $property["height"],
+									"text_color_caption" => t("Teksti v&auml;rv"),
+									"text_color" => $property["text_color"],
+									"background_color_caption" => t("Tausta v&auml;rv"),
+									"background_color" => $property["background_color"],
+									"font_size_caption" => t("Teksti suurus pildid"),
+									"font_size" => $property["font_size"],
+									"sidetop_caption" => t("Tekstikast &uuml;leval"),
+									"sidetop_ch" => checked($property["side"] == "top"),
+									"sidebottom_caption" => t("Tekstikast all"),
+									"sidebottom_ch" => checked($property["side"] == "bottom"),
+									"sideleft_caption" => t("Tekstikast vasakul"),
+									"sideleft_ch" => checked($property["side"] == "left"),
+									"sideright_caption" => t("Tekstikast paremal"),
+									"sideright_ch" => checked($property["side"] == "right"),
+									"textbox_size_caption" => t("Tekstikasti laius"),
+									"textbox_size" => $property["textbox_size"],
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("image_verification_options");
+								$this->vars(array("image_verification_options" => ""));
+								break;
+
+							case "textarea":
+								$this->vars(array(
+									"richtext_caption" => t("RTE"),
+									"richtext_checked" => checked($property["richtext"] == 1),
+									"richtext" => $property["richtext"],
+									"rows_caption" => t("K&otilde;rgus"),
+									"rows" => $property["rows"],
+									"cols_caption" => t("Laius"),
+									"cols" => $property["cols"],
+									"maxlength" => $property["maxlength"],
+									"maxlength_caption" => t("T&auml;hem&auml;rkide piirang"),
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("textarea_options");
+								$this->vars(array("textarea_options" => ""));
+								break;
+
+							case "textbox":
+								$this->vars(array(
+									"size_caption" => t("Laius"),
+									"size" => empty($property["size"]) ? "" : $property["size"],
+									"maxlength" => $property["maxlength"],
+									"maxlength_caption" => t("T&auml;hem&auml;rkide piirang"),
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("textbox_options");
+								$this->vars(array("textbox_options" => ""));
+								break;
+
+							case "relpicker":
+								$this->vars(array(
+									"no_edit_caption" => t("Nuppudeta"),
+									"no_edit_checked" => checked($property["no_edit"] == 1),
+									"no_edit" => isset($property["no_edit"]) ? $property["no_edit"] : "",
+									"displayradio_caption" => t("Valikud"),
+									"displayradio_ch" => (isset($property["display"]) and "radio" === $property["display"]) ? ' checked="1"' : "",
+									"displayselect_caption" => t("Selectbox"),
+									"displayselect_ch" => (isset($property["display"]) and "select" === $property["display"]) ? ' checked="1"' : "",
+									"stylenormal_caption" => t("Tavaline"),
+									"stylenormal_ch" => (empty($property["display"])) ? ' checked="1"' : "",
+									"styleac_caption" => t("Autocomplete"),
+									// Are you sure, this is 'style' not 'mode'? vcl/relpicker.aw doesn't consist the word 'style'. :S -kaarel 2.12.2008
+									//"styleac_ch" => ("autocomplete" === $property["style"]) ? ' checked="1"' : "",
+									"styleac_ch" => (isset($property["mode"]) and "autocomplete" === $property["mode"]) ? ' checked="1"' : "",
+									/*
+									"oit_caption" => t("option_is_tuple"),
+									"option_is_tuple_checked" => isset($property["option_is_tuple"]) && $property["option_is_tuple"] ? ' checked="1"' : "",
+									"option_is_tuple" => isset($property["option_is_tuple"]) ? $property["option_is_tuple"] : "",
+									*/
+									"multiple_caption" => t("Saab valida mitu"),
+									"multiple_checked" => isset($property["multiple"]) && $property["multiple"] ? ' checked="1"' : "",
+									"multiple" => isset($property["multiple"]) ? $property["multiple"] : "",
+									"size_caption" => t("K&otilde;rgus"),
+									"size" => empty($property["size"]) ? "" : $property["size"],
+									"prp_key" => $property["name"]
+								));
+								if($property["store"] == "connect" || $property["store"] == "no")
+								{
+									$this->vars(array(
+										"rlp_ops_mult" => $this->parse("rlp_ops_mult"),
+									));
+								}
+								// I don't think we need this, so I'll not parse it. But I'll leave it here in case someone someday thinks it's necessary... -kaarel 3.12.2008
+								/*
+								if($property["mode"] == "autocomplete")
+								{
+									$this->vars(array(
+										"rlp_ops_oit" => $this->parse("rlp_ops_oit"),
+									));
+								}
+								*/
+								$property["cfgform_additional_options"] = $this->parse("relpicker_options");
+								$this->vars(array("relpicker_options" => ""));
+								break;
+
+							case "releditor":
+								$this->vars(array(
+									"cfgform_id_caption" => t("Seadetevormi id"),
+									"cfgform_id" => $property["cfgform_id"],
+									"obj_parent_caption" => t("Parent"),
+									"obj_parent" => $property["obj_parent"],
+									"use_form" => $property["use_form"],
+									"rel_id" => $property["rel_id"],
+									"mode" => $property["mode"],
+									"prp_key" => $property["name"]
+								));
+								$property["cfgform_additional_options"] = $this->parse("releditor_options");
+								$this->vars(array("releditor_options" => ""));
+								break;
+
+							case "select":
+								$this->vars(array(
+									"size_caption" => t("K&otilde;rgus"),
+									"size" => $property["size"],
+									"prp_key" => $property["name"]
+								));
+								$property["cfgform_additional_options"] = $this->parse("select_options");
+								$this->vars(array("select_options" => ""));
+								break;
+
+							case "date_select":
+								settype($property["format"], "array");
+								$this->vars(array(
+									"prp_key" => $property["name"],
+
+									"buttons_show_caption" => t("Nupud: jah"),
+									"buttons_show_ch" => (1 == $property["buttons"]) ? ' checked="1"' : "",
+									"buttons_hide_caption" => t("ei"),
+									"buttons_hide_ch" => ("0" === $property["buttons"]) ? ' checked="1"' : "",
+									"buttons_default_caption" => t("m&auml;&auml;ramata"),
+									"buttons_default_ch" => (!isset($property["buttons"])) ? ' checked="1"' : "",
+
+									"format_caption" => t("Formaat:"),
+
+									"format_dayselect_caption" => t("P&auml;ev: select"),
+									"format_dayselect_ch" => (in_array("day", $property["format"])) ? ' checked="1"' : "",
+									"format_daytext_caption" => t("text"),
+									"format_daytext_ch" => (in_array("day_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_daynone_caption" => t("m&auml;&auml;ramata"),
+									"format_daynone_ch" => (!in_array("day", $property["format"]) and !in_array("day_textbox", $property["format"])) ? ' checked="1"' : "",
+
+									"format_monthselect_caption" => t("Kuu: select"),
+									"format_monthselect_ch" => (in_array("month", $property["format"])) ? ' checked="1"' : "",
+									"format_monthtext_caption" => t("text"),
+									"format_monthtext_ch" => (in_array("month_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_monthnone_caption" => t("m&auml;&auml;ramata"),
+									"format_monthnone_ch" => (!in_array("month", $property["format"]) and !in_array("month_textbox", $property["format"])) ? ' checked="1"' : "",
+
+									"format_yearselect_caption" => t("Aasta: select"),
+									"format_yearselect_ch" => (in_array("year", $property["format"])) ? ' checked="1"' : "",
+									"format_yeartext_caption" => t("text"),
+									"format_yeartext_ch" => (in_array("year_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_yearnone_caption" => t("m&auml;&auml;ramata"),
+									"format_yearnone_ch" => (!in_array("year", $property["format"]) and !in_array("year_textbox", $property["format"])) ? ' checked="1"' : "",
+
+									"format_hourselect_caption" => t("Tund: select"),
+									"format_hourselect_ch" => (in_array("hour", $property["format"])) ? ' checked="1"' : "",
+									"format_hourtext_caption" => t("text"),
+									"format_hourtext_ch" => (in_array("hour_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_hournone_caption" => t("m&auml;&auml;ramata"),
+									"format_hournone_ch" => (!in_array("hour", $property["format"]) and !in_array("hour_textbox", $property["format"])) ? ' checked="1"' : "",
+
+									"format_minuteselect_caption" => t("Minut: select"),
+									"format_minuteselect_ch" => (in_array("minute", $property["format"])) ? ' checked="1"' : "",
+									"format_minutetext_caption" => t("text"),
+									"format_minutetext_ch" => (in_array("minute_textbox", $property["format"])) ? ' checked="1"' : "",
+									"format_minutenone_caption" => t("m&auml;&auml;ramata"),
+									"format_minutenone_ch" => (!in_array("minute", $property["format"]) and !in_array("minute_textbox", $property["format"])) ? ' checked="1"' : ""
+								));
+								$property["cfgform_additional_options"] = $this->parse("date_select_options");
+								$this->vars(array("date_select_options" => ""));
+								break;
+
+							case "datetime_select":
+								$this->vars(array(
+									"prp_key" => $property["name"],
+									"dayselect_caption" => t("P&auml;ev: select"),
+									"dayselect_ch" => ("select" === $property["day"] or empty($property["day"])) ? ' checked="1"' : "",
+									"daytext_caption" => t("textbox"),
+									"daytext_ch" => ("text" === $property["day"]) ? ' checked="1"' : "",
+									"monthselect_caption" => t("Kuu: select"),
+									"monthselect_ch" => ("select" === $property["month"] or empty($property["month"])) ? ' checked="1"' : "",
+									"monthtext_caption" => t("textbox"),
+									"monthtext_ch" => ("text" === $property["month"]) ? ' checked="1"' : "",
+								));
+								$property["cfgform_additional_options"] = $this->parse("datetime_select_options");
+								$this->vars(array("datetime_select_options" => ""));
+								break;
+
+							case "chooser":
+								$this->vars(array(
+									"orienth_caption" => t("Horisontaalselt"),
+									"orienth_ch" => ("horizontal" === $property["orient"]) ? ' checked="1"' : "",
+									"orientv_caption" => t("Vertikaalselt"),
+									"orientv_ch" => ("vertical" === $property["orient"]) ? ' checked="1"' : "",
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("chooser_options");
+								$this->vars(array("chooser_options" => ""));
+								break;
+
+							case "layout":
+								$this->vars(array(
+									"hbox_caption" => t("Horisontaalne"),
+									"hbox_ch" => ("hbox" === $property["type"]) ? ' checked="1"' : "",
+									"hbox_caption" => t("Vertikaalne"),
+									"hbox_ch" => ("vertical" === $property["type"]) ? ' checked="1"' : "",
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("layout_options");
+								$this->vars(array("layout_options" => ""));
+								break;
+							case "table":
+								$this->vars(array(
+									"prp_key" => $property["name"],
+									"configurable_caption" => t("Konfigureeritav"),
+									"configurable_checked" => $property["configurable"] ? " checked=\"1\"" : "",
+								));
+								$property["cfgform_additional_options"] = $this->parse("table_options");
+								$this->vars(array("table_options" => ""));
+								break;
+
+							case "keyword_selector":
+								$this->vars(array(
+									"prp_key" => $property["name"],
+									"no_folder_names_caption" => t("&Auml;ra n&auml;ita kaustade nimesid"),
+									"no_folder_names_checked" => isset($property["no_folder_names"]) && $property["no_folder_names"] ? " checked=\"1\"" : "",
+									"no_header_caption" => t("&Auml;ra n&auml;ita tabeli p&auml;ist"),
+									"no_header_checked" => isset($property["no_header"]) && $property["no_header"] ? " checked=\"1\"" : "",
+									"hide_selected_caption" => t("&Auml;ra n&auml;ita valitud m&auml;rks&otilde;nu"),
+									"hide_selected_checked" => isset($property["hide_selected"]) && $property["hide_selected"] ? " checked=\"1\"" : "",
+									"keyword_per_row_caption" => t("Mitu v&otilde;tmes&otilde;na real"),
+									"keyword_per_row" => isset($property["keyword_per_row"]) ? (int) $property["keyword_per_row"] : 0,
+								));
+								$property["cfgform_additional_options"] = $this->parse("keyword_selector_options");
+								break;
+
+							case "multifile_upload":
+								$this->vars(array(
+									"prp_key" => $property["name"],
+									"max_files_caption" => t("Maksimaalne failide arv"),
+									"max_files" => isset($property["max_files"]) ? $property["max_files"] : "",
+								));
+								$property["cfgform_additional_options"] = $this->parse("multifile_upload_options");
+								break;
+
+							default:
+								$property["cfgform_additional_options"] = "";
+						}
+
+						if ($arr["obj_inst"]->prop("use_in_releditor"))
+						{
+							$this->vars(array(
+								"prp_key" => $property["name"],
+								"emb_tbl_controller_caption" => t("Tabeli kontrolleri id"),
+								"emb_tbl_controller" => $property["emb_tbl_controller"],
+								"show_in_emb_tbl_caption" => t("N&auml;ita releditori tabelis"),
+								"show_in_emb_tbl_checked" => checked(!empty($property["show_in_emb_tbl"])),
+								"show_in_emb_tbl" => $property["show_in_emb_tbl"],
+								"emb_tbl_caption" => $property["emb_tbl_caption"],
+								"emb_tbl_col_num" => $property["emb_tbl_col_num"],
+								"emb_tbl_col_sep" => $property["emb_tbl_col_sep"],
+								"emb_tbl_caption_caption" => t("Tulba pealkiri"),
+								"emb_tbl_col_num_caption" => t("Tulba grupp"),
+								"emb_tbl_col_sep_caption" => t("Eraldaja"),
+							));
+							$emb_tbl = $this->parse("emb_tbl");
+						}
+						else
+						{
+							$emb_tbl = "";
+						}
+
+						$this->vars(array(
+							"prp_key" => $property["name"],
+							"no_caption_caption" => t("&Auml;ra n&auml;ita pealkirja"),
+							"no_caption_checked" => checked(!empty($property["no_caption"])),
+							"no_caption" => empty($property["no_caption"]) ? "" : $property["no_caption"],
+							"captionside_l_caption" => t("Pealkiri vasakul"),
+							"captionside_l_ch" =>  (isset($property["captionside"]) and "left" === $property["captionside"]) ? ' checked="1"' : "",
+							"captionside_t_caption" => t("Pealkiri &uuml;lal"),
+							"captionside_t_ch" =>  (isset($property["captionside"]) and "top" === $property["captionside"]) ? ' checked="1"' : "",
+							"textsize_caption" => '<span title="' . t("CSS formaadis:") . ' 12px, 0.7em, ..." style="cursor: help;">' . t("Tekstisuurus") . '</span>',
+							"textsize" => empty($property["textsize"]) ? "" : $property["textsize"],
+							"disabled_caption" => t("Mitteaktiivne (disabled)"),
+							"disabled_checked" => checked(!empty($property["disabled"])),
+							"comment_caption" => t("Kommentaar"),
+							"comment" => $property["comment"],
+							"comment_style_text_caption" => t("Kommentaar tekstina"),
+							"comment_style_popup_caption" => t("Kommentaar popupina"),
+							"comment_style_text_ch" => (isset($property["comment_style"]) and "text" === $property["comment_style"]) ? ' checked="1"' : "",
+							"comment_style_popup_ch" => (!isset($property["comment_style"]) or "popup" === $property["comment_style"]) ? ' checked="1"' : "",
+							"disabled" => empty($property["disabled"]) ? "" : $property["disabled"],
+							"prp_options" => $property["cfgform_additional_options"],
+							"prp_opts_caption" => t("Lisavalikud"),
+							"tmp_id" => $cnt,
+							"emb_tbl" => $emb_tbl
+						));
+						$options = $this->parse("options");
+						$this->vars(array("options" => ""));
+
+						// type selector
+						$type_options = array();
+
+						switch ($property["type"])
+						{ /// get type options
+							case "textbox":
+								$type_options = array(
+									"textbox" => "textbox",
+									"textarea" => "textarea"
+								);
+								break;
+
+							case "textarea":
+								$type_options = array(
+									"textarea" => "textarea",
+									"textbox" => "textbox"
+								);
+								break;
+
+							case "date_select":
+								$type_options = array(
+									"date_select" => "date_select",
+									"datetime_select" => "datetime_select"
+								);
+								break;
+
+							case "datetime_select":
+								$type_options = array(
+									"datetime_select" => "datetime_select",
+									"date_select" => "date_select"
+								);
+								break;
+
+							case "relpicker":
+								$type_options = array(
+									"relpicker" => "relpicker",
+									"releditor" => "releditor"
+								);
+								break;
+
+							case "releditor":
+								$type_options = array(
+									"releditor" => "releditor",
+									"relpicker" => "relpicker"
+								);
+								break;
+						}
+
+						/// some elements' type not alterable. those also form elements and in POST request
+						$disabled = !count($type_options);
+						if ($disabled)
+						{
+							$type_options = array($property["type"] => $property["type"]);
+						}
+
+						///
+						$type_selector = html::select(array(
+							"name" => "prpconfig[" . $prpdata["name"] . "][type]",
+							"options" => $type_options,
+							"disabled" => $disabled,
+							"value" => $property["type"]
+						));
+
+						//
+						$used_props[$property["name"]] = 1;
+						$prop_tpl = "property";
+					}
+					else
+					{
+						$options = "";
+						$type_selector = $property["type"];
+						$prop_tpl = "property_disabled";
+					}
+
+					$this->vars(array(
+						"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
+						"prp_caption" => empty($property["caption"]) ? "" : $property["caption"],
+						"prp_type" => $type_selector,
+						"prp_mark_key" => $prpdata["name"] . "|" . $key,
+						"prp_key" => $prpdata["name"],
+						"prp_order" => empty($property["ord"]) ? "" : $property["ord"],
+						"options" => $options,
+						"grp_id" => $grp_id
+					));
+
+					if ($layout)
+					{
+						$layout_props .= $this->parse($prop_tpl);
+					}
+					else
+					{
+						$sc .= $this->parse($prop_tpl);
+					}
+				}
+
+				if ($layout)
+				{
+					$this->vars(array(
+						"layout_name" => $layout,
+						"layout_props" => $layout_props,
+						"layout_type" => $this->cfg_layout[$layout]["type"],
+					));
+					$sc .= $this->parse("layout");
+				}
+			}
+
+			$select_toggle = "";
+
+			if ($sc)
+			{
+				$this->vars(array(
+					"grp_id" => $grp_id,
+					"capt_prp_mark" => t("Inverteeri valik")
+				));
+				$select_toggle = $this->parse("select_toggle");
+			}
+
+			$this->vars(array(
+				"property" => $sc,
+				"layout" => "",
+				"select_toggle" => $select_toggle,
+				"grp_id" => $grp_id,
+				"capt_prp_mark" => t("Inverteeri valik")
+			));
+			$c .= $this->parse("group");
+		}
+
+		$this->vars(array(
+			"group" => $c,
+			"capt_legend_tbl" => t("Tabi pealkiri (tabi_nimi)"),
+			"capt_prp_order" => t("Jrk."),
+			"capt_prp_key" => t("Nimi"),
+			"capt_prp_caption" => t("Pealkiri"),
+			"capt_prp_type" => t("T&uuml;&uuml;p")
+		));
+
+		$item = $arr["prop"];
+		$item["value"] = $this->parse();
+		return array($item);
+	}
+
 	function __sort_props_by_ord($el1,$el2)
 	{
 		if (empty($el1["ord"]) && empty($el2["ord"]))
@@ -2385,6 +2916,515 @@ class cfgform extends class_base
 			//return 0;
 		};
 		return (int)($el1["ord"] - $el2["ord"]);
+	}
+
+	////
+	// !
+	function gen_avail_props($arr = array())
+	{
+		// init table
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "name",
+			"sortable" => true,
+			"caption" => t("Nimi"),
+		));
+
+		$t->define_field(array(
+			"name" => "type",
+			"sortable" => true,
+			"caption" => t("T&uuml;&uuml;p"),
+		));
+
+		$t->define_field(array(
+			"name" => "caption",
+			"sortable" => true,
+			"caption" => t("Pealkiri"),
+		));
+
+		$t->define_field(array(
+			"name" => "default_grp",
+			"sortable" => true,
+			"caption" => t("Vaikimisi tab"),
+			"filter" => "automatic"
+		));
+
+		$t->define_field(array(
+			"name" => "in_use",
+			"sortable" => true,
+			"caption" => t("K"),
+			"tooltip" => t("Kasutusel"),
+		));
+
+		$t->define_chooser(array(
+			"name" => "mark",
+			"field" => "name",
+		));
+
+		if (empty($arr["request"]["sortby"]))
+		{
+			$t->set_sortable(false);
+		}
+
+		// get props in use
+		$used_props = array();
+
+		if (is_array($this->prplist))
+		{
+			foreach($this->prplist as $property)
+			{
+				if (!empty($property["group"]))
+				{
+					if (is_array($property["group"]))
+					{
+						$used_props[$property["name"]] = $property["group"];
+					}
+					else
+					{
+						$used_props[$property["name"]][] = $property["group"];
+					}
+				}
+			}
+		}
+
+		foreach($this->all_props as $property)
+		{
+			if (count($used_props[$property["name"]]))
+			{
+				$groups = implode(", ", $used_props[$property["name"]]);
+			}
+			else
+			{
+				$groups = "";
+			}
+
+			$t->define_data(array(
+				"caption" => empty($property["caption"]) ? "" : $property["caption"],
+				"type" => $property["type"],
+				"name" => $property["name"],
+				"default_grp" => empty($property["group"]) ? "" : $property["group"],
+				"in_use" => $groups ? html::img(array(
+					"url" => aw_ini_get("icons.server")."/check.gif",
+					"alt" => $groups,
+					"title" => $groups
+				)) : ""
+			));
+		}
+	}
+
+	function gen_navtoolbar($arr)
+	{
+		// which links do I need on the toolbar?
+		// 1- lisa tab
+		$toolbar = &$arr["prop"]["toolbar"];
+
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"url" => "javascript:submit_changeform()",
+			"img" => "save.gif",
+		));
+
+		$toolbar->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Eemalda valitud omadused tab-ist"),
+			"url" => "javascript:document.changeform.subaction.value='delete';submit_changeform();",
+			"img" => "delete.gif",
+		));
+
+		$toolbar->add_separator();
+
+		$toolbar->add_cdata(t("<small>Liiguta omadused:</small>"));
+		$opts = array();
+
+		if (is_array($this->grplist))
+		{
+			$layouts_by_grp = array();
+
+			if (is_array($this->layout))
+			{
+				foreach ($this->layout as $name => $data)
+				{
+					$layouts_by_grp[$data["group"]]["layout:" . $name] = t("&nbsp;&nbsp;&nbsp;Layouti: ") . $name;
+				}
+			}
+
+			foreach($this->grplist as $name => $grpdata)
+			{
+				$opts["group:" . $name] = t("Tabi: ") . $grpdata["caption"] . " [" . $name . "]";
+
+				if (isset($layouts_by_grp[$name]))
+				{
+					$opts = array_merge($opts, $layouts_by_grp[$name]);
+				}
+			}
+		}
+		else
+		{
+			$opts[""] = t("&Uuml;htegi tabi pole veel!");
+		}
+
+		$toolbar->add_cdata(html::select(array(
+			"options" => $opts,
+			"textsize" => "12px",
+			"name" => "target_grp",
+		)));
+
+		$toolbar->add_button(array(
+			"name" => "move",
+			"tooltip" => t("Liiguta"),
+			"url" => "javascript:document.changeform.subaction.value='move';submit_changeform();",
+			"img" => "save.gif",
+		));
+
+		$toolbar->add_separator();
+
+		$toolbar->add_cdata(t("<small>Lisa tab:</small>"));
+		$toolbar->add_cdata(html::textbox(array(
+			"name" => "newgrpname",
+			"textsize" => "12px",
+			"size" => "20",
+		)));
+
+		$toolbar->add_cdata(t("<small>Millise tabi alla:</small>"));
+		$tabs = array();
+		$tabs[""] = t("");
+		if (is_array($this->grplist))
+		{
+			foreach($this->grplist as $key => $grpdata)
+			{
+				if (empty($grpdata["parent"]))
+				{
+					$tabs[$key] = $grpdata["caption"] . " [" . $key . "]";
+				}
+			}
+		}
+
+		$toolbar->add_cdata(html::select(array(
+			"options" => $tabs,
+			"textsize" => "12px",
+			"name" => "target",
+		)));
+
+		$toolbar->add_button(array(
+			"name" => "addgrp",
+			"tooltip" => t("Lisa tab"),
+			"url" => "javascript:document.changeform.subaction.value='addgrp';submit_changeform()",
+			"img" => "new.gif",
+		));
+	}
+
+	function gen_availtoolbar($arr)
+	{
+		$this_o = $arr["obj_inst"];
+		$toolbar =& $arr["prop"]["vcl_inst"];
+		$this_oid = $this_o->id();
+		$return_url = get_ru();
+
+		// merge
+		$toolbar->add_menu_button(array(
+			"name" => "merge",
+			"img" => "import.gif",
+			"tooltip" => t("Loe klassi uuendused seadetevormi"),
+		));
+
+			// merge all
+			$toolbar->add_menu_item(array(
+				"parent" => "merge",
+				"text" => t("K&otilde;ik"),
+				"link" => $this->mk_my_orb("merge", array(
+					"id" => $this_oid,
+					"scope" => "all",
+					"return_url" => $return_url,
+				))
+			));
+
+			// merge properties
+			$toolbar->add_menu_item(array(
+				"parent" => "merge",
+				"text" => t("Ainult omadused"),
+				"link" => $this->mk_my_orb("merge", array(
+					"id" => $this_oid,
+					"scope" => "properties",
+					"return_url" => $return_url,
+				))
+			));
+
+			// merge groups
+			$toolbar->add_menu_item(array(
+				"parent" => "merge",
+				"text" => t("Ainult tabid"),
+				"link" => $this->mk_my_orb("merge", array(
+					"id" => $this_oid,
+					"scope" => "groups",
+					"return_url" => $return_url,
+				))
+			));
+
+			// merge layouts
+			$toolbar->add_menu_item(array(
+				"parent" => "merge",
+				"text" => t("Ainult layoudid"),
+				"link" => $this->mk_my_orb("merge", array(
+					"id" => $this_oid,
+					"scope" => "layouts",
+					"return_url" => $return_url,
+				))
+			));
+
+		// reload
+		$toolbar->add_menu_button(array(
+			"name" => "reload",
+			"img" => "refresh.gif",
+			"tooltip" => t("Tee seadetele alglaadimine"),
+		));
+
+			// reload all
+			$toolbar->add_menu_item(array(
+				"parent" => "reload",
+				"text" => t("K&otilde;ik"),
+				"link" => $this->mk_my_orb("reload", array(
+					"id" => $this_oid,
+					"scope" => "all",
+					"return_url" => $return_url,
+				))
+			));
+
+			// reload properties
+			$toolbar->add_menu_item(array(
+				"parent" => "reload",
+				"text" => t("Ainult omadused"),
+				"link" => $this->mk_my_orb("reload", array(
+					"id" => $this_oid,
+					"scope" => "properties",
+					"return_url" => $return_url,
+				))
+			));
+
+			// reload groups
+			$toolbar->add_menu_item(array(
+				"parent" => "reload",
+				"text" => t("Ainult tabid"),
+				"link" => $this->mk_my_orb("reload", array(
+					"id" => $this_oid,
+					"scope" => "groups",
+					"return_url" => $return_url,
+				))
+			));
+
+			// reload layouts
+			$toolbar->add_menu_item(array(
+				"parent" => "reload",
+				"text" => t("Ainult layoudid"),
+				"link" => $this->mk_my_orb("reload", array(
+					"id" => $this_oid,
+					"scope" => "layouts",
+					"return_url" => $return_url,
+				))
+			));
+
+		// move props
+		$opts = array();
+		if (is_array($this->grplist))
+		{
+			foreach($this->grplist as $key => $grpdata)
+			{
+				$opts[$key] = $grpdata["caption"] . " [" . $key . "]";
+			}
+		}
+		else
+		{
+			$opts[""] = t("&Uuml;htegi tabi pole veel!");
+		}
+
+		$toolbar->add_cdata(html::select(array(
+			"options" => $opts,
+			"name" => "target",
+		)));
+
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"url" => "javascript:submit_changeform()",
+			"img" => "save.gif",
+		));
+	}
+
+	private function add_new_properties($arr)
+	{
+		$target = $arr["request"]["target"];
+		$this->_init_cfgform_data($arr["obj_inst"]);
+
+		// first check, whether a group with that id exists
+		if (isset($this->cfg_groups[$target]) and is_array($arr["request"]["mark"]))
+		{
+			foreach($arr["request"]["mark"] as $pkey => $pval)
+			{
+				// if this is a valid property, then add it to the list
+				if (!isset($this->cfg_proplist[$pkey]) and isset($this->all_props[$pkey]))
+				{
+					$this->cfg_proplist[$pkey] = $this->all_props[$pkey];
+				}
+
+				// need to add another group
+				// add group only if prop not already in that group
+				if (is_array($this->cfg_proplist[$pkey]["group"]) and !in_array($target, $this->cfg_proplist[$pkey]["group"]))
+				{
+					$this->cfg_proplist[$pkey]["group"][] = $target;
+				}
+				elseif ($target !== $this->cfg_proplist[$pkey]["group"])
+				{
+					$this->cfg_proplist[$pkey]["group"] = array($this->cfg_proplist[$pkey]["group"], $target);
+				}
+			}
+		}
+	}
+
+	function save_layout($arr)
+	{
+		$subaction = $arr["request"]["subaction"];
+		$this->_init_cfgform_data($arr["obj_inst"]);
+
+		switch($subaction)
+		{
+			case "addgrp":
+				$ret = $this->add_group($arr["obj_inst"], false, $arr["request"]["target"], $arr["request"]["newgrpname"]);
+
+				if (true !== $ret)
+				{
+					$arr["prop"]["error"] = $ret;
+					return PROP_ERROR;
+				}
+				break;
+
+			case "delete":
+				$mark = $arr["request"]["mark"];
+
+				if (is_array($mark))
+				{
+					foreach($mark as $pkey => $val)
+					{
+						list($prop, $grp) = explode("|", $pkey, 2);
+
+						if (!is_array($this->cfg_proplist[$prop]["group"]) or 1 === count($this->cfg_proplist[$prop]["group"]))
+						{
+							unset($this->cfg_proplist[$prop]);
+						}
+						elseif (in_array($grp, $this->cfg_proplist[$prop]["group"], true))
+						{
+							$idx = reset(array_keys($this->cfg_proplist[$prop]["group"], $grp));
+							unset($this->cfg_proplist[$prop]["group"][$idx]);
+						}
+					}
+				}
+				break;
+
+			case "move":
+				$mark = $arr["request"]["mark"];
+
+				if (is_array($mark))
+				{
+					$target = $arr["request"]["target_grp"];
+
+					if (0 === strpos($target, "group:"))
+					{
+						$target_grp = substr($target, 6);
+						$target_layout = false;
+					}
+					elseif (0 === strpos($target, "layout:"))
+					{
+						$target_layout = substr($target, 7);
+						$target_grp = $this->layout[$target_layout]["group"];
+
+						if(empty($target_grp))
+						{
+							$arr["prop"]["error"] = t("Layoudil puudub tab");
+							return PROP_ERROR;
+						}
+					}
+					else
+					{
+						$arr["prop"]["error"] = t("Viga p&auml;ringu formaadis");
+						return PROP_ERROR;
+					}
+
+					foreach($mark as $pkey => $val)
+					{
+						list($prop, $grp) = explode("|", $pkey, 2);
+
+						// set parent group
+						if (is_array($this->cfg_proplist[$prop]["group"]) and !in_array($grp, $this->cfg_proplist[$prop]["group"]))
+						{
+							$this->cfg_proplist[$prop]["group"][] = $target_grp;
+						}
+						else
+						{
+							$this->cfg_proplist[$prop]["group"] = $target_grp;
+						}
+
+						// set parent layout
+						if ($target_layout)
+						{
+							$this->cfg_proplist[$prop]["parent"] = $target_layout;
+						}
+						else
+						{
+							unset($this->cfg_proplist[$prop]["parent"]);
+						}
+					}
+				}
+				break;
+
+			default:
+				foreach ($this->cfg_proplist as $name => $data)
+				{
+					if (isset($arr["request"]["prpconfig"][$name]))
+					{
+						$cfg_data = $arr["request"]["prpconfig"][$name];
+
+						if (isset($arr["request"]["xconfig"][$name]))
+						{ // remove option configuration if checkbox not checked. required by some older html and vcl(?) classes' methods' boolean argument implementations.
+							foreach ($arr["request"]["xconfig"][$name] as $ch_name => $value)
+							{
+								if (!empty($value) and !isset($cfg_data[$ch_name]))
+								{
+									unset($data[$ch_name]);
+								}
+							}
+						}
+
+						foreach ($cfg_data as $option_name => $option_value)
+						{
+							if (is_array($option_value))
+							{ // remove option configuration if no array elements selected. html::date_select format argument requires this.
+								$option_value_defined = false;
+
+								foreach ($option_value as $option_value_el)
+								{
+									if (!empty($option_value_el))
+									{
+										$option_value_defined = true;
+									}
+								}
+
+								if (!$option_value_defined)
+								{
+									unset($cfg_data[$option_name]);
+								}
+							}
+							elseif ("buttons" === $option_name and (0 === strlen($option_value)))
+							{
+								unset($data[$option_name]);
+								unset($cfg_data[$option_name]);
+							}
+						}
+
+						$this->cfg_proplist[$name] = $cfg_data + $data;
+					}
+				}
+				break;
+		}
 	}
 
 	function update_groups($arr)
@@ -3071,7 +4111,7 @@ class cfgform extends class_base
 					}
 				}
 
-				if(!$allowed_to_see) 
+				if(!$allowed_to_see)
 				{
 					unset($ret[$key]);
 				}
@@ -3179,7 +4219,7 @@ class cfgform extends class_base
 		$has_cb = method_exists($si, "callback_get_group_display");
 		foreach($ret as $gn => $gd)
 		{
-			if ($this->can("view", $gd["grp_d_ctl"]))
+			if (isset($gd["grp_d_ctl"]) and $this->can("view", $gd["grp_d_ctl"]))
 			{
 				$ctl = obj($gd["grp_d_ctl"]);
 				$ctli = $ctl->instance();
@@ -3466,7 +4506,6 @@ class cfgform extends class_base
 		$this_o = new object($arr["id"]);
 		$this->_init_cfgform_data($this_o);
 		$this->cff_init_from_class($this_o, $this_o->subclass(), false);
-		$this->hidden_props = array();
 
 		foreach ($scopes as $scope)
 		{
@@ -4095,7 +5134,7 @@ class cfgform extends class_base
 			$list = $o->get_property_list();
 			foreach($list as $lid => $li)
 			{
-				if($li["caption"])
+				if(!empty($li["caption"]))
 				{
 				//if(strpos($li["type"], "text")>-1 && $li["caption"])
 					$goodprops[$lid] = $li["caption"];
@@ -4216,1189 +5255,6 @@ class cfgform extends class_base
 		$cffi = get_instance(CL_CFGFORM);
 		$cff = $cffi->get_sysdefault(array("clid" => $clid));
 		return $this->can("view", $cff) ? $cffi->get_cfg_proplist($cff) : $o->get_property_list();
-	}
-
-	private function set_props_by_group()
-	{
-		$by_group = $by_layout = array();
-		
-		if (isset($this->cfg_groups))
-		{
-			foreach($this->cfg_groups as $key => $val)
-			{
-				if (!is_numeric($key))
-				{
-					$this->props_by_group[$key] = array(
-						"cfgtype" => "group",
-						"name" => sprintf("%s (%s)", $val["caption"], $key),
-					);
-				}
-			}
-		}
-
-		if (isset($this->cfg_layout))
-		{
-			foreach($this->props_by_group as $group => $gr_data)
-			{
-				$subs = array();
-				$this->props_by_group[$group]["subs"] = $this->get_layout_subs(array(
-					"group" => $group,
-					"parent" => "",
-				));
-			}
-		}
-	}
-
-	private function get_layout_subs($arr)
-	{
-		$subs = array();
-		foreach($this->cfg_proplist as $prop)
-		{
-			if($prop["parent"] == $arr["parent"] && $prop["group"] == $arr["group"])
-			{
-				$subs[] = $prop;
-			}
-		}
-		foreach($this->hidden_props as $prop)
-		{
-			if($prop["parent"] == $arr["parent"] && $prop["group"] == $arr["group"])
-			{
-				$subs[] = $prop;
-			}
-		}
-		foreach ($this->cfg_layout as $name => $data)
-		{
-			if($data["parent"] == $arr["parent"] && $arr["group"] == $data["group"])
-			{
-				$data["cfgtype"] = "layout";
-				$data["name"] = $name;
-				$data["subs"] = $this->get_layout_subs(array(
-					"group" => $arr["group"],
-					"parent" => $name,
-				));
-				$subs[] = $data;
-			}
-		}
-		return $subs;
-	}
-
-	function get_properties_tree($arr)
-	{
-		$tree = &$arr["prop"]["vcl_inst"];
-		$obj = $arr["obj_inst"];
-		$grps = new aw_array($arr["obj_inst"]->meta("cfg_groups"));
-
-		foreach($grps->get() as $name => $grp)
-		{
-			$parent = empty($grp["parent"]) ? 0 : $grp["parent"];
-			$tree->add_item($parent,array(
-				"name" => $grp["caption"],
-				"id" => $name,
-				"url" => aw_url_change_var(array("sel_grp" => $name)),
-			));
-		}
-
-		$tree->add_item(0, array(
-			"name" => t("K&otilde;ik omadused"),
-			"id" => ".all",
-			"url" => aw_url_change_var(array("sel_grp" => ".all")),
-		));
-
-		$tree->set_selected_item($arr["request"]["sel_grp"]);
-	}
-
-	function set_properties_table($arr)
-	{
-		$this->_init_cfgform_data($arr["obj_inst"]);
-		foreach ($this->cfg_proplist as $name => $data)
-		{
-			$cfg_data = array();
-			if (isset($arr["request"]["prpconfig"][$name]))
-			{
-				$cfg_data = $arr["request"]["prpconfig"][$name];
-			}
-
-			if (isset($arr["request"]["xconfig"][$name]))
-			{
-				foreach ($arr["request"]["xconfig"][$name] as $ch_name => $value)
-				{
-					if (!empty($value) and !isset($cfg_data[$ch_name]))
-					{
-						unset($data[$ch_name]);
-					}
-				}
-			}
-
-			$this->cfg_proplist[$name] = $cfg_data + $data;
-		}
-
-		$vars = array("controllers", "view_controllers");
-		foreach($vars as $var)
-		{
-			$data = $arr["obj_inst"]->meta($var);
-			foreach($arr["request"]["prpconfig"] as $prop => $tmp)
-			{
-				$data[$prop] = $arr["request"][$var][$prop];
-			}
-			$arr["obj_inst"]->set_meta($var, $data);
-		}
-	}
-
-	private function _init_properties_table($arr)
-	{
-		$t = &$arr["prop"]["vcl_inst"];
-		$t->define_field(array(
-			"name" => "select",
-			"caption" => t("Vali"),
-			"align" => "center",
-			"width" => 20,
-			"chgbgcolor" => "color",
-		));
-		$t->define_field(array(
-			"name" => "show",
-			"caption" => t("Kuva"),
-			"align" => "center",
-			"width" => 20,
-			"chgbgcolor" => "color",
-		));
-		$t->define_field(array(
-			"name" => "ord",
-			"caption" => t("J&auml;rjekord"),
-			"width" => 50,
-			"align" => "center",
-			"chgbgcolor" => "color",
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-			"chgbgcolor" => "color",
-		));
-		$t->define_field(array(
-			"name" => "caption",
-			"caption" => t("Pealkiri"),
-			"chgbgcolor" => "color",
-		));
-		$t->define_field(array(
-			"name" => "type",
-			"caption" => t("T&uuml;&uuml;p"),
-			"chgbgcolor" => "color",
-		));
-		$t->define_field(array(
-			"name" => "save_ctrl",
-			"caption" => t("Salvestamise kontrollerid"),
-			"chgbgcolor" => "color",
-			"width" => 140,
-		));
-		$t->define_field(array(
-			"name" => "view_ctrl",
-			"caption" => t("N&auml;itamise kontrollerid"),
-			"chgbgcolor" => "color",
-			"width" => 140,
-		));
-
-		$sc = $arr["obj_inst"]->prop("subclass");
-		$cls = aw_ini_get("classes");
-		$classname = t($cls[$sc]["name"]);
-
-		$t->set_caption($arr["request"]["sel_grp"] ? ($arr["request"]["sel_grp"] == ".all" ? sprintf(t("K&otilde;ik klassi \"%s\" omadused"), $classname) : sprintf(t("Klassi \"%s\" omadused grupis \"%s\""), $classname, $arr["request"]["sel_grp"])) : t("Omaduste tabel (valige puust omaduste grupp)"));
-
-		$t->set_sortable(false);
-	}
-
-	function get_properties_table($arr)
-	{
-		$this->set_props_by_group();
-
-		$this->_init_properties_table(&$arr);
-		
-		$t = &$arr["prop"]["vcl_inst"];
-
-		if(!$arr["request"]["sel_grp"] || (!count($this->props_by_group[$arr["request"]["sel_grp"]])) && $arr["request"]["sel_grp"] != ".all")
-		{
-			return;
-		}
-		$this->proptbl_count = 0;
-
-		$ol1 = new object_list(array(
-			"class_id" => CL_CFG_VIEW_CONTROLLER,
-			"RELTYPE_VIEWCONTROLLER(CL_CFGFORM).oid" => $arr["obj_inst"]->id(),
-		));	
-		$ol2 = new object_list(array(
-			"class_id" => CL_CFGCONTROLLER,
-			"RELTYPE_CONTROLLER(CL_CFGFORM).oid" => $arr["obj_inst"]->id(),
-		));
-		$this->ctrl_data = array(
-			"set_view_controllers" => $arr["obj_inst"]->meta("view_controllers"),
-			"set_controllers" => $arr["obj_inst"]->meta("controllers"),
-			"view_controllers" => $ol1->names(),
-			"controllers" => $ol2->names(),
-		);
-			
-
-		if($arr["request"]["sel_grp"] == ".all")
-		{
-			$props = $this->props_by_group;
-		}
-		else
-		{
-			$props = $this->props_by_group[$arr["request"]["sel_grp"]]["subs"];
-		}
-
-		foreach($props as $data)
-		{
-			$this->_proptbl_insert_prop($t, $data, $arr);
-		}
-	}
-
-	private function _proptbl_insert_prop(&$t, $data, $arr)
-	{
-		if($data["cfgtype"] == "layout" || $data["cfgtype"] == "group")
-		{
-			$this->_proptbl_insert_layout($t, $data, $arr);
-		}
-		else
-		{
-			$m = 10 * $this->proptbl_count;
-			switch ($data["type"])
-			{
-				case "textbox":
-					$type_options = array(
-						"textbox" => "textbox",
-						"textarea" => "textarea"
-					);
-					break;
-
-				case "textarea":
-					$type_options = array(
-						"textarea" => "textarea",
-						"textbox" => "textbox"
-					);
-					break;
-
-				case "date_select":
-					$type_options = array(
-						"date_select" => "date_select",
-						"datetime_select" => "datetime_select"
-					);
-					break;
-
-				case "datetime_select":
-					$type_options = array(
-						"datetime_select" => "datetime_select",
-						"date_select" => "date_select"
-					);
-					break;
-
-				case "relpicker":
-					$type_options = array(
-						"relpicker" => "relpicker",
-						"releditor" => "releditor"
-					);
-					break;
-
-				case "releditor":
-					$type_options = array(
-						"releditor" => "releditor",
-						"relpicker" => "relpicker"
-					);
-					break;
-			}
-			$rp = get_instance("vcl/relpicker");
-			$show_img = $data["hidden"] ? "delete.gif" : "check.gif";
-			$t->define_data(array(
-				"name" => sprintf("<div id=\"prpname\" style=\"padding-left:{$m}px; display: block; overflow: auto;  width: 130px;\">%s</div>", $data["name"]),
-				"type" => html::select(array(
-					"name" => "prpconfig[".$data["name"]."][type]",
-					"options" => (count($type_options) ? $type_options : array($data["type"] => $data["type"])),
-					"disabled" => !count($type_options) || $data["hidden"],
-					"width" => 70,
-				)),
-				"caption" => html::textbox(array(
-					"name" => "prpconfig[".$data["name"]."][caption]",
-					"value" => $data["caption"],
-					"size" => 13,
-					"disabled" => $data["hidden"],
-				)),
-				"select" => html::checkbox(array(
-					"name" => "sel[".$data["name"]."]",
-					"value" => 1,
-					"disabled" => $data["hidden"],
-				)),
-				"ord" => html::textbox(array(
-					"size" => 2,
-					"name" => "prpconfig[".$data["name"]."][ord]",
-					"value" => $data["ord"],
-					"disabled" => $data["hidden"],
-				)),
-				"view_ctrl" => "<div style=\"width:158px;\">".$rp->create_relpicker(array(
-					"name" => "view_controllers[".$data["name"]."]",
-					"reltype" => "RELTYPE_VIEWCONTROLLER",
-					"oid" => $arr["obj_inst"]->id(),
-					"multiple" => 1,
-					"size" => 2,
-					"options" => $this->ctrl_data["view_controllers"],
-					"value" => $this->ctrl_data["set_view_controllers"][$data["name"]],
-					"width" => 100,
-					"disabled" => $data["hidden"],
-				))."</div>",
-				"save_ctrl" => "<div style=\"width:158px;\">".$rp->create_relpicker(array(
-					"name" => "controllers[".$data["name"]."]",
-					"reltype" => "RELTYPE_CONTROLLER",
-					"oid" => $arr["obj_inst"]->id(),
-					"multiple" => 1,
-					"size" => 2,
-					"options" => $this->ctrl_data["controllers"],
-					"value" => $this->ctrl_data["set_controllers"][$data["name"]],
-					"width" => 100,
-					"disabled" => $data["hidden"],
-				))."</div>",
-				"show" => html::href(array(
-					"caption" => html::img(array(
-						"url" => "./images/icons/".$show_img,
-						"border" => 0,
-						"id" => "show_".$data["name"],
-					)),
-					"url" => "javascript: toggle_show('".$data["name"]."')",
-				)),
-			));
-		}
-	}
-
-	private function _proptbl_insert_layout(&$t, $data, $arr)
-	{
-		$m = 13 * $this->proptbl_count;
-		$t->define_data(array(
-			"name" => "<div style=\"padding-left:{$m}px; display: block; overflow: auto; width: 130px;\"><strong>".$data["name"]."</strong></div>",
-			"color" => ($data["cfgtype"] == "group") ? "#c0c0c0" : "#d0d0d0",
-		));
-		if($data["subs"])
-		{
-			$this->proptbl_count++;
-			foreach($data["subs"] as $data)
-			{
-				$this->_proptbl_insert_prop($t, $data, $arr);
-			}
-			$this->proptbl_count--;
-		}
-	}
-
-	function callback_generate_scripts($arr)
-	{
-		if($arr["request"]["group"] != "props" && $arr["request"]["group"] != "properties")
-		{
-			return;
-		}
-		load_javascript("jquery/plugins/jquery.rightClick.js");
-		$prop_url = $this->mk_my_orb("get_additional_properties", array("id" => $arr["obj_inst"]->id()));
-		$add_prop_url = $this->mk_my_orb("get_add_property", array("id" => $arr["obj_inst"]->id(), "return_url" => get_ru()));
-		$js = "
-		$('#properties_table tr').hover(function()
-		{
-			var c = $('td.awmenuedittabletext', this).css('background-color') 
-			if(c != 'rgb(208, 208, 208)' && c != 'rgb(192, 192, 192)')
-			{
-				$('td.awmenuedittabletext', this).css('background-color', '#f0f0f0')
-			}
-		}, 
-		function()
-		{
-			var c = $('td.awmenuedittabletext', this).css('background-color') 
-			if(c != 'rgb(208, 208, 208)' && c != 'rgb(192, 192, 192)')
-			{
-				$('td.awmenuedittabletext', this).css('background-color', '#e0e0e0')
-			}
-		})
-		$('#properties_table tr').rightClick(function(e)
-		{
-			var c = $('td.awmenuedittabletext', this).css('background-color') 
-			if(c != 'rgb(208, 208, 208)' && !$('td.awmenuedittabletext', this).find('input').attr('disabled'))
-			{
-				$('#prop_div').html('')
-				var prop = $('td.awmenuedittabletext', this).find('div#prpname').html()
-				$('#prop_div').fadeOut(1).fadeIn(500).css('top', e.pageY).css('left', e.pageX).load('".$prop_url."&prop='+prop)
-			}
-		})
-		function add_attribute(elem, attr, value)
-		{
-			var newAttr = document.createAttribute(attr);
-			newAttr.nodeValue = value
-			elem.setAttributeNode(newAttr);
-		}
-		var prop_div = document.createElement('div')
-		add_attribute(prop_div, 'id', 'prop_div')
-		add_attribute(prop_div, 'style', 'position: absolute; display: none; width: 220px; min-height: 200px; background: #ffffff; border: 1px solid #666666; font-family:Arial,Helvetica,sans-serif; font-size:11px; padding: 15px;')
-		document.body.appendChild(prop_div)
-
-		var add_div = document.createElement('div')
-		add_attribute(add_div, 'id', 'add_div')
-		add_attribute(add_div, 'style', 'position: fixed; display: none; width: 100%; height: 100%; background: #bbbbbb; filter:alpha(opacity=80); opacity: 0.8; -moz-opacity:0.8; z-index: 100; text-align: center;')
-		var add_div_box = document.createElement('add_div_box')
-		add_attribute(add_div_box, 'id', 'add_div_box')
-		add_attribute(add_div_box, 'style', 'background: #ffffff; border: 1px solid #000000; width: 30%; display: none; position: fixed; padding: 15px 0px; top: 20%; left: 35%; z-index: 101; font-size: 11px;')
-		document.body.insertBefore(add_div_box, document.body.firstChild);
-		document.body.insertBefore(add_div, document.body.firstChild);
-
-		$('body').click(function(e)
-		{
-			var offset = $('#prop_div').offset();
-			if(
-				e.pageX < offset.left || 
-				e.pageX > (offset.left + $('#prop_div').width()) || 
-				e.pageY < offset.top || 
-				e.pageY > (offset.top + $('#prop_div').height() + 25)
-			)
-			{
-				$('#prop_div').fadeOut(500)
-			}
-		})
-		function toggle_show(prop)
-		{
-			var elem = document.getElementById('show_'+prop)
-			var imgsrc = elem.src
-			var tmp = Array()
-			tmp = imgsrc.split('/')
-			if(tmp[tmp.length - 1] == 'check.gif')
-			{
-				var newsrc = 'delete.gif'
-				$('#show_'+prop).parent().parent().parent().find(\"input, select, textarea\").attr('disabled', 'disabled')
-			}
-			else
-			{
-				var newsrc = 'check.gif'
-				$('#show_'+prop).parent().parent().parent().find(\"input, select, textarea\").attr('disabled', '')
-			}
-			tmp[tmp.length - 1] = newsrc
-			elem.src = tmp.join('/')
-			$.get('".$this->mk_my_orb("toggle_property_display", array(
-				"id" => $arr["obj_inst"]->id()
-			))."&prop='+prop)
-		}
-		function add_property()
-		{
-			$('#add_div').fadeIn(1000)
-			$('#add_div_box').fadeIn(1000).load('".$add_prop_url."')
-		}
-
-		function hide_add_property()
-		{
-			$('#add_div').fadeOut(1000)
-			$('#add_div_box').fadeOut(1000)
-		}
-		";
-		return $js;
-	}
-
-	/**
-	@attrib name=toggle_property_display
-	@param prop required type=string
-	@param id required type=oid
-	@comment for ajax
-	**/
-	function toggle_property_display($arr)
-	{
-		$o = obj($arr["id"]);
-		$this->_init_cfgform_data($o);
-		if($prop = $this->cfg_proplist[$arr["prop"]])
-		{
-			$this->cfg_proplist[$arr["prop"]]["hidden"] = 1;
-		}
-		elseif($prop = $this->hidden_props[$arr["prop"]])
-		{
-			unset($this->hidden_props[$arr["prop"]]);
-			unset($prop["hidden"]);
-			$this->cfg_proplist[$arr["prop"]] = $prop;
-		}
-		$this->_save_cfg_props($o);
-		$o->save();
-	}
-	
-	/**
-	@attrib name=get_add_property
-	@param id required type=oid
-	@param return_url required type=string
-	**/
-	function get_add_property($arr)
-	{
-		$html = '<div style="float: right; position: relative; top: -12px; left: -4px; font-family: arial; font-weight: bold;"><a href="#" style="color: #000;" onclick="hide_add_property()">X</a></div>';
-
-		$htmlc = get_instance("cfg/htmlclient",array("template" => "default.tpl"));
-		$htmlc->start_output();
-
-		$htmlc->view_mode = 1;
-
-		$htmlc->add_property(array(
-			"name" => "capt",
-			"caption" => "<h3>".t("Omaduse lisamine")."</h3>",
-			"type" => "text",
-			"subtitle" => 1,
-		));
-
-		$htmlc->add_property(array(
-			"name" => "add_prop[name]",
-			"caption" => t("Omaduse nimi").": ",
-			"type" => "textbox",
-			"size" => 20,
-		));
-		$htmlc->add_property(array(
-			"name" => "add_prop[caption]",
-			"caption" => t("Omaduse pealkiri").": ",
-			"type" => "textbox",
-			"size" => 20,
-		));
-		$htmlc->add_property(array(
-			"name" => "add_prop[type]",
-			"caption" => t("Omaduse t&uuml;&uuml;p").": ",
-			"type" => "chooser",
-			"orient" => "vertical",
-			"options" => array(
-				"textbox" => "textbox",
-				"textarea" => "textarea",
-				"select" => "select",
-				"chooser" => "chooser",
-				"checkbox" => "checkbox",
-			),
-		));
-		
-		$htmlc->add_property(array(
-			"name" => "submit",
-			"caption" => t("Salvesta"),
-			"type" => "button",
-			"id" => "button",
-		));
-
-		$htmlc->finish_output(array("data" => array(
-				"class" => get_class($this),
-				"action" =>"cfg_add_property",
-				"id" => $arr["id"],
-			),
-		));
-
-		$html .= $htmlc->get_result(array(
-			"form_only" => 1
-		));
-
-		die($html);
-	}
-
-	/**
-	@attrib name=get_additional_properties
-	@param prop required type=string
-	@param id required type=oid
-	@comment for ajax
-	**/
-	function get_additional_properties($arr)
-	{
-		$this->_init_cfgform_data(obj($arr["id"]));
-		$this->read_template("layout.tpl");
-		$property = $this->cfg_proplist[$arr["prop"]];
-		if (empty($property["cfgf_property_editing_disabled"]))
-		{
-			switch ($property["type"])
-			{
-				case "classificator":
-					$this->vars(array(
-						"sort_callback_caption" => t("Sorteerimise callback"),
-						"sort_callback" => $property["sort_callback"],
-						"prp_key" => $property["name"],
-					));
-					$property["cfgform_additional_options"] = $this->parse("classificator_options");
-					$this->vars(array("classificator_options" => ""));
-					break;
-
-				case "image_verification":
-					$this->vars(array(
-						"width_caption" => t("Laius"),
-						"width" => $property["width"],
-						"height_caption" => t("K&otilde;rgus"),
-						"height" => $property["height"],
-						"text_color_caption" => t("Teksti v&auml;rv"),
-						"text_color" => $property["text_color"],
-						"background_color_caption" => t("Tausta v&auml;rv"),
-						"background_color" => $property["background_color"],
-						"font_size_caption" => t("Teksti suurus pildid"),
-						"font_size" => $property["font_size"],
-						"sidetop_caption" => t("Tekstikast &uuml;leval"),
-						"sidetop_ch" => checked($property["side"] == "top"),
-						"sidebottom_caption" => t("Tekstikast all"),
-						"sidebottom_ch" => checked($property["side"] == "bottom"),
-						"sideleft_caption" => t("Tekstikast vasakul"),
-						"sideleft_ch" => checked($property["side"] == "left"),
-						"sideright_caption" => t("Tekstikast paremal"),
-						"sideright_ch" => checked($property["side"] == "right"),
-						"textbox_size_caption" => t("Tekstikasti laius"),
-						"textbox_size" => $property["textbox_size"],
-						"prp_key" => $property["name"],
-					));
-					$property["cfgform_additional_options"] = $this->parse("image_verification_options");
-					$this->vars(array("image_verification_options" => ""));
-					break;
-
-				case "textarea":
-					$this->vars(array(
-						"richtext_caption" => t("RTE"),
-						"richtext_checked" => checked($property["richtext"] == 1),
-						"richtext" => $property["richtext"],
-						"rows_caption" => t("K&otilde;rgus"),
-						"rows" => $property["rows"],
-						"cols_caption" => t("Laius"),
-						"cols" => $property["cols"],
-						"prp_key" => $property["name"],
-						"maxlength_caption" => t("Maksimaalne pikkus"),
-					));
-					$property["cfgform_additional_options"] = $this->parse("textarea_options");
-					$this->vars(array("textarea_options" => ""));
-					break;
-
-				case "textbox":
-					$this->vars(array(
-						"size_caption" => t("Laius"),
-						"maxlength_caption" => t("Maksimaalne pikkus"),
-						"size" => empty($property["size"]) ? "" : $property["size"],
-						"prp_key" => $property["name"],
-					));
-					$property["cfgform_additional_options"] = $this->parse("textbox_options");
-					$this->vars(array("textbox_options" => ""));
-					break;
-
-				case "relpicker":
-					$this->vars(array(
-						"no_edit_caption" => t("Nuppudeta"),
-						"no_edit_checked" => checked($property["no_edit"] == 1),
-						"no_edit" => isset($property["no_edit"]) ? $property["no_edit"] : "",
-						"displayradio_caption" => t("Valikud"),
-						"displayradio_ch" => (isset($property["display"]) and "radio" === $property["display"]) ? ' checked="1"' : "",
-						"displayselect_caption" => t("Selectbox"),
-						"displayselect_ch" => (isset($property["display"]) and "select" === $property["display"]) ? ' checked="1"' : "",
-						"stylenormal_caption" => t("Tavaline"),
-						"stylenormal_ch" => (empty($property["display"])) ? ' checked="1"' : "",
-						"styleac_caption" => t("Autocomplete"),
-						// Are you sure, this is 'style' not 'mode'? vcl/relpicker.aw doesn't consist the word 'style'. :S -kaarel 2.12.2008
-						//"styleac_ch" => ("autocomplete" === $property["style"]) ? ' checked="1"' : "",
-						"styleac_ch" => (isset($property["mode"]) and "autocomplete" === $property["mode"]) ? ' checked="1"' : "",
-						/*
-						"oit_caption" => t("option_is_tuple"),
-						"option_is_tuple_checked" => isset($property["option_is_tuple"]) && $property["option_is_tuple"] ? ' checked="1"' : "",
-						"option_is_tuple" => isset($property["option_is_tuple"]) ? $property["option_is_tuple"] : "",
-						*/
-						"multiple_caption" => t("Saab valida mitu"),
-						"multiple_checked" => isset($property["multiple"]) && $property["multiple"] ? ' checked="1"' : "",
-						"multiple" => isset($property["multiple"]) ? $property["multiple"] : "",
-						"size_caption" => t("K&otilde;rgus"),
-						"size" => empty($property["size"]) ? "" : $property["size"],
-						"prp_key" => $property["name"]
-					));
-					if($property["store"] == "connect" || $property["store"] == "no")
-					{
-						$this->vars(array(
-							"rlp_ops_mult" => $this->parse("rlp_ops_mult"),
-						));
-					}
-					// I don't think we need this, so I'll not parse it. But I'll leave it here in case someone someday thinks it's necessary... -kaarel 3.12.2008
-					/*
-					if($property["mode"] == "autocomplete")
-					{
-						$this->vars(array(
-							"rlp_ops_oit" => $this->parse("rlp_ops_oit"),
-						));
-					}
-					*/
-					$property["cfgform_additional_options"] = $this->parse("relpicker_options");
-					$this->vars(array("relpicker_options" => ""));
-					break;
-
-				case "releditor":
-					$this->vars(array(
-						"cfgform_id_caption" => t("Seadetevormi id"),
-						"cfgform_id" => $property["cfgform_id"],
-						"obj_parent_caption" => t("Parent"),
-						"obj_parent" => $property["obj_parent"],
-						"use_form" => $property["use_form"],
-						"rel_id" => $property["rel_id"],
-						"mode" => $property["mode"],
-						"prp_key" => $property["name"]
-					));
-					$property["cfgform_additional_options"] = $this->parse("releditor_options");
-					$this->vars(array("releditor_options" => ""));
-					break;
-
-				case "select":
-					$this->vars(array(
-						"size_caption" => t("K&otilde;rgus"),
-						"size" => $property["size"],
-						"prp_key" => $property["name"]
-					));
-					$property["cfgform_additional_options"] = $this->parse("select_options");
-					$this->vars(array("select_options" => ""));
-					break;
-
-				case "date_select":
-					settype($property["format"], "array");
-					$this->vars(array(
-						"prp_key" => $property["name"],
-
-						"buttons_show_caption" => t("Nupud: jah"),
-						"buttons_show_ch" => (1 == $property["buttons"]) ? ' checked="1"' : "",
-						"buttons_hide_caption" => t("ei"),
-						"buttons_hide_ch" => ("0" === $property["buttons"]) ? ' checked="1"' : "",
-						"buttons_default_caption" => t("m&auml;&auml;ramata"),
-						"buttons_default_ch" => (!isset($property["buttons"])) ? ' checked="1"' : "",
-
-						"format_caption" => t("Formaat:"),
-
-						"format_dayselect_caption" => t("P&auml;ev: select"),
-						"format_dayselect_ch" => (in_array("day", $property["format"])) ? ' checked="1"' : "",
-						"format_daytext_caption" => t("text"),
-						"format_daytext_ch" => (in_array("day_textbox", $property["format"])) ? ' checked="1"' : "",
-						"format_daynone_caption" => t("m&auml;&auml;ramata"),
-						"format_daynone_ch" => (!in_array("day", $property["format"]) and !in_array("day_textbox", $property["format"])) ? ' checked="1"' : "",
-
-						"format_monthselect_caption" => t("Kuu: select"),
-						"format_monthselect_ch" => (in_array("month", $property["format"])) ? ' checked="1"' : "",
-						"format_monthtext_caption" => t("text"),
-						"format_monthtext_ch" => (in_array("month_textbox", $property["format"])) ? ' checked="1"' : "",
-						"format_monthnone_caption" => t("m&auml;&auml;ramata"),
-						"format_monthnone_ch" => (!in_array("month", $property["format"]) and !in_array("month_textbox", $property["format"])) ? ' checked="1"' : "",
-
-						"format_yearselect_caption" => t("Aasta: select"),
-						"format_yearselect_ch" => (in_array("year", $property["format"])) ? ' checked="1"' : "",
-						"format_yeartext_caption" => t("text"),
-						"format_yeartext_ch" => (in_array("year_textbox", $property["format"])) ? ' checked="1"' : "",
-						"format_yearnone_caption" => t("m&auml;&auml;ramata"),
-						"format_yearnone_ch" => (!in_array("year", $property["format"]) and !in_array("year_textbox", $property["format"])) ? ' checked="1"' : "",
-
-						"format_hourselect_caption" => t("Tund: select"),
-						"format_hourselect_ch" => (in_array("hour", $property["format"])) ? ' checked="1"' : "",
-						"format_hourtext_caption" => t("text"),
-						"format_hourtext_ch" => (in_array("hour_textbox", $property["format"])) ? ' checked="1"' : "",
-						"format_hournone_caption" => t("m&auml;&auml;ramata"),
-						"format_hournone_ch" => (!in_array("hour", $property["format"]) and !in_array("hour_textbox", $property["format"])) ? ' checked="1"' : "",
-
-						"format_minuteselect_caption" => t("Minut: select"),
-						"format_minuteselect_ch" => (in_array("minute", $property["format"])) ? ' checked="1"' : "",
-						"format_minutetext_caption" => t("text"),
-						"format_minutetext_ch" => (in_array("minute_textbox", $property["format"])) ? ' checked="1"' : "",
-						"format_minutenone_caption" => t("m&auml;&auml;ramata"),
-						"format_minutenone_ch" => (!in_array("minute", $property["format"]) and !in_array("minute_textbox", $property["format"])) ? ' checked="1"' : ""
-					));
-					$property["cfgform_additional_options"] = $this->parse("date_select_options");
-					$this->vars(array("date_select_options" => ""));
-					break;
-
-				case "datetime_select":
-					$this->vars(array(
-						"prp_key" => $property["name"],
-						"dayselect_caption" => t("P&auml;ev: select"),
-						"dayselect_ch" => ("select" === $property["day"] or empty($property["day"])) ? ' checked="1"' : "",
-						"daytext_caption" => t("textbox"),
-						"daytext_ch" => ("text" === $property["day"]) ? ' checked="1"' : "",
-						"monthselect_caption" => t("Kuu: select"),
-						"monthselect_ch" => ("select" === $property["month"] or empty($property["month"])) ? ' checked="1"' : "",
-						"monthtext_caption" => t("textbox"),
-						"monthtext_ch" => ("text" === $property["month"]) ? ' checked="1"' : "",
-					));
-					$property["cfgform_additional_options"] = $this->parse("datetime_select_options");
-					$this->vars(array("datetime_select_options" => ""));
-					break;
-
-				case "chooser":
-					$this->vars(array(
-						"orienth_caption" => t("Horisontaalselt"),
-						"orienth_ch" => ("horizontal" === $property["orient"]) ? ' checked="1"' : "",
-						"orientv_caption" => t("Vertikaalselt"),
-						"orientv_ch" => ("vertical" === $property["orient"]) ? ' checked="1"' : "",
-						"prp_key" => $property["name"],
-					));
-					$property["cfgform_additional_options"] = $this->parse("chooser_options");
-					$this->vars(array("chooser_options" => ""));
-					break;
-
-				case "layout":
-					$this->vars(array(
-						"hbox_caption" => t("Horisontaalne"),
-						"hbox_ch" => ("hbox" === $property["type"]) ? ' checked="1"' : "",
-						"hbox_caption" => t("Vertikaalne"),
-						"hbox_ch" => ("vertical" === $property["type"]) ? ' checked="1"' : "",
-						"prp_key" => $property["name"],
-					));
-					$property["cfgform_additional_options"] = $this->parse("layout_options");
-					$this->vars(array("layout_options" => ""));
-					break;
-				case "table":
-					$this->vars(array(
-						"prp_key" => $property["name"],
-						"configurable_caption" => t("Konfigureeritav"),
-						"configurable_checked" => $property["configurable"] ? " checked=\"1\"" : "",
-					));
-					$property["cfgform_additional_options"] = $this->parse("table_options");
-					$this->vars(array("table_options" => ""));
-					break;
-
-				case "keyword_selector":
-					$this->vars(array(
-						"prp_key" => $property["name"],
-						"no_folder_names_caption" => t("&Auml;ra n&auml;ita kaustade nimesid"),
-						"no_folder_names_checked" => isset($property["no_folder_names"]) && $property["no_folder_names"] ? " checked=\"1\"" : "",
-						"no_header_caption" => t("&Auml;ra n&auml;ita tabeli p&auml;ist"),
-						"no_header_checked" => isset($property["no_header"]) && $property["no_header"] ? " checked=\"1\"" : "",
-						"hide_selected_caption" => t("&Auml;ra n&auml;ita valitud m&auml;rks&otilde;nu"),
-						"hide_selected_checked" => isset($property["hide_selected"]) && $property["hide_selected"] ? " checked=\"1\"" : "",
-						"keyword_per_row_caption" => t("Mitu v&otilde;tmes&otilde;na real"),
-						"keyword_per_row" => isset($property["keyword_per_row"]) ? (int) $property["keyword_per_row"] : 0,
-					));
-					$property["cfgform_additional_options"] = $this->parse("keyword_selector_options");
-					break;
-
-				case "multifile_upload":
-					$this->vars(array(
-						"prp_key" => $property["name"],
-						"max_files_caption" => t("Maksimaalne failide arv"),
-						"max_files" => isset($property["max_files"]) ? $property["max_files"] : "",
-					));
-					$property["cfgform_additional_options"] = $this->parse("multifile_upload_options");
-					break;
-
-				default:
-					$property["cfgform_additional_options"] = "";
-			}
-			if (obj($arr["id"])->prop("use_in_releditor"))
-			{
-				$this->vars(array(
-					"prp_key" => $property["name"],
-					"emb_tbl_controller_caption" => t("Tabeli kontrolleri id"),
-					"emb_tbl_controller" => $property["emb_tbl_controller"],
-					"show_in_emb_tbl_caption" => t("N&auml;ita releditori tabelis"),
-					"show_in_emb_tbl_checked" => checked(!empty($property["show_in_emb_tbl"])),
-					"show_in_emb_tbl" => $property["show_in_emb_tbl"],
-					"emb_tbl_caption" => $property["emb_tbl_caption"],
-					"emb_tbl_col_num" => $property["emb_tbl_col_num"],
-					"emb_tbl_col_sep" => $property["emb_tbl_col_sep"],
-					"emb_tbl_caption_caption" => t("Tulba pealkiri"),
-					"emb_tbl_col_num_caption" => t("Tulba grupp"),
-					"emb_tbl_col_sep_caption" => t("Eraldaja"),
-				));
-				$emb_tbl = $this->parse("emb_tbl");
-			}
-			else
-			{
-				$emb_tbl = "";
-			}
-
-			$this->vars(array(
-				"prp_key" => $property["name"],
-				"no_caption_caption" => t("&Auml;ra n&auml;ita pealkirja"),
-				"no_caption_checked" => checked(!empty($property["no_caption"])),
-				"no_caption" => empty($property["no_caption"]) ? "" : $property["no_caption"],
-				"captionside_l_caption" => t("Pealkiri vasakul"),
-				"captionside_l_ch" =>  (isset($property["captionside"]) and "left" === $property["captionside"]) ? ' checked="1"' : "",
-				"captionside_t_caption" => t("Pealkiri &uuml;lal"),
-				"captionside_t_ch" =>  (isset($property["captionside"]) and "top" === $property["captionside"]) ? ' checked="1"' : "",
-				"textsize_caption" => '<span title="' . t("CSS formaadis:") . ' 12px, 0.7em, ..." style="cursor: help;">' . t("Tekstisuurus") . '</span>',
-				"textsize" => empty($property["textsize"]) ? "" : $property["textsize"],
-				"disabled_caption" => t("Mitteaktiivne (disabled)"),
-				"disabled_checked" => checked(!empty($property["disabled"])),
-				"comment_caption" => t("Kommentaar"),
-				"comment" => $property["comment"],
-				"comment_style_text_caption" => t("Kommentaar tekstina"),
-				"comment_style_popup_caption" => t("Kommentaar popupina"),
-				"comment_style_text_ch" => (isset($property["comment_style"]) and "text" === $property["comment_style"]) ? ' checked="1"' : "",
-				"comment_style_popup_ch" => (!isset($property["comment_style"]) or "popup" === $property["comment_style"]) ? ' checked="1"' : "",
-				"disabled" => empty($property["disabled"]) ? "" : $property["disabled"],
-				"prp_options" => $property["cfgform_additional_options"],
-				"prp_opts_caption" => t("Lisavalikud"),
-				"tmp_id" => $cnt,
-				"emb_tbl" => $emb_tbl,
-				"form_action" => $this->mk_my_orb("set_additional_properties", array(
-					"id" => $arr["id"],
-					"prop" => $property["name"],
-				)),
-				"submit_caption" => t("Salvesta"),
-			));
-		}
-		else
-		{
-			die(t("Antud omadusel ei saa lisavalikuid muuta."));
-		}
-		die($this->parse());
-	}
-
-	/**
-	@attrib name=set_additional_properties all_args=1
-	@comment for ajax
-	**/
-	function set_additional_properties($arr)
-	{
-		$o = obj($arr["id"]);
-		$this->_init_cfgform_data($o);
-		$data = $this->cfg_proplist[$arr["prop"]];
-		if (isset($arr["prpconfig"][$arr["prop"]]))
-		{
-			$cfg_data = $arr["prpconfig"][$arr["prop"]];
-		}
-
-		if (isset($arr["xconfig"][$arr["prop"]]))
-		{
-			foreach ($arr["xconfig"][$arr["prop"]] as $ch_name => $value)
-			{
-				if (!empty($value) and !isset($cfg_data[$ch_name]))
-				{
-					unset($data[$ch_name]);
-				}
-			}
-		}
-
-		$this->cfg_proplist[$arr["prop"]] = $cfg_data + $data;
-		$this->_save_cfg_props($o);
-		$o->save();
-	}
-
-	function callback_mod_layout(&$arr)
-	{
-		if($arr["name"] == "props_tree_lay")
-		{
-			$sc = $arr["obj_inst"]->prop("subclass");
-			$cls = aw_ini_get("classes");
-			$classname = t($cls[$sc]["name"]);
-	
-			$arr["area_caption"] = sprintf("Klassi \"%s\" omaduste grupid", $classname);
-		}
-		return true;
-	}
-
-	function get_properties_tb($arr)
-	{
-		$tb =& $arr["prop"]["vcl_inst"];
-		$this_o = $arr["obj_inst"];
-		$this_oid = $this_o->id();
-		$return_url = get_ru();
-
-		$tb->add_button(array(
-			"img" => "new.gif",
-			"name" => "add_property",
-			"url" => "javascript: add_property()",
-			"tooltip" => t("Lisa omadus"),
-		));
-
-		$tb->add_menu_button(array(
-			"img" => "nool1.gif",
-			"name" => "move_props",
-			"tooltip" => t("Liiguta omadused"),
-		));
-
-		$this->_insert_move_menu_groups(&$tb, $arr);
-		
-		$tb->add_save_button();
-
-		$tb->add_separator();
-
-		// merge
-		$tb->add_menu_button(array(
-			"name" => "merge",
-			"img" => "import.gif",
-			"tooltip" => t("Loe klassi uuendused seadetevormi"),
-		));
-
-
-		// merge all
-		$tb->add_menu_item(array(
-			"parent" => "merge",
-			"text" => t("K&otilde;ik"),
-			"link" => $this->mk_my_orb("merge", array(
-				"id" => $this_oid,
-				"scope" => "all",
-				"return_url" => $return_url,
-			))
-		));
-
-		// merge properties
-		$tb->add_menu_item(array(
-			"parent" => "merge",
-			"text" => t("Ainult omadused"),
-			"link" => $this->mk_my_orb("merge", array(
-				"id" => $this_oid,
-				"scope" => "properties",
-				"return_url" => $return_url,
-			))
-		));
-
-		// merge groups
-		$tb->add_menu_item(array(
-			"parent" => "merge",
-			"text" => t("Ainult tabid"),
-			"link" => $this->mk_my_orb("merge", array(
-				"id" => $this_oid,
-				"scope" => "groups",
-				"return_url" => $return_url,
-			))
-		));
-
-		// merge layouts
-		$tb->add_menu_item(array(
-			"parent" => "merge",
-			"text" => t("Ainult layoudid"),
-			"link" => $this->mk_my_orb("merge", array(
-				"id" => $this_oid,
-				"scope" => "layouts",
-				"return_url" => $return_url,
-			))
-		));
-// reload
-		$tb->add_menu_button(array(
-			"name" => "reload",
-			"img" => "refresh.gif",
-			"tooltip" => t("Tee seadetele alglaadimine"),
-		));
-
-		// reload all
-		$tb->add_menu_item(array(
-			"parent" => "reload",
-			"text" => t("K&otilde;ik"),
-			"link" => $this->mk_my_orb("reload", array(
-				"id" => $this_oid,
-				"scope" => "all",
-				"return_url" => $return_url,
-			))
-		));
-
-		// reload properties
-		$tb->add_menu_item(array(
-			"parent" => "reload",
-			"text" => t("Ainult omadused"),
-			"link" => $this->mk_my_orb("reload", array(
-				"id" => $this_oid,
-				"scope" => "properties",
-				"return_url" => $return_url,
-			))
-		));
-
-		// reload groups
-		$tb->add_menu_item(array(
-			"parent" => "reload",
-			"text" => t("Ainult tabid"),
-			"link" => $this->mk_my_orb("reload", array(
-				"id" => $this_oid,
-				"scope" => "groups",
-				"return_url" => $return_url,
-			))
-		));
-
-		// reload layouts
-		$tb->add_menu_item(array(
-			"parent" => "reload",
-			"text" => t("Ainult layoudid"),
-			"link" => $this->mk_my_orb("reload", array(
-				"id" => $this_oid,
-				"scope" => "layouts",
-				"return_url" => $return_url,
-			))
-		));
-	}
-
-	private function _insert_move_menu_groups($tb, $arr, $pt = "")
-	{
-		foreach($this->cfg_groups as $grp => $data)
-		{
-			if($data["parent"] == $pt)
-			{
-				$tb->add_sub_menu(array(
-					"name" => "move_props_".$grp,
-					"parent" => ($pt == "") ? "move_props" : "move_props_".$pt,
-					"text" => sprintf("%s %s", t("Grupp"), $grp),
-					"url" => $this->mk_my_orb("cfg_move_props", array(
-						"id" => $arr["obj_inst"]->id(),
-						"return_url" => get_ru(),
-						"move_group" => $grp
-					)),
-				));
-				$this->_insert_move_menu_groups(&$tb, $arr, $grp);
-				$has_subs = false;
-				foreach($this->cfg_groups as $grp2 => $data)
-				{
-					if($data["parent"] == $grp)
-					{
-						$has_subs = true;
-					}
-				}
-				if(!$has_subs)
-				{
-					$this->_insert_move_menu_layouts(&$tb, $arr, $grp, "");
-				}
-			}
-		}
-	}
-	
-	private function _insert_move_menu_layouts($tb, $arr, $grp, $pt)
-	{
-		foreach($this->cfg_layout as $lay => $data)
-		{
-			if($data["group"] == $grp && $data["parent"] == $pt)
-			{
-				$tb_data = array(
-					"name" => "move_props_".$grp."_".$lay,
-					"parent" => ($pt == "") ? "move_props_".$grp : "move_props_".$grp."_".$pt,
-					"text" => sprintf("%s :: %s", $grp, $lay),
-					"url" => "javascript: var cf = document.forms.changeform; cf.action.value = 'cfg_move_props'; cf.move_group.value = '".$grp."'; cf.move_layout.value = '".$lay."'; cf.submit();",
-				);
-				$has_subs = false;
-				foreach($this->cfg_layout as $lay2 => $data)
-				{
-					if($data["parent"] == $lay)
-					{
-						$has_subs = true;
-					}
-				}
-				if($has_subs)
-				{
-					$tb->add_sub_menu($tb_data);
-					$this->_insert_move_menu_layouts(&$tb, $arr, $grp, $lay);
-				}
-				else
-				{
-					$tb_data["text"] = sprintf(t("Liiguta layouti %s"), $lay);
-					$tb->add_menu_item($tb_data);
-				}
-				
-			}
-		}
-		$tb->add_menu_item(array(
-			"name" => "move_props_".$grp."_nopt",
-			"parent" => ($pt == "") ? "move_props_".$grp : "move_props_".$grp."_".$pt,
-			"text" => t("Liiguta siia"),
-			"url" => "javascript: var cf = document.forms.changeform; cf.action.value = 'cfg_move_props'; cf.move_group.value = '".$grp."'; cf.move_layout.value = '".$pt."'; cf.submit();",
-		));
-	}
-
-	/**
-	@attrib name=cfg_move_props all_args=1
-	**/
-	function cfg_move_props($arr)
-	{
-		$o = obj($arr["id"]);
-		$this->_init_cfgform_data($o);
-		
-		foreach($arr["sel"] as $prop => $tmp)
-		{
-			if($propdata = $this->cfg_proplist[$prop])
-			{
-				$g = $arr["move_group"];
-				if($g)
-				{
-					$propdata["group"] = $g;
-					unset($propdata["parent"]);
-				}
-				
-				$p = $arr["move_layout"];
-				if($p)
-				{
-					$propdata["parent"] = $p;
-				}
-				$this->cfg_proplist[$prop] = $propdata;
-			}
-		}
-
-		$this->_save_cfg_props($o);
-		$o->save();
-
-		return $arr["post_ru"];
 	}
 }
 
