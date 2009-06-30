@@ -2249,6 +2249,12 @@ EOF;
 		{
 			$res[$group->id()] = $group->prop("priority");
 		}
+		if ($uid == "")
+		{
+			// return non logged in users group
+			$rv = obj(group::get_non_logged_in_group());
+			$res[$rv->id()]= $rv->prop("priority");
+		}
 		asort($res);
 		return $res;
 	}
