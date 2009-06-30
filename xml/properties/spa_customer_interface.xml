@@ -52,6 +52,17 @@
             <method>serialize</method>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;laud</caption>
       </property>
+      <property>
+            <name>discount</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DISCOUNT</reltype>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <field>discount</field>
+            <caption>Allahindlus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SPA_CUSTOMER_INTERFACE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -86,6 +97,11 @@
                   <clid>CL_SPA_BOOKIGS_ENTRY</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;laud</caption>
             </IF_WB>
+            <DISCOUNT>
+                  <value>6</value>
+                  <clid>CL_DISCOUNT</clid>
+                  <caption>Allahindlus</caption>
+            </DISCOUNT>
       </reltypes>
 </properties>
 

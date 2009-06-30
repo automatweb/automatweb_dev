@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.41 2009/05/21 16:01:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.42 2009/06/30 16:36:01 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -23,6 +23,9 @@
 @property if_wb type=relpicker reltype=RELTYPE_IF_WB field=meta method=serialize
 @caption T&ouml;&ouml;laud
 
+@property discount type=relpicker reltype=RELTYPE_DISCOUNT store=connect multiple=1
+@caption Allahindlus
+
 @reltype FOLDER value=1 clid=CL_MENU
 @caption Toodete kataloog
 
@@ -37,6 +40,10 @@
 
 @reltype IF_WB value=5 clid=CL_SPA_BOOKIGS_ENTRY
 @caption T&ouml;&ouml;laud
+
+@reltype DISCOUNT value=6 clid=CL_DISCOUNT
+@caption Allahindlus
+
 
 */
 
@@ -57,7 +64,22 @@ class spa_customer_interface extends class_base
 		switch($prop["name"])
 		{
 			case "prod_folders":
+				classload("common/discount_obj");
+				//arr(discount_obj::get_valid_discount_coefficient(array("object" => $arr["obj_inst"]->id())));
 				uksort($prop["options"], array(&$this, "sort_menus"));
+				break;
+/*			case "discount":
+				$prop["post_append_text"] = html::href(array(
+					"url" =>" javascript:aw_popup_scroll('http://mrp.dev.automatweb.com/automatweb/orb.aw?class=popup_search&action=do_search&id=8587&pn=discount&clid[0]=1553&multiple=1','Otsing',800,500)",
+					"caption" => "<img src='http://mrp.dev.automatweb.com/automatweb/images/icons/search.gif' border=0>"
+				)).html::href(array(
+					"url" => "http://mrp.dev.automatweb.com/automatweb/orb.aw?class=discount&action=change&id=16906&return_url=http%3A%2F%2Fmrp.dev.automatweb.com%2Fautomatweb%2Forb.aw%3Fclass%3Dspa_customer_interface%26action%3Dchange%26id%3D8587%26group%3Dgeneral%26return_url%3D%26&",
+					"caption" => "<img src='http://mrp.dev.automatweb.com/automatweb/images/icons/edit.gif' border=0>"
+				)).html::href(array(
+					"url" => "http://mrp.dev.automatweb.com/automatweb/orb.aw?class=discount&action=new&parent=8587&alias_to_prop=discount&alias_to=8587&reltype=6&return_url=http%3A%2F%2Fmrp.dev.automatweb.com%2Fautomatweb%2Forb.aw%3Fclass%3Dspa_customer_interface%26action%3Dchange%26id%3D8587%26group%3Dgeneral%26return_url%3D%26&",
+					"caption" => "<img src='http://mrp.dev.automatweb.com/automatweb/images/icons/new.gif' border=0>"
+				));
+*/
 				break;
 		};
 		return $retval;
