@@ -4019,8 +4019,8 @@ class shop_warehouse extends class_base
 		$pi = get_instance(CL_SHOP_PRODUCT);
 
 	// I'll comment this replacement prods thingie out here for now
-	//	$replacement_products = $this->find_replacement_products($ot);
-	//	$ot->add($replacement_products);
+		$replacement_products = $this->find_replacement_products($ot);
+		$ot->add($replacement_products);
 
 		foreach($ot->arr() as $o)
 		{
@@ -4102,10 +4102,14 @@ class shop_warehouse extends class_base
 		return $res;
 	}
 
-	private function get_products_list_from_index($arr)
+	public function get_products_list_from_index($arr, $request = null)
 	{
 		$params = array();
-		if($code = automatweb::$request->arg("prod_s_code"))
+		if (!$request)
+		{
+			$request = automatweb::$request;
+		}
+		if($code = $request->arg("prod_s_code"))
 		{
 			if($this->config && $cid = $this->config->prop("short_code_ctrl"))
 			{
@@ -4118,7 +4122,7 @@ class shop_warehouse extends class_base
 			}
 		}
 
-		if($name = automatweb::$request->arg("prod_s_name"))
+		if($name = $request->arg("prod_s_name"))
 		{
 			$params["name"] = "name like '%".$name."%'";
 		}
@@ -4133,6 +4137,7 @@ class shop_warehouse extends class_base
 			{
 				$oids[] = $r['oid'];
 			}
+
 			if (!empty($oids))
 			{
 				$ol = new object_list(array(
