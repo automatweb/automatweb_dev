@@ -1940,7 +1940,7 @@ class cfgform extends class_base
 				}
 				$conf[$tbl]["fields"][$name]["hide"] = $field["hide"];
 			}
-		}//die(arr($conf));
+		}
 		$arr["obj_inst"]->set_meta("tbl_config", $conf);
 		$arr["obj_inst"]->save();
 	}
@@ -4799,10 +4799,23 @@ class cfgform extends class_base
 		{
 			$args["alias"]["target"] = $_GET["cfgform_id"];
 		}
-		return $this->get_class_cfgview(array(
+		if(!empty($this->cfgclassview_alias_parsed))
+		{
+			$inst = get_instance("cfgform");
+			$inst->embedded = 1;
+		}
+		else
+		{
+			$inst = $this;
+			$this->cfgclassview_alias_parsed = true;
+		}
+
+		$result = $inst->get_class_cfgview(array(
 			"id" => $args["alias"]["target"],
 			"display_mode" => "cfg_embed",
 		));
+		flush();
+		return $result;
 	}
 
 	// embed cfgform as alias and display configured class interface
@@ -4857,11 +4870,10 @@ class cfgform extends class_base
 			if (empty($this->cfgview_vars["group"]))
 			{
 				$this->cfgview_vars["group"] = reset($this->cfgview_grps);
-				$_GET["group"] = $this->cfgview_vars["group"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 			}
 
-			$this->cfgview_vars["awcb_cfgform"] = $_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
-			$this->cfgview_vars["awcb_display_mode"] = $_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
+			$this->cfgview_vars["awcb_cfgform"] = $args["id"];
+			$this->cfgview_vars["awcb_display_mode"] = $args["display_mode"];
 
 			// make request
 			classload("core/orb/orb");
@@ -4933,7 +4945,6 @@ class cfgform extends class_base
 				{
 					$param = explode("=", $param, 2);
 					$this->cfgview_vars[$param[0]] = $param[1];
-					$_GET[$param[0]] = $param[1];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
 				}
 			}
 
