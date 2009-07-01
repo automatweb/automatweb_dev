@@ -149,9 +149,9 @@
       </property>
       <property>
             <name>normal_capacity</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>aw_room</table>
+            <field>normal_capacity</field>
+            <method>none</method>
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
@@ -160,9 +160,9 @@
       </property>
       <property>
             <name>max_capacity</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>aw_room</table>
+            <field>max_capacity</field>
+            <method>none</method>
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
@@ -255,6 +255,50 @@
             <multiple>1</multiple>
             <reltype>RELTYPE_SETTINGS</reltype>
             <caption>Seaded</caption>
+      </property>
+      <property>
+            <name>category</name>
+            <table>aw_room</table>
+            <field>category</field>
+            <method>none</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CATEGORY</reltype>
+            <parent>general_down</parent>
+            <caption>Ruumi kategooria</caption>
+      </property>
+      <property>
+            <name>floor</name>
+            <table>aw_room</table>
+            <field>floor</field>
+            <method>none</method>
+            <group>general</group>
+            <type>textbox</type>
+            <parent>general_down</parent>
+            <size>3</size>
+            <caption>Korrus</caption>
+      </property>
+      <property>
+            <name>corps</name>
+            <table>aw_room</table>
+            <field>corps</field>
+            <method>none</method>
+            <group>general</group>
+            <type>textbox</type>
+            <parent>general_down</parent>
+            <size>3</size>
+            <caption>Korpus</caption>
+      </property>
+      <property>
+            <name>nr</name>
+            <table>aw_room</table>
+            <field>nr</field>
+            <method>none</method>
+            <group>general</group>
+            <type>textbox</type>
+            <parent>general_down</parent>
+            <size>3</size>
+            <caption>Number</caption>
       </property>
       <property>
             <name>calendar_tb</name>
@@ -729,6 +773,13 @@
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
       </groupinfo>
+      <tableinfo>
+            <aw_room>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_room>
+      </tableinfo>
       <reltypes>
             <LOCATION>
                   <value>1</value>
@@ -813,6 +864,11 @@
                   <clid>CL_CRM_WORKING_TIME_SCENARIO</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;aja stsenaariumid</caption>
             </WORKING_SCENARIO>
+            <CATEGORY>
+                  <value>48</value>
+                  <clid>CL_ROOM_CATEGORY</clid>
+                  <caption>Ruumi kategooria</caption>
+            </CATEGORY>
       </reltypes>
       <layout>
             <general_split>

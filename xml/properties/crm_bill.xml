@@ -445,6 +445,14 @@
             <caption>Kulunud aeg tekstina</caption>
       </property>
       <property>
+            <name>reminder_text</name>
+            <table>aw_crm_bill</table>
+            <group>other_data</group>
+            <type>textbox</type>
+            <field>aw_reminder_text</field>
+            <caption>Arve meeldetuletuse juurde minev tekst</caption>
+      </property>
+      <property>
             <name>monthly_bill</name>
             <table>aw_crm_bill</table>
             <group>other_data</group>

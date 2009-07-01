@@ -579,6 +579,40 @@
             <parent>grp_material_resource_span_tree</parent>
       </property>
       <property>
+            <name>resource_stats_grouping</name>
+            <group>grp_material_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_material_other_options</parent>
+      </property>
+      <property>
+            <name>grp_material_btn</name>
+            <group>grp_material_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>button</type>
+            <store>no</store>
+            <parent>grp_material_other_options</parent>
+            <no_caption>1</no_caption>
+            <caption>Grupeeri</caption>
+      </property>
+      <property>
+            <name>material_stats_table</name>
+            <group>grp_material_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>grp_material_report_full</parent>
+      </property>
+      <property>
             <name>poo_job_done_only_by</name>
             <group>grp_persons_jobs_report</group>
             <table>objects</table>
@@ -614,6 +648,39 @@
             <parent>persons_other_options</parent>
             <captionside>top</captionside>
             <caption>Grupeerimine</caption>
+      </property>
+      <property>
+            <name>poo_quantity_broup_by_resource</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>button</type>
+            <parent>poo_quantity_broup_by</parent>
+            <captionside>top</captionside>
+            <caption>Ressursside kaupa</caption>
+      </property>
+      <property>
+            <name>poo_quantity_broup_by_case</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>button</type>
+            <parent>poo_quantity_broup_by</parent>
+            <captionside>top</captionside>
+            <caption>Projektide kaupa</caption>
+      </property>
+      <property>
+            <name>poo_quantity_broup_by_job</name>
+            <group>grp_persons_quantity_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>button</type>
+            <parent>poo_quantity_broup_by</parent>
+            <captionside>top</captionside>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;de kaupa</caption>
       </property>
       <property>
             <name>persons_quantity_chart_quantity_by_person</name>
@@ -2085,8 +2152,9 @@
                   <parent>grp_persons</parent>
             </grp_persons_quantity_report>
             <grp_material_report>
-                  <caption>Materiali aruanne</caption>
+                  <caption>Materjali aruanne</caption>
                   <parent>grp_persons</parent>
+                  <submit>no</submit>
             </grp_material_report>
             <grp_printer_general>
                   <caption>Operaatori vaade</caption>
@@ -2427,38 +2495,44 @@
                   <type>vbox</type>
                   <parent>grp_material_report_left</parent>
                   <area_caption>Materjal</area_caption>
+                  <closeable>1</closeable>
                   <group>grp_material_report</group>
             </grp_material_tree>
             <grp_material_time_tree>
                   <type>vbox</type>
                   <parent>grp_material_report_left</parent>
                   <area_caption>Ajavahemik</area_caption>
+                  <closeable>1</closeable>
                   <group>grp_material_report</group>
             </grp_material_time_tree>
             <grp_material_personnel_tree>
                   <type>vbox</type>
                   <parent>grp_material_report_left</parent>
                   <area_caption>Inimesed</area_caption>
+                  <closeable>1</closeable>
                   <group>grp_material_report</group>
             </grp_material_personnel_tree>
             <grp_material_resource_span_tree>
                   <type>vbox</type>
                   <parent>grp_material_report_left</parent>
                   <area_caption>Ressursid</area_caption>
+                  <closeable>1</closeable>
                   <group>grp_material_report</group>
             </grp_material_resource_span_tree>
             <grp_material_other_options>
                   <type>vbox</type>
                   <parent>grp_material_report_left</parent>
-                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;tundide&amp;amp;nbsp;kuvamise&amp;amp;nbsp;tingimused</area_caption>
+                  <area_caption>Grupeerimine</area_caption>
+                  <closeable>1</closeable>
                   <group>grp_material_report</group>
             </grp_material_other_options>
-            <grp_material_report_right>
-                  <type>vbox</type>
-                  <parent>grp_grp_material_full</parent>
-                  <group>grp_material_report</group>
-                  <area_caption></area_caption>
-            </grp_material_report_right>
+            <poo_quantity_broup_by>
+                  <type>vbox_sub</type>
+                  <parent>persons_other_options</parent>
+                  <area_caption>Grupeerimine</area_caption>
+                  <closeable>1</closeable>
+                  <group>grp_persons_quantity_report</group>
+            </poo_quantity_broup_by>
             <grp_persons_right_split_1>
                   <type>hbox</type>
                   <width>50%:50%</width>

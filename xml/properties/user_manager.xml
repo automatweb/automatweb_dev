@@ -246,6 +246,15 @@
             <field>packages_tbl</field>
       </property>
       <property>
+            <name>price_conditions_tlb</name>
+            <table>objects</table>
+            <group>price_conditions</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>price_conditions_tlb</field>
+      </property>
+      <property>
             <name>conditions_tlb</name>
             <table>objects</table>
             <group>conditions</group>
@@ -257,12 +266,25 @@
       <property>
             <name>conditions_tree</name>
             <table>objects</table>
-            <group>conditions</group>
+            <group>
+                  <num_0>price_conditions</num_0>
+                  <num_1>conditions</num_1>
+            </group>
             <type>treeview</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <parent>conditions_tree</parent>
             <field>conditions_tree</field>
+      </property>
+      <property>
+            <name>price_conditions_tbl</name>
+            <table>objects</table>
+            <group>price_conditions</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>conditions_right</parent>
+            <field>price_conditions_tbl</field>
       </property>
       <property>
             <name>conditions_tbl</name>
@@ -306,8 +328,12 @@
                   <caption>Paketid</caption>
                   <parent>content_packages</parent>
             </packages>
+            <price_conditions>
+                  <caption>Hinnatingimused</caption>
+                  <parent>content_packages</parent>
+            </price_conditions>
             <conditions>
-                  <caption>Tingimused</caption>
+                  <caption>Sisutingimused</caption>
                   <parent>content_packages</parent>
             </conditions>
             <cp_settings>
@@ -449,13 +475,19 @@
             <conditions_>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>conditions</group>
+                  <group>
+                        <num_0>price_conditions</num_0>
+                        <num_1>conditions</num_1>
+                  </group>
                   <area_caption></area_caption>
             </conditions_>
             <conditions_left>
                   <type>vbox</type>
                   <parent>conditions_</parent>
-                  <group>conditions</group>
+                  <group>
+                        <num_0>price_conditions</num_0>
+                        <num_1>conditions</num_1>
+                  </group>
                   <area_caption></area_caption>
             </conditions_left>
             <conditions_tree>
@@ -463,12 +495,18 @@
                   <parent>conditions_left</parent>
                   <closeable>1</closeable>
                   <area_caption>Sisupaketid</area_caption>
-                  <group>conditions</group>
+                  <group>
+                        <num_0>price_conditions</num_0>
+                        <num_1>conditions</num_1>
+                  </group>
             </conditions_tree>
             <conditions_right>
                   <type>vbox</type>
                   <parent>conditions_</parent>
-                  <group>conditions</group>
+                  <group>
+                        <num_0>price_conditions</num_0>
+                        <num_1>conditions</num_1>
+                  </group>
                   <area_caption></area_caption>
             </conditions_right>
       </layout>

@@ -14,16 +14,16 @@
             <group>general</group>
             <type>hidden</type>
             <field>cp_sp</field>
-            <caption>Toode OID</caption>
+            <caption>Toote OID</caption>
       </property>
       <property>
-            <name>price</name>
+            <name>priority</name>
             <table>aw_content_package</table>
             <group>general</group>
+            <field>aw_priority</field>
             <type>textbox</type>
-            <size>4</size>
-            <field>price</field>
-            <caption>Hind</caption>
+            <size>15</size>
+            <caption>Prioriteet</caption>
       </property>
       <property>
             <name>date_start</name>
@@ -40,15 +40,6 @@
             <type>date_select</type>
             <field>date_end</field>
             <caption>Tellimisaja l&amp;amp;otilde;pp</caption>
-      </property>
-      <property>
-            <name>duration</name>
-            <table>aw_content_package</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>4</size>
-            <field>duration</field>
-            <caption>Paketi kasutamise aeg p&amp;amp;auml;evades</caption>
       </property>
       <property>
             <name>subscribers_tlb</name>
@@ -75,6 +66,24 @@
             <type>hidden</type>
             <store>no</store>
             <field>subscribers_tmp</field>
+      </property>
+      <property>
+            <name>prices_tlb</name>
+            <table>aw_content_package</table>
+            <group>prices</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>prices_tlb</field>
+      </property>
+      <property>
+            <name>prices_tbl</name>
+            <table>aw_content_package</table>
+            <group>prices</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>prices_tbl</field>
       </property>
       <property>
             <name>conditions_tlb</name>
@@ -106,8 +115,11 @@
             <subscribers>
                   <caption>Tellijad</caption>
             </subscribers>
+            <prices>
+                  <caption>Hinnatingimused</caption>
+            </prices>
             <conditions>
-                  <caption>Tingimused</caption>
+                  <caption>Sisutingimused</caption>
             </conditions>
       </groupinfo>
       <tableinfo>
@@ -117,5 +129,12 @@
                   <index>aw_oid</index>
             </aw_content_package>
       </tableinfo>
+      <reltypes>
+            <PRICE_CONDITIONS>
+                  <value>1</value>
+                  <clid>CL_CONTENT_PACKAGE_PRICE_CONDITIONS</clid>
+                  <caption>Hinnatingimused</caption>
+            </PRICE_CONDITIONS>
+      </reltypes>
 </properties>
 

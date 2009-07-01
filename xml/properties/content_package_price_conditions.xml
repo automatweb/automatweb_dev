@@ -1,5 +1,33 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>price</name>
+            <table>aw_content_package_price_conditions</table>
+            <group>general</group>
+            <field>aw_price</field>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <size>4</size>
+            <caption>Hind</caption>
+      </property>
+      <property>
+            <name>duration</name>
+            <table>aw_content_package_price_conditions</table>
+            <group>general</group>
+            <field>aw_duration</field>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <size>4</size>
+            <caption>Paketi kasutamise aeg p&amp;amp;auml;evades</caption>
+      </property>
+      <property>
+            <name>cp_spp</name>
+            <table>aw_content_package_price_conditions</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>aw_cp_spp</field>
+            <caption>Pakendi OID</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CONTENT_PACKAGE_PRICE_CONDITIONS</syslog_type>
             <relationmgr>yes</relationmgr>

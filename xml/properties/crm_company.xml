@@ -200,6 +200,16 @@
             <caption>Kliendpoolne kontaktisik 3</caption>
       </property>
       <property>
+            <name>extern_id</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <field>extern_id</field>
+            <parent>co_bottom_seller_l</parent>
+            <size>10</size>
+            <caption>Siduss&amp;amp;uuml;steemi ID</caption>
+      </property>
+      <property>
             <name>cust_priority</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>
@@ -411,14 +421,6 @@
             <prop_cb>1</prop_cb>
             <field>buyer_buyer_contract_person</field>
             <caption>Ostja kontaktisik 1</caption>
-      </property>
-      <property>
-            <name>extern_id</name>
-            <table>kliendibaas_firma</table>
-            <group>general_sub</group>
-            <type>hidden</type>
-            <field>extern_id</field>
-            <no_caption>1</no_caption>
       </property>
       <property>
             <name>oh_tb</name>

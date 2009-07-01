@@ -470,25 +470,23 @@
             <caption>Kokkusobivad tooted</caption>
       </property>
       <property>
+            <name>replacement_prods_tb</name>
+            <table>objects</table>
+            <group>general_replacement_prods</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>replacement_prods_tb</field>
+            <caption>Asendustoodete t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
             <name>replacement_prods</name>
             <table>objects</table>
             <group>general_replacement_prods</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_REPLACEMENT_PROD</reltype>
-            <mode>manager</mode>
-            <props>
-                  <num_0>jrk</num_0>
-                  <num_1>name</num_1>
-            </props>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>jrk</num_1>
-            </table_fields>
-            <table_edit_fields>jrk</table_edit_fields>
-            <field>meta</field>
-            <method>serialize</method>
-            <clone_link>1</clone_link>
-            <filt_edit_fields>1</filt_edit_fields>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>replacement_prods</field>
             <caption>Asendustooted</caption>
       </property>
       <property>

@@ -139,6 +139,15 @@
             <field>join_grp</field>
       </property>
       <property>
+            <name>extern_id</name>
+            <table>users</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>10</size>
+            <field>aw_extern_id</field>
+            <caption>Siduss&amp;amp;uuml;steemi id</caption>
+      </property>
+      <property>
             <name>passwd</name>
             <table>users</table>
             <group>chpwd</group>
