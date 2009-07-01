@@ -2799,6 +2799,13 @@ class shop_warehouse extends class_base
 	function _get_arrival_products_list($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			"name" => "count",
+			"caption" => t("Nr"),
+			"align" => "center",
+		));
 		$t->define_field(array(
 			"name" => "prod",
 			"caption" => t("Artikkel"),
@@ -2839,6 +2846,8 @@ class shop_warehouse extends class_base
 		$companies = array(0 => t("--vali--")) + $c_ol->names();
 		$arr["warehouses"] = array($arr["obj_inst"]->id());
 		$res = $this->get_products_list_ol($arr);
+		/* 
+		// eee - what is this for here? --dragut@01.07.2009
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
 			"site_id" => array(),
@@ -2846,11 +2855,13 @@ class shop_warehouse extends class_base
 			"warehouse" => $arr["obj_inst"]->id(),
 			"product" => $res["ol"]->ids(),
 		));
+		$ol->arr();
+		*/
 		for($i = 1; $i <=7; $i++)
 		{
 			$weekdays[$i] = locale::get_lc_weekday($i, true, true);
 		}
-		$ol->arr();
+		$counter = 1;
 		foreach($res["ol"]->arr() as $prodid => $prod)
 		{
 			$ol = new object_list(array(
@@ -2862,6 +2873,7 @@ class shop_warehouse extends class_base
 			));
 			$o = $ol->begin();
 			$t->define_data(array(
+				"count" => $counter++,
 				"prod" => html::obj_change_url($prod),
 				"company" => html::select(array(
 					"options" => $companies,
