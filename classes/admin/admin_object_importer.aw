@@ -6,6 +6,17 @@
 @default table=aw_admin_object_importer
 @default group=general
 
+@property folder type=relpicker reltype=RELTYPE_FOLDER field=aw_folder
+@caption Kaust kuhu importida
+
+@property fupload type=fileupload store=no
+@caption Vali fail
+
+@property log type=text store=no
+@caption Logi
+
+@reltype FOLDER value=1 clid=CL_MENU
+@caption Kaust
 */
 
 class admin_object_importer extends class_base
@@ -42,6 +53,22 @@ class admin_object_importer extends class_base
 		return $retval;
 	}
 
+	function _set_fupload($arr)
+	{
+		if (is_uploaded_file($_FILES["fupload"]["tmp_name"]))
+		{
+			$d = unserialize(file_get_contents($_FILES["fupload"]["tmp_name"]));
+			if (is_array($d))
+			{
+				foreach($d as $xml)
+				{
+					$o = obj();
+					$o->from_xml($xml, $arr["obj_inst"]->prop("folder"));
+				}
+			}
+		}
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
@@ -67,10 +94,10 @@ class admin_object_importer extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_folder":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
 				));
 				return true;
 		}

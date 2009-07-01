@@ -191,5 +191,14 @@
 			</function>
 		</action>
 
+		<action name="ajax_update_prop" all_args="1">
+			<function name="ajax_update_prop">
+				<arguments>
+					<optional name="id" type="int" />
+					<optional name="prop" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

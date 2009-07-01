@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cfgform" folder="www/dev/robert/automatweb_dev/classes/cfg" extends="class_base">
+	<class name="cfgform" folder="www/dev/terryf/automatweb_dev/classes/cfg" extends="class_base">
 		<action name="remove_tbl_field">
 			<function name="remove_tbl_field">
 				<arguments>
@@ -79,47 +79,6 @@
 					<optional name="o" type="object" acl="view" />
 					<optional name="oid" type="oid" acl="view" />
 					<optional name="clid" type="class_id" default="CL_CRM_PERSON" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="toggle_property_display">
-			<function name="toggle_property_display">
-				<arguments>
-					<required name="prop" type="string" />
-					<required name="id" type="oid" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_add_property">
-			<function name="get_add_property">
-				<arguments>
-					<required name="id" type="oid" />
-					<required name="return_url" type="string" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_additional_properties">
-			<function name="get_additional_properties">
-				<arguments>
-					<required name="prop" type="string" />
-					<required name="id" type="oid" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="set_additional_properties" all_args="1">
-			<function name="set_additional_properties">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="cfg_move_props" all_args="1">
-			<function name="cfg_move_props">
-				<arguments>
 				</arguments>
 			</function>
 		</action>

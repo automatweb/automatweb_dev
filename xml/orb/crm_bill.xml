@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_bill" folder="www/dev/robert/automatweb_dev/classes/applications/crm" extends="class_base">
+	<class name="crm_bill" folder="www/dev/terryf/automatweb_dev/classes/applications/crm" extends="class_base">
 		<action name="add_payment" all_args="1">
 			<function name="add_payment">
 				<arguments>
@@ -137,13 +137,6 @@
 			<function name="bug_search">
 				<arguments>
 					<optional name="customer" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_prod_list" all_args="1">
-			<function name="get_prod_list">
-				<arguments>
 				</arguments>
 			</function>
 		</action>

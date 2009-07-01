@@ -2,7 +2,7 @@
 <orb>
 	<class name="shop_product_obj" folder="www/dev/terryf/automatweb_dev/classes/applications/shop" extends="_int_object">
 		<action name="get_discount">
-			<function name="get_replacement_prods">
+			<function name="get_replacement_products">
 				<arguments>
 				</arguments>
 			</function>
