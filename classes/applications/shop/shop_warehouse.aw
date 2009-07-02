@@ -2996,12 +2996,12 @@ class shop_warehouse extends class_base
 				)),
 				"date1" => html::date_select(array(
 					"name" => "arrivals[".$oid."][date1]",
-					"value" => ($d = $o->prop("purveyance_date1"))? $d : -1,
+					"value" => ($d = $o->meta("purveyance_date1"))? $d : -1,
 					"format" => array("day_textbox", "month_textbox", "year_textbox"),
 				)),
 				"date2" => html::date_select(array(
 					"name" => "arrivals[".$oid."][date2]",
-					"value" => ($d = $o->prop("purveyance_date2"))? $d : -1,
+					"value" => ($d = $o->meta("purveyance_date2"))? $d : -1,
 					"format" => array("day_textbox", "month_textbox", "year_textbox"),
 				)),
 			));
@@ -3020,16 +3020,20 @@ class shop_warehouse extends class_base
 				"site_id" => array(),
 				"lang_id" => array(),
 			));
+
+			$date1 = mktime(0, 0, 0, (int)$data["date1"]["month"], (int)$data["date1"]["day"], (int)$data["date1"]["year"]);
+			$date2 = mktime(0, 0, 0, (int)$data["date2"]["month"], (int)$data["date2"]["day"], (int)$data["date2"]["year"]);
+
 			$ol->set_prop("weekday", $data["weekday"]);
 			$ol->set_prop("days", $data["days"]);
-			$ol->set_prop("date1", $data["date1"]);
-			$ol->set_prop("date2", $data["date2"]);
+			$ol->set_prop("date1", $date1);
+			$ol->set_prop("date2", $date2);
 			$ol->save();
 			$ol->remove_all();
 			$co->set_meta("purveyance_weekday", $data["weekday"]);
 			$co->set_meta("purveyance_days", $data["days"]);
-			$co->set_meta("purveyance_date1", $data["date1"]);
-			$co->set_meta("purveyance_date2", $data["date2"]);
+			$co->set_meta("purveyance_date1", $date1);
+			$co->set_meta("purveyance_date2", $date2);
 			$co->save();
 		}
 	}
