@@ -712,6 +712,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@property sell_orders type=table store=no no_caption=1  parent=sell_orders_split
 		@caption M&uuml;&uuml;gitellimused
 
+
+
+
+@default group=campaigns
+
+	@property campaigns_toolbar type=toolbar no_caption=1 store=no
+	@layout campaigns_split type=hbox width=20%:80%
+		@layout campaigns_left type=vbox parent=campaigns_split
+
+			@layout campaigns_time_lay type=vbox closeable=1 area_caption=Ajavahemik parent=campaigns_left
+				@property campaigns_time_tree type=treeview no_caption=1 parent=campaigns_time_lay
+
+			@layout campaigns_cust_lay type=vbox closeable=1 area_caption=Kasutajagrupid parent=campaigns_left
+				@property campaigns_groups_tree type=treeview no_caption=1 parent=campaigns_cust_lay
+
+			@layout campaigns_product_lay type=vbox closeable=1 area_caption=Tooted parent=campaigns_left
+				@property campaigns_product_tree type=treeview no_caption=1 parent=campaigns_product_lay
+
+		@property campaigns type=table store=no no_caption=1  parent=campaigns_split
+		@caption Kampaaniad
+
+
 @default group=sales_notes
 
 	@property sales_notes_toolbar type=toolbar no_caption=1
@@ -1056,6 +1078,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@groupinfo shop_orders caption="Poe tellimused" parent=sales
 	@groupinfo order_undone parent=sales caption="T&auml;itmata poe tellimused"
 	@groupinfo order_orderer_cos parent=sales caption="A Tellijad"
+	@groupinfo campaigns parent=sales caption="Kampaaniad" submit=no
 
 @groupinfo stats caption="Aruanded"
 
@@ -1063,6 +1086,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@groupinfo stats_balance caption="Saldo aruanne" parent=stats
 	@groupinfo stats_day caption="P&auml;evade aruanne" parent=stats
 	@groupinfo stats_inventory_repair caption="Inventuuri parandused" parent=stats
+
+
 
 ////////// reltypes
 @reltype CONFIG value=1 clid=CL_SHOP_WAREHOUSE_CONFIG
@@ -8345,6 +8370,362 @@ $oo = get_instance(CL_SHOP_ORDER);
 	{
 		return $this->_get_purchase_orders($arr);
 	}
+
+	function _get_campaigns($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"align" => "left",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+
+		$t->define_field(array(
+			"name" => "discount",
+			"caption" => t("Allahindluse %"),
+			"sortable" => 1,
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "date",
+			"caption" => t("Kestus"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "active",
+			"caption" => t("Kehtib"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "product",
+			"caption" => t("Toode/kategooria"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "groups",
+			"caption" => t("Kasutajaruppidele"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+			"chgbgcolor" => "color",
+		));
+
+		$f = $this->get_range($arr["request"]["timespan"]);
+		if(is_oid($arr["request"]["user_group"]))
+		{
+			$f["group"] = $arr["request"]["user_group"];
+			$t->set_caption(sprintf(t("Valitud ajavahemikul grupile \"%s\" m&otilde;juvad kampaaniad"), get_name($f["group"])));
+		}
+		else
+		{
+			$t->set_caption("Valitud ajavahemikul toimuvad kampaaniad");
+		}
+
+		if(is_oid($arr["request"]["product"]))
+		{
+			$f["object"] = $arr["request"]["user_group"];
+		}
+
+		$discounts = discount_obj::get_discounts($f);
+		foreach($discounts as $id => $data)
+		{
+			$change = ($arr["request"]["change_discount_id"] == $id) ? 1 : 0;
+			$def = array(
+				"name" => $data["name"],
+				"discount" => $data["discount"],
+				"active" => $data["active"] ? t("Aktiivne") : t("Mitteaktiivne"),
+				"oid" => $id,
+			);
+			if($change)
+			{
+				$def["name"] = html::textbox(array("name" => "name" , "value" => $data["name"]));
+			}
+			$group_names = get_name($data["apply_groups"]);
+			$def["groups"] = is_array($group_names) ? join(", " , $group_names) : "";
+			if(is_oid($data["object"]))
+			{
+				$def["product"] = get_name($data["object"]);
+			}
+			if($data["from"] || $data["to"])
+			{
+				$def["date"] = "";
+				if($data["from"] > 0)
+				{
+					$def["date"].= date("d.m.Y" , $data["from"]);
+				}
+				if($data["from"] > 0 && $data["to"] > 0)
+				{
+					$def["date"].= " - ";
+				}
+				if($data["to"] > 0)
+				{
+					$def["date"].= date("d.m.Y" , $data["to"]);
+				}
+			}
+			if(!$change)
+			{
+				$def["change"] = html::button(array(
+					"name" => "change_row",
+					"value" => t("Muuda"),
+					"onclick" => "javascript:reload_property(['campaign'], {change_discount_id: '".$id."'});"
+				));
+			}
+			else
+			{
+				$def["change"] = html::button(array(
+					"name" => "change_row",
+					"value" => t("Salvesta"),
+					"onclick" => "
+					$.post('/automatweb/orb.aw?class=crm_bill&action=post_row', {
+						jrk: document.getElementsByName('rows[".$id."][jrk]')[0].value
+						, id: ".$id."
+						, people: result
+						, name: document.getElementsByName('rows[".$id."][name]')[0].value
+						, comment: document.getElementsByName('rows[".$id."][comment]')[0].value
+						, prod: document.getElementsByName('rows[".$id."][prod]')[0].value
+						, unit: document.getElementsByName('rows[".$id."][unit]')[0].value
+						, has_tax: has_tax
+						, date: document.getElementsByName('rows[".$id."][date]')[0].value
+						, jrk: document.getElementsByName('rows[".$id."][jrk]')[0].value
+						, price: document.getElementsByName('rows[".$id."][price]')[0].value
+						, amt: document.getElementsByName('rows[".$id."][amt]')[0].value
+						},function(data){reload_property(['campaign'], {change_discount_id: '".$id."'});
+					",
+				));
+			}
+			$t->define_data($def);
+		}
+	}
+
+	function _get_campaigns_toolbar($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_delete_button();
+	}
+
+
+	function _get_campaigns_product_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "product";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all_products");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "discounts_product_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik tooted"),
+			"id" => "all_products",
+			"reload" => array(
+				"props" => array("campaigns"),
+				"params" => array($var => "all")
+			)
+		));
+
+		$groups = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+//			"type" => new obj_predicate_not(1)
+		));
+
+		foreach($groups->arr() as $id => $o)
+		{
+			if($o->prop("parent.class_id") == CL_SHOP_PRODUCT_CATEGORY)
+			{
+				continue;
+			}
+			$tv->add_item("all_products", array(
+				"id" => $id,
+				"name" => $o->name(),
+				"iconurl" => icons::get_icon_url(CL_MENU),
+				"reload" => array(
+					"props" => array("campaigns"),
+					"params" => array($var => $id)
+				)
+			));
+			$this->add_discount_product_leaf($tv , $id);
+		}
+	}
+
+	function add_discount_product_leaf($tv , $parent)
+	{
+		$groups = new object_list(array(
+			"class_id" => array(CL_SHOP_PRODUCT_CATEGORY),
+//			"type" => new obj_predicate_not(1),
+			"parent" => $parent
+		));
+		foreach($groups->arr() as $id => $o)
+		{
+			$tv->add_item($parent, array(
+				"id" => $id,
+				"name" => $o->name(),
+				"iconurl" => icons::get_icon_url(CL_MENU),
+				"reload" => array(
+					"props" => array("campaigns"),
+					"params" => array("product" => $id)
+				)
+			));
+			$this->add_discount_product_leaf($tv , $id);
+		}
+
+		$groups = new object_list(array(
+			"class_id" => array(CL_SHOP_PRODUCT),
+//			"type" => new obj_predicate_not(1),
+			"CL_SHOP_PRODUCT.RELTYPE_CATEGORY" => $parent
+		));
+		foreach($groups->arr() as $id => $o)
+		{
+			if($o->class_id() == CL_SHOP_PRODUCT)
+			{
+				$tv->add_item($parent, array(
+					"id" => $id,
+					"name" => $o->name(),
+					"iconurl" => icons::get_icon_url(CL_SHOP_PRODUCT),
+					"reload" => array(
+						"props" => array("campaigns"),
+						"params" => array("product" => $id)
+					)
+				));
+			}
+		}
+	}
+
+	function _get_campaigns_groups_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "user_group";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_time_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik grupid"),
+			"id" => "all",
+			"reload" => array(
+				"props" => array("campaigns"),
+				"params" => array($var => "all")
+			)
+//			"url" => aw_url_change_var($var, "all"),
+		));
+
+		$groups = new object_list(array("class_id" => CL_GROUP , "type" => new obj_predicate_not(1)));
+
+		foreach($groups->arr() as $id => $o)
+		{
+			if($o->prop("parent.class_id") == CL_GROUP)
+			{
+				continue;
+			}
+			$tv->add_item("all", array(
+				"id" => $id,
+				"name" => $o->name(),
+				"iconurl" => icons::get_icon_url(CL_GROUP),
+				"reload" => array(
+					"props" => array("campaigns"),
+					"params" => array($var => $id)
+				)
+			));
+			$this->add_group_leaf($tv , $id);
+		}
+	}
+
+	function add_group_leaf($tv , $parent)
+	{
+		$groups = new object_list(array("class_id" => CL_GROUP , "type" => new obj_predicate_not(1) , "parent" => $parent));
+		foreach($groups->arr() as $id => $o)
+		{
+			$tv->add_item($parent, array(
+				"id" => $id,
+				"name" => $o->name(),
+				"iconurl" => icons::get_icon_url(CL_GROUP),
+				"reload" => array(
+					"props" => array("campaigns"),
+					"params" => array("user_group" => $id)
+				)
+			));
+			$this->add_group_leaf($tv , $id);
+		}
+	}
+
+	function _get_campaigns_time_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "timespan";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "period_week");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_time_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik ajavahemikud"),
+			"id" => "all_time",
+				"reload" => array(
+					"props" => array("campaigns"),
+					"params" => array("timespan" => "all_time")
+				)
+		));
+
+		$branches = array(
+			"last_week" => t("Eelmine n&auml;dal"),
+			"period_week" => t("K&auml;esolev n&auml;dal"),
+			"period_last_last" => t("&Uuml;leelmine kuu"),
+			"period_last" => t("Eelmine kuu"),
+			"period_current" => t("K&auml;esolev kuu"),
+			"period_next" => t("J&auml;rgmine kuu"),
+			"period_lastyear" => t("Eelmine aasta"),
+			"period_year" => t("K&auml;esolev aasta"),
+		);
+
+		foreach($branches as $id => $caption)
+		{
+			$tv->add_item("all_time", array(
+				"id" => $id,
+				"name" => $caption,
+				"reload" => array(
+					"props" => array("campaigns"),
+					"params" => array("timespan" => $id)
+				)
+			));
+		}
+	}
+
 
 	function get_cat_picker($arr)
 	{

@@ -1851,6 +1851,56 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gitellimused</caption>
       </property>
       <property>
+            <name>campaigns_toolbar</name>
+            <table>objects</table>
+            <group>campaigns</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>campaigns_toolbar</field>
+      </property>
+      <property>
+            <name>campaigns_time_tree</name>
+            <table>objects</table>
+            <group>campaigns</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>campaigns_time_lay</parent>
+            <store>no</store>
+            <field>campaigns_time_tree</field>
+      </property>
+      <property>
+            <name>campaigns_groups_tree</name>
+            <table>objects</table>
+            <group>campaigns</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>campaigns_cust_lay</parent>
+            <store>no</store>
+            <field>campaigns_groups_tree</field>
+      </property>
+      <property>
+            <name>campaigns_product_tree</name>
+            <table>objects</table>
+            <group>campaigns</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>campaigns_product_lay</parent>
+            <store>no</store>
+            <field>campaigns_product_tree</field>
+      </property>
+      <property>
+            <name>campaigns</name>
+            <table>objects</table>
+            <group>campaigns</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>campaigns_split</parent>
+            <field>campaigns</field>
+            <caption>Kampaaniad</caption>
+      </property>
+      <property>
             <name>sales_notes_toolbar</name>
             <table>objects</table>
             <group>sales_notes</group>
@@ -2829,6 +2879,10 @@
                   <parent>sales</parent>
                   <caption>A Tellijad</caption>
             </order_orderer_cos>
+            <campaigns>
+                  <parent>sales</parent>
+                  <caption>Kampaaniad</caption>
+            </campaigns>
             <stats>
                   <caption>Aruanded</caption>
             </stats>
@@ -3383,6 +3437,39 @@
                   <closeable>1</closeable>
                   <group>sell_orders</group>
             </sell_orders_left_search>
+            <campaigns_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>campaigns</group>
+                  <area_caption></area_caption>
+            </campaigns_split>
+            <campaigns_left>
+                  <type>vbox</type>
+                  <parent>campaigns_split</parent>
+                  <group>campaigns</group>
+                  <area_caption></area_caption>
+            </campaigns_left>
+            <campaigns_time_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ajavahemik</area_caption>
+                  <parent>campaigns_left</parent>
+                  <group>campaigns</group>
+            </campaigns_time_lay>
+            <campaigns_cust_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kasutajagrupid</area_caption>
+                  <parent>campaigns_left</parent>
+                  <group>campaigns</group>
+            </campaigns_cust_lay>
+            <campaigns_product_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Tooted</area_caption>
+                  <parent>campaigns_left</parent>
+                  <group>campaigns</group>
+            </campaigns_product_lay>
             <sales_notes_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
