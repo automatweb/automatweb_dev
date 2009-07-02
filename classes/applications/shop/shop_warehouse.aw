@@ -2937,6 +2937,8 @@ class shop_warehouse extends class_base
 	function _get_arrivals_bc_info($arr)
 	{
 		$arr["prop"]["value"] = t("Selle vaate salvestamine kirjutab &uuml;le k&otilde;ik vastavate organisatsioonide tarnetingimused");
+		$arr["prop"]["value"] .= t("<br />");
+		$arr["prop"]["value"] .= t("Selles vaates olevaid ettev&otilde;ttedi n&auml;idatakse &quot;Tarnefirmade kaust&quot; kausta alt ja seda saab m&auml;&auml;rata lao seadete objektist");
 	}
 
 	function _get_arrivals_bc_table($arr)
