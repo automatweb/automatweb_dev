@@ -12,20 +12,18 @@ define("BG_FORCE_CHECKPOINT", 2);
 
 class run_in_background extends class_base
 {
+	var $lock_file;
+	var $stop_file;
 
 	function init($arr)
 	{
-
 		parent::init($arr);
 
 		$this->lock_file = aw_ini_get("server.tmpdir")."/bg_run_".get_class($this).".run";
-
 		$this->stop_file = aw_ini_get("server.tmpdir")."/bg_run_".get_class($this).".stop";
 
 		$this->bg_checkpoint_steps = 100 ;
-
 		$this->bg_log_steps = 10;
-
 	}
 
 
@@ -53,12 +51,10 @@ class run_in_background extends class_base
 		$prop =& $arr["prop"];
 
 		$fn = $this->lock_file.".".$arr["obj_inst"]->id();
-
 		$fn_s = $this->stop_file.".".$arr["obj_inst"]->id();
 
 		if (file_exists($fn_s))
 		{
-
 			$prop["value"] = html::href(array(
 				"caption" => t("Reset"),
 				"url" => $this->mk_my_orb("bg_control", array(
@@ -71,7 +67,6 @@ class run_in_background extends class_base
 		else
 		if (file_exists($fn))
 		{
-
 			$prop["value"] = html::href(array(
 				"caption" => t("Peata"),
 				"url" => $this->mk_my_orb("bg_control", array(
@@ -83,7 +78,6 @@ class run_in_background extends class_base
 		}
 		else
 		{
-
 			$prop["value"] = html::href(array(
 				"caption" => t("K&auml;ivita"),
 				"url" => $this->mk_my_orb("bg_control", array(
@@ -115,7 +109,6 @@ class run_in_background extends class_base
 
 	**/
 	function bg_run_get_property_status($arr)
-
 	{
 
 		$prop =& $arr["prop"];
@@ -123,31 +116,20 @@ class run_in_background extends class_base
 		$fn = $this->lock_file.".".$arr["obj_inst"]->id();
 
 		if (file_exists($fn))
-
 		{
-
 			$prop["value"] = nl2br($this->get_file(array("file" => $fn)));
-
 		}
 
 		else
-
 		{
-
 			$v = $arr["obj_inst"]->meta("bg_run_log");
-
 			if ($v != "")
-
 			{
-
 				$prop["value"] = nl2br($v);
-
 				return PROP_OK;
-
 			}
 
 			return PROP_IGNORE;
-
 		}
 
 	}
@@ -195,8 +177,6 @@ class run_in_background extends class_base
 
 				break;
 
-
-
 			case "reset":
 				unlink($this->stop_file.".".$o->id());
 				unlink($this->lock_file.".".$o->id());
@@ -218,37 +198,24 @@ class run_in_background extends class_base
 
 	/**
 
-
-
 		@attrib name=bg_check_scheduler nologin=1
-
-
 
 	**/
 	function bg_check_scheduler($arr)
-
 	{
 
 		$s = get_instance("scheduler");
 
-
-
 		// make a list of all interested parties
-
 		// check if they are in scheduler
 
 		$ol = new object_list(array(
-
 			"class_id" => $this->clid,
-
 			"site_id" => array(),
-
 			"lang_id" => array()
-
 		));
 
 		foreach($ol->arr() as $o)
-
 		{
 
 			echo "object ".$o->name()." <br>";
@@ -256,23 +223,15 @@ class run_in_background extends class_base
 			$url = $this->mk_my_orb("bg_run", array("id" => $o->id()));
 
 			$s->remove(array(
-
 				"event" => $url
-
 			));
 
-
-
 			// here we have to check if the process is in a stopped state, if it is, restart it as soon as possible
-
 			if ($o->meta("bg_run_state") == "started")
-
 			{
 
 				if (!$this->bg_is_running($o))
-
 				{
-
 					echo "process halted, restart immediately <br>";
 
 					// add run scheduler immediately
@@ -284,20 +243,15 @@ class run_in_background extends class_base
 					$o->set_meta("bg_run_log",$o->meta("bg_run_log").t("<br>Protsess j&auml;tkab hiljemalt kahe minuti p&auml;rast"));
 
 					aw_disable_acl();
-
 					$o->save();
-
 					aw_restore_acl();
-					// since scheduler is not running, go for it right away
 
+					// since scheduler is not running, go for it right away
 					$this->bg_run(array("id" => $o->id()));
 					continue;
-
 				}
 
 			}
-
-
 
 			// get the time it should run a
 			if ($o->prop("bg_run_always"))
@@ -310,13 +264,10 @@ class run_in_background extends class_base
 				$o->set_meta("bg_run_log",$o->meta("bg_run_log").t("<br>Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"));
 
 				aw_disable_acl();
-
 				$o->save();
-
 				aw_restore_acl();
 
 				echo "process is done, run always set, restart <br>";
-
 			}
 			else
 			{
@@ -325,7 +276,6 @@ class run_in_background extends class_base
 
 				if ($recur)
 				{
-
 					$s->add(array(
 						"event" => $url,
 						"rep_id" => $recur->id()
@@ -334,22 +284,15 @@ class run_in_background extends class_base
 					$o->set_meta("bg_run_log",$o->meta("bg_run_log").t("<br>Protsess k&auml;ivitub j&auml;rgmisel kordusel"));
 
 					aw_disable_acl();
-
 					$o->save();
-
 					aw_restore_acl();
 
 					echo "added with repeater ".$recur->id()." <br>";
-
 				}
-
 			}
-
 		}
 
-
-
-		echo "add scheduler check at ".date("d.m.Y H:i:s", time()+5*60)." <br>";
+		echo "add scheduler check at ".date("d.m.Y H:i:s", time() + 5 * 60)." <br>";
 
 		// add scheduler check every 5 min
 		$s->add(array(
@@ -358,29 +301,19 @@ class run_in_background extends class_base
 		));
 
 		echo "all done <br>";
-
 	}
 
-
-
 	/**
-
-
-
 		@attrib name=bg_run nologin=1
 
 		@param id required type=int
-
 	**/
 	function bg_run($arr)
 	{
-
 		echo "enter bg_run $arr[id] <br>\n";
-
 		flush();
 
 		aw_set_exec_time(AW_LONG_PROCESS);
-
 
 		aw_disable_acl();
 			$o = obj($arr["id"]);
@@ -393,8 +326,6 @@ class run_in_background extends class_base
 			return;
 		}
 
-
-
 		// run init
 		if (method_exists($this, "bg_run_init"))
 		{
@@ -403,14 +334,12 @@ class run_in_background extends class_base
 			$this->bg_run_init($o);
 		}
 
-echo "after init, state = ".$o->meta("bg_run_state")." <br>\n";
-
-flush();
+		echo "after init, state = ".$o->meta("bg_run_state")." <br>\n";
+		flush();
 
 		// figure out if this is start or restart
 		if ($o->meta("bg_run_state") == "started")
 		{
-
 			// and if it is restart, then run restore step
 			if (method_exists($this, "bg_run_continue"))
 			{
@@ -421,25 +350,17 @@ flush();
 		}
 		else
 		{
-
 			// mark state as started
 			$o->set_meta("bg_run_state", "started");
-
 			$o->set_meta("bg_run_start", time());
 
 			aw_disable_acl();
-
 			$o->save();
-
 			aw_restore_acl();
-
-
-
 		}
 
-echo "after continue <br>\n";
-
-flush();
+		echo "after continue <br>\n";
+		flush();
 
 		// get first log entry
 		if (method_exists($this, "bg_run_get_log_entry"))
@@ -453,23 +374,17 @@ flush();
 		}
 
 
-
 		// run steps until done
-
 		$iter = 0;
 
 		while(true)
 		{
-
 			if (file_exists($this->stop_file.".".$o->id()))
 			{
-
 				echo "calling halt for stop flag <br>\n";
-
 				flush();
 
 				$this->bg_do_halt($o);
-
 			}
 
 			echo "running step <br>\n";
