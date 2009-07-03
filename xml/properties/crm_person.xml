@@ -336,7 +336,7 @@
             <store>no</store>
             <parent>co_bottom_seller_l</parent>
             <field>contact_person</field>
-            <caption>Kliendpoolne kontaktisik</caption>
+            <caption>Kliendipoolne kontaktisik</caption>
       </property>
       <property>
             <name>priority</name>

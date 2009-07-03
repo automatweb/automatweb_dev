@@ -143,7 +143,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 			@caption Kliendisuhte alguskuup&auml;ev
 
 			@property contact_person type=text store=no parent=co_bottom_seller_l
-			@caption Kliendpoolne kontaktisik
+			@caption Kliendipoolne kontaktisik
 
 		@layout co_bottom_seller_r type=vbox parent=co_bottom_seller
 

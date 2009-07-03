@@ -177,7 +177,7 @@
             <editonly>1</editonly>
             <parent>co_bottom_seller_l</parent>
             <field>contact_person</field>
-            <caption>Kliendpoolne kontaktisik 1</caption>
+            <caption>Kliendipoolne kontaktisik 1</caption>
       </property>
       <property>
             <name>contact_person2</name>
@@ -187,7 +187,7 @@
             <editonly>1</editonly>
             <parent>co_bottom_seller_l</parent>
             <field>contact_person2</field>
-            <caption>Kliendpoolne kontaktisik 2</caption>
+            <caption>Kliendipoolne kontaktisik 2</caption>
       </property>
       <property>
             <name>contact_person3</name>
@@ -197,7 +197,7 @@
             <editonly>1</editonly>
             <parent>co_bottom_seller_l</parent>
             <field>contact_person3</field>
-            <caption>Kliendpoolne kontaktisik 3</caption>
+            <caption>Kliendipoolne kontaktisik 3</caption>
       </property>
       <property>
             <name>extern_id</name>
@@ -325,7 +325,7 @@
             <parent>co_bottom_buyer_l</parent>
             <prop_cb>1</prop_cb>
             <field>buyer_contact_person</field>
-            <caption>Kliendpoolne kontaktisik 1</caption>
+            <caption>Kliendipoolne kontaktisik 1</caption>
       </property>
       <property>
             <name>buyer_contact_person2</name>
@@ -337,7 +337,7 @@
             <parent>co_bottom_buyer_l</parent>
             <prop_cb>1</prop_cb>
             <field>buyer_contact_person2</field>
-            <caption>Kliendpoolne kontaktisik 2</caption>
+            <caption>Kliendipoolne kontaktisik 2</caption>
       </property>
       <property>
             <name>buyer_contact_person3</name>
@@ -349,7 +349,7 @@
             <parent>co_bottom_buyer_l</parent>
             <prop_cb>1</prop_cb>
             <field>buyer_contact_person3</field>
-            <caption>Kliendpoolne kontaktisik 3</caption>
+            <caption>Kliendipoolne kontaktisik 3</caption>
       </property>
       <property>
             <name>cust_buyer_priority</name>

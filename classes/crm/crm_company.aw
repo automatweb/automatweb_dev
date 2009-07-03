@@ -80,13 +80,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 			@caption Kliendisuhte alguskuup&auml;ev
 
 			@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype=  parent=co_bottom_seller_l
-			@caption Kliendpoolne kontaktisik 1
+			@caption Kliendipoolne kontaktisik 1
 
 			@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_seller_l
-			@caption Kliendpoolne kontaktisik 2
+			@caption Kliendipoolne kontaktisik 2
 
 			@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_seller_l
-			@caption Kliendpoolne kontaktisik 3
+			@caption Kliendipoolne kontaktisik 3
 
 			@property extern_id type=textbox table=kliendibaas_firma field=extern_id parent=co_bottom_seller_l size=10
 			@caption Siduss&uuml;steemi ID
@@ -133,13 +133,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 			@caption Kliendisuhte alguskuup&auml;ev
 
 			@property buyer_contact_person type=relpicker store=no  editonly=1 reltype=  parent=co_bottom_buyer_l prop_cb=1
-			@caption Kliendpoolne kontaktisik 1
+			@caption Kliendipoolne kontaktisik 1
 
 			@property buyer_contact_person2 type=relpicker store=no  editonly=1  parent=co_bottom_buyer_l prop_cb=1
-			@caption Kliendpoolne kontaktisik 2
+			@caption Kliendipoolne kontaktisik 2
 
 			@property buyer_contact_person3 type=relpicker store=no  editonly=1  parent=co_bottom_buyer_l prop_cb=1
-			@caption Kliendpoolne kontaktisik 3
+			@caption Kliendipoolne kontaktisik 3
 
 		@layout co_bottom_buyer_r type=vbox parent=co_bottom_buyer
 
