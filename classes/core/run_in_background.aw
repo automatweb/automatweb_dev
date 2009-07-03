@@ -457,9 +457,7 @@ class run_in_background extends class_base
 		$o->set_meta("bg_run_state", "done");
 
 		aw_disable_acl();
-
 		$o->save();
-
 		aw_restore_acl();
 
 		@unlink($this->lock_file.".".$o->id());
@@ -468,20 +466,16 @@ class run_in_background extends class_base
 
 	}
 
-
-
 	function bg_is_running($o)
 	{
 		$fn = $this->lock_file.".".$o->id();
 
 		if (file_exists($fn))
 		{
-
 			if (filemtime($fn) > (time()-4*60))
 			{
 				return true;
 			}
-
 			unlink($fn);
 		}
 
@@ -489,11 +483,8 @@ class run_in_background extends class_base
 
 	}
 
-
-
 	function bg_write_log_entry($entry, $o)
 	{
-
 		// write status info to lock file
 		$f = fopen($this->lock_file.".".$o->id(), "w");
 
@@ -504,45 +495,26 @@ class run_in_background extends class_base
 		}
 	}
 
-
-
 	function bg_do_halt($o)
 	{
 
 		echo "found stop flag, stopping scheduler <br>";
-
 		unlink($this->stop_file.".".$o->id());
-
 		unlink($this->lock_file.".".$o->id());
-
-
 
 		$o->set_meta("bg_run_state", "done");
 
-
-
 		if (method_exists($this, "bg_halt"))
-
 		{
-
 			$this->bg_halt($o);
-
 		}
 
-
-
 		aw_disable_acl();
-
 		$o->save();
-
 		aw_restore_acl();
 
-
-
 		die(t("Halt"));
-
 	}
-
 }
 
 ?>
