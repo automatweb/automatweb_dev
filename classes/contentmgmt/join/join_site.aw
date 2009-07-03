@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.82 2009/05/28 12:12:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.83 2009/07/03 11:38:51 instrumental Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1543,6 +1543,10 @@ class join_site extends class_base
 		$com->set_parent($obj->prop("obj_folder"));
 		$com->set_name($sessd["typo_".CL_CRM_COMPANY]["name"]);
 		$c_id = $com->save();
+		$com->acl_set(
+			obj($u_o->get_default_group()),
+			array("can_edit" => 1, "can_add" => 1, "can_view" => 1, "can_delete" => 1)
+		);
 
 		$person->add_work_relation(array("org" => $c_id));
 		
