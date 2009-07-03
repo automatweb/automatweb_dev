@@ -2795,15 +2795,6 @@
                   <submit>no</submit>
                   <parent>articles</parent>
             </packets>
-            <arrivals>
-                  <caption>Tarneajad</caption>
-                  <submit>no</submit>
-                  <parent>articles</parent>
-            </arrivals>
-            <arrivals_by_company>
-                  <caption>Firmade tarneajad</caption>
-                  <parent>articles</parent>
-            </arrivals_by_company>
             <status>
                   <caption>Laoseis</caption>
             </status>
@@ -2848,6 +2839,15 @@
                   <caption>Ostukliendid</caption>
                   <parent>purchases</parent>
             </purchase_clients>
+            <arrivals>
+                  <caption>Tarneajad</caption>
+                  <submit>no</submit>
+                  <parent>purchases</parent>
+            </arrivals>
+            <arrivals_by_company>
+                  <caption>Firmade tarneajad</caption>
+                  <parent>purchases</parent>
+            </arrivals_by_company>
             <sales>
                   <caption>M&amp;amp;uuml;&amp;amp;uuml;k</caption>
             </sales>
@@ -2882,6 +2882,7 @@
             <campaigns>
                   <parent>sales</parent>
                   <caption>Kampaaniad</caption>
+                  <submit>no</submit>
             </campaigns>
             <stats>
                   <caption>Aruanded</caption>

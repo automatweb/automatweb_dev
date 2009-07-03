@@ -1050,8 +1050,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 	@groupinfo products caption="Artiklid" submit=no parent=articles
 	@groupinfo packets caption="Paketid" submit=no parent=articles
-	@groupinfo arrivals caption="Tarneajad" submit=no parent=articles
-	@groupinfo arrivals_by_company caption="Firmade tarneajad" parent=articles
 
 
 @groupinfo status caption="Laoseis"
@@ -1068,6 +1066,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@groupinfo purchase_notes caption="Ostusaatelehed" parent=purchases
 	@groupinfo purchase_bills caption="Ostuarved" parent=purchases
 	@groupinfo purchase_clients caption="Ostukliendid" parent=purchases
+	@groupinfo arrivals caption="Tarneajad" submit=no parent=purchases
+	@groupinfo arrivals_by_company caption="Firmade tarneajad" parent=purchases
 
 @groupinfo sales caption="M&uuml;&uuml;k"
 
