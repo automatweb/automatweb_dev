@@ -22,7 +22,7 @@ function check_delete()
 	}
 	if(users>0)
 	{
-		var confm = confirm("NB! kasutaja kustutamisel ei ole võimalik seda taastada, vaid tuleb luua uus, samanimeline kasutaja.")
+		var confm = confirm("NB! kasutaja kustutamisel ei ole v&otilde;imalik seda taastada, vaid tuleb luua uus, samanimeline kasutaja.")
 		if(confm)
 		{
 			submit_changeform("delete_bms")
