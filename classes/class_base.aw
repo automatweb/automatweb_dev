@@ -134,9 +134,9 @@ class class_base extends aw_template
 		$this->new = 1;
 		$this->reltype = isset($arr["reltype"]) ? $arr["reltype"] : "";
 
-		if (aw_ini_isset("class_lut.{$arr["class"]}") and "menu" !== $arr["class"] and (!aw_ini_isset("classes." . $this->clid . ".site_class") or !aw_ini_get("classes." . $this->clid . ".site_class")))
+		if (aw_ini_isset("class_lut.".$arr["class"]) and "menu" !== $arr["class"] and (!aw_ini_isset("classes." . $this->clid . ".site_class") or !aw_ini_get("classes." . $this->clid . ".site_class")))
 		{
-			$clid = aw_ini_get("class_lut.{$arr["class"]}");
+			$clid = aw_ini_get("class_lut.".$arr["class"]);
 			$ca = isset($arr["constructor_args"]) ? $arr["constructor_args"] : array();
 			$this->obj_inst = obj(null, $ca, $clid);
 		}
@@ -158,9 +158,9 @@ class class_base extends aw_template
 		// try to load object with $id
 		if (isset($arr["class"]))
 		{
-			if (aw_ini_isset("class_lut.{$arr["class"]}"))
+			if (aw_ini_isset("class_lut.".$arr["class"]))
 			{
-				$clid = aw_ini_get("class_lut.{$arr["class"]}");
+				$clid = aw_ini_get("class_lut.".$arr["class"]);
 				$ca = isset($arr["constructor_args"]) ? $arr["constructor_args"] : array();
 
 				try
@@ -174,7 +174,7 @@ class class_base extends aw_template
 			}
 			else
 			{
-				throw new aw_exception("Invalid class {$arr["class"]}");
+				throw new aw_exception("Invalid class ".$arr["class"]);
 			}
 		}
 		else
@@ -3128,7 +3128,7 @@ class class_base extends aw_template
 			elseif ($status == PROP_ERROR)
 			{
 				$val["type"] = "text";
-				$val["value"] = empty($val["error"]) ? t("Viga") : "Viga: {$val["error"]}";
+				$val["value"] = empty($val["error"]) ? t("Viga") : "Viga: ".$val["error"];
 				$resprops[$key] = $val;
 			}
 			elseif ($val["type"] === "hidden")
