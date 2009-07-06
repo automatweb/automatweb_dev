@@ -59,11 +59,22 @@ class aw_uri
 	/**
 	@attrib api=1
 	@returns string
-		Returns uri witout query and fragment parts.
+		Returns uri without query and fragment parts.
 	**/
 	public function get_base()
 	{
 		return $this->get_string(true, true, true, true, true, true, false, false);
+	}
+
+	/**
+	@attrib api=1
+	@returns string
+		Returns uri without host and scheme.
+	**/
+	public function get_query()
+	{
+		$str = $str = $this->get_string(false, false, true, true, true, false, true, true);
+		return substr($str, 0, 1) === "/" ? substr($str, 1) : $str;
 	}
 
 	/**

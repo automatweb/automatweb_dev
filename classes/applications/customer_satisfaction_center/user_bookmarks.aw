@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.24 2008/10/15 11:33:10 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.25 2009/07/06 14:22:02 instrumental Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad
 /*
 
@@ -988,6 +988,9 @@ class user_bookmarks extends class_base
 			}
 		}
 
+		$uri = new aw_uri($arr["url"]);
+		$arr["url"] = $uri->get_query();
+
 		$pm->add_separator();
 		$pm->add_item(array(
 			"text" => t("Pane j&auml;rjehoidjasse"),
@@ -1004,7 +1007,7 @@ class user_bookmarks extends class_base
 
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($pm->get_menu(array(
-					"text" => '<img src="/automatweb/images/aw06/ikoon_jarjehoidja.gif" alt="" width="16" height="14" border="0" class="ikoon" />'.t("J&auml;rjehoidja").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
+					"text" => '<img src="/automatweb/images/aw06/ikoon_jarjehoidja.gif" alt="" width="16" height="14" border="0" class="ikoon" />'.t("J&auml;rjehoidja")
 		)));
 	}
 
@@ -1068,6 +1071,10 @@ class user_bookmarks extends class_base
 		$lo->set_prop("url", $arr["url"]);
 		$lo->save();
 		$this->clear_cache($bm);
+		if(substr($arr["url"], 0, 1) === "?")
+		{
+			$arr["url"] = $_SERVER["SCRIPT_URI"].$arr["url"];
+		}
 		return $arr["url"];
 	}
 	/**
@@ -1091,6 +1098,10 @@ class user_bookmarks extends class_base
 			}
 		}
 		$this->clear_cache($bm);
+		if(substr($arr["url"], 0, 1) === "?")
+		{
+			$arr["url"] = $_SERVER["SCRIPT_URI"].$arr["url"];
+		}
 		return $arr["url"];
 	}
 
