@@ -8571,7 +8571,7 @@ class mrp_workspace extends class_base
 			$arr["link"] = aw_url_change_var("timespan", "current_week", $arr["link"]);
 		}
 
-		if ($arr["request"]["group"] === "grp_login_select_res")
+		if (automatweb::$request->arg("group") === "grp_login_select_res")
 		{
 			unset($arr["classinfo"]["relationmgr"]);
 			return false;
@@ -8591,15 +8591,15 @@ class mrp_workspace extends class_base
 				break;
 
 			case "persons_personnel_tree":
-				if($arr["request"]["group"] == "my_stats")
+				if(automatweb::$request->arg("group") == "my_stats")
 				{
 					return false;
 				}
-				elseif($arr["request"]["group"] == "grp_persons_jobs_report")
+				elseif(automatweb::$request->arg("group") == "grp_persons_jobs_report")
 				{
 					$arr["area_caption"] = t("Vali inimesed, kelle tehtud t&ouml;id soovid n&auml;ha");
 				}
-				elseif($arr["request"]["group"] == "grp_persons_quantity_report")
+				elseif(automatweb::$request->arg("group") == "grp_persons_quantity_report")
 				{
 					$arr["area_caption"] = t("Vali inimesed, kelle t&uuml;kiarvestust soovid n&auml;ha");
 				}
@@ -9373,7 +9373,7 @@ END ajutine
 
 	public function callback_generate_scripts($arr)
 	{
-		if($arr["request"]["group"] == "grp_material_report")
+		if(automatweb::$request->arg("group") == "grp_material_report")
 		{
 			$js = "
 				function update_material_table()
@@ -9418,7 +9418,7 @@ END ajutine
 			return $js;
 
 		}
-		if($arr["request"]["group"] == "grp_customers")
+		if(automatweb::$request->arg("group") == "grp_customers")
 		{
 			return "
 				function update_priors()
@@ -9435,7 +9435,7 @@ END ajutine
 					});
 				}";
 		}
-		if($arr["request"]["group"] == "grp_projects")
+		if(automatweb::$request->arg("group") == "grp_projects")
 		{
 			$vars = array("sp_name" , "sp_comment" , "sp_customer");
 			$date_fields = array("sp_starttime" , "sp_due_date" , "sp_start_date_start" , "sp_start_date_end");
@@ -9476,7 +9476,7 @@ END ajutine
 				}";
 		}
 	
-		if($arr["request"]["group"] == "grp_users_mgr")
+		if(automatweb::$request->arg("group") == "grp_users_mgr")
 		{
 			return "
 $(document).ready(function(){
