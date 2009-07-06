@@ -926,29 +926,8 @@ class treeview extends class_base
 
 			if(!isset($item['url']) && isset($item['reload']))
 			{
-				load_javascript("reload_properties_layouts.js");
-
-				$reload_params = array();
-				foreach($item["reload"]["params"] as $pkey => $pval)
-				{
-					$reload_params[] = $pkey.":'".$pval."'";
-				}
-				$params = "{".implode(",", $reload_params)."}";
-
-				$onclick = "";
-				if(!empty($item['reload']["props"]))
-				{
-					$props = "['".implode("','", (array)$item['reload']["props"])."']";
-					$onclick .= "reload_property(".$props.", ".$params.");";
-				}
-				if(!empty($item['reload']["layouts"]))
-				{
-					$layouts = "['".implode("','", (array)$item['reload']["layouts"])."']";
-					$onclick .= "reload_layout(".$layouts.", ".$params.");";
-				}
-
+				$item["onClick"] = html::handle_reload($item["reload"]);
 				$item["url"] = "javascript:void(0)";
-				$item["onClick"] = $onclick;
 			}
 
 			$name = $item["name"];
@@ -1434,13 +1413,23 @@ class treeview extends class_base
 				"id" => $o->id (),
 				"return_url" => get_ru(),
 			), $class_name);
+			$use_reload = false;
 		}
 		else
 		{
-			$url = aw_url_change_var (array(
-				$var => $root_item->id(),
-				"ft_page" => NULL,		// The tree branch should always link to the first page of the table. -kaarel
-			), false, $target_url);
+			if(!empty($reload))
+			{
+				$reload["params"][$var] = $root_item->id();
+				$use_reload = true;
+			}
+			else
+			{
+				$url = aw_url_change_var (array(
+					$var => $root_item->id(),
+					"ft_page" => NULL,		// The tree branch should always link to the first page of the table. -kaarel
+				), false, $target_url);
+				$use_reload = false;
+			}
 		}
 
 		$tv->start_tree($tree_opts);
@@ -1460,14 +1449,24 @@ class treeview extends class_base
 
 			if ($var && ifset($_GET, $var) == "")
 			{
-				$nm = "<b>".$nm."</b>";
+//				$nm = "<b>".$nm."</b>";
+				$tv->set_selected_item($root_item->id());
 			}
 
-			$tv->add_item(0,array(
+			$item = array(
 				"name" => $nm,
 				"id" => $root_item->id(),
-				"url" => $url,
-			));
+			);
+
+			if($use_reload)
+			{
+				$item["reload"] = $reload;
+			}
+			else
+			{
+				$item["url"] = $url;
+			}
+			$tv->add_item(0, $item);
 		}
 
 		$ic = get_instance("core/icons");
@@ -1495,7 +1494,8 @@ class treeview extends class_base
 
 			if ($var && ifset($_GET, $var) == $oid)
 			{
-				$oname = "<b>".$oname."</b>";
+//				$oname = "<b>".$oname."</b>";
+				$tv->set_selected_item($oid);
 			}
 
 			if ( ($tv->tree_type == TREE_DHTML_WITH_CHECKBOXES) and is_array ($arr["checkbox_class_filter"]) and in_array ($class_id, $arr["checkbox_class_filter"]) )
@@ -1523,13 +1523,23 @@ class treeview extends class_base
 			if ( (is_array ($node_actions)) and !empty($node_actions[$class_id]) )
 			{
 				$url = html::get_change_url($oid, array("return_url" => get_ru()));
+				$use_reload = false;
 			}
 			else
 			{
-				$url = aw_url_change_var (array(
-					$var => $oid,
-					"ft_page" => NULL,		// The tree branch should always link to the first page of the table. -kaarel
-				), false, $target_url);
+				if(!empty($reload))
+				{
+					$reload["params"][$var] = $oid;
+					$use_reload = true;
+				}
+				else
+				{
+					$url = aw_url_change_var (array(
+						$var => $oid,
+						"ft_page" => NULL,		// The tree branch should always link to the first page of the table. -kaarel
+					), false, $target_url);
+					$use_reload = false;
+				}
 			}
 
 			$parent = $o->parent();
@@ -1546,13 +1556,21 @@ class treeview extends class_base
 				$icon = $arr["icon"];
 			}
 			$num_child = 0;
-			$tv->add_item($parent,array(
+			$item = array(
 				"name" => $oname.($show_num_child ? " (".$num_child.")" : "").($add_change_url ? html::obj_change_url($oid, t(" (M)")) : ""),
 				"id" => $oid,
-				"url" => $url,
 				"iconurl" => $icon,
 				"checkbox" => $checkbox_status,
-			));
+			);
+			if($use_reload)
+			{
+				$item["reload"] = $reload;
+			}
+			else
+			{
+				$item["url"] = $url;
+			}
+			$tv->add_item($parent, $item);
 		}
 		return $tv;
 	}

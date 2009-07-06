@@ -1258,6 +1258,7 @@ class html
 		element id (for css mainly)
 	@param caption optional type=string
 		the text user can see
+	@param reload optional type=array
 
 	@returns string/html href
 
@@ -1289,6 +1290,12 @@ class html
 		if (empty($caption))
 		{
 			$caption = $url;
+		}
+		if (empty($url) && !empty($args["reload"]))
+		{
+			$onclick = self::handle_reload($args["reload"]);
+			$url = "javascript:void(0)";
+			$onClick = " onclick=\"$onclick\"";
 		}
 		// We use double quotes in HTML, so we need to escape those in the url.
 		$url = str_replace("\"", "\\\"", $url);
@@ -1439,7 +1446,7 @@ class html
 		$styles = array();
 		foreach($args as $key => $val)
 		{
-			if($style_props[$key])
+			if(!empty($style_props[$key]))
 			{
 				$styles[] = $style_props[$key].": " . $val . ";";
 
@@ -1451,7 +1458,7 @@ class html
 			$style=" style=\" ".join(" " , $styles)."\"";
 		}
 
-		$class = ($class ? ' class="' . $class . '"' : "");
+		$class = (!empty($class) ? ' class="' . $class . '"' : "");
 		$id = ($id ? " id=\"{$id}\"" : "");
 		$content = isset($content) ? $content : "";
 		return "<div{$class}{$style}{$id}>{$content}</div>";
@@ -1660,6 +1667,55 @@ class html
 	public static function strong($str)
 	{
 		return "<b>".$str."</b>";
+	}
+
+	/**
+		@attrib name=handle_reload params=name
+
+		@param params optional type=array
+			Array of key-value pairs. See the example.
+		@param props optional type=array
+			An array of property names.
+		@param layouts optional type=array
+			An array of layout names.
+		@returns
+			The JS for the onclick attribute of HTML tags.
+		@example
+			$onclick = html::handle_reload(array(
+				"params" => array(
+					"foo" => "bar",
+					"moo" => "cow",
+				),
+				"layouts" => array("layout_name_1", "layout_name_2", "layout_name_3"),
+				"props" => array("property_name"),
+			));
+			echo "onc = ".$onclick;
+			// onc = reload_property(['property_name'],{'foo':'bar','moo':'cow'});reload_layout(['layout_name_1','layout_name_2','layout_name_3'],{'foo':'bar','moo':'cow'});
+	**/
+	public static function handle_reload($arr)
+	{
+		load_javascript("reload_properties_layouts.js");
+
+		$reload_params = array();
+		foreach(safe_array(ifset($arr, "params")) as $pkey => $pval)
+		{
+			$reload_params[] = "'".$pkey."':'".$pval."'";
+		}
+		$params = "{".implode(",", $reload_params)."}";
+
+		$onclick = "";
+		if(!empty($arr["props"]))
+		{
+			$props = "['".implode("','", (array)$arr["props"])."']";
+			$onclick .= "reload_property(".$props.",".$params.");";
+		}
+		if(!empty($arr["layouts"]))
+		{
+			$layouts = "['".implode("','", (array)$arr["layouts"])."']";
+			$onclick .= "reload_layout(".$layouts.",".$params.");";
+		}
+
+		return $onclick;
 	}
 }
 
