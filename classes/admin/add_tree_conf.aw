@@ -119,7 +119,7 @@ class add_tree_conf extends class_base
 			foreach($tmp as $cl_id => $cld)
 			{
 
-				if ($cld["parents"] == 0 || !isset($cld["parents"]))
+				if (!isset($cld["parents"]) || $cld["parents"] == 0)
 				{
 					$ala = "";
 					if (true || $cld["alias"] != "")
@@ -127,7 +127,7 @@ class add_tree_conf extends class_base
 						$ala = html::checkbox(array(
 							"name" => "alias_add[$cl_id]",
 							"value" => 1,
-							"checked" => $alias_add[$cl_id] == 1
+							"checked" => !empty($alias_add[$cl_id])
 						));
 					}
 
@@ -136,12 +136,12 @@ class add_tree_conf extends class_base
 						"visible" => html::checkbox(array(
 							"name" => "visible[obj][$cl_id]",
 							"value" => 1,
-							"checked" => $visible["obj"][$cl_id] == 1
+							"checked" => !empty($visible["obj"][$cl_id])
 						)),
 						"usable" => html::checkbox(array(
 							"name" => "usable[$cl_id]",
 							"value" => 1,
-							"checked" => $usable[$cl_id] == 1
+							"checked" => !empty($usable[$cl_id])
 						)),
 						"alias_add" => $ala,
 					));
@@ -160,7 +160,7 @@ class add_tree_conf extends class_base
 					"visible" => html::checkbox(array(
 						"name" => "visible[fld][$id]",
 						"value" => 1,
-						"checked" => $visible["fld"][$id] == 1
+						"checked" => !empty($visible["fld"][$id])
 					)),
 
 				));
@@ -168,13 +168,13 @@ class add_tree_conf extends class_base
 				$tmp = aw_ini_get("classes");
 				foreach($tmp as $cl_id => $cld)
 				{
-					if ($cld["parents"] == "")
+					if (ifset($cld, "parents") == "")
 					{
 						continue;
 					}
 
 					$pss = $this->make_keys(explode(",", $cld["parents"]));
-					if ($pss[$id])
+					if (!empty($pss[$id]))
 					{
 						$ala = "";
 						if (true || $cld["alias"] != "")
@@ -182,7 +182,7 @@ class add_tree_conf extends class_base
 							$ala = html::checkbox(array(
 								"name" => "alias_add[$cl_id]",
 								"value" => 1,
-								"checked" => $alias_add[$cl_id] == 1
+								"checked" => !empty($alias_add[$cl_id])
 							));
 						}
 
@@ -191,12 +191,12 @@ class add_tree_conf extends class_base
 							"visible" => html::checkbox(array(
 								"name" => "visible[obj][$cl_id]",
 								"value" => 1,
-								"checked" => $visible["obj"][$cl_id] == 1
+								"checked" => !empty($visible["obj"][$cl_id])
 							)),
 							"usable" => html::checkbox(array(
 								"name" => "usable[$cl_id]",
 								"value" => 1,
-								"checked" => $usable[$cl_id] == 1
+								"checked" => !empty($usable[$cl_id])
 							)),
 							"alias_add" => $ala,
 						));
