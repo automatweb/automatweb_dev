@@ -119,8 +119,8 @@
 		@property cs_submit type=submit value=Otsi view_element=1 parent=customers_search_box store=no
 		@caption Otsi
 
-	@layout customers_search_table type=hbox closeable=1 area_caption=Projektide&nbsp;nimekiri parent=vsplitbox
-		@property cs_result type=table no_caption=1 parent=
+	@layout customers_search_table type=vbox closeable=1 area_caption=Projektide&nbsp;nimekiri no_padding=1 parent=vsplitbox
+		@property cs_result type=table no_caption=1 parent=customers_search_table
 
 
 @default group=grp_projects
@@ -1597,39 +1597,24 @@ class mrp_workspace extends class_base
 				$this->_get_pp_birthdays($arr);
 				break;
 
-			case "ps_project":
-			case "ps_submit":
-				if (!empty($arr["request"]["pj_job"]))
-				{
-					$retval = PROP_IGNORE;
-				}
-				break;
-
 			case "ps_resource":
-				if (!empty($arr["request"]["pj_job"]))
+				$resids = $this->get_cur_printer_resources(array(
+					"ws" => $arr["obj_inst"],
+					"ign_glob" => true
+				));
+				$res_ol = new object_list();
+				if (count($resids))
 				{
-					$retval = PROP_IGNORE;
+					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
 				}
-				else
+				$empty_selection = array();
+				if (count($resids) > 1)
 				{
-					$resids = $this->get_cur_printer_resources(array(
-						"ws" => $arr["obj_inst"],
-						"ign_glob" => true
-					));
-					$res_ol = new object_list();
-					if (count($resids))
-					{
-						$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
-					}
-					$empty_selection = array();
-					if (count($resids) > 1)
-					{
-						$empty_selection = array("0" => t("K&otilde;ik ressursid"));
-					}
-					$prop["options"] = $empty_selection + $res_ol->names();
-					$prop["value"] = aw_global_get("mrp_operator_use_resource");
-					$prop["onchange"] = "xchanged=1; submit_changeform('');";
+					$empty_selection = array("0" => t("K&otilde;ik ressursid"));
 				}
+				$prop["options"] = $empty_selection + $res_ol->names();
+				$prop["value"] = aw_global_get("mrp_operator_use_resource");
+				$prop["onchange"] = "xchanged=1; submit_changeform('');";
 				break;
 
 			### projects tab
@@ -1770,10 +1755,6 @@ class mrp_workspace extends class_base
 				}
 				break;
 			case "printer_resource_tree":
-				if (!empty($arr["request"]["pj_job"]))
-				{
-					$retval = PROP_IGNORE;
-				}
 			case "my_resources_tree":
 			case "resources_tree":
 				$this->create_resources_tree ($arr);
@@ -1858,13 +1839,33 @@ class mrp_workspace extends class_base
 			case "clients_chart":
 				$data = array();
 				$labels = array();
+				$prms = array(
+					"class_id" => CL_MRP_CASE,
+					"parent" => $this_object->prop("projects_folder"),
+				);
+				$clientspan = automatweb::$request->arg("clientspan");
+				if(is_oid($clientspan) && $this->can("view", $clientspan))
+				{
+					$clientspan_obj = obj($clientspan);
+					switch($clientspan_obj->class_id())
+					{
+						case CL_CRM_CATEGORY:
+							$prms["customer.RELTYPE_CUSTOMER(CL_CRM_CATEGORY)"] = $clientspan;
+							break;
+
+						case CL_CRM_COMPANY:
+							$prms["customer"] = $clientspan;
+							break;
+					}
+				}
+				elseif(!empty($clientspan))
+				{
+					$prms["customer.name"] = $clientspan."%";
+				}
 				$odl = new object_data_list(
+					$prms,
 					array(
-						"class_id" => CL_MRP_CASE,
-						"parent" => $this_object->prop("projects_folder"),
-					),
-					array(
-						CL_MRP_CASE => array("customer.name", "customer"),
+						CL_MRP_CASE => array("customer", "customer.name"),
 					)
 				);
 				foreach($odl->arr() as $o)
@@ -2480,23 +2481,24 @@ class mrp_workspace extends class_base
 		$t->add_item(0, array(
 			"id" => "all",
 			"name" => t("K&otilde;ik"),
-			"url" => aw_url_change_var("clientspan", NULL),
+			//"url" => aw_url_change_var("clientspan", NULL),
+			"reload" => array(
+				"layouts" => array("charts_right"),
+				"params" => array("clientspan" => NULL),
+			),
 		));
 
 		$this->create_customers_tree($arr);
 
-		// Hack the URLs
+		// Hack the reload stuff
 		foreach($t->get_item_ids() as $id)
 		{
 			$item = $t->get_item($id);
-			$uri = new aw_uri($item["url"]);
-			$special_param = strlen($uri->arg("cat")) ? $uri->arg("cat") : (strlen($uri->arg("cust")) ? $uri->arg("cust") : $uri->arg("alph"));
-			$uri->unset_arg(array("cat", "cust", "alph", "clientspan"));
-			if(!empty($special_param))
-			{
-				$uri->set_arg("clientspan", $special_param);
-			}
-			$item["url"] = $uri->get();
+			$param = strlen($item["reload"]["params"]["cat"]) ? $item["reload"]["params"]["cat"] : (strlen($item["reload"]["params"]["cust"]) ? $item["reload"]["params"]["cust"] : $item["reload"]["params"]["alph"]);
+			$item["reload"] = array(
+				"layouts" => array("charts_right"),
+				"params" => array("clientspan" => $param),
+			);
 			$t->set_item($item);
 		}
 
@@ -4023,7 +4025,7 @@ class mrp_workspace extends class_base
 					"id" => $id,
 					"name" => $caption,
 					"reload" => array(
-						"layouts" => array("grp_persons_right", "resources_hours_right"),
+						"layouts" => array("grp_persons_right", "resources_hours_right", "charts_right"),
 						"props" => array("material_stats_table"),
 						"params" => array("timespan" => $id === "all" ? NULL : $id),
 					),
@@ -4064,9 +4066,16 @@ class mrp_workspace extends class_base
 				$t->add_item($parent, array(
 					"id" => $id,
 					"name" => $caption,
+					/*
 					"url" => aw_url_change_var(array(
 						"timespan" => $id === "all" ? NULL : $id,
 					)),
+					*/
+					"reload" => array(
+						"props" => array("projects_list", "customers_list_proj"),
+						"layouts" => array("resources_hours_right", "printer_right", "customers_search_table"),
+						"params" => array("timespan" => $id === "all" ? NULL : $id, "pj_job" => NULL),
+					),
 				));
 			}
 		}
@@ -4374,11 +4383,21 @@ class mrp_workspace extends class_base
 			$t->add_item(0, array(
 				"id" => $id,
 				"name" => $caption,
+				/*
 				"url" => aw_url_change_var(array(
 					"pj_job" => NULL,
 					"printer_job_page" => NULL,
 					"branch_id" => $id,
 				)),
+				*/
+				"reload" => array(
+					"layouts" => array("printer_right"),
+					"params" => array(
+						"printer_job_page" => NULL,
+						"branch_id" => $id,
+						"pj_job" => NULL
+					),
+				),
 			));
 		}
 	}
@@ -4761,6 +4780,14 @@ class mrp_workspace extends class_base
 			"node_actions" => array (
 				CL_MRP_RESOURCE => "change",
 			),
+			"reload" => array(
+				"layouts" => array(
+					"printer_right",
+					"right_pane",
+					"grp_persons_right",
+					"resources_hours_right",
+				),
+			)
 		);
 
 		if(in_array($arr["request"]["group"], array("grp_resources_load", "grp_resources", "grp_resources_hours_report", "grp_persons_quantity_report")))
@@ -5032,6 +5059,18 @@ class mrp_workspace extends class_base
 			"sp_due_date",
 			"sp_status"
 		));
+		$reload = array(
+			"props" => array("projects_list"),
+			"params" => array(
+				"ft_page" => NULL,
+				"sp_search" => NULL,
+				"sp_name" => NULL,
+				"sp_starttime" => NULL,
+				"sp_customer" => NULL,
+				"sp_due_date" => NULL,
+				"sp_status" => NULL,
+			),
+		);
 
 		if (isset($arr["request"]["mrp_tree_active_item"]) and strstr($arr["request"]["mrp_tree_active_item"], "archived_"))
 		{
@@ -5065,67 +5104,83 @@ class mrp_workspace extends class_base
 		$tree->set_only_one_level_opened (true);
 
 		$url->set_arg("mrp_tree_active_item", "planned");
+		$reload["params"]["mrp_tree_active_item"] = "planned";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["planned"] . " (" . $this->projects_planned_count . ")",
 			"id" => "planned",
 			"parent" => 0,
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		$url->set_arg("mrp_tree_active_item", "inwork");
+		$reload["params"]["mrp_tree_active_item"] = "inwork";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["inwork"] . " (" . $this->projects_in_work_count . ")",
 			"id" => "inwork",
 			"parent" => 0,
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		$url->set_arg("mrp_tree_active_item", "planned_overdue");
+		$reload["params"]["mrp_tree_active_item"] = "planned_overdue";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["planned_overdue"] . " (" . $this->projects_planned_overdue_count . ")",
 			"id" => "planned_overdue",
 			"parent" => 0,
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		$url->set_arg("mrp_tree_active_item", "overdue");
+		$reload["params"]["mrp_tree_active_item"] = "overdue";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["overdue"] . " (" . $this->projects_overdue_count . ")",
 			"id" => "overdue",
 			"parent" => 0,
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		$url->set_arg("mrp_tree_active_item", "new");
+		$reload["params"]["mrp_tree_active_item"] = "new";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["new"] . " (" . $this->projects_new_count . ")",
 			"id" => "new",
 			"parent" => 0,
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		$url->set_arg("mrp_tree_active_item", "aborted");
+		$reload["params"]["mrp_tree_active_item"] = "aborted";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["aborted"] . " (" . $this->projects_aborted_count . ")",
 			"id" => "aborted",
 			"parent" => 0,
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		$url->set_arg("mrp_tree_active_item", "onhold");
+		$reload["params"]["mrp_tree_active_item"] = "onhold";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["onhold"] . " (" . $this->projects_onhold_count . ")",
 			"id" => "onhold",
 			"parent" => 0,
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		$url->set_arg("mrp_tree_active_item", "done");
+		$reload["params"]["mrp_tree_active_item"] = "done";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["done"] . " (" . $this->projects_done_count . ")",
 			"id" => "done",
 			"parent" => 0,
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		$tree->add_item (0, array (
@@ -5148,19 +5203,23 @@ class mrp_workspace extends class_base
 		}
 
 		$url->set_arg("mrp_tree_active_item", "subcontracts");
+		$reload["params"]["mrp_tree_active_item"] = "subcontracts";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["subcontracts"] . " (" . $this->jobs_subcontracted_count . ")",
 			"parent" => 0,
 			"id" => "subcontracts",
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		$url->set_arg("mrp_tree_active_item", "aborted_jobs");
+		$reload["params"]["mrp_tree_active_item"] = "aborted_jobs";
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["aborted_jobs"] . " (" . $this->jobs_aborted_count . ")",
 			"parent" => 0,
 			"id" => "aborted_jobs",
-			"url" => $url->get()
+//			"url" => $url->get(),
+			"reload" => $reload,
 		));
 
 		if ("search" !== $this->list_request)
@@ -6847,27 +6906,28 @@ class mrp_workspace extends class_base
 				$customers->add($id);
 			}
 		}
+		$reload = array(
+			"layouts" => array("customers_search_table"),
+			"props" => array("projects_list"),
+		);
 
+		$reload["params"]["cat"] = $reload["params"]["cust"] = NULL;
 		$t->add_item(0, array(
 			"id" => "cats",
 			"name" => t("Kliendid kategooriate kaupa"),
-			"url" => aw_url_change_var(array(
-				"cat" => null,
-				"cust" => null
-			))
+			"reload" => $reload,
 		));
 
 		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 		{
 			$count = $this->_req_create_customers_tree($c->to(), $t);
 			$nm = $c->prop("to.name")." (".$count.")";
+			$reload["params"]["cat"] = $c->prop("to");
+			$reload["params"]["cust"] = NULL;
 			$t->add_item("cats", array(
 				"id" => $c->prop("to"),
-				"name" => (isset($arr["request"]["cat"]) and $arr["request"]["cat"] == $c->prop("to")) ? "<b>".$nm."</b>" : $nm,
-				"url" => aw_url_change_var(array(
-					"cat" => $c->prop("to"),
-					"cust" => null
-				)),
+				"name" => $nm,
+				"reload" => $reload,
 			));
 		}
 
@@ -6884,14 +6944,12 @@ class mrp_workspace extends class_base
 			$t->set_selected_item($arr["request"]["cat"]);
 		}
 
-
+		$reload["params"]["cat"] = NULL;
+		$reload["params"]["cust"] = NULL;
 		$t->add_item(0, array(
 			"id" => "alph",
 			"name" => t("Kliendid A - Z"),
-			"url" => aw_url_change_var(array(
-				"cat" => null,
-				"cust" => null
-			))
+			"reload" => $reload,
 		));
 		$A_to_Z = array();
 //		$customers = $co->get_customers_by_customer_data_objs();
@@ -6915,17 +6973,16 @@ class mrp_workspace extends class_base
 			$nm = parse_obj_name($name)." (".$customer_count[$oid].")";
 			if($arr["request"]["cust"] == $oid)
 			{
-				$nm = html::bold($nm);
+				$t->set_selected_item($oid);
 			}
 
+			$reload["params"]["cat"] = NULL;
+			$reload["params"]["cust"] = $oid;
 			$t->add_item("alph_".$char, array(
 				"id" => $oid,
 				"name" => $nm,
-				"url" => aw_url_change_var(array(
-					"cust" => $oid,
-					"cat" => null
-				)),
 				"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
+				"reload" => $reload,
 			));
 		}
 		ksort($A_to_Z);
@@ -6934,16 +6991,15 @@ class mrp_workspace extends class_base
 			$nm = $char." (" . $count. ")";
 			if($arr["request"]["alph"] == $char)
 			{
-				$nm = html::bold($nm);
+				$t->set_selected_item("alph_".$char);
 			}
+			$reload["params"]["cat"] = NULL;
+			$reload["params"]["cust"] = NULL;
+			$reload["params"]["alph"] = $char;
 			$t->add_item("alph", array(
 				"id" => "alph_".$char,
 				"name" => $nm,
-				"url" => aw_url_change_var(array(
-					"cust" => null,
-					"cat" => null,
-					"alph" => $char,
-				)),
+				"reload" => $reload,
 			));
 		}
 	}
@@ -6955,12 +7011,20 @@ class mrp_workspace extends class_base
 			$nm = $c->prop("to.name");
 			$t->add_item($co->id(), array(
 				"id" => $c->prop("to"),
-				"name" => (isset($arr["request"]["cat"]) and $arr["request"]["cat"] == $c->prop("to")) ? "<b>".$nm."</b>" : $nm,
-				"url" => aw_url_change_var(array(
-					"cat" => $c->prop("to"),
-					"cust" => null
-				), false, get_ru()),
+				"name" => $nm,
+				"reload" => array(
+					"layouts" => array("customers_search_table"),
+					"props" => array("projects_list"),
+					"params" => array(
+						"cat" => $c->prop("to"),
+						"cust" => null
+					),
+				),
 			));
+			if(isset($arr["request"]["cat"]) and $arr["request"]["cat"] == $c->prop("to"))
+			{
+				$t->set_selected_item($c->prop("to"));
+			}
 			$this->_req_create_customers_tree($c->to(), $t);
 		}
 
@@ -6970,13 +7034,21 @@ class mrp_workspace extends class_base
 			$nm = $c->prop("to.name");
 			$t->add_item($co->id(), array(
 				"id" => $c->prop("to"),
-				"name" => (isset($arr["request"]["cust"]) and $arr["request"]["cust"] == $c->prop("to")) ? "<b>".$nm."</b>" : $nm,
-				"url" => aw_url_change_var(array(
-					"cust" => $c->prop("to"),
-					"cat" => null
-				), false, get_ru()),
+				"name" => $nm,
+				"reload" => array(
+					"layouts" => array("customers_search_table"),
+					"props" => array("projects_list"),
+					"params" => array(
+						"cat" => null,
+						"cust" => $c->prop("to")
+					),
+				),
 				"iconurl" => icons::get_icon_url($c->prop("to.class_id"))
 			));
+			if(isset($arr["request"]["cust"]) and $arr["request"]["cust"] == $c->prop("to"))
+			{
+				$t->set_selected_item($c->prop("to"));
+			}
 			$count++;
 		}
 		return $count;
@@ -7767,10 +7839,18 @@ class mrp_workspace extends class_base
 				"length" => $len,
 				"job" => html::href(array(
 					"caption" => "<span style=\"font-size: 15px;\">".t("Ava")."</span>",
+					/*
 					"url" => aw_url_change_var(array(
 						"pj_job" =>  $job["oid"],
 						"return_url" => get_ru()
 					)),
+					*/
+					"reload" => array(
+						"layouts" => array("printer_right"),
+						"params" => array(
+							"pj_job" =>  $job["oid"]
+						),
+					),
 				)),
 				"resource" => $resource_str,
 				"worker" => join(", ",$workers_str),
