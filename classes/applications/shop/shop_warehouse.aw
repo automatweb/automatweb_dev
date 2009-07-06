@@ -10759,14 +10759,6 @@ $oo = get_instance(CL_SHOP_ORDER);
 		));
 
 		$t->define_field(array(
-			"name" => "rel",
-			"caption" => t("Kliendisuhe"),
-			"sortable" => 1,
-			"align" => "center",
-			"width" => 160
-		));
-
-		$t->define_field(array(
 			"name" => "address",
 			"caption" => t("Aadress"),
 			"align" => "center",
@@ -10805,6 +10797,14 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"align" => "center",
 		));
 
+		$t->define_field(array(
+			"name" => "rel",
+			"caption" => t("Kliendisuhe"),
+			"sortable" => 1,
+			"align" => "center",
+			"width" => 160
+		));
+
 		$t->set_caption("Kliendid");
 
 		$g = $arr["request"]["group"];
@@ -10813,9 +10813,14 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			return;
 		}
+		$ownerobject = obj($owner);
 		$ol = $this->_get_clients_ol($arr);
 		foreach($ol->arr() as $oid => $o)
 		{
+			if($o->class_id() != CL_CRM_PERSON && $o->class_id() != CL_CRM_COMPANY)
+			{
+				continue;
+			}
 			if ($this->can("view", $o->prop("phone_id")))
 			{
 				$phone = obj($o->prop("phone_id"));
@@ -10839,14 +10844,28 @@ $oo = get_instance(CL_SHOP_ORDER);
 				));
 			}
 
-			$conn = $o->connections_to(array(
-				"type" => "RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER"),
-				"from.class_id" => CL_CRM_COMPANY_CUSTOMER_DATA
-			));
-			$c = reset($conn);
-			if($c)
+//			$conn = $o->connections_to(array(
+//				"type" => "RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER"),
+//				"from.class_id" => CL_CRM_COMPANY_CUSTOMER_DATA
+//			));
+//			$c = reset($conn);arr();
+//			if($c)
+//			{
+//				$rel = html::obj_change_url($c->from(), ($n = $c->from()->name()) ? $n : t("(nimetu)"));
+//			}
+
+			if(strpos($g, "sales") !== false)
 			{
-				$rel = html::obj_change_url($c->from(), ($n = $c->from()->name()) ? $n : t("(nimetu)"));
+				$relation = $o->get_customer_relation($ownerobject , true);
+			}
+			else
+			{
+				$relation = $ownerobject->get_customer_relation($o , true);
+			}
+
+			if(is_object($relation))
+			{
+				$rel = html::obj_change_url($relation->id(),  t("(muuda)"));
 			}
 
 			$t->define_data(array(
