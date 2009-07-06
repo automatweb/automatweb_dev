@@ -1,13 +1,12 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>recur</name>
+            <name>discount</name>
             <table>aw_discount</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>recur</field>
-            <caption>Kordub</caption>
+            <type>textbox</type>
+            <field>discount</field>
+            <caption>Soodustuse protsent</caption>
       </property>
       <property>
             <name>object</name>
@@ -26,6 +25,22 @@
             <caption>Objekti klass mille soodusega on tegu</caption>
       </property>
       <property>
+            <name>from</name>
+            <table>aw_discount</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>from</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>to</name>
+            <table>aw_discount</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>to</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
             <name>active</name>
             <table>aw_discount</table>
             <group>general</group>
@@ -33,32 +48,6 @@
             <ch_value>1</ch_value>
             <field>active</field>
             <caption>Kehtib</caption>
-      </property>
-      <property>
-            <name>date_from</name>
-            <table>aw_discount</table>
-            <group>general</group>
-            <type>date_select</type>
-            <field>date_from</field>
-            <caption>Alates</caption>
-      </property>
-      <property>
-            <name>date_to</name>
-            <table>aw_discount</table>
-            <group>general</group>
-            <type>date_select</type>
-            <field>date_to</field>
-            <caption>Kuni</caption>
-      </property>
-      <property>
-            <name>weekdays</name>
-            <table>aw_discount</table>
-            <group>general</group>
-            <type>chooser</type>
-            <multiple>1</multiple>
-            <captionside>top</captionside>
-            <field>weekdays</field>
-            <caption>N&amp;amp;auml;dalap&amp;amp;auml;evad</caption>
       </property>
       <property>
             <name>apply_groups</name>
@@ -72,30 +61,41 @@
             <caption>Kehtib gruppidele</caption>
       </property>
       <property>
-            <name>bron_made_from</name>
+            <name>order_from</name>
             <table>aw_discount</table>
             <group>general</group>
             <type>datetime_select</type>
             <default>-1</default>
-            <field>bron_made_from</field>
-            <caption>Objekt tehtud alates</caption>
+            <field>order_from</field>
+            <caption>Tellimuse algus</caption>
       </property>
       <property>
-            <name>bron_made_to</name>
+            <name>order_to</name>
             <table>aw_discount</table>
             <group>general</group>
             <type>datetime_select</type>
             <default>-1</default>
-            <field>bron_made_to</field>
-            <caption>Objekt tehtud kuni</caption>
+            <field>order_to</field>
+            <caption>Tellimuse l&amp;amp;otilde;pp</caption>
       </property>
       <property>
-            <name>bargain_percent</name>
+            <name>weekdays</name>
             <table>aw_discount</table>
             <group>general</group>
-            <type>textbox</type>
-            <field>bargain_percent</field>
-            <caption>Soodustuse protsent</caption>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <captionside>top</captionside>
+            <field>weekdays</field>
+            <caption>N&amp;amp;auml;dalap&amp;amp;auml;evad</caption>
+      </property>
+      <property>
+            <name>recur</name>
+            <table>aw_discount</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>recur</field>
+            <caption>Kordub</caption>
       </property>
       <classinfo>
             <syslog_type>ST_DISCOUNT</syslog_type>
