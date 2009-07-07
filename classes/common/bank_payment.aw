@@ -40,13 +40,19 @@
 		@property expl_controller type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize  parent=general_right
 		@caption Selgituse kontroller
 
+		@property imap type=relpicker reltype=RELTYPE_IMAP table=objects field=meta method=serialize  parent=general_right
+		@caption Imap
+
+		@property currency type=relpicker reltype=RELTYPE_CURRENCY table=objects field=meta method=serialize  parent=general_right
+		@caption Vaikimisi valuuta
+
 		@property test type=checkbox parent=general_right no_caption=1
 		@caption testre&#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond)
 
 		@property not_clickable_ref type=checkbox parent=general_right no_caption=1
 		@caption &Auml;ra kuva viitenumbrit lingina
 
-		@property credit_card_log_upload type=fileupload reltype=RELTYPE_CCL_UPLOAD form=+emb
+		@property credit_card_log_upload type=fileupload reltype=RELTYPE_CCL_UPLOAD form=+emb parent=general_right
 		@caption Lisa reproduktsioon
 
 @groupinfo bank caption="Pankade info"
@@ -129,8 +135,14 @@
 @reltype RETURN_CTR value=7 clid=CL_CFGCONTROLLER
 @caption Makse kinnituse kontroller
 
+@reltype IMAP value=8 clid=CL_PROTO_IMAP
+@caption Reproduktsioon
+
 @reltype CCL_UPLOAD value=19 clid=CL_FILE
 @caption Reproduktsioon
+
+@reltype CURRENCY value=9 clid=CL_CURRENCY
+@caption Valuuta
 */
 
 class bank_payment extends class_base
@@ -2289,6 +2301,171 @@ class bank_payment extends class_base
 			$i = get_instance(CL_CFGCONTROLLER);
 			$desc = $i->check_property($o->prop("alias_return_ctr"), $o->id(), $arr);
 		}
+	}
+
+	function get_cc_check_imap($id)
+	{
+		$imap = null;
+		if($this->can("view" , $id))
+		{
+			$bp = obj($id);
+			$imap = $bp->prop("imap");
+		}
+		if(!$imap)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_BANK_PAYMENT,
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+			foreach($ol->arr() as $o)
+			{
+				if($o->prop("imap"))
+				{
+					return $o->prop("imap");
+				}
+			}
+		}
+		
+		return $imap;
+	}
+
+
+	//seeee funktsioon on selle jaoks, et kuskile croni vms saaks panna k2ima skripti mis aegajalt kontrollib maile mis on saadetud kaardikeskuse poolt ja kus oleks makse aruanded.... oeh, kuna see tulevikus on niikuinii m6ttetu, siis .........
+	/**
+	@attrib name=cccheck nologin=1 api=1 all_args=1
+	@returns 1 if the signature is correct, 0 if it is incorrect, and -1 on error
+	**/
+	function mutafuggah($arr)
+	{
+		$imap_id = $this->get_cc_check_imap($arr["id"]);
+		if(!$this->can("view" , $imap_id))
+		{
+			die(t("Ei suutnud imap seadistust leida"));
+		}
+		global $site_dir;
+		$log = "";
+		$imap = obj($imap_id);
+		$imap_i = $imap->instance();
+		$inf = $imap_i->connect_server(array(
+			"obj_inst" => $imap
+		));
+		$ecard_mail_count = $ecuno_count = 0;
+		$fld_c = $imap_i->get_folder_contents(array("from" => 0, "to" => 50));
+
+		krsort($fld_c);
+		foreach($fld_c as $key => $val)
+		{
+			if($ecard_mail_count >= 6)
+			{
+				break;
+			}
+			$ms = $imap_i->fetch_message(array("msgid" => $key));
+			if($ms["from"] == "card@estcard.ee")
+			{
+				$ecard_mail_count++;
+			}
+			else
+			{
+				continue;
+			}
+
+			$content_rows = explode("\n" , $ms["content"]);
+			$ecunos = array();
+
+			foreach($content_rows as $row)
+			{
+				$cols = explode(" " , $row);
+				foreach($cols as $k => $v)
+				{
+					if(!(strlen($v) > 2))
+					{
+						unset($cols[$k]);
+					}
+				}
+				if(sizeof($cols) >= 8)
+				{
+					$possible = substr(end($cols) , 0 , -2);
+					if(is_oid($possible))
+					{
+						$ecunos[$possible] = $cols;
+					}
+				}
+			}
+			$count = 0;
+			foreach($ecunos as $ecuno => $data)
+			{
+				if($this->can("view" , $ecuno))
+				{
+					$ecuno_object = obj($ecuno);
+					$ecuno_inst = $ecuno_object->instance();
+					$payment_marked = $check_marked = 0;
+					if(method_exists($ecuno_object,"payment_marked"))
+					{
+						$payment_marked = $ecuno_object->payment_marked();
+				
+					}
+					elseif(method_exists($ecuno_inst,"payment_marked"))
+					{
+						$payment_marked = $ecuno_inst->payment_marked($ecuno);
+					}
+
+					if(!$payment_marked)
+					{
+						$data = array_merge($data , array());
+
+						$log.= "idga ".$ecuno." on laekunud kuid ei ole kinnitatud. maksis  ".$data[6]." ".$data[7]." ".$data[1]." " .$data[3]. " EEK<br>\n";
+						$loga = array();
+						$loga["timestamp"] = time()+$ecuno_count;
+						$loga["good"] = 1;
+						$loga["eamount"] = $data[3]*100;
+						$loga["actiontext"] = t("makse kinnitus krediitkaardi saadetud logidest");
+						$loga["bank"] = t("Krediitkaart");
+						$loga["ecuno"] = $ecuno."0";
+						$loga["msgdata"] = $data[6]." ".$data[7];
+						$loga["action"] = "afb";
+						$loga["respcode"] = "000";
+						$myFile = $site_dir."/bank_log.txt";
+						$fh = fopen($myFile, 'a');
+						fwrite($fh, serialize($loga)."\n");
+						fclose($fh);
+						$ecuno_count++;
+						$count++;
+					}
+
+					if(!$payment_marked && method_exists($ecuno_object,"bank_return"))
+					{
+						$log.= "teeb kinnituse l2bi. objekti klassi id: ".$ecuno_object->class_id()."<br>\n";
+						$ecuno_object->bank_return(array(
+							"do_not_die" => 1
+						));
+					}
+					elseif(!$payment_marked && method_exists($ecuno_inst,"bank_return"))
+					{
+						$log.= "teeb kinnituse l2bi. objekti klassi id: ".$ecuno_object->class_id()."<br>\n";
+						$ecuno_inst->bank_return(array(
+							"id" => $ecuno,
+							"do_not_die" => 1
+						));
+					}
+				}
+			}
+			if($count)
+			{
+				$log.= $ms["date"]." kirjast ".$count." kinnitatud<br>\n<br>\n";
+			}
+		}
+		$log.= date("d.m.Y H:i")." kokku ".$ecuno_count."<br>\n<br>\n<br>\n";
+
+		print $log;
+
+
+		$myFile = "/tmp/cc_update_log.txt";
+		$fh = fopen($myFile, 'a');
+		fwrite($fh, $log);
+		fclose($fh);
+
+		die();
 	}
 }
 

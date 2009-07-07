@@ -94,6 +94,28 @@
             <caption>Selgituse kontroller</caption>
       </property>
       <property>
+            <name>imap</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAP</reltype>
+            <parent>general_right</parent>
+            <caption>Imap</caption>
+      </property>
+      <property>
+            <name>currency</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CURRENCY</reltype>
+            <parent>general_right</parent>
+            <caption>Vaikimisi valuuta</caption>
+      </property>
+      <property>
             <name>test</name>
             <table>objects</table>
             <field>meta</field>
@@ -128,6 +150,7 @@
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
+            <parent>general_right</parent>
             <caption>Lisa reproduktsioon</caption>
       </property>
       <property>
@@ -366,11 +389,21 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Makse kinnituse kontroller</caption>
             </RETURN_CTR>
+            <IMAP>
+                  <value>8</value>
+                  <clid>CL_PROTO_IMAP</clid>
+                  <caption>Reproduktsioon</caption>
+            </IMAP>
             <CCL_UPLOAD>
                   <value>19</value>
                   <clid>CL_FILE</clid>
                   <caption>Reproduktsioon</caption>
             </CCL_UPLOAD>
+            <CURRENCY>
+                  <value>9</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>Valuuta</caption>
+            </CURRENCY>
       </reltypes>
       <layout>
             <general_l>

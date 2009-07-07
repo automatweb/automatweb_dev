@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.43 2009/07/07 11:31:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.44 2009/07/07 13:22:02 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -72,8 +72,8 @@ class spa_customer_interface extends class_base
 				//arr(discount_obj::get_valid_discount_coefficient(array("object" => $arr["obj_inst"]->id())));
 				uksort($prop["options"], array(&$this, "sort_menus"));
 				break;
-/*			case "discount":
-				$prop["post_append_text"] = html::href(array(
+			case "discount":
+/*				$prop["post_append_text"] = html::href(array(
 					"url" =>" javascript:aw_popup_scroll('http://mrp.dev.automatweb.com/automatweb/orb.aw?class=popup_search&action=do_search&id=8587&pn=discount&clid[0]=1553&multiple=1','Otsing',800,500)",
 					"caption" => "<img src='http://mrp.dev.automatweb.com/automatweb/images/icons/search.gif' border=0>"
 				)).html::href(array(
@@ -928,15 +928,27 @@ class spa_customer_interface extends class_base
 					continue;
 				}
 				
-				$sum = $room_res_inst->get_total_bron_price(array(
-					"bron" => $b,
-				));
+//				$sum = $room_res_inst->get_total_bron_price(array(
+//					"bron" => $b,
+//				));
+
+				$sum = $b->get_sum();
 				foreach($sum as $curr => $val)
 				{
-					$c = obj($curr);
-					if($c->name() == "EEK")
+					if(isset($this->default_currency))
 					{
-						$sum = $val;
+						if($curr == $this->default_currency)
+						{
+							$sum = $val;
+						}
+					}
+					else//ueh ...... ilus
+					{
+						$c = obj($curr);
+						if($c->name() == "EEK")
+						{
+							$sum = $val;
+						}
 					}
 				}
 				if(is_array($sum))
@@ -999,6 +1011,10 @@ class spa_customer_interface extends class_base
 		if(is_oid($bank_payment))
 		{
 			$payment = obj($bank_payment);
+			if($this->can("view" , $payment->prop("currency")))
+			{
+				$this->default_currency = $payment->prop("currency");
+			}
 			$asd = $bank_inst->bank_forms(array(
 				"id" => $bank_payment,
 				"amount" =>  $this->get_extra_prods_sum($arr["id"]),

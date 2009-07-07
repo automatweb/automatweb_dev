@@ -168,9 +168,33 @@ class reservation_obj extends _int_object
 				"start" => $this->prop("start1"),
 				"end" => $this->prop("end"),
 				"people" => $this->prop("people_count"),
-				"products" => $this->meta("amount"),
+//				"products" => $this->meta("amount"),
 				"bron" => $this,
 			));
+			$products = $this->get_product_amount();
+			$params = array();
+			$params["time"] = $this->created();
+			$params["from"] = $this->prop("start1");
+			$params["uid"] = $this->createdby();
+			foreach($products as $product => $amount)
+			{
+				if(!$GLOBALS["object_loader"]->cache->can("view", $product))
+				{
+					continue;
+				}
+				$po = obj($product);
+				foreach($po->get_price($params) as $curr => $prodsum)
+				{
+					if(!isset($sum[$curr]))
+					{
+						$sum[$curr] = $prodsum;
+					}
+					else
+					{
+						$sum[$curr]+= $prodsum;
+					}
+				}
+			}
 		}
 
 		$this->set_meta("final_saved_sum" , $sum);
@@ -1014,6 +1038,11 @@ class reservation_obj extends _int_object
 				}
 		}
 		return $value;
+	}
+
+	function payment_marked()
+	{
+		return $o->prop("paid");
 	}
 
 }

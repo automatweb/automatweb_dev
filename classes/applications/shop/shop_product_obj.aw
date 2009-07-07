@@ -37,6 +37,38 @@ class shop_product_obj extends _int_object
 		return (double)$curp[$currency->id()];
 	}
 
+	/** edaspidi kasutaks vaid seda, et saaks igale ajahetkele erinevaid hindu panna ja loodetavasti ka hinnaobjektiga mitte metast
+		@attrib name=get_price api=1
+		@param uid optional type=oid
+			user id
+		@param time optional type=int
+			timestamp - order created
+		@param from optional type=int
+			timestamp - order start time
+	**/
+	function get_price($arr)
+	{
+		$prices = $this->meta("cur_prices");
+		$params = array(
+			"time" => $arr["time"] ? $arr["time"] : time(),
+		);
+		if($arr["uid"])
+		{
+			$param["uid"] = $arr["uid"];
+		}
+
+		$discount = $this->get_discount(null,$params);
+
+		if($discount)
+		{
+			foreach($prices as $curr => $price)
+			{
+				$prices[$curr] = $price * (1 - ($discount/100));
+			}
+		}
+		return $prices;
+	}
+
 	function set_prop($k, $v)
 	{
 		if($k == "price" || $k == "purchase_price")
@@ -102,11 +134,17 @@ class shop_product_obj extends _int_object
 
 		@param oid optional type=oid
 		@param group optional type=oid
+		@param uid optional type=oid
+			user id
 		@param crm_category optional type=oid
 		@param org optional type=oid
 		@param person optional type=oid
 		@param warehouse optional type=oid
 		@param prod_category optional type=oid
+		@param time optional type=int
+			timestamp - order made or now
+		@param from optional type=int
+			timestamp - order start time
 	**/
 	public function get_discount($oid = null, $params)
 	{
@@ -153,6 +191,14 @@ class shop_product_obj extends _int_object
 			}
 			return $o->prop("discount");
 		}
+
+
+		$f = array();
+		$f["object"] = $this->id();
+		$f["time"] = $params["time"];
+		$f["uid"] = $params["uid"];
+		$f["from"] = $params["from"];
+		return discount_obj::get_valid_discount($f);
 	}
 
 	/**
@@ -223,6 +269,12 @@ class shop_product_obj extends _int_object
 		}
 
 		return $ol;
+	}
+
+	public function get_amount($warehouse_id)
+	{
+		$sql = "SELECT amount FROM aw_shop_warehouse_amount WHERE warehouse = '$warehouse_id' AND product = '".$this->id()."'";
+		return $GLOBALS["object_loader"]->cache->db_fetch_field($sql, "amount");
 	}
 	
 }
