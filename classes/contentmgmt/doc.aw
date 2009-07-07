@@ -913,7 +913,7 @@ class doc extends class_base
 				$ss = get_instance("contentmgmt/site_show");
 				$url = $ss->make_menu_link($arr["obj_inst"]);
 			}
-			if (ifset($arr, "request", "edit_version") != "")
+			if ($arr["request"]["edit_version"] != "")
 			{
 				$url = aw_url_change_var("docversion", $arr["request"]["edit_version"], $url);
 			}
@@ -933,7 +933,7 @@ class doc extends class_base
 		@attrib name=show params=name default="0"
 		@param id required
 	**/
-	function show($args)
+	function show($args = array())
 	{
 		extract($args);
 		$d = get_instance(CL_DOCUMENT);
