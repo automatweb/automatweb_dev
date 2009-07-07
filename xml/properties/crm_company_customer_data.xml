@@ -237,6 +237,66 @@
             <field>aw_bill_penalty_pct</field>
             <caption>Viivise %</caption>
       </property>
+      <property>
+            <name>users_tbl</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>users_tbl</field>
+            <caption>Kasutajate tabel</caption>
+      </property>
+      <property>
+            <name>campaign_tbl</name>
+            <table>objects</table>
+            <group>campaign</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>campaign_tbl</field>
+            <caption>Kampaaniate tabel</caption>
+      </property>
+      <property>
+            <name>prices_tbl</name>
+            <table>objects</table>
+            <group>prices</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>prices_tbl</field>
+            <caption>Hinnakirjade tabel</caption>
+      </property>
+      <property>
+            <name>bills_tbl</name>
+            <table>objects</table>
+            <group>bills</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>bills_tbl</field>
+            <caption>Arvete tabel</caption>
+      </property>
+      <property>
+            <name>orders_tbl</name>
+            <table>objects</table>
+            <group>orders</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>orders_tbl</field>
+            <caption>Tellimuste tabel</caption>
+      </property>
+      <property>
+            <name>recalls_tbl</name>
+            <table>objects</table>
+            <group>recalls</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>recalls_tbl</field>
+            <caption>Tagastuste tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_COMPANY_CUSTOMER_DATA</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -252,6 +312,24 @@
             <seller>
                   <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
             </seller>
+            <users>
+                  <caption>Kasutajad</caption>
+            </users>
+            <campaign>
+                  <caption>Kampaaniad</caption>
+            </campaign>
+            <prices>
+                  <caption>Hinnakirjad</caption>
+            </prices>
+            <bills>
+                  <caption>Arved</caption>
+            </bills>
+            <orders>
+                  <caption>Tellimused</caption>
+            </orders>
+            <recalls>
+                  <caption>Tagastused</caption>
+            </recalls>
       </groupinfo>
       <tableinfo>
             <aw_crm_customer_data>
