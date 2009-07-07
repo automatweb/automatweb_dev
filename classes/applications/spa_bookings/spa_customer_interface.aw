@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.42 2009/06/30 16:36:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.43 2009/07/07 11:31:07 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -26,6 +26,9 @@
 @property discount type=relpicker reltype=RELTYPE_DISCOUNT store=connect multiple=1
 @caption Allahindlus
 
+@property favorites type=relpicker reltype=RELTYPE_FAVORITES field=meta method=serialize
+@caption Lemmikteenuste objektikorv
+
 @reltype FOLDER value=1 clid=CL_MENU
 @caption Toodete kataloog
 
@@ -44,7 +47,8 @@
 @reltype DISCOUNT value=6 clid=CL_DISCOUNT
 @caption Allahindlus
 
-
+@reltype FAVORITES value=7 clid=CL_OBJECT_BASKET
+@caption Lemmikteenuste objektikorv
 */
 
 class spa_customer_interface extends class_base
@@ -135,7 +139,7 @@ class spa_customer_interface extends class_base
 		$wb = $this->can("view", $ct->prop("if_wb")) ? $ct->prop("if_wb") : 231;
 
 		$bank_payment = $ct->prop("bank_payment");
-		
+		$favorites_basket = $ct->prop("favorites");
 		$rooms = $ct->prop("rooms");
 
 		foreach($ol->arr() as $o)
@@ -165,10 +169,10 @@ class spa_customer_interface extends class_base
 				$bron = $c->to();
 				$confirmed &= $bron->prop("verified");
 				//Mitte kuvada tavakliendile aegu, mis on maksmata ja vanemad kui 24h
-				if(!$confirmed && ($bron->created() < (time() - 24*3600)))
-				{
-					continue;
-				}
+//				if(!$confirmed && ($bron->created() < (time() - 24*3600)))
+//				{
+//					continue;
+//				}
 				$has_prods = true;
 				if ($bron->prop("start1") < 100)
 				{
@@ -464,7 +468,17 @@ class spa_customer_interface extends class_base
 					$this->vars(array(
 						"booking_ln" => $booking_str,
 						"name" => join("<br>", $prod_str),
-						"when" => $date
+						"when" => $date,
+						"add_to_favorites" => html::href(array(
+							"url" => $this->mk_my_orb("add_object", array(
+								"oid" => $prod_id,
+								"ru" => get_ru(),
+								"basket" => $favorites_basket,
+								"section" => aw_global_get("section")
+							) , CL_OBJECT_BASKET),
+							"caption" => t("Lisa lemmikute hulka")
+		
+						)),
 					));
 
 					$book_line .= $this->parse("BOOK_LINE");
