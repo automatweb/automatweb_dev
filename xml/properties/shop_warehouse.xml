@@ -1896,7 +1896,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>campaigns_split</parent>
+            <parent>campaigns_right</parent>
             <field>campaigns</field>
             <caption>Kampaaniad</caption>
       </property>
@@ -3471,6 +3471,12 @@
                   <parent>campaigns_left</parent>
                   <group>campaigns</group>
             </campaigns_product_lay>
+            <campaigns_right>
+                  <type>vbox</type>
+                  <parent>campaigns_split</parent>
+                  <group>campaigns</group>
+                  <area_caption></area_caption>
+            </campaigns_right>
             <sales_notes_split>
                   <type>hbox</type>
                   <width>20%:80%</width>

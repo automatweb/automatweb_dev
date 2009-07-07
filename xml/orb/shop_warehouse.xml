@@ -156,6 +156,13 @@
 			</function>
 		</action>
 
+		<action name="post_campaign_row" all_args="1">
+			<function name="post_campaign_row">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="get_clients_groups_tree_level" all_args="1">
 			<function name="_get_clients_groups_tree_level">
 				<arguments>

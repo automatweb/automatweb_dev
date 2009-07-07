@@ -729,9 +729,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 			@layout campaigns_product_lay type=vbox closeable=1 area_caption=Tooted parent=campaigns_left
 				@property campaigns_product_tree type=treeview no_caption=1 parent=campaigns_product_lay
-
-		@property campaigns type=table store=no no_caption=1  parent=campaigns_split
-		@caption Kampaaniad
+		@layout campaigns_right type=vbox parent=campaigns_split
+			@property campaigns type=table store=no no_caption=1  parent=campaigns_right
+			@caption Kampaaniad
 
 
 @default group=sales_notes
@@ -8464,16 +8464,6 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"active" => $data["active"] ? t("Aktiivne") : t("Mitteaktiivne"),
 				"oid" => $id,
 			);
-			if($change)
-			{
-				$def["name"] = html::textbox(array("name" => "name" , "value" => $data["name"]));
-			}
-			$group_names = get_name($data["apply_groups"]);
-			$def["groups"] = is_array($group_names) ? join(", " , $group_names) : "";
-			if(is_oid($data["object"]))
-			{
-				$def["product"] = get_name($data["object"]);
-			}
 			if($data["from"] || $data["to"])
 			{
 				$def["date"] = "";
@@ -8490,12 +8480,37 @@ $oo = get_instance(CL_SHOP_ORDER);
 					$def["date"].= date("d.m.Y" , $data["to"]);
 				}
 			}
+			$def["groups"] = is_array($group_names) ? join(", " , $group_names) : "";
+			if(is_oid($data["object"]))
+			{
+				$def["product"] = get_name($data["object"]);
+			}
+
+			if($change)
+			{
+				$def["name"] = html::textbox(array("name" => "row[".$id."][name]" , "value" => $data["name"]));
+				$def["discount"] = html::textbox(array("name" => "row[".$id."][discount]" , "value" => $data["discount"] , "size" => 2));
+				$def["active"] = html::checkbox(array("name" => "row[".$id."][active]" , "value" => 1, "checked" => $data["active"]));
+				$def["date"] = html::date_select(array("month_as_numbers" => 1,"name" => "row[".$id."][from]" , "value" => $data["from"])) . " - 
+					" . html::date_select(array("month_as_numbers" => 1,"name" => "row[".$id."][to]" , "value" => $data["to"]));
+				$groups = new object_list(array(
+					"class_id" => CL_GROUP,
+				));
+				$def["groups"] = html::select(array("name" => "row[".$id."][group]"  , "value" => array_keys($group_names) , "multiple" => 1, "size" => 4 , "options" => $groups->names()));
+				$products = new object_list(array(
+					"class_id" => array(CL_SHOP_PRODUCT , CL_SHOP_PRODUCT_PACKAGING, CL_SHOP_PRODUCT_CATEGORY)
+				));
+
+				$def["product"] = html::select(array("name" => "row[".$id."][product]", "value" => $data["object"], "options" => array("" => t("-- Vali --")) + $products->names()));
+
+			}
+			$group_names = get_name($data["apply_groups"]);
 			if(!$change)
 			{
 				$def["change"] = html::button(array(
 					"name" => "change_row",
 					"value" => t("Muuda"),
-					"onclick" => "javascript:reload_property(['campaign'], {change_discount_id: '".$id."'});"
+					"onclick" => "javascript:reload_layout('campaigns_right', {change_discount_id: '".$id."'});"
 				));
 			}
 			else
@@ -8504,21 +8519,18 @@ $oo = get_instance(CL_SHOP_ORDER);
 					"name" => "change_row",
 					"value" => t("Salvesta"),
 					"onclick" => "
-					$.post('/automatweb/orb.aw?class=crm_bill&action=post_row', {
-						jrk: document.getElementsByName('rows[".$id."][jrk]')[0].value
+					$.post('/automatweb/orb.aw?class=shop_warehouse&action=post_campaign_row', {
+						discount: document.getElementsByName('row[".$id."][discount]')[0].value
 						, id: ".$id."
-						, people: result
-						, name: document.getElementsByName('rows[".$id."][name]')[0].value
-						, comment: document.getElementsByName('rows[".$id."][comment]')[0].value
-						, prod: document.getElementsByName('rows[".$id."][prod]')[0].value
-						, unit: document.getElementsByName('rows[".$id."][unit]')[0].value
-						, has_tax: has_tax
-						, date: document.getElementsByName('rows[".$id."][date]')[0].value
-						, jrk: document.getElementsByName('rows[".$id."][jrk]')[0].value
-						, price: document.getElementsByName('rows[".$id."][price]')[0].value
-						, amt: document.getElementsByName('rows[".$id."][amt]')[0].value
-						},function(data){reload_property(['campaign'], {change_discount_id: '".$id."'});
-					",
+						, name: document.getElementsByName('row[".$id."][name]')[0].value
+						, active: document.getElementsByName('row[".$id."][active]')[0].value
+						, from: document.getElementsByName('row[".$id."][from]')[0].value
+						, to: document.getElementsByName('row[".$id."][to]')[0].value
+						//, group: document.getElementsByName('row[".$id."][group]')[0].value
+						, product: document.getElementsByName('row[".$id."][product]')[0].value
+						},function(data){reload_layout('campaigns_right',{change_discount_id: ''});
+					});
+				",
 				));
 			}
 			$t->define_data($def);
@@ -10487,6 +10499,22 @@ $oo = get_instance(CL_SHOP_ORDER);
 		));
 		$f = automatweb::$request->arg("filt_cust");
 		$t->set_selected_item($f ? $f : "all");
+	}
+
+	/**
+		@attrib name=post_campaign_row all_args=1
+	**/
+	function post_campaign_row($arr)
+	{
+		$discount = obj($arr["id"]);
+		$discount->set_prop("discount" , $arr["discount"]);
+		$discount->set_prop("object" , $arr["product"]);
+		$discount->set_prop("active" , $arr["active"] == 1 ? 1 : 0);
+		$discount->save();
+
+		//kuup2evad ka, siis vouks toimida
+
+		die();
 	}
 
 	/**
