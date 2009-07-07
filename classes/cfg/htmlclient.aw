@@ -374,7 +374,7 @@ class htmlclient extends aw_template
 		{
 			if (empty($args["value"]))
 			{
-				$args["value"] = $args["caption"];
+				$args["value"] = ifset($args, "caption");
 			};
 			unset($args["caption"]);
 		};
@@ -949,15 +949,15 @@ class htmlclient extends aw_template
 				"search_text" => t("Otsi"),
 				"bm_pop" => $this->prog_acl("view", "can_bm") ? $bm->get_menu(array(
 					"load_on_demand_url" => $this->mk_my_orb("pm_lod", array("url" => get_ru()), "user_bookmarks"),
-					"text" => '<img src="/automatweb/images/aw06/ikoon_jarjehoidja.gif" alt="" width="16" height="14" border="0" class="ikoon" />'.t("J&auml;rjehoidja").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
+					"text" => '<img src="/automatweb/images/aw06/ikoon_jarjehoidja.gif" alt="" width="16" height="14" border="0" class="ikoon" />'.t("J&auml;rjehoidja")//.' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
 				)) : "",
 				"history_pop" => $this->prog_acl("view", "can_history") ? $bm_h->get_menu(array(
 					"load_on_demand_url" => $this->mk_my_orb("hist_lod", array("url" => get_ru()), "user"),
-					"text" => '<img src="/automatweb/images/aw06/ikoon_ajalugu.gif" alt="" width="13" height="13" border="0" class="ikoon" />'.t("Ajalugu").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
+					"text" => '<img src="/automatweb/images/aw06/ikoon_ajalugu.gif" alt="" width="13" height="13" border="0" class="ikoon" />'.t("Ajalugu")//.' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
 				)) : "",
 				"qa_pop" => $this->prog_acl("view", "can_quick_add") ? $bmq->get_menu(array(
 					"load_on_demand_url" => $this->mk_my_orb("qa_lod", array("url" => get_ru()), "obj_quick_add"),
-					"text" => '<img alt="" title="" border="0" src="'.aw_ini_get("baseurl").'/automatweb/images/aw06/ikoon_lisa.gif" id="mb_user_qa" border="0" class="ikoon" />'.t("Lisa kiiresti").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>'
+					"text" => '<img alt="" title="" border="0" src="'.aw_ini_get("baseurl").'/automatweb/images/aw06/ikoon_lisa.gif" id="mb_user_qa" border="0" class="ikoon" />'.t("Lisa kiiresti")//.' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>'
 				)) : "",
 				"settings_pop" => $bmb->get_menu(array("load_on_demand_url" => $this->mk_my_orb("settings_lod", array("url" => get_ru()), "user"))),
 				"srch_link" => $this->mk_my_orb("redir_search", array("url" => $this->my_get_ru("aw_object_search")), "aw_object_search")
@@ -1101,7 +1101,7 @@ class htmlclient extends aw_template
 						$retval .= html::checkbox(array(
 							"label" => $caption,
 							"name" => $arr["name"] . "[" . $key . "]",
-							"checked" => ($arr["value"][$key]),
+							"checked" => !empty($arr["value"][$key]),
 							"value" => $key,
 							"disabled" => ifset($arr, "disabled", $key),
 							"onclick" => ifset($arr, "onclick"),
@@ -1440,7 +1440,11 @@ class htmlclient extends aw_template
 			if (!empty($ldata["area_caption"]))
 			{
 				$u = get_instance(CL_USER);
-				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
+				$state = $u->get_layer_state(array(
+					"u_class" => automatweb::$request->arg("class"), 
+					"u_group" => automatweb::$request->arg("group"), 
+					"u_layout" => $layout_name
+				));
 
 				if (!empty($ldata["closeable"]))
 				{
@@ -1450,13 +1454,13 @@ class htmlclient extends aw_template
 						"open_text" => t("Lahti"),
 						"start_text" => $state ? t("Kinni") : t("Lahti"),
 						"open_layer_url" => $this->mk_my_orb("open_layer", array(
-							"u_class" => $_GET["class"],
-							"u_group" => $_GET["group"],
+							"u_class" => automatweb::$request->arg("class"),
+							"u_group" => automatweb::$request->arg("group"),
 							"u_layout" => $layout_name
 						), "user"),
 						"close_layer_url" => $this->mk_my_orb("close_layer", array(
-							"u_class" => $_GET["class"],
-							"u_group" => $_GET["group"],
+							"u_class" => automatweb::$request->arg("class"),
+							"u_group" => automatweb::$request->arg("group"),
 							"u_layout" => $layout_name
 						), "user"),
 						"closer_state" => $state ? "up" : "down"

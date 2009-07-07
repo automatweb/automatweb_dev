@@ -913,7 +913,7 @@ class doc extends class_base
 				$ss = get_instance("contentmgmt/site_show");
 				$url = $ss->make_menu_link($arr["obj_inst"]);
 			}
-			if ($arr["request"]["edit_version"] != "")
+			if (ifset($arr, "request", "edit_version") != "")
 			{
 				$url = aw_url_change_var("docversion", $arr["request"]["edit_version"], $url);
 			}
