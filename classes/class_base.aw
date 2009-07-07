@@ -235,6 +235,25 @@ class class_base extends aw_template
 	**/
 	function change($args = array())
 	{
+		// Avoid view_propert/view_layout spreading into URLS.
+		foreach(array("view_layout", "view_property") as $arg)
+		{
+			if(!empty($args[$arg]))
+			{
+				$GLOBALS[$arg] = $args[$arg];
+
+				if(isset($_GET[$arg]))
+				{
+					unset($_GET[$arg]);
+				}
+				unset($args[$arg]);
+				if(automatweb::$request->arg_isset($arg))
+				{
+					automatweb::$request->unset_arg($arg);
+				}
+			}
+		}
+
 		global $awt;
 
 		foreach($args as $k => $v)
@@ -910,7 +929,7 @@ class class_base extends aw_template
 		$msgid = "Grupi ".$msgid_grp_cpt." (".$argblock["group"].") comment";
 		$help = strlen(t2($msgid))?"<div>".t($msgid)."</div>":t("Lisainfo grupi kohta puudub");
 		//
-		$cli->view_layout = !empty($args["view_layout"]) ? $args["view_layout"] : false;
+		$cli->view_layout = !empty($GLOBALS["view_layout"]) ? $GLOBALS["view_layout"] : false;
 		$cli->view_outer = true;//$args["view_outer"]?$args["view_layout"]:false;
 		$cli->finish_output(array(
 			"method" => $method,
@@ -1021,13 +1040,13 @@ class class_base extends aw_template
 			"content" => isset($content) ? $content : "",
 			//"orb_action" => $this->view == 1 ? "view" : "",
 			"orb_action" => $orb_action,
-			"view_property" => ifset($args, "view_property"),
+			"view_property" => ifset($GLOBALS, "view_property"),
 		));
 
 		$awt->stop("final-bit");
 		$awt->stop("cb-change");
 		
-		if(!empty($args["view_property"]))
+		if(!empty($GLOBALS["view_property"]))
 		{
 			$rv = iconv(aw_global_get("charset"), "UTF-8", $rv);
 			die($rv);
@@ -1237,12 +1256,12 @@ class class_base extends aw_template
 
 		if ($save_ok)
 		{
-			if ($request["is_sa"] == 1)
+			if (ifset($request, "is_sa") == 1)
 			{
 				$args["is_sa"] = 1;
 				$args["is_sa_changed"] = 1;
 			}
-			if ($request["in_popup"])
+			if (!empty($request["in_popup"]))
 			{
 				$args["in_popup"] = 1;
 			}
@@ -1262,7 +1281,7 @@ class class_base extends aw_template
 					return $args["goto"];
 				};
 			};
-			if (is_array($this->_do_call_vcl_mod_retvals))
+			if (isset($this->_do_call_vcl_mod_retvals) && is_array($this->_do_call_vcl_mod_retvals))
 			{
 				foreach($this->_do_call_vcl_mod_retvals as $vcl_mro)
 				{
@@ -1373,7 +1392,7 @@ class class_base extends aw_template
 					), false, $retval);
 				}
 
-				if ($request["return"] == "id")
+				if (ifset($request, "return") == "id")
 				{
 					$retval = $this->id;
 				}
@@ -1949,7 +1968,7 @@ class class_base extends aw_template
 			"save_message" => $this->just_saved ? $just_saved_msg : null
 		);
 
-		if(!empty($args["view_property"]))
+		if(!empty($GLOBALS["view_property"]))
 		{
 			$cli_args["element_only"] = 1;
 		}
@@ -4970,7 +4989,7 @@ class class_base extends aw_template
 
 			if (isset($propdata["type"]) && $propdata["type"] === "submit")
 			{
-				$propdata["value"] = $propdata["caption"];
+				$propdata["value"] = ifset($propdata, "caption");
 			}
 
 			// XXX: cfgform defaults are supported for checkboxes only right now
@@ -5023,9 +5042,9 @@ class class_base extends aw_template
 		}
 		
 		// If view_property is given we actually only want the HTML of that one property!
-		if(!empty($args["view_property"]))
+		if(!empty($GLOBALS["view_property"]))
 		{
-			$tmp = isset($tmp[$args["view_property"]]) ? array($args["view_property"] => $tmp[$args["view_property"]]) : array();
+			$tmp = isset($tmp[$GLOBALS["view_property"]]) ? array($GLOBALS["view_property"] => $tmp[$GLOBALS["view_property"]]) : array();
 		}
 
 		$this->use_group = $use_group;

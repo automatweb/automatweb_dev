@@ -378,7 +378,6 @@ class doc extends class_base
 
 	function get_property($arr)
 	{
-
 		// let site mod props
 		$si = __get_site_instance();
 		if ($si)
@@ -914,7 +913,7 @@ class doc extends class_base
 				$ss = get_instance("contentmgmt/site_show");
 				$url = $ss->make_menu_link($arr["obj_inst"]);
 			}
-			if ($arr["request"]["edit_version"] != "")
+			if (ifset($arr, "request", "edit_version") != "")
 			{
 				$url = aw_url_change_var("docversion", $arr["request"]["edit_version"], $url);
 			}
@@ -934,7 +933,7 @@ class doc extends class_base
 		@attrib name=show params=name default="0"
 		@param id required
 	**/
-	function show($args = array())
+	function show($args)
 	{
 		extract($args);
 		$d = get_instance(CL_DOCUMENT);
@@ -1027,12 +1026,12 @@ class doc extends class_base
 
 	function callback_mod_reforb($args = array())
 	{
-		if ($_REQUEST["cb_part"])
+		if (!empty($_REQUEST["cb_part"]))
 		{
 			$args["cb_part"] = $_REQUEST["cb_part"];
 		};
 		$args["post_ru"] = post_ru();
-		if ($_GET["edit_version"])
+		if (!empty($_GET["edit_version"]))
 		{
 			$args["edit_version"] = $_GET["edit_version"];
 		}
@@ -1562,7 +1561,7 @@ class doc extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($_GET["edit_version"])
+		if (!empty($_GET["edit_version"]))
 		{
 			$arr["link"] = aw_url_change_var("edit_version", $_GET["edit_version"], $arr["link"]);
 		}
