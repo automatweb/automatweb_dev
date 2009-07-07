@@ -218,15 +218,6 @@
             <caption>Allahindluse element andmete vormis</caption>
       </property>
       <property>
-            <name>rent_min_amt</name>
-            <group>payment1</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>J&amp;amp;auml;relmaksu min. summa</caption>
-      </property>
-      <property>
             <name>rent_prop</name>
             <group>payment1</group>
             <table>objects</table>
@@ -243,6 +234,78 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>v&amp;amp;auml;&amp;amp;auml;rtus j&amp;amp;auml;relmaksuks</caption>
+      </property>
+      <property>
+            <name>rent_min_amt</name>
+            <group>rent_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>J&amp;amp;auml;relmaksu miinumumsumma</caption>
+      </property>
+      <property>
+            <name>rent_max_amt</name>
+            <group>rent_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>J&amp;auml;relmaksu maksimumsumma</caption>
+      </property>
+      <property>
+            <name>rent_min_payment</name>
+            <group>rent_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>&amp;amp;Uuml;he makse miinimumsumma</caption>
+      </property>
+      <property>
+            <name>rent_prepayment_interest</name>
+            <group>rent_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Esmase sissemakse protsent</caption>
+      </property>
+      <property>
+            <name>rent_interest</name>
+            <group>rent_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Aastaintressi protsent</caption>
+      </property>
+      <property>
+            <name>rent_months_min</name>
+            <group>rent_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Minimaalne j&amp;auml;relmaksuperioodi pikkus kuudes</caption>
+      </property>
+      <property>
+            <name>rent_months_max</name>
+            <group>rent_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Maksimaalne j&amp;auml;relmaksuperioodi pikkus kuudes</caption>
+      </property>
+      <property>
+            <name>rent_months_step</name>
+            <group>rent_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>J&amp;auml;relmaksuperioodi samm</caption>
       </property>
       <property>
             <name>only_active_items</name>
@@ -599,6 +662,10 @@
                   <caption>Seaded</caption>
                   <parent>payment</parent>
             </payment1>
+            <rent_settings>
+                  <caption>J&amp;amp;auml;relmaksu seaded</caption>
+                  <parent>payment</parent>
+            </rent_settings>
             <payment_settings>
                   <caption>Pangamakse seaded</caption>
                   <parent>payment</parent>

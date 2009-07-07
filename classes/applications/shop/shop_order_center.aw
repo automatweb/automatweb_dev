@@ -90,15 +90,37 @@
 	@property data_form_discount type=select
 	@caption Allahindluse element andmete vormis
 
-	@property rent_min_amt type=textbox
-	@caption J&auml;relmaksu min. summa
-
 	@property rent_prop type=select
 	@caption Elemendi
 
 	@property rent_prop_val type=textbox
 	@caption v&auml;&auml;rtus j&auml;relmaksuks
 
+@default group=rent_settings
+
+	@property rent_min_amt type=textbox
+	@caption J&auml;relmaksu miinumumsumma
+
+	@property rent_max_amt type=textbox
+	@caption Järelmaksu maksimumsumma
+
+	@property rent_min_payment type=textbox
+	@caption &Uuml;he makse miinimumsumma
+
+	@property rent_prepayment_interest type=textbox
+	@caption Esmase sissemakse protsent
+
+	@property rent_interest type=textbox
+	@caption Aastaintressi protsent
+
+	@property rent_months_min type=textbox
+	@caption Minimaalne järelmaksuperioodi pikkus kuudes
+
+	@property rent_months_max type=textbox
+	@caption Maksimaalne järelmaksuperioodi pikkus kuudes
+
+	@property rent_months_step type=textbox
+	@caption Järelmaksuperioodi samm
 
 @default group=appear_settings
 
@@ -226,6 +248,7 @@
 
 @groupinfo payment caption="Maksmine"
 	@groupinfo payment1 caption="Seaded" parent=payment
+	@groupinfo rent_settings caption="J&auml;relmaksu seaded" parent=payment
 	@groupinfo payment_settings caption="Pangamakse seaded" parent=payment
 
 @groupinfo appear caption="N&auml;itamine"
