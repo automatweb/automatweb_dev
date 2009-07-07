@@ -128,7 +128,7 @@ if (!empty($_GET["PROMO_DBG"]))
 
 			$show_promo = false;
 			
-			$msec = $assigned_menu_conns_by_promo[$o->id()];
+			$msec = ifset($assigned_menu_conns_by_promo, $o->id());
 
 			$section_include_submenus = $o->meta("section_include_submenus");
 
@@ -169,7 +169,7 @@ if (!empty($_GET["PROMO_DBG"]))
 			// do ignore menus
 			$ign_subs = $o->meta("section_no_include_submenus");
 
-			foreach($noshow_menu_conns_by_promo[$o->id()] as $ignore_menu_to)
+			foreach(safe_array(ifset($noshow_menu_conns_by_promo, $o->id())) as $ignore_menu_to)
 			{
 				if ($inst->sel_section_real == $ignore_menu_to)
 				{
@@ -310,33 +310,33 @@ if (!empty($_GET["PROMO_DBG"]))
 				{
 					enter_function("mainc-contentmgmt/promo-read_docs-old");
 					// get_default_document prefetches docs by itself so no need to do list here
-if ($_GET["PROMO_DBG"] == 1)
-{
-$_GET["INTENSE_DUKE"] = 1;
-obj_set_opt("no_cache", 1);
-}
+					if (!empty($_GET["PROMO_DBG"]))
+					{
+						$_GET["INTENSE_DUKE"] = 1;
+						obj_set_opt("no_cache", 1);
+					}
 					$docid = $inst->get_default_document(array(
 						"obj" => $o,
 						"all_langs" => true,
 						"dsdi_cache" => !isset($dsdi_list_by_promo[$o->id()]) ? array() : $dsdi_list_by_promo[$o->id()]
 					));
 					exit_function("mainc-contentmgmt/promo-read_docs-old");
-if ($_GET["PROMO_DBG"] == 1)
-{
-$_GET["INTENSE_DUKE"] = 0;
-	echo "version1 <br>";
-}
+					if (!empty($_GET["PROMO_DBG"]))
+					{
+						$_GET["INTENSE_DUKE"] = 0;
+						echo "version1 <br>";
+					}
 				}
-if (!empty($_GET["PROMO_DBG"]))
-{
-	echo "3promo = ".$o->id()." show = ".dbg::dump($docid)." <br>";
-}
+				if (!empty($_GET["PROMO_DBG"]))
+				{
+					echo "3promo = ".$o->id()." show = ".dbg::dump($docid)." <br>";
+				}
 				$awt->stop("def-doc");
 
-if (!empty($_GET["PROMO_DBG"]))
-{
-	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($docid)." <br>";
-}
+				if (!empty($_GET["PROMO_DBG"]))
+				{
+					echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($docid)." <br>";
+				}
 				if (!$docid)
 				{
 					continue;
@@ -581,10 +581,15 @@ if (!empty($_GET["PROMO_DBG"]))
 				{
 					$ap = "_LINKED";
 				}
-				if ($this->used_promo_tpls[$use_tpl] != 1)
+				if (!isset($this->used_promo_tpls[$use_tpl]) || $this->used_promo_tpls[$use_tpl] != 1)
 				{
 					$ap.="_BEGIN";
 					$this->used_promo_tpls[$use_tpl] = 1;
+				}
+
+				if(!isset($promos[$use_tpl]))
+				{
+					$promos[$use_tpl] = "";
 				}
 
 				if ($inst->is_template($use_tpl . $ap))

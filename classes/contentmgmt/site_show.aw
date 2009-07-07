@@ -765,8 +765,8 @@ class site_show extends class_base
 
 				if (isset($arr["dsdi_cache"]))
 				{
-					$ilm = safe_array($arr["dsdi_cache"][6]);
-					$lm = safe_array($arr["dsdi_cache"][2]);
+					$ilm = safe_array(ifset($arr, "dsdi_cache", 6));
+					$lm = safe_array(ifset($arr, "dsdi_cache", 2));
 				}
 				else
 				{
@@ -815,7 +815,7 @@ class site_show extends class_base
 				$no_in_promo = 1;
 
 				// get kws from promo
-				if ($this->can("view", $_GET["set_kw"]))
+				if ($this->can("view", ifset($_GET, "set_kw")))
 				{
 					$filter["CL_DOCUMENT.RELTYPE_KEYWORD"] = $_GET["set_kw"];
 				}
@@ -830,7 +830,7 @@ class site_show extends class_base
 				{
 					if (isset($arr["dsdi_cache"]))
 					{
-						$kwns = safe_array($arr["dsdi_cache"][5]);
+						$kwns = safe_array(ifset($arr, "dsdi_cache", 5));
 					}
 					else
 					{
@@ -2061,7 +2061,7 @@ class site_show extends class_base
 					$new_url = $this->make_menu_link($this->section_obj, $row["acceptlang"]);
 				}
 				$url = $new_url;
-				if (substr($_GET["class"], 0, 4) == "shop")
+				if (substr(ifset($_GET, "class"), 0, 4) == "shop")
 				{
 					$url = aw_url_change_var("section", $row["acceptlang"]."/".aw_global_get("section"));
 				}

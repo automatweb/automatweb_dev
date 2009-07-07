@@ -1,7 +1,7 @@
 <?php
 /**
 A class to help manage template files. 
-$Header: /home/cvs/automatweb_dev/classes/core/util/templatemgr.aw,v 1.3 2009/05/12 11:20:10 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/util/templatemgr.aw,v 1.4 2009/07/07 16:01:47 instrumental Exp $
 @classinfo  maintainer=kristo
 **/
 class templatemgr extends aw_template
@@ -112,7 +112,7 @@ class templatemgr extends aw_template
 				$cache[$row["id"]] = $row["filename"];
 			}
 		}
-		return $cache[$id];
+		return ifset($cache, $id);
 	}
 
 	/** returns a list of all template folders that are for this site 

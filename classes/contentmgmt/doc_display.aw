@@ -135,10 +135,7 @@ class doc_display extends aw_template
 
 		$doc_link = $this->get_doc_link($doc);
 
-		if ($this->template_has_var_full("edit_doc"))
-		{
-			$em = $this->_get_edit_menu($doc);
-		}
+		$em = $this->template_has_var_full("edit_doc") ? $this->_get_edit_menu($doc) : NULL;
 
 		$orig = $doc->get_original();
 
