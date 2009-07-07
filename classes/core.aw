@@ -285,6 +285,10 @@ class core extends acl_base
 	**/
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
 	{
+if (aw_global_get("uid") == "struktuur.kristo")
+{
+	die($msg);
+}
 		if (!function_exists("aw_global_get"))
 		{
 			classload("defs");
@@ -447,7 +451,7 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
-		if (substr(@$_REQUEST["class"], 0, 4) === "http" || substr(@$_REQUEST["entry_id"], 0, 4) === "http")
+		if (substr(ifset($_REQUEST, "class"), 0, 4) === "http" || substr(ifset($_REQUEST, "entry_id"), 0, 4) === "http")
 		{
 			$send_mail = false;
 		}

@@ -997,7 +997,8 @@ class doc_display extends aw_template
 	
 	private function _parse_youtube_links($str)
 	{
-		$tmp_template = end(explode("/", $this->template_filename));
+		$tmp_template_explode = explode("/", $this->template_filename);
+		$tmp_template = end($tmp_template_explode);
 		if ( $this->is_template("youtube_link") && (strpos($str, "http://www.youtube.com/")!==false || strpos($str, "http://youtube.com/")!==false))
 		{
 			$str = str_replace  ( array("http://www.youtube.com/watch?v=", "http://youtube.com/watch?v=")  , array("http://www.youtube.com/v/", "http://www.youtube.com/v/"), $str );
