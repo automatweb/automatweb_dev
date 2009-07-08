@@ -380,6 +380,15 @@ class date_edit
 	**/
 	public static function get_timestamp($var, $prop_def = null)
 	{
+		// Initialize
+		$var = array_merge(array(
+			"hour" => 0,
+			"minute" => 0,
+			"second" => 0,
+			"month" => 0,
+			"day" => 0,
+			"year" => 0,
+		), safe_array($var));
 		// if the prop def gives format, then eoms fields might be omitted, fill them in with defaults
 		if ($prop_def !== null && is_array($prop_def["format"]))
 		{

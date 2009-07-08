@@ -686,7 +686,7 @@ class acl_base extends db_connector
 		$nd = array();
 		while(list($bitpos,$name) = each($acl_ids))
 		{
-			$nd[$name] = (int)$aclarr[$name];
+			$nd[$name] = (int)ifset($aclarr, $name);
 		}
 		return $nd;
 	}

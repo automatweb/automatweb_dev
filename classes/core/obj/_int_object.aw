@@ -606,7 +606,7 @@ class _int_object
 		// - else set site_id same as parent's
 		if (is_oid($parent) && $GLOBALS["object_loader"]->ds->can("view", $parent))
 		{
-			if (is_object($GLOBALS["objects"][$parent]))
+			if (isset($GLOBALS["objects"][$parent]) && is_object($GLOBALS["objects"][$parent]))
 			{
 				$objdata = $GLOBALS["objects"][$parent]->obj;
 			}
@@ -1339,7 +1339,7 @@ class _int_object
 			))
 		{
 			$_rt = $GLOBALS["relinfo"][$this->obj["class_id"]][$propi["reltype"]]["value"];
-			if ($propi["multiple"] == 1 || is_array($val))
+			if (ifset($propi, "multiple") == 1 || is_array($val))
 			{
 				$tval = $val;
 				if (!is_array($tval))
@@ -1425,7 +1425,7 @@ class _int_object
 				}
 				else
 				{
-					$this->_int_set_ot_mod($propi["field"], $this->obj[$propi["field"]], $this->obj["properties"][$key]);
+					$this->_int_set_ot_mod($propi["field"], ifset($this->obj, $propi["field"]), ifset($this->obj, "properties", $key));
 					$this->obj[$propi["field"]] = $this->obj["properties"][$key];
 				}
 			}
@@ -1892,7 +1892,7 @@ class _int_object
 
 	public function get_state_id()
 	{
-		return $this->obj["mod_cnt"];
+		return (int)ifset($this->obj, "mod_cnt");
 	}
 
 	public function get_object_data()
@@ -2045,7 +2045,7 @@ class _int_object
 		}
 
 		$_is_new = false;
-		if (!$this->obj["oid"])
+		if (empty($this->obj["oid"]))
 		{
 			$this->_int_init_new();
 
@@ -2057,7 +2057,7 @@ class _int_object
 				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
 				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]]
 			));
-			if (!$this->obj["brother_of"])
+			if (empty($this->obj["brother_of"]))
 			{
 				$this->obj["brother_of"] = $this->obj["oid"];
 			}
@@ -2338,7 +2338,7 @@ class _int_object
 		if ($this->obj["parent"] > 0 && $this->obj["class_id"] > 0)
 		{
 			// acl
-			if ($this->obj["oid"])
+			if (!empty($this->obj["oid"]))
 			{
 				if ($this->_int_can("edit"))
 				{
@@ -2398,7 +2398,7 @@ class _int_object
 		}
 
 		// default to current lang id
-		if (!$this->obj["lang_id"])
+		if (empty($this->obj["lang_id"]))
 		{
 			$this->_int_set_of_value("lang_id", aw_global_get("lang_id"));
 		}
@@ -2460,7 +2460,7 @@ class _int_object
 			}
 			else
 			{
-				$type = @constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]);
+				$type = defined($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]) ? constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]) : NULL;
 			}
 
 			if (!$type)
@@ -2624,7 +2624,7 @@ class _int_object
 		{
 			$this->_int_load_property_values();
 		}
-		$this->_int_set_prop_mod($prop, $this->obj["properties"][$prop], $val);
+		$this->_int_set_prop_mod($prop, ifset($this->obj, "properties", $prop), $val);
 		$this->obj["properties"][$prop] = $val;
 	}
 

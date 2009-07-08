@@ -678,7 +678,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 		extract($arr);
 
-		$metadata = aw_serialize($objdata["meta"], SERIALIZE_NATIVE);
+		$metadata = aw_serialize(ifset($objdata, "meta"), SERIALIZE_NATIVE);
 		$this->quote($metadata);
 		$this->quote($objdata);
 		// insert default new acl to object table here
@@ -698,6 +698,28 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$this->quote($acld_val);
 			$acld_val = ",'".$acld_val."'";
 		}
+
+		// Initialize, to avoid PHP notices
+		$objdata = array_merge(array(
+			"parent" => NULL,
+			"class_id" => NULL,
+			"name" => NULL,
+			"created" => NULL,
+			"createdby" => NULL,
+			"modified" => NULL,
+			"modifiedby" => NULL,
+			"status" => NULL,
+			"site_id" => NULL,
+			"hits" => NULL,
+			"lang_id" => NULL,
+			"comment" => NULL,
+			"jrk" => NULL,
+			"period" => NULL,
+			"alias" => NULL,
+			"periodic" => NULL,
+			"subclass" => NULL,
+			"flags" => NULL,
+		), $objdata);
 
 		// create oid
 		$q = "
@@ -727,7 +749,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$this->create_obj_access($oid);
 		}
 		// set brother to self if not specified.
-		if (!$objdata["brother_of"])
+		if (empty($objdata["brother_of"]))
 		{
 			$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = $oid");
 		}
@@ -788,7 +810,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 
-				if ($data["datatype"] === "int" && $tbls[$data["table"]]["defaults"][$data["field"]] == "")
+				if (ifset($data, "datatype") === "int" && $tbls[$data["table"]]["defaults"][$data["field"]] == "")
 				{
 					$tbls[$data["table"]]["defaults"][$data["field"]] = "0";
 				}
@@ -2683,7 +2705,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				if (is_array($new_t) && count($new_t))
 				{
-					$tbl = $tbl_r = reset(array_keys($new_t));
+					$new_t_keys = array_keys($new_t);
+					$tbl = $tbl_r = reset($new_t_keys);
 					if ($tbl)
 					{
 						$field = $new_t[$tbl]["index"];
@@ -3126,7 +3149,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$multi_fields = array();
 		foreach($to_fetch as $clid => $props)
 		{
-			$p = $GLOBALS["properties"][$clid];
+			$p = ifset($GLOBALS, "properties", $clid);
 			$this->_do_add_class_id($clid, true);
 			foreach($props as $pn => $resn)
 			{

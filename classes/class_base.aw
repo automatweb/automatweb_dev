@@ -3836,7 +3836,7 @@ class class_base extends aw_template
 
 		$errors = $this->validate_data(array(
 			"request" => $args,
-			"cfgform_id" => $this->cfgform_id,
+			"cfgform_id" => isset($this->cfgform_id) ? $this->cfgform_id : NULL,
 			"props" => &$properties,
 			"obj_inst" => &$o
 		));
@@ -4262,9 +4262,7 @@ class class_base extends aw_template
 
 		if ($new)
 		{
-			aw_session_set("added_object",$id);//axel h&auml;kkis
-
-			if ($alias_to || $args["rawdata"]["alias_to"])
+			if (!empty($alias_to) || !empty($args["rawdata"]["alias_to"]))
 			{
 				$_to = obj(($args["rawdata"]["alias_to"] ? $args["rawdata"]["alias_to"] : $alias_to));
 
