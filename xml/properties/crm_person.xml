@@ -1886,7 +1886,6 @@
             <table>objects</table>
             <group>data</group>
             <type>textbox</type>
-            <store>no</store>
             <user>1</user>
             <field>fake_address_address</field>
             <caption>Fake aadress</caption>
@@ -1896,7 +1895,6 @@
             <table>objects</table>
             <group>data</group>
             <type>textbox</type>
-            <store>no</store>
             <user>1</user>
             <field>fake_address_address2</field>
             <caption>Fake aadress 2</caption>
@@ -1906,7 +1904,6 @@
             <table>objects</table>
             <group>data</group>
             <type>textbox</type>
-            <store>no</store>
             <user>1</user>
             <field>fake_address_postal_code</field>
             <caption>Fake postiindeks</caption>
@@ -1916,7 +1913,6 @@
             <table>objects</table>
             <group>data</group>
             <type>textbox</type>
-            <store>no</store>
             <user>1</user>
             <field>fake_address_city</field>
             <caption>Fake linn</caption>
@@ -1926,7 +1922,6 @@
             <table>objects</table>
             <group>data</group>
             <type>textbox</type>
-            <store>no</store>
             <user>1</user>
             <field>fake_address_county</field>
             <caption>Fake maakond</caption>
@@ -1936,7 +1931,6 @@
             <table>objects</table>
             <group>data</group>
             <type>textbox</type>
-            <store>no</store>
             <user>1</user>
             <field>fake_address_country</field>
             <caption>Fake riik</caption>
@@ -1946,7 +1940,6 @@
             <table>objects</table>
             <group>data</group>
             <type>textbox</type>
-            <store>no</store>
             <user>1</user>
             <field>fake_phone</field>
             <caption>Fake telefon</caption>
@@ -1956,7 +1949,6 @@
             <table>objects</table>
             <group>data</group>
             <type>textbox</type>
-            <store>no</store>
             <user>1</user>
             <field>fake_email</field>
             <caption>Fake email</caption>
