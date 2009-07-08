@@ -5,44 +5,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
 	<title>{VAR:html_title} {VAR:title_action}</title>
 	<link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico" />
-	<!-- SUB: MINIFY_JS_AND_CSS -->
-	<link href="{VAR:baseurl}/automatweb/css/style.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/jquery-1.2.3.min.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_timer.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_releditor.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_dump.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_formreset.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_object_quickadd.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_tabs.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_gup.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_sup.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_bgiframe.min.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_dimensions.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_ajaxQueue.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_thickbox-compressed.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_autocomplete.min.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_hotkeys_0.0.3.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_shortcut_manager.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery-impromptu.1.5.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_init_session_modal.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.selectboxes.min.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_unload_handler.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_popup.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.tooltip.min.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.rightClick.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_please_wait_window.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/ajax.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/CalendarPopupMin.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/popup_menu.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/BronCalendar.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/url.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw_help.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
-	<!-- END SUB: MINIFY_JS_AND_CSS -->
+	<link href="{VAR:baseurl}/automatweb/css/style-min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/js-min.js"></script>
 	{VAR:javascript}
 	<script type="text/javascript">
 	xchanged = 0;

@@ -86,4 +86,56 @@ trans.untrans:
 
 trans: pot trans.aw
 
+js:
+	@echo "Generating automatweb/js/js-min"
+	@if test -e scripts/yuicompressor-2.4.2.jar; \
+		then \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/jquery-1.3.2.min.js > automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_timer.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_aw_releditor.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_dump.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_formreset.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_aw_object_quickadd.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_tabs.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_gup.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_sup.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_bgiframe.min.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_dimensions.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_ajaxQueue.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_thickbox-compressed.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_autocomplete.min.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_hotkeys_0.0.3.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_shortcut_manager.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery-impromptu.1.5.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_init_session_modal.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery.selectboxes.min.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_aw_unload_handler.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_popup.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery.tooltip.min.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery.rightClick.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/jquery/plugins/jquery_please_wait_window.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/aw.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/browserdetect.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/cbobjects.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/ajax.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/CalendarPopupMin.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/popup_menu.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/BronCalendar.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/url.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/aw_help.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/other.js >> automatweb/js/js-min.js && \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/js/defs.js >> automatweb/js/js-min.js \
+	else \
+		echo "Yuicompressor not found. Can't create js"; \
+	fi
+
+styles:
+	@echo "Generating automatweb/css/style-min.css"
+	@if test -e scripts/yuicompressor-2.4.2.jar; \
+		then \
+			java -jar scripts/yuicompressor-2.4.2.jar automatweb/css/style.css > automatweb/css/style-min.css  \
+	else \
+		echo "Yuicompressor not found. Can't create js"; \
+	fi
+
 all: ini properties msg orb remoting
