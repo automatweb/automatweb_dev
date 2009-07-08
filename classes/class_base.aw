@@ -6344,7 +6344,7 @@ class class_base extends aw_template
 			$function_draft = "
 			var draftable_props = new Array('".implode("','", $draftable_props)."');
 			var prop_vals = new Array();
-			$(document).ready(function()
+			jQuery(document).ready(function()
 			{";
 			if(count($drafted_props) > 0)
 			{
@@ -6355,7 +6355,7 @@ class class_base extends aw_template
 					for(var i = 0; i < drafted_props.length; i++)
 					{
 						var prop = drafted_props[i];
-						$.ajax({
+						jQuery.ajax({
 							type: 'GET',
 							url: '".$this->mk_my_orb("draft", array("id" => $arr["request"]["id"]))."',
 							data: 'prop='+prop,
@@ -6370,7 +6370,7 @@ class class_base extends aw_template
 				}
 				else
 				{
-					$.ajax({
+					jQuery.ajax({
 						url: '".$this->mk_my_orb("remove_drafts", array("id" => $arr["request"]["id"]))."',
 					});
 				};

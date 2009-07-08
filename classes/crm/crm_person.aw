@@ -5300,11 +5300,11 @@ class crm_person extends class_base
 	function callback_generate_scripts($arr)
 	{
 		$f = "
-		$(document).ready(function()
+		jQuery(document).ready(function()
 		{
-			$('input[id^=\'languages_releditor_\'][id$=\'__other_\']').parent().parent().hide();
-			$('input[id^=\'skills_releditor\'][id$=\'__other_\']').parent().parent().hide();
-			$('#other_mlang').parent().parent().hide();
+			jQuery('input[id^=\'languages_releditor_\'][id$=\'__other_\']').parent().parent().hide();
+			jQuery('input[id^=\'skills_releditor\'][id$=\'__other_\']').parent().parent().hide();
+			jQuery('#other_mlang').parent().parent().hide();
 		});
 		";
 		if (!$arr["new"])
