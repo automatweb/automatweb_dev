@@ -376,7 +376,7 @@ function aw_config_init_class($that)
 }
 
 // loads localization variables from the site's $site_basedir
-function lc_site_load($file, &$obj)
+function lc_site_load($file, $obj)
 {
 	if (aw_ini_get("user_interface.full_content_trans") === "1")
 	{
