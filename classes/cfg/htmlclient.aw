@@ -473,6 +473,7 @@ class htmlclient extends aw_template
 		}
 		// I wanda mis kammi ma selle tmp-iga tegin
 		// different layout mode eh? well, it sucks!
+
 		if (isset($this->tmp) && is_object($this->tmp))
 		{
 			$this->tmp->vars($tpl_vars);
@@ -484,6 +485,51 @@ class htmlclient extends aw_template
 			$rv = $this->parse($add2."LINE".$add);
 		}
 		return $rv;
+	}
+
+	private function _do_cfg_edit_mode_check($arr)
+	{
+		if (!$_SESSION["cfg_admin_mode"] == 1 || !is_oid($_GET["id"]))
+		{
+			return "";
+		}
+
+		static $cur_cfgform;
+		static $cur_cfgform_found = false;
+
+		if (!$cur_cfgform_found)
+		{
+			$cur_cfgfor_found = true;
+			$i = get_instance(CL_FILE);
+			$o = obj($_GET["id"]);
+			$i->clid = $o->class_id();
+			$cur_cfgform = $i->get_cfgform_for_object(array(
+				"args" => $_GET,
+				"obj_inst" => $o,
+				"ignore_cfg_admin_mode" => 1
+			));
+		}
+	
+
+		// get default cfgform for this object and get property status from that
+		$cf = $cur_cfgform;
+		if ($this->can("view", $cf))
+		{
+			$cfo = obj($cf);
+			if ($cfo->instance()->is_active_property($cfo, $arr["name"]))
+			{
+				return "<a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png' id='cfgEditProp".$arr["name"]."'/></a>";
+			}
+			else
+			{
+				return "<a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_red.png' id='cfgEditProp".$arr["name"]."'/></a>";
+			}
+		}
+		else
+		{
+			// green buton
+			return "<a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png' id='cfgEditProp".$arr["name"]."'/></a>";
+		}
 	}
 
 	////
@@ -1251,6 +1297,10 @@ class htmlclient extends aw_template
 				$retval = html::text($arr);
 				break;
 		};
+
+		// do cfg edit mode check
+		$retval .= $this->_do_cfg_edit_mode_check($arr);
+
 		return $retval;
 	}
 

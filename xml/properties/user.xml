@@ -527,6 +527,16 @@
             <caption>Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites)</caption>
       </property>
       <property>
+            <name>cfg_admin_mode</name>
+            <table>objects</table>
+            <group>settings_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Seadete administreerimise vaade</caption>
+      </property>
+      <property>
             <name>stoppers</name>
             <table>objects</table>
             <group>settings_general</group>

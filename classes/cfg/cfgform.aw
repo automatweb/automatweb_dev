@@ -3983,8 +3983,8 @@ class cfgform extends class_base
 	**/
 	function cff_add_prop($o, $pn, $pd)
 	{
-		$pl = $o->meta("cfg_proplist");
-		$pl[$pn] = array(
+		$this->cfg_proplist = $o->meta("cfg_proplist");
+		$this->cfg_proplist[$pn] = array(
 			"name" => $pn,
 			"caption" => $pd["caption"],
 			"group" => $pd["group"],
@@ -5174,6 +5174,24 @@ class cfgform extends class_base
 	}
 
 	/**
+		@attrib name=hide_property api=1
+		@param id required type=int
+		@param property required type=string
+	**/
+	function hide_property($arr)
+	{
+		extract($arr);
+		if(!$this->can("view", $id))
+			return false;
+
+		$o = obj($id);
+		$cfg_proplist = $o->meta("cfg_proplist");
+		$cfg_proplist[$property]["hidden"] = 1;
+		$o->set_meta("cfg_proplist", $cfg_proplist);
+		$o->save();
+	}
+
+	/**
 		@attrib name=remove_property api=1
 		@param id required type=int
 		@param property required type=string
@@ -5266,6 +5284,76 @@ class cfgform extends class_base
 		$cffi = get_instance(CL_CFGFORM);
 		$cff = $cffi->get_sysdefault(array("clid" => $clid));
 		return $this->can("view", $cff) ? $cffi->get_cfg_proplist($cff) : $o->get_property_list();
+	}
+
+	function is_active_property($cf, $prop)
+	{
+		$cfg_proplist = $cf->meta("cfg_proplist");
+		return isset($cfg_proplist[$prop]);
+	}
+
+	/**
+		@attrib name=cfadm_click_prop
+		@param oid required
+		@param prop required
+	**/
+	function cfadm_click_prop($arr)
+	{	
+		if (!$_SESSION["cfg_admin_mode"])
+		{
+			die("");
+		}
+
+		$o = obj($arr["oid"]);
+		$this->clid = $o->class_id();
+		$cfid = $this->get_cfgform_for_object(array(
+			"args" => $arr,
+			"obj_inst" => $o,
+			"ignore_cfg_admin_mode" => 1
+		));
+
+		if (!$cfid)
+		{
+			$clss = aw_ini_get("classes");
+
+			// create system default cf for this class
+
+			$cf = obj();
+			$cf->set_parent($o->parent());
+			$cf->set_class_id(CL_CFGFORM);
+			$cf->set_name(sprintf(t("Seadete vorm klassile %s"), $clss[$o->class_id()]["name"]));
+			$cf->set_flag(OBJ_FLAG_IS_SELECTED, 1);
+			$cf->set_subclass($o->class_id());
+			$this->cff_init_from_class($cf, $o->class_id());
+			$cf->save();
+		}
+		else
+		{
+			$cf = obj($cfid);
+		}
+
+
+		// toggle prop in cf
+		if ($this->is_active_property($cf, $arr["prop"]))
+		{
+			$this->remove_property(array(
+				"id" => $cf->id(),
+				"property" => $arr["prop"]
+			));
+			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_red.png");
+		}
+		else
+		{
+			$pl = $o->get_property_list();
+			$this->cff_add_prop(
+				$cf,
+				$arr["prop"],
+				$pl[$arr["prop"]]
+			);
+//die(dbg::dump($cf->meta("cfg_proplist")));
+			$cf->save();
+			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png");
+		}
 	}
 }
 

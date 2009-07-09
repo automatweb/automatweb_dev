@@ -5,6 +5,11 @@ global $awt;
 $site_title = isset($GLOBALS["site_title"]) ? $GLOBALS["site_title"] : "AutomatWeb";
 $sf->read_template("index.tpl");
 
+if ($_SESSION["cfg_admin_mode"] == 1)
+{
+	$sf->vars(array("CFG_ADMIN_MODE" => $sf->parse("CFG_ADMIN_MODE")));
+}
+
 $i = get_instance(CL_ADMIN_IF);
 $i->insert_texts($sf);
 

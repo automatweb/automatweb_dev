@@ -104,6 +104,16 @@ $.init_session_modal({
 	btn_session_end_cancel		: "{VAR:btn_session_end_cancel}",
 	session_length			: {VAR:session_length}
 });
+
+<!-- SUB: CFG_ADMIN_MODE -->
+function cfEditClick(prop, oid)
+{
+	$.get("orb.aw", {class: "cfgform", action: "cfadm_click_prop", oid: oid,prop: prop}, function (pic) {
+		$("#cfgEditProp"+prop).attr("src", pic);
+	});
+}
+<!-- END SUB: CFG_ADMIN_MODE -->
+
 </script>
 
 <!-- p2is -->

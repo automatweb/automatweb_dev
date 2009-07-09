@@ -27,7 +27,7 @@
 
 	<!-- SUB: LINE -->
 	<tr>
-	    <td width="100" id="linecaption" >{VAR:caption}
+	    <td width="100" id="linecaption" >{VAR:cfgform_edit_mode}{VAR:caption}
 			<!-- SUB: HELP_POPUP -->
 			<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
 			<div class="tooltip">{VAR:comment}</div>
@@ -56,7 +56,7 @@
 
 	<!-- SUB: SUB_TITLE -->
 	<tr>
-	    <td colspan="2" id="subtitle">{VAR:value}</td>
+	    <td colspan="2" id="subtitle">{VAR:cfgform_edit_mode}{VAR:value}</td>
 	</tr>
 	<!-- END SUB: SUB_TITLE -->
 
@@ -106,7 +106,7 @@ this.disabled=true;self.disabled=true;
 			<!-- END SUB: GRID_ERR_MSG -->
 
 			<!-- SUB: CAPTION_TOP -->
-			{VAR:caption}
+			{VAR:cfgform_edit_mode}{VAR:caption}
 			<!-- SUB: HELP_POPUP -->
 				<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
 				<div class="tooltip">{VAR:comment}</div>
@@ -118,7 +118,7 @@ this.disabled=true;self.disabled=true;
 			<table border="0" width="100%">
 			<tr>
 				<td width="20%" align="right">
-				{VAR:caption}
+				{VAR:cfgform_edit_mode}{VAR:caption}
 				<!-- SUB: HELP_POPUP -->
 				<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
 				<div class="tooltip">{VAR:comment}</div>
@@ -132,7 +132,7 @@ this.disabled=true;self.disabled=true;
 		<!-- END SUB: GRIDITEM -->
 
 		<!-- SUB: GRIDITEM_NO_CAPTION -->
-		<div class="aw04gridcell_no_caption" name="{VAR:element_name}">{VAR:element}</div>
+		<div class="aw04gridcell_no_caption" name="{VAR:element_name}">{VAR:cfgform_edit_mode}{VAR:element}</div>
 		<!-- END SUB: GRIDITEM_NO_CAPTION -->
 
 		<!-- SUB: GRID_HBOX_OUTER -->

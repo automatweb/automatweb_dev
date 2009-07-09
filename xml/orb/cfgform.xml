@@ -83,5 +83,14 @@
 			</function>
 		</action>
 
+		<action name="cfadm_click_prop">
+			<function name="cfadm_click_prop">
+				<arguments>
+					<required name="oid" />
+					<required name="prop" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

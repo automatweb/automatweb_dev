@@ -222,6 +222,12 @@ class user_object extends _int_object
 		$p = obj($u->get_current_person());
 		return $p->get_mail();
 	}
+
+	function awobj_set_cfg_admin_mode($v)
+	{	
+		$_SESSION["cfg_admin_mode"] = $v;
+		return $this->set_prop("cfg_admin_mode", $v);
+	}
 }
 
 ?>

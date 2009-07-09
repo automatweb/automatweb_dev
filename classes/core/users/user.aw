@@ -210,6 +210,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 		@property draft_timeout type=textbox field=meta method=serialize table=objects
 		@caption Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites)
 
+	@property cfg_admin_mode type=checkbox ch_value=1 field=meta method=serialize table=objects
+	@caption Seadete administreerimise vaade
+
 	@property stoppers type=hidden table=objects field=meta method=serialize no_caption=1
 
 	@default group=settings_shortcuts

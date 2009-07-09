@@ -107,6 +107,11 @@ class users_user extends aw_template
 		$_SESSION["uid_oid"] = $u_oid;
 		aw_global_set("uid", $uid);
 
+		if ($user_obj->prop("cfg_admin_mode") == 1)
+		{
+			$_SESSION["cfg_admin_mode"] = 1;
+		}
+		
 		// init acl
 		$this->request_startup();
 		// The above certainly doesn't initiate acl, but maybe it has some other purpose... -kaarel 28.11.2008

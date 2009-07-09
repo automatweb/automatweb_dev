@@ -342,6 +342,11 @@ class class_base extends aw_template
 			$cfgform_id = $this->obj_inst->meta("cfgform_id");
 		}
 
+		if ($_SESSION["cfg_admin_mode"] == 1)
+		{
+			$cfgform_id = null;
+		}
+
 		$this->cfgform_id = $cfgform_id;
 
 		// well, i NEED to get the right property group BEFORE i get the right view..
@@ -381,6 +386,8 @@ class class_base extends aw_template
 		/////////////////////
 
 		$defview = 0;
+
+		$this->cli->used_cfgform = $this->cfgform_id;
 
 		if($this->can("view", $this->cfgform_id) && $args["action"] != "view")
 		{
@@ -1434,6 +1441,11 @@ class class_base extends aw_template
 	{
 		// or, if configuration form should be loaded from somewhere
 		// else, this is the place to do it
+
+		if ($_SESSION["cfg_admin_mode"] && !isset($args["ignore_cfg_admin_mode"]))
+		{
+			return "";
+		}
 
 		$action = $args["args"]["action"];
 		$retval = "";
