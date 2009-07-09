@@ -54,22 +54,19 @@ class mrp_case_obj extends _int_object
 	**/
 	public function awobj_set_customer($oid)
 	{
-		if(is_oid($oid) && $this->can("view", $oid))
+		try
 		{
-			try
+			$ws = $this->awobj_get_workspace();
+			if (is_oid($ws->prop("owner")))
 			{
-				$ws = $this->awobj_get_workspace();
 				$seller = $ws->prop("owner");
-				if(is_oid($seller) && $this->can("view", $seller))
-				{
-					// Make customer data object if doesn't exist.
-					obj($oid)->get_customer_relation(obj($seller), true);
-				}
+				// Make customer data object if doesn't exist.
+				obj($oid)->get_customer_relation(obj($seller), true);
 			}
-			catch(awex_mrp_case_workspace $E)
-			{
-				// Damnit!
-			}
+		}
+		catch(awex_mrp_case_workspace $E)
+		{
+			// Damnit!
 		}
 		return parent::set_prop("customer", $oid);
 	}
@@ -203,6 +200,81 @@ class mrp_case_obj extends _int_object
 		return $ol->names();
 	}
 
+	/** Creates a new job in this project
+		@attrib api=1 params=pos
+		@param resource type=CL_MRP_RESOURCE default=null
+		@returns CL_MRP_JOB
+			Created job object
+	**/
+	public function add_job(object $resource = null)
+	{
+		$workspace = $this->awobj_get_workspace();
+		$connections = $this->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
+		$job_number = (count ($connections) + 1);
+
+		if ($resource)
+		{
+			$resource_name = $resource->name();
+			$constructor_args = array("resource" => $resource);
+		}
+		else
+		{
+			$resource_name = t("ressurss m&auml;&auml;ramata");
+			$constructor_args = array();
+		}
+
+		if (!($jobs_folder = $workspace->prop ("jobs_folder")))
+		{
+			throw new awex_mrp_case_workspace("Workspace has no jobs folder");
+		}
+
+		$list = new object_list (array (
+			"class_id" => CL_MRP_JOB,
+			"exec_order" => ($job_number - 1),
+			"parent" => $jobs_folder,
+			"project" => $this->id ()
+		));
+		$prerequisite_job = $list->begin ();
+		$prerequisite = is_object ($prerequisite_job) ? $prerequisite_job->id () : "";
+
+		// get job number
+		$jobs = new object_data_list(
+			array(
+				"class_id" => CL_MRP_JOB,
+				"project" => $this->id()
+			),
+			array(
+				CL_MRP_JOB => array("jrk"),
+			)
+		);
+		$job_nr = 0;
+		foreach ($jobs->list_data as $job) //!!! vaadata miks list_data, see peaks private olema
+		{
+			$job_nr = max($job_nr, $job["jrk"]);
+		}
+		++$job_nr;
+
+		// create job object
+		$job = new object (array (
+		   "parent" => $jobs_folder,
+		   "class_id" => CL_MRP_JOB
+		), $constructor_args);
+		$job->set_prop ("exec_order", $job_number);
+		$job->set_prop ("prerequisites", new object_list(array("oid" => $prerequisite)));
+		$job->set_prop ("project", $this->id ());
+		$job->set_ord($job_nr);
+		// aw_disable_acl(); // should instead be configured by giving proper access rights
+		$job->save ();
+		// aw_restore_acl();
+
+		$this->connect (array (
+			"to" => $job,
+			"reltype" => "RELTYPE_MRP_PROJECT_JOB"
+		));
+
+		return $job;
+	}
+
 	public function save($exclusive = false, $previous_state = null)
 	{
 		$new = (null === $this->id());
@@ -222,7 +294,7 @@ class mrp_case_obj extends _int_object
 			}
 			else
 			{
-				throw new awex_mrp_case("order_quantity not set, can't save.");
+				$this->awobj_set_order_quantity(1);
 			}
 		}
 
@@ -646,7 +718,7 @@ class mrp_case_obj extends _int_object
 		$ws = get_instance(CL_MRP_WORKSPACE);
 		$ws->mrp_log($this->id(), NULL, "Projekt v&otilde;eti planeerimisest v&auml;lja");
 	}
-	
+
 	/**
 		@attrib name=save_materials_without_job api=1 params=pos
 

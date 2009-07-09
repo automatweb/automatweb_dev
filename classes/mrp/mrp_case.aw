@@ -54,6 +54,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY group=grp_case_schedule_gantt,grp_general,grp_case_workflow,grp_case_materials,grp_case_data editonly=1 parent=general_info
 	@caption Klient
 
+	@property customer_relation type=relpicker reltype=RELTYPE_CUSTOMER_RELATION editonly=1
+	@caption Kliendisuhe
+
 	@property progress type=hidden
 	@property extern_id type=hidden
 
@@ -71,7 +74,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 	@property archived type=text editonly=1
 	@caption Arhiveeritud
 
-	@property warehouse type=select editonly=1
+	@property purchasing_manager type=select editonly=1
 	@caption Ladu
 
 @default table=objects
@@ -237,6 +240,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @reltype MRP_CUSTOMER value=2 clid=CL_CRM_COMPANY
 @caption Klient
 
+@reltype CUSTOMER_RELATION value=6 clid=CL_CRM_COMPANY_CUSTOMER_DATA
+@caption Kliendisuhe
+
 @reltype MRP_PROJECT_JOB value=3 clid=CL_MRP_JOB
 @caption T&ouml;&ouml;
 
@@ -262,6 +268,7 @@ CREATE TABLE `mrp_case` (
   `state` tinyint(2) unsigned default '1',
   `extern_id` int(11) unsigned default NULL,
   `customer` int(11) unsigned default NULL,
+  `customer_relation` int(11) unsigned default NULL,
   `finished` int(10) unsigned default NULL,
   `archived` int(10) unsigned default NULL,
 
@@ -621,9 +628,9 @@ class mrp_case extends class_base
 				));
 				break;
 
-			case "warehouse":
+			case "purchasing_manager":
 				$ws = $arr["obj_inst"]->prop("workspace");
-				if($ws && $whs = $ws->prop("warehouse"))
+				if($ws && $whs = $ws->prop("purchasing_manager"))
 				{
 					$ol = new object_list(array(
 						"oid" => $whs,
@@ -704,6 +711,7 @@ class mrp_case extends class_base
 		{
 			$whs = $owner->prop("purchasing_manager");
 		}
+
 		if(count($whs))
 		{
 			$arr["warehouses"] = $whs;
@@ -2298,71 +2306,8 @@ class mrp_case extends class_base
 	function add_job ($arr)
 	{
 		$this_object = $arr["obj_inst"];
-		$workspace = $this->get_current_workspace ($arr);
-		$connections = $this_object->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
-		$resource_id = $arr["mrp_new_job_resource"];
-		$job_number = (count ($connections) + 1);
-
-		if (is_oid ($resource_id))
-		{
-			$resource = obj ($resource_id, array(), CL_MRP_RESOURCE);
-			$constructor_args = array("resource" => $resource);
-		}
-		else
-		{
-			$constructor_args = array();
-		}
-
-		if (!($jobs_folder = $workspace->prop ("jobs_folder")))
-		{
-			return false;//!!! veateade teha? siin ei tasu mingit suurt kella l88ma hakata.
-		}
-
-		$list = new object_list (array (
-			"class_id" => CL_MRP_JOB,
-			"exec_order" => ($job_number - 1),
-			"parent" => $jobs_folder,
-			"project" => $this_object->id ()
-		));
-		$prerequisite_job = $list->begin ();
-		$prerequisite = is_object ($prerequisite_job) ? $prerequisite_job->id () : "";
-
-		// get job number
-		$jobs = new object_data_list(
-			array(
-				"class_id" => CL_MRP_JOB,
-				"project" => $this_object->id()
-			),
-			array(
-				CL_MRP_JOB => array("jrk"),
-			)
-		);
-		$job_nr = 0;
-		foreach ($jobs->list_data as $job)
-		{
-			$job_nr = max($job_nr, $job["jrk"]);
-		}
-		++$job_nr;
-
-		// create job object
-		$job = new object (array (
-		   "parent" => $jobs_folder,
-		   "class_id" => CL_MRP_JOB
-		), $constructor_args);
-		$job->set_prop ("exec_order", $job_number);
-		$job->set_prop ("prerequisites", new object_list(array("oid" => $prerequisite)));
-		$job->set_prop ("project", $this_object->id ());
-		$job->set_ord($job_nr);
-		$job->set_name ($this_object->name () . " - " . $resource->name () . " - " . $job_nr);
-		// aw_disable_acl(); // should instead be configured by giving proper access rights
-		$job->save ();
-		// aw_restore_acl();
-
-		$this_object->connect (array (
-			"to" => $job,
-			"reltype" => "RELTYPE_MRP_PROJECT_JOB",
-		));
-
+		$resource = is_oid($arr["mrp_new_job_resource"]) ? new object($arr["mrp_new_job_resource"]) : null;
+		$job = $this_object->add_job($resource);
 		return $job->id();
 	}
 
@@ -3155,8 +3100,9 @@ class mrp_case extends class_base
 					aw_restore_acl();
 					return true;
 
-				case "warehouse":
+				case "purchasing_manager":
 				case "workspace":
+				case "customer_relation":
 				case "finished":
 				case "archived":
 				case "started":

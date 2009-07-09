@@ -138,6 +138,16 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>customer_relation</name>
+            <group>grp_general</group>
+            <table>mrp_case</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUSTOMER_RELATION</reltype>
+            <editonly>1</editonly>
+            <field>customer_relation</field>
+            <caption>Kliendisuhe</caption>
+      </property>
+      <property>
             <name>progress</name>
             <group>grp_general</group>
             <table>mrp_case</table>
@@ -188,12 +198,12 @@
             <caption>Arhiveeritud</caption>
       </property>
       <property>
-            <name>warehouse</name>
+            <name>purchasing_manager</name>
             <group>grp_general</group>
             <table>mrp_case</table>
             <type>select</type>
             <editonly>1</editonly>
-            <field>warehouse</field>
+            <field>purchasing_manager</field>
             <caption>Ladu</caption>
       </property>
       <property>
@@ -667,6 +677,11 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Klient</caption>
             </MRP_CUSTOMER>
+            <CUSTOMER_RELATION>
+                  <value>6</value>
+                  <clid>CL_CRM_COMPANY_CUSTOMER_DATA</clid>
+                  <caption>Kliendisuhe</caption>
+            </CUSTOMER_RELATION>
             <MRP_PROJECT_JOB>
                   <value>3</value>
                   <clid>CL_MRP_JOB</clid>
