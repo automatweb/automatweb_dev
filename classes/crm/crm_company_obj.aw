@@ -937,6 +937,7 @@ class crm_company_obj extends _int_object
 		$urlid = $this->add_url($address);
 		return $urlid;
 	}
+
 	function get_faxes()
 	{
 		$ret = array();
@@ -975,10 +976,11 @@ class crm_company_obj extends _int_object
 
 	/** returns customer relation object
 		@attrib api=1 params=pos
-		@param my_co optional
-		@param crea_if_not_exists optional
+		@param my_co type=CL_CRM_COMPANY default=null
+			By default current company used
+		@param crea_if_not_exists type=bool default=false
 			if no customer relation object, makes one
-		@returns object
+		@returns CL_CRM_COMPANY_CUSTOMER_DATA
 	**/
 	public function get_customer_relation($my_co = null, $crea_if_not_exists = false)
 	{
@@ -989,12 +991,12 @@ class crm_company_obj extends _int_object
 
 		if (!is_object($my_co) || !is_oid($my_co->id()))
 		{
-			return;
+			throw new awex_crm("Current company not defined");
 		}
 
-		if ($this->id() == $my_co)
+		if ($this->id() == $my_co->id())
 		{
-			return false;
+			throw new awex_crm("Company can't be its own customer");
 		}
 
 		static $gcr_cache;
@@ -1002,6 +1004,7 @@ class crm_company_obj extends _int_object
 		{
 			$gcr_cache = array();
 		}
+
 		if (isset($gcr_cache[$this->id()][$crea_if_not_exists][$my_co->id()]))
 		{
 			return $gcr_cache[$this->id()][$crea_if_not_exists][$my_co->id()];
@@ -1010,17 +1013,16 @@ class crm_company_obj extends _int_object
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
 			"buyer" => $this->id(),
-			"seller" => $my_co
+			"seller" => $my_co->id()
 		));
+
 		if ($ol->count())
 		{
 			$gcr_cache[$this->id()][$crea_if_not_exists][$my_co->id()] = $ol->begin();
 			return $ol->begin();
 		}
-		else
-		if ($crea_if_not_exists)
+		elseif ($crea_if_not_exists)
 		{
-			$my_co = obj($my_co);
 			$o = obj();
 			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
 			$o->set_name(t("Kliendisuhe ").$my_co->name()." => ".$this->name());
@@ -1028,6 +1030,8 @@ class crm_company_obj extends _int_object
 			$o->set_prop("seller", $my_co->id());
 			$o->set_prop("buyer", $this->id());
 			$o->save();
+			$o->connect(array("to" => $my_co, "type" => "RELTYPE_SELLER"));
+			$o->connect(array("to" => new object($this->id()), "type" => "RELTYPE_BUYER"));
 			$gcr_cache[$this->id()][$crea_if_not_exists][$this->id()] = $o;
 			return $o;
 		}
@@ -1554,6 +1558,27 @@ class crm_company_obj extends _int_object
 		return $this->prop("address_address")." ".$this->prop("address_city")." ".$this->prop("address_country");
 	}
 
+	/** Returns object list of professions defined in this company
+		@attrib api=1
+		@returns object_list
+	**/
+	public function get_company_professions()
+	{
+		$sections = new object_list($this->connections_from(array(
+			"type"=> "RELTYPE_SECTION"
+		)));
+		$professions = new object_list($this->connections_from(array(
+			"type"=> "RELTYPE_PROFESSIONS"
+		)));
+		foreach ($sections->arr() as $section)
+		{
+			$professions->add(new object_list($section->connections_from(array(
+				"type"=> "RELTYPE_PROFESSIONS"
+			))));
+		}
+		return $professions;
+	}
+
 	public function get_all_customer_ids($arr = array())
 	{
 		$filter = array(
@@ -1581,5 +1606,7 @@ class crm_company_obj extends _int_object
 	}
 
 }
+
+class awex_crm extends awex_obj {}
 
 ?>
