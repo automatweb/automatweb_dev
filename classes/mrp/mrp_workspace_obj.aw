@@ -8,6 +8,10 @@ require_once "mrp_header.aw";
 
 class mrp_workspace_obj extends _int_object
 {
+	// resource manager types
+	const MGR_TYPE_MR = 1; // manufacturing resources
+	const MGR_TYPE_HR = 2; // human resources
+
 /**
 	@attrib params=pos api=1
 	@returns void
@@ -187,6 +191,132 @@ class mrp_workspace_obj extends _int_object
 		return $ids;
 	}
 
+/** Creates a new project in this resource manager workspace
+	@attrib params=pos api=1
+	@param customer_relation type=CL_CRM_COMPANY_CUSTOMER_DATA default=null
+	@returns CL_MRP_CASE
+		Created project
+**/
+	public function create_project(object $customer_relation = null)
+	{
+		$case = obj(null, array(), CL_MRP_CASE);
+		$case->set_parent($this->id());
+		$case->set_prop("workspace", new object($this->id()));
+		$case->set_prop("purchasing_manager", $this->prop("purchasing_manager"));
+		if (is_object($customer_relation))
+		{
+			$customer = new object($customer_relation->prop("buyer"));
+			$case->set_name(sprintf(t("Kliendi %s projekt"), $customer->name()));
+			$case->set_prop("customer", $customer->id());
+			$case->set_prop("customer_relation", $customer_relation->id());
+		}
+		$case->save();
+
+		if (is_object($customer_relation))
+		{
+			$case->connect(array("to" => $customer, "type" => "RELTYPE_MRP_CUSTOMER"));
+			$case->connect(array("to" => $customer_relation, "type" => "RELTYPE_CUSTOMER_RELATION"));
+		}
+		return $case;
+	}
+
+/** Returns resource for person in given company. Creates one if not found.
+	@attrib params=pos api=1
+	@param company type=CL_CRM_COMPANY
+	@param person type=CL_CRM_PERSON
+	@returns CL_MRP_WORKSPACE
+**/
+	public static function get_person_resource(object $company, object $person)
+	{
+		$self = self::get_hr_manager($company);
+		$list = new object_list(array(
+			"class_id" => CL_MRP_RESOURCE,
+			"workspace" => $self->id(),
+			"CL_MRP_RESOURCE.RELTYPE_CONTAINING_OBJECT" => $person->id(),
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$resource = $list->begin();
+
+		if (!is_object($resource))
+		{
+			// create person resource
+			$parent = $self->prop("resources_folder");
+			$resource = obj(null, array(), CL_MRP_RESOURCE);
+			$resource->set_parent($parent);
+			$resource->set_name(sprintf(t("Ressurss '%s'"), $person->name()));
+			$resource->set_prop("workspace", $self);
+			$resource->set_prop("thread_data", 1);
+			$resource->set_prop("type", mrp_resource_obj::TYPE_SCHEDULABLE);
+			$resource->connect(array("to" => $self, "reltype" => "RELTYPE_MRP_OWNER"));
+			$resource->connect(array("to" => $person, "reltype" => "RELTYPE_CONTAINING_OBJECT"));
+			$resource->save();
+		}
+
+		return $resource;
+	}
+
+/** Returns system's human resource manager workspace applicable for given company. Creates one if not found.
+	@attrib params=pos api=1
+	@param company type=CL_CRM_COMPANY
+	@returns CL_MRP_WORKSPACE
+**/
+	public static function get_hr_manager(object $company)
+	{
+		$list = new object_list(array(
+			"class_id" => CL_MRP_WORKSPACE,
+			"subclass" => self::MGR_TYPE_HR,
+			"CL_MRP_WORKSPACE.RELTYPE_MRP_OWNER" => $company->id(),
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$ws = $list->begin();
+
+		if (!is_object($ws))
+		{
+			$list = new object_list(array(
+				"class_id" => CL_MRP_WORKSPACE,
+				"subclass" => self::MGR_TYPE_HR,
+				"site_id" => array(),
+				"lang_id" => array()
+			));
+			$ws = $list->begin();
+
+			if (is_object($ws))
+			{ // make first found workspace manage this company's human resources too
+				$ws->connect(array("to" => $company, "reltype" => "RELTYPE_MRP_OWNER"));
+			}
+			else
+			{ // create human resource manager
+				$parent = aw_ini_get("users.root_folder");
+				$ws = obj(null, array(), CL_MRP_WORKSPACE);
+				$ws->set_parent($parent);
+				$ws->set_subclass(self::MGR_TYPE_HR);
+				$ws->set_name(t("Systeemi inimressursside halduskeskkond"));
+				$ws->connect(array("to" => $company, "reltype" => "RELTYPE_MRP_OWNER"));
+				$ws->save();
+
+				$projects_folder = obj(null, array(), CL_MENU);
+				$projects_folder->set_parent($ws->id());
+				$projects_folder->set_name(t("Projektid"));
+				$projects_folder->save();
+				$resources_folder = obj(null, array(), CL_MENU);
+				$resources_folder->set_parent($ws->id());
+				$resources_folder->set_name(t("Ressursid"));
+				$resources_folder->save();
+				$jobs_folder = obj(null, array(), CL_MENU);
+				$jobs_folder->set_parent($ws->id());
+				$jobs_folder->set_name(t("T&ouml;&ouml;d"));
+				$jobs_folder->save();
+				$ws->set_prop("projects_folder", $projects_folder->id());
+				$ws->set_prop("resources_folder", $resources_folder->id());
+				$ws->set_prop("jobs_folder", $jobs_folder->id());
+				$ws->save();
+			}
+		}
+
+		return $ws;
+	}
 }
 
 /** Generic workspace error **/
