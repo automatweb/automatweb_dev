@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.16 2008/03/31 11:24:56 robert Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -25,7 +24,7 @@ class comments extends class_base
 		$prop = &$arr["property"];
 		$prname = isset($prop["name"]) ? $prop["name"] : "comments";
 		$rv = array();
-		
+
 		$this->obj = $arr["obj_inst"];
 		// alright, It seems that I need another way to to initialize this object
 		// comments for an image get saved under the image itself
@@ -100,7 +99,7 @@ class comments extends class_base
 		if (!empty($prop["no_form"]))
 		{
 			return $rv;
-		
+
 		}
 		$cols = empty($prop['textarea_cols']) ? 60 : $prop['textarea_cols'];
 		$rows = empty($prop['textarea_rows']) ? 10 : $prop['textarea_rows'];
@@ -131,7 +130,7 @@ class comments extends class_base
 				"name" => $prname . "[obj_id]",
 			),
 		);
-		$rv = $rv + $rv2;
+		$rv = !empty($prop["form_before_comments"]) ? ($rv2 + $rv) : ($rv + $rv2);
 		return $rv;
 	}
 
@@ -139,11 +138,14 @@ class comments extends class_base
 	{
 		$comm = get_instance(CL_COMMENT);
 		$commdata = $arr["prop"]["value"];
-		$nc = $comm->submit(array(
-			"parent" => $commdata["obj_id"],  // "parent" => $arr["obj_inst"]->id(),
-			"commtext" => $commdata["comment"],
-			"return" => "id",
-		));
+		if (strlen($commdata["comment"]))
+		{
+			$nc = $comm->submit(array(
+				"parent" => $commdata["obj_id"],  // "parent" => $arr["obj_inst"]->id(),
+				"commtext" => $commdata["comment"],
+				"return" => "id",
+			));
+		}
 	}
 
 	function pager($arr)
