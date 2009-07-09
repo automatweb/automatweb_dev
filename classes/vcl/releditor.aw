@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.178 2009/05/11 13:03:35 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.179 2009/07/09 17:05:41 voldemar Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -740,6 +740,11 @@ class releditor extends core
 		};
 
 		$obj_inst = false;
+
+		if (isset($arr["prop"]["edit_id"]) and $this->can("edit", $arr["prop"]["edit_id"]))
+		{
+			$edit_id = $arr["prop"]["edit_id"];
+		}
 
 		// load the first connection.
 		// It should be relatively simple to extend this so that it can load
