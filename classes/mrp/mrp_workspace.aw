@@ -387,7 +387,7 @@
 	@caption Projekti headeri kontroller
 
 	@property purchasing_manager type=relpicker reltype=RELTYPE_PURCHASING_MANAGER parent=left_column multiple=1
-	@caption Materjalide hankimise keskkond
+	@caption Laohalduse keskkond
 
 	@property hr_time_format type=chooser parent=left_column
 	@caption Ajaformaat t&ouml;&ouml;ajaaruannetes
@@ -455,6 +455,9 @@
 
 	@property parameter_plan_materials type=checkbox ch_value=1 parent=right_column
 	@caption Planeeri materjalide kasutust
+
+	@property logging_disabled type=checkbox ch_value=1 parent=right_column
+	@caption &Auml;ra logi operatsioone
 
 
 #@default group=grp_printer_current,grp_printer_done,grp_printer_aborted,grp_printer_in_progress,grp_printer_startable,grp_printer_notstartable
@@ -667,9 +670,9 @@
 @default group=grp_res_settings
 
 	@property res_settings_tb type=toolbar store=no no_caption=1
-	
 
-	@layout grp_res_settings_splitter type=hbox 
+
+	@layout grp_res_settings_splitter type=hbox
 
 		@layout grp_res_settings_tree_vb type=vbox closeable=1 area_caption=Seadete&nbsp;kategooriad parent=grp_res_settings_splitter
 
@@ -680,9 +683,9 @@
 @default group=grp_res_formats
 
 	@property res_formats_tb type=toolbar store=no no_caption=1
-	
 
-	@layout grp_res_formats_splitter type=hbox 
+
+	@layout grp_res_formats_splitter type=hbox
 
 		@layout grp_res_formats_tree_vb type=vbox closeable=1 area_caption=Formaatide&nbsp;kategooriad parent=grp_res_formats_splitter
 
@@ -1136,7 +1139,7 @@ class mrp_workspace extends class_base
 				$sort_by,
 				"planned_date" => $tmp,//!!! to enable sorting by planned_date which is in mrp_case_schedule table
 			);
-	
+
 
 			if(!empty($arr["request"]["cat"]) || !empty($arr["request"]["alph"]))
 			{
@@ -2296,7 +2299,7 @@ class mrp_workspace extends class_base
 			"resource" => $this->get_hours_resource($arr),
 			"groupby" => $groupby,
 		));
-		
+
 		$data = array();
 		$weeks = array();
 		$months = array();
@@ -2315,7 +2318,7 @@ class mrp_workspace extends class_base
 						$i = "0".$i;
 					}
 					$data[$pid][$y."_".$i] = isset($_data[$pid][$y][(int)$i]) ? $_data[$pid][$y][(int)$i] : 0;
-					
+
 					switch($type)
 					{
 						case "W":
@@ -2503,7 +2506,7 @@ class mrp_workspace extends class_base
 		}
 
 		$clientspan = automatweb::$request->arg("clientspan");
-		
+
 		if($this->can("view", $clientspan))
 		{
 			$t->set_selected_item($clientspan);
@@ -3295,11 +3298,11 @@ class mrp_workspace extends class_base
 		}
 
 		$res = $this->db_fetch_array("
-			SELECT 
-				aw_resource_id as res, 
+			SELECT
+				aw_resource_id as res,
 				SUM(LEAST(aw_tm - $from, aw_job_last_duration, $to - aw_tm + aw_job_last_duration)) as sum
-			FROM 
-				mrp_job_rows 
+			FROM
+				mrp_job_rows
 			WHERE
 				$pid_query
 				aw_job_previous_state = $state AND
@@ -7270,13 +7273,13 @@ class mrp_workspace extends class_base
 						$from = mktime(0, 0, 0, $M, $D-$N-6, $Y);
 						$to = mktime(23, 59, 59, $M, $D-$N, $Y);
 					break;
-	
+
 					case "current_month":
 						list($Y, $M) = explode("-", date("Y-n"));
 						$from = mktime(0, 0, 0, $M, 1, $Y);
 						$to = mktime(23, 59, 59, $M+1, 0, $Y);
 					break;
-	
+
 					case "last_month":
 						list($Y, $M) = explode("-", date("Y-n"));
 						$from = mktime(0, 0, 0, $M-1, 1, $Y);
@@ -7287,7 +7290,7 @@ class mrp_workspace extends class_base
 			}
 
 			$ol = new object_list($filter);
-			
+
 			foreach($ol->arr() as $case)
 			{
 				$t->define_data(array(
@@ -8246,13 +8249,10 @@ class mrp_workspace extends class_base
 
 	function _do_pj_toolbar($arr, $job)
 	{
-		$tmp = $arr["obj_inst"];
 		$arr["obj_inst"] = $job;
-		$j = get_instance(CL_MRP_JOB);
-		
 		$arr["request"]["id"] = $job->id();
+		$j = get_instance(CL_MRP_JOB);
 		$j->callback_on_load($arr);
-		
 		$j->create_job_toolbar($arr);
 
 		$arr["prop"]["toolbar"]->add_button(array(
@@ -8261,7 +8261,6 @@ class mrp_workspace extends class_base
 			"action" => "save_pj_comment",
 			"confirm" => t("Oled kindel et soovid kommentaari salvestada?"),
 		));
-		$arr["obj_inst"] = $tmp;
 	}
 
 	/**
@@ -8472,7 +8471,9 @@ class mrp_workspace extends class_base
 
 	function mrp_log($proj, $job, $msg, $comment = '')
 	{
+		///!!!! logging_disabled teha.
 		$this->quote(&$comment);
+		$this->quote(&$msg);
 		$this->db_query("INSERT INTO mrp_log (
 					project_id,job_id,uid,tm,message,comment
 				)
@@ -8591,15 +8592,15 @@ class mrp_workspace extends class_base
 				break;
 
 			case "persons_personnel_tree":
-				if(automatweb::$request->arg("group") == "my_stats")
+				if(automatweb::$request->arg("group") === "my_stats")
 				{
 					return false;
 				}
-				elseif(automatweb::$request->arg("group") == "grp_persons_jobs_report")
+				elseif(automatweb::$request->arg("group") === "grp_persons_jobs_report")
 				{
 					$arr["area_caption"] = t("Vali inimesed, kelle tehtud t&ouml;id soovid n&auml;ha");
 				}
-				elseif(automatweb::$request->arg("group") == "grp_persons_quantity_report")
+				elseif(automatweb::$request->arg("group") === "grp_persons_quantity_report")
 				{
 					$arr["area_caption"] = t("Vali inimesed, kelle t&uuml;kiarvestust soovid n&auml;ha");
 				}
@@ -9373,19 +9374,18 @@ END ajutine
 
 	public function callback_generate_scripts($arr)
 	{
-		if(automatweb::$request->arg("group") == "grp_material_report")
+		if(automatweb::$request->arg("group") === "grp_material_report")
 		{
 			$js = "
 				function update_material_table()
 				{
-
 					$.post('/automatweb/orb.aw?class=mrp_workspace&action=ajax_update_prop',{
 							id: ".$arr["obj_inst"]->id()."
 							, prop: 'material_stats_table'
 							, people: $('[name=people]').val()
 							, material: $('[name=material]').val()
 							, timespan: $('[name=timespan]').val()
-							, grouping: document.getElementById('resource_stats_grouping').value
+						, grouping: document.getElementById('resource_stats_grouping').value
 							, resource: $('[name=resource]').val()}
 							,function(html){
 						x=document.getElementsByName('material_stats_table');
@@ -9396,9 +9396,9 @@ END ajutine
 				{
 					$.post('/automatweb/orb.aw?class=mrp_workspace&action=ajax_update_prop',{
 						id: ".$arr["obj_inst"]->id()."
-						, prop: 'grp_material_tree'
-						, material: $('[name=material]').val()}
-						,function(html){
+					, prop: 'grp_material_tree'
+					, material: $('[name=material]').val()}
+					,function(html){
 						x=document.getElementById('grp_material_tree');
 						x.innerHTML = html;//alert(html);
 					});
@@ -9414,13 +9414,11 @@ END ajutine
 						x.innerHTML = html;//alert(html);
 					});
 				}
-";
-			return $js;
-
+			";
 		}
-		if(automatweb::$request->arg("group") == "grp_customers")
+		elseif(automatweb::$request->arg("group") === "grp_customers")
 		{
-			return "
+			$js = "
 				function update_priors()
 				{
 					var a=document.getElementsByName('sp_status');
@@ -9435,7 +9433,7 @@ END ajutine
 					});
 				}";
 		}
-		if(automatweb::$request->arg("group") == "grp_projects")
+		elseif(automatweb::$request->arg("group") === "grp_projects")
 		{
 			$vars = array("sp_name" , "sp_comment" , "sp_customer");
 			$date_fields = array("sp_starttime" , "sp_due_date" , "sp_start_date_start" , "sp_start_date_end");
@@ -9452,8 +9450,7 @@ END ajutine
 				$ajax_vars[] = $var."_"."year: document.getElementsByName('".$var."[year]')[0].value\n";
 			}
 
-			return "
-
+			$js = "
 				function update_projects_div()
 				{
 					var a=document.getElementsByName('sp_status');
@@ -9475,25 +9472,26 @@ END ajutine
 					});
 				}";
 		}
-	
-		if(automatweb::$request->arg("group") == "grp_users_mgr")
+		elseif(automatweb::$request->arg("group") === "grp_users_mgr")
 		{
-			return "
-$(document).ready(function(){
-	$(\"input[type='checkbox'][name$='][all_resources]']\").click(function(){
-		o = $(this);
-		if(o.attr('checked'))
-		{
-			$(\"select[name^='\"+o.attr('name').replace('all_resources', 'resource')+\"']\").attr('disabled', 'disabled');
-		}
-		else
-		{
-			$(\"select[name^='\"+o.attr('name').replace('all_resources', 'resource')+\"']\").removeAttr('disabled');
-		}
-	});
-});
+			$js = "
+				$(document).ready(function(){
+					$(\"input[type='checkbox'][name$='][all_resources]']\").click(function(){
+						o = $(this);
+						if(o.attr('checked'))
+						{
+							$(\"select[name^='\"+o.attr('name').replace('all_resources', 'resource')+\"']\").attr('disabled', 'disabled');
+						}
+						else
+						{
+							$(\"select[name^='\"+o.attr('name').replace('all_resources', 'resource')+\"']\").removeAttr('disabled');
+						}
+					});
+				});
 			";
 		}
+
+		return $js;
 	}
 
 

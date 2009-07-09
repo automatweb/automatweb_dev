@@ -1120,7 +1120,7 @@
             <reltype>RELTYPE_PURCHASING_MANAGER</reltype>
             <parent>left_column</parent>
             <multiple>1</multiple>
-            <caption>Materjalide hankimise keskkond</caption>
+            <caption>Laohalduse keskkond</caption>
       </property>
       <property>
             <name>hr_time_format</name>
@@ -1336,6 +1336,17 @@
             <ch_value>1</ch_value>
             <parent>right_column</parent>
             <caption>Planeeri materjalide kasutust</caption>
+      </property>
+      <property>
+            <name>logging_disabled</name>
+            <group>grp_settings_def</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>right_column</parent>
+            <caption>&amp;amp;Auml;ra logi operatsioone</caption>
       </property>
       <property>
             <name>printer_tree</name>
