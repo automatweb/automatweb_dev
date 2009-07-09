@@ -59,14 +59,14 @@ class crm_person_obj extends _int_object
 	}
 
 
-	/** returns person profession selection
+	/** returns person profession selection. List of professions in $co/$units currently held by this person
 		@attrib api=1
-		@param co optional type=oid
+		@param co required type=oid
 			company id
 		@param units optional type=array
 			unit object ids
-		@return array
-			profession names
+		@returns array
+			profession id => name pairs
 	**/
 	public function get_profession_selection($co, $units = array())
 	{
@@ -179,7 +179,7 @@ class crm_person_obj extends _int_object
 			case "org_section":
 				return $this->get_org_section();
 		}
-		if($k == "title" && parent::prop($k) === 0)
+		if($k === "title" && parent::prop($k) === 0)
 		{
 			return 3;
 		}
