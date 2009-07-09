@@ -16,7 +16,6 @@
             <group>general_sub</group>
             <field>jrk</field>
             <type>textbox</type>
-            <display>none</display>
             <caption>Jrk</caption>
       </property>
       <property>
@@ -714,7 +713,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_phone</field>
-            <caption>Fake phone</caption>
+            <caption>Telefon</caption>
       </property>
       <property>
             <name>fake_fax</name>
@@ -722,7 +721,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_fax</field>
-            <caption>Fake fax</caption>
+            <caption>Faks</caption>
       </property>
       <property>
             <name>fake_mobile</name>
@@ -730,7 +729,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_mobile</field>
-            <caption>Fake mobile</caption>
+            <caption>Mobiiltelefon</caption>
       </property>
       <property>
             <name>fake_skype</name>
@@ -738,7 +737,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_skype</field>
-            <caption>Fake skype</caption>
+            <caption>Skype</caption>
       </property>
       <property>
             <name>fake_email</name>
@@ -746,7 +745,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_email</field>
-            <caption>Fake e-mail</caption>
+            <caption>E-post</caption>
       </property>
       <property>
             <name>fake_url</name>
@@ -754,7 +753,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_url</field>
-            <caption>Fake URL</caption>
+            <caption>WWW</caption>
       </property>
       <property>
             <name>fake_address_address</name>
@@ -762,7 +761,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_address_address</field>
-            <caption>Fake address</caption>
+            <caption>Aadress</caption>
       </property>
       <property>
             <name>fake_address_postal_code</name>
@@ -770,7 +769,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_address_postal_code</field>
-            <caption>Fake ZIP code</caption>
+            <caption>Postiindeks</caption>
       </property>
       <property>
             <name>fake_address_city</name>
@@ -778,7 +777,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_address_city</field>
-            <caption>Fake city</caption>
+            <caption>Linn</caption>
       </property>
       <property>
             <name>fake_address_city_relp</name>
@@ -788,7 +787,7 @@
             <reltype>RELTYPE_FAKE_CITY</reltype>
             <automatic>1</automatic>
             <field>fake_address_city_relp</field>
-            <caption>Fake city</caption>
+            <caption>Linn</caption>
       </property>
       <property>
             <name>fake_address_county</name>
@@ -796,7 +795,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_address_county</field>
-            <caption>Fake county</caption>
+            <caption>Maakond</caption>
       </property>
       <property>
             <name>fake_address_county_relp</name>
@@ -806,7 +805,7 @@
             <reltype>RELTYPE_FAKE_COUNTY</reltype>
             <automatic>1</automatic>
             <field>fake_address_county_relp</field>
-            <caption>Fake county</caption>
+            <caption>Maakond</caption>
       </property>
       <property>
             <name>fake_address_country</name>
@@ -814,7 +813,7 @@
             <group>add_info</group>
             <type>textbox</type>
             <field>fake_address_country</field>
-            <caption>Fake country</caption>
+            <caption>Riik</caption>
       </property>
       <property>
             <name>fake_address_country_relp</name>
@@ -824,7 +823,7 @@
             <reltype>RELTYPE_FAKE_COUNTRY</reltype>
             <automatic>1</automatic>
             <field>fake_address_country_relp</field>
-            <caption>Fake country</caption>
+            <caption>Riik</caption>
       </property>
       <property>
             <name>description_doc</name>

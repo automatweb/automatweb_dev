@@ -356,13 +356,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 			@property mails_s_name type=textbox size=15 store=no captionside=top parent=mails_search
 			@caption Teema
-	
+
 			@property mails_s_content type=textbox size=15 store=no captionside=top parent=mails_search
 			@caption Sisu
 
 			@property mails_s_customer type=textbox size=15 store=no captionside=top parent=mails_search
 			@caption Klient
-	
+
 			@property mails_s_sbt type=submit store=no no_caption=1 parent=mails_search
 			@caption Otsi
 
@@ -668,28 +668,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 // fake address props here, so we can write to them and they go to the real address property
 @property fake_address_address type=textbox user=1
-@caption Fake aadress
+@caption Aadress
 
 @property fake_address_address2 type=textbox user=1
-@caption Fake aadress 2
+@caption Aadress 2
 
 @property fake_address_postal_code type=textbox user=1
-@caption Fake postiindeks
+@caption Postiindeks
 
 @property fake_address_city type=textbox user=1
-@caption Fake linn
+@caption Linn
 
 @property fake_address_county type=textbox user=1
-@caption Fake maakond
+@caption Maakond
 
 @property fake_address_country type=textbox user=1
-@caption Fake riik
+@caption Riik
 
 @property fake_phone type=textbox user=1
-@caption Fake telefon
+@caption Telefon
 
 @property fake_email type=textbox user=1
-@caption Fake email
+@caption E-post
 
 
 
@@ -4196,7 +4196,7 @@ class crm_person extends class_base
 
 	function _get_mails_tbl($arr)
 	{
-	
+
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"caption" => t("Saatja nimi"),
@@ -4255,7 +4255,7 @@ class crm_person extends class_base
 			$data["sender"] = $person->name();
 			$data["content"] = $mail->prop("message");
 			$addr = explode("," , htmlspecialchars($mail->prop("mto")));
-			
+
 			$data["to"] = join("<br>" , $addr);
 
 			$data["attachments"] = "";

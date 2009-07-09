@@ -1888,7 +1888,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>fake_address_address</field>
-            <caption>Fake aadress</caption>
+            <caption>Aadress</caption>
       </property>
       <property>
             <name>fake_address_address2</name>
@@ -1897,7 +1897,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>fake_address_address2</field>
-            <caption>Fake aadress 2</caption>
+            <caption>Aadress 2</caption>
       </property>
       <property>
             <name>fake_address_postal_code</name>
@@ -1906,7 +1906,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>fake_address_postal_code</field>
-            <caption>Fake postiindeks</caption>
+            <caption>Postiindeks</caption>
       </property>
       <property>
             <name>fake_address_city</name>
@@ -1915,7 +1915,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>fake_address_city</field>
-            <caption>Fake linn</caption>
+            <caption>Linn</caption>
       </property>
       <property>
             <name>fake_address_county</name>
@@ -1924,7 +1924,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>fake_address_county</field>
-            <caption>Fake maakond</caption>
+            <caption>Maakond</caption>
       </property>
       <property>
             <name>fake_address_country</name>
@@ -1933,7 +1933,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>fake_address_country</field>
-            <caption>Fake riik</caption>
+            <caption>Riik</caption>
       </property>
       <property>
             <name>fake_phone</name>
@@ -1942,7 +1942,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>fake_phone</field>
-            <caption>Fake telefon</caption>
+            <caption>Telefon</caption>
       </property>
       <property>
             <name>fake_email</name>
@@ -1951,7 +1951,7 @@
             <type>textbox</type>
             <user>1</user>
             <field>fake_email</field>
-            <caption>Fake email</caption>
+            <caption>E-post</caption>
       </property>
       <property>
             <name>stats_s_from</name>

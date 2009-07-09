@@ -20,7 +20,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 @default group=general_sub
 	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
 
-	@property jrk field=jrk type=textbox display=none group=general_sub
+	// @property jrk field=jrk type=textbox display=none group=general_sub // kui vaja display=none tagasi panna siis pandagu see atribuudi nimi propertycollectoris ka kirja
+	@property jrk field=jrk type=textbox group=general_sub
 	@caption Jrk
 
 	@layout co_top type=hbox closeable=1 area_caption=&Uuml;ldandmed width=50%:50%
@@ -256,46 +257,46 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@caption User-defined classificator 5
 
 	@property fake_phone type=textbox
-	@caption Fake phone
+	@caption Telefon
 
 	@property fake_fax type=textbox
-	@caption Fake fax
+	@caption Faks
 
 	@property fake_mobile type=textbox
-	@caption Fake mobile
+	@caption Mobiiltelefon
 
 	@property fake_skype type=textbox
-	@caption Fake skype
+	@caption Skype
 
 	@property fake_email type=textbox
-	@caption Fake e-mail
+	@caption E-post
 
 	@property fake_url type=textbox
-	@caption Fake URL
+	@caption WWW
 
 	@property fake_address_address type=textbox
-	@caption Fake address
+	@caption Aadress
 
 	@property fake_address_postal_code type=textbox
-	@caption Fake ZIP code
+	@caption Postiindeks
 
 	@property fake_address_city type=textbox
-	@caption Fake city
+	@caption Linn
 
 	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY automatic=1
-	@caption Fake city
+	@caption Linn
 
 	@property fake_address_county type=textbox
-	@caption Fake county
+	@caption Maakond
 
 	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1
-	@caption Fake county
+	@caption Maakond
 
 	@property fake_address_country type=textbox
-	@caption Fake country
+	@caption Riik
 
 	@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1
-	@caption Fake country
+	@caption Riik
 
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
@@ -744,7 +745,7 @@ default group=org_objects
 		@layout my_proj_search type=vbox parent=my_proj_search_group closeable=1 area_caption=Otsing
 
 			@layout my_proj_search_b type=vbox parent=my_proj_search
- 
+
 				@layout my_proj_search_b_top type=vbox parent=my_proj_search_b
 
 					@property proj_search_name type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
@@ -1131,22 +1132,22 @@ default group=org_objects
 		@layout stats_list_l type=vbox parent=stats_list_box closeable=1
 
 			@layout stats_list_u type=vbox parent=stats_list_l closeable=1 area_caption=Aruanded
-	
+
 				@property stats_tree type=treeview store=no no_caption=1 parent=stats_list_u
 				@caption Aruannete puu
-	
+
 			@layout stats_list_s type=vbox parent=stats_list_l closeable=1 area_caption=Ajavahemik
-	
+
 				@property stats_stats_time_sel type=select store=no parent=stats_list_s captionside=top
 				@caption Ajavahemik
-	
+
 				@property stats_stats_from type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
 				@caption Alates
-	
+
 				@property stats_stats_to type=date_select store=no parent=stats_list_s captionside=top format=day_textbox,month_textbox,year_textbox
 				@caption Kuni
-	
-				@property stats_stats_search type=submit store=no parent=stats_list_s captionside=top no_caption=1 
+
+				@property stats_stats_search type=submit store=no parent=stats_list_s captionside=top no_caption=1
 				@caption Otsi
 
 		@layout stats_list_r type=vbox parent=stats_list_box closeable=1
@@ -1684,7 +1685,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype QUALITY_MENU value=83 clid=CL_MENU
 @caption Kvaliteedi men&uuml;&uuml;
 
-@reltype FAKE_COUNTRY value=84 clid=CL_CRM_COUNTRY 	 
+@reltype FAKE_COUNTRY value=84 clid=CL_CRM_COUNTRY
 @caption Fake country
 
 */
@@ -2004,7 +2005,7 @@ class crm_company extends class_base
 		{
 			$value = $obj->id();
 		}
-		
+
 		if($show_people)
 		{
 			// preload sections from persons
@@ -2049,7 +2050,7 @@ class crm_company extends class_base
 					"class_id" => CL_CRM_PERSON,
 					"site_id" => array(),
 					"lang_id" => array(),
-					"CL_CRM_PERSON.RELTYPE_RANK" => $tmp_obj->id(), 
+					"CL_CRM_PERSON.RELTYPE_RANK" => $tmp_obj->id(),
 					"oid" => $p2s,
 				));
 				foreach($pol->arr() as $po)
@@ -2243,7 +2244,7 @@ class crm_company extends class_base
 					$this->move_comments_from_meta_to_objects($arr);
 				}
 				$tmp = array();
-				
+
 				foreach($arr["obj_inst"]->get_comments()->arr() as $comm)
 				{
 					if(strlen(trim($comm->commtext)))
@@ -3285,8 +3286,8 @@ class crm_company extends class_base
 
 		// Security!
 		$no_html = array(
-			"fake_email", 
-			"fake_address_address", 
+			"fake_email",
+			"fake_address_address",
 			"fake_address_address2",
 			"fake_address_postal_code",
 			"fake_address_city",
@@ -3630,7 +3631,7 @@ class crm_company extends class_base
 					));
 				}
 			}
-			else 
+			else
 */
 			if($conn->prop('reltype') == 22) //crm_person.client_im_handling
 			{
@@ -3690,8 +3691,8 @@ class crm_company extends class_base
 
 	/**
 		@attrib name=search_for_contacts
-		@param cat optional 
-		@param unit optional 
+		@param cat optional
+		@param unit optional
 	**/
 	function search_for_contacts($arr)
 	{
@@ -7042,7 +7043,7 @@ class crm_company extends class_base
 				"buyer" => $buyer->id(),
 				"seller" => $seller->id()
 			));
-	
+
 			if (!$ol->count())
 			{
 				$o = obj();
@@ -7378,7 +7379,7 @@ class crm_company extends class_base
 				el=document.getElementById(\"tnr\"+id);
 				td = el.parentNode;
 				tr = td.parentNode;
-	
+
 				tbl = tr;
 				while(tbl.tagName.toLowerCase() != \"table\")
 				{
@@ -7399,10 +7400,10 @@ class crm_company extends class_base
 				n_td.colSpan=9;
 				}
 				";
-				
+
 				$url_quick_task_entry = html::get_new_url(CL_TASK_QUICK_ENTRY, $arr["request"]["id"], array("in_popup" => 1));
 				$sc .= "
-				$.hotkeys.add('x',function(e){ 
+				$.hotkeys.add('x',function(e){
 					if (e.target.tagName.toLowerCase() != 'textarea' &&
 						e.target.tagName.toLowerCase() != 'input')
 					{
@@ -7416,7 +7417,7 @@ class crm_company extends class_base
 				$sc .= '
 				$("#bill_s_bill_no").blur( group_bills_clean_date);
 				$("#bill_s_bill_to").blur( group_bills_clean_date);
-				
+
 				function group_bills_clean_date()
 				{
 					if ($(this).attr("value").length>0)
@@ -7427,7 +7428,7 @@ class crm_company extends class_base
 				}
 				';
 			}
-			
+
 			$sc .= "
 				function bg_mark_task_done(link, eln, ns)
 				{
@@ -9667,7 +9668,7 @@ Bank accounts: yksteise all
 
 	/**
 	@attrib name=del_comment api=1 params=name
-	
+
 	@param id required type=oid acl=delete
 
 	@param post_ru required type=string
