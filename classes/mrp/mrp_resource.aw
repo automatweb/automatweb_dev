@@ -128,8 +128,8 @@
 
 	@property materials_tb type=toolbar no_caption=1
 
-		@layout materials_split type=hbox width=25%:75% 	 
-	  	 
+		@layout materials_split type=hbox width=25%:75%
+
 			@layout materials_tree_box parent=materials_split type=vbox area_caption=Materjalid closeable=1
 
 				@property materials_tree type=treeview parent=materials_tree_box no_caption=1
@@ -199,6 +199,9 @@
 
 @reltype RESOURCE_ABILITY_ENTRY value=7 clid=CL_MRP_RESOURCE_ABILITY
 @caption Ressursi j&otilde;udluse kirje
+
+@reltype CONTAINING_OBJECT value=8
+@caption Ressurssi kasutav objekt
 
 */
 
@@ -1565,7 +1568,7 @@ class mrp_resource extends class_base
 		}
 
 		$clientspan = automatweb::$request->arg("clientspan");
-		
+
 		if($this->can("view", $clientspan))
 		{
 			$t->set_selected_item($clientspan);

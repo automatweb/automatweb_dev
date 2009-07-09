@@ -565,6 +565,10 @@
                   <clid>CL_MRP_RESOURCE_ABILITY</clid>
                   <caption>Ressursi j&amp;amp;otilde;udluse kirje</caption>
             </RESOURCE_ABILITY_ENTRY>
+            <CONTAINING_OBJECT>
+                  <value>8</value>
+                  <caption>Ressurssi kasutav objekt</caption>
+            </CONTAINING_OBJECT>
       </reltypes>
       <layout>
             <job_list>
