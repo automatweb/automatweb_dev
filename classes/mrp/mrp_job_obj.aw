@@ -39,6 +39,7 @@ class mrp_job_obj extends _int_object
 	protected $mrp_job_state_data = array();
 
 	private $pause_state	= self::STATE_PAUSED; // used to discern between pausing and shift change in pause();
+	private $change_name = false; // when new resource or project set, job name changes
 
 
 	/**
@@ -227,6 +228,13 @@ class mrp_job_obj extends _int_object
 
 	function save($exclusive = false, $previous_state = null)
 	{
+		if ($this->change_name)
+		{
+			$project = is_oid($this->prop("project")) ? obj($this->prop("project"))->name() : t("Projektita");
+			$resource = is_oid($this->prop("resource")) ? obj($this->prop("resource"))->name() : t("Ressursita");
+			$this->set_name ($project . " - " . $resource . " - " . $this->ord());
+			$this->change_name = false;
+		}
 		$retval = parent::save($exclusive, $previous_state);
 		$this->log_state_change();
 		return $retval;
@@ -705,6 +713,10 @@ class mrp_job_obj extends _int_object
 
 /** Starts the job. Job must be planned.
     @attrib api=1 params=pos
+	@param comment type=string default=""
+		Arbitrary comment text
+	@param real_start_time type=int default=NULL
+		UNIX timestamp real start time. Default is the time when method is called. Used for reflecting job state changes asynchronously
 	@returns void
 	@comment This method requires job data to be fully loaded (load_data constructor parameter or load_data() method)
 	@errors
@@ -717,7 +729,7 @@ class mrp_job_obj extends _int_object
 		throws awex_mrp_job_not_loaded on load error.
 		throws awex_mrp_job on other errors.
 **/
-	function start ($comment = "")
+	function start ($comment = "", $real_start_time = null)
 	{
 		if (!$this->mrp_job_data_loaded)
 		{
@@ -735,6 +747,11 @@ class mrp_job_obj extends _int_object
 
 		try
 		{
+			if (empty($real_start_time))
+			{
+				$real_start_time = time();
+			}
+
 			// reserve resource
 			$this->mrp_resource->reserve($this->ref()); //!!! kas reserveerida enne kontrolle v6i p2rast?
 
@@ -750,7 +767,7 @@ class mrp_job_obj extends _int_object
 
 			### start job
 			$this->set_prop ("state", self::STATE_INPROGRESS);
-			$this->set_prop ("started", time ());
+			$this->set_prop ("started", $real_start_time);
 
 			// update job in project
 			$this->mrp_project->update_progress($this->ref());
@@ -821,6 +838,10 @@ class mrp_job_obj extends _int_object
     @attrib api=1 params=pos
 	@param quantity optional type=int,float
 		Amount/quantity of items done. If not specified, assumed that whole job done
+	@param comment type=string default=""
+		Arbitrary comment text
+	@param real_length type=int default=NULL
+		Real job duration in seconds. Default is the time when method is called minus start time. Used for reflecting job state changes asynchronously
 	@returns void
 	@comment This method requires job data to be fully loaded (load_data constructor parameter or load_data() method)
 	@errors
@@ -829,7 +850,7 @@ class mrp_job_obj extends _int_object
 		throws awex_mrp_job_not_loaded on load error.
 		throws awex_mrp_job on other errors.
 	**/
-	function done ($quantity = null, $comment = "")
+	function done ($quantity = null, $comment = "", $real_length = null)
 	{
 		if (!$this->mrp_job_data_loaded)
 		{
@@ -846,11 +867,16 @@ class mrp_job_obj extends _int_object
 			{ // job isn't in progress but resource is processing it, assume previous execution flow error and try to stop job on resource. try to correct job data also
 				try
 				{
+					if (null === $real_length)
+					{
+						$real_length = $this->get_real();
+					}
+
 					// free resource
 					$this->mrp_resource->stop_job($this->ref());
 					$this->set_prop ("state", self::STATE_DONE);
 					$this->set_prop("length_deviation", $this->get_deviation());
-					$this->set_prop("real_length", $this->get_real());
+					$this->set_prop("real_length", $real_length);
 					if ($this->prop("finished") < 2)
 					{
 						$this->set_prop ("finished", time());
@@ -1764,6 +1790,7 @@ class mrp_job_obj extends _int_object
 
 	public function awobj_set_resource($resource_id)
 	{
+		$this->change_name = true;
 		$resource = obj($resource_id, array(), CL_MRP_RESOURCE);
 		$this->connect (array (
 			"to" => $resource,
@@ -1774,6 +1801,7 @@ class mrp_job_obj extends _int_object
 
 	public function awobj_set_project($project_id)
 	{
+		$this->change_name = true;
 		$project = obj($project_id, array(), CL_MRP_CASE);
 		$this->connect (array (
 			"to" => $project,
@@ -2205,7 +2233,7 @@ class mrp_job_obj extends _int_object
 			All possible values: job, case, person.
 	**/
 	public static function get_progress_for_params($arr)
-	{	
+	{
 		$q = "
 			SELECT
 				%s
@@ -2338,7 +2366,7 @@ class mrp_job_obj extends _int_object
 	}
 }
 
-/** Generic job exception */
+/** Generic job exception **/
 class awex_mrp_job extends awex_obj {}
 
 /** Indicates a problem with internal data integrity **/
