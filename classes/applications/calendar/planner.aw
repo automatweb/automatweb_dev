@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.152 2009/05/06 12:31:20 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -16,7 +15,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@property status type=status
 	@caption Staatus
-	
+
 	@default field=meta
 	@default method=serialize
 
@@ -38,46 +37,46 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property day_end type=time_select rel=1
 	@caption P&auml;ev l&otilde;peb
 
-	@property minute_step type=select 
+	@property minute_step type=select
 	@caption S&uuml;ndmuse sisestamise minutite t&auml;psus
-	
-	@property event_def_len type=select 
+
+	@property event_def_len type=select
 	@caption S&uuml;ndmuse vaikimisi pikkus (min)
-	
+
 @default group=advanced
 
-	@property navigator_visible type=checkbox ch_value=1 default=1 
+	@property navigator_visible type=checkbox ch_value=1 default=1
 	@caption N&auml;ita navigaatorit
-	
-	@property navigator_months type=select 
+
+	@property navigator_months type=select
 	@caption Kuud navigaatoris
 
-	@property my_projects type=checkbox ch_value=1 
+	@property my_projects type=checkbox ch_value=1
 	@caption N&auml;ita projekte
 	@comment Kui valitud, siis n&auml;idatakse ka s&uuml;ndmusi k&otilde;igist projektidest, milles kalendri omanik osaleb.
 
-	@property workdays type=chooser multiple=1 
+	@property workdays type=chooser multiple=1
 	@caption T&ouml;&ouml;p&auml;evad
-	
-	@property tab_views type=chooser multiple=1 
+
+	@property tab_views type=chooser multiple=1
 	@caption Vaate tabid
-	
-	@property del_views type=select multiple=1 
+
+	@property del_views type=select multiple=1
 	@caption Kustutamisv&otilde;imalusega vaated
-	
-	@property event_entry_classes type=chooser multiple=1 orient=vertical 
+
+	@property event_entry_classes type=chooser multiple=1 orient=vertical
 	@caption S&uuml;ndmuste klassid
 	@comment Siit valitud klasse saab kasutada kalendrisse s&uuml;ndmuste sisestamiseks
 
-	@property month_week type=checkbox ch_value=1 
+	@property month_week type=checkbox ch_value=1
 	@caption N&auml;ita kuuvaadet samamoodi nagu n&auml;dalavaadet
-	
-	@property multi_days type=checkbox ch_value=1 
+
+	@property multi_days type=checkbox ch_value=1
 	@caption N&auml;ita mitmep&auml;evaseid s&uuml;ndmusi ainult esimesel p&auml;eval
-	
-	@property show_bdays type=checkbox ch_value=1 
+
+	@property show_bdays type=checkbox ch_value=1
 	@caption N&auml;ita s&uuml;nnip&auml;evi
-	
+
 @default group=vac_settings
 
 	@property vac_count type=textbox size=2 default=10
@@ -90,7 +89,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 @default group=add_event
 
-	@property add_event callback=callback_get_add_event 
+	@property add_event type=callback callback=callback_get_add_event
 	@caption Lisa s&uuml;ndmus
 
 @default group=create_events
@@ -98,17 +97,17 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property create_event_table type=table no_caption=1
 	@caption Loo s&uuml;ndmused
 
-@default group=create_vacancies 
+@default group=create_vacancies
 
 	@property vacancies type=text type=table no_caption=1
 	@caption Ajad
 
-	@property confirm_vacancies type=checkbox store=no no_caption=1 
+	@property confirm_vacancies type=checkbox store=no no_caption=1
 	@caption Kinnita vabad ajad
 
 @default group=create_vacancies_cal
 
-	@property vacancies_cal  type=calendar no_caption=1
+	@property vacancies_cal type=calendar no_caption=1
 	@caption Ajad
 
 	@property vacancies_cal_sbt type=submit no_caption=1 value="Kinnita ajad"
@@ -119,45 +118,45 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property navtoolbar type=toolbar no_caption=1
 	@caption Nav. toolbar
 
-	@property project type=hidden 
+	@property project type=hidden
 	@caption Projekti ID
-	
+
 	@property calendar_contents type=calendar no_caption=1 viewtype=week
 	@caption Kalendri sisu
-	
+
 @default group=search
 
-	@property event_search_name type=textbox 
+	@property event_search_name type=textbox
 	@caption S&uuml;ndmuse nimi
-	
-	@property event_search_content type=textbox 
+
+	@property event_search_content type=textbox
 	@caption S&uuml;ndmuse sisu
-	
-	@property event_search_comment type=textbox 
+
+	@property event_search_comment type=textbox
 	@caption S&uuml;ndmuse kommentaar
-	
-	@property event_search_type type=chooser multiple=1 ch_value=1 orient=vertical 
+
+	@property event_search_type type=chooser multiple=1 orient=vertical
 	@caption S&uuml;ndmuse t&uuml;&uuml;p
-	
-	@property event_search_add type=chooser multiple=1 orient=vertical 
+
+	@property event_search_add type=chooser multiple=1 orient=vertical
 	@caption Lisatingimused
-	
-	@property event_search_button type=submit 
+
+	@property event_search_button type=submit
 	@caption Otsi
-	
+
 	@property event_search_tb type=toolbar no_caption=1
 
-	@property event_search_results_table type=table store=no no_caption=1 
+	@property event_search_results_table type=table store=no no_caption=1
 
 @default group=tasks
-	@property task_list type=table store=no no_caption=1 
-	
+	@property task_list type=table store=no no_caption=1
+
 	@groupinfo general caption=Seaded
 	@groupinfo general2 caption=&Uuml;ldine parent=general
 	@groupinfo advanced caption=Sisuseaded parent=general
 	@groupinfo vac_settings caption="Vabad ajad" parent=general
 	@groupinfo views caption=S&uuml;ndmused submit=no submit_method=get
-	@groupinfo vacancies caption="Vabad ajad" 
+	@groupinfo vacancies caption="Vabad ajad"
 	@groupinfo create_events caption="S&uuml;ndmuste lisamine" parent=vacancies
 	@groupinfo create_vacancies caption="Vabad ajad" parent=vacancies
 	@groupinfo create_vacancies_cal caption="Vabad ajad (kalendrivaade)" parent=vacancies
@@ -180,7 +179,7 @@ define("REP_YEAR",4);
 @reltype EVENT_SOURCE value=2 clid=CL_PLANNER,CL_PROJECT
 @caption v&otilde;ta s&uuml;ndmusi
 
-@reltype EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING,CL_RESERVATION
+@reltype EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING,CL_RESERVATION,CL_CRM_PRESENTATION
 @caption s&uuml;ndmus
 
 @reltype DC_RELATION value=4 clid=CL_RELATION
@@ -227,7 +226,7 @@ class planner extends class_base
 		$this->date = isset($date) ? $date : date("d-m-Y");
 		lc_load("definition");
 		$this->lc_load("planner","lc_planner");
-			
+
 		$this->viewtypes = array(
 			"1" => "day",
 			"3" => "week",
@@ -243,10 +242,10 @@ class planner extends class_base
 		);
 
 
-		//  list all clids here, that can be added to the calendar (those should at least have a referenfe to planner.start)
-		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY , CL_COMICS, CL_STAGING, CL_BUG,CL_RESERVATION);
+		//  list all clids here, that can be added to the calendar (those should at least have a reference to planner.start)
+		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY , CL_COMICS, CL_STAGING, CL_BUG,CL_RESERVATION, CL_CRM_PRESENTATION);
 		// list all clids, that should be shown by default
-		$this->default_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_MEETING,CL_RESERVATION);
+		$this->default_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_MEETING, CL_RESERVATION);
 
 		$this->default_day_start = array(
 			"hour" => 9,
@@ -258,7 +257,7 @@ class planner extends class_base
 			"minute" => 0,
 		);
 	}
-	
+
 	/**
 
       @attrib name=submit_delete_participants_from_calendar
@@ -343,15 +342,15 @@ class planner extends class_base
 	{
 		return new object($this->get_calendar_for_user($arr));
 	}
-	
-	/**  
-		
+
+	/**
+
 		@attrib name=my_calendar params=name is_public="1" caption="Minu kalender" all_args="1"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -392,7 +391,7 @@ class planner extends class_base
 					"relative" => t("&Uuml;levaade"),
 				);
 				break;
-				
+
 			case "minute_step":
 				$data["options"] = array(
 					1 => 1,
@@ -414,11 +413,11 @@ class planner extends class_base
 					60 => 60,
 				);
 				break;
-				
+
 			case "del_views":
 				$data["options"] = $this->vt;
 				break;
-				
+
 			case "default_view":
 				$data["options"] = $this->viewtypes;
 				break;
@@ -460,18 +459,19 @@ class planner extends class_base
 			case "event_search_comment":
 				$data["value"] = $arr["request"][$data["name"]];
 				break;
-			
+
 
 			case "event_search_type":
-				
+
 				$data["options"] = array(
 					CL_CRM_OFFER => t("Pakkumine"),
 					CL_CRM_CALL => t("K&otilde;ne"),
 					CL_TASK => t("Toimetus"),
 					CL_CRM_MEETING => t("Kohtumine"),
 					CL_RESERVATION => t("Broneering"),
+					CL_CRM_PRESENTATION => t("M&uuml;&uuml;giesitlus")
 				);
-				
+
 				if($arr["request"]["event_search_type"])
 				{
 					$data["value"] = $arr["request"]["event_search_type"];
@@ -484,9 +484,10 @@ class planner extends class_base
 						CL_TASK => 1,
 						CL_CRM_MEETING => 1,
 						CL_RESERVATION => 1,
+						CL_CRM_PRESENTATION => 1
 					);
 				}
-				
+
 				break;
 			case "event_search_results_table":
 				if(($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"]))
@@ -506,7 +507,7 @@ class planner extends class_base
 					return PROP_IGNORE;
 				}
 				break;
-				
+
 			case "event_search_tb":
 				if ($arr["request"]["add_part_to_events"])
 				{
@@ -541,11 +542,11 @@ class planner extends class_base
 
 				$this->_event_search_tb($arr);
 				break;
-				
+
 			case "search":
 				$data["value"] = $arr["request"]["search"];
 				break;
-				
+
 			case "event_search_add":
 				if($arr["request"]["event_search_add"])
 				{
@@ -559,7 +560,7 @@ class planner extends class_base
 						"all_cal" => 1,
 					);
 				}
-				
+
 				$data["options"] = array(
 					"done" => t("Otsi tehtud s&uuml;ndmusi"),
 					"not_done" => t("Otsi tegemata s&uuml;ndmusi"),
@@ -647,7 +648,7 @@ class planner extends class_base
 		$this->recur_info = $m->recur_info;
 		return $ret;
 	}
-	
+
 	function get_event_sources($id)
 	{
 		static $m;
@@ -681,7 +682,7 @@ class planner extends class_base
 			"type" => "text",
 			"caption" => t("header"),
 			"subtitle" => 1,
-		);	
+		);
 		$captions = array();
 		// still, would be nice to make 'em _real_ second level groups
 		// right now I'm simply faking 'em
@@ -706,7 +707,7 @@ class planner extends class_base
 					"url" => aw_url_change_var("cb_group",$new_group),
 					"caption" => $val["caption"],
 				));
-				
+
 			}
 			else
 			{
@@ -725,7 +726,7 @@ class planner extends class_base
 		// yuck, what a mess
 		$obj = $arr["obj_inst"];
 		$meta = $obj->meta();
-		
+
 		$event_folder = $obj->prop("event_folder");
 		if (!is_oid($event_folder))
 		{
@@ -735,7 +736,7 @@ class planner extends class_base
 			));
 			return PROP_ERROR;
 		};
-		
+
 		if (!$this->can("add", $event_folder))
 		{
 			return array(array(
@@ -776,7 +777,7 @@ class planner extends class_base
 			}
 			if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
 			{
-				unset($clid);	
+				unset($clid);
 			};
 		}
 		else
@@ -794,7 +795,7 @@ class planner extends class_base
 
 
 		$res_props = array();
-			
+
 		// nii - aga kuidas ma lahenda probleemi s&uuml;ndmuste panemisest teise kalendrisse?
 		// see peaks samamoodi planneri funktsionaalsus olema. wuhuhuuu
 
@@ -818,7 +819,7 @@ class planner extends class_base
 			}
 			else
 			{
-				// 1 - get an instance of that class, for this I need to 
+				// 1 - get an instance of that class, for this I need to
 				aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 				$clfile = $tmp[$clid]["file"];
 				$t = get_instance($clfile);
@@ -829,11 +830,11 @@ class planner extends class_base
 					$emb_group = $arr["request"]["cb_group"];
 				};
 				$this->emb_group = $emb_group;
-			
+
 				$t->id = $this->event_id;
-				
+
 				// the request has to be handled the other way also, in order to use things, that should be used.. -- ahz
-				
+
 				$t->request = $arr["request"] + array("group" => $arr["request"]["cb_group"], "class" => $clfile);
 				// aga vaata see koht siin peaks arvestama ka seadete vormi, nicht war?
 
@@ -873,11 +874,11 @@ class planner extends class_base
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cfgform]","value" => $event_cfgform);
 				if ($this->event_id)
 				{
-					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);	
+					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);
 				};
 				if ($arr["request"]["cb_group"])
 				{
-					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cb_group]","value" => $arr["request"]["cb_group"]);	
+					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cb_group]","value" => $arr["request"]["cb_group"]);
 				}
 			};
 		}
@@ -909,7 +910,7 @@ class planner extends class_base
 		{
 			if (empty($emb["id"]))
 			{
-				$emb["parent"] = $event_folder; 
+				$emb["parent"] = $event_folder;
 			};
 		};
 		if (isset($emb["group"]))
@@ -941,7 +942,7 @@ class planner extends class_base
 		{
 			$this->event_id = $t->submit($emb);
 		}
-		
+
 		if (!empty($emb["id"]))
 		{
 			$this->event_id = $event_obj->id();
@@ -1094,14 +1095,14 @@ class planner extends class_base
 	{
 		return (int)($el1["start"] - $el2["start"]);
 	}
-	
+
 	////
 	// !used to sort events by start date (descending)
 	function __desc_sort($el1,$el2)
 	{
 		return (int)($el2["start"] - $el1["start"]);
 	}
-	
+
 	////
 	// !Kuvab kalendri muutmiseks (eelkoige adminnipoolel)
 	// id - millist kalendrit n2idata
@@ -1237,7 +1238,7 @@ class planner extends class_base
 				"img" => "search.gif",
 			));
 			*/
-			
+
 			$toolbar->add_button(array(
 				"name" => "today",
 				"tooltip" => t("T&auml;na"),
@@ -1273,14 +1274,14 @@ class planner extends class_base
 					"class" => "menuButton",
 				));
 			}
-			
+
 
 			if ($arr["obj_inst"]->prop("my_projects") == 1)
 			{
 				$toolbar->add_separator();
 
 				$prj_opts = array("" => t("--filtreeri projekti j&auml;rgi--"));
-			
+
 				$owners = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_CALENDAR_OWNERSHIP",
 				));
@@ -1387,7 +1388,7 @@ class planner extends class_base
 		$bro = new object($arr["event_id"]);
 		$bro->delete();
 	}
-	
+
 	// !Returns a link for editing an event
 	// cal_id - calendar id
 	// event_id - id of an event
@@ -1487,7 +1488,7 @@ class planner extends class_base
 					foreach($event["parts"] as $part)
 					{
 						list($fn, $ln) = explode(" ", trim($part["name"]));
-						
+
 						$c[] = html::href(array(
 							"caption" => $fn,
 							"url" => $this->mk_my_orb("change", array("id" => $part["id"], "return_url" => get_ru()), $part["class_id"])
@@ -1707,7 +1708,7 @@ class planner extends class_base
 			}
 			$tstamp += 86400;
 			$today = false;
-		
+
 			if (++$cnt > 500)
 			{
 				break;
@@ -1726,7 +1727,7 @@ class planner extends class_base
 			"name" => "ord",
 			"caption" => t("Jrk"),
 			"numeric" => 1,
-		));	
+		));
 		$t->define_field(array(
 			"name" => "start",
 			"caption" => t("Algus"),
@@ -1892,7 +1893,7 @@ class planner extends class_base
 
 		// now I now the parent .. I also need start and end dates
 		$confirmed = $arr["request"]["confirm"];
-		
+
 		$span_length = $arr["obj_inst"]->prop("vac_length");
 		if (!is_numeric($span_length))
 		{
@@ -2011,17 +2012,17 @@ class planner extends class_base
 	function do_events_results_table(&$arr, &$data)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
-		
+
 		$table->define_field(array(
 			"name" => "icon",
 		));
-			
+
 		$table->define_field(array(
 			"name" => "name",
 			"caption" => t("S&uuml;ndmuse nimi"),
 			"sortable" => 1,
 		));
-		
+
 		$table->define_field(array(
 			"name" => "createdby",
 			"caption" => t("S&uuml;ndmuse looja"),
@@ -2035,7 +2036,7 @@ class planner extends class_base
 			"sortable" => "1",
 			"align" => "center",
 		));
-			
+
 		$table->define_field(array(
 			"name" => "date",
 			"caption" => t("Algus"),
@@ -2046,7 +2047,7 @@ class planner extends class_base
 			"align" => "center",
 			"nowrap" => 1,
 		));
-		
+
 		$table->define_field(array(
 			"name" => "modified",
 			"caption" => t("Muudetud"),
@@ -2064,19 +2065,19 @@ class planner extends class_base
 				"name" => "sel",
 			));
 		}
-		
+
 		get_instance("core/icons");
-		
+
 		$user_inst = get_instance(CL_USER);
 		$users_i = get_instance("users");
 		foreach ($data->arr() as $result)
 		{
-		
+
 			$participants = $result->connections_to(array(
 				"type" => array(8,9,10),
 				"from.class_id" => CL_CRM_PERSON,
 			));
-			
+
 			$par_href = "";
 			$sep = "";
 			foreach ($participants as $participant)
@@ -2090,23 +2091,23 @@ class planner extends class_base
 				}
 				$sep = ", ";
 			}
-			
+
 			$iconurl = icons::get_icon_url($result->class_id());
 			if($result->flags() & OBJ_IS_DONE)
 			{
 				$iconurl = str_replace(".gif", "_done.gif", $iconurl);
 			}
-			
+
 			$author_user = &obj($users_i->get_oid_for_uid($result->createdby()));
 			$author_person_id = $user_inst->get_person_for_user($author_user);
 			$author_person_obj = &obj($author_person_id);
-			
+
 			$comment = "";
 			if($result->comment())
 			{
 				$comment = " /<i>".$result->comment()."</i>";
 			}
-			
+
 			$table->define_data(array(
 				"id" => $result->brother_of(),
 				"name" => html::obj_change_url($result).$comment,
@@ -2125,13 +2126,13 @@ class planner extends class_base
 		$table->set_default_sortby("date");
 		$table->set_default_sorder("desc");
 	}
-	
+
 	/**
 		@attrib name=do_event_search
 	**/
 	function do_event_search($arr)
 	{
-	
+
 		//IF search from all calenders
 		if($arr["event_search_add"]["all_cal"])
 		{
@@ -2155,19 +2156,19 @@ class planner extends class_base
 			$obj_cal = &obj($arr["id"]);
 			$parents[] = $obj_cal->prop("event_folder");
 		}
-		
+
 		$params = array(
 			"name" => "%".$arr["event_search_name"]."%",
 			"comment" => "%".$arr["event_search_comment"]."%",
 			"content" => "%".$arr["event_search_content"]."%",
 			"site_id" => array(),
 		);
-		
+
 		if (is_array($parents))
 		{
 			$params["parent"] = $parents;
 		}
-		
+
 		if($arr["event_search_add"]["done"] && !$arr["event_search_add"]["not_done"])
 		{
 			$params["is_done"] = OBJ_IS_DONE;
@@ -2176,7 +2177,7 @@ class planner extends class_base
 		{
 			$params["is_done"] = new obj_predicate_not(8);
 		}
-		
+
 		if($arr["event_search_type"])
 		{
 			$params["class_id"] = $arr["event_search_type"];
@@ -2185,7 +2186,7 @@ class planner extends class_base
 		{
 			$params["class_id"] = $this->event_entry_classes;
 		}
-		
+
 		$event_ol = new object_list($params);
 
 		if($event_ol->count() == 0)
@@ -2198,7 +2199,7 @@ class planner extends class_base
 		{
 			$ids[$item->brother_of()] = $item->brother_of();
 		}
-		
+
 		$retval = new object_list(array(
 			"oid" => $ids,
 			"site_id" => array(),
@@ -2455,7 +2456,7 @@ class planner extends class_base
 			"cb_group" => $arr["emb"]["cb_group"]
 		), $arr["class"]);
 	}
-	
+
 	/**
 		@attrib name=delete_events
 		@param sel required
@@ -2481,7 +2482,7 @@ class planner extends class_base
 	}
 
 	/** returns a list of folders for a specified calendar, this is more efficient that returning a list of events
-	
+
 	**/
 	function get_event_folders($arr)
 	{
@@ -2562,9 +2563,9 @@ class planner extends class_base
 				"oid" => $parents,
 				"site_id" => array(),
 			));
-			
+
 			$locations = $parent_list->names();
-		
+
 			// now find all planners
 			$conn = new connection();
 			$all_conns = $conn->find(array(
@@ -2583,7 +2584,7 @@ class planner extends class_base
 
 			foreach($parents as $key => $val)
 			{
-				// how do I know into which calendar this 
+				// how do I know into which calendar this
 				$rv[$key]["location"] = $locations[$val];
 			};
 		};
@@ -2602,7 +2603,7 @@ class planner extends class_base
 			"caption" => t("ID"),
 		));
 		*/
-		
+
 		$t->define_field(array(
 			"name" => "start",
 			"caption" => t("Algus"),
@@ -2611,7 +2612,7 @@ class planner extends class_base
 			"sortable" => 1,
 			"nowrap" => 1,
 		));
-		
+
 		$t->define_field(array(
 			"name" => "modified",
 			"caption" => t("Muudetud"),
@@ -2625,12 +2626,12 @@ class planner extends class_base
 			"caption" => t("Pealkiri"),
 			"sortable" => 1,
 		));
-		
+
 		$t->define_field(array(
 			"name" => "content",
 			"caption" => t("Sisu"),
 		));
-	
+
 		$t->define_field(array(
 			"name" => "location",
 			"caption" => t("Asukoht"),
@@ -2641,7 +2642,7 @@ class planner extends class_base
 			"field" => "id",
 			"caption" => t("Vali"),
 		));
-		
+
 		$t->set_default_sortby("start");
 		$t->set_default_sorder("asc");
 
