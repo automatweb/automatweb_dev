@@ -12,6 +12,15 @@ class aw_request
 	protected $default_action = "change";
 	protected $method; // http request method.
 	protected $is_fastcall = false; // boolean
+	protected $application; // object
+	protected static $application_classes = array( //!!! tmp. teha n2iteks interface-ga. implements application
+		"crm_sales",
+		"realestate_manager",
+		"mrp_workspace",
+		"admin_if",
+		"bug_tracker",
+		"events_manager"
+	);
 
 	public function __construct($autoload = false)
 	{
@@ -192,6 +201,54 @@ class aw_request
 
 	/**
 	@attrib api=1 params=pos
+	@returns object
+		Currently active application object
+	**/
+	public function get_application()
+	{
+		if (!is_object($this->application))
+		{
+			if (in_array($this->class, self::$application_classes)) //!!! tmp solution
+			{
+				if (isset($this->args["id"]) and is_oid($this->args["id"]))
+				{
+					$application = new object($this->args["id"]);
+					aw_session_set("aw_request_application_object_oid", $application->id());
+				}
+				elseif ("admin_if" === $this->class)
+				{
+					$core = new core();
+					$id = admin_if::find_admin_if_id();
+					$application = new object($id);
+					aw_session_set("aw_request_application_object_oid", $application->id());
+				}
+				elseif (aw_ini_isset("class_lut." . $this->class))
+				{
+					$clid = aw_ini_get("class_lut." . $this->class);
+					$application = obj(null, array(), $clid);
+				}
+				else
+				{
+					$application = null;
+				}
+			}
+			elseif (is_oid(aw_global_get("aw_request_application_object_oid")))
+			{
+				$application = new object(aw_global_get("aw_request_application_object_oid"));
+			}
+			else
+			{
+				$application = new object(); //!!! mis on default?
+			}
+
+			$this->application = $application;
+		}
+
+		return $this->application;
+	}
+
+	/**
+	@attrib api=1 params=pos
 	@returns boolean
 	**/
 	public function is_fastcall()
@@ -229,7 +286,7 @@ class aw_request
 	}
 
 	protected function parse_args()
-	{
+	{ //!!! "restore previous application" on vaja ka teaostada, sest n2iteks kui k2iakse teises applicationis ja minnakse tagasi eelmisest avatud allobjektile, on application vale
 		$this->is_fastcall = !empty($this->args["fastcall"]);
 		// no name validation because requests can be formed and sent to other servers where different classes, methods, etc. defined
 		$this->class = empty($this->args["class"]) ? $this->default_class : $this->args["class"];
