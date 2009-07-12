@@ -61,6 +61,13 @@ class aw_http_request extends aw_request
 			try
 			{
 				$this->uri = new aw_uri($_SERVER["REQUEST_URI"]);
+
+				// try to get request variables from uri, assuming that those must prevail over $_GET
+				$uri_args = $this->uri->get_args();
+				if (count($uri_args) > 0 and count($uri_args) !== count($_GET))
+				{
+					$this->args = $uri_args;
+				}
 			}
 			catch (Exception $e)
 			{
