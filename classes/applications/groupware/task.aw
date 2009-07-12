@@ -905,7 +905,7 @@ class task extends class_base
 		$type = array(
 			CL_TASK => t("Toimetusele"),
 			CL_CRM_MEETING => t("Kohtumisele"),
-			CL_CRM_CALL => t("K&otilde;nele"),
+			CL_CRM_CALL => t("K&otilde;nele")
 		);
 		switch($arr["name"])
 		{
@@ -1864,10 +1864,11 @@ class task extends class_base
 		$hrs = floor($len / 900) / 4;
 
 		// write length to time fields if empty
-		if ($arr["obj_inst"]->prop("time_to_cust") == "")
+		if ($arr["obj_inst"]->is_property("time_to_cust") and $arr["obj_inst"]->prop("time_to_cust") == "")
 		{
 			$arr["obj_inst"]->set_prop("time_to_cust", $hrs);
 		}
+
 		if ($arr["request"]["set_resource"] != "")
 		{
 			$arr["obj_inst"]->connect(array(
@@ -1876,7 +1877,7 @@ class task extends class_base
 			));
 		}
 
-		if ($arr["request"]["set_pred"] != "")
+		if (!empty($arr["request"]["set_pred"]))
 		{
 			$pv = $arr["obj_inst"]->prop("predicates");
 			if (!is_array($pv) && is_oid($pv))
@@ -1891,11 +1892,13 @@ class task extends class_base
 			$pv[$arr["request"]["set_pred"]] = $arr["request"]["set_pred"];
 			$arr["obj_inst"]->set_prop("predicates", $arr["request"]["set_pred"]);
 		}
-		if ($arr["request"]["group"] == "general" && !$arr["request"]["add_clauses"]["status"])
+
+		if ($arr["request"]["group"] === "general" && empty($arr["request"]["add_clauses"]["status"]))
 		{
 			$arr["obj_inst"]->set_status(STAT_NOTACTIVE);
 		}
-		if ($arr["request"]["group"] == "general" && $arr["request"]["add_clauses"]["status"])
+
+		if ($arr["request"]["group"] === "general" && !empty($arr["request"]["add_clauses"]["status"]))
 		{
 			$arr["obj_inst"]->set_status(STAT_ACTIVE);
 		}
@@ -3547,30 +3550,32 @@ class task extends class_base
 		}
 
 		// searched_oids
-		foreach($arr["searched_oid"] as $sto_ident => $oid)
+		if (!empty($arr["searched_oid"]))
 		{
-			if($this->can("view", $oid) && !$this->can("view", $stos[$sto_ident]))
+			foreach($arr["searched_oid"] as $sto_ident => $oid)
 			{
-				$o = obj($oid);
-				$stos[$sto_ident]["oid"] = $oid;
-				$stos[$sto_ident]["name"] = $o->name();
-				$url = $this->mk_my_orb("stopper_pop",array(), CL_TASK);
+				if($this->can("view", $oid) && !$this->can("view", $stos[$sto_ident]))
+				{
+					$o = obj($oid);
+					$stos[$sto_ident]["oid"] = $oid;
+					$stos[$sto_ident]["name"] = $o->name();
+					$url = $this->mk_my_orb("stopper_pop",array(), CL_TASK);
+				}
 			}
 		}
 
-		if ($arr["s_action"] == "del")
+		if ($arr["s_action"] === "del")
 		{
 			unset($stos[$arr["ident"]]);
 		}
-		else
-		if ($arr["s_action"] == "pause")
+		elseif ($arr["s_action"] === "pause")
 		{
 			$elapsed = time() - $stos[$arr["ident"]]["start"];
 			$stos[$arr["ident"]]["base"] += $elapsed;
 			$stos[$arr["ident"]]["state"] = STOPPER_PAUSED;
 		}
 		else
-		if ($arr["s_action"] == "stop")
+		if ($arr["s_action"] === "stop")
 		{
 			// stop timer and write row to task
 			$stopper = $stos[$arr["ident"]];
@@ -3598,7 +3603,7 @@ class task extends class_base
 			}
 		}
 		else
-		if ($arr["s_action"] == "start")
+		if ($arr["s_action"] === "start")
 		{
 			// pause all running timers
 			foreach((array)$stos as $k => $stopper)
@@ -5162,7 +5167,7 @@ class task extends class_base
 
 	function _co_table($arr)
 	{
-		
+
 		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
 		{
 			return PROP_IGNORE;
@@ -6000,7 +6005,7 @@ $types = array(
 			$arr["event_id"] = $arr["id"];
 			foreach($arr["sel_part"] as $part)
 			{
-			
+
 				$pr = $o->get_primary_row_for_person($part);
 				if($pr)
 				{
@@ -6161,15 +6166,21 @@ $types = array(
 
 	function do_db_upgrade($t, $f)
 	{
-		if ("aw_account_balances" == $t)
+		if ("aw_account_balances" === $t)
 		{
 			$i = get_instance(CL_CRM_CATEGORY);
 			return $i->do_db_upgrade($t, $f);
 		}
 		switch($f)
 		{
+			case "result":
+			case "phone":
 			case "promoter":
 			case "deal_has_tax":
+			case "real_start":
+			case "real_duration":
+			case "customer_relation":
+			case "sales_schedule_job":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
