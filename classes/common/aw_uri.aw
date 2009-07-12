@@ -146,6 +146,27 @@ class aw_uri
 		return isset($this->args[$name]) ? (string) $this->args[$name] : null;
 	}
 
+	/** Checks if argument is set
+	@attrib api=1 params=pos
+	@param name required type=string
+		URI query argument/parameter name
+	@returns bool
+	**/
+	public function arg_isset($name)
+	{
+		return isset($this->args[$name]);
+	}
+
+	/**
+	@attrib api=1 params=pos
+	@returns array
+		Query argument values. Argument names as keys
+	**/
+	public function get_args()
+	{
+		return $this->args;
+	}
+
 	/**
 	@attrib api=1 params=pos
 	@param arg required type=string,array
