@@ -5,10 +5,10 @@
 
 class crm_address_obj extends _int_object
 {
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		$this->set_name($this->get_address_name());
-		return parent::save();
+		return parent::save($exclusive, $previous_state);
 	}
 
 	function prop($k)
@@ -47,7 +47,7 @@ class crm_address_obj extends _int_object
 			$ol = new object_list($filter);
 			$o = reset($ol->arr());
 		}
-	
+
 		if(!is_object($o))
 		{
 			$o = new object();
@@ -89,7 +89,7 @@ class crm_address_obj extends _int_object
 			$ol = new object_list($filter);
 			$o = reset($ol->arr());
 		}
-	
+
 		if(!is_object($o))
 		{
 			$o = new object();
@@ -131,7 +131,7 @@ class crm_address_obj extends _int_object
 		{
 			$name[] = $this->prop("riik.name");
 		};
-				
+
 		return join(", ",$name);
 	}
 
