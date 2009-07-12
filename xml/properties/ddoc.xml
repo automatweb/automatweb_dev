@@ -110,6 +110,10 @@
                   <clid>
                         <num_0>CL_FILE</num_0>
                         <num_1>CL_PATENT</num_1>
+                        <num_2>CL_PATENT_PATENT</num_2>
+                        <num_3>CL_INDUSTRIAL_DESIGN</num_3>
+                        <num_4>CL_EURO_PATENT_ET_DESC</num_4>
+                        <num_5>CL_UTILITY_MODEL</num_5>
                   </clid>
                   <caption>Allkirjastatud fail</caption>
             </SIGNED_FILE>

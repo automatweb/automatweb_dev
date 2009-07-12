@@ -219,6 +219,7 @@
             <field>meta</field>
             <method>serialize</method>
             <store>no</store>
+            <type>callback</type>
             <callback>callback_get_add_event</callback>
             <caption>Lisa s&amp;amp;uuml;ndmus</caption>
       </property>
@@ -352,7 +353,6 @@
             <store>no</store>
             <type>chooser</type>
             <multiple>1</multiple>
-            <ch_value>1</ch_value>
             <orient>vertical</orient>
             <caption>S&amp;amp;uuml;ndmuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
@@ -481,6 +481,7 @@
                         <num_1>CL_CRM_CALL</num_1>
                         <num_2>CL_CRM_MEETING</num_2>
                         <num_3>CL_RESERVATION</num_3>
+                        <num_4>CL_CRM_PRESENTATION</num_4>
                   </clid>
                   <caption>s&amp;amp;uuml;ndmus</caption>
             </EVENT>

@@ -22,6 +22,16 @@
             <caption>Verstapost</caption>
       </property>
       <property>
+            <name>call_tools</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>call_tools</field>
+            <caption>K&amp;amp;otilde;ne toimingud</caption>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>
@@ -38,6 +48,47 @@
             <field>comment</field>
             <parent>top_2way_left</parent>
             <caption>Kommentaar</caption>
+      </property>
+      <property>
+            <name>phone</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>objpicker</type>
+            <clid>CL_CRM_PHONE</clid>
+            <mode>autocomplete</mode>
+            <parent>top_2way_left</parent>
+            <field>phone</field>
+            <comment>Number millele helistati v&amp;amp;otilde;i helistada</comment>
+            <caption>Number</caption>
+      </property>
+      <property>
+            <name>result</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>select</type>
+            <parent>top_2way_left</parent>
+            <field>result</field>
+            <caption>K&amp;amp;otilde;ne tulemus</caption>
+      </property>
+      <property>
+            <name>new_call_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>top_2way_left</parent>
+            <caption>Uue k&amp;amp;otilde;ne aeg</caption>
+      </property>
+      <property>
+            <name>presentation_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>top_2way_left</parent>
+            <caption>Esitluse aeg</caption>
       </property>
       <property>
             <name>add_clauses</name>
@@ -76,6 +127,33 @@
             <field>deadline</field>
             <parent>top_2way_right</parent>
             <caption>T&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>real_start</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>text</type>
+            <parent>top_2way_right</parent>
+            <field>real_start</field>
+            <caption>Tegelik algus</caption>
+      </property>
+      <property>
+            <name>real_duration</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>text</type>
+            <datatype>int</datatype>
+            <parent>top_2way_right</parent>
+            <field>real_duration</field>
+            <caption>Tegelik kestus (h)</caption>
+      </property>
+      <property>
+            <name>sales_schedule_job</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>sales_schedule_job</field>
       </property>
       <property>
             <name>hrs_table</name>
@@ -302,7 +380,7 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Prognoositav tundide arv 	</caption>
+            <caption>Prognoositav tundide arv</caption>
       </property>
       <property>
             <name>time_real</name>
@@ -388,6 +466,26 @@
             <caption>Saata arve</caption>
       </property>
       <property>
+            <name>customer_relation</name>
+            <table>planner</table>
+            <group>other_settings</group>
+            <type>relpicker</type>
+            <field>customer_relation</field>
+            <reltype>RELTYPE_CUSTOMER_RELATION</reltype>
+            <caption>Kliendisuhe</caption>
+      </property>
+      <property>
+            <name>presentation</name>
+            <table>objects</table>
+            <group>other_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RESULT_PRESENTATION</reltype>
+            <comment>Tulemuseks olev presentatsioon</comment>
+            <caption>Presentatsioon</caption>
+      </property>
+      <property>
             <name>task_toolbar</name>
             <table>objects</table>
             <group>participants</group>
@@ -396,7 +494,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>&amp;quot;Toolbar&amp;quot;</caption>
+            <caption>Toolbar</caption>
       </property>
       <property>
             <name>recurrence</name>
@@ -518,16 +616,6 @@
             <caption>Tulemuste tabel</caption>
       </property>
       <property>
-            <name>new_call_date</name>
-            <table>objects</table>
-            <group>other_calls</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>datetime_select</type>
-            <store>no</store>
-            <caption>Uue k&amp;amp;otilde;ne aeg</caption>
-      </property>
-      <property>
             <name>other_calls</name>
             <table>objects</table>
             <group>other_calls</group>
@@ -542,6 +630,7 @@
             <no_status>1</no_status>
             <confirm_save_data>1</confirm_save_data>
             <maintainer>markop</maintainer>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <recurrence>
@@ -583,6 +672,11 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECURRENCE>
+            <CUSTOMER_RELATION>
+                  <value>6</value>
+                  <clid>CL_CRM_COMPANY_CUSTOMER_DATA</clid>
+                  <caption>Kliendisuhe</caption>
+            </CUSTOMER_RELATION>
             <CUSTOMER>
                   <value>3</value>
                   <clid>
@@ -615,6 +709,16 @@
                   <clid>CL_TASK_ROW</clid>
                   <caption>Rida</caption>
             </ROW>
+            <RESULT_PRESENTATION>
+                  <value>8</value>
+                  <clid>CL_CRM_PRESENTATION</clid>
+                  <caption>Presentatsioon</caption>
+            </RESULT_PRESENTATION>
+            <RESULT_CALL>
+                  <value>10</value>
+                  <clid>CL_CRM_CALL</clid>
+                  <caption>Uus k&amp;amp;otilde;ne</caption>
+            </RESULT_CALL>
       </reltypes>
       <layout>
             <top_bit>

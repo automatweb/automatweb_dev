@@ -23,6 +23,22 @@
 			</function>
 		</action>
 
+		<action name="start" all_args="1">
+			<function name="start">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="end" all_args="1">
+			<function name="end">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_rels">
 			<function name="delete_rels">
 				<arguments>

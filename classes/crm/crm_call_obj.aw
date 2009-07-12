@@ -90,14 +90,9 @@ class crm_call_obj extends task_object
 				$job->load_data();
 			}
 
-			if (!$job->can_start())
+			if (!($info = $job->can_start(false, true)))
 			{
-				$job->save();
-
-				if (!$job->can_start())
-				{
-					throw new awex_crm_call_state("Call job can't start");
-				}
+				throw new awex_crm_call_state("Call job can't start");
 			}
 
 			$job->start();
