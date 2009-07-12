@@ -238,6 +238,24 @@
             <caption>Viivise %</caption>
       </property>
       <property>
+            <name>salesman</name>
+            <table>aw_crm_customer_data</table>
+            <group>seller</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SALESMAN</reltype>
+            <field>aw_salesman</field>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
+      </property>
+      <property>
+            <name>lead_source</name>
+            <table>aw_crm_customer_data</table>
+            <group>seller</group>
+            <type>relpicker</type>
+            <field>aw_lead_source</field>
+            <reltype>RELTYPE_LEAD_SOURCE</reltype>
+            <caption>Soovitaja/allikas</caption>
+      </property>
+      <property>
             <name>users_tbl</name>
             <table>objects</table>
             <group>users</group>
@@ -374,6 +392,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Kliendihaldur</caption>
             </CLIENT_MANAGER>
+            <SALESMAN>
+                  <value>8</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
+            </SALESMAN>
             <EXT_SYS_ENTRY>
                   <value>35</value>
                   <clid>CL_EXTERNAL_SYSTEM_ENTRY</clid>
@@ -399,6 +422,22 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Arve saaja</caption>
             </BILL_PERSON>
+            <SALES_EVENT>
+                  <value>92</value>
+                  <clid>
+                        <num_0>CL_CRM_CALL</num_0>
+                        <num_1>CL_CRM_PRESENTATION</num_1>
+                  </clid>
+                  <caption>Tehtud, plaanitud m&amp;amp;uuml;&amp;amp;uuml;gitegevus</caption>
+            </SALES_EVENT>
+            <LEAD_SOURCE>
+                  <value>101</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
+                  <caption>Soovitaja/allikas</caption>
+            </LEAD_SOURCE>
       </reltypes>
 </properties>
 

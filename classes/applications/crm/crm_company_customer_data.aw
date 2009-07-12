@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.19 2009/07/07 09:21:28 markop Exp $
 // crm_company_customer_data.aw - Kliendi andmed
 /*
 
@@ -25,10 +24,10 @@ default method=serialize
 	@property order_frequency type=textbox table=aw_crm_customer_data field=aw_order_frequency
 	@caption Tellimuste sagedus p&auml;evades
 
-	@property active_client table=aw_crm_customer_data field=aw_active_client type=checkbox 
+	@property active_client table=aw_crm_customer_data field=aw_active_client type=checkbox
 	@caption Aktiivne klient
 
-	@property authorized_person_control table=aw_crm_customer_data field=aw_authorized_person_control type=checkbox 
+	@property authorized_person_control table=aw_crm_customer_data field=aw_authorized_person_control type=checkbox
 	@caption Volitatud isiku kontroll
 
 	@property sell_alert type=textarea cols=40 rows=5 table=objects table=aw_crm_customer_data field=aw_sell_alert
@@ -103,6 +102,12 @@ default method=serialize
 	@caption Viivise %
 
 
+///////// paigutada 6igesse tab-i
+	@property salesman type=relpicker reltype=RELTYPE_SALESMAN table=aw_crm_customer_data field=aw_salesman
+	@caption M&uuml;&uuml;giesindaja
+
+	@property lead_source type=relpicker table=aw_crm_customer_data field=aw_lead_source reltype=RELTYPE_LEAD_SOURCE
+	@caption Soovitaja/allikas
 
 
 @groupinfo users caption="Kasutajad"
@@ -166,6 +171,9 @@ default method=serialize
 @reltype CLIENT_MANAGER value=34 clid=CL_CRM_PERSON
 @caption Kliendihaldur
 
+@reltype SALESMAN value=8 clid=CL_CRM_PERSON
+@caption M&uuml;&uuml;giesindaja
+
 @reltype EXT_SYS_ENTRY value=35 clid=CL_EXTERNAL_SYSTEM_ENTRY
 @caption Siduss&uuml;steemi sisestus
 
@@ -180,6 +188,13 @@ default method=serialize
 
 @reltype BILL_PERSON value=7 clid=CL_CRM_PERSON
 @caption Arve saaja
+
+@reltype SALES_EVENT value=92 clid=CL_CRM_CALL,CL_CRM_PRESENTATION
+@caption Tehtud, plaanitud m&uuml;&uuml;gitegevus
+
+// isik, firma v6i kampaania
+@reltype LEAD_SOURCE value=101 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Soovitaja/allikas
 
 */
 
@@ -753,6 +768,10 @@ exit_function("bill::balance");
 				  `aw_contact_person3` int(11) default NULL,
 				  `aw_priority` int(11) default NULL,
 				  `aw_client_manager` int(11) default NULL,
+				  `aw_salesman` int(11) default NULL,
+				  `aw_sales_next_call` int(11) default NULL,
+				  `aw_sales_status` int(11) default NULL,
+				  `aw_lead_source` int(11) default NULL,
 				  `aw_referal_type` int(11) default NULL,
 				  PRIMARY KEY  (`aw_oid`)
 				) ");
@@ -769,6 +788,8 @@ exit_function("bill::balance");
 			case "aw_authorized_person_control":
 			case "aw_show_in_webview":
 			case "aw_bill_tolerance":
+			case "aw_salesman":
+			case "aw_lead_source":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int"
