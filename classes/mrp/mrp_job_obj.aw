@@ -226,6 +226,21 @@ class mrp_job_obj extends _int_object
 		return $names;
 	}
 
+	public function set_prop($k, $v)
+	{
+		if($k === "state")
+		{
+			if ($v === self::STATE_DONE)
+			{
+				$this->set_prop("real_length", $this->get_real());
+				$this->set_prop("length_deviation", $this->get_deviation());
+			}
+			$this->mrp_state = $v; // update data cache
+		}
+
+		return parent::set_prop($k, $v);
+	}
+
 	function save($exclusive = false, $previous_state = null)
 	{
 		if ($this->change_name)
@@ -243,17 +258,6 @@ class mrp_job_obj extends _int_object
 	private function get_deviation()
 	{
 		return $this->prop("real_length") - $this->prop("length");
-	}
-
-	function set_prop($k, $v)
-	{
-		if($k === "state" && $v === MRP_STATUS_DONE)
-		{
-			$this->set_prop("real_length", $this->get_real());
-			$this->set_prop("length_deviation", $this->get_deviation());
-		}
-
-		return parent::set_prop($k, $v);
 	}
 
 	private function get_real()
