@@ -34,7 +34,7 @@
 @property files type=hidden field=meta method=serialize
 @property signatures type=hidden field=meta method=serialize
 
-@reltype SIGNED_FILE value=1 clid=CL_FILE,CL_PATENT
+@reltype SIGNED_FILE value=1 clid=CL_FILE,CL_PATENT,CL_PATENT_PATENT,CL_INDUSTRIAL_DESIGN,CL_EURO_PATENT_ET_DESC,CL_UTILITY_MODEL
 @caption Allkirjastatud fail
 
 @reltype SIGNER value=2 clid=CL_CRM_PERSON
