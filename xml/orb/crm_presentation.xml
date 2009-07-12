@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="crm_presentation" folder="applications/crm/sales" extends="task">
+	</class>
+</orb>
+
