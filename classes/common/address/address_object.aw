@@ -72,7 +72,7 @@ class address_object extends _int_object
 		}
 	}
 
-	function prop_str ($param)
+	function prop_str ($param, $is_oid = null)
 	{
 		switch ($param)
 		{
@@ -80,7 +80,7 @@ class address_object extends _int_object
 				return $this->as_get_string ();
 
 			default:
-				return parent::prop_str ($param);
+				return parent::prop_str ($param, $is_oid);
 		}
 	}
 
