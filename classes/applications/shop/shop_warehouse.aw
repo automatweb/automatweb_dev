@@ -10844,13 +10844,6 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 		$ownerobject = obj($owner);
 
-		// if there is no parameters selected from clients tree, then don't show anything 
-		// but it also brokes the "show all" option in tree --dragut@12.07.2009
-		if (empty($arr['request']['filt_cust_name']) && empty($arr['request']['filt_cust']))
-		{
-			return PROP_OK;
-		}
-
 		$ol = $this->_get_clients_ol($arr);
 		foreach($ol->arr() as $oid => $o)
 		{
