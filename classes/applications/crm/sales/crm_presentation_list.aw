@@ -58,7 +58,7 @@ class crm_presentation_list extends object_list
 		return parent::filter($param);
 	}
 
-	protected function _int_add_to_list($oid_arr)
+	/* protected */ function _int_add_to_list($oid_arr) // reinstate access level after object_list method access level determined.
 	{
 		foreach($oid_arr as $oid)
 		{
