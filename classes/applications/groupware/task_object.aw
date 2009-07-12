@@ -3,6 +3,8 @@
 // maintainer=markop
 class task_object extends _int_object
 {
+	protected $_no_display;
+
 	function get_prop($pn)
 	{
 		switch($pn)
@@ -32,7 +34,7 @@ class task_object extends _int_object
 	}
 
 	function set_name($name)
-	{$GLOBALS["DUKE"] = 1;
+	{
 		$rows = $this->get_all_primary_rows();
 		foreach($rows->arr() as $row)
 		{
@@ -57,16 +59,16 @@ class task_object extends _int_object
 		return $rows;
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		if (!is_oid($this->id()))
 		{
-			if (0 !== $this->prop("send_bill"))
+			if ($this->is_property("send_bill") and 0 !== $this->prop("send_bill"))
 			{
 				$this->set_prop("send_bill", 1);
 			}
 		}
-		$res =  parent::save();
+		$res =  parent::save($exclusive, $previous_state);
 
 		$this->update_all_rows();
 		return $res;
@@ -719,7 +721,7 @@ class task_object extends _int_object
 				$ol->add($c->prop("to"));
 			}
 		}
-
+/* BC -- see oli mingi vana systeemi objektide t88tamiseks. uues tekitas probleeme.
 		//kunagi peaks edasise 2ra kustutama
 		$types = array(10, 8);
 		if ($this->class_id() == CL_CRM_CALL)
@@ -735,6 +737,8 @@ class task_object extends _int_object
 		{
 			$ol->add($c->prop("from"));
 		}
+	END BC
+*/
 		return $ol;
 	}
 
@@ -883,7 +887,7 @@ class task_object extends _int_object
 			"class_id" => CL_BUG,
 			"parent" => $this->id(),
 		));
-		
+
 		return $ol->count();
 	}
 
