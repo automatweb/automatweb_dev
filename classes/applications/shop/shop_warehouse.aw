@@ -10419,7 +10419,8 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"get_branch_func" => $gbf,
 		));
 		$conn = obj($owner)->connections_from(array(
-			"type" => "RELTYPE_CATEGORY"
+			"type" => "RELTYPE_CATEGORY",
+			"sort_by" => "to.name"
 		));
 		foreach($conn as $c)
 		{
@@ -10770,7 +10771,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"class_id" => array(),
 			"name" => ($f = $arr["request"]["filt_cust_name"]) ? $f."%" : array(),
 			"CL_CRM_COMPANY.RELTYPE_CUSTOMER(CL_CRM_CATEGORY).oid" => ($f = $arr["request"]["filt_cust"]) ? $f : array(),
-			"limit" => "0,200",
+		//	"limit" => "0,200",
 		);
 		$ol = new object_list($params);	
 		return $ol;
@@ -10842,6 +10843,14 @@ $oo = get_instance(CL_SHOP_ORDER);
 			return;
 		}
 		$ownerobject = obj($owner);
+
+		// if there is no parameters selected from clients tree, then don't show anything 
+		// but it also brokes the "show all" option in tree --dragut@12.07.2009
+		if (empty($arr['request']['filt_cust_name']) && empty($arr['request']['filt_cust']))
+		{
+			return PROP_OK;
+		}
+
 		$ol = $this->_get_clients_ol($arr);
 		foreach($ol->arr() as $oid => $o)
 		{
