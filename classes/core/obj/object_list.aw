@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.77 2009/05/13 08:45:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.78 2009/07/12 18:38:34 voldemar Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -553,7 +553,7 @@ class object_list extends _int_obj_container_base
 			return $GLOBALS["object_loader"]->ds->save_property_multiple($single_clid, $param["params"][0], $param["params"][1], $this->ids());
 		}
 
-		for($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
+		for($o = $this->begin(), $cnt = 0; !$this->end(); $o = $this->next(), $cnt++)
 		{
 			if (isset($param["params"]))
 			{
@@ -1044,7 +1044,7 @@ class object_list extends _int_obj_container_base
 
 		if ($val1 < $val2)
 		{
-			if ($this->_sby_order == "asc")
+			if ($this->_sby_order === "asc")
 			{
 				return -1;
 			}
@@ -1056,7 +1056,7 @@ class object_list extends _int_obj_container_base
 
 		if ($val1 > $val2)
 		{
-			if ($this->_sby_order == "asc")
+			if ($this->_sby_order === "asc")
 			{
 				return 1;
 			}
@@ -1068,7 +1068,7 @@ class object_list extends _int_obj_container_base
 
 	}
 
-	function _int_add_to_list($oid_arr)
+	protected function _int_add_to_list($oid_arr)
 	{
 		foreach($oid_arr as $oid)
 		{
