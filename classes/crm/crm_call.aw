@@ -1,33 +1,54 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.80 2009/03/10 15:57:45 markop Exp $
 // crm_call.aw - phone call
 /*
 
-@classinfo syslog_type=ST_CRM_CALL no_status=1 confirm_save_data=1 maintainer=markop
+@classinfo syslog_type=ST_CRM_CALL no_status=1 confirm_save_data=1 maintainer=markop prop_cb=1
+
+@tableinfo planner index=id master_table=objects master_index=brother_of
+
+@groupinfo recurrence caption=Kordumine
+@groupinfo calendars caption=Kalendrid
+@groupinfo projects caption=Projektid
+@groupinfo comments caption=Kommentaarid
+@groupinfo participants caption=Osalejad submit=no
+@groupinfo other_calls caption="Eelmised k&otilde;ned"
+@groupinfo predicates caption="Eeldused"
+@groupinfo other_settings caption="Muud seaded"
 
 @default table=planner
 
 @default group=predicates
-
 	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect table=objects field=meta method=serialize
 	@caption Eeldustegevused
 
-	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal 
+	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal
 	@caption Verstapost
 
 @default group=general
+	@property call_tools type=toolbar no_caption=1
+	@caption K&otilde;ne toimingud
 
 @layout top_bit type=vbox closeable=1 area_caption=P&otilde;hiandmed
-
 	@layout top_2way type=hbox parent=top_bit
-
 		@layout top_2way_left type=vbox parent=top_2way
-
 			@property name type=textbox table=objects field=name parent=top_2way_left
 			@caption Nimi
 
 			@property comment type=textbox table=objects field=comment parent=top_2way_left
 			@caption Kommentaar
+
+			@property phone type=objpicker clid=CL_CRM_PHONE mode=autocomplete parent=top_2way_left
+			@comment Number millele helistati v&otilde;i helistada
+			@caption Number
+
+			@property result type=select parent=top_2way_left
+			@caption K&otilde;ne tulemus
+
+			@property new_call_date type=datetime_select table=objects field=meta method=serialize parent=top_2way_left
+			@caption Uue k&otilde;ne aeg
+
+			@property presentation_date type=datetime_select table=objects field=meta method=serialize parent=top_2way_left
+			@caption Esitluse aeg
 
 			@property add_clauses type=chooser store=no parent=top_2way_left multiple=1
 			@caption Lisatingimused
@@ -42,28 +63,30 @@
 			@property deadline type=datetime_select table=planner field=deadline parent=top_2way_right
 			@caption T&auml;htaeg
 
+			@property real_start type=text table=planner parent=top_2way_right
+			@caption Tegelik algus
+
+			@property real_duration type=text datatype=int table=planner parent=top_2way_right
+			@caption Tegelik kestus (h)
+
+			@property sales_schedule_job type=hidden datatype=int table=planner
 
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
-@layout center_bit type=hbox 
+@layout center_bit type=hbox
 	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
 
-	@layout center_bit_left type=vbox parent=center_bit 
-
+	@layout center_bit_left type=vbox parent=center_bit
 		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
 
-	@layout center_bit_right type=vbox parent=center_bit 
-
+	@layout center_bit_right type=vbox parent=center_bit
 		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
-
 		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
 
 @layout content_bit type=vbox closeable=1 area_caption=Sisu
 	@property content type=textarea cols=180 rows=30 field=description parent=content_bit no_caption=1 width=100%
 
 @layout customer_bit type=vbox closeable=1 area_caption=Tellijad
-#	@property parts_tb type=toolbar no_caption=1 store=no parent=customer_bit
-
 	@property co_tb type=toolbar no_caption=1 store=no parent=customer_bit
 	@property co_table type=table no_caption=1 store=no parent=customer_bit
 
@@ -83,75 +106,14 @@
 	@property bills_tb type=toolbar no_caption=1 store=no parent=bills_bit
 	@property bills_table type=table no_caption=1 store=no parent=bills_bit
 
+	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_right_top
+	@caption Klient
 
-#	@layout top_2way type=hbox parent=top_bit
-
-#		@layout top_2way_left type=vbox parent=top_2way
-
-#			@property name type=textbox table=objects field=name parent=top_2way_left
-#			@caption Nimi
-
-#			@property comment type=textbox table=objects field=comment parent=top_2way_left
-#			@caption Kommentaar
-
-#			@property add_clauses type=chooser store=no parent=top_2way_left multiple=1
-#			@caption Lisatingimused
-
-#		@layout top_2way_right type=vbox parent=top_2way
-#
-#			@property start1 type=datetime_select field=start table=planner parent=top_2way_right
-#			@caption Algus
-#
-#			@property end type=datetime_select table=planner parent=top_2way_right
-#			@caption L&otilde;peb
-#
-#	@property hrs_table type=table no_caption=1 store=no parent=top_bit
-#
-
-#@layout center_bit type=hbox 
-#	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
-#
-#	@layout center_bit_left type=vbox parent=center_bit 
-#
-#		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
-#
-#		@property content type=textarea cols=80 rows=30 field=description parent=center_bit_left_ct no_caption=1 width=100%
-#		@caption Sisu
-
-#	@layout center_bit_right type=vbox parent=center_bit 
-
-#		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
-
-#			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_right_top
-#
-#			@property co_table type=table no_caption=1 store=no parent=center_bit_right_top
-#			@property proj_table type=table no_caption=1 store=no parent=center_bit_right_top
-#			@property parts_table type=table no_caption=1 store=no parent=center_bit_right_top
-
-
-			@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_right_top
-			@caption Klient
-
-			@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT parent=center_bit_right_top
-			@caption Projekt
-
-
-#		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
-
-#			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_right_bottom
-
-#			@property files_table type=table no_caption=1 store=no parent=center_bit_right_bottom
-
-
-
-
-
+	@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT parent=center_bit_right_top
+	@caption Projekt
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
-
-@property is_personal type=checkbox ch_value=1 field=meta method=serialize table=objects
-@caption Isiklik
 
 @property is_personal type=checkbox ch_value=1 field=meta method=serialize table=objects
 @caption Isiklik
@@ -165,15 +127,14 @@
 @property bill_no type=text table=planner field=bill_no
 @caption Arve number
 
-@property hr_price type=textbox size=5 table=objects field=meta method=serialize 
+@property hr_price type=textbox size=5 table=objects field=meta method=serialize
 @caption Tunni hind
-
 
 @property in_budget type=checkbox ch_value=1 table=planner field=aw_in_budget
 @caption Eelarvesse
 
 @property time_guess type=textbox size=5 field=meta method=serialize table=objects
-@caption Prognoositav tundide arv 	
+@caption Prognoositav tundide arv
 
 @property time_real type=textbox size=5 field=meta method=serialize table=objects
 @caption Tegelik tundide arv
@@ -181,38 +142,40 @@
 @property time_to_cust type=textbox size=5 field=meta method=serialize table=objects
 @caption Tundide arv kliendile
 
-
 @property priority type=textbox size=5 table=planner field=priority
 @caption Prioriteet
 
 @property hr_price_currency type=select field=meta method=serialize table=objects
 @caption Valuuta
 
-	@property deal_unit type=textbox size=5 table=planner
-	@caption &Uuml;hik
+@property deal_unit type=textbox size=5 table=planner
+@caption &Uuml;hik
 
-	@property deal_amount type=textbox size=5 table=planner
-	@caption Kogus
+@property deal_amount type=textbox size=5 table=planner
+@caption Kogus
 
-	@property deal_price type=textbox size=5 table=planner
-	@caption Kokkuleppehind
+@property deal_price type=textbox size=5 table=planner
+@caption Kokkuleppehind
 
-	@property deal_has_tax type=checkbox size=5 table=planner
-	@caption Sisestati koos k&auml;ibemaksuga
-
-
+@property deal_has_tax type=checkbox size=5 table=planner
+@caption Sisestati koos k&auml;ibemaksuga
 
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill group=other_settings
 @caption Saata arve
 
-
+@property customer_relation type=relpicker table=planner field=customer_relation reltype=RELTYPE_CUSTOMER_RELATION group=other_settings
+@caption Kliendisuhe
 
 @default table=objects
 @default field=meta
 @default method=serialize
 
+@property presentation type=relpicker reltype=RELTYPE_RESULT_PRESENTATION group=other_settings
+@comment Tulemuseks olev presentatsioon
+@caption Presentatsioon
+
 @property task_toolbar type=toolbar no_caption=1 store=no group=participants
-@caption "Toolbar"
+@caption Toolbar
 
 @property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,weekdays,end
 @caption Kordused
@@ -249,27 +212,16 @@
 
 @default group=other_calls
 
-	@property new_call_date type=datetime_select store=no
-	@caption Uue k&otilde;ne aeg
-
 	@property other_calls type=table store=no no_caption=1
 
-@groupinfo recurrence caption=Kordumine
-@groupinfo calendars caption=Kalendrid
-@groupinfo projects caption=Projektid
-@groupinfo comments caption=Kommentaarid
-@groupinfo participants caption=Osalejad submit=no
-@groupinfo other_calls caption="Eelmised k&otilde;ned" 
-@groupinfo predicates caption="Eeldused" 
 
-@groupinfo other_settings caption="Muud seaded"
-@default group=other_settings
-
-
-@tableinfo planner index=id master_table=objects master_index=brother_of
+// ------------------- RELATION TYPES -------------------
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
+
+@reltype CUSTOMER_RELATION value=6 clid=CL_CRM_COMPANY_CUSTOMER_DATA
+@caption Kliendisuhe
 
 @reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Klient
@@ -285,6 +237,13 @@
 
 @reltype ROW value=7 clid=CL_TASK_ROW
 @caption Rida
+
+@reltype RESULT_PRESENTATION value=8 clid=CL_CRM_PRESENTATION
+@caption Presentatsioon
+
+@reltype RESULT_CALL value=10 clid=CL_CRM_CALL
+@caption Uus k&otilde;ne
+
 */
 
 class crm_call extends task
@@ -304,7 +263,7 @@ class crm_call extends task
 		$this->vars(array(
 			"name" => $obj->name(),
 			"icon" => icons::get_icon_url($obj),
-			"time" => date("d-M-y H:i",$obj->prop("start1")),
+			"time" => date("d-M-y H:i", $obj->prop("start1")),
 			"content" => nl2br(create_links($obj->prop("content"))),
 		));
 		return $this->parse();
@@ -330,7 +289,86 @@ class crm_call extends task
 				"msgid" => $arr["request"]["msgid"],
 				"fullheaders" => "",
 			));
-		}	
+		}
+	}
+
+	function _get_call_tools(&$arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$this_o = $arr["obj_inst"];
+
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"action" => "submit",
+			"img" => "save.gif",
+		));
+
+		if ($this_o->prop("real_duration") < 1)
+		{
+			if ($this_o->prop("real_start") < 2)
+			{ // call hasn't started yet
+				$tb->add_button(array(
+					"name" => "start",
+					"tooltip" => t("Alusta k&otilde;net"),
+					"action" => "start",
+					"img" => "nool1.gif",
+				));
+			}
+			else
+			{ // end call button
+				$tb->add_button(array(
+					"name" => "end",
+					"tooltip" => t("L&otilde;peta k&otilde;ne ja salvesta andmed"),
+					"action" => "end",
+					"img" => "class_223.gif",
+				));
+			}
+		}
+		return PROP_OK;
+	}
+
+	function _get_new_call_date(&$arr)
+	{
+		$arr["prop"]["year_from"] = date("Y");
+		$application = automatweb::$request->get_application();
+		if ($application->is_a(CL_CRM_SALES) and $arr["prop"]["value"] < 2)
+		{
+			$arr["prop"]["value"] = time();
+		}
+		return PROP_OK;
+	}
+
+	function _get_real_start(&$arr)
+	{
+		if ($arr["prop"]["value"] > 1)
+		{
+			$arr["prop"]["value"] = date("d.m.Y H:i", $arr["prop"]["value"]);
+		}
+		return PROP_OK;
+	}
+
+	function _get_real_duration(&$arr)
+	{
+		$arr["prop"]["value"] = number_format($arr["prop"]["value"]/60, 2, ".", " ");
+		return PROP_OK;
+	}
+
+	function _get_presentation_date(&$arr)
+	{
+		$arr["prop"]["year_from"] = date("Y");
+		$application = automatweb::$request->get_application();
+		if ($application->is_a(CL_CRM_SALES) and $arr["prop"]["value"] < 2)
+		{
+			$arr["prop"]["value"] = time();
+		}
+		return PROP_OK;
+	}
+
+	function _get_result(&$arr)
+	{
+		$arr["prop"]["options"] = array("" => "") + $arr["obj_inst"]->result_names();
+		return PROP_OK;
 	}
 
 	function get_property($arr)
@@ -353,10 +391,11 @@ class crm_call extends task
 				$data["rows"] = 2;
 				$data["cols"] = 30;
 				break;
+
 			case "co_tb":
 				$this->_get_co_tb($arr);
 				break;
-	
+
 			case "project_tb":
 				$this->_get_project_tb($arr);
 				break;
@@ -401,7 +440,7 @@ class crm_call extends task
 				break;
 
 			case "add_clauses":
-					return PROP_IGNORE;
+				return PROP_IGNORE;
 
 				$has_work_time = $arr["obj_inst"]->has_work_time();
 				$data["options"] = array(
@@ -444,19 +483,15 @@ class crm_call extends task
 			case "promoter":
 				return PROP_IGNORE;
 
-			case "new_call_date":
-				$data["value"] = -1;
-				break;
-
 			case "other_calls":
 				$this->_other_calls($arr);
 				break;
 
-			case "name":	
+			case "name":
 				if($this->mail_data)
 				{
 					$data["value"] = $this->mail_data["subject"];
-				}	
+				}
 				if($arr["request"]["title"] && $arr["new"])
 				{
 					$data["value"] = $arr["request"]["title"];
@@ -465,7 +500,7 @@ class crm_call extends task
 				{
 					$_SESSION["event"]["participants"] = explode("," , $arr["request"]["participants"]);
 				}
-				break;	
+				break;
 			case "content":
 				$data["style"] = "width: 100%";
 				if($this->mail_data)
@@ -479,7 +514,7 @@ class crm_call extends task
 						$this->mail_data["content"]);
 				}
 				break;
-			
+
 			case "project":
 				return PROP_IGNORE;
 				$nms = array();
@@ -693,7 +728,7 @@ class crm_call extends task
 //				$arr["obj_inst"]->set_prop("send_bill", $data["value"]["send_bill"] ? 1 : 0);
 //				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
 				if($data["value"]["is_work"])
-				{ 
+				{
 					$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"),
 					"time_to_cust" => $arr["obj_inst"]->prop("time_to_cust"));
 					$arr["obj_inst"]->set_primary_row($rowdata);
@@ -713,54 +748,64 @@ class crm_call extends task
 
 			case "new_call_date":
 				$v = date_edit::get_timestamp($data["value"]);
-				if ($v > time())
+				$application = automatweb::$request->get_application();
+
+				if ($application->is_a(CL_CRM_SALES))
 				{
-					// create a new call from the current one
-					$o = new object();
-					$o->set_class_id(CL_CRM_CALL);
-					$o->set_parent($arr["obj_inst"]->parent());
-					foreach($arr["obj_inst"]->properties() as $pn => $pv)
+					if (crm_call_obj::RESULT_CALL == $arr["request"]["result"] and $v <= time())
 					{
-						if($o->is_property($pn))
-						{
-							$o->set_prop($pn , $pv);
-						}
-					}
-					$dat["start1"] = $v;
-					$dat["is_done"] = 0;
-					$o->save();
-					foreach($arr["obj_inst"]->connections_from(array()) as $c)
-					{
-						$o->connect(array(
-							'reltype' => $c->prop("reltype"),
-							'to' => $c->prop("to"),
-						));
-					}
-					foreach($arr["obj_inst"]->connections_to(array()) as $c)
-					{
-						$from = obj($c->prop("from"));
-						$from->connect(array(
-							'reltype' => $c->prop("reltype"),
-							'to' => $o->id(),
-						));
+						$arr["prop"]["error"] = t("Uue k&otilde;ne aeg peab olema m&auml;&auml;ratud");
+						return PROP_FATAL_ERROR;
 					}
 				}
 				else
-				if ($v > 300)
 				{
-					$data["error"] = t("Uee k&otilde;ne aeg ei tohi olla minevikus!");
-					return PROP_FATAL_ERROR;
+					if ($v > time())
+					{
+						// create a new call from the current one
+						$o = new object();
+						$o->set_class_id(CL_CRM_CALL);
+						$o->set_parent($arr["obj_inst"]->parent());
+						foreach($arr["obj_inst"]->properties() as $pn => $pv)
+						{
+							if($o->is_property($pn))
+							{
+								$o->set_prop($pn , $pv);
+							}
+						}
+						$o->save();
+						foreach($arr["obj_inst"]->connections_from(array()) as $c)
+						{
+							$o->connect(array(
+								'type' => $c->prop("reltype"),
+								'to' => $c->prop("to"),
+							));
+						}
+						foreach($arr["obj_inst"]->connections_to(array()) as $c)
+						{
+							$from = obj($c->prop("from"));
+							$from->connect(array(
+								'type' => $c->prop("reltype"),
+								'to' => $o->id(),
+							));
+						}
+					}
+					elseif ($v > 300)
+					{
+						$data["error"] = t("Uee k&otilde;ne aeg ei tohi olla minevikus!");
+						return PROP_FATAL_ERROR;
+					}
 				}
 				break;
 
 			case "customer":
 			case "project":
 				return PROP_IGNORE;
-				
+
 			case "end":
 				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($data["value"]))
 				{
-					
+
 					$data["value"] = $arr["request"]["start1"];
 					$arr["request"]["end"] = $arr["request"]["start1"];
 				}
@@ -768,6 +813,37 @@ class crm_call extends task
 		};
 		return $retval;
 	}
+
+	function _set_phone(&$arr)
+	{
+		return PROP_IGNORE;
+	}
+
+	function _set_result(&$arr)
+	{
+		if ("end" === $arr["request"]["action"] and empty($arr["prop"]["value"]))
+		{
+			$arr["prop"]["error"] = t("Tulemus peab olema m&auml;&auml;ratud");
+			return PROP_FATAL_ERROR;
+		}
+		return PROP_OK;
+	}
+
+	function _set_presentation_date(&$arr)
+	{
+		$v = date_edit::get_timestamp($arr["prop"]["value"]);
+		$application = automatweb::$request->get_application();
+		if ($application->is_a(CL_CRM_SALES))
+		{
+			if (crm_call_obj::RESULT_PRESENTATION == $arr["request"]["result"] and $v <= time())
+			{
+				$arr["prop"]["error"] = t("Presentatsiooni aeg peab olema m&auml;&auml;ratud");
+				return PROP_FATAL_ERROR;
+			}
+		}
+		return PROP_OK;
+	}
+
 /*
 	function callback_post_save($arr)
 	{	//the person who added the task will be a participant, whether he likes it
@@ -873,7 +949,7 @@ class crm_call extends task
 				if(strlen($params["part"]))
 				{
 					$parts = split(",", $params["part"]);
-					
+
 					$c = new connection();
 					$conns = $c->find(array(
 						"from.class_id" => CL_PROJECT,
@@ -951,7 +1027,7 @@ class crm_call extends task
 				"to" => $arr["data"]["project"]["value"],
 				"type" => "RELTYPE_PROJECT",
 			));
-			
+
 			$arr["oid"] = $o->id();
 		}
 		$o = obj($arr["oid"]);
@@ -966,7 +1042,6 @@ class crm_call extends task
 
 	function gen_stopper_addon($arr)
 	{
-		
 		$props = array(
 			array(
 				"name" => "name",
@@ -1011,7 +1086,7 @@ class crm_call extends task
 		$pl = get_instance(CL_PLANNER);
 		$person->connect(array(
 			"to" => $task->id(),
-			"reltype" => "RELTYPE_PERSON_CALL"
+			"type" => "RELTYPE_PERSON_CALL"
 		));
 
 		// also add to their calendar
@@ -1097,7 +1172,7 @@ class crm_call extends task
 	}
 
 	function _init_other_class_t(&$t)
-	{	
+	{
 		$t->define_field(array(
 			"name" => "when",
 			"caption" => t("Millal"),
@@ -1150,7 +1225,7 @@ class crm_call extends task
 	{
 		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
 		$hrs = floor($len / 900) / 4;
-		
+
 		// write length to time fields if empty
 		if ($arr["obj_inst"]->prop("time_to_cust") == "")
 		{
@@ -1175,7 +1250,7 @@ class crm_call extends task
 			if (!is_array($pv) && is_oid($pv))
 			{
 				$pv = array($pv => $pv);
-			}	
+			}
 			else
 			if (!is_array($pv) && !is_oid($pv))
 			{
@@ -1315,14 +1390,14 @@ class crm_call extends task
 				$o->set_prop("project", 0);
 				$o->save();
 			}
-		}	
+		}
 
 		if (is_array($arr["sel_part"]) && count($arr["sel_part"]))
 		{
 			$arr["check"] = $arr["sel_part"];
 			$arr["event_id"] = $arr["id"];
 			post_message_with_param(
-				MSG_MEETING_DELETE_PARTICIPANTS,
+				"MSG_MEETING_DELETE_PARTICIPANTS",
 				CL_CRM_MEETING,
 				&$arr
 			);
@@ -1342,7 +1417,7 @@ class crm_call extends task
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
-		if ("planner" == $tbl)
+		if ("planner" === $tbl)
 		{
 			$i = get_instance(CL_TASK);
 			return $i->do_db_upgrade($tbl, $field);
@@ -1455,6 +1530,7 @@ class crm_call extends task
 					));
 					$project = reset($projects->ids());
 				}
+
 				if($project)
 				{
 					$o->add_project($project);
@@ -1570,7 +1646,67 @@ class crm_call extends task
 		return $content;
 	}
 
+	/**
+      @attrib name=start all_args=1
+      @param id required type=int acl=view
+      @param phone_id required type=int acl=view
+	**/
+	function start($arr)
+	{
+		$this_o = new object($arr["id"]);
+		$phone = obj($arr["phone_id"], array(), CL_CRM_PHONE, true);
+		$this_o->make($phone);
+		$arr["action"] = "change";
+		unset($arr["phone_id"]);
+		return $this->mk_my_orb("change", $arr);
+	}
 
+	/**
+      @attrib name=end all_args=1
+      @param id required type=int acl=view
+	**/
+	function end($arr)
+	{
+		$this_o = new object($arr["id"]);
+		$r = $this->submit($arr);
+		if ($this->data_processed_successfully())
+		{
+			$this_o->end();
 
-};
+			$application = automatweb::$request->get_application();
+			if ($application->is_a(CL_CRM_SALES))
+			{
+				$crm_sales = new crm_sales();
+				$arr2 = $arr;
+				$arr2["call_id"] = $this_o->id();
+				$arr2["id"] = $application->id();
+				$arr2["action"] = "end_call";
+				$r = $crm_sales->end_call($arr2);
+			}
+		}
+		return $r;
+	}
+
+	function submit($arr)
+	{
+		$r = parent::submit($arr);
+		if ("submit" === $arr["action"] and $this->data_processed_successfully())
+		{
+			$this_o = new object($arr["id"]);
+			$application = automatweb::$request->get_application();
+			if ($application->is_a(CL_CRM_SALES) and $this_o->prop("real_duration") < 1)
+			{
+				if ($this_o->prop("result") == crm_call_obj::RESULT_PRESENTATION)
+				{ // jump to presentation
+					$presentation = $this_o->get_first_obj_by_reltype("RELTYPE_RESULT_PRESENTATION");
+					$r = html::get_change_url($presentation->id(), array("return_url" => $arr["post_ru"]));
+				}
+				elseif ($this_o->prop("result") == crm_call_obj::RESULT_CALL)
+				{ // require next call date
+				}
+			}
+		}
+		return $r;
+	}
+}
 ?>
