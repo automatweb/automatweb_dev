@@ -24,7 +24,7 @@ class obj_predicate_prop
 		$filt = array(
 			"class_id" => CL_BUG,
 			"bug_status" => new obj_predicate_not(2),
-			"bug_priority" => new obj_predicate_prop(OBJ_COMP_LESS, "bug_status")
+			"bug_priority" => new obj_predicate_prop(obj_predicate_compare::LESS, "bug_status")
 		);
 		$ol = new object_list($filt);
 		// filters out bug's which bug_status property isn't 2 and which bug_priority property value is less than bug_status property value.
@@ -41,7 +41,7 @@ class obj_predicate_prop
 		else
 		{
 			$this->prop = $p1;
-			$this->compare = OBJ_COMP_EQUAL;
+			$this->compare = obj_predicate_compare::EQUAL;
 		}
 	}
 

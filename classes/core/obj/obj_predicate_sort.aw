@@ -19,7 +19,7 @@ class obj_predicate_sort
 		$c2 = isset($count["ASC"]) ? $count["ASC"] : 0;
 		$c3 = isset($count["desc"]) ? $count["desc"] : 0;
 		$c4 = isset($count["DESC"]) ? $count["DESC"] : 0;
-		if (($c1 + $c2 + $c3 + $c14) !== count($data))
+		if (($c1 + $c2 + $c3 + $c4) !== count($data))
 		{
 			throw new awex_obj("Argument contains invalid sorting direction instruction(s)");
 		}

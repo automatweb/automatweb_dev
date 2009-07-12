@@ -800,7 +800,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if ($data["method"] !== "serialize")
 					{
-						$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
+						$tbls[$data["table"]]["defaults"][$data["field"]] = isset($data["default"]) ? $data["default"] : null;
 					}
 					else
 					{
@@ -1854,60 +1854,60 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$comparator = "";
 							switch($val->comparator)
 							{
-								case OBJ_COMP_LESS:
+								case obj_predicate_compare::LESS:
 									$comparator = " < ";
 									break;
 
-								case OBJ_COMP_GREATER:
+								case obj_predicate_compare::GREATER:
 									$comparator = " > ";
 									break;
 
-								case OBJ_COMP_LESS_OR_EQ:
+								case obj_predicate_compare::LESS_OR_EQ:
 									$comparator = " <= ";
 									break;
 
-								case OBJ_COMP_GREATER_OR_EQ:
+								case obj_predicate_compare::GREATER_OR_EQ:
 									$comparator = " >= ";
 									break;
 
-								case OBJ_COMP_BETWEEN:
+								case obj_predicate_compare::BETWEEN:
 									$comparator = " > ".$v_data." AND $tf < ";
 									$v_data = $val->data2;
 									break;
 
-								case OBJ_COMP_BETWEEN_INCLUDING:
+								case obj_predicate_compare::BETWEEN_INCLUDING:
 									$comparator = " >= ".$v_data." AND $tf <= ";
 									$v_data = $val->data2;
 									break;
 
-								case OBJ_COMP_EQUAL:
+								case obj_predicate_compare::EQUAL:
 									$comparator = " = ";
 									$v_data = $val->data2;
 									break;
 
-								case OBJ_COMP_NULL:
+								case obj_predicate_compare::NULL:
 									$comparator = " IS NULL ";
 									$v_data = "";
 									break;
 
-								case OBJ_COMP_IN_TIMESPAN:
+								case obj_predicate_compare::IN_TIMESPAN:
 									break;
 
 								default:
 									error::raise(array(
 										"id" => "ERR_OBJ_COMPARATOR",
-										"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ,OBJ_COMP_NULL,OBJ_COMP_IN_TIMESPAN. the value supplied, was: %s!"), $val->comparator)
+										"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either obj_predicate_compare::LESS,obj_predicate_compare::GREATER,obj_predicate_compare::LESS_OR_EQ,obj_predicate_compare::GREATER_OR_EQ,obj_predicate_compare::NULL,obj_predicate_compare::IN_TIMESPAN. the value supplied, was: %s!"), $val->comparator)
 									));
 							}
 
-							if ($val->comparator == OBJ_COMP_IN_TIMESPAN)
+							if ($val->comparator == obj_predicate_compare::IN_TIMESPAN)
 							{
 								$tbl_fld1 = $this->_get_tablefield_from_prop($val->data[0]);
 								$tbl_fld2 = $this->_get_tablefield_from_prop($val->data[1]);
 								$sql[] = " (NOT ($tbl_fld1 >= '".$val->data2[1]."' OR $tbl_fld2 <= '".$val->data2[0]."')) ";
 							}
 							else
-							if ($val->comparator == OBJ_COMP_NULL)
+							if ($val->comparator == obj_predicate_compare::NULL)
 							{
 								$sql[] = $tf." & ".((int)$this->properties[$key]["ch_value"])." IS NULL ";
 							}
@@ -2027,60 +2027,60 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$comparator = "";
 					switch($val->comparator)
 					{
-						case OBJ_COMP_LESS:
+						case obj_predicate_compare::LESS:
 							$comparator = " < ";
 							break;
 
-						case OBJ_COMP_GREATER:
+						case obj_predicate_compare::GREATER:
 							$comparator = " > ";
 							break;
 
-						case OBJ_COMP_LESS_OR_EQ:
+						case obj_predicate_compare::LESS_OR_EQ:
 							$comparator = " <= ";
 							break;
 
-						case OBJ_COMP_GREATER_OR_EQ:
+						case obj_predicate_compare::GREATER_OR_EQ:
 							$comparator = " >= ";
 							break;
 
-						case OBJ_COMP_BETWEEN:
+						case obj_predicate_compare::BETWEEN:
 							$comparator = " > ".$v_data." AND $tf < ";
 							$v_data = $val->data2;
 							break;
 
-						case OBJ_COMP_BETWEEN_INCLUDING:
+						case obj_predicate_compare::BETWEEN_INCLUDING:
 							$comparator = " >= ".$v_data." AND $tf <= ";
 							$v_data = $val->data2;
 							break;
 
-						case OBJ_COMP_EQUAL:
+						case obj_predicate_compare::EQUAL:
 							$comparator = " = ";
 							$v_data = $val->data2;
 							break;
 
-						case OBJ_COMP_NULL:
+						case obj_predicate_compare::NULL:
 							$comparator = " IS NULL ";
 							$v_data = "";
 							break;
 
-						case OBJ_COMP_IN_TIMESPAN:
+						case obj_predicate_compare::IN_TIMESPAN:
 							break;
 
 						default:
 							error::raise(array(
 								"id" => "ERR_OBJ_COMPARATOR",
-								"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ,OBJ_COMP_NULL,OBJ_COMP_IN_TIMESPAN. the value supplied, was: %s!"), $val->comparator)
+								"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either obj_predicate_compare::LESS,obj_predicate_compare::GREATER,obj_predicate_compare::LESS_OR_EQ,obj_predicate_compare::GREATER_OR_EQ,obj_predicate_compare::NULL,obj_predicate_compare::IN_TIMESPAN. the value supplied, was: %s!"), $val->comparator)
 							));
 					}
 
-					if ($val->comparator == OBJ_COMP_IN_TIMESPAN)
+					if ($val->comparator == obj_predicate_compare::IN_TIMESPAN)
 					{
 						$tbl_fld1 = $this->_get_tablefield_from_prop($val->data[0]);
 						$tbl_fld2 = $this->_get_tablefield_from_prop($val->data[1]);
 						$sql[] = " (NOT ($tbl_fld1 >= '".$val->data2[1]."' OR $tbl_fld2 <= '".$val->data2[0]."')) ";
 					}
 					else
-					if ($val->comparator == OBJ_COMP_NULL)
+					if ($val->comparator == obj_predicate_compare::NULL)
 					{
 						$sql[] = $tf." IS NULL ";
 					}
@@ -2122,31 +2122,31 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					switch($val->compare)
 					{
-						case OBJ_COMP_LESS:
+						case obj_predicate_compare::LESS:
 							$compr = " < ";
 							break;
 
-						case OBJ_COMP_GREATER:
+						case obj_predicate_compare::GREATER:
 							$compr = " > ";
 							break;
 
-						case OBJ_COMP_LESS_OR_EQ:
+						case obj_predicate_compare::LESS_OR_EQ:
 							$compr = " <= ";
 							break;
 
-						case OBJ_COMP_GREATER_OR_EQ:
+						case obj_predicate_compare::GREATER_OR_EQ:
 							$compr = " >= ";
 							break;
 
-						case OBJ_COMP_BETWEEN:
+						case obj_predicate_compare::BETWEEN:
 							error::raise(array(
 								"id" => "ERR_WRONG_COMPARATOR",
-								"msg" => t("OBJ_COMP_BETWEEN does not make sense with obj_predicate_prop!")
+								"msg" => t("obj_predicate_compare::BETWEEN does not make sense with obj_predicate_prop!")
 							));
 							break;
 
 						default:
-						case OBJ_COMP_EQUAL:
+						case obj_predicate_compare::EQUAL:
 							$compr = " = ";
 							break;
 					}
@@ -4058,7 +4058,7 @@ exit_function("ds_mysql::optimize_joins");
 		$tmp = obj();
 		$tmp->set_class_id($clid);
 		$pl = $tmp->get_property_list();
-		
+
 		return array($pl[$prop], $tmp->get_tableinfo());
 	}
 }
