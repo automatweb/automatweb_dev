@@ -276,5 +276,39 @@ class shop_product_obj extends _int_object
 		$sql = "SELECT amount FROM aw_shop_warehouse_amount WHERE warehouse = '$warehouse_id' AND product = '".$this->id()."'";
 		return $GLOBALS["object_loader"]->cache->db_fetch_field($sql, "amount");
 	}
+
+	public function get_availability_time($wh_id)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+			"product" => $this->id(),
+			"warehouse" => $wh_id
+		));
+		if (!$ol->count())
+		{
+			return "-";
+		}
+		$o = $ol->begin();
+		if ($o->prop("days") > 0)
+		{
+			return date("d.m.Y", time() + ($o->prop("days") * 24*3600));
+		}
+		if ($o->prop("weekday") != "")
+		{
+			$ws = date_calc::get_week_start();
+			$ws += 24 * 3600 * 7;
+			$ws += ($o->prop("weekday") * 24 * 3600);
+			return date("d.m.Y", $ws);
+		}
+		if ($o->prop("date1"))
+		{
+			return date("d.m.Y", $o->prop("date1"));
+		}
+		if ($o->prop("date2"))
+		{
+			return date("d.m.Y", $o->prop("date2"));
+		}
+		return "-";
+	}
 	
 }
