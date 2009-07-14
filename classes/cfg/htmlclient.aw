@@ -489,7 +489,7 @@ class htmlclient extends aw_template
 
 	private function _do_cfg_edit_mode_check($arr)
 	{
-		if (!$_SESSION["cfg_admin_mode"] == 1 || !is_oid($_GET["id"]))
+		if (!isset($_SESSION["cfg_admin_mode"]) || !$_SESSION["cfg_admin_mode"] == 1 || !is_oid($_GET["id"]))
 		{
 			return "";
 		}

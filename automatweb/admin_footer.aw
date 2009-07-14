@@ -5,7 +5,7 @@ global $awt;
 $site_title = isset($GLOBALS["site_title"]) ? $GLOBALS["site_title"] : "AutomatWeb";
 $sf->read_template("index.tpl");
 
-if ($_SESSION["cfg_admin_mode"] == 1)
+if (isset($_SESSION["cfg_admin_mode"]) and $_SESSION["cfg_admin_mode"] == 1)
 {
 	$sf->vars(array("CFG_ADMIN_MODE" => $sf->parse("CFG_ADMIN_MODE")));
 }
@@ -145,19 +145,20 @@ $sf->vars(array(
 	)),*/
 	"settings_pop" => $bmb->get_menu(array(
 		"load_on_demand_url" => $sf->mk_my_orb("settings_lod", array("url" => get_ru()), "user"),
-		"text" => '<img src="/automatweb/images/aw06/ikoon_seaded.gif" alt="seaded" width="17" height="17" border="0" align="left" style="margin: -1px 5px -3px -2px" />'.t("Seaded").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
+		"text" => '<img src="/automatweb/images/aw06/ikoon_seaded.gif" alt="seaded" width="17" height="17" border="0" align="left" style="margin: -1px 5px -3px -2px" />'.t("Seaded")//.' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 	)),
 	"msg_url" => $sf->mk_my_orb("redir_userbox", array("url" => get_ru()), "quickmessagebox"),
 	"lang_pop" => $bml->get_menu(array(
 		"load_on_demand_url" => $sf->mk_my_orb("lang_pop", array("url" => get_ru()), "language"),
-		"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
+		"text" => $ld["name"]//.' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 	)),
 	"parent" => $parent,
 	"random" => rand(100000,1000000),
 	"session_end_msg" => t("Teie AutomatWeb'i sessioon aegub 5 minuti p&auml;rast!"),
 	"btn_session_end_continue" => html_entity_decode(t("J&auml;tkan")),
 	"btn_session_end_cancel" => html_entity_decode(t("L&otilde;petan")),
-	"session_length" => ini_get("session.gc_maxlifetime")*1000
+	"session_length" => ini_get("session.gc_maxlifetime")*1000,
+	"ajax_loader_msg" => t("T&ouml;&ouml;tlen.<br />&Uuml;ks hetk, palun.")
 ));
 
 $box = quickmessagebox_obj::get_msgbox_for_user(obj(aw_global_get("uid_oid")), true);
