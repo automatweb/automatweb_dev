@@ -6,7 +6,7 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: orb_gen.aw,v 1.5 2009/02/12 11:04:01 kristo Exp $
+	@cvs $Id: orb_gen.aw,v 1.6 2009/07/14 09:54:04 instrumental Exp $
 
 	@comment
 	generates orb defs, based on information from docgen_analyzer
@@ -147,6 +147,10 @@ class orb_gen extends class_base
 			$xml .= "\t\t\t\t<arguments>\n";
 			foreach($adata["arguments"] as $arg_name => $arg_data)
 			{
+					if(empty($arg_data["req"]))
+					{
+						$arg_data["req"] = "optional";
+					}
 					$xml .= "\t\t\t\t\t<".$arg_data["req"]." name=\"$arg_name\"";
 					unset($arg_data["req"]);
 					foreach($arg_data as $akey => $aval)
@@ -299,7 +303,7 @@ class orb_gen extends class_base
 				}
 
 				foreach($cld["classes"] as $class => $cldat)
-				{
+				{					
 					if (is_array($cldat["functions"]) && !empty($class) && strtolower($class) == strtolower(basename($file, ".aw")))
 					{
 						// count orb methods

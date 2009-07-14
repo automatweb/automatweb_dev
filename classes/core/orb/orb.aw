@@ -132,7 +132,6 @@ class orb extends aw_template
 		{
 			$found = false;
 		}
-
 		foreach($cl2load as $clname)
 		{
 			// not yet found
@@ -407,7 +406,6 @@ class orb extends aw_template
 
 		// ja siia moodustub loplik struktuur
 		$orb_defs = array();
-
 		foreach($values as $key => $val)
 		{
 			// parajasti t88deldava tag-i nimi
@@ -622,7 +620,6 @@ class orb extends aw_template
 			{
 				$this->raise_error("ERR_ORB_NOTFOUND",sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
 			}
-
 			$ret = $this->load_xml_orb_def($class);
 		}
 
