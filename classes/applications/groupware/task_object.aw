@@ -721,7 +721,6 @@ class task_object extends _int_object
 				$ol->add($c->prop("to"));
 			}
 		}
-/* BC -- see oli mingi vana systeemi objektide t88tamiseks. uues tekitas probleeme.
 		//kunagi peaks edasise 2ra kustutama
 		$types = array(10, 8);
 		if ($this->class_id() == CL_CRM_CALL)
@@ -737,8 +736,6 @@ class task_object extends _int_object
 		{
 			$ol->add($c->prop("from"));
 		}
-	END BC
-*/
 		return $ol;
 	}
 
