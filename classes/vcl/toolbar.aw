@@ -424,7 +424,7 @@ class toolbar extends aw_template
 						$val["caption"] = $val["tooltip"];
 					}
 
-					$val["url_q"] = str_replace("'", "\\'", $val["url"]);
+					$val["url_q"] = str_replace("'", "\\'", ifset($val, "url"));
 					$disabled = !empty($val["disabled"]) ? "_disabled" : "";
 
 					if (!empty($val["img"]))
@@ -679,15 +679,50 @@ class toolbar extends aw_template
 
 		@param clid optional type=array
 			The class id to search
+
 		@param confirm optional type=string
 			javascript confirmation popup caption
+
+		@examples
+			function _get_my_toolbar($arr)
+			{
+				$tb = &$arr["prop"]["vcl_inst"];
+				$tb->add_search_button(array(
+					'name' => 'something',
+					'pn' => 'add_something',
+					'clid' => CL_SOME_CLASS_ID
+				));
+			}
+
+			function _set_my_toolbar($arr)
+			{
+				if($add = $arr["request"]["add_something"])
+				{
+					$tmp = explode(",", $add);
+					foreach($tmp as $oid)
+					{
+						if(!$arr["obj_inst"]->is_connected_to(array("to" => $oid)))
+						{
+							$arr["obj_inst"]->connect(array(
+								"type" => "RELTYPE_SOME_RELTYPE",
+								"to" => $oid,
+							));
+						}
+					}
+				}
+			}
+
+			function callback_mod_reforb($arr)
+			{
+				$arr["add_something"] = 0;
+			}
 	**/
 	function add_search_button($arr)
 	{
 		$url = $this->mk_my_orb("do_search", $arr, "popup_search");
 		$s = !empty($arr['tooltip']) ? $arr['tooltip'] : t("Otsi");
 		$this->add_button(array(
-			"name" => $arr["name"] ? $arr["name"] : "search",
+			"name" => !empty($arr["name"]) ? $arr["name"] : "search",
 			"img" => "search.gif",
 			"url" => "javascript:aw_popup_scroll('$url','$s',".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
 			"tooltip" => $s
