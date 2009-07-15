@@ -147,6 +147,12 @@ default method=serialize
 	@property recalls_tbl type=table no_caption=1
 	@caption Tagastuste tabel
 
+@groupinfo delivery_notes caption="Saatelehed"
+@default group=delivery_notes
+
+	@property delivery_notes_tbl type=table no_caption=1
+	@caption Saatelehtede tabel
+
 
 
 
@@ -501,11 +507,11 @@ class crm_company_customer_data extends class_base
 			"sortable" => 1,
 			"chgbgcolor" => "color",
 		));
-		$t->define_chooser(array(
-			"field" => "oid",
-			"name" => "sel",
-			"chgbgcolor" => "color",
-		));
+//		$t->define_chooser(array(
+//			"field" => "oid",
+//			"name" => "sel",
+//			"chgbgcolor" => "color",
+//		));
 		$bills = $arr["obj_inst"]->get_bills();
 
 
@@ -546,7 +552,7 @@ enter_function("bill::start");
 			$state = $bill_i->states[$bill->prop("state")];
 
 exit_function("bill::start");
-enter_function("bill::startcurr");
+
 			$cursum = $own_currency_sum = $bill->get_bill_sum();//$bill_i->get_bill_sum($bill,$tax_add);
 			$curid = $bill->get_bill_currency_id();
 			$cur_name = $bill->get_bill_currency_name();
@@ -566,7 +572,7 @@ enter_function("bill::startcurr");
 			{
 				$sum_str = number_format($own_currency_sum, 2);
 			}
-exit_function("bill::startcurr");
+
 enter_function("bill::start0");
 
 			$pop->begin_menu("bill_".$bill->id());
@@ -726,11 +732,71 @@ exit_function("bill::balance");
 
 	}
 
-	function _get_orders_tbl($arr)
+	function _get_delivery_notes_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 
 		$t->define_field(array(
+			"name" => "no",
+			"caption" => t("Number"),
+			"sortable" => 1,
+			"align" => "right",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"sortable" => 1,
+			"align" => "center",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"sortable" => 1,
+			"align" => "right",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+
+		$t->define_field(array(
+			"name" => "currency",
+			"caption" => t("Valuuta"),
+			"sortable" => 1,
+			"align" => "cright",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+		$sum = 0;
+		$delivery_notes = $arr["obj_inst"]->get_delivery_notes();
+		foreach($delivery_notes->arr() as $delivery_note)
+		{
+			$sum+= $delivery_note -> get_sum();
+			$t->define_data(array(
+				"no" => html::obj_change_url($delivery_note,$delivery_note -> prop("number")),
+//				"no" => $order -> prop("number"),
+				"sum" => $delivery_note -> get_sum(),
+				"date" => date("d.m.Y" , $delivery_note -> prop("enter_date")),
+				"currency" => get_name($delivery_note->prop("currency")),
+			));
+		}
+		$t->set_sortable(false);
+		$t->define_data(array(
+			"no" => t("Kokku"),
+			"sum" => $sum,
+		));
+	}
+
+
+	function _get_orders_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+/*		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 			"sortable" => 1,
@@ -738,13 +804,60 @@ exit_function("bill::balance");
 			"chgbgcolor" => "color",
 			"colspan" => "colspan",
 		));
-		$orders = $arr["obj_inst"]->get_orders();
+*/
+		$t->define_field(array(
+			"name" => "no",
+			"caption" => t("Number"),
+			"sortable" => 1,
+			"align" => "right",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"sortable" => 1,
+			"align" => "center",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"sortable" => 1,
+			"align" => "right",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+
+		$t->define_field(array(
+			"name" => "currency",
+			"caption" => t("Valuuta"),
+			"sortable" => 1,
+			"align" => "cright",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+		$sum = 0;
+		$orders = $arr["obj_inst"]->get_sell_orders();
 		foreach($orders->arr() as $order)
 		{
+			$sum+= $order -> get_sum();
 			$t->define_data(array(
-				"name" => html::obj_change_url($order),
+				"no" => html::obj_change_url($order , $order -> prop("number")),
+//				"no" => $order -> prop("number"),
+				"sum" => $order -> get_sum(),
+				"date" => date("d.m.Y" , $order -> prop("date")),
+				"currency" => get_name($order->prop("currency")),
 			));
 		}
+		$t->set_sortable(false);
+		$t->define_data(array(
+			"no" => t("Summa"),
+			"sum" => $sum,
+		));
 	}
 
 	function _get_recalls_tbl($arr)

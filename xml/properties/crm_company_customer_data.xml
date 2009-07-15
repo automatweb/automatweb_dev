@@ -247,6 +247,15 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
       </property>
       <property>
+            <name>lead_source</name>
+            <table>aw_crm_customer_data</table>
+            <group>seller</group>
+            <type>relpicker</type>
+            <field>aw_lead_source</field>
+            <reltype>RELTYPE_LEAD_SOURCE</reltype>
+            <caption>Soovitaja/allikas</caption>
+      </property>
+      <property>
             <name>sales_lead_source</name>
             <table>aw_crm_customer_data</table>
             <group>seller</group>
@@ -315,6 +324,16 @@
             <field>recalls_tbl</field>
             <caption>Tagastuste tabel</caption>
       </property>
+      <property>
+            <name>delivery_notes_tbl</name>
+            <table>objects</table>
+            <group>delivery_notes</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>delivery_notes_tbl</field>
+            <caption>Saatelehtede tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_COMPANY_CUSTOMER_DATA</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -348,6 +367,9 @@
             <recalls>
                   <caption>Tagastused</caption>
             </recalls>
+            <delivery_notes>
+                  <caption>Saatelehed</caption>
+            </delivery_notes>
       </groupinfo>
       <tableinfo>
             <aw_crm_customer_data>
@@ -430,14 +452,14 @@
                   </clid>
                   <caption>Tehtud, plaanitud m&amp;amp;uuml;&amp;amp;uuml;gitegevus</caption>
             </SALES_EVENT>
-            <SALES_LEAD_SOURCE>
+            <LEAD_SOURCE>
                   <value>101</value>
                   <clid>
                         <num_0>CL_CRM_COMPANY</num_0>
                         <num_1>CL_CRM_PERSON</num_1>
                   </clid>
                   <caption>Soovitaja/allikas</caption>
-            </SALES_LEAD_SOURCE>
+            </LEAD_SOURCE>
       </reltypes>
 </properties>
 

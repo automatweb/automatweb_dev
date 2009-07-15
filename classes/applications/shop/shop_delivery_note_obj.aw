@@ -20,6 +20,14 @@ class shop_delivery_note_obj extends _int_object
 		return parent::prop("delivery_date");
 	}
 
+	function awobj_set_state($v)
+	{
+		if ($v == 1)
+		{
+			$this->set_prop("approved", 1);
+		}
+	}
+
 	function update_dn($data)
 	{
 		$dno = $this;
@@ -539,6 +547,18 @@ class shop_delivery_note_obj extends _int_object
 		$res[0] = " ".t("--vali--");
 		natcasesort($res);
 		return $res;
+	}
+
+	public function get_sum()
+	{
+		$sum = 0;
+		foreach($this->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+		{
+			$row = $c->to();
+			$c_sum = $row->amount * $row->price;
+			$sum += $c_sum;
+		}
+		return $sum;
 	}
 }
 
