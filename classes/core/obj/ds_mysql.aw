@@ -935,7 +935,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$mod_flds = array();
 			foreach(safe_array($arr["props_modified"]) as $_pn => $_one)
 			{
-				$mod_flds[$properties[$_pn]["table"]][$properties[$_pn]["field"]] = 1;
+				if (!empty($properties[$_pn]["table"]) and !empty($properties[$_pn]["field"]))
+				{
+					$mod_flds[$properties[$_pn]["table"]][$properties[$_pn]["field"]] = 1;
+				}
 			}
 
 			$tmp = array();
@@ -1023,7 +1026,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$seta[$prop["field"]] = $str;
 					}
 
-					if ($prop["datatype"] === "int" && $seta[$prop["field"]] == "")
+					if (isset($prop["datatype"]) && $prop["datatype"] === "int" && $seta[$prop["field"]] == "")
 					{
 						$seta[$prop["field"]] = "0";
 					}
@@ -1175,7 +1178,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
-		if ($data["id"])
+		if (!empty($data["id"]))
 		{
 			$q = "UPDATE aliases SET
 				source = '$data[from]',
@@ -1193,7 +1196,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		else
 		{
 			// we don't need the index if the connection has a reltype, cause the index is only used for aliases
-			if (!$data["idx"] && !$data["reltype"])
+			if (empty($data["idx"]) && empty($data["reltype"]))
 			{
 				$q = "SELECT MAX(idx) as idx FROM aliases where source = '$data[from]' and type = '$data[type]'";
 				$data["idx"] = $this->db_fetch_field($q, "idx")+1;
@@ -1203,9 +1206,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				idx,						cached,					relobj_id,				reltype,
 				pri
 			) VALUES(
-				'$data[from]',				'$data[to]',			'$data[type]',			'$data[data]',
-				'$data[idx]',				'$data[cached]',		'$data[relobj_id]',		'$data[reltype]',
-				'$data[pri]'
+				'{$data["from"]}',				'{$data["to"]}',			'{$data["type"]}',			'{$data["data"]}',
+				'{$data["idx"]}',				'{$data["cached"]}',		'{$data["relobj_id"]}',		'{$data["reltype"]}',
+				'{$data["pri"]}'
 			)";
 			$this->db_query($q);
 			$data['id'] = $this->db_last_insert_id();
@@ -1573,7 +1576,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 					$objdata[$row["oid"]] = array(
 						"brother_of" => isset($row["brother_of"]) ? $row["brother_of"] : null,
-						"status" => $row["status"],
+						"status" => isset($row["status"]) ? $row["status"] : null,
 						"class_id" => isset($row["class_id"]) ? $row["class_id"] : null,
 						"jrk" => isset($row["jrk"]) ? $row["jrk"] : null ,
 					);
@@ -1584,7 +1587,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$acldata[$row["oid"]] = $row;
 					}
 					$GLOBALS["__obj_sys_acl_memc"][$row["oid"]] = array(
-						"status" => $row["status"],
+						"status" => isset($row["status"]) ? $row["status"] : null,
 						"brother_of" => isset($row["brother_of"]) ? $row["brother_of"] : null,
 						"acldata" => isset($row["acldata"]) ? $row["acldata"] : null,
 						"parent" => isset($row["parent"]) ? $row["parent"] : null
@@ -1708,7 +1711,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				continue;
 			}
 
-			if ("sort_by" == (string)($key))
+			if ("sort_by" === (string)($key))
 			{
 				// add to list of used tables
 				$bits = explode(",", $val);
@@ -2820,47 +2823,47 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$pp = substr($pp, 0, $_pos);
 			}
 
-			if ($pp == "id")
+			if ($pp === "id")
 			{
 				$cur_prop = array("name" => "id", "table" => "objects", "field" => "oid");
 			}
 			else
-			if ($pp == "oid")
+			if ($pp === "oid")
 			{
 				$cur_prop = array("name" => "oid", "table" => "objects", "field" => "oid");
 			}
 			else
-			if ($pp == "class_id")
+			if ($pp === "class_id")
 			{
 				$cur_prop = array("name" => "id", "table" => "objects", "field" => "class_id");
 			}
 			else
-			if ($pp == "parent")
+			if ($pp === "parent")
 			{
 				$cur_prop = array("name" => "parent", "table" => "objects", "field" => "parent");
 			}
 			else
-			if ($pp == "created")
+			if ($pp === "created")
 			{
 				$cur_prop = array("name" => "created", "table" => "objects", "field" => "created");
 			}
 			else
-			if ($pp == "createdby")
+			if ($pp === "createdby")
 			{
 				$cur_prop = array("name" => "createdby", "table" => "objects", "field" => "createdby");
 			}
 			else
-			if ($pp == "modified")
+			if ($pp === "modified")
 			{
 				$cur_prop = array("name" => "modified", "table" => "objects", "field" => "modified");
 			}
 			else
-			if ($pp == "modifiedby")
+			if ($pp === "modifiedby")
 			{
 				$cur_prop = array("name" => "modifiedby", "table" => "objects", "field" => "modifiedby");
 			}
 			else
-			if ($pp == "ord")
+			if ($pp === "ord")
 			{
 				$cur_prop = array("name" => "ord", "table" => "objects", "field" => "jrk");
 			}
@@ -2881,7 +2884,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// if it is the last one, then it can be anything
 			if ($pos < (count($filt) - 1))
 			{
-				error::raise_if($cur_prop["method"] == "serialize" && $cur_prop["store"] != "connect", array(
+				error::raise_if($cur_prop["method"] === "serialize" && $cur_prop["store"] !== "connect", array(
 					"id" => "ERR_OBJ_NO_META",
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"), $pp, $cur_clid)
 				));
@@ -2934,7 +2937,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 
-			if (ifset($cur_prop, "store") == "connect")
+			if (ifset($cur_prop, "store") === "connect")
 			{
 				$this->_do_add_class_id($cur_clid);
 				// rewrite to a reltype join
