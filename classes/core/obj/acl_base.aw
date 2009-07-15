@@ -546,16 +546,24 @@ class acl_base extends db_connector
 				// idea here is, that for if acls we go through the group list until we find one that has if acls set
 				// if none have, then default to all access
 				// but for can admin interface we always thake the highest group for bc
-				if ($o->prop("priority") > $can_adm_max && ($progid == "can_admin_interface" || $o->prop("if_acls_set")))
+				if ($o->prop("priority") > $can_adm_max)
 				{
-					// all settings except can use admin depend on if_acls_set being true
-					$can_adm = $o->prop($progid) || ($progid == "can_admin_interface" ? false : !$o->prop("if_acls_set"));
-					$can_adm_max = $o->prop("priority");
+					if ("can_admin_interface" === $progid)
+					{
+						$can_adm = $o->prop($progid);
+						$can_adm_max = $o->prop("priority");
+					}
+					elseif ($o->prop("if_acls_set") and $o->is_property($progid))
+					{
+						// all settings except can use admin depend on if_acls_set being true
+						$can_adm = $o->prop($progid);
+						$can_adm_max = $o->prop("priority");
+					}
 				}
 			}
 			$GLOBALS["cfg"]["acl"]["no_check"] = $tmp;
 
-			if ($can_adm_max == 0 && $progid != "can_admin_interface")
+			if ($can_adm_max == 0 && $progid !== "can_admin_interface")
 			{
 				$can_adm = 1;
 			}
