@@ -2203,6 +2203,33 @@ class object
 		return $is;
 	}
 
+	/** Returns TRUE if the object class implements given interface
+		@attrib api=1 params=pos
+		@param interface type=string
+			Interface name to check
+		@errors
+			none
+		@returns boolean
+	**/
+	public function implements ($interface)
+	{
+		$interfaces = class_implements($GLOBALS["objects"][$this->oid], true);
+		return in_array($interface, $interfaces);
+	}
+
+	/** Returns TRUE if given method is defined in this object class
+		@attrib api=1 params=pos
+		@param name type=string
+			Method name
+		@errors
+			none
+		@returns boolean
+	**/
+	public function has_method ($name)
+	{
+		return method_exists($GLOBALS["objects"][$this->oid], (string) $name);
+	}
+
 	/** Return the translation of the property
 		@attrib name=trans_get_val api=1 params=pos
 
