@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.62 2009/07/15 07:28:05 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.63 2009/07/15 12:01:34 voldemar Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -47,7 +47,7 @@ class cache extends core
 		{
 			$real_section = $oid;
 		}
-		if (aw_ini_get("use_page_cache") && !aw_global_get("uid") && !aw_global_get("no_cache"))
+		if (aw_ini_get("cache.use_page_cache") && !aw_global_get("uid") && !aw_global_get("no_cache"))
 		{
 			$fname = "/".str_replace("/","_",$oid);
 			foreach($arr as $v)
@@ -90,7 +90,7 @@ class cache extends core
 			$real_oid = $oid;
 		}
 
-		if (aw_ini_get("use_page_cache") && !aw_global_get("uid"))
+		if (aw_ini_get("cache.use_page_cache") && !aw_global_get("uid"))
 		{
 			$fname = "/".str_replace("/","_",$oid);
 			foreach($arr as $v)
@@ -204,7 +204,7 @@ class cache extends core
 		@attrib params=pos api=1
 
 		@param key required type=string
-			String that is used to set the filename in cache. 
+			String that is used to set the filename in cache.
 		@errors
 			none
 
@@ -783,7 +783,7 @@ class cache extends core
 		{
 			$cache_mtime = filemtime($cachefile);
 
-			// get the cache contents here, so we can check whether it is empty, cause for some weird reason 
+			// get the cache contents here, so we can check whether it is empty, cause for some weird reason
 			// cache files get to be empty sometimes, damned if I know why
 
 			$src = $this->get_file(array(
