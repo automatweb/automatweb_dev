@@ -4,22 +4,40 @@
 // Please add a reason to every "return true;"!
 function aw_ignore_error($errno, $errstr, $errfile, $errline, $context)
 {
-	if($errstr === "Declaration of _int_object_loader::_log() should be compatible with that of core::_log()")
+	if(E_STRICT === $errno)
 	{
-		/*
-			You make them compatible! -kaarel 27.05.2009
-			_int_object_loader::_log($new, $oid, $name, $clid = NULL)
-			_log($type, $action, $text, $oid = 0, $honor_ini = true, $object_name = null)
-		*/
-		return true;
+		if($errstr === "Declaration of site_cache::show() should be compatible with that of core::show()")
+		{
+			/*
+				Making either of these compatible with the other one just creates more notices! -kaarel 27.05.2009
+				site_cache::show($args = array())
+				core::show($args)
+			*/
+			return true;
+		}
+
+		if ("Redefining already defined constructor for class _int_object" === $errstr)
+		{
+			/*
+			strict level error _int_object constructor redeclaration for backward compatibility
+			should be removed when old constructor used nowhere
+			*/
+			return true;
+		}
+
+		if($errstr === "Declaration of _int_object_loader::_log() should be compatible with that of core::_log()")
+		{
+			/*
+				You make them compatible! -kaarel 27.05.2009
+				_int_object_loader::_log($new, $oid, $name, $clid = NULL)
+				_log($type, $action, $text, $oid = 0, $honor_ini = true, $object_name = null)
+			*/
+			return true;
+		}
 	}
-	if($errstr === "Declaration of site_cache::show() should be compatible with that of core::show()")
+	elseif (E_NOTICE === $errno and "unserialize()" === substr($errstr, 0, 13) and ("/defs.aw" === substr($errfile, -8) or "\\defs.aw" === substr($errfile, -8)))
 	{
-		/*
-			Making either of these compatible with the other one just creates more notices! -kaarel 27.05.2009
-			site_cache::show($args = array())
-			core::show($args)
-		*/
+		/* No way of predetermining if string to be unserialized is valid for that */
 		return true;
 	}
 
@@ -101,11 +119,6 @@ function aw_dbg_exception_handler($e)
 
 function aw_error_handler($errno, $errstr, $errfile, $errline, $context)
 {
-	if(aw_ignore_error($errno, $errstr, $errfile, $errline, $context))
-	{
-		return true;
-	}
-
 	// generate and throw exception when fatal error occurs. ignore all other errors
 	if (aw_is_fatal_error($errno))
 	{
@@ -135,7 +148,7 @@ function aw_dbg_error_handler($errno, $errstr, $errfile, $errline, $context)
 		$e->context = $context;
 		throw $e;
 	}
-	elseif (!(E_NOTICE === $errno and "unserialize()" === substr($errstr, 0, 13) and ("/defs.aw" === substr($errfile, -8) or "\\defs.aw" === substr($errfile, -8))))
+	else
 	{ // display non-fatal error information
 		$err = strtoupper(substr($class, 9));
 		echo "[{$err}] <b>{$errstr}</b> in {$errfile} on line {$errline}<br><br>\n\n"; //!!! aw_response objekti ja sealt footerite kaudu templatesse
