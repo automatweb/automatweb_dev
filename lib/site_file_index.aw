@@ -1,6 +1,6 @@
 <?php
 
-function load_versions() 
+function load_versions()
 {
 	if (aw_global_get("no_db_connection"))
 	{
@@ -44,7 +44,7 @@ function load_versions()
 	{
 		return;
 	}
-	
+
 	while ($row = mysql_fetch_assoc($res))
 	{
 		$versions[$row['file_location'].'/'.$row['file_name']] = $row;
@@ -65,7 +65,7 @@ function load_versions()
 		}
 	}
 
-/*		
+/*
 	echo "<pre>";
 	print_r($versions);
 	echo "</pre>";
@@ -208,7 +208,7 @@ function get_file_version($file)
 	{
 		$add_aw_dir = 1;
 		$file = substr($file , strlen(AW_DIR));
-		
+
 	}
 	if(substr($file , 0 , 1) == "/")
 	{
@@ -218,6 +218,7 @@ function get_file_version($file)
 
 //print $file." - ".AW_DIR."<br>";
 
+	$ver_file = "";
 	$data = null;
 /*	if(isset($GLOBALS['cfg']['versions'][basename($class)]))
 	{
@@ -245,7 +246,7 @@ function get_file_version($file)
 		$ver_file = $fs."_".$data["file_version"].($ext ? ".".$ext : "");
 	}
 
-	if($_GET["DBG"] && $ver_file)
+	if(!empty($_GET["DBG"]) && $ver_file)
 	{
 		print "file :". $file." , version: "; print $ver_class."<br>";
 	}
