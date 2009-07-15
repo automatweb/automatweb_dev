@@ -33,6 +33,12 @@ class jsonclient extends htmlclient
 			unset($args["post_append_text"]);
 		}
 
+		if (isset($args["value"]))
+		{
+			$args["value"] = str_replace("\"", "&quot;", $args["value"]);
+			// $args["value"] = addslashes($args["value"]);
+		}
+
 		$this->properties[$args["name"]] = $args;
 	}
 
