@@ -42,11 +42,6 @@ class _int_object
 
 	function __construct($objdata = array())
 	{
-		$this->_int_object($objdata);
-	}
-
-	function _int_object($objdata)
-	{
 		$this->obj = $objdata;
 
 		if (isset($objdata["__obj_load_parameter"]))
@@ -54,6 +49,9 @@ class _int_object
 			$this->_int_load();
 		}
 	}
+
+	// DEPRECATED! use self::__construct() instead
+	function _int_object($objdata) { $this->__construct($objdata); }
 
 	function save($exclusive = false, $previous_state = null)
 	{
@@ -373,7 +371,7 @@ class _int_object
 					if (!isset($GLOBALS["relinfo"][$param["from.class_id"]]) || !is_array($GLOBALS["relinfo"][$param["from.class_id"]]))
 					{
 						// load class def
-						_int_object::_int_load_properties($param["from.class_id"]);
+						self::_int_load_properties($param["from.class_id"]);
 					}
 
 					if (!$GLOBALS["relinfo"][$param["from.class_id"]][$param["type"]]["value"])
@@ -679,17 +677,17 @@ class _int_object
 
 		switch($param)
 		{
-			case STAT_DELETED:
-				$this->_int_set_of_value("status", STAT_DELETED);
+			case object::STAT_DELETED:
+				$this->_int_set_of_value("status", object::STAT_DELETED);
 				return $this->delete();
 				break;
 
-			case STAT_ACTIVE:
-				$this->_int_set_of_value("status", STAT_ACTIVE);
+			case object::STAT_ACTIVE:
+				$this->_int_set_of_value("status", object::STAT_ACTIVE);
 				break;
 
-			case STAT_NOTACTIVE:
-				$this->_int_set_of_value("status", STAT_NOTACTIVE);
+			case object::STAT_NOTACTIVE:
+				$this->_int_set_of_value("status", object::STAT_NOTACTIVE);
 				break;
 
 			default:
@@ -1100,10 +1098,10 @@ class _int_object
 		$this->_int_set_ot_mod("metadata", $prev, $value);
 		$this->obj["meta"][$key] = $value;
 
-		$dat = $GLOBALS["properties"][$this->obj["class_id"]][$key];
+		$dat = isset($GLOBALS["properties"][$this->obj["class_id"]][$key]) ? $GLOBALS["properties"][$this->obj["class_id"]][$key] : null;
 
 		// if any property is defined for metadata, we gots to sync from object to property
-		if (is_array($dat) && $dat["field"] == "meta" && $dat["table"] == "objects")
+		if (is_array($dat) && $dat["field"] === "meta" && $dat["table"] === "objects")
 		{
 			$this->_int_set_prop($key, $value);
 		}
@@ -1684,7 +1682,7 @@ class _int_object
 			$trs = $this->obj["meta"]["translations"];
 			if ($prop == "status") // check transl status
 			{
-				return $this->obj["meta"]["trans_".$cur_lid."_status"] == 1 ? STAT_ACTIVE : STAT_NOTACTIVE;
+				return $this->obj["meta"]["trans_".$cur_lid."_status"] == 1 ? object::STAT_ACTIVE : object::STAT_NOTACTIVE;
 			}
 			if (isset($trs[$cur_lid]) && ($this->obj["meta"]["trans_".$cur_lid."_status"] == 1 || $ignore_status))
 			{
@@ -2396,9 +2394,9 @@ class _int_object
 		}
 
 		// new objects can't be created with deleted status
-		if (!$this->obj["status"])
+		if (empty($this->obj["status"]))
 		{
-			$this->_int_set_of_value("status", STAT_NOTACTIVE);
+			$this->_int_set_of_value("status", object::STAT_NOTACTIVE);
 		}
 
 		// default to current lang id
@@ -2462,15 +2460,15 @@ class _int_object
 			{
 				$type = ST_DOCUMENT;
 			}
-			else
+			elseif (isset($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]) and defined($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]))
 			{
 				$type = defined($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]) ? constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]) : NULL;
 			}
-
-			if (!$type)
+			else
 			{
 				$type = 10000;
 			}
+
 			$nm = $tmpo->name();
 
 			if ($full_delete)
