@@ -2214,7 +2214,7 @@ class object
 	public function implements_interface ($name)
 	{
 		$interfaces = class_implements($GLOBALS["objects"][$this->oid], true);
-		return in_array($interface, $interfaces);
+		return in_array($name, $interfaces);
 	}
 
 	/** Returns TRUE if given method is defined in this object class
