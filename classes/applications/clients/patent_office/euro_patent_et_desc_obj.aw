@@ -1,6 +1,6 @@
 <?php
 
-class euro_patent_et_desc_obj extends _int_object
+class euro_patent_et_desc_obj extends intellectual_property_obj
 {
 	public function awobj_set_epat_date($value)
 	{

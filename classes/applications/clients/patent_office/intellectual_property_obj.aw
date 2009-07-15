@@ -16,13 +16,13 @@ class intellectual_property_obj extends _int_object
 		return parent::prop("authorized_codes");
 	}
 
-	private function check_and_set_authorized_codes_user_access()
+	public function check_and_set_authorized_codes_user_access()
 	{
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person()); //!!! ei t88ta id kaardiga?
 		$pid = $p->prop("personal_id");
 		$already_set = $this->meta("set_authorized_codes_user_access2");
-		if (empty($already_set[$pid]))
+		if (true and empty($already_set[$pid]))
 		{
 			aw_disable_acl();
 			// set access for persons in authorized_codes
@@ -31,31 +31,50 @@ class intellectual_property_obj extends _int_object
 
 			if ($grp instanceof object)
 			{
-					// access to application object
-					$this->acl_set($grp, array(
+				// access spec
+				if ($this->createdby() === aw_global_get("uid"))
+				{ // owner
+					$general_access = $attachment_access = array(
+						"can_add" => 1,
+						"can_edit" => 1,
+						"can_admin" => 1,
+						"can_delete" => 1,
+						"can_view" => 1
+					);
+				}
+				else
+				{ // authorized codes users
+					$general_access = array(
 						"can_add" => 1,
 						"can_edit" => 1,
 						"can_admin" => 0,
 						"can_delete" => 0,
 						"can_view" => 1
-					));
+					);
+					$attachment_access = array(
+						"can_add" => 0,
+						"can_edit" => 0,
+						"can_admin" => 0,
+						"can_delete" => 0,
+						"can_view" => 1
+					);
+				}
 
-					// access to digidoc object
-					$ddc = $this->connections_to(array(
-						"from.class_id" => CL_DDOC,
-						"from.status" => new obj_predicate_not(object::STAT_DELETED)
-					));
+				// access to application object
+				$this->acl_set($grp, $general_access);
 
-					foreach ($ddc as $c)
+				// access to digidoc object
+				$ddc = $this->connections_to(array(
+					"from.class_id" => CL_DDOC,
+					// "from.status" => new obj_predicate_not(object::STAT_DELETED)
+				));
+
+				foreach ($ddc as $c)
+				{
+					if ($c->prop("from.status") != object::STAT_DELETED)
 					{
 						$ddo = new object($c->from());
-						$ddo->acl_set($grp, array(
-							"can_add" => 1,
-							"can_edit" => 1,
-							"can_admin" => 0,
-							"can_delete" => 0,
-							"can_view" => 1
-						));
+						$ddo->acl_set($grp, $general_access);
 						$signers = $ddo->connections_from(array("type" => "RELTYPE_SIGNER"));
 						foreach ($signers as $s_c)
 						{
@@ -69,21 +88,16 @@ class intellectual_property_obj extends _int_object
 							));
 						}
 					}
+				}
 
-					// access to attachments etc.
-					$cc = $this->connections_from();
+				// access to attachments etc.
+				$cc = $this->connections_from();
 
-					foreach ($cc as $c)
-					{
-						$co = new object($c->to());
-						$co->acl_set($grp, array(
-							"can_add" => 0,
-							"can_edit" => 0,
-							"can_admin" => 0,
-							"can_delete" => 0,
-							"can_view" => 1
-						));
-					}
+				foreach ($cc as $c)
+				{
+					$co = new object($c->to());
+					$co->acl_set($grp, $attachment_access);
+				}
 			}
 			aw_restore_acl();
 			$already_set[$pid] = 1;

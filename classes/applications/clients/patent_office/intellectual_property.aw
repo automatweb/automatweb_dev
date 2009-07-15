@@ -264,29 +264,39 @@ abstract class intellectual_property extends class_base
 	**/
 	function is_signed($oid)
 	{
-		if(!is_oid($oid))
+		if(!$this->can("view", $oid))
 		{
 			error::raise(array(
-				"msg" => t("Vale objekti id!"),
+				"msg" => t("Vale objekti id!")
 			));
 		}
 
-		$o = new object($oid);
 		$c = new connection();
-		$ret = $c->find(array(
+		aw_disable_acl();
+		$cc = $c->find(array(
 			"from.class_id" => CL_DDOC,
+			// "from.status" => new obj_predicate_not(object::STAT_DELETED),
 			"type" => "RELTYPE_SIGNED_FILE",
-			"to" => $oid,
+			"to" => $oid
 		));
-		$return = array();
+		aw_restore_acl();
+		$return = $ret = array();
 
-		if(count($ret))
+		foreach ($cc as $ret)
 		{
-			$ret = current($ret);
+			if ($ret["from.status"])
+			{
+				break;
+			}
+		}
+
+		if(count($ret) > 1)
+		{
 			$ret = $ret["from"];
 			$inst = get_instance(CL_DDOC);
+			aw_disable_acl();
 			$tmp = $inst->is_signed($ret);
-			$o = new object($oid);
+			aw_restore_acl();
 /*
 			$classes_w_author = array(CL_UTILITY_MODEL, CL_PATENT_PATENT, CL_INDUSTRIAL_DESIGN);
 
@@ -1044,6 +1054,7 @@ abstract class intellectual_property extends class_base
 			}
 		}
 
+		$_SESSION["patent"]["products"] = $o->meta("products");
 		$data["fee_sum_info_value"] = $this->get_payment_sum();
 		$data["request_fee_info_value"] = $this->get_request_fee();
 
@@ -1814,7 +1825,9 @@ abstract class intellectual_property extends class_base
 			return "";
 		}
 		$ddoc_inst = get_instance(CL_DDOC);
+		aw_disable_acl();
 		$signs = $ddoc_inst->get_signatures($re["ddoc"]);
+		aw_restore_acl();
 		foreach($signs as $sig)
 		{
 			$sig_nice[] = sprintf(t("%s, %s  - %s"), $sig["signer_ln"], $sig["signer_fn"], date("H:i d/m/Y", $sig["signing_time"]));
@@ -3113,42 +3126,62 @@ abstract class intellectual_property extends class_base
 		{
 			foreach ($ol->arr() as $o)
 			{
-				// access to application object
-				$o->acl_set($grp, array(
-					"can_add" => 1,
-					"can_edit" => 1,
-					"can_admin" => 0,
-					"can_delete" => 0,
-					"can_view" => 1,
-				));
-
-				// access to digidoc object
-				$ddc = $o->connections_to(array(
-					"from.class_id" => CL_DDOC,
-					"from.status" => new obj_predicate_not(object::STAT_DELETED)
-				));
-
-				foreach ($ddc as $c)
-				{
-					$ddo = new object($c->from());
-					$ddo->acl_set($grp, array(
+				// access spec
+				if ($o->createdby() === aw_global_get("uid"))
+				{ // owner
+					$general_access = $attachment_access = array(
+						"can_add" => 1,
+						"can_edit" => 1,
+						"can_admin" => 1,
+						"can_delete" => 1,
+						"can_view" => 1
+					);
+				}
+				else
+				{ // authorized codes users
+					$general_access = array(
 						"can_add" => 1,
 						"can_edit" => 1,
 						"can_admin" => 0,
 						"can_delete" => 0,
-						"can_view" => 1,
-					));
-					$signers = $ddo->connections_from(array("type" => "RELTYPE_SIGNER"));
-					foreach ($signers as $s_c)
+						"can_view" => 1
+					);
+					$attachment_access = array(
+						"can_add" => 0,
+						"can_edit" => 0,
+						"can_admin" => 0,
+						"can_delete" => 0,
+						"can_view" => 1
+					);
+				}
+
+				// access to application object
+				$o->acl_set($grp, $general_access);
+
+				// access to digidoc object
+				$ddc = $o->connections_to(array(
+					"from.class_id" => CL_DDOC,
+					// "from.status" => new obj_predicate_not(object::STAT_DELETED)
+				));
+
+				foreach ($ddc as $c)
+				{
+					if ($c->prop("from.status") != object::STAT_DELETED)
 					{
-						$signer = $s_c->to();
-						$signer->acl_set($grp, array(
-							"can_add" => 0,
-							"can_edit" => 0,
-							"can_admin" => 0,
-							"can_delete" => 0,
-							"can_view" => 1,
-						));
+						$ddo = new object($c->from());
+						$ddo->acl_set($grp, $general_access);
+						$signers = $ddo->connections_from(array("type" => "RELTYPE_SIGNER"));
+						foreach ($signers as $s_c)
+						{
+							$signer = $s_c->to();
+							$signer->acl_set($grp, array(
+								"can_add" => 0,
+								"can_edit" => 0,
+								"can_admin" => 0,
+								"can_delete" => 0,
+								"can_view" => 1,
+							));
+						}
 					}
 				}
 
@@ -3158,13 +3191,7 @@ abstract class intellectual_property extends class_base
 				foreach ($cc as $c)
 				{
 					$co = new object($c->to());
-					$co->acl_set($grp, array(
-						"can_add" => 0,
-						"can_edit" => 0,
-						"can_admin" => 0,
-						"can_delete" => 0,
-						"can_view" => 1,
-					));
+					$co->acl_set($grp, $attachment_access);
 				}
 			}
 		}
@@ -3303,6 +3330,7 @@ abstract class intellectual_property extends class_base
 			$pat_l = "";
 			foreach($objects_array as $key => $patent)
 			{
+				$patent->check_and_set_authorized_codes_user_access();
 				$sent_form = 0;
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
@@ -3357,13 +3385,13 @@ abstract class intellectual_property extends class_base
 			        	if($re["status"] == 1)
 			        	{
 			        		$sign_url = $ddoc_inst->sign_url(array(
-							"ddoc_oid" => $re["ddoc"],
+							"ddoc_oid" => $re["ddoc"]
 						));
 			        	}
 			        	else
 			        	{
 				        	$sign_url = $ddoc_inst->sign_url(array(
-							"other_oid" =>$patent->id(),
+							"other_oid" =>$patent->id()
 						));
 			          }
 			          $sign = "<a href='javascript:void(0);' onclick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
@@ -3501,6 +3529,7 @@ abstract class intellectual_property extends class_base
 			$tm_l = "";
 			foreach($objects_array as $key => $patent)
 			{
+				$patent->check_and_set_authorized_codes_user_access();
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
 				$sent_form = 0;
@@ -3700,6 +3729,7 @@ abstract class intellectual_property extends class_base
 			$um_l = "";
 			foreach($objects_array as $key => $patent)
 			{
+				$patent->check_and_set_authorized_codes_user_access();
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
 				$sent_form = 0;
@@ -3897,6 +3927,7 @@ abstract class intellectual_property extends class_base
 			$ind_l = "";
 			foreach($objects_array as $key => $patent)
 			{
+				$patent->check_and_set_authorized_codes_user_access();
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
 				$sent_form = 0;
@@ -4095,6 +4126,7 @@ abstract class intellectual_property extends class_base
 			$epat_l = "";
 			foreach($objects_array as $key => $patent)
 			{
+				$patent->check_and_set_authorized_codes_user_access();
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
 				$sent_form = 0;

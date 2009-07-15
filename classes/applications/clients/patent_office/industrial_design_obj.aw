@@ -1,6 +1,6 @@
 <?php
 
-class industrial_design_obj extends _int_object
+class industrial_design_obj extends intellectual_property_obj
 {
 	const APPLICANT_REG_AUTHOR = 1;
 	const APPLICANT_REG_AUTHOR_SUCCESOR = 2;
