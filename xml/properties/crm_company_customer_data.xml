@@ -247,12 +247,12 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
       </property>
       <property>
-            <name>lead_source</name>
+            <name>sales_lead_source</name>
             <table>aw_crm_customer_data</table>
             <group>seller</group>
             <type>relpicker</type>
             <field>aw_lead_source</field>
-            <reltype>RELTYPE_LEAD_SOURCE</reltype>
+            <reltype>RELTYPE_SALES_LEAD_SOURCE</reltype>
             <caption>Soovitaja/allikas</caption>
       </property>
       <property>
@@ -359,7 +359,7 @@
       <reltypes>
             <BUYER>
                   <value>1</value>
-                  <clid>CL_CRM_COMPANY</clid>
+                  <clid>CL_CRM_PERSON</clid>
                   <caption>Ostja</caption>
             </BUYER>
             <SELLER>
@@ -430,14 +430,14 @@
                   </clid>
                   <caption>Tehtud, plaanitud m&amp;amp;uuml;&amp;amp;uuml;gitegevus</caption>
             </SALES_EVENT>
-            <LEAD_SOURCE>
+            <SALES_LEAD_SOURCE>
                   <value>101</value>
                   <clid>
                         <num_0>CL_CRM_COMPANY</num_0>
                         <num_1>CL_CRM_PERSON</num_1>
                   </clid>
                   <caption>Soovitaja/allikas</caption>
-            </LEAD_SOURCE>
+            </SALES_LEAD_SOURCE>
       </reltypes>
 </properties>
 

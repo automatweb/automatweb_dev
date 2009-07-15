@@ -106,7 +106,7 @@ default method=serialize
 	@property salesman type=relpicker reltype=RELTYPE_SALESMAN table=aw_crm_customer_data field=aw_salesman
 	@caption M&uuml;&uuml;giesindaja
 
-	@property lead_source type=relpicker table=aw_crm_customer_data field=aw_lead_source reltype=RELTYPE_LEAD_SOURCE
+	@property sales_lead_source type=relpicker table=aw_crm_customer_data field=aw_lead_source reltype=RELTYPE_SALES_LEAD_SOURCE
 	@caption Soovitaja/allikas
 
 
@@ -150,7 +150,7 @@ default method=serialize
 
 
 
-@reltype BUYER value=1 clid=CL_CRM_COMPANY
+@reltype BUYER value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Ostja
 
 @reltype SELLER value=2 clid=CL_CRM_COMPANY
@@ -193,7 +193,7 @@ default method=serialize
 @caption Tehtud, plaanitud m&uuml;&uuml;gitegevus
 
 // isik, firma v6i kampaania
-@reltype LEAD_SOURCE value=101 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@reltype SALES_LEAD_SOURCE value=101 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Soovitaja/allikas
 
 */
@@ -221,11 +221,22 @@ class crm_company_customer_data extends class_base
 				$i = get_instance(CL_CRM_COMPANY);
 				$arr["prop"]["options"] = $i->get_employee_picker(obj($co), true);
 				break;
+
 			case "buyer_contract_creator":
-				// list of all persons in my company
-				$i = get_instance(CL_CRM_COMPANY);
-				$arr["prop"]["options"] = $i->get_employee_picker(obj($arr["obj_inst"]->prop("buyer")), true);
+				$buyer = obj($arr["obj_inst"]->prop("buyer"));
+				if ($buyer->is_a(CL_CRM_PERSON))
+				{ // case for natural person
+					$arr["prop"]["options"] = array($buyer->id() => $buyer->name());
+					$arr["prop"]["value"] = $buyer->id();
+				}
+				elseif ($buyer->is_a(CL_CRM_COMPANY))
+				{ // buyer is a legal person
+					// list of all persons in my company
+					$i = get_instance(CL_CRM_COMPANY);
+					$arr["prop"]["options"] = $i->get_employee_picker($buyer, true);
+				}
 				break;
+
 			case "referal_type":
 				$c = get_instance("cfg/classificator");
 				$prop["options"] = array("" => t("--vali--")) + $c->get_options_for(array(
@@ -241,13 +252,23 @@ class crm_company_customer_data extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$i = get_instance(CL_CRM_COMPANY);
-				$arr["prop"]["options"] = $i->get_employee_picker(obj($arr["obj_inst"]->prop("buyer")), true);
 
-				if (isset($prop["options"]) && !isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+				$buyer = obj($arr["obj_inst"]->prop("buyer"));
+				if ($buyer->is_a(CL_CRM_PERSON))
+				{ // natural persons have themselves as contact person
+					$arr["prop"]["options"] = array($buyer->id() => $buyer->name());
+					$arr["prop"]["value"] = $buyer->id();
+				}
+				elseif ($buyer->is_a(CL_CRM_COMPANY))
 				{
-					$tmp = obj($prop["value"]);
-					$prop["options"][$prop["value"]] = $tmp->name();
+					$i = get_instance(CL_CRM_COMPANY);
+					$arr["prop"]["options"] = $i->get_employee_picker($buyer, true);
+
+					if (isset($prop["options"]) && !isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+					{
+						$tmp = obj($prop["value"]);
+						$prop["options"][$prop["value"]] = $tmp->name();
+					}
 				}
 				break;
 
@@ -573,7 +594,7 @@ enter_function("bill::start0");
 				"bill_no" => html::get_change_url($bill->id(), array("return_url" => get_ru()), parse_obj_name($bill->prop("bill_no"))),
 				"create_new" => html::href(array(
 					"url" => $this->mk_my_orb("create_new_monthly_bill", array(
-						"id" => $bill->id(), 
+						"id" => $bill->id(),
 						"co" => $arr["obj_inst"]->id(),
 						"post_ru" => get_ru()
 						), CL_CRM_COMPANY),
@@ -620,7 +641,7 @@ exit_function("bill::start1");
 				$curr_balance = $bill->get_bill_needs_payment();
 				if($company_curr && $curid && ($company_curr != $curid))
 				{
-					
+
 					$total_balance = $own_currency_sum;
 					foreach($bill->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
 					{
