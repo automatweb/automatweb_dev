@@ -370,8 +370,8 @@
                   <num_3>fake_email</num_3>
                   <num_4>fake_address_address</num_4>
                   <num_5>fake_address_postal_code</num_5>
-                  <num_6>fake_address_city</num_6>
-                  <num_7>fake_address_county</num_7>
+                  <num_6>fake_address_city_relp</num_6>
+                  <num_7>fake_address_county_relp</num_7>
                   <num_8>fake_address_country_relp</num_8>
             </props>
             <parent>contact_entry_form</parent>
@@ -390,16 +390,36 @@
                   <num_0>lastname</num_0>
                   <num_1>firstname</num_1>
                   <num_2>gender</num_2>
-                  <num_3>fake_address_address</num_3>
-                  <num_4>fake_address_postal_code</num_4>
-                  <num_5>fake_address_city</num_5>
-                  <num_6>fake_address_county</num_6>
-                  <num_7>fake_address_country</num_7>
-                  <num_8>fake_phone</num_8>
-                  <num_9>fake_email</num_9>
+                  <num_3>fake_phone</num_3>
+                  <num_4>fake_email</num_4>
+                  <num_5>fake_address_address</num_5>
+                  <num_6>fake_address_postal_code</num_6>
+                  <num_7>fake_address_city_relp</num_7>
+                  <num_8>fake_address_county_relp</num_8>
+                  <num_9>fake_address_country_relp</num_9>
             </props>
             <parent>contact_entry_form</parent>
             <caption>Kontakt (isik)</caption>
+      </property>
+      <property>
+            <name>import_toolbar</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>data_entry_import</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>import_objects</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>data_entry_import</group>
+            <type>table</type>
+            <store>no</store>
+            <caption>Seadistatud impordid</caption>
       </property>
       <property>
             <name>contact_entry_space</name>
@@ -523,6 +543,11 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>Seadete vorm</caption>
             </CFGFORM>
+            <IMPORT>
+                  <value>7</value>
+                  <clid>CL_CSV_IMPORT</clid>
+                  <caption>Kontaktide import</caption>
+            </IMPORT>
       </reltypes>
       <layout>
             <splitbox1>
