@@ -102,6 +102,7 @@ _bsn.AutoSuggest = function (fldID, param)
 
 	this.fld.onkeypress 	= function(ev){ return pointer.onKeyPress(ev); }
 	this.fld.onkeyup 		= function(ev){ return pointer.onKeyUp(ev); }
+	this.fld.onblur 		= function(ev){ return pointer.onBlur(ev); }
 
 	this.fld.setAttribute("autocomplete","off");
 }
@@ -178,6 +179,13 @@ _bsn.AutoSuggest.prototype.onKeyUp = function(ev)
 	}
 
 	return bubble;
+}
+
+
+_bsn.AutoSuggest.prototype.onBlur = function(ev)
+{
+	this.clearSuggestions();
+	return true;
 }
 
 
