@@ -68,9 +68,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 		@layout co_bottom_seller_l type=vbox parent=co_bottom_seller
 
-			property cust type=relpicker reltype=RELTYPE_BUYER table=kliendibaas_firma parent=co_bottom_seller_l
-			caption M&uuml;&uuml;ja
-
 			@property co_is_cust type=checkbox ch_value=1 store=no parent=co_bottom_seller_l no_caption=1 prop_cb=1
 			@caption Kehtib
 
@@ -1623,7 +1620,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @caption Kiirk&uuml;sitlus
 
 @reltype BUYER value=62 clid=CL_CRM_COMPANY
-@caption Ostja, M&uuml;&uuml;a
+@caption Ostja, M&uuml;&uuml;ja
 
 @reltype BANK value=63 clid=CL_CRM_BANK
 @caption Pank
@@ -7902,12 +7899,12 @@ class crm_company extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
-		if ($tbl == "aw_account_balances")
+		if ($tbl === "aw_account_balances")
 		{
 			$i = get_instance(CL_CRM_CATEGORY);
                         return $i->do_db_upgrade($tbl, $field);
 		}
-		if ("kliendibaas_firma" == $tbl)
+		if ("kliendibaas_firma" === $tbl)
 		{
 			switch($field)
 			{

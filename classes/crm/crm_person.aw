@@ -665,6 +665,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property uservar10 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER10 store=connect
 @caption User-defined var 10
 
+@property fake_phone type=textbox user=1
+@caption Telefon
+
+@property fake_email type=textbox user=1
+@caption E-post
 
 // fake address props here, so we can write to them and they go to the real address property
 @property fake_address_address type=textbox user=1
@@ -679,17 +684,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property fake_address_city type=textbox user=1
 @caption Linn
 
+@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY automatic=1
+@caption Linn
+
 @property fake_address_county type=textbox user=1
+@caption Maakond
+
+@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1
 @caption Maakond
 
 @property fake_address_country type=textbox user=1
 @caption Riik
 
-@property fake_phone type=textbox user=1
-@caption Telefon
+@property fake_address_country_relp type=relpicker reltype=RELTYPE_FAKE_COUNTRY automatic=1
+@caption Riik
 
-@property fake_email type=textbox user=1
-@caption E-post
 
 
 
@@ -1031,6 +1040,15 @@ caption S&otilde;bragrupid
 @reltype PREVIOUS_PRAXIS value=93 clid=CL_CRM_PERSON_WORK_RELATION
 @caption Eelnev praktikakogemus
 
+@reltype FAKE_COUNTY value=94 clid=CL_CRM_COUNTY
+@caption Fake county
+
+@reltype FAKE_CITY value=95 clid=CL_CRM_CITY
+@caption Fake city
+
+@reltype FAKE_COUNTRY value=96 clid=CL_CRM_COUNTRY
+@caption Fake country
+
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");
@@ -1291,13 +1309,6 @@ class crm_person extends class_base
 
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
-				break;
-
-			case "lastname":
-				if (!empty($form["firstname"]) || !empty($form["lastname"]) || !empty($form["previous_lastname"]))
-				{
-					$arr["obj_inst"]->set_name($form["firstname"]." ".$form["lastname"].(empty($form["previous_lastname"]) ? "" : " (".$form["previous_lastname"].")"));
-				}
 				break;
 
 			case "picture":
@@ -3734,7 +3745,7 @@ class crm_person extends class_base
 		return array("width" => $sz[0], "height" => $sz[1]);
 	}
 
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		// okey, I need to determine whether that template has a place for showing
 		// a list of authors documents. If it does, then I need to create that list

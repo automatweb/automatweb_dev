@@ -1,10 +1,10 @@
 <?php
 
-class crm_company_obj extends _int_object
+class crm_company_obj extends _int_object implements crm_customer_interface
 {
 	function prop($k)
 	{
-		if(substr($k, 0, 5) == "fake_" && is_oid($this->id()))
+		if(substr($k, 0, 5) === "fake_" && is_oid($this->id()))
 		{
 			switch(substr($k, 5))
 			{
@@ -70,17 +70,20 @@ class crm_company_obj extends _int_object
 				$args["type"] = substr($type, 5);
 			}
 			$ol = new object_list($args);
-			return $return_oid ? reset($ol->ids()) : reset($ol->names());
+			$names = $ol->names();
+			$name = reset($names);
+			return $return_oid ? key($names) : $name;
 		}
 	}
 
 	function set_prop($name, $value, $set_into_meta = true)
 	{
-		if($name == "name")
+		if($name === "name")
 		{
 			$value = htmlspecialchars($value);
 		}
-		if(substr($name, 0, 5) == "fake_")
+
+		if(substr($name, 0, 5) === "fake_")
 		{
 			switch(substr($name, 5))
 			{
@@ -1030,8 +1033,6 @@ class crm_company_obj extends _int_object
 			$o->set_prop("seller", $my_co->id());
 			$o->set_prop("buyer", $this->id());
 			$o->save();
-			$o->connect(array("to" => $my_co, "type" => "RELTYPE_SELLER"));
-			$o->connect(array("to" => new object($this->id()), "type" => "RELTYPE_BUYER"));
 			$gcr_cache[$this->id()][$crea_if_not_exists][$this->id()] = $o;
 			return $o;
 		}
@@ -1254,6 +1255,7 @@ class crm_company_obj extends _int_object
 				"fake_address_address" => "aadress",
 				"fake_address_address2" => "aadress2"
 			);
+
 			if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("contact")))
 			{
 				$eo = obj($this->prop("contact"));
@@ -1281,9 +1283,32 @@ class crm_company_obj extends _int_object
 					break;
 
 				case "fake_address_county_relp":
+					$v = is_oid($v) ? $v : 0;
+					if ($v)
+					{
+						$o = obj($v, array(), CL_CRM_COUNTY);
+						$eo->connect(array("to" => $o, "type" => "RELTYPE_MAAKOND"));
+					}
+					$eo->set_prop($pmap[$k], $v);
+					break;
+
 				case "fake_address_city_relp":
+					$v = is_oid($v) ? $v : 0;
+					if ($v)
+					{
+						$o = obj($v, array(), CL_CRM_CITY);
+						$eo->connect(array("to" => $o, "type" => "RELTYPE_LINN"));
+					}
+					$eo->set_prop($pmap[$k], $v);
+					break;
+
 				case "fake_address_country_relp":
 					$v = is_oid($v) ? $v : 0;
+					if ($v)
+					{
+						$o = obj($v, array(), CL_CRM_COUNTRY);
+						$eo->connect(array("to" => $o, "type" => "RELTYPE_RIIK"));
+					}
 					$eo->set_prop($pmap[$k], $v);
 					break;
 
@@ -1317,7 +1342,6 @@ class crm_company_obj extends _int_object
 		}
 		else
 		{
-
 			$ro = obj();
 			$ro->set_class_id($rl[$pl[$prop]["reltype"]]["clid"][0]);
 			$ro->set_parent(is_oid($o->id()) ? $o->id() : $o->parent());
@@ -1548,7 +1572,7 @@ class crm_company_obj extends _int_object
 	/** Returns default address as a string
 		@attrib api=1
 	**/
-	function get_address_string()
+	public function get_address_string()
 	{
 		$ct = parent::prop("contact");
 		if ($GLOBALS["object_loader"]->can("view", $ct))

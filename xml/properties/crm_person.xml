@@ -1882,6 +1882,24 @@
             <caption>User-defined var 10</caption>
       </property>
       <property>
+            <name>fake_phone</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>fake_phone</field>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>fake_email</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>fake_email</field>
+            <caption>E-post</caption>
+      </property>
+      <property>
             <name>fake_address_address</name>
             <table>objects</table>
             <group>data</group>
@@ -1918,12 +1936,32 @@
             <caption>Linn</caption>
       </property>
       <property>
+            <name>fake_address_city_relp</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAKE_CITY</reltype>
+            <automatic>1</automatic>
+            <field>fake_address_city_relp</field>
+            <caption>Linn</caption>
+      </property>
+      <property>
             <name>fake_address_county</name>
             <table>objects</table>
             <group>data</group>
             <type>textbox</type>
             <user>1</user>
             <field>fake_address_county</field>
+            <caption>Maakond</caption>
+      </property>
+      <property>
+            <name>fake_address_county_relp</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAKE_COUNTY</reltype>
+            <automatic>1</automatic>
+            <field>fake_address_county_relp</field>
             <caption>Maakond</caption>
       </property>
       <property>
@@ -1936,22 +1974,14 @@
             <caption>Riik</caption>
       </property>
       <property>
-            <name>fake_phone</name>
+            <name>fake_address_country_relp</name>
             <table>objects</table>
             <group>data</group>
-            <type>textbox</type>
-            <user>1</user>
-            <field>fake_phone</field>
-            <caption>Telefon</caption>
-      </property>
-      <property>
-            <name>fake_email</name>
-            <table>objects</table>
-            <group>data</group>
-            <type>textbox</type>
-            <user>1</user>
-            <field>fake_email</field>
-            <caption>E-post</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAKE_COUNTRY</reltype>
+            <automatic>1</automatic>
+            <field>fake_address_country_relp</field>
+            <caption>Riik</caption>
       </property>
       <property>
             <name>stats_s_from</name>
@@ -2632,6 +2662,21 @@
                   <clid>CL_CRM_PERSON_WORK_RELATION</clid>
                   <caption>Eelnev praktikakogemus</caption>
             </PREVIOUS_PRAXIS>
+            <FAKE_COUNTY>
+                  <value>94</value>
+                  <clid>CL_CRM_COUNTY</clid>
+                  <caption>Fake county</caption>
+            </FAKE_COUNTY>
+            <FAKE_CITY>
+                  <value>95</value>
+                  <clid>CL_CRM_CITY</clid>
+                  <caption>Fake city</caption>
+            </FAKE_CITY>
+            <FAKE_COUNTRY>
+                  <value>96</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Fake country</caption>
+            </FAKE_COUNTRY>
       </reltypes>
       <layout>
             <co_bottom_seller>

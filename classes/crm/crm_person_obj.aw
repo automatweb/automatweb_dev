@@ -1,7 +1,9 @@
 <?php
 
-class crm_person_obj extends _int_object
+class crm_person_obj extends _int_object implements crm_customer_interface
 {
+	protected $current_jobs;
+
 	public function awobj_set_is_quickmessenger_enabled($value)
 	{
 		if (1 === $value and 1 === $this->prop("is_quickmessenger_enabled"))
@@ -134,6 +136,9 @@ class crm_person_obj extends _int_object
 			case "fake_address_country":
 			case "fake_address_county":
 			case "fake_address_city":
+			case "fake_address_country_relp":
+			case "fake_address_county_relp":
+			case "fake_address_city_relp":
 			case "fake_address_postal_code":
 			case "fake_address_address":
 			case "fake_address_address2":
@@ -161,6 +166,15 @@ class crm_person_obj extends _int_object
 			case "fake_address_city":
 				return parent::prop("address.linn.name");
 
+			case "fake_address_country_relp":
+				return parent::prop("address.riik");
+
+			case "fake_address_county_relp":
+				return parent::prop("address.maakond");
+
+			case "fake_address_city_relp":
+				return parent::prop("address.linn");
+
 			case "fake_address_postal_code":
 				return parent::prop("address.postiindeks");
 
@@ -179,6 +193,7 @@ class crm_person_obj extends _int_object
 			case "org_section":
 				return $this->get_org_section();
 		}
+
 		if($k === "title" && parent::prop($k) === 0)
 		{
 			return 3;
@@ -625,6 +640,11 @@ class crm_person_obj extends _int_object
 		}
 		else
 		{
+			if(!is_oid($this->id()))
+			{
+				$this->save();
+			}
+
 			$eo = obj();
 			$eo->set_class_id(CL_CRM_PHONE);
 			$eo->set_parent($this->id());
@@ -649,8 +669,11 @@ class crm_person_obj extends _int_object
 	{
 		$pmap = array(
 			"fake_address_country" => "riik",
+			"fake_address_country_relp" => "riik",
 			"fake_address_county" => "maakond",
+			"fake_address_county_relp" => "maakond",
 			"fake_address_city" => "linn",
+			"fake_address_city_relp" => "linn",
 			"fake_address_postal_code" => "postiindeks",
 			"fake_address_address" => "aadress",
 			"fake_address_address2" => "aadress2"
@@ -681,6 +704,36 @@ class crm_person_obj extends _int_object
 				{
 					$this->_adr_set_via_rel($eo, $pmap[$k], $v);
 				}
+				break;
+
+			case "fake_address_county_relp":
+				$v = is_oid($v) ? $v : 0;
+				if ($v)
+				{
+					$o = obj($v, array(), CL_CRM_COUNTY);
+					$eo->connect(array("to" => $o, "type" => "RELTYPE_MAAKOND"));
+				}
+				$eo->set_prop($pmap[$k], $v);
+				break;
+
+			case "fake_address_city_relp":
+				$v = is_oid($v) ? $v : 0;
+				if ($v)
+				{
+					$o = obj($v, array(), CL_CRM_CITY);
+					$eo->connect(array("to" => $o, "type" => "RELTYPE_LINN"));
+				}
+				$eo->set_prop($pmap[$k], $v);
+				break;
+
+			case "fake_address_country_relp":
+				$v = is_oid($v) ? $v : 0;
+				if ($v)
+				{
+					$o = obj($v, array(), CL_CRM_COUNTRY);
+					$eo->connect(array("to" => $o, "type" => "RELTYPE_RIIK"));
+				}
+				$eo->set_prop($pmap[$k], $v);
 				break;
 
 			case "fake_address_postal_code":
@@ -1682,6 +1735,27 @@ class crm_person_obj extends _int_object
 			return $co->prop($prop);
 		}
 		return null;
+	}
+
+	public function save($exclusive = false, $previous_state = null)
+	{
+		$this->set_name($this->prop("firstname") . " " . $this->prop("lastname") . (strlen($this->prop("previous_lastname")) < 1 ? "" : " (" . $this->prop("previous_lastname") . ")"));
+		$r =  parent::save($exclusive, $previous_state);
+		return $r;
+	}
+
+	/** Returns default address as a string
+		@attrib api=1
+	**/
+	public function get_address_string()
+	{
+		$address_str = "";
+		$address_id = parent::prop("address");
+		if ($this->can("view", $address_id))
+		{
+			$address_str = obj($address_id)->name();
+		}
+		return $address_str;
 	}
 }
 
