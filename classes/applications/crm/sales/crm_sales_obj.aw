@@ -116,7 +116,8 @@ class crm_sales_obj extends _int_object implements application_interface
 		$professions = $current_person->get_profession_selection($this->prop("owner"));
 		if (count($professions))
 		{
-			$profession = key(reset($professions));
+			reset($professions);
+			$profession = key($professions);
 			switch ($profession)
 			{
 				case $this->prop("role_profession_manager"):
