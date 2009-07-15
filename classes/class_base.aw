@@ -1455,8 +1455,8 @@ class class_base extends aw_template
 
 		// first priority -- cfgform defined by application
 		$application = automatweb::$request->get_application();
-
-		if (is_callable(array($application, "get_cfgform_for_object")))
+		$interfaces = class_implements($application, true);
+		if (in_array("application_interface", $interfaces))
 		{
 			$cfgform = $application->get_cfgform_for_object($args["obj_inst"]);
 			if (is_object($cfgform))
