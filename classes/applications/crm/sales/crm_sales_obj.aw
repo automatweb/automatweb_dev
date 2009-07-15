@@ -15,12 +15,12 @@ class crm_sales_obj extends _int_object implements application_interface
 
 	private static $role_names = array();
 	public static $role_ids = array(
-		ROLE_GENERIC => "generic",
-		ROLE_DATA_ENTRY_CLERK => "data_entry_clerk",
-		ROLE_TELEMARKETING_SALESMAN => "telemarketing_salesman",
-		ROLE_TELEMARKETING_MANAGER => "telemarketing_manager",
-		ROLE_SALESMAN => "salesman",
-		ROLE_MANAGER => "manager"
+		self::ROLE_GENERIC => "generic",
+		self::ROLE_DATA_ENTRY_CLERK => "data_entry_clerk",
+		self::ROLE_TELEMARKETING_SALESMAN => "telemarketing_salesman",
+		self::ROLE_TELEMARKETING_MANAGER => "telemarketing_manager",
+		self::ROLE_SALESMAN => "salesman",
+		self::ROLE_MANAGER => "manager"
 	);
 
 	/** Returns object list of contacts visible to current user, in applicable order
@@ -51,12 +51,12 @@ class crm_sales_obj extends _int_object implements application_interface
 		if (0 === count($this->role_names))
 		{
 			self::$role_names = array(
-				ROLE_GENERIC => t("&Uuml;ldine"),
-				ROLE_DATA_ENTRY_CLERK => t("Andmesisestaja"),
-				ROLE_TELEMARKETING_SALESMAN => t("Telemarketingit&ouml;&ouml;taja"),
-				ROLE_TELEMARKETING_MANAGER => t("Telemarketingi juht"),
-				ROLE_SALESMAN => t("M&uuml;&uuml;giesindaja"),
-				ROLE_MANAGER => t("Juht")
+				self::ROLE_GENERIC => t("&Uuml;ldine"),
+				self::ROLE_DATA_ENTRY_CLERK => t("Andmesisestaja"),
+				self::ROLE_TELEMARKETING_SALESMAN => t("Telemarketingit&ouml;&ouml;taja"),
+				self::ROLE_TELEMARKETING_MANAGER => t("Telemarketingi juht"),
+				self::ROLE_SALESMAN => t("M&uuml;&uuml;giesindaja"),
+				self::ROLE_MANAGER => t("Juht")
 			);
 		}
 
@@ -256,7 +256,7 @@ class crm_sales_obj extends _int_object implements application_interface
 			else
 			{ // create call
 				$new_call = $this->create_call(new object($call->prop("customer_relation")), $call->prop("new_call_date"));
-				$call->connect(array("to" => $new_call, "reltype" => "RELTYPE_RESULT_CALL"));arr($new_call);
+				$call->connect(array("to" => $new_call, "reltype" => "RELTYPE_RESULT_CALL"));
 			}
 		}
 		elseif ($result === crm_call_obj::RESULT_PRESENTATION)
@@ -312,9 +312,16 @@ class crm_sales_obj extends _int_object implements application_interface
 		return $calls_made->begin();
 	}
 
-	// unused
 	public function process_presentation_result(object $presentation)
 	{
+		if (crm_presentation_obj::RESULT_MISS == $presentation->prop("result"))
+		{
+			// immediately call back to check why presentation didn't take place
+			$new_call = $this->create_call(new object($presentation->prop("customer_relation")), time());
+		}
+		elseif (crm_presentation_obj::RESULT_CALL == $presentation->prop("result"))
+		{
+		}
 	}
 
 	public function get_cfgform_for_object(object $object)
