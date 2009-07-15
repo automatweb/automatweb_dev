@@ -2205,13 +2205,13 @@ class object
 
 	/** Returns TRUE if the object class implements given interface
 		@attrib api=1 params=pos
-		@param interface type=string
+		@param name type=string
 			Interface name to check
 		@errors
 			none
 		@returns boolean
 	**/
-	public function implements ($interface)
+	public function implements_interface ($name)
 	{
 		$interfaces = class_implements($GLOBALS["objects"][$this->oid], true);
 		return in_array($interface, $interfaces);
