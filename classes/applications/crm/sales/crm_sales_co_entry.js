@@ -76,22 +76,22 @@ function loadContactDetails(contactDetails)
 		document.getElementById('contact_entry_co_fake_address_postal_code_').value = "";
 	}
 
-	if (typeof(contactDetails["contact_entry_co[fake_address_city]"]["value"]) != "undefined")
+	if (typeof(contactDetails["contact_entry_co[fake_address_city_relp]"]["value"]) != "undefined")
 	{
-		document.getElementById('contact_entry_co_fake_address_city_').value = contactDetails["contact_entry_co[fake_address_city]"]["value"];
+		document.getElementById('contact_entry_co_fake_address_city_relp_').value = contactDetails["contact_entry_co[fake_address_city_relp]"]["value"];
 	}
 	else
 	{
-		document.getElementById('contact_entry_co_fake_address_city_').value = "";
+		document.getElementById('contact_entry_co_fake_address_city_relp_').value = "";
 	}
 
-	if (typeof(contactDetails["contact_entry_co[fake_address_county]"]["value"]) != "undefined")
+	if (typeof(contactDetails["contact_entry_co[fake_address_county_relp]"]["value"]) != "undefined")
 	{
-		document.getElementById('contact_entry_co_fake_address_county_').value = contactDetails["contact_entry_co[fake_address_county]"]["value"];
+		document.getElementById('contact_entry_co_fake_address_county_relp_').value = contactDetails["contact_entry_co[fake_address_county_relp]"]["value"];
 	}
 	else
 	{
-		document.getElementById('contact_entry_co_fake_address_county_').value = "";
+		document.getElementById('contact_entry_co_fake_address_county_relp_').value = "";
 	}
 
 	if (typeof(contactDetails["contact_entry_co[fake_address_country_relp]"]["value"]) != "undefined")

@@ -24,6 +24,7 @@
 			<function name="get_entry_name_choices" all_args="1" nologin="1" is_public="1">
 				<arguments>
 					<required name="id" type="oid" acl="view" />
+					<required name="type" type="string" />
 					<optional name="typed_text" type="string" />
 				</arguments>
 			</function>

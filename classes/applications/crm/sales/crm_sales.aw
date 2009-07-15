@@ -137,17 +137,20 @@
 
 @default group=data_entry
 @default group=data_entry_contact_co
-	@property contact_entry_co type=releditor reltype=RELTYPE_CONTACT_CO store=no props=name,fake_phone,fake_mobile,fake_email,fake_address_address,fake_address_postal_code,fake_address_city,fake_address_county,fake_address_country_relp parent=contact_entry_form
+	@property contact_entry_co type=releditor reltype=RELTYPE_CONTACT_CO store=no props=name,fake_phone,fake_mobile,fake_email,fake_address_address,fake_address_postal_code,fake_address_city_relp,fake_address_county_relp,fake_address_country_relp parent=contact_entry_form
 	@caption Kontakt (organisatsioon)
 
 
 @default group=data_entry_contact_person
-	@property contact_entry_person type=releditor reltype=RELTYPE_CONTACT_PERSON store=no props=lastname,firstname,gender,fake_address_address,fake_address_postal_code,fake_address_city,fake_address_county,fake_address_country,fake_phone,fake_email parent=contact_entry_form
+	@property contact_entry_person type=releditor reltype=RELTYPE_CONTACT_PERSON store=no props=lastname,firstname,gender,fake_phone,fake_email,fake_address_address,fake_address_postal_code,fake_address_city_relp,fake_address_county_relp,fake_address_country_relp parent=contact_entry_form
 	@caption Kontakt (isik)
 
 
 @default group=data_entry_import
+	@property import_toolbar type=toolbar store=no no_caption=1
 
+	@property import_objects type=table store=no
+	@caption Seadistatud impordid
 
 @layout contact_entry_buttons type=hbox parent=de_form_box group=data_entry_contact_co,data_entry_contact_person width=10%:20%:70%
 	@property contact_entry_space type=text store=no group=data_entry_contact_co,data_entry_contact_person parent=contact_entry_buttons no_caption=1
@@ -178,6 +181,9 @@
 
 @reltype CFGFORM value=6 clid=CL_CFGFORM
 @caption Seadete vorm
+
+@reltype IMPORT value=7 clid=CL_CSV_IMPORT
+@caption Kontaktide import
 
 */
 
@@ -220,6 +226,48 @@ class crm_sales extends class_base
 		}
 	}
 
+	function _get_import_toolbar(&$arr)
+	{
+		$create_new_import = $this->mk_my_orb("new", array(
+			"return_url" => get_ru(),
+			"parent" => $arr["obj_inst"]->id()
+		), "csv_import");
+		$toolbar = $arr["prop"]["vcl_inst"];
+		$toolbar->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"url" => $create_new_import,
+			"tooltip" => t("Loo uus impordiobjekt")
+		));
+	}
+
+	function _get_import_objects(&$arr)
+	{
+		$table = $arr["prop"]["vcl_inst"];
+		$table->define_field(array(
+			"name" => "object",
+			"caption" => t("Import")
+		));
+		$table->define_field(array(
+			"name" => "commands"
+		));
+		$list = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMPORT")));
+
+		if ($list->count() > 0)
+		{
+			$o = $list->begin();
+			do
+			{
+				$table->define_data(array(
+					"object" => html::obj_change_link($o),
+					"commands" => ""
+				));
+			}
+			while ($o = $list->next());
+		}
+
+	}
+
 	function get_property(&$arr)
 	{
 		$ret = PROP_OK;
@@ -234,21 +282,36 @@ class crm_sales extends class_base
 	{
 		$js = "\n /* crm_sales scripts */ \n(function(){\n";
 
-		if($arr["request"]["group"] === "data_entry_contact_co" or $arr["request"]["group"] === "data_entry")
+		if (isset($arr["request"]["group"]))
 		{
-			load_javascript("bsnAutosuggest.js");
-			$options_url = $this->mk_my_orb("get_entry_name_choices", array("id" => $arr["obj_inst"]->id()));
-			$contact_details_url = $this->mk_my_orb("get_contact_details", array("id" => $arr["obj_inst"]->id()));
-			$js .= <<<SCRIPTVARIABLES
+			if($arr["request"]["group"] === "data_entry_contact_co" or $arr["request"]["group"] === "data_entry")
+			{
+				load_javascript("bsnAutosuggest.js");
+				$options_url = $this->mk_my_orb("get_entry_name_choices", array(
+					"type" => "co",
+					"id" => $arr["obj_inst"]->id()
+				));
+				$contact_details_url = $this->mk_my_orb("get_contact_details", array("id" => $arr["obj_inst"]->id()));
+				$js .= <<<SCRIPTVARIABLES
 var optionsUrl = "{$options_url}&";
 var contactDetailsUrl = "{$contact_details_url}";
 SCRIPTVARIABLES;
-			$js .= file_get_contents(AW_DIR . "classes/applications/crm/sales/crm_sales_co_entry.js");
-		}
-		elseif($arr["request"]["group"] === "data_entry_contact_person" or $arr["request"]["group"] === "data_entry")
-		{
-			load_javascript("bsnAutosuggest.js");
-			$js .= file_get_contents(AW_DIR . "classes/applications/crm/sales/crm_sales_person_entry.js");
+				$js .= file_get_contents(AW_DIR . "classes/applications/crm/sales/crm_sales_co_entry.js");
+			}
+			elseif($arr["request"]["group"] === "data_entry_contact_person" or $arr["request"]["group"] === "data_entry")
+			{
+				load_javascript("bsnAutosuggest.js");
+				$options_url = $this->mk_my_orb("get_entry_name_choices", array(
+					"type" => "p",
+					"id" => $arr["obj_inst"]->id()
+				));
+				$contact_details_url = $this->mk_my_orb("get_contact_details", array("id" => $arr["obj_inst"]->id()));
+				$js .= <<<SCRIPTVARIABLES
+var optionsUrl = "{$options_url}&";
+var contactDetailsUrl = "{$contact_details_url}";
+SCRIPTVARIABLES;
+				$js .= file_get_contents(AW_DIR . "classes/applications/crm/sales/crm_sales_person_entry.js");
+			}
 		}
 
 		$js .= "})()\n /* END crm_sales scripts */\n";
@@ -272,31 +335,35 @@ SCRIPTVARIABLES;
 	/** Outputs crm_company/crm_person autocomplete options matching string
 		@attrib name=get_entry_name_choices all_args=1 nologin=1 is_public=1
 		@param id required type=oid acl=view
+		@param type required type=string
 		@param typed_text optional type=string
 	**/
 	function get_entry_name_choices($arr)
 	{
 		$choices = array("results" => array());
-		if (isset($arr["typed_text"]) and strlen($arr["typed_text"]) > 1)
+		if (isset($arr["typed_text"]) and strlen($arr["typed_text"]) > 1 and ("co" === $arr["type"] or "p" === $arr["type"]))
 		{
 			$this_o = new object($arr["id"]);
 			$owner = $this_o->prop("owner");
 			$typed_text = $arr["typed_text"];
+			$name_prop = "co" === $arr["type"] ? "buyer.name" : "CL_CRM_COMPANY_CUSTOMER_DATA.RELTYPE_BUYER.lastname";
+
 			$list = new object_list(array(
-				"class_id" => CL_CRM_COMPANY,
-				"name" => "{$typed_text}%",
-				"CL_CRM_COMPANY.RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).seller" => $owner->id(),
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				$name_prop => "{$typed_text}%",
+				"seller" => $owner->id(),
 				"site_id" => array(),
 				"lang_id" => array(),
 				new obj_predicate_limit(25)
 			));
+
 			if ($list->count() > 0)
 			{
 				$results = array();
 				$o = $list->begin();
 				do
 				{
-					$results[] = array("id" => $o->id(), "value" => $o->name());
+					$results[] = array("id" => $o->prop("buyer"), "value" => $o->prop("buyer.name"));
 				}
 				while ($o = $list->next());
 				$choices["results"] = $results;
@@ -336,7 +403,7 @@ SCRIPTVARIABLES;
 			"class" => "crm_sales"
 		);
 		$r = $i->change($args);
-		$r = substr(trim($r), 0, -1) . ",\"id\":{$arr["contact_id"]}}";
+		$r = substr(trim($r), 0, -1) . ",\"id\":\"{$arr["contact_id"]}\"}";
 		exit($r);
 	}
 
@@ -388,10 +455,17 @@ SCRIPTVARIABLES;
 		if (!empty($arr["request"]["contact_list_load_contact"]))
 		{
 			$contact = obj($arr["request"]["contact_list_load_contact"], array(), CL_CRM_COMPANY, true);
-			if ($contact->createdby() === aw_global_get("uid") and $contact->created() > mktime(0, 0, 0))
-			{
-				$arr["prop"]["edit_id"] = $contact->id();
-			}
+			$arr["prop"]["edit_id"] = $contact->id();
+		}
+		return PROP_OK;
+	}
+
+	function _get_contact_entry_person(&$arr)
+	{
+		if (!empty($arr["request"]["contact_list_load_contact"]))
+		{
+			$contact = obj($arr["request"]["contact_list_load_contact"], array(), CL_CRM_PERSON, true);
+			$arr["prop"]["edit_id"] = $contact->id();
 		}
 		return PROP_OK;
 	}
@@ -420,8 +494,8 @@ SCRIPTVARIABLES;
 			$o->set_prop("fake_email", $arr["prop"]["value"]["fake_email"]);
 			$o->set_prop("fake_address_address", $arr["prop"]["value"]["fake_address_address"]);
 			$o->set_prop("fake_address_postal_code", $arr["prop"]["value"]["fake_address_postal_code"]);
-			$o->set_prop("fake_address_city", $arr["prop"]["value"]["fake_address_city"]);
-			$o->set_prop("fake_address_county", $arr["prop"]["value"]["fake_address_county"]);
+			$o->set_prop("fake_address_city_relp", $arr["prop"]["value"]["fake_address_city_relp"]);
+			$o->set_prop("fake_address_county_relp", $arr["prop"]["value"]["fake_address_county_relp"]);
 			$o->set_prop("fake_address_country_relp", $arr["prop"]["value"]["fake_address_country_relp"]);
 			$o->save();
 		}
@@ -437,8 +511,8 @@ SCRIPTVARIABLES;
 				$o->set_prop("fake_email", $arr["prop"]["value"]["fake_email"]);
 				$o->set_prop("fake_address_address", $arr["prop"]["value"]["fake_address_address"]);
 				$o->set_prop("fake_address_postal_code", $arr["prop"]["value"]["fake_address_postal_code"]);
-				$o->set_prop("fake_address_city", $arr["prop"]["value"]["fake_address_city"]);
-				$o->set_prop("fake_address_county", $arr["prop"]["value"]["fake_address_county"]);
+				$o->set_prop("fake_address_city_relp", $arr["prop"]["value"]["fake_address_city_relp"]);
+				$o->set_prop("fake_address_county_relp", $arr["prop"]["value"]["fake_address_county_relp"]);
 				$o->set_prop("fake_address_country_relp", $arr["prop"]["value"]["fake_address_country_relp"]);
 				$o->save();
 				$owner = $arr["obj_inst"]->prop("owner");
@@ -461,7 +535,7 @@ SCRIPTVARIABLES;
 		$this_o = $arr["obj_inst"];
 		if (isset($arr["prop"]["value"]["id"]))
 		{
-			$o = obj($arr["prop"]["value"]["id"], array(), CL_CRM_COMPANY, true);
+			$o = obj($arr["prop"]["value"]["id"], array(), CL_CRM_PERSON, true);
 			$o->set_prop("firstname", $arr["prop"]["value"]["firstname"]);
 			$o->set_prop("lastname", $arr["prop"]["value"]["lastname"]);
 			$o->set_prop("gender", $arr["prop"]["value"]["gender"]);
@@ -469,9 +543,9 @@ SCRIPTVARIABLES;
 			$o->set_prop("fake_email", $arr["prop"]["value"]["fake_email"]);
 			$o->set_prop("fake_address_address", $arr["prop"]["value"]["fake_address_address"]);
 			$o->set_prop("fake_address_postal_code", $arr["prop"]["value"]["fake_address_postal_code"]);
-			$o->set_prop("fake_address_city", $arr["prop"]["value"]["fake_address_city"]);
-			$o->set_prop("fake_address_county", $arr["prop"]["value"]["fake_address_county"]);
-			$o->set_prop("fake_address_country", $arr["prop"]["value"]["fake_address_country"]);
+			$o->set_prop("fake_address_city_relp", $arr["prop"]["value"]["fake_address_city_relp"]);
+			$o->set_prop("fake_address_county_relp", $arr["prop"]["value"]["fake_address_county_relp"]);
+			$o->set_prop("fake_address_country_relp", $arr["prop"]["value"]["fake_address_country_relp"]);
 			$o->save();
 		}
 		else
@@ -487,9 +561,9 @@ SCRIPTVARIABLES;
 				$o->set_prop("fake_email", $arr["prop"]["value"]["fake_email"]);
 				$o->set_prop("fake_address_address", $arr["prop"]["value"]["fake_address_address"]);
 				$o->set_prop("fake_address_postal_code", $arr["prop"]["value"]["fake_address_postal_code"]);
-				$o->set_prop("fake_address_city", $arr["prop"]["value"]["fake_address_city"]);
-				$o->set_prop("fake_address_county", $arr["prop"]["value"]["fake_address_county"]);
-				$o->set_prop("fake_address_country", $arr["prop"]["value"]["fake_address_country"]);
+				$o->set_prop("fake_address_city_relp", $arr["prop"]["value"]["fake_address_city_relp"]);
+				$o->set_prop("fake_address_county_relp", $arr["prop"]["value"]["fake_address_county_relp"]);
+				$o->set_prop("fake_address_country_relp", $arr["prop"]["value"]["fake_address_country_relp"]);
 				$o->save();
 				$owner = $arr["obj_inst"]->prop("owner");
 				$customer_relation = $o->get_customer_relation($owner, true);
@@ -639,7 +713,7 @@ SCRIPTVARIABLES;
 					}
 
 
-					$lead_source = $customer_relation->prop("lead_source");
+					$lead_source = $customer_relation->prop("sales_lead_source");
 					if ($lead_source)
 					{
 						$lead_source = new object($lead_source);
