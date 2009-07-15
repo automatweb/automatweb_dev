@@ -167,6 +167,7 @@ class relpicker extends  core
 				"title" => t("Otsi"),
 			));
 		}
+
 		if(!is_array($selected) && $this->can("edit", $selected) && !$no_edit)
 		{
 			$selected_obj = new object($selected);
@@ -182,7 +183,7 @@ class relpicker extends  core
 			));
 		}
 		elseif(is_array($selected) && !$no_edit)
-		{	
+		{
 			$pm = get_instance("vcl/popup_menu");
 			$pm->begin_menu(str_replace(array("[", "]"), "", $name)."_rp_editbtn");
 			foreach($selected as $id)
@@ -199,6 +200,7 @@ class relpicker extends  core
 				"icon" => "edit.gif",
 			));
 		}
+
 		if(!$no_edit)
 		{
 			$clss = aw_ini_get("classes");
@@ -247,8 +249,9 @@ class relpicker extends  core
 					));
 				}
 			}
-			return $r;
 		}
+
+		return $r;
 	}
 
 	function init_vcl_property($arr)

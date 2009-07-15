@@ -2153,7 +2153,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@examples
 				echo process_backtrace(debug_backtrace());
 		**/
-		function process_backtrace($bt, $skip = -1)
+		public static function process_backtrace($bt, $skip = -1)
 		{
 			$msg = "<br><br> Backtrace: \n\n<Br><br>";
 			for ($i = count($bt)-1; $i > $skip; $i--)

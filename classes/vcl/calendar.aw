@@ -9,6 +9,12 @@ class vcalendar extends aw_template
 	var $container_template = "container.tpl"; // access?
 	var $cal_tpl_dir = "calendar"; // access?
 	var $output_initialized = false; // access?
+	public /*???*/ $full_weeks;
+	public /*???*/ $month_week;
+
+	protected $items = array();
+	protected $overview_items = array();
+	protected $show_days_with_events = false;
 
 	/**
 		@attrib params=name api=1
@@ -119,8 +125,6 @@ class vcalendar extends aw_template
 	function init_calendar($arr)
 	{
 		// this is the place where I need to calculate the range
-		$this->items = array();
-		$this->overview_items = array();
 	}
 
 	/**
@@ -840,7 +844,7 @@ class vcalendar extends aw_template
 			"section" => $this->target_section,
 		));
 
-		if(!empty($this->show_days_with_events) && !empty($this->event_sources) && $this->fix_links == 1)
+		if($this->show_days_with_events && !empty($this->event_sources) && $this->fix_links == 1)
 		{
 			enter_function("vcalendar::show_days_with_events");
 			if(!empty($this->first_event))
@@ -1034,7 +1038,7 @@ class vcalendar extends aw_template
 				};
 
 				// uh, but we parse day by day. How do I deal with recurring information?
-				if (is_array($this->items[$dstamp]))
+				if (isset($this->items[$dstamp]) and count($this->items[$dstamp]) > 0)
 				{
 					$events = $this->items[$dstamp];
 					uasort($events,array($this,"__asc_sort"));
@@ -1097,7 +1101,7 @@ class vcalendar extends aw_template
 
 				// this will most most likely break templates with grids, but works
 				// fine with event lists .. which is the way it should be used anyway
-				if (empty($calendar_blocks[$block_id]) && 1 == $this->show_days_with_events)
+				if (empty($calendar_blocks[$block_id]) && $this->show_days_with_events)
 				{
 					continue;
 				};
@@ -1180,11 +1184,6 @@ class vcalendar extends aw_template
 
 		//dbg::p5($this->range);
 		list($d,$m,$y) = explode("-",date("d-m-Y",$this->range["timestamp"]));
-		if ($GLOBALS["DX"] == 1)
-		{
-			arr($this->items);
-		};
-
 
 		for ($i = 1; $i <= 12; $i++)
 		{
@@ -1269,7 +1268,7 @@ class vcalendar extends aw_template
 		$now = date("Ymd");
 		if ($this->skip_empty)
 		{
-			$this->show_days_with_events = 1;
+			$this->show_days_with_events = true;
 		};
 
 		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$this->range["start"]));
@@ -1314,7 +1313,7 @@ class vcalendar extends aw_template
 					$events_for_day .= $this->draw_event($event);
 				};
 			}
-			elseif ($this->show_days_with_events == 1)
+			elseif ($this->show_days_with_events)
 			{
 				continue;
 			};

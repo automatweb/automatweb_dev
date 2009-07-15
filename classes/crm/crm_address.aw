@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.38 2008/12/22 17:38:55 markop Exp $
-// crm_address.aw - It's not really a physical address but a collection of data required to 
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.39 2009/07/15 07:28:16 voldemar Exp $
+// crm_address.aw - It's not really a physical address but a collection of data required to
 // contact a person.
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_ADDRESS maintainer=markop
@@ -11,18 +11,18 @@
 
 	@property name type=text
 	@caption Nimi
-	
+
 	@default table=kliendibaas_address
-	
+
 	@property aadress type=textbox size=50 maxlength=100
 	@caption T&auml;nav/K&uuml;la
-	
+
 	@property aadress2 type=textbox size=50 maxlength=100
 	@caption T&auml;nav/K&uuml;la2
-	
+
 	@property postiindeks type=textbox size=5 maxlength=100
 	@caption Postiindeks
-	
+
 	@property linn type=relpicker reltype=RELTYPE_LINN automatic=1
 	@caption Linn/Vald/Alev
 
@@ -34,10 +34,10 @@
 
 	@property riik type=relpicker reltype=RELTYPE_RIIK automatic=1
 	@caption Riik
-	
+
 	@property comment type=textarea cols=65 rows=3 table=objects field=comment
 	@caption Kommentaar
-	
+
 	@classinfo no_status=1
 	@groupinfo settings caption=Seadistused
 */
@@ -66,7 +66,7 @@ CREATE TABLE `kliendibaas_address` (
 
 */
 
-/* 
+/*
 @reltype LINN value=1 clid=CL_CRM_CITY
 @caption Linn
 
@@ -117,7 +117,7 @@ class crm_address extends class_base
 						"linn" => CL_CRM_CITY,
 						"maakond" => CL_CRM_COUNTY,
 						"piirkond" => CL_CRM_AREA,
-						"riik" => CL_CRM_COUNTRY,
+						"riik" => CL_CRM_COUNTRY
 					);
 
 					$data["options"] = array(0 => t("--vali--")) + safe_array($pm_inst->get_locations($clid[$data["name"]]));
@@ -137,7 +137,7 @@ class crm_address extends class_base
 		{
 			case 'name':
 				// generate a name for the object
-				$name = array();	
+				$name = array();
 				if (!empty($form["aadress"]))
 				{
 					$name[] = $form['aadress'];
@@ -153,7 +153,7 @@ class crm_address extends class_base
 					$county_obj = new object($form["maakond"]);
 					$name[] = $county_obj->name();
 				};
-				
+
 				if (count($name) < 1)
 				{
 					if (!empty($form["email"]))
@@ -161,7 +161,7 @@ class crm_address extends class_base
 						$name[] = $form["email"];
 					};
 				}
-				
+
 				if (count($name) < 1)
 				{
 					if (!empty($form["telefon"]))
@@ -179,7 +179,7 @@ class crm_address extends class_base
 
 		};
 		return $retval;
-	}	
+	}
 
 	function request_execute($obj)
 	{
@@ -216,7 +216,7 @@ class crm_address extends class_base
 			$o->set_parent($arr["request"]["parent"]);
 			$o->set_class_id(CL_CRM_ADDRESS);
 			$o->save();
-			
+
 			if ($this->can("view", $arr["request"]["alias_to"]))
 			{
 				$at = obj($arr["request"]["alias_to"]);
@@ -267,7 +267,7 @@ class crm_address extends class_base
 					$at->set_prop($target_prop,$o->id());
 					$at->save();
 				}
-				
+
 				$at->connect(array(
 					"to" => $o->id(),
 					"type" => $arr["request"]["reltype"]
@@ -341,7 +341,7 @@ class crm_address extends class_base
 
 	function get_name_from_adr($o)
 	{
-		$name = array();	
+		$name = array();
 		if ($o->prop("aadress") != "")
 		{
 			$name[] = $o->prop("aadress");
@@ -361,7 +361,7 @@ class crm_address extends class_base
 		{
 			$name[] = $o->prop("riik.name");
 		};
-				
+
 		return join(", ",$name);
 	}
 
@@ -896,8 +896,8 @@ class crm_address extends class_base
 		asort($rv);
 		return $rv;
 	}
-	
-	
+
+
 	/** returns oid, country object id with given $code
 		@attrib api=1
 		@param code required type=string
@@ -916,7 +916,7 @@ class crm_address extends class_base
 		{
 			return null;
 		}
-		
+
 		$filter = array("lang_id" => array(), "class_id" => CL_CRM_COUNTRY, "name" => $name);
 		if(!$use_ex)
 		{
@@ -941,8 +941,8 @@ class crm_address extends class_base
 		}
 		return $o->id();
 	}
-	
-	/** returns string, country code 
+
+	/** returns string, country code
 		@attrib api=1
 		@param o required type=object/oid
 			Country object
@@ -960,11 +960,11 @@ class crm_address extends class_base
 		$countrys = $this->get_country_list();
 		return array_search($o->name(), $countrys);
 	}
-	
+
 	function get_phone_ext_list_as_js_array()
 	{
 		$a_list = $this->get_phone_ext_list();
-		
+
 		$a_list_count = count($a_list);
 		$s_out = "a_phone_prefixes = {";
 		foreach ($a_list as $key => $val)
@@ -973,7 +973,7 @@ class crm_address extends class_base
 		}
 		$s_out = substr($s_out, 0, strlen($s_out)-2);
 		$s_out .= "};";
-		
+
 		return $s_out;
 	}
 

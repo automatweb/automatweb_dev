@@ -285,10 +285,6 @@ class core extends acl_base
 	**/
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
 	{
-if (aw_global_get("uid") == "struktuur.kristo")
-{
-	die($msg);
-}
 		if (!function_exists("aw_global_get"))
 		{
 			classload("defs");
@@ -352,7 +348,7 @@ if (aw_global_get("uid") == "struktuur.kristo")
 			}
 		}
 		// meilime veateate listi ka
-		$subj = $v. str_replace("http://", "", $this->cfg["baseurl"]);
+		$subj = $v. str_replace("http://", "", aw_ini_get("baseurl"));
 
 		if (!$is_rpc_call && !headers_sent())
 		{
@@ -366,7 +362,7 @@ if (aw_global_get("uid") == "struktuur.kristo")
 		$content.= "\nlang_id: ".aw_global_get("lang_id");
 		$content.= "\nuid: ".aw_global_get("uid");
 		$content.= "\nsection: ".(isset($_REQUEST["section"]) ? $_REQUEST["section"] : "");
-		$content.= "\nurl: " . $this->cfg["baseurl"] . aw_global_get("REQUEST_URI");
+		$content.= "\nurl: " . aw_ini_get("baseurl") . aw_global_get("REQUEST_URI");
 		$content.= "\nreferer: " . (isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "");
 		$content.= "\nis_rpc_call: " . (int) $is_rpc_call;
 		$content.= "\nrpc_call_type: " . $rpc_call_type;

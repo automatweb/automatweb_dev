@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.61 2009/04/21 11:06:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.62 2009/07/15 07:28:05 voldemar Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -14,7 +14,7 @@ class cache extends core
 		$this->db_init();
 		aw_config_init_class(&$this);
 	}
-	
+
 	/** writes a page to the html page cache
 		@attrib params=pos api=1
 
@@ -34,7 +34,7 @@ class cache extends core
 
 		@returns
 			none
-	
+
 		@comment
 			Writes data into cache.
 
@@ -47,7 +47,7 @@ class cache extends core
 		{
 			$real_section = $oid;
 		}
-		if ($this->cfg["use_page_cache"] && !aw_global_get("uid") && !aw_global_get("no_cache"))
+		if (aw_ini_get("use_page_cache") && !aw_global_get("uid") && !aw_global_get("no_cache"))
 		{
 			$fname = "/".str_replace("/","_",$oid);
 			foreach($arr as $v)
@@ -81,7 +81,7 @@ class cache extends core
 
 		@returns
 			If the cache for the given parameters exists and is valid, then returns cache content, else false
-	
+
 	**/
 	function get($oid,$arr, $real_oid = NULL)
 	{
@@ -89,7 +89,8 @@ class cache extends core
 		{
 			$real_oid = $oid;
 		}
-		if ($this->cfg["use_page_cache"] && !aw_global_get("uid"))
+
+		if (aw_ini_get("use_page_cache") && !aw_global_get("uid"))
 		{
 			$fname = "/".str_replace("/","_",$oid);
 			foreach($arr as $v)
@@ -109,14 +110,14 @@ class cache extends core
 			return false;
 		}
 	}
-	
+
 	/** Writes the given data to a cache file in the main cache folder
 		@attrib params=pos api=1
 
 		@param key required type=string
 			String that is used to compose the path and filename which holds the cached data.
 
-		@param value required type=string	
+		@param value required type=string
 			Cached data.
 
 		@errors
@@ -124,7 +125,7 @@ class cache extends core
 
 		@returns
 			none
-	
+
 		@comment
 			Not recommended to use.
 
@@ -155,15 +156,15 @@ class cache extends core
 		@attrib params=pos api=1
 
 		@param key required type=string
-			String that is used to set the filename in cache. 
+			String that is used to set the filename in cache.
 
 		@errors
 			none
 
 		@returns
-			Contents of the file in cache.	
+			Contents of the file in cache.
 			false if page_cache is not set in aw.ini of file is not found
-	
+
 		@comment
 			Not recommended to use.
 
@@ -171,7 +172,7 @@ class cache extends core
 			$cache = get_instance('cache');
 			$cache->file_set('foo', 'bar');
 			echo $cache->file_get('foo'); // prints 'bar'
-	
+
 	**/
 	function file_get($key)
 	{
@@ -238,7 +239,7 @@ class cache extends core
 		@attrib params=pos api=1
 
 		@param key required type=string
-			String that is used to set the filename in cache. 
+			String that is used to set the filename in cache.
 
 		@param ts required type=int
 			Timestamp
@@ -247,11 +248,11 @@ class cache extends core
 			none
 
 		@returns
-			- Contents of the file in cache.	
+			- Contents of the file in cache.
 			- false if the cache file does not exist
 			- false if page_cache is not set in aw.ini
 			- false if supplied timestamp has newer time than the file's modification time
-	
+
 		@comment
 			Checks, if the file in cache modification time is older than the time supplied via parameter. If it is older, then returns false, else filecontent.
 
@@ -263,7 +264,7 @@ class cache extends core
 			var_dump($cache->file_get_ts('foo', time() - 3600));
 			// file in cache is older than supplied timestamp, so false is returned
 			var_dump($cache->file_get_ts('foo', time()));
-		
+
 	**/
 	function file_get_ts($key, $ts)
 	{
@@ -284,14 +285,14 @@ class cache extends core
 		@attrib params=pos api=1
 
 		@param key required type=string
-			String that is used to set the filename in cache. 
+			String that is used to set the filename in cache.
 
 		@errors
 			none
 
 		@returns
 			none
-	
+
 		@comment
 			Deletes the file from cache
 
@@ -301,7 +302,7 @@ class cache extends core
 			var_dump($cache->file_get('foo')); // prints 'bar'
 			$cache->file_invalidate('foo');
 			var_dump($cache->file_get('foo')); // prints false
-		
+
 	**/
 	function file_invalidate($key)
 	{
@@ -327,7 +328,7 @@ class cache extends core
 
 		@returns
 			none
-	
+
 		@comment
 			none
 
@@ -345,7 +346,7 @@ class cache extends core
 
 	/** Returns cache content for parent and oid and function
 		@attrib params=pos api=1
-			
+
 		@param pt required type=string
 			Folder under $site/pagecache
 		@param oid required type=int
@@ -358,7 +359,7 @@ class cache extends core
 
 		@returns
 			false if file cannot be opened for reading
-	
+
 		@comment
 			none
 
@@ -407,7 +408,7 @@ class cache extends core
 			// file in cache is older than supplied timestamp, so false is returned
 			var_dump($cache->file_get_pt_oid_ts('foo', 1234, 'bar', time()));
 
-	
+
 	**/
 	function file_get_pt_oid_ts($pt, $oid, $fn, $ts)
 	{
@@ -421,7 +422,7 @@ class cache extends core
 		@param pt required type=string
 			Folder under $site/pagecache
 		@param subf required type=string
-			Folder under the folder specified by $pt parameter 
+			Folder under the folder specified by $pt parameter
 		@param fn required type=string
 			Filename containing cached data
 		@param cont required type=string
@@ -431,7 +432,7 @@ class cache extends core
 
 		@returns
 			none
-	
+
 		@comment
 			none
 
@@ -459,7 +460,7 @@ class cache extends core
 		@param pt required type=string
 			Folder under $site/pagecache
 		@param subf required type=string
-			Folder under the folder specified by $pt parameter 
+			Folder under the folder specified by $pt parameter
 		@param fn required type=string
 			Filename containing cached data
 
@@ -469,8 +470,8 @@ class cache extends core
 		@returns
 			- file content
 			- false if file does no exist in cache or cannot be opened for reading
-			
-	
+
+
 		@comment
 			none
 
@@ -479,7 +480,7 @@ class cache extends core
 			$cache->file_set_pt('foo', 'asd', 'bar', 'Hello World');
 			$val = $cache->file_get_pt('foo', 'asd', 'bar');
 			echo $val; // prints 'Hello World'
-	
+
 	**/
 	function file_get_pt($pt, $subf, $fn)
 	{
@@ -504,7 +505,7 @@ class cache extends core
 		@param pt required type=string
 			Folder under $site/pagecache
 		@param subf required type=string
-			Folder under the folder specified by $pt parameter 
+			Folder under the folder specified by $pt parameter
 		@param fn required type=string
 			Filename containing cached data
 		@param ts required type=int
@@ -517,7 +518,7 @@ class cache extends core
 			- file content
 			- false if timestamp is bigger than file modification time
 			- false if file cannot be opened for reading
-	
+
 		@comment
 			Checks, if the file in cache modification time is older than the time supplied via parameter. If it is older, then returns false, else filecontent.
 
@@ -531,7 +532,7 @@ class cache extends core
 			// file in cache is older than supplied timestamp, so false is returned
 			var_dump($cache->file_get_pt_ts('foo', 1234, 'bar', time()));
 
-		
+
 	**/
 	function file_get_pt_ts($pt, $subf, $fn, $ts)
 	{
@@ -563,7 +564,7 @@ class cache extends core
 
 		@returns
 			none
-	
+
 		@comment
 			Clears the cache folder
 
@@ -578,8 +579,8 @@ class cache extends core
 		{
 			return;
 		}
-		// now, this is where the magic happens. 
-		// basically, we rename the whole folder and clear it's contents later. 
+		// now, this is where the magic happens.
+		// basically, we rename the whole folder and clear it's contents later.
 		$fq = $this->cfg["page_cache"]."/".$pt;
 		$nn = $this->cfg["page_cache"]."/temp/".$pt."_".gen_uniq_id();
 
@@ -600,14 +601,14 @@ class cache extends core
 
 		@returns
 			none
-	
+
 		@comment
-			
+
 
 		@examples
 			$cache = get_instance('cache');
 			$cache->file_clear_pt_oid('foo', 1234);
-			
+
 	**/
 	function file_clear_pt_oid($pt, $oid)
 	{
@@ -637,14 +638,14 @@ class cache extends core
 
 		@returns
 			none
-	
+
 		@comment
 			deletes the file from cache
 
 		@examples
 			$cache = get_instance('cache');
 			$cache->file_clear_pt_oid_fn('foo', 1234, 'bar');
-		
+
 	**/
 	function file_clear_pt_oid_fn($pt, $oid, $fn)
 	{
@@ -661,21 +662,21 @@ class cache extends core
 		@param pt required type=string
 			Folder under $site/pagecache
 		@param subf required type=string
-			Folder under the folder specified by $pt parameter 
+			Folder under the folder specified by $pt parameter
 
 		@errors
 			Throws error when the folder cannot be renamed.
 
 		@returns
 			none
-	
+
 		@comment
 			none
 
 		@examples
 			$cache = get_instance('cache');
 			$cache->file_clear_pt_sub('foo', 'asd');
-			
+
 	**/
 	function file_clear_pt_sub($pt, $subf)
 	{
@@ -723,13 +724,13 @@ class cache extends core
 		@returns
 			- false if file is not readable
 			- false if valid cache_id could not be calculated
-	
+
 		@comment
 			none
-			
+
 		@examples
 			none
-		
+
 	**/
 	function get_cached_file($args = array())
 	{
@@ -747,7 +748,7 @@ class cache extends core
 		}
 
 		// this is all nice and good, but I need a way to load files from the
-		// site directory as well. 
+		// site directory as well.
 
 		if (is_file($fqfn) && is_readable($fqfn))
 		{
@@ -766,15 +767,15 @@ class cache extends core
 		{
 			// no source file, bail out
 
-			// an idea to consider, perhaps we _should_ have a way to 
-			// work only with serialized files? 
+			// an idea to consider, perhaps we _should_ have a way to
+			// work only with serialized files?
 			return false;
 		};
 
 		$cachedir = $this->cfg["page_cache"];
 
 		$cachefile = $cachedir . "/" . $cache_id;
-			
+
 		// now get mtime for both files, source and cache
 		$source_mtime = filemtime($fqfn);
 		$src = "";
@@ -794,7 +795,7 @@ class cache extends core
 		{
 			//print "need to reparse<br />";
 			// 1) get an instance of the unserializer class,
-			
+
 			$clobj = &$args["unserializer"][0];
 			$clmeth = $unserializer[1];
 			if (is_object($clobj) && method_exists($clobj,$clmeth))
@@ -830,7 +831,7 @@ class cache extends core
 		{
 			// 1) get the contents of cached file
 			// 2) awunserialize the data
-			
+
 			$clobj = &$args["loader"][0];
 			$clmeth = $loader[1];
 			if (is_object($clobj) && method_exists($clobj,$clmeth))
@@ -845,7 +846,7 @@ class cache extends core
 	{
 		if ($dir = @opendir($fld))
 		{
-			while (($file = readdir($dir)) !== false) 
+			while (($file = readdir($dir)) !== false)
 			{
 				if (!($file == "." || $file == ".."))
 				{
@@ -872,7 +873,7 @@ class cache extends core
 
 		@returns
 			Timestamp of the last modified object.
-	
+
 		@comment
 			If the method is called first time and there is no objlastmod file in cache, then last modified object is taken (from the objects table by the field modified) and it will be cached into objlastmod file in cache. If site_show.objlastmod_only_menu aw.ini setting is set (for example to 1), then last modified menu object is taken (class_id = CL_MENU)
 
@@ -907,7 +908,7 @@ class cache extends core
 
 		@returns
 			none
-	
+
 
 		@examples
 			$cache = get_instance('cache');

@@ -1237,6 +1237,7 @@ class aw_table extends aw_template
 				};
 
 				$cols = 0;
+				$skip_for_colspan = 0;
 
 				// ts&uuml;kkel &uuml;le rowdefsi, et andmed oleksid oiges j&auml;rjekorras
 				foreach($this->rowdefs as $k1 => $v1)
@@ -1454,7 +1455,7 @@ class aw_table extends aw_template
 					$tbl .= str_replace("[__jrk_replace__]",$counter,$val);
 					$tbl .= "</td>\n";
 					$skip_for_colspan = $colspan;
-				};
+				}
 
 				// joonistame actionid
 				$actionridu = isset($this->actionrows) ? $this->actionrows : 1;

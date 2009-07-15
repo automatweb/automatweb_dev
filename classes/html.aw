@@ -111,7 +111,7 @@ class html
 		{
 			$sel_array = $selected;
 		}
-		elseif (isset($selected) && $selected !== false)
+		elseif (isset($selected) && is_scalar($selected) && $selected !== false)
 		{
 			$sel_array = array($selected);
 		}
@@ -120,7 +120,7 @@ class html
 			$sel_array = array();
 		}
 
-		$sel_array = @array_flip($sel_array);
+		$sel_array = array_flip($sel_array);
 
 		$options = isset($options) ? safe_array($options) : array();
 		foreach($options as $k => $v)
@@ -711,7 +711,7 @@ class html
 		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 
 		
-	//	$tpl = get_instance("cfg/htmlclient");//ma ei tea, yle 1.5 sekundi v6idab m6nest vaatest selle v6lja kommenteerimisega n2iteks
+		//$tpl = get_instance("cfg/htmlclient");//ma ei tea, yle 1.5 sekundi v6idab m6nest vaatest selle v6lja kommenteerimisega n2iteks
 		//$tpl->read_template("default.tpl");
 		if(false and $tpl->is_template("CHECKBOX"))
 		{
@@ -723,7 +723,7 @@ class html
 				"checked" => $checked,
 				"disabled" => $disabled,
 				"caption" => $capt,
-				"post_append_text" => $post_append_text,
+				"post_append_text" => $post_append_text
 			));
 			$rv = $tpl->parse("CHECKBOX");
 		}
@@ -761,7 +761,7 @@ class html
 		$checked = checked($checked);
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 		$onc = empty($onclick) ? "" : " onclick=\"{$onclick}\"";
-		
+
 		if(!isset($caption))
 		{
 			$caption = "";

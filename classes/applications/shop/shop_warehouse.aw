@@ -201,7 +201,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 	@property arrivals_bc_info type=text
 	@caption Info
-	
+
 	@property arrivals_bc_table type=table no_caption=1
 
 @default group=storage_movements
@@ -468,7 +468,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property status_orders_res_tree type=treeview parent=status_orders_res_tree_lay store=no no_caption=1
 
 			@layout status_orders_opt_lay type=vbox closeable=1 parent=status_orders_left area_caption=Lisavalikud
-				
+
 				@property status_orders_opt1 type=chooser store=no captionside=top parent=status_orders_opt_lay
 				@caption Kuvatakse tooteid, mis...
 
@@ -568,9 +568,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property purchase_notes_prod_tree type=treeview no_caption=1 parent=purchase_notes_prod
 
 			@layout purchase_notes_cust type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=purchase_notes_left
-				
+
 				@property purchase_notes_cust_tree type=treeview no_caption=1 parent=purchase_notes_cust
-				
+
 			@layout purchase_notes_left_search type=vbox closeable=1 area_caption=Filtreeri&nbsp;otsinguga parent=purchase_notes_left
 
 				@property purchase_notes_s_acquiredby type=textbox store=no captionside=top size=30 parent=purchase_notes_left_search
@@ -625,9 +625,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property purchase_bills_prod_tree type=treeview no_caption=1 parent=purchase_bills_prod
 
 			@layout purchase_bills_cust type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=purchase_bills_left
-				
+
 				@property purchase_bills_cust_tree type=treeview no_caption=1 parent=purchase_bills_cust
-				
+
 			@layout purchase_bills_left_search type=vbox closeable=1 area_caption=Filtreeri&nbsp;otsinguga parent=purchase_bills_left
 
 				@property purchase_bills_s_acquiredby type=textbox store=no captionside=top size=30 parent=purchase_bills_left_search
@@ -755,7 +755,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property sales_notes_prod_tree type=treeview no_caption=1 parent=sales_notes_prod
 
 			@layout sales_notes_cust type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=sales_notes_left
-				
+
 				@property sales_notes_cust_tree type=treeview no_caption=1 parent=sales_notes_cust
 
 			@layout sales_notes_left_search type=vbox closeable=1 area_caption=Filtreeri&nbsp;otsinguga parent=sales_notes_left
@@ -812,9 +812,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property sales_bills_prod_tree type=treeview no_caption=1 parent=sales_bills_prod
 
 			@layout sales_bills_cust type=vbox closeable=1 area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi parent=sales_bills_left
-				
+
 				@property sales_bills_cust_tree type=treeview no_caption=1 parent=sales_bills_cust
-				
+
 			@layout sales_bills_left_search type=vbox closeable=1 area_caption=Filtreeri&nbsp;otsinguga parent=sales_bills_left
 
 				@property sales_bills_s_acquiredby type=textbox store=no captionside=top size=30 parent=sales_bills_left_search
@@ -865,7 +865,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@property clients_tbl type=table no_caption=1 group=purchase_clients,sales_clients parent=clients_split
 
 @default group=shop_orders
-	
+
 	@property shop_orders_toolbar type=toolbar no_caption=1
 
 	@layout shop_orders_split type=hbox width=20%:80%
@@ -880,28 +880,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 				@property shop_orders_s_uname type=textbox parent=shop_orders_search store=no captionside=top size=20
 				@caption Tellija kasutajanimi
-				
+
 				@property shop_orders_s_pname type=textbox parent=shop_orders_search store=no captionside=top size=20
 				@caption Tellija isikunimi
-				
+
 				@property shop_orders_s_oname type=textbox parent=shop_orders_search store=no captionside=top size=20
 				@caption Organisatsiooni nimi
-				
+
 				@property shop_orders_s_oid type=textbox size=8 parent=shop_orders_search store=no captionside=top size=20
 				@caption Tellimuse ID
-				
+
 				@property shop_orders_s_prod type=textbox parent=shop_orders_search store=no captionside=top size=20
 				@caption Toote nimi
-				
+
 				@property shop_orders_s_from type=date_select parent=shop_orders_search store=no captionside=top
 				@caption Tellimuse ajavahemik (alates)
-				
+
 				@property shop_orders_s_to type=date_select parent=shop_orders_search store=no captionside=top
 				@caption Tellimuse ajavahemik (kuni)
-				
+
 				@property osearch_submit type=submit parent=shop_orders_search
 				@caption Otsi
-				
+
 
 		@layout shop_orders_right type=vbox parent=shop_orders_split
 
@@ -915,7 +915,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @default group=order_orderer_cos
 
 	@layout hbox_oc type=hbox
-	
+
 		@property order_orderer_cos_tree type=text store=no parent=hbox_oc no_caption=1
 		@property order_orderer_cos type=table store=no parent=hbox_oc no_caption=1
 
@@ -1275,7 +1275,7 @@ class shop_warehouse extends class_base
 				}
 				return $retval;
 				break;
-				
+
 		}
 		if($ret = $this->process_search_param($arr))
 		{
@@ -1611,8 +1611,8 @@ class shop_warehouse extends class_base
 		$fields = array(
 //			"prod" => t("Artikkel"),
 			"begin_count" => t("Perioodi algsaldo (kg)"),
-			"amount" => t("Kogus (kg)"),	
-			"len" => t("Kogus (jm)"),	
+			"amount" => t("Kogus (kg)"),
+			"len" => t("Kogus (jm)"),
 			"price" => t("hind (EEK/t)"),
 			"balance" => t("Hetke saldo (EEK)"),
 			"repair" => t("Parandus"),
@@ -1676,8 +1676,8 @@ class shop_warehouse extends class_base
 //				"weight" => t("kaal (gr/m2)"),
 //				"width" => t("Laius (mm)"),
 //				"begin_count" => t("Perioodi algsaldo"),
-//				"amount" => t("Kogus kg"),	
-//				"len" => t("Kogus jm."),	
+//				"amount" => t("Kogus kg"),
+//				"len" => t("Kogus jm."),
 //				"price" => t("hind EEK/t"),
 				"balance" => $count,
 				"repair" => $movements[$o->id()],
@@ -1733,8 +1733,8 @@ class shop_warehouse extends class_base
 		$t->set_caption(t("Lao saldo"));
 		$fields = array(
 			"begin_count" => t("Perioodi algsaldo (kg)"),
-			"amount" => t("Kogus (kg)"),	
-			"len" => t("Kogus jm."),	
+			"amount" => t("Kogus (kg)"),
+			"len" => t("Kogus jm."),
 			"price" => t("hind EEK/t"),
 			"balance" => t("Hetke saldo"),
 		);
@@ -1824,7 +1824,7 @@ class shop_warehouse extends class_base
 				"balance" => $balance,
 				"begin_count" => $begin,
 			);
-			
+
 			foreach($movements_in[$product->id()] as $date => $sum)
 			{
 				$data[$date."in"] = $sum;
@@ -2569,7 +2569,7 @@ class shop_warehouse extends class_base
 				$uo = crm_person::has_user($po);
 			}
 			$c = $o->prop("orderer_company");
-			if($this->can("view", $co))
+			if($this->can("view", $c))
 			{
 				$co = obj($c);
 			}
@@ -2871,7 +2871,7 @@ class shop_warehouse extends class_base
 		$companies = array(0 => t("--vali--")) + $c_ol->names();
 		$arr["warehouses"] = array($arr["obj_inst"]->id());
 		$res = $this->get_products_list_ol($arr);
-		/* 
+		/*
 		// eee - what is this for here? --dragut@01.07.2009
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
@@ -3623,7 +3623,7 @@ class shop_warehouse extends class_base
 		{
 			return PROP_IGNORE;
 		}
-		
+
 		$clids = array(CL_MENU);
 		if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 		{
@@ -4193,7 +4193,7 @@ class shop_warehouse extends class_base
 		return array(
 			'ol' => $ol,
 		);
-	
+
 	}
 
 	private function find_replacement_products($prods)
@@ -6809,7 +6809,7 @@ class shop_warehouse extends class_base
 		if(isset($request["group"]))
 		{
 			switch($request["group"])
-			{	
+			{
 				case "status_orders":
 					$arr["add_rows_order"] = 0;
 					$arr["filt_case"] = $request["filt_case"];
@@ -6930,15 +6930,15 @@ class shop_warehouse extends class_base
 			function update_products_table(){
 
 				var result=[];
-				result = $('input[name^=prod_s]'); 
+				result = $('input[name^=prod_s]');
 
-				button=document.getElementsByName('prod_s_sbt')[0]; 
-				button.disabled = true; 
+				button=document.getElementsByName('prod_s_sbt')[0];
+				button.disabled = true;
 				$.post('/automatweb/orb.aw?class=shop_warehouse&action=ajax_update_products_table&id=".$arr['obj_inst']->id()."&'+result.serialize(),{
 					id: ".$arr["obj_inst"]->id()."
-					, ".join(", " , $ajax_vars)."},function(html){  
+					, ".join(", " , $ajax_vars)."},function(html){
 						x=document.getElementsByName('products_list');
-						x[0].innerHTML = html; 
+						x[0].innerHTML = html;
 						button.disabled = false;
 				});
 			}
@@ -7503,7 +7503,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			}
 			$t->define_data($data);
 		}
-	
+
 		foreach($total as $prod => $data)
 		{
 			foreach($data as $unit => $total)
@@ -8491,7 +8491,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				$def["name"] = html::textbox(array("name" => "row[".$id."][name]" , "value" => $data["name"]));
 				$def["discount"] = html::textbox(array("name" => "row[".$id."][discount]" , "value" => $data["discount"] , "size" => 2));
 				$def["active"] = html::checkbox(array("name" => "row[".$id."][active]" , "value" => 1, "checked" => $data["active"]));
-				$def["date"] = html::date_select(array("month_as_numbers" => 1,"name" => "row[".$id."][from]" , "value" => $data["from"])) . " - 
+				$def["date"] = html::date_select(array("month_as_numbers" => 1,"name" => "row[".$id."][from]" , "value" => $data["from"])) . " -
 					" . html::date_select(array("month_as_numbers" => 1,"name" => "row[".$id."][to]" , "value" => $data["to"]));
 				$groups = new object_list(array(
 					"class_id" => CL_GROUP,
@@ -8917,7 +8917,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 	function _get_status_orders_time_tree($arr)
 	{
 		$t = $arr["prop"]["vcl_inst"];
-	
+
 		$params = array(
 			"set_retu" => get_ru(),
 			"filt_time" => automatweb::$request->arg("filt_time"),
@@ -9043,7 +9043,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"iconurl" => icons::get_icon_url(CL_MENU),
 				"url" => aw_url_change_var(array("filt_time" => "all", $g."_s_from" => "-", $g."_s_to" => "-")),
 			));
-		}	
+		}
 
 		if(!$arr["request"]["status_orders_s_start"])
 		{
@@ -9117,7 +9117,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 	function _get_status_orders_prod_tree($arr)
 	{
-		$this->mk_prodg_tree(&$arr); 
+		$this->mk_prodg_tree(&$arr);
 		$arr["prop"]["vcl_inst"]->add_item(0, array(
 			"name" => t("K&otilde;ik"),
 			"id" => "prod_all",
@@ -9312,7 +9312,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				$max = $ol2->begin()->prop("days");
 			}
 		}
-		
+
 		$arr["start"] = $arr["request"]["status_orders_s_start"];
 		$arr["end"] = $arr["request"]["status_orders_s_end"];
 		extract($this->_get_status_orders_time_filt($arr));
@@ -9488,7 +9488,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"name" => "required",
 				"caption" => t("Vajadused"),
 			));
-				
+
 			$t->define_field(array(
 				"name" => "ordered",
 				"caption" => t("Tellitud"),
@@ -9588,12 +9588,12 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 
 		$t = &$arr["prop"]["vcl_inst"];
-	
+
 		if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 		{
 			$arr["warehouses"] = array($arr["obj_inst"]->id());
 		}
-		
+
 		$levels = 0;
 
 		if(count($this->get_warehouse_configs($arr, "has_alternative_units")) && ($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE || $arr["obj_inst"]->prop("show_alt_units")))
@@ -9608,7 +9608,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$params = array(
 			"class_id" => CL_SHOP_PRODUCT,
 		);
-		
+
 		$n = $arr["request"]["status_orders_s_name"];
 		$c = $arr["request"]["status_orders_s_code"];
 		if($n || $c)
@@ -9652,9 +9652,9 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"name" => html::obj_change_url($o).(($c = $o->prop("code")) ? " (".$c.")" : ""),
 				"product" => $oid,
 			);
-			
+
 			$units = $pi->get_units($o);
-			
+
 			if(!$arr["request"]["filt_time"])
 			{
 				$arr["start"] = $arr["request"]["status_orders_s_start"];
@@ -10224,7 +10224,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"tree_id" => "bills_status_tree",
 		));
 		$group = $this->get_search_group($arr);
-	
+
 		$bi = get_instance(CL_CRM_BILL);
 
 		foreach($bi->states as $id => $state)
@@ -10249,7 +10249,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"url" => aw_url_change_var($group."_s_status", null),
 			"name" => sprintf("%s (%s)", t("K&otilde;ik"), $count),
 		));
-		
+
 		$v = automatweb::$request->arg($group."_s_status");
 
 		$t->set_selected_item($v === null ? "all" : "st_".$v);
@@ -10357,7 +10357,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$tb->add_delete_button();
 		$tb->add_save_button();
 	}
-		
+
 	function _get_purchase_bills_toolbar($arr)
 	{
 		return $this->_get_purchase_notes_toolbar(&$arr);
@@ -10773,7 +10773,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"CL_CRM_COMPANY.RELTYPE_CUSTOMER(CL_CRM_CATEGORY).oid" => ($f = $arr["request"]["filt_cust"]) ? $f : array(),
 		//	"limit" => "0,200",
 		);
-		$ol = new object_list($params);	
+		$ol = new object_list($params);
 		return $ol;
 	}
 
@@ -10966,12 +10966,12 @@ $oo = get_instance(CL_SHOP_ORDER);
 		foreach ($res as $r)
 		{
 			$this->db_query("
-				replace 
-					into aw_shop_products_index 
-				set 
-					code = '".addslashes($r['code'])."', 
-					oid = '".$r['aw_oid']."', 
-					short_code = '".addslashes($r['short_code'])."', 
+				replace
+					into aw_shop_products_index
+				set
+					code = '".addslashes($r['code'])."',
+					oid = '".$r['aw_oid']."',
+					short_code = '".addslashes($r['short_code'])."',
 					name = '".addslashes($r['name'])."'
 			");
 		}

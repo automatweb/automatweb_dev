@@ -349,14 +349,14 @@ class connection
 		}
 
 		post_message(
-			MSG_STORAGE_ALIAS_DELETE,
+			"MSG_STORAGE_ALIAS_DELETE",
 			array(
 				"connection" => &$this
 			)
 		);
 
 		post_message_with_param(
-			MSG_STORAGE_ALIAS_DELETE_FROM,
+			"MSG_STORAGE_ALIAS_DELETE_FROM",
 			$this->conn["from.class_id"],
 			array(
 				"connection" => &$this
@@ -364,7 +364,7 @@ class connection
 		);
 
 		post_message_with_param(
-			MSG_STORAGE_ALIAS_DELETE_TO,
+			"MSG_STORAGE_ALIAS_DELETE_TO",
 			$this->conn["to.class_id"],
 			array(
 				"connection" => &$this
@@ -715,14 +715,14 @@ class connection
 			}
 
 			post_message(
-				MSG_STORAGE_ALIAS_ADD,
+				"MSG_STORAGE_ALIAS_ADD",
 				array(
 					"connection" => &$this
 				)
 			);
 
 			post_message_with_param(
-				MSG_STORAGE_ALIAS_ADD_TO,
+				"MSG_STORAGE_ALIAS_ADD_TO",
 				$this->conn["to.class_id"],
 				array(
 					"connection" => &$this
@@ -730,7 +730,7 @@ class connection
 			);
 
 			post_message_with_param(
-				MSG_STORAGE_ALIAS_ADD_FROM,
+				"MSG_STORAGE_ALIAS_ADD_FROM",
 				$this->conn["from.class_id"],
 				array(
 					"connection" => &$this

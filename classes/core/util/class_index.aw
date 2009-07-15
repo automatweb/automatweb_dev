@@ -6,9 +6,9 @@
 
 class class_index
 {
-	const INDEX_DIR = "/files/class_index/";
-	const CLASS_DIR = "/classes/";
-	const LOCAL_CLASS_DIR = "/files/classes/";
+	const INDEX_DIR = "files/class_index/";
+	const CLASS_DIR = "classes/";
+	const LOCAL_CLASS_DIR = "files/classes/";
 	const LOCAL_CLASS_PREFIX = "_aw_local_class__"; // local class names in form OBJ_LOCAL_CLASS_PREFIX . $class_obj_id
 	const UPDATE_EXEC_TIMELIMIT = 300;
 	const CL_NAME_MAXLEN = 1024;
@@ -37,14 +37,13 @@ class class_index
 	**/
 	public static function update($full_update = true)
 	{
-//return;
 		// ...
 		$max_execution_time_prev_val = ini_get("max_execution_time");
 		set_time_limit(self::UPDATE_EXEC_TIMELIMIT);
 
 		// update
 		$found_classes = self::_update("", "", $full_update);
-		self::update_one_file(aw_ini_get("basedir")."/init.aw", $found_classes, $full_update, "../");
+		self::update_one_file(AW_DIR."init.aw", $found_classes, $full_update, "../");
 
 		if ($full_update)
 		{
@@ -62,10 +61,10 @@ class class_index
 
 		if (empty($class_dir))
 		{
-			$class_dir = aw_ini_get("basedir") . self::CLASS_DIR;
+			$class_dir = AW_DIR . self::CLASS_DIR;
 		}
 
-		$index_dir = aw_ini_get("basedir"). self::INDEX_DIR;
+		$index_dir = AW_DIR. self::INDEX_DIR;
 
 		// make index directory if not found
 		if (!is_dir($index_dir))
@@ -114,18 +113,18 @@ class class_index
 			}
 
 			// these files are ignored under class directory
-			$cl_dir_tmp = aw_ini_get("basedir") . self::CLASS_DIR;
+			$cl_dir_tmp = AW_DIR . self::CLASS_DIR;
 			$ignore_files = array($cl_dir_tmp . "core/fastcall_base" . AW_FILE_EXT);
 
 			while (($file = readdir($handle)) !== false)
 			{
 				$class_file = $class_dir . $file;
 
-				if ("file" === @filetype($class_file) and strrchr($file, ".") === AW_FILE_EXT and !in_array($class_file, $ignore_files))
+				if ("file" === filetype($class_file) and strrchr($file, ".") === AW_FILE_EXT and !in_array($class_file, $ignore_files))
 				{ // process only applicable code files
 					self::update_one_file($class_file, $found_classes, $full_update, $path);
 				}
-				elseif ("dir" === @filetype($class_file) and !in_array($file, $non_dirs))
+				elseif ("dir" === filetype($class_file) and !in_array($file, $non_dirs))
 				{
 					$found_classes = array_merge(self::_update($class_dir . $file . "/", $path . $file . "/", $full_update), $found_classes);
 				}
@@ -147,7 +146,7 @@ class class_index
 	private static function update_one_file($class_file, &$found_classes, $full_update, $path)
 	{
 		$time = time();
-		$index_dir = aw_ini_get("basedir") . self::INDEX_DIR;
+		$index_dir = AW_DIR . self::INDEX_DIR;
 
 		if (0 === strlen(AW_FILE_EXT))
 		{
@@ -332,8 +331,8 @@ class class_index
 		else
 		{
 			// try existing index
-			$class_dfn_file = aw_ini_get("basedir") . self::INDEX_DIR . $name . AW_FILE_EXT;
-			$class_dir = aw_ini_get("basedir") . self::CLASS_DIR;
+			$class_dfn_file = AW_DIR . self::INDEX_DIR . $name . AW_FILE_EXT;
+			$class_dir = AW_DIR . self::CLASS_DIR;
 
 			if (!is_readable($class_dfn_file))
 			{
@@ -408,7 +407,7 @@ class class_index
 			return false;
 		}
 
-		$class_dfn_file = aw_ini_get("basedir") . self::INDEX_DIR . $name . "." . aw_ini_get("ext");
+		$class_dfn_file = AW_DIR . self::INDEX_DIR . $name . "." . aw_ini_get("ext");
 
 		if (!is_readable($class_dfn_file))
 		{
@@ -437,7 +436,7 @@ class class_index
 
 	private static function clean_up($classes)
 	{
-		$index_dir = aw_ini_get("basedir") . self::INDEX_DIR;
+		$index_dir = AW_DIR . self::INDEX_DIR;
 		$ext_len = strlen(AW_FILE_EXT);
 		$ext_len = (0 === $ext_len) ? self::CL_NAME_MAXLEN :  (- $ext_len);
 
@@ -483,7 +482,7 @@ class class_index
 	**/
 	public static function get_classes_by_interface($interface)
 	{
-		$index_dir = aw_ini_get("basedir") . self::INDEX_DIR;
+		$index_dir = AW_DIR . self::INDEX_DIR;
 		$if_file = $index_dir.$interface.".".aw_ini_get("ext");
 
 		if (!file_exists($if_file))
@@ -510,7 +509,7 @@ class class_index
 
 	private static function do_post_update_processing()
 	{
-		$index_dir = aw_ini_get("basedir") . self::INDEX_DIR;
+		$index_dir = AW_DIR . self::INDEX_DIR;
 
 		// write implemented-by info
 		foreach(self::$implements_interface as $if_name => $implemented_by)

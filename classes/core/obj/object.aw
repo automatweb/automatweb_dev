@@ -60,7 +60,7 @@ class object
 	const STAT_NOTACTIVE = 1;
 	const STAT_ACTIVE = 2;
 
-	
+
 	var $oid;	// the object this instance points to
 
 	private static $instance_count = 0;
@@ -2190,11 +2190,12 @@ class object
 		$is = false;
 		if (is_class_id($class_id))
 		{
+			$cl = basename(aw_ini_get("classes.{$class_id}.object_override"));
 			if ($class_id == $this->class_id())
 			{ // object is of queried class
 				$is = true;
 			}
-			elseif (aw_ini_isset("classes.{$class_id}.object_override") and is_a($GLOBALS["objects"][$this->oid], basename(aw_ini_get("classes.{$class_id}.object_override"))))
+			elseif (aw_ini_isset("classes.{$class_id}.object_override") and $GLOBALS["objects"][$this->oid] instanceof $cl)
 			{ // object extends queried class
 				$is = true;
 			}

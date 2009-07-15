@@ -269,7 +269,7 @@ class crm_call extends task
 		return $this->parse();
 	}
 
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		// shows a phone call
 		$obj = new object($arr["id"]);
@@ -1687,7 +1687,7 @@ class crm_call extends task
 		return $r;
 	}
 
-	function submit($arr)
+	function submit($arr = array())
 	{
 		$r = parent::submit($arr);
 		if ("submit" === $arr["action"] and $this->data_processed_successfully())

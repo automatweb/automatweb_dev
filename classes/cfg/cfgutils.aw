@@ -10,6 +10,8 @@ class cfgutils extends aw_template
 	private $cache;
 	private $clist = array();
 
+	public $groupinfo = array();
+
 	function cfgutils($args = array())
 	{
 		$this->init("");
@@ -479,17 +481,17 @@ class cfgutils extends aw_template
 		$this->classinfo = $classinfo;
 		$tmp = array();
 
-		if (isset($this->groupinfo) && is_array($this->groupinfo))
+		if (count($this->groupinfo))
 		{
 			if (is_array($groupinfo))
 			{
 				$this->groupinfo = array_merge($this->groupinfo,$groupinfo);
-			};
+			}
 		}
 		else
 		{
 			$this->groupinfo = $groupinfo;
-		};
+		}
 		// new
 		$this->layout = $layout;
 		$this->propdef["layout"] = $layout;
@@ -885,7 +887,7 @@ class cfgutils extends aw_template
 			$proplist = $this->load_class_properties(array(
 				'source' => $args['xml_definition'],
 			));
-			$grplist = (array) $this->groupinfo;
+			$grplist = $this->groupinfo;
 			$layout = (array) $this->layout;
 		}
 

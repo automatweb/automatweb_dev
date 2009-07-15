@@ -1055,7 +1055,7 @@ class planner extends class_base
 
 	////
 	// !Parsib kalendrialiast
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		extract($arr);
 		$this->cal_oid = $alias["target"];

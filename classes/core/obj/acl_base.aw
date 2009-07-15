@@ -148,15 +148,15 @@ class acl_base extends db_connector
 			));
 		}
 		$gid = $g_obj->prop("gid");
-		$this->db_query("DELETE FROM acl WHERE gid = $gid AND oid = $oid");
+		$this->db_query("DELETE FROM acl WHERE gid = {$gid} AND oid = {$oid}");
 
 		if (aw_ini_get("acl.use_new_acl"))
 		{
-			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata"), false, true));
+			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '{$oid}'", "acldata"), false, true));
 			unset($ad[$g_obj->id()]);
 			$ser = aw_serialize($ad, SERIALIZE_NATIVE);
 			$this->quote($ser);
-			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
+			$this->db_query("UPDATE objects SET acldata = '{$ser}' WHERE oid = {$oid}");
 		}
 
 		aw_session_set("__acl_cache", array());
@@ -672,7 +672,7 @@ class acl_base extends db_connector
 				$a = $GLOBALS["cfg"]["acl"]["denied"];
 			}
 
-			$nd[$name] = (int)$aclarr[$name];
+			$nd[$name] = isset($aclarr[$name]) ? (int) $aclarr[$name] : 0;
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
 		eval('$acl='.join(" | ",$qstr).";");

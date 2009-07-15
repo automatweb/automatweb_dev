@@ -6164,7 +6164,7 @@ $types = array(
 		return 0;
 	}
 
-	function do_db_upgrade($t, $f)
+	function do_db_upgrade($t, $f, $q, $err)
 	{
 		if ("aw_account_balances" === $t)
 		{
