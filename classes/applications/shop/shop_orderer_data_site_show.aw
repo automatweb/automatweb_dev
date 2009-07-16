@@ -1,10 +1,13 @@
 <?php
 /*
-@classinfo syslog_type=ST_SHOP_ORDERER_DATA_SITE_SHOW relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=smeedia
+@classinfo syslog_type=ST_SHOP_ORDERER_DATA_SITE_SHOW relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @tableinfo aw_shop_orderer_data_site_show master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_shop_orderer_data_site_show
 @default group=general
+
+@property template type=select
+@caption Template
 
 */
 
@@ -28,6 +31,18 @@ class shop_orderer_data_site_show extends class_base
 		}
 
 		return $retval;
+	}
+
+	function _get_template($arr)
+	{
+		$tm = get_instance("templatemgr");
+		$arr["prop"]["options"] = $tm->template_picker(array(
+			"folder" => $this->site_template_dir
+		));
+		if(!sizeof($prop["options"]))
+		{
+			$prop["caption"] .= t("\n".$this->site_template_dir."");
+		}
 	}
 
 	function set_property($arr = array())
@@ -57,6 +72,22 @@ class shop_orderer_data_site_show extends class_base
 		return $this->parse();
 	}
 
+	/**
+		@attrib name=parse_alias is_public="1" caption="Change" nologin=1
+	**/
+	function parse_alias($arr)
+	{
+		$show_params = array(
+			"id" => $arr["alias"]["target"],
+		);
+		$target = obj($arr["alias"]["target"]);
+		if($target->prop("template"))
+		{
+			$show_params = $target->prop("template");
+		}
+		return $this->show($show_params);
+	}
+
 	function do_db_upgrade($t, $f)
 	{
 		if ($f == "")
@@ -67,10 +98,10 @@ class shop_orderer_data_site_show extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "template":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "VARCHAR(64)"
 				));
 				return true;
 		}

@@ -1,19 +1,21 @@
 <?php
 /*
-@classinfo syslog_type=ST_SHOP_ORDERER_DATA_SITE_SHOW_RETURNS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=smeedia
-@tableinfo aw_shop_orderer_data_site_show_returns master_index=brother_of master_table=objects index=aw_oid
+@classinfo syslog_type=ST_SHOP_ORDERER_DATA_SITE_SHOW_RETURNS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
+@tableinfo aw_shop_orderer_data_site_show master_index=brother_of master_table=objects index=aw_oid
 
-@default table=aw_shop_orderer_data_site_show_returns
+@default table=aw_shop_orderer_data_site_show
 @default group=general
 
+@property template type=select
+@caption Template
 */
 
-class shop_orderer_data_site_show_returns extends class_base
+class shop_orderer_data_site_show_returns extends shop_orderer_data_site_show
 {
 	function shop_orderer_data_site_show_returns()
 	{
 		$this->init(array(
-			"tpldir" => "applications/shop/shop_orderer_data_site_show_returns",
+			"tpldir" => "applications/shop/shop_orderer_data_site_show",
 			"clid" => CL_SHOP_ORDERER_DATA_SITE_SHOW_RETURNS
 		));
 	}
@@ -42,11 +44,6 @@ class shop_orderer_data_site_show_returns extends class_base
 		return $retval;
 	}
 
-	function callback_mod_reforb($arr)
-	{
-		$arr["post_ru"] = post_ru();
-	}
-
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
@@ -55,25 +52,6 @@ class shop_orderer_data_site_show_returns extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
-	}
-
-	function do_db_upgrade($t, $f)
-	{
-		if ($f == "")
-		{
-			$this->db_query("CREATE TABLE aw_shop_orderer_data_site_show_returns(aw_oid int primary key)");
-			return true;
-		}
-
-		switch($f)
-		{
-			case "":
-				$this->db_add_col($t, array(
-					"name" => $f,
-					"type" => ""
-				));
-				return true;
-		}
 	}
 }
 
