@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.17 2009/05/28 09:53:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.18 2009/07/16 17:09:31 instrumental Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 @classinfo  maintainer=hannes
 */
 class minify_js_and_css extends class_base
 {
-	function compress_js($script, $use_javascriptpacker=false)
+	public static function compress_js($script, $use_javascriptpacker=false)
 	{
 		// JavaScriptPacker seems to create lag. opera shows white page for a sec some times
 		// so dont use it until there's less javascript in aw admin
@@ -26,7 +26,7 @@ class minify_js_and_css extends class_base
 	}
 	
 	
-	function remove_js_comments($str)
+	public static function remove_js_comments($str)
 	{
 		$res = '';
 		$maybe_regex = true;
@@ -179,7 +179,7 @@ class minify_js_and_css extends class_base
 	} 
 	
 	
-	function compress_css($script)
+	public static function compress_css($script)
 	{
 		// remove comments
 		$packed = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $script);
@@ -200,7 +200,7 @@ class minify_js_and_css extends class_base
 		@comment
 
 	**/
-	function get_js($arr)
+	public static function get_js($arr)
 	{
 		$s_salt = "this_is_a_salty_string_";
 		ob_start ("ob_gzhandler");
@@ -224,7 +224,7 @@ class minify_js_and_css extends class_base
 		@comment
 
 	**/
-	function get_css($arr)
+	public static function get_css($arr)
 	{
 		$s_salt = "this_is_a_salty_string_";
 		ob_start ("ob_gzhandler");
