@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_SHOP_WAREHOUSE_RETURN relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=smeedia
+@classinfo syslog_type=ST_SHOP_WAREHOUSE_RETURN relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @tableinfo aw_shop_warehouse_return master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_shop_warehouse_return
@@ -14,7 +14,7 @@
 @caption Tellija
 
 @property related_orders type=relpicker multiple=1 reltype=RELTYPE_PURCHASE_ORDER store=connect
-@caption Seotud ostutellimused			
+@caption Seotud ostutellimused
 
 @property date type=date_select field=aw_date
 @caption Kuup&auml;ev
@@ -32,16 +32,16 @@
 @reltype BUYER value=1 clid=CL_CRM_COMPANY
 @caption Ostja
 
-@reltype PURCHASE_ORDER value=3 clid=CL_SHOP_PURCHASE_ORDER
+@reltype PURCHASE_ORDER value=2 clid=CL_SHOP_PURCHASE_ORDER
 @caption Ostutellimus
 
-@reltype CURRENCY value=5 clid=CL_CURRENCY
+@reltype CURRENCY value=3 clid=CL_CURRENCY
 @caption Valuuta
 
-@reltype WAREHOUSE value=6 clid=CL_SHOP_WAREHOUSE
+@reltype WAREHOUSE value=4 clid=CL_SHOP_WAREHOUSE
 @caption Ladu
 
-@reltype ROW value=9 clid=CL_SHOP_ORDER_ROW
+@reltype ROW value=5 clid=CL_SHOP_WAREHOUSE_RETURN_ROW
 @caption Rida
 
 */
