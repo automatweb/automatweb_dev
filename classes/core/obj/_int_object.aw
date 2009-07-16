@@ -51,7 +51,7 @@ class _int_object
 	}
 
 	// DEPRECATED! use self::__construct() instead
-	function _int_object($objdata) { $this->__construct($objdata); }
+	// function _int_object($objdata) { $this->__construct($objdata); }
 
 	function save($exclusive = false, $previous_state = null)
 	{

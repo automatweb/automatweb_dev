@@ -16,7 +16,7 @@ class warehouse_import_obj extends _int_object
 		// controller for short product codes ...
 		if($this->controller_id = $this->prop("code_ctrl"))
 		{
-			$this->controller_inst = get_instance(CL_CFGCONTROLLER);	
+			$this->controller_inst = get_instance(CL_CFGCONTROLLER);
 		}
 	//	$this->prod_fld = $this->get_products_folder;
 		$this->db_obj = $GLOBALS["object_loader"]->cache;
@@ -33,7 +33,7 @@ class warehouse_import_obj extends _int_object
 
 	private function get_products_folder()
 	{
-		// I actually doubt that it is necessary to have products folder here 
+		// I actually doubt that it is necessary to have products folder here
 		// It belongs to this soon-to-come products import to warehouses class
 		// where i can configure how and where the prods will be imported
 		$wh = $this->prop("warehouse");
@@ -160,7 +160,7 @@ class warehouse_import_obj extends _int_object
 		$ol = new object_list(array(
 			'class_id' => CL_CRM_CATEGORY
 		));
-		
+
 		$result = array();
 		foreach ($ol->arr() as $id => $o)
 		{
@@ -284,7 +284,7 @@ class warehouse_import_obj extends _int_object
 					$client_cat_oid = $client_cat->save();
 
 					$client_categories[$client_cat_oid] = (string)$client->name;
-					
+
 					echo "Add new client category ".$client->name."<br />\n";
 				}
 
@@ -326,7 +326,7 @@ class warehouse_import_obj extends _int_object
 				die("stopped for flag");
 			}
 		}
-		
+
 		$this->_end_import("pricelists");
 	}
 
@@ -353,7 +353,7 @@ class warehouse_import_obj extends _int_object
 			$o->delete(true);
 			} catch (Exception $e) {}
 		}
-	
+
 	}
 
 	public function start_prod_import($callback)
@@ -387,7 +387,7 @@ class warehouse_import_obj extends _int_object
 	{
 		$ps=shell_exec("ps ".$ps_opt."p ".$pid);
 		$ps=explode("\n", $ps);
-  
+
 		if(count($ps) < 2)
 		{
 			return false;
@@ -403,7 +403,7 @@ class warehouse_import_obj extends _int_object
 			$pidinfo[$val] = $ps[1][$key];
 			unset($ps[1][$key]);
 		}
-  
+
 		if(is_array($ps[1]))
 		{
 			$pidinfo[$val].=" ".implode(" ", $ps[1]);
@@ -445,7 +445,7 @@ class warehouse_import_obj extends _int_object
 	}
 
 	function import_status($type, $wh_id = "")
-	{		
+	{
 		$tf = self::_status_fn($type, $wh_id);
 		if (file_exists($tf))
 		{
@@ -466,7 +466,7 @@ class warehouse_import_obj extends _int_object
 	}
 
 	function import_count($type, $wh_id = "")
-	{		
+	{
 		$tf = self::_status_fn($type, $wh_id);
 		if (file_exists($tf))
 		{
@@ -574,8 +574,8 @@ class warehouse_import_obj extends _int_object
 	function write_import_end_log_entry($type, $reason, $success = true, $wh_id = null)
 	{
 		// need to reload meta from database
-		$this->_int_object($GLOBALS["object_loader"]->ds->get_objdata($this->id()));
-		
+		parent::__construct($GLOBALS["object_loader"]->ds->get_objdata($this->id()));
+
 		$typedata = $this->meta("import_log_".$type."_".$wh_id);
 		if (!is_array($typedata))
 		{
@@ -620,15 +620,15 @@ class warehouse_import_obj extends _int_object
 
 		$i = get_instance($this->prop("data_source"));
 		$xml = $i->get_prices_xml();
-		
+
 		$this->_write_xml_file("prices", $xml);
 
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->product);
-		$this->_update_status("prices", warehouse_import_if::STATE_PROCESSING, null, 0, $total); 
+		$this->_update_status("prices", warehouse_import_if::STATE_PROCESSING, null, 0, $total);
 
 		// process
-		$this->_do_prices_import_process($sx);	
+		$this->_do_prices_import_process($sx);
 
 		// finish
 		$this->_end_import("prices");
@@ -646,7 +646,7 @@ class warehouse_import_obj extends _int_object
 				"special_price" => (string)$pdata->special_price
 			);
 		}
-		
+
 		$products_data = $this->get_products_lut();
 
 		$existing_prices_data = array();
@@ -688,7 +688,7 @@ class warehouse_import_obj extends _int_object
 					'special_price' => $prices['special_price'],
 				));
 				echo "Update price ".$prices['price']." to product ".$code." (".$prod_oid.")<br />\n";
-			
+
 			}
 
 			if ((++$counter % 100) == 1)
@@ -699,7 +699,7 @@ class warehouse_import_obj extends _int_object
 					$this->_end_import_from_flag("prices");
 					die("stopped for flag");
 				}
-			} 
+			}
 		}
 	}
 
@@ -718,8 +718,8 @@ class warehouse_import_obj extends _int_object
 		$obj_base['acldata'] = '';
 
 		$sql = "
-			INSERT INTO 
-				objects 
+			INSERT INTO
+				objects
 			VALUES (".implode(',', map('"%s"', $obj_base)).");
 		";
 
@@ -731,13 +731,13 @@ class warehouse_import_obj extends _int_object
 		$this->db_obj->db_query("UPDATE objects set brother_of = ".$oid." WHERE oid = ".$oid);
 
 		$sql = "
-			INSERT INTO 
+			INSERT INTO
 				aw_shop_item_prices
 			SET
 				aw_oid = ".$oid.",
 				price = ".(int)$data['price'].",
 				product = ".$data['product_oid']."
-				
+
 		";
 
 		$this->db_obj->db_query($sql);
@@ -758,7 +758,7 @@ class warehouse_import_obj extends _int_object
 		$obj_base['name'] = addslashes($name);
 
 		$sql = "
-			UPDATE 
+			UPDATE
 				objects
 			SET
 				name = '".addslashes($name)."',
@@ -799,7 +799,7 @@ class warehouse_import_obj extends _int_object
 			select
 				aw_oid,
 				code
-			from 
+			from
 				aw_shop_products
 		";
 		$this->db_obj->db_query($sql);
@@ -817,15 +817,15 @@ class warehouse_import_obj extends _int_object
 		$this->_update_status("amounts", warehouse_import_if::STATE_FETCHING, $wh_id);
 		$i = get_instance($this->prop("data_source"));
 		$xml = $i->get_amounts_xml($this->warehouse_mapper("amounts", $wh_id));
-		
+
 		$this->_write_xml_file("amounts", $xml);
 
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->product);
-		$this->_update_status("amounts", warehouse_import_if::STATE_PROCESSING, $wh_id, 0, $total); 
+		$this->_update_status("amounts", warehouse_import_if::STATE_PROCESSING, $wh_id, 0, $total);
 		// process
-	
-		$this->_do_amounts_import_process($wh_id, $sx);	
+
+		$this->_do_amounts_import_process($wh_id, $sx);
 
 		// finish
 		$this->_end_import("amounts", $wh_id);
@@ -873,7 +873,7 @@ flush();
 		{
 			$existing_amounts_data[$r['product']] = $r;
 		}
-		
+
 		$wh_obj = obj($wh_id);
 		$total = count($sx->product);
 		foreach($sx->product as $pdata)
@@ -886,7 +886,7 @@ flush();
 
 
 			if (empty($existing_amounts_data[$product_oid]))
-			{		
+			{
 				// we don't have the amount object for this product in current warehouse
 				$this->add_amount_sql(array(
 					'product_code' => (string)$pdata->product_code,
@@ -1047,7 +1047,7 @@ flush();
 
 		// import new
 		// update existing
-		// delete old	
+		// delete old
 	}
 
 	public function process_prods_chunk($file)
@@ -1248,7 +1248,7 @@ flush();
 	}
 
 	// I'll assume here, that the product object doesn't exist in aw
-	// So I need to add a line in objects table, aw_shop_products table 
+	// So I need to add a line in objects table, aw_shop_products table
 	/*
 		product_name
 		product_code
@@ -1267,8 +1267,8 @@ flush();
 		$obj_base['name'] = addslashes($data['product_name']);
 		$obj_base['comment'] = addslashes($data['product_code']);
 		$sql = "
-			INSERT INTO 
-				objects 
+			INSERT INTO
+				objects
 			VALUES (".implode(',', map('"%s"', $obj_base)).");
 		";
 
@@ -1280,8 +1280,8 @@ flush();
 		$this->db_obj->db_query("UPDATE objects set brother_of = ".$oid." WHERE oid = ".$oid);
 
 		$sql = "
-			INSERT INTO 
-				aw_shop_products 
+			INSERT INTO
+				aw_shop_products
 			SET
 				aw_oid = ".$oid.",
 				code = '".addslashes($data['product_code'])."',
@@ -1306,7 +1306,7 @@ flush();
 	private function update_product_sql($oid, $data)
 	{
 		$sql = "
-			UPDATE 
+			UPDATE
 				objects
 			SET
 				name = '".addslashes($data['product_name'])."',
