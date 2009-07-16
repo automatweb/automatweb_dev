@@ -3673,7 +3673,7 @@ class crm_bill extends class_base
 		$stats  = $this->stats = get_instance("applications/crm/crm_company_stats_impl");
 		$b = obj($arr["id"]);
 		$this->bill = obj($arr["id"]);
-		$bill_rows = $this->get_bill_rows($b);
+		$bill_rows = $b->get_bill_rows_data();
 		//lkkab mned read kokku ja liidab summa , ning koguse.vibolla saaks sama funktsiooni teise sarnase asemel ka kasutada, kui seda varem teha kki
 //		$bill_rows = $this->collocate($bill_rows);
 		
@@ -3919,14 +3919,15 @@ class crm_bill extends class_base
 			{
 				continue;
 			}
+			$tax_rate = (double)$row["tax"] / 100.0;
 			$cur_tax = 0;
 			$cur_sum = 0;
 			
-			if ($row["tax"])
+			if ($tax_rate)
 			{
 				// tax needs to be added
 				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * $row["tax"]);
+				$cur_tax = ($row["sum"] * $tax_rate);
 				$cur_pr = $this->num($row["price"]);
 			}	
 			else
@@ -3936,7 +3937,7 @@ class crm_bill extends class_base
 				$cur_tax = 0;
 				$cur_pr = $this->num($row["price"]);
 			}
-	
+
 			if($arr["between"] && !($key+1 >= $arr["between"][0] && $key+1 <= $arr["between"][1]));
 			else
 			{
@@ -3950,6 +3951,7 @@ class crm_bill extends class_base
 					"date" => $row["date"],
 					"row_orderer" => $row["orderer"],
 					"comment" => $row["comment"],
+					"row_tax" => $cur_tax,
 				));
 				$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
 			}
@@ -3968,14 +3970,15 @@ class crm_bill extends class_base
 			{
 				continue;
 			}
+			$tax_rate = (double)$row["tax"] / 100.0;
 			$cur_tax = 0;
 			$cur_sum = 0;
 			
-			if ($row["tax"])
+			if ($tax_rate)
 			{
 				// tax needs to be added
 				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * $row["tax"]);
+				$cur_tax = ($row["sum"] * $tax_rate);
 				$cur_pr = $this->num($row["price"]);
 
 			}	

@@ -1209,7 +1209,7 @@ class crm_bill_obj extends _int_object
 		{
 			return 0;
 		}
-		
+		enter_function("bill::get_bill_sum");
 		$rs = "";
 		$sum_wo_tax = 0;
 		$tax = 0;
@@ -1282,7 +1282,7 @@ class crm_bill_obj extends _int_object
 			$tot_amt += $row["amt"];
 			$tot_cur_sum += $cur_sum;
 		}
-
+		exit_function("bill::get_bill_sum");
 		switch($type)
 		{
 			case BILL_SUM_TAX:
@@ -2155,6 +2155,7 @@ class crm_bill_obj extends _int_object
 			"oid" => $this->id(),
 			"CL_CRM_BILL.RELTYPE_ROW.writeoff" => new obj_predicate_not(1),
 		));
+		return 0;//niikauaks kuni aru saab miks see filter alati 1 annab
 		return $ol->count();
 	}
 
