@@ -3388,6 +3388,7 @@ class crm_bill extends class_base
 					"amt" => $stats->hours_format($grp_row["tot_amt"]),
 					"price" => number_format(($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),2,".", " "),
 					"sum" => number_format($grp_row["tot_cur_sum"], 2, ".", " "),
+					"row_tax" => number_format($grp_row["tax"], 2, ".", " "),
 					"desc" => $desc,
 					"date" => "",
 					"row_orderer" => $grp_row["orderer"],
