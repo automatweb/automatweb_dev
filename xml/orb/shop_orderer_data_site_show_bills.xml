@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="shop_orderer_data_site_show_bills" folder="applications/shop" extends="class_base">
+	</class>
+</orb>
+		
