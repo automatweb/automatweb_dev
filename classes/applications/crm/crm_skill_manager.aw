@@ -51,6 +51,7 @@ class crm_skill_manager extends class_base
 			"parent" => $arr["obj_inst"]->id(),
 			"class_id" => CL_CRM_SKILL,
 			"lang_id" => array(),
+			"site_id" => array(),
 		));
 		$olist = $meta_tree->to_list();
 		$rw_tree = array();
@@ -201,6 +202,7 @@ class crm_skill_manager extends class_base
 			"parent" => $root_obj->id(),
 			"class_id" => CL_CRM_SKILL,
 			"lang_id" => array(),
+			"site_id" => array(),
 			"sort_by" => "objects.jrk",
 		));
 		
@@ -479,6 +481,7 @@ class crm_skill_manager extends class_base
 			"parent" => $o->id(),
 			"class_id" => CL_CRM_SKILL,
 			"lang_id" => array(),
+			"site_id" => array(),
 		));
 		$olist = $meta_tree->to_list();
 		$rw_tree = array();

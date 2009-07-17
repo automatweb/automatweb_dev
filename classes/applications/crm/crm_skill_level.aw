@@ -127,6 +127,7 @@ class crm_skill_level extends class_base
 							"class_id" => CL_META,
 							"parent" => $skill_obj->prop("lvl_meta"),
 							"lang_id" => array(),
+							"site_id" => array(),
 							"status" => object::STAT_ACTIVE,
 							"sort_by" => "jrk",
 						));

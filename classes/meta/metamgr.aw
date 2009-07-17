@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.20 2009/01/16 11:37:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.21 2009/07/17 10:09:18 instrumental Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
@@ -48,6 +48,7 @@ class metamgr extends class_base
 			"parent" => $arr["obj_inst"]->id(),
 			"class_id" => CL_META,
 			"lang_id" => array(),
+			"site_id" => array(),
 		));
 		$olist = $meta_tree->to_list();
 		$rw_tree = array();
@@ -207,6 +208,7 @@ class metamgr extends class_base
 			"parent" => $root_obj->id(),
 			"class_id" => CL_META,
 			"lang_id" => array(),
+			"site_id" => array(),
 			"sort_by" => "objects.jrk",
 		));
 
