@@ -428,6 +428,7 @@ class admin_if extends class_base
 			),
 			"request" => $arr
 		));
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($t->finalize_tree());
 	}
 

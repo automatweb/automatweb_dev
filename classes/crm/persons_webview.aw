@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.56 2009/06/29 12:58:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.57 2009/07/17 09:36:43 instrumental Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1132,7 +1132,7 @@ class persons_webview extends class_base
 
 		//pilt                $photo="";
 		$image_inst = get_instance(CL_IMAGE);
-		if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
+		if(false && is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
 		{
 			$photo = $image_inst->make_img_tag_wl($worker->prop("picture"), NULL, NULL, array(), array("show_title" => false));
 			$vars["photo_url"] = $image_inst->get_url_by_id($worker->prop("picture"));

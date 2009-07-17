@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.48 2009/05/28 09:53:12 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.49 2009/07/17 09:36:46 instrumental Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -613,7 +613,11 @@ class image extends class_base
 					}
 					if (strlen($subtxt))
 					{
-						$replacement .= "<BR><span class=\"imagecomment\">".$subtxt."</span>";
+						$replacement .= "<br /><span class=\"imagecomment\">".$subtxt."</span>";
+						if ($vars["align"] == "")
+						{
+							$replacement .= "<br />";
+						}
 					};
 					if ($vars["align"] != "")
 					{

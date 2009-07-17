@@ -2553,6 +2553,7 @@ class document extends aw_template
 
 		@param section required
 		@param e optional type=int
+		@param print optional type=int
 
 		@returns
 
