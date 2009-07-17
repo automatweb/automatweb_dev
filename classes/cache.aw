@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.63 2009/07/15 12:01:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.64 2009/07/17 08:44:20 instrumental Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -579,6 +579,12 @@ class cache extends core
 		{
 			return;
 		}
+
+		if ($pt == "html" && aw_ini_get("cache.manual_html_clear"))
+		{
+			return;
+		}
+
 		// now, this is where the magic happens.
 		// basically, we rename the whole folder and clear it's contents later.
 		$fq = $this->cfg["page_cache"]."/".$pt;
