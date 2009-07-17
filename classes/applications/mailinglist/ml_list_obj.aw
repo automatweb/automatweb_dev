@@ -59,7 +59,7 @@ class ml_list_obj extends _int_object
 		$sources_data = $this->get_sources_data();
 		foreach($src as $menu)
 		{
-			if(!$this->can("view" , $menu))
+			if(!$GLOBALS["object_loader"]->cache->can("view" , $menu))
 			{
 				continue;
 			}
@@ -215,7 +215,7 @@ class ml_list_obj extends _int_object
 
 		foreach($menus as $fold)
 		{
-			if(!is_oid($fold) || !$this->can("add", $fold))
+			if(!is_oid($fold) || !$GLOBALS["object_loader"]->cache->can("add", $fold))
 			{
 				continue;
 			}
@@ -336,7 +336,7 @@ class ml_list_obj extends _int_object
 
 		foreach($menus as $fold)
 		{
-			if(!is_oid($fold) || !$this->can("add", $fold))
+			if(!is_oid($fold) || !$GLOBALS["object_loader"]->cache->can("add", $fold))
 			{
 				continue;
 			}
@@ -409,7 +409,7 @@ class ml_list_obj extends _int_object
 			foreach($regs[0] as $reg)
 			{
 				$reg = substr($reg , 1);
-				if($this->can("view" , $reg))
+				if($GLOBALS["object_loader"]->cache->can("view" , $reg))
 				{
 					$link = obj($reg);
 					if($link->class_id() == CL_EXTLINK)
