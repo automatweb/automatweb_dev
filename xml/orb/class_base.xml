@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="class_base" folder="www/dev/kaarel/automatweb_dev/classes" extends="aw_template">
+	<class name="class_base" folder="www/automatweb_cvs/classes" extends="aw_template">
 		<action name="new" all_args="1">
 			<function name="new_change">
 				<arguments>
@@ -70,12 +70,12 @@
 		<action name="parse_properties">
 			<function name="parse_properties">
 				<arguments>
-					< name="properties" />
-					< name="classinfo" />
-					< name="obj_inst" />
-					< name="target_obj" />
-					< name="name_prefix" />
-					< name="object_type_id" />
+					<optional name="properties" />
+					<optional name="classinfo" />
+					<optional name="obj_inst" />
+					<optional name="target_obj" />
+					<optional name="name_prefix" />
+					<optional name="object_type_id" />
 				</arguments>
 			</function>
 		</action>
