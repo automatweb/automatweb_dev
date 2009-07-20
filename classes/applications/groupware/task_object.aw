@@ -93,6 +93,10 @@ class task_object extends _int_object
 				{
 					$pn = "num_hrs_real";
 				}
+				elseif ($this->class_id() == CL_CRM_PRESENTATION)
+				{
+					return;
+				}
 			case "num_hrs_real":
 				if($GLOBALS["do_not_change_task_real_time"])
 				{
@@ -109,6 +113,10 @@ class task_object extends _int_object
 				if($GLOBALS["do_not_change_task_cust_time"])
 				{
 					return "";
+				}
+				elseif ($this->class_id() == CL_CRM_PRESENTATION)
+				{
+					return;
 				}
 				$pv = str_replace("," , "." , $pv);
 				break;

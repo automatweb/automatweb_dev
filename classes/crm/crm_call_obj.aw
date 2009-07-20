@@ -22,6 +22,22 @@ class crm_call_obj extends task_object
 		}
 	}
 
+	public function awobj_get_presentation()
+	{
+		$r = $this->prop("presentation");
+		if (!is_oid($r))
+		{
+			// a fix to synchronize result_presentation connection and presentation property. saving in crm_sales_obj::process_call_result() leaves prop empty but connects
+			$presentation = $this->get_first_obj_by_reltype("RELTYPE_RESULT_PRESENTATION");
+			if (is_object($presentation))
+			{
+				$r = $presentation->id();
+				$this->set_prop("presentation", $r);
+			}
+		}
+		return $r;
+	}
+
 	/** Returns list of call result options
 	@attrib api=1 params=pos
 	@param result type=int

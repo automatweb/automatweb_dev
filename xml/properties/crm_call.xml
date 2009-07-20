@@ -138,6 +138,26 @@
             <caption>Tegelik kestus (h)</caption>
       </property>
       <property>
+            <name>sales_assigned_salesman</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>top_2way_right</parent>
+            <field>sales_assigned_salesman</field>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
+      </property>
+      <property>
+            <name>sales_lead_source</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>top_2way_right</parent>
+            <field>sales_lead_source</field>
+            <caption>Soovitaja/allikas</caption>
+      </property>
+      <property>
             <name>sales_schedule_job</name>
             <table>planner</table>
             <group>general</group>

@@ -47,9 +47,6 @@
 			@property new_call_date type=datetime_select table=objects field=meta method=serialize parent=top_2way_left
 			@caption Uue k&otilde;ne aeg
 
-			// @property presentation_date type=datetime_select table=objects field=meta method=serialize parent=top_2way_left
-			// @caption Esitluse aeg
-
 			@property add_clauses type=chooser store=no parent=top_2way_left multiple=1
 			@caption Lisatingimused
 
@@ -379,18 +376,7 @@ class crm_call extends task
 		$arr["prop"]["value"] = number_format($arr["prop"]["value"]/60, 2, ".", " ");
 		return PROP_OK;
 	}
-/*
-	function _get_presentation_date(&$arr)
-	{
-		$arr["prop"]["year_from"] = date("Y");
-		$application = automatweb::$request->get_application();
-		if ($application->is_a(CL_CRM_SALES) and $arr["prop"]["value"] < 2)
-		{
-			$arr["prop"]["value"] = time();
-		}
-		return PROP_OK;
-	}
-*/
+
 	function _get_result(&$arr)
 	{
 		$arr["prop"]["options"] = array("" => "") + $arr["obj_inst"]->result_names();
@@ -846,6 +832,13 @@ class crm_call extends task
 		return PROP_IGNORE;
 	}
 
+	function _get_phone(&$arr)
+	{
+		$phone = obj($arr["prop"]["value"]);
+		$arr["prop"]["value"] = $phone->name();
+		return PROP_OK;
+	}
+
 	function _set_result(&$arr)
 	{
 		if ("end" === $arr["request"]["action"] and empty($arr["prop"]["value"]))
@@ -855,22 +848,6 @@ class crm_call extends task
 		}
 		return PROP_OK;
 	}
-/*
-	function _set_presentation_date(&$arr)
-	{
-		$v = date_edit::get_timestamp($arr["prop"]["value"]);
-		$application = automatweb::$request->get_application();
-		if ($application->is_a(CL_CRM_SALES))
-		{
-			if (crm_call_obj::RESULT_PRESENTATION == $arr["request"]["result"] and $v <= time())
-			{
-				$arr["prop"]["error"] = t("Presentatsiooni aeg peab olema m&auml;&auml;ratud");
-				return PROP_FATAL_ERROR;
-			}
-		}
-		return PROP_OK;
-	}
-*/
 
 /*
 	function callback_post_save($arr)
@@ -1210,22 +1187,19 @@ function crmCallProcessResult(resultElem)
 	{
 		if (resultElem.value == {$result_call})
 		{
-			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "default");
-			// $("select[name='presentation_date[day]']").parent().parent().parent().parent().css("display", "none");
+			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "");
 		}
 		else if (resultElem.value == {$result_presentation})
 		{
-			if (!$("#presentation").attr("value"))
+			if ($("#presentation").attr("value") == 0)
 			{
 				$("a[href='javascript:submit_changeform('end');']").parent().css("display", "none");
 			}
 			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "none");
-			// $("select[name='presentation_date[day]']").parent().parent().parent().parent().css("display", "default");
 		}
 		else if (resultElem.value == {$result_refused})
 		{
 			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "none");
-			// $("select[name='presentation_date[day]']").parent().parent().parent().parent().css("display", "none");
 		}
 	}
 }

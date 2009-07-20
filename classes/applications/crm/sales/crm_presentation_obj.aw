@@ -7,6 +7,46 @@ class crm_presentation_obj extends task_object
 	const RESULT_SALE = 3;
 	const RESULT_MISS = 4;
 
+	private static $result_names = array();
+
+	/** Returns list of presentation result options
+	@attrib api=1 params=pos
+	@param result type=int
+		Result constant value to get name for, one of crm_presentation_obj::RESULT_*
+	@returns array
+		Format option value => human readable name, if result parameter set, array with one element returned and empty array when that result not found.
+	**/
+	public static function result_names($result = null)
+	{
+		if (empty(self::$result_names))
+		{
+			self::$result_names = array(
+				self::RESULT_CALL => t("Uus k&otilde;ne"),
+				self::RESULT_PRESENTATION => t("Esitlus"),
+				self::RESULT_SALE => t("Toote m&uuml;&uuml;k"),
+				self::RESULT_MISS => t("J&auml;i &auml;ra")
+			);
+		}
+
+		if (isset($result))
+		{
+			if (isset(self::$result_names[$result]))
+			{
+				$result_names = array($result => self::$result_names[$result]);
+			}
+			else
+			{
+				$result_names = array();
+			}
+		}
+		else
+		{
+			$result_names = self::$result_names;
+		}
+
+		return $result_names;
+	}
+
 	public function awobj_set_start($value)
 	{
 		if ($this->prop("real_start") < 2 and $value < time())

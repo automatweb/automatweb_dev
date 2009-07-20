@@ -180,10 +180,6 @@ class crm_presentation extends task
 			$arr["prop"]["error"] = t("Kui esitlus on tehtud, peab sisestama ka tegeliku algusaja");
 			$return = PROP_FATAL_ERROR;
 		}
-		else
-		{
-			$arr["prop"]["value"] = ceil($arr["prop"]["value"]*60);
-		}
 		return $return;
 	}
 
@@ -210,6 +206,13 @@ class crm_presentation extends task
 			$return = PROP_FATAL_ERROR;
 		}
 
+		return $return;
+	}
+
+	function _get_result(&$arr)
+	{
+		$return = PROP_OK;
+		$arr["prop"]["options"] = array("" => "") + $arr["obj_inst"]->result_names();
 		return $return;
 	}
 

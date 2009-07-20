@@ -277,8 +277,8 @@ class crm_sales_obj extends _int_object implements application_interface
 				$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_PRESENTATION);
 				$customer_relation->save();
 				$call->set_prop("presentation", $presentation->id());
-				$call->connect(array("to" => $presentation, "reltype" => "RELTYPE_RESULT_PRESENTATION"));
 				$call->save();
+				$call->connect(array("to" => $presentation, "reltype" => "RELTYPE_RESULT_PRESENTATION"));
 			}
 		}
 		else
