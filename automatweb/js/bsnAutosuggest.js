@@ -77,14 +77,15 @@ _bsn.AutoSuggest = function (fldID, param)
 	// defaults
 	//
 	if (!this.oP.minchars)									this.oP.minchars = 1;
-	if (!this.oP.method)									this.oP.meth = "get";
+	if (!this.oP.method)										this.oP.meth = "get";
 	if (!this.oP.varname)									this.oP.varname = "input";
 	if (!this.oP.className)									this.oP.className = "autosuggest";
-	if (!this.oP.timeout)									this.oP.timeout = 2500;
+	if (!this.oP.timeout)										this.oP.timeout = 2500;
 	if (!this.oP.delay)										this.oP.delay = 500;
-	if (!this.oP.offsety)									this.oP.offsety = -5;
-	if (!this.oP.shownoresults)								this.oP.shownoresults = false;
+	if (!this.oP.offsety)										this.oP.offsety = -5;
+	if (!this.oP.shownoresults)							this.oP.shownoresults = false;
 	if (!this.oP.noresults)									this.oP.noresults = "No results!";
+	if (!this.oP.width)										this.oP.width = 0;
 	if (!this.oP.maxheight && this.oP.maxheight !== 0)		this.oP.maxheight = 250;
 	if (!this.oP.cache && this.oP.cache != false)			this.oP.cache = true;
 
@@ -430,7 +431,7 @@ _bsn.AutoSuggest.prototype.createList = function(arr)
 
 	div.style.left 		= pos.x + "px";
 	div.style.top 		= ( pos.y + this.fld.offsetHeight + this.oP.offsety ) + "px";
-	div.style.width 	= this.fld.offsetWidth + "px";
+	div.style.width 	= ((this.oP.width > 0) ? this.oP.width : this.fld.offsetWidth) + "px";
 
 
 
@@ -577,7 +578,7 @@ _bsn.AutoSuggest.prototype.resetTimeout = function()
 {
 	clearTimeout(this.toID);
 	var pointer = this;
-	this.toID = setTimeout(function () { pointer.clearSuggestions() }, 1000);
+	this.toID = setTimeout(function () { pointer.clearSuggestions() }, this.oP.timeout);
 }
 
 
