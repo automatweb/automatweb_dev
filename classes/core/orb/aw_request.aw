@@ -18,6 +18,7 @@ class aw_request
 		"realestate_manager",
 		"mrp_workspace",
 		"admin_if",
+		"aw_object_search",
 		"bug_tracker",
 		"events_manager"
 	);
@@ -229,7 +230,7 @@ class aw_request
 				}
 				else
 				{
-					$application = null;
+					$application = new object(); //!!! mis on default?
 				}
 			}
 			elseif (is_oid(aw_global_get("aw_request_application_object_oid")))
