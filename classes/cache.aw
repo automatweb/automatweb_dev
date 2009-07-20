@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.64 2009/07/17 08:44:20 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.65 2009/07/20 11:48:34 voldemar Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -784,6 +784,7 @@ class cache extends core
 
 		// now get mtime for both files, source and cache
 		$source_mtime = filemtime($fqfn);
+		$cache_mtime = 0;
 		$src = "";
 		if (file_exists($cachefile))
 		{

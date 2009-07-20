@@ -294,7 +294,9 @@ class mrp_workspace_obj extends _int_object
 				$ws->set_subclass(self::MGR_TYPE_HR);
 				$ws->set_name(t("Systeemi inimressursside halduskeskkond"));
 				$ws->connect(array("to" => $company, "reltype" => "RELTYPE_MRP_OWNER"));
+				aw_disable_acl();
 				$ws->save();
+				aw_restore_acl();
 
 				$projects_folder = obj(null, array(), CL_MENU);
 				$projects_folder->set_parent($ws->id());
