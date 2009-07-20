@@ -8,8 +8,8 @@
 @groupinfo calls caption="K&otilde;ned" submit_method=get
 @groupinfo presentations caption="Esitlused" submit=no
 @groupinfo data_entry caption="Sisestamine"
-@groupinfo data_entry_contact_co caption="Kontakt (organisatsioon)" parent=data_entry
 @groupinfo data_entry_contact_person caption="Kontakt (isik)" parent=data_entry
+@groupinfo data_entry_contact_co caption="Kontakt (organisatsioon)" parent=data_entry
 @groupinfo data_entry_import caption="Import" parent=data_entry
 
 @default table=objects
@@ -21,19 +21,30 @@
 
 @default group=settings
 	@layout splitbox1 type=hbox width=50%:50% closeable=1 no_caption=1
-	@layout splitbox2 type=hbox width=50%:50% closeable=1 area_caption=Kasutajaliidese&nbsp;vaadete&nbsp;konfiguratsioonid&nbsp;rollide&nbsp;kaupa
-	@layout folders_box type=vbox parent=splitbox1 closeable=1 area_caption=Kaustad
+	@layout splitbox2 type=vbox closeable=1 area_caption=Kasutajaliidese&nbsp;vaadete&nbsp;konfiguratsioonid&nbsp;rollide&nbsp;kaupa
+	@layout splitbox21 type=hbox width=50%:50% parent=splitbox2
+	@layout splitbox22 type=hbox width=50%:50% parent=splitbox2
+	@layout folders_box type=vbox parent=splitbox1 closeable=1 area_caption=&Uuml;ldseaded
 	@layout roles_box type=vbox parent=splitbox1 closeable=1 area_caption=Rollid
-	@layout main_app_cfg_box type=vbox parent=splitbox2 closeable=1 area_caption="M&uuml;i&uuml;git&ouml;&ouml;laud"
-	@layout call_cfg_box type=vbox parent=splitbox2 closeable=1 area_caption="K&otilde;ne"
+	@layout main_app_cfg_box type=vbox parent=splitbox21 area_caption="M&uuml;i&uuml;git&ouml;&ouml;laud"
+	@layout call_cfg_box type=vbox parent=splitbox21 area_caption="K&otilde;ne"
+	@layout presentation_cfg_box type=vbox parent=splitbox22 area_caption="Esitlus"
 
 	@property calls_folder type=relpicker reltype=RELTYPE_FOLDER clid=CL_MENU parent=folders_box
 	@comment Kaust kuhu salvestatakse ning kust loetakse selle m&uuml;&uuml;gikeskkonna k&otilde;neobjektid
 	@caption K&otilde;nede kaust
 
 	@property presentations_folder type=relpicker reltype=RELTYPE_FOLDER clid=CL_MENU parent=folders_box
-	@comment Kaust kuhu salvestatakse ning kust loetakse selle m&uuml;&uuml;gikeskkonna presentatsioonid
-	@caption Presentatsioonide kaust
+	@comment Kaust kuhu salvestatakse ning kust loetakse selle m&uuml;&uuml;gikeskkonna esitlused
+	@caption Esitluste kaust
+
+	@property avg_call_duration_est type=textbox default=300 datatype=int parent=folders_box
+	@comment Hinnanguline keskmine m&uuml;&uuml;gik&otilde;ne kestus (s)
+	@caption K&otilde;nekestuse hinnang
+
+	@property autocomplete_options_limit type=textbox default=20 datatype=int parent=folders_box
+	@comment Mitu valikut pakkuda autocomplete otsingutes
+	@caption Autocomplete valikuid
 
 	// roles
 	@property role_profession_data_entry_clerk type=relpicker reltype=RELTYPE_ROLE_PROFESSION clid=CL_CRM_PROFESSION parent=roles_box
@@ -97,6 +108,26 @@
 	@caption Juht
 
 
+	//// presentation cfgforms
+	@property cfgf_presentation_generic type=relpicker reltype=RELTYPE_CFGFORM parent=presentation_cfg_box
+	@caption K&otilde;ik kasutajad
+
+	@property cfgf_presentation_data_entry_clerk type=relpicker reltype=RELTYPE_CFGFORM parent=presentation_cfg_box
+	@caption Andmesisestaja
+
+	@property cfgf_presentation_telemarketing_salesman type=relpicker reltype=RELTYPE_CFGFORM parent=presentation_cfg_box
+	@caption Telemarketingit&ouml;&ouml;taja
+
+	@property cfgf_presentation_telemarketing_manager type=relpicker reltype=RELTYPE_CFGFORM parent=presentation_cfg_box
+	@caption Telemarketingi juht
+
+	@property cfgf_presentation_salesman type=relpicker reltype=RELTYPE_CFGFORM parent=presentation_cfg_box
+	@caption M&uuml;&uuml;giesindaja
+
+	@property cfgf_presentation_manager type=relpicker reltype=RELTYPE_CFGFORM parent=presentation_cfg_box
+	@caption Juht
+
+
 
 @default group=calls
 	@layout calls_vsplitbox type=hbox width=25%:75%
@@ -110,16 +141,16 @@
 		@property cs_name type=textbox view_element=1 parent=calls_search_box store=no size=33
 		@caption Nimi
 
-		@property cs_salesman type=textbox view_element=1 parent=calls_search_box store=no size=33
-		@caption M&uuml;&uuml;gi-<br/>esindaja
-
 		@property cs_address type=textbox view_element=1 parent=calls_search_box store=no size=33
 		@caption Aadress
 
 		@property cs_phone type=textbox view_element=1 parent=calls_search_box store=no size=33
 		@caption Telefon
 
-		@property cs_status type=textbox view_element=1 parent=calls_search_box store=no size=33
+		@property cs_salesman type=select view_element=1 parent=calls_search_box store=no
+		@caption M&uuml;&uuml;gi-<br/>esindaja
+
+		@property cs_status type=select view_element=1 parent=calls_search_box store=no
 		@caption Staatus
 
 		@property cs_submit type=submit value=Otsi view_element=1 parent=calls_search_box store=no
@@ -130,12 +161,14 @@
 	@property presentations_cal type=calendar store=no no_caption=1
 
 
-@layout de_form_box type=vbox group=data_entry_contact_co,data_entry_contact_person
+@layout de_form_box type=vbox group=data_entry_contact_co,data_entry_contact_person area_caption=Uus&nbsp;kontakt
 @layout de_table_box type=vbox group=data_entry_contact_co,data_entry_contact_person
 @layout contact_entry_form type=vbox group=data_entry_contact_co,data_entry_contact_person parent=de_form_box
 
 
 @default group=data_entry
+	@property contact_entry_toolbar type=toolbar store=no group=data_entry_contact_co,data_entry_contact_person no_caption=1
+
 @default group=data_entry_contact_co
 	@property contact_entry_co type=releditor reltype=RELTYPE_CONTACT_CO store=no props=name,fake_phone,fake_mobile,fake_email,fake_address_address,fake_address_postal_code,fake_address_city_relp,fake_address_county_relp,fake_address_country_relp parent=contact_entry_form
 	@caption Kontakt (organisatsioon)
@@ -145,6 +178,13 @@
 	@property contact_entry_person type=releditor reltype=RELTYPE_CONTACT_PERSON store=no props=lastname,firstname,gender,fake_phone,fake_email,fake_address_address,fake_address_postal_code,fake_address_city_relp,fake_address_county_relp,fake_address_country_relp parent=contact_entry_form
 	@caption Kontakt (isik)
 
+	@property contact_entry_salesman type=select store=no group=data_entry_contact_co,data_entry_contact_person parent=contact_entry_form
+	@caption M&uuml;&uuml;giesindaja
+
+	@property contact_entry_lead_source type=textbox store=no group=data_entry_contact_co,data_entry_contact_person parent=contact_entry_form
+	@caption Soovitaja
+
+	@property contact_entry_lead_source_oid type=hidden store=no group=data_entry_contact_co,data_entry_contact_person
 
 @default group=data_entry_import
 	@property import_toolbar type=toolbar store=no no_caption=1
@@ -226,6 +266,33 @@ class crm_sales extends class_base
 		}
 	}
 
+	function callback_mod_layout(&$arr)
+	{
+		if (isset($arr["request"]["contact_list_load_contact"]) and "de_form_box" === $arr["name"] and $this->can("view", $arr["request"]["contact_list_load_contact"]))
+		{
+			$contact = new object ($arr["request"]["contact_list_load_contact"]);
+			$arr["area_caption"] = sprintf(t("Kontakti '%s' muutmine"), $contact->name());
+		}
+		return PROP_OK;
+	}
+
+	function _get_contact_entry_salesman(&$arr)
+	{
+		$r = PROP_OK;
+		if (is_oid($arr["obj_inst"]->prop("role_profession_salesman")))
+		{
+			$owner = $arr["obj_inst"]->prop("owner");
+			$salespersons = $owner->get_workers(array("active" => true, "profession" => $arr["obj_inst"]->prop("role_profession_salesman")));
+			$arr["prop"]["options"] = array("" => "") + $salespersons->names();
+		}
+		return $r;
+	}
+
+	function _get_cs_salesman(&$arr)
+	{
+		return $this->_get_contact_entry_salesman($arr);
+	}
+
 	function _get_import_toolbar(&$arr)
 	{
 		$create_new_import = $this->mk_my_orb("new", array(
@@ -238,6 +305,17 @@ class crm_sales extends class_base
 			"img" => "new.gif",
 			"url" => $create_new_import,
 			"tooltip" => t("Loo uus impordiobjekt")
+		));
+	}
+
+	function _get_contact_entry_toolbar(&$arr)
+	{
+		$toolbar = $arr["prop"]["vcl_inst"];
+		$toolbar->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"url" => aw_url_change_var("contact_list_load_contact", null),
+			"tooltip" => t("Sisesta uus kontakt")
 		));
 	}
 
@@ -271,6 +349,11 @@ class crm_sales extends class_base
 	function get_property(&$arr)
 	{
 		$ret = PROP_OK;
+		if ("cs_status" === $arr["prop"]["name"])
+		{
+			$arr["prop"]["options"] = array("" => "K&otilde;ik") + crm_company_customer_data_obj::sales_state_names();
+		}
+
 		if (self::CLV_SEARCH === $this->calls_list_view and substr($arr["prop"]["name"], 0, 3) === "cs_" and isset($arr["request"][$arr["prop"]["name"]]))
 		{
 			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
@@ -287,27 +370,45 @@ class crm_sales extends class_base
 			if($arr["request"]["group"] === "data_entry_contact_co" or $arr["request"]["group"] === "data_entry")
 			{
 				load_javascript("bsnAutosuggest.js");
-				$options_url = $this->mk_my_orb("get_entry_name_choices", array(
-					"type" => "co",
+				$name_options_url = $this->mk_my_orb("get_entry_choices", array(
+					"type" => "co_name",
+					"id" => $arr["obj_inst"]->id()
+				));
+				$phone_options_url = $this->mk_my_orb("get_entry_choices", array(
+					"type" => "co_phone",
 					"id" => $arr["obj_inst"]->id()
 				));
 				$contact_details_url = $this->mk_my_orb("get_contact_details", array("id" => $arr["obj_inst"]->id()));
+				$lead_source_options_url = $this->mk_my_orb("get_lead_source_choices", array("id" => $arr["obj_inst"]->id()));
+				$contact_edit_caption = t("Kontakti '%s' muutmine");
 				$js .= <<<SCRIPTVARIABLES
-var optionsUrl = "{$options_url}&";
+var optionsUrl = "{$name_options_url}&";
+var phoneOptionsUrl = "{$phone_options_url}&";
+var leadSourceOptionsUrl = "{$lead_source_options_url}&";
 var contactDetailsUrl = "{$contact_details_url}";
+var contactEditCaption = "{$contact_edit_caption}";
 SCRIPTVARIABLES;
 				$js .= file_get_contents(AW_DIR . "classes/applications/crm/sales/crm_sales_co_entry.js");
 			}
 			elseif($arr["request"]["group"] === "data_entry_contact_person" or $arr["request"]["group"] === "data_entry")
 			{
 				load_javascript("bsnAutosuggest.js");
-				$options_url = $this->mk_my_orb("get_entry_name_choices", array(
-					"type" => "p",
+				$name_options_url = $this->mk_my_orb("get_entry_choices", array(
+					"type" => "p_name",
+					"id" => $arr["obj_inst"]->id()
+				));
+				$phone_options_url = $this->mk_my_orb("get_entry_choices", array(
+					"type" => "p_phone",
 					"id" => $arr["obj_inst"]->id()
 				));
 				$contact_details_url = $this->mk_my_orb("get_contact_details", array("id" => $arr["obj_inst"]->id()));
+				$lead_source_options_url = $this->mk_my_orb("get_lead_source_choices", array("id" => $arr["obj_inst"]->id()));
+				$contact_edit_caption = t("Kontakti '%s' muutmine");
 				$js .= <<<SCRIPTVARIABLES
-var optionsUrl = "{$options_url}&";
+var optionsUrl = "{$name_options_url}&";
+var phoneOptionsUrl = "{$phone_options_url}&";
+var leadSourceOptionsUrl = "{$lead_source_options_url}&";
+var contactEditCaption = "{$contact_edit_caption}";
 var contactDetailsUrl = "{$contact_details_url}";
 SCRIPTVARIABLES;
 				$js .= file_get_contents(AW_DIR . "classes/applications/crm/sales/crm_sales_person_entry.js");
@@ -332,29 +433,55 @@ SCRIPTVARIABLES;
 		return $r;
 	}
 
-	/** Outputs crm_company/crm_person autocomplete options matching string
-		@attrib name=get_entry_name_choices all_args=1 nologin=1 is_public=1
+	/** Outputs crm_company/crm_person autocomplete options matching property string in bsnAutosuggest format json
+		@attrib name=get_entry_choices all_args=1 nologin=1 is_public=1
 		@param id required type=oid acl=view
 		@param type required type=string
+			Determines if person or company searched, and by which property (name, phone nr.)
+			Options: co_name, p_name, co_phone, p_phone
 		@param typed_text optional type=string
 	**/
-	function get_entry_name_choices($arr)
+	function get_entry_choices($arr)
 	{
+		$types_data = array(
+			"co_name" => array(
+				"prop" => "buyer(CL_CRM_COMPANY).name",
+				"info_prop1" => "buyer.name",
+				"info_prop2" => "buyer.RELTYPE_ADDRESS.name"
+			),
+			"co_phone" => array(
+				"prop" => "buyer(CL_CRM_COMPANY).RELTYPE_PHONE.name",
+				"info_prop1" => "buyer.name",
+				"info_prop2" => "buyer.RELTYPE_ADDRESS.name"
+			),
+			"p_name" => array(
+				"prop" => "buyer(CL_CRM_PERSON).lastname",
+				"info_prop1" => "buyer.name",
+				"info_prop2" => "buyer.RELTYPE_ADDRESS.name"
+			),
+			"p_phone" => array(
+				"prop" => "buyer(CL_CRM_PERSON).RELTYPE_PHONE.name",
+				"info_prop1" => "buyer.name",
+				"info_prop2" => "buyer.RELTYPE_ADDRESS.name"
+			)
+		);
+		$type = $arr["type"];
 		$choices = array("results" => array());
-		if (isset($arr["typed_text"]) and strlen($arr["typed_text"]) > 1 and ("co" === $arr["type"] or "p" === $arr["type"]))
+		if (isset($arr["typed_text"]) and strlen($arr["typed_text"]) > 1 and isset($types_data[$type]))
 		{
 			$this_o = new object($arr["id"]);
 			$owner = $this_o->prop("owner");
 			$typed_text = $arr["typed_text"];
-			$name_prop = "co" === $arr["type"] ? "buyer.name" : "CL_CRM_COMPANY_CUSTOMER_DATA.RELTYPE_BUYER.lastname";
+			$prop = $types_data[$type]["prop"];
+			$limit = $this_o->prop("autocomplete_options_limit") ? $this_o->prop("autocomplete_options_limit") : 20;
 
 			$list = new object_list(array(
 				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-				$name_prop => "{$typed_text}%",
+				$prop => "{$typed_text}%",
 				"seller" => $owner->id(),
 				"site_id" => array(),
 				"lang_id" => array(),
-				new obj_predicate_limit(25)
+				new obj_predicate_limit($limit)
 			));
 
 			if ($list->count() > 0)
@@ -363,7 +490,31 @@ SCRIPTVARIABLES;
 				$o = $list->begin();
 				do
 				{
-					$results[] = array("id" => $o->prop("buyer"), "value" => $o->prop("buyer.name"));
+					$customer = new object($o->prop("buyer"));
+					$phones = new object_list($customer->connections_from(array("type" => "RELTYPE_PHONE")));
+					$phones = $phones->names();
+					$phone = "";
+
+					if (strpos($type, "phone"))
+					{
+						foreach ($phones as $phone_oid => $phone_nr)
+						{
+							if (substr($phone_nr, 0, strlen($typed_text)) === $typed_text)
+							{
+								$phone = $phone_nr;
+							}
+						}
+						$info1 = $customer->name();
+					}
+					else
+					{
+						$info1 = implode(", ", $phones);
+					}
+
+					$customer_name = strpos($type, "co_") !== false ? $customer->name() : ($customer->lastname . ", " . $customer->firstname);
+					$value = strpos($type, "phone") !== false ? $phone : $customer_name;
+					$info = $info1 . " | " . $o->prop($types_data[$type]["info_prop2"]);
+					$results[] = array("id" => $o->prop("buyer"), "value" => $value, "info" => $info);
 				}
 				while ($o = $list->next());
 				$choices["results"] = $results;
@@ -378,10 +529,67 @@ SCRIPTVARIABLES;
 		header("Pragma: no-cache"); // HTTP/1.0
 		// header ("Content-type: text/javascript; charset: UTF-8");
 		// header("Expires: ".gmdate("D, d M Y H:i:s", time()+43200)." GMT");
-		$choices = json_encode($choices);
-		exit($choices);
+		exit(json_encode($choices));
 	}
 
+	/** Outputs lead source autocomplete options in bsnAutosuggest format json
+		@attrib name=get_lead_source_choices all_args=1 nologin=1 is_public=1
+		@param id required type=oid acl=view
+		@param typed_text optional type=string
+	**/
+	function get_lead_source_choices($arr)
+	{
+		$choices = array("results" => array());
+		if (isset($arr["typed_text"]) and strlen($arr["typed_text"]) > 1)
+		{
+			$this_o = new object($arr["id"]);
+			$owner = $this_o->prop("owner");
+			$typed_text = $arr["typed_text"];
+			$limit = $this_o->prop("autocomplete_options_limit") ? $this_o->prop("autocomplete_options_limit") : 20;
+
+			$list = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array (
+						"CL_CRM_COMPANY_CUSTOMER_DATA.buyer(CL_CRM_COMPANY).name" => "{$typed_text}%",
+						"CL_CRM_COMPANY_CUSTOMER_DATA.buyer(CL_CRM_PERSON).lastname" => "{$typed_text}%"
+					)
+				)),
+				"seller" => $owner->id(),
+				"site_id" => array(),
+				"lang_id" => array(),
+				new obj_predicate_limit($limit)
+			));
+
+			if ($list->count() > 0)
+			{
+				$results = array();
+				$o = $list->begin();
+				do
+				{
+					$customer = new object($o->prop("buyer"));
+					$phones = new object_list($customer->connections_from(array("type" => "RELTYPE_PHONE")));
+					$phones = $phones->names();
+					$info = implode(", ", $phones) . " | " . $o->prop("buyer.RELTYPE_ADDRESS.name");
+					$value = $customer->class_id() == CL_CRM_COMPANY ? $customer->name() : ($customer->lastname . ", " . $customer->firstname);
+					$results[] = array("id" => $customer->id(), "value" => $value, "info" => $info);
+				}
+				while ($o = $list->next());
+				$choices["results"] = $results;
+			}
+		}
+
+		ob_start("ob_gzhandler");
+		// header("Content-Type: application/json");
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); // always modified
+		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+		header("Pragma: no-cache"); // HTTP/1.0
+		// header ("Content-type: text/javascript; charset: UTF-8");
+		// header("Expires: ".gmdate("D, d M Y H:i:s", time()+43200)." GMT");
+		exit(json_encode($choices));
+	}
 
 	/** Outputs crm_company/crm_person property details in json format
 		@attrib name=get_contact_details all_args=1 nologin=1 is_public=1
@@ -485,7 +693,22 @@ SCRIPTVARIABLES;
 	{
 		$return = PROP_IGNORE;
 		$this_o = $arr["obj_inst"];
-		if (isset($arr["prop"]["value"]["id"]))
+		if (empty($arr["prop"]["value"]["fake_phone"]))
+		{
+			$return = PROP_FATAL_ERROR;
+			$arr["prop"]["error"] = t("Telefoninumber on kohustuslik");
+		}
+		elseif (!empty($arr["request"]["contact_entry_salesman"]) and !$this->can("view", $arr["request"]["contact_entry_salesman"]))
+		{
+			$return = PROP_FATAL_ERROR;
+			$arr["prop"]["error"] = t("Viga m&uuml;&uuml;giesindaja salvestamisel. &Otilde;igused puuduvad.");
+		}
+		elseif (!empty($arr["request"]["contact_entry_lead_source"]) and !$this->can("view", $arr["request"]["contact_entry_lead_source"]))
+		{
+			$return = PROP_FATAL_ERROR;
+			$arr["prop"]["error"] = t("Viga soovitaja salvestamisel. &Otilde;igused puuduvad.");
+		}
+		elseif (isset($arr["prop"]["value"]["id"]))
 		{
 			$o = obj($arr["prop"]["value"]["id"], array(), CL_CRM_COMPANY, true);
 			$o->set_name($arr["prop"]["value"]["name"]);
@@ -498,6 +721,7 @@ SCRIPTVARIABLES;
 			$o->set_prop("fake_address_county_relp", $arr["prop"]["value"]["fake_address_county_relp"]);
 			$o->set_prop("fake_address_country_relp", $arr["prop"]["value"]["fake_address_country_relp"]);
 			$o->save();
+			//!!! customer relation properties are not changed for an existing contact
 		}
 		else
 		{
@@ -517,6 +741,27 @@ SCRIPTVARIABLES;
 				$o->save();
 				$owner = $arr["obj_inst"]->prop("owner");
 				$customer_relation = $o->get_customer_relation($owner, true);
+
+				if (!empty($arr["request"]["contact_entry_salesman"]))
+				{ // set salesman
+					$salesman = obj($arr["request"]["contact_entry_salesman"], array(), CL_CRM_PERSON);
+					$customer_relation->set_prop("salesman", $salesman->id());
+					$customer_relation->connect(array("to" => $salesman, "reltype" => "RELTYPE_SALESMAN"));
+				}
+
+				if (!empty($arr["request"]["contact_entry_lead_source_oid"]))
+				{ // set lead source
+					$lead_source = new object($arr["request"]["contact_entry_lead_source_oid"]);
+
+					if (!$lead_source->is_a(CL_CRM_COMPANY) and !$lead_source->is_a(CL_CRM_PERSON))
+					{
+						throw new awex_obj_class("Invalid class. Lead source must be a company or a person");
+					}
+
+					$customer_relation->set_prop("sales_lead_source", $lead_source->id());
+					$customer_relation->connect(array("to" => $lead_source, "reltype" => "RELTYPE_SALES_LEAD_SOURCE"));
+				}
+
 				$this_o->add_contact($customer_relation);
 			}
 			catch (Exception $e)
@@ -533,7 +778,23 @@ SCRIPTVARIABLES;
 	{
 		$return = PROP_IGNORE;
 		$this_o = $arr["obj_inst"];
-		if (isset($arr["prop"]["value"]["id"]))
+
+		if (empty($arr["prop"]["value"]["fake_phone"]))
+		{
+			$return = PROP_FATAL_ERROR;
+			$arr["prop"]["error"] = t("Telefoninumber on kohustuslik");
+		}
+		elseif (!empty($arr["request"]["contact_entry_salesman"]) and !$this->can("view", $arr["request"]["contact_entry_salesman"]))
+		{
+			$return = PROP_FATAL_ERROR;
+			$arr["prop"]["error"] = t("Viga m&uuml;&uuml;giesindaja salvestamisel. &Otilde;igused puuduvad.");
+		}
+		elseif (!empty($arr["request"]["contact_entry_lead_source_oid"]) and !$this->can("view", $arr["request"]["contact_entry_lead_source_oid"]))
+		{
+			$return = PROP_FATAL_ERROR;
+			$arr["prop"]["error"] = t("Viga soovitaja salvestamisel. &Otilde;igused puuduvad.");
+		}
+		elseif (isset($arr["prop"]["value"]["id"]))
 		{
 			$o = obj($arr["prop"]["value"]["id"], array(), CL_CRM_PERSON, true);
 			$o->set_prop("firstname", $arr["prop"]["value"]["firstname"]);
@@ -547,6 +808,7 @@ SCRIPTVARIABLES;
 			$o->set_prop("fake_address_county_relp", $arr["prop"]["value"]["fake_address_county_relp"]);
 			$o->set_prop("fake_address_country_relp", $arr["prop"]["value"]["fake_address_country_relp"]);
 			$o->save();
+			//!!! customer relation properties are not changed for an existing contact
 		}
 		else
 		{
@@ -567,6 +829,27 @@ SCRIPTVARIABLES;
 				$o->save();
 				$owner = $arr["obj_inst"]->prop("owner");
 				$customer_relation = $o->get_customer_relation($owner, true);
+
+				if (!empty($arr["request"]["contact_entry_salesman"]))
+				{ // set salesman
+					$salesman = obj($arr["request"]["contact_entry_salesman"], array(), CL_CRM_PERSON);
+					$customer_relation->set_prop("salesman", $salesman->id());
+					$customer_relation->connect(array("to" => $salesman, "reltype" => "RELTYPE_SALESMAN"));
+				}
+
+				if (!empty($arr["request"]["contact_entry_lead_source_oid"]))
+				{ // set lead source
+					$lead_source = new object($arr["request"]["contact_entry_lead_source_oid"]);
+
+					if (!$lead_source->is_a(CL_CRM_COMPANY) and !$lead_source->is_a(CL_CRM_PERSON))
+					{
+						throw new awex_obj_class("Invalid class. Lead source must be a company or a person");
+					}
+
+					$customer_relation->set_prop("sales_lead_source", $lead_source->id());
+					$customer_relation->connect(array("to" => $lead_source, "reltype" => "RELTYPE_SALES_LEAD_SOURCE"));
+				}
+
 				$this_o->add_contact($customer_relation);
 			}
 			catch (Exception $e)
@@ -639,19 +922,31 @@ SCRIPTVARIABLES;
 		$per_page = 30;
 		$start = 0;
 		$filter = array(
-			new obj_predicate_limit($per_page, $start),
+			new obj_predicate_limit($per_page, $start)
 		);
 
 		if (!empty($arr["request"]["cs_submit"]))
 		{
 			if (!empty($arr["request"]["cs_name"]))
 			{
-				$filter["customer.name"] = "%{$arr["request"]["cs_name"]}%";
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array (
+						"CL_CRM_CALL.customer_relation.buyer(CL_CRM_COMPANY).name" => "%{$arr["request"]["cs_name"]}%",
+						"CL_CRM_CALL.customer_relation.buyer(CL_CRM_PERSON).lastname" => "%{$arr["request"]["cs_name"]}%"
+					)
+				));
 			}
 
 			if (!empty($arr["request"]["cs_phone"]))
 			{
-				$filter["customer.RELTYPE_PHONE.name"] = "%{$arr["request"]["cs_phone"]}%";
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array (
+						"CL_CRM_CALL.customer_relation.buyer(CL_CRM_COMPANY).RELTYPE_PHONE.name" => "{$arr["request"]["cs_phone"]}%",
+						"CL_CRM_CALL.customer_relation.buyer(CL_CRM_PERSON).RELTYPE_PHONE.name" => "{$arr["request"]["cs_phone"]}%"
+					)
+				));
 			}
 
 			if (!empty($arr["request"]["cs_salesman"]))
@@ -659,17 +954,23 @@ SCRIPTVARIABLES;
 				// "buyer" => $this->id()
 				// "seller" => $my_co
 				// $filter["customer.salesman.name"] = "%{$arr["request"]["cs_name"]}%";
-				$filter["customer.salesman.name"] = "%{$arr["request"]["cs_salesman"]}%";
+				$filter["customer_relation.salesman.name"] = "%{$arr["request"]["cs_salesman"]}%";
 			}
 
 			if (!empty($arr["request"]["cs_address"]))
 			{
-				$filter["customer.RELTYPE_ADDRESS.name"] = "%{$arr["request"]["cs_address"]}%";
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array (
+						"CL_CRM_CALL.customer_relation.buyer(CL_CRM_COMPANY).RELTYPE_ADDRESS.name" => "%{$arr["request"]["cs_address"]}%",
+						"CL_CRM_CALL.customer_relation.buyer(CL_CRM_PERSON).RELTYPE_ADDRESS.name" => "%{$arr["request"]["cs_address"]}%"
+					)
+				));
 			}
 
 			if (!empty($arr["request"]["cs_status"]))
 			{
-				$filter["customer.name"] = "%{$arr["request"]["cs_name"]}%";
+				$filter["customer_relation.sales_state"] = $arr["request"]["cs_status"];
 			}
 		}
 
@@ -746,8 +1047,19 @@ SCRIPTVARIABLES;
 							$request = (array) $arr["request"];
 							$request["return_url"] = get_ru();
 							unset($request["action"]);
-							$url = $this->mk_my_orb("make_call", array("phone_id" => $phone->id(), "call_id" => $call->id()) + $request, "crm_sales");
-							$phones_str[] = html::href(array("caption" => $phone->name(), "url" => $url));
+							if ($call->prop("real_start") < 2)
+							{ // a normal unstarted call
+								$url = $this->mk_my_orb("make_call", array("phone_id" => $phone->id(), "call_id" => $call->id()) + $request, "crm_sales");
+								$phone_nr = $phone->name();
+								$title = "";
+							}
+							elseif ($call->prop("real_duration") < 1)
+							{ // a call that is started but not finished
+								$url = $this->mk_my_orb("change", array("id" => $call->id()), "crm_call");
+								$phone_nr = "<span style=\"color: red;\">" . $phone->name() . "</span>";
+								$title = t("L&otilde;petamata k&otilde;ne");
+							}
+							$phones_str[] = html::href(array("caption" => $phone_nr, "url" => $url, "title" => $title));
 						}
 					}
 					while ($phone = $phones->next());
@@ -834,10 +1146,10 @@ SCRIPTVARIABLES;
 			"caption" => t("Kliendi nimi")
 		));
 		$owner = $arr["obj_inst"]->prop("owner");
-		$clid = $arr["request"]["group"] === "data_entry_contact_person" ? CL_CRM_PERSON : CL_CRM_COMPANY;
+		$clid = $arr["request"]["group"] === "data_entry_contact_co" ? CL_CRM_COMPANY : CL_CRM_PERSON;
 		$list = new object_list(array(
 			"class_id" => $clid,
-			"parent" => $owner->id(),//!!! liiga tinglik. cro kaudu n2iteks teha
+			"parent" => $owner->id(),//!!! cro kaudu teha
 			"createdby" => aw_global_get("uid"),
 			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, mktime(0, 0, 0)),
 			new obj_predicate_sort(array("created" => "desc")),
@@ -893,7 +1205,7 @@ SCRIPTVARIABLES;
 
 	function _get_owner($arr)
 	{
-		$arr["prop"]["value"] = $arr["prop"]["value"]->id();
+		$arr["prop"]["value"] = "view" === automatweb::$request->action() ? $arr["prop"]["value"] : $arr["prop"]["value"]->id();
 		return PROP_OK;
 	}
 

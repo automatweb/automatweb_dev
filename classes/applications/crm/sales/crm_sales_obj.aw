@@ -144,11 +144,15 @@ class crm_sales_obj extends _int_object implements application_interface
 	@attrib api=1 params=pos
 	@param customer_relation type=CL_CRM_COMPANY_CUSTOMER_DATA
 		Customer relation defining the contact to add and its relation to sales application owner
+	@comment
+		Saves customer_relation object
 	@returns void
 	**/
 	public function add_contact(object $customer_relation)
 	{
 		$call = $this->create_call($customer_relation);
+		$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_NEW);
+		$customer_relation->save();
 		$case = $this->get_customer_case($customer_relation, true);
 		$case->plan();
 		$case->start();
@@ -164,7 +168,7 @@ class crm_sales_obj extends _int_object implements application_interface
 	@returns CL_CRM_PRESENTATION
 		Created presentation object
 	**/
-	public function create_presentation(object $customer_relation, $time)
+	public function create_presentation(object $customer_relation)
 	{
 		$folder = $this->prop("presentations_folder");
 		if (!is_oid($folder))
@@ -173,8 +177,7 @@ class crm_sales_obj extends _int_object implements application_interface
 		}
 		$presentation = obj(null, array(), CL_CRM_PRESENTATION);
 		$presentation->set_parent($folder);
-		$presentation->set_name(sprintf(t("Presentatsioon kliendile %s"), $customer_relation->prop("buyer.name")));
-		$this->set_presentation_time($presentation, $time);
+		$presentation->set_name(sprintf(t("Esitlus kliendile %s"), $customer_relation->prop("buyer.name")));
 		$case = $this->get_customer_case($customer_relation, true);
 		$job = $case->add_job();// presentation job in sales schedule
 		$presentation->set_prop("customer_relation", $customer_relation->id());
@@ -203,6 +206,7 @@ class crm_sales_obj extends _int_object implements application_interface
 		$call->set_prop("customer_relation", $customer_relation->id());
 		$case = $this->get_customer_case($customer_relation, true);
 		$job = $case->add_job();
+		$job->set_prop("planned_length", $this->prop("avg_call_duration_est"));
 		$call->set_prop("sales_schedule_job", $job->id());
 		$this->set_call_time($call, $time);
 		$call->save();
@@ -256,21 +260,22 @@ class crm_sales_obj extends _int_object implements application_interface
 			}
 			else
 			{ // create call
-				$new_call = $this->create_call(new object($call->prop("customer_relation")), $call->prop("new_call_date"));
+				$customer_relation = new object($call->prop("customer_relation"));
+				$new_call = $this->create_call($customer_relation, $call->prop("new_call_date"));
+				$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_NEWCALL);
+				$customer_relation->save();
 				$call->connect(array("to" => $new_call, "reltype" => "RELTYPE_RESULT_CALL"));
 			}
 		}
 		elseif ($result === crm_call_obj::RESULT_PRESENTATION)
 		{
 			$presentation = $call->get_first_obj_by_reltype("RELTYPE_RESULT_PRESENTATION");
-			if (is_object($presentation))
-			{ // presentation already created
-				$this->set_presentation_time($presentation, $call->prop("presentation_date"));
-				$presentation->save();
-			}
-			else
+			if (!is_object($presentation))
 			{ // create presentation
-				$presentation = $this->create_presentation(new object($call->prop("customer_relation")), $call->prop("presentation_date"));
+				$customer_relation = new object($call->prop("customer_relation"));
+				$presentation = $this->create_presentation($customer_relation); // temporarily/initially set presentation time
+				$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_PRESENTATION);
+				$customer_relation->save();
 				$call->set_prop("presentation", $presentation->id());
 				$call->connect(array("to" => $presentation, "reltype" => "RELTYPE_RESULT_PRESENTATION"));
 				$call->save();
@@ -318,7 +323,10 @@ class crm_sales_obj extends _int_object implements application_interface
 		if (crm_presentation_obj::RESULT_MISS == $presentation->prop("result"))
 		{
 			// immediately call back to check why presentation didn't take place
+			$customer_relation = new object($call->prop("customer_relation"));
 			$new_call = $this->create_call(new object($presentation->prop("customer_relation")), time());
+			$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_NEWCALL);
+			$customer_relation->save();
 		}
 		elseif (crm_presentation_obj::RESULT_CALL == $presentation->prop("result"))
 		{
@@ -335,6 +343,16 @@ class crm_sales_obj extends _int_object implements application_interface
 			try
 			{
 				$cfgform = new object($this->prop("cfgf_main_" . self::$role_ids[$role]));
+			}
+			catch (Exception $e)
+			{
+			}
+		}
+		elseif (CL_CRM_CALL == $clid)
+		{
+			try
+			{
+				$cfgform = new object($this->prop("cfgf_call_" . self::$role_ids[$role]));
 			}
 			catch (Exception $e)
 			{

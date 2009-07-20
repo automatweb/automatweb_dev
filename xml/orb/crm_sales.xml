@@ -20,11 +20,19 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="get_entry_name_choices">
-			<function name="get_entry_name_choices" all_args="1" nologin="1" is_public="1">
+		<action name="get_entry_choices">
+			<function name="get_entry_choices" all_args="1" nologin="1" is_public="1">
 				<arguments>
 					<required name="id" type="oid" acl="view" />
 					<required name="type" type="string" />
+					<optional name="typed_text" type="string" />
+				</arguments>
+			</function>
+		</action>
+		<action name="get_lead_source_choices">
+			<function name="get_lead_source_choices" all_args="1" nologin="1" is_public="1">
+				<arguments>
+					<required name="id" type="oid" acl="view" />
 					<optional name="typed_text" type="string" />
 				</arguments>
 			</function>

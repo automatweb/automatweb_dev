@@ -1,4 +1,9 @@
-var options = {
+var contactDetails = new Array();
+$("#contact_entry_co_name_").focus();
+
+
+// NAME ELEMENT AUTOCOMPLETE
+var options1 = {
 	script: optionsUrl,
 	varname: "typed_text",
 	minchars: 2,
@@ -8,16 +13,50 @@ var options = {
 	shownoresults: false,
 	callback: getContactDetails
 };
-var as = new AutoSuggest('contact_entry_co_name_', options);
-var contactDetails = new Array();
+var nameAS = new AutoSuggest('contact_entry_co_name_', options1);
+// END NAME ELEMENT AUTOCOMPLETE
 
-$("#contact_entry_co_name_").focus();
+
+
+// PHONE ELEMENT AUTOCOMPLETE
+var options2 = {
+	script: phoneOptionsUrl,
+	varname: "typed_text",
+	minchars: 2,
+	timeout: 10000,
+	delay: 200,
+	json: true,
+	shownoresults: false,
+	callback: getContactDetails
+};
+var phoneAS = new AutoSuggest('contact_entry_co_fake_phone_', options2);
+// END PHONE ELEMENT AUTOCOMPLETE
+
+
+
+// LEAD SOURCE ELEMENT AUTOCOMPLETE
+var options3 = {
+	script: leadSourceOptionsUrl,
+	varname: "typed_text",
+	minchars: 2,
+	timeout: 10000,
+	delay: 200,
+	json: true,
+	shownoresults: false,
+	callback: setLeadSource
+};
+var leadSourceAS = new AutoSuggest('contact_entry_lead_source', options3);
+// END LEAD SOURCE ELEMENT AUTOCOMPLETE
+
+
+
 
 function loadContactDetails(contactDetails)
 {
 	if ($("input[name='contact_entry_co[id]']").length > 0)
 	{
 		el = $("input[name='contact_entry_co[id]']");
+		el.attr("value", contactDetails.id);
 	}
 	else
 	{
@@ -26,11 +65,22 @@ function loadContactDetails(contactDetails)
 		el.type = "hidden";
 		el.name = "contact_entry_co[id]";
 		$("form[name=changeform]").append(el);
+		el.value = contactDetails.id;
 	}
 
-	el.value = contactDetails.id;
+	contactName = contactDetails["contact_entry_co[name]"]["value"];
+	$("div#de_form_box").prev().children("div").eq(0).text(contactEditCaption.replace("%s", contactName));
 
 	// load data to changeform
+	if (typeof(contactDetails["contact_entry_co[name]"]["value"]) != "undefined")
+	{
+		document.getElementById('contact_entry_co_name_').value = contactDetails["contact_entry_co[name]"]["value"];
+	}
+	else
+	{
+		document.getElementById('contact_entry_co_name_').value = "";
+	}
+
 	if (typeof(contactDetails["contact_entry_co[fake_phone]"]["value"]) != "undefined")
 	{
 		document.getElementById('contact_entry_co_fake_phone_').value = contactDetails["contact_entry_co[fake_phone]"]["value"];
@@ -108,4 +158,10 @@ function getContactDetails(obj)
 {
 	contactDetailsUrl = contactDetailsUrl + "&contact_id=" + obj.id;
 	$.getJSON(contactDetailsUrl, {}, loadContactDetails);
+}
+
+function setLeadSource(obj)
+{
+	el = $("input[name='contact_entry_lead_source_oid']");
+	el.attr("value", obj.id);
 }
