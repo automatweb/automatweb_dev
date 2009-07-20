@@ -238,6 +238,14 @@
             <caption>Viivise %</caption>
       </property>
       <property>
+            <name>sales_state</name>
+            <table>aw_crm_customer_data</table>
+            <group>seller</group>
+            <type>select</type>
+            <field>aw_sales_status</field>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi staatus</caption>
+      </property>
+      <property>
             <name>salesman</name>
             <table>aw_crm_customer_data</table>
             <group>seller</group>
@@ -381,7 +389,10 @@
       <reltypes>
             <BUYER>
                   <value>1</value>
-                  <clid>CL_CRM_PERSON</clid>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>Ostja</caption>
             </BUYER>
             <SELLER>

@@ -103,6 +103,9 @@ default method=serialize
 
 
 ///////// paigutada 6igesse tab-i
+	@property sales_state type=select table=aw_crm_customer_data field=aw_sales_status
+	@caption M&uuml;&uuml;gi staatus
+
 	@property salesman type=relpicker reltype=RELTYPE_SALESMAN table=aw_crm_customer_data field=aw_salesman
 	@caption M&uuml;&uuml;giesindaja
 
@@ -394,6 +397,11 @@ class crm_company_customer_data extends class_base
 			}
 			$t->define_data($def);
 		}
+	}
+
+	function _get_sales_state(&$arr)
+	{
+		$arr["prop"]["options"] = $arr["obj_inst"]->sales_state_names();
 	}
 
 	function _get_prices_tbl($arr)
@@ -923,6 +931,7 @@ exit_function("bill::balance");
 			case "aw_show_in_webview":
 			case "aw_bill_tolerance":
 			case "aw_salesman":
+			case "aw_sales_status":
 			case "aw_lead_source":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
