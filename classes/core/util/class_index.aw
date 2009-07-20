@@ -241,15 +241,6 @@ class class_index
 
 					// open index file for this class/iface
 					$cl_handle = fopen($class_dfn_file, "w");
-					$ret = chmod($class_dfn_file, 0666);
-
-					if (!$ret)
-					{ //!!! mida teha
-						// $e = new awex_clidx_filesys("Failed to change file permissions for " . $class_dfn_file . ".");
-						// $e->clidx_file = $class_dfn_file;
-						// $e->clidx_op = "mkdir";
-						// throw $e;
-					}
 				}
 				else
 				{
