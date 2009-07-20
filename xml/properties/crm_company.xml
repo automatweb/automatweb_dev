@@ -472,6 +472,28 @@
             <caption>Tooted</caption>
       </property>
       <property>
+            <name>sales_warehouse</name>
+            <table>objects</table>
+            <group>org_sections</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SALES_WAREHOUSE</reltype>
+            <automatic>1</automatic>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Valmistoodete/m&amp;amp;uuml;&amp;amp;uuml;gi ladu</caption>
+      </property>
+      <property>
+            <name>purchasing_manager</name>
+            <table>objects</table>
+            <group>org_sections</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PURCHASING_MANAGER</reltype>
+            <automatic>1</automatic>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Laohaldus/ostukeskkond</caption>
+      </property>
+      <property>
             <name>pohitegevus</name>
             <table>objects</table>
             <group>org_sections</group>
@@ -4900,6 +4922,16 @@
                   <clid>CL_CRM_COUNTRY</clid>
                   <caption>Fake country</caption>
             </FAKE_COUNTRY>
+            <SALES_WAREHOUSE>
+                  <value>85</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Valmistoodete ladu</caption>
+            </SALES_WAREHOUSE>
+            <PURCHASING_MANAGER>
+                  <value>86</value>
+                  <clid>CL_SHOP_PURCHASE_MANAGER_WORKSPACE</clid>
+                  <caption>Ostukeskkond</caption>
+            </PURCHASING_MANAGER>
       </reltypes>
       <layout>
             <co_top>

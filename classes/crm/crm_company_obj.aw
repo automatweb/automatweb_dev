@@ -422,6 +422,7 @@ class crm_company_obj extends _int_object implements crm_customer_interface
 			);
 			$ol = new object_list($filter);
 		}
+
 		if(!$this->prop("use_only_wr_workers"))
 		{
 		//vana versioon peab j22ma ka toimima siiski, kui tahetakse k6iki t88tajaid

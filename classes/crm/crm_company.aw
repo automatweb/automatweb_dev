@@ -180,6 +180,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property tooted type=relpicker reltype=RELTYPE_TOOTED automatic=1 method=serialize field=meta table=objects
 	@caption Tooted
 
+	@property sales_warehouse type=relpicker reltype=RELTYPE_SALES_WAREHOUSE automatic=1 method=serialize field=meta table=objects
+	@caption Valmistoodete/m&uuml;&uuml;gi ladu
+
+	@property purchasing_manager type=relpicker reltype=RELTYPE_PURCHASING_MANAGER automatic=1 method=serialize field=meta table=objects
+	@caption Laohaldus/ostukeskkond
+
 	@property pohitegevus type=relpicker reltype=RELTYPE_TEGEVUSALAD multiple=1 store=connect
 	@caption P&otilde;hitegevus / Tegevusalad
 
@@ -1684,6 +1690,12 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype FAKE_COUNTRY value=84 clid=CL_CRM_COUNTRY
 @caption Fake country
+
+@reltype SALES_WAREHOUSE value=85 clid=CL_SHOP_WAREHOUSE
+@caption Valmistoodete ladu
+
+@reltype PURCHASING_MANAGER value=86 clid=CL_SHOP_PURCHASE_MANAGER_WORKSPACE
+@caption Ostukeskkond
 
 */
 /*
