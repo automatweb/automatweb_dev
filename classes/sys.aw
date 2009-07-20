@@ -750,7 +750,7 @@ class sys extends aw_template
 
 		if (count($errs) > 0)
 		{
-			send_mail("kristo@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
+			send_mail("dev@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
 		}
 		die(t("All done"));
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.27 2009/04/09 08:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.28 2009/07/20 09:16:18 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 
 //			automatweb::$instance->mode(automatweb::MODE_DBG);
@@ -2881,8 +2881,8 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		{
 			foreach($errs as $entry)
 			{
-				send_mail("kristo@struktuur.ee", "SAIT MAAS!!", $entry["content"], "From: big@brother.ee");
-				$this->_save_sent_mail($entry["site"], $entry["content"], $entry["error"], $o, "kristo@struktuur.ee");
+				send_mail("dev@struktuur.ee", "SAIT MAAS!!", $entry["content"], "From: big@brother.ee");
+				$this->_save_sent_mail($entry["site"], $entry["content"], $entry["error"], $o, "dev@struktuur.ee");
 			}
 		}
 		die(t("All done"));
