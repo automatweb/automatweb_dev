@@ -130,7 +130,7 @@ class bt_stat_impl extends core
 			}
 			$tp = $type["types"];
 			$impl = $o->prop("impl");
-			foreach($impl as $pid)
+			foreach(safe_array($impl) as $pid)
 			{
 				$pi = get_instance(CL_CRM_PERSON);
 				$po = obj($pid);
