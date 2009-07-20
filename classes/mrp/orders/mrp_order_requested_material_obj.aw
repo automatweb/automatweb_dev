@@ -2,13 +2,13 @@
 
 class mrp_order_requested_material_obj extends _int_object
 {
-	function delete()
+	function delete($full_delete = false)
 	{
 		if (is_oid($this->prop("connected_job")))
 		{
 			obj($this->prop("connected_job"))->delete();
 		}
-		return parent::delete();
+		return parent::delete($full_delete);
 	}
 
 	private function _get_order()

@@ -25,7 +25,7 @@ class aw_class_property_obj extends _int_object
 		return parent::prop($k);
 	}
 
-	function prop_str($k)
+	function prop_str($k, $is_oid = NULL)
 	{
 		if ($k[0] == "p" && $k[1] == "_")
 		{
@@ -45,7 +45,7 @@ class aw_class_property_obj extends _int_object
 			$cls = aw_ini_get("classes");
 			return $cls[$clid]["name"];
 		}
-		return parent::prop_str($k);
+		return parent::prop_str($k, $is_oid);
 	}
 
 	function set_prop($k, $v)

@@ -6,16 +6,16 @@
 //maintainer=markop
 class reservation_obj extends _int_object
 {
-	function delete()
+	function delete($full_delete = false)
 	{
 		$ol = $this->get_other_brons();
 		$ol->delete();
-		parent::delete();
+		parent::delete($full_delete);
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
-		$rv = parent::save();
+		$rv = parent::save($exclusive, $previous_state);
 
 		$this->set_sum();
 

@@ -1368,7 +1368,7 @@ class htmlclient extends aw_template
 	{
 		$layout_items = array();
 		$sub_layouts = array();
-		if($this->view_layout && ($this->view_layout == $layout_name || $this->show_layouts[$this->parent_layouts[$layout_name]]))
+		if($this->view_layout && ($this->view_layout == $layout_name || isset($this->parent_layouts) && $this->show_layouts[$this->parent_layouts[$layout_name]]))
 		{
 			$this->show_layouts[$layout_name] = 1;
 		}
@@ -1390,7 +1390,7 @@ class htmlclient extends aw_template
 
 		if($this->view_layout)
 		{
-			if(!$this->show_layouts[$this->parent_layouts[$layout_name]] && !$this->show_layouts[$layout_name])
+			if(empty($this->show_layouts[$this->parent_layouts[$layout_name]]) && empty($this->show_layouts[$layout_name]))
 			{
 				return null;
 			}

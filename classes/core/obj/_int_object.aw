@@ -1404,7 +1404,7 @@ class _int_object
 		{
 			if ($propi["field"] == "meta")
 			{
-				$this->_int_set_ot_mod("metadata", $this->obj["meta"][$propi["name"]], $val);
+				$this->_int_set_ot_mod("metadata", ifset($this->obj, "meta", $propi["name"]), $val);
 				$this->obj["meta"][$propi["name"]] = $val;
 			}
 			else

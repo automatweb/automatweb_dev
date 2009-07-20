@@ -16,14 +16,14 @@ class event_time_obj extends _int_object
 		parent::set_prop($name,$value);
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		if($this->prop("event"))
 		{
 			$event = obj($this->prop("event"));
 			$event->set_start_end();
 		}
-		return parent::save();
+		return parent::save($exclusive, $previous_state);
 	}
 
 	function prop($k)

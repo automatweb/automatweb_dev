@@ -4,7 +4,7 @@
 */
 class meta_obj extends _int_object
 {
-	function meta($var)
+	function meta($var = false)
 	{
 		if($var == "translations")
 		{
@@ -25,13 +25,13 @@ class meta_obj extends _int_object
 		}
 	}
 
-	function trans_get_val($var)
+	function trans_get_val($prop, $lang_id = false, $ignore_status = false)
 	{
-		if($var == "name")
+		if($prop == "name")
 		{
 			$this->meta("translations");
 		}
-		return parent::trans_get_val($var);
+		return parent::trans_get_val($prop, $lang_id, $ignore_status);
 	}
 
 	function fix_translations($arr)

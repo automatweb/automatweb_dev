@@ -29,10 +29,10 @@ class project_obj extends _int_object
 		return parent::set_prop($pn, $pv);
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		$new = !is_oid($this->id());
-		$rv = parent::save();
+		$rv = parent::save($exclusive, $previous_state);
 		if ($new && !count($this->connections_from(array("type" => "RELTYPE_IMPLEMENTOR"))))
 		{
 			$c = get_current_company();

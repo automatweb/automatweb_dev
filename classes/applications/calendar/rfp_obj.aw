@@ -140,7 +140,7 @@ class rfp_obj extends _int_object
 		return parent::prop($pn);
 	}
 
-	function delete()
+	function delete($full_delete = false)
 	{
 		$connections = $this->connections_from(array(
 			"type" => "RELTYPE_RESERVATION",
@@ -158,7 +158,7 @@ class rfp_obj extends _int_object
 			$reservation = $conn->to();
 			$reservation->delete();
 		}
-		parent::delete();
+		parent::delete($full_delete);
 	}
 
 	/** Returns all reservations for this rfp

@@ -44,7 +44,7 @@ class crm_bill_obj extends _int_object
 		parent::set_prop($name,$value);
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		if(!is_oid($this->id()))
 		{
@@ -64,7 +64,7 @@ class crm_bill_obj extends _int_object
 		}
 		$this->set_prop("sum", $this->_calc_sum());
 
-		$rv = parent::save();
+		$rv = parent::save($exclusive, $previous_state);
 
 		if(isset($_SESSION["bill_change_comments"]) && is_array($_SESSION["bill_change_comments"]))
 		{
