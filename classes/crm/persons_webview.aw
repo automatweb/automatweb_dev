@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.57 2009/07/17 09:36:43 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.58 2009/07/20 12:58:29 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1119,7 +1119,7 @@ class persons_webview extends class_base
 		$this->parse_profession($worker);
 
 		$vars = array(
-			"name" => $worker->name(),
+			"name" => str_replace("¹" , "&#154;" , str_replace("©" , "&#138;" , $worker->name())),
 			"wage_doc" => $worker->prop("wage_doc"),
 			"ta1" => $worker->prop("udef_ta1"),
 			"ta2" => $worker->prop("udef_ta2"),
