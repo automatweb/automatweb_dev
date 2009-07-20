@@ -47,8 +47,8 @@
 			@property new_call_date type=datetime_select table=objects field=meta method=serialize parent=top_2way_left
 			@caption Uue k&otilde;ne aeg
 
-			@property presentation_date type=datetime_select table=objects field=meta method=serialize parent=top_2way_left
-			@caption Esitluse aeg
+			// @property presentation_date type=datetime_select table=objects field=meta method=serialize parent=top_2way_left
+			// @caption Esitluse aeg
 
 			@property add_clauses type=chooser store=no parent=top_2way_left multiple=1
 			@caption Lisatingimused
@@ -68,6 +68,12 @@
 
 			@property real_duration type=text datatype=int table=planner parent=top_2way_right
 			@caption Tegelik kestus (h)
+
+			@property sales_assigned_salesman type=text store=no parent=top_2way_right
+			@caption M&uuml;&uuml;giesindaja
+
+			@property sales_lead_source type=text store=no parent=top_2way_right
+			@caption Soovitaja/allikas
 
 			@property sales_schedule_job type=hidden datatype=int table=planner
 
@@ -170,8 +176,8 @@
 @default field=meta
 @default method=serialize
 
-@property presentation type=relpicker reltype=RELTYPE_RESULT_PRESENTATION group=other_settings
-@comment Tulemuseks olev presentatsioon
+@property presentation type=relpicker reltype=RELTYPE_RESULT_PRESENTATION group=general
+@comment Tulemuseks olev presentatsioon (m&auml;&auml;rab k&otilde;ne t&ouml;&ouml;riistariba nuppude konfiguratsiooni)
 @caption Presentatsioon
 
 @property task_toolbar type=toolbar no_caption=1 store=no group=participants
@@ -328,6 +334,20 @@ class crm_call extends task
 		return PROP_OK;
 	}
 
+	function _get_sales_assigned_salesman(&$arr)
+	{
+		$name = $arr["obj_inst"]->prop("customer_relation.salesman.name");
+		$arr["prop"]["value"] = $name;
+		return PROP_OK;
+	}
+
+	function _get_sales_lead_source(&$arr)
+	{
+		$name = $arr["obj_inst"]->prop("customer_relation.sales_lead_source.name");
+		$arr["prop"]["value"] = $name;
+		return PROP_OK;
+	}
+
 	function _get_new_call_date(&$arr)
 	{
 		$arr["prop"]["year_from"] = date("Y");
@@ -336,6 +356,12 @@ class crm_call extends task
 		{
 			$arr["prop"]["value"] = time();
 		}
+		return PROP_OK;
+	}
+
+	function _get_start1(&$arr)
+	{
+		$arr["prop"]["onblur"] = date("d.m.Y H:i", $arr["prop"]["value"]);
 		return PROP_OK;
 	}
 
@@ -353,7 +379,7 @@ class crm_call extends task
 		$arr["prop"]["value"] = number_format($arr["prop"]["value"]/60, 2, ".", " ");
 		return PROP_OK;
 	}
-
+/*
 	function _get_presentation_date(&$arr)
 	{
 		$arr["prop"]["year_from"] = date("Y");
@@ -364,10 +390,11 @@ class crm_call extends task
 		}
 		return PROP_OK;
 	}
-
+*/
 	function _get_result(&$arr)
 	{
 		$arr["prop"]["options"] = array("" => "") + $arr["obj_inst"]->result_names();
+		$arr["prop"]["onchange"] = "crmCallProcessResult(this);";
 		return PROP_OK;
 	}
 
@@ -828,7 +855,7 @@ class crm_call extends task
 		}
 		return PROP_OK;
 	}
-
+/*
 	function _set_presentation_date(&$arr)
 	{
 		$v = date_edit::get_timestamp($arr["prop"]["value"]);
@@ -843,6 +870,7 @@ class crm_call extends task
 		}
 		return PROP_OK;
 	}
+*/
 
 /*
 	function callback_post_save($arr)
@@ -1168,7 +1196,41 @@ class crm_call extends task
 	function callback_generate_scripts($arr)
 	{
 		$task = get_instance(CL_TASK);
-		return $task->callback_generate_scripts($arr);
+		$scripts = $task->callback_generate_scripts($arr);
+		$result_call = crm_call_obj::RESULT_CALL;
+		$result_presentation = crm_call_obj::RESULT_PRESENTATION;
+		$result_refused = crm_call_obj::RESULT_REFUSED;
+		$scripts .= <<<EOS
+// hide and show elements according to call result
+crmCallProcessResult(document.getElementById("result"));
+
+function crmCallProcessResult(resultElem)
+{
+	if (resultElem)
+	{
+		if (resultElem.value == {$result_call})
+		{
+			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "default");
+			// $("select[name='presentation_date[day]']").parent().parent().parent().parent().css("display", "none");
+		}
+		else if (resultElem.value == {$result_presentation})
+		{
+			if (!$("#presentation").attr("value"))
+			{
+				$("a[href='javascript:submit_changeform('end');']").parent().css("display", "none");
+			}
+			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "none");
+			// $("select[name='presentation_date[day]']").parent().parent().parent().parent().css("display", "default");
+		}
+		else if (resultElem.value == {$result_refused})
+		{
+			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "none");
+			// $("select[name='presentation_date[day]']").parent().parent().parent().parent().css("display", "none");
+		}
+	}
+}
+EOS;
+		return $scripts;
 	}
 
 	function _init_other_class_t(&$t)
@@ -1689,6 +1751,7 @@ class crm_call extends task
 
 	function submit($arr = array())
 	{
+		$existing_presentation = is_oid($arr["presentation"]);
 		$r = parent::submit($arr);
 		if ("submit" === $arr["action"] and $this->data_processed_successfully())
 		{
@@ -1696,7 +1759,7 @@ class crm_call extends task
 			$application = automatweb::$request->get_application();
 			if ($application->is_a(CL_CRM_SALES) and $this_o->prop("real_duration") < 1)
 			{
-				if ($this_o->prop("result") == crm_call_obj::RESULT_PRESENTATION)
+				if ($this_o->prop("result") == crm_call_obj::RESULT_PRESENTATION and !$existing_presentation)
 				{ // jump to presentation
 					$presentation = $this_o->get_first_obj_by_reltype("RELTYPE_RESULT_PRESENTATION");
 					$r = html::get_change_url($presentation->id(), array("return_url" => $arr["post_ru"]));

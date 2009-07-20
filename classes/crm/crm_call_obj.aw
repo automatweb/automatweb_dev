@@ -4,6 +4,7 @@ class crm_call_obj extends task_object
 {
 	const RESULT_CALL = 1;
 	const RESULT_PRESENTATION = 2;
+	const RESULT_REFUSED = 3;
 
 	protected static $read_only_when_done = array(
 		"real_start", "start1", "end", "real_duration", "result", "deadline"
@@ -32,7 +33,8 @@ class crm_call_obj extends task_object
 	{
 		$result_names = array(
 			self::RESULT_CALL => t("Uus k&otilde;ne"),
-			self::RESULT_PRESENTATION => t("Esitlus")
+			self::RESULT_PRESENTATION => t("Esitlus"),
+			self::RESULT_REFUSED => t("Keeldub kontaktist")
 		);
 
 		if (isset($result))
@@ -150,7 +152,8 @@ class crm_call_obj extends task_object
 		$application = automatweb::$request->get_application();
 		if ($application->is_a(CL_CRM_SALES))
 		{
-			$application->process_call_result(new object($this->id()));// send call change message to sales application
+			// send call change message to sales application
+			$application->process_call_result(new object($this->id()));
 		}
 		return $r;
 	}

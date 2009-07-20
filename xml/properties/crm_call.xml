@@ -81,16 +81,6 @@
             <caption>Uue k&amp;amp;otilde;ne aeg</caption>
       </property>
       <property>
-            <name>presentation_date</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>datetime_select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <parent>top_2way_left</parent>
-            <caption>Esitluse aeg</caption>
-      </property>
-      <property>
             <name>add_clauses</name>
             <table>planner</table>
             <group>general</group>
@@ -477,12 +467,12 @@
       <property>
             <name>presentation</name>
             <table>objects</table>
-            <group>other_settings</group>
+            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_RESULT_PRESENTATION</reltype>
-            <comment>Tulemuseks olev presentatsioon</comment>
+            <comment>Tulemuseks olev presentatsioon (m&amp;amp;auml;&amp;amp;auml;rab k&amp;amp;otilde;ne t&amp;amp;ouml;&amp;amp;ouml;riistariba nuppude konfiguratsiooni)</comment>
             <caption>Presentatsioon</caption>
       </property>
       <property>
