@@ -5516,7 +5516,7 @@ $types = array(
 		{
 			$name = obj($c);
 			$name = $name->name();
-			$oid = $c->company_id();
+			$oid = method_exists($c, "company_id") ? $c->company_id() : null;
 			if($oid)
 			{
 				$obj = obj($oid);
