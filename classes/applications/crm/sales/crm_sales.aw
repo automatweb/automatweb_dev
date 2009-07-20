@@ -281,8 +281,8 @@ class crm_sales extends class_base
 		$r = PROP_OK;
 		if (is_oid($arr["obj_inst"]->prop("role_profession_salesman")))
 		{
-			$owner = $arr["obj_inst"]->prop("owner");
-			$salespersons = $owner->get_workers(array("active" => true, "profession" => $arr["obj_inst"]->prop("role_profession_salesman")));
+			$profession = new object($arr["obj_inst"]->prop("role_profession_salesman"));
+			$salespersons = $profession->get_workers(null, false);
 			$arr["prop"]["options"] = array("" => "") + $salespersons->names();
 		}
 		return $r;

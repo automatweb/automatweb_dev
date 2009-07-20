@@ -4,9 +4,9 @@ class crm_profession_obj extends _int_object
 {
 	/** returns all workers with this profession
 		@attrib api=1
-		@returns object list
+		@returns object_list of CL_CRM_PERSON
 	**/
-	public function get_workers($section)
+	public function get_workers($section = null, $bc = true)
 	{
 		if(is_oid($section))
 		{
@@ -19,7 +19,7 @@ class crm_profession_obj extends _int_object
 			"class_id" => CL_CRM_PERSON_WORK_RELATION,
 			"site_id" => array(),
 			"lang_id" => array(),
-			"profession" => $this->id(),
+			"profession" => $this->id()
 		));
 
 		if(sizeof($rel_list->ids()))
@@ -28,18 +28,21 @@ class crm_profession_obj extends _int_object
 				"class_id" => CL_CRM_PERSON,
 				"site_id" => array(),
 				"class_id" => array(),
-				"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $rel_list->ids(),
+				"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $rel_list->ids()
 			));
 			$ol = $person_list;
 		}
 
-		$ol2 = new object_list(array(
-			"lang_id" => array(),
-			 "site_id" => array(),
-			 "CL_CRM_PERSON.RELTYPE_RANK" => $this->id(),
-			"class_id" => CL_CRM_PERSON,
-		));
-		$ol->add($ol2);
+		if ($bc)
+		{
+			$ol2 = new object_list(array(
+				"lang_id" => array(),
+				 "site_id" => array(),
+				 "CL_CRM_PERSON.RELTYPE_RANK" => $this->id(),
+				"class_id" => CL_CRM_PERSON
+			));
+			$ol->add($ol2);
+		}
 		return $ol;
 	}
 
@@ -53,7 +56,7 @@ class crm_profession_obj extends _int_object
 			"site_id" => array(),
 			"lang_id" => array(),
 			"CL_CRM_PERSON_WORK_RELATION.RELTYPE_SECTION" => $section,
-			"profession" => $this->id(),
+			"profession" => $this->id()
 		));
 
 		if(sizeof($rel_list->ids()))
@@ -62,7 +65,7 @@ class crm_profession_obj extends _int_object
 				"class_id" => CL_CRM_PERSON,
 				"site_id" => array(),
 				"class_id" => array(),
-				"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $rel_list->ids(),
+				"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $rel_list->ids()
 			));
 			return $person_list;
 		}
