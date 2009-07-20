@@ -7,6 +7,16 @@ class crm_presentation_obj extends task_object
 	const RESULT_SALE = 3;
 	const RESULT_MISS = 4;
 
+	public function awobj_set_start($value)
+	{
+		if ($this->prop("real_start") < 2 and $value < time())
+		{
+			throw new awex_crm_presentation("Start cannot be in the past");
+		}
+
+		$this->set_prop("start", $value);
+	}
+
 	public function save($exclusive = false, $previous_state = null)
 	{
 		$r = parent::save($exclusive, $previous_state);

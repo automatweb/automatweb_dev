@@ -104,6 +104,54 @@ class crm_presentation extends task
 		return $this->save_parts_table($arr);
 	}
 
+	function _get_start(&$arr)
+	{
+		$return = PROP_OK;
+		// in sales application, a salesman can't change planned start/end
+		$application = automatweb::$request->get_application();
+		if ($application->is_a(CL_CRM_SALES))
+		{
+			$role = $application->get_current_user_role();
+			if (crm_sales_obj::ROLE_SALESMAN === $role)
+			{
+				$arr["prop"]["disabled"] = 1;
+			}
+		}
+		return $return;
+	}
+
+	function _get_end(&$arr)
+	{
+		$return = PROP_OK;
+		// in sales application, a salesman can't change planned start/end
+		$application = automatweb::$request->get_application();
+		if ($application->is_a(CL_CRM_SALES))
+		{
+			$role = $application->get_current_user_role();
+			if (crm_sales_obj::ROLE_SALESMAN === $role)
+			{
+				$arr["prop"]["disabled"] = 1;
+			}
+		}
+		return $return;
+	}
+
+	function _set_end(&$arr)
+	{
+		$return = PROP_OK;
+		// in sales application, a salesman can't change planned start/end
+		$application = automatweb::$request->get_application();
+		if ($application->is_a(CL_CRM_SALES))
+		{
+			$role = $application->get_current_user_role();
+			if (crm_sales_obj::ROLE_SALESMAN === $role)
+			{
+				$return = PROP_IGNORE;
+			}
+		}
+		return $return;
+	}
+
 /* SET DONE
 	if either result, real_start or real_duration is set, both must be set. Presentation will then be considered done
 */
@@ -112,7 +160,7 @@ class crm_presentation extends task
 		$real_start = isset($arr["request"]["real_start"]) ? date_edit::get_timestamp($arr["request"]["real_start"]) : 0;
 		if ($arr["prop"]["value"] < 1 and ($real_start > 1 or !empty($arr["request"]["result"])))
 		{
-			$arr["prop"]["error"] = t("Kui presentatsioon on tehtud, peab sisestama ka kestuse");
+			$arr["prop"]["error"] = t("Kui esitlus on tehtud, peab sisestama ka kestuse");
 			$return = PROP_FATAL_ERROR;
 		}
 		else
@@ -125,17 +173,43 @@ class crm_presentation extends task
 
 	function _set_real_start(&$arr)
 	{
+		$return = PROP_OK;
 		$real_start = date_edit::get_timestamp($arr["prop"]["value"]);
 		if ($real_start < 2 and ($arr["request"]["real_duration"] > 1 or !empty($arr["request"]["result"])))
 		{
-			$arr["prop"]["error"] = t("Kui presentatsioon on tehtud, peab sisestama ka tegeliku algusaja");
+			$arr["prop"]["error"] = t("Kui esitlus on tehtud, peab sisestama ka tegeliku algusaja");
 			$return = PROP_FATAL_ERROR;
 		}
 		else
 		{
 			$arr["prop"]["value"] = ceil($arr["prop"]["value"]*60);
-			$return = PROP_OK;
 		}
+		return $return;
+	}
+
+	function _set_start(&$arr)
+	{
+		$return = PROP_OK;
+
+		// in sales application, a salesman can't change planned start/end
+		$application = automatweb::$request->get_application();
+		if ($application->is_a(CL_CRM_SALES))
+		{
+			$role = $application->get_current_user_role();
+			if (crm_sales_obj::ROLE_SALESMAN === $role)
+			{
+				return PROP_IGNORE;
+			}
+		}
+
+		// check if planned start for an unstarted presentation is in the future
+		$start = date_edit::get_timestamp($arr["prop"]["value"]);
+		if ($arr["obj_inst"]->prop("real_start") < 2 and $start < time())
+		{
+			$arr["prop"]["error"] = t("Esitluse algusaeg ei saa olla minevikus");
+			$return = PROP_FATAL_ERROR;
+		}
+
 		return $return;
 	}
 
@@ -144,7 +218,7 @@ class crm_presentation extends task
 		$real_start = isset($arr["request"]["real_start"]) ? date_edit::get_timestamp($arr["request"]["real_start"]) : 0;
 		if (empty($arr["prop"]["value"]) and ($real_start > 1 or !empty($arr["request"]["result"])))
 		{
-			$arr["prop"]["error"] = t("Kui presentatsioon on tehtud, peab valima ka tulemuse");
+			$arr["prop"]["error"] = t("Kui esitlus on tehtud, peab valima ka tulemuse");
 			$return = PROP_FATAL_ERROR;
 		}
 		else
@@ -155,7 +229,7 @@ class crm_presentation extends task
 	}
 /* END SET DONE */
 
-	function do_db_upgrade($tbl, $field)
+	function do_db_upgrade($tbl, $field, $q, $err)
 	{
 		if ("planner" === $tbl)
 		{
