@@ -1739,7 +1739,16 @@ class object
 	function prop_str($param, $is_oid = NULL)
 	{
 		$this->_check_lock_read();
-		return $GLOBALS["objects"][$this->oid]->prop_str($param, $is_oid);
+		$method = "awobj_str_{$param}";
+
+		if (method_exists($GLOBALS["objects"][$this->oid], $method))
+		{
+			return $GLOBALS["objects"][$this->oid]->$method();
+		}
+		else
+		{
+			return $GLOBALS["objects"][$this->oid]->prop_str($param, $is_oid);
+		}
 	}
 
 	/** returns an array of properties that are defined for the current object's class
