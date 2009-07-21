@@ -762,10 +762,13 @@ class bug extends class_base
 							$bt = $pi;
 						}
 					}
-					$bdd = $bt->prop("bug_def_deadline");
-					if($bdd > 0)
+					if ($bt)
 					{
-						$prop["value"] = time() + $bdd*24*60*60;
+						$bdd = $bt->prop("bug_def_deadline");
+						if($bdd > 0)
+						{
+							$prop["value"] = time() + $bdd*24*60*60;
+						}
 					}
 				}
 				break;
@@ -3992,7 +3995,7 @@ EOF;
 
 		$type_app = "
 			var opts = new Array()";
-		foreach($options as $t => $option)
+		foreach(safe_array($options) as $t => $option)
 		{
 			$type_app .=  "
  				opts[$t] = new Array()";
@@ -4159,6 +4162,10 @@ EOF;
 	function filter_bug_statuses($statuses, $arr)
 	{
 		$po = obj(!empty($arr["request"]["parent"]) ? $arr["request"]["parent"] : $arr["request"]["id"]);
+		if (!is_oid($po->id()))
+		{
+			return;
+		}
 		$pt = $po->path();
 		$bt = null;
 		foreach($pt as $pi)
