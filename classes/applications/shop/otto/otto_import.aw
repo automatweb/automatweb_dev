@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.106 2009/07/21 12:36:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.107 2009/07/21 13:28:20 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -286,7 +286,6 @@ define('SMALL_PICTURE', 2);
 
 class otto_import extends class_base
 {
-
 	var $not_found_products = array();
 
 	function otto_import()
