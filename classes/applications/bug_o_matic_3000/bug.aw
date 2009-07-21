@@ -3520,7 +3520,8 @@ die($email);
 		$arr["prop"]["options"][$p->id()] = $p->name();
 
 		$sect = get_instance(CL_CRM_SECTION);
-		$unit = reset($p->prop("org_section"));
+		$units = safe_array($p->prop("org_section"));
+		$unit = reset($units);
 		if ($this->can("view", $unit))
 		{
 			$work_ol = $sect->get_section_workers($unit, true);
