@@ -1349,7 +1349,7 @@ class crm_bill extends class_base
 			));
 		}
 
-		if($arr["obj_inst"]->set_crm_settings() && $arr["obj_inst"]->crm_settings->prop("bill_mail_to"))
+		if($arr["obj_inst"]->set_crm_settings() && is_object($arr["obj_inst"]->crm_settings) && $arr["obj_inst"]->crm_settings->prop("bill_mail_to"))
 		{
 			$t->define_data(array(
 				"mail" => $arr["obj_inst"]->crm_settings->prop("bill_mail_to"),
