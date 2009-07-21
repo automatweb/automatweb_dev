@@ -59,6 +59,13 @@ class shop_orderer_data_site_show_bills extends shop_orderer_data_site_show
 		);
 		$bills = new object_list();
 		$rows = "";
+		$co = get_current_company();
+		$co = obj(2818612);
+		if(is_object($co))
+		{
+			$bills = $co->get_bills();
+		}
+
 		foreach($bills->arr() as $bill)
 		{
 			$bill_vars = array();
@@ -72,8 +79,8 @@ class shop_orderer_data_site_show_bills extends shop_orderer_data_site_show
 			$this->vars($bill_vars);
 			$rows.=$this->parse("ROW");
 		}
-		$this->vars($vars);
 		$vars["ROW"] = $rows;
+		$this->vars($vars);
 		return $this->parse();
 	}
 }

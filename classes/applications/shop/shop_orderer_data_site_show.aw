@@ -39,9 +39,9 @@ class shop_orderer_data_site_show extends class_base
 		$arr["prop"]["options"] = $tm->template_picker(array(
 			"folder" => $this->site_template_dir
 		));
-		if(!sizeof($prop["options"]))
+		if(!(sizeof($arr["prop"]["options"]) > 1))
 		{
-			$prop["caption"] .= t("\n".$this->site_template_dir."");
+			$arr["prop"]["caption"] .= "\n(".$this->site_template_dir.")";
 		}
 	}
 
@@ -83,7 +83,7 @@ class shop_orderer_data_site_show extends class_base
 		$target = obj($arr["alias"]["target"]);
 		if($target->prop("template"))
 		{
-			$show_params = $target->prop("template");
+			$show_params["template"] = $target->prop("template");
 		}
 		return $this->show($show_params);
 	}

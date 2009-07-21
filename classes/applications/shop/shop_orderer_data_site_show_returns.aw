@@ -47,10 +47,39 @@ class shop_orderer_data_site_show_returns extends shop_orderer_data_site_show
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
+		$tpl = "show.tpl";
+		if($arr["tpl"])
+		{
+			$tpl = $arr["tpl"];
+		}
+		$this->read_template($tpl);
+
+		$vars = array(
 			"name" => $ob->prop("name"),
-		));
+		);
+		$bills = new object_list();
+		$rows = "";
+		$co = get_current_company();
+		$co = obj(2818612);
+		if(is_object($co))
+		{
+			$orders = $co->get_warehouse_returns();
+		}
+
+		foreach($orders->arr() as $order)
+		{
+			$order_vars = array();
+			$order_vars["id"] = $order->id();
+			$order_vars["name"] = $order->name();
+			$order_vars["number"] = $order->prop("number");
+			$order_vars["currency"] = $order->prop("currency.name");
+			$order_vars["date"] = date("d.m.Y" , $order->prop("date"));
+			$order_vars["status"] = date("d.m.Y" , $order->prop("order_status"));
+			$this->vars($order_vars);
+			$rows.=$this->parse("ROW");
+		}
+		$vars["ROW"] = $rows;
+		$this->vars($vars);
 		return $this->parse();
 	}
 }

@@ -47,10 +47,43 @@ class shop_orderer_data_site_show_orders extends shop_orderer_data_site_show
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
+		$tpl = "show.tpl";
+		if($arr["tpl"])
+		{
+			$tpl = $arr["tpl"];
+		}
+		$this->read_template($tpl);
+
+		$vars = array(
 			"name" => $ob->prop("name"),
-		));
+		);
+		$bills = new object_list();
+		$rows = "";
+		$co = get_current_company();
+		$co = obj(2818612);
+		if(is_object($co))
+		{
+			$orders = $co->get_sell_orders();
+		}
+
+		$order_inst = get_instance(CL_SHOP_SELL_ORDER);
+		
+		foreach($orders->arr() as $order)
+		{
+			$order_vars = array();
+			$order_vars["id"] = $order->id();
+			$order_vars["name"] = $order->name();
+			$order_vars["number"] = $order->prop("number");
+			$order_vars["currency"] = $order->prop("currency.name");
+			$order_vars["date"] = date("d.m.Y" , $order->prop("date"));
+			$order_vars["status"] = date("d.m.Y" , $order->prop("order_status"));
+			$order_vars["sum"] = $order->get_sum();
+			$order_vars["url"] = $order_inst->mk_my_orb("show" , array("id" => $order->id()));
+			$this->vars($order_vars);
+			$rows.=$this->parse("ROW");
+		}
+		$vars["ROW"] = $rows;
+		$this->vars($vars);
 		return $this->parse();
 	}
 }

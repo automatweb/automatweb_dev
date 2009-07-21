@@ -47,12 +47,47 @@ class shop_orderer_data_site_show_delivery_notes extends shop_orderer_data_site_
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
+		$tpl = "show.tpl";
+		if($arr["tpl"])
+		{
+			$tpl = $arr["tpl"];
+		}
+		$this->read_template($tpl);
+
+		$vars = array(
 			"name" => $ob->prop("name"),
-		));
+		);
+		$bills = new object_list();
+		$rows = "";
+		$co = get_current_company();
+		$co = obj(2818612);
+		if(is_object($co))
+		{
+			$notes = $co->get_delivery_notes();
+		}
+
+		$note_inst = get_instance(CL_SHOP_DELIVERY_NOTE);
+
+		foreach($notes->arr() as $note)
+		{
+			$note_vars = array();
+			$note_vars["id"] = $note->id();
+			$note_vars["number"] = $note->prop("number");
+			$note_vars["currency"] = $note->prop("currency.name");
+			$note_vars["date"] = date("d.m.Y" , $note->prop("enter_date"));
+			$note_vars["delivery"] = date("d.m.Y" , $note->prop("delivery_date"));
+			$note_vars["sum"] = $note->get_sum();
+//			$note_vars["url"] = $note_inst->mk_my_orb("show" , array("id" => $note->id()));
+
+			$this->vars($note_vars);
+			$rows.=$this->parse("ROW");
+		}
+		$vars["ROW"] = $rows;
+		$this->vars($vars);
 		return $this->parse();
 	}
+
+	
 }
 
 ?>
