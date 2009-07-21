@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="otto_import" folder="www/dev/terryf/automatweb_dev/classes/applications/shop/otto" extends="class_base">
+	<class name="otto_import" folder="www/automatweb_cvs/classes/applications/shop/otto" extends="class_base">
 		<action name="_delete_bubble_picture">
 			<function name="_delete_bubble_picture">
 				<arguments>
