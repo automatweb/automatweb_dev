@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.104 2008/08/11 09:55:48 dragut Exp $
-// otto_import.aw - Otto toodete import 
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.105 2009/07/21 08:48:53 dragut Exp $
+// otto_import.aw - Otto toodete import
 /*
 
 @classinfo syslog_type=ST_OTTO_IMPORT relationmgr=yes no_status=1 no_comment=1 prop_cb=1  maintainer=dragut
@@ -34,7 +34,7 @@
 	property force_full_update type=checkbox ch_value=1 store=no
 	caption Import uuendab k&otilde;iki v&auml;lju
 
-	@property update_params_table type=table 
+	@property update_params_table type=table
 	@caption Toodete uuendamine
 
 	@property last_import_log type=text store=no
@@ -51,7 +51,7 @@
 	@property import_log_item type=table no_caption=1 group=imported_products
 	@caption Impordi logi vaatamine
 
-@groupinfo products_manager caption="Toodete haldus" 
+@groupinfo products_manager caption="Toodete haldus"
 
 	@layout hbox_products_manager_toolbar type=hbox group=products_manager
 
@@ -61,7 +61,7 @@
 	@layout hbox_products_manager type=hbox width=20%:80% group=products_manager
 
 		@layout vbox_products_manager_search type=vbox closeable=1 area_caption=Toodete&nbsp;otsing group=products_manager parent=hbox_products_manager
-		
+
 			@property products_manager_prod_id type=textbox store=no size=20 captionside=top group=products_manager parent=vbox_products_manager_search
 			@caption Toote OID
 
@@ -115,7 +115,7 @@
 
 		@property files_order type=table group=files_order
 		@caption Failide n&auml;itamise j&auml;rjekord
-	
+
 	@groupinfo file_suffix caption="Failide suffiksid" parent=files
 
 		@property file_suffix type=table group=file_suffix
@@ -127,7 +127,7 @@
 
 		@property discount_products_file type=textbox size=60 group=discount_products_general field=meta method=serialize
 		@caption Soodustoodete faili asukoht
-			
+
 		@property discount_products_parents type=textbox size=60 group=discount_products_general field=meta method=serialize
 		@caption Kausta id, kus all soodustooted asuvad
 
@@ -158,14 +158,18 @@
 		@property discount_season_amount type=textbox group=discount_products_general field=meta method=serialize
 		@caption Kui palju allahindlust tehake
 
-	@groupinfo discount_products_list caption="Nimekiri" parent=discount_products
+	@groupinfo discount_products_list_without_pictures caption="Soodustooted (ilma piltideta)" parent=discount_products
 
-		@property discount_products_list type=table no_caption=1 group=discount_products_list
+		@property discount_products_list_without_pictures type=table no_caption=1 group=discount_products_list_without_pictures
+
+	@groupinfo discount_products_list_with_pictures caption="Soodustooted (piltidega)" parent=discount_products
+
+		@property discount_products_list_with_pictures type=table no_caption=1 group=discount_products_list_with_pictures
 
 @groupinfo foldersa caption="Kataloogid / Kategooriad"
 
 	@groupinfo categories caption="Kategooriad" parent=foldersa
-		
+
 		@property categories type=table store=no group=categories no_caption=1
 		@caption Kategooriad
 
@@ -177,7 +181,7 @@
 		@caption Firmapildid
 
 	@groupinfo bubble_pictures_group caption="Mullipildid" parent=foldersa
-	
+
 		@property bubble_pictures_toolbar type=toolbar group=bubble_pictures_group no_caption=1
 
 		@property bubble_pictures type=table group=bubble_pictures_group no_caption=1
@@ -295,6 +299,11 @@ class otto_import extends class_base
 
 	function get_property($arr)
 	{
+		if($_GET["kaarel"] == 1)
+		{
+			$this->kaarel($arr);
+			die();
+		}
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -335,7 +344,7 @@ class otto_import extends class_base
 				{
 					$prop['options'] = array(
 						"bp_pl" => "Poola Bonprix",
-						"bp_de" => "Saksa Bonprix"	
+						"bp_de" => "Saksa Bonprix"
 					);
 					$retval = PROP_OK;
 				}
@@ -344,7 +353,7 @@ class otto_import extends class_base
 					$retval = PROP_IGNORE;
 				}
 				break;
-			
+
 			case "import_discount_products":
 				$prop['value'] = html::href(array(
 					"caption" => t("Impordi soodustooted"),
@@ -391,14 +400,14 @@ class otto_import extends class_base
 				$prop['value'] .= t("Peale salvestamist kuvatakse teile tekstikastis olevale stringile vastavad lehed, mille alusel hakatakse tooteid kustutama. Muutes stringi tekstikastis ja uuesti salvastades, saate veenduda, et &otilde;igete t&auml;histe j&rgi hakatakse tooteid otsima.")."<br />";
 				$prop['value'] .= t("Selleks, et tooted kustutataks, m&auml;rkige &auml;ra l&otilde;ppu tekkiv m&auml;rkeruut ja salvestage. Peale seda kustutakse k&auml;ik tooted ja sellega seonduvad hinnad/suurused, mille juures on vastavalt tekstikasti sisestatud otsingustringile vastav t&auml;his (lehe nimetus).")."<br />";
 				$prop['value'] .= "<strong>".t("Tooted ja nendega seonduv info kustutatakse s&uuml;steemist l&otilde;plikult!!!")."</strong><br />";
-			
+
 
 				$tmp = $arr['obj_inst']->prop('del_prods_by_filename');
 				$lang_id = $arr['obj_inst']->lang_id();
 				if ( !empty( $tmp ) )
 				{
 					$prop['value'] .= t('Kustutan j&auml;rgnevate t&auml;histega failides olevad tooted: ').'<br />';
-					
+
 					$this->db_query("
 						select
 							distinct(user18) as pg
@@ -407,9 +416,9 @@ class otto_import extends class_base
 							left join objects on objects.brother_of = aw_shop_products.aw_oid
 						where
 							aw_shop_products.user18 like '$tmp' AND
-							objects.lang_id = $lang_id AND 
+							objects.lang_id = $lang_id AND
 							objects.status > 0
-						
+
 					");
 					$show_confirm = false;
 					while ($row = $this->db_next())
@@ -459,17 +468,17 @@ class otto_import extends class_base
 					// do replace
 					$toims = explode(",", $prop["value"]);
 					$q = "
-						UPDATE 
+						UPDATE
 							otto_prod_img
-						SET 
-							show_imnr = '".$arr["request"]["orig_img"]."' 
+						SET
+							show_imnr = '".$arr["request"]["orig_img"]."'
 						WHERE
 							imnr IN (".join(",", map("'%s'", $toims)).")
 					";
 					$this->db_query($q);
 				}
 				break;
-			
+
 			case "del_prods":
 				if ($prop["value"] != "")
 				{
@@ -508,11 +517,11 @@ class otto_import extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 /*
 	function callback_on_load($arr)
 	{
-		
+
 	}
 */
 	function callback_mod_tab($arr)
@@ -543,7 +552,7 @@ class otto_import extends class_base
 			$arr['container_id'] = (int)$_GET['container_id'];
 		}
 	}
-	
+
 	function callback_mod_retval($arr)
 	{
 		if ( isset($arr['request']['container_id']) )
@@ -582,7 +591,7 @@ class otto_import extends class_base
 		}
 
 		////
-		// bubble filter 
+		// bubble filter
 		if ( isset($arr['request']['bubble_filter']['category']) )
 		{
 			$arr['args']['bubble_filter']['category'] = $arr['request']['bubble_filter']['category'];
@@ -618,7 +627,7 @@ class otto_import extends class_base
 		if($arr['obj_inst']->prop('do_fixes'))
 		{
 			$arr['obj_inst']->set_prop('do_fixes',0);
-			
+
 			$this->do_post_import_fixes($arr['obj_inst']);
 		}
 
@@ -634,7 +643,6 @@ class otto_import extends class_base
 			$this->do_prod_import(array(
 				'otto_import' => $arr["obj_inst"],
 				'doing_pict_i' => $arr['request']['do_pict_i'],
-			//	'force_full_update' => $arr['request']['force_full_update'],
 				'update_product_images' => $arr['request']['update_product_images'],
 				'force_update_product_images' => $arr['request']['force_update_product_images'],
 				'update_product_categories' => $arr['request']['update_product_categories'],
@@ -795,8 +803,16 @@ class otto_import extends class_base
 			'name' => 'view',
 			'caption' => t('Vaata'),
 		));
-
-		$this->db_query('select count(*) as count,csv_files,import_time from otto_import_log group by import_time order by import_time desc');
+		$sql = 'select count(*) as count,csv_files,import_time from otto_import_log group by import_time order by import_time desc';
+		if (aw_global_get('lang_id') == 7 || aw_global_get('lang_id') == 6)
+		{
+			$sql = 'select count(*) as count,csv_files,import_time from otto_import_log where csv_files like \'LET%\'group by import_time order by import_time desc';
+		}
+		if (aw_global_get('lang_id') == 1)
+		{
+			$sql = 'select count(*) as count,csv_files,import_time from otto_import_log where csv_files like \'EST%\'group by import_time order by import_time desc';
+		}
+		$this->db_query($sql);
 		while ($row = $this->db_next())
 		{
 			$t->define_data(array(
@@ -862,7 +878,7 @@ class otto_import extends class_base
 			));
 
 			$images = explode(',', $prod_obj->prop('user3'));
-		
+
 			$images_str = '';
 			foreach ($images as $image)
 			{
@@ -891,7 +907,7 @@ class otto_import extends class_base
 				'images' => $images_str
 			));
 		}
-		
+
 		return PROP_OK;
 	}
 
@@ -954,7 +970,7 @@ class otto_import extends class_base
 		$arr['prop']['value'] = strtoupper($arr['request']['products_manager_prod_page']);
 		return PROP_OK;
 	}
-	
+
 	function _get_products_manager_prod_image($arr)
 	{
 		$arr['prop']['value'] = $arr['request']['products_manager_prod_image'];
@@ -1051,7 +1067,7 @@ class otto_import extends class_base
 		{
 			return PROP_IGNORE;
 		}
-		
+
 		$prod_obj = new object($prod_id);
 		if ($prod_obj->class_id() != CL_SHOP_PRODUCT)
 		{
@@ -1247,8 +1263,8 @@ class otto_import extends class_base
 				));
 
 				unset($_SESSION['otto_import_prod_manager_image_exists']);
-			} 
-			else 
+			}
+			else
 			{
 				$new_image_str = html::fileupload(array(
 					'name' => 'new_picture'
@@ -1295,7 +1311,7 @@ class otto_import extends class_base
 		// if i need to save the object or not
 		$save = false;
 
-		// check if categories have been changed: 
+		// check if categories have been changed:
 		if ($prod_obj->prop('user11') != $arr['request']['categories'])
 		{
 			$categories = array();
@@ -1323,7 +1339,7 @@ class otto_import extends class_base
 				group by
 					aw_folder
 			");
-			
+
 			// add the new sections  info to products to section look-up table:
 			foreach ($sections as $section)
 			{
@@ -1381,7 +1397,7 @@ class otto_import extends class_base
 				if ($this->can('view', $other_product))
 				{
 					$update_products[$other_product] = new object($other_product);
-					
+
 				}
 			}
 			foreach ($update_products as $other_product)
@@ -1438,7 +1454,7 @@ class otto_import extends class_base
 				move_uploaded_file($_FILES['new_picture']['tmp_name'], "/tmp/" . basename($_FILES['new_picture']['tmp_name']));
 			}
 		}
-		
+
 		// so, if there should be any renaming or overwriting done, then lets do it ...
 		if (!empty($arr['request']['new_picture_name'])){
 			$filename = basename($arr['request']['new_picture_name'], '.jpg');
@@ -1468,7 +1484,7 @@ class otto_import extends class_base
 
 			$image_converter = get_instance('core/converters/image_convert');
 			$image_converter->load_from_file($folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.BIG_PICTURE.'.jpg');
-			
+
 			$max_image_width = 168;
 			$max_image_height = 240;
 
@@ -1476,7 +1492,7 @@ class otto_import extends class_base
 
 			$new_image_width = $max_image_width;
 			$new_image_height = ($max_image_width * $image_height) / $image_width;
-			
+
 			if ($new_image_height > $max_image_height)
 			{
 				$new_image_width = ($max_image_height * $image_width) / $image_height;
@@ -1485,7 +1501,7 @@ class otto_import extends class_base
 
 			$image_converter->resize_simple($new_image_width, $new_image_height);
 
-			
+
 
 			$small_picture = $folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.SMALL_PICTURE.'.jpg';
 			$image_converter->save($small_picture, 2);
@@ -1514,7 +1530,7 @@ class otto_import extends class_base
 			$prod_obj->save();
 		}
 	}
-	
+
 	function _get_products_manager_change_submit($arr)
 	{
 		if ($this->can('view', $arr['request']['products_manager_prod_id']))
@@ -1573,7 +1589,7 @@ class otto_import extends class_base
 		return PROP_OK;
 	}
 
-	function _get_discount_products_list($arr)
+	function _get_discount_products_list_without_pictures($arr)
 	{
 		$table = &$arr['prop']['vcl_inst'];
 		$table->set_sortable(false);
@@ -1606,9 +1622,9 @@ class otto_import extends class_base
 				aw_shop_products.user6 as codes,
 				aw_shop_products.user18 as page,
 				objects.name as prod_name
-			from 
+			from
 				bp_discount_products
-				left join aw_shop_products on (bp_discount_products.prod_oid = aw_shop_products.aw_oid)	
+				left join aw_shop_products on (bp_discount_products.prod_oid = aw_shop_products.aw_oid)
 				left join objects on (bp_discount_products.prod_oid = objects.oid)
 			where
 				bp_discount_products.lang_id = ".aw_global_get('lang_id')." and
@@ -1637,6 +1653,71 @@ class otto_import extends class_base
 		}
 
 
+		return PROP_OK;
+	}
+
+	function _get_discount_products_list_with_pictures($arr)
+	{
+		$table = &$arr['prop']['vcl_inst'];
+		$table->set_sortable(false);
+
+		$table->define_field(array(
+			'name' => 'id',
+			'caption' => t('OID'),
+			'align' => 'center',
+			'width' => '10%'
+		));
+		$table->define_field(array(
+			'name' => 'product',
+			'caption' => t('Toode'),
+		));
+		$table->define_field(array(
+			'name' => 'product_codes',
+			'caption' => t('Toote koodid'),
+		));
+		$table->define_field(array(
+			'name' => 'product_page',
+			'caption' => t('Fail/leht'),
+		));
+		$sql = "
+			select
+				bp_discount_products.name as disc_prod_name,
+				bp_discount_products.product_code as disc_prod_code,
+				bp_discount_products.prod_oid as prod_oid,
+				aw_shop_products.aw_oid as aw_oid,
+				aw_shop_products.user3 as images,
+				aw_shop_products.user6 as codes,
+				aw_shop_products.user18 as page,
+				objects.name as prod_name
+			from
+				bp_discount_products
+				left join aw_shop_products on (bp_discount_products.prod_oid = aw_shop_products.aw_oid)
+				left join objects on (bp_discount_products.prod_oid = objects.oid)
+			where
+				bp_discount_products.lang_id = ".aw_global_get('lang_id')." and
+				aw_shop_products.aw_oid is not null and
+				aw_shop_products.user3 != \"\"
+		";
+
+		$prods = $this->db_fetch_array($sql);
+
+		foreach ($prods as $prod)
+		{
+			$table->define_data(array(
+				'id' => $prod['prod_oid'],
+				'product' => html::href(array(
+					'caption' => $prod['prod_name'].' ('.$prod['disc_prod_name'].')',
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $arr['obj_inst']->id(),
+						'group' => 'products_manager',
+						'products_manager_prod_id' => $prod['prod_oid'],
+						'return_url' => post_ru()
+					), CL_OTTO_IMPORT),
+				)),
+				'product_codes' => str_replace(',', ', ', $prod['codes']),
+				'product_page' => $prod['page']
+			));
+		}
 		return PROP_OK;
 	}
 
@@ -1706,7 +1787,7 @@ class otto_import extends class_base
 		));
 
 		$saved_containers = $arr['obj_inst']->meta('containers');
-		foreach (safe_array($saved_containers) as $container_key => $container) 
+		foreach (safe_array($saved_containers) as $container_key => $container)
 		{
 			$table->define_data(array(
 				'id' => $container_key." ",
@@ -1752,7 +1833,7 @@ class otto_import extends class_base
 			{
 				$containers[$id]['order'] = $containers_order[$id];
 			}
-			
+
 		}
 		$arr['obj_inst']->set_meta('containers', $containers);
 		return PROP_OK;
@@ -1762,7 +1843,7 @@ class otto_import extends class_base
 	{
 		if (!isset($arr['request']['container_id']))
 		{
-			return PROP_IGNORE;	
+			return PROP_IGNORE;
 		}
 		$t = &$arr['prop']['vcl_inst'];
 		$t->set_sortable(false);
@@ -1871,7 +1952,7 @@ class otto_import extends class_base
 			{
 				foreach ($row as $row_value)
 				{
-					if ( !empty($row_value) ) 
+					if ( !empty($row_value) )
 					{
 						$valid_rows[] = $row;
 						break;
@@ -1987,7 +2068,7 @@ class otto_import extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'order',
-			'caption' => t('J&auml;rjekord'),	
+			'caption' => t('J&auml;rjekord'),
 			'chgbgcolor' => 'line_color'
 		));
 
@@ -2040,7 +2121,7 @@ class otto_import extends class_base
 		// i think that to avoid the scannig for orders from otto_prod_img table
 		// i should keep them in meta too ... maybe it isn't necessary, anyway, this is
 		// the place where i should update otto_prod_img table and set the order
-		
+
 		foreach ($valid_data as $file => $order)
 		{
 
@@ -2054,7 +2135,7 @@ class otto_import extends class_base
 					$cur_pg = (int)$cur_pg;
 				}
 				$cur_pg = trim($cur_pg);
-			} 
+			}
 			else if (strlen($file) < 4)
 			{
 				// if the file name is shorter than 4 characters, then it is probably a part of the needed file code/page code
@@ -2084,7 +2165,7 @@ class otto_import extends class_base
 
 		// i don't recall that it is in use anywhere, so I comment it out at first and let's see what happens --dragut (14.11.2007)
 		//	$this->db_query("UPDATE otto_prod_img set file_order='".(int)$order."' WHERE p_pg='$cur_pg'");
-		
+
 		}
 		return PROP_OK;
 	}
@@ -2101,7 +2182,7 @@ class otto_import extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'suffix',
-			'caption' => t('Suffiks'),	
+			'caption' => t('Suffiks'),
 			'chgbgcolor' => 'line_color'
 		));
 
@@ -2183,7 +2264,7 @@ class otto_import extends class_base
 			'caption' => t('Filtreeri'),
 			'chgbgcolor' => 'line_color'
 		));
-		
+
 		$count = 1;
 		$data = array();
 		$aw_folder_ids = array();
@@ -2198,9 +2279,9 @@ class otto_import extends class_base
 					aw_folder
 				from
 					otto_imp_t_aw_to_cat
-				where 
+				where
 					lang_id = ".aw_global_get('lang_id')." and
-					category like '%".$args['request']['filter_category']."%' 
+					category like '%".$args['request']['filter_category']."%'
 			");
 			while ($row = $this->db_next())
 			{
@@ -2334,13 +2415,13 @@ class otto_import extends class_base
 						{
 							// v6tame need tooted selle sektsiooni alt mis praegust aktiivne on
 							$this->db_query("
-								select 
-									* 
-								from 
-									otto_prod_to_section_lut 
-								where 
-									section = ".$data['aw_folder_id']." and 
-									product in (".implode(',', $prod_ol_ids).") and 
+								select
+									*
+								from
+									otto_prod_to_section_lut
+								where
+									section = ".$data['aw_folder_id']." and
+									product in (".implode(',', $prod_ol_ids).") and
 									lang_id = ".aw_global_get('lang_id')."
 								");
 							$tmp_prods = array();
@@ -2356,8 +2437,8 @@ class otto_import extends class_base
 							{
 								echo ">>> ".$prod_id." lisatakse sektsiooni ".$data['aw_folder_id']." alla <br /> \n";
 								$this->db_query("
-									insert into 
-										otto_prod_to_section_lut 
+									insert into
+										otto_prod_to_section_lut
 									set
 										product = ".$prod_id.",
 										section = ".$data['aw_folder_id'].",
@@ -2369,7 +2450,7 @@ class otto_import extends class_base
 								echo "### ".$prod_id." n2idatakse juba sektsiooni ".$data['aw_folder_id']." all (ei tee midagi) <br />\n";
 							}
 						}
-						
+
 					}
 
 					$tmp_deleted_categories = array();
@@ -2417,9 +2498,9 @@ class otto_import extends class_base
 									echo "--- remove ".$prod_id." from section ".$data['aw_folder_id']." <br /> \n";
 									$this->db_query("
 										delete from
-											otto_prod_to_section_lut 
-										where 
-											product = ".$prod_id." and 
+											otto_prod_to_section_lut
+										where
+											product = ".$prod_id." and
 											section = ".$data['aw_folder_id']." and
 											lang_id = ".aw_global_get('lang_id')."
 									");
@@ -2432,7 +2513,7 @@ class otto_import extends class_base
 					{
 						if (!empty($category) && !empty($data['aw_folder_id']))
 						{
-							$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set 
+							$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set
 								category = '$category',
 								aw_folder = ".$data['aw_folder_id'].",
 								lang_id = ".aw_global_get('lang_id')."
@@ -2460,8 +2541,8 @@ class otto_import extends class_base
 					{
 						echo ">>> ".$prod_id." lisatakse sektsiooni ".$data['aw_folder_id']." alla <br /> \n";
 						$this->db_query("
-							insert into 
-								otto_prod_to_section_lut 
+							insert into
+								otto_prod_to_section_lut
 							set
 								product = ".$prod_id.",
 								section = ".$data['aw_folder_id'].",
@@ -2473,7 +2554,7 @@ class otto_import extends class_base
 					{
 						if (!empty($category) && !empty($data['aw_folder_id']))
 						{
-							$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set 
+							$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set
 								category = '$category',
 								aw_folder = ".$data['aw_folder_id'].",
 								lang_id = ".aw_global_get('lang_id')."
@@ -2483,7 +2564,7 @@ class otto_import extends class_base
 				}
 			}
 		}
-		
+
 		return PROP_OK;
 	}
 
@@ -2709,7 +2790,7 @@ class otto_import extends class_base
 	function _get_firm_pictures($args)
 	{
 		$t = &$args['prop']['vcl_inst'];
-		$t->set_sortable(false);		
+		$t->set_sortable(false);
 
 		$t->define_field(array(
 			'name' => 'select',
@@ -2812,7 +2893,7 @@ class otto_import extends class_base
 		}
 
 		for ($i = 0; $i < 5; $i++ )
-		{	
+		{
 			$t->define_data(array(
 				'category' => html::textbox(array(
 					'name' => 'new_firm_data['.$i.'][category]'
@@ -2962,7 +3043,7 @@ class otto_import extends class_base
 	{
 		$GLOBALS["no_cache_clear"] = 1;
 		$this->added_images = array();
-		aw_set_exec_time(AW_LONG_PROCESS);	
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$import_obj = $arr;
 
 		echo "-----------[ start of picture import ]------------------<br>";
@@ -2985,7 +3066,7 @@ class otto_import extends class_base
 		$cur_cnt = -1;
 		$start_time = time();
 
-		foreach ($data as $pcode) 
+		foreach ($data as $pcode)
 		{
 
 			$pcode = str_replace(" ", "", $pcode);
@@ -2996,7 +3077,7 @@ class otto_import extends class_base
 			}
 			echo "\n<br /><strong>[ process pcode $pcode ]</strong><br>\n";
 			flush();
-			
+
 			// BONPRIX:
 			if (aw_ini_get("site_id") == 276 || aw_ini_get("site_id") == 277)
 			{
@@ -3013,10 +3094,10 @@ class otto_import extends class_base
 					'import_obj' => $import_obj,
 					'start_time' => $start_time
 				));
-			} 
+			}
 
 			$stat = fopen($this->cfg["site_basedir"]."/files/status.txt","w");
-		
+
 			fwrite($stat, $pcode);
 			fclose($stat);
 
@@ -3061,7 +3142,7 @@ class otto_import extends class_base
 					}
 				}
 		}
-		
+
 	}
 
 	////
@@ -3094,7 +3175,7 @@ class otto_import extends class_base
 				for ( $i = 0; $i < strlen($mask); $i++ )
 				{
 					if ($mask{$i} == 1)
-					{ 
+					{
 						$image_ok = $this->get_image(array(
 							'source' => 'http://www.bonprix.ee/vv_bp_pl_img/'.$i.'/'.$filename.'_160.jpg',
 							'format' => 2,
@@ -3121,8 +3202,8 @@ class otto_import extends class_base
 							flush();
 
 							$q = ("
-								INSERT INTO 
-									otto_prod_img(pcode, nr,imnr, server_id, mod_time) 
+								INSERT INTO
+									otto_prod_img(pcode, nr,imnr, server_id, mod_time)
 									values('$pcode','$i','".$filename."_var".$i."', 7, $start_time)
 								");
 								//echo "q = $q <br>";
@@ -3132,11 +3213,11 @@ class otto_import extends class_base
 						else
 						{
 							echo "------ found image, update mod_time to $start_time (".date("d.m.Y H:m:s", $start_time).")<br>\n";
-							$this->db_query("UPDATE otto_prod_img SET mod_time=$start_time WHERE imnr = '$im' AND nr = '$num' AND pcode = '$pcode'");	
+							$this->db_query("UPDATE otto_prod_img SET mod_time=$start_time WHERE imnr = '$im' AND nr = '$num' AND pcode = '$pcode'");
 						}
 					}
 				}
-				
+
 			}
 		}
 		return true;
@@ -3203,15 +3284,15 @@ class otto_import extends class_base
 			echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
 			flush();
 			if (!$imnr && $first_im)
-			{	
+			{
 				echo "";
 				echo "------ insert new first image [ $first_im ]<br>\n";
 				flush();
-	
+
 				$nr = $first_im{strlen($first_im)-1};
 				$q = ("
-					INSERT INTO 
-						otto_prod_img(pcode, nr,imnr, server_id, mod_time) 
+					INSERT INTO
+						otto_prod_img(pcode, nr,imnr, server_id, mod_time)
 						values('$pcode','$nr','$first_im', 6, $start_time)
 				");
 				//echo "q = $q <br>";
@@ -3223,7 +3304,7 @@ class otto_import extends class_base
 				echo "------ found first image, update mod_time $start_time (".date("d.m.Y H:m:s", $start_time).")<br>\n";
 				$this->db_query("UPDATE otto_prod_img SET mod_time=$start_time WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'");
 			}
-	
+
 			// get other images
 			list($r_i) = explode("_", $first_im);
 			echo "---- Otsin teisi pilte: <br>";
@@ -3266,8 +3347,8 @@ class otto_import extends class_base
 					echo "------ insert new image [ $im ]<br>\n";
 					flush();
 					$q = ("
-						INSERT INTO 
-							otto_prod_img(pcode, nr,imnr, server_id, mod_time) 
+						INSERT INTO
+							otto_prod_img(pcode, nr,imnr, server_id, mod_time)
 							values('$pcode','$nr','$im', 6, $start_time)
 					");
 					//echo "q = $q <br>";
@@ -3297,7 +3378,7 @@ class otto_import extends class_base
 		$o = $arr['otto_import'];
 
 		$GLOBALS["no_cache_clear"] = 1;
-		
+
 		// unset the products list which was imported last time:
 		unset($_SESSION['otto_import_product_data']);
 
@@ -3332,7 +3413,7 @@ class otto_import extends class_base
 	{
 		if ($dir = @opendir($fld))
 		{
-			while (($file = readdir($dir)) !== false) 
+			while (($file = readdir($dir)) !== false)
 			{
 				if (!($file == "." || $file == ".."))
 				{
@@ -3372,6 +3453,9 @@ class otto_import extends class_base
 		// This should clean up the otto_prod_to_code_lut table from those product object ids which are deleted from the system:
 		$this->clean_up_products_to_code_lut();
 
+		// This should clean up the otto_prod_to_section_lut table from those product objects ids which are deleted from the system:
+		$this->clean_up_products_to_section_lut();
+
 
 		// the new structure is like this:
 		// product - the row from the first file, contains name, desc, pictures info
@@ -3380,7 +3464,7 @@ class otto_import extends class_base
 
 		// all products (previosuly packages) - first file content
 		$products = $this->db_fetch_array("select * from otto_imp_t_prod where lang_id = ".aw_global_get('lang_id'));
-		
+
 		foreach ($products as $product)
 		{
 			$product_data = array();
@@ -3396,7 +3480,7 @@ class otto_import extends class_base
 			{
 				$product_codes[$value['code']] = $value['code'];
 				$colors[] = $value['color'];
-				
+
 				// add some information into otto_prod_img table (refactor: see tuleks liigutada piltide impordi juurde imo):
 				$this->db_query("UPDATE otto_prod_img SET p_pg='".$product['pg']."', p_nr='".$product['nr']."' WHERE pcode='".$value['code']."'");
 			}
@@ -3413,15 +3497,15 @@ class otto_import extends class_base
 
 			// using product codes lets search for existing product objects:
 			$existing_products = $this->db_fetch_array("
-				select 
+				select
 					objects.status as status,
 					otto_prod_to_code_lut.product_code as product_code,
 					otto_prod_to_code_lut.product_id as product_id
-				from 
-					otto_prod_to_code_lut 
+				from
+					otto_prod_to_code_lut
 					left join objects on (objects.oid = otto_prod_to_code_lut.product_id)
-				where 
-					product_code in (".implode(",", map("'%s'", $product_codes)).") and 
+				where
+					product_code in (".implode(",", map("'%s'", $product_codes)).") and
 					objects.status > 0 and
 					objects.lang_id = ".aw_global_get('lang_id')."
 			");
@@ -3464,10 +3548,10 @@ class otto_import extends class_base
 			$product_obj->set_prop("userta2", $product["c"]);
 			$product_obj->set_prop("user18", $product["pg"]);
 			$product_obj->set_prop("user19", $product["nr"]);
-			
+
 			// user6 - product codes, comma separated list
 			$product_obj->set_prop('user6', implode(',', $product_codes));
-			
+
 			// user7 - colors, comma separated list
 			$product_obj->set_prop('user7', implode(',', $colors));
 
@@ -3506,9 +3590,9 @@ class otto_import extends class_base
 			foreach ($product_codes as $product_code)
 			{
 				$this->db_query("
-					insert into 
-						otto_prod_to_code_lut 
-					set 
+					insert into
+						otto_prod_to_code_lut
+					set
 						product_code = '".$product_code."',
 						product_id = ".$product_obj->id().",
 						color = '".$code_data['color']."'
@@ -3530,23 +3614,23 @@ class otto_import extends class_base
 				}
 				$this->db_query("delete from otto_prod_to_section_lut where product=".$product_obj->id());
 				$sections = $this->db_fetch_array("
-					select 
+					select
 						aw_folder
-					from 
-						otto_imp_t_aw_to_cat 
-					where 
-						category in (".implode(',', map("'%s'", $categories)).") and 
+					from
+						otto_imp_t_aw_to_cat
+					where
+						category in (".implode(',', map("'%s'", $categories)).") and
 						lang_id = ".aw_global_get('lang_id')."
-					group by 
+					group by
 						aw_folder
 				");
 
 				$product_sections = array();
 				foreach ($sections as $section)
 				{
-					$this->db_query('insert into otto_prod_to_section_lut set 
-						product='.$product_obj->id().', 
-						section='.$section['aw_folder'].', 
+					$this->db_query('insert into otto_prod_to_section_lut set
+						product='.$product_obj->id().',
+						section='.$section['aw_folder'].',
 						lang_id='.aw_global_get('lang_id').'
 					');
 					$product_sections[$section['aw_folder']] = $section['aw_folder'];
@@ -3578,12 +3662,12 @@ class otto_import extends class_base
 			// IMAGES
 			////
 			$images = $this->db_fetch_array("
-				select 
-					* 
-				from 
-					otto_prod_img 
-				where 
-					pcode in (".implode(',', map("'%s'", $product_codes)).") and 
+				select
+					*
+				from
+					otto_prod_img
+				where
+					pcode in (".implode(',', map("'%s'", $product_codes)).") and
 					p_nr = '".$product['nr']."'
 			");
 
@@ -3610,7 +3694,7 @@ class otto_import extends class_base
 				// nii et niikui leian selle yhenduspildi, siis aitab kyll:
 				if (!empty($value['conn_img']) && empty($connection_image))
 				{
-					$connection_image = $value['conn_img'];	
+					$connection_image = $value['conn_img'];
 				}
 			}
 			echo "selle toote koodidele leiti j&auml;rgmised pildid: ".implode(',', $images_arr)."<br />\n";
@@ -3629,7 +3713,7 @@ class otto_import extends class_base
 				////
 				// scanning which products should be visible via connection images and categories
 				////
-				// I need to find other products which have the same 
+				// I need to find other products which have the same
 				// connection image and which should have been shown under products list
 				if (!empty($connection_image))
 				{
@@ -3640,7 +3724,7 @@ class otto_import extends class_base
 						'status' => array(STAT_ACTIVE, STAT_NOTACTIVE),
 						'oid' => new obj_predicate_not($product_obj->id())
 					));
-					
+
 					$product_obj->set_prop('user2', $connection_image);
 					if ($products_ol->count())
 					{
@@ -3689,7 +3773,7 @@ class otto_import extends class_base
 							$products_ol_item->set_prop('user4', implode(',', $products_ol_ids));
 							$products_ol_item->save();
 						}
-						
+
 					}
 					else
 					{
@@ -3707,7 +3791,7 @@ class otto_import extends class_base
 			{
 				echo "ei uuendatud teisi tooteid, toodete nimekirjas n&auml;htavust ega &uuml;henduspilte <br />\n";
 			}
-	
+
 
 			$product_obj->save();
 
@@ -3732,7 +3816,7 @@ class otto_import extends class_base
 			echo "---- [Iga hinna jaoks tekita pakendi objekt (packaging)]<br>\n";
 
 			$this->db_query("
-				select 
+				select
 					otto_imp_t_prices.pg as prices_pg,
 					otto_imp_t_prices.nr as prices_nr,
 					otto_imp_t_prices.type as prices_type,
@@ -3740,7 +3824,7 @@ class otto_import extends class_base
 					otto_imp_t_prices.unit as unit,
 					otto_imp_t_prices.price as price,
 					otto_imp_t_prices.s_type as prices_s_type,
-					
+
 					otto_imp_t_codes.pg as codes_pg,
 					otto_imp_t_codes.nr as codes_nr,
 					otto_imp_t_codes.size as codes_size,
@@ -3748,17 +3832,17 @@ class otto_import extends class_base
 					otto_imp_t_codes.code as code,
 					otto_imp_t_codes.s_type as codes_s_type,
 					otto_imp_t_codes.full_code as full_code
-				from 
+				from
 					otto_imp_t_prices left join otto_imp_t_codes on (
-						otto_imp_t_prices.nr = otto_imp_t_codes.nr and 
-						otto_imp_t_prices.s_type = otto_imp_t_codes.s_type and 
+						otto_imp_t_prices.nr = otto_imp_t_codes.nr and
+						otto_imp_t_prices.s_type = otto_imp_t_codes.s_type and
 						otto_imp_t_prices.pg = otto_imp_t_codes.pg
 					)
 				where
 					otto_imp_t_prices.pg = '".$product['pg']."' and
 					otto_imp_t_codes.pg = '".$product['pg']."' and
 					otto_imp_t_prices.nr = '".$product['nr']."' and
-					otto_imp_t_codes.nr = '".$product['nr']."' and 
+					otto_imp_t_codes.nr = '".$product['nr']."' and
 					otto_imp_t_prices.lang_id = ".aw_global_get('lang_id')." and
 					otto_imp_t_codes.lang_id = ".aw_global_get('lang_id')."
 				order by prices_nr,code,price
@@ -3883,7 +3967,7 @@ class otto_import extends class_base
 				}
 			}
 
-			
+
 
 
 			////
@@ -3893,27 +3977,44 @@ class otto_import extends class_base
 
 			// lets fill the otto_import_log table:
 			$this->db_query('
-				INSERT INTO 
-					otto_import_log 
-				SET 
-					import_time = '.$import_time.', 
+				INSERT INTO
+					otto_import_log
+				SET
+					import_time = '.$import_time.',
 					product_id = '.$product_obj->id().',
 					csv_files = \''.str_replace( "\n", ",", trim($o->prop('fnames')) ).'\'
 			');
 
-			
+
 		}
 
 		echo "[!!] hear hear. prods done. Imporditi $items_done toodet [!!] <br>\n";
-
-		$this->db_query('select import_time from otto_import_log group by import_time order by import_time desc limit 20');
+		$sql = 'select import_time from otto_import_log group by import_time order by import_time desc limit 20';
+		if (aw_global_get('lang_id') == 7 || aw_global_get('lang_id') == 6)
+		{
+			$sql = 'select import_time from otto_import_log where csv_files like \'LET%\' group by import_time order by import_time desc limit 20';
+		}
+		if (aw_global_get('lang_id') == 1)
+		{
+			$sql = 'select import_time from otto_import_log where csv_files like \'EST%\' group by import_time order by import_time desc limit 20';
+		}
+		$this->db_query($sql);
 		$latest_import_times = array();
 		while ($row = $this->db_next())
 		{
 			$latest_import_times[] = $row['import_time'];
 		}
 
-		$this->db_query('delete from otto_import_log where import_time not in('.implode(',', $latest_import_times).')');
+		$sql = 'delete from otto_import_log where import_time not in('.implode(',', $latest_import_times).')';
+		if (aw_global_get('lang_id') == 7 || aw_global_get('lang_id') == 6)
+		{
+			$sql = 'delete from otto_import_log where csv_files like \'LET%\' and import_time not in('.implode(',', $latest_import_times).')';
+		}
+		if (aw_global_get('lang_id') == 1)
+		{
+			$sql = 'delete from otto_import_log where csv_files like \'EST%\' and import_time not in('.implode(',', $latest_import_times).')';
+		}
+		$this->db_query($sql);
 
 		////////////////
 		// clear cache
@@ -4133,11 +4234,11 @@ class otto_import extends class_base
 					$prod_title = $this->db_fetch_field("select title from otto_imp_t_prod where pg='".$cur_pg."' and nr='".$row[1]."' and lang_id=".aw_global_get('lang_id'), "title");
 					$not_found_products_by_page[$cur_pg][$row[4]][] = $prod_title;
 					echo "X";
-					
+
 				}
 
 				echo "-- Lisasin koodi numbriga $row[1], leht: [$cur_pg], tyyp: [$row[2]], v2rv: [$color], kood: [$row[4]], t2iskood: [$full_code], set_f_img: [$set_f_img]<br>\n";
-				
+
 			}
 
 			if ($tmpf)
@@ -4227,7 +4328,7 @@ class otto_import extends class_base
 					VALUES('$cur_pg','$row[1]','$row[2]','$row[3]','$row[4]','$row[5]', ".aw_global_get('lang_id').")
 				");
 
-				
+
 				if (!$row[5])
 				{
 					echo "ERROR ON LINE $num price = $row[5] (orig = $orig)<br>".dbg::dump($orow);
@@ -4253,7 +4354,7 @@ class otto_import extends class_base
 			$log[] = "lugesin failist $fld_url $num hinda";
 			flush();
 		}
-		
+
 	}
 
 	function clean_up_products_to_code_lut()
@@ -4282,13 +4383,39 @@ class otto_import extends class_base
 		return true;
 	}
 
+	function clean_up_products_to_section_lut()
+	{
+		$products = $this->db_fetch_array("
+			SELECT
+				otto_prod_to_section_lut.product as product_id
+			FROM
+				otto_prod_to_section_lut
+				LEFT JOIN objects ON (objects.oid = otto_prod_to_section_lut.product)
+			WHERE
+				objects.status = 0 OR
+				objects.status IS NULL
+		");
+
+		if (!empty($products))
+		{
+			$product_ids = array();
+			foreach ($products as $value)
+			{
+				$product_ids[] = $value['product_id'];
+			}
+			$this->db_query("delete from otto_prod_to_section_lut where product in (".implode(',', $product_ids).")");
+		}
+
+		return true;
+	}
+
 	function clean_up_otto_prod_img_table()
 	{
 		$this->db_query("select * from otto_prod_img");
 		$delete_images = array();
 		while ($row = $this->db_next())
 		{
-			
+
 			$imnr = $row['imnr'];
 			$url = aw_ini_get('baseurl').'/vv_product_images/'.$imnr{0}.'/'.$imnr{1}.'/'.$imnr.'_2.jpg';
 			$file = aw_ini_get('site_basedir').'/product_images/'.$imnr{0}.'/'.$imnr{1}.'/'.$imnr.'_2.jpg';
@@ -4308,7 +4435,7 @@ class otto_import extends class_base
 		}
 		arr($delete_images);
 		arr(count($delete_images));
-		
+
 		if (!empty($delete_images))
 		{
 			$this->db_query("delete from otto_prod_img where imnr in (".implode(',', map("'%s'", $delete_images)).")");
@@ -4331,18 +4458,15 @@ class otto_import extends class_base
 		,chr(238)
 		,chr(239)
 		,chr(231)
-		
+
 
 		Andmete allikaks oli:
 		Impordifail: http://terryf.struktuur.ee/str/otto/import/data/LAT.T004-11.txt
 		Tekst saidil (skrolli alla): http://otto-latvia.struktuur.ee/134393
 		kooditabel: http://www.science.co.il/Language/Character-Code.asp?s=1257
 		*/
-		if (aw_global_get("lang_id") == 6 || aw_global_get("lang_id") == 7)
+		if (aw_global_get("lang_id") == 6)
 		{
-			/* uus */
-			$needle = array();
-			$haystack = array();
 
 			$needle = array(
 			chr(207), //254
@@ -4386,11 +4510,11 @@ class otto_import extends class_base
 			chr(139), //&#269;
 			);
 
-			
-			
-			
-				
-			
+
+
+
+
+
 			$haystack = array(
 			chr(254),
 			chr(251),
@@ -4426,6 +4550,98 @@ class otto_import extends class_base
 			"",
 			"&quot;",
 			"&quot;",
+			"&deg;",
+			chr(205),
+			chr(34),
+			"&#382;",
+			"&#269;",
+			);
+		}
+		elseif (aw_global_get("lang_id") == 7)
+		{
+
+			$needle = array(
+			//chr(207), //254
+			chr(240), //251
+			chr(165), //238
+			chr(236), //234
+			chr(191), //242
+			//chr(199), //226
+			chr(148), //199
+			chr(239), //231
+			chr(134), //239
+			chr(174), //236
+			chr(149), //231
+			chr(192), //242
+			chr(228), //240
+			chr(180), //238
+			chr(250), //237
+			chr(137), //200
+			chr(208), //45
+			chr(130), //226
+			chr(153), //237
+			chr(179), //34
+			chr(129), //194
+			chr(210), //34
+			chr(211), //34
+			chr(178), //34
+			chr(175), //236
+			chr(183), //208
+			chr(177), //206
+			chr(185), //207
+			chr(225), //208
+			chr(186), //239
+			//chr(158), //236
+			chr(202),
+			//chr(200), // "
+			//chr(199),  // "
+			chr(161), // &deg;
+			chr(181), // 205
+			chr(227), //34
+			chr(234), //&#382;
+			chr(139), //&#269;
+			);
+
+
+
+
+
+
+			$haystack = array(
+			//chr(254),
+			chr(251),
+			chr(238),
+			chr(234),
+			chr(242),
+			//chr(226),
+			chr(199),
+			chr(231),
+			chr(239),
+			chr(236),
+			chr(231),
+			chr(242),
+			chr(240),
+			chr(238),
+			chr(237),
+			chr(200),
+			chr(45),
+			chr(226),
+			chr(237),
+			chr(34),
+			chr(194),
+			chr(34),
+			chr(34),
+			chr(34),
+			chr(236),
+			chr(208),
+			chr(206),
+			chr(207),
+			chr(208),
+			chr(239),
+			//chr(234),
+			"",
+			//"&quot;",
+			//"&quot;",
 			"&deg;",
 			chr(205),
 			chr(34),
@@ -4548,14 +4764,76 @@ class otto_import extends class_base
 			//return $retval;
 		}
 */
+
+		// For bugs #250598, #263491
+		//	Cancelled by bug #291652 -kaarel 16.12.2008
+		//	And brought up again by bug #346805. Just a bit modified. -kaarel 16.06.2009
+		// Discounts by site_id => sections
+		$dc_siteid_sec = array(
+			"276" => array(
+				139072,		// Soodustooted /
+				/*
+				139076,		// Soodustooted / Naistele / Pluusid, s2rgid, topid
+				139077,		// Soodustooted / Naistele / Jakid, kampsunid, pulloverid
+				139078,		// Soodustooted / Naistele / Joped, mantlid
+				139080,		// Soodustooted / Naistele / Pyksid
+				139074,		// Soodustooted / Naistele / Seelikud, kleidid
+				139075,		// Soodustooted / Naistele / Pesu, 88pesu, rannamood
+				139082,		// Soodustooted / Naistele / Jalan6ud
+				139085,		// Soodustooted / Meestele / Pluusid, s2rgid
+				139089,		// Soodustooted / Meestele / Jakid, kampsunid
+				139091,		// Soodustooted / Meestele / Pyksid
+				139084,		// Soodustooted / Meestele / Pesu, 88pesu
+				139094,		// Soodustooted / Lastele / R6ivad
+				139095,		// Soodustooted / Lastele / Jalan6ud
+				139097,		// Soodustooted / Aksessuaarid
+				939720,		// Soodustooted / Kodusisustus / Voodipesu
+				1158663,	// Soodustooted / Kodusisustus / K2ter2tikud
+				139110,		// Soodustooted / Kodusisustus / Vannitoamatid
+				689148,		// Soodustooted / Kodusisustus / Sulle abiks
+				*/
+			),
+			"277" => array(
+				186099
+			),
+		);
+		$discount = 0;
+		foreach($dc_siteid_sec as $site_id => $sections)
+		{
+			if(aw_ini_get("site_id") == $site_id)
+			{
+				foreach($sections as $section)
+				{
+					$ot = new object_tree(array(
+						"class_id" => CL_MENU,
+						"parent" => $section,
+						"lang_id" => array(),
+						"status" => array(),
+					));
+					$ids = $ot->ids();
+					if(!in_array(aw_global_get("section"), $ids) && time() < mktime(0, 0, 0, 8, 1, 2009))
+					{
+						$discount = 25;
+					}
+				}
+			}
+		}
+		if($discount > 0)
+		{
+			$item_obj = obj($arr["add_to_cart"]);
+			$arr["new_price"] = (1 - $discount / 100) * $item_obj->prop("price");
+		}
+
 		// rewrite some vars that are hard to rewire in js and forward to shop order cart
 		$vars = $arr;
 		if ($arr["spid"])
 		{
 			$vars["order_data"] = array();
+			$vars["order_data"][$arr["add_to_cart".$arr["spid"]]]["prod_id"] = $arr["prod_id"];
 			$vars["order_data"][$arr["add_to_cart".$arr["spid"]]]["color"] = ($arr["order_data_color".$arr["spid"]] != "" ? $arr["order_data_color".$arr["spid"]] : "---");
 			$vars["order_data"][$arr["add_to_cart".$arr["spid"]]]["size"] = $arr["size_name".$arr["spid"]];
 			$vars["order_data"][$arr["add_to_cart".$arr["spid"]]]["url"] = $retval;
+			$vars["order_data"][$arr["add_to_cart".$arr["spid"]]]["discount"] = $discount;
 
 			$vars["add_to_cart"] = array();
 			$vars["add_to_cart"][$arr["add_to_cart".$arr["spid"]]] = $arr["add_to_cart_count".$arr["spid"]];
@@ -4563,10 +4841,12 @@ class otto_import extends class_base
 		else
 		{
 			$vars["order_data"] = array();
+			$vars["order_data"][$arr["add_to_cart"]]["prod_id"] = $arr["prod_id"];
 			$vars["order_data"][$arr["add_to_cart"]]["color"] = ($arr["order_data_color"] != "" ? $arr["order_data_color"] : "---");
 			$vars["order_data"][$arr["add_to_cart"]]["size"] = $arr["size_name"];
 			$vars["order_data"][$arr["add_to_cart"]]["new_price"] = $arr["new_price"];
 			$vars["order_data"][$arr["add_to_cart"]]["url"] = $retval;
+			$vars["order_data"][$arr["add_to_cart".$arr["spid"]]]["discount"] = $discount;
 
 			$vars["add_to_cart"] = array();
 			$vars["add_to_cart"][$arr["add_to_cart"]] = $arr["add_to_cart_count"];
@@ -4577,7 +4857,7 @@ class otto_import extends class_base
 		return $retval;
 	}
 
-	/** 
+	/**
 
 	@attrib name=pictfix
 
@@ -4612,7 +4892,7 @@ class otto_import extends class_base
 	}
 
 	/** if no random other images show for some products, call this
-	
+
 		@attrib name=fix_image_codes
 
 	**/
@@ -4629,7 +4909,7 @@ class otto_import extends class_base
 				continue;
 			}
 			echo "pcode = $row[pcode] <br>\n";
-			flush();			
+			flush();
 			$this->save_handle();
 			// find the correct ones from the prod by code
 			$ol = new object_list(array(
@@ -4684,7 +4964,7 @@ class otto_import extends class_base
 				}
 			}
 		}
-		echo "all done! <br>";	
+		echo "all done! <br>";
 	}
 
 	function _proc_size($size)
@@ -4732,7 +5012,7 @@ class otto_import extends class_base
 		$in_cell = false;
 		for ($pos=0; $pos < $len; $pos++)
 		{
-			if ($filestr[$pos] == "\"")	
+			if ($filestr[$pos] == "\"")
 			{
 				if ($in_cell == false)
 				{
@@ -4823,12 +5103,12 @@ class otto_import extends class_base
 			}
 			$t->define_data(array(
 				"pgs" => html::textbox(array(
-					"name" => "dat[$cnt][pgs]",	
+					"name" => "dat[$cnt][pgs]",
 					"value" => join(",", $row),
 					"size" => "80"
 				)),
 				"awfld" => html::textbox(array(
-					"name" => "dat[$cnt][awfld]",	
+					"name" => "dat[$cnt][awfld]",
 					"value" => $fld,
 					"size" => "10"
 				)),
@@ -4837,12 +5117,12 @@ class otto_import extends class_base
 		}
 		$t->define_data(array(
 			"pgs" => html::textbox(array(
-				"name" => "dat[$cnt][pgs]",	
+				"name" => "dat[$cnt][pgs]",
 				"value" => "",
 				"size" => "80"
 			)),
 			"awfld" => html::textbox(array(
-				"name" => "dat[$cnt][awfld]",	
+				"name" => "dat[$cnt][awfld]",
 				"value" => "",
 				"size" => "10"
 			)),
@@ -4898,7 +5178,7 @@ class otto_import extends class_base
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
 		$start_time = $arr['start_time'];
-		
+
 
 		$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
 
@@ -4912,7 +5192,7 @@ class otto_import extends class_base
 		// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
 
 		if (strpos($html,"Leider konnten wir") !== false)
-		{ 
+		{
 			echo "[ OTTO ] Can't find an product for <b>$pcode</b> from otto.de, return false<br>\n";
 			return false;
 		}
@@ -4937,9 +5217,9 @@ class otto_import extends class_base
 					echo "[ OTTO ] If we can't find image from otto.de product view, then return false <br />\n";
 /*
 	XXX
-	This is weird here actually - it breaked the loop previously, and now it should return false ... but 
+	This is weird here actually - it breaked the loop previously, and now it should return false ... but
 	let's consider the situation, where multiple products where found and the loop actually could look
-	through multiple products, then maybe from some next product it does find the images? 
+	through multiple products, then maybe from some next product it does find the images?
 	But with previous functionality and and current one it just breaks the loop all together when it doesn't
 	find images ... I'll check back here later --dragut 19.02.2008
 */
@@ -5018,8 +5298,8 @@ class otto_import extends class_base
 						flush();
 
 						$q = ("
-							INSERT INTO 
-								otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
+							INSERT INTO
+								otto_prod_img(pcode, nr,imnr, server_id, conn_img)
 								values('$pcode','".$mt[2][$idx]."','$imnr', 1, '$connection_image')
 						");
 						$this->db_query($q);
@@ -5162,7 +5442,7 @@ class otto_import extends class_base
 		*/
 			echo "[ BAUR ] Can't find a product for <b>$pcode</b> from baur.de, so return false<br>\n";
 			return false;
-			
+
 		}
 
 //		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
@@ -5180,10 +5460,10 @@ class otto_import extends class_base
 			preg_match_all("/http\:\/\/image01(.*)jpg/imsU", $fc, $mt, PREG_PATTERN_ORDER);
 			$pics = array_unique($mt[0]);
 			$fp = basename($pics[0], ".jpg");
-			
+
 			preg_match("/OpenPopUpZoom\('\d*','\d*','(.*)'\)/imsU", $fc, $mt);
 			$popurl = $mt[1];
-			
+
 			$fc_p = $this->file_get_contents($popurl);
 
 			preg_match("/<frame name=\"_popcont\" src=\"(.*)\"/imsU", $fc_p, $mt);
@@ -5201,7 +5481,7 @@ class otto_import extends class_base
 				$pa[$tmp] = $tmp;
 			}
 
-			// now pa contains all images for this one. 
+			// now pa contains all images for this one.
 
 			$cnt = 1;
 			// insert images in db
@@ -5231,8 +5511,8 @@ class otto_import extends class_base
 					echo "[ BAUR ] insert new image $pn <br>\n";
 					flush();
 					$q = ("
-						INSERT INTO 
-							otto_prod_img(pcode, nr,imnr, server_id) 
+						INSERT INTO
+							otto_prod_img(pcode, nr,imnr, server_id)
 							values('$pcode','$cnt','$pn', 2)
 					");
 					//echo "q = $q <br>";
@@ -5284,7 +5564,7 @@ class otto_import extends class_base
 	//	preg_match("/query: '(.*)'/", $fc, $mt);
 	//	$pcode = $mt[1];
 
-	// It doesn't have the the support for multiple products in search result right now. 
+	// It doesn't have the the support for multiple products in search result right now.
 	// Because:
 	//	a) I assume, that product code is products identifier, so one code == one product
 	//	b) I don't have a test case at the moment where there are multiple products/pictures in search result
@@ -5331,8 +5611,8 @@ class otto_import extends class_base
 				echo "[ SCHWAB ] insert new image $first_im <br>\n";
 				flush();
 				$q = ("
-					INSERT INTO 
-						otto_prod_img(pcode, nr,imnr, server_id) 
+					INSERT INTO
+						otto_prod_img(pcode, nr,imnr, server_id)
 						values('$pcode','1','$first_im', 3)
 				");
 				//echo "q = $q <br>";
@@ -5340,7 +5620,7 @@ class otto_import extends class_base
 				$this->added_images[] = $first_im;
 			}
 
-// apparently there seems to be no other images ... 
+// apparently there seems to be no other images ...
 // again, if in real life there actually are, then lets keep the possibility for now:
 /*
 			// get other images
@@ -5361,8 +5641,8 @@ class otto_import extends class_base
 					echo "[ SCHWAB ] insert new image $im <br>\n";
 					flush();
 					$q = ("
-						INSERT INTO 
-							otto_prod_img(pcode, nr,imnr, server_id) 
+						INSERT INTO
+							otto_prod_img(pcode, nr,imnr, server_id)
 							values('$pcode','$nr','$im', 3)
 					");
 					$this->db_query($q);
@@ -5370,13 +5650,13 @@ class otto_import extends class_base
 				}
 			}
 */
-		}		
+		}
 		return true;
 	}
 
 	function read_img_from_albamoda($arr)
 	{
-		
+
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
 
@@ -5438,7 +5718,7 @@ class otto_import extends class_base
 			preg_match_all($pattern, $fc, $mt, PREG_PATTERN_ORDER);
 
 			$image_name = $mt[1][0];
-			
+
 			echo "[ ALBAMODA ] Image files: ";
 
 			$small_image_src = 'http://image01.otto.de:80/pool/albamoda_formatL/'.$image_name.'.jpg';
@@ -5475,7 +5755,7 @@ class otto_import extends class_base
 			{
 				echo "<a href=\"".$big_image_src."\">[ Getting big image failed ]</a> ";
 			}
-		
+
 			echo " <br />\n";
 
 			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$image_name' AND nr = '1' AND pcode = '$pcode'", "pcode");
@@ -5484,12 +5764,12 @@ class otto_import extends class_base
 				echo "[ ALBAMODA ] Database: insert new image $image_name <br>\n";
 				flush();
 				$q = ("
-					INSERT INTO 
-						otto_prod_img(pcode, nr,imnr, server_id) 
+					INSERT INTO
+						otto_prod_img(pcode, nr,imnr, server_id)
 						values('$pcode','1','$image_name', 4)
 				");
 				$this->db_query($q);
-			// seems it is not used, so lets start to remove this to get removed unused code -- dragut@10.03.2008 
+			// seems it is not used, so lets start to remove this to get removed unused code -- dragut@10.03.2008
 			//	$this->added_images[] = $image_name;
 			}
 			else
@@ -5654,8 +5934,8 @@ class otto_import extends class_base
 				flush();
 
 				$q = ("
-					INSERT INTO 
-						otto_prod_img(pcode, nr,imnr, server_id, conn_img) 
+					INSERT INTO
+						otto_prod_img(pcode, nr,imnr, server_id, conn_img)
 						values('$pcode','1','$first_im', 5, '$connection_image')
 				");
 
@@ -5679,7 +5959,7 @@ class otto_import extends class_base
 		}
 
 		// if images has been found, it should return true, false othervise
-		return $found_image; 
+		return $found_image;
 
 	}
 
@@ -5700,34 +5980,44 @@ class otto_import extends class_base
 
 	function _do_del_prods($prods, $page_pattern = "")
 	{
-		aw_set_exec_time(AW_LONG_PROCESS);	
+		aw_set_exec_time(AW_LONG_PROCESS);
 
 		$sql_params = "
 			objects.site_id = ".aw_ini_get('site_id')." AND
 			objects.lang_id = ".aw_global_get('lang_id')."
 		";
+
+		$otto_prod_to_code_lut = "";
+		if (!empty($page_pattern))
+		{
+			$sql_params .= " AND aw_shop_products.user18 LIKE '$page_pattern'";
+
+			$otto_prod_to_code_lut = "objects.oid as product_id,";
+			$sql_from = "objects
+				left join aw_shop_products on objects.brother_of = aw_shop_products.aw_oid";
+		}
+
 		if (!empty($prods))
 		{
 			$product_codes_str = implode(',', map("'%s'", $prods ));
 			$sql_params .= " AND otto_prod_to_code_lut.product_code in ($product_codes_str) ";
+
+			$otto_prod_to_code_lut = "otto_prod_to_code_lut.product_code as product_code,
+				otto_prod_to_code_lut.product_id as product_id,";
+			$sql_from = "otto_prod_to_code_lut
+				left join objects on objects.brother_of = otto_prod_to_code_lut.product_id
+				left join aw_shop_products on objects.brother_of = aw_shop_products.aw_oid";
 		}
-		if (!empty($page_pattern))
-		{
-			$sql_params .= " AND user18 LIKE '$page_pattern'";
-		}
-		
+
 		$sql = "
-			select 
-				otto_prod_to_code_lut.product_code as product_code,
-				otto_prod_to_code_lut.product_id as product_id,
+			select
+				$otto_prod_to_code_lut
 				objects.name as product_name,
 				aw_shop_products.user4 as connected_products,
 				aw_shop_products.user18 as page
-			from 
-				otto_prod_to_code_lut 
-				left join objects on objects.brother_of = otto_prod_to_code_lut.product_id
-				left join aw_shop_products on objects.brother_of = aw_shop_products.aw_oid
-			where 
+			from
+				$sql_from
+			where
 				$sql_params
 
 		";
@@ -5748,9 +6038,21 @@ class otto_import extends class_base
 		// so maybe the product obj. is not present in otto_prod_to_code_lut, lets find it by aw_shop_products.user6 value then (comma separated product codes)
 		foreach ($prods as $prod)
 		{
-			$this->db_query("select aw_oid,user6 from aw_shop_products where user6 like '%".$prod."%'");
+			$this->db_query("
+				SELECT
+					aw_shop_products.aw_oid as aw_oid,
+					aw_shop_products.user6 as user6
+				FROM
+					aw_shop_products
+					LEFT JOIN objects ON objects.oid = aw_shop_products.aw_oid
+				WHERE
+					aw_shop_products.user6 like '%".$prod."%' AND
+					objects.site_id = ".aw_ini_get('site_id')." AND
+					objects.lang_id = ".aw_global_get('lang_id')."
+			");
 			while ($row = $this->db_next())
 			{
+				$found_any_products = true;
 				$product_ids[$row['aw_oid']] = $row['aw_oid'];
 			}
 		}
@@ -5766,13 +6068,13 @@ class otto_import extends class_base
 		$product_ids_str = implode(',', $product_ids);
 		$this->db_query("
 			select
-				target 
+				target
 			from
 				aliases
 			where
 				source in($product_ids_str)
 		");
-		
+
 		while ($row = $this->db_next())
 		{
 			$packaging_ids[$row['target']] = $row['target'];
@@ -5876,7 +6178,7 @@ class otto_import extends class_base
 					$file_url = $tmpf;
 				}
 			}
-			
+
 			$rows = file($file_url);
 
 
@@ -5888,12 +6190,12 @@ class otto_import extends class_base
 				unset($rows[0]);
 				// first of all, empty the table
 				$this->db_query("delete from bp_discount_products where lang_id=".aw_global_get('lang_id'));
-			//	echo "importing ".count($rows)." products<br>";
+				echo "importing ".count($rows)." products<br>";
 				$prods_data = array();
 				foreach($rows as $row)
 				{
 					$fields = explode("\t", $row);
-					
+
 					// fields 5 & 6 contain price-s, and they should not contain
 					// any spaces or commas or double quotas:
 					$fields[5] = str_replace(" ", "", $fields[5]);
@@ -5923,17 +6225,17 @@ class otto_import extends class_base
 					}
 
 					$prod_oid = $this->db_fetch_field("
-						select 
-							aw_oid 
-						from 
-							aw_shop_products 
-							left join objects on (aw_oid = oid) 
-						where 
-							user6 like '%".trim($fields[1])."%' and 
+						select
+							aw_oid
+						from
+							aw_shop_products
+							left join objects on (aw_oid = oid)
+						where
+							user6 like '%".trim($fields[1])."%' and
 							lang_id = ".aw_global_get('lang_id').";
 					", "aw_oid");
 					if (empty($prod_oid)){
-					//	echo "## tootekoodile ".trim($fields[1])." ei leitud toote objekti<br />\n";
+						echo "## tootekoodile ".trim($fields[1])." ei leitud toote objekti<br />\n";
 						$prod_oid = 0;
 					}
 
@@ -5975,6 +6277,12 @@ class otto_import extends class_base
 					if ($this->can('view', $row['product']))
 					{
 						$prod_obj = new object($row['product']);
+
+					/*
+						// I don't remember anymore what was the purpose for the following logic
+						// but I think it might break things ... 
+						// So I set the userch3 flag to zero for all imported discount products
+						// --dragut@25.03.2009
 						if (isset($visible_discount_products[$row['product']]))
 						{
 							if ($prod_obj->prop('userch3') == 1)
@@ -5991,6 +6299,9 @@ class otto_import extends class_base
 								$prod_obj->save();
 							}
 						}
+					*/
+						$prod_obj->set_prop('userch3', 0);
+						$prod_obj->save();
 					}
 				}
 			//	echo ".::[ import complete ]::.<br>";
@@ -5999,8 +6310,9 @@ class otto_import extends class_base
 			{
 				echo "<span style=\"color:red;\">Faili ei &otilde;nnestunud lugeda!</span><br>";
 			}
-			
+
 		}
+		echo "Done <br />\n";
 		return $this->mk_my_orb("change", array(
 			"id" => $object_id,
 			"group" => "discount_products",
@@ -6024,7 +6336,7 @@ class otto_import extends class_base
 		return $this->mk_my_orb("change", array(
 			"id" => $args['id'],
 			"group" => "discount_products",
-		));	
+		));
 	}
 
 	//
@@ -6095,7 +6407,7 @@ class otto_import extends class_base
 			'filename' => $filename,
 			'otto_import' => $arr['otto_import']
 		));
-		
+
 		$new_file = $folder.'/'.$filename;
 
 		if (!file_exists($new_file) || $arr['overwrite'] === true)
@@ -6164,6 +6476,118 @@ class otto_import extends class_base
 	function get_file_name($imnr)
 	{
 		return $imnr{0}.'/'.$imnr{1}.'/'.$imnr;
+	}
+
+	// debugimiseks -kaarel
+	function kaarel($arr)
+	{
+		$needle = array(
+			chr(207), //254
+			chr(240), //251
+			chr(165), //238
+			chr(236), //234
+			chr(191), //242
+			chr(199), //226
+			chr(148), //199
+			chr(239), //231
+			chr(134), //239
+			chr(174), //236
+			chr(149), //231
+			chr(192), //242
+			chr(228), //240
+			chr(180), //238
+			chr(250), //237
+			chr(137), //200
+			chr(208), //45
+			chr(130), //226
+			chr(153), //237
+			chr(179), //34
+			chr(129), //194
+			chr(210), //34
+			chr(211), //34
+			chr(178), //34
+			chr(175), //236
+			chr(183), //208
+			chr(177), //206
+			chr(185), //207
+			chr(225), //208
+			chr(186), //239
+			chr(158), //236
+			chr(202),
+			chr(200), // "
+			chr(199),  // "
+			chr(161), // &deg;
+			chr(181), // 205
+			chr(227), //34
+			chr(234), //&#382;
+			chr(139), //&#269;
+			);
+
+
+
+
+
+
+			$haystack = array(
+			chr(254),
+			chr(251),
+			chr(238),
+			chr(234),
+			chr(242),
+			chr(226),
+			chr(199),
+			chr(231),
+			chr(239),
+			chr(236),
+			chr(231),
+			chr(242),
+			chr(240),
+			chr(238),
+			chr(237),
+			chr(200),
+			chr(45),
+			chr(226),
+			chr(237),
+			chr(34),
+			chr(194),
+			chr(34),
+			chr(34),
+			chr(34),
+			chr(236),
+			chr(208),
+			chr(206),
+			chr(207),
+			chr(208),
+			chr(239),
+			chr(234),
+			"",
+			"&quot;",
+			"&quot;",
+			"&deg;",
+			chr(205),
+			chr(34),
+			"&#382;",
+			"&#269;",
+			);
+
+		foreach($needle as $k => $v)
+		{
+			print $v." ---> ".$haystack[$k]."<br>";
+		}
+
+		die();
+		$a = "a, ā, b, c, č, d, e, ē, f, g, ģ, h, i, ī, j, k, ķ, l, ļ, m, n, ņ, o, p, r, s, š, t, u, ū, v, z, ž";
+		$a = str_replace(" ", "", $a);
+		foreach(explode(",", $a) as $b)
+		{
+			print $b." -- ".ord($b)."<br>";
+		}
+		$a = "A, Ā, B, C, Č, D, E, Ē, F, G, Ģ, H, I, Ī, J, K, Ķ, L, Ļ, M, N, Ņ, O, P, R, S, Š, T, U, Ū, V, Z, Ž";
+		$a = str_replace(" ", "", $a);
+		foreach(explode(",", $a) as $b)
+		{
+			print $b." -- ".ord($b)."<br>";
+		}
 	}
 }
 
