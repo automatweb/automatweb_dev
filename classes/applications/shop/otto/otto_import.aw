@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.105 2009/07/21 08:48:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.106 2009/07/21 12:36:42 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -74,7 +74,7 @@
 			@property products_manager_prod_image type=textbox store=no size=20 captionside=top group=products_manager parent=vbox_products_manager_search
 			@caption Pilt
 
-			@property products_search type=hidden store=no value=1 no_caption=1 group=products_manager parent=vbox_products_manager_search
+			@property products_search type=hidden store=no no_caption=1 group=products_manager parent=vbox_products_manager_search
 			@caption products_search
 
 			@property products_manager_search_submit type=submit no_caption=1 group=products_manager parent=vbox_products_manager_search
@@ -108,7 +108,7 @@
 				@property first_site_to_search_images type=select field=meta method=serialize group=files_import parent=vbox_files_import_sites
 				@caption Esimene leht kust pilte otsitakse
 
-				@property files_import_sites_order type=table rows=5 cols=30 field=meta method=serialize group=files_import parent=vbox_files_import_sites captionside=top
+				@property files_import_sites_order type=table field=meta method=serialize group=files_import parent=vbox_files_import_sites captionside=top
 				@caption Saitide j&auml;rjekord
 
 	@groupinfo files_order caption="Failide j&auml;rjekord" parent=files

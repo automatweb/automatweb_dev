@@ -192,7 +192,6 @@
             <method>serialize</method>
             <type>hidden</type>
             <store>no</store>
-            <value>1</value>
             <no_caption>1</no_caption>
             <parent>vbox_products_manager_search</parent>
             <caption>products_search</caption>
@@ -274,8 +273,6 @@
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
-            <rows>5</rows>
-            <cols>30</cols>
             <parent>vbox_files_import_sites</parent>
             <captionside>top</captionside>
             <store>no</store>
@@ -406,9 +403,19 @@
             <caption>Kui palju allahindlust tehake</caption>
       </property>
       <property>
-            <name>discount_products_list</name>
+            <name>discount_products_list_without_pictures</name>
             <table>objects</table>
-            <group>discount_products_list</group>
+            <group>discount_products_list_without_pictures</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>discount_products_list_with_pictures</name>
+            <table>objects</table>
+            <group>discount_products_list_with_pictures</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -668,10 +675,14 @@
                   <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>discount_products</parent>
             </discount_products_general>
-            <discount_products_list>
-                  <caption>Nimekiri</caption>
+            <discount_products_list_without_pictures>
+                  <caption>Soodustooted (ilma piltideta)</caption>
                   <parent>discount_products</parent>
-            </discount_products_list>
+            </discount_products_list_without_pictures>
+            <discount_products_list_with_pictures>
+                  <caption>Soodustooted (piltidega)</caption>
+                  <parent>discount_products</parent>
+            </discount_products_list_with_pictures>
             <foldersa>
                   <caption>Kataloogid / Kategooriad</caption>
             </foldersa>
