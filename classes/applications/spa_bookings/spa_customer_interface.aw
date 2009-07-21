@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.44 2009/07/07 13:22:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.45 2009/07/21 10:16:24 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -518,6 +518,8 @@ class spa_customer_interface extends class_base
 			$book_line = "";
 
 		}
+
+		$basket_inst = get_instance(CL_OBJECT_BASKET);
 		$this->vars(array(
 			"FIRST_BOOKING" => $f_booking,
 			"BOOKING" => $bookings,
@@ -530,6 +532,15 @@ class spa_customer_interface extends class_base
 			"cur_booking" => $cur_booking,
 			"error" => ($_SESSION["reservation"]["error"]) ? $this->parse("error") : "",
 		));
+		if($this->can("view" , $favorites_basket))
+		{
+			$this->vars(array(
+				"basket" => $basket_inst->show(array(
+					"id" => $favorites_basket,
+				)),
+			));
+		}
+
 		if ($bookings != "")
 		{
 			$this->vars(array(
