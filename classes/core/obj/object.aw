@@ -125,7 +125,7 @@ class object
 	{
 		$this->_check_lock_write();
 
-		if (method_exists($GLOBALS["objects"][$this->oid], $method))
+		if (method_exists($GLOBALS["objects"][$this->oid], $method) && is_callable(array($GLOBALS["objects"][$this->oid], $method)))
 		{
 			return call_user_func_array(array($GLOBALS["objects"][$this->oid], $method), $args);
 		}
@@ -139,9 +139,13 @@ class object
 			}
 			return obj();
 		}
-		else
+		elseif(!method_exists($GLOBALS["objects"][$this->oid], $method))
 		{
 			throw new awex_obj_method("Call to undefined method '" . $method . "' on an instance of '" . get_class($GLOBALS["objects"][$this->oid]) . "' with clid '" . $GLOBALS["objects"][$this->oid]->class_id() . "'.");
+		}
+		else
+		{
+			throw new awex_obj_method("Call to private or protected method '" . $method . "' on an instance of '" . get_class($GLOBALS["objects"][$this->oid]) . "' with clid '" . $GLOBALS["objects"][$this->oid]->class_id() . "'.");
 		}
 	}
 
