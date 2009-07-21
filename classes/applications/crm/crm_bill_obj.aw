@@ -1870,7 +1870,8 @@ class crm_bill_obj extends _int_object
 		return $content;
 	}
 
-	private function set_crm_settings()
+	// Can't be private (nor protected). Called in crm_bill::_bill_targets()! -kaarel 21.07.2009
+	public function set_crm_settings()
 	{
 		if(!$this->crm_settings)
 		{
