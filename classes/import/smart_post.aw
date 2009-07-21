@@ -12,6 +12,9 @@
 @property cities type=table store=no
 @caption Linnade prioriteedid
 
+@property show_inactive type=checkbox field=aw_show_inactive
+@caption N&auml;ita mitteaktiivseid
+
 */
 
 class smart_post extends class_base
@@ -85,6 +88,13 @@ class smart_post extends class_base
 
 		switch($f)
 		{
+			case "aw_show_inactive":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+
 			case "aw_xml_source":
 				$this->db_add_col($t, array(
 					"name" => $f,

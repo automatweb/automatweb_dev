@@ -17,6 +17,14 @@
             <field>cities</field>
             <caption>Linnade prioriteedid</caption>
       </property>
+      <property>
+            <name>show_inactive</name>
+            <table>aw_smart_post</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <field>aw_show_inactive</field>
+            <caption>N&amp;amp;auml;ita mitteaktiivseid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SMART_POST</syslog_type>
             <relationmgr>yes</relationmgr>

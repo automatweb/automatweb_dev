@@ -16,13 +16,13 @@ class smart_post_obj extends _int_object
 			{
 				$tmp = array();
 			}
-			elseif($data["tag"] === "PLACE" && $data["type"] == "close")
+			elseif($data["tag"] === "PLACE" && $data["type"] == "close" && $this->prop("show_inactive") + $tmp["ACTIVE"] > 0)
 			{
 				$ret[$tmp["CITY"]][$tmp["PLACE_ID"]] = $tmp;
 			}
 			elseif($data["level"] == 3 && $data["type"] === "complete")
 			{
-				$tmp[$data["tag"]] = iconv("UTF-8", aw_global_get("charset"), $data["value"]);
+				$tmp[$data["tag"]] = iconv("UTF-8", aw_global_get("charset"), ifset($data, "value"));
 			}
 		}
 		return $ret;
