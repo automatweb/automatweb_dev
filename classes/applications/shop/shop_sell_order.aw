@@ -186,5 +186,65 @@ class shop_sell_order extends class_base
 	{
 		return get_instance(CL_SHOP_PURCHASE_ORDER)->_set_related_orders($arr);
 	}
+
+	/**
+		@attrib name=show
+		@param id required
+	**/
+	function show($arr)
+	{
+		$this->read_template("show.tpl");
+
+		$o = obj($arr["id"]);
+		foreach($o->get_property_list() as $pn => $pd)
+		{
+			$this->vars(array(
+				$pn => $o->prop_str($pn)
+			));
+		}		
+
+		$t = new aw_table();
+		$t->define_field(array(
+			"name" => "prod",
+			"caption" => t("Toode"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center"
+		));
+
+		$sum = 0;
+		foreach($o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+		{
+			$row = $c->to();
+			$c_sum = $row->amount * $row->price;
+			$sum += $c_sum;
+			$t->define_data(array(
+				"prod" => $row->prod_name,
+				"amount" => $row->amount,
+				"price" => $row->price,
+				"sum" => $c_sum
+			));
+		}
+
+		$this->vars(array(
+			"table" => $t->draw(),
+			"sum" => $sum
+		));
+
+		return $this->parse();
+	}
 }
 ?>
