@@ -294,7 +294,10 @@ class crm_sales_obj extends _int_object implements application_interface
 	**/
 	public function get_calls_count(object $customer_relation)
 	{
-		$calls_made = new crm_call_list(array(
+		$calls_made = new object_list(array(
+			"class_id" => CL_CRM_CALL,
+			"lang_id" => array(),
+			"site_id" => array(),
 			"customer_relation" => $customer_relation->id(),
 			"real_duration" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
 		));
@@ -309,7 +312,10 @@ class crm_sales_obj extends _int_object implements application_interface
 	**/
 	public function get_last_call(object $customer_relation)
 	{
-		$calls_made = new crm_call_list(array(
+		$calls_made = new object_list(array(
+			"class_id" => CL_CRM_CALL,
+			"lang_id" => array(),
+			"site_id" => array(),
 			"customer_relation" => $customer_relation->id(),
 			"real_duration" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
 			new obj_predicate_limit(1),
@@ -326,6 +332,12 @@ class crm_sales_obj extends _int_object implements application_interface
 			$customer_relation = new object($call->prop("customer_relation"));
 			$new_call = $this->create_call(new object($presentation->prop("customer_relation")), time());
 			$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_NEWCALL);
+			$customer_relation->save();
+		}
+		elseif (crm_presentation_obj::RESULT_SALE == $presentation->prop("result"))
+		{
+			$customer_relation = new object($call->prop("customer_relation"));
+			$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_SALE);
 			$customer_relation->save();
 		}
 		elseif (crm_presentation_obj::RESULT_CALL == $presentation->prop("result"))

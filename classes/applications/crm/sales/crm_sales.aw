@@ -343,7 +343,6 @@ class crm_sales extends class_base
 			}
 			while ($o = $list->next());
 		}
-
 	}
 
 	function get_property(&$arr)
@@ -351,7 +350,7 @@ class crm_sales extends class_base
 		$ret = PROP_OK;
 		if ("cs_status" === $arr["prop"]["name"])
 		{
-			$arr["prop"]["options"] = array("" => "K&otilde;ik") + crm_company_customer_data_obj::sales_state_names();
+			$arr["prop"]["options"] = array("" => "") + crm_company_customer_data_obj::sales_state_names();
 		}
 
 		if (self::CLV_SEARCH === $this->calls_list_view and substr($arr["prop"]["name"], 0, 3) === "cs_" and isset($arr["request"][$arr["prop"]["name"]]))
@@ -1055,7 +1054,7 @@ SCRIPTVARIABLES;
 							}
 							elseif ($call->prop("real_duration") < 1)
 							{ // a call that is started but not finished
-								$url = $this->mk_my_orb("change", array("id" => $call->id()), "crm_call");
+								$url = $this->mk_my_orb("change", array("id" => $call->id(), "return_url" => get_ru()), "crm_call");
 								$phone_nr = "<span style=\"color: red;\">" . $phone->name() . "</span>";
 								$title = t("L&otilde;petamata k&otilde;ne");
 							}
@@ -1252,7 +1251,7 @@ SCRIPTVARIABLES;
 		if (isset($arr["return_url"]))
 		{
 			$url = new aw_uri($arr["return_url"]); // call was made from calls list tab in crm_sales thru make_call. take two steps back
-			$r = $url->arg_isset("return_url") ? $url->arg("return_url") : $url->get();
+			$r = ($url->arg_isset("return_url") and strlen($url->arg("return_url")) > 1) ? $url->arg("return_url") : $url->get();
 		}
 		else
 		{
@@ -1261,7 +1260,7 @@ SCRIPTVARIABLES;
 				"id" => $this_o->id(),
 				"group" => "calls"
 			);
-			$r = $this->mk_my_orb($arr2["action"], $arr2);
+			$r = $this->mk_my_orb($arr2["action"], $arr2, "crm_sales");
 		}
 		return $r;
 	}
