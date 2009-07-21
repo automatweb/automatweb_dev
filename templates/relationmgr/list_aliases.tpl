@@ -8,7 +8,7 @@ var clids = new Array();
 		cl = aselect.options[aselect.selectedIndex].value;
 		if (cl == "capt_new_object")
 		{
-			alert('Vali objekti tüüp!');
+			alert("Choose object type!");
 		}
 		else
 		<!-- SUB: HAS_DEF_FOLDER -->
