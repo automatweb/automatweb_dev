@@ -5200,7 +5200,7 @@ class task extends class_base
 
 	function _save_co_table($arr)
 	{
-		$rows = $arr["request"]["orderers"];
+		$rows = safe_array($arr["request"]["orderers"]);
 		foreach($rows as $key => $row)
 		{
 			$set = 0;
@@ -5403,7 +5403,7 @@ class task extends class_base
 
 	function save_parts_table($arr)
 	{
-		$rows = $arr["request"]["rows"];
+		$rows = safe_array($arr["request"]["rows"]);
 		foreach($rows as $key => $row)
 		{
 			if(!isset($row["on_bill"]))
@@ -5676,40 +5676,40 @@ $types = array(
 		));
 
 		// insert folders where to add
-// 		$u = get_instance(CL_USER);
-// 		if ($arr["obj_inst"] && $this->can("view", $arr["obj_inst"]->prop("customer")))
-// 		{
-// 			$impl = $arr["obj_inst"]->prop("customer");
-// 			$impl_o = obj($impl);
-// 			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
-// 			{
-// 				$impl = $u->get_current_company();
-// 			}
-// 		}
-// 		else
-// 		{
-// 			$impl = $u->get_current_company();
-// 		}
-// 		if ($this->can("view", $impl))
-// 		{
-// 			$implo = obj($impl);
-// 			$f = get_instance("applications/crm/crm_company_docs_impl");
-// 			$fldo = $f->_init_docs_fld($implo);
-// 			$ot = new object_tree(array(
-// 				"parent" => $fldo->id(),
-// 				"class_id" => CL_MENU
-// 			));
-// 			$folders = array($fldo->id() => $fldo->name());
-// 			$tb->add_sub_menu(array(
-// 				"parent" => "nemw",
-// 				"name" => "mainf",
-// 				"text" => $fldo->name(),
-// 			));
-// 			$this->_add_fa($tb, "mainf", $fldo->id());
-// 			$this->_req_level = 0;
-// 		$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf");
-// 		}
-
+/* 		$u = get_instance(CL_USER);
+ 		if ($arr["obj_inst"] && $this->can("view", $arr["obj_inst"]->prop("customer")))
+ 		{
+ 			$impl = $arr["obj_inst"]->prop("customer");
+ 			$impl_o = obj($impl);
+ 			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+ 			{
+ 				$impl = $u->get_current_company();
+ 			}
+ 		}
+ 		else
+ 		{
+ 			$impl = $u->get_current_company();
+ 		}
+ 		if ($this->can("view", $impl))
+ 		{
+ 			$implo = obj($impl);
+ 			$f = get_instance("applications/crm/crm_company_docs_impl");
+ 			$fldo = $f->_init_docs_fld($implo);
+ 			$ot = new object_tree(array(
+ 				"parent" => $fldo->id(),
+ 				"class_id" => CL_MENU
+ 			));
+ 			$folders = array($fldo->id() => $fldo->name());
+ 			$tb->add_sub_menu(array(
+ 				"parent" => "nemw",
+ 				"name" => "mainf",
+ 				"text" => $fldo->name(),
+ 			));
+ 			$this->_add_fa($tb, "mainf", $fldo->id());
+ 			$this->_req_level = 0;
+ 		$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf");
+ 		}
+*/
 		$url = $this->mk_my_orb("do_search", array("pn" => "files_h", "clid" => array(
 			CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_MENU
 		), "multiple" => 1), "task_file_search");
