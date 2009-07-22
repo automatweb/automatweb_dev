@@ -1,5 +1,10 @@
 <?php
 
+define("BILL_SUM", 1);
+define("BILL_SUM_WO_TAX", 2);
+define("BILL_SUM_TAX", 3);
+define("BILL_AMT", 4);
+
 class crm_bill_obj extends _int_object
 {
 	function set_prop($name,$value)
@@ -1264,8 +1269,8 @@ class crm_bill_obj extends _int_object
 			if ($row["tax"])
 			{
 				// tax needs to be added
+				$cur_tax = ($row["sum"] * ($row["tax"]/100.0));
 				$cur_sum = $row["sum"];
-				$cur_tax = $row["tax"];
 				$cur_pr = $row["price"];
 			}	
 			else

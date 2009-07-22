@@ -2,6 +2,11 @@
 /*
 @classinfo  maintainer=markop
 */
+define("BILL_SUM", 1);
+define("BILL_SUM_WO_TAX", 2);
+define("BILL_SUM_TAX", 3);
+define("BILL_AMT", 4);
+
 class crm_company_bills_impl extends class_base
 {
 	function crm_company_bills_impl()
@@ -1399,6 +1404,16 @@ exit_function("bills_impl::_get_bill_task_list");
 			"align" => "right",
 			"chgbgcolor" => "color",
 		));
+
+		$t->define_field(array(
+			"name" => "tax",
+			"caption" => t("K&auml;ibemaks"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"align" => "right",
+			"chgbgcolor" => "color",
+		));
+
 		if($this->show_bill_balance)
 		{
 			$t->define_field(array(
@@ -1454,6 +1469,12 @@ exit_function("bills_impl::_get_bill_task_list");
 	{
 		switch($val)
 		{
+			case "period_last_last":
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m")-2, 0, date("Y")),
+					"to" => mktime(0,0,0, date("m")-1, 0, date("Y")),
+				);
+			break;
 			case "period_last":
 				$filt["bill_date_range"] = array(
 					"from" => mktime(0,0,0, date("m")-1, 0, date("Y")),
@@ -1471,15 +1492,17 @@ exit_function("bills_impl::_get_bill_task_list");
 					"from" => mktime(0,0,0, date("m")+1, 0, date("Y")),
 					"to" => mktime(0,0,0, date("m")+2, 0, date("Y")),
 				);
+			break;
 			case "period_year":
 				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, 0, 0, date("Y")),
-					"to" => mktime(0,0,0, 0, 0, date("Y")+1),
+					"from" => mktime(0,0,0, 1, 1, date("Y")),
+					"to" => mktime(0,0,0, 1, 1, date("Y")+1),
 				);
+			break;
 			case "period_lastyear":
 				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, 0, 0, date("Y")-1),
-					"to" => mktime(0,0,0,0 , 0, date("Y")),
+					"from" => mktime(0,0,0, 1, 1, date("Y")-1),
+					"to" => mktime(0,0,0,1 , 1, date("Y")),
 				);
 			break;
 			default :return null;
@@ -1701,6 +1724,30 @@ enter_function("bill::startcurr");
 				$sum_str = number_format($own_currency_sum, 2);
 			}
 exit_function("bill::startcurr");
+
+
+enter_function("bill::tax");
+			$curtax = $own_currency_tax = $bill->get_bill_sum(3);//$bill_i->get_bill_sum($bill,$tax_add);
+			if($company_curr && $curid && ($company_curr != $curid))
+			{
+				$own_currency_tax  = $co_stat_inst->convert_to_company_currency(array(
+					"sum" =>  $curtax,
+					"o" => $bill,
+				));
+			}
+			if($cg)//kliendi valuutas
+			{
+				$tax_str = number_format($curtax, 2)." ".$cur_name;
+				$tax_in_curr[$cur_name] += $curtax;
+			}
+			else//oma organisatsiooni valuutas
+			{
+				$tax_str = number_format($own_currency_tax, 2);
+			}//arr($tax_str);
+
+exit_function("bill::tax");
+
+
 enter_function("bill::start0");
 
 			$pop->begin_menu("bill_".$bill->id());
@@ -1742,6 +1789,7 @@ enter_function("bill::start0");
 				"client_manager" => $cm,
 				"oid" => $bill->id(),
 				"print" => $pop->get_menu(),
+				"tax" => $tax_str,
 			);
 exit_function("bill::start0");
 enter_function("bill::start1");
@@ -1834,6 +1882,7 @@ exit_function("bill::balance");
 			$t->define_data($bill_data);
 			// number_format here to round the number the same way in the add, so the sum is correct
 			$sum+= number_format($own_currency_sum,2,".", "");
+			$tax+= number_format($own_currency_tax,2,".", "");
 		}
 
 		$t->set_default_sorder("desc");
@@ -1854,6 +1903,10 @@ exit_function("bill::balance");
 					$final_dat["balance"] .= "<b>".number_format($bal_in_curr[$cur_name], 2)." ".$cur_name."</b><br>";
 				}
 			}
+			foreach($tax_in_curr as $cur_name => $amount)
+			{
+				$final_dat["tax"] .= "<b>".number_format($amount, 2)." ".$cur_name."</b><br>";
+			}
 			$co_currency_name = "";
 			if($this->can("view" , $company_curr))
 			{
@@ -1861,6 +1914,7 @@ exit_function("bill::balance");
 				$co_currency_name = $company_curr_obj->name();
 			}
 			$final_dat["sum"] .= "<b>Kokku: ".number_format($sum, 2).$co_currency_name."</b><br>";
+			$final_dat["tax"] .= "<b>Kokku: ".number_format($tax, 2).$co_currency_name."</b><br>";
 			if($arr["request"]["show_bill_balance"])
 			{
 				$final_dat["balance"] .= "<b>Kokku: ".number_format($balance, 2).$co_currency_name."</b><br>";
@@ -1868,6 +1922,7 @@ exit_function("bill::balance");
 		}
 		else
 		{
+			$final_dat["tax"] = "<b>".number_format($tax, 2)."</b>";
 			$final_dat["sum"] = "<b>".number_format($sum, 2)."</b>";
 			if($arr["request"]["show_bill_balance"])
 			{
@@ -2863,6 +2918,7 @@ exit_function("bill::balance");
 
 		$branches = array(
 //			"all" => t("K&otilde;ik"),
+			"period_last_last" => t("&Uuml;leelmine kuu"),
 			"period_last" => t("Eelmine kuu"),
 			"period_current" => t("K&auml;esolev kuu"),
 			"period_next" => t("J&auml;rgmine kuu"),
