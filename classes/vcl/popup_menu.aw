@@ -98,6 +98,11 @@ class popup_menu extends aw_template
 		{
 			$target = " target=\"_blank\" ";
 		}
+		$title = "";
+		if(!empty($arr["title"]))
+		{
+			$title = $arr["title"];
+		}
 
 		if (empty($arr["disabled"]))
 		{
@@ -105,7 +110,7 @@ class popup_menu extends aw_template
 		}
 		else
 		{
-			$rv = '<a '.$id.' class="menuItem" '.$target.' href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
+			$rv = '<a '.$id.' class="menuItem" '.$target.' href="" title="'.$title.'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
 		}
 
 		if (!isset($this->menus[$arr["parent"]]))
@@ -118,10 +123,10 @@ class popup_menu extends aw_template
 	/** adds a separator line between menu isems that can not be clicked
 		@attrib api=1
 	**/
-	function add_separator($arr)
+	function add_separator($arr = array())
 	{
 		//$this->items[] = array("__is_sep" => 1);
-		if (!$arr["parent"])
+		if (empty($arr["parent"]))
 		{
 			$arr["parent"] = $this->menu_id;
 		}
