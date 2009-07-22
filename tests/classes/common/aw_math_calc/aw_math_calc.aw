@@ -13,7 +13,7 @@ class object_data_list_test extends UnitTestCase
 	**/
 	function test_string2float_dollar_mark_thousand_separator()
 	{
-		$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
