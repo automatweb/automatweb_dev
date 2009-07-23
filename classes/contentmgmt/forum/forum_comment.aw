@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.30 2009/07/23 11:15:08 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.31 2009/07/23 11:23:25 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -39,7 +39,6 @@
 
 @tableinfo forum_comments index=id master_table=objects master_index=oid
 */
-
 
         /*
 		mysql> describe forum_comments;
