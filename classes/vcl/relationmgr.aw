@@ -1251,7 +1251,7 @@ class relationmgr extends aw_template
 				$arr["obj_inst"]->connect(array(
 					"to" => $oalias,
 					"reltype" => $reltype,
-					"data" => $arr["request"]["data"]
+					"data" => automatweb::$request->arg("data")
 				));
 			}
 		}
