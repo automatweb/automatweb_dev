@@ -253,7 +253,7 @@ class relationmgr extends aw_template
 		$this->reltype = $arr["request"]["reltype"];
 		$props = $this->_init_search($arr);
 		
-		$tb = &$this->_make_toolbar($arr);
+		$tb = $this->_make_toolbar($arr);
 		$this->read_template("rel_search.tpl");
 		$req = safe_array($arr["request"]);
 		unset($req["action"]);
@@ -282,7 +282,7 @@ class relationmgr extends aw_template
 			"HAS_DEF_FOLDER" => $def_str,
 			"parent" => $this->parent,
 			"clids" => $this->clid_list,
-			"period" => $arr["request"]["period"],
+			"period" => automatweb::$request->arg("period"),
 			"id" => $arr["obj_inst"]->id(),
 			"saveurl" => $this->mk_my_orb("submit", array("reltype" => $this->reltype, "group" => $req["group"], "return_url" => get_ru(), "reforb" => 1, "id" => $req["id"]), $req["class"]),
 		));
@@ -329,14 +329,14 @@ class relationmgr extends aw_template
 			"name" => "name",
 			"type" => "textbox",
 			"caption" => t("Nimi"),
-			"value" => $arr["request"]["name"],
+			"value" => automatweb::$request->arg("name"),
 			"post_append_text" => "<script language=javascript>el=document.getElementById('name');el.focus();</script>"
 		); 
 		$rval["comment"] = array(
 			"name" => "comment",
 			"type" => "textbox",
 			"caption" => t("Kommentaar"),
-			"value" => $arr["request"]["comment"],
+			"value" => automatweb::$request->arg("comment"),
 		); 
 //@property class_id type=select multiple=1 size=10 group=search,advsearch
 //@caption T&uuml;&uuml;p
@@ -344,25 +344,25 @@ class relationmgr extends aw_template
 			"name" => "oid",
 			"type" => "textbox",
 			"caption" => t("OID"),
-			"value" => $arr["request"]["oid"],
+			"value" => automatweb::$request->arg("oid"),
 		);
 		$rval["createdby"] = array(
 			"name" => "createdby",
 			"type" => "textbox",
 			"caption" => t("Looja"),
-			"value" => $arr["request"]["createdby"],
+			"value" => automatweb::$request->arg("createdby"),
 		);
 		$rval["modifiedby"] = array(
 			"name" => "modifiedby",
 			"type" => "textbox",
 			"caption" => t("Muutja"),
-			"value" => $arr["request"]["modifiedby"],
+			"value" => automatweb::$request->arg("modifiedby"),
 		);
 		$rval["sparent"] = array(
 			"name" => "sparent",
 			"type" => "textbox",
 			"caption" => t("Asukoht"),
-			"value" => $arr["request"]["sparent"],
+			"value" => automatweb::$request->arg("sparent"),
 		);
 		$rval["status"] = array(
 			"name" => "status",
@@ -373,7 +373,7 @@ class relationmgr extends aw_template
 				"2" => t("Aktiivsed"),
 				"1" => t("Deaktiivsed"),
 			),
-			"value" => $arr["request"]["status"],
+			"value" => automatweb::$request->arg("status"),
 		);
 //@property alias type=textbox group=advsearch
 //@caption Alias
@@ -383,7 +383,7 @@ class relationmgr extends aw_template
 			"type" => "chooser",
 			"caption" => t("Keel"),
 			"options" => $lg->get_list(array("ignore_status" => true)),
-			"value" => $arr["request"]["lang_id"],
+			"value" => automatweb::$request->arg("lang_id"),
 		);
 //@property site_id type=select group=advsearch
 //@caption Saidi ID
@@ -392,7 +392,7 @@ class relationmgr extends aw_template
 			"type" => "checkbox",
 			"ch_value" => 1,
 			"caption" => t("Otsi vendi"),
-			"checked" => ($arr["request"]["search_bros"]),
+			"checked" => automatweb::$request->arg("search_bros"),
 		);
 		$rval["searched"] = array(
 			"name" => "searched",
@@ -421,7 +421,7 @@ class relationmgr extends aw_template
 		$this->_init_search_fields($arr["request"]);
 		if($this->do_search)
 		{
-			$tbl = &$this->_get_search_table($arr);
+			$tbl = $this->_get_search_table($arr);
 			$rval["result_table"] = array(
 				"name" => "result_table",
 				"type" => "table",
@@ -522,7 +522,7 @@ class relationmgr extends aw_template
 			};
 
 			// 3 - ignore status
-			if ($s_args["status"] == 3)
+			if (ifset($s_args, "status") == 3)
 			{
 				unset($s_args["status"]);
 			};
@@ -649,7 +649,7 @@ class relationmgr extends aw_template
 		}
 
 		$this->qparts = $parts;
-		if($arr["searched"])
+		if(!empty($arr["searched"]))
 		{
 			$this->do_search = true;
 		}
@@ -773,7 +773,7 @@ class relationmgr extends aw_template
 			
 			if(isset($arr["request"]["srch"]) && $arr["request"]["srch"] == 1)
 			{
-				if ($this->search_results > 0)
+				if (isset($this->search_results) && $this->search_results > 0)
 				{
 					$tb->add_button(array(
 						"name" => "save",
