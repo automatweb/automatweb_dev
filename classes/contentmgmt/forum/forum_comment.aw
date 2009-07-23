@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.29 2008/07/14 18:16:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.30 2009/07/23 11:15:08 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -55,8 +55,6 @@
 		| ip          | varchar(255)        | YES  |     | NULL    |       |
 		+-------------+---------------------+------+-----+---------+-------+
         */
-
-
 
 class forum_comment extends class_base
 {
