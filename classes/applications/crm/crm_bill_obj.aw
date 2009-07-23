@@ -1216,7 +1216,7 @@ class crm_bill_obj extends _int_object
 		}
 		enter_function("bill::get_bill_sum");
 		$rs = "";
-		$sum_wo_tax = 0;
+		$sum_wo_tax = $tot_amt = $tot_cur_sum = 0;
 		$tax = 0;
 		$sum = 0;
 		
@@ -1302,6 +1302,7 @@ class crm_bill_obj extends _int_object
 		return $sum;
 	}
 
+	//selle asemel kasuta get_bill_rows_dat funktsiooni... iganenud on
 	/** returns bill rows data
 		@attrib api=1
 	**/
@@ -1313,6 +1314,10 @@ class crm_bill_obj extends _int_object
 		foreach($cons as $c)
 		{
 			$row = $c->to();
+			if($row->prop("writeoff"))
+			{
+				continue;
+			}
 			$kmk = "";
 			if ($GLOBALS["object_loader"]->cache->can("view", $row->prop("prod")))
 			{
@@ -1878,7 +1883,7 @@ class crm_bill_obj extends _int_object
 	// Can't be private (nor protected). Called in crm_bill::_bill_targets()! -kaarel 21.07.2009
 	public function set_crm_settings()
 	{
-		if(!$this->crm_settings)
+		if(!isset($this->crm_settings) || !is_oid($this->crm_settings))
 		{
 			$seti = get_instance(CL_CRM_SETTINGS);
 			$this->crm_settings = $seti->get_current_settings();
