@@ -1438,6 +1438,11 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				"folder" => $args["request"]["folder"],
 				"_alias" => get_class($this),
 			)),
+			"search_url" => $this->mk_my_orb("search",array(
+				"id" => $args["obj_inst"]->id(),
+				"group" => $arr["group"],
+				"section" => aw_global_get("section"),
+			)),
 		));
 		if ($can_admin)
 		{
@@ -2497,7 +2502,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 	}
 
 	/**
-	@attrib name=search all_args=1 nologin=1
+		@attrib name=search all_args=1 nologin=1
 	**/
 	function forum_search($arr)
 	{
@@ -2702,13 +2707,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 
 	function get_search_form($arr)
 	{
-		$props["title"] = array(
-			"type" => "text",
-			"name" => "title",
-			"caption" => t("Otsing"),
-			"value" => "",
-			"store" => "no",
-		);
 		$props["word"] = array(
 			"type" => "textbox",	
 			"name" => "word",
@@ -3571,7 +3569,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 	}
 
 	/**
-		@attrib name=add_faq no_login=1
+		@attrib name=add_faq nologin=1
 		@param id required type="int" acl="edit"
 		@param topic required type="int" acl="edit"
 		@param section optional

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="forum_v2" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt/forum" extends="class_base">
+	<class name="forum_v2" folder="www/automatweb_cvs/classes/contentmgmt/forum" extends="class_base">
 		<action name="edit_post" nologin="1" all_args="1">
 			<function name="edit_post">
 				<arguments>
@@ -69,7 +69,7 @@
 			</function>
 		</action>
 
-		<action name="add_faq">
+		<action name="add_faq" nologin="1">
 			<function name="add_faq">
 				<arguments>
 					<required name="id" type="int" acl="edit" />
