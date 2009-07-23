@@ -33,6 +33,17 @@
             <caption>&amp;amp;Uuml;hikute valemid</caption>
       </property>
       <property>
+            <name>types</name>
+            <table>aw_shop_product_category</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CATEGORY_TYPES</reltype>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <field>types</field>
+            <caption>Seotud kategooriate t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
+      </property>
+      <property>
             <name>doc</name>
             <table>aw_shop_product_category</table>
             <group>general</group>
@@ -100,6 +111,16 @@
                   <clid>CL_MENU</clid>
                   <caption>Kaust</caption>
             </FOLDER>
+            <CATEGORY>
+                  <value>6</value>
+                  <clid>CL_SHOP_PRODUCT_CATEGORY</clid>
+                  <caption>Tootekategooria kuhu alla kategooria kuulub</caption>
+            </CATEGORY>
+            <CATEGORY_TYPES>
+                  <value>7</value>
+                  <clid>CL_SHOP_PRODUCT_CATEGORY_TYPE</clid>
+                  <caption>Kategooria t&amp;amp;uuml;&amp;amp;uuml;p mille kategooriaid valida saab toodete otsingus</caption>
+            </CATEGORY_TYPES>
       </reltypes>
 </properties>
 

@@ -177,5 +177,19 @@
 			</function>
 		</action>
 
+		<action name="create_new_category" all_args="1">
+			<function name="create_new_category">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="create_new_category_type" all_args="1">
+			<function name="create_new_category_type">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -59,6 +59,64 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@caption Tootegruppide nimekiri
 
 
+@default group=product_management
+	@property product_management_toolbar type=toolbar no_caption=1 store=no
+
+	@layout product_managementsplit type=hbox width=20%:80%
+
+		@layout product_managementleft type=vbox parent=product_managementsplit
+
+			@layout product_managementtree_lay type=vbox closeable=1 area_caption=Tooted parent=product_managementleft
+
+				@property product_managementtree type=treeview parent=product_managementtree_lay store=no no_caption=1
+			@layout product_managementtree_lay2 type=vbox closeable=1 area_caption=Kategooriate&nbsp;t&uuml;&uuml;bid parent=product_managementleft
+
+				@property product_managementcat_tree type=text group=product_management parent=product_managementtree_lay2 store=no no_caption=1
+
+			@layout product_managementleft_search type=vbox parent=product_managementleft area_caption=Otsing closeable=1
+
+				@layout product_managements_top_box type=vbox parent=product_managementleft_search
+
+					@property product_managements_name type=textbox store=no captionside=top size=20 parent=product_managements_top_box
+					@caption Nimi
+
+					@property product_managements_code type=textbox store=no captionside=top size=20 parent=product_managements_top_box
+					@caption Kood
+
+					@property product_managements_barcode type=textbox store=no captionside=top size=20 parent=product_managements_top_box
+					@caption Ribakood
+
+					@property product_managements_count type=chooser store=no captionside=top parent=product_managements_top_box size=30
+					@caption Laoseis
+
+				@layout product_managements_price_box type=hbox parent=product_managementleft_search
+
+					@property product_managements_price_from type=textbox store=no captionside=top size=8 parent=product_managements_price_box
+					@caption Hind alates
+
+					@property product_managements_price_to type=textbox store=no captionside=top size=8 parent=product_managements_price_box
+					@caption Hind kuni
+
+				@property product_managements_show_pieces type=checkbox ch_value=1 store=no captionside=top size=30  parent=product_managementleft_search no_caption=1
+				@caption Kuva t&uuml;kkidena
+
+				@property product_managements_show_batches type=checkbox ch_value=1 store=no captionside=top size=30  parent=product_managementleft_search no_caption=1
+				@caption Kuva partiidena
+
+
+				@property product_managements_sbt type=button store=no captionside=top  parent=product_managementleft_search
+				@caption Otsi
+
+
+		@property product_management_list type=table store=no no_caption=1  parent=product_managementsplit
+		@caption Toodete nimekiri
+
+
+
+
+
+
+
 @default group=products
 
 	@property products_toolbar type=toolbar no_caption=1 store=no
@@ -116,6 +174,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@property products_list type=table store=no no_caption=1  parent=prod_split
 		@caption Toodete nimekiri
+
+
+@default group=category
+	@property category_tb type=toolbar store=no no_caption=1
+	@layout category_split type=hbox width=20%:80%
+		@layout category_left type=vbox parent=category_split
+			@layout category_treel type=vbox closeable=1 area_caption=Kategooriad parent=category_left
+				@property category_tree type=treeview store=no no_caption=1 parent=category_treel
+#			@layout category_type_treel type=vbox closeable=1 area_caption=T&uuml;&uuml;bid parent=category_left
+#				@property category_type_tree type=treeview store=no no_caption=1 parent=category_type_treel
+		@layout category_listl type=vbox parent=category_split
+			@property category_list type=table store=no no_caption=1 parent=category_listl
+
 
 @default group=packets
 
@@ -1048,9 +1119,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 @groupinfo articles caption="Artiklid"
 
-	@groupinfo products caption="Artiklid" submit=no parent=articles
+	@groupinfo product_management caption="Artiklid" submit=no parent=articles
+	@groupinfo category caption="Tootekategooriad" submit=no parent=articles
 	@groupinfo packets caption="Paketid" submit=no parent=articles
-
+	@groupinfo products caption="A Artiklid" submit=no parent=articles
 
 @groupinfo status caption="Laoseis"
 
@@ -1223,6 +1295,9 @@ class shop_warehouse extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "product_managementcat_tree":
+				$prop["value"] = $this->_get_managementcat_tree($arr);
+				break;
 			case "stats_inventory_repair_time_tree":
 			case "stats_balance_time_tree":
 			case "stats_day_time_tree":
@@ -3891,10 +3966,11 @@ class shop_warehouse extends class_base
 
 	private function decide_search_method($arr)
 	{
-              if ($this->can_use_products_index() === false)
-               {
-                       return 'regular';
-               }
+		if ($this->can_use_products_index() === false)
+		{
+			return 'regular';
+		}
+
 		$fields = array(
 		//	'prod_s_name' => 'prod_s_name',
 		//	'prod_s_code' => 'prod_s_code',
@@ -4157,11 +4233,16 @@ class shop_warehouse extends class_base
 			if($this->config && $cid = $this->config->prop("short_code_ctrl"))
 			{
 				$short_code = get_instance(CL_CFGCONTROLLER)->check_property($cid, null, $code, null, null, null);
-				$params[] = "(code like '%".$code."%' or short_code like '%".$short_code."%')";
+				$params[] = "(
+					code LIKE '%".$code."%' OR 
+					short_code LIKE '%".$short_code."%' OR 
+					search_term LIKE '%".$code."%' OR 
+					search_term LIKE '%".$short_code."%'
+				)";
 			}
 			else
 			{
-				$params[] = "'%".$code."%'";
+				$params[] = "code like '%".$code."%'";
 			}
 		}
 
@@ -4171,7 +4252,6 @@ class shop_warehouse extends class_base
 		}
 
 		$ol = new object_list();
-
 		if (!empty($params))
 		{
 			$res = $this->db_fetch_array("select oid from aw_shop_products_index where ".implode(' AND ', $params)."");
@@ -4394,7 +4474,7 @@ class shop_warehouse extends class_base
 		// the idea is, that decide_search_method somehow decides if it can search
 		// index table or has to make the complex search --dragut
 		$search_method = $this->decide_search_method($arr);
-	//	arr($search_method);
+
 		switch ($search_method)
 		{
 			case 'index':
@@ -4404,9 +4484,6 @@ class shop_warehouse extends class_base
 				$res = $this->get_products_list_ol($arr);
 				break;
 		}
-
-	//	$res = $this->get_products_list_ol($arr);
-	//	$res = $this->get_products_list_from_index($arr);
 
 		classload("core/icons");
 		$pi = get_instance(CL_SHOP_PRODUCT);
@@ -6942,9 +7019,35 @@ class shop_warehouse extends class_base
 						button.disabled = false;
 				});
 			}
-
 			";
 		}
+
+		if ($arr['request']['group'] == 'category')
+		{
+
+			return "
+			function add_cat()
+			{
+				var cat = get_property_data['cat'];
+				var my_string = prompt('".t("Sisesta kategooria nimi")."');
+				$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_category',
+					 id: '".$arr["obj_inst"]->id()."' , name: my_string, cat: cat}, function (html) {
+						reload_property(['category_tree','category_list']);
+					}
+				);
+			}
+			function add_cat_type()
+			{
+				var my_string = prompt('".t("Sisesta kategooria liigi nimi")."');
+				$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_category_type',
+					 id: '".$arr["obj_inst"]->id()."' , name: my_string}, function (html) {
+						reload_property(['category_tree','category_list']);
+					}
+				);
+			}
+			";
+		}
+
 		return $js;
 	}
 
@@ -10962,19 +11065,52 @@ $oo = get_instance(CL_SHOP_ORDER);
 	**/
 	function update_products_index($arr)
 	{
-		$res = $this->db_fetch_array('select name, code, short_code, aw_oid from aw_shop_products left join objects on oid = aw_oid');
+		$cid = 0;
+		$obj_inst = new object($arr['id']);
+		if ($this->can('view', $obj_inst->prop('conf')))
+		{
+			$config = new object($obj_inst->prop('conf'));
+			$cid = $config->prop('short_code_ctrl');
+		}
+
+		$res = $this->db_fetch_array('
+			SELECT 
+				name, 
+				code, 
+				short_code, 
+				search_term, 
+				aw_oid 
+			FROM 
+				aw_shop_products left join objects on oid = aw_oid
+		');
 		foreach ($res as $r)
 		{
+			// convert the search term into short format with short code controller
+			if ($cid)
+			{
+				$short_search_term = get_instance(CL_CFGCONTROLLER)->check_property($cid, null, $r['search_term'], null, null, null);
+			//	$short_search_term = $r['search_term'];
+			}
+
 			$this->db_query("
-				replace
-					into aw_shop_products_index
-				set
-					code = '".addslashes($r['code'])."',
-					oid = '".$r['aw_oid']."',
-					short_code = '".addslashes($r['short_code'])."',
-					name = '".addslashes($r['name'])."'
+				REPLACE 
+					INTO aw_shop_products_index 
+				SET 
+					code = '".addslashes($r['code'])."', 
+					oid = '".$r['aw_oid']."', 
+					short_code = '".addslashes($r['short_code'])."', 
+					search_term = '".addslashes($short_search_term)."',
+					name = '".addslashes($r['name'])."',
+					updated = true
+
 			");
 		}
+
+		// now, we need to delete all those lines from the table which weren't updated
+		$this->db_query("DELETE FROM aw_shop_products_index WHERE updated = false");
+		
+		// For next import, lets reset the updated bit
+		$this->db_query("UPDATE aw_shop_products_index SET updated = false");
 
 		return $arr['post_ru'];
 	}
@@ -10994,6 +11130,402 @@ $oo = get_instance(CL_SHOP_ORDER);
                }
                return false;
        }
+
+	function _get_category_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "left",
+		));
+
+		$t->define_field(array(
+			"name" => "types",
+			"caption" => t("Seotud tootekategooriate t&uuml;&uuml;bid"),
+			"align" => "left",
+		));
+
+ 		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+
+		if($this->can("view" , $arr["request"]["cat"]))
+		{
+			$object = obj($arr["request"]["cat"]);
+			switch($object->class_id())
+			{
+				case CL_SHOP_PRODUCT_CATEGORY_TYPE:
+				case CL_SHOP_PRODUCT_CATEGORY:
+					$ol= $object->get_categories();
+					break;
+				case CL_MENU:
+					$ol= new object_list(array(
+						"parent" => $object->id(),
+						"class_id" => CL_SHOP_PRODUCT_CATEGORY
+					));
+					break;
+				default:
+					$ol= new object_list();
+			}
+
+			foreach($ol->arr() as $o)
+			{
+
+				$t->define_data(array(
+					"name" => html::obj_change_url($o,null,array("return_url" => $this->mk_my_orb("change" , array("class" => "shop_warehouse","id" => $arr["obj_inst"]->id() , "group" => "category" )))),
+					"id" => $o->id(),
+					"types" => join(", " , $o->get_gategory_types()->names()),
+				));
+			}
+		}
+	}
+
+	function _get_category_tree($arr)
+	{
+		$tv =&$arr["prop"]["vcl_inst"];
+		$var = "cat";
+
+		$prod_folder = $this->config->prop("prod_type_fld");
+
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : $prod_folder);
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "product_cat_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("Tootet&uuml;&uuml;bid"),
+			"id" => $prod_folder,
+			"reload" => array(
+				"props" => array("category_list"),
+			        "params" => array("cat" => $prod_folder)
+			)
+		));//print "folder:" ; arr($prod_folder);
+		$cats = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"parent" => $prod_folder,
+		));
+
+		foreach($cats->arr() as $id => $cat)
+		{
+			$tv->add_item($prod_folder,array(
+				"name" => $cat->name(),
+				"id" => $id."",
+				"reload" => array(
+					"props" => array("category_list"),
+				        "params" => array("cat" => $id)
+				)
+			));//arr($cat->name());
+			$this->add_cat_leaf($tv , $id);
+		}
+
+		$types = $arr["obj_inst"]->get_product_category_types();
+
+		foreach($types->arr() as $id => $cat)
+		{
+			$tv->add_item(0,array(
+				"name" => $cat->name(),
+				"id" => $id."",
+				"reload" => array(
+					"props" => array("category_list"),
+				        "params" => array("cat" => $id)
+				)
+			));
+
+			$this->add_cat_leaf($tv , $id);
+		}
+	}
+
+	function add_cat_leaf($tv , $parent)
+	{
+		if(!is_oid($parent))
+		{
+			return;
+		}
+		$o = obj($parent);
+		$cats = $o->get_categories();
+
+		foreach($cats->names() as $id => $name)
+		{//arr($id);arr($parent);arr("-----");
+			$tv->add_item($parent,array(
+				"name" => $name,
+				"id" => $id."",
+				"reload" => array(
+					"props" => array("category_list"),
+				        "params" => array("cat" => $id)
+				)
+			));
+			$this->add_cat_leaf($tv , $id);
+		}
+	}
+
+	function _get_category_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Tootekategooria"),
+			"link" => "javascript:add_cat();"
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Tootekategooria t&uuml;&uuml;p"),
+			"link" => "javascript:add_cat_type();"
+		));
+
+		$tb->add_delete_button();
+	}
+
+	function _get_product_management_toolbar($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Toode"),
+			"link" => "javascript:add_product();"
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Pakend"),
+			"link" => "javascript:add_packaging();"
+		));
+
+		$tb->add_delete_button();
+	}
+
+	function _get_product_managementtree($arr)
+	{
+		$tv =&$arr["prop"]["vcl_inst"];
+		$var = "cat";
+
+		$prod_folder = $this->config->prop("prod_type_fld");
+
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : $prod_folder);
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "product_management_cat_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("Tootet&uuml;&uuml;bid"),
+			"id" => $prod_folder,
+			"reload" => array(
+				"props" => array("category_list"),
+			        "params" => array("cat" => $prod_folder)
+			)
+		));//print "folder:" ; arr($prod_folder);
+		$cats = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"parent" => $prod_folder,
+		));
+
+		foreach($cats->arr() as $id => $cat)
+		{
+			$tv->add_item($prod_folder,array(
+				"name" => $cat->name(),
+				"id" => $id."",
+				"reload" => array(
+					"props" => array("product_management_list"),
+				        "params" => array("cat" => $id)
+				)
+			));//arr($cat->name());
+			$this->add_prod_management_leaf($tv , $id);
+		}
+	}
+
+	function add_prod_management_leaf($tv , $parent)
+	{
+		if(!is_oid($parent))
+		{
+			return;
+		}
+		$o = obj($parent);
+		$cats = $o->get_categories();
+
+		foreach($cats->names() as $id => $name)
+		{//arr($id);arr($parent);arr("-----");
+			$tv->add_item($parent,array(
+				"name" => $name,
+				"id" => $id."",
+				"reload" => array(
+					"props" => array("product_management_list"),
+				        "params" => array("cat" => $id)
+				)
+			));
+			$this->add_prod_management_leaf($tv , $id);
+		}
+	}
+
+	function _get_managementcat_tree($arr)
+	{
+		$types = $arr["obj_inst"]->get_product_category_types();
+		$val = "";
+		foreach($types->arr() as $id => $cat)
+		{
+			$t = new treeview();
+			$t->start_tree(array(
+				"type" => TREE_DHTML,
+				"persist_state" => true,
+				"tree_id" => "product_management_cat_types_tree".$id,
+			));
+
+
+			$var = "cat_".$id;
+			$t->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "");
+			$t->add_item(0,array(
+				"name" => $cat->name(),
+				"id" => $id."",
+				"reload" => array(
+					"props" => array("product_management_list"),
+				        "params" => array("cat" => $id)
+				)
+			));
+//
+			$this->add_cat_type_leaf($t , $id);
+			$val.= $t->get_html();
+		}
+		return $val;
+	}
+
+	function add_cat_type_leaf($t , $parent)
+	{
+		if(!is_oid($parent))
+		{
+			return;
+		}
+		$o = obj($parent);
+		$cats = $o->get_categories();
+
+		foreach($cats->names() as $id => $name)
+		{//arr($id);arr($parent);arr("-----");
+			$t->add_item($parent,array(
+				"name" => $name,
+				"id" => $id."",
+				"reload" => array(
+					"props" => array("category_list"),
+				        "params" => array("cat_".$parent => $id)
+				)
+			));
+			$this->add_cat_type_leaf($t , $id);
+		}
+	}
+
+	function _get_product_management_list($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$this->_init_prod_list_list_tbl($tb, $arr);
+		if($this->can("view" , $arr["request"]["cat"]))
+		{
+			$category = obj($arr["request"]["cat"]);
+			$ol = $category->get_products();
+		}
+		else
+		{
+			$ol = new object_list();
+		}
+
+
+		foreach($ol as $o)
+		{
+			$data = array(
+				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
+				"oid" => $o->id(),
+				"name" => html::obj_change_url($o, parse_obj_name($o->name())), //$name,
+				"cnt" => $o->prop("item_count"),
+				"item_type" => $tp,
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $o->id(),
+						"return_url" => get_ru()
+					), $o->class_id()),
+					"caption" => t("Muuda")
+				)),
+				"code" => $o->prop("code"),
+				"del" => html::checkbox(array(
+					"name" => "sel[]",
+					"value" => $o->id()
+				)),
+				"is_menu" => ($o->class_id() == CL_MENU ? 0 : 1),
+				"ord" => html::textbox(array(
+					"name" => "set_ord[".$o->id()."]",
+					"value" => $o->ord(),
+					"size" => 5
+				)).html::hidden(array(
+					"name" => "old_ord[".$o->id()."]",
+					"value" => $o->ord()
+				)),
+				"hidden_ord" => $o->ord(),
+				"clid" => $o->class_id(),
+				"type" => ($o->class_id() == CL_SHOP_PRODUCT)?"":t("&Uuml;ksiktooted"),
+			);
+			$tb->define_data($data);
+		}
+		$tb->set_numeric_field("hidden_ord");
+		$tb->set_default_sortby("name");
+		$tb->set_default_sorder("asc");
+		$tb->sort_by();
+	}
+
+	/**
+		@attrib name=create_new_category all_args=1
+	**/
+	public function create_new_category($arr)
+	{
+		$o = new object();
+		$o->set_parent($arr["cat"] ? $arr["cat"] : $arr["id"]);
+		$o->set_name(iconv("UTF-8",aw_global_get("charset"),$arr["name"]));
+		$o->set_class_id(CL_SHOP_PRODUCT_CATEGORY);
+		$o->save();
+		if($this->can("view" , $arr["cat"]))
+		{
+			$category = obj($arr["cat"]);
+			if($category->class_id() == CL_SHOP_PRODUCT_CATEGORY)
+			{
+				$o->set_category($category->id());
+			}
+			if($category->class_id() == CL_SHOP_PRODUCT_CATEGORY_TYPE)
+			{
+				$o->set_category_type($category->id());
+			}
+		}
+		$o->save();
+		die();
+	}
+
+	/**
+		@attrib name=create_new_category_type all_args=1
+	**/
+	public function create_new_category_type($arr)
+	{
+		$o = new object();
+		$o->set_parent($arr["id"]);
+		$o->set_name(iconv("UTF-8",aw_global_get("charset"),$arr["name"]));
+		$o->set_class_id(CL_SHOP_PRODUCT_CATEGORY_TYPE);
+		$o->save();
+		die($o->id());
+	}
+
 }
 
 ?>

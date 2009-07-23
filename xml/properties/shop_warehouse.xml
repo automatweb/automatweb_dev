@@ -117,6 +117,157 @@
             <caption>Tootegruppide nimekiri</caption>
       </property>
       <property>
+            <name>product_management_toolbar</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>product_management_toolbar</field>
+      </property>
+      <property>
+            <name>product_managementtree</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>treeview</type>
+            <parent>product_managementtree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>product_managementtree</field>
+      </property>
+      <property>
+            <name>product_managementcat_tree</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>text</type>
+            <parent>product_managementtree_lay2</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>product_managementcat_tree</field>
+      </property>
+      <property>
+            <name>product_managements_name</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>20</size>
+            <parent>product_managements_top_box</parent>
+            <field>product_managements_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>product_managements_code</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>20</size>
+            <parent>product_managements_top_box</parent>
+            <field>product_managements_code</field>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>product_managements_barcode</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>20</size>
+            <parent>product_managements_top_box</parent>
+            <field>product_managements_barcode</field>
+            <caption>Ribakood</caption>
+      </property>
+      <property>
+            <name>product_managements_count</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>chooser</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>product_managements_top_box</parent>
+            <size>30</size>
+            <field>product_managements_count</field>
+            <caption>Laoseis</caption>
+      </property>
+      <property>
+            <name>product_managements_price_from</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>8</size>
+            <parent>product_managements_price_box</parent>
+            <field>product_managements_price_from</field>
+            <caption>Hind alates</caption>
+      </property>
+      <property>
+            <name>product_managements_price_to</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>8</size>
+            <parent>product_managements_price_box</parent>
+            <field>product_managements_price_to</field>
+            <caption>Hind kuni</caption>
+      </property>
+      <property>
+            <name>product_managements_show_pieces</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>product_managementleft_search</parent>
+            <no_caption>1</no_caption>
+            <field>product_managements_show_pieces</field>
+            <caption>Kuva t&amp;amp;uuml;kkidena</caption>
+      </property>
+      <property>
+            <name>product_managements_show_batches</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>product_managementleft_search</parent>
+            <no_caption>1</no_caption>
+            <field>product_managements_show_batches</field>
+            <caption>Kuva partiidena</caption>
+      </property>
+      <property>
+            <name>product_managements_sbt</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>button</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>product_managementleft_search</parent>
+            <field>product_managements_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>product_management_list</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>product_managementsplit</parent>
+            <field>product_management_list</field>
+            <caption>Toodete nimekiri</caption>
+      </property>
+      <property>
             <name>products_toolbar</name>
             <table>objects</table>
             <group>products</group>
@@ -288,6 +439,35 @@
             <parent>prod_split</parent>
             <field>products_list</field>
             <caption>Toodete nimekiri</caption>
+      </property>
+      <property>
+            <name>category_tb</name>
+            <table>objects</table>
+            <group>category</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>category_tb</field>
+      </property>
+      <property>
+            <name>category_tree</name>
+            <table>objects</table>
+            <group>category</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>category_treel</parent>
+            <field>category_tree</field>
+      </property>
+      <property>
+            <name>category_list</name>
+            <table>objects</table>
+            <group>category</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>category_listl</parent>
+            <field>category_list</field>
       </property>
       <property>
             <name>packets_toolbar</name>
@@ -2785,16 +2965,26 @@
             <articles>
                   <caption>Artiklid</caption>
             </articles>
-            <products>
+            <product_management>
                   <caption>Artiklid</caption>
                   <submit>no</submit>
                   <parent>articles</parent>
-            </products>
+            </product_management>
+            <category>
+                  <caption>Tootekategooriad</caption>
+                  <submit>no</submit>
+                  <parent>articles</parent>
+            </category>
             <packets>
                   <caption>Paketid</caption>
                   <submit>no</submit>
                   <parent>articles</parent>
             </packets>
+            <products>
+                  <caption>A Artiklid</caption>
+                  <submit>no</submit>
+                  <parent>articles</parent>
+            </products>
             <status>
                   <caption>Laoseis</caption>
             </status>
@@ -2998,6 +3188,51 @@
                   <group>productgroups</group>
                   <area_caption></area_caption>
             </productgroups_r>
+            <product_managementsplit>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>product_management</group>
+                  <area_caption></area_caption>
+            </product_managementsplit>
+            <product_managementleft>
+                  <type>vbox</type>
+                  <parent>product_managementsplit</parent>
+                  <group>product_management</group>
+                  <area_caption></area_caption>
+            </product_managementleft>
+            <product_managementtree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Tooted</area_caption>
+                  <parent>product_managementleft</parent>
+                  <group>product_management</group>
+            </product_managementtree_lay>
+            <product_managementtree_lay2>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kategooriate&amp;amp;nbsp;t&amp;amp;uuml;&amp;amp;uuml;bid</area_caption>
+                  <parent>product_managementleft</parent>
+                  <group>product_management</group>
+            </product_managementtree_lay2>
+            <product_managementleft_search>
+                  <type>vbox</type>
+                  <parent>product_managementleft</parent>
+                  <area_caption>Otsing</area_caption>
+                  <closeable>1</closeable>
+                  <group>product_management</group>
+            </product_managementleft_search>
+            <product_managements_top_box>
+                  <type>vbox</type>
+                  <parent>product_managementleft_search</parent>
+                  <group>product_management</group>
+                  <area_caption></area_caption>
+            </product_managements_top_box>
+            <product_managements_price_box>
+                  <type>hbox</type>
+                  <parent>product_managementleft_search</parent>
+                  <group>product_management</group>
+                  <area_caption></area_caption>
+            </product_managements_price_box>
             <prod_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -3036,6 +3271,31 @@
                   <group>products</group>
                   <area_caption></area_caption>
             </prod_s_price_box>
+            <category_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>category</group>
+                  <area_caption></area_caption>
+            </category_split>
+            <category_left>
+                  <type>vbox</type>
+                  <parent>category_split</parent>
+                  <group>category</group>
+                  <area_caption></area_caption>
+            </category_left>
+            <category_treel>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kategooriad</area_caption>
+                  <parent>category_left</parent>
+                  <group>category</group>
+            </category_treel>
+            <category_listl>
+                  <type>vbox</type>
+                  <parent>category_split</parent>
+                  <group>category</group>
+                  <area_caption></area_caption>
+            </category_listl>
             <packets_split>
                   <type>hbox</type>
                   <width>20%:80%</width>

@@ -15,6 +15,9 @@
 @property unit_formula type=relpicker reltype=RELTYPE_UNIT_FORMULA store=connect multiple=1
 @caption &Uuml;hikute valemid
 
+@property types type=relpicker reltype=RELTYPE_CATEGORY_TYPES store=connect multiple=1
+@caption Seotud kategooriate t&uuml;&uuml;bid
+
 @property doc type=relpicker reltype=RELTYPE_DOC field=aw_doc
 @caption Dokument
 
@@ -36,6 +39,13 @@
 
 @reltype FOLDER value=5 clid=CL_MENU
 @caption Kaust
+
+@reltype CATEGORY value=6 clid=CL_SHOP_PRODUCT_CATEGORY
+@caption Tootekategooria kuhu alla kategooria kuulub
+
+@reltype CATEGORY_TYPES value=7 clid=CL_SHOP_PRODUCT_CATEGORY_TYPE
+@caption Kategooria t&uuml;&uuml;p mille kategooriaid valida saab toodete otsingus
+
 */
 
 class shop_product_category extends class_base

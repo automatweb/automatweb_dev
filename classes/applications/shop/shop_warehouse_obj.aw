@@ -299,4 +299,18 @@ class shop_warehouse_obj extends _int_object
 		return $count;
 	}
 
+	/**returns all warehouse product category types
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_product_category_types()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY_TYPE,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		return $ol;
+	}
+
 }

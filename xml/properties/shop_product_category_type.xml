@@ -15,5 +15,12 @@
                   <index>aw_oid</index>
             </aw_shop_product_category_type>
       </tableinfo>
+      <reltypes>
+            <CATEGORY>
+                  <value>1</value>
+                  <clid>CL_SHOP_PRODUCT_CATEGORY</clid>
+                  <caption>Tootekategooria, mille tooted omavad ka seda t&amp;amp;uuml;&amp;amp;uuml;pi kategooriaid</caption>
+            </CATEGORY>
+      </reltypes>
 </properties>
 
