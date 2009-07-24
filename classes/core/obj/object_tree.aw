@@ -556,6 +556,58 @@ class object_tree extends _int_obj_container_base
 		return $ret;
 	}
 
+	/** returns array of arrays of arrays of ... keys being OIDs
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			array of arrays of arrays of ... keys being OIDs
+
+		@examples
+			$ot = new object_tree(array(
+            	"parent" => 90
+		));
+		$hierarchy = $ot->ids_hierarchy();
+
+		$hierachy = array(
+			[lvl_1_child_1_oid] => array(
+				[lvl_2_child_1_oid] => array(
+					[lvl_3_child_1_oid] => array(
+						...
+					)
+				),
+				[lvl_2_child_2_oid] => array(),
+			)
+			[lvl_1_child_2_oid] => array()
+			...
+		);
+	**/
+	public function ids_hierarchy()
+	{
+		$this->parents = array();
+		foreach($this->tree as $pt => $children)
+		{
+			foreach($children as $id)
+			{
+				$this->parents[$id] = $pt;
+			}
+		}
+		$roots = array_diff(array_values($this->parents), array_keys($this->parents));
+		return $this->ids_hierarchy_lvl(reset($roots));
+	}
+
+	protected function ids_hierarchy_lvl($pt)
+	{
+		$hierarchy = array();
+		foreach(safe_array(array_keys($this->parents, $pt)) as $kid)
+		{
+			$hierarchy[$kid] = $this->ids_hierarchy_lvl($kid);
+		}
+		return $hierarchy;
+	}
+
 	///////////////////////////////////////////////
 	// internal private functions. call these directly and die.
 
