@@ -463,14 +463,14 @@ class popup_search extends aw_template
 		$htmlc->add_property(array(
 			"name" => "s[name]",
 			"type" => "textbox",
-			"value" => $arr["s"]["name"],
+			"value" => ifset($arr, "s", "name"),
 			"caption" => t("Nimi")
 		));
 
 		$htmlc->add_property(array(
 			"name" => "s[oid]",
 			"type" => "textbox",
-			"value" => $arr["s"]["oid"],
+			"value" => ifset($arr, "s", "oid"),
 			"caption" => t("Objekti id")
 		));
 	}
@@ -482,7 +482,7 @@ class popup_search extends aw_template
 
 		$this->_insert_form_props($htmlc, $arr);
 
-		if (count($arr["tbl_props"]))
+		if (!empty($arr["tbl_props"]))
 		{
 			foreach ($arr["tbl_props"] as $key => $value)
 			{
@@ -505,7 +505,7 @@ class popup_search extends aw_template
 				"pn" => $arr["pn"],
 				"multiple" => $arr["multiple"],
 				"clid" => $arr["clid"],
-				"no_submit" => $arr["no_submit"],
+				"no_submit" => ifset($arr, "no_submit"),
 				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
 				"orb_class" => $_GET["class"],
 				"reforb" => 0,
@@ -543,7 +543,7 @@ class popup_search extends aw_template
 	**/
 	protected function _get_filter_props(&$filter, $arr)
 	{
-		if ($arr["s"]["name"] != "")
+		if (isset($arr["s"]["name"]) && $arr["s"]["name"] != "")
 		{
 			$bits = explode(",", $arr["s"]["name"]);
 			foreach($bits as $k => $v)
@@ -552,7 +552,7 @@ class popup_search extends aw_template
 			}
 			$filter["name"] = map("%%%s%%", $bits);
 		}
-		if ($arr["s"]["oid"] != "")
+		if (isset($arr["s"]["oid"]) && $arr["s"]["oid"] != "")
 		{
 			$bits = explode(",", $arr["s"]["oid"]);
 			foreach($bits as $k => $v)
@@ -577,7 +577,7 @@ class popup_search extends aw_template
 			"caption" => t("&nbsp;")
 		));
 
-		if (is_array($arr["tbl_props"]))
+		if (isset($arr["tbl_props"]) && is_array($arr["tbl_props"]))
 		{
 			$clid = $arr["clid"];
 			if (is_array($clid))
@@ -648,9 +648,9 @@ class popup_search extends aw_template
 		}
 
 		$this->_get_filter_props($filter, $arr);
-		$count = !($count ===  count($filter) and $arr["start_empty"]);
+		$count = !($count === count($filter) and !empty($arr["start_empty"]));
 
-		if (!$_GET["MAX_FILE_SIZE"])
+		if (empty($_GET["MAX_FILE_SIZE"]))
 		{
 			$filter["limit"] = 30;
 		}
@@ -725,7 +725,7 @@ class popup_search extends aw_template
 				"pn" => $arr["pn"],
 				"multiple" => $arr["multiple"],
 				"clid" => $arr["clid"],
-				"no_submit" => $arr["no_submit"],
+				"no_submit" => ifset($arr, "no_submit"),
 				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
 			), $_GET["class"]),
 			"append" => ifset($arr,"append_html"),

@@ -809,7 +809,7 @@ class htmlclient extends aw_template
 			$scripts .= "if (typeof(document.changeform['" . $arr["focus"] ."'].focus) != \"undefined\") { document.changeform['" . $arr["focus"] ."'].focus();\n}";
 		}
 
-		if ($is_sa_changed == 1)
+		if (isset($is_sa_changed) && $is_sa_changed == 1)
 		{
 			$scripts .= "if (window.opener) { window.opener.location.reload(); }\n";
 		}
@@ -840,7 +840,7 @@ class htmlclient extends aw_template
 			"reforb" => $this->mk_reforb($action,$data,$orb_class),
 			"form_handler" => !empty($form_handler) ? $form_handler : "orb.aw",
 			"SUBMIT" => isset($sbt) ? $sbt : "",
-			"help" => $arr["help"],
+			"help" => ifset($arr, "help"),
 			"PROPERTY_HELP" => $property_help,
 			//"form_handler" => isset($form_handler) ? "orb.aw" : $form_handler,
 		));
@@ -974,12 +974,12 @@ class htmlclient extends aw_template
 			));
 			$tp->vars_safe(array(
 				"help" => $this->vars["help"],
-				"help_url" => $this->config["help_url"],
-				"translate_url" => $this->config["translate_url"],
+				"help_url" => isset($this->config["help_url"]) ? $this->config["help_url"] : null,
+				"translate_url" => isset($this->config["translate_url"]) ? $this->config["translate_url"] : null,
 				"translate_text" => isset($this->config["translate_text"]) ? $this->config["translate_text"] : null,
-				"more_help_text" => $this->config["more_help_text"],
-				"close_help_text" => $this->config["close_help_text"],
-				"open_help_text" => $this->config["open_help_text"],
+				"more_help_text" => isset($this->config["more_help_text"]) ? $this->config["more_help_text"] : null,
+				"close_help_text" => isset($this->config["close_help_text"]) ? $this->config["close_help_text"] : null,
+				"open_help_text" => isset($this->config["open_help_text"]) ? $this->config["open_help_text"] : null,
 				"WARNING_LAYER" => !empty($this->config["warn"]) ? $tp->parse("WARNING_LAYER") : "",
 				"HAS_WARNING" => !empty($this->config["warn"]) ? $tp->parse("HAS_WARNING") : "",
 				"feedback_link" => $this->mk_my_orb("redir_new_feedback", array(
@@ -1027,13 +1027,13 @@ class htmlclient extends aw_template
 					"NEWIF" => $tp->parse("NEWIF"),
 				));
 			}
-			if ($this->config["show_help"])
+			if (!empty($this->config["show_help"]))
 			{
 				$tp->vars(array(
 					"SHOW_HELP" => $tp->parse("SHOW_HELP"),
 				));
 			};
-			if ($this->config["add_txt"] != "")
+			if (isset($this->config["add_txt"]) && $this->config["add_txt"] != "")
 			{
 				$tp->vars(array(
 					"addt_content" => $this->config["add_txt"]
@@ -1368,7 +1368,7 @@ class htmlclient extends aw_template
 	{
 		$layout_items = array();
 		$sub_layouts = array();
-		if($this->view_layout && ($this->view_layout == $layout_name || isset($this->parent_layouts) && $this->show_layouts[$this->parent_layouts[$layout_name]]))
+		if(!empty($this->view_layout) && ($this->view_layout == $layout_name || isset($this->parent_layouts) && $this->show_layouts[$this->parent_layouts[$layout_name]]))
 		{
 			$this->show_layouts[$layout_name] = 1;
 		}
@@ -1388,7 +1388,7 @@ class htmlclient extends aw_template
 			}
 		}
 
-		if($this->view_layout)
+		if(!empty($this->view_layout))
 		{
 			if(empty($this->show_layouts[$this->parent_layouts[$layout_name]]) && empty($this->show_layouts[$layout_name]))
 			{
