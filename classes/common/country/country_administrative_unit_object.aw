@@ -16,7 +16,7 @@ class country_administrative_unit_object extends _int_object
 		{
 			$o = new object($o->parent());
 		}
-		while (CL_COUNTRY_ADMINISTRATIVE_STRUCTURE !== $o->class_id());
+		while (!$o->is_a(CL_COUNTRY_ADMINISTRATIVE_STRUCTURE));
 
 		$this->set_prop("administrative_structure", $o->id());
 
