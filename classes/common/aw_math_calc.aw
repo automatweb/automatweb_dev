@@ -109,21 +109,26 @@ class aw_math_calc
 		$dot_count = 0;
 		$last_sep_pos_c = 0;
 		$last_sep_pos_d = 0;
+		$chr_cnt = 0;
 		foreach ($a as $key => $chr)
 		{
-			if (!is_numeric($chr) and "," !== $chr and "." !== $chr)
+			if (!is_numeric($chr) and "," !== $chr and "." !== $chr and !("-" === $chr and 0 === $chr_cnt))
 			{
 				unset($a[$key]);
 			}
-			elseif ("," === $chr)
+			else
 			{
-				++$comma_count;
-				$last_sep_pos_c = $key;
-			}
-			elseif ("." === $chr)
-			{
-				++$dot_count;
-				$last_sep_pos_d = $key;
+				if ("," === $chr)
+				{
+					++$comma_count;
+					$last_sep_pos_c = $key;
+				}
+				elseif ("." === $chr)
+				{
+					++$dot_count;
+					$last_sep_pos_d = $key;
+				}
+				$chr_cnt++;
 			}
 		}
 
