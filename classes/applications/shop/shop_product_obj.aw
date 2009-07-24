@@ -310,5 +310,37 @@ class shop_product_obj extends _int_object
 		}
 		return "-";
 	}
-	
+
+	public static function get_categories($id)
+	{
+		if(!is_oid($id))
+		{
+			return array();
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY(CL_SHOP_PRODUCT)" => $id,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		return $ol->ids();
+	}
+
+	/** adds product to category
+		@attrib api=1 params=pos
+		@param cat optional type=oid
+		@returns true
+	**/
+	public function add_category($cat)
+	{
+		if(is_oid($cat))
+		{
+			$this->connect(array(
+				"to" => $cat,
+				"reltype" => "RELTYPE_CATEGORY",
+			));
+		}
+		return true;
+	}
 }

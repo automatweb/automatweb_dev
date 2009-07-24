@@ -6682,7 +6682,7 @@ class shop_warehouse extends class_base
 		@attrib name=copy_products params=name all_args=1
 	**/
 	function copy_products($arr)
-	{
+	{arr($arr);
 		$_SESSION["shop_warehouse"]["cut_products"] = null;
 		$_SESSION["shop_warehouse"]["copy_products"] = $arr["sel"];
 		return $arr["post_ru"];
@@ -6992,6 +6992,7 @@ class shop_warehouse extends class_base
 
 	public function callback_generate_scripts($arr)
 	{
+		$js = "";
 		if ($arr['request']['group'] == 'articles')
 		{
 			$vars = array('prod_s_name', 'prod_s_code', 'prod_s_barcode');
@@ -7002,7 +7003,7 @@ class shop_warehouse extends class_base
 			{
 				$ajax_vars[] = $var.": document.getElementsByName('".$var."')[0].value\n";
 			}
-			return "
+			$js =  "
 
 			function update_products_table(){
 
@@ -7048,8 +7049,73 @@ class shop_warehouse extends class_base
 			";
 		}
 
+		if($arr["request"]["group"] == "product_management" || $arr["request"]["group"] == "articles")
+		{
+
+			$types = $arr["obj_inst"]->get_product_category_types();
+
+			$js.= "
+				function add_product()
+				{
+					var cat = get_property_data['cat'];
+					var my_string = prompt('".t("Sisesta toote nimi")."');
+					$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_product',
+						id: '".$arr["obj_inst"]->id()."' , name: my_string,";
+						foreach($types->names() as $id => $cat)
+						{
+							$js.= " cat_".$id.": get_property_data['cat_".$id."'],
+							";
+						}
+							$js.= " cat: cat}, function (html) {
+							reload_property('product_management_list');
+						}
+					);
+				}
+			";
+			$js.= "
+				function copy_products()
+				{
+					result = $('input[name^=sel]');
+					$.get('/automatweb/orb.aw?class=shop_warehouse&action=copy_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
+						}, function (html) {
+							reload_property(['product_management_toolbar','product_management_list']);
+						}
+					);
+				}
+			";
+			$js.= "
+				function cut_products()
+				{
+					result = $('input[name^=sel]');
+					$.get('/automatweb/orb.aw?class=shop_warehouse&action=cut_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
+						}, function (html) {
+							reload_property(['product_management_toolbar','product_management_list']);
+						}
+					);
+				}
+			";
+			$js.= "
+				function paste_products()
+				{
+					var cat = get_property_data['cat'];
+					$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'paste_products',
+						id: '".$arr["obj_inst"]->id()."' , name: my_string,";
+						foreach($types->names() as $id => $cat)
+						{
+							$js.= " cat_".$id.": get_property_data['cat_".$id."'],
+							";
+						}
+							$js.= " cat: cat}, function (html) {
+							reload_property(['product_management_toolbar','product_management_list']);
+						}
+					);
+
+				}
+			";
+		}
 		return $js;
 	}
+							
 
 	/** returns a list of config forms that can be used to enter products
 
@@ -11152,13 +11218,19 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"field" => "id",
 		));
 
+		$caption = sprintf(t('Lao "%s" tootekategooriad'), $arr["obj_inst"] -> name());
+
 		if($this->can("view" , $arr["request"]["cat"]))
 		{
 			$object = obj($arr["request"]["cat"]);
 			switch($object->class_id())
 			{
 				case CL_SHOP_PRODUCT_CATEGORY_TYPE:
+					$caption = sprintf(t('T&uuml;&uuml;bi %s tootekategooriad'), $object->name());
+					$ol= $object->get_categories();
+					break;
 				case CL_SHOP_PRODUCT_CATEGORY:
+					$caption = sprintf(t('Tootekategooria %s alamkategooriad'), $object->name());
 					$ol= $object->get_categories();
 					break;
 				case CL_MENU:
@@ -11166,9 +11238,11 @@ $oo = get_instance(CL_SHOP_ORDER);
 						"parent" => $object->id(),
 						"class_id" => CL_SHOP_PRODUCT_CATEGORY
 					));
+					$caption = sprintf(t('Lao "%s" tootet&uuml;&uuml;bid'), $arr["obj_inst"] -> name());
 					break;
 				default:
 					$ol= new object_list();
+					$caption = sprintf(t('Lao "%s" tootekategooriad'), $arr["obj_inst"] -> name());
 			}
 
 			foreach($ol->arr() as $o)
@@ -11181,6 +11255,8 @@ $oo = get_instance(CL_SHOP_ORDER);
 				));
 			}
 		}
+
+		$t->set_caption($caption);
 	}
 
 	function _get_category_tree($arr)
@@ -11285,6 +11361,23 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"link" => "javascript:add_cat_type();"
 		));
 
+		$tb->add_menu_button(array(
+			"name" => "change",
+			"img" => "edit.gif",
+			"tooltip" => t("Muuda"),
+		));
+
+		$types = $arr["obj_inst"]->get_product_category_types();
+
+		foreach($types->arr() as $id => $cat)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "change",
+				"text" => $cat->name(),
+				"link" => html::get_change_url($id,array("return_url" => get_ru())),
+			));
+		}
+
 		$tb->add_delete_button();
 	}
 
@@ -11308,6 +11401,30 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"text" => t("Pakend"),
 			"link" => "javascript:add_packaging();"
 		));
+
+		$tb->add_button(array(
+			"name" => "copy",
+			"img" => "copy.gif",
+			"tooltip" => t("Kopeeri tooted teise kategooriasse"),
+			"url" => "javascript:copy_products();"
+		));
+
+		$tb->add_button(array(
+			"name" => "cut",
+			"img" => "cut.gif",
+			"tooltip" => t("T&otilde;sta tooted teise kategooriasse"),
+			"url" => "javascript:cut_products();"
+		));
+
+		if($_SESSION["shop_warehouse"]["cut_products"] || $_SESSION["shop_warehouse"]["copy_products"])
+		{
+			$tb->add_button(array(
+				"name" => "paste",
+				"img" => "paste.gif",
+				"tooltip" => t("Paigalda kopeeritud/l&otilde;igatud tooted valitud kategooriatesse"),
+				"url" => "javascript:paste_products();"
+			));
+		}
 
 		$tb->add_delete_button();
 	}
@@ -11398,7 +11515,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"id" => $id."",
 				"reload" => array(
 					"props" => array("product_management_list"),
-				        "params" => array("cat" => $id)
+				        "params" => array("cat_".$id => $id)
 				)
 			));
 //
@@ -11423,7 +11540,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"name" => $name,
 				"id" => $id."",
 				"reload" => array(
-					"props" => array("category_list"),
+					"props" => array("product_management_list"),
 				        "params" => array("cat_".$parent => $id)
 				)
 			));
@@ -11431,22 +11548,61 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 	}
 
-	function _get_product_management_list($arr)
+
+	function _get_product_managements_sbt($arr)
 	{
+		$arr['prop']['onclick'] = "reload_property('product_management_list', {product_managements_name: $('[name=product_managements_name]').val(),product_managements_code: $('[name=product_managements_code]').val(), product_managements_barcode: $('[name=product_managements_barcode]').val(), product_managements_count: $('[name=product_managements_count]').val(), product_managements_price_from: $('[name=product_managements_price_from]').val(), product_managements_price_to: $('[name=product_managements_price_to]').val(), });";
+		return PROP_OK;
+	}
+
+
+	function _get_product_management_list($arr)
+	{arr($arr["request"]);arr($_SESSION["shop_warehouse"]);
 		$tb = $arr["prop"]["vcl_inst"];
 		$this->_init_prod_list_list_tbl($tb, $arr);
-		if($this->can("view" , $arr["request"]["cat"]))
+
+		$filter = array();
+		$cats = array();
+
+		foreach($arr["request"] as $key => $val)
 		{
-			$category = obj($arr["request"]["cat"]);
-			$ol = $category->get_products();
+			if(substr_count($key , "cat_"))
+			{
+				$type_id = substr($key , 4);
+				if($key != $val)
+				{
+					$cats[] = $val;
+				}
+			}
 		}
-		else
-		{
-			$ol = new object_list();
-		}
+		$filter["category"] = $cats;
 
 
-		foreach($ol as $o)
+		$params = $arr["request"];
+		if($params["product_managements_name"])
+		{
+			$filter["name"] = $params["product_managements_name"];
+		}
+		if($params["product_managements_code"])
+		{
+			$filter["code"] = $params["product_managements_code"];
+		}
+		if($params["product_managements_barcode"])
+		{
+			$filter["barcode"] = $params["product_managements_barcode"];
+		}
+		if($params["product_managements_price_from"] > 0)
+		{
+			$filter["price_from"] = $params["product_managements_price_from"];
+		}
+		if($params["product_managements_price_to"])
+		{
+			$filter["price_to"] = $params["product_managements_price_to"];
+		}
+
+		$ol = $arr["obj_inst"]->search_products($filter);
+
+		foreach($ol->arr() as $o)
 		{
 			$data = array(
 				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
@@ -11524,6 +11680,35 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$o->set_class_id(CL_SHOP_PRODUCT_CATEGORY_TYPE);
 		$o->save();
 		die($o->id());
+	}
+
+	private function get_categories_from_search($arr)
+	{
+		$cats = array();
+		foreach($arr as $key => $val)
+		{
+			if(substr_count($key , "cat_"))
+			{
+				$type_id = substr($key , 4);
+				if($key != $val)
+				{
+					$cats[] = $val;
+				}
+			}
+		}
+		return $cats;
+	}
+
+	/**
+		@attrib name=create_new_product all_args=1
+	**/
+	public function create_new_product($arr)
+	{
+		$arr["category"] =  $this->get_categories_from_search($arr);
+		$object = obj($arr["id"]);
+		$arr["name"] = iconv("UTF-8",aw_global_get("charset"),$arr["name"]);
+		$id = $object->new_product($arr);
+		die($id);
 	}
 
 }

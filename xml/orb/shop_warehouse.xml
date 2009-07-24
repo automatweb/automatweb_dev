@@ -191,5 +191,12 @@
 			</function>
 		</action>
 
+		<action name="create_new_product" all_args="1">
+			<function name="create_new_product">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

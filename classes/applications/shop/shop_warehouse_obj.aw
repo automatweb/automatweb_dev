@@ -128,6 +128,12 @@ class shop_warehouse_obj extends _int_object
 	**/
 	public function get_products($arr)
 	{
+		$arr["recursive"] = 1;
+		return $this->_get_products($arr);
+	}
+
+	private function _get_products($arr)
+	{
 		$filter = array();
 		$filter["class_id"] = CL_SHOP_PRODUCT;
 		$filter["lang_id"] = array();
@@ -135,20 +141,67 @@ class shop_warehouse_obj extends _int_object
 
 		if(is_oid($arr["category"]))
 		{
-			$ot = new object_tree(array(
-				"parent" => $arr["category"],
-				"class_id" => CL_SHOP_PRODUCT_CATEGORY,
-				"sort_by" => "objects.jrk"
-			));
-			$cat_ids = $ot->ids();
-			if(is_array($cat_ids) && sizeof($cat_ids))
+			if($arr["recursive"])
 			{
-				$cat_ids[] = $arr["category"];
-				$arr["category"] = $cat_ids;
+				$ot = new object_tree(array(
+					"parent" => $arr["category"],
+					"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+					"sort_by" => "objects.jrk"
+				));
+				$cat_ids = $ot->ids();
+				if(is_array($cat_ids) && sizeof($cat_ids))
+				{
+					$cat_ids[] = $arr["category"];
+					$arr["category"] = $cat_ids;
+				}
 			}
 			$filter["CL_SHOP_PRODUCT.RELTYPE_CATEGORY"] = $arr["category"];
 		}
+		elseif(is_array($arr["category"]) && sizeof($arr["category"]))
+		{
+			if($arr["cat_condition"] == "and")
+			{//----------------------------------------------------
+				$filter["CL_SHOP_PRODUCT.RELTYPE_CATEGORY"] = $arr["category"];
+			}
+			else
+			{
+				$filter["CL_SHOP_PRODUCT.RELTYPE_CATEGORY"] = $arr["category"];
+			}
+		}
+		if($arr["name"])
+		{
+			$filter["name"] = "%".$arr["name"]."%";
+		}
+
+		if($arr["code"])
+		{
+			$filter["code"] = $arr["code"]."%";
+		}
+
 		return new object_list($filter);
+	}
+
+//3 viimast vaja alles t88le panna
+	/** Searches warehouse products
+		@attrib api=1 params=name
+		@param category optional type=oid
+			Product category id
+		@param name optional type=string
+			Product name
+		@param code optional type=string
+			Product code
+		@param barcode optional type=string//
+			Product barcode
+		@param price_from optional type=double//
+			Minimum product price
+		@param price_to optional type=double//
+			Maximum product price
+		@returns object list
+	**/
+	public function search_products($arr = array())
+	{
+		$arr["cat_condition"] = "and";
+		return $this->_get_products($arr);
 	}
 
 	/** Gets all warehouse product packagings
@@ -311,6 +364,43 @@ class shop_warehouse_obj extends _int_object
 			"site_id" => array(),
 		));
 		return $ol;
+	}
+
+	/**adds new product to warehouse
+		@attrib api=1
+		@param name required type=string
+		@param parent optional type=int
+		@param category optional type=oid/array
+		@returns oid
+			new object id
+	**/
+	public function new_product($arr)
+	{
+		$o = new object();
+		$parent = $this->id();
+		if(isset($arr["parent"]) && is_oid($arr["parent"]))
+		{
+			$parent = $arr["parent"];
+		}
+		$o->set_class_id(CL_SHOP_PRODUCT);
+		$o->set_parent($parent);
+		$o->set_name($arr["name"]);
+		$o->save();
+		if(isset($arr["category"]))
+		{
+			if(is_oid($arr["category"]))
+			{
+				$arr["category"] = array($arr["category"]);
+			}
+			if(is_array($arr["category"]))
+			{
+				foreach($arr["category"] as $cat)
+				{
+					$o->add_category($cat);
+				}
+			}
+		}
+		return $o->id();
 	}
 
 }
