@@ -233,7 +233,7 @@ class connection
 			}
 		}
 
-		if (isset($param["type"]) && is_class_id($param["from.class_id"]))
+		if (isset($param["type"]) && is_class_id(ifset($param, "from.class_id")))
 		{
 			$param["type"] = $GLOBALS["object_loader"]->resolve_reltype($param["type"], $param["from.class_id"]);
 		}
@@ -603,11 +603,15 @@ class connection
 			$ext_conn = reset($ext_conns);
 			// Problem occurred when I tried to change a connection and there already existed a connection with those ends and reltype.
 			// So I'll just delete the connection I'm trying to change.
-			if($this->conn["id"] && $this->conn["id"] != $ext_conn["id"])
+			if(!empty($this->conn["id"]) && $this->conn["id"] != $ext_conn["id"])
 			{
 				$this->delete();
 			}
-			$this->_int_load($ext_conn["id"]);
+			// Load the existing connection if it's not loaded already
+			if(empty($this->conn["id"]) || $this->conn["id"] != $ext_conn["id"])
+			{
+				$this->_int_load($ext_conn["id"]);
+			}
 		}
 
 		// check if this is a new connection
