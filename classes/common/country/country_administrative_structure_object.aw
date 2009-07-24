@@ -34,6 +34,9 @@ class country_administrative_structure_object extends _int_object
 				case "units_by_division":
 					return $this->as_get_units_by_division ($param);
 
+				case "units_by_country":
+					return $this->as_get_units_by_country ($param);
+
 				case "addresses_by_unit":
 					return $this->as_get_addresses_by_unit ($param["unit"]);
 			}
@@ -205,7 +208,7 @@ class country_administrative_structure_object extends _int_object
 		{
 			if ($admin_division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("adminstructure::as_add_adminunit: adminunit division class wrong [%s]", $admin_division->class_id ()).AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo sprintf ("adminstructure::as_add_adminunit: adminunit division class wrong [%s]", $admin_division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 
@@ -219,7 +222,7 @@ class country_administrative_structure_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructure::as_add_adminunit: division undefined [{$arr["division"]}]".AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo "adminstructure::as_add_adminunit: division undefined [{$arr["division"]}]".AS_NEWLINE; }
 			return false;
 		}
 
@@ -229,7 +232,7 @@ class country_administrative_structure_object extends _int_object
 
 		if ($o === false)
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructure::as_add_adminunit: existing unit search fail".AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo "adminstructure::as_add_adminunit: existing unit search fail".AS_NEWLINE; }
 			return false;
 		}
 		elseif (!is_object ($o))
@@ -245,11 +248,11 @@ class country_administrative_structure_object extends _int_object
 				$o->set_subclass ($subclass);
 				$o->set_name ($name);
 				$o->save ();
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructure::as_add_adminunit: added object [{$name}] under [{$parent}] with subclass [{$subclass}]".AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo "adminstructure::as_add_adminunit: added object [{$name}] under [{$parent}] with subclass [{$subclass}]".AS_NEWLINE; }
 			}
 			else
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructure::as_add_adminunit: invalid parent [{$parent}]".AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo "adminstructure::as_add_adminunit: invalid parent [{$parent}]".AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -272,7 +275,7 @@ class country_administrative_structure_object extends _int_object
 
 		if (empty ($name) or !in_array ($class_id, $this->as_address_classes))
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructure::as_get_unit_by_name: name [{$name}] empty or type [{$class_id}] wrong".AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo "adminstructure::as_get_unit_by_name: name [{$name}] empty or type [{$class_id}] wrong".AS_NEWLINE; }
 			return false;
 		}
 
@@ -281,7 +284,7 @@ class country_administrative_structure_object extends _int_object
 
 		if (empty ($admin_user))
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructure::as_get_unit_by_name: admin user not defined for admin structure".AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo "adminstructure::as_get_unit_by_name: admin user not defined for admin structure".AS_NEWLINE; }
 			return false;
 		}
 
@@ -302,7 +305,7 @@ class country_administrative_structure_object extends _int_object
 		}
 		elseif ($list->count () > 1)
 		{ ### structure contains duplicates
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructure::as_get_unit_by_name: duplicates found for name [{$name}] under parent [{$parent}]".AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo "adminstructure::as_get_unit_by_name: duplicates found for name [{$name}] under parent [{$parent}]".AS_NEWLINE; }
 			### move everything from under redundant admin units unto one, selected randomly (?)
 			$o = $list->begin ();
 			$list->remove ($o->id ());
@@ -336,17 +339,48 @@ class country_administrative_structure_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructure::as_get_unit_by_name: no objects found for name [{$name}]".AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo "adminstructure::as_get_unit_by_name: no objects found for name [{$name}]".AS_NEWLINE; }
 		}
 
 		### switch user back
 		aw_restore_user ();
 
 		### return found unit
-		if (is_object ($o))
+		if (isset($o) && is_object ($o))
 		{
 			return $o;
 		}
+	}
+
+	/**
+		@attrib name=as_get_units_by_country
+		@param country required
+		@param division optional
+		@param depth optional
+		@returns AW object tree of admin units of $country
+	**/
+	protected function as_get_units_by_country ($arr)
+	{
+		if(!empty($arr["depth"]))
+		{
+			$divisions = array();
+			$division_objs = array_slice($this->prop("structure_array"), 0, $arr["depth"]);
+			foreach($division_objs as $division_obj)
+			{
+				$divisions[] = $division_obj->id();
+			}
+			$arr["division"] = !empty($arr["division"]) ? array_intersect($arr["division"], $division) : $divisions;
+		}
+
+		$args = array(
+			"parent" => obj($arr["country"])->prop("administrative_structure"),
+			"class_id" => array(CL_COUNTRY_CITY, CL_COUNTRY_CITYDISTRICT, CL_COUNTRY_ADMINISTRATIVE_UNIT),
+			"subclass" => ifset($arr, "division"),
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+		$ot = new object_tree($args);
+		return $ot;
 	}
 
     // @attrib name=as_get_units_by_division
@@ -371,7 +405,7 @@ class country_administrative_structure_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructure::get_units_by_division: division not defined [{$division}]".AS_NEWLINE; }
+/* dbg */ if (!empty($_GET[ADDRESS_DBG_FLAG])) { echo "adminstructure::get_units_by_division: division not defined [{$division}]".AS_NEWLINE; }
 			return false;
 		}
 
