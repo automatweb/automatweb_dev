@@ -234,7 +234,7 @@ class _int_object
 
 	function connections_from($param = NULL)
 	{
-		if (!$this->obj["oid"])
+		if (empty($this->obj["oid"]))
 		{
 			/*
 			error::raise(array(
@@ -337,7 +337,7 @@ class _int_object
 
 	function connections_to($param = NULL)
 	{
-		if (!$this->obj["oid"])
+		if (empty($this->obj["oid"]))
 		{
 			/*
 			error::raise(array(
