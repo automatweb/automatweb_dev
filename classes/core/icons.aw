@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.12 2009/07/27 16:45:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.13 2009/07/27 17:44:04 markop Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -122,7 +122,7 @@ class icons extends aw_template
 		// $ic conains
 		// <img src='http://_blabla_/automatweb/images/icons/class_1.gif'>
 	**/
-	function get_icon_tag($clid)
+	function get_class_icon($clid)
 	{
 
 		return html::img(array(
