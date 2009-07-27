@@ -35,7 +35,26 @@ class shop_product_category_obj extends _int_object
 		));
 	}
 
-	/** sets category type
+	/** adds cate3gory type to category... type in category
+		@attrib api=1
+	**/
+	public function add_type($id)
+	{
+		$this->connect(array(
+			"to" => $id,
+			"reltype" => "RELTYPE_CATEGORY_TYPES",
+		));
+	}
+
+	/** removes category type from category... type in category
+		@attrib api=1
+	**/
+	public function remove_type($id)
+	{
+		$this->disconnect(array("from" => $id));
+	}
+
+	/** sets category type - category under type
 		@attrib api=1
 		@returns
 			none
@@ -43,10 +62,7 @@ class shop_product_category_obj extends _int_object
 	public function set_category_type($id)
 	{
 		$o = new object($id);
-		$o->connect(array(
-			"to" => $this->id(),
-			"reltype" => "RELTYPE_CATEGORY",
-		));
+		$o->add_category($this->id());
 	}
 
 	/** return category types

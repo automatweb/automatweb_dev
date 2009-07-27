@@ -198,5 +198,30 @@
 			</function>
 		</action>
 
+		<action name="add_type_to_categories" all_args="1">
+			<function name="add_type_to_categories">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="rem_type_from_category" all_args="1">
+			<function name="rem_type_from_category">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="search_categories">
+			<function name="search_categories">
+				<arguments>
+					<optional name="category" />
+					<optional name="name" type="string" />
+					<optional name="oid" type="int" />
+					<optional name="result" type="int/array" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

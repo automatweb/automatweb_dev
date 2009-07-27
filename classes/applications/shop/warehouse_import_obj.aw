@@ -24,6 +24,10 @@ class warehouse_import_obj extends _int_object
 
 	private function apply_controller($code)
 	{
+		// XXX need to fix this later ! --dragut
+		// it should use the short code controller, which should be gotten from warehouse config!
+		return str_ireplace(array(" ","-"), array("",""), $code);
+
 		if($this->controller_inst)
 		{
 			return $this->controller_inst->check_property($this->controller_id, null, $code, null, null, null);
@@ -364,6 +368,12 @@ class warehouse_import_obj extends _int_object
 			return;
 		}
 
+		$prod_imp = new warehouse_products_import();
+	//	$prod_imp->set_wh_import(obj($this->id()));
+	//	$prod_imp->set_callback($callback);
+		$prod_imp->bg_control(array('id' => $this->id(), 'do' => 'start'));
+		exit();
+
 		// let datasource fetch data, give it an orb action to report back to
 		$inst = get_instance($this->prop("data_source"));
 		$inst->fetch_product_xml(
@@ -625,6 +635,7 @@ class warehouse_import_obj extends _int_object
 
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->product);
+
 		$this->_update_status("prices", warehouse_import_if::STATE_PROCESSING, null, 0, $total);
 
 		// process
@@ -669,6 +680,7 @@ class warehouse_import_obj extends _int_object
 				continue;
 			}
 			$prices = $prices_data[$code];
+
 			if (empty($existing_prices_data[$prod_oid]))
 			{
 				$this->add_price_sql(array(
@@ -742,7 +754,7 @@ class warehouse_import_obj extends _int_object
 
 		$this->db_obj->db_query($sql);
 
-		$sql = "UPDATE aw_shop_products SET user1 = '".$data["special_price"]."' WHERE aw_oid = $oid";
+		$sql = "UPDATE aw_shop_products SET aw_special_price = '".$data["special_price"]."' WHERE aw_oid = ".$data["product_oid"];
 		$this->db_obj->db_query($sql);
 	}
 
@@ -779,7 +791,7 @@ class warehouse_import_obj extends _int_object
 		";
 		$this->db_obj->db_query($sql);
 
-		$sql = "UPDATE aw_shop_products SET user1 = '".$data["special_price"]."' WHERE aw_oid = $oid";
+		$sql = "UPDATE aw_shop_products SET aw_special_price = '".$data["special_price"]."' WHERE aw_oid = ".$data["product_oid"];
 		$this->db_obj->db_query($sql);
 	}
 
@@ -1012,8 +1024,11 @@ flush();
 	public function process_product_xml($xml_filename)
 	{
 	//	while (ob_get_level()) { ob_end_clean(); }
-		// get aw prods
-	//	$this->_list_aw_prods(obj(119));
+
+		$wh_id = 1; // this 1 should be replaced with warehouse_id !
+
+		$this->_start_import("products", $wh_id); 
+
 		$path = aw_ini_get('server.tmpdir').'/warehouse_import_prods';
 
 		if (!is_dir($path))
@@ -1022,37 +1037,57 @@ flush();
 			chmod($path, 0777);
 		}
 
+		$this->_update_status("products", warehouse_import_if::STATE_FETCHING, $wh_id);
+
 		// parse prods from xml
 		$sx = simplexml_load_file($xml_filename);
 
+		$this->_update_status("products", warehouse_import_if::STATE_PROCESSING, $wh_id, 0, $total); 
+
+		$total = 'n/a';
 		$counter = 1;
 		$slice = array();
 		foreach($sx->product as $prod)
 		{
-	//		die(dbg::dump($prod));
 			$tmp_arr[] = $prod->asXML();
 			$product_codes[] = $prod->product_code;
-			if (($counter % 1000) == 0)
+			if (($counter % 100) == 0)
 			{
 				$file = $path.'/prods_chunk_'.$counter;
 				file_put_contents($file, serialize($tmp_arr));
 				$tmp_arr = array();
 				$h = new http;
 				$url = aw_ini_get('baseurl').'/?class=warehouse_import&action=run_backgrounded&act=process_product_chunk&file='.$file.'&id='.$this->id().'&wh_id=1';
-				$h->get($url);
+				echo $h->get($url);
+
+				$this->_update_status("products", warehouse_import_if::STATE_PROCESSING, $wh_id, $counter, $total);
+				if ($this->need_to_stop_now("products", $wh_id))
+				{
+					$this->_end_import_from_flag("products", $wh_id);
+					die("stopped for flag");
+				}
+
+				sleep(1);
 			}
 
 			$counter++;
 		}
 
+
+		$this->_end_import("products", $wh_id);
+
 		// import new
 		// update existing
 		// delete old
+
 	}
 
 	public function process_prods_chunk($file)
 	{
-		file_put_contents('/tmp/warehouse_import_prods/status.txt', "process_prod_chunk\n", FILE_APPEND);
+		list($usec, $sec) = explode(' ', microtime());
+		$start = ((float)$usec + (float)$sec);
+
+	//	file_put_contents('/tmp/warehouse_import_prods/status.txt', "process_prod_chunk\n", FILE_APPEND);
 		$this->init_vars();
 		$data = unserialize(file_get_contents($file));
 		$products = array();
@@ -1065,6 +1100,7 @@ flush();
 			$products[(string)$sxmlo->product_code] = array(
 				'product_name' => (string)$sxmlo->product_name,
 				'product_code' => (string)$sxmlo->product_code,
+				'info' => (string)$sxmlo->info,
 				'search_term' => (string)$sxmlo->search_term,
 				'replacement_product_code' => (string)$sxmlo->replacement_product_code,
 				'short_code' => (string)$sxmlo->short_code
@@ -1107,8 +1143,12 @@ flush();
 		}
 	//	exit('end for now');
 	//	file_put_contents($file, '');
-		$x = unlink($file);
-		var_dump($x);
+		unlink($file);
+		list($usec, $sec) = explode(' ', microtime());
+		$end = ((float)$usec + (float)$sec);
+		$time = $end - $start;
+		file_put_contents('/tmp/warehouse_import_prods/log.txt', $file." [ ".$time." ] [done]\n", FILE_APPEND);
+	
 	}
 
 	private function _list_aw_prods($arr)
@@ -1285,6 +1325,7 @@ flush();
 			SET
 				aw_oid = ".$oid.",
 				code = '".addslashes($data['product_code'])."',
+				description = '".addslashes($data['info'])."',
 				search_term = '".addslashes($data['search_term'])."',
 				type_code = '".addslashes($data['replacement_product_code'])."',
 				short_code = '".$this->apply_controller($data['product_code'])."'
@@ -1322,6 +1363,7 @@ flush();
 				aw_shop_products
 			SET
 				code = '".addslashes($data['product_code'])."',
+				description = '".addslashes($data['info'])."',
 				search_term = '".addslashes($data['search_term'])."',
 				type_code = '".addslashes($data['replacement_product_code'])."',
 				short_code = '".$this->apply_controller($data['product_code'])."'
@@ -1340,6 +1382,409 @@ flush();
 		$sql = "DELETE FROM aw_shop_products WHERE aw_oid = ".$oid;
 		$this->db_obj->db_query($sql);
 	}
+
+
+	public function update_dnotes()
+	{
+		$this->_start_import("dnotes");
+		$this->_update_status("dnotes", warehouse_import_if::STATE_FETCHING, null, 0);
+
+		$ds = get_instance($this->prop('data_source'));
+
+		// get the pricelist data as XML
+		$xml_data = $ds->get_dnotes_xml();
+		$this->_write_xml_file("dnotes", $xml_data);
+
+		$xml = new SimpleXMLElement($xml_data);
+
+		$total = count($xml->dnote);
+		$this->_update_status("dnotes", warehouse_import_if::STATE_PROCESSING, null, 0, $total);
+
+
+		$odl = new object_data_list(array(
+			"class_id" => CL_SHOP_DELIVERY_NOTE,
+			"lang_id" => array(),
+			"lang_id" => array()
+		),
+		array(
+			CL_SHOP_DELIVERY_NOTE => array("number" => "number", "oid" => "oid")
+		));
+		$tmp = $odl->arr();
+		$data = array();
+		foreach($tmp as $r)
+		{
+			$data[$r["number"]] = $r;
+		}
+		
+
+		$counter = 0;
+		foreach ($xml->dnote as $cat)
+		{
+			$id = (string)$cat->number;
+			if (isset($data[$id]))
+			{
+				// update
+				$this->_update_dnote(obj($data[$id]["oid"]), $cat);
+//echo "update dnote <br>";
+			}
+			else
+			{
+echo "add dnote <br>";
+				// create
+				$o = obj();
+				$o->set_class_id(CL_SHOP_DELIVERY_NOTE);
+				$o->set_parent(6411);
+				$this->_update_dnote($o, $cat);
+			}
+
+			$this->_update_status("dnotes", warehouse_import_if::STATE_PROCESSING, null, ++$counter, $total);
+			if ($this->need_to_stop_now("dnotes"))
+			{
+				$this->_end_import_from_flag("dnotes");
+				die("stopped for flag");
+			}
+		}
+		
+		$this->_end_import("dnotes");
+	}
+
+	function _update_dnote($o, $cat)
+	{
+
+		$o->set_name((string)$cat->number);
+		$o->set_prop("number", (string)$cat->number);
+		$o->set_prop("delivery_date", (string)$cat->delivery_date);
+		$o->set_prop("enter_date", (string)$cat->enter_date);
+		$o->set_prop("customer", $this->_resolve_customer((string)$cat->customer_ext_id));
+		$o->set_prop("from_warehouse", (string)$cat->from_warehouse);
+		$o->set_prop("impl", (string)$cat->impl);
+		$o->set_prop("currency", (string)$cat->currency);
+		$o->set_prop("state", (string)$cat->state);
+		$o->save();
+		echo "updated dnote ".html::obj_change_url($o)." <br>\n";
+flush();
+
+		$ex_rows = array();
+		foreach($o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+		{
+			$r = $c->to();
+			$ex_rows[$r->product()->code] = $r;
+		}
+		foreach($cat->rows as $row)
+		{
+			if (isset($ex_rows[(string)$row->prod_code]))
+			{
+echo "update row <br>\n";
+flush();
+				$r = $ex_rows[(string)$row->prod_code];
+				$pcrod = $this->_resolve_prod((string)$row->prod_code);
+				if ($pcrod)
+				{
+					$r->set_prop("product", $pcrod);
+					$r->set_prop("price", (string)$row->price);
+					$r->set_prop("amount", (string)$row->amount);
+					$r->set_prop("warehouse", (string)$row->warehouse);
+					$r->save();
+				}
+			}
+			else
+			{
+				if ($pcrod)
+				{
+					$r = obj();	
+					$r->set_parent($o->id());
+					$r->set_class_id(CL_SHOP_DELIVERY_NOTE_ROW);
+					$r->set_prop("product", $pcrod);
+					$r->set_prop("price", (string)$row->price);
+					$r->set_prop("amount", (string)$row->amount);
+					$r->save();
+	
+					$o->connect(array(
+						"to" => $r->id(),
+						"type" => "RELTYPE_ROW"
+					));
+					echo "added row ".html::obj_change_url($r)." <br>\n";
+flush();
+//echo "add row via ".((string)$row->prod_code)."<br>";
+				}
+			}
+		}
+	}
+
+	function _resolve_customer($ex)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"extern_id" => $ex,
+			"lang_id" => array(),
+			"site_id" => array()
+		));	
+		if ($ol->count())
+		{
+			return $ol->begin()->id();
+		}
+		return null;
+	}
+
+	function _resolve_prod($ex)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"code" => $ex,
+					"short_code" => $ex
+				)
+			)),
+			"lang_id" => array(),
+			"site_id" => array()
+		));	
+		if ($ol->count())
+		{
+			return $ol->begin()->id();
+		}
+		return null;
+	}
+
+        public function update_bills()
+        {
+                $this->_start_import("bills");
+                $this->_update_status("bills", warehouse_import_if::STATE_FETCHING, null, 0);
+
+                $ds = get_instance($this->prop('data_source'));
+
+                // get the pricelist data as XML
+                $xml_data = $ds->get_bills_xml();
+
+                $this->_write_xml_file("bills", $xml_data);
+
+                $xml = new SimpleXMLElement($xml_data);
+
+                $total = count($xml->bill);
+                $this->_update_status("bills", warehouse_import_if::STATE_PROCESSING, null, 0, $total);
+
+
+                $odl = new object_data_list(array(
+                        "class_id" => CL_CRM_BILL,
+                        "lang_id" => array(),
+                        "lang_id" => array(),
+                ),
+                array(
+                        CL_CRM_BILL => array("bill_no" => "bill_no", "oid" => "oid")
+                ));
+                $tmp = $odl->arr();
+                $data = array();
+                foreach($tmp as $r)
+                {
+                        $data[$r["bill_no"]] = $r;
+                }
+
+
+                $counter = 0;
+                foreach ($xml->bill as $cat)
+                {
+                        $id = (string)$cat->bill_no;
+                        if (isset($data[$id]))
+                        {
+                                // update
+//                              $this->_update_bill(obj($data[$id]["oid"]), $cat);
+echo "update bill $id <br>";
+                        }
+                        else
+                        {
+echo "add bill  <br>";
+                                // create
+                                $o = obj();
+                                $o->set_class_id(CL_CRM_BILL);
+                                $o->set_parent(131);
+                                $o->set_name((string)$cat->name);
+                                $this->_update_bill($o, $cat);
+echo ("updated bill ".html::obj_change_url($o));
+                        }
+
+                        $this->_update_status("bills", warehouse_import_if::STATE_PROCESSING, null, ++$counter, $total);
+                        if ($this->need_to_stop_now("bills"))
+                        {
+                                $this->_end_import_from_flag("bills");
+                                die("stopped for flag");
+                        }
+                }
+
+                $this->_end_import("bills");
+        }
+
+        function _update_bill($o, $cat)
+        {
+                $o->set_prop("bill_no", (string)$cat->bill_no);
+                $o->set_prop("impl", (string)$cat->impl);
+                $o->set_prop("bill_date", (string)$cat->bill_date);
+                $o->set_prop("bill_due_date_days", (string)$cat->bill_due_date_days);
+                $o->set_prop("sum", (string)$cat->sum);
+                $o->set_prop("currency", (string)$cat->currency);
+                $o->set_prop("disc", (string)$cat->disc);
+                $o->set_prop("approved", (string)$cat->apprived);
+                $o->set_prop("customer", $this->_resolve_customer((string)$cat->customer_ext_id));
+                $o->set_prop("warehouse", (string)$cat->warehouse);
+                $o->save();
+
+                $ex_rows = array();
+                foreach($o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+                {
+                        $r = $c->to();
+                        $ex_rows[$r->name()] = $r;
+                }
+//echo "rows = ".dbg::dump($cat->rows)." <br>";
+                foreach($cat->rows as $row)
+                {
+                        if (isset($ex_rows[(string)$row->name]))
+                        {
+                                // nothing
+                        }
+                        else
+                        {
+                                $pcrod = $this->_resolve_prod((string)$row->prod);
+                                if ($pcrod)
+                                {
+                                        $r = obj();
+                                        $r->set_parent($o->id());
+                                        $r->set_class_id(CL_CRM_BILL_ROW);
+                                        $r->set_prop("name", (string)$row->name);
+                                        $r->set_prop("amt", (string)$row->amt);
+                                        $r->set_prop("prod", $pcrod);
+                                        $r->set_prop("price", (string)$row->price);
+                                        $r->set_prop("desc", (string)$row->desc);
+                                        $r->save();
+
+                                        $o->connect(array(
+                                                "to" => $r->id(),
+                                                "type" => "RELTYPE_ROW"
+                                        ));
+                                        echo "added row ".html::obj_change_url($r)." <br>\n";
+//echo "add row via ".((string)$row->prod_code)."<br>";
+                                }
+                        }
+                }
+        }
+
+        public function update_orders()
+        {
+                $this->_start_import("orders");
+                $this->_update_status("orders", warehouse_import_if::STATE_FETCHING, null, 0);
+
+                $ds = get_instance($this->prop('data_source'));
+
+                // get the pricelist data as XML
+                $xml_data = $ds->get_orders_xml();
+
+                $this->_write_xml_file("orders", $xml_data);
+
+                $xml = new SimpleXMLElement($xml_data);
+
+                $total = count($xml->order);
+                $this->_update_status("orders", warehouse_import_if::STATE_PROCESSING, null, 0, $total);
+
+
+                $odl = new object_data_list(array(
+                        "class_id" => CL_SHOP_SELL_ORDER,
+                        "lang_id" => array(),
+                        "lang_id" => array(),
+                ),
+                array(
+                        CL_SHOP_SELL_ORDER => array("number" => "number", "oid" => "oid")
+                ));
+                $tmp = $odl->arr();
+                $data = array();
+                foreach($tmp as $r)
+                {
+                        $data[$r["number"]] = $r;
+                }
+
+
+                $counter = 0;
+                foreach ($xml->order as $cat)
+                {
+                        $id = (string)$cat->number;
+                        if (isset($data[$id]))
+                        {
+                                // update
+//                              $this->_update_order(obj($data[$id]["oid"]), $cat);
+echo "update order $id <br>";
+                        }
+                        else
+                        {
+echo "add order  <br>";
+                                // create
+                                $o = obj();
+                                $o->set_class_id(CL_SHOP_SELL_ORDER);
+                                $o->set_parent(131);
+                                $o->set_name((string)$cat->name);
+                                $this->_update_order($o, $cat);
+echo ("updated order ".html::obj_change_url($o));
+                        }
+
+                        $this->_update_status("orders", warehouse_import_if::STATE_PROCESSING, null, ++$counter, $total);
+                        if ($this->need_to_stop_now("orders"))
+                        {
+                                $this->_end_import_from_flag("orders");
+                                die("stopped for flag");
+                        }
+                }
+
+                $this->_end_import("orders");
+        }
+
+        function _update_order($o, $cat)
+        {
+                $o->set_prop("number", (string)$cat->number);
+                $o->set_prop("purchaser", $this->_resolve_customer((string)$cat->purchaser_ext_id));
+                $o->set_prop("date", (string)$cat->date);
+                $o->set_prop("deal_date", (string)$cat->deal_date);
+                $o->set_prop("currency", (string)$cat->currency);
+
+                $o->set_prop("warehouse", (string)$cat->warehouse);
+                $o->save();
+
+                $ex_rows = array();
+                foreach($o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+                {
+                        $r = $c->to();
+                        $ex_rows[$r->name()] = $r;
+                }
+//echo "rows = ".dbg::dump($cat->rows)." <br>";
+                foreach($cat->rows as $row)
+                {
+                        if (isset($ex_rows[(string)$row->name]))
+                        {
+                                // nothing
+                        }
+                        else
+                        {
+                                $pcrod = $this->_resolve_prod((string)$row->prod);
+                                if ($pcrod)
+                                {
+                                        $r = obj();
+                                        $r->set_parent($o->id());
+                                        $r->set_class_id(CL_SHOP_ORDER_ROW);
+                                        $r->set_prop("name", (string)$row->name);
+                                        $r->set_prop("prod_name", (string)$row->prod_name);
+                                        $r->set_prop("warehouse", (string)$row->warehouse);
+                                        $r->set_prop("prod", $pcrod);
+                                        $r->set_prop("amount", (string)$row->amount);
+                                        $r->set_prop("price", (string)$row->price);
+                                        $r->set_prop("date", (string)$row->date);
+                                        $r->save();
+
+                                        $o->connect(array(
+                                                "to" => $r->id(),
+                                                "type" => "RELTYPE_ROW"
+                                        ));
+                                        echo "added row ".html::obj_change_url($r)." <br>\n";
+//echo "add row via ".((string)$row->prod)."<br>";
+                                }
+                        }
+                }
+        }
 
 }
 

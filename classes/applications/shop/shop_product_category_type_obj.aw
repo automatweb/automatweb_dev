@@ -17,7 +17,26 @@ class shop_product_category_type_obj extends _int_object
 		{
 			$ol->add($c->prop("to"));
 		}
+		$ol->sort_by(array(
+			"prop" => "name",
+			"order" => "desc"
+		));
+		$ol->sort_by(array(
+			"prop" => "ord",
+			"order" => "asc"
+		));
 		return $ol;
+	}
+
+	/** adds category
+		@attrib api=1
+	**/
+	public function add_category($id)
+	{
+		$this->connect(array(
+			"to" => $id,
+			"reltype" => "RELTYPE_CATEGORY",
+		));
 	}
 
 }

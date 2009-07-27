@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.11 2009/04/09 11:45:22 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.12 2009/07/27 16:45:21 markop Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -105,5 +105,32 @@ class icons extends aw_template
 			"border" => 0
 		));
 	}
+
+	/**
+		@attrib params=pos api=1
+		@param clid required type=int
+		The class id which icon you wanna get.
+
+		@comment
+		Locates the correct icon for given class and returns html image tag
+		@returns
+		<img src="corrent iconurl">
+		@examples
+		classload("core/icons");
+		$ic = icons::get_icon_tag(CL_MENU);
+
+		// $ic conains
+		// <img src='http://_blabla_/automatweb/images/icons/class_1.gif'>
+	**/
+	function get_icon_tag($clid)
+	{
+
+		return html::img(array(
+			"url" => icons::get_icon_url($clid),
+			"border" => 0
+		));
+	}
+
+
 }
 ?>

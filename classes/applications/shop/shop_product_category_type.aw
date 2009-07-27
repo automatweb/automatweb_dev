@@ -3,8 +3,13 @@
 @classinfo syslog_type=ST_SHOP_PRODUCT_CATEGORY_TYPE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=smeedia
 @tableinfo aw_shop_product_category_type master_index=brother_of master_table=objects index=aw_oid
 
-@default table=aw_shop_product_category_type
 @default group=general
+
+@property jrk type=textbox table=objects
+@caption Jrk
+@comment Objekti j&auuml;rjekord
+
+@default table=aw_shop_product_category_type
 
 @reltype CATEGORY value=1 clid=CL_SHOP_PRODUCT_CATEGORY
 @caption Tootekategooria, mille tooted omavad ka seda t&uuml;&uuml;pi kategooriaid

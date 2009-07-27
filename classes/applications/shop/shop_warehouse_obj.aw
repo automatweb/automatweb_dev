@@ -362,6 +362,7 @@ class shop_warehouse_obj extends _int_object
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY_TYPE,
 			"lang_id" => array(),
 			"site_id" => array(),
+			"sort_by" => "jrk asc",
 		));
 		return $ol;
 	}
