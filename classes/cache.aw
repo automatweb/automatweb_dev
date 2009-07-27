@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.65 2009/07/20 11:48:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.66 2009/07/27 11:33:28 instrumental Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -444,7 +444,7 @@ class cache extends core
 	function file_set_pt($pt, $subf, $fn, $cont)
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
-		$f = fopen($fq, "w");
+		$f = is_writable($fq) ? fopen($fq, "w") : false;
 		if (!$f)
 		{
 			return;
@@ -538,7 +538,7 @@ class cache extends core
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
 
-		if ((@filemtime($fq)) < $ts)
+		if (!file_exists($fq) || filemtime($fq) < $ts)
 		{
 			return false;
 		}
@@ -659,7 +659,10 @@ class cache extends core
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$of."/".$fn;
 
 		// here we know the full path to the file, so just delete the damn thing
-		@unlink($fq);
+		if(file_exists($fq))
+		{
+			unlink($fq);
+		}
 	}
 
 	/** Clears cache for parent and folder
