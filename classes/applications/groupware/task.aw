@@ -4607,7 +4607,7 @@ class task extends class_base
 			CL_CRM_COMPANY
 		)), "popup_search");
 		$tb->add_button(array(
-			"parent" => "search",
+			"name" => "search",
 			"tooltip" => t("Otsi tellijat"),
 			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 		));
@@ -4637,7 +4637,7 @@ class task extends class_base
 
 		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1, "s" => $s), "crm_project_search");
 		$tb->add_button(array(
-			"parent" => "search",
+			"name" => "search",
 			"tooltip" => t("Otsi projekte"),
 			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 		));
@@ -4692,7 +4692,7 @@ class task extends class_base
 		$url = $this->mk_my_orb("do_search", array("pn" => "participants_h", "clid" => CL_CRM_PERSON,"multiple" => 1, "s" => $s), "crm_participant_search");
 		$cur_co = $cur  = get_current_company();
 		$tb->add_button(array(
-			"parent" => "part_search",
+			"name" => "part_search",
 			"tooltip" => t("Otsi"),
 			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 //			"name" => "",
@@ -4869,7 +4869,7 @@ class task extends class_base
 			CL_CRM_COMPANY
 		)), "popup_search");
 		$tb->add_menu_item(array(
-			"parent" => "search",
+			"name" => "search",
 			"text" => t("Tellija"),
 			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 		));
