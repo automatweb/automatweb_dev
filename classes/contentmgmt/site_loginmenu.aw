@@ -24,16 +24,7 @@ class site_loginmenu extends class_base
 			"class_id" => CL_MENU,
 			"parent" => $login_menu_id,
 			"lang_id" => array(),
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-						"lang_id" => aw_global_get("lang_id"),
-						"CL_MENU.type" => array(MN_CLIENT, MN_ADMIN1, MN_PMETHOD)
-				)
-			)),
-			"status" => 2
 		));
-		
 		$tmp_L1 = "";
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
@@ -42,26 +33,17 @@ class site_loginmenu extends class_base
 				"parent" => $o->id(),
 				"status" => 2,
 				"lang_id" => array(),
-				new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-							"lang_id" => aw_global_get("lang_id"),
-							"CL_MENU.type" => array(MN_CLIENT, MN_ADMIN1, MN_PMETHOD)
-					)
-				)),
-
 			));
-			$link_L1 = str_replace  ("&","&amp;", $that->make_menu_link($o));
 
 			$tmp_L2 = "";
 			for($o2 = $ol2->begin(); !$ol2->end(); $o2 = $ol2->next())
 			{
-				$link_L2 = str_replace  ("&","&amp;", $that->make_menu_link($o2));
-				if (strlen($link_L2)>0)
+				$link = str_replace  ("&","&amp;", $that->make_menu_link($o2));
+				if (strlen($link)>0)
 				{
 					$this->vars(array(
 						"text" => $o2->name(),
-						"link" => $link_L2
+						"link" => $link
 					));
 					if (strlen($tmp_L2)==0 && $this->is_template("MENU_LOGGED_L2_ITEM_BEGIN"))
 					{
@@ -74,8 +56,6 @@ class site_loginmenu extends class_base
 				}
 			}
 			$this->vars(array(
-				"link" => $link_L1,
-				"text" => $o->name(),
 				"MENU_LOGGED_L2_ITEM" => $tmp_L2,
 			));
 			if (strlen($tmp_L1)==0 && $this->is_template("MENU_LOGGED_L1_ITEM_BEGIN"))
