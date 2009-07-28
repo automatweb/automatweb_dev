@@ -2226,7 +2226,7 @@ class _int_object
 	protected function _int_sync_from_objfield_to_prop($ofname, $mod = true)
 	{
 		// object field changed, sync to properties
-		$pn = empty($GLOBALS["of2prop"][$this->obj["class_id"]][$ofname]) ? "" : $GLOBALS["of2prop"][$this->obj["class_id"]][$ofname];
+		$pn = empty($this->obj["class_id"]) || empty($GLOBALS["of2prop"][$this->obj["class_id"]][$ofname]) ? "" : $GLOBALS["of2prop"][$this->obj["class_id"]][$ofname];
 		if ($pn != "")
 		{
 			if ($mod)
@@ -2446,7 +2446,7 @@ class _int_object
 				continue;
 			}
 			post_message_with_param(
-				MSG_STORAGE_DELETE,
+				"MSG_STORAGE_DELETE",
 				$this->obj["class_id"],
 				array(
 					"oid" => $oid
@@ -2474,12 +2474,12 @@ class _int_object
 			if ($full_delete)
 			{
 				$GLOBALS["object_loader"]->ds->final_delete_object($oid);
-				$GLOBALS["object_loader"]->cache->_log($type, SA_FINAL_DELETE, $nm, $oid, false);
+				$GLOBALS["object_loader"]->cache->_log($type, "SA_FINAL_DELETE", $nm, $oid, false);
 			}
 			else
 			{
 				$GLOBALS["object_loader"]->ds->delete_object($oid);
-				$GLOBALS["object_loader"]->cache->_log($type, SA_DELETE, $nm, $oid, false);
+				$GLOBALS["object_loader"]->cache->_log($type, "SA_DELETE", $nm, $oid, false);
 				$GLOBALS["object_loader"]->handle_cache_update($tmpo->id(), $tmpo->site_id(), "delete_object");
 			}
 		}
