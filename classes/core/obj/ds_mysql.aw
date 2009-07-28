@@ -1717,10 +1717,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$bits = explode(",", $val);
 				foreach($bits as $bit)
 				{
-					list($bit_tbl, $bit_field) = explode(".", $bit);
-					if ($bit_tbl != "")
+					if(strpos($bit, ".") !== false)
 					{
-						$this->_add_s($bit_tbl);
+						list($bit_tbl, $bit_field) = explode(".", $bit);
+						if ($bit_tbl != "")
+						{
+							$this->_add_s($bit_tbl);
+						}
 					}
 				}
 				$this->sby = " ORDER BY $val ";
