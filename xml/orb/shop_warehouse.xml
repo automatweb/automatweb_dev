@@ -212,6 +212,13 @@
 			</function>
 		</action>
 
+		<action name="save_categories" all_args="1">
+			<function name="save_categories">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="search_categories">
 			<function name="search_categories">
 				<arguments>
