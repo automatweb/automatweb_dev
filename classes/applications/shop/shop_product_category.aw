@@ -9,6 +9,9 @@
 @property desc type=textarea rows=10 cols=50 field=aw_desc
 @caption Kirjeldus
 
+@property code type=textbox
+@caption Kood
+
 @property images type=relpicker reltype=RELTYPE_IMAGE multiple=1 store=connect
 @caption Pildid
 
@@ -71,6 +74,15 @@ class shop_product_category extends class_base
 			$this->db_query("CREATE TABLE aw_shop_product_category(aw_oid int, aw_desc text, aw_doc int)");
 			return true;
 		}
+		switch($f)
+		{
+			case "code":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+		}
 	}
 
 	function _get_folders_tb($arr)
@@ -83,6 +95,7 @@ class shop_product_category extends class_base
 		));
 		$tb->add_save_button();
 		$tb->add_button(array(
+			"name" => "delete",
 			"img" => "delete.gif",
 			"tooltip" => t("Eemalda valitud seosed"),
 			"confirm" => t("Oled kindel, et soovid valitud seosed kustutada?"),
@@ -219,7 +232,7 @@ class shop_product_category extends class_base
 
 			if($po->class_id() == CL_SHOP_PRODUCT_CATEGORY)
 			{
-				if(empty($arr["request"]["def_fld"]))
+				if(empty($arr["request"]["def_fld"]) && is_oid($po->meta("def_fld")) && $this->can("view", $po->meta("def_fld")))
 				{
 					$arr["obj_inst"]->set_meta("def_fld", $po->meta("def_fld"));
 					$arr["obj_inst"]->connect(array(

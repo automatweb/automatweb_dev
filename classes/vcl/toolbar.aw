@@ -287,6 +287,11 @@ class toolbar extends aw_template
 	**/
 	function add_button($args = array())
 	{
+		if(!isset($args["name"]))
+		{
+			$e = new awex_awtlb_btn_cfg("Missing required parameter 'name'!");
+			throw $e;
+		}
 		$args["type"] = "button";
 		if (empty($args["img"]))
 		{
@@ -787,5 +792,11 @@ class toolbar extends aw_template
 		}
 	}
 }
+
+/* Generic toolbar exception */
+class awex_awtlb extends aw_exception {}
+
+/* Indicates button configuration errors */
+class awex_awtlb_btn_cfg extends awex_awtlb {}
 
 ?>
