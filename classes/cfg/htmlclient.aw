@@ -1786,7 +1786,7 @@ class htmlclient extends aw_template
 	{
 		if($class == $_GET["class"])
 		{
-			return isset($_GET["return_url"]) ? $_GET["return_url"] : $_GET["url"];
+			return isset($_GET["return_url"]) ? $_GET["return_url"] : (isset($_GET["url"]) ? $_GET["url"] : NULL);
 		}
 		return get_ru();
 	}

@@ -1567,31 +1567,34 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$ret2[$row["oid"]] = $row;
 					}
 
-					$ret[$row["oid"]] = $row["name"];
-
-					if (isset($row["parent"]))
+					if(isset($row["oid"]))
 					{
-						$parentdata[$row["oid"]] = $row["parent"];
-					}
+						$ret[$row["oid"]] = $row["name"];
 
-					$objdata[$row["oid"]] = array(
-						"brother_of" => isset($row["brother_of"]) ? $row["brother_of"] : null,
-						"status" => isset($row["status"]) ? $row["status"] : null,
-						"class_id" => isset($row["class_id"]) ? $row["class_id"] : null,
-						"jrk" => isset($row["jrk"]) ? $row["jrk"] : null ,
-					);
+						if (isset($row["parent"]))
+						{
+							$parentdata[$row["oid"]] = $row["parent"];
+						}
 
-					if ($GLOBALS["cfg"]["acl"]["use_new_acl"] && isset($row["acldata"]))
-					{
-						$row["acldata"] = safe_array(aw_unserialize($row["acldata"], false, true));
-						$acldata[$row["oid"]] = $row;
+						$objdata[$row["oid"]] = array(
+							"brother_of" => isset($row["brother_of"]) ? $row["brother_of"] : null,
+							"status" => isset($row["status"]) ? $row["status"] : null,
+							"class_id" => isset($row["class_id"]) ? $row["class_id"] : null,
+							"jrk" => isset($row["jrk"]) ? $row["jrk"] : null ,
+						);
+
+						if ($GLOBALS["cfg"]["acl"]["use_new_acl"] && isset($row["acldata"]))
+						{
+							$row["acldata"] = safe_array(aw_unserialize($row["acldata"], false, true));
+							$acldata[$row["oid"]] = $row;
+						}
+						$GLOBALS["__obj_sys_acl_memc"][$row["oid"]] = array(
+							"status" => isset($row["status"]) ? $row["status"] : null,
+							"brother_of" => isset($row["brother_of"]) ? $row["brother_of"] : null,
+							"acldata" => isset($row["acldata"]) ? $row["acldata"] : null,
+							"parent" => isset($row["parent"]) ? $row["parent"] : null
+						);
 					}
-					$GLOBALS["__obj_sys_acl_memc"][$row["oid"]] = array(
-						"status" => isset($row["status"]) ? $row["status"] : null,
-						"brother_of" => isset($row["brother_of"]) ? $row["brother_of"] : null,
-						"acldata" => isset($row["acldata"]) ? $row["acldata"] : null,
-						"parent" => isset($row["parent"]) ? $row["parent"] : null
-					);
 				}
 				return array($ret, $this->meta_filter, $acldata, $parentdata, $objdata, $ret2, $has_sql_func);
 			}

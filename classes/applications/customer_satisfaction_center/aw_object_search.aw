@@ -368,7 +368,7 @@ class aw_object_search extends class_base
 				break;
 
 			case "s_res":
-				if (!$arr["request"]["MAX_FILE_SIZE"])
+				if (empty($arr["request"]["MAX_FILE_SIZE"]))
 				{
 					return PROP_IGNORE;
 				}
@@ -875,7 +875,7 @@ class aw_object_search extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		$arr["return_url"] = $_GET["return_url"];
+		$arr["return_url"] = automatweb::$request->arg("return_url");
 	}
 
 	function callback_mod_tab($arr)
