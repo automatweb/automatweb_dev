@@ -6,6 +6,15 @@
 @default table=aw_shop_rent_calculator
 @default group=general
 
+@property shop type=relpicker reltype=RELTYPE_SHOP store=connect
+@caption E-pood
+@comment E-poe objekt, mille juurest järelmaksuseaded lugeda
+
+#### RELTYPES
+
+@reltype SHOP value=1 clid=CL_SHOP_ORDER_CENTER
+@caption E-pood
+
 */
 
 class shop_rent_calculator extends class_base
@@ -18,43 +27,91 @@ class shop_rent_calculator extends class_base
 		));
 	}
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 	}
 
-	function show($arr)
+	public function show($arr)
 	{
-		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
+
+		$o = new object($arr["id"]);
+		$soc = obj($o->prop("shop"));
+
+		$rent = array_merge(array("rent_period" => "", "sum_core" => ""), safe_array(aw_global_get("rent_calculator")));
+
+		if($soc->is_a(CL_SHOP_ORDER_CENTER))
+		{
+			$RENT_PERIOD_OPTION = "";
+			foreach($soc->rent_periods() as $rent_period)
+			{
+				$this->vars(array(
+					"rent_period_value" => $rent_period,
+				));
+				$RENT_PERIOD_OPTION .= $this->parse("RENT_PERIOD_OPTION".($rent_period == $rent["rent_period"] ? "_SELECTED" : ""));
+			}
+			$this->vars(array(
+				"id" => $o->id(),
+				"sum_core" => ifset($rent, "sum_core"),
+				"sum_rent" => ifset($rent, "sum_rent"),
+				"rent_period" => ifset($rent, "rent_period"),
+				"prepayment" => ifset($rent, "prepayment"),
+				"single_payment" => ifset($rent, "single_payment"),
+				"RENT_PERIOD_OPTION" => $RENT_PERIOD_OPTION,
+				"RENT_PERIOD_OPTION_SELECTED" => "",
+			));
+
+			if(isset($rent["error"]))
+			{
+				$this->vars(array(
+					"error" => $rent["error"],
+				));
+				$this->vars(array(
+					"ERROR" => $this->parse("ERROR"),
+				));
+				unset($rent["error"]);
+				aw_session_set("rent_calculator", $rent);
+			}
+			elseif(isset($rent["sum_rent"]))
+			{
+				$this->vars(array(
+					"RESULT" => $this->parse("RESULT"),
+				));
+			}
+		}
+
 		return $this->parse();
+	}
+
+	/**
+		@attrib name=calculate params=name
+
+		@param id required type=int acl=view
+
+		@param post_ru optional type=string
+
+		@param rent_period optional type=int
+
+		@param sum_core optional type=float
+	**/
+	public function calculate($arr)
+	{
+		$o = obj($arr["id"]);
+		$soc = obj($o->prop("shop"));
+
+		if($soc->is_a(CL_SHOP_ORDER_CENTER))
+		{
+			$rent = $soc->calculate_rent(ifset($arr["sum_core"]), ifset($arr["rent_period"]));
+		}
+
+		$rent = array_merge($rent, array(
+			"sum_core" => ifset($arr["sum_core"]),
+			"rent_period" => ifset($arr["rent_period"]),
+		));
+		aw_session_set("rent_calculator", $rent);
+
+		return !empty($arr["post_ru"]) ? $arr["post_ru"] : $_SERVER["HTTP_REFERER"];
 	}
 
 	function do_db_upgrade($t, $f)

@@ -1,51 +1,103 @@
 <?php
 /*
-@classinfo syslog_type=ST_SHOP_PRICE_LIST relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
+@classinfo syslog_type=ST_SHOP_PRICE_LIST relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=instrumental
 
 @tableinfo aw_shop_price_list master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_shop_price_list
 @default group=general
 
-@property short_name type=textbox
-@caption L&uuml;hend
+	@groupinfo general2 caption="&Uuml;ldseaded" parent=general
+	@default group=general2
 
-@property valid_from type=date_select field=valid_from
-@caption Kehtib alates
+		@property name type=textbox table=objects
+		@caption Nimi
 
-@property valid_to type=date_select field=valid_to
-@caption Kehtib kuni
+		@property jrk type=textbox size=4 table=objects
+		@caption Jrk
 
-@property jrk type=textbox size=4 table=objects
-@caption Jrk
+		@property owner type=relpicker reltype=RELTYPE_OWNER field=aw_owner
+		@caption Omanikorganisatsioon
 
-@property groups type=relpicker multiple=1 reltype=RELTYPE_GROUP store=connect
-@caption Kehtib gruppidele
+		@property valid_from type=date_select field=valid_from
+		@caption Kehtib alates
 
-@property crm_categories type=relpicker multiple=1 reltype=RELTYPE_ORG_CAT store=connect
-@caption Kehtib kliendigruppidele
+		@property valid_to type=date_select field=valid_to
+		@caption Kehtib kuni
 
-@property orgs type=relpicker multiple=1 reltype=RELTYPE_ORG store=connect
-@caption Kehtib organisatsioonidele
+	@groupinfo matrix_settings caption="Maatriksi seaded" parent=general
+	@default group=matrix_settings
+			
+			@property matrix_col_order type=table store=no
+			@caption Veeru gruppide j&auml;rjekord
+			
+			@property matrix_advanced type=checkbox field=aw_matrix_advanced
+			@caption Power-user mode
+		
+		@property matrix_cols_subtitle type=text subtitle=1 store=no
+		@caption Maatriksi veerud
 
-@property persons type=relpicker multiple=1 reltype=RELTYPE_PERSON store=connect
-@caption Kehtib isikutele
+			@property matrix_customer_categories type=relpicker reltype=RELTYPE_CUSTOMER_CATEGORY multiple=1 store=connect
+			@caption Kliendikategooriad
 
-@property warehouses type=relpicker multiple=1 reltype=RELTYPE_WAREHOUSE store=connect
-@caption Kehtib ladudele
+			@property matrix_countries type=relpicker reltype=RELTYPE_COUNTRY multiple=1 store=connect
+			@caption Riigid
 
-@property discount type=textbox field=discount
-@caption Allahindlus
+		@property matrix_rows_subtitle type=text subtitle=1 store=no
+		@caption Maatriksi read
+		
+			@property matrix_rows type=chooser field=aw_matrix_rows orient=vertical
+			@caption Maatriksi read
+			
+			@property matrix_product_categories type=relpicker reltype=RELTYPE_PRODUCT_CATEGORY multiple=1 store=connect
+			@caption Tootekategooriad
 
-@property base_price type=checkbox field=base_price
-@caption Baashindade alusel
+		@property code type=hidden field=aw_code
 
-@groupinfo clients_matrix caption=Kliendigrupid
-@default group=clients_matrix
+@groupinfo matrix caption=Maatriks
+@default group=matrix
 
-@property clients_tb type=toolbar no_caption=1
+	@property matrix type=table no_caption=1 store=no
 
-@property clients_matrix type=table no_caption=1
+#@groupinfo clients_matrix caption=Kliendigrupid
+#@default group=clients_matrix
+
+#	@property clients_tb type=toolbar no_caption=1
+
+#	@property clients_matrix type=table no_caption=1
+
+@groupinfo priorities caption=Prioriteedid
+@default group=priorities
+
+	@groupinfo priorities_customer_categories caption=Kliendigrupid parent=priorities
+	@default group=priorities_customer_categories
+
+		@property priorities_customer_categories_tbl type=table no_caption=1 store=no
+
+	@groupinfo priorities_locations caption=Asukohad parent=priorities
+	@default group=priorities_locations
+
+		@property priorities_locations_tbl type=table no_caption=1 store=no
+
+	@groupinfo priorities_product_categories caption=Tootegrupid parent=priorities
+	@default group=priorities_product_categories
+
+		@property priorities_product_categories_tbl type=table no_caption=1 store=no
+
+@groupinfo price_lists caption="Teised hinnakirjad"
+@default group=price_lists
+
+	@layout price_lists_split type=hbox width=25%:75%
+
+		@layout price_lists_left type=vbox parent=price_lists_split area_caption=Vali&#44&nbsp;milliseid&nbsp;hinnakirju&nbsp;kuvada
+
+			@property price_lists_tree type=treeview store=no no_caption=1 parent=price_lists_left
+
+		@layout price_lists_right type=vbox parent=price_lists_split no_padding=no closeable=1 area_caption=Hinnakirjad
+
+			@property price_lists_tbl type=table store=no no_caption=1 parent=price_lists_right
+
+### RELTYPES
 
 @reltype GROUP value=1 clid=CL_GROUP
 @caption Grupp
@@ -70,6 +122,22 @@
 
 @reltype MATRIX_ORG_CAT value=8 clid=CL_CRM_CATEGORY
 @caption Kliendigrupp
+
+@reltype OWNER value=9 clid=CL_CRM_COMPANY
+@caption Omanikorganisatsioon
+
+@reltype CUSTOMER_CATEGORY value=10 clid=CL_CRM_CATEGORY
+@caption Kliendikategooria, mida maatriksi veeruna kuvatakse
+
+@reltype PRODUCT_CATEGORY value=11 clid=CL_SHOP_PRODUCT_CATEGORY
+@caption Tootekategooria, mida maatriksi reana kuvatakse
+
+@reltype PRIORITY value=12
+@caption Prioriteet
+
+@reltype COUNTRY value=13 clid=CL_COUNTRY
+@caption Riik, mida maatriksi veeruna kuvatakse
+
 */
 
 class shop_price_list extends class_base
@@ -82,211 +150,433 @@ class shop_price_list extends class_base
 		));
 	}
 
-	function get_property($arr)
+	public function callback_pre_edit($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
+		$this->matrix_structure = shop_price_list_obj::get_matrix_structure($arr["obj_inst"]);
+		$this->col_types = array(
+			"locations" => t("Asukohad"),
+			"customer_categories" => t("Kliendikategooriad"),
+		);
 	}
 
-	function set_property($arr = array())
+	public function _get_matrix($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
+		if(!empty($_GET["debug"]))
 		{
+			$prms = array(
+				"product" => 346088,
+				"price" => 1000,
+				"product_category" => array(346012,346013),
+				"customer_category" => array(346017),//array(346016, 346058),
+				"location" => array(346322, 346323, 346324),
+				"structure" => true,
+
+
+				"debug" => true
+			);
+			arr(array(
+				"names" => $this->matrix_structure["names"],
+				"params" => $prms,
+				"result" => shop_price_list_obj::price($prms)
+			), true);
+		}
+		$matrix = array();
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_PRICE_LIST_CONDITION,
+				"price_list" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+			),
+			array(
+				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus"),
+			)
+		);
+		foreach($odl->arr() as $cond)
+		{
+			$cond["col"] = is_oid($cond["col"]) ? $cond["col"] : "default";
+			$matrix[$cond["row"]][$cond["col"]]["type"] = $cond["type"];
+			$matrix[$cond["row"]][$cond["col"]]["value"] = $cond["value"];
+			$matrix[$cond["row"]][$cond["col"]]["bonus"] = $cond["bonus"];
 		}
 
-		return $retval;
+		$this->draw_matrix(array(
+			"table_inst" => &$arr["prop"]["vcl_inst"],
+			"obj_inst" => &$arr["obj_inst"],
+			"column_types" => $this->col_types,
+			"matrix_data" => $matrix,
+			"field_callback" => array(&$this, "modify_matrix_fields"),
+			"data_cell_callback" => array(&$this, "draw_matrix_cell"),
+			"data_callback" => array(&$this, "modify_matrix_row"),
+		));
+		$t = &$arr["prop"]["vcl_inst"];
 	}
 
-	function _get_clients_tb($arr)
+	public function modify_matrix_fields(&$t, $name)
 	{
-		$tb = &$arr["prop"]["vcl_inst"];
-
-		$tb->add_search_button(array(
-			"tooltip" => t("Otsi kliendi kategooria"),
-			"pn" => "add_crm_cat",
-			"multiple" => 1,
-			"clid" => CL_CRM_CATEGORY,
+		$t->define_field(array(
+			"name" => $name."_value",
+			"caption" => "HV",
+			"tooltip" => t("Hinna valem"),
+			"parent" => $name,
+			"chgbgcolor" => $name."_color",
 		));
-		$tb->add_menu_button(array(
-			"name" => "del_crm_cat",
-			"img" => "delete.gif",
-			"tooltip" => t("Eemalda kliendigrupp"),
+		$t->define_field(array(
+			"name" => $name."_bonus",
+			"caption" => "BV",
+			"tooltip" => t("Boonuse valem"),
+			"parent" => $name,
+			"chgbgcolor" => $name."_color",
 		));
-		foreach($arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_MATRIX_ORG_CAT",
-		)) as $c)
-		{
-			$tb->add_menu_item(array(
-				"parent" => "del_crm_cat",
-				"text" => $c->to()->name(),
-				"link" => aw_url_change_var("del_crm_cat", $c->prop("to")),
-			));
-		}
-		
-		$tb->add_search_button(array(
-			"tooltip" => t("Otsi toote kategooria"),
-			"pn" => "add_prod_cat",
-			"multiple" => 1,
-			"clid" => CL_SHOP_PRODUCT_CATEGORY,
-			"name" => "add_prod_cat",
+		$t->define_field(array(
+			"name" => $name."_type",
+			"caption" => "VT",
+			"tooltip" => t("Valemi t&uuml;&uuml;p"),
+			"parent" => $name,
+			"chgbgcolor" => $name."_color",
 		));
-		$tb->add_menu_button(array(
-			"name" => "del_prod_cat",
-			"img" => "delete.gif",
-			"tooltip" => t("Eemalda tootegrupp"),
-		));
-		foreach($arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_MATRIX_CATEGORY",
-		)) as $c)
-		{
-			$tb->add_menu_item(array(
-				"parent" => "del_prod_cat",
-				"text" => $c->to()->name(),
-				"link" => aw_url_change_var("del_prod_cat", $c->prop("to")),
-			));
-		}
-
-		$tb->add_save_button();
 	}
 
-	function _set_clients_matrix($arr)
+	public function draw_matrix_cell($row, $field, $matrix)
 	{
-		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT,
-			"site_id" => array(),
-			"lang_id" => array(),
-			"pricelist" => $arr["obj_inst"]->id(),
-		));
-		foreach($ol->arr() as $oid => $o)
+		$name = explode("_", $field["name"]);
+		$type = array_pop($name);
+		$col = array_pop($name);
+		if($col === "self")
 		{
-			$data[$o->prop("crm_category")][$o->prop("prod_category")] = $oid;
+			$col = array_pop($name);
 		}
-		foreach($arr["request"]["discount"] as $crm_cat => $data)
+
+		switch($type)
 		{
-			foreach($data as $prod_cat => $discount)
-			{
-				if($oid = $data[$crm_cat][$prod_cat])
+			case "type":
+				static $options = array();
+				if(empty($options))
 				{
-					$o = obj($oid);
-					$o->set_prop("discount", $discount);
-					$o->save();
+					$options = array(t("Auto"));
+					$ol = new object_list(array(
+						"class_id" => CL_SHOP_PRICE_LIST_CONDITION_TYPE,
+					));
+					$options = $options + $ol->names();
 				}
-				else
+				return html::select(array(
+					"name" => "matrix[$row][$col][$type]",
+					"value" => ifset($matrix, $row, $col, $type),
+					"options" => $options,
+				));
+
+			case "value":
+			case "bonus":
+				return html::textbox(array(
+					"name" => "matrix[$row][$col][$type]",
+					"value" => ifset($matrix, $row, $col, $type),
+					"size" => 4,
+				));
+		}
+	}
+
+	public function modify_matrix_row($t, $data)
+	{
+		static $i;
+		$i++;
+
+		$j = 0;
+		foreach($t->get_defined_fields() as $field)
+		{
+			if(isset($field["chgbgcolor"]) && !isset($data[$field["chgbgcolor"]]))
+			{
+				$data[$field["chgbgcolor"]] = ($i + $j++) % 2 == 0 ? "#C4C4C4" : "#D7D7D7";
+			}
+		}
+	}
+
+	public function _set_matrix($arr)
+	{
+		$data = $arr["prop"]["value"];
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_PRICE_LIST_CONDITION,
+				"price_list" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+			),
+			array(
+				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus"),
+			)
+		);
+
+		$change = $delete = array();
+		foreach($odl->arr() as $cond_id => $cond)
+		{
+			if(!empty($data[$cond["row"]][$cond["col"]]) && shop_price_list_obj::store_condition($data[$cond["row"]][$cond["col"]]))
+			{
+				if(
+					$data[$cond["row"]][$cond["col"]]["type"] != $cond["type"] ||
+					$data[$cond["row"]][$cond["col"]]["value"] != $cond["value"] ||
+					$data[$cond["row"]][$cond["col"]]["bonus"] != $cond["bonus"]
+				)
+				{
+					// Conditions have changed!
+					$change[$cond_id] = $data[$cond["row"]][$cond["col"]];
+				}
+				unset($data[$cond["row"]][$cond["col"]]);
+			}
+			else
+			{
+				// No such conditions any more!
+				$delete[$cond_id] = $cond_id;
+			}
+		}
+
+		if(count($change))
+		{
+			$ol = new object_list(array(
+				"oid" => array_keys($change),
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			foreach($ol->arr() as $oid => $o)
+			{
+				$o->set_prop("type", $change[$oid]["type"]);
+				$o->set_prop("value", $change[$oid]["value"]);
+				$o->set_prop("bonus", $change[$oid]["bonus"]);
+				$o->save();
+			}
+		}
+
+		foreach($data as $row => $data)
+		{
+			foreach($data as $col => $val)
+			{
+				if(shop_price_list_obj::store_condition($val))
 				{
 					$o = obj();
-					$o->set_class_id(CL_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT);
-					$o->set_name(sprintf(t("%s kliendigrupi allahindlus"), $arr["obj_inst"]->name()));
 					$o->set_parent($arr["obj_inst"]->id());
-					$o->set_prop("pricelist", $arr["obj_inst"]->id());
-					$o->set_prop("crm_category", $crm_cat);
-					$o->set_prop("prod_category", $prod_cat);
-					$o->set_prop("discount", $discount);
+					$o->set_class_id(CL_SHOP_PRICE_LIST_CONDITION);
+					$o->set_prop("price_list", $arr["obj_inst"]->id());
+					$o->set_prop("row", $row);
+					$o->set_prop("col", $col);
+					$o->set_prop("type", $val["type"]);
+					$o->set_prop("value", $val["value"]);
+					$o->set_prop("bonus", $val["bonus"]);
 					$o->save();
 				}
 			}
 		}
-		if($oids = $arr["request"]["add_crm_cat"])
+
+		if(count($delete) > 0)
 		{
-			foreach(explode(",", $oids) as $oid)
+			$ol = new object_list(array(
+				"oid" => $delete,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			$ol->delete();
+		}
+
+		$arr["obj_inst"]->update_code();
+	}
+
+	protected function _init_priorities_tbl($t, $caption)
+	{
+		$t->define_chooser(array(
+			"width" => "75",
+		));
+		$t->define_field(array(
+			"name" => "priority",
+			"caption" => t("Prioriteet"),
+			"align" => "center",
+			"width" => "75",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => $caption,
+		));
+		$t->set_sortable(false);
+	}
+
+	public function _get_priorities_locations_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_priorities_tbl($t, t("Asukoht"));
+
+		$this->priorities_tbl_insert_row($t, "priorities_locations_tbl", 0, $this->matrix_structure["cols"]["locations"]);
+	}
+
+	public function _get_priorities_product_categories_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_priorities_tbl($t, t("Tootegrupp"));
+
+		$this->priorities_tbl_insert_row($t, "priorities_product_categories_tbl", 0, $this->matrix_structure["rows"]["product_categories"]);
+	}
+
+	public function _get_priorities_customer_categories_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_priorities_tbl($t, t("Kliendigrupp"));
+
+		$this->priorities_tbl_insert_row($t, "priorities_customer_categories_tbl", 0, $this->matrix_structure["cols"]["customer_categories"]);
+	}
+
+	public function _set_priorities_customer_categories_tbl($arr)
+	{
+		return $this->_set_priorities_tbl($arr, CL_CRM_CATEGORY);
+	}
+
+	public function _set_priorities_locations_tbl($arr)
+	{
+		return $this->_set_priorities_tbl($arr, array(CL_COUNTRY_CITY, CL_COUNTRY_CITYDISTRICT, CL_COUNTRY_ADMINISTRATIVE_UNIT));
+	}
+
+	public function _set_priorities_product_categories_tbl($arr)
+	{
+		return $this->_set_priorities_tbl($arr, CL_SHOP_PRODUCT_CATEGORY);
+	}
+
+	protected function _set_priorities_tbl($arr, $clid)
+	{
+		$data = $arr["prop"]["value"];
+		foreach($arr["obj_inst"]->connections_from(array("to.class_id" => $clid, "type" => "RELTYPE_PRIORITY")) as $conn)
+		{
+			if(!empty($data[$conn->prop("to")]) && $data[$conn->prop("to")] != $conn->prop("data"))
+			{
+				$conn->change(array(
+					"data" => $data[$conn->prop("to")],
+				));
+			}
+			elseif(empty($data[$conn->prop("to")]))
+			{
+				$conn->delete();
+			}
+			unset($data[$conn->prop("to")]);
+		}
+		foreach($data as $k => $v)
+		{
+			if($v != 0)
 			{
 				$arr["obj_inst"]->connect(array(
-					"type" => "RELTYPE_MATRIX_ORG_CAT",
-					"to" => $oid,
+					"to" => $k,
+					"type" => "RELTYPE_PRIORITY",
+					"data" => $v,
 				));
 			}
 		}
-		if($oids = $arr["request"]["add_prod_cat"])
+		$arr["obj_inst"]->update_code();
+	}
+
+	protected function priorities_tbl_insert_row($t, $name, $depth, $data)
+	{
+		foreach($data as $key => $subdata)
 		{
-			foreach(explode(",", $oids) as $oid)
-			{
-				$arr["obj_inst"]->connect(array(
-					"type" => "RELTYPE_MATRIX_CATEGORY",
-					"to" => $oid,
-				));
-			}
+			$t->define_data(array(
+				"oid" => $key,
+				"priority" => html::textbox(array(
+					"name" => $name."[".$key."]",
+					"value" => aw_math_calc::string2float(ifset($this->matrix_structure["priorities"], $key)),
+					"size" => 4,
+				)),
+				"name" => str_repeat("&nbsp; ", $depth * 5).parse_obj_name($this->matrix_structure["names"][$key]),
+			));
+			$this->priorities_tbl_insert_row($t, $name, $depth +1, $subdata);
 		}
 	}
 
-	function _get_clients_matrix($arr)
+	public function _get_code($arr)
 	{
-		foreach(array("crm", "prod") as $var)
-		{
-			$c = $arr["request"]["del_".$var."_cat"];
-			if($c && $arr["obj_inst"]->is_connected_to(array("to" => $c)))
-			{
-				$arr["obj_inst"]->disconnect(array(
-					"from" => $c,
-				));
-				$ol = new object_list(array(
-					"class_id" => CL_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT,
-					"site_id" => array(),
-					"lang_id" => array(),
-					"pricelist" => $arr["obj_inst"]->id(),
-					$var."_category" => $c,
-				));
-				$ol->delete();
-			}
-		}
+		return PROP_IGNORE;
+	}
 
+	public function _set_code($arr)
+	{
+		return PROP_IGNORE;
+	}
+
+	public function _get_price_lists_tbl($arr)
+	{
 		$t = &$arr["prop"]["vcl_inst"];
-
 		$t->define_field(array(
-			"name" => "prod_cat",
-			"caption" => t("Tootegrupp"),
-			"align" => "center",
+			"name" => "name",
+			"caption" => t("Nimi"),
 		));
 
-		$org_cats = array();
-		foreach($arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_MATRIX_ORG_CAT",
-		)) as $c)
+		foreach(shop_price_list_obj::get_price_lists(array("valid" => automatweb::$request->arg("price_list_span") != "invalid"))->arr() as $o)
 		{
-			$org_cats[] = $c->to();
-			$t->define_field(array(
-				"name" => "org_cat".$c->prop("to"),
-				"caption" => $c->to()->name(),
-				"align" => "center",
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
 			));
 		}
-		$t->set_sortable(false);
+	}
 
-		$data = array();
-		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT,
-			"site_id" => array(),
-			"lang_id" => array(),
-			"pricelist" => $arr["obj_inst"]->id(),
+	public function _get_price_lists_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_item(0, array(
+			"id" => "valid",
+			"name" => t("Kehtivad"),
+			"reload" => array(
+				"layouts" => array("price_lists_split"),
+				"params" => array("price_list_span" => "valid"),
+			),
 		));
-		foreach($ol->arr() as $o)
+		$t->add_item(0, array(
+			"id" => "invalid",
+			"name" => t("Aegunud"),
+			"reload" => array(
+				"layouts" => array("price_lists_split"),
+				"params" => array("price_list_span" => "invalid"),
+			),
+		));
+		$id = automatweb::$request->arg("price_list_span");
+		$t->set_selected_item(!empty($id) ? $id : "valid");
+	}
+
+	public function _get_matrix_col_order($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center",
+			"sorting_field" => "order_num",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Veeru grupp"),
+		));
+
+		$data = $arr["obj_inst"]->meta("matrix_col_order");
+
+		foreach(array_keys($this->matrix_structure["cols"]) as $col)
 		{
-			$data[$o->prop("crm_category")][$o->prop("prod_category")] = $o->prop("discount");
+			$t->define_data(array(
+				"order" => html::textbox(array(
+					"name" => "matrix_col_order[$col]",
+					"value" => ifset($data, $col),
+					"size" => 5,
+				)),
+				"order_num" => ifset($data, $col),
+				"name" => $this->col_types[$col],
+			));
 		}
 
-		foreach($arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_MATRIX_CATEGORY",
-		)) as $c)
-		{
-			$t_data = array();
-			foreach($org_cats as $o)
-			{
-				$t_data["org_cat".$o->id()] = html::textbox(array(
-					"name" => "discount[".$o->id()."][".$c->prop("to")."]",
-					"value" => $data[$o->id()][$c->prop("to")],
-					"size" => 5,
-				));
-			}
-			$t_data["prod_cat"] = $c->to()->name();
-			$t->define_data($t_data);
-		}
+		$t->set_default_sortby("order");
+	}
+
+	public function _set_matrix_col_order($arr)
+	{
+		asort($arr["prop"]["value"]);
+		$arr["obj_inst"]->set_meta("matrix_col_order", $arr["prop"]["value"]);
+	}
+
+	public function _get_matrix_rows($arr)
+	{
+		$arr["prop"]["value"] = $arr["obj_inst"]->prop("matrix_rows");
+		$arr["prop"]["options"] = array(
+			0 => t("Tootegrupid"),
+			1 => t("Tootegrupid koos toodetega"),
+		);
 	}
 
 	function callback_mod_reforb($arr)
@@ -294,16 +584,6 @@ class shop_price_list extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["add_crm_cat"] = "";
 		$arr["add_prod_cat"] = "";
-	}
-
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
 	}
 
 	function do_db_upgrade($t, $f)
@@ -316,15 +596,19 @@ class shop_price_list extends class_base
 		$ret = false;
 		switch($f)
 		{
+			case "aw_owner":
+			case "aw_matrix_cols":
 			case "valid_from":
 			case "valid_to":
 			case "base_price":
+			case "aw_matrix_advanced":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
 				));
 				$ret = true;
 				break;
+
 			case "groups":
 			case "orgs":
 			case "persons":
@@ -335,6 +619,14 @@ class shop_price_list extends class_base
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(255)"
+				));
+				$ret = true;
+				break;
+
+			case "aw_code":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "text"
 				));
 				$ret = true;
 				break;
@@ -350,6 +642,146 @@ class shop_price_list extends class_base
 				$this->db_query("ALTER TABLE aw_shop_price_list ADD INDEX(".$f.")");
 		}
 		return $ret;
+	}
+
+	/**
+		@attrib params=name api=1
+
+		@param table_inst required type=object
+		@param obj_inst required type=object
+		@param column_types required type=array
+		@param matrix_data required type=array
+		@param field_callback optional type=callback
+		@param data_cell_callback optional type=callback
+		@param data_callback optional type=callback
+	**/
+	public static function draw_matrix($arr)
+	{
+		$t = &$arr["table_inst"];
+		$arr["matrix"] = shop_price_list_obj::get_matrix_structure($arr["obj_inst"]);
+
+		// Otherwise the matrix goes too MAD! -kaarel 13.07.2009
+		$depth = 3;
+
+		### COLS
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Toode/tootekategooria"),
+		));
+		$t->define_field(array(
+			"name" => "default",
+			"caption" => t("*"),
+			"tooltip" => t("Vaikimisi"),
+		));
+		if(!empty($arr["field_callback"]) && is_callable($arr["field_callback"]))
+		{
+			$arr["field_callback"][0]->$arr["field_callback"][1](&$t, "default");
+		}
+
+		foreach($arr["column_types"] as $name => $caption)
+		{
+			$t->define_field(array(
+				"name" => $name,
+				"caption" => $caption,
+			));
+		}
+
+		$oids = array();
+		foreach($arr["column_types"] as $name => $caption)
+		{
+			foreach(safe_array($arr["matrix"]["cols"][$name]) as $id => $children)
+			{
+				self::draw_matrix_add_col(&$t, &$oids, $name, $id, $children, ifset($arr, "field_callback"), array(
+					"sufix" => "_self",
+					"caption" => t("*"),
+					"tooltip" => t("K&otilde;ik \"%s\" kliendid"),
+					"align" => "center",
+				));
+			}
+		}
+
+		// Assign col captions
+		if(count($oids) > 0)
+		{
+			$ol = new object_list(array(
+				"oid" => $oids,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			$names = $ol->names();
+
+			foreach($t->get_defined_fields() as $v)
+			{
+				$id = substr($v["name"], strrpos($v["name"], "_") +1);
+				if(isset($names[$id]))
+				{
+					$v["caption"] = $names[$id];
+					$t->update_field($v);
+				}
+			}
+		}
+
+		#### ROWS
+		$arr["matrix_data"] = safe_array($arr["matrix_data"]);
+		self::draw_matrix_add_row($t, safe_array($arr["matrix"]["rows"]["product_categories"]), $arr, 0);
+
+		$t->set_sortable(false);
+	}
+
+	protected static function draw_matrix_add_row($t, $rows, $arr, $depth)
+	{
+		foreach($rows as $row => $subrows)
+		{
+			$data = array();
+			foreach($t->get_defined_fields() as $field)
+			{
+				$data[$field["name"]] = is_callable($arr["data_cell_callback"]) ? $arr["data_cell_callback"][0]->$arr["data_cell_callback"][1]($row, $field, $arr["matrix_data"]) : "";
+			}
+			$data["name"] = str_repeat("&nbsp; ", $depth * 2).html::img(array(
+				"url" => icons::get_icon_url($arr["matrix"]["clids"][$row]),
+				"border" => 0
+			))."&nbsp;".parse_obj_name($arr["matrix"]["names"][$row]);
+			if(!empty($data_callback) && is_callable($arr["data_callback"]))
+			{
+				$arr["data_callback"][0]->$arr["data_callback"][1](&$t, &$data);
+			}
+			$t->define_data($data);
+			self::draw_matrix_add_row($t, $subrows, $arr, $depth +1);
+		}
+	}
+
+	protected static function draw_matrix_add_col($t, $oids, $parent, $id, $children, $callback, $all_field = false)
+	{
+		$name = $parent."_".$id;
+		$t->define_field(array(
+			"name" => $name,
+			"parent" => $parent,
+		));
+		$oids[$id] = $id;
+		if(count($children))
+		{
+			if($all_field !== false)
+			{
+				$all_field["name"] = $name.ifset($all_field, "sufix");
+				$all_field["caption"] = sprintf($all_field["caption"], parse_obj_name(obj($id)->name()));
+				$all_field["tooltip"] = sprintf($all_field["tooltip"], parse_obj_name(obj($id)->name()));
+				$all_field["parent"] = $name;
+				$t->define_field($all_field);
+				if(is_callable($callback))
+				{
+					$callback[0]->$callback[1]($t, $name."_self");
+				}
+			}
+			foreach($children as $id => $children)
+			{
+				self::draw_matrix_add_col(&$t, &$oids, $name, $id, $children, $callback, $all_field);
+			}
+		}
+		elseif(is_callable($callback))
+		{
+			$callback[0]->$callback[1](&$t, $name);
+		}
 	}
 }
 

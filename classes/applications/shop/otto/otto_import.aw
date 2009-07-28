@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.107 2009/07/21 13:28:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.108 2009/07/28 09:38:23 markop Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -268,10 +268,16 @@
 	@property del_prods_by_filename_info type=text store=no group=delete
 	@caption Info
 
-groupinfo post_import_fix caption="Parandused"
+@groupinfo products_xml caption="[dev] Toodete XML"
+@default group=products_xml
 
-	property do_fixes type=checkbox ch_value=1 method=serialize field=meta group=post_import_fix
-	caption Soorita parandus
+	@property csv_files_location type=textbox field=meta method=serialize
+	@caption CSV failid
+
+	@property xml_file_link type=text 
+	@caption Genereeritud XML fail
+
+	@property csv_files_list type=table no_caption=1
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
@@ -284,7 +290,7 @@ groupinfo post_import_fix caption="Parandused"
 define('BIG_PICTURE', 1);
 define('SMALL_PICTURE', 2);
 
-class otto_import extends class_base
+class otto_import extends class_base implements warehouse_import_if
 {
 	var $not_found_products = array();
 
@@ -298,7 +304,7 @@ class otto_import extends class_base
 
 	function get_property($arr)
 	{
-		if($_GET["kaarel"] == 1)
+		if(isset($_GET['kaarel']) && $_GET["kaarel"] == 1)
 		{
 			$this->kaarel($arr);
 			die();
@@ -311,11 +317,14 @@ class otto_import extends class_base
 				$prop['value'] = nl2br($arr['obj_inst']->prop('fnames'));
 				break;
 			case "last_import_log":
-				if ($_GET['dragut']){
+				if (!empty($_GET['dragut'])){
 					$this->clean_up_otto_prod_img_table();
 					die();
 				}
-				$prop["value"] = join("<br>\n", @file(aw_ini_get("site_basedir")."/files/import_last_log.txt"));
+				if (file_exists(aw_ini_get("site_basedir")."/files/import_last_log.txt"))
+				{
+					$prop["value"] = join("<br>\n", @file(aw_ini_get("site_basedir")."/files/import_last_log.txt"));
+				}
 				break;
 			case "products_count":
 				$ol = new object_list(array(
@@ -537,7 +546,7 @@ class otto_import extends class_base
 
 	function callback_mod_layout($arr)
 	{
-		if ($arr['name'] == 'vbox_products_manager_search' && $this->can('view', $arr['request']['products_manager_prod_id']))
+		if ($arr['name'] == 'vbox_products_manager_search' && isset($arr['request']['products_manager_prod_id']) && $this->can('view', $arr['request']['products_manager_prod_id']))
 		{
 			return false;
 		}
@@ -546,7 +555,7 @@ class otto_import extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		if ( $_GET['container_id'] && ($arr['group'] == 'containers') )
+		if ( isset($_GET['container_id']) && $_GET['container_id'] && ($arr['group'] == 'containers') )
 		{
 			$arr['container_id'] = (int)$_GET['container_id'];
 		}
@@ -561,14 +570,15 @@ class otto_import extends class_base
 
 		////
 		// products manager
-		if ($arr['request']['products_search'])
+		if (!empty($arr['request']['products_search']))
 		{
 			$arr['args']['products_manager_pcode'] = $arr['request']['products_manager_pcode'];
 			$arr['args']['products_manager_prod_page'] = $arr['request']['products_manager_prod_page'];
 			$arr['args']['products_manager_prod_image'] = $arr['request']['products_manager_prod_image'];
 			$arr['args']['products_search'] = $arr['request']['products_search'];
 		}
-		$product_id = (int)$arr['request']['products_manager_prod_id'];
+		
+		$product_id = (isset($arr['request']['product_manager_prod_id'])) ? (int)$arr['request']['products_manager_prod_id'] : '';
 		if ( $this->can('view', $product_id) )
 		{
 			$product_obj = new object($product_id);
@@ -5009,6 +5019,7 @@ class otto_import extends class_base
 		$len = strlen($filestr);
 		$linearr = array();
 		$in_cell = false;
+		$line = '';
 		for ($pos=0; $pos < $len; $pos++)
 		{
 			if ($filestr[$pos] == "\"")
@@ -5051,7 +5062,9 @@ class otto_import extends class_base
 				$line = "";
 			}
 			else
-				$line.=$filestr[$pos];
+			{
+				$line .= $filestr[$pos];
+			}
 		}
 
 		if (trim($line) != "")
@@ -6320,8 +6333,8 @@ class otto_import extends class_base
 
 	/**
 		@attrib name=clear_discount_products
-		@param id optional int
-		@param lang_id optional int
+		@param id optional type=int
+		@param lang_id optional type=int
 	**/
 	function clear_discount_products($args)
 	{
@@ -6588,6 +6601,193 @@ class otto_import extends class_base
 			print $b." -- ".ord($b)."<br>";
 		}
 	}
+
+	public function _get_xml_file_link($arr)
+	{
+		$url = $this->mk_my_orb('get_products_xml', array('id' => $arr['obj_inst']->id()));
+		$arr['prop']['value'] = html::href(array(
+			'url' => $url,
+			'caption' => $url
+		));
+	}
+
+	public function _get_csv_files_list($arr)
+	{
+		/*
+			I probably need to build here somekind of interface where it is possible to choose which files will be imported
+		*/
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'csv_file',
+			'caption' => t('CSV fail')
+		));
+		$t->define_field(array(
+			'name' => 'xml_file',
+			'caption' => t('XML fail')
+		));
+		$folder = $arr['obj_inst']->prop('csv_files_location');
+
+		$files = glob($folder.'/*.xls');
+
+		$page_files = array();
+		foreach ($files as $file)
+		{
+			$filename = basename($file, '.xls');
+
+			$parts = explode('-', $filename);
+			if (count($parts) == 2)
+			{
+				$page = $parts[0];
+				$page_nr = $parts[1];
+				$page_files[$page][$page_nr] = $filename;
+			}
+		}
+
+		foreach ($page_files as $page => $files)
+		{
+			$t->define_data(array(
+				'csv_file' => $page .'(' . implode(',', array_keys($files)) . ')'
+			));
+		}
+	}
+
+        /**
+                @attrib name=get_products_xml
+        **/
+	public function get_products_xml()
+	{
+		$xml_file_path = aw_ini_get('site_basedir').'/files/warehouse_import/products.xml';
+		// This is for warehouse import to get the XML file which the warehouse import will be able to import 
+
+		// this is very temporary thing here - I need to have the otto import object id here, so i can get the configured CSV files or the location of csv files
+		$o = new object(354877);
+		$this->import_data_from_csv($o);
+
+		$oxml = new XMLWriter();
+	//	$oxml->openMemory();
+		$oxml->openURI($xml_file_path);
+		$oxml->startDocument();
+		$oxml->startElement('warehouse_data');
+
+		$prods = $this->db_fetch_array("select * from otto_imp_t_prod where lang_id = ".aw_global_get('lang_id')." order by pg,nr");
+		foreach ($prods as $prod)
+		{
+			$prod = $this->convert_utf($prod);
+
+			$oxml->startElement('packet');
+			$oxml->writeElement('page', $prod['pg']);
+			$oxml->writeElement('nr', $prod['nr']);
+			$oxml->endElement();
+
+			$oxml->startElement('name');
+			$oxml->writeCData($prod['title']);
+			$oxml->endElement();
+
+			$oxml->startElement('description');
+			$oxml->writeCData($prod['c']);
+			$oxml->endElement();
+
+			echo "- ".$prod['pg'].' -- '.$prod['nr'].' -- '.$prod['title']."<br />\n";
+			$codes = $this->db_fetch_array("select * from otto_imp_t_codes where lang_id = ". aw_global_get("lang_id")." and pg = '". $prod["pg"]."' and nr = ".$prod["nr"]." order by pg,nr,s_type" );
+			foreach (safe_array($codes) as $code)
+			{
+
+				$code = $this->convert_utf($code);
+
+				$oxml->startElement('product');
+
+				$oxml->writeElement('page', $code['pg']);
+
+				$oxml->writeElement('nr', $code['nr']);
+
+				$oxml->startElement('type');
+				$oxml->writeCData($code['s_type']);
+				$oxml->endElement();
+
+				$oxml->startElement('color');
+				$oxml->writeCData($code['color']);
+				$oxml->endElement();
+
+				$oxml->startElement('code');
+				$oxml->writeCData($code['code']);
+				$oxml->endElement();
+
+				$oxml->endElement();
+
+				echo "---- ".$code['pg']." -- ".$code['nr']." -- ".$code['s_type']." -- ".$code['code']." -- ".$code['color']."<br />\n";
+				$sizes = $this->db_fetch_array("select * from otto_imp_t_prices where lang_id = ".aw_global_get("lang_id")." and pg = '".$code['pg']."' and nr = ".$code['nr']." and s_type = '".$code['s_type']."' order by pg,nr,s_type");
+				foreach ($sizes as $size)
+				{
+
+					$size = $this->convert_utf($size);
+
+					echo "-------- ".$size['pg']." -- ". $size['nr'] ." -- ".$size['s_type']." -- ".$size['price'].".- -- ".$size['size']." -- ".$size['unit']."<br />\n";
+					$tmp = explode(',', $size['size']);
+					foreach ($tmp as $s)
+					{
+						$oxml->startElement('packaging');
+
+						$oxml->writeElement('page', $code['pg']);
+
+						$oxml->writeElement('nr', $code['nr']);
+
+						$oxml->startElement('type');
+						$oxml->writeCData($code['s_type']);
+						$oxml->endElement();
+
+						$oxml->writeElement('price', $size['price']);
+						
+						$oxml->startElement('size');
+						$oxml->writeCData($s);
+						$oxml->endElement();
+
+						$oxml->endElement();
+
+						echo "------------ ".$s."<br />\n";
+					}
+				}
+			}
+		}
+
+		$oxml->endElement();
+
+		return $xml_file_path;
+
+	//	arr(htmlentities($oxml->outputMemory()));
+		/*
+		$csv_files = array(
+			'EST.AA001',
+			'EST.AA004',
+			'EST.AA006',
+			'EST.AA008'
+		);
+		$csv_files_location = '/www/otto.dev.automatweb.com/files/csv';
+		*/
+	}
+
+	function convert_utf($arr)
+	{
+		foreach ($arr as $k => $v)
+		{
+			$arr[$k] = utf8_encode($v);
+		}
+		return $arr;
+	}
+
+	function parse_csv_file($file)
+	{
+		
+	}
+
+	// for warehouse interface:
+	public function get_warehouse_list(){}
+	public function get_pricelist_xml(){}
+	public function get_prices_xml(){}
+	public function get_dnotes_xml(){}
+	public function get_amounts_xml($wh_id = null){}
+	public function get_bills_xml($wh_id = null){}
 }
 
 ?>

@@ -3,37 +3,49 @@
 // shop_order_cart.aw - Poe ostukorv
 /*
 
-@classinfo syslog_type=ST_SHOP_ORDER_CART relationmgr=yes no_status=1 maintainer=kristo
+@classinfo syslog_type=ST_SHOP_ORDER_CART relationmgr=yes prop_cb=1 no_status=1 maintainer=kristo
 
 @default table=objects
 @default group=general
 
-@property prod_layout type=relpicker reltype=RELTYPE_PROD_LAYOUT field=meta method=serialize
-@caption Kujundus, mida korvis kasutatakse
+	@property prod_layout type=relpicker reltype=RELTYPE_PROD_LAYOUT field=meta method=serialize
+	@caption Kujundus, mida korvis kasutatakse
 
-@property postal_price type=textbox field=meta method=serialize size=5
-@caption Postikulu (liidetakse korvi hinnale)
+	@property email_subj type=textbox field=meta method=serialize
+	@caption Tellimuse e-maili subjekt
 
-@property email_subj type=textbox field=meta method=serialize
-@caption Tellimuse e-maili subjekt
+	@property postal_price type=textbox field=meta method=serialize size=5
+	@caption Vaikimisi postikulu
 
-@property subject_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
-@caption Subjekti kontroller
+	@property subject_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
+	@caption Subjekti kontroller
 
-@property update_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
-@caption Korvi uuendamise kontroller
+	@property update_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
+	@caption Korvi uuendamise kontroller
 
-@property finish_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
-@caption Tellimise kontroller
+	@property finish_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
+	@caption Tellimise kontroller
 
-@property order_show_controller type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
-@caption Tellimuse n&auml;itamise kontroller
+	@property order_show_controller type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
+	@caption Tellimuse n&auml;itamise kontroller
+
+@groupinfo delivery_methods caption="K&auml;ttetoimetamise viisid"
+@default group=delivery_methods
+
+	@property delivery_method_add type=hidden table=objects field=meta method=serialize
+	@property delivery_method_tlb type=toolbar store=no no_caption=1
+	@property delivery_method_tbl type=table store=no no_caption=1
+
+### RELTYPES
 
 @reltype PROD_LAYOUT value=1 clid=CL_SHOP_PRODUCT_LAYOUT
 @caption toote kujundus
 
 @reltype CONTROLLER value=2 clid=CL_FORM_CONTROLLER
 @caption kontroller
+
+@reltype DELIVERY_METHOD value=3 clid=CL_SHOP_DELIVERY_METHOD
+@caption K&auml;ttetoimetamise viis
 
 */
 
@@ -46,30 +58,105 @@ class shop_order_cart extends class_base
 			"clid" => CL_SHOP_ORDER_CART
 		));
 	}
-	/*
 
-	function get_property($arr)
+	public function _get_delivery_method_tlb($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
+		$t = &$arr["prop"]["vcl_inst"];
+		if($this->can("add", $arr["obj_inst"]->id()))
 		{
-
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-
+			$t->add_new_button(array(CL_SHOP_DELIVERY_METHOD), $arr["obj_inst"]->id(), 3);
 		}
-		return $retval;
+		$t->add_save_button();
+		$t->add_search_button(array(
+			"pn" => "delivery_method_add",
+			"clid" => CL_SHOP_DELIVERY_METHOD
+		));
+		$t->add_delete_rels_button();
 	}
-	*/
+
+	public function _get_delivery_method_add($arr)
+	{
+		$arr["prop"]["value"] = "";
+	}
+
+	public function _set_delivery_method_add($arr)
+	{
+		$o = obj(automatweb::$request->arg("id"));
+		foreach(explode(",", $arr["prop"]["value"]) as $id)
+		{
+			$o->connect(array(
+				"to" => $id,
+				"type" => "RELTYPE_DELIVERY_METHOD",
+			));
+		}
+	}
+
+	public function _get_delivery_method_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser();
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+			"sortable" => true,
+			"sorting_field" => "jrk_num",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"sortable" => true,
+		));
+
+		$t->data_from_ol(new object_list(array(
+			"class_id" => CL_SHOP_DELIVERY_METHOD,
+			"CL_SHOP_DELIVERY_METHOD.RELTYPE_DELIVERY_METHOD(CL_SHOP_ORDER_CART)" => $arr["obj_inst"]->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
+		)), array("change_col" => "name"));
+
+		$opts = shop_delivery_method::get_type_options();
+		foreach($t->get_data() as $id => $row)
+		{
+			if(!empty($opts[$row["type"]]))
+			{
+				$row["type"] = $opts[$row["type"]];
+			}
+			$row["jrk_num"] = $row["jrk"];
+			$row["jrk"] = html::textbox(array(
+				"name" => "delivery_method_tbl[".$row["oid"]."][jrk]",
+				"value" => $row["jrk"],
+				"size" => 4,
+			));
+			$t->set_data($id, $row);
+		}
+
+		$t->set_default_sortby("jrk_num");
+	}
+
+	public function _set_delivery_method_tbl($arr)
+	{
+		foreach($arr["prop"]["value"] as $oid => $data)
+		{
+			$o = obj($oid);
+			$o->set_ord($data["jrk"]);
+			$o->save();
+		}
+	}
+
+	public function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
 
 	function get_cart($oc)
 	{

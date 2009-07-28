@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.84 2009/04/09 08:39:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.85 2009/07/28 09:38:19 markop Exp $
 // shop_order.aw - Tellimus
 /*
 
@@ -1485,6 +1485,11 @@ class shop_order extends class_base
 //			$o->set_meta("mail_sent" , 1);
 			$o->save();
 			aw_restore_acl();
+		}
+
+		if($arr["do_not_die"])
+		{
+			return;
 		}
 
 		if(is_oid($o->meta("bank_payment_id")))

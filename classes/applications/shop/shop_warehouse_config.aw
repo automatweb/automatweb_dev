@@ -63,6 +63,9 @@
 			@property arrival_company_folder type=relpicker reltype=RELTYPE_ARRIVAL_COMPANY_FOLDER multiple=1 size=3 field=meta method=serialize parent=left
 			@caption Tarnefirmade kaust
 
+			@property show_purveyance type=checkbox parent=left
+			@caption Kuva tarnijaid
+
 		@layout right type=vbox area_caption=Kaustad closeable=1 parent=split
 
 			@property prod_fld type=relpicker reltype=RELTYPE_FOLDER parent=right

@@ -1,10 +1,31 @@
 <?php
 /*
-@classinfo syslog_type=ST_SHOP_PRICE_LIST_CONDITION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=instrumental
+@classinfo syslog_type=ST_SHOP_PRICE_LIST_CONDITION relationmgr=yes no_name=1 no_comment=1 no_status=1 prop_cb=1 maintainer=instrumental
 @tableinfo aw_shop_price_list_condition master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_shop_price_list_condition
 @default group=general
+
+	@property jrk type=textbox size=4 table=objects
+	@caption J&auml;rjekorra number
+
+	@property price_list type=hidden field=aw_price_list
+	@caption Hinnakiri
+
+	@property row type=hidden field=aw_row
+	@caption Rida
+
+	@property col type=hidden field=aw_col
+	@caption Veerg
+
+	@property type type=select field=aw_type
+	@caption T&uuml;&uuml;p
+
+	@property value type=textbox size=5 field=aw_value
+	@caption V&auml;&auml;rtus
+
+	@property bonus type=textbox size=5 field=aw_bonus
+	@caption Boonus
 
 */
 
@@ -18,28 +39,15 @@ class shop_price_list_condition extends class_base
 		));
 	}
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
+	public function _get_type($arr)
+	{		
+		$options = array(t("Auto"));
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRICE_LIST_CONDITION_TYPE,
+		));
+		$options = $options + $ol->names();
 
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
+		$arr["prop"]["options"] = $options;
 	}
 
 	function callback_mod_reforb($arr)
@@ -67,10 +75,21 @@ class shop_price_list_condition extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_price_list":
+			case "aw_row":
+			case "aw_col":
+			case "aw_type":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
+				));
+				return true;
+
+			case "aw_value":
+			case "aw_bonus":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(30)"
 				));
 				return true;
 		}

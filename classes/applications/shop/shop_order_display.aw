@@ -6,6 +6,12 @@
 @default table=aw_shop_order_display
 @default group=general
 
+	@property warehouse_list type=relpicker reltype=RELTYPE_WAREHOUSE multiple=1 store=connect
+	@caption Laod, kust tellimusi n&auml;idatakse
+
+@reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
+@caption Ladu
+
 */
 
 class shop_order_display extends class_base
@@ -51,8 +57,54 @@ class shop_order_display extends class_base
 	{
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
+
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_SELL_ORDER,
+			"purchaser" => "%",
+			"limit" => 10,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+
+		$t = new aw_table();
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center"
+		));
+
+		foreach($ol->arr() as $item)
+		{
+			$sum = 0;
+			foreach($item->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+			{
+				$tp = $c->to();
+				$sum += $tp->price * $tp->prop("amount");
+			}
+			$t->define_data(array(
+				"name" => html::href(array(
+					"url" => $this->mk_my_orb("show", array("id" => $item->id()), "shop_sell_order"),
+					"caption" => $item->name()
+				)),
+				"date" => $item->date,
+				"sum" => $sum
+			));
+		}
+
 		$this->vars(array(
-			"name" => $ob->prop("name"),
+			"table" => $t->draw(),
 		));
 		return $this->parse();
 	}

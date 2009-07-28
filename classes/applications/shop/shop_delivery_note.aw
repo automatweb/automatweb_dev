@@ -10,8 +10,11 @@
 	@property number type=textbox
 	@caption Number
 
+	@property enter_date type=date_select
+	@caption Sisestamise kuup&auml;ev
+
 	@property delivery_date type=date_select
-	@caption Kuup&auml;ev
+	@caption Kohaletoimetamise kuup&auml;ev
 
 	@property from_warehouse type=relpicker reltype=RELTYPE_FROM_WAREHOUSE
 	@caption Laost
@@ -37,7 +40,10 @@
 	@property writeoff type=checkbox ch_value=1
 	@caption Mahakandmine
 
-	@property approved type=checkbox ch_value=1
+	@property state type=select field=aw_state
+	@caption Staatus
+
+	@property approved type=hidden
 	@caption Kinnitatud
 
 	@property articles_tb store=no no_caption=1 type=toolbar
@@ -835,6 +841,7 @@ class shop_delivery_note extends class_base
 				break;
 
 			case "delivery_date":
+			case "enter_date":
 			case "from_warehouse":
 			case "to_warehouse":
 			case "currency":
@@ -842,6 +849,7 @@ class shop_delivery_note extends class_base
 			case "customer":
 			case "impl":
 			case "writeoff":
+			case "aw_state":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int",
@@ -874,6 +882,16 @@ class shop_delivery_note extends class_base
 			$o->save();
 		}
 		die();
+	}
+
+	function _get_state($arr)
+	{
+		$arr["prop"]["options"] = array(
+			0 => t("Koostamisel"),
+			1 => t("L&otilde;petatud"),
+			2 => t("Koostatud"),
+			3 => t("Katkestatud")
+		);
 	}
 
 	/**

@@ -327,6 +327,22 @@ class shop_product_obj extends _int_object
 		return $ol->ids();
 	}
 
+	/** removes product from all categories
+		@attrib api=1
+		@returns true
+	**/
+	public function remove_categories()
+	{
+		$conns = $this->connections_from(array(
+			'type' => 'RELTYPE_CATEGORY'
+		));
+		foreach ($conns as $conn)
+		{
+			$conn->delete();
+		}
+		return true;
+	}
+
 	/** adds product to category
 		@attrib api=1 params=pos
 		@param cat optional type=oid

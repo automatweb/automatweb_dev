@@ -28,6 +28,11 @@ class shop_order_obj extends _int_object
 		}
 		return number_format($sum, 2);
 	}
+
+	function payment_marked()
+	{
+		return $o->prop("confirmed");
+	}
 }
 
 ?>

@@ -635,8 +635,13 @@ class warehouse_import_obj extends _int_object
 
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->product);
+<<<<<<< warehouse_import_obj.aw
+
+		$this->_update_status("prices", warehouse_import_if::STATE_PROCESSING, null, 0, $total); 
+=======
 
 		$this->_update_status("prices", warehouse_import_if::STATE_PROCESSING, null, 0, $total);
+>>>>>>> 1.8
 
 		// process
 		$this->_do_prices_import_process($sx);
@@ -1073,6 +1078,10 @@ flush();
 			$counter++;
 		}
 
+<<<<<<< warehouse_import_obj.aw
+		// finish
+		$this->_end_import("products", $wh_id);
+=======
 
 		$this->_end_import("products", $wh_id);
 
@@ -1080,6 +1089,7 @@ flush();
 		// update existing
 		// delete old
 
+>>>>>>> 1.8
 	}
 
 	public function process_prods_chunk($file)

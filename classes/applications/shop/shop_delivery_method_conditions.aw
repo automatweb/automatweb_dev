@@ -6,6 +6,25 @@
 @default table=aw_shop_delivery_method_conditions
 @default group=general
 
+	## This sucks! I really don't want to use connections here due to speed issues, but I can't see any other way today. -kaarel 14.07.2009
+	#property delivery_method type=hidden field=aw_delivery_method
+	@property delivery_method type=relpicker reltype=RELTYPE_DELIVERY_METHOD store=connect field=aw_delivery_method
+	@caption K&auml;ttetoimetamise viis
+
+	@property row type=hidden field=aw_row
+	@caption Rida
+
+	@property col type=hidden field=aw_col
+	@caption Veerg
+
+	@property enable type=checkbox ch_value=1 field=aw_enable
+	@caption Lubatud
+
+### RELTYPES
+
+@reltype DELIVERY_METHOD value=1 clid=CL_SHOP_DELIVERY_METHOD
+@caption K&auml;ttetoimetamise viis
+
 */
 
 class shop_delivery_method_conditions extends class_base
@@ -67,10 +86,13 @@ class shop_delivery_method_conditions extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_delivery_method":
+			case "aw_row":
+			case "aw_col":
+			case "aw_enable":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
 				));
 				return true;
 		}

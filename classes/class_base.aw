@@ -3045,7 +3045,7 @@ class class_base extends aw_template
 			}
 			elseif (($val["type"] === "calendar") && (!isset($val["vcl_inst"]) or !is_object($val["vcl_inst"])))
 			{
-				classload("vcl/calendar");
+				classload("vcalendar");
 				$val["vcl_inst"] = new vcalendar();
 			}
 
@@ -6748,6 +6748,21 @@ class class_base extends aw_template
 	public function data_processed_successfully()
 	{
 		return ($this->data_processing_result_status <= 2);
+	}
+
+	/** sets objects order values
+	@attrib api=1 params=pos
+		@param ord required type=array
+			array(object id => order value)
+	**/
+	public function set_order($ord)
+	{
+		foreach($ord as $id => $val)
+		{
+			$o = obj($id);
+			$o->set_ord($val);
+			$o->save();
+		}
 	}
 }
 ?>

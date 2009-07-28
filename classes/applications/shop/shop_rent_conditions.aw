@@ -6,6 +6,36 @@
 @default table=aw_shop_rent_conditions
 @default group=general
 
+	@property valid_from type=date_select field=aw_valid_from
+	@caption Kehtiv alates
+
+	@property valid_to type=date_select field=aw_valid_to
+	@caption Kehtiv kuni
+
+	@property min_amt type=textbox field=aw_min_amt
+	@caption J&auml;relmaksu miinumumsumma
+
+	@property max_amt type=textbox field=aw_max_amt
+	@caption Järelmaksu maksimumsumma
+
+	@property min_payment type=textbox field=aw_min_payment
+	@caption &Uuml;he makse miinimumsumma
+
+	@property prepayment_interest type=textbox field=aw_prepayment_interest
+	@caption Esmase sissemakse protsent
+
+	@property yearly_interest type=textbox field=aw_yearly_interest
+	@caption Aastaintressi protsent
+
+	@property period_min type=textbox field=aw_period_min
+	@caption Minimaalne järelmaksuperioodi pikkus kuudes
+
+	@property period_max type=textbox field=aw_period_max
+	@caption Maksimaalne järelmaksuperioodi pikkus kuudes
+
+	@property period_step type=textbox field=aw_period_step
+	@caption Järelmaksuperioodi samm
+
 */
 
 class shop_rent_conditions extends class_base
@@ -16,30 +46,6 @@ class shop_rent_conditions extends class_base
 			"tpldir" => "applications/shop/shop_rent_conditions",
 			"clid" => CL_SHOP_RENT_CONDITIONS
 		));
-	}
-
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
 	}
 
 	function callback_mod_reforb($arr)
@@ -67,10 +73,25 @@ class shop_rent_conditions extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_valid_to":
+			case "aw_valid_from":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
+				));
+				return true;
+
+			case "aw_min_amt":
+			case "aw_max_amt":
+			case "aw_min_payment":
+			case "aw_prepayment_interest":
+			case "aw_yearly_interest":
+			case "aw_period_min":
+			case "aw_period_max":
+			case "aw_period_step":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "decimal(25,5)"
 				));
 				return true;
 		}

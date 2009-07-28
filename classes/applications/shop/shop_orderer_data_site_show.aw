@@ -37,7 +37,7 @@ class shop_orderer_data_site_show extends class_base
 	{
 		$tm = get_instance("templatemgr");
 		$arr["prop"]["options"] = $tm->template_picker(array(
-			"folder" => $this->site_template_dir
+			"folder" => "applications/shop/shop_orderer_data_site_show",//$this->site_template_dir
 		));
 		if(!(sizeof($arr["prop"]["options"]) > 1))
 		{

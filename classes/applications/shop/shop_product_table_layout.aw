@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.24 2009/05/28 09:53:16 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.25 2009/07/28 09:38:19 markop Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -78,6 +78,7 @@ class shop_product_table_layout extends class_base
 			$tpl = $t->prop("template");
 		}
 		$this->read_template($tpl);
+		$this->colrow_or_rowcol();
 		lc_site_load("shop_order_center", &$this);
 		$soce = new aw_array(aw_global_get("soc_err"));
 		$err = "";
@@ -128,23 +129,110 @@ class shop_product_table_layout extends class_base
 		return true;
 	}
 
+	function add_product($p_html)
+	{
+		$this->product_html[$this->cnt++] = $p_html;
+	}
+
 	/** adds a product to the product table
 	**/
-	function add_product($p_html)
+	function add_product_html($p_html)
 	{
 		if ($this->is_template("PAGE"))
 		{
 			$from = $this->per_page * (int)$_GET["sptlp"];
 			$to = $this->per_page * ((int)$_GET["sptlp"]+1);
 
-			if (!($this->cnt >= $from && $this->cnt < $to))
+			if (!($this->product_html_cnt >= $from && $this->product_html_cnt < $to))
 			{
-				$this->cnt++;
+				$this->product_html_cnt++;
 				return;
 			}
 		}
 
-		if (($this->cnt % $this->t->prop("columns")) == 0)
+		if(empty($this->row_inside_of_col))
+		{
+			if (($this->product_html_cnt % $this->t->prop("columns")) == 0)
+			{
+				$this->r_template = "ROW";
+				if($this->is_template("ROW1"))
+				{
+					if(($this->r_cnt % 2) == 0)
+					{
+						$this->r_template = "ROW2";
+					}
+					else
+					{
+						$this->r_template = "ROW1";
+					}
+				}
+				
+				$this->vars_safe(array(
+					"COL" => $this->t_str
+				));
+				$this->ft_str .= $this->parse($this->r_template);
+				$this->t_str = "";
+				$this->r_cnt++;
+			}
+		}
+		else
+		{
+			if ($this->product_html_cnt > 0 && ($this->product_html_cnt % ceil($this->cnt / $this->t->prop("columns"))) == 0)
+			{
+				$this->r_template = "ROW";
+				if($this->is_template("ROW1"))
+				{
+					if(($this->r_cnt % 2) == 0)
+					{
+						$this->r_template = "ROW2";
+					}
+					else
+					{
+						$this->r_template = "ROW1";
+					}
+				}
+				
+				$this->vars_safe(array(
+					$this->r_template => $this->t_str
+				));
+				$this->ft_str .= $this->parse("COL");
+				$this->t_str = "";
+				$this->r_cnt++;
+			}
+		}
+		
+	
+		$this->vars_safe(array(
+			"product" => $p_html
+		));
+		if(empty($this->row_inside_of_col))
+		{
+			$this->t_str .= $this->parse($this->r_template.".COL");
+		}
+		else
+		{
+			$this->t_str .= $this->parse("COL.".$this->r_template);
+		}
+		$this->product_html_cnt++;
+	}
+
+	/** returns the html for the product table
+	**/
+	function finish_table()
+	{
+		$this->product_html_cnt = 0;
+		foreach($this->product_html as $product_html)
+		{
+			$this->add_product_html($product_html);
+		}
+
+		if(empty($this->row_inside_of_col))
+		{
+			$this->vars_safe(array(
+				"COL" => $this->t_str
+			));
+		}
+		else
 		{
 			$this->r_template = "ROW";
 			if($this->is_template("ROW1"))
@@ -158,29 +246,10 @@ class shop_product_table_layout extends class_base
 					$this->r_template = "ROW1";
 				}
 			}
-			
 			$this->vars_safe(array(
-				"COL" => $this->t_str
+				$this->r_template => $this->t_str
 			));
-			$this->ft_str .= $this->parse($this->r_template);
-			$this->t_str = "";
-			$this->r_cnt++;
 		}
-	
-		$this->vars_safe(array(
-			"product" => $p_html
-		));
-		$this->t_str .= $this->parse($this->r_template.".COL");
-		$this->cnt++;
-	}
-
-	/** returns the html for the product table
-	**/
-	function finish_table()
-	{
-		$this->vars_safe(array(
-			"COL" => $this->t_str
-		));
 
 		$hi = "";
 		if ($this->cnt > 0)
@@ -189,13 +258,13 @@ class shop_product_table_layout extends class_base
 		}
 
 		$so = obj(aw_global_get("section"));
-		if ($so->class_id() != CL_MENU)
+		$prod_tree_clids = count($prod_tree_clids = $this->oc->prop("warehouse.conf.prod_tree_clids")) > 0 ? $prod_tree_clids : array(CL_MENU);
+		if ($so->is_a(CL_SHOP_PRODUCT) || $so->is_a(CL_SHOP_PRODUCT_PACKAGING) || !in_array($so->class_id(), $prod_tree_clids))
 		{
 			$so = obj($so->parent());
 		}
 		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
 		$cart_val = $cart_inst->get_cart_value();
-		$this->ft_str .= $this->parse($this->r_template);
 		$sect = aw_global_get("section");
 		if (aw_ini_get("user_interface.full_content_trans"))
 		{
@@ -219,10 +288,23 @@ class shop_product_table_layout extends class_base
 			$this->_insert_prod_filter($this->oc, $so);
 		}
 
+		if(empty($this->row_inside_of_col))
+		{
+			$this->ft_str .= $this->parse($this->r_template);
+			$this->vars_safe(array(
+				"ROW" => $this->ft_str,
+				"ROW1" => $this->ft_str,
+				"ROW2" => "",
+			));
+		}
+		else
+		{
+			$this->ft_str .= $this->parse("COL");
+			$this->vars_safe(array(
+				"COL" => $this->ft_str,
+			));
+		}
 		$this->vars_safe(array(
-			"ROW" => $this->ft_str,
-			"ROW1" => $this->ft_str,
-			"ROW2" => "",
 			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => $sect, "oc" => $this->oc->id(), "return_url" => aw_global_get("REQUEST_URI")), "shop_order_cart"),
 			"HAS_ITEMS" => $hi,
 			"sel_menu_text" => $so->name(),
@@ -356,6 +438,11 @@ class shop_product_table_layout extends class_base
 			"PROD_FILTER_HEADER" => $fh,
 			"PROD_FILTER_HEADER2" => $fh2,
 		));
+	}
+
+	protected function colrow_or_rowcol()
+	{
+		$this->row_inside_of_col = isset($this->v2_name_map["ROW"]) && substr($this->v2_name_map["ROW"], -7) === "COL.ROW";
 	}
 }
 ?>

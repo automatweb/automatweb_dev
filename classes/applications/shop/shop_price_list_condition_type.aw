@@ -6,6 +6,9 @@
 @default table=aw_shop_price_list_condition_type
 @default group=general
 
+	@property source_code type=textarea field=aw_source_code
+	@caption Kood
+
 */
 
 class shop_price_list_condition_type extends class_base
@@ -18,43 +21,9 @@ class shop_price_list_condition_type extends class_base
 		));
 	}
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-	}
-
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
 	}
 
 	function do_db_upgrade($t, $f)
@@ -67,10 +36,10 @@ class shop_price_list_condition_type extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_source_code":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "text"
 				));
 				return true;
 		}

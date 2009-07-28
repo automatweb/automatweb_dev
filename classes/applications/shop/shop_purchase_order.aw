@@ -356,6 +356,10 @@ class shop_purchase_order extends class_base
 
 	function _get_articles(&$arr)
 	{
+		if($arr["new"])
+		{
+			return PROP_IGNORE;
+		}
 		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_articles_tbl($t);
 		$conn = $arr["obj_inst"]->connections_from(array(

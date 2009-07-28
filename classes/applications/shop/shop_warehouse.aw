@@ -4715,45 +4715,48 @@ class shop_warehouse extends class_base
 			{
 				$levels += (int)$this->get_warehouse_configs($arr, "alternative_unit_levels");
 			}
-			foreach($arr["warehouses"] as $wh)
+			if(isset($arr["warehouses"]))//kust see yldse peaks tulema?
 			{
-				if(!$this->can("view", $wh))
+				foreach($arr["warehouses"] as $wh)
 				{
-					continue;
-				}
-				for($i = 0; $i <= $levels; $i++)
-				{
+					if(!$this->can("view", $wh))
+					{
+						continue;
+					}
+					for($i = 0; $i <= $levels; $i++)
+					{
+						if(count($arr["warehouses"]) == 1)
+						{
+							$cp = $i?sprintf(t("Kogus %s"),$i+1):t("Kogus");
+						}
+						else
+						{
+							$who = obj($wh);
+							$cp = $i?sprintf(t("%s kogus %s"), $who->name(), $i+1):sprintf(t("%s kogus"), $who->name());
+						}
+						$t->define_field(array(
+							"sortable" => 1,
+							"name" => "amount_".$wh."_".$i,
+							"caption" => $cp,
+							"align" => "center"
+						));
+					}
 					if(count($arr["warehouses"]) == 1)
 					{
-						$cp = $i?sprintf(t("Kogus %s"),$i+1):t("Kogus");
+						$cp = t("Saldo");
 					}
 					else
 					{
 						$who = obj($wh);
-						$cp = $i?sprintf(t("%s kogus %s"), $who->name(), $i+1):sprintf(t("%s kogus"), $who->name());
+						$cp = sprintf(t("%s saldo"), $who->name());
 					}
 					$t->define_field(array(
 						"sortable" => 1,
-						"name" => "amount_".$wh."_".$i,
+						"name" => "saldo_".$wh,
 						"caption" => $cp,
-						"align" => "center"
+						"align" => "center",
 					));
 				}
-				if(count($arr["warehouses"]) == 1)
-				{
-					$cp = t("Saldo");
-				}
-				else
-				{
-					$who = obj($wh);
-					$cp = sprintf(t("%s saldo"), $who->name());
-				}
-				$t->define_field(array(
-					"sortable" => 1,
-					"name" => "saldo_".$wh,
-					"caption" => $cp,
-					"align" => "center",
-				));
 			}
 		}
 
@@ -6710,7 +6713,7 @@ class shop_warehouse extends class_base
 		@attrib name=copy_products params=name all_args=1
 	**/
 	function copy_products($arr)
-	{arr($arr);
+	{
 		$_SESSION["shop_warehouse"]["cut_products"] = null;
 		$_SESSION["shop_warehouse"]["copy_products"] = $arr["sel"];
 		return $arr["post_ru"];
@@ -6721,6 +6724,29 @@ class shop_warehouse extends class_base
 	**/
 	function paste_products($arr)
 	{
+		$cats = $this->get_categories_from_search($arr);
+
+		if(sizeof($cats))
+		{
+			foreach(safe_array(ifset($_SESSION, "shop_warehouse", "cut_products")) as $id)
+			{
+				$o = obj($id);
+				$o->remove_categories();
+				foreach($cats as $cat)
+				{
+					$o->add_category($cat);
+				}
+			}
+			foreach(safe_array(ifset($_SESSION, "shop_warehouse", "copy_products")) as $id)
+			{
+				$o = obj($id);
+				foreach($cats as $cat)
+				{
+					$o->add_category($cat);
+				}
+			}
+		}
+
 		if(is_oid($arr["parent"]) && $this->can("add" , $arr["parent"]))
 		{
 			foreach(safe_array(ifset($_SESSION, "shop_warehouse", "cut_products")) as $id)
@@ -7090,6 +7116,15 @@ class shop_warehouse extends class_base
 						reload_property('category_list');
 					}
 				);
+			}
+			function save_categories()
+			{
+				result = $('input[name^=ord]');
+				$.get('/automatweb/orb.aw?class=shop_warehouse&action=save_categories&id=".$arr["obj_inst"]->id()."& ' + result.serialize(), {
+						}, function (html) {
+							reload_property('category_list');
+						}
+					);
 			}
 			";
 		}
@@ -11274,7 +11309,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		$caption = sprintf(t('Lao "%s" tootekategooriad'), $arr["obj_inst"] -> name());
 
-		if($this->can("view" , $arr["request"]["cat"]))
+		if(isset($arr["request"]["cat"]) && $this->can("view" , $arr["request"]["cat"]))
 		{
 			$object = obj($arr["request"]["cat"]);
 			switch($object->class_id())
@@ -11290,7 +11325,9 @@ $oo = get_instance(CL_SHOP_ORDER);
 				case CL_MENU:
 					$ol= new object_list(array(
 						"parent" => $object->id(),
-						"class_id" => CL_SHOP_PRODUCT_CATEGORY
+						"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+						"sort_by" => "jrk asc, name asc",
+						"lang_id" => array(),
 					));
 					$caption = sprintf(t('Lao "%s" tootet&uuml;&uuml;bid'), $arr["obj_inst"] -> name());
 					break;
@@ -11350,6 +11387,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$cats = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 			"parent" => $prod_folder,
+			"sort_by" => "jrk asc, name asc",
 		));
 
 		foreach($cats->arr() as $id => $cat)
@@ -11448,7 +11486,8 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"name" => "save",
 			"img" => "save.gif",
 			"text" => t("Salvesta kategooriad"),
-			"url" => "javascript:javascript:submit_changeform();",
+			"url" => "javascript:save_categories();",
+//			"url" => "javascript:javascript:submit_changeform();",
 		));
 
 		$tb->add_button(array(
@@ -11535,7 +11574,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"url" => "javascript:cut_products();"
 		));
 
-		if($_SESSION["shop_warehouse"]["cut_products"] || $_SESSION["shop_warehouse"]["copy_products"])
+		if(isset($_SESSION["shop_warehouse"]) && ($_SESSION["shop_warehouse"]["cut_products"] || $_SESSION["shop_warehouse"]["copy_products"]))
 		{
 			$tb->add_button(array(
 				"name" => "paste",
@@ -11678,22 +11717,84 @@ $oo = get_instance(CL_SHOP_ORDER);
 	function _get_product_management_list($arr)
 	{
 		$tb = $arr["prop"]["vcl_inst"];
-		$this->_init_prod_list_list_tbl($tb, $arr);
+
+		$tb->define_field(array(
+			"name" => "icon",
+			"caption" => t("&nbsp;"),
+			"sortable" => 0,
+		));
+
+		$tb->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$tb->define_field(array(
+			"sortable" => 1,
+			"name" => "code",
+			"caption" => t("Kood"),
+			"align" => "center"
+		));
+
+		$tb->define_field(array(
+			"sortable" => 1,
+			"name" => "last_purchase_price",
+			"caption" => t("Ostuhind"),
+			"align" => "center"
+		));
+
+		$tb->define_field(array(
+			"sortable" => 1,
+			"name" => "price_fifo",
+			"caption" => t("FIFO"),
+			"align" => "center"
+		));
+		if((!isset($arr["request"][$group."_s_pricelist"]) && $this->def_price_list) || automatweb::$request->arg($group."_s_pricelist"))
+		{
+			$tb->define_field(array(
+				"sortable" => 1,
+				"name" => "sales_price",
+				"caption" => t("M&uuml;&uuml;gihind"),
+				"align" => "center"
+			));
+		}
+
+		if($arr["obj_inst"]->prop("order_center"))
+		{
+			$tb->define_field(array(
+				"name" => "ord",
+				"sortable" => 1,
+				"caption" => t("J&auml;rjekord"),
+				"align" => "center",
+				"sorting_field" => "hidden_ord",
+			));
+		}
+
+		if(!automatweb::$request->arg("pgtf") && automatweb::$request->arg("pgtf") != $this->prod_type_fld && !automatweb::$request->arg($group."_s_cat"))
+		{
+			$tb->define_field(array(
+				"name" => "cat",
+				"caption" => t("Kategooria"),
+				"sortable" => 1,
+				"align" => "center",
+			));
+		}
+		$tb->define_field(array(
+			"name" => "packagings",
+			"caption" => t("Pakendid"),
+			"sortable" => 1,
+			"align" => "center",
+		));
+		$tb->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
 
 		$filter = array();
-		$cats = array();
+		
+		$cats = $this->get_categories_from_search($arr["request"]);
 
-		foreach($arr["request"] as $key => $val)
-		{
-			if(substr_count($key , "cat_"))
-			{
-				$type_id = substr($key , 4);
-				if($key != $val)
-				{
-					$cats[] = $val;
-				}
-			}
-		}
 		$filter["category"] = $cats;
 		if(is_array($filter["category"]) && !sizeof($filter["category"]))
 		{
@@ -11701,23 +11802,23 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 
 		$params = $arr["request"];
-		if($params["product_managements_name"])
+		if(isset($params["product_managements_name"]) && strlen($params["product_managements_name"]))
 		{
 			$filter["name"] = $params["product_managements_name"];
 		}
-		if($params["product_managements_code"])
+		if(isset($params["product_managements_code"]) && strlen($params["product_managements_code"]))
 		{
 			$filter["code"] = $params["product_managements_code"];
 		}
-		if($params["product_managements_barcode"])
+		if(isset($params["product_managements_barcode"]) && strlen($params["product_managements_barcode"]))
 		{
 			$filter["barcode"] = $params["product_managements_barcode"];
 		}
-		if($params["product_managements_price_from"] > 0)
+		if(isset($params["product_managements_price_from"]) && $params["product_managements_price_from"] > 0)
 		{
 			$filter["price_from"] = $params["product_managements_price_from"];
 		}
-		if($params["product_managements_price_to"])
+		if(isset($params["product_managements_price_to"]) && $params["product_managements_price_to"] > 0)
 		{
 			$filter["price_to"] = $params["product_managements_price_to"];
 		}
@@ -11726,12 +11827,26 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		foreach($ol->arr() as $o)
 		{
+			$packagings = array();
+			foreach($o->get_packagings()->arr() as $packaging)
+			{
+				$packagings[]=  html::obj_change_url($packaging, parse_obj_name($packaging->name()));
+			}
+			$cats = array();
+			foreach($o->get_categories($o->id()) as $cat)
+			{
+				if($this->can("view" , $cat))
+				{
+					$cat = obj( $cat);
+					$cats[]=  html::obj_change_url($cat, parse_obj_name($cat->name()));
+				}
+			}
 			$data = array(
 				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
 				"oid" => $o->id(),
 				"name" => html::obj_change_url($o, parse_obj_name($o->name())), //$name,
 				"cnt" => $o->prop("item_count"),
-				"item_type" => $tp,
+	//			"item_type" => $tp,
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
@@ -11756,6 +11871,8 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"hidden_ord" => $o->ord(),
 				"clid" => $o->class_id(),
 				"type" => ($o->class_id() == CL_SHOP_PRODUCT)?"":t("&Uuml;ksiktooted"),
+				"packagings" => join(", " , $packagings),
+				"cat" => join(", " , $cats),
 			);
 			$tb->define_data($data);
 		}
@@ -11807,6 +11924,10 @@ $oo = get_instance(CL_SHOP_ORDER);
 	private function get_categories_from_search($arr)
 	{
 		$cats = array();
+		if(is_oid($arr["cat"]))
+		{
+			$cats[] = $arr["cat"];
+		}
 		foreach($arr as $key => $val)
 		{
 			if(substr_count($key , "cat_"))
@@ -11858,6 +11979,18 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			$c = obj($arr["cat"]);
 			$c->remove_type($arr["type"]);
+		}
+		die("1");
+	}
+
+	/**
+		@attrib name=save_categories all_args=1
+	**/
+	public function save_categories($arr)
+	{
+		if(is_array($arr["ord"]))
+		{
+			$this->set_order($arr["ord"]);
 		}
 		die("1");
 	}

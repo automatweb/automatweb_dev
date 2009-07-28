@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.12 2008/12/22 14:09:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.13 2009/07/28 09:38:19 markop Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -15,7 +15,7 @@
 @default method=serialize
 @default group=data
 
-	@property wh type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 
+	@property wh type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 multiple=1 store=connect
 	@caption Ladu
 
 	@property oc type=relpicker reltype=RELTYPE_OC automatic=1 
@@ -207,6 +207,10 @@ class shop_product_search extends class_base
 				"oc" => $o->prop("oc"),
 			), "shop_order_cart")
 		));
+		if ($_GET["die"] == 1)
+		{
+			die($this->parse());
+		}
 		return $this->parse();
 	}
 
@@ -371,11 +375,16 @@ class shop_product_search extends class_base
 	function _get_prod_props($o)
 	{
 		// get warehouse from object
-		if (!is_oid($o->prop("wh")) || !$this->can("view", $o->prop("wh")))
+		$wh = $o->prop("wh");
+		if (is_array($wh))
+		{
+			$wh = reset($wh);
+		}
+		if (!is_oid($wh) || !$this->can("view", $wh))
 		{
 			return array();
 		}
-		$wh = obj($o->prop("wh"));
+		$wh = obj($wh);
 		$wh_i = $wh->instance();
 
 		$props = array(
@@ -508,7 +517,6 @@ class shop_product_search extends class_base
 		{
 			$transforms[$c->prop("to")] = $c->prop("to.name");
 		}
-
 		$clss = aw_ini_get("classes");
 		foreach($props as $clid => $ps)
 		{
@@ -551,8 +559,55 @@ class shop_product_search extends class_base
 						"value" => isset($dat[$clid][$pn]) ? $dat[$clid][$pn]["caption_".$langid] : $capts[0]
 					));
 				}
+				$t->define_data($data);
 			}
 		}
+
+		$clid = -1;
+		$efs = array(
+			"__result_state" => array("caption" => t("Asendus v&otilde;i ei")),
+			"__retail_price" => array("caption" => t("Jaehind")),
+			"__discount_pct" => array("caption" => t("Allahindluse %")),
+			"__final_price" => array("caption" => t("L&otilde;pphind")),
+			"__special_price" => array("caption" => t("Erihind")),
+			"__amount" => array("caption" => t("Kogus")),
+			"__warehouse_amounts" => array("caption" => t("Lao staatus")),
+		);
+			foreach($efs as $pn => $pd)
+			{
+				$data = array(
+					"class" => $clss[$clid]["name"],
+					"prop" => $pd["caption"]." ($pn)",
+					"in_form" => html::checkbox(array(
+						"name" => "dat[$clid][$pn][in_form]",
+						"value" => 1,
+						"checked" => $dat[$clid][$pn]["in_form"] == 1
+					)),
+					"caption" => html::textbox(array(
+						"name" => "dat[$clid][$pn][caption]",
+						"value" => isset($dat[$clid][$pn]) ? $dat[$clid][$pn]["caption"] : $pd["caption"]
+					)),
+					"ord" => html::textbox(array(
+						"name" => "dat[$clid][$pn][ord]",
+						"value" => $dat[$clid][$pn]["ord"],
+						"size" => 5
+					)),
+					"transform" => html::select(array(
+						"name" => "dat[$clid][$pn][transform]",
+						"value" => $dat[$clid][$pn]["transform"],
+						"options" => $transforms
+					))
+				);
+				foreach($this->get_trans_languages() as $langid => $capt)
+				{
+					$data["caption_".$langid] = html::textbox(array(
+						"name" => "dat[$clid][$pn][caption_".$langid."]",
+						"value" => isset($dat[$clid][$pn]) ? $dat[$clid][$pn]["caption_".$langid] : $pd["caption"]
+					));
+				}
+				$t->define_data($data);
+			}
+
 		$t->set_sortable(false);
 	}
 
@@ -630,10 +685,26 @@ class shop_product_search extends class_base
 			}
 		}
 
+		$warehouses = safe_array($arr["obj_inst"]->prop("wh"));
+
 		uasort($flds, create_function('$a,$b', 'return $a["_ord"] - $b["_ord"];'));
 		foreach($flds as $fld)
 		{
-			$t->define_field($fld);
+			if ($fld["name"] == "-1___warehouse_amounts")
+			{
+				foreach($warehouses as $wh)
+				{
+					$t->define_field(array(
+						"name" => $fld["name"]."_".$wh,
+						"caption" => obj($wh)->name(),
+						"align" => "center"
+					));
+				}
+			}
+			else
+			{
+				$t->define_field($fld);
+			}
 		}
 		$t->define_field(array(
 			"name" => "add_to_cart",
@@ -737,6 +808,11 @@ class shop_product_search extends class_base
 						break;
 				}
 
+				$prod_discount_pct = $prod->get_discount(2573380, array(
+					"prod_category" => $this->_pcat2oid($prod->prop("user5")),
+					"crm_category" => 2815413
+				));
+
 				foreach(safe_array($cols[CL_SHOP_PACKET]) as $coln => $cold)
 				{
 					if ($cold["in_form"] == 1)
@@ -758,6 +834,73 @@ class shop_product_search extends class_base
 						$data[CL_SHOP_PRODUCT_PACKAGING."_".$coln] = $pk->prop_str($coln);
 					}
 				}
+
+				$rsc = str_ireplace(array(" ","-"), array("",""), $_GET["s"][CL_SHOP_PRODUCT]["code"]);
+				foreach(safe_array($cols[-1]) as $coln => $cold)
+				{
+					if ($cold["in_form"] == 1)
+					{
+						switch($coln)
+						{
+							case "__result_state":
+								if ($this->_code_matches($rsc, $prod->prop("code")) || $this->_code_matches($rsc, $prod->prop("short_code")))
+								{
+									$data["-1_".$coln] = t("K&uuml;situd");
+								}
+								else
+								{
+									$data["-1_".$coln] = t("Asendus");
+								}
+								break;
+
+							case "__retail_price":
+								$data["-1_".$coln] = number_format($prod->instance()->calc_price($prod), 2);
+								break;
+
+							case "__discount_pct":
+								$data["-1_".$coln] = $prod_discount_pct." %";
+								break;
+				
+							case "__final_price":
+								if ($prod->prop("special_price") > 0)
+								{
+									$pr = $prod->prop("special_price");
+								}
+								else
+								{
+									$cpr = $prod->instance()->calc_price($prod);
+									$pr = $cpr - (($prod_discount_pct * $cpr) / 100.0);
+								}
+								$data["-1_".$coln] = number_format($pr, 2);
+								break;
+
+							case "__special_price":
+								$data["-1_".$coln] = number_format($prod->prop("special_price"), 2);
+								break;
+
+							case "__warehouse_amounts":
+								foreach($warehouses as $wh)
+								{
+									$data["-1_".$coln."_".$wh] = $prod->get_amount($wh);
+									if ($data["-1_".$coln."_".$wh] < 1)
+									{
+										$data["-1_".$coln."_".$wh] = $prod->get_availability_time($wh);
+									}
+								}
+								break;
+
+							case "__amount":
+								$data["-1_".$coln] = html::textbox(array(
+									"name" => "amount[".$prod->id()."]",
+									"size" => 3,
+									"value" => 1
+								));
+								break;
+						}
+						
+					}
+				}
+
 				$data[CL_SHOP_PACKET."_oid"] = $packet->id();
 				$data[CL_SHOP_PRODUCT."_oid"] = $prod->id();
 				$data[CL_SHOP_PRODUCT_PACKAGING."_oid"] = $pk->id();
@@ -787,6 +930,23 @@ class shop_product_search extends class_base
 
 	function get_search_results($o, $params)
 	{
+		if (!empty($params[295]["code"]) || !empty($params[295]["name"]))
+		{
+			$r = new aw_request;
+			$r->set_arg("prod_s_code", $params[295]["code"]);
+			$r->set_arg("prod_s_name", $params[295]["name"]);
+			$int = get_instance("applications/shop/shop_warehouse");
+
+			$wh = $o->prop("wh");
+			if (is_array($wh))
+			{
+				$wh = reset($wh);
+			}
+			$int->config = obj(obj($wh)->prop("conf"));
+			$tmp = $int->get_products_list_from_index(array(), $r);
+			return $tmp["ol"]->arr();
+		}
+
 		$wh_i = get_instance(CL_SHOP_WAREHOUSE);
 		$conn = $o->connections_from(array(
 			"type" => "RELTYPE_FOLDER",
@@ -811,7 +971,12 @@ class shop_product_search extends class_base
 		}
 		else
 		{
-			list($main_fld, $subs) = $wh_i->get_packet_folder_list(array("id" => $o->prop("wh")));
+			$wh = $o->prop("wh");
+			if (is_array($wh))
+			{
+				$wh = reset($wh);
+			}
+			list($main_fld, $subs) = $wh_i->get_packet_folder_list(array("id" => $wh));
 			$folders = $subs->ids();
 			$folders[] = $main_fld->id();
 		}
@@ -979,6 +1144,26 @@ class shop_product_search extends class_base
 			))
 		));
 		return $this->parse();
+	}
+
+	private function _code_matches($c1, $c2)
+	{
+		return stripos($c2, $c1) !== FALSE;
+	}
+
+	private function _pcat2oid($p)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"name" => $p,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		if ($ol->count())
+		{
+			return $ol->begin()->id();
+		}
+		return null;
 	}
 }
 ?>

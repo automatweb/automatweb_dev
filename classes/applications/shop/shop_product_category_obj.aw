@@ -7,7 +7,7 @@ class shop_product_category_obj extends _int_object
 		@returns
 			object list
 	**/
-	public function get_categories()
+	public function get_categories($id = NULL)
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
@@ -16,12 +16,26 @@ class shop_product_category_obj extends _int_object
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					"parent" => $this->id(),
-					"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY" => $this->id(),
+					"parent" => is_oid($id) ? $id : $this->id(),
+					"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY" => is_oid($id) ? $id : $this->id(),
 				),
-			))
+			)),
+			"sort_by" => "jrk asc, name asc",
 		));
 		return $ol;
+	}
+
+	public function get_categories_hierarchy($id = NULL, $depth = NULL)
+	{
+		$retval = array();
+		if($depth > 0 || $depth === NULL)
+		{
+			foreach($this->get_categories($id)->ids() as $_id)
+			{
+				$retval[$_id] = $this->get_categories_hierarchy($_id, $depth -1);
+			}
+		}
+		return $retval;
 	}
 
 	/**
@@ -97,8 +111,9 @@ class shop_product_category_obj extends _int_object
 			"CL_SHOP_PRODUCT.RELTYPE_CATEGORY" => $this->id(),
 		));
 		return $ol;
-
 	}
+
+//----------------- static functions -------------------------
 
 
 }

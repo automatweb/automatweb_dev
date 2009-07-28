@@ -9,6 +9,9 @@
 @property product type=relpicker reltype=RELTYPE_PRODUCT
 @caption Toode
 
+@property packaging type=relpicker reltype=RELTYPE_PACKAGING
+@caption Pakend
+
 @property company type=relpicker reltype=RELTYPE_COMPANY
 @caption Tarnija
 
@@ -35,6 +38,9 @@
 
 @reltype WAREHOUSE value=3 clid=CL_SHOP_WAREHOUSE
 @caption Ladu
+
+@reltype PACKAGING value=4 clid=CL_SHOP_PRODUCT_PACKAGING
+@caption Pakend
 */
 
 class shop_product_purveyance extends class_base
@@ -54,30 +60,21 @@ class shop_product_purveyance extends class_base
 
 		switch($prop["name"])
 		{
-			case "weekday":
-				$prop["options"] = array(
-					0 => t("--vali--"),
-					1 => t("Esmasp&auml;ev"),
-					2 => t("Teisip&auml;ev"),
-					3 => t("Kolmap&auml;ev"),
-					4 => t("Neljap&auml;ev"),
-					5 => t("Reede"),
-					6 => t("Laup&auml;ev"),
-					7 => t("P&uuml;hap&auml;ev"),
-				);
+			case "packaging":
+				if(!empty($arr["new"]) && $this->can("view", $val = automatweb::$request->arg("packaging")))
+				{
+					$prop["options"][$val] = obj($val)->name();
+					$prop["value"] = $val;
+				}
 				break;
-		}
 
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
+			case "weekday":
+				$prop["options"] = array(0 => t("--vali--"));
+				for($i = 1; $i < 8; $i++)
+				{
+					$prop["options"][$i] = locale::get_lc_weekday($i);
+				}
+				break;
 		}
 
 		return $retval;
@@ -108,6 +105,7 @@ class shop_product_purveyance extends class_base
 
 		switch($f)
 		{
+			case "packaging":
 			case "product":
 			case "company":
 			case "warehouse":

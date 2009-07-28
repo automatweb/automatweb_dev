@@ -1,12 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.22 2008/03/04 08:12:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.23 2009/07/28 09:38:19 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
 @classinfo syslog_type=ST_SHOP_PACKET relationmgr=yes no_status=1  maintainer=kristo
+@tableinfo aw_shop_packets index=aw_oid master_table=objects master_index=brother_of
 
 @default table=objects
 @default group=general
+
+@property description type=textarea cols=40 rows=5 table=aw_shop_packets 
+@caption Kirjeldus
+@comment Toote kirjeldus
 
 @property item_count type=hidden table=aw_shop_packets field=aw_count
 @caption Mitu laos
@@ -93,7 +98,6 @@
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
-@tableinfo aw_shop_packets index=aw_oid master_table=objects master_index=brother_of
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption paketi toode
 
@@ -637,6 +641,29 @@ class shop_packet extends class_base
 	function get_default_packagings_in_packet($package)
 	{
 		return safe_array($package->meta("packet_def_pkgs"));
+	}
+
+	// DB upgrade
+	function do_db_upgrade($t, $f)
+	{
+		if (empty($f))
+		{
+			// db table doesn't exist, so lets create it:
+			$this->db_query('CREATE TABLE '.$t.' (
+				oid INT PRIMARY KEY NOT NULL)');
+		}
+
+		switch($f)
+		{
+			case "description":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "text"
+				));
+				return true;
+				break;
+		}
+
 	}
 
 }

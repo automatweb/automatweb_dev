@@ -168,12 +168,12 @@ class shop_warehouse_obj extends _int_object
 				$filter["CL_SHOP_PRODUCT.RELTYPE_CATEGORY"] = $arr["category"];
 			}
 		}
-		if($arr["name"])
+		if(isset($arr["name"]))
 		{
 			$filter["name"] = "%".$arr["name"]."%";
 		}
 
-		if($arr["code"])
+		if(isset($arr["code"]))
 		{
 			$filter["code"] = $arr["code"]."%";
 		}
@@ -362,7 +362,7 @@ class shop_warehouse_obj extends _int_object
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY_TYPE,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"sort_by" => "jrk asc",
+			"sort_by" => "jrk asc, name asc",
 		));
 		return $ol;
 	}
