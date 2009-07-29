@@ -815,6 +815,13 @@ class shop_delivery_note extends class_base
 		return $this->parse();
 	}
 
+	function request_execute($obj)
+	{
+		$arx = array();
+		$arx["id"] = $obj->id();
+		return $this->show($arx);
+	}
+
 	function do_db_upgrade($t, $f)
 	{
 		if ($f == "")

@@ -8,6 +8,16 @@
             <field>template</field>
             <caption>Template</caption>
       </property>
+      <property>
+            <name>state</name>
+            <table>aw_shop_orderer_data_site_show</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <field>state</field>
+            <caption>Kuvatavad staatused</caption>
+            <comment>Arve staatused milliseid veebis kuvatakse</comment>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDERER_DATA_SITE_SHOW_BILLS</syslog_type>
             <relationmgr>yes</relationmgr>

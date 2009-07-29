@@ -99,6 +99,7 @@ class shop_orderer_data_site_show extends class_base
 		switch($f)
 		{
 			case "template":
+			case "state":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "VARCHAR(64)"

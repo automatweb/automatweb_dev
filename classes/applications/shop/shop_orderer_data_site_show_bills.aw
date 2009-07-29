@@ -8,6 +8,11 @@
 
 @property template type=select
 @caption Template
+
+@property state type=select multiple=1
+@caption Kuvatavad staatused
+@comment Arve staatused milliseid veebis kuvatakse
+
 */
 
 class shop_orderer_data_site_show_bills extends shop_orderer_data_site_show
@@ -27,6 +32,10 @@ class shop_orderer_data_site_show_bills extends shop_orderer_data_site_show
 
 		switch($prop["name"])
 		{
+			case "state":
+				$bi = get_instance(CL_CRM_BILL);
+				$prop["options"] = $bi->states;
+				break;
 		}
 
 		return $retval;
@@ -60,11 +69,20 @@ class shop_orderer_data_site_show_bills extends shop_orderer_data_site_show
 		$bills = new object_list();
 		$rows = "";
 		$co = get_current_company();
-		$co = obj(2818612);
+		$co = obj(2821584);
+
+		$filter = array();
+		if($ob->prop("state"))
+		{
+			$filter["states"] = $ob->prop("state");
+		}
+
 		if(is_object($co))
 		{
-			$bills = $co->get_bills();
+			$bills = $co->get_bills($filter);
 		}
+
+		$bi = get_instance(CL_CRM_BILL);
 
 		foreach($bills->arr() as $bill)
 		{
@@ -75,9 +93,9 @@ class shop_orderer_data_site_show_bills extends shop_orderer_data_site_show
 			$bill_vars["date"] = date("d.m.Y" , $bill->prop("date"));
 			$bill_vars["deadline"] = date("d.m.Y" , $bill->prop("deadline"));
 			$bill_vars["sum"] = $bill->get_bill_sum();
-			
+			$bill_vars["url"] = $bi->mk_my_orb("preview" , array("id" => $bill->id()));
 			$this->vars($bill_vars);
-			$rows.=$this->parse("ROW");
+			$rows.= $this->parse("ROW");
 		}
 		$vars["ROW"] = $rows;
 		$this->vars($vars);

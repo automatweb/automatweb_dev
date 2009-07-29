@@ -77,7 +77,7 @@ class shop_orderer_data_site_show_delivery_notes extends shop_orderer_data_site_
 			$note_vars["date"] = date("d.m.Y" , $note->prop("enter_date"));
 			$note_vars["delivery"] = date("d.m.Y" , $note->prop("delivery_date"));
 			$note_vars["sum"] = $note->get_sum();
-//			$note_vars["url"] = $note_inst->mk_my_orb("show" , array("id" => $note->id()));
+			$note_vars["url"] = "/".$note->id();
 
 			$this->vars($note_vars);
 			$rows.=$this->parse("ROW");

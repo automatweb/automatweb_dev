@@ -2920,7 +2920,17 @@ class crm_bill extends class_base
 		}
 	}
 
-	function _preview($arr)
+	/**
+		@attrib name=preview all_args=1
+	**/
+	public function preview($arr)
+	{
+		return $this->show(array(
+			"id" => $arr["id"],
+		));
+	}
+
+	public function _preview($arr)
 	{
 		$arr["prop"]["value"] = $this->show(array(
 			"id" => $arr["obj_inst"]->id(),
@@ -3126,7 +3136,7 @@ class crm_bill extends class_base
 			{
 				if ($this->read_site_template("show_".$lc.".tpl", true) === false)
 				{
-					$this->read_site_template("show.tpl");
+					$this->read_template("show.tpl");
 				}
 			}
 		}
@@ -3135,7 +3145,7 @@ class crm_bill extends class_base
 			$tpl .= "_".$lc;
 			if ($this->read_site_template($tpl.".tpl", true) === false)
 			{
-				$this->read_site_template("show.tpl");
+				$this->read_template("show.tpl");
 			}
 		}
 		$ord = obj();
