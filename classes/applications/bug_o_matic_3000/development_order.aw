@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.29 2009/05/25 10:18:48 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.30 2009/07/29 12:57:21 instrumental Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -554,7 +554,7 @@ class development_order extends class_base
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"] && !$arr["new"])
 				{
 					$statuses = $this->get_status_list();
-					$com = sprintf(t("Staatus muudeti %s => %s"), $statuses[$old], $statuses[$prop["value"]]);
+					$com = sprintf(t("Staatus muudeti %s => %s"), html_entity_decode($statuses[$old]), html_entity_decode($statuses[$prop["value"]]));
 					$this->add_comments[] = $com;
 				}
 				break;

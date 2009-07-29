@@ -53,7 +53,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@property bug_type type=select table=aw_bugs field=bug_type captionside=top parent=settings_col2
 		@caption T&uuml;&uuml;p
 
-		@property bug_app type=select field=meta method=serialize captionside=top parent=settings_col2 table=objects
+		@property bug_app type=select field=aw_bug_app captionside=top parent=settings_col2 table=aw_bugs
 		@caption Rakendus
 
 		@property bug_severity type=select parent=settings_col2 captionside=top
@@ -1491,7 +1491,7 @@ class bug extends class_base
 				}
 				if ($this->_ac_old_state != $prop["value"] && !$arr["new"])
 				{
-					$com = sprintf(t("Staatus muudeti %s => %s"), $this->bug_statuses[$this->_ac_old_state], $this->bug_statuses[$prop["value"]]);
+					$com = sprintf(t("Staatus muudeti %s => %s"), html_entity_decode($this->bug_statuses[$this->_ac_old_state]), html_entity_decode($this->bug_statuses[$prop["value"]]));
 					$this->add_comments[] = $com;
 					$this->notify_monitors = true;
 				}
@@ -1981,7 +1981,7 @@ class bug extends class_base
 			$msgtxt = t("Bug") . ": " . $bug_url . "\n";
 			$msgtxt .= t("Summary") . ": " . $name . "\n";
 			$msgtxt .= t("URL") . ": " . $bug->prop("bug_url") . "\n";
-			$msgtxt .= t("Status"). ": " . $this->bug_statuses[$bug->prop("bug_status")] . "\n";
+			$msgtxt .= t("Status"). ": " . html_entity_decode($this->bug_statuses[$bug->prop("bug_status")]) . "\n";
 			$msgtxt .= ($bug->prop("bug_status") == BUG_FEEDBACK) ? t("Feedback from"). ": " . $bug->prop("bug_feedback_p.name") . "\n" : "";
 			$msgtxt .= t("Priority"). ": " . $bug->prop("bug_priority") . "\n";
 			$msgtxt .= t("Assigned to"). ": " . $bug->prop("who.name") . "\n";
@@ -2272,7 +2272,7 @@ class bug extends class_base
 		$u = get_instance(CL_USER);
 		foreach($ol->arr() as $com)
 		{
-			$comt = create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars(html_entity_decode($com->comment()))));
+			$comt = create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars(html_entity_decode($com->comment()), ENT_NOQUOTES)));
 			$comt = preg_replace("/(>http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<\n]*)/ims", ">Diff", $comt);
 			if ($nl2br)
 			{
@@ -2351,11 +2351,11 @@ class bug extends class_base
 		}
 		if($base_com)
 		{
-			$main_c = "<b>".$base_author." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("bug_content"))))));
+			$main_c = "<b>".$base_author." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("bug_content"), ENT_NOQUOTES)))));
 		}
 		elseif($o->prop("com"))
 		{
-			$main_c = "<b>".$base_author." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("com"))))));
+			$main_c = "<b>".$base_author." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("com"), ENT_NOQUOTES)))));
 		}
 		else
 		{
@@ -2891,7 +2891,7 @@ class bug extends class_base
 					);
 					$mail_contents = str_replace($find, $replace, $mail_text);
 					$adr = $mail->prop("mail");
-					send_mail($adr, "Lisati arendustellimus", $mail_contents, "From: bugtrack@".substr(strstr(aw_ini_get("baseurl"), "//"), 2));
+					send_mail($adr, t("Lisati arendustellimus"), $mail_contents, "From: bugtrack@".substr(strstr(aw_ini_get("baseurl"), "//"), 2));
 				}
 	
 			}
@@ -3027,7 +3027,7 @@ $diff = explode("*" , $result["diff"]);
 
 		if ($arr["set_fixed"] == 1)
 		{
-			$msg .= "\nStaatus muudeti ".$this->bug_statuses[$bug->prop("bug_status")]." => ".$this->bug_statuses[BUG_DONE]."\n";
+			$msg .= "\nStaatus muudeti ".html_entity_decode($this->bug_statuses[$bug->prop("bug_status")])." => ".html_entity_decode($this->bug_statuses[BUG_DONE])."\n";
 			$bug->set_prop("bug_status", BUG_DONE);
 			$nstat = BUG_DONE;
 			$save = true;
@@ -3297,6 +3297,7 @@ die($email);
 			case "prognosis":
 			case "aw_send_bill":
 			case "aw_to_bill_date":
+			case "aw_bug_app":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",
