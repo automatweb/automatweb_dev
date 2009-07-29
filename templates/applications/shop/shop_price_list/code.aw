@@ -17,7 +17,11 @@ $priorities = array(
 $rows = array();
 foreach($args["rows"] as $row)
 {
-	$rows[$row] = (double)ifset($priorities[$row]);
+	$rows[$row] = (double)ifset($priorities, $row);
+	foreach(safe_array(ifset($parents, $row)) as $parent)
+	{
+		$rows[$parent] = (double)ifset($priorities, $parent);
+	}
 }
 asort($rows);
 
@@ -31,7 +35,7 @@ foreach(array_keys($rows) as $row)
 		{
 			foreach(array_merge(array($col), safe_array(ifset($parents, $col))) as $_col)
 			{
-				$cols[$_col] = (double)ifset($priorities[$_col]);
+				$cols[$_col] = (double)ifset($priorities, $_col);
 			}
 		}
 		arsort($cols);

@@ -562,15 +562,41 @@ class shop_price_list extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("Jrk"),
+			"width" => 75,
+			"align" => "center",
+			"sorting_field" => "ord_num",
+		));
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
+			"align" => "center",
 		));
 
-		foreach(shop_price_list_obj::get_price_lists(array("valid" => automatweb::$request->arg("price_list_span") != "invalid"))->arr() as $o)
+		foreach(shop_price_list_obj::get_price_lists(array("valid" => automatweb::$request->arg("price_list_span") != "invalid"))->arr() as $oid => $o)
 		{
 			$t->define_data(array(
+				"ord" => html::textbox(array(
+					"name" => "price_lists_tbl[{$oid}][ord]",
+					"value" => $o->ord(),
+					"size" => 4,
+				)),
+				"ord_num" => $o->ord(),
 				"name" => html::obj_change_url($o),
 			));
+		}
+
+		$t->set_default_sortby("ord");
+	}
+
+	public function _set_price_lists_tbl($arr)
+	{
+		foreach(safe_array($arr["prop"]["value"]) as $oid => $data)
+		{
+			$o = obj($oid);
+			$o->set_ord($data["ord"]);
+			$o->save();
 		}
 	}
 

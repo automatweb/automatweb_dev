@@ -174,6 +174,7 @@ class shop_price_list_obj extends _int_object
 				),
 				"cols" => array(
 					"customers" => array(),
+					"locations" => array(),
 				),
 				"ids" => array(),
 				"names" => array(),
@@ -183,12 +184,12 @@ class shop_price_list_obj extends _int_object
 			$product_category_inst = new shop_product_category_obj;
 			$admin_struct_inst = new country_administrative_structure_object;
 
-			foreach($o->prop("matrix_customer_categories") as $id)
+			foreach(safe_array($o->prop("matrix_customer_categories")) as $id)
 			{
 				$matrix["cols"]["customers"][$id] = $company_inst->get_customer_categories_hierarchy($id);
 			}
 
-			foreach($o->prop("matrix_countries") as $id)
+			foreach(safe_array($o->prop("matrix_countries")) as $id)
 			{
 				$matrix["cols"]["locations"][$id] = $admin_struct_inst->prop(array(
 					"prop" => "units_by_country",
@@ -196,7 +197,7 @@ class shop_price_list_obj extends _int_object
 				))->ids_hierarchy();
 			}
 
-			foreach($o->prop("matrix_product_categories") as $id)
+			foreach(safe_array($o->prop("matrix_product_categories")) as $id)
 			{
 				$matrix["rows"]["products"][$id] = $product_category_inst->get_categories_hierarchy($id);
 			}
@@ -247,7 +248,7 @@ class shop_price_list_obj extends _int_object
 			}
 
 			$matrix["parents"] = array();
-			self::get_matrix_structure_parents($matrix["cols"]["customers"] + $matrix["cols"]["locations"] + $matrix["rows"]["products"], $matrix["parents"]);
+			self::get_matrix_structure_parents($matrix["rows"]["products"] + $matrix["cols"]["customers"] + $matrix["cols"]["locations"] + $matrix["rows"]["products"], $matrix["parents"]);
 
 			$retval[$o->id()] = $matrix;
 		}		
@@ -271,7 +272,7 @@ class shop_price_list_obj extends _int_object
 	{
 		foreach($data as $k => $v)
 		{
-			$retval[$k] = $parents;
+			$retval[$k] = array_merge(safe_array(ifset($retval, $k)), $parents);
 			self::get_matrix_structure_parents($v, &$retval, $parents + array($k => $k));
 		}
 	}
@@ -441,7 +442,6 @@ class shop_price_list_obj extends _int_object
 
 		$this->set_prop("code", $i->parse());
 		$this->save();
-		arr($i->parse(), true, true);
 	}
 
 	protected function update_code_handle_quantities($str)
