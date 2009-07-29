@@ -1,5 +1,13 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>source_code</name>
+            <table>aw_shop_price_list_condition_type</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>aw_source_code</field>
+            <caption>Kood</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRICE_LIST_CONDITION_TYPE</syslog_type>
             <relationmgr>yes</relationmgr>

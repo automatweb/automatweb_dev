@@ -32,6 +32,18 @@
             <comment>Kas objekt on aktiivne</comment>
       </property>
       <property>
+            <name>description</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>5</rows>
+            <parent>gen_gen</parent>
+            <field>description</field>
+            <caption>Kirjeldus</caption>
+            <comment>Toote kirjeldus</comment>
+      </property>
+      <property>
             <name>content_package</name>
             <table>aw_shop_products</table>
             <group>general_general</group>
@@ -105,6 +117,16 @@
             <size>10</size>
             <parent>gen_prices_prop_right</parent>
             <caption>Ostu hind</caption>
+      </property>
+      <property>
+            <name>special_price</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>aw_special_price</field>
+            <size>10</size>
+            <parent>gen_prices_prop_right</parent>
+            <caption>Erihind</caption>
       </property>
       <property>
             <name>prev_sales_price_tbl</name>
@@ -300,6 +322,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>categories_table</field>
+      </property>
+      <property>
+            <name>categories</name>
+            <table>objects</table>
+            <group>general_categories</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CATEGORY</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>categories</field>
       </property>
       <property>
             <name>reservation_time</name>

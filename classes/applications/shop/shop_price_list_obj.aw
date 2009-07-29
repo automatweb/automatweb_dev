@@ -93,12 +93,6 @@ class shop_price_list_obj extends _int_object
 	public static function price($arr)
 	{
 		enter_function("shop_price_list_obj::price");
-		if(empty($arr["debug"]))
-		{
-			exit_function("shop_price_list_obj::price");
-			return $arr["price"];
-		}
-
 		/**
 			# STRUCTURE of $retval (if $arr["structure"] is true)
 			price[in]
@@ -124,7 +118,7 @@ class shop_price_list_obj extends _int_object
 		);
 
 		// Find all valid price list objects
-		// Later on this should leave out the ones that don't have given client_categories, product_categories etc..
+		// Later on this should leave out the ones that don't have given customers, products etc..
 		$ol = self::get_price_lists(array(
 			"valid" => true,
 		));
@@ -149,8 +143,9 @@ class shop_price_list_obj extends _int_object
 			"amount" => isset($arr["amount"]) ? $arr["amount"] : 1,
 			"price" => $arr["price"],
 			"bonus" => isset($arr["bonus"]) ? $arr["bonus"] : 0,
-			"customer_categories" => safe_array(ifset($arr, "customer_category")),
+			"customers" => safe_array(ifset($arr, "customer_category")),
 			"locations" => safe_array(ifset($arr, "location")),
+			"default" => array(0),
 		);
 
 		if(!isset($arr["product_category"]))
@@ -175,10 +170,10 @@ class shop_price_list_obj extends _int_object
 		{
 			$matrix = array(
 				"rows" => array(
-					"product_categories" => array(),
+					"products" => array(),
 				),
 				"cols" => array(
-					"customer_categories" => array(),
+					"customers" => array(),
 				),
 				"ids" => array(),
 				"names" => array(),
@@ -187,17 +182,10 @@ class shop_price_list_obj extends _int_object
 			$company_inst = new crm_company_obj;
 			$product_category_inst = new shop_product_category_obj;
 			$admin_struct_inst = new country_administrative_structure_object;
-			// Otherwise the matrix goes too MAD! -kaarel 21.07.2009
-			$depth = 3;
 
 			foreach($o->prop("matrix_customer_categories") as $id)
 			{
-				$matrix["cols"]["customer_categories"][$id] = $company_inst->get_customer_categories_hierarchy($id, $depth);
-			}
-
-			foreach($o->prop("matrix_product_categories") as $id)
-			{
-				$matrix["rows"]["product_categories"][$id] = $product_category_inst->get_categories_hierarchy($id, $depth);
+				$matrix["cols"]["customers"][$id] = $company_inst->get_customer_categories_hierarchy($id);
 			}
 
 			foreach($o->prop("matrix_countries") as $id)
@@ -205,15 +193,29 @@ class shop_price_list_obj extends _int_object
 				$matrix["cols"]["locations"][$id] = $admin_struct_inst->prop(array(
 					"prop" => "units_by_country",
 					"country" => $id,
-					"depth" => $depth,
 				))->ids_hierarchy();
 			}
 
-			$matrix["ids"]["customer_categories"] = self::get_matrix_ids($matrix["cols"]["customer_categories"]);
-			$matrix["ids"]["locations"] = self::get_matrix_ids($matrix["cols"]["locations"]);
-			$matrix["ids"]["product_categories"] = self::get_matrix_ids($matrix["rows"]["product_categories"]);
+			foreach($o->prop("matrix_product_categories") as $id)
+			{
+				$matrix["rows"]["products"][$id] = $product_category_inst->get_categories_hierarchy($id);
+			}
 
-			if(count($ids = array_merge($matrix["ids"]["customer_categories"], $matrix["ids"]["product_categories"], $matrix["ids"]["locations"])) > 0)
+			$matrix["ids"]["customers"] = self::get_matrix_ids($matrix["cols"]["customers"]);
+			$matrix["ids"]["locations"] = self::get_matrix_ids($matrix["cols"]["locations"]);
+			$matrix["ids"]["products"] = self::get_matrix_ids($matrix["rows"]["products"]);
+
+			foreach($product_category_inst->get_products($matrix["ids"]["products"]) as $cat => $ol)
+			{
+				$matrix["ids"]["products"];
+				foreach($ol->ids() as $id)
+				{
+					self::get_matrix_structure_add_product_to_category($id, $cat, $matrix["rows"]["products"]);
+					$matrix["ids"]["products"][] = $id;
+				}
+			}
+
+			if(count($ids = array_merge($matrix["ids"]["customers"], $matrix["ids"]["products"], $matrix["ids"]["locations"])) > 0)
 			{
 				// Names, clids
 				$odl = new object_data_list(
@@ -240,17 +242,29 @@ class shop_price_list_obj extends _int_object
 			if(count($matrix["priorities"]) > 0)
 			{
 				$matrix["cols"]["locations"] = self::matrix_sort_lvl($matrix["cols"]["locations"], $matrix["priorities"]);
-				$matrix["cols"]["customer_categories"] = self::matrix_sort_lvl($matrix["cols"]["customer_categories"], $matrix["priorities"]);
-				$matrix["rows"]["product_categories"] = self::matrix_sort_lvl($matrix["rows"]["product_categories"], $matrix["priorities"]);
+				$matrix["cols"]["customers"] = self::matrix_sort_lvl($matrix["cols"]["customers"], $matrix["priorities"]);
+				$matrix["rows"]["products"] = self::matrix_sort_lvl($matrix["rows"]["products"], $matrix["priorities"]);
 			}
 
 			$matrix["parents"] = array();
-			self::get_matrix_structure_parents($matrix["cols"]["customer_categories"] + $matrix["cols"]["locations"] + $matrix["rows"]["product_categories"], $matrix["parents"]);
+			self::get_matrix_structure_parents($matrix["cols"]["customers"] + $matrix["cols"]["locations"] + $matrix["rows"]["products"], $matrix["parents"]);
 
 			$retval[$o->id()] = $matrix;
 		}		
 
 		return $retval[$o->id()];
+	}
+
+	protected static function get_matrix_structure_add_product_to_category($id, $cat, &$products)
+	{
+		foreach($products as $product => $subproducts)
+		{
+			if($product == $cat)
+			{
+				$products[$product][$id] = array();
+			}
+			self::get_matrix_structure_add_product_to_category($id, $cat, $products[$product]);
+		}
 	}
 
 	protected static function get_matrix_structure_parents($data, &$retval, $parents = array())
@@ -299,10 +313,10 @@ class shop_price_list_obj extends _int_object
 
 		$matrix_structure = $this->get_matrix_structure($this);
 		$this->cells = array();
-		foreach($matrix_structure["rows"]["product_categories"] as $row => $subrows)
+		foreach($matrix_structure["rows"]["products"] as $row => $subrows)
 		{
 			$this->update_code_add_cell($row, 0);
-			foreach($matrix_structure["cols"]["customer_categories"] as $col => $subcols)
+			foreach($matrix_structure["cols"]["customers"] as $col => $subcols)
 			{
 				$this->update_code_add_cell($row, $col, array("row" => $row, "col" => 0), $subrows, $subcols);
 			}
@@ -315,7 +329,7 @@ class shop_price_list_obj extends _int_object
 				"site_id" => array(),
 			),
 			array(
-				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus"),
+				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus", "quantities"),
 			)
 		);
 		foreach($odl->arr() as $cond_id => $cond)
@@ -324,6 +338,7 @@ class shop_price_list_obj extends _int_object
 				"type" => $cond["type"],
 				"value" => $cond["value"],
 				"bonus" => $cond["bonus"],
+				"quantities" => $cond["quantities"],
 			);
 		}
 
@@ -355,6 +370,47 @@ class shop_price_list_obj extends _int_object
 				$HANDLE_CELL_ROW = "";
 				foreach($cell_data["conditions"] as $condition_id => $cond)
 				{
+					$quantity_conditions = $this->update_code_handle_quantities($cond["quantities"]);
+					if(count($quantity_conditions) > 0)
+					{
+						$QUANTITY_CONDITION = "";
+						$quantity_condition_count = 0;
+						foreach($quantity_conditions as $quantity_condition)
+						{
+							$QUANTITY_CONDITION_SINGLE = "";
+							$QUANTITY_CONDITION_RANGE = "";
+							switch($quantity_condition["type"])
+							{
+								case "single":
+									$i->vars(array(
+										"quantity" => $quantity_condition["quantity"],
+									));
+									$QUANTITY_CONDITION_SINGLE .= rtrim($i->parse("QUANTITY_CONDITION_SINGLE"), "\t");
+									break;
+									
+								case "range":
+									$i->vars(array(
+										"quantity_from" => $quantity_condition["quantity_from"],
+										"quantity_to" => $quantity_condition["quantity_to"],
+									));
+									$QUANTITY_CONDITION_RANGE .= rtrim($i->parse("QUANTITY_CONDITION_RANGE"), "\t");
+									break;
+							}
+							$i->vars(array(
+								"QUANTITY_CONDITION_SINGLE" => $QUANTITY_CONDITION_SINGLE,
+								"QUANTITY_CONDITION_RANGE" => $QUANTITY_CONDITION_RANGE,
+							));							
+							$QUANTITY_CONDITION .= rtrim($i->parse("QUANTITY_CONDITION".(++$quantity_condition_count === 1 ? "_FIRST" : "")), "\t");
+						}
+						$i->vars(array(
+							"QUANTITY_CONDITION_FIRST" => "",
+							"QUANTITY_CONDITION" => $QUANTITY_CONDITION,
+						));
+						$i->vars(array(
+							"QUANTITY_CONDITION_START" => rtrim($i->parse("QUANTITY_CONDITION_START"), "\t"),
+							"QUANTITY_CONDITION_END" => rtrim($i->parse("QUANTITY_CONDITION_END"), "\t"),
+						));
+					}
 					$i->vars(array(
 						"condition_id" => $condition_id,
 						"type" => $cond["type"],
@@ -368,6 +424,7 @@ class shop_price_list_obj extends _int_object
 					$i->vars(array(
 						"row" => $row,
 						"col" => $col,
+						"HANDLE_CELL_ROW_CUSTOM" => "",
 						"HANDLE_CELL_ROW_AUTO" => $HANDLE_CELL_ROW,
 					));
 					$HANDLE_CELL .= rtrim($i->parse("HANDLE_CELL"), "\t");
@@ -375,7 +432,7 @@ class shop_price_list_obj extends _int_object
 			}
 		}
 		$i->vars(array(
-			"passing_order" => "'".implode("','", array_keys(safe_array($this->meta("matrix_col_order"))))."'",
+			"passing_order" => "'".implode("','", array_merge(array_keys(safe_array($this->meta("matrix_col_order"))), array("default")))."'",
 			"PARENTS" => $PARENTS,
 			"PRIORITIES" => $PRIORITIES,
 			"HANDLE_CELL" => $HANDLE_CELL,
@@ -385,6 +442,48 @@ class shop_price_list_obj extends _int_object
 		$this->set_prop("code", $i->parse());
 		$this->save();
 		arr($i->parse(), true, true);
+	}
+
+	protected function update_code_handle_quantities($str)
+	{
+		$retval = array();
+		if(strlen($str) > 0)
+		{
+			foreach(explode(",", $str) as $_str)
+			{
+				if(($hq = $this->update_code_handle_quantity(trim($_str))) !== false)
+				{
+					$retval[] = $hq;
+				}
+			}
+		}
+		return $retval;
+	}
+
+	protected function update_code_handle_quantity($str)
+	{
+		//	1, 27, 63, 14 etc...
+		if(is_numeric($str))
+		{
+			return array(
+				"type" => "single",
+				"quantity" => (float)$str,
+			);
+		}
+		// 10-80, 17-19, 100-200 etc...
+		elseif(strpos($str, "-") !== false)
+		{
+			list($from, $to) = explode("-", $str);
+			return array(
+				"type" => "range",
+				"quantity_from" => $from,
+				"quantity_to" => $to,
+			);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	protected function update_code_find_closest_cell_with_conditions($data)
@@ -461,7 +560,7 @@ class shop_price_list_obj extends _int_object
 	public function prioritize()
 	{
 		$this->matrix_structure = $this->get_matrix_structure($this);
-		foreach($this->matrix_structure["cols"]["customer_categories"] as $id => $children)
+		foreach($this->matrix_structure["cols"]["customers"] as $id => $children)
 		{
 			$this->prioritize_level($id, $children);
 		}
@@ -469,7 +568,7 @@ class shop_price_list_obj extends _int_object
 		{
 			$this->prioritize_level($id, $children);
 		}
-		foreach($this->matrix_structure["rows"]["product_categories"] as $id => $children)
+		foreach($this->matrix_structure["rows"]["products"] as $id => $children)
 		{
 			$this->prioritize_level($id, $children);
 		}

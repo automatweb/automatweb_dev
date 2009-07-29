@@ -21,11 +21,14 @@
 	@property type type=select field=aw_type
 	@caption T&uuml;&uuml;p
 
-	@property value type=textbox size=5 field=aw_value
+	@property value type=textbox size=5 field=aw_value maxlength=30
 	@caption V&auml;&auml;rtus
 
-	@property bonus type=textbox size=5 field=aw_bonus
+	@property bonus type=textbox size=5 field=aw_bonus maxlength=30
 	@caption Boonus
+
+	@property quantities type=textbox size=5 field=aw_quantities maxlength=100
+	@caption Kogused
 
 */
 
@@ -90,6 +93,13 @@ class shop_price_list_condition extends class_base
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(30)"
+				));
+				return true;
+
+			case "aw_quantities":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(100)"
 				));
 				return true;
 		}

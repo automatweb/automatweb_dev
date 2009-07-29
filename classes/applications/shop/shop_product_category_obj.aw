@@ -97,20 +97,48 @@ class shop_product_category_obj extends _int_object
 		return $ol;
 	}
 
-	/** return category products
-		@attrib api=1
+	/** Returns products for category/categories.
+		@attrib api=1 params=pos
+		@param id optional type=int/array acl=view
 		@returns
-			object list
+			Object list or array of object lists if id is given and is array.
 	**/
-	public function get_products()
+	public function get_products($id = NULL)
 	{
-		$ol = new object_list(array(
+		$prms = array(
 			"class_id" => CL_SHOP_PRODUCT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"CL_SHOP_PRODUCT.RELTYPE_CATEGORY" => $this->id(),
-		));
-		return $ol;
+			"CL_SHOP_PRODUCT.RELTYPE_CATEGORY" => $id !== NULL ? $id : $this->id(),
+		);
+
+		if(is_array($id))
+		{
+			$ols = array();
+			$odl = new object_data_list(
+				$prms,
+				array(
+					CL_SHOP_PRODUCT => array("categories")
+				)
+			);
+			foreach($odl->arr() as $oid => $odata)
+			{
+				foreach((array)$odata["categories"] as $cat)
+				{
+					if(!isset($ols[$cat]))
+					{
+						$ols[$cat] = new object_list;
+					}
+					$ols[$cat]->add($oid);
+				}
+			}
+			return $ols;
+		}
+		else
+		{
+			$ol = new object_list($prms);
+			return $ol;
+		}
 	}
 
 //----------------- static functions -------------------------

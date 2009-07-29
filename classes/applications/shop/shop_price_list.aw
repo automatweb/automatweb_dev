@@ -84,16 +84,40 @@
 
 		@property priorities_product_categories_tbl type=table no_caption=1 store=no
 
-@groupinfo price_lists caption="Teised hinnakirjad"
+@groupinfo debug caption=Hinnakalkulaator
+@default group=debug
+
+	@property debug_product type=relpicker reltype=RELTYPE_DEBUG_SHOP_PRODUCT automatic=1 table=objects field=meta method=serialize no_edit=1 search_button=1
+	@caption Toode
+
+	@property debug_amount type=textbox size=6 table=objects field=meta method=serialize
+	@caption Kogus
+
+	@property debug_price type=textbox size=6 table=objects field=meta method=serialize
+	@caption Hind
+
+	@property debug_product_category type=relpicker reltype=RELTYPE_DEBUG_SHOP_PRODUCT_CATEGORY multiple=1 automatic=1 table=objects field=meta method=serialize no_edit=1 search_button=1
+	@caption Tootekategooria
+
+	@property debug_customer_category type=relpicker reltype=RELTYPE_DEBUG_CRM_CATEGORY multiple=1 automatic=1 table=objects field=meta method=serialize no_edit=1 search_button=1
+	@caption Kliendikategooria
+
+	@property debug_location type=relpicker reltype=RELTYPE_DEBUG_LOCATION multiple=1 automatic=1 table=objects field=meta method=serialize no_edit=1 search_button=1
+	@caption Asukoht
+
+	@property debug_output type=text store=no
+	@caption V&auml;ljund
+
+@groupinfo price_lists caption="Teised hinnastajad"
 @default group=price_lists
 
 	@layout price_lists_split type=hbox width=25%:75%
 
-		@layout price_lists_left type=vbox parent=price_lists_split area_caption=Vali&#44&nbsp;milliseid&nbsp;hinnakirju&nbsp;kuvada
+		@layout price_lists_left type=vbox parent=price_lists_split area_caption=Vali&#44&nbsp;milliseid&nbsp;hinnastajaid&nbsp;kuvada
 
 			@property price_lists_tree type=treeview store=no no_caption=1 parent=price_lists_left
 
-		@layout price_lists_right type=vbox parent=price_lists_split no_padding=no closeable=1 area_caption=Hinnakirjad
+		@layout price_lists_right type=vbox parent=price_lists_split no_padding=no closeable=1 area_caption=Hinnastajad
 
 			@property price_lists_tbl type=table store=no no_caption=1 parent=price_lists_right
 
@@ -138,6 +162,18 @@
 @reltype COUNTRY value=13 clid=CL_COUNTRY
 @caption Riik, mida maatriksi veeruna kuvatakse
 
+@reltype DEBUG_SHOP_PRODUCT value=14 clid=CL_SHOP_PRODUCT
+@caption Hinnakalkulaatori toode
+
+@reltype DEBUG_SHOP_PRODUCT_CATEGORY value=15 clid=CL_SHOP_PRODUCT_CATEGORY
+@caption Hinnakalkulaatori tootekategooria
+
+@reltype DEBUG_CRM_CATEGORY value=16 clid=CL_CRM_CATEGORY
+@caption Hinnakalkulaatori tootekategooria
+
+@reltype DEBUG_LOCATION value=17 clid=CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT,CL_COUNTRY_ADMINISTRATIVE_UNIT
+@caption Hinnakalkulaatori asukoht
+
 */
 
 class shop_price_list extends class_base
@@ -155,31 +191,40 @@ class shop_price_list extends class_base
 		$this->matrix_structure = shop_price_list_obj::get_matrix_structure($arr["obj_inst"]);
 		$this->col_types = array(
 			"locations" => t("Asukohad"),
-			"customer_categories" => t("Kliendikategooriad"),
+			"customers" => t("Kliendikategooriad"),
 		);
+	}
+
+	public function _get_debug_output($arr)
+	{
+		$prms = array(
+			"amount" => $arr["obj_inst"]->prop("debug_amount"),
+			"product" => $arr["obj_inst"]->prop("debug_product"),
+			"price" => $arr["obj_inst"]->prop("debug_price"),
+			"product_category" => $arr["obj_inst"]->prop("debug_product_category"),
+			"customer_category" => $arr["obj_inst"]->prop("debug_customer_category"),
+			"location" => $arr["obj_inst"]->prop("debug_location"),
+			"structure" => true
+		);
+
+		$mtime = explode(' ', microtime()); 
+		$starttime = $mtime[1] + $mtime[0];
+		for($i = 0; $i < 1; $i++)
+		{
+			$result = shop_price_list_obj::price($prms);
+		}
+		$mtime = explode(" ", microtime());
+		$endtime = $mtime[1] + $mtime[0];
+
+		$arr["prop"]["value"] = "<pre>".print_r(array(
+			"p&auml;ringu parameetrid" => $prms,
+			"tulemus" => $result,
+			"hinnapäringuks kulunud aeg" => $endtime - $starttime." sekundit",
+		), true)."</pre>";
 	}
 
 	public function _get_matrix($arr)
 	{
-		if(!empty($_GET["debug"]))
-		{
-			$prms = array(
-				"product" => 346088,
-				"price" => 1000,
-				"product_category" => array(346012,346013),
-				"customer_category" => array(346017),//array(346016, 346058),
-				"location" => array(346322, 346323, 346324),
-				"structure" => true,
-
-
-				"debug" => true
-			);
-			arr(array(
-				"names" => $this->matrix_structure["names"],
-				"params" => $prms,
-				"result" => shop_price_list_obj::price($prms)
-			), true);
-		}
 		$matrix = array();
 		$odl = new object_data_list(
 			array(
@@ -189,7 +234,7 @@ class shop_price_list extends class_base
 				"site_id" => array(),
 			),
 			array(
-				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus"),
+				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus", "quantities"),
 			)
 		);
 		foreach($odl->arr() as $cond)
@@ -198,6 +243,7 @@ class shop_price_list extends class_base
 			$matrix[$cond["row"]][$cond["col"]]["type"] = $cond["type"];
 			$matrix[$cond["row"]][$cond["col"]]["value"] = $cond["value"];
 			$matrix[$cond["row"]][$cond["col"]]["bonus"] = $cond["bonus"];
+			$matrix[$cond["row"]][$cond["col"]]["quantities"] = $cond["quantities"];
 		}
 
 		$this->draw_matrix(array(
@@ -225,6 +271,13 @@ class shop_price_list extends class_base
 			"name" => $name."_bonus",
 			"caption" => "BV",
 			"tooltip" => t("Boonuse valem"),
+			"parent" => $name,
+			"chgbgcolor" => $name."_color",
+		));
+		$t->define_field(array(
+			"name" => $name."_quantities",
+			"caption" => "K",
+			"tooltip" => t("Kogused, millele valemirida rakendub (vaikimisi rakendub k&otilde;igile kogustele)"),
 			"parent" => $name,
 			"chgbgcolor" => $name."_color",
 		));
@@ -271,6 +324,15 @@ class shop_price_list extends class_base
 					"name" => "matrix[$row][$col][$type]",
 					"value" => ifset($matrix, $row, $col, $type),
 					"size" => 4,
+					"maxlength" => 30,
+				));
+
+			case "quantities":
+				return html::textbox(array(
+					"name" => "matrix[$row][$col][$type]",
+					"value" => ifset($matrix, $row, $col, $type),
+					"size" => 4,
+					"maxlength" => 100,
 				));
 		}
 	}
@@ -302,7 +364,7 @@ class shop_price_list extends class_base
 				"site_id" => array(),
 			),
 			array(
-				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus"),
+				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus", "quantities"),
 			)
 		);
 
@@ -314,6 +376,7 @@ class shop_price_list extends class_base
 				if(
 					$data[$cond["row"]][$cond["col"]]["type"] != $cond["type"] ||
 					$data[$cond["row"]][$cond["col"]]["value"] != $cond["value"] ||
+					$data[$cond["row"]][$cond["col"]]["quantities"] != $cond["quantities"] ||
 					$data[$cond["row"]][$cond["col"]]["bonus"] != $cond["bonus"]
 				)
 				{
@@ -341,6 +404,7 @@ class shop_price_list extends class_base
 				$o->set_prop("type", $change[$oid]["type"]);
 				$o->set_prop("value", $change[$oid]["value"]);
 				$o->set_prop("bonus", $change[$oid]["bonus"]);
+				$o->set_prop("quantities", $change[$oid]["quantities"]);
 				$o->save();
 			}
 		}
@@ -360,6 +424,7 @@ class shop_price_list extends class_base
 					$o->set_prop("type", $val["type"]);
 					$o->set_prop("value", $val["value"]);
 					$o->set_prop("bonus", $val["bonus"]);
+					$o->set_prop("quantities", $val["quantities"]);
 					$o->save();
 				}
 			}
@@ -409,7 +474,7 @@ class shop_price_list extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_priorities_tbl($t, t("Tootegrupp"));
 
-		$this->priorities_tbl_insert_row($t, "priorities_product_categories_tbl", 0, $this->matrix_structure["rows"]["product_categories"]);
+		$this->priorities_tbl_insert_row($t, "priorities_product_categories_tbl", 0, $this->matrix_structure["rows"]["products"]);
 	}
 
 	public function _get_priorities_customer_categories_tbl($arr)
@@ -417,7 +482,7 @@ class shop_price_list extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_priorities_tbl($t, t("Kliendigrupp"));
 
-		$this->priorities_tbl_insert_row($t, "priorities_customer_categories_tbl", 0, $this->matrix_structure["cols"]["customer_categories"]);
+		$this->priorities_tbl_insert_row($t, "priorities_customer_categories_tbl", 0, $this->matrix_structure["cols"]["customers"]);
 	}
 
 	public function _set_priorities_customer_categories_tbl($arr)
@@ -568,6 +633,7 @@ class shop_price_list extends class_base
 	{
 		asort($arr["prop"]["value"]);
 		$arr["obj_inst"]->set_meta("matrix_col_order", $arr["prop"]["value"]);
+		$arr["obj_inst"]->update_code();
 	}
 
 	public function _get_matrix_rows($arr)
@@ -579,14 +645,33 @@ class shop_price_list extends class_base
 		);
 	}
 
-	function callback_mod_reforb($arr)
+	public function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["add_crm_cat"] = "";
 		$arr["add_prod_cat"] = "";
 	}
 
-	function do_db_upgrade($t, $f)
+	public function callback_generate_scripts($arr)
+	{
+		if(automatweb::$request->arg("group") === "matrix")
+		{
+			return "
+jQuery(document).ready(function(){
+	$('[name^=matrix]').change(function(){
+		var val = $(this).val();
+		$('[name=\"'+$(this).attr('name')+'\"]').each(function(){
+			if($(this).val() != val){
+				$(this).val(val);
+			}
+		});
+	});
+});
+			";
+		}
+	}
+
+	public function do_db_upgrade($t, $f)
 	{
 		if ($f == "")
 		{
@@ -724,7 +809,7 @@ class shop_price_list extends class_base
 
 		#### ROWS
 		$arr["matrix_data"] = safe_array($arr["matrix_data"]);
-		self::draw_matrix_add_row($t, safe_array($arr["matrix"]["rows"]["product_categories"]), $arr, 0);
+		self::draw_matrix_add_row($t, safe_array($arr["matrix"]["rows"]["products"]), $arr, 0);
 
 		$t->set_sortable(false);
 	}
