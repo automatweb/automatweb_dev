@@ -10,6 +10,15 @@
             <caption>Ladu</caption>
       </property>
       <property>
+            <name>root_menu</name>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <table>aw_shop_order_center</table>
+            <field>aw_root_menu</field>
+            <caption>Veebis kuvamise juurkaust</caption>
+      </property>
+      <property>
             <name>cart</name>
             <group>general</group>
             <type>relpicker</type>
@@ -236,6 +245,26 @@
             <caption>v&amp;amp;auml;&amp;amp;auml;rtus j&amp;amp;auml;relmaksuks</caption>
       </property>
       <property>
+            <name>rent_conditions_tlb</name>
+            <group>rent_conditions</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>rent_conditions_tbl</name>
+            <group>rent_conditions</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>rent_min_amt</name>
             <group>rent_settings</group>
             <table>objects</table>
@@ -306,6 +335,39 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>J&amp;auml;relmaksuperioodi samm</caption>
+      </property>
+      <property>
+            <name>appearance_toolbar</name>
+            <group>appearance</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>appearance_tree</name>
+            <group>appearance</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>appearance_l</parent>
+      </property>
+      <property>
+            <name>appearance_list</name>
+            <group>appearance</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>appearance_r</parent>
+            <caption>N&amp;amp;auml;itamise kaustade seaded</caption>
       </property>
       <property>
             <name>only_active_items</name>
@@ -666,6 +728,10 @@
                   <caption>J&amp;amp;auml;relmaksu seaded</caption>
                   <parent>payment</parent>
             </rent_settings>
+            <rent_conditions>
+                  <caption>J&amp;amp;auml;relmaksu tingimused</caption>
+                  <parent>payment</parent>
+            </rent_conditions>
             <payment_settings>
                   <caption>Pangamakse seaded</caption>
                   <parent>payment</parent>
@@ -794,6 +860,37 @@
                   <clid>CL_SHOP_ORDER_CENTER_FILTER_ENTRY</clid>
                   <caption>Toodete filtri sisestus</caption>
             </FILTER>
+            <RENT_CONDITIONS>
+                  <value>13</value>
+                  <clid>CL_SHOP_RENT_CONDITIONS</clid>
+                  <caption>K&amp;amp;auml;ttetoimetamise viis</caption>
+            </RENT_CONDITIONS>
+            <RELTYPE_MENU>
+                  <value>14</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kaust</caption>
+            </RELTYPE_MENU>
       </reltypes>
+      <layout>
+            <appearance_c>
+                  <width>30%:70%</width>
+                  <type>hbox</type>
+                  <group>appearance</group>
+                  <area_caption></area_caption>
+            </appearance_c>
+            <appearance_l>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Tootegrupid</area_caption>
+                  <parent>appearance_c</parent>
+                  <group>appearance</group>
+            </appearance_l>
+            <appearance_r>
+                  <type>vbox</type>
+                  <parent>appearance_c</parent>
+                  <group>appearance</group>
+                  <area_caption></area_caption>
+            </appearance_r>
+      </layout>
 </properties>
 
