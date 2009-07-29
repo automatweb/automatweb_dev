@@ -8,6 +8,14 @@
 
 @property template type=select
 @caption Template
+
+@property slave_groups type=relpicker multiple=1 store=connect reltype=RELTYPE_GROUP 
+@caption Alamkasutajate kasutajagrupid
+@comment sinna gruppidesse lisatakse kasutajad
+
+@reltype GROUP value=1 clid=CL_GROUP
+@caption Kasutajagrupp
+
 */
 
 class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
@@ -77,6 +85,7 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 			"user_name" => $person->name(),
 			"add_new" => $add_new,
 			"users_table" => $users_table,
+			"error" => $this->add_user_error,
 		));
 
 		return $this->parse();
@@ -87,14 +96,39 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 	**/
 	public function add_slave($arr)
 	{
+
 		$user_inst = get_instance(CL_USER);
-		$user_inst->add_user(array(
-			"parent" => aw_global_get("uid_oid"),
-			"uid" => $this->get_slave_name(),
-			"email" => $arr["email"],
-			"password" => $arr["password"],
-			"real_name" => $arr["name"],
-		));
+		$this->add_user_error = null;
+		if(!(strlen($arr["password"]) > 2))
+		{
+			$this->add_user_error = t("Parool liiga l&uuml;hike");
+		}
+		if(($arr["password"] != $arr["password_again"]))
+		{
+			$this->add_user_error = t("Paroolid erinevad");
+		}
+		if(!$this->add_user_error)
+		{
+			$o = obj($arr["id"]);
+			$uid = $this->get_slave_name();
+			$user = $user_inst->add_user(array(
+				"parent" => aw_global_get("uid_oid"),
+				"uid" => $uid,
+				"email" => $arr["email"],
+				"password" => $arr["password"],
+				"real_name" => $arr["person_name"],
+			));
+			foreach($o->prop("groups") as $group)
+			{
+				$user->add_to_group($group);
+			}
+		}
+		else
+		{
+			$this->user_email = $arr["email"];
+			$this->user_real_name = $arr["name"];
+			$this->user_phone = $arr["phone"];
+		}
 		$this->update_html($arr["id"]); 
 	}
 
@@ -103,7 +137,11 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 	**/
 	public function remove_slave($arr)
 	{
-		arr($arr);
+		foreach($arr["sel"] as $id)
+		{
+			$o = obj($id);
+			$o->delete();
+		}
 		$this->update_html($arr["id"]);
 	}
 	
@@ -124,7 +162,6 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 
 	private function get_add_new($id)
 	{
-
 		classload("cfg/htmlclient");
 		$htmlc = new htmlclient(array(
 			'template' => "default",
@@ -141,21 +178,21 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 		$htmlc->add_property(array(
 			"name" => "person_name",
 			"type" => "textbox",
-			"value" => "",
+			"value" => isset($this->user_real_name) ? $this->user_real_name : "",
 			"caption" => t("Isiku nimi"),
 		));
 
 		$htmlc->add_property(array(
 			"name" => "phone",
 			"type" => "textbox",
-			"value" => "",
+			"value" => isset($this->user_phone) ?$this->user_phone : "",
 			"caption" => t("Telefoni number"),
 		));
 
 		$htmlc->add_property(array(
 			"name" => "email",
 			"type" => "textbox",
-			"value" => "",
+			"value" => isset($this->user_email) ? $this->user_email : "",
 			"caption" => t("E-post"),
 		));
 
@@ -166,19 +203,19 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 			"caption" => t("Parool"),
 		));
 
-/*		$htmlc->add_property(array(
+		$htmlc->add_property(array(
 			"name" => "password_again",
 			"type" => "password",
 			"value" => "",
 			"caption" => t("Parool uuesti"),
 		));
-*/
+
 		$htmlc->add_property(array(
 			"name" => "submitb",
 			"type" => "button",
 			"value" => t("Salvesta uus kasutaja"),
 			"class" => "sbtbutton",
-			"onclick" => "
+			"onclick" => "document.getElementsByName('submitb')[0].disabled = true;
 				$.post('/automatweb/orb.aw?class=shop_orderer_data_site_show_users&action=add_slave', {
 					id: ".$id."
 					,name: document.getElementsByName('person_name')[0].value
@@ -207,11 +244,12 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 	}
 
 
-	private function get_users_table($arr)
+	private function get_users_table($id)
 	{
 		$user = obj(aw_global_get("uid_oid"));
 		$slaves = $user->get_slaves();
 		$result = "";
+
 		if($slaves->count())
 		{
 			classload("vcl/table");
@@ -243,9 +281,11 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 				"name" => "delete",
 				"tooltip" => t("Kustuta"),
 				"url" => "javascript:;",
-				"onClick" => "$.post('/automatweb/orb.aw?class=shop_orderer_data_site_show_users&action=remove_slave', {
-					id: ".$id."
-					,name: document.getElementsByName('person_name')[0].value
+				"onClick" => "
+result = $('input[name^=sel]');
+$.post('/automatweb/orb.aw?class=shop_orderer_data_site_show_users&action=remove_slave&'+result.serialize(), {
+					id: ".$id.", 
+					name: document.getElementsByName('person_name')[0].value
 					},function(html){x=document.getElementById('shop_orderer_data_site_show');
 								x.innerHTML=html;});",
 				"img" => "delete.gif",

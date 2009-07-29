@@ -8,6 +8,18 @@
             <field>template</field>
             <caption>Template</caption>
       </property>
+      <property>
+            <name>slave_groups</name>
+            <table>aw_shop_orderer_data_site_show</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_GROUP</reltype>
+            <field>slave_groups</field>
+            <caption>Alamkasutajate kasutajagrupid</caption>
+            <comment>sinna gruppidesse lisatakse kasutajad</comment>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDERER_DATA_SITE_SHOW_USERS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -23,5 +35,12 @@
                   <index>aw_oid</index>
             </aw_shop_orderer_data_site_show>
       </tableinfo>
+      <reltypes>
+            <GROUP>
+                  <value>1</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Kasutajagrupp</caption>
+            </GROUP>
+      </reltypes>
 </properties>
 

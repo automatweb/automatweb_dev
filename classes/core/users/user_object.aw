@@ -203,6 +203,17 @@ class user_object extends _int_object
 		{
 			return $this->prop("real_name");
 		}
+		$person_c = $this->connections_from(array(
+			"type" => "RELTYPE_PERSON",
+		));
+		foreach($person_c as $p_c)
+		{
+			$person = $p_c->to();
+			if($person->name())
+			{
+				return $person->name();
+			}
+		}
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 		return $p->name();
@@ -227,6 +238,139 @@ class user_object extends _int_object
 	{	
 		$_SESSION["cfg_admin_mode"] = $v;
 		return $this->set_prop("cfg_admin_mode", $v);
+	}
+	
+	/** returns lower users
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_slaves()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_USER,
+			"lang_id" => array(),
+		//	"limit" => 10,
+			"name" => $this->name().".%",
+		));
+		return $ol;
+	}
+	
+	/** returns next slave name
+		@attrib api=1
+		@returns string
+	**/
+	public function get_new_slave_name()
+	{
+		$uid = aw_global_get("uid");
+		$n = 1;
+		while($n < 10000)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_USER,
+				"lang_id" => array(),
+				"name" => aw_global_get("uid").".".$n,
+			));
+			if(!$ol->count())
+			{
+				return aw_global_get("uid").".".$n;
+			}
+			$n++;
+		}
+		return $uid.".0";
+	}
+
+	/** adds the user $user to group $group (storage objects)
+		@attrib params=pos api=1
+		@param group required type=object
+			Group object to what the user will be added
+		@param args optional type=array
+			Array of arguments (start, end, brother_done)
+		@comment
+		Adds the user to the $group.
+	**/
+	public function add_to_group($group, $arr = array())
+	{
+		// for each group in path from the to-add group
+		foreach($group->path() as $p_o)
+		{
+			if ($p_o->class_id() != CL_GROUP)
+			{
+				continue;
+			}
+
+			if(aw_ini_get("users.use_group_membership") == 1)
+			{
+				// I can't see why we need two membership objects with EXACTLY the same attributes.
+				$ol_args = array(
+					"class_id" => CL_GROUP_MEMBERSHIP,
+					"status" => array(),	// If it's inactive, we'll activate it! ;)
+					"lang_id" => array(),	// The lang_id is never checked for these anyway.
+					"site_id" => array(),	// The site_id is never checked for these anyway.
+					"parent" => array(),	// The parent doesn't make a difference here.
+					"gms_user" => $this->id(),
+					"gms_group" => $group->id(),
+				);
+				if(isset($arr["start"]) && isset($arr["end"]))
+				{
+					$ol_args["date_start"] = $arr["start"];
+					$ol_args["date_end"] = $arr["end"];
+				}
+				else
+				{
+					$ol_args["membership_forever"] = 1;
+				}
+				$ol = new object_list($ol_args);
+				if($ol->count() > 0)
+				{
+					$gms = $ol->begin();
+					$gms->set_status(object::STAT_ACTIVE);
+					$gms->save();
+				}
+				else
+				{
+					$gms = obj();
+					$gms->set_class_id(CL_GROUP_MEMBERSHIP);
+					$gms->set_parent($this->id());
+					$gms->set_name(sprintf(t("%s kuulub gruppi %s"), $this->uid, $group->name));
+					$gms->set_status(object::STAT_ACTIVE);
+					$gms->gms_user = $this->id();
+					$gms->gms_group = $group->id();
+					if(isset($arr["start"]) && isset($arr["end"]))
+					{
+						$gms->date_start = $arr["start"];
+						$gms->date_end = $arr["end"];
+					}
+					else
+					{
+						$gms->membership_forever = 1;
+					}
+					$gms->save();
+				}
+				$arr["brother_done"] = true;
+			}
+			else
+			{
+				// connection from user to group
+				$this->connect(array(
+					"to" => $p_o->id(),
+					"reltype" => "RELTYPE_GRP",
+				));
+
+				// connection to group from user
+				$p_o->connect(array(
+					"to" => $this->id(),
+					"reltype" => "RELTYPE_MEMBER",
+				));
+			}
+
+			// brother under group
+			if(!isset($arr["brother_done"]) || !$arr["brother_done"])
+			{
+				$brother_id = $this->create_brother($p_o->id());
+			}
+		}
+		$c = get_instance("cache");
+		$c->file_clear_pt("acl");
 	}
 }
 
