@@ -191,6 +191,9 @@ if(!defined("BUG_STATUS_CLOSED"))
 		@property s_bug_component type=textbox store=no parent=s_type_lay captionside=top
 		@caption Komponent
 
+                @property s_bug_app type=textbox store=no parent=s_type_lay captionside=top
+                @caption Rakendus
+
 	@layout s_cut_lay type=vbox closeable=1 area_caption=Klient parent=s_top
 
 		@property s_customer type=textbox store=no parent=s_cut_lay size=15 captionside=top
@@ -2944,7 +2947,7 @@ class bug_tracker extends class_base
 			}
 		}
 
-		$cplx = array("who", "bug_type", "customer", "project");
+		$cplx = array("who", "customer", "project");
 		foreach($cplx as $field)
 		{
 			if (trim($r["s_".$field]) != "")
@@ -2952,6 +2955,15 @@ class bug_tracker extends class_base
 				$res["CL_BUG.".$field.".name"] = $this->_get_string_filt($r["s_".$field]);
 			}
 		}
+
+		if (trim($r["s_bug_type"]) != "")
+		{
+			$res["CL_BUG.bug_type(CL_META).name"] = $this->_get_string_filt($r["s_bug_type"]);
+		}
+                if (trim($r["s_bug_app"]) != "")
+                {
+                        $res["CL_BUG.bug_app(CL_META).name"] = $this->_get_string_filt($r["s_bug_app"]);
+                }
 
 		if ($r["s_who_empty"] == 1)
 		{
@@ -3172,6 +3184,10 @@ class bug_tracker extends class_base
 	**/
 	function save_search($arr)
 	{
+		if ($arr["save_search_name"] == "")
+		{
+			return $arr["post_ru"];
+		}
 		$search_params = array();
 
 		foreach($arr as $k => $v)
