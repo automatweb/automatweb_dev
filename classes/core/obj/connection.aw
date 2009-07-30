@@ -219,7 +219,8 @@ class connection
 				if (!isset($GLOBALS["relinfo"][$param["from.class_id"]]) || !is_array($GLOBALS["relinfo"][$param["from.class_id"]]))
 				{
 					// load class def
-					_int_object::_int_load_properties($param["from.class_id"]);
+					$i = new _int_object;
+					$i->_int_load_properties($param["from.class_id"]);
 				}
 
 				if (!$GLOBALS["relinfo"][$param["from.class_id"]][$param["type"]]["value"])
