@@ -1,5 +1,25 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>categories</name>
+            <table>aw_products_show</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_CATEGORY</reltype>
+            <field>categories</field>
+            <caption>Tootekategooriad</caption>
+            <comment>Tootekategooriad millesse toode peaks kuuluma, et teda kuvataks</comment>
+      </property>
+      <property>
+            <name>template</name>
+            <table>aw_products_show</table>
+            <group>general</group>
+            <type>select</type>
+            <field>template</field>
+            <caption>Toodete n&amp;amp;auml;itamise template</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PRODUCTS_SHOW</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -15,5 +35,12 @@
                   <index>aw_oid</index>
             </aw_products_show>
       </tableinfo>
+      <reltypes>
+            <CATEGORY>
+                  <value>1</value>
+                  <clid>CL_SHOP_PRODUCT_CATEGORY</clid>
+                  <caption>Tootekategooria</caption>
+            </CATEGORY>
+      </reltypes>
 </properties>
 

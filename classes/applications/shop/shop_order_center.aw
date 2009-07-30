@@ -12,6 +12,9 @@
 @property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE table=aw_shop_order_center field=aw_warehouse_id
 @caption Ladu
 
+@property root_menu type=relpicker reltype=RELTYPE_MENU table=aw_shop_order_center field=aw_root_menu
+@caption Veebis kuvamise juurkaust
+
 @property cart type=relpicker reltype=RELTYPE_CART table=aw_shop_order_center field=aw_cart_id
 @caption Ostukorv
 
@@ -132,6 +135,16 @@
 	@property rent_months_step type=textbox
 	@caption Järelmaksuperioodi samm
 	######## END OF NEED KAOVAD
+
+
+@default group=appearance
+	@property appearance_toolbar type=toolbar no_caption=1 store=no
+	@layout appearance_c width=30%:70% type=hbox
+		@layout appearance_l type=vbox closeable=1 area_caption=Tootegrupid parent=appearance_c
+			@property appearance_tree type=treeview store=no no_caption=1 parent=appearance_l
+	@property appearance_list type=table store=no no_caption=1 parent=appearance_r
+	@caption N&auml;itamise kaustade seaded
+
 
 @default group=appear_settings
 
@@ -264,6 +277,7 @@
 	@groupinfo payment_settings caption="Pangamakse seaded" parent=payment
 
 @groupinfo appear caption="N&auml;itamine"
+	@groupinfo appearance parent=appear caption="N&auml;itamine"
 	@groupinfo appear_settings parent=appear caption="Seaded"
 	@groupinfo appear_ctr parent=appear caption="Kontrollerid"
 	@groupinfo appear_layout parent=appear caption="Layoudid"
@@ -320,6 +334,9 @@
 
 @reltype RENT_CONDITIONS value=13 clid=CL_SHOP_RENT_CONDITIONS
 @caption K&auml;ttetoimetamise viis
+
+@reltype RELTYPE_MENU value=14 clid=CL_MENU
+@caption Kaust
 */
 
 class shop_order_center extends class_base
@@ -1874,6 +1891,21 @@ class shop_order_center extends class_base
 		$ol = new object_list($filt);
 		$pl = $this->make_keys($ol->ids());
 		exit_function("shop_product::apply_filter_to_product_list");
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "aw_root_menu":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+
+		}
+		return false;
 	}
 
 	function callback_mod_reforb($arr)

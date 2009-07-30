@@ -6,6 +6,19 @@
 @default table=aw_products_show
 @default group=general
 
+
+@property categories type=relpicker multiple=1 store=connect reltype=RELTYPE_CATEGORY 
+@caption Tootekategooriad
+@comment Tootekategooriad millesse toode peaks kuuluma, et teda kuvataks
+
+@property template type=select
+@caption Toodete n&auml;itamise template
+
+@reltype CATEGORY value=1 clid=CL_SHOP_PRODUCT_CATEGORY
+@caption Tootekategooria
+
+
+
 */
 
 class products_show extends class_base

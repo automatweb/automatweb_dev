@@ -739,6 +739,10 @@
             <appear>
                   <caption>N&amp;amp;auml;itamine</caption>
             </appear>
+            <appearance>
+                  <parent>appear</parent>
+                  <caption>N&amp;amp;auml;itamine</caption>
+            </appearance>
             <appear_settings>
                   <parent>appear</parent>
                   <caption>Seaded</caption>
@@ -885,12 +889,6 @@
                   <parent>appearance_c</parent>
                   <group>appearance</group>
             </appearance_l>
-            <appearance_r>
-                  <type>vbox</type>
-                  <parent>appearance_c</parent>
-                  <group>appearance</group>
-                  <area_caption></area_caption>
-            </appearance_r>
       </layout>
 </properties>
 
