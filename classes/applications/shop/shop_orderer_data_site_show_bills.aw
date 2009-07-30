@@ -93,7 +93,7 @@ class shop_orderer_data_site_show_bills extends shop_orderer_data_site_show
 			$bill_vars["date"] = date("d.m.Y" , $bill->prop("date"));
 			$bill_vars["deadline"] = date("d.m.Y" , $bill->prop("deadline"));
 			$bill_vars["sum"] = $bill->get_bill_sum();
-			$bill_vars["url"] = $bi->mk_my_orb("preview" , array("id" => $bill->id()));
+			$bill_vars["url"] = "/".$bill->id();
 			$this->vars($bill_vars);
 			$rows.= $this->parse("ROW");
 		}

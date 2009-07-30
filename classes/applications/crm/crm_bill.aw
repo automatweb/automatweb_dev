@@ -3111,6 +3111,14 @@ class crm_bill extends class_base
 		return $vars;
 	}
 
+	function request_execute($o)
+	{
+		return $this->show(array(
+			"id" => $o->id(),
+			"return" => 1,
+		));
+	}
+
 	function show($arr)
 	{
 		$b = obj($arr["id"]);
@@ -3561,6 +3569,11 @@ class crm_bill extends class_base
 //			die($res);
 
 		}
+
+				if($arr["return"])
+				{
+					return $res;
+				}
 
 		if ($_GET["openprintdialog"] == 1)
 		{
