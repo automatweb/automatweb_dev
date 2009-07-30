@@ -18,6 +18,14 @@
             <caption>Hinnakiri</caption>
       </property>
       <property>
+            <name>currency</name>
+            <table>aw_shop_price_list_condition</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>aw_currency</field>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
             <name>row</name>
             <table>aw_shop_price_list_condition</table>
             <group>general</group>

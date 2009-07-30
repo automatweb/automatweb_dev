@@ -73,11 +73,11 @@ class shop_price_list_obj extends _int_object
 
 		@param product required type=int acl=view
 			The OID of the product
-		@param price required type=float
-			The before price
 		@param amount optional type=float default=1
-			The amount of the product price is asked for
-		@param bonus optional type=float default=0
+			The amount of the product prices are asked for
+		@param prices optional type=float
+			The before prices by currencies
+		@param bonuses optional type=float default=0
 			The before points
 		@param customer_category optional type=array/int acl=view
 			OIDs of client categories.
@@ -88,34 +88,53 @@ class shop_price_list_obj extends _int_object
 		@param product_category optional type=array/int acl=view
 			OIDs of product categories
 		@param structure optional type=bool default=false
-			If set, the structure of the price will be returned, otherwise only the final price will be returned.
+			If set, the structure of the prices will be returned, otherwise only the final prices will be returned.
 	**/
 	public static function price($arr)
 	{
 		enter_function("shop_price_list_obj::price");
 		/**
 			# STRUCTURE of $retval (if $arr["structure"] is true)
-			price[in]
-			price[out]
-			bonus[in]
-			bonus[out]
-			log[]	// Following will be tracked for every cell row passed
-				type
-				diff[price]		// ABS
-				diff[bonus]		// ABS
+			array(
+				[currency OID] => array(
+					price => array(
+						in => [PRICE_IN]
+						out => [PRICE_OUT]
+					)
+					bonus => array(
+						in => [BONUS_IN]
+						out => [BONUS_OUT]
+					)
+					log => array(	// Following will be tracked for every cell row passed
+						array(
+							type
+							diff => array(
+								price => [PRICE_DIFF]		// ABS
+								bonus => [BONUS_DIFF]		// ABS
+							)
+						)
+					)
+				)
+			)
 
 		**/
-		$retval = array(
-			"price" => array(
-				"in" => aw_math_calc::string2float($arr["price"]),
-				"out" => aw_math_calc::string2float($arr["price"]),
-			),
-			"bonus" => array(
-				"in" => aw_math_calc::string2float(ifset($arr, "bonus")),
-				"out" => aw_math_calc::string2float(ifset($arr, "bonus")),
-			),
-			"log" => array(),
-		);
+		$retval = array();
+		$prices_only_retval = $arr["prices"];
+		foreach(array_keys($arr["prices"]) as $currency)
+		{
+			$bonus = isset($arr["bonuses"][$currency]) ? $arr["bonuses"][$currency] : 0;
+			$retval[$currency] = array(
+				"price" => array(
+					"in" => aw_math_calc::string2float($arr["prices"][$currency]),
+					"out" => aw_math_calc::string2float($arr["prices"][$currency]),
+				),
+				"bonus" => array(
+					"in" => aw_math_calc::string2float($bonus),
+					"out" => aw_math_calc::string2float($bonus),
+				),
+				"log" => array(),
+			);
+		}
 
 		// Find all valid price list objects
 		// Later on this should leave out the ones that don't have given customers, products etc..
@@ -128,21 +147,25 @@ class shop_price_list_obj extends _int_object
 
 		foreach($ol->arr() as $o)
 		{
-			$price_data = $o->run_price_evaluation_code($args);
-			$args["price"] = $retval["price"]["out"] = $price_data["price"]["out"];
-			$args["bonus"] = $retval["bonus"]["out"] = $price_data["bonus"]["out"];
-			$retval["log"] = array_merge($retval["log"], safe_array($price_data["log"]));
+			$price_datas = $o->run_price_evaluation_code($args);
+			foreach($price_datas as $currency => $price_data)
+			{
+				$args["prices"][$currency] = $prices_only_retval[$currency] = $retval[$currency]["price"]["out"] = $price_data["price"]["out"];
+				$args["bonuses"][$currency] = $retval[$currency]["bonus"]["out"] = $price_data["bonus"]["out"];
+				$retval[$currency]["log"] = array_merge($retval[$currency]["log"], safe_array($price_data["log"]));
+			}
 		}
 		exit_function("shop_price_list_obj::price");
-		return empty($arr["structure"]) ? $retval["price"]["out"] : $retval;
+		return empty($arr["structure"]) ? $prices_only_retval : $retval;
 	}
 
 	protected static function handle_arguments($arr)
 	{
 		$args = array(
 			"amount" => isset($arr["amount"]) ? $arr["amount"] : 1,
-			"price" => $arr["price"],
-			"bonus" => isset($arr["bonus"]) ? $arr["bonus"] : 0,
+			"prices" => $arr["prices"],
+			"bonuses" => isset($arr["bonuses"]) ? $arr["bonuses"] : array(),
+			"currencies" => array_keys($arr["prices"]),
 			"customers" => safe_array(ifset($arr, "customer_category")),
 			"locations" => safe_array(ifset($arr, "location")),
 			"default" => array(0),
@@ -150,7 +173,7 @@ class shop_price_list_obj extends _int_object
 
 		if(!isset($arr["product_category"]))
 		{
-			$arr["product_category"] = shop_product_obj::get_categories($arr["product"]);
+			$arr["product_category"] = shop_product_obj::get_categories_for_id($arr["product"]);
 		}
 		$args["rows"] = array_merge(array($arr["product"]), (array)$arr["product_category"]);
 
@@ -160,7 +183,7 @@ class shop_price_list_obj extends _int_object
 	public function run_price_evaluation_code($args)
 	{
 		$f = create_function('$args', $this->prop("code"));
-		return $f($args);
+		return safe_array($f($args));
 	}
 
 	public static function get_matrix_structure($o)
@@ -328,14 +351,15 @@ class shop_price_list_obj extends _int_object
 				"price_list" => $this->id(),
 				"lang_id" => array(),
 				"site_id" => array(),
+				"currency" => new obj_predicate_compare(OBJ_COMP_GREATER, 0, false, "int"),
 			),
 			array(
-				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus", "quantities"),
+				CL_SHOP_PRICE_LIST_CONDITION => array("row", "col", "type", "value", "bonus", "quantities", "currency"),
 			)
 		);
 		foreach($odl->arr() as $cond_id => $cond)
 		{
-			$this->cells[$cond["row"]][$cond["col"]]["conditions"][$cond_id] = array(
+			$this->cells[$cond["row"]][$cond["col"]]["conditions"][$cond["currency"]][$cond_id] = array(
 				"type" => $cond["type"],
 				"value" => $cond["value"],
 				"bonus" => $cond["bonus"],
@@ -368,67 +392,73 @@ class shop_price_list_obj extends _int_object
 		{
 			foreach($cols as $col => $cell_data)
 			{
-				$HANDLE_CELL_ROW = "";
-				foreach($cell_data["conditions"] as $condition_id => $cond)
+				foreach($cell_data["conditions"] as $currency => $conditions)
 				{
-					$quantity_conditions = $this->update_code_handle_quantities($cond["quantities"]);
-					if(count($quantity_conditions) > 0)
+					$i->vars(array(
+						"currency" => $currency,
+					));
+					$HANDLE_CELL_ROW = "";
+					foreach($conditions as $condition_id => $cond)
 					{
-						$QUANTITY_CONDITION = "";
-						$quantity_condition_count = 0;
-						foreach($quantity_conditions as $quantity_condition)
+						$quantity_conditions = $this->update_code_handle_quantities($cond["quantities"]);
+						if(count($quantity_conditions) > 0)
 						{
-							$QUANTITY_CONDITION_SINGLE = "";
-							$QUANTITY_CONDITION_RANGE = "";
-							switch($quantity_condition["type"])
+							$QUANTITY_CONDITION = "";
+							$quantity_condition_count = 0;
+							foreach($quantity_conditions as $quantity_condition)
 							{
-								case "single":
-									$i->vars(array(
-										"quantity" => $quantity_condition["quantity"],
-									));
-									$QUANTITY_CONDITION_SINGLE .= rtrim($i->parse("QUANTITY_CONDITION_SINGLE"), "\t");
-									break;
-									
-								case "range":
-									$i->vars(array(
-										"quantity_from" => $quantity_condition["quantity_from"],
-										"quantity_to" => $quantity_condition["quantity_to"],
-									));
-									$QUANTITY_CONDITION_RANGE .= rtrim($i->parse("QUANTITY_CONDITION_RANGE"), "\t");
-									break;
+								$QUANTITY_CONDITION_SINGLE = "";
+								$QUANTITY_CONDITION_RANGE = "";
+								switch($quantity_condition["type"])
+								{
+									case "single":
+										$i->vars(array(
+											"quantity" => $quantity_condition["quantity"],
+										));
+										$QUANTITY_CONDITION_SINGLE .= rtrim($i->parse("QUANTITY_CONDITION_SINGLE"), "\t");
+										break;
+										
+									case "range":
+										$i->vars(array(
+											"quantity_from" => $quantity_condition["quantity_from"],
+											"quantity_to" => $quantity_condition["quantity_to"],
+										));
+										$QUANTITY_CONDITION_RANGE .= rtrim($i->parse("QUANTITY_CONDITION_RANGE"), "\t");
+										break;
+								}
+								$i->vars(array(
+									"QUANTITY_CONDITION_SINGLE" => $QUANTITY_CONDITION_SINGLE,
+									"QUANTITY_CONDITION_RANGE" => $QUANTITY_CONDITION_RANGE,
+								));							
+								$QUANTITY_CONDITION .= rtrim($i->parse("QUANTITY_CONDITION".(++$quantity_condition_count === 1 ? "_FIRST" : "")), "\t");
 							}
 							$i->vars(array(
-								"QUANTITY_CONDITION_SINGLE" => $QUANTITY_CONDITION_SINGLE,
-								"QUANTITY_CONDITION_RANGE" => $QUANTITY_CONDITION_RANGE,
-							));							
-							$QUANTITY_CONDITION .= rtrim($i->parse("QUANTITY_CONDITION".(++$quantity_condition_count === 1 ? "_FIRST" : "")), "\t");
+								"QUANTITY_CONDITION_FIRST" => "",
+								"QUANTITY_CONDITION" => $QUANTITY_CONDITION,
+							));
+							$i->vars(array(
+								"QUANTITY_CONDITION_START" => rtrim($i->parse("QUANTITY_CONDITION_START"), "\t"),
+								"QUANTITY_CONDITION_END" => rtrim($i->parse("QUANTITY_CONDITION_END"), "\t"),
+							));
 						}
 						$i->vars(array(
-							"QUANTITY_CONDITION_FIRST" => "",
-							"QUANTITY_CONDITION" => $QUANTITY_CONDITION,
+							"condition_id" => $condition_id,
+							"type" => $cond["type"],
+							"price_formula" => $cond["value"],
+							"bonus_formula" => $cond["bonus"],
 						));
-						$i->vars(array(
-							"QUANTITY_CONDITION_START" => rtrim($i->parse("QUANTITY_CONDITION_START"), "\t"),
-							"QUANTITY_CONDITION_END" => rtrim($i->parse("QUANTITY_CONDITION_END"), "\t"),
-						));
+						$HANDLE_CELL_ROW .= rtrim($cond["type"] ? $i->parse("HANDLE_CELL_ROW_CUSTOM") : $i->parse("HANDLE_CELL_ROW_AUTO"), "\t");
 					}
-					$i->vars(array(
-						"condition_id" => $condition_id,
-						"type" => $cond["type"],
-						"price_formula" => $cond["value"],
-						"bonus_formula" => $cond["bonus"],
-					));
-					$HANDLE_CELL_ROW .= rtrim($cond["type"] ? $i->parse("HANDLE_CELL_ROW_CUSTOM") : $i->parse("HANDLE_CELL_ROW_AUTO"), "\t");
-				}
-				if(strlen($HANDLE_CELL_ROW) > 0)
-				{
-					$i->vars(array(
-						"row" => $row,
-						"col" => $col,
-						"HANDLE_CELL_ROW_CUSTOM" => "",
-						"HANDLE_CELL_ROW_AUTO" => $HANDLE_CELL_ROW,
-					));
-					$HANDLE_CELL .= rtrim($i->parse("HANDLE_CELL"), "\t");
+					if(strlen($HANDLE_CELL_ROW) > 0)
+					{
+						$i->vars(array(
+							"row" => $row,
+							"col" => $col,
+							"HANDLE_CELL_ROW_CUSTOM" => "",
+							"HANDLE_CELL_ROW_AUTO" => $HANDLE_CELL_ROW,
+						));
+						$HANDLE_CELL .= rtrim($i->parse("HANDLE_CELL"), "\t");
+					}
 				}
 			}
 		}
@@ -442,6 +472,7 @@ class shop_price_list_obj extends _int_object
 
 		$this->set_prop("code", $i->parse());
 		$this->save();
+		arr($i->parse(), true, true);
 	}
 
 	protected function update_code_handle_quantities($str)

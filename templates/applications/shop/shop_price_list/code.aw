@@ -1,5 +1,5 @@
-$price = $args["price"];
-$bonus = $args["bonus"];
+$prices = $args["prices"];
+$bonuses = $args["bonuses"];
 $log = array();
 
 $parents = array(
@@ -17,10 +17,13 @@ $priorities = array(
 $rows = array();
 foreach($args["rows"] as $row)
 {
-	$rows[$row] = (double)ifset($priorities, $row);
-	foreach(safe_array(ifset($parents, $row)) as $parent)
+	$rows[$row] = isset($priorities[$row]) ? $priorities[$row] : 0;
+	if(isset($parents[$row]))
 	{
-		$rows[$parent] = (double)ifset($priorities, $parent);
+		foreach($parents[$row] as $parent)
+		{
+			$rows[$parent] = isset($priorities[$parent]) ? $priorities[$parent] : 0;
+		}
 	}
 }
 asort($rows);
@@ -31,32 +34,42 @@ foreach(array_keys($rows) as $row)
 	foreach(array({VAR:passing_order}) as $k)
 	{
 		$cols = array();
-		foreach(safe_array(ifset($args, $k)) as $col)
+		if(isset($args[$k]) && is_array($args[$k]))
 		{
-			foreach(array_merge(array($col), safe_array(ifset($parents, $col))) as $_col)
+			foreach($args[$k] as $col)
 			{
-				$cols[$_col] = (double)ifset($priorities, $_col);
+				foreach(array_merge(array($col), isset($parents[$col]) ? $parents[$col] : array()) as $_col)
+				{
+					$cols[$_col] = isset($priorities[$_col]) ? $priorities[$_col] : 0;
+				}
 			}
-		}
-		arsort($cols);
-		foreach(array_keys($cols) as $col)
-		{
-			$_cols[$col] = $k;
+			arsort($cols);
+			foreach(array_keys($cols) as $col)
+			{
+				$_cols[$col] = $k;
+			}
 		}
 	}
 
-	$done = array();
-	foreach($_cols as $col => $type)
+	foreach($args["currencies"] as $currency)
 	{
-		switch($row."_".$col)
+		if(!isset($bonuses[$currency]))
 		{
-			<!-- SUB: HANDLE_CELL -->
-			case "{VAR:row}_{VAR:col}":
-				if(
-					empty($done[$type]) &&
-					($type !== "default" || empty($done))
-				)	// && count(array_intersect($row_cols, array(GENEREERITUD PRIORITEETSEMATE ROW_COLde NÖ IDd))) == 0 && ... )
-				{
+			$bonuses[$currency] = 0;
+		}
+
+		$done = array();
+		foreach($_cols as $col => $type)
+		{
+			if(!empty($done[$type]) || $type === "default" && !empty($done))
+			{
+				continue;
+			}
+
+			switch($currency."_".$row."_".$col)
+			{
+				<!-- SUB: HANDLE_CELL -->
+				case "{VAR:currency}_{VAR:row}_{VAR:col}":
 					<!-- SUB: HANDLE_CELL_ROW_AUTO -->
 					<!-- SUB: QUANTITY_CONDITION_START -->
 					if(
@@ -76,17 +89,17 @@ foreach(array_keys($rows) as $row)
 					)
 					{
 					<!-- END SUB: QUANTITY_CONDITION_START -->
-						list($new_price, $new_bonus) = shop_price_list_obj::evaluate_price_list_conditions_auto($price, $bonus, "{VAR:price_formula}", "{VAR:bonus_formula}");
-						$log[] = array(
+						list($new_price, $new_bonus) = shop_price_list_obj::evaluate_price_list_conditions_auto($prices["{VAR:currency}"], $bonuses["{VAR:currency}"], "{VAR:price_formula}", "{VAR:bonus_formula}");
+						$log["{VAR:currency}"][] = array(
 							"condition_id" => "{VAR:condition_id}",
 							"type" => "{VAR:type}",
 							"diff" => array(
-								"price" => $new_price - $price,
-								"bonus" => $new_bonus - $bonus,
+								"price" => $new_price - $prices["{VAR:currency}"],
+								"bonus" => $new_bonus - $bonuses["{VAR:currency}"],
 							),
 						);
-						$price = $new_price;
-						$bonus = $new_bonus;
+						$prices["{VAR:currency}"] = $new_price;
+						$bonuses["{VAR:currency}"] = $new_bonus;
 						$done[$type] = true;
 					<!-- SUB: QUANTITY_CONDITION_END -->
 					}
@@ -95,22 +108,27 @@ foreach(array_keys($rows) as $row)
 					<!-- SUB: HANDLE_CELL_ROW_CUSTOM -->
 			//		{VAR:}::{VAR:}($price, ....);
 					<!-- END SUB: HANDLE_CELL_ROW_CUSTOM -->
-				}
-				break;
+					break;
 
-			<!-- END SUB: HANDLE_CELL -->	
+				<!-- END SUB: HANDLE_CELL -->	
+			}
 		}
 	}
 }
 
-return array(
-	"price" => array(
-		"in" => $args["price"],
-		"out" => $price,
-	),
-	"bonus" => array(
-		"in" => $args["bonus"],
-		"out" => $bonus,
-	),
-	"log" => $log,
-);
+$retval = array();
+foreach($args["currencies"] as $currency)
+{
+	$retval[$currency] = array(
+		"price" => array(
+			"in" => $args["prices"][$currency],
+			"out" => $prices[$currency],
+		),
+		"bonus" => array(
+			"in" => isset($args["bonuses"][$currency]) ? $args["bonuses"][$currency] : 0,
+			"out" => isset($bonuses[$currency]) ? $bonuses[$currency] : 0,
+		),
+		"log" => isset($log[$currency]) ? $log[$currency] : array(),
+	);
+}
+return $retval;

@@ -12,6 +12,9 @@
 	@property price_list type=hidden field=aw_price_list
 	@caption Hinnakiri
 
+	@property currency type=hidden field=aw_currency
+	@caption Valuuta
+
 	@property row type=hidden field=aw_row
 	@caption Rida
 
@@ -82,6 +85,7 @@ class shop_price_list_condition extends class_base
 			case "aw_row":
 			case "aw_col":
 			case "aw_type":
+			case "aw_currency":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

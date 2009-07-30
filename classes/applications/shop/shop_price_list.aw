@@ -57,6 +57,8 @@
 @groupinfo matrix caption=Maatriks
 @default group=matrix
 
+	@property matrix_tlb type=toolbar no_caption=1 store=no
+
 	@property matrix type=table no_caption=1 store=no
 
 #@groupinfo clients_matrix caption=Kliendigrupid
@@ -93,8 +95,8 @@
 	@property debug_amount type=textbox size=6 table=objects field=meta method=serialize
 	@caption Kogus
 
-	@property debug_price type=textbox size=6 table=objects field=meta method=serialize
-	@caption Hind
+	@property debug_prices type=table store=no
+	@caption Hinnad k&otilde;igis valuutades
 
 	@property debug_product_category type=relpicker reltype=RELTYPE_DEBUG_SHOP_PRODUCT_CATEGORY multiple=1 automatic=1 table=objects field=meta method=serialize no_edit=1 search_button=1
 	@caption Tootekategooria
@@ -193,6 +195,92 @@ class shop_price_list extends class_base
 			"locations" => t("Asukohad"),
 			"customers" => t("Kliendikategooriad"),
 		);
+		if(!is_oid($this->currency = automatweb::$request->arg("currency")) || !$this->can("view", $this->currency))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CURRENCY,
+				"lang_id" => array(),
+				"site_id" => array(),
+				new obj_predicate_sort(array(
+					"name" => "ASC",
+				)),
+				"limit" => 1,
+			));
+			$ids = $ol->ids();
+			$this->currency = reset($ids);
+		}
+	}
+
+	public function _get_matrix_tlb($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CURRENCY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			new obj_predicate_sort(array(
+				"name" => "ASC",
+			)),
+		));
+
+
+		$arr["prop"]["vcl_inst"]->add_menu_button(array(
+			"name" => "currency",
+			"text" => sprintf(t("Vali valuuta, mille maatriksit kuvada (valitud %s)"), obj($this->currency)->name()),
+		));
+		foreach($ol->names() as $oid => $name)
+		{
+			$arr["prop"]["vcl_inst"]->add_menu_item(array(
+				"parent" => "currency",
+				"name" => "currency_".$oid,
+				"text" => $oid == $this->currency ? html::bold($name) : $name,
+				"title" => $oid == $this->currency ? html::bold($name) : $name,
+				"reload" => array(),
+				"url" => aw_url_change_var("currency", $oid),
+			));
+		}
+	}
+
+	public function _get_debug_prices($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			"name" => "currency",
+			"caption" => t("Valuutakurss"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "center",
+		));
+
+		$ol = new object_list(array(
+			"class_id" => CL_CURRENCY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			new obj_predicate_sort(array(
+				"name" => "ASC",
+			)),
+		));
+		$meta = $arr["obj_inst"]->meta("debug_prices");
+		foreach($ol->names() as $oid => $name)
+		{
+			$t->define_data(array(
+				"currency" => $name,
+				"price" => html::textbox(array(
+					"name" => "debug_prices[$oid]",
+					"value" => isset($meta[$oid]) ? $meta[$oid] : 0,
+					"size" => 6,
+				)),
+			));
+		}
+	}
+
+	public function _set_debug_prices($arr)
+	{
+		$arr["obj_inst"]->set_meta("debug_prices", $arr["prop"]["value"]);
 	}
 
 	public function _get_debug_output($arr)
@@ -200,7 +288,7 @@ class shop_price_list extends class_base
 		$prms = array(
 			"amount" => $arr["obj_inst"]->prop("debug_amount"),
 			"product" => $arr["obj_inst"]->prop("debug_product"),
-			"price" => $arr["obj_inst"]->prop("debug_price"),
+			"prices" => $arr["obj_inst"]->meta("debug_prices"),
 			"product_category" => $arr["obj_inst"]->prop("debug_product_category"),
 			"customer_category" => $arr["obj_inst"]->prop("debug_customer_category"),
 			"location" => $arr["obj_inst"]->prop("debug_location"),
@@ -212,14 +300,17 @@ class shop_price_list extends class_base
 		for($i = 0; $i < 1; $i++)
 		{
 			$result = shop_price_list_obj::price($prms);
+			unset($prms["structure"]);
+			$short_result = shop_price_list_obj::price($prms);
 		}
 		$mtime = explode(" ", microtime());
 		$endtime = $mtime[1] + $mtime[0];
 
 		$arr["prop"]["value"] = "<pre>".print_r(array(
 			"p&auml;ringu parameetrid" => $prms,
+			"l&uuml;hike tulemus" => $short_result,
 			"tulemus" => $result,
-			"hinnapäringuks kulunud aeg" => $endtime - $starttime." sekundit",
+			"hinnapäringuks kulunud aeg" => (($endtime - $starttime)/2)." sekundit",
 		), true)."</pre>";
 	}
 
@@ -230,6 +321,7 @@ class shop_price_list extends class_base
 			array(
 				"class_id" => CL_SHOP_PRICE_LIST_CONDITION,
 				"price_list" => $arr["obj_inst"]->id(),
+				"currency" => $this->currency,
 				"lang_id" => array(),
 				"site_id" => array(),
 			),
@@ -255,7 +347,7 @@ class shop_price_list extends class_base
 			"data_cell_callback" => array(&$this, "draw_matrix_cell"),
 			"data_callback" => array(&$this, "modify_matrix_row"),
 		));
-		$t = &$arr["prop"]["vcl_inst"];
+		$arr["prop"]["vcl_inst"]->set_caption(sprintf(t("Hinnastaja maatrix valuutakursile '%s'"), obj($this->currency)->name()));
 	}
 
 	public function modify_matrix_fields(&$t, $name)
@@ -360,6 +452,7 @@ class shop_price_list extends class_base
 			array(
 				"class_id" => CL_SHOP_PRICE_LIST_CONDITION,
 				"price_list" => $arr["obj_inst"]->id(),
+				"currency" => automatweb::$request->arg("currency"),
 				"lang_id" => array(),
 				"site_id" => array(),
 			),
@@ -419,6 +512,7 @@ class shop_price_list extends class_base
 					$o->set_parent($arr["obj_inst"]->id());
 					$o->set_class_id(CL_SHOP_PRICE_LIST_CONDITION);
 					$o->set_prop("price_list", $arr["obj_inst"]->id());
+					$o->set_prop("currency", automatweb::$request->arg("currency"));
 					$o->set_prop("row", $row);
 					$o->set_prop("col", $col);
 					$o->set_prop("type", $val["type"]);
@@ -674,8 +768,15 @@ class shop_price_list extends class_base
 	public function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		$arr["add_crm_cat"] = "";
-		$arr["add_prod_cat"] = "";
+		$arr["currency"] = $this->currency;
+	}
+
+	public function callback_mod_retval($arr)
+	{
+		if(isset($arr["request"]["currency"]))
+		{
+			$arr["args"]["currency"] = $arr["request"]["currency"];
+		}
 	}
 
 	public function callback_generate_scripts($arr)
