@@ -2,16 +2,6 @@
 
 class shop_price_list_obj extends shop_matrix_obj
 {
-	public function awobj_get_matrix_cols()
-	{
-		return (int)parent::prop("matrix_cols");
-	}
-
-	public function awobj_get_matrix_rows()
-	{
-		return (int)parent::prop("matrix_rows");
-	}
-
 	/**
 		@attrib params=name
 		@param valid optional type=bool
@@ -91,8 +81,10 @@ class shop_price_list_obj extends shop_matrix_obj
 
 		@param shop required type=int acl=view
 			The OID of the shop_order_center object
-		@param product required type=int acl=view
-			The OID of the product
+		@param product optional type=int acl=view
+			The OID of the product. If not given, product_packaging must be given!
+		@param product_packaging optional type=int acl=view
+			OID of product packaging. If not given, product must be given!
 		@param amount optional type=float default=1
 			The amount of the product prices are asked for
 		@param product_category optional type=array/int acl=view
@@ -200,16 +192,15 @@ class shop_price_list_obj extends shop_matrix_obj
 
 	protected static function price_validate_arguments($arr)
 	{
-		foreach(array(
-			"shop" => t("Parameter 'shop' must me a valid OID!"),
-			"product" => t("Parameter 'product' must me a valid OID!"),
-		) as $k => $msg)
+		if(!isset($arr["shop"]) || !is_oid($arr["shop"]))
 		{
-			if(!isset($arr[$k]) || !is_oid($arr[$k]))
-			{
-				$e = new awex_price_list_parameter($msg);
-				throw $e;
-			}
+			$e = new awex_price_list_parameter(t("Parameter 'shop' must me a valid OID!"));
+			throw $e;
+		}
+		if((!isset($arr["product"]) || !is_oid($arr["product"])) && (!isset($arr["product_packaging"]) || !is_oid($arr["product_packaging"])))
+		{
+			$e = new awex_price_list_parameter(t("Either parameter 'product' or 'product_packaging' must me a valid OID!"));
+			throw $e;
 		}
 	}
 
@@ -229,7 +220,15 @@ class shop_price_list_obj extends shop_matrix_obj
 		{
 			$arr["product_category"] = shop_product_obj::get_categories_for_id($arr["product"]);
 		}
-		$args["rows"] = array_merge(array($arr["product"]), (array)$arr["product_category"]);
+		$args["rows"] = (array)$arr["product_category"];
+		if(isset($arr["product"]))
+		{
+			$args["rows"] = array_merge($args["rows"], array($arr["product"]));
+		}
+		if(isset($arr["product_packaging"]))
+		{
+			$args["rows"] = array_merge($args["rows"], array($arr["product_packaging"]));
+		}
 
 		return $args;
 	}
@@ -388,7 +387,7 @@ class shop_price_list_obj extends shop_matrix_obj
 
 		$this->set_prop("code", $i->parse());
 		$this->save();
-		arr($i->parse(), true, true);
+//		arr($i->parse(), true, true);
 	}
 
 	protected function update_code_handle_quantities($str)

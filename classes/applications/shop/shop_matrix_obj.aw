@@ -45,13 +45,27 @@ class shop_matrix_obj extends _int_object
 			$matrix["ids"]["locations"] = self::get_matrix_ids($matrix["cols"]["locations"]);
 			$matrix["ids"]["products"] = self::get_matrix_ids($matrix["rows"]["products"]);
 
-			foreach($product_category_inst->get_products($matrix["ids"]["products"]) as $cat => $ol)
+			$matrix_rows = $o->prop("matrix_rows");
+			if(in_array(1, $matrix_rows))
 			{
-				$matrix["ids"]["products"];
-				foreach($ol->ids() as $id)
+				foreach($product_category_inst->get_products($matrix["ids"]["products"]) as $cat => $ol)
 				{
-					self::get_matrix_structure_add_product_to_category($id, $cat, $matrix["rows"]["products"]);
-					$matrix["ids"]["products"][] = $id;
+					foreach($ol->ids() as $id)
+					{
+						self::get_matrix_structure_add_child($id, $cat, $matrix["rows"]["products"]);
+						$matrix["ids"]["products"][] = $id;
+					}
+				}
+			}
+			if(in_array(2, $matrix_rows))
+			{
+				foreach(shop_product_obj::get_packagings_for_id($matrix["ids"]["products"]) as $product => $ol)
+				{
+					foreach($ol->ids() as $id)
+					{
+						self::get_matrix_structure_add_child($id, $product, $matrix["rows"]["products"]);
+						$matrix["ids"]["products"][] = $id;
+					}
 				}
 			}
 
@@ -95,15 +109,15 @@ class shop_matrix_obj extends _int_object
 		return $retval[$o->id()];
 	}
 
-	protected static function get_matrix_structure_add_product_to_category($id, $cat, &$products)
+	protected static function get_matrix_structure_add_child($id, $parent, &$recursive_array)
 	{
-		foreach($products as $product => $subproducts)
+		foreach($recursive_array as $key => $sub_arrays)
 		{
-			if($product == $cat)
+			if($key == $parent)
 			{
-				$products[$product][$id] = array();
+				$recursive_array[$key][$id] = array();
 			}
-			self::get_matrix_structure_add_product_to_category($id, $cat, $products[$product]);
+			self::get_matrix_structure_add_child($id, $parent, $recursive_array[$key]);
 		}
 	}
 

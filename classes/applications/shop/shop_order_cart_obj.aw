@@ -17,8 +17,6 @@ class shop_order_cart_obj extends _int_object
 			OIDs of customer categories.
 		@param location optional type=array/int acl=view
 			OIDs of locations
-		@param structure optional type=bool default=false
-			If set, the structure of the prices will be returned, otherwise only the final prices will be returned.
 	**/
 	public function delivery_methods($arr = array())
 	{

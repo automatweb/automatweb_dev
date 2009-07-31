@@ -46,7 +46,7 @@
 		@property matrix_rows_subtitle type=text subtitle=1 store=no
 		@caption Maatriksi read
 		
-			@property matrix_rows type=chooser field=aw_matrix_rows orient=vertical
+			@property matrix_rows type=chooser field=aw_matrix_rows multiple=1 orient=vertical table=objects field=meta method=serialize
 			@caption Maatriksi read
 			
 			@property matrix_product_categories type=relpicker reltype=RELTYPE_PRODUCT_CATEGORY multiple=1 store=connect
@@ -84,6 +84,9 @@
 
 	@property debug_product type=relpicker reltype=RELTYPE_DEBUG_SHOP_PRODUCT automatic=1 table=objects field=meta method=serialize no_edit=1 search_button=1
 	@caption Toode
+
+	@property debug_product_packaging type=relpicker reltype=RELTYPE_DEBUG_SHOP_PRODUCT_PACKAGING automatic=1 table=objects field=meta method=serialize no_edit=1 search_button=1
+	@caption Pakend
 
 	@property debug_amount type=textbox size=6 table=objects field=meta method=serialize
 	@caption Kogus
@@ -169,6 +172,9 @@
 @reltype DEBUG_LOCATION value=17 clid=CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT,CL_COUNTRY_ADMINISTRATIVE_UNIT
 @caption Hinnakalkulaatori asukoht
 
+@reltype DEBUG_SHOP_PRODUCT_PACKAGING value=18 clid=CL_SHOP_PRODUCT_PACKAGING
+@caption Hinnakalkulaatori pakend
+
 */
 
 class shop_price_list extends shop_matrix
@@ -229,6 +235,7 @@ class shop_price_list extends shop_matrix
 		$prms = array(
 			"shop" => $arr["obj_inst"]->prop("shop"),
 			"product" => $arr["obj_inst"]->prop("debug_product"),
+			"product_packaging" => $arr["obj_inst"]->prop("debug_product_packaging"),
 			"amount" => $arr["obj_inst"]->prop("debug_amount"),
 			"prices" => $arr["obj_inst"]->meta("debug_prices"),
 			"product_category" => $arr["obj_inst"]->prop("debug_product_category"),
@@ -555,7 +562,6 @@ class shop_price_list extends shop_matrix
 		switch($f)
 		{
 			case "aw_shop":
-			case "aw_matrix_cols":
 			case "valid_from":
 			case "valid_to":
 			case "base_price":

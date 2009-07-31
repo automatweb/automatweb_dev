@@ -28,29 +28,29 @@ foreach($args["rows"] as $row)
 }
 asort($rows);
 
-foreach(array_keys($rows) as $row)
+$_cols = array();
+foreach(array({VAR:passing_order}) as $k)
 {
-	$_cols = array();
-	foreach(array({VAR:passing_order}) as $k)
+	$cols = array();
+	if(isset($args[$k]) && is_array($args[$k]))
 	{
-		$cols = array();
-		if(isset($args[$k]) && is_array($args[$k]))
+		foreach($args[$k] as $col)
 		{
-			foreach($args[$k] as $col)
+			foreach(array_merge(array($col), isset($parents[$col]) ? $parents[$col] : array()) as $_col)
 			{
-				foreach(array_merge(array($col), isset($parents[$col]) ? $parents[$col] : array()) as $_col)
-				{
-					$cols[$_col] = isset($priorities[$_col]) ? $priorities[$_col] : 0;
-				}
-			}
-			arsort($cols);
-			foreach(array_keys($cols) as $col)
-			{
-				$_cols[$col] = $k;
+				$cols[$_col] = isset($priorities[$_col]) ? $priorities[$_col] : 0;
 			}
 		}
+		arsort($cols);
+		foreach(array_keys($cols) as $col)
+		{
+			$_cols[$col] = $k;
+		}
 	}
+}
 
+foreach(array_keys($rows) as $row)
+{
 	foreach($args["currencies"] as $currency)
 	{
 		if(!isset($bonuses[$currency]))

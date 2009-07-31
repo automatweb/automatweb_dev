@@ -299,6 +299,44 @@ class shop_product_obj extends _int_object
 		return $ol;
 	}
 
+	public static function get_packagings_for_id($id)
+	{
+		$prms = array(
+			"class_id" => CL_SHOP_PRODUCT_PACKAGING,
+			"CL_SHOP_PRODUCT_PACKAGING.RELTYPE_PACKAGING(CL_SHOP_PRODUCT)" => $id,
+			"site_id" => array(),
+			"lang_id" => array(),
+			new obj_predicate_sort(array("jrk" => "ASC")),
+		);
+		if(is_array($id))
+		{
+			$ols = array();
+			$odl = new object_data_list(
+				$prms,
+				array(
+					CL_SHOP_PRODUCT_PACKAGING => array("CL_SHOP_PRODUCT_PACKAGING.RELTYPE_PACKAGING(CL_SHOP_PRODUCT).oid" => "products"),
+				)
+			);
+			foreach($odl->arr() as $oid => $odata)
+			{
+				foreach((array)$odata["products"] as $product)
+				{
+					if(!isset($ols[$product]))
+					{
+						$ols[$product] = new object_list;
+					}
+					$ols[$product]->add($oid);
+				}
+			}
+			return $ols;
+		}
+		else
+		{
+			$ol = new object_list($prms);
+			return $ol;
+		}
+	}
+
 	public function get_amount($warehouse_id)
 	{
 		$sql = "SELECT amount FROM aw_shop_warehouse_amount WHERE warehouse = '$warehouse_id' AND product = '".$this->id()."'";
