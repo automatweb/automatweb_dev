@@ -212,7 +212,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@caption Lingi maksimaalne pikkus
 		@comment Linkide kuvamisel maksimaalne lingi teksti pikkus
 
-		@property show_last_posts_count type=textbox default=3 type=int
+		@property show_last_posts_count type=textbox default=3
 		@caption Viimaseid postitusi kuva
 		@comment Mitut n&auml;idata viimaste postituste vaates
 
@@ -2391,7 +2391,24 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			$ca = $this->_can_admin(array("uid" => $uid, "forum_id" => $arr["id"]));
 			if(($t_edit && aw_global_get("uid") == $topic->createdby()) || $ca)
 			{
-				$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+
+				$htmlc = null;
+
+				if ($topic->class_id() == CL_MSGBOARD_TOPIC && $this->read_site_template('edit_topic.tpl', 1))
+				{
+					$htmlc = get_instance("cfg/htmlclient",array("tpldir" => "forum", "template" => "edit_topic.tpl"));
+				}
+
+				if ($topic->class_id() == CL_COMMENT && $this->read_site_template('edit_comment.tpl', 1))
+				{
+					$htmlc = get_instance("cfg/htmlclient",array("tpldir" => "forum", "template" => "edit_comment.tpl"));
+				}
+
+				if ($htmlc == null)
+				{
+					$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+				}
+
 				$htmlc->start_output();
 		
 				$htmlc->add_property(array(
@@ -2439,6 +2456,12 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 					$props["uemail"]["type"] = "text";
 					$props["uname"]["value"] = $topic->prop("uname");
 					$props["uname"]["type"] = "text";
+					$htmlc->vars(array(
+						'commtext' => $topic->prop('commtext'),
+						'name' => $topic->name(),
+						'uemail' => $topic->prop('uemail'),
+						'uname' => $topic->prop('uname'),
+						));
 				}
 				$cb_values = aw_global_get("cb_values");
 				aw_session_del("cb_values");

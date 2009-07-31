@@ -541,7 +541,7 @@
             <group>topic_selector</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>int</type>
+            <type>textbox</type>
             <default>3</default>
             <caption>Viimaseid postitusi kuva</caption>
             <comment>Mitut n&amp;amp;auml;idata viimaste postituste vaates</comment>
