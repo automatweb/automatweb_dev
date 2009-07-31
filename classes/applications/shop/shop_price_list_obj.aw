@@ -1,6 +1,6 @@
 <?php
 
-class shop_price_list_obj extends _int_object
+class shop_price_list_obj extends shop_matrix_obj
 {
 	public function awobj_get_matrix_cols()
 	{
@@ -15,6 +15,8 @@ class shop_price_list_obj extends _int_object
 	/**
 		@attrib params=name
 		@param valid optional type=bool
+		@param timespan optional type=array
+			Array with two elements 'start' and 'end', the start and end of the timespan, respectively. (UNIX timestamps)
 	**/
 	public static function get_price_lists($arr = array())
 	{
@@ -31,10 +33,26 @@ class shop_price_list_obj extends _int_object
 				)),
 			);
 
+			if(!empty($arr["timespan"]["start"]) && !empty($arr["timespan"]["end"]))
+			{	// VALID
+				$prms[] = new object_list_filter(array(
+					"logic" => "AND",
+					"conditions" => array(
+						"CL_SHOP_PRICE_LIST.valid_from" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["timespan"]["start"]),
+						"CL_SHOP_PRICE_LIST.valid_to" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["timespan"]["end"]),
+					)
+				));
+			}
+
 			if(!empty($arr["valid"]))
 			{	// VALID
-				$prms["valid_from"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time());
-				$prms["valid_to"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time());
+				$prms[] = new object_list_filter(array(
+					"logic" => "AND",
+					"conditions" => array(
+						"CL_SHOP_PRICE_LIST.valid_from" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
+						"CL_SHOP_PRICE_LIST.valid_to" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time()),
+					)
+				));
 			}
 			elseif(isset($arr["valid"]))
 			{	// INVALID
@@ -71,27 +89,44 @@ class shop_price_list_obj extends _int_object
 	/**
 		@attrib name=price params=name
 
+		@param shop required type=int acl=view
+			The OID of the shop_order_center object
 		@param product required type=int acl=view
 			The OID of the product
 		@param amount optional type=float default=1
 			The amount of the product prices are asked for
+		@param product_category optional type=array/int acl=view
+			OIDs of product categories
 		@param prices optional type=float
 			The before prices by currencies
 		@param bonuses optional type=float default=0
 			The before points
+		@param customer_data optional type=int acl=view
+			OID of customer_data object
 		@param customer_category optional type=array/int acl=view
-			OIDs of client categories.
-		@param client_data optional type=int acl=view
-			OID of client_data object
+			OIDs of customer categories.
 		@param location optional type=array/int acl=view
 			OIDs of locations
-		@param product_category optional type=array/int acl=view
-			OIDs of product categories
+		@param timespan optional type=array
+			Array with two elements 'start' and 'end', the start and end of the timespan, respectively. (UNIX timestamps)
 		@param structure optional type=bool default=false
 			If set, the structure of the prices will be returned, otherwise only the final prices will be returned.
 	**/
 	public static function price($arr)
 	{
+		try
+		{
+			self::price_validate_arguments($arr);
+		}
+		catch (Exception $e)
+		{
+			throw $e;
+		}
+		if(!empty($_GET["debug"]))
+		{
+			arr(obj($arr["shop"])->get_customer_data());
+		}
+
 		enter_function("shop_price_list_obj::price");
 		/**
 			# STRUCTURE of $retval (if $arr["structure"] is true)
@@ -139,7 +174,11 @@ class shop_price_list_obj extends _int_object
 		// Find all valid price list objects
 		// Later on this should leave out the ones that don't have given customers, products etc..
 		$ol = self::get_price_lists(array(
-			"valid" => true,
+			"shop" => $arr["shop"],
+			"timespan" => array(
+				"start" => isset($arr["timespan"]["start"]) ? $arr["timespan"]["start"] : time(),
+				"end" => isset($arr["timespan"]["end"]) ? $arr["timespan"]["end"] : time(),
+			),
 		));
 
 		// Prepare the arguments for price evaluation code
@@ -157,6 +196,21 @@ class shop_price_list_obj extends _int_object
 		}
 		exit_function("shop_price_list_obj::price");
 		return empty($arr["structure"]) ? $prices_only_retval : $retval;
+	}
+
+	protected static function price_validate_arguments($arr)
+	{
+		foreach(array(
+			"shop" => t("Parameter 'shop' must me a valid OID!"),
+			"product" => t("Parameter 'product' must me a valid OID!"),
+		) as $k => $msg)
+		{
+			if(!isset($arr[$k]) || !is_oid($arr[$k]))
+			{
+				$e = new awex_price_list_parameter($msg);
+				throw $e;
+			}
+		}
 	}
 
 	protected static function handle_arguments($arr)
@@ -184,148 +238,6 @@ class shop_price_list_obj extends _int_object
 	{
 		$f = create_function('$args', $this->prop("code"));
 		return safe_array($f($args));
-	}
-
-	public static function get_matrix_structure($o)
-	{
-		static $retval;
-		if(!isset($retval[$o->id()]))
-		{
-			$matrix = array(
-				"rows" => array(
-					"products" => array(),
-				),
-				"cols" => array(
-					"customers" => array(),
-					"locations" => array(),
-				),
-				"ids" => array(),
-				"names" => array(),
-				"priorities" => array(),
-			);
-			$company_inst = new crm_company_obj;
-			$product_category_inst = new shop_product_category_obj;
-			$admin_struct_inst = new country_administrative_structure_object;
-
-			foreach(safe_array($o->prop("matrix_customer_categories")) as $id)
-			{
-				$matrix["cols"]["customers"][$id] = $company_inst->get_customer_categories_hierarchy($id);
-			}
-
-			foreach(safe_array($o->prop("matrix_countries")) as $id)
-			{
-				$matrix["cols"]["locations"][$id] = $admin_struct_inst->prop(array(
-					"prop" => "units_by_country",
-					"country" => $id,
-				))->ids_hierarchy();
-			}
-
-			foreach(safe_array($o->prop("matrix_product_categories")) as $id)
-			{
-				$matrix["rows"]["products"][$id] = $product_category_inst->get_categories_hierarchy($id);
-			}
-
-			$matrix["ids"]["customers"] = self::get_matrix_ids($matrix["cols"]["customers"]);
-			$matrix["ids"]["locations"] = self::get_matrix_ids($matrix["cols"]["locations"]);
-			$matrix["ids"]["products"] = self::get_matrix_ids($matrix["rows"]["products"]);
-
-			foreach($product_category_inst->get_products($matrix["ids"]["products"]) as $cat => $ol)
-			{
-				$matrix["ids"]["products"];
-				foreach($ol->ids() as $id)
-				{
-					self::get_matrix_structure_add_product_to_category($id, $cat, $matrix["rows"]["products"]);
-					$matrix["ids"]["products"][] = $id;
-				}
-			}
-
-			if(count($ids = array_merge($matrix["ids"]["customers"], $matrix["ids"]["products"], $matrix["ids"]["locations"])) > 0)
-			{
-				// Names, clids
-				$odl = new object_data_list(
-					array(
-						"oid" => $ids,
-						"lang_id" => array(),
-						"site_id" => array(),
-					),
-					array(
-						CL_SHOP_PRODUCT => array("class_id", "name"),
-					)
-				);
-				$matrix["names"] = $odl->get_element_from_all("name");
-				$matrix["clids"] = $odl->get_element_from_all("class_id");
-
-				// Priorities
-				foreach(connection::find(array("from.class_id" => CL_SHOP_PRICE_LIST, "from" => $o->id(), "to" => $ids, "type" => "RELTYPE_PRIORITY")) as $conn)
-				{
-					$matrix["priorities"][$conn["to"]] = aw_math_calc::string2float($conn["data"]);
-				}
-			}
-
-			// Sort rows, cols
-			if(count($matrix["priorities"]) > 0)
-			{
-				$matrix["cols"]["locations"] = self::matrix_sort_lvl($matrix["cols"]["locations"], $matrix["priorities"]);
-				$matrix["cols"]["customers"] = self::matrix_sort_lvl($matrix["cols"]["customers"], $matrix["priorities"]);
-				$matrix["rows"]["products"] = self::matrix_sort_lvl($matrix["rows"]["products"], $matrix["priorities"]);
-			}
-
-			$matrix["parents"] = array();
-			self::get_matrix_structure_parents($matrix["rows"]["products"] + $matrix["cols"]["customers"] + $matrix["cols"]["locations"] + $matrix["rows"]["products"], $matrix["parents"]);
-
-			$retval[$o->id()] = $matrix;
-		}		
-
-		return $retval[$o->id()];
-	}
-
-	protected static function get_matrix_structure_add_product_to_category($id, $cat, &$products)
-	{
-		foreach($products as $product => $subproducts)
-		{
-			if($product == $cat)
-			{
-				$products[$product][$id] = array();
-			}
-			self::get_matrix_structure_add_product_to_category($id, $cat, $products[$product]);
-		}
-	}
-
-	protected static function get_matrix_structure_parents($data, &$retval, $parents = array())
-	{
-		foreach($data as $k => $v)
-		{
-			$retval[$k] = array_merge(safe_array(ifset($retval, $k)), $parents);
-			self::get_matrix_structure_parents($v, &$retval, $parents + array($k => $k));
-		}
-	}
-
-	protected static function matrix_sort_lvl($data, $priorities)
-	{
-		$_priorities = array();
-		foreach($priorities as $k => $v)
-		{
-			$_priorities[] = "'$k' => '$v'";
-		}
-
-		$cmp = create_function('$a, $b', '$p = array('.implode(",", $_priorities).'); return (float)ifset($p, $b) - (float)ifset($p, $a);');
-		uksort($data, $cmp);
-		foreach($data as $k => $v)
-		{
-			$data[$k] = self::matrix_sort_lvl($v, $priorities);
-		}
-		return $data;
-	}
-
-	protected static function get_matrix_ids($d)
-	{
-		$r = array();
-		foreach($d as $k => $v)
-		{
-			$r[$k] = $k;
-			$r = array_merge($r, self::get_matrix_ids($v));
-		}
-		return $r;
 	}
 
 	public function update_code()
@@ -392,6 +304,10 @@ class shop_price_list_obj extends _int_object
 		{
 			foreach($cols as $col => $cell_data)
 			{
+				if(empty($cell_data["conditions"]))
+				{
+					continue;
+				}
 				foreach($cell_data["conditions"] as $currency => $conditions)
 				{
 					$i->vars(array(
@@ -517,40 +433,6 @@ class shop_price_list_obj extends _int_object
 		}
 	}
 
-	protected function update_code_find_closest_cell_with_conditions($data)
-	{
-		if (count($data["conditions"]))
-		{
-			return $data;
-		}
-		elseif (!empty($data["parent"]) && isset($this->cells[$data["parent"]["row"]][$data["parent"]["col"]]))
-		{
-			return $this->update_code_find_closest_cell_with_conditions($this->cells[$data["parent"]["row"]][$data["parent"]["col"]]);
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	protected function update_code_add_cell($row, $col, $parent = array(), $subrows = array(), $subcols = array())
-	{
-		$this->cells[$row][$col] = array(
-			"row" => $row,
-			"col" => $col,
-			"parent" => $parent,
-			"conditions" => array(),
-		);		
-		foreach($subcols as $_col => $_subcols)
-		{
-			$this->update_code_add_cell($row, $_col, array("row" => $row, "col" => $col), array(), $_subcols);
-		}
-		foreach($subrows as $_row => $_subrows)
-		{
-			$this->update_code_add_cell($_row, $col, array("row" => $row, "col" => $col), $_subrows, array());
-		}
-	}
-
 	public static function evaluate_price_list_conditions_auto($old_price, $bonus, $price_formula, $bonus_formula)
 	{
 		$price_formula = trim($price_formula);
@@ -587,41 +469,12 @@ class shop_price_list_obj extends _int_object
 
 		return array($price, $bonus);
 	}
-
-	public function prioritize()
-	{
-		$this->matrix_structure = $this->get_matrix_structure($this);
-		foreach($this->matrix_structure["cols"]["customers"] as $id => $children)
-		{
-			$this->prioritize_level($id, $children);
-		}
-		foreach($this->matrix_structure["cols"]["locations"] as $id => $children)
-		{
-			$this->prioritize_level($id, $children);
-		}
-		foreach($this->matrix_structure["rows"]["products"] as $id => $children)
-		{
-			$this->prioritize_level($id, $children);
-		}
-	}
-
-	protected function prioritize_level($id, $children, $parent_priority = 0)
-	{
-		if(empty($this->matrix_structure["priorities"][$id]))
-		{
-			$this->matrix_structure["priorities"][$id] = $parent_priority + 1000;
-			$this->connect(array(
-				"to" => $id,
-				"type" => "RELTYPE_PRIORITY",
-				"data" => $this->matrix_structure["priorities"][$id],
-			));
-		}
-
-		foreach($children as $_id => $_children)
-		{
-			$this->prioritize_level($_id, $_children, $this->matrix_structure["priorities"][$id]);
-		}
-	}
 }
+
+/* Generic price list exception */
+class awex_price_list extends aw_exception {}
+
+/* Indicates invalid argument */
+class awex_price_list_parameter extends awex_price_list {}
 
 ?>

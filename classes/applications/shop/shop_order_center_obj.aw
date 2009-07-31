@@ -148,4 +148,18 @@ class shop_order_center_obj extends _int_object
 			"sum_rent" => $single_payment * $period + $prepayment,
 		);
 	}
+
+	/**
+		@comment DOES NOT WORK YET!! STORAGE IS BROKEN!!
+	**/
+	public function get_customer_data()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"buyer" => array(),
+			"seller.RELTYPE_MANAGER_CO(CL_SHOP_WAREHOUSE_CONFIG).RELTYPE_ORDER_CENTER(CL_SHOP_WAREHOUSE).RELTYPE_WAREHOUSE(CL_SHOP_ORDER_CENTER)" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+	}
 }

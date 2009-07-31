@@ -183,5 +183,22 @@ class shop_matrix_obj extends _int_object
 	{
 		$this->prioritize();
 	}
+
+	protected function update_code_add_cell($row, $col, $parent = array(), $subrows = array(), $subcols = array())
+	{
+		$this->cells[$row][$col] = array(
+			"row" => $row,
+			"col" => $col,
+			"parent" => $parent,
+		);		
+		foreach($subcols as $_col => $_subcols)
+		{
+			$this->update_code_add_cell($row, $_col, array("row" => $row, "col" => $col), array(), $_subcols);
+		}
+		foreach($subrows as $_row => $_subrows)
+		{
+			$this->update_code_add_cell($_row, $col, array("row" => $row, "col" => $col), $_subrows, array());
+		}
+	}
 }
 ?>

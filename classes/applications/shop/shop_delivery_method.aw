@@ -12,7 +12,7 @@
 	@property type type=chooser field=aw_type orient=vertical
 	@caption T&uuml;&uuml;p
 
-	@property price type=textbox size=4 field=aw_price
+	@property prices type=table store=no
 	@caption Hind
 
 	@property enabled type=checkbox field=aw_enabled
@@ -26,6 +26,9 @@
 
 	@groupinfo matrix_settings caption="Maatriksi seaded" parent=matrix
 	@default group=matrix_settings
+			
+			@property matrix_col_order type=table store=no
+			@caption Veeru gruppide j&auml;rjekord
 
 		@property matrix_cols type=text subtitle=1 store=no
 		@caption Maatriksi veerud
@@ -42,6 +45,26 @@
 			@property matrix_product_categories type=relpicker reltype=RELTYPE_PRODUCT_CATEGORY multiple=1 store=connect
 			@caption Tootekategooriad
 
+		@property code type=hidden field=aw_code
+			
+@groupinfo priorities caption=Prioriteedid
+@default group=priorities
+
+	@groupinfo priorities_customer_categories caption=Kliendigrupid parent=priorities
+	@default group=priorities_customer_categories
+
+		@property priorities_customer_categories_tbl type=table no_caption=1 store=no
+
+	@groupinfo priorities_locations caption=Asukohad parent=priorities
+	@default group=priorities_locations
+
+		@property priorities_locations_tbl type=table no_caption=1 store=no
+
+	@groupinfo priorities_product_categories caption=Tootegrupid parent=priorities
+	@default group=priorities_product_categories
+
+		@property priorities_product_categories_tbl type=table no_caption=1 store=no
+
 #### RELTYPES
 
 @reltype CUSTOMER_CATEGORY value=1 clid=CL_CRM_CATEGORY
@@ -50,9 +73,12 @@
 @reltype PRODUCT_CATEGORY value=2 clid=CL_SHOP_PRODUCT_CATEGORY
 @caption Tootekategooria, mida maatriksi reana kuvatakse
 
+@reltype PRIORITY value=3
+@caption Prioriteet
+
 */
 
-class shop_delivery_method extends class_base
+class shop_delivery_method extends shop_matrix
 {
 	public function shop_delivery_method()
 	{
@@ -68,6 +94,50 @@ class shop_delivery_method extends class_base
 			1 => t("Lisandub iga toote hinnale eraldi"),
 			2 => t("Lisandub kogu tellimuse hinnale"),
 		);
+	}
+
+	public function _get_prices($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			"name" => "currency",
+			"caption" => t("Valuutakurss"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "center",
+		));
+
+		$ol = new object_list(array(
+			"class_id" => CL_CURRENCY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			new obj_predicate_sort(array(
+				"name" => "ASC",
+			)),
+		));
+		$prices = $arr["obj_inst"]->get_price();
+
+		foreach($ol->names() as $oid => $name)
+		{
+			$t->define_data(array(
+				"currency" => $name,
+				"price" => html::textbox(array(
+					"name" => "prices[$oid]",
+					"value" => isset($prices[$oid]) ? $prices[$oid] : 0,
+					"size" => 6,
+				)),
+			));
+		}
+	}
+
+	public function _set_prices($arr)
+	{
+		$arr["obj_inst"]->set_price($arr["prop"]["value"]);
 	}
 
 	public function _get_type($arr)
@@ -91,12 +161,14 @@ class shop_delivery_method extends class_base
 		);
 		foreach($odl->arr() as $cond)
 		{
+			$cond["col"] = is_oid($cond["col"]) ? $cond["col"] : "default";
 			$matrix[$cond["row"]][$cond["col"]] = $cond["enable"] ? 1 : 2;
 		}
 
-		shop_price_list::draw_matrix(array(
+		$this->draw_matrix(array(
 			"table_inst" => &$arr["prop"]["vcl_inst"],
 			"obj_inst" => &$arr["obj_inst"],
+			"column_types" => $this->col_types,
 			"matrix_data" => $matrix,
 			"data_cell_callback" => array(&$this, "draw_matrix_cell"),
 		));
@@ -104,9 +176,16 @@ class shop_delivery_method extends class_base
 
 	public function draw_matrix_cell($oid, $field, $matrix)
 	{
+		$name = explode("_", $field["name"]);
+		$col = array_pop($name);
+		if($col === "self")
+		{
+			$col = array_pop($name);
+		}
+
 		return html::select(array(
 			"name" => "matrix[".$oid."][".(substr($field["name"], -5) == "_self" ? substr($field["name"], 0, -5) : $field["name"])."]",
-			"value" => ifset($matrix, $oid, (substr($field["name"], -5) == "_self" ? substr($field["name"], 0, -5) : $field["name"])),
+			"value" => ifset($matrix, $oid, $col),
 			"options" => array(
 				"0" => t("--Vali--"),
 				"1" => t("Lubatud"),
@@ -132,6 +211,7 @@ class shop_delivery_method extends class_base
 		);
 
 		$delete = array();
+		$change = array();
 		foreach($odl->arr() as $cond_id => $cond)
 		{
 			if(!empty($data[$cond["row"]][$cond["col"]]))
@@ -193,11 +273,8 @@ class shop_delivery_method extends class_base
 			));
 			$ol->delete();
 		}
-	}
 
-	public function callback_mod_reforb($arr)
-	{
-		$arr["post_ru"] = post_ru();
+		$arr["obj_inst"]->update_code();
 	}
 
 	public function show($arr)
@@ -234,6 +311,14 @@ class shop_delivery_method extends class_base
 					"type" => "decimal(14,4)"
 				));
 				return true;
+
+			case "aw_code":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "text"
+				));
+				$ret = true;
+				break;
 		}
 	}
 }
