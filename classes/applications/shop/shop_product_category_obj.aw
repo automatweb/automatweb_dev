@@ -141,6 +141,24 @@ class shop_product_category_obj extends _int_object
 		}
 	}
 
+	/** Returns packages for category
+		@attrib api=1 params=pos
+		@returns
+			Object list or array of object lists if id is given and is array.
+	**/
+	public function get_packets()
+	{
+		$prms = array(
+			"class_id" =>CL_SHOP_PACKET,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_SHOP_PACKET.RELTYPE_CATEGORY" =>$this->id(),
+		);
+		return new object_list($prms);
+	}
+
+
+
 //----------------- static functions -------------------------
 
 

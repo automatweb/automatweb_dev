@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.23 2009/07/28 09:38:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.24 2009/07/31 13:51:38 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -103,6 +103,9 @@
 
 @reltype IMAGE value=2 clid=CL_IMAGE
 @caption pilt
+
+@reltype CATEGORY value=3 clid=CL_SHOP_PRODUCT_CATEGORY
+@caption Kategooria
 
 */
 
@@ -664,6 +667,99 @@ class shop_packet extends class_base
 				break;
 		}
 
+	}
+
+	private function get_template()
+	{
+		if($this->template)
+		{
+			return $this->template;
+		}
+		else
+		{
+			return "show.tpl";
+		}
+	}
+
+	function show($arr)
+	{
+		$ob = new object($arr["id"]);
+
+		$this->read_template($this->get_template());
+		$this->vars(array(
+			"name" => $ob->prop("name"),
+		));
+
+		$data = $ob->get_data();
+		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
+ //		$data["submit_url"] = $this->mk_my_orb("submit_add_cart", array(
+//			"oc" => $oc->id(),
+//			"id" => $oc->prop("cart"),
+//		),CL_SHOP_ORDER_CART,false,false,"&amp;");
+//
+//		if(!substr_count("orb.aw" ,$data["submit_url"] ))
+//		{
+//			$data["submit_url"] = str_replace(aw_ini_get("baseurl")."/" ,aw_ini_get("baseurl")."/orb.aw" , $data["submit_url"]);
+//
+//		}
+//		$data["oc"] = $oc->id();
+		$data["submit"] = html::submit(array(
+			"value" => t("Lisa tooted korvi"),
+		));
+		$prod_params = array();
+		$data["COLORS"] = "";
+		foreach($data["packages"] as $product => $packages)
+		{
+			$prod_sizes = array();
+			$prod_prices = array();
+			$prod_params[$product] = $product." : { sizes : [";
+			$this->vars(array(
+				"color_key" => $product,
+				"color" => $data["colors"][$product],
+			));
+				
+			foreach($packages as $package)
+			{
+				if($data["sizes"][$package] && $data["prices"][$package])
+				{
+					$prod_sizes[] = $data["sizes"][$package];
+					$prod_prices[] = $data["prices"][$package];
+				}
+			}
+
+			$prod_params[$product].=join(",",$prod_sizes);
+			$prod_params[$product].="], prices : [";
+			$prod_params[$product].=join(",",$prod_prices);
+			$prod_params[$product].="], descs : '".$data["descriptions"][$product]."'  }";
+			$data["COLORS"].= $this->parse("COLORS");
+		}
+
+		$first_pack = reset($data["packages"]);
+		$n = 0;
+		$data["SIZES"] = "";
+		foreach($first_pack as $pack)
+		{
+			
+			$this->vars(array(
+				"size" => $data["sizes"][$pack],
+				"size_key" => $n,
+			));
+			$data["SIZES"].= $this->parse("SIZES");
+			$n++;
+		}
+		$data["price"] = $data["prices"][reset($first_pack)];
+		
+		$data["product_params"] = "productParams = {\n";
+		$data["product_params"].= join(",\n" , $prod_params);
+//						111111111 : { sizes : [32,34,36], prices : [100,200,300]  },
+//						232323231 : { sizes : [34,36], prices : [111,222,333]  }
+//					}
+//
+		$data["product_params"].= "\n}";
+//arr($data);
+
+		$this->vars($data);
+		return $this->parse();
 	}
 
 }

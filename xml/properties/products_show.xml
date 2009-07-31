@@ -20,6 +20,22 @@
             <field>template</field>
             <caption>Toodete n&amp;amp;auml;itamise template</caption>
       </property>
+            <property>
+            <name>product_template</name>
+            <table>aw_products_show</table>
+            <group>general</group>
+            <type>select</type>
+            <field>product_template</field>
+            <caption>Toote n&amp;amp;auml;itamise template</caption>
+      </property>
+      <property>
+            <name>type</name>
+            <table>aw_products_show</table>
+            <group>general</group>
+            <type>select</type>
+            <field>type</field>
+            <caption>Klassid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PRODUCTS_SHOW</syslog_type>
             <relationmgr>yes</relationmgr>

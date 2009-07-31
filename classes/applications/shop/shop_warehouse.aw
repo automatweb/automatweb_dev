@@ -200,6 +200,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 				@property packets_tree type=treeview parent=packets_tree_lay store=no no_caption=1
 
+			@layout packets_tree_lay2 type=vbox closeable=1 area_caption=Kategooriate&nbsp;t&uuml;&uuml;bid parent=packets_left
+
+				@property packets_cat_tree type=text parent=packets_tree_lay2 store=no no_caption=1
+
+
 			@layout packets_left_search type=vbox parent=packets_left area_caption=Otsing closeable=1
 
 				@property packets_s_name type=textbox store=no captionside=top size=30 parent=packets_left_search
@@ -1295,6 +1300,7 @@ class shop_warehouse extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "packets_cat_tree":
 			case "product_managementcat_tree":
 				$prop["value"] = $this->_get_managementcat_tree($arr);
 				break;
@@ -5036,6 +5042,7 @@ class shop_warehouse extends class_base
 				)),
 				"products" => join(",<br>" , $products),
 				"icon" => icons::get_class_icon(CL_SHOP_PACKET),
+				"categories" => join(", " , $o->get_categories()->names()),
 			));
 		}
 	}
@@ -5117,12 +5124,12 @@ class shop_warehouse extends class_base
 			"align" => "center"
 		));
 */
-
+/*
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("J&auml;rjekord"),
 			"align" => "center"
-		));
+		));*/
 /*
 		$t->define_field(array(
 			"sortable" => 1,
@@ -5131,6 +5138,7 @@ class shop_warehouse extends class_base
 			"align" => "center"
 		));
 */
+
 		$conf = obj($o->prop("conf"));
 		if (!$conf->prop("no_count"))
 		{
@@ -5161,6 +5169,13 @@ class shop_warehouse extends class_base
 			"align" => "center"
 		));
 */
+
+		$t->define_field(array(
+			"name" => "categories",
+			"caption" => t("Paketiga seotud tootekategooriad"),
+			"align" => "center"
+		));
+
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -11672,7 +11687,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"name" => $cat->name(),
 				"id" => $id."",
 				"reload" => array(
-					"props" => array("product_management_list"),
+					"props" => array("product_management_list", "packets_list"),
 				        "params" => array("cat_".$id => $id)
 				)
 			));
@@ -11698,7 +11713,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"name" => $name,
 				"id" => $id."",
 				"reload" => array(
-					"props" => array("product_management_list"),
+					"props" => array("product_management_list", "packets_list"),
 				        "params" => array("cat_".$parent => $id)
 				)
 			));

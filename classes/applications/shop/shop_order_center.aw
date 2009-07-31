@@ -140,11 +140,11 @@
 @default group=appearance
 	@property appearance_toolbar type=toolbar no_caption=1 store=no
 	@layout appearance_c width=30%:70% type=hbox
-		@layout appearance_l type=vbox closeable=1 area_caption=Tootegrupid parent=appearance_c
+		@layout appearance_l type=vbox closeable=1 parent=appearance_c
 			@property appearance_tree type=treeview store=no no_caption=1 parent=appearance_l
-	@property appearance_list type=table store=no no_caption=1 parent=appearance_r
-	@caption N&auml;itamise kaustade seaded
-
+		@layout appearance_r type=vbox closeable=1 parent=appearance_c
+			@property appearance_list type=table store=no no_caption=1 parent=appearance_r
+			@caption N&auml;itamise kaustade seaded
 
 @default group=appear_settings
 
@@ -1912,6 +1912,83 @@ class shop_order_center extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
+
+	function _get_appearance_tree($arr)
+	{
+		$root = $arr["obj_inst"]->prop("root_menu");
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "menu";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : $root);
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "appearance_tree",
+		));
+
+		if($this->can("view" , $root))
+		{
+			$root_object = obj($root);
+		
+			$tv->add_item(0,array(
+				"name" => t("K&otilde;ik tooted"),
+				"id" => $root,
+	//			"reload" => array(
+	//				"props" => array("campaigns"),
+	//				"params" => array($var => "all")
+	//			)
+			));
+
+			$menus = new object_list(array(
+				"class_id" => CL_MENU,
+				"parent" => $root,
+			));
+
+			foreach($menus->names() as $id => $name)
+			{
+				$tv->add_item($root, array(
+					"id" => $id,
+					"name" => $name,
+					"iconurl" => icons::get_icon_url(CL_MENU),
+					"reload" => array(
+						"props" => array("appearance_list"),
+						"params" => array($var => $id)
+					)
+				));
+				$this->add_appearance_leaf($tv , $id);
+			}
+		}
+	}
+
+	function add_appearance_leaf($tv , $parent)
+	{
+		$groups = new object_list(array(
+			"class_id" => array(CL_MENU),
+			"parent" => $parent
+		));
+
+		foreach($groups->names() as $id => $name)
+		{
+			$tv->add_item($parent, array(
+				"id" => $id,
+				"name" => $name,
+				"iconurl" => icons::get_icon_url(CL_MENU),
+				"reload" => array(
+					"props" => array("appearance_list"),
+					"params" => array("menu" => $id)
+				)
+			));
+			$this->add_appearance_leaf($tv , $id);
+		}
+	}
+
+	function _get_appearance_toolbar($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+
+		$tb->add_delete_button();
+	}
+
 }
 
 /** If you want to create a class that can be used in shop order center to filter products and other things, then implement this interface **/

@@ -889,6 +889,12 @@
                   <parent>appearance_c</parent>
                   <group>appearance</group>
             </appearance_l>
+	          <appearance_r>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>appearance_c</parent>
+                  <group>appearance</group>
+            </appearance_r>
       </layout>
 </properties>
 

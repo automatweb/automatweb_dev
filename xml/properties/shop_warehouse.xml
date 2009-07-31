@@ -489,6 +489,16 @@
             <field>packets_tree</field>
       </property>
       <property>
+            <name>packets_cat_tree</name>
+            <table>objects</table>
+            <group>packets</group>
+            <type>treeview</type>
+            <parent>packets_tree_lay2</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>packets_tree</field>
+      </property>
+      <property>
             <name>packets_s_name</name>
             <table>objects</table>
             <group>packets</group>
@@ -3315,6 +3325,13 @@
                   <parent>packets_left</parent>
                   <group>packets</group>
             </packets_tree_lay>
+	    <packets_tree_lay2>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kategooriate tyybid</area_caption>
+                  <parent>packets_left</parent>
+                  <group>packets</group>
+            </packets_tree_lay2>
             <packets_left_search>
                   <type>vbox</type>
                   <parent>packets_left</parent>

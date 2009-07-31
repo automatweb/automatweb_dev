@@ -1,6 +1,17 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>description</name>
+            <table>aw_shop_packets</table>
+            <group>general</group>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>5</rows>
+            <field>description</field>
+            <caption>Kirjeldus</caption>
+            <comment>Toote kirjeldus</comment>
+      </property>
+      <property>
             <name>item_count</name>
             <table>aw_shop_packets</table>
             <group>general</group>
@@ -269,6 +280,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>pilt</caption>
             </IMAGE>
+	     <CATEGORY>
+                  <value>3</value>
+                  <clid>CL_SHOP_PRODUCT_CATEGORY</clid>
+                  <caption>Tootekategooria</caption>
+            </CATEGORY>
       </reltypes>
 </properties>
 
