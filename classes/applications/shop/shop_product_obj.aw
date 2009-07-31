@@ -37,6 +37,21 @@ class shop_product_obj extends _int_object
 		return (double)$curp[$currency->id()];
 	}
 
+	/** Returns the price as a double for shop or warehouse currency
+		@attrib api=1
+		@returns double
+			the price of the product
+	**/
+	public function get_shop_price($currency)
+	{
+		if($this->prop("price"))
+		{
+			return $this->prop("price");
+		}
+		return reset($this->get_price());//ma ei viitsi lihtsalt teha seda hetkel, et otsiks 6ige valuuta v2lja millega hinna annaks... no ei viitsi.... kyll hiljem j6uab
+	}
+
+
 	/** edaspidi kasutaks vaid seda, et saaks igale ajahetkele erinevaid hindu panna ja loodetavasti ka hinnaobjektiga mitte metast
 		@attrib name=get_price api=1
 		@param uid optional type=oid
@@ -358,6 +373,27 @@ class shop_product_obj extends _int_object
 			));
 		}
 		return true;
+	}
+
+	public function get_data()
+	{
+		$data = $this->properties();
+
+		return $data;
+	}
+
+	
+	/** returns product color name
+		@attrib api=1
+		@returns string
+	**/
+	public function get_color_name()
+	{
+		foreach($this->connections_from(array("type" => "RELTYPE_COLOR")) as $c)
+		{
+			return $c->prop("to.name");
+		}
+		return "";
 	}
 
 }
