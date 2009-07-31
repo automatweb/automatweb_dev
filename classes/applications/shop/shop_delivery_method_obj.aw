@@ -35,12 +35,10 @@ class shop_delivery_method_obj extends shop_matrix_obj
 			OIDs of customer categories.
 		@param location optional type=array/int acl=view
 			OIDs of locations
-		@param timespan optional type=array
-			Array with two elements 'start' and 'end', the start and end of the timespan, respectively. (UNIX timestamps)
 		@param structure optional type=bool default=false
 			If set, the structure of the prices will be returned, otherwise only the final prices will be returned.
 	**/
-	public static function valid($arr)
+	public function valid($arr)
 	{
 		try
 		{
@@ -55,7 +53,7 @@ class shop_delivery_method_obj extends shop_matrix_obj
 
 		// Prepare the arguments for price evaluation code
 		$args = self::handle_arguments($arr);
-		$retval = obj(346005)->run_validation_evaluation_code($args);
+		$retval = $this->run_validation_evaluation_code($args);
 		exit_function("shop_delivery_method_obj::valid");
 		return $retval;
 	}
@@ -191,8 +189,6 @@ class shop_delivery_method_obj extends shop_matrix_obj
 
 		$this->set_prop("code", $i->parse());
 		$this->save();
-		var_dump($this->valid(array("product" => 346088)));
-		arr($i->parse(), true, true);
 	}
 
 	public function run_validation_evaluation_code($args)
