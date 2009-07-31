@@ -647,7 +647,7 @@ class shop_order_cart extends class_base
 
 	**/
 	function submit_add_cart($arr)
-	{
+	{//arr($arr);die();
 		extract($arr);
 
 		//kui on mitu ostukorvi, siis hiljem kontrollib ykshaaval tooteid sealt
@@ -1221,6 +1221,31 @@ class shop_order_cart extends class_base
 		$rval = $so->finish_order($params);
 		//$this->clear_cart($oc);
 		$this->clear_some_carts($oc);
+
+		//uus teema on lao m&uuml;&uuml;gitellimus, mis peab ka toimima saama
+		//vana v6ib 2ra kustutada, kui on kindel, et kuskil seda enam ei kasutata
+		$o = new object();
+		$o->set_name(t("M&uuml;&uuml;gitellimus")." ".date("d.m.Y H:i"));
+		$o->set_parent($oc->id());
+		$o->set_class_id(CL_SHOP_SELL_ORDER);
+		$o->save();
+		$awa = new aw_array($cart["items"]);
+		foreach($awa->get() as $iid => $quant)
+		{
+			$qu = new aw_array($quant);
+			foreach($qu->get() as $key => $val)
+			{
+				if($val["cart"] && !$this->check_confirm_carts($val["cart"]))
+				{
+					continue;
+				}
+				$o->add_row(array(
+					"product" => $iid,
+					"amount" => $cart["items"][$iid][$key],
+				));
+			}
+		}		
+
 		return $rval;
 	}
 
