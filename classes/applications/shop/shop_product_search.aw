@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.13 2009/07/28 09:38:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.14 2009/07/31 12:59:52 dragut Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -987,7 +987,7 @@ class shop_product_search extends class_base
 			"class_id" => $res_type,
 		);
 
-		foreach($params as $clid => $opts)
+		foreach(safe_array($params) as $clid => $opts)
 		{
 			if ($clid == "_fulltext")
 			{
