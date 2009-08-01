@@ -3046,7 +3046,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 	}
 
 	/**
-	@attrib name=submit_post_edit all_args=1 nologin=1
+		@attrib name=submit_post_edit all_args=1 nologin=1
 	**/
 	function submit_post_edit($arr)
 	{
@@ -3482,7 +3482,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		@comment
 			checks whether the remote user can admin the forum
 	**/
-//	function _can_admin($forum_id)
 	function _can_admin($arr)
 	{
 		// admin can be either CL_USER or CL_GROUP, check for both
@@ -3904,6 +3903,5 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 
 		return $path;
 	}
-
 }
 ?>
