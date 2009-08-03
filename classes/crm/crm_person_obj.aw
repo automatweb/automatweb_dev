@@ -602,7 +602,9 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 	/** sets the default email adress content or creates it if needed **/
 	private function set_fake_email($mail, $set_into_meta = true)
 	{
-		if($set_into_meta === true)
+		die("Kaarel arendab, kannatust!");
+		$n = false;
+		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("email")))
 		{
 			$this->set_meta("tmp_fake_email", $mail);
 			$this->set_meta("sim_fake_email", 1);
@@ -798,7 +800,7 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 		foreach($this->connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $conn)
 		{
 			$to = $conn->to();
-			if(is_oid($to->section) && $this->can("view", $to->section))
+			if(is_oid($to->section) && $GLOBALS["object_loader"]->cache->can("view", $to->section))
 			{
 				$ol->add($to->section);
 			}
@@ -831,7 +833,7 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 		foreach($this->connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $conn)
 		{
 			$to = $conn->to();
-			if(is_oid($to->org) && $this->can("view", $to->org))
+			if(is_oid($to->org) && $GLOBALS["object_loader"]->cache->can("view", $to->org))
 			{
 				$ol->add($to->org);
 			}
@@ -1786,12 +1788,34 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 	{
 		$address_str = "";
 		$address_id = parent::prop("address");
-		if ($this->can("view", $address_id))
+		if ($GLOBALS["object_loader"]->cache->can("view", $address_id))
 		{
 			$address_str = obj($address_id)->name();
 		}
 		return $address_str;
 	}
+
+	/** Sets phone number for person
+		@attrib api=1
+	**/
+	public function set_phone($phone)
+	{
+		$eo = obj();
+		$eo->set_class_id(CL_CRM_PHONE);
+		$eo->set_parent($this->id());
+		$eo->set_name($phone);
+		$eo->save();
+
+		$this->set_prop("phone", $eo->id());
+		$this->save();
+		$this->connect(array(
+			"type" => "RELTYPE_PHONE",
+			"to" => $eo->id()
+		));
+	}
+
+
+
 }
 
 ?>

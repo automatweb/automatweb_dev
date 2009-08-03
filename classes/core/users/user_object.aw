@@ -229,9 +229,25 @@ class user_object extends _int_object
 		{
 			return $this->prop("email");
 		}
-		$u = get_instance(CL_USER);
-		$p = obj($u->get_current_person());
+		$p = obj($this->get_person_for_user());
 		return $p->get_mail();
+	}
+
+	/**
+	@attrib api=1
+	@returns string
+	**/
+	public function get_phone()
+	{
+		if($this->prop("phone"))
+		{
+			return $this->prop("phone");
+		}
+		$person = obj($this->get_person_for_user());
+		return $person->get_phone();
+//		$u = get_instance(CL_USER);
+//		$p = obj($u->get_current_person());
+//		return $p->get_mail();
 	}
 
 	function awobj_set_cfg_admin_mode($v)
@@ -249,7 +265,7 @@ class user_object extends _int_object
 		$ol = new object_list(array(
 			"class_id" => CL_USER,
 			"lang_id" => array(),
-		//	"limit" => 10,
+			"parent" => $this->id(),
 			"name" => $this->name().".%",
 		));
 		return $ol;
@@ -371,6 +387,83 @@ class user_object extends _int_object
 		}
 		$c = get_instance("cache");
 		$c->file_clear_pt("acl");
+	}
+
+
+	/**
+		@attrib params=pos api=1
+		@returns
+		Person object id
+	**/
+	public function get_person_for_user()
+	{
+		aw_disable_acl();
+		$person_c = $this->connections_from(array(
+			"type" => "RELTYPE_PERSON",
+		));
+		$person_c = reset($person_c);
+		if (!$person_c)
+		{
+			// create new person next to user
+			$p = obj();
+			$p->set_class_id(CL_CRM_PERSON);
+			$p->set_parent($this->id());
+
+			$rn = $this->prop("real_name");
+
+			$uid = $this->prop("uid");
+
+			$p_n = ($rn != "" ? $rn : $uid);
+			$p->set_name($p_n);
+
+			if ($rn != "")
+			{
+				list($fn, $ln) = explode(" ", $rn);
+			}
+			else
+			{
+				list($fn, $ln) = explode(".", $uid);
+			}
+
+			$p->set_prop("firstname", $fn);
+			$p->set_prop("lastname", $ln);
+
+			aw_disable_acl();
+			$p->save();
+
+			if ($uid == aw_global_get("uid"))
+			{
+				// set acl to the given user
+				$p->acl_set(
+					obj($this->get_default_group()),
+					array("can_edit" => 1, "can_add" => 1, "can_view" => 1, "can_delete" => 1)
+				);
+			}
+
+			aw_restore_acl();
+			// now, connect user to person
+			$this->connect(array(
+				"to" => $p->id(),
+				"reltype" => 2
+			));
+			aw_restore_acl();
+			return $p->id();
+		}
+		else
+		{
+			aw_restore_acl();
+			if (aw_global_get("uid") == $this->prop("uid") && !$GLOBALS["object_loader"]->cache->can("edit", $person_c->prop("to")))
+			{
+				aw_disable_acl();
+				$p = obj($person_c->prop("to"));
+				$p->acl_set(
+					obj($this->get_default_group()),
+					array("can_edit" => 1, "can_add" => 1, "can_view" => 1, "can_delete" => 1)
+				);
+				aw_restore_acl();
+			}
+			return $person_c->prop("to");
+		}
 	}
 }
 

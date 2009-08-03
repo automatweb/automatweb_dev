@@ -116,8 +116,16 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 				"uid" => $uid,
 				"email" => $arr["email"],
 				"password" => $arr["password"],
-				"real_name" => $arr["person_name"],
+				"real_name" => $arr["firstname"]." ".$arr["lastname"],
 			));
+			$person = obj($user->get_person_for_user());
+			$person->set_prop("firstname" , $arr["firstname"]);
+			$person->set_prop("lastname" , $arr["lastname"]);
+			$person->set_name($arr["firstname"]." ".$arr["lastname"]);
+			$person->save();
+			$person -> set_phone($arr["phone"]);
+
+
 			foreach($o->prop("groups") as $group)
 			{
 				$user->add_to_group($group);
@@ -126,7 +134,8 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 		else
 		{
 			$this->user_email = $arr["email"];
-			$this->user_real_name = $arr["name"];
+			$this->user_firstname = $arr["firstname"];
+			$this->user_lastname = $arr["lastname"];
 			$this->user_phone = $arr["phone"];
 		}
 		$this->update_html($arr["id"]); 
@@ -176,11 +185,20 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 		));
 
 		$htmlc->add_property(array(
-			"name" => "person_name",
+			"name" => "firstname",
 			"type" => "textbox",
-			"value" => isset($this->user_real_name) ? $this->user_real_name : "",
-			"caption" => t("Isiku nimi"),
+			"value" => isset($this->user_firstname) ? $this->user_firstname : "",
+			"caption" => t("Eesnimi"),
 		));
+
+		$htmlc->add_property(array(
+			"name" => "lastname",
+			"type" => "textbox",
+			"value" => isset($this->user_lastname) ? $this->user_lastname : "",
+			"caption" => t("Perekonnanimi"),
+		));
+
+
 
 		$htmlc->add_property(array(
 			"name" => "phone",
@@ -218,7 +236,8 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 			"onclick" => "document.getElementsByName('submitb')[0].disabled = true;
 				$.post('/automatweb/orb.aw?class=shop_orderer_data_site_show_users&action=add_slave', {
 					id: ".$id."
-					,name: document.getElementsByName('person_name')[0].value
+					,firstname: document.getElementsByName('firstname')[0].value
+					,lastname: document.getElementsByName('lastname')[0].value
 					, phone: document.getElementsByName('phone')[0].value
 					, email: document.getElementsByName('email')[0].value
 					, password: document.getElementsByName('password')[0].value
@@ -267,12 +286,25 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
  				"name" => "name",
 				"caption" => t("Isiku nimi")
 			));
+
+			$t->define_field(array(
+ 				"name" => "email",
+				"caption" => t("E-post")
+			));
+
+			$t->define_field(array(
+				"name" => "phone",
+				"caption" => t("Telefon")
+			));
+
 			foreach($slaves->arr() as $slave)
 			{
 				$t->define_data(array(
 					"oid" => $slave->id(),
 					"uid" => $slave->name(),
-					"name" => $slave->get_user_name()
+					"name" => $slave->get_user_name(),
+					"phone" => $slave->get_phone(),
+					"email" => $slave->get_user_mail_address(),
 				));
 			}
 
@@ -284,8 +316,7 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 				"onClick" => "
 result = $('input[name^=sel]');
 $.post('/automatweb/orb.aw?class=shop_orderer_data_site_show_users&action=remove_slave&'+result.serialize(), {
-					id: ".$id.", 
-					name: document.getElementsByName('person_name')[0].value
+					id: ".$id."
 					},function(html){x=document.getElementById('shop_orderer_data_site_show');
 								x.innerHTML=html;});",
 				"img" => "delete.gif",
