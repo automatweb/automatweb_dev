@@ -112,11 +112,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@caption Toodete nimekiri
 
 
-
-
-
-
-
 @default group=products
 
 	@property products_toolbar type=toolbar no_caption=1 store=no
@@ -166,7 +161,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 				@property prod_s_show_batches type=checkbox ch_value=1 store=no captionside=top size=30  parent=prod_left_search no_caption=1
 				@caption Kuva partiidena
-
 
 				@property prod_s_sbt type=button store=no captionside=top  parent=prod_left_search
 				@caption Otsi
@@ -11324,31 +11318,43 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		$caption = sprintf(t('Lao "%s" tootekategooriad'), $arr["obj_inst"] -> name());
 
-		if(isset($arr["request"]["cat"]) && $this->can("view" , $arr["request"]["cat"]))
+		if(isset($arr["request"]["cat"]))
 		{
-			$object = obj($arr["request"]["cat"]);
-			switch($object->class_id())
+			$ol = new object_list();
+			if($this->can("view" , $arr["request"]["cat"]))
 			{
-				case CL_SHOP_PRODUCT_CATEGORY_TYPE:
-					$caption = sprintf(t('T&uuml;&uuml;bi %s tootekategooriad'), $object->name());
-					$ol= $object->get_categories();
-					break;
-				case CL_SHOP_PRODUCT_CATEGORY:
-					$caption = sprintf(t('Tootekategooria %s alamkategooriad'), $object->name());
-					$ol= $object->get_categories();
-					break;
-				case CL_MENU:
-					$ol= new object_list(array(
-						"parent" => $object->id(),
-						"class_id" => CL_SHOP_PRODUCT_CATEGORY,
-						"sort_by" => "jrk asc, name asc",
-						"lang_id" => array(),
-					));
-					$caption = sprintf(t('Lao "%s" tootet&uuml;&uuml;bid'), $arr["obj_inst"] -> name());
-					break;
-				default:
-					$ol= new object_list();
-					$caption = sprintf(t('Lao "%s" tootekategooriad'), $arr["obj_inst"] -> name());
+				$object = obj($arr["request"]["cat"]);
+				switch($object->class_id())
+				{
+					case CL_SHOP_PRODUCT_CATEGORY_TYPE:
+						$caption = sprintf(t('T&uuml;&uuml;bi %s tootekategooriad'), $object->name());
+						$ol= $object->get_categories();
+						break;
+					case CL_SHOP_PRODUCT_CATEGORY:
+						$caption = sprintf(t('Tootekategooria %s alamkategooriad'), $object->name());
+						$ol= $object->get_categories();
+						break;
+					case CL_MENU:
+						$ol= new object_list(array(
+							"parent" => $object->id(),
+							"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+							"sort_by" => "jrk asc, name asc",
+							"lang_id" => array(),
+						));
+						$caption = sprintf(t('Lao "%s" tootet&uuml;&uuml;bid'), $arr["obj_inst"] -> name());
+						break;
+					default:
+						$ol= new object_list();
+						$caption = sprintf(t('Lao "%s" tootekategooriad'), $arr["obj_inst"] -> name());
+				}
+			}
+			elseif($arr["request"]["cat"] == "all")
+			{
+				$ol= new object_list(array(
+					"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+					"sort_by" => "jrk asc, name asc",
+					"lang_id" => array(),
+				));
 			}
 
 			foreach($ol->arr() as $o)
@@ -11399,6 +11405,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			        "params" => array("cat" => $prod_folder)
 			)
 		));//print "folder:" ; arr($prod_folder);
+
 		$cats = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 			"parent" => $prod_folder,
@@ -11433,6 +11440,17 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 			$this->add_cat_leaf($tv , $id);
 		}
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik kategooriad"),
+			"id" => "all",
+			"reload" => array(
+				"props" => array("category_list"),
+			        "params" => array("cat" => "all")
+			)
+		));//print "folder:" ; arr($prod_folder);
+
+
 	}
 
 	function add_cat_leaf($tv , $parent)
@@ -12028,7 +12046,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			if(is_oid($arr["result"]))
 			{
-				$arr["result"] = array($arr["result"]);
+				$arr["result"] = array($arr["result"] => $arr["result"]);
 			}
 			if(is_oid($arr["category"]))
 			{
@@ -12132,6 +12150,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 					"url" => $this->mk_my_orb("search_categories",
 						array(
 							"result" => $o->id(),
+							"category" => $arr["category"],
 						), "shop_warehouse"
 					),
 				)),

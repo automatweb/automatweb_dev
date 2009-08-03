@@ -9,7 +9,7 @@ class shop_product_category_type_obj extends _int_object
 	**/
 	public function get_categories()
 	{
-		$ol= new object_list();
+/*		$ol= new object_list();
 		$conn = $this->connections_from(array(
 			"type" => "RELTYPE_CATEGORY",
 		));
@@ -25,6 +25,17 @@ class shop_product_category_type_obj extends _int_object
 			"prop" => "ord",
 			"order" => "asc"
 		));
+*/
+		$prms = array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY(CL_SHOP_PRODUCT_CATEGORY_TYPE)" =>$this->id(),
+			"sort_by" => "jrk asc, name asc",
+		);
+		return new object_list($prms);
+
+
 		return $ol;
 	}
 
