@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.49 2009/07/17 09:36:46 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.50 2009/08/03 11:42:13 dragut Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -364,7 +364,7 @@ class image extends class_base
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		$alstr = array("k" => "center","v" => "left","p" => "right","" => "");
 		
-		if($htmlentities)
+		if(!empty($htmlentities))
 		{
 			$idata["comment"] = htmlentities($idata["comment"]);
 			$idata["meta"]["alt"] = htmlentities($idata["meta"]["alt"]);
@@ -375,7 +375,7 @@ class image extends class_base
 		{
 			// Count comments, if needed
 			$num_comments = 0;
-			if(is_array($args["add_show_link_arr"]) && count($args["add_show_link_arr"]))
+			if(isset($args['add_show_link_add']) && is_array($args["add_show_link_arr"]) && count($args["add_show_link_arr"]))
 			{
 				$show_link_arr = $args["add_show_link_arr"];
 			}
