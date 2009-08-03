@@ -701,11 +701,11 @@ class popup_search extends aw_template
 					"select_this" => html::href(array(
 						"url" => "javascript:void(0)",
 						"caption" => t("Vali see"),
-						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);if (!el) { el=aw_get_el(\"$elname_n\", window.opener.document.changeform);} if (!el) { el=aw_get_el(\"$elname_l\", window.opener.document.changeform);} if (el.options) {sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;} else {el.value = ".$o->id().";} ".(($arr["no_submit"])?"":"window.opener.document.changeform.submit();")."window.close()"
+						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);if (!el) { el=aw_get_el(\"$elname_n\", window.opener.document.changeform);} if (!el) { el=aw_get_el(\"$elname_l\", window.opener.document.changeform);} if (el.options) {sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;} else {el.value = ".$o->id().";} ".(!empty($arr["no_submit"])?"":"window.opener.document.changeform.submit();")."window.close()"
 					)),
 					"icon" => html::img(array("url" => icons::get_icon_url($o->class_id())))
 				);
-				if (is_array($arr["tbl_props"]))
+				if (isset($arr["tbl_props"]) && is_array($arr["tbl_props"]))
 				{
 					foreach($arr["tbl_props"] as $pn)
 					{
