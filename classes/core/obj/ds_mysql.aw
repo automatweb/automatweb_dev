@@ -1166,7 +1166,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function save_connection($data)
 	{
-		if (!$data["type"])
+		if (empty($data["type"]))
 		{
 			if (isset($GLOBALS["objects"][$data["to"]]))
 			{
@@ -2795,7 +2795,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			else
 			{
 				$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
-				error::raise_if(!$reltype_id && $pp !== "RELTYPE", array(
+				error::raise_if(empty($reltype_id) && $pp !== "RELTYPE", array(
 					"id" => "ERR_OBJ_NO_RELATION",
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
 				));

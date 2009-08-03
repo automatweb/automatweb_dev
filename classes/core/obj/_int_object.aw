@@ -131,7 +131,7 @@ class _int_object
 			return;
 		}
 
-		if (!$param["reltype"] && $param["type"])
+		if (empty($param["reltype"]) && !empty($param["type"]))
 		{
 			$param["reltype"] = $param["type"];
 		}

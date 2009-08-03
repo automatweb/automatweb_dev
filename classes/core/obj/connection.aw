@@ -617,12 +617,12 @@ class connection
 
 		// check if this is a new connection
 		$new = false;
-		if (!$this->conn["id"])
+		if (empty($this->conn["id"]))
 		{
 			$new = true;
 
 			// now, if it is, then check if a relobj_id was passed
-			if (!$this->conn["relobj_id"])
+			if (empty($this->conn["relobj_id"]))
 			{
 				// if it wasn't, then create the relobj
 				$to = obj($this->conn["to"]);
