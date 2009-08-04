@@ -1891,6 +1891,33 @@
             <caption>Telefon</caption>
       </property>
       <property>
+            <name>fake_fax</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>fake_fax</field>
+            <caption>Faks</caption>
+      </property>
+      <property>
+            <name>fake_mobile</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>fake_mobile</field>
+            <caption>Mobiiltelefon</caption>
+      </property>
+      <property>
+            <name>fake_skype</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>fake_skype</field>
+            <caption>Skype</caption>
+      </property>
+      <property>
             <name>fake_email</name>
             <table>objects</table>
             <group>data</group>

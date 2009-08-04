@@ -131,7 +131,10 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 				return $this->set_fake_email($v, $set_into_meta);
 
 			case "fake_phone":
-				return $this->set_fake_phone($v, $set_into_meta);
+			case "fake_skype":
+			case "fake_mobile":
+			case "fake_fax":
+				return $this->set_fake_phone($k, $v, $set_into_meta);
 
 			case "fake_address_country":
 			case "fake_address_county":
@@ -155,6 +158,10 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 				return parent::prop("email.mail");
 
 			case "fake_phone":
+			case "fake_skype":
+			case "fake_mobile":
+			case "fake_fax":
+				return $this->get_prop_phone($k);
 				return parent::prop("phone.name");
 
 			case "fake_address_country":
@@ -199,6 +206,40 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 			return 3;
 		}
 		return parent::prop($k);
+	}
+
+	function get_prop_phone($type, $return_oid = false)
+	{
+		if($type === "fake_phone" && $GLOBALS["object_loader"]->cache->can("view", $this->prop("phone")))
+		{
+			return $return_oid ? $this->prop("phone") : $this->prop("phone.name");
+		}
+		elseif($type === "fake_fax")
+		{
+			$args = array(
+				"class_id" => CL_CRM_PHONE,
+				"CL_CRM_PHONE.RELTYPE_FAX(CL_CRM_PERSON).oid" => $this->id(),
+				"limit" => 1,
+				"type" => "fax",
+			);
+		}
+		else
+		{
+			$args = array(
+				"class_id" => CL_CRM_PHONE,
+				"CL_CRM_PHONE.RELTYPE_PHONE(CL_CRM_PERSON).oid" => $this->id(),
+				"limit" => 1,
+				"type" => new obj_predicate_not(array("mobile", "fax", "skype")),
+			);
+			if(in_array(substr($type, 5), array_keys(get_instance("crm_phone")->phone_types)))
+			{
+				$args["type"] = substr($type, 5);
+			}
+		}
+		$ol = new object_list($args);
+		$names = $ol->names();
+		$name = reset($names);
+		return $return_oid ? key($names) : $name;
 	}
 
 	function find_work_contact()
@@ -602,7 +643,6 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 	/** sets the default email adress content or creates it if needed **/
 	private function set_fake_email($mail, $set_into_meta = true)
 	{
-		die("Kaarel arendab, kannatust!");
 		$n = false;
 		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("email")))
 		{
@@ -640,19 +680,21 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 	}
 
 	/** sets the default email adress content or creates it if needed **/
-	private function set_fake_phone($phone, $set_into_meta = true)
+	private function set_fake_phone($type, $phone, $set_into_meta = true)
 	{
 		if($set_into_meta === true)
 		{
-			$this->set_meta("tmp_fake_phone", $phone);
-			$this->set_meta("sim_fake_phone", 1);
+			$this->set_meta("tmp_".$type, $phone);
+			$this->set_meta("sim_".$type, 1);
 		}
 		else
 		{
 			$n = false;
-			if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("phone")))
+
+			$id = $this->get_prop_phone($type, true);
+			if ($GLOBALS["object_loader"]->cache->can("view", $id))
 			{
-				$eo = obj($this->prop("phone"));
+				$eo = obj($id);
 			}
 			else
 			{
@@ -662,14 +704,19 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 				$n = true;
 			}
 
+			$type = in_array(substr($type, 5), array_keys(get_instance("crm_phone")->phone_types)) ? substr($type, 5) : "home";
+			$eo->set_prop("type", $type);
 			$eo->set_name($phone);
 			$eo->save();
 
 			if ($n)
 			{
-				$this->set_prop("phone", $eo->id());
+				if($type === "fake_phone")
+				{
+					$this->set_prop("phone", $eo->id());
+				}
 				$this->connect(array(
-					"type" => "RELTYPE_PHONE",
+					"type" => $type !== "fake_fax" ? "RELTYPE_PHONE" : "RELTYPE_FAX",
 					"to" => $eo->id()
 				));
 			}
@@ -1760,7 +1807,7 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 		$this->set_name($this->prop("firstname") . " " . $this->prop("lastname") . (strlen($this->prop("previous_lastname")) < 1 ? "" : " (" . $this->prop("previous_lastname") . ")"));
 		
 		$fakes = array(
-			"email", "phone", "address_country", "address_country_relp", "address_county", "address_county_relp", "address_city", "address_city_relp", "address_postal_code", "address_address", "address_address2"
+			"email", "phone", "skype", "mobile", "fax", "address_country", "address_country_relp", "address_county", "address_county_relp", "address_city", "address_city_relp", "address_postal_code", "address_address", "address_address2"
 		);
 
 		if(!is_oid($this->id()))

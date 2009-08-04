@@ -668,6 +668,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property fake_phone type=textbox user=1
 @caption Telefon
 
+@property fake_fax type=textbox user=1
+@caption Faks
+
+@property fake_mobile type=textbox user=1
+@caption Mobiiltelefon
+
+@property fake_skype type=textbox user=1
+@caption Skype
+
 @property fake_email type=textbox user=1
 @caption E-post
 
