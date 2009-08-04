@@ -3237,7 +3237,6 @@ class crm_bill extends class_base
 			"orderer_contact" => $ord_ct,
 			"orderer_contact_profession" => $ord_ct_prof,
 			"comment" => $b->prop("notes"),
-
 		));
 		if($ord_country)
 		{
@@ -3936,6 +3935,10 @@ class crm_bill extends class_base
 		foreach($bill_rows as $key => $row)
 		{
 			$row_data = array();
+			if(!$row["task_row_id"] && is_array($row["task_rows"]))
+			{
+				$row["task_row_id"] = reset($row["task_rows"]);
+			}
 			$row_data["task_row_id"] = $row["task_row_id"];
 			$row_data["orderer"] = $row["orderer"];
 			if ($row["is_oe"])
@@ -3975,6 +3978,7 @@ class crm_bill extends class_base
 					"row_orderer" => $row["orderer"],
 					"comment" => $row["comment"],
 					"row_tax" => $cur_tax,
+					"oid" => $row["oid"],
 				));
 				$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
 			}
