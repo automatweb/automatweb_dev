@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.25 2009/08/04 13:07:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.26 2009/08/04 14:36:03 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -772,6 +772,7 @@ class shop_packet extends class_base
 //
 		$data["product_params"].= "\n}";
 
+		$data["section"] = aw_global_get("section");
 
 		$this->vars($data);
 		return $this->parse();

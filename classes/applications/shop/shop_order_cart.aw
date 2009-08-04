@@ -2427,9 +2427,10 @@ class shop_order_cart extends class_base
 		$cart_id = $order_center->prop("cart");
 		$url = $this->mk_my_orb("show_product", array(
 			"cart" => $cart_id,
-			"section" => $sect,
+			"section" => $arr["section"],
 			"product" => $arr["product"],
 		));
+		$url = str_replace("automatweb/orb.aw" , "" , $url);
 		$this->submit_add_cart(array(
 			"oc" => $arr["oc"],
 			"add_to_cart" => array($arr["product"] => $arr["amount"])
