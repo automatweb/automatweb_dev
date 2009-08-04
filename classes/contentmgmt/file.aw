@@ -304,6 +304,7 @@ class file extends class_base
 				if ($arr["new"])
 				{
 					$retval = PROP_IGNORE;
+					break;
 				}
 				classload("core/icons");
 
