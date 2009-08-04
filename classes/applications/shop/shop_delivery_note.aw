@@ -812,6 +812,9 @@ class shop_delivery_note extends class_base
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
+		$this->vars($ob->properties());
+		$this->vars(array("currency" => $ob->prop("currency.name")));
+		$this->vars(array("customer" => $ob->prop("curstomer.name")));
 		return $this->parse();
 	}
 
