@@ -4,7 +4,7 @@
 		displays the data that the docgen analyzer generates
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.32 2009/04/22 12:34:26 instrumental Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.33 2009/08/04 13:30:09 instrumental Exp $
 
 **/
 
@@ -885,6 +885,7 @@ class docgen_viewer extends class_base
 		{
 			try
 			{
+				arr($impl);
 				$clf = class_index::get_file_by_name(basename($impl));
 			}
 			catch (awex_clidx_filesys $e)
@@ -977,7 +978,7 @@ class docgen_viewer extends class_base
 				"disp" => $arr["disp"]
 			));
 		}
-		return $this->finish_with_style($op);
+		die($this->finish_with_style($op));
 	}
 
 	function _find_clid_for_name($name)

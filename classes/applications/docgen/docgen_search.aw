@@ -58,7 +58,7 @@ class docgen_search extends class_base
 			$ret .= "<hr/>".$this->_fetch_search_results($arr);
 		}
 
-		return $this->docgen->finish_with_style($ret);
+		die($this->docgen->finish_with_style($ret));
 	}
 
 	private function _fetch_search_results($arr)
