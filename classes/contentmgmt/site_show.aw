@@ -2598,8 +2598,10 @@ class site_show extends class_base
 		$this->vars_safe(array(
 			"IS_FRONTPAGE" => ($isfp ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($isfp ? $this->parse("IS_FRONTPAGE2") : ""),
+			"IS_FRONTPAGE3" => ($isfp ? $this->parse("IS_FRONTPAGE3") : ""),
 			"IS_NOT_FRONTPAGE" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE") : ""),
 			"IS_NOT_FRONTPAGE2" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
+			"IS_NOT_FRONTPAGE3" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE3") : ""),
 			"POPUP_MENUS_SITE" => $this->cache->file_get("aw_toolbars") // toolbar menu button menuitem layer
 		));
 		$this->cache->file_set("aw_toolbars", "");
