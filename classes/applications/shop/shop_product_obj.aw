@@ -438,7 +438,12 @@ class shop_product_obj extends _int_object
 	public function get_data()
 	{
 		$data = $this->properties();
-
+		$data["image"] = $this->get_product_image();
+		if($this->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+		{
+			$product = $this->get_product();
+			$data["description"] = $product->prop("description");
+		}
 		return $data;
 	}
 
@@ -455,5 +460,66 @@ class shop_product_obj extends _int_object
 		}
 		return "";
 	}
+
+
+
+//packaging functions
+
+	/** returns product color name for packaging
+		@attrib api=1
+		@returns string
+	**/
+	public function get_product_color_name()
+	{
+
+		$product = $this->get_product();
+		if(is_object($product))
+		{
+			foreach($product->connections_from(array("type" => "RELTYPE_COLOR")) as $c)
+			{
+				return $c->prop("to.name");
+			}
+		}
+		return "";
+	}
+
+	private function get_product()
+	{
+		if(is_object($this->product_object))
+		{
+			return $this->product_object;
+		}
+		elseif($this->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+		{
+			$ol = new object_list(array(
+				"lang_id" => array(),
+				"class_id" => CL_SHOP_PRODUCT,
+				"CL_SHOP_PRODUCT.RELTYPE_PACKAGING" => $this->id(),
+			));
+			$this->product_object = reset($ol->arr());
+			return $this->product_object;
+		}
+		else
+		{
+			return $this;
+		}
+
+	}
+
+	public function get_product_image()
+	{
+		$product = $this->get_product();
+		$pic = $product->get_first_obj_by_reltype("RELTYPE_IMAGE");
+		if(is_object($pic))
+		{
+			return $pic->get_html();
+
+		}
+		else
+		{
+			return "";
+		}
+	}
+
 
 }

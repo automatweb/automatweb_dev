@@ -14,6 +14,9 @@
 @property template type=select
 @caption Toodete n&auml;itamise template
 
+@property product_template type=select
+@caption &Uuml;he toote n&auml;itamise templeit
+
 @property type type=select
 @caption N&auml;idatavad klassi t&uuml;&uuml;bid
 
@@ -51,6 +54,35 @@ class products_show extends class_base
 					$prop["caption"].= "<br>".t("templates/applications/shop/products_show/");
 				}
 				break;
+
+			case "product_template":
+				$tm = get_instance("templatemgr");
+				switch($arr["obj_inst"]->prop("type"))
+				{
+					case CL_SHOP_PACKET:
+						$dir = "applications/shop/shop_packet";
+						break;
+
+					case CL_SHOP_PRODUCT:
+						$dir = "applications/shop/shop_product";
+						break;
+
+					case CL_SHOP_PRODUCT_PACKAGING:
+						$dir = "applications/shop/shop_product_packaging";
+						break;
+				}
+				if($dir)
+				{
+					$prop["options"] = $tm->template_picker(array(
+						"folder" => $dir
+					));
+					if(sizeof($prop["options"]) < 2)
+					{
+						$prop["caption"].= "<br>".t("templates/").$dir;
+					}
+				}
+				break;
+
 			case "type":
 				$prop["options"] = array(
 					CL_SHOP_PRODUCT => t("Toode"),
@@ -91,6 +123,7 @@ class products_show extends class_base
 
 		switch($f)
 		{
+			case "product_template":
 			case "template":
 				$this->db_add_col($t, array(
 					"name" => $f,
@@ -114,7 +147,17 @@ class products_show extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		
+		if($this->can("view" , $_GET["product"]))
+		{
+			$show_product = obj($_GET["product"]);
+			$instance = get_instance($show_product->class_id());
+			$instance->template = $ob->prop("product_template");
+			return $instance->show(array(
+				"id" => $_GET["product"],
+				"oc" => $_GET["oc"],
+			));
+		}
+
 		$this->read_template($ob->get_template());
 		$this->vars(array(
 			"name" => $ob->prop("name"),
@@ -123,17 +166,17 @@ class products_show extends class_base
 		$products = $ob->get_web_items();
 		$oc = $ob->get_oc();
 		$prod = "";//templeiti muutuja PRODUCT v22rtuseks
-
+		
 		foreach($products->arr() as $product)
 		{
 			$product_data = $product->get_data();
-
-			preg_match  ( "/.*src='(.*)'.*$/imsU", $product_data["image"], $mt );
-			$product_data["image_url"] = $mt[1];
 			$product_data["checkbox"] = html::checkbox(array(
 				"name" => "add_to_cart[".$product_data["product_id"]."]",
 				"value" => 1,
 			));
+
+			$product_data["product_link"] = "/".aw_global_get("section")."?product=".$product_data["id"]."&oc=".$oc->id();
+
 			$this->vars($product_data);
 			$prod.=$this->parse("PRODUCT");
 		}

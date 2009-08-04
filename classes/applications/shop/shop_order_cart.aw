@@ -29,6 +29,9 @@
 	@property order_show_controller type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
 	@caption Tellimuse n&auml;itamise kontroller
 
+@property product_template type=select field=meta method=serialize
+@caption Ostukorvi &uuml;he toote vaate templeit
+
 @groupinfo delivery_methods caption="K&auml;ttetoimetamise viisid"
 @default group=delivery_methods
 
@@ -58,6 +61,23 @@ class shop_order_cart extends class_base
 			"clid" => CL_SHOP_ORDER_CART
 		));
 	}
+
+	function get_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "product_template":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "applications/shop/shop_order_cart/"
+				));
+				break;
+		};
+		return $retval;
+	}
+
 
 	public function _get_delivery_method_tlb($arr)
 	{
@@ -2390,6 +2410,64 @@ class shop_order_cart extends class_base
 			"cart" => $cart,
 		));
 		die();
+	}
+
+	/**
+		@attrib name=add_product nologin="1"
+		@param oc required type=int acl=view
+		@param product optional
+		@param amount optional
+		@param return_url optional
+		@param section optional
+	**/
+	public function add_product($arr)
+	{
+		$order_center = obj($arr["oc"]);
+		$cart = $order_center->get_cart();
+		$cart_id = $order_center->prop("cart");
+		$url = $this->mk_my_orb("show_product", array(
+			"cart" => $cart_id,
+			"section" => $sect,
+			"product" => $arr["product"],
+		));
+		$this->submit_add_cart(array(
+			"oc" => $arr["oc"],
+			"add_to_cart" => array($arr["product"] => $arr["amount"])
+		));
+		die($url);
+	}
+
+	/**
+		@attrib name=show_product nologin="1"
+		@param cart required type=int acl=view
+		@param product optional
+		@param return_url optional
+	**/
+	public function show_product($arr)
+	{
+		$cart = obj($arr["cart"]);
+		if($cart->prop("product_template"))
+		{
+			$template = $cart->prop("product_template");
+		}
+		else
+		{
+			$template = "show_product.tpl";
+		}
+		$this->read_template($template);
+		lc_site_load("shop_order_cart", &$this);
+		
+		$vars = array();
+		if($this->can("view" , $arr["product"]))
+		{
+			$product_object = obj($arr["product"]);
+			$vars = $product_object->get_data();
+		}
+
+		$vars["return_url"] = $arr["return_url"];
+		$vars["amount"] = $cart->get_prod_amount($arr["product"]);
+		$this->vars($vars);
+		return $this->parse();
 	}
 
 	private function _format_calc_price($p)

@@ -35,6 +35,16 @@
             <caption>Hind</caption>
       </property>
       <property>
+            <name>content_package_price_condition</name>
+            <table>aw_shop_packaging</table>
+            <group>general_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <disabled>1</disabled>
+            <field>aw_content_package_price_condition</field>
+            <caption>Sisupaketi hinnatingimuse pakendiobjekt</caption>
+      </property>
+      <property>
             <name>price_cur</name>
             <table>aw_shop_packaging</table>
             <group>general_general</group>
@@ -177,6 +187,14 @@
                   <num_3>file</num_3>
             </props>
             <caption>Pildid</caption>
+      </property>
+      <property>
+            <name>size</name>
+            <table>aw_shop_packaging</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>size</field>
+            <caption>Suurus</caption>
       </property>
       <property>
             <name>user1</name>
@@ -448,6 +466,24 @@
             <caption>&amp;amp;Otilde;igused</caption>
       </property>
       <property>
+            <name>purveyance_tlb</name>
+            <table>aw_shop_packaging</table>
+            <group>purveyance</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>purveyance_tlb</field>
+      </property>
+      <property>
+            <name>purveyance_tbl</name>
+            <table>aw_shop_packaging</table>
+            <group>purveyance</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>purveyance_tbl</field>
+      </property>
+      <property>
             <name>transl</name>
             <table>aw_shop_packaging</table>
             <group>transl</group>
@@ -461,6 +497,7 @@
             <syslog_type>ST_SHOP_PRODUCT_PACKAGING</syslog_type>
             <relationmgr>yes</relationmgr>
             <maintainer>kristo</maintainer>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <general_general>
@@ -493,6 +530,9 @@
             <acl>
                   <caption>&amp;amp;Otilde;igused</caption>
             </acl>
+            <purveyance>
+                  <caption>Tarnimine</caption>
+            </purveyance>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

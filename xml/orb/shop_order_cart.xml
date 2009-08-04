@@ -72,5 +72,27 @@
 			</function>
 		</action>
 
+		<action name="add_product" nologin="1">
+			<function name="add_product">
+				<arguments>
+					<required name="oc" type="int" acl="view" />
+					<optional name="product" />
+					<optional name="amount" />
+					<optional name="return_url" />
+					<optional name="section" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_product" nologin="1">
+			<function name="show_product">
+				<arguments>
+					<required name="cart" type="int" acl="view" />
+					<optional name="product" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

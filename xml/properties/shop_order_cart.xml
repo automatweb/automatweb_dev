@@ -11,16 +11,6 @@
             <caption>Kujundus, mida korvis kasutatakse</caption>
       </property>
       <property>
-            <name>postal_price</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <size>5</size>
-            <caption>Postikulu (liidetakse korvi hinnale)</caption>
-      </property>
-      <property>
             <name>email_subj</name>
             <table>objects</table>
             <group>general</group>
@@ -28,6 +18,16 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Tellimuse e-maili subjekt</caption>
+      </property>
+      <property>
+            <name>postal_price</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>5</size>
+            <caption>Vaikimisi postikulu</caption>
       </property>
       <property>
             <name>subject_handler</name>
@@ -69,12 +69,53 @@
             <method>serialize</method>
             <caption>Tellimuse n&amp;amp;auml;itamise kontroller</caption>
       </property>
+      <property>
+            <name>product_template</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ostukorvi &amp;amp;uuml;he toote vaate templeit</caption>
+      </property>
+      <property>
+            <name>delivery_method_add</name>
+            <table>objects</table>
+            <group>delivery_methods</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>delivery_method_tlb</name>
+            <table>objects</table>
+            <group>delivery_methods</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>delivery_method_tlb</field>
+      </property>
+      <property>
+            <name>delivery_method_tbl</name>
+            <table>objects</table>
+            <group>delivery_methods</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>delivery_method_tbl</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_CART</syslog_type>
             <relationmgr>yes</relationmgr>
+            <prop_cb>1</prop_cb>
             <no_status>1</no_status>
             <maintainer>kristo</maintainer>
       </classinfo>
+      <groupinfo>
+            <delivery_methods>
+                  <caption>K&amp;amp;auml;ttetoimetamise viisid</caption>
+            </delivery_methods>
+      </groupinfo>
       <reltypes>
             <PROD_LAYOUT>
                   <value>1</value>
@@ -86,6 +127,11 @@
                   <clid>CL_FORM_CONTROLLER</clid>
                   <caption>kontroller</caption>
             </CONTROLLER>
+            <DELIVERY_METHOD>
+                  <value>3</value>
+                  <clid>CL_SHOP_DELIVERY_METHOD</clid>
+                  <caption>K&amp;amp;auml;ttetoimetamise viis</caption>
+            </DELIVERY_METHOD>
       </reltypes>
 </properties>
 

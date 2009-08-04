@@ -11,6 +11,14 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
+            <name>code</name>
+            <table>aw_shop_product_category</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>code</field>
+            <caption>Kood</caption>
+      </property>
+      <property>
             <name>images</name>
             <table>aw_shop_product_category</table>
             <group>general</group>

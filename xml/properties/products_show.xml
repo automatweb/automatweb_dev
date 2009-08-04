@@ -20,13 +20,13 @@
             <field>template</field>
             <caption>Toodete n&amp;amp;auml;itamise template</caption>
       </property>
-            <property>
+      <property>
             <name>product_template</name>
             <table>aw_products_show</table>
             <group>general</group>
             <type>select</type>
             <field>product_template</field>
-            <caption>Toote n&amp;amp;auml;itamise template</caption>
+            <caption>&amp;amp;Uuml;he toote n&amp;amp;auml;itamise templeit</caption>
       </property>
       <property>
             <name>type</name>
@@ -34,7 +34,7 @@
             <group>general</group>
             <type>select</type>
             <field>type</field>
-            <caption>Klassid</caption>
+            <caption>N&amp;amp;auml;idatavad klassi t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PRODUCTS_SHOW</syslog_type>

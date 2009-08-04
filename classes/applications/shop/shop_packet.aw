@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.24 2009/07/31 13:51:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.25 2009/08/04 13:07:25 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -683,6 +683,11 @@ class shop_packet extends class_base
 
 	function show($arr)
 	{
+		error::raise_if(!$this->can("view" , $arr["oc"], array(
+			"id" => ERR_NO_OC,
+			"msg" => t("shop_packet::show(): no order center object selected!")
+		)));
+
 		$ob = new object($arr["id"]);
 
 		$this->read_template($this->get_template());
@@ -702,35 +707,45 @@ class shop_packet extends class_base
 //			$data["submit_url"] = str_replace(aw_ini_get("baseurl")."/" ,aw_ini_get("baseurl")."/orb.aw" , $data["submit_url"]);
 //
 //		}
-//		$data["oc"] = $oc->id();
+		$oc = obj($arr["oc"]);
+		$data["oc"] = $arr["oc"];
 		$data["submit"] = html::submit(array(
 			"value" => t("Lisa tooted korvi"),
 		));
+		$data["submit_url"] = $this->mk_my_orb("submit_add_cart", array(
+			"oc" => $oc->id(),
+			"id" => $oc->prop("cart"),
+		),CL_SHOP_ORDER_CART,false,false,"&amp;");
+
 		$prod_params = array();
 		$data["COLORS"] = "";
 		foreach($data["packages"] as $product => $packages)
 		{
 			$prod_sizes = array();
 			$prod_prices = array();
+			$prod_ids = array();
 			$prod_params[$product] = $product." : { sizes : [";
 			$this->vars(array(
 				"color_key" => $product,
 				"color" => $data["colors"][$product],
 			));
-				
+			//arr($data);	
 			foreach($packages as $package)
 			{
 				if($data["sizes"][$package] && $data["prices"][$package])
 				{
 					$prod_sizes[] = $data["sizes"][$package];
 					$prod_prices[] = $data["prices"][$package];
+					$prod_ids[] = $package;
 				}
 			}
 
 			$prod_params[$product].=join(",",$prod_sizes);
 			$prod_params[$product].="], prices : [";
 			$prod_params[$product].=join(",",$prod_prices);
-			$prod_params[$product].="], descs : '".$data["descriptions"][$product]."'  }";
+			$prod_params[$product].="], ids : [";
+			$prod_params[$product].=join(",",$prod_ids);
+			$prod_params[$product].="]}";
 			$data["COLORS"].= $this->parse("COLORS");
 		}
 
@@ -756,7 +771,7 @@ class shop_packet extends class_base
 //					}
 //
 		$data["product_params"].= "\n}";
-//arr($data);
+
 
 		$this->vars($data);
 		return $this->parse();

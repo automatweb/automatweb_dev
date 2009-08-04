@@ -150,6 +150,40 @@ class shop_order_center_obj extends _int_object
 	}
 
 	/**
+		@attrib api=1
+	**/
+	public function get_cart()
+	{
+		if($this->prop("cart_type") == 1 && aw_global_get("uid") != "")
+		{
+			$user = obj(aw_global_get("uid_oid"));
+			// well, it would be wise to syncronize the session aswell...
+			$_SESSION["cart"] = $user->meta("shop_cart");
+			return $user->meta("shop_cart");
+		}
+		else
+		{
+			return ifset($_SESSION, "cart");
+		}
+	}
+
+	/**
+		@attrib api=1
+	**/
+	public function set_cart($arr)
+	{
+		if($this->prop("cart_type") == 1 && aw_global_get("uid") != "")
+		{
+			$user = obj(aw_global_get("uid_oid"));
+			$user->set_meta("shop_cart", $arr["cart"]);
+			$user->save();
+		}
+		$_SESSION["cart"] = $arr["cart"];
+
+	}
+
+
+	/**
 		@comment DOES NOT WORK YET!! STORAGE IS BROKEN!!
 	**/
 	public function get_customer_data()

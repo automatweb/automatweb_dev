@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.18 2009/03/16 13:53:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.19 2009/08/04 13:02:04 markop Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -23,7 +23,7 @@
 	@property object_basket type=relpicker store=connect reltype=RELTYPE_OBJECT_BASKET
 	@caption Objektide korv
 
-	@property object_shop_product_show type=checkbox field=meta mothod=serialize default=0 ch_value=1
+	@property object_shop_product_show type=checkbox field=meta method=serialize default=0 ch_value=1
 	@caption Toote puhul kasuta tootekuva
 
 	@property object_shop_product_template type=textbox field=meta method=serialize
@@ -144,11 +144,16 @@ class object_basket extends class_base
 				foreach($mt[1] as $var_name)
 				{
 					list($clid, $prop) = explode(".", $var_name, 2);
-					if (constant($clid) == $o->class_id())
+					if (constant($clid) == $o->class_id() && strlen($prop))
 					{
 						if ($prop == "id")
 						{
 							$v[$var_name] = $o->id();
+						}//seda kuramust ei saa ju kontrollida kuidagi kas objekti laienduses va meetod eksisteerib... mu meelest....
+						elseif(substr_count($prop,"()"))// && method_exists($o,substr($prop, 0 ,-2)))
+						{
+							$func = substr($prop, 0 ,-2);
+							$v[$var_name] = $o->$func();
 						}
 						else
 						{
