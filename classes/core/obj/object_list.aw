@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.78 2009/07/12 18:38:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.79 2009/08/05 11:55:36 instrumental Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -357,19 +357,19 @@ class object_list extends _int_obj_container_base
 		if (is_array($cb))
 		{
 			error::raise_if(!is_object($cb[0]), array(
-				"id" => ERR_CORE_NO_OBJ,
+				"id" => "ERR_CORE_NO_OBJ",
 				"msg" => t("object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance!")
 			));
 
 			error::raise_if(!method_exists($cb[0], $cb[1]), array(
-				"id" => ERR_CORE_NO_OBJ,
+				"id" => "ERR_CORE_NO_OBJ",
 				"msg" => t("object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance and the second a method name from that object!")
 			));
 		}
 		else
 		{
 			error::raise_if(!function_exists($cb),array(
-				"id" => ERR_CORE_NO_FUNC,
+				"id" => "ERR_CORE_NO_FUNC",
 				"msg" => sprintf(t("object_list::sort_by_cb(%s): no function %s exists!"), $cb, $cb)
 			));
 		}
