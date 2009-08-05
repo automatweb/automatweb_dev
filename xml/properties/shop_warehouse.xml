@@ -492,11 +492,11 @@
             <name>packets_cat_tree</name>
             <table>objects</table>
             <group>packets</group>
-            <type>treeview</type>
+            <type>text</type>
             <parent>packets_tree_lay2</parent>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>packets_tree</field>
+            <field>packets_cat_tree</field>
       </property>
       <property>
             <name>packets_s_name</name>
@@ -603,6 +603,28 @@
             <parent>packets_split</parent>
             <field>packets_list</field>
             <caption>Pakettide nimekiri</caption>
+      </property>
+      <property>
+            <name>brand_toolbar</name>
+            <table>objects</table>
+            <group>brand</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>brand_toolbar</parent>
+            <field>brand_toolbar</field>
+            <caption>Kaubam&amp;amp;auml;rkide toolbar</caption>
+      </property>
+      <property>
+            <name>brand_list</name>
+            <table>objects</table>
+            <group>brand</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>brand_list</parent>
+            <field>brand_list</field>
+            <caption>Kaubam&amp;amp;auml;rkide nimekiri</caption>
       </property>
       <property>
             <name>arrivals_tb</name>
@@ -2990,6 +3012,11 @@
                   <submit>no</submit>
                   <parent>articles</parent>
             </packets>
+            <brand>
+                  <caption>Kaubam&amp;amp;auml;rk</caption>
+                  <submit>no</submit>
+                  <parent>articles</parent>
+            </brand>
             <products>
                   <caption>A Artiklid</caption>
                   <submit>no</submit>
@@ -3325,10 +3352,10 @@
                   <parent>packets_left</parent>
                   <group>packets</group>
             </packets_tree_lay>
-	    <packets_tree_lay2>
+            <packets_tree_lay2>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Kategooriate tyybid</area_caption>
+                  <area_caption>Kategooriate&amp;amp;nbsp;t&amp;amp;uuml;&amp;amp;uuml;bid</area_caption>
                   <parent>packets_left</parent>
                   <group>packets</group>
             </packets_tree_lay2>
@@ -3339,6 +3366,17 @@
                   <closeable>1</closeable>
                   <group>packets</group>
             </packets_left_search>
+            <brand_toolbar>
+                  <type>vbox</type>
+                  <group>brand</group>
+                  <area_caption></area_caption>
+            </brand_toolbar>
+            <brand_list>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kaubam&amp;amp;auml;rkide&amp;amp;nbsp;nimekiri</area_caption>
+                  <group>brand</group>
+            </brand_list>
             <arrival_prod_split>
                   <type>hbox</type>
                   <width>20%:80%</width>

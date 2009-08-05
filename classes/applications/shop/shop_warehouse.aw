@@ -230,6 +230,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@caption Pakettide nimekiri
 
 
+@default group=brand
+
+	@layout brand_toolbar type=vbox
+		@property brand_toolbar type=toolbar no_caption=1 store=no parent=brand_toolbar
+		@caption Kaubam&auml;rkide toolbar
+	@layout brand_list type=vbox closeable=1 area_caption=Kaubam&auml;rkide&nbsp;nimekiri
+		@property brand_list type=table store=no no_caption=1 parent=brand_list
+		@caption Kaubam&auml;rkide nimekiri
+
+
 @default group=arrivals
 
 	@property arrivals_tb type=toolbar no_caption=1
@@ -1121,6 +1131,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@groupinfo product_management caption="Artiklid" submit=no parent=articles
 	@groupinfo category caption="Tootekategooriad" submit=no parent=articles
 	@groupinfo packets caption="Paketid" submit=no parent=articles
+	@groupinfo brand caption="Kaubam&auml;rk" submit=no parent=articles
 	@groupinfo products caption="A Artiklid" submit=no parent=articles
 
 @groupinfo status caption="Laoseis"
@@ -11618,6 +11629,50 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 
 		$tb->add_delete_button();
+	}
+
+	function _get_brand_toolbar($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_js_new_button(array(
+			"parent" => $arr["obj_inst"]->id(),
+			"clid" => CL_SHOP_BRAND,
+			"refresh" => array("brand_list"),
+			"promts" => array("name" => t("Sisesta uue objekti nimi")),
+		));
+		$tb->add_delete_button();
+	}
+
+	function _get_brand_list($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+
+		$tb->define_field(array(
+			"name" => "logo",
+			"caption" => t("Logo"),
+			"sortable" => 1,
+		));
+
+		$tb->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$tb->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+		$brands = $arr["obj_inst"]->get_brands();
+		foreach($brands->arr() as $brand)
+		{
+			$tb->define_data(array(
+				"name" =>html::obj_change_url($brand, parse_obj_name($brand->name())),
+				"oid" => $brand->id(),
+				"logo" => $brand->get_logo_html(),
+			));
+		}
+
 	}
 
 	function _get_product_managementtree($arr)

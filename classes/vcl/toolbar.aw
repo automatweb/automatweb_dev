@@ -611,6 +611,63 @@ class toolbar extends aw_template
 		}
 	}
 
+//eksperimendi m6ttes praegu... m6nes kohas kasutan sellist, kuid eks n2is kas 6igustab ennast
+	/** Adds a javascript button to the toolbar for adding objects
+		@attrib api=1 params=pos
+		@param clid required type=int
+			Class_id's that can be added via the button
+		@param parent required type=oid
+			Parent where to add the objects to
+		@param refresh optional type=array
+			Properties to refresh after adding new object
+		@param promts optional type=array
+			Properties to ask for new object
+			array("Name" => t("Sisesta uue objekti nimi"))
+		@param tooltip optional type=string
+			Tooltip for the button
+		@example 
+			$tb->add_js_new_button(array(
+				"parent" => $arr["obj_inst"]->id(),
+				"clid" => CL_PRODUCT_BRAND,
+				"refresh" => array("brand_list"),
+				"promts" => array("name" => t("Sisesta uue objekti nimi")),
+			));
+	**/
+	function add_js_new_button($arr)
+	{
+		load_javascript('reload_properties_layouts.js');
+		$js = "";
+		foreach($arr["promts"] as $prop => $text)
+		{
+			$js.= "var ".$prop." = prompt('".$text."');\n";
+		}
+
+		$js.= "$.get('/automatweb/orb.aw', {
+			class: 'menu',
+			action: 'create_new_object',
+			parent: '".$arr["parent"]."',
+			clid: '".$arr["clid"]."'";
+
+		foreach($arr["promts"] as $prop => $text)
+		{
+			$js.= ", ".$prop." : ".$prop."\n";
+		}
+		
+		$js.= "}, function (html) {
+			reload_property(['".join("','" , $arr["refresh"])."']);
+			}
+		);
+		";
+
+		$this->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"url" => "javascript:;",
+			"onClick" => $js,
+			"tooltip" => !empty($arr["tooltip"]) ? $arr["tooltip"] : null,
+		));
+	}
+
 	/** Adds a delete objects button to the toolbar
 		@attrib api=1
 	**/

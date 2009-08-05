@@ -6764,5 +6764,27 @@ class class_base extends aw_template
 			$o->save();
 		}
 	}
+	
+	/**
+		@attrib name=create_new_object all_args=1
+	**/
+	public function create_new_object($arr)
+	{
+		$o = new object();
+		$o->set_parent($arr["parent"]);
+		$o->set_class_id($arr["clid"]);
+		$o->save();
+
+		foreach($arr as $prop => $val)
+		{
+			if($o->is_property($prop))
+			{
+				$o->set_prop($prop, $val);
+			}
+		}
+		$o->save();
+		die($id);
+	}
+
 }
 ?>

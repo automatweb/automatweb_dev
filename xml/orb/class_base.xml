@@ -228,5 +228,12 @@
 			</function>
 		</action>
 
+		<action name="create_new_object" all_args="1">
+			<function name="create_new_object">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

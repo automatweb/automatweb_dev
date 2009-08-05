@@ -18,6 +18,9 @@
 @property desc type=textarea rows=10 cols=50 field=aw_desc
 @caption Kirjeldus
 
+@property code type=textbox field=aw_code
+@caption Kirjeldus
+
 @property desc_doc type=relpicker reltype=RELTYPE_DOC  field=aw_desc_doc
 @caption Kirjeldav dokument
 
@@ -86,6 +89,18 @@ class shop_brand extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_shop_brand(aw_oid int primary key, aw_co int, aw_logo int, aw_desc text, aw_desc_doc int)");
 			return true;
+		}
+		else
+		{
+			switch($f)
+			{
+				case "aw_code":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "int"
+					));
+					return true;
+			}
 		}
 	}
 }

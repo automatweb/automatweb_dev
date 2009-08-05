@@ -40,6 +40,14 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
+            <name>code</name>
+            <table>aw_shop_brand</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_code</field>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
             <name>desc_doc</name>
             <table>aw_shop_brand</table>
             <group>general</group>

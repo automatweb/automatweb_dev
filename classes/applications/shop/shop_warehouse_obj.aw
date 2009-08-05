@@ -404,4 +404,15 @@ class shop_warehouse_obj extends _int_object
 		return $o->id();
 	}
 
+	/**return all brands
+		@attrib api=1
+		@returns object_list
+	**/
+	public function get_brands()
+	{
+		$ol = new object_list(array("class_id" => CL_SHOP_BRAND));
+		return $ol;
+
+	}
+
 }
