@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.13 2009/07/27 17:44:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.14 2009/08/05 11:52:14 instrumental Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -92,9 +92,9 @@ class icons extends aw_template
 		// $ic conains
 		// <img src='http://_blabla_/automatweb/images/icons/class_1.gif'>
 	**/
-	function get_icon($o)
+	public static function get_icon($o)
 	{
-		if (!is_object($o) && $this->can("view", $o))
+		if (!is_object($o) && $GLOBALS["object_loader"]->cache->can("view", $o))
 		{
 			$o = obj($o);
 		}

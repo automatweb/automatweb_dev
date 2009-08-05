@@ -3955,7 +3955,7 @@ EOF;
 			}';
 		}
 
-		if ($arr["request"]["group"] == "general" || $arr["request"]["group"] == "")
+		if (automatweb::$request->arg("group") == "general" || automatweb::$request->arg("group") == "")
 		{
 			$hide_fb = <<<EOF
 				if ($("#bug_status").val() != 10)
