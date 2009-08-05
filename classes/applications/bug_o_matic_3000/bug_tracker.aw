@@ -682,7 +682,7 @@ class bug_tracker extends class_base
 			$fn = "_get_".$prop["name"];
 			return $d_i->$fn($arr);
 		}
-		if (substr($prop["group"], 0, 8) == "problems")
+		if (isset($prop["group"]) && substr((string)$prop["group"], 0, 8) == "problems")
 		{
 			static $p_i;
 			if (!$p_i)
@@ -693,7 +693,7 @@ class bug_tracker extends class_base
 			return $p_i->$fn($arr);
 		}
 
-		if($prop["group"] == "projects")
+		if(isset($prop["group"]) && (string)$prop["group"] == "projects")
 		{
 			static $proj_i;
 			if (!$proj_i)
@@ -1499,7 +1499,7 @@ class bug_tracker extends class_base
 		));
 
 		$vis = "hidden;";
-		if (is_array($_SESSION["bt"]["cut_bugs"]) && count($_SESSION["bt"]["cut_bugs"]))
+		if (isset($_SESSION["bt"]["cut_bugs"]) && is_array($_SESSION["bt"]["cut_bugs"]) && count($_SESSION["bt"]["cut_bugs"]))
 		{
 			$vis = "visible;";
 			$tb->add_button(array(
@@ -1959,18 +1959,18 @@ class bug_tracker extends class_base
 			"root_url" => aw_url_change_var("b_id", null),
 			"get_branch_func" => $this->mk_my_orb($orb_function, array(
 				"type" => $this->sort_type["name"],
-				"reltype" => $this->sort_type["reltype"],
-				"clid"=> $this->sort_type["class"],
+				"reltype" => isset($this->sort_type["reltype"]) ? $this->sort_type["reltype"] : NULL,
+				"clid"=> isset($this->sort_type["class"]) ? $this->sort_type["class"] : NULL,
 				"inst_id" => $this->self_id,
 				"active_group" => $this->active_group,
-				"b_id" => $arr["request"]["b_id"],
-				"p_fld_id" => $arr["request"]["p_fld_id"],
-				"p_cls_id" => $arr["request"]["p_cls_id"],
-				"p_cust_id" => $arr["request"]["p_cust_id"],
-				"b_mon" => $arr["request"]["b_mon"],
-				"b_stat" => $arr["request"]["b_stat"],
-				"filt_type" => $arr["request"]["filt_type"],
-				"filt_value" => $arr["request"]["filt_value"],
+				"b_id" => automatweb::$request->arg("b_id"),
+				"p_fld_id" => automatweb::$request->arg("p_fld_id"),
+				"p_cls_id" => automatweb::$request->arg("p_cls_id"),
+				"p_cust_id" => automatweb::$request->arg("p_cust_id"),
+				"b_mon" => automatweb::$request->arg("b_mon"),
+				"b_stat" => automatweb::$request->arg("b_stat"),
+				"filt_type" => automatweb::$request->arg("filt_type"),
+				"filt_value" => automatweb::$request->arg("filt_value"),
 				"set_retu" => get_ru(),
 				"parent" => " ",
 			)),
@@ -1998,7 +1998,7 @@ class bug_tracker extends class_base
 		$objects = $ol->arr();
 
 		$nm = $this->tree_root_name." (".$ol->count().")";
-		if (!$_GET["b_id"])
+		if (empty($_GET["b_id"]))
 		{
 			$nm = "<b>".$nm."</b>";
 		}
@@ -2010,7 +2010,7 @@ class bug_tracker extends class_base
 		foreach($objects as $obj_id => $object)
 		{
 			$nm = $object->name();
-			if ($_GET["b_id"] == $obj_id)
+			if (isset($_GET["b_id"]) && $_GET["b_id"] == $obj_id)
 			{
 				$nm = "<b>".$nm."</b>";
 			}
@@ -2350,7 +2350,7 @@ class bug_tracker extends class_base
 		$t->set_caption(t("Nimekiri arendus&uuml;lesannetest"));
 
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
-		if($this->can("view", $pt) && !$arr["request"]["filt_type"])
+		if($this->can("view", $pt) && empty($arr["request"]["filt_type"]))
 		{
 			// arhiivi tab
 			if($arr["request"]["group"] == "archive")
@@ -2392,16 +2392,16 @@ class bug_tracker extends class_base
 					));
 				}
 
-				if(strlen($arr["request"]["p_id"]))
+				if(strlen(automatweb::$request->arg("p_id")))
 				{
 					$filt[$this->sort_type["name"]] = $arr["request"]["p_id"];
 				}
-				elseif(strlen($arr["request"]["b_id"]))
+				elseif(strlen(automatweb::$request->arg("b_id")))
 				{
 					$filt["parent"] = $arr["request"]["b_id"];
 				}
 				else
-				if ($arr["request"]["p_fld_id"])	// class folder
+				if (!empty($arr["request"]["p_fld_id"]))	// class folder
 				{
 					// list classes for that folder
 					$clss = aw_ini_get("classes");
@@ -2420,19 +2420,19 @@ class bug_tracker extends class_base
 					unset($filt["parent"]);
 				}
 				else
-				if ($arr["request"]["p_cls_id"])	// class
+				if (!empty($arr["request"]["p_cls_id"]))	// class
 				{
 					$filt["bug_class"] = $arr["request"]["p_cls_id"];
 					unset($filt["parent"]);
 				}
 
-				if ($arr["request"]["b_stat"])
+				if (!empty($arr["request"]["b_stat"]))
 				{
 					$filt["bug_status"] = $arr["request"]["b_stat"];
 					unset($filt["parent"]);
 				}
 
-				if ($arr["request"]["b_mon"])
+				if (!empty($arr["request"]["b_mon"]))
 				{
 					//$filt["monitors"] = $arr["request"]["b_mon"];
 					$filt["CL_BUG.RELTYPE_MONITOR"] = $arr["request"]["b_mon"];
@@ -2443,7 +2443,7 @@ class bug_tracker extends class_base
 				$ol = new object_list($filt);
 			}
 		}
-		elseif($arr["request"]["filt_type"] && $arr["request"]["filt_value"])
+		elseif(!empty($arr["request"]["filt_type"]) && !empty($arr["request"]["filt_value"]))
 		{
 			$filt = array(
 				"class_id" => CL_BUG,
@@ -2497,7 +2497,7 @@ class bug_tracker extends class_base
 		$t->set_default_sorder("desc");
 		$t->sort_by();
 		$arr["prop"]["value"] = "<span id=\"bug_table\">".$t->get_html()."</table>";
-		if ($arr["request"]["tb_only"] == 1)
+		if (automatweb::$request->arg("tb_only") == 1)
 		{
 			die($t->draw());
 		}
@@ -2534,15 +2534,25 @@ class bug_tracker extends class_base
 			));
 		}
 		$comments_by_bug = array();
-		$date_from = date_edit::get_timestamp($s["s_date_from"]);
-		$date_to = date_edit::get_timestamp($s["s_date_to"]);
+		$date_from = date_edit::get_timestamp(isset($s["s_date_from"]) ? $s["s_date_from"] : NULL);
+		$date_to = date_edit::get_timestamp(isset($s["s_date_to"]) ? $s["s_date_to"] : NULL);
 		foreach($comment_ol->arr() as $comm)
 		{
+			if(!isset($comments_by_bug[$comm->parent()]))
+			{
+				$comments_by_bug[$comm->parent()] = 0;
+			}
+
 			$comments_by_bug[$comm->parent()]++;
 			$latest_com_by_bug[$comm->parent()] = $comm->created();
 			if(($date_from > 1 && $comm->created() < $date_from)  ||($date_to > 1 && $comm->created() > $date_to))
 			{
 				continue;
+			}
+
+			if(!isset($times_by_bug[$comm->parent()]))
+			{
+				$times_by_bug[$comm->parent()] = 0;
 			}
 			$times_by_bug[$comm->parent()] += $comm->prop("add_wh");
 		}
@@ -2559,11 +2569,11 @@ class bug_tracker extends class_base
 
 		foreach($bug_list as $bug)
 		{
-			if(($s["s_date_time_from"] && $times_by_bug[$bug->id()] < $s["s_date_time_from"]) || ($s["s_date_time_to"] && $times_by_bug[$bug->id()] > $s["s_date_time_to"]))
+			if((!empty($s["s_date_time_from"]) && $times_by_bug[$bug->id()] < $s["s_date_time_from"]) || (!empty($s["s_date_time_to"]) && $times_by_bug[$bug->id()] > $s["s_date_time_to"]))
 			{
 				continue;
 			}
-			if($s["s_date_type"] == 3 && ($latest_com_by_bug[$bug->id()] < $date_from || $latest_com_by_bug[$bug->id()] > $date_to))
+			if(isset($s["s_date_type"]) && $s["s_date_type"] == 3 && ($latest_com_by_bug[$bug->id()] < $date_from || $latest_com_by_bug[$bug->id()] > $date_to))
 			{
 				continue;
 			}
@@ -2586,7 +2596,7 @@ class bug_tracker extends class_base
 				$nl = html::obj_change_url($bug);
 				$opurl = aw_url_change_var("b_id", $bug->id());
 			}
-			if ($params["path"])
+			if (!empty($params["path"]))
 			{
 				$nl = $bug->path_str(array(
 					"to" => $params["bt"]->id(),
@@ -2612,8 +2622,8 @@ class bug_tracker extends class_base
 					"url" => $opurl,
 					"caption" => t("Sisene")
 				)).")",
-				"bug_status" => (($bug->class_id() == CL_DEVELOPMENT_ORDER) ? $devo_states[$bug->prop("bug_status")] : $states[$bug->prop("bug_status")]),
-				"bug_sort" => $bug_sort[$bug->prop("bug_status")],
+				"bug_status" => $bug->class_id() == CL_DEVELOPMENT_ORDER ? (isset($devo_states[$bug->prop("bug_status")]) ? $devo_states[$bug->prop("bug_status")] : NULL) : (isset($states[$bug->prop("bug_status")]) ? $states[$bug->prop("bug_status")] : 0),
+				"bug_sort" => isset($bug_sort[$bug->prop("bug_status")]) ? $bug_sort[$bug->prop("bug_status")] : NULL,
 				"who" => $bug->prop_str("who"),
 				"bug_priority" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_priority"),
 				"bug_severity" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_severity"),
@@ -2626,12 +2636,12 @@ class bug_tracker extends class_base
 				"sort_priority" => $bug_i->get_sort_priority($bug, $formula),
 				"icon" => icons::get_icon($bug),
 				"obj" => $bug,
-				"comment_count" => (int)$comments_by_bug[$bug->id()],
-				"comment" => (int)$comments_by_bug[$bug->id()],
+				"comment_count" => isset($comments_by_bug[$bug->id()]) ? (int)$comments_by_bug[$bug->id()] : 0,
+				"comment" => isset($comments_by_bug[$bug->id()]) ? (int)$comments_by_bug[$bug->id()] : 0,
 				"col" => $col
 			));
 		}
-		if($params["add_bug_count"])
+		if(!empty($params["add_bug_count"]))
 		{
 			$t->set_caption(sprintf(t("Leiti %s bugi"), $bug_count));
 		}
@@ -2704,9 +2714,9 @@ class bug_tracker extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["tf"] = $_GET["tf"];
+		$arr["tf"] = automatweb::$request->arg("tf");
 		$arr["assign_to"] = 0;
-		$arr["b_id"] = $_GET["b_id"];
+		$arr["b_id"] = automatweb::$request->arg("b_id");
 		$arr["save_search_name"] = "";
 		$arr["post_ru"] = aw_url_change_var("post_ru", null, post_ru());
 		if($arr["group"] == "settings_statuses")
@@ -3671,12 +3681,13 @@ class bug_tracker extends class_base
 		$prevm = time()-3600*24*10;
 		$filter = array(
 			"class_id" => array(CL_TASK_ROW),
+			"CL_TASK_ROW.task.class_id" => CL_BUG,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, $prevm),
-			"sort_by" => "objects.createdby, objects.created",
+			//"created" => new obj_predicate_compare(OBJ_COMP_GREATER, $prevm),
+			"sort_by" => "objects.created desc",
 			"impl" => $cur_p->id(),
-			"limit" => 40,
+			"limit" => 100,
 		);
 
 		$t = new object_data_list(
@@ -3691,10 +3702,10 @@ class bug_tracker extends class_base
 		$count = 0;
 		foreach($t->list_data as $data)
 		{
-			if($count >= 10) break;
-			if(!$tasks[$data["oid"]] && $this->can("view" , $data["oid"]))
+			if($count >= 40) break;
+			if(!$tasks[$data["task"]] && $this->can("view" , $data["task"]))
 			{
-				$tasks[$data["oid"]] = $data["oid"];
+				$tasks[$data["task"]] = $data["task"];
 			}
 			$count++;
 		}
@@ -3705,7 +3716,21 @@ class bug_tracker extends class_base
 			$ol->add($tasks);
 		}
 		
-		arr($ol);
+		$out = "menu = [";
+		foreach($ol->arr() as $o)
+		{
+			$name = utf8_encode( html_entity_decode( $o->name()  ));
+			$url = $this->mk_my_orb("change", array(
+				"id" => $o->id(),
+			), "bug");
+			$class = "";
+			
+			$out .= '{"name":"'.$name.'",'.
+				'"url":"'.$url.'",'.
+				'"modified":"'.$o->modified.'"'.
+			"},";
+		}
+		$out .= '];';
 		die($out);
 	}
 	
