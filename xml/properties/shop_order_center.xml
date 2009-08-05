@@ -885,15 +885,16 @@
             <appearance_l>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Tootegrupid</area_caption>
                   <parent>appearance_c</parent>
                   <group>appearance</group>
+                  <area_caption></area_caption>
             </appearance_l>
-	          <appearance_r>
+            <appearance_r>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <parent>appearance_c</parent>
                   <group>appearance</group>
+                  <area_caption></area_caption>
             </appearance_r>
       </layout>
 </properties>

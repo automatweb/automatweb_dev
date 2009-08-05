@@ -35,7 +35,25 @@ class products_show extends class_base
 			"tpldir" => "applications/shop/products_show",
 			"clid" => CL_PRODUCTS_SHOW
 		));
+		$this->types = array(
+					CL_SHOP_PRODUCT => t("Toode"),
+					CL_SHOP_PRODUCT_PACKAGING => t("Pakend"),
+					CL_SHOP_PACKET => t("Pakett"),
+				);
 	}
+
+	public function templates()
+	{
+		$tm = get_instance("templatemgr");
+		$ret = $tm->template_picker(array(
+					"folder" => "applications/shop/products_show/"
+				));;
+
+
+
+		return $ret;
+	}
+
 
 	function get_property($arr)
 	{
@@ -45,10 +63,7 @@ class products_show extends class_base
 		switch($prop["name"])
 		{
 			case "template":
-				$tm = get_instance("templatemgr");
-				$prop["options"] = $tm->template_picker(array(
-					"folder" => "applications/shop/products_show/"
-				));
+				$prop["options"] = $this->templates();
 				if(sizeof($prop["options"]) < 2)
 				{
 					$prop["caption"].= "<br>".t("templates/applications/shop/products_show/");
@@ -84,11 +99,7 @@ class products_show extends class_base
 				break;
 
 			case "type":
-				$prop["options"] = array(
-					CL_SHOP_PRODUCT => t("Toode"),
-					CL_SHOP_PRODUCT_PACKAGING => t("Pakend"),
-					CL_SHOP_PACKET => t("Pakett"),
-				);
+				$prop["options"] = $this->types;
 				break;
 		}
 
@@ -198,7 +209,7 @@ class products_show extends class_base
 		$data["submit"] = html::submit(array(
 			"value" => t("Lisa tooted korvi"),
 		));
-
+		$data["section"] = aw_global_get("section");
 		$this->vars($data);
 		return $this->parse();
 	}

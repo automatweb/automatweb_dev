@@ -1922,7 +1922,7 @@ class shop_order_center extends class_base
 
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
-			"persist_state" => true,
+		//	"persist_state" => true,
 			"tree_id" => "appearance_tree",
 		));
 
@@ -1982,11 +1982,210 @@ class shop_order_center extends class_base
 		}
 	}
 
+	function _get_appearance_list($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "left",
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "categories",
+			"caption" => t("Kategooriad"),
+			"align" => "left",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "types",
+			"caption" => t("T&uuml;&uuml;bid"),
+			"align" => "left",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "template",
+			"caption" => t("Templeit"),
+			"align" => "left",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			"name" => "product_template",
+			"caption" => t("&Uuml;he toote templeit"),
+			"align" => "left",
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+			"chgbgcolor" => "color",
+		));
+
+		$show_inst = get_instance(CL_PRODUCTS_SHOW);
+
+		if($arr["request"]["menu"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_MENU,
+				"parent" => $arr["request"]["menu"],
+			));
+			foreach($ol->arr() as $id => $o)
+			{
+				$data = array(
+					"name" => $o->name(),
+					"oid" => $id
+				);
+				$data["color"] = $o->prop("status") == 2 ? "#99FF99" : "silver";
+				$o = $this->get_product_show_obj($id);
+				if(is_object($o))
+				{
+					if($o->prop("type"))
+					{
+						$data["types"] = $show_inst->types[$o->prop("type")];
+					}
+					if($o->prop("template"))
+					{
+						$data["template"] = $o->prop("template");
+					}
+					if($o->prop("product_template"))
+					{
+						$data["product_template"] = $o->prop("product_template");
+					}
+					$cats = array();
+					foreach($o->get_categories()->arr() as $cat)
+					{
+						$cats[] = html::obj_change_url($cat);
+					}
+					
+					$data["categories"] = join(",\n<br>" , $cats);
+				}
+				$t->define_data($data);
+			}
+		}
+	}
+
+	private function get_product_show_obj($menu, $make_new = false)
+	{
+		$o = "";
+		$docs = new object_list(array(
+			"class_id" => CL_DOCUMENT,
+			"parent" => $menu,
+			"lang_id" => array(),
+		));
+		$doc = is_array($docs->ids()) ? reset($docs->arr()) : "";
+		if(!is_object($doc) && $make_new)
+		{
+			$doc = new object();
+			$doc->set_class_id(CL_DOCUMENT);
+			$doc->set_parent($menu);
+			$doc->set_name($menu);
+			$doc->save();
+		}
+		if(is_object($doc))
+		{
+			$os = new object_list(array(
+				"class_id" => CL_PRODUCTS_SHOW,
+				"parent" => $menu,
+				"lang_id" => array(),
+//				"CL_PRODUCTS_SHOW.RELTYPE_ALIAS(CL_DOCUMENT)" => $doc->id(),
+			));
+			$o = is_array($os->ids()) ? reset($os->arr()) : "";
+			
+			if(!is_object($o) && $make_new)
+			{
+				$o = new object();
+				$o->set_class_id(CL_PRODUCTS_SHOW);
+				$o->set_parent($menu);
+				$o->set_name($menu." ".t("toodete n&auml;itamine"));
+				$o->save();
+				$doc->connect(array(
+					"type" => "RELTYPE_ALIAS",
+					"to" => $o->id(),
+				));
+			}
+		}
+		return $o;
+	}
+
 	function _get_appearance_toolbar($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
 
 		$tb->add_delete_button();
+
+		$tb->add_menu_button(array(
+			"name" => "active",
+//			"img" => "delete.gif",
+			"text" => t("Aktiivsus"),
+			"tooltip" => t("Tee kaustu aktiivseteks ja mitteaktiivseteks"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "active",
+			"text" => t("Aktiivseks"),
+//			"link" => "javascript:add_type('".$id."');",
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "active",
+			"text" => t("Mitteaktiivseks"),
+//			"link" => "javascript:add_type('".$id."');",
+		));
+
+		$tb->add_menu_button(array(
+			"name" => "type",
+//			"img" => "delete.gif",
+			"text" => t("T&uuml;&uuml;p"),
+			"tooltip" => t("Objektit&uuml;&uuml;p mida tootena kuvatakse"),
+		));
+
+		$prod_show = get_instance(CL_PRODUCTS_SHOW);
+		foreach($prod_show->types as $key => $name)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "type",
+				"text" => $name,
+//				"link" => "javascript:add_type('".$id."');",
+			));
+		}
+
+		$tb->add_menu_button(array(
+			"name" => "template",
+//			"img" => "delete.gif",
+			"text" => t("Templeit"),
+			"tooltip" => t("M&auml;&auml;ra valitud kaustadele templeit"),
+		));
+
+		foreach($prod_show->templates() as $key => $name)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "template",
+				"text" => $name,
+//				"link" => "javascript:add_type('".$id."');",
+			));
+		}
+
+
+		$tb->add_menu_button(array(
+			"name" => "product_template",
+//			"img" => "delete.gif",
+			"text" => t("Toote templeit"),
+			"tooltip" => t("M&auml;&auml;ra valitud kaustadele &uuml;he toote n&auml;itamiseks templeit"),
+		));
+
+		foreach($prod_show->templates() as $key => $name)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "product_template",
+				"text" => $name,
+//				"link" => "javascript:add_type('".$id."');",
+			));
+		}
 	}
 
 }
