@@ -28,8 +28,12 @@ class shop_packet_obj extends _int_object
 
 	private function random_product_id()
 	{
-		$prod = reset($this->get_products()->arr());
-		return $prod->id();
+		$product = $this->get_first_obj_by_reltype("RELTYPE_PRODUCT");
+		if(is_object($product))
+		{
+			return $product->id();
+		}
+		return null;
 	}
 
 	public function get_data()
@@ -44,12 +48,13 @@ class shop_packet_obj extends _int_object
 		$data["prices"] = $this->get_prices();
 		$data["sizes"] = $this->get_sizes();
 		$data["descriptions"] = $this->get_descriptions();
+		$data["min_price"] = $this->get_min_price();
 		return $data;
 	}
 
 	private function _set_image_object()
 	{
-		if(!$this->image_object)
+		if(empty($this->image_object))
 		{
 			foreach($this->connections_from(array(
 				"type" => "RELTYPE_IMAGE",
@@ -80,7 +85,7 @@ class shop_packet_obj extends _int_object
 	//makes var product_objects usable for everyone
 	private function _set_products()
 	{
-		if(!$this->product_objects)
+		if(empty($this->product_objects))
 		{
 			$this->product_objects = new object_list();
 			foreach($this ->connections_from(array(
@@ -95,7 +100,7 @@ class shop_packet_obj extends _int_object
 	//makes var packaging_objects usable for everyone
 	private function _set_packagings()
 	{
-		if(!$this->packaging_objects)
+		if(empty($this->packaging_objects))
 		{
 			$this->_set_products();
 			$ret = array();
@@ -175,6 +180,20 @@ class shop_packet_obj extends _int_object
 			$ret[$packaging->id()] = $packaging->prop("size");
 		}
 		return $ret;
+	}
+
+	private function get_min_price()
+	{
+		$this->_set_packagings();
+		$min = "";
+		foreach($this->packaging_objects->arr() as $packaging)
+		{
+			if(!(is_numeric($min)) || $packaging->get_shop_price() < $min)
+			{
+				$min = $packaging->get_shop_price();
+			}
+		}
+		return $min;
 	}
 
 	private function get_descriptions()

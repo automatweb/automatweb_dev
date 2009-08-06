@@ -42,15 +42,15 @@ class shop_product_obj extends _int_object
 		@returns double
 			the price of the product
 	**/
-	public function get_shop_price($currency)
+	public function get_shop_price($currency = null)
 	{
 		if($this->prop("price"))
 		{
 			return $this->prop("price");
 		}
-		return reset($this->get_price());//ma ei viitsi lihtsalt teha seda hetkel, et otsiks 6ige valuuta v2lja millega hinna annaks... no ei viitsi.... kyll hiljem j6uab
+		$price_by_currency = $this->get_price();
+		return $price_by_currency[$currency];
 	}
-
 
 	/** edaspidi kasutaks vaid seda, et saaks igale ajahetkele erinevaid hindu panna ja loodetavasti ka hinnaobjektiga mitte metast
 		@attrib name=get_price api=1
@@ -439,10 +439,12 @@ class shop_product_obj extends _int_object
 	{
 		$data = $this->properties();
 		$data["image"] = $this->get_product_image();
+		$data["image_url"] = $this->get_product_image_url();
 		if($this->class_id() == CL_SHOP_PRODUCT_PACKAGING)
 		{
 			$product = $this->get_product();
 			$data["description"] = $product->prop("description");
+			$data["color"] =  $product->get_color_name();
 		}
 		return $data;
 	}
@@ -513,6 +515,21 @@ class shop_product_obj extends _int_object
 		if(is_object($pic))
 		{
 			return $pic->get_html();
+
+		}
+		else
+		{
+			return "";
+		}
+	}
+
+	private function get_product_image_url()
+	{
+		$product = $this->get_product();
+		$pic = $product->get_first_obj_by_reltype("RELTYPE_IMAGE");
+		if(is_object($pic))
+		{
+			return $pic->get_url();
 
 		}
 		else

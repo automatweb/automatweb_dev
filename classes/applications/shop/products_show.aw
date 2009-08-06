@@ -201,7 +201,12 @@ class products_show extends class_base
 		$products = $ob->get_web_items();
 		$oc = $ob->get_oc();
 		$prod = "";//templeiti muutuja PRODUCT v22rtuseks
+
+		$rows = "";
 		
+		$max = 4;
+
+		$count = $count_all = 0;
 		foreach($products->arr() as $product)
 		{
 			$product_data = $product->get_data();
@@ -213,11 +218,40 @@ class products_show extends class_base
 			$product_data["product_link"] = "/".aw_global_get("section")."?product=".$product_data["id"]."&oc=".$oc->id();
 
 			$this->vars($product_data);
-			$prod.=$this->parse("PRODUCT");
+
+			$count++;
+			$count_all++;
+			if($count >= $max && $this->is_template("ROW"))//viimane tulp yksk6ik mis reas
+			{
+				$count = 0;
+				if($this->is_template("PRODUCT_END"))
+				{
+					$prod.= $this->parse("PRODUCT_END");
+				}
+				else
+				{
+					$prod.= $this->parse("PRODUCT");
+				}
+				$this->vars(array("PRODUCT" => $prod));
+				$rows.= $this->parse("ROW");
+				$prod = "";
+			}
+			elseif($count_all >= $products->count() && $this->is_template("ROW"))//viimane rida
+			{
+				$prod.= $this->parse("PRODUCT");
+				$this->vars(array("PRODUCT" => $prod));
+				$rows.= $this->parse("ROW");
+			}
+			else
+			{
+				$prod.= $this->parse("PRODUCT");
+			}
+
 		}
 
+		$this->vars(array("ROW" => $rows));
+
 		$data = array();
-		$data["PRODUCT"] = $prod;
 		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
  		$data["submit_url"] = $this->mk_my_orb("submit_add_cart", array(
 			"oc" => $oc->id(),
