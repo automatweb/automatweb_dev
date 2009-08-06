@@ -68,6 +68,29 @@ class products_show_obj extends _int_object
 		return $ol;
 	}
 
+	public function add_category($cat)
+	{
+		if(is_oid($cat))
+		{
+			$cat = array($cat);
+		}
+		foreach($cat as $category)
+		{
+			$this->connect(array(
+				"to" => $category,
+				"reltype" => "RELTYPE_CATEGORY",
+			));
+		}
+		return true;
+	}
+
+	public function remove_category($cat)
+	{
+		$this->disconnect(array(
+			"from" => $cat,
+		));
+	}
+
 }
 
 ?>

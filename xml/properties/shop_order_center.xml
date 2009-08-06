@@ -14,9 +14,10 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MENU</reltype>
-            <table>aw_shop_order_center</table>
-            <field>aw_root_menu</field>
-            <caption>Veebis kuvamise juurkaust</caption>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <field>root_menu</field>
+            <caption>Veebis kuvamise juurkaustad</caption>
       </property>
       <property>
             <name>cart</name>
@@ -886,15 +887,15 @@
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <parent>appearance_c</parent>
+                  <area_caption>Kaustade&amp;amp;nbsp;puu</area_caption>
                   <group>appearance</group>
-                  <area_caption></area_caption>
             </appearance_l>
             <appearance_r>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <parent>appearance_c</parent>
+                  <area_caption>Kaustade&amp;amp;nbsp;all&amp;amp;nbsp;toodete&amp;amp;nbsp;kuvamise&amp;amp;nbsp;seaded</area_caption>
                   <group>appearance</group>
-                  <area_caption></area_caption>
             </appearance_r>
       </layout>
 </properties>

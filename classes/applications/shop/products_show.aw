@@ -36,24 +36,48 @@ class products_show extends class_base
 			"clid" => CL_PRODUCTS_SHOW
 		));
 		$this->types = array(
-					CL_SHOP_PRODUCT => t("Toode"),
-					CL_SHOP_PRODUCT_PACKAGING => t("Pakend"),
-					CL_SHOP_PACKET => t("Pakett"),
-				);
+			CL_SHOP_PRODUCT => t("Toode"),
+			CL_SHOP_PRODUCT_PACKAGING => t("Pakend"),
+			CL_SHOP_PACKET => t("Pakett"),
+		);
 	}
 
+	/** returns products showing template selection
+		@attrib api=1
+	**/
 	public function templates()
 	{
 		$tm = get_instance("templatemgr");
 		$ret = $tm->template_picker(array(
 					"folder" => "applications/shop/products_show/"
 				));;
-
-
-
 		return $ret;
 	}
 
+	/** returns product showing template selection
+		@attrib api=1
+	**/
+	public function product_templates()
+	{
+		$tm = get_instance("templatemgr");
+		$ret = array();
+
+		$dir = "applications/shop/shop_packet";
+		$ret = $ret + $tm->template_picker(array(
+			"folder" => $dir
+		));
+
+		$dir = "applications/shop/shop_product";
+		$ret = $ret + $tm->template_picker(array(
+			"folder" => $dir
+		));
+		$dir = "applications/shop/shop_product_packaging";
+
+		$ret = $ret + $tm->template_picker(array(
+			"folder" => $dir
+		));
+		return $ret;
+	}
 
 	function get_property($arr)
 	{
