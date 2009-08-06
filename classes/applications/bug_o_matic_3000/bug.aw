@@ -1342,7 +1342,7 @@ class bug extends class_base
 					}
 				}
 
-				if ($arr["request"]["bug_status"] == self::BUG_FATAL_ERROR)
+				if ($arr["request"]["bug_status"] == self::BUG_FATALERROR)
 				{
 					return PROP_OK;
 				}
