@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.41 2009/07/28 09:38:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.42 2009/08/06 14:01:23 instrumental Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -21,6 +21,9 @@
 
 @property jrk type=textbox size=5 table=objects field=jrk
 @caption J&auml;rjekord
+
+@property product type=hidden field=aw_product
+@caption Toode
 
 @property price type=textbox size=5 field=aw_price
 @caption Hind
@@ -830,13 +833,22 @@ class shop_product_packaging extends class_base
 
 		switch($f)
 		{
+			case "aw_price":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
+				));
+				break;
+
 			case "size":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(255)"
 				));
 				break;
+
 			case "aw_content_package_price_condition":
+			case "aw_product":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

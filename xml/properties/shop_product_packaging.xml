@@ -26,6 +26,14 @@
             <caption>J&amp;amp;auml;rjekord</caption>
       </property>
       <property>
+            <name>product</name>
+            <table>aw_shop_packaging</table>
+            <group>general_general</group>
+            <type>hidden</type>
+            <field>aw_product</field>
+            <caption>Toode</caption>
+      </property>
+      <property>
             <name>price</name>
             <table>aw_shop_packaging</table>
             <group>general_general</group>
