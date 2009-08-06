@@ -2,10 +2,6 @@
 // bug_tracker.aw - BugTrack
 
 define("MENU_ITEM_LENGTH", 20);
-if(!defined("BUG_STATUS_CLOSED"))
-{
-	define("BUG_STATUS_CLOSED", 5);
-}
 
 /* 
 
@@ -1661,7 +1657,7 @@ class bug_tracker extends class_base
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					"CL_BUG.bug_status" => new obj_predicate_not(array(BUG_STATUS_CLOSED, 14)),
+					"CL_BUG.bug_status" => new obj_predicate_not(array(bug::BUG_CLOSED, 14)),
 					"class_id" => new obj_predicate_not(CL_BUG),
 				),
 			)),
@@ -1679,7 +1675,7 @@ class bug_tracker extends class_base
 				new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"CL_BUG.bug_status" => new obj_predicate_not(array(BUG_STATUS_CLOSED, 14)),
+						"CL_BUG.bug_status" => new obj_predicate_not(array(bug::BUG_CLOSED, 14)),
 						"class_id" => new obj_predicate_not(CL_BUG),
 					),
 				)),
@@ -1994,7 +1990,7 @@ class bug_tracker extends class_base
 
 	function generate_bug_tree($arr)
 	{
-		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),"lang_id" => array(), "site_id" => array()));
+		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU, CL_DEVELOPMENT_ORDER), "bug_status" => new obj_predicate_not(bug::BUG_CLOSED),"lang_id" => array(), "site_id" => array()));
 		$objects = $ol->arr();
 
 		$nm = $this->tree_root_name." (".$ol->count().")";
@@ -2365,7 +2361,7 @@ class bug_tracker extends class_base
 				$ol = new object_list(array(
 					"oid" => $ot->ids(),
 					"class_id" => CL_BUG,
-					"bug_status" => BUG_STATUS_CLOSED,
+					"bug_status" => bug::BUG_CLOSED,
 				));
 			}
 			// bugid tab
@@ -2386,7 +2382,7 @@ class bug_tracker extends class_base
 					$filt[] = new object_list_filter(array(
 						"logic" => "OR",
 						"conditions" => array(
-							"CL_BUG.bug_status" => new obj_predicate_not(array(BUG_STATUS_CLOSED, 14)),
+							"CL_BUG.bug_status" => new obj_predicate_not(array(bug::BUG_CLOSED, 14)),
 							"class_id" => new obj_predicate_not(CL_BUG),
 						),
 					));
@@ -2564,8 +2560,22 @@ class bug_tracker extends class_base
 		$formula = $params["bt"]->prop("combined_priority_formula");
 		$bug_count = 0;
 
-		$bug_sort = array(BUG_FATALERROR => 0,
-				BUG_FEEDBACK => 1 , BUG_INPROGRESS => 2, BUG_OPEN => 3, BUG_DEVORDER => 4, BUG_WONTFIX => 5, BUG_TESTING => 6, BUG_VIEWING => 7, BUG_TESTED => 8, BUG_DONE => 9, BUG_CLOSED => 10, BUG_INCORRECT => 11, BUG_NOTREPEATABLE => 12, BUG_NOTFIXABLE => 13);
+		$bug_sort = array(
+			bug::BUG_FATALERROR => 0,
+			bug::BUG_FEEDBACK => 1,
+			bug::BUG_INPROGRESS => 2,
+			bug::BUG_OPEN => 3,
+			bug::BUG_DEVORDER => 4,
+			bug::BUG_WONTFIX => 5,
+			bug::BUG_TESTING => 6,
+			bug::BUG_VIEWING => 7,
+			bug::BUG_TESTED => 8,
+			bug::BUG_DONE => 9,
+			bug::BUG_CLOSED => 10,
+			bug::BUG_INCORRECT => 11,
+			bug::BUG_NOTREPEATABLE => 12,
+			bug::BUG_NOTFIXABLE => 13
+		);
 
 		foreach($bug_list as $bug)
 		{
@@ -3485,7 +3495,7 @@ class bug_tracker extends class_base
 				),
 				"row_name_class" => $cdata["class"],
 			));
-			if ($arr["ret_b"] && $gt->id() == $arr["ret_b"]->id())
+			if (!empty($arr["ret_b"]) && $gt->id() == $arr["ret_b"]->id())
 			{
 				$has = true;
 			}
@@ -4265,7 +4275,7 @@ class bug_tracker extends class_base
 		// get all goals/tasks
 		$ft = array(
 			"class_id" => CL_BUG,
-			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS,BUG_FATALERROR,BUG_TESTING,BUG_VIEWING),
+			"bug_status" => array(bug::BUG_OPEN, bug::BUG_INPROGRESS, bug::BUG_FATALERROR, bug::BUG_TESTING, bug::BUG_VIEWING),
 			"CL_BUG.who.name" => $p->name(),
 			"lang_id" => array(),
 			"site_id" => array()
@@ -4275,7 +4285,7 @@ class bug_tracker extends class_base
 		// add bugs that are marked as need feedback from the person
 		$gt_list->add(new object_list(array(
 			"class_id" => CL_BUG,
-			"bug_status" => array(BUG_FEEDBACK),
+			"bug_status" => array(bug::BUG_FEEDBACK),
 			"CL_BUG.bug_feedback_p.name" => $p->name(),
 			"lang_id" => array(),
 			"site_id" => array()
@@ -4289,7 +4299,7 @@ class bug_tracker extends class_base
 			"parent" => $gt_list->ids(),
 			"lang_id" => array(),
 			"site_id" => array(),
-			"bug_status" => new obj_predicate_not(BUG_CLOSED)
+			"bug_status" => new obj_predicate_not(bug::BUG_CLOSED)
 		));
 
 		foreach($sub_bugs->arr() as $sub_bug)
@@ -4316,7 +4326,7 @@ class bug_tracker extends class_base
 					if ($this->can("view", $pred_id))
 					{
 						$predo = obj($pred_id);
-						if ($predo->prop("bug_status") < 3 || $predo->prop("bug_status") == BUG_FATALERROR || $predo->prop("bug_status") == BUG_FEEDBACK)
+						if ($predo->prop("bug_status") < 3 || $predo->prop("bug_status") == bug::BUG_FATALERROR || $predo->prop("bug_status") == bug::BUG_FEEDBACK)
 						{
 							$preds_done = false;
 						}
@@ -4384,7 +4394,7 @@ class bug_tracker extends class_base
 			"class_id" => CL_BUG,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"bug_status" => BUG_FEEDBACK,
+			"bug_status" => bug::BUG_FEEDBACK,
 		));
 
 		$bug2uid = array();

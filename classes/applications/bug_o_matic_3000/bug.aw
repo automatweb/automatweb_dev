@@ -1,8 +1,4 @@
 <?php
-//  bug.aw - Ylesanne
-
-define("BUG_STATUS_CLOSED", 5);
-
 /*
 
 @classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 no_status=1 r2=yes maintainer=robert
@@ -318,6 +314,8 @@ define("BUG_STATUS_CLOSED", 5);
 @caption Arve
 */
 
+// DEPRACETED
+
 define("BUG_OPEN", 1);
 define("BUG_INPROGRESS", 2);
 define("BUG_DONE", 3);
@@ -336,6 +334,21 @@ define("BUG_VIEWED", 15);
 
 class bug extends class_base
 {
+	const BUG_OPEN = 1;
+	const BUG_INPROGRESS = 2;
+	const BUG_DONE = 3;
+	const BUG_TESTED = 4;
+	const BUG_CLOSED = 5;
+	const BUG_INCORRECT = 6;
+	const BUG_NOTREPEATABLE = 7;
+	const BUG_NOTFIXABLE = 8;
+	const BUG_WONTFIX = 9;
+	const BUG_FEEDBACK = 10;
+	const BUG_FATALERROR = 11;
+	const BUG_TESTING = 12;
+	const BUG_VIEWING = 13;
+	const BUG_DEVORDER = 14;
+	const BUG_VIEWED = 15;
 	function bug()
 	{
 		$this->init(array(
@@ -344,21 +357,21 @@ class bug extends class_base
 		));
 
 		$this->bug_statuses = array(
-			BUG_OPEN => t("Lahtine"),
-			BUG_INPROGRESS => t("Tegemisel"),
-			BUG_DONE => t("Valmis"),
-			BUG_VIEWING => t("&Uuml;levaatamisel"),
-			BUG_VIEWED => t("&Uuml;le vaadatud"),
-			BUG_TESTING => t("Testimisel"),
-			BUG_TESTED => t("Testitud"),
-			BUG_CLOSED => t("Suletud"),
-			BUG_INCORRECT => t("Vale teade"),
-			BUG_NOTREPEATABLE => t("Kordamatu"),
-			BUG_NOTFIXABLE => t("Parandamatu"),
-			BUG_WONTFIX => t("Ei tee"),
-			BUG_FEEDBACK => t("Vajab tagasisidet"),
-			BUG_FATALERROR => t("Fatal error"),
-			BUG_DEVORDER => t("Arendustellimus"),
+			self::BUG_OPEN => t("Lahtine"),
+			self::BUG_INPROGRESS => t("Tegemisel"),
+			self::BUG_DONE => t("Valmis"),
+			self::BUG_VIEWING => t("&Uuml;levaatamisel"),
+			self::BUG_VIEWED => t("&Uuml;le vaadatud"),
+			self::BUG_TESTING => t("Testimisel"),
+			self::BUG_TESTED => t("Testitud"),
+			self::BUG_CLOSED => t("Suletud"),
+			self::BUG_INCORRECT => t("Vale teade"),
+			self::BUG_NOTREPEATABLE => t("Kordamatu"),
+			self::BUG_NOTFIXABLE => t("Parandamatu"),
+			self::BUG_WONTFIX => t("Ei tee"),
+			self::BUG_FEEDBACK => t("Vajab tagasisidet"),
+			self::BUG_FATALERROR => t("Fatal error"),
+			self::BUG_DEVORDER => t("Arendustellimus"),
 		);
 
 		$this->occurrences = array(
@@ -1329,7 +1342,7 @@ class bug extends class_base
 					}
 				}
 
-				if ($arr["request"]["bug_status"] == BUG_FATAL_ERROR)
+				if ($arr["request"]["bug_status"] == self::BUG_FATAL_ERROR)
 				{
 					return PROP_OK;
 				}
@@ -1468,7 +1481,7 @@ class bug extends class_base
 					));
 					if(!count($c))
 					{
-						$prop["value"] = BUG_DEVORDER;
+						$prop["value"] = self::BUG_DEVORDER;
 					}
 				}
 				if(!$this->_ac_old_state || !$this->_ac_new_state)
@@ -1609,7 +1622,7 @@ class bug extends class_base
 				break;
 
 			case "bug_feedback_p":
-				if ($arr["obj_inst"]->prop("bug_status") != BUG_FEEDBACK)
+				if ($arr["obj_inst"]->prop("bug_status") != self::BUG_FEEDBACK)
 				{
 					return PROP_IGNORE;
 				}
@@ -1774,12 +1787,12 @@ class bug extends class_base
 		$monitors = $bug->prop("monitors");
 		// if the status is right, then add the creator of the bug to the list
 		$states = array(
-			BUG_TESTED,
-			BUG_INCORRECT,
-			BUG_NOTREPEATABLE,
-			BUG_NOTFIXABLE,
-			BUG_WONTFIX,
-			BUG_FEEDBACK
+			self::BUG_TESTED,
+			self::BUG_INCORRECT,
+			self::BUG_NOTREPEATABLE,
+			self::BUG_NOTFIXABLE,
+			self::BUG_WONTFIX,
+			self::BUG_FEEDBACK
 		);
 		$u = get_instance(CL_USER);
 		$us = get_instance("users");
@@ -1982,7 +1995,7 @@ class bug extends class_base
 			$msgtxt .= t("Summary") . ": " . $name . "\n";
 			$msgtxt .= t("URL") . ": " . $bug->prop("bug_url") . "\n";
 			$msgtxt .= t("Status"). ": " . html_entity_decode($this->bug_statuses[$bug->prop("bug_status")]) . "\n";
-			$msgtxt .= ($bug->prop("bug_status") == BUG_FEEDBACK) ? t("Feedback from"). ": " . $bug->prop("bug_feedback_p.name") . "\n" : "";
+			$msgtxt .= ($bug->prop("bug_status") == self::BUG_FEEDBACK) ? t("Feedback from"). ": " . $bug->prop("bug_feedback_p.name") . "\n" : "";
 			$msgtxt .= t("Priority"). ": " . $bug->prop("bug_priority") . "\n";
 			$msgtxt .= t("Assigned to"). ": " . $bug->prop("who.name") . "\n";
 			$msgtxt .= "-------------\n\nNew comment from " . $uid . " at " . date("Y-m-d H:i") . "\n";
@@ -2005,16 +2018,16 @@ class bug extends class_base
 	function get_sort_priority($bug, $formula = "")
 	{
 		$sp_lut = array(
-			BUG_OPEN => 100,
-			BUG_INPROGRESS => 110,
-			BUG_DONE => 70,
-			BUG_TESTED => 60,
-			BUG_CLOSED => 50,
-			BUG_INCORRECT => 40,
-			BUG_NOTREPEATABLE => 40,
-			BUG_NOTFIXABLE => 40,
-			BUG_FATALERROR => 200,
-			BUG_FEEDBACK => 130
+			self::BUG_OPEN => 100,
+			self::BUG_INPROGRESS => 110,
+			self::BUG_DONE => 70,
+			self::BUG_TESTED => 60,
+			self::BUG_CLOSED => 50,
+			self::BUG_INCORRECT => 40,
+			self::BUG_NOTREPEATABLE => 40,
+			self::BUG_NOTFIXABLE => 40,
+			self::BUG_FATALERROR => 200,
+			self::BUG_FEEDBACK => 130
 		);
 
 		if (empty($formula))
@@ -3027,9 +3040,9 @@ $diff = explode("*" , $result["diff"]);
 
 		if ($arr["set_fixed"] == 1)
 		{
-			$msg .= "\nStaatus muudeti ".html_entity_decode($this->bug_statuses[$bug->prop("bug_status")])." => ".html_entity_decode($this->bug_statuses[BUG_DONE])."\n";
-			$bug->set_prop("bug_status", BUG_DONE);
-			$nstat = BUG_DONE;
+			$msg .= "\nStaatus muudeti ".html_entity_decode($this->bug_statuses[$bug->prop("bug_status")])." => ".html_entity_decode($this->bug_statuses[self::BUG_DONE])."\n";
+			$bug->set_prop("bug_status", self::BUG_DONE);
+			$nstat = self::BUG_DONE;
 			$save = true;
 			$com = true;
 		}
@@ -3535,7 +3548,7 @@ die($email);
 
 	function _get_orderer($arr)
 	{
-		if ($arr["new"])
+		if (!empty($arr["new"]))
 		{
 			if ($arr["request"]["from_problem"])
 			{
@@ -3544,7 +3557,7 @@ die($email);
 			}
 		}
 
-		if ($cust)
+		if (!empty($cust))
 		{
 			$arr["prop"]["value"] = $cust;
 		}
@@ -3648,7 +3661,7 @@ die($email);
 	function _handle_status_change($old, $new, $bug, &$prop)
 	{
 		$retval = PROP_OK;
-		if($new == BUG_STATUS_CLOSED && $old != BUG_STATUS_CLOSED)
+		if($new == self::BUG_CLOSED && $old != self::BUG_CLOSED)
 		{
 			$canclose = 0;
 			if(aw_global_get("uid") == $bug->createdby())
@@ -3684,7 +3697,7 @@ die($email);
 			}
 		}
 
-		if ($new == BUG_FEEDBACK && $old != BUG_FEEDBACK)
+		if ($new == self::BUG_FEEDBACK && $old != self::BUG_FEEDBACK)
 		{
 			// set the creator as the feedback from person
 			$u = get_instance(CL_USER);
@@ -3698,9 +3711,9 @@ die($email);
 
 	function handle_stopper_start($o)
 	{
-		if ($o->prop("bug_status") == BUG_OPEN)
+		if ($o->prop("bug_status") == self::BUG_OPEN)
 		{
-			$o->set_prop("bug_status",  BUG_INPROGRESS);
+			$o->set_prop("bug_status",  self::BUG_INPROGRESS);
 			$o->save();
 		}
 	}
@@ -4243,7 +4256,7 @@ EOF;
 			$o->set_class_id(CL_BUG);
 			$o->set_parent($this->get_bug_parent($arr["parent"]));
 			$o->set_name($arr["name"]);
-			$o->set_prop("bug_status" , BUG_OPEN);
+			$o->set_prop("bug_status" , self::BUG_OPEN);
 			foreach($arr as $key => $val)
 			{
 				switch($key)
