@@ -45,7 +45,7 @@ class shop_matrix_obj extends _int_object
 			$matrix["ids"]["locations"] = self::get_matrix_ids($matrix["cols"]["locations"]);
 			$matrix["ids"]["products"] = self::get_matrix_ids($matrix["rows"]["products"]);
 
-			$matrix_rows = $o->prop("matrix_rows");
+			$matrix_rows = safe_array($o->prop("matrix_rows"));
 			if(in_array(1, $matrix_rows))
 			{
 				foreach($product_category_inst->get_products($matrix["ids"]["products"]) as $cat => $ol)

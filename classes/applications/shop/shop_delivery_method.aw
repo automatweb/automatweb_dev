@@ -277,16 +277,6 @@ class shop_delivery_method extends shop_matrix
 		$arr["obj_inst"]->update_code();
 	}
 
-	public function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
 	public function do_db_upgrade($t, $f)
 	{
 		if ($f == "")

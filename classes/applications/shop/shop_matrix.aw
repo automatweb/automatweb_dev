@@ -82,10 +82,10 @@ class shop_matrix extends class_base
 
 	public function _get_matrix_rows($arr)
 	{
-		$arr["prop"]["value"] = $arr["obj_inst"]->prop("matrix_rows");
 		$arr["prop"]["options"] = array(
 			0 => t("Tootegrupid"),
-			1 => t("Tootegrupid koos toodetega"),
+			1 => t("Tooted"),
+			2 => t("Pakendid"),
 		);
 	}
 
@@ -286,6 +286,7 @@ jQuery(document).ready(function(){
 			"name" => "default",
 			"caption" => t("*"),
 			"tooltip" => t("Vaikimisi"),
+			"align" => "center",
 		));
 		if(!empty($arr["field_callback"]) && is_callable($arr["field_callback"]))
 		{
@@ -299,6 +300,7 @@ jQuery(document).ready(function(){
 				$t->define_field(array(
 					"name" => $name,
 					"caption" => $caption,
+					"align" => "center",
 				));
 			}
 		}
@@ -371,6 +373,7 @@ jQuery(document).ready(function(){
 		$t->define_field(array(
 			"name" => $name,
 			"parent" => $parent,
+			"align" => "center",
 		));
 		$oids[$id] = $id;
 		if(count($children))

@@ -6,11 +6,13 @@
 @default table=aw_shop_rent_conditions
 @default group=general
 
-	@property valid_from type=date_select field=aw_valid_from
-	@caption Kehtiv alates
+	@property rent_configuration type=hidden field=aw_rent_configuration
 
-	@property valid_to type=date_select field=aw_valid_to
-	@caption Kehtiv kuni
+	@property row type=hidden field=aw_row
+
+	@property col type=hidden field=aw_col
+
+	@property currency type=hidden field=aw_currency
 
 	@property min_amt type=textbox field=aw_min_amt
 	@caption J&auml;relmaksu miinumumsumma
@@ -75,6 +77,10 @@ class shop_rent_conditions extends class_base
 		{
 			case "aw_valid_to":
 			case "aw_valid_from":
+			case "aw_rent_configuration":
+			case "aw_row":
+			case "aw_col":
+			case "aw_currency":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

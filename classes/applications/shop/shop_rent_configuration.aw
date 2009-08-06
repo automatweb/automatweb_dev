@@ -6,9 +6,90 @@
 @default table=aw_shop_rent_configuration
 @default group=general
 
+@groupinfo matrix caption="Maatriks"
+	@groupinfo matrix_show caption="Maatriks" parent=matrix submit=no
+	@default group=matrix_show
+
+		@property matrix_tlb type=toolbar no_caption=1 store=no
+
+		@property matrix type=table store=no no_caption=1
+
+	@groupinfo matrix_settings caption="Maatriksi seaded" parent=matrix
+	@default group=matrix_settings
+			
+			@property matrix_col_order type=table store=no
+			@caption Veeru gruppide j&auml;rjekord
+
+		@property matrix_cols type=text subtitle=1 store=no
+		@caption Maatriksi veerud
+
+			@property matrix_customer_categories type=relpicker reltype=RELTYPE_CUSTOMER_CATEGORY multiple=1 store=connect
+			@caption Kliendikategooriad
+
+			@property matrix_countries type=relpicker reltype=RELTYPE_COUNTRY multiple=1 store=connect
+			@caption Riigid
+
+		@property matrix_rows type=text subtitle=1 store=no
+		@caption Maatriksi read
+
+			@property matrix_product_categories type=relpicker reltype=RELTYPE_PRODUCT_CATEGORY multiple=1 store=connect
+			@caption Tootekategooriad
+
+		@property code type=hidden field=aw_code
+			
+@groupinfo priorities caption=Prioriteedid
+@default group=priorities
+
+	@groupinfo priorities_customer_categories caption=Kliendigrupid parent=priorities
+	@default group=priorities_customer_categories
+
+		@property priorities_customer_categories_tbl type=table no_caption=1 store=no
+
+	@groupinfo priorities_locations caption=Asukohad parent=priorities
+	@default group=priorities_locations
+
+		@property priorities_locations_tbl type=table no_caption=1 store=no
+
+	@groupinfo priorities_product_categories caption=Tootegrupid parent=priorities
+	@default group=priorities_product_categories
+
+		@property priorities_product_categories_tbl type=table no_caption=1 store=no
+
+@groupinfo advanced_layer caption="Advanced" submit=no
+@default group=advanced_layer
+
+	@layout advanced_layer type=vbox area_caption=J&auml;relmaksuseaded
+		@layout advanced_layer_split type=hbox width=25%:75% parent=advanced_layer
+			@layout advanced_layer_left type=vbox area_caption=J&auml;relmaksuseadete&nbsp;vahemikud parent=advanced_layer_split
+				@property al_tree type=treeview parent=advanced_layer_left store=no no_caption=1
+			@layout advanced_layer_right type=vbox area_caption=J&auml;relmaksuseaded parent=advanced_layer_split
+				@layout advanced_layer_properties type=vbox parent=advanced_layer_right
+					@property rent_conditions type=callback callback=_get_rent_conditions parent=advanced_layer_properties store=no
+		@layout advanced_layer_buttons type=hbox width=33%:33%:34% parent=advanced_layer
+			@property al_cancel type=button parent=advanced_layer_buttons store=no
+			@caption Sulge
+			@property al_delete type=button parent=advanced_layer_buttons store=no
+			@caption Kustuta
+			@property al_submit type=button parent=advanced_layer_buttons store=no
+			@caption Salvesta
+
+#### RELTYPES
+
+@reltype CUSTOMER_CATEGORY value=1 clid=CL_CRM_CATEGORY
+@caption Kliendikategooria, mida maatriksi veeruna kuvatakse
+
+@reltype PRODUCT_CATEGORY value=2 clid=CL_SHOP_PRODUCT_CATEGORY
+@caption Tootekategooria, mida maatriksi reana kuvatakse
+
+@reltype PRIORITY value=3
+@caption Prioriteet
+
+@reltype COUNTRY value=4 clid=CL_COUNTRY
+@caption Riik, mida maatriksi veeruna kuvatakse
+
 */
 
-class shop_rent_configuration extends class_base
+class shop_rent_configuration extends shop_matrix
 {
 	function shop_rent_configuration()
 	{
@@ -18,43 +99,245 @@ class shop_rent_configuration extends class_base
 		));
 	}
 
-	function get_property($arr)
+	public function callback_pre_edit($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
+		if(automatweb::$request->arg("group") == "advanced_layer")
 		{
+			if(automatweb::$request->arg_isset("condition"))
+			{
+				$this->condition = (int)automatweb::$request->arg("condition");
+			}
+			else
+			{
+				$condition_ids = $arr["obj_inst"]->conditions(array(
+					"row" => automatweb::$request->arg("row"),
+					"col" => automatweb::$request->arg("col"),
+					"currency" => automatweb::$request->arg("currency")
+				))->ids();
+				$this->condition = count($condition_ids) ? (int)reset($condition_ids) : "new";
+			}
+		}
+		return parent::callback_pre_edit($arr);
+	}
+
+	public function callback_mod_tab($arr)
+	{
+		if("advanced_layer" == $arr["id"] and automatweb::$request->arg("group") !== "advanced_layer")
+		{
+			return false;
+		}
+	}
+
+	public function callback_mod_layout(&$arr)
+	{
+		switch($arr["name"])
+		{
+			case "advanced_layer":		
+				$row_obj = obj(automatweb::$request->arg("row"));
+				$row_types = array(
+					CL_SHOP_PRODUCT => t("toote"),
+					CL_SHOP_PRODUCT_CATEGORY => t("tootekategooria"),
+					CL_SHOP_PRODUCT_PACKAGING => t("tootepakendi"),
+					"default" => t(""),
+				);
+				if(is_oid($col = automatweb::$request->arg("col")))
+				{
+					$col_obj = obj($col);
+					$col_types = array(
+						CL_CRM_CATEGORY => t("kliendikategooria"),
+						"default" => t("asukoha"),
+					);
+
+					$arr["area_caption"] = sprintf(t("J&auml;relmaksuseaded %s '%s' ja %s '%s' jaoks &nbsp;"),
+						isset($row_types[$row_obj->class_id()]) ? $row_types[$row_obj->class_id()] : $row_types["default"],
+						parse_obj_name($row_obj->name()),
+						isset($col_types[$col_obj->class_id()]) ? $col_types[$col_obj->class_id()] : $col_types["default"],
+						parse_obj_name($col_obj->name())
+					);
+				}
+				else
+				{
+					$arr["area_caption"] = sprintf(t("Vaikimisi j&auml;relmaksuseaded %s '%s' jaoks &nbsp;"),
+						isset($row_types[$row_obj->class_id()]) ? $row_types[$row_obj->class_id()] : $row_types["default"],
+						parse_obj_name($row_obj->name())
+					);
+				}
+				break;
+
+			case "advanced_layer_right":
+				if(isset($this->condition) && is_oid($this->condition) && $this->can("view", $this->condition))
+				{
+					$o = obj($this->condition);
+					$arr["area_caption"] = sprintf(t("J&auml;relmaksuseaded vahemikus %s %s - %s %s"), 
+						$o->prop("currency.symbol"),
+						$o->prop("min_amt"),
+						$o->prop("currency.symbol"),
+						$o->prop("max_amt")
+					);
+				}
+				else
+				{
+					$arr["area_caption"] = t("Uus j&auml;relmaksuseadete vahemik");
+				}
+				break;
+		}
+		return true;
+	}
+
+	public function _get_matrix($arr)
+	{
+		load_javascript("applications/shop/matrix.js");
+		load_javascript("reload_properties_layouts.js");
+
+		$matrix = array();
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_RENT_CONDITIONS,
+				"rent_configuration" => $arr["obj_inst"]->id(),
+				"currency" => $this->currency,
+				"lang_id" => array(),
+				"site_id" => array(),
+			),
+			array(
+				CL_SHOP_RENT_CONDITIONS => array("row", "col"),
+			)
+		);
+		foreach($odl->arr() as $oid => $data)
+		{
+			$matrix[$data["row"]][is_oid($data["col"]) ? $data["col"] : "default"] = $oid;
 		}
 
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function callback_mod_reforb($arr)
-	{
-		$arr["post_ru"] = post_ru();
-	}
-
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
+		$this->draw_matrix(array(
+			"table_inst" => &$arr["prop"]["vcl_inst"],
+			"obj_inst" => &$arr["obj_inst"],
+			"column_types" => $this->col_types,
+			"matrix_data" => $matrix,
+			"data_cell_callback" => array(&$this, "draw_matrix_cell"),
 		));
-		return $this->parse();
+		$arr["prop"]["vcl_inst"]->set_caption(sprintf(t("J&auml;relmaksukonfiguratsioon valuutakursile '%s'"), obj($this->currency)->name()));
+	}
+
+	public function draw_matrix_cell($oid, $field, $matrix)
+	{
+		$name = explode("_", $field["name"]);
+		$col = array_pop($name);
+		if($col === "self")
+		{
+			$col = array_pop($name);
+		}
+
+		if(isset($matrix[$oid][$col]))
+		{
+			$o = obj($matrix[$oid][$col]);
+		}
+		else
+		{
+			$o = obj(NULL, array(), CL_SHOP_RENT_CONDITIONS);
+		}
+
+		return html::href(array(
+			"name" => "{$oid}_{$col}",
+			"caption" => $o->description(),
+			"url" => "javascript:shop_matrix.open_layer('$oid', '$col');",
+		));
+	}
+
+	public function _get_rent_conditions($arr)
+	{
+		$ret = array();
+
+		if(is_oid($this->condition) && $this->can("view", $this->condition))
+		{
+			$o = obj($this->condition);
+		}
+		else
+		{
+			$o = obj(NULL, array(), CL_SHOP_RENT_CONDITIONS);
+		}
+
+		foreach($o->get_property_list() as $k => $v)
+		{
+			if(!in_array($k, array("name", "comment", "status", "rent_configuration", "col", "row")))
+			{
+				$v["captionside"] = "top";
+				$v["group"] = "advanced_layer";
+				$v["parent"] = "advanced_layer_properties";
+				$v["value"] = $o->prop($k);
+				$ret[$k] = $v;
+			}
+		}
+		$ret["period_step"]["post_append_text"] = html::hidden(array(
+			"name" => "condition",
+			"value" => $this->condition
+		));
+
+		return $ret;
+	}
+
+	public function _get_al_cancel($arr)
+	{
+		$arr["prop"]["onclick"] = "shop_matrix.close_layer();";
+	}
+
+	public function _get_al_delete($arr)
+	{
+		$arr["prop"]["onclick"] = "$('input[type=hidden][name=delete_conditions]').val('1'); shop_matrix.submit_layer();";
+	}
+
+	public function _get_al_submit($arr)
+	{
+		$arr["prop"]["onclick"] = "shop_matrix.submit_layer();";
+		$arr["prop"]["post_append_text"] = html::hidden(array(
+			"name" => "row",
+			"value" => automatweb::$request->arg("row"),
+		)).html::hidden(array(
+			"name" => "col",
+			"value" => automatweb::$request->arg("col"),
+		)).html::hidden(array(
+			"name" => "rent_configuration",
+			"value" => $arr["obj_inst"]->id(),
+		)).html::hidden(array(
+			"name" => "delete_conditions",
+			"value" => 0,
+		));
+	}
+
+	public function _get_al_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		foreach($arr["obj_inst"]->conditions(array(
+			"row" => automatweb::$request->arg("row"),
+			"col" => automatweb::$request->arg("col"),
+			"currency" => automatweb::$request->arg("currency"),
+		))->arr() as $o)
+		{
+			$t->add_item(0, array(
+				"id" => (int)$o->id(),
+				"name" => sprintf(t("%s %s - %s %s"), 
+					$o->prop("currency.symbol"),
+					$o->prop("min_amt"),
+					$o->prop("currency.symbol"),
+					$o->prop("max_amt")
+				),
+				"reload" => array(
+					"params" => array(
+						"condition" => $o->id(),
+					),
+					"layouts" => array("advanced_layer_right"),
+				),
+			));
+		}
+		$t->add_item(0, array(
+			"id" => "new",
+			"name" => sprintf("Lisa uus vahemik"),
+			"reload" => array(
+				"params" => array(
+					"condition" => "new",
+				),
+				"layouts" => array("advanced_layer_right"),
+			),
+		));
+		$t->set_selected_item($this->condition);
 	}
 
 	function do_db_upgrade($t, $f)
@@ -67,13 +350,70 @@ class shop_rent_configuration extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_code":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "text"
 				));
-				return true;
+				$ret = true;
+				break;
 		}
+	}
+
+	/**
+		@attrib name=submit_advanced_layer all_args=1 params=name
+		@param id required type=int acl=view,delete
+		@param rent_configuration required type=int acl=view,add
+		@param row required type=int/string acl=view
+		@param col required type=int/string acl=view
+		@param currency required type=int acl=view
+	**/
+	public function submit_advanced_layer($arr)
+	{
+		if(!empty($arr["delete_conditions"]))
+		{
+			if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
+			{
+				obj($arr["id"])->delete();
+			}
+			$o = obj(NULL, array(), CL_SHOP_RENT_CONDITIONS);
+		}
+		else
+		{
+			if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
+			{
+				$o = obj($arr["id"]);
+			}
+			else
+			{
+				$o = obj(NULL, array(), CL_SHOP_RENT_CONDITIONS);
+				$o->set_prop("rent_configuration", $arr["rent_configuration"]);
+				$o->set_prop("row", is_oid($arr["row"]) ? $arr["row"] : 0);
+				$o->set_prop("col", is_oid($arr["col"]) ? $arr["col"] : 0);
+				
+				$o->set_parent($arr["rent_configuration"]);
+			}
+			foreach($arr as $k => $v)
+			{
+				switch ($k)
+				{
+					case "min_amt":
+					case "max_amt":
+					case "min_payment":
+					case "prepayment_interest":
+					case "yearly_interest":
+					case "period_min":
+					case "period_max":
+					case "period_step":
+					case "currency":
+						$o->set_prop($k, $v);
+						break;
+				}
+			}
+			$o->save();
+		}
+
+		die(iconv(aw_global_get("charset"), "UTF-8", $o->description()));
 	}
 }
 
