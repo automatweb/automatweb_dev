@@ -616,8 +616,10 @@ class toolbar extends aw_template
 		@attrib api=1 params=pos
 		@param clid required type=int
 			Class_id's that can be added via the button
-		@param parent required type=oid
-			Parent where to add the objects to
+		@param parent optional type=oid
+			Parent where to add the objects to. parent_var or parent must be set.
+		@param parent_var optional type=string
+			Variable name
 		@param refresh optional type=array
 			Properties to refresh after adding new object
 		@param promts optional type=array
@@ -645,8 +647,16 @@ class toolbar extends aw_template
 		$js.= "$.get('/automatweb/orb.aw', {
 			class: 'menu',
 			action: 'create_new_object',
-			parent: '".$arr["parent"]."',
-			clid: '".$arr["clid"]."'";
+			clid: '".$arr["clid"]."',";
+
+		if(!empty($arr["parent"]))
+		{
+			$js.= "parent: '".$arr["parent"]."'";
+		}
+		elseif(!empty($arr["parent_var"]))
+		{
+			$js.= "parent: get_property_data['".$arr["parent_var"]."']";
+		}
 
 		foreach($arr["promts"] as $prop => $text)
 		{

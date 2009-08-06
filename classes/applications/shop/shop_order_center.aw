@@ -1918,7 +1918,7 @@ class shop_order_center extends class_base
 		$roots = $arr["obj_inst"]->prop("root_menu");
 		$tv =& $arr["prop"]["vcl_inst"];
 		$var = "menu";
-		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : $root);
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : reset($roots));
 
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
@@ -1995,7 +1995,7 @@ class shop_order_center extends class_base
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Nimi"),
+			"caption" => t("Dokument"),
 			"align" => "left",
 			"chgbgcolor" => "color",
 		));
@@ -2042,6 +2042,13 @@ class shop_order_center extends class_base
 			"chgbgcolor" => "color",
 		));
 
+		$t->define_field(array(
+			"name" => "open",
+			"caption" => t("Ava"),
+			"align" => "left",
+			"chgbgcolor" => "color",
+		));
+
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid",
@@ -2050,19 +2057,19 @@ class shop_order_center extends class_base
 
 		$show_inst = get_instance(CL_PRODUCTS_SHOW);
 
-		if($arr["request"]["menu"])
+		if(!empty($arr["request"]["menu"]))
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_MENU,
 				"parent" => $arr["request"]["menu"],
 			));
-			foreach($ol->arr() as $id => $o)
+			foreach($ol->arr() as $id => $menu)
 			{
 				$data = array(
-					"name" => $o->name(),
+					"name" => $menu->name(),
 					"oid" => $id
 				);
-				$data["color"] = $o->prop("status") == 2 ? "#99FF99" : "silver";
+				$data["color"] = $menu->prop("status") == 2 ? "#99FF99" : "silver";
 				$o = $this->get_product_show_obj($id);
 				if(is_object($o))
 				{
@@ -2085,7 +2092,14 @@ class shop_order_center extends class_base
 							"url" => "javascript:;",
 							"onclick" => 'remove_category("'.$o->id().'" , "'.$cat->id().'");',
 							"caption" => html::img(array("url" => $this->imgbase."/delete.gif")),
-						));;
+						));
+					}
+					if($document = $o->get_document())
+					{
+						$data["name"] = html::href(array(
+							"url" =>  $this->mk_my_orb("change", array("id" => $document), CL_DOCUMENT),
+							"caption" => $menu->name(),
+						));
 					}
 					
 					$data["categories"] = join(",\n<br>" , $cats);
@@ -2095,6 +2109,10 @@ class shop_order_center extends class_base
 					"url" => "javascript:;",
 					"onclick" => 'win = window.open("'.$this->mk_my_orb("search_categories", array("is_popup" => 1), CL_SHOP_ORDER_CENTER).'&menu='.$id.'" ,"categoty_search","width=720,height=600,statusbar=yes, scrollbars=yes");',
 					"caption" => html::img(array("url" => $this->imgbase."/search.gif")),
+				));
+				$data["open"] = html::href(array(
+					"url" => $this->mk_my_orb("redir", array("parent" => $id), CL_ADMIN_IF),
+					"caption" => t("Ava")
 				));
 				$t->define_data($data);
 			}
@@ -2109,7 +2127,7 @@ class shop_order_center extends class_base
 			"parent" => $menu,
 			"lang_id" => array(),
 		));
-		$doc = is_array($docs->ids()) ? reset($docs->arr()) : "";
+		$doc = $docs->count() ? $docs->begin() : "";
 		if(!is_object($doc) && $make_new)
 		{
 			$doc = new object();
@@ -2120,14 +2138,11 @@ class shop_order_center extends class_base
 		}
 		if(is_object($doc))
 		{
-			$os = new object_list(array(
-				"class_id" => CL_PRODUCTS_SHOW,
-				"parent" => $menu,
-				"lang_id" => array(),
-//				"CL_PRODUCTS_SHOW.RELTYPE_ALIAS(CL_DOCUMENT)" => $doc->id(),
-			));
-			$o = is_array($os->ids()) ? reset($os->arr()) : "";
-			
+			foreach($doc->connections_from(array("to.class_id" => CL_PRODUCTS_SHOW)) as $c)
+			{
+				$o = $c->to();
+				break;
+			}
 			if(!is_object($o) && $make_new)
 			{
 				$o = new object();
@@ -2135,6 +2150,8 @@ class shop_order_center extends class_base
 				$o->set_parent($menu);
 				$o->set_name($menu." ".t("toodete n&auml;itamine"));
 				$o->save();
+				$doc->set_prop("content" , $doc->prop("content")."#show_products1#");
+				$doc->save();
 				$doc->connect(array(
 					"type" => "RELTYPE_ALIAS",
 					"to" => $o->id(),
@@ -2178,6 +2195,13 @@ class shop_order_center extends class_base
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
 
+		$tb->add_js_new_button(array(
+			"parent_var" => "menu",
+			"clid" => CL_MENU,
+			"refresh" => array("appearance_list"),
+			"promts" => array("name" => t("Sisesta uue kausta nimi")),
+		));
+
 		$tb->add_delete_button();
 
 		$tb->add_menu_button(array(
@@ -2190,7 +2214,7 @@ class shop_order_center extends class_base
 		$tb->add_menu_item(array(
 			"parent" => "active",
 			"text" => t("Aktiivseks"),
-			"link" => "javascript:set_sel_prop('active' , 2');",
+			"link" => "javascript:set_sel_prop('active' , '2');",
 		));
 
 		$tb->add_menu_item(array(
@@ -2394,6 +2418,7 @@ class shop_order_center extends class_base
 			$o = obj($arr["show_object"]);
 			$o->remove_category($arr["category"]);
 		}
+		die();
 	}
 
 	/**
@@ -2430,6 +2455,7 @@ class shop_order_center extends class_base
 				}
 			}
 		}
+		die();
 	}
 
 }

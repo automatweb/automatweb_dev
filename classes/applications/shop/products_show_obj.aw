@@ -61,9 +61,12 @@ class products_show_obj extends _int_object
 	public function get_categories()
 	{
 		$ol = new object_list();	
-		foreach($this->prop("categories") as $category)
+		if(is_array($this->prop("categories")))
 		{
-			$ol->add($category);
+			foreach($this->prop("categories") as $category)
+			{
+				$ol->add($category);
+			}
 		}
 		return $ol;
 	}
@@ -89,6 +92,15 @@ class products_show_obj extends _int_object
 		$this->disconnect(array(
 			"from" => $cat,
 		));
+	}
+
+	public function get_document()
+	{
+		foreach($this->connections_to(array("from.class_id" => CL_DOCUMENT)) as $c)
+		{
+			return $c->prop("from");
+		}
+		return null;
 	}
 
 }
