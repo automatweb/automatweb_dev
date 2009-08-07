@@ -45,7 +45,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>aw_code</field>
-            <caption>Kirjeldus</caption>
+            <caption>Kood</caption>
       </property>
       <property>
             <name>desc_doc</name>

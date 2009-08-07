@@ -19,7 +19,7 @@
 @caption Kirjeldus
 
 @property code type=textbox field=aw_code
-@caption Kirjeldus
+@caption Kood
 
 @property desc_doc type=relpicker reltype=RELTYPE_DOC  field=aw_desc_doc
 @caption Kirjeldav dokument
