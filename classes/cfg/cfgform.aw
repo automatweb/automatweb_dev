@@ -4033,9 +4033,15 @@ class cfgform extends class_base
 	{
 		$o = obj($id);
 		$ret = $o->meta("cfg_proplist");
+		$disabled_properties = safe_array($o->meta("disabled_properties"));
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("translations");
 		$tbl_capt_trans = $o->meta("tbl_capt_translations");
+
+		foreach($disabled_properties as $k)
+		{
+			unset($ret[$k]);
+		}
 
 		// okay, here, if there is no translation for the requested language, then
 		// read the captions from the translations file.
