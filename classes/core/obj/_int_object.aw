@@ -1902,6 +1902,35 @@ class _int_object
 		return $this->obj;
 	}
 
+	public function is_a($class_id)
+	{
+		$is = false;
+		if (is_class_id($class_id))
+		{
+			$cl = basename(aw_ini_get("classes.{$class_id}.object_override"));
+			if ($class_id == $this->class_id())
+			{ // object is of queried class
+				$is = true;
+			}
+			elseif (aw_ini_isset("classes.{$class_id}.object_override") and $this instanceof $cl)
+			{ // object extends queried class
+				$is = true;
+			}
+		}
+		return $is;
+	}
+
+	public function implements_interface ($name)
+	{
+		$interfaces = class_implements($this, true);
+		return in_array($name, $interfaces);
+	}
+
+	public function has_method ($name)
+	{
+		return method_exists($this, (string) $name);
+	}
+
 	/////////////////////////////////////////////////////////////////
 	// private functions
 

@@ -2200,20 +2200,7 @@ class object
 	**/
 	public function is_a($class_id)
 	{
-		$is = false;
-		if (is_class_id($class_id))
-		{
-			$cl = basename(aw_ini_get("classes.{$class_id}.object_override"));
-			if ($class_id == $this->class_id())
-			{ // object is of queried class
-				$is = true;
-			}
-			elseif (aw_ini_isset("classes.{$class_id}.object_override") and $GLOBALS["objects"][$this->oid] instanceof $cl)
-			{ // object extends queried class
-				$is = true;
-			}
-		}
-		return $is;
+		return $GLOBALS["objects"][$this->oid]->is_a($class_id);
 	}
 
 	/** Returns TRUE if the object class implements given interface
@@ -2226,8 +2213,7 @@ class object
 	**/
 	public function implements_interface ($name)
 	{
-		$interfaces = class_implements($GLOBALS["objects"][$this->oid], true);
-		return in_array($name, $interfaces);
+		return $GLOBALS["objects"][$this->oid]->implements_interface($class_id);
 	}
 
 	/** Returns TRUE if given method is defined in this object class
@@ -2240,7 +2226,7 @@ class object
 	**/
 	public function has_method ($name)
 	{
-		return method_exists($GLOBALS["objects"][$this->oid], (string) $name);
+		return $GLOBALS["objects"][$this->oid]->has_method($class_id);
 	}
 
 	/** Return the translation of the property
