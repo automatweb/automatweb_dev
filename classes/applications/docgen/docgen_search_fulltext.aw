@@ -14,6 +14,8 @@ class docgen_search_fulltext extends core implements docgen_search_module, docge
 	
 	function do_search($arr)
 	{
+		$ret = array();
+
 		$words = explode(' ', $arr['search']);
 
 		$basedir = aw_ini_get("basedir")."/docs/tutorials";
@@ -26,7 +28,7 @@ class docgen_search_fulltext extends core implements docgen_search_module, docge
 			$ret = array_merge($ret, $tut_ret);
 		}
 		
-		$classdir = $this->cfg["classdir"];
+		$classdir = isset($this->cfg["classdir"]) ? $this->cfg["classdir"] : NULL;
 		$cl_ret = array();
 		$this->doc_srch_class_info($classdir, $words, &$cl_ret);
 		if(count($cl_ret))

@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.22 2009/03/13 10:21:30 dragut Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.23 2009/08/07 11:55:55 instrumental Exp $
 
 	@comment
 	analyses aw code
@@ -80,7 +80,7 @@ class aw_code_analyzer extends class_base
 		{
 			$fp = $file;
 		}
-		$this->file_source = file_get_contents($fp);
+		$this->file_source = is_readable($fp) ? file_get_contents($fp) : "";
 		$this->tokens = token_get_all($this->file_source);
 
 /*		foreach($this->tokens as $tok)
@@ -237,7 +237,7 @@ die();*/
 		return $this->cur_line;
 	}
 
-	function get_file()
+	function get_current_file()
 	{
 		return $this->cur_file;
 	}
@@ -488,7 +488,7 @@ die();*/
 			{
 				if ($tok[0] == T_STRING)
 				{
-					$var_typehint = $t[1];
+					$var_typehint = isset($t[1]) ? $t[1] : NULL;
 					$tok = $this->get();
 				}
 				$this->assert($tok, T_VARIABLE);
@@ -583,7 +583,7 @@ die();*/
 			}
 			else
 			{
-				echo 'ERROR in file '.$this->get_file().' on line '.$this->get_line()."\n";
+				echo 'ERROR in file '.$this->get_current_file().' on line '.$this->get_line()."\n";
 				echo 'Cannot parse '.$this->get_current_class().'::'.$this->get_current_function().' parameter\'s "'.$tok[1].'" default value!'."\n";
 				die();
 			}
@@ -756,7 +756,7 @@ die();*/
 				while (list(, $line) = each($lines))
 				{
 					$line = trim($line);
-					if ($line{0} == "@")
+					if (isset($line{0}) && $line{0} == "@")
 					{
 						prev($lines);
 						break;
@@ -805,7 +805,7 @@ die();*/
 					if(strstr($line, '#'))
 					{
 						$line = $this->parse_refs($line, true);
-						$data["examples_links"] = array_merge(safe_array($data["examples_links"]), $line["links"]);
+						$data["examples_links"] = isset($data["examples_links"]) && is_array($data["examples_links"]) ? array_merge($data["examples_links"], $line["links"]) : $line["links"];
 						$line = $line["line"];
 					}
 					$data["examples"] .= "\n".$line;
@@ -838,8 +838,8 @@ die();*/
 				}
 				$url = $this->mk_my_orb("class_info", array(
 					"file" => $class,
-					"class" => $GLOBALS["_REQUEST"]["class"],
-					"api_only" => $GLOBALS["_REQUEST"]["api_only"],
+					"class" => automatweb::$request->arg("class"),
+					"api_only" => automatweb::$request->arg("api_only"),
 				))."#fn.".$fun;
 				if($replace)
 				{
@@ -946,7 +946,7 @@ die();*/
 			"name" => "",
 			"req" => ""
 		);
-		list($ret["name"], $ret["req"], $extra) = explode(" ", $str, 3);
+		list($ret["name"], $ret["req"], $extra) = array_merge(explode(" ", $str, 3), array(NULL, NULL));
 
 		// now parse extra params
 		$att = $this->_do_parse_attributes($extra);

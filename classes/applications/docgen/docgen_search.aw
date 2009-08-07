@@ -78,7 +78,7 @@ class docgen_search extends class_base
 		foreach($res as $res_key => $res_arr)
 		{
 			$ret .= "<b>".(get_instance($res_key)->get_module_name())."</b><br/>";
-			$ret .= join("<br/>", $res_arr)."<br/><br/>";
+			$ret .= join("<br/>", safe_array($res_arr))."<br/><br/>";
 		}
 
 		return $ret;

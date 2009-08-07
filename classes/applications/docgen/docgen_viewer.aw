@@ -4,7 +4,7 @@
 		displays the data that the docgen analyzer generates
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.33 2009/08/04 13:30:09 instrumental Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.34 2009/08/07 11:55:58 instrumental Exp $
 
 **/
 
@@ -221,7 +221,7 @@ class docgen_viewer extends class_base
 			"INI_LINE" => $il
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	function get_property($arr)
@@ -380,7 +380,7 @@ class docgen_viewer extends class_base
 		{
 			$fp = $path."/".$file;
 			$awpath = str_replace($this->cfg["classdir"], "", $fp);
-			if ($_GET["group"] != "")
+			if (automatweb::$request->arg("group") != "")
 			{
 				$url = aw_url_change_var("tf", str_replace($this->cfg["classdir"], "", $fp));
 			}
@@ -389,7 +389,7 @@ class docgen_viewer extends class_base
 				$url = $this->mk_my_orb("class_info", array("file" => str_replace($this->cfg["classdir"], "", $fp)));
 			}
 			// if the file only has 1 class in it, direct link to that, else split subs
-			if (count($classes[$fp]) < 2)
+			if (!isset($classes[$fp]) || count($classes[$fp]) < 2)
 			{
 				$tv->add_item($path, array(
 					"name" => $file,
@@ -495,7 +495,7 @@ class docgen_viewer extends class_base
 		$clss = aw_ini_get("classes");
 		foreach($clss as $cldata)
 		{
-			if (basename($cldata["object_override"]) == $usage_class)
+			if (isset($cldata["object_override"]) && basename($cldata["object_override"]) == $usage_class)
 			{
 				$usage_class = "object";
 				break;
@@ -510,22 +510,29 @@ class docgen_viewer extends class_base
 		$cfgu = get_instance("cfg/cfgutils");
 		$props = $cfgu->load_properties(array(
 			"file" => $cln,
-			"clid" => $clid
+			"clid" => $usage_class
 		));
 
-		$f = array();
+		$f = array(
+			"CB" => "",
+			"API" => "",
+			"ORB" => "",
+			"PRIVATE" => "",
+			"OTHER" => "",
+		);
 		$api_count = 0;
 		$orb_count = 0;
+		$fl = "";
 		foreach($data["functions"] as $func => $f_data)
 		{
 			$arg = "";
 
-			if ($opts["api_only"] && !$f_data["doc_comment"]["attribs"]["api"])
+			if (!empty($opts["api_only"]) && empty($f_data["doc_comment"]["attribs"]["api"]))
 			{
 				continue;
 			}
 
-			$api_count += $f_data["doc_comment"]["attribs"]["api"];
+			$api_count += !empty($f_data["doc_comment"]["attribs"]["api"]) ? 1 : 0;
 			$orb_count += !empty($f_data["doc_comment"]["attribs"]["name"]) ? 1 : 0 ;
 
 			$_ar = new aw_array($f_data["arguments"]);
@@ -541,13 +548,16 @@ class docgen_viewer extends class_base
 			}
 
 			$attribs = "";
-			foreach (safe_array($f_data['doc_comment']['attribs']) as $attrib_name => $attrib_value)
+			if(isset($f_data['doc_comment']['attribs']) && is_array($f_data['doc_comment']['attribs']))
 			{
-				$this->vars(array(
-					'attrib_name' => $attrib_name,
-					'attrib_value' => $attrib_value
-				));
-				$attribs .= $this->parse('ATTRIB');
+				foreach ($f_data['doc_comment']['attribs'] as $attrib_name => $attrib_value)
+				{
+					$this->vars(array(
+						'attrib_name' => $attrib_name,
+						'attrib_value' => $attrib_value
+					));
+					$attribs .= $this->parse('ATTRIB');
+				}
 			}
 
 			$params = "";
@@ -557,17 +567,20 @@ class docgen_viewer extends class_base
 				$this->vars(array(
 					'param_name' => $param_name,
 					'param_required' => $param_data['req'],
-					'param_type' => $param_data['type'],
+					'param_type' => isset($param_data['type']) ? $param_data['type'] : NULL,
 					'param_comment' => nl2br(trim($param_data['comment']))
 				));
 				$params .= $this->parse('PARAM');
 			}
 
 			$doc_file = dirname($cur_file)."/".basename($cur_file, ".aw")."/".$data["name"].".".$func.".txt";
-			unset($example_links);
-			foreach($f_data["doc_comment"]["examples_links"] as $match => $url)
+			$example_links = "";
+			if(isset($f_data["doc_comment"]["examples_links"]) && is_array($f_data["doc_comment"]["examples_links"]))
 			{
-				$example_links .= "<a href=\"".$url."\">$match</a><br />";
+				foreach($f_data["doc_comment"]["examples_links"] as $match => $url)
+				{
+					$example_links .= "<a href=\"".$url."\">$match</a><br />";
+				}
 			}
 
 
@@ -593,22 +606,22 @@ class docgen_viewer extends class_base
 				"view_func" => aw_global_get("REQUEST_URI")."#fn.$func",
 				"start_line" => $f_data["start_line"],
 				"start_line_lxr" => sprintf("%03d", $f_data["start_line"]),
-				"end_line" => $f_data["end_line"],
+				"end_line" => isset($f_data["end_line"]) ? $f_data["end_line"] : NULL,
 				"returns_ref" => ($f_data["returns_ref"] ? "X" : "&nbsp;"),
 				"ARG" => $arg,
-				"short_comment" => ($f_data["doc_comment"]["short_comment"] == "" ? "" : $f_data["doc_comment"]["short_comment"]."<Br>"),
+				"short_comment" => (!isset($f_data["doc_comment"]["short_comment"]) || $f_data["doc_comment"]["short_comment"] == "" ? "" : $f_data["doc_comment"]["short_comment"]."<Br>"),
 				'ATTRIB' => $attribs,
 				'PARAM' => $params,
 				'returns' => (empty($f_data['doc_comment']['returns'])) ? t('nothing') : nl2br($f_data['doc_comment']['returns']),
 				'errors' => $errs,
-				'comment' => nl2br($f_data['doc_comment']['comment']),
-				'examples' => (empty($f_data['doc_comment']['examples'])) ? t('none') : highlight_string("<?php \n\t\t".$f_data['doc_comment']['examples']."\n?>", true).(strlen($example_links)?"<br>".$example_links:""),
+				'comment' => isset($f_data['doc_comment']['comment']) ? nl2br($f_data['doc_comment']['comment']) : "",
+				'examples' => (empty($f_data['doc_comment']['examples'])) ? t('none') : highlight_string("<?php \n\t\t".$f_data['doc_comment']['examples']."\n?>", true).(isset($example_links) && strlen($example_links) ? "<br>".$example_links : ""),
 				"view_source" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
 				"view_usage" => $this->mk_my_orb("doc_search_form", array("search" => $usage_class."::".$func, "from" => array("docgen_search_use_func"), "no_reforb" => 1), "docgen_search"),
-				"doc" => $this->show_doc(array("file" => $doc_file)),
+				"doc" => $this->show_doc(array("file" => $doc_file), true),
 				"file" => $cur_file,
 			));
-			if ($f_data["doc_comment"]["attribs"]["api"] == 1)
+			if (isset($f_data["doc_comment"]["attribs"]["api"]) && $f_data["doc_comment"]["attribs"]["api"] == 1)
 			{
 				$f["API"] .= $this->parse("API_FUNCTION");
 			}
@@ -658,30 +671,33 @@ class docgen_viewer extends class_base
 			}
 		}
 		$hif = "";
-		foreach($f_if as $if_name => $if_str)
+		if(isset($f_if) && is_array($f_if))
 		{
-			if ($if_str != "")
+			foreach($f_if as $if_name => $if_str)
 			{
-				$this->vars(array(
-					"IF_FUNCTION" => $if_str,
-					"if_name" => $if_name
-				));
-				$hif .= $this->parse("HAS_IF");
+				if ($if_str != "")
+				{
+					$this->vars(array(
+						"IF_FUNCTION" => $if_str,
+						"if_name" => $if_name
+					));
+					$hif .= $this->parse("HAS_IF");
+				}
 			}
 		}
 		$this->vars(array("HAS_IF" => $hif));
 
-		if ($data["extends"] != "")
+		if (isset($data["extends"]) && $data["extends"] != "")
 		{
 			$this->_display_extends($data);
 		}
 		$this->_display_templates($data["functions"]);
 
-		if (is_array($data["dependencies"]))
+		if (isset($data["dependencies"]) && is_array($data["dependencies"]))
 		{
 			$this->_display_dependencies($data["dependencies"]);
 		}
-		if (is_array($data["implements"]))
+		if (isset($data["implements"]) && is_array($data["implements"]))
 		{
 			$this->_display_implements($data["implements"]);
 		}
@@ -699,34 +715,37 @@ class docgen_viewer extends class_base
 
 		$this->vars(array(
 			"name" => $data["name"],
-			"extends" => $data["extends"],
-			"end_line" => $data["end_line"],
+			"extends" => isset($data["extends"]) ? $data["extends"] : NULL,
+			"end_line" => isset($data["end_line"]) ? $data["end_line"] : NULL,
 			"start_line" => $data["start_line"],
 			"LONG_FUNCTION" => $fl,
 			"view_class" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"])),
-			"maintainer" => $data["maintainer"],
-			"cvs_version" => $data["cvs_version"],
+			"maintainer" => isset($data["maintainer"]) ? $data["maintainer"] : NULL,
+			"cvs_version" => isset($data["cvs_version"]) ? $data["cvs_version"] : NULL,
 			"file" => substr($cur_file, 1),
 			"func_count" => count($data["functions"]),
 			"api_func_count" => $api_count,
 			"orb_func_count" => $orb_count,
 			"type_name" => $data["type"],
 			"cvsweb_url" => "http://dev.struktuur.ee/cgi-bin/viewcvs.cgi/automatweb_dev/classes".$cur_file,
-			"class_comment" => nl2br($data["class_comment"]),
-			"file_url" => $this->mk_my_orb("class_info", array("file" => $cur_file,"api_only" => $_GET["api_only"])),
+			"class_comment" => isset($data["class_comment"]) ? nl2br($data["class_comment"]) : "",
+			"file_url" => $this->mk_my_orb("class_info", array("file" => $cur_file, "api_only" => automatweb::$request->arg("api_only"))),
 		));
 
-		return $this->finish_with_style($this->parse());
+		die($this->finish_with_style($this->parse()));
 	}
 
 	private function _display_member_vars($data)
 	{
-		$tmp = $data["tracked_vars"];
-		foreach(safe_array($data["member_var_defs"]) as $varn => $d)
+		$tmp = isset($data["tracked_vars"]) ? $data["tracked_vars"] : array();
+		if(isset($data["member_var_defs"]) && is_array($data["member_var_defs"]))
 		{
-			if (!isset($tmp[$varn]))
+			foreach($data["member_var_defs"] as $varn => $d)
 			{
-				$tmp[$varn] = array();
+				if (!isset($tmp[$varn]))
+				{
+					$tmp[$varn] = array();
+				}
 			}
 		}
 		$str = "";
@@ -775,7 +794,7 @@ class docgen_viewer extends class_base
 	private function _get_if_methods_for_class($data)
 	{
 		// get all methods for all interfaces class implements
-		$awa = new aw_array($data["implements"]);
+		$awa = new aw_array(isset($data["implements"]) ? $data["implements"] : NULL);
 		$this->db_query("SELECT * FROM aw_da_funcs WHERE class IN (".$awa->to_sql().")");
 		$rv = array();
 		while ($row = $this->db_next())
@@ -790,17 +809,25 @@ class docgen_viewer extends class_base
 		$p = "";
 		foreach($impl_arr as $impl)
 		{
-			try
+			switch ($impl)
 			{
-				$clf = class_index::get_file_by_name(basename($impl));
-			}
-			catch (awex_clidx_filesys $e)
-			{
-				die("ex for class $impl ".$e->getMessage());
+				case "aw_exception":
+					$clf = "/../lib/errorhandling.aw";
+					break;
+
+				default:					
+					try
+					{
+						$clf = class_index::get_file_by_name(basename($impl));
+					}
+					catch (awex_clidx_filesys $e)
+					{
+						die("ex for class $impl ".$e->getMessage());
+					}
 			}
 			$clf = str_replace(aw_ini_get("classdir"), "", $clf);
 			$this->vars(array(
-				"link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => $_GET["api_only"], "disp" => basename($impl))),
+				"link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => automatweb::$request->arg("api_only"), "disp" => basename($impl))),
 				"name" => $impl
 			));
 			$p .= $this->parse("IMPLEMENTS");
@@ -810,7 +837,7 @@ class docgen_viewer extends class_base
 		));
 	}
 
-	function _display_templates($funcs, $class_name)
+	function _display_templates($funcs)
 	{
 		// read main tpl folder from init method
 		// read template files from read_template methods
@@ -818,25 +845,28 @@ class docgen_viewer extends class_base
 		$tpl_folder = "";
 		foreach($funcs as $f_name => $f_data)
 		{
-			foreach(safe_array($f_data["local_calls"]) as $lcall_data)
+			if(isset($f_data["local_calls"]) && is_array($f_data["local_calls"]))
 			{
-				if ($lcall_data["func"] == "init")
+				foreach($f_data["local_calls"] as $lcall_data)
 				{
-					// read template folder arg
-					if (substr($lcall_data["arguments"], 0, 5) == "array")
+					if ($lcall_data["func"] == "init")
 					{
-						// parse from array
-						preg_match("/tpldir['\"]\=\>['\"](.*)['\"]/imsU", $lcall_data["arguments"], $mt);
-						$tpl_folder = $mt[1];
+						// read template folder arg
+						if (substr($lcall_data["arguments"], 0, 5) == "array")
+						{
+							// parse from array
+							preg_match("/tpldir['\"]\=\>['\"](.*)['\"]/imsU", $lcall_data["arguments"], $mt);
+							$tpl_folder = $mt[1];
+						}
+						else
+						{
+							$tpl_folder = $lcall_data["arguments"];
+						}
 					}
-					else
+					if ($lcall_data["func"] == "read_template")
 					{
-						$tpl_folder = $lcall_data["arguments"];
+						$used_tpls[$f_name][$lcall_data["arguments"]] = $lcall_data["arguments"];
 					}
-				}
-				if ($lcall_data["func"] == "read_template")
-				{
-					$used_tpls[$f_name][$lcall_data["arguments"]] = $lcall_data["arguments"];
 				}
 			}
 		}
@@ -875,32 +905,42 @@ class docgen_viewer extends class_base
 		$throws = array();
 		foreach(safe_array($data["functions"]) as $func)
 		{
-			foreach(safe_array($func["throws"]) as $thr)
+			if(isset($func["throws"]) && is_array($func["throws"]))
 			{
-				$throws[$thr] = $thr;
+				foreach($func["throws"] as $thr)
+				{
+					$throws[$thr] = $thr;
+				}
 			}
 		}
 		$p = "";
 		foreach($throws as $impl)
 		{
-			try
+			switch ($impl)
 			{
-				arr($impl);
-				$clf = class_index::get_file_by_name(basename($impl));
-			}
-			catch (awex_clidx_filesys $e)
-			{
-				die("ex for class $impl ".$e->getMessage());
+				case "aw_exception":
+					$clf = "/../lib/errorhandling.aw";
+					break;
+
+				default:					
+					try
+					{
+						$clf = class_index::get_file_by_name(basename($impl));
+					}
+					catch (awex_clidx_filesys $e)
+					{
+						die("ex for class $impl ".$e->getMessage());
+					}
 			}
 
 			$clf = str_replace(aw_ini_get("classdir"), "", $clf);
 			$this->vars(array(
-				"link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => $_GET["api_only"], "disp" => basename($impl))),
+				"link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => automatweb::$request->arg("api_only"), "disp" => basename($impl))),
 				"name" => $impl
 			));
 			$p .= $this->parse("THROWS");
 		}
-		if ($data["throws_undefined"])
+		if (!empty($data["throws_undefined"]))
 		{
 			$p .= $this->parse("THROWS_UNSPECIFIC");
 		}
@@ -942,6 +982,7 @@ class docgen_viewer extends class_base
 			};
 			echo "<br>";
 		}
+		die;
 	}
 
 	/** displays information to the user about a class
@@ -973,9 +1014,9 @@ class docgen_viewer extends class_base
 				continue;
 			}
 			$op .= $this->display_class($class_data, $file, array(
-				"api_only" => $api_only,
-				"defines" => $data["defines"],
-				"disp" => $arr["disp"]
+				"api_only" => isset($api_only) ? $api_only : NULL,
+				"defines" => isset($data["defines"]) ? $data["defines"] : NULL,
+				"disp" => isset($arr["disp"]) ? $arr["disp"] : NULL,
 			));
 		}
 		die($this->finish_with_style($op));
@@ -989,7 +1030,7 @@ class docgen_viewer extends class_base
 		}
 		foreach(aw_ini_get("classes") as $clid => $cld)
 		{
-			if (basename($cld["file"]) == basename($name))
+			if (isset($cld["file"]) && basename($cld["file"]) == basename($name))
 			{
 				return $clid;
 			}
@@ -1057,7 +1098,7 @@ class docgen_viewer extends class_base
 			$str .= "?>";
 		}
 
-		return $this->finish_with_style(highlight_string($str,true));
+		die($this->finish_with_style(highlight_string($str,true)));
 	}
 
 	function _display_dependencies($dependencies)
@@ -1086,19 +1127,27 @@ class docgen_viewer extends class_base
 
 		foreach($dep as $d_class => $d_ar)
 		{
-			try
+			switch ($impl)
 			{
-				$clf = class_index::get_file_by_name(basename($d_class));
-			}
-			catch (exception $e)
-			{
-				die("ex for class $d_class ".$e->getMessage());
+				case "aw_exception":
+					$clf = "/../lib/errorhandling.aw";
+					break;
+
+				default:					
+					try
+					{
+						$clf = class_index::get_file_by_name(basename($impl));
+					}
+					catch (awex_clidx_filesys $e)
+					{
+						die("ex for class $impl ".$e->getMessage());
+					}
 			}
 			$clf = str_replace(aw_ini_get("classdir"), "", $clf);
 			$this->vars(array(
 				"name" => $d_class,
 				"lines" => join(",", $d_ar["lines"]),
-				"link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => $_GET["api_only"], "disp" => basename($d_class))),
+				"link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => automatweb::$request->arg("api_only"), "disp" => basename($d_class))),
 			));
 			$d_str .= $this->parse("DEP");
 		}
@@ -1123,12 +1172,13 @@ class docgen_viewer extends class_base
 		));
 
 		$p2t = array();
+		$p_tbl = "";
 		foreach($props as $prop)
 		{
 			$this->vars(array(
 				"name" => $prop["name"],
 				"type" => $prop["type"],
-				"comment" => $prop["caption"]
+				"comment" => isset($prop["caption"]) ? $prop["caption"] : NULL,
 			));
 			$p_tbl .= $this->parse("PROP");
 
@@ -1188,6 +1238,8 @@ class docgen_viewer extends class_base
 
 		// now, do extended classes. we do that by parsing all the extends classes
 		// which of course slows us to hell and beyond. these parses should be cached or something
+		$level = 0;
+		$ex = "";
 		do {
 			$level++;
 
@@ -1207,14 +1259,21 @@ class docgen_viewer extends class_base
 
 			try
 			{
-				if ($dat["extends"] == "Exception")
+				switch ($dat["extends"])
 				{
-					$clf = "::internal";
+					case "Exception":
+						$clf = "::internal";
+						break;
+
+					case "aw_exception":
+						$clf = "/../lib/errorhandling.aw";
+						break;
+
+					default:
+						$clf = class_index::get_file_by_name(basename($dat["extends"]));
+						break;
 				}
-				else
-				{
-					$clf = class_index::get_file_by_name(basename($dat["extends"]));
-				}
+			
 			}
 			catch (awex_clidx_filesys $e)
 			{
@@ -1222,16 +1281,15 @@ class docgen_viewer extends class_base
 			}
 			$clf = str_replace(aw_ini_get("classdir"), "", $clf);
 
-
 			$this->vars(array(
 				"spacer" => str_repeat("&nbsp;", $level * 3),
-				"inh_link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => $_GET["api_only"], "disp" => basename($dat["extends"]))),
+				"inh_link" => $this->mk_my_orb("class_info", array("file" => $clf, "api_only" => automatweb::$request->arg("api_only"), "disp" => basename($dat["extends"]))),
 				"inh_name" => $dat["extends"]
 			));
 			$ex .= $this->parse("EXTENDER");
 
 			$_dat = $that->analyze_file($ex_fname, true);
-			$dat = $_dat["classes"][$dat["extends"]];
+			$dat = isset($_dat["classes"][$dat["extends"]]) ? $_dat["classes"][$dat["extends"]] : NULL;
 		} while ($dat["extends"] != "");
 
 		$this->vars(array(
@@ -1288,7 +1346,7 @@ class docgen_viewer extends class_base
 		$str = $tv->finalize_tree(array(
 			"rootnode" => $this->basedir,
 		));
-		return $this->finish_with_style($str);
+		die($this->finish_with_style($str));
 	}
 
 	function _req_mk_clfdoc_tree(&$tv, $path)
@@ -1358,7 +1416,7 @@ class docgen_viewer extends class_base
 		$str = $tv->finalize_tree(array(
 			"rootnode" => $this->basedir,
 		));
-		return $this->finish_with_style($str);
+		die($this->finish_with_style($str));
 	}
 
 	/** displays the documentation file $file
@@ -1368,7 +1426,7 @@ class docgen_viewer extends class_base
 		@param file required
 
 	**/
-	function show_doc($arr)
+	function show_doc($arr, $oh_please_dont_die = false)
 	{
 		extract($arr);
 		$file = preg_replace("/(\.){2,}/", "", $file);
@@ -1387,7 +1445,14 @@ class docgen_viewer extends class_base
 		$str = preg_replace("/(#code#)(.+?)(#\/code#)/esm","\"<pre>\".htmlspecialchars(stripslashes('\$2')).\"</pre>\"",$str);
 		$str = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$str);
 
-		return $this->finish_with_style(nl2br($str));
+		if($oh_please_dont_die)
+		{
+			return $this->finish_with_style(nl2br($str));
+		}
+		else
+		{
+			die($this->finish_with_style(nl2br($str)));
+		}
 	}
 
 	function finish_with_style($str)
@@ -1987,7 +2052,7 @@ class aw_language_documenter
 		}
 	}
 
-	function format_arr($source,$hide_keys = array())
+	public static function format_arr($source,$hide_keys = array())
 	{
 		$tmp = "";
 		foreach($source as $key2=>$value2)

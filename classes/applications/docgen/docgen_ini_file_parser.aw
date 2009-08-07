@@ -73,6 +73,7 @@ class docgen_ini_file_parser
 
 		$fd = file($file);
 		$config = array();
+		$last_comment = "";
 
 		foreach($fd as $linenum => $line)
 		{
