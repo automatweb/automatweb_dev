@@ -1323,6 +1323,7 @@ class shop_order_cart extends class_base
 	function get_cart_value($prod = false)
 	{
 		$total = 0;
+		$prod_total = 0;
 
 		$awa = new aw_array(ifset($_SESSION, "cart", "items"));
 		foreach($awa->get() as $iid => $quantx)
@@ -1379,7 +1380,14 @@ class shop_order_cart extends class_base
 
 	function get_items_in_cart()
 	{
-		$awa = new aw_array($_SESSION["cart"]["items"]);
+		if (isset($_SESSION["cart"]["items"]))
+		{
+			$awa = new aw_array($_SESSION["cart"]["items"]);
+		}
+		else
+		{
+			$awa = new aw_array();
+		}
 		$ret = array();
 		foreach($awa->get() as $iid => $q)
 		{
