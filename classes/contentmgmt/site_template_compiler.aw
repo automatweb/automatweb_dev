@@ -462,7 +462,7 @@ class site_template_compiler extends aw_template
 
 		$end_block = false;
 
-		if ($ldat["in_logged"])
+		if (!empty($ldat["in_logged"]))
 		{
 			$this->ops[] = array(
 				"op" => OP_IF_LOGGED,
@@ -506,7 +506,7 @@ class site_template_compiler extends aw_template
 		}
 
 		// groups
-		if ($adat["grps"][$level])
+		if (!empty($adat["grps"][$level]))
 		{
 			$this->ops[] = array(
 				"op" => OP_GRP_BEGIN,
@@ -520,7 +520,7 @@ class site_template_compiler extends aw_template
 		}
 
 		// autogroups
-		if ($adat["autogrps"][$level])
+		if (!empty($adat["autogrps"][$level]))
 		{
 			$this->ops[] = array(
 				"op" => OP_AUTOGRP_BEGIN,
@@ -552,7 +552,7 @@ class site_template_compiler extends aw_template
 			"op" => OP_LIST_INIT,
 			"params" => array(
 				"a_parent" => $adat["parent"],
-				"a_parent_p_fn" => $adat["a_parent_p_fn"],
+				"a_parent_p_fn" => ( !empty($adat["a_parent_p_fn"]) ) ? $adat["a_parent_p_fn"] : '',
 				"level" => $level,
 				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
 			)
@@ -563,8 +563,8 @@ class site_template_compiler extends aw_template
 		$this->ops[] = array(
 			"op" => OP_LOOP_LIST_BEGIN,
 			"params" => array(
-				"has_prev_link" => $ldat["has_prev_link"],
-				"has_next_link" => $ldat["has_next_link"],
+				"has_prev_link" => ( !empty($ldat["has_prev_link"]) ) ? $ldat["has_prev_link"] : '',
+				"has_next_link" => ( !empty($ldat["has_next_link"]) ) ? $ldat["has_next_link"] : '',
 				"a_name" => $area,
 				"level" => $level,
 				"a_parent" => $adat["parent"]
@@ -642,7 +642,7 @@ class site_template_compiler extends aw_template
 					$this->no_top_level_code_for[$chd_area][$chd_lv] = true;
 				}
 
-				if ($ldat["has_lugu"])
+				if (!empty($ldat["has_lugu"]))
 				{
 					$this->ops[] = array(
 						"op" => OP_HAS_LUGU,
@@ -660,25 +660,25 @@ class site_template_compiler extends aw_template
 					"op" => OP_SHOW_ITEM,
 					"params" => array(
 						"tpl" => $cur_tpl_fqn,
-						"has_image_tpl" => $ldat["has_image_tpl"],
-						"no_image_tpl" => $ldat["no_image_tpl"],
-						"has_comment_tpl" => $ldat["has_comment_tpl"],
-						"no_comment_tpl" => $ldat["no_comment_tpl"],
-						"a_parent" => $adat["parent"],
+						"has_image_tpl" => ( !empty($ldat["has_image_tpl"]) ) ? $ldat["has_image_tpl"] : '',
+						"no_image_tpl" => ( !empty($ldat["no_image_tpl"]) ) ? $ldat["no_image_tpl"] : '',
+						"has_comment_tpl" => ( !empty($ldat["has_comment_tpl"]) ) ? $ldat["has_comment_tpl"] : '',
+						"no_comment_tpl" => ( !empty($ldat["no_comment_tpl"]) ) ? $ldat["no_comment_tpl"] : '',
+						"a_parent" => ( !empty($adat["parent"]) ) ? $adat["parent"] : '',
 						"level" => $level,
-						"has_prev_link" => $ldat["has_prev_link"],
-						"has_next_link" => $ldat["has_next_link"]
+						"has_prev_link" => ( !empty($ldat["has_prev_link"]) ) ? $ldat["has_prev_link"] : '',
+						"has_next_link" => ( !empty($ldat["has_next_link"]) ) ? $ldat["has_next_link"] : ''
 					)
 				);
 
-				if ($ldat["has_subitems_sel_check_after_item"])
+				if (!empty($ldat["has_subitems_sel_check_after_item"]))
 				{
 					$this->ops[] = array(
 						"op" => OP_CHECK_SUBITEMS_SEL,
 						"params" => array(
-							"tpl" => $ldat["has_subitems_sel_check_tpl"],
-							"fq_tpl" => $cur_tpl_fqn.".".$ldat["has_subitems_sel_check_tpl"],
-							"a_parent" => $adat["parent"],
+							"tpl" => ( !empty($ldat["has_subitems_sel_check_tpl"]) ) ? $ldat["has_subitems_sel_check_tpl"] : '',
+							"fq_tpl" => $cur_tpl_fqn . "." . ( !empty($ldat["has_subitems_sel_check_tpl"]) ) ? $ldat["has_subitems_sel_check_tpl"] : '',
+							"a_parent" => ( !empty($adat["parent"]) ) ? $adat["parent"] : '',
 							"level" => $level+1
 						)
 					);
@@ -698,7 +698,7 @@ class site_template_compiler extends aw_template
 				}
 
 				$grp_p = false;
-				if ($adat["grps"][$level])
+				if (!empty($adat["grps"][$level]))
 				{
 					$grp_p = array(
 						"a_parent" => $adat["parent"],
@@ -709,7 +709,7 @@ class site_template_compiler extends aw_template
 					);
 				}
 				$autogrp_p = false;
-				if ($adat["autogrps"][$level])
+				if (!empty($adat["autogrps"][$level]))
 				{
 					$autogrp_p = array(
 						"a_parent" => $adat["parent"],
@@ -723,10 +723,10 @@ class site_template_compiler extends aw_template
 					"op" => OP_SHOW_ITEM_INSERT,
 					"params" => array(
 						"tpl" => $cur_tpl_fqn,
-						"has_image_tpl" => $ldat["has_image_tpl"],
-						"no_image_tpl" => $ldat["no_image_tpl"],
-						"has_comment_tpl" => $ldat["has_comment_tpl"],
-						"no_comment_tpl" => $ldat["no_comment_tpl"],
+						"has_image_tpl" => ( !empty($ldat["has_image_tpl"]) ) ? $ldat["has_image_tpl"] : '',
+						"no_image_tpl" => ( !empty($ldat["no_image_tpl"]) ) ? $ldat["no_image_tpl"] : '',
+						"has_comment_tpl" => ( !empty($ldat["has_comment_tpl"]) ) ? $ldat["has_comment_tpl"] : '',
+						"no_comment_tpl" => ( !empty($ldat["no_comment_tpl"]) ) ? $ldat["no_comment_tpl"] : '',
 						"grp_p" => $grp_p,
 						"autogrp_p" => $autogrp_p
 					)
@@ -753,7 +753,7 @@ class site_template_compiler extends aw_template
 			);
 		}
 
-		if ($adat["grps"][$level])
+		if (!empty($adat["grps"][$level]))
 		{
 			$this->ops[] = array(
 				"op" => OP_GRP_END,
@@ -767,7 +767,7 @@ class site_template_compiler extends aw_template
 				)
 			);
 		}
-		elseif ($adat["autogrps"][$level])
+		elseif (!empty($adat["autogrps"][$level]))
 		{
 			$this->ops[] = array(
 				"op" => OP_AUTOGRP_END,
@@ -792,7 +792,7 @@ class site_template_compiler extends aw_template
 			);
 		}
 
-		if ($ldat["has_subitems_sel_check"])
+		if (!empty($ldat["has_subitems_sel_check"]))
 		{
 			$this->ops[] = array(
 				"op" => OP_CHECK_SUBITEMS_SEL,
@@ -803,7 +803,7 @@ class site_template_compiler extends aw_template
 			);
 		}
 
-		if ($ldat["no_subitems_sel_check"])
+		if (!empty($ldat["no_subitems_sel_check"]))
 		{
 			$this->ops[] = array(
 				"op" => OP_CHECK_NO_SUBITEMS_SEL,
@@ -827,7 +827,7 @@ class site_template_compiler extends aw_template
 			"params" => array("level" => $level)
 		);*/
 
-		if ($ldat["in_logged"])
+		if (!empty($ldat["in_logged"]))
 		{
 			$this->ops[] = array(
 				"op" => OP_END_BLK,
@@ -931,7 +931,7 @@ class site_template_compiler extends aw_template
 			"op" => OP_GET_OBJ_SUBMENUS,
 			"params" => array(
 				"a_parent" => $adat["parent"],
-				"a_parent_p_fn" => $adat["a_parent_p_fn"],
+				"a_parent_p_fn" => ( !empty($adat["a_parent_p_fn"]) ) ? $adat["a_parent_p_fn"] : '',
 				"level" => $level,
 				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
 			)
@@ -959,7 +959,7 @@ class site_template_compiler extends aw_template
 			"op" => OP_LIST_BEGIN,
 			"params" => array(
 				"a_parent" => $adat["parent"],
-				"a_parent_p_fn" => $adat["a_parent_p_fn"],
+				"a_parent_p_fn" => ( !empty($adat["a_parent_p_fn"]) ) ? $adat["a_parent_p_fn"] : '',
 				"level" => $level,
 				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
 			)
@@ -2423,24 +2423,28 @@ class site_template_compiler extends aw_template
 		$tpl = substr($arr["tpl"], strrpos($arr["tpl"], ".")+1);
 
 		// if % count
-		$res .= $this->_gi()."if ($loop_counter_name > 0 && ($loop_counter_name + 1) % ceil(".$list_name."->count() / $arr[autogrp_cnt]) == 0 || $loop_counter_name == ".$list_name."->count() - 1)\n";
-		$res .= $this->_gi()."{\n";
-		$this->brace_level++;
-
-			$res .= $this->_gi()."\$this->vars_safe(array(\n";
+		$backtrace = debug_backtrace();
+		if($backtrace[1]["function"] != "generate_code")
+		{
+			$res .= $this->_gi()."if (($loop_counter_name + 1) % ceil(".$list_name."->count() / $arr[autogrp_cnt]) == 0 || $loop_counter_name == ".$list_name."->count() - 1)\n";
+			$res .= $this->_gi()."{\n";
 			$this->brace_level++;
 
-				$res .= $this->_gi()."\"".$tpl."\" => $content_name,\n";
-				$res .= $this->_gi()."\"".(substr($tpl, -4) == "_SEL" ? substr($tpl, 0, -4) : $tpl."_SEL")."\" => \"\"\n";
+				$res .= $this->_gi()."\$this->vars_safe(array(\n";
+				$this->brace_level++;
+
+					$res .= $this->_gi()."\"".$tpl."\" => $content_name,\n";
+					$res .= $this->_gi()."\"".(substr($tpl, -4) == "_SEL" ? substr($tpl, 0, -4) : $tpl."_SEL")."\" => \"\"\n";
+
+				$this->brace_level--;
+				$res .= $this->_gi()."));\n";
+
+				$res .= $this->_gi()."$content_name = \"\";\n";
+				$res .= $this->_gi()."$autogrp_ct_name .= \$this->parse(\"".$autogrp_tpl."\");\n";
 
 			$this->brace_level--;
-			$res .= $this->_gi()."));\n";
-
-			$res .= $this->_gi()."$content_name = \"\";\n";
-			$res .= $this->_gi()."$autogrp_ct_name .= \$this->parse(\"".$autogrp_tpl."\");\n";
-
-		$this->brace_level--;
-		$res .= $this->_gi()."}\n";
+			$res .= $this->_gi()."}\n";
+		}
 
 		// this->vars(arr[tpl] => $content_name)
 		// parse autogrp tpl
