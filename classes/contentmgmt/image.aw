@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.50 2009/08/03 11:42:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.51 2009/08/09 21:25:33 dragut Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -323,6 +323,7 @@ class image extends class_base
 		{
 			$xhtml_slash = " /";
 		}
+		$inplace = '';
 		$force_comments = false;
 		extract($args);
 		$f = $alias;
@@ -404,7 +405,15 @@ class image extends class_base
 				$size = array($flo->prop("width"), $flo->prop("height"));
 			}
 			$bi_show_link = $this->mk_my_orb("show_big", $show_link_arr);
+			if (empty($args['addwidth']))
+			{
+				$args['addwidth'] = 0;
+			}
 			$popup_width = min(1000, $size[0] + ($do_comments ? 500 : 0)) + $args['addwidth'];
+			if (empty($args['addheight']))
+			{
+				$args['addheight'] = 0;
+			}
 			$popup_height = max(5, $size[1]) + $args['addheight'];// + ($do_comments ? 200 : 0);
 			$bi_link = "window.open('$bi_show_link','popup','width=".($popup_width).",height=".($popup_height)."');";
 
@@ -431,7 +440,12 @@ class image extends class_base
 
 			if ($idata["file"] != "")
 			{
-				$i_size = @getimagesize($this->_get_fs_path($idata["file"]));
+				$image_file_path = $this->_get_fs_path($idata['file']);
+				$i_size = 0;
+				if (file_exists($image_file_path))
+				{
+					$i_size = getimagesize($image_file_path);
+				}
 				if (empty($idata['meta']['file2']) && $do_comments)
 				{
 					$size = $i_size;
@@ -558,7 +572,7 @@ class image extends class_base
 					$this->image_inplace_used = true;
 				}
 				else
-				if ($tpls["image_inplace"] && !$GLOBALS["image_inplace_used"][$f["from"]])
+				if (!empty($tpls["image_inplace"]) && !$GLOBALS["image_inplace_used"][$f["from"]])
 				{
 					$tpl = "image_inplace";
 					$inplace = $tpl;
