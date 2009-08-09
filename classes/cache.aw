@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.66 2009/07/27 11:33:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.67 2009/08/09 21:01:23 dragut Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -499,7 +499,7 @@ class cache extends core
 		return $ret;
 	}
 
-	/** Returns cache content for parent folder function if it is not older thatn the given timestamp
+	/** Returns cache content for parent folder function if it is not older than the given timestamp
 		@attrib params=pos api=1
 
 		@param pt required type=string
@@ -543,6 +543,7 @@ class cache extends core
 			return false;
 		}
 
+	/*
 		$f = fopen($fq, "r");
 		if (!$f)
 		{
@@ -550,7 +551,10 @@ class cache extends core
 		}
 		$ret = fread($f, filesize($fq));
 		fclose($f);
+	
 		return $ret;
+	*/
+		return file_get_contents($fq);
 	}
 
 	/** Clears cache for parent
