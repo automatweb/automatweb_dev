@@ -23,7 +23,7 @@ class links_display
 		{
 			$caption = $this->img;
 		};
-		$caption = $htmlentities?htmlentities($caption):$caption;
+		$caption = !empty($htmlentities) ? htmlentities($caption) : $caption;
 		$alt = $this->cur_link->trans_get_val("alt");
 		$url = str_replace("'", "\"", $url);
 		$before_link = $this->cur_link->trans_get_val("before_link");
