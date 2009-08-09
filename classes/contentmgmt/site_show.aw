@@ -2887,11 +2887,9 @@ class site_show extends class_base
 
 				if (not($err))
 				{
-					//$_sec = aw_global_get("section");
-					$_sec = $_REQUEST["section"];
-					if ($_sec)
+					if (!empty($_REQUEST["section"]))
 					{
-						$values["section"] = $_sec;
+						$values["section"] = $_REQUEST["section"];
 					};
 					$link = $this->mk_my_orb($_act,$values,($_cl == "document" ? "doc" : $_cl),$o->meta("pm_url_admin"),!$o->meta("pm_url_menus"));
 				}
