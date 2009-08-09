@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.19 2009/08/04 13:02:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.20 2009/08/09 21:05:13 dragut Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -226,6 +226,7 @@ class object_basket extends class_base
 			"from.class_id" => CL_OBJECT_BASKET,
 			"type" => "RELTYPE_OBJECT_BASKET",
 		));
+		$o_old = null;
 		if(count($rel))
 		{
 			$o_old = $o;
