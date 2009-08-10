@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.7 2008/01/31 13:50:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.8 2009/08/10 21:12:11 dragut Exp $
 // shop_order_cart_value.aw - Poe ostukorvi v&auml;&auml;rtus 
 /*
 
@@ -45,14 +45,14 @@ class shop_order_cart_value extends class_base
 	
 	*/
 
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
 	////
 	// !shows the object
-	function show($arr = array())
+	function show($arr)
 	{
 		$soc = get_instance(CL_SHOP_ORDER_CART);
 
