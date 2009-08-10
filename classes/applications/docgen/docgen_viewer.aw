@@ -4,7 +4,7 @@
 		displays the data that the docgen analyzer generates
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.34 2009/08/07 11:55:58 instrumental Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.35 2009/08/10 10:15:33 dragut Exp $
 
 **/
 
@@ -490,7 +490,7 @@ class docgen_viewer extends class_base
 
 		$if_meth_list = $this->_get_if_methods_for_class($data);
 
-		$usage_class = $data["name"];
+		$usage_class = ( !empty($data["name"]) ) ? $data["name"] : "";
 		// if this is an object override class, then the class you use things from is object
 		$clss = aw_ini_get("classes");
 		foreach($clss as $cldata)
@@ -502,7 +502,7 @@ class docgen_viewer extends class_base
 			}
 		}
 
-		$cln = $data["name"];
+		$cln = ( !empty($data["name"]) ) ? $data["name"] : "";
 		if ($cln == "document" || $cln == "document_brother")
 		{
 			$cln = "doc";
