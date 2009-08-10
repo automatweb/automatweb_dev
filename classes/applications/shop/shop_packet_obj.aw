@@ -2,7 +2,7 @@
 
 class shop_packet_obj extends _int_object
 {
-	public function get_products($arr)
+	public function get_products()
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT,
@@ -13,7 +13,7 @@ class shop_packet_obj extends _int_object
 		return $ol;
 	}
 	
-	public function get_categories($arr)
+	public function get_categories()
 	{
 		$ol = new object_list();
 		foreach($this->connections_from(array(
