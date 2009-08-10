@@ -3031,6 +3031,7 @@ class crm_bill extends class_base
 			$vars["impl_url"] = $impl->prop_str("url_id");
 			$vars["impl_phone"] = $impl->prop_str("phone_id");
 			$vars["imp_penalty"] = $impl->prop("bill_penalty_pct");
+			$vars["impl_ou"] = $impl->prop("ettevotlusvorm.shortname");
 
 			$ba = "";
 			foreach($impl->connections_from(array("type" => "RELTYPE_BANK_ACCOUNT")) as $c)
@@ -3120,10 +3121,6 @@ class crm_bill extends class_base
 			$lc = $lo->prop("lang_acceptlang");
 		}
 		
-
-
-
-
 
 		if($_GET["pdf"])
 		{

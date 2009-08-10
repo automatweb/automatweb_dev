@@ -1704,7 +1704,7 @@ enter_function("bill::start");
 			}
 exit_function("bill::start");
 enter_function("bill::startcurr");
-			$cursum = $own_currency_sum = $bill->get_bill_sum();//$bill_i->get_bill_sum($bill,$tax_add);
+			$cursum = $own_currency_sum = $bill->get_bill_sum(2);//$bill_i->get_bill_sum($bill,$tax_add);
 			$curid = $bill->get_bill_currency_id();
 			$cur_name = $bill->get_bill_currency_name();
 			if($company_curr && $curid && ($company_curr != $curid))
