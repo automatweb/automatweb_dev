@@ -2213,7 +2213,7 @@ class object
 	**/
 	public function implements_interface ($name)
 	{
-		return $GLOBALS["objects"][$this->oid]->implements_interface($class_id);
+		return $GLOBALS["objects"][$this->oid]->implements_interface($name);
 	}
 
 	/** Returns TRUE if given method is defined in this object class
