@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_bill" folder="www/dev/terryf/automatweb_dev/classes/applications/crm" extends="class_base">
+	<class name="crm_bill" folder="www/automatweb_cvs/classes/applications/crm" extends="class_base">
 		<action name="add_payment" all_args="1">
 			<function name="add_payment">
 				<arguments>
@@ -135,6 +135,7 @@
 					<required name="id" type="int" />
 					<optional name="preview_add" type="int" />
 					<optional name="preview_add_pdf" type="int" />
+					<optional name="reminder" type="int" />
 					<optional name="preview_pdf" type="int" />
 				</arguments>
 			</function>

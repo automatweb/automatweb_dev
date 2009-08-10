@@ -1930,6 +1930,17 @@ class crm_bill_obj extends _int_object
 		));
 	}
 
+	private function get_reminder_pdf()
+	{
+		$inst = get_instance(CL_CRM_BILL);
+		return $inst->show(array(
+			"id" => $this->id(),
+			"pdf" => 1,
+			"return" => 1,
+			"reminder" => 1
+		));
+	}
+
 	public function make_preview_pdf()
 	{
                 $f = get_instance(CL_FILE);
@@ -1937,6 +1948,19 @@ class crm_bill_obj extends _int_object
 			"parent" => $this->id(),
 			"content" => $this->get_pdf(),
 			"name" => t("Arve nr:"). " ".$this->prop("bill_no").".pdf",
+			"type" => "application/pdf"
+		));
+
+		return obj($id);
+	}
+
+	public function make_reminder_pdf()
+	{
+                $f = get_instance(CL_FILE);
+		$id = $f->create_file_from_string(array(
+			"parent" => $this->id(),
+			"content" => $this-> get_reminder_pdf(),
+			"name" => t("Arve nr:"). " ".$this->prop("bill_no")." ".t("meeldetuletus").".pdf",
 			"type" => "application/pdf"
 		));
 
@@ -2026,7 +2050,7 @@ class crm_bill_obj extends _int_object
 		$awm->htmlbodyattach(array(
 			"data" => $body
 		));
-//if(aw_global_get("uid") == "marko") {arr($body); arr($this->get_bcc()); arr($addresses);die();}
+if(aw_global_get("uid") == "marko") {arr("praegu ei saada sest marko arendab");arr($body); arr($this->get_bcc()); arr($addresses);die();}
 		$suc = $awm->gen_mail();
 		if(!$suc)
 		{

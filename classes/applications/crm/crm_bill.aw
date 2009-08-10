@@ -351,7 +351,7 @@ class crm_bill extends class_base
 			-5 => t("Maha kantud"),
 		);
 
-		if(is_oid($_GET["project"]) && $this->can("view" , $_GET["project"]))
+		if(!empty($_GET["project"]) && $this->can("view" , $_GET["project"]))
 		{
 			$this->project_object = obj($_GET["project"]);
 			if($this->can("view" , $this->project_object->get_orderer()))
@@ -1168,7 +1168,7 @@ class crm_bill extends class_base
 		$arr["new_payment"] = "";
 		$arr["add_dn"] = 0;
 //		$arr["customer"] = "";
-		if($_GET["project"])
+		if(!empty($_GET["project"]))
 		{
 			$arr["project"] = $_GET["project"];
 		}
@@ -1517,7 +1517,7 @@ class crm_bill extends class_base
 
 	function get_co_currency()
 	{
-		if(!$this->company_currency)
+		if(empty($this->company_currency))
 		{
 			$u = get_instance(CL_USER);
 			$co = obj($u->get_current_company());
@@ -1781,8 +1781,10 @@ class crm_bill extends class_base
 */
 		//kokkuleppe hind
 		$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
-		if(!is_array($agreement_prices[0]) && is_array($agreement_prices)) $agreement_prices = array($agreement_prices);//endiste kokkuleppehindade jaoks mis pold massiivis
-		if($agreement_prices == null) $agreement_prices = array();
+		if($agreement_prices == null)
+		{
+			$agreement_prices = array();
+		}
 // 		if(is_array($agreement_prices[0]))
 // 		{
 			$agreement_prices[] = array();
@@ -1873,25 +1875,7 @@ class crm_bill extends class_base
 							"value" => $agreement_price["code"],
 							"size" => 10
 						)),
-/*						"unit" => html::textbox(array(
-							"name" => "agreement_price[".$x."][unit]",
-							"value" => $agreement_price["unit"],
-							"size" => 3,
-							"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
-							"autocomplete_params" => array("agreement_price[".$x."][unit]"),
-							"option_is_tuple" => 1,
-						)),
-						"price" => html::textbox(array(
-							"name" => "agreement_price[".$x."][price]",
-							"value" => $agreement_price["price"],
-							"size" => 4
-						)),
-						"amt" => html::textbox(array(
-							"name" => "agreement_price[".$x."][amt]",
-							"value" => $agreement_price["amt"],
-							"size" => 3
-						)),
-						"sum" => $agreement_price["sum"],*/
+
 				"unit" => $ut->draw(array("no_titlebar" => 1)),
 						"has_tax" => html::checkbox(array(
 							"name" => "agreement_price[".$x."][has_tax]",
@@ -1919,7 +1903,10 @@ class crm_bill extends class_base
 						))
 					));
 					$x++;
-					if(!($agreement_price["name"] && $agreement_price["price"]))$done_new_line = 1;
+					if(empty($agreement_price["name"]) || empty($agreement_price["price"]))
+					{
+						$done_new_line = 1;
+					}
 				}
 // 			}
 		}
@@ -2936,6 +2923,7 @@ class crm_bill extends class_base
 			"id" => $arr["obj_inst"]->id(),
 			"all_rows" => $arr["all_rows"],
 			"pdf" => $arr["pdf"],
+			"reminder" => $arr["request"]["reminder"]
 		));
 	}
 
@@ -3132,10 +3120,21 @@ class crm_bill extends class_base
 			$lc = $lo->prop("lang_acceptlang");
 		}
 		
+
+
+
+
+
 		if($_GET["pdf"])
 		{
 			$arr["pdf"] = $_GET["pdf"];
 		}
+		
+		if($arr["reminder"])
+		{
+			$tpl .= "_remind";
+		}
+		
 		if($arr["pdf"])
 		{
 			$tpl .= "_pdf";
@@ -4558,6 +4557,56 @@ class crm_bill extends class_base
 			"text" => t("Prindi arve lisa pdf")
 		));
 
+
+
+		$onclick = "";
+		if(!$has_val)
+		{
+			$onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
+		}
+		$onclick.= "win = window.open('".$this->mk_my_orb("change", array(
+			"openprintdialog" => 1,
+			"id" => $arr["obj_inst"]->id(),
+			"group" => "preview",
+			"reminder" => 1
+		), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
+		if(!$has_val)
+		{
+			$onclick.= "}else;";
+		}
+
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => $onclick,
+			"text" => t("Prindi arve meeldetuletus")
+		));
+
+		$onclick = "";
+		if(!$has_val)
+		{
+			$onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
+		}
+		$onclick.= "win = window.open('".$this->mk_my_orb("change", array(
+			"pdf" => 1,
+			"id" => $arr["obj_inst"]->id(),
+			"group" => "preview",
+			"reminder" => 1
+			), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
+		if(!$has_val)
+		{
+			$onclick.= "}else;";
+		}
+
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => $onclick,
+			"text" => t("Prindi arve meeldetuletus pdf")
+		));
+
+
+
 		$tb->add_menu_button(array(
 			"name" => "send_bill",
 			"tooltip" => t("Saada arve"),
@@ -4584,6 +4633,32 @@ class crm_bill extends class_base
 			"onClick" => $onclick,
 			"text" => t("Saada arve pdf koos lisaga")
 		));
+
+		$onclick= "win = window.open('".$this->mk_my_orb("send_bill", array(
+			"id" => $arr["obj_inst"]->id(),
+			"reminder" => 1
+		), CL_CRM_BILL)."','billprint','width=800,height=600,statusbar=yes');";
+
+		$tb->add_menu_item(array(
+			"parent" => "send_bill",
+			"url" => "#",
+			"onClick" => $onclick,
+			"text" => t("Saada arve meeldetuletuse pdf")
+		));
+
+		$onclick= "win = window.open('".$this->mk_my_orb("send_bill", array(
+			"id" => $arr["obj_inst"]->id(),
+			"preview_add" => 1,
+			"reminder" => 1,
+			), CL_CRM_BILL)."','billprint','width=800,height=600,statusbar=yes');";
+
+		$tb->add_menu_item(array(
+			"parent" => "send_bill",
+			"url" => "#",
+			"onClick" => $onclick,
+			"text" => t("Saada arve meeldetuletuse pdf koos lisaga")
+		));
+
 
 		$tb->add_menu_item(array(
 			"parent" => "send_bill",
@@ -5207,6 +5282,7 @@ class crm_bill extends class_base
 		bill id
 	@param preview_add optional type=int
 	@param preview_add_pdf optional type=int
+	@param reminder optional type=int
 	@param preview_pdf optional type=int
 	@returns int
 		bill id
@@ -5223,7 +5299,14 @@ class crm_bill extends class_base
 
 		$attatchments = "";
 
-		$to_o = $obj->make_preview_pdf();
+		if($arr["reminder"])
+		{
+			$to_o = $obj->make_reminder_pdf();
+		}
+		else
+		{
+			$to_o = $obj->make_preview_pdf();
+		}
 		$file_data = $to_o->get_file();
 		$attatchments.= html::href(array(
 			"caption" => html::img(array(
