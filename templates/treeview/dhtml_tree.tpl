@@ -1,3 +1,4 @@
+<div id="treeDivWithID_{VAR:tree_id}">
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript">
 
@@ -233,6 +234,18 @@ persist_state_{VAR:tree_num} = '{VAR:persist_state}';
 open_nodes_{VAR:tree_num} = new Array({VAR:open_nodes});
 tree_id_{VAR:tree_num} = '{VAR:tree_id}';
 
+$(document).ready(function(){
+	function attachTreeNodeOnClick(o){
+		if($(o).attr("tagName") == "A" && typeof $(o).attr("id") != "undefined" && $(o).attr("id").substr(-8) != "treenode"){
+			$(o).click(function(){
+				$("a[tree_id='treeDivWithID_{VAR:tree_id}']").removeClass("nodetext_selected");
+				$(o).addClass("nodetext_selected");
+			}).attr("tree_id", "treeDivWithID_{VAR:tree_id}");
+		}
+		$(o).children().each(function(){attachTreeNodeOnClick(this);});
+	}
+	$("#treeDivWithID_{VAR:tree_id}").each(function(){attachTreeNodeOnClick(this);});
+});
 </script>
 <style>
 .iconcontainer {
@@ -245,6 +258,12 @@ tree_id_{VAR:tree_num} = '{VAR:tree_id}';
 	text-decoration: none;
 	vertical-align: middle;
 	white-space: nowrap;
+	font-weight: normal;
+}
+
+a.nodetext_selected {
+	color: black;
+	font-weight: bold;
 }
 
 .nodetextbuttonlike {
