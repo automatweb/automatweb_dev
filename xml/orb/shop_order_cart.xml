@@ -94,5 +94,30 @@
 			</function>
 		</action>
 
+		<action name="orderer_data" nologin="1">
+			<function name="orderer_data">
+				<arguments>
+					<required name="cart" type="int" acl="view" />
+					<optional name="next_view" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="order_data" nologin="1">
+			<function name="order_data">
+				<arguments>
+					<required name="cart" type="int" acl="view" />
+					<optional name="next_view" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_order_data" nologin="1" all_args="1">
+			<function name="submit_order_data">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

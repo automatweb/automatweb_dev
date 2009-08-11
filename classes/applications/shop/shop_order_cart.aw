@@ -32,6 +32,9 @@
 @property product_template type=select field=meta method=serialize
 @caption Ostukorvi &uuml;he toote vaate templeit
 
+@property orderer_data_template type=select field=meta method=serialize
+@caption Ostukorvi kasutaja andmete templeit
+
 @groupinfo delivery_methods caption="K&auml;ttetoimetamise viisid"
 @default group=delivery_methods
 
@@ -60,6 +63,25 @@ class shop_order_cart extends class_base
 			"tpldir" => "applications/shop/shop_order_cart",
 			"clid" => CL_SHOP_ORDER_CART
 		));
+
+		$this->orderer_vars = array(
+			"customer_no" => t("Kliendi number"),
+			"birthday" => t("S&uuml;nnikuup&auml;ev"),
+			"lastname" => t("Perekonnanimi"),
+			"firstname" => t("Eesnimi"),
+			"address" => t("Aadress"),
+			"index" => t("Postiindeks"),
+			"city" => t("Linn"),
+			"email" => t("E-mail"), 
+			"homephone" => t("Telefon kodus"),
+			"workphone" => t("Telefon t&ouml;&ouml;l"),  
+			"mobilephone" => t("Mobiil"),
+			"work" => t("T&ouml;&ouml;koht"),
+			"workexperience" => t("T&ouml;&ouml;staa"),
+			"profession" => t("Amet"),
+			"personalcode" => t("Isikukood"),
+		);
+
 	}
 
 	function get_property($arr)
@@ -68,6 +90,7 @@ class shop_order_cart extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "user_data_template":
 			case "product_template":
 				$tm = get_instance("templatemgr");
 				$prop["options"] = $tm->template_picker(array(
@@ -534,6 +557,7 @@ class shop_order_cart extends class_base
 		));
 
 		$this->add_bank_vars($oc, $cart["user_data"]);
+		$data["cart"] = $cart_o->id();
 		$this->vars($data);
 		return $this->parse();
 	}
@@ -667,7 +691,7 @@ class shop_order_cart extends class_base
 
 	**/
 	function submit_add_cart($arr)
-	{//arr($arr);die();
+	{
 		extract($arr);
 
 		//kui on mitu ostukorvi, siis hiljem kontrollib ykshaaval tooteid sealt
@@ -1174,10 +1198,15 @@ class shop_order_cart extends class_base
 				$ctr->do_check($cart_o->prop("finish_handler"), NULL, $cart_o, $oc);
 			}
 			aw_session_del("order.accept_cond");
-		 	$ordid = $this->do_create_order_from_cart($arr["oc"], NULL, array(
+
+			$sell_order_id = $cart_o->create_sell_order();
+
+			$ordid = $this->do_create_order_from_cart($arr["oc"], NULL, array(
 				"payment" => $cart["payment"],
 				"payment_type" => $cart["payment_method"]
 			));
+
+			$this->clear_some_carts($oc);
 			return urldecode($this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order"));
 		}
 		else
@@ -2477,6 +2506,141 @@ class shop_order_cart extends class_base
 		$vars["amount"] = $cart->get_prod_amount($arr["product"]);
 		$this->vars($vars);
 		return $this->parse();
+	}
+
+	/**
+		@attrib name=orderer_data nologin="1"
+		@param cart required type=int acl=view
+		@param next_view optional
+	**/
+	public function orderer_data($arr)
+	{
+		$this->cart = obj($arr["cart"]);
+		if($this->cart->prop("orderer_data_template"))
+		{
+			$template = $this->cart->prop("orderer_data_template");
+		}
+		else
+		{
+			$template = "orderer_data.tpl";
+		}
+		$this->read_template($template);
+		lc_site_load("shop_order_cart", &$this);
+
+		$this->add_cart_vars();
+		$this->add_orderer_vars();
+		$this->add_order_vars();
+		$this->add_product_vars();
+
+		return $this->parse();
+	}
+
+	/**
+		@attrib name=order_data nologin="1"
+		@param cart required type=int acl=view
+		@param next_view optional
+	**/
+	public function order_data($arr)
+	{
+		$this->cart = obj($arr["cart"]);
+		if($this->cart->prop("order_data_template"))
+		{
+			$template = $this->cart->prop("order_data_template");
+		}
+		else
+		{
+			$template = "order_data.tpl";
+		}
+		$this->read_template($template);
+		lc_site_load("shop_order_cart", &$this);
+
+
+		$this->add_cart_vars();
+		$this->add_orderer_vars();
+		$this->add_order_vars();
+		$this->add_product_vars();
+
+		return $this->parse();
+	}
+
+	private function add_orderer_vars()
+	{
+		$data = $this->cart->get_order_data();
+		$vars = array();
+		foreach($this->orderer_vars as $orderer_var => $caption)
+		{
+			$vars[$orderer_var."_value"] = $data[$orderer_var];
+			$vars[$orderer_var."_caption"] = $caption;
+			switch($orderer_var)
+			{
+				case "customer_no":
+				case "birthday":
+				case "lastname":
+				case "firstname":
+				case "address":
+				case "index":
+				case "city":
+				case "email":
+				case "homephone":
+				case "workphone":
+				case "mobilephone":
+				case "work":
+				case "workexperience":
+				case "profession":
+				case "personalcode":
+					$vars[$orderer_var] = html::textbox(array(
+						"name" => $orderer_var,
+						"value" => $data[$orderer_var],
+					));
+			}
+		}
+		$this->vars($vars);
+	}
+
+	private function add_order_vars()
+	{
+		
+
+
+	}
+
+	private function add_product_vars()
+	{
+		
+
+
+	}
+
+	private function add_cart_vars()
+	{
+		$vars = array();
+		$vars["cart"] = $this->cart->id();
+
+		$this->vars($vars);
+	}
+
+	/**
+		@attrib name=submit_order_data nologin="1" all_args=1
+		@param next_action optional type=string
+	**/
+	public function submit_order_data($arr)
+	{
+		$cart = obj($arr["cart"]);
+		$cart -> set_order_data($arr);
+
+		if($arr["next_action"])
+		{
+			$action = $arr["next_action"];
+		}
+		else
+		{
+			$action = "final_finish_order";
+		}
+		return $this->mk_my_orb($action, array(
+			"oc" => $arr["oc"],
+			"cart" => $arr["cart"],
+			"section" => $arr["section"],
+		));
 	}
 
 	private function _format_calc_price($p)
