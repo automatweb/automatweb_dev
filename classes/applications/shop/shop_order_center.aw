@@ -1920,12 +1920,20 @@ class shop_order_center extends class_base
 		$var = "menu";
 		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : reset($roots));
 
+		$gbf = $this->mk_my_orb("add_appearance_leaf",array(
+			"tree_type" => "storage",
+			"cls" => $cls,
+			"parent" => " ",
+		), CL_SHOP_ORDER_CENTER);
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
-		//	"persist_state" => true,
 			"tree_id" => "appearance_tree",
+			"persist_state" => 1,
+			"get_branch_func" => $gbf,
+			"has_root" => true,
 		));
-//arr($roots);
+
 		foreach($roots as $root)
 		{
 			$root_object = obj($root);
@@ -1942,6 +1950,7 @@ class shop_order_center extends class_base
 			$menus = new object_list(array(
 				"class_id" => CL_MENU,
 				"parent" => $root,
+				"sort_by" => "jrk asc, name asc",
 			));
 
 			foreach($menus->names() as $id => $name)
@@ -1955,16 +1964,43 @@ class shop_order_center extends class_base
 						"params" => array($var => $id)
 					)
 				));
-				$this->add_appearance_leaf($tv , $id);
+				$groups = new object_list(array(
+					"class_id" => array(CL_MENU),
+					"parent" => $id,
+					"limit" => 1,
+				));
+				if($groups->count())
+				{
+					$tv->add_item($id, array(
+						"id" => $id."_".$id,
+						"name" => $id."_".$id,
+// 						"iconurl" => icons::get_icon_url(CL_MENU),
+					));
+				}
+//			$this->add_appearance_leaf($tv , $id);
 			}
-		}
+		}//arr(count($tv->get_item_ids()));die();
 	}
 
-	function add_appearance_leaf($tv , $parent)
+	/**
+		@attrib name=add_appearance_leaf all_args=1
+	**/
+	function add_appearance_leaf($arr)
 	{
+		parse_str($_SERVER['QUERY_STRING'], $arr);
+		$tv = get_instance("vcl/treeview");
+		$parent = trim($arr["parent"]);
+		$tv->start_tree(array (
+			"type" => TREE_DHTML,
+			"branch" => 1,
+			"tree_id" => "appearance_tree_".$arr["parent"],
+			"persist_state" => 1,
+		));
+		$tv -> rootnode = $parent;
 		$groups = new object_list(array(
 			"class_id" => array(CL_MENU),
-			"parent" => $parent
+			"parent" => $parent,
+			"sort_by" => "jrk asc",
 		));
 
 		foreach($groups->names() as $id => $name)
@@ -1978,8 +2014,27 @@ class shop_order_center extends class_base
 					"params" => array("menu" => $id)
 				)
 			));
-			$this->add_appearance_leaf($tv , $id);
+
+			$groups = new object_list(array(
+				"class_id" => array(CL_MENU),
+				"parent" => $id,
+				"limit" => 1,
+				"sort_by" => "jrk asc, name asc",
+			));
+
+			if($groups->count())
+			{
+				$tv->add_item($id, array(
+					"id" => $id."_".$id,
+					"name" => $id."_".$id,
+// 					"iconurl" => icons::get_icon_url(CL_MENU),
+				));
+			}
 		}
+//		$tv->set_selected_item(trim(automatweb::$request->arg("menu")));
+
+		die($tv->finalize_tree());
+		
 	}
 
 	function _get_appearance_list($arr)
@@ -2056,12 +2111,13 @@ class shop_order_center extends class_base
 		));
 
 		$show_inst = get_instance(CL_PRODUCTS_SHOW);
-
+		$t->set_sortable(false);
 		if(!empty($arr["request"]["menu"]))
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_MENU,
 				"parent" => $arr["request"]["menu"],
+				"sort_by" => "jrk asc, name asc",
 			));
 			foreach($ol->arr() as $id => $menu)
 			{

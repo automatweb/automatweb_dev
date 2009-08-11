@@ -60,7 +60,6 @@ class shop_orderer_data_site_show_orders extends shop_orderer_data_site_show
 		$bills = new object_list();
 		$rows = "";
 		$co = get_current_company();
-		$co = obj(2818612);
 		if(is_object($co))
 		{
 			$orders = $co->get_sell_orders();
