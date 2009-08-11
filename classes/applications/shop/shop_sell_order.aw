@@ -191,7 +191,7 @@ class shop_sell_order extends class_base
 		@attrib name=show
 		@param id required
 	**/
-	function show($arr)
+	public function show($arr)
 	{
 		$this->read_template("show.tpl");
 
@@ -226,6 +226,7 @@ class shop_sell_order extends class_base
 		));
 
 		$sum = 0;
+		$different_products = 0;
 		foreach($o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
 			$row = $c->to();
@@ -237,11 +238,13 @@ class shop_sell_order extends class_base
 				"price" => $row->price,
 				"sum" => $c_sum
 			));
+			$different_products++;
 		}
 
 		$this->vars(array(
 			"table" => $t->draw(),
-			"sum" => $sum
+			"sum" => $sum,
+			"different_products" => $different_products,
 		));
 
 		return $this->parse();
