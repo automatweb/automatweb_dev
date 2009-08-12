@@ -509,7 +509,9 @@ class htmlclient extends aw_template
 				"ignore_cfg_admin_mode" => 1
 			));
 		}
-	
+
+		$green = " <a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png' id='cfgEditProp".$arr["name"]."'/></a>";
+		$red = " <a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_red.png' id='cfgEditProp".$arr["name"]."'/></a>";
 
 		// get default cfgform for this object and get property status from that
 		$cf = $cur_cfgform;
@@ -518,17 +520,17 @@ class htmlclient extends aw_template
 			$cfo = obj($cf);
 			if ($cfo->instance()->is_active_property($cfo, $arr["name"]))
 			{
-				return "<a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png' id='cfgEditProp".$arr["name"]."'/></a>";
+				return $green;
 			}
 			else
 			{
-				return "<a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_red.png' id='cfgEditProp".$arr["name"]."'/></a>";
+				return $red;
 			}
 		}
 		else
 		{
 			// green buton
-			return "<a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png' id='cfgEditProp".$arr["name"]."'/></a>";
+			return $green;
 		}
 	}
 
@@ -591,7 +593,7 @@ class htmlclient extends aw_template
 	{
 		$name = "SUB_TITLE";
 		$tpl_vars = array(
-			"value" => !empty($args["value"]) ? $args["value"] : $args["caption"],
+			"value" => (!empty($args["value"]) ? $args["value"] : $args["caption"]).$this->_do_cfg_edit_mode_check($args),
 			"webform_subtitle" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 			"st_id" => $args["name"]
 		);
@@ -1299,6 +1301,11 @@ class htmlclient extends aw_template
 		};
 
 		// do cfg edit mode check
+		/*
+		$this->vars(array(
+			"cfgform_edit_mode" => $this->_do_cfg_edit_mode_check($arr),
+		));
+		*/
 		$retval .= $this->_do_cfg_edit_mode_check($arr);
 
 		return $retval;
@@ -1368,7 +1375,7 @@ class htmlclient extends aw_template
 	{
 		$layout_items = array();
 		$sub_layouts = array();
-		if(!empty($this->view_layout) && ($this->view_layout == $layout_name || isset($this->parent_layouts) && $this->show_layouts[$this->parent_layouts[$layout_name]]))
+		if(!empty($this->view_layout) && ($this->view_layout == $layout_name || isset($this->parent_layouts) && !empty($this->show_layouts[$this->parent_layouts[$layout_name]])))
 		{
 			$this->show_layouts[$layout_name] = 1;
 		}

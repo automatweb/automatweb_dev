@@ -108,8 +108,14 @@ $.init_session_modal({
 <!-- SUB: CFG_ADMIN_MODE -->
 function cfEditClick(prop, oid)
 {
-	$.get("orb.aw", {class: "cfgform", action: "cfadm_click_prop", oid: oid,prop: prop}, function (pic) {
+	$.get("orb.aw", {"class": "cfgform", "action": "cfadm_click_prop", "oid": oid, "prop": prop}, function (pic) {
 		$("#cfgEditProp"+prop).attr("src", pic);
+	});
+}
+function cfEditClickGroup(group, oid)
+{
+	$.get("orb.aw", {"class": "cfgform", "action": "cfadm_click_group", "oid": oid, "group": group}, function (pic) {
+		$("#cfgEditGroup"+group).attr("src", pic);
 	});
 }
 <!-- END SUB: CFG_ADMIN_MODE -->

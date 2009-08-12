@@ -3,7 +3,7 @@
 		<!-- SUB: tab_L1 -->
 		<div class="norm">
 			<div class="right">
-				<a {VAR:target} href="{VAR:link}">{VAR:caption}</a>
+				<a {VAR:target} href="{VAR:link}">{VAR:caption}{VAR:cfgform_edit_mode}</a>
 			</div>
 		</div>
 		<!-- END SUB: tab_L1 -->
@@ -12,7 +12,7 @@
 		<!-- SUB: sel_tab_L1 -->
 		<div class="akt">
 			<div class="right">
-				<a {VAR:target} href="{VAR:link}">{VAR:caption}</a>
+				<a {VAR:target} href="{VAR:link}">{VAR:caption}{VAR:cfgform_edit_mode}</a>
 			</div>
 		</div>
 		<!-- END SUB: sel_tab_L1 -->
@@ -48,7 +48,7 @@
 			<!-- SUB: tab_L2 -->
 			<div class="norm">
 				<div class="right">
-					<a {VAR:target} href="{VAR:link}">{VAR:caption}</a>
+					<a {VAR:target} href="{VAR:link}">{VAR:caption}{VAR:cfgform_edit_mode}</a>
 				</div>
 			</div>
 			<!-- END SUB: tab_L2 -->
@@ -57,7 +57,7 @@
 			<!-- SUB: sel_tab_L2 -->
 			<div class="akt">
 				<div class="right">
-					<a {VAR:target} href="{VAR:link}">{VAR:caption}</a>
+					<a {VAR:target} href="{VAR:link}">{VAR:caption}{VAR:cfgform_edit_mode}</a>
 				</div>
 			</div>
 			<!-- END SUB: sel_tab_L2 -->

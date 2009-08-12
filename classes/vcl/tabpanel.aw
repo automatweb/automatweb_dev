@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.23 2008/01/31 13:55:36 kristo Exp $
+// $Id: tabpanel.aw,v 1.24 2009/08/12 07:06:05 instrumental Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 /*
 @classinfo  maintainer=kristo
@@ -106,6 +106,7 @@ class tabpanel extends aw_template
 			$subtpl = "disabled_tab";
 		};
 		$this->vars(array(
+			"cfgform_edit_mode" => $this->_do_cfg_edit_mode_check($args),
 			"caption" => $args["caption"],
 			"link" => $args["link"],
 			"target" => $args["target"]
@@ -352,6 +353,52 @@ class tabpanel extends aw_template
 			));
 		}
 		return $tb;
+	}
+
+	protected function _do_cfg_edit_mode_check($arr)
+	{
+		if (!isset($_SESSION["cfg_admin_mode"]) || !$_SESSION["cfg_admin_mode"] == 1 || !is_oid($_GET["id"]))
+		{
+			return "";
+		}
+
+		static $cur_cfgform;
+		static $cur_cfgform_found = false;
+
+		if (!$cur_cfgform_found)
+		{
+			$cur_cfgfor_found = true;
+			$i = get_instance(CL_FILE);
+			$o = obj($_GET["id"]);
+			$i->clid = $o->class_id();
+			$cur_cfgform = $i->get_cfgform_for_object(array(
+				"args" => $_GET,
+				"obj_inst" => $o,
+				"ignore_cfg_admin_mode" => 1
+			));
+		}
+
+		$green = " <a href='javascript:void(0)' onClick='cfEditClickGroup(\"".$arr["id"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png' id='cfgEditGroup".$arr["id"]."'/></a>";
+		$red = " <a href='javascript:void(0)' onClick='cfEditClickGroup(\"".$arr["id"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_red.png' id='cfgEditGroup".$arr["id"]."'/></a>";
+
+		// get default cfgform for this object and get property status from that
+		if ($this->can("view", $cur_cfgform))
+		{
+			$cfo = obj($cur_cfgform);
+			if ($cfo->group_is_hidden($arr["id"]))
+			{
+				return $red;
+			}
+			else
+			{
+				return $green;
+			}
+		}
+		else
+		{
+			// green buton
+			return $green;
+		}
 	}
 };
 ?>

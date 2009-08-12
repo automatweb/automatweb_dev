@@ -274,7 +274,9 @@ this.disabled=true;self.disabled=true;
 
 
 	<!-- SUB: SHOW_CHANGEFORM2 -->
+	<span id="reforb">
 	{VAR:reforb}
+	</span>
 		<script type="text/javascript">
 		{VAR:scripts}
 		function submit_changeform(action)

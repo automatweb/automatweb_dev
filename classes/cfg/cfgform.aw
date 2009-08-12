@@ -4033,15 +4033,9 @@ class cfgform extends class_base
 	{
 		$o = obj($id);
 		$ret = $o->meta("cfg_proplist");
-		$disabled_properties = safe_array($o->meta("disabled_properties"));
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("translations");
 		$tbl_capt_trans = $o->meta("tbl_capt_translations");
-
-		foreach($disabled_properties as $k)
-		{
-			unset($ret[$k]);
-		}
 
 		// okay, here, if there is no translation for the requested language, then
 		// read the captions from the translations file.
@@ -5209,9 +5203,7 @@ class cfgform extends class_base
 			return false;
 
 		$o = obj($id);
-		$cfg_proplist = $o->meta("cfg_proplist");
-		unset($cfg_proplist[$property]);
-		$o->set_meta("cfg_proplist", $cfg_proplist);
+		$o->remove_property($property);
 		$o->save();
 	}
 
@@ -5342,23 +5334,71 @@ class cfgform extends class_base
 		// toggle prop in cf
 		if ($this->is_active_property($cf, $arr["prop"]))
 		{
-			$this->remove_property(array(
-				"id" => $cf->id(),
-				"property" => $arr["prop"]
-			));
+			$cf->remove_property($arr["prop"]);
+			$cf->save();
 			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_red.png");
 		}
 		else
 		{
-			$pl = $o->get_property_list();
-			$this->cff_add_prop(
-				$cf,
-				$arr["prop"],
-				$pl[$arr["prop"]]
-			);
-//die(dbg::dump($cf->meta("cfg_proplist")));
+			$cf->restore_property($arr["prop"]);
 			$cf->save();
 			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png");
+		}
+	}
+
+	/**
+		@attrib name=cfadm_click_group
+		@param oid required
+		@param group required
+	**/
+	function cfadm_click_group($arr)
+	{	
+		if (!$_SESSION["cfg_admin_mode"])
+		{
+			die("");
+		}
+
+		$o = obj($arr["oid"]);
+		$this->clid = $o->class_id();
+		$cfid = $this->get_cfgform_for_object(array(
+			"args" => $arr,
+			"obj_inst" => $o,
+			"ignore_cfg_admin_mode" => 1
+		));
+
+		if (!$cfid)
+		{
+			$clss = aw_ini_get("classes");
+
+			// create system default cf for this class
+
+			$cf = obj();
+			$cf->set_parent($o->parent());
+			$cf->set_class_id(CL_CFGFORM);
+			$cf->set_name(sprintf(t("Seadete vorm klassile %s"), $clss[$o->class_id()]["name"]));
+			$cf->set_flag(OBJ_FLAG_IS_SELECTED, 1);
+			$cf->set_subclass($o->class_id());
+			$this->cff_init_from_class($cf, $o->class_id());
+			$cf->save();
+		}
+		else
+		{
+			$cf = obj($cfid);
+		}
+
+
+		// toggle group in cf
+		if ($cf->group_is_hidden($arr["group"]))
+		{
+			$cf->show_group($arr["group"]);
+			$cf->save();
+			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png");
+		}
+		else
+		{
+			$cf->hide_group($arr["group"]);
+			$cf->save();
+			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_red.png");
 		}
 	}
 }

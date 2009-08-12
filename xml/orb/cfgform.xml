@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cfgform" folder="www/dev/terryf/automatweb_dev/classes/cfg" extends="class_base">
+	<class name="cfgform" folder="www/automatweb_cvs/classes/cfg" extends="class_base">
 		<action name="remove_tbl_field">
 			<function name="remove_tbl_field">
 				<arguments>
@@ -64,6 +64,15 @@
 			</function>
 		</action>
 
+		<action name="hide_property">
+			<function name="hide_property">
+				<arguments>
+					<required name="id" type="int" />
+					<required name="property" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="remove_property">
 			<function name="remove_property">
 				<arguments>
@@ -88,6 +97,15 @@
 				<arguments>
 					<required name="oid" />
 					<required name="prop" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cfadm_click_group">
+			<function name="cfadm_click_group">
+				<arguments>
+					<required name="oid" />
+					<required name="group" />
 				</arguments>
 			</function>
 		</action>
