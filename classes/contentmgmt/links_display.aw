@@ -19,6 +19,7 @@ class links_display
 		{
 			$url = "http://".$url;
 		}
+		$caption2 = $caption;
 		if ($this->img)
 		{
 			$caption = $this->img;
@@ -34,6 +35,7 @@ class links_display
 			"style_class" => $style_class,
 			"url" => $url,
 			"caption" => str_replace("&", "&amp;", $caption),
+			"caption2" => $caption2,
 			"target" => $target,
 			"img" => $this->img,
 			"img_url" => $this->img,
