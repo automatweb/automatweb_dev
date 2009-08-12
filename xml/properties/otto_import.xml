@@ -638,6 +638,34 @@
             <store>no</store>
             <caption>Info</caption>
       </property>
+      <property>
+            <name>csv_files_location</name>
+            <table>objects</table>
+            <group>products_xml</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>CSV failid</caption>
+      </property>
+      <property>
+            <name>xml_file_link</name>
+            <table>objects</table>
+            <group>products_xml</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Genereeritud XML fail</caption>
+      </property>
+      <property>
+            <name>csv_files_list</name>
+            <table>objects</table>
+            <group>products_xml</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
       <classinfo>
             <syslog_type>ST_OTTO_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -714,6 +742,9 @@
             <delete>
                   <caption>Kustutamine</caption>
             </delete>
+            <products_xml>
+                  <caption>[dev] Toodete XML</caption>
+            </products_xml>
       </groupinfo>
       <reltypes>
             <FOLDER>

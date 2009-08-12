@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.108 2009/07/28 09:38:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.109 2009/08/12 14:05:25 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -5163,7 +5163,8 @@ class otto_import extends class_base implements warehouse_import_if
 			switch ($site)
 			{
 				case "otto":
-					$picture_found = $this->read_img_from_otto($arr);
+				//	$picture_found = $this->read_img_from_otto($arr);
+					$picture_found = $this->get_images_from_otto($arr);
 					break;
 				case "heine":
 					$picture_found = $this->read_img_from_heine($arr);
@@ -5183,14 +5184,17 @@ class otto_import extends class_base implements warehouse_import_if
 				break;
 			}
 		}
+		// TODO have to refactor this place here
+		return $picture_found;
 	}
 
 	function read_img_from_otto($arr)
 	{
+		$return_images = array();
+
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
 		$start_time = $arr['start_time'];
-
 
 		$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
 
@@ -5198,6 +5202,7 @@ class otto_import extends class_base implements warehouse_import_if
 		flush();
 
 		$html = $this->file_get_contents($url);
+	//	arr(htmlentities($html));
 		echo "[ OK ]<br />\n";
 		flush();
 
@@ -5212,12 +5217,32 @@ class otto_import extends class_base implements warehouse_import_if
 		{
 			$o_html = $html;
 
-			preg_match_all("/Javascript:gotoSearchArticle\(\'(.*)\'\);/imsU", $html, $mt, PREG_PATTERN_ORDER);
+
+			// just for not, this kind of search happens when one searches for a product code
+			// it seems, that if the search is made by string (for example 'bikini'), then there won't be such
+			// javascript transition page and it is shown just a list of products, so in that case it should be handled
+			// differently. But maybe there won't be such a case and therefore let it be for now.
+			preg_match_all("/function goon\(\) \{(.*)\}/imsU", $html, $mt, PREG_PATTERN_ORDER);
+			$js_code = $mt[1][0];
+			
+			$pattern = "/\" \+ encodeURIComponent\(\"(.*)\"\)/U";
+
+			preg_match_all($pattern, $js_code, $m);
+			foreach ($m[0] as $k => $v)
+			{
+			        $js_code = str_replace($m[0][$k], urlencode($m[1][$k]).'"', $js_code);
+			}
+			$pattern = "/\"(.*)\"/U";
+			preg_match_all($pattern, $js_code, $m);
+
+			$urld[] = implode('', $m[1]);
+/*
 			$urld = array();
 			foreach($mt[1] as $url)
 			{
 				$urld[$url] = $url;
 			}
+*/
 
 			foreach($urld as $url)
 			{
@@ -5249,6 +5274,9 @@ class otto_import extends class_base implements warehouse_import_if
 					$connection_image = $matches[1];
 					if (!empty($connection_image))
 					{
+						// NEW for new import
+						$return_images[] = 'http://image01.otto.de:80/pool/formata/'.$connection_image.'.jpg';
+						
 						echo "[ OTTO ] Siduv pilt ";
 						$image_ok = $this->get_image(array(
 							'source' => 'http://image01.otto.de:80/pool/formatb/'.$connection_image.'.jpg',
@@ -5339,6 +5367,10 @@ class otto_import extends class_base implements warehouse_import_if
 						'otto_import' => $import_obj,
 						'debug' => true
 					));
+
+					// NEW for new import
+					$return_images[] = 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg';
+
 					// download the big version of the image too:
 					$this->get_image(array(
 						'source' => 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg',
@@ -5396,7 +5428,6 @@ class otto_import extends class_base implements warehouse_import_if
 
 					// save rundum
 					// get rundum imnr from html
-				//	preg_match_all("/javascript:setnewRUA\('format360\/(.*)', \d+\);/imsU", $r_html, $mt, PREG_PATTERN_ORDER);
 					preg_match_all("/writeFlashCode_superzoom3d\('(.*)'\);/imsU", $r_html, $mt, PREG_PATTERN_ORDER);
 
 					$flash_file_urls = $mt[1];
@@ -5405,6 +5436,10 @@ class otto_import extends class_base implements warehouse_import_if
 						$flash_file_name = basename($flash_file_url);
 
 						$flash_file_url .= '.swf';
+
+
+						// NEW for new import
+						$return_images[] = $flash_file_url;
 
 						$video_download_result = $this->get_video(array(
 							'source' => $flash_file_url,
@@ -5425,17 +5460,140 @@ class otto_import extends class_base implements warehouse_import_if
 				}
 			}
 		}
-		return true;
+	//	return true;
+		return $return_images;
 	}
 
+	function get_images_from_otto($arr)
+	{
+		$return_images = array();
+
+		$pcode = $arr['pcode'];
+		$import_obj = $arr['import_obj'];
+		$start_time = $arr['start_time'];
+
+		$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
+
+		echo "[ OTTO ] Loading <a href=\"$url\">page</a> content ... ";
+		flush();
+
+		$html = $this->file_get_contents($url);
+
+		echo "[ OK ]<br />\n";
+		flush();
+
+		// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
+
+		if (strpos($html,"Leider konnten wir") !== false)
+		{
+			echo "[ OTTO ] Can't find an product for <b>$pcode</b> from otto.de, return false<br>\n";
+			return false;
+		}
+		else
+		{
+			$o_html = $html;
+
+			// just for not, this kind of search happens when one searches for a product code
+			// it seems, that if the search is made by string (for example 'bikini'), then there won't be such
+			// javascript transition page and it is shown just a list of products, so in that case it should be handled
+			// differently. But maybe there won't be such a case and therefore let it be for now.
+			preg_match_all("/function goon\(\) \{(.*)\}/imsU", $html, $mt, PREG_PATTERN_ORDER);
+			$js_code = $mt[1][0];
+			
+			$pattern = "/\" \+ encodeURIComponent\(\"(.*)\"\)/U";
+
+			preg_match_all($pattern, $js_code, $m);
+			foreach ($m[0] as $k => $v)
+			{
+			        $js_code = str_replace($m[0][$k], urlencode($m[1][$k]).'"', $js_code);
+			}
+			$pattern = "/\"(.*)\"/U";
+			preg_match_all($pattern, $js_code, $m);
+
+			$urld[] = implode('', $m[1]);
+
+			foreach($urld as $url)
+			{
+				echo "[ OTTO ] Searching pictures from <a href=\"$url\">url</a> <br />\n";
+				$html = $this->file_get_contents($url);
+
+				if (!preg_match_all("/<img id=\"mainimage\" src=\"(.*)\.jpg\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
+				{
+					echo "[ OTTO ] If we can't find image from otto.de product view, then return false <br />\n";
+					return false;
+				}
+
+				// we need that connecting picture:
+				$connection_image = '';
+				$pattern = "/<img width=.* title=.* src=\"http:\/\/image01\.otto\.de:80\/pool\/ov_formatg\/(.*)\.jpg\"/imsU";
+				if (preg_match($pattern, $html, $matches ))
+				{
+					$connection_image = $matches[1];
+					if (!empty($connection_image))
+					{
+						$return_images[] = 'http://image01.otto.de:80/pool/formata/'.$connection_image.'.jpg';
+					}
+				}
+
+				foreach($mt[1] as $idx => $img)
+				{
+					if (strpos($img, 'leer.gif') !== false )
+					{
+						echo "[ OTTO ] tundub, et sellele variandile pilti ei ole <br>\n";
+						continue;
+					}
+					$imnr = basename($img, ".jpg");
+
+					if (file_get_contents(str_replace($imnr, $imnr.'.jpg', $img)) === false)
+					{
+						echo "[ OTTO ] selle variandi pilti ei &otilde;nnestu k&auml;tte saada<br />\n";
+						continue;
+					}
+
+					echo "[ OTTO ] ".$imnr."<br>\n";
+
+					// NEW for new import
+					$return_images[] = 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg';
+				}
+
+				// check for rundumanshiftph (flash)
+				if (strpos($html, "rundum_ansicht") !== false)
+				{
+					echo "[ OTTO ] video ";
+
+					$pattern = "/'".preg_quote("http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_DisplayProductInformation-SuperZoom3D;", "/").".*'/imsU";
+					preg_match_all($pattern, $html, $mt, PREG_PATTERN_ORDER);
+					$popup_url = str_replace("'", "", $mt[0][0].$f_imnr);
+					echo " - from <a href=\"".$popup_url."\">url</a>";
+
+					// get the rundum image number from the popup :(
+					$r_html = file_get_contents($popup_url);
+
+					// save rundum
+					// get rundum imnr from html
+					preg_match_all("/writeFlashCode_superzoom3d\('(.*)'\);/imsU", $r_html, $mt, PREG_PATTERN_ORDER);
+
+					$flash_file_urls = $mt[1];
+					foreach ($flash_file_urls as $flash_file_url)
+					{
+						$flash_file_name = basename($flash_file_url);
+
+						$flash_file_url .= '.swf';
+
+						// NEW for new import
+						$return_images[] = $flash_file_url;
+					}
+					echo "<br /> \n";
+				}
+			}
+		}
+
+		return $return_images;
+	}
 	function read_img_from_baur($arr)
 	{
 		$pcode = str_replace(" ", "", $arr['pcode']);
 		$import_obj = $arr['import_obj'];
-
-	//	$url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/BaurDe/de_DE/-/EUR/BV_ParametricSearch-Progress;sid=9wziDKL5zmzox-N_94eyWWD0hj6lQBejDB2TPuW1?ls=0&_PipelineID=search_pipe_bbms&_QueryClass=MallSearch.V1&Servicelet.indexRetrieverPipelet.threshold=0.7&Orengelet.sortPipelet.sortResultSetSize=10&Query_Text=".$pcode."&Kategorie_Text=&x=23&y=13";
-
-	//	$url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/Baur-BaurDe-Site/de_DE/-/EUR/BV_ParametricSearch-Progress;sid=9wziDKL5zmzox-N_94eyWWD0hj6lQBejDB2TPuW1?ls=0&_PipelineID=search_pipe_bbms&_QueryClass=MallSearch.V1&Servicelet.indexRetrieverPipelet.threshold=0.7&Orengelet.sortPipelet.sortResultSetSize=10&Query_Text=".$pcode."&Kategorie_Text=&x=23&y=13";
 
 		$url = "http://suche.baur.de/servlet/weikatec.search.SearchServletMmx?ls=0&source=&resultsPerPage=99&searchandbrowse=&category2=&query=".$pcode."&category=";
 
@@ -5445,22 +5603,11 @@ class otto_import extends class_base implements warehouse_import_if
 //		if (strpos($fc, "leider keine Artikel gefunden") !== false)
 		if ( (strpos($fc, "search/topcontent/noresult_slogan.gif") !== false) || (strpos($fc, "Entschuldigung,<br>diese Seite konnte nicht gefunden werden.") !== false) || true) // xxx disable baur import for now
 		{
-		/*
-			echo "[ BAUR ] Can't find a product for <b>$pcode</b> from baur.de, so searching from schwab<br>\n";
-			return $this->read_img_from_schwab(array(
-				'pcode' => $pcode,
-				'import_obj' => $import_obj
-			));
-		*/
 			echo "[ BAUR ] Can't find a product for <b>$pcode</b> from baur.de, so return false<br>\n";
 			return false;
 
 		}
 
-//		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
-//		preg_match_all("/ProductRef=(\d.*)\"/ims", $fc, $mt, PREG_PATTERN_ORDER);
-//		preg_match_all("/ProductRefID=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
-//		preg_match_all("/ProductRefID=(\d.*)\"/ims", $fc, $mt, PREG_PATTERN_ORDER);
 		preg_match_all("/redirectIt\( \"(.*)\" \)/ims", $fc, $mt, PREG_PATTERN_ORDER);
 
 		$pcs = array_unique($mt[1]);
@@ -5554,6 +5701,8 @@ class otto_import extends class_base implements warehouse_import_if
 
 	function read_img_from_schwab($arr)
 	{
+		echo "[ SCHWAB ] - product search url is changed <br />\n";
+		return false;
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
 
@@ -5817,6 +5966,9 @@ class otto_import extends class_base implements warehouse_import_if
 
 	function read_img_from_heine($arr)
 	{
+		echo "[ HEINE ] - product search url is changed <br />\n";
+		return false;
+
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
 		$product_page_urls = array();
@@ -6661,10 +6813,75 @@ class otto_import extends class_base implements warehouse_import_if
 		$xml_file_path = aw_ini_get('site_basedir').'/files/warehouse_import/products.xml';
 		// This is for warehouse import to get the XML file which the warehouse import will be able to import 
 
-		// this is very temporary thing here - I need to have the otto import object id here, so i can get the configured CSV files or the location of csv files
-		$o = new object(354877);
+		// TODO: I need a better way to have otto import object id here
+		$otto_import_ol = new object_list(array(
+			'class_id' => CL_OTTO_IMPORT
+		));
+		$o = $otto_import_ol->begin();
+
 		$this->import_data_from_csv($o);
 
+/*
+// üks variant kuidas see toodete xml välja võiks näha
+<products>
+	<product>
+		<name />
+		<desc />
+		<categories>
+			<category />
+			<category />
+			<category />
+		</categories>
+		<colors>
+			<color>
+				<code />
+				<color_name />
+				<sizes>
+					<size>
+						<size_name />
+						<price />
+					</size>
+				</sizes>
+			</color>
+		</colors>
+	</product>
+</products>
+
+teine variant oleks teha xml selline, et vastaks aw objektidele (<packet><product></packagin>) jne.
+Esimese puhul oleks ülesehitus vast loogilisem, aga siis peaks kuidagi konfitavaks tegema selle, et 
+milliste parent tagide järgi packette/tooteid/pakeneid tekitatakse (või kas üldse tehakse)
+
+<warehouse_data>
+	<packet>
+		<page /> 
+		<nr />
+		<name />
+		<description />
+		<categories>
+			<category />
+		</categories>
+		<products>
+			<page />
+			<nr />
+			<type />
+			<color />
+			<code />
+			<product>
+				<packagings>
+					<page />
+					<nr />
+					<type />
+					<size />
+					<price />
+				</packagings>
+			</product>
+		</product>
+	</packet>
+</warehouse_data>
+
+Võtn hetkel kasutusele selle teise variandi
+
+*/
 		$oxml = new XMLWriter();
 	//	$oxml->openMemory();
 		$oxml->openURI($xml_file_path);
@@ -6676,13 +6893,21 @@ class otto_import extends class_base implements warehouse_import_if
 		{
 			$prod = $this->convert_utf($prod);
 
+
 			$oxml->startElement('packet');
+
 			$oxml->writeElement('page', $prod['pg']);
 			$oxml->writeElement('nr', $prod['nr']);
-			$oxml->endElement();
 
 			$oxml->startElement('name');
 			$oxml->writeCData($prod['title']);
+			$oxml->endElement();
+
+			$oxml->startElement('categories');
+			foreach (explode(',', $prod['extrafld']) as $extrafld)
+			{
+				$oxml->writeElement('category', $extrafld);
+			}
 			$oxml->endElement();
 
 			$oxml->startElement('description');
@@ -6691,6 +6916,7 @@ class otto_import extends class_base implements warehouse_import_if
 
 			echo "- ".$prod['pg'].' -- '.$prod['nr'].' -- '.$prod['title']."<br />\n";
 			$codes = $this->db_fetch_array("select * from otto_imp_t_codes where lang_id = ". aw_global_get("lang_id")." and pg = '". $prod["pg"]."' and nr = ".$prod["nr"]." order by pg,nr,s_type" );
+			$oxml->startElement('products');
 			foreach (safe_array($codes) as $code)
 			{
 
@@ -6714,10 +6940,30 @@ class otto_import extends class_base implements warehouse_import_if
 				$oxml->writeCData($code['code']);
 				$oxml->endElement();
 
+				// here i have product code and now i should perform images search
+				$imgs = $this->otto_picture_import(array(
+					'pcode' => $code['code'],
+					'import_obj' => $o,
+					'start_time' => time(),
+				));
+				if (empty($imgs))
+				{
+					echo "[NO IMAGES FOUND FOR THIS PRODUCT]<br />\n";
+				}
+				$oxml->startElement('images');
+				foreach (safe_array($imgs) as $img)
+				{
+					$oxml->startElement('image');
+					$oxml->writeCData($img);
+					$oxml->endElement();
+				}
 				$oxml->endElement();
 
 				echo "---- ".$code['pg']." -- ".$code['nr']." -- ".$code['s_type']." -- ".$code['code']." -- ".$code['color']."<br />\n";
 				$sizes = $this->db_fetch_array("select * from otto_imp_t_prices where lang_id = ".aw_global_get("lang_id")." and pg = '".$code['pg']."' and nr = ".$code['nr']." and s_type = '".$code['s_type']."' order by pg,nr,s_type");
+
+				$oxml->startElement('packagings');
+
 				foreach ($sizes as $size)
 				{
 
@@ -6729,12 +6975,12 @@ class otto_import extends class_base implements warehouse_import_if
 					{
 						$oxml->startElement('packaging');
 
-						$oxml->writeElement('page', $code['pg']);
+						$oxml->writeElement('page', $size['pg']);
 
-						$oxml->writeElement('nr', $code['nr']);
+						$oxml->writeElement('nr', $size['nr']);
 
 						$oxml->startElement('type');
-						$oxml->writeCData($code['s_type']);
+						$oxml->writeCData($size['s_type']);
 						$oxml->endElement();
 
 						$oxml->writeElement('price', $size['price']);
@@ -6748,23 +6994,19 @@ class otto_import extends class_base implements warehouse_import_if
 						echo "------------ ".$s."<br />\n";
 					}
 				}
+
+				$oxml->endElement(); // packagings
+
+				$oxml->endElement(); // product tag
 			}
+			$oxml->endElement(); // products tag
+
+			$oxml->endElement(); // packet tag
 		}
 
-		$oxml->endElement();
+		$oxml->endElement(); // warehouse_data tag
 
 		return $xml_file_path;
-
-	//	arr(htmlentities($oxml->outputMemory()));
-		/*
-		$csv_files = array(
-			'EST.AA001',
-			'EST.AA004',
-			'EST.AA006',
-			'EST.AA008'
-		);
-		$csv_files_location = '/www/otto.dev.automatweb.com/files/csv';
-		*/
 	}
 
 	function convert_utf($arr)
@@ -6782,7 +7024,16 @@ class otto_import extends class_base implements warehouse_import_if
 	}
 
 	// for warehouse interface:
-	public function get_warehouse_list(){}
+	public function get_warehouse_list()
+	{
+		return array(
+			1 => array(
+				'name' => t('OTTO Eesti ladu'),
+				'info' => t('draiver')
+			)
+		);
+	}
+
 	public function get_pricelist_xml(){}
 	public function get_prices_xml(){}
 	public function get_dnotes_xml(){}
