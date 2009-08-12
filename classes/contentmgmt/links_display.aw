@@ -36,6 +36,7 @@ class links_display
 			"caption" => str_replace("&", "&amp;", $caption),
 			"target" => $target,
 			"img" => $this->img,
+			"img_url" => $this->img,
 			"real_link" => str_replace("&", "&amp;", $this->real_link),
 			"alt" => $alt,
 			"comment" => $this->cur_link->comment()
