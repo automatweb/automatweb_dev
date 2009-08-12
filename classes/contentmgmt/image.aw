@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.51 2009/08/09 21:25:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.52 2009/08/12 08:43:47 dragut Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1480,7 +1480,14 @@ class image extends class_base
 			none			
 
 		@returns 
-			array with image data (image object id, image url and image size)
+			array with image data:
+
+			Array
+			(
+				[id] => Image object id
+				[url] => Image url
+				[sz] => Image size
+			)
 
 		@comment 
 			none
