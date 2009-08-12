@@ -6,22 +6,30 @@
 @default table=aw_products_show
 @default group=general
 
+	@property packets type=relpicker multiple=1 store=connect reltype=RELTYPE_PACKET
+	@caption Paketid
+	@comment Paketid, mida kuvatakse
 
-@property categories type=relpicker multiple=1 store=connect reltype=RELTYPE_CATEGORY 
-@caption Tootekategooriad
-@comment Tootekategooriad millesse toode peaks kuuluma, et teda kuvataks
+	@property categories type=relpicker multiple=1 store=connect reltype=RELTYPE_CATEGORY 
+	@caption Tootekategooriad
+	@comment Tootekategooriad millesse toode peaks kuuluma, et teda kuvataks
 
-@property template type=select
-@caption Toodete n&auml;itamise template
+	@property template type=select
+	@caption Toodete n&auml;itamise template
 
-@property product_template type=select
-@caption &Uuml;he toote n&auml;itamise templeit
+	@property product_template type=select
+	@caption &Uuml;he toote n&auml;itamise templeit
 
-@property type type=select
-@caption N&auml;idatavad klassi t&uuml;&uuml;bid
+	@property type type=select
+	@caption N&auml;idatavad klassi t&uuml;&uuml;bid
+
+### RELTYPES
 
 @reltype CATEGORY value=1 clid=CL_SHOP_PRODUCT_CATEGORY
 @caption Tootekategooria
+
+@reltype PACKET value=2 clid=CL_SHOP_PACKET
+@caption Pakett
 
 
 

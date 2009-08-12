@@ -46,6 +46,10 @@ class products_show_obj extends _int_object
 			$ol->add($products);
 
 		}
+		foreach($this->prop("packets") as $packet)
+		{
+			$ol->add($packet);
+		}
 		return $ol;
 
 
