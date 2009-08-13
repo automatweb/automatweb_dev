@@ -87,16 +87,16 @@
 
 @default group=payment1
 
-	@property web_discount type=textbox size=5
+	@property web_discount type=textbox size=5 user=1
 	@caption Veebis allahindlus (%)
 
-	@property data_form_discount type=select
+	@property data_form_discount type=select user=1
 	@caption Allahindluse element andmete vormis
 
-	@property rent_prop type=select
+	@property rent_prop type=select user=1
 	@caption Elemendi
 
-	@property rent_prop_val type=textbox
+	@property rent_prop_val type=textbox user=1
 	@caption v&auml;&auml;rtus j&auml;relmaksuks
 
 	## SEE ON VANA ASI, LIHTSALT 2RA KAOTADA EI TOHI!
@@ -2165,7 +2165,7 @@ class shop_order_center extends class_base
 	public function callback_generate_scripts($arr)
 	{
 		$js = "";
-		if($arr["request"]["group"] == "appear" || $arr["request"]["group"] == "appearance")
+		if(in_array(automatweb::$request->arg("group"), array("appear", "appearance")))
 		{
 			$js.= "
 				function set_sel_prop(property , value)
@@ -2347,7 +2347,12 @@ class shop_order_center extends class_base
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
-		 
+
+		$t->define_field(array(
+			"name" => "code",
+			"caption" => t("Kood"),
+		));
+
 		$filter = array(
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 			"lang_id" => array(),
@@ -2371,6 +2376,7 @@ class shop_order_center extends class_base
 			$t->define_data(array(
 				"oid" => $o->id(),
 				"name" => $o->name(),
+				"code" => $o->prop("code"),
 				"choose" => html::href(array(
 					"caption" => t("Vali see"),
 					"url" => $this->mk_my_orb("search_categories",
@@ -2439,7 +2445,7 @@ class shop_order_center extends class_base
 						switch($key)
 						{
 							case "active":
-								$o->set_prop("status" , $val);arr($val);
+								$o->set_prop("status" , $val);
 								$o->save();
 								break;
 							case "type":

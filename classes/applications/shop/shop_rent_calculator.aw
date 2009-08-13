@@ -34,23 +34,32 @@ class shop_rent_calculator extends class_base
 
 	public function show($arr)
 	{
+		load_javascript("applications/shop/rent_calculator.js");
 		$this->read_template("show.tpl");
 
 		$o = new object($arr["id"]);
-		$soc = obj($o->prop("shop"));
+		$shop = obj($o->prop("shop"));
 
 		$rent = array_merge(array("rent_period" => "", "sum_core" => ""), safe_array(aw_global_get("rent_calculator")));
+		$rent_conditions = obj($shop->get_rent_conditions(array(
+			"sum" => $rent["sum_core"],
+			"currency" => 354831,
+		)));
 
-		if($soc->is_a(CL_SHOP_ORDER_CENTER))
+		if($shop->is_a(CL_SHOP_ORDER_CENTER))
 		{
 			$RENT_PERIOD_OPTION = "";
-			foreach($soc->rent_periods() as $rent_period)
+			if($rent_conditions->is_a(CL_SHOP_RENT_CONDITIONS))
 			{
-				$this->vars(array(
-					"rent_period_value" => $rent_period,
-				));
-				$RENT_PERIOD_OPTION .= $this->parse("RENT_PERIOD_OPTION".($rent_period == $rent["rent_period"] ? "_SELECTED" : ""));
+				foreach($rent_conditions->rent_periods() as $rent_period)
+				{
+					$this->vars(array(
+						"rent_period_value" => $rent_period,
+					));
+					$RENT_PERIOD_OPTION .= $this->parse("RENT_PERIOD_OPTION".($rent_period == $rent["rent_period"] ? "_SELECTED" : ""));
+				}
 			}
+
 			$this->vars(array(
 				"id" => $o->id(),
 				"sum_core" => ifset($rent, "sum_core"),
@@ -98,11 +107,19 @@ class shop_rent_calculator extends class_base
 	public function calculate($arr)
 	{
 		$o = obj($arr["id"]);
-		$soc = obj($o->prop("shop"));
+		$shop = obj($o->prop("shop"));
+		$rent = array();
 
-		if($soc->is_a(CL_SHOP_ORDER_CENTER))
+		if($shop->is_a(CL_SHOP_ORDER_CENTER))
 		{
-			$rent = $soc->calculate_rent(ifset($arr["sum_core"]), ifset($arr["rent_period"]));
+			$rent_conditions = obj($shop->get_rent_conditions(array(
+				"sum" => isset($arr["sum_core"]) ? aw_math_calc::string2float($arr["sum_core"]) : 0,
+				"currency" => 354831,
+			)));
+			if($rent_conditions->is_a(CL_SHOP_RENT_CONDITIONS))
+			{
+				$rent = $rent_conditions->calculate_rent(ifset($arr["sum_core"]), ifset($arr["rent_period"]));
+			}
 		}
 
 		$rent = array_merge($rent, array(
@@ -114,22 +131,35 @@ class shop_rent_calculator extends class_base
 		return !empty($arr["post_ru"]) ? $arr["post_ru"] : $_SERVER["HTTP_REFERER"];
 	}
 
-	function do_db_upgrade($t, $f)
+	/**
+		@attrib name=get_rent_periods api=1
+		@param id required type=int acl=view
+			OID of rent calculator object
+		@param sum optional type=float
+		@param format optional type=string
+			[json]
+	**/
+	public function get_rent_periods($arr)
 	{
-		if ($f == "")
+		$o = obj($arr["id"]);
+		$shop = obj($o->prop("shop"));
+		$ret = array();
+
+		if($shop->is_a(CL_SHOP_ORDER_CENTER))
 		{
-			$this->db_query("CREATE TABLE aw_shop_rent_calculator(aw_oid int primary key)");
-			return true;
+			$rent_conditions = obj($shop->get_rent_conditions(array(
+				"sum" => isset($arr["sum"]) ? aw_math_calc::string2float($arr["sum"]) : 0,
+				"currency" => 354831,
+			)));
+			if($rent_conditions->is_a(CL_SHOP_RENT_CONDITIONS))
+			{
+				$ret = $rent_conditions->rent_periods();
+			}
 		}
 
-		switch($f)
+		if($arr["format"] === "json")
 		{
-			case "":
-				$this->db_add_col($t, array(
-					"name" => $f,
-					"type" => ""
-				));
-				return true;
+			die(json_encode($ret));
 		}
 	}
 }

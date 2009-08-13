@@ -132,60 +132,6 @@ class shop_order_center_obj extends _int_object
 	}
 
 	/**
-		Returns array of all possible rent periods
-	**/
-	public function rent_periods()
-	{
-		$periods = array();
-
-		for($i = $this->prop("rent_months_min"); $i <= $this->prop("rent_months_max"); $i += $this->prop("rent_months_step"))
-		{
-			$periods[$i] = $i;
-		}
-
-		return $periods;
-	}
-
-	/**
-		@attrib params=name
-
-		@param core_sum required type=float
-
-		@param rent_period required type=int
-
-		@param precision optional type=int default=2
-	**/
-	public function calculate_rent($core_sum, $period, $precision = 2)
-	{
-		if($core_sum < $this->prop("rent_min_amt"))
-		{
-			return array(
-				"error" => sprintf(t("Minimaalne lubatud summa j&auml;relmaksuks on %s!"), $this->prop("rent_min_amt")),
-			);
-		}
-
-		if($core_sum > $this->prop("rent_max_amt"))
-		{
-			return array(
-				"error" => sprintf(t("Maksimaalne lubatud summa j&auml;relmaksuks on %s!"), $this->prop("rent_max_amt")),
-			);
-		}
-
-		if(!in_array($period, $this->rent_periods()))
-		{
-			return array(
-				"error" => t("Valitud j&auml;relmaksuperiood ei ole lubatud!"),
-			);
-		}
-
-		return array(
-			"prepayment" => $prepayment = round($core_sum * $this->prop("rent_prepayment_interest") / 100, $precision),
-			"single_payment" => $single_payment = round(max($core_sum - $prepayment, 0) * (1 + $this->prop("rent_interest") / 12 / 100 * $period) / $period, $precision),
-			"sum_rent" => $single_payment * $period + $prepayment,
-		);
-	}
-
-	/**
 		@attrib api=1
 	**/
 	public function get_cart()
@@ -241,4 +187,50 @@ class shop_order_center_obj extends _int_object
 			return $ol->count() > 0 ? $ol->begin() : FALSE;
 		}
 	}
+
+	public function get_product_show_obj($menu, $make_new = false)
+	{
+		$o = "";
+		$docs = new object_list(array(
+			"class_id" => CL_DOCUMENT,
+			"parent" => $menu,
+			"lang_id" => array(),
+		));
+		$doc = $docs->count() ? $docs->begin() : "";
+		if(!is_object($doc) && $make_new)
+		{
+			$doc = new object();
+			$doc->set_class_id(CL_DOCUMENT);
+			$doc->set_parent($menu);
+			$doc->set_name($menu);
+			$doc->save();
+		}
+		if(is_object($doc))
+		{
+			foreach($doc->connections_from(array("to.class_id" => CL_PRODUCTS_SHOW)) as $c)
+			{
+				$o = $c->to();
+				break;
+			}
+			if(!is_object($o) && $make_new)
+			{
+				$o = new object();
+				$o->set_class_id(CL_PRODUCTS_SHOW);
+				$o->set_parent($menu);
+				$o->set_name($menu." ".t("toodete n&auml;itamine"));
+				$o->set_prop("oc" , $this->id());
+				$o->save();
+				$doc->set_prop("content" , $doc->prop("content")."#show_products1#");
+				$doc->save();
+				$doc->connect(array(
+					"type" => "RELTYPE_ALIAS",
+					"to" => $o->id(),
+				));
+			}
+		}
+		return $o;
+	}
+
+
+
 }

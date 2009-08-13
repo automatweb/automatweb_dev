@@ -2,12 +2,12 @@
 	<table>
 		<tr>
 			<td>Kataloogihind:</td>
-			<td><input type="text" name="sum_core" value="{VAR:sum_core}" /></td>
+			<td><input type="text" name="sum_core" id="sum_core" value="{VAR:sum_core}" /></td>
 		</tr>
 		<tr>
 			<td>J&auml;relmaksuperiood:</td>
 			<td>
-				<select name="rent_period">
+				<select name="rent_period" id="rent_period">
 					<!-- SUB: RENT_PERIOD_OPTION -->
 						<option value="{VAR:rent_period_value}">{VAR:rent_period_value}</option>
 					<!-- END SUB: RENT_PERIOD_OPTION -->
@@ -36,7 +36,7 @@
 			<td><b>Sissemakse</b></td>
 			<td><b>Osamakseid</b></td>
 			<td><b>Osamakse suurus</b></td>
-			<td><b>Hind järelmaksuga</b></td>
+			<td><b>Hind j&auml;relmaksuga</b></td>
 		</tr>
 		<tr>
 			<td>{VAR:sum_core}</td>
