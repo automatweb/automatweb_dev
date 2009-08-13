@@ -10,7 +10,7 @@ $priorities = array(
 <!-- END SUB: PRIORITIES -->
 );
 
-$rows = array();
+$rows = array(0);
 foreach($args["rows"] as $row)
 {
 	$rows[$row] = isset($priorities[$row]) ? $priorities[$row] : 0;

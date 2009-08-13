@@ -343,6 +343,8 @@ jQuery(document).ready(function(){
 
 		#### ROWS
 		$arr["matrix_data"] = safe_array($arr["matrix_data"]);
+		$arr["matrix"]["names"]["default"] = t("*");
+		self::draw_matrix_add_row($t, array("default" => array()), $arr, 0);
 		self::draw_matrix_add_row($t, safe_array($arr["matrix"]["rows"]["products"]), $arr, 0);
 	}
 
@@ -355,10 +357,10 @@ jQuery(document).ready(function(){
 			{
 				$data[$field["name"]] = is_callable($arr["data_cell_callback"]) ? $arr["data_cell_callback"][0]->$arr["data_cell_callback"][1]($row, $field, $arr["matrix_data"]) : "";
 			}
-			$data["name"] = str_repeat("&nbsp; ", $depth * 2).html::img(array(
+			$data["name"] = str_repeat("&nbsp; ", $depth * 2).(isset($arr["matrix"]["clids"][$row]) ? html::img(array(
 				"url" => icons::get_icon_url($arr["matrix"]["clids"][$row]),
 				"border" => 0
-			))."&nbsp;".parse_obj_name($arr["matrix"]["names"][$row]);
+			)) : "")."&nbsp;".parse_obj_name($arr["matrix"]["names"][$row]);
 			if(!empty($data_callback) && is_callable($arr["data_callback"]))
 			{
 				$arr["data_callback"][0]->$arr["data_callback"][1](&$t, &$data);

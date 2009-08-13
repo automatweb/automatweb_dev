@@ -281,6 +281,7 @@ class shop_price_list extends shop_matrix
 		foreach($odl->arr() as $cond)
 		{
 			$cond["col"] = is_oid($cond["col"]) ? $cond["col"] : "default";
+			$cond["row"] = is_oid($cond["row"]) ? $cond["row"] : "default";
 			$matrix[$cond["row"]][$cond["col"]]["type"] = $cond["type"];
 			$matrix[$cond["row"]][$cond["col"]]["value"] = $cond["value"];
 			$matrix[$cond["row"]][$cond["col"]]["bonus"] = $cond["bonus"];

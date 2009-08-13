@@ -17,10 +17,10 @@ class shop_delivery_method_obj extends shop_matrix_obj
 	/**
 		@attrib name=price params=name
 
-		@param shop required type=int acl=view
-			The OID of the shop_order_center object
-		@param product optional type=int acl=view
-			The OID of the product
+		@param product_packaging optional type=int/array acl=view
+			The OID(s) of the product packagings
+		@param product optional type=int/array acl=view
+			The OID(s) of the product
 		@param amount optional type=float default=1
 			The amount of the product prices are asked for
 		@param product_category optional type=array/int acl=view
@@ -35,8 +35,6 @@ class shop_delivery_method_obj extends shop_matrix_obj
 			OIDs of customer categories.
 		@param location optional type=array/int acl=view
 			OIDs of locations
-		@param structure optional type=bool default=false
-			If set, the structure of the prices will be returned, otherwise only the final prices will be returned.
 	**/
 	public function valid($arr)
 	{

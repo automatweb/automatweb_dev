@@ -100,7 +100,6 @@ class shop_matrix_obj extends _int_object
 				$matrix["rows"]["products"] = self::matrix_sort_lvl($matrix["rows"]["products"], $matrix["priorities"]);
 			}
 
-			$matrix["parents"] = array();
 			self::get_matrix_structure_parents($matrix["rows"]["products"] + $matrix["cols"]["customers"] + $matrix["cols"]["locations"] + $matrix["rows"]["products"], $matrix["parents"]);
 
 			$retval[$o->id()] = $matrix;

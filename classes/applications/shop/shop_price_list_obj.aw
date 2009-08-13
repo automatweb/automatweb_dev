@@ -114,10 +114,6 @@ class shop_price_list_obj extends shop_matrix_obj
 		{
 			throw $e;
 		}
-		if(!empty($_GET["debug"]))
-		{
-			arr(obj($arr["shop"])->get_customer_data());
-		}
 
 		enter_function("shop_price_list_obj::price");
 		/**
@@ -387,7 +383,25 @@ class shop_price_list_obj extends shop_matrix_obj
 
 		$this->set_prop("code", $i->parse());
 		$this->save();
-//		arr($i->parse(), true, true);
+		$shop_order_cart = obj(354887);
+		arr($shop_order_cart->delivery_methods(array(
+			"product" => array(),
+			"product_packaging" => array(),
+		)));
+		$shop_aka_shop_order_center = obj(354886);
+		arr($shop_aka_shop_order_center->get_rent_conditions(array(
+			"sum" => 5000,
+			"currency" => 354831,
+		)));
+		arr(shop_price_list_obj::price(array(
+			"shop" => 354886,
+			"product" => 360048,
+			"prices" => array(
+				354831 => 1000,
+			),
+			"structure" => true,
+		)));
+		arr($i->parse(), true, true);
 	}
 
 	protected function update_code_handle_quantities($str)

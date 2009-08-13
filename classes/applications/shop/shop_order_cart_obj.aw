@@ -3,20 +3,28 @@
 class shop_order_cart_obj extends _int_object
 {
 	/**
-		@attrib name=price params=name
+		@attrib params=name
 
-		@param product required type=int acl=view
-			The OID of the product
+		@param product_packaging optional type=int/array acl=view
+			The OID(s) of the product packagings
+		@param product optional type=int/array acl=view
+			The OID(s) of the product
 		@param amount optional type=float default=1
 			The amount of the product prices are asked for
 		@param product_category optional type=array/int acl=view
 			OIDs of product categories
+		@param prices optional type=float
+			The before prices by currencies
+		@param bonuses optional type=float default=0
+			The before points
 		@param customer_data optional type=int acl=view
 			OID of customer_data object
 		@param customer_category optional type=array/int acl=view
 			OIDs of customer categories.
 		@param location optional type=array/int acl=view
 			OIDs of locations
+
+		@returns object_list of all valid delivery methods
 	**/
 	public function delivery_methods($arr = array())
 	{
@@ -85,7 +93,8 @@ class shop_order_cart_obj extends _int_object
 				"lang_id" => array(),
 				"cart" => $this->id(),
 			));
-			$this->oc = obj(reset($ol->ids()));
+			$ids = $ol->ids();
+			$this->oc = obj(reset($ids));
 			if(!is_object($this->oc))
 			{
 				error::raise(array(
@@ -162,7 +171,11 @@ class shop_order_cart_obj extends _int_object
 	**/
 	public function set_order_data($arr)
 	{
-		$_SESSION["order_data"] = $arr;
+		foreach($arr as $key => $val)
+		{
+			$_SESSION["cart"]["order_data"][$key] = $arr[$key];
+			$_SESSION["cart"]["user_data"][$key] = $arr[$key];//ajutiselt, et vanemates funktsioonides need muutujad ka sisse saaks
+		}
 	}
 
 	/**
@@ -170,7 +183,7 @@ class shop_order_cart_obj extends _int_object
 	**/
 	public function get_order_data()
 	{
-		return $_SESSION["order_data"];
+		return $_SESSION["cart"]["order_data"];
 	}
 
 	/** makes new warehouse sell order object
@@ -213,6 +226,41 @@ class shop_order_cart_obj extends _int_object
 			}
 		}		
 		return $rval;
+	}
+
+	public function remove_product($product)
+	{
+/*Array
+(
+    [items] => Array
+        (
+            [359296] => Array
+                (
+                    [0] => Array
+                        (
+                            [items] => 4
+                        )
+
+                )
+
+            [359294] => Array
+                (
+                    [0] => Array
+                        (
+                            [items] => 11
+                        )
+
+                )
+
+        )
+
+)*/
+		$cart = $this->get_cart();
+		if(isset($cart["items"][$product]))
+		{
+			unset($cart["items"][$product]);
+		}
+		$this->set_cart($cart);
 	}
 }
 

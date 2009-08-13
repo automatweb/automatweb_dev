@@ -143,16 +143,16 @@ class shop_rent_configuration extends shop_matrix
 	{
 		switch($arr["name"])
 		{
-			case "advanced_layer":		
-				$row_obj = obj(automatweb::$request->arg("row"));
+			case "advanced_layer":
 				$row_types = array(
 					CL_SHOP_PRODUCT => t("toote"),
 					CL_SHOP_PRODUCT_CATEGORY => t("tootekategooria"),
 					CL_SHOP_PRODUCT_PACKAGING => t("tootepakendi"),
 					"default" => t(""),
 				);
-				if(is_oid($col = automatweb::$request->arg("col")))
+				if(is_oid($col = automatweb::$request->arg("col")) && is_oid($col = automatweb::$request->arg("row")))
 				{
+					$row_obj = obj(automatweb::$request->arg("row"));
 					$col_obj = obj($col);
 					$col_types = array(
 						CL_CRM_CATEGORY => t("kliendikategooria"),
@@ -166,12 +166,17 @@ class shop_rent_configuration extends shop_matrix
 						parse_obj_name($col_obj->name())
 					);
 				}
-				else
+				elseif(is_oid($col = automatweb::$request->arg("row")))
 				{
+					$row_obj = obj(automatweb::$request->arg("row"));
 					$arr["area_caption"] = sprintf(t("Vaikimisi j&auml;relmaksuseaded %s '%s' jaoks &nbsp;"),
 						isset($row_types[$row_obj->class_id()]) ? $row_types[$row_obj->class_id()] : $row_types["default"],
 						parse_obj_name($row_obj->name())
 					);
+				}
+				else
+				{
+					$arr["area_caption"] = t("Vaikimisi j&auml;relmaksuseaded &nbsp;");
 				}
 				break;
 
@@ -180,9 +185,9 @@ class shop_rent_configuration extends shop_matrix
 				{
 					$o = obj($this->condition);
 					$arr["area_caption"] = sprintf(t("J&auml;relmaksuseaded vahemikus %s %s - %s %s"), 
-						$o->prop("currency.symbol"),
+						$o->prop("currency.name"),
 						$o->prop("min_amt"),
-						$o->prop("currency.symbol"),
+						$o->prop("currency.name"),
 						$o->prop("max_amt")
 					);
 				}
@@ -215,7 +220,7 @@ class shop_rent_configuration extends shop_matrix
 		);
 		foreach($odl->arr() as $oid => $data)
 		{
-			$matrix[$data["row"]][is_oid($data["col"]) ? $data["col"] : "default"] = $oid;
+			$matrix[is_oid($data["row"]) ? $data["row"] : "default"][is_oid($data["col"]) ? $data["col"] : "default"] = $oid;
 		}
 
 		$this->draw_matrix(array(
@@ -331,9 +336,9 @@ class shop_rent_configuration extends shop_matrix
 			$t->add_item(0, array(
 				"id" => (int)$o->id(),
 				"name" => sprintf(t("%s %s - %s %s"), 
-					$o->prop("currency.symbol"),
+					$o->prop("currency.name"),
 					$o->prop("min_amt"),
-					$o->prop("currency.symbol"),
+					$o->prop("currency.name"),
 					$o->prop("max_amt")
 				),
 				"reload" => array(
@@ -372,17 +377,16 @@ class shop_rent_configuration extends shop_matrix
 					"name" => $f,
 					"type" => "text"
 				));
-				$ret = true;
-				break;
+				return true;
 		}
 	}
 
 	/**
 		@attrib name=submit_advanced_layer all_args=1 params=name
-		@param id required type=int
+		@param id required type=int/string
 		@param rent_configuration required type=int
-		@param row required type=int/string acl=view
-		@param col required type=int/string acl=view
+		@param row optional type=int/string
+		@param col optional type=int/string
 		@param currency required type=int acl=view
 	**/
 	public function submit_advanced_layer($arr)
