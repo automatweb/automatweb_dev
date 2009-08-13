@@ -933,6 +933,7 @@ exit_function("bill::balance");
 			case "aw_salesman":
 			case "aw_sales_status":
 			case "aw_lead_source":
+			case "aw_sales_status":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int"
