@@ -14,6 +14,9 @@
 	@caption Tootekategooriad
 	@comment Tootekategooriad millesse toode peaks kuuluma, et teda kuvataks
 
+	@property columns type=textbox
+	@caption Tulpasid
+
 	@property template type=select
 	@caption Toodete n&auml;itamise template
 
@@ -23,6 +26,11 @@
 	@property type type=select
 	@caption N&auml;idatavad klassi t&uuml;&uuml;bid
 
+	@property oc type=relpicker reltype=RELTYPE_OC
+	@caption Tellimiskeskkond
+	@comment veebipood, mille tooteid see n&auml;itamise objekt n&auml;itab
+
+
 ### RELTYPES
 
 @reltype CATEGORY value=1 clid=CL_SHOP_PRODUCT_CATEGORY
@@ -31,6 +39,8 @@
 @reltype PACKET value=2 clid=CL_SHOP_PACKET
 @caption Pakett
 
+@reltype OC value=3 clid=CL_SHOP_ORDER_CENTER
+@caption Tellimiskeskkond
 
 
 */
@@ -174,6 +184,7 @@ class products_show extends class_base
 				));
 				return true;
 			case "type":
+			case "oc":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -190,7 +201,7 @@ class products_show extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		if($this->can("view" , $_GET["product"]))
+		if(!empty($_GET["product"]) && $this->can("view" , $_GET["product"]))
 		{
 			$show_product = obj($_GET["product"]);
 			$instance = get_instance($show_product->class_id());
@@ -208,6 +219,7 @@ class products_show extends class_base
 
 		$products = $ob->get_web_items();
 		$oc = $ob->get_oc();
+		
 		$prod = "";//templeiti muutuja PRODUCT v22rtuseks
 
 		$rows = "";
@@ -224,8 +236,11 @@ class products_show extends class_base
 			));
 
 			$product_data["product_link"] = "/".aw_global_get("section")."?product=".$product_data["id"]."&oc=".$oc->id();
-
-			$this->vars($product_data);
+			$ids = $product->get_categories()->ids();
+			$category = reset($ids);
+			$product_data["menu"] = $ob->get_category_menu($category);
+			$product_data["menu_name"] = get_name($product_data["menu"]);
+			$this->vars($product_data);//arr($product_data);
 
 			$count++;
 			$count_all++;

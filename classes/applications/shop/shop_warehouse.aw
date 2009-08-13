@@ -4926,13 +4926,15 @@ class shop_warehouse extends class_base
 				"return_url" => get_ru()
 			), CL_SHOP_PACKET)
 		));
-
+/*
 		$tb->add_button(array(
 			"name" => "del",
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta valitud"),
 			"url" => "javascript:document.changeform.submit()"
 		));
+*/
+$tb->add_delete_button();
 
 		$tb->add_button(array(
 			"name" => "save",
@@ -5046,7 +5048,7 @@ class shop_warehouse extends class_base
 					"caption" => t("Vii lattu")
 				)),
 				"products" => join(",<br>" , $products),
-				"icon" => icons::get_class_icon(CL_SHOP_PACKET),
+			//	"icon" => icons::get_class_icon(CL_SHOP_PACKET),
 				"categories" => join(", " , $o->get_categories()->names()),
 			));
 		}

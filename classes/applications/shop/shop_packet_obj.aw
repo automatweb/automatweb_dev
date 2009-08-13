@@ -115,7 +115,7 @@ class shop_packet_obj extends _int_object
 	private function get_image_url()
 	{
 		$this->_set_image_object();
-		if(is_object($this->image_object))
+		if(!empty($this->image_object) && is_object($this->image_object))
 		{
 			return $this->image_object->get_url();
 		}		
@@ -125,7 +125,7 @@ class shop_packet_obj extends _int_object
 	private function get_image()
 	{
 		$this->_set_image_object();
-		if(is_object($this->image_object))
+		if(!empty($this->image_object) && is_object($this->image_object))
 		{
 			return $this->image_object->get_html();
 		}		

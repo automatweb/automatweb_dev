@@ -246,13 +246,29 @@ class shop_order_cart extends class_base
 		extract($arr);
 		if(empty($oc) && !empty($arr["cart"]))
 		{
-			$cart = obj($arr["cart"]);
-			$oc = $cart->get_oc();
+			$this->cart = obj($arr["cart"]);
+			$oc = $this->cart->get_oc();
 		}
 		else
 		{
 			$oc = obj($oc);
 		}
+
+		if(empty($this->cart))
+		{
+			$this->cart = obj($oc->prop("cart"));
+		}
+		// get cart to user from oc
+		if (!empty($arr["id"]))
+		{
+			$this->cart = $cart_o = obj($arr["id"]);
+		}
+		else
+		{
+			$this->cart = $cart_o = obj($oc->prop("cart"));
+		}
+
+
 		if(!empty($arr["template"]))
 		{
 			$this->read_template($arr["template"]);
@@ -266,6 +282,9 @@ class shop_order_cart extends class_base
 			$this->read_template("show.tpl");
 		}
 		lc_site_load("shop_order_cart", &$this);
+
+		$this->add_orderer_vars();
+
 		$soce = new aw_array(aw_global_get("soc_err"));
 		$soce_arr = $soce->get();
 		foreach($soce->get() as $prid => $errmsg)
@@ -284,9 +303,12 @@ class shop_order_cart extends class_base
 			));
 			$err .= $this->parse("ERROR");
 		}
-		$this->vars(array(
-			"ERROR" => $err
-		));
+		if(!empty($err))
+		{
+			$this->vars(array(
+				"ERROR" => $err
+			));
+		}
 
 		aw_session_del("soc_err");
 
@@ -295,15 +317,6 @@ class shop_order_cart extends class_base
 			return $this->pre_finish_order($arr);
 		}
 
-		// get cart to user from oc
-		if ($arr["id"])
-		{
-			$cart_o = obj($arr["id"]);
-		}
-		else
-		{
-			$cart_o = obj($oc->prop("cart"));
-		}
 
 		error::raise_if(!$cart_o->prop("prod_layout"), array(
 			"id" => "ERR_NO_PROD_LAYOUT",
@@ -313,6 +326,8 @@ class shop_order_cart extends class_base
 
 		$total = 0;
 		$prod_total = 0;
+		$cart_total = 0;
+		$str = "";
 		$cart = $this->get_cart($oc);
 		$awa = new aw_array($cart["items"]);
 		$show_info_page = true;
@@ -347,7 +362,6 @@ class shop_order_cart extends class_base
 			foreach($carts as $cart_name => $cart_arr)
 			{
 				$prod_str = "";
-				$cart_total = 0;
 				foreach($cart_arr as $iid => $quantx)
 				{
 					$quantx = new aw_array($quantx);
@@ -373,7 +387,7 @@ class shop_order_cart extends class_base
 						$vars["amount"] = $quant["items"];
 						$vars["price"] = $product->get_shop_price();
 						$vars["total_price"] = $quant["items"] * $product->get_shop_price();
-						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("id" => $cart_o->id(), "product" => $i));
+						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
 						$this->vars($vars);
 						$product_str.= $this->parse("PRODUCT");
 
@@ -454,7 +468,7 @@ class shop_order_cart extends class_base
 						$vars["amount"] = $quant["items"];
 						$vars["price"] = $product->get_shop_price();
 						$vars["total_price"] = $quant["items"] * $product->get_shop_price();
-						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("id" => $cart_o->id(), "product" => $i));
+						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
 						$this->vars($vars);
 						$product_str.= $this->parse("PRODUCT");
 
@@ -484,7 +498,7 @@ class shop_order_cart extends class_base
 		$wh_o = obj($oc->prop("warehouse"));
 
 		// fake user data
-		$wh_o->set_meta("order_cur_ud", $cart["user_data"]);
+		if(!empty($cart["user_data"]))	$wh_o->set_meta("order_cur_ud", $cart["user_data"]);
 
 		$els = $swh->callback_get_order_current_form(array(
 			"obj_inst" => $wh_o
@@ -559,7 +573,7 @@ class shop_order_cart extends class_base
 			"prod_total" => number_format($prod_total, 2),
 			"postal_price" => number_format($cart_o->prop("postal_price"),2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array(
-				"oc" => $arr["oc"],
+				"oc" => $oc->id(),
 				"update" => 1,
 				"section" => aw_global_get("section"),//$arr["section"]
 			))
@@ -599,7 +613,7 @@ class shop_order_cart extends class_base
 			"not_logged" => $lln,
 		));
 
-		$this->add_bank_vars($oc, $cart["user_data"]);
+		$this->add_bank_vars($oc, empty($cart["user_data"]) ? null : $cart["user_data"]);
 		$data["cart"] = $cart_o->id();
 		$this->vars($data);
 		return $this->parse();
@@ -611,9 +625,9 @@ class shop_order_cart extends class_base
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $oc->prop("bank_payment");
 		//et pank saaks alati valitud
-		if(!$soce_arr["bank"])
+		if(empty($soce_arr["bank"]))
 		{
-			$soce_arr["bank"] = $_SESSION["cart"]["user_data"]["user9"];
+			$soce_arr["bank"] = empty($_SESSION["cart"]["user_data"]["user9"]) ?  "" : $_SESSION["cart"]["user_data"]["user9"];
 			if($oc->prop("bank_id"))
 			{
 				$soce_arr["bank"] = $uta[$oc->prop("bank_id")];
@@ -1283,13 +1297,16 @@ class shop_order_cart extends class_base
 			// now, get postal_price from cart
 			$params["postal_price"] = $order_cart->prop("postal_price");
 		}
-		$cart = $this->get_cart($oc);
+		$cart = obj($oc->prop("cart"));
+		$params["cart"] = $cart;
+		$params[""] = $cart;
+
+
 		$this->update_user_data_from_order($oc, $warehouse, $params);
 
 		$so->start_order(obj($warehouse), $oc);
 
-		$params["cart"] = $cart;
-		$params[""] = $cart;
+
 
 		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quant)
@@ -2618,12 +2635,11 @@ class shop_order_cart extends class_base
 		$vars = array();
 		foreach($this->orderer_vars as $orderer_var => $caption)
 		{
-			$vars[$orderer_var."_value"] = $data[$orderer_var];
+			$vars[$orderer_var."_value"] = empty($data[$orderer_var]) ? "" : $data[$orderer_var];
 			$vars[$orderer_var."_caption"] = $caption;
 			switch($orderer_var)
 			{
 				case "customer_no":
-				case "birthday":
 				case "lastname":
 				case "firstname":
 				case "address":
@@ -2639,8 +2655,14 @@ class shop_order_cart extends class_base
 				case "personalcode":
 					$vars[$orderer_var] = html::textbox(array(
 						"name" => $orderer_var,
-						"value" => $data[$orderer_var],
+						"value" => $vars[$orderer_var."_value"],
 					));
+					break;
+				case "birthday":
+					$vars["birthday_day_value"] = empty($data[$orderer_var]["day"]) ? t("PP") : $data[$orderer_var]["day"];
+					$vars["birthday_month_value"] = empty($data[$orderer_var]["month"]) ? t("KK") : $data[$orderer_var]["month"];
+					$vars["birthday_year_value"] = empty($data[$orderer_var]["year"]) ? t("AAAA") : $data[$orderer_var]["year"];
+					break;
 			}
 		}
 		$this->vars($vars);
@@ -2648,8 +2670,51 @@ class shop_order_cart extends class_base
 
 	private function add_order_vars()
 	{
-		
 
+		$oc = $this->cart->get_oc();
+		$payment = $delivery = "";
+		$asd = $oc->get_rent_conditions(array(
+			"sum" => 5000,
+			"currency" => 354831,
+			"product" => array(),
+			"product_packaging" => array(),
+		));
+		
+		$delivery_methods_object_list = $this->cart->delivery_methods(array(
+			"product" => array(),
+			"product_packaging" => array(),
+		));
+		if(!is_array($asd))
+		{
+			$asd = array($asd);
+		}
+		foreach($asd as $a)
+		{
+			$this->vars(array(
+				"payment_name" => get_name($a),
+				"payment_id" => $a,
+				"payment_checked" => !empty($data["payment"]) && $data["payment"] == $a ? " checked " : " ",
+			));
+			$payment.= $this->parse("PAYMENT");
+		}
+		$this->vars(array(
+			"PAYMENT" => $payment,
+			"payment_value" => empty($data["payment"]) ? " " : get_name($data["payment"]),
+		));
+
+		foreach($delivery_methods_object_list->names() as $id => $name)
+		{
+			$this->vars(array(
+				"delivery_name" => $name,
+				"delivery_id" => $id,
+				"delivery_checked" =>  !empty($data["delivery"]) && $data["delivery"] == $id ? " checked " : " ",
+			));
+			$delivery.=$this->parse("DELIVERY");
+		}
+		$this->vars(array(
+			"DELIVERY" => $delivery,
+			"delivery_value" => empty($data["delivery"]) ? " " : $data["delivery"],
+		));
 
 	}
 
@@ -2700,9 +2765,23 @@ class shop_order_cart extends class_base
 	public function remove_product($arr)
 	{
 		$cart = obj($arr["cart"]);
-		//$cart -> remove_product($arr["product"]);
+		$cart -> remove_product($arr["product"]);
 		die(1);
 	}
+
+	/**
+		@attrib name=confirm_order nologin="1" params=name
+		@param cart required type=oid
+	**/
+	public function confirm_order($arr)
+	{
+		$cart = obj($arr["cart"]);
+		$order = $cart->create_order();
+		header("Location: /".$order);
+		die();
+		return "/".$order;
+	}
+
 
 	private function _format_calc_price($p)
 	{

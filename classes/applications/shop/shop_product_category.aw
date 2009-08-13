@@ -79,7 +79,7 @@ class shop_product_category extends class_base
 			case "code":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => "int"
+					"type" => "varchar(255)"
 				));
 				return true;
 		}

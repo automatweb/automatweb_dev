@@ -14,6 +14,7 @@ class shop_sell_order_obj extends _int_object
 		return $sum;
 	}
 
+	//price , product , amount
 	public function add_row($data)
 	{
 		$o = new object();
@@ -21,7 +22,11 @@ class shop_sell_order_obj extends _int_object
 		$o->set_name($this->name()." ".t("rida"));
 		$o->set_parent($this->id());
 		$o->set_prop("prod" , $data["product"]);
+		$o->set_prop("prod_name" , get_name($data["product"]));
 		$o->set_prop("items" , $data["amount"]);
+		$o->set_prop("amount" , $data["amount"]);
+		$o->set_prop("price" , $data["price"]);
+		$o->set_prop("date", time());
 		$o->save();
 		$this->connect(array(
 			"to" => $o->id(),

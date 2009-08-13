@@ -25,6 +25,39 @@ class shop_product_category_obj extends _int_object
 		return $ol;
 	}
 
+	/** return categories
+		@attrib api=1
+		@returns
+			object list
+	**/
+	public function get_all_categories()
+	{
+		$ids = array($this->id() => $this->id());
+
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"parent" => $this->id(),
+					"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY" => $this->id(),
+				),
+			)),
+			"sort_by" => "jrk asc, name asc",
+		));
+		foreach($ol->arr() as $o)
+		{
+			$ids[$o->id()] = $o->id();
+			foreach($o->get_all_categories() as $id)
+			{
+				$ids[$id] = $id;
+			}
+		}
+		return $ids;
+	}
+
 	public function get_categories_hierarchy($id = NULL, $depth = NULL)
 	{
 		$retval = array();
@@ -152,8 +185,11 @@ class shop_product_category_obj extends _int_object
 			"class_id" =>CL_SHOP_PACKET,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"CL_SHOP_PACKET.RELTYPE_CATEGORY" =>$this->id(),
+			"CL_SHOP_PACKET.RELTYPE_CATEGORY" => $this->get_all_categories(),
 		);
+		
+
+
 		return new object_list($prms);
 	}
 

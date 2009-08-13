@@ -25,6 +25,14 @@
             <comment>Tootekategooriad millesse toode peaks kuuluma, et teda kuvataks</comment>
       </property>
       <property>
+            <name>columns</name>
+            <table>aw_products_show</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>columns</field>
+            <caption>Tulpasid</caption>
+      </property>
+      <property>
             <name>template</name>
             <table>aw_products_show</table>
             <group>general</group>
@@ -47,6 +55,16 @@
             <type>select</type>
             <field>type</field>
             <caption>N&amp;amp;auml;idatavad klassi t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
+      </property>
+      <property>
+            <name>oc</name>
+            <table>aw_products_show</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OC</reltype>
+            <field>oc</field>
+            <caption>Tellimiskeskkond</caption>
+            <comment>veebipood, mille tooteid see n&amp;amp;auml;itamise objekt n&amp;amp;auml;itab</comment>
       </property>
       <classinfo>
             <syslog_type>ST_PRODUCTS_SHOW</syslog_type>
@@ -74,6 +92,11 @@
                   <clid>CL_SHOP_PACKET</clid>
                   <caption>Pakett</caption>
             </PACKET>
+            <OC>
+                  <value>3</value>
+                  <clid>CL_SHOP_ORDER_CENTER</clid>
+                  <caption>Tellimiskeskkond</caption>
+            </OC>
       </reltypes>
 </properties>
 
