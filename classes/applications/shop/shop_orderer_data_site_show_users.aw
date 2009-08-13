@@ -297,14 +297,46 @@ class shop_orderer_data_site_show_users extends shop_orderer_data_site_show
 				"caption" => t("Telefon")
 			));
 
+			$t->define_field(array(
+				"name" => "group",
+				"caption" => t("Grupp")
+			));
+			
+			$groups = array();
+			foreach($user->get_groups_for_user() as $group)
+			{
+				if($group->name() != $user->name())
+				{
+					$groups[] = $group->name();
+				}
+			}
+			$t->define_data(array(
+			//	"oid" => $user->id(),
+				"uid" => $user->name(),
+				"name" => $user->get_user_name(),
+				"phone" => $user->get_phone(),
+				"email" => $user->get_user_mail_address(),
+				"group" => join(", " ,$groups ),
+			));
+
+
 			foreach($slaves->arr() as $slave)
 			{
+				$groups = array();
+				foreach($slave->get_groups_for_user() as $group)
+				{
+					if($group->name() != $slave->name())
+					{
+						$groups[] = $group->name();
+					}
+				}
 				$t->define_data(array(
 					"oid" => $slave->id(),
 					"uid" => $slave->name(),
 					"name" => $slave->get_user_name(),
 					"phone" => $slave->get_phone(),
 					"email" => $slave->get_user_mail_address(),
+					"group" => join(", " , $groups),
 				));
 			}
 
@@ -324,7 +356,7 @@ $.post('/automatweb/orb.aw?class=shop_orderer_data_site_show_users&action=remove
 			));
 
 
-			$result =  $tb->get_toolbar()."<br>".$t->draw();
+			$result =  $t->draw()."<br>".$tb->get_toolbar();
 		}
 		else
 		{

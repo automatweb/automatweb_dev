@@ -79,7 +79,7 @@
             <caption>Ostukorvi &amp;amp;uuml;he toote vaate templeit</caption>
       </property>
       <property>
-            <name>user_data_template</name>
+            <name>orderer_data_template</name>
             <table>objects</table>
             <group>general</group>
             <type>select</type>

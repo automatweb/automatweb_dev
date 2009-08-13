@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_product" folder="www/dev/terryf/automatweb_dev/classes/applications/shop" extends="class_base">
+	<class name="shop_product" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
 		<action name="delete_replacement_prods_rels">
 			<function name="delete_replacement_prods_rels">
 				<arguments>

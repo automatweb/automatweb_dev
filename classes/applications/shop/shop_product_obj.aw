@@ -386,9 +386,15 @@ class shop_product_obj extends _int_object
 		return $this->categories;
 	}
 
+	/**
+		@attrib api=1 params=pos
+		@param id required type=int/array
+			The OID(s) of products to get the categories for
+		@returns Array of category OIDs for given product(s) OIDs
+	**/
 	public static function get_categories_for_id($id)
 	{
-		if(!is_oid($id))
+		if(empty($id))
 		{
 			return array();
 		}

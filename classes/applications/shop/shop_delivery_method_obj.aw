@@ -19,7 +19,7 @@ class shop_delivery_method_obj extends shop_matrix_obj
 
 		@param shop required type=int acl=view
 			The OID of the shop_order_center object
-		@param product required type=int acl=view
+		@param product optional type=int acl=view
 			The OID of the product
 		@param amount optional type=float default=1
 			The amount of the product prices are asked for
@@ -82,11 +82,21 @@ class shop_delivery_method_obj extends shop_matrix_obj
 			"default" => array(0),
 		);
 
+		if(!isset($arr["product"]))
+		{
+			$arr["product"] = isset($arr["product_packaging"]) ? shop_product_packaging_obj::get_products_for_id($arr["product_packaging"]) : array();
+		}
+
 		if(!isset($arr["product_category"]))
 		{
-			$arr["product_category"] = shop_product_obj::get_categories_for_id($arr["product"]);
+			$arr["product_category"] = isset($arr["product"]) ? shop_product_obj::get_categories_for_id($arr["product"]) : array();
 		}
-		$args["rows"] = array_merge(array($arr["product"]), (array)$arr["product_category"]);
+
+		if(!isset($arr["product_packaging"]))
+		{
+			$arr["product_packaging"] = array();
+		}
+		$args["rows"] = array_merge((array)$arr["product_packaging"], (array)$arr["product"], (array)$arr["product_category"]);
 
 		return $args;
 	}

@@ -3,6 +3,7 @@ class shop_matrix extends class_base
 {
 	public function callback_pre_edit($arr)
 	{
+		$this->obj = $arr["obj_inst"];
 		$this->matrix_structure = $arr["obj_inst"]->get_matrix_structure($arr["obj_inst"]);
 		$this->col_types = array(
 			"locations" => t("Asukohad"),

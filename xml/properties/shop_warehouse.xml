@@ -60,12 +60,11 @@
       </property>
       <property>
             <name>order_center</name>
-            <table>objects</table>
+            <table>aw_shop_warehouses</table>
             <group>general_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ORDER_CENTER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_order_center</field>
             <caption>Tellimiskeskkond tellimuste jaoks</caption>
       </property>
       <property>

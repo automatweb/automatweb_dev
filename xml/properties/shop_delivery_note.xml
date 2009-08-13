@@ -9,12 +9,20 @@
             <caption>Number</caption>
       </property>
       <property>
+            <name>enter_date</name>
+            <table>aw_shop_delivery_note</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>enter_date</field>
+            <caption>Sisestamise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
             <name>delivery_date</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
             <type>date_select</type>
             <field>delivery_date</field>
-            <caption>Kuup&amp;amp;auml;ev</caption>
+            <caption>Kohaletoimetamise kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>from_warehouse</name>
@@ -87,11 +95,18 @@
             <caption>Mahakandmine</caption>
       </property>
       <property>
+            <name>state</name>
+            <table>aw_shop_delivery_note</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_state</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
             <name>approved</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>hidden</type>
             <field>approved</field>
             <caption>Kinnitatud</caption>
       </property>

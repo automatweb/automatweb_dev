@@ -280,10 +280,10 @@
                   <clid>CL_IMAGE</clid>
                   <caption>pilt</caption>
             </IMAGE>
-	     <CATEGORY>
+            <CATEGORY>
                   <value>3</value>
                   <clid>CL_SHOP_PRODUCT_CATEGORY</clid>
-                  <caption>Tootekategooria</caption>
+                  <caption>Kategooria</caption>
             </CATEGORY>
       </reltypes>
 </properties>

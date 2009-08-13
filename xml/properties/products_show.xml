@@ -1,6 +1,18 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>packets</name>
+            <table>aw_products_show</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_PACKET</reltype>
+            <field>packets</field>
+            <caption>Paketid</caption>
+            <comment>Paketid, mida kuvatakse</comment>
+      </property>
+      <property>
             <name>categories</name>
             <table>aw_products_show</table>
             <group>general</group>
@@ -57,6 +69,11 @@
                   <clid>CL_SHOP_PRODUCT_CATEGORY</clid>
                   <caption>Tootekategooria</caption>
             </CATEGORY>
+            <PACKET>
+                  <value>2</value>
+                  <clid>CL_SHOP_PACKET</clid>
+                  <caption>Pakett</caption>
+            </PACKET>
       </reltypes>
 </properties>
 

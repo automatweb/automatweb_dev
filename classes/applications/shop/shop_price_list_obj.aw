@@ -194,12 +194,12 @@ class shop_price_list_obj extends shop_matrix_obj
 	{
 		if(!isset($arr["shop"]) || !is_oid($arr["shop"]))
 		{
-			$e = new awex_price_list_parameter(t("Parameter 'shop' must me a valid OID!"));
+			$e = new awex_price_list_parameter(t("Parameter 'shop' must be a valid OID!"));
 			throw $e;
 		}
 		if((!isset($arr["product"]) || !is_oid($arr["product"])) && (!isset($arr["product_packaging"]) || !is_oid($arr["product_packaging"])))
 		{
-			$e = new awex_price_list_parameter(t("Either parameter 'product' or 'product_packaging' must me a valid OID!"));
+			$e = new awex_price_list_parameter(t("Either parameter 'product' or 'product_packaging' must be a valid OID!"));
 			throw $e;
 		}
 	}

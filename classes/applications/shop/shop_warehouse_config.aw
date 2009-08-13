@@ -1,6 +1,7 @@
 <?php
 /*
 @classinfo syslog_type=ST_SHOP_WAREHOUSE_CONFIG relationmgr=yes maintainer=kristo
+@tableinfo aw_shop_warehouse_config index=aw_oid master_table=objects master_index=brother_of
 
 @default table=objects
 @default group=general
@@ -42,7 +43,7 @@
 			@property manager_cos type=relpicker reltype=RELTYPE_MANAGER_CO multiple=1 parent=left
 			@caption Haldurfirmad
 
-			@property owner type=relpicker reltype=RELTYPE_MANAGER_CO parent=left
+			@property owner type=relpicker reltype=RELTYPE_MANAGER_CO parent=left table=aw_shop_warehouse_config field=aw_owner method=fuck_you_serialize
 			@caption Lao omanik
 
 			@property sell_prods type=checkbox ch_value=1 parent=left
@@ -297,6 +298,34 @@ class shop_warehouse_config extends class_base
 	function callback_mod_retval($arr)
 	{
 		$arr["args"]["pgtf"] = $arr["request"]["pgtf"];
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "")
+		{
+			$this->db_query("CREATE TABLE aw_shop_warehouse_config(aw_oid int primary key)");
+			return true;
+		}
+
+		switch($f)
+		{
+			case "aw_owner":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				$ol = new object_list(array(
+					"class_id" => CL_SHOP_WAREHOUSE_CONFIG,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$this->db_query(sprintf("INSERT INTO aw_shop_warehouse_config (aw_oid, aw_owner) VALUES ('%u', '%u')", $o->id(), $o->meta("owner")));
+				}
+				return true;
+		}
 	}
 }
 ?>

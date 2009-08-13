@@ -99,43 +99,12 @@
 	@property rent_prop_val type=textbox
 	@caption v&auml;&auml;rtus j&auml;relmaksuks
 
-@default group=rent_conditions
-
-	@property rent_conditions_tlb type=toolbar no_caption=1 store=no
-	@property rent_conditions_tbl type=table no_caption=1 store=no
-
-@default group=rent_settings
-
 	## SEE ON VANA ASI, LIHTSALT 2RA KAOTADA EI TOHI!
-	@property rent_min_amt type=textbox
+	@property rent_min_amt type=textbox user=1
 	@caption J&auml;relmaksu miinumumsumma
 
-	######## NEED KAOVAD
-	@property rent_min_amt type=textbox
-	@caption J&auml;relmaksu miinumumsumma
-
-	@property rent_max_amt type=textbox
-	@caption Järelmaksu maksimumsumma
-
-	@property rent_min_payment type=textbox
-	@caption &Uuml;he makse miinimumsumma
-
-	@property rent_prepayment_interest type=textbox
-	@caption Esmase sissemakse protsent
-
-	@property rent_interest type=textbox
-	@caption Aastaintressi protsent
-
-	@property rent_months_min type=textbox
-	@caption Minimaalne järelmaksuperioodi pikkus kuudes
-
-	@property rent_months_max type=textbox
-	@caption Maksimaalne järelmaksuperioodi pikkus kuudes
-
-	@property rent_months_step type=textbox
-	@caption Järelmaksuperioodi samm
-	######## END OF NEED KAOVAD
-
+	@property rent_configuration type=relpicker reltype=RELTYPE_RENT_CONFIGURATION table=aw_shop_order_center field=aw_rent_configuration method=fuck_you_serialize
+	@caption J&auml;relmaksu konfiguratsioon
 
 @default group=appearance
 	@property appearance_toolbar type=toolbar no_caption=1 store=no
@@ -272,8 +241,6 @@
 
 @groupinfo payment caption="Maksmine"
 	@groupinfo payment1 caption="Seaded" parent=payment
-	@groupinfo rent_settings caption="J&auml;relmaksu seaded" parent=payment
-	@groupinfo rent_conditions caption="J&auml;relmaksu tingimused" parent=payment
 	@groupinfo payment_settings caption="Pangamakse seaded" parent=payment
 
 @groupinfo appear caption="N&auml;itamine"
@@ -332,11 +299,12 @@
 @reltype FILTER value=12 clid=CL_SHOP_ORDER_CENTER_FILTER_ENTRY
 @caption Toodete filtri sisestus
 
-@reltype RENT_CONDITIONS value=13 clid=CL_SHOP_RENT_CONDITIONS
-@caption K&auml;ttetoimetamise viis
-
-@reltype RELTYPE_MENU value=14 clid=CL_MENU
+@reltype RELTYPE_MENU value=18 clid=CL_MENU
 @caption Kaust
+
+@reltype RENT_CONFIGURATION value=19 clid=CL_SHOP_RENT_CONFIGURATION
+@caption J&auml;relmaksu konfiguratsioon
+
 */
 
 class shop_order_center extends class_base
@@ -475,30 +443,6 @@ class shop_order_center extends class_base
 				break;
 		};
 		return $retval;
-	}
-
-	public function _get_rent_conditions_tlb($arr)
-	{
-		$t = &$arr["prop"]["vcl_inst"];
-		if($this->can("add", $arr["obj_inst"]->id()))
-		{
-			$t->add_new_button(array(CL_SHOP_RENT_CONDITIONS), $arr["obj_inst"]->id(), 13);
-		}
-		$t->add_save_button();
-		$t->add_search_button(array(
-			"pn" => "rent_conditions_add",
-			"clid" => CL_SHOP_RENT_CONDITIONS,
-		));
-		$t->add_delete_rels_button();
-	}
-
-	public function _get_rent_conditions_tbl($arr)
-	{
-		$t = $arr["prop"]["vcl_inst"];
-		$t->table_from_ol(new object_list(array(
-			"class_id" => CL_SHOP_RENT_CONDITIONS,
-			"CL_SHOP_RENT_CONDITIONS.RELTYPE_RENT_CONDITIONS(CL_SHOP_ORDER_CENTER)" => $arr["obj_inst"]->id(),
-		)), array("name", "valid_from", "valid_to", "min_amt", "max_amt", "min_payment", "prepayment_interest", "yearly_interest", "period_min", "period_max", "period_step"), CL_SHOP_RENT_CONDITIONS);
 	}
 
 	function set_property($arr = array())
@@ -1897,6 +1841,7 @@ class shop_order_center extends class_base
 	{
 		switch($f)
 		{
+			case "aw_rent_configuration":
 			case "aw_root_menu":
 				$this->db_add_col($t, array(
 					"name" => $f,

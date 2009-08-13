@@ -46,7 +46,7 @@ class shop_product_packaging_obj extends shop_product_obj
 		$prices = $this->meta("cur_prices");
 		return isset($arr["shop"]) && is_oid($arr["shop"]) && $this->can("view", $arr["shop"]) ? shop_price_list_obj::price(array(
 			"shop" => $arr["shop"],
-			"product" => NULL,//$this->prop("product"),
+			"product" => $this->prop("product"),
 			"product_packaging" => $this->id(),
 			"product_category" => $this->get_categories(),
 			"amount" => isset($arr["amount"]) ? $arr["amount"] : 1,
@@ -79,6 +79,28 @@ class shop_product_packaging_obj extends shop_product_obj
 			}
 		}
 		return "";
+	}
+
+	/**
+		@attrib api=1 params=pos
+		@param id required type=int/array
+			The OID(s) of product packagings to get the product(s) for
+		@returns Array of product OIDs for given packaging(s) OIDs
+	**/
+	public function get_products_for_id($id)
+	{
+		if(empty($id))
+		{
+			return array();
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT,
+			"RELTYPE_PACKAGING" => $id,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		return $ol->ids();
 	}
 
 }

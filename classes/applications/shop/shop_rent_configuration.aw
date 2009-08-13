@@ -101,9 +101,20 @@ class shop_rent_configuration extends shop_matrix
 
 	public function callback_pre_edit($arr)
 	{
+		if(!empty($_GET["debug"]))
+		{
+			$arr["obj_inst"]->update_code();
+			arr(obj(345974)->delivery_methods(array(
+			)), true);
+			arr(obj(obj(345920)->get_rent_conditions(array(
+				"sum" => 10000,
+				"currency" => 346703,
+				"product" => 346088,
+			)))->properties(), true);
+		}
 		if(automatweb::$request->arg("group") == "advanced_layer")
 		{
-			if(automatweb::$request->arg_isset("condition"))
+			if(automatweb::$request->arg_isset("condition") && ("new" === automatweb::$request->arg("condition") || $this->can("view", automatweb::$request->arg("condition"))))
 			{
 				$this->condition = (int)automatweb::$request->arg("condition");
 			}
@@ -226,18 +237,14 @@ class shop_rent_configuration extends shop_matrix
 			$col = array_pop($name);
 		}
 
-		if(isset($matrix[$oid][$col]))
-		{
-			$o = obj($matrix[$oid][$col]);
-		}
-		else
-		{
-			$o = obj(NULL, array(), CL_SHOP_RENT_CONDITIONS);
-		}
-
 		return html::href(array(
 			"name" => "{$oid}_{$col}",
-			"caption" => $o->description(),
+			"caption" => $this->cell_description(array(
+				"rent_configuration" => $this->obj->id(),
+				"row" => $oid,
+				"col" => $col,
+				"currency" => $this->currency,
+			), true),
 			"url" => "javascript:shop_matrix.open_layer('$oid', '$col');",
 		));
 	}
@@ -300,6 +307,16 @@ class shop_rent_configuration extends shop_matrix
 			"name" => "delete_conditions",
 			"value" => 0,
 		));
+		/*
+		$arr["prop"]["reload"] = array(
+			"submit" => array(
+//				"url" => "",
+				"forms" => array("shop_matrix"),
+//				"props" => array(),
+			),
+			"layouts" => array("advanced_layer_right", "advanced_layer_left"),
+		);
+		*/
 	}
 
 	public function _get_al_tree($arr)
@@ -362,8 +379,8 @@ class shop_rent_configuration extends shop_matrix
 
 	/**
 		@attrib name=submit_advanced_layer all_args=1 params=name
-		@param id required type=int acl=view,delete
-		@param rent_configuration required type=int acl=view,add
+		@param id required type=int
+		@param rent_configuration required type=int
 		@param row required type=int/string acl=view
 		@param col required type=int/string acl=view
 		@param currency required type=int acl=view
@@ -377,6 +394,7 @@ class shop_rent_configuration extends shop_matrix
 				obj($arr["id"])->delete();
 			}
 			$o = obj(NULL, array(), CL_SHOP_RENT_CONDITIONS);
+			$id = NULL;
 		}
 		else
 		{
@@ -410,10 +428,47 @@ class shop_rent_configuration extends shop_matrix
 						break;
 				}
 			}
-			$o->save();
+			$id = $o->save();
 		}
 
-		die(iconv(aw_global_get("charset"), "UTF-8", $o->description()));
+		obj($arr["rent_configuration"])->update_code();
+
+		die((string)$id);
+//		die(iconv(aw_global_get("charset"), "UTF-8", $o->description()));
+	}
+
+	/**
+		@attrib name=cell_description all_args=1 params=name
+		@param rent_configuration required type=int acl=view
+		@param row required type=int/string acl=view
+		@param col required type=int/string acl=view
+		@param currency required type=int acl=view
+	**/
+	public function cell_description($arr, $oh_please_dont_die = false)
+	{
+		$str = "";
+		foreach(obj($arr["rent_configuration"])->conditions(array(
+			"row" => isset($arr["row"]) ? $arr["row"] : NULL,
+			"col" => isset($arr["col"]) ? $arr["col"] : NULL,
+			"currency" => isset($arr["currency"]) ? $arr["currency"] : NULL,
+		))->arr() as $o)
+		{
+			$str .= "<p>".$o->description()."</p>";
+		}
+
+		if(strlen($str) === 0)
+		{
+			$str = t("M&auml;&auml;ramata");
+		}
+
+		if($oh_please_dont_die)
+		{
+			return $str;
+		}
+		else
+		{
+			die(iconv(aw_global_get("charset"), "UTF-8", $str));
+		}
 	}
 }
 

@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>data_source</name>
             <table>objects</table>
             <group>general_general</group>
@@ -97,6 +105,52 @@
             <caption>Hinnakirjade impordi ajastus</caption>
       </property>
       <property>
+            <name>timing_dnotes</name>
+            <table>aw_warehouse_import</table>
+            <group>import_timing</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DNOTES_REPEATER</reltype>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
+            <field>aw_timing_price_lists</field>
+            <parent>timing_dnotes_lay</parent>
+            <caption>Saatelehtede impordi ajastus</caption>
+      </property>
+      <property>
+            <name>timing_bills</name>
+            <table>aw_warehouse_import</table>
+            <group>import_timing</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_BILLS_REPEATER</reltype>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
+            <field>aw_timing_bills</field>
+            <parent>timing_bills_lay</parent>
+            <caption>Arvete impordi ajastus</caption>
+      </property>
+      <property>
+            <name>timing_orders</name>
+            <table>aw_warehouse_import</table>
+            <group>import_timing</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_ORDERS_REPEATER</reltype>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
+            <field>aw_timing_orders</field>
+            <parent>timing_orders_lay</parent>
+            <caption>Tellimuste impordi ajastus</caption>
+      </property>
+      <property>
+            <name>product_status_tmp</name>
+            <table>aw_warehouse_import</table>
+            <group>product_status</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stat_prods_lay</parent>
+            <field>product_status_tmp</field>
+      </property>
+      <property>
             <name>product_status</name>
             <table>aw_warehouse_import</table>
             <group>product_status</group>
@@ -105,6 +159,36 @@
             <no_caption>1</no_caption>
             <parent>stat_prods_lay</parent>
             <field>product_status</field>
+      </property>
+      <property>
+            <name>product_status_dev_imports</name>
+            <table>aw_warehouse_import</table>
+            <group>product_status_dev</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>product_status_dev_imports_frame</parent>
+            <field>product_status_dev_imports</field>
+      </property>
+      <property>
+            <name>product_status_dev_info</name>
+            <table>aw_warehouse_import</table>
+            <group>product_status_dev</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>product_status_dev_info_frame</parent>
+            <field>product_status_dev_info</field>
+      </property>
+      <property>
+            <name>product_status_dev_files</name>
+            <table>aw_warehouse_import</table>
+            <group>product_status_dev</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>product_status_dev_files_frame</parent>
+            <field>product_status_dev_files</field>
       </property>
       <property>
             <name>prices_status</name>
@@ -136,6 +220,36 @@
             <parent>stat_pricelists_lay</parent>
             <field>pricelists_status</field>
       </property>
+      <property>
+            <name>dnotes_status</name>
+            <table>aw_warehouse_import</table>
+            <group>delivery_notes</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stat_dnotes_lay</parent>
+            <field>dnotes_status</field>
+      </property>
+      <property>
+            <name>bills_status</name>
+            <table>aw_warehouse_import</table>
+            <group>bills</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stat_bills_lay</parent>
+            <field>bills_status</field>
+      </property>
+      <property>
+            <name>orders_status</name>
+            <table>aw_warehouse_import</table>
+            <group>orders</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stat_orders_lay</parent>
+            <field>orders_status</field>
+      </property>
       <classinfo>
             <syslog_type>ST_WAREHOUSE_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -165,6 +279,11 @@
                   <parent>import_status</parent>
                   <submit>no</submit>
             </product_status>
+            <product_status_dev>
+                  <caption>[dev] Toodete import</caption>
+                  <parent>import_status</parent>
+                  <submit>no</submit>
+            </product_status_dev>
             <product_prices>
                   <caption>Toodete hinnad</caption>
                   <parent>import_status</parent>
@@ -185,6 +304,21 @@
                   <parent>import_status</parent>
                   <submit>no</submit>
             </customers>
+            <delivery_notes>
+                  <caption>Saatelehed</caption>
+                  <parent>import_status</parent>
+                  <submit>no</submit>
+            </delivery_notes>
+            <bills>
+                  <caption>Arved</caption>
+                  <parent>import_status</parent>
+                  <submit>no</submit>
+            </bills>
+            <orders>
+                  <caption>Tellimused</caption>
+                  <parent>import_status</parent>
+                  <submit>no</submit>
+            </orders>
             <import_timing>
                   <caption>Importide ajastus</caption>
             </import_timing>
@@ -222,6 +356,21 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Hinnakirjade kordaja</caption>
             </PRICE_LISTS_REPEATER>
+            <DNOTES_REPEATER>
+                  <value>15</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Saatelehtede kordaja</caption>
+            </DNOTES_REPEATER>
+            <BILLS_REPEATER>
+                  <value>16</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Arvete kordaja</caption>
+            </BILLS_REPEATER>
+            <ORDERS_REPEATER>
+                  <value>17</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Tellimuste kordaja</caption>
+            </ORDERS_REPEATER>
       </reltypes>
       <layout>
             <timing_prods_lay>
@@ -248,12 +397,63 @@
                   <closeable>1</closeable>
                   <group>import_timing</group>
             </timing_price_lists_lay>
+            <timing_dnotes_lay>
+                  <type>vbox</type>
+                  <area_caption>Saatelehtede&amp;amp;nbsp;impordi&amp;amp;nbsp;ajastus</area_caption>
+                  <closeable>1</closeable>
+                  <group>import_timing</group>
+            </timing_dnotes_lay>
+            <timing_bills_lay>
+                  <type>vbox</type>
+                  <area_caption>Arvete&amp;amp;nbsp;impordi&amp;amp;nbsp;ajastus</area_caption>
+                  <closeable>1</closeable>
+                  <group>import_timing</group>
+            </timing_bills_lay>
+            <timing_orders_lay>
+                  <type>vbox</type>
+                  <area_caption>Tellimuste&amp;amp;nbsp;impordi&amp;amp;nbsp;ajastus</area_caption>
+                  <closeable>1</closeable>
+                  <group>import_timing</group>
+            </timing_orders_lay>
             <stat_prods_lay>
                   <type>vbox</type>
                   <area_caption>Toodete&amp;amp;nbsp;impordi&amp;amp;nbsp;staatus</area_caption>
                   <closeable>1</closeable>
                   <group>product_status</group>
             </stat_prods_lay>
+            <product_status_dev_frame>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>product_status_dev</group>
+                  <area_caption></area_caption>
+            </product_status_dev_frame>
+            <product_status_dev_imports_frame>
+                  <type>vbox</type>
+                  <area_caption>Impordid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>product_status_dev_frame</parent>
+                  <group>product_status_dev</group>
+            </product_status_dev_imports_frame>
+            <product_status_dev_left_frame>
+                  <type>vbox</type>
+                  <parent>product_status_dev_frame</parent>
+                  <group>product_status_dev</group>
+                  <area_caption></area_caption>
+            </product_status_dev_left_frame>
+            <product_status_dev_info_frame>
+                  <type>vbox</type>
+                  <area_caption>Info</area_caption>
+                  <closeable>1</closeable>
+                  <parent>product_status_dev_left_frame</parent>
+                  <group>product_status_dev</group>
+            </product_status_dev_info_frame>
+            <product_status_dev_files_frame>
+                  <type>vbox</type>
+                  <area_caption>Impordi&amp;amp;nbsp;failid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>product_status_dev_left_frame</parent>
+                  <group>product_status_dev</group>
+            </product_status_dev_files_frame>
             <stat_prices_lay>
                   <type>vbox</type>
                   <area_caption>Hindade&amp;amp;nbsp;impordi&amp;amp;nbsp;staatus</area_caption>
@@ -272,6 +472,24 @@
                   <closeable>1</closeable>
                   <group>pricelists</group>
             </stat_pricelists_lay>
+            <stat_dnotes_lay>
+                  <type>vbox</type>
+                  <area_caption>Saatelehtede&amp;amp;nbsp;impordi&amp;amp;nbsp;staatus</area_caption>
+                  <closeable>1</closeable>
+                  <group>delivery_notes</group>
+            </stat_dnotes_lay>
+            <stat_bills_lay>
+                  <type>vbox</type>
+                  <area_caption>Arvete&amp;amp;nbsp;impordi&amp;amp;nbsp;staatus</area_caption>
+                  <closeable>1</closeable>
+                  <group>bills</group>
+            </stat_bills_lay>
+            <stat_orders_lay>
+                  <type>vbox</type>
+                  <area_caption>Tellimuste&amp;amp;nbsp;impordi&amp;amp;nbsp;staatus</area_caption>
+                  <closeable>1</closeable>
+                  <group>orders</group>
+            </stat_orders_lay>
       </layout>
 </properties>
 

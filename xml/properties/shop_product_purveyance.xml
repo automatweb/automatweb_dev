@@ -10,6 +10,15 @@
             <caption>Toode</caption>
       </property>
       <property>
+            <name>packaging</name>
+            <table>aw_shop_product_purveyance</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PACKAGING</reltype>
+            <field>packaging</field>
+            <caption>Pakend</caption>
+      </property>
+      <property>
             <name>company</name>
             <table>aw_shop_product_purveyance</table>
             <group>general</group>
@@ -90,6 +99,11 @@
                   <clid>CL_SHOP_WAREHOUSE</clid>
                   <caption>Ladu</caption>
             </WAREHOUSE>
+            <PACKAGING>
+                  <value>4</value>
+                  <clid>CL_SHOP_PRODUCT_PACKAGING</clid>
+                  <caption>Pakend</caption>
+            </PACKAGING>
       </reltypes>
 </properties>
 

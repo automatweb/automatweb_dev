@@ -21,6 +21,18 @@ class shop_order_cart_obj extends _int_object
 	public function delivery_methods($arr = array())
 	{
 		enter_function("shop_order_center_obj::delivery_mehtods");
+		if(is_object($o = $this->get_shop_order_center()))
+		{
+			$customer_data = $o->get_customer_data();
+			if(is_object($customer_data))
+			{
+				$arr = array_merge(array(
+					"customer_data" => $customer_data->id(),
+					"customer_category" => $customer_data->get_customer_categories()->ids(),
+					"location" => $customer_data->get_locations()->ids(),
+				), $arr);
+			}
+		}
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_DELIVERY_METHOD,
 			"CL_SHOP_DELIVERY_METHOD.RELTYPE_DELIVERY_METHOD(CL_SHOP_ORDER_CART)" => $this->id(),
@@ -40,6 +52,17 @@ class shop_order_cart_obj extends _int_object
 		}
 		exit_function("shop_order_center_obj::delivery_mehtods");
 		return $ol;
+	}
+
+	public function get_shop_order_center()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_ORDER_CENTER,
+			"cart" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		return $ol->begin();
 	}
 
 	function prop($prop)

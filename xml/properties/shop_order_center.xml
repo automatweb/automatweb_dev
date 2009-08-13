@@ -246,96 +246,24 @@
             <caption>v&amp;amp;auml;&amp;amp;auml;rtus j&amp;amp;auml;relmaksuks</caption>
       </property>
       <property>
-            <name>rent_conditions_tlb</name>
-            <group>rent_conditions</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>rent_conditions_tbl</name>
-            <group>rent_conditions</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
             <name>rent_min_amt</name>
-            <group>rent_settings</group>
+            <group>payment1</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
+            <user>1</user>
             <caption>J&amp;amp;auml;relmaksu miinumumsumma</caption>
       </property>
       <property>
-            <name>rent_max_amt</name>
-            <group>rent_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>J&amp;auml;relmaksu maksimumsumma</caption>
-      </property>
-      <property>
-            <name>rent_min_payment</name>
-            <group>rent_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>&amp;amp;Uuml;he makse miinimumsumma</caption>
-      </property>
-      <property>
-            <name>rent_prepayment_interest</name>
-            <group>rent_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Esmase sissemakse protsent</caption>
-      </property>
-      <property>
-            <name>rent_interest</name>
-            <group>rent_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Aastaintressi protsent</caption>
-      </property>
-      <property>
-            <name>rent_months_min</name>
-            <group>rent_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Minimaalne j&amp;auml;relmaksuperioodi pikkus kuudes</caption>
-      </property>
-      <property>
-            <name>rent_months_max</name>
-            <group>rent_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Maksimaalne j&amp;auml;relmaksuperioodi pikkus kuudes</caption>
-      </property>
-      <property>
-            <name>rent_months_step</name>
-            <group>rent_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>J&amp;auml;relmaksuperioodi samm</caption>
+            <name>rent_configuration</name>
+            <group>payment1</group>
+            <table>aw_shop_order_center</table>
+            <field>aw_rent_configuration</field>
+            <method>fuck_you_serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RENT_CONFIGURATION</reltype>
+            <caption>J&amp;amp;auml;relmaksu konfiguratsioon</caption>
       </property>
       <property>
             <name>appearance_toolbar</name>
@@ -725,14 +653,6 @@
                   <caption>Seaded</caption>
                   <parent>payment</parent>
             </payment1>
-            <rent_settings>
-                  <caption>J&amp;amp;auml;relmaksu seaded</caption>
-                  <parent>payment</parent>
-            </rent_settings>
-            <rent_conditions>
-                  <caption>J&amp;amp;auml;relmaksu tingimused</caption>
-                  <parent>payment</parent>
-            </rent_conditions>
             <payment_settings>
                   <caption>Pangamakse seaded</caption>
                   <parent>payment</parent>
@@ -865,16 +785,16 @@
                   <clid>CL_SHOP_ORDER_CENTER_FILTER_ENTRY</clid>
                   <caption>Toodete filtri sisestus</caption>
             </FILTER>
-            <RENT_CONDITIONS>
-                  <value>13</value>
-                  <clid>CL_SHOP_RENT_CONDITIONS</clid>
-                  <caption>K&amp;amp;auml;ttetoimetamise viis</caption>
-            </RENT_CONDITIONS>
             <RELTYPE_MENU>
-                  <value>14</value>
+                  <value>18</value>
                   <clid>CL_MENU</clid>
                   <caption>Kaust</caption>
             </RELTYPE_MENU>
+            <RENT_CONFIGURATION>
+                  <value>19</value>
+                  <clid>CL_SHOP_RENT_CONFIGURATION</clid>
+                  <caption>J&amp;amp;auml;relmaksu konfiguratsioon</caption>
+            </RENT_CONFIGURATION>
       </reltypes>
       <layout>
             <appearance_c>

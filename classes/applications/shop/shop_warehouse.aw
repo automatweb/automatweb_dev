@@ -33,7 +33,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@property conf type=relpicker reltype=RELTYPE_CONFIG table=aw_shop_warehouses field=aw_config
 	@caption Seaded
 
-	@property order_center type=relpicker reltype=RELTYPE_ORDER_CENTER table=objects field=meta method=serialize
+	@property order_center type=relpicker reltype=RELTYPE_ORDER_CENTER table=aw_shop_warehouses field=aw_order_center
 	@caption Tellimiskeskkond tellimuste jaoks
 
 	@property category_entry_form type=relpicker reltype=RELTYPE_CAT_ENTRY_FORM table=objects field=meta method=serialize
@@ -7380,6 +7380,22 @@ $oo = get_instance(CL_SHOP_ORDER);
 	{
 		switch($f)
 		{
+			case "aw_order_center":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				$ol = new object_list(array(
+					"class_id" => CL_SHOP_WAREHOUSE,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$this->db_query(sprintf("UPDATE aw_shop_warehouses SET aw_order_center = '%u' WHERE aw_oid = '%u'", $o->meta("order_center"), $o->id()));
+				}
+				return true;
+
 			case "aw_status_calc_type":
 				$this->db_add_col($t, array(
 					"name" => $f,

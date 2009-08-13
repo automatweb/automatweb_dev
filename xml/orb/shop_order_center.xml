@@ -26,6 +26,13 @@
 			</function>
 		</action>
 
+		<action name="add_appearance_leaf" all_args="1">
+			<function name="add_appearance_leaf">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="search_categories">
 			<function name="search_categories">
 				<arguments>

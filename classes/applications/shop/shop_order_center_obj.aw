@@ -2,6 +2,42 @@
 
 class shop_order_center_obj extends _int_object
 {
+	/**
+		@attrib api=1
+
+		@param sum required type=float
+			The total sum of products/packagings
+		@param currency required type=int
+			The OID of currency
+		@param product optional type=array/int acl=view
+			OIDs of products
+		@param product_packaging optional type=array/int acl=view
+			OIDs of products
+		@param product_category optional type=array/int acl=view
+			OIDs of product categories
+		@param customer_data optional type=int acl=view
+			OID of customer_data object
+		@param customer_category optional type=array/int acl=view
+			OIDs of customer categories.
+		@param location optional type=array/int acl=view
+			OIDs of locations
+
+		@returns OID of rent_conditions object or NULL if none found
+	**/
+	public function get_rent_conditions($arr)
+	{
+		$customer_data = $this->get_customer_data();
+		if(is_object($customer_data))
+		{
+			$arr = array_merge(array(
+				"customer_data" => $customer_data->id(),
+				"customer_category" => $customer_data->get_customer_categories()->ids(),
+				"location" => $customer_data->get_locations()->ids(),
+			), $arr);
+		}
+		return is_oid($id = $this->prop("rent_configuration")) ? obj($id)->valid_conditions($arr) : NULL;
+	}
+
 	function filter_get_fields()
 	{
 		$class_filter_fields = $this->meta("class_filter_fields");
@@ -184,16 +220,25 @@ class shop_order_center_obj extends _int_object
 
 
 	/**
-		@comment DOES NOT WORK YET!! STORAGE IS BROKEN!!
+		@comment
 	**/
 	public function get_customer_data()
 	{
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-			"buyer" => array(),
-			"seller.RELTYPE_MANAGER_CO(CL_SHOP_WAREHOUSE_CONFIG).RELTYPE_ORDER_CENTER(CL_SHOP_WAREHOUSE).RELTYPE_WAREHOUSE(CL_SHOP_ORDER_CENTER)" => $this->id(),
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
+		if(!is_oid($this->prop("warehouse.conf.owner")))
+		{
+			return FALSE;
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"buyer" => array(user::get_current_company(), user::get_current_person()),
+				"seller" => $this->prop("warehouse.conf.owner"),
+				"lang_id" => array(),
+				"site_id" => array(),
+				new obj_predicate_limit(1),
+			));
+			return $ol->count() > 0 ? $ol->begin() : FALSE;
+		}
 	}
 }

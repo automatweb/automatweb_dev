@@ -102,10 +102,10 @@
       </property>
       <property>
             <name>owner</name>
-            <table>objects</table>
+            <table>aw_shop_warehouse_config</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_owner</field>
+            <method>fuck_you_serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_MANAGER_CO</reltype>
             <parent>left</parent>
@@ -178,6 +178,16 @@
             <size>3</size>
             <parent>left</parent>
             <caption>Tarnefirmade kaust</caption>
+      </property>
+      <property>
+            <name>show_purveyance</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <parent>left</parent>
+            <caption>Kuva tarnijaid</caption>
       </property>
       <property>
             <name>prod_fld</name>
@@ -364,6 +374,13 @@
                   <caption>&amp;amp;Uuml;hikud</caption>
             </units>
       </groupinfo>
+      <tableinfo>
+            <aw_shop_warehouse_config>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_shop_warehouse_config>
+      </tableinfo>
       <reltypes>
             <FOLDER>
                   <value>1</value>
