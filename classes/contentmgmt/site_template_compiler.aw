@@ -376,7 +376,7 @@ class site_template_compiler extends aw_template
 			}
 		}
 
-		if ($_GET["TPLC_DBG"] == 1)
+		if (!empty($_GET["TPLC_DBG"]))
 		{
 			echo "menu_areas= ".dbg::dump($this->menu_areas)." <br>";
 		}
@@ -436,7 +436,7 @@ class site_template_compiler extends aw_template
 			}
 		}
 
-		if ($_GET["TPLC_DBG"] == 1)
+		if (!empty($_GET["TPLC_DBG"]))
 		{
 			$this->dbg_show_template_ops();
 		}
@@ -606,7 +606,7 @@ class site_template_compiler extends aw_template
 						"op" => OP_IF_COND,
 						"params" => $params
 					);
-					$no_display_item |= $params["no_display_item"];
+					$no_display_item |= !empty($params["no_display_item"]);
 				}
 				if ($tpl_opt == "SEL")
 				{
@@ -684,9 +684,9 @@ class site_template_compiler extends aw_template
 					);
 				}
 
-				$tpl_l = strlen($ldat["no_subitems_sel_check_tpl"]);
-				$tpl_s = $ldat["no_subitems_sel_check_tpl"];
-				if ($ldat["no_subitems_sel_check_after_item"]  && ($has_sel || !($tpl_s{$tpl_l-1} == "L" && $tpl_s{$tpl_l-2} == "E" && $tpl_s{$tpl_l-3} == "S")))
+				$tpl_l = isset($ldat["no_subitems_sel_check_tpl"]) ? strlen($ldat["no_subitems_sel_check_tpl"]) : 0;
+				$tpl_s = isset($ldat["no_subitems_sel_check_tpl"]) ? $ldat["no_subitems_sel_check_tpl"] : "";
+				if (!empty($ldat["no_subitems_sel_check_after_item"]) && ($has_sel || !($tpl_s{$tpl_l-1} == "L" && $tpl_s{$tpl_l-2} == "E" && $tpl_s{$tpl_l-3} == "S")))
 				{
 					$this->ops[] = array(
 						"op" => OP_CHECK_NO_SUBITEMS_SEL,
@@ -989,7 +989,7 @@ class site_template_compiler extends aw_template
 			"op" => OP_GET_OBJ_TREE_LIST,
 			"params" => array(
 				"a_parent" => $adat["parent"],
-				"a_parent_p_fn" => $adat["a_parent_p_fn"],
+				"a_parent_p_fn" => isset($adat["a_parent_p_fn"]) ? $adat["a_parent_p_fn"] : NULL,
 				"level" => $level,
 				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
 			)
@@ -1113,6 +1113,7 @@ class site_template_compiler extends aw_template
 		$content_name = $dat["content_name"];
 		$inst_name = $dat["inst_name"];
 		$fun_name = $dat["fun_name"];
+		$ret = "";
 
                         $ret .= $this->_gi()."if (is_object(".$o_name.") && ".$o_name."->is_brother() && (!\$this->brother_level_from || \$this->brother_level_from == ".$arr["level"]."))\n";
                         $ret .= $this->_gi()."{\n";
@@ -1389,6 +1390,7 @@ class site_template_compiler extends aw_template
 	{
 		$dat = end($this->list_name_stack);
 		$list_name = $dat["list_name"];
+		$ret = "";
 
 		$ret  .= $this->_gi()."\$__list_filter = array(\n";
 		$this->brace_level++;
@@ -1484,7 +1486,7 @@ class site_template_compiler extends aw_template
 		$this->brace_level++;
 			
 			$ret .= $this->_gi()."if(!empty(".$fun_name."_cb))\$cnt_menus++;\n";
-			$ret .= $this->_gi()."\$tmp_vars".$arr["level"]." = \$tmp_vars_array;\n";
+			$ret .= $this->_gi()."\$tmp_vars".$arr["level"]." = isset(\$tmp_vars_array) ? \$tmp_vars_array : array();\n";
 			$ret .= $this->_gi()."if (empty(\$mmi_cnt))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
@@ -1623,10 +1625,7 @@ class site_template_compiler extends aw_template
 		$content_name = $dat["content_name"];
 		$this->last_list_dat = $dat;
 
-		if (!$arr["no_pop"])
-		{
-			$ret = $this->_gi()."array_pop(\$this->_cur_menu_path);\n";
-		}
+		$ret = !$arr["no_pop"] ? $this->_gi()."array_pop(\$this->_cur_menu_path);\n" : "";
 
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
@@ -2105,7 +2104,7 @@ class site_template_compiler extends aw_template
 			if ($arr["in_parent_tpl"])
 			{
 				$parent_o_name = "\$o_".$arr["a_parent"]."_".($arr["level"]-1);
-				$ret .= $this->_gi()."if(empty(".$parent_is_from_obj_name."[\$parent_obj->id()]) &&  !".$fun_parent_name_cb.")\$parent_obj = ".$parent_o_name.";\n";
+				$ret .= $this->_gi()."if(empty(".$parent_is_from_obj_name."[\$parent_obj->id()]) &&  empty(".$fun_parent_name_cb."))\$parent_obj = ".$parent_o_name.";\n";
 			}
 			else
 			{
@@ -2242,6 +2241,7 @@ class site_template_compiler extends aw_template
 		$this_is_from_obj_name = "\$p_is_o_".$arr["a_parent"]."_".$arr["level"]."[\$parent_obj->id()]";
 		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
 		$parent_is_from_obj_start_level = $dat["parent_is_from_obj_start_level"];
+		$ret = "";
 
 		$ret .= $this->_gi()."if (!empty(".$parent_is_from_obj_name."[\$parent_obj->id()]))\n";
 		$ret .= $this->_gi()."{\n";
