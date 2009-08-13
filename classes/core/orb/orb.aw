@@ -117,7 +117,7 @@ class orb extends aw_template
 			$cl2load = array_merge($cl2load,$orb_defs[$class]["_extends"]);
 		};
 
-		$fun = $orb_defs[$class][$action];
+		$fun = isset($orb_defs[$class][$action]) ? $orb_defs[$class][$action] : NULL;
 		// oh the irony
 		if (!$fun && $action === "view")
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.19 2008/01/31 13:55:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.20 2009/08/13 08:20:52 instrumental Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -16,7 +16,7 @@ class rte extends aw_template
 	{
 		$this->init(array(
 			"tpldir" => "rte",
-			"clid" => CL_RTE
+//			"clid" => CL_RTE
 		));
 	}
 
