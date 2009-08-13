@@ -41,6 +41,20 @@ class image_obj extends _int_object
 		$url = $img_inst->get_url($this->prop("file"));
 		return $img_inst->check_url($url);
 	}
+
+	public function add_image_big($file)
+	{
+		$_fi = get_instance(CL_FILE);
+		$mime = get_instance("core/aw_mime_types");
+
+		$f2 = $_fi->_put_fs(array(
+			"type" => $mime->type_for_file(basename($file)),
+			"content" => file_get_contents($file)
+		));
+
+		$this->set_prop("file2", $f2);
+	
+	}
 }
 
 ?>
