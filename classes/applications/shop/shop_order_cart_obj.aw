@@ -73,6 +73,15 @@ class shop_order_cart_obj extends _int_object
 		}
 	}
 
+	/**	returns cart order center object
+		@attrib api=1
+	**/
+	public function get_oc()
+	{
+		$this->set_oc();
+		return $this->oc;
+	}
+
 	/**
 		@attrib name=get_price api=1 params=pos
 		@param product optional type

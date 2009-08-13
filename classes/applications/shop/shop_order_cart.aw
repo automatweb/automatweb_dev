@@ -238,14 +238,26 @@ class shop_order_cart extends class_base
 		@attrib name=show_cart nologin="1"
 
 		@param oc optional type=int
+		@param cart optional type=int
 		@param section optional
 	**/
 	function show($arr)
-	{
+ 	{
 		extract($arr);
-
-		$oc = obj($oc);
-		if($oc->prop("chart_show_template"))
+		if(empty($oc) && !empty($arr["cart"]))
+		{
+			$cart = obj($arr["cart"]);
+			$oc = $cart->get_oc();
+		}
+		else
+		{
+			$oc = obj($oc);
+		}
+		if(!empty($arr["template"]))
+		{
+			$this->read_template($arr["template"]);
+		}
+		elseif($oc->prop("chart_show_template"))
 		{
 			$this->read_template($oc->prop("chart_show_template"));
 		}
@@ -304,8 +316,10 @@ class shop_order_cart extends class_base
 		$cart = $this->get_cart($oc);
 		$awa = new aw_array($cart["items"]);
 		$show_info_page = true;
-		$l_inst = $layout->instance();
-		$l_inst->read_template($layout->prop("template"));
+//		$l_inst = $layout->instance();
+//		$l_inst->read_template($layout->prop("template"));
+
+		 $product_str = "";
 
 		if($this->is_template("CART"))
 		{
@@ -343,7 +357,7 @@ class shop_order_cart extends class_base
 						
 					foreach($quantx->get() as $x => $quant)
 					{
-						$this->vars(array(
+/*						$this->vars(array(
 							"prod_html" => $inst->do_draw_product(array(
 								"layout" => $layout,
 								"cart" => $quant["cart"],
@@ -354,11 +368,21 @@ class shop_order_cart extends class_base
 								"oc_obj" => $oc,
 								"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
 							))
-						));
+						));*/
+						$vars = $product->get_data();
+						$vars["amount"] = $quant["items"];
+						$vars["price"] = $product->get_shop_price();
+						$vars["total_price"] = $quant["items"] * $product->get_shop_price();
+						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("id" => $cart_o->id(), "product" => $i));
+						$this->vars($vars);
+						$product_str.= $this->parse("PRODUCT");
+
 						$show_info_page = false;
 						$total += ($quant["items"] * str_replace(",", "", $price));
 
-						$cart_total += ($quant["items"] * $price);
+						$cart_total += $vars["total_price"];
+
+/*						$cart_total += ($quant["items"] * $price);
 						if (get_class($inst) == "shop_product_packaging")
 						{
 							$prod_total += ($quant["items"] * $inst->get_prod_calc_price($i));
@@ -366,11 +390,12 @@ class shop_order_cart extends class_base
 						else
 						{
 							$prod_total = $total;
-						}
+						}*/
 						$prod_str .= $this->parse("PROD");
 					}
 				}
 				$this->vars(array(
+					"PRODUCT" => $product_str,
 					"PROD" =>  $prod_str,
 					"cart_total" => $cart_total,
 					"cart_name" => $cart_name,
@@ -410,7 +435,7 @@ class shop_order_cart extends class_base
 						continue;
 					}
 	
-					$this->vars(array(
+/*					$this->vars(array(
 						"prod_html" => $inst->do_draw_product(array(
 							"layout" => $layout,
 							"cart" => $quant["cart"],
@@ -421,17 +446,29 @@ class shop_order_cart extends class_base
 							"oc_obj" => $oc,
 							"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
 						))
-					));
+					));*/
+
+
+						$product = obj($i);
+						$vars = $product->get_data();
+						$vars["amount"] = $quant["items"];
+						$vars["price"] = $product->get_shop_price();
+						$vars["total_price"] = $quant["items"] * $product->get_shop_price();
+						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("id" => $cart_o->id(), "product" => $i));
+						$this->vars($vars);
+						$product_str.= $this->parse("PRODUCT");
+
 					$show_info_page = false;
 					$total += ($quant["items"] * $price);
-					if (get_class($inst) == "shop_product_packaging")
+				$cart_total += $vars["total_price"];
+/*					if (get_class($inst) == "shop_product_packaging")
 					{
 						$prod_total += ($quant["items"] * $inst->get_prod_calc_price($i));
 					}
 					else
 					{
 						$prod_total = $total;
-					}
+					}*/
 					$str .= $this->parse("PROD");
 				}
 			}
@@ -516,10 +553,16 @@ class shop_order_cart extends class_base
 			"cart_val_w_disc" => number_format($cart_total - $cart_discount, 2),
 			"user_data_form" => $html,
 			"PROD" => $str,
+			"PRODUCT" => $product_str,
+			"basket_total_price" => $cart_total,
 			"total" => number_format($total, 2),
 			"prod_total" => number_format($prod_total, 2),
 			"postal_price" => number_format($cart_o->prop("postal_price"),2),
-			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"]))
+			"reforb" => $this->mk_reforb("submit_add_cart", array(
+				"oc" => $arr["oc"],
+				"update" => 1,
+				"section" => aw_global_get("section"),//$arr["section"]
+			))
 		));
 
 		if ($cart_o->prop("postal_price") > 0 or !empty($delivery_vars["postal_price"]))
@@ -688,6 +731,7 @@ class shop_order_cart extends class_base
 		@param add_to_cart optional
 		@param is_update optional type=int
 		@param order_data optional
+		@param go_to_after optional
 
 	**/
 	function submit_add_cart($arr)
@@ -1773,12 +1817,17 @@ class shop_order_cart extends class_base
 
 		@attrib name=final_finish_order nologin=1
 
-		@param oc required
+		@param oc optional
+		@param cart optional
 		@param section optional
 
 	**/
 	function final_finish_order($arr)
 	{
+		$arr["template"] = "final_finish_order.tpl";
+		return $this->show($arr);
+
+
 		extract($arr);
 		$oc = obj($oc);
 		if($oc->prop("chart_final_template"))
@@ -2641,6 +2690,18 @@ class shop_order_cart extends class_base
 			"cart" => $arr["cart"],
 			"section" => $arr["section"],
 		));
+	}
+
+	/**
+		@attrib name=remove_product nologin="1" params=name
+		@param cart required type=oid
+		@param product optional type=oid
+	**/
+	public function remove_product($arr)
+	{
+		$cart = obj($arr["cart"]);
+		//$cart -> remove_product($arr["product"]);
+		die(1);
 	}
 
 	private function _format_calc_price($p)
