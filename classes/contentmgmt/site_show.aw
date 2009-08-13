@@ -2549,7 +2549,9 @@ class site_show extends class_base
 			"meta_description" => $this->section_obj->trans_get_val("description"),
 			"meta_keywords" => $this->properties["keywords"], //$this->section_obj->trans_get_val("keywords"), // hell i know if this is the right solution !?!
 			"trans_lc" => aw_global_get("ct_lang_lc"),
-			"site_loginmenu" => $site_loginmenu
+			"site_loginmenu" => $site_loginmenu,
+			"javascript" => active_page_data::get_javascript(),
+			"javascript_bottom" => active_page_data::get_javascript("bottom"),
 		));
 
 		if ($this->_is_in_document_list)

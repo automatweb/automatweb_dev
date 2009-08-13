@@ -106,7 +106,7 @@ class active_page_data extends class_base
 		return $text;
 	}
 
-	function get_javascript($pos = "")
+	public static function get_javascript($pos = "")
 	{
 		$js = (array) aw_global_get("__aw_javascript");
 
