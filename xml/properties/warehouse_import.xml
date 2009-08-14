@@ -141,26 +141,6 @@
             <caption>Tellimuste impordi ajastus</caption>
       </property>
       <property>
-            <name>product_status_tmp</name>
-            <table>aw_warehouse_import</table>
-            <group>product_status</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>stat_prods_lay</parent>
-            <field>product_status_tmp</field>
-      </property>
-      <property>
-            <name>product_status</name>
-            <table>aw_warehouse_import</table>
-            <group>product_status</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>stat_prods_lay</parent>
-            <field>product_status</field>
-      </property>
-      <property>
             <name>product_status_dev_imports</name>
             <table>aw_warehouse_import</table>
             <group>product_status_dev</group>
@@ -274,13 +254,8 @@
             <import_status>
                   <caption>Importide staatus</caption>
             </import_status>
-            <product_status>
-                  <caption>Toodete import</caption>
-                  <parent>import_status</parent>
-                  <submit>no</submit>
-            </product_status>
             <product_status_dev>
-                  <caption>[dev] Toodete import</caption>
+                  <caption>Toodete import</caption>
                   <parent>import_status</parent>
                   <submit>no</submit>
             </product_status_dev>
@@ -415,12 +390,6 @@
                   <closeable>1</closeable>
                   <group>import_timing</group>
             </timing_orders_lay>
-            <stat_prods_lay>
-                  <type>vbox</type>
-                  <area_caption>Toodete&amp;amp;nbsp;impordi&amp;amp;nbsp;staatus</area_caption>
-                  <closeable>1</closeable>
-                  <group>product_status</group>
-            </stat_prods_lay>
             <product_status_dev_frame>
                   <type>hbox</type>
                   <width>20%:80%</width>
