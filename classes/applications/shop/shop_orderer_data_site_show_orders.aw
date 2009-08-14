@@ -60,9 +60,24 @@ class shop_orderer_data_site_show_orders extends shop_orderer_data_site_show
 		$bills = new object_list();
 		$rows = "";
 		$co = get_current_company();
+
 		if(is_object($co))
 		{
 			$orders = $co->get_sell_orders();
+		}
+
+		$person = get_current_person();
+		if(is_object($person))
+		{
+			if(empty($orders))
+			{
+				$orders = new object_list();
+			}
+			$person_orders =  $person->get_sell_orders();
+			if($person_orders->count())
+			{
+				$orders->add($person_orders);
+			}
 		}
 
 		$order_inst = get_instance(CL_SHOP_SELL_ORDER);
