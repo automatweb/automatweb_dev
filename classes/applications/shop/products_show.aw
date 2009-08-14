@@ -14,7 +14,7 @@
 	@caption Tootekategooriad
 	@comment Tootekategooriad millesse toode peaks kuuluma, et teda kuvataks
 
-	@property columns type=textbox
+	@property columns type=textbox field=aw_columns
 	@caption Tulpasid
 
 	@property template type=select
@@ -183,6 +183,8 @@ class products_show extends class_base
 					"type" => "varchar(63)"
 				));
 				return true;
+			
+			case "aw_columns":
 			case "type":
 			case "oc":
 				$this->db_add_col($t, array(
@@ -229,7 +231,7 @@ class products_show extends class_base
 		$count = $count_all = 0;
 		foreach($products->arr() as $product)
 		{
-			$product_data = $product->get_data();
+			$product_data = $product->get_data($oc->id());
 			$product_data["checkbox"] = html::checkbox(array(
 				"name" => "add_to_cart[".$product_data["product_id"]."]",
 				"value" => 1,

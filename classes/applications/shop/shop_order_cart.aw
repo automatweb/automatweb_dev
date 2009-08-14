@@ -237,6 +237,7 @@ class shop_order_cart extends class_base
 
 		@attrib name=show_cart nologin="1"
 
+		@param id required type=int acl=view
 		@param oc optional type=int
 		@param cart optional type=int
 		@param section optional
@@ -249,15 +250,11 @@ class shop_order_cart extends class_base
 			$this->cart = obj($arr["cart"]);
 			$oc = $this->cart->get_oc();
 		}
-		else
+		elseif(!empty($oc))
 		{
 			$oc = obj($oc);
 		}
 
-		if(empty($this->cart))
-		{
-			$this->cart = obj($oc->prop("cart"));
-		}
 		// get cart to user from oc
 		if (!empty($arr["id"]))
 		{
@@ -268,6 +265,13 @@ class shop_order_cart extends class_base
 			$this->cart = $cart_o = obj($oc->prop("cart"));
 		}
 
+		if(empty($oc))
+		{
+			if(!is_object($oc = $this->cart->get_shop_order_center()))
+			{
+				$oc = obj();
+			}
+		}
 
 		if(!empty($arr["template"]))
 		{
@@ -385,8 +389,8 @@ class shop_order_cart extends class_base
 						));*/
 						$vars = $product->get_data();
 						$vars["amount"] = $quant["items"];
-						$vars["price"] = $product->get_shop_price();
-						$vars["total_price"] = $quant["items"] * $product->get_shop_price();
+						$vars["price"] = $product->get_shop_price($oc->id());
+						$vars["total_price"] = $quant["items"] * $product->get_shop_price($oc->id());
 						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
 						$this->vars($vars);
 						$product_str.= $this->parse("PRODUCT");
@@ -466,8 +470,8 @@ class shop_order_cart extends class_base
 						$product = obj($i);
 						$vars = $product->get_data();
 						$vars["amount"] = $quant["items"];
-						$vars["price"] = $product->get_shop_price();
-						$vars["total_price"] = $quant["items"] * $product->get_shop_price();
+						$vars["price"] = $product->get_shop_price($oc->id());
+						$vars["total_price"] = $quant["items"] * $product->get_shop_price($oc->id());
 						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
 						$this->vars($vars);
 						$product_str.= $this->parse("PRODUCT");
@@ -2568,7 +2572,10 @@ class shop_order_cart extends class_base
 			$vars = $product_object->get_data();
 		}
 
-		$vars["return_url"] = $arr["return_url"];
+		if(!empty($arr["return_url"]))
+		{
+			$vars["return_url"] = $arr["return_url"];
+		}
 		$vars["amount"] = $cart->get_prod_amount($arr["product"]);
 		$this->vars($vars);
 		return $this->parse();
@@ -2776,8 +2783,8 @@ class shop_order_cart extends class_base
 	public function confirm_order($arr)
 	{
 		$cart = obj($arr["cart"]);
-		$order = $cart->create_order();
-		header("Location: /".$order);
+		$order = $cart->create_order(); //arr("Location: ".aw_global_get("baseurl")."/".$order);
+		header("Location: ".aw_global_get("baseurl")."/".$order);
 		die();
 		return "/".$order;
 	}
