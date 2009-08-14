@@ -159,34 +159,6 @@ class crm_company_obj extends _int_object implements crm_customer_interface
 		return $ol;
 	}
 
-	/** Returns customer's undone orders
-		@attrib api=1
-		@return object list
-			orders object list
-	**/
-	public function get_undone_orders()
-	{
-		$arr = array("undone" => 1);
-		return  $this->_get_orders($arr);
-	}
-
-	/** Returns customer delivery notes
-		@attrib api=1
-		@return object list
-			delivery note object list
-	**/
-	public function get_delivery_notes()
-	{
-		$filter = array(
-			"class_id" => CL_SHOP_DELIVERY_NOTE,
-			"customer" => $this->id(),
-			"site_id" => array(),
-			"lang_id" => array(),
-		);
-		$ol = new object_list($filter);
-		return $ol;
-	}
-
 	/** Returns all customer sell orders
 		@attrib api=1
 		@return object list
@@ -204,30 +176,6 @@ class crm_company_obj extends _int_object implements crm_customer_interface
 		$filter = array(
 			"class_id" => CL_SHOP_SELL_ORDER,
 			"purchaser" => $this->id(),
-			"site_id" => array(),
-			"lang_id" => array(),
-		);
-		$ol = new object_list($filter);
-		return $ol;
-	}
-
-	/** Returns all customer orders
-		@attrib api=1
-		@return object list
-			orders object list
-	**/
-	public function get_orders()
-	{
-		return $this->_get_orders();
-	}
-
-	//undone - boolean
-	private function _get_orders($arr = array())
-	{
-
-		$filter = array(
-			"class_id" => CL_SHOP_WAREHOUSE_RETURN,
-			"buyer" => $this->id(),
 			"site_id" => array(),
 			"lang_id" => array(),
 		);
@@ -263,29 +211,6 @@ class crm_company_obj extends _int_object implements crm_customer_interface
 		return $ol;
 	}
 
-	/** Returns all customer sell orders
-		@attrib api=1
-		@return object list
-			orders object list
-	**/
-	public function get_sell_orders()
-	{
-		return $this->_get_sell_orders();
-	}
-
-	//undone - boolean
-	private function _get_sell_orders($arr = array())
-	{
-
-		$filter = array(
-			"class_id" => CL_SHOP_SELL_ORDER,
-			"purchaser" => $this->id(),
-			"site_id" => array(),
-			"lang_id" => array(),
-		);
-		$ol = new object_list($filter);
-		return $ol;
-	}
 
 	/** Returns all customer orders
 		@attrib api=1
@@ -323,32 +248,9 @@ class crm_company_obj extends _int_object implements crm_customer_interface
 		return $ol;
 	}
 
-<<<<<<< crm_company_obj.aw
-	/** Returns customer unpaid bills
-		@attrib api=1
-		@return object list
-			bills object list
-	**/
-	public function get_unpaid_bills()
-	{
-		$filter = array("unpaid" => 1);
-		return $this->get_bills($filter);
-	}
 
-	/** Returns customer all bills
-		@attrib api=1
-		@return object list
-			bills object list
-	**/
-	public function get_bills()
-	{
-		return $this->_get_bills();
-	}
 
-	//unpaid - bool
-	//
-	private function _get_bills($arr = array())
-=======
+
 	/** Returns customer unpaid bills
 		@attrib api=1
 		@param states optional type=array
@@ -375,7 +277,6 @@ class crm_company_obj extends _int_object implements crm_customer_interface
 	//unpaid - bool
 	//
 	private function _get_bills($arr = array())
->>>>>>> 1.55
 	{
 		$filter = array(
 			"class_id" => CL_CRM_BILL,
@@ -383,12 +284,7 @@ class crm_company_obj extends _int_object implements crm_customer_interface
 			"site_id" => array(),
 			"lang_id" => array(),
 		);
-<<<<<<< crm_company_obj.aw
-		if($arr["unpaid"])
-		{
-			 $filter["state"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, 1, 2);
-		}
-=======
+
 		if($arr["unpaid"])
 		{
 			 $filter["state"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, 1, 2);
@@ -397,7 +293,6 @@ class crm_company_obj extends _int_object implements crm_customer_interface
 		{
 			 $filter["state"] = $arr["states"];
 		}
->>>>>>> 1.55
 		$ol = new object_list($filter);
 		return $ol;
 	}
