@@ -431,14 +431,16 @@ class htmlclient extends aw_template
 		else
 		{
 			$this->vars(array(
+				"comment" => "",
 				"HELP_POPUP" => "",
 			));
 		}
 		$tpl_vars = array(
-				"caption" => $caption,
-				"element" => $this->draw_element($args),
-				"webform_caption" => !empty($args["style"]["caption"]) ? "st".$args["style"]["caption"] : "",
-				"webform_element" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
+			"caption" => $caption,
+			"element" => $this->draw_element($args),
+			"webform_caption" => !empty($args["style"]["caption"]) ? "st".$args["style"]["caption"] : "",
+			"webform_comment" => !empty($args["style"]["comment"]) ? "st".$args["style"]["comment"] : "",
+			"webform_element" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
 		$add = "";
 		$add2 = "";
@@ -548,9 +550,11 @@ class htmlclient extends aw_template
 		$tpl_vars = array(
 			"sbt_caption" => $arr["value"] ? $arr["value"] : t("Salvesta"),
 			"name" => $arr["name"] ? $arr["name"] : "",
+			"comment" => $arr["comment"] ? $arr["comment"] : "",
 			"action" => isset($arr["action"]) ? $arr["action"] : "",
 			"webform_element" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
-			"webform_caption" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : ""
+			"webform_caption" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
+			"webform_comment" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
 		);
 
 		if(isset($arr["capt_ord"]) && $arr["capt_ord"] === "right")
@@ -1767,6 +1771,12 @@ class htmlclient extends aw_template
 				"comment" => $arr["comment"]
 			));
 			$s_help_popup = $this->parse("HELP_POPUP");
+		}
+		else
+		{
+			$this->vars(array(
+				"comment" => ""
+			));
 		}
 
 		// name refers to a VAR inside the template

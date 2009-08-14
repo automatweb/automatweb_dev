@@ -25,6 +25,7 @@ function selall()
 	<tr bgcolor="{VAR:bgcolor}">
 		<td width="50">{VAR:jrk_caption}</td>
 		<td width="100">{VAR:cpt_caption}</td>
+		<td width="100">{VAR:comment_caption}</td>
 		<td width="150">{VAR:cpt_loc_caption}</td>
 		<td width="100">{VAR:type_caption}</td>
 		<td width="30">{VAR:side_caption}</td>
@@ -42,6 +43,7 @@ function selall()
 	<tr bgcolor="{VAR:bgcolor}">
 		<td width="50"><input type="text" name="prop_ord[{VAR:prp_key}]" value="{VAR:prp_order}" size="2"></td>
 		<td width="150"><input type="text" name="prpnames[{VAR:prp_key}]" value="{VAR:prp_caption}"></td>
+		<td width="150"><textarea name="prpcomments[{VAR:prp_key}]">{VAR:prp_comment}</textarea></td>
 		<td width="100">{VAR:capt_ord}</td>
 		<td width="100">{VAR:prp_type}</td>
 		<td width="30" align="center"><input type="checkbox" id="prp_opts[{VAR:prp_key}][nextto]" name="prp_opts[{VAR:prp_key}][nextto]" value="1" {VAR:nextto}></td>
@@ -52,13 +54,13 @@ function selall()
 	</tr>
 	<!-- SUB: CLF5 -->
 	<tr bgcolor="{VAR:bgcolor}">
-		<td colspan="2">
+		<td colspan="4">
 		<!-- SUB: HEIGHT -->
 		{VAR:height_caption}	
 		<input type="text" name="prp_opts[{VAR:prp_key}][height]" size="4" value="{VAR:ht}">
 		<!-- END SUB: HEIGHT -->
 		</td>
-		<td colspan="5">
+		<td colspan="6">
 		{VAR:width_caption}	
 		<input type="text" name="prp_opts[{VAR:prp_key}][width]" size="4" value="{VAR:wt}">
 		</td>
@@ -67,7 +69,7 @@ function selall()
 	<!-- SUB: CLF1 -->
 	<tr bgcolor="{VAR:bgcolor}">
 		<td>
-		Välja tüüp:
+		V&auml;lja t&uuml;&uuml;p:
 		</td>
 		<td>
 		{VAR:clf_type}
@@ -79,7 +81,7 @@ function selall()
 		<!-- END SUB: ordering -->
 		</td>
 		<td colspan="3">
-		Sorteeri omaduse järgi:
+		Sorteeri omaduse j&auml;rgi:
 		</td>
 	</tr>
 	<tr bgcolor="{VAR:bgcolor}">
@@ -120,11 +122,11 @@ function selall()
 	</tr>
 	<!-- SUB: NE_SELECT -->
 	<tr bgcolor="{VAR:bgcolor}">
-		<td>Nime väli:</td>
+		<td>Nime v&auml;li:</td>
 		<td colspan="2">
 			{VAR:name_select}
 		</td>
-		<td>E-maili väli:</td>
+		<td>E-maili v&auml;li:</td>
 		<td colspan="3">
 			{VAR:email_select}
 		</td>
@@ -133,7 +135,7 @@ function selall()
 	<!-- END SUB: CLF3 -->
 	<!-- SUB: CLF4 -->
 	<tr bgcolor="{VAR:bgcolor}">
-		<td colspan="3">Vaikimisi kuupäev: {VAR:time_select}</td>
+		<td colspan="3">Vaikimisi kuup&auml;ev: {VAR:time_select}</td>
 		<td colspan="4">
 		Aasta alates: {VAR:year_from}
 		Aasta kuni: {VAR:year_to}

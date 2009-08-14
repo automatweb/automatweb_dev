@@ -128,6 +128,9 @@
 @property def_caption_style type=select
 @caption Vaikimisi pealkirja stiil
 
+@property def_comment_style type=select
+@caption Vaikimisi kommentaari stiil
+
 @property def_prop_style type=select
 @caption Vaikimisi elemendi stiil
 
@@ -440,6 +443,7 @@ class webform extends class_base
 				break;
 
 			case "def_caption_style":
+			case "def_comment_style":
 			case "def_prop_style":
 			case "def_form_style":
 				$this->get_rel_props(array(
@@ -664,6 +668,7 @@ class webform extends class_base
 				}
 
 				$prplist[$key]["caption"] = (string) $arr["request"]["prpnames"][$key];
+				$prplist[$key]["comment"] = (string) $arr["request"]["prpcomments"][$key];
 
 				if (!empty($arr["request"]["prop_ord"][$key]))
 				{
@@ -1365,6 +1370,7 @@ class webform extends class_base
 				$this->vars(array(
 					"bgcolor" => $cnt % 2 ? "#C9C9C9" : "#FFFFFF",
 					"prp_caption" => $property["caption"],
+					"prp_comment" => $property["comment"],
 					"prp_type" => $type_str,
 					"prp_key" => $prpdata["name"],
 					"prp_order" => $property["ord"],
@@ -1562,6 +1568,7 @@ class webform extends class_base
 			$this->vars(array(
 				"property" => $sc,
 				"jrk_caption" => t("Jrk"),
+				"comment_caption" => t("Kommentaar"),
 				"cpt_caption" => t("Pealkiri"),
 				"cpt_loc_caption" => t("Pealkirja asukoht"),
 				"type_caption" => t("T&uuml;&uuml;p"),
@@ -1655,6 +1662,13 @@ class webform extends class_base
 				"type" => "select",
 				"options" => $this->all_rels,
 				"selected" => $sel_styles[$key]["caption"],
+			);
+			$props[$key."_comment"] = array(
+				"name" => "style[$key][comment]",
+				"caption" => sprintf(t("%s kommentaari stiil"), $val["caption"]),
+				"type" => "select",
+				"options" => $this->all_rels,
+				"selected" => $sel_styles[$key]["comment"],
 			);
 			$props[$key] = array(
 				"name" => "style[$key][prop]",
@@ -1973,7 +1987,7 @@ class webform extends class_base
 					"name" => $pn."_err".$num,
 					"type" => "text",
 					"store" => "no",
-					"value" => '<font color="red" class="st'.$m_styles["error"].'">'.$errs[$pn]["msg"].'</font>',
+					"value" => "<font color='red' class='st".$m_styles["error"]."'>".$errs[$pn]["msg"]."</font>",
 					"no_caption" => 1,
 				);
 				$erloc = safe_array($arr["obj_inst"]->prop("error_location"));
@@ -2031,14 +2045,19 @@ class webform extends class_base
 			"obj_inst" => $dummy,
 		));
 		$def_caption_style = $arr["obj_inst"]->prop("def_caption_style");
+		$def_comment_style = $arr["obj_inst"]->prop("def_caption_style");
 		$def_prop_style = $arr["obj_inst"]->prop("def_prop_style");
-		if(!empty($def_caption_style) or !empty($def_prop_style))
+		if(!empty($def_caption_style) or !empty($def_prop_style) or !empty($def_comment_style))
 		{
 			foreach($els as $key => $val)
 			{
 				if(!empty($def_caption_style))
 				{
 					$els[$key]["style"]["caption"] = $def_caption_style;
+				}
+				if(!empty($def_comment_style))
+				{
+					$els[$key]["style"]["comment"] = $def_comment_style;
 				}
 				if(!empty($def_prop_style))
 				{
