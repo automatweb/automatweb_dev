@@ -65,13 +65,12 @@
                 @property timing_orders type=releditor reltype=RELTYPE_ORDERS_REPEATER use_form=emb rel_id=first field=aw_timing_orders parent=timing_orders_lay
                 @caption Tellimuste impordi ajastus
 
-@default group=product_status
+// lets leave the cleanup for later --dragut
+default group=product_status
 
-	@layout stat_prods_lay type=vbox area_caption=Toodete&nbsp;impordi&nbsp;staatus closeable=1
+	layout stat_prods_lay type=vbox area_caption=Toodete&nbsp;impordi&nbsp;staatus closeable=1
 
-		@property product_status_tmp type=text store=no no_caption=1 parent=stat_prods_lay
-
-		@property product_status type=text store=no no_caption=1 parent=stat_prods_lay
+		property product_status type=text store=no no_caption=1 parent=stat_prods_lay
 
 @default group=product_status_dev
 
@@ -130,8 +129,8 @@
 
 @groupinfo import_status caption="Importide staatus"
 
-	@groupinfo product_status caption="Toodete import" parent=import_status submit=no
-	@groupinfo product_status_dev caption="[dev] Toodete import" parent=import_status submit=no
+	groupinfo product_status caption="Toodete import" parent=import_status submit=no
+	@groupinfo product_status_dev caption="Toodete import" parent=import_status submit=no
 	@groupinfo product_prices caption="Toodete hinnad" parent=import_status submit=no
 	@groupinfo product_amounts caption="Toodete laoseisud" parent=import_status  submit=no
 	@groupinfo pricelists caption="Hinnakirjad" parent=import_status submit=no
@@ -908,8 +907,6 @@ die("meh");*/
 
 	function _get_product_status_dev_info($arr)
 	{
-		// if there is ongoing import, then show its controls and statuses here
-		$arr['prop']['value'] = 
 		// if there is no ongoing imports and none are selected from the left pane, then show the link to start a new import
 		// i know about on going imports if i just parse the stat file:
 		$import = new warehouse_products_import();
@@ -930,8 +927,18 @@ die("meh");*/
 					'url' => $this->mk_my_orb('bg_control', array('id' => $arr['obj_inst']->id(), 'do' => 'start'), 'warehouse_products_import'),
 				))
 			);
-		}
 
+			// tmp OTTO specific stuff here, 
+			$lines[] = '---------------';
+			$ol = new object_list(array(
+				'class_id' => CL_OTTO_IMPORT
+			));
+			$otto_import = $ol->begin();
+			$lines[] = html::href(array(
+				'caption' => t('Seadista mis faile imporditakse'),
+				'url' => $this->mk_my_orb('change', array('id' => $otto_import->id(), 'group' => 'files', 'return_url' => get_ru()), CL_OTTO_IMPORT)
+			)); 
+		}
 
 		$arr['prop']['value'] = implode("<br />\n", $lines);
 

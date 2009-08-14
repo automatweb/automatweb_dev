@@ -106,7 +106,7 @@ class warehouse_products_import extends warehouse_data_import
 		{
 			$product_codes_list[] = $code->nodeValue;
 		}
-	
+
 		$products_ol = new object_list(array(
 			'class_id' => CL_SHOP_PRODUCT,
 			'code' => $product_codes_list
@@ -227,15 +227,35 @@ class warehouse_products_import extends warehouse_data_import
 
 				if ($node->nodeName == 'products')
 				{
+					$existing_products_lut = array();
+					$existing_products_conns = $packet_obj->connections_from(array(
+						'type' => 'RELTYPE_PRODUCT'
+					));
+
+					foreach (safe_array($existing_products_conns) as $existing_products_conn)
+					{
+						$existing_product_obj = $existing_products_conn->to();
+						if (!empty($existing_products_lut[$existing_product_obj->prop('code')]))
+						{
+							$existing_product_obj->delete(true);
+						}
+						else
+						{
+							$existing_products_lut[$existing_product_obj->prop('code')] = $existing_product_obj->id();
+						}
+					}
+					
 					foreach ($node->childNodes as $product_node)
 					{
 						// I need to get the damn code value from here
 						$code = $product_node->getElementsByTagName('code');
 						$code = $code->item(0)->nodeValue;
 
-						if (!empty($products_lut[$code]))
+					//	if (!empty($products_lut[$code]))
+						if (!empty($existing_products_lut[$code]))
 						{
-							$product_obj = new object($products_lut[$code]);
+						//	$product_obj = new object($products_lut[$code]);
+							$product_obj = new object($existing_products_lut[$code]);
 						}
 						else
 						{
@@ -264,6 +284,7 @@ class warehouse_products_import extends warehouse_data_import
 					}
 				}
 			}
+			$packet_obj->save();
 		}
 	}
 
@@ -320,7 +341,7 @@ class warehouse_products_import extends warehouse_data_import
 					{
 						if (pathinfo($image_node->nodeValue, PATHINFO_EXTENSION) == 'jpg')
 						{	
-							$image_name = pathinfo($image_node->nodeValue, PATHINFO_FILENAME);
+							$image_name = basename($image_node->nodeValue);
 						
 							if (!empty($existing_images_lut[$image_name]))
 							{
@@ -328,19 +349,34 @@ class warehouse_products_import extends warehouse_data_import
 							}
 							else
 							{
-								$image_inst = new image();
-								$image_data = $image_inst->add_image(array(
-									'from' => 'url',
-									'url' => $image_node->nodeValue,
-									'orig_name' => $image_name,
-									'parent' => $product_obj->id()
-								));
-								$image_obj = $image_data['id'];
+								$image_obj = new object();
+								$image_obj->set_parent($product_obj->id());
+								$image_obj->set_class_id(CL_IMAGE);
+								$image_obj->set_status(STAT_ACTIVE);
+								$image_obj->set_name($image_name);
+								$image_oid = $image_obj->save();
 								$product_obj->connect(array(
 									'type' => 'RELTYPE_IMAGE',
-									'to' => $image_data['id']
+									'to' => $image_oid
 								));
 							}
+							$image_inst = new image();
+							$image_data = $image_inst->add_image(array(
+								'from' => 'url',
+								'url' => $image_node->nodeValue,
+								'orig_name' => $image_name,
+								'id' => $image_obj->id()
+							));
+							$resize_params = array(
+								'id' => $image_obj->id(),
+								'file' => 'file',
+								'width' => 164
+							);
+							$image_inst->resize_picture(&$resize_params);
+							$image_obj->add_image_big($image_node->nodeValue);
+							
+							$image_obj->save();
+							
 							// Let keep track of those images I have updated
 							unset($existing_images_lut[$image_name]);
 						}
@@ -348,7 +384,7 @@ class warehouse_products_import extends warehouse_data_import
 					}
 					// I can't delete stuff from product objects that easily
 					// cause there are cases where one product is updated twice 
-					// with different data and i need keep it all
+					// with different data and i need to keep it all
 					foreach ($existing_images_lut as $existing_image)
 					{
 				//		$existing_image_obj = new object($existing_image);

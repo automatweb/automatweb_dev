@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.109 2009/08/12 14:05:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.110 2009/08/14 08:52:30 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -4122,8 +4122,24 @@ class otto_import extends class_base implements warehouse_import_if
 				$row = $this->char_replacement($row);
 				$row[2] = $this->conv($row[2]);
 
+				// Lets remove the first underscore --dragut@13.08.2009
+				if ($row[2]{0} == '_')
+				{
+					$row[2] = substr($row[2], 1);
+				}
+
+				// Lets remove the first underscore --dragut@13.08.2009
 				$extrafld = trim($row[3]);
+				if ($extrafld{0} == '_')
+				{
+					$extrafld = substr($extrafld, 1);
+				}
 				$desc = $this->conv(trim($row[4]." ".$row[5]." ".$row[6]." ".$row[7]." ".$row[8]." ".$row[9]." ".$row[10]." ".$row[11]." ".$row[12]." ".$row[13]." ".$row[14]." ".$row[15]." ".$row[16]." ".$row[17]." ".$row[18]." ".$row[19]." ".$row[20]." ".$row[21]." ".$row[22]." ".$row[23]." ".$row[24]." ".$row[25]." ".$row[26]." ".$row[27]." ".$row[28]." ".$row[29]." ".$row[30]." ".$row[31]." ".$row[32]." ".$row[33]." ".$row[34]." ".$row[35]." ".$row[36]." ".$row[37]." ".$row[38]." ".$row[39]." ".$row[40]." ".$row[41]." ".$row[42]));
+
+				// remove the underscore before description as well
+				if ($desc{0} == '_'){
+					$desc = substr($desc, 1);
+				}
 
 				$this->db_query("
 					INSERT INTO otto_imp_t_prod(pg,nr,title,c,extrafld, lang_id)
@@ -4212,9 +4228,18 @@ class otto_import extends class_base implements warehouse_import_if
 
 				$this->quote(&$row);
 				$row = $this->char_replacement($row);
+
+				// some weird underscores were introduced in the beginning of the field --dragut@13.08.2009
+				if ($row[2]{0} == '_')
+				{
+					$row[2] = substr($row[2], 1);
+				}
+				$row[3] = str_replace('_', '', $row[3]);
+				$row[4] = str_replace('_', '', $row[4]);
+
 				$full_code = str_replace(".","", $row[4]);
 				$full_code = str_replace(" ","", $full_code);
-
+				
 				$row[4] = substr(str_replace(".","", str_replace(" ","", $row[4])), 0, 8);
 				$color = $row[3];
 				if ($row[2] != "")
@@ -4317,7 +4342,10 @@ class otto_import extends class_base implements warehouse_import_if
 				{
 					continue;
 				}
-
+				if ($row[2]{0} == '_')
+				{
+					$row[2] = substr($row[2], 1);
+				}
 				$orow = $row;
 				if (count($row) == 5)
 				{
@@ -4326,8 +4354,14 @@ class otto_import extends class_base implements warehouse_import_if
 				}
 				$row = $this->char_replacement($row);
 				$this->quote(&$row);
+
+				$row[3] = str_replace('_', '', $row[3]);
+
 				$orig = $row[5];
-				$row[5] = (double)trim(str_replace(",",".", str_replace("-", "",str_replace(chr(160), "", $row[5]))));
+			//	$row[5] = (double)trim(str_replace(",",".", str_replace("-", "",str_replace(chr(160), "", $row[5]))));
+				$searches = array(',', '-', '_', chr(160), chr(208));
+				$replaces = array('.', '', '', '', '');
+				$row[5] = (double)trim(str_replace($searches, $replaces, $row[5]));
 				if ($row[4] == "")
 				{
 					$row[4] = "tk";
@@ -4346,7 +4380,7 @@ class otto_import extends class_base implements warehouse_import_if
 
 					for ($i = 0; $i < strlen($orig); $i++)
 					{
-						echo "at pos ".$i." cahar = ".ord($orig{$i})." v = ".$orig{$i}." <br>";
+						echo "at pos ".$i." char = ".ord($orig{$i})." v = ".$orig{$i}." <br>";
 					}
 				}
 				$num++;
@@ -5966,8 +6000,9 @@ class otto_import extends class_base implements warehouse_import_if
 
 	function read_img_from_heine($arr)
 	{
-		echo "[ HEINE ] - product search url is changed <br />\n";
+		// This heine import works somewhat weird way, will look at it later
 		return false;
+
 
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
@@ -5976,8 +6011,8 @@ class otto_import extends class_base implements warehouse_import_if
 		// no spaces in product code ! --dragut
 		$pcode = str_replace(" ", "", $pcode);
 
-		$url = "http://search.heine.de/Heine/Search.ff?query=".$pcode;
-
+	//	$url = "http://search.heine.de/Heine/Search.ff?query=".$pcode;
+		$url = "http://www.heine.de/is-bin/INTERSHOP.enfinity/WFS/Heine-HeineDe-Site/de_DE/-/EUR/ViewProductSearch-Search;sid=FPzpHV5oa6GkHRTr4Hn03ws4Wg19UWgvT-9O9HYx0YFE1ZEVxF5O9HYxlOi83Q==?query=$pcode&host=www.heine.de#lmPromo=la,1,hk,sh_home,fl,sh_home_header_suchen";
 		echo "[ HEINE ] Loading <a href=\"$url\">page</a> content ... ";
 		flush();
 

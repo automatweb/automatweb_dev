@@ -89,17 +89,22 @@ class warehouse_data_import extends run_in_background
 	// what needs to be done in a step
 	function bg_run_step($o)
 	{
-		$item = next($this->data);
+		$item = current($this->data);
 
 		if ($item !== false)
 		{
 			$this->process_item($item);
+
+			// advance the internal pointer of the array by one
+			next($this->data);
+
 			return BG_OK;
 		}
 		else
 		{
 			return BG_DONE;
 		}
+
 	}
 
 	// for clean-up tasks
