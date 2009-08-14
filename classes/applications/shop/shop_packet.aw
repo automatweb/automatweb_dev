@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.26 2009/08/04 14:36:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.27 2009/08/14 16:50:08 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -106,6 +106,9 @@
 
 @reltype CATEGORY value=3 clid=CL_SHOP_PRODUCT_CATEGORY
 @caption Kategooria
+
+@reltype BRAND value=4 clid=CL_SHOP_BRAND
+@caption Kaubam&auml;rk
 
 */
 
@@ -695,6 +698,21 @@ class shop_packet extends class_base
 			"name" => $ob->prop("name"),
 		));
 
+		//r2ndom miskite sama kategooria pakettide n2itamine
+		if($this->is_template("MORE_PRODUCTS"))
+		{
+			$packets = $ob->get_same_cat_packets();
+			$more = "";
+			foreach($packets->arr() as $pack)
+			{
+				$this->vars($pack->get_data());
+				$more.= $this->parse("MORE_PRODUCTS");
+			}
+			$this->vars(array(
+				"MORE_PRODUCTS" => $more,
+			));
+		}
+
 		$data = $ob->get_data();
 		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
  //		$data["submit_url"] = $this->mk_my_orb("submit_add_cart", array(
@@ -734,7 +752,7 @@ class shop_packet extends class_base
 			{
 				if($data["sizes"][$package] && $data["prices"][$package])
 				{
-					$prod_sizes[] = $data["sizes"][$package];
+					$prod_sizes[] = "\"".$data["sizes"][$package]."\"";
 					$prod_prices[] = $data["prices"][$package];
 					$prod_ids[] = $package;
 				}

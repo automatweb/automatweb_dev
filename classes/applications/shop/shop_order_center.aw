@@ -8,15 +8,19 @@
 @classinfo syslog_type=ST_SHOP_ORDER_CENTER relationmgr=yes maintainer=kristo no_comment=1 no_status=1 prop_cb=1
 
 @default group=general
+@default table=aw_shop_order_center
 
-@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE table=aw_shop_order_center field=aw_warehouse_id
+@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE field=aw_warehouse_id
 @caption Ladu
 
 @property root_menu type=relpicker reltype=RELTYPE_MENU store=connect multiple=1
 @caption Veebis kuvamise juurkaustad
 
-@property cart type=relpicker reltype=RELTYPE_CART table=aw_shop_order_center field=aw_cart_id
+@property cart type=relpicker reltype=RELTYPE_CART field=aw_cart_id
 @caption Ostukorv
+
+@property default_currency type=relpicker reltype=RELTYPE_DEFAULT_CURRENCY field=aw_default_currency
+@caption Vaikimisi valuuta
 
 @default table=objects
 @default field=meta
@@ -304,6 +308,9 @@
 
 @reltype RENT_CONFIGURATION value=19 clid=CL_SHOP_RENT_CONFIGURATION
 @caption J&auml;relmaksu konfiguratsioon
+
+@reltype DEFAULT_CURRENCY value=20 clid=CL_CURRENCY
+@caption Vaikimisi valuuta
 
 */
 
@@ -1841,6 +1848,7 @@ class shop_order_center extends class_base
 	{
 		switch($f)
 		{
+			case "aw_default_currency":
 			case "aw_rent_configuration":
 			case "aw_root_menu":
 				$this->db_add_col($t, array(
@@ -2135,6 +2143,7 @@ class shop_order_center extends class_base
 			$doc->set_class_id(CL_DOCUMENT);
 			$doc->set_parent($menu);
 			$doc->set_name($menu);
+			$doc->set_status(2);
 			$doc->save();
 		}
 		if(is_object($doc))

@@ -48,18 +48,26 @@
 @property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 field=aw_warehouse
 @caption Ladu
 
+@property delivery_address type=relpicker reltype=RELTYPE_ADDRESS automatic=1 field=aw_address
+@caption Kohaletoimetamise aadress
+
 @property order_status type=chooser default=0 field=aw_status
 @caption Staatus
 
 @property taxed type=chooser field=aw_taxed
 @caption Maks
 
+@property payment_type type=select field=aw_payment_type
+@caption Maksetingimus
+
+@property sell_channel type=select field=aw_channel
+@caption M&uuml;&uuml;gikanal
+
 @property art_toolbar type=toolbar no_caption=1 store=no
 
 @property articles type=table store=no no_caption=1
 
-
-@reltype PURCHASER value=1 clid=CL_CRM_COMPANY
+@reltype PURCHASER value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Hankija
 
 @reltype BUYER_REP value=2 clid=CL_CRM_PERSON
@@ -88,6 +96,9 @@
 
 @reltype JOB value=10 clid=CL_MRP_JOB
 @caption T&ouml;&ouml;
+
+@reltype ADDRESS value=11 clid=CL_CRM_ADDRESS
+@caption Aadress
 */
 
 class shop_sell_order extends class_base
@@ -108,6 +119,7 @@ class shop_sell_order extends class_base
 			ORDER_STATUS_SENT => t("Saadetud"),
 			ORDER_STATUS_CLOSED => t("T&auml;idetud"),
 		);
+
 	}
 
 	function callback_mod_reforb($arr)
@@ -149,6 +161,10 @@ class shop_sell_order extends class_base
 			case "aw_job":
 			case "aw_deal_date":
 			case "aw_status":
+			case "aw_delivery":
+			case "aw_channel":
+			case "aw_address":
+			case "aw_payment_type":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -187,6 +203,13 @@ class shop_sell_order extends class_base
 		return get_instance(CL_SHOP_PURCHASE_ORDER)->_set_related_orders($arr);
 	}
 
+	function request_execute($o)
+	{
+		return $this->show(array(
+			"id" => $o->id(),
+		));
+	}
+
 	/**
 		@attrib name=show
 		@param id required
@@ -207,22 +230,22 @@ class shop_sell_order extends class_base
 		$t->define_field(array(
 			"name" => "prod",
 			"caption" => t("Toode"),
-			"align" => "center"
+			"align" => "left"
 		));
 		$t->define_field(array(
 			"name" => "amount",
 			"caption" => t("Kogus"),
-			"align" => "center"
+			"align" => "right"
 		));
 		$t->define_field(array(
 			"name" => "price",
 			"caption" => t("Hind"),
-			"align" => "center"
+			"align" => "right"
 		));
 		$t->define_field(array(
 			"name" => "sum",
 			"caption" => t("Summa"),
-			"align" => "center"
+			"align" => "right"
 		));
 
 		$sum = 0;
@@ -231,7 +254,7 @@ class shop_sell_order extends class_base
 		{
 			$row = $c->to();
 			$c_sum = $row->amount * $row->price;
-			$sum += $c_sum;
+			$sum+= $c_sum;arr($sum);
 			$t->define_data(array(
 				"prod" => $row->prod_name,
 				"amount" => $row->amount,
@@ -242,6 +265,8 @@ class shop_sell_order extends class_base
 		}
 
 		$this->vars(array(
+			"orderer" => $o->prop("purchaser.name"),
+			"status" => $this->states[$o->prop("order_status")],
 			"table" => $t->draw(),
 			"sum" => $sum,
 			"different_products" => $different_products,

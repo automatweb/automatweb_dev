@@ -24,12 +24,16 @@ class products_show_obj extends _int_object
 
 	public function get_web_items()
 	{
-		$ol = new object_list();
-		foreach($this->prop("categories") as $category)
-		{
-			$c = obj($category);
-			
+		$categories = $this->get_categories();
 
+		if(!$categories->count() && (!is_array($this->prop("packets")) || !sizeof($this->prop("packets"))))
+		{
+			$categories = $this->all_lower_categories();
+		}
+
+		$ol = new object_list();
+		foreach($categories->arr() as $c)
+		{
 			if(false)
 			{
 				$products = $c->get_packagings();
@@ -51,15 +55,13 @@ class products_show_obj extends _int_object
 			$ol->add($packet);
 		}
 		return $ol;
-
-
 	}
 
 	public function get_oc()
 	{
 		$ol = new object_list(array("class_id" => CL_SHOP_ORDER_CENTER));
-
-		return reset($ol->arr());
+		$ol = $ol->arr();
+		return reset($ol);
 	}
 
 	public function get_categories()
@@ -73,6 +75,28 @@ class products_show_obj extends _int_object
 			}
 		}
 		return $ol;
+	}
+
+	private function all_lower_categories()
+	{
+		$ol = new object_list();
+		$menu = $this->parent();
+		$ot = new object_tree(array(
+			"parent" => $menu,
+//			"class_id" => CL_FILE
+		));
+
+	
+		foreach($ot->ids() as $s)
+		{
+			$o = obj($s);
+			if($o->class_id() == CL_PRODUCTS_SHOW)
+			{
+				$ol->add($o->get_categories());
+			}
+		}
+		return $ol;
+
 	}
 
 	public function add_category($cat)
@@ -107,6 +131,27 @@ class products_show_obj extends _int_object
 		return null;
 	}
 
+	public function get_category_menu($cat)
+	{
+		$category = obj($cat);
+		$ol = new object_list(array(
+			"class_id" => CL_PRODUCTS_SHOW,
+			"CL_PRODUCTS_SHOW.RELTYPE_CATEGORY" => $cat,
+		));
+		$ol = $ol->arr();
+		$o = reset($ol);
+		if(is_object($o))
+		{
+			$document = $o->get_document();
+			if(is_oid($document))
+			{
+				$doc = obj($document);
+				return $doc->parent();
+			}
+		}
+
+		return null;
+	}
 }
 
 ?>

@@ -203,6 +203,7 @@ class shop_order_center_obj extends _int_object
 			$doc->set_class_id(CL_DOCUMENT);
 			$doc->set_parent($menu);
 			$doc->set_name($menu);
+			$doc->set_status(2);
 			$doc->save();
 		}
 		if(is_object($doc))
@@ -231,6 +232,12 @@ class shop_order_center_obj extends _int_object
 		return $o;
 	}
 
-
+	/**
+		@attrib api=1
+	**/
+	public function get_currency()
+	{
+		return $this->prop("default_currency");
+	}
 
 }

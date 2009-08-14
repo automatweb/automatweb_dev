@@ -170,6 +170,18 @@ class shop_order_cart_obj extends _int_object
 		}
 	}
 
+
+	/** resets cart
+		@attrib api=1
+	**/
+	public function reset_cart()
+	{
+		if(!empty($_SESSION["cart"]))
+		{
+			unset($_SESSION["cart"]);
+		}
+	}
+
 	/**
 		@attrib api=1
 	**/
@@ -195,8 +207,7 @@ class shop_order_cart_obj extends _int_object
 		$warehouse = $this->oc->prop("warehouse");
 		$cart = $this->get_cart();
 		$order_data = $this->get_order_data();
-//arr($cart);
-//arr($order_data);die();
+
 		$o = new object();
 		$o->set_name(t("M&uuml;&uuml;gitellimus")." ".date("d.m.Y H:i"));
 		$o->set_parent($this->oc->id());
@@ -204,29 +215,16 @@ class shop_order_cart_obj extends _int_object
 		$o->set_prop("warehouse" , $warehouse);
 		$o->set_prop("date" , time());
 
-		/*
-
-@property purchaser type=relpicker reltype=RELTYPE_PURCHASER field=aw_purchaser
-@caption Tellija
-
-@property buyer_rep type=relpicker reltype=RELTYPE_BUYER_REP field=aw_buyer_rep
-@caption Tellija esindaja
-
-@property trans_cost type=textbox field=aw_trans_cost
-@caption Transpordikulu
-
-@property transp_type type=relpicker field=aw_transp_type reltype=RELTYPE_TRANSFER_METHOD
-@caption L&auml;hetusviis
-
-@property currency type=relpicker reltype=RELTYPE_CURRENCY automatic=1 field=aw_currency
-@caption Valuuta
-
-@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 field=aw_warehouse
-@caption Ladu
-
-
-*/
+		$person = $this->_get_person($order_data);
+		$o->set_prop("purchaser" , $person->id());
+		$o->set_prop("buyer_rep" , $person->id());
+		$address = $this->_get_address($order_data);
+		$o->set_prop("delivery_address" , $address->id());
+		$o->set_prop("transp_type" , $order_data["delivery"]);
+		$o->set_prop("payment_type" , $order_data["payment"]);
+		$o->set_prop("currency" , $this->oc->get_currency());
 		$o->save();
+
 		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quant)
 		{
@@ -237,50 +235,129 @@ class shop_order_cart_obj extends _int_object
 				{
 					continue;
 				}
+				$product = obj($iid);
 				$o->add_row(array(
 					"product" => $iid,
-					"amount" => $cart["items"][$iid][$key],
+					"amount" => $cart["items"][$iid][$key]["items"],
+					"price" => $product->get_shop_price($this->oc->id()),
 				));
 			}
-		}		
-		return $rval;
+		}
+		$this->reset_cart();
+		return $o->id();
+	}
+
+	private function _get_person($data)
+	{
+		$person = "";
+		//sellisel juhul otsib olemasolevate isikute hulgast, kui on andmeid mille j2rgi otsida
+		if(!empty($data["personalcode"]) || !(empty($data["birthday"]) || empty($data["lastname"])))
+		{
+			$filter = array(
+				"class_id" => CL_CRM_PERSON,
+				"site_id" => array(),
+				"lang_id" => array(),
+			);
+			if(!empty($data["personalcode"]))
+			{
+				$filter["personal_id"] = $data["personalcode"];
+			}
+			if(!empty($data["firstname"]))
+			{
+				$filter["firstname"] = $data["firstname"];
+			}
+			if(!empty($data["lastname"]))
+			{
+				$filter["lastname"] = $data["lastname"];
+			}
+			if(!empty($data["birthday"]))
+			{
+				if(is_array($data["birthday"]))
+				{
+					$filter["birthday"] = mktime(0,0,0,$data["birthday"]["day"],$data["birthday"]["month"],$data["birthday"]["year"]);
+				}
+			}
+			$ol = new object_list();
+			if($ol->count())
+			{
+				$person = $ol->begin();
+			}
+		}
+		if(!is_object($person))
+		{
+			$person = new object();
+			$person->set_class_id(CL_CRM_PERSON);
+			$person->set_parent($this->oc->id());
+			$person->set_name($data["firstname"]." ".$data["lastname"]);
+			$person->set_prop("firstname" , $data["firstname"]);
+			$person->set_prop("lastname" , $data["lastname"]);
+			if(!empty($data["personalcode"]))
+			{
+				$person->set_prop("personal_id" , $data["personalcode"]);
+			}
+			if(!empty($data["birthday"]))
+			{
+				if(is_array($data["birthday"]))
+				{
+						//peaks selle ka salvestama
+				}
+			}
+			if(!empty($data["customer_no"]))
+			{
+				$person->set_prop("external_id" , $data["customer_no"]);
+			}
+			$person->save();
+			if(!empty($data["email"]))
+			{
+				$person->set_email($data["email"]);
+			}
+			if(!empty($data["mobilephone"]))
+			{
+				$person->set_phone($data["mobilephone"]);
+			}
+			if(!empty($data["homephone"]))
+			{
+				$person->set_phone($data["homephone"], "home");
+			}
+			if(!empty($data["workphone"]))
+			{
+				$person->set_phone($data["workphone"], "work");
+			}
+
+		}
+		return $person;
+	}
+
+
+	private function _get_address($data)
+	{
+		$address = new object();
+		$address->set_parent($this->oc->id());
+		$address->set_name($data["address"]." ".$data["city"]);
+		$address->set_class_id(CL_CRM_ADDRESS);
+		$address->set_prop("aadress" ,$data["address"]);
+		if(!empty($data["index"]))
+		{
+			$address->set_prop("postiindeks",$data["index"]);
+		}
+		$address->save();
+		if(!empty($data["city"]))
+		{
+			$address->set_city($data["city"]);
+		}
+		return $address;
 	}
 
 	public function remove_product($product)
 	{
-/*Array
-(
-    [items] => Array
-        (
-            [359296] => Array
-                (
-                    [0] => Array
-                        (
-                            [items] => 4
-                        )
-
-                )
-
-            [359294] => Array
-                (
-                    [0] => Array
-                        (
-                            [items] => 11
-                        )
-
-                )
-
-        )
-
-)*/
 		$cart = $this->get_cart();
 		if(isset($cart["items"][$product]))
 		{
 			$cart["items"][$product] = null;
 		}
 		$this->set_cart($cart);
-
 	}
+
 
 }
 

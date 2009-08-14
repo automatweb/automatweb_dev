@@ -7069,154 +7069,157 @@ $tb->add_delete_button();
 	public function callback_generate_scripts($arr)
 	{
 		$js = "";
-		if ($arr['request']['group'] == 'articles')
+		if(!empty($arr['request']['group']))
 		{
-			$vars = array('prod_s_name', 'prod_s_code', 'prod_s_barcode');
-
-			$ajax_vars = array();
-
-			foreach ($vars as $var)
+			if ($arr['request']['group'] == 'articles')
 			{
-				$ajax_vars[] = $var.": document.getElementsByName('".$var."')[0].value\n";
+				$vars = array('prod_s_name', 'prod_s_code', 'prod_s_barcode');
+
+				$ajax_vars = array();
+
+				foreach ($vars as $var)
+				{
+					$ajax_vars[] = $var.": document.getElementsByName('".$var."')[0].value\n";
+				}
+				$js =  "
+
+				function update_products_table(){
+
+					var result=[];
+					result = $('input[name^=prod_s]');
+
+					button=document.getElementsByName('prod_s_sbt')[0];
+					button.disabled = true;
+					$.post('/automatweb/orb.aw?class=shop_warehouse&action=ajax_update_products_table&id=".$arr['obj_inst']->id()."&'+result.serialize(),{
+						id: ".$arr["obj_inst"]->id()."
+						, ".join(", " , $ajax_vars)."},function(html){
+							x=document.getElementsByName('products_list');
+							x[0].innerHTML = html;
+							button.disabled = false;
+					});
+				}
+				";
 			}
-			$js =  "
 
-			function update_products_table(){
-
-				var result=[];
-				result = $('input[name^=prod_s]');
-
-				button=document.getElementsByName('prod_s_sbt')[0];
-				button.disabled = true;
-				$.post('/automatweb/orb.aw?class=shop_warehouse&action=ajax_update_products_table&id=".$arr['obj_inst']->id()."&'+result.serialize(),{
-					id: ".$arr["obj_inst"]->id()."
-					, ".join(", " , $ajax_vars)."},function(html){
-						x=document.getElementsByName('products_list');
-						x[0].innerHTML = html;
-						button.disabled = false;
-				});
-			}
-			";
-		}
-
-		if ($arr['request']['group'] == 'category')
-		{
-
-			$js.= "
-			function add_cat()
+			if ($arr['request']['group'] == 'category')
 			{
-				var cat = get_property_data['cat'];
-				var my_string = prompt('".t("Sisesta kategooria nimi")."');
-				$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_category',
-					 id: '".$arr["obj_inst"]->id()."' , name: my_string, cat: cat}, function (html) {
-						reload_property(['category_tree','category_list']);
-					}
-				);
-			}
-			function add_cat_type()
-			{
-				var my_string = prompt('".t("Sisesta kategooria liigi nimi")."');
-				$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_category_type',
-					 id: '".$arr["obj_inst"]->id()."' , name: my_string}, function (html) {
-						reload_property(['category_tree','category_list']);
-					}
-				);
-			}
-			function add_type(type)
-			{
-				result = $('input[name^=sel]');
-				$.get('/automatweb/orb.aw?class=shop_warehouse&action=add_type_to_categories&id=".$arr["obj_inst"]->id()."&type=' + type + '& ' + result.serialize(), {
-						}, function (html) {
+
+				$js.= "
+				function add_cat()
+				{
+					var cat = get_property_data['cat'];
+					var my_string = prompt('".t("Sisesta kategooria nimi")."');
+					$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_category',
+						id: '".$arr["obj_inst"]->id()."' , name: my_string, cat: cat}, function (html) {
+							reload_property(['category_tree','category_list']);
+						}
+					);
+				}
+				function add_cat_type()
+				{
+					var my_string = prompt('".t("Sisesta kategooria liigi nimi")."');
+					$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_category_type',
+						id: '".$arr["obj_inst"]->id()."' , name: my_string}, function (html) {
+							reload_property(['category_tree','category_list']);
+						}
+					);
+				}
+				function add_type(type)
+				{
+					result = $('input[name^=sel]');
+					$.get('/automatweb/orb.aw?class=shop_warehouse&action=add_type_to_categories&id=".$arr["obj_inst"]->id()."&type=' + type + '& ' + result.serialize(), {
+							}, function (html) {
+								reload_property('category_list');
+							}
+						);
+				}
+				function rem_type_from_cat(cat , type)
+				{
+					$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'rem_type_from_category',
+						id: '".$arr["obj_inst"]->id()."' ,  cat: cat ,  type: type}, function (html) {
 							reload_property('category_list');
 						}
 					);
+				}
+				function save_categories()
+				{
+					result = $('input[name^=ord]');
+					$.get('/automatweb/orb.aw?class=shop_warehouse&action=save_categories&id=".$arr["obj_inst"]->id()."& ' + result.serialize(), {
+							}, function (html) {
+								reload_property('category_list');
+							}
+						);
+				}
+				";
 			}
-			function rem_type_from_cat(cat , type)
+
+			if($arr["request"]["group"] == "product_management" || $arr["request"]["group"] == "articles")
 			{
-				$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'rem_type_from_category',
-					 id: '".$arr["obj_inst"]->id()."' ,  cat: cat ,  type: type}, function (html) {
-						reload_property('category_list');
+
+				$types = $arr["obj_inst"]->get_product_category_types();
+
+				$js.= "
+					function add_product()
+					{
+						var cat = get_property_data['cat'];
+						var my_string = prompt('".t("Sisesta toote nimi")."');
+						$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_product',
+							id: '".$arr["obj_inst"]->id()."' , name: my_string,";
+							foreach($types->names() as $id => $cat)
+							{
+								$js.= " cat_".$id.": get_property_data['cat_".$id."'],
+								";
+							}
+								$js.= " cat: cat}, function (html) {
+								reload_property('product_management_list');
+							}
+						);
 					}
-				);
+				";
+				$js.= "
+					function copy_products()
+					{
+						result = $('input[name^=sel]');
+						$.get('/automatweb/orb.aw?class=shop_warehouse&action=copy_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
+							}, function (html) {
+								reload_property('product_management_toolbar');
+								reload_property('product_management_list');
+							}
+						);
+					}
+				";
+				$js.= "
+					function cut_products()
+					{
+						result = $('input[name^=sel]');
+						$.get('/automatweb/orb.aw?class=shop_warehouse&action=cut_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
+							}, function (html) {
+								reload_property('product_management_toolbar');
+								reload_property('product_management_list');
+							}
+						);
+					}
+				";
+				$js.= "
+					function paste_products()
+					{
+						var cat = get_property_data['cat'];
+						$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'paste_products',
+							id: '".$arr["obj_inst"]->id()."' ,";
+							foreach($types->names() as $id => $cat)
+							{
+								$js.= " cat_".$id.": get_property_data['cat_".$id."'],
+								";
+							}
+								$js.= " cat: cat}, function (html) {
+								reload_property('product_management_toolbar');
+								reload_property('product_management_list');
+							}
+						);
+
+					}
+				";
 			}
-			function save_categories()
-			{
-				result = $('input[name^=ord]');
-				$.get('/automatweb/orb.aw?class=shop_warehouse&action=save_categories&id=".$arr["obj_inst"]->id()."& ' + result.serialize(), {
-						}, function (html) {
-							reload_property('category_list');
-						}
-					);
-			}
-			";
-		}
-
-		if($arr["request"]["group"] == "product_management" || $arr["request"]["group"] == "articles")
-		{
-
-			$types = $arr["obj_inst"]->get_product_category_types();
-
-			$js.= "
-				function add_product()
-				{
-					var cat = get_property_data['cat'];
-					var my_string = prompt('".t("Sisesta toote nimi")."');
-					$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_product',
-						id: '".$arr["obj_inst"]->id()."' , name: my_string,";
-						foreach($types->names() as $id => $cat)
-						{
-							$js.= " cat_".$id.": get_property_data['cat_".$id."'],
-							";
-						}
-							$js.= " cat: cat}, function (html) {
-							reload_property('product_management_list');
-						}
-					);
-				}
-			";
-			$js.= "
-				function copy_products()
-				{
-					result = $('input[name^=sel]');
-					$.get('/automatweb/orb.aw?class=shop_warehouse&action=copy_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
-						}, function (html) {
-							reload_property('product_management_toolbar');
-							reload_property('product_management_list');
-						}
-					);
-				}
-			";
-			$js.= "
-				function cut_products()
-				{
-					result = $('input[name^=sel]');
-					$.get('/automatweb/orb.aw?class=shop_warehouse&action=cut_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
-						}, function (html) {
-							reload_property('product_management_toolbar');
-							reload_property('product_management_list');
-						}
-					);
-				}
-			";
-			$js.= "
-				function paste_products()
-				{
-					var cat = get_property_data['cat'];
-					$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'paste_products',
-						id: '".$arr["obj_inst"]->id()."' ,";
-						foreach($types->names() as $id => $cat)
-						{
-							$js.= " cat_".$id.": get_property_data['cat_".$id."'],
-							";
-						}
-							$js.= " cat: cat}, function (html) {
-							reload_property('product_management_toolbar');
-							reload_property('product_management_list');
-						}
-					);
-
-				}
-			";
 		}
 		return $js;
 	}

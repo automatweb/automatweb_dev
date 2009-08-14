@@ -643,8 +643,11 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 	/** sets the default email adress content or creates it if needed **/
 	private function set_fake_email($mail, $set_into_meta = true)
 	{
+
+		die("Kaarel arendab, kannatust!");
 		$n = false;
 		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("email")))
+
 		{
 			$this->set_meta("tmp_fake_email", $mail);
 			$this->set_meta("sim_fake_email", 1);
@@ -1842,15 +1845,21 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 		return $address_str;
 	}
 
+
 	/** Sets phone number for person
-		@attrib api=1
+		@attrib api=1 params=pos
+		@param phone required type=string
+			phone number
+		@param type optional type=string default=mobile
+			phone number
 	**/
-	public function set_phone($phone)
+	public function set_phone($phone, $type="mobile")
 	{
 		$eo = obj();
 		$eo->set_class_id(CL_CRM_PHONE);
 		$eo->set_parent($this->id());
 		$eo->set_name($phone);
+		$eo->set_prop("type", $type);
 		$eo->save();
 
 		$this->set_prop("phone", $eo->id());
@@ -1861,7 +1870,51 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 		));
 	}
 
+	/** Sets e-mail address for person
+		@attrib api=1 params=pos
+		@param mail required type=string
+			e-mail address
+	**/
+	public function set_email($mail)
+	{
+		$eo = obj();
+		$eo->set_class_id(CL_ML_MEMBER);
+		$eo->set_parent($this->id());
+		$eo->set_name($mail);
+		$eo->set_prop("mail" , $mail);
+		$eo->save();
 
+		$this->set_prop("email", $eo->id());
+		$this->save();
+		$this->connect(array(
+			"type" => "RELTYPE_EMAIL",
+			"to" => $eo->id()
+		));
+	}
+
+	/** Returns all customer sell orders
+		@attrib api=1
+		@return object list
+			orders object list
+	**/
+	public function get_sell_orders()
+	{
+		return $this->_get_sell_orders();
+	}
+
+	//undone - boolean
+	private function _get_sell_orders($arr = array())
+	{
+
+		$filter = array(
+			"class_id" => CL_SHOP_SELL_ORDER,
+			"purchaser" => $this->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
+		);
+		$ol = new object_list($filter);
+		return $ol;
+	}
 
 }
 
