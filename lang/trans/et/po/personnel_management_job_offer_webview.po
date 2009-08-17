@@ -85,6 +85,18 @@ msgstr ""
 msgid "Omaduse T&ouml;&ouml;pakkumisel klikkides p&auml;&auml;seb selle detailvaatesse (jo2link) help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:prop_only_translated_jos
+msgid "Omaduse Kuva ainult aktiivse t&otilde;lkega t&ouml;&ouml;pakkumisi (only_translated_jos) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:prop_only_translated_jos_comment
+msgid "Omaduse Kuva ainult aktiivse t&otilde;lkega t&ouml;&ouml;pakkumisi (only_translated_jos) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:prop_only_translated_jos_help
+msgid "Omaduse Kuva ainult aktiivse t&otilde;lkega t&ouml;&ouml;pakkumisi (only_translated_jos) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:prop_ord_tbl
 msgid "Omaduse J&auml;rjestamisprintsiibid (ord_tbl) caption"
 msgstr ""
@@ -209,96 +221,96 @@ msgstr ""
 msgid "Seose Piirkond (RELTYPE_AREA) tekst"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:94
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:140
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:171
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:197
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:230
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:97
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:143
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:174
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:200
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:233
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:95
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:98
 msgid "Asukoha j&auml;rgi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:96
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:99
 msgid "Organisatsiooni j&auml;rgi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:97
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:100
 msgid "&Uuml;ksuse j&auml;rgi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:98
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:101
 msgid "Organisatsiooni ja &uuml;ksuste j&auml;rgi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:126
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:183
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:129
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:186
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:131
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:188
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:134
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:191
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:136
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:193
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:139
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:196
 msgid "J&auml;rjestus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:141
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:144
 msgid "Grupi nimi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:142
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:145
 msgid "Grupi jrk"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:156
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:171
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:215
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:230
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:159
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:174
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:218
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:233
 msgid "Kasvav"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:156
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:171
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:215
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:230
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:159
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:174
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:218
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:233
 msgid "Kahanev"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:198
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:201
 msgid "T&ouml;&ouml;pakkumise nimi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:199
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:202
 msgid "Ameti jrk"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:200
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:203
 msgid "Ameti nimi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:201
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:310
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:204
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:314
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:309
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:313
 msgid "T&ouml;&ouml;pakkumine"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:363
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:372
 msgid "Piirkonnad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:364
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:373
 msgid "Maakonnad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:365
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:374
 msgid "Linnad"
 msgstr ""

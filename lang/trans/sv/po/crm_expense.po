@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_expense.aw:class_1144_help
 msgid "Klassi Kulu help"
 msgstr ""
@@ -36,6 +35,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:prop_date_help
 msgid "Omaduse Kuup&auml;ev (date) help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_task
+msgid "Omaduse Toimetus (task) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_task_comment
+msgid "Omaduse Toimetus (task) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_task_help
+msgid "Omaduse Toimetus (task) help"
 msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:prop_on_bill
@@ -118,3 +129,6 @@ msgstr ""
 msgid "Seose Isik (RELTYPE_PEOPLE) tekst"
 msgstr ""
 
+#: classes/applications/crm/crm_expense.aw:rel_RELTYPE_TASK
+msgid "Seose Toimetus (RELTYPE_TASK) tekst"
+msgstr ""

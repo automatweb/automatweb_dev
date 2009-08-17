@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -35,6 +35,18 @@ msgstr ""
 
 #: classes/applications/banner/banner_client.aw:prop_cont_doc_tpl_help
 msgid "Omaduse Dokumendi template (cont_doc_tpl) help"
+msgstr ""
+
+#: classes/applications/banner/banner_client.aw:prop_dynamic_switch_interval
+msgid "Omaduse D&uuml;naamilise vaheldumise intervall (dynamic_switch_interval) caption"
+msgstr ""
+
+#: classes/applications/banner/banner_client.aw:prop_dynamic_switch_interval_comment
+msgid "Omaduse D&uuml;naamilise vaheldumise intervall (dynamic_switch_interval) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner_client.aw:prop_dynamic_switch_interval_help
+msgid "Omaduse D&uuml;naamilise vaheldumise intervall (dynamic_switch_interval) help"
 msgstr ""
 
 #: classes/applications/banner/banner_client.aw:prop_html

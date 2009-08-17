@@ -182,6 +182,18 @@ msgstr ""
 msgid "Omaduse Taotlusl&otilde;iv (request_fee) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/patent.aw:prop_fee_sum
+msgid "Omaduse Kokku (fee_sum) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:prop_fee_sum_comment
+msgid "Omaduse Kokku (fee_sum) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:prop_fee_sum_help
+msgid "Omaduse Kokku (fee_sum) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/patent.aw:prop_payer
 msgid "Omaduse Maksja nimi (payer) caption"
 msgstr ""
@@ -558,7 +570,7 @@ msgstr ""
 msgid "Seose Reproduktsioon (RELTYPE_REPRODUCTION) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:116 classes/applications/clients/patent_office/patent.aw:287
+#: classes/applications/clients/patent_office/patent.aw:116 classes/applications/clients/patent_office/patent.aw:292
 msgid "S&otilde;nam&auml;rk"
 msgstr ""
 
@@ -590,83 +602,83 @@ msgstr ""
 msgid "(554) Ruumiline m&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:118 classes/applications/clients/patent_office/patent.aw:349
+#: classes/applications/clients/patent_office/patent.aw:118 classes/applications/clients/patent_office/patent.aw:354
 msgid "Kollektiivkaubam&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:118 classes/applications/clients/patent_office/patent.aw:351
+#: classes/applications/clients/patent_office/patent.aw:118 classes/applications/clients/patent_office/patent.aw:356
 msgid "Garantiim&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:178 classes/applications/clients/patent_office/patent.aw:218 classes/applications/clients/patent_office/patent.aw:404
+#: classes/applications/clients/patent_office/patent.aw:179 classes/applications/clients/patent_office/patent.aw:219 classes/applications/clients/patent_office/patent.aw:409
 msgid "Klass"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:182 classes/applications/clients/patent_office/patent.aw:222 classes/applications/clients/patent_office/patent.aw:408
+#: classes/applications/clients/patent_office/patent.aw:183 classes/applications/clients/patent_office/patent.aw:223 classes/applications/clients/patent_office/patent.aw:413
 msgid "Kaup/teenus"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:268
+#: classes/applications/clients/patent_office/patent.aw:269
 msgid "Oled kindel, et soovid valitud klassi kustutada?"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:270
+#: classes/applications/clients/patent_office/patent.aw:271
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:299
+#: classes/applications/clients/patent_office/patent.aw:304
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Kujutism&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:312
+#: classes/applications/clients/patent_office/patent.aw:317
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Kombineeritud m&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:322
+#: classes/applications/clients/patent_office/patent.aw:327
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Ruumiline m&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:334
+#: classes/applications/clients/patent_office/patent.aw:339
 msgid "S&otilde;naline osa:"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:334
+#: classes/applications/clients/patent_office/patent.aw:339
 msgid "Kaubam&auml;rk:"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:336
+#: classes/applications/clients/patent_office/patent.aw:341
 msgid "(kui taotlete kollektiivkaubam&auml;rki)"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:343
+#: classes/applications/clients/patent_office/patent.aw:348
 msgid "(kui taotlete garantiikaubam&auml;rki)"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:354
+#: classes/applications/clients/patent_office/patent.aw:359
 msgid "Sisene klassifikaatorisse"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:413
+#: classes/applications/clients/patent_office/patent.aw:418
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:714
+#: classes/applications/clients/patent_office/patent.aw:719
 msgid "Kohustuslik v&auml;hemalt &uuml;he klassi lisamine"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:722
+#: classes/applications/clients/patent_office/patent.aw:727
 msgid "S&otilde;nam&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:726 classes/applications/clients/patent_office/patent.aw:734 classes/applications/clients/patent_office/patent.aw:738
+#: classes/applications/clients/patent_office/patent.aw:731 classes/applications/clients/patent_office/patent.aw:739 classes/applications/clients/patent_office/patent.aw:743
 msgid "Peab olema lisatud ka reproduktsioon"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:730
+#: classes/applications/clients/patent_office/patent.aw:735
 msgid "Kombineeritud m&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:758
+#: classes/applications/clients/patent_office/patent.aw:763
 msgid "Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud"
 msgstr ""
 

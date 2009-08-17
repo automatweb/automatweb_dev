@@ -13,21 +13,19 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/users/users_user.aw:83
+#: classes/core/users/users_user.aw:86
 msgid "oid for uid is empty uid = '%s'!"
 msgstr "oid for uid is empty uid = '%s'!"
 
-#: classes/core/users/users_user.aw:120
-msgid "1"
-msgstr "1"
-
-#: classes/core/users/users_user.aw:211
-msgid "0"
-msgstr "0"
-
-#: classes/core/users/users_user.aw:214
+#: classes/core/users/users_user.aw:219
 msgid "Vigane kasutajanimi v&otilde;i parool"
 msgstr ""
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "0"
+#~ msgstr "0"
 
 #~ msgid "uid is empty!"
 #~ msgstr "uid is empty!"

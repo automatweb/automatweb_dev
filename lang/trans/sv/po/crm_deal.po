@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_deal.aw:class_222_help
 msgid "Klassi Leping help"
 msgstr ""
@@ -211,7 +210,7 @@ msgid "Seose Osapool (RELTYPE_SIDE) tekst"
 msgstr ""
 
 #: classes/crm/crm_deal.aw:rel_RELTYPE_ACTION
-msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
+msgid "Seose <<<<<< crm_deal.p (RELTYPE_ACTION) tekst"
 msgstr ""
 
 #: classes/crm/crm_deal.aw:339
@@ -249,4 +248,3 @@ msgstr ""
 #: classes/crm/crm_deal.aw:450
 msgid "Muutja"
 msgstr ""
-

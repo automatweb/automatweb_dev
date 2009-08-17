@@ -50,7 +50,15 @@ msgstr ""
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/admin/config/config_login_menus.aw:141
-msgid "menyy"
+#: classes/admin/config/config_login_menus.aw:146
+msgid "Kuva men&uuml;&uuml;d"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:153
+msgid "Prioriteet"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:160
+msgid "Men&uuml;&uuml;"
 msgstr ""
 

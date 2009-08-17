@@ -261,8 +261,8 @@ msgid "Tellija"
 msgstr "Orderer"
 
 #: classes/applications/orders/orders_manager.aw:419
-msgid "Kuupäev"
-msgstr "Date"
+msgid "Kuup&auml;ev"
+msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:429
 #: classes/applications/orders/orders_manager.aw:531
@@ -360,3 +360,6 @@ msgstr "all done!"
 #: classes/applications/orders/orders_manager.aw:796
 msgid "Pole midagi printida"
 msgstr ""
+
+#~ msgid "Kuupäev"
+#~ msgstr "Date"

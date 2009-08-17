@@ -74,6 +74,18 @@ msgstr ""
 msgid "Omaduse Otsinguvormi tulemuste tabel (stbl_t) help"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_result_default_order
+msgid "Omaduse Otsinguvormi vaikimisi j&auml;rjestuse suund (result_default_order) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_result_default_order_comment
+msgid "Omaduse Otsinguvormi vaikimisi j&auml;rjestuse suund (result_default_order) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_result_default_order_help
+msgid "Omaduse Otsinguvormi vaikimisi j&auml;rjestuse suund (result_default_order) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_srch
 msgid "Omaduse  (srch) caption"
 msgstr ""
@@ -126,55 +138,103 @@ msgstr ""
 msgid "Seose postipoisi andmeallikas (RELTYPE_PP) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:101 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:164
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:rel_RELTYPE_CONTROLLER
+msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:65
+msgid "Tekstikast"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:66
+msgid "Valik olemasolevatest"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:67
+msgid "Ajavahemik"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:68
+msgid "Kuup&auml;eva vahemik"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:90
+msgid "Kasvav"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:90
+msgid "kahanev"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:117 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:212
 msgid "Element"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:105
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:121
 msgid "Otsitav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:110 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:198
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:126 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:246
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:115 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:203
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:131
+msgid "Otsinguv&auml;lja t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:136
+msgid "Kontroller"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:141 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:251
 msgid "Tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:130
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:166
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:168
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:216
 msgid "Tabelis"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:173
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:221
 msgid "Sorditav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:178
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:226
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:183
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:231
 msgid "Number"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:188
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:236
 msgid "Vaikimisi sorteeritud"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:193
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:241
 msgid "Vaatamise tulp"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:452
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:354
+msgid "-- Vali --"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:376 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:392
+msgid "alates"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:383 classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:399
+msgid "kuni"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:620
 msgid "otv_ds_pp_search: postipoisi andmeallikas on valimata!"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:496
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:664
 msgid "Otsi"
 msgstr ""
 

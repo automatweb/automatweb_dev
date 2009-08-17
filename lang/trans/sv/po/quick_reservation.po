@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/groupware/quick_reservation.aw:class_1384_help
 msgid "Klassi Broneeringu kiirlisamine help"
 msgstr ""
@@ -110,6 +109,18 @@ msgstr ""
 msgid "Omaduse Meie esindaja (people) help"
 msgstr ""
 
+#: classes/applications/groupware/quick_reservation.aw:prop_other_rooms
+msgid "Omaduse Broneeri lisaks ruumid (other_rooms) caption"
+msgstr ""
+
+#: classes/applications/groupware/quick_reservation.aw:prop_other_rooms_comment
+msgid "Omaduse Broneeri lisaks ruumid (other_rooms) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/quick_reservation.aw:prop_other_rooms_help
+msgid "Omaduse Broneeri lisaks ruumid (other_rooms) help"
+msgstr ""
+
 #: classes/applications/groupware/quick_reservation.aw:prop_id
 msgid "Omaduse ID (id) caption"
 msgstr ""
@@ -158,3 +169,6 @@ msgstr ""
 msgid "Omaduse Toode (product) help"
 msgstr ""
 
+#: classes/applications/groupware/quick_reservation.aw:132
+msgid "Sellisele ajale ei saa broneerida ruume:"
+msgstr ""

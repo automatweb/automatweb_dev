@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -69,10 +69,9 @@ msgstr ""
 msgid "Omaduse Otsi ainult m&auml;rks&otilde;nadest (search_only_kws) help"
 msgstr ""
 
-# classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
-msgid "Seose Otsingu lähtekoht (RELTYPE_SEARCH_LOCATION) tekst"
-msgstr "Search location"
+msgid "Seose Otsingu l&auml;tekoht (RELTYPE_SEARCH_LOCATION) tekst"
+msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_KW
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KW) tekst"
@@ -91,18 +90,22 @@ msgid "Nimi"
 msgstr "Name"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:113
-msgid "k.a. alammenüüd"
-msgstr "incl. submenus"
+msgid "k.a. alammen&uuml;&uuml;d"
+msgstr "incl. sub-folders"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:121
 msgid "mitteaktiivsed"
 msgstr "not-active"
+
+# classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
+#~ msgid "Seose Otsingu lähtekoht (RELTYPE_SEARCH_LOCATION) tekst"
+#~ msgstr "Search location"
+
+#~ msgid "k.a. alammenüüd"
+#~ msgstr "incl. submenus"
 
 #~ msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d (menus) caption"
 #~ msgstr "Choose folders"
 
 #~ msgid "Seose Otsingu l&amp;auml;htekoht (RELTYPE_SEARCH_LOCATION) tekst"
 #~ msgstr "Search from folder(s)"
-
-#~ msgid "k.a. alammen&uuml;&uuml;d"
-#~ msgstr "incl. sub-folders"

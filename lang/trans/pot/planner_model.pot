@@ -14,7 +14,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/calendar/planner_model.aw:195
+#: classes/applications/calendar/planner_model.aw:240
 msgid "%s s&uuml;nnip&auml;ev!"
 msgstr ""
 

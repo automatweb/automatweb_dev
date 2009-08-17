@@ -98,6 +98,30 @@ msgstr ""
 msgid "Omaduse  (mail_bank_bcc) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_cc_bcc
+msgid "Omaduse  (mail_cc_bcc) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_cc_bcc_comment
+msgid "Omaduse  (mail_cc_bcc) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_mail_cc_bcc_help
+msgid "Omaduse  (mail_cc_bcc) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_promo_settings
+msgid "Omaduse  (promo_settings) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_promo_settings_comment
+msgid "Omaduse  (promo_settings) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:prop_promo_settings_help
+msgid "Omaduse  (promo_settings) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_bron.aw:group_mail_settings
 msgid "Grupi Meiliseaded (mail_settings) pealkiri"
 msgstr ""
@@ -123,11 +147,11 @@ msgid "Grupi T&uuml;histusmeil (mail_settings_cancel) help"
 msgstr ""
 
 #: classes/applications/ows_bron/ows_bron.aw:group_mail_bcc
-msgid "Grupi BCC (mail_bcc) pealkiri"
+msgid "Grupi CC makse BCC (mail_bcc) pealkiri"
 msgstr ""
 
 #: classes/applications/ows_bron/ows_bron.aw:group_mail_bcc_help
-msgid "Grupi BCC (mail_bcc) help"
+msgid "Grupi CC makse BCC (mail_bcc) help"
 msgstr ""
 
 #: classes/applications/ows_bron/ows_bron.aw:group_mail_bank_bcc
@@ -138,12 +162,28 @@ msgstr ""
 msgid "Grupi Pangalingi BCC (mail_bank_bcc) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_cc_bcc
+msgid "Grupi CC kinnituse BCC (mail_cc_bcc) pealkiri"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_mail_cc_bcc_help
+msgid "Grupi CC kinnituse BCC (mail_cc_bcc) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_bron.aw:group_bank_settings
 msgid "Grupi Panga seaded (bank_settings) pealkiri"
 msgstr ""
 
 #: classes/applications/ows_bron/ows_bron.aw:group_bank_settings_help
 msgid "Grupi Panga seaded (bank_settings) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_promo_settings
+msgid "Grupi Promokoodi seaded (promo_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:group_promo_settings_help
+msgid "Grupi Promokoodi seaded (promo_settings) help"
 msgstr ""
 
 #: classes/applications/ows_bron/ows_bron.aw:rel_RELTYPE_BANK_PAYMENT
@@ -154,71 +194,91 @@ msgstr ""
 msgid "Seose Kinnitatud tellimuste kaust (RELTYPE_CONFIRMED_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:771 classes/applications/ows_bron/ows_bron.aw:1154
+#: classes/applications/ows_bron/ows_bron.aw:977 classes/applications/ows_bron/ows_bron.aw:1507 classes/applications/ows_bron/ows_bron.aw:1703
 msgid "OWS Bron %s %s @ %s"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:1356
+#: classes/applications/ows_bron/ows_bron.aw:1165
+msgid "To Customer"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:1166
+msgid "To Booker"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:1167
+msgid "Invoice"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:1168
+msgid "Cash"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:1947
 msgid "No such booking found!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:1487
-msgid "No such reservation found!"
-msgstr ""
-
-#: classes/applications/ows_bron/ows_bron.aw:2672
+#: classes/applications/ows_bron/ows_bron.aw:3453
 msgid "Dates changed"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2673
+#: classes/applications/ows_bron/ows_bron.aw:3454
 msgid "Plans changed"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2674
+#: classes/applications/ows_bron/ows_bron.aw:3455
 msgid "Wrong price"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2675
+#: classes/applications/ows_bron/ows_bron.aw:3456
 msgid "Other"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2694
+#: classes/applications/ows_bron/ows_bron.aw:3493
 msgid "The booking you requested does not exist!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2699
+#: classes/applications/ows_bron/ows_bron.aw:3498
 msgid "The booking you requested has already been cancelled!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2704
+#: classes/applications/ows_bron/ows_bron.aw:3503
 msgid "Sorry, but it is already too late to cancel this booking!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3014 classes/applications/ows_bron/ows_bron.aw:3092 classes/applications/ows_bron/ows_bron.aw:3140
+#: classes/applications/ows_bron/ows_bron.aw:3823 classes/applications/ows_bron/ows_bron.aw:3948 classes/applications/ows_bron/ows_bron.aw:3996 classes/applications/ows_bron/ows_bron.aw:4047
 msgid "Hotell"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3019
+#: classes/applications/ows_bron/ows_bron.aw:3828
 msgid "Template"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3051
+#: classes/applications/ows_bron/ows_bron.aw:3859
+msgid "Promokood"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:3860
+msgid "Riigikood"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:3907
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3056
+#: classes/applications/ows_bron/ows_bron.aw:3912
 msgid "Pangamakse objekt"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3067
+#: classes/applications/ows_bron/ows_bron.aw:3923
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3097 classes/applications/ows_bron/ows_bron.aw:3145
+#: classes/applications/ows_bron/ows_bron.aw:3953 classes/applications/ows_bron/ows_bron.aw:4001 classes/applications/ows_bron/ows_bron.aw:4052
 msgid "BCC"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3102 classes/applications/ows_bron/ows_bron.aw:3150
+#: classes/applications/ows_bron/ows_bron.aw:3958 classes/applications/ows_bron/ows_bron.aw:4006 classes/applications/ows_bron/ows_bron.aw:4057
 msgid "Kirja teema"
 msgstr ""
 

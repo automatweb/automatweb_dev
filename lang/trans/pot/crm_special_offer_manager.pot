@@ -15,15 +15,15 @@ msgid "Klassi Organisatsiooni eripakkumiste haldus help"
 msgstr ""
 
 #: classes/crm/crm_special_offer_manager.aw:prop_listtype
-msgid "Omaduse Kuvatava nimekirja tüüp (listtype) caption"
+msgid "Omaduse Kuvatava nimekirja t&uuml;&uuml;p (listtype) caption"
 msgstr ""
 
 #: classes/crm/crm_special_offer_manager.aw:prop_listtype_comment
-msgid "Omaduse Kuvatava nimekirja tüüp (listtype) kommentaar"
+msgid "Omaduse Kuvatava nimekirja t&uuml;&uuml;p (listtype) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_special_offer_manager.aw:prop_listtype_help
-msgid "Omaduse Kuvatava nimekirja tüüp (listtype) help"
+msgid "Omaduse Kuvatava nimekirja t&uuml;&uuml;p (listtype) help"
 msgstr ""
 
 #: classes/crm/crm_special_offer_manager.aw:prop_url_to
@@ -139,7 +139,7 @@ msgid "Kuvatavate pakkumiste arv peab olema positiivne!"
 msgstr ""
 
 #: classes/crm/crm_special_offer_manager.aw:102
-msgid "Nimekirja tüüp vigane."
+msgid "Nimekirja t&uuml;&uuml;p vigane."
 msgstr ""
 
 #: classes/crm/crm_special_offer_manager.aw:160
@@ -166,15 +166,15 @@ msgstr ""
 msgid "Kuvamiseks valitud"
 msgstr ""
 
-#: classes/crm/crm_special_offer_manager.aw:248 classes/crm/crm_special_offer_manager.aw:267
+#: classes/crm/crm_special_offer_manager.aw:256 classes/crm/crm_special_offer_manager.aw:275
 msgid "nimetu"
 msgstr ""
 
-#: classes/crm/crm_special_offer_manager.aw:275
+#: classes/crm/crm_special_offer_manager.aw:283
 msgid "Jah"
 msgstr ""
 
-#: classes/crm/crm_special_offer_manager.aw:275
+#: classes/crm/crm_special_offer_manager.aw:283
 msgid "Ei"
 msgstr ""
 

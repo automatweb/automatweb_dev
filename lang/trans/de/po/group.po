@@ -25,6 +25,18 @@ msgstr ""
 msgid "Omaduse Grupi ID (gid) help"
 msgstr ""
 
+#: classes/core/users/group.aw:prop_gp_name
+msgid "Omaduse  (gp_name) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gp_name_comment
+msgid "Omaduse  (gp_name) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gp_name_help
+msgid "Omaduse  (gp_name) help"
+msgstr ""
+
 #: classes/core/users/group.aw:prop_priority
 msgid "Omaduse Prioriteet (priority) caption"
 msgstr ""
@@ -509,74 +521,82 @@ msgstr ""
 msgid "Seose Kohustuslik j&auml;rjehoidja (RELTYPE_BOOKMARK) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:204
+#: classes/core/users/group.aw:rel_RELTYPE_MEMBERSHIP
+msgid "Seose Grupikuuluvus (RELTYPE_MEMBERSHIP) tekst"
+msgstr ""
+
+#: classes/core/users/group.aw:209
 msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/group.aw:247
+#: classes/core/users/group.aw:252
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/group.aw:248
+#: classes/core/users/group.aw:253
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/group.aw:249
+#: classes/core/users/group.aw:254
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/core/users/group.aw:258
+#: classes/core/users/group.aw:263
 msgid "Kasutajate importimise faili formaat on j&auml;rgmine:<br />\t\t\t\t\tkasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />\t\t\t\t\tv&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />\t\t\t\t\tkuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">siin</a> <br />\t\t\t\t\tn&auml;ide: <br />\t\t\t\t\tkix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />\t\t\t\t\t<br />\t\t\t\t\tv&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />"
 msgstr ""
 
-#: classes/core/users/group.aw:303
+#: classes/core/users/group.aw:308
 msgid "Impordin kasutajaid ... <br />"
 msgstr ""
 
-#: classes/core/users/group.aw:461
+#: classes/core/users/group.aw:466
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:490
+#: classes/core/users/group.aw:495
 msgid "Objekti Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:499
+#: classes/core/users/group.aw:504
 msgid "Objekti Asukoht"
 msgstr ""
 
-#: classes/core/users/group.aw:508
+#: classes/core/users/group.aw:513
 msgid "Grupi Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:517
+#: classes/core/users/group.aw:522
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:538
+#: classes/core/users/group.aw:543
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:601
+#: classes/core/users/group.aw:606
 msgid "--vali--"
 msgstr ""
 
-#: classes/core/users/group.aw:629
+#: classes/core/users/group.aw:634
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:659
+#: classes/core/users/group.aw:664
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:778
+#: classes/core/users/group.aw:789
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:822
+#: classes/core/users/group.aw:833
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 
-#: classes/core/users/group.aw:1085
+#: classes/core/users/group.aw:939
+msgid "%s kuulub gruppi %s"
+msgstr ""
+
+#: classes/core/users/group.aw:1184
 msgid "could not find the group oid for gid %s"
 msgstr ""

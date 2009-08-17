@@ -15,15 +15,27 @@ msgid "Klassi D&uuml;naamilise k&uuml;simustiku k&uuml;simus help"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire_question.aw:prop_name
-msgid "Omaduse Küsimus (name) caption"
+msgid "Omaduse K&uuml;simus (name) caption"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire_question.aw:prop_name_comment
-msgid "Omaduse Küsimus (name) kommentaar"
+msgid "Omaduse K&uuml;simus (name) kommentaar"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire_question.aw:prop_name_help
-msgid "Omaduse Küsimus (name) help"
+msgid "Omaduse K&uuml;simus (name) help"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:prop_ratable
+msgid "Omaduse Hinnatav (ratable) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:prop_ratable_comment
+msgid "Omaduse Hinnatav (ratable) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:prop_ratable_help
+msgid "Omaduse Hinnatav (ratable) help"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire_question.aw:prop_jrk
@@ -74,6 +86,18 @@ msgstr ""
 msgid "Omaduse Kuva vastuse kommentaari (dsply_acomment) help"
 msgstr ""
 
+#: classes/applications/questionary/questionnaire_question.aw:prop_show_answer_in_results
+msgid "Omaduse N&auml;ita vastust vastajate tabelis (show_answer_in_results) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:prop_show_answer_in_results_comment
+msgid "Omaduse N&auml;ita vastust vastajate tabelis (show_answer_in_results) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:prop_show_answer_in_results_help
+msgid "Omaduse N&auml;ita vastust vastajate tabelis (show_answer_in_results) help"
+msgstr ""
+
 #: classes/applications/questionary/questionnaire_question.aw:prop_pics
 msgid "Omaduse K&uuml;simuse pildid (pics) caption"
 msgstr ""
@@ -108,6 +132,18 @@ msgstr ""
 
 #: classes/applications/questionary/questionnaire_question.aw:prop_p_false_help
 msgid "Omaduse Vale vastuse pilt (p_false) help"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:prop_answers
+msgid "Omaduse Vastused (answers) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:prop_answers_comment
+msgid "Omaduse Vastused (answers) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:prop_answers_help
+msgid "Omaduse Vastused (answers) help"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire_question.aw:prop_atlbr
@@ -166,35 +202,43 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire_question.aw:75
-msgid "Valikvastused"
+#: classes/applications/questionary/questionnaire_question.aw:95
+msgid "Valikvastused (valida saab &uuml;he)"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire_question.aw:76
+#: classes/applications/questionary/questionnaire_question.aw:96
+msgid "Valikvastused (valida saab mitu)"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:97
 msgid "Tekstikast"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire_question.aw:84
+#: classes/applications/questionary/questionnaire_question.aw:98
+msgid "Tekstiala"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire_question.aw:108
 msgid "Mitte kunagi"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire_question.aw:85
+#: classes/applications/questionary/questionnaire_question.aw:109
 msgid "Alati"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire_question.aw:86
+#: classes/applications/questionary/questionnaire_question.aw:110
 msgid "Ainult &otilde;ige vastuse korral"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire_question.aw:87
+#: classes/applications/questionary/questionnaire_question.aw:111
 msgid "Ainult vale vastuse korral"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire_question.aw:118
+#: classes/applications/questionary/questionnaire_question.aw:144
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire_question.aw:124
+#: classes/applications/questionary/questionnaire_question.aw:150
 msgid "Vastus"
 msgstr ""
 

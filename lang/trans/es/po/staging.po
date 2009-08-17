@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/calendar/staging.aw:class_831_help
 msgid "Klassi Lavastus help"
 msgstr ""
@@ -39,15 +38,15 @@ msgid "Omaduse Algab (start1) help"
 msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_end
-msgid "Omaduse Lõppeb (end) caption"
+msgid "Omaduse L&otilde;ppeb (end) caption"
 msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_end_comment
-msgid "Omaduse Lõppeb (end) kommentaar"
+msgid "Omaduse L&otilde;ppeb (end) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_end_help
-msgid "Omaduse Lõppeb (end) help"
+msgid "Omaduse L&otilde;ppeb (end) help"
 msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_img
@@ -310,15 +309,14 @@ msgstr ""
 msgid "(Aktiivne)"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:190
+#: classes/applications/calendar/staging.aw:198
 msgid "Uued"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:199
+#: classes/applications/calendar/staging.aw:208
 msgid "Uus %s"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:209
-msgid "Tee sündmus %s"
+#: classes/applications/calendar/staging.aw:218
+msgid "Tee s&uuml;ndmus %s"
 msgstr ""
-

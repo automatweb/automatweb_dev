@@ -158,11 +158,11 @@ msgstr ""
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:180 classes/applications/customer_satisfaction_center/user_bookmarks.aw:430 classes/applications/customer_satisfaction_center/user_bookmarks.aw:720
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:180 classes/applications/customer_satisfaction_center/user_bookmarks.aw:432 classes/applications/customer_satisfaction_center/user_bookmarks.aw:722
 msgid "Link"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:193 classes/applications/customer_satisfaction_center/user_bookmarks.aw:616
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:193 classes/applications/customer_satisfaction_center/user_bookmarks.aw:618
 msgid "Salvesta"
 msgstr ""
 
@@ -182,67 +182,67 @@ msgstr ""
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:414
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:416
 msgid "Jaga"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:419 classes/applications/customer_satisfaction_center/user_bookmarks.aw:709
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:421 classes/applications/customer_satisfaction_center/user_bookmarks.aw:711
 msgid "Ikoon"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:425 classes/applications/customer_satisfaction_center/user_bookmarks.aw:715
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:427 classes/applications/customer_satisfaction_center/user_bookmarks.aw:717
 msgid "Objekti nimi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:435
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:437
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:440
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:442
 msgid "Tee kohustuslikuks"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:445
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:447
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:450
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:452
 msgid "Kasutaja tekst"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:507
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:509
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:647 classes/applications/customer_satisfaction_center/user_bookmarks.aw:949 classes/applications/customer_satisfaction_center/user_bookmarks.aw:1157
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:649 classes/applications/customer_satisfaction_center/user_bookmarks.aw:953 classes/applications/customer_satisfaction_center/user_bookmarks.aw:1172
 msgid "j&auml;rjehoidja"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:704
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:706
 msgid "Kuva endal"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:725
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:727
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:775
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:777
 msgid "j&auml;rjehoidjad"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:989
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:996
 msgid "Pane j&auml;rjehoidjasse"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:993
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1000
 msgid "Eemalda j&auml;rjehoidjast"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:997
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1004
 msgid "Toimeta j&auml;rjehoidjat"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1003
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1010
 msgid "J&auml;rjehoidja"
 msgstr ""
 

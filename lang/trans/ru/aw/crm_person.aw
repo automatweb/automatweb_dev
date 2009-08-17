@@ -30,13 +30,11 @@ $GLOBALS["TRANS"]["Bakalaureus"] = "Бакалавр";
 $GLOBALS["TRANS"]["Magister"] = "Магистр";
 $GLOBALS["TRANS"]["Doktor"] = "Доктор";
 $GLOBALS["TRANS"]["Teaduste kandidaat"] = "Кандидат наук";
-$GLOBALS["TRANS"]["T&otilde;stuk"] = "Подъемник";
-$GLOBALS["TRANS"]["Muu keel"] = "другие языки";
 $GLOBALS["TRANS"]["Vallaline"] = "не женат (не замужем)";
 $GLOBALS["TRANS"]["Abielus"] = "женат (замужем)";
-$GLOBALS["TRANS"]["Lahutatud"] = "разведен(а)";
+$GLOBALS["TRANS"]["Lahutatud"] = "разведен (а)";
 $GLOBALS["TRANS"]["Vabaabielus"] = "в свободном браке";
 $GLOBALS["TRANS"]["mees"] = "мужчина";
 $GLOBALS["TRANS"]["naine"] = "женщина";
-$GLOBALS["TRANS"]["--vali--"] = "--Выбери--";
+$GLOBALS["TRANS"]["T&otilde;stuk"] = "Подъемник";
 ?>

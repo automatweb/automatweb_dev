@@ -25,7 +25,7 @@ msgstr "Choose existing file"
 msgid "Fail"
 msgstr "File"
 
-#: classes/admin/editor/file_manager.aw:151
+#: classes/admin/editor/file_manager.aw:147
 msgid "Vali see"
 msgstr "Choose this"
 
@@ -37,11 +37,11 @@ msgstr ""
 msgid "Oled sa kindel et tahad seda jama pakkida?"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:376
+#: classes/admin/editor/file_manager.aw:377
 msgid "Download selected compressed in ZIP file"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:401
+#: classes/admin/editor/file_manager.aw:404
 msgid "Vali failid ja/v&otilde;i kataloogid!"
 msgstr ""
 

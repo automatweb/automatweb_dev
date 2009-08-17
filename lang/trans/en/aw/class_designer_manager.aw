@@ -1,5 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Grupi Manager (mgr) pealkiri"] = "Manager";
 $GLOBALS["TRANS"]["Grupi Seosed (rels) pealkiri"] = "Relations";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Vali"] = "Select";

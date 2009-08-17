@@ -181,6 +181,18 @@ msgstr ""
 msgid "Omaduse Taotlusl&otilde;iv (request_fee) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/utility_model.aw:prop_fee_sum
+msgid "Omaduse Kokku (fee_sum) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/utility_model.aw:prop_fee_sum_comment
+msgid "Omaduse Kokku (fee_sum) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/utility_model.aw:prop_fee_sum_help
+msgid "Omaduse Kokku (fee_sum) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/utility_model.aw:prop_payer
 msgid "Omaduse Maksja nimi (payer) caption"
 msgstr ""
@@ -505,6 +517,18 @@ msgstr ""
 msgid "Omaduse Prioriteedin&otilde;uet t&otilde;endavate dokumentide t&otilde;lked (attachment_prio_trans) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_other
+msgid "Omaduse Muu (attachment_other) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_other_comment
+msgid "Omaduse Muu (attachment_other) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_other_help
+msgid "Omaduse Muu (attachment_other) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/utility_model.aw:group_priority
 msgid "Grupi Prioriteet (priority) pealkiri"
 msgstr ""
@@ -633,10 +657,14 @@ msgstr ""
 msgid "Seose Lisa prioriteeditoendi tolked (RELTYPE_ATTACHMENT_PRIO_TRANS) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:313
+#: classes/applications/clients/patent_office/utility_model.aw:rel_RELTYPE_ATTACHMENT_OTHER
+msgid "Seose Lisa muu (RELTYPE_ATTACHMENT_OTHER) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/utility_model.aw:343
 msgid "Ainult pdf formaadis failid lubatud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:320
+#: classes/applications/clients/patent_office/utility_model.aw:350
 msgid "Leiutiskirjeldus peab olema lisatud"
 msgstr ""

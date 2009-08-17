@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/calendar/planner_model.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/calendar/planner_model.aw:195
+#: classes/applications/calendar/planner_model.aw:240
 msgid "%s s&uuml;nnip&auml;ev!"
 msgstr ""
-

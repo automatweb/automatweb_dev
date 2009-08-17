@@ -1,11 +1,10 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Toote t&uuml;&uuml;p (item_type) caption"] = "Product type";
 $GLOBALS["TRANS"]["Omaduse Hinnakujundus (price_settings) caption"] = "Price style";
-$GLOBALS["TRANS"]["Omaduse Hinnad valuutades (price_cur) caption"] = "Prices in currencies";
+$GLOBALS["TRANS"]["Omaduse Maksum&auml;&auml;r (tax_rate) caption"] = "Tax rate";
 $GLOBALS["TRANS"]["Omaduse Hind (price) caption"] = "Price";
 $GLOBALS["TRANS"]["Omaduse Ostu hind (purchase_price) caption"] = "Buying price";
 $GLOBALS["TRANS"]["Omaduse Mitu peab korraga tellima (must_order_num) caption"] = "Amount must be divisible by this";
-$GLOBALS["TRANS"]["Omaduse Toote t&uuml;&uuml;p (item_type) caption"] = "Product type";
-$GLOBALS["TRANS"]["Omaduse Maksum&auml;&auml;r (tax_rate) caption"] = "Tax rate";
 $GLOBALS["TRANS"]["Omaduse Mitu laos (item_count) caption"] = "Numer in stock";
 $GLOBALS["TRANS"]["Omaduse Broneeritav aeg (reservation_time) caption"] = "Booking time ";
 $GLOBALS["TRANS"]["Omaduse Puhveraeg enne (buffer_time_before) caption"] = "Buffer time before";

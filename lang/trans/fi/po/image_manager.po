@@ -13,18 +13,18 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/admin/editor/image_manager.aw:111
+#: classes/admin/editor/image_manager.aw:124
 msgid "Uus pilt"
 msgstr ""
 
-#: classes/admin/editor/image_manager.aw:112
+#: classes/admin/editor/image_manager.aw:125
 msgid "Vali olemasolev pilt"
 msgstr ""
 
-#: classes/admin/editor/image_manager.aw:125
+#: classes/admin/editor/image_manager.aw:138
 msgid "Pilt"
 msgstr ""
 
-#: classes/admin/editor/image_manager.aw:166
+#: classes/admin/editor/image_manager.aw:179
 msgid "Vali see"
 msgstr ""

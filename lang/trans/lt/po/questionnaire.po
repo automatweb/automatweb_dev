@@ -13,6 +13,30 @@ msgstr ""
 msgid "Klassi D&uuml;naamiline k&uuml;simustik help"
 msgstr ""
 
+#: classes/applications/questionary/questionnaire.aw:prop_q_by_one
+msgid "Omaduse K&uuml;simused &uuml;hekaupa (q_by_one) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_q_by_one_comment
+msgid "Omaduse K&uuml;simused &uuml;hekaupa (q_by_one) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_q_by_one_help
+msgid "Omaduse K&uuml;simused &uuml;hekaupa (q_by_one) help"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_str_answerer_with_qs
+msgid "Omaduse Vastaja andmed samal lehel k&uuml;simustega (str_answerer_with_qs) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_str_answerer_with_qs_comment
+msgid "Omaduse Vastaja andmed samal lehel k&uuml;simustega (str_answerer_with_qs) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_str_answerer_with_qs_help
+msgid "Omaduse Vastaja andmed samal lehel k&uuml;simustega (str_answerer_with_qs) help"
+msgstr ""
+
 #: classes/applications/questionary/questionnaire.aw:prop_dsply_qcomment
 msgid "Omaduse Kuva k&uuml;simuse kommentaari (dsply_qcomment) caption"
 msgstr ""
@@ -157,6 +181,30 @@ msgstr ""
 msgid "Omaduse Salvesta vastamised (str_rslts) help"
 msgstr ""
 
+#: classes/applications/questionary/questionnaire.aw:prop_str_answerer
+msgid "Omaduse Salvesta vastaja andmed (str_answerer) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_str_answerer_comment
+msgid "Omaduse Salvesta vastaja andmed (str_answerer) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_str_answerer_help
+msgid "Omaduse Salvesta vastaja andmed (str_answerer) help"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_str_answerer_cfgform
+msgid "Omaduse Vastaja salvestamise seadete vorm (str_answerer_cfgform) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_str_answerer_cfgform_comment
+msgid "Omaduse Vastaja salvestamise seadete vorm (str_answerer_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_str_answerer_cfgform_help
+msgid "Omaduse Vastaja salvestamise seadete vorm (str_answerer_cfgform) help"
+msgstr ""
+
 #: classes/applications/questionary/questionnaire.aw:prop_p_correct
 msgid "Omaduse &Otilde;ige vastuse pilt (p_correct) caption"
 msgstr ""
@@ -193,6 +241,30 @@ msgstr ""
 msgid "Omaduse &Otilde;igete vastuste protsent (rd_percent) help"
 msgstr ""
 
+#: classes/applications/questionary/questionnaire.aw:prop_rd_fraction
+msgid "Omaduse &Otilde;igeid vastuseid hariliku murruna (rd_fraction) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_rd_fraction_comment
+msgid "Omaduse &Otilde;igeid vastuseid hariliku murruna (rd_fraction) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_rd_fraction_help
+msgid "Omaduse &Otilde;igeid vastuseid hariliku murruna (rd_fraction) help"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_rd_results
+msgid "Omaduse Kuva &otilde;igesti/valesti vastatud k&uuml;simusi (rd_results) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_rd_results_comment
+msgid "Omaduse Kuva &otilde;igesti/valesti vastatud k&uuml;simusi (rd_results) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_rd_results_help
+msgid "Omaduse Kuva &otilde;igesti/valesti vastatud k&uuml;simusi (rd_results) help"
+msgstr ""
+
 #: classes/applications/questionary/questionnaire.aw:prop_rd_text
 msgid "Omaduse Tekst (rd_text) caption"
 msgstr ""
@@ -215,6 +287,18 @@ msgstr ""
 
 #: classes/applications/questionary/questionnaire.aw:prop_rd_percent_text_help
 msgid "Omaduse Tekst &otilde;igete vastuste protsendi j&auml;rgi (rd_percent_text) help"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_table_cols_conf
+msgid "Omaduse  (table_cols_conf) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_table_cols_conf_comment
+msgid "Omaduse  (table_cols_conf) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_table_cols_conf_help
+msgid "Omaduse  (table_cols_conf) help"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire.aw:prop_qtlbr
@@ -241,6 +325,18 @@ msgstr ""
 msgid "Omaduse  (qtbl) help"
 msgstr ""
 
+#: classes/applications/questionary/questionnaire.aw:prop_atlb
+msgid "Omaduse Vastajate toolbar (atlb) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_atlb_comment
+msgid "Omaduse Vastajate toolbar (atlb) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_atlb_help
+msgid "Omaduse Vastajate toolbar (atlb) help"
+msgstr ""
+
 #: classes/applications/questionary/questionnaire.aw:prop_acnt
 msgid "Omaduse Vastajate arv (acnt) caption"
 msgstr ""
@@ -251,6 +347,18 @@ msgstr ""
 
 #: classes/applications/questionary/questionnaire.aw:prop_acnt_help
 msgid "Omaduse Vastajate arv (acnt) help"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_atbl
+msgid "Omaduse Vastajad (atbl) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_atbl_comment
+msgid "Omaduse Vastajad (atbl) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:prop_atbl_help
+msgid "Omaduse Vastajad (atbl) help"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire.aw:group_conf
@@ -275,6 +383,14 @@ msgstr ""
 
 #: classes/applications/questionary/questionnaire.aw:group_dsply_rslts_help
 msgid "Grupi Tulemuste&nbsp;kuvamine (dsply_rslts) help"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:group_answerers_tab
+msgid "Grupi Vastajate&nbsp;vaade (answerers_tab) pealkiri"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:group_answerers_tab_help
+msgid "Grupi Vastajate&nbsp;vaade (answerers_tab) help"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire.aw:group_questions
@@ -305,66 +421,131 @@ msgstr ""
 msgid "Seose Vastaja (RELTYPE_ANSWERER) tekst"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:127
-#: classes/applications/questionary/questionnaire.aw:138
+#: classes/applications/questionary/questionnaire.aw:rel_RELTYPE_ASWERER_DATA_CFGFORM
+msgid "Seose Vastaja salvestamise seadete vorm (RELTYPE_ASWERER_DATA_CFGFORM) tekst"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:165
+msgid "&Auml;ra salvesta"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:166
+msgid "Enne vastamist"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:167
+msgid "P&auml;rast vastamist"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:173
+#: classes/applications/questionary/questionnaire.aw:184
 msgid "Mitte kunagi"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:128
-#: classes/applications/questionary/questionnaire.aw:139
+#: classes/applications/questionary/questionnaire.aw:174
+#: classes/applications/questionary/questionnaire.aw:185
 msgid "Alati"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:129
-#: classes/applications/questionary/questionnaire.aw:140
+#: classes/applications/questionary/questionnaire.aw:175
+#: classes/applications/questionary/questionnaire.aw:186
 msgid "Ainult &otilde;ige vastuse korral"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:130
-#: classes/applications/questionary/questionnaire.aw:141
+#: classes/applications/questionary/questionnaire.aw:176
+#: classes/applications/questionary/questionnaire.aw:187
 msgid "Ainult vale vastuse korral"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:131
+#: classes/applications/questionary/questionnaire.aw:177
 msgid "Suvalise vastuse korral"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:164
+#: classes/applications/questionary/questionnaire.aw:210
 msgid "Vastajaid ei salvestata!"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:178
-msgid "Protsent alates"
+#: classes/applications/questionary/questionnaire.aw:225
+msgid "Omadus"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:184
-msgid "Protsent kuni"
+#: classes/applications/questionary/questionnaire.aw:230
+msgid "Kuva tabelis"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:190
-msgid "Tekst"
+#: classes/applications/questionary/questionnaire.aw:235
+msgid "Pealkiri"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:247
+#: classes/applications/questionary/questionnaire.aw:240
+#: classes/applications/questionary/questionnaire.aw:613
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:252
+#: classes/applications/questionary/questionnaire.aw:324
+msgid "%u."
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:374
+msgid "Tulemus"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:380
+msgid "Vastamise aeg"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:507
+msgid "+"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:508
+msgid "#0000CC"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:513
+msgid "-"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:514
+msgid "#FF0000"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:544
+msgid "Protsent alates"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:550
+msgid "Protsent kuni"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:556
+msgid "Tekst"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:618
 msgid "K&uuml;simus"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:363
-msgid "&Otilde;igeid vastuseid"
+#: classes/applications/questionary/questionnaire.aw:851
+msgid "Vastus d&uuml;naamilisele k&uuml;simustikule %s"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:363
-msgid "%."
+#: classes/applications/questionary/questionnaire.aw:893
+msgid "%s vastus d&uuml;naamilisele k&uuml;simustikule %s"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:460
+#: classes/applications/questionary/questionnaire.aw:923
+msgid "Tekstivastus k&uuml;simusele %s"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:1142
 msgid "J&auml;rgmine"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:465
+#: classes/applications/questionary/questionnaire.aw:1147
+msgid "L&otilde;peta!"
+msgstr ""
+
+#: classes/applications/questionary/questionnaire.aw:1152
 msgid "L&otilde;peta"
 msgstr ""

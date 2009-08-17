@@ -2,8 +2,6 @@
 $GLOBALS["TRANS"]["Omaduse Select owner (owner) caption"] = "Select owner";
 $GLOBALS["TRANS"]["Omaduse Require approval (is_contactlist_add_approval_required) caption"] = "Require approval";
 $GLOBALS["TRANS"]["Omaduse Allow messages from (approved_senders) caption"] = "Allow messages from";
-$GLOBALS["TRANS"]["Omaduse Messages (msg_inbox_tbl) caption"] = "Messages";
-$GLOBALS["TRANS"]["Omaduse Messages (msg_outbox_tbl) caption"] = "Messages";
 $GLOBALS["TRANS"]["Grupi Settings (general) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Grupi Messages (message_box) pealkiri"] = "Messages";
 $GLOBALS["TRANS"]["Grupi Inbox (message_inbox) pealkiri"] = "Inbox";

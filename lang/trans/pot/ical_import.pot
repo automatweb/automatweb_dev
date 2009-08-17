@@ -11,7 +11,7 @@ msgstr ""
 
 
 #: classes/applications/calendar/ical_import.aw:class_1349_help
-msgid "Klassi Sündmuste import (iCal) help"
+msgid "Klassi S&uuml;ndmuste import (iCal) help"
 msgstr ""
 
 #: classes/applications/calendar/ical_import.aw:prop_import_tb

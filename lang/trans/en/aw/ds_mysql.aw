@@ -2,7 +2,6 @@
 $GLOBALS["TRANS"]["object::load(%s): no such object!"] = "object::load(%s): no such object!";
 $GLOBALS["TRANS"]["ds_mysql::final_delete_object(%s): no suct object exists!"] = "ds_mysql::final_delete_object(%s): no suct object exists!";
 $GLOBALS["TRANS"]["filter cannot contain properties (%s) that are in serialized fields other than metadata!"] = "filter cannot contain properties (%s) that are in serialized fields other than metadata!";
-$GLOBALS["TRANS"]["OBJ_COMP_BETWEEN does not make sense with obj_predicate_prop!"] = "OBJ_COMP_BETWEEN does not make sense with obj_predicate_prop!";
 $GLOBALS["TRANS"]["ds_mysql::do_proc_complex_param(%s, %s): if a complex join parameter is given without a class id as the first element, the class_id parameter must be set!"] = "ds_mysql::do_proc_complex_param(%s, %s): if a complex join parameter is given without a class id as the first element, the class_id parameter must be set!";
 $GLOBALS["TRANS"]["ds_mysql::_req_do_pcp(): no relation from class %s named %s"] = "ds_mysql::_req_do_pcp(): no relation from class %s named %s";
 $GLOBALS["TRANS"]["ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"] = "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)";

@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Vees&otilde;idukite haldus (watercraft_management) help"
 msgstr ""
 
+#: classes/applications/watercraft_management/watercraft_add.aw:prop_redir_after_publish
+msgid "Omaduse Peale avaldamist suuna (redir_after_publish) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_add.aw:prop_redir_after_publish_comment
+msgid "Omaduse Peale avaldamist suuna (redir_after_publish) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_add.aw:prop_redir_after_publish_help
+msgid "Omaduse Peale avaldamist suuna (redir_after_publish) help"
+msgstr ""
+
 #: classes/applications/watercraft_management/watercraft_add.aw:prop_required_fields_table
 msgid "Omaduse Kohustuslikud v&auml;ljad (required_fields_table) caption"
 msgstr ""
@@ -82,39 +94,39 @@ msgstr ""
 msgid "Seose Vees&otilde;idukite haldus (RELTYPE_WATERCRAFT_MANAGEMENT) tekst"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:82
+#: classes/applications/watercraft_management/watercraft_add.aw:85
 msgid "Kohustuslik"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:88
+#: classes/applications/watercraft_management/watercraft_add.aw:91
 msgid "Arv"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:94
+#: classes/applications/watercraft_management/watercraft_add.aw:97
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:98
+#: classes/applications/watercraft_management/watercraft_add.aw:101
 msgid "Templeidi muutuja"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:158
+#: classes/applications/watercraft_management/watercraft_add.aw:161
 msgid "Lehek&uuml;lg"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:164
+#: classes/applications/watercraft_management/watercraft_add.aw:167
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:169
+#: classes/applications/watercraft_management/watercraft_add.aw:172
 msgid "&Uuml;levaade"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:174
+#: classes/applications/watercraft_management/watercraft_add.aw:177
 msgid "Templeit"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:775
+#: classes/applications/watercraft_management/watercraft_add.aw:802
 msgid "(Nimetu)"
 msgstr ""
 

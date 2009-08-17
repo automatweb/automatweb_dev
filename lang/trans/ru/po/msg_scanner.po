@@ -13,7 +13,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/msg/msg_scanner.aw:61
+#: classes/core/msg/msg_scanner.aw:62
 msgid ""
 "ERROR: function %s already defined as message handler\n"
 "       for message %s, can not define several recievers\n"
@@ -21,7 +21,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: classes/core/msg/msg_scanner.aw:73
+#: classes/core/msg/msg_scanner.aw:74
 msgid ""
 "ERROR: function %s already defined as message handler\n"
 "       for message %s with param %s, can not define several recievers\n"
@@ -29,33 +29,33 @@ msgid ""
 "\n"
 msgstr ""
 
-#: classes/core/msg/msg_scanner.aw:93 classes/core/msg/msg_scanner.aw:118
+#: classes/core/msg/msg_scanner.aw:94 classes/core/msg/msg_scanner.aw:119
 msgid ""
 "ERROR: message %s is not defined, but recieved by class%s %s!\n"
 "\n"
 msgstr ""
 
-#: classes/core/msg/msg_scanner.aw:102
+#: classes/core/msg/msg_scanner.aw:103
 msgid ""
 "ERROR: class %s defines function %s as message handler for message %s,\n"
 "       but the function does not exist in that class!\n"
 "\n"
 msgstr ""
 
-#: classes/core/msg/msg_scanner.aw:129
+#: classes/core/msg/msg_scanner.aw:130
 msgid ""
 "ERROR: class %s defines function %s as message handler for message %s (with param %s),\n"
 "       but the function does not exist in that class!\n"
 "\n"
 msgstr ""
 
-#: classes/core/msg/msg_scanner.aw:185 classes/core/msg/msg_scanner.aw:201
+#: classes/core/msg/msg_scanner.aw:186 classes/core/msg/msg_scanner.aw:202
 msgid ""
 "ERROR: no write access to file %s!\n"
 "\n"
 msgstr ""
 
-#: classes/core/msg/msg_scanner.aw:194
+#: classes/core/msg/msg_scanner.aw:195
 msgid ""
 "ERROR: folder %s where message maps are stored, does not exist!\n"
 "\n"

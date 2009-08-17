@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_expense_obj.aw:29
+#: classes/applications/crm/crm_expense_obj.aw:42
 msgid "Toimetus puudub"
 msgstr ""
 
-#: classes/applications/crm/crm_expense_obj.aw:40
+#: classes/applications/crm/crm_expense_obj.aw:53
 msgid "Klient puudub"
 msgstr ""
-

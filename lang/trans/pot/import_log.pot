@@ -15,15 +15,15 @@ msgid "Klassi Impordi logi help"
 msgstr ""
 
 #: classes/import/import_log.aw:prop_field
-msgid "Omaduse Muudetud väli (field) caption"
+msgid "Omaduse Muudetud v&auml;li (field) caption"
 msgstr ""
 
 #: classes/import/import_log.aw:prop_field_comment
-msgid "Omaduse Muudetud väli (field) kommentaar"
+msgid "Omaduse Muudetud v&auml;li (field) kommentaar"
 msgstr ""
 
 #: classes/import/import_log.aw:prop_field_help
-msgid "Omaduse Muudetud väli (field) help"
+msgid "Omaduse Muudetud v&auml;li (field) help"
 msgstr ""
 
 #: classes/import/import_log.aw:prop_content

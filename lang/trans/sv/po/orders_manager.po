@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/orders/orders_manager.aw:class_842_help
 msgid "Klassi Tellimuste haldus help"
 msgstr ""
@@ -178,7 +177,8 @@ msgstr ""
 msgid "Exceli-tabeli vormis"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:137 classes/applications/orders/orders_manager.aw:399
+#: classes/applications/orders/orders_manager.aw:137
+#: classes/applications/orders/orders_manager.aw:399
 msgid "Prindi tellimused"
 msgstr ""
 
@@ -186,7 +186,8 @@ msgstr ""
 msgid "Kokku:"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:316 classes/applications/orders/orders_manager.aw:628
+#: classes/applications/orders/orders_manager.aw:316
+#: classes/applications/orders/orders_manager.aw:628
 msgid "Kood"
 msgstr ""
 
@@ -243,10 +244,11 @@ msgid "Tellija"
 msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:419
-msgid "Kuupäev"
+msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:429 classes/applications/orders/orders_manager.aw:531
+#: classes/applications/orders/orders_manager.aw:429
+#: classes/applications/orders/orders_manager.aw:531
 msgid "Vaata tellimust"
 msgstr ""
 
@@ -341,4 +343,3 @@ msgstr ""
 #: classes/applications/orders/orders_manager.aw:796
 msgid "Pole midagi printida"
 msgstr ""
-

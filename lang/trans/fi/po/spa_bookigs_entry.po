@@ -486,8 +486,8 @@ msgid "Lisasin kasutaja %s, isiku %s ja broneeringu paketile %s algusega %s ja l
 msgstr "K&auml;ytt&auml;j&auml; lis&auml;tty %s, Henkil&ouml;n %s paketille %s joka alkaa %s ja p&auml;&auml;ttyy %s<br>"
 
 #: classes/applications/spa_bookings/spa_bookigs_entry.aw:708
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2170
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2210
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2178
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2218
 msgid "--vali--"
 msgstr ""
 
@@ -568,90 +568,98 @@ msgstr "Varattu"
 msgid "Vahepeal on valitud aeg broneeritud!"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1574
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1693
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1578
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1701
 msgid "Mees"
 msgstr "Mies"
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1574
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1693
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1578
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1701
 msgid "Naine"
 msgstr "Nainen"
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1766
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1774
 msgid "Meili sisus kasutatavad muutujad:<br>#uid# - kasutajanimi<br>#pwd# - parool<br>#pwd_hash_link# - parooli vahetamise link<br> #login_url# - sisse logimise aadress<br>"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2010
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2018
 msgid "Vali toode"
 msgstr "Palvelu"
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2094
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2102
 msgid "Sisesta kasutaja puuduvad andmed"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2116
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2124
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2163
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2171
 msgid "Paketi nimi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2179
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2187
 msgid "Saabumine"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2183
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2191
 msgid "Lahkumine"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2209
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2217
 msgid "Reisib&uuml;roo nimi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2259
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2274
 msgid "%s %s-%s"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2520
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2528
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2286
+msgid "%s %s"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2287
+msgid "Eemalda"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2556
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2564
 msgid "Eesnimi puudu"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2521
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2557
 msgid "Perenimi puudu"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2522
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2558
 msgid "Sugu m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2523
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2559
 msgid "S&uuml;nniaeg puudu"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2524
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2560
 msgid "E-post puudu"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2525
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2561
 msgid "Algus puudu"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2526
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2562
 msgid "Paketi id puudu"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2527
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2541
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2563
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2577
 msgid "B&uuml;roo puudu"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2545
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2581
 msgid "Reisib&uuml;roo pole &uuml;hegi SPA reisib&uuml;roo liidese omanik"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2574
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:2610
 msgid "Kasutaja ja parool ei klapi"
 msgstr "Username and password do not match"

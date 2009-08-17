@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse J&auml;rjekord (jrk) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_packaging.aw:prop_product
+msgid "Omaduse Toode (product) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_product_comment
+msgid "Omaduse Toode (product) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_product_help
+msgid "Omaduse Toode (product) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_packaging.aw:prop_price
 msgid "Omaduse Hind (price) caption"
 msgstr ""
@@ -36,6 +48,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_price_help
 msgid "Omaduse Hind (price) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_content_package_price_condition
+msgid "Omaduse Sisupaketi hinnatingimuse pakendiobjekt (content_package_price_condition) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_content_package_price_condition_comment
+msgid "Omaduse Sisupaketi hinnatingimuse pakendiobjekt (content_package_price_condition) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_content_package_price_condition_help
+msgid "Omaduse Sisupaketi hinnatingimuse pakendiobjekt (content_package_price_condition) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_price_cur
@@ -108,6 +132,102 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_unit_help
 msgid "Omaduse  (buffer_time_unit) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits
+msgid "Omaduse  (amount_limits) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_comment
+msgid "Omaduse  (amount_limits) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_help
+msgid "Omaduse  (amount_limits) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tb
+msgid "Omaduse  (amount_limits_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tb_comment
+msgid "Omaduse  (amount_limits_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tb_help
+msgid "Omaduse  (amount_limits_tb) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_aml_inheritable
+msgid "Omaduse P&auml;ritav (aml_inheritable) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_aml_inheritable_comment
+msgid "Omaduse P&auml;ritav (aml_inheritable) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_aml_inheritable_help
+msgid "Omaduse P&auml;ritav (aml_inheritable) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_inherit_aml_from
+msgid "Omaduse P&auml;ri kogusepiirangud (inherit_aml_from) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_inherit_aml_from_comment
+msgid "Omaduse P&auml;ri kogusepiirangud (inherit_aml_from) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_inherit_aml_from_help
+msgid "Omaduse P&auml;ri kogusepiirangud (inherit_aml_from) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl
+msgid "Omaduse  (amount_limits_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl_comment
+msgid "Omaduse  (amount_limits_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl_help
+msgid "Omaduse  (amount_limits_tbl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_files
+msgid "Omaduse Failid (files) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_files_comment
+msgid "Omaduse Failid (files) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_files_help
+msgid "Omaduse Failid (files) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_images
+msgid "Omaduse Pildid (images) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_images_comment
+msgid "Omaduse Pildid (images) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_images_help
+msgid "Omaduse Pildid (images) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_size
+msgid "Omaduse Suurus (size) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_size_comment
+msgid "Omaduse Suurus (size) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_size_help
+msgid "Omaduse Suurus (size) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_user1
@@ -410,30 +530,6 @@ msgstr ""
 msgid "Omaduse User-defined var 5 (uservar5) help"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:prop_images
-msgid "Omaduse Pildid (images) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_images_comment
-msgid "Omaduse Pildid (images) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_images_help
-msgid "Omaduse Pildid (images) help"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_files
-msgid "Omaduse Failid (files) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_files_comment
-msgid "Omaduse Failid (files) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_files_help
-msgid "Omaduse Failid (files) help"
-msgstr ""
-
 #: classes/applications/shop/shop_product_packaging.aw:prop_userch1
 msgid "Omaduse User-defined checkbox 1 (userch1) caption"
 msgstr ""
@@ -506,64 +602,28 @@ msgstr ""
 msgid "Omaduse &Otilde;igused (acl) help"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits
-msgid "Omaduse  (amount_limits) caption"
+#: classes/applications/shop/shop_product_packaging.aw:prop_purveyance_tlb
+msgid "Omaduse  (purveyance_tlb) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_comment
-msgid "Omaduse  (amount_limits) kommentaar"
+#: classes/applications/shop/shop_product_packaging.aw:prop_purveyance_tlb_comment
+msgid "Omaduse  (purveyance_tlb) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_help
-msgid "Omaduse  (amount_limits) help"
+#: classes/applications/shop/shop_product_packaging.aw:prop_purveyance_tlb_help
+msgid "Omaduse  (purveyance_tlb) help"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tb
-msgid "Omaduse  (amount_limits_tb) caption"
+#: classes/applications/shop/shop_product_packaging.aw:prop_purveyance_tbl
+msgid "Omaduse  (purveyance_tbl) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tb_comment
-msgid "Omaduse  (amount_limits_tb) kommentaar"
+#: classes/applications/shop/shop_product_packaging.aw:prop_purveyance_tbl_comment
+msgid "Omaduse  (purveyance_tbl) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tb_help
-msgid "Omaduse  (amount_limits_tb) help"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_aml_inheritable
-msgid "Omaduse P&auml;ritav (aml_inheritable) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_aml_inheritable_comment
-msgid "Omaduse P&auml;ritav (aml_inheritable) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_aml_inheritable_help
-msgid "Omaduse P&auml;ritav (aml_inheritable) help"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_inherit_aml_from
-msgid "Omaduse P&auml;ri kogusepiirangud (inherit_aml_from) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_inherit_aml_from_comment
-msgid "Omaduse P&auml;ri kogusepiirangud (inherit_aml_from) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_inherit_aml_from_help
-msgid "Omaduse P&auml;ri kogusepiirangud (inherit_aml_from) help"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl
-msgid "Omaduse  (amount_limits_tbl) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl_comment
-msgid "Omaduse  (amount_limits_tbl) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl_help
-msgid "Omaduse  (amount_limits_tbl) help"
+#: classes/applications/shop/shop_product_packaging.aw:prop_purveyance_tbl_help
+msgid "Omaduse  (purveyance_tbl) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_transl
@@ -578,28 +638,20 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:group_data
-msgid "Grupi Andmed (data) pealkiri"
+#: classes/applications/shop/shop_product_packaging.aw:group_general_general
+msgid "Grupi &Uuml;ldine (general_general) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:group_data_help
-msgid "Grupi Andmed (data) help"
+#: classes/applications/shop/shop_product_packaging.aw:group_general_general_help
+msgid "Grupi &Uuml;ldine (general_general) help"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:group_file
-msgid "Grupi Failid (file) pealkiri"
+#: classes/applications/shop/shop_product_packaging.aw:group_general_time_settings
+msgid "Grupi Ajaseaded (general_time_settings) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:group_file_help
-msgid "Grupi Failid (file) help"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:group_acl
-msgid "Grupi &Otilde;igused (acl) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:group_acl_help
-msgid "Grupi &Otilde;igused (acl) help"
+#: classes/applications/shop/shop_product_packaging.aw:group_general_time_settings_help
+msgid "Grupi Ajaseaded (general_time_settings) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:group_amount_limits
@@ -610,20 +662,60 @@ msgstr ""
 msgid "Grupi Kogusepiirangud (amount_limits) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_packaging.aw:group_info
+msgid "Grupi Lisainfo (info) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_info_help
+msgid "Grupi Lisainfo (info) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_file
+msgid "Grupi Failid (file) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_file_help
+msgid "Grupi Failid (file) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_img
+msgid "Grupi Pildid (img) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_img_help
+msgid "Grupi Pildid (img) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_data
+msgid "Grupi Andmed (data) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_acl
+msgid "Grupi &Otilde;igused (acl) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_acl_help
+msgid "Grupi &Otilde;igused (acl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_purveyance
+msgid "Grupi Tarnimine (purveyance) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_purveyance_help
+msgid "Grupi Tarnimine (purveyance) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_packaging.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:group_transl_help
 msgid "Grupi T&otilde;lgi (transl) help"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:group_img
-msgid "Grupi img (img) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/shop_product_packaging.aw:group_img_help
-msgid "Grupi img (img) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_IMAGE
@@ -658,35 +750,59 @@ msgstr ""
 msgid "Seose P&auml;ri kogusepiirangud (RELTYPE_INHERIT_AML_FROM) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:224
+#: classes/applications/shop/shop_product_packaging.aw:layout_reservation
+msgid "Kujundusosa Broneeritav&nbsp;aeg (reservation) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:layout_buffer
+msgid "Kujundusosa Puhveraeg (buffer) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:258
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:241
+#: classes/applications/shop/shop_product_packaging.aw:275
 msgid "Minutit"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:242
+#: classes/applications/shop/shop_product_packaging.aw:276
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:259
+#: classes/applications/shop/shop_product_packaging.aw:291
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:296
+msgid "Tarnep&auml;ev"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:301
+msgid "Tarnija"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:306
+msgid "Tarneaeg p&auml;evades"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:353
 msgid "Kasutajagrupp"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:264
+#: classes/applications/shop/shop_product_packaging.aw:358
 msgid "Minimaalne kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:269
+#: classes/applications/shop/shop_product_packaging.aw:363
 msgid "Maksimaalne kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:618
+#: classes/applications/shop/shop_product_packaging.aw:719
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:623
+#: classes/applications/shop/shop_product_packaging.aw:724
 msgid "Valuuta"
 msgstr ""
 

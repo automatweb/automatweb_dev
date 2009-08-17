@@ -41,18 +41,6 @@ msgstr ""
 msgid "Omaduse Aktiivne (active) help"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_topic.aw:prop_jrk
-msgid "Omaduse J&auml;rjekord (jrk) caption"
-msgstr ""
-
-#: classes/contentmgmt/forum/forum_topic.aw:prop_jrk_comment
-msgid "Omaduse J&auml;rjekord (jrk) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/forum/forum_topic.aw:prop_jrk_help
-msgid "Omaduse J&auml;rjekord (jrk) help"
-msgstr ""
-
 # classes/contentmgmt/forum/forum_topic.aw:prop_comment
 #: classes/contentmgmt/forum/forum_topic.aw:prop_comment
 msgid "Omaduse Sisu (comment) caption"
@@ -192,11 +180,11 @@ msgstr "Subscriber"
 msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_topic.aw:157
+#: classes/contentmgmt/forum/forum_topic.aw:154
 msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_topic.aw:173
+#: classes/contentmgmt/forum/forum_topic.aw:170
 msgid "Sisestatud kontrollnumber on vale!"
 msgstr ""
 

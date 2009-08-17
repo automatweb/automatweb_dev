@@ -4,7 +4,6 @@ $GLOBALS["TRANS"]["Omaduse Eraisikust kliendi seadete vorm (s_p_cfgform) caption
 $GLOBALS["TRANS"]["Omaduse Minu t&ouml;&ouml;koha seadete vorm (work_cfgform) caption"] = "My workplace configuration form";
 $GLOBALS["TRANS"]["Omaduse T&ouml;&ouml;kaaslaste seadete vorm (coworker_cfgform) caption"] = "My workmates configuration form";
 $GLOBALS["TRANS"]["Omaduse Kliendi t&ouml;&ouml;taja seadete vorm (customer_employer_cfgform) caption"] = "Clients workers configuration form";
-$GLOBALS["TRANS"]["Omaduse Vaikimisi toode arve ridadel (bill_def_prod) caption"] = "Default article in task rows";
 $GLOBALS["TRANS"]["Omaduse Projekti kontroller (controller_proj) caption"] = "Project controller";
 $GLOBALS["TRANS"]["Omaduse Toimetuse kontroller (controller_task) caption"] = "Task controller";
 $GLOBALS["TRANS"]["Omaduse Tegevused vaikimisi vaade (default_tasks_view) caption"] = "Default view for actions";
@@ -20,6 +19,7 @@ $GLOBALS["TRANS"]["Omaduse Osakonnad (sects) caption"] = "Sections";
 $GLOBALS["TRANS"]["Omaduse Ametinimetused (profs) caption"] = "Titles";
 $GLOBALS["TRANS"]["Omaduse K&otilde;ik (everyone) caption"] = "All";
 $GLOBALS["TRANS"]["Omaduse Isiku piltide seaded (person_img_settings) caption"] = "Persons image settings";
+$GLOBALS["TRANS"]["Omaduse Vaikimisi toode arve ridadel (bill_def_prod) caption"] = "Default article in task rows";
 $GLOBALS["TRANS"]["Grupi Tabelid (tables) pealkiri"] = "Tables";
 $GLOBALS["TRANS"]["Grupi Kellele kehtib (whom) pealkiri"] = "To whom";
 $GLOBALS["TRANS"]["Grupi Pildid (img) pealkiri"] = "Images";

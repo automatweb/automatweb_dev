@@ -10,11 +10,15 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/groupware/reservation_obj.aw:383
+#: classes/applications/groupware/reservation_obj.aw:358
+msgid "hind"
+msgstr ""
+
+#: classes/applications/groupware/reservation_obj.aw:696
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/applications/groupware/reservation_obj.aw:383
+#: classes/applications/groupware/reservation_obj.aw:696
 msgid "Kinnitamata"
 msgstr ""
 

@@ -102,7 +102,7 @@ msgstr ""
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
-#: classes/applications/personnel_import/personnel_import.aw:67
+#: classes/applications/personnel_import/personnel_import.aw:68
 msgid "K&auml;ivita import"
 msgstr ""
 

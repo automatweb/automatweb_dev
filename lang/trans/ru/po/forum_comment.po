@@ -97,6 +97,18 @@ msgstr ""
 msgid "Omaduse IP (ip) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_comment.aw:prop_commtype
+msgid "Omaduse T&uuml;&uuml;p (commtype) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_commtype_comment
+msgid "Omaduse T&uuml;&uuml;p (commtype) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_commtype_help
+msgid "Omaduse T&uuml;&uuml;p (commtype) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_comment.aw:rel_RELTYPE_FORUM_IMAGE
 msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
 msgstr ""

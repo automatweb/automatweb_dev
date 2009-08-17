@@ -72,21 +72,6 @@ msgstr "informeeriv väli. Näitab, mitu korda on antud lingil klikitud."
 msgid "Omaduse Klikke (hits) help"
 msgstr "informeeriv väli. Näitab, mitu korda on antud lingil klikitud."
 
-# classes/contentmgmt/links.aw:prop_url_int_text
-#: classes/contentmgmt/links.aw:prop_url_int_text
-msgid "Omaduse Saidi sisene link (url_int_text) caption"
-msgstr ""
-
-# classes/contentmgmt/links.aw:prop_url_int_text_comment
-#: classes/contentmgmt/links.aw:prop_url_int_text_comment
-msgid "Omaduse Saidi sisene link (url_int_text) kommentaar"
-msgstr "avades selle valiku, on võimalik nime või sisu järgi otsida saidi siseseid dokumente, millele link viitama panna."
-
-# classes/contentmgmt/links.aw:prop_url_int_text_help
-#: classes/contentmgmt/links.aw:prop_url_int_text_help
-msgid "Omaduse Saidi sisene link (url_int_text) help"
-msgstr "avades selle valiku, on võimalik nime või sisu järgi otsida saidi siseseid dokumente, millele link viitama panna. Olles leidnud sobiva kinnita see \"Vali see\" lingil klikkides. Automaatselt pannakse lingile nimi ning täidetakse URL lahter."
-
 # classes/contentmgmt/links.aw:prop_alt
 #: classes/contentmgmt/links.aw:prop_alt
 msgid "Omaduse Alt tekst (alt) caption"
@@ -244,6 +229,42 @@ msgstr " valiku tegemisel lubatakse uues aknas kerimisribade näitamine."
 msgid "Omaduse Skrollbarid (newwinscroll) help"
 msgstr " valiku tegemisel lubatakse uues aknas kerimisribade näitamine."
 
+#: classes/contentmgmt/links.aw:prop_style_class
+msgid "Omaduse Stiiliklass (style_class) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_style_class_comment
+msgid "Omaduse Stiiliklass (style_class) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_style_class_help
+msgid "Omaduse Stiiliklass (style_class) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_before_link
+msgid "Omaduse Enne lingi teksti (before_link) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_before_link_comment
+msgid "Omaduse Enne lingi teksti (before_link) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_before_link_help
+msgid "Omaduse Enne lingi teksti (before_link) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_after_link
+msgid "Omaduse P&auml;rast lingi teksti (after_link) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_after_link_comment
+msgid "Omaduse P&auml;rast lingi teksti (after_link) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_after_link_help
+msgid "Omaduse P&auml;rast lingi teksti (after_link) help"
+msgstr ""
+
 # classes/contentmgmt/links.aw:prop_link_image
 #: classes/contentmgmt/links.aw:prop_link_image
 msgid "Omaduse Pilt (link_image) caption"
@@ -328,14 +349,12 @@ msgstr ""
 msgid "Omaduse V&otilde;tmes&otilde;nad (kws) help"
 msgstr "v&otilde;imalus m&auml;&auml;rta lingi objektile v&otilde;tmes&otilde;nu. Vajalik juhul, kui soovitakse, et saaks v&otilde;tmes&otilde;nade j&auml;rgi sama teemaga seotud linke leida."
 
-# classes/contentmgmt/links.aw:group_Javascript
 #: classes/contentmgmt/links.aw:group_Javascript
-msgid "Grupi Javascript (Javascript) pealkiri"
+msgid "Grupi N&auml;itamine (Javascript) pealkiri"
 msgstr ""
 
-# classes/contentmgmt/links.aw:group_Javascript_help
 #: classes/contentmgmt/links.aw:group_Javascript_help
-msgid "Grupi Javascript (Javascript) help"
+msgid "Grupi N&auml;itamine (Javascript) help"
 msgstr ""
 
 # classes/contentmgmt/links.aw:group_Pilt
@@ -364,53 +383,61 @@ msgstr ""
 msgid "Grupi V&otilde;tmes&otilde;nad (kws) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:132 classes/contentmgmt/links.aw:180
+#: classes/contentmgmt/links.aw:141 classes/contentmgmt/links.aw:189
 msgid "Vali see"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:136
+#: classes/contentmgmt/links.aw:145
 msgid "Nimetus"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:141
+#: classes/contentmgmt/links.aw:150
 msgid "Asukoht"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:146
+#: classes/contentmgmt/links.aw:155
 msgid "Looja"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:151
+#: classes/contentmgmt/links.aw:160
 msgid "Viimati muudetud"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:280
+#: classes/contentmgmt/links.aw:289
 msgid "T&ouml;&ouml;riistariba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:281
+#: classes/contentmgmt/links.aw:290
 msgid "Aadressi riba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:282
+#: classes/contentmgmt/links.aw:291
 msgid "Men&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:283
+#: classes/contentmgmt/links.aw:292
 msgid "Kerimisriba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:317
+#: classes/contentmgmt/links.aw:326
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:323
+#: classes/contentmgmt/links.aw:332
 msgid "Otsi uus objekt:"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:479
+#: classes/contentmgmt/links.aw:488
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
+
+# classes/contentmgmt/links.aw:prop_url_int_text_comment
+#~ msgid "Omaduse Saidi sisene link (url_int_text) kommentaar"
+#~ msgstr "avades selle valiku, on võimalik nime või sisu järgi otsida saidi siseseid dokumente, millele link viitama panna."
+
+# classes/contentmgmt/links.aw:prop_url_int_text_help
+#~ msgid "Omaduse Saidi sisene link (url_int_text) help"
+#~ msgstr "avades selle valiku, on võimalik nime või sisu järgi otsida saidi siseseid dokumente, millele link viitama panna. Olles leidnud sobiva kinnita see \"Vali see\" lingil klikkides. Automaatselt pannakse lingile nimi ning täidetakse URL lahter."
 
 # classes/contentmgmt/links.aw:prop_comment
 #~ msgid "Omaduse Kommentaar lingikogusse (comment) caption"

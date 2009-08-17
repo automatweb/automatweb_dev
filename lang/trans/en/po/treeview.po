@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -59,19 +59,16 @@ msgstr ""
 msgid "Omaduse Root objekti ikoon (icon_root) help"
 msgstr ""
 
-# classes/vcl/treeview.aw:prop_treetype
 #: classes/vcl/treeview.aw:prop_treetype
-msgid "Omaduse Puu tüüp (treetype) caption"
-msgstr "Tree type"
-
-# classes/vcl/treeview.aw:prop_treetype_comment
-#: classes/vcl/treeview.aw:prop_treetype_comment
-msgid "Omaduse Puu tüüp (treetype) kommentaar"
+msgid "Omaduse Puu t&uuml;&uuml;p (treetype) caption"
 msgstr ""
 
-# classes/vcl/treeview.aw:prop_treetype_help
+#: classes/vcl/treeview.aw:prop_treetype_comment
+msgid "Omaduse Puu t&uuml;&uuml;p (treetype) kommentaar"
+msgstr ""
+
 #: classes/vcl/treeview.aw:prop_treetype_help
-msgid "Omaduse Puu tüüp (treetype) help"
+msgid "Omaduse Puu t&uuml;&uuml;p (treetype) help"
 msgstr ""
 
 # classes/vcl/treeview.aw:prop_icon_folder_open
@@ -113,3 +110,11 @@ msgstr "root folder"
 #: classes/vcl/treeview.aw:rel_RELTYPE_ICON
 msgid "Seose ikoon (RELTYPE_ICON) tekst"
 msgstr "icon"
+
+#: classes/vcl/treeview.aw:1560
+msgid "(M)"
+msgstr ""
+
+# classes/vcl/treeview.aw:prop_treetype
+#~ msgid "Omaduse Puu tüüp (treetype) caption"
+#~ msgstr "Tree type"

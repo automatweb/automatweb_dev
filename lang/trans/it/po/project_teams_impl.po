@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/groupware/project_teams_impl.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -18,15 +17,18 @@ msgstr ""
 msgid "Tiim"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:37 classes/applications/groupware/project_teams_impl.aw:97
+#: classes/applications/groupware/project_teams_impl.aw:37
+#: classes/applications/groupware/project_teams_impl.aw:97
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:49 classes/applications/groupware/project_teams_impl.aw:108
+#: classes/applications/groupware/project_teams_impl.aw:49
+#: classes/applications/groupware/project_teams_impl.aw:108
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:59 classes/applications/groupware/project_teams_impl.aw:117
+#: classes/applications/groupware/project_teams_impl.aw:59
+#: classes/applications/groupware/project_teams_impl.aw:117
 msgid "Kleebi"
 msgstr ""
 
@@ -38,11 +40,13 @@ msgstr ""
 msgid "Lisa valitud isikud meeskonda"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:134 classes/applications/groupware/project_teams_impl.aw:187
+#: classes/applications/groupware/project_teams_impl.aw:134
+#: classes/applications/groupware/project_teams_impl.aw:187
 msgid "T&ouml;&ouml;perekonnad"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:162 classes/applications/groupware/project_teams_impl.aw:204
+#: classes/applications/groupware/project_teams_impl.aw:162
+#: classes/applications/groupware/project_teams_impl.aw:204
 msgid "Projekti meeskond"
 msgstr ""
 
@@ -54,7 +58,9 @@ msgstr ""
 msgid "liikmed"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:291 classes/applications/groupware/project_teams_impl.aw:368 classes/applications/groupware/project_teams_impl.aw:423
+#: classes/applications/groupware/project_teams_impl.aw:291
+#: classes/applications/groupware/project_teams_impl.aw:381
+#: classes/applications/groupware/project_teams_impl.aw:436
 msgid "Rollid"
 msgstr ""
 
@@ -62,23 +68,23 @@ msgstr ""
 msgid "Otsingu tulemused"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:383 classes/applications/groupware/project_teams_impl.aw:439
+#: classes/applications/groupware/project_teams_impl.aw:396
+#: classes/applications/groupware/project_teams_impl.aw:452
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:391
+#: classes/applications/groupware/project_teams_impl.aw:404
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:399
+#: classes/applications/groupware/project_teams_impl.aw:412
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:407
+#: classes/applications/groupware/project_teams_impl.aw:420
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/groupware/project_teams_impl.aw:415
+#: classes/applications/groupware/project_teams_impl.aw:428
 msgid "E-post"
 msgstr ""
-

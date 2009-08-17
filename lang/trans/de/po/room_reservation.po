@@ -235,44 +235,44 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
-#: classes/common/room_reservation.aw:450
-#: classes/common/room_reservation.aw:451
+#: classes/common/room_reservation.aw:453
+#: classes/common/room_reservation.aw:454
 msgid "Vali enne j&auml;tkamist sobiv aeg!"
 msgstr ""
 
-#: classes/common/room_reservation.aw:675
+#: classes/common/room_reservation.aw:691
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/common/room_reservation.aw:675
+#: classes/common/room_reservation.aw:691
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1068
+#: classes/common/room_reservation.aw:1086
 msgid "Nimi on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1072
+#: classes/common/room_reservation.aw:1090
 msgid "Telefon on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1076
+#: classes/common/room_reservation.aw:1094
 msgid "E-Mail on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1284
+#: classes/common/room_reservation.aw:1302
 msgid "Salvesta"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1561
+#: classes/common/room_reservation.aw:1593
 msgid "Broneeringut ei &otilde;nnestunud kinnitada"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1639
-#: classes/common/room_reservation.aw:1698
+#: classes/common/room_reservation.aw:1671
+#: classes/common/room_reservation.aw:1730
 msgid "Broneering: %s"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1756
+#: classes/common/room_reservation.aw:1788
 msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
 msgstr ""

@@ -14,3 +14,7 @@ msgstr ""
 msgid "Klassi Bugtracki rakendus help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_app_type.aw:rel_RELTYPE_TYPE
+msgid "Seose Bugi t&uuml;&uuml;p (RELTYPE_TYPE) tekst"
+msgstr ""
+

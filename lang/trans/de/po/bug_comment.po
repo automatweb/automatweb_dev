@@ -37,6 +37,18 @@ msgstr ""
 msgid "Omaduse Uus staatus (new_state) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh_guess
+msgid "Omaduse Lisandunud prognoositunnid (add_wh_guess) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh_guess_comment
+msgid "Omaduse Lisandunud prognoositunnid (add_wh_guess) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh_guess_help
+msgid "Omaduse Lisandunud prognoositunnid (add_wh_guess) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh
 msgid "Omaduse Lisandunud t&ouml;&ouml;tunnid (add_wh) caption"
 msgstr ""
@@ -85,6 +97,38 @@ msgstr ""
 msgid "Omaduse Statistika t&uuml;&uuml;p (activity_stats_type) help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_comment.aw:54
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_bill
+msgid "Omaduse Arve (bill) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_bill_comment
+msgid "Omaduse Arve (bill) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_bill_help
+msgid "Omaduse Arve (bill) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_bug
+msgid "Omaduse Arve (bug) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_bug_comment
+msgid "Omaduse Arve (bug) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_bug_help
+msgid "Omaduse Arve (bug) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:rel_RELTYPE_BILL
+msgid "Seose Arve (RELTYPE_BILL) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:rel_RELTYPE_BUG
+msgid "Seose Bugi (RELTYPE_BUG) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:69
 msgid "--vali--"
 msgstr ""

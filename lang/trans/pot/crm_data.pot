@@ -14,7 +14,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/crm/crm_data.aw:38
+#: classes/applications/crm/crm_data.aw:46
 msgid "crm_data::get_bills_by_co(): second parameter must be an array, if set!"
 msgstr ""
 

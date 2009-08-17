@@ -30,83 +30,83 @@ msgstr ""
 msgid "Ei"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:91
+#: classes/vcl/acl_manager.aw:92
 msgid "Tabeli legend:<Br>M - %s<br>L - %s<Br>ACL - %s<br>K - %s<br>V - %s<br>Alam - %s<br>J - %s"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:92
+#: classes/vcl/acl_manager.aw:93
 msgid "Muutmine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:93
+#: classes/vcl/acl_manager.aw:94
 msgid "Lisamine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:94
+#: classes/vcl/acl_manager.aw:95
 msgid "ACL Muutmine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:95
+#: classes/vcl/acl_manager.aw:96
 msgid "Kustutamine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:96
+#: classes/vcl/acl_manager.aw:97
 msgid "Vaatamine"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:97
+#: classes/vcl/acl_manager.aw:98
 msgid "Kehtib alamobjektidele"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:98 classes/vcl/acl_manager.aw:164
+#: classes/vcl/acl_manager.aw:99 classes/vcl/acl_manager.aw:165
 msgid "Juurkaust"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:136
+#: classes/vcl/acl_manager.aw:137
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:140
+#: classes/vcl/acl_manager.aw:141
 msgid "M"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:141
+#: classes/vcl/acl_manager.aw:142
 msgid "L"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:142
+#: classes/vcl/acl_manager.aw:143
 msgid "ACL"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:143
+#: classes/vcl/acl_manager.aw:144
 msgid "K"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:144
+#: classes/vcl/acl_manager.aw:145
 msgid "V"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:145
+#: classes/vcl/acl_manager.aw:146
 msgid "ALAM"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:163
+#: classes/vcl/acl_manager.aw:164
 msgid "J"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:170
+#: classes/vcl/acl_manager.aw:171
 msgid "M&auml;&auml;ra"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:214 classes/vcl/acl_manager.aw:304
+#: classes/vcl/acl_manager.aw:215 classes/vcl/acl_manager.aw:305
 msgid "no group for user %s!"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:253
+#: classes/vcl/acl_manager.aw:254
 msgid "Salvesta &otilde;igused"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:275
+#: classes/vcl/acl_manager.aw:276
 msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
 msgstr ""
 

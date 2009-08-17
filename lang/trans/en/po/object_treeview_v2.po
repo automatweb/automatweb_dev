@@ -674,7 +674,7 @@ msgid "Ikoon"
 msgstr "Icon"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:203
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1235
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1247
 msgid "Nimi"
 msgstr "Name"
 
@@ -730,142 +730,150 @@ msgstr "Table"
 msgid "Kombineeritud"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:509
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:521
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:512
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:524
 msgid "%s andmeallikas"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:587
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:590
 msgid "Sirvi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:745
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:755
 msgid "Search results"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1106
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1118
 msgid "K&otilde;ik"
 msgstr "All"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1242
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1254
 msgid "Kas n&auml;idata"
 msgstr "Display?"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1250
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1262
 msgid "Kontroller"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1256
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1268
 msgid "Jrk"
 msgstr "Ord"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1263
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1275
 msgid "Eraldaja enne"
 msgstr "Separator before"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1270
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1282
 msgid "Tekst"
 msgstr "Text"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1277
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1289
 msgid "Eraldaja p&auml;rast"
 msgstr "Seprattor after"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1284
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1296
 msgid "Muudetav"
 msgstr "Modifiable"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1290
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1302
 msgid "Sorteeritav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1297
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1308
+msgid "Kuup&auml;ev tekstina"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1314
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1320
 msgid "Milliste v&auml;ljade sisu n&auml;idata<br>Eraldaja&nbsp;&nbsp;|&nbsp;&nbsp;Vasak&nbsp;tekst&nbsp;&nbsp;|&nbsp;&nbsp;V&auml;li&nbsp;&nbsp;|&nbsp;&nbsp;Parem&nbsp;tekst"
 msgstr "Fields to display<br>Separator&nbsp;&nbsp;|&nbsp;&nbsp;Left&nbsp;text&nbsp;&nbsp;|&nbsp;&nbsp;Field&nbsp;&nbsp;|&nbsp;&nbsp;Right&nbsp;text"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1614
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1652
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1690
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1728
 msgid "Uus"
 msgstr "New"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1712
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1750
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1717
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1755
 msgid "Oled kindel et tahad objekte kustutada?"
 msgstr "Are you sure you want to delete objects?"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1727
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1765
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1740
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1778
 msgid "Otsi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1869
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1920
 msgid "--Vali--"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2004
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2055
 msgid "Staatus"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2154
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2175
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2205
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2226
 msgid "Kasvav"
 msgstr "Ascending"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2154
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2175
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2205
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2226
 msgid "Kahanev"
 msgstr "Descending"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2204
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2255
 msgid "Sorditav v&auml;li"
 msgstr "Sortable field"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2210
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2261
 msgid "Kasvav / kahanev"
 msgstr "Ascending / Descending"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2216
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2267
 msgid "Kuup&auml;ev tekstina?"
 msgstr "Date as text?"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2281
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2332
 msgid "Grupp"
 msgstr "Group"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2287
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2338
 msgid "Filtreeritav v&auml;li"
 msgstr "Filtered field"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2293
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2344
 msgid "Filtreeritav v&auml;&auml;rtus"
 msgstr "Filtered value"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2299
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2350
 msgid "V&auml;listav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2305
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2356
 msgid "Kas t&auml;pne?"
 msgstr "Exact?"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2331
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2382
 msgid "Asukoht"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2662
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2713
 msgid "Tulp"
 msgstr "Column"
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2668
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2719
 msgid "Muundaja"
 msgstr "Transformer"
 

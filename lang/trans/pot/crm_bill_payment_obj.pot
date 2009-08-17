@@ -10,15 +10,15 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_bill_payment_obj.aw:180
+#: classes/applications/crm/crm_bill_payment_obj.aw:177
 msgid "Laekumisel juba piisava summa eest areveid"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment_obj.aw:184
+#: classes/applications/crm/crm_bill_payment_obj.aw:181
 msgid "Laekumise valuuta erineb arve omast"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_payment_obj.aw:194
+#: classes/applications/crm/crm_bill_payment_obj.aw:191
 msgid "laekumine ei saa olla erinevate klientidega arvetele"
 msgstr ""
 

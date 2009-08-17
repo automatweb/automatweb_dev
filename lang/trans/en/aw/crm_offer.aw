@@ -1,7 +1,6 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Tellija (orderer) caption"] = "Orderer";
 $GLOBALS["TRANS"]["Omaduse Algus (start1) caption"] = "Start";
-$GLOBALS["TRANS"]["Omaduse Täitja (preformer) caption"] = "Performer";
 $GLOBALS["TRANS"]["Omaduse Pakkumise koostaja (salesman) caption"] = "Offer creator";
 $GLOBALS["TRANS"]["Omaduse Staatus (offer_status) caption"] = "Status";
 $GLOBALS["TRANS"]["Omaduse Sisu (content) caption"] = "Content";
@@ -27,8 +26,6 @@ $GLOBALS["TRANS"]["Seose Pakkumiste haldus (RELTYPE_OFFER_MGR) tekst"] = "Offer 
 $GLOBALS["TRANS"]["Koostamisel"] = "Being created";
 $GLOBALS["TRANS"]["Saadetud"] = "Sent";
 $GLOBALS["TRANS"]["Esitletud"] = "Presented";
-$GLOBALS["TRANS"]["Tagasilükatud"] = "Rejected";
-$GLOBALS["TRANS"]["Positiivelt lõppenud"] = "Psitively ended";
 $GLOBALS["TRANS"]["Peat&uuml;kk"] = "Chapter";
 $GLOBALS["TRANS"]["Eesm&auml;rk"] = "Goal";
 $GLOBALS["TRANS"]["Maksetingimused"] = "Payment terms";
@@ -37,7 +34,6 @@ $GLOBALS["TRANS"]["V&otilde;rdlustabel"] = "Compare table";
 $GLOBALS["TRANS"]["Projekt"] = "Project";
 $GLOBALS["TRANS"]["--Vali--"] = "--Select--";
 $GLOBALS["TRANS"]["Algstaatus"] = "Starting status";
-$GLOBALS["TRANS"]["Lõppstaatus"] = "Final status";
 $GLOBALS["TRANS"]["Muutuse aeg"] = "Change time";
 $GLOBALS["TRANS"]["Muutja"] = "Modified by";
 $GLOBALS["TRANS"]["Lisa"] = "Add";

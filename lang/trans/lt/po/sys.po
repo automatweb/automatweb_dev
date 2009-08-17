@@ -13,50 +13,50 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/sys.aw:36
+#: classes/sys.aw:39
 msgid "Tabeli nimi"
 msgstr ""
 
-#: classes/sys.aw:41
+#: classes/sys.aw:44
 msgid "Suurus"
 msgstr ""
 
-#: classes/sys.aw:68
+#: classes/sys.aw:71
 msgid "Total"
 msgstr ""
 
-#: classes/sys.aw:414
+#: classes/sys.aw:417
 msgid "L&otilde;i saidi andmebaasi tabelid"
 msgstr ""
 
-#: classes/sys.aw:471
+#: classes/sys.aw:474
 msgid "all done!"
 msgstr ""
 
-#: classes/sys.aw:511
+#: classes/sys.aw:514
 msgid "Nimi"
 msgstr ""
 
-#: classes/sys.aw:515
+#: classes/sys.aw:518
 msgid "Klass"
 msgstr ""
 
-#: classes/sys.aw:519
+#: classes/sys.aw:522
 msgid "Muutja"
 msgstr ""
 
-#: classes/sys.aw:523
+#: classes/sys.aw:526
 msgid "Muutmise aeg"
 msgstr ""
 
-#: classes/sys.aw:691
+#: classes/sys.aw:694
 msgid "all done!! database seems to be relatively ok!"
 msgstr ""
 
-#: classes/sys.aw:751
+#: classes/sys.aw:755
 msgid "All done"
 msgstr ""
 
-#: classes/sys.aw:839
+#: classes/sys.aw:843
 msgid "$fn"
 msgstr ""

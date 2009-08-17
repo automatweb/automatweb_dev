@@ -111,6 +111,14 @@ msgstr "Variables"
 msgid "Grupi Muutujad (manager) help"
 msgstr ""
 
+#: classes/meta/metamgr.aw:group_translate
+msgid "Grupi translate (translate) pealkiri"
+msgstr ""
+
+#: classes/meta/metamgr.aw:group_translate_help
+msgid "Grupi translate (translate) help"
+msgstr ""
+
 #: classes/meta/metamgr.aw:143
 msgid "ID"
 msgstr "ID"

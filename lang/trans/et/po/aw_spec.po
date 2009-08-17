@@ -375,22 +375,22 @@ msgstr ""
 msgid "PDF"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:502
+#: classes/applications/aw_spec/aw_spec.aw:505
 msgid "Klass: %s"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:524
+#: classes/applications/aw_spec/aw_spec.aw:527
 msgid "Seos: %s"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:525
+#: classes/applications/aw_spec/aw_spec.aw:528
 msgid "Klassist %s klassi %s"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:552
+#: classes/applications/aw_spec/aw_spec.aw:555
 msgid "%s seosed"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:615
+#: classes/applications/aw_spec/aw_spec.aw:618
 msgid "Salvesta uus versioon"
 msgstr ""

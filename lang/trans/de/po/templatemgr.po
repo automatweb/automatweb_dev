@@ -13,6 +13,6 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/util/templatemgr.aw:81
+#: classes/core/util/templatemgr.aw:86
 msgid "Vaikimisi:"
 msgstr ""

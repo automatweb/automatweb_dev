@@ -178,15 +178,15 @@ msgstr ""
 msgid "Uus toimetus"
 msgstr ""
 
-#: classes/applications/calendar/calendar_vacancy.aw:236
+#: classes/applications/calendar/calendar_vacancy.aw:235
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/applications/calendar/calendar_vacancy.aw:245
+#: classes/applications/calendar/calendar_vacancy.aw:244
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/calendar/calendar_vacancy.aw:254
+#: classes/applications/calendar/calendar_vacancy.aw:253
 msgid "Salvesta"
 msgstr ""
 

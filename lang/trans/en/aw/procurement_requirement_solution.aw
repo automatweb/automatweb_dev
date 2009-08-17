@@ -17,7 +17,6 @@ $GLOBALS["TRANS"]["Uus arendus"] = "New development";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Telefon"] = "Phone";
 $GLOBALS["TRANS"]["E-post"] = "E-mail";
-$GLOBALS["TRANS"]["Üksus"] = "Unit";
 $GLOBALS["TRANS"]["Ametinimetus"] = "Title";
 $GLOBALS["TRANS"]["Tunnihind"] = "Hour price";
 $GLOBALS["TRANS"]["T&ouml;&ouml;tunnid"] = "Hours";

@@ -214,8 +214,8 @@ msgid "Seose Isikute kaust (RELTYPE_FOLDER) tekst"
 msgstr "Person folder"
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:rel_RELTYPE_WEBFORM
-msgid "Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"
-msgstr "Event form"
+msgid "Seose S&uuml;ndmuse vorm (RELTYPE_WEBFORM) tekst"
+msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:156
 msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - kalendri s&uuml;ndmuse sisu<br>\t\t\t\t\t#date# - kohtumise kuup&auml;ev<br>\t\t\t\t\t#time_from# - kohtumise alguskellaaeg<br>\t\t\t\t\t#time_to# - kohtumise k&otilde;ppkellaaeg<br>lisaks v&otilde;ib kasutada elemente andmete vormist, trellidega eraldatult"
@@ -234,13 +234,19 @@ msgid "Isikute kaust (%s)"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:251
-msgid "Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"
-msgstr "Webform with event registration form can only be used via event registration"
+msgid "Veebivorm s&uuml;ndmusele registreerimise vormiga t&ouml;&ouml;tab ainult l&auml;bi s&uuml;ndmusele registreerimise"
+msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:270
 msgid "calendar_registration_form::show(%s): event and object type must be related!"
 msgstr "calendar_registration_form::show(%s): event and object type must be related!"
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:664
+#: classes/applications/calendar/calendar_registration_form_conf.aw:658
 msgid "calendar_registration_form::show_data(%s): event and object type must be related!"
 msgstr "calendar_registration_form::show_data(%s): event and object type must be related!"
+
+#~ msgid "Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"
+#~ msgstr "Event form"
+
+#~ msgid "Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"
+#~ msgstr "Webform with event registration form can only be used via event registration"

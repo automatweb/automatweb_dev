@@ -214,6 +214,18 @@ msgstr ""
 msgid "Omaduse  (join_grp) help"
 msgstr ""
 
+#: classes/core/users/user.aw:prop_extern_id
+msgid "Omaduse Siduss&uuml;steemi id (extern_id) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_extern_id_comment
+msgid "Omaduse Siduss&uuml;steemi id (extern_id) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_extern_id_help
+msgid "Omaduse Siduss&uuml;steemi id (extern_id) help"
+msgstr ""
+
 #: classes/core/users/user.aw:prop_passwd
 msgid "Omaduse Salas&otilde;na (passwd) caption"
 msgstr "Password"
@@ -653,6 +665,114 @@ msgstr ""
 msgid "Omaduse Keela RTE (rte_disabled) help"
 msgstr ""
 
+#: classes/core/users/user.aw:prop_object_tree_always_visible
+msgid "Omaduse Objektipuu alati n&auml;htaval (object_tree_always_visible) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_object_tree_always_visible_comment
+msgid "Omaduse Objektipuu alati n&auml;htaval (object_tree_always_visible) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_object_tree_always_visible_help
+msgid "Omaduse Objektipuu alati n&auml;htaval (object_tree_always_visible) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_object_tree_classes_inherit_from
+msgid "Omaduse P&auml;ri puu objektid kasutajalt (object_tree_classes_inherit_from) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_object_tree_classes_inherit_from_comment
+msgid "Omaduse P&auml;ri puu objektid kasutajalt (object_tree_classes_inherit_from) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_object_tree_classes_inherit_from_help
+msgid "Omaduse P&auml;ri puu objektid kasutajalt (object_tree_classes_inherit_from) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_object_tree_classes
+msgid "Omaduse Objektipuu alati n&auml;htaval klassides (object_tree_classes) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_object_tree_classes_comment
+msgid "Omaduse Objektipuu alati n&auml;htaval klassides (object_tree_classes) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_object_tree_classes_help
+msgid "Omaduse Objektipuu alati n&auml;htaval klassides (object_tree_classes) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_nfy_hd
+msgid "Omaduse Teavituste seaded (nfy_hd) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_nfy_hd_comment
+msgid "Omaduse Teavituste seaded (nfy_hd) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_nfy_hd_help
+msgid "Omaduse Teavituste seaded (nfy_hd) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_nfy_meeting
+msgid "Omaduse Kohtumine (nfy_meeting) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_nfy_meeting_comment
+msgid "Omaduse Kohtumine (nfy_meeting) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_nfy_meeting_help
+msgid "Omaduse Kohtumine (nfy_meeting) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_nfy_task
+msgid "Omaduse Toimetus (nfy_task) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_nfy_task_comment
+msgid "Omaduse Toimetus (nfy_task) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_nfy_task_help
+msgid "Omaduse Toimetus (nfy_task) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_draft_hd
+msgid "Omaduse Mustandi seaded (draft_hd) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_draft_hd_comment
+msgid "Omaduse Mustandi seaded (draft_hd) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_draft_hd_help
+msgid "Omaduse Mustandi seaded (draft_hd) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_draft_timeout
+msgid "Omaduse Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites) (draft_timeout) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_draft_timeout_comment
+msgid "Omaduse Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites) (draft_timeout) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_draft_timeout_help
+msgid "Omaduse Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites) (draft_timeout) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_cfg_admin_mode
+msgid "Omaduse Seadete administreerimise vaade (cfg_admin_mode) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_cfg_admin_mode_comment
+msgid "Omaduse Seadete administreerimise vaade (cfg_admin_mode) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_cfg_admin_mode_help
+msgid "Omaduse Seadete administreerimise vaade (cfg_admin_mode) help"
+msgstr ""
+
 #: classes/core/users/user.aw:prop_stoppers
 msgid "Omaduse  (stoppers) caption"
 msgstr ""
@@ -663,6 +783,30 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_stoppers_help
 msgid "Omaduse  (stoppers) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_settings_shortcuts_shortcut_sets
+msgid "Omaduse Aktiivne set (settings_shortcuts_shortcut_sets) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_settings_shortcuts_shortcut_sets_comment
+msgid "Omaduse Aktiivne set (settings_shortcuts_shortcut_sets) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_settings_shortcuts_shortcut_sets_help
+msgid "Omaduse Aktiivne set (settings_shortcuts_shortcut_sets) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_settings_shortcuts_settings_shortcuts
+msgid "Omaduse Shortcutid (settings_shortcuts_settings_shortcuts) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_settings_shortcuts_settings_shortcuts_comment
+msgid "Omaduse Shortcutid (settings_shortcuts_settings_shortcuts) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_settings_shortcuts_settings_shortcuts_help
+msgid "Omaduse Shortcutid (settings_shortcuts_settings_shortcuts) help"
 msgstr ""
 
 #: classes/core/users/user.aw:group_chpwd
@@ -687,6 +831,22 @@ msgstr "Settings"
 
 #: classes/core/users/user.aw:group_settings_help
 msgid "Grupi Seaded (settings) help"
+msgstr ""
+
+#: classes/core/users/user.aw:group_settings_general
+msgid "Grupi &Uuml;ldine (settings_general) pealkiri"
+msgstr ""
+
+#: classes/core/users/user.aw:group_settings_general_help
+msgid "Grupi &Uuml;ldine (settings_general) help"
+msgstr ""
+
+#: classes/core/users/user.aw:group_settings_shortcuts
+msgid "Grupi Shortcutid (settings_shortcuts) pealkiri"
+msgstr ""
+
+#: classes/core/users/user.aw:group_settings_shortcuts_help
+msgid "Grupi Shortcutid (settings_shortcuts) help"
 msgstr ""
 
 # classes/core/users/user.aw:group_jdata
@@ -753,145 +913,192 @@ msgstr "IP access"
 msgid "Seose liitumise andmed (RELTYPE_JOIN_SITE) tekst"
 msgstr "Join data"
 
-#: classes/core/users/user.aw:303
+#: classes/core/users/user.aw:rel_RELTYPE_USER
+msgid "Seose Kasutaja (RELTYPE_USER) tekst"
+msgstr ""
+
+#: classes/core/users/user.aw:rel_RELTYPE_SHORTCUT_SET
+msgid "Seose Kiirviidete&nbsp;kogu (RELTYPE_SHORTCUT_SET) tekst"
+msgstr ""
+
+#: classes/core/users/user.aw:layout_settings_shortcuts_top
+msgid "Kujundusosa &Uuml;ldine (settings_shortcuts_top) pealkiri"
+msgstr ""
+
+#: classes/core/users/user.aw:layout_settings_shortcuts_bot
+msgid "Kujundusosa Aktiivsed&nbsp;shortcutid (settings_shortcuts_bot) pealkiri"
+msgstr ""
+
+#: classes/core/users/user.aw:288
+msgid "&Auml;ra saada e-kirja"
+msgstr ""
+
+#: classes/core/users/user.aw:289
+msgid "Saada e-kiri, kui mind lisatakse osalejaks"
+msgstr ""
+
+#: classes/core/users/user.aw:290
+msgid "Saada e-kiri, kui minu kohtumist muudetakse"
+msgstr ""
+
+#: classes/core/users/user.aw:290
+msgid "Saada e-kiri, kui minu toimetust muudetakse"
+msgstr ""
+
+#: classes/core/users/user.aw:372
 msgid "Genereeri parool"
 msgstr "Generate password"
 
-#: classes/core/users/user.aw:376
+#: classes/core/users/user.aw:452
 msgid "Selline kasutaja on juba olemas!"
 msgstr "User with that uid already exists!:"
 
-#: classes/core/users/user.aw:381
+#: classes/core/users/user.aw:457
 msgid "Selline kasutajanimi pole lubatud!"
 msgstr "Username contains invalid characters!"
 
-#: classes/core/users/user.aw:400
+#: classes/core/users/user.aw:476
 msgid "Paroolid pole samad!"
 msgstr "Passwords do not match!"
 
-#: classes/core/users/user.aw:406
+#: classes/core/users/user.aw:482
 msgid "Parool sisaldab lubamatuid t&auml;hti v&otilde;i on liiga l&uuml;hike!"
 msgstr "Password contains invalid characters or is too short!"
 
-#: classes/core/users/user.aw:444
+#: classes/core/users/user.aw:520
 msgid "Sellist kasutajat pole!"
 msgstr "No such user!"
 
-#: classes/core/users/user.aw:490
-msgid "D&uuml;naamiline"
-msgstr "Dynamic"
-
-#: classes/core/users/user.aw:491 classes/core/users/user.aw:498
-msgid "Jah"
-msgstr "Yes"
-
-#: classes/core/users/user.aw:491 classes/core/users/user.aw:498
-msgid "Ei"
-msgstr "No"
-
-#: classes/core/users/user.aw:495
-msgid "Tavaline"
-msgstr "Regular"
-
-#: classes/core/users/user.aw:657
+#: classes/core/users/user.aw:713 classes/core/users/user.aw:929
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/core/users/user.aw:663
+#: classes/core/users/user.aw:719
+msgid "Shortcut"
+msgstr ""
+
+#: classes/core/users/user.aw:725
+msgid "Kustuta"
+msgstr ""
+
+#: classes/core/users/user.aw:759
+msgid "D&uuml;naamiline"
+msgstr "Dynamic"
+
+#: classes/core/users/user.aw:760 classes/core/users/user.aw:767
+msgid "Jah"
+msgstr "Yes"
+
+#: classes/core/users/user.aw:760 classes/core/users/user.aw:767
+msgid "Ei"
+msgstr "No"
+
+#: classes/core/users/user.aw:764
+msgid "Tavaline"
+msgstr "Regular"
+
+#: classes/core/users/user.aw:935
 msgid "Liige?"
 msgstr "Member?"
 
-#: classes/core/users/user.aw:669
+#: classes/core/users/user.aw:941
 msgid "Prioriteet"
 msgstr "Priority"
 
-#: classes/core/users/user.aw:677
+#: classes/core/users/user.aw:949
 msgid "Mitu liiget"
 msgstr "Number of members"
 
-#: classes/core/users/user.aw:684
+#: classes/core/users/user.aw:956
 msgid "Muutja"
 msgstr "Modified by"
 
-#: classes/core/users/user.aw:692
+#: classes/core/users/user.aw:964
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/core/users/user.aw:700 classes/core/users/user.aw:1081
+#: classes/core/users/user.aw:972 classes/core/users/user.aw:1395
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/core/users/user.aw:1058
+#: classes/core/users/user.aw:1372
 msgid "Nr"
 msgstr "Nr"
 
-#: classes/core/users/user.aw:1062
+#: classes/core/users/user.aw:1376
 msgid "Millal"
 msgstr "When"
 
-#: classes/core/users/user.aw:1071
+#: classes/core/users/user.aw:1385
 msgid "Kes"
 msgstr "Who"
 
-#: classes/core/users/user.aw:1076
+#: classes/core/users/user.aw:1390
 msgid "IP"
 msgstr "IP"
 
-#: classes/core/users/user.aw:1086
+#: classes/core/users/user.aw:1400
 msgid "Tegevus"
 msgstr "Action"
 
-#: classes/core/users/user.aw:1093
+#: classes/core/users/user.aw:1407
 msgid "Saidi ID"
 msgstr "Site ID"
 
-#: classes/core/users/user.aw:1099
+#: classes/core/users/user.aw:1413
 msgid "OID"
 msgstr "OID"
 
-#: classes/core/users/user.aw:1104
+#: classes/core/users/user.aw:1418
 msgid "Mida"
 msgstr "What"
 
-#: classes/core/users/user.aw:1594
+#: classes/core/users/user.aw:1899
 msgid "users::add_user(%s): no uid specified"
 msgstr "users::add_user(%s): no uid specified"
 
-#: classes/core/users/user.aw:1643
-msgid "Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
-msgstr "Object $oid is brother, rights are read from object %s."
+#: classes/core/users/user.aw:1967
+msgid "Objekt %s on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
+msgstr ""
 
-#: classes/core/users/user.aw:1651
+#: classes/core/users/user.aw:1975
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr "Object has been deleted, permission denied!"
 
-#: classes/core/users/user.aw:1656
+#: classes/core/users/user.aw:1980
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr "Object does not exist and never has, permission denied!"
 
-#: classes/core/users/user.aw:1661
+#: classes/core/users/user.aw:1985
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr "Object's parent object (%s) is deleted. No access!"
 
-#: classes/core/users/user.aw:1671
+#: classes/core/users/user.aw:1997
+msgid "<br>M&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>\t\t\t\t%s"
+msgstr ""
+
+#: classes/core/users/user.aw:2003
 msgid "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;igus ainult."
 msgstr "View right only"
 
-#: classes/core/users/user.aw:1707
+#: classes/core/users/user.aw:2039
 msgid "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
 msgstr "Info on object's acl:<br /><br />Access is set by access-relation between object %s and group %s<br /><br />ACL set for that relation are: %s"
 
-#: classes/core/users/user.aw:2158
+#: classes/core/users/user.aw:2569
 msgid "Seaded"
 msgstr "Settings"
 
-#: classes/core/users/user.aw:2205
+#: classes/core/users/user.aw:2616
 msgid "Ajalugu"
 msgstr "History"
 
-#: classes/core/users/user.aw:2311
+#: classes/core/users/user.aw:2722
 msgid "could not find the group oid for gid %s"
 msgstr ""
+
+#~ msgid "Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
+#~ msgstr "Object $oid is brother, rights are read from object %s."
 
 # classes/core/users/user.aw:group_general
 #~ msgid "Grupi &Uuml;ldine (general) pealkiri"

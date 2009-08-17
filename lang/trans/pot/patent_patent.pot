@@ -182,6 +182,18 @@ msgstr ""
 msgid "Omaduse Taotlusl&otilde;iv (request_fee) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_fee_sum
+msgid "Omaduse Kokku (fee_sum) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_fee_sum_comment
+msgid "Omaduse Kokku (fee_sum) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_fee_sum_help
+msgid "Omaduse Kokku (fee_sum) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_payer
 msgid "Omaduse Maksja nimi (payer) caption"
 msgstr ""
@@ -710,16 +722,52 @@ msgstr ""
 msgid "Omaduse Bioloogilise aine, sealhulgas mikroorganismi deponeerimist t&otilde;endav dokument (attachment_bio) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_attachment_other
+msgid "Omaduse Muu (attachment_other) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_attachment_other_comment
+msgid "Omaduse Muu (attachment_other) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_attachment_other_help
+msgid "Omaduse Muu (attachment_other) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_add_fee
+msgid "Omaduse Rohkem kui 10 n&otilde;udluspunkti (add_fee) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_add_fee_comment
+msgid "Omaduse Rohkem kui 10 n&otilde;udluspunkti (add_fee) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_add_fee_help
+msgid "Omaduse Rohkem kui 10 n&otilde;udluspunkti (add_fee) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_fee_copies
-msgid "Omaduse Patendidokumentide v&otilde;i muude tr&uuml;kiste koopiate v&auml;ljastamise l&otilde;iv (fee_copies) caption"
+msgid "Omaduse Koopiate v&auml;ljastamise l&otilde;iv (fee_copies) caption"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_fee_copies_comment
-msgid "Omaduse Patendidokumentide v&otilde;i muude tr&uuml;kiste koopiate v&auml;ljastamise l&otilde;iv (fee_copies) kommentaar"
+msgid "Omaduse Koopiate v&auml;ljastamise l&otilde;iv (fee_copies) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_fee_copies_help
-msgid "Omaduse Patendidokumentide v&otilde;i muude tr&uuml;kiste koopiate v&auml;ljastamise l&otilde;iv (fee_copies) help"
+msgid "Omaduse Koopiate v&auml;ljastamise l&otilde;iv (fee_copies) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_fee_copies_info
+msgid "Omaduse Koopiate v&auml;ljastamise l&otilde;iv (fee_copies_info) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_fee_copies_info_comment
+msgid "Omaduse Koopiate v&auml;ljastamise l&otilde;iv (fee_copies_info) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_fee_copies_info_help
+msgid "Omaduse Koopiate v&auml;ljastamise l&otilde;iv (fee_copies_info) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:group_priority
@@ -858,11 +906,15 @@ msgstr ""
 msgid "Seose Lisa biol. depon. toend (RELTYPE_ATTACHMENT_BIO) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:403
-msgid "Ainult pdf formaadis failid lubatud"
+#: classes/applications/clients/patent_office/patent_patent.aw:rel_RELTYPE_ATTACHMENT_OTHER
+msgid "Seose Lisa muu (RELTYPE_ATTACHMENT_OTHER) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:410
+#: classes/applications/clients/patent_office/patent_patent.aw:438
+msgid "Ainult pdf, gif ja jpeg formaadis failid lubatud"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:445
 msgid "Leiutiskirjeldus peab olema lisatud"
 msgstr ""
 

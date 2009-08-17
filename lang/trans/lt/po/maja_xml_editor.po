@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/xml_editor/maja_xml_editor.aw:class_835_help
 msgid "Klassi Maja XML-i editor help"
@@ -334,59 +333,58 @@ msgstr ""
 msgid "Seose Andmebaasitabeli sisu objekt (RELTYPE_DB_TABLE_CONTENTS) tekst"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:384
+#: classes/applications/xml_editor/maja_xml_editor.aw:379
 msgid "---"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:388
+#: classes/applications/xml_editor/maja_xml_editor.aw:383
 msgid "Ei Salvestata"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:452
+#: classes/applications/xml_editor/maja_xml_editor.aw:447
 msgid "Korteri nr."
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:453
+#: classes/applications/xml_editor/maja_xml_editor.aw:448
 msgid "Alternatiivne korteri nr."
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:454
+#: classes/applications/xml_editor/maja_xml_editor.aw:449
 msgid "Korruse nr."
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:455
+#: classes/applications/xml_editor/maja_xml_editor.aw:450
 msgid "Korruse nimi"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:456
+#: classes/applications/xml_editor/maja_xml_editor.aw:451
 msgid "Alternatiivne staatus"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:457
+#: classes/applications/xml_editor/maja_xml_editor.aw:452
 msgid "Panipaik"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:458
+#: classes/applications/xml_editor/maja_xml_editor.aw:453
 msgid "Terrass"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:459
+#: classes/applications/xml_editor/maja_xml_editor.aw:454
 msgid "R&otilde;du"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:460
+#: classes/applications/xml_editor/maja_xml_editor.aw:455
 msgid "Korteriomand"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:461
+#: classes/applications/xml_editor/maja_xml_editor.aw:456
 msgid "Parklakoht"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:727
+#: classes/applications/xml_editor/maja_xml_editor.aw:722
 msgid "Couldn't open the file (%s) to write"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:733
+#: classes/applications/xml_editor/maja_xml_editor.aw:728
 msgid "Cannot write to this file: %s"
 msgstr ""
-

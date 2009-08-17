@@ -13,30 +13,6 @@ msgstr ""
 msgid "Klassi Kohtumine help"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:prop_predicates
-msgid "Omaduse Eeldustegevused (predicates) caption"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_predicates_comment
-msgid "Omaduse Eeldustegevused (predicates) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_predicates_help
-msgid "Omaduse Eeldustegevused (predicates) help"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_is_goal
-msgid "Omaduse Verstapost (is_goal) caption"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_is_goal_comment
-msgid "Omaduse Verstapost (is_goal) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_is_goal_help
-msgid "Omaduse Verstapost (is_goal) help"
-msgstr ""
-
 #: classes/crm/crm_meeting.aw:prop_add_clauses
 msgid "Omaduse Lisatingimused (add_clauses) caption"
 msgstr ""
@@ -50,15 +26,15 @@ msgid "Omaduse Lisatingimused (add_clauses) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_start1
-msgid "Omaduse Algab  (start1) caption"
+msgid "Omaduse Algus (start1) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_start1_comment
-msgid "Omaduse Algab  (start1) kommentaar"
+msgid "Omaduse Algus (start1) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_start1_help
-msgid "Omaduse Algab  (start1) help"
+msgid "Omaduse Algus (start1) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_end
@@ -71,6 +47,18 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_end_help
 msgid "Omaduse L&otilde;peb (end) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deadline
+msgid "Omaduse T&auml;htaeg (deadline) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deadline_comment
+msgid "Omaduse T&auml;htaeg (deadline) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deadline_help
+msgid "Omaduse T&auml;htaeg (deadline) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_hrs_table
@@ -109,16 +97,16 @@ msgstr ""
 msgid "Omaduse Sisu (content) help"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:prop_parts_tb
-msgid "Omaduse  (parts_tb) caption"
+#: classes/crm/crm_meeting.aw:prop_co_tb
+msgid "Omaduse  (co_tb) caption"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:prop_parts_tb_comment
-msgid "Omaduse  (parts_tb) kommentaar"
+#: classes/crm/crm_meeting.aw:prop_co_tb_comment
+msgid "Omaduse  (co_tb) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:prop_parts_tb_help
-msgid "Omaduse  (parts_tb) help"
+#: classes/crm/crm_meeting.aw:prop_co_tb_help
+msgid "Omaduse  (co_tb) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_co_table
@@ -133,6 +121,18 @@ msgstr ""
 msgid "Omaduse  (co_table) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_project_tb
+msgid "Omaduse  (project_tb) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_project_tb_comment
+msgid "Omaduse  (project_tb) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_project_tb_help
+msgid "Omaduse  (project_tb) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_proj_table
 msgid "Omaduse  (proj_table) caption"
 msgstr ""
@@ -145,6 +145,18 @@ msgstr ""
 msgid "Omaduse  (proj_table) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_impl_tb
+msgid "Omaduse  (impl_tb) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_impl_tb_comment
+msgid "Omaduse  (impl_tb) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_impl_tb_help
+msgid "Omaduse  (impl_tb) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_parts_table
 msgid "Omaduse  (parts_table) caption"
 msgstr ""
@@ -155,30 +167,6 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_parts_table_help
 msgid "Omaduse  (parts_table) help"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_customer
-msgid "Omaduse Klient (customer) caption"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_customer_comment
-msgid "Omaduse Klient (customer) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_customer_help
-msgid "Omaduse Klient (customer) help"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_project
-msgid "Omaduse Projekt (project) caption"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_project_comment
-msgid "Omaduse Projekt (project) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_project_help
-msgid "Omaduse Projekt (project) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_files_tb
@@ -205,16 +193,52 @@ msgstr ""
 msgid "Omaduse  (files_table) help"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:prop_summary
-msgid "Omaduse Kokkuv&otilde;te (summary) caption"
+#: classes/crm/crm_meeting.aw:prop_bills_tb
+msgid "Omaduse  (bills_tb) caption"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:prop_summary_comment
-msgid "Omaduse Kokkuv&otilde;te (summary) kommentaar"
+#: classes/crm/crm_meeting.aw:prop_bills_tb_comment
+msgid "Omaduse  (bills_tb) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:prop_summary_help
-msgid "Omaduse Kokkuv&otilde;te (summary) help"
+#: classes/crm/crm_meeting.aw:prop_bills_tb_help
+msgid "Omaduse  (bills_tb) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_bills_table
+msgid "Omaduse  (bills_table) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_bills_table_comment
+msgid "Omaduse  (bills_table) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_bills_table_help
+msgid "Omaduse  (bills_table) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_project
+msgid "Omaduse Projekt (project) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_project_comment
+msgid "Omaduse Projekt (project) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_project_help
+msgid "Omaduse Projekt (project) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_is_done
@@ -227,6 +251,18 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_is_done_help
 msgid "Omaduse Tehtud (is_done) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_promoter
+msgid "Omaduse Korraldaja (promoter) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_promoter_comment
+msgid "Omaduse Korraldaja (promoter) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_promoter_help
+msgid "Omaduse Korraldaja (promoter) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_is_personal
@@ -275,18 +311,6 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udefch1_help
 msgid "Omaduse User-defined checkbox 1 (udefch1) help"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_udeflb1
-msgid "Omaduse Kasutajdefineeritud muutuja 1 (udeflb1) caption"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_udeflb1_comment
-msgid "Omaduse Kasutajdefineeritud muutuja 1 (udeflb1) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_udeflb1_help
-msgid "Omaduse Kasutajdefineeritud muutuja 1 (udeflb1) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb1
@@ -338,27 +362,27 @@ msgid "Omaduse User-defined textbox 4 (udeftb4) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb5
-msgid "Omaduse User-defined textbox 5  (udeftb5) caption"
+msgid "Omaduse User-defined textbox 5 (udeftb5) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb5_comment
-msgid "Omaduse User-defined textbox 5  (udeftb5) kommentaar"
+msgid "Omaduse User-defined textbox 5 (udeftb5) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb5_help
-msgid "Omaduse User-defined textbox 5  (udeftb5) help"
+msgid "Omaduse User-defined textbox 5 (udeftb5) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb6
-msgid "Omaduse User-defined textbox 6  (udeftb6) caption"
+msgid "Omaduse User-defined textbox 6 (udeftb6) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb6_comment
-msgid "Omaduse User-defined textbox 6  (udeftb6) kommentaar"
+msgid "Omaduse User-defined textbox 6 (udeftb6) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb6_help
-msgid "Omaduse User-defined textbox 6  (udeftb6) help"
+msgid "Omaduse User-defined textbox 6 (udeftb6) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb7
@@ -374,39 +398,39 @@ msgid "Omaduse User-defined textbox 7 (udeftb7) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb8
-msgid "Omaduse User-defined textbox 8  (udeftb8) caption"
+msgid "Omaduse User-defined textbox 8 (udeftb8) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb8_comment
-msgid "Omaduse User-defined textbox 8  (udeftb8) kommentaar"
+msgid "Omaduse User-defined textbox 8 (udeftb8) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb8_help
-msgid "Omaduse User-defined textbox 8  (udeftb8) help"
+msgid "Omaduse User-defined textbox 8 (udeftb8) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb9
-msgid "Omaduse User-defined textbox 9  (udeftb9) caption"
+msgid "Omaduse User-defined textbox 9 (udeftb9) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb9_comment
-msgid "Omaduse User-defined textbox 9  (udeftb9) kommentaar"
+msgid "Omaduse User-defined textbox 9 (udeftb9) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb9_help
-msgid "Omaduse User-defined textbox 9  (udeftb9) help"
+msgid "Omaduse User-defined textbox 9 (udeftb9) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb10
-msgid "Omaduse User-defined textbox 10  (udeftb10) caption"
+msgid "Omaduse User-defined textbox 10 (udeftb10) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb10_comment
-msgid "Omaduse User-defined textbox 10  (udeftb10) kommentaar"
+msgid "Omaduse User-defined textbox 10 (udeftb10) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udeftb10_help
-msgid "Omaduse User-defined textbox 10  (udeftb10) help"
+msgid "Omaduse User-defined textbox 10 (udeftb10) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_udefta1
@@ -445,54 +469,6 @@ msgstr ""
 msgid "Omaduse User-defined textarea 3 (udefta3) help"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:prop_userfile1
-msgid "Omaduse Failiupload 1 (userfile1) caption"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_userfile1_comment
-msgid "Omaduse Failiupload 1 (userfile1) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_userfile1_help
-msgid "Omaduse Failiupload 1 (userfile1) help"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_userfile2
-msgid "Omaduse Failiupload 2 (userfile2) caption"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_userfile2_comment
-msgid "Omaduse Failiupload 2 (userfile2) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_userfile2_help
-msgid "Omaduse Failiupload 2 (userfile2) help"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_userfile3
-msgid "Omaduse Failiupload 3 (userfile3) caption"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_userfile3_comment
-msgid "Omaduse Failiupload 3 (userfile3) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_userfile3_help
-msgid "Omaduse Failiupload 3 (userfile3) help"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_send_bill
-msgid "Omaduse Saata arve (send_bill) caption"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_send_bill_comment
-msgid "Omaduse Saata arve (send_bill) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_send_bill_help
-msgid "Omaduse Saata arve (send_bill) help"
-msgstr ""
-
 #: classes/crm/crm_meeting.aw:prop_bill_no
 msgid "Omaduse Arve number (bill_no) caption"
 msgstr ""
@@ -518,15 +494,15 @@ msgid "Omaduse Osalejad (participants) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_time_guess
-msgid "Omaduse Prognoositav tundide arv \t (time_guess) caption"
+msgid "Omaduse Prognoositav tundide arv (time_guess) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_time_guess_comment
-msgid "Omaduse Prognoositav tundide arv \t (time_guess) kommentaar"
+msgid "Omaduse Prognoositav tundide arv (time_guess) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_time_guess_help
-msgid "Omaduse Prognoositav tundide arv \t (time_guess) help"
+msgid "Omaduse Prognoositav tundide arv (time_guess) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_time_real
@@ -565,6 +541,102 @@ msgstr ""
 msgid "Omaduse Tunni hind (hr_price) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_in_budget
+msgid "Omaduse Eelarvesse (in_budget) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_in_budget_comment
+msgid "Omaduse Eelarvesse (in_budget) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_in_budget_help
+msgid "Omaduse Eelarvesse (in_budget) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_priority
+msgid "Omaduse Prioriteet (priority) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_priority_comment
+msgid "Omaduse Prioriteet (priority) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_priority_help
+msgid "Omaduse Prioriteet (priority) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_hr_price_currency
+msgid "Omaduse Valuuta (hr_price_currency) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_hr_price_currency_comment
+msgid "Omaduse Valuuta (hr_price_currency) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_hr_price_currency_help
+msgid "Omaduse Valuuta (hr_price_currency) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_unit
+msgid "Omaduse &Uuml;hik (deal_unit) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_unit_comment
+msgid "Omaduse &Uuml;hik (deal_unit) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_unit_help
+msgid "Omaduse &Uuml;hik (deal_unit) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_amount
+msgid "Omaduse Kogus (deal_amount) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_amount_comment
+msgid "Omaduse Kogus (deal_amount) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_amount_help
+msgid "Omaduse Kogus (deal_amount) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_price
+msgid "Omaduse Kokkuleppehind (deal_price) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_price_comment
+msgid "Omaduse Kokkuleppehind (deal_price) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_price_help
+msgid "Omaduse Kokkuleppehind (deal_price) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_has_tax
+msgid "Omaduse Sisestati koos k&auml;ibemaksuga (deal_has_tax) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_has_tax_comment
+msgid "Omaduse Sisestati koos k&auml;ibemaksuga (deal_has_tax) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_deal_has_tax_help
+msgid "Omaduse Sisestati koos k&auml;ibemaksuga (deal_has_tax) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_summary
+msgid "Omaduse Kokkuv&otilde;te (summary) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_summary_comment
+msgid "Omaduse Kokkuv&otilde;te (summary) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_summary_help
+msgid "Omaduse Kokkuv&otilde;te (summary) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_controller_disp
 msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) caption"
 msgstr ""
@@ -575,6 +647,18 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_controller_disp_help
 msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_send_bill
+msgid "Omaduse Saata arve (send_bill) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_send_bill_comment
+msgid "Omaduse Saata arve (send_bill) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_send_bill_help
+msgid "Omaduse Saata arve (send_bill) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_task_toolbar
@@ -745,6 +829,78 @@ msgstr ""
 msgid "Omaduse  (sel_resources) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_udeflb1
+msgid "Omaduse Kasutajdefineeritud muutuja 1 (udeflb1) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_udeflb1_comment
+msgid "Omaduse Kasutajdefineeritud muutuja 1 (udeflb1) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_udeflb1_help
+msgid "Omaduse Kasutajdefineeritud muutuja 1 (udeflb1) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile1
+msgid "Omaduse Failiupload 1 (userfile1) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile1_comment
+msgid "Omaduse Failiupload 1 (userfile1) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile1_help
+msgid "Omaduse Failiupload 1 (userfile1) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile2
+msgid "Omaduse Failiupload 2 (userfile2) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile2_comment
+msgid "Omaduse Failiupload 2 (userfile2) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile2_help
+msgid "Omaduse Failiupload 2 (userfile2) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile3
+msgid "Omaduse Failiupload 3 (userfile3) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile3_comment
+msgid "Omaduse Failiupload 3 (userfile3) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_userfile3_help
+msgid "Omaduse Failiupload 3 (userfile3) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_predicates
+msgid "Omaduse Eeldustegevused (predicates) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_predicates_comment
+msgid "Omaduse Eeldustegevused (predicates) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_predicates_help
+msgid "Omaduse Eeldustegevused (predicates) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_goal
+msgid "Omaduse Verstapost (is_goal) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_goal_comment
+msgid "Omaduse Verstapost (is_goal) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_goal_help
+msgid "Omaduse Verstapost (is_goal) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -825,6 +981,14 @@ msgstr ""
 msgid "Grupi Ressursid (resources) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:group_other_settings
+msgid "Grupi Muud seaded (other_settings) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:group_other_settings_help
+msgid "Grupi Muud seaded (other_settings) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
 msgstr ""
@@ -855,6 +1019,14 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:rel_RELTYPE_RESOURCE
 msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_BILL
+msgid "Seose Arve (RELTYPE_BILL) tekst"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_ROW
+msgid "Seose Rida (RELTYPE_ROW) tekst"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:rel_RELTYPE_UDEFLB1
@@ -897,94 +1069,164 @@ msgstr ""
 msgid "Kujundusosa Manused (center_bit_right_bottom) pealkiri"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:layout_center_bit_bottom
-msgid "Kujundusosa Kokkuv&otilde;te (center_bit_bottom) pealkiri"
+#: classes/crm/crm_meeting.aw:layout_content_bit
+msgid "Kujundusosa Sisu (content_bit) pealkiri"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:364
+#: classes/crm/crm_meeting.aw:layout_customer_bit
+msgid "Kujundusosa Tellijad (customer_bit) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:layout_project_bit
+msgid "Kujundusosa Projektid (project_bit) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:layout_impl_bit
+msgid "Kujundusosa Osalejad (impl_bit) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:layout_files_bit
+msgid "Kujundusosa Manused (files_bit) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:layout_bills_bit
+msgid "Kujundusosa Arved (bills_bit) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:layout_center_bit_bottom
+msgid "Kujundusosa Osapooled (center_bit_bottom) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:441 classes/crm/crm_meeting.aw:1348
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:365 classes/crm/crm_meeting.aw:1493
+#: classes/crm/crm_meeting.aw:442 classes/crm/crm_meeting.aw:1354
+#: classes/crm/crm_meeting.aw:1699
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:366
+#: classes/crm/crm_meeting.aw:443 classes/crm/crm_meeting.aw:1360
 msgid "Terve p&auml;ev"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:367
+#: classes/crm/crm_meeting.aw:444 classes/crm/crm_meeting.aw:1366
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:368 classes/crm/crm_meeting.aw:1500
+#: classes/crm/crm_meeting.aw:445 classes/crm/crm_meeting.aw:1372
+#: classes/crm/crm_meeting.aw:1382 classes/crm/crm_meeting.aw:1706
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:369
+#: classes/crm/crm_meeting.aw:446 classes/crm/crm_meeting.aw:458
 msgid "T&ouml;&ouml;aeg"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:612
+#: classes/crm/crm_meeting.aw:702
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:623
+#: classes/crm/crm_meeting.aw:713
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:625
+#: classes/crm/crm_meeting.aw:715
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:633
+#: classes/crm/crm_meeting.aw:723
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:642
+#: classes/crm/crm_meeting.aw:732
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1188
-msgid "Prognoositav tundide arv"
+#: classes/crm/crm_meeting.aw:1309
+msgid "Tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1193
-msgid "Tegelik tundide arv"
+#: classes/crm/crm_meeting.aw:1314
+msgid "Prognoositav"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1198
-msgid "Tundide arv kliendile"
+#: classes/crm/crm_meeting.aw:1320
+msgid "Tegelik"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1203
+#: classes/crm/crm_meeting.aw:1326
+msgid "Kliendile"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1332 classes/crm/crm_meeting.aw:1941
 msgid "Tunnihind"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1208
+#: classes/crm/crm_meeting.aw:1337
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1242
+#: classes/crm/crm_meeting.aw:1342
+msgid "Lisatingimused"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1418
 msgid "Loo uus arve"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1365
+#: classes/crm/crm_meeting.aw:1571
 msgid "Nimi, osaleja ja projekt peavad olema t&auml;idetud!"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1476
+#: classes/crm/crm_meeting.aw:1682
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1481
+#: classes/crm/crm_meeting.aw:1687
 msgid "Osaleja"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1487
+#: classes/crm/crm_meeting.aw:1693 classes/crm/crm_meeting.aw:1986
 msgid "Projekt"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1505
+#: classes/crm/crm_meeting.aw:1711
 msgid "Kirjeldus"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1921
+msgid "L&uuml;hikirjeldus"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1927
+msgid "Algus"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1934
+msgid "L&otilde;pp"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1947
+msgid "Sisu"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1955
+msgid "Osalejad"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1964
+msgid "Klient"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1971
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1978
+msgid "Isik"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1994 classes/crm/crm_meeting.aw:1996
+msgid "Lisa uus kohtumine!"
 msgstr ""

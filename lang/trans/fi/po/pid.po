@@ -12,19 +12,3 @@ msgstr ""
 #: classes/common/pid.aw:class__help
 msgid "Klassi  help"
 msgstr ""
-
-#: classes/common/pid.aw:38
-msgid "Isikukood ei vasta Eesti Vabariigi isikukoodi standardile."
-msgstr ""
-
-#: classes/common/pid.aw:39
-msgid "Isikukoodis leiduv s&uuml;nnikuup&auml;evateave ei vasta &uuml;helegi kuup&auml;evale Gregoriuse kalendris."
-msgstr ""
-
-#: classes/common/pid.aw:40
-msgid "Isikukood vale pikkusega."
-msgstr ""
-
-#: classes/common/pid.aw:41
-msgid "Riik sobimatus formaadis."
-msgstr ""

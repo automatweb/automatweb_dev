@@ -49,6 +49,18 @@ msgstr ""
 msgid "Omaduse Kinnitatud (confirmed) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_toolbar
+msgid "Omaduse T&ouml;&ouml;riistariba (toolbar) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_toolbar_comment
+msgid "Omaduse T&ouml;&ouml;riistariba (toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_toolbar_help
+msgid "Omaduse T&ouml;&ouml;riistariba (toolbar) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_inventory.aw:prop_product_code
 msgid "Omaduse Kood (product_code) caption"
 msgstr ""
@@ -97,28 +109,28 @@ msgstr ""
 msgid "Omaduse Tootegrupp (product_group) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:prop_toolbar
-msgid "Omaduse T&ouml;&ouml;riistariba (toolbar) caption"
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_product_sbmt
+msgid "Omaduse Otsi (product_sbmt) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:prop_toolbar_comment
-msgid "Omaduse T&ouml;&ouml;riistariba (toolbar) kommentaar"
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_product_sbmt_comment
+msgid "Omaduse Otsi (product_sbmt) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:prop_toolbar_help
-msgid "Omaduse T&ouml;&ouml;riistariba (toolbar) help"
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_product_sbmt_help
+msgid "Omaduse Otsi (product_sbmt) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_inventory.aw:prop_product_result
-msgid "Omaduse Tooted (product_result) caption"
+msgid "Omaduse  (product_result) caption"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_inventory.aw:prop_product_result_comment
-msgid "Omaduse Tooted (product_result) kommentaar"
+msgid "Omaduse  (product_result) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_inventory.aw:prop_product_result_help
-msgid "Omaduse Tooted (product_result) help"
+msgid "Omaduse  (product_result) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_inventory.aw:group_products
@@ -133,34 +145,67 @@ msgstr ""
 msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:75
+#: classes/applications/shop/shop_warehouse_inventory.aw:layout_product_search_params_frame
+msgid "Kujundusosa Otsing (product_search_params_frame) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:89
+msgid "Lisa saateleht"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:102
+msgid "Saateleht: %s"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:112
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:77
+#: classes/applications/shop/shop_warehouse_inventory.aw:114
 msgid "Oled kindel?"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:93
+#: classes/applications/shop/shop_warehouse_inventory.aw:120
+msgid "Loo mahakandmine valitud ridadega"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:197
+msgid "Aeg ei saa olla tulevikus!"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:216
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:97
+#: classes/applications/shop/shop_warehouse_inventory.aw:221
 msgid "Ribakood"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:101
+#: classes/applications/shop/shop_warehouse_inventory.aw:226
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:105
+#: classes/applications/shop/shop_warehouse_inventory.aw:231
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:243
 msgid "Kogus laos"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:109
+#: classes/applications/shop/shop_warehouse_inventory.aw:249
+#: classes/applications/shop/shop_warehouse_inventory.aw:298
 msgid "Tegelik kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:113
-msgid "Vali"
+#: classes/applications/shop/shop_warehouse_inventory.aw:285
+msgid "(Kood puudub)"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:312
+msgid "Puudub"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:317
+msgid "Toode"
 msgstr ""

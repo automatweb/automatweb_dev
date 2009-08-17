@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -113,19 +113,16 @@ msgstr ""
 msgid "Omaduse Seaded (config_table) help"
 msgstr ""
 
-# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config
-msgid "Omaduse XML vaate seaded  (xml_config) caption"
-msgstr "XML View settings"
-
-# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config_comment
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config_comment
-msgid "Omaduse XML vaate seaded  (xml_config) kommentaar"
+msgid "Omaduse XML vaate seaded (xml_config) caption"
 msgstr ""
 
-# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config_comment
+msgid "Omaduse XML vaate seaded (xml_config) kommentaar"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config_help
-msgid "Omaduse XML vaate seaded  (xml_config) help"
+msgid "Omaduse XML vaate seaded (xml_config) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_recurrence
@@ -218,45 +215,53 @@ msgstr "Parent"
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr "recurrence"
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:117
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:115
 msgid "Alates viimasest impordist"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:120
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:118
 msgid "K&otilde;ik s&uuml;ndmused"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:123
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:121
 msgid "Impordi s&uuml;ndmused (%s)"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:127
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:125
 msgid "Impordi Kultuuriakna s&uuml;ndmused (%s)"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:198
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:196
 msgid "Parent"
 msgstr "Parent"
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:203
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:201
 msgid "XML v&auml;lja sisu"
 msgstr "XML field content"
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:230
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:228
 msgid "XML v&auml;li"
 msgstr "XML field"
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:234
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:232
 msgid "Vormi v&auml;li"
 msgstr "Form field"
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:360
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:358
 msgid "You don't have view access to import object!"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:370
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:368
 msgid "You don't have view access to eventform object!"
 msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:501
+msgid "<br>..:: IMPORT L6PPENUD ::..<br>"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config
+#~ msgid "Omaduse XML vaate seaded  (xml_config) caption"
+#~ msgstr "XML View settings"
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text
 #~ msgid "Omaduse J&auml;rgmine import (next_import_text) caption"

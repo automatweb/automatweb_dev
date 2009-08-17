@@ -14,18 +14,6 @@ msgstr ""
 msgid "Klassi Ruumi seaded help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_max_times_per_day
-msgid "Omaduse Maksimaalne aegade arv samal p&auml;eval (max_times_per_day) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_max_times_per_day_comment
-msgid "Omaduse Maksimaalne aegade arv samal p&auml;eval (max_times_per_day) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_max_times_per_day_help
-msgid "Omaduse Maksimaalne aegade arv samal p&auml;eval (max_times_per_day) help"
-msgstr ""
-
 #: classes/common/room_settings.aw:prop_hold_not_verifyed
 msgid "Omaduse Kinnitamata broneeringut tuleb hoida kinni x minutit (hold_not_verifyed) caption"
 msgstr ""
@@ -36,18 +24,6 @@ msgstr ""
 
 #: classes/common/room_settings.aw:prop_hold_not_verifyed_help
 msgid "Omaduse Kinnitamata broneeringut tuleb hoida kinni x minutit (hold_not_verifyed) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_show_unverified
-msgid "Omaduse N&auml;ita kalendris kinnitamata broneeringuid (show_unverified) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_show_unverified_comment
-msgid "Omaduse N&auml;ita kalendris kinnitamata broneeringuid (show_unverified) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_show_unverified_help
-msgid "Omaduse N&auml;ita kalendris kinnitamata broneeringuid (show_unverified) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_related_room_folder
@@ -62,40 +38,16 @@ msgstr ""
 msgid "Omaduse Seotud ruumide kaust (related_room_folder) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_cal_show_prods
-msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) caption"
+#: classes/common/room_settings.aw:prop_related_rooms
+msgid "Omaduse Ruumid mida samal ajal broneerida (related_rooms) caption"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_cal_show_prods_comment
-msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) kommentaar"
+#: classes/common/room_settings.aw:prop_related_rooms_comment
+msgid "Omaduse Ruumid mida samal ajal broneerida (related_rooms) kommentaar"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_cal_show_prods_help
-msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_cal_show_prod_img
-msgid "Omaduse Kuva tootepilte kalendrivaates (cal_show_prod_img) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_cal_show_prod_img_comment
-msgid "Omaduse Kuva tootepilte kalendrivaates (cal_show_prod_img) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_cal_show_prod_img_help
-msgid "Omaduse Kuva tootepilte kalendrivaates (cal_show_prod_img) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_cal_show_prod_img_ord
-msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_cal_show_prod_img_ord_comment
-msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_cal_show_prod_img_ord_help
-msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) help"
+#: classes/common/room_settings.aw:prop_related_rooms_help
+msgid "Omaduse Ruumid mida samal ajal broneerida (related_rooms) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_cal_refresh_time
@@ -146,172 +98,52 @@ msgstr ""
 msgid "Omaduse Miinimumhind m&otilde;jub k&otilde;igile (min_price_to_all) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_disp_bron_len
-msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) caption"
+#: classes/common/room_settings.aw:prop_no_cust_arrived_pop
+msgid "Omaduse Kliendi saabumise kinnitust pole vaja k&uuml;sida (no_cust_arrived_pop) caption"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_disp_bron_len_comment
-msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) kommentaar"
+#: classes/common/room_settings.aw:prop_no_cust_arrived_pop_comment
+msgid "Omaduse Kliendi saabumise kinnitust pole vaja k&uuml;sida (no_cust_arrived_pop) kommentaar"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_disp_bron_len_help
-msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) help"
+#: classes/common/room_settings.aw:prop_no_cust_arrived_pop_help
+msgid "Omaduse Kliendi saabumise kinnitust pole vaja k&uuml;sida (no_cust_arrived_pop) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_users
-msgid "Omaduse Kasutajad (users) caption"
+#: classes/common/room_settings.aw:prop_use_existing_person
+msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) caption"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_users_comment
-msgid "Omaduse Kasutajad (users) kommentaar"
+#: classes/common/room_settings.aw:prop_use_existing_person_comment
+msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) kommentaar"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_users_help
-msgid "Omaduse Kasutajad (users) help"
+#: classes/common/room_settings.aw:prop_use_existing_person_help
+msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_groups
-msgid "Omaduse Grupid (groups) caption"
+#: classes/common/room_settings.aw:prop_dont_ask_close_reason
+msgid "Omaduse Ei k&uuml;si sulgemise p&otilde;hjust (dont_ask_close_reason) caption"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_groups_comment
-msgid "Omaduse Grupid (groups) kommentaar"
+#: classes/common/room_settings.aw:prop_dont_ask_close_reason_comment
+msgid "Omaduse Ei k&uuml;si sulgemise p&otilde;hjust (dont_ask_close_reason) kommentaar"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_groups_help
-msgid "Omaduse Grupid (groups) help"
+#: classes/common/room_settings.aw:prop_dont_ask_close_reason_help
+msgid "Omaduse Ei k&uuml;si sulgemise p&otilde;hjust (dont_ask_close_reason) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_persons
-msgid "Omaduse Isikud (persons) caption"
+#: classes/common/room_settings.aw:prop_bron_required_fields
+msgid "Omaduse Broneeringuobjekti kohustuslikud v&auml;ljad (bron_required_fields) caption"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_persons_comment
-msgid "Omaduse Isikud (persons) kommentaar"
+#: classes/common/room_settings.aw:prop_bron_required_fields_comment
+msgid "Omaduse Broneeringuobjekti kohustuslikud v&auml;ljad (bron_required_fields) kommentaar"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_persons_help
-msgid "Omaduse Isikud (persons) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_cos
-msgid "Omaduse Organisatsioonid (cos) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_cos_comment
-msgid "Omaduse Organisatsioonid (cos) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_cos_help
-msgid "Omaduse Organisatsioonid (cos) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_sects
-msgid "Omaduse Osakonnad (sects) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_sects_comment
-msgid "Omaduse Osakonnad (sects) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_sects_help
-msgid "Omaduse Osakonnad (sects) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_profs
-msgid "Omaduse Ametinimetused (profs) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_profs_comment
-msgid "Omaduse Ametinimetused (profs) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_profs_help
-msgid "Omaduse Ametinimetused (profs) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_everyone
-msgid "Omaduse K&otilde;ik (everyone) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_everyone_comment
-msgid "Omaduse K&otilde;ik (everyone) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_everyone_help
-msgid "Omaduse K&otilde;ik (everyone) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_buffer
-msgid "Omaduse Puhveraja v&auml;rv kalendris (col_buffer) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_buffer_comment
-msgid "Omaduse Puhveraja v&auml;rv kalendris (col_buffer) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_buffer_help
-msgid "Omaduse Puhveraja v&auml;rv kalendris (col_buffer) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_web_halfling
-msgid "Omaduse Veebis poolelioleva tellimuse v&auml;rvi (col_web_halfling) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_web_halfling_comment
-msgid "Omaduse Veebis poolelioleva tellimuse v&auml;rvi (col_web_halfling) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_web_halfling_help
-msgid "Omaduse Veebis poolelioleva tellimuse v&auml;rvi (col_web_halfling) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_closed
-msgid "Omaduse Kinnise aja v&auml;rvi (col_closed) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_closed_comment
-msgid "Omaduse Kinnise aja v&auml;rvi (col_closed) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_closed_help
-msgid "Omaduse Kinnise aja v&auml;rvi (col_closed) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_available
-msgid "Omaduse Vaba aja v&auml;rvi (col_available) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_available_comment
-msgid "Omaduse Vaba aja v&auml;rvi (col_available) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_available_help
-msgid "Omaduse Vaba aja v&auml;rvi (col_available) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_recent
-msgid "Omaduse Hiljuti muudetud reserveeringud (col_recent) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_recent_comment
-msgid "Omaduse Hiljuti muudetud reserveeringud (col_recent) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_recent_help
-msgid "Omaduse Hiljuti muudetud reserveeringud (col_recent) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_bron_props
-msgid "Omaduse Broneeringu omaduste tabel (bron_props) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_bron_props_comment
-msgid "Omaduse Broneeringu omaduste tabel (bron_props) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_bron_props_help
-msgid "Omaduse Broneeringu omaduste tabel (bron_props) help"
+#: classes/common/room_settings.aw:prop_bron_required_fields_help
+msgid "Omaduse Broneeringuobjekti kohustuslikud v&auml;ljad (bron_required_fields) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_comment_pos
@@ -434,30 +266,6 @@ msgstr ""
 msgid "Omaduse Ruumide kalendrid algavad t&auml;nasest, mitte n&auml;dala algusest (cal_from_today) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_no_cust_arrived_pop
-msgid "Omaduse Kliendi saabumise kinnitust pole vaja k&uuml;sida (no_cust_arrived_pop) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_no_cust_arrived_pop_comment
-msgid "Omaduse Kliendi saabumise kinnitust pole vaja k&uuml;sida (no_cust_arrived_pop) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_no_cust_arrived_pop_help
-msgid "Omaduse Kliendi saabumise kinnitust pole vaja k&uuml;sida (no_cust_arrived_pop) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_use_existing_person
-msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_use_existing_person_comment
-msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_use_existing_person_help
-msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) help"
-msgstr ""
-
 #: classes/common/room_settings.aw:prop_show_workers_in_calander
 msgid "Omaduse N&auml;ita t&ouml;&ouml;tajaid kalendrivaates (show_workers_in_calander) caption"
 msgstr ""
@@ -468,6 +276,18 @@ msgstr ""
 
 #: classes/common/room_settings.aw:prop_show_workers_in_calander_help
 msgid "Omaduse N&auml;ita t&ouml;&ouml;tajaid kalendrivaates (show_workers_in_calander) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_dont_show_day_sum_in_calander
+msgid "Omaduse &Auml;ra n&auml;ita p&auml;eva summat kalendrivaates (dont_show_day_sum_in_calander) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_dont_show_day_sum_in_calander_comment
+msgid "Omaduse &Auml;ra n&auml;ita p&auml;eva summat kalendrivaates (dont_show_day_sum_in_calander) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_dont_show_day_sum_in_calander_help
+msgid "Omaduse &Auml;ra n&auml;ita p&auml;eva summat kalendrivaates (dont_show_day_sum_in_calander) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_show_only_my_graphs
@@ -482,28 +302,328 @@ msgstr ""
 msgid "Omaduse N&auml;ita ainult enda t&ouml;&ouml;graafikuid (show_only_my_graphs) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_dont_ask_close_reason
-msgid "Omaduse Ei k&uuml;si sulgemise p&otuilde;hjust (dont_ask_close_reason) caption"
+#: classes/common/room_settings.aw:prop_max_times_per_day
+msgid "Omaduse Maksimaalne aegade arv samal p&auml;eval (max_times_per_day) caption"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_dont_ask_close_reason_comment
-msgid "Omaduse Ei k&uuml;si sulgemise p&otuilde;hjust (dont_ask_close_reason) kommentaar"
+#: classes/common/room_settings.aw:prop_max_times_per_day_comment
+msgid "Omaduse Maksimaalne aegade arv samal p&auml;eval (max_times_per_day) kommentaar"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_dont_ask_close_reason_help
-msgid "Omaduse Ei k&uuml;si sulgemise p&otuilde;hjust (dont_ask_close_reason) help"
+#: classes/common/room_settings.aw:prop_max_times_per_day_help
+msgid "Omaduse Maksimaalne aegade arv samal p&auml;eval (max_times_per_day) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_bron_required_fields
-msgid "Omaduse Broneeringuobjekti kohustuslikud v&auml;ljad (bron_required_fields) caption"
+#: classes/common/room_settings.aw:prop_show_unverified
+msgid "Omaduse N&auml;ita kalendris kinnitamata broneeringuid (show_unverified) caption"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_bron_required_fields_comment
-msgid "Omaduse Broneeringuobjekti kohustuslikud v&auml;ljad (bron_required_fields) kommentaar"
+#: classes/common/room_settings.aw:prop_show_unverified_comment
+msgid "Omaduse N&auml;ita kalendris kinnitamata broneeringuid (show_unverified) kommentaar"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_bron_required_fields_help
-msgid "Omaduse Broneeringuobjekti kohustuslikud v&auml;ljad (bron_required_fields) help"
+#: classes/common/room_settings.aw:prop_show_unverified_help
+msgid "Omaduse N&auml;ita kalendris kinnitamata broneeringuid (show_unverified) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prods
+msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prods_comment
+msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prods_help
+msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img
+msgid "Omaduse Kuva tootepilte kalendrivaates (cal_show_prod_img) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_comment
+msgid "Omaduse Kuva tootepilte kalendrivaates (cal_show_prod_img) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_help
+msgid "Omaduse Kuva tootepilte kalendrivaates (cal_show_prod_img) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_ord
+msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_ord_comment
+msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_ord_help
+msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_disp_bron_len
+msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_disp_bron_len_comment
+msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_disp_bron_len_help
+msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_bron_props
+msgid "Omaduse Broneeringu omaduste tabel (bron_props) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_bron_props_comment
+msgid "Omaduse Broneeringu omaduste tabel (bron_props) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_bron_props_help
+msgid "Omaduse Broneeringu omaduste tabel (bron_props) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_users
+msgid "Omaduse Kasutajad (users) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_users_comment
+msgid "Omaduse Kasutajad (users) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_users_help
+msgid "Omaduse Kasutajad (users) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_groups
+msgid "Omaduse Grupid (groups) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_groups_comment
+msgid "Omaduse Grupid (groups) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_groups_help
+msgid "Omaduse Grupid (groups) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_persons
+msgid "Omaduse Isikud (persons) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_persons_comment
+msgid "Omaduse Isikud (persons) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_persons_help
+msgid "Omaduse Isikud (persons) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cos
+msgid "Omaduse Organisatsioonid (cos) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cos_comment
+msgid "Omaduse Organisatsioonid (cos) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cos_help
+msgid "Omaduse Organisatsioonid (cos) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_sects
+msgid "Omaduse Osakonnad (sects) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_sects_comment
+msgid "Omaduse Osakonnad (sects) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_sects_help
+msgid "Omaduse Osakonnad (sects) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_profs
+msgid "Omaduse Ametinimetused (profs) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_profs_comment
+msgid "Omaduse Ametinimetused (profs) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_profs_help
+msgid "Omaduse Ametinimetused (profs) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_everyone
+msgid "Omaduse K&otilde;ik (everyone) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_everyone_comment
+msgid "Omaduse K&otilde;ik (everyone) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_everyone_help
+msgid "Omaduse K&otilde;ik (everyone) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_buffer
+msgid "Omaduse Puhveraeg kalendris (col_buffer) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_buffer_comment
+msgid "Omaduse Puhveraeg kalendris (col_buffer) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_buffer_help
+msgid "Omaduse Puhveraeg kalendris (col_buffer) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_available
+msgid "Omaduse Vaba aja v&auml;rv (col_available) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_available_comment
+msgid "Omaduse Vaba aja v&auml;rv (col_available) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_available_help
+msgid "Omaduse Vaba aja v&auml;rv (col_available) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_closed
+msgid "Omaduse Kinnise aja v&auml;rv (col_closed) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_closed_comment
+msgid "Omaduse Kinnise aja v&auml;rv (col_closed) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_closed_help
+msgid "Omaduse Kinnise aja v&auml;rv (col_closed) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_unverified_color_sub
+msgid "Omaduse Kinnitamata broneering (unverified_color_sub) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_unverified_color_sub_comment
+msgid "Omaduse Kinnitamata broneering (unverified_color_sub) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_unverified_color_sub_help
+msgid "Omaduse Kinnitamata broneering (unverified_color_sub) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_web_halfling
+msgid "Omaduse Veebis pooleliolev tellimus (col_web_halfling) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_web_halfling_comment
+msgid "Omaduse Veebis pooleliolev tellimus (col_web_halfling) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_web_halfling_help
+msgid "Omaduse Veebis pooleliolev tellimus (col_web_halfling) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_sent
+msgid "Omaduse Saadetud RFP tellimus (col_sent) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_sent_comment
+msgid "Omaduse Saadetud RFP tellimus (col_sent) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_sent_help
+msgid "Omaduse Saadetud RFP tellimus (col_sent) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_on_hold
+msgid "Omaduse T&auml;psustamisel RFP tellimus (col_on_hold) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_on_hold_comment
+msgid "Omaduse T&auml;psustamisel RFP tellimus (col_on_hold) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_on_hold_help
+msgid "Omaduse T&auml;psustamisel RFP tellimus (col_on_hold) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_back
+msgid "Omaduse Tagasi l&uuml;katud RFP tellimus (col_back) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_back_comment
+msgid "Omaduse Tagasi l&uuml;katud RFP tellimus (col_back) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_back_help
+msgid "Omaduse Tagasi l&uuml;katud RFP tellimus (col_back) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_unverified
+msgid "Omaduse T&uuml;histatud RFP tellimus (col_unverified) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_unverified_comment
+msgid "Omaduse T&uuml;histatud RFP tellimus (col_unverified) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_unverified_help
+msgid "Omaduse T&uuml;histatud RFP tellimus (col_unverified) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_verified_color_sub
+msgid "Omaduse Kinnitatud broneering (verified_color_sub) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_verified_color_sub_comment
+msgid "Omaduse Kinnitatud broneering (verified_color_sub) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_verified_color_sub_help
+msgid "Omaduse Kinnitatud broneering (verified_color_sub) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_recent
+msgid "Omaduse Hiljuti muudetud reserveering (col_recent) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_recent_comment
+msgid "Omaduse Hiljuti muudetud reserveering (col_recent) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_recent_help
+msgid "Omaduse Hiljuti muudetud reserveering (col_recent) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_slave
+msgid "Omaduse Alamreserveering (col_slave) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_slave_comment
+msgid "Omaduse Alamreserveering (col_slave) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_slave_help
+msgid "Omaduse Alamreserveering (col_slave) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_food
+msgid "Omaduse Toitlustusreserveering (col_food) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_food_comment
+msgid "Omaduse Toitlustusreserveering (col_food) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_food_help
+msgid "Omaduse Toitlustusreserveering (col_food) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_send_del_mail
@@ -818,6 +938,22 @@ msgstr ""
 msgid "Omaduse  (grp_settings) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:group_bron
+msgid "Grupi Broneeringuobjekt (bron) pealkiri"
+msgstr ""
+
+#: classes/common/room_settings.aw:group_bron_help
+msgid "Grupi Broneeringuobjekt (bron) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:group_calendar_view
+msgid "Grupi Kalendrivaade (calendar_view) pealkiri"
+msgstr ""
+
+#: classes/common/room_settings.aw:group_calendar_view_help
+msgid "Grupi Kalendrivaade (calendar_view) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:group_whom
 msgid "Grupi Kellele kehtib (whom) pealkiri"
 msgstr ""
@@ -832,14 +968,6 @@ msgstr ""
 
 #: classes/common/room_settings.aw:group_colours_help
 msgid "Grupi V&auml;rvid (colours) help"
-msgstr ""
-
-#: classes/common/room_settings.aw:group_calendar_view
-msgid "Grupi Kalendrivaade (calendar_view) pealkiri"
-msgstr ""
-
-#: classes/common/room_settings.aw:group_calendar_view_help
-msgid "Grupi Kalendrivaade (calendar_view) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:group_settings
@@ -938,95 +1066,111 @@ msgstr ""
 msgid "Seose Grupp (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/common/room_settings.aw:294
+#: classes/common/room_settings.aw:rel_RELTYPE_RELATED_ROOMS
+msgid "Seose Ruumid mida samaaegselt broneerida (RELTYPE_RELATED_ROOMS) tekst"
+msgstr ""
+
+#: classes/common/room_settings.aw:329
+msgid "Toote pilt"
+msgstr ""
+
+#: classes/common/room_settings.aw:330
+msgid "Toote kood"
+msgstr ""
+
+#: classes/common/room_settings.aw:342
 msgid "#ord# - tellimuse sisu"
 msgstr ""
 
-#: classes/common/room_settings.aw:298
+#: classes/common/room_settings.aw:346
 msgid "#ord# - tellimuse sisu<br>#reason# - kinnituse eemaldamise p&ouml;hjus"
 msgstr ""
 
-#: classes/common/room_settings.aw:313
+#: classes/common/room_settings.aw:361
 msgid "sisu tuleb common/room/preview.tpl failist"
 msgstr ""
 
-#: classes/common/room_settings.aw:461
+#: classes/common/room_settings.aw:509
 msgid "Omadus"
 msgstr ""
 
-#: classes/common/room_settings.aw:467
+#: classes/common/room_settings.aw:515
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:509
+#: classes/common/room_settings.aw:557
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:514
+#: classes/common/room_settings.aw:562
 msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:520
+#: classes/common/room_settings.aw:568
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:526 classes/common/room_settings.aw:538
+#: classes/common/room_settings.aw:574 classes/common/room_settings.aw:586
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:532
+#: classes/common/room_settings.aw:580
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:545
+#: classes/common/room_settings.aw:593
 msgid "Broneeringu tegijate gruppide v&auml;rvid"
 msgstr ""
 
-#: classes/common/room_settings.aw:551
+#: classes/common/room_settings.aw:599
 msgid "K&uuml;sida kliendi saabumise kinnitust"
 msgstr ""
 
-#: classes/common/room_settings.aw:557
+#: classes/common/room_settings.aw:605
 msgid "Broneeringud vaikimisi kinnitatud"
 msgstr ""
 
-#: classes/common/room_settings.aw:568
+#: classes/common/room_settings.aw:611
+msgid "Ajakontrollita"
+msgstr ""
+
+#: classes/common/room_settings.aw:622
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:569
+#: classes/common/room_settings.aw:623
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:570
+#: classes/common/room_settings.aw:624
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/common/room_settings.aw:614
+#: classes/common/room_settings.aw:668
 msgid "Vali"
 msgstr ""
 
-#: classes/common/room_settings.aw:667
+#: classes/common/room_settings.aw:740
 msgid "Omaduse nimi"
 msgstr ""
 
-#: classes/common/room_settings.aw:671
-msgid "Eraldaja enne"
-msgstr ""
-
-#: classes/common/room_settings.aw:675
-msgid "Eraldaja p&auml;rast"
-msgstr ""
-
-#: classes/common/room_settings.aw:679
-msgid "Jrk"
-msgstr ""
-
-#: classes/common/room_settings.aw:683
+#: classes/common/room_settings.aw:744
 msgid "Tekstina"
 msgstr ""
 
-#: classes/common/room_settings.aw:687
+#: classes/common/room_settings.aw:748
 msgid "Alt-tekstina"
+msgstr ""
+
+#: classes/common/room_settings.aw:752
+msgid "Eraldaja enne"
+msgstr ""
+
+#: classes/common/room_settings.aw:756
+msgid "Eraldaja p&auml;rast"
+msgstr ""
+
+#: classes/common/room_settings.aw:760
+msgid "Jrk"
 msgstr ""
 

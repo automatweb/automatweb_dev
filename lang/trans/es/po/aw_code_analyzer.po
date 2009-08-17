@@ -13,10 +13,10 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/aw_code_analyzer.aw:635
+#: classes/core/aw_code_analyzer/aw_code_analyzer.aw:674
 msgid "error: do_parse_parameters failed for string %s <br>\n"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/aw_code_analyzer.aw:1365
+#: classes/core/aw_code_analyzer/aw_code_analyzer.aw:1414
 msgid "horrible parse error!"
 msgstr ""

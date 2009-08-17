@@ -449,46 +449,50 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:389
+#: classes/contentmgmt/image.aw:392
 msgid "kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:389
+#: classes/contentmgmt/image.aw:392
 msgid "kommentaari"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1106
+#: classes/contentmgmt/image.aw:1167
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1107
+#: classes/contentmgmt/image.aw:1168
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1120
+#: classes/contentmgmt/image.aw:1181
 msgid "Piltide automaatset suurendamist kontrollib objekt"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1752
+#: classes/contentmgmt/image.aw:1222
+msgid "Kustuta pilt"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:1835
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2332
+#: classes/contentmgmt/image.aw:2428
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2458
+#: classes/contentmgmt/image.aw:2556
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2462
+#: classes/contentmgmt/image.aw:2560
 msgid "Sisu"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2466
+#: classes/contentmgmt/image.aw:2564
 msgid "Autor"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2473
+#: classes/contentmgmt/image.aw:2571
 msgid "Aeg"
 msgstr ""

@@ -14,7 +14,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/orb/xmlrpc.aw:98
-msgid "Viga XML-RPC p2ringu vastuse dekodeerimisel: %s on line %s!"
+#: classes/core/orb/xmlrpc.aw:97
+msgid "Viga XML-RPC p2ringu vastuse dekodeerimisel: %s on line %s! %s"
 msgstr ""
 

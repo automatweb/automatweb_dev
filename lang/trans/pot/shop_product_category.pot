@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Kirjeldus (desc) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_category.aw:prop_code
+msgid "Omaduse Kood (code) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_category.aw:prop_images
 msgid "Omaduse Pildid (images) caption"
 msgstr ""
@@ -48,6 +60,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_category.aw:prop_unit_formula_help
 msgid "Omaduse &Uuml;hikute valemid (unit_formula) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_types
+msgid "Omaduse Seotud kategooriate t&uuml;&uuml;bid (types) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_types_comment
+msgid "Omaduse Seotud kategooriate t&uuml;&uuml;bid (types) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_types_help
+msgid "Omaduse Seotud kategooriate t&uuml;&uuml;bid (types) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_category.aw:prop_doc
@@ -102,19 +126,35 @@ msgstr ""
 msgid "Seose &Uuml;hikute valem (RELTYPE_UNIT_FORMULA) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_category.aw:79
-msgid "Eemalda"
+#: classes/applications/shop/shop_product_category.aw:rel_RELTYPE_FOLDER
+msgid "Seose Kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_category.aw:84
+#: classes/applications/shop/shop_product_category.aw:rel_RELTYPE_CATEGORY
+msgid "Seose Tootekategooria kuhu alla kategooria kuulub (RELTYPE_CATEGORY) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:rel_RELTYPE_CATEGORY_TYPES
+msgid "Seose Kategooria t&uuml;&uuml;p mille kategooriaid valida saab toodete otsingus (RELTYPE_CATEGORY_TYPES) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:100
+msgid "Eemalda valitud seosed"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:101
+msgid "Oled kindel, et soovid valitud seosed kustutada?"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:115
 msgid "Kuvamise kaust"
 msgstr ""
 
-#: classes/applications/shop/shop_product_category.aw:89
+#: classes/applications/shop/shop_product_category.aw:120
 msgid "Salvestamise kaust"
 msgstr ""
 
-#: classes/applications/shop/shop_product_category.aw:94
+#: classes/applications/shop/shop_product_category.aw:125
 msgid "Nimi"
 msgstr ""
 

@@ -74,51 +74,39 @@ msgid "Omaduse Contact list (contactlist) help"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_msg_toolbar
-msgid "Omaduse  (msg_toolbar) caption"
+msgid "Omaduse Message list toolbar (msg_toolbar) caption"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_msg_toolbar_comment
-msgid "Omaduse  (msg_toolbar) kommentaar"
+msgid "Omaduse Message list toolbar (msg_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_msg_toolbar_help
-msgid "Omaduse  (msg_toolbar) help"
-msgstr ""
-
-#: classes/applications/quickmessage/quickmessagebox.aw:prop_Message
-msgid "Omaduse  (Message) caption"
-msgstr ""
-
-#: classes/applications/quickmessage/quickmessagebox.aw:prop_Message_comment
-msgid "Omaduse  (Message) kommentaar"
-msgstr ""
-
-#: classes/applications/quickmessage/quickmessagebox.aw:prop_Message_help
-msgid "Omaduse  (Message) help"
+msgid "Omaduse Message list toolbar (msg_toolbar) help"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_msg_inbox_tbl
-msgid "Omaduse Messages (msg_inbox_tbl) caption"
+msgid "Omaduse Received messages (msg_inbox_tbl) caption"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_msg_inbox_tbl_comment
-msgid "Omaduse Messages (msg_inbox_tbl) kommentaar"
+msgid "Omaduse Received messages (msg_inbox_tbl) kommentaar"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_msg_inbox_tbl_help
-msgid "Omaduse Messages (msg_inbox_tbl) help"
+msgid "Omaduse Received messages (msg_inbox_tbl) help"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_msg_outbox_tbl
-msgid "Omaduse Messages (msg_outbox_tbl) caption"
+msgid "Omaduse Sent messages (msg_outbox_tbl) caption"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_msg_outbox_tbl_comment
-msgid "Omaduse Messages (msg_outbox_tbl) kommentaar"
+msgid "Omaduse Sent messages (msg_outbox_tbl) kommentaar"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_msg_outbox_tbl_help
-msgid "Omaduse Messages (msg_outbox_tbl) help"
+msgid "Omaduse Sent messages (msg_outbox_tbl) help"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:group_general

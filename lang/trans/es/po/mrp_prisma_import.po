@@ -9,20 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/mrp/mrp_prisma_import.aw:class_878_help
 msgid "Klassi Prisma import help"
 msgstr ""
 
-#: classes/mrp/mrp_prisma_import.aw:104
+#: classes/mrp/mrp_prisma_import.aw:105
 msgid "all done"
 msgstr ""
 
-#: classes/mrp/mrp_prisma_import.aw:693
+#: classes/mrp/mrp_prisma_import.aw:471
+msgid "Ostutellimus Sisu paber: %s"
+msgstr ""
+
+#: classes/mrp/mrp_prisma_import.aw:489
+msgid "Ostutellimus Kaane paber: %s"
+msgstr ""
+
+#: classes/mrp/mrp_prisma_import.aw:720
 msgid "Jah"
 msgstr ""
 
-#: classes/mrp/mrp_prisma_import.aw:697
+#: classes/mrp/mrp_prisma_import.aw:724
 msgid "Ei"
 msgstr ""
-

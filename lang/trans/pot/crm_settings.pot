@@ -74,18 +74,6 @@ msgstr ""
 msgid "Omaduse Kliendi t&ouml;&ouml;taja seadete vorm (customer_employer_cfgform) help"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:prop_bill_def_prod
-msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_bill_def_prod_comment
-msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_bill_def_prod_help
-msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) help"
-msgstr ""
-
 #: classes/applications/crm/crm_settings.aw:prop_controller_proj
 msgid "Omaduse Projekti kontroller (controller_proj) caption"
 msgstr ""
@@ -218,18 +206,6 @@ msgstr ""
 msgid "Omaduse N&auml;ita puus faile ja dokumente (show_files_and_docs_in_tree) help"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:prop_billable_only_by_mrg
-msgid "Omaduse Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur (billable_only_by_mrg) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_billable_only_by_mrg_comment
-msgid "Omaduse Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur (billable_only_by_mrg) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_billable_only_by_mrg_help
-msgid "Omaduse Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur (billable_only_by_mrg) help"
-msgstr ""
-
 #: classes/applications/crm/crm_settings.aw:prop_org_link_menu
 msgid "Omaduse Organisatsioonide linkide kataloog (org_link_menu) caption"
 msgstr ""
@@ -252,6 +228,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_insurance_link_menu_help
 msgid "Omaduse Kindlustuse t&uuml;&uuml;pide kataloog (insurance_link_menu) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_comment_menu
+msgid "Omaduse Kommentaaride kaust (comment_menu) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_comment_menu_comment
+msgid "Omaduse Kommentaaride kaust (comment_menu) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_comment_menu_help
+msgid "Omaduse Kommentaaride kaust (comment_menu) help"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_default_my_company_tab
@@ -410,6 +398,162 @@ msgstr ""
 msgid "Omaduse Staatuste piirangud (status_limits) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_billable_only_by_mrg
+msgid "Omaduse Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur (billable_only_by_mrg) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_billable_only_by_mrg_comment
+msgid "Omaduse Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur (billable_only_by_mrg) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_billable_only_by_mrg_help
+msgid "Omaduse Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur (billable_only_by_mrg) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_to
+msgid "Omaduse Kellele meil saata (bill_mail_to) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_to_comment
+msgid "Omaduse Kellele meil saata (bill_mail_to) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_to_help
+msgid "Omaduse Kellele meil saata (bill_mail_to) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_from
+msgid "Omaduse Meili from aadress (bill_mail_from) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_from_comment
+msgid "Omaduse Meili from aadress (bill_mail_from) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_from_help
+msgid "Omaduse Meili from aadress (bill_mail_from) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_from_name
+msgid "Omaduse Meili from nimi (bill_mail_from_name) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_from_name_comment
+msgid "Omaduse Meili from nimi (bill_mail_from_name) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_from_name_help
+msgid "Omaduse Meili from nimi (bill_mail_from_name) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_subj
+msgid "Omaduse Meili subjekt (bill_mail_subj) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_subj_comment
+msgid "Omaduse Meili subjekt (bill_mail_subj) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_subj_help
+msgid "Omaduse Meili subjekt (bill_mail_subj) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_legend
+msgid "Omaduse Meili sisu legend (bill_mail_legend) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_legend_comment
+msgid "Omaduse Meili sisu legend (bill_mail_legend) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_legend_help
+msgid "Omaduse Meili sisu legend (bill_mail_legend) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_ct
+msgid "Omaduse Meili sisu (bill_mail_ct) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_ct_comment
+msgid "Omaduse Meili sisu (bill_mail_ct) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_mail_ct_help
+msgid "Omaduse Meili sisu (bill_mail_ct) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_hide_pwr
+msgid "Omaduse Peita eelvaade ridadega (bill_hide_pwr) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_hide_pwr_comment
+msgid "Omaduse Peita eelvaade ridadega (bill_hide_pwr) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_hide_pwr_help
+msgid "Omaduse Peita eelvaade ridadega (bill_hide_pwr) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_hide_cr
+msgid "Omaduse Peita koonda read nupp (bill_hide_cr) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_hide_cr_comment
+msgid "Omaduse Peita koonda read nupp (bill_hide_cr) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_hide_cr_help
+msgid "Omaduse Peita koonda read nupp (bill_hide_cr) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_no_agreement_price
+msgid "Omaduse &Auml;ra kasuta kokkuleppehinda (bill_no_agreement_price) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_no_agreement_price_comment
+msgid "Omaduse &Auml;ra kasuta kokkuleppehinda (bill_no_agreement_price) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_no_agreement_price_help
+msgid "Omaduse &Auml;ra kasuta kokkuleppehinda (bill_no_agreement_price) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_def_prod
+msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_def_prod_comment
+msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_def_prod_help
+msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_default_unit
+msgid "Omaduse Vaikimisi &Uuml;hik (bill_default_unit) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_default_unit_comment
+msgid "Omaduse Vaikimisi &Uuml;hik (bill_default_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_default_unit_help
+msgid "Omaduse Vaikimisi &Uuml;hik (bill_default_unit) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_default_tax
+msgid "Omaduse Vaikimisi k&auml;ibemaks (bill_default_tax) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_default_tax_comment
+msgid "Omaduse Vaikimisi k&auml;ibemaks (bill_default_tax) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_default_tax_help
+msgid "Omaduse Vaikimisi k&auml;ibemaks (bill_default_tax) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:group_tables
 msgid "Grupi Tabelid (tables) pealkiri"
 msgstr ""
@@ -440,6 +584,14 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:group_status_limits_help
 msgid "Grupi Staatuste piirangud (status_limits) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:group_bill
+msgid "Grupi Arve seaded (bill) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:group_bill_help
+msgid "Grupi Arve seaded (bill) help"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_USER
@@ -482,83 +634,87 @@ msgstr ""
 msgid "Seose Kataloog (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:258
+#: classes/applications/crm/crm_settings.aw:rel_RELTYPE_TAX_RATE
+msgid "Seose Maksum&auml;&auml;r (RELTYPE_TAX_RATE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:296
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:259
+#: classes/applications/crm/crm_settings.aw:297
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:260
+#: classes/applications/crm/crm_settings.aw:298
 msgid "Arvel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:261
+#: classes/applications/crm/crm_settings.aw:299
 msgid "Arveta"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:274
+#: classes/applications/crm/crm_settings.aw:312
 msgid "Tabelvaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:275
+#: classes/applications/crm/crm_settings.aw:313
 msgid "Kalendervaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:311
+#: classes/applications/crm/crm_settings.aw:379
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:332
+#: classes/applications/crm/crm_settings.aw:400
 msgid "Grupid kellele piirang ei m&otilde;ju"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:419
+#: classes/applications/crm/crm_settings.aw:487
 msgid "Salvesta tabeli seaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:440
+#: classes/applications/crm/crm_settings.aw:508
 msgid "Taasta algseaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:441
+#: classes/applications/crm/crm_settings.aw:509
 msgid "Muudetud seaded kaovad kui algseaded taastada, kas j&auml;tkata?"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:454
+#: classes/applications/crm/crm_settings.aw:522
 msgid "Minu t&ouml;&ouml;koht"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:461
+#: classes/applications/crm/crm_settings.aw:529
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:468
+#: classes/applications/crm/crm_settings.aw:536
 msgid "Eraisikust klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:475
+#: classes/applications/crm/crm_settings.aw:543
 msgid "T&ouml;&ouml;kaaslane"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:482
+#: classes/applications/crm/crm_settings.aw:550
 msgid "Kliendi t&ouml;&ouml;taja"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:532
+#: classes/applications/crm/crm_settings.aw:600
 msgid "Veeru nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:536
+#: classes/applications/crm/crm_settings.aw:604
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:540
+#: classes/applications/crm/crm_settings.aw:608
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:544
+#: classes/applications/crm/crm_settings.aw:612
 msgid "Pealkiri"
 msgstr ""
 

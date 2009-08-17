@@ -13,35 +13,35 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:66
+#: classes/core/obj/_int_object.aw:62
 msgid "object::save(): object (%s) cannot be saved, needed properties are not set (parent, class_id)"
 msgstr "object::save(): object (%s) cannot be saved, needed properties are not set (parent, class_id)"
 
-#: classes/core/obj/_int_object.aw:107
+#: classes/core/obj/_int_object.aw:104
 msgid "object::delete(): no current object loaded"
 msgstr "object::delete(): no current object loaded"
 
-#: classes/core/obj/_int_object.aw:132
+#: classes/core/obj/_int_object.aw:129
 msgid "object::connect(%s): parameter must be an array of connection parameters!"
 msgstr "object::connect(%s): parameter must be an array of connection parameters!"
 
-#: classes/core/obj/_int_object.aw:184
+#: classes/core/obj/_int_object.aw:181
 msgid "object::connect(): no view access for both endpoints (%s and %s)!"
 msgstr "object::connect(): no view access for both endpoints (%s and %s)!"
 
-#: classes/core/obj/_int_object.aw:198
+#: classes/core/obj/_int_object.aw:195
 msgid "object::disconnect(%s): parameter must be an array!"
 msgstr "object::disconnect(%s): parameter must be an array!"
 
-#: classes/core/obj/_int_object.aw:227
+#: classes/core/obj/_int_object.aw:223
 msgid "object::disconnect(): could not find connection to object %s from object %s"
 msgstr "object::disconnect(): could not find connection to object %s from object %s"
 
-#: classes/core/obj/_int_object.aw:245
+#: classes/core/obj/_int_object.aw:242
 msgid "object::connections_from(): no current object loaded!"
 msgstr "object::connections_from(): no current object loaded!"
 
-#: classes/core/obj/_int_object.aw:260
+#: classes/core/obj/_int_object.aw:258
 msgid "object::connections_from(): if argument is present, then argument must be array of filter parameters!"
 msgstr "object::connections_from(): if argument is present, then argument must be array of filter parameters!"
 
@@ -49,105 +49,116 @@ msgstr "object::connections_from(): if argument is present, then argument must b
 msgid "object::connections_to(): no current object loaded!"
 msgstr "object::connections_to(): no current object loaded!"
 
-#: classes/core/obj/_int_object.aw:360
+#: classes/core/obj/_int_object.aw:361
 msgid "object::connections_to(): if argument is present, then argument must be array of filter parameters!"
 msgstr "object::connections_to(): if argument is present, then argument must be array of filter parameters!"
 
-#: classes/core/obj/_int_object.aw:465
+#: classes/core/obj/_int_object.aw:466
 msgid "object::path(): no object loaded!"
 msgstr "object::path(): no object loaded!"
 
-#: classes/core/obj/_int_object.aw:474
+#: classes/core/obj/_int_object.aw:475
 msgid "object::path(%s): if parameter is specified, it must be an array!"
 msgstr "object::path(%s): if parameter is specified, it must be an array!"
 
-#: classes/core/obj/_int_object.aw:495
+#: classes/core/obj/_int_object.aw:496
 msgid "object::path_str(): parameter must be an array if present!"
 msgstr "object::path_str(): parameter must be an array if present!"
 
-#: classes/core/obj/_int_object.aw:550
+#: classes/core/obj/_int_object.aw:551
 msgid "object::can(%s): no current object loaded!"
 msgstr "object::can(%s): no current object loaded!"
 
-#: classes/core/obj/_int_object.aw:569
+#: classes/core/obj/_int_object.aw:575
 msgid "object::is_property(%s): no class_id for the current object is set!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:591
+#: classes/core/obj/_int_object.aw:597
 msgid "object::set_parent(%s): no parent specified!"
 msgstr "object::set_parent(%s): no parent specified!"
 
-#: classes/core/obj/_int_object.aw:653
+#: classes/core/obj/_int_object.aw:657
 msgid "object::set_class(%s): specified class id id is not valid!"
 msgstr "object::set_class(%s): specified class id id is not valid!"
 
-#: classes/core/obj/_int_object.aw:694
+#: classes/core/obj/_int_object.aw:696
 msgid "object::set_status(%s): incorrect status code!"
 msgstr "object::set_status(%s): incorrect status code!"
 
-#: classes/core/obj/_int_object.aw:728
+#: classes/core/obj/_int_object.aw:730
 msgid "object::set_lang_id(%s): lang_id must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:781
+#: classes/core/obj/_int_object.aw:783
 msgid "object::set_ord(%s): order must be integer!"
 msgstr "object::set_ord(%s): order must be integer!"
 
-#: classes/core/obj/_int_object.aw:842
+#: classes/core/obj/_int_object.aw:845
 msgid "object::set_period(%s): period must be integer!"
 msgstr "object::set_period(%s): period must be integer!"
 
-#: classes/core/obj/_int_object.aw:865
+#: classes/core/obj/_int_object.aw:868
 msgid "object::set_periodic(%s): order must be integer or boolean!"
 msgstr "object::set_periodic(%s): order must be integer or boolean!"
 
-#: classes/core/obj/_int_object.aw:888
+#: classes/core/obj/_int_object.aw:891
 msgid "object::set_site_id(%s): site_id must be integer!"
 msgstr "object::set_site_id(%s): site_id must be integer!"
 
-#: classes/core/obj/_int_object.aw:944
+#: classes/core/obj/_int_object.aw:984
 msgid "object::set_subclass(%s): subclass must be integer!"
 msgstr "object::set_subclass(%s): subclass must be integer!"
 
-#: classes/core/obj/_int_object.aw:972
+#: classes/core/obj/_int_object.aw:1012
 msgid "object::set_flags(%s): flags must be integer!"
 msgstr "object::set_flags(%s): flags must be integer!"
 
-#: classes/core/obj/_int_object.aw:988
+#: classes/core/obj/_int_object.aw:1028
 msgid "object::flag(%s): flag must be integer!"
 msgstr "object::flag(%s): flag must be integer!"
 
-#: classes/core/obj/_int_object.aw:1009
+#: classes/core/obj/_int_object.aw:1049
 msgid "object::set_flag(%s, %s): flag must be integer!"
 msgstr "object::set_flag(%s, %s): flag must be integer!"
 
-#: classes/core/obj/_int_object.aw:1017
+#: classes/core/obj/_int_object.aw:1057
 msgid "object::set_flag(%s, %s): value must be integer!"
 msgstr "object::set_flag(%s, %s): value must be integer!"
 
-#: classes/core/obj/_int_object.aw:1270
+#: classes/core/obj/_int_object.aw:1310
+msgid "Jah"
+msgstr ""
+
+#: classes/core/obj/_int_object.aw:1310
+msgid "Ei"
+msgstr ""
+
+#: classes/core/obj/_int_object.aw:1326
 msgid "object::set_prop(%s, %s): no property %s defined for current object!"
 msgstr "object::set_prop(%s, %s): no property %s defined for current object!"
 
-#: classes/core/obj/_int_object.aw:1445
+#: classes/core/obj/_int_object.aw:1501
 msgid "object::instance(): no object loaded or class id not set!"
 msgstr "object::instance(): no object loaded or class id not set!"
 
-#: classes/core/obj/_int_object.aw:1466
+#: classes/core/obj/_int_object.aw:1522
 msgid "object::create_brother(%s): no parent!"
 msgstr "object::create_brother(%s): no parent!"
 
-#: classes/core/obj/_int_object.aw:2229
+#: classes/core/obj/_int_object.aw:2332
 msgid "object::path(%s): error in object hierarchy, infinite loop!"
 msgstr "object::path(%s): error in object hierarchy, infinite loop!"
 
-#: classes/core/obj/_int_object.aw:2278
-msgid "object::save(): no acess to save object %s under %s !"
-msgstr "object::save(): no acess to save object %s under %s !"
+#: classes/core/obj/_int_object.aw:2382
+msgid "object::save(): no access to edit object %s!"
+msgstr ""
 
-#: classes/core/obj/_int_object.aw:2293
+#: classes/core/obj/_int_object.aw:2397
 msgid "object::save(): no access to add object under folder %s (gidlist = %s)!"
 msgstr "object::save(): no access to add object under folder %s (gidlist = %s)!"
+
+#~ msgid "object::save(): no acess to save object %s under %s !"
+#~ msgstr "object::save(): no acess to save object %s under %s !"
 
 #~ msgid "object::delete(): no delete access for current object (%s)"
 #~ msgstr "object::delete(): no delete access for current object (%s)"

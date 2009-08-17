@@ -54,11 +54,11 @@ msgstr ""
 msgid "Seose Artikkel (RELTYPE_PRODUCT) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_single.aw:41
+#: classes/applications/shop/shop_product_single.aw:66
 msgid "&Uuml;ksiktoode"
 msgstr ""
 
-#: classes/applications/shop/shop_product_single.aw:42
+#: classes/applications/shop/shop_product_single.aw:67
 msgid "Partii"
 msgstr ""
 

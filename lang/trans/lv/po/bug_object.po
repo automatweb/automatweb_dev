@@ -13,20 +13,20 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_object.aw:94
-#: classes/applications/bug_o_matic_3000/bug_object.aw:105
+#: classes/applications/bug_o_matic_3000/bug_object.aw:125
+#: classes/applications/bug_o_matic_3000/bug_object.aw:136
 msgid "tund"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_object.aw:94
-#: classes/applications/bug_o_matic_3000/bug_object.aw:105
+#: classes/applications/bug_o_matic_3000/bug_object.aw:125
+#: classes/applications/bug_o_matic_3000/bug_object.aw:136
 msgid "tundi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_object.aw:117
+#: classes/applications/bug_o_matic_3000/bug_object.aw:148
 msgid "p&auml;ev"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_object.aw:117
+#: classes/applications/bug_o_matic_3000/bug_object.aw:148
 msgid "p&auml;eva"
 msgstr ""

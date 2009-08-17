@@ -244,7 +244,7 @@ msgid "Tellija"
 msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:419
-msgid "Kuupäev"
+msgid "Kuup&auml;ev"
 msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:429

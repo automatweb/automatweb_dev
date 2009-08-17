@@ -9,8 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/reminder.aw:class_871_help
-msgid "Klassi Meeldetuletus help"
+#: classes/vcl/reminder.aw:class__help
+msgid "Klassi  help"
 msgstr ""
 
 #: classes/vcl/reminder.aw:prop_remind

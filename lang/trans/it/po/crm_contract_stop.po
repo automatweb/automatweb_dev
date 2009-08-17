@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_contract_stop.aw:class_877_help
-msgid "Klassi Töölepingu peatamine help"
+msgid "Klassi T&ouml;&ouml;lepingu peatamine help"
 msgstr ""
 
 #: classes/applications/crm/crm_contract_stop.aw:prop_start1
@@ -69,4 +68,3 @@ msgstr ""
 #: classes/applications/crm/crm_contract_stop.aw:rel_RELTYPE_SUBSTITUTE
 msgid "Seose Asendaja (RELTYPE_SUBSTITUTE) tekst"
 msgstr ""
-

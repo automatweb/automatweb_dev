@@ -109,16 +109,16 @@ msgstr ""
 msgid "Omaduse Sisu (content) help"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:prop_parts_tb
-msgid "Omaduse  (parts_tb) caption"
+#: classes/applications/groupware/task.aw:prop_co_tb
+msgid "Omaduse  (co_tb) caption"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:prop_parts_tb_comment
-msgid "Omaduse  (parts_tb) kommentaar"
+#: classes/applications/groupware/task.aw:prop_co_tb_comment
+msgid "Omaduse  (co_tb) kommentaar"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:prop_parts_tb_help
-msgid "Omaduse  (parts_tb) help"
+#: classes/applications/groupware/task.aw:prop_co_tb_help
+msgid "Omaduse  (co_tb) help"
 msgstr ""
 
 #: classes/applications/groupware/task.aw:prop_co_table
@@ -133,6 +133,18 @@ msgstr ""
 msgid "Omaduse  (co_table) help"
 msgstr ""
 
+#: classes/applications/groupware/task.aw:prop_project_tb
+msgid "Omaduse  (project_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_project_tb_comment
+msgid "Omaduse  (project_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_project_tb_help
+msgid "Omaduse  (project_tb) help"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:prop_proj_table
 msgid "Omaduse  (proj_table) caption"
 msgstr ""
@@ -145,6 +157,18 @@ msgstr ""
 msgid "Omaduse  (proj_table) help"
 msgstr ""
 
+#: classes/applications/groupware/task.aw:prop_impl_tb
+msgid "Omaduse  (impl_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_impl_tb_comment
+msgid "Omaduse  (impl_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_impl_tb_help
+msgid "Omaduse  (impl_tb) help"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:prop_parts_table
 msgid "Omaduse  (parts_table) caption"
 msgstr ""
@@ -155,30 +179,6 @@ msgstr ""
 
 #: classes/applications/groupware/task.aw:prop_parts_table_help
 msgid "Omaduse  (parts_table) help"
-msgstr ""
-
-#: classes/applications/groupware/task.aw:prop_customer
-msgid "Omaduse Klient (customer) caption"
-msgstr "Customer"
-
-#: classes/applications/groupware/task.aw:prop_customer_comment
-msgid "Omaduse Klient (customer) kommentaar"
-msgstr ""
-
-#: classes/applications/groupware/task.aw:prop_customer_help
-msgid "Omaduse Klient (customer) help"
-msgstr ""
-
-#: classes/applications/groupware/task.aw:prop_project
-msgid "Omaduse Projekt (project) caption"
-msgstr "Project"
-
-#: classes/applications/groupware/task.aw:prop_project_comment
-msgid "Omaduse Projekt (project) kommentaar"
-msgstr ""
-
-#: classes/applications/groupware/task.aw:prop_project_help
-msgid "Omaduse Projekt (project) help"
 msgstr ""
 
 #: classes/applications/groupware/task.aw:prop_files_tb
@@ -205,6 +205,30 @@ msgstr ""
 msgid "Omaduse  (files_table) help"
 msgstr ""
 
+#: classes/applications/groupware/task.aw:prop_bills_tb
+msgid "Omaduse  (bills_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_bills_tb_comment
+msgid "Omaduse  (bills_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_bills_tb_help
+msgid "Omaduse  (bills_tb) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_bills_table
+msgid "Omaduse  (bills_table) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_bills_table_comment
+msgid "Omaduse  (bills_table) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_bills_table_help
+msgid "Omaduse  (bills_table) help"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:prop_ppa
 msgid "Omaduse  (ppa) caption"
 msgstr ""
@@ -215,6 +239,30 @@ msgstr ""
 
 #: classes/applications/groupware/task.aw:prop_ppa_help
 msgid "Omaduse  (ppa) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr "Customer"
+
+#: classes/applications/groupware/task.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_project
+msgid "Omaduse Projekt (project) caption"
+msgstr "Project"
+
+#: classes/applications/groupware/task.aw:prop_project_comment
+msgid "Omaduse Projekt (project) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_project_help
+msgid "Omaduse Projekt (project) help"
 msgstr ""
 
 #: classes/applications/groupware/task.aw:prop_is_done
@@ -253,16 +301,16 @@ msgstr ""
 msgid "Omaduse Isiklik (is_personal) help"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:prop_send_bill
-msgid "Omaduse Saata arve (send_bill) caption"
-msgstr "Send invoice"
-
-#: classes/applications/groupware/task.aw:prop_send_bill_comment
-msgid "Omaduse Saata arve (send_bill) kommentaar"
+#: classes/applications/groupware/task.aw:prop_promoter
+msgid "Omaduse Korraldaja (promoter) caption"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:prop_send_bill_help
-msgid "Omaduse Saata arve (send_bill) help"
+#: classes/applications/groupware/task.aw:prop_promoter_comment
+msgid "Omaduse Korraldaja (promoter) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_promoter_help
+msgid "Omaduse Korraldaja (promoter) help"
 msgstr ""
 
 #: classes/applications/groupware/task.aw:prop_in_budget
@@ -649,6 +697,18 @@ msgstr ""
 msgid "Omaduse  (other_expenses) help"
 msgstr ""
 
+#: classes/applications/groupware/task.aw:prop_send_bill
+msgid "Omaduse Saata arve (send_bill) caption"
+msgstr "Send invoice"
+
+#: classes/applications/groupware/task.aw:prop_send_bill_comment
+msgid "Omaduse Saata arve (send_bill) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_send_bill_help
+msgid "Omaduse Saata arve (send_bill) help"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:prop_rows_tb
 msgid "Omaduse  (rows_tb) caption"
 msgstr ""
@@ -893,518 +953,683 @@ msgstr ""
 msgid "Kujundusosa P&otilde;hiandmed (top_bit) pealkiri"
 msgstr "Main"
 
-#: classes/applications/groupware/task.aw:layout_center_bit_left_ct
-msgid "Kujundusosa Sisu (center_bit_left_ct) pealkiri"
-msgstr "Content"
+#: classes/applications/groupware/task.aw:layout_content_bit
+msgid "Kujundusosa Sisu (content_bit) pealkiri"
+msgstr ""
 
-#: classes/applications/groupware/task.aw:layout_center_bit_right_top
-msgid "Kujundusosa Osapooled (center_bit_right_top) pealkiri"
-msgstr "Participants"
+#: classes/applications/groupware/task.aw:layout_customer_bit
+msgid "Kujundusosa Tellijad (customer_bit) pealkiri"
+msgstr ""
 
-#: classes/applications/groupware/task.aw:layout_center_bit_right_bottom
-msgid "Kujundusosa Manused (center_bit_right_bottom) pealkiri"
-msgstr "Attachments"
+#: classes/applications/groupware/task.aw:layout_project_bit
+msgid "Kujundusosa Projektid (project_bit) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:layout_impl_bit
+msgid "Kujundusosa Osalejad (impl_bit) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:layout_files_bit
+msgid "Kujundusosa Manused (files_bit) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:layout_bills_bit
+msgid "Kujundusosa Arved (bills_bit) pealkiri"
+msgstr ""
 
 #: classes/applications/groupware/task.aw:layout_predicates_left
 msgid "Kujundusosa Eeldustegevused (predicates_left) pealkiri"
 msgstr "Predicates"
 
-#: classes/applications/groupware/task.aw:298
+#: classes/applications/groupware/task.aw:313
 msgid "Seisab"
 msgstr "Paused"
 
-#: classes/applications/groupware/task.aw:299
+#: classes/applications/groupware/task.aw:314
 msgid "Stopper k&auml;ib"
 msgstr "Timer on"
 
-#: classes/applications/groupware/task.aw:431
-#: classes/applications/groupware/task.aw:546
-#: classes/applications/groupware/task.aw:1906
-#: classes/applications/groupware/task.aw:3149
+#: classes/applications/groupware/task.aw:453
+#: classes/applications/groupware/task.aw:568
+#: classes/applications/groupware/task.aw:2085
+#: classes/applications/groupware/task.aw:3331
+#: classes/applications/groupware/task.aw:5132
+#: classes/applications/groupware/task.aw:5237
+#: classes/applications/groupware/task.aw:5325
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/groupware/task.aw:436
-#: classes/applications/groupware/task.aw:4229
-#: classes/applications/groupware/task.aw:4298
-#: classes/applications/groupware/task.aw:4609
+#: classes/applications/groupware/task.aw:458
+#: classes/applications/groupware/task.aw:4830
+#: classes/applications/groupware/task.aw:4899
+#: classes/applications/groupware/task.aw:5319
 msgid "Osaleja"
 msgstr "Partcipant"
 
-#: classes/applications/groupware/task.aw:442
-#: classes/applications/groupware/task.aw:4218
-#: classes/applications/groupware/task.aw:4280
-#: classes/applications/groupware/task.aw:4433
-#: classes/applications/groupware/task.aw:4558
+#: classes/applications/groupware/task.aw:464
+#: classes/applications/groupware/task.aw:4819
+#: classes/applications/groupware/task.aw:4881
+#: classes/applications/groupware/task.aw:5048
+#: classes/applications/groupware/task.aw:5231
 msgid "Projekt"
 msgstr "Project"
 
-#: classes/applications/groupware/task.aw:448
-#: classes/applications/groupware/task.aw:1040
-#: classes/applications/groupware/task.aw:2175
+#: classes/applications/groupware/task.aw:470
+#: classes/applications/groupware/task.aw:1116
+#: classes/applications/groupware/task.aw:2354
+#: classes/applications/groupware/task.aw:4265
+#: classes/applications/groupware/task.aw:5368
 msgid "Tehtud"
 msgstr "Done"
 
-#: classes/applications/groupware/task.aw:455
-#: classes/applications/groupware/task.aw:1044
-#: classes/applications/groupware/task.aw:1926
-#: classes/applications/groupware/task.aw:2186
+#: classes/applications/groupware/task.aw:477
+#: classes/applications/groupware/task.aw:1120
+#: classes/applications/groupware/task.aw:2105
+#: classes/applications/groupware/task.aw:2365
+#: classes/applications/groupware/task.aw:4315
+#: classes/applications/groupware/task.aw:5374
 msgid "Arvele"
 msgstr "To invoice"
 
-#: classes/applications/groupware/task.aw:460
+#: classes/applications/groupware/task.aw:482
 msgid "Kirjeldus"
 msgstr "Description"
 
-#: classes/applications/groupware/task.aw:518
+#: classes/applications/groupware/task.aw:540
 msgid "Stopper '%s'"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:555
-#: classes/applications/groupware/task.aw:574
-#: classes/applications/groupware/task.aw:4912
+#: classes/applications/groupware/task.aw:577
+#: classes/applications/groupware/task.aw:596
+#: classes/applications/groupware/task.aw:5783
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/applications/groupware/task.aw:564
+#: classes/applications/groupware/task.aw:586
 msgid "-- Vali t&uuml;&uuml;p --"
 msgstr "-- Select type --"
 
-#: classes/applications/groupware/task.aw:594
+#: classes/applications/groupware/task.aw:616
 msgid "Otsi olemasolev objekt"
 msgstr "Find existing object"
 
-#: classes/applications/groupware/task.aw:607
+#: classes/applications/groupware/task.aw:629
 msgid "Aeg"
 msgstr "Time"
 
-#: classes/applications/groupware/task.aw:628
-#: classes/applications/groupware/task.aw:3142
-#: classes/applications/groupware/task.aw:4564
+#: classes/applications/groupware/task.aw:650
+#: classes/applications/groupware/task.aw:3324
+#: classes/applications/groupware/task.aw:5243
 msgid "Staatus"
 msgstr "Status"
 
-#: classes/applications/groupware/task.aw:638
+#: classes/applications/groupware/task.aw:660
 msgid "Paus"
 msgstr "Pause"
 
-#: classes/applications/groupware/task.aw:645
+#: classes/applications/groupware/task.aw:667
 msgid "Start"
 msgstr "Start"
 
-#: classes/applications/groupware/task.aw:650
+#: classes/applications/groupware/task.aw:672
 msgid "L&otilde;peta"
 msgstr "Finish"
 
-#: classes/applications/groupware/task.aw:654
+#: classes/applications/groupware/task.aw:676
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/applications/groupware/task.aw:674
+#: classes/applications/groupware/task.aw:696
 msgid "Tegevused"
 msgstr "Actions"
 
+#: classes/applications/groupware/task.aw:906
+msgid "Toimetusele"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:907
-#: classes/applications/groupware/task.aw:939
-#: classes/applications/groupware/task.aw:2193
-#: classes/applications/groupware/task.aw:2256
-#: classes/applications/groupware/task.aw:2261
+msgid "Kohtumisele"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:908
+msgid "K&otilde;nele"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:913
+msgid "Tellijad: %s \"%s\""
+msgstr ""
+
+#: classes/applications/groupware/task.aw:916
+msgid "Projektid: %s \"%s\""
+msgstr ""
+
+#: classes/applications/groupware/task.aw:919
+msgid "Osalejad: %s \"%s\""
+msgstr ""
+
+#: classes/applications/groupware/task.aw:922
+msgid "Manused: %s \"%s\""
+msgstr ""
+
+#: classes/applications/groupware/task.aw:925
+msgid "Arved: %s \"%s\""
+msgstr ""
+
+#: classes/applications/groupware/task.aw:973
+#: classes/applications/groupware/task.aw:1005
+#: classes/applications/groupware/task.aw:2372
+#: classes/applications/groupware/task.aw:2435
+#: classes/applications/groupware/task.aw:2440
 msgid "Arveta"
 msgstr "No invoice"
 
-#: classes/applications/groupware/task.aw:909
+#: classes/applications/groupware/task.aw:975
 msgid "Muud kulud, mille kohta ei ole arvet esitatud"
 msgstr "Other expenses without invoice"
 
-#: classes/applications/groupware/task.aw:911
-#: classes/applications/groupware/task.aw:946
-#: classes/applications/groupware/task.aw:2192
-#: classes/applications/groupware/task.aw:2266
+#: classes/applications/groupware/task.aw:977
+#: classes/applications/groupware/task.aw:1012
+#: classes/applications/groupware/task.aw:2371
+#: classes/applications/groupware/task.aw:2445
 msgid "Arvel"
 msgstr "On invoice"
 
-#: classes/applications/groupware/task.aw:913
+#: classes/applications/groupware/task.aw:979
 msgid "Muud kulud, mille kohta on arve esitatud"
 msgstr "Other expenses with invoice"
 
-#: classes/applications/groupware/task.aw:917
+#: classes/applications/groupware/task.aw:983
 msgid "Muud kulud"
 msgstr "Other expenses"
 
-#: classes/applications/groupware/task.aw:953
+#: classes/applications/groupware/task.aw:1019
 msgid "arve nr %s"
 msgstr "invoice no %s"
 
-#: classes/applications/groupware/task.aw:985
+#: classes/applications/groupware/task.aw:1051
 msgid "arve nr"
 msgstr "invoice no"
 
-#: classes/applications/groupware/task.aw:993
-#: classes/applications/groupware/task.aw:2670
+#: classes/applications/groupware/task.aw:1059
+#: classes/applications/groupware/task.aw:2849
 msgid "Kokku:"
 msgstr "Total:"
 
-#: classes/applications/groupware/task.aw:1039
+#: classes/applications/groupware/task.aw:1115
+#: classes/applications/groupware/task.aw:4259
 msgid "Aktiivne"
 msgstr "Active"
 
-#: classes/applications/groupware/task.aw:1041
+#: classes/applications/groupware/task.aw:1117
+#: classes/applications/groupware/task.aw:4273
 msgid "Terve p&auml;ev"
 msgstr "Whole day"
 
-#: classes/applications/groupware/task.aw:1042
+#: classes/applications/groupware/task.aw:1118
+#: classes/applications/groupware/task.aw:4281
 msgid "Verstapost"
 msgstr "Milestone"
 
-#: classes/applications/groupware/task.aw:1043
+#: classes/applications/groupware/task.aw:1119
+#: classes/applications/groupware/task.aw:4288
 msgid "Isiklik"
 msgstr "Personal"
 
-#: classes/applications/groupware/task.aw:1045
+#: classes/applications/groupware/task.aw:1121
+#: classes/applications/groupware/task.aw:4322
 msgid "Eelarvesse"
 msgstr "Into budget"
 
-#: classes/applications/groupware/task.aw:1046
+#: classes/applications/groupware/task.aw:1122
+#: classes/applications/groupware/task.aw:1137
+#: classes/applications/groupware/task.aw:4333
+#: classes/applications/groupware/task.aw:5344
 msgid "T&ouml;&ouml;aeg"
 msgstr "Worktime"
 
-#: classes/applications/groupware/task.aw:1207
-#: classes/applications/groupware/task.aw:1219
-#: classes/applications/groupware/task.aw:2483
-#: classes/applications/groupware/task.aw:2493
+#: classes/applications/groupware/task.aw:1298
+#: classes/applications/groupware/task.aw:1310
+#: classes/applications/groupware/task.aw:2662
+#: classes/applications/groupware/task.aw:2672
 msgid "Stopper"
 msgstr "Timer"
 
-#: classes/applications/groupware/task.aw:1326
+#: classes/applications/groupware/task.aw:1417
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/applications/groupware/task.aw:1335
-#: classes/applications/groupware/task.aw:4262
-#: classes/applications/groupware/task.aw:4273
-#: classes/applications/groupware/task.aw:4281
-#: classes/applications/groupware/task.aw:4299
-#: classes/applications/groupware/task.aw:4305
-#: classes/applications/groupware/task.aw:4306
-#: classes/applications/groupware/task.aw:4332
-#: classes/applications/groupware/task.aw:4362
-#: classes/applications/groupware/task.aw:4408
-#: classes/applications/groupware/task.aw:4409
-#: classes/applications/groupware/task.aw:4434
-#: classes/applications/groupware/task.aw:4849
-#: classes/applications/groupware/task.aw:5130
-#: classes/applications/groupware/task.aw:5132
+#: classes/applications/groupware/task.aw:1426
+#: classes/applications/groupware/task.aw:4612
+#: classes/applications/groupware/task.aw:4642
+#: classes/applications/groupware/task.aw:4696
+#: classes/applications/groupware/task.aw:4697
+#: classes/applications/groupware/task.aw:4731
+#: classes/applications/groupware/task.aw:4765
+#: classes/applications/groupware/task.aw:4863
+#: classes/applications/groupware/task.aw:4874
+#: classes/applications/groupware/task.aw:4882
+#: classes/applications/groupware/task.aw:4900
+#: classes/applications/groupware/task.aw:4906
+#: classes/applications/groupware/task.aw:4907
+#: classes/applications/groupware/task.aw:4933
+#: classes/applications/groupware/task.aw:4967
+#: classes/applications/groupware/task.aw:5013
+#: classes/applications/groupware/task.aw:5014
+#: classes/applications/groupware/task.aw:5049
+#: classes/applications/groupware/task.aw:5719
+#: classes/applications/groupware/task.aw:5720
+#: classes/applications/groupware/task.aw:6096
+#: classes/applications/groupware/task.aw:6098
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/applications/groupware/task.aw:1344
+#: classes/applications/groupware/task.aw:1435
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/applications/groupware/task.aw:1536
+#: classes/applications/groupware/task.aw:1650
+#: classes/applications/groupware/task.aw:4567
 msgid "Puuduvad &otilde;igused m&auml;&auml;rata tehtud t&ouml;id arvele! P&ouml;&ouml;rduge kliendihaldur %s poole!"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1718
+#: classes/applications/groupware/task.aw:1832
 msgid "<br><br><br>Valitud Projekti ja Toimetuse kliendid erinevad"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1727
+#: classes/applications/groupware/task.aw:1841
 msgid "Tunnihind sisestamata!"
 msgstr "No hour price!"
 
-#: classes/applications/groupware/task.aw:1910
-#: classes/applications/groupware/task.aw:4140
+#: classes/applications/groupware/task.aw:2089
+#: classes/applications/groupware/task.aw:4219
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/groupware/task.aw:1914
-#: classes/applications/groupware/task.aw:4027
+#: classes/applications/groupware/task.aw:2093
+#: classes/applications/groupware/task.aw:4246
 msgid "Valuuta"
 msgstr "Currency"
 
-#: classes/applications/groupware/task.aw:1918
-#: classes/applications/groupware/task.aw:4140
+#: classes/applications/groupware/task.aw:2097
+#: classes/applications/groupware/task.aw:4237
 msgid "KM"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1922
-#: classes/applications/groupware/task.aw:2113
-#: classes/applications/groupware/task.aw:2123
+#: classes/applications/groupware/task.aw:2101
+#: classes/applications/groupware/task.aw:2292
+#: classes/applications/groupware/task.aw:2302
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/applications/groupware/task.aw:1936
+#: classes/applications/groupware/task.aw:2115
 msgid "Arve nr."
 msgstr "Invoice no"
 
-#: classes/applications/groupware/task.aw:1976
-#: classes/applications/groupware/task.aw:2500
-#: classes/applications/groupware/task.aw:2506
+#: classes/applications/groupware/task.aw:2155
+#: classes/applications/groupware/task.aw:2679
+#: classes/applications/groupware/task.aw:2685
 msgid "Arve nr %s"
 msgstr "Invoice no %s"
 
-#: classes/applications/groupware/task.aw:2123
-#: classes/applications/groupware/task.aw:2132
+#: classes/applications/groupware/task.aw:2302
+#: classes/applications/groupware/task.aw:2311
 msgid "Jrk"
 msgstr "Order"
 
-#: classes/applications/groupware/task.aw:2140
+#: classes/applications/groupware/task.aw:2319
 msgid "Tegevus"
 msgstr "Action"
 
-#: classes/applications/groupware/task.aw:2146
+#: classes/applications/groupware/task.aw:2325
 msgid "Teostaja"
 msgstr "Performer"
 
-#: classes/applications/groupware/task.aw:2154
+#: classes/applications/groupware/task.aw:2333
 msgid "Tunde"
 msgstr "Hours"
 
-#: classes/applications/groupware/task.aw:2163
+#: classes/applications/groupware/task.aw:2342
+#: classes/applications/groupware/task.aw:5356
 msgid "Kulunud tunde"
 msgstr "Actual hours"
 
-#: classes/applications/groupware/task.aw:2169
+#: classes/applications/groupware/task.aw:2348
+#: classes/applications/groupware/task.aw:5362
 msgid "Tunde kliendile"
 msgstr "Hours to the customer"
 
-#: classes/applications/groupware/task.aw:2178
-#: classes/applications/groupware/task.aw:2190
-#: classes/applications/groupware/task.aw:2203
-#: classes/applications/groupware/task.aw:2221
-#: classes/applications/groupware/task.aw:2238
-#: classes/applications/groupware/task.aw:2270
+#: classes/applications/groupware/task.aw:2357
+#: classes/applications/groupware/task.aw:2369
+#: classes/applications/groupware/task.aw:2382
+#: classes/applications/groupware/task.aw:2400
+#: classes/applications/groupware/task.aw:2417
+#: classes/applications/groupware/task.aw:2449
 msgid "Jah"
 msgstr "Yes"
 
-#: classes/applications/groupware/task.aw:2179
-#: classes/applications/groupware/task.aw:2191
-#: classes/applications/groupware/task.aw:2204
-#: classes/applications/groupware/task.aw:2225
-#: classes/applications/groupware/task.aw:2242
-#: classes/applications/groupware/task.aw:2274
+#: classes/applications/groupware/task.aw:2358
+#: classes/applications/groupware/task.aw:2370
+#: classes/applications/groupware/task.aw:2383
+#: classes/applications/groupware/task.aw:2404
+#: classes/applications/groupware/task.aw:2421
+#: classes/applications/groupware/task.aw:2453
 msgid "Ei"
 msgstr "No"
 
-#: classes/applications/groupware/task.aw:2399
+#: classes/applications/groupware/task.aw:2578
 msgid "vali"
 msgstr "select"
 
-#: classes/applications/groupware/task.aw:2411
+#: classes/applications/groupware/task.aw:2590
 msgid "%s (%s)"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2480
-#: classes/applications/groupware/task.aw:2490
-#: classes/applications/groupware/task.aw:5103
+#: classes/applications/groupware/task.aw:2659
+#: classes/applications/groupware/task.aw:2669
+#: classes/applications/groupware/task.aw:6069
 msgid "Toimetus"
 msgstr "Task"
 
-#: classes/applications/groupware/task.aw:2548
-#: classes/applications/groupware/task.aw:2588
+#: classes/applications/groupware/task.aw:2727
+#: classes/applications/groupware/task.aw:2767
+#: classes/applications/groupware/task.aw:4177
 msgid "Prognoos"
 msgstr "Prognosis"
 
-#: classes/applications/groupware/task.aw:2548
-#: classes/applications/groupware/task.aw:2593
+#: classes/applications/groupware/task.aw:2727
+#: classes/applications/groupware/task.aw:2772
 msgid "Kulunud"
 msgstr "Elapsed"
 
-#: classes/applications/groupware/task.aw:2548
-#: classes/applications/groupware/task.aw:2598
+#: classes/applications/groupware/task.aw:2727
+#: classes/applications/groupware/task.aw:2777
+#: classes/applications/groupware/task.aw:4195
 msgid "Kliendile"
 msgstr "To customer"
 
-#: classes/applications/groupware/task.aw:2669
+#: classes/applications/groupware/task.aw:2848
 msgid "h"
 msgstr "h"
 
-#: classes/applications/groupware/task.aw:2737
-#: classes/applications/groupware/task.aw:2774
+#: classes/applications/groupware/task.aw:2916
+#: classes/applications/groupware/task.aw:2953
 msgid "tund"
 msgstr "hour"
 
-#: classes/applications/groupware/task.aw:2881
+#: classes/applications/groupware/task.aw:3060
 msgid "Kohtumine"
 msgstr "Meeting"
 
-#: classes/applications/groupware/task.aw:2899
+#: classes/applications/groupware/task.aw:3078
 msgid "Loo arve"
 msgstr "Create invoice"
 
-#: classes/applications/groupware/task.aw:2915
+#: classes/applications/groupware/task.aw:3094
 msgid "Kustuta read"
 msgstr "Delete rows"
 
-#: classes/applications/groupware/task.aw:2922
+#: classes/applications/groupware/task.aw:3101
 msgid "Kopeeri read"
 msgstr "Copy rows"
 
-#: classes/applications/groupware/task.aw:2929
+#: classes/applications/groupware/task.aw:3108
 msgid "L&otilde;ika read"
 msgstr "Cut rows"
 
-#: classes/applications/groupware/task.aw:2938
+#: classes/applications/groupware/task.aw:3117
 msgid "Aseta read"
 msgstr "Paste rows"
 
-#: classes/applications/groupware/task.aw:3056
+#: classes/applications/groupware/task.aw:3238
 msgid "%s toimetus"
 msgstr "%s task"
 
-#: classes/applications/groupware/task.aw:3113
-#: classes/applications/groupware/task.aw:3865
+#: classes/applications/groupware/task.aw:3295
+#: classes/applications/groupware/task.aw:4050
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/applications/groupware/task.aw:3135
+#: classes/applications/groupware/task.aw:3317
 msgid "Kalender"
 msgstr "Calendar"
 
-#: classes/applications/groupware/task.aw:3156
+#: classes/applications/groupware/task.aw:3338
 msgid "Vali"
 msgstr "Select"
 
-#: classes/applications/groupware/task.aw:3186
+#: classes/applications/groupware/task.aw:3368
 msgid "Ressurss on valitud aegadel kasutuses:<br>"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3205
-#: classes/applications/groupware/task.aw:3224
+#: classes/applications/groupware/task.aw:3387
+#: classes/applications/groupware/task.aw:3406
 msgid "Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3235
+#: classes/applications/groupware/task.aw:3417
 msgid "Vaata"
 msgstr "View"
 
-#: classes/applications/groupware/task.aw:3241
+#: classes/applications/groupware/task.aw:3423
 msgid "Ressurss on vaba"
 msgstr "Resource available"
 
-#: classes/applications/groupware/task.aw:3979
+#: classes/applications/groupware/task.aw:4164
 msgid "Prioriteet"
 msgstr "Priority"
 
-#: classes/applications/groupware/task.aw:3987
-msgid "Prognoositav tundide arv"
-msgstr "Prognosis"
+#: classes/applications/groupware/task.aw:4170
+msgid "Tundide kulu"
+msgstr ""
 
-#: classes/applications/groupware/task.aw:3995
-msgid "Tegelik tundide arv"
-msgstr "Elapsed"
+#: classes/applications/groupware/task.aw:4186
+msgid "Tegelik"
+msgstr ""
 
-#: classes/applications/groupware/task.aw:4003
-msgid "Tundide arv kliendile"
-msgstr "For customer"
-
-#: classes/applications/groupware/task.aw:4011
+#: classes/applications/groupware/task.aw:4204
 msgid "Tunnihind"
 msgstr "Hour price"
 
-#: classes/applications/groupware/task.aw:4019
+#: classes/applications/groupware/task.aw:4213
 msgid "Kokkuleppehind"
 msgstr "Agreed price"
 
-#: classes/applications/groupware/task.aw:4035
-msgid "Arve number"
-msgstr "Invoice no"
-
-#: classes/applications/groupware/task.aw:4043
-msgid "Kood"
-msgstr "Code"
-
-#: classes/applications/groupware/task.aw:4051
-msgid "Teenuse liik"
-msgstr "Service type"
-
-#: classes/applications/groupware/task.aw:4103
-msgid "Loo uus arve"
-msgstr "Create new invoice"
-
-#: classes/applications/groupware/task.aw:4140
+#: classes/applications/groupware/task.aw:4225
 msgid "Kogus"
 msgstr "Amount"
 
-#: classes/applications/groupware/task.aw:4140
+#: classes/applications/groupware/task.aw:4231
 msgid "&Uuml;hik"
 msgstr "Unit"
 
-#: classes/applications/groupware/task.aw:4183
-#: classes/applications/groupware/task.aw:4804
-#: classes/applications/groupware/task.aw:5098
-msgid "Uus"
-msgstr "New"
+#: classes/applications/groupware/task.aw:4253
+msgid "Lisatingimused"
+msgstr ""
 
-#: classes/applications/groupware/task.aw:4189
-#: classes/applications/groupware/task.aw:4272
+#: classes/applications/groupware/task.aw:4297
+msgid "K&otilde;ne suund"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:4306
+msgid "Tee bugi"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:4344
+msgid "Arve number"
+msgstr "Invoice no"
+
+#: classes/applications/groupware/task.aw:4352
+msgid "Kood"
+msgstr "Code"
+
+#: classes/applications/groupware/task.aw:4360
+msgid "Teenuse liik"
+msgstr "Service type"
+
+#: classes/applications/groupware/task.aw:4413
+#: classes/applications/groupware/task.aw:5854
+msgid "Loo uus arve"
+msgstr "Create new invoice"
+
 #: classes/applications/groupware/task.aw:4511
-msgid "Tellija"
-msgstr "Customer"
+msgid "Tuli sisse"
+msgstr ""
 
-#: classes/applications/groupware/task.aw:4199
-msgid "Organisatsioon"
-msgstr "Organisation"
+#: classes/applications/groupware/task.aw:4511
+msgid "L&auml;ks v&auml;lja"
+msgstr ""
 
-#: classes/applications/groupware/task.aw:4208
-msgid "Isik"
-msgstr "Person"
+#: classes/applications/groupware/task.aw:4587
+msgid "Uus Organisatsioon"
+msgstr ""
 
-#: classes/applications/groupware/task.aw:4239
-#: classes/applications/groupware/task.aw:4251
+#: classes/applications/groupware/task.aw:4597
+msgid "Uus isik"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:4611
+msgid "Otsi tellijat"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:4630
+msgid "Uus projekt"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:4641
+msgid "Otsi projekte"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:4659
+msgid "Uus osaleja"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:4669
+#: classes/applications/groupware/task.aw:4681
+#: classes/applications/groupware/task.aw:4840
+#: classes/applications/groupware/task.aw:4852
 msgid "Lisa isik organisatsiooni %s"
 msgstr "Add person into organisation %s"
 
-#: classes/applications/groupware/task.aw:4517
-#: classes/applications/groupware/task.aw:4621
+#: classes/applications/groupware/task.aw:4703
+msgid "Lisa osaleja t&ouml;&ouml;tajate hulgast:"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:4784
+#: classes/applications/groupware/task.aw:5674
+#: classes/applications/groupware/task.aw:6064
+msgid "Uus"
+msgstr "New"
+
+#: classes/applications/groupware/task.aw:4790
+#: classes/applications/groupware/task.aw:4873
+#: classes/applications/groupware/task.aw:5126
+msgid "Tellija"
+msgstr "Customer"
+
+#: classes/applications/groupware/task.aw:4800
+msgid "Organisatsioon"
+msgstr "Organisation"
+
+#: classes/applications/groupware/task.aw:4809
+msgid "Isik"
+msgstr "Person"
+
+#: classes/applications/groupware/task.aw:5138
+#: classes/applications/groupware/task.aw:5337
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/applications/groupware/task.aw:4523
+#: classes/applications/groupware/task.aw:5144
 msgid "Kontaktisik"
 msgstr "Contact person"
 
-#: classes/applications/groupware/task.aw:4570
+#: classes/applications/groupware/task.aw:5150
+#: classes/applications/groupware/task.aw:5258
+msgid "Osalus"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:5156
+msgid "Tundides"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:5162
+msgid "Protsentides"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:5249
 msgid "L&otilde;ppt&auml;htaeg"
 msgstr "Due date"
 
-#: classes/applications/groupware/task.aw:4615
+#: classes/applications/groupware/task.aw:5264
+msgid "Osalus tundides"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:5270
+msgid "Osalus protsentides"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:5331
 msgid "Ametinimetus"
 msgstr "Position"
 
-#: classes/applications/groupware/task.aw:4878
+#: classes/applications/groupware/task.aw:5350
+msgid "Prognoositud tunde"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:5749
 msgid "Fail"
 msgstr "File"
 
-#: classes/applications/groupware/task.aw:4879
+#: classes/applications/groupware/task.aw:5750
 msgid "Memo"
 msgstr "Memo"
 
-#: classes/applications/groupware/task.aw:4880
+#: classes/applications/groupware/task.aw:5751
 msgid "CRM Dokument"
 msgstr "Document"
 
-#: classes/applications/groupware/task.aw:4881
+#: classes/applications/groupware/task.aw:5752
 msgid "Leping"
 msgstr "Contract"
 
-#: classes/applications/groupware/task.aw:4882
+#: classes/applications/groupware/task.aw:5753
 msgid "Pakkumine"
 msgstr "Offer"
 
-#: classes/applications/groupware/task.aw:4906
+#: classes/applications/groupware/task.aw:5777
 msgid "Manuse nimi"
 msgstr "Attachment"
 
-#: classes/applications/groupware/task.aw:4918
+#: classes/applications/groupware/task.aw:5789
 msgid "Viimane muutja"
 msgstr "Last modified by"
 
-#: classes/applications/groupware/task.aw:5066
+#: classes/applications/groupware/task.aw:5873
+msgid "Arve"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:6032
 msgid "Eeldustegevus"
 msgstr "Predicate"
 
-#: classes/applications/groupware/task.aw:5112
+#: classes/applications/groupware/task.aw:6078
 msgid "K&otilde;ne"
 msgstr "Call"
+
+#~ msgid "Kujundusosa Sisu (center_bit_left_ct) pealkiri"
+#~ msgstr "Content"
+
+#~ msgid "Kujundusosa Osapooled (center_bit_right_top) pealkiri"
+#~ msgstr "Participants"
+
+#~ msgid "Kujundusosa Manused (center_bit_right_bottom) pealkiri"
+#~ msgstr "Attachments"
+
+#~ msgid "Prognoositav tundide arv"
+#~ msgstr "Prognosis"
+
+#~ msgid "Tegelik tundide arv"
+#~ msgstr "Elapsed"
+
+#~ msgid "Tundide arv kliendile"
+#~ msgstr "For customer"

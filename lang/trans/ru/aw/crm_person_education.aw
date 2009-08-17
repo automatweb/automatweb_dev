@@ -10,7 +10,7 @@ $GLOBALS["TRANS"]["Bakalaureus"] = "Бакалавр";
 $GLOBALS["TRANS"]["Magister"] = "Магистр";
 $GLOBALS["TRANS"]["Doktor"] = "Доктор";
 $GLOBALS["TRANS"]["Teaduste kandidaat"] = "Кандидат наук";
+$GLOBALS["TRANS"]["--vali--"] = "--Выбери--";
 $GLOBALS["TRANS"]["Jah"] = "Да";
 $GLOBALS["TRANS"]["Ei"] = "Нет";
-$GLOBALS["TRANS"]["--vali--"] = "--Выбери--";
 ?>

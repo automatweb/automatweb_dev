@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Kujundus, mida korvis kasutatakse (prod_layout) caption"] = "Layout to use in cart";
-$GLOBALS["TRANS"]["Omaduse Postikulu (liidetakse korvi hinnale) (postal_price) caption"] = "Postage fee";
 $GLOBALS["TRANS"]["Omaduse Tellimuse e-maili subjekt (email_subj) caption"] = "Order e-mail subject";
 $GLOBALS["TRANS"]["Omaduse Korvi uuendamise kontroller (update_handler) caption"] = "Basket update controller";
 $GLOBALS["TRANS"]["Omaduse Tellimise kontroller (finish_handler) caption"] = "Order controller";

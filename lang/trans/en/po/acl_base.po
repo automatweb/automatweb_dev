@@ -13,35 +13,35 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:75
+#: classes/core/obj/acl_base.aw:77
 msgid "acl_base::add_acl_group_to_obj(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:82
+#: classes/core/obj/acl_base.aw:84
 msgid "acl_base::add_acl_group_to_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:110
+#: classes/core/obj/acl_base.aw:112
 msgid "acl_base::add_acl_group_to_new_obj(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:117
+#: classes/core/obj/acl_base.aw:119
 msgid "acl_base::add_acl_group_to_new_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:145
+#: classes/core/obj/acl_base.aw:147
 msgid "acl_base::remove_acl_group_from_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:172
+#: classes/core/obj/acl_base.aw:174
 msgid "acl_base::save_acl(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:179
+#: classes/core/obj/acl_base.aw:181
 msgid "acl_base::save_acl(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:339
+#: classes/core/obj/acl_base.aw:343
 msgid "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 

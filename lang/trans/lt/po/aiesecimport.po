@@ -189,79 +189,79 @@ msgstr ""
 msgid "Seose Impordi kaust (RELTYPE_IMPORTFOLDER) tekst"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2129 classes/import/aiesecimport.aw:2834
-#: classes/import/aiesecimport.aw:2972
+#: classes/import/aiesecimport.aw:2116 classes/import/aiesecimport.aw:2817
+#: classes/import/aiesecimport.aw:2955
 msgid "Id"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2137 classes/import/aiesecimport.aw:2842
+#: classes/import/aiesecimport.aw:2124 classes/import/aiesecimport.aw:2825
 msgid "Nimi"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2849
+#: classes/import/aiesecimport.aw:2832
 msgid "Aadress"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2856
+#: classes/import/aiesecimport.aw:2839
 msgid "Posti i."
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2863
+#: classes/import/aiesecimport.aw:2846
 msgid "Linn"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2870
+#: classes/import/aiesecimport.aw:2853
 msgid "Url"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2877
+#: classes/import/aiesecimport.aw:2860
 msgid "email"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2884
+#: classes/import/aiesecimport.aw:2867
 msgid "Kontakt"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2891 classes/import/aiesecimport.aw:3022
+#: classes/import/aiesecimport.aw:2874 classes/import/aiesecimport.aw:3005
 msgid "Töötelefon1"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2898 classes/import/aiesecimport.aw:3029
+#: classes/import/aiesecimport.aw:2881 classes/import/aiesecimport.aw:3012
 msgid "Töötelefon2"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2905 classes/import/aiesecimport.aw:3036
+#: classes/import/aiesecimport.aw:2888 classes/import/aiesecimport.aw:3019
 msgid "Mob1"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2912 classes/import/aiesecimport.aw:3043
+#: classes/import/aiesecimport.aw:2895 classes/import/aiesecimport.aw:3026
 msgid "Mob2"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2921
+#: classes/import/aiesecimport.aw:2904
 msgid "Tegevuse kirjeldus"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2980
+#: classes/import/aiesecimport.aw:2963
 msgid "Eesnimi"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2987
+#: classes/import/aiesecimport.aw:2970
 msgid "Perenimi"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2994
+#: classes/import/aiesecimport.aw:2977
 msgid "Firma"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:3001
+#: classes/import/aiesecimport.aw:2984
 msgid "Email"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:3008
+#: classes/import/aiesecimport.aw:2991
 msgid "URL"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:3015
+#: classes/import/aiesecimport.aw:2998
 msgid "Siit v6tame telefonid"
 msgstr ""

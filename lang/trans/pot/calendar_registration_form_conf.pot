@@ -215,7 +215,7 @@ msgid "Seose Isikute kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:rel_RELTYPE_WEBFORM
-msgid "Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"
+msgid "Seose S&uuml;ndmuse vorm (RELTYPE_WEBFORM) tekst"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:156
@@ -235,14 +235,14 @@ msgid "Isikute kaust (%s)"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:251
-msgid "Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"
+msgid "Veebivorm s&uuml;ndmusele registreerimise vormiga t&ouml;&ouml;tab ainult l&auml;bi s&uuml;ndmusele registreerimise"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:270
 msgid "calendar_registration_form::show(%s): event and object type must be related!"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:664
+#: classes/applications/calendar/calendar_registration_form_conf.aw:658
 msgid "calendar_registration_form::show_data(%s): event and object type must be related!"
 msgstr ""
 

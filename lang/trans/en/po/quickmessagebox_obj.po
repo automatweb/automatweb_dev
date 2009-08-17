@@ -13,28 +13,28 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:154
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:158
 msgid "anyone"
 msgstr "anyone"
 
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:155
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:172
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:159
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:176
 msgid "users in my contact list"
 msgstr "users in my contact list"
 
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:156
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:160
 msgid "no-one"
 msgstr "no-one"
 
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:158
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:174
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:162
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:178
 msgid "system default (currently '%s')"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:171
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:175
 msgid "all users"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:208
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:230
 msgid "Quickmessagebox of %s"
 msgstr "Quickmessagebox of %s"

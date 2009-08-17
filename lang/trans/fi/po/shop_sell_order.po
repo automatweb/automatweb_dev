@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_sell_order.aw:class_1431_help
 msgid "Klassi Lao m&uuml;&uuml;gitellimus help"
 msgstr ""
@@ -38,16 +37,28 @@ msgstr ""
 msgid "Omaduse Tellija (purchaser) help"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_related_purchase_orders
-msgid "Omaduse Seotud ostutellimused			 (related_purchase_orders) caption"
+#: classes/applications/shop/shop_sell_order.aw:prop_job
+msgid "Omaduse T&ouml;&ouml; (job) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_related_purchase_orders_comment
-msgid "Omaduse Seotud ostutellimused			 (related_purchase_orders) kommentaar"
+#: classes/applications/shop/shop_sell_order.aw:prop_job_comment
+msgid "Omaduse T&ouml;&ouml; (job) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_related_purchase_orders_help
-msgid "Omaduse Seotud ostutellimused			 (related_purchase_orders) help"
+#: classes/applications/shop/shop_sell_order.aw:prop_job_help
+msgid "Omaduse T&ouml;&ouml; (job) help"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_related_orders
+msgid "Omaduse Seotud ostutellimused\t\t\t (related_orders) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_related_orders_comment
+msgid "Omaduse Seotud ostutellimused\t\t\t (related_orders) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_related_orders_help
+msgid "Omaduse Seotud ostutellimused\t\t\t (related_orders) help"
 msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_date
@@ -62,16 +73,28 @@ msgstr ""
 msgid "Omaduse Kuup&auml;ev (date) help"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_planned_send_date
-msgid "Omaduse Planeeritud saatmise kuup&auml;ev (planned_send_date) caption"
+#: classes/applications/shop/shop_sell_order.aw:prop_deal_date
+msgid "Omaduse Tegelemise kuup&auml;ev (deal_date) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_planned_send_date_comment
-msgid "Omaduse Planeeritud saatmise kuup&auml;ev (planned_send_date) kommentaar"
+#: classes/applications/shop/shop_sell_order.aw:prop_deal_date_comment
+msgid "Omaduse Tegelemise kuup&auml;ev (deal_date) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_planned_send_date_help
-msgid "Omaduse Planeeritud saatmise kuup&auml;ev (planned_send_date) help"
+#: classes/applications/shop/shop_sell_order.aw:prop_deal_date_help
+msgid "Omaduse Tegelemise kuup&auml;ev (deal_date) help"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_planned_date
+msgid "Omaduse Planeeritud saatmise kuup&auml;ev (planned_date) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_planned_date_comment
+msgid "Omaduse Planeeritud saatmise kuup&auml;ev (planned_date) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_planned_date_help
+msgid "Omaduse Planeeritud saatmise kuup&auml;ev (planned_date) help"
 msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_buyer_rep
@@ -110,6 +133,18 @@ msgstr ""
 msgid "Omaduse Transpordikulu (trans_cost) help"
 msgstr ""
 
+#: classes/applications/shop/shop_sell_order.aw:prop_customs_cost
+msgid "Omaduse Tollikulu (customs_cost) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_customs_cost_comment
+msgid "Omaduse Tollikulu (customs_cost) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_customs_cost_help
+msgid "Omaduse Tollikulu (customs_cost) help"
+msgstr ""
+
 #: classes/applications/shop/shop_sell_order.aw:prop_transp_type
 msgid "Omaduse L&auml;hetusviis (transp_type) caption"
 msgstr ""
@@ -146,28 +181,28 @@ msgstr ""
 msgid "Omaduse Ladu (warehouse) help"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_confirmed
-msgid "Omaduse Kinnitatud (confirmed) caption"
+#: classes/applications/shop/shop_sell_order.aw:prop_delivery_address
+msgid "Omaduse Kohaletoimetamise aadress (delivery_address) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_confirmed_comment
-msgid "Omaduse Kinnitatud (confirmed) kommentaar"
+#: classes/applications/shop/shop_sell_order.aw:prop_delivery_address_comment
+msgid "Omaduse Kohaletoimetamise aadress (delivery_address) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_confirmed_help
-msgid "Omaduse Kinnitatud (confirmed) help"
+#: classes/applications/shop/shop_sell_order.aw:prop_delivery_address_help
+msgid "Omaduse Kohaletoimetamise aadress (delivery_address) help"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_closed
-msgid "Omaduse Suletud (closed) caption"
+#: classes/applications/shop/shop_sell_order.aw:prop_order_status
+msgid "Omaduse Staatus (order_status) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_closed_comment
-msgid "Omaduse Suletud (closed) kommentaar"
+#: classes/applications/shop/shop_sell_order.aw:prop_order_status_comment
+msgid "Omaduse Staatus (order_status) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:prop_closed_help
-msgid "Omaduse Suletud (closed) help"
+#: classes/applications/shop/shop_sell_order.aw:prop_order_status_help
+msgid "Omaduse Staatus (order_status) help"
 msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_taxed
@@ -180,6 +215,30 @@ msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_taxed_help
 msgid "Omaduse Maks (taxed) help"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_payment_type
+msgid "Omaduse Maksetingimus (payment_type) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_payment_type_comment
+msgid "Omaduse Maksetingimus (payment_type) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_payment_type_help
+msgid "Omaduse Maksetingimus (payment_type) help"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_sell_channel
+msgid "Omaduse M&uuml;&uuml;gikanal (sell_channel) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_sell_channel_comment
+msgid "Omaduse M&uuml;&uuml;gikanal (sell_channel) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_sell_channel_help
+msgid "Omaduse M&uuml;&uuml;gikanal (sell_channel) help"
 msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_art_toolbar
@@ -195,23 +254,15 @@ msgid "Omaduse  (art_toolbar) help"
 msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_articles
-msgid "Omaduse Artiklid (articles) caption"
+msgid "Omaduse  (articles) caption"
 msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_articles_comment
-msgid "Omaduse Artiklid (articles) kommentaar"
+msgid "Omaduse  (articles) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_articles_help
-msgid "Omaduse Artiklid (articles) help"
-msgstr ""
-
-#: classes/applications/shop/shop_sell_order.aw:group_articles
-msgid "Grupi Artiklid (articles) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/shop_sell_order.aw:group_articles_help
-msgid "Grupi Artiklid (articles) help"
+msgid "Omaduse  (articles) help"
 msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_PURCHASER
@@ -238,35 +289,58 @@ msgstr ""
 msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:136
-msgid "Artikkel"
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_TRANSFER_METHOD
+msgid "Seose L&auml;hetusviis (RELTYPE_TRANSFER_METHOD) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:142
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_PRODUCT
+msgid "Seose Artikkel (RELTYPE_PRODUCT) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_ROW
+msgid "Seose Rida (RELTYPE_ROW) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_JOB
+msgid "Seose T&ouml;&ouml; (RELTYPE_JOB) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_ADDRESS
+msgid "Seose Aadress (RELTYPE_ADDRESS) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:116
+msgid "Koostamisel"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:117
+msgid "Kinnitatud"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:118
+msgid "Katkestatud"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:119
+msgid "Saadetud"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:120
+msgid "T&auml;idetud"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:230
+msgid "Toode"
+msgstr "Nimi"
+
+#: classes/applications/shop/shop_sell_order.aw:235
 msgid "Kogus"
-msgstr ""
+msgstr "Määrä"
 
-#: classes/applications/shop/shop_sell_order.aw:149
-msgid "&Uuml;hik"
-msgstr ""
+#: classes/applications/shop/shop_sell_order.aw:240
+msgid "Hind"
+msgstr "Hinta"
 
-#: classes/applications/shop/shop_sell_order.aw:155
-msgid "&Uuml;hiku hind"
-msgstr ""
-
-#: classes/applications/shop/shop_sell_order.aw:161
+#: classes/applications/shop/shop_sell_order.aw:245
 msgid "Summa"
-msgstr ""
-
-#: classes/applications/shop/shop_sell_order.aw:167
-msgid "Maksum&auml;&auml;r"
-msgstr ""
-
-#: classes/applications/shop/shop_sell_order.aw:173
-msgid "Tellija artiklikood"
-msgstr ""
-
-#: classes/applications/shop/shop_sell_order.aw:179
-msgid "Saadud kogus"
-msgstr ""
-
+msgstr "Summa"

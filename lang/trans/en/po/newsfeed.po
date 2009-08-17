@@ -262,7 +262,7 @@ msgstr ""
 msgid "Viimase X p&auml;eva uudised"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:149 classes/contentmgmt/newsfeed.aw:586
+#: classes/contentmgmt/newsfeed.aw:149 classes/contentmgmt/newsfeed.aw:598
 msgid "Vali"
 msgstr ""
 
@@ -286,7 +286,7 @@ msgstr "Name"
 msgid "V&ouml;ta alamkaustadest ka"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:580
+#: classes/contentmgmt/newsfeed.aw:592
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 

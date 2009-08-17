@@ -12,7 +12,6 @@ $GLOBALS["TRANS"]["Oled kindel, et soovid valitud tellimused kustutada?"] = "Are
 $GLOBALS["TRANS"]["Kinnita tellimused"] = "Confirm orders";
 $GLOBALS["TRANS"]["Oled kindel, et soovid valitud tellimused kinnitada?"] = "Are you sure you want to delete selected offers?";
 $GLOBALS["TRANS"]["Tellija"] = "Orderer";
-$GLOBALS["TRANS"]["Kuupäev"] = "Date";
 $GLOBALS["TRANS"]["Vaata tellimust"] = "View order";
 $GLOBALS["TRANS"]["Toote nimi"] = "Product name";
 $GLOBALS["TRANS"]["V&auml;rvus"] = "Colour";

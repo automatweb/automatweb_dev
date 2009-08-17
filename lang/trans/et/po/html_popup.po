@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2015-06-01 20:57+0200\n"
 "Last-Translator: ergo\n"
 "Language-Team: \n"
@@ -60,20 +60,17 @@ msgstr "avaneva akna või layeri laius"
 msgid "Omaduse Laius (width) help"
 msgstr "avaneva akna või layeri laius"
 
-# classes/contentmgmt/html_popup.aw:prop_height
 #: classes/contentmgmt/html_popup.aw:prop_height
-msgid "Omaduse Kõrgus (height) caption"
+msgid "Omaduse K&otilde;rgus (height) caption"
 msgstr ""
 
-# classes/contentmgmt/html_popup.aw:prop_height_comment
 #: classes/contentmgmt/html_popup.aw:prop_height_comment
-msgid "Omaduse Kõrgus (height) kommentaar"
-msgstr "avaneva akna või layeri kõrgus"
+msgid "Omaduse K&otilde;rgus (height) kommentaar"
+msgstr ""
 
-# classes/contentmgmt/html_popup.aw:prop_height_help
 #: classes/contentmgmt/html_popup.aw:prop_height_help
-msgid "Omaduse Kõrgus (height) help"
-msgstr "avaneva akna või layeri kõrgus"
+msgid "Omaduse K&otilde;rgus (height) help"
+msgstr ""
 
 # classes/contentmgmt/html_popup.aw:prop_scrollbars
 #: classes/contentmgmt/html_popup.aw:prop_scrollbars
@@ -105,20 +102,17 @@ msgstr "popup-aknent kuvatakse samale külastajale vaid üks kord (kuni sessioonik
 msgid "Omaduse Ainult &uuml;he korra sessiooni jooksul (only_once) help"
 msgstr "popup-aknent kuvatakse samale külastajale vaid üks kord (kuni sessiooniküpsise aegumiseni)"
 
-# classes/contentmgmt/html_popup.aw:prop_menus
 #: classes/contentmgmt/html_popup.aw:prop_menus
-msgid "Omaduse Menüüd (menus) caption"
+msgid "Omaduse Men&uuml;&uuml;d (menus) caption"
 msgstr ""
 
-# classes/contentmgmt/html_popup.aw:prop_menus_comment
 #: classes/contentmgmt/html_popup.aw:prop_menus_comment
-msgid "Omaduse Menüüd (menus) kommentaar"
-msgstr "nimekiri läbi seostehalduri seostatud kaustadest, mille alla liikudes popup-aken nähtavale ilmub. "
+msgid "Omaduse Men&uuml;&uuml;d (menus) kommentaar"
+msgstr ""
 
-# classes/contentmgmt/html_popup.aw:prop_menus_help
 #: classes/contentmgmt/html_popup.aw:prop_menus_help
-msgid "Omaduse Menüüd (menus) help"
-msgstr "nimekiri läbi seostehalduri seostatud kaustadest, mille alla liikudes popup-aken nähtavale ilmub. "
+msgid "Omaduse Men&uuml;&uuml;d (menus) help"
+msgstr ""
 
 # classes/contentmgmt/html_popup.aw:rel_RELTYPE_OBJ
 #: classes/contentmgmt/html_popup.aw:rel_RELTYPE_OBJ
@@ -139,5 +133,21 @@ msgid "Nimi"
 msgstr ""
 
 #: classes/contentmgmt/html_popup.aw:94
-msgid "k.a. alammenüüd"
+msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
+
+# classes/contentmgmt/html_popup.aw:prop_height_comment
+#~ msgid "Omaduse Kõrgus (height) kommentaar"
+#~ msgstr "avaneva akna või layeri kõrgus"
+
+# classes/contentmgmt/html_popup.aw:prop_height_help
+#~ msgid "Omaduse Kõrgus (height) help"
+#~ msgstr "avaneva akna või layeri kõrgus"
+
+# classes/contentmgmt/html_popup.aw:prop_menus_comment
+#~ msgid "Omaduse Menüüd (menus) kommentaar"
+#~ msgstr "nimekiri läbi seostehalduri seostatud kaustadest, mille alla liikudes popup-aken nähtavale ilmub. "
+
+# classes/contentmgmt/html_popup.aw:prop_menus_help
+#~ msgid "Omaduse Menüüd (menus) help"
+#~ msgstr "nimekiri läbi seostehalduri seostatud kaustadest, mille alla liikudes popup-aken nähtavale ilmub. "

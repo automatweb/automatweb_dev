@@ -38,7 +38,7 @@ msgstr ""
 msgid "t&ouml;&ouml;stusdisaini komplekt"
 msgstr ""
 
-#: classes/applications/clients/patent_office/industrial_design_obj.aw:42
+#: classes/applications/clients/patent_office/industrial_design_obj.aw:43
 msgid "--"
 msgstr ""
 

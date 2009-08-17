@@ -150,43 +150,43 @@ msgstr ""
 msgid "Seose Isik (RELTYPE_P) tekst"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:68
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:67
 msgid "Kohe olemas"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:69
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:68
 msgid "Vajab seadistamist"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:70
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:69
 msgid "Uus arendus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:207
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:206
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:212
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:211
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:217
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:216
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:222
-msgid "Üksus"
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:221
+msgid "&Uuml;ksus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:227
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:226
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:232
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:231
 msgid "Tunnihind"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement_solution.aw:237
+#: classes/applications/procurement_center/procurement_requirement_solution.aw:236
 msgid "T&ouml;&ouml;tunnid"
 msgstr ""
 

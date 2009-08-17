@@ -37,18 +37,6 @@ msgstr ""
 msgid "Omaduse Kinnitatud taotluste kaust (verified_menu) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:prop_series
-msgid "Omaduse Numbriseeria (series) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:prop_series_comment
-msgid "Omaduse Numbriseeria (series) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:prop_series_help
-msgid "Omaduse Numbriseeria (series) help"
-msgstr ""
-
 #: classes/applications/clients/patent_office/trademark_manager.aw:prop_patent_add
 msgid "Omaduse Patenditaotluste lisamine (patent_add) caption"
 msgstr ""
@@ -73,6 +61,30 @@ msgstr ""
 msgid "Omaduse Kasuliku mudeli taotluste lisamine (utility_model_add) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_industrial_design_add
+msgid "Omaduse T&ouml;&ouml;stusdisaini taotluste lisamine (industrial_design_add) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_industrial_design_add_comment
+msgid "Omaduse T&ouml;&ouml;stusdisaini taotluste lisamine (industrial_design_add) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_industrial_design_add_help
+msgid "Omaduse T&ouml;&ouml;stusdisaini taotluste lisamine (industrial_design_add) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_euro_patent_et_desc_add
+msgid "Omaduse EP patendi taotluste lisamine (euro_patent_et_desc_add) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_euro_patent_et_desc_add_comment
+msgid "Omaduse EP patendi taotluste lisamine (euro_patent_et_desc_add) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_euro_patent_et_desc_add_help
+msgid "Omaduse EP patendi taotluste lisamine (euro_patent_et_desc_add) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/trademark_manager.aw:prop_trademark_add
 msgid "Omaduse Kaubam&auml;rgitaotluste lisamine (trademark_add) caption"
 msgstr ""
@@ -95,6 +107,18 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_manager.aw:prop_admins_help
 msgid "Omaduse Halduskeskkonna administraatorid (admins) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_procurators_folder
+msgid "Omaduse Volinike kaust (procurators_folder) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_procurators_folder_comment
+msgid "Omaduse Volinike kaust (procurators_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_procurators_folder_help
+msgid "Omaduse Volinike kaust (procurators_folder) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_manager.aw:prop_objects_tb
@@ -217,6 +241,30 @@ msgstr ""
 msgid "Omaduse Ekspordi (exp_link) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_procurators_toolbar
+msgid "Omaduse Volinike t&ouml;&ouml;riistariba (procurators_toolbar) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_procurators_toolbar_comment
+msgid "Omaduse Volinike t&ouml;&ouml;riistariba (procurators_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_procurators_toolbar_help
+msgid "Omaduse Volinike t&ouml;&ouml;riistariba (procurators_toolbar) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_procurators_table
+msgid "Omaduse Volinike tabel (procurators_table) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_procurators_table_comment
+msgid "Omaduse Volinike tabel (procurators_table) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:prop_procurators_table_help
+msgid "Omaduse Volinike tabel (procurators_table) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/trademark_manager.aw:group_applications
 msgid "Grupi Taotlused (applications) pealkiri"
 msgstr ""
@@ -233,6 +281,14 @@ msgstr ""
 msgid "Grupi Eksport (export) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/trademark_manager.aw:group_procurators
+msgid "Grupi Volinikud (procurators) pealkiri"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:group_procurators_help
+msgid "Grupi Volinikud (procurators) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/trademark_manager.aw:rel_RELTYPE_NOT_VERIFIED_MENU
 msgid "Seose Kinnitamata taotluste kaust (RELTYPE_NOT_VERIFIED_MENU) tekst"
 msgstr ""
@@ -241,8 +297,8 @@ msgstr ""
 msgid "Seose Kinnitatud taotluste kaust (RELTYPE_VERIFIED_MENU) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:rel_RELTYPE_SERIES
-msgid "Seose Numbriseeria (RELTYPE_SERIES) tekst"
+#: classes/applications/clients/patent_office/trademark_manager.aw:rel_RELTYPE_PROCURATORS_FOLDER
+msgid "Seose Volinike kaust (RELTYPE_PROCURATORS_FOLDER) tekst"
 msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_manager.aw:rel_RELTYPE_ADD
@@ -261,138 +317,166 @@ msgstr ""
 msgid "Kujundusosa Objektide&nbsp;otsing (objects_find_params) pealkiri"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:126
-msgid "EKSPORDI!"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:166
-msgid "Taotlused"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:179
-msgid "Kinnitatud"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:188
-#: classes/applications/clients/patent_office/trademark_manager.aw:248
+#: classes/applications/clients/patent_office/trademark_manager.aw:131
+#: classes/applications/clients/patent_office/trademark_manager.aw:430
+#: classes/applications/clients/patent_office/trademark_manager.aw:490
 msgid "Kaubam&auml;rk"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:198
-#: classes/applications/clients/patent_office/trademark_manager.aw:258
+#: classes/applications/clients/patent_office/trademark_manager.aw:132
+#: classes/applications/clients/patent_office/trademark_manager.aw:440
+#: classes/applications/clients/patent_office/trademark_manager.aw:500
 msgid "Patent"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:208
-#: classes/applications/clients/patent_office/trademark_manager.aw:268
+#: classes/applications/clients/patent_office/trademark_manager.aw:133
+#: classes/applications/clients/patent_office/trademark_manager.aw:450
+#: classes/applications/clients/patent_office/trademark_manager.aw:510
 msgid "Kasulik mudel"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:218
-#: classes/applications/clients/patent_office/trademark_manager.aw:278
+#: classes/applications/clients/patent_office/trademark_manager.aw:134
+#: classes/applications/clients/patent_office/trademark_manager.aw:460
+#: classes/applications/clients/patent_office/trademark_manager.aw:520
 msgid "T&ouml;&ouml;stusdisain"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:228
-#: classes/applications/clients/patent_office/trademark_manager.aw:288
+#: classes/applications/clients/patent_office/trademark_manager.aw:135
+#: classes/applications/clients/patent_office/trademark_manager.aw:470
+#: classes/applications/clients/patent_office/trademark_manager.aw:530
 msgid "EP patent"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:239
-msgid "Arhiiv"
+#: classes/applications/clients/patent_office/trademark_manager.aw:162
+msgid "EKSPORDI!"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:299
-msgid "Kinnitamata"
+#: classes/applications/clients/patent_office/trademark_manager.aw:202
+msgid "Main procurators' folder can't be same as procurators' folder for specific application type"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:565
-msgid "Number puudub"
+#: classes/applications/clients/patent_office/trademark_manager.aw:227
+msgid "Lisa volinik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:626
-#: classes/applications/clients/patent_office/trademark_manager.aw:725
-msgid "Allkirjad"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:652
-#: classes/applications/clients/patent_office/trademark_manager.aw:740
-#: classes/applications/clients/patent_office/trademark_manager.aw:836
-msgid "Kinnita"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:673
-msgid "Taotluse t&uuml;&uuml;p"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:681
-msgid "M&auml;rgi t&uuml;&uuml;p"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:688
-msgid "Taotluse number"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:695
-msgid "Esitaja nimi"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:702
-msgid "Esitaja kontaktandmed"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:708
-msgid "Voliniku nimi"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:715
-msgid "Esitamise kuup&auml;ev"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:731
-msgid "Vali"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:752
-msgid "Lisa uus"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:760
-msgid "Kaubam&auml;rgitaotlus"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:771
-msgid "Patenditaotlus"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:782
-msgid "Kasuliku mudeli taotlus"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:793
-msgid "T&ouml;&ouml;stusdisaini taotlus"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:804
-msgid "EP patendi taotlus"
-msgstr ""
-
-#: classes/applications/clients/patent_office/trademark_manager.aw:813
+#: classes/applications/clients/patent_office/trademark_manager.aw:236
+#: classes/applications/clients/patent_office/trademark_manager.aw:1271
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:821
+#: classes/applications/clients/patent_office/trademark_manager.aw:242
+#: classes/applications/clients/patent_office/trademark_manager.aw:1279
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:823
+#: classes/applications/clients/patent_office/trademark_manager.aw:244
+msgid "Kas oled kindel, et soovid valitud volinikud s&uuml;steemist kustudada?"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:256
+msgid "Volinike kaust m&auml;&auml;ramata v&otilde;i puudub &otilde;igus seda vaadata"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:330
+msgid "Volinik"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:344
+#: classes/applications/clients/patent_office/trademark_manager.aw:1184
+msgid "Vali"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:408
+msgid "Taotlused"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:421
+msgid "Kinnitatud"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:481
+msgid "Arhiiv"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:540
+msgid "Kinnitamata"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1024
+msgid "Number puudub"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1079
+#: classes/applications/clients/patent_office/trademark_manager.aw:1178
+msgid "Allkirjad"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1105
+#: classes/applications/clients/patent_office/trademark_manager.aw:1193
+#: classes/applications/clients/patent_office/trademark_manager.aw:1294
+msgid "Kinnita"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1126
+msgid "Taotluse t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1134
+msgid "M&auml;rgi t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1141
+msgid "Taotluse number"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1148
+msgid "Esitaja nimi"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1155
+msgid "Esitaja kontaktandmed"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1161
+msgid "Voliniku nimi"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1168
+msgid "Esitamise kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1210
+msgid "Lisa uus"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1218
+msgid "Kaubam&auml;rgitaotlus"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1229
+msgid "Patenditaotlus"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1240
+msgid "Kasuliku mudeli taotlus"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1251
+msgid "T&ouml;&ouml;stusdisaini taotlus"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1262
+msgid "EP patendi taotlus"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_manager.aw:1281
 msgid "Kas oled kindel et soovid valitud taotlused kustudada?"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:828
+#: classes/applications/clients/patent_office/trademark_manager.aw:1286
 msgid "V&auml;rskenda"
 msgstr ""
 
-#: classes/applications/clients/patent_office/trademark_manager.aw:864
+#: classes/applications/clients/patent_office/trademark_manager.aw:1332
 msgid "Taotlus nr:"
 msgstr ""

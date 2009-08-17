@@ -13,7 +13,6 @@ $GLOBALS["TRANS"]["Omaduse Toodete grupeerimine meilis (mail_group_by) caption"]
 $GLOBALS["TRANS"]["Omaduse Saada eraldi meilid vastavalt klassifikaatorile (mails_sep_by_el) caption"] = "Send separate e-mails according to classificators";
 $GLOBALS["TRANS"]["Omaduse Lisa meili manusega tellimus (send_attach) caption"] = "Add order to e-mail as attachment";
 $GLOBALS["TRANS"]["Omaduse Allahindluse element andmete vormis (data_form_discount) caption"] = "Discount element in data form";
-$GLOBALS["TRANS"]["Omaduse J&auml;relmaksu min. summa (rent_min_amt) caption"] = "Rent minimum amount";
 $GLOBALS["TRANS"]["Omaduse Elemendi (rent_prop) caption"] = "Element";
 $GLOBALS["TRANS"]["Omaduse v&auml;&auml;rtus j&auml;relmaksuks (rent_prop_val) caption"] = "value for rent";
 $GLOBALS["TRANS"]["Omaduse Ainult aktiivsed tooted (only_active_items) caption"] = "Only active products";

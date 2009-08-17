@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/treeview.aw:class_137_help
 msgid "Klassi Puu help"
 msgstr ""
@@ -51,15 +50,15 @@ msgid "Omaduse Root objekti ikoon (icon_root) help"
 msgstr ""
 
 #: classes/vcl/treeview.aw:prop_treetype
-msgid "Omaduse Puu tüüp (treetype) caption"
+msgid "Omaduse Puu t&uuml;&uuml;p (treetype) caption"
 msgstr ""
 
 #: classes/vcl/treeview.aw:prop_treetype_comment
-msgid "Omaduse Puu tüüp (treetype) kommentaar"
+msgid "Omaduse Puu t&uuml;&uuml;p (treetype) kommentaar"
 msgstr ""
 
 #: classes/vcl/treeview.aw:prop_treetype_help
-msgid "Omaduse Puu tüüp (treetype) help"
+msgid "Omaduse Puu t&uuml;&uuml;p (treetype) help"
 msgstr ""
 
 #: classes/vcl/treeview.aw:prop_icon_folder_open
@@ -94,3 +93,6 @@ msgstr ""
 msgid "Seose ikoon (RELTYPE_ICON) tekst"
 msgstr ""
 
+#: classes/vcl/treeview.aw:1560
+msgid "(M)"
+msgstr ""

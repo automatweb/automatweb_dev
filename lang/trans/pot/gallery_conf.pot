@@ -146,6 +146,30 @@ msgstr ""
 msgid "Omaduse Kas v&auml;ike pilt on kadreeritud (v_tn_subimage) help"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_stretch
+msgid "Omaduse V&auml;ikest pilti ei venitata (v_tn_subimage_stretch) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_stretch_comment
+msgid "Omaduse V&auml;ikest pilti ei venitata (v_tn_subimage_stretch) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_stretch_help
+msgid "Omaduse V&auml;ikest pilti ei venitata (v_tn_subimage_stretch) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_subimage_stretch
+msgid "Omaduse Suurt pilti ei venitata (v_subimage_stretch) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_subimage_stretch_comment
+msgid "Omaduse Suurt pilti ei venitata (v_subimage_stretch) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_subimage_stretch_help
+msgid "Omaduse Suurt pilti ei venitata (v_subimage_stretch) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_left
 msgid "Omaduse Mitu pikslit vasakult kaader algab (v_tn_subimage_left) caption"
 msgstr ""
@@ -264,6 +288,30 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_help
 msgid "Omaduse Kas v&auml;ike pilt on kadreeritud (h_tn_subimage) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_stretch
+msgid "Omaduse V&auml;ikest pilti ei venitata (h_tn_subimage_stretch) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_stretch_comment
+msgid "Omaduse V&auml;ikest pilti ei venitata (h_tn_subimage_stretch) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_stretch_help
+msgid "Omaduse V&auml;ikest pilti ei venitata (h_tn_subimage_stretch) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_subimage_stretch
+msgid "Omaduse Suurt pilti ei venitata (h_subimage_stretch) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_subimage_stretch_comment
+msgid "Omaduse Suurt pilti ei venitata (h_subimage_stretch) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_subimage_stretch_help
+msgid "Omaduse Suurt pilti ei venitata (h_subimage_stretch) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_left

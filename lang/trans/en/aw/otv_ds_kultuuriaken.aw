@@ -4,7 +4,6 @@ $GLOBALS["TRANS"]["Omaduse XML faili url (xml_file_url) caption"] = "XML file ur
 $GLOBALS["TRANS"]["Omaduse Viimane import (last_import_text) caption"] = "Last import";
 $GLOBALS["TRANS"]["Omaduse Impordi s&uuml;ndmused (import_events) caption"] = "Imprt events";
 $GLOBALS["TRANS"]["Omaduse Seaded (config_table) caption"] = "Settings";
-$GLOBALS["TRANS"]["Omaduse XML vaate seaded  (xml_config) caption"] = "XML View settings";
 $GLOBALS["TRANS"]["Omaduse Kordus (recurrence) caption"] = "Recurrence";
 $GLOBALS["TRANS"]["Omaduse Kasutaja (auto_import_user) caption"] = "User";
 $GLOBALS["TRANS"]["Omaduse Parool (auto_import_passwd) caption"] = "Password";

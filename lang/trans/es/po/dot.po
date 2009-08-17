@@ -9,28 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/protocols/data/dot.aw:class_1197_help
-msgid "Klassi DOT help"
+#: classes/protocols/data/dot.aw:class__help
+msgid "Klassi  help"
 msgstr ""
-
-#: classes/protocols/data/dot.aw:prop_
-msgid "Omaduse  () caption"
-msgstr ""
-
-#: classes/protocols/data/dot.aw:prop__comment
-msgid "Omaduse  () kommentaar"
-msgstr ""
-
-#: classes/protocols/data/dot.aw:prop__help
-msgid "Omaduse  () help"
-msgstr ""
-
-#: classes/protocols/data/dot.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/protocols/data/dot.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-

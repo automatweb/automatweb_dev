@@ -26,7 +26,6 @@ $GLOBALS["TRANS"]["Omaduse CV aktiivne (cvactive) caption"] = "CV active";
 $GLOBALS["TRANS"]["Omaduse Kehtib (co_is_cust) caption"] = "Active";
 $GLOBALS["TRANS"]["Omaduse Kliendisuhte looja (cust_contract_creator) caption"] = "Customer relation created by";
 $GLOBALS["TRANS"]["Omaduse Kliendisuhte alguskuup&auml;ev (cust_contract_date) caption"] = "Customer relation started";
-$GLOBALS["TRANS"]["Omaduse Kliendpoolne kontaktisik (contact_person) caption"] = "Customer contact";
 $GLOBALS["TRANS"]["Omaduse Kliendi prioriteet (priority) caption"] = "Customer priority";
 $GLOBALS["TRANS"]["Omaduse Sissetuleku meetod (referal_type) caption"] = "Incoming method";
 $GLOBALS["TRANS"]["Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) caption"] = "Invoice due days";

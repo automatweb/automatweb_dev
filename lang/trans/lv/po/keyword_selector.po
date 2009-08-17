@@ -13,24 +13,22 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:81 classes/vcl/keyword_selector.aw:93
-#: classes/vcl/keyword_selector.aw:105
+#: classes/vcl/keyword_selector.aw:83
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:87 classes/vcl/keyword_selector.aw:99
-#: classes/vcl/keyword_selector.aw:111
+#: classes/vcl/keyword_selector.aw:89
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:218 classes/vcl/keyword_selector.aw:223
+#: classes/vcl/keyword_selector.aw:213 classes/vcl/keyword_selector.aw:218
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:229
+#: classes/vcl/keyword_selector.aw:224
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:240
+#: classes/vcl/keyword_selector.aw:235
 msgid "Valitud:"
 msgstr ""

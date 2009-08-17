@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_bill_row.aw:class_1054_help
 msgid "Klassi Arve rida help"
 msgstr ""
@@ -98,6 +97,18 @@ msgstr ""
 msgid "Omaduse Muu kulu? (is_oe) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill_row.aw:prop_writeoff
+msgid "Omaduse Maha kantud (writeoff) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_writeoff_comment
+msgid "Omaduse Maha kantud (writeoff) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_writeoff_help
+msgid "Omaduse Maha kantud (writeoff) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill_row.aw:prop_has_tax
 msgid "Omaduse Lisandub k&auml;ibemaks? (has_tax) caption"
 msgstr ""
@@ -108,6 +119,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_has_tax_help
 msgid "Omaduse Lisandub k&auml;ibemaks? (has_tax) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_tax
+msgid "Omaduse K&auml;ibemaksu % (tax) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_tax_comment
+msgid "Omaduse K&auml;ibemaksu % (tax) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_tax_help
+msgid "Omaduse K&auml;ibemaksu % (tax) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_date
@@ -146,6 +169,18 @@ msgstr ""
 msgid "Omaduse Isikud (people) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill_row.aw:prop_task_row
+msgid "Omaduse Toimetuse read (task_row) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_task_row_comment
+msgid "Omaduse Toimetuse read (task_row) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_task_row_help
+msgid "Omaduse Toimetuse read (task_row) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill_row.aw:rel_RELTYPE_PROD
 msgid "Seose Toode (RELTYPE_PROD) tekst"
 msgstr ""
@@ -166,3 +201,6 @@ msgstr ""
 msgid "Seose Muu kulu (RELTYPE_EXPENSE) tekst"
 msgstr ""
 
+#: classes/applications/crm/crm_bill_row.aw:rel_RELTYPE_BUG
+msgid "Seose Bugi (RELTYPE_BUG) tekst"
+msgstr ""

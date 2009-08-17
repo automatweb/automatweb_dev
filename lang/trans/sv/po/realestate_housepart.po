@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_housepart.aw:class_979_help
 msgid "Klassi Majaosa help"
 msgstr ""
@@ -170,16 +169,16 @@ msgstr ""
 msgid "Omaduse Aadress (address_connection) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_housepart.aw:prop_
-msgid "Omaduse  () caption"
+#: classes/applications/realestate_management/realestate_housepart.aw:prop_deal
+msgid "Omaduse  (deal) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_housepart.aw:prop__comment
-msgid "Omaduse  () kommentaar"
+#: classes/applications/realestate_management/realestate_housepart.aw:prop_deal_comment
+msgid "Omaduse  (deal) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_housepart.aw:prop__help
-msgid "Omaduse  () help"
+#: classes/applications/realestate_management/realestate_housepart.aw:prop_deal_help
+msgid "Omaduse  (deal) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:prop_transaction_type
@@ -2119,11 +2118,11 @@ msgid "Grupi Kaart (grp_map) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:group_grp_sub_main
-msgid "Grupi Üldine (grp_sub_main) pealkiri"
+msgid "Grupi &Uuml;ldine (grp_sub_main) pealkiri"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:group_grp_sub_main_help
-msgid "Grupi Üldine (grp_sub_main) help"
+msgid "Grupi &Uuml;ldine (grp_sub_main) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:group_transaction_data
@@ -2186,7 +2185,7 @@ msgstr ""
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_housepart.aw:490 classes/applications/realestate_management/realestate_housepart.aw:498
+#: classes/applications/realestate_management/realestate_housepart.aw:490
+#: classes/applications/realestate_management/realestate_housepart.aw:498
 msgid "Kohustuslik v&auml;li"
 msgstr ""
-

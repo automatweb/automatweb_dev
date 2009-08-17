@@ -202,47 +202,47 @@ msgstr ""
 msgid "Grupi Test (test) help"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:147
+#: classes/applications/calendar/recurrence.aw:154
 msgid "esimesel"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:148
+#: classes/applications/calendar/recurrence.aw:155
 msgid "teisel"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:149
+#: classes/applications/calendar/recurrence.aw:156
 msgid "kolmandal"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:150
+#: classes/applications/calendar/recurrence.aw:157
 msgid "neljandal"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:151
+#: classes/applications/calendar/recurrence.aw:158
 msgid "viimasel"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:158
+#: classes/applications/calendar/recurrence.aw:165
 msgid "päev"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:159
+#: classes/applications/calendar/recurrence.aw:166
 msgid "nädal"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:160
+#: classes/applications/calendar/recurrence.aw:167
 msgid "kuu"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:161
+#: classes/applications/calendar/recurrence.aw:168
 msgid "aasta"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:162
+#: classes/applications/calendar/recurrence.aw:169
 msgid "minut"
 msgstr ""
 
-#: classes/applications/calendar/recurrence.aw:163
+#: classes/applications/calendar/recurrence.aw:170
 msgid "tund"
 msgstr ""
 

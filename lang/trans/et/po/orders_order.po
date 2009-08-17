@@ -104,19 +104,16 @@ msgstr ""
 msgid "Omaduse Aadress (person_contact) help"
 msgstr ""
 
-# classes/applications/orders/orders_order.aw:prop_person_birthday
 #: classes/applications/orders/orders_order.aw:prop_person_birthday
-msgid "Omaduse Sünnipäev (person_birthday) caption"
+msgid "Omaduse S&uuml;nnip&auml;ev (person_birthday) caption"
 msgstr ""
 
-# classes/applications/orders/orders_order.aw:prop_person_birthday_comment
 #: classes/applications/orders/orders_order.aw:prop_person_birthday_comment
-msgid "Omaduse Sünnipäev (person_birthday) kommentaar"
+msgid "Omaduse S&uuml;nnip&auml;ev (person_birthday) kommentaar"
 msgstr ""
 
-# classes/applications/orders/orders_order.aw:prop_person_birthday_help
 #: classes/applications/orders/orders_order.aw:prop_person_birthday_help
-msgid "Omaduse Sünnipäev (person_birthday) help"
+msgid "Omaduse S&uuml;nnip&auml;ev (person_birthday) help"
 msgstr ""
 
 # classes/applications/orders/orders_order.aw:prop_order_completed
@@ -500,19 +497,16 @@ msgstr ""
 msgid "Omaduse  (orders) help"
 msgstr ""
 
-# classes/applications/orders/orders_order.aw:prop_submit
-#: classes/applications/orders/orders_order.aw:prop_submit
-msgid "Omaduse Lisa tellimus (submit) caption"
+#: classes/applications/orders/orders_order.aw:prop_add_order_button
+msgid "Omaduse Lisa tellimus (add_order_button) caption"
 msgstr ""
 
-# classes/applications/orders/orders_order.aw:prop_submit_comment
-#: classes/applications/orders/orders_order.aw:prop_submit_comment
-msgid "Omaduse Lisa tellimus (submit) kommentaar"
+#: classes/applications/orders/orders_order.aw:prop_add_order_button_comment
+msgid "Omaduse Lisa tellimus (add_order_button) kommentaar"
 msgstr ""
 
-# classes/applications/orders/orders_order.aw:prop_submit_help
-#: classes/applications/orders/orders_order.aw:prop_submit_help
-msgid "Omaduse Lisa tellimus (submit) help"
+#: classes/applications/orders/orders_order.aw:prop_add_order_button_help
+msgid "Omaduse Lisa tellimus (add_order_button) help"
 msgstr ""
 
 # classes/applications/orders/orders_order.aw:prop_forward

@@ -10,8 +10,8 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/common/external/xml_source.aw:class_1339_help
-msgid "Klassi XML allikas help"
+#: classes/common/external/xml_source.aw:class_1354_help
+msgid "Klassi Syndmuste XML andmeallikas help"
 msgstr ""
 
 #: classes/common/external/xml_source.aw:prop_url

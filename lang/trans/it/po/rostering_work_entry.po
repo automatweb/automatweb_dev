@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/rostering/rostering_work_entry.aw:class_1160_help
 msgid "Klassi T&ouml;&ouml;aegade sisestus help"
 msgstr ""
@@ -150,7 +149,8 @@ msgstr ""
 msgid "Tasu liik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:247 classes/applications/rostering/rostering_work_entry.aw:262 classes/applications/rostering/rostering_work_entry.aw:305
+#: classes/applications/rostering/rostering_work_entry.aw:248
+#: classes/applications/rostering/rostering_work_entry.aw:263
+#: classes/applications/rostering/rostering_work_entry.aw:306
 msgid "--vali--"
 msgstr ""
-

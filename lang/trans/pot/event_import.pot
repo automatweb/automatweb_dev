@@ -11,7 +11,7 @@ msgstr ""
 
 
 #: classes/import/event_import.aw:class_1337_help
-msgid "Klassi Sündmuste import help"
+msgid "Klassi S&uuml;ndmuste import help"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_events_manager
@@ -134,16 +134,28 @@ msgstr ""
 msgid "Omaduse Impordi s&uuml;ndmused algusest (import_events_all) help"
 msgstr ""
 
+#: classes/import/event_import.aw:prop_past_length
+msgid "Omaduse Imporditavate p&auml;evade arv (tagasi) (past_length) caption"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_past_length_comment
+msgid "Omaduse Imporditavate p&auml;evade arv (tagasi) (past_length) kommentaar"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_past_length_help
+msgid "Omaduse Imporditavate p&auml;evade arv (tagasi) (past_length) help"
+msgstr ""
+
 #: classes/import/event_import.aw:prop_future_length
-msgid "Omaduse Imporditavate p&auml;evade arv (future_length) caption"
+msgid "Omaduse Imporditavate p&auml;evade arv (edasi) (future_length) caption"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_future_length_comment
-msgid "Omaduse Imporditavate p&auml;evade arv (future_length) kommentaar"
+msgid "Omaduse Imporditavate p&auml;evade arv (edasi) (future_length) kommentaar"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_future_length_help
-msgid "Omaduse Imporditavate p&auml;evade arv (future_length) help"
+msgid "Omaduse Imporditavate p&auml;evade arv (edasi) (future_length) help"
 msgstr ""
 
 #: classes/import/event_import.aw:prop_import_events
@@ -458,59 +470,59 @@ msgstr ""
 msgid "Muudatust allikas ignoreeritakse"
 msgstr ""
 
-#: classes/import/event_import.aw:1277
+#: classes/import/event_import.aw:1284
 msgid "External system for events not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1282
+#: classes/import/event_import.aw:1289
 msgid "External system for locations not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1287
+#: classes/import/event_import.aw:1294
 msgid "External system for categories (aka sectors) not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1292
+#: classes/import/event_import.aw:1299
 msgid "External system for event times not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1681 classes/import/event_import.aw:1880 classes/import/event_import.aw:2007 classes/import/event_import.aw:2199 classes/import/event_import.aw:2296
+#: classes/import/event_import.aw:1689 classes/import/event_import.aw:1888 classes/import/event_import.aw:2015 classes/import/event_import.aw:2207 classes/import/event_import.aw:2304
 msgid "Siduss&uuml;steemi %s sisestus objektile %s"
 msgstr ""
 
-#: classes/import/event_import.aw:2396
+#: classes/import/event_import.aw:2404
 msgid "You don't have view access to import object!"
 msgstr ""
 
-#: classes/import/event_import.aw:2406
+#: classes/import/event_import.aw:2414
 msgid "Events manager not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2411
+#: classes/import/event_import.aw:2419
 msgid "You don't have view access to events manager object!"
 msgstr ""
 
-#: classes/import/event_import.aw:2419
+#: classes/import/event_import.aw:2427
 msgid "Events manager: Directory for events not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2425
+#: classes/import/event_import.aw:2433
 msgid "Events manager: Directory for places not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2431
+#: classes/import/event_import.aw:2439
 msgid "Events manager: Directory for organizers not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2437
+#: classes/import/event_import.aw:2445
 msgid "Events manager: Directory for categories not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2450
+#: classes/import/event_import.aw:2458
 msgid "Event form not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2455
+#: classes/import/event_import.aw:2463
 msgid "You don't have view access to eventform object!"
 msgstr ""
 

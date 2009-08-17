@@ -169,41 +169,41 @@ msgstr ""
 msgid "Kujundusosa Klassi&nbsp;info (tbl) pealkiri"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:110
-#: classes/applications/docgen/docgen_viewer.aw:117
-#: classes/applications/docgen/docgen_viewer.aw:309
-#: classes/applications/docgen/docgen_viewer.aw:1273
-#: classes/applications/docgen/docgen_viewer.aw:1343
-#: classes/applications/docgen/docgen_viewer.aw:1657
-#: classes/applications/docgen/docgen_viewer.aw:1727
+#: classes/applications/docgen/docgen_viewer.aw:109
+#: classes/applications/docgen/docgen_viewer.aw:116
+#: classes/applications/docgen/docgen_viewer.aw:308
+#: classes/applications/docgen/docgen_viewer.aw:1279
+#: classes/applications/docgen/docgen_viewer.aw:1349
+#: classes/applications/docgen/docgen_viewer.aw:1663
+#: classes/applications/docgen/docgen_viewer.aw:1733
 msgid "Classes"
 msgstr "Classes"
 
-#: classes/applications/docgen/docgen_viewer.aw:172
+#: classes/applications/docgen/docgen_viewer.aw:171
 msgid "Ini file"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:236
+#: classes/applications/docgen/docgen_viewer.aw:235
 msgid "Open DocGen"
 msgstr "Open DocGen"
 
-#: classes/applications/docgen/docgen_viewer.aw:418
-#: classes/applications/docgen/docgen_viewer.aw:1829
+#: classes/applications/docgen/docgen_viewer.aw:417
+#: classes/applications/docgen/docgen_viewer.aw:1835
 msgid "Functions not in any class"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:425
-#: classes/applications/docgen/docgen_viewer.aw:1836
+#: classes/applications/docgen/docgen_viewer.aw:424
+#: classes/applications/docgen/docgen_viewer.aw:1842
 msgid "Interface:"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:429
-#: classes/applications/docgen/docgen_viewer.aw:1840
+#: classes/applications/docgen/docgen_viewer.aw:428
+#: classes/applications/docgen/docgen_viewer.aw:1846
 msgid "Class:"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:433
-#: classes/applications/docgen/docgen_viewer.aw:1844
+#: classes/applications/docgen/docgen_viewer.aw:432
+#: classes/applications/docgen/docgen_viewer.aw:1850
 msgid "Exception:"
 msgstr ""
 
@@ -216,54 +216,62 @@ msgstr ""
 msgid "nothing"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1410
-msgid "Class overview"
+#: classes/applications/docgen/docgen_viewer.aw:758
+msgid "Yes"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:758
+msgid "No"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:1416
-msgid "All classes"
+msgid "Class overview"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:1422
-msgid "API classes"
+msgid "All classes"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:1428
-#: classes/applications/docgen/docgen_viewer.aw:1547
-msgid "Classes by maintainer"
+msgid "API classes"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:1434
-#: classes/applications/docgen/docgen_viewer.aw:1507
-msgid "Interfaces"
+#: classes/applications/docgen/docgen_viewer.aw:1553
+msgid "Classes by maintainer"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:1440
-#: classes/applications/docgen/docgen_viewer.aw:1607
-msgid "Exceptions"
+#: classes/applications/docgen/docgen_viewer.aw:1513
+msgid "Interfaces"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:1446
-msgid "Separate documentation"
+#: classes/applications/docgen/docgen_viewer.aw:1613
+msgid "Exceptions"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:1452
+msgid "Separate documentation"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:1458
 msgid "INI"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1459
+#: classes/applications/docgen/docgen_viewer.aw:1465
 msgid "Classbase tags"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1465
+#: classes/applications/docgen/docgen_viewer.aw:1471
 msgid "Search"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1471
+#: classes/applications/docgen/docgen_viewer.aw:1477
 msgid "Renew database"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1482
+#: classes/applications/docgen/docgen_viewer.aw:1488
 msgid "Foorum"
 msgstr "Forum"
 

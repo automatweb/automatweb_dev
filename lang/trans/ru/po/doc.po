@@ -961,6 +961,18 @@ msgstr ""
 msgid "Omaduse Lisa fail (associated_file) help"
 msgstr ""
 
+#: classes/contentmgmt/doc.aw:prop_show_to_country
+msgid "Omaduse N&auml;htav vaid nendest riikidest tulijatele (show_to_country) caption"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:prop_show_to_country_comment
+msgid "Omaduse N&auml;htav vaid nendest riikidest tulijatele (show_to_country) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:prop_show_to_country_help
+msgid "Omaduse N&auml;htav vaid nendest riikidest tulijatele (show_to_country) help"
+msgstr ""
+
 #: classes/contentmgmt/doc.aw:prop_no_right_pane
 msgid "Omaduse Ilma parema paanita (no_right_pane) caption"
 msgstr ""
@@ -1213,6 +1225,30 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/contentmgmt/doc.aw:prop_comments_tb
+msgid "Omaduse  (comments_tb) caption"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:prop_comments_tb_comment
+msgid "Omaduse  (comments_tb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:prop_comments_tb_help
+msgid "Omaduse  (comments_tb) help"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:prop_comments_tbl
+msgid "Omaduse  (comments_tbl) caption"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:prop_comments_tbl_comment
+msgid "Omaduse  (comments_tbl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:prop_comments_tbl_help
+msgid "Omaduse  (comments_tbl) help"
+msgstr ""
+
 #: classes/contentmgmt/doc.aw:prop_acl
 msgid "Omaduse &Otilde;igused (acl) caption"
 msgstr ""
@@ -1247,6 +1283,14 @@ msgstr ""
 
 #: classes/contentmgmt/doc.aw:group_settings_help
 msgid "Grupi Seadistused (settings) help"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
 msgstr ""
 
 #: classes/contentmgmt/doc.aw:group_kws
@@ -1333,80 +1377,96 @@ msgstr ""
 msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:389
+#: classes/contentmgmt/doc.aw:398
 msgid "NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik! (%s)"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:390
+#: classes/contentmgmt/doc.aw:399
 msgid "Originaal"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:818
+#: classes/contentmgmt/doc.aw:901
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:839 classes/contentmgmt/doc.aw:1401
+#: classes/contentmgmt/doc.aw:922 classes/contentmgmt/doc.aw:1500
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:882
+#: classes/contentmgmt/doc.aw:965
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:895
+#: classes/contentmgmt/doc.aw:978
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1044 classes/contentmgmt/doc.aw:1132
-#: classes/contentmgmt/doc.aw:1136
+#: classes/contentmgmt/doc.aw:1127 classes/contentmgmt/doc.aw:1215
+#: classes/contentmgmt/doc.aw:1219
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1084
+#: classes/contentmgmt/doc.aw:1167
 msgid "Versioon"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1090 classes/contentmgmt/doc.aw:1150
-#: classes/contentmgmt/doc.aw:1178
+#: classes/contentmgmt/doc.aw:1173 classes/contentmgmt/doc.aw:1233
+#: classes/contentmgmt/doc.aw:1261
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1096
+#: classes/contentmgmt/doc.aw:1179
 msgid "Hinne"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1102
+#: classes/contentmgmt/doc.aw:1185
 msgid "Hinda"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1108
+#: classes/contentmgmt/doc.aw:1191
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1114
+#: classes/contentmgmt/doc.aw:1197
 msgid "Vali"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1145 classes/contentmgmt/doc.aw:1173
+#: classes/contentmgmt/doc.aw:1228 classes/contentmgmt/doc.aw:1256
 msgid "--Vali--"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1270
+#: classes/contentmgmt/doc.aw:1353
 msgid "Kustuta"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1338
+#: classes/contentmgmt/doc.aw:1421
 msgid "V&otilde;tmes&otilde;na"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1591
+#: classes/contentmgmt/doc.aw:1529
+msgid "Kustuta valitud kommentaarid"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:1530
+msgid "Oled kindel, et soovid valitud kustutada?"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:1543
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:1547
+msgid "Sisu"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:1748
 msgid "Hoiatus, seda dokumenti muudab hetkel kasutaja %s, muutmisvaate avas %s"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1598
+#: classes/contentmgmt/doc.aw:1755
 msgid "Hoiatus, seda dokumenti muudavad hetkel kasutajad:"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1601
+#: classes/contentmgmt/doc.aw:1758
 msgid "avas muutmisvaate"
 msgstr ""

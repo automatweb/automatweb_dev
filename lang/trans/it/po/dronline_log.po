@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/syslog/dronline_log.aw:class_164_help
 msgid "Klassi AW_Log help"
 msgstr ""
@@ -25,12 +24,3 @@ msgstr ""
 #: classes/syslog/dronline_log.aw:prop_status_help
 msgid "Omaduse Staatus (status) help"
 msgstr ""
-
-#: classes/syslog/dronline_log.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/syslog/dronline_log.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-

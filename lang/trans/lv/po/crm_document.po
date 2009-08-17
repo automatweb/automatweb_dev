@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/crm/crm_document.aw:class_1007_help
 msgid "Klassi CRM Dokument help"
@@ -310,39 +309,41 @@ msgstr ""
 msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:181
+#: classes/applications/crm/crm_document.aw:182
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:187
+#: classes/applications/crm/crm_document.aw:188
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:194
+#: classes/applications/crm/crm_document.aw:195
 msgid "Saada teavitusmeil"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:205
+#: classes/applications/crm/crm_document.aw:206
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:210
+#: classes/applications/crm/crm_document.aw:211
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:215
+#: classes/applications/crm/crm_document.aw:216
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:220
+#: classes/applications/crm/crm_document.aw:221
 msgid "E-mail"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:380
+#: classes/applications/crm/crm_document.aw:381
 msgid "Teavitus muutunud dokumendist"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:381
-msgid "Uuendati dokumenti \"%s\". Palun kliki siia:\n%s\net dokumenti näha!"
+#: classes/applications/crm/crm_document.aw:382
+msgid ""
+"Uuendati dokumenti \"%s\". Palun kliki siia:\n"
+"%s\n"
+"et dokumenti n&auml;ha!"
 msgstr ""
-

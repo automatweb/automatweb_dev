@@ -331,19 +331,19 @@ msgstr ""
 msgid "T&auml;idetud tellimus/arve number"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:567
+#: classes/applications/shop/shop_order.aw:569
 msgid "shop_order::do_confirm(): could not find parent folder for warehouse export!"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:574
+#: classes/applications/shop/shop_order.aw:576
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:677
-#: classes/applications/shop/shop_order.aw:865
+#: classes/applications/shop/shop_order.aw:679
+#: classes/applications/shop/shop_order.aw:867
 msgid "Tellimus laost %s"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:1152
+#: classes/applications/shop/shop_order.aw:1256
 msgid "Tellimus laost"
 msgstr ""

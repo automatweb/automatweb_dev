@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_brand.aw:class_1443_help
 msgid "Klassi Lao br&auml;nd help"
 msgstr ""
@@ -62,6 +61,18 @@ msgstr ""
 msgid "Omaduse Kirjeldus (desc) help"
 msgstr ""
 
+#: classes/applications/shop/shop_brand.aw:prop_code
+msgid "Omaduse Kood (code) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_brand.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_brand.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
+msgstr ""
+
 #: classes/applications/shop/shop_brand.aw:prop_desc_doc
 msgid "Omaduse Kirjeldav dokument (desc_doc) caption"
 msgstr ""
@@ -105,4 +116,3 @@ msgstr ""
 #: classes/applications/shop/shop_brand.aw:rel_RELTYPE_BRAND_SERIES
 msgid "Seose Br&auml;ndiseeria (RELTYPE_BRAND_SERIES) tekst"
 msgstr ""
-

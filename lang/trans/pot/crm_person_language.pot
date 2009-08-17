@@ -110,11 +110,11 @@ msgstr ""
 msgid "v&auml;ga hea"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:60 classes/applications/crm/crm_person_language.aw:72
+#: classes/applications/crm/crm_person_language.aw:59 classes/applications/crm/crm_person_language.aw:71
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:65
+#: classes/applications/crm/crm_person_language.aw:64
 msgid "muu keel"
 msgstr ""
 

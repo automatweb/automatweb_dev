@@ -13,11 +13,11 @@ msgstr ""
 msgid "Klassi Vorm help"
 msgstr ""
 
-#: classes/formgen/form.aw:2263
+#: classes/formgen/form.aw:2261
 msgid "Sessioonist lugemise formi pole valitud v&auml;ljundile %s"
 msgstr ""
 
-#: classes/formgen/form.aw:3030
+#: classes/formgen/form.aw:3028
 msgid "No table selected for showing search results for form %s!"
 msgstr "No table selected for showing search results for form %s!"
 

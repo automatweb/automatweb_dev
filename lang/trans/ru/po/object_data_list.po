@@ -13,14 +13,22 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/obj/object_data_list.aw:52
-msgid "object_data_list::object_data_list($param): parameter must be array!"
+#: classes/core/obj/object_data_list.aw:55
+msgid "object_data_list::object_data_list(%s): parameter must be array!"
 msgstr ""
 
-#: classes/core/obj/object_data_list.aw:165
+#: classes/core/obj/object_data_list.aw:61
+msgid "The fetch parameter can not be empty!"
+msgstr ""
+
+#: classes/core/obj/object_data_list.aw:73
+msgid "The fields oid,parent,name,brother_of,status,class_id can not be renamed in fetches. Current rename is %s => %s"
+msgstr ""
+
+#: classes/core/obj/object_data_list.aw:161
 msgid "object_list::filter(%s => %s): can not complex searches on metadata fields!"
 msgstr ""
 
-#: classes/core/obj/object_data_list.aw:172
+#: classes/core/obj/object_data_list.aw:168
 msgid "object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"
 msgstr ""

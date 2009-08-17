@@ -13,10 +13,13 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/crm/crm_user_creator.aw:320
-msgid "Nimes sisaldunud tähemärgid [%s] pole kasutajanimedes lubatud."
-msgstr "Used strings [%s] are not allowed in usernames"
+#: classes/crm/crm_user_creator.aw:315
+msgid "Nimes sisaldunud t&auml;hem&auml;rgid [%s] pole kasutajanimedes lubatud."
+msgstr ""
 
-#: classes/crm/crm_user_creator.aw:336
+#: classes/crm/crm_user_creator.aw:331
 msgid "Valitud kasutajanimi [%s] on juba kasutusel."
 msgstr "Username [%s] is already taken."
+
+#~ msgid "Nimes sisaldunud tähemärgid [%s] pole kasutajanimedes lubatud."
+#~ msgstr "Used strings [%s] are not allowed in usernames"

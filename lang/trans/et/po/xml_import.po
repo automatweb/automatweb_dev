@@ -44,19 +44,16 @@ msgstr ""
 msgid "Omaduse Impordifunktsioon (import_function) help"
 msgstr ""
 
-# classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import
 #: classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import
-msgid "Omaduse Käivita import (run_import) caption"
+msgid "Omaduse K&auml;ivita import (run_import) caption"
 msgstr ""
 
-# classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import_comment
 #: classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import_comment
-msgid "Omaduse Käivita import (run_import) kommentaar"
+msgid "Omaduse K&auml;ivita import (run_import) kommentaar"
 msgstr ""
 
-# classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import_help
 #: classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import_help
-msgid "Omaduse Käivita import (run_import) help"
+msgid "Omaduse K&auml;ivita import (run_import) help"
 msgstr ""
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:53

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -447,27 +447,27 @@ msgstr ""
 msgid "Grupi Eelvaade (preview) help"
 msgstr ""
 
-#: classes/applications/graph/graph.aw:135
+#: classes/applications/graph/graph.aw:134
 msgid "Tulbad"
 msgstr ""
 
-#: classes/applications/graph/graph.aw:136
+#: classes/applications/graph/graph.aw:135
 msgid "Jooned"
 msgstr ""
 
-#: classes/applications/graph/graph.aw:137
+#: classes/applications/graph/graph.aw:136
 msgid "Tort"
 msgstr ""
 
-#: classes/applications/graph/graph.aw:179
+#: classes/applications/graph/graph.aw:178
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/graph/graph.aw:185
+#: classes/applications/graph/graph.aw:184
 msgid "Andmed"
 msgstr ""
 
-#: classes/applications/graph/graph.aw:191
+#: classes/applications/graph/graph.aw:190
 msgid "V&auml;rv"
 msgstr ""
 

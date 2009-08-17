@@ -71,21 +71,6 @@ msgstr ""
 msgid "Omaduse Klikke (hits) help"
 msgstr "informational field. It shows how many times the link has been clicked."
 
-# classes/contentmgmt/links.aw:prop_url_int_text
-#: classes/contentmgmt/links.aw:prop_url_int_text
-msgid "Omaduse Saidi sisene link (url_int_text) caption"
-msgstr "Inter-site link"
-
-# classes/contentmgmt/links.aw:prop_url_int_text_comment
-#: classes/contentmgmt/links.aw:prop_url_int_text_comment
-msgid "Omaduse Saidi sisene link (url_int_text) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/links.aw:prop_url_int_text_help
-#: classes/contentmgmt/links.aw:prop_url_int_text_help
-msgid "Omaduse Saidi sisene link (url_int_text) help"
-msgstr "when opening that option, it is possible to search inner site documents to what make your link refer to. When you have found the right document fix it with selecting it. Link will be named automatically and the URL row will be filled."
-
 # classes/contentmgmt/links.aw:prop_alt
 #: classes/contentmgmt/links.aw:prop_alt
 msgid "Omaduse Alt tekst (alt) caption"
@@ -239,6 +224,42 @@ msgstr ""
 msgid "Omaduse Skrollbarid (newwinscroll) help"
 msgstr "when ticking this, it allows to show scrollbars in new window."
 
+#: classes/contentmgmt/links.aw:prop_style_class
+msgid "Omaduse Stiiliklass (style_class) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_style_class_comment
+msgid "Omaduse Stiiliklass (style_class) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_style_class_help
+msgid "Omaduse Stiiliklass (style_class) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_before_link
+msgid "Omaduse Enne lingi teksti (before_link) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_before_link_comment
+msgid "Omaduse Enne lingi teksti (before_link) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_before_link_help
+msgid "Omaduse Enne lingi teksti (before_link) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_after_link
+msgid "Omaduse P&auml;rast lingi teksti (after_link) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_after_link_comment
+msgid "Omaduse P&auml;rast lingi teksti (after_link) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_after_link_help
+msgid "Omaduse P&auml;rast lingi teksti (after_link) help"
+msgstr ""
+
 # classes/contentmgmt/links.aw:prop_link_image
 #: classes/contentmgmt/links.aw:prop_link_image
 msgid "Omaduse Pilt (link_image) caption"
@@ -323,14 +344,12 @@ msgstr ""
 msgid "Omaduse V&otilde;tmes&otilde;nad (kws) help"
 msgstr ""
 
-# classes/contentmgmt/links.aw:group_Javascript
 #: classes/contentmgmt/links.aw:group_Javascript
-msgid "Grupi Javascript (Javascript) pealkiri"
-msgstr "Javascript"
+msgid "Grupi N&auml;itamine (Javascript) pealkiri"
+msgstr ""
 
-# classes/contentmgmt/links.aw:group_Javascript_help
 #: classes/contentmgmt/links.aw:group_Javascript_help
-msgid "Grupi Javascript (Javascript) help"
+msgid "Grupi N&auml;itamine (Javascript) help"
 msgstr ""
 
 # classes/contentmgmt/links.aw:group_Pilt
@@ -359,53 +378,65 @@ msgstr "Keywords"
 msgid "Grupi V&otilde;tmes&otilde;nad (kws) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:132 classes/contentmgmt/links.aw:180
+#: classes/contentmgmt/links.aw:141 classes/contentmgmt/links.aw:189
 msgid "Vali see"
 msgstr "Select this"
 
-#: classes/contentmgmt/links.aw:136
+#: classes/contentmgmt/links.aw:145
 msgid "Nimetus"
 msgstr "Name"
 
-#: classes/contentmgmt/links.aw:141
+#: classes/contentmgmt/links.aw:150
 msgid "Asukoht"
 msgstr "Location"
 
-#: classes/contentmgmt/links.aw:146
+#: classes/contentmgmt/links.aw:155
 msgid "Looja"
 msgstr "Createdby"
 
-#: classes/contentmgmt/links.aw:151
+#: classes/contentmgmt/links.aw:160
 msgid "Viimati muudetud"
 msgstr "Last modified"
 
-#: classes/contentmgmt/links.aw:280
+#: classes/contentmgmt/links.aw:289
 msgid "T&ouml;&ouml;riistariba"
 msgstr "Toolbar"
 
-#: classes/contentmgmt/links.aw:281
+#: classes/contentmgmt/links.aw:290
 msgid "Aadressi riba"
 msgstr "Address bar"
 
-#: classes/contentmgmt/links.aw:282
+#: classes/contentmgmt/links.aw:291
 msgid "Men&uuml;&uuml;d"
 msgstr "Menus"
 
-#: classes/contentmgmt/links.aw:283
+#: classes/contentmgmt/links.aw:292
 msgid "Kerimisriba"
 msgstr "Scrollbars"
 
-#: classes/contentmgmt/links.aw:317
+#: classes/contentmgmt/links.aw:326
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:323
+#: classes/contentmgmt/links.aw:332
 msgid "Otsi uus objekt:"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:479
+#: classes/contentmgmt/links.aw:488
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
+
+# classes/contentmgmt/links.aw:prop_url_int_text
+#~ msgid "Omaduse Saidi sisene link (url_int_text) caption"
+#~ msgstr "Inter-site link"
+
+# classes/contentmgmt/links.aw:prop_url_int_text_help
+#~ msgid "Omaduse Saidi sisene link (url_int_text) help"
+#~ msgstr "when opening that option, it is possible to search inner site documents to what make your link refer to. When you have found the right document fix it with selecting it. Link will be named automatically and the URL row will be filled."
+
+# classes/contentmgmt/links.aw:group_Javascript
+#~ msgid "Grupi Javascript (Javascript) pealkiri"
+#~ msgstr "Javascript"
 
 #~ msgid "Saidi sisene link"
 #~ msgstr "Inner-site link"

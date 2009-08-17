@@ -225,53 +225,91 @@ msgstr ""
 msgid "Seose Otsingu kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:230
+#: classes/applications/shop/shop_product_search.aw:234
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:236
+#: classes/applications/shop/shop_product_search.aw:240
 msgid "Ka alamkaustad"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:283
-#: classes/applications/shop/shop_product_search.aw:420
+#: classes/applications/shop/shop_product_search.aw:287
+#: classes/applications/shop/shop_product_search.aw:444
 msgid "Klass"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:289
-#: classes/applications/shop/shop_product_search.aw:426
+#: classes/applications/shop/shop_product_search.aw:293
+#: classes/applications/shop/shop_product_search.aw:450
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:295
+#: classes/applications/shop/shop_product_search.aw:299
 msgid "Vormis?"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:301
-#: classes/applications/shop/shop_product_search.aw:438
+#: classes/applications/shop/shop_product_search.aw:305
+#: classes/applications/shop/shop_product_search.aw:462
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:307
+#: classes/applications/shop/shop_product_search.aw:311
+#: classes/applications/shop/shop_product_search.aw:318
 msgid "Tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:432
+#: classes/applications/shop/shop_product_search.aw:456
 msgid "Tabelis?"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:444
+#: classes/applications/shop/shop_product_search.aw:468
+#: classes/applications/shop/shop_product_search.aw:479
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:449
+#: classes/applications/shop/shop_product_search.aw:488
 msgid "Muundaja"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:462
+#: classes/applications/shop/shop_product_search.aw:515
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:590
+#: classes/applications/shop/shop_product_search.aw:568
+msgid "Asendus v&otilde;i ei"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:569
+msgid "Jaehind"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:570
+msgid "Allahindluse %"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:571
+msgid "L&otilde;pphind"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:572
+msgid "Erihind"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:573
+msgid "Kogus"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:574
+msgid "Lao staatus"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:711
 msgid "Vali"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:848
+msgid "K&uuml;situd"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:852
+msgid "Asendus"
 msgstr ""

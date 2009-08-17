@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -35,6 +35,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:prop_date_help
 msgid "Omaduse Kuup&auml;ev (date) help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_task
+msgid "Omaduse Toimetus (task) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_task_comment
+msgid "Omaduse Toimetus (task) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_task_help
+msgid "Omaduse Toimetus (task) help"
 msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:prop_on_bill
@@ -115,4 +127,8 @@ msgstr "Invoice"
 
 #: classes/applications/crm/crm_expense.aw:rel_RELTYPE_PEOPLE
 msgid "Seose Isik (RELTYPE_PEOPLE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:rel_RELTYPE_TASK
+msgid "Seose Toimetus (RELTYPE_TASK) tekst"
 msgstr ""

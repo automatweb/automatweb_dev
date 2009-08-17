@@ -2,7 +2,6 @@
 $GLOBALS["TRANS"]["Omaduse P&auml;rast liitumist mine aadressile (after_join_url) caption"] = "Go to address after joining";
 $GLOBALS["TRANS"]["Omaduse Kataloog, kuhu salvestatakse objektid (obj_folder) caption"] = "Folder where objects are stored";
 $GLOBALS["TRANS"]["Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) caption"] = "Log the user in automatically after join";
-$GLOBALS["TRANS"]["Omaduse Kas liitumisel saadetakse meil (send_join_mail) caption"] = "Send e-mail on join";
 $GLOBALS["TRANS"]["Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) caption"] = "Users are blocked by default";
 $GLOBALS["TRANS"]["Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) caption"] = "Join data properties";
 $GLOBALS["TRANS"]["Omaduse Eraldi lehtedel (join_sep_pages) caption"] = "Seprate pages";

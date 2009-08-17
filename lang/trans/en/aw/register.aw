@@ -1,7 +1,6 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Andmete seadete vorm (data_cfgform) caption"] = "Data form";
 $GLOBALS["TRANS"]["Omaduse Tee seadete vorm andmetele default'iks (default_cfgform) caption"] = "Form is default for data";
-$GLOBALS["TRANS"]["Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) caption"] = "Redirect after data save";
 $GLOBALS["TRANS"]["Omaduse Andmete kataloog (data_rootmenu) caption"] = "Data folder";
 $GLOBALS["TRANS"]["Omaduse Andmete puu struktuuri v&auml;li (data_tree_field) caption"] = "Data tree structure field";
 $GLOBALS["TRANS"]["Omaduse Otsingu konfiguratsioon (search_o) caption"] = "Search configuration";

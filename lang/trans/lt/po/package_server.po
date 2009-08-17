@@ -201,6 +201,22 @@ msgstr ""
 msgid "Seose Pakkide kaust AW-s (RELTYPE_PACKAGES_FOLDER_AW) tekst"
 msgstr ""
 
+#: classes/applications/package_management/package_server.aw:layout_packages_search
+msgid "Kujundusosa Pakkide&nbsp;otsing (packages_search) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:layout_packages_list
+msgid "Kujundusosa &nbsp; (packages_list) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:layout_sites_search
+msgid "Kujundusosa Saitide&nbsp;otsing (sites_search) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:layout_sites_list
+msgid "Kujundusosa &nbsp; (sites_list) pealkiri"
+msgstr ""
+
 #: classes/applications/package_management/package_server.aw:121
 msgid "Uus pakk"
 msgstr ""
@@ -218,7 +234,8 @@ msgid "Pakkide nimekiri"
 msgstr ""
 
 #: classes/applications/package_management/package_server.aw:154
-#: classes/applications/package_management/package_server.aw:227
+#: classes/applications/package_management/package_server.aw:230
+#: classes/applications/package_management/package_server.aw:252
 msgid "Nimi"
 msgstr ""
 
@@ -234,18 +251,28 @@ msgstr ""
 msgid "S&otilde;ltuvused"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:219
-msgid "Saitide nimekiri"
+#: classes/applications/package_management/package_server.aw:222
+msgid "saidil kasutatavad paketid"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:223
+#: classes/applications/package_management/package_server.aw:226
+#: classes/applications/package_management/package_server.aw:248
 msgid "ID"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:231
+#: classes/applications/package_management/package_server.aw:244
+msgid "Saitide nimekiri"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:256
 msgid "Url"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:235
+#: classes/applications/package_management/package_server.aw:260
 msgid "Paketid"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:274
+#: classes/applications/package_management/package_server.aw:434
+msgid "(Nimetu)"
 msgstr ""

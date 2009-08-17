@@ -25,33 +25,35 @@ msgstr "connection::load(): parameter must be either array (connection data) or 
 msgid "connection::find(): parameter must be an array of filter parameters!"
 msgstr "connection::find(): parameter must be an array of filter parameters!"
 
-#: classes/core/obj/connection.aw:299
+#: classes/core/obj/connection.aw:300
 msgid "connection::change(%s): parameter must be an array!"
 msgstr "connection::change(%s): parameter must be an array!"
 
-#: classes/core/obj/connection.aw:336
+#: classes/core/obj/connection.aw:337
 msgid "connection::delete(): no current connection to delete!"
 msgstr "connection::delete(): no current connection to delete!"
 
-#: classes/core/obj/connection.aw:346
+#: classes/core/obj/connection.aw:347
 msgid "connection::delete(): no view access for this connection (%s)!"
 msgstr "connection::delete(): no view access for this connection (%s)!"
 
-#: classes/core/obj/connection.aw:498 classes/core/obj/connection.aw:525
-msgid "connection::to(): no current connection!"
-msgstr "connection::to(): no current connection!"
+#: classes/core/obj/connection.aw:557
+msgid "connection::load(%s): no connection with id %s!"
+msgstr ""
 
-#: classes/core/obj/connection.aw:564
-msgid "connection::load(%s): no connection with id $id!"
-msgstr "connection::load(%s): no connection with id $id!"
-
-#: classes/core/obj/connection.aw:574 classes/core/obj/connection.aw:598
+#: classes/core/obj/connection.aw:567 classes/core/obj/connection.aw:591
 msgid "connection::load(%s): no view access for this connection!"
 msgstr "connection::load(%s): no view access for this connection!"
 
-#: classes/core/obj/connection.aw:586
+#: classes/core/obj/connection.aw:579
 msgid "connection::save(): connection must have both ends defined!"
 msgstr "connection::save(): connection must have both ends defined!"
+
+#~ msgid "connection::to(): no current connection!"
+#~ msgstr "connection::to(): no current connection!"
+
+#~ msgid "connection::load(%s): no connection with id $id!"
+#~ msgstr "connection::load(%s): no connection with id $id!"
 
 #~ msgid "connection::constructior(%s): parameter must be numeric or array!"
 #~ msgstr "connection::constructior(%s): parameter must be numeric or array!"

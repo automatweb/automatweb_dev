@@ -14,3 +14,15 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
+#: classes/applications/groupware/project_obj.aw:828
+msgid "Arve nr %s"
+msgstr ""
+
+#: classes/applications/groupware/project_obj.aw:1261
+msgid "Tulukoht"
+msgstr ""
+
+#: classes/applications/groupware/project_obj.aw:1281
+msgid "--vali--"
+msgstr ""
+

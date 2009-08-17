@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/groupware/project_analysis_row.aw:class_1112_help
 msgid "Klassi Projekti anal&uuml;&uuml;si rida help"
 msgstr ""
@@ -26,3 +25,6 @@ msgstr ""
 msgid "Omaduse J&auml;rjekord (ord) help"
 msgstr ""
 
+#: classes/applications/groupware/project_analysis_row.aw:rel_RELTYPE_OBJECT
+msgid "Seose Objekt (RELTYPE_OBJECT) tekst"
+msgstr ""

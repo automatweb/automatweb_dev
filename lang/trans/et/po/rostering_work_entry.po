@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -149,8 +149,8 @@ msgstr ""
 msgid "Tasu liik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:247
-#: classes/applications/rostering/rostering_work_entry.aw:262
-#: classes/applications/rostering/rostering_work_entry.aw:305
+#: classes/applications/rostering/rostering_work_entry.aw:248
+#: classes/applications/rostering/rostering_work_entry.aw:263
+#: classes/applications/rostering/rostering_work_entry.aw:306
 msgid "--vali--"
 msgstr ""

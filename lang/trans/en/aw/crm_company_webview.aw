@@ -13,6 +13,7 @@ $GLOBALS["TRANS"]["J&auml;rjekorranr"] = "Order";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Maakond"] = "County";
 $GLOBALS["TRANS"]["Linn"] = "City";
+$GLOBALS["TRANS"]["Muuda"] = "Change";
 $GLOBALS["TRANS"]["Aadress"] = "Address";
 $GLOBALS["TRANS"]["Tel"] = "Phone";
 $GLOBALS["TRANS"]["Faks"] = "Fax";
@@ -35,5 +36,4 @@ $GLOBALS["TRANS"]["Puhkemaja"] = "Resthouse";
 $GLOBALS["TRANS"]["K&uuml;laliskorter"] = "Guest apartment";
 $GLOBALS["TRANS"]["Kodumajutus"] = "Home accomaodation";
 $GLOBALS["TRANS"]["Koduleht"] = "Homepage";
-$GLOBALS["TRANS"]["Muuda"] = "Change";
 ?>

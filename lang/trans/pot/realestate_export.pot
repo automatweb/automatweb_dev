@@ -155,10 +155,10 @@ msgid "Nimi"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:136
-msgid "Kasutajanimi City24 süsteemis"
+msgid "Kasutajanimi City24 s&uuml;steemis"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:367
+#: classes/applications/realestate_management/realestate_export.aw:364
 msgid "Viga objekti ekspordil. AW id: %s.\n<blockquote>%s</blockquote>"
 msgstr ""
 

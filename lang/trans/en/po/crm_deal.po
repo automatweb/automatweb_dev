@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 21:56+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
 "Language-Team: \n"
@@ -211,7 +211,7 @@ msgid "Seose Osapool (RELTYPE_SIDE) tekst"
 msgstr ""
 
 #: classes/crm/crm_deal.aw:rel_RELTYPE_ACTION
-msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
+msgid "Seose <<<<<< crm_deal.p (RELTYPE_ACTION) tekst"
 msgstr ""
 
 #: classes/crm/crm_deal.aw:339

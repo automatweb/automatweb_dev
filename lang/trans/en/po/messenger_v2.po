@@ -101,6 +101,18 @@ msgstr ""
 msgid "Omaduse Kirjade v&auml;rskendamine (sekundites) (page_reload) help"
 msgstr ""
 
+#: classes/applications/messenger/messenger_v2.aw:prop_mail_rte
+msgid "Omaduse Kirjade RTE (mail_rte) caption"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:prop_mail_rte_comment
+msgid "Omaduse Kirjade RTE (mail_rte) kommentaar"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:prop_mail_rte_help
+msgid "Omaduse Kirjade RTE (mail_rte) help"
+msgstr ""
+
 # classes/applications/messenger/messenger_v2.aw:prop_num_attachments
 #: classes/applications/messenger/messenger_v2.aw:prop_num_attachments
 msgid "Omaduse Manuste arv (num_attachments) caption"
@@ -709,166 +721,174 @@ msgstr ""
 msgid "Kujundusosa Kalender (msg_calendar) pealkiri"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:234
+#: classes/applications/messenger/messenger_v2.aw:237
 msgid "kulla mees, sa pole omale default messengeri ju valinud?"
 msgstr "dear fellow, you have not selected a messenger!"
 
-#: classes/applications/messenger/messenger_v2.aw:383
+#: classes/applications/messenger/messenger_v2.aw:386
 msgid "Kustutada?"
 msgstr "Delete?"
 
-#: classes/applications/messenger/messenger_v2.aw:384
-#: classes/applications/messenger/messenger_v2.aw:1474
+#: classes/applications/messenger/messenger_v2.aw:387
+#: classes/applications/messenger/messenger_v2.aw:1517
 msgid "Kustuta m&auml;rgitud kirjad"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:391
+#: classes/applications/messenger/messenger_v2.aw:394
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:395
+#: classes/applications/messenger/messenger_v2.aw:398
 msgid "E-Mail"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:444
+#: classes/applications/messenger/messenger_v2.aw:451
 msgid "Saada kiri"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:474
+#: classes/applications/messenger/messenger_v2.aw:481
 msgid "Vasta"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:480
+#: classes/applications/messenger/messenger_v2.aw:487
 msgid "Vasta/k&otilde;igile"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:487
+#: classes/applications/messenger/messenger_v2.aw:494
 msgid "Edasta"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:495
+#: classes/applications/messenger/messenger_v2.aw:502
 msgid "Kustutada see kiri? (tagasi ei saa!)"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:496
+#: classes/applications/messenger/messenger_v2.aw:503
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:520
+#: classes/applications/messenger/messenger_v2.aw:527
 msgid "J&auml;rgmine kiri"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:525
+#: classes/applications/messenger/messenger_v2.aw:532
 msgid "%s of %s"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:528
+#: classes/applications/messenger/messenger_v2.aw:535
 msgid "Eelmine kiri"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:536
+#: classes/applications/messenger/messenger_v2.aw:543
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:842
+#: classes/applications/messenger/messenger_v2.aw:578
+msgid "Ei kuva"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:579
+msgid "FCKeditor"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:885
 msgid "IMAP extension not available"
 msgstr "IMAP extension not available"
 
-#: classes/applications/messenger/messenger_v2.aw:854
+#: classes/applications/messenger/messenger_v2.aw:897
 msgid "IMAP sissep&auml;&auml;s on konfigureerimata"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:928
+#: classes/applications/messenger/messenger_v2.aw:971
 msgid "Vast."
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:937
+#: classes/applications/messenger/messenger_v2.aw:980
 msgid "A"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:945
+#: classes/applications/messenger/messenger_v2.aw:988
 msgid "Kellelt"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:952
+#: classes/applications/messenger/messenger_v2.aw:995
 msgid "Teema"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:958
+#: classes/applications/messenger/messenger_v2.aw:1001
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:969
+#: classes/applications/messenger/messenger_v2.aw:1012
 msgid "KB"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:980
+#: classes/applications/messenger/messenger_v2.aw:1023
 msgid "G"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:1004
-#: classes/applications/messenger/messenger_v2.aw:1366
+#: classes/applications/messenger/messenger_v2.aw:1047
+#: classes/applications/messenger/messenger_v2.aw:1409
 msgid "Login failed, check whether server name, user and password are correct.<br>"
 msgstr "Login failed, check whether server name, user and password are correct.<br>"
 
-#: classes/applications/messenger/messenger_v2.aw:1191
+#: classes/applications/messenger/messenger_v2.aw:1234
 msgid "ei"
 msgstr "no"
 
-#: classes/applications/messenger/messenger_v2.aw:1191
+#: classes/applications/messenger/messenger_v2.aw:1234
 msgid "jah"
 msgstr "yes"
 
-#: classes/applications/messenger/messenger_v2.aw:1377
+#: classes/applications/messenger/messenger_v2.aw:1420
 msgid "Uus kiri"
 msgstr "New message"
 
-#: classes/applications/messenger/messenger_v2.aw:1393
+#: classes/applications/messenger/messenger_v2.aw:1436
 msgid "Kustuta valitud kirjad"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:1405
+#: classes/applications/messenger/messenger_v2.aw:1448
 msgid "addressbook"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:1414
+#: classes/applications/messenger/messenger_v2.aw:1457
 msgid "search bar"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:1441
+#: classes/applications/messenger/messenger_v2.aw:1484
 msgid "Otsi kirju"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:1447
+#: classes/applications/messenger/messenger_v2.aw:1490
 msgid "Vii kirjad"
 msgstr "Move messages"
 
-#: classes/applications/messenger/messenger_v2.aw:1461
+#: classes/applications/messenger/messenger_v2.aw:1504
 msgid "Vii valitud kirjad kataloogi"
 msgstr "Move messages to folder"
 
-#: classes/applications/messenger/messenger_v2.aw:1475
+#: classes/applications/messenger/messenger_v2.aw:1518
 msgid "Kustutada m&auml;rgitud kirjad?"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:1559
+#: classes/applications/messenger/messenger_v2.aw:1602
 msgid "&uuml;kski kiri INBOXis ei matchinud &uuml;hegi ruuliga<br>"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:1576
+#: classes/applications/messenger/messenger_v2.aw:1619
 msgid "&uuml;htegi ruuli pole seostatud"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:1658
-#: classes/applications/messenger/messenger_v2.aw:1671
+#: classes/applications/messenger/messenger_v2.aw:1701
+#: classes/applications/messenger/messenger_v2.aw:1714
 msgid "<strong>message with subject: %s</strong><br>"
 msgstr "<strong>message with subject: %s</strong><br>"
 
-#: classes/applications/messenger/messenger_v2.aw:1660
+#: classes/applications/messenger/messenger_v2.aw:1703
 msgid "&nbsp; &nbsp; uid = %s, matches subject rule %s, moving to %s folder<br>"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:1673
+#: classes/applications/messenger/messenger_v2.aw:1716
 msgid "&nbsp; &nbsp; matches from rule %s, moving to %s folder<br>"
 msgstr ""
 

@@ -401,35 +401,35 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr "Keyword"
 
-#: classes/contentmgmt/file.aw:206
+#: classes/contentmgmt/file.aw:205
 msgid "%s, %s (%s) - %s"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:226
+#: classes/contentmgmt/file.aw:225
 msgid "Lisa allkiri"
 msgstr "Add signature"
 
-#: classes/contentmgmt/file.aw:227 classes/contentmgmt/file.aw:265
+#: classes/contentmgmt/file.aw:226 classes/contentmgmt/file.aw:264
 msgid "Faili: %s, allkirjastamine"
 msgstr "Signing of file %s"
 
-#: classes/contentmgmt/file.aw:234
+#: classes/contentmgmt/file.aw:233
 msgid "DigiDoc konteinerisse"
 msgstr "Into Digidoc container"
 
-#: classes/contentmgmt/file.aw:245
+#: classes/contentmgmt/file.aw:244
 msgid "Allkirjasta"
 msgstr "Sign"
 
-#: classes/contentmgmt/file.aw:246
+#: classes/contentmgmt/file.aw:245
 msgid "Allkirjastamine"
 msgstr "Sign"
 
-#: classes/contentmgmt/file.aw:253
+#: classes/contentmgmt/file.aw:252
 msgid "DigiDoc konteiner"
 msgstr "Digidoc container"
 
-#: classes/contentmgmt/file.aw:264
+#: classes/contentmgmt/file.aw:263
 msgid "Allkirjasta fail"
 msgstr "Sign file"
 
@@ -471,51 +471,51 @@ msgstr "Notification about modified document"
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr "File type is not allowed"
 
-#: classes/contentmgmt/file.aw:797
+#: classes/contentmgmt/file.aw:800
 msgid "faili ikoon"
 msgstr "file icon"
 
-#: classes/contentmgmt/file.aw:915
+#: classes/contentmgmt/file.aw:919
 msgid "Vale objekti id!"
 msgstr "Wrong object ID"
 
-#: classes/contentmgmt/file.aw:1569
+#: classes/contentmgmt/file.aw:1561
 msgid "Need either id or parent"
 msgstr "Need either id or parent"
 
-#: classes/contentmgmt/file.aw:1769
+#: classes/contentmgmt/file.aw:1784
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr "Save and index for search"
 
-#: classes/contentmgmt/file.aw:1777
+#: classes/contentmgmt/file.aw:1792
 msgid "Salvesta ja paiguta dokumenti"
 msgstr "Save and insert into document"
 
-#: classes/contentmgmt/file.aw:1815
+#: classes/contentmgmt/file.aw:1867
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/contentmgmt/file.aw:1821
+#: classes/contentmgmt/file.aw:1873
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/contentmgmt/file.aw:1828
+#: classes/contentmgmt/file.aw:1880
 msgid "Saada teavitusmeil"
 msgstr "Send notification e-mail"
 
-#: classes/contentmgmt/file.aw:1838
+#: classes/contentmgmt/file.aw:1890
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/contentmgmt/file.aw:1843
+#: classes/contentmgmt/file.aw:1895
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/contentmgmt/file.aw:1848
+#: classes/contentmgmt/file.aw:1900
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/contentmgmt/file.aw:1853
+#: classes/contentmgmt/file.aw:1905
 msgid "E-mail"
 msgstr "E-mail"
 

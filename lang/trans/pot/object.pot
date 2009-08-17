@@ -14,7 +14,3 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/obj/object.aw:150
-msgid "object loader is not object!!"
-msgstr ""
-

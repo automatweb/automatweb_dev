@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Kirjeldus (desc) help"
 msgstr ""
 
+#: classes/applications/shop/shop_brand.aw:prop_code
+msgid "Omaduse Kood (code) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_brand.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_brand.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
+msgstr ""
+
 #: classes/applications/shop/shop_brand.aw:prop_desc_doc
 msgid "Omaduse Kirjeldav dokument (desc_doc) caption"
 msgstr ""

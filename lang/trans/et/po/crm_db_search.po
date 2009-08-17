@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -61,6 +61,18 @@ msgstr ""
 msgid "Omaduse Tegevusalade kaust (dir_tegevusala) help"
 msgstr ""
 
+#: classes/applications/crm/crm_db_search.aw:prop_sector_recursive
+msgid "Omaduse Otsi ka alategevusaladest (sector_recursive) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_sector_recursive_comment
+msgid "Omaduse Otsi ka alategevusaladest (sector_recursive) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_sector_recursive_help
+msgid "Omaduse Otsi ka alategevusaladest (sector_recursive) help"
+msgstr ""
+
 #: classes/applications/crm/crm_db_search.aw:prop_keywords
 msgid "Omaduse V&ouml;tmes&ouml;nad (komadega eraldatult) (keywords) caption"
 msgstr ""
@@ -86,15 +98,27 @@ msgid "Omaduse AW V&otilde;tmes&otilde;nad (keywords2) help"
 msgstr ""
 
 #: classes/applications/crm/crm_db_search.aw:prop_keywords_in_row
-msgid "Omaduse V&ouml;tmes&ouml;nu &uuml;hel real (keywords_in_row) caption"
+msgid "Omaduse V&otilde;tmes&otilde;nu &uuml;hel real (keywords_in_row) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_db_search.aw:prop_keywords_in_row_comment
-msgid "Omaduse V&ouml;tmes&ouml;nu &uuml;hel real (keywords_in_row) kommentaar"
+msgid "Omaduse V&otilde;tmes&otilde;nu &uuml;hel real (keywords_in_row) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_db_search.aw:prop_keywords_in_row_help
-msgid "Omaduse V&ouml;tmes&ouml;nu &uuml;hel real (keywords_in_row) help"
+msgid "Omaduse V&otilde;tmes&otilde;nu &uuml;hel real (keywords_in_row) help"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_keywords_by_folder
+msgid "Omaduse V&otilde;tmes&otilde;nad kaustade kaupa (keywords_by_folder) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_keywords_by_folder_comment
+msgid "Omaduse V&otilde;tmes&otilde;nad kaustade kaupa (keywords_by_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_keywords_by_folder_help
+msgid "Omaduse V&otilde;tmes&otilde;nad kaustade kaupa (keywords_by_folder) help"
 msgstr ""
 
 #: classes/applications/crm/crm_db_search.aw:rel_RELTYPE_CRM_DB
@@ -109,14 +133,14 @@ msgstr ""
 msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_db_search.aw:148
+#: classes/applications/crm/crm_db_search.aw:156
 msgid "Otsisid '<b>%s</b>',"
 msgstr ""
 
-#: classes/applications/crm/crm_db_search.aw:150
-msgid "Leiti %s asutus."
+#: classes/applications/crm/crm_db_search.aw:157
+msgid "leiti %u asutus."
 msgstr ""
 
-#: classes/applications/crm/crm_db_search.aw:150
-msgid "Leiti %s asutust."
+#: classes/applications/crm/crm_db_search.aw:157
+msgid "leiti %u asutust."
 msgstr ""

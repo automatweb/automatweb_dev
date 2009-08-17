@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:class_232_help
 msgid "Klassi Saidi sisu otsingu grupp help"
 msgstr ""
@@ -63,7 +62,7 @@ msgid "Omaduse Otsi ainult m&auml;rks&otilde;nadest (search_only_kws) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
-msgid "Seose Otsingu lähtekoht (RELTYPE_SEARCH_LOCATION) tekst"
+msgid "Seose Otsingu l&auml;tekoht (RELTYPE_SEARCH_LOCATION) tekst"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_KW
@@ -83,10 +82,9 @@ msgid "Nimi"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:113
-msgid "k.a. alammenüüd"
+msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:121
 msgid "mitteaktiivsed"
 msgstr ""
-

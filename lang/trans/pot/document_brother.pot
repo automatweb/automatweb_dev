@@ -734,7 +734,7 @@ msgstr ""
 msgid "Viimati muudetud"
 msgstr ""
 
-#: classes/contentmgmt/document_brother.aw:244 classes/contentmgmt/document_brother.aw:284
+#: classes/contentmgmt/document_brother.aw:244 classes/contentmgmt/document_brother.aw:286
 msgid "Vali see"
 msgstr ""
 

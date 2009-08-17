@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -69,22 +69,22 @@ msgstr ""
 msgid "Seose autentimisserver (RELTYPE_AUTH_SERVER) tekst"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:115
+#: classes/core/users/auth/auth_config.aw:114
 msgid "Serveri t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:121
+#: classes/core/users/auth/auth_config.aw:120
 msgid "Nimi"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:127
+#: classes/core/users/auth/auth_config.aw:126
 msgid "Kasuta?"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:132
+#: classes/core/users/auth/auth_config.aw:131
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:137
+#: classes/core/users/auth/auth_config.aw:136
 msgid "Nimetus"
 msgstr ""

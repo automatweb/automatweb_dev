@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/users/auth/auth_config.aw:class_843_help
 msgid "Klassi Autentimise Seaded help"
 msgstr ""
@@ -58,23 +57,22 @@ msgstr ""
 msgid "Seose autentimisserver (RELTYPE_AUTH_SERVER) tekst"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:115
+#: classes/core/users/auth/auth_config.aw:114
 msgid "Serveri t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:121
+#: classes/core/users/auth/auth_config.aw:120
 msgid "Nimi"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:127
+#: classes/core/users/auth/auth_config.aw:126
 msgid "Kasuta?"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:132
+#: classes/core/users/auth/auth_config.aw:131
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/core/users/auth/auth_config.aw:137
+#: classes/core/users/auth/auth_config.aw:136
 msgid "Nimetus"
 msgstr ""
-

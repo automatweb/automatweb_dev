@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_sales_manager_workspace.aw:class_1440_help
 msgid "Klassi Lao m&uuml;&uuml;gijuhi t&ouml;&ouml;laud help"
 msgstr ""
@@ -24,6 +23,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_sales_manager_workspace.aw:prop_warehouses_help
 msgid "Omaduse Laod (warehouses) help"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_show_alt_units
+msgid "Omaduse Kuva alternatiiv&uuml;hikuid (show_alt_units) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_show_alt_units_comment
+msgid "Omaduse Kuva alternatiiv&uuml;hikuid (show_alt_units) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_show_alt_units_help
+msgid "Omaduse Kuva alternatiiv&uuml;hikuid (show_alt_units) help"
 msgstr ""
 
 #: classes/applications/shop/shop_sales_manager_workspace.aw:prop_products_toolbar
@@ -854,6 +865,54 @@ msgstr ""
 msgid "Omaduse Artikli kategooria (sell_orders_s_art_cat) help"
 msgstr ""
 
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_purchaser
+msgid "Omaduse Hankija (sell_orders_s_purchaser) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_purchaser_comment
+msgid "Omaduse Hankija (sell_orders_s_purchaser) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_purchaser_help
+msgid "Omaduse Hankija (sell_orders_s_purchaser) help"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_job_name
+msgid "Omaduse T&ouml;&ouml; nimi (sell_orders_s_job_name) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_job_name_comment
+msgid "Omaduse T&ouml;&ouml; nimi (sell_orders_s_job_name) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_job_name_help
+msgid "Omaduse T&ouml;&ouml; nimi (sell_orders_s_job_name) help"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_job_number
+msgid "Omaduse T&ouml;&ouml; number (sell_orders_s_job_number) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_job_number_comment
+msgid "Omaduse T&ouml;&ouml; number (sell_orders_s_job_number) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_job_number_help
+msgid "Omaduse T&ouml;&ouml; number (sell_orders_s_job_number) help"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_sales_manager
+msgid "Omaduse M&uuml;&uuml;gijuht (sell_orders_s_sales_manager) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_sales_manager_comment
+msgid "Omaduse M&uuml;&uuml;gijuht (sell_orders_s_sales_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_sales_manager_help
+msgid "Omaduse M&uuml;&uuml;gijuht (sell_orders_s_sales_manager) help"
+msgstr ""
+
 #: classes/applications/shop/shop_sales_manager_workspace.aw:prop_sell_orders_s_sbt
 msgid "Omaduse Otsi (sell_orders_s_sbt) caption"
 msgstr ""
@@ -1426,6 +1485,14 @@ msgstr ""
 msgid "Grupi Tellimused (purchases) help"
 msgstr ""
 
+#: classes/applications/shop/shop_sales_manager_workspace.aw:group_sell_orders
+msgid "Grupi M&uuml;&uuml;gitellimused (sell_orders) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:group_sell_orders_help
+msgid "Grupi M&uuml;&uuml;gitellimused (sell_orders) help"
+msgstr ""
+
 #: classes/applications/shop/shop_sales_manager_workspace.aw:group_purchase_orders
 msgid "Grupi Ostutellimused (purchase_orders) pealkiri"
 msgstr ""
@@ -1440,14 +1507,6 @@ msgstr ""
 
 #: classes/applications/shop/shop_sales_manager_workspace.aw:group_offers_help
 msgid "Grupi Pakkumised (offers) help"
-msgstr ""
-
-#: classes/applications/shop/shop_sales_manager_workspace.aw:group_sell_orders
-msgid "Grupi M&uuml;&uuml;gitellimused (sell_orders) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/shop_sales_manager_workspace.aw:group_sell_orders_help
-msgid "Grupi M&uuml;&uuml;gitellimused (sell_orders) help"
 msgstr ""
 
 #: classes/applications/shop/shop_sales_manager_workspace.aw:group_sales
@@ -1550,63 +1609,78 @@ msgstr ""
 msgid "Kujundusosa Otsing (sales_custcards_left_search) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:540 classes/applications/shop/shop_sales_manager_workspace.aw:540
+#: classes/applications/shop/shop_sales_manager_workspace.aw:576
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:546 classes/applications/shop/shop_sales_manager_workspace.aw:546
+#: classes/applications/shop/shop_sales_manager_workspace.aw:582
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:552 classes/applications/shop/shop_sales_manager_workspace.aw:552 classes/applications/shop/shop_sales_manager_workspace.aw:625 classes/applications/shop/shop_sales_manager_workspace.aw:625 classes/applications/shop/shop_sales_manager_workspace.aw:710 classes/applications/shop/shop_sales_manager_workspace.aw:710
+#: classes/applications/shop/shop_sales_manager_workspace.aw:588
+#: classes/applications/shop/shop_sales_manager_workspace.aw:661
+#: classes/applications/shop/shop_sales_manager_workspace.aw:763
 msgid "Arhiveeritud"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:565
+#: classes/applications/shop/shop_sales_manager_workspace.aw:601
 msgid "Number"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:571
+#: classes/applications/shop/shop_sales_manager_workspace.aw:607
 msgid "Tellija"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:578
+#: classes/applications/shop/shop_sales_manager_workspace.aw:614
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:587
+#: classes/applications/shop/shop_sales_manager_workspace.aw:623
 msgid "Seosed"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:594
+#: classes/applications/shop/shop_sales_manager_workspace.aw:630
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:601
+#: classes/applications/shop/shop_sales_manager_workspace.aw:637
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:619 classes/applications/shop/shop_sales_manager_workspace.aw:619 classes/applications/shop/shop_sales_manager_workspace.aw:704 classes/applications/shop/shop_sales_manager_workspace.aw:704
+#: classes/applications/shop/shop_sales_manager_workspace.aw:655
+#: classes/applications/shop/shop_sales_manager_workspace.aw:757
 msgid "Kehtivad"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:638 classes/applications/shop/shop_sales_manager_workspace.aw:723
+#: classes/applications/shop/shop_sales_manager_workspace.aw:681
+msgid "Jah"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:681
+msgid "Ei"
+msgstr ""
+
+#: classes/applications/shop/shop_sales_manager_workspace.aw:691
+#: classes/applications/shop/shop_sales_manager_workspace.aw:776
 msgid "Name"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:645 classes/applications/shop/shop_sales_manager_workspace.aw:730
+#: classes/applications/shop/shop_sales_manager_workspace.aw:698
+#: classes/applications/shop/shop_sales_manager_workspace.aw:783
 msgid "Alates"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:654 classes/applications/shop/shop_sales_manager_workspace.aw:739
+#: classes/applications/shop/shop_sales_manager_workspace.aw:707
+#: classes/applications/shop/shop_sales_manager_workspace.aw:792
 msgid "Kuni"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:663 classes/applications/shop/shop_sales_manager_workspace.aw:748
+#: classes/applications/shop/shop_sales_manager_workspace.aw:716
+#: classes/applications/shop/shop_sales_manager_workspace.aw:801
 msgid "Kehtib?"
 msgstr ""
 
-#: classes/applications/shop/shop_sales_manager_workspace.aw:670 classes/applications/shop/shop_sales_manager_workspace.aw:755
+#: classes/applications/shop/shop_sales_manager_workspace.aw:723
+#: classes/applications/shop/shop_sales_manager_workspace.aw:808
 msgid "Kellele"
 msgstr ""
-

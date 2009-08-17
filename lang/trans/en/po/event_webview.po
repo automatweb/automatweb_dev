@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/calendar/event_webview.aw:class_1475_help
 msgid "Klassi S&uuml;ndmused veebis help"
 msgstr ""
@@ -74,15 +73,34 @@ msgstr ""
 msgid "Omaduse Ainult avalikud s&uuml;ndmused (published_only) help"
 msgstr ""
 
+#: classes/applications/calendar/event_webview.aw:prop_order_by_time
+msgid "Omaduse J&auml;rjestamine aja j&auml;rgi (order_by_time) caption"
+msgstr ""
+
+#: classes/applications/calendar/event_webview.aw:prop_order_by_time_comment
+msgid "Omaduse J&auml;rjestamine aja j&auml;rgi (order_by_time) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/event_webview.aw:prop_order_by_time_help
+msgid "Omaduse J&auml;rjestamine aja j&auml;rgi (order_by_time) help"
+msgstr ""
+
 #: classes/applications/calendar/event_webview.aw:rel_RELTYPE_EVENTS_MANAGER
 msgid "Seose S&uuml;ndmuste halduse keskkond (RELTYPE_EVENTS_MANAGER) tekst"
 msgstr ""
 
-#: classes/applications/calendar/event_webview.aw:48
+#: classes/applications/calendar/event_webview.aw:52
 msgid "S&uuml;ndmuste kaupa"
 msgstr ""
 
-#: classes/applications/calendar/event_webview.aw:49
+#: classes/applications/calendar/event_webview.aw:53
 msgid "Toimumisaegade kaupa"
 msgstr ""
 
+#: classes/applications/calendar/event_webview.aw:63
+msgid "Vanemad eespool"
+msgstr ""
+
+#: classes/applications/calendar/event_webview.aw:64
+msgid "Uuemad eespool"
+msgstr ""

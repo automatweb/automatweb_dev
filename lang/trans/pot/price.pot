@@ -74,6 +74,30 @@ msgstr ""
 msgid "Omaduse Kuni (date_to) help"
 msgstr ""
 
+#: classes/common/price.aw:prop_object
+msgid "Omaduse Objekst millele hind m&otildejub (object) caption"
+msgstr ""
+
+#: classes/common/price.aw:prop_object_comment
+msgid "Omaduse Objekst millele hind m&otildejub (object) kommentaar"
+msgstr ""
+
+#: classes/common/price.aw:prop_object_help
+msgid "Omaduse Objekst millele hind m&otildejub (object) help"
+msgstr ""
+
+#: classes/common/price.aw:prop_price_prop
+msgid "Omaduse Hinna omadus, (m&otilde;nel klassil v&otilde olla eri liiki hindu) (price_prop) caption"
+msgstr ""
+
+#: classes/common/price.aw:prop_price_prop_comment
+msgid "Omaduse Hinna omadus, (m&otilde;nel klassil v&otilde olla eri liiki hindu) (price_prop) kommentaar"
+msgstr ""
+
+#: classes/common/price.aw:prop_price_prop_help
+msgid "Omaduse Hinna omadus, (m&otilde;nel klassil v&otilde olla eri liiki hindu) (price_prop) help"
+msgstr ""
+
 #: classes/common/price.aw:rel_RELTYPE_OBJECT
 msgid "Seose Objekt millele hind m&otilde;jub (RELTYPE_OBJECT) tekst"
 msgstr ""

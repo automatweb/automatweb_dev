@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/flv_player/flv_file.aw:class_1382_help
 msgid "Klassi FLV video help"
 msgstr ""
@@ -38,6 +37,42 @@ msgstr ""
 msgid "Omaduse Fail (fileupload) help"
 msgstr ""
 
+#: classes/applications/flv_player/flv_file.aw:prop_preview_img
+msgid "Omaduse Eelvaate pilt (preview_img) caption"
+msgstr ""
+
+#: classes/applications/flv_player/flv_file.aw:prop_preview_img_comment
+msgid "Omaduse Eelvaate pilt (preview_img) kommentaar"
+msgstr ""
+
+#: classes/applications/flv_player/flv_file.aw:prop_preview_img_help
+msgid "Omaduse Eelvaate pilt (preview_img) help"
+msgstr ""
+
+#: classes/applications/flv_player/flv_file.aw:prop_width
+msgid "Omaduse Laius (px) (width) caption"
+msgstr ""
+
+#: classes/applications/flv_player/flv_file.aw:prop_width_comment
+msgid "Omaduse Laius (px) (width) kommentaar"
+msgstr ""
+
+#: classes/applications/flv_player/flv_file.aw:prop_width_help
+msgid "Omaduse Laius (px) (width) help"
+msgstr ""
+
+#: classes/applications/flv_player/flv_file.aw:prop_height
+msgid "Omaduse K&otilde;rgus (px) (height) caption"
+msgstr ""
+
+#: classes/applications/flv_player/flv_file.aw:prop_height_comment
+msgid "Omaduse K&otilde;rgus (px) (height) kommentaar"
+msgstr ""
+
+#: classes/applications/flv_player/flv_file.aw:prop_height_help
+msgid "Omaduse K&otilde;rgus (px) (height) help"
+msgstr ""
+
 #: classes/applications/flv_player/flv_file.aw:prop_meta_duration
 msgid "Omaduse Kestvus (meta_duration) caption"
 msgstr ""
@@ -63,15 +98,15 @@ msgid "Omaduse Laius (meta_width) help"
 msgstr ""
 
 #: classes/applications/flv_player/flv_file.aw:prop_meta_height
-msgid "Omaduse Kõrgus (meta_height) caption"
+msgid "Omaduse K&ouml;rgus (meta_height) caption"
 msgstr ""
 
 #: classes/applications/flv_player/flv_file.aw:prop_meta_height_comment
-msgid "Omaduse Kõrgus (meta_height) kommentaar"
+msgid "Omaduse K&ouml;rgus (meta_height) kommentaar"
 msgstr ""
 
 #: classes/applications/flv_player/flv_file.aw:prop_meta_height_help
-msgid "Omaduse Kõrgus (meta_height) help"
+msgid "Omaduse K&ouml;rgus (meta_height) help"
 msgstr ""
 
 #: classes/applications/flv_player/flv_file.aw:prop_meta_video_data_rate
@@ -111,15 +146,15 @@ msgid "Omaduse frame_rate (meta_frame_rate) help"
 msgstr ""
 
 #: classes/applications/flv_player/flv_file.aw:prop_meta_creation_date
-msgid "Omaduse Loomisaeg	 (meta_creation_date) caption"
+msgid "Omaduse Loomisaeg\t (meta_creation_date) caption"
 msgstr ""
 
 #: classes/applications/flv_player/flv_file.aw:prop_meta_creation_date_comment
-msgid "Omaduse Loomisaeg	 (meta_creation_date) kommentaar"
+msgid "Omaduse Loomisaeg\t (meta_creation_date) kommentaar"
 msgstr ""
 
 #: classes/applications/flv_player/flv_file.aw:prop_meta_creation_date_help
-msgid "Omaduse Loomisaeg	 (meta_creation_date) help"
+msgid "Omaduse Loomisaeg\t (meta_creation_date) help"
 msgstr ""
 
 #: classes/applications/flv_player/flv_file.aw:group_meta
@@ -130,7 +165,10 @@ msgstr ""
 msgid "Grupi Meta (meta) help"
 msgstr ""
 
-#: classes/applications/flv_player/flv_file.aw:78
-msgid "sekundit"
+#: classes/applications/flv_player/flv_file.aw:rel_RELTYPE_PREVIEWIMG
+msgid "Seose Eelvaate pilt (RELTYPE_PREVIEWIMG) tekst"
 msgstr ""
 
+#: classes/applications/flv_player/flv_file.aw:90
+msgid "sekundit"
+msgstr ""

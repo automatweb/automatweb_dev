@@ -488,7 +488,7 @@ msgid "Vaikimisi sorteeritakse"
 msgstr "Default sort-by"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:339
-#: classes/contentmgmt/site_search/site_search_content.aw:2223
+#: classes/contentmgmt/site_search/site_search_content.aw:2296
 msgid "Pealkiri"
 msgstr "Title"
 
@@ -504,40 +504,44 @@ msgstr ""
 msgid "Kuup&auml;eva j&auml;rgi (vanem enne)"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2203
-#: classes/contentmgmt/site_search/site_search_content.aw:2209
+#: classes/contentmgmt/site_search/site_search_content.aw:754
+msgid "V&otilde;tmes&otilde;nad"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:2276
+#: classes/contentmgmt/site_search/site_search_content.aw:2282
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2215
+#: classes/contentmgmt/site_search/site_search_content.aw:2288
 msgid "Mitu korda sisaldab"
 msgstr "How many in results"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2230
+#: classes/contentmgmt/site_search/site_search_content.aw:2303
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2240
+#: classes/contentmgmt/site_search/site_search_content.aw:2313
 msgid "Sisu"
 msgstr "Content"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2396
+#: classes/contentmgmt/site_search/site_search_content.aw:2469
 msgid "t&auml;psuse"
 msgstr "by accuracy"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2397
+#: classes/contentmgmt/site_search/site_search_content.aw:2470
 msgid "kuup&auml;eva alusel"
 msgstr "by date"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2398
+#: classes/contentmgmt/site_search/site_search_content.aw:2471
 msgid "pealkirja alusel"
 msgstr "by title"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2694
+#: classes/contentmgmt/site_search/site_search_content.aw:2767
 msgid "Lihtne otsing"
 msgstr "Simple search"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2702
+#: classes/contentmgmt/site_search/site_search_content.aw:2775
 msgid "Detailotsing"
 msgstr "Advanced search"
 

@@ -18,21 +18,21 @@ msgid "AW Saitide list"
 msgstr "AW Site list"
 
 #: classes/install/site_list.aw:35 classes/install/site_list.aw:233
-#: classes/install/site_list.aw:548
+#: classes/install/site_list.aw:566
 msgid "ID"
 msgstr "ID"
 
 #: classes/install/site_list.aw:41 classes/install/site_list.aw:240
-#: classes/install/site_list.aw:555
+#: classes/install/site_list.aw:573
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/install/site_list.aw:46 classes/install/site_list.aw:563
+#: classes/install/site_list.aw:46 classes/install/site_list.aw:581
 msgid "URL"
 msgstr "URL"
 
 #: classes/install/site_list.aw:51 classes/install/site_list.aw:166
-#: classes/install/site_list.aw:571
+#: classes/install/site_list.aw:589
 msgid "Server"
 msgstr "Server"
 
@@ -49,7 +49,7 @@ msgid "Viimane uuendus"
 msgstr "Last update"
 
 #: classes/install/site_list.aw:74
-msgid "Sünkroniseeri andmebaas"
+msgid "S&uuml;nkroniseeri andmebaas"
 msgstr ""
 
 #: classes/install/site_list.aw:78 classes/install/site_list.aw:252
@@ -58,7 +58,7 @@ msgid "Muuda"
 msgstr "Change"
 
 #: classes/install/site_list.aw:107
-msgid "Sünkroniseeri"
+msgid "S&uuml;nkroniseeri"
 msgstr ""
 
 #: classes/install/site_list.aw:119
@@ -93,7 +93,7 @@ msgstr "How many"
 msgid "Koodiversioon"
 msgstr "Code version"
 
-#: classes/install/site_list.aw:225 classes/install/site_list.aw:650
+#: classes/install/site_list.aw:225 classes/install/site_list.aw:668
 msgid "AW Serverite list"
 msgstr "AW Server list"
 
@@ -101,27 +101,27 @@ msgstr "AW Server list"
 msgid "IP aadress"
 msgstr "IP Address"
 
-#: classes/install/site_list.aw:579
+#: classes/install/site_list.aw:597
 msgid "Used?"
 msgstr "Used?"
 
-#: classes/install/site_list.aw:587
+#: classes/install/site_list.aw:605
 msgid "Code branch"
 msgstr "Code branch"
 
-#: classes/install/site_list.aw:594
+#: classes/install/site_list.aw:612
 msgid "Basedir"
 msgstr "Basedir"
 
-#: classes/install/site_list.aw:601
+#: classes/install/site_list.aw:619
 msgid "Updater"
 msgstr "Updater"
 
-#: classes/install/site_list.aw:608
+#: classes/install/site_list.aw:626
 msgid "Last update"
 msgstr "Last update"
 
-#: classes/install/site_list.aw:651
+#: classes/install/site_list.aw:669
 msgid "/ Muuda serverit"
 msgstr ""
 

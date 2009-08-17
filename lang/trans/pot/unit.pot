@@ -38,27 +38,47 @@ msgstr ""
 msgid "Omaduse &Uuml;hiku liik (unit_sort) help"
 msgstr ""
 
-#: classes/common/unit.aw:34
+#: classes/common/unit.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/common/unit.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/common/unit.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/common/unit.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/common/unit.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/common/unit.aw:43
 msgid "pikkus&uuml;hik"
 msgstr ""
 
-#: classes/common/unit.aw:34
+#: classes/common/unit.aw:43
 msgid "massi&uuml;hik"
 msgstr ""
 
-#: classes/common/unit.aw:34
+#: classes/common/unit.aw:43
 msgid "koguse&uuml;hik"
 msgstr ""
 
-#: classes/common/unit.aw:34
+#: classes/common/unit.aw:43
 msgid "mahu&uuml;hik"
 msgstr ""
 
-#: classes/common/unit.aw:34
+#: classes/common/unit.aw:43
 msgid "aja&uuml;hik"
 msgstr ""
 
-#: classes/common/unit.aw:65
+#: classes/common/unit.aw:92
 msgid "--vali--"
 msgstr ""
 

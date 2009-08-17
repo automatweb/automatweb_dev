@@ -85,16 +85,40 @@ msgstr ""
 msgid "Omaduse S&uuml;ndmuse n&auml;dala kujundusp&otilde;hi (week_event_template) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_view.aw:prop_default_urlobj
+msgid "Omaduse Default lingi objekt (default_urlobj) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_default_urlobj_comment
+msgid "Omaduse Default lingi objekt (default_urlobj) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_default_urlobj_help
+msgid "Omaduse Default lingi objekt (default_urlobj) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_use_event_time_objs
+msgid "Omaduse Kasuta toimumisaja objekte (use_event_time_objs) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_use_event_time_objs_comment
+msgid "Omaduse Kasuta toimumisaja objekte (use_event_time_objs) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_use_event_time_objs_help
+msgid "Omaduse Kasuta toimumisaja objekte (use_event_time_objs) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_view.aw:prop_show_days_with_events
-msgid "Omaduse N&auml;ita ainult s&uuml;ndmustega päevi (show_days_with_events) caption"
+msgid "Omaduse N&auml;ita ainult s&uuml;ndmustega p&auml;evi (show_days_with_events) caption"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:prop_show_days_with_events_comment
-msgid "Omaduse N&auml;ita ainult s&uuml;ndmustega päevi (show_days_with_events) kommentaar"
+msgid "Omaduse N&auml;ita ainult s&uuml;ndmustega p&auml;evi (show_days_with_events) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:prop_show_days_with_events_help
-msgid "Omaduse N&auml;ita ainult s&uuml;ndmustega päevi (show_days_with_events) help"
+msgid "Omaduse N&auml;ita ainult s&uuml;ndmustega p&auml;evi (show_days_with_events) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:prop_sort_day_events_before
@@ -110,15 +134,15 @@ msgid "Omaduse Sorteeri &uuml;he p&auml;evased ettepoole (sort_day_events_before
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:prop_show_event_content
-msgid "Omaduse N&auml;ita kalendrivaates kohe sündmuse sisu (show_event_content) caption"
+msgid "Omaduse N&auml;ita kalendrivaates kohe s&uuml;ndmuse sisu (show_event_content) caption"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:prop_show_event_content_comment
-msgid "Omaduse N&auml;ita kalendrivaates kohe sündmuse sisu (show_event_content) kommentaar"
+msgid "Omaduse N&auml;ita kalendrivaates kohe s&uuml;ndmuse sisu (show_event_content) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:prop_show_event_content_help
-msgid "Omaduse N&auml;ita kalendrivaates kohe sündmuse sisu (show_event_content) help"
+msgid "Omaduse N&auml;ita kalendrivaates kohe s&uuml;ndmuse sisu (show_event_content) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:prop_show_event_days
@@ -145,6 +169,18 @@ msgstr ""
 msgid "Omaduse N&auml;ita ainult aktiivseid s&uuml;ndmusi (actives_only) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_view.aw:prop_show_active_trans
+msgid "Omaduse N&auml;ita mitteaktiivseid s&uuml;ndmusi, mille t&otilde;lge on aktiivne (show_active_trans) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_show_active_trans_comment
+msgid "Omaduse N&auml;ita mitteaktiivseid s&uuml;ndmusi, mille t&otilde;lge on aktiivne (show_active_trans) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_show_active_trans_help
+msgid "Omaduse N&auml;ita mitteaktiivseid s&uuml;ndmusi, mille t&otilde;lge on aktiivne (show_active_trans) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_view.aw:prop_fix_links
 msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad s&uuml;ndmusega p&auml;evale (fix_links) caption"
 msgstr ""
@@ -155,6 +191,18 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:prop_fix_links_help
 msgid "Omaduse \"Eelmine\"-\"J&auml;rgmine\" lingid viivad s&uuml;ndmusega p&auml;evale (fix_links) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_monyear_2in1
+msgid "Omaduse Kuu ja aasta &uuml;he selecti sees (monyear_2in1) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_monyear_2in1_comment
+msgid "Omaduse Kuu ja aasta &uuml;he selecti sees (monyear_2in1) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:prop_monyear_2in1_help
+msgid "Omaduse Kuu ja aasta &uuml;he selecti sees (monyear_2in1) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:prop_minical_day_with_events
@@ -330,11 +378,11 @@ msgid "Grupi Tulemuste seadistamine (ftresults) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:group_show_events
-msgid "Grupi Sündmused (show_events) pealkiri"
+msgid "Grupi S&uuml;ndmused (show_events) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:group_show_events_help
-msgid "Grupi Sündmused (show_events) help"
+msgid "Grupi S&uuml;ndmused (show_events) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:rel_RELTYPE_EVENT_SOURCE
@@ -357,87 +405,91 @@ msgstr ""
 msgid "Seose S&uuml;ndmuste n&auml;itamise kontroller (RELTYPE_EVENT_VALIDATOR) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_view.aw:136
-msgid "Kuuvaade & nädala sündmused"
+#: classes/applications/calendar/calendar_view.aw:rel_RELTYPE_DEFAULT_URLOBJ
+msgid "Seose Default lingi objekt (RELTYPE_DEFAULT_URLOBJ) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_view.aw:137
-msgid "Kuukalender"
-msgstr ""
-
-#: classes/applications/calendar/calendar_view.aw:138
-msgid "Algavad sündmused"
-msgstr ""
-
-#: classes/applications/calendar/calendar_view.aw:139
-msgid "Nädala vaade"
-msgstr ""
-
-#: classes/applications/calendar/calendar_view.aw:140
-msgid "Järgmised sündmused"
-msgstr ""
-
-#: classes/applications/calendar/calendar_view.aw:141
-msgid "Grupeeri allika järgi"
-msgstr ""
-
-#: classes/applications/calendar/calendar_view.aw:142
-#: classes/applications/calendar/calendar_view.aw:157
-msgid "Ülevaade"
+#: classes/applications/calendar/calendar_view.aw:152
+msgid "Kuuvaade & n&auml;dala s&uuml;ndmused"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:153
-msgid "päev"
+msgid "Kuukalender"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:154
-msgid "nädal"
+msgid "Algavad s&uuml;ndmused"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:155
-msgid "kuu"
+msgid "N&auml;dala vaade"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:156
-msgid "Järgmised"
+msgid "J&auml;rgmised s&uuml;ndmused"
 msgstr ""
 
-#: classes/applications/calendar/calendar_view.aw:196
-msgid "Nimi"
+#: classes/applications/calendar/calendar_view.aw:157
+msgid "Grupeeri allika j&auml;rgi"
 msgstr ""
 
-#: classes/applications/calendar/calendar_view.aw:201
-msgid "Pealkiri"
+#: classes/applications/calendar/calendar_view.aw:158
+#: classes/applications/calendar/calendar_view.aw:173
+msgid "&Uuml;levaade"
 msgstr ""
 
-#: classes/applications/calendar/calendar_view.aw:206
-msgid "Aktiivne"
+#: classes/applications/calendar/calendar_view.aw:169
+msgid "p&auml;ev"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:170
+msgid "n&auml;dal"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:171
+msgid "kuu"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:172
+msgid "J&auml;rgmised"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:212
-msgid "Jrk"
+msgid "Nimi"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:217
-msgid "Seaded"
+msgid "Pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:222
-msgid "Väljade eraldaja"
+msgid "Aktiivne"
 msgstr ""
 
-#: classes/applications/calendar/calendar_view.aw:227
-msgid "Lisaväljad"
+#: classes/applications/calendar/calendar_view.aw:228
+msgid "Jrk"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:233
+msgid "Seaded"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:238
+msgid "V&auml;ljade eraldaja"
 msgstr ""
 
 #: classes/applications/calendar/calendar_view.aw:243
-msgid "Väljundvorm on valimata"
+msgid "Lisav&auml;ljad"
 msgstr ""
 
-#: classes/applications/calendar/calendar_view.aw:1088
+#: classes/applications/calendar/calendar_view.aw:259
+msgid "V&auml;ljundvorm on valimata"
+msgstr ""
+
+#: classes/applications/calendar/calendar_view.aw:1163
 msgid "&lt;&lt;"
 msgstr ""
 
-#: classes/applications/calendar/calendar_view.aw:1095
+#: classes/applications/calendar/calendar_view.aw:1170
 msgid "&gt;&gt;"
 msgstr ""

@@ -13,10 +13,19 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_row_object.aw:100
+#: classes/applications/crm/crm_bill_row_object.aw:18
+msgid "Rida"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row_object.aw:194
+#: classes/applications/crm/crm_bill_row_object.aw:231
 msgid "Pole piisavalt p&auml;dev klassi id"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_row_object.aw:105
+#: classes/applications/crm/crm_bill_row_object.aw:199
 msgid "Ridadel pole toimetust m&auml;&auml;ratud"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row_object.aw:237
+msgid "Kommentaaril pole bugi"
 msgstr ""

@@ -9,8 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/personnel_management/personnel_management_job_offer_obj.aw:45
 msgid "T&auml;htajatu"
 msgstr "&#1041&#1077&#1089&#1089&#1088&#1086&#1095&#1085&#1099&#1081"
 
+#: classes/applications/personnel_management/personnel_management_job_offer_obj.aw:164
+msgid "Job offer '%s' is confirmed!"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer_obj.aw:165
+msgid "To whom it may concerne,Job offer '%s' has been confirmed.Regards,Your Personnel Management"
+msgstr ""

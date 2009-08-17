@@ -182,6 +182,18 @@ msgstr ""
 msgid "Omaduse Taotlusl&otilde;iv (request_fee) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/industrial_design.aw:prop_fee_sum
+msgid "Omaduse Kokku (fee_sum) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/industrial_design.aw:prop_fee_sum_comment
+msgid "Omaduse Kokku (fee_sum) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/industrial_design.aw:prop_fee_sum_help
+msgid "Omaduse Kokku (fee_sum) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/industrial_design.aw:prop_payer
 msgid "Omaduse Maksja nimi (payer) caption"
 msgstr ""
@@ -387,15 +399,27 @@ msgid "Omaduse Volikiri (doc_warrant) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/industrial_design.aw:prop_doc_description
-msgid "Omaduse Tööstusdisainilahenduse kirjeldus (doc_description) caption"
+msgid "Omaduse T&ouml;&ouml;stusdisainilahenduse kirjeldus (doc_description) caption"
 msgstr ""
 
 #: classes/applications/clients/patent_office/industrial_design.aw:prop_doc_description_comment
-msgid "Omaduse Tööstusdisainilahenduse kirjeldus (doc_description) kommentaar"
+msgid "Omaduse T&ouml;&ouml;stusdisainilahenduse kirjeldus (doc_description) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/patent_office/industrial_design.aw:prop_doc_description_help
-msgid "Omaduse Tööstusdisainilahenduse kirjeldus (doc_description) help"
+msgid "Omaduse T&ouml;&ouml;stusdisainilahenduse kirjeldus (doc_description) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/industrial_design.aw:prop_add_fee
+msgid "Omaduse Variandid (alates 3-dast) (add_fee) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/industrial_design.aw:prop_add_fee_comment
+msgid "Omaduse Variandid (alates 3-dast) (add_fee) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/industrial_design.aw:prop_add_fee_help
+msgid "Omaduse Variandid (alates 3-dast) (add_fee) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/industrial_design.aw:group_priority
@@ -439,11 +463,11 @@ msgid "Grupi Menetluse peatamise n&otilde;ue (process_postpone) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/industrial_design.aw:group_docs
-msgid "Grupi Dokumentide loetelu (docs) pealkiri"
+msgid "Grupi Reproduktsioonid (docs) pealkiri"
 msgstr ""
 
 #: classes/applications/clients/patent_office/industrial_design.aw:group_docs_help
-msgid "Grupi Dokumentide loetelu (docs) help"
+msgid "Grupi Reproduktsioonid (docs) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/industrial_design.aw:rel_RELTYPE_APPLICANT
@@ -506,15 +530,23 @@ msgstr ""
 msgid "Seose Lisa volikiri (RELTYPE_DOC_WARRANT) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/industrial_design.aw:133
+#: classes/applications/clients/patent_office/industrial_design.aw:139
 msgid "kuuks"
 msgstr ""
 
-#: classes/applications/clients/patent_office/industrial_design.aw:318
+#: classes/applications/clients/patent_office/industrial_design.aw:334
 msgid "Reproduktsioon peab olema GIF v&otilde;i JPEG formaadis"
 msgstr ""
 
-#: classes/applications/clients/patent_office/industrial_design.aw:335
+#: classes/applications/clients/patent_office/industrial_design.aw:341
+msgid "Reproduktsioon peab olema lisatud"
+msgstr ""
+
+#: classes/applications/clients/patent_office/industrial_design.aw:356
 msgid "Kirjeldusel ainult pdf formaadis failid lubatud"
+msgstr ""
+
+#: classes/applications/clients/patent_office/industrial_design.aw:375
+msgid "Nimetus on kohustuslik"
 msgstr ""
 

@@ -230,39 +230,39 @@ msgstr ""
 msgid "Seose Juurkaust (RELTYPE_ROOT_FOLDER) tekst"
 msgstr ""
 
-#: classes/import/document_import.aw:178
+#: classes/import/document_import.aw:176
 msgid "---"
 msgstr ""
 
-#: classes/import/document_import.aw:182 classes/import/document_import.aw:202 classes/import/document_import.aw:460
+#: classes/import/document_import.aw:180 classes/import/document_import.aw:200 classes/import/document_import.aw:458
 msgid "Sisu"
 msgstr ""
 
-#: classes/import/document_import.aw:198 classes/import/document_import.aw:452
+#: classes/import/document_import.aw:196 classes/import/document_import.aw:450
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/import/document_import.aw:211
+#: classes/import/document_import.aw:209
 msgid "Lae alla ja tee objektiks"
 msgstr ""
 
-#: classes/import/document_import.aw:214
+#: classes/import/document_import.aw:212
 msgid "Link"
 msgstr ""
 
-#: classes/import/document_import.aw:448
+#: classes/import/document_import.aw:446
 msgid "Asukoht"
 msgstr ""
 
-#: classes/import/document_import.aw:456
+#: classes/import/document_import.aw:454
 msgid "Autor"
 msgstr ""
 
-#: classes/import/document_import.aw:524
+#: classes/import/document_import.aw:522
 msgid "Tagi %s sisu ette pane"
 msgstr ""
 
-#: classes/import/document_import.aw:536
+#: classes/import/document_import.aw:534
 msgid "Tagi %s sisu taha pane"
 msgstr ""
 

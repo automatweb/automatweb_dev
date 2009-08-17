@@ -74,6 +74,30 @@ msgstr ""
 msgid "Omaduse T&ouml;&ouml;laud (if_wb) help"
 msgstr ""
 
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_discount
+msgid "Omaduse Allahindlus (discount) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_discount_comment
+msgid "Omaduse Allahindlus (discount) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_discount_help
+msgid "Omaduse Allahindlus (discount) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_favorites
+msgid "Omaduse Lemmikteenuste objektikorv (favorites) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_favorites_comment
+msgid "Omaduse Lemmikteenuste objektikorv (favorites) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_favorites_help
+msgid "Omaduse Lemmikteenuste objektikorv (favorites) help"
+msgstr ""
+
 #: classes/applications/spa_bookings/spa_customer_interface.aw:rel_RELTYPE_FOLDER
 msgid "Seose Toodete kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
@@ -94,39 +118,51 @@ msgstr ""
 msgid "Seose T&ouml;&ouml;laud (RELTYPE_IF_WB) tekst"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:129
+#: classes/applications/spa_bookings/spa_customer_interface.aw:rel_RELTYPE_DISCOUNT
+msgid "Seose Allahindlus (RELTYPE_DISCOUNT) tekst"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:rel_RELTYPE_FAVORITES
+msgid "Seose Lemmikteenuste objektikorv (RELTYPE_FAVORITES) tekst"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:155
 msgid "Broneering %s / %s"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:174
+#: classes/applications/spa_bookings/spa_customer_interface.aw:201
 msgid "Lisa teenus"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:185
+#: classes/applications/spa_bookings/spa_customer_interface.aw:212
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:186
+#: classes/applications/spa_bookings/spa_customer_interface.aw:213
 msgid "Maksa"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:194
+#: classes/applications/spa_bookings/spa_customer_interface.aw:222
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:387
+#: classes/applications/spa_bookings/spa_customer_interface.aw:420
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:921 classes/applications/spa_bookings/spa_customer_interface.aw:1016
+#: classes/applications/spa_bookings/spa_customer_interface.aw:479
+msgid "Lisa lemmikute hulka"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1013 classes/applications/spa_bookings/spa_customer_interface.aw:1112
 msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1086
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1186
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:1086
+#: classes/applications/spa_bookings/spa_customer_interface.aw:1186
 msgid "Naine"
 msgstr ""
 

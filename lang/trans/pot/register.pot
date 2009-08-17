@@ -39,15 +39,15 @@ msgid "Omaduse Tee seadete vorm andmetele default'iks (default_cfgform) help"
 msgstr ""
 
 #: classes/applications/register/register.aw:prop_data_return_url
-msgid "Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) caption"
+msgid "Omaduse Kuhu &uuml;mbersuunata peale andmete salvestamist (data_return_url) caption"
 msgstr ""
 
 #: classes/applications/register/register.aw:prop_data_return_url_comment
-msgid "Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) kommentaar"
+msgid "Omaduse Kuhu &uuml;mbersuunata peale andmete salvestamist (data_return_url) kommentaar"
 msgstr ""
 
 #: classes/applications/register/register.aw:prop_data_return_url_help
-msgid "Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) help"
+msgid "Omaduse Kuhu &uuml;mbersuunata peale andmete salvestamist (data_return_url) help"
 msgstr ""
 
 #: classes/applications/register/register.aw:prop_data_rootmenu

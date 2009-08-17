@@ -19,7 +19,7 @@ msgid "Reval Hotel Central"
 msgstr ""
 
 #: classes/applications/clients/reval/reval_customer_mailer.aw:25
-msgid "Reval hotel Elizabete"
+msgid "Reval Hotel Elizabete"
 msgstr ""
 
 #: classes/applications/clients/reval/reval_customer_mailer.aw:26

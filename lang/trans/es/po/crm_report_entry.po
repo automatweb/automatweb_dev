@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_report_entry.aw:class_1052_help
 msgid "Klassi Aruanne help"
 msgstr ""
@@ -72,6 +71,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_report_entry.aw:prop_worker_sel_help
 msgid "Omaduse T&ouml;&ouml;taja (worker_sel) help"
+msgstr ""
+
+#: classes/applications/crm/crm_report_entry.aw:prop_project_mgr
+msgid "Omaduse Projektijuht (project_mgr) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_report_entry.aw:prop_project_mgr_comment
+msgid "Omaduse Projektijuht (project_mgr) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_report_entry.aw:prop_project_mgr_help
+msgid "Omaduse Projektijuht (project_mgr) help"
 msgstr ""
 
 #: classes/applications/crm/crm_report_entry.aw:prop_from
@@ -189,4 +200,3 @@ msgstr ""
 #: classes/applications/crm/crm_report_entry.aw:group_view_help
 msgid "Grupi Vaata (view) help"
 msgstr ""
-

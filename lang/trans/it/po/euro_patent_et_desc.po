@@ -14,15 +14,15 @@ msgid "Klassi EP patent help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_applicant
-msgid "Omaduse Taotleja (applicant) caption"
+msgid "Omaduse Patendiomanik (applicant) caption"
 msgstr ""
 
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_applicant_comment
-msgid "Omaduse Taotleja (applicant) kommentaar"
+msgid "Omaduse Patendiomanik (applicant) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_applicant_help
-msgid "Omaduse Taotleja (applicant) help"
+msgid "Omaduse Patendiomanik (applicant) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_signed
@@ -181,6 +181,18 @@ msgstr ""
 msgid "Omaduse Taotlusl&otilde;iv (request_fee) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_fee_sum
+msgid "Omaduse Kokku (fee_sum) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_fee_sum_comment
+msgid "Omaduse Kokku (fee_sum) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_fee_sum_help
+msgid "Omaduse Kokku (fee_sum) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_payer
 msgid "Omaduse Maksja nimi (payer) caption"
 msgstr ""
@@ -229,6 +241,90 @@ msgstr ""
 msgid "Omaduse Maksekorraldus (payment_order) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_nr
+msgid "Omaduse Euroopa patendi number (epat_nr) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_nr_comment
+msgid "Omaduse Euroopa patendi number (epat_nr) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_nr_help
+msgid "Omaduse Euroopa patendi number (epat_nr) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_date
+msgid "Omaduse Euroopa patenditaotluse esitamise kuup&auml;ev (epat_date) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_date_comment
+msgid "Omaduse Euroopa patenditaotluse esitamise kuup&auml;ev (epat_date) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_date_help
+msgid "Omaduse Euroopa patenditaotluse esitamise kuup&auml;ev (epat_date) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_invention_name_et
+msgid "Omaduse Leiutise nimetus (eesti keeles) (invention_name_et) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_invention_name_et_comment
+msgid "Omaduse Leiutise nimetus (eesti keeles) (invention_name_et) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_invention_name_et_help
+msgid "Omaduse Leiutise nimetus (eesti keeles) (invention_name_et) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_desc_trans
+msgid "Omaduse Patendikirjelduse t&otilde;lge (epat_desc_trans) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_desc_trans_comment
+msgid "Omaduse Patendikirjelduse t&otilde;lge (epat_desc_trans) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_desc_trans_help
+msgid "Omaduse Patendikirjelduse t&otilde;lge (epat_desc_trans) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_desc_trans_appl
+msgid "Omaduse Patendikirjelduse t&otilde;lke avaldamise sooviavaldus (epat_desc_trans_appl) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_desc_trans_appl_comment
+msgid "Omaduse Patendikirjelduse t&otilde;lke avaldamise sooviavaldus (epat_desc_trans_appl) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_desc_trans_appl_help
+msgid "Omaduse Patendikirjelduse t&otilde;lke avaldamise sooviavaldus (epat_desc_trans_appl) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_other_file
+msgid "Omaduse Muu (epat_other_file) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_other_file_comment
+msgid "Omaduse Muu (epat_other_file) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_epat_other_file_help
+msgid "Omaduse Muu (epat_other_file) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_add_fee
+msgid "Omaduse T&auml;iendav l&otilde;iv (add_fee) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_add_fee_comment
+msgid "Omaduse T&auml;iendav l&otilde;iv (add_fee) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_add_fee_help
+msgid "Omaduse T&auml;iendav l&otilde;iv (add_fee) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:group_priority
 msgid "Grupi Prioriteet (priority) pealkiri"
 msgstr ""
@@ -243,6 +339,14 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:group_fee_help
 msgid "Grupi Riigil&otilde;iv (fee) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:group_invention
+msgid "Grupi Leiutis (invention) pealkiri"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:group_invention_help
+msgid "Grupi Leiutis (invention) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:rel_RELTYPE_APPLICANT
@@ -287,4 +391,24 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:rel_RELTYPE_TRADEMARK_STATUS
 msgid "Seose Staatus (RELTYPE_TRADEMARK_STATUS) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:rel_RELTYPE_EPAT_DESC_TRANS
+msgid "Seose Patendikirjelduse t6lge (RELTYPE_EPAT_DESC_TRANS) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:rel_RELTYPE_EPAT_DESC_TRANS_APPL
+msgid "Seose Patendikirjelduse t6lke avaldamise sooviavaldus (RELTYPE_EPAT_DESC_TRANS_APPL) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:rel_RELTYPE_EPAT_OTHER_FILE
+msgid "Seose Muu (RELTYPE_EPAT_OTHER_FILE) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:185
+msgid "Ainult pdf formaadis fail lubatud"
+msgstr ""
+
+#: classes/applications/clients/patent_office/euro_patent_et_desc.aw:194
+msgid "Kuup&auml;ev peab olema suurem kui 1. juuli 2002"
 msgstr ""

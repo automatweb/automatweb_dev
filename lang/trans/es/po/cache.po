@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/cache.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/cache.aw:654
+#: classes/cache.aw:703
 msgid "cache::file_clear_pt_sub(%s, %s): could not rename %s to %s!"
 msgstr ""
-

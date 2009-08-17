@@ -9,8 +9,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/applications/groupware/task_object.aw:15
-#: classes/applications/groupware/task_object.aw:24
-#: classes/applications/groupware/task_object.aw:41
+#: classes/applications/groupware/task_object.aw:176
+#: classes/applications/groupware/task_object.aw:185
+#: classes/applications/groupware/task_object.aw:202
 msgid "Isiklik"
+msgstr ""
+
+#: classes/applications/groupware/task_object.aw:516
+msgid "tegevus"
+msgstr ""
+
+#: classes/applications/groupware/task_object.aw:562
+msgid "osalus"
+msgstr ""
+
+#: classes/applications/groupware/task_object.aw:673
+#: classes/applications/groupware/task_object.aw:684
+msgid "tund"
+msgstr ""
+
+#: classes/applications/groupware/task_object.aw:673
+#: classes/applications/groupware/task_object.aw:684
+msgid "tundi"
+msgstr ""
+
+#: classes/applications/groupware/task_object.aw:696
+msgid "p&auml;ev"
+msgstr ""
+
+#: classes/applications/groupware/task_object.aw:696
+msgid "p&auml;eva"
 msgstr ""

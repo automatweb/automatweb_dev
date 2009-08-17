@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:class_1185_help
 msgid "Klassi Probleem help"
@@ -258,15 +257,15 @@ msgstr ""
 msgid "Seose &Uuml;ksus (RELTYPE_UNIT) tekst"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:118 classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:139
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:117
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:138
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:215
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:214
 msgid "Probleemist tulenenud &uuml;lesanded"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:233
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:232
 msgid "Probleemist tulenenud n&otilde;uded"
 msgstr ""
-

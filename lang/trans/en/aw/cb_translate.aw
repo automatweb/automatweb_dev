@@ -1,7 +1,6 @@
 <?php
 $GLOBALS["TRANS"]["Grupi T&otilde;lkimine (translation) pealkiri"] = "Translations";
 $GLOBALS["TRANS"]["Kujundusosa Klassihierarhia (translation_vsplit_left) pealkiri"] = "Class hierarhy";
-$GLOBALS["TRANS"]["Kujundusosa Tolgitavad_asjad (translation_vsplit_right) pealkiri"] = "Translatable items";
 $GLOBALS["TRANS"]["AW KLASSIDE T&Otilde;LKIMINE"] = "Translation of AW classes";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Otsi"] = "Search";

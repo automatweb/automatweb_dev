@@ -102,127 +102,127 @@ msgstr ""
 msgid "Konfiguratsioon"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:187
+#: classes/applications/awmyadmin/db_server_explorer.aw:186
 msgid "Muutuja"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:192
+#: classes/applications/awmyadmin/db_server_explorer.aw:191
 msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:204
+#: classes/applications/awmyadmin/db_server_explorer.aw:203
 msgid "Serveri %s info"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:257
+#: classes/applications/awmyadmin/db_server_explorer.aw:256
 msgid "Andmebaasi %s\\%s tabelite info"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:284
+#: classes/applications/awmyadmin/db_server_explorer.aw:283
 msgid "| vaata: %s / %s / %s / %s / %s"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:287
+#: classes/applications/awmyadmin/db_server_explorer.aw:286
 msgid "Struktuur"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:291
+#: classes/applications/awmyadmin/db_server_explorer.aw:290
 msgid "Indeksid"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:295
+#: classes/applications/awmyadmin/db_server_explorer.aw:294
 msgid "Sisu"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:304
+#: classes/applications/awmyadmin/db_server_explorer.aw:303
 msgid "SQL"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:314
+#: classes/applications/awmyadmin/db_server_explorer.aw:313
 msgid "Administreeri"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:351
-#: classes/applications/awmyadmin/db_server_explorer.aw:398
-#: classes/applications/awmyadmin/db_server_explorer.aw:475
+#: classes/applications/awmyadmin/db_server_explorer.aw:350
+#: classes/applications/awmyadmin/db_server_explorer.aw:397
+#: classes/applications/awmyadmin/db_server_explorer.aw:474
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:352
-#: classes/applications/awmyadmin/db_server_explorer.aw:480
+#: classes/applications/awmyadmin/db_server_explorer.aw:351
+#: classes/applications/awmyadmin/db_server_explorer.aw:479
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:353
+#: classes/applications/awmyadmin/db_server_explorer.aw:352
 msgid "Attribuudid"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:354
-#: classes/applications/awmyadmin/db_server_explorer.aw:494
+#: classes/applications/awmyadmin/db_server_explorer.aw:353
+#: classes/applications/awmyadmin/db_server_explorer.aw:493
 msgid "NULL"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:355
+#: classes/applications/awmyadmin/db_server_explorer.aw:354
 msgid "Default"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:356
+#: classes/applications/awmyadmin/db_server_explorer.aw:355
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:357
+#: classes/applications/awmyadmin/db_server_explorer.aw:356
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:374
+#: classes/applications/awmyadmin/db_server_explorer.aw:373
 msgid "Tabeli %s\\%s\\%s struktuur"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:388
+#: classes/applications/awmyadmin/db_server_explorer.aw:387
 msgid "Tabeli %s\\%s\\%s sisu"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:399
+#: classes/applications/awmyadmin/db_server_explorer.aw:398
 msgid "Tulba nimi"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:400
+#: classes/applications/awmyadmin/db_server_explorer.aw:399
 msgid "Unikaalne"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:413
+#: classes/applications/awmyadmin/db_server_explorer.aw:412
 msgid "Tabeli %s\\%s\\%s indeksid"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:432
+#: classes/applications/awmyadmin/db_server_explorer.aw:431
 msgid "Tagasi"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:444
-#: classes/applications/awmyadmin/db_server_explorer.aw:511
+#: classes/applications/awmyadmin/db_server_explorer.aw:443
+#: classes/applications/awmyadmin/db_server_explorer.aw:510
 msgid "Lisa tabel"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:452
+#: classes/applications/awmyadmin/db_server_explorer.aw:451
 msgid "Tabeli andmed"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:457
+#: classes/applications/awmyadmin/db_server_explorer.aw:456
 msgid "Tabeli nimi"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:465
+#: classes/applications/awmyadmin/db_server_explorer.aw:464
 msgid "Primaarv&otilde;tme andmed"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:488
+#: classes/applications/awmyadmin/db_server_explorer.aw:487
 msgid "Pikkus"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:499
+#: classes/applications/awmyadmin/db_server_explorer.aw:498
 msgid "Vaikimisi"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:504
+#: classes/applications/awmyadmin/db_server_explorer.aw:503
 msgid "Extra"
 msgstr ""

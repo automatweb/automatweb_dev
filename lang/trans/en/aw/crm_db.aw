@@ -1,11 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Vaikimisi valim (selections) caption"] = "Default selection";
-$GLOBALS["TRANS"]["Omaduse Org. toolbar (orgtoolbar) caption"] = "Co toolbar";
-$GLOBALS["TRANS"]["Omaduse Compound search (search_form1) caption"] = "Comound search";
-$GLOBALS["TRANS"]["Grupi Organisatsioonid (org) pealkiri"] = "Organisations";
-$GLOBALS["TRANS"]["Grupi Otsing (f2) pealkiri"] = "Search";
-$GLOBALS["TRANS"]["Grupi Nimekiri (firmad) pealkiri"] = "List";
-$GLOBALS["TRANS"]["Grupi Tegevusalad (tegevusalad) pealkiri"] = "Activities";
 $GLOBALS["TRANS"]["Seose Valimid (RELTYPE_SELECTIONS) tekst"] = "Selections";
 $GLOBALS["TRANS"]["Seose Organisatsioonide kaust (RELTYPE_FIRMA_CAT) tekst"] = "Organisation folder";
 $GLOBALS["TRANS"]["Seose Aadresside kaust (RELTYPE_ADDRESS_CAT) tekst"] = "Address folder";
@@ -17,11 +11,11 @@ $GLOBALS["TRANS"]["Seose Toodete kataloogide kaust (RELTYPE_TOODE_CAT) tekst"] =
 $GLOBALS["TRANS"]["Seose Kalender (RELTYPE_CALENDAR) tekst"] = "Calendar";
 $GLOBALS["TRANS"]["Seose Sisestusvormid (RELTYPE_FORMS) tekst"] = "Entry forms";
 $GLOBALS["TRANS"]["Seose Muutujad (RELTYPE_METAMGR) tekst"] = "Variables";
-$GLOBALS["TRANS"]["Kustuta"] = "Delete";
 $GLOBALS["TRANS"]["Organisatsioon"] = "Organisation";
 $GLOBALS["TRANS"]["Aadress"] = "Address";
 $GLOBALS["TRANS"]["E-post"] = "E-mail";
 $GLOBALS["TRANS"]["Telefon"] = "Phone";
+$GLOBALS["TRANS"]["Kustuta"] = "Delete";
 $GLOBALS["TRANS"]["Lisa"] = "Add";
 $GLOBALS["TRANS"]["Kasutaja kalender"] = "User calendar";
 $GLOBALS["TRANS"]["Ava valim"] = "Open selection";

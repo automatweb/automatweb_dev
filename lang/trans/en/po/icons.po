@@ -13,6 +13,6 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/icons.aw:104 classes/core/icons.aw:105
+#: classes/core/icons.aw:103 classes/core/icons.aw:104
 msgid "Objekti id on %s"
 msgstr "Object id is %s"

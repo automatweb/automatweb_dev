@@ -131,31 +131,63 @@ msgstr ""
 msgid "Omaduse Men&uuml;&uuml; seoste tabel (menu_table) help"
 msgstr ""
 
+#: classes/contentmgmt/menu_tree.aw:prop_default_table
+msgid "Omaduse  (default_table) caption"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_default_table_comment
+msgid "Omaduse  (default_table) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:prop_default_table_help
+msgid "Omaduse  (default_table) help"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:group_activity
+msgid "Grupi Aktiivsus (activity) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:group_activity_help
+msgid "Grupi Aktiivsus (activity) help"
+msgstr ""
+
 #: classes/contentmgmt/menu_tree.aw:rel_RELTYPE_ROOT_MENU
 msgid "Seose Men&uuml;&uuml; (RELTYPE_ROOT_MENU) tekst"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:57
+#: classes/contentmgmt/menu_tree.aw:63
 msgid "K&otilde;ik"
 msgstr "All"
 
-#: classes/contentmgmt/menu_tree.aw:373
+#: classes/contentmgmt/menu_tree.aw:149
+msgid "S&uuml;steemi vaikimisi objekt"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:152
+msgid "Vali"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:157
+msgid "Objekt"
+msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:475
 msgid "Men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:407
+#: classes/contentmgmt/menu_tree.aw:509
 msgid "Lisa men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:410
+#: classes/contentmgmt/menu_tree.aw:512
 msgid "Otsi"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:414
+#: classes/contentmgmt/menu_tree.aw:516
 msgid "Eemalda men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:446
+#: classes/contentmgmt/menu_tree.aw:548
 msgid "Avamisaeg"
 msgstr ""
 

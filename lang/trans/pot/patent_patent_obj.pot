@@ -10,15 +10,15 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/clients/patent_office/patent_patent_obj.aw:12
+#: classes/applications/clients/patent_office/patent_patent_obj.aw:14
 msgid "autori &otilde;igusj&auml;rglane"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent_obj.aw:13
+#: classes/applications/clients/patent_office/patent_patent_obj.aw:15
 msgid "isik vastavalt t&ouml;&ouml;lepingule"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent_obj.aw:14
+#: classes/applications/clients/patent_office/patent_patent_obj.aw:16
 msgid "isik vastavalt lepingule, v&auml;lja arvatud t&ouml;&ouml;lepingule"
 msgstr ""
 

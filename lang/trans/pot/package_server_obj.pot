@@ -14,7 +14,11 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/package_management/package_server_obj.aw:73
+#: classes/applications/package_management/package_server_obj.aw:14
+msgid "Nimetu pakett"
+msgstr ""
+
+#: classes/applications/package_management/package_server_obj.aw:114
 msgid "Pakkide kaust"
 msgstr ""
 

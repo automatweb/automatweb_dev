@@ -196,27 +196,27 @@ msgstr "Address"
 msgid "Vali"
 msgstr "Select"
 
-#: classes/contentmgmt/forum/forum.aw:1312
+#: classes/contentmgmt/forum/forum.aw:1311
 msgid "Nime v&auml;li peab olema t&auml;idetud"
 msgstr "Name field must be filled"
 
-#: classes/contentmgmt/forum/forum.aw:1316
+#: classes/contentmgmt/forum/forum.aw:1315
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud"
 msgstr "Comment field must be filled"
 
-#: classes/contentmgmt/forum/forum.aw:1320
+#: classes/contentmgmt/forum/forum.aw:1319
 msgid "Sisestatud kontrollkood on vale"
 msgstr "Verification code is incorrect"
 
-#: classes/contentmgmt/forum/forum.aw:2431
+#: classes/contentmgmt/forum/forum.aw:2439
 msgid "N&auml;ita"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2439
+#: classes/contentmgmt/forum/forum.aw:2447
 msgid "Ekspordi XML"
 msgstr "Export XML"
 
-#: classes/contentmgmt/forum/forum.aw:2445
+#: classes/contentmgmt/forum/forum.aw:2453
 msgid "E-posti aadressid"
 msgstr "E-mail addresses"
 

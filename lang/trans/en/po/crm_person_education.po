@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Haridus help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_education.aw:prop_person
+msgid "Omaduse Isik (person) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_person_comment
+msgid "Omaduse Isik (person) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_person_help
+msgid "Omaduse Isik (person) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_education.aw:prop_school1
 msgid "Omaduse Kool (school1) caption"
 msgstr ""
@@ -36,6 +48,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_school2_help
 msgid "Omaduse Muu kool (school2) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_faculty
+msgid "Omaduse Teaduskond (faculty) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_faculty_comment
+msgid "Omaduse Teaduskond (faculty) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_faculty_help
+msgid "Omaduse Teaduskond (faculty) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_degree
@@ -72,6 +96,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_speciality_help
 msgid "Omaduse Eriala (speciality) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_addspeciality
+msgid "Omaduse K&otilde;rvaleriala (addspeciality) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_addspeciality_comment
+msgid "Omaduse K&otilde;rvaleriala (addspeciality) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_addspeciality_help
+msgid "Omaduse K&otilde;rvaleriala (addspeciality) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_main_speciality
@@ -182,71 +218,95 @@ msgstr ""
 msgid "Seose Omandamise keel (RELTYPE_LANGUAGE) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:78
+#: classes/applications/crm/crm_person_education.aw:rel_RELTYPE_PERSON
+msgid "Seose Isik (RELTYPE_PERSON) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:rel_RELTYPE_FACULTY
+msgid "Seose Teaduskond (RELTYPE_FACULTY) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:98
+#: classes/applications/crm/crm_person_education.aw:113
 msgid "P&otilde;hiharidus"
 msgstr "Main education"
 
-#: classes/applications/crm/crm_person_education.aw:79
+#: classes/applications/crm/crm_person_education.aw:99
+#: classes/applications/crm/crm_person_education.aw:114
 msgid "Keskharidus"
 msgstr "Middle education"
 
-#: classes/applications/crm/crm_person_education.aw:80
+#: classes/applications/crm/crm_person_education.aw:100
+#: classes/applications/crm/crm_person_education.aw:115
 msgid "Kutsekeskharidus"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:81
+#: classes/applications/crm/crm_person_education.aw:101
+#: classes/applications/crm/crm_person_education.aw:116
 msgid "Kesk-eriharidus"
 msgstr "Middle-special education"
 
-#: classes/applications/crm/crm_person_education.aw:82
+#: classes/applications/crm/crm_person_education.aw:102
+#: classes/applications/crm/crm_person_education.aw:117
 msgid "Kutsek&otilde;rgharidus"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:83
+#: classes/applications/crm/crm_person_education.aw:103
+#: classes/applications/crm/crm_person_education.aw:118
 msgid "Rakendusk&otilde;rgharidus"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:84
+#: classes/applications/crm/crm_person_education.aw:104
+#: classes/applications/crm/crm_person_education.aw:120
 msgid "K&otilde;rghariduse diplom"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:85
+#: classes/applications/crm/crm_person_education.aw:105
+#: classes/applications/crm/crm_person_education.aw:121
 msgid "Bakalaureus"
 msgstr "Bachelor"
 
-#: classes/applications/crm/crm_person_education.aw:86
+#: classes/applications/crm/crm_person_education.aw:106
+#: classes/applications/crm/crm_person_education.aw:122
 msgid "Magister"
 msgstr "Magistar"
 
-#: classes/applications/crm/crm_person_education.aw:87
+#: classes/applications/crm/crm_person_education.aw:107
+#: classes/applications/crm/crm_person_education.aw:123
 msgid "Doktor"
 msgstr "Doctor"
 
-#: classes/applications/crm/crm_person_education.aw:88
+#: classes/applications/crm/crm_person_education.aw:108
+#: classes/applications/crm/crm_person_education.aw:124
 msgid "Teaduste kandidaat"
 msgstr "Master of science"
 
-#: classes/applications/crm/crm_person_education.aw:123
+#: classes/applications/crm/crm_person_education.aw:112
+#: classes/applications/crm/crm_person_education.aw:206
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:119
+msgid "K&otilde;rgharidus"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:170
 msgid "Algus ei saa olla suurem kui l&otilde;pp!"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:133
+#: classes/applications/crm/crm_person_education.aw:180
 msgid "L&otilde;pp ei saa olla v&auml;iksem kui algus!"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:138
-#: classes/applications/crm/crm_person_education.aw:146
+#: classes/applications/crm/crm_person_education.aw:185
+#: classes/applications/crm/crm_person_education.aw:193
 msgid "Jah"
 msgstr "Yes"
 
-#: classes/applications/crm/crm_person_education.aw:139
-#: classes/applications/crm/crm_person_education.aw:147
+#: classes/applications/crm/crm_person_education.aw:186
+#: classes/applications/crm/crm_person_education.aw:194
 msgid "Ei"
 msgstr "No"
-
-#: classes/applications/crm/crm_person_education.aw:172
-msgid "--vali--"
-msgstr ""
 
 #~ msgid "Diplom"
 #~ msgstr "Diploma"

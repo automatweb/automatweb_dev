@@ -213,15 +213,15 @@ msgstr "New call"
 msgid "Uus toimetus"
 msgstr "New event"
 
-#: classes/applications/calendar/calendar_vacancy.aw:236
+#: classes/applications/calendar/calendar_vacancy.aw:235
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/applications/calendar/calendar_vacancy.aw:245
+#: classes/applications/calendar/calendar_vacancy.aw:244
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/applications/calendar/calendar_vacancy.aw:254
+#: classes/applications/calendar/calendar_vacancy.aw:253
 msgid "Salvesta"
 msgstr "Save"
 

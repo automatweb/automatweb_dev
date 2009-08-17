@@ -105,30 +105,34 @@ msgstr ""
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:120
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:122
 msgid "Uuenda cache"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:159
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:162
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:169
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:172
 msgid "<b>Kataloogid</b>"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:185
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:188
 msgid "<b>Failid</b>"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:345
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:348
 msgid "the subject xml file (%s) does not exist!"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:758
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:791
 msgid "Andmebaasi v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:762
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:795
 msgid "XML v&auml;li"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:799
+msgid "Kuup&auml;ev tekstina"
 msgstr ""

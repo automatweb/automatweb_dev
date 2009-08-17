@@ -11,7 +11,7 @@ msgstr ""
 
 
 #: classes/applications/event_import_2/json_delfi.aw:class_1414_help
-msgid "Klassi Delfi JSON väljund help"
+msgid "Klassi Delfi JSON v&auml;ljund help"
 msgstr ""
 
 #: classes/applications/event_import_2/json_delfi.aw:prop_json_url
@@ -108,5 +108,9 @@ msgstr ""
 
 #: classes/applications/event_import_2/json_delfi.aw:prop_show_output_help
 msgid "Omaduse N&auml;ita v&auml;ljundit (show_output) help"
+msgstr ""
+
+#: classes/applications/event_import_2/json_delfi.aw:59
+msgid "Delfi JSON v&auml;ljund"
 msgstr ""
 

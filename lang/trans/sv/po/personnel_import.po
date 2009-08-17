@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/personnel_import/personnel_import.aw:class_1386_help
 msgid "Klassi Personali import help"
 msgstr ""
@@ -102,7 +101,7 @@ msgstr ""
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
-#: classes/applications/personnel_import/personnel_import.aw:67
+#: classes/applications/personnel_import/personnel_import.aw:68
 msgid "K&auml;ivita import"
 msgstr ""
 
@@ -121,4 +120,3 @@ msgstr ""
 #: classes/applications/personnel_import/personnel_import.aw:129
 msgid "Default kataloog valimata!"
 msgstr ""
-

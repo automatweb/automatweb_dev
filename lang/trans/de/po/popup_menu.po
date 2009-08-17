@@ -13,26 +13,6 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/popup_menu.aw:prop_
-msgid "Omaduse  () caption"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:prop__comment
-msgid "Omaduse  () kommentaar"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:prop__help
-msgid "Omaduse  () help"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:51 classes/vcl/popup_menu.aw:180
+#: classes/vcl/popup_menu.aw:53 classes/vcl/popup_menu.aw:187
 msgid "Valik"
 msgstr ""

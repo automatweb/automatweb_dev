@@ -4,7 +4,6 @@ $GLOBALS["TRANS"]["Omaduse  (o_tree) caption"] = "Folders";
 $GLOBALS["TRANS"]["Omaduse  (o_tbl) caption"] = "Content objects";
 $GLOBALS["TRANS"]["Omaduse Info (info_text) caption"] = "Info";
 $GLOBALS["TRANS"]["Omaduse Laadi ZIP fail (zip_upload) caption"] = "Upload ZIP file";
-$GLOBALS["TRANS"]["Omaduse Lae faile\t (uploader) caption"] = "Upload files\t";
 $GLOBALS["TRANS"]["Grupi Objektid (o) pealkiri"] = "Objects";
 $GLOBALS["TRANS"]["Grupi Objektid (o) help"] = "This view is for editing content objects. To edit folders, You have to select Change from action-button on the object row. To edit other objects You can click on the name of the object.<br /><br />To add a new object, use the green button on the left of the toolbar.<br /><br />You can move in site structure by clicking on the tree or on folder names.<br /><br />You can see preview of the current location on the web by clickin Preview button on the right of the toolbar";
 $GLOBALS["TRANS"]["Grupi Failide &uuml;leslaadimine (fu) pealkiri"] = "File upload";

@@ -29,6 +29,5 @@ $GLOBALS["TRANS"]["object::set_prop(%s, %s): no property %s defined for current 
 $GLOBALS["TRANS"]["object::instance(): no object loaded or class id not set!"] = "object::instance(): no object loaded or class id not set!";
 $GLOBALS["TRANS"]["object::create_brother(%s): no parent!"] = "object::create_brother(%s): no parent!";
 $GLOBALS["TRANS"]["object::path(%s): error in object hierarchy, infinite loop!"] = "object::path(%s): error in object hierarchy, infinite loop!";
-$GLOBALS["TRANS"]["object::save(): no acess to save object %s under %s !"] = "object::save(): no acess to save object %s under %s !";
 $GLOBALS["TRANS"]["object::save(): no access to add object under folder %s (gidlist = %s)!"] = "object::save(): no access to add object under folder %s (gidlist = %s)!";
 ?>

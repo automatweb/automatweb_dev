@@ -74,6 +74,18 @@ msgstr ""
 msgid "Omaduse T&ouml;&ouml;taja (worker_sel) help"
 msgstr ""
 
+#: classes/applications/crm/crm_report_entry.aw:prop_project_mgr
+msgid "Omaduse Projektijuht (project_mgr) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_report_entry.aw:prop_project_mgr_comment
+msgid "Omaduse Projektijuht (project_mgr) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_report_entry.aw:prop_project_mgr_help
+msgid "Omaduse Projektijuht (project_mgr) help"
+msgstr ""
+
 #: classes/applications/crm/crm_report_entry.aw:prop_from
 msgid "Omaduse Alates (from) caption"
 msgstr ""

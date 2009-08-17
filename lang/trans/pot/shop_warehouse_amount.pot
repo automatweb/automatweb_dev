@@ -74,6 +74,18 @@ msgstr ""
 msgid "Omaduse &Uuml;hik (unit) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_amount.aw:prop_is_default
+msgid "Omaduse  (is_default) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_amount.aw:prop_is_default_comment
+msgid "Omaduse  (is_default) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_amount.aw:prop_is_default_help
+msgid "Omaduse  (is_default) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_amount.aw:rel_RELTYPE_PRODUCT
 msgid "Seose Artikkel (RELTYPE_PRODUCT) tekst"
 msgstr ""

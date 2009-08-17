@@ -145,6 +145,10 @@ msgstr ""
 msgid "Klassi Mailinglist (72) nimi"
 msgstr ""
 
+#: aw.ini:class_prodfamily_72
+msgid "Klassi tooteperekonna Mailinglist (72) nimi"
+msgstr ""
+
 #: aw.ini:class_73
 msgid "Klassi Meiliaadress (73) nimi"
 msgstr ""
@@ -239,6 +243,10 @@ msgstr ""
 
 #: aw.ini:class_130
 msgid "Klassi Kliendibaas (130) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_130
+msgid "Klassi tooteperekonna Asutuste andmebaas (130) nimi"
 msgstr ""
 
 #: aw.ini:class_131
@@ -509,16 +517,64 @@ msgstr ""
 msgid "Klassi Intranet (233) nimi"
 msgstr ""
 
+#: aw.ini:class_236
+msgid "Klassi Taket Spikker (236) nimi"
+msgstr ""
+
+#: aw.ini:class_237
+msgid "Klassi Taket tellimuste nimekiri (237) nimi"
+msgstr ""
+
 #: aw.ini:class_239
 msgid "Klassi Projekt (239) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_239
+msgid "Klassi tooteperekonna Projektide haldus (239) nimi"
 msgstr ""
 
 #: aw.ini:class_240
 msgid "Klassi Messengeri identiteet (240) nimi"
 msgstr ""
 
+#: aw.ini:class_241
+msgid "Klassi Taket Ostukorv (241) nimi"
+msgstr ""
+
+#: aw.ini:class_242
+msgid "Klassi Taketi Otsing (242) nimi"
+msgstr ""
+
+#: aw.ini:class_243
+msgid "Klassi Taketi tellimus (243) nimi"
+msgstr ""
+
 #: aw.ini:class_244
 msgid "Klassi Toimetus (244) nimi"
+msgstr ""
+
+#: aw.ini:class_245
+msgid "Klassi Taketi Ostukorvi Rida (245) nimi"
+msgstr ""
+
+#: aw.ini:class_246
+msgid "Klassi Taketi Ostukorvi Objekt (246) nimi"
+msgstr ""
+
+#: aw.ini:class_247
+msgid "Klassi Taketi kasutajate import (247) nimi"
+msgstr ""
+
+#: aw.ini:class_248
+msgid "Klassi Taketi JS Parser (248) nimi"
+msgstr ""
+
+#: aw.ini:class_249
+msgid "Klassi Taketi tellimuse item (249) nimi"
+msgstr ""
+
+#: aw.ini:class_250
+msgid "Klassi Taketi Otsingu piirangud (250) nimi"
 msgstr ""
 
 #: aw.ini:class_251
@@ -554,7 +610,7 @@ msgid "Klassi tooteperekonna V&auml;rbamiskeskkond (275) nimi"
 msgstr ""
 
 #: aw.ini:class_285
-msgid "Klassi Tööpakkumine (285) nimi"
+msgid "Klassi T&ouml;&ouml;pakkumine (285) nimi"
 msgstr ""
 
 #: aw.ini:class_prodfamily_285
@@ -587,6 +643,10 @@ msgstr ""
 
 #: aw.ini:class_289
 msgid "Klassi Ladu (289) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_289
+msgid "Klassi tooteperekonna Laovara (289) nimi"
 msgstr ""
 
 #: aw.ini:class_290
@@ -654,7 +714,7 @@ msgid "Klassi Dokumendiarhiiv (313) nimi"
 msgstr ""
 
 #: aw.ini:class_314
-msgid "Klassi Tellimiskeskkond (314) nimi"
+msgid "Klassi E-pood (314) nimi"
 msgstr ""
 
 #: aw.ini:class_315
@@ -945,16 +1005,32 @@ msgstr ""
 msgid "Klassi Ressurss (825) nimi"
 msgstr ""
 
+#: aw.ini:class_prodfamily_825
+msgid "Klassi tooteperekonna Ressursiplaneerija (825) nimi"
+msgstr ""
+
 #: aw.ini:class_826
 msgid "Klassi Tegevus (826) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_826
+msgid "Klassi tooteperekonna Ressursiplaneerija (826) nimi"
 msgstr ""
 
 #: aw.ini:class_827
 msgid "Klassi Ressursiplaneerija (827) nimi"
 msgstr ""
 
+#: aw.ini:class_prodfamily_827
+msgid "Klassi tooteperekonna Ressursiplaneerija (827) nimi"
+msgstr ""
+
 #: aw.ini:class_828
 msgid "Klassi Arendustoode (828) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_828
+msgid "Klassi tooteperekonna Ressursiplaneerija (828) nimi"
 msgstr ""
 
 #: aw.ini:class_830
@@ -1037,6 +1113,10 @@ msgstr ""
 msgid "Klassi Ressursihalduskeskkond (852) nimi"
 msgstr ""
 
+#: aw.ini:class_prodfamily_852
+msgid "Klassi tooteperekonna Ressursiplaneerija (852) nimi"
+msgstr ""
+
 #: aw.ini:class_858
 msgid "Klassi Ajaline aktiivsus (858) nimi"
 msgstr ""
@@ -1077,6 +1157,10 @@ msgstr ""
 msgid "Klassi Operaator (872) nimi"
 msgstr ""
 
+#: aw.ini:class_prodfamily_872
+msgid "Klassi tooteperekonna Ressursiplaneerija (872) nimi"
+msgstr ""
+
 #: aw.ini:class_874
 msgid "Klassi Autentimisserver NDS (874) nimi"
 msgstr ""
@@ -1090,11 +1174,15 @@ msgid "Klassi Puhkus (876) nimi"
 msgstr ""
 
 #: aw.ini:class_877
-msgid "Klassi Töölepingu peatamine (877) nimi"
+msgid "Klassi T&ouml;&ouml;lepingu peatamine (877) nimi"
 msgstr ""
 
 #: aw.ini:class_878
 msgid "Klassi Prisma import (878) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_878
+msgid "Klassi tooteperekonna Ressursiplaneerija (878) nimi"
 msgstr ""
 
 #: aw.ini:class_879
@@ -1239,6 +1327,10 @@ msgstr ""
 
 #: aw.ini:class_929
 msgid "Klassi Klasside brauser (929) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_929
+msgid "Klassi tooteperekonna Tarkvarahaldus (929) nimi"
 msgstr ""
 
 #: aw.ini:class_930
@@ -2070,11 +2162,15 @@ msgid "Klassi Ruumi broneerimine (1174) nimi"
 msgstr ""
 
 #: aw.ini:class_1175
-msgid "Klassi Pakkumise saamise palve (1175) nimi"
+msgid "Klassi Konverentsitellimus (1175) nimi"
 msgstr ""
 
 #: aw.ini:class_1176
 msgid "Klassi Reusneri andmete sirvimine (1176) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_1176
+msgid "Klassi tooteperekonna Ressursiplaneerija (1176) nimi"
 msgstr ""
 
 #: aw.ini:class_1177
@@ -2118,7 +2214,11 @@ msgid "Klassi DigiDoc (1186) nimi"
 msgstr ""
 
 #: aw.ini:class_1187
-msgid "Klassi Reserveeringute &uuml;levaade (1187) nimi"
+msgid "Klassi Broneeringute &uuml;levaade (1187) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_1187
+msgid "Klassi tooteperekonna Broneeringute haldus (1187) nimi"
 msgstr ""
 
 #: aw.ini:class_1188
@@ -2138,7 +2238,11 @@ msgid "Klassi Autentimisserver kasutajadefineeritud (1191) nimi"
 msgstr ""
 
 #: aw.ini:class_1192
-msgid "Klassi RFP Haldus (1192) nimi"
+msgid "Klassi Konverentsihaldus (1192) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_1192
+msgid "Klassi tooteperekonna Konverentsihaldus (1192) nimi"
 msgstr ""
 
 #: aw.ini:class_1193
@@ -2155,10 +2259,6 @@ msgstr ""
 
 #: aw.ini:class_1196
 msgid "Klassi Expp kampaania (1196) nimi"
-msgstr ""
-
-#: aw.ini:class_1197
-msgid "Klassi DOT (1197) nimi"
 msgstr ""
 
 #: aw.ini:class_1198
@@ -2274,7 +2374,7 @@ msgid "Klassi Toimumisaeg (1322) nimi"
 msgstr ""
 
 #: aw.ini:class_1337
-msgid "Klassi Sündmuste import (1337) nimi"
+msgid "Klassi S&uuml;ndmuste import (1337) nimi"
 msgstr ""
 
 #: aw.ini:class_1338
@@ -2314,7 +2414,7 @@ msgid "Klassi OWS Broneering (1344) nimi"
 msgstr ""
 
 #: aw.ini:class_1341
-msgid "Klassi Ülesannete kuvamine (1341) nimi"
+msgid "Klassi &Uuml;lesannete kuvamine (1341) nimi"
 msgstr ""
 
 #: aw.ini:class_1342
@@ -2334,11 +2434,11 @@ msgid "Klassi M&uuml;&uuml;gikeskkond (1347) nimi"
 msgstr ""
 
 #: aw.ini:class_1348
-msgid "Klassi Sündmuste eksport (iCal) (1348) nimi"
+msgid "Klassi S&uuml;ndmuste eksport (iCal) (1348) nimi"
 msgstr ""
 
 #: aw.ini:class_1349
-msgid "Klassi Sündmuste import (iCal) (1349) nimi"
+msgid "Klassi S&uuml;ndmuste import (iCal) (1349) nimi"
 msgstr ""
 
 #: aw.ini:class_1350
@@ -2493,6 +2593,10 @@ msgstr ""
 msgid "Klassi D&uuml;naamilise k&uuml;simustiku vastus (1395) nimi"
 msgstr ""
 
+#: aw.ini:class_1396
+msgid "Klassi D&uuml;naamilise k&uuml;simustiku vastaja (1396) nimi"
+msgstr ""
+
 #: aw.ini:class_1397
 msgid "Klassi AW v&auml;line teenus (1397) nimi"
 msgstr ""
@@ -2546,11 +2650,11 @@ msgid "Klassi Tellimiskeskkonna toodete filter (1412) nimi"
 msgstr ""
 
 #: aw.ini:class_1413
-msgid "Klassi Sündmuste import 2 (1413) nimi"
+msgid "Klassi S&uuml;ndmuste import 2 (1413) nimi"
 msgstr ""
 
 #: aw.ini:class_1414
-msgid "Klassi Delfi JSON väljund (1414) nimi"
+msgid "Klassi Delfi JSON v&auml;ljund (1414) nimi"
 msgstr ""
 
 #: aw.ini:class_1415
@@ -2714,7 +2818,7 @@ msgid "Klassi AW Spetsifikatsiooni versioon (1456) nimi"
 msgstr ""
 
 #: aw.ini:class_1457
-msgid "Klassi Hinnakiri (1457) nimi"
+msgid "Klassi Hinnastaja (1457) nimi"
 msgstr ""
 
 #: aw.ini:class_1458
@@ -2733,6 +2837,10 @@ msgstr ""
 msgid "Klassi &Uuml;ksiktoode (1462) nimi"
 msgstr ""
 
+#: aw.ini:class_1464
+msgid "Klassi Otseviidete manageerija (1464) nimi"
+msgstr ""
+
 #: aw.ini:class_1465
 msgid "Klassi Tegevuse statistika t&uuml;&uuml;p (1465) nimi"
 msgstr ""
@@ -2743,6 +2851,10 @@ msgstr ""
 
 #: aw.ini:class_1467
 msgid "Klassi Paketi Saidi seos (1467) nimi"
+msgstr ""
+
+#: aw.ini:class_1468
+msgid "Klassi Kiirklahv (1468) nimi"
 msgstr ""
 
 #: aw.ini:class_1469
@@ -2757,8 +2869,408 @@ msgstr ""
 msgid "Klassi AW Spetisifikatsiooni kasutuslugu (1471) nimi"
 msgstr ""
 
+#: aw.ini:class_1472
+msgid "Klassi Kiirklahvide set (1472) nimi"
+msgstr ""
+
+#: aw.ini:class_1473
+msgid "Klassi L&auml;hetusviis (1473) nimi"
+msgstr ""
+
+#: aw.ini:class_1474
+msgid "Klassi L&auml;hetustingimus (1474) nimi"
+msgstr ""
+
 #: aw.ini:class_1475
 msgid "Klassi S&uuml;ndmused veebis (1475) nimi"
+msgstr ""
+
+#: aw.ini:class_1476
+msgid "Klassi DomPDF (1476) nimi"
+msgstr ""
+
+#: aw.ini:class_1477
+msgid "Klassi Sisupakett (1477) nimi"
+msgstr ""
+
+#: aw.ini:class_1478
+msgid "Klassi Sisutingimus (1478) nimi"
+msgstr ""
+
+#: aw.ini:class_1479
+msgid "Klassi Ajahalduse Installatsioonimoodul (1479) nimi"
+msgstr ""
+
+#: aw.ini:class_1480
+msgid "Klassi Pakkumise T&uuml;&uuml;p (1480) nimi"
+msgstr ""
+
+#: aw.ini:class_1481
+msgid "Klassi Grupikuuluvus (1481) nimi"
+msgstr ""
+
+#: aw.ini:class_1485
+msgid "Klassi Reval extranet (1485) nimi"
+msgstr ""
+
+#: aw.ini:class_1486
+msgid "Klassi Saitide v&otilde;rdlus (1486) nimi"
+msgstr ""
+
+#: aw.ini:class_1487
+msgid "Klassi Saitide kopeerimine (1487) nimi"
+msgstr ""
+
+#: aw.ini:class_1488
+msgid "Klassi Saidi kopeerimine (1488) nimi"
+msgstr ""
+
+#: aw.ini:class_1489
+msgid "Klassi Kopeeritud sait (1489) nimi"
+msgstr ""
+
+#: aw.ini:class_1490
+msgid "Klassi Osapool (1490) nimi"
+msgstr ""
+
+#: aw.ini:class_1491
+msgid "Klassi D&uuml;naamilise k&uuml;simustiku tekst (1491) nimi"
+msgstr ""
+
+#: aw.ini:class_1492
+msgid "Klassi Tekstipeksja (1492) nimi"
+msgstr ""
+
+#: aw.ini:class_1493
+msgid "Klassi SM Klasside statisika t&ouml;&ouml;laud (1493) nimi"
+msgstr ""
+
+#: aw.ini:class_1494
+msgid "Klassi SM Klassi statistika grupp (1494) nimi"
+msgstr ""
+
+#: aw.ini:class_1496
+msgid "Klassi Taketi toodete import (1496) nimi"
+msgstr ""
+
+#: aw.ini:class_1497
+msgid "Klassi Property mustand (1497) nimi"
+msgstr ""
+
+#: aw.ini:class_1498
+msgid "Klassi AW Saidi kirje (1498) nimi"
+msgstr ""
+
+#: aw.ini:class_1499
+msgid "Klassi AW Serveri kirje (1499) nimi"
+msgstr ""
+
+#: aw.ini:class_1500
+msgid "Klassi Toote tarnetingimus (1500) nimi"
+msgstr ""
+
+#: aw.ini:class_1501
+msgid "Klassi Projektikategooria (1501) nimi"
+msgstr ""
+
+#: aw.ini:class_1502
+msgid "Klassi Saidi teavituse reegel (1502) nimi"
+msgstr ""
+
+#: aw.ini:class_1503
+msgid "Klassi Saidi kohta saadetud teavitus (1503) nimi"
+msgstr ""
+
+#: aw.ini:class_1504
+msgid "Klassi Mailinglisti liikmelisuse haldus (1504) nimi"
+msgstr ""
+
+#: aw.ini:class_1505
+msgid "Klassi SM Omaduse statistika grupp (1505) nimi"
+msgstr ""
+
+#: aw.ini:class_1506
+msgid "Klassi AW Klassi omadus (1506) nimi"
+msgstr ""
+
+#: aw.ini:class_1507
+msgid "Klassi Kliendisuhetegeneraator (1507) nimi"
+msgstr ""
+
+#: aw.ini:class_1508
+msgid "Klassi AW Saitide grupp (1508) nimi"
+msgstr ""
+
+#: aw.ini:class_1509
+msgid "Klassi Isiku t&ouml;&ouml;tundide tabel (1509) nimi"
+msgstr ""
+
+#: aw.ini:class_1510
+msgid "Klassi Isiku t&ouml;&ouml;tundide tabeli sisestus (1510) nimi"
+msgstr ""
+
+#: aw.ini:class_1511
+msgid "Klassi Materjali kulutingimus (1511) nimi"
+msgstr ""
+
+#: aw.ini:class_1512
+msgid "Klassi Isiku n&otilde;utud tundide kirje (1512) nimi"
+msgstr ""
+
+#: aw.ini:class_1513
+msgid "Klassi Materjalikulu (1513) nimi"
+msgstr ""
+
+#: aw.ini:class_1514
+msgid "Klassi Isiku t&ouml;&ouml;tundide sisestuse rida (1514) nimi"
+msgstr ""
+
+#: aw.ini:class_1515
+msgid "Klassi Organisatsiooni seadete vormi seadistaja (1515) nimi"
+msgstr ""
+
+#: aw.ini:class_1516
+msgid "Klassi Materjali liikumisseos (1516) nimi"
+msgstr ""
+
+#: aw.ini:class_1517
+msgid "Klassi Objekti kommentaar (1517) nimi"
+msgstr ""
+
+#: aw.ini:class_1518
+msgid "Klassi ERP Tellimuste haldus (1518) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_1518
+msgid "Klassi tooteperekonna Tr&uuml;kise m&uuml;&uuml;gikeskkond (1518) nimi"
+msgstr ""
+
+#: aw.ini:class_1519
+msgid "Klassi ERP Tellimus (1519) nimi"
+msgstr ""
+
+#: aw.ini:class_1520
+msgid "Klassi ERP Tr&uuml;kit&ouml;&ouml;stuse tellimus (1520) nimi"
+msgstr ""
+
+#: aw.ini:class_1521
+msgid "Klassi ERP Hinnakiri (1521) nimi"
+msgstr ""
+
+#: aw.ini:class_1522
+msgid "Klassi ERP Hinnakirja rida (1522) nimi"
+msgstr ""
+
+#: aw.ini:class_1523
+msgid "Klassi ERP Hinna kate (1523) nimi"
+msgstr ""
+
+#: aw.ini:class_1524
+msgid "Klassi Organisatsiooni seos tegevusalaga (1524) nimi"
+msgstr ""
+
+#: aw.ini:class_1525
+msgid "Klassi Praktikad (1525) nimi"
+msgstr ""
+
+#: aw.ini:class_1526
+msgid "Klassi Praktika (1526) nimi"
+msgstr ""
+
+#: aw.ini:class_1527
+msgid "Klassi SmartPOST pakiautomaadid (1527) nimi"
+msgstr ""
+
+#: aw.ini:class_1528
+msgid "Klassi ERP Tellumuste veebiliides (1528) nimi"
+msgstr ""
+
+#: aw.ini:class_1529
+msgid "Klassi ERP Paberi formaat (1529) nimi"
+msgstr ""
+
+#: aw.ini:class_1530
+msgid "Klassi Kogusepiirang (1530) nimi"
+msgstr ""
+
+#: aw.ini:class_1531
+msgid "Klassi RSS Lugeja (1531) nimi"
+msgstr ""
+
+#: aw.ini:class_1532
+msgid "Klassi Saidi koopia tellija (1532) nimi"
+msgstr ""
+
+#: aw.ini:class_1533
+msgid "Klassi ERP Saadetud tellimus (1533) nimi"
+msgstr ""
+
+#: aw.ini:class_1534
+msgid "Klassi Kliendigrupi allahindlus (1534) nimi"
+msgstr ""
+
+#: aw.ini:class_1535
+msgid "Klassi Lao import (1535) nimi"
+msgstr ""
+
+#: aw.ini:class_1536
+msgid "Klassi ERP Tellimuses kasutatav materjal (1536) nimi"
+msgstr ""
+
+#: aw.ini:class_1537
+msgid "Klassi ERP M&uuml;&uuml;gi katte grupp (1537) nimi"
+msgstr ""
+
+#: aw.ini:class_1538
+msgid "Klassi Tulukoht (1538) nimi"
+msgstr ""
+
+#: aw.ini:class_1539
+msgid "Klassi Kulukoht (1539) nimi"
+msgstr ""
+
+#: aw.ini:class_1540
+msgid "Klassi Kulukoha rida (1540) nimi"
+msgstr ""
+
+#: aw.ini:class_1541
+msgid "Klassi Klientide import (1541) nimi"
+msgstr ""
+
+#: aw.ini:class_1542
+msgid "Klassi Infrastruktuuri import (1542) nimi"
+msgstr ""
+
+#: aw.ini:class_1543
+msgid "Klassi Sisupaketi hinnatingimused (1543) nimi"
+msgstr ""
+
+#: aw.ini:class_1544
+msgid "Klassi T&ouml;&ouml;pakkumise tingimuste grupp (1544) nimi"
+msgstr ""
+
+#: aw.ini:class_1545
+msgid "Klassi T&ouml;&ouml;pakkumise tingimus (1545) nimi"
+msgstr ""
+
+#: aw.ini:class_1546
+msgid "Klassi ERP Ressursi seade (1546) nimi"
+msgstr ""
+
+#: aw.ini:class_1547
+msgid "Klassi MRP Ressursi seade kategooria (1547) nimi"
+msgstr ""
+
+#: aw.ini:class_1548
+msgid "Klassi ERP Formaadi kategooria (1548) nimi"
+msgstr ""
+
+#: aw.ini:class_1549
+msgid "Klassi MRP Formaadi kehtivus ressursile (1549) nimi"
+msgstr ""
+
+#: aw.ini:class_1551
+msgid "Klassi ERP Ressursi j&otilde;udluse kirje (1551) nimi"
+msgstr ""
+
+#: aw.ini:class_1553
+msgid "Klassi Kampaania (1553) nimi"
+msgstr ""
+
+#: aw.ini:class_1554
+msgid "Klassi Objektide allalaadimine (1554) nimi"
+msgstr ""
+
+#: aw.ini:class_1555
+msgid "Klassi Objektide &uuml;leslaadimine (1555) nimi"
+msgstr ""
+
+#: aw.ini:class_1556
+msgid "Klassi Lao tellimused veebis (1556) nimi"
+msgstr ""
+
+#: aw.ini:class_1557
+msgid "Klassi J&auml;relmaksukalkulaator (1557) nimi"
+msgstr ""
+
+#: aw.ini:class_1558
+msgid "Klassi K&auml;ttetoimetamise viis (1558) nimi"
+msgstr ""
+
+#: aw.ini:class_1559
+msgid "Klassi J&auml;relmaksu tingimused (1559) nimi"
+msgstr ""
+
+#: aw.ini:class_1560
+msgid "Klassi Esitlus (1560) nimi"
+msgstr ""
+
+#: aw.ini:class_1561
+msgid "Klassi K&auml;ttetoimetamise viisi tingimused (1561) nimi"
+msgstr ""
+
+#: aw.ini:class_1562
+msgid "Klassi CSV import (1562) nimi"
+msgstr ""
+
+#: aw.ini:class_1563
+msgid "Klassi Lao tagastus (1563) nimi"
+msgstr ""
+
+#: aw.ini:class_1564
+msgid "Klassi Reklamatsioon (1564) nimi"
+msgstr ""
+
+#: aw.ini:class_1565
+msgid "Klassi Lao tagastuse rida (1565) nimi"
+msgstr ""
+
+#: aw.ini:class_1566
+msgid "Klassi Reklamatsiooni rida (1566) nimi"
+msgstr ""
+
+#: aw.ini:class_1567
+msgid "Klassi Kliendi andmete veebis kuvamine (1567) nimi"
+msgstr ""
+
+#: aw.ini:class_1568
+msgid "Klassi Kliendi tellimuste veebis kuvamine (1568) nimi"
+msgstr ""
+
+#: aw.ini:class_1569
+msgid "Klassi Kliendi arvete veebis kuvamine (1569) nimi"
+msgstr ""
+
+#: aw.ini:class_1570
+msgid "Klassi Kliendi kasutajate veebis kuvamine (1570) nimi"
+msgstr ""
+
+#: aw.ini:class_1571
+msgid "Klassi Kliendi tagastuste veebis kuvamine (1571) nimi"
+msgstr ""
+
+#: aw.ini:class_1572
+msgid "Klassi Kliendi saatelehtede veebis kuvamine (1572) nimi"
+msgstr ""
+
+#: aw.ini:class_1573
+msgid "Klassi Hinnakirja tingimus (1573) nimi"
+msgstr ""
+
+#: aw.ini:class_1574
+msgid "Klassi Hinnakirja tingimuse t&uuml;&uuml;p (1574) nimi"
+msgstr ""
+
+#: aw.ini:class_1575
+msgid "Klassi Tootekategooria t&uuml;&uuml;p (1575) nimi"
+msgstr ""
+
+#: aw.ini:class_1576
+msgid "Klassi Toodete n&auml;itamine (1576) nimi"
+msgstr ""
+
+#: aw.ini:class_1577
+msgid "Klassi J&auml;relmaksukonfiguratsioon (1577) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29
@@ -2794,7 +3306,7 @@ msgid "Klassi kataloogi Meilinglistid (5) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_6
-msgid "Klassi kataloogi Tõlked (6) nimi"
+msgid "Klassi kataloogi T&otilde;lked (6) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_7
@@ -2842,7 +3354,7 @@ msgid "Klassi kataloogi Kasutusstatistika (26) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_28
-msgid "Klassi kataloogi Töövoogude juhtimine (28) nimi"
+msgid "Klassi kataloogi T&ouml;&ouml;voogude juhtimine (28) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_31
@@ -2874,7 +3386,7 @@ msgid "Klassi kataloogi Varia & Vanad (4) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_10
-msgid "Klassi kataloogi Süsteemi haldus (10) nimi"
+msgid "Klassi kataloogi S&uuml;steemi haldus (10) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_33
@@ -2890,7 +3402,7 @@ msgid "Klassi kataloogi Varia & Vanad (18) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_41
-msgid "Klassi kataloogi Võtmesõnad (41) nimi"
+msgid "Klassi kataloogi V&otilde;tmes&otilde;nad (41) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_30
@@ -2914,19 +3426,19 @@ msgid "Klassi kataloogi Otsingud (35) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_19
-msgid "Klassi kataloogi Töösolevad klassid (19) nimi"
+msgid "Klassi kataloogi T&ouml;&ouml;solevad klassid (19) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_21
-msgid "Klassi kataloogi Nähtamatud objektid (21) nimi"
+msgid "Klassi kataloogi N&auml;htamatud objektid (21) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_12
-msgid "Klassi kataloogi Proovitööd (12) nimi"
+msgid "Klassi kataloogi Proovit&ouml;&ouml;d (12) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_22
-msgid "Klassi kataloogi Sissepääsud (22) nimi"
+msgid "Klassi kataloogi Sissep&auml;&auml;sud (22) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_11
@@ -3023,6 +3535,18 @@ msgstr ""
 
 #: aw.ini:classfolder_68
 msgid "Klassi kataloogi Geoinfo (68) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_69
+msgid "Klassi kataloogi Infohaldus (69) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_70
+msgid "Klassi kataloogi Tellimused (70) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_71
+msgid "Klassi kataloogi Praktikad (71) nimi"
 msgstr ""
 
 #: aw.ini:acl_can_edit
@@ -5573,12 +6097,384 @@ msgstr ""
 msgid "syslog.type.ST_AW_SPEC_USE_CASE"
 msgstr ""
 
+#: aw.ini:syslogtypes_1473
+msgid "syslog.type.ST_CRM_TRANSFER_METHOD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1474
+msgid "syslog.type.ST_CRM_TRANSFER_CONDITION"
+msgstr ""
+
 #: aw.ini:syslogtypes_1475
 msgid "syslog.type.ST_EVENT_WEBVIEW"
 msgstr ""
 
+#: aw.ini:syslogtypes_1476
+msgid "syslog.type.ST_DOMPDF"
+msgstr ""
+
+#: aw.ini:syslogtypes_1477
+msgid "syslog.type.ST_CONTENT_PACKAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1478
+msgid "syslog.type.ST_CONTENT_ITEM"
+msgstr ""
+
+#: aw.ini:syslogtypes_1481
+msgid "syslog.type.ST_GROUP_MEMBERSHIP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1485
+msgid "syslog.type.ST_REVAL_EXTRANET"
+msgstr ""
+
+#: aw.ini:syslogtypes_1486
+msgid "syslog.type.ST_SITE_DIFF"
+msgstr ""
+
+#: aw.ini:syslogtypes_1487
+msgid "syslog.type.ST_SITE_COPY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1488
+msgid "syslog.type.ST_SITE_COPY_TODO"
+msgstr ""
+
+#: aw.ini:syslogtypes_1489
+msgid "syslog.type.ST_SITE_COPY_SITE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1491
+msgid "syslog.type.ST_QUESTIONNAIRE_TXT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1492
+msgid "syslog.type.ST_HTML_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1493
+msgid "syslog.type.ST_SM_CLASS_STATS_WORKSPACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1494
+msgid "syslog.type.ST_SM_CLASS_STATS_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1496
+msgid "syslog.type.ST_TAKET_AFP_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1497
+msgid "syslog.type.ST_DRAFT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1498
+msgid "syslog.type.ST_AW_SITE_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1499
+msgid "syslog.type.ST_AW_SERVER_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1500
+msgid "syslog.type.ST_SHOP_PRODUCT_PURVEYANCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1501
+msgid "syslog.type.ST_PROJECT_CATEGORY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1502
+msgid "syslog.type.ST_SITE_NOTIFICATION_RULE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1503
+msgid "syslog.type.ST_SITE_NOTIFICATION_SENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1504
+msgid "syslog.type.ST_ML_MEMBERSHIP_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1505
+msgid "syslog.type.ST_SM_PROP_STATS_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1506
+msgid "syslog.type.ST_AW_CLASS_PROPERTY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1508
+msgid "syslog.type.ST_SM_SITE_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1507
+msgid "syslog.type.ST_CRM_COMPANY_CUSTOMER_DATA_GENERATOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_1509
+msgid "syslog.type.ST_CRM_PERSON_WH_TABLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1510
+msgid "syslog.type.ST_CRM_PERSON_WH_TABLE_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1511
+msgid "syslog.type.ST_MATERIAL_EXPENSE_CONDITION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1512
+msgid "syslog.type.ST_CRM_PERSON_REQUIRED_WH_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1513
+msgid "syslog.type.ST_MATERIAL_EXPENSE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1514
+msgid "syslog.type.ST_CRM_PERSON_WH_TABLE_ENTRY_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1515
+msgid "syslog.type.ST_CRM_COMPANY_CFGFORM_CONFIGURATOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_1517
+msgid "syslog.type.ST_CRM_COMMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1516
+msgid "syslog.type.ST_MATERIAL_MOVEMENT_RELATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1518
+msgid "syslog.type.ST_MRP_ORDER_CENTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1519
+msgid "syslog.type.ST_MRP_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1520
+msgid "syslog.type.ST_MRP_ORDER_PRINT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1521
+msgid "syslog.type.ST_MRP_PRICELIST"
+msgstr ""
+
+#: aw.ini:syslogtypes_1522
+msgid "syslog.type.ST_MRP_PRICELIST_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1523
+msgid "syslog.type.ST_MRP_ORDER_COVER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1524
+msgid "syslog.type.ST_CRM_COMPANY_SECTOR_MEMBERSHIP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1525
+msgid "syslog.type.ST_PRACTICES"
+msgstr ""
+
+#: aw.ini:syslogtypes_1526
+msgid "syslog.type.ST_PRACTICE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1527
+msgid "syslog.type.ST_SMART_POST"
+msgstr ""
+
+#: aw.ini:syslogtypes_1534
+msgid "syslog.type.ST_SHOP_PRICE_LIST_CUSTOMER_DISCOUNT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1528
+msgid "syslog.type.ST_MRP_ORDER_PRINT_WEB_INTERFACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1529
+msgid "syslog.type.ST_MRP_ORDER_PRINT_FORMAT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1530
+msgid "syslog.type.ST_SHOP_AMOUNT_LIMIT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1531
+msgid "syslog.type.ST_RSS_READER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1532
+msgid "syslog.type.ST_SITE_COPY_CLIENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1535
+msgid "syslog.type.ST_WAREHOUSE_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1533
+msgid "syslog.type.ST_MRP_ORDER_SENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1536
+msgid "syslog.type.ST_MRP_ORDER_REQUESTED_MATERIAL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1537
+msgid "syslog.type.ST_MRP_ORDER_COVER_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1541
+msgid "syslog.type.ST_CUSTOMER_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1542
+msgid "syslog.type.ST_INFRASTRUCTURE_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1543
+msgid "syslog.type.ST_CONTENT_PACKAGE_PRICE_CONDITIONS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1544
+msgid "syslog.type.ST_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1545
+msgid "syslog.type.ST_PERSONNEL_MANAGEMENT_JOB_OFFER_CONDITION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1547
+msgid "syslog.type.ST_MRP_RESOURCE_SETTING_CATEGORY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1548
+msgid "syslog.type.ST_MRP_RESOURCE_FORMAT_CATEGORY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1549
+msgid "syslog.type.ST_MRP_RESOURCE_FORMAT_APPLIES"
+msgstr ""
+
+#: aw.ini:syslogtypes_1550
+msgid "syslog.type.ST_ROOM_CATEGORY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1551
+msgid "syslog.type.ST_MRP_RESOURCE_ABILITY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1553
+msgid "syslog.type.ST_DISCOUNT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1554
+msgid "syslog.type.ST_ADMIN_OBJECT_EXPORTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1555
+msgid "syslog.type.ST_ADMIN_OBJECT_IMPORTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1556
+msgid "syslog.type.ST_SHOP_ORDER_DISPLAY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1557
+msgid "syslog.type.ST_SHOP_RENT_CALCULATOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_1558
+msgid "syslog.type.ST_SHOP_DELIVERY_METHOD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1559
+msgid "syslog.type.ST_SHOP_RENT_CONDITIONS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1560
+msgid "syslog.type.ST_CRM_PRESENTATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1562
+msgid "syslog.type.ST_CSV_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1561
+msgid "syslog.type.ST_SHOP_DELIVERY_METHOD_CONDITIONS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1563
+msgid "syslog.type.ST_SHOP_WAREHOUSE_RETURN"
+msgstr ""
+
+#: aw.ini:syslogtypes_1564
+msgid "syslog.type.ST_REKLAMATSIOON"
+msgstr ""
+
+#: aw.ini:syslogtypes_1565
+msgid "syslog.type.ST_SHOP_WAREHOUSE_RETURN_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1566
+msgid "syslog.type.ST_REKLAMATSIOON_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1567
+msgid "syslog.type.ST_SHOP_ORDERER_DATA_SITE_SHOW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1568
+msgid "syslog.type.ST_SHOP_ORDERER_DATA_SITE_SHOW_ORDERS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1569
+msgid "syslog.type.ST_SHOP_ORDERER_DATA_SITE_SHOW_BILLS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1570
+msgid "syslog.type.ST_SHOP_ORDERER_DATA_SITE_SHOW_USERS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1571
+msgid "syslog.type.ST_SHOP_ORDERER_DATA_SITE_SHOW_RETURNS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1572
+msgid "syslog.type.ST_SHOP_ORDERER_DATA_SITE_SHOW_DELIVERY_NOTES"
+msgstr ""
+
+#: aw.ini:syslogtypes_1573
+msgid "syslog.type.ST_SHOP_PRICE_LIST_CONDITION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1574
+msgid "syslog.type.ST_SHOP_PRICE_LIST_CONDITION_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1575
+msgid "syslog.type.ST_SHOP_PRODUCT_CATEGORY_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1576
+msgid "syslog.type.ST_PRODUCTS_SHOW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1577
+msgid "syslog.type.ST_SHOP_RENT_CONFIGURATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1589
+msgid "syslog.type.ST_PRODUCT_BRAND"
+msgstr ""
+
 #: aw.ini:syslogactions_1
-msgid "syslog.action.SA_CHANGE"
+msgid "syslog.action."
 msgstr ""
 
 #: aw.ini:syslogactions_2

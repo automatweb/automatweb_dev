@@ -9,8 +9,4 @@ $GLOBALS["TRANS"]["Omaduse Liitumiseks on vaja kinnitust (confirm_subscribe) kom
 $GLOBALS["TRANS"]["Omaduse Liitumiseks on vaja kinnitust (confirm_subscribe) help"] = "listiga liitmine eeldab administraatori poolset kinnitust";
 $GLOBALS["TRANS"]["Omaduse Liitumise kinnituseks saadetav kiri (confirm_subscribe_msg) kommentaar"] = "e-mail, mis saadetakse liitunud kasutajale peale liitumise kinnitust";
 $GLOBALS["TRANS"]["Omaduse Liitumise kinnituseks saadetav kiri (confirm_subscribe_msg) help"] = "e-mail, mis saadetakse liitunud kasutajale peale liitumise kinnitust";
-$GLOBALS["TRANS"]["Omaduse Listi liikmete allikas (def_user_folder) kommentaar"] = "Kaust või Kasutajagrupp, millest meilinglisti liikmed võetakse";
-$GLOBALS["TRANS"]["Omaduse Listi liikmete allikas (def_user_folder) help"] = "Kaust või Kasutajagrupp, millest meilinglisti liikmed võetakse";
-$GLOBALS["TRANS"]["Omaduse Liikmed (member_list) kommentaar"] = "listi liikmed tabelina, kuvatakse nimi, meiliaadress, liitumise aeg. ";
-$GLOBALS["TRANS"]["Omaduse Liikmed (member_list) help"] = "listi liikmed tabelina, kuvatakse nimi, meiliaadress, liitumise aeg. Vali tulba ja tööriistaribas oleva kustuta nupu abil saab listi liikmeid eemaldada";
 ?>

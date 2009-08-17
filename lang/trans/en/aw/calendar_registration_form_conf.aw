@@ -18,10 +18,8 @@ $GLOBALS["TRANS"]["Grupi E-mailid (emails) pealkiri"] = "E-mails";
 $GLOBALS["TRANS"]["Seose S&uuml;ndmus (RELTYPE_EVENT) tekst"] = "Event";
 $GLOBALS["TRANS"]["Seose Sisestus (RELTYPE_REG_ENTRY) tekst"] = "Entry";
 $GLOBALS["TRANS"]["Seose Isikute kaust (RELTYPE_FOLDER) tekst"] = "Person folder";
-$GLOBALS["TRANS"]["Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"] = "Event form";
 $GLOBALS["TRANS"]["&Auml;ra kuva"] = "Do not display";
 $GLOBALS["TRANS"]["Kuva dokumendis s&uuml;ndmuse infot"] = "Display event info in document";
-$GLOBALS["TRANS"]["Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"] = "Webform with event registration form can only be used via event registration";
 $GLOBALS["TRANS"]["calendar_registration_form::show(%s): event and object type must be related!"] = "calendar_registration_form::show(%s): event and object type must be related!";
 $GLOBALS["TRANS"]["calendar_registration_form::show_data(%s): event and object type must be related!"] = "calendar_registration_form::show_data(%s): event and object type must be related!";
 ?>

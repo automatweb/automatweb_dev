@@ -29,16 +29,6 @@ msgstr ""
 msgid "Omaduse Staatus (q_status) help"
 msgstr ""
 
-# classes/applications/mailinglist/ml_queue.aw:group_
-#: classes/applications/mailinglist/ml_queue.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr " "
-
-# classes/applications/mailinglist/ml_queue.aw:group__help
-#: classes/applications/mailinglist/ml_queue.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-
 #: classes/applications/mailinglist/ml_queue.aw:445
 msgid "adding scheduler ! <br />"
 msgstr ""
@@ -74,3 +64,7 @@ msgstr ""
 #: classes/applications/mailinglist/ml_queue.aw:809
 msgid "sending mail to:"
 msgstr ""
+
+# classes/applications/mailinglist/ml_queue.aw:group_
+#~ msgid "Grupi  () pealkiri"
+#~ msgstr " "

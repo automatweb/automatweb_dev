@@ -378,35 +378,35 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:206
+#: classes/contentmgmt/file.aw:205
 msgid "%s, %s (%s) - %s"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:226
+#: classes/contentmgmt/file.aw:225
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:227 classes/contentmgmt/file.aw:265
+#: classes/contentmgmt/file.aw:226 classes/contentmgmt/file.aw:264
 msgid "Faili: %s, allkirjastamine"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:234
+#: classes/contentmgmt/file.aw:233
 msgid "DigiDoc konteinerisse"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:245
+#: classes/contentmgmt/file.aw:244
 msgid "Allkirjasta"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:246
+#: classes/contentmgmt/file.aw:245
 msgid "Allkirjastamine"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:253
+#: classes/contentmgmt/file.aw:252
 msgid "DigiDoc konteiner"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:264
+#: classes/contentmgmt/file.aw:263
 msgid "Allkirjasta fail"
 msgstr ""
 
@@ -446,51 +446,51 @@ msgstr ""
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:797
+#: classes/contentmgmt/file.aw:800
 msgid "faili ikoon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:915
+#: classes/contentmgmt/file.aw:919
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1569
+#: classes/contentmgmt/file.aw:1561
 msgid "Need either id or parent"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1769
+#: classes/contentmgmt/file.aw:1784
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1777
+#: classes/contentmgmt/file.aw:1792
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1815
+#: classes/contentmgmt/file.aw:1867
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1821
+#: classes/contentmgmt/file.aw:1873
 msgid "Kustuta"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1828
+#: classes/contentmgmt/file.aw:1880
 msgid "Saada teavitusmeil"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1838
+#: classes/contentmgmt/file.aw:1890
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1843
+#: classes/contentmgmt/file.aw:1895
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1848
+#: classes/contentmgmt/file.aw:1900
 msgid "Telefon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1853
+#: classes/contentmgmt/file.aw:1905
 msgid "E-mail"
 msgstr ""
 

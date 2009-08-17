@@ -13,6 +13,18 @@ msgstr ""
 msgid "Klassi Pakett help"
 msgstr ""
 
+#: classes/applications/shop/shop_packet.aw:prop_description
+msgid "Omaduse Kirjeldus (description) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_description_comment
+msgid "Omaduse Kirjeldus (description) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_description_help
+msgid "Omaduse Kirjeldus (description) help"
+msgstr ""
+
 #: classes/applications/shop/shop_packet.aw:prop_item_count
 msgid "Omaduse Mitu laos (item_count) caption"
 msgstr ""
@@ -361,38 +373,54 @@ msgstr ""
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:127
+#: classes/applications/shop/shop_packet.aw:rel_RELTYPE_CATEGORY
+msgid "Seose Kategooria (RELTYPE_CATEGORY) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:rel_RELTYPE_BRAND
+msgid "Seose Kaubam&auml;rk (RELTYPE_BRAND) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:137
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:128
+#: classes/applications/shop/shop_packet.aw:138
 msgid "N&auml;dal"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:129
+#: classes/applications/shop/shop_packet.aw:139
 msgid "Kuu"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:165
+#: classes/applications/shop/shop_packet.aw:175
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:170
+#: classes/applications/shop/shop_packet.aw:180
 msgid "Mitu paketis"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:176
+#: classes/applications/shop/shop_packet.aw:186
 msgid "Pakend"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:181
+#: classes/applications/shop/shop_packet.aw:191
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:232
+#: classes/applications/shop/shop_packet.aw:242
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:593
+#: classes/applications/shop/shop_packet.aw:603
 msgid "Kustuta tooted paketist"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:691
+msgid "shop_packet::show(): no order center object selected!"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:732
+msgid "Lisa tooted korvi"
 msgstr ""

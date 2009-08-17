@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/import/livelink_import.aw:class_196_help
 msgid "Klassi Livelinki import help"
 msgstr ""
@@ -75,15 +74,15 @@ msgid "Omaduse Objekti staatus (message) help"
 msgstr ""
 
 #: classes/import/livelink_import.aw:prop_invoke
-msgid "Omaduse Käivita (invoke) caption"
+msgid "Omaduse K&auml;ivita (invoke) caption"
 msgstr ""
 
 #: classes/import/livelink_import.aw:prop_invoke_comment
-msgid "Omaduse Käivita (invoke) kommentaar"
+msgid "Omaduse K&auml;ivita (invoke) kommentaar"
 msgstr ""
 
 #: classes/import/livelink_import.aw:prop_invoke_help
-msgid "Omaduse Käivita (invoke) help"
+msgid "Omaduse K&auml;ivita (invoke) help"
 msgstr ""
 
 #: classes/import/livelink_import.aw:prop_ll_username
@@ -133,4 +132,3 @@ msgstr ""
 #: classes/import/livelink_import.aw:rel_RELTYPE_LOGFILE
 msgid "Seose Logifail (RELTYPE_LOGFILE) tekst"
 msgstr ""
-

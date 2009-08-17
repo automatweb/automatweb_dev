@@ -13,50 +13,50 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:200
+#: classes/vcl/date_edit.aw:220
 msgid "Jaanuar"
 msgstr "Tammikuu"
 
-#: classes/vcl/date_edit.aw:201
+#: classes/vcl/date_edit.aw:221
 msgid "Veebruar"
 msgstr "Helmikuu"
 
-#: classes/vcl/date_edit.aw:202
+#: classes/vcl/date_edit.aw:222
 msgid "M&auml;rts"
 msgstr "Maaliskuu"
 
-#: classes/vcl/date_edit.aw:203
+#: classes/vcl/date_edit.aw:223
 msgid "Aprill"
 msgstr "Huhtikuu"
 
-#: classes/vcl/date_edit.aw:204
+#: classes/vcl/date_edit.aw:224
 msgid "Mai"
 msgstr "Toukokuu"
 
-#: classes/vcl/date_edit.aw:205
+#: classes/vcl/date_edit.aw:225
 msgid "Juuni"
 msgstr "Kesäkuu"
 
-#: classes/vcl/date_edit.aw:206
+#: classes/vcl/date_edit.aw:226
 msgid "Juuli"
 msgstr "Heinäkuu"
 
-#: classes/vcl/date_edit.aw:207
+#: classes/vcl/date_edit.aw:227
 msgid "August"
 msgstr "Elokuu"
 
-#: classes/vcl/date_edit.aw:208
+#: classes/vcl/date_edit.aw:228
 msgid "September"
 msgstr "Syyskuu"
 
-#: classes/vcl/date_edit.aw:209
+#: classes/vcl/date_edit.aw:229
 msgid "Oktoober"
 msgstr "Lokakuu"
 
-#: classes/vcl/date_edit.aw:210
+#: classes/vcl/date_edit.aw:230
 msgid "November"
 msgstr "Marraskuu"
 
-#: classes/vcl/date_edit.aw:211
+#: classes/vcl/date_edit.aw:231
 msgid "Detsember"
 msgstr "Joulukuu"

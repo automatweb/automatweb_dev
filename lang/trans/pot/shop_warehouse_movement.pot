@@ -110,6 +110,18 @@ msgstr ""
 msgid "Omaduse Hind (price) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_movement.aw:prop_base_price
+msgid "Omaduse Hind p&otilde;hivaluutas (base_price) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_movement.aw:prop_base_price_comment
+msgid "Omaduse Hind p&otilde;hivaluutas (base_price) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_movement.aw:prop_base_price_help
+msgid "Omaduse Hind p&otilde;hivaluutas (base_price) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_movement.aw:prop_transport
 msgid "Omaduse Transport (transport) caption"
 msgstr ""

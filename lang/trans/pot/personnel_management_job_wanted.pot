@@ -14,16 +14,40 @@ msgstr ""
 msgid "Klassi T&ouml;&ouml;soov help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_person
+msgid "Omaduse Isik (person) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_person_comment
+msgid "Omaduse Isik (person) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_person_help
+msgid "Omaduse Isik (person) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_field
-msgid "Omaduse Tegevusala (field) caption"
+msgid "Omaduse Tegevusala (muutuja) (field) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_field_comment
-msgid "Omaduse Tegevusala (field) kommentaar"
+msgid "Omaduse Tegevusala (muutuja) (field) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_field_help
-msgid "Omaduse Tegevusala (field) help"
+msgid "Omaduse Tegevusala (muutuja) (field) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_sector
+msgid "Omaduse Tegevusala (tegevusala objekt) (sector) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_sector_comment
+msgid "Omaduse Tegevusala (tegevusala objekt) (sector) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_sector_help
+msgid "Omaduse Tegevusala (tegevusala objekt) (sector) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_job_type
@@ -74,40 +98,64 @@ msgstr ""
 msgid "Omaduse T&ouml;&ouml;koormus (load) help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_load2
+msgid "Omaduse T&ouml;&ouml;koormus (load2) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_load2_comment
+msgid "Omaduse T&ouml;&ouml;koormus (load2) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_load2_help
+msgid "Omaduse T&ouml;&ouml;koormus (load2) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay
-msgid "Omaduse Palgasoov (pay) caption"
+msgid "Omaduse Palgasoov (arv) (pay) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay_comment
-msgid "Omaduse Palgasoov (pay) kommentaar"
+msgid "Omaduse Palgasoov (arv) (pay) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay_help
-msgid "Omaduse Palgasoov (pay) help"
+msgid "Omaduse Palgasoov (arv) (pay) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay_text
+msgid "Omaduse Palgasoov (tekst) (pay_text) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay_text_comment
+msgid "Omaduse Palgasoov (tekst) (pay_text) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay_text_help
+msgid "Omaduse Palgasoov (tekst) (pay_text) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_work_by_schedule
-msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel 	  (work_by_schedule) caption"
+msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel (work_by_schedule) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_work_by_schedule_comment
-msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel 	  (work_by_schedule) kommentaar"
+msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel (work_by_schedule) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_work_by_schedule_help
-msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel 	  (work_by_schedule) help"
+msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel (work_by_schedule) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_work_at_night
-msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel 	  (work_at_night) caption"
+msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel (work_at_night) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_work_at_night_comment
-msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel 	  (work_at_night) kommentaar"
+msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel (work_at_night) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_work_at_night_help
-msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel 	  (work_at_night) help"
+msgid "Omaduse Olen n&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel (work_at_night) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_ready_for_errand
@@ -135,63 +183,63 @@ msgid "Omaduse T&ouml;&ouml; asukoht (location) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_location_2
-msgid "Omaduse T&ouml;&ouml; asukoht 	  (location_2) caption"
+msgid "Omaduse T&ouml;&ouml; asukoht (location_2) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_location_2_comment
-msgid "Omaduse T&ouml;&ouml; asukoht 	  (location_2) kommentaar"
+msgid "Omaduse T&ouml;&ouml; asukoht (location_2) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_location_2_help
-msgid "Omaduse T&ouml;&ouml; asukoht 	  (location_2) help"
+msgid "Omaduse T&ouml;&ouml; asukoht (location_2) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_location_text
-msgid "Omaduse T&ouml;&ouml; asukoht 	  (location_text) caption"
+msgid "Omaduse T&ouml;&ouml; asukoht (location_text) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_location_text_comment
-msgid "Omaduse T&ouml;&ouml; asukoht 	  (location_text) kommentaar"
+msgid "Omaduse T&ouml;&ouml; asukoht (location_text) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_location_text_help
-msgid "Omaduse T&ouml;&ouml; asukoht 	  (location_text) help"
+msgid "Omaduse T&ouml;&ouml; asukoht (location_text) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_start_working
-msgid "Omaduse Soovitud t&ouml;&ouml;le asumise aeg 	  (start_working) caption"
+msgid "Omaduse Soovitud t&ouml;&ouml;le asumise aeg (start_working) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_start_working_comment
-msgid "Omaduse Soovitud t&ouml;&ouml;le asumise aeg 	  (start_working) kommentaar"
+msgid "Omaduse Soovitud t&ouml;&ouml;le asumise aeg (start_working) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_start_working_help
-msgid "Omaduse Soovitud t&ouml;&ouml;le asumise aeg 	  (start_working) help"
+msgid "Omaduse Soovitud t&ouml;&ouml;le asumise aeg (start_working) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_additional_skills
-msgid "Omaduse T&auml;iendavad oskused 	  (additional_skills) caption"
+msgid "Omaduse T&auml;iendavad oskused (additional_skills) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_additional_skills_comment
-msgid "Omaduse T&auml;iendavad oskused 	  (additional_skills) kommentaar"
+msgid "Omaduse T&auml;iendavad oskused (additional_skills) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_additional_skills_help
-msgid "Omaduse T&auml;iendavad oskused 	  (additional_skills) help"
+msgid "Omaduse T&auml;iendavad oskused (additional_skills) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_handicaps
-msgid "Omaduse Tegurid, mis ei v&otilde;imalda m&otilde;nda t&ouml;&ouml;&uuml;lesannet t&auml;ita 	  (handicaps) caption"
+msgid "Omaduse Tegurid, mis ei v&otilde;imalda m&otilde;nda t&ouml;&ouml;&uuml;lesannet t&auml;ita (handicaps) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_handicaps_comment
-msgid "Omaduse Tegurid, mis ei v&otilde;imalda m&otilde;nda t&ouml;&ouml;&uuml;lesannet t&auml;ita 	  (handicaps) kommentaar"
+msgid "Omaduse Tegurid, mis ei v&otilde;imalda m&otilde;nda t&ouml;&ouml;&uuml;lesannet t&auml;ita (handicaps) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_handicaps_help
-msgid "Omaduse Tegurid, mis ei v&otilde;imalda m&otilde;nda t&ouml;&ouml;&uuml;lesannet t&auml;ita 	  (handicaps) help"
+msgid "Omaduse Tegurid, mis ei v&otilde;imalda m&otilde;nda t&ouml;&ouml;&uuml;lesannet t&auml;ita (handicaps) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_hobbies_vs_work
@@ -246,31 +294,35 @@ msgstr ""
 msgid "Seose Asukoht (teine valik) (RELTYPE_LOCATION2) tekst"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:108
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:rel_RELTYPE_SECTOR
+msgid "Seose Tegevusvaldkond (RELTYPE_SECTOR) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:123
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:109
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:124
 msgid "Kohe"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:110
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:125
 msgid "1 kuu jooksul"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:111
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:126
 msgid "2 kuu jooksul"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:112
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:127
 msgid "Kokkuleppel"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:202
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:207
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:210
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:215
 msgid "Nimi"
 msgstr ""
 

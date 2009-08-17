@@ -14,3 +14,11 @@ msgstr ""
 msgid "T&auml;htajatu"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_job_offer_obj.aw:164
+msgid "Job offer '%s' is confirmed!"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer_obj.aw:165
+msgid "To whom it may concerne,Job offer '%s' has been confirmed.Regards,Your Personnel Management"
+msgstr ""
+

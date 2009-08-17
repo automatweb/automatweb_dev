@@ -14,7 +14,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/languages.aw:509
+#: classes/core/languages.aw:557
 msgid "Lisas keele"
 msgstr ""
 

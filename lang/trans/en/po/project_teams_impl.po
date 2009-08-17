@@ -59,8 +59,8 @@ msgid "liikmed"
 msgstr "members"
 
 #: classes/applications/groupware/project_teams_impl.aw:291
-#: classes/applications/groupware/project_teams_impl.aw:368
-#: classes/applications/groupware/project_teams_impl.aw:423
+#: classes/applications/groupware/project_teams_impl.aw:381
+#: classes/applications/groupware/project_teams_impl.aw:436
 msgid "Rollid"
 msgstr "Roles"
 
@@ -68,23 +68,23 @@ msgstr "Roles"
 msgid "Otsingu tulemused"
 msgstr "Search results"
 
-#: classes/applications/groupware/project_teams_impl.aw:383
-#: classes/applications/groupware/project_teams_impl.aw:439
+#: classes/applications/groupware/project_teams_impl.aw:396
+#: classes/applications/groupware/project_teams_impl.aw:452
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/groupware/project_teams_impl.aw:391
+#: classes/applications/groupware/project_teams_impl.aw:404
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/applications/groupware/project_teams_impl.aw:399
+#: classes/applications/groupware/project_teams_impl.aw:412
 msgid "Ametinimetus"
 msgstr "Title"
 
-#: classes/applications/groupware/project_teams_impl.aw:407
+#: classes/applications/groupware/project_teams_impl.aw:420
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/applications/groupware/project_teams_impl.aw:415
+#: classes/applications/groupware/project_teams_impl.aw:428
 msgid "E-post"
 msgstr "E-mail"

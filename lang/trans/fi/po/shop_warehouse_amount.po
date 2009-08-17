@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_warehouse_amount.aw:class_1458_help
 msgid "Klassi Laoseis help"
 msgstr ""
@@ -74,6 +73,18 @@ msgstr ""
 msgid "Omaduse &Uuml;hik (unit) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_amount.aw:prop_is_default
+msgid "Omaduse  (is_default) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_amount.aw:prop_is_default_comment
+msgid "Omaduse  (is_default) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_amount.aw:prop_is_default_help
+msgid "Omaduse  (is_default) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_amount.aw:rel_RELTYPE_PRODUCT
 msgid "Seose Artikkel (RELTYPE_PRODUCT) tekst"
 msgstr ""
@@ -89,4 +100,3 @@ msgstr ""
 #: classes/applications/shop/shop_warehouse_amount.aw:rel_RELTYPE_SINGLE
 msgid "Seose &Uuml;ksiktoode (RELTYPE_SINGLE) tekst"
 msgstr ""
-

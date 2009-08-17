@@ -14,63 +14,43 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/run_in_background.aw:prop_
-msgid "Omaduse  () caption"
-msgstr ""
-
-#: classes/core/run_in_background.aw:prop__comment
-msgid "Omaduse  () kommentaar"
-msgstr ""
-
-#: classes/core/run_in_background.aw:prop__help
-msgid "Omaduse  () help"
-msgstr ""
-
-#: classes/core/run_in_background.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/core/run_in_background.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-
-#: classes/core/run_in_background.aw:70
+#: classes/core/run_in_background.aw:59
 msgid "Reset"
 msgstr ""
 
-#: classes/core/run_in_background.aw:94
+#: classes/core/run_in_background.aw:71
 msgid "Peata"
 msgstr ""
 
-#: classes/core/run_in_background.aw:116
+#: classes/core/run_in_background.aw:82
 msgid "K&auml;ivita"
 msgstr ""
 
-#: classes/core/run_in_background.aw:239
+#: classes/core/run_in_background.aw:168
 msgid "Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:255
+#: classes/core/run_in_background.aw:178
 msgid "Protsess l&otilde;petab t&ouml;&ouml;d"
 msgstr ""
 
-#: classes/core/run_in_background.aw:356
+#: classes/core/run_in_background.aw:246
 msgid "<br>Protsess j&auml;tkab hiljemalt kahe minuti p&auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:388
+#: classes/core/run_in_background.aw:267
 msgid "<br>Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:418
+#: classes/core/run_in_background.aw:287
 msgid "<br>Protsess k&auml;ivitub j&auml;rgmisel kordusel"
 msgstr ""
 
-#: classes/core/run_in_background.aw:693
+#: classes/core/run_in_background.aw:467
 msgid "all done"
 msgstr ""
 
-#: classes/core/run_in_background.aw:782
+#: classes/core/run_in_background.aw:518
 msgid "Halt"
 msgstr ""
 

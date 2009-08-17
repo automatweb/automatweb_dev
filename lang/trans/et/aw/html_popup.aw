@@ -5,10 +5,6 @@ $GLOBALS["TRANS"]["Omaduse Kasuta layerit (popup_type) kommentaar"] = "dhtml-teh
 $GLOBALS["TRANS"]["Omaduse Kasuta layerit (popup_type) help"] = "dhtml-tehnoloogias valmistatud erikujuline popup-aken, mille kuvamiseks ei avata uut internetilehitseja akent";
 $GLOBALS["TRANS"]["Omaduse Laius (width) kommentaar"] = "avaneva akna või layeri laius";
 $GLOBALS["TRANS"]["Omaduse Laius (width) help"] = "avaneva akna või layeri laius";
-$GLOBALS["TRANS"]["Omaduse Kõrgus (height) kommentaar"] = "avaneva akna või layeri kõrgus";
-$GLOBALS["TRANS"]["Omaduse Kõrgus (height) help"] = "avaneva akna või layeri kõrgus";
 $GLOBALS["TRANS"]["Omaduse Ainult &uuml;he korra sessiooni jooksul (only_once) kommentaar"] = "popup-aknent kuvatakse samale külastajale vaid üks kord (kuni sessiooniküpsise aegumiseni)";
 $GLOBALS["TRANS"]["Omaduse Ainult &uuml;he korra sessiooni jooksul (only_once) help"] = "popup-aknent kuvatakse samale külastajale vaid üks kord (kuni sessiooniküpsise aegumiseni)";
-$GLOBALS["TRANS"]["Omaduse Menüüd (menus) kommentaar"] = "nimekiri läbi seostehalduri seostatud kaustadest, mille alla liikudes popup-aken nähtavale ilmub. ";
-$GLOBALS["TRANS"]["Omaduse Menüüd (menus) help"] = "nimekiri läbi seostehalduri seostatud kaustadest, mille alla liikudes popup-aken nähtavale ilmub. ";
 ?>

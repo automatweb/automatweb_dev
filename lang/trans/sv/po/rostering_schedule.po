@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/rostering/rostering_schedule.aw:class_1159_help
 msgid "Klassi Rostering graafik help"
 msgstr ""
@@ -335,7 +334,7 @@ msgid "5 edasi"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:564
-msgid "&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s"
+msgid "&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;P&auml;evi perioodis: %s"
 msgstr ""
 
 #: classes/applications/rostering/rostering_schedule.aw:570
@@ -382,15 +381,15 @@ msgstr ""
 msgid "Vahetus"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:907 classes/applications/rostering/rostering_schedule.aw:986
+#: classes/applications/rostering/rostering_schedule.aw:907
+#: classes/applications/rostering/rostering_schedule.aw:986
 msgid "Puudu inimene"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:1079
+#: classes/applications/rostering/rostering_schedule.aw:1078
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:1085
+#: classes/applications/rostering/rostering_schedule.aw:1084
 msgid "P&auml;devused"
 msgstr ""
-

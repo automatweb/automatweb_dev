@@ -79,112 +79,120 @@ msgstr "General"
 msgid "Grupi &Uuml;ldine (general) help"
 msgstr ""
 
-#: classes/class_base.aw:561
+#: classes/class_base.aw:624
 msgid "T&otilde;lgi"
 msgstr "Translate"
 
-#: classes/class_base.aw:584
+#: classes/class_base.aw:653
 msgid "Rohkem infot"
 msgstr "More info"
 
-#: classes/class_base.aw:585
+#: classes/class_base.aw:654
 msgid "Peida &auml;ra"
 msgstr "Hide"
 
-#: classes/class_base.aw:586
+#: classes/class_base.aw:655
 msgid "Abiinfo"
 msgstr "Help"
 
-#: classes/class_base.aw:650
+#: classes/class_base.aw:719
 msgid "tab panel"
 msgstr "tab panel"
 
-#: classes/class_base.aw:864
+#: classes/class_base.aw:942
 msgid "Lisainfo grupi kohta puudub"
 msgstr "no additional info about group"
 
-#: classes/class_base.aw:953 classes/class_base.aw:1654
+#: classes/class_base.aw:1031 classes/class_base.aw:1833
 msgid "Nimetu"
 msgstr "No name"
 
-#: classes/class_base.aw:1530
+#: classes/class_base.aw:1727
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/class_base.aw:1538
+#: classes/class_base.aw:1735
 msgid "Uus"
 msgstr "New"
 
-#: classes/class_base.aw:1584 classes/class_base.aw:1672
+#: classes/class_base.aw:1762 classes/class_base.aw:1856
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1807
+#: classes/class_base.aw:1991
 msgid "Andmed salvestatud!"
 msgstr "Data saved!"
 
-#: classes/class_base.aw:3494
+#: classes/class_base.aw:3141
+msgid "Viga"
+msgstr ""
+
+#: classes/class_base.aw:3667
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3503
+#: classes/class_base.aw:3679
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:4304
+#: classes/class_base.aw:4476
 msgid "ACL error saidil %s: CAN_%s denied for oid %s"
 msgstr ""
 
-#: classes/class_base.aw:4612 classes/class_base.aw:5074
-#: classes/class_base.aw:5086
+#: classes/class_base.aw:4784 classes/class_base.aw:5268
+#: classes/class_base.aw:5280
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:4953
+#: classes/class_base.aw:5148
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
 
-#: classes/class_base.aw:5521
+#: classes/class_base.aw:5724
 msgid "(l&auml;htetekst)"
 msgstr ""
 
-#: classes/class_base.aw:5528
+#: classes/class_base.aw:5734
 msgid "(t&otilde;lge)"
 msgstr ""
 
-#: classes/class_base.aw:5536 classes/class_base.aw:5590
-#: classes/class_base.aw:5623
+#: classes/class_base.aw:5744 classes/class_base.aw:5800
+#: classes/class_base.aw:5833
 msgid "T&otilde;lge aktiivne"
 msgstr "Translation is active"
 
-#: classes/class_base.aw:5545 classes/class_base.aw:5598
-#: classes/class_base.aw:5631
+#: classes/class_base.aw:5754 classes/class_base.aw:5808
+#: classes/class_base.aw:5841
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/class_base.aw:5796 classes/class_base.aw:5833
+#: classes/class_base.aw:6005 classes/class_base.aw:6042
 msgid "aliase number oli juba olemas, seega uuendas"
 msgstr "alias number already existed, therefore updated"
 
-#: classes/class_base.aw:5800
+#: classes/class_base.aw:6009
 msgid "Seoste l&otilde;ikamisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr "There appeared an error while cutting relations: object with id %s already had relation #%s# therefore the object %s has relation #%s#"
 
-#: classes/class_base.aw:5840
+#: classes/class_base.aw:6049
 msgid "Seoste kopeerilisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr "There appeared an error while copying relations: object with id %s already had relation #%s# therefore the object %s has relation #%s#"
 
-#: classes/class_base.aw:5870
+#: classes/class_base.aw:6079
 msgid "Kliki siia j&auml;tkamiseks"
 msgstr "Click here to continue"
 
-#: classes/class_base.aw:6300
+#: classes/class_base.aw:6369
+msgid "Teil on selle objekti omaduste jaoks mustandid. Kas soovite need laadida?"
+msgstr ""
+
+#: classes/class_base.aw:6649
 msgid ""
 "User %s has added/changed the following file %s. Please click the link below to view the document \n"
 " %s"
 msgstr ""
 
-#: classes/class_base.aw:6319
+#: classes/class_base.aw:6668
 msgid "Teavitus muutunud dokumendist"
 msgstr ""
 

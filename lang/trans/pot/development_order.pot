@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Arendustellimus help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_createdby
+msgid "Omaduse  (bug_createdby) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_createdby_comment
+msgid "Omaduse  (bug_createdby) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_bug_createdby_help
+msgid "Omaduse  (bug_createdby) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_name
 msgid "Omaduse  (name) caption"
 msgstr ""
@@ -135,27 +147,27 @@ msgid "Omaduse J&auml;lgijad (monitors) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_wish_live_date
-msgid "Omaduse Soovitav Live kuupäev (wish_live_date) caption"
+msgid "Omaduse Soovitav Live kuup&auml;ev (wish_live_date) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_wish_live_date_comment
-msgid "Omaduse Soovitav Live kuupäev (wish_live_date) kommentaar"
+msgid "Omaduse Soovitav Live kuup&auml;ev (wish_live_date) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_wish_live_date_help
-msgid "Omaduse Soovitav Live kuupäev (wish_live_date) help"
+msgid "Omaduse Soovitav Live kuup&auml;ev (wish_live_date) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_actual_live_date
-msgid "Omaduse Tegelik Live kuupäev	 (actual_live_date) caption"
+msgid "Omaduse Tegelik Live kuup&auml;ev	 (actual_live_date) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_actual_live_date_comment
-msgid "Omaduse Tegelik Live kuupäev	 (actual_live_date) kommentaar"
+msgid "Omaduse Tegelik Live kuup&auml;ev	 (actual_live_date) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_actual_live_date_help
-msgid "Omaduse Tegelik Live kuupäev	 (actual_live_date) help"
+msgid "Omaduse Tegelik Live kuup&auml;ev	 (actual_live_date) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_reason
@@ -411,11 +423,11 @@ msgid "Grupi Probleemid (problems) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:group_bugs
-msgid "Grupi &Uuml;lesanded (bugs) pealkiri"
+msgid "Grupi Ülesanded (bugs) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:group_bugs_help
-msgid "Grupi &Uuml;lesanded (bugs) help"
+msgid "Grupi Ülesanded (bugs) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_CUSTOMER
@@ -494,99 +506,155 @@ msgstr ""
 msgid "Kujundusosa Andmed (data) pealkiri"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:237 classes/applications/bug_o_matic_3000/development_order.aw:305 classes/applications/bug_o_matic_3000/development_order.aw:416 classes/applications/bug_o_matic_3000/development_order.aw:430
+#: classes/applications/bug_o_matic_3000/development_order.aw:254 classes/applications/bug_o_matic_3000/development_order.aw:326 classes/applications/bug_o_matic_3000/development_order.aw:439 classes/applications/bug_o_matic_3000/development_order.aw:457
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:478
+#: classes/applications/bug_o_matic_3000/development_order.aw:512
 msgid "Tagasiside kellelt muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:493
+#: classes/applications/bug_o_matic_3000/development_order.aw:527
 msgid "Prioriteet muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:505
+#: classes/applications/bug_o_matic_3000/development_order.aw:539
 msgid "Staatus muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:564
+#: classes/applications/bug_o_matic_3000/development_order.aw:604
 msgid "Id"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:568
+#: classes/applications/bug_o_matic_3000/development_order.aw:608
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:574
+#: classes/applications/bug_o_matic_3000/development_order.aw:614
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:582
+#: classes/applications/bug_o_matic_3000/development_order.aw:622
 msgid "Kellele"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:587
+#: classes/applications/bug_o_matic_3000/development_order.aw:627
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:593 classes/applications/bug_o_matic_3000/development_order.aw:608
+#: classes/applications/bug_o_matic_3000/development_order.aw:633 classes/applications/bug_o_matic_3000/development_order.aw:648
 msgid "1"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:594 classes/applications/bug_o_matic_3000/development_order.aw:609
+#: classes/applications/bug_o_matic_3000/development_order.aw:634 classes/applications/bug_o_matic_3000/development_order.aw:649
 msgid "2"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:595 classes/applications/bug_o_matic_3000/development_order.aw:610
+#: classes/applications/bug_o_matic_3000/development_order.aw:635 classes/applications/bug_o_matic_3000/development_order.aw:650
 msgid "3"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:596 classes/applications/bug_o_matic_3000/development_order.aw:611
+#: classes/applications/bug_o_matic_3000/development_order.aw:636 classes/applications/bug_o_matic_3000/development_order.aw:651
 msgid "4"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:597 classes/applications/bug_o_matic_3000/development_order.aw:612
+#: classes/applications/bug_o_matic_3000/development_order.aw:637 classes/applications/bug_o_matic_3000/development_order.aw:652
 msgid "5"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:602
+#: classes/applications/bug_o_matic_3000/development_order.aw:642
 msgid "T&otilde;sidus"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:617
+#: classes/applications/bug_o_matic_3000/development_order.aw:657
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:622
+#: classes/applications/bug_o_matic_3000/development_order.aw:662
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:630
+#: classes/applications/bug_o_matic_3000/development_order.aw:670
 msgid "K"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:832
+#: classes/applications/bug_o_matic_3000/development_order.aw:799
+msgid "Koosk&otilde;lastamisel"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:800
+msgid "&Uuml;levaatamisel"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:801
+msgid "&Uuml;le vaadatud"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:802
+msgid "Tellitud"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:803
+msgid "Valmis"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:804
+msgid "Testimisel"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:805
+msgid "Testitud"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:806
+msgid "Suletud"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:807
+msgid "Vale teade"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:808
+msgid "Kordamatu"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:809
+msgid "Parandamatu"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:810
+msgid "Ei tee"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:811
+msgid "Vajab tagasisidet"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:812
+msgid "Fatal error"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:879
 msgid "Ekspordi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:839
+#: classes/applications/bug_o_matic_3000/development_order.aw:886
 msgid "Lisa korvi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:903
+#: classes/applications/bug_o_matic_3000/development_order.aw:950
 msgid "Eemalda korvist"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:931
+#: classes/applications/bug_o_matic_3000/development_order.aw:978
 msgid "T&ouml;&ouml;tunde"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:936
+#: classes/applications/bug_o_matic_3000/development_order.aw:983
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:941
+#: classes/applications/bug_o_matic_3000/development_order.aw:988
 msgid "L&otilde;ppt&auml;htaeg"
 msgstr ""
 

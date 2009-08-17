@@ -9,8 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/bug_o_matic_3000/bug_app_type.aw:class_1342_help
 msgid "Klassi Bugtracki rakendus help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_app_type.aw:rel_RELTYPE_TYPE
+msgid "Seose Bugi t&uuml;&uuml;p (RELTYPE_TYPE) tekst"
+msgstr ""

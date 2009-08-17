@@ -25,6 +25,18 @@ msgstr ""
 msgid "Omaduse Aeg (date) help"
 msgstr ""
 
+#: classes/applications/groupware/task_quick_entry.aw:prop_orderer
+msgid "Omaduse Tellija (orderer) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_orderer_comment
+msgid "Omaduse Tellija (orderer) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_orderer_help
+msgid "Omaduse Tellija (orderer) help"
+msgstr ""
+
 #: classes/applications/groupware/task_quick_entry.aw:prop_cust_type
 msgid "Omaduse Kliendi t&uuml;&uuml;p (cust_type) caption"
 msgstr "Client type"
@@ -47,6 +59,18 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_customer_help
 msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_customer_name
+msgid "Omaduse Klient - vaid olemasolev mitte lisamiseks (customer_name) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_customer_name_comment
+msgid "Omaduse Klient - vaid olemasolev mitte lisamiseks (customer_name) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_customer_name_help
+msgid "Omaduse Klient - vaid olemasolev mitte lisamiseks (customer_name) help"
 msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_custp_fn
@@ -165,34 +189,42 @@ msgstr ""
 msgid "Kujundusosa Osalejad (general_down) pealkiri"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:81
+#: classes/applications/groupware/task_quick_entry.aw:107
 msgid "Salvesta ja lisa uus"
 msgstr "Submit and add new"
 
-#: classes/applications/groupware/task_quick_entry.aw:111
+#: classes/applications/groupware/task_quick_entry.aw:153
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/applications/groupware/task_quick_entry.aw:111
+#: classes/applications/groupware/task_quick_entry.aw:153
 msgid "Isik"
 msgstr "Person"
 
-#: classes/applications/groupware/task_quick_entry.aw:141
+#: classes/applications/groupware/task_quick_entry.aw:183
 msgid "--Vali--"
 msgstr "--Select--"
 
-#: classes/applications/groupware/task_quick_entry.aw:174
+#: classes/applications/groupware/task_quick_entry.aw:219
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!"
 msgstr "All fields should be filled"
 
-#: classes/applications/groupware/task_quick_entry.aw:682
+#: classes/applications/groupware/task_quick_entry.aw:777
+msgid "klient"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:777
+msgid "puudub andmebaasist!"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:862
 msgid "Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr "Client named %s does not exist, if You click OK, it will be added\n"
 
-#: classes/applications/groupware/task_quick_entry.aw:704
+#: classes/applications/groupware/task_quick_entry.aw:884
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr "Project named %s does not exist, if You click OK, it will be added\n"
 
-#: classes/applications/groupware/task_quick_entry.aw:727
+#: classes/applications/groupware/task_quick_entry.aw:907
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr "Task named %s does not exist, if You click OK, it will be added\n"

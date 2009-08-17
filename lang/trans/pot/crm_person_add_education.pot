@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Algus (time) help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_add_education.aw:prop_time_end
+msgid "Omaduse L&otilde;pp (time_end) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_add_education.aw:prop_time_end_comment
+msgid "Omaduse L&otilde;pp (time_end) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_add_education.aw:prop_time_end_help
+msgid "Omaduse L&otilde;pp (time_end) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_add_education.aw:prop_time_text
 msgid "Omaduse Aeg (time_text) caption"
 msgstr ""

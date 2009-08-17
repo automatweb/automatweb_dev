@@ -3,8 +3,6 @@ $GLOBALS["TRANS"]["Omaduse URL (url) caption"] = "URL";
 $GLOBALS["TRANS"]["Omaduse URL (url) help"] = "the address where the link refers. It is written in following form: http://www.struktuur.ee or in case of inner site references the document's or folder´s ID.";
 $GLOBALS["TRANS"]["Omaduse Klikke (hits) caption"] = "Clicks";
 $GLOBALS["TRANS"]["Omaduse Klikke (hits) help"] = "informational field. It shows how many times the link has been clicked.";
-$GLOBALS["TRANS"]["Omaduse Saidi sisene link (url_int_text) caption"] = "Inter-site link";
-$GLOBALS["TRANS"]["Omaduse Saidi sisene link (url_int_text) help"] = "when opening that option, it is possible to search inner site documents to what make your link refer to. When you have found the right document fix it with selecting it. Link will be named automatically and the URL row will be filled.";
 $GLOBALS["TRANS"]["Omaduse Alt tekst (alt) caption"] = "Alt text";
 $GLOBALS["TRANS"]["Omaduse Alt tekst (alt) help"] = "the text that shows up next to the cursor if the cursor is held on the link for couple of seconds.";
 $GLOBALS["TRANS"]["Omaduse Uues aknas (newwindow) caption"] = "New window";
@@ -33,7 +31,6 @@ $GLOBALS["TRANS"]["Omaduse Pilt aktiivne kuni (link_image_active_until) caption"
 $GLOBALS["TRANS"]["Omaduse Pilt aktiivne kuni (link_image_active_until) help"] = "the time while the image is being displayed. When the entered period is over, the link will be as text again.";
 $GLOBALS["TRANS"]["Omaduse T&otilde;lgi (transl) caption"] = "Translate";
 $GLOBALS["TRANS"]["Omaduse V&otilde;tmes&otilde;nad (kws) caption"] = "Keywords";
-$GLOBALS["TRANS"]["Grupi Javascript (Javascript) pealkiri"] = "Javascript";
 $GLOBALS["TRANS"]["Grupi Pilt (Pilt) pealkiri"] = "Image";
 $GLOBALS["TRANS"]["Grupi T&otilde;lgi (transl) pealkiri"] = "Translate";
 $GLOBALS["TRANS"]["Grupi V&otilde;tmes&otilde;nad (kws) pealkiri"] = "Keywords";

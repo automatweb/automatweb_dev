@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_export.aw:class_1002_help
 msgid "Klassi Kinnisvaraobjektide eksport help"
 msgstr ""
@@ -155,10 +154,11 @@ msgid "Nimi"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:136
-msgid "Kasutajanimi City24 süsteemis"
+msgid "Kasutajanimi City24 s&uuml;steemis"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:367
-msgid "Viga objekti ekspordil. AW id: %s.\n<blockquote>%s</blockquote>"
+#: classes/applications/realestate_management/realestate_export.aw:364
+msgid ""
+"Viga objekti ekspordil. AW id: %s.\n"
+"<blockquote>%s</blockquote>"
 msgstr ""
-

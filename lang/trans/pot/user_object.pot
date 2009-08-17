@@ -14,7 +14,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/users/user_object.aw:45
+#: classes/core/users/user_object.aw:53
 msgid "%s kodukataloog"
 msgstr ""
 

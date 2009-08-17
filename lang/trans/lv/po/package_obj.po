@@ -9,8 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/package_management/package_obj.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
+#: classes/applications/package_management/package_obj.aw:141
+msgid "failiobjekt ei sisalda &uuml;htegi faili"
+msgstr ""

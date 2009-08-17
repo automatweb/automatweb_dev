@@ -92,6 +92,18 @@ msgstr ""
 msgid "Omaduse Haldurfirmad (manager_cos) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_config.aw:prop_owner
+msgid "Omaduse Lao omanik (owner) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_owner_comment
+msgid "Omaduse Lao omanik (owner) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_owner_help
+msgid "Omaduse Lao omanik (owner) help"
+msgstr ""
+
 # classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods
 #: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods
 msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) caption"
@@ -131,6 +143,54 @@ msgstr ""
 msgid "Omaduse Toodetel puudub laoseis (no_count) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_prod_tree
+msgid "Omaduse Toodete kaustade puud ei kuvata (no_prod_tree) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_prod_tree_comment
+msgid "Omaduse Toodete kaustade puud ei kuvata (no_prod_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_prod_tree_help
+msgid "Omaduse Toodete kaustade puud ei kuvata (no_prod_tree) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_prodg_tree
+msgid "Omaduse Tootekategooriate puud ei kuvata (no_prodg_tree) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_prodg_tree_comment
+msgid "Omaduse Tootekategooriate puud ei kuvata (no_prodg_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_prodg_tree_help
+msgid "Omaduse Tootekategooriate puud ei kuvata (no_prodg_tree) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_arrival_company_folder
+msgid "Omaduse Tarnefirmade kaust (arrival_company_folder) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_arrival_company_folder_comment
+msgid "Omaduse Tarnefirmade kaust (arrival_company_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_arrival_company_folder_help
+msgid "Omaduse Tarnefirmade kaust (arrival_company_folder) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_show_purveyance
+msgid "Omaduse Kuva tarnijaid (show_purveyance) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_show_purveyance_comment
+msgid "Omaduse Kuva tarnijaid (show_purveyance) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_show_purveyance_help
+msgid "Omaduse Kuva tarnijaid (show_purveyance) help"
+msgstr ""
+
 # classes/applications/shop/shop_warehouse_config.aw:prop_prod_fld
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_fld
 msgid "Omaduse Toodete kataloog (prod_fld) caption"
@@ -159,6 +219,18 @@ msgstr ""
 # classes/applications/shop/shop_warehouse_config.aw:prop_pkt_fld_help
 #: classes/applications/shop/shop_warehouse_config.aw:prop_pkt_fld_help
 msgid "Omaduse Pakettide kataloog (pkt_fld) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prod_cat_fld
+msgid "Omaduse Artiklikategooriate kataloog (prod_cat_fld) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prod_cat_fld_comment
+msgid "Omaduse Artiklikategooriate kataloog (prod_cat_fld) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prod_cat_fld_help
+msgid "Omaduse Artiklikategooriate kataloog (prod_cat_fld) help"
 msgstr ""
 
 # classes/applications/shop/shop_warehouse_config.aw:prop_reception_fld
@@ -266,6 +338,54 @@ msgstr ""
 msgid "Omaduse Lao tellijate kataloog (buyers_fld) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_config.aw:prop_purchase_order_mail
+msgid "Omaduse Ostutellimuse meil (purchase_order_mail) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_purchase_order_mail_comment
+msgid "Omaduse Ostutellimuse meil (purchase_order_mail) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_purchase_order_mail_help
+msgid "Omaduse Ostutellimuse meil (purchase_order_mail) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_purchase_order_mail_ctrl
+msgid "Omaduse Ostutellimuse meili kontroller (purchase_order_mail_ctrl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_purchase_order_mail_ctrl_comment
+msgid "Omaduse Ostutellimuse meili kontroller (purchase_order_mail_ctrl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_purchase_order_mail_ctrl_help
+msgid "Omaduse Ostutellimuse meili kontroller (purchase_order_mail_ctrl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_short_code_ctrl
+msgid "Omaduse Toote l&uuml;hikoodi kontroller (short_code_ctrl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_short_code_ctrl_comment
+msgid "Omaduse Toote l&uuml;hikoodi kontroller (short_code_ctrl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_short_code_ctrl_help
+msgid "Omaduse Toote l&uuml;hikoodi kontroller (short_code_ctrl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prod_tree_clids
+msgid "Omaduse Klassid, mida toodete puus kuvatakse (prod_tree_clids) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prod_tree_clids_comment
+msgid "Omaduse Klassid, mida toodete puus kuvatakse (prod_tree_clids) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prod_tree_clids_help
+msgid "Omaduse Klassid, mida toodete puus kuvatakse (prod_tree_clids) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_config.aw:prop_units_table
 msgid "Omaduse  (units_table) caption"
 msgstr ""
@@ -338,6 +458,18 @@ msgstr ""
 msgid "Seose Valuuta (RELTYPE_DEF_CURRENCY) tekst"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_PO_MAIL_CONTROLLER
+msgid "Seose Ostutellimuse meili kontroller (RELTYPE_PO_MAIL_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_CODE_CONTROLLER
+msgid "Seose Toote l&uuml;hikoodi kontroller (RELTYPE_CODE_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_ARRIVAL_COMPANY_FOLDER
+msgid "Seose Organisatsioonide kaust (RELTYPE_ARRIVAL_COMPANY_FOLDER) tekst"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_config.aw:layout_left
 msgid "Kujundusosa Seaded (left) pealkiri"
 msgstr ""
@@ -354,22 +486,30 @@ msgstr ""
 msgid "Kujundusosa &Uuml;hikud (units_tbl_box) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:147
+#: classes/applications/shop/shop_warehouse_config.aw:193
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:148
+#: classes/applications/shop/shop_warehouse_config.aw:194
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:182
+#: classes/applications/shop/shop_warehouse_config.aw:203
+msgid "AW meil"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:204
+msgid "Kontrolleriga defineeritud"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:234
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:189
+#: classes/applications/shop/shop_warehouse_config.aw:241
 msgid "Alternatiiv&uuml;hik %s"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:189
+#: classes/applications/shop/shop_warehouse_config.aw:241
 msgid "P&otilde;hi&uuml;hik"
 msgstr ""
