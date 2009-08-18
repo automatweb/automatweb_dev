@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.52 2009/08/12 08:43:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.53 2009/08/18 14:58:23 dragut Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -2380,7 +2380,7 @@ class image extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($_REQUEST["docid"])
+		if (!empty($_REQUEST["docid"]))
 		{
 			$arr["link"] = aw_url_change_var("docid", $_REQUEST["docid"], $arr["link"]);
 		}
