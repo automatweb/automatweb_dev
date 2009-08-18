@@ -462,6 +462,7 @@ class _int_image_convert_driver_gd extends aw_template
 {
 	var $image;
 	var $ref;
+	var $error;
 
 	function _int_image_convert_driver_gd()
 	{
@@ -560,7 +561,7 @@ class _int_image_convert_driver_gd extends aw_template
 				imagepng($this->image, $tn);
 				break;
 			case IMAGE_JPEG:
-				imagejpeg($this->image, $tn);
+				imagejpeg($this->image, $tn, 85);
 				break;
 			case IMAGE_GIF:
 				imagegif($this->image, $tn);
