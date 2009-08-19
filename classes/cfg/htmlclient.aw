@@ -550,7 +550,7 @@ class htmlclient extends aw_template
 		$tpl_vars = array(
 			"sbt_caption" => $arr["value"] ? $arr["value"] : t("Salvesta"),
 			"name" => $arr["name"] ? $arr["name"] : "",
-			"comment" => $arr["comment"] ? $arr["comment"] : "",
+			"comment" => ( !empty($arr["comment"]) ) ? $arr["comment"] : "",
 			"action" => isset($arr["action"]) ? $arr["action"] : "",
 			"webform_element" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
 			"webform_caption" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",

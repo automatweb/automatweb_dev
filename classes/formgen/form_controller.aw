@@ -66,7 +66,7 @@ class form_controller extends form_base
 		@comment
 
 	**/
-	function submit($arr)
+	function submit($arr = array())
 	{
 		extract($arr);
 		//$this->dequote(&$eq);
@@ -124,7 +124,7 @@ class form_controller extends form_base
 		@comment
 
 	**/
-	function change($arr)
+	function change($arr = array())
 	{
 		extract($arr);
 		$co = $this->load_controller($id);
@@ -321,7 +321,6 @@ class form_controller extends form_base
 
 		exit_function("form_controller::eval_controller");
 		exit_function("form_controller::eval_controller::".$co[OID]);
-echo "a <br>\n";
 		return $res;
 	}
 
