@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.14 2009/07/31 12:59:52 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.15 2009/08/19 13:25:10 dragut Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -152,14 +152,14 @@ class shop_product_search extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
 	/** 
 
-		@attrib name=show nologin="1"
+		@attrib name=show nologin="1" default="1"
 
 		@param id required type=int acl=view
 	**/
@@ -169,8 +169,8 @@ class shop_product_search extends class_base
 		$o = obj($arr["id"]);
 
 		$request = array(
-			"MAX_FILE_SIZE" => $_GET["do_search"],
-			"s" => $_GET["s"]
+			"MAX_FILE_SIZE" => ( !empty($_GET["do_search"]) ) ? $_GET["do_search"] : '',
+			"s" => ( !empty($_GET["s"]) && is_array($_GET["s"]) ) ? $_GET["s"] : array()
 		);
 
 		$props =  $this->callback_gen_search_form(array(
@@ -205,9 +205,12 @@ class shop_product_search extends class_base
 			"table" => $table,
 			"reforb" => $this->mk_reforb("submit_add_cart", array(
 				"oc" => $o->prop("oc"),
+				"MAX_FILE_SIZE" => 1000000,
 			), "shop_order_cart")
 		));
-		if ($_GET["die"] == 1)
+
+
+		if (!empty($_GET["die"]))
 		{
 			die($this->parse());
 		}
@@ -338,7 +341,10 @@ class shop_product_search extends class_base
 				$capts = array();
 				foreach($pd as $real_pd)
 				{
-					$capts[] = $real_pd["caption"];
+					if(isset($real_pd["caption"]))
+					{
+						$capts[] = $real_pd["caption"];
+					}
 				}
 				
 				$data = array(
@@ -347,7 +353,7 @@ class shop_product_search extends class_base
 					"in_form" => html::checkbox(array(
 						"name" => "dat[$clid][$pn][in_form]",
 						"value" => 1,
-						"checked" => $dat[$clid][$pn]["in_form"] == 1
+						"checked" => isset($dat[$clid][$pn]["in_form"])
 					)),
 					"caption" => html::textbox(array(
 						"name" => "dat[$clid][$pn][caption]",
@@ -427,6 +433,16 @@ class shop_product_search extends class_base
 		foreach($ps as $pn => $pd)
 		{
 			$props[CL_SHOP_PACKET][$pn][] = $pd;
+		}
+
+		$cu = get_instance("cfg/cfgutils");
+		$ps = $cu->load_properties(array(
+			"clid" => CL_SHOP_PRODUCT,
+			"file" => "shop_product"
+		));
+		foreach($ps as $pn => $pd)
+		{
+			$props[CL_SHOP_PRODUCT][$pn][] = $pd;
 		}
 
 		return $props;
@@ -526,7 +542,7 @@ class shop_product_search extends class_base
 				$capts = array();
 				foreach($pd as $real_pd)
 				{
-					$capts[] = $real_pd["caption"];
+					$capts[] = ( !empty($real_pd["caption"]) ) ? $real_pd["caption"] : '';
 				}
 
 				$data = array(
@@ -535,7 +551,7 @@ class shop_product_search extends class_base
 					"in_form" => html::checkbox(array(
 						"name" => "dat[$clid][$pn][in_form]",
 						"value" => 1,
-						"checked" => $dat[$clid][$pn]["in_form"] == 1
+						"checked" => (!empty($dat[$clid][$pn]["in_form"]) && $dat[$clid][$pn]["in_form"] == 1) ? true : false
 					)),
 					"caption" => html::textbox(array(
 						"name" => "dat[$clid][$pn][caption]",
@@ -543,12 +559,12 @@ class shop_product_search extends class_base
 					)),
 					"ord" => html::textbox(array(
 						"name" => "dat[$clid][$pn][ord]",
-						"value" => $dat[$clid][$pn]["ord"],
+						"value" => ( !empty($dat[$clid][$pn]["ord"]) ) ? $dat[$clid][$pn]["ord"] : '',
 						"size" => 5
 					)),
 					"transform" => html::select(array(
 						"name" => "dat[$clid][$pn][transform]",
-						"value" => $dat[$clid][$pn]["transform"],
+						"value" => ( !empty($dat[$clid][$pn]["transform"]) ) ? $dat[$clid][$pn]["transform"] : '',
 						"options" => $transforms
 					))
 				);
@@ -576,12 +592,12 @@ class shop_product_search extends class_base
 			foreach($efs as $pn => $pd)
 			{
 				$data = array(
-					"class" => $clss[$clid]["name"],
+					"class" => ( !empty($clss[$clid]["name"]) ) ? $clss[$clid]["name"] : '',
 					"prop" => $pd["caption"]." ($pn)",
 					"in_form" => html::checkbox(array(
 						"name" => "dat[$clid][$pn][in_form]",
 						"value" => 1,
-						"checked" => $dat[$clid][$pn]["in_form"] == 1
+						"checked" => ( !empty($dat[$clid][$pn]["in_form"]) && $dat[$clid][$pn]["in_form"] == 1 ) ? true : false
 					)),
 					"caption" => html::textbox(array(
 						"name" => "dat[$clid][$pn][caption]",
@@ -630,13 +646,13 @@ class shop_product_search extends class_base
 			$r_props = $cu->load_properties(array("clid" => $clid));
 			foreach($ps as $pn => $pd)
 			{
-				if ($pd["in_form"] == 1)
+				if (!empty($pd["in_form"]))
 				{
 					$nm = "s[$clid][".$pn."]";
 					$ret[$nm] = array(
 						"name" => $nm,
 						"type" => $r_props[$pn]["type"] == "checkbox" ? "checkbox" : "textbox",
-						"caption" => $pd["caption_".aw_global_get("ct_lang_id")] ? $pd["caption_".aw_global_get("ct_lang_id")] : $pd["caption"],
+						"caption" => !empty($pd["caption_".aw_global_get("ct_lang_id")]) ? $pd["caption_".aw_global_get("ct_lang_id")] : $pd["caption"],
 						"store" => "no",
 						"value" => $arr["request"]["s"][$clid][$pn],
 						"ch_value" => 1,
@@ -669,11 +685,11 @@ class shop_product_search extends class_base
 		{
 			foreach($cold as $coln => $coli)
 			{
-				if ($coli["in_form"] == 1)
+				if (!empty($coli["in_form"]))
 				{
 					$flds[] = array(
 						"name" => $clid."_".$coln,
-						"caption" => $coli["caption_".aw_global_get("ct_lang_id")] ? $coli["caption_".aw_global_get("ct_lang_id")] : $coli["caption"],
+						"caption" => !empty($coli["caption_".aw_global_get("ct_lang_id")]) ? $coli["caption_".aw_global_get("ct_lang_id")] : $coli["caption"],
 						"_ord" => $coli["ord"]
 					);
 					if ($this->can("view", $coli["transform"]))
@@ -719,7 +735,10 @@ class shop_product_search extends class_base
 
 		$ctr_i = get_instance(CL_FORM_CONTROLLER);
 		$tr_i = get_instance(CL_OTV_DATA_FILTER);
-		if ($arr["request"]["MAX_FILE_SIZE"] != "")
+		
+		arr($arr["request"]);
+
+		if (array_key_exists("MAX_FILE_SIZE", $arr["request"]))
 		{
 			$results = $this->get_search_results($arr["obj_inst"], $arr["request"]["s"]);
 			foreach($results as $o)
@@ -1137,6 +1156,7 @@ class shop_product_search extends class_base
 			"table" => $table,
 			"reforb" => $this->mk_reforb("submit_add_cart", array(
 				"oc" => $o->prop("oc"),
+				"MAX_FILE_SIZE" => 1000000,
 			), "shop_order_cart"),
 			"s_ro" => $this->mk_reforb("show", array(
 				"id" => $o->id(),
