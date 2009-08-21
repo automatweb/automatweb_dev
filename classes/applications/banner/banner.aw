@@ -360,6 +360,7 @@ class banner extends class_base
 			$baids[$cnt++] = $row;
 			$sum += $row["pb"];
 		}
+		$bid = null;
 		if ($cnt > 0)
 		{
 			srand ((double) microtime() * 10000000);
