@@ -117,13 +117,13 @@ class shop_order_center_obj extends _int_object
 	function filter_get_active_by_folder($folder_id)
 	{
 		$fbf = safe_array($this->meta("filter_by_folder"));
-		if (is_oid($fbf[$folder_id]) && $GLOBALS["object_loader"]->can("view", $fbf[$folder_id]))
+		if (is_oid($fbf[$folder_id]) && $GLOBALS["object_loader"]->cache->can("view", $fbf[$folder_id]))
 		{
 			return $fbf[$folder_id];
 		}
 		foreach(obj($folder_id)->path(array("full_path" => 1)) as $path_item)
 		{
-			if (is_oid($fbf[$path_item->id()]) && $GLOBALS["object_loader"]->can("view", $fbf[$path_item->id()]))
+			if (is_oid($fbf[$path_item->id()]) && $GLOBALS["object_loader"]->cache->can("view", $fbf[$path_item->id()]))
 			{
 				return $fbf[$path_item->id()];
 			}
@@ -230,6 +230,97 @@ class shop_order_center_obj extends _int_object
 			}
 		}
 		return $o;
+	}
+	
+	public function send_confirm_mail($order , $mail_data = array())
+	{
+		$order_inst = get_instance(CL_SHOP_SELL_ORDER);
+
+		$html_params = array(
+			"id" => $order,
+		);
+
+
+		// If there is template set explicitly in $mail_data parameter, then use it
+		if (!empty($mail_data['template']))
+		{
+			$html_params['template'] = $mail_data['template'];
+		}
+		else
+		if($this->prop("mail_template"))
+		{
+			$html_params["template"] = $this->prop("mail_template");
+		}
+
+
+		$html = $order_inst->show($html_params);
+		$order_object = obj($order);
+		$warehouse = $this->prop("warehouse");
+		$wo = obj($warehouse);
+
+		$email_subj = t("Tellimus laost");
+		$mail_from_addr = "automatweb@automatweb.com";
+		$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
+		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("cart")))
+		{
+			$cart_o = obj($this->prop("cart"));
+			if ($cart_o->prop("email_subj") != "")
+			{
+				$email_subj = $cart_o->prop("email_subj");
+			}
+			if($GLOBALS["object_loader"]->cache->can("view", $cart_o->prop("subject_handler")))
+			{
+				$ctr = get_instance(CL_FORM_CONTROLLER);
+				$email_subj = $ctr->eval_controller_ref($cart_o->prop("subject_handler"), NULL, $cart_o, $order);
+			}
+		}
+
+		if(!empty($mail_data["from_address"]))
+		{
+			$mail_from_addr = $mail_data["from_address"];
+		}
+		elseif ($this->prop("mail_from_addr"))
+		{
+			$mail_from_addr = $this->prop("mail_from_addr");
+		}
+
+		if(!empty($mail_data["from_name"]))
+		{
+			$mail_from_name = $mail_data["from_name"];
+		}
+		elseif ($this->prop("mail_from_name"))
+		{
+			$mail_from_name = $this->prop("mail_from_name");
+		}
+
+		if(!empty($mail_data["subject"]))
+		{
+			$email_subj= $mail_data["subject"];
+		}
+
+	
+		$order_mails = $wo->get_order_mails();
+		$order_mails[$order_object->get_orderer_mail()] = $order_object->get_orderer_mail();
+
+		if (count($order_mails) > 0)
+		{
+			$awm = get_instance("protocols/mail/aw_mail");
+			foreach($order_mails as $mail)
+			{
+				$awm->clean();
+				$awm->create_message(array(
+					"froma" => $mail_from_addr,
+					"fromn" => $mail_from_name,
+					"subject" => $email_subj,
+					"to" => $mail,
+					"body" => t("see on html kiri"),
+				));
+				$awm->htmlbodyattach(array(
+					"data" => $html,
+				));
+				$awm->gen_mail();
+			}
+		}
 	}
 
 	/**
