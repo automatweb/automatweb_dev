@@ -2,6 +2,11 @@
 
 class products_show_obj extends _int_object
 {
+	/** returns template name
+		@attrib api=1
+		@returns string
+			template file name
+	**/
 	public function get_template()
 	{
 		if($this->prop("template"))
@@ -11,6 +16,10 @@ class products_show_obj extends _int_object
 		return "show.tpl";
 	}
 
+	/** returns products
+		@attrib api=1
+		@returns object list
+	**/
 	public function get_products()
 	{
 		$ol = new object_list();
@@ -22,8 +31,14 @@ class products_show_obj extends _int_object
 		return $ol;
 	}
 
+	/** returns all items for showing
+		@attrib api=1
+		@returns object list
+			product , packaging or packet objects
+	**/
 	public function get_web_items()
 	{
+enter_function("products_show::get_web_items");
 		$categories = $this->get_categories();
 
 		if(!$categories->count() && (!is_array($this->prop("packets")) || !sizeof($this->prop("packets"))))
@@ -32,31 +47,48 @@ class products_show_obj extends _int_object
 		}
 
 		$ol = new object_list();
-		foreach($categories->arr() as $c)
+		if(false)
 		{
-			if(false)
+			foreach($categories->arr() as $c)
 			{
 				$products = $c->get_packagings();
+				$ol->add($products);
 			}
-			elseif(false)
+		}
+		elseif(false)
+		{
+			foreach($categories->arr() as $c)
 			{
 				$products = $c->get_products();
+				$ol->add($products);
 			}
-			else
-			{
-				$products = $c->get_packets();
-			}
-
-			$ol->add($products);
-
 		}
-		foreach($this->prop("packets") as $packet)
+		else
 		{
-			$ol->add($packet);
+			$filter = array(
+				"class_id" => CL_SHOP_PACKET,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_SHOP_PACKET.RELTYPE_CATEGORY" => $categories->ids(),
+			);
+			$ol = new object_list($filter);
 		}
+
+		if(is_array($this->prop("packets")))
+		{
+			foreach($this->prop("packets") as $packet)
+			{
+				$ol->add($packet);
+			}
+		}
+exit_function("products_show::get_web_items");
 		return $ol;
 	}
 
+	/** returns order center object
+		@attrib api=1 params=pos
+		@returns object
+	**/
 	public function get_oc()
 	{
 		$ol = new object_list(array("class_id" => CL_SHOP_ORDER_CENTER));
@@ -64,6 +96,10 @@ class products_show_obj extends _int_object
 		return reset($ol);
 	}
 
+	/** returns categories
+		@attrib api=1
+		@returns object list
+	**/
 	public function get_categories()
 	{
 		$ol = new object_list();	
@@ -96,9 +132,13 @@ class products_show_obj extends _int_object
 			}
 		}
 		return $ol;
-
 	}
 
+	/** adds category
+		@attrib api=1 params=pos
+		@param cat required oid
+		@returns true
+	**/
 	public function add_category($cat)
 	{
 		if(is_oid($cat))
@@ -115,6 +155,10 @@ class products_show_obj extends _int_object
 		return true;
 	}
 
+	/** removes category
+		@attrib api=1 params=pos
+		@param cat required oid
+	**/
 	public function remove_category($cat)
 	{
 		$this->disconnect(array(
@@ -122,6 +166,11 @@ class products_show_obj extends _int_object
 		));
 	}
 
+	/** returns document id where product show object is connected to
+		@attrib api=1
+		@returns oid
+			document object id
+	**/
 	public function get_document()
 	{
 		foreach($this->connections_to(array("from.class_id" => CL_DOCUMENT)) as $c)
@@ -131,6 +180,12 @@ class products_show_obj extends _int_object
 		return null;
 	}
 
+	/** returns category site menu id
+		@attrib api=1 params=pos
+		@param cat required oid
+		@returns oid
+			menu object id
+	**/
 	public function get_category_menu($cat)
 	{
 		$category = obj($cat);

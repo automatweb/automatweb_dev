@@ -202,18 +202,20 @@ class products_show extends class_base
 
 	function show($arr)
 	{
+enter_function("products_show::show");
 		$ob = new object($arr["id"]);
 		if(!empty($_GET["product"]) && $this->can("view" , $_GET["product"]))
 		{
 			$show_product = obj($_GET["product"]);
 			$instance = get_instance($show_product->class_id());
 			$instance->template = $ob->prop("product_template");
+			exit_function("products_show::show");
 			return $instance->show(array(
 				"id" => $_GET["product"],
 				"oc" => $_GET["oc"],
 			));
 		}
-
+enter_function("products_show::start");
 		$this->read_template($ob->get_template());
 		$this->vars(array(
 			"name" => $ob->prop("name"),
@@ -221,17 +223,33 @@ class products_show extends class_base
 
 		$products = $ob->get_web_items();
 		$oc = $ob->get_oc();
+		$GLOBALS["order_center"] = $oc->id();
 		
 		$prod = "";//templeiti muutuja PRODUCT v22rtuseks
-
 		$rows = "";
 		
-		$max = 4;
+		$max = 4;//default
+		$per_page = 16;//default products per page
+		$page = empty($_GET["page"]) ? 0 : $_GET["page"];
+		if($oc->prop("per_page"))
+		{
+			$per_page = $oc->prop("per_page");
+		}
 
 		$count = $count_all = 0;
-		foreach($products->arr() as $product)
+		exit_function("products_show::start");
+		enter_function("products_show::loop");
+		foreach($products->ids() as $product_id)
 		{
-			$product_data = $product->get_data($oc->id());
+			$count_all++;
+			if($count_all <= ($per_page * $page))
+			{
+				continue;
+			}
+			$product = obj($product_id);
+			$count++;
+			$data_params = array("image_url" => 1 , "min_price" => 1,"product_id" => 1, "brand_name" => 1);
+			$product_data = $product->get_data($data_params);
 			$product_data["checkbox"] = html::checkbox(array(
 				"name" => "add_to_cart[".$product_data["product_id"]."]",
 				"value" => 1,
@@ -244,8 +262,6 @@ class products_show extends class_base
 			$product_data["menu_name"] = get_name($product_data["menu"]);
 			$this->vars($product_data);//arr($product_data);
 
-			$count++;
-			$count_all++;
 			if($count >= $max && $this->is_template("ROW"))//viimane tulp yksk6ik mis reas
 			{
 				$count = 0;
@@ -272,9 +288,73 @@ class products_show extends class_base
 				$prod.= $this->parse("PRODUCT");
 			}
 
+			if($count_all >= $per_page * ($page + 1))
+			{
+				break;
+			}
 		}
+		exit_function("products_show::loop");
+		exit_function("products_show::enter");
+		$this->vars(array(
+			"ROW" => $rows
+		));
 
-		$this->vars(array("ROW" => $rows));
+		$pages = $products->count() / $per_page;
+		$pages = (int)$pages;
+		if($products->count() % $per_page) $pages++;
+		if($pages > 1)
+		{
+			if($page > 2)
+			{
+				$this->vars(array("pager_url" => aw_url_change_var("page", $page - 1)));
+				$this->vars(array("PAGE_PREV" => $this->parse("PAGE_PREV")));
+			}
+			if($page < ($pages-3))
+			{
+				$this->vars(array("pager_url" => aw_url_change_var("page", $page + 1)));
+				$this->vars(array("PAGE_NEXT" => $this->parse("PAGE_NEXT")));
+			}
+
+			$page_str = "";
+			
+			$x = max(array(0,$page - 2));
+			$y = 0;
+			if($x+$y > 1)
+			{
+				$page_str.= $this->parse("PAGE_SEP");
+			}
+			while($y < 5)
+			{
+				if($x+$y >= $pages)
+				{
+					break;
+				}
+				$this->vars(array("pager_url" => aw_url_change_var("page", ($x+$y))));
+				$this->vars(array("pager_nr" => ($x + $y + 1)));
+
+				
+				if($x+$y == $page)
+				{
+					$page_str.= $this->parse("PAGE_SEL");
+				}
+				else
+				{
+					$page_str.= $this->parse("PAGE");
+				}
+				$y++;
+			}
+
+			if($x+$y + 1 < $pages)
+			{
+				$page_str.= $this->parse("PAGE_SEP");
+			}
+
+			$this->vars(array(
+				"PAGE" => $page_str,
+				"PAGE_SEL" => " ",
+			));
+			$this->vars(array("PAGER" => $this->parse("PAGER")));
+		}
 
 		$data = array();
 		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
@@ -294,6 +374,8 @@ class products_show extends class_base
 		));
 		$data["section"] = aw_global_get("section");
 		$this->vars($data);
+		exit_function("products_show::end");
+		exit_function("products_show::show");
 		return $this->parse();
 	}
 }
