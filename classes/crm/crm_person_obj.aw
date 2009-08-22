@@ -907,9 +907,15 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 	}
 
 	/** returns one phone number
-		@attrib api=1
+		@attrib api=1 params=pos
+		@param co type=oid optional
+			company object id
+		@param sect type=oid optional
+			section object id
+		@param type type=string optional
+			phone number type, possible options:"work", "home" , "short", "mobile", "fax", "skype", "extension"
 	**/
-	public function get_phone($co = null , $sect = null)
+	public function get_phone($co = null , $sect = null, $type = null)
 	{
 		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
 		{
@@ -925,7 +931,7 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 			}
 
 			$phone = $current_job->get_first_obj_by_reltype("RELTYPE_PHONE");
-			if(is_object($phone))
+			if(is_object($phone) && (!$type || $type == $phone->prop("type")))
 			{
 				return $phone->name();
 			}
@@ -933,7 +939,18 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 
 		foreach(parent::connections_from(array("type" => "RELTYPE_PHONE")) as $cn)
 		{
-			return $cn->prop("to.name");
+			if(!$type)
+			{
+				return $cn->prop("to.name");
+			}
+			else
+			{
+				$phone = $cn->to();
+				if($type == $phone->prop("type"))
+				{
+					return $cn->prop("to.name");
+				}
+			}
 		}
 		return "";
 	}
@@ -1902,10 +1919,8 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 		return $this->_get_sell_orders();
 	}
 
-	//undone - boolean
 	private function _get_sell_orders($arr = array())
 	{
-
 		$filter = array(
 			"class_id" => CL_SHOP_SELL_ORDER,
 			"purchaser" => $this->id(),
