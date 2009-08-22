@@ -88,6 +88,16 @@
             <caption>Ostukorvi kasutaja andmete templeit</caption>
       </property>
       <property>
+            <name>channel</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CHANNEL</reltype>
+            <store>connect</store>
+            <field>channel</field>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gikanal</caption>
+      </property>
+      <property>
             <name>delivery_method_add</name>
             <table>objects</table>
             <group>delivery_methods</group>
@@ -141,6 +151,11 @@
                   <clid>CL_SHOP_DELIVERY_METHOD</clid>
                   <caption>K&amp;amp;auml;ttetoimetamise viis</caption>
             </DELIVERY_METHOD>
+            <RELTYPE_CHANNEL>
+                  <value>12</value>
+                  <clid>CL_WAREHOUSE_SELL_CHANNEL</clid>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gikanal</caption>
+            </RELTYPE_CHANNEL>
       </reltypes>
 </properties>
 

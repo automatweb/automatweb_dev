@@ -51,17 +51,17 @@
 @property delivery_address type=relpicker reltype=RELTYPE_ADDRESS automatic=1 field=aw_address
 @caption Kohaletoimetamise aadress
 
-@property order_status type=chooser default=0 field=aw_status
+@property order_status type=chooser default=0 field=aw_status default=0
 @caption Staatus
+
+@property channel type=relpicker field=aw_channel reltype=RELTYPE_CHANNEL store=connect
+@caption M&uuml;&uuml;gikanal
 
 @property taxed type=chooser field=aw_taxed
 @caption Maks
 
 @property payment_type type=select field=aw_payment_type
 @caption Maksetingimus
-
-@property sell_channel type=select field=aw_channel
-@caption M&uuml;&uuml;gikanal
 
 @property art_toolbar type=toolbar no_caption=1 store=no
 
@@ -99,6 +99,9 @@
 
 @reltype ADDRESS value=11 clid=CL_CRM_ADDRESS
 @caption Aadress
+
+@reltype RELTYPE_CHANNEL value=12 clid=CL_WAREHOUSE_SELL_CHANNEL
+@caption M&uuml;&uuml;gikanal
 */
 
 class shop_sell_order extends class_base
@@ -165,6 +168,7 @@ class shop_sell_order extends class_base
 			case "aw_channel":
 			case "aw_address":
 			case "aw_payment_type":
+			case "aw_channel":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -216,15 +220,20 @@ class shop_sell_order extends class_base
 	**/
 	public function show($arr)
 	{
-		$this->read_template("show.tpl");
-
+		if(empty($arr["template"]))
+		{
+			$this->read_template("show.tpl");
+		}
+		else
+		{
+			$this->read_template($arr["template"]);
+		}
+		$data = array();
 		$o = obj($arr["id"]);
 		foreach($o->get_property_list() as $pn => $pd)
 		{
-			$this->vars(array(
-				$pn => $o->prop_str($pn)
-			));
-		}		
+			$data[$pn] = $o->prop_str($pn);
+		}
 
 		$t = new aw_table();
 		$t->define_field(array(
@@ -250,29 +259,106 @@ class shop_sell_order extends class_base
 
 		$sum = 0;
 		$different_products = 0;
+		$rows = "";
 		foreach($o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
+			
 			$row = $c->to();
 			$c_sum = $row->amount * $row->price;
-			$sum+= $c_sum;arr($sum);
-			$t->define_data(array(
+			$sum+= $c_sum;
+			$prod_data = array();
+
+			if($this->can("view" , $row->prop("prod")))
+			{
+				$product = obj($row->prop("prod"));
+				$prod_data = $product->get_data();
+				$this->vars($prod_data);
+			}
+			$row_data = array(
 				"prod" => $row->prod_name,
 				"amount" => $row->amount,
-				"price" => $row->price,
-				"sum" => $c_sum
-			));
+				"price" => number_format($row->price , 2),
+				"sum" => number_format($c_sum, 2)
+			);
+			$t->define_data($row_data);
+			foreach($row->get_property_list() as $pn => $pd)
+			{
+				$row_data[$pn] = $row->prop_str($pn);
+			}		
+
+			if(!sizeof($prod_data))
+			{
+				$prod_data["code"] = $row->meta("product_code");
+				$prod_data["size"] = $row->meta("product_size");
+				$prod_data["color"] = $row->meta("product_color");
+				$prod_data["name"] = $row->prop("prod_name");
+				$prod_data["packet_name"] = $row->prop("prod_name");
+			}
 			$different_products++;
+			$this->vars($row_data);
+			$this->vars($prod_data);
+			$rows.= $this->parse("ROW");
+
+
+			foreach($prod_data as $key => $var)
+			{
+				$this->vars(array(
+					$key => "",
+				));
+			}
+		}
+		$data["cart_sum"] = number_format($sum , 2);
+		if($this->can("view" , $o->prop("transp_type")))
+		{
+			$delivery = obj($o->prop("transp_type"));
+			$t->define_data(array(
+				"prod" => $delivery->name(),
+				"sum" => $delivery->get_curr_price($o->prop("currency")),
+			));
+			$data["delivery_sum"] = $delivery->get_curr_price($o->prop("currency"));
+			$data["delivery_name"] = $delivery->name();
+			$sum+= $delivery->get_curr_price($o->prop("currency"));
 		}
 
-		$this->vars(array(
-			"orderer" => $o->prop("purchaser.name"),
-			"status" => $this->states[$o->prop("order_status")],
-			"table" => $t->draw(),
-			"sum" => $sum,
-			"different_products" => $different_products,
-		));
+
+		$data["payment_name"] = $o->prop("payment_type.name");
+
+		$data["ROW"] = $rows;
+		$data["id"] = $o->id();
+		$data["orderer"] = $o->prop("purchaser.name");
+		$data["status"] = $o->prop("order_status") ? $this->states[$o->prop("order_status")] : "";
+		$data["table"] = $t->draw();
+		$data["sum"] = number_format($sum, 2);
+
+		$data["date"] = date("d.m.Y" , $o->prop("date"));
+		$data["different_products"] = $different_products;
+		if($this->can("view" , $o->prop("delivery_address")))
+		{
+			$address = obj($o->prop("delivery_address"));
+			$data["address_index"] = $address->prop("postiindeks");
+			$data["address_city"] = $address->prop_str("linn");
+			$data["address_address"] = $address->prop_str("aadress");
+		}
+		if($this->can("view" , $o->prop("purchaser")))
+		{
+			$orderer = obj($o->prop("purchaser"));
+			$data["email"] = $orderer->get_mail();
+			$data["mobile_phone"] = $orderer->get_phone(null,null,"mobile");
+			$data["home_phone"] = $orderer->get_phone(null,null,"home");
+			if($orderer->class_id() == CL_CRM_PERSON && $orderer->prop("birthday"))
+			{
+				$data["birthday"] = date("d.m.Y" , $orderer->prop("birthday"));
+				$data["customer_no"] = $orderer->prop("external_id");
+				$data["firstname"] = $orderer->prop("firstname");
+				$data["lastname"] = $orderer->prop("lastname");
+			}
+		}
+		$data["channel"] = $o->prop("channel");
+		$data["customer_no"] = $orderer->prop("external_id");
+		$this->vars($data);
 
 		return $this->parse();
 	}
+
 }
 ?>

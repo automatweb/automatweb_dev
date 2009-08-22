@@ -50,9 +50,6 @@
 @property chart_final_template type=select
 @caption Ostukorvi l&ouml;ppvaate template
 
-@property mail_template type=select
-@caption E-maili template
-
 @property integration_class type=select
 @caption Integratsiooni klass
 
@@ -73,6 +70,9 @@
 
 	@property mail_cust_content type=textarea rows=10 cols=80
 	@caption Meili sisu (kui t&uuml;hi, siis templatest)
+
+@property mail_template type=select
+@caption E-maili template
 
 @default group=mail_settings_seller
 
@@ -120,6 +120,12 @@
 			@caption N&auml;itamise kaustade seaded
 
 @default group=appear_settings
+
+	@property per_page type=textbox table=aw_shop_order_center field=aw_per_page  method=null
+	@caption Tooteid lehek&uuml;ljel
+
+@property childtitle1 type=text store=no subtitle=1
+@caption Vanad-&uuml;le-vaadata-kas-toimivad-ja-kas-vaja
 
 	@property only_active_items type=checkbox ch_value=1
 	@caption Ainult aktiivsed tooted
@@ -359,10 +365,16 @@ class shop_order_center extends class_base
 
 			case "chart_show_template":
 			case "chart_final_template":
-			case "mail_template":
+
 				$tm = get_instance("templatemgr");
 				$prop["options"] = $tm->template_picker(array(
 					"folder" => "applications/shop/shop_order_cart/"
+				));
+				break;
+			case "mail_template":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "applications/shop/shop_sell_order/"
 				));
 				break;
 
@@ -1851,12 +1863,12 @@ class shop_order_center extends class_base
 			case "aw_default_currency":
 			case "aw_rent_configuration":
 			case "aw_root_menu":
+			case "aw_per_page":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
 				));
 				return true;
-
 		}
 		return false;
 	}
@@ -2197,6 +2209,17 @@ class shop_order_center extends class_base
 					);
 				}
 			";
+
+			$js.= "
+				function make_all_not_active()
+				{
+					$.get('/automatweb/orb.aw?class=shop_order_center&action=make_all_not_active&id=".$arr["obj_inst"]->id()."', {
+						}, function (html) {
+							reload_property('appearance_list');
+						}
+					);
+				}
+			";
 		}
 		return $js;
 	}
@@ -2231,6 +2254,12 @@ class shop_order_center extends class_base
 			"parent" => "active",
 			"text" => t("Mitteaktiivseks"),
 			"link" => "javascript:set_sel_prop('active' , '1');",
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "active",
+			"text" => t("K&otilde;ik t&uuml;hjad kaustad mitteaktiivseteks"),
+			"link" => "javascript:make_all_not_active();",
 		));
 
 		$tb->add_menu_button(array(
@@ -2279,6 +2308,7 @@ class shop_order_center extends class_base
 				"link" => "javascript:set_sel_prop('product_template' , '".$name."');",
 			));
 		}
+
 	}
 
 	/** searches and connects bill row to task row
@@ -2472,6 +2502,16 @@ class shop_order_center extends class_base
 			}
 		}
 		die();
+	}
+
+	/**
+		@attrib name=make_all_not_active all_args=1
+	**/
+	public function make_all_not_active($arr)
+	{
+		$obj = obj($arr["id"]);
+		$obj->make_all_empty_menus_not_active();
+		die(1);
 	}
 
 }

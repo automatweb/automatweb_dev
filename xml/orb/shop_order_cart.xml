@@ -4,6 +4,7 @@
 		<action name="show_cart" nologin="1">
 			<function name="show">
 				<arguments>
+					<optional name="id" type="int" acl="view" />
 					<optional name="oc" type="int" />
 					<optional name="cart" type="int" />
 					<optional name="section" />
@@ -19,6 +20,7 @@
 					<optional name="is_update" type="int" />
 					<optional name="order_data" />
 					<optional name="go_to_after" />
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
@@ -38,6 +40,7 @@
 					<optional name="oc" />
 					<optional name="cart" />
 					<optional name="section" />
+					<optional name="confirm_url" />
 				</arguments>
 			</function>
 		</action>
@@ -102,6 +105,8 @@
 				<arguments>
 					<required name="cart" type="int" acl="view" />
 					<optional name="next_view" />
+					<optional name="confirm_url" />
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
@@ -111,6 +116,8 @@
 				<arguments>
 					<required name="cart" type="int" acl="view" />
 					<optional name="next_view" />
+					<optional name="confirm_url" />
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
@@ -119,6 +126,8 @@
 			<function name="submit_order_data">
 				<arguments>
 					<optional name="next_action" type="string" />
+					<optional name="confirm_url" type="string" />
+					<optional name="section" type="string" />
 				</arguments>
 			</function>
 		</action>

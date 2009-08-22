@@ -412,7 +412,32 @@ class shop_warehouse_obj extends _int_object
 	{
 		$ol = new object_list(array("class_id" => CL_SHOP_BRAND));
 		return $ol;
+	}
 
+	/**return all channels
+		@attrib api=1
+		@returns object_list
+	**/
+	public function get_channels()
+	{
+		$ol = new object_list(array("class_id" => CL_WAREHOUSE_SELL_CHANNEL));
+		return $ol;
+	}
+
+	/** returns all mail addresses
+		@attrib api=1
+		@returns array
+			mail addresses array
+	**/
+	public function get_order_mails()
+	{
+		$ret = array();
+		foreach($this->connections_from(array("type" => "RELTYPE_EMAIL")) as $con)
+		{
+			$eml = $con->to();
+			$ret[$eml->prop("mail")] = $eml->prop("mail");
+		};
+		return $ret;
 	}
 
 }

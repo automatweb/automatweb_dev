@@ -35,12 +35,17 @@
 @property orderer_data_template type=select field=meta method=serialize
 @caption Ostukorvi kasutaja andmete templeit
 
+@property channel type=relpicker reltype=RELTYPE_CHANNEL store=connect
+@caption M&uuml;&uuml;gikanal
+
 @groupinfo delivery_methods caption="K&auml;ttetoimetamise viisid"
 @default group=delivery_methods
 
 	@property delivery_method_add type=hidden table=objects field=meta method=serialize
 	@property delivery_method_tlb type=toolbar store=no no_caption=1
 	@property delivery_method_tbl type=table store=no no_caption=1
+
+
 
 ### RELTYPES
 
@@ -52,6 +57,9 @@
 
 @reltype DELIVERY_METHOD value=3 clid=CL_SHOP_DELIVERY_METHOD
 @caption K&auml;ttetoimetamise viis
+
+@reltype RELTYPE_CHANNEL value=12 clid=CL_WAREHOUSE_SELL_CHANNEL
+@caption M&uuml;&uuml;gikanal
 
 */
 
@@ -237,7 +245,7 @@ class shop_order_cart extends class_base
 
 		@attrib name=show_cart nologin="1"
 
-		@param id required type=int acl=view
+		@param id optional type=int acl=view
 		@param oc optional type=int
 		@param cart optional type=int
 		@param section optional
@@ -272,7 +280,7 @@ class shop_order_cart extends class_base
 				$oc = obj();
 			}
 		}
-
+		$this->vars(array("section" => aw_global_get("section")));
 		if(!empty($arr["template"]))
 		{
 			$this->read_template($arr["template"]);
@@ -287,7 +295,10 @@ class shop_order_cart extends class_base
 		}
 		lc_site_load("shop_order_cart", &$this);
 
+		$this->add_cart_vars();
 		$this->add_orderer_vars();
+		$this->add_order_vars();
+		$this->add_product_vars();
 
 		$soce = new aw_array(aw_global_get("soc_err"));
 		$soce_arr = $soce->get();
@@ -389,10 +400,11 @@ class shop_order_cart extends class_base
 						));*/
 						$vars = $product->get_data();
 						$vars["amount"] = $quant["items"];
-						$vars["price"] = $product->get_shop_price($oc->id());
-						$vars["total_price"] = $quant["items"] * $product->get_shop_price($oc->id());
+						$vars["price"] = number_format($product->get_shop_price($oc->id()));
+						$vars["total_price"] =number_format( $quant["items"] * $product->get_shop_price($oc->id()));
 						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
-						$this->vars($vars);
+	
+					$this->vars($vars);
 						$product_str.= $this->parse("PRODUCT");
 
 						$show_info_page = false;
@@ -470,12 +482,11 @@ class shop_order_cart extends class_base
 						$product = obj($i);
 						$vars = $product->get_data();
 						$vars["amount"] = $quant["items"];
-						$vars["price"] = $product->get_shop_price($oc->id());
-						$vars["total_price"] = $quant["items"] * $product->get_shop_price($oc->id());
+						$vars["price"] = number_format($product->get_shop_price($oc->id()) , 2);
+						$vars["total_price"] = number_format($quant["items"] * $product->get_shop_price($oc->id()) , 2);
 						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
 						$this->vars($vars);
 						$product_str.= $this->parse("PRODUCT");
-
 					$show_info_page = false;
 					$total += ($quant["items"] * $price);
 				$cart_total += $vars["total_price"];
@@ -565,6 +576,12 @@ class shop_order_cart extends class_base
 			$total += $cart_o->prop("postal_price");
 		}
 
+		if($this->can("view" , $cart["order_data"]["delivery"]))
+		{
+			$delivery = obj( $cart["order_data"]["delivery"]);
+			$total+= $delivery->get_curr_price($oc->prop("default_currency"));
+		}
+
 		$this->vars($delivery_vars + array(
 			"cart_total" => number_format($cart_total, 2),
 			"cart_discount" => number_format($cart_discount, 2),
@@ -572,7 +589,7 @@ class shop_order_cart extends class_base
 			"user_data_form" => $html,
 			"PROD" => $str,
 			"PRODUCT" => $product_str,
-			"basket_total_price" => $cart_total,
+			"basket_total_price" =>number_format( $cart_total,2),
 			"total" => number_format($total, 2),
 			"prod_total" => number_format($prod_total, 2),
 			"postal_price" => number_format($cart_o->prop("postal_price"),2),
@@ -580,7 +597,7 @@ class shop_order_cart extends class_base
 				"oc" => $oc->id(),
 				"update" => 1,
 				"section" => aw_global_get("section"),//$arr["section"]
-			))
+			)),
 		));
 
 		if ($cart_o->prop("postal_price") > 0 or !empty($delivery_vars["postal_price"]))
@@ -599,6 +616,13 @@ class shop_order_cart extends class_base
 		{
 			$this->vars(array(
 				'cart_page' => $this->parse('cart_page'),
+			));
+		}
+
+		if($total && $this->is_template("HAS_PRODUCTS"))
+		{
+			$this->vars(array(
+				"HAS_PRODUCTS" => $this->parse("HAS_PRODUCTS"),
 			));
 		}
 
@@ -750,6 +774,7 @@ class shop_order_cart extends class_base
 		@param is_update optional type=int
 		@param order_data optional
 		@param go_to_after optional
+		@param section optional
 
 	**/
 	function submit_add_cart($arr)
@@ -757,7 +782,7 @@ class shop_order_cart extends class_base
 		extract($arr);
 
 		//kui on mitu ostukorvi, siis hiljem kontrollib ykshaaval tooteid sealt
-		if($cart_confirm)
+		if(!empty($cart_confirm))
 		{
 			$this->set_confirm_carts($cart_confirm);
 		}
@@ -765,8 +790,10 @@ class shop_order_cart extends class_base
 		$section = aw_global_get("section");
 		$oc = obj($oc);
 		$cart = $this->get_cart($oc);
-		aw_session_set("order.accept_cond", $arr["order_cond_ok"]);
-
+		if(isset($arr["order_cond_ok"]))
+		{
+			aw_session_set("order.accept_cond", $arr["order_cond_ok"]);
+		}
 		// get cart to user from oc
 		$cart_o = obj($oc->prop("cart"));
 
@@ -819,7 +846,7 @@ class shop_order_cart extends class_base
 			$quantx = new aw_array($quantx);
 			foreach($quantx->get() as $x => $quant)
 			{
-				if ($arr["update"] == 1)
+				if (!empty($arr["update"]) && $arr["update"] == 1)
 				{
 					$cc = $quant;
 				}
@@ -1841,13 +1868,17 @@ class shop_order_cart extends class_base
 		@param oc optional
 		@param cart optional
 		@param section optional
-
+		@param confirm_url optional
 	**/
 	function final_finish_order($arr)
 	{
+		if(!empty($arr["confirm_url"]))
+		{
+			header("Location: ".$arr["confirm_url"]);
+			die();
+		}
 		$arr["template"] = "final_finish_order.tpl";
 		return $this->show($arr);
-
 
 		extract($arr);
 		$oc = obj($oc);
@@ -2585,6 +2616,8 @@ class shop_order_cart extends class_base
 		@attrib name=orderer_data nologin="1"
 		@param cart required type=int acl=view
 		@param next_view optional
+		@param confirm_url optional
+		@param section optional
 	**/
 	public function orderer_data($arr)
 	{
@@ -2605,6 +2638,7 @@ class shop_order_cart extends class_base
 		$this->add_order_vars();
 		$this->add_product_vars();
 
+		$this->vars($arr);
 		return $this->parse();
 	}
 
@@ -2612,6 +2646,8 @@ class shop_order_cart extends class_base
 		@attrib name=order_data nologin="1"
 		@param cart required type=int acl=view
 		@param next_view optional
+		@param confirm_url optional
+		@param section optional
 	**/
 	public function order_data($arr)
 	{
@@ -2632,11 +2668,11 @@ class shop_order_cart extends class_base
 		$this->add_orderer_vars();
 		$this->add_order_vars();
 		$this->add_product_vars();
-
+		$this->vars($arr);
 		return $this->parse();
 	}
 
-	private function add_orderer_vars()
+	public function add_orderer_vars()
 	{
 		$data = $this->cart->get_order_data();
 		$vars = array();
@@ -2666,18 +2702,22 @@ class shop_order_cart extends class_base
 					));
 					break;
 				case "birthday":
-					$vars["birthday_day_value"] = empty($data[$orderer_var]["day"]) ? t("PP") : $data[$orderer_var]["day"];
-					$vars["birthday_month_value"] = empty($data[$orderer_var]["month"]) ? t("KK") : $data[$orderer_var]["month"];
-					$vars["birthday_year_value"] = empty($data[$orderer_var]["year"]) ? t("AAAA") : $data[$orderer_var]["year"];
+					if(!empty($data[$orderer_var]))
+					{
+						$vars["birthday_day_value"] = empty($data[$orderer_var]["day"]) ? t("PP") : $data[$orderer_var]["day"];
+						$vars["birthday_month_value"] = empty($data[$orderer_var]["month"]) ? t("KK") : $data[$orderer_var]["month"];
+						$vars["birthday_year_value"] = empty($data[$orderer_var]["year"]) ? t("AAAA") : $data[$orderer_var]["year"];
+						$vars["birthday_value"] = empty($data[$orderer_var]["day"]) ? "" : date("d.m.Y" , mktime(0,0,0,$data[$orderer_var]["day"],$data[$orderer_var]["month"],$data[$orderer_var]["year"]));
+					}
 					break;
 			}
 		}
 		$this->vars($vars);
 	}
 
-	private function add_order_vars()
+	public function add_order_vars()
 	{
-
+		$data = $this->cart->get_order_data();
 		$oc = $this->cart->get_oc();
 		$payment = $delivery = "";
 		$asd = $oc->get_rent_conditions(array(
@@ -2706,21 +2746,24 @@ class shop_order_cart extends class_base
 		}
 		$this->vars(array(
 			"PAYMENT" => $payment,
-			"payment_value" => empty($data["payment"]) ? " " : get_name($data["payment"]),
+			"payment_name" => empty($data["payment"]) ? " " : get_name($data["payment"]),
+			"payment_value" => empty($data["payment"]) ? "" : $data["payment"],
 		));
 
-		foreach($delivery_methods_object_list->names() as $id => $name)
+		foreach($delivery_methods_object_list->arr() as $id => $o)
 		{
 			$this->vars(array(
-				"delivery_name" => $name,
+				"delivery_name" => $o->name(),
 				"delivery_id" => $id,
 				"delivery_checked" =>  !empty($data["delivery"]) && $data["delivery"] == $id ? " checked " : " ",
+				"delivery_price" => $o->get_shop_price($oc),
 			));
 			$delivery.=$this->parse("DELIVERY");
 		}
 		$this->vars(array(
 			"DELIVERY" => $delivery,
-			"delivery_value" => empty($data["delivery"]) ? " " : $data["delivery"],
+			"delivery_name" => empty($data["delivery"]) ? " " : get_name($data["delivery"]),
+			"delivery_value" => empty($data["delivery"]) ? "" : $data["delivery"],
 		));
 
 	}
@@ -2732,7 +2775,7 @@ class shop_order_cart extends class_base
 
 	}
 
-	private function add_cart_vars()
+	public function add_cart_vars()
 	{
 		$vars = array();
 		$vars["cart"] = $this->cart->id();
@@ -2743,6 +2786,9 @@ class shop_order_cart extends class_base
 	/**
 		@attrib name=submit_order_data nologin="1" all_args=1
 		@param next_action optional type=string
+		@param confirm_url optional type=string
+		@param section optional type=string
+			for some other confirm view 
 	**/
 	public function submit_order_data($arr)
 	{
@@ -2757,11 +2803,17 @@ class shop_order_cart extends class_base
 		{
 			$action = "final_finish_order";
 		}
-		return $this->mk_my_orb($action, array(
+		$return_data = array(
 			"oc" => $arr["oc"],
 			"cart" => $arr["cart"],
 			"section" => $arr["section"],
-		));
+		);
+		if(!empty($arr["confirm_url"]))
+		{
+			$return_data["confirm_url"] = $arr["confirm_url"];
+		}
+
+		return $this->mk_my_orb($action, $return_data);
 	}
 
 	/**
@@ -2783,8 +2835,10 @@ class shop_order_cart extends class_base
 	public function confirm_order($arr)
 	{
 		$cart = obj($arr["cart"]);
-		$order = $cart->create_order(); //arr("Location: ".aw_global_get("baseurl")."/".$order);
-		header("Location: ".aw_global_get("baseurl")."/".$order);
+		$order = $cart->confirm_order(); //arr("Location: ".aw_global_get("baseurl")."/".$order);
+		$url = aw_global_get("baseurl")."/".$order;
+		//$url = $this->mk_my_orb("show" , array("id" => $order) , CL_SHOP_SELL_ORDER);
+		header("Location: ".$url);
 		die();
 		return "/".$order;
 	}
