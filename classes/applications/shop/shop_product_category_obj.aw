@@ -25,10 +25,10 @@ class shop_product_category_obj extends _int_object
 		return $ol;
 	}
 
-	/** return categories
+	/** return all categories
 		@attrib api=1
 		@returns
-			object list
+			array
 	**/
 	public function get_all_categories()
 	{
@@ -58,6 +58,11 @@ class shop_product_category_obj extends _int_object
 		return $ids;
 	}
 
+	/**
+		@attrib api=1 params=pos
+		@param id optional type=oid default=null
+		@param depth optional type=oid default=null
+	**/
 	public function get_categories_hierarchy($id = NULL, $depth = NULL)
 	{
 		$retval = array();
@@ -72,7 +77,9 @@ class shop_product_category_obj extends _int_object
 	}
 
 	/**
-		@attrib api=1
+		@attrib api=1 params=pos
+		@param id required type=oid
+			category object id
 	**/
 	public function set_category($id)
 	{
@@ -174,10 +181,10 @@ class shop_product_category_obj extends _int_object
 		}
 	}
 
-	/** Returns packages for category
+	/** Returns all packets for category, including packets under subcategories
 		@attrib api=1 params=pos
 		@returns
-			Object list or array of object lists if id is given and is array.
+			Object list.
 	**/
 	public function get_packets()
 	{
@@ -187,12 +194,29 @@ class shop_product_category_obj extends _int_object
 			"site_id" => array(),
 			"CL_SHOP_PACKET.RELTYPE_CATEGORY" => $this->get_all_categories(),
 		);
-		
-
 
 		return new object_list($prms);
 	}
 
+	/** Returns image url for category
+		@attrib api=1 params=pos
+		@returns string
+			image url if image exists
+	**/
+	public function get_image_url()
+	{
+		foreach($this->connections_from(array(
+			"type" => "RELTYPE_IMAGE",
+		)) as $c)
+		{
+			$this->image_object = $c->to();
+		}
+		if(!empty($this->image_object) && is_object($this->image_object))
+		{
+			return $this->image_object->get_url();
+		}		
+		return "";
+	}
 
 
 //----------------- static functions -------------------------

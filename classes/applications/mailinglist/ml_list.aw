@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.160 2009/05/22 12:04:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.161 2009/08/22 20:08:06 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -904,7 +904,12 @@ class ml_list extends class_base
 				"use_folders" => array_keys($args["subscr_folder"]),
 				"email" => $args["email"],
 				"list_id" => $list_obj->id(),
+				"confirm_message" => $list_obj->prop("confirm_unsubscribe_msg"),
 			));
+			if($this->can("view", $list_obj->prop("redir_unsubscribe_obj")))
+			{
+				$retval = $this->cfg["baseurl"] . "/" . $list_obj->prop("redir_unsubscribe_obj");
+			}
 		}
 
 		$relobj = new object($rel_id);
@@ -2214,6 +2219,10 @@ foreach($ol->arr() as $o)
 	{
 		if (empty($el1["ord"]) && empty($el2["ord"]))
 		{
+			if(empty($el1["tmp_ord"]) || empty($el2["tmp_ord"]))
+			{
+				return 0;
+			}
 			return (int)($el1["tmp_ord"] - $el2["tmp_ord"]);
 			//return 0;
 		}
@@ -2780,7 +2789,7 @@ foreach($ol->arr() as $o)
 			$src = $obj->prop("choose_menu");
 			if(!$this->list_id) $this->list_id = $id;
 		}
-		if($this->can("view" , $this->list_id))
+		if(!empty( $this->list_id) && $this->can("view" , $this->list_id))
 		{
 			$mailinglist = obj($this->list_id);
 		}
@@ -4251,7 +4260,7 @@ arr($msg_obj->prop("message"));
 		$this->_init_members_table($t, $arr["obj_inst"]);
 
 		//hangib organisatsioonide, ametinimetuste ja osakondade nimed
-		if($GLOBALS["mailinglist_show_org_column"])
+		if(!empty($GLOBALS["mailinglist_show_org_column"]))
 		{
 			$co_array = array();
 			$pro_array = array();

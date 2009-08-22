@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.33 2009/03/19 15:14:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.34 2009/08/22 20:06:54 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -324,6 +324,7 @@ class ml_member extends class_base
 	{
 		$this->quote($args);
 		extract($args);
+		$deleted = 0;
 		$section = aw_global_get("section");
 		if((!$use_folders) && is_oid($list_id))
 		{
@@ -345,6 +346,7 @@ class ml_member extends class_base
 				if (is_object($check))
 				{
 					$check->delete();
+					$deleted = 1;
 				};
 			}
 		}
@@ -357,8 +359,23 @@ class ml_member extends class_base
 			if (is_object($check))
 			{
 				$check->delete();
+				$deleted = 1;
 			};
 		}
+
+		if ($deleted && $confirm_subscribe_msg > 0)
+		{
+			// now generate and send the bloody message
+			$msg = get_instance(CL_MESSAGE);
+			$msg->process_and_deliver(array(
+				"confirm_mail" => 1,
+				"id" => $confirm_subscribe_msg,
+				"to" => $email,
+			));
+		}
+
+
+
 		return isset($args["ret_status"]) ? $check : $this->cfg["baseurl"] . "/" . $section;
 	}
 

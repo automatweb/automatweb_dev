@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.53 2009/03/31 14:55:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.54 2009/08/22 20:05:59 markop Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -860,24 +860,37 @@ arr($row);*/
 
 		$awm->create_message(array(
 			"froma" => $address,
-			"subject" => $row["name"],
+			"subject" => $mail->name(),
 			"to" => $args["to"],
-			"body" => $message,
+			"body" => strip_tags(str_replace("<br>", "\n",$message)),
+			"fromn" => $mail->prop("mfrom.name"),
 		));
+		$message = str_replace('href="/' , 'href="'.aw_ini_get("baseurl").'/' , $message);
+		if($mail->prop("html_mail"))
+		{
+			$awm->htmlbodyattach(array(
+				"data" => $message
+			));
+		}
 		$awm->gen_mail();
 
 		if($args["confirm_mail"])
 		{
-
-			$awm_admin = get_instance("protocols/mail/aw_mail");
-			$from = $row["mfrom"];
-			$awm_admin->create_message(array(
+			$awm = get_instance("protocols/mail/aw_mail");
+			$awm->create_message(array(
 				"froma" => $address,
-				"subject" => $row["name"],
+				"subject" => $mail->name(),
 				"to" => $mto,
-				"body" => $message,
+				"body" => strip_tags(str_replace("<br>", "\n",$message)),
+				"fromn" => $mail->prop("mfrom.name"),
 			));
-			$awm_admin->gen_mail();
+			if($mail->prop("html_mail"))
+			{
+				$awm->htmlbodyattach(array(
+					"data" => $message
+				));
+			}
+			$awm->gen_mail();
 		}
 	}
 
