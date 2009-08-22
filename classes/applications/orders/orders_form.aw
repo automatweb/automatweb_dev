@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.30 2008/10/29 15:55:13 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.30 2008/10/29 15:55:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.31 2009/08/22 20:32:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.31 2009/08/22 20:32:04 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -30,8 +30,29 @@
 @property no_pdata_check type=checkbox ch_value=1
 @caption Kasutajaandmed isikust
 
-//@property order_center type=relpicker reltype=RELTYPE_ORDER_CENTER
-//@caption Tellimiskeskkond
+@property order_center type=relpicker reltype=RELTYPE_ORDER_CENTER store=connect
+@caption Tellimiskeskkond
+
+
+
+@property channel type=relpicker reltype=RELTYPE_CHANNEL store=connect
+@caption M&uuml;&uuml;gikanal
+
+
+@groupinfo mails caption=Meiliseaded 
+@default group=mails
+
+@property mail_subject type=textbox
+@caption Maili subjekt
+
+@property mail_from type=textbox
+@caption Mail kellelt
+
+@property mail_from_address type=textbox
+@caption Mail kellelt aadress
+
+
+
 
 
 @groupinfo config caption=Seaded 
@@ -57,6 +78,9 @@
 
 @property orders_form_template type=select
 @caption Tellija andmete kujundusp&otilde;hi
+
+@property confirm_template type=select
+@caption Kinnitusvaate templeit
 
 
 @groupinfo ordering caption=Tellimine submit=no
@@ -88,6 +112,7 @@
 @property rent_item_types type=table 
 @caption Makseperioodid
 
+
 @reltype ORDERFORM value=1 clid=CL_CFGFORM
 @caption Tellimuse seadetevorm
 
@@ -106,10 +131,14 @@
 @reltype MAIL_ADDRESS value=6 clid=CL_ML_MEMBER
 @caption Maili aadress
 
-//@reltype ORDER_CENTER value=6 clid=CL_SHOP_ORDER_CENTER
-//@caption Tellimiskeskkond
+@reltype ORDER_CENTER value=7 clid=CL_SHOP_ORDER_CENTER
+@caption Tellimiskeskkond
+
+@reltype RELTYPE_CHANNEL value=12 clid=CL_WAREHOUSE_SELL_CHANNEL
+@caption M&uuml;&uuml;gikanal
 
 */
+
 class orders_form extends class_base
 {
 	function orders_form()
@@ -220,8 +249,493 @@ class orders_form extends class_base
 		return $retval;
 	}
 	
+	public function get_order()
+	{
+		return empty($_SESSION["order"]) ? array() : $_SESSION["order"];
+	}
+
+	public function clear_order()
+	{
+		unset($_SESSION["order"]);
+	}
+
+	public function set_order($order)
+	{
+		foreach($order as $key =>  $o)
+		{
+			$set = 0;
+			foreach($o as $val)
+			{
+				if($val)
+				{
+					$set = 1;
+					break;
+				}
+			}
+			if(!$set)
+			{
+				unset($order[$key]);
+			}
+		}
+
+		$_SESSION["order"] = $order;
+	}
+
+	/**
+		@attrib name=orderer_data nologin="1"
+		@param id required type=int acl=view
+		@param next_view optional
+		@param cart required type=int acl=view
+		@param section optional
+	**/
+	public function orderer_data($arr)
+	{
+		$cart_instance = get_instance(CL_SHOP_ORDER_CART);
+		$cart_instance->cart = obj($arr["cart"]);
+	
+		if($this->can("view" , $arr["id"]))
+		{
+			$form= obj($arr["id"]);
+			if($form->prop("orderer_data_template"))
+			{
+				$template = $form->prop("orderer_data_template");
+			}
+		}
+
+		if(empty($template))
+		{
+			$template = "orderer_form_data.tpl";
+		}
+		$cart_instance->read_template($template);
+		lc_site_load("shop_order_cart", &$cart_instance);
+
+		$cart_instance->add_orderer_vars();
+		$cart_instance->add_order_vars();
+		$cart_instance->add_cart_vars();
+		$cart_instance->vars($arr);
+		$cart_instance->vars(array("id" => $arr["id"]));
+		return $cart_instance->parse();
+	}
+
+	/**
+		@attrib name=submit_order_data nologin="1" all_args=1
+		@param next_action optional type=string
+	**/
+	public function submit_order_data($arr)
+	{
+		$cart = obj($arr["cart"]);
+		$cart -> set_order_data($arr);
+
+		if($arr["next_action"])
+		{
+			$action = $arr["next_action"];
+		}
+		else
+		{
+			$action = "confirm_view";
+		}
+		return $this->mk_my_orb($action, array(
+			"oc" => $arr["oc"],
+			"cart" => $arr["cart"],
+			"section" => $arr["section"],
+			"id" => $arr["id"],
+		));
+	}
+
+	/**
+		@attrib name=order_data nologin="1"
+		@param id required type=int acl=view
+		@param cart required type=int acl=view
+		@param next_view optional
+		@param section optional
+	**/
+	public function order_data($arr)
+	{
+		$cart_instance = get_instance(CL_SHOP_ORDER_CART);
+		$cart_instance->cart = obj($arr["cart"]);
+		$form = obj($arr["id"]);
+		if($form->prop("order_data_template"))
+		{
+			$template = $form->prop("order_data_template");
+		}
+		else
+		{
+			$template = "order_form_data.tpl";
+		}
+		$cart_instance->read_template($template);
+		lc_site_load("shop_order_cart", &$cart_instance);
+		$cart_instance->cart->get_order_data();
+		$cart_instance->add_orderer_vars();
+		$cart_instance->add_order_vars();
+		$cart_instance->add_cart_vars();
+		$cart_instance->vars($arr);
+		$cart_instance->vars(array("id" => $arr["id"]));
+		return $cart_instance->parse();
+	}
+	function show($arr)
+	{
+	//tellimuse info
+		$form_obj = obj($arr["id"]);
+		$oc = obj($form_obj->prop("order_center"));
+		$cart = obj($oc->prop("cart"));
+		$c_data = $cart->get_order_data();
+		$order_data = $this->get_order();
+		$cart_instance = get_instance(CL_SHOP_ORDER_CART);
+	//templeidi valik
+		if(!empty($arr["template"]))
+		{
+			$this->read_template($arr["template"]);
+		}
+		elseif($form_obj->prop("orders_form_template"))
+		{
+			$this->read_template($form_obj->prop("orders_form_template"));
+		}
+		elseif(file_exists($this->site_template_dir."/orders_form.tpl"))
+		{
+			$this->read_site_template("orders_form.tpl");
+		}
+		else
+		{
+			$this->read_template("orders_form.tpl");
+		}
+
+
+		foreach($c_data as $key => $val)
+		{
+			$this->vars(array(
+				$key."_value" => $val,
+			));
+		}
+
+		$this->vars(array(
+			"delivery_name" => empty($c_data["delivery"]) ? " " : get_name($c_data["delivery"]),
+			"delivery_value" => empty($c_data["delivery"]) ? "" : $c_data["delivery"],
+		));
+		$this->vars(array(
+			"payment_name" => empty($c_data["payment"]) ? " " : get_name($c_data["payment"]),
+			"payment_value" => empty($c_data["payment"]) ? "" : $c_data["payment"],
+		));
+		//v6imalikud v2ljad mida templeidis kasutada
+		$order_vars = array(
+			"name" => t("Nimi"),
+			"product_code" => t("Tootekood"),
+			"product_color" => t("V&auml;rv"),
+			"product_size" => t("Suurus"),
+			"product_count" => t("Hulk"),
+			"product_page" => t("Lehek&uuml;lg"),
+			"product_image" => t("Pilt"),
+			"product_price" => t("Hind"),
+			"product_sum" => t("Summa")
+		);
+		//v2ljad mida toote leidmisel laost muuta ei saa
+		$disable_vars = array("product_code" , "name" , "product_color", "product_page" , "product_image" , "product_sum");
+		
+		$shop_cart_table = "";
+		$count = 0;
+		foreach($order_data as $key => $data)
+		{
+			$vars = array();
+			$product = null;
+			$data["product_price"] = t("Hinnakirja<br>alusel");
+			if(!$data["product_count"])
+			{
+				$order_data[$key]["product_count"] = $data["product_count"] = 1;
+			}
+
+			if($data["product_code"])//kui koodi j2rgi toode, siis annab ise igast andmeid ette
+			{
+				$product = $this->get_product_by_code($data["product_code"]);
+				if($product)
+				{
+					$data["name"] = $product->get_packet_name();
+					$order_data[$key]["product_color"] = $data["product_color"] = $product->get_color_name();
+					if(empty($data["product_size"]))
+					{
+						$order_data[$key]["product_size"] = $data["product_size"] = reset($product->get_size_vals());
+					}
+					if($pr = $product->get_size_price($data["product_size"] , $form_obj->prop("order_center")))
+					{
+						$data["product_price"] = number_format($pr , 2);
+					}
+
+					$vars["image_popup"] = $product->get_image_popup();
+					$vars["image_url"] = $product->get_product_big_image_url();
+				}
+			}
+
+			foreach($order_vars as $order_var => $caption)
+			{
+				$vars[$order_var."_value"] = empty($data[$order_var]) ? "" : $data[$order_var];
+				$vars[$order_var."_caption"] = $caption;
+				$vars[$order_var] = html::textbox(array(
+					"name" => "order_row[".$count."][".$order_var."]",
+					"size" => 11,
+					"value" => $vars[$order_var."_value"],
+				));
+
+			if($product && in_array($order_var,$disable_vars))
+			{
+				$vars[$order_var] = 
+//html::textbox(array(
+	//					"name" => "order_row[".$count."][".$order_var."]",
+//						"size" => 11,
+//						"value" => $vars[$order_var."_value"],
+//						"disabled" => 1,
+//					)).
+					$vars[$order_var."_value"].
+					html::hidden(array(
+						"name" => "order_row[".$count."][".$order_var."]",
+						"value" => $vars[$order_var."_value"],
+					));
+				}
+			}
+			if($product)
+			{
+				$vars["product_size"] = html::select(array(
+					"name" => "order_row[".$count."][product_size]",
+					"value" => $vars["product_size_value"],
+					"options" => $product->get_size_vals()
+				));
+				if(!(sizeof($product->get_size_vals()) > 1))
+				{
+					$vars["product_size"] = "";
+				}
+				if(!empty($data["product_price"]) && $data["product_count"])
+				{
+					$vars["product_sum"] = number_format($data["product_price"] * $data["product_count"] , 2);
+				}
+			}
+			else
+			{
+			//	$vars["product_size"] = "";
+				$vars["image_popup"] = "";
+				$vars["image_url"] = "";
+				$vars["product_sum"] = "";
+			}
+
+			$vars["delete"] = html::href(array("url" => "javascript:void(0);" , "onClick" => '$.get("/automatweb/orb.aw?class=orders_form&action=delete_row&row='.$count.'", {
+						}, function (html) {
+							x=document.getElementById("order_row_'.$count.'");
+							//alert(jQuery(x).css("border", "1px solid red"));
+							jQuery(x).remove();
+						}
+					);',
+					"caption" => t("Eemalda<br>toode"),
+			));
+			$vars["tr_id"] = "order_row_".$count;
+			$this->vars($vars);
+			$_vars = $vars;
+			foreach($_vars as $var => $value)
+			{
+				if($value && $this->is_template("HAS_".strtoupper($var)))
+				{
+					$this->vars(array("HAS_".strtoupper($var) => $this->parse("HAS_".strtoupper($var))));
+				}
+				elseif($this->is_template("HAS_".strtoupper($var)))
+				{
+					$this->vars(array("HAS_".strtoupper($var) => " "));
+				}
+			}
+
+			$shop_cart_table.= $this->parse("shop_cart_table");
+			$count++;
+		}
+		
+		if(empty($arr["confirm"]))
+		{
+			$x = 0;
+			while($x < 1)
+			{
+				$vars = array();
+				foreach($order_vars as $order_var => $caption)
+				{
+					$vars[$order_var."_caption"] = $caption;
+					$vars[$order_var] = html::textbox(array(
+						"name" => "order_row[".($count+$x)."][".$order_var."]",
+						"size" => 11,
+					));
+				}
+				$this->vars( $vars);
+				$shop_cart_table.= html::div(array("id" => "order_row_".($count+$x) , "content" => $this->parse("shop_cart_new_table")));
+				$x++;
+			}
+		}
+			$confirm_url =$this->mk_my_orb("confirm_view", array("id" => $arr["id"], "section" => aw_global_get("section")));
+		
+//add delivery vars
+		if($this->can("view" , $c_data["delivery"]))
+		{
+			$delivery_vars = array();
+			$delivery = obj($c_data["delivery"]);
+			$delivery_vars["delivery_name"] = $delivery->name();
+			$delivery_vars["delivery_price"] = $delivery->get_curr_price($oc->prop("default_currency"));
+			$this->vars($delivery_vars);
+		}
+		$this->vars(array(
+			"shop_cart_table" => $shop_cart_table,
+			"rows_count" => $count,
+			"id" => $form_obj->id(),
+			"reforb" => $this->mk_reforb("submit_order", array(
+				"section" => aw_global_get("section"))),
+			"forwardurl" => $this->mk_my_orb("order_data" , 
+				array("confirm_url" => $confirm_url,
+					"cart" => $form_obj->prop("order_center.cart"),
+					"section" => aw_global_get("section"),
+					"id" => $arr["id"],
+				) , CL_ORDERS_FORM),
+			"confirm_url" => $this->mk_my_orb("confirm", array("id" => $arr["id"], "section" => aw_global_get("section"))),
+		));
+		$this->vars(array("shop_table" => $this->parse("shop_table")));
+
+		$this->set_order($order_data);//et igasugu default v22rtused ka 2ra salvestaks
+		return $this->parse();
+	}
+
+	public function get_product_by_code($code)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"code" => $code,
+		));
+		return $ol->begin();
+	}
+
+	/**
+		@attrib name=delete_row nologin=1 all_args=1
+	**/
+	public function delete_row($arr)
+	{
+		$order = $this->get_order();
+		unset($order[$arr["row"]]);
+		$this->set_order($order);
+		die(1);
+	}
+
+	/**
+		@attrib name=confirm_view nologin=1 all_args=1
+	**/
+	public function confirm_view($arr)
+	{
+		if(is_oid($arr["id"]))
+		{
+			$obj = obj($arr["id"]);
+			if($obj->prop("confirm_template"))
+			{
+				return $this->show(array("id" => $arr["id"], "template" => $obj->prop("confirm_template")));
+			}
+		}
+		return $this->show(array("id" => $arr["id"], "template" => "confirm_template.tpl","confirm" => 1));
+		die(t("tellimuse vormi kinnituse templeit valimata"));
+	}
+
+	/**
+		@attrib name=confirm nologin=1 all_args=1
+	**/
+	public function confirm($arr)
+	{
+		$form = obj($arr["id"]);
+		$this->oc = obj($form->prop("order_center"));
+		$cart = obj($this->oc->prop("cart"));
+		$cart->set_oc();
+		if (!is_oid($this->oc->prop("warehouse")))
+		{
+			error::raise(array(
+				"id" => "ERR_NO_WAREHOOS",
+				"msg" => sprintf(t("shop_order_cart::do_creat_order_from_cart(): no warehouse set for ordering center %s!"), $this->oc->id())
+			));
+		}
+
+		$warehouse = $this->oc->prop("warehouse");
+
+		$order_data = $cart->get_order_data();
+
+		$o = new object();
+		$o->set_name(t("M&uuml;&uuml;gitellimus")." ".date("d.m.Y H:i"));
+		$o->set_parent($this->oc->id());
+		$o->set_class_id(CL_SHOP_SELL_ORDER);
+		$o->set_prop("warehouse" , $warehouse);
+		$o->set_prop("date" , time());
+		
+
+		$person = $cart->_get_person($order_data);
+
+		$o->set_prop("purchaser" , $person->id());
+		$o->set_prop("buyer_rep" , $person->id());
+		$address = $cart->_get_address($order_data);
+		$o->set_prop("delivery_address" , $address->id());
+		$o->set_prop("transp_type" , $order_data["delivery"]);
+		$o->set_prop("payment_type" , $order_data["payment"]);
+		$o->set_prop("currency" , $this->oc->get_currency());
+		$o->set_prop("channel" , $form->prop("channel"));
+		$o->save();
+
+		$rows = $this->get_order();
+
+		foreach($rows as $row)
+		{
+			$product = null;
+			if(!empty($row["product_code"]))
+			{
+				$prod = $this->get_product_by_code($row["product_code"]);
+				if(is_object($prod))
+				{
+					$packaging = $prod->get_package_by_size($row["product_size"]);
+
+					if(is_object($packaging))
+					{
+						$product = $packaging->id();
+						$row["product_price"] = $packaging->get_shop_price($cart->id());
+					}
+				}
+			}
+			$id = $o->add_row(array(
+				"product_name" => $row["name"],
+				"product" => $product,
+				"amount" => $row["product_count"],
+				"price" => $row["product_price"],
+				"code" => $row["product_code"],
+			));
+			$r = obj($id);
+			foreach($row as $key => $val)
+			{
+				$r->set_meta($key , $val);
+			}
+			$r->save();
+		}
+		$this->clear_order();
+
+		$form->send_confirm_mail($o->id());
+
+		header("Location: /".$o->id());
+		die();
+		return $o->id();
+
+	}
+
+	/**
+		@attrib name=submit_order nologin=1 all_args=1
+	**/
+	public function submit_order($arr)
+	{
+		$this->set_order($arr["order_row"]);
+		$url = aw_global_get("baseurl")."/".$arr["section"];
+		//$url = $this->mk_my_orb("show" , array("id" => $order) , CL_SHOP_SELL_ORDER);
+		header("Location: ".$url);
+		die();
+
+	}
+
 	function parse_alias($arr)
 	{
+		$object = obj($arr["alias"]["target"]);
+		if($this->can("view" , $object->prop("order_center")))//ostukorviga versiooni jaoks... siis teeb hiljem lao myygitellimuse
+		{
+			return $this->show(array(
+				"id" => $arr["alias"]["target"],
+			));
+		}
 		$_SESSION["orders_section"] = $arr["alias"]["from.parent"];
 		$_SESSION["order_form_id"] = $arr["alias"]["to"];
 		$arr["id"] = $arr["alias"]["target"];

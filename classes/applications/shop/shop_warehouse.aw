@@ -240,6 +240,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@caption Kaubam&auml;rkide nimekiri
 
 
+
+@default group=channels
+
+	@layout channel_toolbar type=vbox
+		@property channel_toolbar type=toolbar no_caption=1 store=no parent=channel_toolbar
+		@caption M&uuml;&uuml;gikanalite toolbar
+	@layout channel_list type=vbox closeable=1 area_caption=M&uuml;&uuml;gikanalite nimekiri
+		@property channel_list type=table store=no no_caption=1 channel=brand_list
+		@caption M&uuml;&uuml;gikanalite nimekiri
+
+
 @default group=arrivals
 
 	@property arrivals_tb type=toolbar no_caption=1
@@ -1159,6 +1170,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@groupinfo sales_clients caption="M&uuml;&uuml;gikliendid" parent=sales
 	@groupinfo shop_orders caption="Poe tellimused" parent=sales
 	@groupinfo order_undone parent=sales caption="T&auml;itmata poe tellimused"
+	@groupinfo channels parent=sales caption="M&uuml;&uuml;gikanalid"
 	@groupinfo order_orderer_cos parent=sales caption="A Tellijad"
 	@groupinfo campaigns parent=sales caption="Kampaaniad" submit=no
 
@@ -8402,6 +8414,15 @@ $oo = get_instance(CL_SHOP_ORDER);
 			}
 			$add_row = null;
 			$sum = 0;
+			$conn = $o->connections_from(array(
+				"type" => "RELTYPE_ROW",
+			));
+			foreach($conn as $c)
+			{
+				$row = $c->to();
+				$sum += $row->prop("amount") * $row->prop("price");
+			}
+
 			if(($group == "purchase_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_PURCHASE_MANAGER_WORKSPACE) || ($group == "sell_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_SALES_MANAGER_WORKSPACE))
 			{
 				$add_row .= html::strong(t("Kommentaarid:"))."<br />";
@@ -8426,9 +8447,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 					"name" => "orders[".$o->id()."][add_comment]",
 					"size" => 40,
 				))."<br />";
-				$conn = $o->connections_from(array(
-					"type" => "RELTYPE_ROW",
-				));
+
 				if(count($conn))
 				{
 					$at = new vcl_table();
@@ -8480,7 +8499,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 						$at->set_default_sortby("sb");
 						$at->set_default_sorder("desc");
 						$at->define_data($data);
-						$sum += $row->prop("amount") * $row->prop("price");
+//						$sum += $row->prop("amount") * $row->prop("price");
 					}
 					$at->define_data(array(
 						"name" => html::strong(t("Nimi")),
@@ -8502,7 +8521,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"purchaser" => html::obj_change_url($o->prop("purchaser")),
 				"date" => $o->prop("date"),
 				"rels" => implode(", ", $rel_arr),
-				"sum" => $sum,
+				"sum" => $sum." ".get_name($o->prop("currency")),
 				"status" => $o->instance()->states[$o->prop("order_status")],
 				"oid" => $o->id(),
 				"start_date" => html::textbox(array(
@@ -8518,6 +8537,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 					"value" => date('Y', $dd),
 					"style" => "width: 40px;",
 				)),
+				"id" => $o->id(),
 				"case" => $case,
 				"color" => ($dealnow)?"#FF4444":"",
 				"now" => $dealnow,
@@ -8581,8 +8601,17 @@ $oo = get_instance(CL_SHOP_ORDER);
 		));
 
 		$t->define_field(array(
+			"name" => "oid",
+			"caption" => t("Id"),
+			"sortable" => 1,
+			"align" => "center",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+
+		$t->define_field(array(
 			"name" => "purchaser",
-			"caption" => t("Tarnija"),
+			"caption" => t("Tellija"),
 			"sortable" => 1,
 			"align" => "center",
 			"chgbgcolor" => "color",
@@ -11664,6 +11693,45 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$tb->add_delete_button();
 	}
 
+	function _get_channel_toolbar($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_js_new_button(array(
+			"parent" => $arr["obj_inst"]->id(),
+			"clid" => CL_WAREHOUSE_SELL_CHANNEL,
+			"refresh" => array("channel_list"),
+			"promts" => array("name" => t("Sisesta uue m&uuml;&uuml;gikanali nimi")),
+		));
+		$tb->add_delete_button();
+	}
+
+	function _get_channel_list($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+
+		$tb->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$tb->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+		$channels = $arr["obj_inst"]->get_channels();
+		foreach($channels->arr() as $channel)
+		{
+			$tb->define_data(array(
+				"name" =>html::obj_change_url($channel, parse_obj_name($channel->name())),
+				"oid" => $channel->id(),
+			));
+		}
+
+	}
+
+
+
 	function _get_brand_list($arr)
 	{
 		$tb = $arr["prop"]["vcl_inst"];
@@ -11859,7 +11927,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"caption" => t("FIFO"),
 			"align" => "center"
 		));
-		if((!isset($arr["request"][$group."_s_pricelist"]) && $this->def_price_list) || automatweb::$request->arg($group."_s_pricelist"))
+		if(!isset($group) || ((!isset($arr["request"][$group."_s_pricelist"]) && $this->def_price_list) || automatweb::$request->arg($group."_s_pricelist")))
 		{
 			$tb->define_field(array(
 				"sortable" => 1,
@@ -11880,7 +11948,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			));
 		}
 
-		if(!automatweb::$request->arg("pgtf") && automatweb::$request->arg("pgtf") != $this->prod_type_fld && !automatweb::$request->arg($group."_s_cat"))
+		if(empty($group) || (!automatweb::$request->arg("pgtf") && automatweb::$request->arg("pgtf") != $this->prod_type_fld && !automatweb::$request->arg($group."_s_cat")))
 		{
 			$tb->define_field(array(
 				"name" => "cat",
@@ -12033,7 +12101,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 	private function get_categories_from_search($arr)
 	{
 		$cats = array();
-		if(is_oid($arr["cat"]))
+		if(!empty($arr["cat"]) && is_oid($arr["cat"]))
 		{
 			$cats[] = $arr["cat"];
 		}
