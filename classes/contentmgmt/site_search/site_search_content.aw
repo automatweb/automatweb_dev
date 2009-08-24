@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.107 2009/02/10 08:52:39 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.108 2009/08/24 14:53:24 markop Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1418,6 +1418,19 @@ class site_search_content extends class_base
 				"keyword" => $keyword,
 				"area" => $area,
 			)));
+			if(strlen($str) != strlen(htmlentities($str)))
+			{
+				$ret = $this->merge_result_sets($ret, $this->fetch_live_search_results(array(
+					"menus" => $ms,
+					"str" => htmlentities($str),
+					"obj" => $arr["obj"],
+					"opts" => $opts,
+					"date" => $date,
+					"field" => $field,
+					"keyword" => $keyword,
+					"area" => $area,
+				)));
+			}
 		}
 		// make sure we only get unique titles in results
 		$_ret = array();
