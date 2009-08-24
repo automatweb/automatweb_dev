@@ -2201,7 +2201,7 @@ class webform extends class_base
 			}
 			if ($val['type'] == 'date_select')
 			{
-				if ($val['default_value_today'] == 1)
+				if (empty($val["value"]) && $val['default_value_today'] == 1)
 				{
 					$els[$key]['value'] = time();
 				}
