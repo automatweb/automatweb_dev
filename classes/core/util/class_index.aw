@@ -9,9 +9,9 @@ class class_index
 	const INDEX_DIR = "files/class_index/";
 	const CLASS_DIR = "classes/";
 	const LOCAL_CLASS_DIR = "files/classes/";
-	const LOCAL_CLASS_PREFIX = "_aw_local_class__"; // local class names in form OBJ_LOCAL_CLASS_PREFIX . $class_obj_id
+	const LOCAL_CLASS_PREFIX = "_aw_local_class__"; // local class names in form LOCAL_CLASS_PREFIX . $class_obj_id
 	const UPDATE_EXEC_TIMELIMIT = 300;
-	const CL_NAME_MAXLEN = 1024;
+	const CL_NAME_MAXLEN = 1024;  // max string length of class names
 
 	// update collects implemented interfaces in this, so we can update the interface definitions with the list of classes that implement that interface
 	private static $implements_interface = array();
