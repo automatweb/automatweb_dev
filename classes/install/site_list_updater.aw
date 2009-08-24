@@ -34,7 +34,14 @@ class site_list_updater extends aw_template
 		}
 		// no go to background
 		$url = str_replace("/automatweb", "", $this->mk_my_orb("bg_do_update", array("uid" => $arr["uid"]), "site_list_updater", false, true, "&", false));
-		get_instance("protocols/file/http")->get($url);
+
+		try
+		{
+			get_instance("protocols/file/http")->get($url);
+		}
+		catch (awex_socket_timeout $e)
+		{
+		}
 	}
 
 	/**
@@ -51,7 +58,7 @@ class site_list_updater extends aw_template
 	**/
 	function bg_do_update($arr)
 	{
-		// go to bg. 
+		// go to bg.
 		// let the user continue with their business
 		ignore_user_abort(true);
 		header("Content-Type: image/gif");
@@ -69,14 +76,14 @@ class site_list_updater extends aw_template
 			$key = $this->_init_session_key();
 		}
 
-		// the idea behind the session key is that the first time 
+		// the idea behind the session key is that the first time
 		// any communication between the site and the register happens
 		// the session key is created in both databases
 		// after that it is used to encrypt all communications, but it iself
 		// is of course never passed between servers, so that if the attacker
 		// misses the session key he can not make any modifications to the register
-		// it still is vulnerable during the session key creation, but... 
-		
+		// it still is vulnerable during the session key creation, but...
+
 		// get the new info about the site
 		$data = $this->_collect();
 
