@@ -3,13 +3,13 @@
 @classinfo maintainer=kristo
 */
 
-class http 
+class http
 {
 	function http()
 	{
 		aw_config_init_class(&$this);
 	}
-	
+
 	/**
 	@attrib api=1 params=pos
 	@param url required type=string
@@ -22,6 +22,8 @@ class http
 		$this->headers = $http->get_headers();
 	@comment
 		gets requested data from url
+	@errors
+		throws awex_socket_timeout
 	**/
 	function get($url, $sess = null, $cook_name = "automatweb")
 	{
@@ -59,7 +61,9 @@ class http
 		));
 		$socket->write($req);
 		$ipd = "";
+		$data = "";
 		$len = null;
+
 		while($data = $socket->read(10000))
 		{
 			//echo "data = $data <br>";
@@ -79,7 +83,7 @@ class http
 			{
 				break;
 			}
-		};
+		}
 		list($headers,$data) = explode("\r\n\r\n",$ipd,2);
 		$this->last_request_headers = $headers;
 		//echo htmlentities($headers)."<br>".htmlentities($data);
@@ -91,34 +95,34 @@ class http
 			{
 				$loc = trim($mt[1]);
 				// make full url from location
-                                if ($loc[0] == "/")
-                                {
-	                                $loc = "http://".$host.$loc;
-                                }
-                                else
-                                if ($loc[0] == "?")
-                                {
+				if ($loc[0] === "/")
+				{
+					$loc = "http://".$host.$loc;
+				}
+				elseif ($loc[0] === "?")
+				{
 					$tmp = $url;
 					$qpos = strpos($url, "?");
 					if ($qpos)
 					{
 						$tmp = substr($tmp, 0, $qpos);
 					}
+
 					$loc = $tmp.$loc;
-                                }
-                                $pu = parse_url($loc);
-                                if (!$pu["scheme"])
-                                {
-					if (substr($url, -1) == "/")
+				}
+
+				$pu = parse_url($loc);
+				if (!$pu["scheme"])
+				{
+					if (substr($url, -1) === "/")
 					{
 						$loc = $url.$loc;
 					}
 					else
 					{
-                        	        	$loc = dirname($url)."/".$loc;
+						$loc = dirname($url)."/".$loc;
 					}
-                                }
-//echo "redirect to $loc <br>";
+				}
 				return $this->get($loc, $sess, $cook_name);
 			}
 		}
@@ -138,7 +142,7 @@ class http
 	{
 		return $this->last_request_headers;
 	}
-	
+
 	/**
 	@attrib api=1
 	@return string/content type
@@ -160,7 +164,7 @@ class http
 
 		return $ct;
 	}
-	
+
 	/**
 	@attrib api=1 params=name
 	@param host required type=string
@@ -177,13 +181,13 @@ class http
 		));
 		if ($evnt["uid"] && $evnt["password"])
 			$awt->login(array(
-				"host" => $url, 
-				"uid" => $evnt["uid"], 
+				"host" => $url,
+				"uid" => $evnt["uid"],
 				"password" => $evnt["password"]
 			));
 		else	$awt->login_hash(array(
-				"host" => $url, 
-				"uid" => $evnt["uid"], 
+				"host" => $url,
+				"uid" => $evnt["uid"],
 				"hash" => $evnt["auth_hash"],
 			));
 		$req = $awt->do_send_request(array(
@@ -191,7 +195,7 @@ class http
 			"req" => substr($ev_url,strlen("http://")+strlen($url)))
 		);
 		$awt->logout(array("host" => $url));
-	
+
 	@return cookie, if sessid is not set
 	**/
 	function handshake($args = array())
@@ -201,7 +205,7 @@ class http
 		{
 			$silent = true;
 		}
-		$socket = get_instance("protocols/socket");  
+		$socket = get_instance("protocols/socket");
 		if (substr($host,0,7) == "http://")
 		{
 			$host = substr($host,7);
@@ -210,7 +214,7 @@ class http
 			"host" => $host,
 			"port" => 80,
 		));
-	
+
 		if ($args["sessid"] != "")
 		{
 			$this->cookie = $args["sessid"];
@@ -230,7 +234,7 @@ class http
 		$socket->write($op);
 
 		$ipd="";
-		
+
 		while($data = $socket->read())
 		{
 			$ipd .= $data;
@@ -251,13 +255,13 @@ class http
 		}
 		return $cookie;
 	}
-	
+
 	/**
 	@attrib api=1 params=pos
 	@param id required type=oid
 		object id
 	@return array(prop("server") , $this->cookie)
-	@comment 
+	@comment
 		object's props(server, login_uid, login_password, server) must be set
 	**/
 	function login_from_obj($id)
@@ -277,7 +281,7 @@ class http
 
 		return array($ob->prop("server"),$this->cookie);
 	}
-	
+
 	/**
 	@attrib api=1 params=name
 	@param host required type=string
@@ -289,7 +293,7 @@ class http
 	@param silent optional type=bool
 		if not set, prints out the request
 	@example ${handshake}
-	@comment 
+	@comment
 		Sends login request
 	**/
 	function login($args = array())
@@ -305,7 +309,7 @@ class http
 			"host" => $host,
 			"port" => 80,
 		));
-		
+
 		$request = "uid=$uid&password=$password&class=users&action=login";
 
 		$op = "GET /orb.".$this->cfg["ext"]."?$request HTTP/1.0\r\n";
@@ -333,7 +337,7 @@ class http
 			flush();
 		}
 	}
-	
+
 	/**
 	@attrib api=1 params=name
 	@param host required type=string
@@ -343,7 +347,7 @@ class http
 	@param hash required type=oid
 		hash value
 	@example ${handshake}
-	@comment 
+	@comment
 		Sends login request
 	**/
 	function login_hash($args = array())
@@ -367,7 +371,7 @@ class http
 			"host" => $host,
 			"port" => 80,
 		));
-		
+
 		$request = "uid=$uid&hash=$hash&class=users&action=login";
 		$op = "GET /orb.".$this->cfg["ext"]."?$request HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
@@ -404,7 +408,7 @@ class http
 	@return string
 		data returned after request
 	@example ${handshake}
-	@comment 
+	@comment
 		Sends HTTP GET request
 	**/
 	function do_send_request($arr)
@@ -432,7 +436,7 @@ class http
 
 		return $ipd;
 	}
-	
+
 	/**
 	@attrib api=1 params=name
 	@param host optional type=string
@@ -440,7 +444,7 @@ class http
 	@param req required type=string
 		Request url
 	@example ${handshake}
-	@comment 
+	@comment
 		Sends HTTP GET request
 	**/
 	function send_request($args = array())
@@ -479,14 +483,14 @@ class http
 		};
 		flush();
 	}
-	
+
 	/**
 	@attrib api=1 params=name
 	@param host required type=string
 		Server URL
 	@return array(headers,data)
 	@example ${handshake}
-	@comment 
+	@comment
 		Log's out
 	**/
 	function logout($args = array())
@@ -505,7 +509,7 @@ class http
 		$op .= "Cookie: automatweb=$cookie\r\n\r\n";
 
 		$socket->write($op);
-		
+
 		while($data = $socket->read())
 		{
 			$ipd .= $data;
@@ -514,12 +518,12 @@ class http
 		list($headers,$data) = explode("\r\n\r\n",$ipd);
 		return array($headers, $data);
 	}
-	
+
 	/**
 	@attrib api=1 params=pos
 	@param c required type=string
 		cookie
-	@comment 
+	@comment
 		Sets session cookie
 	**/
 	function set_session_cookie($c)
@@ -537,7 +541,7 @@ class http
 		Request parameters Array("parameter"=>"value")
 	@param port optional type=int default=80
 		Connection port
-	@example 
+	@example
 		$http = get_instance("protocols/file/http");
 		return $http->post_request(
 			"https://unet.eyp.ee/cgi-bin/unet3.sh/un3min.r",
@@ -550,7 +554,7 @@ class http
 			$port = 80,
 		);
 	@return string
-	@comment 
+	@comment
 		Initiates a socket connection to the server and generates HTTP POST request
 	**/
 	function post_request($server, $handler, $params, $port = 80, $sessid = NULL)
@@ -568,7 +572,7 @@ class http
 		foreach($params as $key => $val)
 		{
 			$request .= urlencode($key) . "=" . urlencode($val) . "&";
-		} 
+		}
 
 		$op .= "Content-Length: " . strlen($request) . "\r\n\r\n";
 		$op .= $request;
