@@ -47,14 +47,14 @@ class crm_presentation_obj extends task_object
 		return $result_names;
 	}
 
-	public function awobj_set_start($value)
+	public function awobj_set_start1($value)
 	{
 		if ($this->prop("real_start") < 2 and $value < time())
 		{
 			throw new awex_crm_presentation("Start cannot be in the past");
 		}
 
-		$this->set_prop("start", $value);
+		$this->set_prop("start1", $value);
 	}
 
 	public function save($exclusive = false, $previous_state = null)
@@ -66,14 +66,14 @@ class crm_presentation_obj extends task_object
 			$application->process_presentation_result(new object($this->id()));
 		}
 
-		if (is_oid($this->prop("sales_schedule_job")))
+		if (is_oid($this->prop("hr_schedule_job")))
 		{
 			// change job times
-			$job = new object($this->prop("sales_schedule_job"));
-			$planned_length = $this->prop("end") > $this->prop("start") ? $this->prop("end") - $this->prop("start") : 0;
-			if ($this->prop("start") != $job->prop("minstart") or $planned_length != $job->prop("planned_length"))
+			$job = new object($this->prop("hr_schedule_job"));
+			$planned_length = $this->prop("end") > $this->prop("start1") ? $this->prop("end") - $this->prop("start1") : 0;
+			if ($this->prop("start1") != $job->prop("minstart") or $planned_length != $job->prop("planned_length"))
 			{
-				$job->set_prop("minstart", $this->prop("start"));
+				$job->set_prop("minstart", $this->prop("start1"));
 				$job->set_prop("planned_length", $planned_length);
 				$job->save();
 			}

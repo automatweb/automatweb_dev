@@ -84,6 +84,7 @@ class crm_sales_obj extends _int_object implements application_interface
 		{
 			throw new awex_crm_sales_owner("Owner not defined, can't save");
 		}
+
 		return parent::save($exclusive, $previous_state);
 	}
 
@@ -155,7 +156,6 @@ class crm_sales_obj extends _int_object implements application_interface
 		$customer_relation->save();
 		$case = $this->get_customer_case($customer_relation, true);
 		$case->plan();
-		$case->start();
 	}
 
 	/** Creates a presentation task
@@ -180,10 +180,9 @@ class crm_sales_obj extends _int_object implements application_interface
 		$presentation->set_name(sprintf(t("Esitlus kliendile %s"), $customer_relation->prop("buyer.name")));
 		$case = $this->get_customer_case($customer_relation, true);
 		$job = $case->add_job();// presentation job in sales schedule
+		$job->set_prop("planned_length", $this->prop("avg_presentation_duration_est"));
 		$presentation->set_prop("customer_relation", $customer_relation->id());
 		$presentation->save();
-		$presentation->connect(array("to" => $customer_relation, "reltype" => "RELTYPE_CUSTOMER_RELATION"));
-		$customer_relation->connect(array("to" => $presentation, "reltype" => "RELTYPE_SALES_EVENT"));
 		return $presentation;
 	}
 
@@ -191,39 +190,34 @@ class crm_sales_obj extends _int_object implements application_interface
 	@attrib api=1 params=pos
 	@param to type=CL_CRM_COMPANY_CUSTOMER_DATA
 	@param time type=int default=0
-		UNIX timestamp. Default means current time will be the call time
+		UNIX timestamp. Default means an unscheduled call is created
 	@returns CL_CRM_CALL
 		Created call object
 	**/
 	public function create_call(object $customer_relation, $time = 0)
 	{
-		$time = $time < time() ? time() : $time;
+		// uses only customer relation prop avoid additional connection objects
+		// customer prop is left empty as redundant
 		$calls_folder = $this->prop("calls_folder");
 		$call = obj(null, array(), CL_CRM_CALL);
 		$call->set_parent($calls_folder);
 		$call->set_name(sprintf(t("K&otilde;ne %s kliendile %s"), $this->get_calls_count($customer_relation) + 1, $customer_relation->prop("buyer.name")));
-		$call->set_prop("customer", $customer_relation->prop("buyer"));
 		$call->set_prop("customer_relation", $customer_relation->id());
-		$case = $this->get_customer_case($customer_relation, true);
-		$job = $case->add_job();
-		$job->set_prop("planned_length", $this->prop("avg_call_duration_est"));
-		$call->set_prop("sales_schedule_job", $job->id());
 		$this->set_call_time($call, $time);
-		$call->save();
-
-		$call->connect(array("to" => $customer_relation, "reltype" => "RELTYPE_CUSTOMER_RELATION"));
-		$call->connect(array("to" => new object($customer_relation->prop("buyer")), "reltype" => "RELTYPE_CUSTOMER"));
-		$customer_relation->connect(array("to" => $call, "reltype" => "RELTYPE_SALES_EVENT"));
+		$company = $this->awobj_get_owner();
+		$profession = new object($this->prop("role_profession_telemarketing_salesman"), array(), CL_CRM_PROFESSION);
+		$human_resources_manager = mrp_workspace_obj::get_hr_manager($company);
+		$resource = $human_resources_manager->get_profession_resource($company, $profession);
+		$call->schedule($resource);
 		return $call;
 	}
 
 	/** Makes a phone call.
 	@attrib api=1 params=pos
 	@param call type=CL_CRM_CALL
-	@param phone type=CL_CRM_PHONE
 	@returns void
 	**/
-	public function make_call(object $call, object $phone)
+	public function make_call(object $call)
 	{
 	}
 
@@ -249,36 +243,51 @@ class crm_sales_obj extends _int_object implements application_interface
 			throw new awex_crm_sales_call("Customer relation not defined");
 		}
 
+		// cache call data in cro
+		$customer_relation = new object($call->prop("customer_relation"));
+		$customer_relation->set_prop("sales_last_call_time", $call->prop("real_start"));
+		$customer_relation->set_prop("sales_calls_made", $customer_relation->prop("sales_calls_made") + 1);
+		$customer_relation->save();
+
 		$result = (int) $call->prop("result");
 		if ($result === crm_call_obj::RESULT_CALL)
 		{
-			$new_call = $call->get_first_obj_by_reltype("RELTYPE_RESULT_CALL");
-			if (is_object($new_call))
-			{ // call already created
-				$this->set_call_time($new_call, $call->prop("new_call_date"));
-				$new_call->save();
-			}
-			else
-			{ // create call
-				$customer_relation = new object($call->prop("customer_relation"));
-				$new_call = $this->create_call($customer_relation, $call->prop("new_call_date"));
-				$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_NEWCALL);
-				$customer_relation->save();
-				$call->connect(array("to" => $new_call, "reltype" => "RELTYPE_RESULT_CALL"));
-			}
+			$new_call_time =  $call->prop("new_call_date");
+			$new_call = $this->result_call_for_ended_call($call, $new_call_time);
+		}
+		elseif ($result === crm_call_obj::RESULT_NOANSWER)
+		{
+			$new_call_time =  time() + $this->prop("call_result_noanswer_recall_time");
+			$new_call = $this->result_call_for_ended_call($call, $new_call_time);
+		}
+		elseif ($result === crm_call_obj::RESULT_BUSY)
+		{
+			$new_call_time =  time() + $this->prop("call_result_busy_recall_time");
+			$new_call = $this->result_call_for_ended_call($call, $new_call_time);
+		}
+		elseif ($result === crm_call_obj::RESULT_OUTOFSERVICE)
+		{
+			$new_call_time =  time() + $this->prop("call_result_outofservice_recall_time");
+			$new_call = $this->result_call_for_ended_call($call, $new_call_time);
+		}
+		elseif ($result === crm_call_obj::RESULT_VOICEMAIL)
+		{
+			$new_call_time =  time() + $this->prop("call_result_busy_recall_time");
+			$new_call = $this->result_call_for_ended_call($call, $new_call_time);
+		}
+		elseif ($result === crm_call_obj::RESULT_NEWNUMBER)
+		{
+			// replace old nr. and create immediate new call
+			$new_call_time =  time();
+			$new_call = $this->result_call_for_ended_call($call, $new_call_time);
 		}
 		elseif ($result === crm_call_obj::RESULT_PRESENTATION)
 		{
 			$presentation = $call->get_first_obj_by_reltype("RELTYPE_RESULT_PRESENTATION");
 			if (!is_object($presentation))
 			{ // create presentation
-				$customer_relation = new object($call->prop("customer_relation"));
-				$presentation = $this->create_presentation($customer_relation); // temporarily/initially set presentation time
 				$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_PRESENTATION);
 				$customer_relation->save();
-				$call->set_prop("presentation", $presentation->id());
-				$call->save();
-				$call->connect(array("to" => $presentation, "reltype" => "RELTYPE_RESULT_PRESENTATION"));
 			}
 		}
 		else
@@ -286,13 +295,38 @@ class crm_sales_obj extends _int_object implements application_interface
 		}
 	}
 
+	private function result_call_for_ended_call(object $ended_call, $new_call_time)
+	{
+		$new_call = $ended_call->get_first_obj_by_reltype("RELTYPE_RESULT_CALL");
+		if (is_object($new_call))
+		{ // call already created
+			$this->set_call_time($new_call, $new_call_time);
+			$new_call->save();
+		}
+		else
+		{ // create call
+			$customer_relation = new object($ended_call->prop("customer_relation"));
+			$new_call = $this->create_call($customer_relation, $new_call_time);
+			$customer_relation->set_prop("sales_state", crm_company_customer_data_obj::SALESSTATE_NEWCALL);
+			$customer_relation->save();
+			$ended_call->connect(array("to" => $new_call, "reltype" => "RELTYPE_RESULT_CALL"));
+		}
+		return $new_call;
+	}
+
 	/**
 	@attrib api=1 params=pos
 	@param customer_relation type=CL_CRM_COMPANY_CUSTOMER_DATA
+	@param result type=int default=0
+		One of crm_call::RESULT_... constants. If set, only calls with that result are counted
+	@param result_count_mode type=string default="any"
+		Has effect when $result parameter set. Applicable values:
+		"any" counts any calls with $result.
+		"last_consecutive" counts last consecutive calls with $result, if any
 	@returns int
-		Number of calls made in this sales application to customer
+		Number of calls made in this sales application to customer considering given parameters
 	**/
-	public function get_calls_count(object $customer_relation)
+	public function get_calls_count(object $customer_relation, $result = 0, $result_count_mode = "any")
 	{
 		$calls_made = new object_list(array(
 			"class_id" => CL_CRM_CALL,
@@ -370,45 +404,40 @@ class crm_sales_obj extends _int_object implements application_interface
 			{
 			}
 		}
+		elseif (CL_CRM_PRESENTATION == $clid)
+		{
+			try
+			{
+				$cfgform = new object($this->prop("cfgf_presentation_" . self::$role_ids[$role]));
+			}
+			catch (Exception $e)
+			{
+			}
+		}
 		return $cfgform;
 	}
 
 	private function set_call_time(object $call, $time)
 	{
 		$call->set_prop("start1", $time);
-		$call->set_prop("deadline", $time + 3600); //!!! normaalseks
-		$call->set_prop("end", $time + 900); //!!! normaalseks
+
+		if ($time > 1)
+		{
+			$call->set_prop("deadline", $time + 3600); //!!! normaalseks
+		}
+
+		$call->set_prop("end", $time + $this->prop("avg_call_duration_est"));
 	}
 
 	private function set_presentation_time(object $presentation, $time)
 	{//!!! saab muuta ainult kuni mingi tingimuseni -- myygimehe plaani koostamiseni vms.
 		$presentation->set_prop("start", $time);
-		$presentation->set_prop("end", $time + 3600);//!!!
+		$presentation->set_prop("end", $time + $this->prop("avg_presentation_duration_est"));
 	}
 
 	private function get_customer_case(object $customer_relation, $create = false)
 	{
-		$resource_mgr = mrp_workspace_obj::get_hr_manager(new object($customer_relation->prop("seller")));
-		$list = new object_list(array(
-			"class_id" => CL_MRP_CASE,
-			"workspace" => $resource_mgr->id(),
-			"customer_relation" => $customer_relation->id(),
-			"site_id" => array(),
-			"lang_id" => array()
-		));
-		$case = $list->begin();
-		if ($list->count() < 1)
-		{
-			if ($create)
-			{
-				$case = $resource_mgr->create_project($customer_relation);
-			}
-			else
-			{
-				throw new awex_crm_sales_case("Customer has no sales case");
-			}
-		}
-		return $case;
+		return $customer_relation->get_sales_case($create);
 	}
 }
 

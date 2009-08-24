@@ -3,9 +3,13 @@
 @classinfo syslog_type=ST_CRM_PRESENTATION relationmgr=yes no_status=1 prop_cb=1 maintainer=voldemar
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
+@groupinfo customer caption="Klient"
 
 @default table=planner
 @default group=general
+	@property presentation_tools type=toolbar no_caption=1
+	@caption Esitluse toimingud
+
 	@property name type=textbox table=objects field=name
 	@caption Nimi
 
@@ -15,13 +19,13 @@
 	@property result type=select
 	@caption Tulemus
 
-	@property start type=datetime_select
+	@property start1 field=start type=datepicker
 	@caption Algus
 
-	@property end type=datetime_select
+	@property end type=datepicker
 	@caption L&otilde;pp
 
-	@property real_start type=datetime_select
+	@property real_start type=datepicker
 	@comment Kui tegelik algus sisestada, arvatakse presentatsioon toimunuks.
 	@caption Tegelik algus
 
@@ -29,43 +33,19 @@
 	@comment Kui tegelik kestus sisestada, arvatakse presentatsioon toimunuks.
 	@caption Tegelik kestus (h)
 
-	@property customer_relation type=relpicker reltype=RELTYPE_CUSTOMER_RELATION
-	@caption Kliendisuhe
-
-	@property sales_schedule_job type=hidden datatype=int
+	@property customer_relation type=hidden datatype=int
+	@property hr_schedule_job type=hidden datatype=int
 
 @layout impl_bit type=vbox closeable=1 area_caption=Osalejad
 	@property impl_tb type=toolbar no_caption=1 store=no parent=impl_bit
 	@property parts_table type=table no_caption=1 store=no parent=impl_bit
 
 
-
-@default table=objects
-@default field=meta
-@default method=serialize
-	@property comment_list type=comments form_before_comments=1
-	@caption Lisakommentaarid
+@default group=customer
+	@property customer_info type=text store=no no_caption=1
 
 
 ////////////// RELTYPES /////////////
-
-@reltype RECURRENCE value=1 clid=CL_RECURRENCE
-@caption Kordus
-
-@reltype CUSTOMER_RELATION value=6 clid=CL_CRM_COMPANY_CUSTOMER_DATA
-@caption Kliendisuhe
-
-@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
-@caption Klient
-
-@reltype PROJECT value=4 clid=CL_PROJECT
-@caption Projekt
-
-@reltype PREDICATE value=9 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING
-@caption Eeldustegevus
-
-@reltype FILE value=2 clid=CL_FILE
-@caption Fail
 
 @reltype ROW value=7 clid=CL_TASK_ROW
 @caption Rida
@@ -88,10 +68,36 @@ class crm_presentation extends task
 		$arr["post_ru"] = post_ru();
 	}
 
+	function _get_presentation_tools(&$arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$this_o = $arr["obj_inst"];
+
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"action" => "submit",
+			"img" => "save.gif"
+		));
+
+		return PROP_OK;
+	}
+
 	function _get_real_duration(&$arr)
 	{
 		$arr["prop"]["value"] = number_format($arr["prop"]["value"]/60, 2, ".", " ");
 		return PROP_OK;
+	}
+
+	function _get_customer_info(&$arr)
+	{
+		$this_o = $arr["obj_inst"];
+		$cro = new crm_company_customer_data();
+		$cro->form_only = true;
+		$arr["prop"]["value"] = $cro->view(array(
+			"id" => $this_o->prop("customer_relation"),
+			"group" => "sales_data"
+		));
 	}
 
 	function _get_parts_table(&$arr)
@@ -104,7 +110,7 @@ class crm_presentation extends task
 		return $this->save_parts_table($arr);
 	}
 
-	function _get_start(&$arr)
+	function _get_start1(&$arr)
 	{
 		$return = PROP_OK;
 		// in sales application, a salesman can't change planned start/end
@@ -152,6 +158,26 @@ class crm_presentation extends task
 		return $return;
 	}
 
+	function _set_comment(&$arr)
+	{
+		$this_o = $arr["obj_inst"];
+		$val = $arr["prop"]["value"];
+		if (strlen($val) > 1 and $val !== $this_o->comment() and $this_o->prop("customer_relation"))
+		{
+			$comm = new forum_comment();
+			$commdata = $this_o->name() . ":\n" . $val;
+			if (strlen($commdata["comment"]))
+			{
+				$comm->submit(array(
+					"parent" => $this_o->prop("customer_relation"),
+					"commtext" => $commdata,
+					"return" => "id"
+				));
+			}
+		}
+		return PROP_OK;
+	}
+
 /* SET DONE
 	if either result, real_start or real_duration is set, both must be set. Presentation will then be considered done
 */
@@ -183,7 +209,7 @@ class crm_presentation extends task
 		return $return;
 	}
 
-	function _set_start(&$arr)
+	function _set_start1(&$arr)
 	{
 		$return = PROP_OK;
 
@@ -199,7 +225,7 @@ class crm_presentation extends task
 		}
 
 		// check if planned start for an unstarted presentation is in the future
-		$start = date_edit::get_timestamp($arr["prop"]["value"]);
+		$start = datepicker::get_timestamp($arr["prop"]["value"]);
 		if ($arr["obj_inst"]->prop("real_start") < 2 and $start < time())
 		{
 			$arr["prop"]["error"] = t("Esitluse algusaeg ei saa olla minevikus");
@@ -231,6 +257,23 @@ class crm_presentation extends task
 		return $return;
 	}
 /* END SET DONE */
+
+	function submit($arr = array())
+	{
+		$r = parent::submit($arr);
+		if ("submit" === $arr["action"] and $this->data_processed_successfully())
+		{//!!! workflow definitsioon, t6sta wf objekti kui selline asi valmis saab
+			$this_o = new object($arr["id"]);
+			$application = automatweb::$request->get_application();
+			$role = $application->get_current_user_role();
+			if ($application->is_a(CL_CRM_SALES) and $this_o->prop("real_duration") < 1 and crm_sales_obj::ROLE_TELEMARKETING_SALESMAN === $role)
+			{ // return to calls list
+				$url = new aw_uri($arr["return_url"]);
+				$r = $url->arg("return_url");
+			}
+		}
+		return $r;
+	}
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
