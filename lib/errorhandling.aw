@@ -170,7 +170,7 @@ function aw_reasonable_error_handler($errno, $errstr, $errfile, $errline, $conte
 	{ // file maintainer info cached
 		$current_user_is_maintainer = $file_cache[$errfile];
 	}
-	else
+	elseif (is_file($errfile))
 	{ // get file maintainer from file
 		try
 		{
