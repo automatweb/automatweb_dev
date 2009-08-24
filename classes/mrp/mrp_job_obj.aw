@@ -15,6 +15,7 @@ class mrp_job_obj extends _int_object
 
 	const STATE_NEW = 1; // job hasn't been planned yet
 	const STATE_PLANNED = 2; // start time has been planned. job is in schedule
+	const STATE_ONHOLD = 2; // start time has been planned. job is in schedule
 	const STATE_ABORTED = 4; // work was started but then stopped with no knowledge if resumed in future
 	const STATE_DONE = 5; // job is completed
 	const STATE_LOCKED = 6;
@@ -715,6 +716,64 @@ class mrp_job_obj extends _int_object
 		}
 	}
 
+/** Sets the job on hold. Job won't be scheduled but remains active. Project must be planned or new. Requires load_data()
+    @attrib api=1 params=pos
+	@returns void
+	@errors
+		throws awex_mrp_job_state when current job state doesn't allow setting on hold.
+		throws awex_mrp_case_state when current project state doesn't allow setting on hold.
+		throws awex_mrp_job_not_loaded on load error.
+		throws awex_mrp_job on errors.
+**/
+	function set_on_hold ()
+	{
+		if (!$this->mrp_job_data_loaded)
+		{
+			throw new awex_mrp_job_not_loaded("Operation can't be executed in this mode. Call load_data() before trying again.");
+		}
+
+		### project states for setting a job on hold
+		$applicable_states = array(
+			mrp_case_obj::STATE_NEW,
+			mrp_case_obj::STATE_PLANNED,
+			mrp_case_obj::STATE_INPROGRESS,
+			mrp_case_obj::STATE_ONHOLD
+		);
+
+		if (!in_array ($this->mrp_project->prop("state"), $applicable_states))
+		{
+			throw new awex_mrp_case_state("Project state doesn't allow setting job on hold.");
+		}
+
+		### states for setting a job on hold
+		$applicable_states = array(
+			self::STATE_NEW,
+			self::STATE_PLANNED
+		);
+
+		if (!in_array ($this->prop ("state"), $applicable_states))
+		{
+			throw new awex_mrp_job_state("Job state must be 'NEW' or 'PLANNED'.");
+		}
+
+		try
+		{
+			$this->set_prop ("state", self::STATE_ONHOLD);
+			aw_disable_acl();
+			$this->save ();
+			aw_restore_acl();
+			$this->state_changed("");
+			$this->mrp_workspace->request_rescheduling();
+		}
+		catch (Exception $E)
+		{
+			$error_message = "Unknown error (" . get_class($e) . "): " . $e->getMessage();
+			$e = new awex_mrp_job($error_message);
+			$e->set_forwarded_exception($E);
+			throw $e;
+		}
+	}
+
 /** Starts the job. Job must be planned.
     @attrib api=1 params=pos
 	@param comment type=string default=""
@@ -1352,7 +1411,8 @@ class mrp_job_obj extends _int_object
 		{
 			if ($return_info)
 			{
-				$info .= t("Andmete laadimine ei &otilde;nnestunud. ");
+				$info .= t("Andmete laadimine ei &otilde;nnestunud.");
+				return $info;
 			}
 			else
 			{
