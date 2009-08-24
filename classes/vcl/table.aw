@@ -765,7 +765,7 @@ class aw_table extends aw_template
 		{
 			foreach($this->rgroupby as $_rgcol => $rgel)
 			{
-				if (is_array($this->rgroupsortdat[$_rgcol]) && $this->rgroupsortdat[$_rgcol]["sort_el"])
+				if (!empty($this->rgroupsortdat[$_rgcol]["sort_el"]))
 				{
 					$v1 = $a[$this->rgroupsortdat[$_rgcol]["sort_el"]];
 					$v2 = $b[$this->rgroupsortdat[$_rgcol]["sort_el"]];
@@ -782,9 +782,9 @@ class aw_table extends aw_template
 				{
 					$v1 = $a[$rgel];
 					$v2 = $b[$rgel];
-					$this->sort_flag = $this->nfields[$_rgcol] ? SORT_NUMERIC : SORT_REGULAR;
+					$this->sort_flag = !empty($this->nfields[$_rgcol]) ? SORT_NUMERIC : SORT_REGULAR;
 				}
-				$this->u_sorder = $this->sorder[$_rgcol];
+				$this->u_sorder = ifset($this->sorder, $_rgcol);
 				if ($v1 != $v2)
 				{
 					$skip = true;
@@ -1041,7 +1041,7 @@ class aw_table extends aw_template
 			usort($this->rowdefs, array(&$this, "_sort_by_field_order"));
 		}
 
-		if ($this->rgroupby && !$arr["rgroupby"])
+		if ($this->rgroupby && empty($arr["rgroupby"]))
 		{
 			$arr["rgroupby"] = $this->rgroupby;
 		}
@@ -1236,6 +1236,8 @@ END;
 				if (isset($rgroupby) && is_array($rgroupby))
 				{
 					// XXY siin peaks yhe colspani v2hemaks v6tma
+					$rgroupby_sep = isset($rgroupby_sep) ? $rgroupby_sep : NULL;
+					$rowid = isset($rowid) ? $rowid : NULL;
 					$tmp = $this->do_col_rgrouping($rgroupby, $this->rgroupdat, $rgroupby_sep, $v, $rowid, $row_style);
 				};
 
@@ -2351,11 +2353,11 @@ echo dbg::short_backtrace();
 				$links = false;
 				$_a = $v[$rgel];
 			}
-			if (strtolower(strip_tags($this->lgrpvals[$rgel])) != strtolower(strip_tags($v[$rgel])))
+			if (strtolower(strip_tags(ifset($this->lgrpvals, $rgel))) != strtolower(strip_tags(ifset($v, $rgel))))
 			{
 				//$this->rgroupby
 				// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
-				if (is_array($rgroupdat[$rgel]) && count($rgroupdat[$rgel]) > 0)
+				if (isset($rgroupdat[$rgel]) && is_array($rgroupdat[$rgel]) && count($rgroupdat[$rgel]) > 0)
 				{
 					$tbl.=$this->opentag(array(
 						"name" => "td",
@@ -2386,7 +2388,7 @@ echo dbg::short_backtrace();
 					$tbl.=$this->opentag(array(
 						"name" => "td",
 						"colspan" => count($this->rowdefs) + ($this->use_chooser ? 1 : 0) - count($this->hide_rgroupby),
-						"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
+						"classid" => !empty($this->col_styles[ifset($v, "name")]["group_style"]) ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style
 					));
 					if (isset($rgroupby_sep[$rgel]["real_sep_before"]))
 					{
@@ -2414,7 +2416,7 @@ echo dbg::short_backtrace();
 				}
 				$val = "";
 
-				if (is_array($rgroupdat[$rgel]))
+				if (isset($rgroupdat[$rgel]) && is_array($rgroupdat[$rgel]))
 				{
 					$val .= $rgroupby_sep[$rgel]["pre"];
 					$_ta = array();
@@ -2457,7 +2459,7 @@ echo dbg::short_backtrace();
 		{
 			foreach($rgroupby as $rgel)
 			{
-				$this->rgroupcounts[$row[$rgel]] ++;
+				$this->rgroupcounts[$row[$rgel]] = isset($this->rgroupcounts[$row[$rgel]]) ? $this->rgroupcounts[$row[$rgel]]++ : 1;
 			}
 		}
 	}
