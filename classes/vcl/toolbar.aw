@@ -129,7 +129,7 @@ class toolbar extends aw_template
 
 		if (isset($arr["action"]))
 		{
-			$arr["url"] = "javascript:submit_changeform('$arr[action]');";
+			$arr["url"] = "javascript:submit_changeform('{$arr["action"]}');";
 		}
 
 		if (empty($arr["disabled"]))
@@ -627,7 +627,7 @@ class toolbar extends aw_template
 			array("Name" => t("Sisesta uue objekti nimi"))
 		@param tooltip optional type=string
 			Tooltip for the button
-		@example 
+		@example
 			$tb->add_js_new_button(array(
 				"parent" => $arr["obj_inst"]->id(),
 				"clid" => CL_PRODUCT_BRAND,
@@ -662,7 +662,7 @@ class toolbar extends aw_template
 		{
 			$js.= ", ".$prop." : ".$prop."\n";
 		}
-		
+
 		$js.= "}, function (html) {
 			reload_property(['".join("','" , $arr["refresh"])."']);
 			}
@@ -680,6 +680,8 @@ class toolbar extends aw_template
 
 	/** Adds a delete objects button to the toolbar
 		@attrib api=1
+		@comment
+			Objects to be deleted are passed by array of id-s in 'sel' or 'check' request variable
 	**/
 	function add_delete_button()
 	{
@@ -695,6 +697,8 @@ class toolbar extends aw_template
 
 	/** Adds a delete relations button to the toolbar
 		@attrib api=1
+		@comment
+			Objects to be disconnected are passed by array of id-s in 'sel' or 'check' request variable
 	**/
 	function add_delete_rels_button()
 	{
@@ -742,7 +746,7 @@ class toolbar extends aw_template
 
 		@param tooltip optional type=string default=Otsi
 			Custom tooltip for button. Defaults to "Otsi"
-	
+
 		@param pn required type=string
 			The html element name to stick the search results to
 
