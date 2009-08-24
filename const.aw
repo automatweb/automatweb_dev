@@ -494,6 +494,11 @@ function classload($args)
 		}
 		else
 		{
+			if (empty($olib))
+			{
+				throw new aw_exception("Can't load class when no name given.");
+			}
+
 			// try to handle it with class_index and autoload
 			__autoload(basename($olib));
 		}
@@ -503,6 +508,11 @@ function classload($args)
 
 function get_instance($class, $args = array(), $errors = true)
 {
+	if (empty($class))
+	{
+		throw new aw_exception("Can't load class when no name given.");
+	}
+
 	if (!empty($GLOBALS["TRACE_INSTANCE"]))
 	{
 		echo "get_instance $class from ".dbg::short_backtrace()." <br>";
