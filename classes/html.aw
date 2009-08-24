@@ -231,6 +231,9 @@ class html
 	@param onkeyup optional type=string
 		if set, onkeyup=$onkeyup.
 
+	@param onload optional type=string
+		if set, onload=$onload.
+
 	@param class optional type=string
 		textbox's css class
 
@@ -247,12 +250,12 @@ class html
 		$textsize = (!empty($textsize) ? " style=\"font-size: {$textsize};\"" : "");
 		$size = isset($size) ? $size : 40;
 		$maxlength = isset($maxlength) ? " maxlength=\"{$maxlength}\"" : "";
-		$id = str_replace("[","_",$name);
-		$id = str_replace("]","_",$id);
+		$id = str_replace(array("[", "]"),"_",$name);
 		$value = isset($value) ? $value : "";
 		$value = str_replace('"' , '&quot;',$value);
 		settype ($option_is_tuple, "boolean");
 		$onkeypress = isset($onkeypress) ? " onkeypress=\"{$onkeypress}\"" : "";
+		$onload = isset($onload) ? " onload=\"{$onload}\"" : '';
 		$onFocus = isset($onFocus) ? " onfocus=\"{$onFocus}\"" : '';
 		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 		$ti = isset($tabindex) ? " tabindex=\"{$tabindex}\"" : '';
@@ -270,19 +273,17 @@ class html
 		if(is_admin() && !empty($autocomplete_class_id))
 		{
 			$params = array(
-				"id" => $_GET["id"],
+				"id" => automatweb::$request->arg("id"),
 				"class_ids" => $autocomplete_class_id,
 				"param" => $name,
 			);
+
 			if(is_array($ac_filter))
 			{
-				$params+= $ac_filter;
+				$params += $ac_filter;
 			}
-			$class = $_GET["class"];
-			if(!$class)
-			{
-				$class = $_POST["class"];
-			}
+
+			$class = automatweb::$request->class();
 			$core = new core();
 			$autocomplete_source = $core->mk_my_orb("object_name_autocomplete_source", $params, $class , false, true);
 			$autocomplete_params = array($name);
@@ -328,7 +329,7 @@ class html
 				{
 					$autocomplete_source_class = $autocomplete_source_class ? $autocomplete_source_class : $_GET["class"];
 					$params = array(
-						"id" => $_GET["id"],
+						"id" => automatweb::$request->arg("id"),
 					);
 					$core = new core();
 					$autocomplete_source = $core->mk_my_orb($autocomplete_source_method, $params, $autocomplete_source_class, false, true);
@@ -401,7 +402,7 @@ class html
 			$value = isset($content) ? $content : "";
 		}
 
-		return "<input type=\"text\" id=\"{$id}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$style}{$onkeypress}{$onkeyup}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti}{$ac_off}{$onchange}{$class} />{$post_append_text}\n{$value_elem}{$autocomplete}";
+		return "<input type=\"text\" id=\"{$id}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$style}{$onkeypress}{$onkeyup}{$onload}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti}{$ac_off}{$onchange}{$class} />{$post_append_text}\n{$value_elem}{$autocomplete}";
 	}
 
 	/**
@@ -710,7 +711,7 @@ class html
 
 		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 
-		
+
 		//$tpl = get_instance("cfg/htmlclient");//ma ei tea, yle 1.5 sekundi v6idab m6nest vaatest selle v6lja kommenteerimisega n2iteks
 		//$tpl->read_template("default.tpl");
 		if(false and $tpl->is_template("CHECKBOX"))
