@@ -64,6 +64,28 @@ class crm_company_customer_data_obj extends _int_object
 		return $names;
 	}
 
+	public function get_sales_case($create = false)
+	{
+		$case = null;
+		$resource_mgr = mrp_workspace_obj::get_hr_manager(new object($this->prop("seller")));
+		$list = new object_list(array(
+			"class_id" => CL_MRP_CASE,
+			"workspace" => $resource_mgr->id(),
+			"customer_relation" => $this->id(),
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		if ($list->count() < 1 and $create)
+		{
+			$case = $resource_mgr->create_project(new object($this->id()));
+		}
+		else
+		{
+			$case = $list->begin();
+		}
+		return $case;
+	}
+
 	public function get_bills()
 	{
 		$filter = array(
