@@ -86,43 +86,82 @@ class country_administrative_structure_object extends _int_object
 		return parent::save($exclusive, $previous_state);
 	}
 
-	private function as_get_descendant_unit_ids($parent)
+	/**
+		@attrib api=1 params=pos
+		@returns object_list
+			All administrative divisions in this structure definition
+		@errors
+	**/
+	public function get_divisions()
 	{
-		if (!is_oid($parent))
-		{
-			return false;
-		}
+		$divisions = new object_list($this->connections_from(array("reltype" => "RELTYPE_ADMINISTRATIVE_DIVISION")));
+		return $divisions;
+	}
 
-/* dbg */ enter_function ("address2::as_get_descendant_unit_ids");
-/* dbg */ enter_function ("address2::as_get_descendant_unit_ids 1");
+	/**
+		@attrib api=1 params=pos
+		@param unit type=oid
+		@comment
+		@returns array
+			All ancestor units as object id array up to before country itself
+		@errors
+	**/
+	public function get_ancestor_unit_ids($unit)
+	{
+		$index = (array) $this->meta("unit_hierarchy_index");
+		$parent_unit_ids = array();
+		while (isset($index[$unit]))
+		{
+			$unit = $index[$unit];
+
+			if ($unit !== $this->id())
+			{
+				$parent_unit_ids[] = $unit;
+			}
+		}
+		return $parent_unit_ids;
+	}
+
+	/**
+		@attrib api=1 params=pos
+		@param parent type=oid
+		@comment
+		@returns array
+			All descendant units as object id array
+		@errors
+	**/
+	public function get_descendant_unit_ids($parent)
+	{
+// /* dbg */ enter_function ("address2::get_descendant_unit_ids");
+// /* dbg */ enter_function ("address2::get_descendant_unit_ids 1");
 
 		$index = (array) $this->meta("unit_hierarchy_index");
 		$parents = array($parent);
 		$descendants = array();
 
-/* dbg */ exit_function ("address2::as_get_descendant_unit_ids 1");
+// /* dbg */ exit_function ("address2::get_descendant_unit_ids 1");
 
 		while (count($parents))
 		{
 			$children = array();
 
-/* dbg */ enter_function ("address2::as_get_descendant_unit_ids 2");
+// /* dbg */ enter_function ("address2::get_descendant_unit_ids 2");
 
 			foreach ($parents as $parent)
 			{
 				$children = array_merge($children, array_keys($index, $parent));
 			}
 
-/* dbg */ exit_function ("address2::as_get_descendant_unit_ids 2");
-/* dbg */ enter_function ("address2::as_get_descendant_unit_ids 3");
+// /* dbg */ exit_function ("address2::get_descendant_unit_ids 2");
+// /* dbg */ enter_function ("address2::get_descendant_unit_ids 3");
 
 			$parents = $children;
 			$descendants = array_merge($descendants, $children);
 
-/* dbg */ exit_function ("address2::as_get_descendant_unit_ids 3");
+// /* dbg */ exit_function ("address2::get_descendant_unit_ids 3");
 		}
 
-/* dbg */ exit_function ("address2::as_get_descendant_unit_ids");
+// /* dbg */ exit_function ("address2::get_descendant_unit_ids");
 
 		return $descendants;
 	}
@@ -140,7 +179,7 @@ class country_administrative_structure_object extends _int_object
 /* dbg */ enter_function ("address2::as_get_addresses_by_unit");
 /* dbg */ enter_function ("address2::as_get_addresses_by_unit 1");
 
-		$parent_unit_ids = $this->as_get_descendant_unit_ids($unit->id());
+		$parent_unit_ids = $this->get_descendant_unit_ids($unit->id());
 
 /* dbg */ exit_function ("address2::as_get_addresses_by_unit 1");
 /* dbg */ enter_function ("address2::as_get_addresses_by_unit 2");
@@ -185,6 +224,15 @@ class country_administrative_structure_object extends _int_object
 		return $this->as_structure_array;
 	}
 
+	public function add_administrative_unit($name, $parent, $division)
+	{
+		return $this->as_add_adminunit(array(
+			"name" => $name,
+			"parent" => $parent,
+			"division" => $division
+		));
+	}
+
     // @attrib name=as_add_adminunit
 	// @param name required
 	// @param parent required
@@ -198,7 +246,7 @@ class country_administrative_structure_object extends _int_object
 		{
 			$admin_division =& $arr["division"];
 		}
-		elseif (is_oid ($arr["division"]) and $this->can ("view", $arr["division"]))
+		elseif ($this->can ("view", $arr["division"]))
 		{
 			$admin_division = obj ($arr["division"]);
 		}

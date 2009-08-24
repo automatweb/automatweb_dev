@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_STRUCTURE relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
+@classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_STRUCTURE relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar prop_cb=1
 
 @groupinfo grp_administrative_structure caption="Haldusjaotuse struktuur"
 
@@ -16,6 +16,10 @@
 	@property address_admin type=textbox
 	@comment Kasutaja kellel on 6igused k6igele ja k6igeks aadressisysteemi objektidel. Kasutatakse p6hiliselt programmaatiliselt systeemi haldamiseks t88 k2igus.
 	@caption Aadresside administraatori kasutaja uid
+
+	@property external_system_1_name type=textbox
+	@comment Kui haldus&uuml;ksustes defineeritakse v&auml;lise s&uuml;steemi 1 identifikaatorid siis see on selle s&uuml;steemi nimetus
+	@caption V&auml;lise s&uuml;steemi nimi (1)
 
 @default group=grp_administrative_structure
 	@property administrative_structure type=releditor reltype=RELTYPE_ADMINISTRATIVE_DIVISION mode=manager props=name,type,parent_division,division,jrk table_fields=jrk,name,parent_division editonly=1
@@ -69,7 +73,7 @@ class country_administrative_structure extends class_base
 				{
 					$division = $connection->to ();
 
-					if ($arr["request"]["administrative_structure"] != $division->id ())
+					if (!isset($arr["request"]["administrative_structure"]) or $arr["request"]["administrative_structure"] != $division->id ())
 					{
 						$divisions[$division->id ()] = $division->name ();
 					}
@@ -84,17 +88,12 @@ class country_administrative_structure extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 
-		switch ($prop["group"])
+		if (isset($prop["group"]) and "grp_administrative_structure" === $prop["group"] and !$this_object->get_first_obj_by_reltype("RELTYPE_COUNTRY"))
 		{
-			case "grp_administrative_structure":
-				if (!$this_object->get_first_obj_by_reltype("RELTYPE_COUNTRY"))
-				{
-					$retval = PROP_FATAL_ERROR;
-					$prop["error"] = t("Riik valimata");
-				}
-				break;
+			$retval = PROP_FATAL_ERROR;
+			$prop["error"] = t("Riik valimata");
 		}
 
 		switch($prop["name"])

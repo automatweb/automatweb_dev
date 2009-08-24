@@ -13,6 +13,15 @@
 	@property subclass type=text
 	@caption Tüüp
 
+	@property complete_name type=textbox field=meta method=serialize
+	@caption T&auml;isnimi
+
+	@property alt_name type=textbox field=meta method=serialize
+	@caption Paralleelnimi
+
+	@property ext_id_1 type=textbox field=meta method=serialize
+	@caption Identifikaator v&auml;lises s&uuml;steemis 1
+
 	@property parent type=text
 	@comment Halduspiirkond, millesse käesolev halduspiirkond kuulub
 	@caption Kõrgem halduspiirkond

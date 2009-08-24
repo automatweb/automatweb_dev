@@ -10,10 +10,19 @@
 	@property subclass type=text
 	@caption Tüüp
 
+	@property complete_name type=textbox field=meta method=serialize
+	@caption T&auml;isnimi
+
+	@property alt_name type=textbox field=meta method=serialize
+	@caption Paralleelnimi
+
+	@property ext_id_1 type=textbox field=meta method=serialize
+	@caption Identifikaator v&auml;lises s&uuml;steemis 1
+
+
 */
 
 require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
-classload("common/country/country_administrative_unit");
 
 class country_citydistrict extends country_administrative_unit
 {

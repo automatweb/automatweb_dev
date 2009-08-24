@@ -13,9 +13,18 @@
 	@property parent_division_show type=text field=meta method=serialize
 	@caption Kõrgem haldusüksus
 
-	@property parent_division type=relpicker reltype=RELTYPE_PARENT_ADMINISTRATIVE_UNIT clid=CL_COUNTRY,CL_COUNTRY_ADMINISTRATIVE_DIVISION,CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT automatic=1 field=meta method=serialize
+	@property parent_division type=relpicker reltype=RELTYPE_PARENT_ADMINISTRATIVE_DIVISION clid=CL_COUNTRY,CL_COUNTRY_ADMINISTRATIVE_DIVISION,CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT automatic=1 field=meta method=serialize
 	@comment Haldusüksus, millesse käesolev haldusüksus kuulub
 	@caption Kõrgem haldusüksus
+
+	@property division_name type=textbox
+	@caption Haldusüksuse nimetus
+
+	@property division_name_as_suffix type=textbox
+	@caption Haldusüksuse nimetus lauses
+
+	@property ext_id_1 type=textbox
+	@caption Identifikaator v&auml;lises s&uuml;steemis 1
 
 	@property jrk type=textbox datatype=int
 	@comment Positiivne täisarv (vahemikus 1 kuni 1000000)
@@ -24,7 +33,7 @@
 
 // --------------- RELATION TYPES ---------------------
 
-@reltype PARENT_ADMINISTRATIVE_UNIT value=1 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION,CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT,CL_COUNTRY
+@reltype PARENT_ADMINISTRATIVE_DIVISION value=1 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION,CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT,CL_COUNTRY
 @caption Kõrgem haldusüksus
 
 */
@@ -60,7 +69,7 @@ class country_administrative_division extends class_base
 			case "parent_division_show":
 				if (aw_global_get ("address_system_administrative_structure"))
 				{//!!! vaja releditori muuta et n2idataks kui ainult table_fieldsis on prop aga props-is pole
-					$parent = $this_object->get_first_obj_by_reltype("RELTYPE_PARENT_ADMINISTRATIVE_UNIT");
+					$parent = $this_object->get_first_obj_by_reltype("RELTYPE_PARENT_ADMINISTRATIVE_DIVISION");
 					$prop["value"] = $parent->name ();
 				}
 				else

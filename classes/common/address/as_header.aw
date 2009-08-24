@@ -10,4 +10,6 @@ define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocom
 define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
 define ("ADDRESS_DBG_FLAG", "address_dbg");
 
+class awex_as extends awex_obj {}
+
 ?>
