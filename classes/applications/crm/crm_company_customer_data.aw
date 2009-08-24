@@ -7,9 +7,6 @@
 @tableinfo aw_crm_customer_data index=aw_oid master_index=brother_of master_table=objects
 
 @default table=objects
-
-default method=serialize
-
 @default group=general
 
 	@property buyer type=relpicker reltype=RELTYPE_BUYER table=aw_crm_customer_data field=aw_buyer
@@ -102,15 +99,25 @@ default method=serialize
 	@caption Viivise %
 
 
-///////// paigutada 6igesse tab-i
-	@property sales_state type=select table=aw_crm_customer_data field=aw_sales_status
+@groupinfo sales_data caption="M&uuml;&uuml;giinfo"
+@default group=sales_data
+	@property sales_state type=select table=aw_crm_customer_data field=aw_sales_status datatype=int default=1
 	@caption M&uuml;&uuml;gi staatus
 
-	@property salesman type=relpicker reltype=RELTYPE_SALESMAN table=aw_crm_customer_data field=aw_salesman
+	@property salesman type=relpicker reltype=RELTYPE_SALESMAN table=aw_crm_customer_data field=aw_salesman datatype=int
 	@caption M&uuml;&uuml;giesindaja
 
-	@property sales_lead_source type=relpicker table=aw_crm_customer_data field=aw_lead_source reltype=RELTYPE_SALES_LEAD_SOURCE
+	@property sales_lead_source type=relpicker reltype=RELTYPE_SALES_LEAD_SOURCE store=connect
 	@caption Soovitaja/allikas
+
+	@property sales_last_call_time type=text table=aw_crm_customer_data field=aw_sales_last_call_time datatype=int
+	@caption Viimase m&uuml;&uuml;gik&otilde;ne aeg
+
+	@property sales_calls_made type=text table=aw_crm_customer_data field=aw_sales_calls_made datatype=int
+	@caption Tehtud m&uuml;&uuml;gik&otilde;nesid
+
+	@property sales_comments type=comments table=objects field=meta method=serialize
+	@caption M&uuml;&uuml;gikommentaarid
 
 
 @groupinfo users caption="Kasutajad"
@@ -197,9 +204,6 @@ default method=serialize
 
 @reltype BILL_PERSON value=7 clid=CL_CRM_PERSON
 @caption Arve saaja
-
-@reltype SALES_EVENT value=92 clid=CL_CRM_CALL,CL_CRM_PRESENTATION
-@caption Tehtud, plaanitud m&uuml;&uuml;gitegevus
 
 // isik, firma v6i kampaania
 @reltype SALES_LEAD_SOURCE value=101 clid=CL_CRM_COMPANY,CL_CRM_PERSON
@@ -298,6 +302,11 @@ class crm_company_customer_data extends class_base
 		{
 		}
 		return $retval;
+	}
+
+	function _get_sales_last_call_time(&$arr)
+	{
+		$arr["prop"]["value"] = locale::get_lc_date($arr["prop"]["value"], locale::DATETIME_LONG_FULLYEAR);
 	}
 
 	function _get_campaign_tbl($arr)
@@ -913,6 +922,8 @@ exit_function("bill::balance");
 				  `aw_salesman` int(11) default NULL,
 				  `aw_sales_next_call` int(11) default NULL,
 				  `aw_sales_status` int(11) default NULL,
+				  `aw_sales_last_call_time` int(11) default NULL,
+				  `aw_sales_calls_made` int(3) default NULL,
 				  `aw_lead_source` int(11) default NULL,
 				  `aw_referal_type` int(11) default NULL,
 				  PRIMARY KEY  (`aw_oid`)
@@ -933,10 +944,17 @@ exit_function("bill::balance");
 			case "aw_salesman":
 			case "aw_sales_status":
 			case "aw_lead_source":
-			case "aw_sales_status":
+			case "aw_sales_last_call_time":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
-					"type" => "int"
+					"type" => "int(11)"
+				));
+				return true;
+
+			case "aw_sales_calls_made":
+				$this->db_add_col($tbl, array(
+					"name" => $fld,
+					"type" => "int(3)"
 				));
 				return true;
 
