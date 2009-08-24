@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.28 2009/05/11 08:15:40 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.29 2009/08/24 06:46:23 voldemar Exp $
 // phone.aw - Telefon
 /*
 
@@ -36,7 +36,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
@@ -223,7 +223,7 @@ class crm_phone extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
-		if ($tbl == "kliendibaas_telefon" && $field == "")
+		if ($tbl === "kliendibaas_telefon" && $field == "")
 		{
 			$this->db_query("create table kliendibaas_telefon (oid int primary key)");
 			return true;
@@ -240,7 +240,7 @@ class crm_phone extends class_base
 			case "aw_phone_type":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
-					"type" => "varchar(25)"
+					"type" => "char(25)"
 				));
 
 				aw_restore_acl();
@@ -271,7 +271,7 @@ class crm_phone extends class_base
 			case "number":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
-					"type" => "varchar(50)"
+					"type" => "char(50)"
 				));
 
 				aw_restore_acl();
