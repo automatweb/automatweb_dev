@@ -4,6 +4,7 @@
 // what kind of forms do I need?
 // 1. uid, title of comment, comment - not implemented
 // 2. user, email, title of comment, comment - not imlemented
+// 4. user, profession, title of comment, comment - not implemented
 // 3. uid, comment - for logged in users - implemented
 /*
 @classinfo  maintainer=kristo
@@ -68,7 +69,7 @@ class comments extends class_base
 					{
 						$author = $row["createdby"];
 					};
-					$res .= "<p><b>" . $author . "</b>, " . $this->time2date($row["created"]) . "<br>";
+					$res .= "<p><b>" . $author . "</b>, " . locale::get_lc_date($row["created"], locale::DATETIME_SHORT_FULLYEAR) . "<br>";
 					$res .= nl2br(create_links($row["commtext"]));
 					if($prop["edit"])
 					{
