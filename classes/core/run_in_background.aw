@@ -292,7 +292,7 @@ class run_in_background extends class_base
 			}
 		}
 
-		echo "add scheduler check at ".date("d.m.Y H:i:s", time() + 5 * 60)." <br>";
+		echo "add scheduler check at ".date("d.m.Y H:i:s", time() + 5 * 60)." <br />";
 
 		// add scheduler check every 5 min
 		$s->add(array(
@@ -372,7 +372,6 @@ class run_in_background extends class_base
 			$this->bg_write_log_entry($this->bg_run_get_log_entry($o), $o);
 
 		}
-
 
 		// run steps until done
 		$iter = 0;

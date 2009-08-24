@@ -40,6 +40,13 @@ function aw_ignore_error($errno, $errstr, $errfile, $errline, $context)
 		/* No way of predetermining if string to be unserialized is valid for that */
 		return true;
 	}
+	if($errstr === "Redefining already defined constructor for class _int_object")
+	{
+		/*
+			ve doesn't wanna give up neither __construct() nor _int_object()
+		*/
+		return true;
+	}
 
 	return false;
 }

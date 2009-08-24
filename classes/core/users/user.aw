@@ -1884,12 +1884,14 @@ EOF;
 		Users name
 		@param person optional type=oid
 		The OID of person object.
+		@param parent optional type=oid default="users.root_folder"
+			Parent for user object
 		@comment
 		Creates new user object
 		@returns
 		New users object
 	**/
-	function add_user($arr)
+	public function add_user($arr)
 	{
 		extract($arr);
 		error::raise_if(empty($uid), array(
@@ -1905,7 +1907,7 @@ EOF;
 		$o = obj();
 		$o->set_name($uid);
 		$o->set_class_id(CL_USER);
-		$pt = aw_ini_get("users.root_folder");
+		$pt = !empty($parent) ? $parent : aw_ini_get("users.root_folder");
 		$o->set_parent($pt);
 		$o->set_prop("uid", $uid);
 		$o->set_password($password);

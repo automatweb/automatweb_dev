@@ -136,6 +136,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		if(isset($query["query"]))
 		{
 			parse_str($query["query"], &$result);
+
 			// Some use url parameter instead of return_url
 			$return_url = isset($result["return_url"]) ? $result["return_url"] : (isset($result["url"]) ? $result["url"] : null);
 
@@ -145,10 +146,18 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 
 			if($return_url !== null && isset($result_ru["class"]) && $result["class"] === $result_ru["class"] && $result["action"] === $result_ru["action"] && $result["id"] === $result_ru["id"])
 			{
-				return $return_url;
+				$retval = $return_url;
 			}
 		}
-		return aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
+		if(!isset($retval))
+		{
+			$retval = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
+		}
+		if(!empty($result["view_layout"]) || !empty($result["view_property"]))
+		{
+			$retval = aw_url_change_var(array("view_layout" => NULL, "view_property" => NULL), false, $retval);
+		}
+		return $retval;
 	}
 
 	/** use this to get the correct return_url argument for POST requests
@@ -606,6 +615,14 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		{
 			$arg_list[0] = array($arg1 => $arg2);
 		};
+		if(empty($arg_list[0]["view_property"]))
+		{
+			$arg_list[0]["view_property"] = NULL;
+		}
+		if(empty($arg_list[0]["view_layout"]))
+		{
+			$arg_list[0]["view_layout"] = NULL;
+		}
 		if (!$url)
 		{
 			$url = aw_global_get("REQUEST_URI");
@@ -2432,6 +2449,15 @@ function eval_buffer($res)
 			$obj = obj($id);
 			return $obj->name();
 		}
+		elseif(is_array($id))
+		{
+			$ret = array();
+			foreach($id as $oid)
+			{
+				$ret[] = get_name($oid);
+			}
+			return $ret;
+		}
 		return "";
 	}
 
@@ -2599,6 +2625,11 @@ function t($s)
 function t2($s)
 {
 	return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : NULL;
+}
+
+function get_active_lang()
+{
+	return aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
 }
 
 ?>

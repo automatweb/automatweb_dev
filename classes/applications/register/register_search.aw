@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.55 2009/04/28 10:14:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.56 2009/08/24 11:56:38 instrumental Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -1047,7 +1047,7 @@ die(dbg::dump($filter));
 				{
 					// link to img
 					$imgo = $o->get_first_obj_by_reltype("RELTYPE_IMAGE".substr($v["name"], 6));
-					if ($imgo)
+					if (is_object($imgo) && $imgo-> class_id() == CL_IMAGE)
 					{
 						$imgi = $imgo->instance();
 						$data[$v["name"]] = $imgi->make_img_tag_wl($imgo->id());
