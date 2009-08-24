@@ -224,7 +224,7 @@ class mrp_workspace_obj extends _int_object
 	@attrib params=pos api=1
 	@param company type=CL_CRM_COMPANY
 	@param person type=CL_CRM_PERSON
-	@returns CL_MRP_WORKSPACE
+	@returns CL_MRP_RESOURCE
 **/
 	public static function get_person_resource(object $company, object $person)
 	{
@@ -241,7 +241,7 @@ class mrp_workspace_obj extends _int_object
 		if (!is_object($resource))
 		{
 			// create person resource
-			$parent = $self->prop("resources_folder");
+			$parent = $self->prop("resources_folder");//!!! must check parent's status, that it isn't DELETED.
 			$resource = obj(null, array(), CL_MRP_RESOURCE);
 			$resource->set_parent($parent);
 			$resource->set_name(sprintf(t("Ressurss '%s'"), $person->name()));
@@ -250,7 +250,48 @@ class mrp_workspace_obj extends _int_object
 			$resource->set_prop("type", mrp_resource_obj::TYPE_SCHEDULABLE);
 			$resource->connect(array("to" => $self, "reltype" => "RELTYPE_MRP_OWNER"));
 			$resource->connect(array("to" => $person, "reltype" => "RELTYPE_CONTAINING_OBJECT"));
+			aw_disable_acl();
 			$resource->save();
+			aw_restore_acl();
+		}
+
+		return $resource;
+	}
+
+/** Returns resource for given profession. Creates one if not found.
+	@attrib params=pos api=1
+	@param company type=CL_CRM_COMPANY
+	@param profession type=CL_CRM_PROFESSION
+	@returns CL_MRP_RESOURCE
+**/
+	public static function get_profession_resource(object $company, object $profession)
+	{
+		$self = self::get_hr_manager($company);
+		$list = new object_list(array(
+			"class_id" => CL_MRP_RESOURCE,
+			"workspace" => $self->id(),
+			"CL_MRP_RESOURCE.RELTYPE_CONTAINING_OBJECT" => $profession->id(),
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$resource = $list->begin();
+
+		if (!is_object($resource))
+		{
+			// create person resource
+			$num_of_profession_employees = $profession->get_workers(null, false)->count();
+			$parent = $self->prop("resources_folder");//!!! must check parent's status, that it isn't DELETED.
+			$resource = obj(null, array(), CL_MRP_RESOURCE);
+			$resource->set_parent($parent);
+			$resource->set_name(sprintf(t("Ameti '%s' ressurss"), $profession->name()));
+			$resource->set_prop("workspace", $self);
+			$resource->set_prop("thread_data", $num_of_profession_employees);
+			$resource->set_prop("type", mrp_resource_obj::TYPE_SCHEDULABLE);
+			$resource->connect(array("to" => $self, "reltype" => "RELTYPE_MRP_OWNER"));
+			$resource->connect(array("to" => $profession, "reltype" => "RELTYPE_CONTAINING_OBJECT"));
+			aw_disable_acl();
+			$resource->save();
+			aw_restore_acl();
 		}
 
 		return $resource;
@@ -313,7 +354,9 @@ class mrp_workspace_obj extends _int_object
 				$ws->set_prop("projects_folder", $projects_folder->id());
 				$ws->set_prop("resources_folder", $resources_folder->id());
 				$ws->set_prop("jobs_folder", $jobs_folder->id());
+				aw_disable_acl();
 				$ws->save();
+				aw_restore_acl();
 			}
 		}
 
