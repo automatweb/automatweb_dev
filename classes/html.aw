@@ -283,7 +283,7 @@ class html
 				$params += $ac_filter;
 			}
 
-			$class = automatweb::$request->class();
+			$class = automatweb::$request->class_name();
 			$core = new core();
 			$autocomplete_source = $core->mk_my_orb("object_name_autocomplete_source", $params, $class , false, true);
 			$autocomplete_params = array($name);
