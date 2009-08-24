@@ -473,7 +473,7 @@ class task_object extends _int_object
 		if ($sts && $sts->prop("billable_only_by_mrg"))
 		{
 			$u = get_instance(CL_USER);
-			$p = $u->get_current_person();//arr($p); arr($this -> get_client_mgr());
+			$p = $u->get_current_person();
 			if($this -> get_client_mgr() == $p)
 			{
 				return true;
@@ -980,5 +980,13 @@ class task_object extends _int_object
 		return $this->set_primary_row($data);
 	}
 
+	/** Tells if person is a participant in this task
+		@attrib api=1 params=pos
+		@param person type=CL_CRM_PERSON
+	**/
+	public function has_participant(object $person)
+	{
+		return $person->is_connected_to(array("to" => $this->id(), "reltype" => "RELTYPE_PERSON_TASK"));
+	}
 }
 ?>
