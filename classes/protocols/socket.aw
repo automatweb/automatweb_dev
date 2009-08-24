@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/socket.aw,v 1.3 2008/11/11 09:50:58 voldemar Exp $
+
 // socket.aw - low level communications
 // provides functions that can be used by other classes to connect to hosts
 // and read/write information to/from those hosts
@@ -34,7 +34,7 @@ class socket
 	function open($args = array())
 	{
 		extract($args);
-		$this->sock = @fsockopen($host,$port,&$errno, &$errstr,5);
+		$this->sock = fsockopen($host,$port,&$errno, &$errstr,5);
 		if (not($this->sock))
 		{
 			//print "WARNING: Connection to $host:$port failed, $errstr\n";
@@ -90,7 +90,21 @@ class socket
 		{
 			return NULL;
 		}
-		return fread($this->sock,$blocklen);
+
+		stream_set_timeout($this->sock, aw_ini_get("core.default_exec_time") - 1);
+		$ret = fread($this->sock, $blocklen);
+
+		$info = stream_get_meta_data($fp);
+		if (!empty($info["timed_out"]))
+		{
+			throw new awex_socket_timeout("Connection timed out!");
+		}
+
+		return $ret;
 	}
-};
+}
+
+class awex_socket extends aw_exception {}
+class awex_socket_timeout extends awex_socket {}
+
 ?>
