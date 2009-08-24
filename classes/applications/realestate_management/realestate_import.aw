@@ -1237,7 +1237,7 @@ arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
 					$address_text = $address->prop ("address_array");
 					unset($address_text[ADDRESS_COUNTRY_TYPE]);
 
-					if (!empty($arr["import_all"]) or (($address_text != $address_city24 or $maja_nr !== $address->prop("street_address") or $korteri_nr !== $address->prop("apartment")) and $current_user === $maakler_user))
+					if (!empty($arr["import_all"]) or (($address_text != $address_city24 or $maja_nr !== $address->prop("house") or $korteri_nr !== $address->prop("apartment")) and $current_user === $maakler_user))
 					{
 						##### set address
 						$address->set_prop ("unit_name", array (
@@ -1270,7 +1270,7 @@ arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
 							"name" => $address_city24["street"],
 						));
 
-						$address->set_prop ("street_address", $maja_nr);
+						$address->set_prop ("house", $maja_nr);
 						$address->set_prop ("apartment", $korteri_nr);
 						aw_disable_acl();
 						$address->save ();
@@ -1279,7 +1279,7 @@ arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
 						$address_text = $address->prop ("address_array");
 						unset($address_text[ADDRESS_COUNTRY_TYPE]);
 						$address_text = implode (", ", $address_text);
-						$name = $address_text . " " . $address->prop ("street_address") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
+						$name = $address_text . " " . $address->prop ("house") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
 						$property->set_name ($name);//!!! nime panemine yhte funktsiooni!
 						$admin_structure_changed = true;
 					}

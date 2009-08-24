@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.28 2008/02/17 22:26:11 kristo Exp $
+
 // realestate_add.aw - Kinnisvaraobjekti lisamine
 /*
 
@@ -610,7 +610,7 @@ class realestate_add extends class_base
 			"vald"		=> $realestate_environment_obj->prop("address_equivalent_4"),
 			"settlement"	=> $realestate_environment_obj->prop("address_equivalent_5"),
 			"street"	=> "street",
-			"street_address"=> 0,
+			"house"=> 0,
 			"apartment"	=> 0,
 		);
 		return $address_props;
@@ -638,7 +638,7 @@ class realestate_add extends class_base
 		}
 		foreach($address_props as $key => $val)
 		{
-			if((($key == "street_address") || ($key == "apartment")) && (is_object($address)))
+			if((($key == "house") || ($key == "apartment")) && (is_object($address)))
 			{
 				$_SESSION["realestate_input_data"][$key] = $address->prop ($key, $val);
 			}
@@ -1343,7 +1343,7 @@ class realestate_add extends class_base
 		if($names[$data["settlement"]])	$ret .= ', '.$names[$data["settlement"]];
 		if($data["place_name"])		$ret .= ', '.$data["place_name"];
 		if($data["street"])		$ret .= ', '.$data["street"];
-		if($data["street_address"])	$ret .= ' '.$data["street_address"];
+		if($data["house"])	$ret .= ' '.$data["house"];
 		if($data["apartment"])		$ret .= ' - '.$data["apartment"];
 		return $ret;
 	}
@@ -1521,7 +1521,7 @@ class realestate_add extends class_base
 			//aadressi salvestamine - tõsine porno
 			if((array_key_exists($key , $address_props)) && (is_object($address)))
 			{
-				if(($key == "street_address") || ($key == "apartment"))
+				if(($key == "house") || ($key == "apartment"))
 				{
 					$address->set_prop ($key, $val);
 				}

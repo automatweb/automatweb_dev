@@ -52,7 +52,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 //seda j2rjekorda peab veel m6tlema
 		@property title1 type=text store=no subtitle=1
 		@caption Objekti aadress
-			@property address_connection type=releditor reltype=RELTYPE_REALESTATE_ADDRESS rel_id=first editonly=1 props=location_country,location,postal_code,street_address,po_box,apartment
+			@property address_connection type=releditor reltype=RELTYPE_REALESTATE_ADDRESS rel_id=first editonly=1 props=location_country,location,postal_code,house,po_box,apartment
 			@caption Aadress
 
 	@groupinfo transaction_data parent=grp_main caption="Tehingu andmed"
@@ -643,7 +643,7 @@ class realestate_property extends class_base
 				}
 
 				$address_parsed[] = urlencode ($street);
-				$address_parsed[] = urlencode ($this->address->prop ("street_address"));
+				$address_parsed[] = urlencode ($this->address->prop ("house"));
 
 
 				$address_parsed = implode ("+", $address_parsed);
@@ -912,7 +912,7 @@ class realestate_property extends class_base
 		$address_text = $address->prop ("address_array");
 		unset ($address_text[ADDRESS_COUNTRY_TYPE]);
 		$address_text = implode (", ", $address_text);
-		$name = $address_text . " " . $address->prop ("street_address") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
+		$name = $address_text . " " . $address->prop ("house") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
 		$this_object->set_name ($name);
 		$this_object->save ();
 
@@ -2306,7 +2306,7 @@ class realestate_property extends class_base
 				$address5_alt = $this->address_encoding ? $address->prop ($param) : $address5_str;
 
 				$address_street = $address_array[ADDRESS_STREET_TYPE];
-				$address_street_address = $address->prop ("street_address");
+				$address_house = $address->prop ("house");
 				$address_apartment = $address->prop ("apartment");
 			}
 
@@ -2370,14 +2370,14 @@ class realestate_property extends class_base
 				"altvalue" => $address_street,
 			);
 
-			$prop_name = "address_street_address";
+			$prop_name = "address_house";
 			$properties[$prop_name] = array (
 				"name" => $prop_name,
 				"type" => "text",
 				"caption" => t("Maja nr."),
-				"value" => $address_street_address,
-				"strvalue" => $address_street_address,
-				"altvalue" => $address_street_address,
+				"value" => $address_house,
+				"strvalue" => $address_house,
+				"altvalue" => $address_house,
 			);
 
 			$prop_name = "address_apartment";

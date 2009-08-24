@@ -1956,7 +1956,7 @@ class realestate_manager extends class_base
 				$address_4 = $address_array[$this_object->prop ("address_equivalent_3")];//linnaosa
 				$address_3 = $address_array[$this_object->prop ("address_equivalent_4")];//vald
 				$apartment = $address->prop ("apartment") ? "-" . $address->prop ("apartment") : "";
-				$address = $address_array[ADDRESS_STREET_TYPE] . " " . $address->prop ("street_address") . $apartment;
+				$address = $address_array[ADDRESS_STREET_TYPE] . " " . $address->prop ("house") . $apartment;
 			}
 
 			### actions menu
