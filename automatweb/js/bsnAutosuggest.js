@@ -261,7 +261,15 @@ _bsn.AutoSuggest.prototype.doAjaxRequest = function ()
 	var pointer = this;
 
 	// create ajax request
-	var url = this.oP.script+this.oP.varname+"="+escape(this.fld.value);
+	if (typeof(this.oP.script) == "function")
+	{
+		var url = this.oP.script(escape(this.fld.value));
+	}
+	else
+	{
+		var url = this.oP.script+this.oP.varname+"="+escape(this.fld.value);
+	}
+
 	var meth = this.oP.meth;
 
 	var onSuccessFunc = function (req) { pointer.setSuggestions(req) };
