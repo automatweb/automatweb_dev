@@ -6,7 +6,24 @@
 
 class obj_predicate_sort
 {
+	const ASC = 1;
+	const DESC = 2;
+
 	private $arr = array();
+	private $data = array();
+
+	private static $direction_values = array(
+		self::ASC => "ASC",
+		self::DESC => "DESC",
+		"asc" => "ASC",
+		"ASC" => "ASC",
+		"desc" => "DESC",
+		"DESC" => "DESC"
+	);
+
+	private static $supported_predicates = array(
+		"obj_predicate_compare"
+	);
 
 	function obj_predicate_sort($data)
 	{
@@ -14,29 +31,38 @@ class obj_predicate_sort
 		{
 			throw new awex_obj_type("Invalid argument type");
 		}
-		$count = array_count_values($data);
-		$c1 = isset($count["asc"]) ? $count["asc"] : 0;
-		$c2 = isset($count["ASC"]) ? $count["ASC"] : 0;
-		$c3 = isset($count["desc"]) ? $count["desc"] : 0;
-		$c4 = isset($count["DESC"]) ? $count["DESC"] : 0;
-		if (($c1 + $c2 + $c3 + $c4) !== count($data))
+
+		foreach ($data as $prop => $direction)
 		{
-			throw new awex_obj("Argument contains invalid sorting direction instruction(s)");
+			$predicate = false;
+
+			if (is_array($direction))
+			{
+				$predicate = $direction[0];
+				$direction = $direction[1];
+			}
+
+			if (!isset(self::$direction_values[$direction]))
+			{
+				throw new awex_obj("Argument contains invalid sorting direction instruction(s)");
+			}
+
+			if ($predicate and (!is_object($predicate) or !in_array(get_class($predicate), self::$supported_predicates)))
+			{
+
+			}
+
+			$this->data[] = array(
+				"prop" => $prop,
+				"direction" => self::$direction_values[$direction],
+				"predicate" => $predicate
+			);
 		}
-		$this->arr = $data;
 	}
 
 	function get_sorter_list()
 	{
-		$rv = array();
-		foreach(safe_array($this->arr) as $prop => $direction)
-		{
-			$rv[] = array(
-				"prop" => $prop,
-				"direction" => $direction
-			);
-		}
-		return $rv;
+		return $this->data;
 	}
 
 	function __toString()
