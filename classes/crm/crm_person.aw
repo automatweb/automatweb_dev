@@ -266,6 +266,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 			@property messenger type=textbox size=30 maxlength=200 parent=ceditmsn no_caption=1
 
 
+@property address2_edit type=releditor mode=manager2 store=no props=country,location_data,location,street,house,apartment,postal_code,po_box table_fields=name,location,street,house,apartment reltype=RELTYPE_ADDRESS_ALT
+
 @property email type=hidden table=objects field=meta method=serialize
 @property phone type=hidden table=objects field=meta method=serialize
 @property fax type=hidden table=objects field=meta method=serialize
@@ -684,9 +686,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property fake_address_address type=textbox user=1
 @caption Aadress
 
-@property fake_address_address2 type=textbox user=1
-@caption Aadress 2
-
 @property fake_address_postal_code type=textbox user=1
 @caption Postiindeks
 
@@ -1057,6 +1056,9 @@ caption S&otilde;bragrupid
 
 @reltype FAKE_COUNTRY value=96 clid=CL_CRM_COUNTRY
 @caption Fake country
+
+@reltype ADDRESS_ALT value=97 clid=CL_ADDRESS
+@caption Aadressid
 
 */
 

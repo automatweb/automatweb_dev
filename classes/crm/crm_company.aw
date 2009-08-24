@@ -202,6 +202,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property correspond_address type=relpicker reltype=RELTYPE_CORRESPOND_ADDRESS table=objects field=meta method=serialize
 	@caption Kirjavahetuse aadress
 
+	@property address2_edit type=releditor mode=manager2 store=no props=country,location_data,location,street,house,apartment,postal_code,po_box table_fields=name,location,street,house,apartment reltype=RELTYPE_ADDRESS_ALT
+
 	@property classif1 type=classificator store=connect reltype=RELTYPE_METAMGR
 	@caption Asutuse omadused
 
@@ -1696,6 +1698,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype PURCHASING_MANAGER value=86 clid=CL_SHOP_PURCHASE_MANAGER_WORKSPACE
 @caption Ostukeskkond
+
+@reltype ADDRESS_ALT value=87 clid=CL_ADDRESS
+@caption Aadressid
 
 */
 /*
@@ -3297,7 +3302,6 @@ class crm_company extends class_base
 		$no_html = array(
 			"fake_email",
 			"fake_address_address",
-			"fake_address_address2",
 			"fake_address_postal_code",
 			"fake_address_city",
 			"fake_address_county",
