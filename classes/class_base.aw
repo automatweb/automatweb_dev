@@ -66,14 +66,25 @@ class class_base extends aw_template
 	var $id; // loaded storage object id
 	var $clid; // loaded storage object class id
 	var $cli; // output client reference
+	var $clfile;
 	var $tmp_cfgform;
 	var $cfgform_id;
+	var $groupinfo;
 	var $classinfo;
 	var $cfgmanager;
 	var $embedded;
 	var $changeform_target;
 	var $new;
 	var $no_buttons;
+	var $inst;
+
+	var $use_group;
+	var $active_group;
+	var $active_groups = array();
+	var $grpmap = array();
+	var $subgroup;
+
+	var $use_mode;
 	var $view;
 	var $no_rte;
 	var $cb_values;
@@ -82,7 +93,7 @@ class class_base extends aw_template
 	var $layout_mode;
 	var $leftout_layouts;
 	var $_do_call_vcl_mod_reforbs;
-	var $no_mod_view;
+	var $no_mod_view = 0;
 	var $just_saved;
 	var $translation_lang_var_name = "awcb_347c92e42_trans_lid";
 	var $translation_lang_id;
@@ -91,8 +102,11 @@ class class_base extends aw_template
 	var $request = array();
 	var $_do_call_vcl_mod_retvals = array();
 
+	public $form_only = false;
+
 	protected $_cfg_props;
 	protected $classconfig;
+	protected $name_prefix = "";
 
 	private $data_processing_result_status = PROP_OK;
 
@@ -721,6 +735,7 @@ class class_base extends aw_template
 		$properties = array("tabpanel" => $panel) + $properties;
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
+			"obj_inst" => $this->obj_inst
 		));
 
 		$awt->start("add-property");
@@ -907,7 +922,7 @@ class class_base extends aw_template
 
 		$gen_scripts_args = array(
 			"request" => isset($this->request) ? $this->request : "",
-			"obj_inst" => &$this->obj_inst,
+			"obj_inst" => $this->obj_inst,
 			"groupinfo" => &$this->groupinfo,
 			"new" => $this->new,
 			"view" => $this->view,
@@ -1232,7 +1247,7 @@ class class_base extends aw_template
 			"alias_to" => $request["alias_to"],
 			"just_saved" => $this->just_saved,
 			"alias_to_prop" => $request["alias_to_prop"],
-			"return_url" => $request["return_url"],
+			"return_url" => isset($request["return_url"]) ? $request["return_url"] : "",
 		) + ((isset($extraids) && is_array($extraids)) ? $extraids : array());
 
 		if (!$save_ok)
@@ -1384,7 +1399,7 @@ class class_base extends aw_template
 				}
 
 				//$retval = $this->mk_my_orb($action,$args,$orb_class);
-				$retval = /*!empty($request["post_ru"]) ? $request["post_ru"] :*/ $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
+				$retval = /*!empty($request["post_ru"]) ? $request["post_ru"] :*/ $this->mk_my_orb($action,$args,$orb_class,false, (!empty($request["ret_to_orb"]) ? true : false), "&", false);
 
 				if (is_numeric($class))
 				{
@@ -1479,6 +1494,7 @@ class class_base extends aw_template
 				return $cfid;
 			}
 		}
+
 		// 1. if there is a cfgform specified in the url, then we will use that
 		if (!empty($args["args"]["cfgform"]))
 		{
@@ -1489,8 +1505,8 @@ class class_base extends aw_template
 			if ($this->can("view", $cgid))
 			{
 				return $cgid;
-			};
-		};
+			}
+		}
 
 		// 2. seadete vorm kasutajagrupist, seostatud cfgform
 		if (($action == "change"))
@@ -1514,19 +1530,23 @@ class class_base extends aw_template
 					}
 				}
 			}
-		};
+		}
 
 
 		// 3. failing that, if there is a config form specified in the object metainfo,
 		//  we will use it
-		if (($action == "change") && $args["obj_inst"]->meta("cfgform_id") != "")
+		if (($action === "change") && is_oid($args["obj_inst"]->meta("cfgform_id")))
 		{
 			$cgid = $args["obj_inst"]->meta("cfgform_id");
-			if ($this->can("view", $cgid))
+			if (!$this->can("view", $cgid))
+			{
+				//!!! cfgf on defineeritud ja peaks m6juma kuid talle pole 6igusi.
+			}
+			else
 			{
 				return $cgid;
-			};
-		};
+			}
+		}
 
 		// 4. failing that too, we will check whether this class has a default cfgform
 		// and if so, use it
@@ -1558,7 +1578,7 @@ class class_base extends aw_template
 		if (empty($this->clid))
 		{
 			return false;
-		};
+		}
 
 		$ol = new object_list(array(
 			"class_id" => CL_CFGFORM,
@@ -1574,7 +1594,7 @@ class class_base extends aw_template
 		{
 			$first = $ol->begin();
 			return $first->id();
-		};
+		}
 
 		// okey, I need a helper class. Something that I can create, something can load
 		// properties into and then query them. cfgform is taken, what name will I use?
@@ -1921,7 +1941,7 @@ class class_base extends aw_template
 					"link" => &$link,
 					"caption" => &$val["caption"],
 					"id" => $key,
-					"obj_inst" => &$this->obj_inst,
+					"obj_inst" => $this->obj_inst,
 					"request" => $this->request,
 					"activegroup" => $activegroup,
 					"tabgroup" => &$val["tabgroup"],
@@ -2000,6 +2020,11 @@ class class_base extends aw_template
 		if(!empty($GLOBALS["view_property"]))
 		{
 			$cli_args["element_only"] = 1;
+		}
+
+		if($this->form_only)
+		{
+			$cli_args["form_only"] = true;
 		}
 
 		if ($this->can("view", $this->cfgform_id))
@@ -2454,7 +2479,10 @@ class class_base extends aw_template
 		$this->groupinfo = $grpinfo;
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 
-		$this->inst->all_props = $this->all_props;
+		if (is_object($this->inst))
+		{
+			$this->inst->all_props = $this->all_props;
+		}
 
 		return $this->all_props;
 	}
@@ -2495,7 +2523,11 @@ class class_base extends aw_template
 				{
 					$val["value"] = get_lc_date($val["value"]);
 				}
-			};
+			}
+			elseif ("datepicker" === $val["type"])
+			{
+				$val["value"] = get_lc_date($val["value"]);
+			}
 			$val["type"] = "text";
 		}
 
@@ -2604,6 +2636,10 @@ class class_base extends aw_template
 				{
 					 $property["value"] = date_edit::get_timestamp($this->cb_values[$property["name"]]["value"]);
 				}
+				elseif ($property["type"] === "datepicker")
+				{
+					 $property["value"] = datepicker::get_timestamp($this->cb_values[$property["name"]]["value"]);
+				}
 				else
 				{
 					$property["value"] = $this->cb_values[$property["name"]]["value"];
@@ -2626,7 +2662,7 @@ class class_base extends aw_template
 		// current time for datetime_select properties for new objects
 		// XXX: for now this->use_form is empty for add/change forms, this
 		// will probably change in the future
-		if (empty($this->id) && empty($this->use_form) && ($property["type"] == "datetime_select" || $property["type"] == "date_select") && (!isset($property["no_default"]) || !$property["no_default"]) && empty($property["value"]))
+		if (empty($this->id) && empty($this->use_form) && ($property["type"] === "datetime_select" || $property["type"] === "date_select") && (!isset($property["no_default"]) || !$property["no_default"]) && empty($property["value"]))
 		{
 			$property["value"] = time();
 		}
@@ -2648,7 +2684,7 @@ class class_base extends aw_template
 		{
 			// I need to implement this in storage .. so that $obj->prop('blag')
 			// gives the correct result .. all connections of that type
-			if ($this->view == 1 && !$property["view_element"])
+			if ($this->view == 1 && empty($property["view_element"]))
 			{
 				$property["value"] = create_email_links($this->obj_inst->prop_str($property["name"]));
 				if (strpos($property["value"], "\n") !== false && strpos($property["value"], "<br") === false)
@@ -2736,14 +2772,19 @@ class class_base extends aw_template
 			{
 				$this->classinfo[$k] = $val;
 			}
-
 		}
 
 		if (isset($args["obj_inst"]) && is_object($args["obj_inst"]))
 		{
 			$this->obj_inst = $args["obj_inst"];
 			$this->id = $this->obj_inst->id();
-		};
+		}
+
+		if (!empty($args["name_prefix"]))
+		{
+			$this->name_prefix = $args["name_prefix"];
+			$this->inst->name_prefix = $args["name_prefix"];
+		}
 
 		if (!is_array($this->relinfo))
 		{
@@ -2772,7 +2813,7 @@ class class_base extends aw_template
 
 		$argblock = array(
 			"request" => isset($this->request) ? $this->request : "",
-			"obj_inst" => &$this->obj_inst,
+			"obj_inst" => $this->obj_inst,
 			"groupinfo" => &$this->groupinfo,
 			"new" => $this->new,
 			"view" => $this->view,
@@ -2872,7 +2913,7 @@ class class_base extends aw_template
 						"property" => &$val,
 						"id" => $this->id,
 						"clid" => $this->clid,
-						"obj_inst" => &$this->obj_inst,
+						"obj_inst" => $this->obj_inst,
 						//"columns" => $this->columninfo,
 						"relinfo" => $this->relinfo,
 						"view" => $this->view,
@@ -3059,7 +3100,7 @@ class class_base extends aw_template
 			{
 				$this->get_value(&$val);
 				// fuck me plenty
-				if ($this->view && $val["orig_type"] === "select" && is_oid($val["value"]) && !$val["view_element"])
+				if ($this->view && isset($val["orig_type"]) && $val["orig_type"] === "select" && isset($val["value"]) && is_oid($val["value"]) && !$val["view_element"])
 				{
 					if (!$this->can("view", $val["value"]))
 					{
@@ -3071,8 +3112,7 @@ class class_base extends aw_template
 						$val["value"] = $tmp->name();
 					}
 				}
-				else
-				if ($this->view && $val["orig_type"] === "select" && is_array($val["value"]) && count($val["value"]) > 0 && !$val["view_element"])
+				elseif ($this->view && isset($val["orig_type"]) &&  $val["orig_type"] === "select" && isset($val["value"]) && is_array($val["value"]) && count($val["value"]) > 0 && !$val["view_element"])
 				{
 					$tmp_ol = new object_list(array("oid" => $val["value"]));
 					$val["value"] = join(", ", $tmp_ol->names());
@@ -3327,7 +3367,7 @@ class class_base extends aw_template
 							$rte = get_instance("vcl/rte");
 							$rte->get_rte_toolbar(array(
 								"toolbar" => &$val["vcl_inst"],
-								"target" => $this->layout_mode == "fixed_toolbar" ? "contentarea" : "",
+								"target" => $this->layout_mode === "fixed_toolbar" ? "contentarea" : "",
 								"no_rte" => $this->no_rte,
 							));
 						}
@@ -3655,6 +3695,10 @@ class class_base extends aw_template
 						{
 							$check_val = date_edit::get_timestamp($val);
 						}
+						if ("datepicker" === $tmp["type"])
+						{
+							$check_val = datepicker::get_timestamp($val);
+						}
 						else
 						{
 							$check_val = 1;
@@ -3767,7 +3811,7 @@ class class_base extends aw_template
 		if (empty($this->id) and !empty($args["parent"]) and is_oid($args["parent"]))
 		{
 			$parent = $args["parent"];
-			$o = new object;
+			$o = new object();
 			$o->set_class_id($this->clid);
 			$o->set_parent($parent);
 			$o->set_status(isset($args["status"]) ? $args["status"] : object::STAT_ACTIVE);
@@ -3802,7 +3846,7 @@ class class_base extends aw_template
 		if (isset($args["_object_type"]) and $this->can("view", $args["_object_type"]))
 		{
 			$ot_obj = new object($args["_object_type"]);
-			$o->set_meta("object_type",$args["_object_type"]);
+			$this->obj_inst->set_meta("object_type",$args["_object_type"]);
 		}
 
 		$filter = array();
@@ -3842,7 +3886,7 @@ class class_base extends aw_template
 			{
 				if (!empty($val["default"]))
 				{
-					$o->set_prop($key,$val["default"]);
+					$this->obj_inst->set_prop($key,$val["default"]);
 				}
 			}
 		}
@@ -3851,7 +3895,7 @@ class class_base extends aw_template
 			"request" => $args,
 			"cfgform_id" => isset($this->cfgform_id) ? $this->cfgform_id : NULL,
 			"props" => &$properties,
-			"obj_inst" => &$o
+			"obj_inst" => $this->obj_inst
 		));
 
 		$pvalues = array();
@@ -3959,7 +4003,7 @@ class class_base extends aw_template
 				"prop" => &$property,
 				"request" => &$args["rawdata"],
 				"new" => $new,
-				"obj_inst" => &$this->obj_inst,
+				"obj_inst" => $this->obj_inst,
 				"relinfo" => $this->relinfo,
 			);
 			$processing_status = max($status, $processing_status);
@@ -4140,13 +4184,15 @@ class class_base extends aw_template
 					}
 					else
 					{
-						classload("vcl/date_edit");
 						$property["value"] = date_edit::get_timestamp($args["rawdata"][$name]);
-					};
-				};
-			};
-
-			if ($type === "relmanager")
+					}
+				}
+			}
+			elseif ("datepicker" === $type and is_array($args["rawdata"][$name]))
+			{
+				$property["value"] = datepicker::get_timestamp($args["rawdata"][$name]);
+			}
+			elseif ($type === "relmanager")
 			{
 				$argblock["prop"] = &$property;
 				//$target_reltype = $this->relinfo[$property["reltype"]];
@@ -4158,9 +4204,8 @@ class class_base extends aw_template
 				$vcl_inst = new relmanager();
 				// XXX: would be nice if this could return an error message as well
 				$vcl_inst->process_relmanager($argblock);
-			};
-
-			if (($type === "select") && isset($property["multiple"]))
+			}
+			elseif (($type === "select") && isset($property["multiple"]))
 			{
 				$property["value"] = $this->make_keys($args["rawdata"][$name]);
 			}
@@ -4247,15 +4292,17 @@ class class_base extends aw_template
 				"new" => $new,
 				"id" => $this->id,
 				"request" => &$args,
-				"obj_inst" => &$this->obj_inst,
+				"obj_inst" => $this->obj_inst,
 			));
 		}
 
+/* setting it permanently to meta field doesn't allow changing cfgform later
 		// it is set (or not) on validate_cfgform
 		if (isset($this->cfgform_id))
 		{
 			$this->obj_inst->set_meta("cfgform_id",$this->cfgform_id);
 		}
+*/
 
 		// this is here to solve the line break problems with RTE
 		if (isset($args["cb_nobreaks"]) && is_array($args["cb_nobreaks"]))
@@ -4406,7 +4453,7 @@ class class_base extends aw_template
 			        $inst->callback_post_save(array(
 			                "id" => $this->obj_inst->id(),
 					"request" => &$args,
-					"obj_inst" => &$this->obj_inst,
+					"obj_inst" => $this->obj_inst,
 					"new" => $new,
 					"prop" => $prop,
 			        ));
@@ -4422,7 +4469,7 @@ class class_base extends aw_template
 			$this->inst->callback_post_save(array(
 				"id" => $this->obj_inst->id(),
 				"request" => &$args,
-				"obj_inst" => &$this->obj_inst,
+				"obj_inst" => $this->obj_inst,
 				"new" => $new,
 			));
 		}
@@ -4792,9 +4839,6 @@ class class_base extends aw_template
 		// alright, I need to do this in a better way. perhaps like the way it was done in the tree
 
 		$default_group = false;
-
-		$this->grpmap = array();
-		$this->active_groups = array();
 
 		$si = __get_site_instance();
 		$has_cb = method_exists($si, "callback_get_group_display");
@@ -5199,15 +5243,16 @@ class class_base extends aw_template
 			foreach($grps as $gkey => $gval)
 			{
 				// use the "submit" setting from the original group
-				if (isset($this->groupinfo[$gkey]["submit"]) && $this->groupinfo[$gkey]["submit"])
+				if (!empty($this->groupinfo[$gkey]["submit"]))
 				{
 					$gval["submit"] = $this->groupinfo[$gkey]["submit"];
 				}
 
-				if (isset($this->groupinfo[$gkey]["tabgroup"]) && $this->groupinfo[$gkey]["tabgroup"])
+				if (!empty($this->groupinfo[$gkey]["tabgroup"]))
 				{
 					$gval["tabgroup"] = $this->groupinfo[$gkey]["tabgroup"];
 				}
+
 				if ((isset($this->groupinfo[$gkey]["submit_method"]) && $this->groupinfo[$gkey]["submit_method"]) || (isset($gval["submit_method"]) && $gval["submit_method"]))
 				{
 					$gval["submit_method"] = $this->groupinfo[$gkey]["submit_method"];
@@ -6764,7 +6809,7 @@ class class_base extends aw_template
 			$o->save();
 		}
 	}
-	
+
 	/**
 		@attrib name=create_new_object all_args=1
 	**/
