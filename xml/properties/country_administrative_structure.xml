@@ -24,6 +24,16 @@
             <caption>Aadresside administraatori kasutaja uid</caption>
       </property>
       <property>
+            <name>external_system_1_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <comment>Kui haldus&amp;amp;uuml;ksustes defineeritakse v&amp;amp;auml;lise s&amp;amp;uuml;steemi 1 identifikaatorid siis see on selle s&amp;amp;uuml;steemi nimetus</comment>
+            <caption>V&amp;amp;auml;lise s&amp;amp;uuml;steemi nimi (1)</caption>
+      </property>
+      <property>
             <name>administrative_structure</name>
             <table>objects</table>
             <field>meta</field>
@@ -61,6 +71,7 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
             <maintainer>voldemar</maintainer>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <grp_administrative_structure>

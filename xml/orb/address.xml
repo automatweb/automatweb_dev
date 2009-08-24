@@ -4,10 +4,10 @@
 		<action name="location_autocomplete" all_args="1">
 			<function name="location_autocomplete">
 				<arguments>
-					<required name="id" type="int" />
+					<required name="country" type="oid" acl="view" />
+					<optional name="typed_text" type="string" />
 				</arguments>
 			</function>
 		</action>
-
 	</class>
 </orb>

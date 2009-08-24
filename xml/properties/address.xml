@@ -1,88 +1,87 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>administrative_structure</name>
+            <name>name</name>
+            <type>text</type>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADMINISTRATIVE_STRUCTURE</reltype>
-            <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
-            <automatic>1</automatic>
-            <caption>Riik/haldusjaotus</caption>
+            <field>name</field>
+            <caption>Aadress</caption>
       </property>
       <property>
-            <name>address_data</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <name>administrative_structure</name>
+            <table>aw_address</table>
             <group>general</group>
             <type>hidden</type>
+            <field>administrative_structure</field>
       </property>
       <property>
             <name>country</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>aw_address</table>
             <group>general</group>
-            <type>hidden</type>
+            <type>select</type>
+            <field>country</field>
+            <caption>Riik</caption>
       </property>
       <property>
-            <name>location_country</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_address</group>
+            <name>location_data</name>
+            <table>aw_address</table>
+            <group>general</group>
             <type>hidden</type>
             <store>no</store>
-            <editonly>1</editonly>
+            <field>location_data</field>
       </property>
       <property>
             <name>location</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_address</group>
-            <type>callback</type>
-            <callback>callback_location</callback>
-            <no_caption>1</no_caption>
+            <table>aw_address</table>
+            <group>general</group>
+            <type>textbox</type>
             <store>no</store>
+            <field>location</field>
+            <caption>Asukoht</caption>
       </property>
       <property>
-            <name>postal_code</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_address</group>
+            <name>street</name>
+            <table>aw_address</table>
+            <group>general</group>
             <type>textbox</type>
-            <caption>Postiindeks</caption>
+            <maxlength>250</maxlength>
+            <field>street</field>
+            <caption>T&amp;amp;auml;nav/asum</caption>
       </property>
       <property>
-            <name>street_address</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_address</group>
+            <name>house</name>
+            <table>aw_address</table>
+            <group>general</group>
             <type>textbox</type>
-            <caption>Maja number</caption>
+            <maxlength>250</maxlength>
+            <field>house</field>
+            <caption>Maja/number</caption>
       </property>
       <property>
             <name>apartment</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_address</group>
+            <table>aw_address</table>
+            <group>general</group>
             <type>textbox</type>
+            <maxlength>50</maxlength>
+            <field>apartment</field>
             <caption>Korter/Tuba</caption>
       </property>
       <property>
-            <name>po_box</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_address</group>
+            <name>postal_code</name>
+            <table>aw_address</table>
+            <group>general</group>
             <type>textbox</type>
+            <maxlength>25</maxlength>
+            <field>postal_code</field>
+            <caption>Postiindeks</caption>
+      </property>
+      <property>
+            <name>po_box</name>
+            <table>aw_address</table>
+            <group>general</group>
+            <type>textbox</type>
+            <maxlength>50</maxlength>
+            <field>po_box</field>
             <caption>Postkast</caption>
       </property>
       <classinfo>
@@ -91,18 +90,14 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
             <maintainer>voldemar</maintainer>
+            <prop_cb>1</prop_cb>
       </classinfo>
-      <groupinfo>
-            <grp_address>
-                  <caption>Aadress</caption>
-            </grp_address>
-      </groupinfo>
-      <reltypes>
-            <ADMINISTRATIVE_STRUCTURE>
-                  <value>1</value>
-                  <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
-                  <caption>Haldusjaotus</caption>
-            </ADMINISTRATIVE_STRUCTURE>
-      </reltypes>
+      <tableinfo>
+            <aw_address>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </aw_address>
+      </tableinfo>
 </properties>
 

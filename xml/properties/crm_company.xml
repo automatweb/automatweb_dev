@@ -545,6 +545,33 @@
             <caption>Kirjavahetuse aadress</caption>
       </property>
       <property>
+            <name>address2_edit</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>releditor</type>
+            <mode>manager2</mode>
+            <store>no</store>
+            <props>
+                  <num_0>country</num_0>
+                  <num_1>location_data</num_1>
+                  <num_2>location</num_2>
+                  <num_3>street</num_3>
+                  <num_4>house</num_4>
+                  <num_5>apartment</num_5>
+                  <num_6>postal_code</num_6>
+                  <num_7>po_box</num_7>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>location</num_1>
+                  <num_2>street</num_2>
+                  <num_3>house</num_3>
+                  <num_4>apartment</num_4>
+            </table_fields>
+            <reltype>RELTYPE_ADDRESS_ALT</reltype>
+            <field>address2_edit</field>
+      </property>
+      <property>
             <name>classif1</name>
             <table>objects</table>
             <group>add_info</group>
@@ -4932,6 +4959,11 @@
                   <clid>CL_SHOP_PURCHASE_MANAGER_WORKSPACE</clid>
                   <caption>Ostukeskkond</caption>
             </PURCHASING_MANAGER>
+            <ADDRESS_ALT>
+                  <value>87</value>
+                  <clid>CL_ADDRESS</clid>
+                  <caption>Aadressid</caption>
+            </ADDRESS_ALT>
       </reltypes>
       <layout>
             <co_top>

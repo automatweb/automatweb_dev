@@ -1,6 +1,27 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>result_task</name>
+            <table>planner</table>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>result_task</field>
+      </property>
+      <property>
+            <name>hr_schedule_job</name>
+            <table>planner</table>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>hr_schedule_job</field>
+      </property>
+      <property>
+            <name>customer_relation</name>
+            <table>planner</table>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>customer_relation</field>
+      </property>
+      <property>
             <name>predicates</name>
             <table>objects</table>
             <group>predicates</group>
@@ -74,7 +95,7 @@
             <name>new_call_date</name>
             <table>objects</table>
             <group>general</group>
-            <type>datetime_select</type>
+            <type>datepicker</type>
             <field>meta</field>
             <method>serialize</method>
             <parent>top_2way_left</parent>
@@ -95,7 +116,7 @@
             <name>start1</name>
             <table>planner</table>
             <group>general</group>
-            <type>datetime_select</type>
+            <type>datepicker</type>
             <field>start</field>
             <parent>top_2way_right</parent>
             <caption>Algus</caption>
@@ -104,7 +125,7 @@
             <name>end</name>
             <table>planner</table>
             <group>general</group>
-            <type>datetime_select</type>
+            <type>datepicker</type>
             <parent>top_2way_right</parent>
             <field>end</field>
             <caption>L&amp;amp;otilde;peb</caption>
@@ -113,7 +134,7 @@
             <name>deadline</name>
             <table>planner</table>
             <group>general</group>
-            <type>datetime_select</type>
+            <type>datepicker</type>
             <field>deadline</field>
             <parent>top_2way_right</parent>
             <caption>T&amp;amp;auml;htaeg</caption>
@@ -136,34 +157,6 @@
             <parent>top_2way_right</parent>
             <field>real_duration</field>
             <caption>Tegelik kestus (h)</caption>
-      </property>
-      <property>
-            <name>sales_assigned_salesman</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <parent>top_2way_right</parent>
-            <field>sales_assigned_salesman</field>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
-      </property>
-      <property>
-            <name>sales_lead_source</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <parent>top_2way_right</parent>
-            <field>sales_lead_source</field>
-            <caption>Soovitaja/allikas</caption>
-      </property>
-      <property>
-            <name>sales_schedule_job</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>hidden</type>
-            <datatype>int</datatype>
-            <field>sales_schedule_job</field>
       </property>
       <property>
             <name>hrs_table</name>
@@ -296,6 +289,26 @@
             <store>no</store>
             <parent>bills_bit</parent>
             <field>bills_table</field>
+      </property>
+      <property>
+            <name>task_results_toolbar</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>reults_bit</parent>
+            <field>task_results_toolbar</field>
+      </property>
+      <property>
+            <name>task_results_table</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>reults_bit</parent>
+            <field>task_results_table</field>
       </property>
       <property>
             <name>customer</name>
@@ -476,26 +489,6 @@
             <caption>Saata arve</caption>
       </property>
       <property>
-            <name>customer_relation</name>
-            <table>planner</table>
-            <group>other_settings</group>
-            <type>relpicker</type>
-            <field>customer_relation</field>
-            <reltype>RELTYPE_CUSTOMER_RELATION</reltype>
-            <caption>Kliendisuhe</caption>
-      </property>
-      <property>
-            <name>presentation</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_RESULT_PRESENTATION</reltype>
-            <comment>Tulemuseks olev presentatsioon (m&amp;amp;auml;&amp;amp;auml;rab k&amp;amp;otilde;ne t&amp;amp;ouml;&amp;amp;ouml;riistariba nuppude konfiguratsiooni)</comment>
-            <caption>Presentatsioon</caption>
-      </property>
-      <property>
             <name>task_toolbar</name>
             <table>objects</table>
             <group>participants</group>
@@ -635,6 +628,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>customer_info</name>
+            <table>objects</table>
+            <group>customer</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_CALL</syslog_type>
             <no_status>1</no_status>
@@ -665,6 +668,9 @@
             <predicates>
                   <caption>Eeldused</caption>
             </predicates>
+            <customer>
+                  <caption>Klient</caption>
+            </customer>
             <other_settings>
                   <caption>Muud seaded</caption>
             </other_settings>
@@ -682,11 +688,6 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECURRENCE>
-            <CUSTOMER_RELATION>
-                  <value>6</value>
-                  <clid>CL_CRM_COMPANY_CUSTOMER_DATA</clid>
-                  <caption>Kliendisuhe</caption>
-            </CUSTOMER_RELATION>
             <CUSTOMER>
                   <value>3</value>
                   <clid>
@@ -719,16 +720,11 @@
                   <clid>CL_TASK_ROW</clid>
                   <caption>Rida</caption>
             </ROW>
-            <RESULT_PRESENTATION>
+            <TMP1>
                   <value>8</value>
-                  <clid>CL_CRM_PRESENTATION</clid>
-                  <caption>Presentatsioon</caption>
-            </RESULT_PRESENTATION>
-            <RESULT_CALL>
-                  <value>10</value>
-                  <clid>CL_CRM_CALL</clid>
-                  <caption>Uus k&amp;amp;otilde;ne</caption>
-            </RESULT_CALL>
+                  <clid>CL_CRM_COMPANY_CUSTOMER_DATA</clid>
+                  <caption>tmp1</caption>
+            </TMP1>
       </reltypes>
       <layout>
             <top_bit>
@@ -831,6 +827,12 @@
                   <area_caption>Arved</area_caption>
                   <group>general</group>
             </bills_bit>
+            <reults_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Tulemused</area_caption>
+                  <group>general</group>
+            </reults_bit>
       </layout>
 </properties>
 

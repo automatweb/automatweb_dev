@@ -407,6 +407,11 @@
 			</multiple>
 		</popup_search>
 
+		<datepicker>
+			<size />
+			<disabled />
+		</datepicker>
+
 		<datetime_select>
 			<year_from>
 			</year_from>

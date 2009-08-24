@@ -1,25 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_sales" folder="classes/applications/crm/sales" extends="class_base">
-		<action name="make_call">
-			<function name="make_call" all_args="1">
-				<arguments>
-					<required name="id" type="oid" />
-					<required name="call_id" type="oid" />
-					<required name="phone_id" type="oid" />
-					<optional name="return_url" type="string" />
-				</arguments>
-			</function>
-		</action>
-		<action name="end_call">
-			<function name="end_call" all_args="1">
-				<arguments>
-					<required name="id" type="oid" />
-					<required name="call_id" type="oid" />
-					<optional name="return_url" type="string" />
-				</arguments>
-			</function>
-		</action>
 		<action name="get_entry_choices">
 			<function name="get_entry_choices" all_args="1" nologin="1" is_public="1">
 				<arguments>
@@ -42,6 +23,15 @@
 				<arguments>
 					<required name="id" type="oid" acl="view" />
 					<required name="contact_id" type="oid" acl="view" />
+				</arguments>
+			</function>
+		</action>
+		<action name="create_calls">
+			<function name="create_calls">
+				<arguments>
+					<required name="id" type="oid" acl="view" />
+					<required name="sel" type="array" />
+					<required name="post_ru" type="string" />
 				</arguments>
 			</function>
 		</action>

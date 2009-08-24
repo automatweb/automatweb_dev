@@ -587,6 +587,33 @@
             <field>messenger</field>
       </property>
       <property>
+            <name>address2_edit</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>releditor</type>
+            <mode>manager2</mode>
+            <store>no</store>
+            <props>
+                  <num_0>country</num_0>
+                  <num_1>location_data</num_1>
+                  <num_2>location</num_2>
+                  <num_3>street</num_3>
+                  <num_4>house</num_4>
+                  <num_5>apartment</num_5>
+                  <num_6>postal_code</num_6>
+                  <num_7>po_box</num_7>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>location</num_1>
+                  <num_2>street</num_2>
+                  <num_3>house</num_3>
+                  <num_4>apartment</num_4>
+            </table_fields>
+            <reltype>RELTYPE_ADDRESS_ALT</reltype>
+            <field>address2_edit</field>
+      </property>
+      <property>
             <name>email</name>
             <table>objects</table>
             <group>contact</group>
@@ -1936,15 +1963,6 @@
             <caption>Aadress</caption>
       </property>
       <property>
-            <name>fake_address_address2</name>
-            <table>objects</table>
-            <group>data</group>
-            <type>textbox</type>
-            <user>1</user>
-            <field>fake_address_address2</field>
-            <caption>Aadress 2</caption>
-      </property>
-      <property>
             <name>fake_address_postal_code</name>
             <table>objects</table>
             <group>data</group>
@@ -2704,6 +2722,11 @@
                   <clid>CL_CRM_COUNTRY</clid>
                   <caption>Fake country</caption>
             </FAKE_COUNTRY>
+            <ADDRESS_ALT>
+                  <value>97</value>
+                  <clid>CL_ADDRESS</clid>
+                  <caption>Aadressid</caption>
+            </ADDRESS_ALT>
       </reltypes>
       <layout>
             <co_bottom_seller>

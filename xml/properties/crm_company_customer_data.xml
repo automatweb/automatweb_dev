@@ -240,37 +240,59 @@
       <property>
             <name>sales_state</name>
             <table>aw_crm_customer_data</table>
-            <group>seller</group>
+            <group>sales_data</group>
             <type>select</type>
             <field>aw_sales_status</field>
+            <datatype>int</datatype>
+            <default>1</default>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gi staatus</caption>
       </property>
       <property>
             <name>salesman</name>
             <table>aw_crm_customer_data</table>
-            <group>seller</group>
+            <group>sales_data</group>
             <type>relpicker</type>
             <reltype>RELTYPE_SALESMAN</reltype>
             <field>aw_salesman</field>
+            <datatype>int</datatype>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
       </property>
       <property>
-            <name>lead_source</name>
-            <table>aw_crm_customer_data</table>
-            <group>seller</group>
+            <name>sales_lead_source</name>
+            <table>objects</table>
+            <group>sales_data</group>
             <type>relpicker</type>
-            <field>aw_lead_source</field>
-            <reltype>RELTYPE_LEAD_SOURCE</reltype>
+            <reltype>RELTYPE_SALES_LEAD_SOURCE</reltype>
+            <store>connect</store>
+            <field>sales_lead_source</field>
             <caption>Soovitaja/allikas</caption>
       </property>
       <property>
-            <name>sales_lead_source</name>
+            <name>sales_last_call_time</name>
             <table>aw_crm_customer_data</table>
-            <group>seller</group>
-            <type>relpicker</type>
-            <field>aw_lead_source</field>
-            <reltype>RELTYPE_SALES_LEAD_SOURCE</reltype>
-            <caption>Soovitaja/allikas</caption>
+            <group>sales_data</group>
+            <type>text</type>
+            <field>aw_sales_last_call_time</field>
+            <datatype>int</datatype>
+            <caption>Viimase m&amp;amp;uuml;&amp;amp;uuml;gik&amp;amp;otilde;ne aeg</caption>
+      </property>
+      <property>
+            <name>sales_calls_made</name>
+            <table>aw_crm_customer_data</table>
+            <group>sales_data</group>
+            <type>text</type>
+            <field>aw_sales_calls_made</field>
+            <datatype>int</datatype>
+            <caption>Tehtud m&amp;amp;uuml;&amp;amp;uuml;gik&amp;amp;otilde;nesid</caption>
+      </property>
+      <property>
+            <name>sales_comments</name>
+            <table>objects</table>
+            <group>sales_data</group>
+            <type>comments</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gikommentaarid</caption>
       </property>
       <property>
             <name>users_tbl</name>
@@ -357,6 +379,9 @@
             <seller>
                   <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
             </seller>
+            <sales_data>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;giinfo</caption>
+            </sales_data>
             <users>
                   <caption>Kasutajad</caption>
             </users>
@@ -455,22 +480,14 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Arve saaja</caption>
             </BILL_PERSON>
-            <SALES_EVENT>
-                  <value>92</value>
-                  <clid>
-                        <num_0>CL_CRM_CALL</num_0>
-                        <num_1>CL_CRM_PRESENTATION</num_1>
-                  </clid>
-                  <caption>Tehtud, plaanitud m&amp;amp;uuml;&amp;amp;uuml;gitegevus</caption>
-            </SALES_EVENT>
-            <LEAD_SOURCE>
+            <SALES_LEAD_SOURCE>
                   <value>101</value>
                   <clid>
                         <num_0>CL_CRM_COMPANY</num_0>
                         <num_1>CL_CRM_PERSON</num_1>
                   </clid>
                   <caption>Soovitaja/allikas</caption>
-            </LEAD_SOURCE>
+            </SALES_LEAD_SOURCE>
       </reltypes>
 </properties>
 

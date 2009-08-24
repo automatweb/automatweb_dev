@@ -1,6 +1,20 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>hr_schedule_job</name>
+            <table>planner</table>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>hr_schedule_job</field>
+      </property>
+      <property>
+            <name>customer_relation</name>
+            <table>planner</table>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>customer_relation</field>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>

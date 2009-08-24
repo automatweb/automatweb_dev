@@ -21,7 +21,34 @@
             <group>general</group>
             <type>text</type>
             <field>subclass</field>
-            <caption>T&amp;uuml;&amp;uuml;p</caption>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>complete_name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>T&amp;amp;auml;isnimi</caption>
+      </property>
+      <property>
+            <name>alt_name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Paralleelnimi</caption>
+      </property>
+      <property>
+            <name>ext_id_1</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Identifikaator v&amp;amp;auml;lises s&amp;amp;uuml;steemis 1</caption>
       </property>
       <property>
             <name>parent</name>
