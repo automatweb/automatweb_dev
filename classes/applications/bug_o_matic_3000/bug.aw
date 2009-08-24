@@ -481,8 +481,11 @@ class bug extends class_base
 		switch($prop["name"])
 		{
 			case "site_copy":
+				return PROP_IGNORE;
+				/*	sitecopy is currently down
 				$prop["value"] = '<div id="site_copy"></div>';
 				load_javascript("site_copy.js");
+				*/
 				break;
 
 			case "send_bill":

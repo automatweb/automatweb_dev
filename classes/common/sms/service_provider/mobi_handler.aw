@@ -294,7 +294,6 @@ class mobi_handler extends class_base
 			)
 		);
 		$context = stream_context_create($args);
-		// I know, it works. No need to send 'em anymore for testing purposes.
 		$mobi_answer = file_get_contents($url, false, $context);
 
 		$sms_sent = obj();

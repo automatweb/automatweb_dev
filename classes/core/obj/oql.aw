@@ -14,12 +14,12 @@ class oql
 		WHERE
 			((CL_FOO.prop1.RELTYPE_BOOYAH.foo * CL_FOO.prop1.RELTYPE_BOOYAH.foo) + 4) > 2
 	**/
-	function compile_query($oql)
+	public static function compile_query($oql)
 	{
 		return $GLOBALS["object_loader"]->ds->compile_oql_query($oql);
 	}
 
-	function execute_query($oql, $params)
+	public static function execute_query($oql, $params)
 	{
 		$rv =  $GLOBALS["object_loader"]->ds->execute_oql_query(vsprintf($oql, $params));
 		$d = array();

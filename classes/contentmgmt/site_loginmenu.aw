@@ -13,13 +13,14 @@ class site_loginmenu extends class_base
 
 	function get_site_loginmenu($that)
 	{
-		if (aw_global_get("uid") == "")
+		if (aw_global_get("uid") == "" || !get_instance("config_login_menus")->show_login_menu())
 		{
 			return "";
 		}
 		$out = "";
 		$this->read_template("site_loginmenu.tpl");
-		$login_menu_id = site_show::_helper_get_login_menu_id();
+		$ss = get_instance("contentmgmt/site_show");
+		$login_menu_id = $ss->_helper_get_login_menu_id();
 		$ol = new object_list(array(
 			"class_id" => CL_MENU,
 			"parent" => $login_menu_id,

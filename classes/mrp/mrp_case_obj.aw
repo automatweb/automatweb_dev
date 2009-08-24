@@ -38,7 +38,7 @@ class mrp_case_obj extends _int_object
 
 	public function awobj_get_project_priority()
 	{
-		return rtrim(parent::prop("project_priority"), "0.");
+		return aw_math_calc::string2float(parent::prop("project_priority"));
 	}
 
 	public function awobj_set_trykiarv($value)

@@ -48,6 +48,10 @@ class config_login_menus extends class_base
 		switch($data["name"])
 		{
 			case "login_menus":
+				foreach($arr["request"]["lm"] as $k => $v)
+				{
+					$arr["request"]["lm"][$k]["show"] = !empty($arr["request"]["lm"][$k]["show"]) ? 1 : 0;
+				}
 				$arr["obj_inst"]->set_meta("lm", $arr["request"]["lm"]);
 				if ($arr["obj_inst"]->flag(OBJ_FLAG_IS_SELECTED))
 				{
@@ -100,6 +104,7 @@ class config_login_menus extends class_base
 		foreach($gl as $gid => $gname)
 		{
 			$go = obj($gid);
+			$lm[aw_global_get("lang_id")][$go->prop("gid")]["show"] = $o_lm[$go->prop("gid")]["show"];
 			$lm[aw_global_get("lang_id")][$go->prop("gid")]["menu"] = $o_lm[$go->prop("gid")]["menu"];
 			$lm[aw_global_get("lang_id")][$go->prop("gid")]["pri"] = $o_lm[$go->prop("gid")]["pri"];
 		}
@@ -128,24 +133,36 @@ class config_login_menus extends class_base
 			$go = obj($gid);
 			$gid = $go->prop("gid");
 
-			$tmp = array(
-				"type" => "textbox",
+			$ret[] = array(
+				"type" => "text",
+				"subtitle" => 1,
 				"caption" => $gname,
+				"size" => 4,
+				"name" => "lm[$gid][subtitle]",
+			);
+
+			$ret[] = array(
+				"type" => "checkbox",
+				"caption" => t("Kuva men&uuml;&uuml;d"),
+				"name" => "lm[$gid][show]",
+				"value" => isset($lm[$gid]["show"]) ? $lm[$gid]["show"] : 1,
+			);
+
+			$ret[] = array(
+				"type" => "textbox",
+				"caption" => t("Prioriteet"),
 				"size" => 4,
 				"name" => "lm[$gid][pri]",
 				"value" => $lm[$gid]["pri"]
 			);
-			$ret[] = $tmp;
 
-			$tmp = array(
-				"caption" => $gname . t(" menyy"),
+			$ret[] = array(
+				"caption" => t("Men&uuml;&uuml;"),
 				"type" => "relpicker",
 				"name" => "lm[$gid][menu]",
 				"value" => $lm[$gid]["menu"],
 				"reltype" => "RELTYPE_FOLDER"
 			);
-
-			$ret[] = $tmp;
 		}
 
 		return $ret;
@@ -321,6 +338,49 @@ class config_login_menus extends class_base
 		$str = aw_serialize($lm);
 		$this->quote(&$str);
 		$this->set_cval("login_menus_".aw_ini_get("site_id"),$str);
+	}
+
+	public function show_login_menu()
+	{
+		$_data = $this->_get_login_menus();
+		$data = $_data[aw_global_get("lang_id")];
+		if (!is_array($data))
+		{
+			if (is_array($_data))
+			{
+				foreach($_data as $k => $v)
+				{
+					if (is_array($v))
+					{
+						$data = $v;
+					}
+				}
+			}
+		};
+
+		if (!is_array($data))
+		{
+			return true;
+		}
+		$gids = aw_global_get("gidlist");
+		$cur_pri = -1;
+		$cur_menu = -1;
+
+		if (!is_array($gids))
+		{
+			return true;
+		};
+
+		$show = true;
+		foreach($gids as $gid)
+		{
+			if (isset($data[$gid]) && $data[$gid]["pri"] > $cur_pri)
+			{
+				$cur_pri = $data[$gid]["pri"];
+				$show = !isset($data[$gid]["show"]) || !empty($data[$gid]["show"]);
+			}
+		};
+		return $show;
 	}
 }
 ?>

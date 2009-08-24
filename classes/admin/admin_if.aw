@@ -2088,13 +2088,6 @@ class admin_if extends class_base
 			$cur_lid = $cl;
 		}
 
-		// If the language id is given, ignore the stuff above.
-		if($lang_id !== false && $lang_id != $row_d["lang_id"])
-		{
-			$trans = true;
-			$cur_lid = $lang_id;
-		}
-
 		$m = aw_unserialize(ifset($row_d, "metadata"));
 
 		if ($trans)

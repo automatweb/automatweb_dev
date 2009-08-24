@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.170 2009/05/22 16:04:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.171 2009/08/24 08:54:31 instrumental Exp $
 // project.aw - Projekt
 /*
 
@@ -4587,7 +4587,19 @@ exit_function("bills::all_cust_bills");
 		$this->bug_hours = array();
 		$this->bug_real_hours = array();
 
-		$ready = array(3,4,5,6,7,8,9,11);
+		$colors = array(
+			3 => "#99FF66",
+			4 => "#99FF66",
+			5 => "#99FF66",
+			6 => "#99FF66",
+			7 => "#99FF66",
+			8 => "#99FF66",
+			9 => "#99FF66",
+			11 => "red",
+			12 => "#99FF66",
+		);
+
+		$ready = array(3,4,5,6,7,8,9,12);
 
 		foreach($bugs->arr() as $bug)
 		{
@@ -4618,9 +4630,9 @@ exit_function("bills::all_cust_bills");
 				"date" => date("d.m.Y" , $this->bug_start[$bug->id()]) . " - ".date("d.m.Y" , $this->bug_end[$bug->id()]),
 				"oid" => $bug->id(),
 			);
-			if(in_array($bug->prop("bug_status") , $ready))
+			if($colors[$bug->prop("bug_status")])
 			{
-				$bug_data["color"] = "#99FF66";
+				$bug_data["color"] = $colors[$bug->prop("bug_status")];
 			}
 			$bug_data["name"] = html::href(array(
 				"caption" => $bug->name() ? htmlspecialchars($bug->name()) : t("..."),
@@ -5185,18 +5197,31 @@ exit_function("bills::all_cust_bills");
 		}
 
 		// get all goals/tasks
-		$ot = new object_tree(array(
+	/*	$ot = new object_tree(array(
 			"parent" => $arr["obj_inst"]->id(),
 			"class_id" => array(CL_PROJECT_GOAL,CL_TASK),
-		));
-		$gt_list = $ot->to_list();
+		));*/
+//		$gt_list = $ot->to_list();
+		$gt_list = $arr["obj_inst"]->get_goals();
 
 		$range_start = 2000000000;
 		$range_end = 0;
 		foreach($gt_list->arr() as $gt)
 		{
-			$range_start = min($gt->prop("start1"), $range_start);
-			$range_end = max($gt->prop("end"), $range_end);
+			switch($gt->class_id())
+			{
+				case CL_CRM_MEETING:
+				case CL_TASK:
+				case CL_CRM_CALL:
+					$range_start = min($gt->prop("start1"), $range_start);
+					$range_end = max($gt->prop("end"), $range_end);
+
+					break;
+				case CL_BUG:
+					$range_start = min($gt->created(), $range_start);
+					$range_end = max($gt->created(), $range_end);
+					break;
+			}
 		}
 		if($arr["request"]["start"]) $range_start = $arr["request"]["start"];
 		foreach($gt_list->arr() as $gt)
@@ -5213,9 +5238,23 @@ exit_function("bills::all_cust_bills");
 
 		foreach ($gt_list->arr() as $gt)
 		{
-			$start = $gt->prop ("start1");
-			$length = $gt->prop("end") - $start;
-			$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $gt->prop("end"))." ) ";
+			switch($gt->class_id())
+			{
+				case CL_CRM_MEETING:
+				case CL_TASK:
+				case CL_CRM_CALL:
+					$start = $gt->prop ("start1");
+					$length = $gt->prop("end") - $start;
+					$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $gt->prop("end"))." ) ";
+					break;
+
+				case CL_BUG:
+					$start = $gt->created();
+					$length = $gt->num_hrs_real * 3600;
+					$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
+					break;
+			}
+
 
 			$bar = array (
 				"id" => $gt->id (),

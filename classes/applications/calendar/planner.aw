@@ -2099,8 +2099,15 @@ class planner extends class_base
 			}
 
 			$author_user = &obj($users_i->get_oid_for_uid($result->createdby()));
-			$author_person_id = $user_inst->get_person_for_user($author_user);
-			$author_person_obj = &obj($author_person_id);
+			if (!$author_user->id())
+			{
+				$author_person_obj = obj();
+			}
+			else
+			{
+				$author_person_id = $user_inst->get_person_for_user($author_user);
+				$author_person_obj = &obj($author_person_id);
+			}
 
 			$comment = "";
 			if($result->comment())

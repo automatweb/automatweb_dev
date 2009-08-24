@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.11 2008/12/02 09:03:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.12 2009/08/24 08:54:35 instrumental Exp $
 // crm_person_language.aw - Keeleoskus
 /*
 
@@ -53,17 +53,16 @@ class crm_person_language extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$personnel_management_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 		switch($prop["name"])
 		{
 			case "language":
 				$prop["options"][0] = t("--vali--");
-				foreach($personnel_management_inst->get_languages() as $lkey => $lname)
+				foreach(get_instance(CL_PERSONNEL_MANAGEMENT)->get_languages() as $lkey => $lname)
 				{
 					$prop["options"][$lkey] = $lname;
 				}
 				$prop["options"]["other"] = t("muu keel");
-				$prop["onchange"] = "var id = this.id.replace('_language_', '_other_'); if(this.value == 'other') { $('#' + id).parent().parent().show(); } else { $('#' + id).parent().parent().hide(); }";
+				$prop["onchange"] = "var id = this.id.replace('_language_', '_other_'); alert(id); if(this.value == 'other') { $('#' + id).parent().parent().show(); } else { $('#' + id).parent().parent().hide(); }";
 				break;
 
 			case "talk":
@@ -72,6 +71,7 @@ class crm_person_language extends class_base
 				//$prop["options"][0] = t("--vali--");
 				$prop["options"] = $this->lang_lvl_options;
 				break;
+
 			case "person":
 				$prop["value"] = $arr["request"]["person"];
 				break;

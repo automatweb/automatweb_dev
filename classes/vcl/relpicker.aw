@@ -629,12 +629,12 @@ class relpicker extends  core
 
 	function process_vcl_property($arr)
 	{
-		if ($arr["prop"]["mode"] == "autocomplete")
+		if (ifset($arr, "prop", "mode") == "autocomplete")
 		{
 			return $this->process_autocomplete_relpicker($arr);
 		}
 		$property = $arr["prop"];
-		if ($property["type"] == "relpicker" && $property["automatic"] == 1)
+		if (ifset($property, "type") == "relpicker" && ifset($property, "automatic") == 1)
 		{
 			$obj_inst = $arr["obj_inst"];
 			$conns = array();

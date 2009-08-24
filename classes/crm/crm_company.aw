@@ -4778,20 +4778,12 @@ class crm_company extends class_base
 		}
 	}
 
-	function get_all_org_customer_categories($obj)
+	/**
+		DEPRECATED use crm_company_obj::get_all_org_customer_categories() instead!
+	**/
+	public static function get_all_org_customer_categories($obj)
 	{
-		static $retval;
-		$conns = $obj->connections_from(array(
-			"type" => "RELTYPE_CATEGORY",
-		));
-
-		foreach($conns as $conn)
-		{
-			$retval[$conn->prop("to")] = $conn->prop("to");
-			$obj = $conn->to();
-			$this->get_all_org_customer_categories($obj);
-		}
-		return $retval;
+		return $obj->get_all_org_customer_categories();
 	}
 
 	function get_customers_for_category($cat_id)

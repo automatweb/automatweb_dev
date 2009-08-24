@@ -26,10 +26,9 @@
 	@caption Objekst millele hind m&otildejub
 
 	@property price_prop type=textbox table=aw_prices field=aw_prop
-	@caption Hinna omadus, (m&otilde;nel klassil v&otilde olla eri liiki hindu)
+	@caption Hinna omadus, (m&otilde;nel klassil v&otilde;ib olla eri liiki hindu)
 
-//idee oleks selles, et kui uuele klassile tahaks hinda kylge panna, siis siia lisada lihtsalt klassi id
-@reltype OBJECT value=1 clid=CL_TRANSPORT_TYPE
+@reltype OBJECT value=1
 @caption Objekt millele hind m&otilde;jub
 
 */

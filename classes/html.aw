@@ -845,11 +845,33 @@ class html
 		stuff what will happen if you click the button - javascript
 	@param id optional type=string
 		button id
+	@param post_append_text optional type=string
+		any text or html code you want to see after button
+	@param reload optional type=array
+		array of parameters for reloading properties
+		@param reload.submit optional type=string
+			@param reload.submit.url optional type=string default=orb.aw
+				The URL to post the data to.
+			@param reload.submit.forms optional type=array
+				The inputs from given forms will be posted (using $("FORM_ID").serialize())
+			@param reload.submit.props optional type=array
+				The given prioperties will be posted.
+		@param reload.layouts optional type=array
+		@param reload.props optional type=array
+		@param reload.params optional type=array
+
 	@returns string/html submit button
 	**/
 	public static function button($args = array())
 	{
+		$post_append_text = "";
 		extract($args);
+
+		// AJAX property/layout reloading stuff
+		if(isset($args["reload"]))
+		{
+//			$onclick = self::handle_reload($args["reload"]);
+		}
 
 		$textsize = !empty($textsize) ? " style=\"font-size: {$textsize};\"" : "";
 		$disabled = !empty($disabled) ? ' disabled="disabled"' : "";
@@ -858,9 +880,9 @@ class html
 		$class = !empty($class) ? " class=\"{$class}\"" : "";
 		$style = !empty($style) ? " style=\"{$style}\"" : "";
 		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "";
-		$id = !empty($id) ? " id=\"{$id}\"" : "";
+		$id = !empty($id) ? " id=\"{$id}" : "";
 
-		return "<input type='{$type}' {$name}value='{$value}'{$id}{$onclick}{$class}{$disabled}{$textsize}{$style} />\n";
+		return "<input type='{$type}' {$name}value='{$value}'{$id}{$onclick}{$class}{$disabled}{$textsize}{$style} />{$post_append_text}\n";
 	}
 
 	/**Time selector
@@ -1255,6 +1277,8 @@ class html
 		style class name
 	@param tabindex optional type=string
 		tab index
+	@param name optional type=string
+		element name
 	@param id optional type=string
 		element id (for css mainly)
 	@param caption optional type=string
@@ -1284,6 +1308,7 @@ class html
 		$onMouseOut = isset($onmouseout)?" onmouseout='".$onmouseout."'":"";
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$id = isset($id) ? " id='$id'" : "";
+		$name = isset($name) ? " name='$name'" : "";
 		$rel = isset($rel) ? " rel='$rel'" : "";
 		$url = isset($url) ? $url : "";
 		$style = isset($style) ? " style='$style'" : "";
@@ -1301,7 +1326,7 @@ class html
 		// We use double quotes in HTML, so we need to escape those in the url.
 		$url = str_replace("\"", "\\\"", $url);
 
-		return "<a href=\"{$url}\"{$target}{$title}{$onClick}{$onMouseOver}{$onMouseOut}{$ti}{$textsize}{$class}{$id}{$rel}{$style}>{$caption}</a>";
+		return "<a href=\"{$url}\"{$target}{$title}{$onClick}{$onMouseOver}{$onMouseOut}{$ti}{$textsize}{$class}{$id}{$name}{$rel}{$style}>{$caption}</a>";
 	}
 
 	/**Popup
@@ -1671,7 +1696,7 @@ class html
 	}
 
 	/**
-		@attrib name=handle_reload params=name
+		@attrib params=name api=1
 
 		@param params optional type=array
 			Array of key-value pairs. See the example.
@@ -1679,6 +1704,15 @@ class html
 			An array of property names.
 		@param layouts optional type=array
 			An array of layout names.
+		@param submit optional type=string
+			@param submit.url optional type=string default=orb.aw
+				The URL to post the data to.
+			@param submit.params optional type=string default=orb.aw
+				The params to post.
+			@param submit.forms optional type=array
+				The inputs from given forms will be posted (using $("FORM_ID").serialize())
+			@param submit.props optional type=array
+				The given prioperties will be posted.
 		@returns
 			The JS for the onclick attribute of HTML tags.
 		@example
@@ -1692,19 +1726,33 @@ class html
 			));
 			echo "onc = ".$onclick;
 			// onc = reload_property(['property_name'],{'foo':'bar','moo':'cow'});reload_layout(['layout_name_1','layout_name_2','layout_name_3'],{'foo':'bar','moo':'cow'});
+
+			$onclick = html::handle_reload(array(
+				"submit" => array(
+					"props" => array("moo", "cow"),
+					"forms" => array("foo_bar"),
+				),
+				"layouts" => array("layout_name_1", "layout_name_2", "layout_name_3"),
+				"props" => array("property_name"),
+			));
+			echo "onc = ".$onclick;
+			// onc = reload_property(['property_name'],{'foo':'bar','moo':'cow'});reload_layout(['layout_name_1','layout_name_2','layout_name_3'],{'foo':'bar','moo':'cow'});
 	**/
 	public static function handle_reload($arr)
 	{
 		load_javascript("reload_properties_layouts.js");
+		$onclick = "";
 
 		$reload_params = array();
-		foreach(safe_array(ifset($arr, "params")) as $pkey => $pval)
+		if(isset($arr["params"]) and is_array($arr["params"]))
 		{
-			$reload_params[] = "'".$pkey."':'".$pval."'";
+			foreach($arr["params"] as $pkey => $pval)
+			{
+				$reload_params[] = "'".$pkey."':'".$pval."'";
+			}
 		}
 		$params = "{".implode(",", $reload_params)."}";
 
-		$onclick = "";
 		if(!empty($arr["props"]))
 		{
 			$props = "['".implode("','", (array)$arr["props"])."']";
@@ -1715,6 +1763,23 @@ class html
 			$layouts = "['".implode("','", (array)$arr["layouts"])."']";
 			$onclick .= "reload_layout(".$layouts.",".$params.");";
 		}
+
+		/*
+		if(isset($arr["submit"]))
+		{
+			$post_url = !empty($arr["submit"]["url"]) ? $arr["submit"]["forms"] : "orb.aw";
+			$post_params
+			if(!empty($arr["submit"]["forms"]))
+			{
+				$post_params = 
+			}
+			if(!empty($arr["submit"]["props"]))
+			{
+			}
+			$post_params = "{".implode(",", $post_params)."}";
+			$onclick = "$.post('".$post_url."}',{".$post_params.",function(){".$onclick."});";
+		}
+		*/
 
 		return $onclick;
 	}

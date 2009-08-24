@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.190 2009/04/09 08:52:37 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.191 2009/08/24 08:54:38 instrumental Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2768,6 +2768,10 @@ class rfp extends class_base
 	{
 		$langs = aw_ini_get("languages.list");
 		$lang_f = false;
+		if ($lang_to == "")
+		{
+			$lang_to = 1;
+		}
 		foreach($langs as $key => $lang)
 		{
 			if($key == $lang_to)

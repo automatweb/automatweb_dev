@@ -1878,6 +1878,7 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 		$eo->save();
 
 		$this->set_prop("phone", $eo->id());
+		$this->set_prop("type", $type);
 		$this->save();
 		$this->connect(array(
 			"type" => "RELTYPE_PHONE",

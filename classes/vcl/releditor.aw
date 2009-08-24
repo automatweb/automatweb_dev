@@ -928,7 +928,7 @@ class releditor extends core
 				$params = array(
 					"return_url" => $return_url,
 				);
-				if ($arr["prop"]["cfgform"])
+				if (!empty($arr["prop"]["cfgform"]))
 				{
 					$params["cfgform"] = $arr["prop"]["cfgform"];
 				}
@@ -1051,7 +1051,7 @@ class releditor extends core
 		$fdata = array();
 		$conns = array();
 		$filt_props = array();
-		if (empty($arr["new"]) && is_a($arr["obj_inst"], "object"))
+		if (empty($arr["new"]) && $arr["obj_inst"] instanceof object)
 		{
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => $arr["prop"]["reltype"],

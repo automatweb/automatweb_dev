@@ -17,7 +17,7 @@
 	@property ord type=textbox size=5 table=objects field=jrk
 	@caption J&auml;rjekord
 
-	@property parent_sector type=select store=no
+	@property parent_sector type=relpicker reltype=RELTYPE_PARENT store=no
 	@caption Parent
 
 	@property tegevusala_en type=textbox size=55 table=kliendibaas_tegevusala
@@ -28,6 +28,9 @@
 
 	@property kood type=textbox size=8 table=kliendibaas_tegevusala
 	@caption Tegevusala kood
+
+	@property emtak_2008 type=textbox size=8 table=kliendibaas_tegevusala field=aw_emtak_2008
+	@caption EMTAK2008 kood
 
 	@property image type=relpicker reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
 	@caption Pilt
@@ -55,6 +58,9 @@
 
 @reltype DOCUMENT value=2 clid=CL_DOCUMENT
 @caption Dokument
+
+@reltype PARENT value=3
+@caption Parent
 */
 
 /*
@@ -96,6 +102,13 @@ class crm_sector extends class_base
 				$retval = PROP_IGNORE;
 				break;
 
+			case 'tegevusala':
+				if(empty($prop["value"]))
+				{
+					$prop["value"] = $arr["obj_inst"]->name();
+				}
+				break;
+
 			case 'parent_sector':
 				if (is_oid($this_o->id()))
 				{
@@ -112,9 +125,11 @@ class crm_sector extends class_base
 					$retval = PROP_ERROR;
 				}
 
-				$prop["options"] = array($parent->id() => $parent->name());
+				$prop["options"] = safe_array(ifset($prop, "options")) + array($parent->id() => $parent->name());
+				unset($prop["options"][0]);
+				/*
 
-				while (CL_CRM_SECTOR === (int) $parent->class_id())
+				while ($parent->is_a(CL_CRM_SECTOR))
 				{
 					if ($this->can("view", $parent->parent()))
 					{
@@ -125,6 +140,7 @@ class crm_sector extends class_base
 				$sectors = new object_tree(array(
 					"parent" => $parent,
 				));
+				arr($sectors->ids(), true);
 				$sectors = $sectors->to_list();
 
 				if ($sectors->count() > 0)
@@ -140,6 +156,7 @@ class crm_sector extends class_base
 					}
 					while ($sector = $sectors->next());
 				}
+				*/
 				break;
 		}
 
@@ -238,6 +255,13 @@ class crm_sector extends class_base
 
 		switch($field)
 		{
+			case "aw_emtak_2008":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int"
+				));
+				return true;
+
 			case "ext_id":
 				$this->db_add_col($tbl, array(
 					"name" => $field,

@@ -22,9 +22,9 @@ class crm_company_people_impl extends class_base
 
 		$alias_to = $arr['obj_inst']->id();
 
-		if((int)$arr['request']['unit'])
+		if((int)automatweb::$request->arg('unit'))
 		{
-			$alias_to = $arr['request']['unit'];
+			$alias_to = automatweb::$request->arg('unit');
 		}
 
 		$tb->add_menu_item(array(
@@ -34,10 +34,10 @@ class crm_company_people_impl extends class_base
 				'action' => 'create_new_person',
 				'parent' => $arr['obj_inst']->id(),
 				'alias_to' => $alias_to,
-				'reltype' => $arr['request']['unit'] ? 2 : 8,
+				'reltype' => !empty($arr['request']['unit']) ? 2 : 8,
 				'return_url' => get_ru(),
 				"class" => "crm_company",
-				"profession" => $arr["request"]["cat"] == CRM_ALL_PERSONS_CAT ? 0 : $arr["request"]["cat"]
+				"profession" => automatweb::$request->arg("cat") == CRM_ALL_PERSONS_CAT ? 0 : automatweb::$request->arg("cat")
 			))
 		));
 
@@ -80,7 +80,7 @@ class crm_company_people_impl extends class_base
 			'link'=> "javascript:submit_changeform('search_for_contacts')"
 		));
 
-		if($arr["request"]["contacts_search_show_results"])
+		if(!empty($arr["request"]["contacts_search_show_results"]))
 		{
 			$tb->add_button(array(
 				'name' => 'Salvesta',
@@ -134,7 +134,7 @@ class crm_company_people_impl extends class_base
 		for($i = ord('A'); $i < ord("Z"); $i++)
 		{
 			$c->add_item(array(
-				"text" => chr($i).($arr["request"]["filt_p"] == chr($i) ? t(" (Valitud)") : "" ),
+				"text" => chr($i).(automatweb::$request->arg("filt_p") == chr($i) ? t(" (Valitud)") : "" ),
 				"link" => aw_url_change_var("filt_p", chr($i))
 			));
 		}
@@ -144,7 +144,7 @@ class crm_company_people_impl extends class_base
 
 	function _get_unit_listing_tree($arr)
 	{
-		if ($arr["request"]["contact_search"] == 1)
+		if (automatweb::$request->arg("contact_search") == 1)
 		{
 			return PROP_IGNORE;
 		}
@@ -201,66 +201,74 @@ class crm_company_people_impl extends class_base
 		);
 	}
 
-	function _init_human_resources_table(&$t)
+	function _init_human_resources_table(&$t, $fields = false)
 	{
-		$t->define_field(array(
-			"name" => "cal",
-			"caption" => t("&nbsp;"),
-			"width" => 1
-		));
+		$fields_data = array(
+			array(
+				"name" => "cal",
+				"caption" => t("&nbsp;"),
+				"width" => 1
+			),
+			array(
+				'name' => 'image',
+				'caption' => t('&nbsp;'),
+				"chgbgcolor" => "cutcopied",
+				"align" => "center",
+				"width" => 1
+			),
+			array(
+				'name' => 'name',
+				'caption' => t('Nimi'),
+				'sortable' => '1',
+				"chgbgcolor" => "cutcopied",
+				'callback' => array(&$this, 'callb_human_name'),
+				'callb_pass_row' => true,
+			),
+			array(
+				'name' => 'phone',
+				"chgbgcolor" => "cutcopied",
+				'caption' => t('Telefon'),
+				'sortable' => '1',
+			),
+			array(
+				'name' => 'email',
+				"chgbgcolor" => "cutcopied",
+				'caption' => t('E-post'),
+				'sortable' => '1',
+			),
+			array(
+				'name' => 'section',
+				"chgbgcolor" => "cutcopied",
+				'caption' => t('&Uuml;ksus'),
+				'sortable' => '1',
+			),
+			array(
+				'name' => 'rank',
+				"chgbgcolor" => "cutcopied",
+				'caption' => t('Ametinimetus'),
+				'sortable' => '1',
+			),
+			array(
+				'name' => 'work_relation',
+				"chgbgcolor" => "cutcopied",
+				'caption' => t('T&ouml;&ouml;suhe'),
+				'sortable' => '1',
+			),
+			array(
+				'name' => 'authorized',
+				"chgbgcolor" => "cutcopied",
+				'caption' => t('Volitatud'),
+				'sortable' => '1',
+			)
+		);
+		foreach($fields_data as $field_data)
+		{
+			if($fields === false || in_array($field_data["name"], $fields))
+			{
+				$t->define_field($field_data);
+			}
+		}
 
-		$t->define_field(array(
-			'name' => 'image',
-			'caption' => t('&nbsp;'),
-			"chgbgcolor" => "cutcopied",
-			"align" => "center",
-			"width" => 1
-		));
-
-		$t->define_field(array(
-			'name' => 'name',
-			'caption' => t('Nimi'),
-			'sortable' => '1',
-			"chgbgcolor" => "cutcopied",
-			'callback' => array(&$this, 'callb_human_name'),
-			'callb_pass_row' => true,
-		));
-		$t->define_field(array(
-			'name' => 'phone',
-			"chgbgcolor" => "cutcopied",
-			'caption' => t('Telefon'),
-			'sortable' => '1',
-		));
-		$t->define_field(array(
-			'name' => 'email',
-			"chgbgcolor" => "cutcopied",
-			'caption' => t('E-post'),
-			'sortable' => '1',
-		));
-		$t->define_field(array(
-			'name' => 'section',
-			"chgbgcolor" => "cutcopied",
-			'caption' => t('&Uuml;ksus'),
-			'sortable' => '1',
-		));
-		$t->define_field(array(
-			'name' => 'rank',
-			"chgbgcolor" => "cutcopied",
-			'caption' => t('Ametinimetus'),
-			'sortable' => '1',
-		));
-		$t->define_field(array(
-			'name' => 'work_relation',
-			"chgbgcolor" => "cutcopied",
-			'caption' => t('T&ouml;&ouml;suhe'),
-			'sortable' => '1',
-		));
-		$t->define_field(array(
-			'name' => 'authorized',
-			"chgbgcolor" => "cutcopied",
-			'caption' => t('Volitatud'),
-			'sortable' => '1',
-		));
 		$t->define_chooser(array(
 			'name'=>'check',
 			'field'=>'id',
@@ -284,7 +292,7 @@ class crm_company_people_impl extends class_base
 		$u = get_instance(CL_USER);
 		classload("core/icons");
 		$t = &$arr["prop"]["vcl_inst"];
-		$this->_init_human_resources_table($t);
+		$this->_init_human_resources_table($t, isset($arr["prop"]["fields"]) ? $arr["prop"]["fields"] : false);
 		$format = t('%s t&ouml;&ouml;tajad');
 		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 

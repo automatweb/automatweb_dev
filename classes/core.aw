@@ -947,7 +947,7 @@ class core extends acl_base
 	function get_file($arr)
 	{
 		$retval = "";
-		if (!$arr["file"])
+		if (empty($arr["file"]))
 		{
 			$this->raise_error("ERR_CORE_NOFILE", LC_CORE_GET_FILE_NO_NAME, true);
 		}

@@ -1775,6 +1775,16 @@ class conference_planning extends class_base
 			{
 				switch($property)
 				{
+					case "data_mf_attendees_no":
+						$value = (int)$value;
+						break;
+					case "data_gen_open_for_alternative_dates":
+					case "data_gen_accommodation_requirements":
+						if($value == "on")
+						{
+							$value = 1;
+						}
+						break;
 					case "data_gen_acc_end":
 					case "data_gen_acc_start":
 						$tmp = $value;
@@ -1840,6 +1850,7 @@ class conference_planning extends class_base
 
 		$html["yah_bar"] = $this->parse_yah_bar($cp, $arr["id"], $active_view);
 		$html["active_view"] = $this->parse_active_view($cp, $arr["id"], $active_view);
+
 		//$html["movement"] = $this->parse_movement_buttons($cp->id(), $active_view);
 		$html["errors"] = $this->error_html;
 		$reforb_arr = array(
@@ -1877,7 +1888,6 @@ class conference_planning extends class_base
 
 	function parse_form_element($el, $view_no, $element, $views, $value, $values, $doc)
 	{
-
 		$this->_init_vars();
 		lc_site_load("conference_planning_new", &$this);
 		$prop = $this->get_form_elements_data($el["name"]);
@@ -1914,7 +1924,7 @@ class conference_planning extends class_base
 			"prop" => &$prop,
 			"current_view" => $view_no,
 			"current_element" => $element,
-		);
+		);//if($el["show_controller"] == 11440)arr($toprop);
 		$controller = $this->can("view", $el["show_controller"])?$i->check_property($el["show_controller"], $this->cp->id(),&$toprop, $GLOBALS["_GET"],"",""):array();
 
 		if($controller == PROP_IGNORE)
@@ -2020,7 +2030,7 @@ class conference_planning extends class_base
 				$this->vars(array(
 					"caption" => $caption,
 					//"caption" => $el["trans"][$lang],
-					"value" => $el["value"],
+					"value" => $value_to_use,//$el["value"],
 				));
 				break;
 			case "table":
@@ -2135,7 +2145,7 @@ class conference_planning extends class_base
 
 		foreach($view["elements"] as $elem_id => $el)
 		{
-			$ret .= $this->parse_form_element(&$view["elements"][$elem_id], $act, $elem_id, &$views, &$stored_data[$view["elements"][$elem_id]["name"]], &$stored_data, $doc);
+			$ret .= $this->parse_form_element(&$view["elements"][$elem_id], $act, $elem_id, &$views, &$stored_data[$view["elements"][$elem_id]["wid"]], &$stored_data, $doc);
 		}
 		// let's parse errors here as well
 		foreach($errors[$act] as $ctr)

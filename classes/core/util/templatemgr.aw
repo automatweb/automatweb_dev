@@ -1,7 +1,7 @@
 <?php
 /**
 A class to help manage template files. 
-$Header: /home/cvs/automatweb_dev/classes/core/util/templatemgr.aw,v 1.4 2009/07/07 16:01:47 instrumental Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/util/templatemgr.aw,v 1.5 2009/08/24 08:54:13 instrumental Exp $
 @classinfo  maintainer=kristo
 **/
 class templatemgr extends aw_template
@@ -258,6 +258,21 @@ class templatemgr extends aw_template
 		$fp_adm = $this->cfg["basedir"]."/templates/".$arr["folder"];
 
 		$ret = array("" => "");
+	
+		if (is_dir($GLOBALS["cfg"]["tpldir"]."/".$arr["folder"]))
+		{
+			$dc = $this->get_directory(array(
+				"dir" => $GLOBALS["cfg"]["tpldir"]."/".$arr["folder"]
+			));
+			foreach($dc as $file)
+			{
+				if (substr($file, -3) == "tpl")
+				{
+					$ret[$file] = $file;
+				}
+			}
+		}
+
 		if (is_dir($fp_site))
 		{
 			$dc = $this->get_directory(array(
