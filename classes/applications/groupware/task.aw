@@ -2,6 +2,12 @@
 /*
 
 @classinfo syslog_type=ST_TASK confirm_save_data=1 maintainer=markop
+
+@default table=planner
+	@property hr_schedule_job type=hidden datatype=int
+	@property customer_relation type=hidden datatype=int
+
+
 @default table=objects
 
 @default group=general
@@ -89,7 +95,6 @@
 
 @property is_done type=checkbox field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
-
 
 
 @layout personal type=hbox
@@ -1226,7 +1231,7 @@ class task extends class_base
 				}
 
 				$p = get_instance(CL_PLANNER);
-				$cal = $p->get_calendar_for_user();//arr($data["value"]);
+				$cal = $p->get_calendar_for_user();
 				if ($cal && !($daystart > 0))
 				{
 					$calo = obj($cal);
@@ -5843,7 +5848,7 @@ $types = array(
 
 	function _bills_tb($arr)
 	{
-		$tb =& $arr["prop"]["vcl_inst"];
+		$tb = $arr["prop"]["vcl_inst"];
 
 		if (!$arr["new"])
 		{
@@ -5878,7 +5883,7 @@ $types = array(
 
 	function _bills_table($arr)
 	{
-		$t =& $arr["prop"]["vcl_inst"];
+		$t = $arr["prop"]["vcl_inst"];
 		if (is_oid($arr["obj_inst"]->id()) && sizeof($cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL"))))
 		{
 			if (!count($cs))
@@ -5906,6 +5911,64 @@ $types = array(
 		}
 		$t->set_rgroupby(array("parent_name" => "parent_name"));
 	}
+
+	function _get_task_results_toolbar(&$arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+
+		if (!$arr["new"])
+		{
+
+			$tb->add_button(array(
+				"name" => "new_call",
+				"tooltip" => t("Uus k&otilde;ne"),
+				"url" => $this->mk_my_orb("new", array("parent" => $arr["obj_inst"]->parent(), "return_url" => get_ru()))
+			));
+		}
+	}
+
+	function _get_task_results_table(&$arr)
+	{
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
+
+		$t = $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Tegevuse nimi"),
+			"width" => "40%"
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"width" => "35%"
+		));
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => t("Viimane muutja"),
+			"width" => "25%"
+		));
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RESULT_TASK")) as $c)
+		{
+			$result_task = $c->to();
+			$m = $c->modifiedby();
+			$m = $u->get_person_for_uid($m);
+			$po = obj($c->parent());
+			$t->define_data(array(
+				"oid" => "o_".$c->id(),
+				"name" => html::obj_change_url($c),
+				"type" => $clss[$c->class_id()]["name"],
+				"modifiedby" => html::obj_change_url($m),
+				"parent_name" => $po->name()
+			));
+		}
+
+		$t->set_rgroupby(array("parent_name" => "parent_name"));
+	}
+
 	/**
 		@attrib name=delete_rels
 	**/
@@ -6174,13 +6237,15 @@ $types = array(
 		switch($f)
 		{
 			case "result":
+			case "result_task":
 			case "phone":
 			case "promoter":
 			case "deal_has_tax":
 			case "real_start":
 			case "real_duration":
+			case "deadline":
 			case "customer_relation":
-			case "sales_schedule_job":
+			case "hr_schedule_job":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
