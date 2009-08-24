@@ -643,8 +643,6 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 	/** sets the default email adress content or creates it if needed **/
 	private function set_fake_email($mail, $set_into_meta = true)
 	{
-
-		die("Kaarel arendab, kannatust!");
 		$n = false;
 		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("email")))
 
@@ -1825,7 +1823,7 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 	public function save($exclusive = false, $previous_state = null)
 	{
 		$this->set_name($this->prop("firstname") . " " . $this->prop("lastname") . (strlen($this->prop("previous_lastname")) < 1 ? "" : " (" . $this->prop("previous_lastname") . ")"));
-		
+
 		$fakes = array(
 			"email", "phone", "skype", "mobile", "fax", "address_country", "address_country_relp", "address_county", "address_county_relp", "address_city", "address_city_relp", "address_postal_code", "address_address", "address_address2"
 		);

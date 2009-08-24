@@ -2257,7 +2257,7 @@ abstract class intellectual_property extends class_base
 			"layout" => "generic",
 			"id" => "patent_requesters_registered",
 		));
-		$t->table_tag_id = "applicant_requesters";
+		$t->set_dom_id("applicant_requesters");
 
 		$t->define_field(array(
 			"name" => "name",
