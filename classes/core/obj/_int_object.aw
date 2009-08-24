@@ -1169,7 +1169,7 @@ class _int_object
 			foreach($bits as $idx => $part)
 			{
 				$is_rel = false;
-				if (substr($part, 0, strlen("RELTYPE")) == "RELTYPE")
+				if (substr($part, 0, strlen("RELTYPE")) === "RELTYPE")
 				{
 					$is_rel = true;
 					$prop_dat = array();
@@ -1242,7 +1242,7 @@ class _int_object
 			case "popup_search":
 			case "crm_participant_search":
 			case "releditor":
-				if ($pd["store"] == "connect")
+				if ($pd["store"] === "connect")
 				{
 					// we need to list the connections and fetch their names.
 					// UNLESS we already got them from wherever. like fetch_full_list conn prop fetch
@@ -1332,12 +1332,12 @@ class _int_object
 		$this->_int_set_prop($key, $val);
 		// if this is a relpicker property, create the relation as well
 		$propi = $GLOBALS["properties"][$this->obj["class_id"]][$key];
-		if ((($propi["type"] == "relpicker" ) ||
-			($propi["type"] == "releditor" && ($propi["store"] == "connect" || $propi["choose_default"] == 1)) ||
-			 $propi["type"] == "relmanager" ||
-			($propi["type"] == "classificator" && $propi["store"] == "connect") ||
-			($propi["type"] == "popup_search" && $propi["reltype"] != "") ||
-			($propi["type"] == "chooser" && $propi["store"] == "connect" || !empty($propi["reltype"]))
+		if ((($propi["type"] === "relpicker" ) ||
+			($propi["type"] === "releditor" && ($propi["store"] === "connect" || $propi["choose_default"] == 1)) ||
+			 $propi["type"] === "relmanager" ||
+			($propi["type"] === "classificator" && $propi["store"] === "connect") ||
+			($propi["type"] === "popup_search" && $propi["reltype"] != "") ||
+			($propi["type"] === "chooser" && $propi["store"] === "connect" || !empty($propi["reltype"]))
 			))
 		{
 			$_rt = $GLOBALS["relinfo"][$this->obj["class_id"]][$propi["reltype"]]["value"];
@@ -1350,7 +1350,7 @@ class _int_object
 				}
 				// get all old connections
 				// remove the ones that are not selected
-				if (is_oid($this->id()) && ($propi["type"] != "relpicker" || $propi["store"] == "connect"))
+				if (is_oid($this->id()) && ($propi["type"] !== "relpicker" || $propi["store"] === "connect"))
 				{
 					foreach($this->connections_from(array("type" => $_rt)) as $c)
 					{
@@ -1918,6 +1918,11 @@ class _int_object
 			}
 		}
 		return $is;
+	}
+
+	public function is_saved()
+	{
+		return is_oid($this->obj["oid"]);
 	}
 
 	public function implements_interface ($name)
