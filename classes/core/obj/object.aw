@@ -2187,6 +2187,15 @@ class object
 		return $GLOBALS["objects"][$this->oid]->originalize();
 	}
 
+	/** Returns TRUE if the object has been saved -- a call to self::save() has ever been made
+		@attrib api=1 params=pos
+		@returns boolean
+	**/
+	public function is_saved()
+	{
+		return $GLOBALS["objects"][$this->oid]->is_saved();
+	}
+
 	/** Returns TRUE if the object is of this class or has this class as one of its parents
 		@attrib api=1 params=pos
 
