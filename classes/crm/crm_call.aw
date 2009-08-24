@@ -13,9 +13,14 @@
 @groupinfo participants caption=Osalejad submit=no
 @groupinfo other_calls caption="Eelmised k&otilde;ned"
 @groupinfo predicates caption="Eeldused"
+@groupinfo customer caption="Klient"
 @groupinfo other_settings caption="Muud seaded"
 
 @default table=planner
+
+	@property result_task type=hidden datatype=int
+	@property hr_schedule_job type=hidden datatype=int
+	@property customer_relation type=hidden datatype=int
 
 @default group=predicates
 	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect table=objects field=meta method=serialize
@@ -44,20 +49,20 @@
 			@property result type=select parent=top_2way_left
 			@caption K&otilde;ne tulemus
 
-			@property new_call_date type=datetime_select table=objects field=meta method=serialize parent=top_2way_left
+			@property new_call_date type=datepicker table=objects field=meta method=serialize parent=top_2way_left
 			@caption Uue k&otilde;ne aeg
 
 			@property add_clauses type=chooser store=no parent=top_2way_left multiple=1
 			@caption Lisatingimused
 
 		@layout top_2way_right type=vbox parent=top_2way
-			@property start1 type=datetime_select field=start table=planner parent=top_2way_right
+			@property start1 type=datepicker field=start table=planner parent=top_2way_right
 			@caption Algus
 
-			@property end type=datetime_select table=planner parent=top_2way_right
+			@property end type=datepicker table=planner parent=top_2way_right
 			@caption L&otilde;peb
 
-			@property deadline type=datetime_select table=planner field=deadline parent=top_2way_right
+			@property deadline type=datepicker table=planner field=deadline parent=top_2way_right
 			@caption T&auml;htaeg
 
 			@property real_start type=text table=planner parent=top_2way_right
@@ -66,13 +71,6 @@
 			@property real_duration type=text datatype=int table=planner parent=top_2way_right
 			@caption Tegelik kestus (h)
 
-			@property sales_assigned_salesman type=text store=no parent=top_2way_right
-			@caption M&uuml;&uuml;giesindaja
-
-			@property sales_lead_source type=text store=no parent=top_2way_right
-			@caption Soovitaja/allikas
-
-			@property sales_schedule_job type=hidden datatype=int table=planner
 
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
@@ -108,6 +106,10 @@
 @layout bills_bit type=vbox closeable=1 area_caption=Arved
 	@property bills_tb type=toolbar no_caption=1 store=no parent=bills_bit
 	@property bills_table type=table no_caption=1 store=no parent=bills_bit
+
+@layout reults_bit type=vbox closeable=1 area_caption=Tulemused
+	@property task_results_toolbar type=toolbar no_caption=1 store=no parent=reults_bit
+	@property task_results_table type=table no_caption=1 store=no parent=reults_bit
 
 	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_right_top
 	@caption Klient
@@ -166,16 +168,10 @@
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill group=other_settings
 @caption Saata arve
 
-@property customer_relation type=relpicker table=planner field=customer_relation reltype=RELTYPE_CUSTOMER_RELATION group=other_settings
-@caption Kliendisuhe
 
 @default table=objects
 @default field=meta
 @default method=serialize
-
-@property presentation type=relpicker reltype=RELTYPE_RESULT_PRESENTATION group=general
-@comment Tulemuseks olev presentatsioon (m&auml;&auml;rab k&otilde;ne t&ouml;&ouml;riistariba nuppude konfiguratsiooni)
-@caption Presentatsioon
 
 @property task_toolbar type=toolbar no_caption=1 store=no group=participants
 @caption Toolbar
@@ -213,18 +209,19 @@
 @property search_contact_results type=table store=no group=participants no_caption=1
 @caption Tulemuste tabel
 
-@default group=other_calls
 
+@default group=other_calls
 	@property other_calls type=table store=no no_caption=1
+
+
+@default group=customer
+	@property customer_info type=text store=no no_caption=1
 
 
 // ------------------- RELATION TYPES -------------------
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
-
-@reltype CUSTOMER_RELATION value=6 clid=CL_CRM_COMPANY_CUSTOMER_DATA
-@caption Kliendisuhe
 
 @reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Klient
@@ -241,11 +238,8 @@
 @reltype ROW value=7 clid=CL_TASK_ROW
 @caption Rida
 
-@reltype RESULT_PRESENTATION value=8 clid=CL_CRM_PRESENTATION
-@caption Presentatsioon
-
-@reltype RESULT_CALL value=10 clid=CL_CRM_CALL
-@caption Uus k&otilde;ne
+@reltype TMP1 value=8 clid=CL_CRM_COMPANY_CUSTOMER_DATA
+@caption tmp1
 
 */
 
@@ -267,7 +261,7 @@ class crm_call extends task
 			"name" => $obj->name(),
 			"icon" => icons::get_icon_url($obj),
 			"time" => date("d-M-y H:i", $obj->prop("start1")),
-			"content" => nl2br(create_links($obj->prop("content"))),
+			"content" => nl2br(create_links($obj->prop("content")))
 		));
 		return $this->parse();
 	}
@@ -290,9 +284,27 @@ class crm_call extends task
 				"mailbox" => "INBOX" ,
 				"msgrid" => $arr["request"]["msgrid"],
 				"msgid" => $arr["request"]["msgid"],
-				"fullheaders" => "",
+				"fullheaders" => ""
 			));
 		}
+
+		$application = automatweb::$request->get_application();
+		if (!empty($arr["request"]["preparing_to_call"]) and "change" === $arr["request"]["action"] and $application->is_a(CL_CRM_SALES))
+		{
+			$this_o = new object($arr["request"]["id"], array(), CL_CRM_CALL);
+			$this_o->lock();
+		}
+	}
+
+	function _get_customer_info(&$arr)
+	{
+		$this_o = $arr["obj_inst"];
+		$cro = new crm_company_customer_data();
+		$cro->form_only = true;
+		$arr["prop"]["value"] = $cro->view(array(
+			"id" => $this_o->prop("customer_relation"),
+			"group" => "sales_data"
+		));
 	}
 
 	function _get_call_tools(&$arr)
@@ -304,61 +316,36 @@ class crm_call extends task
 			"name" => "save",
 			"tooltip" => t("Salvesta"),
 			"action" => "submit",
-			"img" => "save.gif",
+			"img" => "save.gif"
 		));
 
 		if ($this_o->prop("real_duration") < 1)
 		{
-			if ($this_o->prop("real_start") < 2)
+			if ($this_o->can_start())
 			{ // call hasn't started yet
 				$tb->add_button(array(
 					"name" => "start",
 					"tooltip" => t("Alusta k&otilde;net"),
 					"action" => "start",
-					"img" => "nool1.gif",
+					"img" => "start.gif"
 				));
 			}
-			else
+			elseif($this_o->prop("real_start") > 2)
 			{ // end call button
 				$tb->add_button(array(
 					"name" => "end",
 					"tooltip" => t("L&otilde;peta k&otilde;ne ja salvesta andmed"),
 					"action" => "end",
-					"img" => "class_223.gif",
+					"img" => "stop.gif"
 				));
 			}
-		}
-		return PROP_OK;
-	}
-
-	function _get_sales_assigned_salesman(&$arr)
-	{
-		$name = $arr["obj_inst"]->prop("customer_relation.salesman.name");
-		$arr["prop"]["value"] = $name;
-		return PROP_OK;
-	}
-
-	function _get_sales_lead_source(&$arr)
-	{
-		$name = $arr["obj_inst"]->prop("customer_relation.sales_lead_source.name");
-		$arr["prop"]["value"] = $name;
-		return PROP_OK;
-	}
-
-	function _get_new_call_date(&$arr)
-	{
-		$arr["prop"]["year_from"] = date("Y");
-		$application = automatweb::$request->get_application();
-		if ($application->is_a(CL_CRM_SALES) and $arr["prop"]["value"] < 2)
-		{
-			$arr["prop"]["value"] = time();
 		}
 		return PROP_OK;
 	}
 
 	function _get_start1(&$arr)
 	{
-		$arr["prop"]["onblur"] = date("d.m.Y H:i", $arr["prop"]["value"]);
+		// $arr["prop"]["onblur"] = date("d.m.Y H:i", $arr["prop"]["value"]);
 		return PROP_OK;
 	}
 
@@ -379,9 +366,24 @@ class crm_call extends task
 
 	function _get_result(&$arr)
 	{
-		$arr["prop"]["options"] = array("" => "") + $arr["obj_inst"]->result_names();
-		$arr["prop"]["onchange"] = "crmCallProcessResult(this);";
-		return PROP_OK;
+		$r = PROP_IGNORE;
+		if ($arr["obj_inst"]->prop("real_start") > 1)
+		{
+			$arr["prop"]["options"] = array("" => "") + $arr["obj_inst"]->result_names();
+			$arr["prop"]["onchange"] = "crmCallProcessResult(this);";
+			$r = PROP_OK;
+		}
+		return $r;
+	}
+
+	function _get_new_call_date(&$arr)
+	{
+		$r = PROP_IGNORE;
+		if ($arr["obj_inst"]->prop("real_start") > 1)
+		{
+			$r = PROP_OK;
+		}
+		return $r;
 	}
 
 	function get_property($arr)
@@ -760,7 +762,7 @@ class crm_call extends task
 				return PROP_IGNORE;
 
 			case "new_call_date":
-				$v = date_edit::get_timestamp($data["value"]);
+				$v = datepicker::get_timestamp($data["value"]);
 				$application = automatweb::$request->get_application();
 
 				if ($application->is_a(CL_CRM_SALES))
@@ -845,6 +847,26 @@ class crm_call extends task
 		{
 			$arr["prop"]["error"] = t("Tulemus peab olema m&auml;&auml;ratud");
 			return PROP_FATAL_ERROR;
+		}
+		return PROP_OK;
+	}
+
+	function _set_comment(&$arr)
+	{
+		$this_o = $arr["obj_inst"];
+		$val = $arr["prop"]["value"];
+		if (strlen($val) > 1 and $val !== $this_o->comment() and $this_o->prop("customer_relation"))
+		{
+			$comm = new forum_comment();
+			$commdata = $this_o->name() . ":\n" . $val;
+			if (strlen($commdata["comment"]))
+			{
+				$comm->submit(array(
+					"parent" => $this_o->prop("customer_relation"),
+					"commtext" => $commdata,
+					"return" => "id"
+				));
+			}
 		}
 		return PROP_OK;
 	}
@@ -1177,6 +1199,15 @@ class crm_call extends task
 		$result_call = crm_call_obj::RESULT_CALL;
 		$result_presentation = crm_call_obj::RESULT_PRESENTATION;
 		$result_refused = crm_call_obj::RESULT_REFUSED;
+		$result_noanswer = RESULT_NOANSWER;
+		$result_busy = RESULT_BUSY;
+		$result_hungup = RESULT_HUNGUP;
+		$result_outofservice = RESULT_OUTOFSERVICE;
+		$result_invalidnr = RESULT_INVALIDNR;
+		$result_voicemail = RESULT_VOICEMAIL;
+		$result_newnumber = RESULT_NEWNUMBER;
+		$result_disconnected = RESULT_DISCONNECTED;
+
 		$scripts .= <<<EOS
 // hide and show elements according to call result
 crmCallProcessResult(document.getElementById("result"));
@@ -1186,20 +1217,20 @@ function crmCallProcessResult(resultElem)
 	if (resultElem)
 	{
 		if (resultElem.value == {$result_call})
-		{
-			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "");
+		{ // show new call date dateselect
+			$("input[name='new_call_date[date]']").parent().parent().parent().parent().css("display", "");
 		}
 		else if (resultElem.value == {$result_presentation})
 		{
 			if ($("#presentation").attr("value") == 0)
-			{
+			{ // hide 'end call' button
 				$("a[href='javascript:submit_changeform('end');']").parent().css("display", "none");
 			}
-			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "none");
+			$("input[name='new_call_date[date]']").parent().parent().parent().parent().css("display", "none");
 		}
-		else if (resultElem.value == {$result_refused})
+		else
 		{
-			$("select[name='new_call_date[day]']").parent().parent().parent().parent().css("display", "none");
+			$("input[name='new_call_date[date]']").parent().parent().parent().parent().css("display", "none");
 		}
 	}
 }
@@ -1685,15 +1716,12 @@ EOS;
 	/**
       @attrib name=start all_args=1
       @param id required type=int acl=view
-      @param phone_id required type=int acl=view
 	**/
 	function start($arr)
 	{
 		$this_o = new object($arr["id"]);
-		$phone = obj($arr["phone_id"], array(), CL_CRM_PHONE, true);
-		$this_o->make($phone);
+		$this_o->make();
 		$arr["action"] = "change";
-		unset($arr["phone_id"]);
 		return $this->mk_my_orb("change", $arr);
 	}
 
@@ -1710,14 +1738,10 @@ EOS;
 			$this_o->end();
 
 			$application = automatweb::$request->get_application();
-			if ($application->is_a(CL_CRM_SALES))
-			{
-				$crm_sales = new crm_sales();
-				$arr2 = $arr;
-				$arr2["call_id"] = $this_o->id();
-				$arr2["id"] = $application->id();
-				$arr2["action"] = "end_call";
-				$r = $crm_sales->end_call($arr2);
+			$role = $application->get_current_user_role();
+			if ($application->is_a(CL_CRM_SALES) and crm_sales_obj::ROLE_TELEMARKETING_SALESMAN === $role)
+			{ // return to calls list
+				$r = $arr["return_url"];
 			}
 		}
 		return $r;
@@ -1725,17 +1749,26 @@ EOS;
 
 	function submit($arr = array())
 	{
-		$existing_presentation = is_oid($arr["presentation"]);
+		$result_task = new object($arr["presentation"]);
 		$r = parent::submit($arr);
 		if ("submit" === $arr["action"] and $this->data_processed_successfully())
 		{
 			$this_o = new object($arr["id"]);
 			$application = automatweb::$request->get_application();
+			$role = $application->get_current_user_role();
 			if ($application->is_a(CL_CRM_SALES) and $this_o->prop("real_duration") < 1)
 			{
-				if ($this_o->prop("result") == crm_call_obj::RESULT_PRESENTATION and !$existing_presentation)
+				if ($this_o->prop("result") == crm_call_obj::RESULT_PRESENTATION and $result_task->is_a(CL_CRM_PRESENTATION))
 				{ // jump to presentation
-					$presentation = $this_o->get_first_obj_by_reltype("RELTYPE_RESULT_PRESENTATION");
+					$presentation = $result_task;
+					$r = html::get_change_url($presentation->id(), array("return_url" => $arr["post_ru"]));
+				}
+				elseif ($this_o->prop("result") == crm_call_obj::RESULT_PRESENTATION)
+				{ // jump to presentation
+					$customer_relation = obj($this_o->prop("customer_relation"), array(), CL_CRM_COMPANY_CUSTOMER_DATA);
+					$presentation = $application->create_presentation($customer_relation);
+					$this_o->set_prop("result_task", $presentation->id());
+					$this_o->save();
 					$r = html::get_change_url($presentation->id(), array("return_url" => $arr["post_ru"]));
 				}
 				elseif ($this_o->prop("result") == crm_call_obj::RESULT_CALL)
