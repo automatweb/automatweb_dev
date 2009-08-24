@@ -1047,7 +1047,7 @@ class cfgform extends class_base
 						"name" => $pname."[".$prop["name"]."]",
 						"value" => 1,
 						//"checked" => $this->prplist[$prop["name"]]["default"] == "" ? $prop["default"] : ($this->prplist[$prop["name"]]["default"] == 1),
-						"checked" => $this->prplist[$prop["name"]]["default"] == 1,
+						"checked" => !empty($this->prplist[$prop["name"]]["default"]),
 					)),
 				));
 			};
@@ -2397,9 +2397,22 @@ class cfgform extends class_base
 		{
 			foreach ($this->cfg_layout as $name => $data)
 			{
-				if (array_key_exists($data["group"], $this->cfg_groups))
+				if (is_array($data["group"]))
 				{
-					array_unshift($by_group[$data["group"]], $name);
+					foreach ($data["group"] as $l_group)
+					{
+						if (array_key_exists($l_group, $this->cfg_groups))
+						{
+							array_unshift($by_group[$l_group], $name);
+						}
+					}
+				}
+				else
+				{
+					if (array_key_exists($data["group"], $this->cfg_groups))
+					{
+						array_unshift($by_group[$data["group"]], $name);
+					}
 				}
 			}
 		}
@@ -3046,7 +3059,17 @@ class cfgform extends class_base
 			{
 				foreach ($this->layout as $name => $data)
 				{
-					$layouts_by_grp[$data["group"]]["layout:" . $name] = t("&nbsp;&nbsp;&nbsp;Layouti: ") . $name;
+					if (is_array($data["group"]))
+					{
+						foreach ($data["group"] as $l_group)
+						{
+							$layouts_by_grp[$l_group]["layout:" . $name] = t("&nbsp;&nbsp;&nbsp;Layouti: ") . $name;
+						}
+					}
+					else
+					{
+						$layouts_by_grp[$data["group"]]["layout:" . $name] = t("&nbsp;&nbsp;&nbsp;Layouti: ") . $name;
+					}
 				}
 			}
 
@@ -3577,7 +3600,7 @@ class cfgform extends class_base
 	**/
 	function get_props_from_cfgform($arr)
 	{
-		if(!$arr["id"])
+		if(empty($arr["id"]))
 		{
 			return array();
 		}
@@ -3598,15 +3621,16 @@ class cfgform extends class_base
 		$dat = array();
 		foreach($tmp as $pn => $pd)
 		{
-			if ($pn == "needs_translation" || $pn == "is_translated" || $pn == "")
+			if ($pn === "needs_translation" || $pn === "is_translated" || $pn == "")
 			{
 				continue;
 			}
+
 			if($ret[$pn])
 			{
 				$dat[$pn] = $ret[$pn];
-				$dat[$pn]["caption"] = $pd["caption"];
-				if($pd["richtext"])
+				$dat[$pn]["caption"] = empty($pd["caption"]) ? "" : $pd["caption"];
+				if(!empty($pd["richtext"]))
 				{
 					$dat[$pn]["richtext"] = $pd["richtext"];
 				}
@@ -5296,7 +5320,7 @@ class cfgform extends class_base
 		@param prop required
 	**/
 	function cfadm_click_prop($arr)
-	{	
+	{
 		if (!$_SESSION["cfg_admin_mode"])
 		{
 			die("");
