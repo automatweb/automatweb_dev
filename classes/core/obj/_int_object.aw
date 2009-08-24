@@ -157,7 +157,7 @@ class _int_object
 			}
 
 			// use a different code path for not saved objects
-			if (!is_oid($this->obj["oid"]))
+			if (!isset($this->obj["oid"]) or !is_oid($this->obj["oid"]))
 			{
 				// object is not saved, therefore we cannot create
 				// the actual connection, so remember the data
@@ -2422,7 +2422,7 @@ class _int_object
 		$this->_int_set_of_value("created", time());
 		$this->_int_set_of_value("createdby", aw_global_get("uid"));
 		$this->_int_set_of_value("hits", 0);
-		if (!$this->obj["site_id"])
+		if (empty($this->obj["site_id"]))
 		{
 			$this->_int_set_of_value("site_id", $GLOBALS["cfg"]["site_id"]);
 		}

@@ -684,7 +684,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// insert default new acl to object table here
 		$acld_fld = $acld_val = "";
 		$n_acl_data = null;
-		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "" && is_oid(aw_global_get("uid_oid")))
+		if (aw_ini_get("acl.use_new_acl") && !empty($_SESSION["uid"]) && is_oid(aw_global_get("uid_oid")))
 		{
 			$uo = obj(aw_global_get("uid_oid"));
 			$g_d = $uo->get_default_group();
@@ -1202,16 +1202,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		else
 		{
 			$q = "UPDATE aliases SET
-				source = '{$data[from]}',
-				target = '{$data[to]}',
-				type = '{$data[type]}',
-				data = '{$data[data]}',
-				idx = '{$data[idx]}',
-				cached = '{$data[cached]}',
-				relobj_id = '{$data[relobj_id]}',
-				reltype = '{$data[reltype]}',
-				pri = '{$data[pri]}'
-			WHERE id = '{$data[id]}'";
+				source = '{$data["from"]}',
+				target = '{$data["to"]}',
+				type = '{$data["type"]}',
+				data = '{$data["data"]}',
+				idx = '{$data["idx"]}',
+				cached = '{$data["cached"]}',
+				relobj_id = '{$data["relobj_id"]}',
+				reltype = '{$data["reltype"]}',
+				pri = '{$data["pri"]}'
+			WHERE id = '{$data["id"]}'";
 			$this->db_query($q);
 		}
 		$this->save_connection_cache_update(null);
