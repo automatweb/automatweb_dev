@@ -21,19 +21,19 @@ class awlc_date_et implements awlc_date
 				break;
 
 			case locale::DATE_LONG:
-				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
+				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y",$timestamp);
 				break;
 
 			case locale::DATE_LONG_FULLYEAR:
-				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
+				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				break;
 
 			case 5:
-				$rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1];
+				$rv = date("j. ",$timestamp).self::$month[date("m",$timestamp)-1];
 				break;
 
 			case 6:
-				$rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1] . date(" Y",$timestamp);
+				$rv = date("j. ",$timestamp).self::$month[date("m",$timestamp)-1] . date(" Y",$timestamp);
 				break;
 
 			case 7:
@@ -49,11 +49,11 @@ class awlc_date_et implements awlc_date
 				break;
 
 			case locale::DATETIME_LONG:
-				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y H:i",$timestamp);
+				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y H:i",$timestamp);
 				break;
 
 			case locale::DATETIME_LONG_FULLYEAR:
-				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y H:i",$timestamp);
+				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y H:i",$timestamp);
 				break;
 		}
 
