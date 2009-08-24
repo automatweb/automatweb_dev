@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.179 2009/07/09 17:05:41 voldemar Exp $
+
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
 	multiple connections
-@classinfo  maintainer=kristo
+@classinfo maintainer=kristo
 */
 
 class releditor extends core
@@ -25,16 +25,25 @@ class releditor extends core
 			"layout" => "generic",
 		));
 		$property = $arr["prop"];
+
 		if(!is_object($arr["obj_inst"]))
 		{
-			$arr["obj_inst"] = obj($arr["request"]["id"]);
+			if (aw_ini_isset("class_lut.".$arr["request"]["class"]))
+			{
+				$clid = aw_ini_get("class_lut.".$arr["request"]["class"]);
+				$arr["obj_inst"] = obj($arr["request"]["id"], array(), $clid);
+			}
+			else
+			{
+				$arr["obj_inst"] = obj($arr["request"]["id"]);
+			}
 		}
 
 		if (!empty($arr["cb_values"]["edit_data"]))
-                {
-                        $tmp = aw_unserialize($arr["cb_values"]["edit_data"]);
-                        if (is_array($tmp))
-                        {
+		{
+			$tmp = aw_unserialize($arr["cb_values"]["edit_data"]);
+			if (is_array($tmp))
+			{
 				$this->_init_js_rv_table($awt, $arr["obj_inst"]->class_id(), $property["name"]);
 				foreach($tmp  as $idx => $dat_row)
 				{
@@ -44,8 +53,8 @@ class releditor extends core
 					"name" => $property["name"]."_data",
 					"value" => $arr["cb_values"]["edit_data"]
 				));
-                        }
-                }
+			}
+		}
 
 		if ($arr["new"])
 		{
@@ -54,7 +63,11 @@ class releditor extends core
 
 		$htmlclient = get_instance("cfg/htmlclient");
 
-		$parent_inst = get_instance($arr["obj_inst"]->class_id());
+		if ($arr["obj_inst"]->class_id())
+		{
+			$parent_inst = get_instance($arr["obj_inst"]->class_id());
+		}
+
 		$parent_property_list = $arr["obj_inst"]->get_property_list();
 		// HACK!
 
@@ -79,7 +92,6 @@ class releditor extends core
 
 		if(!$arr["new"] && is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 		{
-
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => $property["reltype"],
 			));
@@ -142,32 +154,32 @@ class releditor extends core
 							continue;
 						};
 					}
-					if ($_pd["type"] == "chooser" && is_array($prop["options"]))
+					if ($_pd["type"] === "chooser" && is_array($prop["options"]))
 					{
 						$prop["value"] = $prop["options"][$prop["value"]];
 					}
-					if ($_pd["type"] == "date_select")
+					if ($_pd["type"] === "date_select")
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
 					}
 					else
-					if ($_pd["type"] == "datetime_select")
+					if ($_pd["type"] === "datetime_select")
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
 					}
-					if (($_pd["type"] == "relpicker" || $_pd["type"] == "classificator") && $this->can("view", $prop["value"]))
+					if (($_pd["type"] === "relpicker" || $_pd["type"] === "classificator") && $this->can("view", $prop["value"]))
 					{
 						$_tmp = obj($prop["value"]);
 						$prop["value"] = parse_obj_name($_tmp->name());
 					}
 					else
-					if ($_pd["type"] == "select" && is_array($prop["options"]))
+					if ($_pd["type"] === "select" && is_array($prop["options"]))
 					{
 						$prop["value"] = $prop["options"][$prop["value"]];
 					};
 					if(isset($prop["filt_edit_fields"]) && $prop["filt_edit_fields"] == 1)
 					{
-						if($prop["value"] != "" && $prop["type"] == "textbox")
+						if($prop["value"] != "" && $prop["type"] === "textbox")
 						{
 							$ed_fields[$_pn] = $_pn;
 						}
@@ -262,7 +274,7 @@ class releditor extends core
 		if (!is_array($props) && !empty($props))
 		{
 			$props = array($props);
-		};
+		}
 
 		$xprops = array();
 
@@ -273,10 +285,13 @@ class releditor extends core
 		else
 		{
 			$use_clid = $clid;
-		};
-		$t = get_instance($use_clid);
+		}
 
-		$parent_inst = get_instance($obj_inst->class_id());
+		$t = get_instance($use_clid);
+		if ($obj_inst->class_id())
+		{
+			$parent_inst = get_instance($obj_inst->class_id());
+		}
 
 		$t->init_class_base();
 		$emb_group = "general";
@@ -296,9 +311,9 @@ class releditor extends core
 				if (is_array($_prop["form"]) && in_array($use_form,$_prop["form"]))
 				{
 					$props[$key] = $key;
-				};
-			};
-		};
+				}
+			}
+		}
 
 		$form_type = isset($arr["request"][$this->elname]) ? $arr["request"][$this->elname] : "";
 		if (isset($arr["prop"]["always_show_add"]) && $arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id))
@@ -312,18 +327,19 @@ class releditor extends core
 		{
 			if ($all_props[$key] && is_array($props) && in_array($key,$props))
 			{
-				if (!empty($form_type) || $visual != "manager")
+				if (!empty($form_type) || $visual !== "manager")
 				{
-					if (1 == $pcount and "manager" != $visual)
+					if (1 == $pcount and "manager" !== $visual)
 					{
 						$_prop["caption"] = $prop["caption"];
-					};
+					}
+
 					//saadab asja get_property'sse
 					$act_props[$key] = $_prop;
-				};
-			};
+				}
+			}
 			$this->all_props[$key] = $_prop;
-		};
+		}
 
 		if(isset($arr["prop"]["cfgform_id"]) and $this->can("view", $arr["prop"]["cfgform_id"]))
 		{
@@ -332,7 +348,7 @@ class releditor extends core
 			$this->cfg_act_props = $cfg->get_cfg_proplist($cfgform_id);
 			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
 			$this->loaded_from_cfgform = true;
-			$cfgform_o = new object($cfgform_id);
+			$cfgform_o = new object($cfgform_id, array(), CL_CFGFORM);
 			$layoutinfo = $cfg->get_cfg_layout($cfgform_o);
 
 			if (is_array($layoutinfo))
@@ -347,13 +363,13 @@ class releditor extends core
 		};
 
 		$obj_inst = false;
-		if ($form_type != "new" && is_object($arr["obj_inst"]) &&  is_oid($arr["obj_inst"]->id()))
+		if ($form_type !== "new" && is_object($arr["obj_inst"]) &&  is_oid($arr["obj_inst"]->id()))
 		{
 			if ($edit_id)
 			{
-				$obj_inst = new object($edit_id);
+				$obj_inst = new object($edit_id, array(), $clid);
 			}
-			else if (!empty($prop["rel_id"]) && $prop["rel_id"] == "first")
+			else if (!empty($prop["rel_id"]) && $prop["rel_id"] === "first")
 			{
 				$o = $arr["obj_inst"];
 				if (is_object($o) && is_oid($o->id()))
@@ -362,7 +378,7 @@ class releditor extends core
 						"type" => $prop["reltype"],
 					));
 					// take the first
-					if ($prop["rel_id"] == "first")
+					if ($prop["rel_id"] === "first")
 					{
 						$key = reset($conns);
 						if ($key)
@@ -374,10 +390,10 @@ class releditor extends core
 					if ($conns[$prop["rel_id"]])
 					{
 						$obj_inst = $conns[$prop["rel_id"]]->to();
-					};
-				};
-			};
-		};
+					}
+				}
+			}
+		}
 
 		if (is_object($obj_inst) && empty($arr["view"]))
 		{
@@ -390,14 +406,14 @@ class releditor extends core
 
 		if (!$obj_inst)
 		{
-			$obj_inst = new object();
-		};
+			$obj_inst = new object(null, array(), $clid);
+		}
 
 		// so that the object can access the source object
 		if (is_object($arr["obj_inst"]))
 		{
-			aw_global_set("from_obj",$arr["obj_inst"]->id());
-		};
+			aw_global_set("from_obj", $arr["obj_inst"]->id());
+		}
 
 		// maybe I can use the property name itself
 		if (isset($arr["cb_values"]) && $arr["cb_values"])
@@ -501,12 +517,11 @@ class releditor extends core
 			}
 		}
 		return $xprops;
-
 	}
 
 	function init_rel_editor($arr)
 	{
-		if(ifset($arr, "prop", "mode") == "manager2")
+		if(ifset($arr, "prop", "mode") === "manager2")
 		{
 			return $this->init_new_manager($arr);
 		}
@@ -515,6 +530,7 @@ class releditor extends core
 		$this->elname = $prop["name"];
 		$obj = $arr["obj_inst"];
 		$obj_inst = $obj;
+
 		$clid = $arr["prop"]["clid"][0];
 		if (empty($clid) && is_object($arr["obj_inst"]))
 		{
@@ -529,7 +545,6 @@ class releditor extends core
 		};
 
 		$xprops = array();
-
 		$errors = false;
 
 
@@ -545,7 +560,7 @@ class releditor extends core
 
 		// form is a single form, which can be used to edit a single connection. It
 		// is also the default
-		$visual = isset($prop["mode"]) && $prop["mode"] == "manager" ? "manager" : "form";
+		$visual = isset($prop["mode"]) && $prop["mode"] === "manager" ? "manager" : "form";
 
 
 		if (!is_array($props) && empty($prop["use_form"]))
@@ -616,7 +631,8 @@ class releditor extends core
 		else
 		{
 			$use_clid = $clid;
-		};
+		}
+
 		$t = get_instance($use_clid);
 		$t->init_class_base();
 		$emb_group = "general";
@@ -755,7 +771,7 @@ class releditor extends core
 		{
 			if ($edit_id)
 			{
-				$obj_inst = new object($edit_id);
+				$obj_inst = new object($edit_id, array(), $clid);
 			}
 			elseif (!empty($prop["rel_id"]))
 			{
@@ -822,8 +838,8 @@ class releditor extends core
 
 		if (!$obj_inst)
 		{
-			$obj_inst = new object();
-		};
+			$obj_inst = new object(null, array(), $clid);
+		}
 
 		// so that the object can access the source object
 		if (is_object($arr["obj_inst"]))
@@ -1391,8 +1407,7 @@ class releditor extends core
 		$relinfo = $arr["obj_inst"]->get_relinfo();
 
 		$to_clid = $relinfo[$arr["prop"]["reltype"]]["clid"][0];
-		$clss = aw_ini_get("classes");
-		$class_name = basename($clss[$to_clid]["file"]);
+		$class_name = basename(aw_ini_get("classes.{$to_clid}.file"));
 
 		$rels = $arr["obj_inst"]->get_property_list();
 
@@ -1429,7 +1444,7 @@ class releditor extends core
 
 	function process_releditor($arr)
 	{
-		if($arr["prop"]["mode"] == "manager2")
+		if($arr["prop"]["mode"] === "manager2")
 		{
 			return;
 		}
@@ -1461,7 +1476,7 @@ class releditor extends core
 
 		$act_prop = $prop["name"] . "_action";
 
-		if ("delete" == $arr["request"][$act_prop])
+		if ("delete" === $arr["request"][$act_prop])
 		{
 			// XXX: this will fail, if there are multiple releditors on one page
 			$to_delete = new aw_array($arr["request"]["check"]);
@@ -1471,7 +1486,7 @@ class releditor extends core
 			{
 				$c = new connection($alias_id);
 
-				if ("manager" == $prop["mode"] and $c->prop("to") == $obj->prop($prop["name"]))
+				if ("manager" === $prop["mode"] and $c->prop("to") == $obj->prop($prop["name"]))
 				{
 					$delete_default = true;
 				}
@@ -1546,7 +1561,7 @@ class releditor extends core
 			// process it
 			if (!empty($use_form) || in_array($item["name"],$proplist))
 			{
-				if ($item["type"] == "fileupload")
+				if ($item["type"] === "fileupload")
 				{
 					if (!is_array($emb[$item["name"]]))
 					{
@@ -1615,7 +1630,7 @@ class releditor extends core
 			{
 				$obj_parent = $prop["obj_parent"];
 			};
-			if ($prop["override_parent"] == "this")
+			if ($prop["override_parent"] === "this")
 			{
 				$obj_parent = $obj->id();
 			}
@@ -1640,16 +1655,11 @@ class releditor extends core
 				};
 				$prop["error"] = $errtxt;
 				return PROP_ERROR;
-				/*
-				print "<pre>";
-				print_r($cb_values);
-				print "</pre>";
-				*/
 			}
 
 
 
-			if ($prop["rel_id"] == "first" && empty($emb["id"]))
+			if ($prop["rel_id"] === "first" && empty($emb["id"]))
 			{
 				// I need to disconnect, no?
 				if (is_oid($obj->id()))
@@ -1665,7 +1675,8 @@ class releditor extends core
 						));
 					};
 				};
-			};
+			}
+
 			if (is_oid($obj_id))
 			{
 				if (empty($emb["id"]))
@@ -1753,12 +1764,13 @@ class releditor extends core
 		$propn = null;
 		foreach($arr as $k => $d)
 		{
-			if (substr($k, -strlen("_reled_data")) == "_reled_data")
+			if (substr($k, -strlen("_reled_data")) === "_reled_data")
 			{
 				list($clid, $propn) = explode("::", $d);
 				break;
 			}
 		}
+
 		if ($propn === null)
 		{
 			die("error, no property data! given: ".dbg::dump($arr));
@@ -1819,6 +1831,7 @@ class releditor extends core
 					}
 				}
 			}
+
 			if($retval != PROP_OK)
 			{
 				// Return the errors instead of HTML.
@@ -2033,7 +2046,7 @@ class releditor extends core
 				$defs[$data["emb_tbl_col_num"]] = $tc_name;
 			}
 
-			if (($rel_props[$prop_name]["type"] == "date_select" || $rel_props[$prop_name]["type"] == "datetime_select") && is_array($prop_data[$prop_name]))
+			if (($rel_props[$prop_name]["type"] === "date_select" || $rel_props[$prop_name]["type"] === "datetime_select") && is_array($prop_data[$prop_name]))
 			{
 				$tc_val = date_edit::get_timestamp($prop_data[$prop_name], $rel_props[$prop_name]);
 			}
@@ -2044,7 +2057,7 @@ class releditor extends core
 			$pv = $rel_props[$prop_name];
 			$pv["value"] = $tc_val;
 
-			if ($pv["type"] == "relpicker")
+			if ($pv["type"] === "relpicker")
 			{
 				$ri = get_instance("vcl/relpicker");
 				$ri->init_vcl_property(array(
@@ -2160,7 +2173,7 @@ class releditor extends core
 			"name" => $pd["name"],
 			"caption" => $pd["emb_tbl_caption"] ? $pd["emb_tbl_caption"] : $pd["caption"],
 		);
-		if ($pd["type"] == "date_select")
+		if ($pd["type"] === "date_select")
 		{
 			$d["type"] = "time";
 			if (is_array($pd["format"]))
@@ -2190,7 +2203,7 @@ class releditor extends core
 			}
 		}
 		else
-		if ($pd["type"] == "datetime_select")
+		if ($pd["type"] === "datetime_select")
 		{
 			$d["type"] = "time";
 			$d["format"] = "d.m.Y H:i:s";
@@ -2237,7 +2250,7 @@ class releditor extends core
 		$r = array();
 		foreach($pd["props"] as $rel_prop_name)
 		{
-			if ($rel_props[$rel_prop_name]["type"] == "datetime_select")
+			if ($rel_props[$rel_prop_name]["type"] === "datetime_select")
 			{
 				if (is_array($d[$idx][$rel_prop_name]))
 				{
@@ -2311,7 +2324,7 @@ class releditor extends core
 		$propn = null;
 		foreach($arr as $k => $d)
 		{
-			if (substr($k, -strlen("_reled_data")) == "_reled_data")
+			if (substr($k, -strlen("_reled_data")) === "_reled_data")
 			{
 				list($clid, $propn) = explode("::", $d);
 				break;
@@ -2375,6 +2388,6 @@ class releditor extends core
 			"value" => htmlspecialchars(serialize($prev_dat))
 		)));
 	}
+}
 
-};
 ?>
