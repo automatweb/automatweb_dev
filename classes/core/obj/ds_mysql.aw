@@ -1132,6 +1132,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			unset($GLOBALS["__obj_sys_objd_memc"][$objdata["brother_of"]]);
 		}
+
 		if(isset($GLOBALS["__obj_sys_objd_memc"][$objdata["oid"]]))
 		{
 			unset($GLOBALS["__obj_sys_objd_memc"][$objdata["oid"]]);
@@ -1178,22 +1179,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
-		if (!empty($data["id"]))
-		{
-			$q = "UPDATE aliases SET
-				source = '$data[from]',
-				target = '$data[to]',
-				type = '$data[type]',
-				data = '$data[data]',
-				idx = '$data[idx]',
-				cached = '$data[cached]',
-				relobj_id = '$data[relobj_id]',
-				reltype = '$data[reltype]',
-				pri = '$data[pri]'
-			WHERE id = '$data[id]'";
-			$this->db_query($q);
-		}
-		else
+		if (empty($data["id"]))
 		{
 			// we don't need the index if the connection has a reltype, cause the index is only used for aliases
 			if (empty($data["idx"]) && empty($data["reltype"]))
@@ -1212,6 +1198,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			)";
 			$this->db_query($q);
 			$data['id'] = $this->db_last_insert_id();
+		}
+		else
+		{
+			$q = "UPDATE aliases SET
+				source = '{$data[from]}',
+				target = '{$data[to]}',
+				type = '{$data[type]}',
+				data = '{$data[data]}',
+				idx = '{$data[idx]}',
+				cached = '{$data[cached]}',
+				relobj_id = '{$data[relobj_id]}',
+				reltype = '{$data[reltype]}',
+				pri = '{$data[pri]}'
+			WHERE id = '{$data[id]}'";
+			$this->db_query($q);
 		}
 		$this->save_connection_cache_update(null);
 
@@ -1473,7 +1474,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					objects.brother_of as brother_of,
 					objects.status as status,
 					objects.class_id as class_id
-					$acld
+					{$acld}
 				";
 				$datafetch = false;
 			}
@@ -1495,11 +1496,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			$q = "
 				SELECT
-					$fetch_sql
+					{$fetch_sql}
 				FROM
-					$joins
+					{$joins}
 				WHERE
-					$where $gpb ".$this->sby."  ".$this->limit;
+					{$where} {$gpb} {$this->sby} {$this->limit}";
 
 			$acldata = array();
 			$parentdata = array();
@@ -2161,8 +2162,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					$sql[] = $tf.$compr.$tbl2.".".$fld2." ";
 				}
-				else
-				if ($class_name === "obj_predicate_limit")
+				elseif ($class_name === "obj_predicate_limit")
 				{
 					if (($tmp = $val->get_per_page()) > 0)
 					{
@@ -2173,21 +2173,24 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$this->limit = " LIMIT ".$val->get_from()." ";
 					}
 				}
-				else
-				if ($class_name === "obj_predicate_sort")
+				elseif ($class_name === "obj_predicate_sort")
 				{
-					$this->sby = " ORDER BY ";
+					if (empty($this->sby))
+					{
+						$this->sby = " ORDER BY ";
+					}
 					$tmp = array();
 					foreach($val->get_sorter_list() as $sl_item)
 					{
 						if (strpos($sl_item["prop"], ".") !== false)
 						{
 							// no support for prop.prop.prop yet, just class definer
-							list(, $sl_item["prop"]) = explode(".", $sl_item["prop"]);
-							$pd = $this->properties[$sl_item["prop"]];
+							list($table, $field) = $this->_do_proc_complex_param(array("key" => $sl_item["prop"], "val" => null, "params" => $p_tmp));
+							$pd = array("table" => $table, "field" => $field);
+							// list(, $sl_item["prop"]) = explode(".", $sl_item["prop"]);
+							// $pd = $this->properties[$sl_item["prop"]];
 						}
-						else
-						if (isset($GLOBALS["object_loader"]->all_ot_flds[$sl_item["prop"]]) || $sl_item["prop"] === "oid")
+						elseif (isset($GLOBALS["object_loader"]->all_ot_flds[$sl_item["prop"]]) || $sl_item["prop"] === "oid")
 						{
 							$pd = array("table" => "objects", "field" => $sl_item["prop"]);
 						}
@@ -2195,14 +2198,62 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						{
 							$pd = $this->properties[$sl_item["prop"]];
 						}
-						if ($pd["table"])
+
+						if ($sl_item["predicate"])
 						{
-							$this->used_tables[$pd["table"]] = $pd["table"];
+							if ("obj_predicate_compare" === get_class($sl_item["predicate"]))
+							{
+								$comparator = "";
+								$fld = "{$pd["table"]}.`{$pd["field"]}`";
+								$predicate = $sl_item["predicate"];
+								switch($predicate->comparator)
+								{
+									case obj_predicate_compare::LESS:
+										$comparator = "{$fld} < {$predicate->data}";
+										break;
+
+									case obj_predicate_compare::GREATER:
+										$comparator = "{$fld} > {$predicate->data}";
+										break;
+
+									case obj_predicate_compare::LESS_OR_EQ:
+										$comparator = "{$fld} <= {$predicate->data}";
+										break;
+
+									case obj_predicate_compare::GREATER_OR_EQ:
+										$comparator = "{$fld} >= {$predicate->data}";
+										break;
+
+									case obj_predicate_compare::BETWEEN:
+										$comparator = "{$fld} > {$predicate->data} AND {$fld} < {$predicate->data2}";
+										break;
+
+									case obj_predicate_compare::BETWEEN_INCLUDING:
+										$comparator = "{$fld} >= {$predicate->data} AND {$fld} <= {$predicate->data2}";
+										break;
+
+									case obj_predicate_compare::EQUAL:
+										$comparator = "{$fld} = {$predicate->data}";
+										break;
+
+									case obj_predicate_compare::NULL:
+										$comparator = "ISNULL({$fld})";
+										break;
+
+									default:
+										throw new awex_obj("Comparator not supported");
+								}
+								$tmp[] = "IF(({$comparator}), 0, 1), {$fld} ".($sl_item["direction"] === "DESC" ? "DESC" : "ASC")." ";
+							}
 						}
-						$tmp[] = $pd["table"].".`".$pd["field"]."` ".($sl_item["direction"] === "desc" ? "DESC" : "ASC")." ";
+						else
+						{
+							$tmp[] = $pd["table"].".`".$pd["field"]."` ".($sl_item["direction"] === "DESC" ? "DESC" : "ASC")." ";
+						}
+
 						$this->_add_s($pd["table"]);
 					}
-					$this->sby .= join(", ", $tmp);
+					$this->sby .= (strlen($this->sby) === 10 ? "" : ", ") . join(", ", $tmp);
 				}
 			}
 			else
@@ -2984,36 +3035,41 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	}
 
 	function _get_joins($params)
-	{
+	{ ///!!! join strategy is currently not used. implement or remove relevant code below
+		/*
 		// check if join strategy is present in args and do joins based on that
 		if (false && !empty($params["join_strategy"]))
 		{
 			$join_strategy = $params["join_strategy"];
 		}
 		else
-		{
+		{*/
 			$join_strategy = "obj";
-		}
+		/* }
 
 		if ($join_strategy === "obj" || !$this->has_data_table_filter)
-		{
+		{*/
+
 			// make joins
 			$js = array();
 			foreach($this->used_tables as $tbl)
 			{
 				if ($tbl !== "objects" && $tbl != "")
 				{
-					$js[] = " LEFT JOIN $tbl ON $tbl.".$this->tableinfo[$tbl]["index"]." = objects.brother_of ";
+					$js[] = " LEFT JOIN {$tbl} ON {$tbl}.{$this->tableinfo[$tbl]["index"]} = objects.brother_of ";
 				}
 			}
+
 			foreach($this->alias_joins as $aj)
 			{
-				$js[] = " LEFT JOIN aliases $aj[name] ON $aj[on] ";
+				$js[] = " LEFT JOIN aliases {$aj["name"]} ON {$aj["on"]} ";
 			}
 			return "objects ".join("", $js).join(" ", $this->joins);
-		}
-		else
-		if ($join_strategy === "data")
+
+
+
+/* 		}
+		elseif ($join_strategy === "data")
 		{
 			// make joins
 			$js = array();
@@ -3052,7 +3108,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$js[] = " LEFT JOIN aliases $aj[name] ON $aj[on] ";
 			}
 			return join("", $js).join(" ", $this->joins);
-		}
+		} */
 	}
 
 	function fetch_list($to_fetch)
