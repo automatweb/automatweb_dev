@@ -23,14 +23,14 @@ class aw_table extends aw_template
 	var $_gml;
 	var $_max_gml;
 	var $_sh_req_level;
-	var $records_per_page;
+	var $records_per_page = 0;
 	var $final_enum;
 	var $titlebar_repeat_bottom;
 	var $hide_rgroupby;
 	var $non_filtered;
-	var $table_tag_id;
 	var $table_class_id = "awmenuedittabletag";
-	var $d_row_cnt;
+	var $d_row_cnt = 0;
+	var $tr_sel;
 
 	protected $cfgform;
 
@@ -49,10 +49,12 @@ class aw_table extends aw_template
 	protected $header_attribs = array();
 
 	protected $sortable = true;
+	protected $sort_nulls_at_end = false;
 	protected $rowdefs_ordered = false;
 	protected $first = true;
 	protected $use_chooser = false;
 	protected $chooser_hilight = true;
+	protected $hover_hilight = false;
 	protected $titlebar_display = true;
 
 	protected $imgurl = "";
@@ -65,6 +67,10 @@ class aw_table extends aw_template
 	protected $table_footer = "";
 	protected $header_class_id = "awVclTableHeader";
 	protected $footer_class_id = "awVclTableFooter";
+	protected $row_hover_class = "awVclTableRowHover";
+	protected $table_tag_id;
+
+	protected $active_page = 0;
 
 	/* a symbolic name for the table so we can tell it apart from others */
 	protected $prefix = "";
@@ -74,7 +80,8 @@ class aw_table extends aw_template
 
 	function aw_table($data = array())
 	{
-		$this->id = uniqid('table_');
+		$this->id = uniqid('awTable');
+		$this->table_tag_id = $this->id;
 
 		if (file_exists(aw_ini_get("site_basedir")."/public/img/up.gif"))
 		{
@@ -170,6 +177,27 @@ class aw_table extends aw_template
 	function set_rgroupby($arg)
 	{
 		$this->rgroupby = $arg;
+	}
+
+	/** Whether to hilite rows as user hovers over with mouse cursor. Default setting is FALSE
+	@attrib api=1 params=pos
+	@param value required type=bool
+	**/
+	function set_hover_hilight($value)
+	{
+		$this->hover_hilight = (bool) $value;
+	}
+
+	/** Table element DOM id
+	@attrib api=1 params=pos
+	@param value required type=string
+	**/
+	function set_dom_id($value)
+	{
+		if (is_string($value))
+		{
+			$this->table_tag_id = $value;
+		}
 	}
 
 	/** hides rgrouping fields if needed
@@ -504,17 +532,20 @@ class aw_table extends aw_template
 
 	/**
 	@attrib api=1 params=pos
-	@param $dir required type=string/array
+	@param dir type=string/array
 		A string (asc/desc) or an array of strings - it will be linked to the sort element by index
+	@param nulls_at_end type=bool
+		If TRUE, null values will apper at the end of table when sorting ascendingly
 	@example ${draw}
 	@comments
 		Sets the default sorting order
 		If the sorting function finds that there are no other sorting arrangements made, then it will use
 		The order specified here.
 	**/
-	function set_default_sorder($dir)
+	function set_default_sorder($dir, $nulls_at_end = false)
 	{
 		$this->default_odir = $dir;
+		$this->sort_nulls_at_end = $nulls_at_end;
 	}
 
 	/** defines that the table has a pager
@@ -791,8 +822,13 @@ class aw_table extends aw_template
 			$_a = (float)strtolower(strip_tags($v1));
 			$_b = (float)strtolower(strip_tags($v2));
 
-			if ($this->u_sorder == "asc")
+			if ($this->u_sorder === "asc")
 			{
+				if ($this->sort_nulls_at_end)
+				{
+					return $_a == 0 ? 1 : -1;
+				}
+
 				if ($_a < $_b)
 				{
 					return -1;
@@ -823,6 +859,12 @@ class aw_table extends aw_template
 			$_a = strtolower(strip_tags($v1));
 			$_b = strtolower(strip_tags($v2));
 			$ret = strcoll($_a, $_b);
+
+			if ($this->sort_nulls_at_end)
+			{
+				return ($_a === null or $_a === "") ? 1 : -1;
+			}
+
 			if (isset($this->u_sorder) && ($this->u_sorder == "asc"))
 			{
 				return $ret;
@@ -1061,8 +1103,21 @@ class aw_table extends aw_template
 			if ($this->chooser_hilight)
 			{
 				$tbl .= $this->parse("hilight_script");
-			};
+			}
 		}
+
+
+		if (!isset($act_page))
+		{
+			$act_page = (int) automatweb::$request->arg("ft_page");
+		}
+
+		if ($act_page*$this->records_per_page > count($this->data))
+		{
+			$act_page = 0;
+		}
+
+		$this->active_page = $act_page;
 
 		// parse pageselector
 		$pageselector = "";
@@ -1079,7 +1134,7 @@ class aw_table extends aw_template
 			}
 			elseif ("lb" === $this->pageselector or "lbtxt" === $this->pageselector)
 			{
-				$this->parsed_pageselector = $this->draw_lb_pageselector();
+				$this->parsed_pageselector = $this->draw_lb_pageselector(array());
 			}
 		}
 
@@ -1120,22 +1175,26 @@ class aw_table extends aw_template
 		if (!empty($this->pageselector_string))
 		{
 			$colspan = sizeof($this->rowdefs) + sizeof($this->actions) - (int) $this->headerextrasize + (int) $this->use_chooser;
-			$tbl .= "<tr>\n";
-			$tbl .= "<td colspan='$colspan' class='" . $this->style1 . "'>";
-			$tbl .= $this->pageselector_string;
-			$tbl .= "</td>\n";
-			$tbl .= "</tr>\n";
+			$tbl .= <<<END
+	<tr>
+		<td colspan='{$colspan}' class='{$this->style1}'>
+		{$this->pageselector_string}
+		</td>
+	</tr>
+END;
 		}
 
 		if (!empty($this->headerstring))
 		{
 			$colspan = sizeof($this->rowdefs) + sizeof($this->actions) - (int) $this->headerextrasize + (int) $this->use_chooser;
-			$tbl .= "<tr>\n";
-			$tbl .= "<td colspan='$colspan' class='" . $this->titlestyle . "'>";
-			$tbl .= "<strong>" . $this->headerstring . ": ". $this->headerlinks . "</strong>";
-			$tbl .= "</td>\n";
-			$tbl .= $this->headerextra;
-			$tbl .= "</tr>\n";
+			$tbl .= <<<END
+	<tr>
+		<td colspan='{$colspan}' class='{$this->titlestyle}'>
+			<strong>{$this->headerstring}: {$this->headerlinks}</strong>
+		</td>
+		{$this->headerextra}
+	</tr>
+END;
 		}
 
 		// if we show title under grouping elements, then we must not show it on the first line!
@@ -1145,16 +1204,6 @@ class aw_table extends aw_template
 		}
 
 		$this->lgrpvals = array();
-
-		if (!isset($act_page))
-		{
-			$act_page = isset($GLOBALS["ft_page"]) ? $GLOBALS["ft_page"] : null;
-		}
-
-		if ($act_page*$this->records_per_page > count($this->data))
-		{
-			$act_page = 0;
-		}
 
 		// koostame tabeli sisu
 		if (count($this->data))
@@ -1203,7 +1252,7 @@ class aw_table extends aw_template
 				// rida algab
 				// rowid/domid is needed for the selector script
 				$rowid = $this->prefix . $this->id . $counter;
-				$tbl .= "<tr id='$rowid' class='$row_style'>";
+				$tbl .= "<tr id='{$rowid}' class='{$row_style}'>";
 
 				$tbl .= $tmp;
 
@@ -1384,7 +1433,7 @@ class aw_table extends aw_template
 						$v1["type"] = "";
 					};
 
-					if (isset($v1["type"]) && $v1["type"] == "time")
+					if (isset($v1["type"]) && $v1["type"] === "time")
 					{
 						if (!empty($v1["smart"]))
 						{
@@ -1548,6 +1597,15 @@ class aw_table extends aw_template
 			$tbl .= "<div class={$this->footer_class_id}>{$this->table_footer}</div>";
 		}
 
+		if ($this->hover_hilight)
+		{
+			$this->vars(array(
+				"hover_row_style" => $this->row_hover_class,
+				"table_id" => $this->table_tag_id
+			));
+			$tbl .= $this->parse("hover_script");
+		}
+
 		// raam kinni
 		/*
 		if (is_array($this->frameattribs))
@@ -1674,40 +1732,40 @@ class aw_table extends aw_template
 		$name = "";
 		foreach($data as $k => $v)
 		{
-			if ($k == "name")
+			if ($k === "name")
 			{
 				$name = $v;
 			}
 			// whats up with this id?
-			elseif ($k == "id")
+			elseif ($k === "id")
 			{
-				$attr_list .= " name='$v'";
+				$attr_list .= " name='{$v}'";
 			}
-			elseif ($k == "domid")
+			elseif ($k === "domid")
 			{
-				$attr_list .= " id='$v'";
+				$attr_list .= " id='{$v}'";
 			}
-			elseif ($k == "title" and !empty ($v))
+			elseif ($k === "title" and !empty ($v))
 			{
-				$attr_list .= " title='$v'";
+				$attr_list .= " title='{$v}'";
 			}
-			elseif ($k == "onclick" and !empty ($v))
+			elseif ($k === "onclick" and !empty ($v))
 			{
-				$attr_list .= ' onClick="'.$v.'"';
+				$attr_list .= " onClick=\"{$v}\"";
 			}
 			elseif ($v != "")
 			{
-				if ($k == "nowrap")
+				if ($k === "nowrap")
 				{
-					$attr_list .= " $k";
+					$attr_list .= " {$k}";
 				}
-				elseif ($k == "classid")
+				elseif ($k === "classid")
 				{
-					$attr_list .= " class='$v'";
+					$attr_list .= " class='{$v}'";
 				}
 				else
 				{
-					$attr_list .= " $k='$v'";
+					$attr_list .= " {$k}='{$v}'";
 				};
 			};
 		};
@@ -1717,7 +1775,7 @@ class aw_table extends aw_template
 		if (!empty($name))
 		{
 			$retval = "<" . $name . $attr_list . ">\n";
-		};
+		}
 		// ja tagastame selle
 		return $retval;
 	}
@@ -2419,7 +2477,7 @@ echo dbg::short_backtrace();
 
 			$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
 			$records_per_page = empty($arr["records_per_page"]) ? $this->records_per_page : $arr["$records_per_page"];
-			$page = (int) $GLOBALS["ft_page"];
+			$page = (int) automatweb::$request->arg("ft_page");
 			if ($page*$records_per_page > $_drc)
 			{
 				$page = 0;
@@ -2481,7 +2539,7 @@ echo dbg::short_backtrace();
 
 		$_drc = !empty($arr["d_row_cnt"]) ? $arr["d_row_cnt"] : $this->d_row_cnt;
 
-		$act_page = (int)ifset($GLOBALS, "ft_page");
+		$act_page = (int) automatweb::$request->arg("ft_page");
 		if ($act_page*$records_per_page > $_drc)
 		{
 			$act_page = 0;
