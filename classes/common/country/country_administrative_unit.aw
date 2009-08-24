@@ -3,10 +3,10 @@
 
 @classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_UNIT relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
+@tableinfo aw_administrative_unit index=aw_oid master_index=brother_of master_table=objects
+
 @default table=objects
 @default group=general
-	@property administrative_structure type=hidden
-
 	@property name type=textbox
 	@caption Nimi
 
@@ -19,25 +19,24 @@
 	@property alt_name type=textbox field=meta method=serialize
 	@caption Paralleelnimi
 
-	@property ext_id_1 type=textbox field=meta method=serialize
-	@caption Identifikaator v&auml;lises s&uuml;steemis 1
-
 	@property parent type=text
 	@comment Halduspiirkond, millesse käesolev halduspiirkond kuulub
 	@caption Kõrgem halduspiirkond
 
-	@property parent_show type=text field=meta method=serialize
+	@property parent_show type=text store=no
 	@caption Kõrgem halduspiirkond
 
 	@property parent_select type=relpicker reltype=RELTYPE_PARENT_ADMINISTRATIVE_UNIT clid=CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT store=no
 	@comment Halduspiirkond, millesse käesolev halduspiirkond kuulub
 	@caption Vali kõrgem halduspiirkond
 
-@groupinfo transl caption="T&otilde;lgi"
-@default group=transl
+@default table=aw_administrative_unit
+	@property ext_id_1 type=textbox datatype=int
+	@caption Identifikaator v&auml;lises s&uuml;steemis 1
 
-@property transl type=callback callback=callback_get_transl store=no
-@caption T&otilde;lgi
+	@property administrative_structure type=hidden datatype=int
+	@property indexed type=hidden datatype=int default=0
+
 
 // --------------- RELATION TYPES ---------------------
 
@@ -45,8 +44,6 @@
 @caption Kõrgem halduspiirkond
 
 */
-
-require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 
 class country_administrative_unit extends class_base
 {
@@ -56,17 +53,13 @@ class country_administrative_unit extends class_base
 			"tpldir" => "common/country",
 			"clid" => CL_COUNTRY_ADMINISTRATIVE_UNIT
 		));
-
-		$this->trans_props = array(
-			"name"
-		);
 	}
 
 	function get_property ($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 
 		switch ($prop["name"])
 		{
@@ -93,14 +86,10 @@ class country_administrative_unit extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 
 		switch($prop["name"])
 		{
-			case "transl":
-				$this->trans_save($arr, $this->trans_props);
-				break;
-
 			case "parent_select":
 				if (is_oid ($prop["value"]))
 				{
@@ -119,17 +108,26 @@ class country_administrative_unit extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function callback_mod_tab($arr)
+	function do_db_upgrade($table, $field, $query, $error)
 	{
-		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
-		{
-			return false;
-		}
-	}
+		$return_val = false;
 
-	function callback_get_transl($arr)
-	{
-		return $this->trans_callback($arr, $this->trans_props);
+		if ("aw_administrative_unit" === $table)
+		{
+			if (empty($field))
+			{
+				$this->db_query("CREATE TABLE `aw_administrative_unit` (
+					`aw_oid` int(11) UNSIGNED NOT NULL default '0',
+					`administrative_structure` int(11) UNSIGNED NOT NULL default '0',
+					`ext_id_1` int(11) UNSIGNED default NULL,
+					`indexed` int(1) default '0',
+					PRIMARY KEY  (`aw_oid`)
+				) ");
+				$return_val = true;
+			}
+		}
+
+		return $return_val;
 	}
 }
 

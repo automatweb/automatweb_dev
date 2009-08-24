@@ -3,31 +3,17 @@
 @classinfo  maintainer=voldemar
 */
 
-require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
-
 class country_administrative_unit_object extends _int_object
 {
 	function save($exclusive = false, $previous_state = null)
 	{
-		// find parent administrative structure
-		$o = $this;
-
-		do
+		if (!is_oid($this->prop("administrative_structure")))
 		{
-			$o = new object($o->parent());
+			throw new awex_as_admin_structure("Administrative structure not defined");
 		}
-		while (!$o->is_a(CL_COUNTRY_ADMINISTRATIVE_STRUCTURE));
-
-		$this->set_prop("administrative_structure", $o->id());
 
 		// save this unit object
-		$rv = parent::save($exclusive, $previous_state);
-
-		// add saved unit to adm str index
-		$o->set_prop("unit_index", $this);
-		$o->save();
-
-		return $rv;
+		return parent::save($exclusive, $previous_state);
 	}
 }
 

@@ -128,7 +128,7 @@ class address_object extends _int_object
 
 		if ($admin_structure->id() != $division->prop ("administrative_structure"))
 		{
-			throw new awex_as_address_admin_struct(sprintf ("division [%s] admin structure [%s] different from current [%s]. division var: [%s]", $division->id (), $division->prop ("administrative_structure"), $admin_structure->id()));
+			throw new awex_as_admin_structure(sprintf ("division [%s] admin structure [%s] different from current [%s]. division var: [%s]", $division->id (), $division->prop ("administrative_structure"), $admin_structure->id()));
 		}
 
 		$this->set_parent($unit->id());
@@ -143,7 +143,6 @@ class address_object extends _int_object
 		### validate name. validation needed here to give a chance to avoid corruptions in address structure -- spot errors before any changes made.
 		if (empty ($arr["name"]))
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::setbyname: name not defined for unit [%s]", var_export($arr["division"], true)) . AS_NEWLINE; }
 			return false;
 		}
 
@@ -154,7 +153,6 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -164,7 +162,6 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -174,7 +171,6 @@ class address_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_by_name: division object not defined. name: [{$arr["name"]}]".AS_NEWLINE; }
 			return false;
 		}
 
@@ -183,7 +179,6 @@ class address_object extends _int_object
 
 		if (is_object ($division) and $this->as_administrative_structure->id () != $division->prop ("administrative_structure"))
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_name: division [%s] admin structure [%s] different from current [%s]", $division->id (), $division->prop ("administrative_structure"), $this->as_administrative_structure->id ()).AS_NEWLINE; }
 			return false;
 		}
 
@@ -209,7 +204,6 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -219,7 +213,6 @@ class address_object extends _int_object
 
 			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: division [%s] of wrong class [%s]", $division->id (), $division->class_id ()).AS_NEWLINE; }
 				return false;
 			}
 		}
@@ -229,7 +222,6 @@ class address_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::as_get_unit_encoded: division object not defined".AS_NEWLINE; }
 			return false;
 		}
 
@@ -244,13 +236,11 @@ class address_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::as_get_unit_encoded: encoding object not defined".AS_NEWLINE; }
 			return false;
 		}
 
 		if ($encoding->class_id () != CL_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING)
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: encoding [%s] of wrong class [%s]", $encoding->id (), $encoding->class_id ()).AS_NEWLINE; }
 			return false;
 		}
 
@@ -270,8 +260,6 @@ class awex_as_address extends awex_as {}
 /** Country related error **/
 class awex_as_address_country extends awex_as_address {}
 
-/** Administrative structure related error **/
-class awex_as_address_admin_struct extends awex_as_address {}
 
 
 ?>

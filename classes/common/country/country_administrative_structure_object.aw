@@ -7,6 +7,12 @@ require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
 
 class country_administrative_structure_object extends _int_object
 {
+	public static $unit_classes = array (
+		CL_COUNTRY_ADMINISTRATIVE_UNIT,
+		CL_COUNTRY_CITY,
+		CL_COUNTRY_CITYDISTRICT
+	);
+
 	var $as_unit_classes = array (
 		CL_COUNTRY_ADMINISTRATIVE_UNIT,
 		CL_COUNTRY_CITY,
@@ -75,14 +81,7 @@ class country_administrative_structure_object extends _int_object
 
 	function save($exclusive = false, $previous_state = null)
 	{
-		if ($this->as_save())
-		{
-			error::raise(array(
-				"msg" => sprintf(t("administrative_structure::save(): object (%s) couldn't be saved."), $this->obj["oid"])
-			));
-			return false;
-		}
-
+		$this->as_save();
 		return parent::save($exclusive, $previous_state);
 	}
 
@@ -504,7 +503,7 @@ class country_administrative_structure_object extends _int_object
 			{
 				if ($degree > count ($divisions))
 				{
-					return 1;
+					break;
 				}
 
 				$current_nodes = $nodes;
@@ -546,23 +545,30 @@ class country_administrative_structure_object extends _int_object
 		$this->set_meta("as_division_hierarchy_sequence", $sequence);
 
 		// index current units
-		$unit_index =  array();
-		$units = new object_tree(array(
-			"parent" => $this->id(),
-			"class_id" => $this->as_address_classes,
-			"site_id" => array(),
-			"lang_id" => array(),
-		));
-		$units =  $units->to_list();
-		$units->begin();
+		$unit_index = (array) $this->meta("unit_hierarchy_index");
+		$units = new object_data_list(
+			array(
+				"administrative_structure" => $this->id(),
+				"indexed" => 0,
+				"class_id" => self::$unit_classes,
+				"site_id" => array(),
+				"lang_id" => array()
+			),
+			array(
+				CL_COUNTRY_ADMINISTRATIVE_UNIT => array("oid", "parent"),
+				CL_COUNTRY_CITY => array("oid", "parent"),
+				CL_COUNTRY_CITYDISTRICT => array("oid", "parent")
+			)
+		);
+		$units =  $units->arr();
 
-		while ($unit = $units->next())
+		foreach ($units as $unit_data)
 		{
-			$unit_index[$unit->id()] = $unit->parent();
+			$unit_index[$unit_data["oid"]] = $unit_data["parent"];
 		}
 
 		$this->set_meta("unit_hierarchy_index", $unit_index);
-		return $retval;
+		return true;
 	}
 }
 
