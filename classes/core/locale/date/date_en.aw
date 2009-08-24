@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo  maintainer=kristo
+@classinfo  maintainer=voldemar
 */
 class awlc_date_en implements awlc_date
 {
@@ -8,40 +8,40 @@ class awlc_date_en implements awlc_date
 
 	public static function get_lc_date($timestamp, $format)
 	{
-		if ($timestamp==0)
-		{
-			$timestamp=time();
-		}
-
 		switch ($format)
 		{
-			case 1:
-				$newdate=date("d.m.y", $timestamp);
-				return $newdate;
-			case 2:
+			case locale::DATE_SHORT:
+				return date("m.d.y", $timestamp);
 
-				$newdate=date("d.m.Y", $timestamp);
-				return $newdate;
+			case locale::DATE_SHORT_FULLYEAR:
+				return date("m.d.Y", $timestamp);
 
-			case 3:
-				$newdate=date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y",$timestamp);
-				return $newdate;
+			case locale::DATE_LONG:
+				return date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y",$timestamp);
 
-			case 4:
-				$newdate=date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y",$timestamp);
-				return $newdate;
+			case locale::DATE_LONG_FULLYEAR:
+				return date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y",$timestamp);
 
 			case 5:
-				$rv = ucfirst(self::$month[date("m",$timestamp)-1]) . " " . date("d",$timestamp);
-				return $rv;
+				return ucfirst(self::$month[date("m",$timestamp)-1]) . " " . date("d",$timestamp);
 
 			case 6:
-				$rv = ucfirst(self::$month[date("m",$timestamp)-1]) . " " . date("d",$timestamp) . date(" Y",$timestamp);
-				return $rv;
-			case 7:
-				$newdate=date("H:i d.m.y", $timestamp);
-				return $newdate;
+				return ucfirst(self::$month[date("m",$timestamp)-1]) . " " . date("d",$timestamp) . date(" Y",$timestamp);
 
+			case 7:
+				return date("H:i d.m.y", $timestamp);
+
+			case locale::DATETIME_SHORT:
+				return date("m.d.y g:i a", $timestamp);
+
+			case locale::DATETIME_SHORT_FULLYEAR:
+				return date("m.d.Y g:i a", $timestamp);
+
+			case locale::DATETIME_LONG:
+				return date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y g:i a",$timestamp);
+
+			case locale::DATETIME_LONG_FULLYEAR:
+				return date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y g:i a",$timestamp);
 		}
 	}
 

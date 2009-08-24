@@ -6,6 +6,17 @@ Localisation utilities class.
 **/
 class locale
 {
+	const DATE_SHORT = 1; // For example: 20.06.88 or 05.12.98
+	const DATE_SHORT_FULLYEAR = 2; // For example: 20.06.1999 or 05.12.1998
+	const DATE_LONG = 3; // For example: 20. juuni 99
+	const DATE_LONG_FULLYEAR = 4; // For example: 20. juuni 1999
+	const DATETIME_SHORT = 10; // For example: 20.06.88 15:25 or 05.12.98 15:25
+	const DATETIME_SHORT_FULLYEAR = 11; // For example: 20.06.1999 15:25 or 05.12.1998 15:25
+	const DATETIME_LONG = 12; // For example: 20. juuni 99 15:25
+	const DATETIME_LONG_FULLYEAR = 13; // For example: 20. juuni 1999 15:25
+
+	const DATE_DEFAULT_FORMAT = "[\E] m.d Y H:i";
+
 	protected static $lc_data = array( // locale data by locale code
 		"de" => array(),
 		"en" => array(),
@@ -74,28 +85,51 @@ class locale
 	/** returns a localized date in the current language
 		@attrib api=1 params=pos
 
-		@param timestamp required type=int
-			The unix timestamp to return the date for
+		@param timestamp optional type=int
+			The unix timestamp to return the date for. If NULL current time is used.
 
 		@param format required type=int
 			One of the defined date formats
 
 		@comment
 			The date formats are:
-				LC_DATE_FORMAT_SHORT = For example: 20.06.88 or 05.12.98
-				LC_DATE_FORMAT_SHORT_FULLYEAR = For example: 20.06.1999 or 05.12.1998
-				LC_DATE_FORMAT_LONG = For example: 20. juuni 99
-				LC_DATE_FORMAT_LONG_FULLYEAR = For example: 20. juuni 1999
+				locale::DATE_SHORT = For example: 20.06.88 or 05.12.98
+				locale::DATE_SHORT_FULLYEAR = For example: 20.06.1999 or 05.12.1998
+				locale::DATE_LONG = For example: 20. juuni 99
+				locale::DATE_LONG_FULLYEAR = For example: 20. juuni 1999
+				locale::DATETIME_SHORT = For example: 20.06.88 21:45 or 05.12.98 21:45
+				locale::DATETIME_SHORT_FULLYEAR = For example: 20.06.1999 21:45 or 05.12.1998 21:45
+				locale::DATETIME_LONG = For example: 20. juuni 99 21:45
+				locale::DATETIME_LONG_FULLYEAR = For example: 20. juuni 1999 21:45
+
+		@returns string
 	**/
 	public static function get_lc_date($timestamp, $format)
 	{
+		if (empty($timestamp)) //!!! teha et saaks siin olla NULL === $timestamp
+		{
+			$timestamp = time();
+		}
+
+		$date = "";
+
+		if (PHP_OS === "WINNT" && $timestamp < 0)
+		{
+			$date = t("n/a");
+		}
+
 		$lc = self::get_lc();
 		$method = array("awlc_date_{$lc}", "get_lc_date");
-		$date = "";
 		if (is_readable(AW_DIR . "classes/core/locale/date/date_{$lc}" . AW_FILE_EXT))
 		{
 			$date = call_user_func($method, $timestamp, $format);
 		}
+
+		if (empty($date))
+		{
+			$date = date(self::DATE_DEFAULT_FORMAT, $timestamp);
+		}
+
 		return $date;
 	}
 

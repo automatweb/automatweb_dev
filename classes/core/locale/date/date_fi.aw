@@ -8,11 +8,6 @@ class awlc_date_fi implements awlc_date
 
 	public static function get_lc_date($timestamp, $format)
 	{
-		if ($timestamp == 0)
-		{
-			$timestamp = time();
-		}
-
 		$mname = self::$month[date("m", $timestamp)-1] . "ta";
 
 		switch ($format)

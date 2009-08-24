@@ -8,13 +8,7 @@ class awlc_date_lt implements awlc_date
 
 	public static function get_lc_date($timestamp, $format)
 	{
-		if ($timestamp==0)
-		{
-			$timestamp=time();
-		}
-
 		switch ($format)
-
 		{
 			case 1:
 				$newdate=date("d.m.y", $timestamp);
@@ -39,6 +33,7 @@ class awlc_date_lt implements awlc_date
 			case 6:
 				$rv = date("d.",$timestamp).self::$month[date("m",$timestamp)-1] . date(".Y",$timestamp);
 				return $rv;
+
 			case 7:
 				$newdate=date("H:i d.m.y", $timestamp);
 				return $newdate;

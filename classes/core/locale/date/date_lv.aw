@@ -8,11 +8,6 @@ class awlc_date_lv implements awlc_date
 
 	public static function get_lc_date($timestamp, $format)
 	{
-		if ($timestamp==0)
-		{
-			$timestamp=time();
-		}
-
 		switch ($format)
 		{
 			case 1:

@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo  maintainer=kristo
+@classinfo  maintainer=voldemar
 */
 class awlc_date_et implements awlc_date
 {
@@ -8,45 +8,52 @@ class awlc_date_et implements awlc_date
 
 	public static function get_lc_date($timestamp, $format)
 	{
-		if (empty($timestamp))
-		{
-			$timestamp = time();
-		}
-
 		$rv = "";
-
-		if (PHP_OS == "WINNT" && $timestamp < 0)
-		{
-			return "n/a";
-		}
 
 		switch ($format)
 		{
-			case 1:
+			case locale::DATE_SHORT:
 				$rv = date("j.m.y", $timestamp);
 				break;
 
-			case 2:
+			case locale::DATE_SHORT_FULLYEAR:
 				$rv = date("j.m.Y", $timestamp);
 				break;
 
-			case 3:
-				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y",$timestamp);
+			case locale::DATE_LONG:
+				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
 				break;
 
-			case 4:
-				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y",$timestamp);
+			case locale::DATE_LONG_FULLYEAR:
+				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				break;
 
 			case 5:
-				$rv = date("j. ",$timestamp).self::$month[date("m",$timestamp)-1];
+				$rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1];
 				break;
 
 			case 6:
-				$rv = date("j. ",$timestamp).self::$month[date("m",$timestamp)-1] . date(" Y",$timestamp);
+				$rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1] . date(" Y",$timestamp);
 				break;
+
 			case 7:
 				$rv = date("H:i j.m.Y", $timestamp);
+				break;
+
+			case locale::DATETIME_SHORT:
+				$rv = date("j.m.y H:i", $timestamp);
+				break;
+
+			case locale::DATETIME_SHORT_FULLYEAR:
+				$rv = date("j.m.Y H:i", $timestamp);
+				break;
+
+			case locale::DATETIME_LONG:
+				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y H:i",$timestamp);
+				break;
+
+			case locale::DATETIME_LONG_FULLYEAR:
+				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y H:i",$timestamp);
 				break;
 		}
 
