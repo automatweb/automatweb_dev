@@ -2417,9 +2417,12 @@ function eval_buffer($res)
 	function load_javascript($file, $pos = 'head')
 	{
 		$js = aw_global_get("__aw_javascript");
-		$file = aw_ini_get("baseurl")."/automatweb/js/".$file;
-		$js[$pos][$file] = $file;
-		aw_global_set("__aw_javascript", $js);
+		if (!isset($js[$pos][$file])) // assuming that some scripts may be needed to be included both at head and bottom
+		{
+			$file_path = aw_ini_get("baseurl")."/automatweb/js/".$file;
+			$js[$pos][$file] = $file_path;
+			aw_global_set("__aw_javascript", $js);
+		}
 	}
 
 	function get_name($id)
