@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_COUNTRY relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
+@classinfo syslog_type=ST_COUNTRY relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar prop_cb=1
 
 @groupinfo grp_settings caption="Seaded"
 
@@ -26,17 +26,8 @@
 
 */
 
-require_once(aw_ini_get("basedir") . "/classes/common/address/as_header.aw");
-
 class country extends class_base
 {
-	var $admin_division_classes = array (
-		CL_COUNTRY_ADMINISTRATIVE_UNIT,
-		CL_COUNTRY_CITYDISTRICT,
-		CL_COUNTRY_CITY,
-		CL_ADDRESS_STREET,
-	);
-
 	function country()
 	{
 		$this->init(array(
@@ -52,37 +43,12 @@ class country extends class_base
 
 		switch($prop["name"])
 		{
-			case "":
+			case "xxx":
 				$addresses_using_this = "";
 
 				if ( ($addresses_using_this > 0) and (is_oid ($prop["value"])) )
 				{
 					$prop["error"] = sprintf (t("%s aadressi kasutab hetkel valitud haldusjaotust! Muudatuste salvestamisel ..."), $addresses_using_this);//!!! t2psustada mis juhtub kui uus struktuur m22rata.
-				}
-				break;
-		}
-
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		$this_object =& $arr["obj_inst"];
-
-		switch($prop["name"])
-		{
-			case "administrative_structure":
-				if (is_oid ($prop["value"]))
-				{
-					$o = obj ($prop["value"]);
-
-					if ($o->parent () != $this_object->id ())
-					{
-						$retval = PROP_FATAL_ERROR;
-						$prop["error"] = t("Riigi adminstratiivjaotuse objekt peab asuma riigiobjekti all");
-					}
 				}
 				break;
 		}
