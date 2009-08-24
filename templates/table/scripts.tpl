@@ -37,3 +37,12 @@ function hilight(el,tgt)
 }
 </script>
 <!-- END SUB: hilight_script -->
+
+<!-- SUB: hover_script -->
+<script type="text/javascript">
+$("table#{VAR:table_id} tr.awmenuedittablerow").hover(
+	function (){ $(this).children("td").addClass("{VAR:hover_row_style}"); },
+	function (){ $(this).children("td").removeClass("{VAR:hover_row_style}");}
+);
+</script>
+<!-- END SUB: hover_script -->
