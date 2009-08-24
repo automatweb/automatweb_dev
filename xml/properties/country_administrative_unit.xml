@@ -1,13 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>administrative_structure</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>hidden</type>
-            <field>administrative_structure</field>
-      </property>
-      <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>
@@ -42,15 +35,6 @@
             <caption>Paralleelnimi</caption>
       </property>
       <property>
-            <name>ext_id_1</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Identifikaator v&amp;amp;auml;lises s&amp;amp;uuml;steemis 1</caption>
-      </property>
-      <property>
             <name>parent</name>
             <table>objects</table>
             <group>general</group>
@@ -64,8 +48,8 @@
             <table>objects</table>
             <group>general</group>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>no</store>
+            <field>parent_show</field>
             <caption>K&amp;otilde;rgem halduspiirkond</caption>
       </property>
       <property>
@@ -85,14 +69,30 @@
             <caption>Vali k&amp;otilde;rgem halduspiirkond</caption>
       </property>
       <property>
-            <name>transl</name>
-            <table>objects</table>
-            <group>transl</group>
-            <type>callback</type>
-            <callback>callback_get_transl</callback>
-            <store>no</store>
-            <field>transl</field>
-            <caption>T&amp;amp;otilde;lgi</caption>
+            <name>ext_id_1</name>
+            <table>aw_administrative_unit</table>
+            <group>general</group>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <field>ext_id_1</field>
+            <caption>Identifikaator v&amp;amp;auml;lises s&amp;amp;uuml;steemis 1</caption>
+      </property>
+      <property>
+            <name>administrative_structure</name>
+            <table>aw_administrative_unit</table>
+            <group>general</group>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>administrative_structure</field>
+      </property>
+      <property>
+            <name>indexed</name>
+            <table>aw_administrative_unit</table>
+            <group>general</group>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <default>0</default>
+            <field>indexed</field>
       </property>
       <classinfo>
             <syslog_type>ST_COUNTRY_ADMINISTRATIVE_UNIT</syslog_type>
@@ -101,11 +101,13 @@
             <no_status>1</no_status>
             <maintainer>voldemar</maintainer>
       </classinfo>
-      <groupinfo>
-            <transl>
-                  <caption>T&amp;amp;otilde;lgi</caption>
-            </transl>
-      </groupinfo>
+      <tableinfo>
+            <aw_administrative_unit>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </aw_administrative_unit>
+      </tableinfo>
       <reltypes>
             <PARENT_ADMINISTRATIVE_UNIT>
                   <value>1</value>
