@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.53 2009/08/18 14:58:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.54 2009/08/25 10:19:24 dragut Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -2370,7 +2370,7 @@ class image extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["docid"] = $_GET["docid"];
+		$arr["docid"] = ( !empty($_GET["docid"]) ) ? $_GET['docid'] : '';
 	}
 
 	function callback_mod_retval($arr)
