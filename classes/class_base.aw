@@ -5272,7 +5272,8 @@ class class_base extends aw_template
 	}
 
 	// right now only the document class supports this
-	function load_from_file()
+	// added $str parameter, cause image_convert.aw overrides this function with that parameter and gives [STRICT] level error because of that --dragut@
+	function load_from_file($str)
 	{
 		$cfgu = get_instance("cfg/cfgutils");
 		$def = $this->get_file(array("file" => (aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml")));
