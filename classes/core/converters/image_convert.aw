@@ -159,7 +159,7 @@ class image_convert extends class_base
 	{
 		error::raise_if(!($this->driver), array(
 			"id" => "ERR_IMAGE_DRIVER",
-			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+			"msg" => t("image_convert: could not detect any supported imagehandlers!")
 		));
 		$this->driver->load_from_file($str);
 	}
@@ -462,7 +462,7 @@ class _int_image_convert_driver_gd extends aw_template
 {
 	var $image;
 	var $ref;
-	var $error;
+	var $is_error;
 
 	function _int_image_convert_driver_gd()
 	{
