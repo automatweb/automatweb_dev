@@ -390,7 +390,7 @@ class htmlclient extends aw_template
 	function put_line($args)
 	{
 		$rv = "";
-		$caption = $args["caption"];
+		$caption = isset($args["caption"]) ? $args["caption"] : "";
 		unset($args["caption"]);
 
 		if ($caption == "")
@@ -498,12 +498,12 @@ class htmlclient extends aw_template
 
 		static $cur_cfgform;
 		static $cur_cfgform_found = false;
+		$o = obj($_GET["id"]);
 
 		if (!$cur_cfgform_found)
 		{
 			$cur_cfgfor_found = true;
 			$i = get_instance(CL_FILE);
-			$o = obj($_GET["id"]);
 			$i->clid = $o->class_id();
 			$cur_cfgform = $i->get_cfgform_for_object(array(
 				"args" => $_GET,
@@ -515,25 +515,28 @@ class htmlclient extends aw_template
 		$green = " <a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_green.png' id='cfgEditProp".$arr["name"]."'/></a>";
 		$red = " <a href='javascript:void(0)' onClick='cfEditClick(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_red.png' id='cfgEditProp".$arr["name"]."'/></a>";
 
+		$time_active_icon = " <a href='javascript:void(0)' onClick='cfEditClickTime(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_timer_active.png' id='cfgEditPropTime".$arr["name"]."'/></a>";
+		$time_inactive_icon = " <a href='javascript:void(0)' onClick='cfEditClickTime(\"".$arr["name"]."\", ".$_GET["id"].");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/cfg_timer_inactive.png' id='cfgEditPropTime".$arr["name"]."'/></a>";
+
 		// get default cfgform for this object and get property status from that
 		$cf = $cur_cfgform;
+		$retval = $green;
 		if ($this->can("view", $cf))
 		{
 			$cfo = obj($cf);
-			if ($cfo->instance()->is_active_property($cfo, $arr["name"]))
-			{
-				return $green;
-			}
-			else
+			if (!$cfo->instance()->is_active_property($cfo, $arr["name"]))
 			{
 				return $red;
 			}
 		}
-		else
+
+		if(aw_global_get("uid_oid") == 207933)
 		{
-			// green buton
-			return $green;
+			$user_activity = new user_activity();
+			$active_timer = $user_activity->is_timer_active_for_property($o->class_id(), $arr["name"]);
+			$retval .= $active_timer ? $time_active_icon : $time_inactive_icon;
 		}
+		return $retval;
 	}
 
 	////
@@ -694,7 +697,7 @@ class htmlclient extends aw_template
 				));
 			}
 
-			if ($back_button != "")
+			if (!empty($back_button))
 			{
 				$this->vars_safe(array(
 					"back_button_caption" => t("&lt;&lt;&lt; Tagasi"),
@@ -705,7 +708,7 @@ class htmlclient extends aw_template
 				));
 			}
 
-			if ($forward_button != "")
+			if (!empty($forward_button))
 			{
 				$this->vars_safe(array(
 					"forward_button_caption" => t("Edasi &gt;&gt;&gt;"),

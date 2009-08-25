@@ -14,6 +14,7 @@ class popup_search extends aw_template
 
 	function popup_search()
 	{
+		load_javascript("reload_properties_layouts.js");
 		$this->init("popup_search");
 	}
 
@@ -987,5 +988,351 @@ function aw_get_el(name,form)
 			}
 		}
 	}
+
+	//----------------- Marko teeb siia miskit uut varianti.... katsetab
+	function set_class_id($clid)
+	{
+		$this->clid = $clid;
+	}
+
+	function set_id($id)
+	{
+		$this->oid = $id;
+	}
+
+	function set_reload_layout($layouts)
+	{
+		$this->reload_layouts = $layouts;
+	}
+
+	function set_property($prop)
+	{
+		$this->property = $prop;
+	}
+
+	function get_search_button()
+	{
+		$ret = 	html::href(array(
+			"url" => "javascript:;",
+			"onclick" => 'win = window.open("'.$this->get_popup_url().'" ,"categoty_search","width=720,height=600,statusbar=yes, scrollbars=yes");',
+			"caption" => html::img(array("url" =>  $this->cfg["baseurl"] . "/automatweb/images/icons/search.gif")),
+		));
+
+		return $ret;
+	}
+
+	function get_popup_url()
+	{
+		$url = $this->mk_my_orb("do_ajax_search", array(
+			"id" => $this->oid,
+			"reload_layout" => $this->reload_layouts,
+			"clid" => $this->clid,
+			"multiple" => $this->multiple,
+			"property" => $this->property,
+		));
+		return $url;
+
+	}
+
+	/**
+
+		@attrib name=do_ajax_search api=1
+		@param id optional
+		@param multiple optional
+		@param clid optional
+		@param property optional
+		@param reload_layout optional type=string
+		@param tbl_props optional
+		@param no_submit optional
+		@param start_empty optional type=bool
+			If true, initially search results table is empty.
+		@returns
+			returns the html for search form & results
+	**/
+	function do_ajax_search($arr)
+	{
+		$_GET["in_popup"] = 1;
+		$form_html = $this->_get_search_form($arr);
+		$arr["return"] = 1;
+		$res_html = html::div(array("id" => "result" , "content" => $this->get_search_results($arr)));
+
+		return $form_html."<br>".$res_html;
+	}
+
+	/**
+
+		@attrib name=ajax_set_property api=1
+		@param id optional
+		@param property optional
+		@param value optional
+			
+	**/
+	function ajax_set_property($arr)
+	{
+		$o = obj($arr["id"]);
+		$cx = get_instance("cfg/cfgutils");
+		$properties = $cx->load_class_properties(array(
+			"clid" => $o->class_id(),
+		));
+		if($properties[$arr["property"]]["multiple"] > 0)
+		{
+			$val = $o->prop($arr["property"]);
+			$val[] = $arr["value"];
+		}
+		else
+		{
+			$val = $arr["value"];
+		}
+		$o->set_prop($arr["property"] , $val);
+		$o->save();
+		die($o->prop($arr["property"]));
+	}
+
+	function _get_search_form($arr)
+	{
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+
+		$htmlc->add_property(array(
+			"name" => "s[name]",
+			"type" => "textbox",
+			"value" => ifset($arr, "s", "name"),
+			"caption" => t("Nimi")
+		));
+
+		$htmlc->add_property(array(
+			"name" => "s[oid]",
+			"type" => "textbox",
+			"value" => ifset($arr, "s", "oid"),
+			"caption" => t("Objekti id")
+		));
+
+		$arr["clid"] = join("," , $arr["clid"]);
+		if(!isset($arr["reload_layout"]))
+		{
+			$arr["reload_layout"] = "' '";
+		}
+
+		$htmlc->add_property(array(
+			"name" => "s[submit]",
+			"type" => "button",
+			"value" => t("Otsi"),
+			"caption" => t("Otsi"),
+			"onclick" => "
+			var div = $('#result');
+				$.please_wait_window.show({
+					'target': div
+				});               
+			var oids = document.getElementById('s_oid_');
+			var names = document.getElementById('s_name_');
+			javascript:$.get('/automatweb/orb.aw', {class: 'popup_search',
+				action: 'get_search_results',
+				id: '".$arr["id"]."',
+				oid: oids.value,
+				name: names.value,
+				clid: '".$arr["clid"]."',
+				reload_layout: '".$arr["reload_layout"]."',
+				property: '".$arr["property"]."'
+			}, function (html) {
+				x=document.getElementById('result');
+				x.innerHTML=html;
+				$.please_wait_window.hide();
+			});
+			",
+		));
+//http://www.otto-suomi.fi/automatweb/orb.aw?class=shop_packet&action=change&id=401624
+
+		$data = array(
+			"id" => $arr["id"],
+			"clid" => $arr["clid"],
+			"no_submit" => ifset($arr, "no_submit"),
+			"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
+			"orb_class" => $_GET["class"],
+			"reforb" => 0,
+		);
+		$this->_process_reforb_args($data);
+
+		$htmlc->finish_output(array(
+			"action" => "do_search",
+			"method" => "GET",
+			"data" => $data,
+			"submit" => "no",
+		));
+
+		$html = $htmlc->get_result();
+
+		return $html;
+	}
+
+	/**
+		@attrib name=get_search_results api=1
+		@param id optional
+		@param oid optional
+		@param name optional
+		@param multiple optional
+		@param clid optional
+		@param property optional
+		@param reload_layout optional type=string
+		@param tbl_props optional
+		@param no_submit optional
+		@param start_empty optional type=bool
+			If true, initially search results table is empty.
+		@returns
+			returns the html for search form & results
+	**/
+	function get_search_results($arr)
+	{
+		$this->read_template("table.tpl");
+		
+		if(!empty($arr["clid"]))
+		{
+			if(!is_array($arr["clid"]))
+			{
+				$clid = explode("," , $arr["clid"]);
+			}
+			else
+			{
+				$clid = $arr["clid"];
+			}
+		}
+		classload("vcl/table");
+		$t = new aw_table(array(
+			"layout" => "generic"
+		));
+
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t("&nbsp;")
+		));
+
+		$t->define_field(array(
+			"name" => "oid",
+			"caption" => t("OID"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"sortable" => 1,
+			"caption" => t("Nimi")
+		));
+
+		$t->define_field(array(
+			"name" => "parent",
+			"sortable" => 1,
+			"caption" => t("Asukoht")
+		));
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"sortable" => 1,
+			"caption" => t("Muutja")
+		));
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"sortable" => 1,
+			"format" => "d.m.Y H:i",
+			"type" => "time"
+		));
+
+		$t->define_field(array(
+			"name" => "select_this",
+			"caption" => t("Vali"),
+		));
+
+		$obj = obj($arr["id"]);
+		$cx = get_instance("cfg/cfgutils");
+		$props = $cx->load_class_properties(array(
+			"clid" => $obj->class_id(),
+		));
+
+		if(!empty($props[$arr["property"]]["multiple"]))
+		{
+			$t->define_chooser(array(
+				"name" => "sel",
+				"field" => "oid",
+			));
+		}
+
+		$t->set_default_sortby("name");
+
+		$filter = array(
+			"limit" => 100,
+		);
+		if(!empty($arr["name"]))
+		{
+			$filter["name"] = "%".$arr["name"]."%";
+		}
+		if(!empty($arr["oid"]))
+		{
+			$filter["oid"] = "%".$arr["oid"]."%";
+		}
+
+		if($arr["clid"])
+		{
+			$filter["class_id"] = $clid;
+		}
+		$ol = new object_list($filter);
+		foreach($ol->arr() as $o)
+		{
+			$dat = array(
+				"oid" => $o->id(),
+				"name" => html::obj_change_url($o),
+				"parent" => $o->path_str(array("max_len" => 3)),
+				"modifiedby" => $o->modifiedby(),
+				"modified" => $o->modified(),
+				"select_this" => html::href(array(
+					"url" => "javascript:void(0)",
+					"caption" => t("Vali see"),
+					"onClick" => "set_prop(\"".$o->id()."\")",
+				)),
+				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id())))
+			);
+
+			$t->define_data($dat);
+		}
+
+
+		$reload = "";
+		if(!empty($arr["reload_layout"]))
+		{
+			$reload.= "window.opener.reload_layout('".$arr["reload_layout"]."');";
+			
+		}
+		
+		$javascript = "<script language='javascript'>
+			function set_prop(value)
+			{
+				$.get('/automatweb/orb.aw', {class: 'popup_search',
+					action: 'ajax_set_property',
+					id: '".$arr["id"]."',
+					value: value,
+					property: '".$arr["property"]."'
+				}, function (html) {
+					".$reload."
+				//	window.close();
+				});
+
+			}
+			</script>
+		";
+		
+
+		$t->sort_by();
+		$this->vars(array(
+			"select_text" => t("Vali"),
+			"table" => $t->draw().$javascript,
+		));
+		if($arr["return"])
+		{
+			return $this->parse();
+		}
+		else
+		{
+			die($this->parse());
+		}
+	}
+
+	//----------------------------------------------------------
 }
 ?>
