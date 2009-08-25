@@ -340,6 +340,7 @@ class shop_order_cart extends class_base
 		$layout = obj($cart_o->prop("prod_layout"));
 
 		$total = 0;
+		$items = 0;
 		$prod_total = 0;
 		$cart_total = 0;
 		$str = "";
@@ -403,7 +404,7 @@ class shop_order_cart extends class_base
 						$vars["price"] = number_format($product->get_shop_price($oc->id()));
 						$vars["total_price"] =number_format( $quant["items"] * $product->get_shop_price($oc->id()));
 						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
-	
+	$items ++;
 					$this->vars($vars);
 						$product_str.= $this->parse("PRODUCT");
 
@@ -465,6 +466,8 @@ class shop_order_cart extends class_base
 						continue;
 					}
 	
+		$items ++;
+
 /*					$this->vars(array(
 						"prod_html" => $inst->do_draw_product(array(
 							"layout" => $layout,
@@ -619,7 +622,7 @@ class shop_order_cart extends class_base
 			));
 		}
 
-		if($total && $this->is_template("HAS_PRODUCTS"))
+		if($items && $this->is_template("HAS_PRODUCTS"))
 		{
 			$this->vars(array(
 				"HAS_PRODUCTS" => $this->parse("HAS_PRODUCTS"),
@@ -2568,7 +2571,8 @@ class shop_order_cart extends class_base
 			"section" => $arr["section"],
 			"product" => $arr["product"],
 		));
-		$url = str_replace("automatweb/orb.aw" , "" , $url);
+		$url = str_replace("automatweb/orb.aw" , "index.aw" , $url);
+		$url = str_replace("orb.aw" , "index.aw" , $url);
 		$this->submit_add_cart(array(
 			"oc" => $arr["oc"],
 			"add_to_cart" => array($arr["product"] => $arr["amount"])
@@ -2720,6 +2724,8 @@ class shop_order_cart extends class_base
 		$data = $this->cart->get_order_data();
 		$oc = $this->cart->get_oc();
 		$payment = $delivery = "";
+		$prods =  $this->cart->get_cart();
+
 		$asd = $oc->get_rent_conditions(array(
 			"sum" => 5000,
 			"currency" => 354831,
@@ -2728,8 +2734,8 @@ class shop_order_cart extends class_base
 		));
 		
 		$delivery_methods_object_list = $this->cart->delivery_methods(array(
-			"product" => array(),
-			"product_packaging" => array(),
+			"product" =>  array_keys($prods["items"]),
+			"product_packaging" => array_keys($prods["items"]),
 		));
 		if(!is_array($asd))
 		{

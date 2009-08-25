@@ -11,6 +11,8 @@ class shop_order_cart_obj extends _int_object
 			The amount of the product prices are asked for
 		@param product_category optional type=array/int acl=view
 			OIDs of product categories
+		@param product_packet optional type=array/int acl=view
+			OIDs of product packets
 		@param customer_data optional type=int acl=view
 			OID of customer_data object
 		@param customer_category optional type=array/int acl=view
@@ -38,16 +40,16 @@ class shop_order_cart_obj extends _int_object
 			"CL_SHOP_DELIVERY_METHOD.RELTYPE_DELIVERY_METHOD(CL_SHOP_ORDER_CART)" => $this->id(),
 			"lang_id" => array(),
 			"site_id" => array(),
+			new obj_predicate_sort(array(
+				"jrk" => "ASC"
+			)),
 		));
 		// Validate
-		if(!empty($arr["product"]) || !empty($arr["product_category"]) || !empty($arr["customer_data"]) || !empty($arr["customer_category"]) || !empty($arr["location"]))
+		foreach($ol->arr() as $o)
 		{
-			foreach($ol->arr() as $o)
+			if(!$o->valid($arr))
 			{
-				if(!$o->valid($arr))
-				{
-					$ol->remove($o->id());
-				}
+				$ol->remove($o->id());
 			}
 		}
 		exit_function("shop_order_center_obj::delivery_mehtods");
@@ -76,7 +78,7 @@ class shop_order_cart_obj extends _int_object
 		return parent::prop($prop);
 	}
 
-	private function set_oc()
+	public function set_oc()
 	{
 		if(empty($this->oc))
 		{
@@ -187,7 +189,7 @@ class shop_order_cart_obj extends _int_object
 	**/
 	public function get_order_data()
 	{
-		return $_SESSION["cart"]["order_data"];
+		return empty($_SESSION["cart"]["order_data"]) ? array() : $_SESSION["cart"]["order_data"];
 	}
 
 	/** makes new warehouse sell order object
@@ -203,11 +205,10 @@ class shop_order_cart_obj extends _int_object
 				"msg" => sprintf(t("shop_order_cart::do_creat_order_from_cart(): no warehouse set for ordering center %s!"), $this->oc->id())
 			));
 		}
-
 		$warehouse = $this->oc->prop("warehouse");
 		$cart = $this->get_cart();
 		$order_data = $this->get_order_data();
-
+//arr($order_data);die();
 		$o = new object();
 		$o->set_name(t("M&uuml;&uuml;gitellimus")." ".date("d.m.Y H:i"));
 		$o->set_parent($this->oc->id());
@@ -223,6 +224,7 @@ class shop_order_cart_obj extends _int_object
 		$o->set_prop("transp_type" , $order_data["delivery"]);
 		$o->set_prop("payment_type" , $order_data["payment"]);
 		$o->set_prop("currency" , $this->oc->get_currency());
+		$o->set_prop("channel" , $this->prop("channel"));
 		$o->save();
 
 		$awa = new aw_array($cart["items"]);
@@ -231,7 +233,7 @@ class shop_order_cart_obj extends _int_object
 			$qu = new aw_array($quant);
 			foreach($qu->get() as $key => $val)
 			{
-				if($val["cart"] && !$this->check_confirm_carts($val["cart"]))
+				if($val["cart"] && !$this->check_confirm_carts($val["cart"]) && $iid)
 				{
 					continue;
 				}
@@ -243,15 +245,15 @@ class shop_order_cart_obj extends _int_object
 				));
 			}
 		}
-		$this->reset_cart();
 		return $o->id();
 	}
 
-	private function _get_person($data)
+	public function _get_person($data)
 	{
+
 		$person = "";
 		//sellisel juhul otsib olemasolevate isikute hulgast, kui on andmeid mille j2rgi otsida
-		if(!empty($data["personalcode"]) || !(empty($data["birthday"]) || empty($data["lastname"])))
+		if(!empty($data["personalcode"]) || !empty($data["customer_no"]) || (!empty($data["birthday"]) && !empty($data["lastname"])))
 		{
 			$filter = array(
 				"class_id" => CL_CRM_PERSON,
@@ -262,22 +264,30 @@ class shop_order_cart_obj extends _int_object
 			{
 				$filter["personal_id"] = $data["personalcode"];
 			}
-			if(!empty($data["firstname"]))
+			if(!empty($data["customer_no"]))
 			{
-				$filter["firstname"] = $data["firstname"];
+				$filter["external_id"] = $data["customer_no"];
 			}
-			if(!empty($data["lastname"]))
+			else
 			{
-				$filter["lastname"] = $data["lastname"];
-			}
-			if(!empty($data["birthday"]))
-			{
-				if(is_array($data["birthday"]))
+				if(!empty($data["firstname"]))
 				{
-					$filter["birthday"] = mktime(0,0,0,$data["birthday"]["day"],$data["birthday"]["month"],$data["birthday"]["year"]);
+					$filter["firstname"] = $data["firstname"];
+				}
+				if(!empty($data["lastname"]))
+				{
+					$filter["lastname"] = $data["lastname"];
+				}
+				if(!empty($data["birthday"]))
+				{
+					if(is_array($data["birthday"]))
+					{
+						$filter["birthday"] = mktime(0,0,0,$data["birthday"]["month"],$data["birthday"]["day"],$data["birthday"]["year"]);
+					}
 				}
 			}
-			$ol = new object_list();
+			$ol = new object_list($filter);
+
 			if($ol->count())
 			{
 				$person = $ol->begin();
@@ -299,7 +309,8 @@ class shop_order_cart_obj extends _int_object
 			{
 				if(is_array($data["birthday"]))
 				{
-						//peaks selle ka salvestama
+					$person->set_prop("birthday" , mktime(0,0,0,$data["birthday"]["month"],$data["birthday"]["day"],$data["birthday"]["year"]));
+					//peaks selle ka salvestama
 				}
 			}
 			if(!empty($data["customer_no"]))
@@ -328,8 +339,7 @@ class shop_order_cart_obj extends _int_object
 		return $person;
 	}
 
-
-	private function _get_address($data)
+	public function _get_address($data)
 	{
 		$address = new object();
 		$address->set_parent($this->oc->id());
@@ -346,6 +356,18 @@ class shop_order_cart_obj extends _int_object
 			$address->set_city($data["city"]);
 		}
 		return $address;
+	}
+
+	public function confirm_order()
+	{
+		$order = $this->create_order();
+		$this->reset_cart();
+		$this->set_oc();
+		$order_obj = obj($order);
+		$order_obj->set_prop("order_status" , "5");
+		$order_obj->save();
+		$this->oc->send_confirm_mail($order);
+		return $order;
 	}
 
 	public function remove_product($product)

@@ -65,11 +65,14 @@ class shop_price_list_obj extends shop_matrix_obj
 	*/
 	public static function store_condition($data)
 	{
+		/*
 		if(
 			$data["value"] === "0" ||	// The price is set to 0
 			aw_math_calc::string2float(trim($data["value"], "+-%")) > 0 ||	// False for something like this: +0% -0 etc
 			aw_math_calc::string2float(trim($data["bonus"], "+-%")) > 0	// False for something like this: +0% -0 etc
 		)
+		*/
+		if(strlen(trim($data["value"])) > 0)
 		{
 			return true;
 		}
@@ -83,6 +86,8 @@ class shop_price_list_obj extends shop_matrix_obj
 			The OID of the shop_order_center object
 		@param product optional type=int acl=view
 			The OID of the product. If not given, product_packaging must be given!
+		@param product_packet optional type=array/int acl=view
+			OIDs of product packets
 		@param product_packaging optional type=int acl=view
 			OID of product packaging. If not given, product must be given!
 		@param amount optional type=float default=1
@@ -203,6 +208,7 @@ class shop_price_list_obj extends shop_matrix_obj
 	protected static function handle_arguments($arr)
 	{
 		$args = array(
+			"rows" => array(),
 			"amount" => isset($arr["amount"]) ? $arr["amount"] : 1,
 			"prices" => $arr["prices"],
 			"bonuses" => isset($arr["bonuses"]) ? $arr["bonuses"] : array(),
@@ -212,18 +218,46 @@ class shop_price_list_obj extends shop_matrix_obj
 			"default" => array(0),
 		);
 
+		if(!isset($arr["product"]) && !empty($arr["product_packaging"]))
+		{
+			$args["product"] = shop_product_packaging_obj::get_products_for_id($arr["product_packaging"]);
+		}
+		if(!isset($arr["product_packet"]) && !empty($arr["product"]))
+		{
+			$arr["product_packet"] = array();
+			foreach(shop_product_obj::get_packets_for_id((array)$arr["product"]) as $packet_ol)
+			{
+				$arr["product_packet"] = array_merge($arr["product_packet"], $packet_ol->ids());
+			}
+		}
 		if(!isset($arr["product_category"]))
 		{
-			$arr["product_category"] = shop_product_obj::get_categories_for_id($arr["product"]);
+			$arr["product_category"] = array();
+			if(!empty($arr["product"]))
+			{
+				$arr["product_category"] = shop_product_obj::get_categories_for_id($arr["product"]);
+			}
+			if(!empty($arr["product_packet"]))
+			{
+				$arr["product_category"] = shop_packet_obj::get_categories_for_id($arr["product_packet"]);
+			}
 		}
-		$args["rows"] = (array)$arr["product_category"];
-		if(isset($arr["product"]))
+
+		if(!empty($arr["product"]))
 		{
-			$args["rows"] = array_merge($args["rows"], array($arr["product"]));
+			$args["rows"] = array_merge($args["rows"], (array)$arr["product"]);
 		}
-		if(isset($arr["product_packaging"]))
+		if(!empty($arr["product_packet"]))
 		{
-			$args["rows"] = array_merge($args["rows"], array($arr["product_packaging"]));
+			$args["rows"] = array_merge($args["rows"], (array)$arr["product_packet"]);
+		}
+		if(!empty($arr["product_category"]))
+		{
+			$args["rows"] = array_merge($args["rows"], (array)$arr["product_category"]);
+		}
+		if(!empty($arr["product_packaging"]))
+		{
+			$args["rows"] = array_merge($args["rows"], (array)$arr["product_packaging"]);
 		}
 
 		return $args;
@@ -383,25 +417,6 @@ class shop_price_list_obj extends shop_matrix_obj
 
 		$this->set_prop("code", $i->parse());
 		$this->save();
-		$shop_order_cart = obj(354887);
-		arr($shop_order_cart->delivery_methods(array(
-			"product" => array(),
-			"product_packaging" => array(),
-		)));
-		$shop_aka_shop_order_center = obj(354886);
-		arr($shop_aka_shop_order_center->get_rent_conditions(array(
-			"sum" => 5000,
-			"currency" => 354831,
-		)));
-		arr(shop_price_list_obj::price(array(
-			"shop" => 354886,
-			"product" => 360048,
-			"prices" => array(
-				354831 => 1000,
-			),
-			"structure" => true,
-		)));
-		arr($i->parse(), true, true);
 	}
 
 	protected function update_code_handle_quantities($str)
