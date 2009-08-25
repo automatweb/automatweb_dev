@@ -1479,7 +1479,13 @@ class site_template_compiler extends aw_template
 
 		$ret = "";
 		$ret .= $this->_gi().$content_name." = \"\";\n";
-		$ret .= $this->_gi()."\$mmi_cnt = 0; if(empty(\$cnt_menus))\$cnt_menus = 0;\n";
+		$ret .= $this->_gi()."\$mmi_cnt = 0;\n";
+		$ret .= $this->_gi()."if(empty(\$cnt_menus))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$cnt_menus = 0;\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
 		$ret .= $this->_gi().$act_count_name." = \$this->_helper_get_act_count(".$list_name.");\n";
 		$ret .= $this->_gi()."for(\n((\"make_menu_item\" == " . $fun_name . ") ? (\$mmi_cnt = 1) : (".$o_name." = ".$list_name."->begin())), ((\"make_menu_item\" == " . $fun_name . ") ? ((".$fun_name."_cb)?(\$tmp_vars_array = " . $inst_name . "->make_menu_item_from_tabs(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus)):\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus))  : (null)),".$loop_counter_name." = 0, ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (\$prev_obj = NULL));\n ((\"make_menu_item\" == " . $fun_name . ") ? is_array(\$tmp_vars_array) : (!".$list_name."->end()));\n ((\"make_menu_item\" == " . $fun_name . ") ? ((".$fun_name."_cb)? \$tmp_vars_array = " . $inst_name . "->make_menu_item_from_tabs(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus):\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus)) : (\$prev_obj = ".$o_name.")), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$o_name." = ".$list_name."->next())), ".$loop_counter_name."++\n)\n";
 		$ret .= $this->_gi()."{\n";
@@ -1531,7 +1537,7 @@ class site_template_compiler extends aw_template
 				$ret .= $this->_gi()."}\n";
 			$this->brace_level--;
 			$ret .= $this->_gi()."}\n";
-			$ret .= $this->_gi()."if (".$this_is_from_obj_name."[".$o_name."->parent()])\n";
+			$ret .= $this->_gi()."if (!empty(".$this_is_from_obj_name."[".$o_name."->parent()]))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 			$ret .= $this->_gi().$this_is_from_obj_name."[".$o_name."->id()] = ".$this_is_from_obj_name."[".$o_name."->parent()];\n";
@@ -2451,12 +2457,13 @@ class site_template_compiler extends aw_template
 
 		// insert the same thing that op_loop_list_end does, but for groups
 
-                if ($arr["stack_pop"])                                                                                                      {
+                if (!empty($arr["stack_pop"]))
+				{
                         $res .= $this->_gi()."array_pop(\$this->_cur_menu_path);\n";
                 }
 
 		// pop one item off the list name stack
-		if (!$arr["no_pop"])
+		if (empty($arr["no_pop"]))
 		{
 			$dat = array_pop($this->list_name_stack);
 			$this->last_list_dat = $dat;
