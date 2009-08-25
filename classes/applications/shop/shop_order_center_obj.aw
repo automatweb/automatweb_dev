@@ -31,8 +31,8 @@ class shop_order_center_obj extends _int_object
 		{
 			$arr = array_merge(array(
 				"customer_data" => $customer_data->id(),
-				"customer_category" => $customer_data->get_customer_categories()->ids(),
-				"location" => $customer_data->get_locations()->ids(),
+				"customer_category" => array(),//$customer_data->get_customer_categories()->ids(),
+				"location" => array(),//$customer_data->get_locations()->ids(),
 			), $arr);
 		}
 		return is_oid($id = $this->prop("rent_configuration")) ? obj($id)->valid_conditions($arr) : NULL;
@@ -239,20 +239,14 @@ class shop_order_center_obj extends _int_object
 		$html_params = array(
 			"id" => $order,
 		);
-
-
-		// If there is template set explicitly in $mail_data parameter, then use it
-		if (!empty($mail_data['template']))
+		if(!empty($mail_data["template"]))
 		{
-			$html_params['template'] = $mail_data['template'];
+			$html_params["template"] = $mail_data["template"];
 		}
-		else
-		if($this->prop("mail_template"))
+		elseif($this->prop("mail_template"))
 		{
 			$html_params["template"] = $this->prop("mail_template");
 		}
-
-
 		$html = $order_inst->show($html_params);
 		$order_object = obj($order);
 		$warehouse = $this->prop("warehouse");
@@ -330,5 +324,100 @@ class shop_order_center_obj extends _int_object
 	{
 		return $this->prop("default_currency");
 	}
+
+	private function get_all_product_show_menus()
+	{
+		$menus = array();
+		$roots = $this->prop("root_menu");
+		foreach($roots as $root_menu)
+		{
+			$ot = new object_tree(array(
+				"class_id" => CL_MENU,
+				"parent" => $root_menu,
+			));
+			$menus = $menus + $ot->ids();
+		}
+		return $menus;
+	}
+
+	/** makes all menus used to show products inactive if there is no products
+		@attrib api=1
+	**/
+	public function make_all_empty_menus_not_active()
+	{
+		$menus = $this->get_all_product_show_menus();
+		$inactive_menus = array();
+		$active_menus = array();
+		arr("kokku men&uuml;&uuml;sid : ".sizeof($menus));flush();
+		foreach($menus as $key => $menu_id)
+		{
+			arr("kontrollib men&uuml;&uuml;d idga : ".$menu_id);flush();
+			if(in_array($menu_id , $inactive_menus) || in_array($menu_id , $active_menus))
+			{
+				continue;
+			}
+			$show_object = $this->get_product_show_obj($menu_id);
+			if(is_object($show_object))
+			{
+				$items = $show_object->get_web_items();
+				if($items->count())
+				{
+					$active_menus[$menu_id] = $menu_id;
+					continue;
+				}
+			}
+			if(in_array($menu_id , $active_menus))
+			{
+				continue;
+			}
+
+			$ot = new object_tree(array(
+				"class_id" => CL_MENU,
+				"parent" => $menu_id,
+			));
+			foreach($ot->ids() as $id)
+			{
+				if(in_array($id , $active_menus))
+				{
+					$active_menus[$menu_id] = $menu_id;
+					break;
+				}
+				$show_object = $this->get_product_show_obj($id);
+				if(is_object($show_object))
+				{
+					$items = $show_object->get_web_items();
+					if($items->count())
+					{
+						$active_menus[$menu_id] = $menu_id;
+						$active_menus[$id] = $id;
+						break;
+					}
+				}
+			}
+			if(!in_array($menu_id , $active_menus))
+			{
+				$inactive_menus[$menu_id] = $menu_id;
+				foreach($ot->ids() as $id)
+				{
+					$inactive_menus[$id] = $id;
+				}
+			}
+		}
+		arr("kokku mitteaktiivseid men&uuml;&uuml;sid : ".sizeof($inactive_menus));
+		print "<br>";
+		print "teeb mitteaktiivseks:<br>";
+		if(sizeof($inactive_menus))
+		{
+			$ol = new object_list();
+			$ol->add($inactive_menus);
+			foreach($ol->arr() as $inactive)
+			{
+				print "ID: ".$inactive->id()." , Nimi: ".$inactive->name()."<br>";
+				$inactive->set_prop("status" , 1);
+//				$inactive->save();
+			}
+		}
+	}
+	
 
 }

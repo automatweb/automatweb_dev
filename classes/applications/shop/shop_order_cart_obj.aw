@@ -30,8 +30,8 @@ class shop_order_cart_obj extends _int_object
 			{
 				$arr = array_merge(array(
 					"customer_data" => $customer_data->id(),
-					"customer_category" => $customer_data->get_customer_categories()->ids(),
-					"location" => $customer_data->get_locations()->ids(),
+					"customer_category" => array(),//$customer_data->get_customer_categories()->ids(),
+					"location" => array(),//$customer_data->get_locations()->ids(),
 				), $arr);
 			}
 		}
