@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.15 2009/08/19 13:25:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.16 2009/08/25 07:55:53 instrumental Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -735,8 +735,6 @@ class shop_product_search extends class_base
 
 		$ctr_i = get_instance(CL_FORM_CONTROLLER);
 		$tr_i = get_instance(CL_OTV_DATA_FILTER);
-		
-		arr($arr["request"]);
 
 		if (array_key_exists("MAX_FILE_SIZE", $arr["request"]))
 		{
