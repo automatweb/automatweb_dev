@@ -18,6 +18,9 @@
 	@property enabled type=checkbox field=aw_enabled
 	@caption Vaikimisi lubatud
 
+	@property enabling_type type=chooser field=aw_enabling_type orient=vertical
+	@caption Lubamise/keelamise tingimus
+
 @groupinfo matrix caption="Maatriks"
 	@groupinfo matrix_show caption="Maatriks" parent=matrix
 	@default group=matrix_show
@@ -88,12 +91,30 @@ class shop_delivery_method extends shop_matrix
 		));
 	}
 
+	public function callback_post_save($arr)
+	{
+		$arr["obj_inst"]->update_code();
+	}
+
 	public static function get_type_options()
 	{
 		return array(
 			1 => t("Lisandub iga toote hinnale eraldi"),
 			2 => t("Lisandub kogu tellimuse hinnale"),
 		);
+	}
+
+	public static function get_enabling_type_options()
+	{
+		return array(
+			1 => t("Lubatud/keelatud, kui ostukorvis olevale k&otilde;rgeima prioriteediga maatriksi reale on lubatud/keelatud"),
+			2 => t("Lubatud/keelatud, kui k&otilde;igile ostukorvis olevatele maatriksi ridadele on lubatud/keelatud"),
+		);
+	}
+
+	public function _get_enabling_type($arr)
+	{
+		$arr["prop"]["options"] = $this->get_enabling_type_options();
 	}
 
 	public function _get_prices($arr)
@@ -273,8 +294,6 @@ class shop_delivery_method extends shop_matrix
 			));
 			$ol->delete();
 		}
-
-		$arr["obj_inst"]->update_code();
 	}
 
 	public function do_db_upgrade($t, $f)
@@ -289,16 +308,10 @@ class shop_delivery_method extends shop_matrix
 		{
 			case "aw_type":
 			case "aw_enabled":
+			case "aw_enabling_type":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
-				));
-				return true;
-
-			case "aw_price":
-				$this->db_add_col($t, array(
-					"name" => $f,
-					"type" => "decimal(14,4)"
 				));
 				return true;
 

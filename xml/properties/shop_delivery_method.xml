@@ -36,6 +36,15 @@
             <caption>Vaikimisi lubatud</caption>
       </property>
       <property>
+            <name>enabling_type</name>
+            <table>aw_shop_delivery_method</table>
+            <group>general</group>
+            <type>chooser</type>
+            <field>aw_enabling_type</field>
+            <orient>vertical</orient>
+            <caption>Lubamise/keelamise tingimus</caption>
+      </property>
+      <property>
             <name>matrix</name>
             <table>aw_shop_delivery_method</table>
             <group>matrix_show</group>

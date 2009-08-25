@@ -11,6 +11,7 @@ $priorities = array(
 );
 
 $rows = array(0);
+$groups = array();
 foreach($args["rows"] as $row)
 {
 	$rows[$row] = isset($priorities[$row]) ? $priorities[$row] : 0;
@@ -21,6 +22,10 @@ foreach($args["rows"] as $row)
 			$rows[$parent] = isset($priorities[$parent]) ? $priorities[$parent] : 0;
 		}
 	}
+	<!-- SUB: ENABLING_TYPE_2_INITIALIZE -->
+	$groups[] = array_merge(array($row), isset($parents[$row]) ? $parents[$row] : array());
+	$groups_return_default[] = 1;
+	<!-- END SUB: ENABLING_TYPE_2_INITIALIZE -->
 }
 asort($rows);
 
@@ -54,11 +59,24 @@ foreach(array_keys($rows) as $row)
 		{
 			<!-- SUB: HANDLE_CELL -->
 			case "{VAR:row}_{VAR:col}":
+				<!-- SUB: ENABLING_TYPE_2_HANDLE_CELL -->
+				foreach($groups as $group_key => $group)
+				{
+					$groups_return_default[$group_key] = array_search($row, $group) !== false && {VAR:enable} !== {VAR:enabled_by_default} ? 0 : 1;
+				}
+				<!-- END SUB: ENABLING_TYPE_2_HANDLE_CELL -->
+				<!-- SUB: ENABLING_TYPE_1_HANDLE_CELL -->
 				$valid = {VAR:enable};
+				<!-- END SUB: ENABLING_TYPE_1_HANDLE_CELL -->
 				break;
 			<!-- END SUB: HANDLE_CELL -->
 		}
 	}
 }
 
+<!-- SUB: ENABLING_TYPE_1_RETURN -->
 return $valid;
+<!-- END SUB: ENABLING_TYPE_1_RETURN -->
+<!-- SUB: ENABLING_TYPE_2_RETURN -->
+return array_sum($groups_return_default) === 0 ? !{VAR:enabled_by_default} : {VAR:enabled_by_default};
+<!-- END SUB: ENABLING_TYPE_2_RETURN -->

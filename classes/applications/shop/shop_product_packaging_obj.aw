@@ -43,25 +43,51 @@ class shop_product_packaging_obj extends shop_product_obj
 	**/
 	function get_price($arr)
 	{
-		$prices = $this->meta("cur_prices");
-		return isset($arr["shop"]) && is_oid($arr["shop"]) && $this->can("view", $arr["shop"]) ? shop_price_list_obj::price(array(
-			"shop" => $arr["shop"],
-			"product" => $this->prop("product"),
-			"product_packaging" => $this->id(),
-			"product_category" => $this->get_categories(),
-			"amount" => isset($arr["amount"]) ? $arr["amount"] : 1,
-			"prices" => $prices,
-			//	Need tuleb e-poe k2est kysida, kui ette ei anta (ja yldiselt ei anta)
-			"customer_category" => isset($arr["customer_category"]) ? $arr["customer_category"] : array(),
-			"customer_data" => isset($arr["customer_data"]) ? $arr["customer_data"] : array(),
-			//	Kliendi juurest, kui ette ei anta? (yldiselt ei anta)
-			"location" => isset($arr["location"]) ? $arr["location"] : array(),
-			"timespan" => array(
-				"start" => isset($arr["from"]) ? $arr["from"] : (isset($arr["time"]) ? $arr["time"] : time()),
-				"end" => isset($arr["time"]) ? $arr["time"] : time(),
-			),
-			"structure" => !empty($arr["structure"]),
-		)) : $prices;
+		$prices = safe_array($this->meta("cur_prices"));
+		if(isset($arr["shop"]) && is_oid($arr["shop"]) && $this->can("view", $arr["shop"]))
+		{
+			$shop = obj($arr["shop"]);
+			// If no prices are set for any currencies, we presume the price property is set for default currency
+			if(is_oid($shop->default_currency) && $this->prop("price"))
+			{
+				$no_price_set_for_any_currency = true;
+				foreach($prices as $currency => $price)
+				{
+					if(strlen(trim($price)))
+					{
+						$no_price_set_for_any_currency = false;
+						break;
+					}
+				}
+				if($no_price_set_for_any_currency)
+				{
+					$prices[$shop->default_currency] = $this->prop("price");
+				}
+			}
+			return shop_price_list_obj::price(array(
+				"shop" => $arr["shop"],
+				"product" => $product = $this->prop("product"),
+				"product_packets" => $packet = is_oid($product) ? shop_product_obj::get_packets_for_id($product)->ids() : array(),
+				"product_packaging" => $this->id(),
+				"product_category" => array_merge((is_oid($product) ? shop_product_obj::get_categories_for_id($product) : array()), (!empty($packet) ? shop_packet_obj::get_categories_for_id($packet)->ids() : array())),
+				"amount" => isset($arr["amount"]) ? $arr["amount"] : 1,
+				"prices" => $prices,
+				//	Need tuleb e-poe k2est kysida, kui ette ei anta (ja yldiselt ei anta)
+				"customer_category" => isset($arr["customer_category"]) ? $arr["customer_category"] : array(),
+				"customer_data" => isset($arr["customer_data"]) ? $arr["customer_data"] : array(),
+				//	Kliendi juurest, kui ette ei anta? (yldiselt ei anta)
+				"location" => isset($arr["location"]) ? $arr["location"] : array(),
+				"timespan" => array(
+					"start" => isset($arr["from"]) ? $arr["from"] : (isset($arr["time"]) ? $arr["time"] : time()),
+					"end" => isset($arr["time"]) ? $arr["time"] : time(),
+				),
+				"structure" => !empty($arr["structure"]),
+			));
+		}
+		else
+		{
+			return $prices;
+		}
 	}
 	
 	/** returns product color name
@@ -87,7 +113,7 @@ class shop_product_packaging_obj extends shop_product_obj
 			The OID(s) of product packagings to get the product(s) for
 		@returns Array of product OIDs for given packaging(s) OIDs
 	**/
-	public function get_products_for_id($id)
+	public static function get_products_for_id($id)
 	{
 		if(empty($id))
 		{
@@ -96,7 +122,7 @@ class shop_product_packaging_obj extends shop_product_obj
 
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT,
-			"RELTYPE_PACKAGING" => $id,
+			"CL_SHOP_PRODUCT.RELTYPE_PACKAGING" => $id,
 			"lang_id" => array(),
 			"site_id" => array(),
 		));

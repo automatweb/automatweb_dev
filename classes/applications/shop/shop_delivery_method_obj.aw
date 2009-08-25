@@ -6,8 +6,9 @@ class shop_delivery_method_obj extends shop_matrix_obj
 	{
 		switch($k)
 		{
-			case "price":
-				return aw_math_calc::string2float(parent::prop($k));
+			case "enabling_type":
+			case "type":
+				return ($val = aw_math_calc::string2float(parent::prop($k))) > 0 ? $val : 1;
 
 			default:
 				return parent::prop($k);
@@ -21,6 +22,8 @@ class shop_delivery_method_obj extends shop_matrix_obj
 			The OID(s) of the product packagings
 		@param product optional type=int/array acl=view
 			The OID(s) of the product
+		@param product_packet optional type=array/int acl=view
+			OIDs of product packets
 		@param amount optional type=float default=1
 			The amount of the product prices are asked for
 		@param product_category optional type=array/int acl=view
@@ -58,17 +61,6 @@ class shop_delivery_method_obj extends shop_matrix_obj
 
 	protected static function valid_validate_arguments($arr)
 	{
-		foreach(array(
-			"shop" => t("Parameter 'shop' must me a valid OID!"),
-			"product" => t("Parameter 'product' must me a valid OID!"),
-		) as $k => $msg)
-		{
-			if(!isset($arr[$k]) || !is_oid($arr[$k]))
-			{
-				$e = new awex_shop_delivery_method_parameter($msg);
-//				throw $e;
-			}
-		}
 	}
 
 	protected static function handle_arguments($arr)
@@ -78,23 +70,57 @@ class shop_delivery_method_obj extends shop_matrix_obj
 			"customers" => safe_array(ifset($arr, "customer_category")),
 			"locations" => safe_array(ifset($arr, "location")),
 			"default" => array(0),
+			"rows" => array(),
 		);
 
-		if(!isset($arr["product"]))
+		if(!isset($arr["product"]) && !empty($arr["product_packaging"]))
 		{
-			$arr["product"] = isset($arr["product_packaging"]) ? shop_product_packaging_obj::get_products_for_id($arr["product_packaging"]) : array();
+			$arr["product"] = shop_product_packaging_obj::get_products_for_id($arr["product_packaging"]);
+		}
+		elseif(!empty($arr["product_packaging"]))
+		{
+			$arr["product"] = array_merge((array)$arr["product"], shop_product_packaging_obj::get_products_for_id($arr["product_packaging"]));
 		}
 
-		if(!isset($arr["product_category"]))
+		if(!empty($arr["product"]))
 		{
-			$arr["product_category"] = isset($arr["product"]) ? shop_product_obj::get_categories_for_id($arr["product"]) : array();
+			$arr["product_packet"] = isset($arr["product_packet"]) ? $arr["product_packet"] : array();
+			foreach(shop_product_obj::get_packets_for_id((array)$arr["product"]) as $packet_ol)
+			{
+				$arr["product_packet"] = array_merge($arr["product_packet"], $packet_ol->ids());
+			}
 		}
 
-		if(!isset($arr["product_packaging"]))
+		$arr["product_category"] = isset($arr["product_category"]) ? $arr["product_category"] : array();
+		if(!empty($arr["product"]))
 		{
-			$arr["product_packaging"] = array();
+			$arr["product_category"] = shop_product_obj::get_categories_for_id($arr["product"]);
 		}
-		$args["rows"] = array_merge((array)$arr["product_packaging"], (array)$arr["product"], (array)$arr["product_category"]);
+		if(!empty($arr["product_packet"]))
+		{
+			$arr["product_category"] = shop_packet_obj::get_categories_for_id($arr["product_packet"])->ids();
+		}
+
+		if(!empty($arr["product"]))
+		{
+			$args["rows"] = array_merge($args["rows"], (array)$arr["product"]);
+		}
+		if(!empty($arr["product_packet"]))
+		{
+			$args["rows"] = array_merge($args["rows"], (array)$arr["product_packet"]);
+		}
+		if(!empty($arr["product_category"]))
+		{
+			$args["rows"] = array_merge($args["rows"], (array)$arr["product_category"]);
+		}
+		if(!empty($arr["product_packaging"]))
+		{
+			$args["rows"] = array_merge($args["rows"], (array)$arr["product_packaging"]);
+		}
+
+		// Currently the matrix is only configurable for product categories anyway
+		// DO NOT change this unless you're aware that if enabling_mode == 2 it currently only works like this! -kaarel 25.08.2009
+		$args["rows"] = !empty($arr["product_category"]) ? $arr["product_category"] : array();
 
 		return $args;
 	}
@@ -108,12 +134,35 @@ class shop_delivery_method_obj extends shop_matrix_obj
 	public function get_price()
 	{
 		static $prices;
+		if(!isset($prices[$this->id()]))
+		{
+			// LATER ON SHOULD BE BUILT ON PRICE OBJECTS. I CAN'T UNDERSTAND THE LOGIC BEHIND THOSE AT THE MOMENT -kaarel 30.07.2009
+			$prices[$this->id()] = $this->meta("prices");
+		}
+		return $prices[$this->id()];
+	}
+
+	//oc - order center object
+	public function get_shop_price($oc)
+	{
+		static $price;
+		if(!isset($price[$this->id()]))
+		{
+			// LATER ON SHOULD BE BUILT ON PRICE OBJECTS. I CAN'T UNDERSTAND THE LOGIC BEHIND THOSE AT THE MOMENT -kaarel 30.07.2009
+			$prices[$this->id()] = $this->get_price();
+		}
+		return $prices[$this->id()][$oc->prop("default_currency")];
+	}
+
+	//oc - order center object
+	public function get_curr_price($curr)
+	{
 		if(!isset($prices))
 		{
 			// LATER ON SHOULD BE BUILT ON PRICE OBJECTS. I CAN'T UNDERSTAND THE LOGIC BEHIND THOSE AT THE MOMENT -kaarel 30.07.2009
-			$prices = $this->meta("prices");
+			$prices = $this->get_price();
 		}
-		return $prices;
+		return $prices[$curr];
 	}
 
 	public function update_code()
@@ -122,6 +171,10 @@ class shop_delivery_method_obj extends shop_matrix_obj
 
 		$i = $this->instance();
 		$i->read_template("code.aw");
+		$i->vars(array(
+			"enabled_by_default" => $this->prop("enabled") ? "true" : "false",
+			"passing_order" => "'".implode("','", array_merge(array_keys(safe_array($this->meta("matrix_col_order"))), array("default")))."'",			
+		));
 
 		$matrix_structure = $this->get_matrix_structure($this);
 		$this->cells = array();
@@ -182,17 +235,26 @@ class shop_delivery_method_obj extends shop_matrix_obj
 						"col" => $col,
 						"enable" => $cell_data["enable"] == 2 ? "false" : "true",
 					));
+					if($this->prop("enabling_type") == 2)
+					{
+						$i->vars(array(
+							"ENABLING_TYPE_2_HANDLE_CELL" => rtrim($i->parse("ENABLING_TYPE_2_HANDLE_CELL"), "\t"),
+						));
+					}
 					$HANDLE_CELL .= rtrim($i->parse("HANDLE_CELL"), "\t");
 				}
 			}
 		}
 
 		$i->vars(array(
-			"enabled_by_default" => $this->prop("enabled") ? "true" : "false",
-			"passing_order" => "'".implode("','", array_merge(array_keys(safe_array($this->meta("matrix_col_order"))), array("default")))."'",
 			"PARENTS" => $PARENTS,
 			"PRIORITIES" => $PRIORITIES,
 			"HANDLE_CELL" => $HANDLE_CELL,
+		));
+		$i->vars(array(
+			"ENABLING_TYPE_2_INITIALIZE" => $this->prop("enabling_type") == 2 ? rtrim($i->parse("ENABLING_TYPE_2_INITIALIZE"), "\t") : "",
+			"ENABLING_TYPE_1_RETURN" => $this->prop("enabling_type") == 1 ? rtrim($i->parse("ENABLING_TYPE_1_RETURN"), "\t") : "",
+			"ENABLING_TYPE_2_RETURN" => $this->prop("enabling_type") == 2 ? rtrim($i->parse("ENABLING_TYPE_2_RETURN"), "\t") : "",
 		));
 
 		$this->set_prop("code", $i->parse());
