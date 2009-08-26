@@ -18,11 +18,11 @@ msgid "object::load(%s): no such object!"
 msgstr ""
 
 #: classes/core/obj/ds_mysql.aw:228 classes/core/obj/ds_mysql.aw:303
-#: classes/core/obj/ds_mysql.aw:3553
+#: classes/core/obj/ds_mysql.aw:3554
 msgid "ds_mysql::read_properties(): no reltype for prop %s (%s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:423 classes/core/obj/ds_mysql.aw:3635
+#: classes/core/obj/ds_mysql.aw:423 classes/core/obj/ds_mysql.aw:3636
 msgid "ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch! q = %s"
 msgstr ""
 
@@ -34,7 +34,7 @@ msgstr ""
 msgid "ds_mysql::final_delete_object(%s): no suct object exists!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1801 classes/core/obj/ds_mysql.aw:3838
+#: classes/core/obj/ds_mysql.aw:1801 classes/core/obj/ds_mysql.aw:3839
 msgid "filter cannot contain properties (%s) that are in serialized fields other than metadata!"
 msgstr ""
 
@@ -59,7 +59,7 @@ msgid "ds_mysql::do_proc_complex_param(%s, %s): if a complex join parameter is g
 msgstr ""
 
 #: classes/core/obj/ds_mysql.aw:2780 classes/core/obj/ds_mysql.aw:2800
-#: classes/core/obj/ds_mysql.aw:2954
+#: classes/core/obj/ds_mysql.aw:2955
 msgid "ds_mysql::_req_do_pcp(): no relation from class %s named %s"
 msgstr ""
 
@@ -71,22 +71,22 @@ msgstr ""
 msgid "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:2902 classes/core/obj/ds_mysql.aw:2940
+#: classes/core/obj/ds_mysql.aw:2902 classes/core/obj/ds_mysql.aw:2941
 msgid "ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:2927
+#: classes/core/obj/ds_mysql.aw:2928
 msgid "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:3199
+#: classes/core/obj/ds_mysql.aw:3200
 msgid "ds_mysql::_get_search_fetch() was called with incorrect sql func %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:3860
+#: classes/core/obj/ds_mysql.aw:3861
 msgid "object_complex_query::compile_oql_query(): FROM clause has an error, unrecognized clid %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:3968
+#: classes/core/obj/ds_mysql.aw:3969
 msgid "ds_mysql::_parse_fetch(): no property %s in class %s"
 msgstr ""

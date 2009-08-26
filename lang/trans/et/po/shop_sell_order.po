@@ -205,6 +205,18 @@ msgstr ""
 msgid "Omaduse Staatus (order_status) help"
 msgstr ""
 
+#: classes/applications/shop/shop_sell_order.aw:prop_channel
+msgid "Omaduse M&uuml;&uuml;gikanal (channel) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_channel_comment
+msgid "Omaduse M&uuml;&uuml;gikanal (channel) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_channel_help
+msgid "Omaduse M&uuml;&uuml;gikanal (channel) help"
+msgstr ""
+
 #: classes/applications/shop/shop_sell_order.aw:prop_taxed
 msgid "Omaduse Maks (taxed) caption"
 msgstr ""
@@ -309,38 +321,46 @@ msgstr ""
 msgid "Seose Aadress (RELTYPE_ADDRESS) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:116
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_CHANNEL
+msgid "Seose M&uuml;&uuml;gikanal (RELTYPE_CHANNEL) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_RELTYPE_CHANNEL
+msgid "Seose M&uuml;&uuml;gikanal (RELTYPE_RELTYPE_CHANNEL) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:122
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:117
+#: classes/applications/shop/shop_sell_order.aw:123
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:118
+#: classes/applications/shop/shop_sell_order.aw:124
 msgid "Katkestatud"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:119
+#: classes/applications/shop/shop_sell_order.aw:125
 msgid "Saadetud"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:120
+#: classes/applications/shop/shop_sell_order.aw:126
 msgid "T&auml;idetud"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:230
+#: classes/applications/shop/shop_sell_order.aw:244
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:235
+#: classes/applications/shop/shop_sell_order.aw:249
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:240
+#: classes/applications/shop/shop_sell_order.aw:254
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:245
+#: classes/applications/shop/shop_sell_order.aw:259
 msgid "Summa"
 msgstr ""

@@ -1055,7 +1055,7 @@ msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:677
 #: classes/applications/shop/otto/otto_import.aw:2259
-#: classes/applications/shop/otto/otto_import.aw:5128
+#: classes/applications/shop/otto/otto_import.aw:5129
 msgid "AW Kataloogi ID"
 msgstr ""
 
@@ -1346,22 +1346,22 @@ msgstr ""
 msgid "all done! <br>"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:5122
+#: classes/applications/shop/otto/otto_import.aw:5123
 msgid "Lehed komaga eraldatult"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:6808
+#: classes/applications/shop/otto/otto_import.aw:6818
 msgid "CSV fail"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:6812
+#: classes/applications/shop/otto/otto_import.aw:6822
 msgid "XML fail"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:7063
+#: classes/applications/shop/otto/otto_import.aw:7073
 msgid "OTTO Eesti ladu"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:7064
+#: classes/applications/shop/otto/otto_import.aw:7074
 msgid "draiver"
 msgstr ""

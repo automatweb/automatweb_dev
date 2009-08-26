@@ -3533,6 +3533,10 @@ msgstr ""
 msgid "Klassi J&auml;relmaksukonfiguratsioon (1577) nimi"
 msgstr ""
 
+#: aw.ini:class_1682
+msgid "Klassi M&uuml;&uuml;gikanal (1682) nimi"
+msgstr ""
+
 # aw.ini:classfolder_29
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
@@ -6778,6 +6782,10 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1589
 msgid "syslog.type.ST_PRODUCT_BRAND"
+msgstr ""
+
+#: aw.ini:syslogtypes_1682
+msgid "syslog.type.ST_WAREHOUSE_SELL_CHANNEL"
 msgstr ""
 
 #: aw.ini:syslogactions_1
