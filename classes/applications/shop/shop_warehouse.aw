@@ -8271,7 +8271,32 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 			"name" => sprintf("%s (%s)",  t("K&otilde;ik m&uuml;&uuml;gikanalid"), $ol->count()),
 		));
 	}
+/*
+	function _get_sell_orders_channel_tree($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$channels = $arr["obj_inst"]->get_channels();
+		$t->set_selected_item($arr["request"]["channel"] ? "channel_".$arr["request"]["channel"] : "channel_all");
 
+		foreach($channels->names() as $channel => $name)
+		{
+			$arr["request"]["channel"] = $channel;
+			$ol = $this->_get_orders_ol($arr);
+			$t->add_item(0, array(
+				"id" => "channel_".$channel,
+				"url" => aw_url_change_var("channel", $channel),
+				"name" =>  sprintf("%s (%s)",  $name, $ol->count()),
+			));
+		}
+		$arr["request"]["channel"] = "all";
+		$ol = $this->_get_orders_ol($arr);
+		$t->add_item(0, array(
+			"id" => "channel_all",
+			"url" => aw_url_change_var("channel", "all"),
+			"name" => sprintf("%s (%s)",  t("K&otilde;ik m&uuml;&uuml;gikanalid"), $ol->count()),
+		));
+	}
+*/
 	function _get_purchase_orders_tree($arr)
 	{
 		$oi = get_instance(CL_SHOP_PURCHASE_ORDER);
@@ -8355,23 +8380,23 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 				$co = $co->name();
 			}
 		}
-		if($co)
+		if(!empty($co))
 		{
 			$params[$co_prop.".name"] = "%".$co."%";
 		}
-		if($sm = $arr["request"][$group."_s_sales_manager"])
+		if(!empty($arr["request"][$group."_s_sales_manager"]) && $sm = $arr["request"][$group."_s_sales_manager"])
 		{
 			$params["job.RELTYPE_MRP_MANAGER.name"] = "%".$sm."%";
 		}
-		if($jn = $arr["request"][$group."_s_job_name"])
+		if(!empty($arr["request"][$group."_s_job_name"]) && $jn = $arr["request"][$group."_s_job_name"])
 		{
 			$params["job.comment"] = "%".$jn."%";
 		}
-		if($jno = $arr["request"][$group."_s_job_number"])
+		if(!empty($arr["request"][$group."_s_job_number"]) && $jno = $arr["request"][$group."_s_job_number"])
 		{
 			$params["job.name"] = "%".$jno."%";
 		}
-		if($s = $arr["request"][$group."_s_status"])
+		if(!empty($arr["request"][$group."_s_status"]) && $s = $arr["request"][$group."_s_status"])
 		{
 			if($s != STORAGE_FILTER_CONFIRMATION_ALL)
 			{
@@ -8461,6 +8486,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 		$ol = $this->_get_orders_ol($arr);
 		$ui = get_instance(CL_USER);
 		$count = 0;
+		$total_sum = 0;
 		foreach($ol->arr() as $o)
 		{
 			$count++;
@@ -8486,6 +8512,10 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 				$co = obj($cid);
 				$case = html::obj_change_url($co, parse_obj_name($co->name())).", ".$co->comment();
 			}
+			else
+			{
+				$case = "";
+			}
 			$dd = $o->prop("deal_date");
 			$dealnow = 0;
 			if($dd <= time() && $o->prop("order_status") < ORDER_STATUS_SENT && $arr["extra"])
@@ -8502,7 +8532,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 				$row = $c->to();
 				$sum += $row->prop("amount") * $row->prop("price");
 			}
-
+			$total_sum+=$sum;
 			if(($group == "purchase_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_PURCHASE_MANAGER_WORKSPACE) || ($group == "sell_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_SALES_MANAGER_WORKSPACE))
 			{
 				$add_row .= html::strong(t("Kommentaarid:"))."<br />";
@@ -8679,6 +8709,14 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 			$time_capt = date("d.m.Y" , $arr["request"]["filt_time"]);
 		}
 
+
+			$t->define_data(array(
+				"purchaser" => t("Kokku"),
+				"sum" => $total_sum." ".get_name($o->prop("currency")),
+			));
+
+
+
 		$sell_capt = t("Ostutellimused");
 if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitellimused");
 		$t->set_caption(sprintf(t("%s: %s "), $sell_capt , $time_capt));
@@ -8767,6 +8805,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 
 		$t->define_field(array(
 			"name" => "oid",
+
 			"caption" => t("AW ID"),
 			"sortable" => 1,
 			"align" => "center",
@@ -8774,7 +8813,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			"colspan" => "colspan",
 			"parent" => "ids"
 		));
-		
+
 		$t->define_field(array(
 			"name" => "number",
 			"caption" => t("Naabri ID"),
@@ -10521,27 +10560,27 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 	private function get_art_filter_ol($arr)
 	{
 		$group = $this->get_search_group($arr);
-		if($p = $arr["request"][$group."_s_article"])
+		if(!empty($arr["request"][$group."_s_article"]) && $p = $arr["request"][$group."_s_article"])
 		{
 			$name = $p;
 		}
-		elseif($p = $arr["request"][$group."_s_art"])
+		elseif(!empty($arr["request"][$group."_s_art"]) && $p = $arr["request"][$group."_s_art"])
 		{
 			$name = $p;
 		}
-		if($name)
+		if(!empty($name) && $name)
 		{
 			$params["name"] = "%".$name."%";
 		}
-		if($b = $arr["request"][$group."_s_barcode"])
+		if(!empty($arr["request"][$group."_s_barcode"]) && $b = $arr["request"][$group."_s_barcode"])
 		{
 			$params["barcode"] = "%".$b."%";
 		}
-		if($c = $arr["request"][$group."_s_articlecode"])
+		if(!empty($arr["request"][$group."_s_articlecode"]) && $c = $arr["request"][$group."_s_articlecode"])
 		{
 			$params["code"] = "%".$c."%";
 		}
-		if($pgid = $arr["request"][$group."_s_art_cat"])
+		if(!empty($arr["request"][$group."_s_art_cat"]) && $pgid = $arr["request"][$group."_s_art_cat"])
 		{
 			$oids = $this->get_art_cat_filter($pgid);
 			if(count($oids))
