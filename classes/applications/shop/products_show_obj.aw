@@ -65,13 +65,20 @@ enter_function("products_show::get_web_items");
 		}
 		else
 		{
-			$filter = array(
-				"class_id" => CL_SHOP_PACKET,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"CL_SHOP_PACKET.RELTYPE_CATEGORY" => $categories->ids(),
-			);
-			$ol = new object_list($filter);
+			if(!$categories->count())
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$filter = array(
+					"class_id" => CL_SHOP_PACKET,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"CL_SHOP_PACKET.RELTYPE_CATEGORY" => $categories->ids(),
+				);
+				$ol = new object_list($filter);
+			}
 		}
 
 		if(is_array($this->prop("packets")))

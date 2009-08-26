@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.27 2009/08/14 16:50:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.28 2009/08/26 12:58:59 dragut Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -706,14 +706,38 @@ class shop_packet extends class_base
 			foreach($packets->arr() as $pack)
 			{
 				$this->vars($pack->get_data());
+				$this->vars(array("view_url" => aw_url_change_var("product", $pack->id())));
 				$more.= $this->parse("MORE_PRODUCTS");
 			}
 			$this->vars(array(
 				"MORE_PRODUCTS" => $more,
 			));
+			$this->vars(array(
+				"HAS_MORE_PRODUCTS" => $packets->count() ? $this->parse("HAS_MORE_PRODUCTS") : "",
+			));
+
 		}
 
 		$data = $ob->get_data();
+
+		if($this->is_template("TAGS"))
+		{
+			$tags = "";
+			foreach($data["cat_comments"] as $key =>  $comment)
+			{
+				if($comment)
+				{
+					$this->vars(array(
+						"comment" => $comment,
+						"image_url" => $data["cat_images"][$key],
+					));
+					$tags.= $this->parse("TAGS");
+				}		
+			}
+			$this->vars(array("TAGS" => $tags));
+		}
+
+
 		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
  //		$data["submit_url"] = $this->mk_my_orb("submit_add_cart", array(
 //			"oc" => $oc->id(),
@@ -737,20 +761,32 @@ class shop_packet extends class_base
 
 		$prod_params = array();
 		$data["COLORS"] = "";
+		$szs = 0;//lihtsalt n2itab kas on yhelgi pakendil suurusi
+		$clrs = 0;//n2itab kas on yhelgi tootel v2rve suurusi
+
 		foreach($data["packages"] as $product => $packages)
 		{
 			$prod_sizes = array();
 			$prod_prices = array();
 			$prod_ids = array();
-			$prod_params[$product] = $product." : { sizes : [";
+			$prod_params[$product] = $product." : { ";
+
+			$prod_params[$product].= " image_url : \"".$data["big_image_urls"][$product]."\",";
+
+
+			$prod_params[$product].= "sizes : [";
 			$this->vars(array(
 				"color_key" => $product,
 				"color" => $data["colors"][$product],
 			));
+			if($data["colors"][$product])
+			{
+				$clrs = 1;
+			}
 			//arr($data);	
 			foreach($packages as $package)
 			{
-				if($data["sizes"][$package] && $data["prices"][$package])
+				if($data["prices"][$package])
 				{
 					$prod_sizes[] = "\"".$data["sizes"][$package]."\"";
 					$prod_prices[] = $data["prices"][$package];
@@ -765,14 +801,19 @@ class shop_packet extends class_base
 			$prod_params[$product].=join(",",$prod_ids);
 			$prod_params[$product].="]}";
 			$data["COLORS"].= $this->parse("COLORS");
+
 		}
+
 
 		$first_pack = reset($data["packages"]);
 		$n = 0;
 		$data["SIZES"] = "";
 		foreach($first_pack as $pack)
 		{
-			
+			if($data["sizes"][$pack])
+			{
+				$szs = 1;
+			}
 			$this->vars(array(
 				"size" => $data["sizes"][$pack],
 				"size_key" => $n,
@@ -780,7 +821,8 @@ class shop_packet extends class_base
 			$data["SIZES"].= $this->parse("SIZES");
 			$n++;
 		}
-		$data["price"] = $data["prices"][reset($first_pack)];
+
+		$data["price"] = number_format($data["prices"][reset($first_pack)] , 2);
 		
 		$data["product_params"] = "productParams = {\n";
 		$data["product_params"].= join(",\n" , $prod_params);
@@ -789,10 +831,17 @@ class shop_packet extends class_base
 //					}
 //
 		$data["product_params"].= "\n}";
-
 		$data["section"] = aw_global_get("section");
 
 		$this->vars($data);
+		if($szs)
+		{
+			$this->vars(array("HAS_SIZE" => $this->parse("HAS_SIZE")));
+		}
+		if($clrs)
+		{
+			$this->vars(array("HAS_COLOR" => $this->parse("HAS_COLOR")));
+		}
 		return $this->parse();
 	}
 

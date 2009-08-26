@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.42 2009/08/06 14:01:23 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.43 2009/08/26 12:57:45 dragut Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -660,11 +660,10 @@ class shop_product_packaging extends class_base
 
 	function get_prod_calc_price($o)
 	{
-		$c = reset($o->connections_to(array(
+		foreach($o->connections_to(array(
 			"from.class_id" => CL_SHOP_PRODUCT,
 			"type" => 2 // RELTYPE_PACKAGING
-		)));
-		if ($c)
+		)) as $c)
 		{
 			$o = $c->from();
 			return $o->prop("price");
@@ -695,14 +694,16 @@ class shop_product_packaging extends class_base
 
 	function get_must_order_num($o)
 	{
-		if($prod = reset($o->connections_to(array(
+		
+		foreach($o->connections_to(array(
 			"from.class_id" => CL_SHOP_PRODUCT,
-		))))
+		)) as $prod)
 		{
 			$prod = $prod->from();
 			$prod_i = $prod->instance();
 			return $prod_i->get_must_order_num($prod);
 		}
+		return null;
 	}
 
 	function _price_cur($arr)
@@ -759,6 +760,7 @@ class shop_product_packaging extends class_base
 	**/
 	function get_amount_limits($arr)
 	{
+		$ret = array();
 		$o = obj($arr["id"]);
 		if($this->can("view", $o->inherit_aml_from) && $arr["id"] != $o->inherit_aml_from)
 		{
@@ -766,6 +768,11 @@ class shop_product_packaging extends class_base
 			return $this->get_amount_limits($arr);
 		}
 		$amount_limits = $o->meta("amount_limits");
+		if(!is_array($amount_limits))
+		{
+			$amount_limits = array();
+		}
+
 		if(is_oid($arr["group"]))
 		{
 			$arr["group"] = array($arr["group"]);

@@ -105,6 +105,7 @@ define("ORDER_STATUS_INPROGRESS", 1);
 define("ORDER_STATUS_SENT", 2);
 define("ORDER_STATUS_CONFIRMED", 3);
 define("ORDER_STATUS_CLOSED", 4);
+define("ORDER_STATUS_WORKING", 5);
 
 class shop_purchase_order extends class_base
 {
@@ -121,6 +122,7 @@ class shop_purchase_order extends class_base
 			ORDER_STATUS_SENT => t("Saadetud"),
 			ORDER_STATUS_CONFIRMED => t("Kinnitatud"),
 			ORDER_STATUS_CLOSED => t("T&auml;idetud"),
+			ORDER_STATUS_WORKING => t("T&ouml;&ouml;tlemisel"),
 		);
 	}
 

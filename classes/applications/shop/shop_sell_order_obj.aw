@@ -21,10 +21,10 @@ class shop_sell_order_obj extends _int_object
 
 	function save($exclusive = false, $previous_state = null)
 	{
-		if(empty($this->order_status))
-		{
-			$this->set_prop("order_status" , 0);
-		}
+//		if(empty($this->order_status))
+//		{
+//			$this->set_prop("order_status" , "1");
+//		}
 		$r =  parent::save($exclusive, $previous_state);
 		return $r;
 	}

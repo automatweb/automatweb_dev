@@ -97,7 +97,7 @@ class shop_brand extends class_base
 				case "aw_code":
 					$this->db_add_col($t, array(
 						"name" => $f,
-						"type" => "int"
+						"type" => "varchar(255)"
 					));
 					return true;
 			}
