@@ -2268,10 +2268,10 @@ exit_function("bill::balance");
 					$custr[] = $cust->prop("contact.postiindeks")." ".$cust->prop("contact.riik.name");
 				}
 				*/
-				$custr[] = $i->get_customer_address($b->id());
-				$custr[] = $i->get_customer_address($b->id() , "index")." ".$i->get_customer_address($b->id() , "country");
+				$custr[] = $b->get_customer_address();
+				$custr[] = $b->get_customer_address("index")." ".$b->get_customer_address("country");
 
-				$cust_code = str_replace("\n", "", str_replace("\r", "", trim($i->get_customer_code($b->id()))));
+				$cust_code = str_replace("\n", "", str_replace("\r", "", trim($b->get_customer_code())));
 				list($cm) = explode(" ", $cust->prop_str("client_manager"));
 				$cm = mb_strtoupper($cm);
 			}

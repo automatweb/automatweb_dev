@@ -1064,6 +1064,31 @@ class crm_bill_obj extends _int_object
 		return $this->prop("sum");
 	}
 
+	/** returns bill sum without other expenses
+		@attrib api=1
+	**/
+	function get_sum_wo_exp()
+	{
+		$agreement = $this->meta("agreement_price");
+		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
+		if($agreement[0]["sum"] && $agreement[0]["price"] && strlen($agreement[0]["name"]) > 0) 
+		{
+			$sum = 0;
+			foreach($agreement as $a)
+			{
+				$sum+= $a["sum"];
+			}
+			return $sum;
+		}
+		$rows = $this->get_bill_rows_data();
+		$sum = 0;
+		foreach($rows as $row)
+		{
+			if(!$row["is_oe"]) $sum+= $row["sum"];
+		}
+		return $sum;
+	}
+
 	/** returns task object list
 		@attrib api=1
 	**/
@@ -2652,6 +2677,86 @@ if(aw_global_get("uid") == "marko") {arr("praegu ei saada sest marko arendab");a
 	{
 		if($nr < 0) return 0;
 		else return $nr;
+	}
+
+	public function get_customer_address($prop = "")
+	{
+		if(!$this->prop("customer_name") || !$this->prop("customer_address"))
+		{
+			if($GLOBALS["object_loader"]->cache->can("view" , $this->prop("customer")))
+			{
+				$cust_obj = obj($this->prop("customer"));
+				if($cust_obj->class_id() == CL_CRM_COMPANY)
+				{
+					$a = "contact";
+				}
+				else
+				{
+					$a = "address";
+				}
+			}
+			else
+			{
+				return "";
+			}
+		}
+		
+		
+		if(!$prop)
+		{
+			if($this->prop("customer_name"))
+			{
+				return $this->prop("customer_address");
+			}
+			else
+			{
+				return $cust_obj->prop($a.".name");
+			}
+		}
+
+		if($this->prop("customer_name"))
+		{
+			$cust_addr = $this->meta("customer_addr");
+			return $cust_addr[$prop];
+		}
+		else
+		{
+			switch($prop)
+			{
+				case "street":
+					return $cust_obj->prop($a.".aadress");
+				break;
+				case "index":
+					return $cust_obj->prop($a.".postiindeks");
+				break;
+				case "country":
+					return $cust_obj->prop($a.".riik.name");
+				break;
+				case "county":
+					return $cust_obj->prop($a.".maakond.name");
+				break;
+				case "city":
+					return $cust_obj->prop($a.".linn.name");
+				break;
+				case "country_en":
+					if($cust_obj->prop($a.".riik.name_en")) return $cust_obj->prop($a.".riik.name_en");
+					else return $cust_obj->prop($a.".riik.name");
+				break;
+				return "";
+			}
+		}
+	}
+
+	function get_customer_code()
+	{
+		if($this->prop("customer_name"))
+		{
+			return $this->prop("customer_code");
+		}
+		else
+		{
+			return $this->prop("customer.code");
+		}
 	}
 
 
