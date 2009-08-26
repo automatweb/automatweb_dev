@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.34 2009/08/22 20:06:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.35 2009/08/26 12:39:24 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -326,9 +326,10 @@ class ml_member extends class_base
 		extract($args);
 		$deleted = 0;
 		$section = aw_global_get("section");
+		$list_obj = new object($list_id);
+
 		if((!$use_folders) && is_oid($list_id))
 		{
-			$list_obj = new object($list_id);
 			$use_folders = $list_obj->prop("choose_menu");
 		}
 		if(is_array($use_folders))
@@ -362,6 +363,8 @@ class ml_member extends class_base
 				$deleted = 1;
 			};
 		}
+
+		$confirm_subscribe_msg = $list_obj->prop("confirm_unsubscribe_msg");
 
 		if ($deleted && $confirm_subscribe_msg > 0)
 		{
