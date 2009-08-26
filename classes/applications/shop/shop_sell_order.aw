@@ -121,9 +121,34 @@ class shop_sell_order extends class_base
 			ORDER_STATUS_CANCELLED => t("Katkestatud"),
 			ORDER_STATUS_SENT => t("Saadetud"),
 			ORDER_STATUS_CLOSED => t("T&auml;idetud"),
+			ORDER_STATUS_WORKING => t("T&ouml;&ouml;tlemisel"),
 		);
 
 	}
+
+	function get_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+
+		switch($prop["name"])
+		{
+			case "payment_type":
+				if($prop["value"])
+				{
+					$prop["options"] = array($prop["value"] => get_name($prop["value"]));
+
+				}
+	
+				break;
+
+		}
+
+		return $retval;
+	}
+
+
+
 
 	function callback_mod_reforb($arr)
 	{
@@ -217,17 +242,16 @@ class shop_sell_order extends class_base
 	/**
 		@attrib name=show
 		@param id required
+		@param template optional
 	**/
 	public function show($arr)
 	{
 		if(empty($arr["template"]))
 		{
-			$this->read_template("show.tpl");
+			$arr["template"] = "show.tpl";
 		}
-		else
-		{
-			$this->read_template($arr["template"]);
-		}
+		$this->read_any_template($arr["template"]);
+
 		$data = array();
 		$o = obj($arr["id"]);
 		foreach($o->get_property_list() as $pn => $pd)

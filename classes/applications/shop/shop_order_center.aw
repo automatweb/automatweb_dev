@@ -1885,6 +1885,10 @@ class shop_order_center extends class_base
 		$var = "menu";
 		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : reset($roots));
 
+		if(empty($cls))
+		{
+			$cls = "";
+		}
 		$gbf = $this->mk_my_orb("add_appearance_leaf",array(
 			"tree_type" => "storage",
 			"cls" => $cls,
@@ -2476,28 +2480,44 @@ class shop_order_center extends class_base
 		{
 			if($this->can("view" , $id))
 			{
-				$o = obj($id);
-				if($o->class_id() == CL_MENU)
+				$o = obj($id);arr($o->class_id());
+				switch($o->class_id())
 				{
-					foreach($arr as $key => $val)
-					{
-						switch($key)
+					case CL_MENU:
+						foreach($arr as $key => $val)
 						{
-							case "active":
-								$o->set_prop("status" , $val);
-								$o->save();
-								break;
-							case "type":
-							case "template":
-							case "product_template":
-								$show = $this->get_product_show_obj($o->id() , true);
-								$show->set_prop($key ,$val);
-								$show->save();
-								break;
-							default:
-								break;
+							switch($key)
+							{
+								case "active":
+									$o->set_prop("status" , $val);
+									$o->save();
+									break;
+								case "type":
+								case "template":
+								case "product_template":
+									$show = $this->get_product_show_obj($o->id() , true);
+									$show->set_prop($key ,$val);
+									$show->save();
+									break;
+								default:
+									break;
+							}
 						}
-					}
+						break;
+					case CL_SHOP_SELL_ORDER:
+						foreach($arr as $key => $val)
+						{
+							switch($key)
+							{
+								case "status":
+									$o->set_prop("order_status" , $val);
+									$o->save();
+									break;
+								default:
+									break;
+							}
+						}
+						break;
 				}
 			}
 		}

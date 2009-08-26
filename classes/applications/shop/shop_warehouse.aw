@@ -757,15 +757,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 	@property sell_orders_toolbar type=toolbar no_caption=1 store=no
 
-	@layout sell_orders_split type=hbox width=20%:80%
+	@layout sell_orders_split type=hbox width=25%:75%
 
 		@layout sell_orders_left type=vbox parent=sell_orders_split
 
-			@layout sell_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=sell_orders_left
+			@layout sell_orders_channel_lay type=vbox closeable=1 area_caption=Filtreeri&nbsp;m&uuml;&uuml;gikanali&nbsp;kaupa parent=sell_orders_left
+
+				@property sell_orders_channel_tree type=treeview parent=sell_orders_channel_lay store=no no_caption=1
+
+			@layout sell_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri&nbsp;staatuste&nbsp;kaupa parent=sell_orders_left
 
 				@property sell_orders_tree type=treeview parent=sell_orders_tree_lay store=no no_caption=1
 
-			@layout sell_orders_time_lay type=vbox closeable=1 area_caption=Filtreeri&nbsp;ajavahemiku&nbsp;j&auml;rgi parent=sell_orders_left
+			@layout sell_orders_time_lay type=vbox closeable=1 area_caption=Filtreeri&nbsp;tellimuse&nbsp;esitamise&nbsp;aja&nbsp;j&auml;rgi parent=sell_orders_left
 
 				@property sell_orders_time_tree type=treeview no_caption=1 parent=sell_orders_time_lay
 
@@ -5627,7 +5631,7 @@ $tb->add_delete_button();
 			{
 				$to = $c->to();
 				$cnum = $to->prop($t ? "number" : "bill_no");
-				$rels[] = html::obj_change_url($c->to(), $cnum ? $cnum : t("(Number puudub)"));
+				$rels[] = html::obj_change_url($c->to(), $cnum ? $cnum : t("(Puudub)"));
 			}
 			$sum = 0;
 			if($t)
@@ -7083,36 +7087,6 @@ $tb->add_delete_button();
 		$js = "";
 		if(!empty($arr['request']['group']))
 		{
-			if ($arr['request']['group'] == 'articles')
-			{
-				$vars = array('prod_s_name', 'prod_s_code', 'prod_s_barcode');
-
-				$ajax_vars = array();
-
-				foreach ($vars as $var)
-				{
-					$ajax_vars[] = $var.": document.getElementsByName('".$var."')[0].value\n";
-				}
-				$js =  "
-
-				function update_products_table(){
-
-					var result=[];
-					result = $('input[name^=prod_s]');
-
-					button=document.getElementsByName('prod_s_sbt')[0];
-					button.disabled = true;
-					$.post('/automatweb/orb.aw?class=shop_warehouse&action=ajax_update_products_table&id=".$arr['obj_inst']->id()."&'+result.serialize(),{
-						id: ".$arr["obj_inst"]->id()."
-						, ".join(", " , $ajax_vars)."},function(html){
-							x=document.getElementsByName('products_list');
-							x[0].innerHTML = html;
-							button.disabled = false;
-					});
-				}
-				";
-			}
-
 			if ($arr['request']['group'] == 'category')
 			{
 
@@ -7165,73 +7139,113 @@ $tb->add_delete_button();
 				";
 			}
 
-			if($arr["request"]["group"] == "product_management" || $arr["request"]["group"] == "articles")
+			switch($arr["request"]["group"])
 			{
+				case "sales":
+				case "sell_orders":
+					$js.= "
+						function set_sel_prop(property , value)
+						{
+							result = $('input[name^=sel]');
+							$.get('/automatweb/orb.aw?class=shop_order_center&action=ajax_set_product_show_property&' + property + '=' + value + '&' + result.serialize(), {
+								}, function (html) {
+									reload_property('sell_orders');
+								}
+							);
+						}
+					";
+				case "product_management":
+				case "articles":
 
-				$types = $arr["obj_inst"]->get_product_category_types();
+					$vars = array('prod_s_name', 'prod_s_code', 'prod_s_barcode');
+					$ajax_vars = array();
+					foreach ($vars as $var)
+					{
+						$ajax_vars[] = $var.": document.getElementsByName('".$var."')[0].value\n";
+					}
+					$js.=  "
+						function update_products_table(){
 
-				$js.= "
-					function add_product()
-					{
-						var cat = get_property_data['cat'];
-						var my_string = prompt('".t("Sisesta toote nimi")."');
-						$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_product',
-							id: '".$arr["obj_inst"]->id()."' , name: my_string,";
-							foreach($types->names() as $id => $cat)
-							{
-								$js.= " cat_".$id.": get_property_data['cat_".$id."'],
-								";
-							}
-								$js.= " cat: cat}, function (html) {
-								reload_property('product_management_list');
-							}
-						);
-					}
-				";
-				$js.= "
-					function copy_products()
-					{
-						result = $('input[name^=sel]');
-						$.get('/automatweb/orb.aw?class=shop_warehouse&action=copy_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
-							}, function (html) {
-								reload_property('product_management_toolbar');
-								reload_property('product_management_list');
-							}
-						);
-					}
-				";
-				$js.= "
-					function cut_products()
-					{
-						result = $('input[name^=sel]');
-						$.get('/automatweb/orb.aw?class=shop_warehouse&action=cut_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
-							}, function (html) {
-								reload_property('product_management_toolbar');
-								reload_property('product_management_list');
-							}
-						);
-					}
-				";
-				$js.= "
-					function paste_products()
-					{
-						var cat = get_property_data['cat'];
-						$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'paste_products',
-							id: '".$arr["obj_inst"]->id()."' ,";
-							foreach($types->names() as $id => $cat)
-							{
-								$js.= " cat_".$id.": get_property_data['cat_".$id."'],
-								";
-							}
-								$js.= " cat: cat}, function (html) {
-								reload_property('product_management_toolbar');
-								reload_property('product_management_list');
-							}
-						);
+							var result=[];
+							result = $('input[name^=prod_s]');
 
-					}
-				";
+							button=document.getElementsByName('prod_s_sbt')[0];
+							button.disabled = true;
+							$.post('/automatweb/orb.aw?class=shop_warehouse&action=ajax_update_products_table&id=".$arr['obj_inst']->id()."&'+result.serialize(),{
+								id: ".$arr["obj_inst"]->id()."
+								, ".join(", " , $ajax_vars)."},function(html){
+									x=document.getElementsByName('products_list');
+									x[0].innerHTML = html;
+									button.disabled = false;
+							});
+						}
+					";
+					$types = $arr["obj_inst"]->get_product_category_types();
+
+					$js.= "
+						function add_product()
+						{
+							var cat = get_property_data['cat'];
+							var my_string = prompt('".t("Sisesta toote nimi")."');
+							$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'create_new_product',
+								id: '".$arr["obj_inst"]->id()."' , name: my_string,";
+								foreach($types->names() as $id => $cat)
+								{
+									$js.= " cat_".$id.": get_property_data['cat_".$id."'],
+									";
+								}
+									$js.= " cat: cat}, function (html) {
+									reload_property('product_management_list');
+								}
+							);
+						}
+					";
+					$js.= "
+						function copy_products()
+						{
+							result = $('input[name^=sel]');
+							$.get('/automatweb/orb.aw?class=shop_warehouse&action=copy_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
+								}, function (html) {
+									reload_property('product_management_toolbar');
+									reload_property('product_management_list');
+								}
+							);
+						}
+					";
+					$js.= "
+						function cut_products()
+						{
+							result = $('input[name^=sel]');
+							$.get('/automatweb/orb.aw?class=shop_warehouse&action=cut_products&id=".$arr["obj_inst"]->id()."&' + result.serialize(), {
+								}, function (html) {
+									reload_property('product_management_toolbar');
+									reload_property('product_management_list');
+								}
+							);
+						}
+					";
+					$js.= "
+						function paste_products()
+						{
+							var cat = get_property_data['cat'];
+							$.get('/automatweb/orb.aw', {class: 'shop_warehouse', action: 'paste_products',
+								id: '".$arr["obj_inst"]->id()."' ,";
+								foreach($types->names() as $id => $cat)
+								{
+									$js.= " cat_".$id.": get_property_data['cat_".$id."'],
+									";
+								}
+									$js.= " cat: cat}, function (html) {
+									reload_property('product_management_toolbar');
+									reload_property('product_management_list');
+								}
+							);
+
+						}
+					";
+					break;
 			}
+
 		}
 		return $js;
 	}
@@ -7327,7 +7341,7 @@ $tb->add_delete_button();
 		$res = "";
 //		fopen("http://games.swirve.com/utopia/login.htm");
 //		die();
-$oo = get_instance(CL_SHOP_ORDER);
+$oo = get_instance(CL_SHOP_SELL_ORDER);
 		if (is_array($arr["sel"]) && count($arr["sel"]))
 		{
 			foreach($arr["sel"] as $id)
@@ -7339,13 +7353,15 @@ $oo = get_instance(CL_SHOP_ORDER);
 						"id" => $id,
 					);
 					$res.='<DIV style="page-break-after:always">';
-					if(file_exists($this->site_template_dir."/show_ordered.tpl"))
+
+					if(file_exists($oo->site_template_dir."/print_order.tpl"))
 					{
-						$vars["template"] = "show_ordered.tpl";
-						$vars["unsent"] = $_GET["unsent"];
+						$vars["template"] = "print_order.tpl";
+//						$vars["unsent"] = $_GET["unsent"];
 					}
-					arr($oo->show($vars));
-					$res .= $oo->request_execute(obj($id));
+//					arr($oo->show($vars));
+					$res .=$oo->show($vars);
+				//	$res .= $oo->request_execute(obj($id));
 					$res.='</DIV>';
 				}
 
@@ -7353,7 +7369,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				$res.= '<script name= javascript>window.open("'.$link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")</script>';
 				//"<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
 */			}
-				$res.= "<script name= javascript>setTimeout('window.close()',10000);window.print();</script>";
+		//		$res.= "<script name= javascript>setTimeout('window.close()',10000);window.print();</script>";
 		}
 //		elseif($this->can("view", $arr["print_id"]))
 //		{
@@ -7373,7 +7389,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 
 //		$res .= "<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
-
+//return $res;
 		die($res);
 	}
 
@@ -7793,7 +7809,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			{
 				$dno = obj($id);
 				$cnum = $dno->prop("number");
-				$data["dn"] = html::obj_change_url($dno, $cnum ? $cnum : t("(Number puudub)"));
+				$data["dn"] = html::obj_change_url($dno, $cnum ? $cnum : t("(Puudub)"));
 				$conn = $dno->connections_to(array(
 					"type" => "RELTYPE_DELIVERY_NOTE",
 					"from.class_id" => CL_CRM_BILL,
@@ -7802,7 +7818,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				foreach($conn as $c)
 				{
 					$no = $c->from()->prop("bill_no");
-					$bills[] = html::obj_change_url($c->from(), $no ? $no : t("(Number puudub)"));
+					$bills[] = html::obj_change_url($c->from(), $no ? $no : t("(Puudub)"));
 				}
 				$data["bill"] = implode(", ", $bills);
 			}
@@ -8164,7 +8180,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"tooltip" => t("Uus")
 		));
 
-		if(!$data["warehouses"] && $data["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
+		if(empty($data["warehouses"]) && $data["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 		{
 			$whs = array($data["obj_inst"]);
 		}
@@ -8206,6 +8222,54 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		$tb->add_save_button();
 		$tb->add_delete_button();
+		$tb->add_button(array(
+			"name" => "print",
+			"tooltip" => t("Prindi tellimused"),
+			"img" => "print.gif",
+			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('print_orders')",
+		));
+
+
+		$tb->add_menu_button(array(
+			"name" => "type",
+			"text" => t("Muuda staatust"),
+			"tooltip" => t("Objektit&uuml;&uuml;p mida tootena kuvatakse"),
+		));
+		load_javascript("reload_properties_layouts.js");
+		$order = get_instance(CL_SHOP_SELL_ORDER);
+		foreach($order->states as $key => $name)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "type",
+				"text" => $name,
+				"link" => "javascript:set_sel_prop('status' , '".$key."');",
+			));
+		}
+	}
+
+	function _get_sell_orders_channel_tree($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$channels = $arr["obj_inst"]->get_channels();
+		$t->set_selected_item($arr["request"]["channel"] ? "channel_".$arr["request"]["channel"] : "channel_all");
+
+		foreach($channels->names() as $channel => $name)
+		{
+			$arr["request"]["channel"] = $channel;
+			$ol = $this->_get_orders_ol($arr);
+			$t->add_item(0, array(
+				"id" => "channel_".$channel,
+				"url" => aw_url_change_var("channel", $channel),
+				"name" =>  sprintf("%s (%s)",  $name, $ol->count()),
+			));
+		}
+		$arr["request"]["channel"] = "all";
+		$ol = $this->_get_orders_ol($arr);
+		$t->add_item(0, array(
+			"id" => "channel_all",
+			"url" => aw_url_change_var("channel", "all"),
+			"name" => sprintf("%s (%s)",  t("K&otilde;ik m&uuml;&uuml;gikanalid"), $ol->count()),
+		));
 	}
 
 	function _get_purchase_orders_tree($arr)
@@ -8217,7 +8281,11 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$var = $group."_s_status";
 		$disp = $arr["request"][$var];
 		$total = 0;
-
+		$t->set_selected_item($disp ? "state_".$disp :"state_5" );
+		if($disp == 10)
+		{
+			$t->set_selected_item("state_all");
+		}
 		foreach($oi->states as $id => $state)
 		{
 			$arr["request"][$var] = $id;
@@ -8225,19 +8293,24 @@ $oo = get_instance(CL_SHOP_ORDER);
 			$t->add_item(0, array(
 				"id" => "state_".$id,
 				"url" => aw_url_change_var($var, $id),
-				"name" => sprintf("%s (%s)", $disp == $id ? "<b>".$state."</b>" : $state, $ol->count()),
+				"name" => sprintf("%s (%s)",  $state, $ol->count()),
 			));
 			$total += $ol->count();
 		}
 		$t->add_item(0, array(
 			"id" => "state_all",
 			"url" => aw_url_change_var($var, STORAGE_FILTER_CONFIRMATION_ALL),
-			"name" => sprintf("%s (%s)", (!$disp || $disp == STORAGE_FILTER_CONFIRMATION_ALL) ? "<b>".t("K&otilde;ik")."</b>" : t("K&otilde;ik"), $total),
+			"name" => sprintf("%s (%s)", t("K&otilde;ik"), $total),
 		));
 	}
 
 	function _get_orders_ol($arr)
 	{
+
+		if(empty($arr["request"]["sell_orders_s_status"]))
+		{
+			$arr["request"]["sell_orders_s_status"] = 5;
+		}
 		$ol = new object_list();
 		$group = $this->get_search_group($arr);
 
@@ -8256,15 +8329,20 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			return $ol;
 		}
-		if($n = $arr["request"][$group."_s_number"])
+		if(is_oid($channel = $arr["request"]["channel"]))
+		{
+			$params["channel"] = $arr["request"]["channel"];
+
+		}
+		if(!empty($arr["request"][$group."_s_number"]) && $n = $arr["request"][$group."_s_number"])
 		{
 			$params["number"] = "%".$n."%";
 		}
-		if($co = $arr["request"][$group."_s_".$co_filt])
+		if(!empty($arr["request"][$group."_s_".$co_filt]) && $co = $arr["request"][$group."_s_".$co_filt])
 		{
 			$co = $arr["request"][$group."_s_".$co_filt];
 		}
-		elseif($this->can("view", $arr["request"]["filt_cust"]))
+		elseif(!empty($arr["request"]["filt_cust"]) && $this->can("view", $arr["request"]["filt_cust"]))
 		{
 			$co = obj($arr["request"]["filt_cust"]);
 			if($co->class_id() == CL_CRM_CATEGORY)
@@ -8326,7 +8404,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 			unset($arr["end"]);
 			$v = $this->_get_status_orders_time_filt($arr);
 			$params["date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $v["filt_start"], $v["filt_end"]);
-		}
+		}//arr($arr);arr(date("d.m.Y" , $v["filt_start"]));arr($params["date"]);
 		$prods = $this->get_art_filter_ol($arr);
 		if($prods)
 		{
@@ -8382,8 +8460,10 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$this->_init_purchase_orders_tbl($t, $arr);
 		$ol = $this->_get_orders_ol($arr);
 		$ui = get_instance(CL_USER);
+		$count = 0;
 		foreach($ol->arr() as $o)
 		{
+			$count++;
 			$other_rels = $o->prop("related_orders");
 			$rel_arr = array();
 			if(count($other_rels))
@@ -8396,7 +8476,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				foreach($other_ol->arr() as $so)
 				{
 					$cnum = $so->prop("number");
-					$rel_arr[] = html::obj_change_url($so, $cnum ? $cnum : t("(Number puudub)"));
+					$rel_arr[] = html::obj_change_url($so, $cnum ? $cnum : t("(Puudub)"));
 				}
 			}
 			$cnum = $o->prop("number");
@@ -8516,9 +8596,22 @@ $oo = get_instance(CL_SHOP_ORDER);
 				}
 				//$add_row .= "<br />";
 			}
+
+			$cust_code = "";
+			if($this->can("view" , $o->prop("purchaser")) && $this->can("view" , $arr["obj_inst"]->prop("conf.owner")))
+			{
+				$orderer_object = obj($o->prop("purchaser"));
+				$cust_rel = $orderer_object->get_customer_relation(obj($arr["obj_inst"]->prop("conf.owner")), true);
+				$cust_code =  html::obj_change_url($cust_rel , $cust_rel->id());
+			}
+
 			$t->define_data(array(
-				"number" => html::obj_change_url($o,  $cnum ? $cnum : t("(Number puudub)")),
+				"nr" => $count,
+				"number" => html::obj_change_url($o,  $cnum ? $cnum : t("(Puudub)")),
 				"purchaser" => html::obj_change_url($o->prop("purchaser")),
+				"channel" => $o->prop_str("channel"),
+				"purchaser_id" => $cust_code,//$o->prop("purchaser"),
+				"purchaser_other_id" => $o->prop("purchaser.external_id"),
 				"date" => $o->prop("date"),
 				"rels" => implode(", ", $rel_arr),
 				"sum" => $sum." ".get_name($o->prop("currency")),
@@ -8545,10 +8638,55 @@ $oo = get_instance(CL_SHOP_ORDER);
 			));
 		}
 		//$t->set_lower_titlebar_display(true);
-		$t->sort_by(array(
-			"field" => "now",
-			"sorder" => "asc",
-		));
+		$time_capt = "";
+		switch($arr["request"]["filt_time"])
+		{
+			case "today":
+				$time_capt = t("t&auml;na");
+				break;
+			case "tomorrow":
+				$time_capt = t("homme");
+				break;
+			case "yesterday":
+				$time_capt = t("eile");
+				break;
+			case "lastweek":
+				$time_capt = t("eelmine n&auml;dal");
+				break;
+			case "thisweek":
+				$time_capt = t("k&auml;esolev n&auml;dal");
+				break;
+			case "nextweek":
+				$time_capt = t("j&auml;rgmine n&auml;dal");
+				break;
+			case "lastmonth":
+				$time_capt = t("eelmine kuu");
+				break;
+			case "thismonth":
+				$time_capt = t("k&auml;esolev kuu");
+				break;
+			case "next":
+				$time_capt = t("j&auml;rgmine kuu");
+				break;
+			case "":
+				$time_capt = t("t&auml;na");
+				break;
+			default:
+				$time_capt = t("k&otilde;ik perioodid");
+		}
+		if(is_numeric($arr["request"]["filt_time"]))
+		{
+			$time_capt = date("d.m.Y" , $arr["request"]["filt_time"]);
+		}
+
+		$sell_capt = t("Ostutellimused");
+if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitellimused");
+		$t->set_caption(sprintf(t("%s: %s "), $sell_capt , $time_capt));
+		$t->set_sortable(false);
+//		$t->sort_by(array(
+//			"field" => "now",
+//			"sorder" => "asc",
+//		));
 	}
 
 	function _set_purchase_orders(&$arr)
@@ -8592,8 +8730,35 @@ $oo = get_instance(CL_SHOP_ORDER);
 	private function _init_purchase_orders_tbl($t, $arr)
 	{
 		$t->define_field(array(
-			"name" => "number",
-			"caption" => t("Number"),
+			"name" => "nr",
+			"caption" => t("NR"),
+			"sortable" => 1,
+			"align" => "center",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+		$t->define_field(array(
+			"name" => "channel",
+			"caption" => t("M&uuml;&uuml;gikanal"),
+			"sortable" => 1,
+			"align" => "center",
+			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+		));
+
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+
+
+		$t->define_field(array(
+			"name" => "ids",
+			"caption" => t("Tellimuse number"),
 			"sortable" => 1,
 			"align" => "center",
 			"chgbgcolor" => "color",
@@ -8602,20 +8767,57 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		$t->define_field(array(
 			"name" => "oid",
-			"caption" => t("Id"),
+			"caption" => t("AW ID"),
 			"sortable" => 1,
 			"align" => "center",
 			"chgbgcolor" => "color",
 			"colspan" => "colspan",
+			"parent" => "ids"
 		));
-
+		
 		$t->define_field(array(
-			"name" => "purchaser",
-			"caption" => t("Tellija"),
+			"name" => "number",
+			"caption" => t("Naabri ID"),
 			"sortable" => 1,
 			"align" => "center",
 			"chgbgcolor" => "color",
+			"colspan" => "colspan",
+			"parent" => "ids"
 		));
+
+		$t->define_field(array(
+			"name" => "orderer",
+			"caption" => t("Tellija"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+		$t->define_field(array(
+			"name" => "purchaser",
+			"caption" => t("Isik"),
+			"sortable" => 1,
+			"align" => "center",
+			"chgbgcolor" => "color",
+			"parent" => "orderer", 
+		));
+		$t->define_field(array(
+			"name" => "purchaser_id",
+			"caption" => html::href(array("url" => "#" , "title" => t("AutomatWebi poolne kliendikood") , "caption" => t("AW KK"))),
+			"sortable" => 1,
+			"align" => "center",
+			"chgbgcolor" => "color",
+			"parent" => "orderer", 
+		));
+ 
+		$t->define_field(array(
+			"name" => "purchaser_other_id",
+			"caption" => html::href(array("url" => "#" , "title" => t("Naabers&uuml;steemi kliendikood") , "caption" => t("Naabri KK"))),
+			"sortable" => 1,
+			"align" => "center",
+			"chgbgcolor" => "color",
+			"parent" => "orderer", 
+		));
+
+
 
 		$t->define_field(array(
 			"sortable" => 1,
@@ -8623,17 +8825,10 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"caption" => t("Kuup&auml;ev"),
 			"align" => "center",
 			"type" => "time",
-			"format" => "d.m.Y",
+			"format" => "d.m.Y H:i",
 			"chgbgcolor" => "color",
 		));
 
-		$t->define_field(array(
-			"sortable" => 1,
-			"name" => "rels",
-			"caption" => t("Seosed"),
-			"align" => "center",
-			"chgbgcolor" => "color",
-		));
 
 		$t->define_field(array(
 			"sortable" => 1,
@@ -8643,13 +8838,6 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"chgbgcolor" => "color",
 		));
 
-		$t->define_field(array(
-			"sortable" => 1,
-			"name" => "status",
-			"caption" => t("Staatus"),
-			"align" => "center",
-			"chgbgcolor" => "color",
-		));
 
 		if($arr["extra"])
 		{
@@ -8669,6 +8857,13 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"chgbgcolor" => "color",
 			));
 		}
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "rels",
+			"caption" => t("Seosed"),
+			"align" => "center",
+			"chgbgcolor" => "color",
+		));
 
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -9282,8 +9477,8 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"persist_state" => 1,
 			"get_branch_func" => $gbf,
 		));
-
-		foreach(array("", "nextweek", "thismonth", "nextmonth", "all") as $id => $val)
+	
+		foreach(array("", "yesterday" , "today" , "tomorrow" , "lastweek" , "thisweek" , "nextweek", "lastmonth" , "thismonth", "nextmonth", "all") as $id => $val)
 		{
 			switch($g)
 			{
@@ -9305,26 +9500,61 @@ $oo = get_instance(CL_SHOP_ORDER);
 			}
 		}
 
-		$t->add_item(0, array(
-			"name" => sprintf("%s %s", t("K&auml;esolev n&auml;dal"), isset($count0) ? "(".$count0.")" : ""),
+
+		if(!empty($count1))$t->add_item(0, array(
+			"name" => sprintf("%s %s", t("Eile"), isset($count1) ? "(".$count1.")" : ""),
+			"id" => "yesterday",
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("filt_time", "yesterday"),
+		));
+
+		if(!empty($count2))$t->add_item(0, array(
+			"name" => sprintf("%s %s", t("T&auml;na"), isset($count2) ? "(".$count2.")" : ""),
+			"id" => "today",
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("filt_time", "today"),
+		));
+
+		if(!empty($count3))$t->add_item(0, array(
+			"name" => sprintf("%s %s", t("Homme"), isset($count3) ? "(".$count3.")" : ""),
+			"id" => "tomorrow",
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("filt_time", "tomorrow"),
+		));
+
+		if(!empty($count4))$t->add_item(0, array(
+			"name" => sprintf("%s %s", t("Eelmine n&auml;dal"), isset($count4) ? "(".$count4.")" : ""),
+			"id" => "lastweek",
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("filt_time", "lastweek"),
+		));
+
+		if(!empty($count5))$t->add_item(0, array(
+			"name" => sprintf("%s %s", t("K&auml;esolev n&auml;dal"), isset($count5) ? "(".$count5.")" : ""),
 			"id" => "thisweek",
 			"iconurl" => icons::get_icon_url(CL_MENU),
-			"url" => aw_url_change_var("filt_time", ""),
+			"url" => aw_url_change_var("filt_time", "thisweek"),
 		));
-		$t->add_item(0, array(
-			"name" => sprintf("%s %s", t("J&auml;rgmine n&auml;dal"), isset($count1) ? "(".$count1.")" : ""),
+		if(!empty($count6))$t->add_item(0, array(
+			"name" => sprintf("%s %s", t("J&auml;rgmine n&auml;dal"), isset($count6) ? "(".$count6.")" : ""),
 			"id" => "nextweek",
 			"iconurl" => icons::get_icon_url(CL_MENU),
 			"url" => aw_url_change_var("filt_time", "nextweek"),
 		));
-		$t->add_item(0, array(
-			"name" => sprintf("%s %s", t("K&auml;esolev kuu"), isset($count2) ? "(".$count2.")" : ""),
+		if(!empty($count7))$t->add_item(0, array(
+			"name" => sprintf("%s %s", t("Eelmine kuu"), isset($count7) ? "(".$count7.")" : ""),
+			"id" => "lastmonth",
+			"iconurl" => icons::get_icon_url(CL_MENU),
+			"url" => aw_url_change_var("filt_time", "lastmonth"),
+		));
+		if(!empty($count8))$t->add_item(0, array(
+			"name" => sprintf("%s %s", t("K&auml;esolev kuu"), isset($count8) ? "(".$count8.")" : ""),
 			"id" => "thismonth",
 			"iconurl" => icons::get_icon_url(CL_MENU),
 			"url" => aw_url_change_var("filt_time", "thismonth"),
 		));
-		$t->add_item(0, array(
-			"name" => sprintf("%s %s", t("J&auml;rgmine kuu"), isset($count3) ? "(".$count3.")" : ""),
+		if(!empty($count9))$t->add_item(0, array(
+			"name" => sprintf("%s %s", t("J&auml;rgmine kuu"), isset($count9) ? "(".$count9.")" : ""),
 			"id" => "nextmonth",
 			"iconurl" => icons::get_icon_url(CL_MENU),
 			"url" => aw_url_change_var("filt_time", "nextmonth"),
@@ -9360,7 +9590,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		if($arr["all"])
 		{
 			$t->add_item(0, array(
-				"name" => sprintf("%s %s", t("K&otilde;ik"), isset($count4) ? "(".$count4.")" : ""),
+				"name" => sprintf("%s %s", t("K&otilde;ik"), isset($count10) ? "(".$count10.")" : ""),
 				"id" => "all",
 				"iconurl" => icons::get_icon_url(CL_MENU),
 				"url" => aw_url_change_var(array("filt_time" => "all", $g."_s_from" => "-", $g."_s_to" => "-")),
@@ -9369,7 +9599,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		if(!$arr["request"]["status_orders_s_start"])
 		{
-			$t->set_selected_item(($f = automatweb::$request->arg("filt_time")) ? $f : "thisweek");
+			$t->set_selected_item(($f = automatweb::$request->arg("filt_time")) ? $f : "today");
 		}
 	}
 
@@ -9586,9 +9816,34 @@ $oo = get_instance(CL_SHOP_ORDER);
 		$time = $arr["request"]["filt_time"];
 		switch($time)
 		{
+			case "yesterday":
+				$filt_start = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
+				$filt_end = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+				break;
+			case "today":
+				$filt_start = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+				$filt_end = mktime(0, 0, 0, date('m'), date('d')+1, date('Y'));
+				break;
+			case "tomorrow":
+				$filt_start = mktime(0, 0, 0, date('m'), date('d')+1, date('Y'));
+				$filt_end = mktime(0, 0, 0, date('m'), date('d')+2, date('Y'));
+				break;
+			case "lastweek":
+				$filt_start = mktime(0, 0, 0, date('m'), date('d') - 6 - date('N'), date('Y'));
+				$filt_end = mktime(0, 0, 0, date('m'), date('d') - date('N'), date('Y'));
+				break;
+
+			case "thisweek":
+				$filt_start = mktime(0, 0, 0, date('m'), date('d') - date('N'), date('Y'));
+				$filt_end = mktime(0, 0, 0, date('m'), date('d') + 8 - date('N'), date('Y'));
+				break;
 			case "nextweek":
-				$filt_start = mktime(0, 0, 0, date('m'), date('d') + 7 - date('N'), date('Y'));
-				$filt_end = mktime(0, 0, 0, date('m'), date('d') + 14 - date('N'), date('Y'));
+				$filt_start = mktime(0, 0, 0, date('m'), date('d') + 8 - date('N'), date('Y'));
+				$filt_end = mktime(0, 0, 0, date('m'), date('d') + 15 - date('N'), date('Y'));
+				break;
+			case "lastmonth":
+				$filt_start = mktime(0,0,0,date('m')-1,1,date('Y'));
+				$filt_end = mktime(0,0,0,date('m'),0,date('Y'));
 				break;
 			case "thismonth":
 				$filt_start = mktime(0,0,0,date('m'),1,date('Y'));
@@ -9606,8 +9861,8 @@ $oo = get_instance(CL_SHOP_ORDER);
 				}
 				else
 				{
-					$filt_start = mktime(0, 0, 0, date('m'), date('d') - date('N'), date('Y'));
-					$filt_end = mktime(0, 0, 0, date('m'), date('d') + 7 - date('N'), date('Y'));
+					$filt_start = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+					$filt_end = mktime(0, 0, 0, date('m'), date('d')+1, date('Y'));
 				}
 		}
 		return array(
