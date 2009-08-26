@@ -410,5 +410,10 @@ class crm_bill_row_object extends _int_object
 		}
 		return $res;
 	}
+
+	public function is_writeoff()
+	{
+		return $this->prop("writeoff");
+	}
 }
 ?>

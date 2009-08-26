@@ -213,6 +213,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property comments_add type=textarea store=no
 	@caption Lisa
 
+	@property mail_reciever type=relpicker store=connect multiple=1 reltype=RELTYPE_RECIEVER
+	@caption Maili saaja
+
 @default group=bill_mail
 
 	@property bill_mail_to type=textbox field=meta method=serialize
@@ -322,6 +325,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 @reltype CURRENCY value=18 clid=CL_CURRENCY
 @caption Valuuta
+
+@reltype RECIEVER value=19 clid=CL_CRM_PERSON
+@caption Arve saaja
 */
 
 define("BILL_SUM", 1);
@@ -384,27 +390,6 @@ class crm_bill extends class_base
 		}
 	}
 
-	function get_bill_cust_data_object($bill)
-	{
-		if(!is_object($bill))
-		{
-			return "";
-		}
-		if($this->cust_data_object)
-		{
-			return $this->cust_data_object;
-		}
-		$cust_rel_list = new object_list(array(
-			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"buyer" => $bill->prop("customer"),
-			"seller" => $bill->prop("impl")
-		));
-		$this->cust_data_object = reset($cust_rel_list->arr());
-		return $this->cust_data_object;
-	}
-
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -422,9 +407,9 @@ class crm_bill extends class_base
 				$this->_get_mail_table($arr);
 				break;
 			//case "language":
-			//	if(!$prop["value"])
+			//	if(!$arr["new"] && !$prop["value"])
 			//	{
-			//		$cdo = $this->get_bill_cust_data_object($arr["obj_inst"]);
+			//		$cdo = $arr["obj_inst"]->get_bill_cust_data_object();
 			//		if($cdo->prop("language"))
 			//		{
 			//			$prop["value"] = $cdo->prop("language");
@@ -432,25 +417,6 @@ class crm_bill extends class_base
 			//	}
 			//	break;
 			case "important_comment":
-
-			/*	if(aw_global_get("uid") == "marko")
-				{
-					$ol = new object_list(array(
-						"class_id" => CL_CRM_BILL,
-						"site_id" => array(),
-						"lang_id" => array(),
-						"bill_no" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, 901005),
-					));
-					foreach($ol->arr() as $o)
-					{
-						arr($o->name());
-						$o->set_prop("impl" , 324374);
-						$o->save();
-					}
-
-				}*/
-
-
 				if($this->can("view" , $arr["obj_inst"]->meta("important_comment")))
 				{
 					$ic = obj($arr["obj_inst"]->meta("important_comment"));
@@ -462,20 +428,10 @@ class crm_bill extends class_base
 				break;
 			case 'partial_recieved':
 
-				$sum = $this->get_bill_recieved_money($arr["obj_inst"]);
-/*				$bi = get_instance(CL_CRM_BILL);
-				$bill_sum = $bi->get_bill_sum($arr["obj_inst"]);
-				$sum = 0;
-				foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
+				if(!$arr["new"])
 				{
-					$p = $conn->to();
-					$sum = $sum + $p->get_free_sum($arr["obj_inst"]->id());
+					$sum = $arr["obj_inst"]->get_bill_recieved_money();
 				}
-				if($bill_sum < $sum)
-				{
-					$sum = $bill_sum;
-				}
-*/
 				$prop["value"] = number_format($sum, 2);
 				$prop["value"] .= " ".$arr["obj_inst"]->get_bill_currency_name();
 				$url = $this->mk_my_orb("do_search", array(
@@ -533,6 +489,15 @@ class crm_bill extends class_base
 					return PROP_IGNORE;
 				}
 				$this->_bill_targets($arr);
+				break;
+			case 'bill_rec_name':
+				$prop["post_append_text"] = "sdfsd";
+				$ps = get_instance("vcl/popup_search");
+				$ps->set_class_id(array(CL_CRM_PERSON));
+				$ps->set_id($arr["obj_inst"]->id());
+				$ps->set_reload_layout("almost_bottom");
+				$ps->set_property("mail_reciever");
+				$prop["post_append_text"] = $ps->get_search_button();
 				break;
 			case "writeoffs":
 				if($arr["new"])
@@ -596,6 +561,13 @@ class crm_bill extends class_base
 				break;
 
 			case "customer_name":
+				$prop["post_append_text"] = "sdfsd";
+				$ps = get_instance("vcl/popup_search");
+				$ps->set_class_id(array(CL_CRM_PERSON, CL_CRM_COMPANY));
+				$ps->set_id($arr["obj_inst"]->id());
+				$ps->set_reload_layout("top_right");
+				$ps->set_property("customer");
+				$prop["post_append_text"] = " ".$ps->get_search_button();
 			case "customer_code":
 			case "customer_address":
 				if(!$arr["obj_inst"]->prop("customer_name"))
@@ -774,7 +746,6 @@ class crm_bill extends class_base
 			#contact_person# => Kontaktisik,
 			#signature# => saatja allkiri"
 		;
-
 	}
 
 	function set_property($arr = array())
@@ -980,7 +951,6 @@ class crm_bill extends class_base
 		return $retval;
 	}
 
-
 	function customer_add_meta_cb($arr)
 	{
 		if(!$arr["obj_inst"]->prop("customer_name"))
@@ -1014,9 +984,17 @@ class crm_bill extends class_base
 	}
 
 	/**
-		@attrib name=add_payment all_args=1
-	**/
-	function add_payment($arr)
+		@attrib name=add_payment api=1
+		@param id optional type=int
+			bill id
+		@param o optional type=object
+			bill object
+		@param sum optional type=double
+		@param ru optional type=string
+		@param p optional type=oid/object
+			payment id
+	**/ 
+	public function add_payment($arr)
 	{
 		extract($arr);
 		if(!is_object($o) && is_oid($id) && $this->can("view", $id))
@@ -1026,8 +1004,6 @@ class crm_bill extends class_base
 		if(is_oid($p) && $this->can("view" , $p))
 		{
 			$p = obj($p);
-//			$sum = $o->prop("partial_recieved");
-//			$sum = $sum + $p->get_free_sum();
 		}
 		
 		if(is_object($p))
@@ -1050,23 +1026,7 @@ class crm_bill extends class_base
 		}
 		return $this->mk_my_orb("change", array("id" => $p->id(), "return_url" => $ru), CL_CRM_BILL_PAYMENT);
 	}
-
-	function get_customer_name($b)
-	{
-		if(is_oid($b))
-		{
-			$b = obj($b);
-		}
-		if($b->prop("customer_name"))
-		{
-			return $b->prop("customer_name");
-		}
-		else
-		{
-			return $b->prop("customer.name");
-		}
-	}
-
+//siia j2in pooleli puhastamisega
 	function get_customer_address($b, $prop = "")
 	{
 		if(is_oid($b))
@@ -2264,7 +2224,7 @@ class crm_bill extends class_base
 					"name" => "rows[".$row->id()."][date]",
 					"value" => $row->prop("date"),
 					"size" => 8
-				)).t("maha kantud")."<br>".html::textbox(array(
+				)).($row->is_writeoff() ? t("maha kantud") : "")."<br>".html::textbox(array(
 					"name" => "rows[".$row->id()."][comment]",
 					"value" => $row->comment(),
 					"size" => 70
@@ -3214,7 +3174,7 @@ class crm_bill extends class_base
 		$ord_county = $this->get_customer_address($b->id() , "county");
 
 		$this->vars(array(
-			"orderer_name" => $this->get_customer_name($b->id()),
+			"orderer_name" => $b->get_customer_name(),
 			"orderer_code" => $this->get_customer_code($b->id()),
 			"orderer_corpform" => $ord->prop("ettevotlusvorm.shortname"),
 			"ord_penalty_pct" => number_format($bpct, 2),
@@ -5171,28 +5131,6 @@ class crm_bill extends class_base
 			$sum = $bill_sum;
 		}
 		return $bill_sum - $sum;
-	}
-
-	function get_bill_recieved_money($b,$payment=0)
-	{
-		if(!(is_object($b) && is_oid($b->id())))
-		{
-			return 0;
-		}
-		enter_function("bill::get_bill_recieved_money");
-		$bill_sum = $b->get_bill_sum();
-		$needed = $this->get_bill_needs_payment(array("bill" => $b));
-		if($payment)
-		{
-			$needed_wtp = $this->get_bill_needs_payment(array("bill" => $b, "payment" => $payment));
-			$payment = obj($payment);
-			$free_sum = $payment->get_free_sum($b->id());
-			exit_function("bill::get_bill_recieved_money");
-			return min($free_sum , $needed_wtp);
-		}
-
-		exit_function("bill::get_bill_recieved_money");
-		return $this->posValue($bill_sum - $needed);
 	}
 
 	function get_unit_name($unit, $o)

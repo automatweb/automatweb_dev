@@ -135,7 +135,7 @@ class crm_bill_payment extends class_base
 			$bill_sum = $arr["obj_inst"]->get_bill_sum($o->id());
 			if(!$bill_sum)
 			{
-				$bill_sum = $bi->get_bill_needs_payment(array("bill" => $o->id()));//get_bill_recieved_money($o , $arr["obj_inst"]->id());//arr($bill_sum); arr($free_sum);
+				$bill_sum = $bi->get_bill_needs_payment(array("bill" => $o->id()));
 			}
 			$t->define_data(array(
 				"nr" => html::obj_change_url($o->id(),$o->prop("bill_no")),

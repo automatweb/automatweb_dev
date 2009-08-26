@@ -1836,7 +1836,7 @@ exit_function("bill::start1");
 				$bill_data["project_leader"] = join("<br>" , $pl_array);
 			}exit_function("bill::project_leaders");
 			enter_function("bill::balance");
-			if($arr["request"]["show_bill_balance"])
+			if(!empty($arr["request"]["show_bill_balance"]))
 			{
 				$curr_balance = $bill->get_bill_needs_payment();
 				if($company_curr && $curid && ($company_curr != $curid))
@@ -2254,7 +2254,7 @@ exit_function("bill::balance");
 				$cust = obj($b->prop("customer"));
 
 				$custr[] = str_replace("\n", "", str_replace("\r", "", trim($cust->comment())));	// kliendi kood hansaraamas
-				$custr[] = str_replace("\n", "", str_replace("\r", "", trim($i->get_customer_name($b->id()))))." ".str_replace("\n", "", str_replace("\r", "", trim($cust->prop("ettevotlusvorm.shortname"))));	// kliendi kood hansaraamas
+				$custr[] = str_replace("\n", "", str_replace("\r", "", trim($b->get_customer_name())))." ".str_replace("\n", "", str_replace("\r", "", trim($cust->prop("ettevotlusvorm.shortname"))));	// kliendi kood hansaraamas
 
 				/*
 				if($cust->class_id() == CL_CRM_PERSON)
@@ -2827,6 +2827,10 @@ exit_function("bill::balance");
 		$count = array();
 		foreach($t->list_data as $data)
 		{
+			if(!isset($count[$data["state"]]))
+			{
+				$count[$data["state"]] = 0;
+			}
 			$count[$data["state"]]++;
 		}
 
@@ -3034,6 +3038,10 @@ d)
 			$pm_statuses = array();
 			foreach($bills_data as $bd)
 			{
+				if(!isset($pm_statuses[$bd["state"]]))
+				{
+					$pm_statuses[$bd["state"]] = 0;
+				}
 				$pm_statuses[$bd["state"]] ++;
 			}
 			if(array_sum($pm_statuses))

@@ -161,6 +161,33 @@ class crm_company_customer_data_obj extends _int_object
 		return new object_list($filter);
 	}
 
+	public function get_locations()
+	{
+		// USE classes like CL_COUNTRY, CL_COUNTRY_ADMINISTRATIVE_UNIT, CL_COUNTRY_CITY etc
+		return new object_list();
+	}
+
+	public function get_customer_categories()
+	{
+		if(is_oid($this->prop("buyer")) && is_oid($this->prop("seller")))
+		{
+			$ids = obj($this->prop("seller"))->get_all_org_customer_categories();
+			arr(array(
+				"class_id" => CL_CRM_CATEGORY,
+				"oid" => $ids,
+				"CL_CRM_CATEGORY.RELTYPE_CUSTOMER" => $this->prop("buyer"),
+			));
+			return !empty($ids) ? new object_list(array(
+				"class_id" => CL_CRM_CATEGORY,
+				"oid" => $ids,
+				"CL_CRM_CATEGORY.RELTYPE_CUSTOMER" => $this->prop("buyer"),
+			)) : new object_list();
+		}
+		else
+		{
+			return new object_list();
+		}
+	}
 
 	public function save($exclusive = false, $previous_state = null)
 	{
