@@ -15,20 +15,6 @@ class taket_afp_import_obj extends _int_object
 	// this is a cache class, i use it to make db queries
 	private $db_obj; 
 
-	function get_data($arr)
-	{
-		$this->init_vars();
-		$this->print_line("Make a query so the remote files would be created::");
-		$this->create_remote_files();
-
-		$this->print_line("Download files:");
-		$this->download_data_files();
-
-		$this->generate_products_xml();
-
-		exit(1);
-	}
-
 	private function init_vars()
 	{
 		// ERROR REPORTING
@@ -49,112 +35,6 @@ class taket_afp_import_obj extends _int_object
 
 		$this->prod_fld = $this->get_products_folder();
 		$this->org_fld = $this->get_suppliers_folder();
-	}
-
-	public function get_products_folder()
-	{
-		// I actually doubt that it is necessary to have products folder here 
-		// It belongs to this soon-to-come products import to warehouses class
-		// where i can configure how and where the prods will be imported
-		$wh = $this->prop("warehouse");
-
-		if($this->can("view", $wh))
-		{
-			$who = obj($wh);
-			$cid = $who->prop("conf");
-			$this->warehouse = $wh;
-		}
-		if($this->can("view", $cid))
-		{
-			$co = obj($cid);
-			$prod_fld = $co->prop("prod_fld");
-		}
-
-		if(!$prod_fld)
-		{
-			die(t("Lao toodete kataloog on m&auml;&auml;ramata"));
-		}
-		elseif(!$this->can("add", $prod_fld))
-		{
-			die(t("Lao toodete kataloogi alla ei ole &otilde;igusi lisamiseks"));
-		}
-		return $prod_fld;
-	}
-
-	public function get_suppliers_folder()
-	{
-		$org_fld = $this->prop("org_fld");
-
-		if(!$org_fld)
-		{
-			die(t("Organisatsioonide kataloog on m&auml;&auml;ramata"));
-		}
-		elseif(!$this->can("add", $org_fld))
-		{
-			die(t("Organisatsioonide kataloogi alla ei ole &otilde;igusi lisamiseks"));
-		}
-
-		return $org_fld;
-	}
-
-	private function create_remote_files()
-	{
-		$warehouses = $this->get_warehouses();
-
-		// Create products file in first (Kadaka) server
-		// TODO I should make it configurable which warehouse is used to get products from
-		$warehouse = new object(reset($warehouses));
-		$url = new aw_uri($warehouse->comment().'/index.php');
-		$url->set_arg('create_products_file', 1);
-
-		$this->print_line("Creating products file ... ", false);
-		$result = file_get_contents($url->get());
-		$this->print_line($result);
-
-		$urls = array();
-		foreach ($warehouses as $oid)
-		{
-			$warehouse = new object($oid);
-			$url = new aw_uri($warehouse->comment().'/index.php');
-			$url->set_arg('create_amounts_file', 1);
-
-			$urls[] = $url->get();
-		}
-
-		$this->print_line("Create amounts files (parallel)");
-		$res = $this->parallel_url_fetch($urls);
-		arr($res);
-
-		$this->print_line("Remote files created");
-	}
-
-	private function download_data_files() 
-	{
-		$this->print_line("Start downloading files");
-
-		$this->download_products_file();
-
-		$this->download_amounts_file();
-
-		$this->print_line("downloads done");
-	}
-
-	private function download_products_file()
-	{
-		$warehouses = $this->get_warehouses();
-
-		// lets download products file:
-		$wh = new object(reset($warehouses));
-		$adr = new aw_uri($wh->comment()."/prods.csv");
-
-		$dest_fld = aw_ini_get('site_basedir').'/files/products.csv';
-
-		$wget_command = 'wget -O '.$dest_fld.' "'.$adr->get().'"';
-
-		$this->print_line("Download products file ... ", false);
-		shell_exec($wget_command);
-	
-		$this->print_line("[done]");
 	}
 
 	private function download_amounts_file()
@@ -179,94 +59,6 @@ class taket_afp_import_obj extends _int_object
 			file_put_contents($filename, $v);
 			$this->print_line("saved file: ".$filename);
 		}
-	}
-
-	function generate_products_xml()
-	{
-		// TODO should make it configurable
-		$path = aw_ini_get('site_basedir').'/files/products.csv';
-		$lines = file($path);
-
-	
-		$keys = explode("\t", trim($lines[0]));
-		unset($lines[0]);
-
-		foreach ($lines as $line)
-		{
-			$items = explode("\t", $line);
-
-			foreach ($items as $k => $v)
-			{
-				$items[$k] = trim(urldecode($v));
-			}
-
-			$prod = array_combine($keys, $items);
-			$prods[$prod['product_code']] = $prod;
-
-			$suppliers[$prod['supplier_id']] = $prod['supplier_name'];
-		}
-
-		$xml = new SimpleXMLElement("<?xml version='1.0'?><products></products>");
-		
-		foreach ($prods as $code => $data)
-		{
-			$product = $xml->addChild('product');
-			foreach ($data as $key => $value)
-			{
-				$product->addChild($key, utf8_encode(htmlentities($value)));
-			}
-		}
-		$xml->asXML(aw_ini_get('site_basedir').'/files/products.xml');
-	}
-
-	// obsolete
-	public function get_data_from_file($arr)
-	{
-		$this->init_vars();
-
-		// get data files
-		$this->download_data_files();
-
-		if($cid = $this->prop("code_ctrl"))
-		{
-			$ctrli = get_instance(CL_CFGCONTROLLER);	
-		}
-
-		$start = $this->microtime_float();
-
-		aw_set_exec_time(AW_LONG_PROCESS);
-
-		$path = aw_ini_get('site_basedir').'/files/prods.txt';
-
-		$lines = file($path);
-	
-		$keys = explode("\t", trim($lines[0]));
-		unset($lines[0]);
-
-		foreach ($lines as $line)
-		{
-			$items = explode("\t", $line);
-
-			foreach ($items as $k => $v)
-			{
-				$items[$k] = trim(urldecode($v));
-			}
-
-			$prod = array_combine($keys, $items);
-			$prods[$prod['product_code']] = $prod;
-
-			$suppliers[$prod['supplier_id']] = $prod['supplier_name'];
-		}
-
-//		$this->update_suppliers($suppliers);
-
-		$this->update_products($prods);
-
-		$end = $this->microtime_float();
-
-		echo "time: ".(float)($end - $start)." <br /> \n";
-
-		exit();
 	}
 
 	public function get_suppliers()
@@ -316,99 +108,7 @@ class taket_afp_import_obj extends _int_object
 		echo "Suppliers updated<br />\n";
 	}
 
-	private function update_products($data)
-	{
-		$sql = "
-			SELECT
-				objects.oid,
-				objects.name,
-				objects.comment,
-				aw_shop_products.search_term as search_term,
-				aw_shop_products.user1 as replacement_product_code,
-				aw_shop_products.code
-			FROM
-				objects
-				LEFT JOIN aw_shop_products on objects.oid = aw_shop_products.aw_oid
-			WHERE
-				objects.class_id = 295 and
-				objects.status = 1
-		";
-
-		$aw_prods = $this->db_obj->db_fetch_array($sql);
-		echo "About to go over <strong>".count($aw_prods)."</strong> products ... <br />\n";
-		$count = 0;
-		foreach ($aw_prods as $aw_prod)
-		{
-			$code = (empty($aw_prod['comment'])) ? trim($aw_prod['code']) : trim($aw_prod['comment']);
-
-			$prod_data = ( isset( $data[$code] ) ) ? $data[$code] : null;
-			if ( !empty($prod_data) )
-			{
-				if ($this->is_product_changed($aw_prod, $prod_data))
-				{
-					echo "Product is changed - update (".$aw_prod['oid'].")<br />\n";
-					$this->update_product_sql($aw_prod['oid'], $prod_data);
-				}
-				else
-				{
-				//	echo "Product is not changed <br />\n";
-				}
-
-				$this->update_purveyances(array(
-					'product_oid' => $aw_prod['oid'],
-					'product_name' => $prod_data['product_name'],
-				));
-
-				// the product is in aw, so lets remove it from data array:
-				unset($data[$code]);
-			}
-			else
-			{
-				echo "Delete product (".$aw_prod['oid'].") <br />\n";
-				$this->delete_product_sql($aw_prod['oid']);
-			}
-		}
-
-		echo "<pre>";
-		print_r("Prods to insert aw: ".count($data));
-		echo "</pre>";
-
-		foreach ($data as $value)
-		{
-			$new_prod_oid = $this->add_product_sql($value);
-			$this->update_purveyances(array(
-				'product_oid' => $new_prod_oid,
-				'product_name' => $value['product_name'],
-			));
-		}
-
-		echo "<pre>";
-		print_r("prods update done");
-		echo "</pre>";
-	}
-
-	// check if the product is changed or not ...
-	private function is_product_changed($old, $new)
-	{
-		// values to check
-		// old (from db) => new (from file)
-		$check = array(
-			'name' => 'product_name',
-			'code' => 'product_code',
-			'replacement_product_code' => 'replacement_product_code',
-			'search_term' => 'search_term'
-		);
-		
-		foreach ($check as $old_key => $new_key)
-		{
-			if ($old[$old_key] != $new[$new_key])
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
+	// obsolete
 	private function add_product($product)
 	{
 		$code = urldecode($product["product_code"]);
@@ -516,7 +216,7 @@ class taket_afp_import_obj extends _int_object
 				aw_oid = ".$oid.",
 				code = '".addslashes($data['product_code'])."',
 				search_term = '".addslashes($data['search_term'])."',
-				user1 = '".addslashes($data['replacement_product_code'])."',
+				type_code = '".addslashes($data['replacement_product_code'])."',
 				short_code = '".$this->apply_controller($data['product_code'])."'
 		";
 		$this->db_obj->db_query($sql);
@@ -544,7 +244,7 @@ class taket_afp_import_obj extends _int_object
 			SET
 				code = '".addslashes($data['product_code'])."',
 				search_term = '".addslashes($data['search_term'])."',
-				user1 = '".addslashes($data['replacement_product_code'])."',
+				type_code = '".addslashes($data['replacement_product_code'])."',
 				short_code = '".$this->apply_controller($data['product_code'])."'
 			WHERE
 				aw_oid = ".$oid."
@@ -1111,7 +811,6 @@ class taket_afp_import_obj extends _int_object
 			$this->warehouses[$conn->prop('to')] = $conn->prop('to');
 		}
 		return $this->warehouses;
-		
 	}
 
 	// this is for personnel import and it should return php array with data

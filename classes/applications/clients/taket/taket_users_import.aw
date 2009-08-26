@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.12 2009/05/21 13:35:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.13 2009/08/26 12:35:43 dragut Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 @classinfo syslog_type=ST_TAKET_USERS_IMPORT relationmgr=yes
@@ -196,7 +196,81 @@ class taket_users_import extends class_base implements customer_import_datasourc
 
 	function get_user_list_xml()
 	{
+		$gpd = file("http://88.196.208.74:8888/xmlrpc/index.php?get_persons_data=1");
 
+		$xml = new SimpleXMLElement("<?xml version='1.0'?><users></users>");
+
+		$first = true;
+		$customers = array();
+		foreach($gpd as $line)
+		{
+			if ($first)
+			{
+				$first = false;
+				continue;
+			}
+
+			$fields = explode("\t", trim($line));
+			$id = trim($fields[0]);
+
+			if (trim($fields[4]) == "")
+			{
+				continue;
+			}
+			$cat = $xml->addChild("user");
+			$cat->addChild("extern_id", $this->_t($id));
+			$cat->addChild("person_external_id", $this->_t($id));
+			$cat->addChild("real_name", $this->_t(trim($fields[4])));
+			$cat->addChild("uid", $this->get_uid(trim($fields[2]), trim($fields[3])));
+			$cat->addChild("email", $this->_t(trim($fields[9])));
+			$cat->addChild("password", generate_password());
+			break;
+		}
+		return $xml->asXML();
+	}
+
+	function get_uid($firstname, $lastname)
+	{
+		$allowed_chars = array_merge(range("A","Z"), range("a","z"), range("0","9"), array("_", "."));
+		$errors = array();
+
+		if (!is_object($this->cl_user))
+		{
+			$this->cl_user = get_instance(CL_USER);
+		}
+
+		$uid = htmlentities($firstname . (strlen($lastname) ? "." : "") . $lastname, ENT_NOQUOTES);
+		$uid = str_replace("'", "", $uid);
+		$uid = preg_replace("/\&([A-z])[A-z]{1,7}\;/U", "$1", $uid);
+
+		$alc = $this->make_keys($allowed_chars);
+		$len = strlen($uid);
+		for ($i = 0; $i < $len; $i++)
+		{
+			if (!isset($alc[$uid[$i]]))
+			{
+				$uid[$i] = "_";
+			}
+		}
+
+		$uid_chars = preg_split('//', $uid, -1, PREG_SPLIT_NO_EMPTY);
+		$invalid_chars = array_diff($uid_chars, $allowed_chars);
+
+		$o_uid = $uid;
+		$cnt = 0;
+		while ($this->cl_user->username_is_taken($uid))
+		{
+			$uid = $o_uid.".".sprintf("%03d", $cnt++);
+		}
+
+		if (count($errors))
+		{
+			return false;
+		}
+		else
+		{
+			return $uid;
+		}
 	}
 
 	////
