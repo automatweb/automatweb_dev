@@ -679,6 +679,16 @@ class treeview extends class_base
 		$root = "";
 		if ($this->has_root)
 		{
+			if(empty($this->tree_dat["root_name"]))
+			{
+				$this->tree_dat["root_name"] = "";
+			}
+
+			if(empty($this->tree_dat["root_url"]))
+			{
+				$this->tree_dat["root_url"] = "";
+			}
+
 			$this->vars(array(
 				"rootname" => $this->tree_dat["root_name"],
 				"rooturl" => $this->tree_dat["root_url"],
@@ -934,7 +944,7 @@ class treeview extends class_base
 			if ($item["id"] === $this->selected_item)
 			{
 				// XXX: Might want to move this into the template
-//				$name = "<strong>$name</strong>";
+				$name = "<strong>$name</strong>";
 				$this->vars(array(
 					"selected" => "class=\"nodetext_selected\""
 				));
