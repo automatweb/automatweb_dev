@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.28 2009/08/26 12:58:59 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.29 2009/08/26 13:32:24 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -697,7 +697,7 @@ class shop_packet extends class_base
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
-
+		lc_site_load("shop_packet", &$this);
 		//r2ndom miskite sama kategooria pakettide n2itamine
 		if($this->is_template("MORE_PRODUCTS"))
 		{
