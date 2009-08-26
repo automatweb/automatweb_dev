@@ -75,6 +75,9 @@
 			@property pkt_fld type=relpicker reltype=RELTYPE_FOLDER parent=right
 			@caption Pakettide kataloog
 
+			@property prod_cat_fld type=relpicker reltype=RELTYPE_FOLDER parent=right
+			@caption Artiklikategooriate kataloog
+
 			@property reception_fld type=relpicker reltype=RELTYPE_FOLDER parent=right
 			@caption Lao sissetulekute kataloog
 

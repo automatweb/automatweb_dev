@@ -367,16 +367,18 @@ class warehouse_products_import extends warehouse_data_import
 								'orig_name' => $image_name,
 								'id' => $image_obj->id()
 							));
+
 							$resize_params = array(
 								'id' => $image_obj->id(),
 								'file' => 'file',
 								'width' => 164
 							);
+						
 							$image_inst->resize_picture(&$resize_params);
 							$image_obj->add_image_big($image_node->nodeValue);
-							
 							$image_obj->save();
-							
+							aw_cache_flush('get_image_by_id');
+
 							// Let keep track of those images I have updated
 							unset($existing_images_lut[$image_name]);
 						}

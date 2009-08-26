@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.110 2009/08/14 08:52:30 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.111 2009/08/26 12:43:20 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -30,9 +30,6 @@
 
 	@property do_pict_i type=checkbox ch_value=1
 	@caption Teosta piltide import
-
-	property force_full_update type=checkbox ch_value=1 store=no
-	caption Import uuendab k&otilde;iki v&auml;lju
 
 	@property update_params_table type=table
 	@caption Toodete uuendamine
@@ -4058,7 +4055,8 @@ class otto_import extends class_base implements warehouse_import_if
 
 		$import_time = time();
 
-		$fext = 'xls';
+	//	$fext = 'xls';
+		$fext = 'txt';
 
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
 		{
@@ -5207,7 +5205,9 @@ class otto_import extends class_base implements warehouse_import_if
 					$picture_found = $this->read_img_from_schwab($arr);
 					break;
 				case "albamoda":
-					$picture_found = $this->read_img_from_albamoda($arr);
+				// lets comment this thing out for now cause it gave some db error
+				// and searching from albamoda doesn't work at the moment anyway --dragut@19.08.2009
+				//	$picture_found = $this->read_img_from_albamoda($arr);
 					break;
 				case "baur":
 					$picture_found = $this->read_img_from_baur($arr);
@@ -5587,7 +5587,14 @@ class otto_import extends class_base implements warehouse_import_if
 					echo "[ OTTO ] ".$imnr."<br>\n";
 
 					// NEW for new import
-					$return_images[] = 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg';
+					if (file_get_contents('http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg') === false)
+					{
+						$return_images[] = "http://image02.otto.de/pool/ov_formatg/".$imnr.".jpg";
+					}
+					else
+					{
+						$return_images[] = 'http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg';
+					}
 				}
 
 				// check for rundumanshiftph (flash)
@@ -5851,7 +5858,7 @@ class otto_import extends class_base implements warehouse_import_if
 
 	function read_img_from_albamoda($arr)
 	{
-
+return false;
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
 
