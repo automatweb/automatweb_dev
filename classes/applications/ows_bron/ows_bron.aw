@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.52 2009/05/06 13:12:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.53 2009/08/26 09:20:22 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -841,7 +841,7 @@ class ows_bron extends class_base
 		{
 				return aw_url_change_var("error", 8, $arr["r_url"]);
 		}
-		if (!empty($arr["ct"]["email"]) && !is_email($arr["ct"]["email"]))
+		if (empty($arr["ct"]["email"]) || (!empty($arr["ct"]["email"]) && !is_email($arr["ct"]["email"])))
 		{
 				return aw_url_change_var("error", 9, $arr["r_url"]);
 		}
