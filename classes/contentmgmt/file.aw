@@ -809,10 +809,11 @@ class file extends class_base
 
 	////
 	// !Salvestab faili failisysteemi. For internal use, s.t. kutsutakse v&auml;lja save_file seest
+	// image.aw uses this method as well to save image file to filesystem
 	// returns the name of the file that the data was saved in
 	function _put_fs($arr)
 	{
-		if ($arr["fs_folder_to_save_to"])
+		if (!empty($arr["fs_folder_to_save_to"]))
 		{
 			$file = $arr["fs_folder_to_save_to"]."/".$arr["name"];
 		}

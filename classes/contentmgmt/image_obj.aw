@@ -18,9 +18,9 @@ class image_obj extends _int_object
 	**/
 	public function get_html()
 	{
-		$img_inst = get_instance(CL_IMAGE);
+		$inst = get_instance(CL_IMAGE);
 		$idata = $this->get_image_data();
-		$img_inst->mk_path($idata["parent"],"Vaata pilti");
+		$inst->mk_path($idata["parent"],"Vaata pilti");
 		$retval = html::img(array(
 			"url" => $idata["url"],
 			'height' => (isset($args['height']) ? $args['height'] : NULL),
@@ -139,15 +139,16 @@ class image_obj extends _int_object
 	{
 		// it shouldn't be, but it is an array, if a period is loaded
 		// from a stale cache.
+		$inst = get_instance(CL_IMAGE);
 		if (!($row = aw_cache_get("get_image_by_id",$this->id())))
 		{
 			$q = "SELECT objects.*,images.* FROM images
 				LEFT JOIN objects ON (objects.oid = images.id)
 				WHERE images.id = '".$this->id()."'";
-			if (method_exists($this, "db_query"))
+			if (method_exists($inst, "db_query"))
 			{
-				$this->db_query($q);
-				$row = $this->db_fetch_row();
+				$inst->db_query($q);
+				$row = $inst->db_fetch_row();
 			};
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.251 2009/03/25 11:45:33 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.252 2009/08/26 14:26:01 markop Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -105,7 +105,7 @@
 		@caption Klikitav
 
 
-		@property link type=textbox group=show_sub table=menu
+		@property link type=textbox group=show_sub table=menu size=80
 		@caption Men&uuml;&uuml; link
 
 

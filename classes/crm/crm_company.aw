@@ -3005,7 +3005,10 @@ class crm_company extends class_base
 			case "bill_s_bill_to":
 			case "show_bill_balance":
 			case "currency_grouping":
-				$data['value'] = $arr['request'][$data["name"]];
+				if(!empty($arr['request'][$data["name"]]))
+				{
+					$data['value'] = $arr['request'][$data["name"]];
+				}
 				break;
 
 			case "bill_s_from":
@@ -6630,7 +6633,10 @@ class crm_company extends class_base
 		{
 			$a_fn = "";$a_ln = $a;
 		}
-		if(sizeof(explode(" ", $a)) > 1)list($b_fn, $b_ln) = explode(" ", $b);
+		if(sizeof(explode(" ", $b)) > 1)
+		{;
+			list($b_fn, $b_ln) = explode(" ", $b);
+		}
 		else
 		{
 			$b_fn = "";$b_ln = $b;

@@ -918,7 +918,7 @@ function aw_get_el(name,form)
 	**/
 	function get_popup_search_link($arr)
 	{
-		$c = strlen($arr["confirm"])?" onClick=\"if(!confirm('$arr[confirm]')) {return false;}\"":"";
+		$c = !empty($arr["confirm"])?" onClick=\"if(!confirm('$arr[confirm]')) {return false;}\"":"";
 		unset($arr["confirm"]);
 		$url = $this->mk_my_orb("do_search", $arr);
 		$s = t("Otsi");

@@ -248,6 +248,7 @@
             <table>menu</table>
             <type>textbox</type>
             <group>show_sub</group>
+            <size>80</size>
             <field>link</field>
             <caption>Men&amp;amp;uuml;&amp;amp;uuml; link</caption>
       </property>

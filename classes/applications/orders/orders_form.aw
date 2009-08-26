@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.31 2009/08/22 20:32:04 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.31 2009/08/22 20:32:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.32 2009/08/26 14:35:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.32 2009/08/26 14:35:26 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -669,6 +669,8 @@ class orders_form extends class_base
 		$o->set_prop("payment_type" , $order_data["payment"]);
 		$o->set_prop("currency" , $this->oc->get_currency());
 		$o->set_prop("channel" , $form->prop("channel"));
+
+		$o->set_prop("order_status" , "5");
 		$o->save();
 
 		$rows = $this->get_order();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.20 2009/08/09 21:05:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.21 2009/08/26 14:23:42 markop Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -104,6 +104,12 @@ class object_basket extends class_base
 		$sub_ct = $this->get_template_string("LINE");
 		preg_match_all("/\{VAR\:(.*)\}/imsU", $sub_ct, $mt, PREG_PATTERN_ORDER);
 
+		if(empty($_GET["bm_page"]))
+		{
+			$_GET["bm_page"] = 0;
+
+		}
+
 		$per_page = (int)$basket->prop("perpage") > 0 ? (int)$basket->prop("perpage") : 4;
 		$cur_page_from = $_GET["bm_page"] * $per_page;
 		$cur_page_to = ($_GET["bm_page"]+1) * $per_page;
@@ -113,7 +119,11 @@ class object_basket extends class_base
 		$cal = 0;
 		foreach($objs as $dat)
 		{
-			if ($counter >= $cur_page_from && $counter < $cur_page_to)
+			if(! $this->can("view" , $dat["oid"]))
+			{
+				continue;
+			}
+ 			if ($counter >= $cur_page_from && $counter < $cur_page_to)
 			{
 				$v = array(
 					"remove_single_url" => $this->mk_my_orb("remove_single", array("basket" => $basket->id(), "item" => $dat["oid"], "ru" => get_ru()))
@@ -175,7 +185,7 @@ class object_basket extends class_base
 				"page_to" => min(($i+1)*$per_page, count($objs)),
 				"page_link" => aw_url_change_var("bm_page", $i)
 			));
-			if ($_GET["bm_page"] == $i)
+			if (!empty($_GET["bm_page"]) && $_GET["bm_page"] == $i)
 			{
 				$pgs .= $this->parse("SEL_PAGE");
 			}
