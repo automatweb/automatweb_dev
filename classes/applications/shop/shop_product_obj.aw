@@ -2,7 +2,6 @@
 
 class shop_product_obj extends _int_object
 {
-
 	/** Sets the price for the product by currency
 		@attrib api=1 params=pos
 
@@ -42,14 +41,30 @@ class shop_product_obj extends _int_object
 		@returns double
 			the price of the product
 	**/
-	public function get_shop_price($currency = null)
+	public function get_shop_price($shop = null, $currency = null)
 	{
-		if($this->prop("price"))
+		enter_function("shop_product_obj::get_shop_price");
+		$price_by_currency = $this->get_price(array(
+			"shop" => $shop
+		));
+		if(is_oid($shop) && $currency === NULL)
 		{
-			return $this->prop("price");
+			$currency = obj($shop)->default_currency;
 		}
-		$price_by_currency = $this->get_price();
-		return $price_by_currency[$currency];
+		if(!empty($price_by_currency) && !empty($price_by_currency[$currency]))
+		{
+			$retval = (float)$price_by_currency[$currency];
+		}
+		elseif($this->prop("price"))
+		{
+			$retval = (float)$this->prop("price");
+		}
+		else
+		{
+			$retval = 0;
+		}
+		exit_function("shop_product_obj::get_shop_price");
+		return $retval;
 	}
 
 	/** edaspidi kasutaks vaid seda, et saaks igale ajahetkele erinevaid hindu panna ja loodetavasti ka hinnaobjektiga mitte metast
@@ -72,29 +87,57 @@ class shop_product_obj extends _int_object
 			OID of customer_data object
 		@param location optional type=array/int acl=view
 			OIDs of locations
+		@param ocn optional type=int acl=view
+			Order center oid
 		@param structure optional type=bool default=false
 			If set, the structure of the prices will be returned, otherwise only the final prices will be returned
 	**/
 	function get_price($arr)
 	{
-		$prices = $this->meta("cur_prices");
-		return isset($arr["shop"]) && is_oid($arr["shop"]) && $this->can("view", $arr["shop"]) ? shop_price_list_obj::price(array(
-			"shop" => $arr["shop"],
-			"product" => $this->id(),
-			"product_category" => $this->get_categories(),
-			"amount" => isset($arr["amount"]) ? $arr["amount"] : 1,
-			"prices" => $prices,
-			//	Need tuleb e-poe k2est kysida, kui ette ei anta (ja yldiselt ei anta)
-			"customer_category" => isset($arr["customer_category"]) ? $arr["customer_category"] : array(),
-			"customer_data" => isset($arr["customer_data"]) ? $arr["customer_data"] : array(),
-			//	Kliendi juurest, kui ette ei anta? (yldiselt ei anta)
-			"location" => isset($arr["location"]) ? $arr["location"] : array(),
-			"timespan" => array(
-				"start" => isset($arr["from"]) ? $arr["from"] : (isset($arr["time"]) ? $arr["time"] : time()),
-				"end" => isset($arr["time"]) ? $arr["time"] : time(),
-			),
-			"structure" => !empty($arr["structure"]),
-		)) : $prices;
+		$prices = safe_array($this->meta("cur_prices"));
+		if(isset($arr["shop"]) && is_oid($arr["shop"]))// $this->can() IS NOT VALID! && $this->can("view", $arr["shop"]))
+		{
+			$shop = obj($arr["shop"]);
+			// If no prices are set for any currencies, we presume the price property is set for default currency
+			if(is_oid($shop->default_currency) && $this->prop("price"))
+			{
+				$no_price_set_for_any_currency = true;
+				foreach($prices as $currency => $price)
+				{
+					if(strlen(trim($price)))
+					{
+						$no_price_set_for_any_currency = false;
+						break;
+					}
+				}
+				if($no_price_set_for_any_currency)
+				{
+					$prices[$shop->default_currency] = $this->prop("price");
+				}
+			}
+			return shop_price_list_obj::price(array(
+				"shop" => $arr["shop"],
+				"product" => $this->id(),
+				"product_packet" => $packet = $this->get_packets(),
+				"product_category" => array_merge($this->get_categories(), !empty($packet) ? shop_packet_obj::get_categories_for_id($packet)->ids() : array()),
+				"amount" => isset($arr["amount"]) ? $arr["amount"] : 1,
+				"prices" => $prices,
+				//	Need tuleb e-poe k2est kysida, kui ette ei anta (ja yldiselt ei anta)
+				"customer_category" => isset($arr["customer_category"]) ? $arr["customer_category"] : array(),
+				"customer_data" => isset($arr["customer_data"]) ? $arr["customer_data"] : array(),
+				//	Kliendi juurest, kui ette ei anta? (yldiselt ei anta)
+				"location" => isset($arr["location"]) ? $arr["location"] : array(),
+				"timespan" => array(
+					"start" => isset($arr["from"]) ? $arr["from"] : (isset($arr["time"]) ? $arr["time"] : time()),
+					"end" => isset($arr["time"]) ? $arr["time"] : time(),
+				),
+				"structure" => !empty($arr["structure"]),
+			));
+		}
+		else
+		{
+			return $prices;
+		}
 	}
 
 	function set_prop($k, $v)
@@ -337,6 +380,44 @@ class shop_product_obj extends _int_object
 		}
 	}
 
+	public static function get_packets_for_id($id)
+	{
+		$prms = array(
+			"class_id" => CL_SHOP_PACKET,
+			"CL_SHOP_PACKET.RELTYPE_PRODUCT" => $id,
+			"site_id" => array(),
+			"lang_id" => array(),
+			new obj_predicate_sort(array("jrk" => "ASC")),
+		);
+		if(is_array($id))
+		{
+			$ols = array();
+			$odl = new object_data_list(
+				$prms,
+				array(
+					CL_SHOP_PACKET => array("CL_SHOP_PACKET.RELTYPE_PRODUCT.oid" => "products"),
+				)
+			);
+			foreach($odl->arr() as $oid => $odata)
+			{
+				foreach((array)$odata["products"] as $product)
+				{
+					if(!isset($ols[$product]))
+					{
+						$ols[$product] = new object_list;
+					}
+					$ols[$product]->add($oid);
+				}
+			}
+			return $ols;
+		}
+		else
+		{
+			$ol = new object_list($prms);
+			return $ol;
+		}
+	}
+
 	public function get_amount($warehouse_id)
 	{
 		$sql = "SELECT amount FROM aw_shop_warehouse_amount WHERE warehouse = '$warehouse_id' AND product = '".$this->id()."'";
@@ -384,6 +465,15 @@ class shop_product_obj extends _int_object
 			$this->categories = $this->get_categories_for_id($this->id());
 		}
 		return $this->categories;
+	}
+
+	public function get_packets()
+	{
+		if(!isset($this->packets))
+		{
+			$this->packets = $this->get_packets_for_id($this->id())->ids();
+		}
+		return $this->packets;
 	}
 
 	/**
@@ -441,9 +531,47 @@ class shop_product_obj extends _int_object
 		return true;
 	}
 
+	public function get_size_vals()
+	{
+		$ret = array();
+		$packs =  $this->get_packagings();
+		foreach($packs->arr() as $pack)
+		{
+			$ret[$pack->prop("size")] = $pack->prop("size");
+		}
+		return $ret;
+	}
+
+	public function get_size_price($size = null,$oc = null)
+	{
+		$packs =  $this->get_packagings();
+		foreach($packs->arr() as $pack)
+		{
+			if(!$size || $pack->prop("size") == $size)
+			{
+				return $pack->get_shop_price($oc);
+			}
+		}
+		return null;
+	}
+
+	public function get_package_by_size($size = null)
+	{
+		$packs =  $this->get_packagings();
+		foreach($packs->arr() as $pack)
+		{
+			if(!$size || $pack->prop("size") == $size)
+			{
+				return $pack;
+			}
+		}
+		return null;
+	}
+
 	public function get_data()
 	{
 		$data = $this->properties();
+		$data["id"] = $this->id();
 		$data["image"] = $this->get_product_image();
 		$data["image_url"] = $this->get_product_image_url();
 		if($this->class_id() == CL_SHOP_PRODUCT_PACKAGING)
@@ -451,11 +579,32 @@ class shop_product_obj extends _int_object
 			$product = $this->get_product();
 			$data["description"] = $product->prop("description");
 			$data["color"] =  $product->get_color_name();
+					$data["code"] =  $product->prop("code");
+		}
+		else
+		{
+$data["code"] =  $this->prop("code");
+		}
+		$packet = $this->get_packet();
+		if(is_object($packet))
+		{
+			$data["packet_name"] = $packet->name();
+			$data["brand_name"] = $packet->get_brand();
 		}
 		return $data;
 	}
 
-	
+	public function get_packet_name()
+	{
+		$packet = $this->get_packet();
+		if(is_object($packet))
+		{
+			$data["packet_name"] = $packet->name();
+			$data["brand_name"] = $packet->get_brand();
+		}
+		return $data["packet_name"];
+
+	}
 	/** returns product color name
 		@attrib api=1
 		@returns string
@@ -493,7 +642,7 @@ class shop_product_obj extends _int_object
 
 	private function get_product()
 	{
-		if(is_object($this->product_object))
+		if(!empty($this->product_object) && is_object($this->product_object))
 		{
 			return $this->product_object;
 		}
@@ -504,7 +653,7 @@ class shop_product_obj extends _int_object
 				"class_id" => CL_SHOP_PRODUCT,
 				"CL_SHOP_PRODUCT.RELTYPE_PACKAGING" => $this->id(),
 			));
-			$this->product_object = reset($ol->arr());
+			$this->product_object = $ol->begin();
 			return $this->product_object;
 		}
 		else
@@ -528,8 +677,8 @@ class shop_product_obj extends _int_object
 			return "";
 		}
 	}
-
-	private function get_product_image_url()
+	
+	public function get_product_image_url()
 	{
 		$product = $this->get_product();
 		$pic = $product->get_first_obj_by_reltype("RELTYPE_IMAGE");
@@ -544,5 +693,42 @@ class shop_product_obj extends _int_object
 		}
 	}
 
+
+	public function get_product_big_image_url()
+	{
+		$product = $this->get_product();
+		$pic = $product->get_first_obj_by_reltype("RELTYPE_IMAGE");
+		if(is_object($pic))
+		{
+			return $pic->get_big_url();
+
+		}
+		else
+		{
+			return "";
+		}
+	}
+
+	public function get_image_popup()
+	{
+		$product = $this->get_product();
+		$pic = $product->get_first_obj_by_reltype("RELTYPE_IMAGE");
+		if(is_object($pic))
+		{ 
+			return $pic->get_on_click_js();
+
+		}
+		else
+		{
+			return "";
+		}
+	}
+
+	public function get_packet()
+	{
+		$product = $this->get_product();
+		$ol = $product->get_packets_for_id($product->id());
+		return $ol->begin();
+	}
 
 }
