@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.111 2009/08/26 12:43:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.112 2009/08/27 12:43:41 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -5502,10 +5502,11 @@ class otto_import extends class_base implements warehouse_import_if
 	{
 		$return_images = array();
 
-		$pcode = $arr['pcode'];
+		$full_pcode = $arr['pcode'];
+		$pcode = substr($arr['pcode'], 0, 6);
 		$import_obj = $arr['import_obj'];
 		$start_time = $arr['start_time'];
-
+		echo "[ OTTO ] Searching images for product code <strong>".$pcode." </strong>(code length: ".strlen($pcode)." / full code length: ".strlen($full_pcode).")<br />\n";
 		$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
 
 		echo "[ OTTO ] Loading <a href=\"$url\">page</a> content ... ";
@@ -5584,7 +5585,7 @@ class otto_import extends class_base implements warehouse_import_if
 						continue;
 					}
 
-					echo "[ OTTO ] ".$imnr."<br>\n";
+					echo "[ OTTO ] Image name: <strong>".$imnr."</strong><br>\n";
 
 					// NEW for new import
 					if (file_get_contents('http://image01.otto.de:80/pool/formata/'.$imnr.'.jpg') === false)
