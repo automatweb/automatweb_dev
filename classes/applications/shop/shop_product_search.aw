@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.16 2009/08/25 07:55:53 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.17 2009/08/27 08:25:22 instrumental Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -191,12 +191,22 @@ class shop_product_search extends class_base
 		));
 
 		$prop = array();
-		$this->_s_res(array(
-			"obj_inst" => &$o,
-			"request" => $request,
-			"prop" => &$prop
-		));
-		$table = $prop["value"];
+
+		// It should be somehow configurable, should the search page use vcl/table or templates
+		// I think it is rather reasonable to use htmlclient for form drawing ... or not? --dragut@19.08.2009
+		if (true)
+		{
+			$table = $this->draw_search_results_with_templates($request);
+		}
+		else
+		{
+			$this->_s_res(array(
+				"obj_inst" => &$o,
+				"request" => $request,
+				"prop" => &$prop
+			));
+			$table = $prop["value"];
+		}
 
 		$this->read_template("show.tpl");
 		$this->vars(array(
@@ -654,7 +664,7 @@ class shop_product_search extends class_base
 						"type" => $r_props[$pn]["type"] == "checkbox" ? "checkbox" : "textbox",
 						"caption" => !empty($pd["caption_".aw_global_get("ct_lang_id")]) ? $pd["caption_".aw_global_get("ct_lang_id")] : $pd["caption"],
 						"store" => "no",
-						"value" => $arr["request"]["s"][$clid][$pn],
+						"value" => ( !empty($arr["request"]["s"][$clid][$pn]) ) ? $arr["request"]["s"][$clid][$pn] : '',
 						"ch_value" => 1,
 						"_ord" => $pd["ord"]
 					);
@@ -943,6 +953,12 @@ class shop_product_search extends class_base
 		}
 		$html = $t->draw();
 		$arr["prop"]["value"] = $html;
+	}
+
+	function draw_search_results_with_templates($request)
+	{
+		arr($request);
+		return '';
 	}
 
 	function get_search_results($o, $params)
