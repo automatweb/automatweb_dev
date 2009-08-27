@@ -22,7 +22,7 @@ class shop_order_center_obj extends _int_object
 		@param location optional type=array/int acl=view
 			OIDs of locations
 
-		@returns OID of rent_conditions object or NULL if none found
+		@returns OID of shop_payment_type object or NULL if none found
 	**/
 	public function get_rent_conditions($arr)
 	{
@@ -35,7 +35,7 @@ class shop_order_center_obj extends _int_object
 				"location" => array(),//$customer_data->get_locations()->ids(),
 			), $arr);
 		}
-		return is_oid($id = $this->prop("rent_configuration")) ? obj($id)->valid_conditions($arr) : NULL;
+		return is_oid($id = $this->prop("shop_payment_type")) ? obj($id)->valid_conditions($arr) : NULL;
 	}
 
 	function filter_get_fields()
