@@ -5222,7 +5222,7 @@ class class_base extends aw_template
 			// config form overloads original properties
 			if ($sbc == CL_DOCUMENT)
 			{
-				list($prplist,$grplist) = $this->load_from_file();
+				list($prplist,$grplist) = $this->load_from_file(null);
 				if (empty($grps))
 				{
 					$grps = $grplist;
