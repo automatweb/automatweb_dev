@@ -953,7 +953,6 @@ exit_function("bill::balance");
 				return true;
 
 			case "aw_sales_calls_made":
-
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int(3)"
