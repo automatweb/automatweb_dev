@@ -8710,15 +8710,20 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 		}
 
 
-			$t->define_data(array(
-				"purchaser" => t("Kokku"),
-				"sum" => $total_sum." ".get_name($o->prop("currency")),
-			));
+		$t->define_data(array(
+			"purchaser" => t("Kokku"),
+			// Can't ask currency from last order, produces FATAL ERROR if no orders were found.
+			// Orders should be grouped by currency anyway. Think about what happens if there are several currencies available and it just sums up all the orders and gives the last currency as the currency of sum. That's bullshit!! -kaarel 27.08.2009
+			"sum" => $total_sum." ".get_name(is_object($o) ? $o->prop("currency") : 0),
+		));
 
 
 
 		$sell_capt = t("Ostutellimused");
-if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitellimused");
+		if($arr["request"]["group"] == "sell_orders")
+		{
+			$sell_capt = t("M&uuml;&uuml;gitellimused");
+		}
 		$t->set_caption(sprintf(t("%s: %s "), $sell_capt , $time_capt));
 		$t->set_sortable(false);
 //		$t->sort_by(array(
