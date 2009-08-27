@@ -1,5 +1,5 @@
 <!-- SUB: SHOW_CHANGEFORM -->
-<form action="{VAR:handler}.{VAR:ext}" method="{VAR:method}" enctype="multipart/form-data" name="changeform" id="changeform" style="margin-top: 0px;" {VAR:form_target}>
+<form action="{VAR:handler}.{VAR:ext}" method="{VAR:method}" enctype="multipart/form-data" name="changeform" id="changeform" onsubmit="return false;" style="margin-top: 0px;" {VAR:form_target}>
 <input type="hidden" name="MAX_FILE_SIZE" value="100000000" />
 
 <!-- END SUB: SHOW_CHANGEFORM -->
@@ -32,7 +32,7 @@
 			<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
 			<div class="tooltip">{VAR:comment}</div>
 			<!-- END SUB: HELP_POPUP -->
-			
+
 		</td>
 	    <td id="lineelment">{VAR:element}</td>
 	</tr>
@@ -273,34 +273,39 @@ this.disabled=true;self.disabled=true;
 		<!-- END SUB: PROPERTY_HELP -->
 
 
-	<!-- SUB: SHOW_CHANGEFORM2 -->
+	</table>
+
+<!-- SUB: SHOW_CHANGEFORM2 -->
 	<span id="reforb">
 	{VAR:reforb}
 	</span>
-		<script type="text/javascript">
-		{VAR:scripts}
-		function submit_changeform(action)
-		{
-			changed = 0;
-			{VAR:submit_handler}
-			if (typeof(aw_submit_handler) != "undefined")
-			{
-				if (aw_submit_handler() == false)
-				{
-					this.disabled=false;
-					return false;
-				}
-			}
-			if (typeof action == "string" && action.length>0)
-			{
-				document.changeform.action.value = action;
-			};
-			document.changeform.submit();
-		}
-		</script>
-	<!-- END SUB: SHOW_CHANGEFORM2 -->
-</table>
 </form>
+
+<script type="text/javascript">
+	{VAR:scripts}
+
+	function submit_changeform(action)
+	{
+		changed = 0;
+		{VAR:submit_handler}
+
+		if (typeof(aw_submit_handler) != "undefined")
+		{
+			if (aw_submit_handler() == false)
+			{
+				this.disabled=false;
+				return false;
+			}
+		}
+
+		if (typeof action == "string" && action.length > 0)
+		{
+			document.changeform.action.value = action;
+		}
+		document.changeform.submit();
+	}
+</script>
+<!-- END SUB: SHOW_CHANGEFORM2 -->
 
 <!-- SUB: iframe_body_style -->
 body {
