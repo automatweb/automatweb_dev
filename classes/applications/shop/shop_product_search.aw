@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.17 2009/08/27 08:25:22 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.18 2009/08/28 06:10:05 dragut Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -8,12 +8,8 @@
 @default group=general
 @default table=objects
 
-	@property name type=textbox group=data
-	@caption Nimi
-
 @default field=meta 
 @default method=serialize
-@default group=data
 
 	@property wh type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 multiple=1 store=connect
 	@caption Ladu
@@ -21,24 +17,31 @@
 	@property oc type=relpicker reltype=RELTYPE_OC automatic=1 
 	@caption Tellimiskeskkond
 
+	@property search_category_root type=relpicker reltype=RELTYPE_SEARCH_CATEGORY_ROOT
+	@caption Otsingu kategooriate juurikas
+
 	@property objs_in_res type=select 
 	@caption Tulemuseks on 
 
+@groupinfo folders caption="Otsingu l&auml;htekohad"
 @default group=folders
 
 	@property fld_tb type=toolbar store=no no_caption=1
 
 	@property fld_tbl type=table store=no no_caption=1
 
+@groupinfo s_form caption="Koosta otsinguvorm"
 @default group=s_form
 	@property s_form type=table no_caption=1
 
 	@property search_btn_caption type=textbox 
 	@caption Otsi nupu tekst
 
+@groupinfo s_res caption="Koosta tulemuste tabel"
 @default group=s_res
 	@property s_tbl type=table no_caption=1
 
+@groupinfo s_res_ctr caption="Kontrollerid"
 @default group=s_res_ctr
 
 	@property s_tbl_ctr type=relpicker reltype=RELTYPE_CONTROLLER
@@ -47,17 +50,12 @@
 	@property s_tbl_ctr2 type=relpicker reltype=RELTYPE_CONTROLLER
 	@caption Tulemuste tabeli kontroller
 
+@groupinfo search caption="Otsi" submit_method=get submit=no
 @default group=search
+
 	@property search_form type=callback callback=callback_gen_search_form
 
 	@property s_res type=text no_caption=1
-
-@groupinfo data caption="Andmed" parent=general
-@groupinfo folders caption="Otsingu l&auml;htekohad" parent=general
-@groupinfo s_form caption="Koosta otsinguvorm"
-@groupinfo s_res caption="Koosta tulemuste tabel"
-@groupinfo s_res_ctr caption="Kontrollerid"
-@groupinfo search caption="Otsi" submit_method=get submit=no
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption ladu
@@ -73,6 +71,10 @@
 
 @reltype FOLDER value=5 clid=CL_MENU
 @caption Otsingu kaust
+
+@reltype SEARCH_CATEGORY_ROOT value=6 clid=CL_MENU
+@caption Otsingu kaust
+
 */
 
 class shop_product_search extends class_base
@@ -158,7 +160,6 @@ class shop_product_search extends class_base
 	}
 
 	/** 
-
 		@attrib name=show nologin="1" default="1"
 
 		@param id required type=int acl=view
@@ -169,8 +170,8 @@ class shop_product_search extends class_base
 		$o = obj($arr["id"]);
 
 		$request = array(
-			"MAX_FILE_SIZE" => ( !empty($_GET["do_search"]) ) ? $_GET["do_search"] : '',
-			"s" => ( !empty($_GET["s"]) && is_array($_GET["s"]) ) ? $_GET["s"] : array()
+		//	"MAX_FILE_SIZE" => ( !empty($_GET["do_search"]) ) ? $_GET["do_search"] : '', // why the heck is this needed here ?
+			's' => ( !empty($_GET["s"]) && is_array($_GET["s"]) ) ? $_GET["s"] : array(),
 		);
 
 		$props =  $this->callback_gen_search_form(array(
@@ -184,6 +185,7 @@ class shop_product_search extends class_base
 		{
 			$htmlc->add_property($pd);
 		}
+
 		$htmlc->finish_output();
 
 		$html = $htmlc->get_result(array(
@@ -196,7 +198,7 @@ class shop_product_search extends class_base
 		// I think it is rather reasonable to use htmlclient for form drawing ... or not? --dragut@19.08.2009
 		if (true)
 		{
-			$table = $this->draw_search_results_with_templates($request);
+			$table = $this->draw_search_results_with_templates(array('obj_inst' => $o, 'request' => $request));
 		}
 		else
 		{
@@ -213,6 +215,7 @@ class shop_product_search extends class_base
 			"form" => $html,
 			"section" => aw_global_get("section"),
 			"table" => $table,
+			"results" => $table, // need to refactor it
 			"reforb" => $this->mk_reforb("submit_add_cart", array(
 				"oc" => $o->prop("oc"),
 				"MAX_FILE_SIZE" => 1000000,
@@ -224,6 +227,52 @@ class shop_product_search extends class_base
 		{
 			die($this->parse());
 		}
+		return $this->parse();
+	}
+
+	// this can be called from site.aw as well, to draw simple search form, but it should be more generic solution, which will be able to draw any kind of searchform according to a template
+	function draw_search_form($arr)
+	{
+		if (!empty($arr['template']))
+		{
+			$this->read_template($arr['template']);
+		}
+		else
+		{
+			$this->read_template('form.tpl');
+		}
+
+		// actually it is a pretty bold move to get the first object of this type and to expect, that this is the right one
+		$ol = new object_list(array(
+			'class_id' => CL_SHOP_PRODUCT_SEARCH,
+			new obj_predicate_limit(1)
+		));
+		$search_obj = $ol->begin();
+
+		// No search object found from the system
+		if (empty($search_obj))
+		{
+			return $this->parse();
+		}
+
+		$categories = new object_list(array(
+			'class_id' => CL_MENU,
+			'parent' => $search_obj->get_first_obj_by_reltype('RELTYPE_SEARCH_CATEGORY_ROOT')->id(),
+			'sort_by' => 'objects.jrk'
+		));
+
+		$categories_str = '';
+		foreach ($categories->arr() as $cat_id => $cat)
+		{
+			$this->vars(array(
+				'search_category_name' => $cat->name(),
+				'search_category_id' => $cat_id,
+			));
+			$categories_str .= $this->parse('SEARCH_CATEGORY');
+		}
+		$this->vars(array(
+			'SEARCH_CATEGORY' => $categories_str
+		));
 		return $this->parse();
 	}
 
@@ -658,7 +707,7 @@ class shop_product_search extends class_base
 			{
 				if (!empty($pd["in_form"]))
 				{
-					$nm = "s[$clid][".$pn."]";
+					$nm = "s[".$clid."][".$pn."]";
 					$ret[$nm] = array(
 						"name" => $nm,
 						"type" => $r_props[$pn]["type"] == "checkbox" ? "checkbox" : "textbox",
@@ -955,14 +1004,225 @@ class shop_product_search extends class_base
 		$arr["prop"]["value"] = $html;
 	}
 
-	function draw_search_results_with_templates($request)
+	function draw_search_results_with_templates($arr)
 	{
-		arr($request);
-		return '';
+		// can't use this get_search_results() method here cause it needs a little different composition of object_list params
+		// probably i need to think of some solution to compile those object list params, so i can have such search forms as well
+		// where there are only one input box which content will be searched from different properties + it should be possible to
+		// define, if the props will be AND-ed together or OR-ed.
+	//	$params[295]['code'] = automatweb::$request->arg('search_term'); // code param from shop_product object
+	//	$params[295]['name'] = automatweb::$request->arg('search_term'); // name param from shop_packet object
+	//	$results = $this->get_search_results($arr["obj_inst"], $arr["request"]["s"]);
+	//	$results = $this->get_search_results($arr["obj_inst"], $params);
+	//	$ol = new object_list(array(
+	//		'class_id' => CL_SHOP_PACKET,
+	//		new object_list_filter(array(
+	//			"logic" => "OR",
+	//			"conditions" => array(
+	//				'name' => '%'.automatweb::$request->arg('search_term').'%',
+	//				'CL_SHOP_PACKET.RELTYPE_PRODUCT.name' => '%'.automatweb::$request->arg('search_term').'%'
+	//				)
+	//			))
+	//	));
+
+		$this->read_template('results.tpl');
+
+enter_function("products_show::show");
+		$ob = new object($arr["id"]);
+
+		// get the order center object from shop_product_search
+		$oc = $arr['obj_inst']->get_order_center();
+
+enter_function("products_show::start");
+	//	$this->read_template($ob->get_template());
+		$this->vars(array(
+			"name" => $ob->prop("name"),
+		));
+
+		// is it required?
+		lc_site_load("shop_order_cart", &$this);
+/*
+		$products = new object_list(array(
+			'class_id' => CL_SHOP_PRODUCT,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					'name' => '%'.automatweb::$request->arg('search_term').'%',
+					'code' => '%'.automatweb::$request->arg('search_term').'%'
+					)
+				))
+		));
+*/
+		$products = new object_list(array(
+			'class_id' => CL_SHOP_PACKET,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					'name' => '%'.automatweb::$request->arg('search_term').'%',
+					'CL_SHOP_PACKET.RELTYPE_PRODUCT.name' => '%'.automatweb::$request->arg('search_term').'%'
+					)
+				))
+			
+		));
+
+		$GLOBALS["order_center"] = $oc->id();
+		
+		$prod = "";//templeiti muutuja PRODUCT v22rtuseks
+		$rows = "";
+		
+		$max = 4;//default
+		$per_page = 16;//default products per page
+		$page = empty($_GET["page"]) ? 0 : $_GET["page"];
+		if($oc->prop("per_page"))
+		{
+			$per_page = $oc->prop("per_page");
+		}
+
+	// The idea here should be, that if the search will be by product code and therefore only one packet will be found, then 
+	// I should redirect the user right to the product detail view
+	// But I need to be sure somehow, that there is product code in the search field - how do i know that? are there only numbers maybe?
+	//	if ($products->count() == 1)
+	//	{
+	//		$product = $products->begin();
+	//		$url = "/".reset($product->get_pask())."?product=".$product->id()."&oc=".$oc->id();
+	//		header("Location: ".$url);
+	//		exit();
+	//	}
+
+		$count = $count_all = 0;
+		exit_function("products_show::start");
+		enter_function("products_show::loop");
+		foreach($products->ids() as $product_id)
+		{
+			$count_all++;
+			if($count_all <= ($per_page * $page))
+			{
+				continue;
+			}
+			$product = obj($product_id);
+			$count++;
+			$data_params = array("image_url" => 1 , "min_price" => 1,"product_id" => 1, "brand_name" => 1);
+			$product_data = $product->get_data($data_params);
+
+			$product_data["product_link"] = "/".reset($product->get_pask())."?product=".$product->id()."&oc=".$oc->id();
+			$ids = $product->get_categories()->ids();
+			$category = reset($ids);
+
+		//	$product_data["menu"] = $ob->get_category_menu($category);
+			$product_data["menu_name"] = get_name($product_data["menu"]);
+			$this->vars($product_data);
+
+			if($count >= $max && $this->is_template("ROW"))//viimane tulp yksk6ik mis reas
+			{
+				$count = 0;
+				if($this->is_template("PRODUCT_END"))
+				{
+					$prod.= $this->parse("PRODUCT_END");
+				}
+				else
+				{
+					$prod.= $this->parse("PRODUCT");
+				}
+				$this->vars(array("PRODUCT" => $prod));
+				$rows.= $this->parse("ROW");
+				$prod = "";
+			}
+			elseif($count_all >= $products->count() && $this->is_template("ROW"))//viimane rida
+			{
+				$prod.= $this->parse("PRODUCT");
+				$this->vars(array("PRODUCT" => $prod));
+				$rows.= $this->parse("ROW");
+			}
+			else
+			{
+				$prod.= $this->parse("PRODUCT");
+			}
+
+			if($count_all >= $per_page * ($page + 1))
+			{
+				break;
+			}
+		}
+		exit_function("products_show::loop");
+		exit_function("products_show::enter");
+		$this->vars(array(
+			"ROW" => $rows
+		));
+
+		$pages = $products->count() / $per_page;
+		$pages = (int)$pages;
+		if($products->count() % $per_page) $pages++;
+		if($pages > 1)
+		{
+			if($page > 2)
+			{
+				$this->vars(array("pager_url" => aw_url_change_var("page", $page - 1)));
+				$this->vars(array("PAGE_PREV" => $this->parse("PAGE_PREV")));
+			}
+			if($page < ($pages-3))
+			{
+				$this->vars(array("pager_url" => aw_url_change_var("page", $page + 1)));
+				$this->vars(array("PAGE_NEXT" => $this->parse("PAGE_NEXT")));
+			}
+
+			$page_str = "";
+			
+			$x = max(array(0,$page - 2));
+			$y = 0;
+			if($x+$y > 1)
+			{
+				$page_str.= $this->parse("PAGE_SEP");
+			}
+			while($y < 5)
+			{
+				if($x+$y >= $pages)
+				{
+					break;
+				}
+				$this->vars(array("pager_url" => aw_url_change_var("page", ($x+$y))));
+				$this->vars(array("pager_nr" => ($x + $y + 1)));
+
+				
+				if($x+$y == $page)
+				{
+					$page_str.= $this->parse("PAGE_SEL");
+				}
+				else
+				{
+					$page_str.= $this->parse("PAGE");
+				}
+				$y++;
+			}
+
+			if($x+$y + 1 < $pages)
+			{
+				$page_str.= $this->parse("PAGE_SEP");
+			}
+
+			$this->vars(array(
+				"PAGE" => $page_str,
+				"PAGE_SEL" => " ",
+			));
+			$this->vars(array("PAGER" => $this->parse("PAGER")));
+		}
+
+		$data = array();
+		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
+
+		$data["section"] = aw_global_get("section");
+		$this->vars($data);
+		exit_function("products_show::end");
+		exit_function("products_show::show");
+		return $this->parse();
 	}
 
 	function get_search_results($o, $params)
 	{
+	/*
+		// this here is mainly for taket at this point of time
+		// Actually, i think I whould ask from warehouse, if search index is supported or not
+		// but for now, i need to get this search thing working for otto quickly, so it will
+		// for future development
 		if (!empty($params[295]["code"]) || !empty($params[295]["name"]))
 		{
 			$r = new aw_request;
@@ -979,11 +1239,12 @@ class shop_product_search extends class_base
 			$tmp = $int->get_products_list_from_index(array(), $r);
 			return $tmp["ol"]->arr();
 		}
-
+	*/
 		$wh_i = get_instance(CL_SHOP_WAREHOUSE);
 		$conn = $o->connections_from(array(
 			"type" => "RELTYPE_FOLDER",
 		));
+		$folders = array();
 		if(count($conn))
 		{
 			$subs = $o->meta("subfolders");
@@ -1004,6 +1265,7 @@ class shop_product_search extends class_base
 		}
 		else
 		{
+			/*
 			$wh = $o->prop("wh");
 			if (is_array($wh))
 			{
@@ -1012,9 +1274,10 @@ class shop_product_search extends class_base
 			list($main_fld, $subs) = $wh_i->get_packet_folder_list(array("id" => $wh));
 			$folders = $subs->ids();
 			$folders[] = $main_fld->id();
+			*/
 		}
-
 		$res_type = $o->prop("objs_in_res");
+
 		$filt = array(
 			"parent" => $folders,
 			"class_id" => $res_type,
@@ -1038,8 +1301,10 @@ class shop_product_search extends class_base
 				$v = "%".$pv."%";
 				// now, based on the result object we must calc the way to search
 				$this->_get_filt_param($clid, $res_type, $pn, $v, &$filt);
+				arr($filt);
 			}
 		}
+
 		$ol = new object_list($filt);
 		$r = $ol->arr();
 		return $r;
