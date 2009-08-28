@@ -2825,8 +2825,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if ($nxt_clid)
 				{
 					$this->_do_add_class_id($nxt_clid);
-					$reltype_id = $GLOBALS["relinfo"][$nxt_clid]["RELTYPE_".$mt[1]]["value"];
-					error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
+					$reltype_id = isset($GLOBALS["relinfo"][$nxt_clid]["RELTYPE_".$mt[1]]["value"]) ? $GLOBALS["relinfo"][$nxt_clid]["RELTYPE_".$mt[1]]["value"] : "";
+					error::raise_if(strlen($reltype_id) === 0 && $pp != "RELTYPE", array(
 						"id" => "ERR_OBJ_NO_RELATION",
 						"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
 					));
@@ -2845,8 +2845,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			else
 			{
-				$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
-				error::raise_if(empty($reltype_id) && $pp !== "RELTYPE", array(
+				$reltype_id = isset($GLOBALS["relinfo"][$cur_clid][$pp]["value"]) ? $GLOBALS["relinfo"][$cur_clid][$pp]["value"] : "";
+				error::raise_if(strlen($reltype_id) === 0 && $pp !== "RELTYPE", array(
 					"id" => "ERR_OBJ_NO_RELATION",
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
 				));
@@ -2958,6 +2958,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					switch ($cur_prop["type"])
 					{
 						case "relpicker":
+						case "hidden"://? v6ib ju
 						case "relmanager":
 						case "classificator":
 						case "popup_search":
@@ -2999,8 +3000,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->_do_add_class_id($cur_clid);
 				// rewrite to a reltype join
 				$pp = $cur_prop["reltype"];
-				$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
-				error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
+				$reltype_id = isset($GLOBALS["relinfo"][$cur_clid][$pp]["value"]) ? $GLOBALS["relinfo"][$cur_clid][$pp]["value"] : "";
+				error::raise_if(strlen($reltype_id) === 0 && $pp != "RELTYPE", array(
 					"id" => "ERR_OBJ_NO_RELATION",
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
 				));
