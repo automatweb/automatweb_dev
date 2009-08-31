@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.112 2009/08/27 12:43:41 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.113 2009/08/31 11:49:33 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -39,6 +39,7 @@
 
 	@property products_count type=text store=no
 	@caption Toodete arv
+
 
 @groupinfo imported_products caption="Imporditud tooted"
 
@@ -276,6 +277,27 @@
 
 	@property csv_files_list type=table no_caption=1
 
+@groupinfo availability caption="Laoseisud"
+@default group=availability
+
+	@property availability_ftp_host type=textbox table=objects field=meta method=serialize
+	@caption FTP aadress
+	@comment FTP serveri aadress
+
+	@property availability_ftp_user type=textbox table=objects field=meta method=serialize
+	@caption FTP kasutaja
+	@comment Kasutajanimi, millega FTP serverisse logitakse
+
+	@property availability_ftp_password type=password table=objects field=meta method=serialize
+	@caption FTP parool
+	@comment Parool FTP kasutajale
+
+	@property availability_ftp_file_location type=textbox table=objects field=meta method=serialize size=70
+	@caption Faili asukoht
+
+	@property availability_import_link type=text store=no
+	@caption Laoseisu import
+
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
 
@@ -301,11 +323,6 @@ class otto_import extends class_base implements warehouse_import_if
 
 	function get_property($arr)
 	{
-		if(isset($_GET['kaarel']) && $_GET["kaarel"] == 1)
-		{
-			$this->kaarel($arr);
-			die();
-		}
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -6685,116 +6702,231 @@ return false;
 		return $imnr{0}.'/'.$imnr{1}.'/'.$imnr;
 	}
 
-	// debugimiseks -kaarel
-	function kaarel($arr)
+	function _get_availability_import_link($arr)
 	{
-		$needle = array(
-			chr(207), //254
-			chr(240), //251
-			chr(165), //238
-			chr(236), //234
-			chr(191), //242
-			chr(199), //226
-			chr(148), //199
-			chr(239), //231
-			chr(134), //239
-			chr(174), //236
-			chr(149), //231
-			chr(192), //242
-			chr(228), //240
-			chr(180), //238
-			chr(250), //237
-			chr(137), //200
-			chr(208), //45
-			chr(130), //226
-			chr(153), //237
-			chr(179), //34
-			chr(129), //194
-			chr(210), //34
-			chr(211), //34
-			chr(178), //34
-			chr(175), //236
-			chr(183), //208
-			chr(177), //206
-			chr(185), //207
-			chr(225), //208
-			chr(186), //239
-			chr(158), //236
-			chr(202),
-			chr(200), // "
-			chr(199),  // "
-			chr(161), // &deg;
-			chr(181), // 205
-			chr(227), //34
-			chr(234), //&#382;
-			chr(139), //&#269;
-			);
+		$arr['prop']['value'] = html::href(array(
+			'caption' => t('Impordi'),
+			'url' => $this->mk_my_orb('do_products_amounts_import', array('id' => $arr['obj_inst']->id()))
+		));
+	}
 
-
-
-
-
-
-			$haystack = array(
-			chr(254),
-			chr(251),
-			chr(238),
-			chr(234),
-			chr(242),
-			chr(226),
-			chr(199),
-			chr(231),
-			chr(239),
-			chr(236),
-			chr(231),
-			chr(242),
-			chr(240),
-			chr(238),
-			chr(237),
-			chr(200),
-			chr(45),
-			chr(226),
-			chr(237),
-			chr(34),
-			chr(194),
-			chr(34),
-			chr(34),
-			chr(34),
-			chr(236),
-			chr(208),
-			chr(206),
-			chr(207),
-			chr(208),
-			chr(239),
-			chr(234),
-			"",
-			"&quot;",
-			"&quot;",
-			"&deg;",
-			chr(205),
-			chr(34),
-			"&#382;",
-			"&#269;",
-			);
-
-		foreach($needle as $k => $v)
+	/**
+		@attrib name=do_products_amounts_import
+		@param id required type=int
+	**/
+	function do_products_amounts_import($arr)
+	{
+		if ($this->can('view', $arr['id']))
 		{
-			print $v." ---> ".$haystack[$k]."<br>";
+			$o = new object($arr['id']);
+		}
+		else
+		{
+			exit('OTTO import object is not accessible');
 		}
 
-		die();
-		$a = "a, ā, b, c, č, d, e, ē, f, g, ģ, h, i, ī, j, k, ķ, l, ļ, m, n, ņ, o, p, r, s, š, t, u, ū, v, z, ž";
-		$a = str_replace(" ", "", $a);
-		foreach(explode(",", $a) as $b)
+		$ftp = new ftp();
+		$connection = $ftp->connect(array(
+			'host' => $o->prop('availability_ftp_host'),
+			'user' => $o->prop('availability_ftp_user'),
+			'pass' => $o->prop('availability_ftp_password')
+		));
+
+		$file_location = $o->prop('availability_ftp_file_location');
+		$file_content = $ftp->get_file($file_location);
+		$local_file = aw_ini_get('site_basedir').'/files/otto_import_availability.zip';
+		file_put_contents($local_file, $file_content);
+		
+		exit('die for now');
+		$lines = file(aw_ini_get('site_basedir').'/files/ASTAEXP.TXT');
+
+		// tegelt peaks saama pakendid kohe ka k2tte
+		$prods = new object_list(array(
+			'class_id' => CL_SHOP_PRODUCT
+		));
+		foreach ($prods->arr() as $prod_id => $prod)
 		{
-			print $b." -- ".ord($b)."<br>";
+			$codes[substr($prod->prop('code'), 0, 6)] = $prod;
 		}
-		$a = "A, Ā, B, C, Č, D, E, Ē, F, G, Ģ, H, I, Ī, J, K, Ķ, L, Ļ, M, N, Ņ, O, P, R, S, Š, T, U, Ū, V, Z, Ž";
-		$a = str_replace(" ", "", $a);
-		foreach(explode(",", $a) as $b)
+
+		// tarnija seostamiseks
+		$comps = new object_list(array(
+			'class_id' => CL_CRM_COMPANY,
+			'name' => '%Saksa%',
+			new obj_predicate_limit(1),
+		));
+		$comp = $comps->count() > 0 ? $comps->begin() : false;
+
+		$whs = new object_list(array(
+			'class_id' => CL_SHOP_WAREHOUSE,
+			'name' => '%Eesti%',
+			new obj_predicate_limit(1),
+		));
+		$wh = $whs->count() > 0 ? $whs->begin() : false;
+
+		foreach ($lines as $line)
 		{
-			print $b." -- ".ord($b)."<br>";
+			$fields = explode(';', $line);
+			if (array_key_exists($fields[0], $codes))
+			{
+				// lets get sizes from the product
+				$prod = $codes[$fields[0]];
+				echo "product: ".$prod->name()." (".$prod->id().")<br />\n";
+				$packagings = $prod->get_packagings(array());
+				foreach ($packagings->arr() as $packaging)
+				{
+					//	do_products_amounts_import_handle_size() handles different formes of sizes a'la S(127), 41/2(37), 56
+					echo "-- Going to compare '".$this->do_products_amounts_import_handle_size($packaging->prop('size'))."' with '".((int)($fields[1]))."' (".$fields[1].") - packaging id: ".$packaging->id()."<br />\n";
+					if ($this->do_products_amounts_import_handle_size($packaging->prop('size')) === ((int)$fields[1]))
+					{
+						echo "----".$packaging->prop('size')." -- ".$fields[1]." - ".((int)$fields[1])."/ ".$fields[2]."<br />\n";
+						
+						$purvs = new object_list(array(
+							"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+							"packaging" => $packaging->id(),
+							"lang_id" => array(),
+							"site_id" => array(),
+						));
+						if ($purvs->count() > 0)
+						{
+							$purv = $purvs->begin();
+							echo "-------- Existing purveyance oid: ".$purv->id()." count: ".$purvs->count()."<br />\n";
+						}
+						else
+						{
+							echo "-------- NEW purv: ";
+							$purv = new object();
+							$purv->set_class_id(CL_SHOP_PRODUCT_PURVEYANCE);
+							$purv->set_parent($packaging->id());
+							$purv->save();
+							$purv->connect(array(
+								'to' => $packaging->id(),
+								'type' => 'RELTYPE_PACKAGING'
+							));
+							$purv->set_prop('packaging', $packaging->id());
+
+							// tarnija seostamine
+							if ($comp !== false)
+							{
+								echo "------------ connect company ".$comp->name()."<br />\n";
+								$purv->connect(array(
+									'to' => $comp->id(),
+									'type' => 'RELTYPE_COMPANY'
+								));
+								$purv->set_prop('company', $comp->id());
+							}
+							
+							// seostab lao ka 2ra:
+							if ($wh !== false)
+							{
+								echo "------------ connect warehouse ".$wh->name()."<br />\n";
+								$purv->connect(array(
+									'to' => $wh->id(),
+									'type' => 'RELTYPE_WAREHOUSE'
+								));
+								$purv->set_prop('warehouse', $wh->id());
+							}
+							$purv->save();
+						}
+						//	It's better to handle the status as integer. The caption will be in template
+						$purv->set_name($fields[2]);
+						switch ($fields[2])
+						{
+							case 1:
+								$purv->set_comment(t('Tarneaeg 3-4 n&auml;dalat'));
+								break;
+							case 2:
+								$purv->set_comment(t('Tarneaeg pikem kui 4 n&auml;dalat'));
+								break;
+							case 3:
+								$purv->set_comment(t('V&auml;ljam&uuml;&uuml;dud'));
+								break;
+						}
+						$purv->set_prop('code', $fields[2]);
+						$purv->save();
+					}
+				}
+
+			}
+			$fields = null;
 		}
+		exit('done');
+	}
+
+	function do_products_amounts_import_handle_size($size)
+	{
+		/*
+			American sizes must be decoded
+			8XL = 924
+			7XL = 923
+			6XL = 922
+			5XL = 921
+			4XL = 910
+			3XL = XXXL = 909
+			XXL = 908
+			XL = 907
+			L = 906
+			M = 905
+			ML = 955
+			S = 904
+			XS = 903
+			XXS = 902
+			3XS = XXXS = 901 
+		*/
+		$expressions = array(
+			'/^3XS\([0-9]+\)$/' => 901,
+			'/^XXXS\([0-9]+\)$/' => 901,
+			'/^XXS\([0-9]\)$/' => 902,
+			'/^XS\([0-9]+\)$/' => 903,
+			'/^S\([0-9]+\)$/' => 904,
+			'/^ML\([0-9]+\)$/' => 955,
+			'/^M\([0-9]+\)$/' => 905,
+			'/^L\([0-9]+\)$/' => 906,
+			'/^XL\([0-9]+\)$/' => 907,
+			'/^XXL\([0-9]+\)$/' => 908,
+			'/^XXXL\([0-9]+\)$/' => 909,
+			'/^3XL\([0-9]+\)$/' => 909,
+			'/^4XL\([0-9]+\)$/' => 910,
+			'/^5XL\([0-9]+\)$/' => 921,
+			'/^6XL\([0-9]+\)$/' => 922,
+			'/^7XL\([0-9]+\)$/' => 923,
+			'/^8XL\([0-9]+\)$/' => 924,
+		);
+		foreach($expressions as $expression => $value)
+		{
+			if(preg_match($expression, $size))
+			{
+				return $value;
+			}
+		}
+		/*
+			double sizes 40/42 use the starting 40 only
+		*/
+		if(preg_match('/^[0-9]+[*]{1}[0-9]+$/', $size))
+		{
+			return (int)substr($size, 0, strpos($size, "/"));
+		}
+		/*
+			ring or shoe sizes 19,5 or 8,5 use 195 or 85 (without decimals)
+
+			28.08.2009 -kaarel : The shitty part is that we have show sizes like this: 41/2(37)
+			Tested cases:
+			41/2(37)	->	45
+			51/2(38		->	55
+			6(39)		->	60
+			61/2(40)	->	65
+			7(40		->	70
+			71/2(4		->	75
+		*/
+		if(preg_match('/^[0-9]+(\/[0-9]+)?\([0-9]+/', $size))
+		{
+			return ((int)substr($size, 0, min(strpos($size, "/") -1, strpos($size, "("))))*10 + (strpos($size, "/") ? 5 : 0);
+		}
+		return (int)aw_math_calc::string2float($size);
+		// !!! FOLLOWING CASES ARE NOT YET HANDLED !!!
+		/*
+			if quantity is a length so order in cm, max 999 = 10m,		// I can't understand this one! -kaarel 28.08.2009
+		*/
 	}
 
 	public function _get_xml_file_link($arr)
