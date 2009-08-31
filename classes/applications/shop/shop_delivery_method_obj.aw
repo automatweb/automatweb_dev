@@ -94,11 +94,11 @@ class shop_delivery_method_obj extends shop_matrix_obj
 		$arr["product_category"] = isset($arr["product_category"]) ? $arr["product_category"] : array();
 		if(!empty($arr["product"]))
 		{
-			$arr["product_category"] = shop_product_obj::get_categories_for_id($arr["product"]);
+			$arr["product_category"] = array_merge($arr["product_category"], shop_product_obj::get_categories_for_id($arr["product"]));
 		}
 		if(!empty($arr["product_packet"]))
 		{
-			$arr["product_category"] = shop_packet_obj::get_categories_for_id($arr["product_packet"])->ids();
+			$arr["product_category"] = array_merge($arr["product_category"], shop_packet_obj::get_categories_for_id($arr["product_packet"])->ids());
 		}
 
 		if(!empty($arr["product"]))

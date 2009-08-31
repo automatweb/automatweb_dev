@@ -29,12 +29,6 @@
 	@property order_show_controller type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
 	@caption Tellimuse n&auml;itamise kontroller
 
-	@property show_only_valid_delivery_methods type=checkbox field=meta method=serialize
-	@caption N&auml;ita checkout'is ainult valiidseid k&auml;ttetoimetamise viise
-
-	@property show_only_valid_payment_types type=checkbox field=meta method=serialize
-	@caption N&auml;ita checkout'is ainult valiidseid makseviise
-
 @property product_template type=select field=meta method=serialize
 @caption Ostukorvi &uuml;he toote vaate templeit
 
@@ -2724,23 +2718,29 @@ class shop_order_cart extends class_base
 		$payment = $delivery = "";
 		$prods =  $this->cart->get_cart();
 
-		$self_validate_payment_types = $this->cart->prop("show_only_valid_payment_types") ? false : true;
-		$payment_types_params = array(
+		$asd = $oc->get_payment_types(array(
 			"sum" => $this->cart_sum,
 			"currency" => $oc->get_currency(),
 			"product" => array(),
 			"product_packaging" => array(),
-			"validate" => !$self_validate_payment_types,
-		);
-		$asd = $oc->get_payment_types($payment_types_params);
+		));
 
-		$self_validate_delivery_methods = $this->cart->prop("show_only_valid_delivery_methods") ? false : true;
-		$delivery_methods_params = array(
+		$method_params = array(
 			"product" =>  array_keys($prods["items"]),
 			"product_packaging" => array_keys($prods["items"]),
-			"validate" => !$self_validate_delivery_methods,
 		);
-		$delivery_methods_object_list = $this->cart->delivery_methods($delivery_methods_params);
+		if(isset($this->categories) && is_array($this->categories))
+		{
+			$method_params["product_category"] = $this->categories ;
+		}
+		if(isset($this->products) && is_array($this->products))
+		{
+			$method_params["product_packaging"] = $this->products;
+			$method_params["product"] = $this->products;
+		}
+
+		$delivery_methods_object_list = $this->cart->delivery_methods($method_params);
+
 
 		foreach($asd->arr() as $a => $o)
 		{
@@ -2749,16 +2749,8 @@ class shop_order_cart extends class_base
 				"payment_name" => $o->name(),
 				"payment_id" => $a,
 				"payment_checked" => (!empty($data["payment"]) && $data["payment"] == $a) || $porn==0 ? " checked='checked' " : " ",
-			));
-			if($self_validate_payment_types)
-			{
-				$payment.= $this->parse("PAYMENT".(is_oid($o->valid_conditions($payment_types_params)) ? "" : "_DISABLED"));
-			}
-			else
-			{
-				$payment.= $this->parse("PAYMENT");
-				$porn++;
-			}
+			));$porn++;
+			$payment.= $this->parse("PAYMENT");
 			$condition = $o->valid_conditions(array(
 				"sum" => $this->cart_sum,
 				"currency" => $oc->get_currency(),
@@ -2807,15 +2799,7 @@ class shop_order_cart extends class_base
 			{
 				$this->delivery_sum = $o->get_shop_price($oc);
 			}
-			if($self_validate_delivery_methods)
-			{
-				$delivery.=$this->parse("DELIVERY".($o->valid($delivery_methods_params) ? "" : "_DISABLED"));
-			}
-			else
-			{
-				$delivery.=$this->parse("DELIVERY");
-				$porno++;
-			}
+			$delivery.=$this->parse("DELIVERY");$porno++;
 		}
 
 		$this->vars(array(
@@ -2831,24 +2815,6 @@ class shop_order_cart extends class_base
 		$n = 0;
 		foreach($smart_post->get_automates_by_city() as $name =>  $pask)
 		{
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			$n++;
 			$city_selected = !empty($data["county"]) && $data["county"] == $n;
 			$this->vars(array(

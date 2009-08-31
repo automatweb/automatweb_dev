@@ -30,16 +30,8 @@ class smart_post_obj extends _int_object
 
 	public function get_automates_by_city()
 	{
-		$jrk = $this->meta("cities");
 		$data = $this->get_data_by_cities();
-		foreach($jrk as $k => $v)
-		{
-			$jrk[$k] = array(
-				"jrk" => $v,
-				"city" => $k,
-			);
-		}
-		uasort($jrk, array($this, "sort_cities"));
+		$jrk = $this->get_sorted_cities();
 		$ret = array();
 		foreach($jrk as $j)
 		{
@@ -58,6 +50,43 @@ class smart_post_obj extends _int_object
 		{
 			return $a["jrk"] > $b["jrk"] ? 1 : -1;
 		}
+	}
+
+	protected function get_sorted_cities()
+	{
+		$jrk = $this->meta("cities");
+		foreach($jrk as $k => $v)
+		{
+			$jrk[$k] = array(
+				"jrk" => $v,
+				"city" => $k,
+			);
+		}
+		uasort($jrk, array($this, "sort_cities"));
+		return $jrk;
+	}
+
+	public static function get_smart_post()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SMART_POST,
+		));
+		return $ol->begin();
+	}
+
+	public function get_place_name_by_id($id)
+	{
+		foreach($this->get_data_by_cities() as $city => $places)
+		{
+			foreach($places as $key => $place)
+			{
+				if($key == $id)
+				{
+					return $place["NAME"];
+				}
+			}
+		}
+		return "";
 	}
 
 }

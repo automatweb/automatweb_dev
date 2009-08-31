@@ -103,6 +103,42 @@ class smart_post extends class_base
 				return true;
 		}
 	}
+	/**
+		@attrib name=get_city_options nologin="1"
+		@param city required type=int
+	**/
+	public function get_city_options($arr)
+	{
+		$sp = new object_list(array(
+			"class_id" => CL_SMART_POST,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$smart_post = $sp->begin();
+		
+		$stuff_array =  array();
+		
+		$stuff = 'var smartpostPlaces = { ';
+		
+		$n = 0;
+		foreach($smart_post->get_automates_by_city() as $name =>  $pask)
+		{
+			$n++; 
+			if($arr["city"] == $n)
+			{
+				foreach($pask as $key => $data)
+				{
+					$stuff_array[] = '"'.$key.'" : "'.$data["NAME"].'"';
+				}
+				break;
+			}
+		}
+		$stuff.= join("," , $stuff_array);
+
+		$stuff.= '}';
+		die($stuff);
+
+	}
 }
 
 ?>

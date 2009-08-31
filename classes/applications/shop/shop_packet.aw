@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.30 2009/08/31 11:04:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.31 2009/08/31 15:08:07 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -759,13 +759,17 @@ class shop_packet extends class_base
 			"id" => $oc->prop("cart"),
 		),CL_SHOP_ORDER_CART,false,false,"&amp;");
 
+
 		$prod_params = array();
 		$data["COLORS"] = "";
 		$szs = 0;//lihtsalt n2itab kas on yhelgi pakendil suurusi
 		$clrs = 0;//n2itab kas on yhelgi tootel v2rve suurusi
-
+		
+		$purveyances_stuff = $this->get_purveyances($data["packages"]);
+		$this->add_purveyances($data["packages"]);
 		foreach($data["packages"] as $product => $packages)
 		{
+			$prod_purveyances_ids = array();
 			$prod_sizes = array();
 			$prod_prices = array();
 			$prod_ids = array();
@@ -789,10 +793,12 @@ class shop_packet extends class_base
 			{
 				if($data["prices"][$package])
 				{
+
 					$prod_sizes[] = "\"".$data["sizes"][$package]."\"";
 					$prod_prices[] = $data["prices"][$package];
 					$prod_ids[] = $package;
 					$prod_purveyances[] = "'Tarneinfo puudub'";
+ 					$prod_purveyances_ids[] = $purveyances_stuff[$package] ? "\"".trim($purveyances_stuff[$package])."\"" : "\"\"";
 				}
 			}
 
@@ -803,6 +809,8 @@ class shop_packet extends class_base
 			$prod_params[$product].=join(",",$prod_ids);
 			$prod_params[$product].="], purveyances : [";
 			$prod_params[$product].=join(",",$prod_purveyances);
+			$prod_params[$product].="], purveyances_id : [";
+			$prod_params[$product].=join(",",$prod_purveyances_ids);
 			$prod_params[$product].="]}";
 			$data["COLORS"].= $this->parse("COLORS");
 
@@ -848,6 +856,68 @@ class shop_packet extends class_base
 		}
 		return $this->parse();
 	}
+
+	private function get_purveyances($packagings)
+	{
+		$ret = array();
+		foreach($packagings as $products => $packaging_array)
+		{
+			foreach($packaging_array as $key => $packaging)
+			{
+	
+				$conns = connection::find(array(
+					"to" => $packaging,
+					"from.class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+					"type" => "RELTYPE_PACKAGING"
+				));
+				foreach($conns as $conn)
+				{
+					$o = obj($conn["from"]);
+					$ret[$packaging] = $o->prop("code");
+				}				
+
+			}
+		}
+
+		return $ret;
+
+	}
+
+	private function add_purveyances($packagings)
+	{
+		$ret = array();
+		$show = 0;
+		foreach($packagings as $products => $packaging_array)
+		{
+			foreach($packaging_array as $key => $packaging)
+			{
+				$conns = connection::find(array(
+					"to" => $packaging,
+					"from.class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+					"type" => "RELTYPE_PACKAGING"
+				));
+				foreach($conns as $conn)
+				{
+					$o = obj($conn["from"]);
+					$this->vars(array(
+						"purveyance.comment" => trim($o->comment()),
+						"purveyance.name" =>trim($o->name()),
+						"purveyance.code" =>trim($o->prop("code")),
+					));
+					$show = 1;
+				}
+			}
+		}
+
+		if($show)
+		{
+			$this->vars(array("HAS_PURVEYANCES" => $this->parse("HAS_PURVEYANCES")));
+		}
+		return $ret;
+
+	}
+
+
 
 }
 ?>
