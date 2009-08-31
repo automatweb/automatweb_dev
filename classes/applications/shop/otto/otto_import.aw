@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.113 2009/08/31 11:49:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.114 2009/08/31 14:15:42 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -6725,6 +6725,8 @@ return false;
 			exit('OTTO import object is not accessible');
 		}
 
+
+		// Get the file from FTP:
 		$ftp = new ftp();
 		$connection = $ftp->connect(array(
 			'host' => $o->prop('availability_ftp_host'),
@@ -6733,14 +6735,23 @@ return false;
 		));
 
 		$file_location = $o->prop('availability_ftp_file_location');
+		echo "Get file from ftp ... ";
+		flush();
 		$file_content = $ftp->get_file($file_location);
 		$local_file = aw_ini_get('site_basedir').'/files/otto_import_availability.zip';
-		file_put_contents($local_file, $file_content);
-		
-		exit('die for now');
+		$file_size = file_put_contents($local_file, $file_content);
+		echo "( ".number_format(($file_size / 1024 / 1024), 2)." )";
+		echo "[done]<br />\n";
+		flush();
+		echo "Unpacking the file ...";
+		flush();
+		shell_exec("unzip -o $local_file");
+		echo "[done]<br />\n";
+		flush();
+
+		// Start import:
 		$lines = file(aw_ini_get('site_basedir').'/files/ASTAEXP.TXT');
 
-		// tegelt peaks saama pakendid kohe ka k2tte
 		$prods = new object_list(array(
 			'class_id' => CL_SHOP_PRODUCT
 		));
@@ -6776,8 +6787,9 @@ return false;
 				foreach ($packagings->arr() as $packaging)
 				{
 					//	do_products_amounts_import_handle_size() handles different formes of sizes a'la S(127), 41/2(37), 56
-					echo "-- Going to compare '".$this->do_products_amounts_import_handle_size($packaging->prop('size'))."' with '".((int)($fields[1]))."' (".$fields[1].") - packaging id: ".$packaging->id()."<br />\n";
-					if ($this->do_products_amounts_import_handle_size($packaging->prop('size')) === ((int)$fields[1]))
+					$handled_code = $this->do_products_amounts_import_handle_size($packaging->prop('size'));
+					echo "-- Going to compare '".$handled_code."' with '".((int)($fields[1]))."' (".$fields[1].") - packaging id: ".$packaging->id()."<br />\n";
+					if ($handled_code === ((int)$fields[1]))
 					{
 						echo "----".$packaging->prop('size')." -- ".$fields[1]." - ".((int)$fields[1])."/ ".$fields[2]."<br />\n";
 						
@@ -6790,7 +6802,7 @@ return false;
 						if ($purvs->count() > 0)
 						{
 							$purv = $purvs->begin();
-							echo "-------- Existing purveyance oid: ".$purv->id()." count: ".$purvs->count()."<br />\n";
+							echo "-------- Existing purveyance oid: ".$purv->id()." <br />\n";
 						}
 						else
 						{
@@ -6844,8 +6856,10 @@ return false;
 						}
 						$purv->set_prop('code', $fields[2]);
 						$purv->save();
+					//	echo "-------- Updated purveyance for packaging ".$packaging->id().", set comment = ".$purv->comment().", set name = ".$purv->name()."<br />\n";
 					}
 				}
+				$packagings = null;
 
 			}
 			$fields = null;
@@ -6902,8 +6916,9 @@ return false;
 		/*
 			double sizes 40/42 use the starting 40 only
 		*/
-		if(preg_match('/^[0-9]+[*]{1}[0-9]+$/', $size))
+		if(preg_match('/^[0-9]+[\/]{1}[0-9]+$/', $size, $m))
 		{
+	//	arr($m);
 			return (int)substr($size, 0, strpos($size, "/"));
 		}
 		/*
