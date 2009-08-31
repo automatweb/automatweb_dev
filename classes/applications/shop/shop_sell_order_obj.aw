@@ -29,6 +29,22 @@ class shop_sell_order_obj extends _int_object
 		return $r;
 	}
 
+	function prop($name)
+	{
+		switch($name)
+		{
+			case "shop_delivery_type":
+				if(!parent::prop("shop_delivery_type") && $this->prop("transp_type.class_id") == CL_SHOP_DELIVERY_METHOD)
+				{
+					$name = "transp_type";
+				}
+			break;
+		}
+
+
+		return parent::prop($name);
+	}
+
 
 	/** adds new row
 		@attrib api=1 params=name

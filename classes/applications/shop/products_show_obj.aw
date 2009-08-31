@@ -39,6 +39,7 @@ class products_show_obj extends _int_object
 	public function get_web_items()
 	{
 enter_function("products_show::get_web_items");
+
 		$categories = $this->get_categories();
 
 		if(!$categories->count() && (!is_array($this->prop("packets")) || !sizeof($this->prop("packets"))))
@@ -122,23 +123,27 @@ exit_function("products_show::get_web_items");
 
 	private function all_lower_categories()
 	{
+enter_function("pll_lower_categories::get_web_items1");
 		$ol = new object_list();
 		$menu = $this->parent();
 		$ot = new object_tree(array(
 			"parent" => $menu,
-//			"class_id" => CL_FILE
+			"class_id" => array(CL_MENU),
 		));
-
-	
-		foreach($ot->ids() as $s)
+		$menus = $ot->ids();
+		if(sizeof($menus))
 		{
-			$o = obj($s);
-			if($o->class_id() == CL_PRODUCTS_SHOW)
-			{
-				$ol->add($o->get_categories());
-			}
+			$categories = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+				"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY(CL_PRODUCTS_SHOW).parent" => $menus
+			));
 		}
-		return $ol;
+		else
+		{
+			$categories = new object_list();
+		}
+exit_function("pll_lower_categories::get_web_items1");
+		return $categories;
 	}
 
 	/** adds category

@@ -728,6 +728,7 @@ $data["code"] =  $this->prop("code");
 	{
 		$product = $this->get_product();
 		$ol = $product->get_packets_for_id($product->id());
+//		var_dump($product->id(), $ol);
 		return $ol->begin();
 	}
 

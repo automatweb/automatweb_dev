@@ -6,14 +6,13 @@
 @default table=aw_shop_rent_calculator
 @default group=general
 
-@property shop type=relpicker reltype=RELTYPE_SHOP store=connect
-@caption E-pood
-@comment E-poe objekt, mille juurest järelmaksuseaded lugeda
+@property payment_type type=relpicker reltype=RELTYPE_PAYMENT_TYPE store=connect
+@caption Makseviis
 
 #### RELTYPES
 
-@reltype SHOP value=1 clid=CL_SHOP_ORDER_CENTER
-@caption E-pood
+@reltype PAYMENT_TYPE value=1 clid=CL_SHOP_PAYMENT_TYPE
+@caption Makseviis
 
 */
 
@@ -38,18 +37,18 @@ class shop_rent_calculator extends class_base
 		$this->read_template("show.tpl");
 
 		$o = new object($arr["id"]);
-		$shop = obj($o->prop("shop"));
+		$payment_type = obj($o->prop("payment_type"));
 
 		$rent = array_merge(array("rent_period" => "", "sum_core" => ""), safe_array(aw_global_get("rent_calculator")));
-		$rent_conditions = obj($shop->get_rent_conditions(array(
+		$rent_conditions = obj($payment_type->valid_conditions(array(
 			"sum" => $rent["sum_core"],
 			"currency" => 354831,
 		)));
 
-		if($shop->is_a(CL_SHOP_ORDER_CENTER))
+		if($payment_type->is_a(CL_SHOP_PAYMENT_TYPE))
 		{
 			$RENT_PERIOD_OPTION = "";
-			if($rent_conditions->is_a(CL_SHOP_RENT_CONDITIONS))
+			if($rent_conditions->is_a(CL_SHOP_PAYMENT_TYPE_CONDITIONS))
 			{
 				foreach($rent_conditions->rent_periods() as $rent_period)
 				{
@@ -84,6 +83,20 @@ class shop_rent_calculator extends class_base
 			}
 			elseif(isset($rent["sum_rent"]))
 			{
+				if(isset($rent["warning"]))
+				{
+					$WARNING = "";
+					foreach($rent["warning"] as $warning)
+					{
+						$this->vars(array(
+							"warning" => $warning,
+						));
+						$WARNING .= $this->parse("WARNING");
+					}
+					$this->vars(array(
+						"WARNING" => $WARNING,
+					));
+				}
 				$this->vars(array(
 					"RESULT" => $this->parse("RESULT"),
 				));
@@ -107,16 +120,16 @@ class shop_rent_calculator extends class_base
 	public function calculate($arr)
 	{
 		$o = obj($arr["id"]);
-		$shop = obj($o->prop("shop"));
+		$payment_type = obj($o->prop("payment_type"));
 		$rent = array();
 
-		if($shop->is_a(CL_SHOP_ORDER_CENTER))
+		if($payment_type->is_a(CL_SHOP_PAYMENT_TYPE))
 		{
-			$rent_conditions = obj($shop->get_rent_conditions(array(
+			$rent_conditions = obj($payment_type->valid_conditions(array(
 				"sum" => isset($arr["sum_core"]) ? aw_math_calc::string2float($arr["sum_core"]) : 0,
 				"currency" => 354831,
 			)));
-			if($rent_conditions->is_a(CL_SHOP_RENT_CONDITIONS))
+			if($rent_conditions->is_a(CL_SHOP_PAYMENT_TYPE_CONDITIONS))
 			{
 				$rent = $rent_conditions->calculate_rent(ifset($arr["sum_core"]), ifset($arr["rent_period"]));
 			}
@@ -142,16 +155,16 @@ class shop_rent_calculator extends class_base
 	public function get_rent_periods($arr)
 	{
 		$o = obj($arr["id"]);
-		$shop = obj($o->prop("shop"));
+		$payment_type = obj($o->prop("payment_type"));
 		$ret = array();
 
-		if($shop->is_a(CL_SHOP_ORDER_CENTER))
+		if($payment_type->is_a(CL_SHOP_PAYMENT_TYPE))
 		{
-			$rent_conditions = obj($shop->get_rent_conditions(array(
+			$rent_conditions = obj($payment_type->valid_conditions(array(
 				"sum" => isset($arr["sum"]) ? aw_math_calc::string2float($arr["sum"]) : 0,
 				"currency" => 354831,
 			)));
-			if($rent_conditions->is_a(CL_SHOP_RENT_CONDITIONS))
+			if($rent_conditions->is_a(CL_SHOP_PAYMENT_TYPE_CONDITIONS))
 			{
 				$ret = $rent_conditions->rent_periods();
 			}

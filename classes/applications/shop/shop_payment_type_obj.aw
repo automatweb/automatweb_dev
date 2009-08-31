@@ -142,14 +142,16 @@ class shop_payment_type_obj extends shop_matrix_obj
 				"site_id" => array(),
 			),
 			array(
-				CL_SHOP_PAYMENT_TYPE_CONDITIONS => array("row", "col", "currency", "min_amt", "max_amt"),
+				CL_SHOP_PAYMENT_TYPE_CONDITIONS => array("row", "col", "currency", "min_amt", "max_amt", "ignore_min_amt", "ignore_max_amt"),
 			)
 		);
 		foreach($odl->arr() as $cond)
 		{
 			$this->cells[$cond["row"]][$cond["col"]]["conditions"][$cond["currency"]][$cond["oid"]] = array(
 				"min" => $cond["min_amt"],
+				"ignore_min" => $cond["ignore_min_amt"],
 				"max" => $cond["max_amt"],
+				"ignore_max" => $cond["ignore_max_amt"],
 			);
 		}
 
@@ -195,6 +197,20 @@ class shop_payment_type_obj extends shop_matrix_obj
 							"minimum_sum" => $cond["min"],
 							"maximum_sum" => $cond["max"],
 						));
+						if($cond["max"] == 0 || $cond["ignore_max"])
+						{
+							$i->vars(array(
+								"HANDLE_CELL_ROW_WITH_MAXIMUM_SUM" => "",
+								"HANDLE_CELL_ROW_WITHOUT_MAXIMUM_SUM" => $i->parse("HANDLE_CELL_ROW_WITHOUT_MAXIMUM_SUM"),
+							));
+						}
+						else
+						{
+							$i->vars(array(
+								"HANDLE_CELL_ROW_WITH_MAXIMUM_SUM" => $i->parse("HANDLE_CELL_ROW_WITH_MAXIMUM_SUM"),
+								"HANDLE_CELL_ROW_WITHOUT_MAXIMUM_SUM" => "",
+							));
+						}
 						$HANDLE_CELL_ROW .= rtrim($i->parse("HANDLE_CELL_ROW"), "\t");
 					}
 					if(strlen($HANDLE_CELL_ROW) > 0)

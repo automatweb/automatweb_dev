@@ -334,13 +334,14 @@ class shop_packet_obj extends _int_object
 	{
 		enter_function("packet_obj::get_min_price");
 		$min = "";
-		$this->_set_products();
+		//$this->_set_products();
 		$t = new object_data_list(
 			array(
 				"class_id" => CL_SHOP_PRODUCT_PACKAGING,
 				"site_id" => array(),
 				"lang_id" => array(),
-				"product" => $this->product_objects->ids(),
+				"CL_SHOP_PRODUCT_PACKAGING.RELTYPE_PACKAGING(CL_SHOP_PRODUCT).RELTYPE_PRODUCT(CL_SHOP_PACKET)" => $this->id(),//$this->product_objects->ids(),
+//				"product.CL_SHOP_PRODUCT.RELTYPE_PRODUCT(CL_SHOP_PACKET)" => $this->id(),//$this->product_objects->ids(),
 				"CL_SHOP_PRODUCT_PACKAGING.price" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 0),
 			),
 			array(
@@ -376,6 +377,26 @@ class shop_packet_obj extends _int_object
 			"site_id" => array(),
 		));
 		return $ol;
+	}
+
+	public function get_pask()
+	{
+		$categories = $this->get_crap();
+		$ol = new object_list();
+		if($categories->count())
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_PRODUCTS_SHOW,
+				"CL_PRODUCTS_SHOW.RELTYPE_CATEGORY" => $categories->ids(),
+			));
+
+		}
+		$menus = array();
+		foreach($ol->arr() as $o)
+		{
+			$menus[] = $o->parent();
+		}
+		return $menus;
 	}
 
 }

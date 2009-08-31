@@ -88,7 +88,6 @@
 	@property send_attach type=checkbox ch_value=1
 	@caption Lisa meili manusega tellimus
 
-
 @default group=payment1
 
 	@property web_discount type=textbox size=5 user=1
@@ -107,8 +106,11 @@
 	@property rent_min_amt type=textbox user=1
 	@caption J&auml;relmaksu miinumumsumma
 
-	@property rent_configuration type=relpicker reltype=RELTYPE_RENT_CONFIGURATION table=aw_shop_order_center field=aw_rent_configuration method=fuck_you_serialize
-	@caption J&auml;relmaksu konfiguratsioon
+@default group=payment_types
+
+	@property payment_types_tlb type=toolbar store=no no_caption=1
+
+	@property payment_types_tbl type=table store=no no_caption=1
 
 @default group=appearance
 	@property appearance_toolbar type=toolbar no_caption=1 store=no
@@ -250,8 +252,9 @@
 	@groupinfo mail_settings_seller caption="Pakkujale" parent=mail_settings
 
 @groupinfo payment caption="Maksmine"
-	@groupinfo payment1 caption="Seaded" parent=payment
+	@groupinfo payment_types caption="Makseviisid" parent=payment
 	@groupinfo payment_settings caption="Pangamakse seaded" parent=payment
+	@groupinfo payment1 caption="Seaded" parent=payment
 
 @groupinfo appear caption="N&auml;itamine"
 	@groupinfo appearance parent=appear caption="N&auml;itamine"
@@ -311,9 +314,6 @@
 
 @reltype RELTYPE_MENU value=18 clid=CL_MENU
 @caption Kaust
-
-@reltype RENT_CONFIGURATION value=19 clid=CL_SHOP_RENT_CONFIGURATION
-@caption J&auml;relmaksu konfiguratsioon
 
 @reltype DEFAULT_CURRENCY value=20 clid=CL_CURRENCY
 @caption Vaikimisi valuuta
@@ -1574,6 +1574,26 @@ class shop_order_center extends class_base
 		return $ret;
 	}
 
+	public function _get_payment_types_tlb($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$t->add_new_button(array(CL_SHOP_PAYMENT_TYPE), $arr["obj_inst"]->id());
+		$t->add_delete_button();
+		$t->add_save_button();
+	}
+
+	public function _get_payment_types_tbl($arr)
+	{
+		$ol = $arr["obj_inst"]->get_payment_types();
+
+		$t = $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			$ol,
+			array("name"),
+			CL_SHOP_PAYMENT_TYPE
+		);
+	}
+
 	function _get_folder_ot_from_o($o)
 	{
 		if (!$o->prop("warehouse"))
@@ -1861,7 +1881,6 @@ class shop_order_center extends class_base
 		switch($f)
 		{
 			case "aw_default_currency":
-			case "aw_rent_configuration":
 			case "aw_root_menu":
 			case "aw_per_page":
 				$this->db_add_col($t, array(

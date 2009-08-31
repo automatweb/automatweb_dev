@@ -19,22 +19,13 @@ class shop_order_cart_obj extends _int_object
 			OIDs of customer categories.
 		@param location optional type=array/int acl=view
 			OIDs of locations
+		@param validate optional type=boolean default=true
+			If set to false, delivery methods will not be validated, therefore all delivery methods will be returned
+
 	**/
 	public function delivery_methods($arr = array())
 	{
 		enter_function("shop_order_center_obj::delivery_mehtods");
-		if(is_object($o = $this->get_shop_order_center()))
-		{
-			$customer_data = $o->get_customer_data();
-			if(is_object($customer_data))
-			{
-				$arr = array_merge(array(
-					"customer_data" => $customer_data->id(),
-					"customer_category" => array(),//$customer_data->get_customer_categories()->ids(),
-					"location" => array(),//$customer_data->get_locations()->ids(),
-				), $arr);
-			}
-		}
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_DELIVERY_METHOD,
 			"CL_SHOP_DELIVERY_METHOD.RELTYPE_DELIVERY_METHOD(CL_SHOP_ORDER_CART)" => $this->id(),
@@ -45,11 +36,26 @@ class shop_order_cart_obj extends _int_object
 			)),
 		));
 		// Validate
-		foreach($ol->arr() as $o)
+		if(!isset($arr["validate"]) || !empty($arr["validate"]))
 		{
-			if(!$o->valid($arr))
+			if(is_object($o = $this->get_shop_order_center()))
 			{
-				$ol->remove($o->id());
+				$customer_data = $o->get_customer_data();
+				if(is_object($customer_data))
+				{
+					$arr = array_merge(array(
+						"customer_data" => $customer_data->id(),
+						"customer_category" => array(),//$customer_data->get_customer_categories()->ids(),
+						"location" => array(),//$customer_data->get_locations()->ids(),
+					), $arr);
+				}
+			}
+			foreach($ol->arr() as $o)
+			{
+				if(!$o->valid($arr))
+				{
+					$ol->remove($o->id());
+				}
 			}
 		}
 		exit_function("shop_order_center_obj::delivery_mehtods");
@@ -225,6 +231,7 @@ class shop_order_cart_obj extends _int_object
 		$o->set_prop("payment_type" , $order_data["payment"]);
 		$o->set_prop("currency" , $this->oc->get_currency());
 		$o->set_prop("channel" , $this->prop("channel"));
+		$o->set_meta("order_data" , $order_data);
 		$o->save();
 
 		$awa = new aw_array($cart["items"]);
@@ -237,6 +244,13 @@ class shop_order_cart_obj extends _int_object
 				{
 					continue;
 				}
+
+				// If the quantity of an item is 0, then don't add it to order:
+				if ($cart["items"][$iid][$key]["items"] == 0)
+				{
+					continue;
+				}
+
 				$product = obj($iid);
 				$o->add_row(array(
 					"product" => $iid,
@@ -334,7 +348,6 @@ class shop_order_cart_obj extends _int_object
 			{
 				$person->set_phone($data["workphone"], "work");
 			}
-
 		}
 		return $person;
 	}

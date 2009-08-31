@@ -18,7 +18,7 @@ class shop_payment_type_conditions_obj extends _int_object
 	}
 
 	/**
-		@attrib params=name
+		@attrib name=calculate_rent params=pos
 
 		@param core_sum required type=float
 
@@ -28,32 +28,65 @@ class shop_payment_type_conditions_obj extends _int_object
 	**/
 	public function calculate_rent($core_sum, $period, $precision = 2)
 	{
+		$ret = array();
 		if($core_sum < $this->prop("min_amt"))
 		{
-			return array(
-				"error" => sprintf(t("Minimaalne lubatud summa j&auml;relmaksuks on %s!"), $this->prop("rent_min_amt")),
-			);
+			if($this->prop("ignore_min_amt"))
+			{
+				$ret["warning"][] = html_entity_decode(sprintf(t("Minimaalne lubatud summa j&auml;relmaksuks on %s!"), $this->prop("min_amt")), ENT_QUOTES, aw_global_get("charset"));
+			}
+			else
+			{
+				return array(
+					"error" => html_entity_decode(sprintf(t("Minimaalne lubatud summa j&auml;relmaksuks on %s!"), $this->prop("min_amt")), ENT_QUOTES, aw_global_get("charset")),
+				);
+			}
 		}
 
-		if($core_sum > $this->prop("max_amt"))
+		if($core_sum > $this->prop("max_amt") && $this->prop("max_amt") != 0)
 		{
-			return array(
-				"error" => sprintf(t("Maksimaalne lubatud summa j&auml;relmaksuks on %s!"), $this->prop("rent_max_amt")),
-			);
+			$error = html_entity_decode(sprintf(t("Maksimaalne lubatud summa j&auml;relmaksuks on %s!"), $this->prop("max_amt")), ENT_QUOTES, aw_global_get("charset"));
+			if($this->prop("ignore_max_amt"))
+			{
+				$ret["warning"][] = $error;
+			}
+			else
+			{
+				return array(
+					"error" => $error,
+				);
+			}
 		}
 
 		if(!in_array($period, $this->rent_periods()))
 		{
+			$error = html_entity_decode(t("Valitud j&auml;relmaksuperiood ei ole lubatud!"), ENT_QUOTES, aw_global_get("charset"));
 			return array(
-				"error" => t("Valitud j&auml;relmaksuperiood ei ole lubatud!"),
+				"error" => $error,
 			);
 		}
 
-		return array(
-			"prepayment" => $prepayment = round($core_sum * $this->prop("prepayment_interest") / 100, $precision),
-			"single_payment" => $single_payment = round(max($core_sum - $prepayment, 0) * (1 + $this->prop("yearly_interest") / 12 / 100 * $period) / $period, $precision),
-			"sum_rent" => $single_payment * $period + $prepayment,
-		);
+		$ret["prepayment"] = $prepayment = round($core_sum * $this->prop("prepayment_interest") / 100, $precision);
+		$ret["single_payment"] = $single_payment = round(max($core_sum - $prepayment, 0) * (1 + $this->prop("yearly_interest") / 12 / 100 * $period) / $period, $precision);
+		$ret["sum_rent"] = $single_payment * $period + $prepayment;
+
+		if($single_payment < $this->prop("min_payment"))
+		{
+			$error = html_entity_decode(sprintf(t("Minimaalne lubatud summa igakuiseks osamakseks on %s!"), $this->prop("min_payment")), ENT_QUOTES, aw_global_get("charset"));
+			if($this->prop("ignore_min_payment"))
+			{
+				$ret["warning"][] = $error;
+			}
+			else
+			{
+				return array(
+					"error" => $error,
+				);
+			}
+		}
+
+
+		return $ret;
 	}
 	public function prop($k)
 	{
@@ -93,7 +126,7 @@ class shop_payment_type_conditions_obj extends _int_object
 			$unit = $this->prop("currency.symbol"),
 			$this->prop("min_amt"),
 			$unit,
-			$this->prop("max_amt"),
+			$this->prop("max_amt") > 0 ? $this->prop("max_amt") : "&#8734;",
 			$unit,
 			$this->prop("min_payment"),
 			$this->prop("prepayment_interest"),

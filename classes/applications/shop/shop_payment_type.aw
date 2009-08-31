@@ -6,6 +6,9 @@
 @default table=aw_shop_payment_type
 @default group=general
 
+	@property shop type=relpicker reltype=RELTYPE_SHOP field=aw_shop no_edit=1
+	@caption E-pood
+
 @groupinfo matrix caption="Maatriks"
 	@groupinfo matrix_show caption="Maatriks" parent=matrix submit=no
 	@default group=matrix_show
@@ -87,6 +90,9 @@
 @reltype COUNTRY value=4 clid=CL_COUNTRY
 @caption Riik, mida maatriksi veeruna kuvatakse
 
+@reltype SHOP value=5 clid=CL_SHOP_ORDER_CENTER
+@caption E-pood
+
 */
 
 class shop_payment_type extends shop_matrix
@@ -104,6 +110,23 @@ class shop_payment_type extends shop_matrix
 		if(!empty($_GET["debug"]))
 		{
 			$arr["obj_inst"]->update_code();
+			$ot = new object_tree(array(
+				"class_id" => array(CL_MENU, CL_DOCUMENT),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => 354721,
+			));
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+				"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY(CL_PRODUCTS_SHOW).RELTYPE_ALIAS(CL_DOCUMENT)" => $ot->ids(),
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			arr($ol->names());
+			exit;
+			arr(obj(379542)->valid_conditions(array("sum" => 1000, "currency" => 354831)));
+			arr(obj(379540)->valid_conditions(array("sum" => 1000, "currency" => 354831)));
+			exit;
 			arr(obj(345974)->delivery_methods(array(
 			)), true);
 			arr(obj(obj(345920)->get_conditions(array(
@@ -200,6 +223,14 @@ class shop_payment_type extends shop_matrix
 		return true;
 	}
 
+	public function _get_shop($arr)
+	{
+		if(!empty($arr["new"]) && $this->can("view", $parent = automatweb::$request->arg("parent")) && obj($parent)->is_a(CL_SHOP_ORDER_CENTER))
+		{
+			$arr["prop"]["options"] = array($parent => obj($parent)->name());
+		}
+	}
+
 	public function _get_matrix($arr)
 	{
 		load_javascript("applications/shop/matrix.js");
@@ -269,12 +300,22 @@ class shop_payment_type extends shop_matrix
 
 		foreach($o->get_property_list() as $k => $v)
 		{
-			if(!in_array($k, array("name", "comment", "status", "payment_type", "col", "row")))
+			if(!in_array($k, array("name", "comment", "status", "payment_type", "col", "row", "ignore_min_amt", "ignore_max_amt", "ignore_min_payment")))
 			{
 				$v["captionside"] = "top";
 				$v["group"] = "advanced_layer";
 				$v["parent"] = "advanced_layer_properties";
 				$v["value"] = $o->prop($k);
+								
+				if(in_array($k, array("min_amt", "max_amt", "min_payment")))
+				{
+					$v["post_append_text"] = " ".html::checkbox(array(
+						"name" => "ignore_".$k,
+						"value" => 1,
+						"checked" => $o->prop("ignore_".$k),
+					))." ".t("Ei arvestata, ainult informatiivne");
+				}
+
 				$ret[$k] = $v;
 			}
 		}
@@ -372,6 +413,13 @@ class shop_payment_type extends shop_matrix
 
 		switch($f)
 		{
+			case "aw_shop":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+
 			case "aw_code":
 				$this->db_add_col($t, array(
 					"name" => $f,
@@ -409,19 +457,23 @@ class shop_payment_type extends shop_matrix
 			else
 			{
 				$o = obj(NULL, array(), CL_SHOP_PAYMENT_TYPE_CONDITIONS);
+				$o->set_name(sprintf(t("Makseviisi '%s' tingimused"), parse_obj_name(obj($arr["payment_type"])->name())));
 				$o->set_prop("payment_type", $arr["payment_type"]);
 				$o->set_prop("row", is_oid($arr["row"]) ? $arr["row"] : 0);
 				$o->set_prop("col", is_oid($arr["col"]) ? $arr["col"] : 0);
 				
 				$o->set_parent($arr["payment_type"]);
 			}
-			foreach($arr as $k => $v)
+			foreach(array_merge(array("ignore_min_amt" => 0, "ignore_max_amt" => 0, "ignore_min_payment" => 0), $arr) as $k => $v)
 			{
 				switch ($k)
 				{
 					case "min_amt":
 					case "max_amt":
 					case "min_payment":
+					case "ignore_min_amt":
+					case "ignore_max_amt":
+					case "ignore_min_payment":
 					case "prepayment_interest":
 					case "yearly_interest":
 					case "period_min":

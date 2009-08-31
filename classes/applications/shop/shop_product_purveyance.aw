@@ -6,6 +6,9 @@
 @default table=aw_shop_product_purveyance
 @default group=general
 
+@property code type=textbox
+@caption Kood
+
 @property product type=relpicker reltype=RELTYPE_PRODUCT
 @caption Toode
 
@@ -116,6 +119,12 @@ class shop_product_purveyance extends class_base
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
+				));
+				return true;
+			case "code":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(100)"
 				));
 				return true;
 		}

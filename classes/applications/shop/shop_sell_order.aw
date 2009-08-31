@@ -42,6 +42,9 @@
 @property transp_type type=relpicker field=aw_transp_type reltype=RELTYPE_TRANSFER_METHOD
 @caption L&auml;hetusviis
 
+@property shop_delivery_type type=relpicker field=aw_delivery_type reltype=RELTYPE_DELIVERY_METHOD
+@caption Poe kohaletoimetamise viis
+
 @property currency type=relpicker reltype=RELTYPE_CURRENCY automatic=1 field=aw_currency
 @caption Valuuta
 
@@ -102,6 +105,9 @@
 
 @reltype RELTYPE_CHANNEL value=12 clid=CL_WAREHOUSE_SELL_CHANNEL
 @caption M&uuml;&uuml;gikanal
+
+@reltype DELIVERY_METHOD value=13 clid=CL_SHOP_DELIVERY_METHOD
+@caption Poe kohaletoimetamise viis
 */
 
 class shop_sell_order extends class_base
@@ -193,6 +199,7 @@ class shop_sell_order extends class_base
 			case "aw_channel":
 			case "aw_address":
 			case "aw_payment_type":
+			case "aw_delivery_type":
 			case "aw_channel":
 				$this->db_add_col($t, array(
 					"name" => $f,
@@ -251,9 +258,11 @@ class shop_sell_order extends class_base
 			$arr["template"] = "show.tpl";
 		}
 		$this->read_any_template($arr["template"]);
-
+		lc_site_load("shop", &$this);
 		$data = array();
 		$o = obj($arr["id"]);
+		$meta = $o->meta("order_data");
+		$this->vars($meta);
 		foreach($o->get_property_list() as $pn => $pd)
 		{
 			$data[$pn] = $o->prop_str($pn);
@@ -332,18 +341,49 @@ class shop_sell_order extends class_base
 			}
 		}
 		$data["cart_sum"] = number_format($sum , 2);
-		if($this->can("view" , $o->prop("transp_type")))
+		if($this->can("view" , $o->prop("payment_type")))
 		{
-			$delivery = obj($o->prop("transp_type"));
+			$payment = obj($o->prop("payment_type"));
+
+			$condition = $payment->valid_conditions(array(
+				"sum" => $sum,
+				"currency" => $o->prop("currency"),
+				"product" => array(),
+				"product_packaging" => array(),
+			));
+
+			if($this->can("view" , $condition))
+			{
+				$condition_object = obj($condition);
+				foreach($condition_object->properties() as $key => $prop)
+				{
+					$this->vars(array("condition_".$key => $prop));
+				}
+				
+				$stuff = $condition_object->calculate_rent($sum , $meta["deferred_payment_count"]);
+
+				if($stuff["sum_rent"] > 0)
+				{
+					$sum = $stuff["sum_rent"];
+					$data["deferred_payment_price"] = $stuff["single_payment"];
+				}
+			}
+		}
+		if($this->can("view" , $o->prop("shop_delivery_type")))
+		{
+			$delivery = obj($o->prop("shop_delivery_type"));
 			$t->define_data(array(
 				"prod" => $delivery->name(),
 				"sum" => $delivery->get_curr_price($o->prop("currency")),
 			));
 			$data["delivery_sum"] = $delivery->get_curr_price($o->prop("currency"));
 			$data["delivery_name"] = $delivery->name();
-			$sum+= $delivery->get_curr_price($o->prop("currency"));
-		}
+			$data["delivery_price"] = $delivery->get_curr_price($o->prop("currency"));
+			$sum+= $data["delivery_price"];
 
+			//kohaletoimetamise info muutujad
+			$this->vars($delivery->get_vars($o->properties() + $o->meta("order_data")));
+		}
 
 		$data["payment_name"] = $o->prop("payment_type.name");
 
@@ -353,7 +393,6 @@ class shop_sell_order extends class_base
 		$data["status"] = $o->prop("order_status") ? $this->states[$o->prop("order_status")] : "";
 		$data["table"] = $t->draw();
 		$data["sum"] = number_format($sum, 2);
-
 		$data["date"] = date("d.m.Y" , $o->prop("date"));
 		$data["different_products"] = $different_products;
 		if($this->can("view" , $o->prop("delivery_address")))
@@ -379,7 +418,16 @@ class shop_sell_order extends class_base
 		}
 		$data["channel"] = $o->prop("channel");
 		$data["customer_no"] = $orderer->prop("external_id");
+
 		$this->vars($data);
+
+		foreach($this->vars as $key => $val)
+		{
+			if($val && $this->is_template("HAS_".strtoupper($key)))
+			{
+				$this->vars(array("HAS_".strtoupper($key) => $this->parse("HAS_".strtoupper($key))));
+			}
+		}
 
 		return $this->parse();
 	}

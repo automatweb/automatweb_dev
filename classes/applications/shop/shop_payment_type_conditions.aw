@@ -17,11 +17,20 @@
 	@property min_amt type=textbox field=aw_min_amt
 	@caption J&auml;relmaksu miinumumsumma
 
+	@property ignore_min_amt type=checkbox field=aw_ignore_min_amt
+	@caption J&auml;relmaksu miinumumsummat ei arvestata, ainult informatiivne
+
 	@property max_amt type=textbox field=aw_max_amt
-	@caption Järelmaksu maksimumsumma
+	@caption J&auml;relmaksu maksimumsumma (0 - piiramata)
+
+	@property ignore_max_amt type=checkbox field=aw_ignore_max_amt
+	@caption J&auml;relmaksu maksimumsummat ei arvestata, ainult informatiivne
 
 	@property min_payment type=textbox field=aw_min_payment
 	@caption &Uuml;he makse miinimumsumma
+
+	@property ignore_min_payment type=checkbox field=aw_ignore_min_payment
+	@caption &Uuml;he makse miinumumsummat ei arvestata, ainult informatiivne
 
 	@property prepayment_interest type=textbox field=aw_prepayment_interest
 	@caption Esmase sissemakse protsent
@@ -55,16 +64,6 @@ class shop_payment_type_conditions extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
 	function do_db_upgrade($t, $f)
 	{
 		if ($f == "")
@@ -81,6 +80,9 @@ class shop_payment_type_conditions extends class_base
 			case "aw_row":
 			case "aw_col":
 			case "aw_currency":
+			case "aw_ignore_min_amt":
+			case "aw_ignore_max_amt":
+			case "aw_ignore_min_payment":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -101,6 +103,22 @@ class shop_payment_type_conditions extends class_base
 				));
 				return true;
 		}
+	}
+
+	/**
+		@attrib name=calculate_rent params=name
+
+		@param id required type=int acl=view
+
+		@param sum required type=float
+
+		@param period required type=int
+
+		@param precision optional type=int default=2
+	**/
+	public function calculate_rent($arr)
+	{
+		die(json_encode(obj($arr["id"])->calculate_rent($arr["sum"], $arr["period"], isset($arr["precision"]) ? $arr["precision"] : 2)));
 	}
 }
 

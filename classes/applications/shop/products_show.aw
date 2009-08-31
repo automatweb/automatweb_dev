@@ -221,6 +221,7 @@ enter_function("products_show::start");
 			"name" => $ob->prop("name"),
 		));
 
+		lc_site_load("shop", &$this);
 		$products = $ob->get_web_items();
 		$oc = $ob->get_oc();
 		$GLOBALS["order_center"] = $oc->id();

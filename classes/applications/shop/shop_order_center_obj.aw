@@ -38,6 +38,50 @@ class shop_order_center_obj extends _int_object
 		return is_oid($id = $this->prop("shop_payment_type")) ? obj($id)->valid_conditions($arr) : NULL;
 	}
 
+	/**
+		@attrib api=1
+
+		@param sum optional type=float
+			The total sum of products/packagings
+		@param currency optional type=int
+			The OID of currency
+		@param product optional type=array/int acl=view
+			OIDs of products
+		@param product_packaging optional type=array/int acl=view
+			OIDs of products
+		@param product_category optional type=array/int acl=view
+			OIDs of product categories
+		@param customer_data optional type=int acl=view
+			OID of customer_data object
+		@param customer_category optional type=array/int acl=view
+			OIDs of customer categories.
+		@param location optional type=array/int acl=view
+			OIDs of locations
+		@param validate optional type=boolean default=true
+
+		@returns object_list of valid shop_payment_type objects
+	**/
+	public function get_payment_types($arr = array())
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PAYMENT_TYPE,
+			"shop" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		if((!isset($arr["validate"]) || !empty($arr["validate"])) && !empty($arr["sum"]))
+		{
+			foreach($ol->arr() as $o)
+			{
+				if(!is_oid($o->valid_conditions($arr)))
+				{
+					$ol->remove($o->id());
+				}
+			}
+		}
+		return $ol;
+	}
+
 	function filter_get_fields()
 	{
 		$class_filter_fields = $this->meta("class_filter_fields");

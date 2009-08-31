@@ -238,7 +238,15 @@ class shop_delivery_method_obj extends shop_matrix_obj
 					if($this->prop("enabling_type") == 2)
 					{
 						$i->vars(array(
+							"ENABLING_TYPE_1_HANDLE_CELL" => "",
 							"ENABLING_TYPE_2_HANDLE_CELL" => rtrim($i->parse("ENABLING_TYPE_2_HANDLE_CELL"), "\t"),
+						));
+					}
+					else
+					{
+						$i->vars(array(
+							"ENABLING_TYPE_1_HANDLE_CELL" => rtrim($i->parse("ENABLING_TYPE_1_HANDLE_CELL"), "\t"),
+							"ENABLING_TYPE_2_HANDLE_CELL" => "",
 						));
 					}
 					$HANDLE_CELL .= rtrim($i->parse("HANDLE_CELL"), "\t");
@@ -265,6 +273,18 @@ class shop_delivery_method_obj extends shop_matrix_obj
 	{
 		$f = create_function('$args', $this->prop("code"));
 		return $f($args);
+	}
+
+	public function get_vars($order_data)
+	{
+		$vars = array();
+		if($order_data["smartpost_sell_place"])
+		{
+			$sm = smart_post_obj::get_smart_post();
+			$vars["smartpost_sell_place_name"] = $sm->get_place_name_by_id($order_data["smartpost_sell_place"]);
+
+		}
+		return $vars;
 	}
 }
 

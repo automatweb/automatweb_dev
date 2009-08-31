@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.29 2009/08/26 13:32:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.30 2009/08/31 11:04:05 dragut Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -697,7 +697,7 @@ class shop_packet extends class_base
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
-		lc_site_load("shop_packet", &$this);
+		lc_site_load("shop", &$this);
 		//r2ndom miskite sama kategooria pakettide n2itamine
 		if($this->is_template("MORE_PRODUCTS"))
 		{
@@ -769,6 +769,7 @@ class shop_packet extends class_base
 			$prod_sizes = array();
 			$prod_prices = array();
 			$prod_ids = array();
+			$prod_purveyances = array();
 			$prod_params[$product] = $product." : { ";
 
 			$prod_params[$product].= " image_url : \"".$data["big_image_urls"][$product]."\",";
@@ -791,6 +792,7 @@ class shop_packet extends class_base
 					$prod_sizes[] = "\"".$data["sizes"][$package]."\"";
 					$prod_prices[] = $data["prices"][$package];
 					$prod_ids[] = $package;
+					$prod_purveyances[] = "'Tarneinfo puudub'";
 				}
 			}
 
@@ -799,6 +801,8 @@ class shop_packet extends class_base
 			$prod_params[$product].=join(",",$prod_prices);
 			$prod_params[$product].="], ids : [";
 			$prod_params[$product].=join(",",$prod_ids);
+			$prod_params[$product].="], purveyances : [";
+			$prod_params[$product].=join(",",$prod_purveyances);
 			$prod_params[$product].="]}";
 			$data["COLORS"].= $this->parse("COLORS");
 

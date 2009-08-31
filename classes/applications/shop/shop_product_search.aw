@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.18 2009/08/28 06:10:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.19 2009/08/31 11:04:05 dragut Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -22,6 +22,9 @@
 
 	@property objs_in_res type=select 
 	@caption Tulemuseks on 
+
+	@property forward_single_product_to_detailview type=checkbox
+	@caption Kui leitakse ainult &uuml;ks toode, suuna detailvaatesse
 
 @groupinfo folders caption="Otsingu l&auml;htekohad"
 @default group=folders
@@ -50,6 +53,10 @@
 	@property s_tbl_ctr2 type=relpicker reltype=RELTYPE_CONTROLLER
 	@caption Tulemuste tabeli kontroller
 
+	@property products_object_list_filter_controller type=relpicker reltype=RELTYPE_CFGCONTROLLER
+	@caption Toodete object listi filtri kontroller
+	@comment Kasutada kaht muutujat - $args (object listi filter) ja $no_products (boolean, kui tõene, siis tagastatakse tühi object list).
+
 @groupinfo search caption="Otsi" submit_method=get submit=no
 @default group=search
 
@@ -74,6 +81,9 @@
 
 @reltype SEARCH_CATEGORY_ROOT value=6 clid=CL_MENU
 @caption Otsingu kaust
+
+@reltype CFGCONTROLLER value=7 clid=CL_CFGCONTROLLER
+@caption Kontroller (class_base liidesega)
 
 */
 
@@ -211,6 +221,7 @@ class shop_product_search extends class_base
 		}
 
 		$this->read_template("show.tpl");
+		lc_site_load("shop", &$this);
 		$this->vars(array(
 			"form" => $html,
 			"section" => aw_global_get("section"),
@@ -242,6 +253,8 @@ class shop_product_search extends class_base
 			$this->read_template('form.tpl');
 		}
 
+		lc_site_load("shop", &$this);
+
 		// actually it is a pretty bold move to get the first object of this type and to expect, that this is the right one
 		$ol = new object_list(array(
 			'class_id' => CL_SHOP_PRODUCT_SEARCH,
@@ -268,10 +281,12 @@ class shop_product_search extends class_base
 				'search_category_name' => $cat->name(),
 				'search_category_id' => $cat_id,
 			));
-			$categories_str .= $this->parse('SEARCH_CATEGORY');
+			$categories_str .= $this->parse('SEARCH_CATEGORY'.(automatweb::$request->arg("search_category") == $cat_id ? "_SELECTED" : ""));
 		}
 		$this->vars(array(
-			'SEARCH_CATEGORY' => $categories_str
+			"search_term" => automatweb::$request->arg("search_term"),
+			'SEARCH_CATEGORY' => $categories_str,
+			"SEARCH_CATEGORY_SELECTED" => "",
 		));
 		return $this->parse();
 	}
@@ -1026,21 +1041,22 @@ class shop_product_search extends class_base
 	//	));
 
 		$this->read_template('results.tpl');
-
-enter_function("products_show::show");
-		$ob = new object($arr["id"]);
+		enter_function("products_show::show");
+//		$ob = new object($arr["id"]);
 
 		// get the order center object from shop_product_search
 		$oc = $arr['obj_inst']->get_order_center();
 
-enter_function("products_show::start");
-	//	$this->read_template($ob->get_template());
+		enter_function("products_show::start");
+		/*
+		$this->read_template($ob->get_template());
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
+		*/
 
 		// is it required?
-		lc_site_load("shop_order_cart", &$this);
+		lc_site_load("shop", &$this);
 /*
 		$products = new object_list(array(
 			'class_id' => CL_SHOP_PRODUCT,
@@ -1053,16 +1069,14 @@ enter_function("products_show::start");
 				))
 		));
 */
-		$products = new object_list(array(
-			'class_id' => CL_SHOP_PACKET,
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					'name' => '%'.automatweb::$request->arg('search_term').'%',
-					'CL_SHOP_PACKET.RELTYPE_PRODUCT.name' => '%'.automatweb::$request->arg('search_term').'%'
-					)
-				))
-			
+		$products = $arr["obj_inst"]->get_search_results();
+		if($products->count() === 1 && $arr["obj_inst"]->prop("forward_single_product_to_detailview"))
+		{
+			$product = $products->begin();
+			header("Location: /".reset($product->get_pask())."?product=".$product->id()."&oc=".$oc->id()."&search_term=".automatweb::$request->arg("search_term")."&search_category=".automatweb::$request->arg("search_category"));
+		}
+		$this->vars(array(
+			"count" => $products->count(),
 		));
 
 		$GLOBALS["order_center"] = $oc->id();
