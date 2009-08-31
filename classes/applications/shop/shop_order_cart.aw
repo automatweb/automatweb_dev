@@ -2813,22 +2813,24 @@ class shop_order_cart extends class_base
 		$county = "";
 		$smartpost_active = array();
 		$n = 0;
-		foreach($smart_post->get_automates_by_city() as $name =>  $pask)
-		{
-			$n++;
-			$city_selected = !empty($data["county"]) && $data["county"] == $n;
-			$this->vars(array(
-				"county_name" => $name,
-				"county_id" => $n,
-				"county_selected" => $city_selected ? 'selected="selected"' : "",
-			));
-			if($city_selected)
+		if($smart_post)
+		{		
+			foreach($smart_post->get_automates_by_city() as $name =>  $pask)
 			{
-				$smartpost_active = $pask;
+				$n++;
+				$city_selected = !empty($data["county"]) && $data["county"] == $n;
+				$this->vars(array(
+					"county_name" => $name,
+					"county_id" => $n,
+					"county_selected" => $city_selected ? 'selected="selected"' : "",
+				));
+				if($city_selected || $n == 1)
+				{
+					$smartpost_active = $pask;
+				}
+				$county.= $this->parse("COUNTY");
 			}
-			$county.= $this->parse("COUNTY");
 		}
-
 		$SMARTPOST_SELL_PLACE = "";
 		foreach($smartpost_active as $id => $values)
 		{

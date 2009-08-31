@@ -326,6 +326,10 @@ class shop_sell_order extends class_base
 				$prod_data["color"] = $row->meta("product_color");
 				$prod_data["name"] = $row->prop("prod_name");
 				$prod_data["packet_name"] = $row->prop("prod_name");
+				if(!$prod_data["sum"])
+				{
+					$prod_data["sum"] = t("Hinnakirja<br>alusel");
+				}
 			}
 			$different_products++;
 			$this->vars($row_data);
@@ -369,6 +373,7 @@ class shop_sell_order extends class_base
 				}
 			}
 		}
+		
 		if($this->can("view" , $o->prop("shop_delivery_type")))
 		{
 			$delivery = obj($o->prop("shop_delivery_type"));
@@ -432,5 +437,11 @@ class shop_sell_order extends class_base
 		return $this->parse();
 	}
 
+
 }
+
+
+
+
+
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.19 2009/08/31 11:04:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.20 2009/08/31 17:40:32 markop Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -268,9 +268,10 @@ class shop_product_search extends class_base
 			return $this->parse();
 		}
 
+		$root = $search_obj->get_first_obj_by_reltype('RELTYPE_SEARCH_CATEGORY_ROOT');
 		$categories = new object_list(array(
 			'class_id' => CL_MENU,
-			'parent' => $search_obj->get_first_obj_by_reltype('RELTYPE_SEARCH_CATEGORY_ROOT')->id(),
+			'parent' => is_object($root) ? $search_obj->get_first_obj_by_reltype('RELTYPE_SEARCH_CATEGORY_ROOT')->id() : "",
 			'sort_by' => 'objects.jrk'
 		));
 

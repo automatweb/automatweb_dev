@@ -113,7 +113,6 @@ class shop_payment_type_obj extends shop_matrix_obj
 		}
 
 		$args["rows"] = array_merge((array)$arr["product_packaging"], (array)$arr["product"], (array)$arr["product_category"]);
-
 		return $args;
 	}
 
