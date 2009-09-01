@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.32 2009/08/26 14:35:26 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.32 2009/08/26 14:35:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.33 2009/09/01 15:57:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.33 2009/09/01 15:57:14 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -137,6 +137,9 @@
 @reltype RELTYPE_CHANNEL value=12 clid=CL_WAREHOUSE_SELL_CHANNEL
 @caption M&uuml;&uuml;gikanal
 
+@reltype RELTYPE_PRODUCT_CATEGORY value=8 clid=CL_SHOP_PRODUCT_CATEGORY
+@caption Tootekategooria
+
 */
 
 class orders_form extends class_base
@@ -257,6 +260,7 @@ class orders_form extends class_base
 	public function clear_order()
 	{
 		unset($_SESSION["order"]);
+		unset($_SESSION["cart"]);
 	}
 
 	public function set_order($order)
@@ -307,11 +311,13 @@ class orders_form extends class_base
 			$template = "orderer_form_data.tpl";
 		}
 		$cart_instance->read_template($template);
-		lc_site_load("shop_order_cart", &$cart_instance);
-
-		$cart_instance->add_orderer_vars();
-		$cart_instance->add_order_vars();
+		lc_site_load("shop", &$cart_instance);
 		$cart_instance->add_cart_vars();
+		$cart_instance->add_orderer_vars();
+		$cart_instance->cart_sum = 15000000;
+		$cart_instance->add_order_vars();
+
+
 		$cart_instance->vars($arr);
 		$cart_instance->vars(array("id" => $arr["id"]));
 		return $cart_instance->parse();
@@ -362,10 +368,36 @@ class orders_form extends class_base
 		{
 			$template = "order_form_data.tpl";
 		}
+
+		$cats = array();
+		foreach($form->connections_from(array(
+			"type" => "RELTYPE_PRODUCT_CATEGORY",
+		)) as $conn)
+		{
+			$cats[] = $conn->prop("to");
+		}
+
+		$order_data = $this->get_order();
+		$cart_instance->products = array();
+		foreach($order_data as $key => $data)
+		{
+			if($data["product_code"])
+			{
+				$product = $this->get_product_by_code($data["product_code"]);
+				if(is_object($product))
+				{
+					$cart_instance->products[] =  $product->id();
+				}
+			}
+		}
+		$cart_instance->categories = $cats;
+
+	//	arr($form);
 		$cart_instance->read_template($template);
-		lc_site_load("shop_order_cart", &$cart_instance);
+		lc_site_load("shop", &$cart_instance);
 		$cart_instance->cart->get_order_data();
 		$cart_instance->add_orderer_vars();
+		$cart_instance->cart_sum = 15000000000;
 		$cart_instance->add_order_vars();
 		$cart_instance->add_cart_vars();
 		$cart_instance->vars($arr);
@@ -375,12 +407,19 @@ class orders_form extends class_base
 	function show($arr)
 	{
 	//tellimuse info
+
+$is_saved = 1;
 		$form_obj = obj($arr["id"]);
 		$oc = obj($form_obj->prop("order_center"));
 		$cart = obj($oc->prop("cart"));
 		$c_data = $cart->get_order_data();
 		$order_data = $this->get_order();
 		$cart_instance = get_instance(CL_SHOP_ORDER_CART);
+		$cart_instance->cart = $cart;
+		$cart_instance->cart_sum = 1500000000;
+		$cart_instance->add_order_vars();
+ 		$this->vars($cart_instance->vars);
+
 	//templeidi valik
 		if(!empty($arr["template"]))
 		{
@@ -400,6 +439,7 @@ class orders_form extends class_base
 		}
 
 
+		lc_site_load("shop", &$this);
 		foreach($c_data as $key => $val)
 		{
 			$this->vars(array(
@@ -431,12 +471,14 @@ class orders_form extends class_base
 		$disable_vars = array("product_code" , "name" , "product_color", "product_page" , "product_image" , "product_sum");
 		
 		$shop_cart_table = "";
-		$count = 0;
+		$count = $total = 0 ;
 		foreach($order_data as $key => $data)
 		{
 			$vars = array();
 			$product = null;
 			$data["product_price"] = t("Hinnakirja<br>alusel");
+
+
 			if(!$data["product_count"])
 			{
 				$order_data[$key]["product_count"] = $data["product_count"] = 1;
@@ -502,15 +544,22 @@ class orders_form extends class_base
 				}
 				if(!empty($data["product_price"]) && $data["product_count"])
 				{
-					$vars["product_sum"] = number_format($data["product_price"] * $data["product_count"] , 2);
+					$vars["product_sum"] = number_format(aw_math_calc::string2float($data["product_price"]) * $data["product_count"] , 2);
+					$total+=aw_math_calc::string2float($data["product_price"]) * $data["product_count"];
 				}
+
+
 			}
 			else
 			{
+				if(!$data["product_count"] || !$data["name"])
+				{
+					$is_saved = 0;
+				}
 			//	$vars["product_size"] = "";
 				$vars["image_popup"] = "";
 				$vars["image_url"] = "";
-				$vars["product_sum"] = "";
+				$vars["product_sum"] = t("Hinnakirja<br>alusel");
 			}
 
 			$vars["delete"] = html::href(array("url" => "javascript:void(0);" , "onClick" => '$.get("/automatweb/orb.aw?class=orders_form&action=delete_row&row='.$count.'", {
@@ -572,6 +621,7 @@ class orders_form extends class_base
 			$this->vars($delivery_vars);
 		}
 		$this->vars(array(
+			"total" => $total,
 			"shop_cart_table" => $shop_cart_table,
 			"rows_count" => $count,
 			"id" => $form_obj->id(),
@@ -588,6 +638,58 @@ class orders_form extends class_base
 		$this->vars(array("shop_table" => $this->parse("shop_table")));
 
 		$this->set_order($order_data);//et igasugu default v22rtused ka 2ra salvestaks
+
+
+
+
+		//j2relmaksu jaoks SUB
+		if(!empty($order_data["payment"]) && $this->can("view" , $order_data["payment"]))
+		{
+			$payment = obj($order_data["payment"]);
+			$condition = $payment->valid_conditions(array(
+				"sum" => 150000000,
+				"currency" => $oc->get_currency(),
+				"product" => array(),
+				"product_packaging" => array(),
+			));
+			if($this->can("view" , $condition))
+			{
+				$c = obj($condition);
+				$rent = $c->calculate_rent($total,$data["deferred_payment_count"]);
+
+				if($rent["single_payment"])
+				{
+					$this->vars(array(
+						"deferred_payment_price" => $rent["single_payment"],
+					));
+					$this->vars(array(
+						"total" => $rent["sum_rent"],
+					));
+				}
+
+				if($c->prop("prepayment_interest") != 100)
+				{//print "<br><br><br><br><br>minge munni!!!!!, kopp on ees sest jamast!";
+					$this->vars(array(
+						"HAS_LEASE_PURCHASE" => $this->parse("HAS_LEASE_PURCHASE"),
+					));
+				}
+			}
+		}
+		foreach($this->vars as $key => $val)
+		{
+			if($val && $this->is_template("HAS_".strtoupper($key)))
+			{
+				$this->vars(array("HAS_".strtoupper($key) => $this->parse("HAS_".strtoupper($key))));
+			}
+		}
+
+		if($is_saved)
+		{
+			$this->vars(array(
+				"IS_SAVED" => $this->parse("IS_SAVED"),
+			));
+		}
+
 		return $this->parse();
 	}
 
@@ -665,12 +767,12 @@ class orders_form extends class_base
 		$o->set_prop("buyer_rep" , $person->id());
 		$address = $cart->_get_address($order_data);
 		$o->set_prop("delivery_address" , $address->id());
-		$o->set_prop("transp_type" , $order_data["delivery"]);
+		$o->set_prop("shop_delivery_type" , $order_data["delivery"]);
 		$o->set_prop("payment_type" , $order_data["payment"]);
 		$o->set_prop("currency" , $this->oc->get_currency());
 		$o->set_prop("channel" , $form->prop("channel"));
-
 		$o->set_prop("order_status" , "5");
+		$o->set_meta("order_data" , $order_data);
 		$o->save();
 
 		$rows = $this->get_order();
