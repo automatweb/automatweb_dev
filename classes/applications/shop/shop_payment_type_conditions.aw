@@ -106,7 +106,7 @@ class shop_payment_type_conditions extends class_base
 	}
 
 	/**
-		@attrib name=calculate_rent params=name
+		@attrib name=calculate_rent params=name nologin=1 
 
 		@param id required type=int acl=view
 

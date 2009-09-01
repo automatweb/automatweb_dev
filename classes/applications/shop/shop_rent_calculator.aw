@@ -107,7 +107,7 @@ class shop_rent_calculator extends class_base
 	}
 
 	/**
-		@attrib name=calculate params=name
+		@attrib name=calculate params=name nologin=1
 
 		@param id required type=int acl=view
 
@@ -145,7 +145,7 @@ class shop_rent_calculator extends class_base
 	}
 
 	/**
-		@attrib name=get_rent_periods api=1
+		@attrib name=get_rent_periods api=1 nologin=1
 		@param id required type=int acl=view
 			OID of rent calculator object
 		@param sum optional type=float

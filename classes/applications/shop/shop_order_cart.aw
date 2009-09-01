@@ -529,7 +529,7 @@ class shop_order_cart extends class_base
 		$postal_price = 0;
 
 
-		if($this->total_sum > 0)
+		if(!empty($this->total_sum) &&  $this->total_sum > 0)
 		{
 			$total = $this->total_sum;
 		}
@@ -2748,7 +2748,7 @@ class shop_order_cart extends class_base
 			$this->vars(array(
 				"payment_name" => $o->name(),
 				"payment_id" => $a,
-				"payment_checked" => (!empty($data["payment"]) && $data["payment"] == $a) || $porn==0 ? " checked='checked' " : " ",
+				"payment_checked" => (!empty($data["payment"]) && $data["payment"] == $a) || ($porn==0 && empty($data["payment"])) ? " checked='checked' " : " ",
 			));$porn++;
 			$payment.= $this->parse("PAYMENT");
 			$condition = $o->valid_conditions(array(
@@ -2771,7 +2771,7 @@ class shop_order_cart extends class_base
 			while($min <= $max)
 			{
 				$this->vars(array(
-					"deferred_payment_selected" => !empty($data["deferred_payment_count"]) && $data["deferred_payment_count"] == $min ? 'selected="selected"' : "",
+					"deferred_payment_selected" => (!empty($data["deferred_payment_count"]) && $data["deferred_payment_count"] == $min) ? 'selected="selected"' : "",
 					"value" => $min
 				));
 				$DEFERRED_PAYMENT.= $this->parse("DEFERRED_PAYMENT");
@@ -2788,7 +2788,7 @@ class shop_order_cart extends class_base
 		$porno = 0;
 		foreach($delivery_methods_object_list->arr() as $id => $o)
 		{
-			$sel_delivery = (!empty($data["delivery"]) && $data["delivery"] == $id) || $porno==0;
+			$sel_delivery = (!empty($data["delivery"]) && $data["delivery"] == $id) || ($porno==0 && empty($data["delivery"]));
 			$this->vars(array(
 				"delivery_name" => $o->name(),
 				"delivery_id" => $id,
@@ -2837,18 +2837,24 @@ class shop_order_cart extends class_base
 			$this->vars(array(
 				"smartpost_name" => $values["NAME"],
 				"smartpost_value" => $id,
-				"smartpost_sell_place_selected" => $data["smartpost_sell_place"] == $id ? 'selected="selected"' : "",
+				"smartpost_sell_place_selected" => !empty($data["smartpost_sell_place"]) &&  $data["smartpost_sell_place"] == $id ? 'selected="selected"' : "",
 			));
 			$SMARTPOST_SELL_PLACE.= $this->parse("SMARTPOST_SELL_PLACE");
 		}
 
 //---------- kui miskit suva porno checkboxi v6i radiobuttoni muutujat vaja kasutada, mis on templeidis, siis siit annaks v22rtus
+
 		$checkbox_vars = array("client_status");
 		foreach($checkbox_vars as $checkbox_var)
 		{
 			if(isset($data[$checkbox_var]))
 			{
 				$this->vars(array($checkbox_var."_".$data[$checkbox_var]."_checked"  => "checked=\"checked\""));
+			}
+			else
+			{
+
+				$this->vars(array($checkbox_var."_2_checked"  => "checked=\"checked\""));
 			}
 		}
 		
@@ -2860,7 +2866,7 @@ class shop_order_cart extends class_base
 			"SMARTPOST_SELL_PLACE" => $SMARTPOST_SELL_PLACE,
 		));
 
-		if($this->can("view" , $data["delivery"]))
+		if(isset($data["delivery"]) && $this->can("view" , $data["delivery"]))
 		{
 			$delivery = obj($data["delivery"]);
 			$this->vars($delivery->get_vars($data));

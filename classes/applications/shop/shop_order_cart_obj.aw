@@ -264,7 +264,6 @@ class shop_order_cart_obj extends _int_object
 
 	public function _get_person($data)
 	{
-
 		$person = "";
 		//sellisel juhul otsib olemasolevate isikute hulgast, kui on andmeid mille j2rgi otsida
 		if(!empty($data["personalcode"]) || !empty($data["customer_no"]) || (!empty($data["birthday"]) && !empty($data["lastname"])))
@@ -278,7 +277,7 @@ class shop_order_cart_obj extends _int_object
 			{
 				$filter["personal_id"] = $data["personalcode"];
 			}
-			if(!empty($data["customer_no"]))
+			if(!empty($data["customer_no"]) && is_numeric($data["customer_no"]))
 			{
 				$filter["external_id"] = $data["customer_no"];
 			}
@@ -300,11 +299,14 @@ class shop_order_cart_obj extends _int_object
 					}
 				}
 			}
-			$ol = new object_list($filter);
-
-			if($ol->count())
+			if(sizeof($filter) > 3)
 			{
-				$person = $ol->begin();
+				$ol = new object_list($filter);
+
+				if($ol->count())
+				{
+					$person = $ol->begin();
+				}
 			}
 		}
 		if(!is_object($person))
