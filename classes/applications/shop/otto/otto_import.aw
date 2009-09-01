@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.114 2009/08/31 14:15:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.115 2009/09/01 12:41:27 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -6716,6 +6716,9 @@ return false;
 	**/
 	function do_products_amounts_import($arr)
 	{
+		ini_set("memory_limit", "2048M");
+		aw_set_exec_time(AW_LONG_PROCESS);
+
 		if ($this->can('view', $arr['id']))
 		{
 			$o = new object($arr['id']);
