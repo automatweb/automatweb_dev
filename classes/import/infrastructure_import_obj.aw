@@ -52,7 +52,6 @@ class infrastructure_import_obj extends _int_object
 			"county" => CL_CRM_COUNTY,
 			"city" => CL_CRM_CITY,
 		);
-		exit;
 		foreach($clids as $type => $clid)
 		{
 			$objects = $this->data[$type];
@@ -63,7 +62,7 @@ class infrastructure_import_obj extends _int_object
 				"site_id" => array(),
 			));
 			$name_to_object = array_flip($ol->names());
-			foreach($objects as $object)
+			foreach($objects as $object_id => $object)
 			{
 				if(isset($name_to_object[$object["name"]["et"]]))
 				{
@@ -73,7 +72,7 @@ class infrastructure_import_obj extends _int_object
 				{
 					$o = obj();
 					$o->set_class_id($clid);
-					$o->set_name($name["et"]);
+					$o->set_name($object["name"]["et"]);
 				}
 				switch($type)
 				{
@@ -82,7 +81,16 @@ class infrastructure_import_obj extends _int_object
 						break;
 
 					case "county":
-						$o->set_parent($countries_parent);
+						if(isset($this->data["country"][$object["country"]]["oid"]) && is_oid($this->data["country"][$object["country"]]["oid"]))
+						{
+							$o->set_parent($this->data["country"][$object["country"]]["oid"]);
+							$o->set_prop("country", $this->data["country"][$object["country"]]["oid"]);
+						}
+						else
+						{
+							arr($object);
+							continue;
+						}
 						break;
 
 					case "city":
@@ -94,7 +102,8 @@ class infrastructure_import_obj extends _int_object
 						}
 						else
 						{
-							echo arr($object);
+							arr($object);
+							continue;
 						}
 						break;
 				}
@@ -106,7 +115,7 @@ class infrastructure_import_obj extends _int_object
 					$o->set_meta("trans_2_status", 1);
 					$o->set_meta("translations", $m);
 				}
-				$o->save();
+				$this->data[$type][$object_id]["oid"] = $o->save();
 			}
 		}
 
