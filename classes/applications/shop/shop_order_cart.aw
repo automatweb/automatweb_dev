@@ -2747,6 +2747,7 @@ class shop_order_cart extends class_base
 		$method_params = array(
 			"product" =>  array_keys($prods["items"]),
 			"product_packaging" => array_keys($prods["items"]),
+			"validate" => !$self_validate_delivery_methods,
 		);
 		if(isset($this->categories) && is_array($this->categories))
 		{
@@ -2768,8 +2769,17 @@ class shop_order_cart extends class_base
 				"payment_name" => $o->name(),
 				"payment_id" => $a,
 				"payment_checked" => (!empty($data["payment"]) && $data["payment"] == $a) || ($porn==0 && empty($data["payment"])) ? " checked='checked' " : " ",
-			));$porn++;
-			$payment.= $this->parse("PAYMENT");
+			));
+
+                         if($self_validate_payment_types) 	 
+	                         { 	 
+	                                 $payment.= $this->parse("PAYMENT".(is_oid($o->valid_conditions($payment_types_params)) ? "" : "_DISABLED")); 	 
+	                         } 	 
+	                         else 	 
+	                         {	 
+ 	                                 $payment.= $this->parse("PAYMENT");
+					$porn++; 	 
+				}
 			$condition = $o->valid_conditions(array(
 				"sum" => $this->cart_sum,
 				"currency" => $oc->get_currency(),
@@ -2818,7 +2828,15 @@ class shop_order_cart extends class_base
 			{
 				$this->delivery_sum = $o->get_shop_price($oc);
 			}
-			$delivery.=$this->parse("DELIVERY");$porno++;
+		        if($self_validate_delivery_methods)
+	                { 	 
+	                         $delivery.=$this->parse("DELIVERY".($o->valid($delivery_methods_params) ? "" : "_DISABLED")); 	 
+	                }
+			else 	 
+	                { 	 
+	                         $delivery.=$this->parse("DELIVERY"); 	 
+	                         $porno++; 	 
+	                }
 		}
 
 		$this->vars(array(

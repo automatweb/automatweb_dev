@@ -366,7 +366,16 @@ class shop_order_center_obj extends _int_object
 	**/
 	public function get_currency()
 	{
-		return $this->prop("default_currency");
+		if(is_oid($this->prop("default_currency")))
+		{
+			return $this->prop("default_currency");
+		}
+		$ol = new object_list(array("class_id" => CL_CURRENCY));
+		foreach($ol->ids() as $id)
+		{
+			return $id;
+		}
+		return null;
 	}
 
 	private function get_all_product_show_menus()

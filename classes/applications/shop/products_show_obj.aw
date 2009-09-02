@@ -99,9 +99,8 @@ exit_function("products_show::get_web_items");
 	**/
 	public function get_oc()
 	{
-		$ol = new object_list(array("class_id" => CL_SHOP_ORDER_CENTER));
-		$ol = $ol->arr();
-		return reset($ol);
+		$ol = new object_list(array("class_id" => CL_SHOP_ORDER_CENTER, "lang_id" => array(), "site_id" => array()));
+		return $ol->begin();
 	}
 
 	/** returns categories
