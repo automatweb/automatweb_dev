@@ -85,7 +85,7 @@ EOS;
 		return array($prop["name"] => $prop);
 	}
 
-	function process_vcl_property($arr)
+	function process_vcl_property(&$arr)
 	{
 		$prop =& $arr["prop"];
 		$name = $prop["name"];
