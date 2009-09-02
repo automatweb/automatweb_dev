@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.19 2007/11/23 07:06:27 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.20 2009/09/02 12:48:27 markop Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus
 /*
 
@@ -122,7 +122,7 @@ class cb_form_chain_entry extends class_base
 
 			$f2d[$d->meta("webform_id")][] = $d;
 		}
-		
+
 		foreach($f2d as $wf_id => $entries)
 		{
 			if (!$wf_id)
@@ -158,23 +158,41 @@ class cb_form_chain_entry extends class_base
 		$props = $wf->get_props_from_wf(array(
 			"id" => $wf_id
 		));
-
+		$ret = "";
 		if ($d[$wf_id]["data_table_confirm_vert"] == 1)
 		{
-			$t->define_field(array(
-				"name" => "capt",
-				"caption" => t(""),
-				"align" => "center"
-			));
-			foreach($entries as $idx => $entry)
+			
+			$ent = array();
+			$count = 1;
+			$key_count = 0;
+
+			foreach($entries as $key => $val)
+			{
+                                $ent[$key_count][$key] = $val;				
+				if($count % 5 == 0)
+				{
+					$key_count++;
+				}
+$count++;
+			}
+			foreach($ent as $key => $entries2)
+			{
+
+                        $t->define_field(array(
+                                "name" => "capt",
+                                "caption" => t(""),
+                                "align" => "left"
+                        ));
+
+
+			foreach($entries2 as $idx => $entry)
 			{
 				$t->define_field(array(
 					"name" => "e".$idx,
 					"caption" => t(""),
-					"align" => "center"
+					"align" => "left"
 				));
 			}
-
 			// go over all datas
 			foreach($props as $pn => $pd)
 			{
@@ -214,7 +232,8 @@ class cb_form_chain_entry extends class_base
 				}
 				$t->define_data($row);
 			}
-
+				$ret.= $t->draw();$t = new aw_table(array("layout" => "generic"));
+			}
 		}
 		else
 		{
@@ -266,9 +285,9 @@ class cb_form_chain_entry extends class_base
 				}
 				$t->define_data($row);
 			}
+			$ret.= $t->draw();
 		}
 
-		$ret = $t->draw();
 		if ($this->is_template("FORM_MUL"))
 		{
 			$form_obj = obj($wf_id);	
