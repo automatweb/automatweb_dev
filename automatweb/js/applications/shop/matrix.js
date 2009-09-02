@@ -43,7 +43,7 @@ var shop_matrix = {
 		$.get('orb.aw', {
 				"class": $.gup("class"),
 				"action": "cell_description",
-				"rent_configuration": $.gup("id"),
+				"payment_type": $.gup("id"),
 				"currency": shop_matrix.current.currency,
 				"row": shop_matrix.current.row,
 				"col": shop_matrix.current.col,
@@ -55,7 +55,7 @@ var shop_matrix = {
 		});
 	},
 	submit_layer: function(){
-		$.post("orb.aw", "class="+$.gup("class")+"&action=submit_advanced_layer&"+shop_matrix.form.serialize()+"&currency="+shop_matrix.current.currency+"&id="+$("input[type='hidden'][name='condition']").val()+"&rent_configuration="+$.gup("id"), function(condition){
+		$.post("orb.aw", "class="+$.gup("class")+"&action=submit_advanced_layer&"+shop_matrix.form.serialize()+"&currency="+shop_matrix.current.currency+"&id="+$("input[type='hidden'][name='condition']").val()+"&payment_type="+$.gup("id"), function(condition){
 			if($('input[type=hidden][name=delete_conditions]').val() == '1'){
 				reload_layout(['advanced_layer_left','advanced_layer_right'],{'row':shop_matrix.current.row,'col':shop_matrix.current.col,'currency':shop_matrix.current.currency});
 				$('input[type=hidden][name=delete_conditions]').val('');

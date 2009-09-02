@@ -55,7 +55,12 @@ foreach(array_keys($rows) as $row)
 			<!-- SUB: HANDLE_CELL -->
 			case "{VAR:currency}_{VAR:row}_{VAR:col}":
 				<!-- SUB: HANDLE_CELL_ROW -->
+				<!-- SUB: HANDLE_CELL_ROW_WITH_MAXIMUM_SUM -->
 				if($args["sum"] <= {VAR:maximum_sum} and $args["sum"] >= {VAR:minimum_sum})
+				<!-- END SUB: HANDLE_CELL_ROW_WITH_MAXIMUM_SUM -->
+				<!-- SUB: HANDLE_CELL_ROW_WITHOUT_MAXIMUM_SUM -->
+				if($args["sum"] >= {VAR:minimum_sum})
+				<!-- END SUB: HANDLE_CELL_ROW_WITHOUT_MAXIMUM_SUM -->
 				{
 					$condition = {VAR:condition_id};
 				}
