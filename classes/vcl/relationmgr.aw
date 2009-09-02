@@ -241,7 +241,7 @@ class relationmgr extends aw_template
 			asort($val);
 			if($id == 0 || $id == RELTYPE_BROTHER)
 			{
-				$val = array("capt_new_object" => aw_html_entity_decode(t("Objekti t&uuml;&uuml;p")) + $val;
+				$val = array("capt_new_object" => aw_html_entity_decode(t("Objekti t&uuml;&uuml;p"))) + $val;
 			}
 			$this->true_rel_classes[$id] = $val;
 		}
