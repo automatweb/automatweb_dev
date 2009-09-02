@@ -4226,18 +4226,35 @@ EOF;
 		return $statuses;
 	}
 
-	private function get_bug_parent($parent)
+	private function get_bug_parent($parent,$customer = "")
 	{
 		if($this->can("add" , $parent))
 		{
 			return $parent;
 		}
+		
+		if($customer)
+		{
+			$cust_bugs = new object_list(array(
+				"class_id" => CL_BUG,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $customer
+			));
+			if($cust_bugs->count())
+			{
+				$ids = $cust_bugs->ids();
+				return reset($ids);
+			}
+		}
+
+
 		$bugtracks = new object_list(array(
 			"class_id" => CL_BUG_TRACKER,
 			"site_id" => array(),
 			"lang_id" => array(),
 		));
-		$bugtrack = reset();
+
 		foreach($bugtracks->arr() as $bugtrack)
 		{
 			if($bugtrack->prop("default_bug_parent"))
@@ -4257,7 +4274,7 @@ EOF;
 		{
 			$o = new object();
 			$o->set_class_id(CL_BUG);
-			$o->set_parent($this->get_bug_parent($arr["parent"]));
+			$o->set_parent($this->get_bug_parent($arr["parent"] , $arr["customer"]));
 			$o->set_name($arr["name"]);
 			$o->set_prop("bug_status" , self::BUG_OPEN);
 			foreach($arr as $key => $val)
@@ -4419,10 +4436,16 @@ EOF;
 				}
 			}
 
-
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
-			$o->set_prop("monitors" , array($p->id(), $p->id()));
+			$monitors = array($p->id());
+
+			if(is_array($arr["watchers"]) && sizeof($arr["watchers"]))
+			{
+				$monitors = $monitors + $arr["watchers"];
+
+			}
+			$o->set_prop("monitors" , $monitors);
 
 			$o->save();
 
@@ -4458,6 +4481,15 @@ EOF;
 			"name" => "who",
 			"type" => "select",
 			"caption" => t("Kellele"),
+			"options" => $company->get_worker_selection(),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "watchers",
+			"type" => "select",
+			"multiple" => 1,
+			"caption" => t("J&auml;lgijad"),
+			"size" => 5,
 			"options" => $company->get_worker_selection(),
 		));
 
