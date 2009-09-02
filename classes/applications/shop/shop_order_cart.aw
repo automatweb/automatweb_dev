@@ -28,7 +28,12 @@
 
 	@property order_show_controller type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
 	@caption Tellimuse n&auml;itamise kontroller
-
+   @property show_only_valid_delivery_methods type=checkbox field=meta method=serialize 	 
+	         @caption N&auml;ita checkout'is ainult valiidseid k&auml;ttetoimetamise viise 	 
+	  	 
+	         @property show_only_valid_payment_types type=checkbox field=meta method=serialize 	 
+	         @caption N&auml;ita checkout'is ainult valiidseid makseviise 	 
+	 
 @property product_template type=select field=meta method=serialize
 @caption Ostukorvi &uuml;he toote vaate templeit
 
@@ -2724,6 +2729,20 @@ class shop_order_cart extends class_base
 			"product" => array(),
 			"product_packaging" => array(),
 		));
+ 
+			$self_validate_payment_types = $this->cart->prop("show_only_valid_payment_types") ? false : true;
+	                 $payment_types_params = array( 	 
+	                         "sum" => $this->cart_sum,
+ 	                         "currency" => $oc->get_currency(), 
+	                         "product" => array(),
+	                         "product_packaging" => array(),
+	                         "validate" => !$self_validate_payment_types,
+	                 ); 	 
+	                 $asd = $oc->get_payment_types($payment_types_params);
+
+
+
+
 
 		$method_params = array(
 			"product" =>  array_keys($prods["items"]),
