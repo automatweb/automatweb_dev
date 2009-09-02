@@ -1,4 +1,4 @@
-<?php 
+<?php
  // this is the new relationmanager, unfortunately for now, still template based, let's hope
  // that class_base will one day be powerful enough to replace these with properties without
  // a headache -- ahz
@@ -11,7 +11,7 @@ class relationmgr extends aw_template
 	{
 		$this->init("relationmgr");
 	}
-	
+
 	function init_vcl_property($arr)
 	{
 		$arr["request"] = safe_array($arr["request"]) + $_REQUEST;
@@ -88,11 +88,11 @@ class relationmgr extends aw_template
 		));
 		return $cli->get_result();
 	}
-	
+
 	/**
 		@attrib name=submit all_args=1
 	**/
-	function submit($arr)	
+	function submit($arr)
 	{
 		$arg = array(
 			"request" => $arr,
@@ -111,7 +111,7 @@ class relationmgr extends aw_template
 		$i->rel_cut($arr);
 		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
 	}
-		
+
 	/**
 		@attrib name=rel_copy all_args=1
 	**/
@@ -121,7 +121,7 @@ class relationmgr extends aw_template
 		$i->rel_copy($arr);
 		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
 	}
-		
+
 	/**
 		@attrib name=rel_paste all_args=1
 	**/
@@ -138,7 +138,7 @@ class relationmgr extends aw_template
 		}
 		return $this->mk_my_orb("disp_relmgr", array("id" => $arr["id"]));
 	}
-	
+
 	function _get_reltypes($clid)
 	{
 		$reltypes[0] = t("Alias");
@@ -161,7 +161,7 @@ class relationmgr extends aw_template
 	{
 		$this->clids = array();
 		$classes = aw_ini_get("classes");
-		
+
 		// maybe it would be nice to get this kind of relinfo from core
 		// or storage, so i wouldn't have to make it here? -- ahz
 		$this->clids[CL_MENU] = basename($classes[CL_MENU]["file"]);
@@ -241,18 +241,18 @@ class relationmgr extends aw_template
 			asort($val);
 			if($id == 0 || $id == RELTYPE_BROTHER)
 			{
-				$val = array("capt_new_object" => html_entity_decode(t("Objekti t&uuml;&uuml;p"), ENT_COMPAT, aw_global_get("charset"))) + $val;
+				$val = array("capt_new_object" => aw_html_entity_decode(t("Objekti t&uuml;&uuml;p")) + $val;
 			}
 			$this->true_rel_classes[$id] = $val;
 		}
 	}
-	
+
 	function _show_search($arr)
 	{
 		$pr = array();
 		$this->reltype = $arr["request"]["reltype"];
 		$props = $this->_init_search($arr);
-		
+
 		$tb = $this->_make_toolbar($arr);
 		$this->read_template("rel_search.tpl");
 		$req = safe_array($arr["request"]);
@@ -299,7 +299,7 @@ class relationmgr extends aw_template
 		) + $props;
 		return $pr;
 	}
-	
+
 	function _init_search($arr)
 	{
 //@property server type=select group=advsearch
@@ -331,13 +331,13 @@ class relationmgr extends aw_template
 			"caption" => t("Nimi"),
 			"value" => automatweb::$request->arg("name"),
 			"post_append_text" => "<script language=javascript>el=document.getElementById('name');el.focus();</script>"
-		); 
+		);
 		$rval["comment"] = array(
 			"name" => "comment",
 			"type" => "textbox",
 			"caption" => t("Kommentaar"),
 			"value" => automatweb::$request->arg("comment"),
-		); 
+		);
 //@property class_id type=select multiple=1 size=10 group=search,advsearch
 //@caption T&uuml;&uuml;p
 		$rval["oid"] = array(
@@ -431,7 +431,7 @@ class relationmgr extends aw_template
 		}
 		return $rval;
 	}
-	
+
 	function _get_search_table($arr)
 	{
 		classload("vcl/table");
@@ -553,14 +553,14 @@ class relationmgr extends aw_template
 					"modifiedby" => $item["modifiedby"],
 					"modified" => $item["modified"],
 					"class_id" => $clinf[$item["class_id"]]["name"],
-					"location" => html_entity_decode($item["path_str"], ENT_COMPAT, aw_global_get("charset")),
+					"location" => aw_html_entity_decode($item["path_str"]),
 					"change" => "<input type='checkbox' name='check' value='$id'>",
 				));
 			}
 		}
 		return $t;
 	}
-	
+
 	// generates contents for the class picker drop-down menu
 	function _get_s_class_id()
 	{
@@ -654,7 +654,7 @@ class relationmgr extends aw_template
 			$this->do_search = true;
 		}
 	}
-	
+
 	function _make_toolbar($arr)
 	{
 		$tb = get_instance("vcl/toolbar");
@@ -684,7 +684,7 @@ class relationmgr extends aw_template
 				$ls = array("&auml;", "&Auml;", "&ouml", "&Ouml;", "&uuml;", "&Uuml;", "&otilde;", "&Otilde;", );
 				foreach($ls as $l)
 				{
-					$vals = str_replace($l, html_entity_decode($l, ENT_COMPAT, aw_global_get("charset")), $vals);
+					$vals = aw_html_entity_decode($l);
 				}
 				$vals = $this->mk_kstring($vals);
 				if (isset($this->true_rel_classes[$k][$objtype]))
@@ -710,18 +710,18 @@ class relationmgr extends aw_template
 					$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.($sele ? $sele : $single_select).'");'."\n";
 				}
 			}
-	
-			$rels1 .= 'listB.addOptions("_","'.html_entity_decode(t("Objekti t&uuml;&uuml;p"), ENT_COMPAT, aw_global_get("charset")).'","capt_new_object"'.");\n";
+
+			$rels1 .= 'listB.addOptions("_","'.aw_html_entity_decode(t("Objekti t&uuml;&uuml;p")).'","capt_new_object"'.");\n";
 			$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
-	
+
 			$this->vars(array(
 				"parent" => $this->parent,
 				"rels1" => $rels1,
 				"defaults1" => $defaults1,
 			));
-	
+
 			$tb->add_cdata($this->parse());
-	
+
 			$tb->add_cdata(
 				html::select(array(
 					"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => t('Seose t&uuml;&uuml;p')) + $this->reltypes),
@@ -761,16 +761,16 @@ class relationmgr extends aw_template
 					"url" => "javascript:search_for_object()",
 				));
 			}
-			
+
 			$tb->add_separator();
-			
+
 			$tb->add_button(array(
 				"name" => "refresh",
 				"img" => "refresh.gif",
 				"tooltip" => t("Uuenda"),
 				"url" => "javascript:window.location.reload()",
 			));
-			
+
 			if(isset($arr["request"]["srch"]) && $arr["request"]["srch"] == 1)
 			{
 				if (isset($this->search_results) && $this->search_results > 0)
@@ -791,7 +791,7 @@ class relationmgr extends aw_template
 					"tooltip" => t("Salvesta"),
 					"url" => "javascript:document.changeform.submit();",
 				));
-				
+
 				$tb->add_button(array(
 					"name" => "delete",
 					"img" => "delete.gif",
@@ -799,7 +799,7 @@ class relationmgr extends aw_template
 					"url" => "javascript:awdelete()",
 				));
 			}
-	
+
 			$tb->add_separator();
 			$tb->add_button(array(
 				"name" => "rel_cut",
@@ -833,14 +833,17 @@ class relationmgr extends aw_template
 		//$tb->add_cdata("[[ Seostehaldur V3 ]]");
 		return $tb;
 	}
-	
+
 	function mk_kstring($arr)
 	{
 		$alls = array();
-		foreach($arr as $key => $val)
+		if (is_array($arr))
 		{
-			$alls[] ='"'.$val.'"';
-			$alls[] ='"'.$key.'"';
+			foreach($arr as $key => $val)
+			{
+				$alls[] ='"'.$val.'"';
+				$alls[] ='"'.$key.'"';
+			}
 		}
 		return implode(',', $alls);
 	}
@@ -885,7 +888,7 @@ class relationmgr extends aw_template
 			}*/
 			$htmlc = get_instance("cfg/htmlclient");
 			$htmlc->start_output();
-			
+
 			foreach($d as $nm => $da)
 			{
 				$htmlc->add_property($da);
@@ -913,7 +916,7 @@ class relationmgr extends aw_template
 		$this->vars(array("mgr" => $res));
 		return $this->parse();
 	}
-	
+
 	function _show_relations($arr)
 	{
 		if (!is_oid($arr["obj_inst"]->id()))
@@ -922,7 +925,7 @@ class relationmgr extends aw_template
 		}
 		classload("core/icons");
 		$pr = array();
-		
+
 		$tb = $this->_make_toolbar($arr);
 		$this->read_template("list_aliases.tpl");
 
@@ -933,9 +936,9 @@ class relationmgr extends aw_template
 		// table part
 		classload("vcl/table");
 		$tbl = new vcl_table();
-		
+
 		$tbl->parse_xml_def(aw_ini_get("basedir")."/xml/generic_table.xml");
-		
+
 		$flds = array(
 			"icon" => array(
 				"name" => "icon",
@@ -1035,7 +1038,7 @@ class relationmgr extends aw_template
 		{
 			$tbl->define_field($flds[$fld]);
 		}
-		
+
 		$tbl->define_chooser(array(
 			"name" => "check",
 			"field" => "id",
@@ -1090,20 +1093,20 @@ class relationmgr extends aw_template
 			);
 			$adat["lang"] = $target_obj->lang();
 			$aclid = $target_obj->prop("class_id");
-			
+
 			$edfile = $classes[$aclid]["file"];
 			if ($aclid == CL_DOCUMENT)
 			{
 				$edfile = "doc";
 			}
-			
+
 			$ch = $this->mk_my_orb("change", array("id" => $alias->prop($cn), "return_url" => get_ru()), $edfile);
 			$reltype_id = $alias->prop("reltype");
-			
+
 			$adat["icon"] = html::img(array(
 			"url" => icons::get_icon_url($target_obj),
 			));
-			
+
 			if ($reltype_id == 0)
 			{
 				list($astr) = explode(",", $classes[$aclid]["alias"]);
@@ -1114,29 +1117,29 @@ class relationmgr extends aw_template
 				$astr = sprintf("#%s%d#", $astr, $alias->prop("idx"));
 				$adat["alias"] = sprintf("<input type='text' size='10' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>", $astr, $astr);
 			}
-			
+
 			$adat["link"] = html::checkbox(array(
 				"name" => "link[".$alias->prop($cn)."]",
 				"value" => 1,
 				"checked" => $alinks[$alias->prop($cn)],
 			));
-			
+
 			$adat["title"] = $classes[$aclid]["name"];
-			
+
 			// for the chooser
 			$adat["id"] = $alias->prop("id");
-			
+
 			$adat["name"] = html::href(array(
 				"url" => $ch,
 				"caption" => parse_obj_name($alias->prop($cn.".name")),
 			));
-			
+
 			$adat["cache"] = html::checkbox(array(
 				"name" => "cache[".$alias->prop($cn)."]",
 				"value" => 1,
 				"checked" => ($alias->prop("cached") == 1)
 			));
-			
+
 			if($cn == "from")
 			{
 				$reltypes = $this->_get_reltypes($alias->prop($cn.".class_id"));
@@ -1223,7 +1226,7 @@ class relationmgr extends aw_template
 		);
 		return $pr;
 	}
-	
+
 	function process_vcl_property($arr)
 	{
 		$arr["request"] = safe_array($arr["request"]) + $_REQUEST;

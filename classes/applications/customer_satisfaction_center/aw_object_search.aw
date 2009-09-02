@@ -300,7 +300,7 @@ class aw_object_search extends class_base
 				{
 					if(isset($cldata[$od["clid"]]["name"]))
 					{
-						$cls[$od["clid"]] = html_entity_decode($cldata[$od["clid"]]["name"], ENT_COMPAT, aw_global_get("charset"));
+						$cls[$od["clid"]] = aw_html_entity_decode($cldata[$od["clid"]]["name"]);
 					}
 				}
 				natsort($cls);
