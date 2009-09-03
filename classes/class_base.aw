@@ -103,6 +103,7 @@ class class_base extends aw_template
 	var $_do_call_vcl_mod_retvals = array();
 
 	public $form_only = false;
+	public $no_form = false;
 
 	protected $_cfg_props;
 	protected $classconfig;
@@ -220,6 +221,7 @@ class class_base extends aw_template
 		@param period optional
 		@param alias_to optional
 		@param alias_to_prop optional
+		@param save_autoreturn optional
 		@param return_url optional
 		@param reltype optional type=int
 
@@ -242,9 +244,10 @@ class class_base extends aw_template
 		@param period optional
 		@param alias_to optional
 		@param alias_to_prop optional
+		@param save_autoreturn optional
 		@param return_url optional
 		@param view_property optional
-		@param view_laoyout optional
+		@param view_layout optional
 
 		@returns data formatted by the currently used output client. For example a HTML form if htmlclient is used
 
@@ -599,7 +602,7 @@ class class_base extends aw_template
 					$cli->set_form_target($this->changeform_target);
 			}
 
-			if (!empty($o_arr["no_form"]))
+			if (!empty($o_arr["no_form"]) or $this->no_form)
 			{
 				$cli->set_opt("no_form",1);
 			};
@@ -746,7 +749,7 @@ class class_base extends aw_template
 			$this->subgroup = $resprops["subgroup"]["value"];
 		}
 
-		if ($has_errors)
+		if ($has_errors and empty($this->no_form))
 		{
 			// give the output client a chance to display a message stating
 			// that there were errors in entered data. Individual error
@@ -801,6 +804,7 @@ class class_base extends aw_template
 			"period" => isset($this->request["period"]) ? $this->request["period"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
 			"alias_to_prop" => isset($this->request["alias_to_prop"]) ? $this->request["alias_to_prop"] : "",
+			"save_autoreturn" => isset($this->request["save_autoreturn"]) ? $this->request["save_autoreturn"] : "",
 			"cfgform" => empty($this->auto_cfgform) && isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
 			"return_url" => !empty($this->request["return_url"]) ? $this->request["return_url"] : "",
 			"subgroup" => $this->subgroup,
@@ -1244,9 +1248,9 @@ class class_base extends aw_template
 			"group" => $group,
 			"return" => isset($args["return"]) ? $args["return"] : null,
 			"period" => aw_global_get("period"),
-			"alias_to" => $request["alias_to"],
+			"alias_to" => isset($request["alias_to"]) ? $request["alias_to"] : null,
 			"just_saved" => $this->just_saved,
-			"alias_to_prop" => $request["alias_to_prop"],
+			"alias_to_prop" => isset($request["alias_to_prop"]) ? $request["alias_to_prop"] : null,
 			"return_url" => isset($request["return_url"]) ? $request["return_url"] : "",
 		) + ((isset($extraids) && is_array($extraids)) ? $extraids : array());
 
@@ -1320,7 +1324,7 @@ class class_base extends aw_template
 				}
 			}
 
-			if ($this->can("view", $request["cfgform"]))
+			if (isset($request["cfgform"]) and $this->can("view", $request["cfgform"]))
 			{
 				$cfgform_o = obj($request["cfgform"]);
 				if (!is_admin() and $cfgform_o->trans_get_val("cfgview_ru" . ($this->new ? "" : "_change")) != "")
@@ -1413,6 +1417,7 @@ class class_base extends aw_template
 						"action" => NULL,
 						"alias_to" => NULL,
 						"alias_to_prop" => NULL,
+						"save_autoreturn" => NULL
 					), false, $retval);
 				}
 
@@ -1451,6 +1456,17 @@ class class_base extends aw_template
 			$o->save();
 		}
 
+		if (!empty($request["save_autoreturn"]))
+		{
+			if (!empty($request["return_url"]))
+			{
+				$retval = $request["return_url"];
+			}
+			elseif (!empty($request["post_ru"]))
+			{
+				$retval = $request["post_ru"];
+			}
+		}
 		return $retval;
 	}
 
@@ -1476,10 +1492,6 @@ class class_base extends aw_template
 			if (is_object($cfgform))
 			{
 				return $cfgform->id();
-			}
-			else
-			{
-				return false;
 			}
 		}
 
@@ -1509,7 +1521,7 @@ class class_base extends aw_template
 		}
 
 		// 2. seadete vorm kasutajagrupist, seostatud cfgform
-		if (($action == "change"))
+		if ($action === "change")
 		{
 			$gl = aw_global_get("gidlist_pri_oid");
 			asort($gl);
@@ -2644,13 +2656,14 @@ class class_base extends aw_template
 				{
 					$property["value"] = $this->cb_values[$property["name"]]["value"];
 				}
-			};
+			}
+
 			if (!empty($this->cb_values[$property["name"]]["error"]))
 			{
 				$property["error"] = $this->cb_values[$property["name"]]["error"];
-			};
+			}
 			return;
-		};
+		}
 		$nm = $property["name"];
 
 		// if this is a new object and the property has a default value, use it
@@ -3117,7 +3130,7 @@ class class_base extends aw_template
 					$tmp_ol = new object_list(array("oid" => $val["value"]));
 					$val["value"] = join(", ", $tmp_ol->names());
 				}
-			};
+			}
 
 
 			$argblock["prop"] = &$val;
@@ -3144,7 +3157,7 @@ class class_base extends aw_template
 			{
 				// and this as well
 				continue;
-			};
+			}
 
 			$pname = $val["name"];
 			$getter = "_get_" . $pname;
@@ -3246,7 +3259,7 @@ class class_base extends aw_template
 							"property" => &$val,
 						));
 						$resprops[$key] = $val;
-					};
+					}
 					continue;
 				}
 
@@ -3256,35 +3269,46 @@ class class_base extends aw_template
 					{
 						classload("vcl/releditor");
 						$val["vcl_inst"] = new releditor();
-					};
+					}
 
 					$argblock["prop"] = &$val;
 					$target_reltype = $val["reltype"];
 					$argblock["prop"]["reltype"] = $this->relinfo[$target_reltype]["value"];
 					$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
-//die(dbg::dump($this->cb_values));
+
 					if (is_array($this->cb_values[$val["name"]]))
 					{
 						$argblock["cb_values"] = $this->cb_values[$val["name"]];
-					};
+					}
 
 					// init_rel_editor returns an array of properties to be embbeded
 					$relres = $val["vcl_inst"]->init_rel_editor($argblock);
-
+					$releditor_error_not_processed = true;
 					if (is_array($relres))
 					{
-						// if ($val["error"])
-						// {
-							/*$resprops[$val["name"]."_error"] = array(
-								"type" => "text",
-								"value" => "",
-								"error" => $val["error"],
-							);*/
-						// };
-
 						foreach($relres as $rkey => $rval)
 						{
 							$this->convert_element(&$rval);
+
+							if ($releditor_error_not_processed)
+							{
+								$releditor_error_not_processed = false;
+								if (!empty($val["error"]))
+								{
+									$errprop_name = $val["name"] . "__aw_releditor_error_display";
+									$errprop_rkey = $rkey . "__aw_releditor_error_display";
+									$resprops[$errprop_rkey] = array(
+										"name" => $errprop_rkey,
+										"type" => "text",
+										"class" => "awerror",//!!! teha normaalne. hetkel tegemata sest htmlclienti default.tpl-is on vigade elementidel mitte klass vaid dom id
+										"caption" => t("Viga!"),
+										"value" => "<span style=\"color:red\">{$val["error"]}</span>"///!!! teha formaat dom klassi abil
+									) + $rval;
+									$resprops[$errprop_rkey]["wf_capt_ord"] = isset($val["wf_capt_ord"]) ? $val["wf_capt_ord"] : "";
+									$resprops[$errprop_name]["otherprops"][$errprop_rkey] = $errprop_rkey;
+								}
+							}
+
 							$resprops[$rkey] = $rval;
 							$resprops[$rkey]["wf_capt_ord"] = isset($val["wf_capt_ord"]) ? $val["wf_capt_ord"] : "";
 							if ($resprops[$rkey]["type"] === "hidden")
@@ -3292,8 +3316,9 @@ class class_base extends aw_template
 								unset($resprops[$rkey]["parent"]);
 							}
 							$resprops[$val["name"]]["otherprops"][$rkey] = $rkey;
-						};
-					};
+						}
+					}
+
 					if (isset($val["vcl_inst"]) && is_callable(array($val["vcl_inst"], "callback_mod_reforb")))
 					{
 						$this->_do_call_vcl_mod_reforbs[] = array($val["vcl_inst"], "callback_mod_reforb");
@@ -4034,7 +4059,7 @@ class class_base extends aw_template
 			{
 				$status = PROP_FATAL_ERROR;
 				$argblock["prop"]["error"] = $errors[$name]["msg"];
-			};
+			}
 
 			if ($status == PROP_OK && !empty($property["datatype"]) && "int" === $property["datatype"])
 			{
@@ -4049,8 +4074,7 @@ class class_base extends aw_template
 					$status = PROP_ERROR;
 					$property["error"] = $property["caption"] . " - siia saab sisestada ainult arvu!";
 				};
-			};
-
+			}
 
 			if (PROP_ERROR == $status)
 			{
@@ -4118,15 +4142,19 @@ class class_base extends aw_template
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
 				$res = $vcl_inst->process_releditor($argblock);
 
-				if (PROP_ERROR == $res)
+				if (PROP_ERROR === $res)
 				{
 					$propvalues[$name]["error"] = $argblock["prop"]["error"];
 					aw_session_set("cb_values",$propvalues);
 					$this->cb_values = $propvalues;
 					return false;
 				}
-				$propvalues[$name]["reledit_data"] = $args[$name."_edit_data"];
-			};
+
+				if (isset($args[$name."_edit_data"]))
+				{
+					$propvalues[$name]["reledit_data"] = $args[$name."_edit_data"];
+				}
+			}
 
 			// the current behaviour is to call set_property and not ever
 			// call process_vcl_property if set_property returns false
@@ -4333,7 +4361,7 @@ class class_base extends aw_template
 				$reltype = $args["rawdata"]["reltype"] ? $args["rawdata"]["reltype"] : $reltype;
 				$_to->connect(array(
 					"to" => $this->obj_inst->id(),
-					"reltype" => $reltype,
+					"type" => $reltype
 				));
 				// now scan the bloody properties
 				// but I need all the properties
@@ -4343,9 +4371,8 @@ class class_base extends aw_template
 				// in $this instance. This might lead to some nasty bugs
 				$bt = $this->get_properties_by_type(array(
 					"type" => array("relpicker","relmanager", "popup_search"),
-					"clid" => $_to->class_id(),
+					"clid" => $_to->class_id()
 				));
-				dbg::p5($bt);
 
 				$symname = "";
 
@@ -4357,10 +4384,9 @@ class class_base extends aw_template
 						if ($reltype == $val["value"])
 						{
 							$symname = $key;
-						};
-					};
-				};
-				dbg::p5("symname = $symname");
+						}
+					}
+				}
 
 				// figure out which property to check
 				foreach($bt as $item_key => $item)
@@ -4369,10 +4395,9 @@ class class_base extends aw_template
 					if (!empty($symname) && ($item["type"] === "popup_search" || $item["type"] === "relpicker" || $item["type"] === "relmanager") && ($item["reltype"] == $symname))
 					{
 						$target_prop = $item_key;
-					};
-				};
+					}
+				}
 
-				dbg::p5("target_prop = " . $target_prop);
 
 				// now check, whether that property has a value. If not,
 				// set it to point to the newly created connection
@@ -4382,27 +4407,25 @@ class class_base extends aw_template
 						"type" => $symname,
 					));
 					$conn_count = sizeof($conns);
-					dbg::p5("conn_count = " . $conn_count);
-					//$old_val = $_to->prop($target_prop);
 				};
 
 				// this is after the new connection has been made
-				if ($target_prop != "" && ($conn_count == 1 || !$bt[$target_prop]["multiple"] ))
+				if (!empty($target_prop) && ($conn_count == 1 || empty($bt[$target_prop]["multiple"])))
 				{
-					if (!($alias_to_prop || $args["rawdata"]["alias_to_prop"])) // avoid double save
+					if (empty($alias_to_prop) and empty($args["rawdata"]["alias_to_prop"])) // avoid double save
 					{
-						$_to->set_prop($target_prop,$this->obj_inst->id());
+						$_to->set_prop($target_prop, $this->obj_inst->id());
 						$_to->save();
 					}
 				}
 
-				if ($alias_to_prop || $args["rawdata"]["alias_to_prop"])
+				if (!empty($alias_to_prop) || !empty($args["rawdata"]["alias_to_prop"]))
 				{
-					$altp = $alias_to_prop ? $alias_to_prop : $args["rawdata"]["alias_to_prop"];
+					$altp = !empty($alias_to_prop) ? $alias_to_prop : $args["rawdata"]["alias_to_prop"];
 					$curpv = $_to->prop($altp);
 					$property_info = $_to->get_property_list();
 
-					if ($property_info[$altp]["multiple"] == 1 || is_array($curpv))
+					if (!empty($property_info[$altp]["multiple"]) || is_array($curpv))
 					{
 						$curpv[$this->obj_inst->id()] = $this->obj_inst->id();
 					}
@@ -4427,8 +4450,8 @@ class class_base extends aw_template
 
 					$_to->save();
 				}
-			};
-		};
+			}
+		}
 
 		foreach($properties as $key => $prop)
 		{
@@ -4451,11 +4474,11 @@ class class_base extends aw_template
 			if (is_object($inst) && method_exists($inst, "callback_post_save"))
 			{
 			        $inst->callback_post_save(array(
-			                "id" => $this->obj_inst->id(),
-					"request" => &$args,
-					"obj_inst" => $this->obj_inst,
-					"new" => $new,
-					"prop" => $prop,
+						"id" => $this->obj_inst->id(),
+						"request" => &$args,
+						"obj_inst" => $this->obj_inst,
+						"new" => $new,
+						"prop" => $prop,
 			        ));
 			}
 		}
@@ -5116,7 +5139,7 @@ class class_base extends aw_template
 		// load defaults first
 		$all_properties = $this->load_defaults(array(
 			"clid" => $arr["clid"],
-			"clfile" => $arr["clfile"],
+			"clfile" => empty($arr["clfile"]) ? null : $arr["clfile"]
 		));
 
 		$rv = array();
