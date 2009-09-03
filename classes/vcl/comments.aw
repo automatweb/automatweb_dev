@@ -97,11 +97,12 @@ class comments extends class_base
 			$pr1["name"] = $prname . "[list]";
 			$rv[$prname . "_list"] = $pr1;
 		}
-		if (!empty($prop["no_form"]))
+
+		if (!empty($prop["no_form"]) or !empty($arr["view"]))
 		{
 			return $rv;
-
 		}
+
 		$cols = empty($prop['textarea_cols']) ? 60 : $prop['textarea_cols'];
 		$rows = empty($prop['textarea_rows']) ? 10 : $prop['textarea_rows'];
 		$rv2 = array(
