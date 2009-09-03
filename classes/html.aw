@@ -574,20 +574,20 @@ class html
 		text
 	@param textsize optional type=string
 		text size - examples: "10px", "0.7em", "smaller".
+
+	@param class optional type=string
+		text element container dom class
+
 	@returns string/html text
 
 	@comment draws simple html text with given textsize
 	**/
 	public static function text($args = array())
 	{
-		if (!empty($args["textsize"]))
-		{
-			$element = "<span style=\"font-size: {$args["textsize"]};\">{$args["value"]}</span>";
-		}
-		else
-		{
-			$element = isset($args["value"]) ? $args["value"] : "";
-		}
+		$style = empty($args["textsize"]) ? "" : " style=\"font-size: {$args["textsize"]};\"";
+		$class = empty($args["class"]) ? "" : " class=\"{$args["class"]}\"";
+		$value = isset($args["value"]) ? $args["value"] : "";
+		$element = "<span{$class}{$style}>{$value}</span>";
 		return $element;
 	}
 
@@ -880,7 +880,7 @@ class html
 		$class = !empty($class) ? " class=\"{$class}\"" : "";
 		$style = !empty($style) ? " style=\"{$style}\"" : "";
 		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "";
-		$id = !empty($id) ? " id=\"{$id}" : "";
+		$id = !empty($id) ? " id=\"{$id}\"" : "";
 
 		return "<input type='{$type}' {$name}value='{$value}'{$id}{$onclick}{$class}{$disabled}{$textsize}{$style} />{$post_append_text}\n";
 	}
@@ -1771,7 +1771,7 @@ class html
 			$post_params
 			if(!empty($arr["submit"]["forms"]))
 			{
-				$post_params = 
+				$post_params =
 			}
 			if(!empty($arr["submit"]["props"]))
 			{
