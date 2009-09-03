@@ -22,6 +22,7 @@ class aw_request
 		"bug_tracker",
 		"events_manager"
 	);
+	protected $protocol; // protocol object
 
 	public function __construct($autoload = false)
 	{
@@ -255,6 +256,15 @@ class aw_request
 	public function is_fastcall()
 	{
 		return $this->is_fastcall;
+	}
+
+	/** Current request protocol
+	@attrib api=1 params=pos
+	@returns object
+	**/
+	public function protocol()
+	{
+		return $this->protocol;
 	}
 
 	public function type() // DEPRECATED

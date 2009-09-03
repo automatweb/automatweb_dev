@@ -8,6 +8,8 @@ class aw_http_request extends aw_request
 	public function __construct($autoload = false)
 	{
 		parent::__construct($autoload);
+		$this->protocol = new http();
+
 		if (!$autoload)
 		{
 			$this->uri = new aw_uri();
