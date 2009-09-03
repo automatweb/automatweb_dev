@@ -54,16 +54,17 @@ div.autosuggest ul
 
 div.autosuggest ul li
 {
-	color: #ccc;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	color: #777;
 	padding: 0;
-	margin: 0 2px 2px;
+	margin: 0 2px 0px;
 	text-align: left;
-	font-size: 12px;
+	font-size: 10px;
 }
 
 div.autosuggest ul li a
 {
-	color: #ccc;
+	color: #777;
 	display: block;
 	text-decoration: none;
 	background-color: transparent;
