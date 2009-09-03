@@ -191,7 +191,12 @@ class crm_company_customer_data_obj extends _int_object
 
 	public function save($exclusive = false, $previous_state = null)
 	{
-		if ((!$this->prop("sales_state") or self::SALESSTATE_NEW == $this->prop("sales_state")) and is_oid($this->prop("sales_lead_source")))
+		if (!$this->prop("sales_state"))
+		{
+			$this->set_prop("sales_state", self::SALESSTATE_NEW);
+		}
+
+		if (self::SALESSTATE_NEW == $this->prop("sales_state") and is_oid($this->prop("sales_lead_source")))
 		{
 			$this->awobj_set_sales_state(self::SALESSTATE_LEAD);
 		}

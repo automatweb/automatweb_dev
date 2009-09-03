@@ -76,7 +76,6 @@
             <group>general</group>
             <type>objpicker</type>
             <clid>CL_CRM_PHONE</clid>
-            <mode>autocomplete</mode>
             <parent>top_2way_left</parent>
             <field>phone</field>
             <comment>Number millele helistati v&amp;amp;otilde;i helistada</comment>
@@ -157,6 +156,15 @@
             <parent>top_2way_right</parent>
             <field>real_duration</field>
             <caption>Tegelik kestus (h)</caption>
+      </property>
+      <property>
+            <name>real_maker</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <parent>top_2way_right</parent>
+            <field>real_maker</field>
       </property>
       <property>
             <name>hrs_table</name>
@@ -670,6 +678,7 @@
             </predicates>
             <customer>
                   <caption>Klient</caption>
+                  <submit>no</submit>
             </customer>
             <other_settings>
                   <caption>Muud seaded</caption>

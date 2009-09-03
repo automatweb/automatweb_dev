@@ -101,22 +101,32 @@
 
 @groupinfo sales_data caption="M&uuml;&uuml;giinfo"
 @default group=sales_data
-	@property sales_state type=select table=aw_crm_customer_data field=aw_sales_status datatype=int default=1
+@layout splitbox1 type=hbox width=50%:50%
+@layout leftbox type=vbox parent=splitbox1 area_caption=M&uuml;&uuml;giinfo
+@layout rightbox type=vbox parent=splitbox1 area_caption=Kommentaarid
+
+	@property sales_state type=select table=aw_crm_customer_data field=aw_sales_status datatype=int default=1 parent=leftbox
 	@caption M&uuml;&uuml;gi staatus
 
-	@property salesman type=relpicker reltype=RELTYPE_SALESMAN table=aw_crm_customer_data field=aw_salesman datatype=int
+	@property salesman type=relpicker reltype=RELTYPE_SALESMAN table=aw_crm_customer_data field=aw_salesman datatype=int parent=leftbox
 	@caption M&uuml;&uuml;giesindaja
 
-	@property sales_lead_source type=relpicker reltype=RELTYPE_SALES_LEAD_SOURCE store=connect
+	@property sales_lead_source type=relpicker reltype=RELTYPE_SALES_LEAD_SOURCE store=connect parent=leftbox
 	@caption Soovitaja/allikas
 
-	@property sales_last_call_time type=text table=aw_crm_customer_data field=aw_sales_last_call_time datatype=int
+	// a cache for real_maker property value of the last call object associated with this customer relation
+	@property sales_last_call_maker type=text table=aw_crm_customer_data field=aw_sales_last_call_maker datatype=int parent=leftbox
+	@caption Viimase m&uuml;&uuml;gik&otilde;ne tegija
+
+	// a cache for real_start property value of the last call object associated with this customer relation
+	@property sales_last_call_time type=text table=aw_crm_customer_data field=aw_sales_last_call_time datatype=int parent=leftbox
 	@caption Viimase m&uuml;&uuml;gik&otilde;ne aeg
 
-	@property sales_calls_made type=text table=aw_crm_customer_data field=aw_sales_calls_made datatype=int
+	// a cache for the count of call objects associated with this customer relation
+	@property sales_calls_made type=text table=aw_crm_customer_data field=aw_sales_calls_made datatype=int parent=leftbox
 	@caption Tehtud m&uuml;&uuml;gik&otilde;nesid
 
-	@property sales_comments type=comments table=objects field=meta method=serialize
+	@property sales_comments type=comments table=objects field=meta method=serialize parent=rightbox
 	@caption M&uuml;&uuml;gikommentaarid
 
 
@@ -307,6 +317,11 @@ class crm_company_customer_data extends class_base
 	function _get_sales_last_call_time(&$arr)
 	{
 		$arr["prop"]["value"] = locale::get_lc_date($arr["prop"]["value"], locale::DATETIME_LONG_FULLYEAR);
+	}
+
+	function _get_sales_last_call_maker(&$arr)
+	{
+		$arr["prop"]["value"] = is_oid($arr["prop"]["value"]) ? obj($arr["prop"]["value"])->name() : "";
 	}
 
 	function _get_campaign_tbl($arr)
@@ -923,6 +938,7 @@ exit_function("bill::balance");
 				  `aw_sales_next_call` int(11) default NULL,
 				  `aw_sales_status` int(11) default NULL,
 				  `aw_sales_last_call_time` int(11) default NULL,
+				  `aw_sales_last_call_maker` int(11) default NULL,
 				  `aw_sales_calls_made` int(3) default NULL,
 				  `aw_lead_source` int(11) default NULL,
 				  `aw_referal_type` int(11) default NULL,
@@ -946,6 +962,7 @@ exit_function("bill::balance");
 			case "aw_lead_source":
 			case "aw_sales_status":
 			case "aw_sales_last_call_time":
+			case "aw_sales_last_call_maker":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int(11)"

@@ -245,6 +245,7 @@
             <field>aw_sales_status</field>
             <datatype>int</datatype>
             <default>1</default>
+            <parent>leftbox</parent>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gi staatus</caption>
       </property>
       <property>
@@ -255,6 +256,7 @@
             <reltype>RELTYPE_SALESMAN</reltype>
             <field>aw_salesman</field>
             <datatype>int</datatype>
+            <parent>leftbox</parent>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
       </property>
       <property>
@@ -264,8 +266,19 @@
             <type>relpicker</type>
             <reltype>RELTYPE_SALES_LEAD_SOURCE</reltype>
             <store>connect</store>
+            <parent>leftbox</parent>
             <field>sales_lead_source</field>
             <caption>Soovitaja/allikas</caption>
+      </property>
+      <property>
+            <name>sales_last_call_maker</name>
+            <table>aw_crm_customer_data</table>
+            <group>sales_data</group>
+            <type>text</type>
+            <field>aw_sales_last_call_maker</field>
+            <datatype>int</datatype>
+            <parent>leftbox</parent>
+            <caption>Viimase m&amp;amp;uuml;&amp;amp;uuml;gik&amp;amp;otilde;ne tegija</caption>
       </property>
       <property>
             <name>sales_last_call_time</name>
@@ -274,6 +287,7 @@
             <type>text</type>
             <field>aw_sales_last_call_time</field>
             <datatype>int</datatype>
+            <parent>leftbox</parent>
             <caption>Viimase m&amp;amp;uuml;&amp;amp;uuml;gik&amp;amp;otilde;ne aeg</caption>
       </property>
       <property>
@@ -283,6 +297,7 @@
             <type>text</type>
             <field>aw_sales_calls_made</field>
             <datatype>int</datatype>
+            <parent>leftbox</parent>
             <caption>Tehtud m&amp;amp;uuml;&amp;amp;uuml;gik&amp;amp;otilde;nesid</caption>
       </property>
       <property>
@@ -292,6 +307,7 @@
             <type>comments</type>
             <field>meta</field>
             <method>serialize</method>
+            <parent>rightbox</parent>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gikommentaarid</caption>
       </property>
       <property>
@@ -489,5 +505,25 @@
                   <caption>Soovitaja/allikas</caption>
             </SALES_LEAD_SOURCE>
       </reltypes>
+      <layout>
+            <splitbox1>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <group>sales_data</group>
+                  <area_caption></area_caption>
+            </splitbox1>
+            <leftbox>
+                  <type>vbox</type>
+                  <parent>splitbox1</parent>
+                  <area_caption>M&amp;amp;uuml;&amp;amp;uuml;giinfo</area_caption>
+                  <group>sales_data</group>
+            </leftbox>
+            <rightbox>
+                  <type>vbox</type>
+                  <parent>splitbox1</parent>
+                  <area_caption>Kommentaarid</area_caption>
+                  <group>sales_data</group>
+            </rightbox>
+      </layout>
 </properties>
 
