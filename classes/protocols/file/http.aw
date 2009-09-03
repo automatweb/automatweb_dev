@@ -3,11 +3,16 @@
 @classinfo maintainer=kristo
 */
 
-class http
+class http implements protocol_interface
 {
 	function http()
 	{
 		aw_config_init_class(&$this);
+	}
+
+	public function name()
+	{
+		return "HTTP/1.1";
 	}
 
 	/**
