@@ -253,8 +253,11 @@ class automatweb
 	{
 		global $awt;
 		global $section;
+		$baseurl = aw_ini_get("baseurl");
+		$baseurl .= (("/" === substr($baseurl, -1)) ? "" : "/");
+		$request_uri = $_SERVER["REQUEST_URI"];
 
-		if (strpos($_SERVER["REQUEST_URI"], "/automatweb") === false)
+		if (strpos($request_uri, "/automatweb") === false)
 		{
 			// can't use classload here, cause it will be included from within a function and then all kinds of nasty
 			// scoping rules come into action. blech.
@@ -334,7 +337,7 @@ class automatweb
 				// et kui orb_data on link, siis teeme ymbersuunamise
 				// see ei ole muidugi parem lahendus. In fact, see pole yleyldse
 				// mingi lahendus
-				if ((substr($content,0,5) === "http:" || (substr($content,0,6) === "https:") || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && empty($vars["no_redir"]))
+				if ((substr($content,0,5) === "http:" || substr($content,0,6) === "https:" || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && empty($vars["no_redir"]))
 				{
 					if (headers_sent())
 					{
@@ -345,7 +348,7 @@ class automatweb
 					}
 					else
 					{
-						header("Location: $content");
+						header("Location: {$content}");
 						exit;
 					}
 				}
@@ -355,13 +358,19 @@ class automatweb
 				$footer_return = ob_get_clean();
 				self::$result->set_data($str . $footer_return);
 			}
-			else
-			{
+			elseif (
+				(!empty($_SERVER["PATH_TRANSLATED"]) and file_exists($_SERVER["PATH_TRANSLATED"])) or
+				(!empty($_SERVER["SCRIPT_NAME"]) and file_exists(AW_DIR . $_SERVER["SCRIPT_NAME"]))
+			)
+			{ // no class given but request is valid and legal, assume that admin interface is desired
 				// go to default admin interface
 				include(AW_DIR . "automatweb/admin_header" . AW_FILE_EXT);
 				$id = admin_if::find_admin_if_id();
 				header("Location: " . aw_ini_get("baseurl") . "/automatweb/orb.aw?group=o&class=admin_if&action=change&id=" . $id);
 				exit;
+			}
+			else // a bad request. avoid background calls to admin_if when e.g. a non-existent ordinary file requested (css, images, etc.)
+			{
 			}
 		}
 	}
