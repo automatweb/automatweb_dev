@@ -751,7 +751,7 @@ class htmlclient extends aw_template
 						"err_msg" => $item["error"],
 					));
 					$res .= $this->parse("PROP_ERR_MSG");
-				};
+				}
 
 				// this is what I was talking about before ...
 				// move submit button _before_ the aliasmgr
@@ -836,17 +836,24 @@ class htmlclient extends aw_template
 			$method = "POST";
 		}
 
-		if ("POST" !== $method)
+		if ("post" !== strtolower($method))
 		{
 			$data["no_reforb"] = 1;
+			foreach ($data as $key => $value)
+			{
+				if (strlen($value) < 1)
+				{
+					unset($data[$key]);
+				}
+			}
 		}
 
 		$this->vars_safe(array(
 			"submit_handler" => $submit_handler,
 			"scripts" => $scripts,
-			"method" => !empty($method) ? $method : "POST",
+			"method" => $method,
 			"content" => $res,
-			"reforb" => $this->mk_reforb($action,$data,$orb_class),
+			"reforb" => $this->mk_reforb($action, $data, $orb_class),
 			"form_handler" => !empty($form_handler) ? $form_handler : "orb.aw",
 			"SUBMIT" => isset($sbt) ? $sbt : "",
 			"help" => ifset($arr, "help"),
@@ -885,7 +892,7 @@ class htmlclient extends aw_template
 			));
 		}
 
-		if (!empty($arr["save_message"]))
+		if (!empty($arr["save_message"]) and empty($this->no_form))
 		{
 			$this->vars_safe(array(
 				"message" => $arr["save_message"]
@@ -1505,8 +1512,8 @@ class htmlclient extends aw_template
 			{
 				$u = get_instance(CL_USER);
 				$state = $u->get_layer_state(array(
-					"u_class" => automatweb::$request->arg("class"), 
-					"u_group" => automatweb::$request->arg("group"), 
+					"u_class" => automatweb::$request->arg("class"),
+					"u_group" => automatweb::$request->arg("group"),
 					"u_layout" => $layout_name
 				));
 
@@ -1752,7 +1759,7 @@ class htmlclient extends aw_template
 		));
 
 		// errmsg
-		if (!empty($arr["error"]))
+		if (!empty($arr["error"]) and empty($this->no_form))
 		{
 			$errmsg = $this->parse("GRID_ERR_MSG");
 		}
