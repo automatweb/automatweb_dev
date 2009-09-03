@@ -2351,7 +2351,7 @@ exit_function("bill::balance");
 			$pr[] = "";
 			$ct[] = join("\t", $pr);
 
-			$rows = $i->get_bill_rows($b);
+			$rows = $b->get_bill_rows_data();
 			//kui eksisteerib kokkuleppe hind, siis votab selle ridade asemele
 
 			if($agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0)
@@ -2845,7 +2845,7 @@ exit_function("bill::balance");
 		{
 			$tv->add_item("all_stats", array(
 				"id" => "".($id+10)."",
-				"name" => $caption.($count[$id]? " (".$count[$id].")" : ""),
+				"name" => $caption.(empty($count[$id])? "" :  " (".$count[$id].")"),
 				"url" => aw_url_change_var(array(
 					$var => ($id+10),
 				)),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.171 2009/08/24 08:54:31 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.172 2009/09/03 15:07:04 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -843,6 +843,10 @@ class project extends class_base
 				foreach($works as $work)
 				{
 					$implementor = reset($work["impl"]);
+					if(!isset($works_per_person[$implementor]))
+					{
+						$works_per_person[$implementor] = 0;
+					}
 					$works_per_person[$implementor]+= $work["time_real"];
 				}
 				foreach($works_per_person as $person => $hours)
@@ -1228,6 +1232,10 @@ class project extends class_base
 
 				foreach($works as $work)
 				{
+					if(!isset($tasks[$work["task"]]))
+					{
+						$tasks[$work["task"]] = 0;
+					}
 					$tasks[$work["task"]]+= $work["time_real"];
 				}
 				$work_price = 0;
@@ -3576,10 +3584,10 @@ class project extends class_base
 		$arr["implementor"] = "0";
 		$arr["participants"] = "0";
 		$arr["orderer"] = "0";
-		$arr["tf"] = $_GET["tf"];
-		$arr["team"] = $_GET["team"];
-		$arr["connect_orderer"] = $_GET["connect_orderer"];
-		$arr["connect_impl"] = $_GET["connect_impl"];
+		if(isset($_GET["tf"])) $arr["tf"] = $_GET["tf"];
+		if(isset($_GET["team"])) $arr["team"] = $_GET["team"];
+		if(isset($_GET["connect_orderer"])) $arr["connect_orderer"] = $_GET["connect_orderer"];
+		if(isset($_GET["connect_impl"])) $arr["connect_impl"] = $_GET["connect_impl"];
 		$arr["prod_search_res"] = "0";
 	}
 
@@ -4756,6 +4764,10 @@ exit_function("bills::all_cust_bills");
 		$bugs_count = array();
 		foreach($bugs_data as $bd)
 		{
+			if(!isset($bugs_count[$bd["bug_status"]]))
+			{
+				$bugs_count[$bd["bug_status"]] = 0;
+			}
 			$bugs_count[$bd["bug_status"]] ++;
 		}
 

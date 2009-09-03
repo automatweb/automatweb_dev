@@ -1008,7 +1008,7 @@ class planner extends class_base
 			$args["event_id"] = $this->event_id;
 		};
 		$args["post_ru"] = post_ru();
-		if ($args["event_id"])
+		if (!empty($args["event_id"]))
 		{
 			$evo = obj($args["event_id"]);
 			if ($evo->class_id() == CL_CRM_CALL)
@@ -1250,7 +1250,7 @@ class planner extends class_base
 			// XXX: check acl and only show that button, if the user actually _can_
 			// edit the calendar
 			$prp = safe_array($arr["obj_inst"]->prop("del_views"));
-			$view = $_REQUEST["viewtype"] ? $_REQUEST["viewtype"] : $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
+			$view = !empty($_REQUEST["viewtype"]) ? $_REQUEST["viewtype"] : $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
 			$views = array("week");
 			if(count($prp) > 0)
 			{
@@ -1437,7 +1437,7 @@ class planner extends class_base
 		));
 
 		$prp = safe_array($arr["obj_inst"]->prop("del_views"));
-		$view = $_REQUEST["viewtype"] ? $_REQUEST["viewtype"] : $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
+		$view = !empty($_REQUEST["viewtype"]) ? $_REQUEST["viewtype"] : $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
 		$views = array("week");
 		if(count($prp) > 0)
 		{

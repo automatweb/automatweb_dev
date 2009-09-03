@@ -505,7 +505,7 @@ class task_object extends _int_object
 			"primary" => 1,
 			"task" => $this->id(),
 		));
-		return reset($ol->arr());
+		return $ol->begin();
 	}
 
 	public function set_primary_row($data)

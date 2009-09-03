@@ -2667,7 +2667,7 @@ class bug extends class_base
 			}
 		}
 
-		if($arr["request"]["is_order"])
+		if(!empty($arr["request"]["is_order"]))
 		{
 			$c = $arr["obj_inst"]->connections_from(array(
 				"type" => "RELTYPE_DEV_ORDER"

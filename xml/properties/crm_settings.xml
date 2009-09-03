@@ -427,6 +427,15 @@
             <caption>Vaikimisi &amp;amp;Uuml;hik</caption>
       </property>
       <property>
+            <name>bill_default_duedate_unit</name>
+            <table>objects</table>
+            <group>bill</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi viivisearve &amp;amp;Uuml;hik</caption>
+      </property>
+      <property>
             <name>bill_default_tax</name>
             <table>objects</table>
             <group>bill</group>
@@ -436,6 +445,15 @@
             <reltype>RELTYPE_TAX_RATE</reltype>
             <field>bill_default_tax</field>
             <caption>Vaikimisi k&amp;amp;auml;ibemaks</caption>
+      </property>
+      <property>
+            <name>bill_text</name>
+            <table>objects</table>
+            <group>bill</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Arve tekst</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_SETTINGS</syslog_type>

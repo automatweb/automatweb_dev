@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.36 2009/06/29 14:08:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.37 2009/09/03 15:06:52 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -185,8 +185,14 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 	@property bill_default_unit type=select table=objects field=meta method=serialize
 	@caption Vaikimisi &Uuml;hik
 
+	@property bill_default_duedate_unit type=select table=objects field=meta method=serialize
+	@caption Vaikimisi viivisearve &Uuml;hik
+
 	@property bill_default_tax type=relpicker multiple=1 store=connect reltype=RELTYPE_TAX_RATE
 	@caption Vaikimisi k&auml;ibemaks
+
+	@property bill_text type=textarea field=meta method=serialize
+	@caption Arve tekst
 
 @groupinfo tables caption="Tabelid"
 @groupinfo whom caption="Kellele kehtib"
@@ -328,6 +334,7 @@ class crm_settings extends class_base
 				$bill = get_instance(CL_CRM_BILL);
 				$prop["value"] = $bill->get_mail_legend();
 				break;
+			case "bill_default_duedate_unit":
 			case "bill_default_unit":
 				$filter = array(
 					"class_id" => CL_UNIT,

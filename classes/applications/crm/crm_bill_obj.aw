@@ -88,7 +88,7 @@ class crm_bill_obj extends _int_object
 	private function _calc_sum()
 	{
 		$bill_inst = get_instance(CL_CRM_BILL);
-		$rows = $bill_inst->get_bill_rows($this);
+		$rows = $this->get_bill_rows_data();
 		$sum = 0;
 		foreach($rows as $row)
 		{
@@ -223,9 +223,10 @@ class crm_bill_obj extends _int_object
 	@comment
 		returns sum not paid for bill
 	**/
-	function get_bill_needs_payment($arr)
+	public function get_bill_needs_payment($arr = null)
 	{
-		$payment = $arr["payment"];
+		
+		$payment = empty($arr["payment"]) ? "" : $arr["payment"];
 		$bill_sum = $this->get_bill_sum();
 		$sum = 0;
 		foreach($this->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
@@ -2640,7 +2641,7 @@ if(aw_global_get("uid") == "marko") {arr("praegu ei saada sest marko arendab");a
 
 	public function get_bill_cust_data_object()
 	{
-		if($this->cust_data_object)
+		if(isset($this->cust_data_object))
 		{
 			return $this->cust_data_object;
 		}
@@ -2651,7 +2652,7 @@ if(aw_global_get("uid") == "marko") {arr("praegu ei saada sest marko arendab");a
 			"buyer" => $this->prop("customer"),
 			"seller" => $this->prop("impl")
 		));
-		$this->cust_data_object = reset($cust_rel_list->begin());
+		$this->cust_data_object = $cust_rel_list->begin();
 		return $this->cust_data_object;
 	}
 
@@ -2759,6 +2760,169 @@ if(aw_global_get("uid") == "marko") {arr("praegu ei saada sest marko arendab");a
 		}
 	}
 
+	public function get_payment_id()
+	{
+		foreach($this->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
+		{
+			return $conn->prop("to");
+		}
+		return null;
+	}
+
+	 /** returns bill id
+		@attrib api=1 all_args=1
+	@param no required type=int
+		bill no.
+	@returns int
+		bill id
+	**/
+	public static function get_bill_id($arr)
+	{
+		$bills = new object_list(array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"bill_no" => $arr["no"],
+		));
+		if(sizeof($bills->count()))
+		{
+			$ids = $bills->ids();
+			return reset($ids);
+		}
+	}
+
+	 /** returns bill overdue charge
+		@attrib api=1
+	@returns double
+		penalty %
+	**/
+	public function get_overdue_charge()
+	{
+		$bpct = $this->prop("overdue_charge");
+		if (!$bpct)
+		{
+			$cust_data = $this->get_bill_cust_data_object();
+			if(is_object($cust_data) && $cust_data->prop("bill_penalty_pct"))
+			{
+				return $cust_data->prop("bill_penalty_pct");
+			}
+			$bpct = $this->prop("customer.bill_penalty_pct");
+			if (!$bpct)
+			{
+				$bpct = $this->prop("impl.bill_penalty_pct");
+			}
+		}
+		return $bpct;
+	}
+
+	 /** makes overdue bill
+		@attrib api=1
+		@returns oid
+			new bill id
+	**/
+	public function make_overdue_bill()
+	{
+		if($this->prop("state") != 3)
+		{
+			$_SESSION["bill_error"] = t("Viivisarvet koostatakse ainult laekunud arvete kohta");
+			return null;
+		}
+		if(!($this->get_overdue_charge() > 0))
+		{
+			$_SESSION["bill_error"] = t("Viivise m&auml;&auml;r peab olema > 0");
+			return null;
+		}
+
+		$nb = new object();
+		$nb->set_parent($this->parent());
+		$nb->set_class_id(CL_CRM_BILL);
+		$nb->save();
+		$save_props = array(
+			"impl",
+			"bill_due_date_days",
+			"currency",
+			"disc",
+			"language",
+			"on_demand",
+			"mail_notify",
+			"customer_name",
+			"customer",
+			"customer_code",
+			"customer_address",
+			"ctp_text",
+			"warehouse",
+			"price_list",
+			"transfer_method",
+			"transfer_condition",
+			"transfer_address",
+			"project",
+		);
+		foreach($save_props as $prop)
+		{
+			$nb->set_prop($prop , $this->prop($prop));
+		}
+
+		$nb->set_prop("is_overdue_bill" , 1);
+		$nb->set_prop("bill_date" , time());
+		$nb->set_prop("bill_accounting_date" , time());
+
+		$nb->set_prop("state" , 0);
+		$nb->set_name(t("Viivsarve arvele")." ".$this->prop("bill_no"));
+		$nb->save();
+		$row = $nb->add_row();
+		if($this->set_crm_settings() && $this->crm_settings->prop("bill_default_duedate_unit"))
+		{
+			$row->set_prop("unit" , $this->crm_settings->prop("bill_default_duedate_unit"));
+		}
+		$days = ($this->prop("bill_recieved") - $this->prop("bill_date") - 3600*24*$this->prop("bill_due_date_days")) / (3600*24);
+		$sum = number_format(((double)$this->get_sum() * (double)$this->get_overdue_charge())/100 , 2);
+		$row->set_prop("amt", $days);
+		$row-> set_prop("price" , $sum);
+		$row->save();
+
+		return $nb->id();
+	}
+
+	 /** returns text added to bill 
+		@attrib api=1
+		@returns string
+	**/
+	public function get_bill_text()
+	{
+		if($this->prop("bill_text"))
+		{
+			return $this->prop("bill_text");
+		}
+		if($this->set_crm_settings() && $this->crm_settings->prop("bill_text"))
+		{
+			return  $this->crm_settings->prop("bill_text");
+		}
+	}
+
+	 /** returns unit name 
+		@attrib api=1 params=pos
+		@returns string
+	**/
+	public function get_unit_name($unit)
+	{
+		if($this->can("view", $unit))
+		{
+			$uo = obj($unit);
+			$u_trans = $uo->meta("translations");
+			if($this->can("view", $this->prop("language")))
+			{
+				$unit_name = $u_trans[obj($this->prop("language"))->prop("db_lang_id")]["unit_code"];
+			}
+			if(!$unit_name)
+			{
+				$unit_name = $uo->prop("unit_code");
+			}
+		}
+		else
+		{
+			$unit_name = $unit;
+		}
+		return $unit_name;
+	}
 
 }
 

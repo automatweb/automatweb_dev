@@ -273,7 +273,7 @@ class relpicker extends  core
 		{
 			$options = array("0" => t("--vali--"));
 		}
-		$reltype = $prop["reltype"];
+		$reltype = isset($prop["reltype"]) ? $prop["reltype"] : null;
 		// generate option list
 		if (isset($prop["options"]) && is_array($prop["options"]))
 		{
@@ -358,22 +358,43 @@ class relpicker extends  core
 
 		if ($val["type"] == "select" /*&& is_object($this->obj)*/)
 		{
-			$clid = (array)$arr["relinfo"][$reltype]["clid"];
-			$url = $this->mk_my_orb("do_search", array(
-				"id" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->id() : null,
-				"pn" => $arr["property"]["name"],
-				"clid" => $clid,
-				"multiple" => isset($arr["property"]["multiple"]) && $arr["property"]["multiple"] ? $arr["property"]["multiple"] : NULL
-			), "popup_search", false, true);
-
-			// I only want the search button. No edit or new buttons!
-			if (/*is_oid($this->obj->id()) &&*/ !isset($val["no_edit"]) || !$val["no_edit"] || isset($val["search_button"]) && $val["search_button"])
+			$clid = isset($arr["relinfo"][$reltype]["clid"]) ? (array)$arr["relinfo"][$reltype]["clid"] : array();
+			if(!is_object($arr["obj_inst"]) || empty($val["parent"]))
 			{
-				$val["post_append_text"] .= " ".html::href(array(
-					"url" => "javascript:aw_popup_scroll('$url','Otsing',".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
-					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
-					"title" => t("Otsi"),
-				));
+				
+				$url = $this->mk_my_orb("do_search", array(
+					"id" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->id() : null,
+					"pn" => $arr["property"]["name"],
+					"clid" => $clid,
+					"multiple" => isset($arr["property"]["multiple"]) && $arr["property"]["multiple"] ? $arr["property"]["multiple"] : NULL
+				), "popup_search", false, true);
+
+				// I only want the search button. No edit or new buttons!
+				if (/*is_oid($this->obj->id()) &&*/ !isset($val["no_edit"]) || !$val["no_edit"] || isset($val["search_button"]) && $val["search_button"])
+				{
+					$val["post_append_text"] .= " ".html::href(array(
+						"url" => "javascript:aw_popup_scroll('$url','Otsing',".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
+						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+						"title" => t("Otsi"),
+					));
+				}
+			}//selle paneks peaaegu alati t88le kui suudaks loadida relpickereid
+			else
+			{
+				$ps = get_instance("vcl/popup_search");
+				$ps->set_class_id($clid);
+				$ps->set_id($arr["obj_inst"]->id());
+				$ps->set_reload_property($val["name"]);
+				$ps->set_property($arr["property"]["name"]);
+				if(!empty($val["parent"]))
+				{
+					$ps->set_reload_layout($val["parent"]);
+				}
+				else
+				{
+					$ps->set_reload_property($val["name"]);
+				}
+				$prop["post_append_text"] = $ps->get_search_button();
 			}
 		}
 
@@ -507,8 +528,8 @@ class relpicker extends  core
 
 		if ($val["type"] === "select" && is_object($this->obj) && is_oid($this->obj->id()) && empty($val["no_edit"]))
 		{
-			$clid = (array)$arr["relinfo"][$reltype]["clid"];
-			$rel_val = $arr["relinfo"][$reltype]["value"];
+			$clid = isset($arr["relinfo"][$reltype]["clid"]) ? (array)$arr["relinfo"][$reltype]["clid"] : array();
+			$rel_val = isset($arr["relinfo"][$reltype]["value"]) ? $arr["relinfo"][$reltype]["value"] : null;
 
 			$clss = aw_ini_get("classes");
 			if (count($clid) > 1)
@@ -524,7 +545,7 @@ class relpicker extends  core
 							(isset($arr["prop"]["parent"]) && $arr["prop"]["parent"] == "this.parent") ? $this->obj->parent() : $this->obj->id(),
 							array(
 								"alias_to" => $this->obj->id(),
-								"alias_to_prop" => $arr["prop"]["name"],
+								"alias_to_prop" => $arr["property"]["name"],
 								"reltype" => $rel_val,
 								"return_url" => get_ru()
 							)

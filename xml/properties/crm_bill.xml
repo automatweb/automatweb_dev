@@ -155,6 +155,16 @@
             <caption>Allahindlus (%)</caption>
       </property>
       <property>
+            <name>overdue_charge</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_overdue_charge</field>
+            <size>5</size>
+            <parent>bottom_left</parent>
+            <caption>Viivis (%)</caption>
+      </property>
+      <property>
             <name>language</name>
             <table>objects</table>
             <group>general</group>
@@ -512,6 +522,15 @@
             <caption>Kasutajadefineeritud muutuja 5</caption>
       </property>
       <property>
+            <name>is_overdue_bill</name>
+            <table>aw_crm_bill</table>
+            <group>other_data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_is_overdue_bill</field>
+            <caption>Viivisarve</caption>
+      </property>
+      <property>
             <name>project</name>
             <table>objects</table>
             <group>other_data</group>
@@ -539,6 +558,17 @@
             <store>no</store>
             <field>comments_add</field>
             <caption>Lisa</caption>
+      </property>
+      <property>
+            <name>mail_reciever</name>
+            <table>objects</table>
+            <group>other_data</group>
+            <type>relpicker</type>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_RECIEVER</reltype>
+            <field>mail_reciever</field>
+            <caption>Maili saaja</caption>
       </property>
       <property>
             <name>bill_mail_to</name>
@@ -816,6 +846,11 @@
                   <clid>CL_CURRENCY</clid>
                   <caption>Valuuta</caption>
             </CURRENCY>
+            <RECIEVER>
+                  <value>19</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Arve saaja</caption>
+            </RECIEVER>
       </reltypes>
       <layout>
             <main_split>

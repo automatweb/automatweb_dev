@@ -84,6 +84,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5  parent=bottom_left
 	@caption Allahindlus (%)
 
+	@property overdue_charge type=textbox table=aw_crm_bill field=aw_overdue_charge size=5 parent=bottom_left
+	@caption Viivis (%)
+
 	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE parent=bottom_left
 	@caption Keel
 
@@ -204,8 +207,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property udef5 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Kasutajadefineeritud muutuja 5
 
+	@property is_overdue_bill type=checkbox ch_value=1  table=aw_crm_bill field=aw_is_overdue_bill
+	@caption Viivisarve
+
 	@property project type=relpicker store=connect reltype=RELTYPE_PROJECT multiple=1
 	@caption Projekt
+
+	@property bill_text type=textarea field=meta method=serialize
+	@caption Arve tekst
 
 	@property comments type=text store=no
 	@caption Kommentaarid
@@ -330,11 +339,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 @caption Arve saaja
 */
 
-define("BILL_SUM", 1);
-define("BILL_SUM_WO_TAX", 2);
-define("BILL_SUM_TAX", 3);
-define("BILL_AMT", 4);
-
 class crm_bill extends class_base
 {
 	function crm_bill()
@@ -369,7 +373,7 @@ class crm_bill extends class_base
 
 	function callback_post_save($arr)
 	{
-		if($this->can("view" , $arr["request"]["project"]))
+		if(isset($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
 		{
 			$arr["obj_inst"]->set_project($arr["request"]["project"]);
 		}
@@ -411,6 +415,16 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "overdue_charge":
+				if(empty($pop["value"]) && !$arr["new"])
+				{
+					$prop["value"] = $arr["obj_inst"]->get_overdue_charge();
+				}
+				$prop["post_append_text"] = " ".html::href(array(
+					"url" => $this->mk_my_orb("make_overdue_bill", array("id" => $arr["obj_inst"]->id(), "ru" => get_ru())),
+					"caption" => t("Loo viivisarve"),
+				));
+				break;
 			case "currency":
 				$prop["value"] = $arr["obj_inst"]->get_bill_currency_id();
 				if(!$prop["options"][$prop["value"]])
@@ -437,6 +451,10 @@ class crm_bill extends class_base
 					$ic = obj($arr["obj_inst"]->meta("important_comment"));
 					$prop["value"] = "<font color=red size=+1><b>".$ic->comment()."</b></font>";
 				}
+				if(isset($this->error))
+				{
+					$prop["value"].= "<br><font color=red size=+1>".html::bold($this->error)."</font>";
+				}
 				break;
 			case "comments":
 				$prop["value"] = $arr["obj_inst"]->get_comments_text();
@@ -449,6 +467,18 @@ class crm_bill extends class_base
 				}
 				$prop["value"] = number_format($sum, 2);
 				$prop["value"] .= " ".$arr["obj_inst"]->get_bill_currency_name();
+				if(!$arr["new"])
+				{
+					$payment_id = $arr["obj_inst"]->get_payment_id();
+					if($payment_id)
+					{
+						$prop["value"] = html::href(array(
+							"url" => $this->mk_my_orb("change", array("id" => $payment_id, "return_url" => get_ru()), CL_CRM_BILL_PAYMENT), 
+							"caption" => $prop["value"],
+						));
+					}
+				}
+
 				$url = $this->mk_my_orb("do_search", array(
 					"pn" => "new_payment",
 					"clid" => CL_CRM_BILL_PAYMENT,
@@ -506,7 +536,6 @@ class crm_bill extends class_base
 				$this->_bill_targets($arr);
 				break;
 			case 'bill_rec_name':
-				$prop["post_append_text"] = "sdfsd";
 				$ps = get_instance("vcl/popup_search");
 				$ps->set_class_id(array(CL_CRM_PERSON));
 				$ps->set_id($arr["obj_inst"]->id());
@@ -605,7 +634,10 @@ class crm_bill extends class_base
 					$prop["value"] = $this->customer_object->id();
 				}
 				break;
-			
+			case "bill_text":
+				$prop["value"] = $arr["obj_inst"]->get_bill_text();
+				break;
+
 			case "bill_due_date_days":
 				if($arr["new"] && $this->customer_object)
 				{
@@ -618,7 +650,7 @@ class crm_bill extends class_base
 					return PROP_IGNORE;
 				}
 				$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
-				if(is_array($agreement_price) && $agreement_prices[0]["price"] && strlen($agreement_prices[0]["name"]) > 0)
+				if(isset($agreement_prices[0]) && $agreement_prices[0]["price"] && strlen($agreement_prices[0]["name"]) > 0)
 				{
 					$sum = 0;
 					foreach($agreement_prices as $agreement_price)
@@ -635,7 +667,7 @@ class crm_bill extends class_base
 
 				$val = array();
 				$val[] = number_format($prop["value"], 2)." ".$arr["obj_inst"]->get_bill_currency_name();
-				if($add_tax)
+				if(!empty($add_tax))
 				{
 					$val[] = t("Summa").": ".$prop["value"]." ".$arr["obj_inst"]->get_bill_currency_name();
 					$val[] = t("KM").": ".number_format($SUM_WITHOUT, 2)." ".$arr["obj_inst"]->get_bill_currency_name();
@@ -685,9 +717,8 @@ class crm_bill extends class_base
 			case "bill_mail_ct":
 				if(!$prop["value"])
 				{
-					$seti = get_instance(CL_CRM_SETTINGS);
-					$this->crm_settings = $seti->get_current_settings();
-					if($this->crm_settings)
+					$this->set_current_settings();
+					if(is_object($this->crm_settings))
 					{
 						$prop["value"] = $this->crm_settings->prop($prop["name"]);
 					}
@@ -731,15 +762,10 @@ class crm_bill extends class_base
 				break;
 
 			case "warehouse_info":
-				$wh = $arr["obj_inst"]->prop("warehouse");
-				if($this->can("view", $wh))
+				$cos = $arr["obj_inst"]->prop("warehouse.conf.manager_cos");
+				if(!is_array($cos))
 				{
-					$conf = obj($wh)->prop("conf");
-				}
-				$cos = array();
-				if($this->can("view", $conf))
-				{
-					$cos = obj($conf)->prop("manager_cos");
+					$cos = array($cos);
 				}
 				if(in_array($arr["obj_inst"]->prop("customer"), $cos))
 				{
@@ -779,6 +805,7 @@ class crm_bill extends class_base
 				}
 				break;
 			case "comments":
+				if(!(empty($arr["request"]["set_important_comment"])))
 				$arr["obj_inst"]->set_meta("important_comment" , $arr["request"]["set_important_comment"]);
 				break;
 			case 'partial_recieved':
@@ -802,7 +829,7 @@ class crm_bill extends class_base
 						));
 					}
 				}
-				if($error)
+				if(!empty($error))
 				{
 					$prop["error"] = $error;
 					return PROP_ERROR;
@@ -865,7 +892,7 @@ class crm_bill extends class_base
 			case "customer_name":
 			case "customer_code":
 			case "customer_address":
-				if($arr["request"]["customer"])
+				if(!empty($arr["request"]["customer"]))
 				{
 					return PROP_IGNORE;
 				}
@@ -1078,7 +1105,7 @@ class crm_bill extends class_base
 		$t->set_sortable(false);
 
 		$writeoffs = $arr["obj_inst"]->get_writeoff_rows_data();
-
+		$first_oe = 0;
 		foreach($writeoffs as $row)
 		{
 			//eraldab muid kulusid
@@ -1393,16 +1420,18 @@ class crm_bill extends class_base
 	function _bill_rows($arr)
 	{
 		classload("vcl/table");
+		$pps = get_instance("applications/crm/crm_participant_search");
+		$curr_inst = get_instance(CL_CURRENCY);
 		$t = new vcl_table();
 		$this->_init_bill_rows_t($t);
 
 		$sum = 0;
 
 		$task_i = get_instance(CL_TASK);
-
+		$u = get_instance(CL_USER);
 		$prods = array("" => t("--vali--"));
 		// get prords from co
-		$u = get_instance(CL_USER);
+
 		$co = obj($u->get_current_company());
 		$ccurrency = $co->prop("currency");
 		$ccurrency_name = $co->prop("currency.name");
@@ -1412,17 +1441,10 @@ class crm_bill extends class_base
 		$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
 		if ($wh)
 		{
-			$wh_i = $wh->instance();
-			$pkts = $wh_i->get_packet_list(array(
-				"id" => $wh->id()
-			));
-			foreach($pkts as $pko)
-			{
-				$prods[$pko->id()] = $pko->name();
-			}
-		}//if(aw_global_get("uid") == "Teddi.Rull")$arr["obj_inst"]->connect(array("to" => 25403, "type" => "RELTYPE_ROW"));
-		$rows = $this->get_bill_rows($arr["obj_inst"]);
-		if (!is_oid($arr["obj_inst"]->id()))
+			$prods = $prods + $wh->get_packet_list()->names();
+		}
+		$rows = $arr["obj_inst"]->get_bill_rows_data();
+/*		if (!is_oid($arr["obj_inst"]->id()))
 		{
 			$rows[] = array(
 				"id" => -1,
@@ -1430,9 +1452,8 @@ class crm_bill extends class_base
 				"amt" => 0,
 				"sum" => 0
 			);
-		}
-		$pps = get_instance("applications/crm/crm_participant_search");
-		$curr_inst = get_instance(CL_CURRENCY);
+		}*/
+
 		classload("vcl/table");
 		$default_row_jrk = $first_oe = 0;
 		$ut = new vcl_table(array(
@@ -1509,8 +1530,6 @@ class crm_bill extends class_base
 			{
 				$unit_oid = $t_inf["unit"];
 			}
-			$unit_name = $this->get_unit_name($t_inf["unit"], $arr["obj_inst"]);
-
 
 			$ut->clear_data();
 			$ut->define_data(array(
@@ -1830,8 +1849,6 @@ class crm_bill extends class_base
 			{
 				$unit_oid = $t_inf["unit"];
 			}
-			$unit_name = $this->get_unit_name($t_inf["unit"], $arr["obj_inst"]);
-
 //-------------
 			$price_cc = "";//hind oma organisatsiooni valuutas
 			$sum_cc = "";//summa oma organisatsiooni valuutas
@@ -2184,7 +2201,7 @@ class crm_bill extends class_base
 						"name" => "rows[$id][price]",
 						"value" => $row->prop("price"),
 						"size" => 5
-					)).$price_cc,
+					)),
 				));
 				$ut->define_data(array(
 					"field1" => t("Kogus"),
@@ -2234,7 +2251,7 @@ class crm_bill extends class_base
 				{
 					$m = new popup_menu;
 					$m->begin_menu("move_rows_to_dn_".$id);
-					$bill = reset($row->connections_to(array("type" => "RELTYPE_ROW", "from.class_id" => CL_CRM_BILL)))->from();
+					$bill = $row->get_bill_object();
 					foreach($bill->connections_from(array(
 						"type" => "RELTYPE_DELIVERY_NOTE",
 					)) as $c)
@@ -2393,6 +2410,7 @@ class crm_bill extends class_base
 					$ret.=html::checkbox(array(
 						"checked" => $row->prop("has_tax"),
 						"disabled" => 1,
+						"name" => "disabled_checkbox",
 					));
 				}
 				break;
@@ -2681,7 +2699,7 @@ class crm_bill extends class_base
 
 	function callback_pre_save($arr)
 	{
-		if ($this->_set_bddd)
+		if (!empty($this->_set_bddd))
 		{
 			$arr["obj_inst"]->set_prop("bill_due_date_days", $this->_set_bddd);
 		}
@@ -2691,7 +2709,7 @@ class crm_bill extends class_base
 			mktime(3,3,3, date("m", $bt), date("d", $bt) + $arr["obj_inst"]->prop("bill_due_date_days"), date("Y", $bt))
 		);
 
-		if ($this->_set_recv_date)
+		if (!empty($this->_set_recv_date))
 		{
 			$arr["obj_inst"]->set_prop("bill_recieved", $this->_set_recv_date);
 		}
@@ -2907,11 +2925,9 @@ class crm_bill extends class_base
 		$lc = "et";
 		if ($this->can("view", $b->prop("language")))
 		{
-			$lo = obj($b->prop("language"));
-			$lc = $lo->prop("lang_acceptlang");
+			$lc = $b->prop("language.lang_acceptlang");
 		}
 		
-
 		if($_GET["pdf"])
 		{
 			$arr["pdf"] = $_GET["pdf"];
@@ -2977,8 +2993,10 @@ class crm_bill extends class_base
 				{
 					$lo = obj($b->prop("language"));
 					$lc = $lo->prop("lang_acceptlang");
-//					$country_obj = obj($ct->prop("riik"));
-					if($lc == "en") $ord_country = $b->get_customer_address("country_en");//$country_obj->prop("name_en");
+					if($lc == "en")
+					{
+						$ord_country = $b->get_customer_address("country_en");
+					}
 				}
 				else
 				{
@@ -2993,13 +3011,16 @@ class crm_bill extends class_base
 		}
 
 		$imp_vars = $this->implementor_vars($b->prop("impl"));
-
-		$bpct = $ord->prop("bill_penalty_pct");
+	
+		$bpct = $b->prop("overdue_charge");
 		if (!$bpct)
 		{
-			$bpct = $imp_vars["impl_penalty"];
+			$bpct = $ord->prop("bill_penalty_pct");
+			if (!$bpct)
+			{
+				$bpct = $imp_vars["impl_penalty"];
+			}
 		}
-
 		//need enne vaja 2ra leida, sest hiljem subide jaoks ka vaja
 		$ord_county = $b->get_customer_address("county");
 
@@ -3023,6 +3044,8 @@ class crm_bill extends class_base
 			"orderer_contact" => $ord_ct,
 			"orderer_contact_profession" => $ord_ct_prof,
 			"comment" => $b->prop("notes"),
+			"overdue" => $b->get_overdue_charge(),
+			"bill_text" => $b->get_bill_text(),
 		));
 		if($ord_country)
 		{
@@ -3078,7 +3101,7 @@ class crm_bill extends class_base
 		}
 		else
 		{
-			$bill_rows = $this->get_bill_rows($b);
+			$bill_rows = $b->get_bill_rows_data();
 		}
 		$brows = $bill_rows; //moment ei tea miks see topelt tuleb... igaks juhuks ei vtnud maha... hiljem kib miski reset
 		$grp_rows = array();
@@ -3187,7 +3210,7 @@ class crm_bill extends class_base
 //					}
 //				}
 				$this->vars(array(
-					"unit" => $this->get_unit_name($grp_row["unit"], $b),
+					"unit" => $b->get_unit_name($grp_row["unit"]),
 					"amt" => $stats->hours_format($grp_row["tot_amt"]),
 					"price" => number_format(($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),2,".", " "),
 					"sum" => number_format($grp_row["tot_cur_sum"], 2, ".", " "),
@@ -3229,7 +3252,7 @@ class crm_bill extends class_base
 			$name = $row["comment"];
 			$tax_rows["$tax_rate"] += $cur_tax;
 			$this->vars(array(
-				"unit" => $this->get_unit_name($row["unit"], $b),
+				"unit" => $b->get_unit_name($row["unit"]),
 				"amt" => $stats->hours_format($row["amt"]),
 				"price" => number_format($cur_pr, 2, ".", " "),
 				"sum" => number_format($cur_sum, 2, ".",  " "),
@@ -3266,7 +3289,8 @@ class crm_bill extends class_base
 
 //arr($tax_rows);
 		if($there_is_tax_rate)
-		{foreach($tax_rows as $tax_rate => $tax_amt)
+		{
+			foreach($tax_rows as $tax_rate => $tax_amt)
 			{
 	//			if ($tax_rate > 0)
 	//			{
@@ -3374,88 +3398,7 @@ class crm_bill extends class_base
 
 
 //siia j2in pooleli puhastamisega
-	function get_bill_rows($bill)
-	{
-		if (!is_oid($bill->id()))
-		{
-			return array();
-		}
-		$inf = array();
-		$cons = $bill->connections_from(array("type" => "RELTYPE_ROW"));
-		if (!count($cons))
-		{
-			// create new empty bill row
-			$br = obj();
-			$br->set_class_id(CL_CRM_BILL_ROW);
-			$br->set_parent($bill->id());
-			$br->save();
-			$bill->connect(array(
-				"to" => $br->id(),
-				"type" => "RELTYPE_ROW"
-			));
-			$cons = $bill->connections_from(array("type" => "RELTYPE_ROW"));
-		}
-		// bill rows are objects connected and get info copied into them from task rows
-		foreach($cons as $c)
-		{
-			$row = $c->to();
-			if($row->prop("writeoff"))
-			{
-				continue;
-			}
-			$kmk = "";
-			if ($this->can("view", $row->prop("prod")))
-			{
-				$prod = obj($row->prop("prod"));
-				if ($this->can("view", $prod->prop("tax_rate")))
-				{
-					$tr = obj($prod->prop("tax_rate"));
-					$kmk = $tr->prop("code");
-				}
-			}
 
-			$ppl = array();
-			foreach((array)$row->prop("people") as $p_id)
-			{
-				if ($this->can("view", $p_id))
-				{
-					$ppl[$p_id] = $p_id;	
-				}
-			}
-			$rd = array(
-				"amt" => $row->prop("amt"),
-				"prod" => $row->prop("prod"),
-				"name" => $row->prop("desc"),
-				"comment" => $row->prop("comment"),
-				"price" => $row->prop("price"),
-				"sum" => str_replace(",", ".", $row->prop("amt")) * str_replace(",", ".", $row->prop("price")),
-				"km_code" => $kmk,
-				"unit" => $row->prop("unit"),
-				"jrk" => $row->meta("jrk"),
-				"id" => $row->id(),
-				"is_oe" => $row->prop("is_oe"),
-				"has_tax" => $row->prop("has_tax"),
-				"tax" => $row->get_row_tax(),
-				"date" => $row->prop("date"),
-				"id" => $row->id(),
-				"persons" => $ppl,
-				"has_task_row" => $row->has_task_row(),
-			);
-			$rd["orderer"] = $row->get_orderer_person_name();
-			$rd["task_row_id"] = $row->get_task_row_or_bug_id();
-
-
-			$inf[] = $rd;
-		}
-		usort($inf, array(&$this, "__br_sort"));
-		//sotrimine jrjekorranumbri jrgi
-//		foreach ($inf as $key => $row) {
-//		   $volume[$key]  = $row['jrk'];
-//		   $edition[$key] = $row;
-//		}
-//		array_multisort($volume, SORT_ASC, $edition, SORT_DESC, $inf);
-		return $inf;
-	}
 
 	function __br_sort($a, $b)
 	{
@@ -3465,7 +3408,7 @@ class crm_bill extends class_base
 		list($b_d, $b_m, $b_y) = explode(".", $b_date);
 		$a_tm = mktime(0,0,0, $a_m, $a_d, $a_y);
 		$b_tm = mktime(0,0,0, $b_m, $b_d, $b_y);
-		if(!(($a["is_oe"] - $b["is_oe"]) == 0))
+		if(isset($a["is_oe"]) && isset($b["is_oe"]) && !(($a["is_oe"] - $b["is_oe"]) == 0))
 		{
 			return $a["is_oe"]- $b["is_oe"];
 		}
@@ -3543,9 +3486,6 @@ class crm_bill extends class_base
 			}
 			if ($this->can("view", $ord->prop("contact")))
 			{
-				//$ct = obj($ord->prop("contact"));
-				//$ord_addr = $ct->name()." ".$ct->prop("postiindeks");
-
 				$ct = obj($ord->prop("contact"));
 				$ap = array($ct->prop("aadress"));
 				if ($ct->prop("linn"))
@@ -3560,11 +3500,14 @@ class crm_bill extends class_base
 		}
 
 		$impl_vars = $this->implementor_vars($b->prop("impl"));
-
-		$bpct = $ord->prop("bill_penalty_pct");
+		$bpct = $b->prop("overdue_charge");
 		if (!$bpct)
 		{
-			$bpct = $impl_vars["impl_penalty"];
+			$bpct = $ord->prop("bill_penalty_pct");
+			if (!$bpct)
+			{
+				$bpct = $imp_vars["impl_penalty"];
+			}
 		}
 
 		$this->vars(array(
@@ -3615,7 +3558,6 @@ class crm_bill extends class_base
 		else
 		{
 			$rs = $this->parse_preview_add_rows($bill_rows);
-	
 		}
 		$sigs = "";
 		
@@ -3757,7 +3699,7 @@ class crm_bill extends class_base
 			{
 				$this->vars($row_data);
 				$this->vars(array(
-					"unit" => $this->get_unit_name($row["unit"], $this->bill),
+					"unit" => $this->bill->get_unit_name($row["unit"]),
 					"amt" => $this->stats->hours_format($row["amt"]),
 					"price" => number_format($row["price"], 2,".", " "),
 					"sum" => number_format($cur_sum, 2,"." , " "),
@@ -3805,7 +3747,7 @@ class crm_bill extends class_base
 				$cur_pr = $this->num($row["price"]);
 			}
 			$this->vars(array(
-				"unit" => $this->get_unit_name($row["unit"], $this->bill),
+				"unit" => $this->bill->get_unit_name($row["unit"]),
 				"amt" => $this->stats->hours_format($row["amt"]),
 				"price" => number_format($cur_pr, 2,".", " "),
 				"sum" => number_format($cur_sum, 2, ".", " "),
@@ -3819,9 +3761,9 @@ class crm_bill extends class_base
 			$this->sum_wo_tax += $cur_sum;
 			$this->tax += $cur_tax;
 			$this->sum += ($cur_tax+$cur_sum);
-			}
-			usort($rs, array(&$this, "__br_sort"));
-			foreach($rs as $idx => $ida)
+		}
+		usort($rs, array(&$this, "__br_sort"));
+		foreach($rs as $idx => $ida)
 		{
 			$rs[$idx] = $ida["str"];
 		}
@@ -3846,7 +3788,7 @@ class crm_bill extends class_base
 		}
 		else
 		{
-			$rows = $this->get_bill_rows($b);
+			$rows = $b->get_bill_rows_data();
 		}
 		foreach($rows as $row)
 		{
@@ -3921,6 +3863,10 @@ class crm_bill extends class_base
 	function _save_rows($arr)
 	{
 		$u = get_instance(CL_USER);
+		if(!isset($arr["request"]["rows"]))
+		{
+			$arr["request"]["rows"] = array();
+		}
 		foreach(safe_array($arr["request"]["rows"]) as $oid => $row)
 		{
 			$new = false;
@@ -4003,7 +3949,7 @@ class crm_bill extends class_base
 					$arr["request"]["agreement_price"][$key]["prod"] = $sts->prop("bill_def_prod");
 				}
 				$arr["request"]["agreement_price"][$key]["sum"] = str_replace("," , "." , $arr["request"]["agreement_price"][$key]["price"])*str_replace("," , "." , $arr["request"]["agreement_price"][$key]["amt"]);
-				if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && !$arr["request"]["agreement_price"][$key]["atm"]) 
+				if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && empty($arr["request"]["agreement_price"][$key]["atm"])) 
 				{
 					unset($arr["request"]["agreement_price"][$key]);
 				}
@@ -4028,27 +3974,22 @@ class crm_bill extends class_base
 	function add_row($arr)
 	{
 		$bill = obj($arr["id"]);
-		$rows = $this->get_bill_rows(obj($arr["id"]));
+		$rows = $bill->get_bill_rows_data();
 		$jrk = 0;
 		foreach($rows as $row)
 		{
 			if($row["jrk"] > $jrk-10) $jrk = $row["jrk"]+10;
 		}
-
-		$row = obj();
-		$row->set_parent($bill->id());
-		$row->set_class_id(CL_CRM_BILL_ROW);
-		$row->set_prop("date", date("d.m.Y", time()));
+		$row = $bill->add_row();
 		$row->set_meta("jrk" , $jrk);
 		$row->save();
 
-		$bill->connect(array(
-			"to" => $row->id(),
-			"type" => "RELTYPE_ROW"
-		));
 		$bill->set_prop("bill_trans_date", time());
 		$bill->save();
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "return_url" => $arr["retu"]), CL_CRM_BILL);
+		if(empty($arr["retu"]))
+		{
+			die($row->id());
+		}
 		return $arr["retu"];
 	}
 
@@ -4122,6 +4063,12 @@ class crm_bill extends class_base
 	{
 		$url = $this->mk_my_orb("get_comment_for_prod");
 		return '
+			function add_row()
+			{
+				$.get("/automatweb/orb.aw", {class: "crm_bill", action: "add_row", id: "'.$arr["obj_inst"]->id().'"}, function (html) {
+					reload_property("bill_rows");
+				});
+			}
 			function edit_row(id)
 			{
 				$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "name"}, function (html) {
@@ -4244,15 +4191,14 @@ class crm_bill extends class_base
 
 	function _bill_tb($arr)
 	{
-		$tb =& $arr["prop"]["vcl_inst"];
 		enter_function("bill_tb_init");
+
+		$tb =& $arr["prop"]["vcl_inst"];
 		$this->set_current_settings();
-
-		$has_val = 1;
 		$has_val = !$arr["obj_inst"]->has_not_initialized_rows();
-
-
-
+		$onclick_start = empty($has_val) ? " fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){" : "";
+		$onclick_end = empty($has_val) ? "}else;" : "";
+	
 		$tb->add_menu_button(array(
 			"name" => "new",
 			"tooltip" => t("Uus"),
@@ -4260,8 +4206,9 @@ class crm_bill extends class_base
 		));
 		$tb->add_menu_item(array(
 			"parent" => "new",
-			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru())),
-			"text" => t("Lisa t&uuml;hi rida")
+			"url" => "javascript:;",
+			"text" => t("Lisa t&uuml;hi rida"),
+			"onClick" => "add_row();",
 		));
 		$tb->add_menu_item(array(
 			"parent" => "new",
@@ -4278,134 +4225,79 @@ class crm_bill extends class_base
 			"img" => "print.gif"
 		));
 		exit_function("bill_tb_init");
-		$onclick = "";
-		if(!$has_val)
-		{
-			$onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-		}
-		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
-		if(!$has_val)
-		{
-			$onclick.= "}else;";
-		}
 
+		$onclick_middle = "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => $onclick,
+			"onClick" => $onclick_start.$onclick_middle.$onclick_end,
 			"text" => t("Prindi arve")
 		));
 
-		$onclick = "";
-		if(!$has_val)
-		{
-			$onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-		}
-		$onclick.= "win = window.open('".$this->mk_my_orb("change", array(
+		$onclick_middle = "win = window.open('".$this->mk_my_orb("change", array(
 			"pdf" => 1,
 			"id" => $arr["obj_inst"]->id(),
 			"group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
-		if(!$has_val)
-		{
-			$onclick.= "}else;";
-		}
-
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => $onclick,
+			"onClick" => $onclick_start.$onclick_middle.$onclick_end,
 			"text" => t("Prindi arve pdf")
 		));
 
-		$onclick = "";
-		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
-		if(!$has_val) $onclick.= "}else {;}";
-		
-
+		$onclick_middle.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => $onclick,
+			"onClick" => $onclick_start.$onclick_middle.$onclick_end,
 			"text" => t("Prindi arve lisa")
 		));
 
-		$onclick = "";
-		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-		$onclick.= "win = window.open('".$this->mk_my_orb("change", array(
+		$onclick_middle = "win = window.open('".$this->mk_my_orb("change", array(
 			"pdf" => 1,
 			"id" => $arr["obj_inst"]->id(),
 			"group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
-		if(!$has_val) $onclick.= "}else {;}";
-		
-
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => $onclick,
+			"onClick" => $onclick_start.$onclick_middle.$onclick_end,
 			"text" => t("Prindi arve lisa pdf")
 		));
 
-
-
-		$onclick = "";
-		if(!$has_val)
-		{
-			$onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-		}
-		$onclick.= "win = window.open('".$this->mk_my_orb("change", array(
+		$onclick_middle = "win = window.open('".$this->mk_my_orb("change", array(
 			"openprintdialog" => 1,
 			"id" => $arr["obj_inst"]->id(),
 			"group" => "preview",
 			"reminder" => 1
 		), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
-		if(!$has_val)
-		{
-			$onclick.= "}else;";
-		}
-
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => $onclick,
+			"onClick" => $onclick_start.$onclick_middle.$onclick_end,
 			"text" => t("Prindi arve meeldetuletus")
 		));
 
-		$onclick = "";
-		if(!$has_val)
-		{
-			$onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-		}
-		$onclick.= "win = window.open('".$this->mk_my_orb("change", array(
+		$onclick_middle = "win = window.open('".$this->mk_my_orb("change", array(
 			"pdf" => 1,
 			"id" => $arr["obj_inst"]->id(),
 			"group" => "preview",
 			"reminder" => 1
 			), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
-		if(!$has_val)
-		{
-			$onclick.= "}else;";
-		}
-
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => $onclick,
+			"onClick" => $onclick_start.$onclick_middle.$onclick_end,
 			"text" => t("Prindi arve meeldetuletus pdf")
 		));
-
-
 
 		$tb->add_menu_button(array(
 			"name" => "send_bill",
 			"tooltip" => t("Saada arve"),
 			"img" => "mail_send.gif",
-//			"onClick" => $onclick,
 		));
 		
 		$onclick= "win = window.open('".$this->mk_my_orb("send_bill", array(
 			"id" => $arr["obj_inst"]->id(),), CL_CRM_BILL)."','billprint','width=800,height=600,statusbar=yes');";
-
 		$tb->add_menu_item(array(
 			"parent" => "send_bill",
 			"url" => "#",
@@ -4415,7 +4307,6 @@ class crm_bill extends class_base
 
 		$onclick= "win = window.open('".$this->mk_my_orb("send_bill", array(
 			"id" => $arr["obj_inst"]->id(),"preview_add" => 1), CL_CRM_BILL)."','billprint','width=800,height=600,statusbar=yes');";
-
 		$tb->add_menu_item(array(
 			"parent" => "send_bill",
 			"url" => "#",
@@ -4427,7 +4318,6 @@ class crm_bill extends class_base
 			"id" => $arr["obj_inst"]->id(),
 			"reminder" => 1
 		), CL_CRM_BILL)."','billprint','width=800,height=600,statusbar=yes');";
-
 		$tb->add_menu_item(array(
 			"parent" => "send_bill",
 			"url" => "#",
@@ -4440,14 +4330,12 @@ class crm_bill extends class_base
 			"preview_add" => 1,
 			"reminder" => 1,
 			), CL_CRM_BILL)."','billprint','width=800,height=600,statusbar=yes');";
-
 		$tb->add_menu_item(array(
 			"parent" => "send_bill",
 			"url" => "#",
 			"onClick" => $onclick,
 			"text" => t("Saada arve meeldetuletuse pdf koos lisaga")
 		));
-
 
 		$tb->add_menu_item(array(
 			"parent" => "send_bill",
@@ -4457,30 +4345,21 @@ class crm_bill extends class_base
 			"text" => t("Kirjade seaded")
 		));
 
-		if(!$this->crm_settings || !$this->crm_settings->prop("bill_hide_pwr"))
+		if(empty($this->crm_settings) || !$this->crm_settings->prop("bill_hide_pwr"))
 		{
-	
-			$onclick = "";
-			if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-			$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
-			if(!$has_val) $onclick.= "}else;";
-	
+			$onclick_middle = "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
 			$tb->add_menu_item(array(
 				"parent" => "print",
 				"url" => "#",
-				"onClick" => $onclick,
+				"onClick" => $onclick_start.$onclick_middle.$onclick_end,
 				"text" => t("Prindi arve koos lisaga")
 			));
 	
-			$onclick = "";
-			if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
-			$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"pdf" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
-			if(!$has_val) $onclick.= "}else;";
-	
+			$onclick_middle.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"pdf" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
 			$tb->add_menu_item(array(
 				"parent" => "print",
 				"url" => "#",
-				"onClick" => $onclick,
+				"onClick" => $onclick_start.$onclick_middle.$onclick_end,
 				"text" => t("Prindi arve koos lisaga pdf")
 			));
 		}
@@ -4830,11 +4709,18 @@ class crm_bill extends class_base
 			case "aw_approved":
 			case "aw_currency":
 			case "aw_bill_accounting_date":
+			case "aw_is_overdue_bill":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "int"
 				));
 				return true;
+			case "aw_overdue_charge":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "double"
+				));
+				return true;	
 		}
 	}
 
@@ -4919,37 +4805,25 @@ class crm_bill extends class_base
 		}
 	}
 
-	function get_unit_name($unit, $o)
-	{
-		if($this->can("view", $unit))
-		{
-			$uo = obj($unit);
-			$u_trans = $uo->meta("translations");
-			if($this->can("view", $o->prop("language")))
-			{
-				$unit_name = $u_trans[obj($o->prop("language"))->prop("db_lang_id")]["unit_code"];
-			}
-			if(!$unit_name)
-			{
-				$unit_name = $uo->prop("unit_code");
-			}
-		}
-		else
-		{
-			$unit_name = $unit;
-		}
-		return $unit_name;
-	}
-
 	function posValue($nr)
 	{
 		if($nr < 0) return 0;
 		else return $nr;
 	}
 
+	function callback_on_load()
+	{
+		if(isset($_SESSION["bill_error"]))
+		{
+			$this->error = $_SESSION["bill_error"];
+			unset($_SESSION["bill_error"]);
+		}
+	}
+
 	function callback_mod_retval($arr)
 	{
-		$arr["args"]["project"] = $arr["request"]["project"];
+		if(isset( $arr["request"]["project"])) $arr["args"]["project"] = $arr["request"]["project"];
+
 	}
 
 	function callback_mod_layout(&$arr)
@@ -4975,26 +4849,6 @@ class crm_bill extends class_base
 			}
 		}
 		return true;
-	}
-
-	/** returns bill id
-		@attrib api=1 all_args=1
-	@param no required type=int
-		bill no.
-	@returns int
-		bill id
-	**/
-	function get_bill_id($arr)
-	{
-		$bills = new object_list(array(
-			"class_id" => CL_CRM_BILL,
-			"lang_id" => array(),
-			"bill_no" => $arr["no"],
-		));
-		if(sizeof($bills->ids()))
-		{
-			return reset($bills->ids());
-		}
 	}
 
 	/**
@@ -5397,12 +5251,28 @@ class crm_bill extends class_base
 
 
 	/**
-	@attrib name=move_rows_to_dn all_args=1
+		@attrib name=move_rows_to_dn all_args=1
 	**/
 	function move_rows_to_dn($arr)
 	{
 		obj($arr["id"])->move_rows_to_dn($arr);
 		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=make_overdue_bill all_args=1
+	**/
+	public function make_overdue_bill($arr)
+	{
+		$id = obj($arr["id"])->make_overdue_bill();
+		if(is_oid($id))
+		{
+			return  $this->mk_my_orb("change", array("id" => $id, "return_url" => $arr["ru"]), CL_CRM_BILL); 
+		}
+		else
+		{
+			return $arr["ru"];
+		}
 	}
 }
 ?>

@@ -83,16 +83,15 @@ function get_date_range($args = array())
 	$timestamp2 = mktime(23,59,59,$m,$d,$y);
 
 	// if a range is specified then use that as the base for our calculations
-	$range_start = $args["range_start"];
-	if ($range_start > 0)
+	if (!empty($args["range_start"]))
 	{
-		$timestamp = $range_start;
+		$timestamp = $args["range_start"];
 		list($d,$m,$y) = explode("-",date("d-m-Y",$timestamp));
 	}
 
 	// current = 0, backward = 1, forward = 2
 	// current - start or end from/at the timestamp
-	if ($args["direction"] == 0)
+	if (empty($args["direction"]))
 	{
 		$rg_start = $timestamp;
 		// this will be calculated from the range type
@@ -117,17 +116,17 @@ function get_date_range($args = array())
 
 	$diff = 0;
 
-	$eti = $args["event_time_item"];
 
-	if (!empty($eti) && is_numeric($eti))
+
+	if (!empty($args["event_time_item"]) && is_numeric($args["event_time_item"]))
 	{
 		if ($type == "day")
 		{
-			$diff = $eti;
+			$diff = $args["event_time_item"];
 		}
 		elseif ($type == "week")
 		{
-			$diff = $eti * 7;
+			$diff = $args["event_time_item"] * 7;
 		};
 	}
 
@@ -274,7 +273,7 @@ function get_date_range($args = array())
 	$start_wd = convert_wday(date("w",$start_ts));
 	$end_wd = convert_wday(date("w",$end_ts));
 
-	if ($args["fullweeks"] == 1)
+	if (!empty($args["fullweeks"]))
 	{
 		if ($start_wd > 1)
 		{

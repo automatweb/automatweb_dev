@@ -436,7 +436,7 @@ class crm_company_qv_impl extends class_base
 		{
 			$bi = $o->instance();
 			$sum = $bi->get_sum($o);
-			$rows = $bi->get_bill_rows($o);
+			$rows = $o->get_bill_rows_data();
 			$hrs = 0;
 			foreach($rows as $row)
 			{

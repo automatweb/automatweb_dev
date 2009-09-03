@@ -1,9 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_bill" folder="www/automatweb_cvs/classes/applications/crm" extends="class_base">
-		<action name="add_payment" all_args="1">
+		<action name="add_payment">
 			<function name="add_payment">
 				<arguments>
+					<optional name="id" type="int" />
+					<optional name="o" type="object" />
+					<optional name="sum" type="double" />
+					<optional name="ru" type="string" />
+					<optional name="p" type="oid/object" />
 				</arguments>
 			</function>
 		</action>
@@ -151,6 +156,13 @@
 
 		<action name="move_rows_to_dn" all_args="1">
 			<function name="move_rows_to_dn">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="make_overdue_bill" all_args="1">
+			<function name="make_overdue_bill">
 				<arguments>
 				</arguments>
 			</function>

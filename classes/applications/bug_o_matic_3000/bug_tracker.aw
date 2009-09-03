@@ -795,9 +795,9 @@ class bug_tracker extends class_base
 				$udata = $arr["obj_inst"]->meta("gantt_user_ends");
 				$cur = aw_global_get("uid_oid");
 				$days = 7;
-				if($ue = $udata[$cur])
+				if(!empty($udata[$cur]))
 				{
-					$days = $ue;
+					$days =  $udata[$cur];
 				}
 				$prop["value"] = time() + ($days-1) * 24 * 60 * 60;
 				break;
@@ -805,7 +805,7 @@ class bug_tracker extends class_base
 			case "gantt_p":
 			case "unset_p":
 			case "my_bugs_stat_p":
-				if ($this->can("view", $arr["request"]["filt_p"]))
+				if (isset($arr["request"]["filt_p"]) && $this->can("view", $arr["request"]["filt_p"]))
 				{
 					$p = obj($arr["request"]["filt_p"]);
 				}
@@ -3424,9 +3424,9 @@ class bug_tracker extends class_base
 		$chart = get_instance ("vcl/gantt_chart");
 		$udata = is_object($arr["obj_inst"]) ? $arr["obj_inst"]->meta("gantt_user_ends") : array();
 		$cur = aw_global_get("uid_oid");
-		if($cs = $udata[$cur])
+		if(!empty($udata[$cur]))
 		{
-			$columns = $cs;
+			$columns = $udata[$cur];
 		}
 		else
 		{
@@ -3440,7 +3440,7 @@ class bug_tracker extends class_base
 		}
 		$col_length = $this->gt_days_in_col*24*60*60;
 
-		if ($this->can("view", $arr["request"]["filt_p"]))
+		if (isset($arr["request"]["filt_p"]) && $this->can("view", $arr["request"]["filt_p"]))
 		{
 			$p = obj($arr["request"]["filt_p"]);
 		}
@@ -3501,7 +3501,7 @@ class bug_tracker extends class_base
 			}
 		}
 
-		if (!$has && $arr["ret_b"])
+		if (!$has && !empty($arr["ret_b"]))
 		{
 			$gt_list[] = $arr["ret_b"];
 			usort($gt_list, array(&$this, "__gantt_sort"));
@@ -3536,7 +3536,7 @@ class bug_tracker extends class_base
 			{
 				$guess_hrs = $gt->prop("num_hrs_guess");
 			}
-			if ($guess_hrs > 0)
+			if (isset($guess_hrs) &&  $guess_hrs > 0)
 			{
 				$length = $guess_hrs * 3600 - ($real_hrs * 3600);
 				if ($length < 0)
@@ -3612,7 +3612,7 @@ class bug_tracker extends class_base
 				$this->over_deadline[$gt->id()] = $gt;
 			}
 
-			if ($gt->id() == $arr["ret_b_time"])
+			if (!empty($arr["ret_b_time"]) && $gt->id() == $arr["ret_b_time"])
 			{
 				return $this->gt_start;
 			}
@@ -3805,15 +3805,16 @@ class bug_tracker extends class_base
 
 	function check_sect(&$sect, &$curday)
 	{
-		if($sect[$curday]["len"] <= 0)
+		
+		if(empty($sect[$curday]["len"]) || $sect[$curday]["len"] <= 0)
 		{
 			$curday++;
-			if(is_array($sect[$curday]))
+			if(!empty($sect[$curday]) && is_array($sect[$curday]))
 			{
 				$this->gt_start = $sect[$curday]["start"];
 			}
 		}
-		if(!is_array($sect[$curday]))
+		if(empty($sect[$curday]) || !is_array($sect[$curday]))
 		{
 			$this->gt_start = $this->get_next_avail_time_from($this->gt_start, $this->day2wh);
 			$sect = $this->get_sect();
@@ -4236,12 +4237,21 @@ class bug_tracker extends class_base
 				$ret[$lut[$d]] = explode("-", trim($hrs));
 			}
 		}
+		$count = 0;
+		while($count < 7)
+		{
+			if(empty($ret[$count]))
+			{
+				$ret[$count] = array(0,0);
+			}
+			$count++;
+		}
 		return $ret;
 	}
 
 	function get_next_avail_time_from($tm, $day2wh)
 	{
-		if ($this->_rq_lev > 7)
+		if (isset($this->_rq_lev) && $this->_rq_lev > 7)
 		{
 			error::raise(array(
 				"id" => "ERR_TIME_LOOP",

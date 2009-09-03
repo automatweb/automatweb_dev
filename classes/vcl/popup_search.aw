@@ -1005,6 +1005,11 @@ function aw_get_el(name,form)
 		$this->reload_layouts = $layouts;
 	}
 
+	function set_reload_property($prop)
+	{
+		$this->reload_property = $prop;
+	}
+
 	function set_property($prop)
 	{
 		$this->property = $prop;
@@ -1025,9 +1030,9 @@ function aw_get_el(name,form)
 	{
 		$url = $this->mk_my_orb("do_ajax_search", array(
 			"id" => $this->oid,
-			"reload_layout" => $this->reload_layouts,
+			"reload_layout" => isset($this->reload_layouts) ? $this->reload_layouts :"",
+			"reload_property" => isset($this->reload_property) ? $this->reload_property :"",
 			"clid" => $this->clid,
-			"multiple" => $this->multiple,
 			"property" => $this->property,
 		));
 		return $url;
@@ -1041,6 +1046,7 @@ function aw_get_el(name,form)
 		@param multiple optional
 		@param clid optional
 		@param property optional
+		@param reload_property optional type=string
 		@param reload_layout optional type=string
 		@param tbl_props optional
 		@param no_submit optional
@@ -1108,11 +1114,16 @@ function aw_get_el(name,form)
 		));
 
 		$arr["clid"] = join("," , $arr["clid"]);
-		if(!isset($arr["reload_layout"]))
+/*		if(!isset($arr["reload_layout"]))
 		{
 			$arr["reload_layout"] = "' '";
 		}
 
+		if(!isset($arr["reload_property"]))
+		{
+			$arr["reload_property"] = "' '";
+		}
+*/
 		$htmlc->add_property(array(
 			"name" => "s[submit]",
 			"type" => "button",
@@ -1132,6 +1143,7 @@ function aw_get_el(name,form)
 				name: names.value,
 				clid: '".$arr["clid"]."',
 				reload_layout: '".$arr["reload_layout"]."',
+				reload_property: '".$arr["reload_property"]."',
 				property: '".$arr["property"]."'
 			}, function (html) {
 				x=document.getElementById('result');
@@ -1261,11 +1273,11 @@ function aw_get_el(name,form)
 		);
 		if(!empty($arr["name"]))
 		{
-			$filter["name"] = "%".$arr["name"]."%";
+			$filter["name"] = "%".iconv("UTF-8",aw_global_get("charset"),  $arr["name"])."%";
 		}
 		if(!empty($arr["oid"]))
 		{
-			$filter["oid"] = "%".$arr["oid"]."%";
+			$filter["oid"] = $arr["oid"]."%";
 		}
 
 		if($arr["clid"])
@@ -1299,7 +1311,11 @@ function aw_get_el(name,form)
 			$reload.= "window.opener.reload_layout('".$arr["reload_layout"]."');";
 			
 		}
-		
+		if(!empty($arr["reload_property"]))
+		{
+			$reload.= "window.opener.reload_property('".$arr["reload_property"]."');";
+			
+		}
 		$javascript = "<script language='javascript'>
 			function set_prop(value)
 			{
@@ -1310,7 +1326,7 @@ function aw_get_el(name,form)
 					property: '".$arr["property"]."'
 				}, function (html) {
 					".$reload."
-				//	window.close();
+					window.close();
 				});
 
 			}
@@ -1329,7 +1345,7 @@ function aw_get_el(name,form)
 		}
 		else
 		{
-			die($this->parse());
+			die(iconv(aw_global_get("charset"),"UTF-8",  $this->parse()));
 		}
 	}
 
