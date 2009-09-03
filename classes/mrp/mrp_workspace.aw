@@ -882,7 +882,12 @@ class mrp_workspace extends class_base
 	public function _get_grp_res_settings_tree($arr)
 	{
 		$this->_req_res_settings_tree($arr["prop"]["vcl_inst"], $arr["obj_inst"], 0);
-		$arr["prop"]["vcl_inst"]->set_selected_item($arr["request"]["res_fld"]);
+
+		if (isset($arr["request"]["res_fld"]))
+		{
+			$arr["prop"]["vcl_inst"]->set_selected_item($arr["request"]["res_fld"]);
+		}
+
 		$arr["prop"]["vcl_inst"]->set_root_url(aw_url_change_var("res_fld", null));
 		$arr["prop"]["vcl_inst"]->set_root_name($arr["obj_inst"]->name());
 		$arr["prop"]["vcl_inst"]->set_root_icon(icons::get_icon_url(CL_MENU));
@@ -933,7 +938,12 @@ class mrp_workspace extends class_base
 	public function _get_grp_res_formats_tree($arr)
 	{
 		$this->_req_res_format_tree($arr["prop"]["vcl_inst"], $arr["obj_inst"], 0);
-		$arr["prop"]["vcl_inst"]->set_selected_item($arr["request"]["res_fld"]);
+
+		if (isset($arr["request"]["res_fld"]))
+		{
+			$arr["prop"]["vcl_inst"]->set_selected_item($arr["request"]["res_fld"]);
+		}
+
 		$arr["prop"]["vcl_inst"]->set_root_url(aw_url_change_var("res_fld", null));
 		$arr["prop"]["vcl_inst"]->set_root_name($arr["obj_inst"]->name());
 		$arr["prop"]["vcl_inst"]->set_root_icon(icons::get_icon_url(CL_MENU));
@@ -6892,7 +6902,14 @@ class mrp_workspace extends class_base
 		$customer_count = array();
 		foreach($cases as $data)
 		{
-			$customer_count[$data["customer"]]++;
+			if (isset($customer_count[$data["customer"]]))
+			{
+				$customer_count[$data["customer"]]++;
+			}
+			else
+			{
+				$customer_count[$data["customer"]] = 1;
+			}
 		}
 /*		foreach($customer_count as $id => $count)//ei k6ike panna, sest miskeid nulle ja asju tuleb alati sisse ja siis annab errorit
 		{
@@ -6974,7 +6991,7 @@ class mrp_workspace extends class_base
 				$customer_count[$oid] = 0;
 			}
 			$nm = parse_obj_name($name)." (".$customer_count[$oid].")";
-			if($arr["request"]["cust"] == $oid)
+			if(isset($arr["request"]["cust"]) and $arr["request"]["cust"] == $oid)
 			{
 				$t->set_selected_item($oid);
 			}
@@ -6992,7 +7009,7 @@ class mrp_workspace extends class_base
 		foreach($A_to_Z as $char => $count)
 		{
 			$nm = $char." (" . $count. ")";
-			if($arr["request"]["alph"] == $char)
+			if(isset($arr["request"]["alph"]) and $arr["request"]["alph"] == $char)
 			{
 				$t->set_selected_item("alph_".$char);
 			}
@@ -7145,7 +7162,7 @@ class mrp_workspace extends class_base
 					$customers->add($c->prop("to"));
 				}
 			}
-			elseif($arr["request"]["alph"])
+			elseif(!empty($arr["request"]["alph"]))
 			{
 				$t->set_caption(sprintf(t("'%s' t&auml;hega algavate klientide nimekiri"), $arr["request"]["alph"]));
 				$customers_data = $co->get_all_customer_ids(array("name" => $arr["request"]["alph"]));
@@ -7159,7 +7176,7 @@ class mrp_workspace extends class_base
 			}
 
 
-			if($arr["request"]["timespan"])
+			if(!empty($arr["request"]["timespan"]))
 			{
 				$time = $this->get_hours_from_to();
 				$filter = array(
@@ -9374,6 +9391,7 @@ END ajutine
 
 	public function callback_generate_scripts($arr)
 	{
+		$js = "";
 		if(automatweb::$request->arg("group") === "grp_material_report")
 		{
 			$js = "
