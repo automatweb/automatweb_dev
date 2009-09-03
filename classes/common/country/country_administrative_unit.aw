@@ -69,8 +69,8 @@ class country_administrative_unit extends class_base
 			case "subclass":
 				if (is_oid ($prop["value"]))
 				{
-					$administrative_unit = obj ($prop["value"]);
-					$prop["value"] = $administrative_unit->name ();
+					$administrative_division_or_unit = obj ($prop["value"]);
+					$prop["value"] = $administrative_division_or_unit->name ();
 				}
 				else
 				{

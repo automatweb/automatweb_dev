@@ -12,20 +12,29 @@ class country_obj extends _int_object
 	**/
 	public function get_current_admin_structure()
 	{
-		$list = new object_list(array(
-			"class_id" => CL_COUNTRY_ADMINISTRATIVE_STRUCTURE,
-			"CL_COUNTRY_ADMINISTRATIVE_STRUCTURE.RELTYPE_COUNTRY" => $this->id(),
-			"site_id" => array(),
-			"lang_id" => array()
-		));
-
-		if ($list->count() < 1)
+		$administrative_structure = $this->prop("administrative_structure");
+		if (is_oid($administrative_structure))
 		{
-			throw new awex_as_country_admin_structure("Administrative structure not defined for this country");
+			$administrative_structure = new object($administrative_structure);
 		}
-		///!!! teha midagi kui rohkem kui yks on
+		else
+		{
+			$list = new object_list(array(
+				"class_id" => CL_COUNTRY_ADMINISTRATIVE_STRUCTURE,
+				"CL_COUNTRY_ADMINISTRATIVE_STRUCTURE.RELTYPE_COUNTRY" => $this->id(),
+				"site_id" => array(),
+				"lang_id" => array()
+			));
 
-		return $list->begin();
+			if ($list->count() < 1)
+			{
+				throw new awex_as_country_admin_structure("Administrative structure not defined for this country");
+			}
+			///!!! teha midagi kui rohkem kui yks on
+			$administrative_structure = $list->begin();
+		}
+
+		return $administrative_structure;
 	}
 }
 

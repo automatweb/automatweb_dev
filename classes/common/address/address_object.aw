@@ -109,7 +109,7 @@ class address_object extends _int_object
 
     /**
 	@attrib api=1 params=pos
-	@param unit
+	@param unit type=CL_COUNTRY_ADMINISTRATIVE_UNIT
 		Administrative unit object or id
 	@comment Sets address location.
 	**/
@@ -119,6 +119,10 @@ class address_object extends _int_object
 		if (is_oid ($unit))
 		{
 			$unit = obj ($unit);
+		}
+		elseif (!is_object($unit) or !$unit->is_a(CL_COUNTRY_ADMINISTRATIVE_DIVISION))
+		{
+			throw new awex_as_address("Invalid administrative unit given as address location.");
 		}
 
 		$division = obj ($unit->subclass (), array(), CL_COUNTRY_ADMINISTRATIVE_DIVISION);

@@ -93,7 +93,7 @@ class country_administrative_structure_object extends _int_object
 	**/
 	public function get_divisions()
 	{
-		$divisions = new object_list($this->connections_from(array("reltype" => "RELTYPE_ADMINISTRATIVE_DIVISION")));
+		$divisions = new object_list($this->connections_from(array("type" => "RELTYPE_ADMINISTRATIVE_DIVISION")));
 		return $divisions;
 	}
 
@@ -118,6 +118,7 @@ class country_administrative_structure_object extends _int_object
 				$parent_unit_ids[] = $unit;
 			}
 		}
+		array_pop($parent_unit_ids);// remove country
 		return $parent_unit_ids;
 	}
 

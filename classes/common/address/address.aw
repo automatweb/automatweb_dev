@@ -224,7 +224,7 @@ EOS;
 						$ancestor_unit = new object($ancestor_oid);
 						$unit_location_text[] = $ancestor_unit->prop("complete_name");
 					}
-					$results[] = array("id" => $o->id(), "value" => iconv("iso-8859-4", "UTF-8", implode(", ", $unit_location_text)), "info" => "");
+					$results[] = array("id" => $o->id(), "value" => iconv("iso-8859-4", "UTF-8", implode(", ", $unit_location_text)), "info" => "");//!!! in charset mis tegelikult olema peab?
 				}
 				while ($o = $list->next());
 				$choices["results"] = $results;
