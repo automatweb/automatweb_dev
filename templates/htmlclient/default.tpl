@@ -118,7 +118,7 @@ this.disabled=true;self.disabled=true;
 			<table border="0" width="100%">
 			<tr>
 				<td width="20%" align="right">
-				{VAR:cfgform_edit_mode}{VAR:caption}
+				{VAR:cfgform_edit_mode}<span class="aw04gridCellCaptionText">{VAR:caption}</span>
 				<!-- SUB: HELP_POPUP -->
 				<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
 				<div class="tooltip">{VAR:comment}</div>
