@@ -13,7 +13,7 @@
 @groupinfo participants caption=Osalejad submit=no
 @groupinfo other_calls caption="Eelmised k&otilde;ned"
 @groupinfo predicates caption="Eeldused"
-@groupinfo customer caption="Klient"
+@groupinfo customer caption="Klient" submit=no
 @groupinfo other_settings caption="Muud seaded"
 
 @default table=planner
@@ -42,7 +42,7 @@
 			@property comment type=textbox table=objects field=comment parent=top_2way_left
 			@caption Kommentaar
 
-			@property phone type=objpicker clid=CL_CRM_PHONE mode=autocomplete parent=top_2way_left
+			@property phone type=objpicker clid=CL_CRM_PHONE parent=top_2way_left
 			@comment Number millele helistati v&otilde;i helistada
 			@caption Number
 
@@ -70,6 +70,8 @@
 
 			@property real_duration type=text datatype=int table=planner parent=top_2way_right
 			@caption Tegelik kestus (h)
+
+			@property real_maker type=hidden datatype=int table=planner parent=top_2way_right
 
 
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
@@ -301,6 +303,7 @@ class crm_call extends task
 		$this_o = $arr["obj_inst"];
 		$cro = new crm_company_customer_data();
 		$cro->form_only = true;
+		$cro->no_form = true;
 		$arr["prop"]["value"] = $cro->view(array(
 			"id" => $this_o->prop("customer_relation"),
 			"group" => "sales_data"
@@ -769,7 +772,14 @@ class crm_call extends task
 				{
 					if (crm_call_obj::RESULT_CALL == $arr["request"]["result"] and $v <= time())
 					{
-						$arr["prop"]["error"] = t("Uue k&otilde;ne aeg peab olema m&auml;&auml;ratud");
+						if ($v < 2)
+						{
+							$arr["prop"]["error"] = t("Uue k&otilde;ne aeg peab olema m&auml;&auml;ratud");
+						}
+						else
+						{
+							$arr["prop"]["error"] = t("Uue k&otilde;ne aeg ei saa olla minevikus");
+						}
 						return PROP_FATAL_ERROR;
 					}
 				}
@@ -832,13 +842,6 @@ class crm_call extends task
 	function _set_phone(&$arr)
 	{
 		return PROP_IGNORE;
-	}
-
-	function _get_phone(&$arr)
-	{
-		$phone = obj($arr["prop"]["value"]);
-		$arr["prop"]["value"] = $phone->name();
-		return PROP_OK;
 	}
 
 	function _set_result(&$arr)
@@ -1179,10 +1182,11 @@ class crm_call extends task
 		$arr["post_ru"] = post_ru();
 		$arr["participants"] = 0;
 		$arr["participants_h"] = 0;
-		$arr["orderer_h"] = $_GET["alias_to_org"] ? $_GET["alias_to_org"] : 0;
-		$arr["project_h"] = $_GET["set_proj"] ? $_GET["set_proj"] : 0;
+		$arr["orderer_h"] = isset($_GET["alias_to_org"]) ? $_GET["alias_to_org"] : 0;
+		$arr["project_h"] = isset($_GET["set_proj"]) ? $_GET["set_proj"] : 0;
 		$arr["files_h"] = 0;
-		if ($_GET["action"] == "new")
+
+		if ($_GET["action"] === "new")
 		{
 			$arr["add_to_cal"] = $_GET["add_to_cal"];
 			$arr["alias_to_org"] = $_GET["alias_to_org"];
@@ -1190,10 +1194,16 @@ class crm_call extends task
 			$arr["set_pred"] = $_GET["set_pred"];
 			$arr["set_resource"] = $_GET["set_resource"];
 		}
+
+		if (is_oid(automatweb::$request->arg("phone_id")))
+		{
+			$arr["phone_id"] = automatweb::$request->arg("phone_id");
+		}
 	}
 
 	function callback_generate_scripts($arr)
 	{
+		$this_o = $arr["obj_inst"];
 		$task = get_instance(CL_TASK);
 		$scripts = $task->callback_generate_scripts($arr);
 		$result_call = crm_call_obj::RESULT_CALL;
@@ -1207,12 +1217,13 @@ class crm_call extends task
 		$result_voicemail = RESULT_VOICEMAIL;
 		$result_newnumber = RESULT_NEWNUMBER;
 		$result_disconnected = RESULT_DISCONNECTED;
+		$redirect_to_presentation = $this_o->is_in_progress() ? "true" : "false";
 
 		$scripts .= <<<EOS
 // hide and show elements according to call result
-crmCallProcessResult(document.getElementById("result"));
+crmCallProcessResult(document.getElementById("result"), true);
 
-function crmCallProcessResult(resultElem)
+function crmCallProcessResult(resultElem, init)
 {
 	if (resultElem)
 	{
@@ -1222,11 +1233,19 @@ function crmCallProcessResult(resultElem)
 		}
 		else if (resultElem.value == {$result_presentation})
 		{
-			if ($("#presentation").attr("value") == 0)
+			$("input[name='new_call_date[date]']").parent().parent().parent().parent().css("display", "none");
+			// $("a[href='javascript:submit_changeform('end');']").parent().css("display", "none"); // hide end call btn
+
+			if ($("input[name='result_task']").attr("value") == 0)
 			{ // hide 'end call' button
 				$("a[href='javascript:submit_changeform('end');']").parent().css("display", "none");
 			}
-			$("input[name='new_call_date[date]']").parent().parent().parent().parent().css("display", "none");
+
+			if (!init && {$redirect_to_presentation})
+			{
+				//redirect to presentation view
+				submit_changeform("submit");
+			}
 		}
 		else
 		{
@@ -1716,13 +1735,24 @@ EOS;
 	/**
       @attrib name=start all_args=1
       @param id required type=int acl=view
+      @param phone_id optional type=int acl=view
 	**/
 	function start($arr)
 	{
 		$this_o = new object($arr["id"]);
-		$this_o->make();
-		$arr["action"] = "change";
-		return $this->mk_my_orb("change", $arr);
+
+		if (!empty($arr["phone_id"]))
+		{
+			$phone = obj($arr["phone_id"], array(), CL_CRM_PHONE);
+			$this_o->make($phone);
+		}
+		else
+		{
+			$this_o->make();
+		}
+
+		$return_url = !empty($arr["post_ru"]) ? aw_url_change_var("phone", null, $arr["post_ru"]) : $this->mk_my_orb("change", array("id" => $arr["id"]), "crm_call");
+		return $return_url;
 	}
 
 	/**
@@ -1749,31 +1779,26 @@ EOS;
 
 	function submit($arr = array())
 	{
-		$result_task = new object($arr["presentation"]);
 		$r = parent::submit($arr);
 		if ("submit" === $arr["action"] and $this->data_processed_successfully())
 		{
 			$this_o = new object($arr["id"]);
 			$application = automatweb::$request->get_application();
 			$role = $application->get_current_user_role();
-			if ($application->is_a(CL_CRM_SALES) and $this_o->prop("real_duration") < 1)
+			if ($application->is_a(CL_CRM_SALES) and $this_o->prop("real_duration") < 1 and crm_call_obj::RESULT_PRESENTATION == $this_o->prop("result"))
 			{
-				if ($this_o->prop("result") == crm_call_obj::RESULT_PRESENTATION and $result_task->is_a(CL_CRM_PRESENTATION))
-				{ // jump to presentation
-					$presentation = $result_task;
-					$r = html::get_change_url($presentation->id(), array("return_url" => $arr["post_ru"]));
-				}
-				elseif ($this_o->prop("result") == crm_call_obj::RESULT_PRESENTATION)
-				{ // jump to presentation
+				$result_task = new object($this_o->prop("result_task"));
+
+				if (!$result_task->is_a(CL_CRM_PRESENTATION))
+				{ // no existing presentation, create
 					$customer_relation = obj($this_o->prop("customer_relation"), array(), CL_CRM_COMPANY_CUSTOMER_DATA);
-					$presentation = $application->create_presentation($customer_relation);
-					$this_o->set_prop("result_task", $presentation->id());
+					$result_task = $application->create_presentation($customer_relation);
+					$this_o->set_prop("result_task", $result_task->id());
 					$this_o->save();
-					$r = html::get_change_url($presentation->id(), array("return_url" => $arr["post_ru"]));
 				}
-				elseif ($this_o->prop("result") == crm_call_obj::RESULT_CALL)
-				{ // require next call date
-				}
+
+				// jump to presentation
+				$r = html::get_change_url($result_task->id(), array("return_url" => $arr["post_ru"]));
 			}
 		}
 		return $r;

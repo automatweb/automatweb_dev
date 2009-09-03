@@ -30,22 +30,6 @@ class crm_call_obj extends task_object
 		}
 	}
 
-	public function awobj_get_presentation()
-	{
-		$r = $this->prop("presentation");
-		if (!is_oid($r))
-		{
-			// a fix to synchronize result_presentation connection and presentation property. saving in crm_sales_obj::process_call_result() leaves prop empty but connects
-			$presentation = $this->get_first_obj_by_reltype("RELTYPE_RESULT_PRESENTATION");
-			if (is_object($presentation))
-			{
-				$r = $presentation->id();
-				$this->set_prop("presentation", $r);
-			}
-		}
-		return $r;
-	}
-
 	/** Returns list of call result options
 	@attrib api=1 params=pos
 	@param result type=int
@@ -101,6 +85,17 @@ class crm_call_obj extends task_object
 		return $can_start;
 	}
 
+	/** Tells if call is in progress.
+	@attrib api=1 params=pos
+	@returns bool
+	@errors
+		none
+	**/
+	public function is_in_progress()
+	{
+		return (($this->prop("real_duration") < 1) and ($this->prop("real_start") > 1));
+	}
+
 	/** Makes a phone call.
 	@attrib api=1 params=pos
 	@param phone type=CL_CRM_PHONE default=null
@@ -127,9 +122,11 @@ class crm_call_obj extends task_object
 			$this->set_prop("phone", $phone->id());
 		}
 
+		$current_person_oid = get_current_person();
 		$this->set_prop("real_start", time());
+		$this->set_prop("real_maker", $current_person_oid);
 		$crm_call = new crm_call();
-		$crm_call->add_participant(new object($this->id()), get_current_person());
+		$crm_call->add_participant(new object($this->id()), $current_person_oid);
 
 		$job = new object($this->prop("hr_schedule_job"));
 		$job->load_data();
