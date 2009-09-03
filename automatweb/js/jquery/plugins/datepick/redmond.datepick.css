@@ -1,7 +1,7 @@
 /* Redmond style sheet for jQuery date picker v3.7.0. */
 #datepick-div, .datepick-inline {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 14px;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 13px;
 	padding: 0;
 	margin: 0;
 	background: #fff;
@@ -89,14 +89,14 @@ img.datepick-trigger {
 	text-align: left;
 }
 .datepick-header {
-	background: #5c9ccc;
+	background: #05A6E9;
 	color: #fff;
 	text-align: center;
 	font-weight: bold;
 	height: 1.6em;
 }
 .datepick-header select {
-	background: #5c9ccc;
+	background: #05A6E9;
 	color: #fff;
 	border: 0px;
 	font-weight: bold;
@@ -146,7 +146,7 @@ img.datepick-trigger {
 	border: 1px solid #4297d7;
 }
 .datepick-current-day a {
-	background: #5c9ccc;
+	background: #05A6E9;
 	color: #fff;
 }
 .datepick-days-cell-over {
@@ -175,7 +175,7 @@ img.datepick-trigger {
 	color: #222 !important;
 }
 .datepick-control a:hover {
-	background: #5c9ccc;
+	background: #05A6E9;
 }
 .datepick-links a:hover, .datepick-title-row a:hover {
 	background: #d0e5f5;
