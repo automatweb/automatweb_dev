@@ -1255,6 +1255,10 @@ table.tree_enabled_in_edit .tree_enabled_in_edit_content #sisu .awcbContentTblDe
 	padding: 3px 7px;
 }
 
+span.aw04gridCellCaptionText
+{
+	color: #666;
+}
 
 /* POPUPID */
 
