@@ -233,6 +233,8 @@
 			</automatic>
 			<no_edit>
 			</no_edit>
+			<no_search />
+			<add_edit_autoreturn />
 			<mode>
 			</mode>
 			<orient>
@@ -476,8 +478,6 @@
 		<objpicker>
 			<clid>
 			</clid>
-			<multiple>
-			</multiple>
 		</objpicker>
 
 		<time_select>
