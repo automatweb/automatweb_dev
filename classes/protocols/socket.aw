@@ -13,6 +13,8 @@ class socket
 	var $sock;
 	var $query;
 
+	private $timeout = 5; // seconds
+
 	/**
 		@attrib params=name api=1
 
@@ -29,6 +31,9 @@ class socket
 		{
 			$this->socket = $this->open($args);
 		}
+
+		$timeout = abs(aw_ini_get("core.default_exec_time"));
+		$this->timeout = $timeout <= 2 ? 1 : ceil($timeout*2/3);
 	}
 
 	function open($args = array())
@@ -38,7 +43,8 @@ class socket
 		if (not($this->sock))
 		{
 			//print "WARNING: Connection to $host:$port failed, $errstr\n";
-		};
+		}
+		stream_set_timeout($this->sock, $this->timeout);
 	}
 
 	/**
@@ -83,6 +89,8 @@ class socket
 			reads $blocklen bytes(default is 32762) from opened connection
 		@returns
 			returns the data readed or NULL, if no connections opened.
+		@errors
+			throws awex_socket_timeout
 	**/
 	function read($blocklen = 32762)
 	{
@@ -91,10 +99,9 @@ class socket
 			return NULL;
 		}
 
-		stream_set_timeout($this->sock, aw_ini_get("core.default_exec_time") - 1);
 		$ret = fread($this->sock, $blocklen);
 
-		$info = stream_get_meta_data($fp);
+		$info = stream_get_meta_data($this->sock);
 		if (!empty($info["timed_out"]))
 		{
 			throw new awex_socket_timeout("Connection timed out!");
