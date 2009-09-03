@@ -372,7 +372,7 @@ class relpicker extends  core
 			$clid = isset($arr["relinfo"][$reltype]["clid"]) ? (array)$arr["relinfo"][$reltype]["clid"] : array();
 			if(!is_object($arr["obj_inst"]) || empty($val["parent"]))
 			{
-				
+
 				$url = $this->mk_my_orb("do_search", array(
 					"id" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->id() : null,
 					"pn" => $arr["property"]["name"],
@@ -390,7 +390,7 @@ class relpicker extends  core
 					));
 				}
 			}//selle paneks peaaegu alati t88le kui suudaks loadida relpickereid
-			else
+			elseif(empty($val["no_search"]))
 			{
 				$ps = get_instance("vcl/popup_search");
 				$ps->set_class_id($clid);
