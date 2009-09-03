@@ -27,10 +27,18 @@ class relpicker extends  core
 			Select size for multiple relpickers
 
 		@param no_sel optional type=int
+			Show no selection options
 
 		@param automatic optional type=int
 
 		@param no_edit optional type=int
+			Don't show new/search/edit buttons
+
+		@param no_search optional type=int
+			Don't show search button
+
+		@param add_edit_autoreturn optional type=int
+			When adding a new related object or editing a selected one, return immediately back to caller view after saving
 
 		@param options optional type=array
 			Options to be displayed in the relpicker select box. Array(oid => caption).
@@ -159,7 +167,7 @@ class relpicker extends  core
 			"multiple" => $multiple
 		), "popup_search", false, true);
 
-		if (!$no_edit)
+		if (!$no_edit and !$no_search)
 		{
 			$r .= " ".html::href(array(
 				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
@@ -175,11 +183,11 @@ class relpicker extends  core
 			$r .= " ".html::href(array(
 				"url" => $this->mk_my_orb("change", array(
 					"id" => $selected,
-					"return_url" => get_ru(),
+					"save_autoreturn" => !empty($add_edit_autoreturn),
+					"return_url" => get_ru()
 				), $selected_clid),
-//				"url" => html::get_change_url($selected_id, array("return_url" => get_ru())),
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
-				"title" => t("Muuda"),
+				"title" => t("Muuda")
 			));
 		}
 		elseif(is_array($selected) && !$no_edit)
@@ -219,6 +227,7 @@ class relpicker extends  core
 								"alias_to" => $oid,
 								"alias_to_prop" => $property,
 								"reltype" => $reltype,
+								"save_autoreturn" => !empty($add_edit_autoreturn),
 								"return_url" => get_ru()
 							)
 						)
@@ -241,6 +250,7 @@ class relpicker extends  core
 								"alias_to_prop" => $property,
 								"alias_to" => $oid,
 								"reltype" => $reltype,
+								"save_autoreturn" => !empty($add_edit_autoreturn),
 								"return_url" => get_ru()
 							)
 						),
@@ -354,9 +364,10 @@ class relpicker extends  core
 				}
 			}
 		}
-		$val["type"] = (isset($val["display"]) && $val["display"] == "radio") ? "chooser" : "select";
 
-		if ($val["type"] == "select" /*&& is_object($this->obj)*/)
+		$val["type"] = (isset($val["display"]) && $val["display"] === "radio") ? "chooser" : "select";
+
+		if ($val["type"] === "select" /*&& is_object($this->obj)*/)
 		{
 			$clid = isset($arr["relinfo"][$reltype]["clid"]) ? (array)$arr["relinfo"][$reltype]["clid"] : array();
 			if(!is_object($arr["obj_inst"]) || empty($val["parent"]))
@@ -370,7 +381,7 @@ class relpicker extends  core
 				), "popup_search", false, true);
 
 				// I only want the search button. No edit or new buttons!
-				if (/*is_oid($this->obj->id()) &&*/ !isset($val["no_edit"]) || !$val["no_edit"] || isset($val["search_button"]) && $val["search_button"])
+				if ((empty($val["no_edit"]) || !empty($val["search_button"])) and empty($val["no_search"]))
 				{
 					$val["post_append_text"] .= " ".html::href(array(
 						"url" => "javascript:aw_popup_scroll('$url','Otsing',".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
@@ -406,9 +417,12 @@ class relpicker extends  core
 		)
 		{
 			$val["post_append_text"] .= " ".html::href(array(
-				"url" => html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru())),
+				"url" => html::get_change_url($this->obj->prop($val["name"]), array(
+					"save_autoreturn" => !empty($val["add_edit_autoreturn"]),
+					"return_url" => get_ru()
+				)),
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
-				"title" => t("Muuda"),
+				"title" => t("Muuda")
 			));
 		}
 		elseif (
@@ -426,12 +440,12 @@ class relpicker extends  core
 				{
 					$pm->add_item(array(
 						"text" => obj($id)->name(),
-						"link" => html::get_change_url($id, array("return_url" => get_ru())),
+						"link" => html::get_change_url($id, array("return_url" => get_ru()))
 					));
 				}
 			}
 			$val["post_append_text"] .= " ".$pm->get_menu(array(
-				"icon" => "edit.gif",
+				"icon" => "edit.gif"
 			));
 		}
 
@@ -478,7 +492,8 @@ class relpicker extends  core
 				}
 			}
 		}
-		if($val["type"] == "select" && is_object($this->obj) && $allow_delete)
+
+		if($val["type"] === "select" && is_object($this->obj) && $allow_delete)
 		{
 			if($val["delete_button"])
 			{
@@ -496,6 +511,7 @@ class relpicker extends  core
 					"onclick" => "if(!alert('".t("Oled kindel, et soovid valitud objektid kustutada?")."')) { return false; };",
 				));
 			}
+
 			if($val["delete_rels_button"])
 			{
 				foreach($oids as $i => $oid)
@@ -512,6 +528,7 @@ class relpicker extends  core
 					"onclick" => "if(!alert('".t("Oled kindel, et soovid valitud seosed kustutada?")."')) { return false; };",
 				));
 			}
+
 			if($val["delete_rels_popup_button"])
 			{
 				$url = $this->mk_my_orb("rels_del_popup", array(
@@ -542,11 +559,12 @@ class relpicker extends  core
 						"text" => $clss[$_clid]["name"],
 						"link" => html::get_new_url(
 							$_clid,
-							(isset($arr["prop"]["parent"]) && $arr["prop"]["parent"] == "this.parent") ? $this->obj->parent() : $this->obj->id(),
+							(isset($arr["prop"]["parent"]) && $arr["prop"]["parent"] === "this.parent") ? $this->obj->parent() : $this->obj->id(),
 							array(
 								"alias_to" => $this->obj->id(),
 								"alias_to_prop" => $arr["property"]["name"],
 								"reltype" => $rel_val,
+								"save_autoreturn" => !empty($val["add_edit_autoreturn"]),
 								"return_url" => get_ru()
 							)
 						)
@@ -564,11 +582,12 @@ class relpicker extends  core
 					$val["post_append_text"] .= " ".html::href(array(
 						"url" => html::get_new_url(
 							$_clid,
-							(!empty($arr["prop"]["parent"]) && $arr["prop"]["parent"] == "this.parent") ? $this->obj->parent() : $this->obj->id(),
+							(!empty($arr["prop"]["parent"]) && $arr["prop"]["parent"] === "this.parent") ? $this->obj->parent() : $this->obj->id(),
 							array(
 								"alias_to_prop" => ifset($arr, "prop", "name"),
 								"alias_to" => $this->obj->id(),
 								"reltype" => $rel_val,
+								"save_autoreturn" => !empty($val["add_edit_autoreturn"]),
 								"return_url" => get_ru()
 							)
 						),
