@@ -686,7 +686,10 @@ class aw_table extends aw_template
 		setlocale(LC_COLLATE, 'et_EE');
 
 		// sort the data
-		usort($this->data, array($this,"sorter"));
+		if (!empty($this->sortby)) // sort only when sort order defined. leave as is to preserve adding order
+		{
+			usort($this->data, array($this,"sorter"));
+		}
 
 		// switch back to estonian
 		setlocale(LC_COLLATE, $old_loc);
@@ -865,7 +868,7 @@ class aw_table extends aw_template
 				return ($_a === null or $_a === "") ? 1 : -1;
 			}
 
-			if (isset($this->u_sorder) && ($this->u_sorder == "asc"))
+			if (isset($this->u_sorder) && ($this->u_sorder === "asc"))
 			{
 				return $ret;
 			}
@@ -1607,14 +1610,6 @@ END;
 			));
 			$tbl .= $this->parse("hover_script");
 		}
-
-		// raam kinni
-		/*
-		if (is_array($this->frameattribs))
-		{
-			$tbl .= "</td></tr></table>\n";
-		};
-		*/
 
 		return $tbl;
 	}
