@@ -2044,7 +2044,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 				Echoes the full string and then for each character, it's character code and position in the string.
 				Useful for debugging character set problems.
 		**/
-		function str_dbg($str)
+		static function str_dbg($str)
 		{
 			echo "str = $str <br>";
 			for($i = 0; $i < strlen($str); $i++)
@@ -2060,7 +2060,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@param msg required type=string
 				The message to print
 		**/
-		function p($msg)
+		static function p($msg)
 		{
 			if (aw_global_get("DEBUG") == 1)
 			{
@@ -2077,7 +2077,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
-		function p1($msg)
+		static function p1($msg)
 		{
 			if (!empty($_COOKIE["debug1"]))
 			{
@@ -2094,7 +2094,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
-		function p2($msg)
+		static function p2($msg)
 		{
 			if (!empty($_COOKIE["debug2"]))
 			{
@@ -2111,7 +2111,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
-		function p3($msg)
+		static function p3($msg)
 		{
 			if (!empty($_COOKIE["debug3"]))
 			{
@@ -2128,7 +2128,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
-		function p4($msg)
+		static function p4($msg)
 		{
 			if (!empty($_COOKIE["debug4"]))
 			{
@@ -2145,7 +2145,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@comment
 				Useful for printing debug data, so that just you can see it. cookiemonster class can be used for setting cookies
 		**/
-		function p5($msg)
+		static function p5($msg)
 		{
 			if (!empty($_COOKIE["debug5"]))
 			{
@@ -2239,7 +2239,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@returns
 				One-line string with a human-readable backtrace
 		**/
-		function short_backtrace()
+		static function short_backtrace()
 		{
 			$msg = "";
 			if (function_exists("debug_backtrace"))
@@ -2278,7 +2278,7 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			@param q required type=string
 				The sql query to perform
 		**/
-		function q($q)
+		static function q($q)
 		{
 			$first = true;
 			$GLOBALS["__aw_globals"]["db::DBMAIN"]->db_query($q);
