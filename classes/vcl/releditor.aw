@@ -1444,7 +1444,7 @@ class releditor extends core
 
 	function process_releditor($arr)
 	{
-		if($arr["prop"]["mode"] === "manager2")
+		if("no" === $arr["prop"]["store"] or $arr["prop"]["mode"] === "manager2")
 		{
 			return;
 		}
@@ -1651,10 +1651,17 @@ class releditor extends core
 				$errtxt = "";
 				foreach($cb_values as $pkey => $pval)
 				{
-					$errtxt .= $pval["error"];
-				};
-				$prop["error"] = $errtxt;
-				return PROP_ERROR;
+					if (in_array($pkey, $prop["props"]))
+					{
+						$errtxt .= $pval["error"];
+					}
+				}
+
+				if (strlen($errtxt) > 0)
+				{
+					$prop["error"] = $errtxt;
+					return PROP_ERROR;
+				}
 			}
 
 
