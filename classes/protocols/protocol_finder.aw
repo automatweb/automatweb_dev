@@ -34,4 +34,11 @@ class protocol_finder
 		));
 	}
 }
+
+interface protocol_interface
+{
+	// protocol name string
+	function name();
+}
+
 ?>
