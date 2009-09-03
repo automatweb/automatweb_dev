@@ -6234,36 +6234,40 @@ $types = array(
 			$i = get_instance(CL_CRM_CATEGORY);
 			return $i->do_db_upgrade($t, $f);
 		}
-		switch($f)
+		elseif ("planner" === $t)
 		{
-			case "result":
-			case "result_task":
-			case "phone":
-			case "promoter":
-			case "deal_has_tax":
-			case "real_start":
-			case "real_duration":
-			case "deadline":
-			case "customer_relation":
-			case "hr_schedule_job":
-				$this->db_add_col($t, array(
-					"name" => $f,
-					"type" => "int"
-				));
+			switch($f)
+			{
+				case "result":
+				case "result_task":
+				case "phone":
+				case "promoter":
+				case "deal_has_tax":
+				case "real_start":
+				case "real_duration":
+				case "real_maker":
+				case "deadline":
+				case "customer_relation":
+				case "hr_schedule_job":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "int"
+					));
+					return true;
+				case "deal_unit":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "varchar(31)"
+					));
+					return true;
+				case "deal_amount":
+				case "deal_price":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "double"
+					));
 				return true;
-			case "deal_unit":
-				$this->db_add_col($t, array(
-					"name" => $f,
-					"type" => "varchar(31)"
-				));
-				return true;
-			case "deal_amount":
-			case "deal_price":
-				$this->db_add_col($t, array(
-					"name" => $f,
-					"type" => "double"
-				));
-			return true;
+			}
 		}
 	}
 }
