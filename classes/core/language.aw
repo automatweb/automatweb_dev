@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.32 2009/05/04 12:07:20 kristo Exp $
-// language.aw - Keel 
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.33 2009/09/03 16:55:09 voldemar Exp $
+// language.aw - Keel
 /*
 
 @classinfo syslog_type=ST_LANGUAGE relationmgr=yes no_status=1 no_comment=1  maintainer=kristo
@@ -73,7 +73,7 @@
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
@@ -114,7 +114,7 @@ class language extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			
+
 			case "name":
 				return PROP_IGNORE;
 				break;
@@ -218,7 +218,7 @@ class language extends class_base
 				$tmp = aw_ini_get("languages.list");
 				$arr["obj_inst"]->set_prop("lang_acceptlang", $tmp[$prop["value"]]["acceptlang"]);
 				$arr["obj_inst"]->set_prop("lang_charset", $tmp[$prop["value"]]["charset"]);
-				$l = get_instance("core/languages");	
+				$l = get_instance("core/languages");
 				$l->init_cache(true);
 				break;
 
@@ -248,7 +248,7 @@ class language extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_pre_save($arr)
 	{
@@ -262,7 +262,7 @@ class language extends class_base
 
 	function callback_post_save()
 	{
-		$l = get_instance("core/languages");	
+		$l = get_instance("core/languages");
 		$l->init_cache(true);
 	}
 
@@ -378,7 +378,7 @@ class language extends class_base
 	{
 		$awa = new aw_array($arr["request"]["varvals"]);
 		$tarr = $awa->get();
-		
+
 		$texts = array();
 		foreach($tarr as $cnt => $dat)
 		{
@@ -441,7 +441,7 @@ class language extends class_base
 			{
 				$pm->add_item(array(
 					"text" => $ld,
-					"link" => aw_ini_get("baseurl")."/automatweb/?set_lang_id=".$lid,
+					"link" => aw_ini_get("baseurl")."/automatweb/index.aw?set_lang_id=".$lid,
 				));
 			}
 		}
