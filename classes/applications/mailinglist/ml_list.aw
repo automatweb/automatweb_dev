@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.161 2009/08/22 20:08:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.162 2009/09/04 15:46:10 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -670,6 +670,7 @@ class ml_list extends class_base
 			"qid" => $qid,
 			"mfrom" => $mfrom,
 		));
+		$mail_obj->save();
 		$mlq = get_instance("applications/mailinglist/ml_mail_gen");
 		$mlq->bg_control(array("id" => $id, "do" => "start"));
 
@@ -1013,7 +1014,7 @@ class ml_list extends class_base
 					$prop["value"].= html::checkbox(array(
 						"name" => "admin_subscribe_folders[".$source->id()."]",
 						"value" => 1,
-						"checked" => $arr["request"]["admin_subscribe_folders"][$source->id()]? 1 : 0,
+						"checked" => empty($arr["request"]["admin_subscribe_folders"][$source->id()])? 0 : 1,
 					)). " " . $source->name()." <br>";
 				}
 				break;
@@ -1023,7 +1024,7 @@ class ml_list extends class_base
 				break;
 			case "search_mail":
 			case "search_name":
-				$prop["value"] = $arr["request"][$prop["name"]];
+				$prop["value"] = empty($arr["request"][$prop["name"]]) ? "" : $arr["request"][$prop["name"]];
 				break;
 			case "search_menu":
 				$sources = $arr["obj_inst"]->get_sources();
@@ -1033,7 +1034,7 @@ class ml_list extends class_base
 					$prop["value"].= html::checkbox(array(
 						"name" => "search_from_source[".$source->id()."]",
 						"value" => 1,
-						"checked" => $arr["request"]["search_from_source"][$source->id()]? 1 : 0,
+						"checked" => empty($arr["request"]["search_from_source"][$source->id()])? 0 : 1,
 					)). " " . $source->name()." <br>";
 				}
 				break;
@@ -1314,8 +1315,8 @@ class ml_list extends class_base
 				$prop["value"] = "tab'i eraldajana kasutamiseks m&auml;rgi tekstikasti /t";
 				break;
 			case "list_status_table":
-				$tbl = $this->db_get_table("ml_sent_mails");
-/*				if (!isset($tbl["fields"]["oid"]))
+/*				$tbl = $this->db_get_table("ml_sent_mails");
+				if (!isset($tbl["fields"]["oid"]))
 				{
 					$this->db_add_col("ml_sent_mails", array(
 						"name" => "oid",
@@ -1608,12 +1609,14 @@ class ml_list extends class_base
 		if($object->prop["no_rtf"]) $this->set_classinfo(array("allow_rte" => 0));
 		else $this->set_classinfo(array("allow_rte" => $object->prop("classinfo_allow_rte")));
 
-		$arr["args"]["search_mail"] = $_POST["search_mail"];
-		$arr["args"]["search_name"] = $_POST["search_name"];
-		$arr["args"]["search_from_source"] = $_POST["search_from_source"];
-		$arr["args"]["admin_subscribe_folders"] = $_POST["admin_subscribe_folders"];
-
-		$arr["args"]["search_from_subfolders"] = $_POST["search_from_subfolders"];
+		$vars = array("search_mail" , "search_name" , "search_from_source" , "admin_subscribe_folders" , "search_from_subfolders");
+		foreach($vars as $var)
+		{
+			if(!empty($_POST[$var]))
+			{
+				$arr["args"][$var] = $_POST[$var];
+			}
+		}
 
 		if (isset($this->do_export))
 		{
@@ -2343,46 +2346,37 @@ foreach($ol->arr() as $o)
 
 	function gen_list_status_table($arr)
 	{
-		/*
-		$sched = get_instance("scheduler");
-		$sched->add(array(
-			"event" => $this->mk_my_orb("process_queue", array(), "", false, true),
-			"time" => time()+120, // every 2 minutes
-		));
-		*/
 		$sched = get_instance("scheduler");
 		$mq = get_instance("applications/mailinglist/ml_queue");
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_gen_ls_table($t);
 		$q = "SELECT ml_queue.* FROM ml_queue LEFT JOIN objects ON (ml_queue.mid = objects.oid) WHERE objects.status != 0 AND lid = " . $arr["obj_inst"]->id() . " ORDER BY start_at DESC";
+
 		$this->db_query($q);
+		$rows = array();
 		while ($row = $this->db_next())
+		{
+			$rows[] = $row;
+		}
+		foreach($rows as $row)
 		{
 			$mail_obj = new object($row["mid"]);
 			$status = $row["status"];
-			/*
-			if ($row["status"] != 2)
-			{
-				$stat_str = $mq->a_status[$row["status"]];
-				$status_str = "<a href='javascript:remote(0,450,270,\"".$this->mk_my_orb("queue_change", array("id"=>$row["qid"]))."\");'>$stat_str</a>";
-			}
-			else
-			{
-			*/
-				$status_str = $mq->a_status[$row["status"]];
-			//};
+			$status_str = $mq->a_status[$row["status"]];
 			
 			//monele pole subjekti pandud
-			if(!strlen($mail_obj->name()) > 0) $mail_name = t("(Nimetu)");
+			if(!strlen($mail_obj->name()) > 0) 
+			{
+				$mail_name = t("(Nimetu)");
+			}
 			else $mail_name = $mail_obj->name();
 			 
-			 $row["subject"] = html::get_change_url($arr["obj_inst"]->id(), array(
+			$row["subject"] = html::get_change_url($arr["obj_inst"]->id(), array(
 				"group" => "write_mail",
 				"msg_id" => $mail_obj->id(),
 				"status" => $row["status"],
 			), $mail_name);
 			
-			//$row["mid"] = $mail_obj->name();
 			if (!$row["patch_size"])
 			{
 				$row["patch_size"] = t("k&otilde;ik");
@@ -2413,14 +2407,15 @@ foreach($ol->arr() as $o)
 				$this->restore_handle();
 			
 				$is_in_ched = 0;
-				foreach($in_scheduler as $key=> $val)
+				//kui huvi tekkib, peaks siia kontrolli tegema ette et kas on scheduleris
+/*				foreach($in_scheduler as $key=> $val)
 				{
 					if(substr_count($val["event"], $row["mid"]) > 0)
 					{
 						$is_in_ched = 1;
 						break;
 					}
-				}
+				}*/
 				if(!$is_in_ched)
 				{
 					$row["status"].="<br>\n".html::button(array(
@@ -2695,7 +2690,7 @@ foreach($ol->arr() as $o)
 		foreach($rows as $row)
 		{
 			$column = explode($separator , $row);
-			if(!(strlen($column[1]) > 5))
+			if(!(sizeof($column) > 1) || !(strlen($column[1]) > 5))
 			{
 				continue;
 			}
@@ -2817,7 +2812,7 @@ foreach($ol->arr() as $o)
 					"lang_id" => array(),
 					"site_id" => array(),
 				);
-				if($to > 1)
+				if(isset($to) && $to > 1)
 				{
 					if(($from - $this->member_count) < 0) $from_q = 0;
 					else $from_q = $from - $this->member_count;
@@ -2834,7 +2829,7 @@ foreach($ol->arr() as $o)
 					)
 				);
 
-				if($to > 1)
+				if(isset($to) && $to > 1)
 				{
 					$cnt_all = $odl->count();
 					$this->member_count = $this->member_count + $cnt_all;
@@ -2854,7 +2849,7 @@ foreach($ol->arr() as $o)
 							"name"		=> $od["name"],
 							"mail"		=> $od["mail"]
 						);
-						if(!($to > 1))$this->member_count++;
+						if(!(isset($to) && $to > 1))$this->member_count++;
 					}
 					if(!$all) $this->already_found[$od["mail"]] = $od["mail"];
 				}
@@ -3215,10 +3210,12 @@ foreach($ol->arr() as $o)
 		// tekst pane sinna, kus on rohkem ruumi.
 		if ($p > $not_p)
 		{
+			$p2t = ""; 
 			$p1t = "<span Style='font-size:10px;font-face:verdana;'><font color='white'>".$p."%</font></span>";
 		}
 		else
 		{
+			$p1t = "";
 			$p2t = "<span Style='font-size:10px;font-face:verdana;'><font color='black'>".$p."%</font></span>";
 		}
 		// kommentaar on selleks, et sorteerimine tootaks (hopefully)
@@ -3246,9 +3243,11 @@ foreach($ol->arr() as $o)
 			if ($p > $not_p)
 			{
 				$p1t = "<span Style='font-size:10px;font-face:verdana;'><font color='white'>".$p."%</font></span>";
+				$p2t = "";
 			}
 			else
 			{
+				$p1t = "";
 				$p2t = "<span Style='font-size:10px;font-face:verdana;'><font color='black'>".$p."%</font></span>";
 			}
 			return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"green\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
@@ -4191,7 +4190,7 @@ arr($msg_obj->prop("message"));
 		$cfg = $list->prop("member_config");
 		if(is_oid($cfg) && $this->can("view", $cfg))
 		{
-			$config_obj = &obj($cfg);
+			$config_obj = obj($cfg);
 			$config_data = $config_obj->meta("cfg_proplist");
 			uasort($config_data, array($this,"__sort_props_by_ord"));
 				
@@ -4234,8 +4233,8 @@ arr($msg_obj->prop("message"));
 	function member_search_table($arr)
 	{
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
-		$search_name = $arr["request"]["search_name"];
-		$search_mail = $arr["request"]["search_mail"];
+		$search_name = isset($arr["request"]["search_name"]) ? $arr["request"]["search_name"] : null;
+		$search_mail = isset($arr["request"]["search_mail"]) ? $arr["request"]["search_mail"] : null;
 
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_default_sortby("id");
@@ -4390,7 +4389,7 @@ arr($msg_obj->prop("message"));
 
 	function _set_member_search_table($arr)
 	{
-		foreach($arr["request"]["ignore_members_count"] as $source => $members)
+		if(isset($arr["request"]["ignore_members_count"]))foreach($arr["request"]["ignore_members_count"] as $source => $members)
 		{
 			$source = obj($source);
 			$ignore_list = $source->meta("mail_ignore_list");

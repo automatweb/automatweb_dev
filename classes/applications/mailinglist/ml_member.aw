@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.35 2009/08/26 12:39:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.36 2009/09/04 15:46:10 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -428,7 +428,7 @@ class ml_member extends class_base
 		}
 	}
 
-	function parse_alias($arr)
+	function parse_alias($args = array())
 	{
 		$o = obj($arr["alias"]["target"]);
 		return html::href(array(

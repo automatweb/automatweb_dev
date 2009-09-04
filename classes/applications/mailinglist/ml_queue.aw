@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.49 2008/06/19 14:16:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.50 2009/09/04 15:46:10 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 
@@ -396,7 +396,7 @@ class ml_queue extends aw_template
 	}
 
 	/**  
-		@attrib name=process_queue params=name nologin="1" 
+		@attrib name=check_scheduler params=name nologin="1" 
 		@returns
 		@comment
 		kontrollib kas saatmine on ikka scheduleris
