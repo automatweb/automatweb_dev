@@ -1424,6 +1424,26 @@ class crm_bill_obj extends _int_object
 		return $leaders;
 	}
 
+	/** returns bill project leader names
+		@attrib api=1
+		@returns array
+	**/
+	public function project_leader_names()
+	{
+		$ret = array();
+		$ol = new object_list();
+		$ol->add($this->get_project_ids());
+		foreach($ol->arr() as $o)
+		{
+			if(is_oid($o->prop("proj_mgr")))
+			{
+				$ret[$o->prop("proj_mgr")] = $o->prop("proj_mgr.name");
+			}
+		}
+		return $ret;
+	}
+
+
 	/** disconnects tasks from bill and bill rows
 		@attrib api=1 params=pos
 		@param tasks required type=array
@@ -2924,6 +2944,14 @@ if(aw_global_get("uid") == "marko") {arr("praegu ei saada sest marko arendab");a
 		return $unit_name;
 	}
 
+	//igast info siia hiljem
+	public function get_data()
+	{
+		$data = array();
+		$data["impl_rep"] = reset($this->project_leader_names());
+		return $data;
+
+	}
 }
 
 ?>

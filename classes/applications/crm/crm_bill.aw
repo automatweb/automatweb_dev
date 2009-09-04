@@ -105,6 +105,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 table=objects field=meta method=serialize style=relpicker parent=bottom_left
 	@caption Allkirjastajad
 
+	@property signature_type type=select table=objects field=meta method=serialize parent=bottom_left
+	@caption Allkirja t&uuml;&uuml;p
 
 	// top right lyt
 	@property customer_name type=textbox table=aw_crm_bill field=aw_customer_name parent=top_right
@@ -415,6 +417,9 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "signature_type":
+				$pop["options"] = array(0,t("Tavaline"), t("Digitaalne"));
+				break;
 			case "overdue_charge":
 				if(empty($pop["value"]) && !$arr["new"])
 				{
@@ -2731,7 +2736,8 @@ class crm_bill extends class_base
 			"id" => $arr["obj_inst"]->id(),
 			"all_rows" => $arr["all_rows"],
 			"pdf" => $arr["pdf"],
-			"reminder" => $arr["request"]["reminder"]
+			"reminder" => $arr["request"]["reminder"],
+			"handover" => $arr["request"]["handover"]
 		));
 	}
 
@@ -2745,11 +2751,13 @@ class crm_bill extends class_base
 				"rows_in_page" => $arr["obj_inst"]->meta("rows_in_page"),
 				"page" => $page,
 				"id" => $arr["obj_inst"]->id(),
+				"handover" => $arr["handover"]
 			));
 		}
 		if($page == 0) $arr["prop"]["value"] = die($this->show_add(array(
 			"id" => $arr["obj_inst"]->id(),
-			"pdf" => ($arr["request"]["pdf"] || $arr["pdf"]) ? 1 : 0 
+			"pdf" => ($arr["request"]["pdf"] || $arr["pdf"]) ? 1 : 0, 
+			"handover" => ($arr["request"]["handover"] || $arr["handover"]) ? 1 : 0 
 		)));
 	}
 
@@ -2903,6 +2911,7 @@ class crm_bill extends class_base
 				$mail = obj($impl->prop("email_id"));
 				$vars["impl_mail"] = $mail->prop("mail");
 			}
+
 			$this->vars($vars);
 		}
 		return $vars;
@@ -2937,6 +2946,11 @@ class crm_bill extends class_base
 		{
 			$tpl .= "_remind";
 		}
+
+		if($arr["handover"])
+		{
+			$tpl .= "_remit";
+		}
 		
 		if($arr["pdf"])
 		{
@@ -2957,7 +2971,7 @@ class crm_bill extends class_base
 			{
 				$this->read_template("show.tpl");
 			}
-		}
+		}//arr($tpl); arr($arr);die();
 		$ord = obj();
 		$ord_cur = obj();
 		$ord_ct_prof = "";
@@ -3011,7 +3025,8 @@ class crm_bill extends class_base
 		}
 
 		$imp_vars = $this->implementor_vars($b->prop("impl"));
-	
+		$this->vars($this->bill_vars($b));
+
 		$bpct = $b->prop("overdue_charge");
 		if (!$bpct)
 		{
@@ -3396,7 +3411,25 @@ class crm_bill extends class_base
 		die($res);
 	}
 
-
+	function bill_vars($b)
+	{
+		$bill_data = $b->get_data();
+		$this->vars($bill_data);
+		if($b->prop("signature_type") == 2)
+		{
+			$this->vars(array(
+				"IMPL_DIG_SIGNATURE" => $this->parse("IMPL_DIG_SIGNATURE"),
+				"ORD_DIG_SIGNATURE" => $this->parse("ORD_DIG_SIGNATURE"),
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"IMPL_SIGNATURE" => $this->parse("IMPL_SIGNATURE"),
+				"ORD_SIGNATURE" => $this->parse("ORD_SIGNATURE"),
+			));
+		}
+	}
 //siia j2in pooleli puhastamisega
 
 
@@ -3444,12 +3477,18 @@ class crm_bill extends class_base
 			$lo = obj($b->prop("language"));
 			$lc = $lo->prop("lang_acceptlang");
 		}
+
+		if($arr["handover"])
+		{
+			$tpl = "show_remit";
+		}
 		
 		if($_GET["pdf"])
 		{
 			$arr["pdf"] = $_GET["pdf"];
 		}
-		
+
+	
 		if($arr["pdf"])
 		{
 			$tpl .= "_pdf";
@@ -3500,6 +3539,7 @@ class crm_bill extends class_base
 		}
 
 		$impl_vars = $this->implementor_vars($b->prop("impl"));
+		$this->vars($this->bill_vars($b));
 		$bpct = $b->prop("overdue_charge");
 		if (!$bpct)
 		{
@@ -4288,6 +4328,19 @@ class crm_bill extends class_base
 			"url" => "#",
 			"onClick" => $onclick_start.$onclick_middle.$onclick_end,
 			"text" => t("Prindi arve meeldetuletus pdf")
+		));
+
+		$onclick_middle = "win = window.open('".$this->mk_my_orb("change", array(
+			"pdf" => 1,
+			"id" => $arr["obj_inst"]->id(),
+			"group" => "preview_add",
+			"handover" => 1
+			), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => $onclick_start.$onclick_middle.$onclick_end,
+			"text" => t("Prindi &uuml;leandmis-vastuv&otilde;tmisakt pdf")
 		));
 
 		$tb->add_menu_button(array(

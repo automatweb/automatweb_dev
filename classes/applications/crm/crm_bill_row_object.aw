@@ -154,7 +154,23 @@ class crm_bill_row_object extends _int_object
 			"lang_id" => array(),
 			"CL_CRM_BILL.RELTYPE_ROW" => $this->id(),
 		));
-		return reset($bills_list->ids());
+		$ids = $bills_list->ids();
+		return reset($ids);
+	}
+
+	/** returns bill row bill id
+		@attrib api=1
+		@returns oid
+			bill id
+	**/
+	function get_bill_object()
+	{
+		$bills_list = new object_list(array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"CL_CRM_BILL.RELTYPE_ROW" => $this->id(),
+		));
+		return $bills_list->begin();
 	}
 
 	/** checks if bill has other customers...
