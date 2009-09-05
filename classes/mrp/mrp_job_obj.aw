@@ -810,6 +810,8 @@ class mrp_job_obj extends _int_object
 
 		try
 		{
+			$saving = false;
+
 			if (empty($real_start_time))
 			{
 				$real_start_time = time();
@@ -826,7 +828,6 @@ class mrp_job_obj extends _int_object
 
 			// start making changes to data
 			$this->save_mrp_state("start");
-			$saving = false;
 
 			### start job
 			$this->set_prop ("state", self::STATE_INPROGRESS);
@@ -875,11 +876,12 @@ class mrp_job_obj extends _int_object
 			try
 			{
 				$this->mrp_resource->stop_job($this->ref());
+				$this->restore_mrp_state("start", $saving);
 			}
-			catch (Exception $e)
+			catch (Exception $E)
 			{
+				$e->set_forwarded_exception($E);
 			}
-			$this->restore_mrp_state("start", $saving);
 			throw $e;
 		}
 		catch (Exception $E)
@@ -889,7 +891,14 @@ class mrp_job_obj extends _int_object
 			$e->set_forwarded_exception($E);
 
 			// restore job state
-			$this->restore_mrp_state("start", $saving);
+			try
+			{
+				$this->restore_mrp_state("start", $saving);
+			}
+			catch (Exception $E)
+			{
+				$e->set_forwarded_exception($E);
+			}
 
 			### free resource and exit
 			$this->mrp_resource->cancel_reservation($this->ref());
@@ -1380,9 +1389,9 @@ class mrp_job_obj extends _int_object
 			aw_restore_acl();
 			return true;
 		}
-		catch (Exception $e)
+		catch (Exception $E)
 		{
-			$error_message = "Couln't determine prerequisites status. Unknown error (" . get_class($e) . "): " . $e->getMessage();
+			$error_message = "Couln't determine prerequisites status. Unknown error (" . get_class($E) . "): " . $E->getMessage();
 			$e = new awex_mrp_job($error_message);
 			$e->set_forwarded_exception($E);
 			throw $e;
@@ -1740,7 +1749,7 @@ class mrp_job_obj extends _int_object
 	{
 		$prerequisites_list = $this->awobj_get_prerequisites();
 		$prerequisites_list->add($job);
-		$this->set_prop("prerequisites", $prerequisites_list);
+		$this->awobj_set_prerequisites($prerequisites_list);
 	}
 
 /** Removes a prerequisite job from this job
@@ -1752,7 +1761,7 @@ class mrp_job_obj extends _int_object
 	{
 		$prerequisites_list = $this->awobj_get_prerequisites();
 		$prerequisites_list->remove($job);
-		$this->set_prop("prerequisites", $prerequisites_list);
+		$this->awobj_set_prerequisites($prerequisites_list);
 	}
 
 /** Retrieves list of prerequisite jobs
@@ -1763,7 +1772,7 @@ class mrp_job_obj extends _int_object
 **/
 	public function awobj_get_prerequisites()
 	{
-		$prerequisites_raw =  (string) parent::prop("prerequisites");
+		$prerequisites_raw =  (string) parent::prop("prerequisites");var_dump($prerequisites_raw);
 		$prerequisite_oids = empty($prerequisites_raw) ? array() : explode(",", $prerequisites_raw);
 		if (count($prerequisite_oids))
 		{
@@ -1896,6 +1905,7 @@ class mrp_job_obj extends _int_object
 		{
 			throw new awex_mrp_job("No state with this id saved.");
 		}
+
 		foreach ($this->mrp_job_state_data[$state_id] as $propname => $value)
 		{
 			$this->set_prop($propname, $value);
