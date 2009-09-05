@@ -1772,7 +1772,7 @@ class mrp_job_obj extends _int_object
 **/
 	public function awobj_get_prerequisites()
 	{
-		$prerequisites_raw =  (string) parent::prop("prerequisites");var_dump($prerequisites_raw);
+		$prerequisites_raw =  (string) parent::prop("prerequisites");
 		$prerequisite_oids = empty($prerequisites_raw) ? array() : explode(",", $prerequisites_raw);
 		if (count($prerequisite_oids))
 		{
