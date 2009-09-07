@@ -10,9 +10,10 @@ class warehouse_data_import extends run_in_background
 	var $products_folder = null;
 	var $categories_folder = null;
 
+	var $debug = true;
+
 	function warehouse_data_import()
 	{
-
 	}
 
 	// init tasks for process 

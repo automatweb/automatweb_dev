@@ -75,11 +75,6 @@ class warehouse_products_import extends warehouse_data_import
 		$r = new XMLReader();
 		$r->open($file);
 
-		// those are hardcoded for temporary use
-		// later i need to get those folder ids from warehouse config
-		$packet_folder = '354820';
-		$products_folder = '354819';
-
 		while ($r->read())
 		{
 			// If the node, in depth 1, is packet or product, then this is root for an item and split it up on that node
