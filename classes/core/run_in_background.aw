@@ -15,7 +15,9 @@ class run_in_background extends class_base
 	var $lock_file;
 	var $stop_file;
 
-	function init($arr)
+	var $debug = false;
+
+	function init($arr = array())
 	{
 		parent::init($arr);
 
@@ -137,14 +139,11 @@ class run_in_background extends class_base
 
 
 	/**
-
 		@attrib name=bg_control
 
 		@param id required type=int acl=view
 		@param do required
-
 		@param ru optional
-
 	**/
 	function bg_control($arr)
 	{
@@ -157,6 +156,14 @@ class run_in_background extends class_base
 		{
 			case "start":
 				$url = $this->mk_my_orb("bg_run", array("id" => $o->id()));
+
+				if ($this->debug === true)
+				{
+					// working in debug mode, not going to background! 
+					header('Location:'.$url);
+					exit();
+				}
+				
 				$s->add(array(
 					"event" => $url,
 					"time" => time()-1
