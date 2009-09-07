@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.31 2009/08/31 15:08:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.32 2009/09/07 14:56:01 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -917,7 +917,38 @@ class shop_packet extends class_base
 
 	}
 
+	/** 
+		@attrib name=get_data nologin=1 is_public=1 all_args=1 params=pos api=1
+		@param prop required type=string
+		@param code required type=string
+ 	**/
+	public function get_data($arr)
+	{
+		aw_disable_acl();
+		$products = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"code" => $arr["code"],
+			"status" => array(1,2)
+		));
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PACKET,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"CL_SHOP_PACKET.RELTYPE_PRODUCT" => $products->ids(),
+		));
+		$o = $ol->begin();
 
+		if(is_object($o))
+		{
+			$fun = "get_".$arr["prop"];
+			$stuff = $o->$fun(1);
+			aw_restore_acl();
+			return $stuff; 
+		}aw_restore_acl();
+		return null;
+	}
 
 }
 ?>

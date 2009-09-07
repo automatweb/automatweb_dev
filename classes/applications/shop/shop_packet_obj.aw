@@ -118,17 +118,46 @@ class shop_packet_obj extends _int_object
 		return $data;
 	}
 
-	private function get_brand_image()
+	public function get_brand_image($original = null)
 	{
+		enter_function("packet_obj::get_brand_image");
+		$ret = "";
+/*		if(!$original)
+		{
+			$product = $this->get_first_obj_by_reltype("RELTYPE_PRODUCT");
+			if(is_object($product))
+			{
+				$filter = array(
+					"code" => $product->prop("code"),
+					"site_id" => $this->site_id(),
+					"prop" => "brand_image",
+				);
+
+				$ret = $GLOBALS["object_loader"]->cache->do_orb_method_call(array(
+					"class" => "shop_packet",
+					"action" => "get_data",
+					"method" => "xmlrpc",
+					"server" => "otto-suomi.dev.automatweb.com",
+					"no_errors" => true,
+					"params" => $filter,
+				));
+
+				if($ret)
+				{exit_function("packet_obj::get_brand_image");
+					return $ret;
+				}
+
+			}
+		}
+*/
+
 		$brand = $this->get_first_obj_by_reltype("RELTYPE_BRAND");
 		if(is_object($brand))
 		{
-			return $brand->get_logo_html();
+			$ret = $brand->get_logo_html();
 		}
-		else
-		{
-			return null;
-		}
+exit_function("packet_obj::get_brand_image");
+		return $ret;
 	}
 
 	public function get_brand()
