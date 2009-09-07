@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.33 2009/09/01 15:57:14 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.33 2009/09/01 15:57:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.34 2009/09/07 11:43:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.34 2009/09/07 11:43:05 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -468,7 +468,7 @@ $is_saved = 1;
 			"product_sum" => t("Summa")
 		);
 		//v2ljad mida toote leidmisel laost muuta ei saa
-		$disable_vars = array("product_code" , "name" , "product_color", "product_page" , "product_image" , "product_sum");
+		$disable_vars = array("product_code" , "name" , "product_color", "product_page" , "product_image" , "product_sum", "product_price");
 		
 		$shop_cart_table = "";
 		$count = $total = 0 ;
@@ -476,7 +476,7 @@ $is_saved = 1;
 		{
 			$vars = array();
 			$product = null;
-			$data["product_price"] = t("Hinnakirja<br>alusel");
+//			$data["product_price"] = t("Hinnakirja<br>alusel");
 
 
 			if(!$data["product_count"])
@@ -490,6 +490,8 @@ $is_saved = 1;
 				if($product)
 				{
 					$data["name"] = $product->get_packet_name();
+					$data["product_code"] = $product->prop("code");
+
 					$order_data[$key]["product_color"] = $data["product_color"] = $product->get_color_name();
 					if(empty($data["product_size"]))
 					{
@@ -559,7 +561,8 @@ $is_saved = 1;
 			//	$vars["product_size"] = "";
 				$vars["image_popup"] = "";
 				$vars["image_url"] = "";
-				$vars["product_sum"] = t("Hinnakirja<br>alusel");
+				$vars["product_sum"] = number_format(aw_math_calc::string2float($data["product_price"]) * $data["product_count"] , 2);
+			//	$vars["product_sum"] = t("Hinnakirja<br>alusel");
 			}
 
 			$vars["delete"] = html::href(array("url" => "javascript:void(0);" , "onClick" => '$.get("/automatweb/orb.aw?class=orders_form&action=delete_row&row='.$count.'", {
@@ -699,9 +702,13 @@ $is_saved = 1;
 			"class_id" => CL_SHOP_PRODUCT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"code" => $code,
+			"code" => $code."%",
 		));
-		return $ol->begin();
+		if($ol->count() == 1)
+		{
+			return $ol->begin();
+		}
+		else return null;
 	}
 
 	/**
@@ -782,11 +789,11 @@ $is_saved = 1;
 			$product = null;
 			if(!empty($row["product_code"]))
 			{
-				$prod = $this->get_product_by_code($row["product_code"]);
+				$prod = $this->get_product_by_code($data["product_code"]);
 				if(is_object($prod))
 				{
 					$packaging = $prod->get_package_by_size($row["product_size"]);
-
+					$data["product_code"] = $prod->prop("code");
 					if(is_object($packaging))
 					{
 						$product = $packaging->id();
