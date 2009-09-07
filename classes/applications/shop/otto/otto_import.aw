@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.115 2009/09/01 12:41:27 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.116 2009/09/07 11:37:35 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -7112,7 +7112,7 @@ Võtn hetkel kasutusele selle teise variandi
 			$oxml->startElement('products');
 			foreach (safe_array($codes) as $code)
 			{
-
+				$orig_code = $code;
 				$code = $this->convert_utf($code);
 
 				$oxml->startElement('product');
@@ -7153,7 +7153,7 @@ Võtn hetkel kasutusele selle teise variandi
 				$oxml->endElement();
 
 				echo "---- ".$code['pg']." -- ".$code['nr']." -- ".$code['s_type']." -- ".$code['code']." -- ".$code['color']."<br />\n";
-				$sizes = $this->db_fetch_array("select * from otto_imp_t_prices where lang_id = ".aw_global_get("lang_id")." and pg = '".$code['pg']."' and nr = ".$code['nr']." and s_type = '".$code['s_type']."' order by pg,nr,s_type");
+				$sizes = $this->db_fetch_array("select * from otto_imp_t_prices where lang_id = ".aw_global_get("lang_id")." and pg = '".$orig_code['pg']."' and nr = ".$orig_code['nr']." and s_type = '".$orig_code['s_type']."' order by pg,nr,s_type");
 
 				$oxml->startElement('packagings');
 
