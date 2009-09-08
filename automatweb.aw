@@ -14,7 +14,7 @@ define("AW_FILE_EXT", substr($__FILE__, strrpos($__FILE__, "automatweb") + 10));
 require_once(AW_DIR . "lib/main" . AW_FILE_EXT);
 
 // set required confituration
-//register_shutdown_function("aw_fatal_error_handler");
+register_shutdown_function("aw_fatal_error_handler");
 ini_set("track_errors", "1");
 
 class automatweb
