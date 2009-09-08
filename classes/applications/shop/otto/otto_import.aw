@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.116 2009/09/07 11:37:35 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.117 2009/09/08 13:12:36 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -6746,9 +6746,28 @@ return false;
 		echo "( ".number_format(($file_size / 1024 / 1024), 2)." )";
 		echo "[done]<br />\n";
 		flush();
+
 		echo "Unpacking the file ...";
 		flush();
-		shell_exec("unzip -o $local_file");
+
+
+		if (extension_loaded("zip"))
+		{
+			$folder = aw_ini_get("site_basedir")."/files/";
+			$zip = zip_open($local_file);
+			while ($zip_entry = zip_read($zip))
+			{
+				zip_entry_open($zip, $zip_entry, "r");
+				$fn = $folder."/".zip_entry_name($zip_entry);
+				$fc = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+				file_put_contents($fn, $fc);
+			}
+		}
+		else
+		{
+			echo "[ FATAL ERROR ] There is no zip extension loaded in PHP, so it is not possible to unpack the file!";
+			exit();
+		}
 		echo "[done]<br />\n";
 		flush();
 
