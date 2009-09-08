@@ -64,6 +64,24 @@
 	background: #5FC000;
 	color: #000000;
 }
+
+a.calNavLink
+{
+	margin-top: 10px;
+	font-size: 14px ! important;
+	position: relative;
+	top: 1px;
+}
+
+a.calNavLink:hover
+{
+	text-decoration: none;
+}
+
+span.calCurrentPeriodCaption
+{
+}
+
 .style1 {
 	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
@@ -126,17 +144,18 @@ function hilight_event(el,tgt)
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="aw04kalender02" style="">
-			<div class="style4" style="float: left; margin-left: 15px;">
-			<a href="{VAR:prevlink}"><b>&laquo;</b></a> <b>{VAR:caption}</b>  <a href="{VAR:nextlink}"><b>&raquo;</b></a>			</div>
-			
+			<div class="style4" style="float: left; margin-left: 15px; padding-top: 2px;">
+				<a href="{VAR:prevlink}" class="calNavLink">&lt;&lt;</a> <span class="calCurrentPeriodCaption">{VAR:caption}</span>  <a href="{VAR:nextlink}" class="calNavLink">&gt;&gt;</a>
+			</div>
+
 			<div>
 			<div class="aw04kalender01" align="right">
-<table border="0" cellpadding="0" cellspacing="0">
+	<table border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<!-- SUB: TODAY -->
 		  <td>&nbsp;</td>
 		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:today_url}" class="style1">{VAR:text}</a></td>
-		  
+
 		  <!-- END SUB: TODAY -->
 
 			<!-- SUB: PAGE -->
@@ -159,7 +178,7 @@ function hilight_event(el,tgt)
 	  <select id='navi_month' name='month' style="border: 1px solid gray">{VAR:mnames}</select>
 	<select id='navi_year' name='year'>{VAR:years}</select>
 	<input type="button" class="aw04formbutton" value="Go!" onClick='navigate_to()'>
-	
+
 	</td>
 	</tr>
 </table>

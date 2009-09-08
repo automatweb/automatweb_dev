@@ -11,10 +11,20 @@ class vcalendar extends aw_template
 	var $output_initialized = false; // access?
 	public /*???*/ $full_weeks;
 	public /*???*/ $month_week;
+	public/*???*/ $adm_day;
+	public/*???*/ $overview_func;
+	public/*???*/ $filt_views;
+	public/*???*/ $target_section;
+	public/*???*/ $random;
+	public/*???*/ $years;
+	public/*???*/ $skip_empty;
+	public/*???*/ $first_event;
+	public/*???*/ $events_sorted;
 
 	protected $items = array();
 	protected $overview_items = array();
 	protected $show_days_with_events = false;
+
 
 	/**
 		@attrib params=name api=1
@@ -98,29 +108,34 @@ class vcalendar extends aw_template
 				$sub_tpl = $o_inst->obj_inst->prop("sub_event_template");
 			}
 		}
-		$tpl = $this->range["viewtype"] == "relative" ? "sub_event2.tpl" :($sub_tpl ? $sub_tpl : "sub_event.tpl");
+
+		$tpl = $this->range["viewtype"] === "relative" ? "sub_event2.tpl" : (!empty($sub_tpl) ? $sub_tpl : "sub_event.tpl");
 		$better_template = "";
-		if ($arr["event_template"])
+
+		if (!empty($arr["event_template"]))
 		{
 			$tpl = $arr["event_template"];
 		}
-		else
-		if ($this->range["viewtype"] === "week")
+		elseif ($this->range["viewtype"] === "week")
 		{
 			$better_template = "week_event.tpl";
-		};//if(aw_global_get("uid") == "kix") arr($tpl);
+		}
+
 		$got_it = false;
 		if ($better_template)
 		{
 			$got_it = $this->evt_tpl->read_template($better_template,1);
-		};
+		}
+
 		if (!$got_it)
 		{
 			$this->evt_tpl->read_template($tpl);
-		};
+		}
+
 		lc_site_load("vcl_calendar", $this->evt_tpl);
 		$this->output_initialized = true;
 	}
+
 	// whats for is that here ??(taiu)
 	function init_calendar($arr)
 	{
@@ -252,6 +267,7 @@ class vcalendar extends aw_template
 		$range_args = array(
 			"type" => $viewtype,
 		);
+
 		if (empty($arr["date"]))
 		{
 			$range_args["time"] = time();
@@ -259,12 +275,12 @@ class vcalendar extends aw_template
 		else
 		{
 			$range_args["date"] = $arr["date"];
-		};
+		}
 
 		if (empty($this->overview_range))
 		{
 			$this->overview_range = 3;
-		};
+		}
 		// this should also return overview range. no?
 		// depending on amount of months we have in the overview.
 		// yees. For starters, let's assume that we have 3 of them
@@ -275,10 +291,12 @@ class vcalendar extends aw_template
 		$m = date("m",$range["timestamp"]);
 		$y = date("Y",$range["timestamp"]);
 		$range["viewtype"] = $viewtype;
-		if ($arr["limit_events"])
+
+		if (!empty($arr["limit_events"]))
 		{
 			$range["limit_events"] = $arr["limit_events"];
 		}
+
 		if ($this->overview_range == 3)
 		{
 			// start of the previous month
@@ -292,17 +310,18 @@ class vcalendar extends aw_template
 			$range["overview_start"] = mktime(0,0,0,$m,1,$y);
 			// end of the this month
 			$range["overview_end"] = mktime(23,59,59,$m+1,0,$y);
-		};
-		if ($viewtype == "relative")
+		}
+
+		if ($viewtype === "relative")
 		{
 			$range["past"] = $this->past_limit;
 			$range["future"] = $this->future_limit;
 			$range["end"] += 86400 * 60;
-		};
+		}
 
 		$this->el_count = 0;
 		$this->evt_list = array();
-		if($arr["show_ec"])
+		if (!empty($arr["show_ec"]))
 		{
 			$range = $arr["show_ec"] + $range;
 		}
@@ -316,41 +335,35 @@ class vcalendar extends aw_template
 	/**
 		@attrib params=name api=1
 		@param item_start optional type=int
-		Event start time(unix timestamp). Default is current time
+			Event start time(unix timestamp). Default is current time
 		@param item_end optional type=int
-		Event end time(unix timestamp).
+			Event end time(unix timestamp).
+		@param bgcolor optional type=string
+			Background colour for this event item
 		@param data required type=array
-		Data for the event, array elements:
-		- id
-		- comment (comment about event)
-		- utextarea1 (text about event)
+			Data for the event, array elements:
+			- id
+			- comment (comment about event)
 		@comment
-		For adding events into calendar.
+			For adding events into calendar.
 		@examples
-		$vcal->add_item(array(
-			"item_start" => time(),
-			"data"=>array(
-				"id" => integer
-				"comment" => "commentaarium",
-				"utextarea1" => "blahh",
-			)
-		));
+			$vcal->add_item(array(
+				"item_start" => time(),
+				"data"=>array(
+					"id" => integer
+					"comment" => "commentaarium",
+				)
+			));
 	**/
 	function add_item($arr)
 	{
-		if ($_GET["DD"] == 1)
-		{
-			arr($arr);
-			//echo "id = ".$arr["data"]["id"]." name = ".$arr["data"]["name"]." start = ".date("d.m.Y H:i", $arr["data"]["start1"])." <br>";
-		}
-
 		if (!empty($arr["item_start"]))
 		{
 			$arr["timestamp"] = $arr["item_start"];
 			if (empty($arr["item_end"]))
 			{
 				$arr["item_end"] = $arr["item_start"];
-			};
+			}
 			// experimental support for multiday events
 			if ($arr["item_start"] > $arr["item_end"])
 			{
@@ -359,14 +372,8 @@ class vcalendar extends aw_template
 				// events where the start date is later than end. But maybe
 				// I shouldn't care
 				$arr["item_end"] = $arr["item_start"];
-				/*
-				$tmp = $arr["item_end"];
-				$arr["item_end"] = $item["start"];
-				$arr["item_start"] = $tmp;
-				*/
-
 			};
-		};
+		}
 
 		// convert timestamp to day, since calendar is usually day based
 		$use_date = date("Ymd",$arr["timestamp"]);
@@ -374,13 +381,13 @@ class vcalendar extends aw_template
 		$data = $arr["data"];
 		$data["timestamp"] = $arr["timestamp"];
 
-		if ($arr["item_start"])
+		if (!empty($arr["item_start"]))
 		{
 			$data["item_start"] = $arr["item_start"];
 			$start_tm = (int)($data["item_start"] / 86400);
 		}
 
-		if ($arr["item_end"])
+		if (!empty($arr["item_end"]))
 		{
 			$data["item_end"] = $arr["item_end"];
 			$end_tm = (int)($data["item_end"] / 86400);
@@ -388,9 +395,9 @@ class vcalendar extends aw_template
 		}
 
 		$data["_id"] = $this->el_count;
-		$data["id"] = $arr["data"]["id"];
-		$data["comment"] = $arr["data"]["comment"];
-		$data["utextarea1"] = nl2br($data["utextarea1"]);
+		$data["id"] = isset($arr["data"]["id"]) ? $arr["data"]["id"] : "";
+		$data["comment"] = isset($arr["data"]["comment"]) ? $arr["data"]["comment"] : "";
+		$data["bgcolor"] = $arr["bgcolor"];
 
 		if ($end_tm > $start_tm)
 		{
@@ -450,16 +457,17 @@ class vcalendar extends aw_template
 					//$tmp["time"] = "L&otilde;peb: " . date("H:i",$arr["item_end"]);
 					$tmp["item_end"] =  $arr["item_end"];
 				}
-				else
-				{
-					//$tmp["time"] = "";
-				};
 
 				$tmp["hide_times"] = 1;
 
+				if (!empty($arr["bgcolor"]))
+				{
+					$tmp["bgcolor"] = $arr["bgcolor"];
+				}
+
 				$this->items[$use_date][] = $tmp;
-			};
-		};
+			}
+		}
 		// this is used for relational view
 		//if ($data["timestamp"] < $this->range["timestamp"])
 		if ($data["timestamp"] < time())
@@ -470,10 +478,8 @@ class vcalendar extends aw_template
 		{
 			$this->future[] = &$this->items[$use_date][sizeof($this->items[$use_date])-1];
 		};
-
-
-
 	}
+
 	/**
 		@attrib params=name api=1
 		@param timestamp required type=int
@@ -499,6 +505,7 @@ class vcalendar extends aw_template
 			$this->overview_urls[$use_date] = $arr["url"];
 		};
 	}
+
 	/**
 		@attrib params=name api=1
 		@param style optional type=array
@@ -553,10 +560,12 @@ class vcalendar extends aw_template
 		$awt->start("gen-calendar-html");
 		$this->aliasmgr = get_instance("alias_parser");
 		$this->styles = array();
-		if (is_array($arr["style"]))
+
+		if (isset($arr["style"]) and is_array($arr["style"]))
 		{
 			$this->styles = $arr["style"];
-		};
+		}
+
 		classload("core/date/date_calc");
 		if (!is_array($this->range))
 		{
@@ -738,7 +747,7 @@ class vcalendar extends aw_template
 				$mn .= $this->draw_s_month($range);
 			};
 			$awt->stop("draw-s-month");
-		};
+		}
 		exit_function("vcl/calendar::get_html::overview");
 
 
@@ -759,6 +768,7 @@ class vcalendar extends aw_template
 		{
 			$funcs = array_keys($types);
 		}
+
 		foreach($types as $type => $name)
 		{
 			if(!in_array($type, $funcs))
@@ -844,6 +854,8 @@ class vcalendar extends aw_template
 			"section" => $this->target_section,
 		));
 
+		$prev = $next = "";
+
 		if($this->show_days_with_events && !empty($this->event_sources) && $this->fix_links == 1)
 		{
 			enter_function("vcalendar::show_days_with_events");
@@ -883,6 +895,7 @@ class vcalendar extends aw_template
 					$prev = $this->parse("PREV");
 				}
 			}
+
 			if(!empty($this->last_event))
 			{
 				$l = obj($this->last_event["id"]);
@@ -897,6 +910,7 @@ class vcalendar extends aw_template
 					"sort_by" => "planner.start ASC",
 					"site_id" => array(),
 				));
+
 				if($this->range["viewtype"] == "relative")
 				{
 					if($obj = $objs->last())
@@ -921,6 +935,7 @@ class vcalendar extends aw_template
 			}
 			exit_function("vcalendar::show_days_with_events");
 		}
+
 		if ($this->template_has_var("prevweek_link"))
 		{
 			$weekrange = get_date_range(array(
@@ -940,7 +955,8 @@ class vcalendar extends aw_template
 					"target_section" => $this->target_section,
 				)),
 			));
-		};
+		}
+
 		$this->vars_safe(array(
 			"RANDOM" => $this->random,
 			"YEARS" => $this->years,
@@ -961,7 +977,8 @@ class vcalendar extends aw_template
 			"today_date" => date("d.m.Y"),
 			"act_day_tm" => $this->range["timestamp"],
 		));
-		$n = is_object($inst) && is_object($inst->obj_inst) && $this->can("view", $inst->obj_inst->id()) && obj($inst->obj_inst->id())->monyear_2in1 ? 1 : 2;
+
+		$n = isset($inst) && is_object($inst) && is_object($inst->obj_inst) && $this->can("view", $inst->obj_inst->id()) && obj($inst->obj_inst->id())->monyear_2in1 ? 1 : 2;
 		$this->vars_safe(array(
 			"MINIMONYEAR_2IN".$n => $this->parse("MINIMONYEAR_2IN".$n),
 			"MINIMONYEAR_2IN".$n."_JS" => $this->parse("MINIMONYEAR_2IN".$n."_JS"),
@@ -983,7 +1000,7 @@ class vcalendar extends aw_template
 			$tpl = "month_week_view.tpl";
 		}
 		$this->read_template($tpl);
-		$rv = "";
+		$rv = $header = $w = "";
 
 		for ($i = 1; $i <= 7; $i++)
 		{
@@ -996,8 +1013,7 @@ class vcalendar extends aw_template
 				"dayname" => $dn,
 			));
 			$header .= $this->parse("HEADER_CELL");
-
-		};
+		}
 
 		$this->vars(array(
 			"HEADER_CELL" => $header,
@@ -1051,11 +1067,11 @@ class vcalendar extends aw_template
 					{
 						$sday = $this->draw_event($event);
 						$events_for_day .= $sday;
-					};
-				};
+					}
+				}
 				$calendar_blocks[date("Ymd",$reals)] = $events_for_day;
-			};
-		};
+			}
+		}
 
 		$last = 0;
 
@@ -1132,12 +1148,13 @@ class vcalendar extends aw_template
 			}
 			$this->vars(array(
 				"DAY" => $rv,
-				"monthvar" => "$d1. $mon1 - $d2. $mon2",
+				"monthvar" => "{$d1}. {$mon1} - {$d2}. {$mon2}",
 			));
 			$rv = "";
 			$w .= $this->parse("WEEK");
-		};
-		$this->last_event = $event;
+		}
+
+		$this->last_event = isset($event) ? $event :  null;
 
 		$month_opts = array();
 		$cd = $_GET["date"];
@@ -1223,7 +1240,7 @@ class vcalendar extends aw_template
 				};
 				$et .= $events_for_day;
 
-			};
+			}
 
 			// XX: add optional skip_empty argument
 			if (!$this->skip_empty || $ev_count > 0)
@@ -1241,10 +1258,10 @@ class vcalendar extends aw_template
 				));
 
 				$rv .= $this->parse("MONTH");
-			};
-		};
-		$this->last_event = $event;
+			}
+		}
 
+		$this->last_event = $event;
 		$this->vars(array(
 			"MONTH" => $rv,
 		));
@@ -1254,6 +1271,8 @@ class vcalendar extends aw_template
 
 	function draw_week()
 	{
+		$rv = "";
+
 		if ($this->overview_func)
 		{
 			$o_inst = $this->overview_func[0];
@@ -1262,14 +1281,14 @@ class vcalendar extends aw_template
 				$sub_tpl = $o_inst->obj_inst->prop("week_event_template");
 			}
 		}
-		$tpl = $sub_tpl ? $sub_tpl : "week_view.tpl";
+		$tpl = !empty($sub_tpl) ? $sub_tpl : "week_view.tpl";
 
 		$this->read_template($tpl);
 		$now = date("Ymd");
 		if ($this->skip_empty)
 		{
 			$this->show_days_with_events = true;
-		};
+		}
 
 		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$this->range["start"]));
 		#$e_parts = unpack("a4year/a2mon/a2day",date("Ymd",$this->range["end"]));
@@ -1292,7 +1311,7 @@ class vcalendar extends aw_template
 			$dstamp = date("Ymd",$reals);
 			#$dstamp = $s_parts["year"] . $s_parts["mon"] . $s_parts["day"];
 			$events_for_day = "";
-			if (is_array($this->items[$dstamp]))
+			if (isset($this->items[$dstamp]) and is_array($this->items[$dstamp]))
 			{
 				$this->day = date("d-m-Y",$reals);
 				$events = $this->items[$dstamp];
@@ -1329,7 +1348,7 @@ class vcalendar extends aw_template
 
 
 			$this->vars(array(
-				"DCHECK" => $dcheck,
+				"DCHECK" => isset($dcheck) ? $dcheck : "",
 				"EVENT" => $events_for_day,
 				"monthnum" => date("m",$reals),
 				"daynum" => date("j",$reals),
@@ -1348,7 +1367,8 @@ class vcalendar extends aw_template
 			));
 			$tpl = $dstamp == $now ? "TODAY" : "DAY";
 			$rv .= $this->parse($tpl);
-		};
+		}
+
 		$this->last_event = $event;
 		$this->vars(array(
 			"DAY" => $rv,
@@ -1374,9 +1394,11 @@ class vcalendar extends aw_template
 		{
 			$dcheck = $this->parse("DCHECK");
 		}
+
 		$dstamp = date("Ymd",$this->range["start"]);
 		$events_for_day = "";
-		if (is_array($this->items[$dstamp]))
+
+		if (isset($this->items[$dstamp]) and is_array($this->items[$dstamp]))
 		{
 			$events = $this->items[$dstamp];
 			if(!$this->events_sorted)
@@ -1395,25 +1417,28 @@ class vcalendar extends aw_template
 			{
 				$this->first_event = reset($events);
 			}
+
 			foreach($events as $event)
 			{
 				$events_for_day .= $this->draw_event($event);
-			};
-		};
-		$this->last_event = $event;
+			}
+		}
+
+		$this->last_event = isset($event) ? $event : null;
+
 		$i = $this->range["start"];
 		$dt = date("d",$i);
 		$mn = locale::get_lc_month(date("m",$i));
 		$this->vars(array(
 			"DCHECK" => $dcheck,
 			"EVENT" => $events_for_day,
-			"monthnum" => date("m",$reals),
-			"daynum" => date("j",$this->range["start"]),
-			"monthnum" => date("m",$reals),
+			"monthnum" => date("m", $this->range["start"]),
+			"daynum" => date("j", $this->range["start"]),
+			"monthnum" => date("m", $this->range["start"]),
 			"dayname" => date("F d, Y",$this->range["start"]),
 			"long_day_name" => locale::get_lc_weekday($this->range["wd"]),
 			"date" => locale::get_lc_date($this->range["start"],5),
-			"caption" => $arr["caption"],
+			"caption" => isset($arr["caption"]) ? $arr["caption"] : "",
 			"lc_weekday" => locale::get_lc_weekday(date("w",$this->range["start"])),
 		));
 		return $this->parse();
@@ -1756,19 +1781,20 @@ class vcalendar extends aw_template
 
 	function draw_event($evt)
 	{
-		$m = date("m",$evt["timestamp"]);
+		$m = date("m", $evt["timestamp"]);
 		$lc_month = locale::get_lc_month($m);
 		if (isset($evt["url"]))
 		{
 			$evt["link"] = $evt["url"];
-		};
+		}
 
 		$this->evt_tpl->vars(array(
 			"parent_1_name" => "",
 			"parent_2_name" => "",
 			"parent_3_name" => "",
 		));
-		if($evt["class_id"] == CL_PARTY)
+
+		if(isset($evt["class_id"]) and $evt["class_id"] == CL_PARTY)
 		{
 			$fa = safe_array($evt["from_artist"]);
 			$obj = obj($evt["id"]);
@@ -1802,6 +1828,7 @@ class vcalendar extends aw_template
 				{
 					$evt["content"] = $artist->prop("notes");
 				}
+
 				if($fa["image"])
 				{
 					$evt["image"] = $artist->prop("picture");
@@ -1847,6 +1874,7 @@ class vcalendar extends aw_template
 				}
 				$evt["artist"] = implode(", ", $xz);
 			}
+
 			if($image = $obj->get_first_obj_by_reltype("RELTYPE_FLYER"))
 			{
 				$flyer_i = get_instance(CL_FLYER);
@@ -1858,17 +1886,23 @@ class vcalendar extends aw_template
 		}
 		$this->evt_tpl->vars($evt);
 
-		$dt = date("d",$evt["start1"]);
-		$mn = locale::get_lc_month(date("m",$evt["start1"]));
-		$mn .= " " . date("H:i",$evt["start1"]);
+
+		$dt = $mn = "";
+		if (isset($evt["start1"]))
+		{
+			$dt = date("d", $evt["start1"]);
+			$mn = locale::get_lc_month(date("m", $evt["start1"]));
+			$mn .= " " . date("H:i", $evt["start1"]);
+		}
 
 		if($this->adm_day)
 		{
 			$dchecked = $this->evt_tpl->parse("DCHECKED");
 		}
+
 		if (!isset($evt["time"]))
 		{
-			if ($evt["item_start"] && $evt["item_end"] && $evt["item_start"] != $evt["item_end"])
+			if (!empty($evt["item_start"]) && !empty($evt["item_end"]) && $evt["item_start"] != $evt["item_end"])
 			{
 				$tm_start = date("H:i",$evt["item_start"]);
 				$tm_end = date("H:i",$evt["item_end"]);
@@ -1876,35 +1910,43 @@ class vcalendar extends aw_template
 				{
 					$time = "";
 				}
-				else if ($tm_end == "00:00")
+				else if ($tm_end === "00:00")
 				{
 					$time = date("H:i",$evt["item_start"]);
 				}
 				else
 				{
 					$time = date("H:i",$evt["item_start"]) . " - " . date("H:i",$evt["item_end"]);
-				};
+				}
 			}
 			else
 			{
 				$time = date("H:i",$evt["timestamp"]);
-			};
-
+			}
 		}
 		else
 		{
 			$time = $evt["time"];
 		}
 
-		if ($evt["hide_times"] || $time == "00:00")
+		if (!empty($evt["hide_times"]) || $time === "00:00")
 		{
 			$time = "";
-		};
-		$title = sprintf(t("Lisas [%s] %s /  Muutis [%s] %s"), $evt["createdby"], date("d.m.y", $evt["created"]), $evt["modifiedby"], date("d.m.y", $evt["modified"]));
+		}
+
+		if (empty($evt["createdby"]) and empty($evt["created"]) and empty($evt["modifiedby"]) and empty($evt["modified"]))
+		{
+			$title = "";
+		}
+		else
+		{
+			$title = sprintf(t("Lisas [%s] %s /  Muutis [%s] %s"), $evt["createdby"], date("d.m.y", $evt["created"]), $evt["modifiedby"], date("d.m.y", $evt["modified"]));
+		}
+
 		$this->evt_tpl->vars(array(
 			"title" => $title,
-			'start_timestamp' => $evt['start'],
-			'end_timestamp' => $evt['end'],
+			'start_timestamp' => isset($evt['start']) ? $evt['start'] : "",
+			'end_timestamp' => isset($evt['end']) ? $evt['end'] : "",
 			"odd" => $this->event_counter % 2,
 			"time" => $time,
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
@@ -1913,16 +1955,17 @@ class vcalendar extends aw_template
 			"datestamp" => date("d.m.Y",$evt["timestamp"]),
 			"aw_date" => date("d-m-Y",$evt["timestamp"]),
 			"lc_date" => date("j",$evt["timestamp"]) . ". " . $lc_month . " " . date("Y H:i",$evt["timestamp"]),
-			"name" => $evt["name"],
-			"id" => $evt["id"],
+			"name" => htmlspecialchars($evt["name"]),
+			"id" => isset($evt["id"]) ? $evt["id"] : "",
 			"link" => !empty($evt["link"]) ? $evt["link"] : "javascript:void(0)",
 			"calendar_view_link" => aw_url_change_var("event_id", $evt["id"]),
-			"modifiedby" => $evt["modifiedby"],
+			"modifiedby" => isset($evt["modifiedby"]) ? $evt["modifiedby"] : "",
 			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
 			"COMMENT" => "",
-			"DCHECKED" => $dchecked,
+			"DCHECKED" => isset($dchecked) ? $dchecked : "",
 			"comment" => $evt["comment"],
-			"day_name" => strtoupper(substr(locale::get_lc_weekday(date("w",$evt["start1"])),0,1)),
+			"bgcolor" => empty($evt["bgcolor"]) ? "" : "background-color:{$evt["bgcolor"]};",
+			"day_name" => isset($evt["start1"]) ? strtoupper(substr(locale::get_lc_weekday(date("w", $evt["start1"])),0,1)) : "",
 			"date_and_time" => $dt . ". " . $mn,
 			"section" => aw_global_get("section")
 		));
@@ -1932,7 +1975,7 @@ class vcalendar extends aw_template
 		if (!empty($evt["comment"]))
 		{
 			$this->evt_tpl->vars(array(
-				'comment_content' => $evt['comment'],
+				'comment_content' => htmlspecialchars($evt['comment']),
 			));
 
 			$this->evt_tpl->vars(array(

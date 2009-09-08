@@ -1,4 +1,4 @@
-<div class="aw04kalendersubevent" style="width:100%">
+<div class="aw04kalendersubevent" style="width:100%;{VAR:bgcolor}">
 	<table border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr class="aw04kalendersubevent">
 			<td width="4%" align="center" valign="top">
