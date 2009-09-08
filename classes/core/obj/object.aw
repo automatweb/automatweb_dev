@@ -1718,6 +1718,17 @@ class object
 		return $GLOBALS["objects"][$this->oid]->draft($param);
 	}
 
+	/** returns the value for the specified property for the current object, suitable for use directly in xml, html
+		@attrib api=1
+
+		@param param required type=string
+			the name of the property whose value is to be returned
+	**/
+	function prop_xml($param)
+	{
+		return htmlspecialchars($this->prop($param));
+	}
+
 	/** returns the value for the specified property for the current object, suitable for displaying to the user
 		@attrib api=1
 
