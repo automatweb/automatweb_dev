@@ -134,13 +134,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 	@caption Vaikimisi asukohariba
 
 	@property disp_person type=checkbox ch_value=1 field=meta table=objects method=serialize
-	@caption Kuva isikut
+	@caption Kuva isiku muutmislinki
+
+	@property disp_person_view type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kuva isiku vaatamislinki
+
+	@property disp_person_text type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kuva ainult isiku nime
 
 	@property disp_co_edit type=checkbox ch_value=1 field=meta table=objects method=serialize
-	@caption Kuva organisatsiooni muutmisvaadet
+	@caption Kuva organisatsiooni muutmislinki
 
 	@property disp_co_view type=checkbox ch_value=1 field=meta table=objects method=serialize
-	@caption Kuva organisatsiooni vaatamisvaadet
+	@caption Kuva organisatsiooni vaatamislinki
+
+	@property disp_co_text type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kuva ainult organisatsiooni nime
 
 	@property disp_object_type type=checkbox ch_value=1 field=meta table=objects method=serialize
 	@caption Kuva objektit&uuml;&uuml;pi
@@ -148,7 +157,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 	@property disp_object_link type=checkbox ch_value=1 field=meta table=objects method=serialize
 	@caption Kuva objekti muutmislinki
 
-	@property editable_settings type=select ch_value=1 field=meta table=objects method=serialize multiple=1
+	@property editable_settings type=select field=meta table=objects method=serialize multiple=1
 	@caption Vali muudetavad seaded
 
 
@@ -738,7 +747,7 @@ class group extends class_base
 			// Selliseid krdi seoseid ei tohiks yldse luua!
 			arr(debug_backtrace(), true);
 		}
-		
+
 		if ($arr["connection"]->prop("reltype") == 2) //RELTYPE_MEMBER
 		{
 			$group = $arr["connection"]->from();
@@ -1168,7 +1177,7 @@ class group extends class_base
 		{
 			$nlg_oid = $c->get_simple_config("non_logged_in_users_group_oid");
 		}
-		
+
 		if (!$nlg_oid)
 		{
 			$nlg_gid = $c->get_simple_config("non_logged_in_users_group");

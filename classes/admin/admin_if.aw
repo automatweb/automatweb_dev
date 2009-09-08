@@ -91,17 +91,17 @@ class admin_if extends class_base
 
 
 		$this->if_copy_template = str_replace("__", "%s", $this->mk_my_orb("if_copy", array(
-			"reforb" => 1, 
-			"id" => "__", 
+			"reforb" => 1,
+			"id" => "__",
 			"parent" => "__",
 			"sel[__]" => "1",
 			"period" => "__"
 		), "admin_if",true,true));
 
 		$this->if_delete_template = str_replace("__", "%s", $this->mk_my_orb("if_delete", array(
-			"ret_id" => "__", 
-			"reforb" => 1, 
-			"id" => "__", 
+			"ret_id" => "__",
+			"reforb" => 1,
+			"id" => "__",
 			"parent" => "__",
 			"sel[__]" => "1",
 			"period" => "__"
@@ -680,7 +680,7 @@ class admin_if extends class_base
 
 		$ft_page = isset($arr["request"]["ft_page"]) ? $arr["request"]["ft_page"] : null;
 		$filt[] = new obj_predicate_limit($per_page, $ft_page * $per_page);
-		
+
 		$ob = new object_data_list(
 			$filt,
 			$this->data_list_ot_flds
@@ -922,7 +922,7 @@ class admin_if extends class_base
 			$tree = $c->file_get("newbtn_tree_cache_".aw_global_get("uid"));
 			$tree = unserialize($tree);
 		}
-		
+
 		if(!is_array($tree))
 		{
 			$tree = $atc->get_class_tree(array(
@@ -1090,7 +1090,7 @@ class admin_if extends class_base
 		@param sel optional
 		@param return_url optional
 		@param login optional
-		
+
 		@returns
 
 
@@ -1393,6 +1393,7 @@ class admin_if extends class_base
 	{
 		$t->vars(array(
 			"logout_text" => t("Logi v&auml;lja"),
+			"logged_in_text" => t("Kasutaja:"),
 			"location_text" => t("Asukoht:"),
 			"footer_l1" => sprintf(t("AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-%s."), date("Y")),
 			"footer_l2" => t("Palun k&uuml;lasta meie kodulehek&uuml;lgi:"),

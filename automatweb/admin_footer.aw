@@ -121,13 +121,13 @@ $parent = max(1, (empty($_GET["parent"]) ? $cur_obj->parent() : $_GET["parent"])
 $sf->vars(array(
 	"prod_family" => $pf,
 	"prod_family_href" => $pf_url,
-	"cur_p_name" => $p->name(),
+	"cur_p_name" => $p->prop_xml("name"),
 	"cur_p_url" => html::get_change_url($p->id(), array('return_url' => get_ru())),
 	"cur_co_url" => html::get_change_url($co->id(), array('return_url' => get_ru())),
 	"cur_co_url_view" => $sf->mk_my_orb("view", array("id" => $co->id(), 'return_url' => get_ru()), CL_CRM_COMPANY),
-	"cur_co_name" => $co->name(),
+	"cur_co_name" => $co->prop_xml("name"),
 	"cur_class" => $cur_class,
-	"cur_obj_name" => $cur_obj->name(),
+	"cur_obj_name" => $cur_obj->prop_xml("name"),
 	"site_title" => $site_title,
 	"stop_pop_url_add" => $sf->mk_my_orb("stopper_pop", array(
 		"s_action" => "start",
@@ -168,8 +168,8 @@ if($num = $ol->count())
 	if($num == 1)
 	{
 		$o = $ol->begin();
-		$text = strip_tags($o->prop("msg"));
-		$text = html::strong(obj($o->prop("from"))->name()).":<br />".(strlen($text) > 100 ? substr($text, 0, 100)."..." : $text);
+		$text = $o->prop_xml("msg");
+		$text = html::strong(obj($o->prop("from"))->prop_xml("name")).":<br />".(strlen($text) > 100 ? substr($text, 0, 100)."..." : $text);
 	}
 	else
 	{
@@ -192,24 +192,49 @@ if ($sf->prog_acl("view", "disp_person"))
 		"SHOW_CUR_P" => $sf->parse("SHOW_CUR_P")
 	));
 }
+
+if ($sf->prog_acl("view", "disp_person_view") and !$sf->prog_acl("view", "disp_person"))
+{
+	$sf->vars(array(
+		"SHOW_CUR_P_VIEW" => $sf->parse("SHOW_CUR_P_VIEW")
+	));
+}
+
+if ($sf->prog_acl("view", "disp_person_text") and !$sf->prog_acl("view", "disp_person") and !$sf->prog_acl("view", "disp_person_view"))
+{
+	$sf->vars(array(
+		"SHOW_CUR_P_TEXT" => $sf->parse("SHOW_CUR_P_TEXT")
+	));
+}
+
 if ($sf->prog_acl("view", "disp_co_edit"))
 {
 	$sf->vars(array(
 		"SHOW_CUR_CO" => $sf->parse("SHOW_CUR_CO")
 	));
 }
+
 if ($sf->prog_acl("view", "disp_co_view") && !$sf->prog_acl("view", "disp_co_edit"))
 {
 	$sf->vars(array(
 		"SHOW_CUR_CO_VIEW" => $sf->parse("SHOW_CUR_CO_VIEW")
 	));
 }
+
+if ($sf->prog_acl("view", "disp_co_text") && !$sf->prog_acl("view", "disp_co_edit") && !$sf->prog_acl("view", "disp_co_view"))
+{
+	$sf->vars(array(
+		"SHOW_CUR_CO_TEXT" => $sf->parse("SHOW_CUR_CO_TEXT")
+	));
+}
+
 if ($sf->prog_acl("view", "disp_object_type"))
 {
 	$sf->vars(array(
 		"SHOW_CUR_CLASS" => $sf->parse("SHOW_CUR_CLASS")
 	));
 }
+
 if ($sf->prog_acl("view", "disp_object_link"))
 {
 	$sf->vars(array(
@@ -274,7 +299,7 @@ if (!empty($output_charset))
 
 // compose html title
 $html_title = aw_ini_get("stitle");
-$html_title_obj = (CL_ADMIN_IF == $cur_obj->class_id()) ? aw_global_get("site_title_path_obj_name") : $cur_obj->name();
+$html_title_obj = (CL_ADMIN_IF == $cur_obj->class_id()) ? aw_global_get("site_title_path_obj_name") : $cur_obj->prop_xml("name");
 
 if (!empty($html_title))
 {

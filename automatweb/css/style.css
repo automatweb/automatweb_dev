@@ -13,7 +13,7 @@ Version: 0.9
 
 /* Begin /automatweb/css/stiil.css */
 body {
-	background: #0386c7 url('/automatweb/images/aw06/layout_t.gif') repeat-x 0px 85px;
+	background: #0386c7 url('/automatweb/images/aw06/layout_t.gif') repeat-x 0px 83px;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	margin: 0px;
 	padding: 0px;
@@ -27,7 +27,7 @@ a img { border: 0; }
 #pais {
 	background: #e2e2e2 url('/automatweb/images/aw06/pais_t.gif') repeat-x;
 	/*min-width: 550px;*/
-	height: 84px;
+	height: 82px;
 	border-bottom: 1px solid #f1f8fc
 }
 #pais_noheader {
@@ -47,7 +47,9 @@ a img { border: 0; }
 #pais .logo img {
 	margin:17px 0 0 15px
 }
-#pais .logo span {
+
+#pais .logo span
+{
 	color: #d50000;
 	width: 239px;
 	font-size: 10px;
@@ -58,55 +60,67 @@ a img { border: 0; }
 	top: 46px;
 	position: absolute;
 }
-#pais .top-left-menyy {
+
+#pais .top-left-menyy
+{
 	background: url('/automatweb/images/aw06/y_menyy_left_t.gif') no-repeat;
-	padding: 5px 0 5px 8px;
+	padding: 4px 0 2px 8px;
 	color: #545454;
-	font-size: 11px;
-	white-space: nowrap;
+	font-size: 12px;
+	font-weight: bold;
 	left: 239px;
-	height: 1%;
+	z-index: 11;
 	position: absolute
 }
-#pais .top-left-menyy a {
+
+#pais .top-left-menyy a
+{
 	color: #545454;
 }
-#pais .top-right-menyy {
+
+#pais .top-right-menyy
+{
 	float: right;
 	background: url('/automatweb/images/aw06/y_menyy_right_t.gif') no-repeat;
-	font-size: 11px;
 	top: 0px;
 	/*position: relative*/
+	height: 19px;
+	padding: none;
+	white-space: nowrap;
 }
-#pais .top-right-menyy a {
+
+#pais div.top-right-menu-item {
+	font-size: 11px;
 	float: left;
 	color: #000;
 	border-left: 1px solid #fff;
 	border-right: 1px solid #fff;
-	padding: 5px 8px 5px 10px;
+	padding: 5px 8px 0 10px;
 	margin-right: -1px;
-	display: block
+	height: 100%;
+	white-space: nowrap;
 }
+
+#pais .top-right-menyy a {
+	color: #000;
+}
+
 #pais .top-right-menyy a.akt {
 	border-top: 1px solid #05a6e9;
 	border-left: 1px solid #05a6e9;
 	border-right: 1px solid #05a6e9;
 	border-bottom: 1px solid #05a6e9;
 	margin: 0 0 0 1px;
-	padding: 4px 7px 4px 10px;
+	padding: 0 7px 0 10px;
 }
-#pais .top-right-menyy a:hover {
-	color: #333;
-	text-decoration: none;
+
+#pais a.nupp:hover,
+#pais a.menuButton:hover,
+#pais a.menuItem:hover
+{
+	text-decoration: none ! important;
 }
-#pais .top-right-menyy a.logout {
-	background: url('/automatweb/images/aw06/ikoon_logout.gif') no-repeat 8px 5px;
-	padding: 5px 20px 5px 43px;
-	margin: 0;
-}
-#pais .top-right-menyy a.quickmessagebox_link {
-	padding: 3px 8px 2px 10px;
-}
+
 #pais .top-right-menyy .nool {
 	top: -1px;
 	position: relative
@@ -117,7 +131,7 @@ a img { border: 0; }
 	color: #545454;
 	/*min-width: 400px;*/
 	font-size: 11px;
-	padding: 12px 0 0 8px;
+	padding: 4px 0 0 8px;
 	top: 24px;
 	left: 239px;
 	position: absolute;
@@ -130,7 +144,7 @@ a img { border: 0; }
 #pais .tabs {
 	float: left;
 	padding-left: 30px;
-	top: 66px;
+	top: 64px;
 	position: absolute;
 }
 #pais .tabs .norm, #pais .tabs .akt {
@@ -172,7 +186,7 @@ a img { border: 0; }
 }
 #pais .toiming {
 	float: right;
-	height: 60px;
+	height: 55px;
 	/*position: relative;*/
 	z-index: 10;
 }
@@ -182,7 +196,7 @@ a img { border: 0; }
 	font-size: 11px;
 	padding: 2px 10px 3px 25px;
 	margin-right:5px;
-	margin-top: 33px;
+	margin-top: 25px;
 	border: 1px solid #fff
 }
 #pais .toiming a.menuButton {
@@ -191,7 +205,7 @@ a img { border: 0; }
 	font-size: 11px;
 	padding: 2px 10px 3px 25px;
 	margin-right:5px;
-	margin-top: 33px;
+	margin-top: 25px;
 	border: 1px solid #fff
 }
 
@@ -201,7 +215,7 @@ a img { border: 0; }
 	font-size: 11px;
 	padding: 2px 10px 3px 25px;
 	margin-right:5px;
-	margin-top: 33px;
+	margin-top: 25px;
 	border: 1px solid #fff;
 }
 

@@ -65,9 +65,9 @@ function aw_keyhandler_init(event)
 		<div id="aw_object_quickadd_results" style="display: none;" ></div>';
 	$("body").append(html);
 
-	$.get("{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_xml", {}, function (d) 
-		{ 
-			eval(d); 
+	$.get("{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_xml", {}, function (d)
+		{
+			eval(d);
 			// fetch items on demand
 			$("#aw_object_quickadd").aw_object_quickadd(null, options);
 
@@ -123,36 +123,57 @@ function cfEditClickGroup(group, oid)
 </script>
 
 <!-- p2is -->
-<!-- SUB: YAH -->
 <div id="pais">
 	<div class="logo">
 		<span>{VAR:prod_family}</span>
 		<a href="{VAR:prod_family_href}" title="AutomatWeb"><img src="{VAR:baseurl}/automatweb/images/aw06/aw_logo.gif" alt="AutomatWeb.com" width="183" height="34" border="0" /></a>
 	</div>
 	<div class="top-left-menyy">
-		<!-- SUB: SHOW_CUR_P -->
-		<a href="{VAR:cur_p_url}">{VAR:cur_p_name}</a> |
-		<!-- END SUB: SHOW_CUR_P -->
-		<!-- SUB: SHOW_CUR_CO -->
-		<a href="{VAR:cur_co_url}">{VAR:cur_co_name}</a> |
-		<!-- END SUB: SHOW_CUR_CO -->
-		<!-- SUB: SHOW_CUR_CO_VIEW -->
-		<a href="{VAR:cur_co_url_view}">{VAR:cur_co_name}</a> |
-		<!-- END SUB: SHOW_CUR_CO_VIEW -->
 		<!-- SUB: SHOW_CUR_CLASS -->
-		{VAR:cur_class} |
+		<span class="currentClassTitle">{VAR:cur_class}</span>
 		<!-- END SUB: SHOW_CUR_CLASS -->
 		<!-- SUB: SHOW_CUR_OBJ -->
-		<a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a>
+		"<a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a>"
 		<!-- END SUB: SHOW_CUR_OBJ -->
 	</div>
 	<div class="top-right-menyy">
-		{VAR:lang_pop}
-		{VAR:settings_pop}
-		<a title="{VAR:msg_title}" href="{VAR:msg_url}" class="quickmessagebox_link"><img src="{VAR:baseurl}/automatweb/images/icons/mail_send.gif" border="0" alt="{VAR:msg_title}" /></a>
-		<a href="{VAR:baseurl}/orb.aw?class=users&action=logout" class="logout">{VAR:logout_text}</a>
+		<div class="top-right-menu-item">
+			{VAR:lang_pop}
+		</div>
+		<div class="top-right-menu-item">
+			{VAR:settings_pop}
+		</div>
+		<div class="top-right-menu-item">
+			<div style="margin-top: -2px;">
+				<a title="{VAR:msg_title}" href="{VAR:msg_url}"><img src="{VAR:baseurl}/automatweb/images/icons/mail_send.gif" border="0" alt="{VAR:msg_title}" /></a>
+			</div>
+		</div>
+		<div class="top-right-menu-item">
+			<div style="padding-right: 2px;">
+			<!-- SUB: SHOW_CUR_P -->
+			{VAR:logged_in_text} <a href="{VAR:cur_p_url}">{VAR:cur_p_name}</a>
+			<!-- END SUB: SHOW_CUR_P -->
+			<!-- SUB: SHOW_CUR_P_VIEW -->
+			{VAR:logged_in_text} <a href="{VAR:cur_p_url_view}">{VAR:cur_p_name}</a>
+			<!-- END SUB: SHOW_CUR_P_VIEW -->
+			<!-- SUB: SHOW_CUR_P_TEXT -->
+			{VAR:logged_in_text} {VAR:cur_p_name}
+			<!-- END SUB: SHOW_CUR_P_TEXT -->
+			<!-- SUB: SHOW_CUR_CO -->
+			<a href="{VAR:cur_co_url}">({VAR:cur_co_name})</a>
+			<!-- END SUB: SHOW_CUR_CO -->
+			<!-- SUB: SHOW_CUR_CO_VIEW -->
+			<a href="{VAR:cur_co_url_view}">({VAR:cur_co_name})</a>
+			<!-- END SUB: SHOW_CUR_CO_VIEW -->
+			<!-- SUB: SHOW_CUR_CO_TEXT -->
+			({VAR:cur_co_name})
+			<!-- END SUB: SHOW_CUR_CO_TEXT -->
+			</div>
+			<a href="{VAR:baseurl}/orb.aw?class=users&action=logout" title="{VAR:logout_text}"><img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_logout.gif" width="26" height="14" border="0" alt="{VAR:logout_text}"></a>
+		</div>
 	</div>
 
+	<!-- SUB: YAH -->
 	<div class="olekuriba">
 		{VAR:location_text}
 		{VAR:site_title}

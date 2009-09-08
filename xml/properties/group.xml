@@ -295,7 +295,27 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kuva isikut</caption>
+            <caption>Kuva isiku muutmislinki</caption>
+      </property>
+      <property>
+            <name>disp_person_view</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva isiku vaatamislinki</caption>
+      </property>
+      <property>
+            <name>disp_person_text</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva ainult isiku nime</caption>
       </property>
       <property>
             <name>disp_co_edit</name>
@@ -305,7 +325,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kuva organisatsiooni muutmisvaadet</caption>
+            <caption>Kuva organisatsiooni muutmislinki</caption>
       </property>
       <property>
             <name>disp_co_view</name>
@@ -315,7 +335,17 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kuva organisatsiooni vaatamisvaadet</caption>
+            <caption>Kuva organisatsiooni vaatamislinki</caption>
+      </property>
+      <property>
+            <name>disp_co_text</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva ainult organisatsiooni nime</caption>
       </property>
       <property>
             <name>disp_object_type</name>
@@ -342,7 +372,6 @@
             <table>objects</table>
             <group>if_acl</group>
             <type>select</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
             <multiple>1</multiple>
