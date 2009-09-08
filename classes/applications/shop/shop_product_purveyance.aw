@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_SHOP_PRODUCT_PURVEYANCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
+@classinfo syslog_type=ST_SHOP_PRODUCT_PURVEYANCE relationmgr=yes no_status=1 prop_cb=1 maintainer=robert
 @tableinfo aw_shop_product_purveyance master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_shop_product_purveyance
