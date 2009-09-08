@@ -59,9 +59,9 @@ var bsnAsFileref = document.createElement("link");bsnAsFileref.setAttribute("rel
  *
  * LAST UPDATED:
  *
- * 		- $Date: 2009/08/24 07:50:34 $
+ * 		- $Date: 2009/09/08 10:29:57 $
  * 		- $Author: voldemar $
- * 		- $Revision: 1.1 $
+ * 		- $Revision: 1.2 $
  *
  *
  **********************************************************************/
@@ -147,30 +147,30 @@ jQuery.ptTimeSelect._ptTimeSelectInit = function () {
 					//~ +	'								<br style="clear: left;" /><div></div>'
 					//~ +	'							</div>'
 					+	'							<div class="ptTimeSelectHrCntr">'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">0</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">1</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">2</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">3</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">4</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">5</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">6</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">7</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">8</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">9</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">10</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">11</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">12</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">13</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">14</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">15</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">16</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">17</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">18</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">19</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">20</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">21</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">22</a>'
-					+	'								<a class="ptTimeSelectHr ui-state-default" href="javascript: void(0);">23</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">0</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">1</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">2</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">3</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">4</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">5</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">6</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">7</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">8</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">9</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">10</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">11</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">12</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">13</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">14</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">15</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">16</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">17</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">18</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">19</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">20</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">21</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">22</a>'
+					+	'								<a class="ptTimeSelectHr" href="javascript: void(0);">23</a>'
 					+	'								<br style="clear: left;" /><div></div>'
 					+	'							</div>'
 					+	'						</div>'
@@ -178,18 +178,18 @@ jQuery.ptTimeSelect._ptTimeSelectInit = function () {
 					+	'					<div style="width: 50%; float: left;">'
 					+	'						<div class="ui-widget-content ptTimeSelectRightPane">'
 					+	'							<div class="ptTimeSelectMinCntr">'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">00</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">05</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">10</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">15</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">20</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">25</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">30</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">35</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">40</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">45</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">50</a>'
-					+	'								<a class="ptTimeSelectMin ui-state-default" href="javascript: void(0);">55</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">00</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">05</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">10</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">15</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">20</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">25</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">30</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">35</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">40</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">45</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">50</a>'
+					+	'								<a class="ptTimeSelectMin" href="javascript: void(0);">55</a>'
 					+	'								<br style="clear: left;" /><div></div>'
 					+	'							</div>'
 					+	'						</div>'
@@ -228,6 +228,7 @@ jQuery.ptTimeSelect._ptTimeSelectInit = function () {
 	 				});
 
 				$(document).mousedown(jQuery.ptTimeSelect._doCheckMouseClick);
+				$(document).keypress(jQuery.ptTimeSelect._doCheckKeyPress);
 			}//end if
 		}
 	);
@@ -409,6 +410,21 @@ jQuery.ptTimeSelect._doCheckMouseClick = function(ev){
 	}
 	if (!jQuery(ev.target).closest("#ptTimeSelectCntr").length){
 		jQuery.ptTimeSelect.closeCntr();
+	}
+
+}/* jQuery.ptTimeSelect._doCheckMouseClick */
+
+
+jQuery.ptTimeSelect._doCheckKeyPress = function(ev){
+	if (!$("#ptTimeSelectCntr:visible").length)
+	{
+		return;
+	}
+	else if (13 == ev.keyCode)
+	{
+		jQuery.ptTimeSelect.setTime();
+		jQuery.ptTimeSelect.closeCntr();
+		return false;
 	}
 
 }/* jQuery.ptTimeSelect._doCheckMouseClick */

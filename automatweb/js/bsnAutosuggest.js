@@ -104,6 +104,7 @@ _bsn.AutoSuggest = function (fldID, param)
 	this.fld.onkeypress 	= function(ev){ return pointer.onKeyPress(ev); }
 	this.fld.onkeyup 		= function(ev){ return pointer.onKeyUp(ev); }
 	this.fld.onblur 		= function(ev){ return pointer.onBlur(ev); }
+	this.fld.onkeydown 	= function(ev){ return pointer.onKeyDown(ev); }
 
 	this.fld.setAttribute("autocomplete","off");
 }
@@ -120,14 +121,12 @@ _bsn.AutoSuggest.prototype.onKeyPress = function(ev)
 {
 	var key = (window.event) ? window.event.keyCode : ev.keyCode;
 
-
 	// set responses to keydown events in the field
 	// this allows the user to use the arrow keys to scroll through the results
 	// ESCAPE clears the list
-	// TAB sets the current highlighted value
+	// ENTER selects currently highlighted value and clears list
 	//
 	var RETURN = 13;
-	var TAB = 9;
 	var ESC = 27;
 
 	var bubble = true;
@@ -153,13 +152,39 @@ _bsn.AutoSuggest.prototype.onKeyUp = function(ev)
 {
 	var key = (window.event) ? window.event.keyCode : ev.keyCode;
 
-	// set responses to keydown events in the field
-	// this allows the user to use the arrow keys to scroll through the results
-	// ESCAPE clears the list
-	// TAB sets the current highlighted value
+	// TAB clears the list besides default behaviour
 	//
+	var TAB = 9;
+
+	var bubble = true;
+
+	switch(key)
+	{
+		case TAB:
+			this.clearSuggestions();
+			break;
+
+		default:
+			this.getSuggestions(this.fld.value);
+	}
+
+	return bubble;
+}
+
+
+
+
+
+_bsn.AutoSuggest.prototype.onKeyDown = function(ev)
+{
+	var key = (window.event) ? window.event.keyCode : ev.keyCode;
+
+	// up/down arrow keys move hilight caret
+	// left/right arrows don't move input caret position in textbox
 	var ARRUP = 38;
 	var ARRDN = 40;
+	var ARROWLEFT = 37;
+	var ARROWRIGHT = 39;
 
 	var bubble = true;
 
@@ -175,8 +200,10 @@ _bsn.AutoSuggest.prototype.onKeyUp = function(ev)
 			bubble = false;
 			break;
 
-		default:
-			this.getSuggestions(this.fld.value);
+		case ARROWLEFT:
+		case ARROWRIGHT:
+			bubble = false;
+			break;
 	}
 
 	return bubble;

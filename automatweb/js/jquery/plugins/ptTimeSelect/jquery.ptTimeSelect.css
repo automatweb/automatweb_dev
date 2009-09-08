@@ -4,63 +4,77 @@
  *
  *  LAST UPDATED:
  *
- * 		- $Date: 2009/08/24 07:50:34 $
+ * 		- $Date: 2009/09/08 10:29:57 $
  * 		- $Author: voldemar $
- * 		- $Revision: 1.1 $
+ * 		- $Revision: 1.2 $
+D0E5F5
+05A6E9 tumesini
  */
 #ptTimeSelectCntr {
-	width: 250px;
-	font-size: .7em;
+	width: 200px;
+	font-size: 12px;
 	position: absolute;
 	z-index: 10;
 	display: none;
+	border: 1px solid #4297D7;
 }
 #ptTimeSelectCntr .ui-widget{
-	padding: .2em;
+	padding: 1px;
 }
 #ptTimeSelectCntr .ui-widget-header {
-	padding: .1em;
+	padding: 0;
+	background: none;
+	background-color: #05A6E9;
+	color: white;
+	border: none;
 }
 #ptTimeSelectCntr #ptTimeSelectUserTime {
-	font-size: larger;
-	padding: .2em;
-	padding-left: 1em;
+	font-weight: bold;
+	padding: 0;
+	padding-left: 4px;
 	text-align: center;
 }
 #ptTimeSelectCntr #ptTimeSelectCloseCntr {
 	display: block;
-	padding: .2em;
+	padding: 0;
 }
 #ptTimeSelectCntr #ptTimeSelectCloseCntr a {
 	display: block;
-	padding: .2em;
+	padding: 0;
 }
 #ptTimeSelectCntr .ui-widget-content {
-	 margin-top: .1em;
-	 margin-bottom: .1em;
-	 padding: .2em;
+	 margin: 0;
+	 border-left: none;
+	 border-right: none;
+	border-color: #D0E5F5;
+	 padding: 0;
 }
 #ptTimeSelectCntr .ui-widget.ui-widget-content {
 	margin-top: 0;
 }
 #ptTimeSelectCntr .ptTimeSelectLeftPane.ui-widget-content {
-	border-top:none;
-	border-bottom:none;
-	border-left:none;
-	border-right-width: 2px;
+	border:none;
 }
 #ptTimeSelectCntr .ptTimeSelectRightPane.ui-widget-content {
 	border: none;
+}
+#ptTimeSelectCntr .ptTimeSelectRightPane {
+	text-align: right;
 }
 #ptTimeSelectCntr .ptTimeSelectHrCntr a,
 #ptTimeSelectCntr .ptTimeSelectMinCntr a {
 	display: block;
 	float: left;
-	padding: .2em;
+	padding: 0;
 	width: 1.9em;
-	margin: 1px;
+	margin: 0;
 	text-align: center;
 	text-decoration: none;
+}
+#ptTimeSelectCntr .ptTimeSelectHr,
+#ptTimeSelectCntr .ptTimeSelectMin {
+	border: 1px solid #C5DBEC;
+	background-color: #D0E5F5;
 }
 #ptTimeSelectCntr .ptTimeSelectHrAmPmCntr a {
 	text-align: center;
@@ -68,15 +82,15 @@
 }
 #ptTimeSelectCntr .ptTimeSelectTimeLabelsCntr {
 	font-weight: bold;
-	font-size: .9em;
+	font-size: 12px;
 }
 #ptTimeSelectCntr #ptTimeSelectSetButton {
-	padding-top: .2em;
-	padding-bottom: .2em;
+	padding-top: 1px;
+	padding-bottom: 1px;
 }
 #ptTimeSelectCntr #ptTimeSelectSetButton a {
  	display: block;
-	padding: .2em;
+	padding: 1px;
 	width: 30%;
 	text-align: center;
 	float: right;
