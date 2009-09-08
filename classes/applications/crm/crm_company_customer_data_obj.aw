@@ -42,7 +42,7 @@ class crm_company_customer_data_obj extends _int_object
 				self::SALESSTATE_NEW => t("Uus"),
 				self::SALESSTATE_LEAD => t("Soovitus"),
 				self::SALESSTATE_NEWCALL => t("Uus k&otilde;ne"),
-				self::SALESSTATE_PRESENTATION => t("Presentatsioon"),
+				self::SALESSTATE_PRESENTATION => t("Esitlus"),
 				self::SALESSTATE_SALE => t("Ostja"),
 				self::SALESSTATE_REFUSED => t("Keeldund kontaktist")
 			);
@@ -66,7 +66,6 @@ class crm_company_customer_data_obj extends _int_object
 
 	public function get_sales_case($create = false)
 	{
-		$case = null;
 		$resource_mgr = mrp_workspace_obj::get_hr_manager(new object($this->prop("seller")));
 		$list = new object_list(array(
 			"class_id" => CL_MRP_CASE,
@@ -75,14 +74,25 @@ class crm_company_customer_data_obj extends _int_object
 			"site_id" => array(),
 			"lang_id" => array()
 		));
+
 		if ($list->count() < 1 and $create)
 		{
-			$case = $resource_mgr->create_project(new object($this->id()));
+			$case = $resource_mgr->create_case(new object($this->id()));
 		}
-		else
+		elseif ($list->count() > 1)
+		{
+			trigger_error("More than one sales case associated with customer relation " . $this->id(), E_USER_WARNING);
+			$case = $list->begin();
+		}
+		elseif ($list->count() === 1)
 		{
 			$case = $list->begin();
 		}
+		else
+		{
+			$case = null;
+		}
+
 		return $case;
 	}
 

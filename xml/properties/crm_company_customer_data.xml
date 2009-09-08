@@ -238,6 +238,16 @@
             <caption>Viivise %</caption>
       </property>
       <property>
+            <name>sales_customer_info</name>
+            <table>objects</table>
+            <group>sales_data</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>leftbox</parent>
+            <field>sales_customer_info</field>
+            <caption>Kliendi andmed</caption>
+      </property>
+      <property>
             <name>sales_state</name>
             <table>aw_crm_customer_data</table>
             <group>sales_data</group>
@@ -271,24 +281,13 @@
             <caption>Soovitaja/allikas</caption>
       </property>
       <property>
-            <name>sales_last_call_maker</name>
+            <name>sales_last_call</name>
             <table>aw_crm_customer_data</table>
             <group>sales_data</group>
-            <type>text</type>
-            <field>aw_sales_last_call_maker</field>
+            <type>hidden</type>
+            <field>aw_sales_last_call</field>
             <datatype>int</datatype>
             <parent>leftbox</parent>
-            <caption>Viimase m&amp;amp;uuml;&amp;amp;uuml;gik&amp;amp;otilde;ne tegija</caption>
-      </property>
-      <property>
-            <name>sales_last_call_time</name>
-            <table>aw_crm_customer_data</table>
-            <group>sales_data</group>
-            <type>text</type>
-            <field>aw_sales_last_call_time</field>
-            <datatype>int</datatype>
-            <parent>leftbox</parent>
-            <caption>Viimase m&amp;amp;uuml;&amp;amp;uuml;gik&amp;amp;otilde;ne aeg</caption>
       </property>
       <property>
             <name>sales_calls_made</name>

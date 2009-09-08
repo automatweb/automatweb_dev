@@ -105,6 +105,9 @@
 @layout leftbox type=vbox parent=splitbox1 area_caption=M&uuml;&uuml;giinfo
 @layout rightbox type=vbox parent=splitbox1 area_caption=Kommentaarid
 
+	@property sales_customer_info type=text store=no parent=leftbox
+	@caption Kliendi andmed
+
 	@property sales_state type=select table=aw_crm_customer_data field=aw_sales_status datatype=int default=1 parent=leftbox
 	@caption M&uuml;&uuml;gi staatus
 
@@ -114,13 +117,8 @@
 	@property sales_lead_source type=relpicker reltype=RELTYPE_SALES_LEAD_SOURCE store=connect parent=leftbox
 	@caption Soovitaja/allikas
 
-	// a cache for real_maker property value of the last call object associated with this customer relation
-	@property sales_last_call_maker type=text table=aw_crm_customer_data field=aw_sales_last_call_maker datatype=int parent=leftbox
-	@caption Viimase m&uuml;&uuml;gik&otilde;ne tegija
-
-	// a cache for real_start property value of the last call object associated with this customer relation
-	@property sales_last_call_time type=text table=aw_crm_customer_data field=aw_sales_last_call_time datatype=int parent=leftbox
-	@caption Viimase m&uuml;&uuml;gik&otilde;ne aeg
+	// a cache for the last call object associated with this customer relation
+	@property sales_last_call type=hidden table=aw_crm_customer_data field=aw_sales_last_call datatype=int parent=leftbox
 
 	// a cache for the count of call objects associated with this customer relation
 	@property sales_calls_made type=text table=aw_crm_customer_data field=aw_sales_calls_made datatype=int parent=leftbox
@@ -300,7 +298,7 @@ class crm_company_customer_data extends class_base
 				$u = get_instance(CL_USER);
 				$prop["options"] = $i->get_employee_picker(obj($u->get_current_company()), true);
 				break;
-		};
+		}
 		return $retval;
 	}
 
@@ -314,14 +312,17 @@ class crm_company_customer_data extends class_base
 		return $retval;
 	}
 
-	function _get_sales_last_call_time(&$arr)
+	function _get_sales_customer_info(&$arr)
 	{
-		$arr["prop"]["value"] = locale::get_lc_date($arr["prop"]["value"], locale::DATETIME_LONG_FULLYEAR);
-	}
+		$customer = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_BUYER");
 
-	function _get_sales_last_call_maker(&$arr)
-	{
-		$arr["prop"]["value"] = is_oid($arr["prop"]["value"]) ? obj($arr["prop"]["value"])->name() : "";
+		if ($customer)
+		{
+			$arr["prop"]["value"] = nl2br(sprintf(t('Nimi: %s
+Telefon(id): %s
+Aadress: %s
+			'), $customer->name(), implode(", ", $customer->get_phones()), $customer->get_address_string()));
+		}
 	}
 
 	function _get_campaign_tbl($arr)
@@ -937,8 +938,7 @@ exit_function("bill::balance");
 				  `aw_salesman` int(11) default NULL,
 				  `aw_sales_next_call` int(11) default NULL,
 				  `aw_sales_status` int(11) default NULL,
-				  `aw_sales_last_call_time` int(11) default NULL,
-				  `aw_sales_last_call_maker` int(11) default NULL,
+				  `aw_sales_last_call` int(11) default NULL,
 				  `aw_sales_calls_made` int(3) default NULL,
 				  `aw_lead_source` int(11) default NULL,
 				  `aw_referal_type` int(11) default NULL,
@@ -961,8 +961,7 @@ exit_function("bill::balance");
 			case "aw_sales_status":
 			case "aw_lead_source":
 			case "aw_sales_status":
-			case "aw_sales_last_call_time":
-			case "aw_sales_last_call_maker":
+			case "aw_sales_last_call":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int(11)"
