@@ -17,8 +17,8 @@ class aw_request
 		"crm_sales",
 		"realestate_manager",
 		"mrp_workspace",
-		"admin_if",
-		"aw_object_search",
+		// "admin_if",//!!! esialgu tekitab tyli, vaja m6elda kuidas mitme aknaga s2ilitada aplikatsiooni. variandid window id, klassi aplikatsioonide nimekirjad ja kui mitu siis kysitakse kasutajalt
+		// "aw_object_search",///!!!! vt admin_if
 		"bug_tracker",
 		"events_manager"
 	);
