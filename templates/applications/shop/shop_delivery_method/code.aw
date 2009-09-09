@@ -14,12 +14,12 @@ $rows = array(0);
 $groups = array();
 foreach($args["rows"] as $row)
 {
-	$rows[$row] = isset($priorities[$row]) ? $priorities[$row] : 0;
+	$rows[$row] = isset($priorities[$row]) ? aw_math_calc::string2float($priorities[$row]) : 0;
 	if(isset($parents[$row]))
 	{
 		foreach($parents[$row] as $parent)
 		{
-			$rows[$parent] = isset($priorities[$parent]) ? $priorities[$parent] : 0;
+			$rows[$parent] = isset($priorities[$parent]) ? aw_math_calc::string2float($priorities[$parent]) : 0;
 		}
 	}
 	<!-- SUB: ENABLING_TYPE_2_INITIALIZE -->
@@ -51,6 +51,7 @@ foreach(array({VAR:passing_order}) as $k)
 }
 
 $valid = {VAR:enabled_by_default};
+$cnt = 0;
 foreach(array_keys($rows) as $row)
 {
 	foreach(array_keys($cols) as $col)
@@ -68,8 +69,16 @@ foreach(array_keys($rows) as $row)
 				<!-- SUB: ENABLING_TYPE_1_HANDLE_CELL -->
 				$valid = {VAR:enable};
 				<!-- END SUB: ENABLING_TYPE_1_HANDLE_CELL -->
+				$cnt++;
 				break;
 			<!-- END SUB: HANDLE_CELL -->
+			default:
+				if($row."_".$col !== "0_0" or $cnt === 0)
+				{
+					$valid = {VAR:enabled_by_default};
+				}
+				$cnt++;
+				break;
 		}
 	}
 }
