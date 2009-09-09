@@ -834,7 +834,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				"no_caption" => 1,
 			);
 		};
-
 		//$prop = $arr["prop"];
 		//$prop["value"] = $retval;
 		//return array($prop);
@@ -3236,8 +3235,13 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 	**/
 	function submit_comment($arr)
 	{
-
 		$errors = array();
+
+		if (!empty($arr['delete_comments']))
+		{
+			return $this->delete_comments($arr);
+			
+		}
 
 		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
 		{
