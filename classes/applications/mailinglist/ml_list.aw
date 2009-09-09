@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.162 2009/09/04 15:46:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.163 2009/09/09 14:38:11 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2685,7 +2685,7 @@ foreach($ol->arr() as $o)
 		if($separator[0] == "/")
 		{
 			$separator = str_replace("/t", "\t" ,$separator);
-		}
+		}arr($separator);
 		$row_count = 0;
 		foreach($rows as $row)
 		{
@@ -2702,7 +2702,7 @@ foreach($ol->arr() as $o)
 					if(!($to > 1) || (!($this->member_count < $from) && ($to > $this->member_count)))
 					{
 						$name = trim($column[0]);
-						if($comb)
+						if(!empty($comb))
 						{
 							$name = "".$name." &lt;".$mail."&gt;";
 						}
@@ -2774,7 +2774,7 @@ foreach($ol->arr() as $o)
 		$obj = obj($id);
 		$this->already_found = array();
 		if($obj->class_id() == CL_MESSAGE)
-		{;
+		{
 			$src = $obj->meta("list_source");
 			$m_data = $obj->meta("mail_data");
 			if(!$this->list_id) $this->list_id = $m_data["list_id"];
@@ -2784,7 +2784,7 @@ foreach($ol->arr() as $o)
 			$src = $obj->prop("choose_menu");
 			if(!$this->list_id) $this->list_id = $id;
 		}
-		if(!empty( $this->list_id) && $this->can("view" , $this->list_id))
+		if(!empty($this->list_id) && $this->can("view" , $this->list_id))
 		{
 			$mailinglist = obj($this->list_id);
 		}
@@ -4284,7 +4284,7 @@ arr($msg_obj->prop("message"));
 		foreach($members as $key => $val)
 		{
 			$is_oid = 0;
-			if(is_oid($val["oid"]))
+			if(!empty($val["oid"]))
 			{
 				$is_oid = 1;
 			}
@@ -4328,7 +4328,7 @@ arr($msg_obj->prop("message"));
 			}
 
 			$tabledata = array(
-				"id" => $val["oid"],
+				"id" => $is_oid ? $val["oid"] : "",
 				"email" => $val["mail"],
 				"joined" => $memberdata["joined"],
 				"source" => $source,
@@ -4337,24 +4337,27 @@ arr($msg_obj->prop("message"));
 				"oid" => $oid,
 			);
 
-			$tabledata["ignore"] = html::checkbox(array(
-				"name" => "ignore_members[".$val["parent"]."][".$val["oid"]."]",
-				"checked" => $this->ignore_member(obj($val["parent"]) , $val["oid"]) ? 1: 0,
-				"value" => 1,
-			)).html::hidden(array(
-				"name" => "ignore_members_count[".$val["parent"]."][".$val["oid"]."]",
-				"value" => 1,
-			));
+			if($is_oid)
+			{
+				$tabledata["ignore"] = html::checkbox(array(
+					"name" => "ignore_members[".$val["parent"]."][".$val["oid"]."]",
+					"checked" => $this->ignore_member(obj($val["parent"]) , $val["oid"]) ? 1: 0,
+					"value" => 1,
+				)).html::hidden(array(
+					"name" => "ignore_members_count[".$val["parent"]."][".$val["oid"]."]",
+					"value" => 1,
+				));
+			}
 
-			if($val["co"])
+			if(isset($val["co"]))
 			{
 				$tabledata["co"] = $cos[$val["co"]];
 			}
-			if($val["pro"])
+			if(isset($val["pro"]))
 			{
 				$tabledata["pro"] = $pros[$val["pro"]];
 			}
-			if($val["section"])
+			if(isset($val["section"]))
 			{
 				$tabledata["section"] = $secs[$val["section"]];
 			}

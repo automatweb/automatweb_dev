@@ -108,7 +108,6 @@ class ml_list_obj extends _int_object
 		Mailinglist member e-mail address for search
 	@param from optional type=int
 	@param to optional type=int
-	
 	@returns array
 	@comment
 		if the source is file, then parent_name is set
@@ -135,6 +134,7 @@ class ml_list_obj extends _int_object
 		$params = $arr;
 		$params["id"] = $this->id();
 		$params["src"] = $arr["sources"];
+		$list->list_id = $this->id();
 		$ml_list_members = $list->get_members($params);
 
 		if(strlen($arr["name"]) > 1 || strlen($arr["mail"]) > 1)
