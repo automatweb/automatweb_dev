@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.163 2009/09/09 14:38:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.164 2009/09/09 14:38:44 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2685,7 +2685,7 @@ foreach($ol->arr() as $o)
 		if($separator[0] == "/")
 		{
 			$separator = str_replace("/t", "\t" ,$separator);
-		}arr($separator);
+		}
 		$row_count = 0;
 		foreach($rows as $row)
 		{
@@ -2774,7 +2774,7 @@ foreach($ol->arr() as $o)
 		$obj = obj($id);
 		$this->already_found = array();
 		if($obj->class_id() == CL_MESSAGE)
-		{
+		{;
 			$src = $obj->meta("list_source");
 			$m_data = $obj->meta("mail_data");
 			if(!$this->list_id) $this->list_id = $m_data["list_id"];
@@ -2784,7 +2784,7 @@ foreach($ol->arr() as $o)
 			$src = $obj->prop("choose_menu");
 			if(!$this->list_id) $this->list_id = $id;
 		}
-		if(!empty($this->list_id) && $this->can("view" , $this->list_id))
+		if(!empty( $this->list_id) && $this->can("view" , $this->list_id))
 		{
 			$mailinglist = obj($this->list_id);
 		}
