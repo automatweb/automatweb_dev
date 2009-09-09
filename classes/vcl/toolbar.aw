@@ -617,11 +617,13 @@ class toolbar extends aw_template
 		@param clid required type=int
 			Class_id's that can be added via the button
 		@param parent optional type=oid
-			Parent where to add the objects to. parent_var or parent must be set.
+			Parent where to add the objects to. parent_var or parent or both must be set. If both, then parent is default
 		@param parent_var optional type=string
 			Variable name
 		@param refresh optional type=array
 			Properties to refresh after adding new object
+		@param refresh_layout optional type=array
+			Layouts to refresh after adding new object
 		@param promts optional type=array
 			Properties to ask for new object
 			array("Name" => t("Sisesta uue objekti nimi"))
@@ -644,28 +646,42 @@ class toolbar extends aw_template
 			$js.= "var ".$prop." = prompt('".$text."');\n";
 		}
 
+		if(!empty($arr["parent"]))
+		{
+			$js.= "var parent='".$arr["parent"]."';";
+		}
+
+		if(!empty($arr["parent_var"]))
+		{
+			$js.= "if(get_property_data['".$arr["parent_var"]."'] > 1)
+			{
+				var parent = get_property_data['".$arr["parent_var"]."'];
+			}";
+		}
+
 		$js.= "$.get('/automatweb/orb.aw', {
 			class: 'menu',
 			action: 'create_new_object',
-			clid: '".$arr["clid"]."',";
+			parent: parent,
+			clid: '".$arr["clid"]."'";
 
-		if(!empty($arr["parent"]))
-		{
-			$js.= "parent: '".$arr["parent"]."'";
-		}
-		elseif(!empty($arr["parent_var"]))
-		{
-			$js.= "parent: get_property_data['".$arr["parent_var"]."']";
-		}
 
 		foreach($arr["promts"] as $prop => $text)
 		{
 			$js.= ", ".$prop." : ".$prop."\n";
 		}
 
-		$js.= "}, function (html) {
-			reload_property(['".join("','" , $arr["refresh"])."']);
+		$js.= "}, function (html) {\n";
+			if(isset($arr["refresh"]) && is_array($arr["refresh"]))
+			{
+				$js.= "reload_property(['".join("','" , $arr["refresh"])."']);\n";
 			}
+			
+			if(isset($arr["refresh_layout"]) && is_array($arr["refresh_layout"]))
+			{
+				$js.= "reload_layout(['".join("','" , $arr["refresh_layout"])."']);\n";
+			}
+		$js.= "}
 		);
 		";
 
