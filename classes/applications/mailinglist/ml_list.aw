@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.164 2009/09/09 14:38:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.165 2009/09/09 14:57:44 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -4250,6 +4250,15 @@ arr($msg_obj->prop("message"));
 				"name" => $search_name,
 				"all" => 1,
 			));
+				$cnt = 0;
+			foreach($members as  $key => $member)//see jama 2ra kaotada kui hakkab suutma lehekylgedeks jagada
+			{
+				if($cnt > 5000)
+				{
+					unset($members[$key]);
+				}
+				$cnt++;
+			}
 		}
 		else
 		{
