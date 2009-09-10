@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.35 2009/09/10 11:50:22 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.35 2009/09/10 11:50:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.36 2009/09/10 13:00:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.36 2009/09/10 13:00:53 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -780,17 +780,16 @@ $is_saved = 1;
 		$o->set_prop("channel" , $form->prop("channel"));
 		$o->set_prop("order_status" , "5");
 		$o->set_meta("order_data" , $order_data);
-		$o->save();
 
 		//kui valitud transpordiliik omab oma miskeid kontoreid v6i kohti kuhu viia, siis salvestab selle aadressi ka
 		$ed_types = $this->oc->prop("extra_address_delivery_types");
-
 		if(is_array($ed_types) && sizeof($ed_types) && in_array($order_data["delivery"], $ed_types))
 		{
 			$delivery = obj($order_data["delivery"]);
 			$delivery_vars = $delivery->get_vars($order_data);
 			$o->set_prop("smartpost_sell_place_name" , $delivery_vars["smartpost_sell_place_name"]);
 		}
+		$o->save();
 
 		$rows = $this->get_order();
 
