@@ -161,89 +161,101 @@ $sf->vars(array(
 	"ajax_loader_msg" => t("T&ouml;&ouml;tlen.<br />&Uuml;ks hetk, palun.")
 ));
 
-$box = quickmessagebox_obj::get_msgbox_for_user(obj(aw_global_get("uid_oid")), true);
-$ol = new object_list($box->connections_from(array("type" => "RELTYPE_UNREAD_MESSAGE")));
-if($num = $ol->count())
+
+if (empty($_GET["in_popup"]))
 {
-	if($num == 1)
+	$box = quickmessagebox_obj::get_msgbox_for_user(obj(aw_global_get("uid_oid")), true);
+	$ol = new object_list($box->connections_from(array("type" => "RELTYPE_UNREAD_MESSAGE")));
+	if($num = $ol->count())
 	{
-		$o = $ol->begin();
-		$text = $o->prop_xml("msg");
-		$text = html::strong(obj($o->prop("from"))->prop_xml("name")).":<br />".(strlen($text) > 100 ? substr($text, 0, 100)."..." : $text);
+		if($num == 1)
+		{
+			$o = $ol->begin();
+			$text = $o->prop_xml("msg");
+			$text = html::strong(obj($o->prop("from"))->prop_xml("name")).":<br />".(strlen($text) > 100 ? substr($text, 0, 100)."..." : $text);
+		}
+		else
+		{
+			$text = sprintf(t("Teile on %s uut s&otilde;numit"), $num);
+		}
+		$sf->vars(array(
+			"msg_popup_title" => t("Teade"),
+			"msg_popup_content" => $text,
+			"msg_popup_url" => ($num == 1 && $o->prop("url")) ? $sf->mk_my_orb("redir_popup_url", array("url" => $o->prop("url")), "quickmessagebox") : $sf->mk_my_orb("redir_userbox", array("url" => get_ru()), "quickmessagebox"),
+		));
+		$popup = $sf->parse("MSG_POPUP");
+		$sf->vars(array(
+			"MSG_POPUP" => $popup,
+		));
 	}
-	else
+
+	if ($sf->prog_acl("view", "disp_person"))
 	{
-		$text = sprintf(t("Teile on %s uut s&otilde;numit"), $num);
+		$sf->vars(array(
+			"SHOW_CUR_P" => $sf->parse("SHOW_CUR_P")
+		));
 	}
+
+	if ($sf->prog_acl("view", "disp_person_view") and !$sf->prog_acl("view", "disp_person"))
+	{
+		$sf->vars(array(
+			"SHOW_CUR_P_VIEW" => $sf->parse("SHOW_CUR_P_VIEW")
+		));
+	}
+
+	if ($sf->prog_acl("view", "disp_person_text") and !$sf->prog_acl("view", "disp_person") and !$sf->prog_acl("view", "disp_person_view"))
+	{
+		$sf->vars(array(
+			"SHOW_CUR_P_TEXT" => $sf->parse("SHOW_CUR_P_TEXT")
+		));
+	}
+
+	if ($sf->prog_acl("view", "disp_co_edit"))
+	{
+		$sf->vars(array(
+			"SHOW_CUR_CO" => $sf->parse("SHOW_CUR_CO")
+		));
+	}
+
+	if ($sf->prog_acl("view", "disp_co_view") && !$sf->prog_acl("view", "disp_co_edit"))
+	{
+		$sf->vars(array(
+			"SHOW_CUR_CO_VIEW" => $sf->parse("SHOW_CUR_CO_VIEW")
+		));
+	}
+
+	if ($sf->prog_acl("view", "disp_co_text") && !$sf->prog_acl("view", "disp_co_edit") && !$sf->prog_acl("view", "disp_co_view"))
+	{
+		$sf->vars(array(
+			"SHOW_CUR_CO_TEXT" => $sf->parse("SHOW_CUR_CO_TEXT")
+		));
+	}
+
+	if ($sf->prog_acl("view", "disp_object_type"))
+	{
+		$sf->vars(array(
+			"SHOW_CUR_CLASS" => $sf->parse("SHOW_CUR_CLASS")
+		));
+	}
+
+	if ($sf->prog_acl("view", "disp_object_link"))
+	{
+		$sf->vars(array(
+			"SHOW_CUR_OBJ" => $sf->parse("SHOW_CUR_OBJ")
+		));
+	}
+	$shwy =  (empty($site_title) || aw_global_get("hide_yah")) && $_GET["class"] !== "admin_if";
+
 	$sf->vars(array(
-		"msg_popup_title" => t("Teade"),
-		"msg_popup_content" => $text,
-		"msg_popup_url" => ($num == 1 && $o->prop("url")) ? $sf->mk_my_orb("redir_popup_url", array("url" => $o->prop("url")), "quickmessagebox") : $sf->mk_my_orb("redir_userbox", array("url" => get_ru()), "quickmessagebox"),
+		"YAH" => $shwy ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH"),
+		"YAH2" => $shwy ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH2"),
 	));
-	$popup = $sf->parse("MSG_POPUP");
+
 	$sf->vars(array(
-		"MSG_POPUP" => $popup,
+		"HEADER" => $sf->parse("HEADER")
 	));
 }
-
-if ($sf->prog_acl("view", "disp_person"))
-{
-	$sf->vars(array(
-		"SHOW_CUR_P" => $sf->parse("SHOW_CUR_P")
-	));
-}
-
-if ($sf->prog_acl("view", "disp_person_view") and !$sf->prog_acl("view", "disp_person"))
-{
-	$sf->vars(array(
-		"SHOW_CUR_P_VIEW" => $sf->parse("SHOW_CUR_P_VIEW")
-	));
-}
-
-if ($sf->prog_acl("view", "disp_person_text") and !$sf->prog_acl("view", "disp_person") and !$sf->prog_acl("view", "disp_person_view"))
-{
-	$sf->vars(array(
-		"SHOW_CUR_P_TEXT" => $sf->parse("SHOW_CUR_P_TEXT")
-	));
-}
-
-if ($sf->prog_acl("view", "disp_co_edit"))
-{
-	$sf->vars(array(
-		"SHOW_CUR_CO" => $sf->parse("SHOW_CUR_CO")
-	));
-}
-
-if ($sf->prog_acl("view", "disp_co_view") && !$sf->prog_acl("view", "disp_co_edit"))
-{
-	$sf->vars(array(
-		"SHOW_CUR_CO_VIEW" => $sf->parse("SHOW_CUR_CO_VIEW")
-	));
-}
-
-if ($sf->prog_acl("view", "disp_co_text") && !$sf->prog_acl("view", "disp_co_edit") && !$sf->prog_acl("view", "disp_co_view"))
-{
-	$sf->vars(array(
-		"SHOW_CUR_CO_TEXT" => $sf->parse("SHOW_CUR_CO_TEXT")
-	));
-}
-
-if ($sf->prog_acl("view", "disp_object_type"))
-{
-	$sf->vars(array(
-		"SHOW_CUR_CLASS" => $sf->parse("SHOW_CUR_CLASS")
-	));
-}
-
-if ($sf->prog_acl("view", "disp_object_link"))
-{
-	$sf->vars(array(
-		"SHOW_CUR_OBJ" => $sf->parse("SHOW_CUR_OBJ")
-	));
-}
-$shwy =  (empty($site_title) || aw_global_get("hide_yah")) && $_GET["class"] != "admin_if";
-
-if (!empty($_GET["in_popup"]))
+else
 {
 	$sf->vars(array(
 		"NO_HEADER" => $sf->parse("NO_HEADER")
@@ -251,10 +263,7 @@ if (!empty($_GET["in_popup"]))
 	$site_title = "";
 	$shwy = true;
 }
-$sf->vars(array(
-	"YAH" => $shwy ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH"),
-	"YAH2" => $shwy ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH2"),
-));
+
 
 $tmp = array();
 if (!empty($site_title))	// weird, but lots of places rely on the yah line being empty and thus having no height.

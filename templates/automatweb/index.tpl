@@ -16,6 +16,7 @@
 	<![endif]-->
 </head>
 <body onLoad="check_generic_loader();">
+
 <!-- SUB: MSG_POPUP -->
 <div class="msg_popup" style="background: #ffffff; width: 150px; min-height: 76px; font-size: 11px; padding: 0px; visibility: hidden; position: fixed; right: 0px;  border: #05A6E9 2px solid;">
 <div style="background: url('{VAR:baseurl}/automatweb/images/aw06/layout_t.gif') repeat-x top; height:14px; color: white; font-weight: bold; padding: 4px;">
@@ -34,7 +35,6 @@ jQuery(function(){
 });
 </script>
 <!-- END SUB: MSG_POPUP -->
-
 
 <script type="text/javascript">
 
@@ -122,8 +122,10 @@ function cfEditClickGroup(group, oid)
 
 </script>
 
-<!-- p2is -->
 <div id="pais">
+<!-- p2is -->
+<div id="awMainHeaderContainer">
+<!-- SUB: HEADER -->
 	<div class="logo">
 		<span>{VAR:prod_family}</span>
 		<a href="{VAR:prod_family_href}" title="AutomatWeb"><img src="{VAR:baseurl}/automatweb/images/aw06/aw_logo.gif" alt="AutomatWeb.com" width="183" height="34" border="0" /></a>
@@ -179,12 +181,14 @@ function cfEditClickGroup(group, oid)
 		{VAR:site_title}
 	</div>
 	<!-- END SUB: YAH -->
+<!-- END SUB: HEADER -->
 
-		<!-- SUB: NO_HEADER -->
-		<div id="pais2">
-		<!-- END SUB: NO_HEADER -->
+<!-- SUB: NO_HEADER -->
+<!-- END SUB: NO_HEADER -->
+</div>
 
 	{VAR:content}
+
 <!-- //sisu -->
 <!-- jalus -->
 <!-- SUB: YAH2 -->
@@ -198,7 +202,7 @@ function cfEditClickGroup(group, oid)
 <!-- SUB: POPUP_MENUS -->
 <!-- END SUB: POPUP_MENUS -->
 
-<div id="ajaxLoader" style="display: none;">
+	<div id="ajaxLoader" style="display: none;">
 	<img src="/automatweb/images/ajax-loader2.gif" width="220" height="19" alt="" />
 	<div>{VAR:ajax_loader_msg}</div>
 </div>
