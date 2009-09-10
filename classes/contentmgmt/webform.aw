@@ -2641,6 +2641,31 @@ class webform extends class_base
 				$awm->gen_mail();
 			}
 
+
+//v2ga kole... kuid ei tea kuda muidu saaks kontrollerist miski lisaks maili saaja valida
+                      if(aw_global_get("also_send_form_submit_confirmation_to"))
+                        {
+                                $awm->clean();
+                                foreach($attaches as $att)
+                                {
+                                        $awm->fattach($att);
+                                }
+                                $prx = array(
+                                        "fromn" => $obj_inst->prop("def_name"),
+                                        "froma" => $obj_inst->prop("def_mail"),
+                                );
+                                $awm->create_message(array(
+                                        "subject" => aw_global_get("confirmation_subject") != "" ? aw_global_get("confirmation_subject") : $obj_inst->name(),
+                                        "to" => aw_global_get("also_send_form_submit_confirmation_to"),
+                                        "body" => aw_global_get("confirmation_subject")."\n".$body,
+                                ) + $prx);
+                                $awm->gen_mail();
+                        }
+
+
+
+
+
 			if ($obj_inst->prop("after_confirm_edit"))
 			{
 				return $this->mk_my_orb("change", array("id" => $o->id(), "section" => aw_global_get("section")), CL_REGISTER_DATA, false, false, "&", false);

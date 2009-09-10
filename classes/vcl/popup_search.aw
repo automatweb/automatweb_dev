@@ -1090,7 +1090,7 @@ function aw_get_el(name,form)
 			$val = $arr["value"];
 		}
 		$o->set_prop($arr["property"] , $val);
-		$o->save();
+		$o->save();arr($arr["property"]); arr($o->prop($arr["property"]));
 		die($o->prop($arr["property"]));
 	}
 
@@ -1114,16 +1114,16 @@ function aw_get_el(name,form)
 		));
 
 		$arr["clid"] = join("," , $arr["clid"]);
-/*		if(!isset($arr["reload_layout"]))
+		if(!isset($arr["reload_layout"]))
 		{
-			$arr["reload_layout"] = "' '";
+			$arr["reload_layout"] = "''";
 		}
 
 		if(!isset($arr["reload_property"]))
 		{
-			$arr["reload_property"] = "' '";
+			$arr["reload_property"] = "''";
 		}
-*/
+
 		$htmlc->add_property(array(
 			"name" => "s[submit]",
 			"type" => "button",
@@ -1253,7 +1253,9 @@ function aw_get_el(name,form)
 		));
 
 		$obj = obj($arr["id"]);
-		$cx = get_instance("cfg/cfgutils");
+
+//se valimine vaja ka t88le saada, muidu pole kasu sest valitavusest
+/*		$cx = get_instance("cfg/cfgutils");
 		$props = $cx->load_class_properties(array(
 			"clid" => $obj->class_id(),
 		));
@@ -1265,11 +1267,13 @@ function aw_get_el(name,form)
 				"field" => "oid",
 			));
 		}
-
+*/
 		$t->set_default_sortby("name");
 
 		$filter = array(
 			"limit" => 100,
+			"lang_id" => array(),
+			"site_id" => array(),
 		);
 		if(!empty($arr["name"]))
 		{
