@@ -39,91 +39,6 @@
             <caption>Vaikimisi valuuta</caption>
       </property>
       <property>
-            <name>cart_type</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>chooser</type>
-            <caption>Ostukorvi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
-      </property>
-      <property>
-            <name>multi_items</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Ostukorvis v&amp;amp;otilde;ib olla mitu sama ID-ga toodet</caption>
-      </property>
-      <property>
-            <name>show_unconfirmed</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>N&amp;amp;auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi</caption>
-      </property>
-      <property>
-            <name>only_prods</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Ostukorvis on tooted ilma pakendite, piltide jms</caption>
-      </property>
-      <property>
-            <name>pdf_template</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>PDF Template faili nimi</caption>
-      </property>
-      <property>
-            <name>show_prod_and_package</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>N&amp;amp;auml;ita selgituses toodet/paketti</caption>
-      </property>
-      <property>
-            <name>chart_show_template</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Ostukorvi vaade template</caption>
-      </property>
-      <property>
-            <name>chart_final_template</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Ostukorvi l&amp;amp;ouml;ppvaate template</caption>
-      </property>
-      <property>
-            <name>integration_class</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Integratsiooni klass</caption>
-      </property>
-      <property>
             <name>mail_to_client</name>
             <group>mail_settings_orderer</group>
             <table>objects</table>
@@ -343,6 +258,15 @@
             <method>null</method>
             <type>textbox</type>
             <caption>Tooteid lehek&amp;amp;uuml;ljel</caption>
+      </property>
+      <property>
+            <name>product_type</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>N&amp;amp;auml;idatavad klassi t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
       </property>
       <property>
             <name>childtitle1</name>
@@ -683,6 +607,91 @@
             <reltype>RELTYPE_CART_VALUE_CONTROLLER</reltype>
             <caption>Korvi hinna kontroller</caption>
       </property>
+      <property>
+            <name>cart_type</name>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>Ostukorvi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>multi_items</name>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ostukorvis v&amp;amp;otilde;ib olla mitu sama ID-ga toodet</caption>
+      </property>
+      <property>
+            <name>show_unconfirmed</name>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;amp;auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi</caption>
+      </property>
+      <property>
+            <name>only_prods</name>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ostukorvis on tooted ilma pakendite, piltide jms</caption>
+      </property>
+      <property>
+            <name>pdf_template</name>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>PDF Template faili nimi</caption>
+      </property>
+      <property>
+            <name>show_prod_and_package</name>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;amp;auml;ita selgituses toodet/paketti</caption>
+      </property>
+      <property>
+            <name>chart_show_template</name>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Ostukorvi vaade template</caption>
+      </property>
+      <property>
+            <name>chart_final_template</name>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Ostukorvi l&amp;amp;ouml;ppvaate template</caption>
+      </property>
+      <property>
+            <name>integration_class</name>
+            <group>settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Integratsiooni klass</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -692,17 +701,6 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
-            <mail_settings>
-                  <caption>Meiliseaded</caption>
-            </mail_settings>
-            <mail_settings_orderer>
-                  <caption>Tellijale</caption>
-                  <parent>mail_settings</parent>
-            </mail_settings_orderer>
-            <mail_settings_seller>
-                  <caption>Pakkujale</caption>
-                  <parent>mail_settings</parent>
-            </mail_settings_seller>
             <appear>
                   <caption>N&amp;amp;auml;itamine</caption>
             </appear>
@@ -740,6 +738,17 @@
             <delivery>
                   <caption>Kohaletoimetamine</caption>
             </delivery>
+            <mail_settings>
+                  <caption>Meiliseaded</caption>
+            </mail_settings>
+            <mail_settings_orderer>
+                  <caption>Tellijale</caption>
+                  <parent>mail_settings</parent>
+            </mail_settings_orderer>
+            <mail_settings_seller>
+                  <caption>Pakkujale</caption>
+                  <parent>mail_settings</parent>
+            </mail_settings_seller>
             <data>
                   <caption>Andmed</caption>
             </data>
@@ -775,6 +784,9 @@
                   <caption>Vali kehtivad filtrid</caption>
                   <parent>filter</parent>
             </filter_set_folders>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
       </groupinfo>
       <tableinfo>
             <aw_shop_order_center>

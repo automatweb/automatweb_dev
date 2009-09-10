@@ -51,6 +51,14 @@
 			</function>
 		</action>
 
+		<action name="make_new_struct">
+			<function name="make_new_struct">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="ajax_set_product_show_property" all_args="1">
 			<function name="ajax_set_product_show_property">
 				<arguments>
