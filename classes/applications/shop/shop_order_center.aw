@@ -351,6 +351,20 @@ class shop_order_center extends class_base
 		}
 	}
 
+
+ 
+	function callback_mod_layout(&$arr)
+	{
+		if($arr["name"] == "appearance_r")
+		{
+			if(isset($arr["request"]["menu"]) && $this->can("view" , $arr["request"]["menu"]))
+			{
+				$arr["area_caption"] = sprintf(t("Kausta %s all asuvate kaustade toodete n&auml;itamise seaded"), get_name($arr["request"]["menu"]));
+			}
+		}
+		return true;
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -1933,6 +1947,8 @@ class shop_order_center extends class_base
 			"persist_state" => 1,
 			"get_branch_func" => $gbf,
 			"has_root" => true,
+			"root_name" => sizeof($roots) ? "" : "<font color=red>" . t("Toodete kuvamise juurkaust valimata") . "</font>",
+			"root_url" => "javascript:;",
 		));
 
 		foreach($roots as $root)
@@ -1940,7 +1956,7 @@ class shop_order_center extends class_base
 			$root_object = obj($root);
 		
 			$tv->add_item(0,array(
-				"name" => t("K&otilde;ik tooted"),
+				"name" => $root_object->name(),//t("K&otilde;ik tooted"),
 				"id" => $root,
 				"reload" => array(
 					"props" => array("appearance_list"),
@@ -2112,6 +2128,10 @@ class shop_order_center extends class_base
 		));
 
 		$show_inst = get_instance(CL_PRODUCTS_SHOW);
+		$ps = get_instance("vcl/popup_search");
+		$ps->set_class_id(array(CL_SHOP_PRODUCT_CATEGORY));
+		$ps->set_reload_layout("appearance_r");
+		$ps->set_property("categories");
 		$t->set_sortable(false);
 		if(!empty($arr["request"]["menu"]))
 		{
@@ -2160,13 +2180,15 @@ class shop_order_center extends class_base
 					}
 					
 					$data["categories"] = join(",\n<br>" , $cats);
+					$ps->set_id($o->id());
+					$data["cat_search"] = $ps->get_search_button();	
 				}
 
-				$data["cat_search"] = html::href(array(
+/*				$data["cat_search"] = html::href(array(
 					"url" => "javascript:;",
 					"onclick" => 'win = window.open("'.$this->mk_my_orb("search_categories", array("is_popup" => 1), CL_SHOP_ORDER_CENTER).'&menu='.$id.'" ,"categoty_search","width=720,height=600,statusbar=yes, scrollbars=yes");',
 					"caption" => html::img(array("url" => $this->imgbase."/search.gif")),
-				));
+				));*/
 				$data["open"] = html::href(array(
 					"url" => $this->mk_my_orb("redir", array("parent" => $id), CL_ADMIN_IF),
 					"caption" => t("Ava")
@@ -2256,6 +2278,20 @@ class shop_order_center extends class_base
 					);
 				}
 			";
+			$js.= "
+				function make_new_struct()
+				{
+					var ansa = confirm('" . t("Kataloogistruktuuri ehitamine l6hub seni toiminud toodete n2itamise seaded. Oled kindel et luua uus struktuur?") . "');
+					if (ansa)
+					{
+						alert('k6ik on kadunud.... peab ametit vahetama...');
+					}
+					else
+					{
+						alert('vuss!!!');
+					}
+				}
+			";
 		}
 		return $js;
 	}
@@ -2264,12 +2300,16 @@ class shop_order_center extends class_base
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
 
-		$tb->add_js_new_button(array(
-			"parent_var" => "menu",
-			"clid" => CL_MENU,
-			"refresh" => array("appearance_list"),
-			"promts" => array("name" => t("Sisesta uue kausta nimi")),
-		));
+		$roots = $arr["obj_inst"]->prop("root_menu");
+
+ 		$tb->add_js_new_button(array(
+ 			"parent_var" => "menu",
+			"parent" => is_array($roots) ? reset($roots) : "",
+ 			"clid" => CL_MENU,
+ 			"refresh" => array("appearance_list"),
+	//		"refresh_layout" => array("appearance_c"),
+ 			"promts" => array("name" => t("Sisesta uue kausta nimi")),
+ 		));
 
 		$tb->add_delete_button();
 
@@ -2344,6 +2384,14 @@ class shop_order_center extends class_base
 				"link" => "javascript:set_sel_prop('product_template' , '".$name."');",
 			));
 		}
+
+		$tb->add_button(array(
+			"name" => "new_struct",
+			"text" => t("Loo uus struktuur"),
+			"tooltip" => t("Loo uus struktuur"),
+			"url" => "javascript:make_new_struct()",
+		));
+
 
 	}
 
@@ -2431,6 +2479,7 @@ class shop_order_center extends class_base
 		$filter = array(
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 			"lang_id" => array(),
+-			"site_id" => array(),
 		);
 
 		if($arr["name"])
