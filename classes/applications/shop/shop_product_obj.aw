@@ -498,6 +498,19 @@ class shop_product_obj extends _int_object
 		return $ol->ids();
 	}
 
+	public function get_first_caregory_id()
+	{
+		$ids = $this->get_categories();
+		if(is_array($ids))
+		{
+			return reset($ids);
+		}
+		else
+		{
+			return null;
+		}
+	}
+
 	/** removes product from all categories
 		@attrib api=1
 		@returns true

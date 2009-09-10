@@ -338,11 +338,11 @@ class shop_order_cart extends class_base
 		}
 
 
-		error::raise_if(!$cart_o->prop("prod_layout"), array(
-			"id" => "ERR_NO_PROD_LAYOUT",
-			"msg" => sprintf(t("shop_order_cart::show(): no product layout set for cart (%s) "), $cart_o->id())
-		));
-		$layout = obj($cart_o->prop("prod_layout"));
+//		error::raise_if(!$cart_o->prop("prod_layout"), array(
+//			"id" => "ERR_NO_PROD_LAYOUT",
+//			"msg" => sprintf(t("shop_order_cart::show(): no product layout set for cart (%s) "), $cart_o->id())
+//		));
+//		$layout = obj($cart_o->prop("prod_layout"));
 
 		$total = 0;
 		$items = 0;
@@ -392,8 +392,8 @@ class shop_order_cart extends class_base
 						
 					foreach($quantx->get() as $x => $quant)
 					{
-						$items ++;
 
+						$items ++;
 						$product = obj($i);
 						$vars = $product->get_data();
 						$price = $product->get_shop_price($oc->id());
@@ -455,6 +455,7 @@ class shop_order_cart extends class_base
 	
 					$items ++;
 
+
 					$product = obj($i);
 					$vars = $product->get_data();
 					$price = $product->get_shop_price($oc->id());
@@ -467,6 +468,7 @@ class shop_order_cart extends class_base
 					$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
 					$this->vars($vars);
 					$product_str.= $this->parse("PRODUCT");
+
 					$show_info_page = false;
 					$total += $total_price;
 					$cart_total += $total_price;
@@ -1033,7 +1035,7 @@ class shop_order_cart extends class_base
 				}
 				if($arr["from"] != "confirm")
 				{
-					foreach($order_data[$iid] as $key => $val)
+					foreach(safe_array($order_data[$iid]) as $key => $val)
 					{
 						if((string)$key == "all_items" || (string)$key == "all_pkts")
 						{
@@ -1286,7 +1288,8 @@ class shop_order_cart extends class_base
 			}
 			aw_session_del("order.accept_cond");
 
-			$sell_order_id = $cart_o->create_sell_order();
+		// There is no such function ?!? --dragut@28.08.2009
+		//	$sell_order_id = $cart_o->create_sell_order();
 
 			$ordid = $this->do_create_order_from_cart($arr["oc"], NULL, array(
 				"payment" => $cart["payment"],
@@ -1336,7 +1339,7 @@ class shop_order_cart extends class_base
 		$so->start_order(obj($warehouse), $oc);
 
 
-
+		$cart = $this->get_cart($oc);
 		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quant)
 		{

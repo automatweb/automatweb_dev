@@ -48,37 +48,34 @@ enter_function("products_show::get_web_items");
 		}
 
 		$ol = new object_list();
-		if(false)
+		if($categories->count())
 		{
-			foreach($categories->arr() as $c)
+			switch($this->prop("type"))
 			{
-				$products = $c->get_packagings();
-				$ol->add($products);
-			}
-		}
-		elseif(false)
-		{
-			foreach($categories->arr() as $c)
-			{
-				$products = $c->get_products();
-				$ol->add($products);
-			}
-		}
-		else
-		{
-			if(!$categories->count())
-			{
-				$ol = new object_list();
-			}
-			else
-			{
-				$filter = array(
-					"class_id" => CL_SHOP_PACKET,
-					"lang_id" => array(),
-					"site_id" => array(),
-					"CL_SHOP_PACKET.RELTYPE_CATEGORY" => $categories->ids(),
-				);
-				$ol = new object_list($filter);
+				case CL_SHOP_PRODUCT://toode
+					foreach($categories->arr() as $c)
+					{
+						$products = $c->get_products();
+						$ol->add($products);
+					}
+					break;
+				case CL_SHOP_PRODUCT_PACKAGINGS://pakend
+					foreach($categories->arr() as $c)
+					{
+						$products = $c->get_packagings();
+						$ol->add($products);
+					}
+					break;
+				case CL_SHOP_PACKER:
+				default:
+					$filter = array(
+						"class_id" => CL_SHOP_PACKET,
+						"lang_id" => array(),
+						"site_id" => array(),
+						"CL_SHOP_PACKET.RELTYPE_CATEGORY" => $categories->ids(),
+					);
+					$ol = new object_list($filter);
+					break;
 			}
 		}
 

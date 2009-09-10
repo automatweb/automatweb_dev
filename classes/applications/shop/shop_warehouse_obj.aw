@@ -139,38 +139,46 @@ class shop_warehouse_obj extends _int_object
 		$filter["lang_id"] = array();
 		$filter["site_id"] = array();
 
-		if(is_oid($arr["category"]))
+		if(isset($arr["category"]))
 		{
-			if($arr["recursive"])
+			if(is_oid($arr["category"]))
 			{
-				$ot = new object_tree(array(
-					"parent" => $arr["category"],
-					"class_id" => CL_SHOP_PRODUCT_CATEGORY,
-					"sort_by" => "objects.jrk"
-				));
-				$cat_ids = $ot->ids();
-				if(is_array($cat_ids) && sizeof($cat_ids))
+				if($arr["recursive"])
 				{
-					$cat_ids[] = $arr["category"];
-					$arr["category"] = $cat_ids;
+					$ot = new object_tree(array(
+						"parent" => $arr["category"],
+						"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+						"sort_by" => "objects.jrk"
+					));
+					$cat_ids = $ot->ids();
+					if(is_array($cat_ids) && sizeof($cat_ids))
+					{
+						$cat_ids[] = $arr["category"];
+						$arr["category"] = $cat_ids;
+					}
 				}
-			}
-			$filter["CL_SHOP_PRODUCT.RELTYPE_CATEGORY"] = $arr["category"];
-		}
-		elseif(is_array($arr["category"]) && sizeof($arr["category"]))
-		{
-			if($arr["cat_condition"] == "and")
-			{//----------------------------------------------------
 				$filter["CL_SHOP_PRODUCT.RELTYPE_CATEGORY"] = $arr["category"];
 			}
-			else
+			elseif(is_array($arr["category"]) && sizeof($arr["category"]))
 			{
-				$filter["CL_SHOP_PRODUCT.RELTYPE_CATEGORY"] = $arr["category"];
+				if($arr["cat_condition"] == "and")
+				{//----------------------------------------------------
+					$filter["CL_SHOP_PRODUCT.RELTYPE_CATEGORY"] = $arr["category"];
+				}
+				else
+				{
+					$filter["CL_SHOP_PRODUCT.RELTYPE_CATEGORY"] = $arr["category"];
+				}
 			}
 		}
 		if(isset($arr["name"]))
 		{
 			$filter["name"] = "%".$arr["name"]."%";
+		}
+
+		if(isset($arr["parent"]))
+		{
+			$filter["parent"] = $arr["parent"];
 		}
 
 		if(isset($arr["code"]))
@@ -187,6 +195,8 @@ class shop_warehouse_obj extends _int_object
 		@param category optional type=oid
 			Product category id
 		@param name optional type=string
+			Product name
+		@param parent optional type=oid/array
 			Product name
 		@param code optional type=string
 			Product code
@@ -383,6 +393,10 @@ class shop_warehouse_obj extends _int_object
 		{
 			$parent = $arr["parent"];
 		}
+		elseif($this->get_conf("prod_fld"))
+		{
+			$parent = $this->get_conf("prod_fld");
+		}
 		$o->set_class_id(CL_SHOP_PRODUCT);
 		$o->set_parent($parent);
 		$o->set_name($arr["name"]);
@@ -438,6 +452,106 @@ class shop_warehouse_obj extends _int_object
 			$ret[$eml->prop("mail")] = $eml->prop("mail");
 		};
 		return $ret;
+	}
+
+	/** Returns a list of packets/products in the warehouse $id, optionally under folder $parent
+		@attrib param=name api=1
+		@param parent optional type=var
+			Parent folder id or array of parent folders
+		@param only_active optional type=bool
+			To get only active packets/products
+		@param no_subitems optional type=bool
+			If true, sub-products are not requested
+		@returns Array of packet/product objects
+	**/
+	function get_packet_list($arr = array())
+	{
+		enter_function("shop_warehouse::get_packet_list");
+
+		$conf = obj($this->prop("conf"));
+
+		$status = array(STAT_ACTIVE, STAT_NOTACTIVE);
+		if (!empty($arr["only_active"]))
+		{
+			$status = STAT_ACTIVE;
+		}
+
+		$ret = new object_list();
+
+		if($conf->prop("no_packets") != 1 && !(isset($arr['parent']) &&  is_array($arr['parent'])))
+		{
+			$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")));
+			if ($po->is_brother())
+			{
+				$po = $po->get_original();
+			}
+
+			$ol = new object_list(array(
+				"parent" => $po->id(),
+				"class_id" => CL_SHOP_PACKET,
+				"status" => $status
+			));
+			$ret = $ol;
+		}
+
+		if (isset($arr['parent']) && is_array($arr['parent']))
+		{
+			$parent = $arr['parent'];
+		}
+		else
+		{
+			$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("prod_fld")));
+			if ($po->is_brother())
+			{
+				$po = $po->get_original();
+			}
+			$parent = $po->id();
+		}
+
+		enter_function("warehouse::object_list");
+		$ol = new object_list(array(
+			"parent" => $parent,
+			"class_id" => CL_SHOP_PRODUCT,
+			"status" => $status
+		));
+		$ret->add($ol);
+		exit_function("warehouse::object_list");
+		if(!$conf->prop("sell_prods") && empty($arr["no_subitems"]))
+		{
+			//seda peaks parandama
+			// now, let the classes add sub-items to the list
+//			$tmp = array();
+//			foreach($ret as $o)
+//			{
+//				$inst = $o->instance();
+//				foreach($inst->get_contained_products($o) as $co)
+//				{
+//					$tmp[] = $co;
+//				}
+//			}
+//			$ret = $tmp;
+		}
+		exit_function("shop_warehouse::get_packet_list");
+		return $ret;
+	}
+
+	private function set_config_object()
+	{
+		if(!isset($this->config_object))
+		{
+			$this->config_object = obj($this->prop("conf"));
+		}
+	}
+
+	/** Returns config object property value
+		@attrib param=pos api=1
+		@param property required type=string
+			conf object property name
+	**/
+	public function get_conf($prop)
+	{
+		$this->set_config_object();
+		return $this->config_object->prop($prop);
 	}
 
 }

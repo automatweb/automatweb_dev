@@ -92,15 +92,26 @@ class shop_order_cart_obj extends _int_object
 				"class_id" => CL_SHOP_ORDER_CENTER,
 				"lang_id" => array(),
 				"cart" => $this->id(),
+				"site_id" => array(),
 			));
 			$ids = $ol->ids();
 			$this->oc = obj(reset($ids));
-			if(!is_object($this->oc))
+			if(!is_oid($this->oc->id()))
 			{
-				error::raise(array(
-					"id" => "ERR_NO_WAREHOOS",
-					"msg" => sprintf(t("shop_order_cart_obj::creat_osell_order(): no order_center set for cart %s!"), $this->id())
+				$ol = new object_list(array(
+					"class_id" => CL_SHOP_ORDER_CENTER,
+					"lang_id" => array(),
+					"site_id" => array(),
 				));
+				$ids = $ol->ids();
+				$this->oc = obj(reset($ids));
+				if(!is_oid($this->oc->id()))
+				{	
+					error::raise(array(
+						"id" => "ERR_NO_WAREHOOS",
+						"msg" => sprintf(t("shop_order_cart_obj::creat_osell_order(): no order_center set for cart %s!"), $this->id())
+					));
+				}
 			}
 		}
 	}

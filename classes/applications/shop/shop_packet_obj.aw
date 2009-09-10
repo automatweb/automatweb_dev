@@ -38,6 +38,18 @@ class shop_packet_obj extends _int_object
 		));
 		return $ol;
 	}
+
+	public function get_first_caregory_id()
+	{
+		foreach($this->connections_from(array(
+			"type" => "RELTYPE_CATEGORY",
+
+		)) as $c)
+		{
+			return $c->prop("to");
+		}
+		return null;
+	}
 	
 	public function get_categories()
 	{

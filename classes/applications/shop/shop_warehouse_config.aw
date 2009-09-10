@@ -193,7 +193,7 @@ class shop_warehouse_config extends class_base
 					0 => t("Ei"),
 					1 => t("Jah"),
 				);
-				if(!$data["value"])
+				if(empty($data["value"]))
 				{
 					$data["value"] = 0;
 				}

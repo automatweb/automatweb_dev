@@ -216,14 +216,16 @@ enter_function("products_show::show");
 			));
 		}
 enter_function("products_show::start");
+		$oc = $ob->get_oc();
 		$this->read_template($ob->get_template());
 		$this->vars(array(
 			"name" => $ob->prop("name"),
+			"currency" => get_name($oc->get_currency()),
 		));
 
 		lc_site_load("shop", &$this);
 		$products = $ob->get_web_items();
-		$oc = $ob->get_oc();
+
 		$GLOBALS["order_center"] = $oc->id();
 		
 		$prod = "";//templeiti muutuja PRODUCT v22rtuseks
@@ -257,8 +259,9 @@ enter_function("products_show::start");
 			));
 
 			$product_data["product_link"] = "/".aw_global_get("section")."?product=".$product_data["id"]."&oc=".$oc->id();
-			$ids = $product->get_categories()->ids();
-			$category = reset($ids);
+		
+			$category = $product->get_first_caregory_id();
+
 			$product_data["menu"] = $ob->get_category_menu($category);
 			$product_data["menu_name"] = get_name($product_data["menu"]);
 			$this->vars($product_data);//arr($product_data);
@@ -370,6 +373,7 @@ enter_function("products_show::start");
 
 		}
 		$data["oc"] = $oc->id();
+
 		$data["submit"] = html::submit(array(
 			"value" => t("Lisa tooted korvi"),
 		));

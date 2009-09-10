@@ -187,6 +187,12 @@ class shop_price_list extends shop_matrix
 		));
 	}
 
+	public function callback_pre_edit($arr)
+	{
+		$this->obj = $arr["obj_inst"];
+		return parent::callback_pre_edit($arr);
+	}
+
 	public function _get_debug_prices($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -302,80 +308,98 @@ class shop_price_list extends shop_matrix
 
 	public function modify_matrix_fields(&$t, $name)
 	{
-		$t->define_field(array(
-			"name" => $name."_value",
-			"caption" => "HV",
-			"tooltip" => t("Hinna valem"),
-			"parent" => $name,
-			"chgbgcolor" => $name."_color",
-		));
-		$t->define_field(array(
-			"name" => $name."_bonus",
-			"caption" => "BV",
-			"tooltip" => t("Boonuse valem"),
-			"parent" => $name,
-			"chgbgcolor" => $name."_color",
-		));
-		$t->define_field(array(
-			"name" => $name."_quantities",
-			"caption" => "K",
-			"tooltip" => t("Kogused, millele valemirida rakendub (vaikimisi rakendub k&otilde;igile kogustele)"),
-			"parent" => $name,
-			"chgbgcolor" => $name."_color",
-		));
-		$t->define_field(array(
-			"name" => $name."_type",
-			"caption" => "VT",
-			"tooltip" => t("Valemi t&uuml;&uuml;p"),
-			"parent" => $name,
-			"chgbgcolor" => $name."_color",
-		));
+		if(!$this->obj->matrix_advanced)
+		{
+			$t->define_field(array(
+				"name" => $name."_value",
+				"caption" => "HV",
+				"tooltip" => t("Hinna valem"),
+				"parent" => $name,
+				"chgbgcolor" => $name."_color",
+			));
+			$t->define_field(array(
+				"name" => $name."_bonus",
+				"caption" => "BV",
+				"tooltip" => t("Boonuse valem"),
+				"parent" => $name,
+				"chgbgcolor" => $name."_color",
+			));
+			$t->define_field(array(
+				"name" => $name."_quantities",
+				"caption" => "K",
+				"tooltip" => t("Kogused, millele valemirida rakendub (vaikimisi rakendub k&otilde;igile kogustele)"),
+				"parent" => $name,
+				"chgbgcolor" => $name."_color",
+			));
+			$t->define_field(array(
+				"name" => $name."_type",
+				"caption" => "VT",
+				"tooltip" => t("Valemi t&uuml;&uuml;p"),
+				"parent" => $name,
+				"chgbgcolor" => $name."_color",
+			));
+		}
 	}
 
 	public function draw_matrix_cell($row, $field, $matrix)
 	{
 		$name = explode("_", $field["name"]);
-		$type = array_pop($name);
-		$col = array_pop($name);
-		if($col === "self")
+		if(!$this->obj->matrix_advanced)
+		{
+			$type = array_pop($name);
+			$col = array_pop($name);
+			if($col === "self")
+			{
+				$col = array_pop($name);
+			}
+
+			switch($type)
+			{
+				case "type":
+					static $options = array();
+					if(empty($options))
+					{
+						$options = array(t("Auto"));
+						$ol = new object_list(array(
+							"class_id" => CL_SHOP_PRICE_LIST_CONDITION_TYPE,
+						));
+						$options = $options + $ol->names();
+					}
+					return html::select(array(
+						"name" => "matrix[$row][$col][$type]",
+						"value" => ifset($matrix, $row, $col, $type),
+						"options" => $options,
+					));
+
+				case "value":
+				case "bonus":
+					return html::textbox(array(
+						"name" => "matrix[$row][$col][$type]",
+						"value" => ifset($matrix, $row, $col, $type),
+						"size" => 4,
+						"maxlength" => 30,
+					));
+
+				case "quantities":
+					return html::textbox(array(
+						"name" => "matrix[$row][$col][$type]",
+						"value" => ifset($matrix, $row, $col, $type),
+						"size" => 4,
+						"maxlength" => 100,
+					));
+			}
+		}
+		else
 		{
 			$col = array_pop($name);
-		}
-
-		switch($type)
-		{
-			case "type":
-				static $options = array();
-				if(empty($options))
-				{
-					$options = array(t("Auto"));
-					$ol = new object_list(array(
-						"class_id" => CL_SHOP_PRICE_LIST_CONDITION_TYPE,
-					));
-					$options = $options + $ol->names();
-				}
-				return html::select(array(
-					"name" => "matrix[$row][$col][$type]",
-					"value" => ifset($matrix, $row, $col, $type),
-					"options" => $options,
-				));
-
-			case "value":
-			case "bonus":
-				return html::textbox(array(
-					"name" => "matrix[$row][$col][$type]",
-					"value" => ifset($matrix, $row, $col, $type),
-					"size" => 4,
-					"maxlength" => 30,
-				));
-
-			case "quantities":
-				return html::textbox(array(
-					"name" => "matrix[$row][$col][$type]",
-					"value" => ifset($matrix, $row, $col, $type),
-					"size" => 4,
-					"maxlength" => 100,
-				));
+			if($col === "self")
+			{
+				$col = array_pop($name);
+			}
+			return html::href(array(
+				"url" => "",
+				"caption" => $col,
+			));
 		}
 	}
 
