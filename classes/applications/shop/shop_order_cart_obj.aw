@@ -214,7 +214,7 @@ class shop_order_cart_obj extends _int_object
 		$warehouse = $this->oc->prop("warehouse");
 		$cart = $this->get_cart();
 		$order_data = $this->get_order_data();
-//arr($order_data);die();
+
 		$o = new object();
 		$o->set_name(t("M&uuml;&uuml;gitellimus")." ".date("d.m.Y H:i"));
 		$o->set_parent($this->oc->id());
@@ -225,9 +225,23 @@ class shop_order_cart_obj extends _int_object
 		$person = $this->_get_person($order_data);
 		$o->set_prop("purchaser" , $person->id());
 		$o->set_prop("buyer_rep" , $person->id());
+
 		$address = $this->_get_address($order_data);
 		$o->set_prop("delivery_address" , $address->id());
+
 		$o->set_prop("transp_type" , $order_data["delivery"]);
+		$o->set_prop("shop_delivery_type" , $order_data["delivery"]);
+
+		//kui valitud transpordiliik omab oma miskeid kontoreid v6i kohti kuhu viia, siis salvestab selle aadressi ka
+		$ed_types = $this->oc->prop("extra_address_delivery_types");
+
+		if(is_array($ed_types) && sizeof($ed_types) && in_array($order_data["delivery"], $ed_types))
+		{
+			$delivery = obj($order_data["delivery"]);
+			$delivery_vars = $delivery->get_vars($order_data);
+			$o->set_prop("smartpost_sell_place_name" , $delivery_vars["smartpost_sell_place_name"]);
+		}
+
 		$o->set_prop("payment_type" , $order_data["payment"]);
 		$o->set_prop("currency" , $this->oc->get_currency());
 		$o->set_prop("channel" , $this->prop("channel"));
@@ -235,6 +249,7 @@ class shop_order_cart_obj extends _int_object
 		$o->save();
 
 		$awa = new aw_array($cart["items"]);
+		$sum = 0;
 		foreach($awa->get() as $iid => $quant)
 		{
 			$qu = new aw_array($quant);
@@ -250,8 +265,8 @@ class shop_order_cart_obj extends _int_object
 				{
 					continue;
 				}
-
 				$product = obj($iid);
+				$sum+= $cart["items"][$iid][$key]["items"] * $product->get_shop_price($this->oc->id());
 				$o->add_row(array(
 					"product" => $iid,
 					"amount" => $cart["items"][$iid][$key]["items"],
@@ -259,7 +274,39 @@ class shop_order_cart_obj extends _int_object
 				));
 			}
 		}
+
+		//j2relmaksude arv, juhul kui tegu on j2relmaksuga
+		if($this->is_after_payment($order_data["payment"] , $sum))
+		{
+			$o->set_prop("deferred_payment_count" , $order_data["deferred_payment_count"]);
+			$o->save();
+		}
+
 		return $o->id();
+	}
+
+	//tagastab summa ja maksetyybi objekti kohta, kas on j2relmaksuga tegu
+	private function is_after_payment($payment, $sum)
+	{
+		if(!empty($payment))
+		{
+			$payment = obj($payment);
+			$condition = $payment->valid_conditions(array(
+				"sum" => $sum,
+				"currency" => $this->oc->get_currency(),
+				"product" => array(),
+				"product_packaging" => array(),
+			));
+			if($this->can("view" , $condition))
+			{
+				$c = obj($condition);
+				if($c->prop("prepayment_interest") != 100)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public function _get_person($data)

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.34 2009/09/07 11:43:05 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.34 2009/09/07 11:43:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.35 2009/09/10 11:50:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.35 2009/09/10 11:50:22 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -50,7 +50,6 @@
 
 @property mail_from_address type=textbox
 @caption Mail kellelt aadress
-
 
 
 
@@ -759,6 +758,7 @@ $is_saved = 1;
 		$warehouse = $this->oc->prop("warehouse");
 
 		$order_data = $cart->get_order_data();
+		$ed_types = $this->oc->prop("extra_address_delivery_types");
 
 		$o = new object();
 		$o->set_name(t("M&uuml;&uuml;gitellimus")." ".date("d.m.Y H:i"));
@@ -781,6 +781,16 @@ $is_saved = 1;
 		$o->set_prop("order_status" , "5");
 		$o->set_meta("order_data" , $order_data);
 		$o->save();
+
+		//kui valitud transpordiliik omab oma miskeid kontoreid v6i kohti kuhu viia, siis salvestab selle aadressi ka
+		$ed_types = $this->oc->prop("extra_address_delivery_types");
+
+		if(is_array($ed_types) && sizeof($ed_types) && in_array($order_data["delivery"], $ed_types))
+		{
+			$delivery = obj($order_data["delivery"]);
+			$delivery_vars = $delivery->get_vars($order_data);
+			$o->set_prop("smartpost_sell_place_name" , $delivery_vars["smartpost_sell_place_name"]);
+		}
 
 		$rows = $this->get_order();
 
@@ -815,14 +825,47 @@ $is_saved = 1;
 			}
 			$r->save();
 		}
-		$this->clear_order();
 
+
+		//j2relmaksude arv, juhul kui tegu on j2relmaksuga
+		if($this->is_after_payment($order_data["payment"]))
+		{
+			$o->set_prop("deferred_payment_count" , $order_data["deferred_payment_count"]);
+			$o->save();
+		}
+
+		$this->clear_order();
 		$form->send_confirm_mail($o->id());
+
 
 		header("Location: /".$o->id());
 		die();
 		return $o->id();
 
+	}
+
+	//tagastab summa ja maksetyybi objekti kohta, kas on j2relmaksuga tegu
+	private function is_after_payment($payment)
+	{
+		if(!empty($payment))
+		{
+			$payment = obj($payment);
+			$condition = $payment->valid_conditions(array(
+				"sum" => 15000000,
+				"currency" => $this->oc->get_currency(),
+				"product" => array(),
+				"product_packaging" => array(),
+			));
+			if($this->can("view" , $condition))
+			{
+				$c = obj($condition);
+				if($c->prop("prepayment_interest") != 100)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

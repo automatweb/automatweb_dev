@@ -54,6 +54,13 @@
 @property delivery_address type=relpicker reltype=RELTYPE_ADDRESS automatic=1 field=aw_address
 @caption Kohaletoimetamise aadress
 
+
+@property smartpost_sell_place_name type=hidden field=aw_address_text
+@caption Kohaletoimetamise aadress tekstina (postkontorid jne)
+@comment M&otilde;nel kohaletoimetamise viisil on omal aadresside valik kuhu saadetakse kaup (nt. smartpost)
+
+
+
 @property order_status type=chooser default=0 field=aw_status default=0
 @caption Staatus
 
@@ -65,6 +72,9 @@
 
 @property payment_type type=select field=aw_payment_type
 @caption Maksetingimus
+
+@property deferred_payment_count type=hidden field=aw_deferred_payment_count
+@caption J&auml;relmaksude arv
 
 @property art_toolbar type=toolbar no_caption=1 store=no
 
@@ -185,6 +195,12 @@ class shop_sell_order extends class_base
 		}
 		switch($f)
 		{
+			case "aw_address_text":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "VARCHAR(127)"
+				));
+				break;
 			case "aw_customs_cost":
 				$this->db_add_col($t, array(
 					"name" => $f,
@@ -192,6 +208,7 @@ class shop_sell_order extends class_base
 				));
 				return true;
 				break;
+			case "aw_deferred_payment_count":
 			case "aw_job":
 			case "aw_deal_date":
 			case "aw_status":
@@ -387,7 +404,7 @@ class shop_sell_order extends class_base
 			$sum+= $data["delivery_price"];
 
 			//kohaletoimetamise info muutujad
-			$this->vars($delivery->get_vars($o->properties() + $o->meta("order_data")));
+//			$this->vars($delivery->get_vars($o->meta("order_data") + $o->properties()));
 		}
 
 		$data["payment_name"] = $o->prop("payment_type.name");

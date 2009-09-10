@@ -3,15 +3,16 @@
       <property>
             <name>warehouse</name>
             <group>general</group>
+            <table>aw_shop_order_center</table>
             <type>relpicker</type>
             <reltype>RELTYPE_WAREHOUSE</reltype>
-            <table>aw_shop_order_center</table>
             <field>aw_warehouse_id</field>
             <caption>Ladu</caption>
       </property>
       <property>
             <name>root_menu</name>
             <group>general</group>
+            <table>aw_shop_order_center</table>
             <type>relpicker</type>
             <reltype>RELTYPE_MENU</reltype>
             <store>connect</store>
@@ -22,11 +23,20 @@
       <property>
             <name>cart</name>
             <group>general</group>
+            <table>aw_shop_order_center</table>
             <type>relpicker</type>
             <reltype>RELTYPE_CART</reltype>
-            <table>aw_shop_order_center</table>
             <field>aw_cart_id</field>
             <caption>Ostukorv</caption>
+      </property>
+      <property>
+            <name>default_currency</name>
+            <group>general</group>
+            <table>aw_shop_order_center</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEFAULT_CURRENCY</reltype>
+            <field>aw_default_currency</field>
+            <caption>Vaikimisi valuuta</caption>
       </property>
       <property>
             <name>cart_type</name>
@@ -105,15 +115,6 @@
             <caption>Ostukorvi l&amp;amp;ouml;ppvaate template</caption>
       </property>
       <property>
-            <name>mail_template</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>E-maili template</caption>
-      </property>
-      <property>
             <name>integration_class</name>
             <group>general</group>
             <table>objects</table>
@@ -171,6 +172,15 @@
             <caption>Meili sisu (kui t&amp;amp;uuml;hi, siis templatest)</caption>
       </property>
       <property>
+            <name>mail_template</name>
+            <group>mail_settings_orderer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>E-maili template</caption>
+      </property>
+      <property>
             <name>mail_to_seller_in_el</name>
             <group>mail_settings_seller</group>
             <table>objects</table>
@@ -216,6 +226,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
+            <user>1</user>
             <caption>Veebis allahindlus (%)</caption>
       </property>
       <property>
@@ -225,6 +236,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <user>1</user>
             <caption>Allahindluse element andmete vormis</caption>
       </property>
       <property>
@@ -234,6 +246,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <user>1</user>
             <caption>Elemendi</caption>
       </property>
       <property>
@@ -243,6 +256,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
+            <user>1</user>
             <caption>v&amp;amp;auml;&amp;amp;auml;rtus j&amp;amp;auml;relmaksuks</caption>
       </property>
       <property>
@@ -256,14 +270,37 @@
             <caption>J&amp;amp;auml;relmaksu miinumumsumma</caption>
       </property>
       <property>
-            <name>rent_configuration</name>
-            <group>payment1</group>
-            <table>aw_shop_order_center</table>
-            <field>aw_rent_configuration</field>
-            <method>fuck_you_serialize</method>
+            <name>payment_types_tlb</name>
+            <group>payment_types</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>payment_types_tbl</name>
+            <group>payment_types</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>extra_address_delivery_types</name>
+            <group>delivery</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_RENT_CONFIGURATION</reltype>
-            <caption>J&amp;amp;auml;relmaksu konfiguratsioon</caption>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_EXTRA_ADDRESS_DELIVERY_TYPES</reltype>
+            <caption>Lisaadressi omavad kohaletoimetamise viisid</caption>
+            <comment>Kohaletoimetamise viisid, millel on omal miski aadresside valik kuhu saadetakse kaup (nt. smartpost)</comment>
       </property>
       <property>
             <name>appearance_toolbar</name>
@@ -297,6 +334,26 @@
             <no_caption>1</no_caption>
             <parent>appearance_r</parent>
             <caption>N&amp;amp;auml;itamise kaustade seaded</caption>
+      </property>
+      <property>
+            <name>per_page</name>
+            <group>appear_settings</group>
+            <table>aw_shop_order_center</table>
+            <field>aw_per_page</field>
+            <method>null</method>
+            <type>textbox</type>
+            <caption>Tooteid lehek&amp;amp;uuml;ljel</caption>
+      </property>
+      <property>
+            <name>childtitle1</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Vanad-&amp;amp;uuml;le-vaadata-kas-toimivad-ja-kas-vaja</caption>
       </property>
       <property>
             <name>only_active_items</name>
@@ -646,17 +703,6 @@
                   <caption>Pakkujale</caption>
                   <parent>mail_settings</parent>
             </mail_settings_seller>
-            <payment>
-                  <caption>Maksmine</caption>
-            </payment>
-            <payment1>
-                  <caption>Seaded</caption>
-                  <parent>payment</parent>
-            </payment1>
-            <payment_settings>
-                  <caption>Pangamakse seaded</caption>
-                  <parent>payment</parent>
-            </payment_settings>
             <appear>
                   <caption>N&amp;amp;auml;itamine</caption>
             </appear>
@@ -676,6 +722,24 @@
                   <parent>appear</parent>
                   <caption>Layoudid</caption>
             </appear_layout>
+            <payment>
+                  <caption>Maksmine</caption>
+            </payment>
+            <payment_types>
+                  <caption>Makseviisid</caption>
+                  <parent>payment</parent>
+            </payment_types>
+            <payment_settings>
+                  <caption>Pangamakse seaded</caption>
+                  <parent>payment</parent>
+            </payment_settings>
+            <payment1>
+                  <caption>Seaded</caption>
+                  <parent>payment</parent>
+            </payment1>
+            <delivery>
+                  <caption>Kohaletoimetamine</caption>
+            </delivery>
             <data>
                   <caption>Andmed</caption>
             </data>
@@ -790,11 +854,15 @@
                   <clid>CL_MENU</clid>
                   <caption>Kaust</caption>
             </RELTYPE_MENU>
-            <RENT_CONFIGURATION>
-                  <value>19</value>
-                  <clid>CL_SHOP_RENT_CONFIGURATION</clid>
-                  <caption>J&amp;amp;auml;relmaksu konfiguratsioon</caption>
-            </RENT_CONFIGURATION>
+            <DEFAULT_CURRENCY>
+                  <value>20</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>Vaikimisi valuuta</caption>
+            </DEFAULT_CURRENCY>
+            <RELTYPE_EXTRA_ADDRESS_DELIVERY_TYPES>
+                  <value>21</value>
+                  <clid>CL_SHOP_DELIVERY_METHOD</clid>
+            </RELTYPE_EXTRA_ADDRESS_DELIVERY_TYPES>
       </reltypes>
       <layout>
             <appearance_c>

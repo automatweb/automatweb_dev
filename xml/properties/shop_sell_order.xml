@@ -106,6 +106,15 @@
             <caption>L&amp;amp;auml;hetusviis</caption>
       </property>
       <property>
+            <name>shop_delivery_type</name>
+            <table>aw_shop_sell_orders</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_delivery_type</field>
+            <reltype>RELTYPE_DELIVERY_METHOD</reltype>
+            <caption>Poe kohaletoimetamise viis</caption>
+      </property>
+      <property>
             <name>currency</name>
             <table>aw_shop_sell_orders</table>
             <group>general</group>
@@ -126,6 +135,25 @@
             <caption>Ladu</caption>
       </property>
       <property>
+            <name>delivery_address</name>
+            <table>aw_shop_sell_orders</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS</reltype>
+            <automatic>1</automatic>
+            <field>aw_address</field>
+            <caption>Kohaletoimetamise aadress</caption>
+      </property>
+      <property>
+            <name>smartpost_sell_place_name</name>
+            <table>aw_shop_sell_orders</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>aw_address_text</field>
+            <caption>Kohaletoimetamise aadress tekstina (postkontorid jne)</caption>
+            <comment>M&amp;amp;otilde;nel kohaletoimetamise viisil on omal aadresside valik kuhu saadetakse kaup (nt. smartpost)</comment>
+      </property>
+      <property>
             <name>order_status</name>
             <table>aw_shop_sell_orders</table>
             <group>general</group>
@@ -135,12 +163,38 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>channel</name>
+            <table>aw_shop_sell_orders</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_channel</field>
+            <reltype>RELTYPE_CHANNEL</reltype>
+            <store>connect</store>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gikanal</caption>
+      </property>
+      <property>
             <name>taxed</name>
             <table>aw_shop_sell_orders</table>
             <group>general</group>
             <type>chooser</type>
             <field>aw_taxed</field>
             <caption>Maks</caption>
+      </property>
+      <property>
+            <name>payment_type</name>
+            <table>aw_shop_sell_orders</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_payment_type</field>
+            <caption>Maksetingimus</caption>
+      </property>
+      <property>
+            <name>deferred_payment_count</name>
+            <table>aw_shop_sell_orders</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>aw_deferred_payment_count</field>
+            <caption>J&amp;amp;auml;relmaksude arv</caption>
       </property>
       <property>
             <name>art_toolbar</name>
@@ -178,7 +232,10 @@
       <reltypes>
             <PURCHASER>
                   <value>1</value>
-                  <clid>CL_CRM_COMPANY</clid>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>Hankija</caption>
             </PURCHASER>
             <BUYER_REP>
@@ -226,6 +283,21 @@
                   <clid>CL_MRP_JOB</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;</caption>
             </JOB>
+            <ADDRESS>
+                  <value>11</value>
+                  <clid>CL_CRM_ADDRESS</clid>
+                  <caption>Aadress</caption>
+            </ADDRESS>
+            <RELTYPE_CHANNEL>
+                  <value>12</value>
+                  <clid>CL_WAREHOUSE_SELL_CHANNEL</clid>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gikanal</caption>
+            </RELTYPE_CHANNEL>
+            <DELIVERY_METHOD>
+                  <value>13</value>
+                  <clid>CL_SHOP_DELIVERY_METHOD</clid>
+                  <caption>Poe kohaletoimetamise viis</caption>
+            </DELIVERY_METHOD>
       </reltypes>
 </properties>
 
