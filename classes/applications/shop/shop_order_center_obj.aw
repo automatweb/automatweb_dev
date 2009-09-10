@@ -40,6 +40,7 @@ class shop_order_center_obj extends _int_object
 			$warehouse->set_parent($this->parent());
 			$warehouse->save();
 		}
+		$this->set_prop("product_type" , CL_SHOP_PRODUCT);
 		$this->set_prop("warehouse" , $warehouse->id());
 		$this->save();
 	}
@@ -512,6 +513,67 @@ class shop_order_center_obj extends _int_object
 //				$inactive->save();
 			}
 		}
+	}
+
+
+	/**
+		@attrib name=make_new_struct api=1
+	**/
+	public function make_new_struct($arr)
+	{
+		$warehouse = obj($this->prop("warehouse"));
+		$root_menus = $this->prop("root_menu");
+		$root = reset($root_menus);
+		$cats = $warehouse->get_root_categories();
+
+		if($cats->count())
+		{
+			$this->_make_new_struct_leaf($cats , $root);
+		}
+	}
+
+	private function _make_new_struct_leaf($cats , $root)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_MENU,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $root));
+
+		foreach($cats->arr() as $cat)
+		{
+			$menu_found = 0;
+			foreach($ol->arr() as $menu)
+			{
+				if($menu->name() == $cat->name())
+				{
+					$menu_found = 1;
+					break;
+				}
+			}
+			if(!$menu_found)
+			{
+				$menu = new object();
+				$menu->set_class_id(CL_MENU);
+				$menu->set_parent($root);
+				$menu->set_name($cat->name());
+				$menu->save();
+			}
+			$menu->set_prop("status" , 2);
+			$menu->save();
+			$o = $this->get_product_show_obj($menu->id(), true);
+			$o->add_category($cat->get_all_categories());
+			$o->set_prop("type" , $this->prop("product_type"));
+			$o->save();
+
+			$categories = $cat->get_categories();
+			if($categories->count())
+			{
+				$this->_make_new_struct_leaf($categories , $menu->id());		
+			}
+
+		}
+		
 	}
 	
 

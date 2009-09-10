@@ -554,4 +554,19 @@ class shop_warehouse_obj extends _int_object
 		return $this->config_object->prop($prop);
 	}
 
+	public function get_root_categories()
+	{
+		$prod_folder = $this->get_conf("prod_cat_fld");
+
+		$cats = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"parent" => $prod_folder,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+
+		return $cats;
+
+	}
+
 }

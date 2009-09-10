@@ -26,34 +26,6 @@
 @default field=meta
 @default method=serialize
 
-@property cart_type type=chooser
-@caption Ostukorvi t&uuml;&uuml;p
-
-@property multi_items type=checkbox ch_value=1
-@caption Ostukorvis v&otilde;ib olla mitu sama ID-ga toodet
-
-@property show_unconfirmed type=checkbox ch_value=1
-@caption N&auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi
-
-@property only_prods type=checkbox ch_value=1
-@caption Ostukorvis on tooted ilma pakendite, piltide jms
-
-@property pdf_template type=textbox
-@caption PDF Template faili nimi
-
-@property show_prod_and_package type=checkbox ch_value=1
-@caption N&auml;ita selgituses toodet/paketti
-
-@property chart_show_template type=select
-@caption Ostukorvi vaade template
-
-@property chart_final_template type=select
-@caption Ostukorvi l&ouml;ppvaate template
-
-@property integration_class type=select
-@caption Integratsiooni klass
-
-
 @default group=mail_settings_orderer
 
 	@property mail_to_client type=checkbox ch_value=1
@@ -133,6 +105,10 @@
 
 	@property per_page type=textbox table=aw_shop_order_center field=aw_per_page  method=null
 	@caption Tooteid lehek&uuml;ljel
+
+	@property product_type type=select
+	@caption N&auml;idatavad klassi t&uuml;&uuml;bid
+
 
 @property childtitle1 type=text store=no subtitle=1
 @caption Vanad-&uuml;le-vaadata-kas-toimivad-ja-kas-vaja
@@ -254,10 +230,34 @@
 	@property cart_value_controller type=relpicker reltype=RELTYPE_CART_VALUE_CONTROLLER
 	@caption Korvi hinna kontroller
 
+@default group=settings
+	
+	@property cart_type type=chooser
+	@caption Ostukorvi t&uuml;&uuml;p
 
-@groupinfo mail_settings caption="Meiliseaded"
-	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
-	@groupinfo mail_settings_seller caption="Pakkujale" parent=mail_settings
+	@property multi_items type=checkbox ch_value=1
+	@caption Ostukorvis v&otilde;ib olla mitu sama ID-ga toodet
+
+	@property show_unconfirmed type=checkbox ch_value=1
+	@caption N&auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi
+
+	@property only_prods type=checkbox ch_value=1
+	@caption Ostukorvis on tooted ilma pakendite, piltide jms
+
+	@property pdf_template type=textbox
+	@caption PDF Template faili nimi
+
+	@property show_prod_and_package type=checkbox ch_value=1
+	@caption N&auml;ita selgituses toodet/paketti
+
+	@property chart_show_template type=select
+	@caption Ostukorvi vaade template
+
+	@property chart_final_template type=select
+	@caption Ostukorvi l&ouml;ppvaate template
+
+	@property integration_class type=select
+	@caption Integratsiooni klass
 
 @groupinfo appear caption="N&auml;itamine"
 	@groupinfo appearance parent=appear caption="N&auml;itamine"
@@ -272,6 +272,12 @@
 
 @groupinfo delivery caption="Kohaletoimetamine"
 
+
+@groupinfo mail_settings caption="Meiliseaded"
+	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
+	@groupinfo mail_settings_seller caption="Pakkujale" parent=mail_settings
+
+
 @groupinfo data caption="Andmed"
 	@groupinfo data_settings caption="Seaded" parent=data
 	@groupinfo psfieldmap caption="Isukuandmete kaart" parent=data
@@ -282,6 +288,9 @@
 	@groupinfo filter_settings caption="Seaded" parent=filter
 	@groupinfo filter_select caption="Koosta filter" parent=filter submit=no
 	@groupinfo filter_set_folders caption="Vali kehtivad filtrid" parent=filter
+
+@groupinfo settings caption="Seaded"
+
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption ladu
@@ -351,7 +360,6 @@ class shop_order_center extends class_base
 		}
 	}
 
-
  
 	function callback_mod_layout(&$arr)
 	{
@@ -371,6 +379,10 @@ class shop_order_center extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "product_type":
+				$products_show = get_instance(CL_PRODUCTS_SHOW);
+				$prop["options"] = $products_show->types;
+				break;
 			case "bank_id":
 			case "orderer_mail":
 			case "bank_lang":
@@ -483,7 +495,7 @@ class shop_order_center extends class_base
 				$v = array("" => "");
 				foreach($ps as $pn => $pd)
 				{
-					$v[$pn] = $pd["caption"];
+					$v[$pn] = isset($pd["caption"]) ? $pd["caption"] : $pd["name"];
 				}
 				$prop["options"] = $v;
 				break;
@@ -1902,7 +1914,7 @@ class shop_order_center extends class_base
 		$pl = $this->make_keys($ol->ids());
 		exit_function("shop_product::apply_filter_to_product_list");
 	}
-
+//------------------ siit piitist peaks ok olema... enne seda on l2bu
 	function do_db_upgrade($t, $f)
 	{
 		switch($f)
@@ -2147,7 +2159,7 @@ class shop_order_center extends class_base
 					"oid" => $id
 				);
 				$data["color"] = $menu->prop("status") == 2 ? "#99FF99" : "silver";
-				$o = $this->get_product_show_obj($id);
+				$o = $arr["obj_inst"]->get_product_show_obj($id);
 				if(is_object($o))
 				{
 					if($o->prop("type"))
@@ -2198,49 +2210,6 @@ class shop_order_center extends class_base
 		}
 	}
 
-	private function get_product_show_obj($menu, $make_new = false)
-	{
-		$o = "";
-		$docs = new object_list(array(
-			"class_id" => CL_DOCUMENT,
-			"parent" => $menu,
-			"lang_id" => array(),
-		));
-		$doc = $docs->count() ? $docs->begin() : "";
-		if(!is_object($doc) && $make_new)
-		{
-			$doc = new object();
-			$doc->set_class_id(CL_DOCUMENT);
-			$doc->set_parent($menu);
-			$doc->set_name($menu);
-			$doc->set_status(2);
-			$doc->save();
-		}
-		if(is_object($doc))
-		{
-			foreach($doc->connections_from(array("to.class_id" => CL_PRODUCTS_SHOW)) as $c)
-			{
-				$o = $c->to();
-				break;
-			}
-			if(!is_object($o) && $make_new)
-			{
-				$o = new object();
-				$o->set_class_id(CL_PRODUCTS_SHOW);
-				$o->set_parent($menu);
-				$o->set_name($menu." ".t("toodete n&auml;itamine"));
-				$o->save();
-				$doc->set_prop("content" , $doc->prop("content")."#show_products1#");
-				$doc->save();
-				$doc->connect(array(
-					"type" => "RELTYPE_ALIAS",
-					"to" => $o->id(),
-				));
-			}
-		}
-		return $o;
-	}
-
 	public function callback_generate_scripts($arr)
 	{
 		$js = "";
@@ -2250,7 +2219,7 @@ class shop_order_center extends class_base
 				function set_sel_prop(property , value)
 				{
 					result = $('input[name^=sel]');
-					$.get('/automatweb/orb.aw?class=shop_order_center&action=ajax_set_product_show_property&' + property + '=' + value + '&' + result.serialize(), {
+					$.get('/automatweb/orb.aw?class=shop_order_center&id=".$arr["obj_inst"]->id()."action=ajax_set_product_show_property&' + property + '=' + value + '&' + result.serialize(), {
 						}, function (html) {
 							reload_property('appearance_list');
 						}
@@ -2284,7 +2253,12 @@ class shop_order_center extends class_base
 					var ansa = confirm('" . t("Kataloogistruktuuri ehitamine l6hub seni toiminud toodete n2itamise seaded. Oled kindel et luua uus struktuur?") . "');
 					if (ansa)
 					{
-						alert('k6ik on kadunud.... peab ametit vahetama...');
+						alert('kui sa nyyd OK vajutad siis k6ik on kadunud....ja peab ametit vahetama...');
+						$.get('/automatweb/orb.aw?class=shop_order_center&action=make_new_struct&id=".$arr["obj_inst"]->id()."', {
+							}, function (html) {
+								reload_property('appearance_list');
+							}
+						);
 					}
 					else
 					{
@@ -2395,6 +2369,7 @@ class shop_order_center extends class_base
 
 	}
 
+
 	/** searches and connects bill row to task row
 		@attrib name=search_categories
 		@param category optional
@@ -2405,7 +2380,8 @@ class shop_order_center extends class_base
 			menu oid
 		@param result optional type=int/array
 			result category id
-	**/
+
+	**//*
 	function search_categories($arr)
 	{
 		$content = "";
@@ -2538,7 +2514,7 @@ class shop_order_center extends class_base
 
 		return $content;
 	}
-
+*/
 	/**
 		@attrib name=ajax_remove_category all_args=1
 	**/
@@ -2553,10 +2529,23 @@ class shop_order_center extends class_base
 	}
 
 	/**
+		@attrib name=make_new_struct params=name
+		@param id required type=int
+			shop id
+	**/
+	public function make_new_struct($arr)
+	{
+		$this->shop = obj($arr["id"]);
+		$this->shop->make_new_struct();
+		die("MINGE MUNNI!!!!");
+	}
+
+	/**
 		@attrib name=ajax_set_product_show_property all_args=1
 	**/
 	public function ajax_set_product_show_property($arr)
 	{
+		$shop = obj($arr["id"]);
 		foreach($arr["sel"] as $id)
 		{
 			if($this->can("view" , $id))
@@ -2576,7 +2565,7 @@ class shop_order_center extends class_base
 								case "type":
 								case "template":
 								case "product_template":
-									$show = $this->get_product_show_obj($o->id() , true);
+									$show = $shop->get_product_show_obj($o->id() , true);
 									$show->set_prop($key ,$val);
 									$show->save();
 									break;

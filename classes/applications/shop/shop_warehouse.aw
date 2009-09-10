@@ -3643,7 +3643,10 @@ class shop_warehouse extends class_base
 
 		if($check_ol->count() || $subitems)
 		{
-			$tree->add_item($o->id(), array());
+			$tree->add_item($o->id(), array(
+				"name" => "tmp",
+				"id" => $c->prop("to")."_tmp",
+			));
 		}
 	}
 
@@ -3904,7 +3907,10 @@ class shop_warehouse extends class_base
 		));
 		if($check_ol->count())
 		{
-			$tree->add_item($o->id(), array());
+			$tree->add_item($o->id(), array(
+				"name" => "tmp",
+				"id" => $c->prop("to")."_tmp",
+			));
 		}
 	}
 
@@ -5039,7 +5045,7 @@ $tb->add_delete_button();
 
 		// get items
 		$ot = new object_tree(array(
-			"parent" => $this->pkt_tree_root,
+			"parent" => isset($this->pkt_tree_root) ? $this->pkt_tree_root : 1,
 			"class_id" => array(CL_MENU,CL_SHOP_PACKET),
 			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 		));
@@ -8275,7 +8281,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 	{
 		$t = $arr["prop"]["vcl_inst"];
 		$channels = $arr["obj_inst"]->get_channels();
-		$t->set_selected_item($arr["request"]["channel"] ? "channel_".$arr["request"]["channel"] : "channel_all");
+		$t->set_selected_item(!empty($arr["request"]["channel"]) ? "channel_".$arr["request"]["channel"] : "channel_all");
 
 		foreach($channels->names() as $channel => $name)
 		{
@@ -8328,7 +8334,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 
 		$group = $this->get_search_group($arr);
 		$var = $group."_s_status";
-		$disp = $arr["request"][$var];
+		$disp = isset($arr["request"][$var]) ? $arr["request"][$var] : "";
 		$total = 0;
 		$t->set_selected_item($disp ? "state_".$disp :"state_5" );
 		if($disp == 10)
@@ -8378,7 +8384,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 		{
 			return $ol;
 		}
-		if(is_oid($channel = $arr["request"]["channel"]))
+		if(isset($arr["request"]["channel"]) && is_oid(isset($arr["request"]["channel"])))
 		{
 			$params["channel"] = $arr["request"]["channel"];
 
@@ -8431,8 +8437,8 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 				$params["order_status"] = new obj_predicate_anything();
 			}
 		}
-		$t = date_edit::get_timestamp($arr["request"][$group."_s_to"]);
-		$f = date_edit::get_timestamp($arr["request"][$group."_s_from"]);
+		$t = isset($arr["request"][$group."_s_to"]) ? date_edit::get_timestamp($arr["request"][$group."_s_to"]) : 0;
+		$f = isset($arr["request"][$group."_s_from"]) ? date_edit::get_timestamp($arr["request"][$group."_s_from"]) : 0;
 		if($t > 1 && $f > 1 && !$arr["request"]["filt_time"])
 		{
 			$t += 24 * 60 * 60 - 1;
@@ -8447,7 +8453,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 			$t += 24 * 60 * 60 -1;
 			$params["date"] = new obj_predicate_compare(OBJ_COMP_LESS, $t);
 		}
-		elseif($arr["request"]["filt_time"] != "all")
+		elseif(empty($arr["request"]["filt_time"]) || $arr["request"]["filt_time"] != "all")
 		{
 			unset($arr["start"]);
 			unset($arr["end"]);
@@ -8475,10 +8481,13 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 		}
 		if(count($params) || $arr["request"]["just_saved"] || $arr["request"]["filt_time"] == "all")
 		{
-			$wh = $arr["warehouses"];
-			if(!$wh && $arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
+			if(empty($arr["warehouses"]) && $arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 			{
 				$wh = $arr["obj_inst"]->id();
+			}
+			else
+			{
+				$wh = $arr["warehouses"];
 			}
 			//$params["warehouse"] = $wh;
 			$params["class_id"] = $class_id;
@@ -8693,46 +8702,48 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 		}
 		//$t->set_lower_titlebar_display(true);
 		$time_capt = "";
-		switch($arr["request"]["filt_time"])
+		if(isset($arr["request"]["filt_time"]))
 		{
-			case "today":
-				$time_capt = t("t&auml;na");
-				break;
-			case "tomorrow":
-				$time_capt = t("homme");
-				break;
-			case "yesterday":
-				$time_capt = t("eile");
-				break;
-			case "lastweek":
-				$time_capt = t("eelmine n&auml;dal");
-				break;
-			case "thisweek":
-				$time_capt = t("k&auml;esolev n&auml;dal");
-				break;
-			case "nextweek":
-				$time_capt = t("j&auml;rgmine n&auml;dal");
-				break;
-			case "lastmonth":
-				$time_capt = t("eelmine kuu");
-				break;
-			case "thismonth":
-				$time_capt = t("k&auml;esolev kuu");
-				break;
-			case "next":
-				$time_capt = t("j&auml;rgmine kuu");
-				break;
-			case "":
-				$time_capt = t("t&auml;na");
-				break;
-			default:
-				$time_capt = t("k&otilde;ik perioodid");
+			switch($arr["request"]["filt_time"])
+			{
+				case "today":
+					$time_capt = t("t&auml;na");
+					break;
+				case "tomorrow":
+					$time_capt = t("homme");
+					break;
+				case "yesterday":
+					$time_capt = t("eile");
+					break;
+				case "lastweek":
+					$time_capt = t("eelmine n&auml;dal");
+					break;
+				case "thisweek":
+					$time_capt = t("k&auml;esolev n&auml;dal");
+					break;
+				case "nextweek":
+					$time_capt = t("j&auml;rgmine n&auml;dal");
+					break;
+				case "lastmonth":
+					$time_capt = t("eelmine kuu");
+					break;
+				case "thismonth":
+					$time_capt = t("k&auml;esolev kuu");
+					break;
+				case "next":
+					$time_capt = t("j&auml;rgmine kuu");
+					break;
+				case "":
+					$time_capt = t("t&auml;na");
+					break;
+				default:
+					$time_capt = t("k&otilde;ik perioodid");
+			}
+			if(is_numeric($arr["request"]["filt_time"]))
+			{
+				$time_capt = date("d.m.Y" , $arr["request"]["filt_time"]);
+			}
 		}
-		if(is_numeric($arr["request"]["filt_time"]))
-		{
-			$time_capt = date("d.m.Y" , $arr["request"]["filt_time"]);
-		}
-
 
 			$t->define_data(array(
 				"purchaser" => t("Kokku"),
@@ -8902,7 +8913,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		));
 
 
-		if($arr["extra"])
+		if(!empty($arr["extra"]))
 		{
 			$t->define_field(array(
 				"sortable" => 1,
@@ -9512,15 +9523,14 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 				$params[$var] = $val;
 			}
 		}
-		$fc = $arr["request"]["filt_cust"];
-		$pg = $arr["request"]["pgtf"];
-		if($fc)
+
+		if(!empty($arr["request"]["filt_cust"]))
 		{
-			$params["filt_cust"] = $fc;
+			$params["filt_cust"] = $arr["request"]["filt_cust"];
 		}
-		if($pg)
+		if(!empty($arr["request"]["pgtf"]))
 		{
-			$params["pgtf"] = $pg;
+			$params["pgtf"] = $arr["request"]["pgtf"];
 		}
 		if($arr["start"])
 		{
@@ -9646,7 +9656,10 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 					"url" => "#",
 					"iconurl" => icons::get_icon_url(CL_MENU),
 				));
-				$t->add_item("year_".$i, array());
+				$t->add_item("year_".$i, array(
+					"name" => "tmp",
+					"id" => "year_".$i."_tmp",
+				));
 			}
 		}
 
@@ -9660,7 +9673,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			));
 		}
 
-		if(!$arr["request"]["status_orders_s_start"])
+		if(empty($arr["request"]["status_orders_s_start"]))
 		{
 			$t->set_selected_item(($f = automatweb::$request->arg("filt_time")) ? $f : "today");
 		}
@@ -9867,16 +9880,14 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 
 	private function _get_status_orders_time_filt($arr)
 	{
-		$s1 = $arr["start"];
-		$s2 = $arr["end"];
-		if($s1 && $s2)
+		if(!empty($arr["start"]) && !empty($arr["end"]))
 		{
 			return array(
-				"filt_start" => date_edit::get_timestamp($s1),
-				"filt_end" => date_edit::get_timestamp($s2),
+				"filt_start" => date_edit::get_timestamp($arr["start"]),
+				"filt_end" => date_edit::get_timestamp($arr["end"]),
 			);
 		}
-		$time = $arr["request"]["filt_time"];
+		$time = empty($arr["request"]["filt_time"]) ? "" : $arr["request"]["filt_time"];
 		switch($time)
 		{
 			case "yesterday":
@@ -10584,6 +10595,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 	private function get_art_filter_ol($arr)
 	{
 		$group = $this->get_search_group($arr);
+		$params = array();
 		if(!empty($arr["request"][$group."_s_article"]) && $p = $arr["request"][$group."_s_article"])
 		{
 			$name = $p;
@@ -11099,7 +11111,10 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			));
 			if(count($conn))
 			{
-				$t->add_item($c->prop("to"), array());
+				$t->add_item($c->prop("to"), array(
+					"name" => "tmp",
+					"id" => $c->prop("to")."_tmp",
+				));
 			}
 			if($arr["show_subs"])
 			{
@@ -11108,7 +11123,10 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 				));
 				if(count($conn))
 				{
-					$t->add_item($c->prop("to"), array());
+					$t->add_item($c->prop("to"), array(
+						"name" => "tmp",
+						"id" => $c->prop("to")."_tmp",
+					));
 				}
 			}
 		}
@@ -11222,7 +11240,10 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			));
 			if(count($conn))
 			{
-				$t->add_item($c->prop("to"), array());
+				$t->add_item($c->prop("to"), array(
+					"name" => "tmp",
+					"id" => $c->prop("to")."_tmp",
+				));
 			}
 			if($arr["show_subs"])
 			{
@@ -11231,7 +11252,10 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 				));
 				if(count($conn))
 				{
-					$t->add_item($c->prop("to"), array());
+					$t->add_item($c->prop("to"), array(
+						"name" => "tmp",
+						"id" => $c->prop("to")."_tmp",
+					));
 				}
 			}
 		}
