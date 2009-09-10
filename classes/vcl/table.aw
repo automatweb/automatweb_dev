@@ -1395,7 +1395,7 @@ END;
 						$rowspan = $v[$v1["rowspan"]];
 						$this->rowspans[$v1["name"]] = $v[$v1["rowspan"]];
 					}
-					$colspan = isset($v1["colspan"]) && $v[$v1["colspan"]] ? $v[$v1["colspan"]] : 1;
+					$colspan = isset($v1["colspan"]) && isset($v[$v1["colspan"]]) ? $v[$v1["colspan"]] : 1;
 					$cols += $colspan;
 					if($cols > count($this->rowdefs))
 					{
