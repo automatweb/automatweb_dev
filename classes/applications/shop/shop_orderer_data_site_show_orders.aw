@@ -80,6 +80,23 @@ class shop_orderer_data_site_show_orders extends shop_orderer_data_site_show
 			}
 		}
 
+		//selle kasutajaga thetud tellimused ka k6ik n2htavale
+		if(aw_global_get("uid"))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_SELL_ORDER,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"createdby" => aw_global_get("uid"),
+			));
+			if($ol->count())
+			{
+				$orders->add($ol);
+			}
+		}
+
+
+
 		$order_inst = get_instance(CL_SHOP_SELL_ORDER);
 		
 		foreach($orders->arr() as $order)

@@ -312,6 +312,12 @@ class shop_order_cart_obj extends _int_object
 	public function _get_person($data)
 	{
 		$person = "";
+
+		//kui yldse selliseid andmeid pole mille j2rgi isikut idendifitseerida... v6tab kasutaja isiku
+		if(empty($data["firstname"]) && empty($data["lastname"]) && empty($data["birthday"]) && empty($data["personalcode"]) && empty($data["customer_no"]))
+		{
+			$person = get_current_person();
+		}
 		//sellisel juhul otsib olemasolevate isikute hulgast, kui on andmeid mille j2rgi otsida
 		if(!empty($data["personalcode"]) || !empty($data["customer_no"]) || (!empty($data["birthday"]) && !empty($data["lastname"])))
 		{
@@ -356,6 +362,7 @@ class shop_order_cart_obj extends _int_object
 				}
 			}
 		}
+
 		if(!is_object($person))
 		{
 			$person = new object();
@@ -381,22 +388,23 @@ class shop_order_cart_obj extends _int_object
 				$person->set_prop("external_id" , $data["customer_no"]);
 			}
 			$person->save();
-			if(!empty($data["email"]))
-			{
-				$person->set_email($data["email"]);
-			}
-			if(!empty($data["mobilephone"]))
-			{
-				$person->set_phone($data["mobilephone"]);
-			}
-			if(!empty($data["homephone"]))
-			{
-				$person->set_phone($data["homephone"], "home");
-			}
-			if(!empty($data["workphone"]))
-			{
-				$person->set_phone($data["workphone"], "work");
-			}
+		}
+
+		if(!empty($data["email"]))
+		{
+			$person->set_email($data["email"]);
+		}
+		if(!empty($data["mobilephone"]))
+		{
+			$person->set_phone($data["mobilephone"]);
+		}
+		if(!empty($data["homephone"]))
+		{
+			$person->set_phone($data["homephone"], "home");
+		}
+		if(!empty($data["workphone"]))
+		{
+			$person->set_phone($data["workphone"], "work");
 		}
 		return $person;
 	}
