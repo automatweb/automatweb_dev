@@ -2,6 +2,48 @@
 
 class shop_order_center_obj extends _int_object
 {
+
+	public function save($exclusive = false, $previous_state = null)
+	{
+		$do_new_shop_stuff = is_oid($this->id()) ? 0 : 1;
+		$r =  parent::save($exclusive, $previous_state);
+
+		if($do_new_shop_stuff)
+		{
+			$this->do_new_shop_stuff();
+
+		}
+		return $r;
+	}
+
+	private function do_new_shop_stuff()
+	{
+		//ostukorvi on alati vaja
+		$cart = new object();
+		$cart->set_class_id(CL_SHOP_ORDER_CART);
+		$cart->set_name($this->name() . " " . t("ostukorv"));
+		$cart->set_parent($this->id());
+		$cart->save();
+		$this->set_prop("cart" , $cart->id());
+		
+		$warehouses = new object_list(array(
+			"class_id" => CL_SHOP_WAREHOUSE,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$warehouse = $warehouses->begin();
+		if(!is_object($warehouse))
+		{
+			$warehouse = new object();
+			$warehouse->set_class_id(CL_SHOP_WAREHOUSE);
+			$warehouse->set_name($this->name() . " " . t("ladu"));
+			$warehouse->set_parent($this->parent());
+			$warehouse->save();
+		}
+		$this->set_prop("warehouse" , $warehouse->id());
+		$this->save();
+	}
+
 	/**
 		@attrib api=1
 
