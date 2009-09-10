@@ -25,6 +25,28 @@
             <caption>Allikate tabel</caption>
       </property>
       <property>
+            <name>join_objects</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_JOIN</reltype>
+            <multiple>1</multiple>
+            <caption>Liitumise/lahkumise objektid</caption>
+      </property>
+      <property>
+            <name>childtitle1</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Vanad-&amp;amp;uuml;le-vaadata-kas-toimivad-ja-kas-vaja</caption>
+      </property>
+      <property>
             <name>choose_languages</name>
             <table>objects</table>
             <field>meta</field>
@@ -952,6 +974,11 @@
                   <clid>CL_MESSAGE_TEMPLATE</clid>
                   <caption>Lahkumise kirja templeit</caption>
             </UNSUBSCRIBE_MAIL>
+            <JOIN>
+                  <value>15</value>
+                  <clid>CL_MAILINGLIST_JOIN</clid>
+                  <caption>Liitumise/lahkumise objektid</caption>
+            </JOIN>
       </reltypes>
       <layout>
             <search_lay>

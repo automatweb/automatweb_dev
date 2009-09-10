@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="mailinglist_join" folder="applications/mailinglist" extends="class_base">
+	</class>
+</orb>
+		

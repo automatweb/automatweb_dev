@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.165 2009/09/09 14:57:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.166 2009/09/10 18:10:03 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -18,6 +18,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property sources_data_table type=table store=no no_caption=1
 @caption Allikate tabel
+
+@property join_objects type=relpicker reltype=RELTYPE_JOIN multiple=1
+@caption Liitumise/lahkumise objektid
+
+
+
+@property childtitle1 type=text store=no subtitle=1
+@caption Vanad-&uuml;le-vaadata-kas-toimivad-ja-kas-vaja
+
+
 
 @property choose_languages type=select multiple=1 field=meta method=serialize
 @caption Keeled millega v&otilde;ib liituda
@@ -357,6 +367,12 @@ caption Aliastehaldur
 
 @reltype UNSUBSCRIBE_MAIL value=14 clid=CL_MESSAGE_TEMPLATE
 @caption Lahkumise kirja templeit
+
+@reltype JOIN value=15 clid=CL_MAILINGLIST_JOIN
+@caption Liitumise/lahkumise objektid
+
+
+
 
 
 */

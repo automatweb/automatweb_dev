@@ -1,0 +1,93 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>sub_form_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <rel>1</rel>
+            <caption>Vormi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>choose_languages</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Keeled millega v&amp;amp;otilde;ib liituda</caption>
+      </property>
+      <property>
+            <name>multiple_folders</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lase kausta valida</caption>
+      </property>
+      <property>
+            <name>multiple_languages</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lase valida keelt</caption>
+      </property>
+      <property>
+            <name>redir_obj</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REDIR_OBJECT</reltype>
+            <rel>1</rel>
+            <caption>Dokument millele suunata</caption>
+      </property>
+      <property>
+            <name>mail</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SUBSCRIBE_MAIL</reltype>
+            <store>connect</store>
+            <caption>Liitumise kirja templeit</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_MAILINGLIST_JOIN</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+            <maintainer>smeedia</maintainer>
+      </classinfo>
+      <tableinfo>
+            <aw_mailinglist_join>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_mailinglist_join>
+      </tableinfo>
+      <reltypes>
+            <REDIR_OBJECT>
+                  <value>1</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>&amp;amp;Uuml;mbersuunamine</caption>
+            </REDIR_OBJECT>
+            <SUBSCRIBE_MAIL>
+                  <value>2</value>
+                  <clid>CL_MESSAGE_TEMPLATE</clid>
+                  <caption>Liitumise kirja templeit</caption>
+            </SUBSCRIBE_MAIL>
+      </reltypes>
+</properties>
+
