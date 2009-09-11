@@ -446,6 +446,39 @@ class image_obj extends _int_object
 	}
 
 
+	function _get_conf_for_folder($pt, $apply_image = false)
+	{
+		if (!is_oid($pt) || !$GLOBALS["object_loader"]->cache->can("view", $pt))
+		{
+			return false;
+		}
+
+		$oc = obj($pt);
+		$oc = $oc->path(array(
+			"full_path" => true
+		));
+
+		$rv = false;
+		if ($apply_image)
+		{
+			$appi = " AND apply_image = 1 ";
+		}
+		foreach($oc as $dat)
+		{
+			$q = "SELECT conf_id FROM gallery_conf2menu LEFT JOIN objects ON objects.oid = gallery_conf2menu.conf_id WHERE menu_id = '".$dat->id()."' AND objects.status != 0 $appi";
+			if (($mnid = $GLOBALS["object_loader"]->cache->db_fetch_field($q,"conf_id")))
+			{
+				$rv = $mnid;
+			}
+		}
+		// that config object might have been deleted, check it and return false, if so
+		if (!$GLOBALS["object_loader"]->cache->can("view",$rv))
+		{
+			$rv = false;
+		};
+		return $rv;
+	}
+
 
 }
 
