@@ -113,6 +113,22 @@ class warehouse_products_import extends warehouse_data_import
 			$products_lut[$o->prop('code')] = $o->id();
 		}
 
+		// create brands look-up-table
+		$brands_ol = new object_list(array(
+			'class_id' => CL_SHOP_BRAND
+		));
+
+		$brands_lut = array();
+		foreach ($brands_ol->arr() as $brand_oid => $brand_obj)
+		{
+			$brand_codes = $brand_obj->prop('code');
+			foreach (safe_array(explode(',', $brand_codes)) as $brand_code)
+			{
+				$brands_lut[$brand_code] = $brand_oid;
+			}
+		}
+
+		// get packet
 		$packets_ol = new object_list();
 		if (!empty($products_lut))
 		{
@@ -206,6 +222,31 @@ class warehouse_products_import extends warehouse_data_import
 						// connected categories will remain, so we can disconnect them
 						unset($categories_lut[$cat_node->nodeValue]);
 						echo " [done]<br />\n";
+					
+						// brands:
+						echo " -- Connect brand ";
+						if (!empty($brands_lut[$cat_node->nodeValue]))
+						{
+							$brand_conns = $packet_obj->connections_from(array(
+								'type' => 'RELTYPE_BRAND'
+							));
+							if (empty($brand_conns))
+							{
+								echo " - connect brand(s) ".$cat_noce->nodeValue." (".$brands_lut[$cat_node->nodeValue].") ";
+								$packet_obj->connect(array(
+									'type' => 'RELTYPE_BRAND',
+									'to' => $brands_lut[$cat_node->nodeValue]
+								));
+							}
+							else
+							{
+								// here i should implement the brand objects update logic, but let it be at the moment
+							}
+						}
+						else
+						{
+							echo " - this category is not a brand! <br />\n";
+						}
 					}
 				/*
 				// I remove this part right now, cause if somebody adds some categories by hand, then they would be removed in next import

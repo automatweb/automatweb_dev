@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.117 2009/09/08 13:12:36 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.118 2009/09/11 10:33:24 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -7120,6 +7120,7 @@ Võtn hetkel kasutusele selle teise variandi
 			{
 				$oxml->writeElement('category', $extrafld);
 			}
+			$oxml->writeElement('category', $prod['pg']); // add the file/page code as category as well:
 			$oxml->endElement();
 
 			$oxml->startElement('description');
