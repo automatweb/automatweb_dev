@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.54 2009/08/25 10:19:24 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.55 2009/09/11 13:34:06 markop Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -138,7 +138,6 @@
 @caption M&auml;rks&otilde;na
 */
 
-define("FL_IMAGE_CAN_COMMENT", 1);
 
 class image extends class_base
 {
@@ -2048,121 +2047,14 @@ class image extends class_base
 	**/
 	function do_apply_gal_conf($o)
 	{
-		if ($o->prop("no_apply_gal_conf"))
-		{
-			return;
-		}
-		$conf = $this->_get_conf_for_folder($o->parent(), true);
-		if ($conf)
-		{
-			// resize image as conf says
-			$this->do_resize_image(array(
-				"o" => $o,
-				"conf" => obj($conf)
-			));
-		}
+		$o->do_apply_gal_conf();
 	}
 
-	/** Resizes images as conf says
-
-		@attrib name=do_resize_image params=name api=1 
-
-		@param o required type=object
-			Image object
-		@param conf required type=object
-			Gallery configuration object
-
-		@errors 
-			none
-
-		@returns 
-			none
-
-		@comment 
-			Applies the gallery configuration to an image. Gallery configuration is set to the image's parent.
-
-		@examples
-			none
-	**/
 	function do_resize_image($arr)
 	{
 		extract($arr);
 		// big first
-		if (($conf->prop("v_width") || $conf->prop("v_height") || $conf->prop("h_width") || $conf->prop("h_height")))
-		{
-			$bigf = $o->prop("file2");
-
-			if (file_exists($bigf))
-			{
-				$img = get_instance("core/converters/image_convert");
-				$img->set_error_reporting(false);
-				$img->load_from_file($bigf);
-				if ($img->is_error())
-				{
-					$bigf = false;
-				}
-			}
-
-			if($o->prop("file") != $o->meta("old_file") && $bigf)
-			{
-				// If we changed the small file, change the big file also!
-				unlink($bigf);
-				$bigf = false;
-			}
-
-			if (!$bigf)
-			{
-				// no big file, copy from small file
-				$bigf = $o->prop("file");
-				if ($bigf)
-				{
-					$f = get_instance(CL_FILE);
-					$bigf = $f->_put_fs(array(
-						"type" => "image/jpg",
-						"content" => $this->get_file(array("file" => $bigf))
-					));
-					$o->set_prop("file2", $bigf);
-					$o->save();
-				}
-			}
-
-			if ($bigf)
-			{
-				// do the actual resize-file thingie
-				$this->do_resize_file_in_fs($bigf, $conf, "");
-			}
-		}
-
-		// now small
-		$smallf = $o->prop("file");
-		if (!$smallf)
-		{
-			// do copy-big-to-small
-			$smallf = $o->prop("file2");
-			if ($smallf)
-			{
-				$f = get_instance(CL_FILE);
-				$smallf = $f->_put_fs(array(
-					"type" => "image/jpg",
-					"content" => $this->get_file(array("file" => $smallf))
-				));
-				$o->set_prop("file", $smallf);
-				$o->save();
-			}
-		}
-
-		if ($smallf)
-		{
-			$this->do_resize_file_in_fs($smallf, $conf, "tn_");
-			// if controller is set, let it do it's thing
-			if ($this->can("view", $conf->prop("controller")))
-			{
-				$ctr = obj($conf->prop("controller"));
-				$ctr_i = $ctr->instance();
-				$ctr_i->eval_controller_ref($ctr->id(), $conf, $smallf, $smallf);
-			}
-		}
-
+		$o->do_resize_image($arr);
 	}
 
 	/** Resizes images in filesystem
@@ -2327,39 +2219,10 @@ class image extends class_base
 		return $imagetag;
 	}
 
-	/** Composes javascript onClick code to open big image in popup window
-
-		@attrib name=get_on_click_js params=pos api=1 
-
-		@param id required type=int
-			Image object's id
-	
-		@errors 
-			none
-
-		@returns 
-			Empty value when big image is not set
-			javascript onclick code to open big image in popup window
-
-		@comment 
-			none
-
-		@examples
-			none
-	**/
 	function get_on_click_js($id)
 	{
 		$o = obj($id);
-		if ($o->prop("file2") == "")
-		{
-			return "";
-		}
-
-		$that = new image;
-
-		$size = @getimagesize(self::_get_fs_path($o->prop("file2")));
-		$bi_show_link = $that->mk_my_orb("show_big", array("id" => $id), "image");
-		return  "window.open(\"$bi_show_link\",\"popup\",\"width=".($size[0]).",height=".($size[1])."\");";
+		return $o->get_on_click_js();
 	}
 
 	function mime_type_for_image($arr)
@@ -2669,7 +2532,6 @@ class image extends class_base
 		@attrib name=delete_image
 
 		@param id required type=int acl=delete
-
 		@param delete_file type=bool default=false
 
 	**/

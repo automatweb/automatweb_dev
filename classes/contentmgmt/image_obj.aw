@@ -1,5 +1,5 @@
 <?php
-
+define("FL_IMAGE_CAN_COMMENT", 1);
 class image_obj extends _int_object
 {
 	function set_prop($k, $v)
@@ -18,9 +18,8 @@ class image_obj extends _int_object
 	**/
 	public function get_html()
 	{
-		$inst = get_instance(CL_IMAGE);
 		$idata = $this->get_image_data();
-		$inst->mk_path($idata["parent"],"Vaata pilti");
+		$GLOBALS["object_loader"]->cache->mk_path($idata["parent"],"Vaata pilti");
 		$retval = html::img(array(
 			"url" => $idata["url"],
 			'height' => (isset($args['height']) ? $args['height'] : NULL),
@@ -71,8 +70,7 @@ class image_obj extends _int_object
 			}
 			else
 			{
-				$inst = get_instance(CL_IMAGE);
-				$url = $inst->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
+				$url = $GLOBALS["object_loader"]->cache->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
 			}
 			$retval = str_replace("automatweb/", "", $url);
 		}
@@ -92,9 +90,8 @@ class image_obj extends _int_object
 	**/
 	public function get_big_html()
 	{
-		$img_inst = get_instance(CL_IMAGE);
-		$idata = $img_inst->get_image_by_id($this->id());
-		$img_inst->mk_path($idata["parent"],"Vaata pilti");
+		$idata = $this->get_image_data();
+		$GLOBALS["object_loader"]->cache->mk_path($idata["parent"],"Vaata pilti");
 		$retval = html::img(array(
 			"url" => $idata["big_url"],
 			'height' => (isset($args['height']) ? $args['height'] : NULL),
@@ -139,16 +136,15 @@ class image_obj extends _int_object
 	{
 		// it shouldn't be, but it is an array, if a period is loaded
 		// from a stale cache.
-		$inst = get_instance(CL_IMAGE);
 		if (!($row = aw_cache_get("get_image_by_id",$this->id())))
 		{
 			$q = "SELECT objects.*,images.* FROM images
 				LEFT JOIN objects ON (objects.oid = images.id)
 				WHERE images.id = '".$this->id()."'";
-			if (method_exists($inst, "db_query"))
+			if (method_exists($GLOBALS["object_loader"]->cache, "db_query"))
 			{
-				$inst->db_query($q);
-				$row = $inst->db_fetch_row();
+				$GLOBALS["object_loader"]->cache->db_query($q);
+				$row = $GLOBALS["object_loader"]->cache->db_fetch_row();
 			};
 
 
@@ -206,8 +202,7 @@ class image_obj extends _int_object
 	**/
 	public function get_big_url()
 	{
-		$img_inst = get_instance(CL_IMAGE);
-		$url = $img_inst->get_url($this->prop("file2"));
+		$url = $this->fix_url($this->prop("file2"));
 		return $this->check_url($url);
 	}
 
@@ -329,6 +324,128 @@ class image_obj extends _int_object
 		$tmp = aw_ini_get("site_basedir")."/files/".substr($tmp, $slp)."/".basename($path);
 		return $tmp;
 	}
+
+	/** Resizes images as conf says
+		@attrib name=do_resize_image params=name api=1 
+		@param conf required type=object
+			Gallery configuration object
+		@errors 
+			none
+		@returns 
+			none
+		@comment 
+			Applies the gallery configuration to an image. Gallery configuration is set to the image's parent.
+		@examples
+			none
+	**/
+	function do_resize_image($arr)
+	{
+		extract($arr);
+		// big first
+		if (($conf->prop("v_width") || $conf->prop("v_height") || $conf->prop("h_width") || $conf->prop("h_height")))
+		{
+			$bigf = $this->prop("file2");
+
+			if (file_exists($bigf))
+			{
+				$img = get_instance("core/converters/image_convert");
+				$img->set_error_reporting(false);
+				$img->load_from_file($bigf);
+				if ($img->is_error())
+				{
+					$bigf = false;
+				}
+			}
+
+			if($this->prop("file") != $this->meta("old_file") && $bigf)
+			{
+				// If we changed the small file, change the big file also!
+				unlink($bigf);
+				$bigf = false;
+			}
+
+			if (!$bigf)
+			{
+				// no big file, copy from small file
+				$bigf = $this->prop("file");
+				if ($bigf)
+				{
+					$f = get_instance(CL_FILE);
+					$bigf = $f->_put_fs(array(
+						"type" => "image/jpg",
+						"content" => $this->get_file(array("file" => $bigf))
+					));
+					$this->set_prop("file2", $bigf);
+					$this->save();
+				}
+			}
+
+			if ($bigf)
+			{
+				// do the actual resize-file thingie
+				$this->do_resize_file_in_fs($bigf, $conf, "");
+			}
+		}
+
+		// now small
+		$smallf = $this->prop("file");
+		if (!$smallf)
+		{
+			// do copy-big-to-small
+			$smallf = $this->prop("file2");
+			if ($smallf)
+			{
+				$f = get_instance(CL_FILE);
+				$smallf = $f->_put_fs(array(
+					"type" => "image/jpg",
+					"content" => $this->get_file(array("file" => $smallf))
+				));
+				$this->set_prop("file", $smallf);
+				$this->save();
+			}
+		}
+
+		if ($smallf)
+		{
+			$this->do_resize_file_in_fs($smallf, $conf, "tn_");
+			// if controller is set, let it do it's thing
+			if ($this->can("view", $conf->prop("controller")))
+			{
+				$ctr = obj($conf->prop("controller"));
+				$ctr_i = $ctr->instance();
+				$ctr_i->eval_controller_ref($ctr->id(), $conf, $smallf, $smallf);
+			}
+		}
+	}
+
+	/** Apply gallery conf to an image
+		@attrib name=do_apply_gal_conf params=pos api=1 
+		@errors 
+			none
+		@returns 
+			none
+		@comment 
+			Applies the gallery configuration to an image. Gallery configuration is set to the image's parent.
+		@examples
+			none
+	**/
+	function do_apply_gal_conf()
+	{
+		if ($this->prop("no_apply_gal_conf"))
+		{
+			return;
+		}
+		$conf = $this->_get_conf_for_folder($this->parent(), true);
+		if ($conf)
+		{
+			// resize image as conf says
+			$this->do_resize_image(array(
+				"conf" => obj($conf)
+			));
+		}
+	}
+
+
 
 }
 
