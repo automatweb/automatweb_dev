@@ -59,9 +59,9 @@ var bsnAsFileref = document.createElement("link");bsnAsFileref.setAttribute("rel
  *
  * LAST UPDATED:
  *
- * 		- $Date: 2009/09/08 10:29:57 $
+ * 		- $Date: 2009/09/12 07:33:47 $
  * 		- $Author: voldemar $
- * 		- $Revision: 1.2 $
+ * 		- $Revision: 1.3 $
  *
  *
  **********************************************************************/
@@ -114,7 +114,7 @@ jQuery.ptTimeSelect._ptTimeSelectInit = function () {
 				jQuery("body").append(
 						'<div id="ptTimeSelectCntr" class="">'
 					+	'		<div class="ui-widget ui-widget-content">'
-					+	'		<div class="ui-widget-header">'
+					+	'		<div class="ptTimeSelectHeader">'
 					+	'			<div id="ptTimeSelectCloseCntr" style="float: right;">'
 					+	'				<a href="javascript: void(0);" onclick="jQuery.ptTimeSelect.closeCntr();" '
 					+	'						onmouseover="jQuery(this).removeClass(\'ui-state-default\').addClass(\'ui-state-hover\');" '
