@@ -324,6 +324,8 @@ exit_function("packet_obj::get_brand_image");
 		$colors = array();
 		foreach($this ->connections_from(array(
 			"type" => "RELTYPE_PRODUCT",
+			"sort_by_num" => "to.jrk",
+			"sort_dir" => "asc"
 		)) as $c)
 		{
 			$product = $c->to();
