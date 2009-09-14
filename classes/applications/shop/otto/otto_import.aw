@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.118 2009/09/11 10:33:24 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.119 2009/09/14 07:35:04 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -7130,7 +7130,7 @@ Võtn hetkel kasutusele selle teise variandi
 			echo "- ".$prod['pg'].' -- '.$prod['nr'].' -- '.$prod['title']."<br />\n";
 			$codes = $this->db_fetch_array("select * from otto_imp_t_codes where lang_id = ". aw_global_get("lang_id")." and pg = '". $prod["pg"]."' and nr = ".$prod["nr"]." order by pg,nr,s_type" );
 			$oxml->startElement('products');
-			foreach (safe_array($codes) as $code)
+			foreach (safe_array($codes) as $product_order => $code)
 			{
 				$orig_code = $code;
 				$code = $this->convert_utf($code);
@@ -7140,6 +7140,8 @@ Võtn hetkel kasutusele selle teise variandi
 				$oxml->writeElement('page', $code['pg']);
 
 				$oxml->writeElement('nr', $code['nr']);
+
+				$oxml->writeElement('order', ($product_order * 10)); // i use the array index as order value and it will be with step 10 --dragut
 
 				$oxml->startElement('type');
 				$oxml->writeCData($code['s_type']);
@@ -7184,13 +7186,15 @@ Võtn hetkel kasutusele selle teise variandi
 
 					echo "-------- ".$size['pg']." -- ". $size['nr'] ." -- ".$size['s_type']." -- ".$size['price'].".- -- ".$size['size']." -- ".$size['unit']."<br />\n";
 					$tmp = explode(',', $size['size']);
-					foreach ($tmp as $s)
+					foreach ($tmp as $packaging_order => $s)
 					{
 						$oxml->startElement('packaging');
 
 						$oxml->writeElement('page', $size['pg']);
 
 						$oxml->writeElement('nr', $size['nr']);
+
+						$oxml->writeElement('order', ($packaging_order * 10)); // first one will be 0, and the second ones will with step 10. using array index as order value --dragut
 
 						$oxml->startElement('type');
 						$oxml->writeCData($size['s_type']);

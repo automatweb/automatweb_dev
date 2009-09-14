@@ -332,6 +332,9 @@ class warehouse_products_import extends warehouse_data_import
 		{
 			switch ($n->nodeName)
 			{
+				case 'order':
+					$product_obj->set_ord($n->nodeValue);
+					break;
 				case 'type':
 					$product_obj->set_prop('type_code', $n->nodeValue);
 					break;
@@ -514,6 +517,9 @@ class warehouse_products_import extends warehouse_data_import
 					break;
 				case 'size':
 					$packaging_obj->set_prop('size', $n->nodeValue);
+					break;
+				case 'order':
+					$packaging_obj->set_ord($n->nodeValue);
 					break;
 				case 'type':
 					$packaging_obj->set_comment($n->nodevalue);
