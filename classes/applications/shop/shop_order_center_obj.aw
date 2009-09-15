@@ -26,6 +26,17 @@ class shop_order_center_obj extends _int_object
 		$cart->save();
 		$this->set_prop("cart" , $cart->id());
 		
+		//pangamakse objekt ka suht populaarne
+		$bp = new object();
+		$bp->set_class_id(CL_BANK_PAYMENT);
+		$bp->set_name($this->name() . " " . t("pangamakse"));
+		$bp->set_parent($this->id());
+		$bp->save();
+		$bp->set_prop("bank_payment" , $bp->id());
+		
+		//maili v6iks ka kohe saata
+		$this->set_prop("mail_to_client" , 1);
+
 		$warehouses = new object_list(array(
 			"class_id" => CL_SHOP_WAREHOUSE,
 			"site_id" => array(),
@@ -571,10 +582,24 @@ class shop_order_center_obj extends _int_object
 			{
 				$this->_make_new_struct_leaf($categories , $menu->id());		
 			}
-
 		}
-		
 	}
-	
+
+	private function  __orderer_vars_sorter($a, $b)
+	{
+		if ($this->orderer_vars_meta["jrk"][$a] == $this->orderer_vars_meta["jrk"][$b]) 
+		{
+			return 0;
+		}
+		return ($this->orderer_vars_meta["jrk"][$a] < $this->orderer_vars_meta["jrk"][$b]) ? -1 : 1;
+	}
+
+	public function get_orderer_vars(&$cart_instance)
+	{
+		$orderer_vars = $cart_instance->orderer_vars;
+		$this->orderer_vars_meta = $this->meta("orderer_vars");
+		uksort($orderer_vars, array(&$this, "__orderer_vars_sorter"));
+		return $orderer_vars;
+	}
 
 }

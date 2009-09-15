@@ -7,7 +7,7 @@
 
 @classinfo syslog_type=ST_SHOP_ORDER_CENTER relationmgr=yes maintainer=kristo no_comment=1 no_status=1 prop_cb=1
 
-@default group=general
+@default group=general_
 @default table=aw_shop_order_center
 
 @property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE field=aw_warehouse_id
@@ -31,8 +31,8 @@
 	@property mail_to_client type=checkbox ch_value=1
 	@caption Saada tellijale e-mail
 
-	@property mail_to_el type=select
-	@caption E-maili element, kuhu saata tellimus
+#	@property mail_to_el type=select
+#	@caption E-maili element, kuhu saata tellimus
 
 	@property mail_from_addr type=textbox
 	@caption Meili From aadress
@@ -48,14 +48,14 @@
 
 @default group=mail_settings_seller
 
-	@property mail_to_seller_in_el type=select
-	@caption Saada meil aadressile, mis on elemendis
+#	@property mail_to_seller_in_el type=select
+#	@caption Saada meil aadressile, mis on elemendis
 
-	@property mail_group_by type=select
-	@caption Toodete grupeerimine meilis
+#	@property mail_group_by type=select
+#	@caption Toodete grupeerimine meilis
 
-	@property mails_sep_by_el type=checkbox ch_value=1
-	@caption Saada eraldi meilid vastavalt klassifikaatorile
+#	@property mails_sep_by_el type=checkbox ch_value=1
+#	@caption Saada eraldi meilid vastavalt klassifikaatorile
 
 	@property send_attach type=checkbox ch_value=1
 	@caption Lisa meili manusega tellimus
@@ -90,6 +90,28 @@
 	@property extra_address_delivery_types type=relpicker multiple=1 store=connect reltype=RELTYPE_EXTRA_ADDRESS_DELIVERY_TYPES
 	@caption Lisaadressi omavad kohaletoimetamise viisid
 	@comment Kohaletoimetamise viisid, millel on omal miski aadresside valik kuhu saadetakse kaup (nt. smartpost)
+
+	@property show_delivery type=checkbox ch_value=1
+	@caption Kuva kohaletoimetamise valikut
+	@comment Suunab ostukorvi vaatest otse isikuandmete vaatesse, kui valitud, ning ei n&auml;ita kohaletoimetamise muutujaid mujal vaadetes
+
+
+
+	@property delivery_show_controller type=relpicker reltype=RELTYPE_DELIVERY_SHOW_CONTROLLER
+	@caption N&auml;itamise kontroller
+	@comment Vaja t88le kruvida
+
+	@property delivery_save_controller type=relpicker reltype=RELTYPE_DELIVERY_SAVE_CONTROLLER
+	@caption Salvestamise kontroller
+	@comment Vaja t88le kruvida
+
+	@property delivery_exec_controller type=relpicker reltype=RELTYPE_DELIVERY_EXEC_CONTROLLER
+	@caption Teostamiselesaatmise kontroller
+	@comment Vaja t88le kruvida
+
+	@property cart_value_controller type=relpicker reltype=RELTYPE_CART_VALUE_CONTROLLER
+	@caption Korvi hinna kontroller
+	@comment Vaja t88le kruvida
 
 
 @default group=appearance
@@ -140,9 +162,6 @@
 	@property disp_cart_in_web type=checkbox ch_value=1
 	@caption Kuva korvi toodete all
 
-	@property show_delivery type=checkbox ch_value=1
-	@caption Kuva kohaletoimetamise valikut
-
 	@property no_change_button type=checkbox ch_value=1
 	@caption &Auml;ra kuva tellimiskeskkonnas toote k&otilde;rvale "Muuda" nuppu
 
@@ -160,6 +179,10 @@
 	@property layoutbl type=table store=no no_caption=1
 	@caption Toodete layout
 
+@default group=psfieldmap
+	@property person_properties type=table store=no
+	@caption Tellimuse andmete vormis asuvad isikuandmed
+
 
 @default group=data_settings
 
@@ -172,8 +195,6 @@
 	@property data_form_company type=select
 	@caption Organisatsiooni nime element andmete vormis
 
-@default group=psfieldmap
-
 	@property psfieldmap type=table store=no
 	@caption Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele
 
@@ -184,17 +205,20 @@
 
 @default group=payment_settings
 
-	@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
+	@property use_bank_payment type=checkbox ch_value=1
+	@caption Kasuta pangamakset
+
+	@property bank_payment type=releditor reltype=RELTYPE_BANK_PAYMENT store=connect props=bank direct_links=1 rel_id=first use_form=emb
 	@caption Pangamakse objekt
 
-	@property bank_id type=select
-	@caption Panga muutuja
+#	@property bank_id type=select
+#	@caption Panga muutuja
 
-	@property orderer_mail type=select
-	@caption Tellija mailiaadressi muutuja
+#	@property orderer_mail type=select
+#	@caption Tellija mailiaadressi muutuja
 
-	@property bank_lang type=select
-	@caption Panga keele muutuja
+#	@property bank_lang type=select
+#	@caption Panga keele muutuja
 
 @default group=filter_settings
 
@@ -216,20 +240,6 @@
 
 	@property filter_sel_for_folders type=table store=no no_caption=1
 
-
-@default group=delivery_cfg
-	@property delivery_show_controller type=relpicker reltype=RELTYPE_DELIVERY_SHOW_CONTROLLER
-	@caption N&auml;itamise kontroller
-
-	@property delivery_save_controller type=relpicker reltype=RELTYPE_DELIVERY_SAVE_CONTROLLER
-	@caption Salvestamise kontroller
-
-	@property delivery_exec_controller type=relpicker reltype=RELTYPE_DELIVERY_EXEC_CONTROLLER
-	@caption Teostamiselesaatmise kontroller
-
-	@property cart_value_controller type=relpicker reltype=RELTYPE_CART_VALUE_CONTROLLER
-	@caption Korvi hinna kontroller
-
 @default group=settings
 	
 	@property cart_type type=chooser
@@ -241,11 +251,9 @@
 	@property show_unconfirmed type=checkbox ch_value=1
 	@caption N&auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi
 
-	@property only_prods type=checkbox ch_value=1
-	@caption Ostukorvis on tooted ilma pakendite, piltide jms
-
-	@property pdf_template type=textbox
-	@caption PDF Template faili nimi
+#see vaid vanas tellimuses kasutuses
+#	@property pdf_template type=textbox
+#	@caption PDF Template faili nimi
 
 	@property show_prod_and_package type=checkbox ch_value=1
 	@caption N&auml;ita selgituses toodet/paketti
@@ -259,6 +267,10 @@
 	@property integration_class type=select
 	@caption Integratsiooni klass
 
+
+@groupinfo general_ parent=general caption="&Uuml;ldine"
+@groupinfo settings caption="Seaded" parent=general
+
 @groupinfo appear caption="N&auml;itamine"
 	@groupinfo appearance parent=appear caption="N&auml;itamine"
 	@groupinfo appear_settings parent=appear caption="Seaded"
@@ -266,7 +278,7 @@
 	@groupinfo appear_layout parent=appear caption="Layoudid"
 
 @groupinfo payment caption="Maksmine"
-	@groupinfo payment_types caption="Makseviisid" parent=payment
+	@groupinfo payment_types caption="J&auml;relmaks" parent=payment
 	@groupinfo payment_settings caption="Pangamakse seaded" parent=payment
 	@groupinfo payment1 caption="Seaded" parent=payment
 
@@ -279,17 +291,16 @@
 
 
 @groupinfo data caption="Andmed"
+	@groupinfo psfieldmap caption="Isikuandmete kaart" parent=data
 	@groupinfo data_settings caption="Seaded" parent=data
-	@groupinfo psfieldmap caption="Isukuandmete kaart" parent=data
 	@groupinfo orgfieldmap caption="Firma andmete kaart" parent=data
-	@groupinfo delivery_cfg caption="Kohaletoimetamise seaded" parent=data
 
 @groupinfo filter caption="Filtreerimine"
 	@groupinfo filter_settings caption="Seaded" parent=filter
 	@groupinfo filter_select caption="Koosta filter" parent=filter submit=no
 	@groupinfo filter_set_folders caption="Vali kehtivad filtrid" parent=filter
 
-@groupinfo settings caption="Seaded"
+
 
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
@@ -476,7 +487,7 @@ class shop_order_center extends class_base
 				$props = $this->get_properties_from_data_form($arr["obj_inst"]);
 				foreach($props as $pn => $pd)
 				{
-					$opts[$pn] = $pd["caption"];
+					$opts[$pn] = empty($pd["caption"]) ? $pd["name"] : $pd["caption"];
 				}
 				$prop["options"] = $opts;
 				break;
@@ -527,6 +538,9 @@ class shop_order_center extends class_base
 			case "controller_tbl":
 				$this->save_ctr_t($arr);
 				break;
+			case "use_bank_payment":
+				$this->_set_bank_payment($arr);
+				break;
 		}
 		return $retval;
 	}
@@ -537,6 +551,64 @@ class shop_order_center extends class_base
 		$arr["obj_inst"]->set_meta("itemlayouts_long", $arr["request"]["itemlayout_long"]);
 		$arr["obj_inst"]->set_meta("itemlayouts_long_2", $arr["request"]["itemlayout_long_2"]);
 		$arr["obj_inst"]->set_meta("tblayouts", $arr["request"]["tblayout"]);
+	}
+
+	function _set_bank_payment($arr)
+	{
+		$bank_payment_instance = get_instance(CL_BANK_PAYMENT);
+		$bank_payment_instance->submit_meta(array(
+			"request" => $arr["request"],
+			"obj_inst" => obj($arr["request"]["bank_payment"]["id"]),
+			"prop" => array("name" => "bank"),
+		));
+	}
+
+	function _get_person_properties($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("V&auml;lja nimi")
+		));
+		$t->define_field(array(
+			"name" => "show",
+			"caption" => t("N&auml;ita"),
+		));
+		$t->define_field(array(
+			"name" => "req",
+			"caption" => t("Kohustuslik"),
+		));
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+		));
+
+		$cart = get_instance(CL_SHOP_ORDER_CART);
+		$orderer_vars = $arr["obj_inst"]->meta("orderer_vars");
+
+		foreach($cart->orderer_vars as $var => $caption)
+		{
+			$t->define_data(array(
+				"name" => $caption,
+				"show" => html::checkbox(array(
+					"name" => "orderer_vars[show][".$var."]",
+					"checked" => empty($orderer_vars["show"][$var]) ? "" : 1,
+				)),
+				"req" => html::checkbox(array(
+					"name" => "orderer_vars[req][".$var."]",
+					"checked" => empty($orderer_vars["req"][$var]) ? "" : 1,
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "orderer_vars[jrk][".$var."]",
+					"value" => empty($orderer_vars["jrk"][$var]) ? "" : $orderer_vars["jrk"][$var],
+				)),
+			));
+		}
+	}
+
+	function _set_person_properties($arr)
+	{
+		$arr["obj_inst"]->set_meta("orderer_vars" , $arr["request"]["orderer_vars"]);
 	}
 
 	function do_save_sortbl(&$arr)
@@ -1381,7 +1453,7 @@ class shop_order_center extends class_base
 			$ret[$pn] = $all_ps[$pn];
 			foreach($override_params as $override_param)
 			{
-				if($pd[$override_param])
+				if(!empty($pd[$override_param]))
 				{
 					$ret[$pn][$override_param] = $pd[$override_param];
 				}

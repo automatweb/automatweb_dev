@@ -303,7 +303,10 @@ class shop_order_cart extends class_base
 		$this->add_cart_vars();
 		$this->add_product_vars();
 		$this->add_orderer_vars();
-		$this->add_order_vars();
+		if($oc->prop("show_delivery"))
+		{
+			$this->add_order_vars();
+		}
 
 		$soce = new aw_array(aw_global_get("soc_err"));
 		$soce_arr = $soce->get();
@@ -573,7 +576,6 @@ class shop_order_cart extends class_base
 
 
 
-
 		$this->vars($delivery_vars + array(
 			"cart_total" => number_format($cart_total, 2),
 			"cart_discount" => number_format($cart_discount, 2),
@@ -587,8 +589,9 @@ class shop_order_cart extends class_base
 			"postal_price" => number_format($postal_price,2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array(
 				"oc" => $oc->id(),
+				"cart" => $cart_o->id(),
 				"update" => 1,
-				"section" => aw_global_get("section"),//$arr["section"]
+				"section" => aw_global_get("section"),
 			)),
 		));
 /*
@@ -633,8 +636,14 @@ class shop_order_cart extends class_base
 			"not_logged" => $lln,
 		));
 */
+
+		//pangamakse muutujad
 		$this->add_bank_vars($oc, empty($cart["user_data"]) ? null : $cart["user_data"]);
 		$data["cart"] = $cart_o->id();
+		
+		//peale submiti edasi mineku url
+		$data["go_to_after"] = aw_ini_get("baseurl")."/index.aw?action=".($oc->prop("show_delivery") ? "order_data" : "orderer_data")."&class=shop_order_cart&cart=".$cart_o->id()."&section=".aw_global_get("section");
+
 		$this->vars($data);
 		foreach($this->vars as $key => $val)
 		{
@@ -2637,7 +2646,11 @@ class shop_order_cart extends class_base
 		$this->add_cart_vars();
 		$this->add_product_vars();
 		$this->add_orderer_vars();
-		$this->add_order_vars();;
+
+		if($this->oc->prop("show_delivery"))
+		{
+			$this->add_order_vars();
+		}
 
 		$this->vars($arr);
 		return $this->parse();
@@ -2675,9 +2688,12 @@ class shop_order_cart extends class_base
 
 	public function add_orderer_vars()
 	{
+		//load_javascript('validationEngine.jquery.css');
 		$data = $this->cart->get_order_data();
-		$vars = array();
-		foreach($this->orderer_vars as $orderer_var => $caption)
+		$vars = array("ORDERER_DATA" => "");
+		$orderer_vars = $this->oc->get_orderer_vars($this);
+		$this->orderer_vars_meta = $this->oc->meta("orderer_vars");
+		foreach($orderer_vars as $orderer_var => $caption)
 		{
 			$vars[$orderer_var."_value"] = empty($data[$orderer_var]) ? "" : $data[$orderer_var];
 			$vars[$orderer_var."_caption"] = $caption;
@@ -2700,6 +2716,7 @@ class shop_order_cart extends class_base
 					$vars[$orderer_var] = html::textbox(array(
 						"name" => $orderer_var,
 						"value" => $vars[$orderer_var."_value"],
+						"class" => empty($this->orderer_vars_meta["req"][$orderer_var]) ? "" : "validate[required] text",
 					));
 					break;
 				case "birthday":
@@ -2711,7 +2728,26 @@ class shop_order_cart extends class_base
 						$vars["birthday_value"] = empty($data[$orderer_var]["day"]) ? "" : date("d.m.Y" , mktime(0,0,0,$data[$orderer_var]["day"],$data[$orderer_var]["month"],$data[$orderer_var]["year"]));
 					}
 					break;
-			} 
+			}
+			if($this->is_template("ORDERER_DATA") || $this->is_template(strtoupper($orderer_var."_SUB")))
+			{
+				$this->vars(array(
+					"caption" => $caption,
+					"value" => empty($data[$orderer_var]) ? "" : $data[$orderer_var],
+					"var_name" => $orderer_var,
+					"REQUIRED" => empty($this->orderer_vars_meta["req"][$orderer_var]) ? "" : $this->parse("REQUIRED"),
+					"class" => empty($this->orderer_vars_meta["req"][$orderer_var]) ? "" : "validate[required] text",
+				));
+				if($this->is_template(strtoupper($orderer_var."_SUB")))
+				{
+					$this->vars($vars);
+					$vars["ORDERER_DATA"].= $this->parse(strtoupper($orderer_var."_SUB"));
+				}
+				else
+				{
+					$vars["ORDERER_DATA"].= $this->parse("ORDERER_DATA");
+				}
+			}
 		}
 
 
