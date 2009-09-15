@@ -69,9 +69,9 @@ EOS;
 		return $date_textbox . $datepicker . $time_textbox . $timepicker;
 	}
 
-	function init_vcl_property($arr)
+	public function init_vcl_property($arr)
 	{
-		$prop = $arr["prop"];
+		$prop = $arr["property"];
 		$name = $prop["name"];
 		$prop["value"] = $arr["obj_inst"]->prop($name);
 		if (isset($prop["value"]) and $prop["value"] > 1)
@@ -85,7 +85,7 @@ EOS;
 		return array($prop["name"] => $prop);
 	}
 
-	function process_vcl_property(&$arr)
+	public function process_vcl_property(&$arr)
 	{
 		$prop =& $arr["prop"];
 		$name = $prop["name"];
@@ -101,7 +101,7 @@ EOS;
 /** Converts datepicker value to UNIX timestamp
 	@attrib api=1 params=pos
 	@param value type=array
-		array(date => ddmmyyyy, time => hh:mm)
+		array("date" => ddmmyyyy, "time" => hh:mm)
 	@returns int
 **/
 	public static function get_timestamp($value)
