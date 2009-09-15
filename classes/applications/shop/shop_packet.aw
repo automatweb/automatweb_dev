@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.32 2009/09/07 14:56:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.33 2009/09/15 09:11:14 dragut Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -176,6 +176,12 @@ class shop_packet extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "count",
 			"caption" => t("Mitu paketis"),
 			"align" => "center"
@@ -200,12 +206,19 @@ class shop_packet extends class_base
 
 	function do_packet_table(&$arr)
 	{
+		$arr['prop']['vcl_inst']->set_sortable(false);
+
 		$pd = $arr["obj_inst"]->meta("packet_content");
 		$pg = $arr["obj_inst"]->meta("packet_groups");
 		$pk = $arr["obj_inst"]->meta("packet_def_pkgs");
 
 		$this->_init_packet_table($arr["prop"]["vcl_inst"]);
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
+		$connections_to_products = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_PRODUCT",
+			"sort_by_num" => "to.jrk",
+			"sort_dir" => "asc"
+		));
+		foreach($connections_to_products as $c)
 		{
 			if(isset($pd[$c->prop("to")]))
 			{
@@ -217,6 +230,11 @@ class shop_packet extends class_base
 			}
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"name" => html::obj_change_url($c->to()),
+				"ord" => html::textbox(array(
+					"name" => "packet_order[".$c->prop("to")."]",
+					"value" => $c->to()->ord(),
+					"size" => 5
+				)),
 				"count" => html::textbox(array(
 					"name" => "pd[".$c->prop("to")."]",
 					"value" => $value,
@@ -252,6 +270,20 @@ class shop_packet extends class_base
 		$arr["obj_inst"]->set_meta("packet_content", $arr["request"]["pd"]);
 		$arr["obj_inst"]->set_meta("packet_groups", $arr["request"]["pg"]);
 		$arr["obj_inst"]->set_meta("packet_def_pkgs", $arr["request"]["pk"]);
+
+		// if the order is changed, then update the order value in product objects:
+		foreach ($arr['request']['packet_order'] as $product_oid => $product_order)
+		{
+			if ($this->can('view', $product_oid))
+			{
+				$product_obj = new object($product_oid);
+				if ($product_order != $product_obj->ord())
+				{
+					$product_obj->set_ord($product_order);
+					$product_obj->save();
+				}
+			}
+		}
 	}
 
 	function get_price($o)
