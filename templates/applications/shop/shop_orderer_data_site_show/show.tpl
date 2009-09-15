@@ -1,7 +1,7 @@
 <!-- 
 bill vars : "id" , "number" , "currency" , "date" , "deadline" , "sum"
 delivery_note vars : "id" , "number" , "currency" , "date" , "delivery" , "sum"
-
+user vars:name, uid, user_name, add_new, users_table
 -->
 
 

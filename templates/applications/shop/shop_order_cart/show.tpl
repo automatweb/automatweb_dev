@@ -1,14 +1,13 @@
 <table id="shop_basket_content">
 	<tr>
 		<td id="contentSidebar">
-			<div id="contentSidebarStart"><a href="/"><img src="/img/contentSidebarStart{VAR:LC_IMAGE_SUFIX}.gif" alt="{VAR:LC_GO_TO_FRONTPAGE}" title="{VAR:LC_GO_TO_FRONTPAGE}" /></a></div>
 			<div class="contentSidebarBasketNav">
 				<div class="contentSidebarBasketNavHeader"><!-- --></div>
 				<ul class="level1">
-					<li class="levelActive"><span>Ostukorv</span></li>
-					<li class=""><span>Tellimuse andmed</span></li>
-					<li class=""><span>Tellija andmed</span></li>
-					<li><span>Ostukorvi kinnitus</span></li>
+					<li class="levelActive"><span>{VAR:LC_BASKET_STEP_1}</span></li>
+					<li class=""><span>{VAR:LC_BASKET_STEP_2}</span></li>
+					<li class=""><span>{VAR:LC_BASKET_STEP_3}</span></li>
+					<li><span>{VAR:LC_BASKET_STEP_4}</span></li>
 				</ul>
 				<div class="contentSidebarBasketNavFooter"><!-- --></div>
 			</div>
@@ -22,7 +21,7 @@
 		<table>
 			<tr>
 				<td class="shopStep"><span>1</span></td>
-				<td>Ostukorv</td>
+				<td>{VAR:LC_BASKET_STEP_1}</td>
 			</tr>
 		</table>
 	</div>
@@ -34,9 +33,9 @@
 		<table class="table1">
 			<thead>
 				<tr>
-					<th class="first">Toode</th>
-					<th class="second">Kogus</th>
-					<th class="third">Hind ({VAR:currency})</th>
+					<th class="first">{VAR:LC_PRODUCT}</th>
+					<th class="second">{VAR:LC_COUNT}</th>
+					<th class="third">{VAR:LC_PRICE} ({VAR:LC_MONEY_EXT})</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -49,12 +48,12 @@
 										<img src="{VAR:image_url}" alt="" width="69" />
 									</td>
 									<td>
-										<p class="title"><a href="">{VAR:packet_name}, {VAR:brand_name}</a></p>
+										<p class="title"><a href="">{VAR:name}, {VAR:brand_name}</a></p>
 										<p>
-											{VAR:Tootekood}: {VAR:code}, ( {VAR:price} / tk)
+											{VAR:LC_PRODUCT_NR}: {VAR:code}, ({VAR:LC_MONEY_EXT_EUR} {VAR:price} / {VAR:LC_PIECE2})
 										</p>
 										<p class="removeProduct">
-											<a href="JavaScript:void(0);" onclick="removeProductFromBasket(this, '{VAR:remove_url}');">{VAR:Eemalda toode}</a>
+											<a href="JavaScript:void(0);" onclick="removeProductFromBasket(this, '{VAR:remove_url}');">{VAR:LC_REMOVE_PRODUCT}</a>
 										</p>
 									</td>
 								</tr>
@@ -76,7 +75,7 @@
 							</table>
 
 						<td class="third">
-							{VAR:total_price}
+							{VAR:total_price_without_thousand_separator}
 						</td>
 					</tr>
 				<!-- END SUB: PRODUCT -->			
@@ -86,7 +85,10 @@
 		<table class="total1">
 			<tr>
 				<td class="first">
-						<strong>Kokku</strong><br />
+						<strong>{VAR:LC_PRODUCT_SUM}</strong><br />
+						<!--alle Angaben in EUR, inkl. MwSt. 	<br /> 
+						zzgl. Versand- und Servicekosten 	<br />
+						(Anzeige erst nach Anmeldung mĆ¶glich) 	-->
 				</td>
 				<td class="second">
 					{VAR:basket_total_price}
@@ -96,9 +98,9 @@
 
 
 		{VAR:reforb}
-		<input type="hidden" name="go_to_after" value="{VAR:baseurl}/index.aw?action=order_data&class=shop_order_cart&cart={VAR:cart}&section={VAR:section}">
+		<input type="hidden" name="go_to_after" value="{VAR:baseurl}/index.aw?action=order_data&class=shop_order_cart&cart={VAR:cart}&section={VAR:LC_BASKET_STEP2_SECTION}">
 		<input type="hidden" name="cart" value="{VAR:cart}">
-		<input type="hidden" name="section" value="{VAR:section}">
+		<input type="hidden" name="section" value="{VAR:LC_BASKET_STEP2_SECTION}">
 		<!-- SUB: HAS_PRODUCTS -->
 		<table class="buttons">
 			<tr>
@@ -107,7 +109,7 @@
 				</td>
 				<td class="space"></td>
 				<td class="right">
-					<input type="submit" value="Edasi"/>
+					<input type="submit" value="{VAR:LC_FORWARD}"/>
 				</td>
 			</tr>
 		</table>
