@@ -16,6 +16,8 @@ class htmlclient extends aw_template
 	var $error;
 	var $view_mode;
 
+	private $has_property_help = false;
+
 	function htmlclient($arr = array())
 	{
 		if(!empty($arr["no_form"]))
@@ -375,9 +377,9 @@ class htmlclient extends aw_template
 			if (empty($args["value"]))
 			{
 				$args["value"] = ifset($args, "caption");
-			};
+			}
 			unset($args["caption"]);
-		};
+		}
 
 		if ($args["type"] === "container")
 		{
@@ -398,45 +400,9 @@ class htmlclient extends aw_template
 			$caption = " ";
 		}
 
-		// give the first letter of a caption a tooltip
-		if (!empty($args["comment"]))
-		{
-			if ( isset($this->tooltip_index) )
-			{
-				$this->tooltip_index++;
-			}
-			else
-			{
-				$this->tooltip_index = 1;
-			}
-
-			$this->vars(array(
-				"tooltip_index" => $this->tooltip_index,
-				"comment" => $args["comment"],
-			));
-
-			if(strlen($args["comment"]))
-			{
-				$s_help_popup = $this->parse("HELP_POPUP");
-			}
-			else
-			{
-				$s_help_popup = "";
-			}
-
-			$this->vars(array(
-				"HELP_POPUP" => $s_help_popup,
-			));
-		}
-		else
-		{
-			$this->vars(array(
-				"comment" => "",
-				"HELP_POPUP" => "",
-			));
-		}
 		$tpl_vars = array(
 			"caption" => $caption,
+			"comment" => $this->get_property_help($args),
 			"element" => $this->draw_element($args),
 			"webform_caption" => !empty($args["style"]["caption"]) ? "st".$args["style"]["caption"] : "",
 			"webform_comment" => !empty($args["style"]["comment"]) ? "st".$args["style"]["comment"] : "",
@@ -726,7 +692,6 @@ class htmlclient extends aw_template
 		);
 
 		$xxx = $this->parse_layouts("_main");
-		$property_help = "";
 		if (sizeof($this->proplist) > 0)
 		{
 			foreach($this->proplist as $ki => $item)
@@ -737,13 +702,6 @@ class htmlclient extends aw_template
 					continue;
 				};
 
-				$this->vars_safe(array(
-					"property_name" => isset($item["name"]) ? $item["name"] : "",
-					"property_caption" => isset($item["caption"]) ? $item["caption"] : "",
-					"property_comment" => isset($item["comment"]) ? $item["comment"] : "",
-					"property_help" => isset($item["help"]) ? $item["help"] : "",
-				));
-				$property_help .= $this->parse("PROPERTY_HELP");
 				$item["html"] = $this->create_element($item);
 				if (!empty($item["error"]))
 				{
@@ -759,10 +717,10 @@ class htmlclient extends aw_template
 				{
 					$res .= $sbt;
 					unset($sbt);
-				};
+				}
 				$res .= $item["html"];
-			};
-		};
+			}
+		}
 
 		$submit_handler = $txt = "";
 		if ($this->rte)
@@ -857,7 +815,6 @@ class htmlclient extends aw_template
 			"form_handler" => !empty($form_handler) ? $form_handler : "orb.aw",
 			"SUBMIT" => isset($sbt) ? $sbt : "",
 			"help" => ifset($arr, "help"),
-			"PROPERTY_HELP" => $property_help,
 			//"form_handler" => isset($form_handler) ? "orb.aw" : $form_handler,
 		));
 
@@ -899,6 +856,13 @@ class htmlclient extends aw_template
 			));
 			$this->vars_safe(array(
 				"SAVE_MESSAGE" => $this->parse("SAVE_MESSAGE")
+			));
+		}
+
+		if ($this->has_property_help)
+		{
+			$this->vars_safe(array(
+				"HAS_PROPERTY_HELP" => $this->parse("HAS_PROPERTY_HELP")
 			));
 		}
 
@@ -1541,7 +1505,7 @@ class htmlclient extends aw_template
 
 				$this->vars_safe(array(
 					"grid_name" => $layout_name,
-					"area_caption" => $ldata["area_caption"],
+					"area_caption" => htmlspecialchars(aw_html_entity_decode($ldata["area_caption"])),
 					"display" => $state ? "block" : "none",
 					"GRID_HAS_CLOSER" => $closer,
 				));
@@ -1624,7 +1588,7 @@ class htmlclient extends aw_template
 
 				$this->vars_safe(array(
 					"grid_name" => $layout_name,
-					"area_caption" => $ldata["area_caption"],
+					"area_caption" => htmlspecialchars(aw_html_entity_decode($ldata["area_caption"])),
 					"display" => $state ? "block" : "none",
 					"VGRID_HAS_CLOSER" => $closer,
 					"VGRID_HAS_PADDING" => !empty($ldata["no_padding"]) ? "" : $this->parse("VGRID_HAS_PADDING"),
@@ -1698,7 +1662,7 @@ class htmlclient extends aw_template
 
 				$this->vars_safe(array(
 					"grid_name" => $layout_name,
-					"area_caption" => $ldata["area_caption"],
+					"area_caption" => htmlspecialchars(aw_html_entity_decode($ldata["area_caption"])),
 					"display" => $state ? "block" : "none",
 					"VSGRID_HAS_CLOSER" => $closer,
 					"VSGRID_HAS_PADDING" => !empty($ldata["no_padding"]) ? "" : $this->parse("VSGRID_HAS_PADDING"),
@@ -1730,31 +1694,23 @@ class htmlclient extends aw_template
 
 		return $html;
 	}
+
 	function put_griditem($arr)
 	{
 		// support TOP and LEFT for now only
-		$captionside = "LEFT";
+		$captionside = (isset($arr["captionside"]) and "top" === strtoupper($arr["captionside"])) ? "TOP" : "LEFT";
 		$s_help_popup = "";
 		$errmsg = "";
 
-		if (isset($arr["captionside"]))
-		{
-			switch ($arr["captionside"])
-			{
-				case "top":
-					$captionside = "TOP";
-					break;
-			}
-		}
-
 		// reset all captions
 		$this->vars_safe(array(
-			"caption" => empty($arr["caption"]) ? null : $arr["caption"],
+			"caption" => empty($arr["caption"]) ? "" : $arr["caption"],
+			"comment" => $this->get_property_help($arr),
 			"CAPTION_LEFT" => "",
 			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
 			"element_name" => $arr["name"],
-			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
+			"err_msg" => isset($arr["error"]) ? $arr["error"] : "",
 			"GRID_ERR_MSG" => ""
 		));
 
@@ -1764,41 +1720,17 @@ class htmlclient extends aw_template
 			$errmsg = $this->parse("GRID_ERR_MSG");
 		}
 
-		// prop help
-		if ( isset($this->tooltip_index) )
-		{
-			$this->tooltip_index++;
-		}
-		else
-		{
-			$this->tooltip_index = 1;
-		}
-
-		if(isset($arr["comment"]) && strlen($arr["comment"]))
-		{
-			$this->vars(array(
-				"tooltip_index" => $this->tooltip_index,
-				"comment" => $arr["comment"]
-			));
-			$s_help_popup = $this->parse("HELP_POPUP");
-		}
-		else
-		{
-			$this->vars(array(
-				"comment" => ""
-			));
-		}
-
 		// name refers to a VAR inside the template
 		$caption_template = "CAPTION_" . $captionside; // TOP or LEFT
 
 		// main vars
 		$this->vars_safe(array(
-			"caption" => empty($arr["caption"]) ? null : $arr["caption"],
+			"caption" => empty($arr["caption"]) ? "" : $arr["caption"],
+			"comment" => $this->get_property_help($arr),
 			"CAPTION_LEFT" => "",
 			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
-			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
+			"err_msg" => isset($arr["error"]) ? $arr["error"] : "",
 			"GRID_ERR_MSG" => $errmsg,
 			$caption_template => $this->parse($caption_template),
 			"HELP_POPUP" => $s_help_popup
@@ -1807,6 +1739,36 @@ class htmlclient extends aw_template
 		$tpl = empty($arr["no_caption"]) ? "GRIDITEM" : "GRIDITEM_NO_CAPTION";
 		$src = $this->parse($tpl);
 		return $src;
+	}
+
+	private function get_property_help($args)
+	{
+		$this->has_property_help = true;
+		if(isset($args["comment"]) && strlen($args["comment"]))
+		{
+			$this->vars(array(
+				"property_comment" => aw_html_entity_decode($args["comment"])
+			));
+			$property_help = $this->parse("PROPERTY_HELP");
+		}
+		else
+		{
+			$property_help = "";
+		}
+		return $property_help;
+	}
+
+	private function get_property_help_trigger($args)
+	{
+		if(isset($args["comment"]) && strlen($args["comment"]))
+		{
+			$property_help_trigger = "awcbShowPropertyHelp(this);";
+		}
+		else
+		{
+			$property_help_trigger = "";
+		}
+		return $property_help_trigger;
 	}
 
 	private function my_get_ru($class)
