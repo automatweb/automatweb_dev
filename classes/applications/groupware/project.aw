@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.172 2009/09/03 15:07:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.173 2009/09/15 22:29:59 dragut Exp $
 // project.aw - Projekt
 /*
 
@@ -5019,6 +5019,11 @@ exit_function("bills::all_cust_bills");
 			"sortable" => 1
 		));
 
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"align" => "center"
+		));
 
 		$t->define_field(array(
 			"name" => "start1",
@@ -5148,6 +5153,9 @@ exit_function("bills::all_cust_bills");
 				case CL_BUG:
 					$goal_data["start1"] = date("d.m.Y H:i",  $goal->created());
 					$goal_data["impl"] = join(", " ,$goal->get_participants()->names());
+					$bug = new bug();
+					$bug_status_list = $bug->get_status_list();
+					$goal_data["status"] = $bug_status_list[$goal->prop("bug_status")];
 					break;
 			}
 			
