@@ -27,24 +27,22 @@
 
 	<!-- SUB: LINE -->
 	<tr>
-	    <td width="100" id="linecaption" >{VAR:cfgform_edit_mode}{VAR:caption}
-			<!-- SUB: HELP_POPUP -->
-			<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
-			<div class="tooltip">{VAR:comment}</div>
-			<!-- END SUB: HELP_POPUP -->
-
+	    <td width="100" id="linecaption">
+		{VAR:cfgform_edit_mode}
+		{VAR:caption}
+		{VAR:comment}
 		</td>
 	    <td id="lineelment">{VAR:element}</td>
 	</tr>
 	<!-- END SUB: LINE -->
 
 	<!-- SUB: RADIOBUTTON -->
-<input class="radiobutton" type="radio" name="{VAR:name}" id="{VAR:id}" value="{VAR:value}"{VAR:onclick}{VAR:checked}{VAR:disabled} /> {VAR:caption}
+	<input class="radiobutton" type="radio" name="{VAR:name}" id="{VAR:id}" value="{VAR:value}"{VAR:onclick}{VAR:checked}{VAR:disabled} /> {VAR:caption}
 	<!-- END SUB: RADIOBUTTON -->
 
 	<!-- SUB: CHECKBOX -->
-<input class="checkbox" type="checkbox" id="{VAR:name}" name="{VAR:name}" value="{VAR:value}"{VAR:onblur}{VAR:title}{VAR:onclick}{VAR:checked}{VAR:disabled} /> {VAR:caption}
-{VAR:post_append_text}
+	<input class="checkbox" type="checkbox" id="{VAR:name}" name="{VAR:name}" value="{VAR:value}"{VAR:onblur}{VAR:title}{VAR:onclick}{VAR:checked}{VAR:disabled} /> {VAR:caption}
+	{VAR:post_append_text}
 	<!-- END SUB: CHECKBOX -->
 
 	<!-- SUB: HEADER -->
@@ -102,31 +100,29 @@ this.disabled=true;self.disabled=true;
 		<!-- SUB: GRIDITEM -->
 		<div class="aw04gridcell_caption">
 			<!-- SUB: GRID_ERR_MSG -->
-			<span style='color: red;'>{VAR:err_msg}</span>
+			<span style="color: red;">{VAR:err_msg}</span>
 			<!-- END SUB: GRID_ERR_MSG -->
 
 			<!-- SUB: CAPTION_TOP -->
-			{VAR:cfgform_edit_mode}{VAR:caption}
-			<!-- SUB: HELP_POPUP -->
-				<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
-				<div class="tooltip">{VAR:comment}</div>
-				<!-- END SUB: HELP_POPUP -->
+			{VAR:cfgform_edit_mode}
+			<span class="awcbPropCaption">{VAR:caption}</span>
+			{VAR:comment}
 			<br/>
 			{VAR:element}
 			<!-- END SUB: CAPTION_TOP -->
+
 			<!-- SUB: CAPTION_LEFT -->
 			<table border="0" width="100%">
 			<tr>
 				<td width="20%" align="right">
-				{VAR:cfgform_edit_mode}<span class="aw04gridCellCaptionText">{VAR:caption}</span>
-				<!-- SUB: HELP_POPUP -->
-				<span id="tooltip_{VAR:tooltip_index}" class="help"></span>
-				<div class="tooltip">{VAR:comment}</div>
-				<!-- END SUB: HELP_POPUP -->
+				{VAR:cfgform_edit_mode}<span class="aw04gridCellCaptionText awcbPropCaption">{VAR:caption}</span>
+				{VAR:comment}
 				</td>
 				<td width="80%">
-			{VAR:element}
-				</td></tr></table>
+				{VAR:element}
+				</td>
+			</tr>
+			</table>
 			<!-- END SUB: CAPTION-LEFT -->
 		</div>
 		<!-- END SUB: GRIDITEM -->
@@ -146,7 +142,7 @@ this.disabled=true;self.disabled=true;
 				<div class="pais">
 					<div class="caption">{VAR:area_caption}</div>
 					<!-- SUB: GRID_HAS_CLOSER -->
-					<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; im.alt=im.title="{VAR:close_text}"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; im.alt=im.title="{VAR:open_text}"; aw_get_url_contents("{VAR:close_layer_url}");} return false;' tabindex="10"><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" title="{VAR:start_text}" alt="{VAR:start_text}" width="20" height="15" border="0" class="btn" id="{VAR:grid_name}_closer_img"/></a></div>
+					<div class="closer"><a href="#" onclick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; im.alt=im.title="{VAR:close_text}"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; im.alt=im.title="{VAR:open_text}"; aw_get_url_contents("{VAR:close_layer_url}");} return false;' tabindex="10"><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" title="{VAR:start_text}" alt="{VAR:start_text}" width="20" height="15" border="0" class="btn" id="{VAR:grid_name}_closer_img"/></a></div>
 					<!-- END SUB: GRID_HAS_CLOSER -->
 				</div>
 				<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
@@ -264,15 +260,6 @@ this.disabled=true;self.disabled=true;
 		    </div>
 		</div>
 		<!-- END SUB: GRID_TABLEBOX -->
-
-		<!-- SUB: PROPERTY_HELP -->
-		<div id="property_{VAR:property_name}_help" style="display: none;">
-		<strong>{VAR:property_caption} - {VAR:property_comment}</strong>
-		<p>{VAR:property_help}</p>
-		</div>
-		<!-- END SUB: PROPERTY_HELP -->
-
-
 	</table>
 
 <!-- SUB: SHOW_CHANGEFORM2 -->
@@ -316,8 +303,52 @@ body {
 }
 <!-- END SUB: iframe_body_style -->
 
+<!-- SUB: PROPERTY_HELP -->
+<div class="awcbPropertyHelpContainer">
+<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_abi_small.gif" alt="" border="0"/>
+<div class="awcbPropertyHelp" style="display: none;">{VAR:property_comment}</div>
+</div>
+<!-- END SUB: PROPERTY_HELP -->
+
+<!-- SUB: HAS_PROPERTY_HELP -->
+<style>
+div.awcbPropertyHelp
+{
+	position: absolute;
+	width: 25em;
+	text-align: left;
+	border: 1px solid grey;
+	background-color: white;
+	color: #333;
+	font-size: 1.1em;
+	font-weight: normal;
+	padding: .2em;
+	padding-left: .5em;
+
+}
+div.awcbPropertyHelpContainer
+{
+	display: inline;
+}
+div.awcbPropertyHelpVisible
+{
+	display: block ! important;
+}
+</style>
+<script type="text/javascript">
+$("div.awcbPropertyHelpContainer").hover(
+	function () {
+		$(this).find("div.awcbPropertyHelp").addClass("awcbPropertyHelpVisible");
+	},
+	function () {
+		$(this).find("div.awcbPropertyHelp").removeClass("awcbPropertyHelpVisible");
+	}
+);
+</script>
+<!-- END SUB: HAS_PROPERTY_HELP -->
+
 <!-- SUB: CHECK_LEAVE_PAGE -->
-<script language="javascript">
+<script type="text/javascript">
 changed = 0;
 var disable_set_changed;
 function set_changed()
@@ -363,4 +394,4 @@ $.aw_unload_handler({
 });
 */
 </script>
-<!-- SUB: CHECK_LEAVE_PAGE -->
+<!-- END SUB: CHECK_LEAVE_PAGE -->
