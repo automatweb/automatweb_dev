@@ -199,6 +199,8 @@ exit_function("packet_obj::get_brand_image");
 			}
 			foreach($this->connections_from(array(
 				"type" => "RELTYPE_PRODUCT",
+				"sort_by_num" => "to.jrk",
+				"sort_dir" => "asc"
 			)) as $c)
 			{
 				$product = $c->to();
@@ -217,13 +219,15 @@ exit_function("packet_obj::get_brand_image");
 
 	//makes var product_objects usable for everyone
 	private function _set_products()
-	{
+	{ 
 		enter_function("packet_obj::_set_products");
 		if(empty($this->product_objects))
 		{
 			$this->product_objects = new object_list();
 			foreach($this ->connections_from(array(
 				"type" => "RELTYPE_PRODUCT",
+				"sort_by_num" => "to.jrk",
+				"sort_dir" => "asc"
 			)) as $c)
 			{
 				$this->product_objects->add($c->prop("to"));
