@@ -21,6 +21,16 @@
             <caption>Keeled millega v&amp;amp;otilde;ib liituda</caption>
       </property>
       <property>
+            <name>choose_menus</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Kaustad millega liituda</caption>
+      </property>
+      <property>
             <name>multiple_folders</name>
             <table>objects</table>
             <group>general</group>
@@ -62,6 +72,26 @@
             <store>connect</store>
             <caption>Liitumise kirja templeit</caption>
       </property>
+      <property>
+            <name>confirm</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>On vaja kinnitust</caption>
+      </property>
+      <property>
+            <name>confirm_msg</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADM_MESSAGE</reltype>
+            <caption>Kinnituseks saadetav kiri</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST_JOIN</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -88,6 +118,11 @@
                   <clid>CL_MESSAGE_TEMPLATE</clid>
                   <caption>Liitumise kirja templeit</caption>
             </SUBSCRIBE_MAIL>
+            <ADM_MESSAGE>
+                  <value>3</value>
+                  <clid>CL_MESSAGE</clid>
+                  <caption>administratiivne teade </caption>
+            </ADM_MESSAGE>
       </reltypes>
 </properties>
 
