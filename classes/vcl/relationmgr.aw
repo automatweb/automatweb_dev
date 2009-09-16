@@ -687,12 +687,16 @@ class relationmgr extends aw_template
 				$single_select = "capt_new_object";
 				$sele = NULL;
 				$vals = $this->true_rel_classes[$k];
+
+				/*
+				// this thing broke relationmanager --dragut@16.09.2009
 				$ls = array("&auml;", "&Auml;", "&ouml", "&Ouml;", "&uuml;", "&Uuml;", "&otilde;", "&Otilde;", );
 				foreach($ls as $l)
 				{
 					$vals = aw_html_entity_decode($l);
 				}
-				$vals = $this->mk_kstring($vals);
+				*/
+				$vals = aw_html_entity_decode($this->mk_kstring($vals));
 				if (isset($this->true_rel_classes[$k][$objtype]))
 				{
 					$sele = $objtype;
