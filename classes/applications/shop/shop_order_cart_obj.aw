@@ -448,7 +448,7 @@ class shop_order_cart_obj extends _int_object
 		$order_obj->set_prop("order_status" , "5");
 		$order_obj->save();
 		$this->oc->send_confirm_mail($order);
-		return $order;
+		return $order_obj;
 	}
 
 	public function remove_product($product)

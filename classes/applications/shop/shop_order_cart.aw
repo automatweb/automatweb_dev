@@ -277,7 +277,6 @@ class shop_order_cart extends class_base
 		{
 			$this->cart = $cart_o = obj($oc->prop("cart"));
 		}
-
 		if(empty($oc))
 		{
 			if(!is_object($oc = $this->cart->get_shop_order_center()))
@@ -308,7 +307,7 @@ class shop_order_cart extends class_base
 			$this->add_order_vars();
 		}
 
-		$soce = new aw_array(aw_global_get("soc_err"));
+/*		$soce = new aw_array(aw_global_get("soc_err"));
 		$soce_arr = $soce->get();
 		foreach($soce->get() as $prid => $errmsg)
 		{
@@ -334,7 +333,7 @@ class shop_order_cart extends class_base
 		}
 
 		aw_session_del("soc_err");
-
+*/
 		if ($oc->prop("no_show_cart_contents"))
 		{
 			return $this->pre_finish_order($arr);
@@ -638,13 +637,21 @@ class shop_order_cart extends class_base
 */
 
 		//pangamakse muutujad
-		$this->add_bank_vars($oc, empty($cart["user_data"]) ? null : $cart["user_data"]);
+		if($oc->prop("use_bank_payment"))
+		{
+			$this->add_bank_vars($oc, empty($cart["user_data"]) ? null : $cart["user_data"]);
+		}
+
 		$data["cart"] = $cart_o->id();
 		
 		//peale submiti edasi mineku url
 		$data["go_to_after"] = aw_ini_get("baseurl")."/index.aw?action=".($oc->prop("show_delivery") ? "order_data" : "orderer_data")."&class=shop_order_cart&cart=".$cart_o->id()."&section=".aw_global_get("section");
 
+		//kinnitamise url
+		$data["confirm_url"] = aw_ini_get("baseurl")."/index.aw?action=confirm_order&class=shop_order_cart&cart=".$cart_o->id()."&section=".aw_global_get("section");
+
 		$this->vars($data);
+		//k6igi muutujate kohta sub ka selle jaoks, kui on olemas selline muutuja
 		foreach($this->vars as $key => $val)
 		{
 			if($val && $this->is_template("HAS_".strtoupper($key)))
@@ -3083,12 +3090,51 @@ class shop_order_cart extends class_base
 	public function confirm_order($arr)
 	{
 		$cart = obj($arr["cart"]);
-		$order = $cart->confirm_order(); //arr("Location: ".aw_global_get("baseurl")."/".$order);
-		$url = aw_global_get("baseurl")."/".$order;
-		//$url = $this->mk_my_orb("show" , array("id" => $order) , CL_SHOP_SELL_ORDER);
+		$order_data = $cart->get_order_data();
+		$order = $cart->confirm_order();
+		$url = aw_global_get("baseurl")."/".$order->id();
+		$oc = $cart->get_oc();
+		if($oc->prop("use_bank_payment"))
+		{
+			if($order_data["bank"])
+			{
+				return $this->pay_cart(array(
+					"oc" => $oc->id(),
+				));
+			}
+			else
+			{
+				$bank_payment_inst = get_instance(CL_BANK_PAYMENT);
+				$bank_payment = $oc->get_bank_payment_id();
+
+				//seda keele v2rki peaks tegelt kontrollima, et kas niipalju l2bu on ikka vaja... asi selleks, et kirja saadaks vastavas keeles tellijale
+				$lang = aw_global_get("lang_id");
+				$l = get_instance("languages");
+				$order->set_meta("lang" , $lang);
+				$order->set_meta("lang_id" , $_SESSION["ct_lang_id"]);
+				$order->set_meta("lang_lc" , $l->get_langid($_SESSION["ct_lang_id"]));
+
+				$expl = $order->id();
+				if($oc->prop("show_prod_and_package"))
+				{
+					$expl = substr($expl." ".join(", " , $order->get_product_names()), 0, 69);
+				}
+
+				if(strlen($expl." (".$oc->id().")") < 70)
+				{
+					$expl.= " (".$oc->id().")"; //et tellimiskeskkonna objekt ka naha jaaks
+				}
+				return $bank_payment_inst->bank_forms(array(
+					"id" => $bank_payment,
+					"amount" => $order->get_sum(),
+					"reference_nr" => $order->id(),
+					"lang" => empty($order_data["bank_lang"]) ? "" : $order_data["bank_lang"],
+					"expl" => $expl,
+				));
+			}
+		}
 		header("Location: ".$url);
 		die();
-		return "/".$order;
 	}
 
 

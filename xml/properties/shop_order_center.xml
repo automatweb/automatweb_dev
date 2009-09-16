@@ -505,7 +505,10 @@
             <type>releditor</type>
             <reltype>RELTYPE_BANK_PAYMENT</reltype>
             <store>connect</store>
-            <props>bank</props>
+            <props>
+                  <num_0>cancel_url</num_0>
+                  <num_1>bank</num_1>
+            </props>
             <direct_links>1</direct_links>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>

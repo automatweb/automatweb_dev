@@ -32,7 +32,7 @@ class shop_order_center_obj extends _int_object
 		$bp->set_name($this->name() . " " . t("pangamakse"));
 		$bp->set_parent($this->id());
 		$bp->save();
-		$bp->set_prop("bank_payment" , $bp->id());
+		$this->set_prop("bank_payment" , $bp->id());
 		
 		//maili v6iks ka kohe saata
 		$this->set_prop("mail_to_client" , 1);
@@ -600,6 +600,26 @@ class shop_order_center_obj extends _int_object
 		$this->orderer_vars_meta = $this->meta("orderer_vars");
 		uksort($orderer_vars, array(&$this, "__orderer_vars_sorter"));
 		return $orderer_vars;
+	}
+
+	public function get_bank_payment_id()
+	{
+		$bp = $this->get_first_obj_by_reltype("RELTYPE_BANK_PAYMENT");
+		if(!is_object($bp))
+		{
+			if($this->prop("use_bank_payment"))
+			{
+				$bp = new object();
+				$bp->set_class_id(CL_BANK_PAYMENT);
+				$bp->set_name($this->name() . " " . t("pangamakse"));
+				$bp->set_parent($this->id());
+				$bp->save();
+				$this->set_prop("bank_payment" , $bp->id());
+				$this->save();
+			}
+			else return null;
+		}
+		return $bp->id();
 	}
 
 }

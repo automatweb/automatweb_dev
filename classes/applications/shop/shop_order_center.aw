@@ -208,7 +208,7 @@
 	@property use_bank_payment type=checkbox ch_value=1
 	@caption Kasuta pangamakset
 
-	@property bank_payment type=releditor reltype=RELTYPE_BANK_PAYMENT store=connect props=bank direct_links=1 rel_id=first use_form=emb
+	@property bank_payment type=releditor reltype=RELTYPE_BANK_PAYMENT store=connect props=cancel_url,bank direct_links=1 rel_id=first use_form=emb
 	@caption Pangamakse objekt
 
 #	@property bank_id type=select

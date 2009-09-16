@@ -19,6 +19,22 @@ class shop_sell_order_obj extends _int_object
 		return $sum;
 	}
 
+	/** returns all product names
+		@attrib api=1
+		@returns array
+	**/
+	public function get_product_names()
+	{
+		$ret = array();
+		$sum = 0;
+		foreach($this->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+		{
+			$row = $c->to();
+			$ret[] = $row->prod_name();
+		}
+		return $ret;
+	}
+
 	function save($exclusive = false, $previous_state = null)
 	{
 //		if(empty($this->order_status))
