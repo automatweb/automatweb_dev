@@ -333,7 +333,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
-@reltype ALIAS value=0 clid=CL_PRODUCTS_SHOW
+@reltype ALIAS value=0 
 
 @reltype TIMING value=20 clid=CL_TIMING
 @caption Aeg

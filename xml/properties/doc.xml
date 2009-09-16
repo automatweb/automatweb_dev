@@ -1066,6 +1066,9 @@
             </planner>
       </tableinfo>
       <reltypes>
+            <ALIAS>
+                  <value>0</value>
+            </ALIAS>
             <TIMING>
                   <value>20</value>
                   <clid>CL_TIMING</clid>

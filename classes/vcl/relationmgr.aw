@@ -190,6 +190,12 @@ class relationmgr extends aw_template
 		);
 		foreach($arr["relinfo"] as $key => $rel)
 		{
+			// If there is defined reltype with value 0 or something that evaluates to false, then i assume, that this should be reserved alias reltype and lets not override it --dragut@16.09.2009
+			if (empty($rel['value']))
+			{
+				continue;
+			}
+
 			if(empty($rel["hidden"]))
 			{
 				$tmp = array();
