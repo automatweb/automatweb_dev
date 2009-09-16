@@ -212,6 +212,17 @@
             <caption>Pakettide kataloog</caption>
       </property>
       <property>
+            <name>prod_cat_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <parent>right</parent>
+            <caption>Artiklikategooriate kataloog</caption>
+      </property>
+      <property>
             <name>reception_fld</name>
             <table>objects</table>
             <group>general</group>

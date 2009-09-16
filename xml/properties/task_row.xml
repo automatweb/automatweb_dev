@@ -81,7 +81,7 @@
             <name>skill_used</name>
             <table>aw_task_rows</table>
             <group>general</group>
-            <style>select</style>
+            <type>select</type>
             <field>skill_used</field>
             <parent>settings_col1</parent>
             <captionside>top</captionside>
