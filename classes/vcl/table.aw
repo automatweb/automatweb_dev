@@ -3019,7 +3019,7 @@ class vcl_table extends aw_table
 					));
 				};
 			};
-			if(is_object($arr["obj_inst"]))
+			if(is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 			{
 				$form_oid = $arr["obj_inst"]->instance()->get_cfgform_for_object(array(
 					"obj_inst" => $arr["obj_inst"],

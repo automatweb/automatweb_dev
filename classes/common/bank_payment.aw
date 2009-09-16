@@ -9,7 +9,7 @@
 @default group=general
 	
 	@layout general_l type=hbox width=40%:60%
-	@layout general_left type=vbox closeable=1 area_caption=N&otilde;utavad v&nbsp;&auml;&auml;rtused parent=general_l
+	@layout general_left type=vbox closeable=1 area_caption=N&otilde;utavad&nbsp;v&auml;&auml;rtused parent=general_l
 
 		@property name type=textbox field=name method=none parent=general_left
 		@caption Nimi
@@ -996,7 +996,7 @@ class bank_payment extends class_base
 				"name" => "meta[".$key."][use]",
 				"type" => "chechbox" ,
 				"ch_value" => 1 ,
-				"value" => $meta["key"],
+				"value" => isset($meta["key"]) ? $meta["key"] : "",
 				"caption" => $val,
 			);
 			$data["name"] = $val;

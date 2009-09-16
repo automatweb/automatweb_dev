@@ -415,7 +415,7 @@
             <general_left>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>N&amp;amp;otilde;utavad</area_caption>
+                  <area_caption>N&amp;amp;otilde;utavad&amp;amp;nbsp;v&amp;amp;auml;&amp;amp;auml;rtused</area_caption>
                   <parent>general_l</parent>
                   <group>general</group>
             </general_left>

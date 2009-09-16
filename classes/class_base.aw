@@ -1077,6 +1077,9 @@ class class_base extends aw_template
 		$awt->stop("final-bit");
 		$awt->stop("cb-change");
 
+		$user_activity = new user_activity();
+		$user_activity->log_property_group_display($this->clid, $this->use_group);
+
 		if(!empty($GLOBALS["view_property"]))
 		{
 			$rv = iconv(aw_global_get("charset"), "UTF-8", $rv);
@@ -1480,7 +1483,7 @@ class class_base extends aw_template
 			return "";
 		}
 
-		$action = $args["args"]["action"];
+		$action = isset($args["args"]["action"]) ? $args["args"]["action"] : "";
 		$retval = "";
 		$cgid = false;
 
@@ -3162,7 +3165,9 @@ class class_base extends aw_template
 			$pname = $val["name"];
 			$getter = "_get_" . $pname;
 			$status = null;
-			if ( !empty($this->classinfo['prop_cb']) && in_array($getter,$class_methods))
+
+
+			if (!empty($this->classinfo['prop_cb']) && in_array($getter,$class_methods))
 			{
 				$awt->start("getter $getter");
 				$status = $this->inst->$getter($argblock);
@@ -6389,6 +6394,7 @@ class class_base extends aw_template
 	function callback_generate_scripts_from_class_base($arr)
 	{
 		$retval = "";
+
 		// Drafting
 		if(isset($arr["request"]["class"]) && $arr["request"]["class"] == "doc")
 		{

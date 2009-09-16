@@ -661,7 +661,7 @@ class releditor extends core
 		{
 			foreach($all_props as $key => $_prop)
 			{
-				if (is_array($_prop["form"]) && in_array($use_form,$_prop["form"]))
+				if (isset($_prop["form"]) && is_array($_prop["form"]) && in_array($use_form,$_prop["form"]))
 				{
 					$props[$key] = $key;
 				};
