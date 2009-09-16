@@ -154,14 +154,6 @@ $lc_shop["LC_SHOP_SUM"] = "Summa";
 
 
 
-
-
-
-
-
-
-
-
 // sektsioon, kuhu peale 1. ostukorvi sammu minnakse
 $lc_shop["LC_BASKET_STEP2_SECTION"] = "379544";
 
@@ -172,9 +164,9 @@ $lc_shop["LC_BACK_TO_SHOP"] = "Edasi ŠOPPAMA";
 // Katso ostoskoriin 
 $lc_shop["LC_LOOK_IN_BASKET"] = "Vaata ostukorvi";
 // väri 
-$lc_shop["LC_COLOR"] = "värv";
+$lc_shop["LC_COLOR"] = "v&auml;rv";
 // Väri 
-$lc_shop["LC_COLOR2"] = "Värv";
+$lc_shop["LC_COLOR2"] = "V&auml;rv";
 // kokous 
 $lc_shop["LC_SIZE"] = "suurus";
 // koko
@@ -218,10 +210,10 @@ $lc_shop["LC_FORWARD2"] = "Saada tellimus";
 // Poista tuode
 $lc_shop["LC_REMOVE_PRODUCT"] = "Eemalda toode";
 // Tähdellä (*) merkityt kentät ovat pakollisia. Lisääthän myös ainakin yhden puhelinnumeron, josta sinut tarvittaessa tavoittaa.
-$lc_shop["LC_STARRED_FIELD_INFO"] = "Tärniga (*) tähistatud väljad on kohustuslikud. Palume lisada ka ühe telefoninumbri, et saaksime vajadusel Sinuga ühendust võtta.";
-$lc_shop["LC_STARRED_FIELD_INFO2"] = "Tärnigä (*) tähistatud väljad on kohustuslikud.";
+$lc_shop["LC_STARRED_FIELD_INFO"] = "T&auml;rniga (*) t&auml;histatud v&auml;ljad on kohustuslikud. Palume lisada ka &uuml;he telefoninumbri, et saaksime vajadusel Sinuga &uuml;hendust v&otilde;tta.";
+$lc_shop["LC_STARRED_FIELD_INFO2"] = "T&auml;rniga (*) t&auml;histatud v&auml;ljad on kohustuslikud.";
 // Toimitustapa
-$lc_shop["LC_DELIVERY_METHOD"] = "Kättetoimetamisviis";
+$lc_shop["LC_DELIVERY_METHOD"] = "K&auml;ttetoimetamisviis";
 // Maksutapa*
 $lc_shop["LC_PAYMENT_METHOD"] = "Makseviis";
 // Tutustu toimitus- ja maksuehtoihin täällä.
@@ -249,14 +241,14 @@ $lc_shop["LC_PRODUCTS2"] = "Toodete hind kokku";
 // Toimituskulut
 $lc_shop["LC_DELIVERPRICE"] = "Postikulu";
 // Loppusumma
-$lc_shop["LC_SUM"] = "Koguväärtus ";
+$lc_shop["LC_SUM"] = "Koguv&auml;&auml;rtus ";
 //  Summa
 $lc_shop["LC_SUM2"] = "Summa";
 //  Summa
 $lc_shop["LC_SUM3"] = "KÕIK KOKKU";
-$lc_shop["LC_BASKET_STEP_4_DONE_TITLE"] = "Täname tellimuse eest, Sinu tellimus on edastatud OTTO klienditeenindusele.";
+$lc_shop["LC_BASKET_STEP_4_DONE_TITLE"] = "T&auml;name tellimuse eest, Sinu tellimus on edastatud klienditeenindusele.";
 // Tilauksesi on välitetty OTTOn Asiakaspalveluun. Kiitos tilauksestasi!
-$lc_shop["LC_BASKET_STEP_4_DONE_MAIL_TITLE"] = "Teie tellimus on edastatud OTTO klienditeenindusse. Täname tellimast!";
+$lc_shop["LC_BASKET_STEP_4_DONE_MAIL_TITLE"] = "Teie tellimus on edastatud klienditeenindusse. T&auml;name tellimast!";
 //  Syntymäaika
 $lc_shop["LC_BIRTHDAY"] = "Sünnikuupäev";
 //  Sukunimi
@@ -316,22 +308,22 @@ $lc_shop["LC_DEFERRED_PAYMENT_SIZE"] = "Osamakse suurus";
 $lc_shop["LC_SEARCH_FORM_TITLE"] = "Otsingus&otilde;na / tootekood:";
 
 $lc_shop["LC_SEARCH_FROM_ALL"] = "Kogu poest";
-$lc_shop["LC_TO_NOTEBOOK"] = "Lisa märkmikusse";
-$lc_shop["LC_ADDED_TO_NOTEBOOK"] = "Toode on lisatud märkmikusse";
+$lc_shop["LC_TO_NOTEBOOK"] = "Lisa m&auml;rkmikusse";
+$lc_shop["LC_ADDED_TO_NOTEBOOK"] = "Toode on lisatud m&auml;rkmikusse";
 $lc_shop["LC_ADD_TO_BASKET"] = "Lisa ostukorvi";
 $lc_shop["LC_LOOK_MORE"] = "Soovitame lisaks";
 
 $lc_shop["LC_ORDER_CATALOGUE"] = "telli tasuta kataloog";
 $lc_shop["LC_ORDER_ALL_CATALOGUE"] = "Telli valitud kataloogid";
 // Järelmaksuga tellitavate kaupade hind peab olema kokku vähemalt 1500 EEK.
-$lc_shop["LC_DEFERRED_PAYMENT_NOTICE"] = "Järelmaksuga tellitavate kaupade hind peab olema kokku vähemalt 1500 EEK.";
-$lc_shop["LC_DEFERRED_PAYMENT_NOTICE"] = "Järelmaksuga tellitavate kaupade hind peab olema kokku vähemalt 1500 EEK.";
+$lc_shop["LC_DEFERRED_PAYMENT_NOTICE"] = "J&auml;relmaksuga tellitavate kaupade hind peab olema kokku vähemalt 1500 EEK.";
+$lc_shop["LC_DEFERRED_PAYMENT_NOTICE"] = "J&auml;elmaksuga tellitavate kaupade hind peab olema kokku vähemalt 1500 EEK.";
 $lc_shop["LC_SMARTPOST_NOTICE"] = "SmartPOST toob kauba Sinu poolt valitud kaubanduskeskuse pakiautomaati, Eesti Post aga kas koju, lähimasse postkontorisse või annab kauba üle kandekeskuses. Kojutoomistähistusega kaubad kuuluvad kättetoimetamisele kulleriga.";
 
-$lc_shop["LC_REMOVE_FROM_OBJECT_BASKET"] = "Eemalda märkmikust";
+$lc_shop["LC_REMOVE_FROM_OBJECT_BASKET"] = "Eemalda m&auml;rkmikust";
 $lc_shop["LC_ADD_TO_OBJECT_BASKET"] = "Lisa ostukorvi";
 
-$lc_shop["LC_SAVE_INFO"] = "Palun salvesta tellimuse rida enne järgmise sammu juurde liikumist.";
+$lc_shop["LC_SAVE_INFO"] = "Palun salvesta tellimuse rida enne j&auml;rgmise sammu juurde liikumist.";
 
 
 ?>
