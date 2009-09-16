@@ -257,6 +257,14 @@ class shop_order_cart_obj extends _int_object
 		$o->set_prop("currency" , $this->oc->get_currency());
 		$o->set_prop("channel" , $this->prop("channel"));
 		$o->set_meta("order_data" , $order_data);
+
+		//seda keele v2rki peaks tegelt kontrollima, et kas niipalju l2bu on ikka vaja... asi selleks, et kirja saadaks vastavas keeles tellijale
+		$lang = aw_global_get("lang_id");
+		$l = get_instance("languages");
+		$o->set_meta("lang" , $lang);
+		$o->set_meta("lang_id" , $_SESSION["ct_lang_id"]);
+		$o->set_meta("lang_lc" , $l->get_langid($_SESSION["ct_lang_id"]));
+
 		$o->save();
 
 		$awa = new aw_array($cart["items"]);
@@ -449,6 +457,35 @@ class shop_order_cart_obj extends _int_object
 		$order_obj->save();
 		$this->oc->send_confirm_mail($order);
 		return $order_obj;
+	}
+
+	public function get_pay_form()
+	{
+		$order = $this->create_order();
+		$this->reset_cart();
+		$oc = $this->get_oc();
+		$order = obj($order);
+		$order->set_prop("order_status" , "0");
+
+		$bank_payment_inst = get_instance(CL_BANK_PAYMENT);
+		$bank_payment = $oc->get_bank_payment_id();
+		$expl = $order->id();
+
+		if($oc->prop("show_prod_and_package"))
+		{
+			$expl = substr($expl." ".join(", " , $order->get_product_names()), 0, 69);
+		}
+		if(strlen($expl." (".$oc->id().")") < 70)
+		{
+			$expl.= " (".$oc->id().")"; //et tellimiskeskkonna objekt ka naha jaaks
+		}
+		return $bank_payment_inst->bank_forms(array(
+			"id" => $bank_payment,
+			"amount" => $order->get_sum(),
+			"reference_nr" => $order->id(),
+			"lang" => empty($order_data["bank_lang"]) ? "" : $order_data["bank_lang"],
+			"expl" => $expl,
+		));
 	}
 
 	public function remove_product($product)

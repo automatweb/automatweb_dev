@@ -391,9 +391,11 @@ class shop_order_center_obj extends _int_object
 		}
 
 	
-		$order_mails = $wo->get_order_mails();
-		$order_mails[$order_object->get_orderer_mail()] = $order_object->get_orderer_mail();
-
+		$order_mails = $wo->get_order_mails() + $this->get_order_mails();
+		if($this->prop("mail_to_client"))
+		{
+			$order_mails[$order_object->get_orderer_mail()] = $order_object->get_orderer_mail();
+		}
 		if (count($order_mails) > 0)
 		{
 			$awm = get_instance("protocols/mail/aw_mail");
@@ -621,5 +623,31 @@ class shop_order_center_obj extends _int_object
 		}
 		return $bp->id();
 	}
+
+	private function get_order_mails()
+	{
+		$ret = array();
+		foreach($this->connections_from(array(
+			"type" => "RELTYPE_MAIL_RECIEVERS",
+	//		"sort_by_num" => "to.jrk"
+		)) as $c)
+		{
+			$o = $c->to();
+			switch($o->class_id())
+			{
+				case CL_CRM_PERSON:
+					$ret[$o->prop("mail")] = $o->get_mail();
+					break;
+				case CL_ML_MEMBER:
+					$ret[$o->prop("mail")] = $o->prop("mail");
+					break;
+			}
+			break;
+		}
+
+
+		return $ret;
+	}
+
 
 }

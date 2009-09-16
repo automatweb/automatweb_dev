@@ -117,6 +117,49 @@ class shop_sell_order_obj extends _int_object
 		return null;
 	}
 
+	/**
+		@attrib name=bank_return nologin=1
+	**/
+	function bank_return($arr)
+	{
+		if($this->meta("lang_id"))
+		{
+			$_SESSION["ct_lang_id"] = $this->meta("lang_id");
+			$_SESSION["ct_lang_lc"] = $this->meta("lang_lc");
+			aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
+			aw_global_set("ct_lang_id", $_SESSION["ct_lang_id"]);
+		}
+		$this->set_prop("order_status" , "0");
+		aw_disable_acl();
+		$this->save();
+		aw_restore_acl();
+
+		$order_data = $this->meta("order_data");
+
+		$order_center = obj($order_data["oc"]);
+
+		// send mail
+		if(!$this->meta("mail_sent"))
+		{
+			$this->set_meta("mail_sent" , 1);
+			$order_center->send_confirm_mail($this->id());
+			aw_disable_acl();
+			$this->save();
+			aw_restore_acl();
+
+		}
+
+		if(is_oid($this->meta("bank_payment_id")))
+		{
+			$p = obj($this->meta("bank_payment_id"));
+//			if(!empty($p->prop("bank_return_url")))
+//			{
+//				return $p->prop("bank_return_url");
+//			}
+		}
+		return $this->mk_my_orb("show", array("id" => $this->id()), "shop_order");
+	}
+
 }
 
 ?>

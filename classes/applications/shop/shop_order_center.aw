@@ -31,8 +31,8 @@
 	@property mail_to_client type=checkbox ch_value=1
 	@caption Saada tellijale e-mail
 
-#	@property mail_to_el type=select
-#	@caption E-maili element, kuhu saata tellimus
+	@property mail_recievers type=relpicker reltype=RELTYPE_MAIL_RECIEVERS store=connect multiple=1
+	@caption Kinnitusmeili saajad
 
 	@property mail_from_addr type=textbox
 	@caption Meili From aadress
@@ -40,25 +40,19 @@
 	@property mail_from_name type=textbox
 	@caption Meili From nimi
 
-	@property mail_cust_content type=textarea rows=10 cols=80
-	@caption Meili sisu (kui t&uuml;hi, siis templatest)
-
-@property mail_template type=select
-@caption E-maili template
+#	@property mail_cust_content type=textarea rows=10 cols=80
+#	@caption Meili sisu (kui t&uuml;hi, siis templatest)
+#
+	@property mail_template type=select
+	@caption E-maili template
 
 @default group=mail_settings_seller
-
-#	@property mail_to_seller_in_el type=select
-#	@caption Saada meil aadressile, mis on elemendis
-
-#	@property mail_group_by type=select
-#	@caption Toodete grupeerimine meilis
 
 #	@property mails_sep_by_el type=checkbox ch_value=1
 #	@caption Saada eraldi meilid vastavalt klassifikaatorile
 
-	@property send_attach type=checkbox ch_value=1
-	@caption Lisa meili manusega tellimus
+#	@property send_attach type=checkbox ch_value=1
+#	@caption Lisa meili manusega tellimus
 
 @default group=payment1
 
@@ -207,6 +201,7 @@
 
 	@property use_bank_payment type=checkbox ch_value=1
 	@caption Kasuta pangamakset
+	@comment Kui see valitud, siis kinnitades ei kinnita tellimust enne &auml;ra kui on makstud. Kui varem on templeidis olemas pankade valik, siis suunab otse maksma, kui pole, siis tuleb peale kinnitusvaadet pangamaksete vormide vaade
 
 	@property bank_payment type=releditor reltype=RELTYPE_BANK_PAYMENT store=connect props=cancel_url,bank direct_links=1 rel_id=first use_form=emb
 	@caption Pangamakse objekt
@@ -348,8 +343,11 @@
 @reltype DEFAULT_CURRENCY value=20 clid=CL_CURRENCY
 @caption Vaikimisi valuuta
 
-@reltype RELTYPE_EXTRA_ADDRESS_DELIVERY_TYPES value=21 clid=CL_SHOP_DELIVERY_METHOD
+@reltype EXTRA_ADDRESS_DELIVERY_TYPES value=21 clid=CL_SHOP_DELIVERY_METHOD
 @postitusaadresse omavad kohaletoimetamise meetodid
+
+@reltype MAIL_RECIEVERS value=22 clid=CL_CRM_PERSON,CL_ML_MEMBER
+@caption Kinnitusmaili saajad
 
 */
 
@@ -477,7 +475,6 @@ class shop_order_center extends class_base
 			case "data_form_person":
 			case "data_form_company":
 			case "data_form_discount":
-			case "mail_to_el":
 			case "mail_to_seller_in_el":
 				if (!$arr["obj_inst"]->prop("data_form"))
 				{

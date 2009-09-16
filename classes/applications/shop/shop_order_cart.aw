@@ -3091,8 +3091,6 @@ class shop_order_cart extends class_base
 	{
 		$cart = obj($arr["cart"]);
 		$order_data = $cart->get_order_data();
-		$order = $cart->confirm_order();
-		$url = aw_global_get("baseurl")."/".$order->id();
 		$oc = $cart->get_oc();
 		if($oc->prop("use_bank_payment"))
 		{
@@ -3104,35 +3102,11 @@ class shop_order_cart extends class_base
 			}
 			else
 			{
-				$bank_payment_inst = get_instance(CL_BANK_PAYMENT);
-				$bank_payment = $oc->get_bank_payment_id();
-
-				//seda keele v2rki peaks tegelt kontrollima, et kas niipalju l2bu on ikka vaja... asi selleks, et kirja saadaks vastavas keeles tellijale
-				$lang = aw_global_get("lang_id");
-				$l = get_instance("languages");
-				$order->set_meta("lang" , $lang);
-				$order->set_meta("lang_id" , $_SESSION["ct_lang_id"]);
-				$order->set_meta("lang_lc" , $l->get_langid($_SESSION["ct_lang_id"]));
-
-				$expl = $order->id();
-				if($oc->prop("show_prod_and_package"))
-				{
-					$expl = substr($expl." ".join(", " , $order->get_product_names()), 0, 69);
-				}
-
-				if(strlen($expl." (".$oc->id().")") < 70)
-				{
-					$expl.= " (".$oc->id().")"; //et tellimiskeskkonna objekt ka naha jaaks
-				}
-				return $bank_payment_inst->bank_forms(array(
-					"id" => $bank_payment,
-					"amount" => $order->get_sum(),
-					"reference_nr" => $order->id(),
-					"lang" => empty($order_data["bank_lang"]) ? "" : $order_data["bank_lang"],
-					"expl" => $expl,
-				));
+				return $cart->get_pay_form();
 			}
 		}
+		$order = $cart->confirm_order();
+		$url = aw_global_get("baseurl")."/".$order->id();
 		header("Location: ".$url);
 		die();
 	}
