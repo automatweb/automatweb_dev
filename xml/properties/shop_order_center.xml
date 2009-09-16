@@ -49,6 +49,18 @@
             <caption>Saada tellijale e-mail</caption>
       </property>
       <property>
+            <name>mail_recievers</name>
+            <group>mail_settings_orderer</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAIL_RECIEVERS</reltype>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <caption>Kinnitusmeili saajad</caption>
+      </property>
+      <property>
             <name>mail_from_addr</name>
             <group>mail_settings_orderer</group>
             <table>objects</table>
@@ -67,17 +79,6 @@
             <caption>Meili From nimi</caption>
       </property>
       <property>
-            <name>mail_cust_content</name>
-            <group>mail_settings_orderer</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textarea</type>
-            <rows>10</rows>
-            <cols>80</cols>
-            <caption>Meili sisu (kui t&amp;amp;uuml;hi, siis templatest)</caption>
-      </property>
-      <property>
             <name>mail_template</name>
             <group>mail_settings_orderer</group>
             <table>objects</table>
@@ -85,16 +86,6 @@
             <method>serialize</method>
             <type>select</type>
             <caption>E-maili template</caption>
-      </property>
-      <property>
-            <name>send_attach</name>
-            <group>mail_settings_seller</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Lisa meili manusega tellimus</caption>
       </property>
       <property>
             <name>web_discount</name>
@@ -495,6 +486,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Kasuta pangamakset</caption>
+            <comment>Kui see valitud, siis kinnitades ei kinnita tellimust enne &amp;amp;auml;ra kui on makstud. Kui varem on templeidis olemas pankade valik, siis suunab otse maksma, kui pole, siis tuleb peale kinnitusvaadet pangamaksete vormide vaade</comment>
       </property>
       <property>
             <name>bank_payment</name>
@@ -822,10 +814,18 @@
                   <clid>CL_CURRENCY</clid>
                   <caption>Vaikimisi valuuta</caption>
             </DEFAULT_CURRENCY>
-            <RELTYPE_EXTRA_ADDRESS_DELIVERY_TYPES>
+            <EXTRA_ADDRESS_DELIVERY_TYPES>
                   <value>21</value>
                   <clid>CL_SHOP_DELIVERY_METHOD</clid>
-            </RELTYPE_EXTRA_ADDRESS_DELIVERY_TYPES>
+            </EXTRA_ADDRESS_DELIVERY_TYPES>
+            <MAIL_RECIEVERS>
+                  <value>22</value>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_ML_MEMBER</num_1>
+                  </clid>
+                  <caption>Kinnitusmaili saajad</caption>
+            </MAIL_RECIEVERS>
       </reltypes>
       <layout>
             <appearance_c>
