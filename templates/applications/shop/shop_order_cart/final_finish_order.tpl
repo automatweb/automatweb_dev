@@ -28,11 +28,7 @@
 					
 			<div class="contentMainBasket contentMainBasket2">
 						
-			<form action="{VAR:baseurl}/orb.aw" method="POST">
-				<input type="hidden" name="class" value="shop_order_cart" />
-				<input type="hidden" name="action" value="confirm_order" />
-				<input type="hidden" name="cart" value="{VAR:cart}" />
-				<input type="hidden" name="oc" value="{VAR:oc}" />
+			<form action="{VAR:confirm_url}" method="POST">
 
 				<table class="product_table">
 					<tr>

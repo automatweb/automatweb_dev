@@ -98,9 +98,9 @@
 
 
 		{VAR:reforb}
-		<input type="hidden" name="go_to_after" value="{VAR:baseurl}/index.aw?action=order_data&class=shop_order_cart&cart={VAR:cart}&section={VAR:LC_BASKET_STEP2_SECTION}">
+		<input type="hidden" name="go_to_after" value="{VAR:go_to_after}">
 		<input type="hidden" name="cart" value="{VAR:cart}">
-		<input type="hidden" name="section" value="{VAR:LC_BASKET_STEP2_SECTION}">
+		<input type="hidden" name="section" value="{VAR:section}">
 		<!-- SUB: HAS_PRODUCTS -->
 		<table class="buttons">
 			<tr>
