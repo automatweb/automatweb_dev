@@ -627,7 +627,7 @@ class object_tree extends _int_obj_container_base
 			));
 		}
 
-		if ($filter["parent"])
+		if (!empty($filter["parent"]))
 		{
 			$filter["parent"] = $GLOBALS["object_loader"]->param_to_oid($filter["parent"]);
 		}

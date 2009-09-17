@@ -656,6 +656,7 @@ class gantt_chart extends class_base
 		}
 
 		### footer
+		$footer = "";
 		if (strlen($this->chart_footer))
 		{
 			$this->vars (array (
