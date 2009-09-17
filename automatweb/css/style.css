@@ -1036,7 +1036,9 @@ table.tree_enabled_in_edit .tree_enabled_in_edit_content #sisu .awcbContentTblDe
 	text-transform: uppercase;
 	background-color: #FFFFFF;
 }
-#error_msg {
+
+td.awcbPropErr
+{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	color: #CC0000;
@@ -1044,6 +1046,7 @@ table.tree_enabled_in_edit .tree_enabled_in_edit_content #sisu .awcbContentTblDe
 	text-align: left;
 	padding: 3px;
 }
+
 #linecaption {
 	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;

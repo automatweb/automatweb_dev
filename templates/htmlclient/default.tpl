@@ -1,5 +1,5 @@
 <!-- SUB: SHOW_CHANGEFORM -->
-<form action="{VAR:handler}.{VAR:ext}" method="{VAR:method}" enctype="multipart/form-data" name="changeform" id="changeform" onsubmit="return false;" style="margin-top: 0px;" {VAR:form_target}>
+<form action="{VAR:handler}.{VAR:ext}" method="{VAR:method}" enctype="multipart/form-data" name="changeform" id="changeform" onsubmit="if(awcbChangeFormSubmitted){ return false; } submit_changeform('{VAR:action}', true);" style="margin-top: 0px;" {VAR:form_target}>
 <input type="hidden" name="MAX_FILE_SIZE" value="100000000" />
 
 <!-- END SUB: SHOW_CHANGEFORM -->
@@ -21,7 +21,7 @@
 	<!-- SUB: PROP_ERR_MSG -->
 	<tr>
 	    <td width="100"></td>
-	    <td id="error_msg">{VAR:err_msg}</td>
+	    <td class="awcbPropErr">{VAR:err_msg}</td>
 	</tr>
 	<!-- END SUB: PROP_ERR_MSG -->
 
@@ -64,10 +64,6 @@
 	</tr>
 	<!-- END SUB: CONTENT -->
 
-	<!-- SUB: SBT_JS -->
-this.disabled=true;self.disabled=true;
-	<!-- END SUB: SBT_JS -->
-
 	<!-- SUB: SUBMIT -->
 	<tr>
 	    <td width="100"></td>
@@ -75,7 +71,7 @@ this.disabled=true;self.disabled=true;
 		<!-- SUB: BACK_BUTTON -->
 		<input id="button" type="submit" name="{VAR:back_button_name}" value="{VAR:back_button_caption}" />
 		<!-- END SUB: BACK_BUTTON -->
-		<input id="button" type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" accesskey='s' onClick='{VAR:sbt_js}submit_changeform("{VAR:action}"); return false;'/>
+		<input id="button" type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" accesskey="s" />
 		<!-- SUB: FORWARD_BUTTON -->
 		<input id="button" type="submit" name="{VAR:forward_button_name}" value="{VAR:forward_button_caption}" />
 		<!-- END SUB: FORWARD_BUTTON -->
@@ -271,31 +267,36 @@ this.disabled=true;self.disabled=true;
 <script type="text/javascript">
 	{VAR:scripts}
 
-	function submit_changeform(action)
-	{
+	var awcbChangeFormSubmitted = false;
+	function submit_changeform(action, nosubmit) {
+		$(document.changeform).trigger("awbeforesubmit");
 		changed = 0;
+
 		{VAR:submit_handler}
 
-		if (typeof(aw_submit_handler) != "undefined")
-		{
-			if (aw_submit_handler() == false)
-			{
+		if (typeof(aw_submit_handler) != "undefined") {
+			if (aw_submit_handler() == false) {
 				this.disabled=false;
 				return false;
 			}
 		}
 
-		if (typeof action == "string" && action.length > 0)
-		{
+		if (typeof action == "string" && action.length > 0) {
 			document.changeform.action.value = action;
 		}
-		document.changeform.submit();
+
+		if (!nosubmit && !awcbChangeFormSubmitted) {
+			document.changeform.submit();
+		}
+
+		awcbChangeFormSubmitted = true;
 	}
 </script>
 <!-- END SUB: SHOW_CHANGEFORM2 -->
 
 <!-- SUB: iframe_body_style -->
-body {
+body
+{
         background-color: #FFFFFF;
         margin: 0px;
         overflow-y: hidden;
@@ -351,47 +352,32 @@ $("div.awcbPropertyHelpContainer").hover(
 <script type="text/javascript">
 changed = 0;
 var disable_set_changed;
-function set_changed()
-{
-	if(!disable_set_changed)
-	{
+function set_changed() {
+	if(!disable_set_changed) {
 		changed = 1;
 	}
 }
 
-function generic_loader2()
-{
+function generic_loader2() {
 	// set onchange event handlers for all form elements
 	var els = document.changeform.elements;
 	var cnt = els.length;
-	for(var i = 0; i < cnt; i++)
-	{
-		if (els[i].attachEvent)
-		{
+	for(var i = 0; i < cnt; i++) {
+		if (els[i].attachEvent) {
 			els[i].attachEvent('onChange',set_changed);
 		}
-		else
-		{
+		else {
 			els[i].setAttribute("onChange",els[i].getAttribute("onChange")+ ";set_changed();");
 		}
 	}
 }
 
-function generic_unloader()
-{
-	if (changed && !xchanged)
-	{
-		if (confirm("{VAR:msg_unload_leave_notice}"))
-		{
+function generic_unloader() {
+	if (changed && !xchanged) {
+		if (confirm("{VAR:msg_unload_leave_notice}")) {
 			document.changeform.submit();
 		}
 	}
 }
-/*
-$.aw_unload_handler({
-	msg_unload_leave_notice: "{VAR:msg_unload_leave_notice}",
-	msg_unload_save_error: "{VAR:msg_unload_save_error}"
-});
-*/
 </script>
 <!-- END SUB: CHECK_LEAVE_PAGE -->

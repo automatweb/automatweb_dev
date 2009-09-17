@@ -15,6 +15,7 @@ class htmlclient extends aw_template
 	var $tabpanel;
 	var $error;
 	var $view_mode;
+	var $style;
 
 	private $has_property_help = false;
 
