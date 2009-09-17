@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.119 2009/09/14 07:35:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.120 2009/09/17 11:15:18 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -7128,7 +7128,7 @@ Võtn hetkel kasutusele selle teise variandi
 			$oxml->endElement();
 
 			echo "- ".$prod['pg'].' -- '.$prod['nr'].' -- '.$prod['title']."<br />\n";
-			$codes = $this->db_fetch_array("select * from otto_imp_t_codes where lang_id = ". aw_global_get("lang_id")." and pg = '". $prod["pg"]."' and nr = ".$prod["nr"]." order by pg,nr,s_type" );
+			$codes = $this->db_fetch_array("select * from otto_imp_t_codes where lang_id = ". aw_global_get("lang_id")." and pg = '". $prod["pg"]."' and nr = ".$prod["nr"]." order by pg,nr,s_type,id" );
 			$oxml->startElement('products');
 			foreach (safe_array($codes) as $product_order => $code)
 			{
@@ -7175,7 +7175,9 @@ Võtn hetkel kasutusele selle teise variandi
 				$oxml->endElement();
 
 				echo "---- ".$code['pg']." -- ".$code['nr']." -- ".$code['s_type']." -- ".$code['code']." -- ".$code['color']."<br />\n";
-				$sizes = $this->db_fetch_array("select * from otto_imp_t_prices where lang_id = ".aw_global_get("lang_id")." and pg = '".$orig_code['pg']."' and nr = ".$orig_code['nr']." and s_type = '".$orig_code['s_type']."' order by pg,nr,s_type");
+				$sizes = $this->db_fetch_array("select * from otto_imp_t_prices where lang_id = ".aw_global_get("lang_id")." and pg = '".$orig_code['pg']."' and nr = ".$orig_code['nr']." and s_type = '".$orig_code['s_type']."' order by pg,nr,s_type,id");
+
+				$counter = 0; // packaging order counter
 
 				$oxml->startElement('packagings');
 
@@ -7194,7 +7196,7 @@ Võtn hetkel kasutusele selle teise variandi
 
 						$oxml->writeElement('nr', $size['nr']);
 
-						$oxml->writeElement('order', ($packaging_order * 10)); // first one will be 0, and the second ones will with step 10. using array index as order value --dragut
+						$oxml->writeElement('order', ($counter * 10)); // packaging order counter
 
 						$oxml->startElement('type');
 						$oxml->writeCData($size['s_type']);
@@ -7207,6 +7209,8 @@ Võtn hetkel kasutusele selle teise variandi
 						$oxml->endElement();
 
 						$oxml->endElement();
+
+						$counter++; // increase the packaging order counter
 
 						echo "------------ ".$s."<br />\n";
 					}
