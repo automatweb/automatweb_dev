@@ -257,7 +257,7 @@ class mrp_resource_obj extends _int_object
 		{
 			arr($this->id(), true);
 		}
-		
+
 		if (!is_array($value))
 		{
 			throw new awex_obj_type("Array required.");
@@ -1071,11 +1071,11 @@ class mrp_resource_obj extends _int_object
 				}
 			}
 		}
-	}	/**
+	}
+
+	/**
 		@attrib name=get_available_hours
-
 		@param from optional type=int default=0
-
 		@param to optional type=int
 
 	**/
@@ -1188,7 +1188,7 @@ class mrp_resource_obj extends _int_object
 				"class_id" => CL_MRP_RESOURCE_OPERATOR,
 				"unit" => $secs,
 				"all_section_resources" => 1,
-			), 
+			),
 			array(
 				CL_MRP_RESOURCE_OPERATOR => array("profession")
 			)

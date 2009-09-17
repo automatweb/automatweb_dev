@@ -197,7 +197,7 @@ class mrp_workspace_obj extends _int_object
 	@returns CL_MRP_CASE
 		Created project
 **/
-	public function create_project(object $customer_relation = null)
+	public function create_case(object $customer_relation = null)
 	{
 		$case = obj(null, array(), CL_MRP_CASE);
 		$case->set_parent($this->id());
@@ -207,14 +207,14 @@ class mrp_workspace_obj extends _int_object
 		{
 			$customer = new object($customer_relation->prop("buyer"));
 			$case->set_name(sprintf(t("Kliendi %s projekt"), $customer->name()));
-			$case->set_prop("customer", $customer->id());
+			$case->set_prop("customer", $customer->id());//!!! deprecated soon
 			$case->set_prop("customer_relation", $customer_relation->id());
 		}
 		$case->save();
 
 		if (is_object($customer_relation))
 		{
-			$case->connect(array("to" => $customer, "type" => "RELTYPE_MRP_CUSTOMER"));
+			$case->connect(array("to" => $customer, "type" => "RELTYPE_MRP_CUSTOMER"));//!!! deprecated soon
 			$case->connect(array("to" => $customer_relation, "type" => "RELTYPE_CUSTOMER_RELATION"));
 		}
 		return $case;

@@ -582,7 +582,8 @@ class mrp_schedule extends db_connector
 		### insert inprogress jobs' remaining lengths to resource reserved times
 		foreach ($inprogress_jobs as $job)
 		{
-			$length = (int) ($job->prop("length") * ((($job->prop("started") + $job->prop("planned_length")) - $this->schedule_start) / $job->prop("planned_length")));
+			$planned_length = $job->prop("planned_length");
+			$length = $planned_length ? (int) ($job->prop("length") * ((($job->prop("started") + $planned_length) - $this->schedule_start) / $planned_length)) : 0;
 
 			if ($length > 0)
 			{

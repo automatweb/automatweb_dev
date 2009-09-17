@@ -16,7 +16,7 @@
 @default group=general
 
 	@layout general_split type=hbox width=25%:75%
-		
+
 		@layout general_left type=vbox parent=general_split closeable=1 area_caption=T&ouml;&ouml;&nbsp;&uuml;ldandmed
 
 			@property project_name type=text parent=general_left store=no
@@ -302,15 +302,23 @@ class mrp_job extends class_base
 				break;
 
 			case "prerequisites":
-				$prerequisites = $this_object->awobj_get_prerequisites()->arr();
-				$prerequisite_orders = array();
-
-				foreach ($prerequisites as $prerequisite)
+				try
 				{
-					$prerequisite_orders[] = $prerequisite->prop ("exec_order");
-				}
+					$prerequisites = $this_object->awobj_get_prerequisites()->arr();
+					$prerequisite_orders = array();
 
-				$prop["value"] = implode (",", $prerequisite_orders);
+					foreach ($prerequisites as $prerequisite)
+					{
+						$prerequisite_orders[] = $prerequisite->prop ("exec_order");
+					}
+
+					$prop["value"] = implode (",", $prerequisite_orders);
+				}
+				catch (Exception $e)
+				{
+					$prop["error"] = t("Eeldust&ouml;&ouml;de definitsioon katki v&otilde;i puudub osale neist juurdep&auml;&auml;s");
+					$retval = PROP_ERROR;
+				}
 				break;
 
 			case "resource":
@@ -355,7 +363,7 @@ class mrp_job extends class_base
 				break;
 
 			case "state":
-				
+
 				$prop["value"] = "<span style='padding: 5px; background: ".mrp_workspace::$state_colours[$prop["value"]]."'>".mrp_job_obj::get_state_names($prop["value"])."<span>";
 				break;
 
@@ -1170,7 +1178,7 @@ class mrp_job extends class_base
 	public static function get_materials_unitselect($po, $value = null, $set_job_oid = false, $name_template = false)
 	{
 		enter_function("mrp_job::get_materials_unitselect");
-		
+
 		if(!$name_template)
 		{
 			$name_template = $set_job_oid ? "jobs[$set_job_oid][unit][%u]" : "unit[%u]";
@@ -1373,7 +1381,7 @@ class mrp_job extends class_base
 						aw_entry_time INT(11) UNSIGNED NOT NULL
 					);");
 					return true;
-					
+
 				case "aw_pid_oid":
 					$this->db_add_col($table, array(
 						"name" => $field,

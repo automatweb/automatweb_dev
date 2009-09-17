@@ -33,7 +33,7 @@ class mrp_job_obj extends _int_object
 	);
 	protected static $mrp_state_names = array(); // array of state => human_readable_name
 	protected $mrp_resource; // CL_MRP_RESOURCE
-	protected $mrp_project; // CL_MRP_CASE
+	protected $mrp_case; // CL_MRP_CASE
 	protected $mrp_workspace; // CL_MRP_WORKSPACE
 	protected $mrp_state; // job state property cache
 	protected $mrp_job_data_loaded;
@@ -141,7 +141,7 @@ class mrp_job_obj extends _int_object
 					$this->mrp_resource = obj($resource, array(), CL_MRP_RESOURCE);
 				}
 
-				if (empty($this->mrp_project))
+				if (empty($this->mrp_case))
 				{
 					// load project
 					$project = $this->prop("project");
@@ -149,11 +149,11 @@ class mrp_job_obj extends _int_object
 					{
 						throw new awex_mrp_job_data("Project not defined", 2);
 					}
-					$this->mrp_project = obj($project, array(), CL_MRP_CASE);
+					$this->mrp_case = obj($project, array(), CL_MRP_CASE);
 				}
 
 				// load workspace
-				$this->mrp_workspace = $this->mrp_project->prop("workspace");
+				$this->mrp_workspace = $this->mrp_case->prop("workspace");
 
 				// load properties
 				$this->mrp_state = $this->prop("state");
@@ -628,6 +628,7 @@ class mrp_job_obj extends _int_object
 	@errors
 		throws awex_mrp_job_state when current job state doesn't allow planning.
 		throws awex_mrp_job_not_loaded on load error.
+		throws awex_mrp_case_state if case is not planned
 		throws awex_mrp_job on errors.
 **/
 	function plan()
@@ -638,12 +639,22 @@ class mrp_job_obj extends _int_object
 		}
 
 		$applicable_states = array (
+			mrp_case_obj::STATE_PLANNED,
+			mrp_case_obj::STATE_ONHOLD,
+			mrp_case_obj::STATE_INPROGRESS
+		);
+		if (!in_array ($this->mrp_case->prop("state"), $applicable_states))
+		{
+			throw new awex_mrp_case_state("Case state state can't be " . mrp_case_obj::get_state_names($this->mrp_case->prop("state")));
+		}
+
+		$applicable_states = array (
 			self::STATE_NEW,
 			self::STATE_ABORTED
 		);
 		if (!in_array ($this->prop("state"), $applicable_states))
 		{
-			throw new awex_mrp_job_state("State must be 'NEW' or 'ABORTED'.");
+			throw new awex_mrp_job_state("State must be 'NEW' or 'ABORTED' not " . self::get_state_names($this->prop("state")));
 		}
 
 		try
@@ -740,7 +751,7 @@ class mrp_job_obj extends _int_object
 			mrp_case_obj::STATE_ONHOLD
 		);
 
-		if (!in_array ($this->mrp_project->prop("state"), $applicable_states))
+		if (!in_array ($this->mrp_case->prop("state"), $applicable_states))
 		{
 			throw new awex_mrp_case_state("Project state doesn't allow setting job on hold.");
 		}
@@ -834,7 +845,7 @@ class mrp_job_obj extends _int_object
 			$this->set_prop ("started", $real_start_time);
 
 			// update job in project
-			$this->mrp_project->update_progress($this->ref());
+			$this->mrp_case->update_progress($this->ref());
 
 			// start on resource
 			$this->mrp_resource->start_job($this->ref());
@@ -973,7 +984,7 @@ class mrp_job_obj extends _int_object
 			}
 			elseif ($this->prop("done") < 1)
 			{ // set whole order quantity done when no specific data entered
-				$quantity = $this->mrp_project->prop("order_quantity")*$this->prop("component_quantity");
+				$quantity = $this->mrp_case->prop("order_quantity")*$this->prop("component_quantity");
 				$this->set_prop ("done", $quantity);
 			}
 
@@ -986,7 +997,7 @@ class mrp_job_obj extends _int_object
 					('".$this->id()."', '".$this->prop("project")."', '".$this->prop("resource")."', '".get_instance("user")->get_current_person()."', '".aw_global_get("uid_oid")."', '{$quantity}', '".time()."')
 			");
 
-			if ($this->prop("done") >= $this->mrp_project->prop("order_quantity")*$this->prop("component_quantity"))
+			if ($this->prop("done") >= $this->mrp_case->prop("order_quantity")*$this->prop("component_quantity"))
 			{ // whole job done
 				// free resource
 				try
@@ -1019,7 +1030,7 @@ class mrp_job_obj extends _int_object
 			if (!isset($quantity))
 			{
 				// update job in project
-				$this->mrp_project->update_progress($this->ref());
+				$this->mrp_case->update_progress($this->ref());
 			}
 		}
 		catch (awex_mrp_resource $e)
@@ -1085,7 +1096,7 @@ class mrp_job_obj extends _int_object
 			$this->stats_done();
 
 			// update job in project
-			$this->mrp_project->update_progress($this->ref());
+			$this->mrp_case->update_progress($this->ref());
 		}
 		catch (awex_mrp_resource $e)
 		{
@@ -1148,7 +1159,7 @@ class mrp_job_obj extends _int_object
 			$this->stats_done();
 
 			// update job in project
-			$this->mrp_project->update_progress($this->ref());
+			$this->mrp_case->update_progress($this->ref());
 		}
 		catch (awex_mrp_case $e)
 		{
@@ -1206,7 +1217,7 @@ class mrp_job_obj extends _int_object
 			$this->stats_start();
 
 			// update job in project. assuming here that job can be continued till done regardless of project changes meanwhile
-			$this->mrp_project->update_progress($this->ref());
+			$this->mrp_case->update_progress($this->ref());
 		}
 		catch (awex_mrp_case $e)
 		{
@@ -1269,7 +1280,7 @@ class mrp_job_obj extends _int_object
 			$this->set_prop ("state", self::STATE_INPROGRESS);
 
 			// update job in project
-			$this->mrp_project->update_progress($this->ref());
+			$this->mrp_case->update_progress($this->ref());
 
 			// start on resource
 			$this->mrp_resource->start_job($this->ref());
@@ -1435,7 +1446,7 @@ class mrp_job_obj extends _int_object
 			mrp_case_obj::STATE_PLANNED
 		);
 
-		if (!in_array ($this->mrp_project->prop ("state"), $applicable_states))
+		if (!in_array ($this->mrp_case->prop ("state"), $applicable_states))
 		{
 			if ($return_info)
 			{
@@ -1559,7 +1570,7 @@ class mrp_job_obj extends _int_object
 			### set successive jobs' prerequisites equal to deleted job's prerequisites
 			$list = new object_list (array (
 				"class_id" => CL_MRP_JOB,
-				"project" => $this->mrp_project->id (),
+				"project" => $this->mrp_case->id (),
 				"state" => new obj_predicate_not (self::STATE_DELETED),
 			));
 			$other_jobs = $list->arr ();
@@ -1595,7 +1606,7 @@ class mrp_job_obj extends _int_object
 				"action" => "order_jobs",
 				"class" => "mrp_case",
 				"params" => array (
-					"oid" => $this->mrp_project->id ()
+					"oid" => $this->mrp_case->id ()
 				)
 			));
 //!!! ei saa j2tta workflowd katkiseks
@@ -1604,7 +1615,7 @@ class mrp_job_obj extends _int_object
 				mrp_case_obj::STATE_PLANNED
 			);
 
-			if (in_array ($this->mrp_project->prop("state"), $applicable_planning_states))
+			if (in_array ($this->mrp_case->prop("state"), $applicable_planning_states))
 			{
 				### post rescheduling msg
 				$this->mrp_workspace->request_rescheduling();
@@ -1776,10 +1787,12 @@ class mrp_job_obj extends _int_object
 		$prerequisite_oids = empty($prerequisites_raw) ? array() : explode(",", $prerequisites_raw);
 		if (count($prerequisite_oids))
 		{
-			$empty_elements = array_keys($prerequisite_oids, "");
-			foreach ($empty_elements as $key)
+			foreach ($prerequisite_oids as $key => $prerequisite_oid)
 			{
-				unset($prerequisite_oids[$key]);
+				if (empty($prerequisite_oid))
+				{
+					unset($prerequisite_oids[$key]);
+				}
 			}
 			$prerequisites_list = new object_list(array(
 				"class_id" => CL_MRP_JOB,
@@ -1790,7 +1803,18 @@ class mrp_job_obj extends _int_object
 
 			if ($prerequisites_list->count() !== count($prerequisite_oids))
 			{
-				throw new awex_mrp_job_data("Definition corrupt or no permissions to some jobs.");
+				// go over the array and let an acl exception be thrown when permissions are missing. otherwise assume that definition is corrupt
+				foreach ($prerequisite_oids as $key => $prerequisite_oid)
+				{
+					if (is_oid($prerequisite_oid))
+					{
+						$tmp = obj($prerequisite_oid, array(), CL_MRP_JOB);
+					}
+				}
+
+				$e = new awex_mrp_job_data("Prerequisites definition corrupt");
+				$e->awobj_id = $this->id();
+				throw $e;
 			}
 		}
 		else
@@ -1808,20 +1832,34 @@ class mrp_job_obj extends _int_object
 	@returns void
 	@errors
 		throws awex_obj_type if object list contains object(s) that are not jobs.
+		throws awex_mrp_job_data when project not set (code 2)
+		throws awex_mrp_job_prerequisites when one of given prerequisites not among case jobs
 **/
 	public function awobj_set_prerequisites(object_list $prerequisites_list)
 	{ // internal format -- ',job1id,job2id,'
 		$prerequisites_raw = "";
 		if ($prerequisites_list->count())
 		{
+			$project = $this->prop("project");
+			if (!is_oid($this->prop("project")))
+			{
+				throw new awex_mrp_job_data("Project not defined", 2);
+			}
+			$project = obj($project, array(), CL_MRP_CASE);
+			$project_jobs = $project->get_job_list();
+
 			foreach ($prerequisites_list->arr() as $prerequisite_job)
 			{
 				if (CL_MRP_JOB != $prerequisite_job->class_id())
 				{
-					awex_obj_type("One of given prerequisite objects is not a CL_MRP_JOB object");
+					throw new awex_obj_type("One of given prerequisite objects is not a CL_MRP_JOB object");
+				}
+				elseif (!isset($project_jobs[$prerequisite_job->id()]))
+				{
+					throw new awex_mrp_job_prerequisites("One of given prerequisite objects is not among case jobs");
 				}
 			}
-			$prerequisite_oids =  $prerequisites_list->ids();
+			$prerequisite_oids =  array_unique($prerequisites_list->ids());
 			$prerequisites_raw = "," . implode(",", $prerequisite_oids) .  ",";
 		}
 		parent::set_prop("prerequisites", $prerequisites_raw);

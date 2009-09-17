@@ -1882,7 +1882,15 @@ class mrp_case extends class_base
 			$state = '<span style="color: ' . mrp_workspace::$state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
 			### translate prerequisites from object id-s to execution orders
-			$prerequisites = $job->prop ("prerequisites");
+			try
+			{
+				$prerequisites = $job->prop ("prerequisites");
+			}
+			catch (awex_mrp_job_data $e)
+			{
+				$prerequisites = new object_list();
+			}
+
 			$prerequisites_translated = array ();
 
 			foreach ($prerequisites->arr() as $prerequisite_job)
@@ -2027,7 +2035,7 @@ class mrp_case extends class_base
 								{
 									settype ($prerequisite, "integer");
 									$job_id = $jobs[$prerequisite];
-									$prerequisites[] = $job_id;
+									$prerequisites[] = (int) $job_id;
 								}
 
 								$workflow[$job->id ()] = $prerequisites;
@@ -2094,7 +2102,7 @@ class mrp_case extends class_base
 			### check & save workflow
 			if (!empty ($workflow))
 			{
-				$error = $this->order_jobs ($arr, $workflow);
+				$error = $this->order_jobs($arr, $workflow);
 
 				if ($error)
 				{
@@ -2104,7 +2112,7 @@ class mrp_case extends class_base
 				{
 					foreach ($workflow as $job_id => $prerequisites)
 					{
-						$prerequisites = count($prerequisites) ? new object_list(array("oid" => $prerequisites)) : new object_list();
+						$prerequisites = count($prerequisites) ? new object_list(array("oid" => $prerequisites, "site_id" => array(), "lang_id" => array())) : new object_list();
 						$job = obj ($job_id);
 						$job->set_prop ("prerequisites", $prerequisites);
 						aw_disable_acl();
@@ -2205,7 +2213,7 @@ class mrp_case extends class_base
 
 				foreach ($current_nodes as $current_node)
 				{
-					if ($workflow[$current_node][0] != "none")
+					if (isset($workflow[$current_node][0]) and $workflow[$current_node][0] !== "none")
 					{ ### prerequisites exist for current node
 						### add new prerequisites
 						$nodes = array_merge ($nodes, $workflow[$current_node]);
@@ -2269,18 +2277,21 @@ class mrp_case extends class_base
 	function check_prerequistes_cycle_for_one_job($workflow, $job_id, $prerequisite)
 	{
 		### go through the prerequisites to see if any of those is the current job
-		foreach($workflow[$prerequisite] as $_prerequisite)
+		if (isset($workflow[$prerequisite]))
 		{
-			if(!isset($workflow[$_prerequisite]))
+			foreach($workflow[$prerequisite] as $_prerequisite)
 			{
-				continue;
+				if(!isset($workflow[$_prerequisite]))
+				{
+					continue;
+				}
+				if($_prerequisite == $job_id)
+				{
+					return true;
+				}
+				### go through the prerequisites of the prerequisite to see if any of those is the current job
+				return $this->check_prerequistes_cycle_for_one_job($workflow, $job_id, $_prerequisite);
 			}
-			if($_prerequisite == $job_id)
-			{
-				return true;
-			}
-			### go through the prerequisites of the prerequisite to see if any of those is the current job
-			return $this->check_prerequistes_cycle_for_one_job($workflow, $job_id, $_prerequisite);
 		}
 		return false;
 	}

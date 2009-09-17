@@ -19,6 +19,7 @@ class mrp_case_obj extends _int_object
 	const STATE_DELETED = 8; // project is deleted
 	const STATE_INPROGRESS = 3; // work is being done
 
+	protected static $mrp_state_names = array(); // array of state => human_readable_name
 	protected $workspace; // project owner
 
 /** Class constructor
@@ -34,6 +35,48 @@ class mrp_case_obj extends _int_object
 			### set status
 			$this->set_prop ("state", self::STATE_NEW);
 		}
+	}
+
+	/**
+	@attrib api=1 params=pos
+	@param state optional type=int
+		State for which to get name. One of STATE constant values.
+	@comment
+	@returns mixed
+		Array of constant values (keys) and names (array values) if $state parameter not specified. String name corresponding to that state if $state parameter given. Names are in currently active language. Empty string if invalid state parameter given.
+	**/
+	public static function get_state_names($state = null)
+	{
+		if (empty(self::$mrp_state_names))
+		{
+			self::$mrp_state_names = array(
+				self::STATE_NEW => t("Uus"),
+				self::STATE_PLANNED => t("Planeeritud"),
+				self::STATE_INPROGRESS => t("T&ouml;&ouml;s"),
+				self::STATE_ABORTED => t("Katkestatud"),
+				self::STATE_DONE => t("Valmis"),
+				self::STATE_LOCKED => t("Lukustatud"),
+				self::STATE_ONHOLD => t("Ootel"),
+				self::STATE_ARCHIVED => t("Arhiveeritud"),
+				self::STATE_VIRTUAL_PLANNED => t("Virtuaalselt planeeritud"),
+				self::STATE_DELETED => t("Kustutatud")
+			);
+		}
+
+		if (!isset($state))
+		{
+			$names = self::$mrp_state_names;
+		}
+		elseif (is_scalar($state) and isset(self::$mrp_state_names[$state]))
+		{
+			$names = self::$mrp_state_names[$state];
+		}
+		else
+		{
+			$names = "";
+		}
+
+		return $names;
 	}
 
 	public function awobj_get_project_priority()
@@ -183,7 +226,9 @@ class mrp_case_obj extends _int_object
 	}
 
 	/**
-		@attrib api=1
+		@attrib api=1 params=pos
+		@returns array
+			Associative array of all case jobs: object id => job object
 	**/
 	public function get_job_list()
 	{
@@ -209,8 +254,6 @@ class mrp_case_obj extends _int_object
 	public function add_job(object $resource = null)
 	{
 		$workspace = $this->awobj_get_workspace();
-		$connections = $this->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
-		$job_number = (count ($connections) + 1);
 
 		if ($resource)
 		{
@@ -227,15 +270,6 @@ class mrp_case_obj extends _int_object
 		{
 			throw new awex_mrp_case_workspace("Workspace has no jobs folder");
 		}
-
-		$list = new object_list (array (
-			"class_id" => CL_MRP_JOB,
-			"exec_order" => ($job_number - 1),
-			"parent" => $jobs_folder,
-			"project" => $this->id ()
-		));
-		$prerequisite_job = $list->begin ();
-		$prerequisite = is_object ($prerequisite_job) ? $prerequisite_job->id () : "";
 
 		// get job number
 		$jobs = new object_data_list(
@@ -259,8 +293,7 @@ class mrp_case_obj extends _int_object
 		   "parent" => $jobs_folder,
 		   "class_id" => CL_MRP_JOB
 		), $constructor_args);
-		$job->set_prop ("exec_order", $job_number);
-		$job->set_prop ("prerequisites", new object_list(array("oid" => $prerequisite)));
+		$job->set_prop ("exec_order", $job_nr);
 		$job->set_prop ("project", $this->id ());
 		$job->set_ord($job_nr);
 		// aw_disable_acl(); // should instead be configured by giving proper access rights
@@ -450,7 +483,9 @@ class mrp_case_obj extends _int_object
 			$job_state = $job->prop("state");
 			if (!in_array ($state, $req_project_states_by_job_state[$job_state]))
 			{
-				throw new awex_mrp_case_state("Project is not ready for this job");
+				$job_state_name = mrp_job_obj::get_state_names($job_state);
+				$case_state_name = self::get_state_names($state);
+				throw new awex_mrp_case_state("Project is not ready for this job. Job state '{$job_state_name}', case state '{$case_state_name}'");
 			}
 
 			switch ($job_state)
