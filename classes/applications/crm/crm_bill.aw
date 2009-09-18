@@ -48,6 +48,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl parent=top_left reltype=RELTYPE_IMPL
 	@caption Arve esitaja
 
+	@property assembler type=select table=aw_crm_bill field=aw_assembler parent=top_left
+	@caption Koostaja
+
 	@property bill_date type=date_select table=aw_crm_bill field=aw_date parent=top_left
 	@caption Kuup&auml;ev
 
@@ -77,6 +80,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property partial_recieved type=text field=meta method=serialize parent=top_left
 	@caption Osaline laekumine
+
 
 
 
@@ -417,6 +421,16 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "assembler" :
+				$maker = $arr["obj_inst"]->get_the_person_who_made_this_fucking_thing();
+				$prop["options"] = array($maker->id() => $maker->name());
+				$ps = get_instance("vcl/popup_search");
+				$ps->set_class_id(array(CL_CRM_PERSON));
+				$ps->set_id($arr["obj_inst"]->id());
+				$ps->set_reload_layout("almost_bottom");
+				$ps->set_property("top_left");
+				$prop["post_append_text"] = $ps->get_search_button();
+				break;
 			case "signature_type":
 				$pop["options"] = array(0,t("Tavaline"), t("Digitaalne"));
 				break;
@@ -1393,6 +1407,13 @@ class crm_bill extends class_base
 			"caption" => t("Artikkel"),
 			"chgbgcolor" => "color"
 		));
+
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+			"chgbgcolor" => "color"
+		));
+
 		$t->define_field(array(
 			"name" => "person",
 			"caption" => t("Isik"),
@@ -1636,6 +1657,7 @@ class crm_bill extends class_base
 				"unit" => $this->get_row_html($row["id"],"unit",$arr),
 				"has_tax" => $this->get_row_html($row["id"],"has_tax",$arr),
 				"prod" => $this->get_row_html($row["id"],"prod",$arr),
+				"project" => $this->get_row_html($row["id"],"project",$arr),
 				"sel" => html::checkbox(array(
 					"name" => "sel_rows[]",
 					"value" => $row["id"]
@@ -1994,7 +2016,7 @@ class crm_bill extends class_base
 			die(0);
 		}
 		$o = obj($arr["id"]);
-		$props = array("name" , "comment" , "date" , "price" , "amt", "unit");
+		$props = array("name" , "comment" , "date" , "price" , "amt", "unit","project");
 		foreach($props as $prop)
 		{
 			if(isset($arr[$prop]))
@@ -2115,6 +2137,7 @@ class crm_bill extends class_base
 						, jrk: document.getElementsByName('rows[".$id."][jrk]')[0].value
 						, price: document.getElementsByName('rows[".$id."][price]')[0].value
 						, amt: document.getElementsByName('rows[".$id."][amt]')[0].value
+						, project: document.getElementsByName('rows[".$id."][project]')[0].value
 						},function(data){load_new_data".$id."(); });
 
 						function load_new_data".$id."()
@@ -2136,6 +2159,9 @@ class crm_bill extends class_base
 								x.innerHTML=html;});
 							$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'ajax_get_row_html', id: '".$arr["id"]."', field: 'has_tax'}, function (html) {
 								x=document.getElementById('row_".$id."_has_tax');
+								x.innerHTML=html;});
+							$.get('/automatweb/orb.aw', {class: 'crm_bill', action: 'ajax_get_row_html', id: '".$arr["id"]."', field: 'project'}, function (html) {
+								x=document.getElementById('row_".$id."_project');
 								x.innerHTML=html;});
 						}
 						
@@ -2308,6 +2334,20 @@ class crm_bill extends class_base
 					"icon" => "copy.gif",
 				))."</div>");
 				break;
+			case "project":
+				$ret.= html::select(array(
+					"name" => "rows[$id][project]",
+					"options" => array("" => t("--vali--")) + $row->get_project_selection(),
+					"value" => $row->prop("project"),
+				));
+				$ps = get_instance("vcl/popup_search");
+				$ps->set_class_id(array(CL_PROJECT));
+				$ps->set_reload_layout("bottom");
+				$ps->set_property("project");
+				$ps->set_id($id);
+				$ret.= $ps->get_search_button();
+				break;
+
 			case "person":
 				$ret.=html::select(array(
 					"name" => "rows[$id][person]",
@@ -2349,7 +2389,7 @@ class crm_bill extends class_base
 		}
 	}
 
-	function get_row_html($id,$field,$arr)
+	function get_row_html($id,$field,$arr = array())
 	{
 		$row = obj($id);
 		$ret = '<div id="row_'.$id.'_'.$field.'">';
@@ -2361,6 +2401,12 @@ class crm_bill extends class_base
 					"value" => t("Muuda"),
 					"onclick" => "edit_row('".$id."')",
 				));
+				break;
+			case "project":
+				if($row->prop("project"))
+				{
+					$ret.= get_name($row->prop("project"));
+				}
 				break;
 			case "name":
 				$ret.="<div>".
@@ -2377,7 +2423,7 @@ class crm_bill extends class_base
 			case "unit":
 				$price_cc = "";//hind oma organisatsiooni valuutas
 				$sum_cc = "";//summa oma organisatsiooni valuutas
-				if(is_object($arr["obj_inst"]) && !$arr["new"])
+				if(isset($arr["obj_inst"]) && is_object($arr["obj_inst"]) && !$arr["new"])
 				{
 					$bcurrency = $arr["obj_inst"]->get_bill_currency_id();
 					$date = $arr["obj_inst"]->prop("bill_date");
@@ -4129,6 +4175,9 @@ class crm_bill extends class_base
 					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "has_tax"}, function (html) {
 						x=document.getElementById("row_" + id + "_has_tax");
 						x.innerHTML=html;});
+					$.get("/automatweb/orb.aw", {class: "crm_bill", action: "get_row_change_fields", id: id, field: "project"}, function (html) {
+						x=document.getElementById("row_" + id + "_project");
+						x.innerHTML=html;});
 			}
 
 			var date_day_el = aw_get_el("bill_date[day]")
@@ -4763,6 +4812,7 @@ class crm_bill extends class_base
 			case "aw_currency":
 			case "aw_bill_accounting_date":
 			case "aw_is_overdue_bill":
+			case "aw_assembler":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "int"

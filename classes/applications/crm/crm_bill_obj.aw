@@ -2924,7 +2924,7 @@ if(aw_global_get("uid") == "marko") {arr("praegu ei saada sest marko arendab");a
 	**/
 	public function get_unit_name($unit)
 	{
-		if($this->can("view", $unit))
+		if($GLOBALS["object_loader"]->cache->can("view", $unit))
 		{
 			$uo = obj($unit);
 			$u_trans = $uo->meta("translations");
@@ -2951,6 +2951,22 @@ if(aw_global_get("uid") == "marko") {arr("praegu ei saada sest marko arendab");a
 		$data["impl_rep"] = reset($this->project_leader_names());
 		return $data;
 
+	}
+
+	 /** returns person id who made this  
+		@attrib api=1
+		@returns oid
+	**/
+	public function get_the_person_who_made_this_fucking_thing()
+	{
+		if(is_oid($this->prop("assembler")))
+		{
+			return obj($this->prop("assembler"));
+		}
+		$creator_user = $this->createdby();
+		$user_instance = get_instance(CL_USER);
+		$person = $user_instance->get_person_for_uid($creator_user);
+		return $person;
 	}
 }
 

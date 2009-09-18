@@ -301,6 +301,29 @@ class crm_bill_row_object extends _int_object
 		return $prods;
 	}
 
+	/** returns bill projects
+		@attrib api=1
+		@returns array
+	**/
+	public function get_project_selection()
+	{
+		$projects = array();
+		$bill = $this->get_bill();
+		if($GLOBALS["object_loader"]->cache->can("view" , $bill))
+		{
+			$bill_obj = obj($bill);
+			foreach($bill_obj->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+			{
+				$projects[$c->prop("to")] = $c->prop("to.name");
+			}
+		}
+		if($this->prop("project"))
+		{
+			$projects[$this->prop("project")] = get_name($this->prop("project"));
+		}
+		return $projects;
+	}
+
 	/** returns bill row unit selection
 		@attrib api=1
 		@returns array
