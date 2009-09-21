@@ -255,19 +255,6 @@ class crm_call extends task
 		));
 	}
 
-	function request_execute($obj)
-	{
-		classload("core/icons");
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $obj->name(),
-			"icon" => icons::get_icon_url($obj),
-			"time" => date("d-M-y H:i", $obj->prop("start1")),
-			"content" => nl2br(create_links($obj->prop("content")))
-		));
-		return $this->parse();
-	}
-
 	function parse_alias($arr = array())
 	{
 		// shows a phone call
@@ -401,7 +388,6 @@ class crm_call extends task
 
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		$i = get_instance(CL_TASK);
 		switch($data['name'])
 		{
 			case "comment":
@@ -409,82 +395,32 @@ class crm_call extends task
 				$data["rows"] = 2;
 				$data["cols"] = 30;
 				break;
-
 			case "co_tb":
-				$this->_get_co_tb($arr);
-				break;
-
 			case "project_tb":
-				$this->_get_project_tb($arr);
-				break;
 			case "impl_tb":
-				$this->_get_impl_tb($arr);
+			case 'task_toolbar' :
+				$fun = "_get_".$data['name'];
+				$this->$fun($arr);
 				break;
 
 			case "parts_tb":
-				$this->_parts_tb($arr);
-				break;
-
 			case "co_table":
-				$this->_co_table($arr);
-				break;
-
 			case "proj_table":
-				$this->_proj_table($arr);
-				break;
-
 			case "parts_table":
-				$this->_parts_table($arr);
-				break;
-
 			case "files_tb":
-				$this->_files_tb($arr);
-				break;
-
 			case "files_table":
-				$this->_files_table($arr);
-				break;
-
 			case "bills_tb":
-				$this->_bills_tb($arr);
-				break;
-
 			case "bills_table":
-				$this->_bills_table($arr);
-				break;
-
 			case "hrs_table":
-				$this->_hrs_table($arr);
+			case "other_calls":
+				$fun = "_".$data['name'];
+				$this->$fun($arr);
 				break;
 
 			case "add_clauses":
-				return PROP_IGNORE;
-
-				$has_work_time = $arr["obj_inst"]->has_work_time();
-				$data["options"] = array(
-					"status" => t("Aktiivne"),
-					"is_done" => t("Tehtud"),
-					"is_personal" => t("Isiklik"),
-					"send_bill" => t("Arvele"),
-//					"is_work" => t("T&ouml;&ouml;aeg"),
-				);
-				$data["value"] = array(
-					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
-					"is_done" => $arr["obj_inst"]->prop("is_done") ? 1 : 0,
-					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
-					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
-//					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
-				);
-				if(!$has_work_time)
-				{
-					$data["options"]["is_work"] = t("T&ouml;&ouml;aeg");
-				}
-				break;
-
 			case "is_done":
 			case "status":
 			case "is_personal":
-//			case "send_bill":
 			case "time_guess":
 			case "time_real":
 			case "time_to_cust":
@@ -499,12 +435,9 @@ class crm_call extends task
 			case "deal_price":
 			case "deal_has_tax":
 			case "promoter":
+			case "project":
+			case "customer":
 				return PROP_IGNORE;
-
-			case "other_calls":
-				$this->_other_calls($arr);
-				break;
-
 			case "name":
 				if($this->mail_data)
 				{
@@ -533,114 +466,6 @@ class crm_call extends task
 				}
 				break;
 
-			case "project":
-				return PROP_IGNORE;
-				$nms = array();
-				if ($this->can("view",$arr["request"]["alias_to_org"]))
-				{
-					$ol = new object_list(array(
-						"class_id" => CL_PROJECT,
-						"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["request"]["alias_to_org"],
-						"lang_id" => array(),
-						"site_id" => array()
-					));
-				}
-				else
-				if (is_object($arr["obj_inst"]))
-				{
-					if($this->can("view", $arr["obj_inst"]->prop("customer")))
-					{
-						$ol = new object_list(array(
-							"class_id" => CL_PROJECT,
-							"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["obj_inst"]->prop("customer"),
-							"lang_id" => array(),
-							"site_id" => array()
-						));
-						$nms = $ol->names();
-					}
-					else
-					{
-						$nms = array();
-					}
-				}
-				else
-				{
-					$i = get_instance(CL_CRM_COMPANY);
-					$prj = $i->get_my_projects();
-					if (!count($prj))
-					{
-						$ol = new object_list();
-					}
-					else
-					{
-						$ol = new object_list(array("oid" => $prj));
-					}
-					$nms = $ol->names();
-				}
-
-				$data["options"] = array("" => "") + $nms;
-
-				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
-				{
-					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
-					{
-						$data["options"][$c->prop("to")] = $c->prop("to.name");
-					}
-				}
-
-				if ($arr["request"]["set_proj"])
-				{
-					$data["value"] = $arr["request"]["set_proj"];
-				}
-
-				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
-				{
-					$tmp = obj($data["value"]);
-					$data["options"][$tmp->id()] = $tmp->name();
-				}
-				asort($data["options"]);
-				break;
-
-			case "customer":
-				return PROP_IGNORE;
-				$i = get_instance(CL_CRM_COMPANY);
-				$cst = $i->get_my_customers();
-				if (!count($cst))
-				{
-					$data["options"] = array("" => "");
-				}
-				else
-				{
-					$ol = new object_list(array("oid" => $cst));
-					$data["options"] = array("" => "") + $ol->names();
-				}
-				if ($this->can("view", $arr["request"]["alias_to_org"]))
-				{
-					$ao = obj($arr["request"]["alias_to_org"]);
-					if ($ao->class_id() == CL_CRM_PERSON)
-					{
-						$u = get_instance(CL_USER);
-						$data["value"] = $u->get_company_for_person($ao->id());
-					}
-					else
-					{
-						$data["value"] = $arr["request"]["alias_to_org"];
-					}
-				}
-
-				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
-				{
-					$tmp = obj($data["value"]);
-					$data["options"][$tmp->id()] = $tmp->name();
-				}
-
-				asort($data["options"]);
-				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
-				{
-					$arr["obj_inst"]->set_prop("customer", $data["value"]);
-				}
-				$data["onchange"] = "upd_proj_list()";
-				break;
 
 			case "start1":
 			case "end":
@@ -670,45 +495,6 @@ class crm_call extends task
 				}
 				break;
 
-			case 'task_toolbar' :
-			{
-				$tb = &$data['toolbar'];
-				$tb->add_button(array(
-					'name' => 'del',
-					'img' => 'delete.gif',
-					'tooltip' => t('Kustuta valitud'),
-					'action' => 'submit_delete_participants_from_calendar',
-				));
-
-				$tb->add_separator();
-
-				$tb->add_button(array(
-					'name' => 'Search',
-					'img' => 'search.gif',
-					'tooltip' => t('Otsi'),
-					'url' => aw_url_change_var(array(
-						'show_search' => 1,
-					)),
-				));
-
-				$tb->add_button(array(
-					'name' => 'save',
-					'img' => 'save.gif',
-					'tooltip' => t('Salvesta'),
-					"action" => "save_participant_search_results"
-				));
-
-				$tb->add_button(array(
-					'name' => 'csv',
-					'img' => 'ftype_xls.gif',
-					'tooltip' => 'CSV',
-					"url" => aw_url_change_var("get_csv_file", 1)
-				));
-
-				$this->return_url=aw_global_get('REQUEST_URI');
-				break;
-			}
-
 			case "search_contact_company":
 			case "search_contact_firstname":
 			case "search_contact_lastname":
@@ -737,31 +523,17 @@ class crm_call extends task
 			case "hrs_table":
 				$this->save_add_clauses($arr);
 				break;
-			case "add_clauses":
-					return PROP_IGNORE;
-
-				$arr["obj_inst"]->set_status($data["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
-				$arr["obj_inst"]->set_prop("is_done", $data["value"]["is_done"] ? 8 : 0);
-				$arr["obj_inst"]->set_prop("is_personal", $data["value"]["is_personal"] ? 1 : 0);
-//				$arr["obj_inst"]->set_prop("send_bill", $data["value"]["send_bill"] ? 1 : 0);
-//				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
-				if($data["value"]["is_work"])
-				{
-					$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"),
-					"time_to_cust" => $arr["obj_inst"]->prop("time_to_cust"));
-					$arr["obj_inst"]->set_primary_row($rowdata);
-				}
-
-				break;
 			case "parts_table":
 				$this->save_parts_table($arr);
 				break;
 			case "is_done":
 			case "status":
 			case "is_personal":
-//			case "send_bill":
 			case "is_work":
+			case "add_clauses":
 			case "promoter":
+			case "customer":
+			case "project":
 				return PROP_IGNORE;
 
 			case "new_call_date":
@@ -823,10 +595,6 @@ class crm_call extends task
 				}
 				break;
 
-			case "customer":
-			case "project":
-				return PROP_IGNORE;
-
 			case "end":
 				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($data["value"]))
 				{
@@ -872,142 +640,6 @@ class crm_call extends task
 			}
 		}
 		return PROP_OK;
-	}
-
-/*
-	function callback_post_save($arr)
-	{	//the person who added the task will be a participant, whether he likes it
-		//or not
-		if($arr['new'])
-		{
-			//
-			$user = get_instance(CL_USER);
-			$person = new object($user->get_current_person());
-			$person->connect(array(
-				'reltype' => 'RELTYPE_PERSON_CALL',
-				'to' => $arr['obj_inst'],
-			));
-		}
-
-		foreach(explode(",", $_POST["participants_h"]) as $person)
-		{
-			if ($this->can("view", $person))
-			{
-				$this->add_participant($arr["obj_inst"], obj($person));
-			}
-		}
-
-		$pl = get_instance(CL_PLANNER);
-		$pl->post_submit_event($arr["obj_inst"]);
-		if(!empty($arr['new']))
-		{
-			$this->add_participant($arr["obj_inst"], get_current_person());
-		}
-
-		if ($this->can("view", $_POST["orderer_h"]))
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $_POST["orderer_h"],
-				"type" => "RELTYPE_CUSTOMER"
-			));
-			$arr["obj_inst"]->set_prop("customer" , $_POST["orderer_h"]);
-			$arr["obj_inst"]->save();
-		}
-		if ($_POST["project_h"] > 0)
-		{
-			foreach(explode(",", $_POST["project_h"]) as $proj)
-			{
-				$arr["obj_inst"]->connect(array(
-					"to" => $proj,
-					"type" => "RELTYPE_PROJECT"
-				));
-				$arr["obj_inst"]->create_brother($proj);
-			}
-		}
-		if ($_POST["files_h"] > 0)
-		{
-			foreach(explode(",", $_POST["files_h"]) as $proj)
-			{
-				$arr["obj_inst"]->connect(array(
-					"to" => $proj,
-					"type" => "RELTYPE_FILE"
-				));
-			}
-		}
-
-		if($_SESSION["add_to_task"])
-		{
-			if(is_oid($_SESSION["add_to_task"]["project"]))
-			{
-				 $arr["obj_inst"]->connect(array(
-					"to" => $_SESSION["add_to_task"]["project"],
-					"type" => "RELTYPE_PROJECT"
-				));
-			}
-			if(is_oid($_SESSION["add_to_task"]["customer"]))
-			{
-				$arr["obj_inst"]->connect(array(
-					"to" => $_SESSION["add_to_task"]["customer"],
-					"type" => "RELTYPE_CUSTOMER"
-				));
-			}
-			if(is_oid($_SESSION["add_to_task"]["impl"]))
-			{
-				$this->add_participant($arr["obj_inst"], obj($_SESSION["add_to_task"]["impl"]));
-			}
-			unset($_SESSION["add_to_task"]);
-		}
-
-	}
-*/
-
-	function stopper_autocomplete($requester, $params)
-	{
-		switch($requester)
-		{
-			case "part":
-				$l = new object_list(array(
-					"class_id" => CL_CRM_PERSON,
-				));
-				foreach($l->arr() as $obj)
-				{
-					$ret[$obj->id()] = $obj->name();
-				}
-			break;
-			case "project":
-
-				if(strlen($params["part"]))
-				{
-					$parts = split(",", $params["part"]);
-
-					$c = new connection();
-					$conns = $c->find(array(
-						"from.class_id" => CL_PROJECT,
-						"to" => $parts,
-					));
-					foreach($conns as $conn)
-					{
-						$p = obj($conn["from"]);
-						$ret[$p->id()] = $p->name();
-					}
-				}
-				else
-				{
-					$l = new object_list(array(
-						"class_id" => CL_PROJECT,
-					));
-					foreach($l->arr() as $obj)
-					{
-						$ret[$obj->id()] = $obj->name();
-					}
-
-				}
-			break;
-			default:
-				$ret = array();
-				break;
-		}
-		return $ret;
 	}
 
 	function handle_stopper_stop($arr)
@@ -1070,47 +702,6 @@ class crm_call extends task
 		$o->save();
 	}
 
-	function gen_stopper_addon($arr)
-	{
-		$props = array(
-			array(
-				"name" => "name",
-				"type" => "textbox",
-				"caption" => t("Nimi"),
-			),
-			array(
-				"name" => "part",
-				"type" => "textbox",
-				"caption" => t("Osaleja"),
-				"autocomplete" => true,
-			),
-			array(
-				"name" => "project",
-				"type" => "textbox",
-				"caption" => t("Projekt"),
-				"autocomplete" => true,
-			),
-			array(
-				"name" => "isdone",
-				"type" => "checkbox",
-				"caption" => t("Tehtud"),
-				"ch_value" => 1,
-				"value" => 1,
-			),
-			array(
-				"name" => "tobill",
-				"type" => "checkbox",
-				"caption" => t("Arvele"),
-			),
-			array(
-				"name" => "desc",
-				"type" => "textarea",
-				"caption" => t("Kirjeldus"),
-			),
-		);
-		return $props;
-	}
-
 	function add_participant($task, $person)
 	{
 		$pl = get_instance(CL_PLANNER);
@@ -1130,51 +721,6 @@ class crm_call extends task
 	{
 		aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 		return parent::new_change($arr);
-	}
-
-	/**
-		@attrib name=search_contacts
-	**/
-	function search_contacts($arr)
-	{
-		return $this->mk_my_orb('change',array(
-				'id' => $arr['id'],
-				'group' => $arr['group'],
-				'search_contact_firstname' => $arr['search_contact_firstname'],
-				'search_contact_lastname' => $arr['search_contact_lastname'],
-				'search_contact_code' => $arr['search_contact_code'],
-				'search_contact_company' => $arr['search_contact_company'],
-				"return_url" => $arr["return_url"]
-			),
-			$arr['class']
-		);
-	}
-
-	/**
-
-		@attrib name=save_participant_search_results
-
-	**/
-	function save_participant_search_results($arr)
-	{
-		$p = get_instance(CL_PLANNER);
-		return $p->save_participant_search_results($arr);
-	}
-
-	/**
-
-      @attrib name=submit_delete_participants_from_calendar
-      @param id required type=int acl=view
-
-	**/
-	function submit_delete_participants_from_calendar($arr)
-	{
-		post_message_with_param(
-			MSG_MEETING_DELETE_PARTICIPANTS,
-			CL_CRM_MEETING,
-			&$arr
-		);
-		return $arr['post_ru'];
 	}
 
 	function callback_mod_reforb($arr)
@@ -1306,125 +852,7 @@ EOS;
 		}
 		$t->set_default_sortby("when");
 	}
-/*
-	function callback_pre_save($arr)
-	{
-		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
-		$hrs = floor($len / 900) / 4;
 
-		// write length to time fields if empty
-		if ($arr["obj_inst"]->prop("time_to_cust") == "")
-		{
-			$arr["obj_inst"]->set_prop("time_to_cust", $hrs);
-		}
-		if ($arr["request"]["set_resource"] != "")
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["set_resource"],
-				"type" => "RELTYPE_RESOURCE"
-			));
-		}
-
-		if ($arr["obj_inst"]->prop("time_real") == "")
-		{
-			$arr["obj_inst"]->set_prop("time_real", $hrs);
-		}
-
-		if ($arr["request"]["set_pred"] != "")
-		{
-			$pv = $arr["obj_inst"]->prop("predicates");
-			if (!is_array($pv) && is_oid($pv))
-			{
-				$pv = array($pv => $pv);
-			}
-			else
-			if (!is_array($pv) && !is_oid($pv))
-			{
-				$pv = array();
-			}
-			$pv[$arr["request"]["set_pred"]] = $arr["request"]["set_pred"];
-			$arr["obj_inst"]->set_prop("predicates", $arr["request"]["set_pred"]);
-		}
-	}
-
-	function _hrs_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$t->define_field(array(
-			"name" => "time_guess",
-			"caption" => t("Prognoositav tundide arv"),
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "time_real",
-			"caption" => t("Tegelik tundide arv"),
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "time_to_cust",
-			"caption" => t("Tundide arv kliendile"),
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "bill_no",
-			"caption" => t("Arve number"),
-			"align" => "center"
-		));
-
-		// small conversion - if set, create a relation instead and clear, so that we can have multiple
-		if ($this->can("view", $arr["obj_inst"]->prop("bill_no") ))
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $arr["obj_inst"]->prop("bill_no"),
-				"type" => "RELTYPE_BILL"
-			));
-			$arr["obj_inst"]->set_prop("bill_no", "");
-			$arr["obj_inst"]->save();
-		}
-
-		$bno = "";
-		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
-		{
-			$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL"));
-			if (!count($cs))
-			{
-				$ol = new object_list();
-			}
-			else
-			{
-				$ol = new object_list($cs);
-			}
-			$bno = html::obj_change_url($ol->arr());
-		}
-
-		if ($bno == "" && is_object($arr["obj_inst"]) && !$arr["new"])
-		{
-			$bno = html::href(array(
-				"url" => $this->mk_my_orb("create_bill_from_task", array("id" => $arr["obj_inst"]->id(),"post_ru" => get_ru())),
-				"caption" => t("Loo uus arve")
-			));
-		}
-
-		$t->define_data(array(
-			"time_guess" => html::textbox(array(
-				"name" => "time_guess",
-				"value" => $arr["obj_inst"]->prop("time_guess"),
-				"size" => 5
-			)),
-			"time_real" => html::textbox(array(
-				"name" => "time_real",
-				"value" => $arr["obj_inst"]->prop("time_real"),
-				"size" => 5
-			)),
-			"time_to_cust" => html::textbox(array(
-				"name" => "time_to_cust",
-				"value" => $arr["obj_inst"]->prop("time_to_cust"),
-				"size" => 5
-			)),
-			"bill_no" => $bno,
-		));
-	}
-*/
 	/**
 		@attrib name=delete_rels
 	**/
@@ -1499,15 +927,6 @@ EOS;
 			}
 		}
 		return $arr["post_ru"];
-	}
-
-	function do_db_upgrade($tbl, $field, $q, $err)
-	{
-		if ("planner" === $tbl)
-		{
-			$i = get_instance(CL_TASK);
-			return $i->do_db_upgrade($tbl, $field);
-		}
 	}
 
 	private function get_new_parent($parent)
@@ -1768,7 +1187,7 @@ EOS;
 			$this_o->end();
 
 			$application = automatweb::$request->get_application();
-			$role = $application->get_current_user_role();
+//			$role = $application->get_current_user_role();
 			if ($application->is_a(CL_CRM_SALES) and crm_sales_obj::ROLE_TELEMARKETING_SALESMAN === $role)
 			{ // return to calls list
 				$r = $arr["return_url"];
@@ -1784,7 +1203,7 @@ EOS;
 		{
 			$this_o = new object($arr["id"]);
 			$application = automatweb::$request->get_application();
-			$role = $application->get_current_user_role();
+//			$role = $application->get_current_user_role();
 			if ($application->is_a(CL_CRM_SALES) and $this_o->prop("real_duration") < 1 and crm_call_obj::RESULT_PRESENTATION == $this_o->prop("result"))
 			{
 				$result_task = new object($this_o->prop("result_task"));
