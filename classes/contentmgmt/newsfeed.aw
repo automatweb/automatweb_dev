@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.34 2009/09/21 11:08:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.35 2009/09/21 15:45:36 markop Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -445,7 +445,7 @@ class newsfeed extends class_base
 						foreach($fields as $prop=>$f)
 						{
 							$props[$prop] = $o->trans_get_val($prop);
-							$al->parse_oo_aliases($oid,$props[$prop]);
+							$al->parse_oo_aliases($oid,$props[$prop],array("data" => array("rss" => 1)));
 							$di->parse_wiki(& $props[$prop]);
 						}
 					}

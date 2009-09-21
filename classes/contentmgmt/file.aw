@@ -696,7 +696,7 @@ class file extends class_base
 			};
 		}
 		else
-		if ($fi["showal"] == 1)
+		if ($fi["showal"] == 1 && empty($args["data"]["rss"]))
 		{
 			$fi = $this->get_file_by_id($alias["target"], true);
 			// n2itame kohe
