@@ -11,27 +11,6 @@
 			</function>
 		</action>
 
-		<action name="search_contacts">
-			<function name="search_contacts">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="save_participant_search_results">
-			<function name="save_participant_search_results">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="delete_rels">
-			<function name="delete_rels">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="quick_add" all_args="1">
 			<function name="quick_add">
 				<arguments>
