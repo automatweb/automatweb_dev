@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.120 2009/09/17 11:15:18 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.121 2009/09/21 12:53:39 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -5216,7 +5216,8 @@ class otto_import extends class_base implements warehouse_import_if
 					$picture_found = $this->get_images_from_otto($arr);
 					break;
 				case "heine":
-					$picture_found = $this->read_img_from_heine($arr);
+				//	$picture_found = $this->read_img_from_heine($arr);
+					$picture_found = $this->get_images_from_heine($arr);
 					break;
 				case "schwab":
 					$picture_found = $this->read_img_from_schwab($arr);
@@ -6023,12 +6024,8 @@ return false;
 		return true;
 	}
 
-	function read_img_from_heine($arr)
+	function get_images_from_heine($arr)
 	{
-		// This heine import works somewhat weird way, will look at it later
-		return false;
-
-
 		$pcode = $arr['pcode'];
 		$import_obj = $arr['import_obj'];
 		$product_page_urls = array();
@@ -6036,7 +6033,8 @@ return false;
 		// no spaces in product code ! --dragut
 		$pcode = str_replace(" ", "", $pcode);
 
-	//	$url = "http://search.heine.de/Heine/Search.ff?query=".$pcode;
+		$img_baseurl = "http://image01.otto.de/pool/format_hv_ea_1/";
+
 		$url = "http://www.heine.de/is-bin/INTERSHOP.enfinity/WFS/Heine-HeineDe-Site/de_DE/-/EUR/ViewProductSearch-Search;sid=FPzpHV5oa6GkHRTr4Hn03ws4Wg19UWgvT-9O9HYx0YFE1ZEVxF5O9HYxlOi83Q==?query=$pcode&host=www.heine.de#lmPromo=la,1,hk,sh_home,fl,sh_home_header_suchen";
 		echo "[ HEINE ] Loading <a href=\"$url\">page</a> content ... ";
 		flush();
@@ -6045,146 +6043,34 @@ return false;
 		echo "[ok]<br />\n";
 		flush();
 
-		if (preg_match("/top\.location\.href\=\"(.*)\";/imsU", $fc, $mt))
+		$imgs = array();
+		if (preg_match_all("/.*\.SKU = \"".substr($pcode, 0, 6).".*mainImages\.add\(\"(.*)\"\).*;$/Um", $fc, $mt))
 		{
-			$url = $mt[1];
-			echo "[ HEINE ] getting redirect <a href='$url'>url</a> to product page ... ";
-			flush();
+			$imgs = array_unique($mt[1]);
+			foreach ($imgs as $k => $v)
+			{
+				$imgs[$k] = $img_baseurl.$v;
+			}
 
-		//	$fc = $this->file_get_contents($url);
+			echo "[ HEINE ] Found product images:<br />\n";
+			foreach ($imgs as $img)
+			{
+				echo "[ HEINE ] * <a href=\"".$img."\">".$img."</a><br />\n";
+			}
 			$product_page_urls[] = $url;
 			echo "[ok]<br />\n";
 			flush();
 		}
 		else
 		{
-			// v6imalik, et leiti mitu toodet, seega on meil neid k6iki vaja, et sealt pildid kokku otsida ...
-			$pattern = "/\"".preg_quote("http://www.heine.de/is-bin/INTERSHOP.enfinity/WFS/Heine-HeineDe-Site/de_DE/-/EUR/SH_ViewProduct-ArticleNo", "/").".*\"/imsU";
-			preg_match_all($pattern, $fc, $mt, PREG_PATTERN_ORDER);
-			foreach ($mt[0] as $url)
-			{
-				$url = str_replace("\"", "", $url);
-				$url = str_replace(" ", "%20", $url);
-				if ( array_search($url, $product_page_urls) === false )
-				{
-					echo "[ HEINE ] getting product page <a href='$url'>url</a> ... ";
-					$product_page_urls[] = $url;
-					echo "[ok]<br />\n";
-					flush();
-				}
-			}
+			echo "[ HEINE ] For some reason it wasn't possible to get picture from the page found <br />\n";
 		}
 
-		$found_image = false;
-		foreach ($product_page_urls as $url)
+		if (empty($imgs))
 		{
-			$fc = $this->file_get_contents($url);
-
-			if (strpos($fc, "Sie sind auf der Suche nach etwas Besonderem?") !== false)
-			{
-				echo "[ HEINE ] Can't find product for code $pcode from page <a href=\"$url\">$url</a><br />\n";
-				flush();
-				continue;
-			}
-
-
-			// connection image ... xxx to fix!
-			$connection_image = '';
-			if (preg_match("/ImageBundle = (\d+).jpg/", $fc, $mt))
-			{
-				$connection_image = $mt[1];
-				echo "[ HEINE ] salvestan seose pildi $connection_image ";
-				echo "[ <a href=\"http://image01.otto.de/pool/format_hv_ds_b/".$connection_image.".jpg\">v&auml;ike</a> ";
-				echo "| <a href=\"http://image01.otto.de/pool/format_hv_ds_a/".$connection_image.".jpg\">suur</a> ]<br />\n";
-				$image_ok = $this->get_image(array(
-					'source' => 'http://image01.otto.de/pool/format_hv_ds_b/'.$connection_image.'.jpg',
-					'format' => 2,
-					'otto_import' => $import_obj,
-					'debug' => true
-				));
-				if ($image_ok)
-				{
-					// download the big version of the image too:
-					$this->get_image(array(
-						'source' => 'http://image01.otto.de/pool/format_hv_ds_a/'.$connection_image.'.jpg',
-						'format' => 1,
-						'otto_import' => $import_obj,
-						'debug' => true
-					));
-				}
-			}
-
-
-			$patterns = array(
-				"/bild\[bildZahl\+\+\]\=\"(\d+).jpg\";/imsU",
-			);
-
-			foreach ($patterns as $pattern)
-			{
-				if (preg_match($pattern, $fc, $mt))
-				{
-					break;
-				}
-			}
-
-			if (empty($mt))
-			{
-				continue;
-			}
-
-			$first_im = $mt[1];
-			echo "[ HEINE ] salvestan pildi $first_im [ <a href=\"http://image01.otto.de/pool/format_hv_ds_b/".$first_im.".jpg\">v&auml;ike</a> | <a href=\"http://image01.otto.de/pool/format_hv_ds_a/".$first_im.".jpg\">suur</a> ]<br />\n";
-			$image_ok = $this->get_image(array(
-				'source' => 'http://image01.otto.de/pool/format_hv_ds_b/'.$first_im.'.jpg',
-				'format' => 2,
-				'otto_import' => $import_obj,
-				'debug' => true
-			));
-			if ($image_ok)
-			{
-				// download the big version of the image too:
-				$this->get_image(array(
-					'source' => 'http://image01.otto.de/pool/format_hv_ds_a/'.$first_im.'.jpg',
-					'format' => 1,
-					'otto_import' => $import_obj,
-					'debug' => true
-				));
-			}
-
-			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
-			if (!$imnr)
-			{
-				echo "[ HEINE ] lisan uue pildi \"".$first_im."\" tootele \"".$pcode."\" piltide andmebaasi <br />\n";
-				flush();
-
-				$q = ("
-					INSERT INTO
-						otto_prod_img(pcode, nr,imnr, server_id, conn_img)
-						values('$pcode','1','$first_im', 5, '$connection_image')
-				");
-
-				$this->db_query($q);
-				$this->added_images[] = $first_im;
-			}
-			else
-			{
-				$this->db_query("
-					update
-						otto_prod_img
-					set
-						conn_img = '".$connection_image."'
-					where
-						imnr = '".$first_im."' and
-						pcode = '".$pcode."'
-				");
-				echo "[ HEINE ] pilt \"". $first_im ."\" tootele \"". $pcode ."\" on piltide andmebaasis juba olemas <br />\n";
-			}
-			$found_image = true;
+			return false;
 		}
-
-		// if images has been found, it should return true, false othervise
-		return $found_image;
-
+		return $imgs;
 	}
 
 	function file_get_contents($url)
