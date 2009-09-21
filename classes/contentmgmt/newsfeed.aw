@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.33 2009/09/17 15:45:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.34 2009/09/21 11:08:08 markop Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -499,7 +499,7 @@ class newsfeed extends class_base
 					"author" => $o->prop("author"),
 					"source" => $source,
 //     				"art_lead" => $art_lead,
-					"description" => str_replace("& " , "&amp; " , str_replace("&&" , "&amp;&amp" , $description)),
+					"description" => str_replace("& " , "&amp; " , str_replace("&&" , "&amp;&amp;" , $description)),
 					"guid" => $baseurl . "/" . $oid,
 					"pubDate" => date("r",$mod_date),
 				);	
