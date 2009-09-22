@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.121 2009/09/21 12:53:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.122 2009/09/22 13:59:15 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -5524,6 +5524,7 @@ class otto_import extends class_base implements warehouse_import_if
 		$pcode = substr($arr['pcode'], 0, 6);
 		$import_obj = $arr['import_obj'];
 		$start_time = $arr['start_time'];
+
 		echo "[ OTTO ] Searching images for product code <strong>".$pcode." </strong>(code length: ".strlen($pcode)." / full code length: ".strlen($full_pcode).")<br />\n";
 		$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
 
@@ -5539,31 +5540,43 @@ class otto_import extends class_base implements warehouse_import_if
 
 		if (strpos($html,"Leider konnten wir") !== false)
 		{
-			echo "[ OTTO ] Can't find an product for <b>$pcode</b> from otto.de, return false<br>\n";
+			echo "[ OTTO ] Can't find a product for <b>$pcode</b> from otto.de, return false<br>\n";
 			return false;
 		}
 		else
 		{
 			$o_html = $html;
 
-			// just for not, this kind of search happens when one searches for a product code
-			// it seems, that if the search is made by string (for example 'bikini'), then there won't be such
-			// javascript transition page and it is shown just a list of products, so in that case it should be handled
-			// differently. But maybe there won't be such a case and therefore let it be for now.
+			// If it finds only one product,then there will be some JS transition page which directs to product detailed view
 			preg_match_all("/function goon\(\) \{(.*)\}/imsU", $html, $mt, PREG_PATTERN_ORDER);
 			$js_code = $mt[1][0];
-			
-			$pattern = "/\" \+ encodeURIComponent\(\"(.*)\"\)/U";
-
-			preg_match_all($pattern, $js_code, $m);
-			foreach ($m[0] as $k => $v)
+			if (!empty($mt[1]))
 			{
-			        $js_code = str_replace($m[0][$k], urlencode($m[1][$k]).'"', $js_code);
-			}
-			$pattern = "/\"(.*)\"/U";
-			preg_match_all($pattern, $js_code, $m);
+				$pattern = "/\" \+ encodeURIComponent\(\"(.*)\"\)/U";
 
-			$urld[] = implode('', $m[1]);
+				preg_match_all($pattern, $js_code, $m);
+				foreach ($m[0] as $k => $v)
+				{
+					$js_code = str_replace($m[0][$k], urlencode($m[1][$k]).'"', $js_code);
+				}
+				$pattern = "/\"(.*)\"/U";
+				preg_match_all($pattern, $js_code, $m);
+
+				$urld[] = implode('', $m[1]);
+			}
+			else
+			{
+				echo "[ OTTO ] No transition page, so lets get the products urls from products list<br />\n";
+				if (preg_match_all("/gotoSearchArticle\('(.*)&FromSearch=true'\)/mU", $html, $m))
+				{
+					echo "[ OTTO ] Found ".count($m[1])." products (urls)<br />\n";
+					$urld[] = $m[1][0];
+				}
+				else
+				{
+					echo "[ OTTO ] Found nothing! <br />\n";
+				}
+			}
 
 			foreach($urld as $url)
 			{
@@ -6052,24 +6065,39 @@ return false;
 				$imgs[$k] = $img_baseurl.$v;
 			}
 
-			echo "[ HEINE ] Found product images:<br />\n";
-			foreach ($imgs as $img)
-			{
-				echo "[ HEINE ] * <a href=\"".$img."\">".$img."</a><br />\n";
-			}
-			$product_page_urls[] = $url;
-			echo "[ok]<br />\n";
-			flush();
 		}
 		else
 		{
-			echo "[ HEINE ] For some reason it wasn't possible to get picture from the page found <br />\n";
+			// there might be case where there isn't mainImage set for this variation, then it seems, that it will use some style mainImage
+			// and it seems, that the correct image can be optained from the line which will match to the following regexp, but it feels so fragile:( --dragut@22.09.2009
+			if(preg_match_all("/^style.*AKL.*style\.mainImages\.add\(\"(.*\.jpg\")\)/Um", $fc, $mt))
+			{
+				echo "[ HEINE ] There is no image for this variation in heine.de, so I try to be smart here and take the image from style <br />\n";
+				$imgs[] = $img_baseurl.$mt[1][0];
+			}
+			else
+			{
+
+				echo "[ HEINE ] For some reason it wasn't possible to get picture from the page found <br />\n";
+			}
 		}
 
+		// if there are no images despite all my effort, then just quit:
 		if (empty($imgs))
 		{
 			return false;
 		}
+
+		// if some pictures were found, then display them with urls:
+		echo "[ HEINE ] Found product images:<br />\n";
+		foreach ($imgs as $img)
+		{
+			echo "[ HEINE ] * <a href=\"".$img."\">".$img."</a><br />\n";
+		}
+		$product_page_urls[] = $url;
+		echo "[ok]<br />\n";
+		flush();
+
 		return $imgs;
 	}
 
