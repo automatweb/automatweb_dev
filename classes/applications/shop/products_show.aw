@@ -308,12 +308,12 @@ enter_function("products_show::start");
 		if($products->count() % $per_page) $pages++;
 		if($pages > 1)
 		{
-			if($page > 2)
+			if($page > 0)
 			{
 				$this->vars(array("pager_url" => aw_url_change_var("page", $page - 1)));
 				$this->vars(array("PAGE_PREV" => $this->parse("PAGE_PREV")));
 			}
-			if($page < ($pages-3))
+			if($page < ($pages-1))
 			{
 				$this->vars(array("pager_url" => aw_url_change_var("page", $page + 1)));
 				$this->vars(array("PAGE_NEXT" => $this->parse("PAGE_NEXT")));
@@ -325,6 +325,7 @@ enter_function("products_show::start");
 			$y = 0;
 			if($x+$y > 1)
 			{
+				$this->vars(array("pager_url" => aw_url_change_var("page", 0)));
 				$page_str.= $this->parse("PAGE_SEP");
 			}
 			while($y < 5)
@@ -348,8 +349,9 @@ enter_function("products_show::start");
 				$y++;
 			}
 
-			if($x+$y + 1 < $pages)
+			if($x+$y < $pages)
 			{
+				$this->vars(array("pager_url" => aw_url_change_var("page", ($pages-1))));
 				$page_str.= $this->parse("PAGE_SEP");
 			}
 

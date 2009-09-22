@@ -343,14 +343,29 @@ class shop_sell_order extends class_base
 				$prod_data["color"] = $row->meta("product_color");
 				$prod_data["name"] = $row->prop("prod_name");
 				$prod_data["packet_name"] = $row->prop("prod_name");
-				if(!$prod_data["sum"])
-				{
-					$prod_data["sum"] = t("Hinnakirja<br>alusel");
-				}
+//				if(!$prod_data["sum"])
+//				{
+//					$prod_data["sum"] = t("Hinnakirja<br>alusel");
+//				}
 			}
 			$different_products++;
 			$this->vars($row_data);
 			$this->vars($prod_data);
+			foreach($prod_data as $key => $val)
+			{
+				if($this->is_template("HAS_".strtoupper($key)))
+				{
+					if($val)
+					{
+						$this->vars(array("HAS_".strtoupper($key) => $this->parse("HAS_".strtoupper($key))));
+					}
+					else
+					{
+						$this->vars(array("HAS_".strtoupper($key) => ""));
+					}
+				}
+				
+			}
 			$rows.= $this->parse("ROW");
 
 
@@ -450,10 +465,8 @@ class shop_sell_order extends class_base
 				$this->vars(array("HAS_".strtoupper($key) => $this->parse("HAS_".strtoupper($key))));
 			}
 		}
-
 		return $this->parse();
 	}
-
 
 }
 

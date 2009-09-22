@@ -2776,19 +2776,15 @@ class shop_order_cart extends class_base
 			"product_packaging" => array(),
 		));
  
-			$self_validate_payment_types = $this->cart->prop("show_only_valid_payment_types") ? false : true;
-	                 $payment_types_params = array( 	 
-	                         "sum" => $this->cart_sum,
- 	                         "currency" => $oc->get_currency(), 
-	                         "product" => array(),
-	                         "product_packaging" => array(),
-	                         "validate" => !$self_validate_payment_types,
-	                 ); 	 
-	                 $asd = $oc->get_payment_types($payment_types_params);
-
-
-
-
+		$self_validate_payment_types = $this->cart->prop("show_only_valid_payment_types") ? false : true;
+		$payment_types_params = array( 	 
+			"sum" => $this->cart_sum,
+			"currency" => $oc->get_currency(), 
+			"product" => array(),
+			"product_packaging" => array(),
+			"validate" => !$self_validate_payment_types,
+		); 	 
+		$asd = $oc->get_payment_types($payment_types_params);
 
 		$method_params = array(
 			"product" =>  array_keys($prods["items"]),
@@ -2807,7 +2803,6 @@ class shop_order_cart extends class_base
 
 		$delivery_methods_object_list = $this->cart->delivery_methods($method_params);
 
-
 		foreach($asd->arr() as $a => $o)
 		{
 			$porn = 0;
@@ -2817,15 +2812,15 @@ class shop_order_cart extends class_base
 				"payment_checked" => (!empty($data["payment"]) && $data["payment"] == $a) || ($porn==0 && empty($data["payment"])) ? " checked='checked' " : " ",
 			));
 
-                         if($self_validate_payment_types) 	 
-	                         { 	 
-	                                 $payment.= $this->parse("PAYMENT".(is_oid($o->valid_conditions($payment_types_params)) ? "" : "_DISABLED")); 	 
-	                         } 	 
-	                         else 	 
-	                         {	 
- 	                                 $payment.= $this->parse("PAYMENT");
-					$porn++; 	 
-				}
+			if($self_validate_payment_types)
+			{
+				$payment.= $this->parse("PAYMENT".(is_oid($o->valid_conditions($payment_types_params)) ? "" : "_DISABLED")); 
+			}
+			else
+			{
+				$payment.= $this->parse("PAYMENT");
+				$porn++;
+			}
 			$condition = $o->valid_conditions(array(
 				"sum" => $this->cart_sum,
 				"currency" => $oc->get_currency(),

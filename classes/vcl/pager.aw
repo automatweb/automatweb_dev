@@ -34,12 +34,12 @@ class pager extends class_base
 		if($pages > 1)
 		{
 			$this->read_template("show.tpl");
-			if($page > 2)
+			if($page > 0)
 			{
 				$this->vars(array("pager_url" => aw_url_change_var("page", $page - 1)));
 				$this->vars(array("PAGE_PREV" => $this->parse("PAGE_PREV")));
 			}
-			if($page < ($pages-3))
+			if($page < ($pages-1))
 			{
 				$this->vars(array("pager_url" => aw_url_change_var("page", $page + 1)));
 				$this->vars(array("PAGE_NEXT" => $this->parse("PAGE_NEXT")));
@@ -51,6 +51,7 @@ class pager extends class_base
 			$y = 0;
 			if($x+$y > 1)
 			{
+				$this->vars(array("pager_url" => aw_url_change_var("page", 0)));
 				$page_str.= $this->parse("PAGE_SEP");
 			}
 			while($y < 5)
@@ -74,8 +75,9 @@ class pager extends class_base
 				$y++;
 			}
 
-			if($x+$y + 1 < $pages)
+			if($x+$y < $pages)
 			{
+				$this->vars(array("pager_url" => aw_url_change_var("page", ($pages-1))));
 				$page_str.= $this->parse("PAGE_SEP");
 			}
 
