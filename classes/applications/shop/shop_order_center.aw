@@ -2288,7 +2288,7 @@ class shop_order_center extends class_base
 				function set_sel_prop(property , value)
 				{
 					result = $('input[name^=sel]');
-					$.get('/automatweb/orb.aw?class=shop_order_center&id=".$arr["obj_inst"]->id()."action=ajax_set_product_show_property&' + property + '=' + value + '&' + result.serialize(), {
+					$.get('/automatweb/orb.aw?class=shop_order_center&id=".$arr["obj_inst"]->id()."&action=ajax_set_product_show_property&' + property + '=' + value + '&' + result.serialize(), {
 						}, function (html) {
 							reload_property('appearance_list');
 						}
