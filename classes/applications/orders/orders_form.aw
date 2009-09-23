@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.36 2009/09/10 13:00:53 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.36 2009/09/10 13:00:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.37 2009/09/23 12:09:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.37 2009/09/23 12:09:36 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -553,7 +553,7 @@ $is_saved = 1;
 			}
 			else
 			{
-				if(!$data["product_count"] || !$data["name"])
+				if(!$data["product_count"] || !$data["product_code"])
 				{
 					$is_saved = 0;
 				}

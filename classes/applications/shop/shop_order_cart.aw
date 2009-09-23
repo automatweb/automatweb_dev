@@ -91,6 +91,7 @@ class shop_order_cart extends class_base
 			"mobilephone" => t("Mobiil"),
 			"work" => t("T&ouml;&ouml;koht"),
 			"workexperience" => t("T&ouml;&ouml;staa"),
+			"wage" => t("T&ouml;&ouml;tasu"),
 			"profession" => t("Amet"),
 			"personalcode" => t("Isikukood"),
 		);
