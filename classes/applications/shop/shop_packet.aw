@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.33 2009/09/15 09:11:14 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.34 2009/09/23 09:16:28 dragut Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -829,8 +829,8 @@ class shop_packet extends class_base
 					$prod_sizes[] = "\"".$data["sizes"][$package]."\"";
 					$prod_prices[] = $data["prices"][$package];
 					$prod_ids[] = $package;
-					$prod_purveyances[] = "'Tarneinfo puudub'";
- 					$prod_purveyances_ids[] = $purveyances_stuff[$package] ? "\"".trim($purveyances_stuff[$package])."\"" : "\"\"";
+					$prod_purveyances[] = !empty($purveyances_stuff[$package]) ? '"'.$purveyances_stuff[$package]['comment'].'"' : '"'.t('Tarneinfo puudub').'"';
+ 					$prod_purveyances_ids[] = !empty($purveyances_stuff[$package]) ? "\"".trim($purveyances_stuff[$package]['code'])."\"" : "\"\"";
 				}
 			}
 
@@ -905,7 +905,11 @@ class shop_packet extends class_base
 				foreach($conns as $conn)
 				{
 					$o = obj($conn["from"]);
-					$ret[$packaging] = $o->prop("code");
+					$ret[$packaging] = array(
+						'name' => $o->name(),
+						'comment' => $o->comment(),
+						'code' => $o->prop("code")
+					);
 				}				
 
 			}
