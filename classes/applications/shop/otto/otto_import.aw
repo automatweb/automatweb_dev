@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.123 2009/09/24 11:55:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.124 2009/09/24 12:18:58 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -6865,8 +6865,10 @@ return false;
 			51/2(38		->	55
 			6(39)		->	60
 			61/2(40)	->	65
+			6 1/2 (40)	->	65
 			7(40		->	70
 			71/2(4		->	75
+			7 1/2 (4	->	75
 		*/
 		if(preg_match('/^[0-9 ]+(\/[0-9]+)? ?\([0-9]+/', $size))
 		{
