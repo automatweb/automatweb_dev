@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="otto_import" folder="www/automatweb_cvs/classes/applications/shop/otto" extends="class_base">
+	<class name="otto_import" folder="www/automatweb_dev/classes/applications/shop/otto" extends="class_base">
 		<action name="_delete_bubble_picture">
 			<function name="_delete_bubble_picture">
 				<arguments>
@@ -69,8 +69,23 @@
 		<action name="clear_discount_products">
 			<function name="clear_discount_products">
 				<arguments>
-					<optional name="id" />
-					<optional name="lang_id" />
+					<optional name="id" type="int" />
+					<optional name="lang_id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_products_amounts_import" nologin="1">
+			<function name="do_products_amounts_import">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_products_xml">
+			<function name="get_products_xml">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.124 2009/09/24 12:18:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.125 2009/09/25 11:48:13 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -6625,7 +6625,7 @@ return false;
 	}
 
 	/**
-		@attrib name=do_products_amounts_import
+		@attrib name=do_products_amounts_import nologin=1
 		@param id required type=int
 	**/
 	function do_products_amounts_import($arr)
