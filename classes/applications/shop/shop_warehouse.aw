@@ -11697,6 +11697,11 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 
+		$t->define_pageselector(array(
+			'type' => 'lb',
+			'records_per_page' => 10
+		));
+
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk"),
@@ -12375,6 +12380,11 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 	function _get_product_management_list($arr)
 	{
 		$tb = $arr["prop"]["vcl_inst"];
+
+		$tb->define_pageselector(array(
+			'type' => 'lb',
+			'records_per_page' => 10,
+		));
 
 		$tb->define_field(array(
 			"name" => "icon",
