@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.125 2009/09/25 11:48:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.126 2009/09/27 22:50:05 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -6687,7 +6687,7 @@ return false;
 
 		// Start import:
 		$lines = file(aw_ini_get('site_basedir').'/files/ASTAEXP.TXT');
-
+/*
 		$prods = new object_list(array(
 			'class_id' => CL_SHOP_PRODUCT
 		));
@@ -6695,7 +6695,7 @@ return false;
 		{
 			$codes[substr($prod->prop('code'), 0, 6)] = $prod;
 		}
-
+*/
 		// tarnija seostamiseks
 		$comps = new object_list(array(
 			'class_id' => CL_CRM_COMPANY,
@@ -6711,24 +6711,50 @@ return false;
 		));
 		$wh = $whs->count() > 0 ? $whs->begin() : false;
 
+		$prods = $this->db_query("
+			select
+				aw_shop_products.code as full_code,
+				aw_shop_products.aw_oid as aw_oid,
+				substring(aw_shop_products.code, 1, 6) as code
+			from
+				aw_shop_products left join objects on aw_shop_products.aw_oid = objects.oid
+			where
+				objects.status > 0 and
+				objects.lang_id = ".aw_global_get('lang_id')."
+		");
+		while ($row = $this->db_next())
+		{
+			$codes[$row['code']][] = $row;
+		}
+
 		foreach ($lines as $line)
 		{
 			$fields = explode(';', $line);
+
 			if (array_key_exists($fields[0], $codes))
 			{
-				// lets get sizes from the product
-				$prod = $codes[$fields[0]];
-				echo "product: ".$prod->name()." (".$prod->id().")<br />\n";
-				$packagings = $prod->get_packagings(array());
-				foreach ($packagings->arr() as $packaging)
+				// The catch here is, that sometimes there are several products in aw which share the same first 6 characters of product code
+				// but as the purveyance info should go to packaging object, then I take packagings from all the products found and update it
+				// in this way, no matter which product is actually in use and visible for users, there should be always up-to-date purveyance 
+				// info --dragut@28.09.2009
+				$packagings = array();
+				foreach ($codes[$fields[0]] as $data)
+				{
+					$prod = new object($data['aw_oid']);
+					echo "product: ".$prod->name()." ( OID: ".$prod->id()." )<br />\n";
+					$packagings += $prod->get_packagings()->arr();
+				}
+				flush();
+				foreach ($packagings as $packaging)
 				{
 					//	do_products_amounts_import_handle_size() handles different formes of sizes a'la S(127), 41/2(37), 56
 					$handled_code = $this->do_products_amounts_import_handle_size($packaging->prop('size'));
 					echo "-- Going to compare '".$handled_code."' with '".((int)($fields[1]))."' (".$fields[1].") - packaging id: ".$packaging->id()."<br />\n";
+					flush();
 					if ($handled_code === ((int)$fields[1]))
 					{
 						echo "----".$packaging->prop('size')." -- ".$fields[1]." - ".((int)$fields[1])."/ ".$fields[2]."<br />\n";
-						
+						flush();
 						$purvs = new object_list(array(
 							"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
 							"packaging" => $packaging->id(),
@@ -6792,7 +6818,7 @@ return false;
 						}
 						$purv->set_prop('code', $fields[2]);
 						$purv->save();
-					//	echo "-------- Updated purveyance for packaging ".$packaging->id().", set comment = ".$purv->comment().", set name = ".$purv->name()."<br />\n";
+						flush();	
 					}
 				}
 				$packagings = null;
@@ -6805,6 +6831,8 @@ return false;
 
 	function do_products_amounts_import_handle_size($size)
 	{
+		// Because the spaces in sizes a causing some trouble, then instead of fixing the patterns, lets remove the spaces when comparing:
+		$size = str_replace(' ', '', $size);
 		/*
 			American sizes must be decoded
 			8XL = 924
