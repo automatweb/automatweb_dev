@@ -66,15 +66,18 @@ enter_function("products_show::get_web_items");
 						$ol->add($products);
 					}
 					break;
-				case CL_SHOP_PACKER:
+				case CL_SHOP_PACKET:
 				default:
 					$filter = array(
 						"class_id" => CL_SHOP_PACKET,
 						"lang_id" => array(),
 						"site_id" => array(),
 						"CL_SHOP_PACKET.RELTYPE_CATEGORY" => $categories->ids(),
+						"status" => array(1 , 2),
 					);
+					aw_disable_acl();//kui keegi miskite x 6igustega tooteid tekitama hakkab, on p*****, kuid siia listi kuna tuleb tuhandeid tooteid, siis sitaks aega v6idab
 					$ol = new object_list($filter);
+					aw_restore_acl();
 					break;
 			}
 		}
@@ -100,7 +103,9 @@ exit_function("products_show::get_web_items");
 		{
 			return obj($this->prop("oc"));
 		}
-		$ol = new object_list(array("class_id" => CL_SHOP_ORDER_CENTER, "lang_id" => array(), "site_id" => array()));
+		$ol = new object_list(array(
+			"limit" => 1,
+			"class_id" => CL_SHOP_ORDER_CENTER, "lang_id" => array(), "site_id" => array()));
 
 		return $ol->begin();
 	}
@@ -130,13 +135,17 @@ enter_function("pll_lower_categories::get_web_items1");
 		$ot = new object_tree(array(
 			"parent" => $menu,
 			"class_id" => array(CL_MENU),
+
+			"limit" => 100,//ajutine, ära kommiti
 		));
 		$menus = $ot->ids();
 		if(sizeof($menus))
 		{
 			$categories = new object_list(array(
 				"class_id" => CL_SHOP_PRODUCT_CATEGORY,
-				"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY(CL_PRODUCTS_SHOW).parent" => $menus
+				"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY(CL_PRODUCTS_SHOW).parent" => $menus,
+
+			"limit" => 100,//ajutine, ära kommiti
 			));
 		}
 		else
@@ -205,6 +214,7 @@ exit_function("pll_lower_categories::get_web_items1");
 		$ol = new object_list(array(
 			"class_id" => CL_PRODUCTS_SHOW,
 			"CL_PRODUCTS_SHOW.RELTYPE_CATEGORY" => $cat,
+			"limit" => 1,
 		));
 		$ol = $ol->arr();
 		$o = reset($ol);

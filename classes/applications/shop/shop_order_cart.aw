@@ -2699,6 +2699,10 @@ class shop_order_cart extends class_base
 		//load_javascript('validationEngine.jquery.css');
 		$data = $this->cart->get_order_data();
 		$vars = array("ORDERER_DATA" => "");
+		if(!isset($this->oc))
+		{
+			$this->oc = $this->cart->get_oc();
+		}
 		$orderer_vars = $this->oc->get_orderer_vars($this);
 		$this->orderer_vars_meta = $this->oc->meta("orderer_vars");
 		foreach($orderer_vars as $orderer_var => $caption)
@@ -2775,9 +2779,11 @@ class shop_order_cart extends class_base
 			"currency" => $oc->get_currency(),
 			"product" => array(),
 			"product_packaging" => array(),
+			"validate" => false,
 		));
  
 		$self_validate_payment_types = $this->cart->prop("show_only_valid_payment_types") ? false : true;
+		$self_validate_delivery_methods = $this->cart->prop("show_only_valid_delivery_methods") ? false : true;
 		$payment_types_params = array( 	 
 			"sum" => $this->cart_sum,
 			"currency" => $oc->get_currency(), 
@@ -2813,21 +2819,30 @@ class shop_order_cart extends class_base
 				"payment_checked" => (!empty($data["payment"]) && $data["payment"] == $a) || ($porn==0 && empty($data["payment"])) ? " checked='checked' " : " ",
 			));
 
-			if($self_validate_payment_types)
-			{
-				$payment.= $this->parse("PAYMENT".(is_oid($o->valid_conditions($payment_types_params)) ? "" : "_DISABLED")); 
-			}
-			else
-			{
-				$payment.= $this->parse("PAYMENT");
-				$porn++;
-			}
+// 			if($self_validate_payment_types)
+// 			{
+// 				$payment.= $this->parse("PAYMENT".(is_oid($o->valid_conditions($payment_types_params)) ? "" : "_DISABLED")); 
+// 			}
+// 			else
+// 			{
+// 				$payment.= $this->parse("PAYMENT");
+// 				$porn++;
+// 			}
 			$condition = $o->valid_conditions(array(
 				"sum" => $this->cart_sum,
 				"currency" => $oc->get_currency(),
 				"product" => array(),
 				"product_packaging" => array(),
 			));
+			if(is_oid($condition))
+			{
+				$payment .= $this->parse("PAYMENT");
+				$porn++;
+			}
+			else
+			{
+				$payment .= $this->parse("PAYMENT_DISABLED");
+			}
 
 			$condition_object = obj($condition);
 			foreach($condition_object->properties() as $key => $prop)
@@ -2848,6 +2863,11 @@ class shop_order_cart extends class_base
 				$DEFERRED_PAYMENT.= $this->parse("DEFERRED_PAYMENT");
 				$min = $min + $step;
 			}
+			$this->vars(array(
+				"deferred_payment_selected" => empty($data["deferred_payment_count"]) ? 'selected="selected"' : "",
+				"value" => ""
+			));
+			$DEFERRED_PAYMENT.= $this->parse("DEFERRED_PAYMENT");
 		}
 		$this->vars(array(
 			"DEFERRED_PAYMENT" => $DEFERRED_PAYMENT,  
@@ -2872,7 +2892,7 @@ class shop_order_cart extends class_base
 			}
 		        if($self_validate_delivery_methods)
 	                { 	 
-	                         $delivery.=$this->parse("DELIVERY".($o->valid($delivery_methods_params) ? "" : "_DISABLED")); 	 
+	                         $delivery.=$this->parse("DELIVERY".($o->valid($delivery_methods_params) ? "" : "_DISABLED")); 	//misasi see $delivery_methods_params on? (Marko)
 	                }
 			else 	 
 	                { 	 
@@ -2932,7 +2952,6 @@ class shop_order_cart extends class_base
 			}
 			else
 			{
-
 				$this->vars(array($checkbox_var."_2_checked"  => "checked=\"checked\""));
 			}
 		}
@@ -2953,6 +2972,7 @@ class shop_order_cart extends class_base
 
 		//j2relmaksu jaoks SUB
 
+
 		if(!empty($data["payment"]) && $this->can("view" , $data["payment"]))
 		{
 			$payment = obj($data["payment"]);
@@ -2962,7 +2982,7 @@ class shop_order_cart extends class_base
 				"product" => array(),
 				"product_packaging" => array(),
 			));
-			if($this->can("view" , $condition))
+			if(is_oid($condition) && $this->can("view", $condition))
 			{
 				$c = obj($condition);
 				$rent = $c->calculate_rent($this->cart_sum,$data["deferred_payment_count"]);
@@ -3074,9 +3094,11 @@ class shop_order_cart extends class_base
 	**/
 	public function remove_product($arr)
 	{
+		ignore_user_abort(true);
 		$cart = obj($arr["cart"]);
 		$cart -> remove_product($arr["product"]);
-		die(1);
+		ignore_user_abort(false);
+		die("1");
 	}
 
 	/**
