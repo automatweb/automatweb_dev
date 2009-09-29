@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.128 2009/09/28 00:11:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.129 2009/09/29 12:36:23 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -6743,13 +6743,14 @@ return false;
 					$prod = new object($data['aw_oid']);
 					echo "product: ".$prod->name()." ( OID: ".$prod->id()." )<br />\n";
 					$packagings += $prod->get_packagings()->arr();
+					flush();
 				}
 				flush();
 				foreach ($packagings as $packaging)
 				{
 					//	do_products_amounts_import_handle_size() handles different formes of sizes a'la S(127), 41/2(37), 56
 					$handled_code = $this->do_products_amounts_import_handle_size($packaging->prop('size'));
-					echo "-- Going to compare '".$handled_code."' with '".((int)($fields[1]))."' (".$fields[1].") - packaging id: ".$packaging->id()."<br />\n";
+				//	echo "-- Going to compare '".$handled_code."' with '".((int)($fields[1]))."' (".$fields[1].") - packaging id: ".$packaging->id()."<br />\n";
 					flush();
 					if ($handled_code === ((int)$fields[1]))
 					{
