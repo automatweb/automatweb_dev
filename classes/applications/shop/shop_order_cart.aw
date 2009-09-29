@@ -2876,7 +2876,7 @@ class shop_order_cart extends class_base
 			"payment_value" => empty($data["payment"]) ? "" : $data["payment"],
 		));
 
-		$porno = 0;
+		$porno = 0;//lihstalt count
 		foreach($delivery_methods_object_list->arr() as $id => $o)
 		{
 			$sel_delivery = (!empty($data["delivery"]) && $data["delivery"] == $id) || ($porno==0 && empty($data["delivery"]));
@@ -2893,12 +2893,14 @@ class shop_order_cart extends class_base
 		        if($self_validate_delivery_methods)
 	                { 	 
 	                         $delivery.=$this->parse("DELIVERY".($o->valid($delivery_methods_params) ? "" : "_DISABLED")); 	//misasi see $delivery_methods_params on? (Marko)
+				if($o->valid($delivery_methods_params)) $porno++; 
 	                }
 			else 	 
 	                { 	 
-	                         $delivery.=$this->parse("DELIVERY"); 	 
-	                         $porno++; 	 
+	                        $delivery.=$this->parse("DELIVERY"); 	
+				$porno++;  
 	                }
+
 		}
 
 		$this->vars(array(
