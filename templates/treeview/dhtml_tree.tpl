@@ -1,5 +1,6 @@
 <div id="treeDivWithID_{VAR:tree_id}">
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/js-min.js"></script>
 <script type="text/javascript">
 
 var feeding_node;
@@ -235,16 +236,17 @@ open_nodes_{VAR:tree_num} = new Array({VAR:open_nodes});
 tree_id_{VAR:tree_num} = '{VAR:tree_id}';
 
 $(document).ready(function(){
-	function attachTreeNodeOnClick(o){
+	function attachTreeNodeOnClick(o, id){
 		if($(o).attr("tagName") == "A" && typeof $(o).attr("id") != "undefined" && $(o).attr("id").substr(-8) != "treenode"){
 			$(o).click(function(){
-				$("a[tree_id='treeDivWithID_{VAR:tree_id}']").removeClass("nodetext_selected");
+				$("a[tree_id='"+id+"']").removeClass("nodetext_selected");
 				$(o).addClass("nodetext_selected");
-			}).attr("tree_id", "treeDivWithID_{VAR:tree_id}");
+			}).attr("tree_id", id);
 		}
-		$(o).children().each(function(){attachTreeNodeOnClick(this);});
+		$(o).children().each(function(){attachTreeNodeOnClick(this, id);});
 	}
-	$("#treeDivWithID_{VAR:tree_id}").each(function(){attachTreeNodeOnClick(this);});
+	$("div[id^='treeDivWithID_']").each(function(){
+	attachTreeNodeOnClick(this, $(this).attr("id"));});
 });
 </script>
 <style>
@@ -307,3 +309,4 @@ if(is_numeric(tmp))
 <!-- END SUB: SUB_NODES -->
 </div></div>
 <!-- END SUB: TREE_NODE -->
+</div>
