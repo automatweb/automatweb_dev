@@ -215,6 +215,11 @@ class automatweb
 			$mode = constant($mode);
 			automatweb::$instance->mode($mode);
 		}
+
+		if (!aw_global_get("no_db_connection"))
+		{
+			$GLOBALS["object_loader"] = new _int_object_loader();
+		}
 	}
 
 	/**

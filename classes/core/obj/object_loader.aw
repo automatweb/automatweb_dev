@@ -786,6 +786,10 @@ class _int_object_loader extends core
 	}
 }
 
-$GLOBALS["object_loader"] = new _int_object_loader();
 $GLOBALS["objects"] = array();
+$GLOBALS["properties"] = array();
+$GLOBALS["tableinfo"] = array();
+$GLOBALS["of2prop"] = array();
+$GLOBALS["__obj_sys_opts"] = array();
+
 ?>

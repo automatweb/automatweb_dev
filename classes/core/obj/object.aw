@@ -2,32 +2,6 @@
 /*
 @classinfo  maintainer=kristo
 */
-classload("core/obj/object_loader");
-/*classload(
-	"core/obj/_int_obj_container_base",
-	"core/obj/_int_object",
-	"core/obj/ds_base",
-	"core/obj/connection",
-	"core/obj/object_loader",
-	"core/obj/object_list",
-	"core/obj/object_data_list",
-	"core/obj/object_tree",
-	"core/obj/object_list_filter",
-	"core/obj/obj_predicate_not",
-	"core/obj/obj_predicate_regex",
-	"core/obj/obj_predicate_compare",
-	"core/obj/obj_predicate_prop",
-	"core/obj/obj_predicate_limit",
-	"core/obj/obj_sql_func",
-	"core/obj/oql"
-);*/
-
-$GLOBALS["properties"] = array();
-$GLOBALS["tableinfo"] = array();
-$GLOBALS["of2prop"] = array();
-$GLOBALS["__obj_sys_opts"] = array();
-
-
 
 // god damn, this is a fucking great idea!
 // how to get around the php copy-object problem.
