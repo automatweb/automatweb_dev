@@ -211,8 +211,8 @@ enter_function("products_show::show");
 			$instance->template = $ob->prop("product_template");
 			exit_function("products_show::show");
 			return $instance->show(array(
-				"id" => $_GET["product"],
-				"oc" => $_GET["oc"],
+				"id" => (int)$_GET["product"],
+				"oc" => (int)$_GET["oc"],
 			));
 		}
 enter_function("products_show::start");
