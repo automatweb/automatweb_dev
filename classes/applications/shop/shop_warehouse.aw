@@ -66,8 +66,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@layout product_managementleft type=vbox parent=product_managementsplit
 
-			@layout product_managementtree_lay type=vbox closeable=1 area_caption=Tooted parent=product_managementleft
-				@property product_managementtree type=treeview parent=product_managementtree_lay store=no no_caption=1
+			@layout product_managementtree_layout type=vbox closeable=1 area_caption=Tooted parent=product_managementleft
+				@property product_managementtree type=treeview parent=product_managementtree_layout store=no no_caption=1
 
 			@layout product_management_tree_layout2 type=vbox closeable=1 area_caption=Kategooriate&nbsp;puu parent=product_managementleft
 				@property product_management_category_tree type=text parent=product_management_tree_layout2 store=no no_caption=1
@@ -108,11 +108,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@layout product_managementright type=vbox parent=product_managementsplit
 
-		@property product_management_list type=table store=no no_caption=1  parent=product_managementright
-		@caption Toodete nimekiri
+			@property product_management_list type=table store=no no_caption=1  parent=product_managementright
+			@caption Toodete nimekiri
 
-		@property category_list type=table store=no no_caption=1 parent=product_managementright
-		@caption Kategooriate nimekiri
+			@property category_list type=table store=no no_caption=1 parent=product_managementright
+			@caption Kategooriate nimekiri
 
 
 @default group=products
@@ -11695,11 +11695,14 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 
 	function _get_category_list($arr)
 	{
+		$per_page = 10;
+		$selected_page = automatweb::$request->arg('ft_page');
+
 		$t =& $arr["prop"]["vcl_inst"];
 
 		$t->define_pageselector(array(
 			'type' => 'lb',
-			'records_per_page' => 10
+			'records_per_page' => $per_page
 		));
 
 		$t->define_field(array(
@@ -11762,6 +11765,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		}
 		elseif($arr["request"]["cat"] == "all")
 		{
+		arr('foo');
 			$ol= new object_list(array(
 				"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 				"sort_by" => "jrk asc, name asc",
@@ -11780,7 +11784,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 						"url" => "automatweb/images/icons/delete.gif",
 					)),
 				));
-				}
+			}
 			$t->define_data(array(
 				"name" => html::obj_change_url($o,null,array("return_url" => $this->mk_my_orb("change" , array("class" => "shop_warehouse","id" => $arr["obj_inst"]->id() , "group" => "category" )))),
 				"id" => $o->id(),
@@ -12283,7 +12287,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		{
 			return PROP_IGNORE;
 		}
-		$val = "";
+
 		foreach($types->arr() as $id => $cat)
 		{
 			$t = new treeview();
@@ -12304,11 +12308,13 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 				        "params" => array("cat_".$id => $id)
 				)
 			));
-//
+
 			$this->add_cat_type_leaf($t , $id);
-			$ret.= $t->get_html();
+			$ret .= "<div style='border: 1px solid gray; background-color: white;margin:5px;'>".$t->get_html()."</div>";
 		}
-		$arr["prop"]["value"]=$ret;
+		$arr["prop"]["value"] = $ret;
+
+		return PROP_OK;
 	}
 
 
@@ -12353,7 +12359,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		$cats = $o->get_categories();
 
 		foreach($cats->names() as $id => $name)
-		{//arr($id);arr($parent);arr("-----");
+		{
 			$t->add_item($parent,array(
 				"name" => $name,
 				"id" => $id."",

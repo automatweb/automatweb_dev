@@ -129,7 +129,7 @@
             <table>objects</table>
             <group>product_management</group>
             <type>treeview</type>
-            <parent>product_managementtree_lay</parent>
+            <parent>product_managementtree_layout</parent>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>product_managementtree</field>
@@ -3254,13 +3254,13 @@
                   <group>product_management</group>
                   <area_caption></area_caption>
             </product_managementleft>
-            <product_managementtree_lay>
+            <product_managementtree_layout>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Tooted</area_caption>
                   <parent>product_managementleft</parent>
                   <group>product_management</group>
-            </product_managementtree_lay>
+            </product_managementtree_layout>
             <product_management_tree_layout2>
                   <type>vbox</type>
                   <closeable>1</closeable>
