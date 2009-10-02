@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.129 2009/09/29 12:36:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.130 2009/10/02 13:16:00 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -6645,14 +6645,27 @@ return false;
 
 		// Get the file from FTP:
 		$ftp = new ftp();
+		$ftp->verbose = false;
 		$connection = $ftp->connect(array(
 			'host' => $o->prop('availability_ftp_host'),
 			'user' => $o->prop('availability_ftp_user'),
 			'pass' => $o->prop('availability_ftp_password')
 		));
 
+		switch ($connection)
+		{
+			case 1:
+				echo "[ ERROR ] Connecting to ftp failed <br />\n";
+				exit();
+			case 2:
+				echo "[ ERROR ] Login to ftp failed <br />\n";
+				exit();
+			default:
+				echo " Successfully connected to ftp <br />\n";
+		}
+
 		$file_location = $o->prop('availability_ftp_file_location');
-		echo "Get file from ftp ... ";
+		echo "Get file from ftp (file location: ".$file_location.")... ";
 		flush();
 		$file_content = $ftp->get_file($file_location);
 		$local_file = aw_ini_get('site_basedir').'/files/otto_import_availability.zip';
@@ -6687,6 +6700,7 @@ return false;
 
 		// Start import:
 		$lines = file(aw_ini_get('site_basedir').'/files/ASTAEXP.TXT');
+
 /*
 		$prods = new object_list(array(
 			'class_id' => CL_SHOP_PRODUCT
@@ -6719,13 +6733,15 @@ return false;
 			from
 				aw_shop_products left join objects on aw_shop_products.aw_oid = objects.oid
 			where
-				objects.status > 0 and
-				objects.lang_id = ".aw_global_get('lang_id')."
+				objects.status > 0
 		");
 		while ($row = $this->db_next())
 		{
 			$codes[$row['code']][] = $row;
 		}
+
+		$total_lines = count($lines);
+		$counter = 0;
 
 		foreach ($lines as $line)
 		{
@@ -6741,7 +6757,7 @@ return false;
 				foreach ($codes[$fields[0]] as $data)
 				{
 					$prod = new object($data['aw_oid']);
-					echo "product: ".$prod->name()." ( OID: ".$prod->id()." )<br />\n";
+					echo "product: ".$prod->name()." ( OID: ".$prod->id()." )\n";
 					$packagings += $prod->get_packagings()->arr();
 					flush();
 				}
@@ -6754,7 +6770,7 @@ return false;
 					flush();
 					if ($handled_code === ((int)$fields[1]))
 					{
-						echo "----".$packaging->prop('size')." -- ".$fields[1]." - ".((int)$fields[1])."/ ".$fields[2]."<br />\n";
+						echo "----".$packaging->prop('size')." -- ".$fields[1]." - ".((int)$fields[1])."/ ".$fields[2]."\n";
 						flush();
 						$purvs = new object_list(array(
 							"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
@@ -6769,7 +6785,7 @@ return false;
 						if ($purvs->count() > 0)
 						{
 							$purv = $purvs->begin();
-							echo "-------- Existing purveyance oid: ".$purv->id()." <br />\n";
+							echo "-------- Existing purveyance oid: ".$purv->id()." \n";
 						}
 						else
 						{
@@ -6787,7 +6803,7 @@ return false;
 							// tarnija seostamine
 							if ($comp !== false)
 							{
-								echo "------------ connect company ".$comp->name()."<br />\n";
+								echo "------------ connect company ".$comp->name()."\n";
 								$purv->connect(array(
 									'to' => $comp->id(),
 									'type' => 'RELTYPE_COMPANY'
@@ -6798,7 +6814,7 @@ return false;
 							// seostab lao ka 2ra:
 							if ($wh !== false)
 							{
-								echo "------------ connect warehouse ".$wh->name()."<br />\n";
+								echo "------------ connect warehouse ".$wh->name()."\n";
 								$purv->connect(array(
 									'to' => $wh->id(),
 									'type' => 'RELTYPE_WAREHOUSE'
@@ -6830,11 +6846,14 @@ return false;
 					}
 				}
 				$packagings = null;
+				$counter++;
+				echo " [".($counter)."/".$total_lines."][ ".number_format( ( $counter / ( $total_lines / 100 ) ), 2 )."% ] \n";
 
 			}
 			$fields = null;
 		}
-		exit('done');
+		echo "DONE \n";
+		exit();
 	}
 
 	function do_products_amounts_import_handle_size($size)
