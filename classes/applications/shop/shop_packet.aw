@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.34 2009/09/23 09:16:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.35 2009/10/05 16:44:42 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -925,8 +925,9 @@ class shop_packet extends class_base
 		$show = 0;
 		foreach($packagings as $products => $packaging_array)
 		{
-			foreach($packaging_array as $key => $packaging)
-			{
+			$packaging = reset($packaging_array);
+//			foreach($packaging_array as $key => $packaging)
+//			{
 				$conns = connection::find(array(
 					"to" => $packaging,
 					"from.class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
@@ -942,7 +943,7 @@ class shop_packet extends class_base
 					));
 					$show = 1;
 				}
-			}
+//			}
 		}
 
 		if($show)
