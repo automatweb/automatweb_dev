@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.37 2009/09/23 12:09:36 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.37 2009/09/23 12:09:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.38 2009/10/05 19:47:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.38 2009/10/05 19:47:06 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -467,7 +467,7 @@ $is_saved = 1;
 			"product_sum" => t("Summa")
 		);
 		//v2ljad mida toote leidmisel laost muuta ei saa
-		$disable_vars = array("product_code" , "name" , "product_color", "product_page" , "product_image" , "product_sum", "product_price");
+		$disable_vars = array("product_code" , "name" , "product_color", "product_sum", "product_price");
 		
 		$shop_cart_table = "";
 		$count = $total = 0 ;
@@ -560,7 +560,9 @@ $is_saved = 1;
 			//	$vars["product_size"] = "";
 				$vars["image_popup"] = "";
 				$vars["image_url"] = "";
-				$vars["product_sum"] = number_format(aw_math_calc::string2float($data["product_price"]) * $data["product_count"] , 2);
+				$vars["product_sum"] = empty($data["product_price"]) ? "" : number_format(aw_math_calc::string2float($data["product_price"]) * $data["product_count"] , 2);
+				$total+= empty($data["product_price"]) ? 0 :aw_math_calc::string2float($data["product_price"]) * $data["product_count"];
+
 			//	$vars["product_sum"] = t("Hinnakirja<br>alusel");
 			}
 
@@ -614,16 +616,19 @@ $is_saved = 1;
 			$confirm_url =$this->mk_my_orb("confirm_view", array("id" => $arr["id"], "section" => aw_global_get("section")));
 		
 //add delivery vars
+$sum = $total;
 		if($this->can("view" , $c_data["delivery"]))
 		{
 			$delivery_vars = array();
 			$delivery = obj($c_data["delivery"]);
 			$delivery_vars["delivery_name"] = $delivery->name();
 			$delivery_vars["delivery_price"] = $delivery->get_curr_price($oc->prop("default_currency"));
+$sum+= $delivery_vars["delivery_price"];
 			$this->vars($delivery_vars);
 		}
 		$this->vars(array(
 			"total" => $total,
+			"sum" => $sum,
 			"shop_cart_table" => $shop_cart_table,
 			"rows_count" => $count,
 			"id" => $form_obj->id(),
@@ -880,7 +885,7 @@ $is_saved = 1;
 
 	}
 
-	function parse_alias($arr)
+	function parse_alias($arr = array())
 	{
 		$object = obj($arr["alias"]["target"]);
 		if($this->can("view" , $object->prop("order_center")))//ostukorviga versiooni jaoks... siis teeb hiljem lao myygitellimuse
