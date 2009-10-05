@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.20 2009/08/31 17:40:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.21 2009/10/05 09:09:23 dragut Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -242,6 +242,7 @@ class shop_product_search extends class_base
 	}
 
 	// this can be called from site.aw as well, to draw simple search form, but it should be more generic solution, which will be able to draw any kind of searchform according to a template
+	// or according to the configuration
 	function draw_search_form($arr)
 	{
 		if (!empty($arr['template']))
@@ -1022,28 +1023,7 @@ class shop_product_search extends class_base
 
 	function draw_search_results_with_templates($arr)
 	{
-		// can't use this get_search_results() method here cause it needs a little different composition of object_list params
-		// probably i need to think of some solution to compile those object list params, so i can have such search forms as well
-		// where there are only one input box which content will be searched from different properties + it should be possible to
-		// define, if the props will be AND-ed together or OR-ed.
-	//	$params[295]['code'] = automatweb::$request->arg('search_term'); // code param from shop_product object
-	//	$params[295]['name'] = automatweb::$request->arg('search_term'); // name param from shop_packet object
-	//	$results = $this->get_search_results($arr["obj_inst"], $arr["request"]["s"]);
-	//	$results = $this->get_search_results($arr["obj_inst"], $params);
-	//	$ol = new object_list(array(
-	//		'class_id' => CL_SHOP_PACKET,
-	//		new object_list_filter(array(
-	//			"logic" => "OR",
-	//			"conditions" => array(
-	//				'name' => '%'.automatweb::$request->arg('search_term').'%',
-	//				'CL_SHOP_PACKET.RELTYPE_PRODUCT.name' => '%'.automatweb::$request->arg('search_term').'%'
-	//				)
-	//			))
-	//	));
-
-		$this->read_template('results.tpl');
 		enter_function("products_show::show");
-//		$ob = new object($arr["id"]);
 
 		// get the order center object from shop_product_search
 		$oc = $arr['obj_inst']->get_order_center();
@@ -1058,19 +1038,20 @@ class shop_product_search extends class_base
 
 		// is it required?
 		lc_site_load("shop", &$this);
-/*
-		$products = new object_list(array(
-			'class_id' => CL_SHOP_PRODUCT,
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					'name' => '%'.automatweb::$request->arg('search_term').'%',
-					'code' => '%'.automatweb::$request->arg('search_term').'%'
-					)
-				))
-		));
-*/
+
 		$products = $arr["obj_inst"]->get_search_results();
+		if ($products->count() === 0)
+		{
+			$this->read_template('no_results.tpl');
+			$this->vars(array(
+				'search_term' => htmlentities(automatweb::$request->arg('search_term'))
+			));
+			return $this->parse();
+		}
+		else
+		{
+			$this->read_template('results.tpl');
+		}
 		if($products->count() === 1 && $arr["obj_inst"]->prop("forward_single_product_to_detailview"))
 		{
 			$product = $products->begin();
