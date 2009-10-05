@@ -279,7 +279,7 @@ class htmlclient extends aw_template
 	function show_error()
 	{
 		$this->vars(array(
-			"error_text" => t("Viga sisendandmetes"),
+			"error_text" => empty($this->error_text) ? t("Viga sisendandmetes") : $this->error_text,
 			"webform_error" => $this->style["error"] ? "st".$this->style["error"] : "",
 		));
 		$this->error = $this->parse("ERROR");

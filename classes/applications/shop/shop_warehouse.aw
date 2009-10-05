@@ -952,13 +952,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@layout clients_left type=vbox group=purchase_clients,sales_clients parent=clients_split
 
-			@layout clients_groups_lay type=vbox area_caption=Filtreeri&nbsp;kliendigrupi&nbsp;j&auml;rgi group=purchase_clients,sales_clients parent=clients_left
+			@layout clients_groups_lay type=vbox area_caption=Kliendigrupp group=purchase_clients,sales_clients parent=clients_left
 
 				@property clients_groups_tree type=treeview no_caption=1  group=purchase_clients,sales_clients parent=clients_groups_lay
 
-			@layout clients_alphabet_lay type=vbox area_caption=Filtreeri&nbsp;nime&nbsp;j&auml;rgi group=purchase_clients,sales_clients parent=clients_left
+			@layout clients_alphabet_lay type=vbox area_caption=Nimi group=purchase_clients,sales_clients parent=clients_left
 
 				@property clients_alphabet_tree type=treeview no_caption=1  group=purchase_clients,sales_clients parent=clients_alphabet_lay
+
+			@layout clients_status_lay type=vbox area_caption=Staatus group=purchase_clients,sales_clients parent=clients_left
+
+				@property clients_status_tree type=treeview no_caption=1 group=purchase_clients,sales_clients parent=clients_status_lay
+
+			@layout clients_start_lay type=vbox area_caption=Kliendisuhte&nbsp;algus group=purchase_clients,sales_clients parent=clients_left
+
+				@property clients_time_tree type=treeview no_caption=1 group=purchase_clients,sales_clients parent=clients_start_lay
 
 		@property clients_tbl type=table no_caption=1 group=purchase_clients,sales_clients parent=clients_split
 
@@ -1324,6 +1332,47 @@ class shop_warehouse extends class_base
 		}
 	}
 
+	function _get_clients_time_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "timespan";
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "period_week");
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_time_tree",
+		));
+
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik ajavahemikud"),
+			"id" => "all_time",
+			"url" => aw_url_change_var($var, "all_time"),
+		));
+
+		$branches = array(
+			"last_week" => t("Eelmine n&auml;dal"),
+			"period_week" => t("K&auml;esolev n&auml;dal"),
+			"period_last_last" => t("&Uuml;leelmine kuu"),
+			"period_last" => t("Eelmine kuu"),
+			"period_current" => t("K&auml;esolev kuu"),
+//			"period_next" => t("J&auml;rgmine kuu"),
+			"period_lastyear" => t("Eelmine aasta"),
+			"period_year" => t("K&auml;esolev aasta"),
+		);
+
+		foreach($branches as $id => $caption)
+		{
+			$tv->add_item("all_time", array(
+				"id" => $id,
+				"name" => $caption,
+				"url" => aw_url_change_var(array(
+					$var => $id,
+				)),
+			));
+		}
+	}
+
 	function _get_product_managements_count($arr)
 	{
 		$arr["prop"]["options"] = array(t("Laoseis ebaoluline") , t("Laos olemas"));
@@ -1386,12 +1435,13 @@ class shop_warehouse extends class_base
 			case "sales_bills_s_acquiredby":
 			case "purchase_orders_s_purchaser":
 			case "sell_orders_s_buyer":
-				if($v = $arr["request"][$prop["name"]])
+				if(!empty($arr["request"][$prop["name"]]))
 				{
-					$prop["value"] = $v;
+					$prop["value"] = $arr["request"][$prop["name"]];
 				}
-				elseif($v = $arr["request"]["filt_cust"])
+				elseif(!empty($arr["request"]["filt_cust"]))
 				{
+					$v = $arr["request"]["filt_cust"];
 					if($this->can("view", $v))
 					{
 						$co = obj($v);
@@ -1593,7 +1643,7 @@ class shop_warehouse extends class_base
 							STORAGE_FILTER_UNCONFIRMED => t("Kinnitamata"),
 						);
 					}
-					$prop["value"] =  $arr["request"][$prop["name"]] ? $arr["request"][$prop["name"]] : STORAGE_FILTER_CONFIRMATION_ALL;
+					$prop["value"] =  empty($arr["request"][$prop["name"]]) ? STORAGE_FILTER_CONFIRMATION_ALL : $arr["request"][$prop["name"]];
 					break;
 
 				case "direction":
@@ -2080,63 +2130,6 @@ class shop_warehouse extends class_base
 			$t->define_data($prod_data);
 		}
 		$t->set_caption(t("Toodete liikumine laos p&auml;evade l&otilde;ikes"));
-	}
-
-	private function get_range($val)
-	{
-		switch($val)
-		{
-			case "period_last_week":
-				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, date("m")-1, 1, date("Y")),
-					"to" => mktime(0,0,0, date("m")-1, 8, date("Y")),
-				);
-			break;
-			case "period_week":
-				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, date("m"), 1, date("Y")),
-					"to" => mktime(0,0,0, date("m"), 8, date("Y")),
-				);
-			break;
-			case "period_last_last":
-				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, date("m")-2, 1, date("Y")),
-					"to" => mktime(0,0,0, date("m")-1, 1, date("Y")),
-				);
-			break;
-			case "period_last":
-				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, date("m")-1, 1, date("Y")),
-					"to" => mktime(0,0,0, date("m"), 1, date("Y")),
-				);
-			break;
-			case "period_current":
-				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, date("m"), 1, date("Y")),
-					"to" => mktime(0,0,0, date("m")+1, 1, date("Y")),
-				);
-			break;
-			case "period_next":
-				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, date("m")+1, 1, date("Y")),
-					"to" => mktime(0,0,0, date("m")+2, 1, date("Y")),
-				);
-			break;
-			case "period_year":
-				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, 1, 1, date("Y")),
-					"to" => mktime(0,0,0, 1, 1, date("Y")+1),
-				);
-			break;
-			case "period_lastyear":
-				$filt["bill_date_range"] = array(
-					"from" => mktime(0,0,0, 1, 1, date("Y")-1),
-					"to" => mktime(0,0,0,1 , 1, date("Y")),
-				);
-			break;
-			default :return null;
-		}
-		return $filt["bill_date_range"];
 	}
 
 	function _get_stats_table($arr)
@@ -8281,7 +8274,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 	{
 		$t = $arr["prop"]["vcl_inst"];
 		$channels = $arr["obj_inst"]->get_channels();
-		$t->set_selected_item(!empty($arr["request"]["channel"]) ? "channel_".$arr["request"]["channel"] : "channel_all");
+		$t->set_selected_item(empty($arr["request"]["channel"]) ? "channel_all" : "channel_".$arr["request"]["channel"]);
 
 		foreach($channels->names() as $channel => $name)
 		{
@@ -8384,10 +8377,10 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 		{
 			return $ol;
 		}
-		if(isset($arr["request"]["channel"]) && is_oid(isset($arr["request"]["channel"])))
+		$params = array();
+		if(isset($arr["request"]["channel"]) && is_oid($arr["request"]["channel"]))
 		{
 			$params["channel"] = $arr["request"]["channel"];
-
 		}
 		if(!empty($arr["request"][$group."_s_number"]) && $n = $arr["request"][$group."_s_number"])
 		{
@@ -8439,7 +8432,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 		}
 		$t = isset($arr["request"][$group."_s_to"]) ? date_edit::get_timestamp($arr["request"][$group."_s_to"]) : 0;
 		$f = isset($arr["request"][$group."_s_from"]) ? date_edit::get_timestamp($arr["request"][$group."_s_from"]) : 0;
-		if($t > 1 && $f > 1 && !$arr["request"]["filt_time"])
+		if($t > 1 && $f > 1 && empty($arr["request"]["filt_time"]))
 		{
 			$t += 24 * 60 * 60 - 1;
 			$params["date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $f, $t);
@@ -8551,7 +8544,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 			}
 			$dd = $o->prop("deal_date");
 			$dealnow = 0;
-			if($dd <= time() && $o->prop("order_status") < ORDER_STATUS_SENT && $arr["extra"])
+			if($dd <= time() && $o->prop("order_status") < ORDER_STATUS_SENT && !empty($arr["extra"]))
 			{
 				$dealnow = 1;
 			}
@@ -8672,7 +8665,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 				"nr" => $count,
 				"number" => html::obj_change_url($o,  $cnum ? $cnum : t("(Puudub)")),
 				"purchaser" => html::obj_change_url($o->prop("purchaser")),
-				"channel" => $o->prop_str("channel"),
+				"channel" => $o->prop("channel.name"),
 				"purchaser_id" => $cust_code,//$o->prop("purchaser"),
 				"purchaser_other_id" => $o->prop("purchaser.external_id"),
 				"date" => $o->prop("date"),
@@ -8745,10 +8738,10 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 			}
 		}
 
-			$t->define_data(array(
-				"purchaser" => t("Kokku"),
-				"sum" => $total_sum." ".get_name($o->prop("currency")),
-			));
+		$t->define_data(array(
+			"purchaser" => t("Kokku"),
+//			"sum" => $total_sum." ".get_name($o->prop("currency")),
+		));
 
 
 
@@ -9349,6 +9342,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 
 	private function get_cat_picker_recur($o, $flevel)
 	{
+		$slashes = "";
 		for($i=0;$i<$flevel;$i++)
 		{
 			$slashes .= "--";
@@ -9681,6 +9675,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 
 	private function _get_status_orders_time_tree_end($o)
 	{
+		$days = 0;
 		$ol = new object_list(array(
 			"class_id" => CL_MRP_JOB,
 			"RELTYPE_JOB(CL_MATERIAL_EXPENSE).class_id" => CL_MATERIAL_EXPENSE,
@@ -9774,13 +9769,13 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 	function _get_status_orders_s_start($arr)
 	{
 		$times = $this->_get_status_orders_time_filt($arr);
-		if(!($r = $arr["request"][$arr["prop"]["name"]]))
+		if(empty($arr["request"][$arr["prop"]["name"]]))
 		{
 			$arr["prop"]["value"] = $times["filt_start"];
 		}
 		else
 		{
-			$arr["prop"]["value"] = date_edit::get_timestamp($r);
+			$arr["prop"]["value"] = date_edit::get_timestamp($arr["request"][$arr["prop"]["name"]]);
 		}
 		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
@@ -9788,13 +9783,13 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 	function _get_status_orders_s_end($arr)
 	{
 		$times = $this->_get_status_orders_time_filt($arr);
-		if(!($r = $arr["request"][$arr["prop"]["name"]]))
+		if(empty($arr["request"][$arr["prop"]["name"]]))
 		{
 			$arr["prop"]["value"] = $times["filt_end"];
 		}
 		else
 		{
-			$arr["prop"]["value"] = date_edit::get_timestamp($r);
+			$arr["prop"]["value"] = date_edit::get_timestamp($arr["request"][$arr["prop"]["name"]]);
 		}
 		$arr["prop"]["format"] = array("day_textbox", "month_textbox", "year_textbox");
 	}
@@ -11026,6 +11021,31 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		return $this->_get_purchase_notes_toolbar(&$arr);
 	}
 
+	function _get_clients_status_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_selected_item(empty($arr["request"]["client_state"]) ? "" : "state_".$arr["request"]["client_state"]);
+		$cr_inst = get_instance("applications/crm/crm_company_customer_data_obj");
+		$t->start_tree(array(
+			"has_root" => true,
+			"root_name" => empty($arr["request"]["client_state"]) ?  "<b>".t("K&otilde;ik staatused")."</b>" : t("K&otilde;ik staatused"),
+			"root_url" => aw_url_change_var(array("client_state" => null)),
+			"root_icon" => icons::get_icon_url(CL_MENU),
+			"type" => TREE_DHTML,
+			"tree_id" => "client_state_tree",
+			"persist_state" => 1,
+		));
+
+		foreach($cr_inst->sales_state_names() as $key => $name)
+		{
+			$t->add_item(0, array(
+				"id" => "state_".$key,
+				"name" => $name,
+				"url" => aw_url_change_var("client_state", $key),
+			));
+		}
+	}
+
 	function _get_clients_groups_tree($arr)
 	{
 		$owner = $this->config->prop("owner");
@@ -11035,21 +11055,14 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		}
 		$params = array(
 			"set_retu" => get_ru(),
-			"filt_cust" => $arr["request"]["filt_cust"],
-			"show_subs" => $arr["show_subs"],
 			"id" => $arr["obj_inst"]->id(),
 			"group" => $arr["request"]["group"],
 		);
-		$ft = $arr["request"]["filt_time"];
-		$pg = $arr["request"]["pgtf"];
-		if($ft)
-		{
-			$params["filt_time"] = $ft;
-		}
-		if($pg)
-		{
-			$params["pgtf"] = $pg;
-		}
+		if(isset($arr["request"]["filt_cust"])) 	$params["filt_cust"] = 	$arr["request"]["filt_cust"];
+		if(isset($arr["show_subs"])) 			$params["show_subs"] = 	$arr["show_subs"];
+		if(isset($arr["request"]["filt_time"]))		$params["filt_time"] = 	$arr["request"]["filt_time"];
+		if(isset($arr["request"]["pgtf"]))		$params["pgtf"] = 	$arr["request"]["pgtf"];
+
 		foreach($arr["request"] as $var => $val)
 		{
 			if($this->is_search_param($var))
@@ -11319,6 +11332,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		$owner = $this->config->prop("owner");
 		if(!$this->can("view", $owner))
 		{
+			$this->show_error_text(t("Lao omanik valimata"));
 			return;
 		}
 		$t = &$arr["prop"]["vcl_inst"];
@@ -11335,6 +11349,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		unset($arr["request"]["filt_cust_name"]);
 		$ol = $this->_get_clients_ol($arr);
 		$letters = array();
+		$total = 0;
 		foreach($ol->names() as $oid => $name)
 		{
 			$letters[strtolower(substr($name,0,1))]++;
@@ -11376,7 +11391,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			'parent' => $arr['obj_inst']->id(),
 			'return_url' => get_ru(),
 		);
-		if($this->can("view", $arr["request"]["filt_cust"]) && obj($arr["request"]["filt_cust"])->class_id() == CL_CRM_CATEGORY)
+		if(isset($arr["request"]["filt_cust"]) && $this->can("view", $arr["request"]["filt_cust"]) && obj($arr["request"]["filt_cust"])->class_id() == CL_CRM_CATEGORY)
 		{
 			$lp['alias_to'] = $cat;
 			$lp['reltype'] = 3; // crm_company.CUSTOMER,
@@ -11400,7 +11415,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		$alias_to = $parent = $owner;
 		$rt = 30;
 
-		if($this->can("view", $arr["request"]["filt_cust"]) && obj($arr["request"]["filt_cust"])->class_id() == CL_CRM_CATEGORY)
+		if(isset($arr["request"]["filt_cust"]) && $this->can("view", $arr["request"]["filt_cust"]) && obj($arr["request"]["filt_cust"])->class_id() == CL_CRM_CATEGORY)
 		{
 			$alias_to = $arr["request"]["filt_cust"];
 			$parent = $arr["request"]["filt_cust"];
@@ -11434,13 +11449,90 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			"CL_CRM_COMPANY.RELTYPE_".(strpos($g, "sales") !== false ? "BUYER" : "SELLER")."(CL_CRM_COMPANY_CUSTOMER_DATA).RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER").".oid" => $owner,
 			"site_id" => array(),
 			"class_id" => array(),
-			"name" => ($f = $arr["request"]["filt_cust_name"]) ? $f."%" : array(),
-			"CL_CRM_COMPANY.RELTYPE_CUSTOMER(CL_CRM_CATEGORY).oid" => ($f = $arr["request"]["filt_cust"]) ? $f : array(),
+			"name" => empty($arr["request"]["filt_cust_name"]) ? array() : $arr["request"]["filt_cust_name"]."%",
 		//	"limit" => "0,200",
 		);
+
+		if(!empty($arr["request"]["filt_state"]))	$params["sales_state"] = $arr["request"]["filt_state"];
+		if(!empty($arr["request"]["timespan"]))		$params["cust_contract_date"] = $this->get_time_ol_filter($arr["request"]["timespan"]);
+		if(!empty($arr["request"]["filt_cust"]))	$params["CL_CRM_COMPANY.RELTYPE_CUSTOMER(CL_CRM_CATEGORY).oid"] = $arr["request"]["filt_cust"];
+
 		$ol = new object_list($params);
 		return $ol;
 	}
+
+	private function get_range($timespan)
+	{
+		switch($timespan)
+		{
+			case "period_last_week":
+				$from = mktime(0,0,0, date("m")-1, 1, date("Y"));
+				$to = mktime(0,0,0, date("m")-1, 8, date("Y"));
+				break;
+			case "period_week":
+				$from = mktime(0,0,0, date("m"), 1, date("Y"));
+				$to = mktime(0,0,0, date("m"), 8, date("Y"));
+				break;
+			case "period_last_last":
+				$from = mktime(0,0,0, date("m")-2, 1, date("Y"));
+				$to = mktime(0,0,0, date("m")-1, 1, date("Y"));
+				break;
+			case "period_last":
+				$from = mktime(0,0,0, date("m")-1, 1, date("Y"));
+				$to = mktime(0,0,0, date("m"), 1, date("Y"));
+				break;
+			case "period_current":
+				$from = mktime(0,0,0, date("m"), 1, date("Y"));
+				$to = mktime(0,0,0, date("m")+1, 1, date("Y"));
+				break;
+			case "period_next":
+				$from = mktime(0,0,0, date("m")+1, 1, date("Y"));
+				$to = mktime(0,0,0, date("m")+2, 1, date("Y"));
+				break;
+			case "period_year":
+				$from = mktime(0,0,0, 1, 1, date("Y"));
+				$to = mktime(0,0,0, 1, 1, date("Y")+1);
+				break;
+			case "period_lastyear":
+				$from = mktime(0,0,0, 1, 1, date("Y")-1);
+				$to = mktime(0,0,0,1 , 1, date("Y"));
+				break;
+			default :
+				return array();
+				break;	
+		}
+		return array(
+			"from" => $from,
+			"to" => $to,
+		);
+	}
+
+	//annad timespani v22rtuse ja saad ol filtrile sobiliku compare objekti
+	private function get_time_ol_filter($timespan)
+	{
+		$range = $this->get_range($timespan);
+		extract($range);
+
+		$filt = array();
+		if(!empty($from) && !empty($to))
+		{
+			$filt = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $from, $to);
+		}
+		else
+		{
+			if(!empty($from))
+			{
+				$filt = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
+			}
+			if(!empty($to))
+			{
+				$filt = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
+			}
+		}
+
+		return $filt;
+	}
+
 
 	function _get_clients_tbl($arr)
 	{
@@ -11508,6 +11600,11 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			return;
 		}
 		$ownerobject = obj($owner);
+
+		if(!$arr["request"]["timespan"])
+		{
+			$arr["request"]["timespan"] = "period_week";
+		}
 
 		$ol = $this->_get_clients_ol($arr);
 		foreach($ol->arr() as $oid => $o)

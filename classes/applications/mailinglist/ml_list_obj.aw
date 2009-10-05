@@ -131,11 +131,14 @@ class ml_list_obj extends _int_object
 	public function get_members($arr = array())
 	{
 		$list = get_instance(CL_ML_LIST);
-		$params = $arr;
-		$params["id"] = $this->id();
-		$params["src"] = $arr["sources"];
 		$list->list_id = $this->id();
-		$ml_list_members = $list->get_members($params);
+		$ml_list_members = $list->get_members(array(
+			"src"	=> $arr["sources"],
+			"all"	=> $arr["all"],
+			"id" => $this->id(),
+			"from"	=> $arr["from"],
+			"to"	=> $arr["to"],
+		));
 
 		if(strlen($arr["name"]) > 1 || strlen($arr["mail"]) > 1)
 		{

@@ -1091,6 +1091,15 @@ class class_base extends aw_template
 		}
 	}
 
+	function show_error_text($error_text = "")
+	{
+		if($error_text)
+		{
+			$this->cli->error_text = $error_text;
+		}
+		$this->cli->show_error();
+	}
+
 	function _get_sub_layouts($lay)
 	{
 		$this->leftout_layouts[$lay] = $lay;

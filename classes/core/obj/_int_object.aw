@@ -1246,6 +1246,7 @@ class _int_object
 				{
 					// we need to list the connections and fetch their names.
 					// UNLESS we already got them from wherever. like fetch_full_list conn prop fetch
+//arr(dbg::short_backtrace());
 					if (is_array($GLOBALS["read_properties_data_cache_conn"][$this->obj["oid"]]))
 					{
 						$rt = $GLOBALS["relinfo"][$this->obj["class_id"]][$pd["reltype"]]["value"];
