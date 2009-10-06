@@ -1516,7 +1516,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 		$str = "";
 
-		if(isset($bills_inst->states[$arr["request"]["bill_status"] - 10]))
+		if(isset($arr["request"]["bill_status"]) && isset($bills_inst->states[$arr["request"]["bill_status"] - 10]))
 		{
 			$str.= $bills_inst->states[$arr["request"]["bill_status"] - 10]." ";
 		}
@@ -1559,19 +1559,20 @@ exit_function("bills_impl::_get_bill_task_list");
 			}
 		}
 
-		if($arr["request"]["show_bill_balance"])
+		if(!empty($arr["request"]["show_bill_balance"]))
 		{
 			$this->show_bill_balance = 1;
 		}
-		if($arr["request"]["bill_s_with_tax"] == 0)
+		if(isset($arr["request"]["bill_s_with_tax"]) && $arr["request"]["bill_s_with_tax"] == 0)
 		{
 			$tax_add = 2;
 		}
-		else
+		elseif(isset($arr["request"]["bill_s_with_tax"]))
 		{
 			$tax_add = $arr["request"]["bill_s_with_tax"];
 		}
-		$cg = $arr["request"]["currency_grouping"];
+
+		$cg = isset($arr["request"]["currency_grouping"]) ? $arr["request"]["currency_grouping"] : "";
 
 
 		if(isset($_GET["get_all_customers_without_client_relation"]))
@@ -1645,7 +1646,7 @@ exit_function("bills_impl::_get_bill_task_list");
 					);
 				}
 			}
-			elseif ($arr["request"]["bill_s_from"] == "")
+			elseif (empty($arr["request"]["bill_s_from"]))
 			{
 				// init default search opts
 				//$u = get_instance(CL_USER);
@@ -1965,7 +1966,7 @@ exit_function("bill::balance");
 		{
 			$final_dat["tax"] = "<b>".number_format($tax, 2)."</b>";
 			$final_dat["sum"] = "<b>".number_format($sum, 2)."</b>";
-			if($arr["request"]["show_bill_balance"])
+			if(isset($arr["request"]["show_bill_balance"]))
 			{
 				$final_dat["balance"] .= "<b>".number_format($balance, 2)."</b><br>";
 			}
@@ -1979,7 +1980,7 @@ exit_function("bill::balance");
 			0 => t("K&auml;ibemaksuta"),
 			1 => t("K&auml;ibemaksuga"),
 		);
-		if($arr["request"]["bill_s_with_tax"] == "")
+		if(empty($arr["request"]["bill_s_with_tax"]))
 		{
 			$arr["prop"]["value"] = 1;
 		}
@@ -2010,7 +2011,7 @@ exit_function("bill::balance");
 	{
 		$b = get_instance(CL_CRM_BILL);
 		$arr["prop"]["options"] = array("-1" => "") + $b->states + array("-6" => t("Sissen&otilde;udmisel"));
-		if ($arr["request"]["bill_s_from"] == "")
+		if (empty($arr["request"]["bill_s_from"]))
 		{
 			$arr["prop"]["value"] = -1;
 		}
@@ -3051,7 +3052,7 @@ exit_function("bill::balance");
 		}
 		else
 		{
-			$selected = "pr_mgr";
+			$selected = "cust";
 		}
 		classload("core/icons");
 		$tv->start_tree(array(
@@ -3221,7 +3222,7 @@ exit_function("bill::balance");
 		}
 		classload("core/icons");
 
-		$bills_data = $this->all_bills_data(isset($arr["request"]["timespan"]) ? $arr["request"]["timespan"] : "" , $arr["request"]["bill_status"] - 10);
+		$bills_data = $this->all_bills_data(isset($arr["request"]["timespan"]) ? $arr["request"]["timespan"] : "" , isset($arr["request"]["bill_status"]) ? $arr["request"]["bill_status"] - 10 : null);
 
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
