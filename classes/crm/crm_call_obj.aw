@@ -122,11 +122,11 @@ class crm_call_obj extends task_object
 			$this->set_prop("phone", $phone->id());
 		}
 
-		$current_person_oid = get_current_person();
+		$current_person = get_current_person();
 		$this->set_prop("real_start", time());
-		$this->set_prop("real_maker", $current_person_oid);
+		$this->set_prop("real_maker", $current_person->id());
 		$crm_call = new crm_call();
-		$crm_call->add_participant(new object($this->id()), $current_person_oid);
+		$this->add_row();
 
 		$job = new object($this->prop("hr_schedule_job"));
 		$job->load_data();
@@ -143,7 +143,7 @@ class crm_call_obj extends task_object
 		if ($application->is_a(CL_CRM_SALES))
 		{
 			// send call start message to sales application
-			$application->end_call(new object($this->id()));
+			$application->make_call(new object($this->id()));
 		}
 	}
 
@@ -151,6 +151,8 @@ class crm_call_obj extends task_object
 	@attrib api=1 params=pos
 	@param resource type=CL_MRP_RESOURCE
 		resource to schedule the call to
+	@param prerequisite_tasks type=object_list default=null
+		Tasks (CL_TASK and extensions) that the call will have as prerequisites.
 	@returns void
 	@errors
 		throws awex_crm_call_state when call state doesn't allow scheduling
@@ -158,7 +160,7 @@ class crm_call_obj extends task_object
 	@comment
 		Requires customer_relation to be set. Saves object (calls self::save())
 	**/
-	public function schedule(object $resource)
+	public function schedule(object $resource, object_list $prerequisite_tasks = null)
 	{
 		if ($this->prop("real_duration") > 0 or $this->prop("real_start") > 1)
 		{
@@ -171,11 +173,39 @@ class crm_call_obj extends task_object
 			throw new awex_crm_call_cr("Customer relation must be defined");
 		}
 
-		$case = $customer_relation->get_sales_case(true);
-		$job = $case->add_job();
+		if (is_oid($this->prop("hr_schedule_job")))
+		{
+			$job = new object($this->prop("hr_schedule_job"));
+		}
+		else
+		{
+			$case = $customer_relation->get_sales_case(true);
+			$job = $case->add_job();
+			$this->set_prop("hr_schedule_job", $job->id());
+		}
+
+		// set tasks that this call is a result to as prerequisites
+		if (isset($prerequisite_tasks))
+		{
+			if ($prerequisite_tasks->count() > 0)
+			{
+				$prerequisite_jobs = new object_list();
+				foreach ($prerequisite_tasks->arr() as $task)
+				{
+					if (is_oid($task->prop("hr_schedule_job")))
+					{
+						$prerequisite_jobs->add($task->prop("hr_schedule_job"));
+					}
+				}
+
+				$job->set_prop("prerequisites", $prerequisite_jobs);
+			}
+		}
+
 		$job->set_prop("resource", $resource->id());
-		$job->set_prop("planned_length", ($this->prop("end") - $this->prop("start1")));
-		$this->set_prop("hr_schedule_job", $job->id());
+		$planned_length = $this->prop("end") > $this->prop("start1") ? $this->prop("end") - $this->prop("start1") : 0;
+		$job->set_prop("planned_length", $planned_length);
+		$job->set_prop("minstart", $this->prop("start1"));
 		$time = $this->prop("start1");
 		$job->load_data();
 
@@ -185,6 +215,18 @@ class crm_call_obj extends task_object
 		}
 		else
 		{
+			try
+			{
+				$case->plan();
+			}
+			catch (awex_mrp_case_state $e)
+			{
+				if ($case->prop("state") != mrp_case_obj::STATE_INPROGRESS)
+				{
+					throw $e;
+				}
+			}
+
 			$job->plan();
 		}
 
