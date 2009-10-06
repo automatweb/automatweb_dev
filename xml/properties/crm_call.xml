@@ -1,13 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>result_task</name>
-            <table>planner</table>
-            <type>hidden</type>
-            <datatype>int</datatype>
-            <field>result_task</field>
-      </property>
-      <property>
             <name>hr_schedule_job</name>
             <table>planner</table>
             <type>hidden</type>
@@ -20,6 +13,20 @@
             <type>hidden</type>
             <datatype>int</datatype>
             <field>customer_relation</field>
+      </property>
+      <property>
+            <name>real_maker</name>
+            <table>planner</table>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>real_maker</field>
+      </property>
+      <property>
+            <name>result_task</name>
+            <table>planner</table>
+            <type>hidden</type>
+            <datatype>int</datatype>
+            <field>result_task</field>
       </property>
       <property>
             <name>predicates</name>
@@ -91,6 +98,16 @@
             <caption>K&amp;amp;otilde;ne tulemus</caption>
       </property>
       <property>
+            <name>result_task_view</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>text</type>
+            <parent>top_2way_left</parent>
+            <store>no</store>
+            <field>result_task_view</field>
+            <caption>Tulemustegevus</caption>
+      </property>
+      <property>
             <name>new_call_date</name>
             <table>objects</table>
             <group>general</group>
@@ -144,6 +161,7 @@
             <group>general</group>
             <type>text</type>
             <parent>top_2way_right</parent>
+            <editonly>1</editonly>
             <field>real_start</field>
             <caption>Tegelik algus</caption>
       </property>
@@ -154,17 +172,9 @@
             <type>text</type>
             <datatype>int</datatype>
             <parent>top_2way_right</parent>
+            <editonly>1</editonly>
             <field>real_duration</field>
             <caption>Tegelik kestus (h)</caption>
-      </property>
-      <property>
-            <name>real_maker</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>hidden</type>
-            <datatype>int</datatype>
-            <parent>top_2way_right</parent>
-            <field>real_maker</field>
       </property>
       <property>
             <name>hrs_table</name>

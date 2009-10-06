@@ -18,9 +18,10 @@
 
 @default table=planner
 
-	@property result_task type=hidden datatype=int
 	@property hr_schedule_job type=hidden datatype=int
 	@property customer_relation type=hidden datatype=int
+	@property real_maker type=hidden datatype=int
+	@property result_task type=hidden datatype=int
 
 @default group=predicates
 	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect table=objects field=meta method=serialize
@@ -49,6 +50,9 @@
 			@property result type=select parent=top_2way_left
 			@caption K&otilde;ne tulemus
 
+			@property result_task_view type=text parent=top_2way_left store=no
+			@caption Tulemustegevus
+
 			@property new_call_date type=datepicker table=objects field=meta method=serialize parent=top_2way_left
 			@caption Uue k&otilde;ne aeg
 
@@ -65,14 +69,11 @@
 			@property deadline type=datepicker table=planner field=deadline parent=top_2way_right
 			@caption T&auml;htaeg
 
-			@property real_start type=text table=planner parent=top_2way_right
+			@property real_start type=text table=planner parent=top_2way_right editonly=1
 			@caption Tegelik algus
 
-			@property real_duration type=text datatype=int table=planner parent=top_2way_right
+			@property real_duration type=text datatype=int table=planner parent=top_2way_right editonly=1
 			@caption Tegelik kestus (h)
-
-			@property real_maker type=hidden datatype=int table=planner parent=top_2way_right
-
 
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
@@ -247,6 +248,8 @@
 
 class crm_call extends task
 {
+	private $mail_data = array();
+
 	function crm_call()
 	{
 		$this->init(array(
@@ -266,7 +269,7 @@ class crm_call extends task
 
 	function callback_on_load($arr)
 	{
-		if(($arr["request"]["msgid"]))
+		if(!empty($arr["request"]["msgid"]))
 		{
 			$mail = get_instance(CL_MESSAGE);
 			$this->mail_data = $mail->fetch_message(Array(
@@ -285,6 +288,29 @@ class crm_call extends task
 		}
 	}
 
+	function _get_result_task_view(&$arr)
+	{
+		$r = PROP_IGNORE;
+		$this_o = $arr["obj_inst"];
+
+		if ($this->can("view", $this_o->prop("result_task")))
+		{
+			$result_task = new object($this_o->prop("result_task"));
+			$arr["prop"]["value"] = html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $result_task->id(),
+					"return_url" => get_ru()
+				), $result_task->class_id()),
+				"caption" => $result_task->prop_xml("name"),
+				"title" => t("Muuda")
+			));
+
+			$r = PROP_OK;
+		}
+
+		return $r;
+	}
+
 	function _get_customer_info(&$arr)
 	{
 		$this_o = $arr["obj_inst"];
@@ -295,6 +321,7 @@ class crm_call extends task
 			"id" => $this_o->prop("customer_relation"),
 			"group" => "sales_data"
 		));
+		return PROP_OK;
 	}
 
 	function _get_call_tools(&$arr)
@@ -341,7 +368,7 @@ class crm_call extends task
 
 	function _get_real_start(&$arr)
 	{
-		if ($arr["prop"]["value"] > 1)
+		if (isset($arr["prop"]["value"]) and $arr["prop"]["value"] > 1)
 		{
 			$arr["prop"]["value"] = date("d.m.Y H:i", $arr["prop"]["value"]);
 		}
@@ -361,6 +388,18 @@ class crm_call extends task
 		{
 			$arr["prop"]["options"] = array("" => "") + $arr["obj_inst"]->result_names();
 			$arr["prop"]["onchange"] = "crmCallProcessResult(this);";
+			$r = PROP_OK;
+		}
+		return $r;
+	}
+
+	function _get_phone(&$arr)
+	{
+		$r = PROP_OK;
+		if (empty($arr["value"]) and isset($arr["request"]["phone_id"]) and is_oid($arr["request"]["phone_id"]))
+		{
+			$phone = obj($arr["request"]["phone_id"], array(), CL_CRM_PHONE);
+			$arr["prop"]["value"] = $phone->name();
 			$r = PROP_OK;
 		}
 		return $r;
@@ -391,9 +430,12 @@ class crm_call extends task
 		switch($data['name'])
 		{
 			case "comment":
-				$data["type"] = "textarea";
-				$data["rows"] = 2;
-				$data["cols"] = 30;
+				if ($data["type"] !== "textarea")
+				{
+					$data["type"] = "textarea";
+					$data["rows"] = 2;
+					$data["cols"] = 30;
+				}
 				break;
 			case "co_tb":
 			case "project_tb":
@@ -439,22 +481,24 @@ class crm_call extends task
 			case "customer":
 				return PROP_IGNORE;
 			case "name":
-				if($this->mail_data)
+				if(count($this->mail_data))
 				{
 					$data["value"] = $this->mail_data["subject"];
 				}
-				if($arr["request"]["title"] && $arr["new"])
+
+				if(!empty($arr["request"]["title"]) && !empty($arr["new"]))
 				{
 					$data["value"] = $arr["request"]["title"];
 				}
-				if($arr["request"]["participants"] && $arr["new"])
+
+				if(!empty($arr["request"]["participants"]) && !empty($arr["new"]))
 				{
 					$_SESSION["event"]["participants"] = explode("," , $arr["request"]["participants"]);
 				}
 				break;
 			case "content":
 				$data["style"] = "width: 100%";
-				if($this->mail_data)
+				if(count($this->mail_data))
 				{
 					$data["value"] = sprintf(
 					"From: %s\nTo: %s\nSubject: %s\nDate: %s\n\n%s",
@@ -475,19 +519,19 @@ class crm_call extends task
 				{
 					$calo = obj($cal);
 					$data["minute_step"] = $calo->prop("minute_step");
-					if ($data["name"] == "end" && (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id())))
+					if ($data["name"] === "end" && (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id())))
 					{
 						$data["value"] = time() + $calo->prop("event_def_len")*60;
 					}
 				}
-				else
-				if ($data["name"] ==  "end" && $arr["new"])
+				elseif ($data["name"] ===  "end" && $arr["new"])
 				{
 					$data["value"] = time() + 900;
 				}
-				if ($arr["new"])
+
+				if (!empty($arr["new"]))
 				{
-					if($day = $arr["request"]["date"])
+					if(isset($arr["request"]["date"]) and $day = $arr["request"]["date"])
 					{
 						$da = explode("-", $day);
 						$data["value"] = mktime(date('h',$data["value"]), date('i', $data["value"]), 0, $da[1], $da[0], $da[2]);
@@ -499,7 +543,7 @@ class crm_call extends task
 			case "search_contact_firstname":
 			case "search_contact_lastname":
 			case "search_contact_code":
-				if ($arr["request"]["class"] != "planner")
+				if ($arr["request"]["class"] !== "planner")
 				{
 					$data["value"] = $arr["request"][$data["name"]];
 				}
@@ -542,7 +586,7 @@ class crm_call extends task
 
 				if ($application->is_a(CL_CRM_SALES))
 				{
-					if (crm_call_obj::RESULT_CALL == $arr["request"]["result"] and $v <= time())
+					if (isset($arr["request"]["result"]) and crm_call_obj::RESULT_CALL == $arr["request"]["result"] and $v <= time())
 					{
 						if ($v < 2)
 						{
@@ -596,25 +640,30 @@ class crm_call extends task
 				break;
 
 			case "end":
-				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($data["value"]))
+				if(isset($arr["request"]["start1"]) and date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($data["value"]))
 				{
-
 					$data["value"] = $arr["request"]["start1"];
 					$arr["request"]["end"] = $arr["request"]["start1"];
 				}
 				break;
-		};
+		}
+
 		return $retval;
 	}
 
 	function _set_phone(&$arr)
 	{
-		return PROP_IGNORE;
+		$r = PROP_OK;
+		if (empty($arr["prop"]["value"]) and isset($arr["request"]["phone_id"]) and is_oid($arr["request"]["phone_id"]))
+		{
+			$arr["prop"]["value"] = $arr["request"]["phone_id"];
+		}
+		return $r;
 	}
 
 	function _set_result(&$arr)
 	{
-		if ("end" === $arr["request"]["action"] and empty($arr["prop"]["value"]))
+		if (isset($arr["request"]["action"]) and "end" === $arr["request"]["action"] and empty($arr["prop"]["value"]))
 		{
 			$arr["prop"]["error"] = t("Tulemus peab olema m&auml;&auml;ratud");
 			return PROP_FATAL_ERROR;
@@ -702,7 +751,7 @@ class crm_call extends task
 		$o->save();
 	}
 
-	function add_participant($task, $person)
+	function add_participant(object $task, object $person)
 	{
 		$pl = get_instance(CL_PLANNER);
 		$person->connect(array(
@@ -734,11 +783,11 @@ class crm_call extends task
 
 		if ($_GET["action"] === "new")
 		{
-			$arr["add_to_cal"] = $_GET["add_to_cal"];
-			$arr["alias_to_org"] = $_GET["alias_to_org"];
-			$arr["reltype_org"] = $_GET["reltype_org"];
-			$arr["set_pred"] = $_GET["set_pred"];
-			$arr["set_resource"] = $_GET["set_resource"];
+			$arr["add_to_cal"] = isset($_GET["add_to_cal"]) ? $_GET["add_to_cal"] : null;
+			$arr["alias_to_org"] = isset($_GET["alias_to_org"]) ? $_GET["alias_to_org"] : null;
+			$arr["reltype_org"] = isset($_GET["reltype_org"]) ? $_GET["reltype_org"] : null;
+			$arr["set_pred"] = isset($_GET["set_pred"]) ? $_GET["set_pred"] : null;
+			$arr["set_resource"] = isset($_GET["set_resource"]) ? $_GET["set_resource"] : null;
 		}
 
 		if (is_oid(automatweb::$request->arg("phone_id")))
@@ -755,14 +804,14 @@ class crm_call extends task
 		$result_call = crm_call_obj::RESULT_CALL;
 		$result_presentation = crm_call_obj::RESULT_PRESENTATION;
 		$result_refused = crm_call_obj::RESULT_REFUSED;
-		$result_noanswer = RESULT_NOANSWER;
-		$result_busy = RESULT_BUSY;
-		$result_hungup = RESULT_HUNGUP;
-		$result_outofservice = RESULT_OUTOFSERVICE;
-		$result_invalidnr = RESULT_INVALIDNR;
-		$result_voicemail = RESULT_VOICEMAIL;
-		$result_newnumber = RESULT_NEWNUMBER;
-		$result_disconnected = RESULT_DISCONNECTED;
+		$result_noanswer = crm_call_obj::RESULT_NOANSWER;
+		$result_busy = crm_call_obj::RESULT_BUSY;
+		$result_hungup = crm_call_obj::RESULT_HUNGUP;
+		$result_outofservice = crm_call_obj::RESULT_OUTOFSERVICE;
+		$result_invalidnr = crm_call_obj::RESULT_INVALIDNR;
+		$result_voicemail = crm_call_obj::RESULT_VOICEMAIL;
+		$result_newnumber = crm_call_obj::RESULT_NEWNUMBER;
+		$result_disconnected = crm_call_obj::RESULT_DISCONNECTED;
 		$redirect_to_presentation = $this_o->is_in_progress() ? "true" : "false";
 
 		$scripts .= <<<EOS
@@ -1187,9 +1236,9 @@ EOS;
 			$this_o->end();
 
 			$application = automatweb::$request->get_application();
-//			$role = $application->get_current_user_role();
-			if ($application->is_a(CL_CRM_SALES) and crm_sales_obj::ROLE_TELEMARKETING_SALESMAN === $role)
-			{ // return to calls list
+			if ($application->is_a(CL_CRM_SALES))
+			{
+				// return to calls list
 				$r = $arr["return_url"];
 			}
 		}
