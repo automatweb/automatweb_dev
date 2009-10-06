@@ -956,18 +956,33 @@ default group=org_objects
 		@layout bills_list_l type=vbox parent=bills_list_box closeable=1
 
 		@layout bills_list_u type=vbox parent=bills_list_l closeable=1 area_caption=Arved
-
-			@property bills_tree type=treeview store=no no_caption=1 parent=bills_list_u group=bills_list
-			@caption Arvete puu
+			@property bills_tree type=treeview store=no no_caption=1 parent=bills_list_u
+			@caption Saadetud arvete puu
 
 		@layout bills_list_stats type=vbox parent=bills_list_l closeable=1 area_caption=Arve&nbsp;staatus
+			@property bills_stats_tree type=treeview store=no no_caption=1 parent=bills_list_stats
+			@caption Arve staatuste puu
 
-			@property bills_stats_tree type=treeview store=no no_caption=1 parent=bills_list_stats group=bills_list
-			@caption Arvete puu
+		@layout bills_list_u_project_manager type=vbox parent=bills_list_l closeable=1 area_caption=Projektijuhid
+			@property bills_project_manager_tree type=treeview store=no no_caption=1 parent=bills_list_u_project_manager
+			@caption Arvete projektijuhi puu
+
+		@layout bills_list_u_customer_manage type=vbox parent=bills_list_l closeable=1 area_caption=Kliendihaldurid
+			@property bills_customer_manager_tree type=treeview store=no no_caption=1 parent=bills_list_u_customer_manage
+			@caption Arvete kliendihalduri puu
+
+		@layout bills_list_u_customer type=vbox parent=bills_list_l closeable=1 area_caption=Klient
+			@property bills_customer_tree type=treeview store=no no_caption=1 parent=bills_list_u_customer
+			@caption Arvete Klientide puu
+
+#		@layout bills_list_u_customer_manage type=vbox parent=bills_list_l closeable=1 area_caption=Osakonnad
+#
+#			@property bills_section_tree type=treeview store=no no_caption=1 parent=bills_list_u_customer_manage
+#			@caption Arvete osakonna puu
 
 		@layout bills_list_time type=vbox parent=bills_list_l closeable=1 area_caption=Periood
 
-			@property bills_time_tree type=treeview store=no no_caption=1 parent=bills_list_time group=bills_list
+			@property bills_time_tree type=treeview store=no no_caption=1 parent=bills_list_time
 			@caption Arvete puu
 
 		@layout bills_list_s type=vbox parent=bills_list_l closeable=1 area_caption=Otsing
@@ -2117,7 +2132,6 @@ class crm_company extends class_base
 	{
 		$data = &$arr['prop'];
 		$retval = PROP_OK;
-
 		switch($data['name'])
 		{
 			case "ettevotlusvorm":
@@ -3053,6 +3067,10 @@ class crm_company extends class_base
 			case 'bill_tb':
 			case 'bills_list':
 			case 'bills_tree':
+			case 'bills_project_manager_tree':
+			case 'bills_customer_manager_tree':
+			case 'bills_customer_tree':
+			case 'bills_section_tree':
 			case 'bills_stats_tree':
 			case 'bills_time_tree':
 			case 'bills_tb':

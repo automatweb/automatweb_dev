@@ -2853,7 +2853,7 @@
             <no_caption>1</no_caption>
             <parent>bills_list_u</parent>
             <field>bills_tree</field>
-            <caption>Arvete puu</caption>
+            <caption>Saadetud arvete puu</caption>
       </property>
       <property>
             <name>bills_stats_tree</name>
@@ -2864,7 +2864,40 @@
             <no_caption>1</no_caption>
             <parent>bills_list_stats</parent>
             <field>bills_stats_tree</field>
-            <caption>Arvete puu</caption>
+            <caption>Arve staatuste puu</caption>
+      </property>
+      <property>
+            <name>bills_project_manager_tree</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>bills_list_u_project_manager</parent>
+            <field>bills_project_manager_tree</field>
+            <caption>Arvete projektijuhi puu</caption>
+      </property>
+      <property>
+            <name>bills_customer_manager_tree</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>bills_list_u_customer_manage</parent>
+            <field>bills_customer_manager_tree</field>
+            <caption>Arvete kliendihalduri puu</caption>
+      </property>
+      <property>
+            <name>bills_customer_tree</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>bills_list_u_customer</parent>
+            <field>bills_customer_tree</field>
+            <caption>Arvete Klientide puu</caption>
       </property>
       <property>
             <name>bills_time_tree</name>
@@ -5512,6 +5545,27 @@
                   <area_caption>Arve&amp;amp;nbsp;staatus</area_caption>
                   <group>bills_list</group>
             </bills_list_stats>
+            <bills_list_u_project_manager>
+                  <type>vbox</type>
+                  <parent>bills_list_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Projektijuhid</area_caption>
+                  <group>bills_list</group>
+            </bills_list_u_project_manager>
+            <bills_list_u_customer_manage>
+                  <type>vbox</type>
+                  <parent>bills_list_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kliendihaldurid</area_caption>
+                  <group>bills_list</group>
+            </bills_list_u_customer_manage>
+            <bills_list_u_customer>
+                  <type>vbox</type>
+                  <parent>bills_list_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Klient</area_caption>
+                  <group>bills_list</group>
+            </bills_list_u_customer>
             <bills_list_time>
                   <type>vbox</type>
                   <parent>bills_list_l</parent>

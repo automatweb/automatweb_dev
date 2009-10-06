@@ -168,6 +168,7 @@ class crm_bill_row_object extends _int_object
 		$bills_list = new object_list(array(
 			"class_id" => CL_CRM_BILL,
 			"lang_id" => array(),
+			"site_id" => array(),
 			"CL_CRM_BILL.RELTYPE_ROW" => $this->id(),
 		));
 		return $bills_list->begin();

@@ -1414,7 +1414,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			"chgbgcolor" => "color",
 		));
 
-		if($this->show_bill_balance)
+		if(!empty($this->show_bill_balance))
 		{
 			$t->define_field(array(
 				"name" => "balance",
@@ -1510,8 +1510,47 @@ exit_function("bills_impl::_get_bill_task_list");
 		return $filt["bill_date_range"];
 	}
 
+	private function get_table_name($arr)
+	{
+		$bills_inst = get_instance(CL_CRM_BILL);
+
+		$str = "";
+
+		if(isset($bills_inst->states[$arr["request"]["bill_status"] - 10]))
+		{
+			$str.= $bills_inst->states[$arr["request"]["bill_status"] - 10]." ";
+		}
+
+		$str.= t("arved");
+
+		$other_stuff = array();
+		if(!empty($arr["request"]["project_manager"]))
+		{
+			$other_stuff[] = sprintf("projektijuhiks %s", get_name($arr["request"]["project_manager"]));
+		}
+		if(!empty($arr["request"]["customer_manager"]))
+		{
+			$other_stuff[] = sprintf("kliendihalduriks %s", get_name($arr["request"]["customer_manager"]));
+		}
+
+		if(!empty($arr["request"]["customer"]))
+ 		{
+			$other_stuff[] = sprintf("klient %s", get_name($arr["request"]["customer"]));
+		}
+
+		if(sizeof($other_stuff))
+		{
+			$str.= " ".t("mille")." ".join(", " , $other_stuff);
+		}
+		return $str;
+	}
+
 	function _get_bills_list($arr)
 	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_caption($this->get_table_name($arr));
+
+
 		if(!isset($arr["request"]["st"]))
 		{
 			if(is_object($current_co = get_current_company()) && $current_co->id() != $arr["obj_inst"]->id())
@@ -1534,8 +1573,8 @@ exit_function("bills_impl::_get_bill_task_list");
 		}
 		$cg = $arr["request"]["currency_grouping"];
 
-		$t =& $arr["prop"]["vcl_inst"];
-		if($_GET["get_all_customers_without_client_relation"])
+
+		if(isset($_GET["get_all_customers_without_client_relation"]))
 		{
 			$t = $arr["obj_inst"]->get_all_customers_without_client_relation();
 			return 1;
@@ -1549,6 +1588,7 @@ exit_function("bills_impl::_get_bill_task_list");
 		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
 		$pop = get_instance("vcl/popup_menu");
 
+
 		if ($arr["request"]["group"] == "bills_monthly")
 		{
 			$bills = $d->get_bills_by_co($arr["obj_inst"], array("monthly" => 1));
@@ -1557,46 +1597,46 @@ exit_function("bills_impl::_get_bill_task_list");
 		else
 		{
 			$filt = array();
-			if($arr["request"]["st"] || $arr["request"]["timespan"] || $arr["request"]["bill_status"])
+			$tree_props = array(
+				"st" => 1,
+				"timespan" => 1,
+				"bills_status" => 1,
+				"project_manager" => 1,
+				"customer_manager" => 1,
+				"customer" => 1,
+			);
+			if(sizeof(array_intersect_key($arr["request"] , $tree_props)))
 			{
-				$stuff = explode("_" , $arr["request"]["st"]);
-				switch($stuff[0])
+				if(isset($arr["request"]["st"]))//kui viitsimist tuleb, v6iks seda jama lyhemaks teha... osa ei t88ta enam
 				{
-					case "prman":
-						$filt["project_mgr"] = $stuff[1];
-					break;
-					case "mails":
-						return $this->_get_mails_list($arr);
-					break;
-					case "custman":
-						$filt["client_mgr"] = $stuff[1];
-					break;
-					case "cust":
-						$filt["customer"] = $stuff[1];
-					break;
-
-					default:
-					if($arr["request"]["st"] > 1)
+					$stuff = explode("_" , $arr["request"]["st"]);
+					switch($stuff[0])
 					{
-						$filt["state"] = $arr["request"]["st"]-10;
+						case "prman":
+							$filt["project_mgr"] = $stuff[1];
+						break;
+						case "mails":
+							return $this->_get_mails_list($arr);
+						break;
+						case "custman":
+							$filt["client_mgr"] = $stuff[1];
+						break;
+						case "cust":
+							$filt["customer"] = $stuff[1];
+						break;
+
+						default:
+						if($arr["request"]["st"] > 1)
+						{
+							$filt["state"] = $arr["request"]["st"]-10;
+						}
 					}
 				}
-//				if(isset($stuff[2]))
-//				{
-//					$filt["state"] = $stuff[2];
-//				}
-
-				
-
-				if( $arr["request"]["bill_status"])
-				{
-					$filt["state"] = $arr["request"]["bill_status"] - 10;
-				}
-				
-				if($arr["request"]["timespan"])
-				{
-					$filt["bill_date_range"] = $this->get_range($arr["request"]["timespan"]);
-				}
+				if(isset($arr["request"]["customer_manager"])) 	$filt["client_mgr"] = $arr["request"]["customer_manager"];
+				if(isset($arr["request"]["customer"]))		$filt["customer"] = $arr["request"]["customer"];
+				if(isset($arr["request"]["project_manager"])) 	$filt["project_mgr"] = $arr["request"]["project_manager"];
+				if(isset($arr["request"]["bill_status"])) 	$filt["state"] = $arr["request"]["bill_status"] - 10;
+				if(isset($arr["request"]["timespan"]))		$filt["bill_date_range"] = $this->get_range($arr["request"]["timespan"]);
 				if(!isset($arr["request"]["timespan"]))
 				{
 					$filt["bill_date_range"] = array(
@@ -1665,7 +1705,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 		$company_curr = $co_stat_inst->get_company_currency();
 
-		if ($arr["request"]["export_hr"] > 0)
+		if (isset($arr["request"]["export_hr"]) && $arr["request"]["export_hr"] > 0)
 		{
 			if (is_array($arr["request"]["bi"]) && count($arr["request"]["bi"]))
 			{
@@ -1677,6 +1717,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 		$sum_in_curr = $bal_in_curr = array();
 		$balance = 0;
+		$sum = $tax = 0;
 		foreach($bills->arr() as $bill)
 		{
 enter_function("bill::start");
@@ -1951,17 +1992,8 @@ exit_function("bill::balance");
 
 	function _get_bill_s_client_mgr($arr)
 	{
-		if ($arr["request"]["bill_s_from"] == "")
-		{
-//			$u = get_instance(CL_USER);
-//			$p = obj($u->get_current_person());
-//
-//			if($p->is_cust_mgr())
-//			{
-//				$v = $p->name();
-//			}
-		}
-		else
+		$v = "";
+		if (!empty($arr["request"]["bill_s_from"]) && isset($arr["request"]["bill_s_client_mgr"]))
 		{
 			$v = $arr["request"]["bill_s_client_mgr"];
 		}
@@ -2797,7 +2829,6 @@ exit_function("bill::balance");
 		return;
 	}
 
-
 	function _get_bills_stats_tree($arr)
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
@@ -2814,7 +2845,6 @@ exit_function("bill::balance");
 
 		$filter = $this->_get_bills_filter($arr);
 		unset($filter["state"]);
-
 		$t = new object_data_list(
 			$filter,
 			array(
@@ -2861,39 +2891,50 @@ exit_function("bill::balance");
 			"lang_id" => array(),
 			"site_id" => array(),
 		);
-		$stuff = explode("_" , $arr["request"]["st"]);
-		switch($stuff[0])
+		if(!empty($arr["customer_manager"]))
 		{
-			case "prman":
-				$filter["RELTYPE_PROJECT.proj_mgr"] = $stuff[1];
-			break;
-			case "custman":
-				$filter["customer.client_mgr"] = $stuff[1];
-			break;
-			case "cust":
-				$filter["customer"] = $stuff[1];
-			break;
-				default:
-				if($arr["request"]["st"] > 1)
-				{
-					$filter["state"] = $arr["request"]["st"]-10;
-				}
+			$filter["customer.client_mgr"] = $arr["customer_manager"];
 		}
-		if( $arr["request"]["bill_status"])
+		if(!empty($arr["project_manager"]))
+		{
+			$filter["RELTYPE_PROJECT.proj_mgr"] = $arr["project_manager"];
+		}
+		if(isset($arr["request"]["st"]))
+		{
+			$stuff = explode("_" , $arr["request"]["st"]);
+			switch($stuff[0])
+			{
+				case "prman":
+					$filter["RELTYPE_PROJECT.proj_mgr"] = $stuff[1];
+				break;
+				case "custman":
+					$filter["customer.client_mgr"] = $stuff[1];
+				break;
+				case "cust":
+					$filter["customer"] = $stuff[1];
+				break;
+					default:
+					if($arr["request"]["st"] > 1)
+					{
+						$filter["state"] = $arr["request"]["st"]-10;
+					}
+			}
+		}
+		if(!empty($arr["request"]["bill_status"]))
 		{
 			$filter["state"] = $arr["request"]["bill_status"] - 10;
 		}
 		
-		if($arr["request"]["timespan"])
-		{
-			$bill_date_range = $this->get_range($arr["request"]["timespan"]);
-		}
-		if(!isset($arr["request"]["timespan"]))
+		if(empty($arr["request"]["timespan"]))
 		{
 			$bill_date_range = array(
 				"from" => mktime(0,0,0, date("m"), 0, date("Y")),
 				"to" => mktime(0,0,0, date("m")+1, 0, date("Y")),
 			);
+		}
+		else
+		{
+			$bill_date_range = $this->get_range($arr["request"]["timespan"]);
 		}
 		if(is_array($bill_date_range))
 		{
@@ -2933,7 +2974,7 @@ exit_function("bill::balance");
 		foreach($branches as $id => $caption)
 		{
 			$tv->add_item("all_time", array(
-				"id" => $id,
+				"id" => "".$id."",
 				"name" => $caption,
 				"url" => aw_url_change_var(array(
 					$var => $id,
@@ -2942,89 +2983,31 @@ exit_function("bill::balance");
 		}
 	}
 
-	function _get_bills_tree($arr)
+	function _get_bills_project_manager_tree($arr)
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
-		$var = "st";
-
-		if(!isset($_GET[$var]))
+		$var = "project_manager";
+		if(!empty($_GET[$var]))
 		{
-			if(is_object($current_co = get_current_company()) && $current_co->id() != $arr["obj_inst"]->id())
-			{
-				$_GET[$var] = "cust_".$arr["obj_inst"]->id();
-			}
-			else
-			{
-				$_GET[$var] = 10;
-			}
+			$selected = $_GET[$var];
+		}
+		else
+		{
+			$selected = "pr_mgr";
 		}
 		classload("core/icons");
-
-		$bills_data = $this->all_bills_data($arr["request"]["timespan"] , $arr["request"]["bill_status"] - 10);
-
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"persist_state" => true,
-			"tree_id" => "proj_bills_tree",
+			"tree_id" => "proj_manager_bills_tree",
 		));
 
-		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all_bills");
+		$tv->set_selected_item($selected);
 
 		$tv->add_item(0,array(
-			"name" => t("K&otilde;ik"),
-			"id" => "all_bills",
-			"url" => aw_url_change_var($var, null),
-		));
-
-		$bills_inst = get_instance(CL_CRM_BILL);
-		$states = $bills_inst->states;
-
-
-		$tv->add_item(0,array(
-			"name" => t("Saadetud arved"),
-			"id" => "sent_bills",
-//			"url" => aw_url_change_var($var, $stat_id+10),
-		));
-
-		$sent_bills_props = array(
-			"sent" => t("Saadetud ja laekumata"),
-			"overdate" => t("Laekumata &uuml;le makset&auml;htaja"),
-			"overtolerance" => t("Laekumata &uuml;le tolerantsi"),
-			"all" => t("Laekumata kokku"),
-		);
-/* 
-b) 
-(alla kuvab kliendtide nimekirja, kus kliendi nime j2rel sulus on vastav arvete arv)
-c) 
-(vt. punkt b)
-d) 
-*/
-/*		$bill_mails = $this->get_bill_mails(array(
-			"state" => 1,
-		));
-*/
-		foreach($sent_bills_props as $id => $name)
-		{
-			if(!$name)
-			{
-				continue;
-			}
-			if (isset($_GET[$var]) && $_GET[$var] == "mails_".$id)
-			{
-				$name = "<b>".$name."</b>";
-			}
-			$tv->add_item("sent_bills",array(
-				"name" => $name,
-				"id" => "mails".$id,
-				"iconurl" => icons::get_icon_url(CL_MESSAGE),
-				"url" => aw_url_change_var($var, "mails_".$id),
-			));
-		}
-
-		$tv->add_item(0,array(
-			"name" => t("Projektijuht"),
+			"name" => t("K&otilde;ik projektijuhid"),
 			"id" => "pr_mgr",
-//			"url" => aw_url_change_var($var, $stat_id+10),
+			"url" => aw_url_change_var($var,null),
 		));
 
 		foreach($this->all_project_managers()->names() as $id => $name)
@@ -3048,94 +3031,42 @@ d)
 			{
 				$name = $name." (".array_sum($pm_statuses).")";
 			}
-			if (isset($_GET[$var]) && $_GET[$var] == "prman_".$id)
-			{
-				$name = "<b>".$name."</b>";
-			}
 
 			$tv->add_item("pr_mgr",array(
 				"name" => $name,
-				"id" => "prman".$id,
+				"id" => "".$id."",
 				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
-				"url" => aw_url_change_var($var, "prman_".$id),
+				"url" => aw_url_change_var($var, $id),
 			));
-/*
-			if(sizeof($pm_statuses))
-			{
-				foreach($pm_statuses as $status => $st_count)
-				{
-					$name = $states[$status]." (".$st_count.")";
-					if (isset($_GET[$var]) && $_GET[$var] == "prman_".$id."_".$status)
-					{
-						$name = "<b>".$name."</b>";
-					}
-		
-					$tv->add_item("prman".$id,array(
-						"name" => $name,
-						"id" => "prman_".$id."_".$status,
-						"iconurl" => icons::get_icon_url(CL_CRM_BILL),
-						"url" => aw_url_change_var($var, "prman_".$id."_".$status),
-					));
-				}
-			}*/
 		}
+	}
 
-		$tv->add_item(0,array(
-			"name" => t("Kliendihaldur"),
-			"id" => "cust_mgr",
-//			"url" => aw_url_change_var($var, $stat_id+10),
+	function _get_bills_customer_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "customer";
+		if(!empty($_GET[$var]))
+		{
+			$selected = $_GET[$var];
+		}
+		else
+		{
+			$selected = "pr_mgr";
+		}
+		classload("core/icons");
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_customers_bills_tree",
 		));
 
-		foreach($this->all_client_managers()->names() as $id => $name)
-		{
-			if(!$name)
-			{
-				continue;
-			}
-			if (isset($_GET[$var]) && $_GET[$var] == "custman_".$id)
-			{
-				$name = "<b>".$name."</b>";
-			}
-			$tv->add_item("cust_mgr",array(
-				"name" => $name,
-				"id" => "custman".$id,
-				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
-				"url" => aw_url_change_var($var, "custman_".$id),
-			));
-		}
-
+		$tv->set_selected_item($selected);
 		$tv->add_item(0,array(
-			"name" => t("&Uuml;ksus"),
-			"id" => "unit",
-//			"url" => aw_url_change_var($var, $stat_id+10),
-		));
-
-		$units = $arr["obj_inst"]->get_sections();
-		$unames = $units->names();
-		asort($unames);
-		foreach($unames as $id => $name)
-		{
-			if(!$name)
-			{
-				continue;
-			}
-			if (isset($_GET[$var]) && $_GET[$var] == "unit_".$id)
-			{
-				$name = "<b>".$name."</b>";
-			}
-			$tv->add_item("unit",array(
-				"name" => $name,
-				"id" => "custman".$id,
-				"iconurl" => icons::get_icon_url(CL_CRM_SECTION),
-				"url" => aw_url_change_var($var, "unit_".$id),
-			));
-		}
-
-		$tv->add_item(0,array(
-			"name" => t("Klient"),
+			"name" => t("K&otilde;ik kliendid"),
 			"id" => "cust",
-//			"url" => aw_url_change_var($var, $stat_id+10),
+			"url" => aw_url_change_var($var, null),
 		));
+
 		$customers_by_1_letter = array();
 		$customer_names = $this->all_bill_customers()->names();
 		$cust_name_sort = array();
@@ -3147,193 +3078,199 @@ d)
 		asort($cust_name_sort);//arr($customer_names);
 		foreach($cust_name_sort as $customer_id => $customer_n)
 		{
-			$customer_name = $customer_names[$customer_id];//*/
-//		asort($customer_names , SORT_STRING);
-//		foreach($customer_names as $customer_id => $customer_name)
-//		{
+			$customer_name = $customer_names[$customer_id];
+		asort($customer_names , SORT_STRING);
+		foreach($customer_names as $customer_id => $customer_name)
+		{
 			if(!$customer_name)
 			{
 				continue;
 			}
 			$customers_by_1_letter[substr($customer_name,0,1)][$customer_id] = $customer_name;
 		}
-
+		}
 		foreach($customers_by_1_letter as $letter1 => $customers)
 		{
 			$name = $letter1 ." (".sizeof($customers).")";
-			if (isset($_GET[$var]) && $_GET[$var] == "cust_".$letter1)
-			{
-				$name = "<b>".$name."</b>";
-			}
 			$tv->add_item("cust",array(
 				"name" => $name,
-				"id" => "cust".$letter1,
+				"id" => $letter1,
 			//	"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
-				"url" => aw_url_change_var($var, "cust_".$letter1),
+				"url" => aw_url_change_var($var, $letter1),
 			));
 
 			foreach($customers as $id => $name)
 			{
-				if (isset($_GET[$var]) && $_GET[$var] == "cust_".$id)
-				{
-					$name = "<b>".$name."</b>";
-				}
-				$tv->add_item("cust".$letter1,array(
+				$tv->add_item($letter1,array(
 					"name" => $name,
-					"id" => "cust".$id,
+					"id" => "".$id."",
 					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
-					"url" => aw_url_change_var($var, "cust_".$id),
+					"url" => aw_url_change_var($var, $id),
 				));
 			}
 		}
-/*
+
+	}
+
+	function _get_bills_customer_manager_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "customer_manager";
+		if(!empty($_GET[$var]))
+		{
+			$selected = $_GET[$var];
+		}
+		else
+		{
+			$selected = "cust_mgr";
+		}
+		classload("core/icons");
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "customer_manager_bills_tree",
+		));
+
+		$tv->set_selected_item($selected);
+
 		$tv->add_item(0,array(
-			"name" => t("Periood"),
-			"id" => "period",
-//			"url" => aw_url_change_var($var, $stat_id+10),
+			"name" => t("K&otilde;ik kliendihaldurid"),
+			"id" => "cust_mgr",
+			"url" => aw_url_change_var($var, null),
 		));
 
-		$state = t("Eelmine kuu");
- 		$bills_data = $this->all_bills_data("period_last");
- 		$pm_statuses = array();
- 		foreach($bills_data as $bd)
- 		{
- 			$pm_statuses[$bd["state"]] ++;
- 		}
- 		if(array_sum($pm_statuses))
- 		{
- 			$state = $state." (".array_sum($pm_statuses).")";
- 		}
-		if (isset($_GET[$var]) && $_GET[$var] == "period_last") $state = "<b>".$state."</b>";
-		$tv->add_item("period",array(
-			"name" => $state,
-			"id" => "period_last",
-			"url" => aw_url_change_var($var, "period_last"),
+		foreach($this->all_client_managers()->names() as $id => $name)
+		{
+			if(!$name)
+			{
+				continue;
+			}
+			$tv->add_item("cust_mgr",array(
+				"name" => $name,
+				"id" => "".$id."",
+				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
+				"url" => aw_url_change_var($var, $id),
+			));
+		}
+
+
+	}
+
+	function _bills_section_tree($arr)
+	{return;
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "section";
+		if(empty($_GET[$var]))
+		{
+			$selected = $_GET[$var];
+		}
+		else
+		{
+			$selected = "unit";
+		}
+		classload("core/icons");
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "section_bills_tree",
 		));
- 		if(sizeof($pm_statuses))
- 		{
- 			foreach($pm_statuses as $status => $st_count)
- 			{
- 				$name = $states[$status]." (".$st_count.")";
- 				if (isset($_GET[$var]) && $_GET[$var] == "period_last_".$status)
- 				{
- 					$name = "<b>".$name."</b>";
- 				}
- 				$tv->add_item("period_last",array(
- 					"name" => $name,
- 					"id" => "period_last_".$status,
- 					"iconurl" => icons::get_icon_url(CL_CRM_BILL),
- 					"url" => aw_url_change_var($var, "period_last_".$status),
- 				));
- 			}
- 		}
 
-		$state = t("Jooksev kuu");
-		$bills_data = $this->all_bills_data("period_current");
- 		$pm_statuses = array();
- 		foreach($bills_data as $bd)
- 		{
- 			$pm_statuses[$bd["state"]] ++;
- 		}
- 		if(array_sum($pm_statuses))
- 		{
- 			$state = $state." (".array_sum($pm_statuses).")";
- 		}
-		if (isset($_GET[$var]) && $_GET[$var] == "period_current") $state = "<b>".$state."</b>";
-		$tv->add_item("period",array(
-			"name" => $state,
-			"id" => "period_current",
-			"url" => aw_url_change_var($var, "period_current"),
+		$tv->set_selected_item($selected);
+
+		$tv->add_item(0,array(
+			"name" => t("&Uuml;ksus"),
+			"id" => "unit",
+			"url" => aw_url_change_var($var, $stat_id+10),
 		));
- 		if(sizeof($pm_statuses))
- 		{
- 			foreach($pm_statuses as $status => $st_count)
- 			{
- 				$name = $states[$status]." (".$st_count.")";
- 				if (isset($_GET[$var]) && $_GET[$var] == "period_current_".$status)
- 				{
- 					$name = "<b>".$name."</b>";
- 				}
- 				$tv->add_item("period_current",array(
- 					"name" => $name,
- 					"id" => "period_current_".$status,
- 					"iconurl" => icons::get_icon_url(CL_CRM_BILL),
- 					"url" => aw_url_change_var($var, "period_current_".$status),
- 				));
- 			}
- 		}
 
+		$units = $arr["obj_inst"]->get_sections();
+		$unames = $units->names();
+		asort($unames);
+		foreach($unames as $id => $name)
+		{
+			if(!$name)
+			{
+				continue;
+			}
 
-		$state = t("J&auml;rgmine kuu");
-		$bills_data = $this->all_bills_data("period_next");
- 		$pm_statuses = array();
- 		foreach($bills_data as $bd)
- 		{
- 			$pm_statuses[$bd["state"]] ++;
- 		}
- 		if(array_sum($pm_statuses))
- 		{
- 			$state = $state." (".array_sum($pm_statuses).")";
- 		}
-		if (isset($_GET[$var]) && $_GET[$var] == "period_next") $state = "<b>".$state."</b>";
-		$tv->add_item("period",array(
-			"name" => $state,
-			"id" => "period_next",
-			"url" => aw_url_change_var($var, "period_next"),
+			$tv->add_item("unit",array(
+				"name" => $name,
+				"id" => $id,
+				"iconurl" => icons::get_icon_url(CL_CRM_SECTION),
+				"url" => aw_url_change_var($var, $id),
+			));
+		}
+
+	}
+
+	function _get_bills_tree($arr)
+	{
+		$tv =& $arr["prop"]["vcl_inst"];
+		$var = "st";
+
+		if(!isset($_GET[$var]))
+		{
+			if(is_object($current_co = get_current_company()) && $current_co->id() != $arr["obj_inst"]->id())
+			{
+				$_GET[$var] = "cust_".$arr["obj_inst"]->id();
+			}
+			else
+			{
+				$_GET[$var] = 10;
+			}
+		}
+		classload("core/icons");
+
+		$bills_data = $this->all_bills_data(isset($arr["request"]["timespan"]) ? $arr["request"]["timespan"] : "" , $arr["request"]["bill_status"] - 10);
+
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_bills_tree",
 		));
- 		if(sizeof($pm_statuses))
- 		{
- 			foreach($pm_statuses as $status => $st_count)
- 			{
- 				$name = $states[$status]." (".$st_count.")";
- 				if (isset($_GET[$var]) && $_GET[$var] == "period_next_".$status)
- 				{
- 					$name = "<b>".$name."</b>";
- 				}
- 				$tv->add_item("period_next",array(
- 					"name" => $name,
- 					"id" => "period_next_".$status,
- 					"iconurl" => icons::get_icon_url(CL_CRM_BILL),
- 					"url" => aw_url_change_var($var, "period_next_".$status),
- 				));
- 			}
- 		}
 
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : "all_bills");
 
-		$state = t("K&otilde;ik perioodid");
-		$bills_data = $this->all_bills_data();
- 		$pm_statuses = array();
- 		foreach($bills_data as $bd)
- 		{
- 			$pm_statuses[$bd["state"]] ++;
- 		}
- 		if(array_sum($pm_statuses))
- 		{
- 			$state = $state." (".array_sum($pm_statuses).")";
- 		}
-		if (isset($_GET[$var]) && $_GET[$var] == "period_all") $state = "<b>".$state."</b>";
-		$tv->add_item("period",array(
-			"name" => $state,
-			"id" => "period_all",
-			"url" => aw_url_change_var($var, "period_all"),
+		$tv->add_item(0,array(
+			"name" => t("K&otilde;ik arved"),
+			"id" => "all_bills",
+			"url" => aw_url_change_var($var, null),
 		));
- 		if(sizeof($pm_statuses))
- 		{
- 			foreach($pm_statuses as $status => $st_count)
- 			{
- 				$name = $states[$status]." (".$st_count.")";
- 				if (isset($_GET[$var]) && $_GET[$var] == "period_all_".$status)
- 				{
- 					$name = "<b>".$name."</b>";
- 				}
- 				$tv->add_item("period_all",array(
- 					"name" => $name,
- 					"id" => "period_all_".$status,
- 					"iconurl" => icons::get_icon_url(CL_CRM_BILL),
- 					"url" => aw_url_change_var($var, "period_all_".$status),
- 				));
- 			}
- 		}*/
+
+		$bills_inst = get_instance(CL_CRM_BILL);
+		$states = $bills_inst->states;
+
+
+		$tv->add_item(0,array(
+			"name" => t("Saadetud arved"),
+			"id" => "sent_bills",
+			"url" => aw_url_change_var($var, "sent_bills"),
+		));
+
+		$sent_bills_props = array(
+			"sent" => t("Saadetud ja laekumata"),
+			"overdate" => t("Laekumata &uuml;le makset&auml;htaja"),
+			"overtolerance" => t("Laekumata &uuml;le tolerantsi"),
+			"all" => t("Laekumata kokku"),
+		);
+
+		foreach($sent_bills_props as $id => $name)
+		{
+			if(!$name)
+			{
+				continue;
+			}
+			if (isset($_GET[$var]) && $_GET[$var] == "mails_".$id)
+			{
+				$name = "<b>".$name."</b>";
+			}
+			$tv->add_item("sent_bills",array(
+				"name" => $name,
+				"id" => "mails".$id,
+				"iconurl" => icons::get_icon_url(CL_MESSAGE),
+				"url" => aw_url_change_var($var, "mails_".$id),
+			));
+		}
 	}
 
 	public function all_client_managers()

@@ -428,7 +428,7 @@ class crm_bill extends class_base
 				$ps->set_class_id(array(CL_CRM_PERSON));
 				$ps->set_id($arr["obj_inst"]->id());
 				$ps->set_reload_layout("almost_bottom");
-				$ps->set_property("top_left");
+				$ps->set_property("assembler");
 				$prop["post_append_text"] = $ps->get_search_button();
 				break;
 			case "signature_type":
@@ -2016,7 +2016,7 @@ class crm_bill extends class_base
 			die(0);
 		}
 		$o = obj($arr["id"]);
-		$props = array("name" , "comment" , "date" , "price" , "amt", "unit","project");
+		$props = array("name" , "comment" , "date" , "price" , "amt", "unit","project", "has_tax");
 		foreach($props as $prop)
 		{
 			if(isset($arr[$prop]))
@@ -2138,6 +2138,7 @@ class crm_bill extends class_base
 						, price: document.getElementsByName('rows[".$id."][price]')[0].value
 						, amt: document.getElementsByName('rows[".$id."][amt]')[0].value
 						, project: document.getElementsByName('rows[".$id."][project]')[0].value
+						, has_tax: document.getElementsByName('rows[".$id."][has_tax]')[0].value
 						},function(data){load_new_data".$id."(); });
 
 						function load_new_data".$id."()
@@ -2218,7 +2219,7 @@ class crm_bill extends class_base
 					"field2" => html::select(array(
 						"name" => "rows[$id][unit]",
 //						"selected" => $unit_oid?array($unit_oid => $unit_name):'',
-						"options" =>  $prods = array("" => t("--vali--")) + $row->get_unit_selection(),
+						"options" =>  $prods = array("" => t("--vali--")) + $this->get_unit_selection(),
 						"value" => $row->prop("unit"),
 //						"size" => 5,
 //						"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
@@ -2363,6 +2364,59 @@ class crm_bill extends class_base
 				break;
 		}
 		return $ret;//.'</div>';
+	}
+
+	/** returns bill unit selection
+		@attrib api=1
+		@returns array
+	**/
+	public function get_unit_selection()
+	{
+		// get prords from co
+		$filter = array(
+			"class_id" => CL_UNIT,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+
+		$t = new object_data_list(
+			$filter,
+			array(
+				CL_UNIT => array(
+					new obj_sql_func(OBJ_SQL_UNIQUE, "name", "objects.name"),
+				)
+			)
+		);
+
+		$names = $t->get_element_from_all("name");
+
+		foreach($names as $id => $name)
+		{
+			if($name)
+			{
+				$prods[$this->get_unit_id($name)] = $name;
+			}
+		}
+		return $prods;
+	}
+
+	private function get_unit_id($name)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_UNIT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $name,
+		));
+		$ids = $ol->ids();
+		if(sizeof($ids))
+		{
+			return reset($ids);
+		}
+		else
+		{
+			return  null;
+		}
 	}
 
 	/**
