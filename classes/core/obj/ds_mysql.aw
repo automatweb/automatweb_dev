@@ -2627,7 +2627,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->_add_join($str);
 //				$this->joins[] = $str;
 
-				$new_t = $GLOBALS["tableinfo"][$join["to_class"]];
+				$new_t = isset($GLOBALS["tableinfo"][$join["to_class"]]) ? $GLOBALS["tableinfo"][$join["to_class"]] : null;
 
 				if (is_array($new_t))
 				{
