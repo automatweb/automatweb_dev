@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.173 2009/09/15 22:29:59 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.174 2009/10/07 12:24:37 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -300,6 +300,24 @@
 			@property team type=table no_caption=1 store=no parent=team_r
 
 
+@default group=event_time_list
+	@layout event_time_list_vb type=hbox width="25%:75%"
+		@layout event_time_list_left type=vbox parent=event_time_list_vb
+
+			@layout event_time_list_search_lay type=vbox closeable=1 area_caption=Otsinguparameetrid parent=event_time_list_left
+
+				@property event_time_list_search_start type=date_select captionside=top store=no parent=event_time_list_search_lay
+				@caption Algus
+				@property event_time_list_search_end type=date_select captionside=top store=no parent=event_time_list_search_lay
+				@caption L&otilde;pp
+
+				@property event_time_list_sbt type=submit captionside=top parent=event_time_list_search_lay no_caption=1
+				@caption Otsi
+
+		#@layout event_time_list_table_layout type=vbox parent=event_time_list_vb
+			@property event_time_list_table type=table no_caption=1
+
+
 @default group=goals_edit
 	@property goal_tb type=toolbar no_caption=1
 
@@ -439,6 +457,7 @@
 	@groupinfo goals_edit caption="Tegevused tabelis" parent=event_list submit=no
 	@groupinfo goals_gantt caption="Tegevused voop&otilde;hiselt" parent=event_list submit=no
 	@groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no parent=event_list
+	@groupinfo event_time_list caption="Plaani muutus" submit=no parent=event_list
 	@groupinfo req caption="N&otilde;uded" submit=no parent=event_list
 	@groupinfo req_process caption="N&otilde;uded protsessidega" submit=no parent=event_list
 	@groupinfo stats_entry caption="Vali t&uuml;&uuml;bid" parent=event_list
@@ -747,6 +766,9 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "event_time_list_table":
+				$this->_get_event_time_list_table($arr);
+				break;
 			case "project_estimated_table":
 				$this->_get_project_estimated_table($arr);
 				break;
@@ -3563,6 +3585,9 @@ class project extends class_base
 		$args["team_search_person"] = $arr["request"]["team_search_person"];
 		$args["team_search_co"] = $arr["request"]["team_search_co"];
 
+		$args["event_time_list_search_start"] = $arr["request"]["event_time_list_search_start"];
+		$args["event_time_list_search_end"] = $arr["request"]["event_time_list_search_end"];
+
 		if($arr["request"]["group"] == "files")
 		{
 			$args["files_find_name"] = $arr["request"]["files_find_name"];
@@ -3908,6 +3933,10 @@ class project extends class_base
 		if (is_array($ord))
 		{
 			$ord = reset($ord);
+		}
+		if(empty($arr["request"]["tf"]))
+		{
+			$arr["request"]["tf"] = "";
 		}
 		$t->add_menu_item(array(
 			"name" => "new_event",
@@ -5008,27 +5037,27 @@ exit_function("bills::all_cust_bills");
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
-			"align" => "center",
+//			"align" => "left",
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "impl",
 			"caption" => t("Osalejad"),
-			"align" => "center",
+//			"align" => "left",
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "status",
 			"caption" => t("Staatus"),
-			"align" => "center"
+//			"align" => "left"
 		));
 
 		$t->define_field(array(
 			"name" => "start1",
 			"caption" => t("Algus"),
-			"align" => "center",
+//			"align" => "left",
 /*			"sortable" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i",
@@ -5038,7 +5067,7 @@ exit_function("bills::all_cust_bills");
 		$t->define_field(array(
 			"name" => "end",
 			"caption" => t("L&otilde;pp"),
-			"align" => "center",
+//			"align" => "left",
 /*			"sortable" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i",
@@ -5815,6 +5844,136 @@ exit_function("bills::all_cust_bills");
 		}
 		return aw_ini_get("baseurl")."/automatweb/closewin.html";
 	}
+	
+	function _get_event_time_list_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$timestamp = isset($arr["request"]["event_time_list_search_start"]) ? date_edit::get_timestamp($arr["request"]["event_time_list_search_start"]) : time();
+		$start = $beginning = ((date("W", $timestamp) - 1)*7 - date("N" , $timestamp))*24*3600 + mktime(0,0,0,1,1,date("Y", $timestamp));//date("d.m.Y" , date("W", $timestamp)*7*3600+mktime(0,0,0,1,1,date("Y", $timestamp)));
+		$end = isset($arr["request"]["event_time_list_search_end"]) ? date_edit::get_timestamp($arr["request"]["event_time_list_search_end"]) :$start + 6*24*3600 - 1;
+		$t->define_field(array(
+			"name" => "name",
+			"caption" =>t("&Uuml;lesande nimi"),
+			"chgbgcolor" => "color"
+		));
+
+
+		$t->define_field(array(
+			"name" => "done",
+			"align" => "right",
+			"caption" => t("Tehtud"),
+			"chgbgcolor" => "color"
+		));
+		$t->define_field(array(
+			"name" => "guess",
+			"align" => "right",
+			"caption" => t("Prognoositud"),
+			"chgbgcolor" => "color"
+		));
+
+
+		while($start  < $end)
+		{
+			$t->define_field(array(
+				"name" => date("dmy" , $start),
+				"caption" => date("d.m.Y" , $start),
+			"align" => "right",
+			"chgbgcolor" => "color"
+			));
+
+			$t->define_field(array(
+				"name" => date("dmy" , $start)."done",
+				"caption" => t("Tehtud"),
+				"parent" =>  date("dmy" , $start),
+				"align" => "right",
+			"chgbgcolor" => "color"
+			));
+			$t->define_field(array(
+				"name" => date("dmy" , $start)."added",
+				"caption" => t("Lisandunud"),
+				"parent" =>  date("dmy" , $start),
+				"align" => "right",
+			"chgbgcolor" => "color"
+			));
+			$start+= 24*3600;
+		}
+
+		$t->define_field(array(
+			"name" => "done_end",
+			"caption" => t("Tehtud"),
+			"align" => "right",
+			"chgbgcolor" => "color"
+		));
+		$t->define_field(array(
+			"name" => "guess_end",
+			"caption" => t("Prognoositud"),
+			"align" => "right",
+			"chgbgcolor" => "color"
+		));
+
+		$bugs = $arr["obj_inst"]->get_bugs();
+		foreach($bugs->arr() as $key => $bug)
+		{
+			$color = "";
+			switch($bug->prop("bug_status"))
+			{
+				case 3:
+				case 4:
+				case 5:
+				case 6:
+				case 7:
+				case 8:
+				case 9:
+				case 12:
+				case 13:
+					$color = "lime";
+				break;
+				case 11:
+					$color="red";
+			}
+			$define_data = array(
+				"name" => html::get_change_url($bug->id(), array("return_url" => get_ru()),$bug->name()),
+				"color" => $color,
+			);
+			$comments = $bug->get_bug_comments();
+
+			$has_comments = 0;
+			foreach($comments->arr() as $row)
+			{
+				if($row->prop("date") > $beginning)
+				{
+					$has_comments = 1;
+					break;
+				}
+			}
+
+
+			if($has_comments || in_array($bug->prop("bug_status") , array(1, 2, 11, 10)))
+			{
+//				$done = 0;
+//				$prog = 0;
+				foreach($comments->arr() as $row)
+				{
+					if($row->prop("time_real"))$define_data["done_end"] += $row->prop("time_real");
+					if($row->prop("time_guess"))$define_data["guess_end"] +=$row->prop("time_guess");
+					if($row->prop("date") < $beginning)
+					{
+						if($row->prop("time_real")) $define_data["done"] += $row->prop("time_real");
+						if($row->prop("time_guess")) $define_data["guess"] += $row->prop("time_guess");
+		
+					}
+					elseif(!($row->prop("date") > $end))
+					{
+						if($row->prop("time_real"))$define_data[date('dmy' , $row->prop("date"))."done"]+=$row->prop("time_real");
+						if($row->prop("time_guess"))$define_data[date('dmy' , $row->prop("date"))."added"]+=$row->prop("time_guess");
+					}
+				}
+				$t->define_data($define_data);
+
+			}
+		}
+	}
+
 /*
 	function _get_team($arr)
 	{

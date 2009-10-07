@@ -851,6 +851,49 @@
             <field>team</field>
       </property>
       <property>
+            <name>event_time_list_search_start</name>
+            <table>objects</table>
+            <group>event_time_list</group>
+            <type>date_select</type>
+            <captionside>top</captionside>
+            <store>no</store>
+            <parent>event_time_list_search_lay</parent>
+            <field>event_time_list_search_start</field>
+            <caption>Algus</caption>
+      </property>
+      <property>
+            <name>event_time_list_search_end</name>
+            <table>objects</table>
+            <group>event_time_list</group>
+            <type>date_select</type>
+            <captionside>top</captionside>
+            <store>no</store>
+            <parent>event_time_list_search_lay</parent>
+            <field>event_time_list_search_end</field>
+            <caption>L&amp;amp;otilde;pp</caption>
+      </property>
+      <property>
+            <name>event_time_list_sbt</name>
+            <table>objects</table>
+            <group>event_time_list</group>
+            <type>submit</type>
+            <captionside>top</captionside>
+            <parent>event_time_list_search_lay</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>event_time_list_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>event_time_list_table</name>
+            <table>objects</table>
+            <group>event_time_list</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>event_time_list_table</field>
+      </property>
+      <property>
             <name>goal_tb</name>
             <table>objects</table>
             <group>goals_edit</group>
@@ -1250,6 +1293,11 @@
                   <submit>no</submit>
                   <parent>event_list</parent>
             </event_list_cal>
+            <event_time_list>
+                  <caption>Plaani muutus</caption>
+                  <submit>no</submit>
+                  <parent>event_list</parent>
+            </event_time_list>
             <req>
                   <caption>N&amp;amp;otilde;uded</caption>
                   <submit>no</submit>
@@ -1700,6 +1748,25 @@
                   <group>team</group>
                   <area_caption></area_caption>
             </team_r>
+            <event_time_list_vb>
+                  <type>hbox</type>
+                  <width>25%:75%</width>
+                  <group>event_time_list</group>
+                  <area_caption></area_caption>
+            </event_time_list_vb>
+            <event_time_list_left>
+                  <type>vbox</type>
+                  <parent>event_time_list_vb</parent>
+                  <group>event_time_list</group>
+                  <area_caption></area_caption>
+            </event_time_list_left>
+            <event_time_list_search_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Otsinguparameetrid</area_caption>
+                  <parent>event_time_list_left</parent>
+                  <group>event_time_list</group>
+            </event_time_list_search_lay>
             <goal_vb>
                   <type>hbox</type>
                   <width>20%:80%</width>
