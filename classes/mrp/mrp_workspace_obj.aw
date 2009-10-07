@@ -248,11 +248,11 @@ class mrp_workspace_obj extends _int_object
 			$resource->set_prop("workspace", $self);
 			$resource->set_prop("thread_data", 1);
 			$resource->set_prop("type", mrp_resource_obj::TYPE_SCHEDULABLE);
-			$resource->connect(array("to" => $self, "reltype" => "RELTYPE_MRP_OWNER"));
-			$resource->connect(array("to" => $person, "reltype" => "RELTYPE_CONTAINING_OBJECT"));
 			aw_disable_acl();
 			$resource->save();
 			aw_restore_acl();
+			$resource->connect(array("to" => $self, "reltype" => "RELTYPE_MRP_OWNER"));
+			$resource->connect(array("to" => $person, "reltype" => "RELTYPE_CONTAINING_OBJECT"));
 		}
 
 		return $resource;
@@ -287,11 +287,11 @@ class mrp_workspace_obj extends _int_object
 			$resource->set_prop("workspace", $self);
 			$resource->set_prop("thread_data", $num_of_profession_employees);
 			$resource->set_prop("type", mrp_resource_obj::TYPE_SCHEDULABLE);
-			$resource->connect(array("to" => $self, "reltype" => "RELTYPE_MRP_OWNER"));
-			$resource->connect(array("to" => $profession, "reltype" => "RELTYPE_CONTAINING_OBJECT"));
 			aw_disable_acl();
 			$resource->save();
 			aw_restore_acl();
+			$resource->connect(array("to" => $self, "type" => "RELTYPE_MRP_OWNER"));
+			$resource->connect(array("to" => $profession, "type" => "RELTYPE_CONTAINING_OBJECT"));
 		}
 
 		return $resource;
@@ -334,10 +334,10 @@ class mrp_workspace_obj extends _int_object
 				$ws->set_parent($parent);
 				$ws->set_subclass(self::MGR_TYPE_HR);
 				$ws->set_name(t("Systeemi inimressursside halduskeskkond"));
-				$ws->connect(array("to" => $company, "reltype" => "RELTYPE_MRP_OWNER"));
 				aw_disable_acl();
 				$ws->save();
 				aw_restore_acl();
+				$ws->connect(array("to" => $company, "reltype" => "RELTYPE_MRP_OWNER"));
 
 				$projects_folder = obj(null, array(), CL_MENU);
 				$projects_folder->set_parent($ws->id());
