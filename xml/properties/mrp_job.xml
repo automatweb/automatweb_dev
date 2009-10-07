@@ -374,11 +374,6 @@
             </mrp_job_progress>
       </tableinfo>
       <reltypes>
-            <MRP_RESOURCE>
-                  <value>1</value>
-                  <clid>CL_MRP_RESOURCE</clid>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;ks kasutatav ressurss</caption>
-            </MRP_RESOURCE>
             <MRP_PROJECT>
                   <value>2</value>
                   <clid>CL_MRP_CASE</clid>

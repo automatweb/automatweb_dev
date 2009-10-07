@@ -150,9 +150,6 @@
 
 // --------------- RELATION TYPES ---------------------
 
-@reltype MRP_RESOURCE value=1 clid=CL_MRP_RESOURCE
-@caption T&ouml;&ouml;ks kasutatav ressurss
-
 @reltype MRP_PROJECT value=2 clid=CL_MRP_CASE
 @caption Projekt
 
@@ -1120,7 +1117,6 @@ class mrp_job extends class_base
 	{
 		$t = $arr["prop"]["vcl_inst"];
 		$this->init_materials_tbl(&$t);
-//		$res = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
 		$res = obj($arr["obj_inst"]->prop("resource"));
 		if($res)
 		{
