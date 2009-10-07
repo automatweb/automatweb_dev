@@ -309,7 +309,6 @@ class mrp_job_obj extends _int_object
 	**/
 	function save_materials($arr)
 	{
-//		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
 		$res = obj($this->prop("resource"));
 		if($res)
 		{
@@ -917,7 +916,7 @@ class mrp_job_obj extends _int_object
 		}
 	}
 
-/** Ends the job. Job must be in progress.
+/** Ends the job or sets how much is done if $quantity parameter specified. Job must be in progress.
     @attrib api=1 params=pos
 	@param quantity optional type=int,float
 		Amount/quantity of items done. If not specified, assumed that whole job done
@@ -1903,10 +1902,6 @@ class mrp_job_obj extends _int_object
 	{
 		$this->change_name = true;
 		$resource = obj($resource_id, array(), CL_MRP_RESOURCE);
-		$this->connect (array (
-			"to" => $resource,
-			"reltype" => "RELTYPE_MRP_RESOURCE"
-		));
 		return parent::set_prop("resource", $resource_id);
 	}
 
@@ -1956,7 +1951,6 @@ class mrp_job_obj extends _int_object
 			aw_restore_acl();
 		}
 
-//		$res = $this->get_first_obj_by_reltype("RELTYPE_MRP_RESOURCE");
 		$res = obj($this->prop("resource"));
 		if($res)
 		{
