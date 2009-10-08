@@ -233,10 +233,14 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			when you need to present the user with a link that displays an object
 			then give this function the oid and you get the link
 	**/
-	function obj_link($oid)
-	{
-		return aw_ini_get("baseurl")."/".$oid;
-	}
+        function obj_link($oid)
+        {
+                if(aw_ini_get("menuedit.language_in_url") && aw_global_get("LC"))//kui on saidil linkides keel, siis lisab selle ka:
+                {
+                        return aw_ini_get("baseurl")."/".aw_global_get("LC")."/".$oid;
+                }
+                return aw_ini_get("baseurl")."/".$oid;
+        }
 
 	/** creates links from e-mail addresses in the given text
 		@attrib api=1
