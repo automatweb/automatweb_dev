@@ -2,8 +2,8 @@
 
 class aw_http_request extends aw_request
 {
-	protected $uri; // request uri aw_uri object if available, empty aw_uri object if not. read-only
-	protected $method = "GET";
+	private $_uri; // request uri aw_uri object if available, empty aw_uri object if not. read-only
+	private $_method = "GET";
 
 	public function __construct($autoload = false)
 	{
@@ -12,7 +12,11 @@ class aw_http_request extends aw_request
 
 		if (!$autoload)
 		{
-			$this->uri = new aw_uri();
+			$this->_uri = new aw_uri();
+		}
+		else
+		{
+			$this->_autoload();
 		}
 	}
 
@@ -26,20 +30,20 @@ class aw_http_request extends aw_request
 	public function get_uri()
 	{
 		$this->update_uri();
-		return clone $this->uri;
+		return clone $this->_uri;
 	}
 
-	protected function _autoload()
+	private function _autoload()
 	{
 		if (!empty($_SERVER["REQUEST_METHOD"]))
 		{
-			$this->method = $_SERVER["REQUEST_METHOD"];
+			$this->_method = $_SERVER["REQUEST_METHOD"];
 		}
 
 		// load arguments
 		if (!empty($_POST))
 		{
-			$this->method = "POST";
+			$this->_method = "POST";
 
 			if (!empty($_GET) and count($_GET))
 			{ // _GET overwrites _POST. Must be reviewed and this requirement deprecated and code requiring it rewritten.
@@ -54,7 +58,7 @@ class aw_http_request extends aw_request
 		elseif (!empty($_GET))
 		{
 			$this->args = $_GET;
-			$this->method = "GET";
+			$this->_method = "GET";
 		}
 
 		// load uri
@@ -62,10 +66,10 @@ class aw_http_request extends aw_request
 		{
 			try
 			{
-				$this->uri = new aw_uri($_SERVER["REQUEST_URI"]);
+				$this->_uri = new aw_uri($_SERVER["REQUEST_URI"]);
 
 				// try to get request variables from uri, assuming that those must prevail over $_GET
-				$uri_args = $this->uri->get_args();
+				$uri_args = $this->_uri->get_args();
 				if (count($uri_args) > 0 and count($uri_args) !== count($_GET))
 				{
 					$this->args = $uri_args;
@@ -73,7 +77,7 @@ class aw_http_request extends aw_request
 			}
 			catch (Exception $e)
 			{
-				$this->uri = new aw_uri();
+				$this->_uri = new aw_uri();
 			}
 		}
 
@@ -135,13 +139,13 @@ class aw_http_request extends aw_request
 		$this->parse_args();
 	}
 
-	protected function update_uri()
+	private function update_uri()
 	{
-		$this->uri->unset_arg();
+		$this->_uri->unset_arg();
 
 		try
 		{
-			$this->uri->set_arg($this->args);
+			$this->_uri->set_arg($this->args);
 		}
 		catch (Exception $e)
 		{

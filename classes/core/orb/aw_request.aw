@@ -5,31 +5,31 @@
 */
 class aw_request
 {
-	protected $args = array(); // Request parameters. Associative array of argument name/value pairs. read-only
-	protected $class; // requested class. aw_class.class_name
-	protected $default_class = "admin_if";
-	protected $action; // requested class action. one of aw_class.actions
-	protected $default_action = "change";
-	protected $method; // http request method.
-	protected $is_fastcall = false; // boolean
-	protected $application; // object
-	protected static $application_classes = array( //!!! tmp. teha n2iteks interface-ga. implements application
+	const DEFAULT_CLASS = "admin_if";
+	const DEFAULT_ACTION = "change";
+
+	private $_args = array(); // Request parameters. Associative array of argument name/value pairs. read-only
+	private $_class; // requested class. aw_class.class_name
+	private $_action; // requested class action. one of aw_class.actions
+	private $_is_fastcall = false; // boolean
+	private $_application; // object
+	private static $_application_classes = array( //!!! tmp. teha n2iteks interface-ga. implements application
 		"crm_sales",
 		"realestate_manager",
 		"mrp_workspace",
-		// "admin_if",//!!! esialgu tekitab tyli, vaja m6elda kuidas mitme aknaga s2ilitada aplikatsiooni. variandid window id, klassi aplikatsioonide nimekirjad ja kui mitu siis kysitakse kasutajalt
+		"admin_if",//!!! esialgu tekitab tyli, vaja m6elda kuidas mitme aknaga s2ilitada aplikatsiooni. variandid window id, klassi aplikatsioonide nimekirjad ja kui mitu siis kysitakse kasutajalt
 		// "aw_object_search",///!!!! vt admin_if
 		"bug_tracker",
 		"events_manager"
 	);
-	protected $protocol; // protocol object
+	private $_protocol; // protocol object
 
 	public function __construct($autoload = false)
 	{
 		if ($autoload)
 		{
 			// load current/active request
-			$this->_autoload();
+			$this->parse_args();
 		}
 	}
 
@@ -61,9 +61,9 @@ class aw_request
 	**/
 	public function arg($name)
 	{
-		if (isset($this->args[$name]))
+		if (isset($this->_args[$name]))
 		{
-			return $this->args[$name];
+			return $this->_args[$name];
 		}
 		else
 		{
@@ -79,7 +79,7 @@ class aw_request
 	**/
 	public function arg_isset($name)
 	{
-		return isset($this->args[$name]);
+		return isset($this->_args[$name]);
 	}
 
 	/**
@@ -89,7 +89,7 @@ class aw_request
 	**/
 	public function get_args()
 	{
-		return $this->args;
+		return $this->_args;
 	}
 
 	/**
@@ -125,18 +125,18 @@ class aw_request
 					$args[$name] = $val;
 				}
 
-				$this->args = $args + $this->args;
+				$this->_args = $args + $this->_args;
 			}
 			else
 			{
-				$this->args = $arg + $this->args;
+				$this->_args = $arg + $this->_args;
 			}
 		}
 		elseif (is_string($arg) and strlen($arg))
 		{
 			if ($sa)
 			{
-				$this->args[$arg] = func_get_arg(1);
+				$this->_args[$arg] = func_get_arg(1);
 			}
 			else
 			{
@@ -171,9 +171,9 @@ class aw_request
 			{
 				foreach ($name as $arg)
 				{
-					if (isset($this->args[$arg]))
+					if (isset($this->_args[$arg]))
 					{
-						unset($this->args[$arg]);
+						unset($this->_args[$arg]);
 					}
 					else
 					{
@@ -183,9 +183,9 @@ class aw_request
 			}
 			else
 			{
-				if (!isset($this->args[$name]))
+				if (!isset($this->_args[$name]))
 				{
-					unset($this->args[$name]);
+					unset($this->_args[$name]);
 				}
 				else
 				{
@@ -195,7 +195,7 @@ class aw_request
 		}
 		else
 		{
-			$this->args = array();
+			$this->_args = array();
 		}
 
 		$this->parse_args();
@@ -208,25 +208,25 @@ class aw_request
 	**/
 	public function get_application()
 	{
-		if (!is_object($this->application))
+		if (!is_object($this->_application))
 		{
-			if (in_array($this->class, self::$application_classes)) //!!! tmp solution
+			if (in_array($this->_class, self::$_application_classes)) //!!! tmp solution
 			{
-				if (isset($this->args["id"]) and is_oid($this->args["id"]))
+				if (isset($this->_args["id"]) and is_oid($this->_args["id"]))
 				{
-					$application = new object($this->args["id"]);
+					$application = new object($this->_args["id"]);
 					aw_session_set("aw_request_application_object_oid", $application->id());
 				}
-				elseif ("admin_if" === $this->class)
+				elseif ("admin_if" === $this->_class)
 				{
 					$core = new core();
 					$id = admin_if::find_admin_if_id();
 					$application = new object($id);
 					aw_session_set("aw_request_application_object_oid", $application->id());
 				}
-				elseif (aw_ini_isset("class_lut." . $this->class))
+				elseif (aw_ini_isset("class_lut." . $this->_class))
 				{
-					$clid = aw_ini_get("class_lut." . $this->class);
+					$clid = aw_ini_get("class_lut." . $this->_class);
 					$application = obj(null, array(), $clid);
 				}
 				else
@@ -243,10 +243,10 @@ class aw_request
 				$application = new object(); //!!! mis on default?
 			}
 
-			$this->application = $application;
+			$this->_application = $application;
 		}
 
-		return $this->application;
+		return $this->_application;
 	}
 
 	/**
@@ -255,7 +255,7 @@ class aw_request
 	**/
 	public function is_fastcall()
 	{
-		return $this->is_fastcall;
+		return $this->_is_fastcall;
 	}
 
 	/** Current request protocol
@@ -264,7 +264,7 @@ class aw_request
 	**/
 	public function protocol()
 	{
-		return $this->protocol;
+		return $this->_protocol;
 	}
 
 	public function type() // DEPRECATED
@@ -277,7 +277,7 @@ class aw_request
 	**/
 	public function class_name()
 	{
-		return $this->class;
+		return $this->_class;
 	}
 
 	/**
@@ -287,21 +287,70 @@ class aw_request
 	**/
 	public function action()
 	{
-		return $this->action;
+		return $this->_action;
 	}
 
-	protected function _autoload()
+	private function _set_args($args)
 	{
-		// parse arguments
-		$this->parse_args();
+		if (!is_array($args))
+		{
+			throw new awex_request_param("Invalid type. Arguments are an array");
+		}
+
+		$this->_args = $args;
 	}
 
-	protected function parse_args()
+	private function _set_protocol($protocol)
+	{
+		if (!is_object($protocol))
+		{
+			throw new awex_request_param("Invalid argument. Protocol must be an object");
+		}
+
+		if (!in_array("protocol_interface", class_implements($protocol)))
+		{
+			throw new awex_request_param("Invalid argument. Protocol object must have protocol interface");
+		}
+
+		$this->_protocol = $protocol;
+	}
+
+	public function parse_args()
 	{ //!!! "restore previous application" on vaja ka teaostada, sest n2iteks kui k2iakse teises applicationis ja minnakse tagasi eelmisest avatud allobjektile, on application vale
-		$this->is_fastcall = !empty($this->args["fastcall"]);
+		$this->_is_fastcall = !empty($this->_args["fastcall"]);
 		// no name validation because requests can be formed and sent to other servers where different classes, methods, etc. defined
-		$this->class = empty($this->args["class"]) ? $this->default_class : $this->args["class"];
-		$this->action = empty($this->args["action"]) ? $this->default_action : $this->args["action"];
+		$this->_class = empty($this->_args["class"]) ? self::DEFAULT_CLASS : $this->_args["class"];
+		$this->_action = empty($this->_args["action"]) ? self::DEFAULT_ACTION : $this->_args["action"];
+	}
+
+	private function __isset($name)
+	{
+		$name = "_{$name}";
+		return isset($this->$name);
+	}
+
+	private function __get($name)
+	{
+		$name = "_{$name}";
+		return $this->$name;
+	}
+
+	private function __set($name, $value)
+	{
+		$setter_name = "_set_{$name}";
+		if (method_exists($this, $setter_name))
+		{
+			$this->$setter_name($value);
+		}
+	}
+
+	private function __unset($name)
+	{
+		$unsetter_name = "_unset_{$name}";
+		if (method_exists($this, $unsetter_name))
+		{
+			$this->$unsetter_name();
+		}
 	}
 }
 
