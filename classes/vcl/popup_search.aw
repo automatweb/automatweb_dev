@@ -1114,15 +1114,8 @@ function aw_get_el(name,form)
 		));
 
 		$arr["clid"] = join("," , $arr["clid"]);
-		if(!isset($arr["reload_layout"]))
-		{
-			$arr["reload_layout"] = "''";
-		}
-
-		if(!isset($arr["reload_property"]))
-		{
-			$arr["reload_property"] = "''";
-		}
+		$reload_property = isset($arr["reload_property"]) ? "reload_property: '".$arr["reload_property"]."'," : "";
+		$reload_layout = isset($arr["reload_layout"]) ? "reload_layout: '".$arr["reload_layout"]."'," : "";
 
 		$htmlc->add_property(array(
 			"name" => "s[submit]",
@@ -1142,8 +1135,8 @@ function aw_get_el(name,form)
 				oid: oids.value,
 				name: names.value,
 				clid: '".$arr["clid"]."',
-				reload_layout: '".$arr["reload_layout"]."',
-				reload_property: '".$arr["reload_property"]."',
+				".$reload_property."
+				".$reload_layout."
 				property: '".$arr["property"]."'
 			}, function (html) {
 				x=document.getElementById('result');
