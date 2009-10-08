@@ -510,12 +510,6 @@ class htmlclient extends aw_template
 	// !Creates a submit button
 	function put_submit($arr)
 	{
-		if (aw_global_get("changeform_target") !== "_blank")
-		{
-			$this->vars(array(
-				"sbt_js" => $this->parse("SBT_JS")
-			));
-		}
 		$name = "SUBMIT";
 		$tpl_vars = array(
 			"sbt_caption" => $arr["value"] ? $arr["value"] : t("Salvesta"),
@@ -656,13 +650,6 @@ class htmlclient extends aw_template
 			);
 			// I need to figure out whether I have a relation manager
 			$this->vars_safe($tpl_vars);
-
-			if (aw_global_get("changeform_target") !== "_blank")
-			{
-				$this->vars_safe(array(
-					"sbt_js" => $this->parse("SBT_JS")
-				));
-			}
 
 			if (!empty($back_button))
 			{
@@ -1099,7 +1086,7 @@ class htmlclient extends aw_template
 		if ($args["type"] === "submit")
 		{
 			$this->submit_done = true;
-		};
+		}
 
 		// Check the types and call their counterparts
 		// from the HTML class. If you want to support
@@ -1167,18 +1154,10 @@ class htmlclient extends aw_template
 			case "textarea":
 				if (isset($arr["richtext"]))
 				{
-					$arr["rte_type"] = $this->rte_type;
 					$this->rte = true;
 					$this->rtes[] = $arr["name"];
+					$this->vars_safe(array("rte_type" => $this->rte_type));
 				}
-				else
-				{
-					//$arr["style"] = "width: 100%;";
-				};
-				//$arr["divcols"] = 8 * $arr["cols"];
-				//$arr["divrows"] = 12 * $arr["rows"];
-				$this->vars_safe($arr);
-				//$retval = $this->parse("my_textarea");
 				$retval = html::textarea($arr);
 				$this->vars(array("value" => NULL));
 				break;
@@ -1245,6 +1224,7 @@ class htmlclient extends aw_template
 
 			case "reset":
 				$arr["class"] = "sbtbutton";
+
 			case "button":
 				$retval = html::button($arr);
 				break;
@@ -1698,15 +1678,17 @@ class htmlclient extends aw_template
 
 	function put_griditem($arr)
 	{
-		// support TOP and LEFT for now only
-		$captionside = (isset($arr["captionside"]) and "top" === strtoupper($arr["captionside"])) ? "TOP" : "LEFT";
-		$s_help_popup = "";
+		// support caption positions TOP and LEFT for now only
+		// name refers to a VAR inside the template
+		$caption_template = (isset($arr["captionside"]) and "TOP" === strtoupper($arr["captionside"])) ? "CAPTION_TOP" : "CAPTION_LEFT"; // TOP or LEFT
+		$caption = empty($arr["caption"]) ? "" : $arr["caption"];
 		$errmsg = "";
+		$property_help = $this->get_property_help($arr);
 
 		// reset all captions
 		$this->vars_safe(array(
-			"caption" => empty($arr["caption"]) ? "" : $arr["caption"],
-			"comment" => $this->get_property_help($arr),
+			"caption" => $caption,
+			"comment" => $property_help,
 			"CAPTION_LEFT" => "",
 			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
@@ -1721,20 +1703,16 @@ class htmlclient extends aw_template
 			$errmsg = $this->parse("GRID_ERR_MSG");
 		}
 
-		// name refers to a VAR inside the template
-		$caption_template = "CAPTION_" . $captionside; // TOP or LEFT
-
 		// main vars
 		$this->vars_safe(array(
-			"caption" => empty($arr["caption"]) ? "" : $arr["caption"],
-			"comment" => $this->get_property_help($arr),
+			"caption" => $caption,
+			"comment" => $property_help,
 			"CAPTION_LEFT" => "",
 			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
 			"err_msg" => isset($arr["error"]) ? $arr["error"] : "",
 			"GRID_ERR_MSG" => $errmsg,
-			$caption_template => $this->parse($caption_template),
-			"HELP_POPUP" => $s_help_popup
+			$caption_template => $this->parse($caption_template)
 		));
 
 		$tpl = empty($arr["no_caption"]) ? "GRIDITEM" : "GRIDITEM_NO_CAPTION";
@@ -1757,19 +1735,6 @@ class htmlclient extends aw_template
 			$property_help = "";
 		}
 		return $property_help;
-	}
-
-	private function get_property_help_trigger($args)
-	{
-		if(isset($args["comment"]) && strlen($args["comment"]))
-		{
-			$property_help_trigger = "awcbShowPropertyHelp(this);";
-		}
-		else
-		{
-			$property_help_trigger = "";
-		}
-		return $property_help_trigger;
 	}
 
 	private function my_get_ru($class)
