@@ -297,7 +297,7 @@ class sys extends aw_template
 		{
 			foreach($check as $table => $fields)
 			{
-				if ($table == "syslog")
+				if ($table === "syslog")
 				{
 					continue;
 				}
@@ -862,6 +862,7 @@ class sys extends aw_template
 			throw new awex_sys("Invalid argument");
 		}
 
+		$_GET["in_popup"] = 1;
 		$classes = isset($arr["classes"]) ? explode(",", $arr["classes"]) : array();
 		$this->_make_property_definitions($classes);
 	}
@@ -929,6 +930,8 @@ class sys extends aw_template
 		{
 			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
+
+		$_GET["in_popup"] = 1;
 		$this->_make_orb_definitions();
 	}
 
@@ -976,6 +979,7 @@ class sys extends aw_template
 			throw new awex_sys_webmaintenance("Web maintenance is turned off");
 		}
 
+		$_GET["in_popup"] = 1;
 		$this->_make_ini_file();
 	}
 
@@ -1235,10 +1239,10 @@ ENDCLASSFORM;
 				$cnt = min($total, (int)$this->db_fetch_field($q, "cnt", false));
 
 				$rv[] = array(
-					"class_id" => $clid, 
+					"class_id" => $clid,
 					"prop" => $pn,
-					"site_id" => aw_ini_get("site_id"), 
-					"set_objs" => $cnt, 
+					"site_id" => aw_ini_get("site_id"),
+					"set_objs" => $cnt,
 					"total_objs" => $total
 				);
 			}
@@ -1260,8 +1264,8 @@ ENDCLASSFORM;
 			$this->db_query("INSERT INTO aw_site_object_stats(site_id, class_id, count) values(".aw_ini_get("site_id").", $row[class_id], $row[cnt])");
 			$this->restore_handle();*/
 			$rv[] = array(
-				"site_id" => aw_ini_get("site_id"), 
-				"class_id" => $row["class_id"], 
+				"site_id" => aw_ini_get("site_id"),
+				"class_id" => $row["class_id"],
 				"count" => $row["cnt"]
 			);
 		}
