@@ -587,6 +587,7 @@ class shop_product_obj extends _int_object
 		$data["id"] = $this->id();
 		$data["image"] = $this->get_product_image();
 		$data["image_url"] = $this->get_product_image_url();
+		$data["purveyance"] = $this->get_purveyance();
 		if($this->class_id() == CL_SHOP_PRODUCT_PACKAGING)
 		{
 			$product = $this->get_product();
@@ -596,15 +597,34 @@ class shop_product_obj extends _int_object
 		}
 		else
 		{
-$data["code"] =  $this->prop("code");
+			$data["code"] =  $this->prop("code");
 		}
 		$packet = $this->get_packet();
 		if(is_object($packet))
 		{
 			$data["packet_name"] = $packet->name();
 			$data["brand_name"] = $packet->get_brand();
+			$packet_data = $packet-> get_data();
 		}
 		return $data;
+	}
+
+	private function get_purveyance()
+	{
+		$ret = array();
+		$conns = connection::find(array(
+			"to" => $this->id(),
+			"from.class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+			"type" => "RELTYPE_PACKAGING"
+		));
+		foreach($conns as $conn)
+		{
+			$o = obj($conn["from"]);
+			return $o->comment();
+		}				
+
+		return t("Tarneinfo puudub");
+
 	}
 
 	public function get_packet_name()
