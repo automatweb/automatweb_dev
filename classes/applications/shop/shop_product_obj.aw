@@ -756,6 +756,20 @@ class shop_product_obj extends _int_object
 			return "";
 		}
 	}
+	public function get_pask()
+	{
+		$packet = $this->get_packet();
+		if(is_object($packet))
+		{
+			$stuff = $packet->get_pask();
+		}
+		if(is_array($stuff))
+		{
+			return reset($stuff);
+		}
+		return null;
+	}
+
 
 	public function get_packet()
 	{
@@ -763,6 +777,15 @@ class shop_product_obj extends _int_object
 		$ol = $product->get_packets_for_id($product->id());
 //		var_dump($product->id(), $ol);
 		return $ol->begin();
+	}
+
+	public function get_packet_id()
+	{
+		$product = $this->get_product();
+		$ol = $product->get_packets_for_id($product->id());
+		$ids = $ol->ids();
+//		var_dump($product->id(), $ol);
+		return reset($ids);
 	}
 
 }
