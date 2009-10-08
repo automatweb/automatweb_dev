@@ -1,5 +1,5 @@
 <!-- SUB: prev -->
-<a href="{VAR:link}" title="{VAR:caption}">&lt;&lt;</a>
+<a href="{VAR:link}" title="{VAR:caption}" style="font-size: 1.3em; font-weight: bold; text-decoration: none;">&lt;&lt;</a>
 <!-- END SUB: prev -->
 <select {VAR:class} name="ft_page" onChange="window.location='{VAR:pageurl}ft_page='+this.options[this.selectedIndex].value">
 <!-- SUB: page -->
@@ -11,5 +11,5 @@
 <!-- END SUB: sel_page -->
 </select>
 <!-- SUB: next -->
-<a href="{VAR:link}" title="{VAR:caption}">&gt;&gt;</a>
+<a href="{VAR:link}" title="{VAR:caption}" style="font-size: 1.3em; font-weight: bold; text-decoration: none;">&gt;&gt;</a>
 <!-- END SUB: next -->
