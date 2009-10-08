@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.39 2009/10/08 12:29:15 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.39 2009/10/08 12:29:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.40 2009/10/08 12:50:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.40 2009/10/08 12:50:09 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -468,7 +468,8 @@ $is_saved = 1;
 		);
 		//v2ljad mida toote leidmisel laost muuta ei saa
 		$disable_vars = array("product_code" , "name" , "product_color", "product_sum", "product_price");
-		
+$required_fields = array("product_code" , "name" , "product_color", "product_sum", "product_price", "product_size","product_count");	
+	
 		$shop_cart_table = "";
 		$count = $total = 0 ;
 		foreach($order_data as $key => $data)
@@ -514,6 +515,7 @@ $is_saved = 1;
 					"name" => "order_row[".$count."][".$order_var."]",
 					"size" => 11,
 					"value" => $vars[$order_var."_value"],
+					"class" => in_array($order_var,$required_fields) ? "validate[required] text" : "",
 				));
 
 			if($product && in_array($order_var,$disable_vars))
