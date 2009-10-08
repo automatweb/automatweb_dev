@@ -31,6 +31,7 @@ class aw_table extends aw_template
 	var $table_class_id = "awmenuedittabletag";
 	var $d_row_cnt = 0;
 	var $tr_sel;
+	var $default_field_values = array();
 
 	protected $cfgform;
 
@@ -2110,6 +2111,42 @@ END;
 		return count($this->rowdefs)-1;
 	}
 
+	/**adds multiple fields to table
+		@attrib api=1 params=pos
+		@param fields optional type=array
+			Fields array: field name => field caption
+		@returns 1
+	**/
+	public function add_fields($fields)
+	{
+		foreach($fields as $name => $caption)
+		{
+			$define = array();
+			$define["name"] = $name;
+			$define["caption"] = $caption;
+			foreach($this->default_field_values as $param => $value)
+			{
+				if(!empty($value))
+				{
+					$define[$param] = $value;
+				}
+			}
+			$this->define_field($define);
+		}
+		return 1;
+	}
+
+	/**sets default params to table fields
+		@attrib api=1 params=pos
+		@param param required type=string
+			paramerer name
+		@param value required
+			paramerer value
+	**/
+	function set_default($param , $value)
+	{
+		$this->default_field_values[$param] = $value;
+	}
 
 	function get_defined_fields()
 	{
