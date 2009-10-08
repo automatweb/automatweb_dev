@@ -1072,12 +1072,15 @@ class relationmgr extends aw_template
 			$conn = $arr["obj_inst"]->connections_from();
 			$cn = "to";
 		}
+
+		$conn_ids = array();
 		foreach($conn as $alias)
 		{
 			$oid = $alias->prop($cn);
 			$conn_ids[$oid] = $oid;
 			$conns[$oid] = $alias;
 		}
+
 		if(count($conn_ids))
 		{
 			$loader_ol = new object_list(array(

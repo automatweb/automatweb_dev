@@ -1376,6 +1376,9 @@ class treeview extends class_base
 			If true, the single root item is not inserted into the tree
 		@param item_name_props optional type=array
 			Property names by class to be used for tree item visible name. Format: array($clid => "property_name"). Default is object name.
+		@param checked_nodes optional type=array
+			Tree node id-s that are checked initially, applies when type is TREE_DHTML_WITH_CHECKBOXES.
+
 		@returns
 			Treeview object
 		@comment
@@ -1383,7 +1386,7 @@ class treeview extends class_base
 		@examples
 
 	**/
-	function tree_from_objects($arr)
+	public static function tree_from_objects($arr)
 	{
 		$node_actions = null;
 		$item_name_props = null;
@@ -1404,7 +1407,7 @@ class treeview extends class_base
 
 		if ( (is_array ($node_actions)) and !empty($node_actions[$class_id]))
 		{
-			$tree_opts["root_url"] = $this->mk_my_orb ($node_actions[$class_id], array(
+			$tree_opts["root_url"] = $tv->mk_my_orb ($node_actions[$class_id], array(
 				"id" => $o->id (),
 				"return_url" => get_ru(),
 			), $class_name);
@@ -1419,7 +1422,7 @@ class treeview extends class_base
 
 		if ( (is_array ($node_actions)) and !empty($node_actions[$class_id]) )
 		{
-			$url = $this->mk_my_orb ($node_actions[$class_id], array(
+			$url = $tv->mk_my_orb ($node_actions[$class_id], array(
 				"id" => $o->id (),
 				"return_url" => get_ru(),
 			), $class_name);
@@ -1510,7 +1513,7 @@ class treeview extends class_base
 
 			if ( ($tv->tree_type == TREE_DHTML_WITH_CHECKBOXES) and is_array ($arr["checkbox_class_filter"]) and in_array ($class_id, $arr["checkbox_class_filter"]) )
 			{
-				if (is_array ($this->checked_nodes) and in_array ($oid, $this->checked_nodes))
+				if (is_array ($checked_nodes) and in_array ($oid, $checked_nodes))
 				{
 					$checkbox_status = 1;
 				}

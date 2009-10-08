@@ -14,17 +14,17 @@ class acl_manager extends class_base
 	{
 		$tp = $arr["prop"];
 		$tp["type"] = "text";
-		
+
 		$content = $this->_get_cur_acl_desc($arr["obj_inst"]);
 
 		if ($this->can("admin", $arr["obj_inst"]->id()))
 		{
 			$content .= "<br>";
-			$url = $this->mk_my_orb("disp_manager", array("id" => $arr["obj_inst"]->id()));
+			$url = $this->mk_my_orb("disp_manager", array("id" => $arr["obj_inst"]->id(), "in_popup" => "1"));
 			$content .= html::href(array(
 				"caption" => t("Muuda"),
 				"url" => "javascript:void(0)",
-				"onClick" => "aw_popup_scroll(\"$url\", \"acl_manager\", 800, 500);"
+				"onClick" => "aw_popup_scroll(\"{$url}\", \"acl_manager\", 800, 500);"
 			));
 		}
 
@@ -38,7 +38,6 @@ class acl_manager extends class_base
 
 	function _get_cur_acl_desc($o)
 	{
-		classload("vcl/table");
 		$t = new aw_table();
 		$t->define_field(array(
 			"name" => "grp",
@@ -79,7 +78,7 @@ class acl_manager extends class_base
 	{
 		$_GET["in_popup"] = 1;
 		$this->read_template("show.tpl");
-		classload("core/icons");
+
 		$this->_get_tree($arr);
 
 		$this->_get_table($arr);
@@ -89,25 +88,24 @@ class acl_manager extends class_base
 		$arr["post_ru"] = post_ru();
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_mgr", $arr),
-			"table_legend" => sprintf(t("Tabeli legend:<Br>M - %s<br>L - %s<Br>ACL - %s<br>K - %s<br>V - %s<br>Alam - %s<br>J - %s"), 
+			"table_legend" => sprintf(t("Tabeli legend:<Br>M - %s<br>L - %s<Br>ACL - %s<br>K - %s<br>V - %s<br>Alam - %s<br>J - %s"),
 					t("Muutmine"),
 					t("Lisamine"),
 					t("ACL Muutmine"),
 					t("Kustutamine"),
 					t("Vaatamine"),
-					t("Kehtib alamobjektidele"),
+					t("Kehtib ainult alamobjektidele"),
 					t("Juurkaust")
 			)
-		));	
+		));
 		return $this->parse();
 	}
 
 	function _get_tree($r)
 	{
-		classload("vcl/treeview");
 		$t = treeview::tree_from_objects(array(
 			"tree_opts" => array(
-				"type" => TREE_DHTML, 
+				"type" => TREE_DHTML,
 				"persist_state" => true,
 				"tree_id" => "acl_mgr",
 			),
@@ -175,7 +173,6 @@ class acl_manager extends class_base
 
 	function _get_table($r)
 	{
-		classload("vcl/table");
 		$t = new aw_table();
 
 		$obj = obj($r["id"]);
@@ -196,7 +193,7 @@ class acl_manager extends class_base
 		{
 			$dat = array(
 				"icon" => icons::get_icon($o),
-				"name" => html::obj_change_url($o),
+				"name" => $_GET["in_popup"] ? $o->name() : html::obj_change_url($o),
 			);
 			if ($o->class_id() == CL_USER)
 			{
@@ -220,11 +217,11 @@ class acl_manager extends class_base
 			}
 
 			$adm_rm = safe_array($o->meta("admin_rootmenu2"));
-			
+
 			$dat["rootf"] = html::checkbox(array(
 				"name" => "is_rootmenu[$oid]",
 				"value" => 1,
-				"checked" => in_array($obj->id(), $adm_rm[aw_global_get("lang_id")])
+				"checked" => isset($adm_rm[aw_global_get("lang_id")]) and in_array($obj->id(), $adm_rm[aw_global_get("lang_id")])
 			));
 			$dat["set_acl"] = html::checkbox(array(
 				"name" => "set_acl[$oid]",
@@ -236,7 +233,7 @@ class acl_manager extends class_base
 				$dat[$id] = html::checkbox(array(
 					"name" => "acl_matrix[$oid][$id]",
 					"value" => 1,
-					"checked" => $acls[$o->id()][$id] == 1
+					"checked" => isset($acls[$o->id()][$id]) and $acls[$o->id()][$id] == 1
 				));
 			}
 			$t->define_data($dat);
@@ -257,7 +254,6 @@ class acl_manager extends class_base
 		));
 
 		$o = obj($r["id"]);
-		$t->add_cdata($o->name());
 		$this->vars(array(
 			"toolbar" => $t->get_toolbar()
 		));
@@ -318,8 +314,8 @@ class acl_manager extends class_base
 			if (isset($acl[$o->id()]) || (isset($arr["acl_matrix"][$o->id()]) && count($arr["acl_matrix"][$o->id()])) || $arr["set_acl"][$o->id()] == 1)
 			{
 				$obj->acl_set($o, safe_array($arr["acl_matrix"][$o->id()]));
-			}	
-			
+			}
+
 			if ($arr["is_rootmenu"][$oid] == 1)
 			{
 				$o->connect(array(
@@ -338,7 +334,7 @@ class acl_manager extends class_base
 			else
 			{
 				$adm_rm = safe_array($o->meta("admin_rootmenu2"));
-				if (in_array($obj->id(), $adm_rm[aw_global_get("lang_id")]))
+				if (isset($adm_rm[aw_global_get("lang_id")]) and in_array($obj->id(), $adm_rm[aw_global_get("lang_id")]))
 				{
 					unset($adm_rm[aw_global_get("lang_id")][array_search($obj->id(), $adm_rm[aw_global_get("lang_id")])]);
 					$o->set_meta("admin_rootmenu2", $adm_rm);

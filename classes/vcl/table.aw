@@ -107,7 +107,7 @@ class aw_table extends aw_template
 
 		if (!empty($data["prop_name"]))
 		{
-			$this->filter_name = $data["prop_name"].$_GET["id"];
+			$this->filter_name = $data["prop_name"]. (empty($_GET["id"]) ? "" : $_GET["id"]);
 		}
 		elseif (!empty($_GET["id"]) && !empty($_GET["group"]))
 		{
@@ -1551,6 +1551,7 @@ END;
 				{
 					aw_session_set("table_enum", $enum);
 				}
+
 				if(!empty($v["add_row"]))
 				{
 					$add_rows = array();
@@ -2472,7 +2473,7 @@ echo dbg::short_backtrace();
 		{
 			$url = new aw_uri(aw_global_get("REQUEST_URI"));
 
-			$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
+			$_drc = isset($arr["d_row_cnt"]) ? $arr["d_row_cnt"] : $this->d_row_cnt;
 			$records_per_page = empty($arr["records_per_page"]) ? $this->records_per_page : $arr["$records_per_page"];
 			$page = (int) automatweb::$request->arg("ft_page");
 			if ($page*$records_per_page > $_drc)
@@ -2549,7 +2550,7 @@ echo dbg::short_backtrace();
 			$from = $i*$records_per_page+1;
 			$to = min(($i+1)*$records_per_page, $_drc);
 			$this->vars(array(
-				"style" => $arr["style"],
+				"style" => empty($arr["style"]) ? "" : $arr["style"],
 				"url" => $url . "ft_page=".$i,
 				"pageurl" => $url,
 				"text" => $from . " - " . $to,

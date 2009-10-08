@@ -216,45 +216,49 @@ define("CAL_SHOW_MONTH",4);
 lc_load("calendar");
 class planner extends class_base
 {
+	public /*???*/ $event_id = 0;
+	public /*???*/ $date = "";
+	public /*???*/ $vt = array();
+	public /*???*/ $viewtypes = array(
+		"1" => "day",
+		"3" => "week",
+		"4" => "month",
+		"5" => "relative"
+	);
+
+	//  list all clids here, that can be added to the calendar (those should at least have a reference to planner.start)
+	public /*???*/ $event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY , CL_COMICS, CL_STAGING, CL_BUG,CL_RESERVATION, CL_CRM_PRESENTATION);
+
+	// list all clids, that should be shown by default
+	public /*???*/ $default_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_MEETING, CL_RESERVATION);
+
+	public /*???*/ $default_day_start = array(
+		"hour" => 9,
+		"minute" => 0
+	);
+
+	public /*???*/ $default_day_end = array(
+		"hour" => 17,
+		"minute" => 0
+	);
+
 	function planner($args = array())
 	{
 		$this->init(array(
 			"tpldir" => "planner",
 			"clid" => CL_PLANNER,
 		));
-		extract($args);
-		$this->date = isset($date) ? $date : date("d-m-Y");
+
+		$this->date = isset($args["date"]) ? $args["date"] : date("d-m-Y");
 		lc_load("definition");
 		$this->lc_load("planner","lc_planner");
 
-		$this->viewtypes = array(
-			"1" => "day",
-			"3" => "week",
-			"4" => "month",
-			"5" => "relative",
-		);
 		$this->vt = array(
 			"day" => t("P&auml;ev"),
 			"week" => t("N&auml;dal"),
 			"month" => t("Kuu"),
 			"relative" => t("&Uuml;levaade"),
-			"search" => t("Otsing"),
-		);
-
-
-		//  list all clids here, that can be added to the calendar (those should at least have a reference to planner.start)
-		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY , CL_COMICS, CL_STAGING, CL_BUG,CL_RESERVATION, CL_CRM_PRESENTATION);
-		// list all clids, that should be shown by default
-		$this->default_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_MEETING, CL_RESERVATION);
-
-		$this->default_day_start = array(
-			"hour" => 9,
-			"minute" => 0,
-		);
-
-		$this->default_day_end = array(
-			"hour" => 17,
-			"minute" => 0,
+			"search" => t("Otsing")
 		);
 	}
 
@@ -272,16 +276,16 @@ class planner extends class_base
 			&$arr
 		);
 		// XXX: miks tyhi?
-		return $arr['post_ru'];
+		return isset($arr['post_ru']) ? $arr['post_ru'] : "";
 	}
 
 	function get_event_entry_classes($o)
 	{
 		$rv = $o->prop("event_entry_classes");
-		if (!is_array($rv) || empty($rv))
+		if (empty($rv) or !is_array($rv))
 		{
 			$rv = $this->make_keys($this->default_entry_classes);
-		};
+		}
 		return $rv;
 	}
 
@@ -311,12 +315,7 @@ class planner extends class_base
 
 	function get_calendar_for_user($arr = array())
 	{
-		$uid = $arr["uid"];
-		if (empty($uid))
-		{
-			$uid = aw_global_get("uid");
-		};
-
+		$uid = empty($arr["uid"]) ? aw_global_get("uid") : $arr["uid"];
 		static $cache;
 		if (isset($cache[$uid]))
 		{
@@ -331,7 +330,7 @@ class planner extends class_base
 		if (sizeof($conns) == 0)
 		{
 			return false;
-		};
+		}
 		list(,$conn) = each($conns);
 		$obj_id = $conn->prop("from");
 		$cache[$uid] = $obj_id;
@@ -366,7 +365,7 @@ class planner extends class_base
 		if (sizeof($conns) == 0)
 		{
 			return sprintf(t("Kasutajal '%s' puudub default kalender"),aw_global_get("uid"));
-		};
+		}
 		list(,$conn) = each($conns);
 		$obj_id = $conn->prop("from");
 
@@ -457,7 +456,7 @@ class planner extends class_base
 			case "event_search_name":
 			case "event_search_content":
 			case "event_search_comment":
-				$data["value"] = $arr["request"][$data["name"]];
+				$data["value"] = isset($arr["request"][$data["name"]]) ? $arr["request"][$data["name"]] : "";
 				break;
 
 
@@ -472,7 +471,7 @@ class planner extends class_base
 					CL_CRM_PRESENTATION => t("M&uuml;&uuml;giesitlus")
 				);
 
-				if($arr["request"]["event_search_type"])
+				if(!empty($arr["request"]["event_search_type"]))
 				{
 					$data["value"] = $arr["request"]["event_search_type"];
 				}
@@ -487,10 +486,10 @@ class planner extends class_base
 						CL_CRM_PRESENTATION => 1
 					);
 				}
-
 				break;
+
 			case "event_search_results_table":
-				if(($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"]))
+				if((!empty($arr["request"]["event_search_name"]) or !empty($arr["request"]["event_search_content"]) or !empty($arr["request"]["event_search_type"])))
 				{
 					$results = $this->do_event_search($arr["request"]);
 					if($results->count() > 0)
@@ -509,7 +508,7 @@ class planner extends class_base
 				break;
 
 			case "event_search_tb":
-				if ($arr["request"]["add_part_to_events"])
+				if (!empty($arr["request"]["add_part_to_events"]))
 				{
 					$this->do_add_parts_to_events($arr);
 					unset($arr["request"]["add_part_to_events"]);
@@ -518,7 +517,7 @@ class planner extends class_base
 					die();
 				}
 
-				if(!$arr["request"]["event_search_name"] && !$arr["request"]["event_search_content"] && !$arr["request"]["event_search_type"])
+				if(empty($arr["request"]["event_search_name"]) && empty($arr["request"]["event_search_content"]) && empty($arr["request"]["event_search_type"]))
 				{
 					return PROP_IGNORE;
 				}
@@ -528,7 +527,8 @@ class planner extends class_base
 				{
 					$tab_view = $tb;
 				}
-				if(in_array($arr["request"]["group"], $tab_view) && $this->can("edit", $arr["obj_inst"]->id()))
+
+				if(isset($arr["request"]["group"]) && in_array($arr["request"]["group"], $tab_view) && $this->can("edit", $arr["obj_inst"]->id()))
 				{
 					$data["vcl_inst"]->add_button(array(
 						"name" => "delete",
@@ -548,7 +548,7 @@ class planner extends class_base
 				break;
 
 			case "event_search_add":
-				if($arr["request"]["event_search_add"])
+				if(!empty($arr["request"]["event_search_add"]))
 				{
 					$data["value"] = $arr["request"]["event_search_add"];
 				}
@@ -627,7 +627,7 @@ class planner extends class_base
 				break;
 
 			case "event_search_tb":
-				die(dbg::dump($arr["request"]));
+				// die(dbg::dump($arr["request"]));
 
 		}
 		return $retval;
@@ -642,7 +642,7 @@ class planner extends class_base
 		static $m;
 		if (!$m)
 		{
-			$m = get_instance("applications/calendar/planner_model");
+			$m = new planner_model();
 		}
 		$ret = $m->get_event_list($arr);
 		$this->recur_info = $m->recur_info;
@@ -654,7 +654,7 @@ class planner extends class_base
 		static $m;
 		if (!$m)
 		{
-			$m = get_instance("applications/calendar/planner_model");
+			$m = new planner_model();
 		}
 		$ret = $m->get_event_sources($id);
 		$this->recur_info = $m->recur_info;
@@ -667,7 +667,7 @@ class planner extends class_base
 		static $m;
 		if (!$m)
 		{
-			$m = get_instance("applications/calendar/planner_model");
+			$m = new planner_model();
 		}
 		$this->id = $args["id"];
 		$ret = $m->_init_event_source($args);
@@ -751,19 +751,22 @@ class planner extends class_base
 		$event_cfgform = $arr["request"]["cfgform_id"];
 		// are we editing an existing event?
 		$cf = get_instance(CL_CFGFORM);
+
 		if (empty($event_cfgform))
 		{
 			$sys_default_form = $cf->get_sysdefault(array("clid" => $arr["request"]["clid"]));
 			$event_cfgform = $sys_default_form;
-		};
+		}
+
 		$event_id = $arr["request"]["event_id"];
+
 		if (is_oid($event_id) && $this->can("view", $event_id))
 		{
 			$event_obj = new object($event_id);
 			if ($event_obj->is_brother())
 			{
 				$event_obj = $event_obj->get_original();
-			};
+			}
 			//$event_cfgform = $event_obj->meta("cfgform_id");
 			$this->event_id = $event_id;
 			$clid = $event_obj->class_id();
@@ -825,7 +828,7 @@ class planner extends class_base
 				$t = get_instance($clfile);
 				$t->init_class_base();
 				$emb_group = "general";
-				if ($this->event_id && $arr["request"]["cb_group"])
+				if ($this->event_id && !empty($arr["request"]["cb_group"]))
 				{
 					$emb_group = $arr["request"]["cb_group"];
 				};
@@ -891,41 +894,40 @@ class planner extends class_base
 		if (empty($event_folder))
 		{
 			return PROP_ERROR;
-		};
+		}
+
 		$emb = $args["request"]["emb"];
-		if (!isset($emb["customer"]))
+		if (!isset($emb["customer"]) and !empty($args["request"]["customer"]))
 		{
 			$emb["customer"] = $args["request"]["customer"];
 		}
-		$is_doc = false;
-		if (!empty($emb["clid"]))
+
+		if (!empty($emb["clid"]) and aw_ini_isset("classes.{$emb["clid"]}"))
 		{
-			$tmp = aw_ini_get("classes");
-			$clfile = $tmp[$emb["clid"]]["file"];
-			$t = get_instance($clfile);
+			$cl = basename(aw_ini_get("classes.{$emb["clid"]}.file"));
+			$t = new $cl();
 			$t->init_class_base();
 		}
 
-		if (is_array($emb))
+		if (is_array($emb) and empty($emb["id"]))
 		{
-			if (empty($emb["id"]))
-			{
-				$emb["parent"] = $event_folder;
-			};
-		};
+			$emb["parent"] = $event_folder;
+		}
+
 		if (isset($emb["group"]))
 		{
 			$this->emb_group = $emb["group"];
-		};
+		}
 
 		if (!empty($emb["id"]))
 		{
 			$event_obj = new object($emb["id"]);
 			$emb["id"] = $event_obj->brother_of();
-		};
+		}
 
 		$emb["return"] = "id";
-		if (is_array($_FILES["emb"]))
+
+		if (isset($_FILES["emb"]) and is_array($_FILES["emb"]))
 		{
 			foreach($_FILES["emb"] as $ekey => $eval)
 			{
@@ -938,6 +940,7 @@ class planner extends class_base
 				}
 			}
 		}
+
 		if($t)
 		{
 			$this->event_id = $t->submit($emb);
@@ -1003,11 +1006,13 @@ class planner extends class_base
 
 	function callback_mod_reforb($args = array())
 	{
-		if (isset($this->event_id))
+		if ($this->event_id)
 		{
 			$args["event_id"] = $this->event_id;
-		};
+		}
+
 		$args["post_ru"] = post_ru();
+
 		if (!empty($args["event_id"]))
 		{
 			$evo = obj($args["event_id"]);
@@ -1250,7 +1255,8 @@ class planner extends class_base
 			// XXX: check acl and only show that button, if the user actually _can_
 			// edit the calendar
 			$prp = safe_array($arr["obj_inst"]->prop("del_views"));
-			$view = !empty($_REQUEST["viewtype"]) ? $_REQUEST["viewtype"] : $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
+			$default_viewtype = $arr["obj_inst"]->prop("default_view") ? $arr["obj_inst"]->prop("default_view") : "4";
+			$view = !empty($_REQUEST["viewtype"]) ? $_REQUEST["viewtype"] : $this->viewtypes[$default_viewtype];
 			$views = array("week");
 			if(count($prp) > 0)
 			{
@@ -1315,14 +1321,14 @@ class planner extends class_base
 						foreach($conns as $conn)
 						{
 							$prj_opts[$conn->prop("from")] = $conn->prop("from.name");
-						};
-					};
-				};
+						}
+					}
+				}
 
 				$toolbar->add_cdata("&nbsp;&nbsp;".html::select(array(
 					"name" => "prj",
 					"options" => $prj_opts,
-					"selected" => $arr["request"]["project"],
+					"selected" => isset($arr["request"]["project"]) ? $arr["request"]["project"] : null,
 				)));
 
 				$toolbar->add_button(array(
@@ -1343,10 +1349,12 @@ class planner extends class_base
 			$conn = $arr["obj_inst"]->connections_from(array(
 				"type" => "RELTYPE_ICAL_EXPORT"
 			));
+			$export = 0;
 			foreach($conn as $c)
 			{
 				$export = obj($c->conn["to"]);
 			}
+
 			if($export)
 			{
 				$toolbar->add_menu_button(array(
@@ -1411,7 +1419,7 @@ class planner extends class_base
 		// if no workdays are defined, use all of them
 		for($wd = 1; $wd <= 7; $wd++)
 		{
-			if(!$wds[$wd])
+			if(empty($wds[$wd]))
 			{
 				$full_weeks = false;
 				break;
@@ -1437,7 +1445,8 @@ class planner extends class_base
 		));
 
 		$prp = safe_array($arr["obj_inst"]->prop("del_views"));
-		$view = !empty($_REQUEST["viewtype"]) ? $_REQUEST["viewtype"] : $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
+		$default_viewtype = $arr["obj_inst"]->prop("default_view") ? $arr["obj_inst"]->prop("default_view") : "4";
+		$view = !empty($_REQUEST["viewtype"]) ? $_REQUEST["viewtype"] : $this->viewtypes[$default_viewtype];
 		$views = array("week");
 		if(count($prp) > 0)
 		{
@@ -1454,11 +1463,11 @@ class planner extends class_base
 		{
 			$arr["prop"]["vcl_inst"]->adm_day = 1;
 		}
-		$viewtype = $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
+		$viewtype = $this->viewtypes[$default_viewtype];
 
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
-			"date" => $arr["request"]["date"],
-			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
+			"date" => empty($arr["request"]["date"]) ? "" : $arr["request"]["date"],
+			"viewtype" => !empty($arr["request"]["viewtype"]) ? $arr["request"]["viewtype"] : $viewtype,
 		));
 
 		global $awt;
@@ -1668,7 +1677,7 @@ class planner extends class_base
 		if (!is_array($day_end))
 		{
 			$day_end = $this->default_day_end;
-		};
+		}
 
 		$real_day_start = ($day_start["hour"] * 3600) + ($day_start["minute"] * 60);
 		$real_day_end = ($day_end["hour"] * 3600) + ($day_end["minute"] * 60);
@@ -1695,6 +1704,7 @@ class planner extends class_base
 			}
 		}
 
+		$cnt = 0;
 		while((isset($arr["until"]) && $tstamp < $arr["until"]) || sizeof($slots) < $vac_count)
 		{
 			// event list eh?
@@ -1713,14 +1723,14 @@ class planner extends class_base
 			{
 				break;
 			}
-		};
+		}
 
 		return $slots;
 	}
 
 	function gen_vacancies($arr)
 	{
-		$t = &$arr["prop"]["vcl_inst"];
+		$t = $arr["prop"]["vcl_inst"];
 		// mis v2ljad peavad olema
 		// jrk, algus, l6pp, checkbox kinnita
 		$t->define_field(array(
@@ -1743,6 +1753,7 @@ class planner extends class_base
 		));
 
 		$slots = $this->_gen_vac_slots($arr);
+		$ord = 0;
 
 		foreach($slots as $slot)
 		{
@@ -1764,7 +1775,7 @@ class planner extends class_base
 	{
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
-			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
+			"viewtype" => empty($arr["request"]["viewtype"]) ? "" : $arr["request"]["viewtype"],
 		));
 
 		$arr["until"] = $range["end"];
@@ -1775,7 +1786,8 @@ class planner extends class_base
 			$arr["prop"]["vcl_inst"]->add_item(array(
 				"timestamp" => $slot["start"],
 				"data" => array(
-					"name" => "Vaba aeg".html::checkbox(array(
+					"name" => "Vaba aeg",
+					"name_html_appendix" => html::checkbox(array(
 						"name" => "confirm[]",
 						"value" => $slot["start"]
 					)),

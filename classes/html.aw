@@ -759,7 +759,7 @@ class html
 	public static function radiobutton($args = array())
 	{
 		extract($args);
-		$checked = checked($checked);
+		$checked = isset($checked) ? checked($checked) : '';
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 		$onc = empty($onclick) ? "" : " onclick=\"{$onclick}\"";
 
@@ -907,21 +907,21 @@ class html
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
-		$selector->set("minute_step", ($args["minute_step"] ? $args["minute_step"] : 1));
+		$selector->set("minute_step", (isset($args["minute_step"]) ? $args["minute_step"] : 1));
 		$selector->configure(array("hour" => 1, "minute" => 1));
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
-		$val = mktime($args["value"]["hour"], $args["value"]["minute"], 0, $m, $d, $y);
+		$val = mktime(isset($args["value"]["hour"]) ? $args["value"]["hour"] : 0, isset($args["value"]["minute"]) ? $args["value"]["minute"] : 0, 0, $m, $d, $y);
 
-		if ($args["disabled"] or $args["textsize"])
+		if (!empty($args["disabled"]) or !empty($args["textsize"]))
 		{
 			$name = array ("name" => $args["name"]);
 
-			if ($args["disabled"])
+			if (!empty($args["disabled"]))
 			{
 				$name["disabled"] = true;
 			}
 
-			if ($args["textsize"])
+			if (!empty($args["textsize"]))
 			{
 				$name["textsize"] = $args["textsize"];
 			}
@@ -1417,6 +1417,8 @@ class html
 		examples: "10px", "0.7em", "smaller"
 	@param fontweight optional type=string
 		examples: "bold", "normal"
+	@param color optional type=string
+		examples: "red", "#CCBBAA"
 	@param content optional type=string
 		html to insert between span tags
 	@returns string/html
@@ -1429,7 +1431,8 @@ class html
 		extract($args);
 		$textsize = (!empty($textsize) ? 'font-size: ' . $textsize . ';' : "");
 		$fontweight = (!empty($fontweight) ? 'font-weight: ' . $fontweight . ';' : "");
-		$style = (!empty($textsize) or !empty($fontweight)) ? " style=\"{$textsize}{$fontweight}\"" : "";
+		$color = (!empty($color) ? "color: {$color};" : "");
+		$style = (empty($textsize) and empty($fontweight) and empty($color)) ? "" : " style=\"{$textsize}{$fontweight}{$color}\"";
 		$class = (!empty($class) ? ' class="' . $class . '"' : "");
 		$id = (!empty($id) ? " id=\"{$id}\"" : "");
 		$content = isset($content) ? $content : "";

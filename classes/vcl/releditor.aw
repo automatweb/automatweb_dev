@@ -356,11 +356,15 @@ class releditor extends core
 				$t->layoutinfo = $layoutinfo;
 			}
 		}
+		else
+		{
+			$cfgform_id = 0;
+		}
 
 		if (!empty($prop["choose_default"]))
 		{
 			$this->choose_default = 1;
-		};
+		}
 
 		$obj_inst = false;
 		if ($form_type !== "new" && is_object($arr["obj_inst"]) &&  is_oid($arr["obj_inst"]->id()))
@@ -425,7 +429,7 @@ class releditor extends core
 		{
 			$xprops[$prop["name"]."[0]_caption"] = array(
 				"type" => "text",
-				"value" => $prop["caption"],
+				"value" => empty($prop["caption"]) ? "" : $prop["caption"],
 				"subtitle" => 1,
 				"store" => "no",
 				"name" => $this->elname."_caption",
@@ -826,15 +830,15 @@ class releditor extends core
 				"value" => t("Salvesta"),
 			);*/
 
-			if ($arr["prop"]["cfgform"])
+			if (!empty($arr["prop"]["cfgform"]))
 			{
 				$act_props["eb_cfgform"] = array(
 					"type" => "hidden",
 					"name" => "cfgform",
 					"value" => $arr["prop"]["cfgform"],
 				);
-			};
-		};
+			}
+		}
 
 		if (!$obj_inst)
 		{
@@ -845,7 +849,7 @@ class releditor extends core
 		if (is_object($arr["obj_inst"]))
 		{
 			aw_global_set("from_obj",$arr["obj_inst"]->id());
-		};
+		}
 
 		// maybe I can use the property name itself
 		if (isset($arr["cb_values"]) && $arr["cb_values"])
@@ -1147,29 +1151,29 @@ class releditor extends core
 					{
 						$prop["value"] = $prop["options"][$prop["value"]];
 					}
+
 					if ($_pd["type"] === "date_select")
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
 					}
-					else
-					if ($_pd["type"] === "datetime_select")
+					elseif ($_pd["type"] === "datetime_select")
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
 					}
+
 					if (($_pd["type"] === "relpicker" || $_pd["type"] === "classificator") && $this->can("view", $prop["value"]))
 					{
 						$_tmp = obj($prop["value"]);
 						$prop["value"] = parse_obj_name($_tmp->name());
 					}
-					else
-					if ($_pd["type"] === "select" && is_array($prop["options"]))
+					elseif ($_pd["type"] === "select")
 					{
-						$prop["value"] = $prop["options"][$prop["value"]];
+						$prop["value"] = isset($prop["options"][$prop["value"]]) ? $prop["options"][$prop["value"]] : "";
 					}
 
 					if(isset($arr["prop"]["filt_edit_fields"]) and $arr["prop"]["filt_edit_fields"] == 1)
 					{
-						if($prop["value"] != "" && $prop["type"] == "textbox")
+						if($prop["value"] != "" && $prop["type"] === "textbox")
 						{
 							$ed_fields[$_pn] = $_pn;
 						}
@@ -1340,7 +1344,11 @@ class releditor extends core
 		$awt->set_default_sortby(array("_sort_jrk"=>"_sort_jrk", "_sort_name"=>"_sort_name"));
 		$awt->sort_by();
 		$awt->set_sortable(false);
-		$awt->set_caption($arr["prop"]["caption"]);
+
+		if (isset($arr["prop"]["caption"]) and strlen($arr["prop"]["caption"]))
+		{
+			$awt->set_caption($arr["prop"]["caption"]);
+		}
 
 		$rv = array(
 			"name" => $this->elname . "_table",
@@ -1612,7 +1620,7 @@ class releditor extends core
 						$el_count++;
 					}
 
-					if ($item["type"] == "checkbox" && !$emb[$item["name"]])
+					if ($item["type"] === "checkbox" && !$emb[$item["name"]])
 					{
 						$emb[$item["name"]] = 0;
 					}
@@ -1663,7 +1671,6 @@ class releditor extends core
 					return PROP_ERROR;
 				}
 			}
-
 
 
 			if ($prop["rel_id"] === "first" && empty($emb["id"]))

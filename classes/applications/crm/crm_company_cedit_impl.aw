@@ -36,8 +36,9 @@ class crm_company_cedit_impl extends core
 		}
 		$i = get_instance(CL_CRM_PHONE);
 		$ptypes = $i->get_phone_types();
+		$wrs = array();
 		foreach($cns2wrs as $cn2wr)
-		{					
+		{
 			$wr = $cn2wr->to();
 			if($wr->prop("org") != $org_fixed && $org_fixed != 0)
 			{
@@ -68,7 +69,7 @@ class crm_company_cedit_impl extends core
 				$conns[$cn2ph->id()] = $cn2ph;
 				$cns2phs[$cn2ph->conn["from"]][$cn2ph->conn["to"]] = 1;
 			}
-		} 
+		}
 
 		foreach($conns as $conn)
 		{
@@ -81,11 +82,11 @@ class crm_company_cedit_impl extends core
 			));
 			$ch_url = aw_url_change_var("cedit_tbl_edit", $obj->id());
 
-			if ($arr["request"]["cedit_tbl_edit"] == $obj->id())
+			if (isset($arr["request"]["cedit_tbl_edit"]) and $arr["request"]["cedit_tbl_edit"] == $obj->id())
 			{
 				$types = array();
 				foreach($ptypes as $_type_id => $_type_val)
-				{		
+				{
 					$types[] = html::radiobutton(array(
 						"name" => "cedit_phone[".$obj->id()."][type]",
 						"checked" => $obj->prop("type") == $_type_id,
@@ -124,7 +125,7 @@ class crm_company_cedit_impl extends core
 				$popup_menu = get_instance("vcl/popup_menu");
 				$popup_menu->begin_menu("c2wr".$obj->id());
 				foreach($wrs as $wr_id => $wr_name)
-				{				
+				{
 					$popup_menu->add_item(array(
 							"text" => $wr_name.($cns2phs[$wr_id][$obj->id()] == 1 ? t("(eemalda)") : t("(seosta)")),
 							"link" => $this->mk_my_orb("c2wr", array(
@@ -135,7 +136,7 @@ class crm_company_cedit_impl extends core
 								"return_url" => get_ru(),
 							), CL_CRM_PERSON)
 					));
-				} 
+				}
 				$popup_menu->add_item(array(
 						"text" => t("Isiklik"),
 						"link" => $this->mk_my_orb("c2wr", array(
@@ -160,7 +161,8 @@ class crm_company_cedit_impl extends core
 				));
 			}
 		}
-		if (!$arr["request"]["cedit_tbl_edit"])
+
+		if (empty($arr["request"]["cedit_tbl_edit"]))
 		{
 			$chooser = html::radiobutton(array(
 				"name" => "cedit[".$arr["prop"]["name"]."]",
@@ -169,7 +171,7 @@ class crm_company_cedit_impl extends core
 			));
 			$types = array();
 			foreach($ptypes as $_type_id => $_type_val)
-			{		
+			{
 				$types[] = html::radiobutton(array(
 					"name" => "cedit_phone[-1][type]",
 					"value" => $_type_id,
@@ -222,7 +224,7 @@ class crm_company_cedit_impl extends core
 			"type" => 67,		// RELTYPE_CURRENT_JOB
 		));
 		foreach($cns2wrs as $cn2wr)
-		{					
+		{
 			$wr = $cn2wr->to();
 			if($wr->prop("org") != $org_fixed && $org_fixed != 0)
 			{
@@ -253,7 +255,7 @@ class crm_company_cedit_impl extends core
 				$conns[$cn2fx->id()] = $cn2fx;
 				$cns2fxs[$cn2fx->conn["from"]][$cn2fx->conn["to"]] = 1;
 			}
-		} 
+		}
 		$i = get_instance(CL_CRM_PHONE);
 		foreach($conns as $conn)
 		{
@@ -266,7 +268,7 @@ class crm_company_cedit_impl extends core
 			));
 			$ch_url = aw_url_change_var("cedit_tbl_edit_f", $obj->id());
 
-			if ($arr["request"]["cedit_tbl_edit_f"] == $obj->id())
+			if (isset($arr["request"]["cedit_tbl_edit_f"]) and $arr["request"]["cedit_tbl_edit_f"] == $obj->id())
 			{
 				$t->define_data(array(
 					"sel" => $obj->id(),
@@ -290,7 +292,7 @@ class crm_company_cedit_impl extends core
 				$popup_menu = get_instance("vcl/popup_menu");
 				$popup_menu->begin_menu("c2wr".$obj->id());
 				foreach($wrs as $wr_id => $wr_name)
-				{				
+				{
 					$popup_menu->add_item(array(
 							"text" => $wr_name.($cns2fxs[$wr_id][$obj->id()] == 1 ? t("(eemalda)") : t("(seosta)")),
 							"link" => $this->mk_my_orb("c2wr", array(
@@ -301,7 +303,7 @@ class crm_company_cedit_impl extends core
 								"return_url" => get_ru(),
 							), CL_CRM_PERSON)
 					));
-				} 
+				}
 				$popup_menu->add_item(array(
 						"text" => t("Isiklik"),
 						"link" => $this->mk_my_orb("c2wr", array(
@@ -324,7 +326,8 @@ class crm_company_cedit_impl extends core
 				));
 			}
 		}
-		if (!$arr["request"]["cedit_tbl_edit_f"])
+
+		if (empty($arr["request"]["cedit_tbl_edit_f"]))
 		{
 			$chooser = html::radiobutton(array(
 				"name" => "cedit[".$arr["prop"]["name"]."]",
@@ -476,7 +479,7 @@ class crm_company_cedit_impl extends core
 			));
 			$ch_url = aw_url_change_var("cedit_tbl_edit_u", $obj->id());
 
-			if ($arr["request"]["cedit_tbl_edit_u"] == $obj->id())
+			if (isset($arr["request"]["cedit_tbl_edit_u"]) and $arr["request"]["cedit_tbl_edit_u"] == $obj->id())
 			{
 				$t->define_data(array(
 					"sel" => $obj->id(),
@@ -505,7 +508,8 @@ class crm_company_cedit_impl extends core
 				));
 			}
 		}
-		if (!$arr["request"]["cedit_tbl_edit_u"])
+
+		if (empty($arr["request"]["cedit_tbl_edit_u"]))
 		{
 			$chooser = html::radiobutton(array(
 				"name" => "cedit[".$arr["prop"]["name"]."]",
@@ -545,7 +549,7 @@ class crm_company_cedit_impl extends core
 		{
 			$parent = $arr["obj_inst"]->id();
 		}
-		
+
 		foreach(safe_array($arr["request"]["cedit_url"]) as $id => $data)
 		{
 			if ($this->can("view", $id))
@@ -622,8 +626,10 @@ class crm_company_cedit_impl extends core
 				"type" => 67,		// RELTYPE_CURRENT_JOB
 			));
 		}
+
+		$wrs = array();
 		foreach($cns2wrs as $cn2wr)
-		{					
+		{
 			$wr = $cn2wr->to();
 			if($wr->prop("org") != $org_fixed && $org_fixed != 0)
 			{
@@ -654,7 +660,8 @@ class crm_company_cedit_impl extends core
 				$conns[$cn2ml->id()] = $cn2ml;
 				$cns2mls[$cn2ml->conn["from"]][$cn2ml->conn["to"]] = 1;
 			}
-		} 
+		}
+
 		foreach($conns as $conn)
 		{
 			$obj = $conn->to();
@@ -666,7 +673,7 @@ class crm_company_cedit_impl extends core
 			));
 			$ch_url = aw_url_change_var("cedit_tbl_edit_e", $obj->id());
 
-			if ($arr["request"]["cedit_tbl_edit_e"] == $obj->id())
+			if (isset($arr["request"]["cedit_tbl_edit_e"]) and $arr["request"]["cedit_tbl_edit_e"] == $obj->id())
 			{
 				$t->define_data(array(
 					"sel" => $obj->id(),
@@ -696,7 +703,7 @@ class crm_company_cedit_impl extends core
 				$popup_menu = get_instance("vcl/popup_menu");
 				$popup_menu->begin_menu("c2wr".$obj->id());
 				foreach($wrs as $wr_id => $wr_name)
-				{				
+				{
 					$popup_menu->add_item(array(
 							"text" => $wr_name.($cns2mls[$wr_id][$obj->id()] == 1 ? t("(eemalda)") : t("(seosta)")),
 							"link" => $this->mk_my_orb("c2wr", array(
@@ -707,7 +714,7 @@ class crm_company_cedit_impl extends core
 								"return_url" => get_ru(),
 							), CL_CRM_PERSON)
 					));
-				} 
+				}
 				$popup_menu->add_item(array(
 						"text" => t("Isiklik"),
 						"link" => $this->mk_my_orb("c2wr", array(
@@ -731,7 +738,8 @@ class crm_company_cedit_impl extends core
 				));
 			}
 		}
-		if (!$arr["request"]["cedit_tbl_edit_e"])
+
+		if (empty($arr["request"]["cedit_tbl_edit_e"]))
 		{
 			$chooser = html::radiobutton(array(
 				"name" => "cedit[".$arr["prop"]["name"]."]",
@@ -784,7 +792,7 @@ class crm_company_cedit_impl extends core
 			));
 			$ch_url = aw_url_change_var("cedit_tbl_edit_e", $obj->id());
 
-			if ($arr["request"]["cedit_tbl_edit_e"] == $obj->id())
+			if (isset($arr["request"]["cedit_tbl_edit_e"]) and $arr["request"]["cedit_tbl_edit_e"] == $obj->id())
 			{
 				$t->define_data(array(
 					"sel" => $obj->id(),
@@ -844,7 +852,8 @@ class crm_company_cedit_impl extends core
 				));
 			}
 		}
-		if (!$arr["request"]["cedit_tbl_edit_e"])
+
+		if (empty($arr["request"]["cedit_tbl_edit_e"]))
 		{
 			/*
 			$chooser = html::radiobutton(array(
@@ -951,7 +960,7 @@ class crm_company_cedit_impl extends core
 			));
 			$ch_url = aw_url_change_var("cedit_tbl_edit_a", $obj->id());
 
-			if ($arr["request"]["cedit_tbl_edit_a"] == $obj->id())
+			if (isset($arr["request"]["cedit_tbl_edit_a"]) and $arr["request"]["cedit_tbl_edit_a"] == $obj->id())
 			{
 				$t->define_data(array(
 					"sel" => $obj->id(),
@@ -998,7 +1007,7 @@ class crm_company_cedit_impl extends core
 				));
 			}
 		}
-		if (!$arr["request"]["cedit_tbl_edit_a"])
+		if (empty($arr["request"]["cedit_tbl_edit_a"]))
 		{
 			$chooser = html::radiobutton(array(
 				"name" => "cedit[".$arr["prop"]["name"]."]",
@@ -1093,13 +1102,17 @@ class crm_company_cedit_impl extends core
 		));
 		foreach($fields as $name => $caption)
 		{
-			if($name == "choose")
+			if($name === "choose")
 			{
 				$width = "10%";
 			}
-			elseif($name == "change")
+			elseif($name === "change")
 			{
 				$width = "60px";
+			}
+			else
+			{
+				$width = "";
 			}
 			$t->define_field(array(
 				"name" => $name,
@@ -1147,7 +1160,7 @@ class crm_company_cedit_impl extends core
 			));
 			$ch_url = aw_url_change_var("cedit_tbl_edit_a", $obj->id());
 
-			if ($arr["request"]["cedit_tbl_edit_a"] == $obj->id())
+			if (isset($arr["request"]["cedit_tbl_edit_a"]) and $arr["request"]["cedit_tbl_edit_a"] == $obj->id())
 			{
 				$t->define_data(array(
 					"sel" => $obj->id(),
@@ -1214,7 +1227,7 @@ class crm_company_cedit_impl extends core
 				));
 			}
 		}
-		if (!$arr["request"]["cedit_tbl_edit_a"])
+		if (empty($arr["request"]["cedit_tbl_edit_a"]))
 		{
 			$chooser = html::radiobutton(array(
 				"name" => "cedit[".$arr["prop"]["name"]."]",
@@ -1353,7 +1366,7 @@ class crm_company_cedit_impl extends core
 			"lang_id" => array(),
 			"site_id" => array(),
 			"name" => $val
-		)); 
+		));
 		if ($ol->count())
 		{
 			$fo = $ol->begin();
@@ -1422,7 +1435,7 @@ class crm_company_cedit_impl extends core
 		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}
-	
+
 	function parse_url_parse_query($return_url)
 	{
 		$url = parse_url($return_url);
@@ -1430,7 +1443,7 @@ class crm_company_cedit_impl extends core
 		foreach($query as $q)
 		{
 			$t = explode("=", $q);
-			$ret[$t[0]] = $t[1];
+			$ret[$t[0]] = isset($t[1]) ? $t[1] : "";
 		}
 		return $ret;
 	}

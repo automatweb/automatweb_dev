@@ -13,13 +13,13 @@ class popup_menu extends aw_template
 
 		$this->read_template("js_popup_menu.tpl");
 	}
-	/** 
+	/**
 
-		@attrib name=begin_menu params=pos api=1 
+		@attrib name=begin_menu params=pos api=1
 
 		@param menu_id required type=string
 			String which identifies popup menu
-		@comment 
+		@comment
 			Sets the popup menu's id and resets items array
 
 		@examples
@@ -35,7 +35,7 @@ class popup_menu extends aw_template
 
 	/** Adds new item to popup menu
 
-		@attrib name=add_item params=name api=1 
+		@attrib name=add_item params=name api=1
 
 		@param text required type=string
 			Item's caption
@@ -130,6 +130,12 @@ class popup_menu extends aw_template
 		{
 			$arr["parent"] = $this->menu_id;
 		}
+
+		if (!isset($this->menus[$arr["parent"]]))
+		{
+			$this->menus[$arr["parent"]] = "";
+		}
+
 		$this->menus[$arr["parent"]] .= '<div class="menuItemSep"></div>'."\n";
 	}
 
@@ -147,7 +153,7 @@ class popup_menu extends aw_template
 	**/
 	function add_sub_menu($arr)
 	{
-		if (!$arr["parent"])
+		if (empty($arr["parent"]))
 		{
 			$arr["parent"] = $this->menu_id;
 		}
@@ -164,7 +170,7 @@ class popup_menu extends aw_template
 
 	/** Returns the HTML of the popup menu
 
-		@attrib name=get_menu params=name api=1 
+		@attrib name=get_menu params=name api=1
 
 		@param icon optional type=string
 			Icon image name
@@ -251,8 +257,8 @@ class popup_menu extends aw_template
 				el = document.getElementById(\"lod_".$this->menu_id."\");
 				el.innerHTML=aw_get_url_contents(\"".$param["load_on_demand_url"]."\");
 				nhr=document.getElementById(\"href_".$this->menu_id."\");
-				if (document.createEvent) {evObj = document.createEvent(\"MouseEvents\");evObj.initEvent( \"click\", true, true );nhr.dispatchEvent(evObj);} 
-				else { 
+				if (document.createEvent) {evObj = document.createEvent(\"MouseEvents\");evObj.initEvent( \"click\", true, true );nhr.dispatchEvent(evObj);}
+				else {
 					nhr.fireEvent(\"onclick\");
 				}
 			}

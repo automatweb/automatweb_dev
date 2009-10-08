@@ -17,9 +17,11 @@ class vcalendar extends aw_template
 	public/*???*/ $target_section;
 	public/*???*/ $random;
 	public/*???*/ $years;
+	public/*???*/ $past;
 	public/*???*/ $skip_empty;
 	public/*???*/ $first_event;
 	public/*???*/ $events_sorted;
+	public/*???*/ $overview_items_oids;
 
 	protected $items = array();
 	protected $overview_items = array();
@@ -357,7 +359,11 @@ class vcalendar extends aw_template
 	**/
 	function add_item($arr)
 	{
-		if (!empty($arr["item_start"]))
+		if (empty($arr["item_start"]))
+		{
+			$arr["item_start"] = time();
+		}
+		else
 		{
 			$arr["timestamp"] = $arr["item_start"];
 			if (empty($arr["item_end"]))
@@ -372,7 +378,12 @@ class vcalendar extends aw_template
 				// events where the start date is later than end. But maybe
 				// I shouldn't care
 				$arr["item_end"] = $arr["item_start"];
-			};
+			}
+		}
+
+		if (empty($arr["item_end"]))
+		{
+			$arr["item_end"] = $arr["item_start"];
 		}
 
 		// convert timestamp to day, since calendar is usually day based
@@ -397,13 +408,13 @@ class vcalendar extends aw_template
 		$data["_id"] = $this->el_count;
 		$data["id"] = isset($arr["data"]["id"]) ? $arr["data"]["id"] : "";
 		$data["comment"] = isset($arr["data"]["comment"]) ? $arr["data"]["comment"] : "";
-		$data["bgcolor"] = $arr["bgcolor"];
+		$data["bgcolor"] = empty($arr["bgcolor"]) ? "" : $arr["bgcolor"];
 
 		if ($end_tm > $start_tm)
 		{
 			$data["item_end"] = mktime($this->day_end["hour"],$this->day_end["minute"],59,$em,$ed,$ey);
 			//$data["time"] = "Algab: " . date("H:i",$data["item_start"]);
-		};
+		}
 
 		$this->evt_list[$this->el_count] = $data;
 		$this->items[$use_date][] = &$this->evt_list[$this->el_count];
@@ -1157,12 +1168,18 @@ class vcalendar extends aw_template
 		$this->last_event = isset($event) ? $event :  null;
 
 		$month_opts = array();
-		$cd = $_GET["date"];
-		if (!$cd)
+		$cd = empty($_GET["date"]) ? date("d-m-Y") : $_GET["date"];
+
+		if (1 === substr_count($cd, "-"))
 		{
-			$cd = date("d-m-Y");
+			$c_d = 1;
+			list($c_m, $c_y) = explode("-", $cd);
 		}
-		list($c_d, $c_m, $c_y) = explode("-", $cd);
+		else
+		{
+			list($c_d, $c_m, $c_y) = explode("-", $cd);
+		}
+
 		$u = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
 		for($i = 1; $i < 13; $i++)
 		{
@@ -1327,10 +1344,11 @@ class vcalendar extends aw_template
 				{
 					$this->first_event = reset($events);
 				}
+
 				foreach($events as $event)
 				{
 					$events_for_day .= $this->draw_event($event);
-				};
+				}
 			}
 			elseif ($this->show_days_with_events)
 			{
@@ -1369,7 +1387,7 @@ class vcalendar extends aw_template
 			$rv .= $this->parse($tpl);
 		}
 
-		$this->last_event = $event;
+		$this->last_event = isset($event) ? $event : null;
 		$this->vars(array(
 			"DAY" => $rv,
 		));
@@ -1480,7 +1498,7 @@ class vcalendar extends aw_template
 			};
 		};
 		//arr(dbg::process_backtrace(debug_backtrace()));
-		$this->first_event = $event;
+		$this->first_event = isset($event) ? $event : null;
 
 		$limit = $this->future_limit;
 		$count = 0;
@@ -1534,30 +1552,31 @@ class vcalendar extends aw_template
 		$now = date("Ymd");
 
 		$active_day = aw_global_get("date");
-		if (empty($active_day))
+		if (1 === substr_count($active_day, "-"))
 		{
-			$active_day = date("d-m-Y");
-		};
-		list($d,$m,$y) = explode("-",$active_day);
-		if ($d && $m && !$y)
-		{
-			$y = $m;
-			$m = $d;
 			$d = 1;
+			list($m, $y) = explode("-", $active_day, 3);
 		}
-		else
-		if (!$y)
+		elseif (2 === substr_count($active_day, "-"))
+		{
+			list($d, $m, $y) = explode("-", $active_day);
+		}
+		elseif (1 === substr_count($active_day, "."))
+		{
+			$d = 1;
+			list($m, $y) = explode(".", $active_day);
+		}
+		elseif (2 === substr_count($active_day, "."))
 		{
 			list($d, $m, $y) = explode(".", $active_day);
 		}
-
-		// perhaps the date was in dd-mm-YYYY form?
-		if (empty($y))
+		else
 		{
-			$y = $m;
-			$m = $d;
-			$d = 1;
-		};
+			$d = date("d");
+			$m = date("m");
+			$y = date("Y");
+		}
+
 		$act_tm = mktime(0,0,0,$m,$d,$y);
 		$act_stamp = date("Ymd",$act_tm);
 
@@ -1613,11 +1632,12 @@ class vcalendar extends aw_template
 		if (isset($this->styles["minical_background"]))
 		{
 			$style_background = $this->styles["minical_background"];
-		};
+		}
 
 		$done_days = array();
 		$j = $realstart;
 		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$realstart));
+		$week = "";
 		while($j <= $realend)
 		{
 			$i = $j;
@@ -1632,13 +1652,13 @@ class vcalendar extends aw_template
 					continue;
 				}
 				$done_days[$dstamp] = 1;
-				$has_events = $this->overview_items[$dstamp];
+				$has_events = !empty($this->overview_items[$dstamp]);
 				$style = $has_events ? $style_day_with_events : $style_day_without_events;
 				if (between($i,$arr["start"],$arr["end"]))
 				{
 					$mode = 0;
 					// if a day has no events and "cell_empty" sub is defined, use it.
-					if (empty($has_events))
+					if (!$has_events)
 					{
 						$mode = 1;
 					};
@@ -1748,7 +1768,8 @@ class vcalendar extends aw_template
 			));
 			$week .= $this->parse("WEEK");
 			$j = $j + (7*86400);
-		};
+		}
+
 		// now, how to make those configurable?
 		$this->vars_safe(array(
 			"WEEK" => $week,
@@ -1955,7 +1976,7 @@ class vcalendar extends aw_template
 			"datestamp" => date("d.m.Y",$evt["timestamp"]),
 			"aw_date" => date("d-m-Y",$evt["timestamp"]),
 			"lc_date" => date("j",$evt["timestamp"]) . ". " . $lc_month . " " . date("Y H:i",$evt["timestamp"]),
-			"name" => htmlspecialchars($evt["name"]),
+			"name" => htmlspecialchars($evt["name"]) . (isset($evt["name_html_appendix"]) ? $evt["name_html_appendix"] : ""),
 			"id" => isset($evt["id"]) ? $evt["id"] : "",
 			"link" => !empty($evt["link"]) ? $evt["link"] : "javascript:void(0)",
 			"calendar_view_link" => aw_url_change_var("event_id", $evt["id"]),
@@ -2060,5 +2081,6 @@ class vcalendar extends aw_template
 			return (int)($el1['start'] - $el2['start']);
 		}
 	}
-};
+}
+
 ?>
