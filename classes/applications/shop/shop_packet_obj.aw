@@ -2,6 +2,31 @@
 
 class shop_packet_obj extends _int_object
 {
+
+	function delete()
+	{
+		$ws = $this->get_warehouse_settings();
+		if(is_object($ws) && $ws->prop("delete_all_lower_products"))
+		{
+			foreach($this->get_products()->arr() as $product)
+			{
+				$product -> delete();
+			}
+		}
+
+		parent::delete();
+	}
+
+	private function get_warehouse_settings()
+	{
+		$ol = new object_list(array(
+			"site_id" => array(),
+			"lang_id" => array(),
+			"class_id" => CL_SHOP_WAREHOUSE_CONFIG,
+		));
+		return $ol->begin();
+	}
+
 	/** returns 3 same category packets
 		@attrib api=1
 		 @returns object list

@@ -112,6 +112,17 @@
             <caption>Lao omanik</caption>
       </property>
       <property>
+            <name>delete_all_lower_products</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>left</parent>
+            <caption>Kustuta paketi kustutamisel ka tooted</caption>
+      </property>
+      <property>
             <name>sell_prods</name>
             <table>objects</table>
             <group>general</group>
