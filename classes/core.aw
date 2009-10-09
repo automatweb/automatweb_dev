@@ -851,24 +851,9 @@ class core extends acl_base
 		$path = "";
 		$nt = true;
 		// check if there is a default text
-		$gl = aw_global_get("gidlist_oid");
-		$can_adm_max = -100000000;
-		foreach($gl as $g_oid)
-		{
-			$o = obj($g_oid);
+		$dyc = $this->prog_acl("", "default_yah_ct");
 
-			if ($o->prop("type") == 1 || $o->prop("type") == 3)
-			{
-				continue;
-			}
-			if ($o->prop("priority") > $can_adm_max)
-			{
-				// all settings except can use admin depend on if_acls_set being true
-				$dyc = $o->prop("default_yah_ct");
-				$can_adm_max = $o->prop("priority");
-			}
-		}
-		if ($dyc != "")
+		if (true !== $dyc and strlen($dyc))
 		{
 			if ($_GET["return_url"] != "")
 			{
@@ -886,7 +871,6 @@ class core extends acl_base
 
 		if ($this->can("view", $oid) && $nt)
 		{
-			$path = "";
 			$current = new object($oid);
 			// path() always return an array
 			$chain = array_reverse($current->path());
