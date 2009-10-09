@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.125 2009/05/05 13:21:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.126 2009/10/09 13:59:21 markop Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1225,7 +1225,7 @@ class object_treeview_v2 extends class_base
 		));
 		$res = $this->parse();
 
-		if ($ih_ob->prop("show_add"))
+		if ($ih_ob->prop("show_add") && strlen(aw_global_get("uid")))//kui kuskil ikka vaja toolbari kasutada ka mitte sisse loginud inimeste puhul... siis siin on viga... mu meelest pole seda aga vaja kunagi, lisaks on reede 6htu ja kopp on ees
 		{
 			$res = $this->_get_add_toolbar($ih_ob).$res;
 		}
