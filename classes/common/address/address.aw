@@ -254,11 +254,11 @@ EOS;
 					`aw_oid` int(11) UNSIGNED NOT NULL default '0',
 					`administrative_structure` int(11) UNSIGNED NOT NULL default '0',
 					`country` int(11) UNSIGNED default NULL,
-					`postal_code` char(25) default NULL,
-					`street` char(250) default NULL,
-					`house` char(250) default NULL,
-					`apartment` char(50) default NULL,
-					`po_box` char(50) default NULL,
+					`postal_code` varchar(25) default NULL,
+					`street` varchar(250) default NULL,
+					`house` varchar(250) default NULL,
+					`apartment` varchar(50) default NULL,
+					`po_box` varchar(50) default NULL,
 					PRIMARY KEY  (`aw_oid`)
 				) ");
 				$return_val = true;
@@ -267,14 +267,14 @@ EOS;
 			{
 				$this->db_add_col($table, array(
 					"name" => "street",
-					"type" => "char(250)"
+					"type" => "varchar(250)"
 				));
 			}
 			elseif ("house" === $field)
 			{
 				$this->db_add_col($table, array(
 					"name" => "house",
-					"type" => "char(250)"
+					"type" => "varchar(250)"
 				));
 			}
 		}
