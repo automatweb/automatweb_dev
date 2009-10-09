@@ -510,7 +510,7 @@ class acl_base extends db_connector
 
 	////
 	// !checks if the user has the $right for program $progid
-	function prog_acl($right = "",$progid = "can_admin_interface")
+	function prog_acl($right = "", $progid = "can_admin_interface")
 	{
 		if (aw_global_get("uid") == "")
 		{
@@ -565,7 +565,7 @@ class acl_base extends db_connector
 
 			if ($can_adm_max == 0 && $progid !== "can_admin_interface")
 			{
-				$can_adm = 1;
+				$can_adm = false === $can_adm ? true : $can_adm;
 			}
 
 			aw_global_set("acl_base::prog_acl_cache", $can_adm+1);
