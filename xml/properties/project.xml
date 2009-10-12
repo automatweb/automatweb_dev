@@ -913,6 +913,16 @@
             <field>task_types_tree</field>
       </property>
       <property>
+            <name>task_persons_tree</name>
+            <table>objects</table>
+            <group>goals_edit</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>task_persons_tree_lay</parent>
+            <store>no</store>
+            <field>task_persons_tree</field>
+      </property>
+      <property>
             <name>search_part</name>
             <table>objects</table>
             <group>goals_edit</group>
@@ -1786,6 +1796,13 @@
                   <parent>task_types_tree_left</parent>
                   <group>goals_edit</group>
             </task_types_tree_lay>
+            <task_persons_tree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>&amp;amp;Uuml;lesande&amp;amp;nbsp;Teostaja</area_caption>
+                  <parent>task_types_tree_left</parent>
+                  <group>goals_edit</group>
+            </task_persons_tree_lay>
             <task_types_search_lay>
                   <type>vbox</type>
                   <closeable>1</closeable>

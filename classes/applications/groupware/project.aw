@@ -331,6 +331,10 @@
 
 				@property task_types_tree type=treeview no_caption=1 parent=task_types_tree_lay
 
+			@layout task_persons_tree_lay type=vbox closeable=1 area_caption=&Uuml;lesande&nbsp;Teostaja parent=task_types_tree_left
+
+				@property task_persons_tree type=treeview no_caption=1 parent=task_persons_tree_lay
+
 			@layout task_types_search_lay type=vbox closeable=1 area_caption=Otsinguparameetrid parent=task_types_tree_left
 
  				@property search_part type=textbox captionside=top store=no parent=task_types_search_lay
@@ -641,7 +645,7 @@ class project extends class_base
 				$ret.= html::checkbox(array(
 					"name" => "month_chooser[".$mY."]",
 					"value" => 1,
-					"checked" => ($month_chooser[$mY]) ? 1 : 0
+					"checked" => empty($month_chooser[$mY]) ? 0 : 1
 				))." ".date("M Y" , $start)."<br>";
 			}
 			$start+= self::DAY_LENGTH_SECONDS*28;
@@ -1162,6 +1166,9 @@ class project extends class_base
 					{
 						$start = $work["date"];
 					}
+					if(!isset($result[$work["task.class_id"]][$date_day_start])) $result[$work["task.class_id"]][$date_day_start] = 0;
+					if(!isset($result[1][$date_day_start])) $result[1][$date_day_start] = 0;
+
 					$result[$work["task.class_id"]][$date_day_start] +=$work["time_real"];
 					$result[1][$date_day_start] +=$work["time_real"];
 				}
@@ -1731,7 +1738,9 @@ class project extends class_base
 			case "task_types_tree":
 				$this->_task_types_tree($arr);
 				break;
-
+			case "task_persons_tree":
+				$this->_get_task_persons_tree($arr);
+				break;
 			case "work_list":
 				$this->_get_work_list($arr);
 				break;
@@ -4770,6 +4779,60 @@ exit_function("bills::all_cust_bills");
 		exit_function("bills_impl::_get_bill_task_list");
 	}
 
+	function _get_task_persons_tree($arr)
+	{
+		classload("core/icons");
+		$act = $arr["request"]["person"];
+		$tv =& $arr["prop"]["vcl_inst"];
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "proj_task_persons",
+		));
+		if(sizeof(explode("_" , $arr["request"]["tf"])))
+		{
+			$type = explode("_" , $arr["request"]["tf"]);
+			if($type[0] == CL_BUG)
+			{
+				$status = $type[1];
+			}
+		}
+
+
+		$people = array();
+		$bugs_data = $arr["obj_inst"]->get_bugs_data();
+		foreach($bugs_data as $bug => $data)
+		{
+			if($data["bug_status"] == $status)
+			{
+				$people[$data["who"]]+=1;
+			}
+			else
+			{
+				$people[$data["who"]]+=0;
+			}
+		}
+
+		$tv->add_item(0,array(
+			"name" => empty($act) ? "<b>".t("K&ouml;ik teostajad")."</b>" : t("K&ouml;ik teostajad"),
+			"id" => "all",
+			"url" => aw_url_change_var("person", null),
+		));
+		foreach($people as $person => $count)
+		{
+			$name = get_name($person);
+			if($count)
+			{
+				$name.= "(".$count.")";
+			}
+			$tv->add_item("all",array(
+				"name" => $person == $act ? "<b>".$name."</b>" : $name,
+				"id" => $person,
+				"url" => aw_url_change_var("person", $person),
+			));
+		}
+	}
+
 	function _task_types_tree($arr)
 	{
 		classload("core/icons");
@@ -5095,7 +5158,10 @@ exit_function("bills::all_cust_bills");
 			switch($tf[0])
 			{
 				case CL_BUG:
-					$tasks = $arr["obj_inst"]->get_bugs(array("status" => $tf[1]));
+					$tasks = $arr["obj_inst"]->get_bugs(array(
+						"status" => $tf[1],
+						"implementor" => $arr["request"]["person"],
+					));
 					break;
 
 				case CL_TASK:
@@ -7925,6 +7991,9 @@ exit_function("bills::all_cust_bills");
 			{
 				$start = $data["date"];
 			}
+
+			if($end > $start)
+
 			$date_day_start = date("dmy" , $data["date"]);
 			$work_data[$person][$data["task.class_id"]][$date_day_start] +=$data["time_real"];
 			$work_data[$person][1][$date_day_start] +=$data["time_real"];
@@ -7960,7 +8029,16 @@ exit_function("bills::all_cust_bills");
 
 			foreach($this->event_types as $clid => $capt)
 			{
-				$data_defined = $work_data[$person][$clid];
+				$data_defined = empty($work_data[$person][$clid]) ? array() : $work_data[$person][$clid];
+				$data_defined["all"] = 0;
+				foreach($data_defined as $key => $val)
+				{
+					if(isset($month_chooser[substr($key , 2 , 4)]))
+					{
+						$data_defined["all"]+= $val;
+
+					}
+				}
 				$data_defined["person"] = $capt;
 				$t->define_data($data_defined);
 			}
@@ -7973,6 +8051,15 @@ exit_function("bills::all_cust_bills");
 		foreach($this->event_types as $clid => $capt)
 		{
 			$data_defined = $result[$clid];
+			$data_defined["all"] = 0;
+			foreach($data_defined as $key => $val)
+			{
+				if(isset($month_chooser[substr($key , 2 , 4)]))
+				{
+					$data_defined["all"]+= $val;
+
+				}
+			}
 			$data_defined["person"] = $capt;
 			$t->define_data($data_defined);
 		}
@@ -8009,7 +8096,7 @@ exit_function("bills::all_cust_bills");
 		}
 		while($end > $start)
 		{
-			if(!$month_chooser[date("my" , $start)])
+			if(empty($month_chooser[date("my" , $start)]))
 			{
 				$start += self::DAY_LENGTH_SECONDS;
 				continue;
@@ -8023,6 +8110,7 @@ exit_function("bills::all_cust_bills");
 				));
 				$parent_field =  date("my" , $start);
 			}
+
 			$t->define_field(array(
 				"name" => date("dmy" , $start),
 				"caption" => date("d" , $start),
@@ -8033,6 +8121,14 @@ exit_function("bills::all_cust_bills");
 			));
 			$start += self::DAY_LENGTH_SECONDS;
 		}
+
+		$t->define_field(array(
+			"name" => "all",
+			"caption" => t("Kokku"),
+			"align" => "right",
+			"callback" =>  array(&$this, "__tm_field_format"),
+			"callb_pass_row" => true,
+		));
 
 /*
 		$stats_by_ppl = $arr["obj_inst"]->stats_get_by_person();
@@ -8083,7 +8179,7 @@ arr($stats_by_ppl);
 
 	function __tm_field_format($val)
 	{
-		if(!$val[$val["_this_cell"]])
+		if(empty($val[$val["_this_cell"]]))
 		{
 			return "-";
 		}

@@ -106,6 +106,7 @@ class project_obj extends _int_object
 			time between end
 		@param status optional type=bool
 		@param participant optional type=string/oid
+		@param implementor optional type=oid
 		@returns object list
 	**/
 	public function get_bugs($arr = array())
@@ -129,7 +130,7 @@ class project_obj extends _int_object
 	{
 		$filter = $this->_get_bugs_filter($arr);
 		$bugres = array(
-			CL_BUG => array("bug_status"),
+			CL_BUG => array("bug_status", "who"),
 		);
 		$rows_arr = new object_data_list($filter , $bugres);
 
@@ -174,6 +175,14 @@ class project_obj extends _int_object
 				$filter["CL_BUG.RELTYPE_MONITOR.name"] = "%".$participant."%";;
 			}
 
+		}
+
+		if(!empty($implementor))
+		{
+			if(is_oid($implementor))
+			{
+				$filter["CL_BUG.who"] = $implementor;
+			}
 		}
 
 		if($status)
