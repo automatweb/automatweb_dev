@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.47 2009/01/13 21:04:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.48 2009/10/13 13:16:28 markop Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -311,7 +311,11 @@ class poll extends class_base implements main_subtemplate_handler
                         $_COOKIE["poll_set_answer_id"] = $_GET["c_set_answer_id"];
                         setcookie("poll_set_answer_id", $_GET["c_set_answer_id"],time()+24*3600*1000,"/");
                         ///$url = aw_url_change_var("c_set_answer_id", null);
-			$url = $this->mk_my_orb("show", array("poll_id" => $_GET["poll_id"], "section" => aw_global_get("section")));
+			$url = $this->mk_my_orb("show", array(
+				"poll_id" => $_GET["poll_id"],
+				"section" => aw_global_get("section")
+				"return_url" => $GLOBALS["HTTP_SESSION_VARS"]["aw_session_track"]["server"]["referer"],
+			));
                         die("<script language=javascript>window.location.href='$url';</script>");
                 }
 
@@ -441,7 +445,8 @@ class poll extends class_base implements main_subtemplate_handler
 			"addcomment" => $t->add_comment(array("board" => $id)), 
 			"num_comments" => $t->get_num_comments($id), 
 			"poll_id" => $id, 
-			"QUESTION" => $p
+			"QUESTION" => $p,
+			"back_url" => isset($_GET["return_url"]) ? $_GET["return_url"] : "",
 		));
 
 		if ($def)
