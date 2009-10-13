@@ -6409,7 +6409,16 @@ class class_base extends aw_template
 		{
 			$arr["request"]["class"] = "document";
 		}
-		$props = isset($arr["request"]["id"]) && is_oid($arr["request"]["id"]) ? get_instance("cfgform")->get_default_proplist(array("oid" => $arr["request"]["id"])) : get_instance("cfgform")->get_default_proplist(array("clid" => constant("CL_".strtoupper($arr["request"]["class"]))));
+		switch($arr["request"]["class"])
+		{
+			case "links":
+				$class_id = CL_EXTLINK;
+				break;
+			default:
+				$class_id = constant("CL_".strtoupper($arr["request"]["class"]));
+		}
+
+		$props = isset($arr["request"]["id"]) && is_oid($arr["request"]["id"]) ? get_instance("cfgform")->get_default_proplist(array("oid" => $arr["request"]["id"])) : get_instance("cfgform")->get_default_proplist(array("clid" => $class_id));
 		$draftable_props = array();
 		foreach($props as $k => $prop)
 		{
@@ -6428,7 +6437,7 @@ class class_base extends aw_template
 			if(!isset($arr["request"]["id"]) || !is_oid($arr["request"]["id"]))
 			{
 				unset($params["draft_object"]);
-				$params["draft_new"] = constant("CL_".strtoupper($arr["request"]["class"]));
+				$params["draft_new"] = $class_id;
 			}
 			else
 			{
