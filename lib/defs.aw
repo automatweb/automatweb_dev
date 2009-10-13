@@ -2453,7 +2453,7 @@ function eval_buffer($res)
 
 	function get_name($id)
 	{
-		if(is_oid($id))
+		if($GLOBALS["object_loader"]->cache->can("view" , $id))
 		{
 			$obj = obj($id);
 			return $obj->name();
