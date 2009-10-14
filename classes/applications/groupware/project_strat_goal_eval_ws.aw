@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_strat_goal_eval_ws.aw,v 1.4 2007/12/06 14:33:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_strat_goal_eval_ws.aw,v 1.5 2009/10/14 15:32:28 markop Exp $
 // project_strat_goal_eval_ws.aw - Projekti eesm&auml;rkide hindamislaud 
 /*
 
@@ -158,7 +158,7 @@ class project_strat_goal_eval_ws extends class_base
 			$strats[$c->prop("to")] = $c->prop("to");
 		}
 
-		foreach($pi->get_events_for_project(array("project_id" => $proj->id())) as $evid)
+		foreach($proj->get_goals()->ids() as $evid)
 		{
 			$ar = array(
 				"task" => html::obj_change_url($evid),
@@ -246,7 +246,7 @@ class project_strat_goal_eval_ws extends class_base
 		}
 		$sbs = array();
 		$sums = array();
-		foreach($pi->get_events_for_project(array("project_id" => $proj->id())) as $evid)
+		foreach($proj->get_goals()->ids() as $evid)
 		{
 			$ar = array(
 				"task" => html::obj_change_url($evid),
@@ -367,7 +367,7 @@ class project_strat_goal_eval_ws extends class_base
 				}
 			}
 		}
-		foreach($pi->get_events_for_project(array("project_id" => $proj->id())) as $evid)
+		foreach($proj->get_goals()->ids() as $evid)
 		{
 			$ar = array(
 				"task" => html::obj_change_url($evid),

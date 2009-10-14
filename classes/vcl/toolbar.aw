@@ -629,6 +629,8 @@ class toolbar extends aw_template
 			array("Name" => t("Sisesta uue objekti nimi"))
 		@param tooltip optional type=string
 			Tooltip for the button
+		@param connect optional type=int
+			Connection id from parent to new object
 		@example
 			$tb->add_js_new_button(array(
 				"parent" => $arr["obj_inst"]->id(),
@@ -664,6 +666,11 @@ class toolbar extends aw_template
 			action: 'create_new_object',
 			parent: parent,
 			clid: '".$arr["clid"]."'";
+
+		if(!empty($arr["connect"]))
+		{
+			$js.= ", connect : '".$arr["connect"]."'\n";
+		}
 
 
 		foreach($arr["promts"] as $prop => $text)

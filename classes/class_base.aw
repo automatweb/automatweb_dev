@@ -6868,6 +6868,15 @@ class class_base extends aw_template
 		$o->set_class_id($arr["clid"]);
 		$o->save();
 
+		if(!empty($arr["parent"]) && !empty($arr["connect"]))
+		{
+			$parent = obj($arr["parent"]);
+			$parent->connect(array(
+				"to" => $o->id(),
+				"reltype" => $arr["connect"]
+			));
+		}
+
 		foreach($arr as $prop => $val)
 		{
 			if($o->is_property($prop))
@@ -6876,7 +6885,7 @@ class class_base extends aw_template
 			}
 		}
 		$o->save();
-		die($id);
+		die($o->id());
 	}
 
 }

@@ -171,6 +171,16 @@
             <caption>Kategooria</caption>
       </property>
       <property>
+            <name>hrs_guess</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>aw_hrs_guess</field>
+            <size>5</size>
+            <parent>left_bit</parent>
+            <caption> Prognoositav tundide arv</caption>
+      </property>
+      <property>
             <name>start</name>
             <table>aw_projects</table>
             <group>general2</group>
@@ -196,16 +206,6 @@
             <field>aw_deadline</field>
             <parent>project_time</parent>
             <caption>T&amp;amp;auml;htaeg</caption>
-      </property>
-      <property>
-            <name>hrs_guess</name>
-            <table>aw_projects</table>
-            <group>general2</group>
-            <type>textbox</type>
-            <field>aw_hrs_guess</field>
-            <size>5</size>
-            <parent>project_time</parent>
-            <caption> Prognoositav tundide arv</caption>
       </property>
       <property>
             <name>parts_tb</name>
@@ -246,6 +246,26 @@
             <store>no</store>
             <parent>project_people</parent>
             <field>impl_table</field>
+      </property>
+      <property>
+            <name>subprojects</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>subprojects_layout</parent>
+            <field>subprojects</field>
+      </property>
+      <property>
+            <name>master_project</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>master_project_layout</parent>
+            <field>master_project</field>
       </property>
       <property>
             <name>participants</name>
@@ -1022,6 +1042,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>strat_table</parent>
             <field>strat</field>
       </property>
       <property>
@@ -1602,6 +1623,22 @@
                   <area_caption>Osalejad</area_caption>
                   <group>general2</group>
             </project_people>
+            <subprojects_layout>
+                  <type>vbox</type>
+                  <parent>center_bit</parent>
+                  <closeable>1</closeable>
+                  <no_padding>1</no_padding>
+                  <area_caption>Alamprojektid</area_caption>
+                  <group>general2</group>
+            </subprojects_layout>
+            <master_project_layout>
+                  <type>vbox</type>
+                  <parent>center_bit</parent>
+                  <closeable>1</closeable>
+                  <no_padding>1</no_padding>
+                  <area_caption>&amp;amp;Uuml;lemprojekt</area_caption>
+                  <group>general2</group>
+            </master_project_layout>
             <files_lay>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -1817,6 +1854,12 @@
                   <parent>goal_vb</parent>
                   <group>goals_edit</group>
             </task_table>
+            <strat_table>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <group>strat</group>
+                  <area_caption></area_caption>
+            </strat_table>
             <req_l>
                   <type>hbox</type>
                   <width>20%:80%</width>

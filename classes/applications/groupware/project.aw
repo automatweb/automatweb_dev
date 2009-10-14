@@ -61,6 +61,9 @@
 			@property category type=relpicker reltype=RELTYPE_CATEGORY store=connect multiple=1 size=2 parent=left_bit
 			@caption Kategooria
 
+			@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5 parent=left_bit
+			@caption  Prognoositav tundide arv
+
 		@layout center_bit type=vbox parent=up_bit no_padding=1
 			@layout project_time type=vbox parent=center_bit closeable=1 no_padding=1 area_caption=Ajad
 
@@ -73,14 +76,17 @@
 			@property deadline type=date_select table=aw_projects field=aw_deadline parent=project_time
 			@caption T&auml;htaeg
 
-			@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5 parent=project_time
-			@caption  Prognoositav tundide arv
-
 			@layout project_people type=vbox parent=center_bit closeable=1 no_padding=1  area_caption=Osalejad
 				@property parts_tb type=toolbar no_caption=1 store=no parent=project_people
 				@property orderer_table type=table no_caption=1 store=no parent=project_people
 				@property part_table type=table no_caption=1 store=no parent=project_people
 				@property impl_table type=table no_caption=1 store=no parent=project_people
+
+			@layout subprojects_layout type=vbox parent=center_bit closeable=1 no_padding=1 area_caption=Alamprojektid
+				@property subprojects type=text no_caption=1 store=no parent=subprojects_layout
+
+			@layout master_project_layout type=vbox parent=center_bit closeable=1 no_padding=1 area_caption=&Uuml;lemprojekt
+				@property master_project type=text no_caption=1 store=no parent=master_project_layout
 
 		@property implementor type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_IMPLEMENTOR
 		@caption Teostajad
@@ -364,7 +370,8 @@
 
 @default group=strat
 	@property strat_tb type=toolbar store=no no_caption=1
-	@property strat type=table store=no no_caption=1
+	@layout strat_table type=vbox closeable=1
+		@property strat type=table store=no no_caption=1 parent=strat_table
 
 @default group=risks
 	@property risks_tb type=toolbar store=no no_caption=1
@@ -571,8 +578,10 @@
 */
 
 class project extends class_base
-{
+{//9307
 	const DAY_LENGTH_SECONDS = 86400;
+	const WEEK_LENGTH_SECONDS = 604800;
+	const HOUR_LENGTH_SECONDS = 3600;
 
 	function project()
 	{
@@ -583,7 +592,15 @@ class project extends class_base
 
 		lc_site_load("project",&$this);
 
-		$this->event_entry_classes = array(CL_CALENDAR_EVENT, CL_STAGING, CL_CRM_MEETING, CL_TASK, CL_CRM_CALL, CL_PARTY, CL_COMICS);
+		$this->event_entry_classes = array(
+			CL_CALENDAR_EVENT,
+			CL_STAGING,
+			CL_CRM_MEETING,
+			CL_TASK,
+			CL_CRM_CALL,
+			CL_PARTY,
+			CL_COMICS
+		);
 		classload("core/icons");
 
 		$this->states = array(
@@ -595,7 +612,6 @@ class project extends class_base
 			"name"
 		);
 
-
 		$this->event_types = array(
 			CL_BUG => "&Uuml;lesanded",
 			CL_TASK => t("Toimetused"),
@@ -604,165 +620,55 @@ class project extends class_base
 		);
 	}
 
-	private function get_all_works_sum()
+//---------------------- callback funktsioonid ----------------------------
+
+	function _mk_tbl()
 	{
-		if(isset($this->all_work_sum))
+		$this->db_query("
+			create table aw_projects(
+				aw_oid int primary key,
+				aw_state int,
+				aw_start int,
+				aw_end int,
+				aw_deadline int,
+				aw_doc int,
+				aw_skip_subproject_events int,
+				aw_project_navigator int,
+				aw_use_template int,
+				aw_doc_id int,
+				aw_user1 varchar(255),
+				aw_user2 varchar(255),
+				aw_user3 varchar(255),
+				aw_user4 varchar(255),
+				aw_user5 varchar(255),
+				aw_userch1 int,
+				aw_userch2 int,
+				aw_userch3 int,
+				aw_userch4 int,
+				aw_userch5 int
+		)");
+		$q = "SELECT * FROM objects WHERE class_id = ".CL_PROJECT." AND status > 0";
+		$this->db_query($q);
+		aw_disable_acl();
+		while($row = $this->db_next())
 		{
-			return $this->all_work_sum;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	private function month_selector($start , $end, $month_chooser = array())
-	{
-		$ret = "";
-		$mY = "";
-		if(!$end)
-		{
-			$end = time();
-		}
-
-		if(!$start)
-		{
-			$start = $end - 31*self::DAY_LENGTH_SECONDS;
-		}
-
-		if(!$month_chooser || !sizeof($month_chooser))
-		{
-			$month_chooser = array();
-			$month_chooser[date("my" , $end)] = 1;
-			$month_chooser[date("my" , mktime(0,0,0, date("m" , $end) - 1, date("d" , $end), date("Y" , $end)))] = 1;
-		}
-
-		while($start < $end)
-		{
-			if($mY != date("my" , $start))
+			$this->save_handle();
+			$this->db_query("INSERT INTO aw_projects(aw_oid) values(".$row["oid"].")");
+			$o = obj($row["oid"]);
+			$pl = $o->get_property_list();
+			foreach($pl as $pn => $pd)
 			{
-				$mY = date("my" , $start);
-				$ret.= html::checkbox(array(
-					"name" => "month_chooser[".$mY."]",
-					"value" => 1,
-					"checked" => empty($month_chooser[$mY]) ? 0 : 1
-				))." ".date("M Y" , $start)."<br>";
+				if ($pd["table"] == "aw_projects")
+				{
+					flush();
+					$o->set_prop($pn, $o->meta($pn));
+				}
 			}
-			$start+= self::DAY_LENGTH_SECONDS*28;
+			$o->save();
+
+			$this->restore_handle();
 		}
-		if($mY != date("my" , $start) && date("my" , $start) == date("my" , $end))
-		{
-			$mY = date("my" , $start);
-			$ret.= html::checkbox(array(
-				"name" => "month_chooser[".$mY."]",
-				"value" => 1,
-				"checked" => ($month_chooser[$mY]) ? 1 : 0
-			))." ".date("M Y" , $start)."<br>";
-		}
-
-		return $ret;
-	}
-
-	private function _get_project_estimated_table($arr)
-	{
-		$table_dat = array();
-		$table_dat[] = array(
-			"name" => t("Projekti eelarve"),
-			"value" => html::textbox(array(
-				"name" => "budget",
-				"value" => $arr["obj_inst"]->prop("budget"),
-				"size" => 5,
-				)),
-		);
-		$table_dat[] = array(
-			"name" => t("Projekti v&auml;ljam&uuml;&uuml;gi hind"),
-			"value" => $arr["obj_inst"]->prop("proj_price"),
-		);
-		$table_dat[] = array(
-			"name" => t("Eelarvestamata kulude olemasolu"),
-			"value" => $arr["obj_inst"]->has_not_guessed_expenses() ? t("on") : t("ei ole"),
-		);
-		$table_dat[] = array(
-			"name" => t("Jooksev maksumus"),
-			"value" => 0,
-		);
-		$table_dat[] = array(
-			"name" => t("M&auml;&auml;ramata eelarve osa"),
-			"value" => 0,
-		);
-		$table_dat[] = array(
-			"name" => t("Eelarvest v&auml;lja l&auml;inud summa"),
-			"value" => 0,
-		);
-		$arr["prop"]["value"] = $this->do_fckng_table($table_dat);
-
-	}
-
-
-	function _get_income_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-
-		$t->define_field(array(
-			"name" => "group",
-			"caption" => "",
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => "",
-		));
-		$t->define_field(array(
-			"name" => "sum",
-			"caption" => "",
-		));
-		$t->define_field(array(
-			"name" => "pr",
-			"caption" => "",
-		));
-		$t->define_field(array(
-			"name" => "tt",
-			"caption" => "",
-			"align" => "right",
-		));
-
-		$bill_sum = $arr["obj_inst"]->get_bill_sum();
-		$bill_income = $arr["obj_inst"]->get_project_income_cc();
-		$billed_hours = $arr["obj_inst"]->get_billed_hours();
-		$billable_hours = $arr["obj_inst"]->get_billable_hours();
-
-		$t->define_data(array(
-			"group" => t("Tulud"),
-			"name" => t("Makstud"),
-			"sum" => $arr["obj_inst"]->get_project_income_text(),
-			"pr" => number_format($bill_income  / $arr["obj_inst"]->prop("proj_price") * 100 ,  2)." %" ,
-			"tt" => number_format($billed_hours * ($bill_income/$bill_sum),2)." TT",
-		));
-
-		$t->define_data(array(
-			"group" => "",
-			"name" => t("Maksmata"),
-			"sum" => $bill_sum - $bill_income,
-			"pr" => number_format(($bill_sum - $bill_income) / $arr["obj_inst"]->prop("proj_price") * 100 , 2)." %",
-			"tt" => number_format($billed_hours * (1 - ($bill_income/$bill_sum)),2)." TT",
-		));
-
-		$t->define_data(array(
-			"group" => t("Viittulu"),
-			"name" => t("Tehtud ja maksmata"),
-			"sum" => round(min((($billable_hours / $arr["obj_inst"]->prop("planned_work_time"))*$arr["obj_inst"]->prop("proj_price")) , ($arr["obj_inst"]->prop("proj_price") - $bill_sum)), 2),
-			"pr" => round (($billable_hours / $arr["obj_inst"]->prop("planned_work_time"))*100 , 2)." %",
-			"tt" => $billable_hours." TT",
-		));
-
-		$t->define_data(array(
-			"group" => "",
-			"name" => t("Tegemata t&ouml;&ouml;d"),
-			"sum" => round((($arr["obj_inst"]->prop("planned_work_time") - $billable_hours  - $billed_hours) / $arr["obj_inst"]->prop("planned_work_time"))*$arr["obj_inst"]->prop("proj_price") , 2),
-			"pr" => round ((($arr["obj_inst"]->prop("planned_work_time") - $billable_hours  - $billed_hours)  / $arr["obj_inst"]->prop("planned_work_time"))*100 , 2)." %",
-			"tt" => $arr["obj_inst"]->prop("planned_work_time") - $billable_hours - $billed_hours." TT",
-		));
-
-		$t->set_sortable(false);
+		aw_restore_acl();
 	}
 
 	function get_property($arr)
@@ -771,14 +677,63 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "subprojects" :
+				$subs = $arr["obj_inst"]->get_subprojects();
+				if(sizeof($subs))
+				{
+					$ol = new object_list();
+					$ol->add($subs);
+					$links = array();
+					foreach($ol->names() as $id => $name)
+					{
+						$links[] = html::obj_change_url($id);
+					}
+					$data["value"] = join("<br>", $links); 
+					
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case "master_project":
+				$master = $arr["obj_inst"]->get_master_project();
+				if(is_oid($master))
+				{
+					$data["value"] = html::obj_change_url($master);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case "files":
+			case "sides_conflict":
 			case "event_time_list_table":
-				$this->_get_event_time_list_table($arr);
-				break;
 			case "project_estimated_table":
-				$this->_get_project_estimated_table($arr);
-				break;
 			case "income_spot_table":
-				$this->_get_income_spot_table($arr);
+			case "prods_toolbar":
+			case "prods_table":
+			case "income_table":
+			case "hours_stats_by_type_chart":
+			case "works_by_payment_chart":
+			case "status_chart":
+			case "stats_money_by_person_chart":
+			case "stats_time_by_person_chart":
+			case "money_chart":
+			case "bills_tree":
+			case "bills_list":
+			case "task_persons_tree":
+			case "work_list":
+			case "create_bill_tb":
+			case "bills_tb":
+			case "stats_entry_table":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$fun = "_get_".$data["name"];
+				$this->$fun($arr);
 				break;
 			case "project_costs":
 				$data["value"] = $arr["obj_inst"]->prop("proj_price");
@@ -806,28 +761,28 @@ class project extends class_base
 			case "search_part":
 			case "search_start":
 			case "search_end":
-				$data["value"] = $arr["request"][$data["name"]];
+				$data["value"] = empty($arr["request"][$data["name"]]) ? null : $arr["request"][$data["name"]];
 				break;
 			case "search_type":
 				$data["value"]= html::checkbox(array(
 					"name" => "search_type[".CL_TASK."]",
 					"value" => 1,
-					"checked" => $arr["request"][$data["name"]][CL_TASK] ? 1 : 0
+					"checked" => !empty($arr["request"][$data["name"]][CL_TASK]) ? 1 : 0
 				))." ".t("Toimetus")."<br>".
 				$data["value"] = html::checkbox(array(
 					"name" => "search_type[".CL_CRM_MEETING."]",
 					"value" => 1,
-					"checked" => $arr["request"][$data["name"]][CL_CRM_MEETING] ? 1 : 0
+					"checked" => !empty($arr["request"][$data["name"]][CL_CRM_MEETING]) ? 1 : 0
 				))." ".t("Kohtumine")."<br>".
 				$data["value"] = html::checkbox(array(
 					"name" => "search_type[".CL_CRM_CALL."]",
 					"value" => 1,
-					"checked" => $arr["request"][$data["name"]][CL_CRM_CALL] ? 1 : 0
+					"checked" => !empty($arr["request"][$data["name"]][CL_CRM_CALL]) ? 1 : 0
 				))." ".t("K&otilde;ne")."<br>".
 				$data["value"] = html::checkbox(array(
 					"name" => "search_type[".CL_BUG."]",
 					"value" => 1,
-					"checked" => $arr["request"][$data["name"]][CL_BUG] ? 1 : 0
+					"checked" => !empty($arr["request"][$data["name"]][CL_BUG]) ? 1 : 0
 				))." ".t("Arendus&uuml;lesanne");
 
 				break;
@@ -839,13 +794,1110 @@ class project extends class_base
 					"330000","660000","000000","aa0000","aa00cc",
 					"330099","660099","990099","aa0099","9900cc",
 				));
-
 			case "works_by_person_chart":
 				if($arr["new"])
 				{
 					return PROP_IGNORE;
 				}
+				$this->_get_works_by_person_chart($arr);
+				break;
+			case "hidden_team":
+				if($arr["request"]["team"]) $data["value"] = $arr["request"]["team"];
+				if($arr["request"]["hidden_team"]) $data["value"] = $arr["request"]["hidden_team"];
+				break;
+			case "risks":
+			case "risks_tb":
+			case "strat_tb":
+			case "parts_tb":
+			case "orderer_table":
+			case "part_table":
+			case "impl_table":
+			case "strat":
+			case "strat_res":
+			case "sides_tb":
+			case "sides":
+			case "goal_tb":
+			case "goal_tree":
+			case "task_types_tree":
+			case "goal_table":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$fun = "_".$data["name"];
+				$this->$fun($arr);
+				break;
+			case "files_tb":
+			case "files_tree":
+			case "files_table":
+				static $ia;
+				if (!$ia)
+				{
+					$ia = get_instance("applications/groupware/project_files_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $ia->$fn($arr);
+				break;
 
+			case "team_tb":
+			case "team_team_tb":
+			case "team_team_tree":
+			case "team_team_tbl":
+			case "team":
+				static $i;
+				if (!$i)
+				{
+					$i = get_instance("applications/groupware/project_teams_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $i->$fn($arr);
+				break;
+
+			case "req_tb":
+			case "req_tree":
+			case "req_tbl":
+				static $i;
+				if (!$i)
+				{
+					$i = get_instance("applications/groupware/project_req_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $i->$fn($arr);
+				break;
+
+
+			case "risks":
+				$data["direct_links"] = 1;
+				break;
+
+			case "controller_disp":
+				$cs = get_instance(CL_CRM_SETTINGS);
+				$pc = $cs->get_project_controller($cs->get_current_settings());
+				if ($this->can("view", $pc))
+				{
+					$pco = obj($pc);
+					$pci = $pco->instance();
+					$data["value"] = $pci->eval_controller($pc, $arr["obj_inst"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "proj_type":
+				if ($arr["new"])
+				{
+					$data["value"] = array();
+				}
+				break;
+			case "files_find_type":
+				$data["options"] = array(
+					"" => "",
+					CL_FILE => t("Fail"),
+					CL_CRM_MEMO => t("Memo"),
+					CL_CRM_DOCUMENT => t("CRM Dokument"),
+					CL_CRM_DEAL => t("Leping"),
+					CL_CRM_OFFER => t("Pakkumine"),
+					CL_PROJECT_STRAT_GOAL_EVAL_WS => t("Eesm&auml;rkide hindamise t&ouml;&ouml;laud"),
+					CL_PROJECT_RISK_EVAL_WS => t("Riskide hindamise t&ouml;&ouml;laud"),
+					CL_PROJECT_ANALYSIS_WS => t("Anal&uuml;&uuml;si t&ouml;&ouml;laud"),
+				);
+			case "team_search_co":
+			case "team_search_person":
+			case "files_find_name":
+			case "files_find_comment":
+				$data["value"] = $arr["request"][$data["name"]];
+				break;
+
+			case "contact_person_orderer":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
+				$data["options"] = array("" => t("--Vali--"));
+				foreach($arr["obj_inst"]->connections_from(array("type" => 9)) as $c)
+				{
+					$c = $c->to();
+					switch($c->class_id())
+					{
+						case CL_CRM_PERSON:
+							$data["options"][$c->id()] = $c->name();
+							break;
+						case CL_CRM_COMPANY:
+							$data["options"] = $data["options"] + $c->get_workers()->names();
+					}
+				}
+				break;
+
+			case "contact_person_implementor":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
+				$data["options"] = array("" => t("--Vali--"));
+				foreach($arr["obj_inst"]->connections_from(array("type" => 10)) as $c)
+				{
+					$c = $c->to();
+					switch($c->class_id())
+					{
+						case CL_CRM_PERSON:
+							$data["options"][$c->id()] = $c->name();
+							break;
+						case CL_CRM_COMPANY:
+							$data["options"] = $data["options"] + $c->get_workers()->names();
+					}
+
+				}
+				break;
+
+			case "participants":
+			case "orderer":
+			case "implementor":
+			case "hours_stats":
+			case "stats":
+			case "aim":
+				return PROP_IGNORE;
+
+			case "state":
+				$data["options"] = $this->states;
+				break;
+
+			case "event_list":
+				$this->gen_event_list($arr);
+				break;
+
+			case "event_toolbar":
+				$this->gen_event_toolbar($arr);
+				break;
+
+			case "use_template":
+				$data["options"] = array(
+					"weekview" => t("N&auml;dala vaade"),
+				);
+				break;
+
+
+
+			case "prepayment":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
+				$bill = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_PREPAYMENT_BILL");
+				if ($bill)
+				{
+					$data["post_append_text"] = " ".html::obj_change_url($bill);
+				}
+				else
+				{
+					$data["post_append_text"] = " ".html::href(array(
+						"url" => $this->mk_my_orb("do_create_prepayment_bill", array(
+							"id" => $arr["obj_inst"]->id(),
+							"ru" => get_ru()
+						)),
+						"caption" => t("Loo arve")
+					));
+				}
+				break;
+			case "goals_gantt":
+			case "stats_table":
+			case "hours_stats_table":
+			case "stats_money_table":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$fun = "_get_".$data["name"];
+				$data["value"] = $this->$fun($arr);
+				break;
+		}
+		return $retval;
+	}
+
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "project_estimated_table":
+				$arr["obj_inst"]->set_prop("budget" , $arr["request"]["budget"]);
+				break;
+			case "prods_toolbar":
+				$ps = get_instance("vcl/popup_search");
+				$ps->do_create_rels($arr["obj_inst"], $arr["request"]["prod_search_res"], 24);
+				break;
+
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
+			case "files":
+				$this->_set_files($arr);
+				break;
+
+			case "create_task":
+				if ($prop["value"] == 1)
+				{
+					$this->do_create_task = 1;
+				}
+				break;
+
+			case "orderer":
+			case "implementor":
+				if ($arr["request"]["connect_orderer"] && $prop["name"] == "orderer")
+				{
+					$prop["value"] = $arr["request"]["connect_orderer"];
+				}
+				if ($arr["request"]["connect_impl"] && $prop["name"] == "implementor")
+				{
+					$prop["value"] = $arr["request"]["connect_impl"];
+				}
+				if (count(explode(",", $prop["value"])) > 1)
+				{
+					$prop["value"] = $this->make_keys(explode(",", $prop["value"]));
+				}
+				if (is_oid($prop["value"]))
+				{
+					$prop["value"] = array($prop["value"]);
+				}
+				else
+				if (!is_array($prop["value"]))
+				{
+					$prop["value"] = array();
+				}
+				if (count($prop["value"]))
+				{
+					foreach($prop["value"] as $v)
+					{
+						if ($arr["new"] || !$arr["obj_inst"]->is_connected_to(array("type" => "RELTYPE_PARTICIPANT", "to" => $v)))
+						{
+							$arr["obj_inst"]->connect(array(
+								"reltype" => "RELTYPE_PARTICIPANT",
+								"to" => $v
+							));
+						}
+					}
+				}
+				break;
+
+			case "add_event"://aegunud?
+				$this->register_event_with_planner($arr);
+				break;
+
+			case "sel_resources":
+				$this->save_sel_resources($arr);
+				break;
+
+			case "resources";
+				$this->do_save_resources($arr);
+				break;
+
+			case "confirm":
+				if ($prop["value"] == 1)
+				{
+					$this->do_write_times_to_cal($arr);
+				}
+				break;
+
+			case "participants":
+				if ($arr["new"])
+				{
+					$p = get_current_person();
+					$prop["value"] = array(
+						$p->id() => $p->id(),
+					);
+				}
+				break;
+
+			case "state":
+				if (!$prop["value"])
+				{
+					$prop["value"] = PROJ_IN_PROGRESS ;
+				}
+				break;
+
+			case "stats_entry_table":
+				$this->_set_stats_entry_table($arr);
+				break;
+		}
+		return $retval;
+	}
+
+	function callback_mod_tab($args)
+	{
+		if ($args["activegroup"] != "add_event" && $args["id"] == "add_event")
+		{
+			return false;
+		};
+
+		if ($args["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		if ($args["id"] == "trans")
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$args = &$arr["args"];
+		if ($this->event_id)
+		{
+			$args["event_id"] = $this->event_id;
+			if ($this->emb_group && $this->emb_group != "general")
+			{
+				$args["cb_group"] = $this->emb_group;
+			};
+		};
+
+		switch($arr["request"]["group"])
+		{
+			case "stats":
+				$args["month_chooser"] = $arr["request"]["month_chooser"];
+				break;
+			case "goals_edit":
+				$args["search_part"] = $arr["request"]["search_part"];
+				$args["search_start"] = $arr["request"]["search_start"];
+				$args["search_end"] = $arr["request"]["search_end"];
+				$args["search_type"] = $arr["request"]["search_type"];
+				break;
+			case "files":
+				$args["files_find_name"] = $arr["request"]["files_find_name"];
+				$args["files_find_type"] = $arr["request"]["files_find_type"];
+				$args["files_find_comment"] = $arr["request"]["files_find_comment"];
+		}
+
+
+		if($arr["request"]["hidden_team"] && !$args["team"])
+		{
+			$args["team"] = $arr["request"]["hidden_team"];
+		}
+
+		$args["team_search_person"] = $arr["request"]["team_search_person"];
+		$args["team_search_co"] = $arr["request"]["team_search_co"];
+
+		$args["event_time_list_search_start"] = $arr["request"]["event_time_list_search_start"];
+		$args["event_time_list_search_end"] = $arr["request"]["event_time_list_search_end"];
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		switch($arr["group"])
+		{
+			case "create_bill":
+				$arr["bill_id"] = "";
+				break;
+		}
+
+		$arr["post_ru"] = post_ru();
+		$arr["implementor"] = "0";
+		$arr["participants"] = "0";
+		$arr["orderer"] = "0";
+		$arr["prod_search_res"] = "0";
+
+		$props = array("tf" , "team" , "connect_orderer" , "connect_impl");
+		foreach($props as $prop)
+		{
+			if(isset($_GET[$prop])) $arr[$prop] = $_GET[$prop];
+		}
+
+	}	
+
+	function request_execute($o)
+	{
+		$rv = "";
+		$prj_id = $o->id();
+
+		$prj_obj = $o;
+
+		$obj = $o;
+
+
+		$orig_conns = $o->connections_from(array(
+			"type" => 103,
+		));
+
+		if (sizeof($orig_conns) > 0)
+		{
+			$first = reset($orig_conns);
+			$prj_id = $first->prop("to");
+			$prj_obj = $first->to();
+		};
+
+
+		$this->read_template("show.tpl");
+
+
+		$cal_view = get_instance(CL_CALENDAR_VIEW);
+
+		// XXX: make the view type configurable
+		$views = array(
+			3 => $this->vars["lc_day"],
+			2 => $this->vars["lc_week"],
+			1 => $this->vars["lc_month"],
+			0 => $this->vars["lc_year"],
+		);
+
+		$view_from_url = aw_global_get("view");
+		if (empty($view_from_url))
+		{
+			$view_from_url = 0;
+		};
+
+		if (!$views[$view_from_url])
+		{
+			$view_from_url = 0;
+		};
+
+		$use_template = "";
+		if ($view_from_url == 0)
+		{
+			$use_template = "year";
+			$viewtype = "year";
+			$start_from = mktime(0,0,0,date("m"), 1, date("Y"));
+		};
+
+		if ($view_from_url == 1)
+		{
+			$use_template = "month";
+			$viewtype = "month";
+		};
+
+		if ($view_from_url == 2)
+		{
+			$use_template = "weekview";
+			$viewtype = "week";
+		};
+
+		if ($view_from_url == 3)
+		{
+			$use_template = "day";
+			$viewtype = "day";
+		};
+
+		$project_obj = $obj;
+
+		// no need for that .. I just get the type from url
+
+		// argh .. projekti otse vaatamin on ikka paras sitt kyll
+
+		$caldata = $cal_view->parse_alias(array(
+			"obj_inst" => $project_obj,
+			"use_template" => $use_template,
+			"event_template" => "project_event.tpl",
+			"viewtype" => $viewtype,
+			"status" => STAT_ACTIVE,
+			"skip_empty" => true,
+			"full_weeks" => true,
+			"start_from" => $start_from
+		));
+
+		classload("core/date/date_calc");
+		$dt = aw_global_get("date");
+		if (empty($dt))
+		{
+			$dt = date("d-m-Y");
+		};
+		$rg = get_date_range(array(
+			"type" => $viewtype,
+			"date" => $dt,
+		));
+
+		// it is possible to attach a document containing detailed description of
+		// the project to the project. If the connection is present show the document
+		// in the web
+
+		$lang_id = aw_global_get("lang_id");
+
+		$c = new connection();
+		$conns = $c->find(array(
+			"from" => $prj_obj->id(),
+			"from.class_id" => CL_PROJECT,
+			//"type" => 7,
+			"to.lang_id" => $lang_id,
+		));
+
+		$description = "";
+		$first = true;
+		if (is_array($conns))
+		{
+			foreach($conns as $conn)
+			{
+				if (!$first)
+				{
+					continue;
+				};
+
+				if ($conn["type"] != 7)
+				{
+					continue;
+				};
+
+				$t = get_instance(CL_DOCUMENT);
+				$description = $t->gen_preview(array(
+					"docid" => $conn["to"],
+					"leadonly" => -1,
+				));
+
+				$first = false;
+			};
+		};
+
+		$view_navigator = "";
+
+
+		foreach($views as $key => $val)
+		{
+			$this->vars(array(
+				"text" => $val,
+				"url" => aw_url_change_var("view",$key),
+			));
+			$tpl = ($view_from_url == $key) ? "ACTIVE_VIEW" : "VIEW";
+			$view_navigator .= $this->parse($tpl);
+		};
+
+		$this->vars(array(
+			"VIEW" => $view_navigator,
+			"calendar" => $caldata,
+			"prev" => aw_url_change_var("date",$rg["prev"]),
+			"next" => aw_url_change_var("date",$rg["next"]),
+			"description" => $description,
+		));
+
+		$rv =  $this->parse();
+		return $rv;
+	}
+
+	function callback_mod_layout(&$arr)
+	{
+		switch($arr["name"])
+		{
+//			case "bills_left":
+//				$arr["area_caption"] = sprintf(t("%s arved staatuste kaupa"), $arr["obj_inst"]->name());
+//				break;
+			case "task_types_search_lay":
+				$arr["area_caption"] = sprintf(t("Otsingu parameetrid"));
+				break;
+			case "task_types_tree_lay":
+				$arr["area_caption"] = sprintf(t("Tegevused t&uuml;&uuml;pide kaupa"));
+				break;
+			case "task_table":
+				$arr["area_caption"] = sprintf(t("Projekti %s tegevused"), $arr["obj_inst"]->name());
+				break;
+			case "create_bill_table":
+				$arr["area_caption"] = sprintf(t("Projekti %s tehtud arveta t&ouml;&ouml;de nimekiri"), $arr["obj_inst"]->name());
+				break;
+			case "bills_r":
+				$var = 10;
+				if(isset($_GET["st"]))
+				{
+					$var = $_GET["st"];
+				}
+				if($var == 14)
+				{
+					$state = t("Krediit");
+				}
+				elseif($var == 15)
+				{
+					$state = t("Tehtud krediit");
+				}
+				else
+				{
+					$bills_inst = get_instance(CL_CRM_BILL);
+					$states = $bills_inst->states + array("90" => t("K&otilde;ik"));
+					$state = $states[$var-10]." ";
+				}
+				$arr["area_caption"] = sprintf(t("Projekti %s %sarved"), $arr["obj_inst"]->name(), strtolower($state));
+				break;
+		}
+		return true;
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		$sc = "";
+		$sc.= "
+			function openall()
+			{
+				var allElements = document.getElementsByName(\"bug_comments_table\");
+				len = allElements.length;
+				for (i=0; i < len; i++)
+				{
+					el=document.getElementsByName(\"bug_comments_table\")[i];
+					if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){
+						if(el.style.display == \"block\")
+							{ d = \"none\";}
+						else { d = \"block\";} }
+					else {
+						if (el.style.display == \"table-row\") {
+							d = \"none\";
+						}
+						else {d = \"table-row\";}
+					}
+					el.style.display=d;
+				}
+			}";
+		return $sc;
+
+	}
+
+	function callback_post_save($arr)
+	{
+		// write implementor and orderer
+		if (!$this->can("view", $arr["obj_inst"]->prop("implementor")))
+		{
+			$imp = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_IMPLEMENTOR");
+			if ($imp)
+			{
+				$arr["obj_inst"]->set_prop("implementor", $imp->id());
+				$save = true;
+			}
+		}
+		if (!$this->can("view", $arr["obj_inst"]->prop("orderer")))
+		{
+			$imp = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_ORDERER");
+			if ($imp)
+			{
+				$arr["obj_inst"]->set_prop("orderer", $imp->id());
+				$save = true;
+			}
+		}
+
+		if ($save)
+		{
+			$arr["obj_inst"]->save();
+		}
+		if ($this->do_create_task == 1)
+		{
+			$this->_create_task($arr);
+		}
+
+		if($arr["request"]["participants"])
+		{
+			$ps = get_instance('vcl/popup_search');
+			$ps->do_create_rels($arr['obj_inst'], $arr["request"]["participants"], RELTYPE_PARTICIPANT);
+		}
+		if(substr_count($arr["request"]["return_url"] , "action=new") && (substr_count($arr["request"]["return_url"] , "class=crm_task") || substr_count($arr["request"]["return_url"] , "class=crm_call") || substr_count($arr["request"]["return_url"] , "class=crm_meeting")))
+		{
+			$_SESSION["add_to_task"]["project"] = $arr["obj_inst"]->id();
+		}
+	}
+
+//--------------- property callback funktsioonid ----------------------
+	private function _get_money_chart($arr)
+	{
+		$c2 = &$arr["prop"]["vcl_inst"];
+		$c2->set_type(GCHART_LINE_CHART);
+		$c2->set_size(array(
+			"width" => 450,
+			"height" => 120,
+		));
+		$c2->add_fill(array(
+			"area" => GCHART_FILL_BACKGROUND,
+			"type" => GCHART_FILL_SOLID,
+			"colors" => array(
+				"color" => "e9e9e9",
+			),
+		));
+		$works = $arr["obj_inst"]-> get_rows_data();
+		$tasks = array();
+		foreach($works as $work)
+		{
+			if(!isset($tasks[$work["task"]]))
+			{
+				$tasks[$work["task"]] = 0;
+			}
+			$tasks[$work["task"]]+= $work["time_real"];
+		}
+		$work_price = 0;
+		$task_list = new object_list();
+		$task_list->add(array_keys($tasks));
+		foreach($task_list->arr() as $task)
+		{
+			$work_price+= $task->prop("hr_price") * $tasks[$task->id()];
+		}
+
+		$bill_sum = 0;
+		$payment_sum = 0;
+		$bills = $arr["obj_inst"]->get_bills();
+		foreach($bills->arr() as $bill)
+		{
+			$payment_sum += $bill->get_payments_sum();
+			$bill_sum +=$bill->get_sum();
+		}
+
+		$times = array();
+		$data1 = array();
+		$data1[] = $work_price;
+		$data1[] = $bill_sum;
+		$data1[] = $payment_sum;
+
+		$c2->add_data($data1);
+		$c2->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
+		$left_axis = array();
+		if ($work_price > 0)
+		{
+			for($i = 0; $i <= $work_price; $i+= $work_price/4)
+			{
+				$left_axis[] = round($i, 2);
+			}
+		}
+		$c2->add_axis_label(0, $left_axis);
+		$bot_axis = array();
+		$bot_axis[] = t("Tehtud t&ouml;id summas")." ".$work_price;
+		$bot_axis[] = t("Arveid esitatud summas")." ".$bill_sum;
+		$bot_axis[] = t("Laekunud")." ".$payment_sum;
+
+		$c2->add_axis_label(1, $bot_axis);
+		$c2->add_axis_style(1, array(
+			"color" => "888888",
+			"font" => 10,
+			"align" => GCHART_ALIGN_CENTER,
+		));
+		$c2->set_grid(array(
+			"xstep" => 30,
+			"ystep" => 20,
+		));
+		$c2->set_title(array(
+			"text" => t("Projekti statistika rahaliselt"),
+			"color" => "555555",
+			"size" => 10,
+		));
+		$arr["prop"]["type"] = "text";
+		$arr["prop"]["value"] = $c2->get_html();
+	}
+	
+	private function _get_stats_time_by_person_chart($arr)
+	{
+		$c2 = &$arr["prop"]["vcl_inst"];
+		$c2->set_type(GCHART_LINE_CHART);
+		$c2->set_size(array(
+			"width" => 1000,
+			"height" => 220,
+		));
+		$c2->set_colors(array("5511aa"));
+		$c2->add_fill(array(
+			"area" => GCHART_FILL_BACKGROUND,
+			"type" => GCHART_FILL_SOLID,
+			"colors" => array(
+				"color" => "e9e9e9",
+			),
+		));
+		$times = array();
+		$data1 = array();
+		$bot_axis = array();
+
+		classload("core/date/date_calc");
+		$all_data = $arr["obj_inst"]->get_rows_data();
+		$work_data = array();
+		$end = $arr["obj_inst"]->prop("end");
+		$start = time();
+		$max_hours = 0;
+
+		$result = array();
+
+		foreach($all_data as $work)
+		{
+			if(!$work["time_real"])
+			{
+				continue;
+			}
+			$date_day_start = date("YW" , $work["date"]);
+			if($end < $work["date"])
+			{
+				$end = $work["date"];
+			}
+			if($start > $work["date"])
+			{
+				$start = $work["date"];
+			}
+			if(!isset($result[$work["task.class_id"]][$date_day_start])) $result[$work["task.class_id"]][$date_day_start] = 0;
+			if(!isset($result[1][$date_day_start])) $result[1][$date_day_start] = 0;
+				$result[$work["task.class_id"]][$date_day_start] +=$work["time_real"];
+			$result[1][$date_day_start] +=$work["time_real"];
+		}
+		if($start < $end - self::DAY_LENGTH_SECONDS * 600)
+		{
+			$start = $end - self::DAY_LENGTH_SECONDS * 600;
+		}
+		$start = get_week_start($start);
+		if(!($end > 1 && $start > 1))
+		{
+			return;
+		}
+		$month = 1;
+		while($end > $start)
+		{
+			if(date("mY", $month) != date("mY", $start))
+			{
+				$month = $start;
+				$bot_axis[] = date("M Y" , $start);
+			}
+			else
+			{
+	//			$bot_axis[] = "";
+			}
+			$data1[] = $result[1][date("YW" , $start)];
+			if($max_hours < $result[1][date("YW" , $start)])
+			{
+				$max_hours = $result[1][date("YW" , $start)];
+			}
+			$start += self::WEEK_LENGTH_SECONDS;
+		}	
+
+		$c2->add_data($data1);
+		$c2->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
+		$left_axis = array();
+		$round_i = 0;
+		if($max_hours < 10)
+		{
+			$round_i = 2;
+		}
+		if ($max_hours > 0)
+		{
+			for($i = 0; $i <= $max_hours; $i+= $max_hours/4)
+			{
+				$left_axis[] = round($i, $round_i);
+			}
+		}
+		$c2->add_axis_label(0, $left_axis);
+		$c2->add_axis_label(1, $bot_axis);
+		$c2->add_axis_style(1, array(
+			"color" => "888888",
+			"font" => 10,
+			"align" => GCHART_ALIGN_CENTER,
+		));
+		$c2->set_grid(array(
+			"xstep" => 30,
+			"ystep" => 20,
+		));
+		$c2->set_title(array(
+			"text" => t("Projekti T&ouml;&ouml; aktiivsus tundides n&auml;da kohta"),
+			"color" => "555555",
+			"size" => 10,
+		));
+	}
+
+	private function _get_status_chart($arr)
+	{
+		$c = &$arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_PIE_3D);
+		$c->set_size(array(
+			"width" => 350,
+			"height" => 120,
+		));
+		$c->add_fill(array(
+			"area" => GCHART_FILL_BACKGROUND,
+			"type" => GCHART_FILL_SOLID,
+			"colors" => array(
+				"color" => "e9e9e9",
+			),
+		));
+		$bills = $arr["obj_inst"]->get_bills();
+
+		$times = array();
+		$labels = array();
+
+		foreach($bills->arr() as $bill)
+		{
+			if(!isset($times[$bill->prop("state")]))
+			{
+				$times[$bill->prop("state")] = 0;
+			}
+			$times[$bill->prop("state")] ++;
+		}
+
+		$bill_inst = get_instance(CL_CRM_BILL);
+
+		foreach($times as $status => $count)
+		{
+			$labels[] = $bill_inst->states[$status]." (".$count.")";
+		}
+		$c->add_data($times);
+		$c->set_labels($labels);
+		$c->set_title(array(
+			"text" => t("Arveid staatuste kaupa"),
+			"color" => "666666",
+			"size" => 11,
+		));
+	}
+
+	private function _get_works_by_payment_chart($arr)
+	{
+		$c = &$arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_PIE_3D);
+		$c->set_size(array(
+			"width" => 650,
+			"height" => 150,
+		));
+		$c->add_fill(array(
+			"area" => GCHART_FILL_BACKGROUND,
+			"type" => GCHART_FILL_SOLID,
+			"colors" => array(
+				"color" => "e9e9e9",
+			),
+		));
+
+		$times = array();
+		$labels = array();
+
+		$works = $arr["obj_inst"]-> get_rows_data();
+		$tasks = array();
+
+		foreach($works as $work)
+		{
+			$tasks[$work["task"]]+= $work["time_real"];
+		}
+		$work_price = 0;
+		$task_list = new object_list();
+		$task_list->add(array_keys($tasks));
+		foreach($task_list->arr() as $task)
+		{
+			$work_price+= $task->prop("hr_price") * $tasks[$task->id()];
+		}
+
+		$bill_sum = 0;
+		$payment_sum = 0;
+		$bills = $arr["obj_inst"]->get_bills();
+		foreach($bills->arr() as $bill)
+		{
+			$payment_sum += $bill->get_payments_sum();
+			$bill_sum +=$bill->get_sum();
+		}
+		$c->set_title(array(
+			"text" => t("Laekumine t&ouml;&ouml;de eest"),
+			"color" => "666666",
+			"size" => 11,
+		));
+		$unpaid_work = max(0 , $work_price - $bill_sum);
+		$bill_sum = max(0 , $bill_sum - $payment_sum);
+		$times[] = $unpaid_work;
+		$times[] = $bill_sum;
+		$times[] = $payment_sum;
+		$c->set_colors(array(
+			"bbbbbb", "aa2222", "FFFF00",
+		));
+		$labels[] = t("Arvele minemata t&ouml;id summas")." ".$unpaid_work;
+		$labels[] = t("Laekumata arveid summas")." ".$bill_sum;
+		$labels[] = t("Laekunud")." ".$payment_sum;
+
+		$c->add_data($times);
+		$c->set_labels($labels);
+
+	}
+
+	private function _get_hours_stats_by_type_chart($arr)
+	{
+		$c = &$arr["prop"]["vcl_inst"];
+		$c->set_type(GCHART_BAR_GV);
+		$c->set_size(array(
+			"width" => 640,
+			"height" => 200,
+		));
+		$c->add_fill(array(
+			"area" => GCHART_FILL_BACKGROUND,
+			"type" => GCHART_FILL_SOLID,
+			"colors" => array(
+				"color" => "e9e9e9",
+			),
+		));
+
+		$c->set_title(array(
+			"text" => t("T&ouml;&ouml;tunnid t&uuml;&uuml;pide kaupa"),
+			"color" => "444444",
+			"size" => 11,
+		));
+
+		$times = array();
+		$labels = array();
+
+		$all_data = $arr["obj_inst"]->get_rows_data();
+		$work_data = array();
+		$params = array(
+			"prog" => t("Prognoositud"),
+			"real" => t("Tegelik"),
+			"cust" => t("Kliendile"),
+		);
+
+		foreach($all_data as $dat)
+		{
+			$work_data[$dat["task.class_id"]]["prog"] +=$dat["time_guess"];
+			$work_data[$dat["task.class_id"]]["real"] +=$dat["time_real"];
+			$work_data[$dat["task.class_id"]]["cust"] +=$dat["time_to_cust"];//? $dat["time_to_cust"] : $dat["time_real"];
+		}
+
+		$max = 0;
+
+		foreach($work_data as $clid  => $d)
+		{
+			foreach($d as $param => $count)
+			{
+				if($param == "real")
+				{
+					$labels[] = $this->event_types[$clid];
+				}
+				else
+				{
+					$labels[] = " ";
+				}
+				if($max < $count)
+				{
+					$max = $count;
+				}
+				$label2[] = $params[$param];
+				$times[] = number_format($count , 2);
+			}
+		}
+		$c->set_axis(array(
+			GCHART_AXIS_LEFT,
+			GCHART_AXIS_BOTTOM,
+			GCHART_AXIS_BOTTOM,
+			GCHART_AXIS_TOP,
+		));
+
+		//set some labels
+		$c->add_axis_label(0, array("0", round($max/2), round($max)));
+
+		$c->add_axis_style(2, array(
+			"color" => "FFFFFF",
+			"font" => 8,
+			"align" => GCHART_AXIS_TOP,
+		));
+
+		//set the range and style for one of them
+		$c->add_axis_style(1, array(
+			"color" => "ff0000",
+			"font" => 11,
+			"align" => GCHART_AXIS_BOTTOM,
+		));
+		$c->set_colors(array(
+			"aa2222", "FFFF00","bbbbbb", "aa2222", "FFFF00","bbbbbb", "aa2222", "FFFF00","bbbbbb", "aa2222", "FFFF00",
+		));
+
+		$c->set_bar_sizes(array(
+			"width" => 60,
+			"bar_spacing" => 3,
+			"bar_group_spacing" => 8,
+		));
+
+		$c->add_axis_label(2, $labels);
+		$c->add_axis_label(3, $times);
+		$c->add_data($times);
+		$c->set_labels($label2);
+	}
+
+	private function _get_works_by_person_chart($arr)
+	{
 				$c = &$arr["prop"]["vcl_inst"];
 
 				$c->set_type(GCHART_PIE_3D);
@@ -893,1054 +1945,11 @@ class project extends class_base
 					"color" => "666666",
 					"size" => 11,
 				));
-
-				break;
-
-			case "hours_stats_by_type_chart":
-				if($arr["new"])
-				{
-					return PROP_IGNORE;
-				}
-
-
-				$c = &$arr["prop"]["vcl_inst"];
-				$c->set_type(GCHART_BAR_GV);
-				$c->set_size(array(
-					"width" => 640,
-					"height" => 200,
-				));
-				$c->add_fill(array(
-					"area" => GCHART_FILL_BACKGROUND,
-					"type" => GCHART_FILL_SOLID,
-					"colors" => array(
-						"color" => "e9e9e9",
-					),
-				));
-
-				$c->set_title(array(
-					"text" => t("T&ouml;&ouml;tunnid t&uuml;&uuml;pide kaupa"),
-					"color" => "444444",
-					"size" => 11,
-				));
-
-				$times = array();
-				$labels = array();
-
-				$all_data = $arr["obj_inst"]->get_rows_data();
-				$work_data = array();
-				$params = array(
-					"prog" => t("Prognoositud"),
-					"real" => t("Tegelik"),
-					"cust" => t("Kliendile"),
-
-				);
-
-				foreach($all_data as $dat)
-				{
-					$work_data[$dat["task.class_id"]]["prog"] +=$dat["time_guess"];
-					$work_data[$dat["task.class_id"]]["real"] +=$dat["time_real"];
-					$work_data[$dat["task.class_id"]]["cust"] +=$dat["time_to_cust"];//? $dat["time_to_cust"] : $dat["time_real"];
-
-				}
-
-				$max = 0;
-
-				foreach($work_data as $clid  => $d)
-				{
-					foreach($d as $param => $count)
-					{
-						if($param == "real")
-						{
-							$labels[] = $this->event_types[$clid];
-						}else $labels[] = " ";
-
-
-						if($max < $count)
-						{
-							$max = $count;
-						}
-						$label2[] = $params[$param];
-						$times[] = number_format($count , 2);
-					}
-				}
-				$c->set_axis(array(
-					GCHART_AXIS_LEFT,
-					GCHART_AXIS_BOTTOM,
-					GCHART_AXIS_BOTTOM,
-					GCHART_AXIS_TOP,
-				));
-
-		//set some labels
-		$c->add_axis_label(0, array("0", round($max/2), round($max)));
-
-		$c->add_axis_style(2, array(
-			"color" => "FFFFFF",
-			"font" => 8,
-			"align" => GCHART_AXIS_TOP,
-		));
-
-		//set the range and style for one of them
-		$c->add_axis_style(1, array(
-			"color" => "ff0000",
-			"font" => 11,
-			"align" => GCHART_AXIS_BOTTOM,
-		));
-				$c->set_colors(array(
-					"aa2222", "FFFF00","bbbbbb", "aa2222", "FFFF00","bbbbbb", "aa2222", "FFFF00","bbbbbb", "aa2222", "FFFF00",
-				));
-
-				$c->set_bar_sizes(array(
-					"width" => 60,
-					"bar_spacing" => 3,
-					"bar_group_spacing" => 8,
-				));
-
-				$c->add_axis_label(2, $labels);
-				$c->add_axis_label(3, $times);
-				$c->add_data($times);
-				$c->set_labels($label2);
-
-				break;
-			case "works_by_payment_chart":
-				if($arr["new"])
-				{
-					return PROP_IGNORE;
-				}
-				$c = &$arr["prop"]["vcl_inst"];
-				$c->set_type(GCHART_PIE_3D);
-				$c->set_size(array(
-					"width" => 650,
-					"height" => 150,
-				));
-				$c->add_fill(array(
-					"area" => GCHART_FILL_BACKGROUND,
-					"type" => GCHART_FILL_SOLID,
-					"colors" => array(
-						"color" => "e9e9e9",
-					),
-				));
-
-				$times = array();
-				$labels = array();
-
-				$works = $arr["obj_inst"]-> get_rows_data();
-				$tasks = array();
-
-				foreach($works as $work)
-				{
-					$tasks[$work["task"]]+= $work["time_real"];
-				}
-				$work_price = 0;
-				$task_list = new object_list();
-				$task_list->add(array_keys($tasks));
-				foreach($task_list->arr() as $task)
-				{
-					$work_price+= $task->prop("hr_price") * $tasks[$task->id()];
-				}
-
-				$bill_sum = 0;
-				$payment_sum = 0;
-				$bills = $arr["obj_inst"]->get_bills();
-				foreach($bills->arr() as $bill)
-				{
-					$payment_sum += $bill->get_payments_sum();
-					$bill_sum +=$bill->get_sum();
-				}
-				$c->set_title(array(
-					"text" => t("Laekumine t&ouml;&ouml;de eest"),
-					"color" => "666666",
-					"size" => 11,
-				));
-				$unpaid_work = max(0 , $work_price - $bill_sum);
-				$bill_sum = max(0 , $bill_sum - $payment_sum);
-				$times[] = $unpaid_work;
-				$times[] = $bill_sum;
-				$times[] = $payment_sum;
-				$c->set_colors(array(
-					"bbbbbb", "aa2222", "FFFF00",
-				));
-				$labels[] = t("Arvele minemata t&ouml;id summas")." ".$unpaid_work;
-				$labels[] = t("Laekumata arveid summas")." ".$bill_sum;
-				$labels[] = t("Laekunud")." ".$payment_sum;
-
-				$c->add_data($times);
-				$c->set_labels($labels);
-
-				break;
-			case "status_chart":
-				if($arr["new"])
-				{
-					return PROP_IGNORE;
-				}
-				$c = &$arr["prop"]["vcl_inst"];
-				$c->set_type(GCHART_PIE_3D);
-				$c->set_size(array(
-					"width" => 350,
-					"height" => 120,
-				));
-				$c->add_fill(array(
-					"area" => GCHART_FILL_BACKGROUND,
-					"type" => GCHART_FILL_SOLID,
-					"colors" => array(
-						"color" => "e9e9e9",
-					),
-				));
-
-				$bills = $arr["obj_inst"]->get_bills();
-
-				$times = array();
-				$labels = array();
-
-				foreach($bills->arr() as $bill)
-				{
-					$times[$bill->prop("state")] ++;
-				}
-
-				$bill_inst = get_instance(CL_CRM_BILL);
-
-				foreach($times as $status => $count)
-				{
-					$labels[] = $bill_inst->states[$status]." (".$count.")";
-				}
-				$c->add_data($times);
-				$c->set_labels($labels);
-				$c->set_title(array(
-					"text" => t("Arveid staatuste kaupa"),
-					"color" => "666666",
-					"size" => 11,
-				));
-				break;
-
-			case "stats_money_by_person_chart":
-				if($arr["new"])
-				{
-					return PROP_IGNORE;
-				}
-				$this->_get_stats_money_by_person_chart($arr);
-				break;
-
-		case "stats_time_by_person_chart":
-				if($arr["new"])
-				{
-					return PROP_IGNORE;
-				}
-				$c2 = &$arr["prop"]["vcl_inst"];
-				$c2->set_type(GCHART_LINE_CHART);
-				$c2->set_size(array(
-					"width" => 1000,
-					"height" => 220,
-				));
-				$c2->set_colors(array("5511aa"));
-				$c2->add_fill(array(
-					"area" => GCHART_FILL_BACKGROUND,
-					"type" => GCHART_FILL_SOLID,
-					"colors" => array(
-						"color" => "e9e9e9",
-					),
-				));
-				$times = array();
-				$data1 = array();
-				$bot_axis = array();
-
-				classload("core/date/date_calc");
-				$all_data = $arr["obj_inst"]->get_rows_data();
-				$work_data = array();
-				$end = $arr["obj_inst"]->prop("end");
-				$start = time();
-				$max_hours = 0;
-
-				$result = array();
-
-				foreach($all_data as $work)
-				{
-					if(!$work["time_real"])
-					{
-						continue;
-					}
-					$date_day_start = date("YW" , $work["date"]);
-					if($end < $work["date"])
-					{
-						$end = $work["date"];
-					}
-					if($start > $work["date"])
-					{
-						$start = $work["date"];
-					}
-					if(!isset($result[$work["task.class_id"]][$date_day_start])) $result[$work["task.class_id"]][$date_day_start] = 0;
-					if(!isset($result[1][$date_day_start])) $result[1][$date_day_start] = 0;
-
-					$result[$work["task.class_id"]][$date_day_start] +=$work["time_real"];
-					$result[1][$date_day_start] +=$work["time_real"];
-				}
-
-
-				if($start < $end - self::DAY_LENGTH_SECONDS * 600)
-				{
-					$start = $end - self::DAY_LENGTH_SECONDS * 600;
-				}
-				$start = get_week_start($start);
-				if(!($end > 1 && $start > 1))
-				{
-					return;
-				}
-				$month = 1;
-				while($end > $start)
-				{
-					if(date("mY", $month) != date("mY", $start))
-					{
-						$month = $start;
-						$bot_axis[] = date("M Y" , $start);
-					}
-					else
-					{
-	//					$bot_axis[] = "";
-					}
-					$data1[] = $result[1][date("YW" , $start)];
-					if($max_hours < $result[1][date("YW" , $start)])
-					{
-						$max_hours = $result[1][date("YW" , $start)];
-					}
-					$start += self::DAY_LENGTH_SECONDS*7;
-				}
-
-				$c2->add_data($data1);
-				$c2->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
-				$left_axis = array();
-				$round_i = 0;
-				if($max_hours < 10)
-				{
-					$round_i = 2;
-				}
-				if ($max_hours > 0)
-				{
-					for($i = 0; $i <= $max_hours; $i+= $max_hours/4)
-					{
-						$left_axis[] = round($i, $round_i);
-					}
-				}
-				$c2->add_axis_label(0, $left_axis);
-
-				$c2->add_axis_label(1, $bot_axis);
-				$c2->add_axis_style(1, array(
-					"color" => "888888",
-					"font" => 10,
-					"align" => GCHART_ALIGN_CENTER,
-				));
-				$c2->set_grid(array(
-					"xstep" => 30,
-					"ystep" => 20,
-				));
-				$c2->set_title(array(
-					"text" => t("Projekti T&ouml;&ouml; aktiivsus tundides n&auml;da kohta"),
-					"color" => "555555",
-					"size" => 10,
-				));
-				break;
-
-			case "money_chart":
-				if($arr["new"])
-				{
-					return PROP_IGNORE;
-				}
-				$c2 = &$arr["prop"]["vcl_inst"];
-				$c2->set_type(GCHART_LINE_CHART);
-				$c2->set_size(array(
-					"width" => 450,
-					"height" => 120,
-				));
-				$c2->add_fill(array(
-					"area" => GCHART_FILL_BACKGROUND,
-					"type" => GCHART_FILL_SOLID,
-					"colors" => array(
-						"color" => "e9e9e9",
-					),
-				));
-
-				$works = $arr["obj_inst"]-> get_rows_data();
-
-				$tasks = array();
-
-				foreach($works as $work)
-				{
-					if(!isset($tasks[$work["task"]]))
-					{
-						$tasks[$work["task"]] = 0;
-					}
-					$tasks[$work["task"]]+= $work["time_real"];
-				}
-				$work_price = 0;
-				$task_list = new object_list();
-				$task_list->add(array_keys($tasks));
-				foreach($task_list->arr() as $task)
-				{
-					$work_price+= $task->prop("hr_price") * $tasks[$task->id()];
-				}
-
-				$bill_sum = 0;
-				$payment_sum = 0;
-				$bills = $arr["obj_inst"]->get_bills();
-				foreach($bills->arr() as $bill)
-				{
-					$payment_sum += $bill->get_payments_sum();
-					$bill_sum +=$bill->get_sum();
-				}
-
-				$times = array();
-				$data1 = array();
-
-				$data1[] = $work_price;
-				$data1[] = $bill_sum;
-				$data1[] = $payment_sum;
-
-				$c2->add_data($data1);
-				$c2->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
-				$left_axis = array();
-				if ($work_price > 0)
-				{
-					for($i = 0; $i <= $work_price; $i+= $work_price/4)
-					{
-						$left_axis[] = round($i, 2);
-					}
-				}
-				$c2->add_axis_label(0, $left_axis);
-				$bot_axis = array();
-
-				$bot_axis[] = t("Tehtud t&ouml;id summas")." ".$work_price;
-				$bot_axis[] = t("Arveid esitatud summas")." ".$bill_sum;
-				$bot_axis[] = t("Laekunud")." ".$payment_sum;
-
-				$c2->add_axis_label(1, $bot_axis);
-				$c2->add_axis_style(1, array(
-					"color" => "888888",
-					"font" => 10,
-					"align" => GCHART_ALIGN_CENTER,
-				));
-				$c2->set_grid(array(
-					"xstep" => 30,
-					"ystep" => 20,
-				));
-				$c2->set_title(array(
-					"text" => t("Projekti statistika rahaliselt"),
-					"color" => "555555",
-					"size" => 10,
-				));
-				$arr["prop"]["type"] = "text";
-				$arr["prop"]["value"] = $c2->get_html();
-				break;
-
-			case "prods_toolbar":
-				$this->_get_prods_toolbar($arr);
-				break;
-
-			case "prods_table":
-				$this->_get_prods_table($arr);
-				break;
-			case "income_table":
-				$this->_get_income_table($arr);
-				break;
-
-			case "hidden_team":
-				if($arr["request"]["team"]) $data["value"] = $arr["request"]["team"];
-				if($arr["request"]["hidden_team"]) $data["value"] = $arr["request"]["hidden_team"];
-				break;
-			case "parts_tb":
-				$this->_parts_tb($arr);
-				break;
-			case "orderer_table":
-				$this->_orderer_table($arr);
-				break;
-			case "part_table":
-				$this->_part_table($arr);
-				break;
-			case "impl_table":
-				$this->_impl_table($arr);
-				break;
-/*
-			case "analysis_tb":
-			case "analysis_table":
-				static $ib;
-				if (!$ib)
-				{
-					$ib = get_instance("applications/groupware/project_analysis_impl");
-				}
-				$fn = "_get_".$data["name"];
-				return $ib->$fn($arr);
-				break;
-*/
-			case "files_tb":
-			case "files_tree":
-			case "files_table":
-				static $ia;
-				if (!$ia)
-				{
-					$ia = get_instance("applications/groupware/project_files_impl");
-				}
-				$fn = "_get_".$data["name"];
-				return $ia->$fn($arr);
-				break;
-
-			case "team_tb":
-			case "team_team_tb":
-			case "team_team_tree":
-			case "team_team_tbl":
-			case "team":
-				static $i;
-				if (!$i)
-				{
-					$i = get_instance("applications/groupware/project_teams_impl");
-				}
-				$fn = "_get_".$data["name"];
-				return $i->$fn($arr);
-				break;
-
-			case "req_tb":
-			case "req_tree":
-			case "req_tbl":
-				static $i;
-				if (!$i)
-				{
-					$i = get_instance("applications/groupware/project_req_impl");
-				}
-				$fn = "_get_".$data["name"];
-				return $i->$fn($arr);
-				break;
-
-			case "risks":
-				$this->_risks($arr);
-				break;
-
-			case "risks_tb":
-				$this->_risks_tb($arr);
-				break;
-
-			case "strat_tb":
-				$this->_strat_tb($arr);
-				break;
-/*
-			case "strat_a_tb":
-				$this->_strat_a_tb($arr);
-				break;
-*/
-			case "strat":
-				$this->_strat($arr);
-				break;
-
-			case "risks":
-				$data["direct_links"] = 1;
-				break;
-/*
-			case "risks_eval":
-				$this->_risks_eval($arr);
-				break;
-
-			case "risks_eval_tb":
-				$this->_risks_eval_tb($arr);
-				break;
-
-			case "strat_a":
-				$this->_strat_a($arr);
-				break;
-*/
-			case "strat_res":
-				$this->_strat_res($arr);
-				break;
-
-			case "controller_disp":
-				$cs = get_instance(CL_CRM_SETTINGS);
-				$pc = $cs->get_project_controller($cs->get_current_settings());
-				if ($this->can("view", $pc))
-				{
-					$pco = obj($pc);
-					$pci = $pco->instance();
-					$data["value"] = $pci->eval_controller($pc, $arr["obj_inst"]);
-				}
-				else
-				{
-					return PROP_IGNORE;
-				}
-				break;
-
-			case "proj_type":
-				if ($arr["new"])
-				{
-					$data["value"] = array();
-				}
-				break;
-
-			case "files":
-				$this->_get_files($arr);
-				break;
-
-			case "sides_conflict":
-				$this->_get_sides_conflict($arr);
-				break;
-
-			case "files_find_type":
-				$data["options"] = array(
-					"" => "",
-					CL_FILE => t("Fail"),
-					CL_CRM_MEMO => t("Memo"),
-					CL_CRM_DOCUMENT => t("CRM Dokument"),
-					CL_CRM_DEAL => t("Leping"),
-					CL_CRM_OFFER => t("Pakkumine"),
-					CL_PROJECT_STRAT_GOAL_EVAL_WS => t("Eesm&auml;rkide hindamise t&ouml;&ouml;laud"),
-					CL_PROJECT_RISK_EVAL_WS => t("Riskide hindamise t&ouml;&ouml;laud"),
-					CL_PROJECT_ANALYSIS_WS => t("Anal&uuml;&uuml;si t&ouml;&ouml;laud"),
-				);
-			case "team_search_co":
-			case "team_search_person":
-			case "files_find_name":
-			case "files_find_comment":
-				$data["value"] = $arr["request"][$data["name"]];
-				break;
-
-/*			case "team_search_res":
-				$this->_get_team_search_res($arr);
-				break;
-*/
-			case "implementor_person":
-				$i = get_instance(CL_CRM_COMPANY);
-				if ($this->can("view", $arr["obj_inst"]->prop("implementor")))
-				{
-					$inf = array();
-					$i->get_all_workers_for_company(obj($arr["obj_inst"]->prop("implementor")),&$inf);
-					$ol = new object_list(array("oid" => $inf));
-					$data["options"] = array("" => "") + $ol->names();
-				}
-				break;
-
-			case "sides_tb":
-				$this->_sides_tb($arr);
-				break;
-
-			case "sides":
-				$this->_sides($arr);
-				break;
-
-			case "contact_person_orderer":
-				if (!is_oid($arr["obj_inst"]->id()))
-				{
-					return PROP_IGNORE;
-				}
-				$data["options"] = array("" => t("--Vali--"));
-				foreach($arr["obj_inst"]->connections_from(array("type" => 9)) as $c)
-				{
-					$c = $c->to();
-					if($c->class_id() == CL_CRM_PERSON){
-						$data["options"][$c->id()] = $c->name();
-					}
-					if($c->class_id() == CL_CRM_COMPANY){
-						$wl = array();
-						$i = get_instance(CL_CRM_COMPANY);
-						$i->get_all_workers_for_company($c, &$wl);
-						if (count($wl))
-						{
-							$ol = new object_list(array("oid" => $wl));
-							foreach ($ol->arr() as $person)
-							{
-								$data["options"][$person->id()] = $person->name();
-							}
-						}
-					}
-
-				}
-				/*
-				$ord = $arr["obj_inst"]->prop("orderer");
-				if (is_array($ord))
-				{
-					$ord = reset($ord);
-				}
-				if ($this->can("view", $ord))
-				{
-					$this->_proc_cp(obj($ord), $data);
-				}
-				asort($data["options"]);*/
-				break;
-
-			case "contact_person_implementor":
-				if (!is_oid($arr["obj_inst"]->id()))
-				{
-					return PROP_IGNORE;
-				}
-				$data["options"] = array("" => t("--Vali--"));
-				foreach($arr["obj_inst"]->connections_from(array("type" => 10)) as $c)
-				{
-					$c = $c->to();
-					if($c->class_id() == CL_CRM_PERSON){
-						$data["options"][$c->id()] = $c->name();
-					}
-					if($c->class_id() == CL_CRM_COMPANY){
-						$wl = array();
-						$i = get_instance(CL_CRM_COMPANY);
-						$i->get_all_workers_for_company($c, &$wl);
-						if (count($wl))
-						{
-							$ol = new object_list(array("oid" => $wl));
-							foreach ($ol->arr() as $person)
-							{
-								$data["options"][$person->id()] = $person->name();
-							}
-						}
-					}
-
-				}
-				/*
-				$ord = $arr["obj_inst"]->prop("implementor");
-				if (is_array($ord))
-				{
-					$ord = reset($ord);
-				}
-				if ($this->can("view", $ord))
-				{
-					$this->_proc_cp(obj($ord), $data);
-				}
-				asort($data["options"]);*/
-				break;
-
-			case "orderer":
-				return PROP_IGNORE;
-				if ($this->can("view", $arr["request"]["connect_orderer"]))
-				{
-					$data["value"] = array(
-						$arr["request"]["connect_orderer"] =>
-							$arr["request"]["connect_orderer"]
-					);
-				}
-				/*if (is_array($data["value"]))
-				{
-					$data["value"] = reset($data["value"]);
-				}*/
-
-				// get values
-				$u = get_instance(CL_USER);
-				$me = $u->get_current_person();
-				$ol = new object_list(array(
-					"class_id" => array(CL_CRM_PERSON,CL_CRM_COMPANY),
-					new object_list_filter(array(
-						"logic" => "OR",
-						"conditions" => array(
-							"CL_CRM_PERSON.client_manager" => $me,
-							"CL_CRM_COMPANY.client_manager" => $me
-						)
-					)),
-					"brother_of" => new obj_predicate_prop("id")
-				));
-
-
-				$data["options"] = array("" => "--vali--") + $ol->names();
-				foreach((array)$data["value"] as $_id)
-				{
-					if (!isset($data["options"][$_id]) && $this->can("view", $_id))
-					{
-						$tmp = obj($_id);
-						$data["options"][$tmp->id()] = $tmp->name();
-					}
-				}
-				asort($data["options"]);
-				break;
-
-			case "implementor":
-				return PROP_IGNORE;
-				if ($arr["new"])
-				{
-					$data["value"] = $arr["request"]["connect_impl"];
-				}
-				if (is_array($data["value"]))
-				{
-					$data["value"] = reset($data["value"]);
-				}
-				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
-				{
-					$tmp = obj($data["value"]);
-					$data["options"][$tmp->id()] = $tmp->name();
-				}
-
-				$u = get_instance(CL_USER);
-				$co = obj($u->get_current_company());
-				$data["options"][$co->id()] = $co->name();
-
-				asort($data["options"]);
-				break;
-
-			case "participants":
-				return PROP_IGNORE;
-				if (!$arr["new"])
-				{
-					$cur_pts = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
-				}
-				$people = array();
-				$u = get_instance(CL_USER);
-				$co = $u->get_current_company();
-				$i = get_instance(CL_CRM_COMPANY);
-				$people = array_keys($i->get_employee_picker(obj($co),false,true));
-				if (!count($people))
-				{
-					$ol = new object_list();
-				}
-				else
-				{
-					$ol = new object_list(array("oid" => array_values($people), "lang_id" => array(), "site_id" => array()));
-				}
-				$sel = array();
-				foreach($cur_pts as $pt)
-				{
-					if ($pt->prop("to.class_id") == CL_USER)
-					{
-						continue;
-					}
-					$ol->add($pt->prop("to"));
-					$sel[$pt->prop("to")] = $pt->prop("to");
-				}
-
-				if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
-				{
-					$sel = $u->get_current_person();
-				}
-				$data["options"] = array("" => t("--Vali--")) + $ol->names();
-				asort($data["options"]);
-				$data["value"] = $sel;
-				break;
-
-			case "state":
-				$data["options"] = $this->states;
-				break;
-
-			case "event_list":
-				$this->gen_event_list($arr);
-				break;
-
-			case "event_toolbar":
-				$this->gen_event_toolbar($arr);
-				break;
-
-			case "use_template":
-				$data["options"] = array(
-					"weekview" => t("N&auml;dala vaade"),
-				);
-				break;
-
-			case "goal_tb":
-				$this->_goal_tb($arr);
-				break;
-
-			case "bills_tree":
-				$this->_get_bills_tree($arr);
-				break;
-
-			case "bills_list":
-				$this->_get_bills_table($arr);
-				break;
-
-			case "goal_tree":
-				$this->_goal_tree($arr);
-				break;
-
-			case "task_types_tree":
-				$this->_task_types_tree($arr);
-				break;
-			case "task_persons_tree":
-				$this->_get_task_persons_tree($arr);
-				break;
-			case "work_list":
-				$this->_get_work_list($arr);
-				break;
-
-			case "create_bill_tb":
-				$this->_get_create_bill_tb($arr);
-				break;
-			case "bills_tb":
-				$this->_get_bills_tb($arr);
-				break;
-
-			case "goal_table":
-				$this->_goal_table($arr);
-				break;
-
-			case "goals_gantt":
-				$data["value"] = $this->_goals_gantt($arr);
-				break;
-
-			case "prepayment":
-				if (!is_oid($arr["obj_inst"]->id()))
-				{
-					return PROP_IGNORE;
-				}
-				$bill = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_PREPAYMENT_BILL");
-				if ($bill)
-				{
-					$data["post_append_text"] = " ".html::obj_change_url($bill);
-				}
-				else
-				{
-					$data["post_append_text"] = " ".html::href(array(
-						"url" => $this->mk_my_orb("do_create_prepayment_bill", array(
-							"id" => $arr["obj_inst"]->id(),
-							"ru" => get_ru()
-						)),
-						"caption" => t("Loo arve")
-					));
-				}
-				break;
-
-			case "stats":return PROP_IGNORE;
-				$data["value"] = $this->_get_stats($arr["obj_inst"]);
-				break;
-
-			case "stats_table":
-				$data["value"] = $this->_get_stats_table($arr);
-				break;
-			case "hours_stats_table":
-				$data["value"] = $this->_get_hours_stats_table($arr);
-				break;
-
-			case "stats_money_table":
-				$data["value"] = $this->_get_stats_money_table($arr);
-				break;
-
-			case "stats_entry_table":
-				$this->_get_stats_entry_table($arr);
-				break;
-			case "hours_stats":
-				return PROP_IGNORE;
-		}
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			case "project_estimated_table":
-				$arr["obj_inst"]->set_prop("budget" , $arr["request"]["budget"]);
-				break;
-			case "prods_toolbar":
-				$ps = get_instance("vcl/popup_search");
-				$ps->do_create_rels($arr["obj_inst"], $arr["request"]["prod_search_res"], 24);
-				break;
-
-/*			case "risks_eval":
-				$this->_save_risks_eval($arr);
-				break;
-
-*/			case "transl":
-				$this->trans_save($arr, $this->trans_props);
-				break;
-
-			case "files":
-				$this->_set_files($arr);
-				break;
-
-			case "create_task":
-				if ($prop["value"] == 1)
-				{
-					$this->do_create_task = 1;
-				}
-				break;
-
-			case "orderer":
-			case "implementor":
-			case "implementor_person":
-				if ($arr["request"]["connect_orderer"] && $prop["name"] == "orderer")
-				{
-					$prop["value"] = $arr["request"]["connect_orderer"];
-				}
-				if ($arr["request"]["connect_impl"] && $prop["name"] == "implementor")
-				{
-					$prop["value"] = $arr["request"]["connect_impl"];
-				}
-				if (count(explode(",", $prop["value"])) > 1)
-				{
-					$prop["value"] = $this->make_keys(explode(",", $prop["value"]));
-				}
-				if (is_oid($prop["value"]))
-				{
-					$prop["value"] = array($prop["value"]);
-				}
-				else
-				if (!is_array($prop["value"]))
-				{
-					$prop["value"] = array();
-				}
-				if (count($prop["value"]))
-				{
-					foreach($prop["value"] as $v)
-					{
-						if ($arr["new"] || !$arr["obj_inst"]->is_connected_to(array("type" => "RELTYPE_PARTICIPANT", "to" => $v)))
-						{
-							$arr["obj_inst"]->connect(array(
-								"reltype" => "RELTYPE_PARTICIPANT",
-								"to" => $v
-							));
-						}
-					}
-				}
-				break;
-
-			case "add_event":
-				$this->register_event_with_planner($arr);
-				break;
-
-			case "sel_resources":
-				$this->save_sel_resources($arr);
-				break;
-
-			case "resources";
-				$this->do_save_resources($arr);
-				break;
-
-			case "confirm":
-				if ($prop["value"] == 1)
-				{
-					$this->do_write_times_to_cal($arr);
-				}
-				break;
-
-			/*case "priority":
-				if ($prop["value"] != $arr["obj_inst"]->prop("priority") && is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("confirm"))
-				{
-					// write priority to all events from this
-					$evids = new aw_array($arr["obj_inst"]->meta("event_ids"));
-					foreach($evids->get() as $evid)
-					{
-						$evo = obj($evid);
-						$evo->set_meta("task_priority", $prop["value"]);
-						$evo->save();
-					}
-
-					// also, recalc times
-					$this->do_write_times_to_cal($arr);
-				}
-				break;*/
-
-			case "participants":
-				if ($arr["new"])
-				{
-					$p = get_current_person();
-					$prop["value"] = array(
-						$p->id() => $p->id(),
-					);
-				}
-				break;
-
-			case "state":
-				if (!$prop["value"])
-				{
-					$prop["value"] = PROJ_IN_PROGRESS ;
-				}
-				break;
-
-			case "stats_entry_table":
-				$this->_set_stats_entry_table($arr);
-				break;
-		}
-		return $retval;
 	}
 
 	////
 	// !Optionally this also needs to support date range ..
-	function gen_event_list($arr)
+	private function gen_event_list($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 
@@ -1950,8 +1959,8 @@ class project extends class_base
 		));
 
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
-			"date" => $arr["request"]["date"],
-			"viewtype" => $arr["request"]["viewtype"],
+			"date" => isset($arr["request"]["date"]) ? $arr["request"]["date"] : null,
+			"viewtype" => isset($arr["request"]["viewtype"]) ? $arr["request"]["date"] : null,
 		));
 
 		$start = $range["start"];
@@ -1961,7 +1970,6 @@ class project extends class_base
 		};
 
 		$end = $range["end"];
-		classload("core/icons");
 
 		// event translations have the id of the object in original language
 		$o = $arr["obj_inst"];
@@ -1982,7 +1990,7 @@ class project extends class_base
 			$this->_recurse_projects(0,$o->id());
 
 			// create a list of all subprojects, so that we can show events from all projects
-			if (is_array($this->prj_map))
+			if (isset($this->prj_map) && is_array($this->prj_map))
 			{
 				foreach($this->prj_map as $key => $val)
 				{
@@ -2028,12 +2036,6 @@ class project extends class_base
 				continue;
 			}
 			$disp[$o->brother_of()] = 1;
-			//if ($id != $o->brother_of())
-			//{
-				// this will break things, but makes estonia work for now
-				//continue;
-			//};
-
 
 			if ($o->class_id() == CL_BUG)
 			{
@@ -2108,834 +2110,9 @@ class project extends class_base
 		return $this->overview;
 	}
 
-
-	////
-	// !returns a list of events from the projects the user participates in
-	// project_id (optional) - id of the project, if specified we get events
-	// from that project only
-
-	// XXX: split this into separate methods
-	function get_event_folders($arr = array())
-	{
-		$ev_ids = array();
-		if (!empty($arr["project_id"]))
-		{
-			global $awt;
-			$awt->start("project-event-loader");
-			#$ev_ids = $this->get_events_for_project(array("project_id" => $arr["project_id"]));
-			$ev_ids = $arr["project_id"];
-			$awt->stop("project-event-loader");
-		}
-		else
-		if ($arr["type"] == "my_projects")
-		{
-			// this returns a list of events from "My projects"
-			$users = get_instance("users");
-			if (aw_global_get("uid"))
-			{
-				// see asi peab n&uuml;&uuml;d hakkama tagastame foldereid!
-				$user_obj = new object($arr["user_ids"][0]);
-				$conns = $user_obj->connections_to(array(
-					"from.class_id" => CL_PROJECT,
-				));
-				// ei mingit bloody cyclet, see hakkab lihtsalt tagastame projektide id-sid, onj2!
-				$ev_ids = array();
-				foreach($conns as $conn)
-				{
-					$ev_ids[] = $conn->prop("from");
-					//$ev_ids = array_merge($ev_ids,$this->get_events_for_project(array("project_id" => $conn->prop("from"))));
-				};
-			};
-		};
-		return $ev_ids;
-	}
-
-	////
-	// !id - participant id
-	function get_events_for_participant($arr = array())
-	{
-		$ev_ids = array();
-		$projects = array();
-		$obj = new object($arr["id"]);
-		if ($obj->class_id() == CL_CRM_COMPANY)
-		{
-			$conns = $obj->connections_to(array(
-				"reltype" => 2 //RELTYPE_PARTICIPANT,
-			));
-			foreach($conns as $conn)
-			{
-				$ev_ids = $ev_ids + $this->get_events_for_project(array(
-					"project_id" => $conn->prop("from"),
-					"class_id" => $arr["clid"],
-				));
-			};
-		};
-
-		return $ev_ids;
-	}
-
-	////
-	// !Returns a list of event id-s for a given project
-	function get_events_for_project($arr)
-	{
-		$pr_obj = new object($arr["project_id"]);
-		$args = array(
-			"type" => "RELTYPE_PRJ_EVENT",
-		);
-
-		if (!empty($arr["class_id"]))
-		{
-			$args["to.class_id"] = $arr["class_id"];
-		};
-
-		$event_connections = $pr_obj->connections_from($args);
-
-		$ev_id_list = array();
-		foreach($event_connections as $conn)
-		{
-			$ev_id_list[$conn->prop("to")] = $conn->prop("to");
-		};
-
-		// add all tasks that have project set
-		$ol = new object_list(array(
-			"class_id" => CL_TASK,
-			"project" => $arr["project_id"],
-			"lang_id" => array(),
-			"site_id" => array(),
-			"brother_of" => new obj_predicate_prop("id")
-		));
-		foreach($ol->ids() as $id)
-		{
-			$ev_id_list[$id] = $id;
-		}
-		return $ev_id_list;
-	}
-
-	/**
-		@attrib name=wtf
-	**/
-	function wtf($arr)
-	{
-		aw_disable_acl();
-		$ol = new object_list(array(
-			"brother_of" => 10412,
-			"lang_id" => array(),
-		));
-		echo dbg::dump($ol);
-
-		arr($ol);
-		foreach($ol->arr() as $o)
-		{
-			print "id = " . $o->id();
-			print "prnt = " . $o->parent();
-			print "lang = " . $o->lang();
-			print "<br>";
-		};
-
-		aw_disable_acl();
-		$ol = new object_list(array(
-			"brother_of" => 5602,
-			"lang_id" => array(),
-		));
-		echo dbg::dump($ol);
-
-		foreach($ol->arr() as $o)
-		{
-			print "id = " . $o->id();
-			print "prnt = " . $o->parent();
-			print "<br>";
-		};
-
-		die();
-
-
-
-
-		// and another, english should be activated for this
-		// this is original and it has start1
-		$o = new object(10083);
-		arr($o->properties());
-
-		// this one is translation and it does not have start1
-		$o = new object(10085);
-		arr($o->properties());
-
-		die();
-
-	}
-
-	function get_event_sources($id)
-	{
-		$o = new object($id);
-		$orig_conns = $o->connections_from(array(
-			"type" => 103,
-		));
-		if (sizeof($orig_conns) > 0)
-		{
-			$first = reset($orig_conns);
-			$id = $first->prop("to");
-		};
-		$sources = array($id => $id);
-		if ($o->prop("skip_subproject_events") != 1)
-		{
-			$this->used = array();
-			$this->_recurse_projects(0, $id);
-		};
-		if (is_array($this->prj_map))
-		{
-			foreach($this->prj_map as $key => $val)
-			{
-				foreach($val as $k1 => $v1)
-				{
-					$sources[$k1] = $k1;
-				}
-			}
-		}
-		return $sources;
-	}
-
-	function get_events($arr)
-	{
-		extract($arr);
-		$o = new object($arr["id"]);
-		$orig_conns = $o->connections_from(array(
-			"type" => 103,
-		));
-
-		if (sizeof($orig_conns) > 0)
-		{
-			$first = reset($orig_conns);
-			$arr["id"] = $first->prop("to");
-		};
-
-		$parents = array($arr["id"]);
-
-		if (1 != $o->prop("skip_subproject_events"))
-		{
-			$this->used = array();
-			$this->_recurse_projects(0,$arr["id"]);
-		};
-
-		if (is_array($this->prj_map))
-		{
-			// ah vitt .. see project map algab ju parajasti aktiivsest projektist.
-
-			// aga valik "n2ita alamprojektide syndmusi" ei oma ju yleyldse mitte mingit m6tet
-			// kui mul on vennad k6igis ylemprojektides ka
-			foreach($this->prj_map as $key => $val)
-			{
-				// nii . aga nyyd ta n2itab mulle ju ka master projektide syndmusi .. which is NOT what I want
-
-				// teisis6nu - mul ei ole syndmuste lugemisel vaja k6iki peaprojekte
-
-				// kyll aga on vaja neid n2itamisel - et ma oskaksin kuvada asukohti. so there
-				foreach($val as $k1 => $v1)
-				{
-					$parents[$k1] = $k1;
-				};
-			};
-		};
-		$limit_num = 300;
-
-		$parent = join(",",$parents);
-
-		$limit = "";
-		if ($arr["range"]["limit_events"])
-		{
-			$limit = " LIMIT ".$arr["range"]["limit_events"];
-			$limit_num = $arr["range"]["limit_events"];
-		}
-
-		// ma pean lugema syndmusi sellest projektist ja selle alamprojektidest.
-		$_start = $arr["range"]["start"];
-		/* this code is ev0l, we should outcomment it -- ahz
-		if ($arr["range"]["overview_start"])
-		{
-			$_start = $arr["range"]["overview_start"];
-		};
-		*/
-		$_end = $arr["range"]["end"];
-		$lang_id = aw_global_get("lang_id");
-		$stat_str = "objects.status != 0";
-
-		if(is_array($arr["status"]))
-		{
-			$stat_str = "objects.status IN (".implode(",", $arr["status"]).")";
-		}
-		elseif($arr["status"] && aw_global_get("uid") == "")
-		{
-			$stat_str = "objects.status = " . $arr["status"];
-		};
-
-		$active_lang_only = aw_ini_get("project.act_lang_only");
-
-		$q = "
-			SELECT
-				objects.oid AS id,
-				objects.parent,
-				objects.class_id,
-				objects.brother_of,
-				objects.name,
-				planner.start,
-				planner.end
-			FROM planner
-			LEFT JOIN objects ON (planner.id = objects.brother_of)
-			WHERE ((planner.start >= '${_start}' AND planner.start <= '${_end}')
-			OR
-			(planner.end >= '${_start}' AND planner.start <= '${_end}')) AND
-			$stat_str AND objects.parent IN (${parent}) order by planner.start"; // $limit
-
-		if($arr["range"]["viewtype"] == "relative")
-		{
-			if($_GET["date"])
-			{
-				list($d, $m, $y) = split("-", $_GET["date"]);
-				$_start = mktime(23, 59, 59, $m, $d, $y);
-			}
-			else
-			{
-				$_start = mktime(23, 59, 59, 12, 12, 2020);
-			}
-			$_start =
-			$q = "
-			SELECT
-				objects.oid AS id,
-				objects.parent,
-				objects.class_id,
-				objects.brother_of,
-				objects.name,
-				planner.start,
-				planner.end
-			FROM planner
-			LEFT JOIN objects ON (planner.id = objects.brother_of)
-			WHERE (planner.start - $_start) <= 0 AND
-			$stat_str AND objects.parent IN (${parent}) order by ($_start - planner.start) LIMIT $limit_num";
-
-		}
-
-
-
-
-
-		// SELECT objects.oid AS id, objects.parent, objects.class_id, objects.brother_of, objects.name, planner.start, planner.end FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE ((planner.start >= '1099260000' AND planner.start <= '1104530399') OR (planner.end >= '1099260000' AND planner.end <= '1104530399')) AND objects.status != 0 AND objects.parent IN (2186)
-
-		enter_function("project::query");
-		$this->db_query($q);
-		$events = array();
-		$pl = get_instance(CL_PLANNER);
-		$ids = array();
-		$projects = $by_parent = array();
-		$lang_id = aw_global_get("lang_id");
-		// weblingi jaoks on vaja kysida connectioneid selle projekti juurde!
-		while($row = $this->db_next())
-		{
-
-			// now figure out which project this thing belongs to?
-			//$web_page_id = $row["parent"];
-
-			if (!$this->can("view",$row["brother_of"]))
-			{
-				//dbg::p1($row["name"]);
-				//dbg::p1("skip1");
-				continue;
-			};
-
-			$e_obj = new object($row["brother_of"]);
-			// see leiab siis objekti originaali parenti
-			$pr_obj = new object($e_obj->parent());
-
-
-			if ($active_lang_only == 1 && $pr_obj->lang_id() != $lang_id)
-			{
-				dbg::p1($row["name"]);
-				dbg::p1("skip2");
-
-				continue;
-			};
-
-			$projects[$row["parent"]] = $row["parent"];
-
-			$project_name = $pr_obj->name();
-
-			// koostan nimekirja asjadest, mida mul vaja on? ja edasi on vaja
-			// nimekirja piltidest
-
-
-			$prid = $pr_obj->id();
-
-			// mida fakki .. miks see asi NII on?
-			$projects[$prid] = $prid;
-
-			// 2kki ma saan siis siin ka kasutada seda tsyklite yhendamist?
-
-			$eid = $e_obj->id();
-
-			$event_parent = $e_obj->parent();
-			$event_brother = $e_obj->brother_of();
-
-			enter_function("assign-event");
-			if (!($limit_counter >= ($limit_num) && $limit_num))
-			{
-				if (!isset($events[$event_brother]))
-				{
-					$limit_counter++;
-				}
-			$events[$event_brother] = array(
-				"start" => $row["start"],
-				"end" => $row["end"],
-				"pr" => $prid,
-				"name" => $e_obj->name(),
-				"parent" => $event_parent,
-				"comment" => $e_obj->comment(),
-				"lang_id" => $e_obj->lang_id(),
-				"id" => $eid,
-				//"project_image" => $row["project_image"],
-				"original_id" => $row["brother_of"],
-				//"project_weblink" => aw_ini_get("baseurl") . "/" . $web_page_id,
-				//"project_day_url" => aw_ini_get("baseurl") . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$row["start"]),
-				"project_name" => $project_name,
-				"project_name_ucase" => strtoupper($project_name),
-				"link" => $this->mk_my_orb("change",array(
-					"id" => $eid,
-				),$row["class_id"],true,true),
-			);
-			}
-			exit_function("assign-event");
-			$ids[$row["brother_of"]] = $row["brother_of"];
-			$ids[$e_obj->brother_of()] = $e_obj->brother_of();
-
-			$by_parent[$event_parent][] = $event_brother;
-
-
-			/*if (++$limit_counter >= $limit_num && $limit_num)
-			{
-				break;
-			}*/
-		};
-
-
-		$pr_list = new object_list(array(
-			"class_id" => CL_PROJECT,
-		));
-
-		$pr_data = $pr_list->names();
-
-		// kas ma saan pr-i hiljem arvutada?
-		exit_function("project::query");
-
-		// kuidas ma saan sellest jamast lahti?
-
-		// now i have a list of all projects .. I need to figure out which menus connect to those projects
-		$web_pages = $project_images = array();
-		$c = new connection();
-
-		$conns = $c->find(array(
-			"from" => $projects,
-			"type" => RELTYPE_ORIGINAL,
-		));
-
-		foreach($conns as $conn)
-		{
-			$from = $conn["from"];
-			$to = $conn["to"];
-			if (!is_oid($to) || !$this->can("view", $to))
-			{
-				continue;
-			}
-			$xto = new object($to);
-			//$xtod = $xto->id();
-			//if ($projects[$from])
-			//{
-				//unset($projects[$from]);
-				$projects[$from] = $to;
-				//$projects[$to] = $from;
-			//};
-		};
-
-
-		// nii .. yhes6naga me diilime kogu aeg originaalprojektidega siin. eks?
-		$conns = $c->find(array(
-			"to" => $projects,
-			"from.lang_id" => aw_global_get("lang_id"),
-			"type" => 17,
-		));
-		//foreach($conns as $conn)
-		//{
-			//print $conn["to"] . " - " . $conn["from"];
-			//$tx = new object($conn["from"]);
-			//arr($tx->properties());
-			//print "<br>";
-			/*
-			if (aw_global_get("uid") == "meff")
-			{
-				print "connection from " . $conn["from"] . " to " .$conn["to"] . "<br>";
-			};
-			*/
-
-			//$web_pages[$conn["to"]] = $conn["from"];
-		//};
-
-		/*
-		if (aw_global_get("uid") == "meff")
-		{
-			print "<hr>";
-		};
-		*/
-		$conns = $c->find(array(
-			//"to" => $projects,
-			//"to" => $projects,
-			"from.lang_id" => aw_global_get("lang_id"),
-			"from.class_id" => CL_MENU,
-			"type" => 17,
-		));
-		$clinf = aw_ini_get("classes");
-		foreach($conns as $conn)
-		{
-			//print $conn["to"] . " - " . $conn["from"];
-			//$tx = new object($conn["from"]);
-			//arr($tx->properties());
-			//print "<br>";
-			$web_pages[$conn["to"]] = $conn["from"];
-			/*
-			if (aw_global_get("uid") == "meff")
-			{
-				// nii, aga mind huvitab see, et kas mul on seos olemas aktiivse keele jaoks
-
-				// ja mida ma teen, kui ei ole? Kuidas ma saan selle 6ige asja leida?
-				$o1 = new object($conn["from"]);
-				$o2 = new object($conn["to"]);
-
-				//print "connection from " . $conn["from"] . " to " .$conn["to"] . "<br>";
-				printf("connection from %s %s (%s | %s) to %s %s (%s)<br>",$clinf[$o1->class_id()]["name"],$o1->name(),$o1->id(),$o1->lang(),$clinf[$o2->class_id()]["name"],$o2->name(),$o2->id());
-			};
-			*/
-		};
-
-		$lc = aw_global_get("LC");
-		$current_charset = aw_global_get("charset");
-
-		if (1 == $arr["project_media"])
-		{
-			$conns = $c->find(array(
-				"from" => $projects,
-				"type" => 11 //RELTYPE_PRJ_VIDEO,
-			));
-
-			foreach($conns as $conn)
-			{
-
-				$v_o = new object($conn["to"]);
-				//$v_o = $conn->to();
-				// aga miks siis see asi ei anna mulle t6lget 6iges keeles?
-				$tmp = $v_o->properties();
-				$tmp["media_id"] = $conn["to"];
-				$tmp["name"] = $prop_val = iconv("UTF-8",$current_charset . "//TRANSLIT",$tmp["trans"][$lc]["name"]);
-				//$tmp = array_merge($tmp,$tmp["trans"][$lc]);
-				// video is always connected to the original project, but when showing
-				// the event, I need to show the translated caption and not the original
-				$project_videos[$conn["from"]][] = $tmp;
-
-			};
-
-			if (is_array($projects))
-			{
-				foreach($projects as $project_id)
-				{
-					$fx = $project_id;
-					$fxo = new object($fx);
-					// vat see koht siisn tegeleb remappimisega
-					if ($project_videos[$fx])
-					{
-						$project_videos[$fxo->id()] = $project_videos[$fx];
-					};
-				};
-			};
-		}
-
-		if (1 == $arr["first_image"])
-		{
-			$conns = $c->find(array(
-				"from" => $projects,
-				"type" => 8 //RELTYPE_PRJ_IMAGE,
-			));
-
-			$t_img = get_instance(CL_IMAGE);
-
-
-			foreach($conns as $conn)
-			{
-				$project_images[$conn["from"]] = $t_img->get_url_by_id($conn["to"]);
-			};
-
-			$conns = $c->find(array(
-				"from" => $ids,
-				"type" => 1, // RELTYPE_PICTURE from CL_STAGING
-			));
-
-
-			foreach($conns as $conn)
-			{
-				$project_images[$conn["from"]] = $t_img->get_url_by_id($conn["to"]);
-			};
-
-			if (is_array($ids))
-			{
-				foreach($ids as $id)
-				{
-					$fx = $id;
-					$fxo = new object($fx);
-					// vat see koht siisn tegeleb remappimisega
-					if ($project_images[$fx])
-					{
-						$project_images[$fxo->id()] = $project_images[$fx];
-					};
-				};
-			};
-
-		};
-
-		$baseurl = aw_ini_get("baseurl");
-
-		/*
-		if (aw_global_get("uid") == "meff")
-		{
-			arr($project_videos);
-		};
-		*/
-
-		foreach($events as $key => $event)
-		{
-			$prid = $event["pr"];
-			if ($projects[$prid])
-			{
-				$prid = $projects[$prid];
-			};
-
-			if ($web_pages[$prid])
-			{
-				$web_page_id = $web_pages[$prid];
-				$events[$key]["project_weblink"] =  $baseurl . "/" . $web_page_id;
-				$events[$key]["project_day_url"] = $baseurl . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$event["start"]);
-			};
-
-			if ($web_pages[$event["pr"]])
-			{
-				$web_page_id = $web_pages[$event["pr"]];
-				$events[$key]["project_weblink"] =  $baseurl . "/" . $web_page_id;
-				$events[$key]["project_day_url"] = $baseurl . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$event["start"]);
-				//$events[$key]["project_name_ucase"] = $pr_data[$event["pr"]];
-			};
-
-			if ($project_images[$event["id"]])
-			{
-				$events[$key]["first_image"] = $project_images[$event["id"]];
-			}
-			else if ($project_images[$event["pr"]])
-			{
-				$events[$key]["first_image"] = $project_images[$event["pr"]];
-			}
-			else
-			{
-				$events[$key]["first_image"] = $baseurl . "/img/trans.gif";
-			};
-
-			if ($project_videos[$event["pr"]])
-			{
-				$events[$key]["media"] = $project_videos[$event["pr"]];
-
-			};
-		};
-
-		if (sizeof($events) > 0)
-		{
-			$mpr = $this->get_master_project($o,$level);
-			$this->prj_level = 1;
-
-			$this->prj_levels[$mpr->id()] = $this->prj_level;
-			$this->prj_level++;
-
-
-			$this->used = array();
-			$prj_levels = $this->prj_levels;
-
-
-			$this->_recurse_projects2($mpr->id());
-
-
-			// aaah, see on see bloody brother_list ju
-
-			// iga eventi kohta on vaja teada k6iki vendi
-			$ol = new object_list(array(
-				"brother_of" => $ids,
-				"lang_id" => array(),
-			));
-
-
-
-			// how does it work? Events will be assigned to multiple projects
-			// by creating brothers in the event folders of the other projects
-
-			// a tree is built from the projects. While I'm showing projects
-			// I don't know on which level a particular project is nor what
-			// the path of from the root project is
-
-			// so I create a tree of all projects and assign a level number to
-			// each.
-
-			// then a list of all brothers of an event is created, which will
-			// yield a list of project id's which is then matched against the
-			// project level numbers - and this gives us the desired result
-
-			enter_function("find-parent");
-			$ox = $ol->arr();
-			foreach($ox as $brot)
-			{
-				if (!$this->can("view", $brot->parent()))
-				{
-					continue;
-				}
-				// et siis teeme uue nimekirja k6igist objektidest, jees?
-				$prnt = new object($brot->parent());
-				$pid = $prnt->id();
-				$prj_level = $this->_ptree[$pid];
-				enter_function("get-original");
-				$orig = $brot->get_original();
-				exit_function("get-original");
-
-				if ($prj_level)
-				{
-					enter_function("project-assign-event");
-					$events[$orig->id()]["parent_" . $prj_level . "_name"] = $this->_pnames[$pid];
-					$events[$orig->id()]["parent_" . $prj_level . "_oid"] = $this->_oids[$pid];
-					exit_function("project-assign-event");
-				};
-			};
-			exit_function("find-parent");
-
-		};
-		return $events;
-	}
-
-	////
-	// !connects an event to a project
-	// id - id of the project
-	// event_id - id of the event
-	function connect_event($arr)
-	{
-		$evt_obj = new object($arr["event_id"]);
-		// create a brother under the project object
-		$evt_obj->create_brother($arr["id"]);
-	}
-
-	////
-	// !Disconnects and event from a project
-	// id - id of the project
-	// event_id - id of the event
-	function disconnect_event($arr)
-	{
-		//print "disconnecting " . $arr["event_id"];
-		#$evt_obj = new object($arr["event_id"]);
-		#$evt_obj->delete();
-		// deleting is broken now until I can figure out something
-		//$evt_obj
-		/*
-		$prj_obj = new object($arr["id"]);
-		$prj_obj->disconnect(array(
-			"from" => $arr["event_id"],
-		));
-		*/
-	}
-
-	/**
-		@attrib name=test_it_out all_args="1"
-
-	**/
-	function test_it_out($arr)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_PROJECT,
-		));
-		aw_set_exec_time(AW_LONG_PROCESS);
-		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-		{
-			/*
-			if ($o->id() != 87738)
-			{
-				continue;
-			};
-			*/
-			$o->set_prop("skip_subproject_events",1);
-			$o->save();
-		};
-		print "all done";
-		exit;
-		while (1 == 0)
-		{
-			$subs = new object_list(array(
-				"parent" => $o->id(),
-				"site_id" => array(),
-			));
-			for ($sub_o = $subs->begin(); !$subs->end(); $sub_o = $subs->next())
-			{
-				$orig = $sub_o->get_original();
-				#print_r($sub_o);
-				$sub2parent[$orig->id()] = $sub_o->id();
-			};
-			#arr($sub2parent);
-			#arr($subs);
-			$brother_parent = $o->id();
-			// now I have to create brothers for each object
-			print "projekt " . $o->name(). "<br>";
-			print "id = " . $o->id() . "<br>";
-			print "connections = ";
-			$conns = $o->connections_from(array(
-				"type" => "RELTYPE_PRJ_EVENT",
-			));
-			// create_brother
-			print sizeof($conns);
-			print "<br><br>";
-			foreach($conns as $conn)
-			{
-				$to_obj = $conn->to();
-				$tmp = $to_obj->get_original();
-				$to_oid = $tmp->id();
-				print "# ";
-				print $conn->prop("reltype") . " ";
-				print $to_obj->name() . " ";
-				$p_obj = new object($to_obj->prop("parent"));
-				print $p_obj->name() . "<bR>";
-				// but first check, whether I already have an object with that parent!
-
-				print_r($to_obj);
-				if ($sub2parent[$to_oid])
-				{
-					print "brother already exists under $brother_parent<br>";
-				}
-				else
-				{
-					print "creating a brother under $brother_parent<br>";
-				};
-				print "<hr>";
-				$to_obj->create_brother($brother_parent);
-			};
-			// I have to clone those, you know
-			print "<br><br>";
-		};
-		print "oh, man, this is SO cool!";
-
-
-	}
-
-	function gen_event_toolbar($arr)
+	private function gen_event_toolbar($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
-		/*
-		$tb->add_menu_button(array(
-			"name" => "new",
-			"img" => "new.gif",
-			"tooltip" => t("Uus"),
-		));
-		*/
 		$o = $arr["obj_inst"];
 		$inst = $o->instance();
 
@@ -2943,22 +2120,6 @@ class project extends class_base
 
 		$clinf = aw_ini_get("classes");
 
-		foreach($clinf as $key => $val)
-		{
-			if (in_array($key,$int["clid"]))
-			{
-				/*
-				$tb->add_menu_item(array(
-					"parent" => "new",
-					"text" => $val["name"],
-					"link" => "link",
-				));
-				*/
-
-
-			};
-		};
-		//$tb->add_separator();
 		$tb->add_menu_button(array(
 			"name" => "subprj",
 			"img" => "new.gif",
@@ -2988,89 +2149,8 @@ class project extends class_base
 
 		$cl_name = $cl_inf[CL_STAGING]["name"];
 
-
 		$create_args = array();
 
-		if (false && is_array($this->prj_map))
-		{
-			// how do I know that I'm dealing with first level items?
-			foreach($this->prj_map as $parent => $items)
-			{
-				$level = 0;
-				foreach($items as $prj_id)
-				{
-					$level++;
-					// if first level projects are configured with skip_subproject_events off
-					// then a brother of the added event is created under that first level
-					// project
-					$use_parent = $parent == 0 ? "subprj" : $parent;
-					$pro = new object($prj_id);
-					$tb->add_sub_menu(array(
-						"name" => $prj_id,
-						"parent" => $use_parent,
-						"text" => $pro->name(),
-					));
-
-					if (1 == $pro->prop("skip_subproject_events"))
-					{
-						// do nothing
-					};
-
-					// but for this to work I also need to figure out the path
-					// I'm in. How do I do that?
-
-					// right then, I need a way to create links with correct parent
-					// now - how do I do that?
-
-					if (!$this->prj_map[$prj_id])
-					{
-						foreach($forms as $form_id => $form_name)
-						{
-							foreach($adds as $add_clid)
-							{
-								if ($add_clid == CL_TASK)
-								{
-									$pl = get_instance(CL_PLANNER);
-									$this->cal_id = $pl->get_calendar_for_user(array(
-										"uid" => aw_global_get("uid"),
-									));
-
-									$url = $this->mk_my_orb('new',array(
-										'alias_to_org' => $arr["obj_inst"]->prop("orderer"),
-										'reltype_org' => 13,
-										'add_to_cal' => $this->cal_id,
-										'title' => t("Toimetus"),
-										'parent' => $arr["id"],
-										'return_url' => get_ru(),
-										"set_proj" => $arr["obj_inst"]->id()
-									),CL_TASK);
-									$tb->add_menu_item(array(
-										"name" => "x_" . $prj_id . "_" . $form_id."_".$add_clid,
-										"parent" => $prj_id,
-										"text" => $cl_inf[$add_clid]["name"],
-										"link" => $url,
-									));
-								}
-								else
-								{
-									$tb->add_menu_item(array(
-										"name" => "x_" . $prj_id . "_" . $form_id."_".$add_clid,
-										"parent" => $prj_id,
-										"text" => $cl_inf[$add_clid]["name"],
-										"link" => $this->mk_my_orb("new",array(
-											"parent" => $prj_id,
-											"group" => "change",
-										),$add_clid),
-									));
-								}
-							}
-						};
-					};
-				};
-			};
-		}
-		else
-		{
 			$conns = $o->connections_from(array(
 				"type" => "RELTYPE_PRJ_CFGFORM",
 			));
@@ -3141,7 +2221,7 @@ class project extends class_base
 					}
 				}
 			};
-		};
+
 
 		// and now .. to the lowest level ... I need to add configuration forms .. or that other stuff
 
@@ -3162,82 +2242,7 @@ class project extends class_base
 		/*
 			1. how do I access that information
 			2.
-
-
-
 		*/
-
-
-	}
-
-	function _recurse_projects2($parent)
-	{
-		$prx = new object($parent);
-		$parent = $prx->id();
-
-		$c = new connection();
-		$conns = $c->find(array(
-			"from.class_id" => CL_PROJECT,
-			"to.class_id" => CL_PROJECT,
-			"type" => 1,
-		));
-
-		$subs = array();
-		$this->_pnames = array();
-		$this->_fullnames = array();
-		$saast = array();
-		$this->_oids = array();
-		foreach($conns as $conn)
-		{
-			$o1 = new object($conn["from"]);
-			$o2 = new object($conn["to"]);
-			$subs[$conn["from"]][$conn["to"]] = $conn["to"];
-			$subs[$o1->id()][$o2->id()] = $o2->id();
-			$this->_pnames[$conn["from"]] = $conn["from.name"];
-			$this->_pnames[$conn["to"]] = $conn["to.name"];
-			$this->_pnames[$o1->id()] = $o1->name();
-			$this->_pnames[$o2->id()] = $o2->name();
-
-			$this->_oids[$conn["from"]] = $conn["from"];
-			$this->_oids[$conn["to"]] = $conn["to"];
-			$this->_oids[$o1->id()] = $o1->id();
-			$this->_oids[$o2->id()] = $o2->id();
-		};
-
-		$this->subs = $subs;
-
-		$this->_ptree = array();
-		$this->level = 0;
-
-		$this->name_stack = array();
-		$this->done = array();
-		$this->_finalize_tree($parent);
-
-
-	}
-
-	function _finalize_tree($parent)
-	{
-		if (!$this->subs[$parent])
-		{
-			return false;
-		}
-		if ($this->done[$parent])
-		{
-			return false;
-		};
-		$this->done[$parent] = 1;
-
-		$this->_ptree[$parent] = $this->level;
-		$this->level++;
-
-		foreach($this->subs[$parent] as $item)
-		{
-			$this->_finalize_tree($item);
-			$this->_ptree[$item] = $this->level;
-		};
-
-		$this->level--;
 	}
 
 	// I need to build a tree of names ... HOW?
@@ -3252,7 +2257,7 @@ class project extends class_base
 	// it should create a list of connections starting from those projects
 	function _recurse_projects($parent,$prj_id)
 	{
-		if ($this->used[$parent])
+		if (empty($this->used[$parent]))
 		{
 			return false;
 		};
@@ -3261,19 +2266,6 @@ class project extends class_base
 		$prj_obj = new object($prj_id);
 		//dbg::p1("111 recursing from " . $prj_obj->name() . " / " . $prj_obj->id());
 		//flush();
-
-		/*
-		$trans_conns = $prj_obj->connections_from(array(
-			"type" => RELTYPE_ORIGINAL,
-		));
-
-		if (sizeof($trans_conns) > 0)
-		{
-			$first = reset($trans_conns);
-			$prj_obj = new object($first->prop("to"));
-
-		};
-		*/
 
 		//dbg::p1("recursing from " . $prj_obj->name());
 
@@ -3298,6 +2290,7 @@ class project extends class_base
 		}
 	}
 
+//aegunud?
 	function callback_get_add_event($args = array())
 	{
 		// yuck, what a mess
@@ -3412,8 +2405,8 @@ class project extends class_base
 		}
 		return $resprops;
 	}
-
-	function do_group_headers($arr)
+//aegunud?
+	private function do_group_headers($arr)
 	{
 		$xtmp = $arr["t"]->groupinfo;
 		$tmp = array(
@@ -3445,6 +2438,114 @@ class project extends class_base
 		return $tmp;
 	}
 
+	private function _goal_tb($arr)
+	{
+		$t =& $arr["prop"]["toolbar"];
+
+		$t->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa")
+		));
+
+		$ord = $arr["obj_inst"]->prop("orderer");
+		if (is_array($ord))
+		{
+			$ord = reset($ord);
+		}
+		if(empty($arr["request"]["tf"]))
+		{
+			$arr["request"]["tf"] = "";
+		}
+		$t->add_menu_item(array(
+			"name" => "new_event",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_TASK,
+				$arr["obj_inst"]->id(),
+				array(
+					"return_url" => get_ru(),
+					"alias_to_org" => $ord,
+					"set_proj" => $arr["obj_inst"]->id(),
+					"set_pred" => $arr["request"]["tf"]
+				)
+			),
+			"text" => t("Toimetus"),
+		));
+		$t->add_menu_item(array(
+			"name" => "new_call",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_CRM_CALL,
+				$arr["obj_inst"]->id(),
+				array(
+					"return_url" => get_ru(),
+					"alias_to_org" => $ord,
+					"set_proj" => $arr["obj_inst"]->id(),
+					"set_pred" => $arr["request"]["tf"]
+				)
+			),
+			"text" => t("K&otilde;ne"),
+		));
+		$t->add_menu_item(array(
+			"name" => "new_meeting",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_CRM_MEETING,
+				$arr["obj_inst"]->id(),
+				array(
+					"return_url" => get_ru(),
+					"alias_to_org" => $ord,
+					"set_proj" => $arr["obj_inst"]->id(),
+					"set_pred" => $arr["request"]["tf"]
+				)
+			),
+			"text" => t("Kohtumine"),
+		));
+
+		$t->add_menu_item(array(
+			"name" => "new_bug",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_BUG,
+				$arr["obj_inst"]->id(),
+				array(
+					"return_url" => get_ru(),
+					"alias_to_org" => $ord,
+					"set_proj" => $arr["obj_inst"]->id(),
+					"set_pred" => $arr["request"]["tf"]
+				)
+			),
+			"text" => t("Arendus&uuml;lesanne"),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_goals",
+			"tooltip" => t("Kustuta"),
+		));
+
+		$t->add_separator();
+		$t->add_button(array(
+			"name" => "cut",
+			"img" => "cut.gif",
+			"action" => "cut_goals",
+			"tooltip" => t("L&otilde;ika"),
+		));
+
+		if (isset($_SESSION["proj_cut_goals"]) && is_array($_SESSION["proj_cut_goals"]) && count($_SESSION["proj_cut_goals"]))
+		{
+			$t->add_button(array(
+				"name" => "paste",
+				"img" => "paste.gif",
+				"action" => "paste_goals",
+				"tooltip" => t("Kleebi"),
+			));
+		}
+	}
+
+//aegunud?
 	function register_event_with_planner($args = array())
 	{
 		$event_folder = $args["obj_inst"]->id();
@@ -3537,505 +2638,6 @@ class project extends class_base
 		return PROP_OK;
 	}
 
-	function callback_mod_tab($args)
-	{
-		if ($args["activegroup"] != "add_event" && $args["id"] == "add_event")
-		{
-			return false;
-		};
-
-		if ($args["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
-		{
-			return false;
-		}
-		if ($args["id"] == "trans")
-		{
-			return false;
-		}
-		return true;
-	}
-
-	function callback_get_transl($arr)
-	{
-		return $this->trans_callback($arr, $this->trans_props);
-	}
-
-	function callback_mod_retval($arr)
-	{
-		$args = &$arr["args"];
-		if ($this->event_id)
-		{
-			$args["event_id"] = $this->event_id;
-			if ($this->emb_group && $this->emb_group != "general")
-			{
-				$args["cb_group"] = $this->emb_group;
-			};
-		};
-
-		switch($arr["request"]["group"])
-		{
-			case "stats":
-				$args["month_chooser"] = $arr["request"]["month_chooser"];
-				break;
-		}
-
-
-		if($arr["request"]["hidden_team"] && !$args["team"])
-		{
-		  $args["team"] = $arr["request"]["hidden_team"];
-		}
-		if($arr["request"]["group"] == "goals_edit")
-		{
-			$args["search_part"] = $arr["request"]["search_part"];
-			$args["search_start"] = $arr["request"]["search_start"];
-			$args["search_end"] = $arr["request"]["search_end"];
-			$args["search_type"] = $arr["request"]["search_type"];
-		}
-
-		$args["team_search_person"] = $arr["request"]["team_search_person"];
-		$args["team_search_co"] = $arr["request"]["team_search_co"];
-
-		$args["event_time_list_search_start"] = $arr["request"]["event_time_list_search_start"];
-		$args["event_time_list_search_end"] = $arr["request"]["event_time_list_search_end"];
-
-		if($arr["request"]["group"] == "files")
-		{
-			$args["files_find_name"] = $arr["request"]["files_find_name"];
-			$args["files_find_type"] = $arr["request"]["files_find_type"];
-			$args["files_find_comment"] = $arr["request"]["files_find_comment"];
-		}
-	}
-
-	function callback_mod_reforb($arr)
-	{
-		switch($arr["group"])
-		{
-			case "create_bill":
-				$arr["bill_id"] = "";
-				break;
-		}
-
-		$arr["post_ru"] = post_ru();
-		$arr["implementor"] = "0";
-		$arr["participants"] = "0";
-		$arr["orderer"] = "0";
-		if(isset($_GET["tf"])) $arr["tf"] = $_GET["tf"];
-		if(isset($_GET["team"])) $arr["team"] = $_GET["team"];
-		if(isset($_GET["connect_orderer"])) $arr["connect_orderer"] = $_GET["connect_orderer"];
-		if(isset($_GET["connect_impl"])) $arr["connect_impl"] = $_GET["connect_impl"];
-		$arr["prod_search_res"] = "0";
-	}
-
-	function request_execute($o)
-	{
-		$rv = "";
-		$prj_id = $o->id();
-
-		$prj_obj = $o;
-
-		$obj = $o;
-
-
-		$orig_conns = $o->connections_from(array(
-			"type" => 103,
-		));
-
-		if (sizeof($orig_conns) > 0)
-		{
-			$first = reset($orig_conns);
-			$prj_id = $first->prop("to");
-			$prj_obj = $first->to();
-		};
-
-
-		$this->read_template("show.tpl");
-
-
-		$cal_view = get_instance(CL_CALENDAR_VIEW);
-
-		// XXX: make the view type configurable
-		$views = array(
-			3 => $this->vars["lc_day"],
-			2 => $this->vars["lc_week"],
-			1 => $this->vars["lc_month"],
-			0 => $this->vars["lc_year"],
-		);
-
-		$view_from_url = aw_global_get("view");
-		if (empty($view_from_url))
-		{
-			$view_from_url = 0;
-		};
-
-		if (!$views[$view_from_url])
-		{
-			$view_from_url = 0;
-		};
-
-		$use_template = "";
-		if ($view_from_url == 0)
-		{
-			$use_template = "year";
-			$viewtype = "year";
-			$start_from = mktime(0,0,0,date("m"), 1, date("Y"));
-		};
-
-		if ($view_from_url == 1)
-		{
-			$use_template = "month";
-			$viewtype = "month";
-		};
-
-		if ($view_from_url == 2)
-		{
-			$use_template = "weekview";
-			$viewtype = "week";
-		};
-
-		if ($view_from_url == 3)
-		{
-			$use_template = "day";
-			$viewtype = "day";
-		};
-
-		$project_obj = $obj;
-
-		// no need for that .. I just get the type from url
-
-		// argh .. projekti otse vaatamin on ikka paras sitt kyll
-
-		$caldata = $cal_view->parse_alias(array(
-			"obj_inst" => $project_obj,
-			"use_template" => $use_template,
-			"event_template" => "project_event.tpl",
-			"viewtype" => $viewtype,
-			"status" => STAT_ACTIVE,
-			"skip_empty" => true,
-			"full_weeks" => true,
-			"start_from" => $start_from
-		));
-
-		classload("core/date/date_calc");
-		$dt = aw_global_get("date");
-		if (empty($dt))
-		{
-			$dt = date("d-m-Y");
-		};
-		$rg = get_date_range(array(
-			"type" => $viewtype,
-			"date" => $dt,
-		));
-
-		// it is possible to attach a document containing detailed description of
-		// the project to the project. If the connection is present show the document
-		// in the web
-
-		$lang_id = aw_global_get("lang_id");
-
-		/*
-		if (aw_global_get("uid") == "meff")
-		{
-			global $DUKE;
-			$DUKE = 1;
-		};
-		*/
-
-		/*
-			[15:17] <terryf_home> ongi sihuke kood
-			[15:17] <terryf_home>   if ($arr["from"] && $arr["from.class_id"] && $arr["type"])
-			[15:17] <terryf_home>   {
-			[15:17] <terryf_home> siis t6lgib from 2ra
-			[15:17] <terryf_home> ja muidu ei t6lgi
-			[15:18] <terryf_home> and I haven't goot the faintest idea, miks see nii on
-			[15:18] <terryf_home> ja mida see katki teeks kui ma selle 2ra muudan
-			[15:18] <duke> oki, loen siis k6ik seosed ja v6tan ise need mis mul vaja on
-		*/
-
-
-		$c = new connection();
-		$conns = $c->find(array(
-			"from" => $prj_obj->id(),
-			"from.class_id" => CL_PROJECT,
-			//"type" => 7,
-			"to.lang_id" => $lang_id,
-		));
-
-		/*
-		$conns = $prj_obj->connections_from(array(
-			"type" => "RELTYPE_PRJ_DOCUMENT",
-			"to.lang_id" => aw_global_get("lang_id"),
-		));
-		*/
-
-		$description = "";
-		$first = true;
-		if (is_array($conns))
-		{
-			foreach($conns as $conn)
-			{
-				if (!$first)
-				{
-					continue;
-				};
-
-				if ($conn["type"] != 7)
-				{
-					continue;
-				};
-
-				$t = get_instance(CL_DOCUMENT);
-				$description = $t->gen_preview(array(
-					"docid" => $conn["to"],
-					"leadonly" => -1,
-				));
-
-				$first = false;
-			};
-		};
-
-		$view_navigator = "";
-
-
-		foreach($views as $key => $val)
-		{
-			$this->vars(array(
-				"text" => $val,
-				"url" => aw_url_change_var("view",$key),
-			));
-			$tpl = ($view_from_url == $key) ? "ACTIVE_VIEW" : "VIEW";
-			$view_navigator .= $this->parse($tpl);
-		};
-
-		$this->vars(array(
-			"VIEW" => $view_navigator,
-			"calendar" => $caldata,
-			"prev" => aw_url_change_var("date",$rg["prev"]),
-			"next" => aw_url_change_var("date",$rg["next"]),
-			"description" => $description,
-		));
-
-		$rv =  $this->parse();
-		return $rv;
-	}
-
-	/** Returns an array of subproject id-s, suitable for feeding to object_list
-
-	**/
-
-	function _get_subprojects($arr)
-	{
-		if (sizeof($arr["from"]) == 0)
-		{
-			return array();
-		};
-		$conn = new connection();
-		$conns = $conn->find(array(
-			"from" => $arr["from"],
-			"from.class_id" => CL_PROJECT,
-			//"from.lang_id" => aw_global_get("lang_id"),
-			"type" => "RELTYPE_SUBPROJECT",
-		));
-
-		$res = array();
-		if (is_array($conns))
-		{
-			foreach($conns as $conn)
-			{
-				// this way I should get the translated object
-				//$to = new object($conn["to"]);
-				$to = $conn["to"];
-				//dbg::p1("created object instance is " . $to->name());
-				//dbg::p1("created object instance is " . $to->lang_id());
-				$from = $conn["from"];
-				//$res[$to->id()] = $to->id();
-				$res[$to] = $to;
-			};
-		};
-
-		return $res;
-	}
-
-	function get_master_project($o,&$level)
-	{
-		$o2 = $o;
-		$level = 0;
-		$parent_selections = array();
-
-		while ($o2 != false)
-		{
-			$level++;
-			$sp = $o->connections_to(array(
-				"type" => 1, // SUBPROJECT
-				"from.class_id" => CL_PROJECT,
-			));
-			$first = reset($sp);
-			if (is_object($first))
-			{
-				$o2 = $first->from();
-				array_unshift($parent_selections,$o2->id());
-			}
-			else
-			{
-				$o2 = false;
-			};
-			$tmp = $o;
-			$o = $o2;
-		};
-
-		return $tmp;
-	}
-
-	function get_event_overview($arr)
-	{
-		// saan ette project id, alguse ja l6pu
-		$rv = array();
-		$ol = new object_list(array(
-			"parent" => $arr["id"],
-			"sort_by" => "planner.start",
-			"site_id" => array(),
-			new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
-			new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN,array("start1", "end"), array($arr["start"], $arr["end"]))
-		));
-
-		foreach($ol->arr() as $o)
-		{
-			$id = $o->id();
-			$dstart = (int)($o->prop("start1") / 86400);
-			$dend = (int)($o->prop("end") / 86400);
-			$rv[] = array(
-				"url" => "/" . $o->id(),
-				"start" => $o->prop("start1"),
-			);
-			if ($dend > $dstart)
-			{
-				for ($i = $dstart + 1; $i <= $dend; $i = $i + 1)
-				{
-					$rv[] = array(
-						"url" => "/" . $o->id(),
-						"start" => $i * 86400,
-					);
-				};
-			};
-		};
-		return $rv;
-	}
-
-	function _goal_tb($arr)
-	{
-		$t =& $arr["prop"]["toolbar"];
-
-		$t->add_menu_button(array(
-			"name" => "new",
-			"img" => "new.gif",
-			"tooltip" => t("Lisa")
-		));
-		/*$t->add_menu_item(array(
-			"name" => "new_goal",
-			"parent" => "new",
-			"link" => html::get_new_url(
-				CL_PROJECT_GOAL,
-				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
-				array("return_url" => get_ru())
-			),
-			"text" => t("Verstapost"),
-		))*/;
-		$ord = $arr["obj_inst"]->prop("orderer");
-		if (is_array($ord))
-		{
-			$ord = reset($ord);
-		}
-		if(empty($arr["request"]["tf"]))
-		{
-			$arr["request"]["tf"] = "";
-		}
-		$t->add_menu_item(array(
-			"name" => "new_event",
-			"parent" => "new",
-			"link" => html::get_new_url(
-				CL_TASK,
-				$arr["obj_inst"]->id(),
-				array(
-					"return_url" => get_ru(),
-					"alias_to_org" => $ord,
-					"set_proj" => $arr["obj_inst"]->id(),
-					"set_pred" => $arr["request"]["tf"]
-				)
-			),
-			"text" => t("Toimetus"),
-		));
-		$t->add_menu_item(array(
-			"name" => "new_call",
-			"parent" => "new",
-			"link" => html::get_new_url(
-				CL_CRM_CALL,
-				$arr["obj_inst"]->id(),
-				array(
-					"return_url" => get_ru(),
-					"alias_to_org" => $ord,
-					"set_proj" => $arr["obj_inst"]->id(),
-					"set_pred" => $arr["request"]["tf"]
-				)
-			),
-			"text" => t("K&otilde;ne"),
-		));
-		$t->add_menu_item(array(
-			"name" => "new_meeting",
-			"parent" => "new",
-			"link" => html::get_new_url(
-				CL_CRM_MEETING,
-				$arr["obj_inst"]->id(),
-				array(
-					"return_url" => get_ru(),
-					"alias_to_org" => $ord,
-					"set_proj" => $arr["obj_inst"]->id(),
-					"set_pred" => $arr["request"]["tf"]
-				)
-			),
-			"text" => t("Kohtumine"),
-		));
-
-		$t->add_menu_item(array(
-			"name" => "new_bug",
-			"parent" => "new",
-			"link" => html::get_new_url(
-				CL_BUG,
-				$arr["obj_inst"]->id(),
-				array(
-					"return_url" => get_ru(),
-					"alias_to_org" => $ord,
-					"set_proj" => $arr["obj_inst"]->id(),
-					"set_pred" => $arr["request"]["tf"]
-				)
-			),
-			"text" => t("Arendus&uuml;lesanne"),
-		));
-
-		$t->add_button(array(
-			"name" => "delete",
-			"img" => "delete.gif",
-			"action" => "del_goals",
-			"tooltip" => t("Kustuta"),
-		));
-
-		$t->add_separator();
-		$t->add_button(array(
-			"name" => "cut",
-			"img" => "cut.gif",
-			"action" => "cut_goals",
-			"tooltip" => t("L&otilde;ika"),
-		));
-
-		if (is_array($_SESSION["proj_cut_goals"]) && count($_SESSION["proj_cut_goals"]))
-		{
-			$t->add_button(array(
-				"name" => "paste",
-				"img" => "paste.gif",
-				"action" => "paste_goals",
-				"tooltip" => t("Kleebi"),
-			));
-		}
-	}
-
 	function _get_bills_tree($arr)
 	{
 		$tv =& $arr["prop"]["vcl_inst"];
@@ -4056,7 +2658,7 @@ class project extends class_base
 		$states = $bills_inst->states + array("90" => t("K&otilde;ik"));
 		foreach($states as $stat_id => $state)
 		{
-			if($bill_state_count[$stat_id])
+			if(isset($bill_state_count[$stat_id]))
 			{
 				$state.= " (".$bill_state_count[$stat_id].")";
 			}
@@ -4072,7 +2674,7 @@ class project extends class_base
 		}
 	}
 
-	function _get_bills_table($arr)
+	function _get_bills_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 
@@ -4171,6 +2773,7 @@ class project extends class_base
 		$balance = $cg = 0;//$cg - currency grouping... if there are different currencies
 		$bills_inst = get_instance(CL_CRM_BILL);
 		$bills_inst->states;
+		$sum = $balance = 0;
 
 
 		foreach($bills->arr() as $bill)
@@ -4178,7 +2781,7 @@ class project extends class_base
 			$cm = $partial = "";
 			$payments_total = 0;
 
-			$cursum = $own_currency_sum = $bill_i->get_bill_sum($bill,$tax_add);
+			$cursum = $own_currency_sum = $bill_i->get_bill_sum($bill);
 			$curid = $bill->get_bill_currency_id();
 			$cur_name = $bill->get_bill_currency_name();
 
@@ -4201,6 +2804,9 @@ class project extends class_base
 				$sum_str = number_format($own_currency_sum, 2);
 			}
 
+
+			$state = "";
+			$partial = "";
 			if($bill->prop("state") == 3 && $bill->prop("partial_recieved") && $bill->prop("partial_recieved") < $cursum)
 			{
 				$partial = '<br>'.t("osaliselt");
@@ -4230,7 +2836,7 @@ class project extends class_base
 			//hilinenud
 			if(($bill->prop("state") == 1 || $bill->prop("state") == 6 || $bill->prop("state") == -6) && $bill->prop("bill_due_date") < time())
 			{
-				$bill_data["late"] = (int)((time() - $bill->prop("bill_due_date")) / (3600*24));
+				$bill_data["late"] = (int)((time() - $bill->prop("bill_due_date")) / (DAY_LENGTH_SECONDS));
 			}
 
 			//laekumiskuup2ev
@@ -4287,7 +2893,8 @@ class project extends class_base
 		$t->set_sortable(false);
 
 		$final_dat = array(
-			"bill_no" => t("<b>Summa</b>")
+			"bill_no" => t("<b>Summa</b>"),
+			"balance" => "",
 		);
 
 		if($cg)
@@ -4339,18 +2946,10 @@ class project extends class_base
 	}
 
 
-
 	function _get_create_bill_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-/*
-		$tb->add_button(array(
-			'name' => 'new',
-			'img' => 'new.gif',
-			'tooltip' => t('Lisa'),
-			'url' => html::get_new_url(CL_CRM_BILL, $arr["obj_inst"]->id(), array("return_url" => get_ru() , "project" => $arr["obj_inst"]->id()))
-		));
-*/
+
 		$tb->add_button(array(
 			'name' => 'create_bill',
 			'img' => 'save.gif',
@@ -4381,116 +2980,6 @@ exit_function("bills::all_cust_bills");
 		}
 	}
 
-	/**
-		@attrib name=create_bill all_args=1
-	**/
-	function create_bill($arr)
-	{
-		foreach($arr as $k => $v)
-		{
-			if (substr($k, 0, 3) == "sel")
-			{
-				foreach($v as $v_id)
-				{
-					$arr["sel"][$v_id] = $v_id;
-				}
-			}
-		}
-
-		//klientide kontroll ka vaja
-		$project = obj($arr["id"]);
-		if(isset($arr["bill_id"]) && $this->can("view", $arr["bill_id"]))
-		{
-			$bill = obj($arr["bill_id"]);
-		}
-		elseif(isset($_SESSION["bill_id"]) && $this->can("view", $_SESSION["bill_id"]))
-		{
-			$bill = obj($_SESSION["bill_id"]);
-			unset($_SESSION["bill_id"]);
-		}
-		else
-		{
-			$bill = $project->add_bill();
-		}
-		$bill->add_rows(array(
-			"objects" => $arr["sel"],
-		));
-		$create_bill_ru = html::get_change_url($arr["id"], array("group" => "create_bill"));
-		return html::get_change_url($bill->id(),array("return_url" => $create_bill_ru,));
-	}
-
-	function callback_mod_layout(&$arr)
-	{
-		switch($arr["name"])
-		{
-//			case "bills_left":
-//				$arr["area_caption"] = sprintf(t("%s arved staatuste kaupa"), $arr["obj_inst"]->name());
-//				break;
-			case "task_types_search_lay":
-				$arr["area_caption"] = sprintf(t("Otsingu parameetrid"));
-				break;
-			case "task_types_tree_lay":
-				$arr["area_caption"] = sprintf(t("Tegevused t&uuml;&uuml;pide kaupa"));
-				break;
-			case "task_table":
-				$arr["area_caption"] = sprintf(t("Projekti %s tegevused"), $arr["obj_inst"]->name());
-				break;
-			case "create_bill_table":
-				$arr["area_caption"] = sprintf(t("Projekti %s tehtud arveta t&ouml;&ouml;de nimekiri"), $arr["obj_inst"]->name());
-				break;
-			case "bills_r":
-				$var = 10;
-				if(isset($_GET["st"]))
-				{
-					$var = $_GET["st"];
-				}
-				if($var == 14)
-				{
-					$state = t("Krediit");
-				}
-				elseif($var == 15)
-				{
-					$state = t("Tehtud krediit");
-				}
-				else
-				{
-					$bills_inst = get_instance(CL_CRM_BILL);
-					$states = $bills_inst->states + array("90" => t("K&otilde;ik"));
-					$state = $states[$var-10]." ";
-				}
-				$arr["area_caption"] = sprintf(t("Projekti %s %sarved"), $arr["obj_inst"]->name(), strtolower($state));
-				break;
-		}
-		return true;
-	}
-
-	function callback_generate_scripts($arr)
-	{
-		$sc = "";
-		$sc.= "
-			function openall()
-			{
-				var allElements = document.getElementsByName(\"bug_comments_table\");
-				len = allElements.length;
-				for (i=0; i < len; i++)
-				{
-					el=document.getElementsByName(\"bug_comments_table\")[i];
-					if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){
-						if(el.style.display == \"block\")
-							{ d = \"none\";}
-						else { d = \"block\";} }
-					else {
-						if (el.style.display == \"table-row\") {
-							d = \"none\";
-						}
-						else {d = \"table-row\";}
-					}
-					el.style.display=d;
-				}
-			}";
-		return $sc;
-
-	}
 
 	function _get_work_list($arr)
 	{
@@ -4500,7 +2989,6 @@ exit_function("bills::all_cust_bills");
 			"caption" => t("<a href='javascript:void(0)' onclick='openall();'>Ava</a>"),
 			"name" => "open",
 			"align" => "center",
-//			"sortable" => 1
 			"chgbgcolor" => "color"
 		));
 
@@ -4508,59 +2996,22 @@ exit_function("bills::all_cust_bills");
 			"caption" => t("Juhtumi nimi"),
 			"name" => "name",
 			"align" => "center",
-//			"sortable" => 1
 			"chgbgcolor" => "color"
 		));
 
-		$t->define_field(array(
-			"caption" => t("Tunde"),
-			"name" => "hrs",
-			"align" => "right",
-//			"sortable" => 1
-			"chgbgcolor" => "color"
+		$t->set_default("align" , "right");
+		$t->set_default("chgbgcolor" , "color");
+		$t->add_fields(array(
+			"hrs"=> t("Tunde"),
+			"hrs_cust" => t("Tunde kliendile"),
+			"hr_price" => t("Tunni hind"),
+			"sum" => t("Summa"),
 		));
-
-		$t->define_field(array(
-			"caption" => t("Tunde kliendile"),
-			"name" => "hrs_cust",
-			"align" => "right",
-//			"sortable" => 1
-			"chgbgcolor" => "color"
-		));
-
-		$t->define_field(array(
-			"caption" => t("Tunni hind"),
-			"name" => "hr_price",
-			"align" => "right",
-//			"sortable" => 1
-			"chgbgcolor" => "color"
-		));
-
-		$t->define_field(array(
-			"caption" => t("Summa"),
-			"name" => "sum",
-			"align" => "right",
-//			"sortable" => 1
-			"chgbgcolor" => "color"
-		));
-/*
-		$t->define_field(array(
-			"caption" => t("Arvele m&auml;&auml;ramise kuup&auml;ev"),
-			"name" => "set_date",
-			"align" => "right",
-//			"sortable" => 1,
-//			"type" => "time",
-//			"format" => "d.m.Y"
-		));
-*/
 
 		$t->define_field(array(
 			"caption" => t("tegevuse kuup&auml;ev"),
 			"name" => "date",
 			"align" => "right",
-//			"sortable" => 1,
-//			"type" => "time",
-//			"format" => "d.m.Y"
 			"chgbgcolor" => "color"
 		));
 
@@ -4781,15 +3232,14 @@ exit_function("bills::all_cust_bills");
 
 	function _get_task_persons_tree($arr)
 	{
-		classload("core/icons");
-		$act = $arr["request"]["person"];
+		$act = empty($arr["request"]["person"]) ? null : $arr["request"]["person"];
 		$tv =& $arr["prop"]["vcl_inst"];
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"persist_state" => true,
 			"tree_id" => "proj_task_persons",
 		));
-		if(sizeof(explode("_" , $arr["request"]["tf"])))
+		if(isset($arr["request"]["tf"]) && sizeof(explode("_" , $arr["request"]["tf"])))
 		{
 			$type = explode("_" , $arr["request"]["tf"]);
 			if($type[0] == CL_BUG)
@@ -4798,12 +3248,15 @@ exit_function("bills::all_cust_bills");
 			}
 		}
 
-
 		$people = array();
 		$bugs_data = $arr["obj_inst"]->get_bugs_data();
 		foreach($bugs_data as $bug => $data)
 		{
-			if($data["bug_status"] == $status)
+			if(!isset($people[$data["who"]]))
+			{
+				$people[$data["who"]] = 0;
+			}
+			if(isset($status) && $data["bug_status"] == $status)
 			{
 				$people[$data["who"]]+=1;
 			}
@@ -4833,10 +3286,9 @@ exit_function("bills::all_cust_bills");
 		}
 	}
 
-	function _task_types_tree($arr)
+	private function _task_types_tree($arr)
 	{
-		classload("core/icons");
-		$act = $arr["request"]["tf"];
+		$act = empty($arr["request"]["tf"]) ? null : $arr["request"]["tf"];
 		$tv =& $arr["prop"]["vcl_inst"];
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
@@ -4868,6 +3320,14 @@ exit_function("bills::all_cust_bills");
 		$tasks_count = array();
 		foreach($tasks_data as $bd)
 		{
+			if(!isset($tasks_count[$bd["class_id"]]))
+			{
+				$tasks_count[$bd["class_id"]] = array();
+			}
+			if(!isset($tasks_count[$bd["class_id"]][$bd["is_done"]]))
+			{
+				$tasks_count[$bd["class_id"]][$bd["is_done"]] = 0;
+			}
 			$tasks_count[$bd["class_id"]][$bd["is_done"]] ++;
 		}
 
@@ -4882,7 +3342,7 @@ exit_function("bills::all_cust_bills");
 				$name = $name." (".array_sum($bugs_count).")";
 			}
 
-			if($tasks_count[$clid])
+			if(isset($tasks_count[$clid]))
 			{
 				$name = $name." (".array_sum($tasks_count[$clid]).")";
 			}
@@ -4902,7 +3362,7 @@ exit_function("bills::all_cust_bills");
 		//bugi staatuste kaupa
 		foreach($bug_inst->bug_statuses as $stat_id => $caption)
 		{
-			if($bugs_count[$stat_id])
+			if(!empty($bugs_count[$stat_id]))
 			{
 				$caption = $caption." (".$bugs_count[$stat_id].")";
 			}
@@ -4969,7 +3429,7 @@ exit_function("bills::all_cust_bills");
 		$clid = CL_CRM_CALL;
 		$tf = $clid."_0";
 		$nm = t("Plaanis olevad");
-		if($tasks_count[$clid][0])
+		if(isset($tasks_count[$clid][0]))
 		{
 			$nm = $nm." (".$tasks_count[$clid][0].")";
 		}
@@ -4990,59 +3450,10 @@ exit_function("bills::all_cust_bills");
 				"url" => aw_url_change_var("tf", $tf),
 		));
 
-
-
-/*
-
-		$ol = new object_list(array(
-			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
-//			"project" => $arr["obj_inst"]->id(),
-			"CL_TASK.RELTYPE_PROJECT.id" => $arr["obj_inst"]->id(),
-			"is_goal" => 1,
-//			"lang_id" => 1,
-			"brother_of" => new obj_predicate_prop("id")
-		));
-		$ids = $this->make_keys($ol->ids());
-		// now make tree, based on predicate tasks
-
-
-
-		foreach($ol->arr() as $o)
-		{
-			$nm = parse_obj_name($o->name());
-			if ($arr["request"]["tf"] == $o->id())
-			{
-				$nm = "<b>".$nm."</b>";
-			}
-
-			$pt = $o->prop("predicates");
-			if (is_array($pt))
-			{
-				$pt = $this->make_keys($pt);
-				unset($pt["0"]);
-				$pt = reset($pt);
-			}
-			if (!$this->can("view", $pt))
-			{
-				$pt = $arr["obj_inst"]->id();
-			}
-			if (!isset($ids[$pt]))
-			{
-				$pt = $arr["obj_inst"]->id();
-			}
-			$tv->add_item($pt, array(
-				"name" => $nm,
-				"id" => $o->id(),
-				"url" => aw_url_change_var("tf", $o->id()),
-				"iconurl" => icons::get_icon_url(CL_MENU)
-			));
-		}*/
-
 	}
 
 	function _goal_tree($arr)
 	{
-		classload("core/icons");
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
 //			"project" => $arr["obj_inst"]->id(),
@@ -5101,43 +3512,35 @@ exit_function("bills::all_cust_bills");
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
-//			"align" => "left",
 			"sortable" => 1
 		));
 
+		$t->add_fields(array(
+			"impl" => t("Osalejad"),
+			"status" => t("Staatus"),
+			"start1" => t("Algus"),
+			"end" => t("L&otilde;pp"),
+		));
+
 		$t->define_field(array(
-			"name" => "impl",
-			"caption" => t("Osalejad"),
-//			"align" => "left",
+			"name" => "time",
+			"caption" => t("Kulunud aeg"),
 			"sortable" => 1
 		));
-
 		$t->define_field(array(
-			"name" => "status",
-			"caption" => t("Staatus"),
-//			"align" => "left"
+			"name" => "guess",
+			"caption" => t("Prognoositud"),
+			"sortable" => 1,
+			"parent" => "time",
+			"align" => "right"
 		));
-
 		$t->define_field(array(
-			"name" => "start1",
-			"caption" => t("Algus"),
-//			"align" => "left",
-/*			"sortable" => 1,
-			"type" => "time",
-			"format" => "d.m.Y H:i",
-			"numeric" => 1
-*/		));
-
-		$t->define_field(array(
-			"name" => "end",
-			"caption" => t("L&otilde;pp"),
-//			"align" => "left",
-/*			"sortable" => 1,
-			"type" => "time",
-			"format" => "d.m.Y H:i",
-			"numeric" => 1
-*/		));
-
+			"name" => "real",
+			"caption" => t("Tegelik"),
+			"sortable" => 1,
+			"parent" => "time",
+			"align" => "right"
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -5160,7 +3563,7 @@ exit_function("bills::all_cust_bills");
 				case CL_BUG:
 					$tasks = $arr["obj_inst"]->get_bugs(array(
 						"status" => $tf[1],
-						"implementor" => $arr["request"]["person"],
+						"implementor" => isset($arr["request"]["person"]) ? $arr["request"]["person"] : null,
 					));
 					break;
 
@@ -5184,7 +3587,7 @@ exit_function("bills::all_cust_bills");
 		{
 			$tasks = new object_list();
 
-			if($arr["request"]["search_part"] || $arr["request"]["search_start"] || $arr["request"]["search_end"] || $arr["request"]["search_type"])
+			if(isset($arr["request"]["search_part"]) || isset($arr["request"]["search_start"]) || isset($arr["request"]["search_end"]) || isset($arr["request"]["search_type"]))
 			{
 				$search = array();
 				if($arr["request"]["search_part"])
@@ -5220,12 +3623,18 @@ exit_function("bills::all_cust_bills");
 				}
 			}
 		}
-
-
-//		$goals = new object_list();
-
-		//$goals = $arr["obj_inst"]->get_goals($parent);
-
+enter_function("stats::task_data");
+		$bug = get_instance(CL_BUG);
+		$rows = $arr["obj_inst"]->get_rows_data();
+		$real_times = array();
+		$guess_times = array();
+		foreach($rows as $row)
+		{
+			if(!isset($real_times[$row["task"]])) $real_times[$row["task"]] = 0;
+			if(!isset($guess_times[$row["task"]])) $guess_times[$row["task"]] = 0;
+			$real_times[$row["task"]]+= $row["time_real"];
+			$guess_times[$row["task"]]+= $row["time_guess"];
+		}
 		foreach($tasks->arr() as $goal)
 		{
 			$goal_data = array(
@@ -5237,6 +3646,8 @@ exit_function("bills::all_cust_bills");
 				"oid" => $goal->id(),
 				"class" => $goal->class_id(),
 				"end" => $goal->prop("end") ? date("d.m.Y H:i",  $goal->prop("end")) : "",
+				"real" => empty($real_times[$goal->id()]) ? 0 : $real_times[$goal->id()],
+				"guess" => empty($guess_times[$goal->id()]) ? 0 : $guess_times[$goal->id()],
 			);
 			switch($goal->class_id())
 			{
@@ -5249,32 +3660,15 @@ exit_function("bills::all_cust_bills");
 				case CL_BUG:
 					$goal_data["start1"] = date("d.m.Y H:i",  $goal->created());
 					$goal_data["impl"] = join(", " ,$goal->get_participants()->names());
-					$bug = new bug();
+
 					$bug_status_list = $bug->get_status_list();
 					$goal_data["status"] = $bug_status_list[$goal->prop("bug_status")];
 					break;
 			}
 
-
 			$t->define_data($goal_data);
 		}
-//		$t->data_from_ol($goals, array("change_col" => "name"));*/
-	}
-
-	/**
-
-		@attrib name=del_goals
-
-	**/
-	function del_goals($arr)
-	{
-		if (is_array($arr["sel"]) && count($arr["sel"]))
-		{
-			$ol = new object_list(array("oid" => $arr["sel"]));
-			$ol->delete();
-		}
-
-		return $arr["post_ru"];
+exit_function("stats::task_data");
 	}
 
 	function _goals_gantt($arr)
@@ -5289,14 +3683,14 @@ exit_function("bills::all_cust_bills");
 		$subdivisions = 1;
 		$subdivisions = ((int)6/$columns)*4;
 		$days = array ("P", "E", "T", "K", "N", "R", "L");
-		$column_length = 86400;
+		$column_length = DAY_LENGTH_SECONDS;
 
 		if($arr["request"]["units"] == "months")
 		{
 			$days = array (t("Jaanuar"), t("Veebruar"), t("M&auml;rts"), t("Aprill"), t("Mai"), t("Juuni"), t("Juuli"), t("August"), t("September"), t("Oktoober"), t("November"), t("Detsember"));
 			$subdivisions = 1;
 			$subdivisions = (int)(10/$columns)*3;
-			$column_length = 86400*30.5;
+			$column_length = DAY_LENGTH_SECONDS*30.5;
 		}
 
 		if($arr["request"]["units"] == "weeks")
@@ -5309,15 +3703,9 @@ exit_function("bills::all_cust_bills");
 				$x++;
 			}
 			$subdivisions = (int)(4/$columns)*7;
-			$column_length = 86400*7;
+			$column_length = WEEK_LENGTH_SECONDS;
 		}
 
-		// get all goals/tasks
-	/*	$ot = new object_tree(array(
-			"parent" => $arr["obj_inst"]->id(),
-			"class_id" => array(CL_PROJECT_GOAL,CL_TASK),
-		));*/
-//		$gt_list = $ot->to_list();
 		$gt_list = $arr["obj_inst"]->get_goals();
 
 		$range_start = 2000000000;
@@ -5366,7 +3754,7 @@ exit_function("bills::all_cust_bills");
 
 				case CL_BUG:
 					$start = $gt->created();
-					$length = $gt->num_hrs_real * 3600;
+					$length = $gt->num_hrs_real * HOUR_LENGTH_SECONDS;
 					$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
 					break;
 			}
@@ -5401,21 +3789,21 @@ exit_function("bills::all_cust_bills");
 
 		while ($i < $columns)
 		{
-			$day_start = ($range_start + ($i * 86400));
+			$day_start = ($range_start + ($i * DAY_LENGTH_SECONDS));
 			$day = date ("w", $day_start);
 			$date = date ("j/m/Y", $day_start);
 			$title = $days[$day] . " - " . $date;
 			if($arr["request"]["units"] == "weeks")
 			{
-				$day_start = ($range_start + ($i * 86400*7));
+				$day_start = ($range_start + ($i * WEEK_LENGTH_SECONDS));
 				$day = (int)date ("W", $day_start);
 				$date = date ("j/m/Y", $day_start);
-				$date.= " - " .date ("j/m/Y", $day_start+ 86400*6);
+				$date.= " - " .date ("j/m/Y", $day_start+ DAY_LENGTH_SECONDS*6);
 				$title = $days[$day] . " " . $date;
 			}
 			if($arr["request"]["units"] == "months")
 			{
-				$day_start = ($range_start + ($i * 86400*30.5));
+				$day_start = ($range_start + ($i * DAY_LENGTH_SECONDS*30.5));
 				$day = (int)date ("m", $day_start) - 1;
 				$date = date ("m/Y", $day_start);
 				$title = $days[$day] . " " . $date;
@@ -5450,22 +3838,22 @@ exit_function("bills::all_cust_bills");
 		{
 			$columns = 7;
 			if(!$column_n) $column_n = $columns;
-			$last = $last - 86400*$column_n;
-			$next = $next + 86400*$column_n;
+			$last = $last - DAY_LENGTH_SECONDS*$column_n;
+			$next = $next + DAY_LENGTH_SECONDS*$column_n;
 		}
 		if($units == "weeks")
 		{
 			$columns = 8;
 			if(!$column_n) $column_n = $columns;
-			$last = $last - 86400*7*$column_n;
-			$next = $next + 86400*7*$column_n;
+			$last = $last - WEEK_LENGTH_SECONDS*$column_n;
+			$next = $next + WEEK_LENGTH_SECONDS*$column_n;
 		}
 		if($units == "months")
 		{
 			$columns = 6;
 			if(!$column_n) $column_n = $columns;
-			$last = $last - 86400*30.5*$column_n;
-			$next = $next + 86400*30.5*$column_n;
+			$last = $last - DAY_LENGTH_SECONDS*30.5*$column_n;
+			$next = $next + DAY_LENGTH_SECONDS*30.5*$column_n;
 		}
 		$links = "";
 		$x = 0;
@@ -5600,114 +3988,6 @@ exit_function("bills::all_cust_bills");
 		return "";
 	}
 
-	function callback_post_save($arr)
-	{
-		// write implementor and orderer
-		if (!$this->can("view", $arr["obj_inst"]->prop("implementor")))
-		{
-			$imp = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_IMPLEMENTOR");
-			if ($imp)
-			{
-				$arr["obj_inst"]->set_prop("implementor", $imp->id());
-				$save = true;
-			}
-		}
-		if (!$this->can("view", $arr["obj_inst"]->prop("orderer")))
-		{
-			$imp = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_ORDERER");
-			if ($imp)
-			{
-				$arr["obj_inst"]->set_prop("orderer", $imp->id());
-				$save = true;
-			}
-		}
-
-		if ($save)
-		{
-			$arr["obj_inst"]->save();
-		}
-		if ($this->do_create_task == 1)
-		{
-			$this->_create_task($arr);
-		}
-
-		if($arr["request"]["participants"])
-		{
-			$ps = get_instance('vcl/popup_search');
-			$ps->do_create_rels($arr['obj_inst'], $arr["request"]["participants"], RELTYPE_PARTICIPANT);
-		}
-		if(substr_count($arr["request"]["return_url"] , "action=new") && (substr_count($arr["request"]["return_url"] , "class=crm_task") || substr_count($arr["request"]["return_url"] , "class=crm_call") || substr_count($arr["request"]["return_url"] , "class=crm_meeting")))
-		{
-			$_SESSION["add_to_task"]["project"] = $arr["obj_inst"]->id();
-		}
-	}
-
-	function _mk_tbl()
-	{
-		$this->db_query("
-			create table aw_projects(
-				aw_oid int primary key,
-				aw_state int,
-				aw_start int,
-				aw_end int,
-				aw_deadline int,
-				aw_doc int,
-				aw_skip_subproject_events int,
-				aw_project_navigator int,
-				aw_use_template int,
-				aw_doc_id int,
-				aw_user1 varchar(255),
-				aw_user2 varchar(255),
-				aw_user3 varchar(255),
-				aw_user4 varchar(255),
-				aw_user5 varchar(255),
-				aw_userch1 int,
-				aw_userch2 int,
-				aw_userch3 int,
-				aw_userch4 int,
-				aw_userch5 int
-		)");
-		$q = "SELECT * FROM objects WHERE class_id = ".CL_PROJECT." AND status > 0";
-		$this->db_query($q);
-		aw_disable_acl();
-		while($row = $this->db_next())
-		{
-			$this->save_handle();
-			$this->db_query("INSERT INTO aw_projects(aw_oid) values(".$row["oid"].")");
-			$o = obj($row["oid"]);
-			$pl = $o->get_property_list();
-			foreach($pl as $pn => $pd)
-			{
-				if ($pd["table"] == "aw_projects")
-				{
-					flush();
-					$o->set_prop($pn, $o->meta($pn));
-				}
-			}
-			$o->save();
-
-			$this->restore_handle();
-		}
-		aw_restore_acl();
-	}
-
-	function _proc_cp($ord, &$data)
-	{
-		$res = array();
-		if ($ord)
-		{
-			$wl = array();
-			$i = get_instance(CL_CRM_COMPANY);
-			$i->get_all_workers_for_company($ord, &$wl);
-			if (count($wl))
-			{
-				$ol = new object_list(array("oid" => $wl));
-				$res = array("" => t("--Vali--")) + $ol->names();
-			}
-		}
-		$data["options"] = $res;
-	}
-
 	function _sides_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -5800,72 +4080,25 @@ exit_function("bills::all_cust_bills");
 		$t->set_sortable(false);
 	}
 
-	/**
-		@attrib name=del_sides
-	**/
-	function del_sides($arr)
-	{
-		$o = obj($arr["id"]);
-		foreach(safe_array($arr["sel"]) as $id)
-		{
-			$o->disconnect(array(
-				"from" => $id
-			));
-			/*					"onClick" => "aw_popup_scroll('".$search_url."','_spop',600,500)",*/
-
-		}
-
-		return $arr["post_ru"];
-	}
-
-	/**
-		@attrib name=pop_side_search
-	**/
-	function pop_side_search($arr)
-	{
-		$h = get_instance("cfg/htmlclient");
-		$h->start_output();
-
-		$els = array(
-			"s_name" => array("caption" => t("Nimi"), "type" => "textbox", "size" => 30),
-			"s_class_id" => array("caption" => t("T&uuml;&uuml;p"), "type" => "select", "options" => array("" => "", CL_CRM_PERSON => t("Isik"), CL_CRM_COMPANY => t("Organisatsioon"))),
-		);
-
-		foreach($els as $k => $v)
-		{
-			$v["name"] = $k;
-			$v["value"] = $_GET[$k];
-
-			$h->add_property($v);
-		}
-
-		$h->put_submit(array());
-		$h->finish_output(array(
-			"method" => "GET",
-			"action" => "pop_side_search",
-			"data" => array(
-				"orb_class" => "project",
-				"id" => $_GET["id"]
-			),
-			"sbt_caption" => t("Otsi")
-		));
-		$html = $h->get_result();
-
-		$content = $this->_get_pop_s_res_t($arr);
-		$content .= html::submit(array(
-			"value" => t("Vali")
-		));
-		$content .= $this->mk_reforb("save_pop_s_res", array("id" => $_GET["id"]));
 
 
-		$html .= html::form(array(
-			"method" => "POST",
-			"action" => "orb.aw",
-			"content" => $content
-		));
 
-		return $html;
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-------------------------- *********************** minge m****
 
 	function _get_pop_s_res_t($arr)
 	{
@@ -5916,8 +4149,8 @@ exit_function("bills::all_cust_bills");
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$timestamp = isset($arr["request"]["event_time_list_search_start"]) ? date_edit::get_timestamp($arr["request"]["event_time_list_search_start"]) : time();
-		$start = $beginning = ((date("W", $timestamp) - 1)*7 - date("N" , $timestamp))*24*3600 + mktime(0,0,0,1,1,date("Y", $timestamp));//date("d.m.Y" , date("W", $timestamp)*7*3600+mktime(0,0,0,1,1,date("Y", $timestamp)));
-		$end = isset($arr["request"]["event_time_list_search_end"]) ? date_edit::get_timestamp($arr["request"]["event_time_list_search_end"]) :$start + 6*24*3600 - 1;
+		$start = $beginning = ((date("W", $timestamp) - 1)*7 - date("N" , $timestamp))*DAY_LENGTH_SECONDS + mktime(0,0,0,1,1,date("Y", $timestamp));//date("d.m.Y" , date("W", $timestamp)*7*3600+mktime(0,0,0,1,1,date("Y", $timestamp)));
+		$end = isset($arr["request"]["event_time_list_search_end"]) ? date_edit::get_timestamp($arr["request"]["event_time_list_search_end"]) :$start + 6*DAY_LENGTH_SECONDS - 1;
 		$t->define_field(array(
 			"name" => "name",
 			"caption" =>t("&Uuml;lesande nimi"),
@@ -5962,7 +4195,7 @@ exit_function("bills::all_cust_bills");
 				"align" => "right",
 			"chgbgcolor" => "color"
 			));
-			$start+= 24*3600;
+			$start+= DAY_LENGTH_SECONDS;
 		}
 
 		$t->define_field(array(
@@ -6865,12 +5098,22 @@ exit_function("bills::all_cust_bills");
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 
-		$t->add_button(array(
+		$t->add_js_new_button(array(
 			"name" => "new",
-			"img" => "new.gif",
-			"tooltip" => t("Editegur"),
-			"url" => html::get_new_url(CL_PROJECT_STRAT_GOAL, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 17))
+			"promts" => array("name" => t("Sisesta uue objekti nimi")),
+			"refresh" => array("strat"),
+			"parent" => $arr["obj_inst"]->id(),
+			"connect" => "RELTYPE_STRAT",
+			"clid" => CL_PROJECT_STRAT_GOAL,
 		));
+
+//		$t->add_button(array(
+//			"name" => "new",
+//			"img" => "new.gif",
+//			"tooltip" => t("Editegur"),
+//			"url" => html::get_new_url(CL_PROJECT_STRAT_GOAL, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 17))
+//		));
+
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -8262,7 +6505,7 @@ arr($stats_by_ppl);
 		if ($arr["request"]["show_last"])
 		{
 			classload("core/date/date_calc");
-			$com_list = $arr["obj_inst"]->get_bug_comments(get_day_start()-24*3600)->arr();
+			$com_list = $arr["obj_inst"]->get_bug_comments(get_day_start()-DAY_LENGTH_SECONDS)->arr();
 		}
 		else
 		{
@@ -8362,52 +6605,7 @@ arr($stats_by_ppl);
 		}
 	}
 
-	/**
-		@attrib name=daily_stats_type_check nologin="1"
-	**/
-	function daily_stats_type_check($arr)
-	{
-		get_instance("users")->login(array("uid" => aw_ini_get("project.default_uid"), "password" => aw_ini_get("project.default_password")));
-		$ol = new object_list(array(
-			"class_id" => CL_PROJECT,
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
 
-		$send = array();
-		foreach($ol->arr() as $o)
-		{
-			if (!$this->can("view", $o->proj_mgr))
-			{
-				continue;
-			}
-			$eml = $o->prop("proj_mgr.email.mail");
-			if (!is_email($eml))
-			{
-				continue;
-			}
-			classload("core/date/date_calc");
-			$com_list = $o->get_bug_comments(get_day_start()-24*3600)->arr();
-			if (count($com_list) > 0)
-			{
-				// send mail to maintainer
-				$send[$eml][] = $o->id;
-			}
-		}
-
-		foreach($send as $email => $projs)
-		{
-			$ct = "Tere!\n\nTeie projektidesse on lisandunud tegevusi. Palun m2rkige nende tyybid:\n\n";
-			foreach($projs as $proj)
-			{
-				$ct .= $this->mk_my_orb("change", array("id" => $proj, "group" => "stats_entry", "show_last" => 1), "project")."\n";
-			}
-
-			echo "send mail to $email <pre>$ct</pre><Br>";
-			send_mail($email, t("Uued projekti tegevused"), $ct, "From: ".aw_ini_get("baseurl")." <info@struktuur.ee>");
-		}
-		die("all done");
-	}
 
 	function _get_stats_money_by_person_chart($arr)
 	{
@@ -9301,6 +7499,1127 @@ arr($stats_by_ppl);
 		));
 		return $val;
 	}
+
+	private function get_all_works_sum()
+	{
+		if(isset($this->all_work_sum))
+		{
+			return $this->all_work_sum;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	private function month_selector($start , $end, $month_chooser = array())
+	{
+		$ret = "";
+		$mY = "";
+		if(!$end)
+		{
+			$end = time();
+		}
+
+		if(!$start)
+		{
+			$start = $end - 31*self::DAY_LENGTH_SECONDS;
+		}
+
+		if(!$month_chooser || !sizeof($month_chooser))
+		{
+			$month_chooser = array();
+			$month_chooser[date("my" , $end)] = 1;
+			$month_chooser[date("my" , mktime(0,0,0, date("m" , $end) - 1, date("d" , $end), date("Y" , $end)))] = 1;
+		}
+
+		while($start < $end)
+		{
+			if($mY != date("my" , $start))
+			{
+				$mY = date("my" , $start);
+				$ret.= html::checkbox(array(
+					"name" => "month_chooser[".$mY."]",
+					"value" => 1,
+					"checked" => empty($month_chooser[$mY]) ? 0 : 1
+				))." ".date("M Y" , $start)."<br>";
+			}
+			$start+= self::DAY_LENGTH_SECONDS*28;
+		}
+		if($mY != date("my" , $start) && date("my" , $start) == date("my" , $end))
+		{
+			$mY = date("my" , $start);
+			$ret.= html::checkbox(array(
+				"name" => "month_chooser[".$mY."]",
+				"value" => 1,
+				"checked" => ($month_chooser[$mY]) ? 1 : 0
+			))." ".date("M Y" , $start)."<br>";
+		}
+
+		return $ret;
+	}
+
+	private function _get_project_estimated_table($arr)
+	{
+		$table_dat = array();
+		$table_dat[] = array(
+			"name" => t("Projekti eelarve"),
+			"value" => html::textbox(array(
+				"name" => "budget",
+				"value" => $arr["obj_inst"]->prop("budget"),
+				"size" => 5,
+				)),
+		);
+		$table_dat[] = array(
+			"name" => t("Projekti v&auml;ljam&uuml;&uuml;gi hind"),
+			"value" => $arr["obj_inst"]->prop("proj_price"),
+		);
+		$table_dat[] = array(
+			"name" => t("Eelarvestamata kulude olemasolu"),
+			"value" => $arr["obj_inst"]->has_not_guessed_expenses() ? t("on") : t("ei ole"),
+		);
+		$table_dat[] = array(
+			"name" => t("Jooksev maksumus"),
+			"value" => 0,
+		);
+		$table_dat[] = array(
+			"name" => t("M&auml;&auml;ramata eelarve osa"),
+			"value" => 0,
+		);
+		$table_dat[] = array(
+			"name" => t("Eelarvest v&auml;lja l&auml;inud summa"),
+			"value" => 0,
+		);
+		$arr["prop"]["value"] = $this->do_fckng_table($table_dat);
+
+	}
+
+
+	function _get_income_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "group",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "pr",
+			"caption" => "",
+		));
+		$t->define_field(array(
+			"name" => "tt",
+			"caption" => "",
+			"align" => "right",
+		));
+
+		$bill_sum = $arr["obj_inst"]->get_bill_sum();
+		$bill_income = $arr["obj_inst"]->get_project_income_cc();
+		$billed_hours = $arr["obj_inst"]->get_billed_hours();
+		$billable_hours = $arr["obj_inst"]->get_billable_hours();
+
+		$t->define_data(array(
+			"group" => t("Tulud"),
+			"name" => t("Makstud"),
+			"sum" => $arr["obj_inst"]->get_project_income_text(),
+			"pr" => number_format($bill_income  / $arr["obj_inst"]->prop("proj_price") * 100 ,  2)." %" ,
+			"tt" => number_format($billed_hours * ($bill_income/$bill_sum),2)." TT",
+		));
+
+		$t->define_data(array(
+			"group" => "",
+			"name" => t("Maksmata"),
+			"sum" => $bill_sum - $bill_income,
+			"pr" => number_format(($bill_sum - $bill_income) / $arr["obj_inst"]->prop("proj_price") * 100 , 2)." %",
+			"tt" => number_format($billed_hours * (1 - ($bill_income/$bill_sum)),2)." TT",
+		));
+
+		$t->define_data(array(
+			"group" => t("Viittulu"),
+			"name" => t("Tehtud ja maksmata"),
+			"sum" => round(min((($billable_hours / $arr["obj_inst"]->prop("planned_work_time"))*$arr["obj_inst"]->prop("proj_price")) , ($arr["obj_inst"]->prop("proj_price") - $bill_sum)), 2),
+			"pr" => round (($billable_hours / $arr["obj_inst"]->prop("planned_work_time"))*100 , 2)." %",
+			"tt" => $billable_hours." TT",
+		));
+
+		$t->define_data(array(
+			"group" => "",
+			"name" => t("Tegemata t&ouml;&ouml;d"),
+			"sum" => round((($arr["obj_inst"]->prop("planned_work_time") - $billable_hours  - $billed_hours) / $arr["obj_inst"]->prop("planned_work_time"))*$arr["obj_inst"]->prop("proj_price") , 2),
+			"pr" => round ((($arr["obj_inst"]->prop("planned_work_time") - $billable_hours  - $billed_hours)  / $arr["obj_inst"]->prop("planned_work_time"))*100 , 2)." %",
+			"tt" => $arr["obj_inst"]->prop("planned_work_time") - $billable_hours - $billed_hours." TT",
+		));
+
+		$t->set_sortable(false);
+	}
+
+//----------------- API funktsioonid ----------------------
+
+	/**
+		@attrib name=pop_side_search
+	**/
+	function pop_side_search($arr)
+	{
+		$h = get_instance("cfg/htmlclient");
+		$h->start_output();
+
+		$els = array(
+			"s_name" => array("caption" => t("Nimi"), "type" => "textbox", "size" => 30),
+			"s_class_id" => array("caption" => t("T&uuml;&uuml;p"), "type" => "select", "options" => array("" => "", CL_CRM_PERSON => t("Isik"), CL_CRM_COMPANY => t("Organisatsioon"))),
+		);
+
+		foreach($els as $k => $v)
+		{
+			$v["name"] = $k;
+			$v["value"] = $_GET[$k];
+
+			$h->add_property($v);
+		}
+
+		$h->put_submit(array());
+		$h->finish_output(array(
+			"method" => "GET",
+			"action" => "pop_side_search",
+			"data" => array(
+				"orb_class" => "project",
+				"id" => $_GET["id"]
+			),
+			"sbt_caption" => t("Otsi")
+		));
+		$html = $h->get_result();
+
+		$content = $this->_get_pop_s_res_t($arr);
+		$content .= html::submit(array(
+			"value" => t("Vali")
+		));
+		$content .= $this->mk_reforb("save_pop_s_res", array("id" => $_GET["id"]));
+
+
+		$html .= html::form(array(
+			"method" => "POST",
+			"action" => "orb.aw",
+			"content" => $content
+		));
+
+		return $html;
+	}
+
+	/**
+		@attrib name=del_sides
+	**/
+	function del_sides($arr)
+	{
+		$o = obj($arr["id"]);
+		foreach(safe_array($arr["sel"]) as $id)
+		{
+			$o->disconnect(array(
+				"from" => $id
+			));
+		}
+
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=del_goals
+
+	**/
+	function del_goals($arr)
+	{
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			$ol = new object_list(array("oid" => $arr["sel"]));
+			$ol->delete();
+		}
+
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=create_bill all_args=1
+	**/
+	function create_bill($arr)
+	{
+		foreach($arr as $k => $v)
+		{
+			if (substr($k, 0, 3) == "sel")
+			{
+				foreach($v as $v_id)
+				{
+					$arr["sel"][$v_id] = $v_id;
+				}
+			}
+		}
+
+		//klientide kontroll ka vaja
+		$project = obj($arr["id"]);
+		if(isset($arr["bill_id"]) && $this->can("view", $arr["bill_id"]))
+		{
+			$bill = obj($arr["bill_id"]);
+		}
+		elseif(isset($_SESSION["bill_id"]) && $this->can("view", $_SESSION["bill_id"]))
+		{
+			$bill = obj($_SESSION["bill_id"]);
+			unset($_SESSION["bill_id"]);
+		}
+		else
+		{
+			$bill = $project->add_bill();
+		}
+		$bill->add_rows(array(
+			"objects" => $arr["sel"],
+		));
+		$create_bill_ru = html::get_change_url($arr["id"], array("group" => "create_bill"));
+		return html::get_change_url($bill->id(),array("return_url" => $create_bill_ru,));
+	}
+
+	////
+	// !returns a list of events from the projects the user participates in
+	// project_id (optional) - id of the project, if specified we get events
+	// from that project only
+
+	/**
+		@attrib name=daily_stats_type_check nologin="1"
+	**/
+	function daily_stats_type_check($arr)
+	{
+		get_instance("users")->login(array("uid" => aw_ini_get("project.default_uid"), "password" => aw_ini_get("project.default_password")));
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+
+		$send = array();
+		foreach($ol->arr() as $o)
+		{
+			if (!$this->can("view", $o->proj_mgr))
+			{
+				continue;
+			}
+			$eml = $o->prop("proj_mgr.email.mail");
+			if (!is_email($eml))
+			{
+				continue;
+			}
+			classload("core/date/date_calc");
+			$com_list = $o->get_bug_comments(get_day_start()-DAY_LENGTH_SECONDS)->arr();
+			if (count($com_list) > 0)
+			{
+				// send mail to maintainer
+				$send[$eml][] = $o->id;
+			}
+		}
+
+		foreach($send as $email => $projs)
+		{
+			$ct = "Tere!\n\nTeie projektidesse on lisandunud tegevusi. Palun m2rkige nende tyybid:\n\n";
+			foreach($projs as $proj)
+			{
+				$ct .= $this->mk_my_orb("change", array("id" => $proj, "group" => "stats_entry", "show_last" => 1), "project")."\n";
+			}
+
+			echo "send mail to $email <pre>$ct</pre><Br>";
+			send_mail($email, t("Uued projekti tegevused"), $ct, "From: ".aw_ini_get("baseurl")." <info@struktuur.ee>");
+		}
+		die("all done");
+	} 
+
+	// XXX: split this into separate methods
+	function get_event_folders($arr = array())
+	{
+		$ev_ids = array();
+		if (!empty($arr["project_id"]))
+		{
+			global $awt;
+			$awt->start("project-event-loader");
+			#$ev_ids = $this->get_events_for_project(array("project_id" => $arr["project_id"]));
+			$ev_ids = $arr["project_id"];
+			$awt->stop("project-event-loader");
+		}
+		else
+		if ($arr["type"] == "my_projects")
+		{
+			// this returns a list of events from "My projects"
+			$users = get_instance("users");
+			if (aw_global_get("uid"))
+			{
+				// see asi peab n&uuml;&uuml;d hakkama tagastame foldereid!
+				$user_obj = new object($arr["user_ids"][0]);
+				$conns = $user_obj->connections_to(array(
+					"from.class_id" => CL_PROJECT,
+				));
+				// ei mingit bloody cyclet, see hakkab lihtsalt tagastame projektide id-sid, onj2!
+				$ev_ids = array();
+				foreach($conns as $conn)
+				{
+					$ev_ids[] = $conn->prop("from");
+					//$ev_ids = array_merge($ev_ids,$this->get_events_for_project(array("project_id" => $conn->prop("from"))));
+				};
+			};
+		};
+		return $ev_ids;
+	}
+
+	/** lahe oleks , kui see oleks ka kommenteeritud
+		@attrib name=test_it_out all_args="1"
+
+	**/
+	function test_it_out($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+		));
+		aw_set_exec_time(AW_LONG_PROCESS);
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$o->set_prop("skip_subproject_events",1);
+			$o->save();
+		};
+		print "all done";
+		exit;
+		while (1 == 0)
+		{
+			$subs = new object_list(array(
+				"parent" => $o->id(),
+				"site_id" => array(),
+			));
+			for ($sub_o = $subs->begin(); !$subs->end(); $sub_o = $subs->next())
+			{
+				$orig = $sub_o->get_original();
+				#print_r($sub_o);
+				$sub2parent[$orig->id()] = $sub_o->id();
+			};
+			#arr($sub2parent);
+			#arr($subs);
+			$brother_parent = $o->id();
+			// now I have to create brothers for each object
+			print "projekt " . $o->name(). "<br>";
+			print "id = " . $o->id() . "<br>";
+			print "connections = ";
+			$conns = $o->connections_from(array(
+				"type" => "RELTYPE_PRJ_EVENT",
+			));
+			// create_brother
+			print sizeof($conns);
+			print "<br><br>";
+			foreach($conns as $conn)
+			{
+				$to_obj = $conn->to();
+				$tmp = $to_obj->get_original();
+				$to_oid = $tmp->id();
+				print "# ";
+				print $conn->prop("reltype") . " ";
+				print $to_obj->name() . " ";
+				$p_obj = new object($to_obj->prop("parent"));
+				print $p_obj->name() . "<bR>";
+				// but first check, whether I already have an object with that parent!
+
+				print_r($to_obj);
+				if ($sub2parent[$to_oid])
+				{
+					print "brother already exists under $brother_parent<br>";
+				}
+				else
+				{
+					print "creating a brother under $brother_parent<br>";
+				};
+				print "<hr>";
+				$to_obj->create_brother($brother_parent);
+			};
+			// I have to clone those, you know
+			print "<br><br>";
+		};
+		print "oh, man, this is SO cool!";
+	}
+
+//----------------------------- API l6pp---------------------
+//----------------------------- saast.. millest tuleks lahti saada millalgi-----------------
+
+	function get_event_sources($id)
+	{
+		$o = new object($id);
+		$orig_conns = $o->connections_from(array(
+			"type" => 103,
+		));
+		if (sizeof($orig_conns) > 0)
+		{
+			$first = reset($orig_conns);
+			$id = $first->prop("to");
+		};
+		$sources = array($id => $id);
+		if ($o->prop("skip_subproject_events") != 1)
+		{
+			$this->used = array();
+			$this->_recurse_projects(0, $id);
+		};
+		if (is_array($this->prj_map))
+		{
+			foreach($this->prj_map as $key => $val)
+			{
+				foreach($val as $k1 => $v1)
+				{
+					$sources[$k1] = $k1;
+				}
+			}
+		}
+		return $sources;
+	}
+
+	function get_events($arr)
+	{
+		extract($arr);
+		$o = new object($arr["id"]);
+		$orig_conns = $o->connections_from(array(
+			"type" => 103,
+		));
+
+		if (sizeof($orig_conns) > 0)
+		{
+			$first = reset($orig_conns);
+			$arr["id"] = $first->prop("to");
+		};
+
+		$parents = array($arr["id"]);
+
+		if (1 != $o->prop("skip_subproject_events"))
+		{
+			$this->used = array();
+			$this->_recurse_projects(0,$arr["id"]);
+		};
+
+		if (is_array($this->prj_map))
+		{
+			// ah vitt .. see project map algab ju parajasti aktiivsest projektist.
+
+			// aga valik "n2ita alamprojektide syndmusi" ei oma ju yleyldse mitte mingit m6tet
+			// kui mul on vennad k6igis ylemprojektides ka
+			foreach($this->prj_map as $key => $val)
+			{
+				// nii . aga nyyd ta n2itab mulle ju ka master projektide syndmusi .. which is NOT what I want
+
+				// teisis6nu - mul ei ole syndmuste lugemisel vaja k6iki peaprojekte
+
+				// kyll aga on vaja neid n2itamisel - et ma oskaksin kuvada asukohti. so there
+				foreach($val as $k1 => $v1)
+				{
+					$parents[$k1] = $k1;
+				};
+			};
+		};
+		$limit_num = 300;
+
+		$parent = join(",",$parents);
+
+		$limit = "";
+		if ($arr["range"]["limit_events"])
+		{
+			$limit = " LIMIT ".$arr["range"]["limit_events"];
+			$limit_num = $arr["range"]["limit_events"];
+		}
+
+		// ma pean lugema syndmusi sellest projektist ja selle alamprojektidest.
+		$_start = $arr["range"]["start"];
+		/* this code is ev0l, we should outcomment it -- ahz
+		if ($arr["range"]["overview_start"])
+		{
+			$_start = $arr["range"]["overview_start"];
+		};
+		*/
+		$_end = $arr["range"]["end"];
+		$lang_id = aw_global_get("lang_id");
+		$stat_str = "objects.status != 0";
+
+		if(is_array($arr["status"]))
+		{
+			$stat_str = "objects.status IN (".implode(",", $arr["status"]).")";
+		}
+		elseif($arr["status"] && aw_global_get("uid") == "")
+		{
+			$stat_str = "objects.status = " . $arr["status"];
+		};
+
+		$active_lang_only = aw_ini_get("project.act_lang_only");
+
+		$q = "
+			SELECT
+				objects.oid AS id,
+				objects.parent,
+				objects.class_id,
+				objects.brother_of,
+				objects.name,
+				planner.start,
+				planner.end
+			FROM planner
+			LEFT JOIN objects ON (planner.id = objects.brother_of)
+			WHERE ((planner.start >= '${_start}' AND planner.start <= '${_end}')
+			OR
+			(planner.end >= '${_start}' AND planner.start <= '${_end}')) AND
+			$stat_str AND objects.parent IN (${parent}) order by planner.start"; // $limit
+
+		if($arr["range"]["viewtype"] == "relative")
+		{
+			if($_GET["date"])
+			{
+				list($d, $m, $y) = split("-", $_GET["date"]);
+				$_start = mktime(23, 59, 59, $m, $d, $y);
+			}
+			else
+			{
+				$_start = mktime(23, 59, 59, 12, 12, 2020);
+			}
+			$_start =
+			$q = "
+			SELECT
+				objects.oid AS id,
+				objects.parent,
+				objects.class_id,
+				objects.brother_of,
+				objects.name,
+				planner.start,
+				planner.end
+			FROM planner
+			LEFT JOIN objects ON (planner.id = objects.brother_of)
+			WHERE (planner.start - $_start) <= 0 AND
+			$stat_str AND objects.parent IN (${parent}) order by ($_start - planner.start) LIMIT $limit_num";
+
+		}
+
+
+
+
+
+		// SELECT objects.oid AS id, objects.parent, objects.class_id, objects.brother_of, objects.name, planner.start, planner.end FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE ((planner.start >= '1099260000' AND planner.start <= '1104530399') OR (planner.end >= '1099260000' AND planner.end <= '1104530399')) AND objects.status != 0 AND objects.parent IN (2186)
+
+		enter_function("project::query");
+		$this->db_query($q);
+		$events = array();
+		$pl = get_instance(CL_PLANNER);
+		$ids = array();
+		$projects = $by_parent = array();
+		$lang_id = aw_global_get("lang_id");
+		// weblingi jaoks on vaja kysida connectioneid selle projekti juurde!
+		while($row = $this->db_next())
+		{
+
+			// now figure out which project this thing belongs to?
+			//$web_page_id = $row["parent"];
+
+			if (!$this->can("view",$row["brother_of"]))
+			{
+				//dbg::p1($row["name"]);
+				//dbg::p1("skip1");
+				continue;
+			};
+
+			$e_obj = new object($row["brother_of"]);
+			// see leiab siis objekti originaali parenti
+			$pr_obj = new object($e_obj->parent());
+
+
+			if ($active_lang_only == 1 && $pr_obj->lang_id() != $lang_id)
+			{
+				dbg::p1($row["name"]);
+				dbg::p1("skip2");
+
+				continue;
+			};
+
+			$projects[$row["parent"]] = $row["parent"];
+
+			$project_name = $pr_obj->name();
+
+			// koostan nimekirja asjadest, mida mul vaja on? ja edasi on vaja
+			// nimekirja piltidest
+
+
+			$prid = $pr_obj->id();
+
+			// mida fakki .. miks see asi NII on?
+			$projects[$prid] = $prid;
+
+			// 2kki ma saan siis siin ka kasutada seda tsyklite yhendamist?
+
+			$eid = $e_obj->id();
+
+			$event_parent = $e_obj->parent();
+			$event_brother = $e_obj->brother_of();
+
+			enter_function("assign-event");
+			if (!($limit_counter >= ($limit_num) && $limit_num))
+			{
+				if (!isset($events[$event_brother]))
+				{
+					$limit_counter++;
+				}
+			$events[$event_brother] = array(
+				"start" => $row["start"],
+				"end" => $row["end"],
+				"pr" => $prid,
+				"name" => $e_obj->name(),
+				"parent" => $event_parent,
+				"comment" => $e_obj->comment(),
+				"lang_id" => $e_obj->lang_id(),
+				"id" => $eid,
+				//"project_image" => $row["project_image"],
+				"original_id" => $row["brother_of"],
+				//"project_weblink" => aw_ini_get("baseurl") . "/" . $web_page_id,
+				//"project_day_url" => aw_ini_get("baseurl") . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$row["start"]),
+				"project_name" => $project_name,
+				"project_name_ucase" => strtoupper($project_name),
+				"link" => $this->mk_my_orb("change",array(
+					"id" => $eid,
+				),$row["class_id"],true,true),
+			);
+			}
+			exit_function("assign-event");
+			$ids[$row["brother_of"]] = $row["brother_of"];
+			$ids[$e_obj->brother_of()] = $e_obj->brother_of();
+
+			$by_parent[$event_parent][] = $event_brother;
+
+
+			/*if (++$limit_counter >= $limit_num && $limit_num)
+			{
+				break;
+			}*/
+		};
+
+
+		$pr_list = new object_list(array(
+			"class_id" => CL_PROJECT,
+		));
+
+		$pr_data = $pr_list->names();
+
+		// kas ma saan pr-i hiljem arvutada?
+		exit_function("project::query");
+
+		// kuidas ma saan sellest jamast lahti?
+
+		// now i have a list of all projects .. I need to figure out which menus connect to those projects
+		$web_pages = $project_images = array();
+		$c = new connection();
+
+		$conns = $c->find(array(
+			"from" => $projects,
+			"type" => RELTYPE_ORIGINAL,
+		));
+
+		foreach($conns as $conn)
+		{
+			$from = $conn["from"];
+			$to = $conn["to"];
+			if (!is_oid($to) || !$this->can("view", $to))
+			{
+				continue;
+			}
+			$xto = new object($to);
+			//$xtod = $xto->id();
+			//if ($projects[$from])
+			//{
+				//unset($projects[$from]);
+				$projects[$from] = $to;
+				//$projects[$to] = $from;
+			//};
+		};
+
+
+		// nii .. yhes6naga me diilime kogu aeg originaalprojektidega siin. eks?
+		$conns = $c->find(array(
+			"to" => $projects,
+			"from.lang_id" => aw_global_get("lang_id"),
+			"type" => 17,
+		));
+		//foreach($conns as $conn)
+		//{
+			//print $conn["to"] . " - " . $conn["from"];
+			//$tx = new object($conn["from"]);
+			//arr($tx->properties());
+			//print "<br>";
+			/*
+			if (aw_global_get("uid") == "meff")
+			{
+				print "connection from " . $conn["from"] . " to " .$conn["to"] . "<br>";
+			};
+			*/
+
+			//$web_pages[$conn["to"]] = $conn["from"];
+		//};
+
+		/*
+		if (aw_global_get("uid") == "meff")
+		{
+			print "<hr>";
+		};
+		*/
+		$conns = $c->find(array(
+			//"to" => $projects,
+			//"to" => $projects,
+			"from.lang_id" => aw_global_get("lang_id"),
+			"from.class_id" => CL_MENU,
+			"type" => 17,
+		));
+		$clinf = aw_ini_get("classes");
+		foreach($conns as $conn)
+		{
+			//print $conn["to"] . " - " . $conn["from"];
+			//$tx = new object($conn["from"]);
+			//arr($tx->properties());
+			//print "<br>";
+			$web_pages[$conn["to"]] = $conn["from"];
+			/*
+			if (aw_global_get("uid") == "meff")
+			{
+				// nii, aga mind huvitab see, et kas mul on seos olemas aktiivse keele jaoks
+
+				// ja mida ma teen, kui ei ole? Kuidas ma saan selle 6ige asja leida?
+				$o1 = new object($conn["from"]);
+				$o2 = new object($conn["to"]);
+
+				//print "connection from " . $conn["from"] . " to " .$conn["to"] . "<br>";
+				printf("connection from %s %s (%s | %s) to %s %s (%s)<br>",$clinf[$o1->class_id()]["name"],$o1->name(),$o1->id(),$o1->lang(),$clinf[$o2->class_id()]["name"],$o2->name(),$o2->id());
+			};
+			*/
+		};
+
+		$lc = aw_global_get("LC");
+		$current_charset = aw_global_get("charset");
+
+		if (1 == $arr["project_media"])
+		{
+			$conns = $c->find(array(
+				"from" => $projects,
+				"type" => 11 //RELTYPE_PRJ_VIDEO,
+			));
+
+			foreach($conns as $conn)
+			{
+
+				$v_o = new object($conn["to"]);
+				//$v_o = $conn->to();
+				// aga miks siis see asi ei anna mulle t6lget 6iges keeles?
+				$tmp = $v_o->properties();
+				$tmp["media_id"] = $conn["to"];
+				$tmp["name"] = $prop_val = iconv("UTF-8",$current_charset . "//TRANSLIT",$tmp["trans"][$lc]["name"]);
+				//$tmp = array_merge($tmp,$tmp["trans"][$lc]);
+				// video is always connected to the original project, but when showing
+				// the event, I need to show the translated caption and not the original
+				$project_videos[$conn["from"]][] = $tmp;
+
+			};
+
+			if (is_array($projects))
+			{
+				foreach($projects as $project_id)
+				{
+					$fx = $project_id;
+					$fxo = new object($fx);
+					// vat see koht siisn tegeleb remappimisega
+					if ($project_videos[$fx])
+					{
+						$project_videos[$fxo->id()] = $project_videos[$fx];
+					};
+				};
+			};
+		}
+
+		if (1 == $arr["first_image"])
+		{
+			$conns = $c->find(array(
+				"from" => $projects,
+				"type" => 8 //RELTYPE_PRJ_IMAGE,
+			));
+
+			$t_img = get_instance(CL_IMAGE);
+
+
+			foreach($conns as $conn)
+			{
+				$project_images[$conn["from"]] = $t_img->get_url_by_id($conn["to"]);
+			};
+
+			$conns = $c->find(array(
+				"from" => $ids,
+				"type" => 1, // RELTYPE_PICTURE from CL_STAGING
+			));
+
+
+			foreach($conns as $conn)
+			{
+				$project_images[$conn["from"]] = $t_img->get_url_by_id($conn["to"]);
+			};
+
+			if (is_array($ids))
+			{
+				foreach($ids as $id)
+				{
+					$fx = $id;
+					$fxo = new object($fx);
+					// vat see koht siisn tegeleb remappimisega
+					if ($project_images[$fx])
+					{
+						$project_images[$fxo->id()] = $project_images[$fx];
+					};
+				};
+			};
+
+		};
+
+		$baseurl = aw_ini_get("baseurl");
+
+		/*
+		if (aw_global_get("uid") == "meff")
+		{
+			arr($project_videos);
+		};
+		*/
+
+		foreach($events as $key => $event)
+		{
+			$prid = $event["pr"];
+			if ($projects[$prid])
+			{
+				$prid = $projects[$prid];
+			};
+
+			if ($web_pages[$prid])
+			{
+				$web_page_id = $web_pages[$prid];
+				$events[$key]["project_weblink"] =  $baseurl . "/" . $web_page_id;
+				$events[$key]["project_day_url"] = $baseurl . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$event["start"]);
+			};
+
+			if ($web_pages[$event["pr"]])
+			{
+				$web_page_id = $web_pages[$event["pr"]];
+				$events[$key]["project_weblink"] =  $baseurl . "/" . $web_page_id;
+				$events[$key]["project_day_url"] = $baseurl . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$event["start"]);
+				//$events[$key]["project_name_ucase"] = $pr_data[$event["pr"]];
+			};
+
+			if ($project_images[$event["id"]])
+			{
+				$events[$key]["first_image"] = $project_images[$event["id"]];
+			}
+			else if ($project_images[$event["pr"]])
+			{
+				$events[$key]["first_image"] = $project_images[$event["pr"]];
+			}
+			else
+			{
+				$events[$key]["first_image"] = $baseurl . "/img/trans.gif";
+			};
+
+			if ($project_videos[$event["pr"]])
+			{
+				$events[$key]["media"] = $project_videos[$event["pr"]];
+
+			};
+		};
+
+		if (sizeof($events) > 0)
+		{
+			$mpr = $this->get_master_project($o,$level);
+			$this->prj_level = 1;
+
+			$this->prj_levels[$mpr->id()] = $this->prj_level;
+			$this->prj_level++;
+
+
+			$this->used = array();
+			$prj_levels = $this->prj_levels;
+
+
+			$this->_recurse_projects2($mpr->id());
+
+
+			// aaah, see on see bloody brother_list ju
+
+			// iga eventi kohta on vaja teada k6iki vendi
+			$ol = new object_list(array(
+				"brother_of" => $ids,
+				"lang_id" => array(),
+			));
+
+
+
+			// how does it work? Events will be assigned to multiple projects
+			// by creating brothers in the event folders of the other projects
+
+			// a tree is built from the projects. While I'm showing projects
+			// I don't know on which level a particular project is nor what
+			// the path of from the root project is
+
+			// so I create a tree of all projects and assign a level number to
+			// each.
+
+			// then a list of all brothers of an event is created, which will
+			// yield a list of project id's which is then matched against the
+			// project level numbers - and this gives us the desired result
+
+			enter_function("find-parent");
+			$ox = $ol->arr();
+			foreach($ox as $brot)
+			{
+				if (!$this->can("view", $brot->parent()))
+				{
+					continue;
+				}
+				// et siis teeme uue nimekirja k6igist objektidest, jees?
+				$prnt = new object($brot->parent());
+				$pid = $prnt->id();
+				$prj_level = $this->_ptree[$pid];
+				enter_function("get-original");
+				$orig = $brot->get_original();
+				exit_function("get-original");
+
+				if ($prj_level)
+				{
+					enter_function("project-assign-event");
+					$events[$orig->id()]["parent_" . $prj_level . "_name"] = $this->_pnames[$pid];
+					$events[$orig->id()]["parent_" . $prj_level . "_oid"] = $this->_oids[$pid];
+					exit_function("project-assign-event");
+				};
+			};
+			exit_function("find-parent");
+
+		};
+		return $events;
+	}
+
+	////
+	// !connects an event to a project
+	// id - id of the project
+	// event_id - id of the event
+	function connect_event($arr)
+	{
+		$evt_obj = new object($arr["event_id"]);
+		// create a brother under the project object
+		$evt_obj->create_brother($arr["id"]);
+	}
+
+	function _recurse_projects2($parent)
+	{
+		$prx = new object($parent);
+		$parent = $prx->id();
+
+		$c = new connection();
+		$conns = $c->find(array(
+			"from.class_id" => CL_PROJECT,
+			"to.class_id" => CL_PROJECT,
+			"type" => 1,
+		));
+
+		$subs = array();
+		$this->_pnames = array();
+		$this->_fullnames = array();
+		$saast = array();
+		$this->_oids = array();
+		foreach($conns as $conn)
+		{
+			$o1 = new object($conn["from"]);
+			$o2 = new object($conn["to"]);
+			$subs[$conn["from"]][$conn["to"]] = $conn["to"];
+			$subs[$o1->id()][$o2->id()] = $o2->id();
+			$this->_pnames[$conn["from"]] = $conn["from.name"];
+			$this->_pnames[$conn["to"]] = $conn["to.name"];
+			$this->_pnames[$o1->id()] = $o1->name();
+			$this->_pnames[$o2->id()] = $o2->name();
+
+			$this->_oids[$conn["from"]] = $conn["from"];
+			$this->_oids[$conn["to"]] = $conn["to"];
+			$this->_oids[$o1->id()] = $o1->id();
+			$this->_oids[$o2->id()] = $o2->id();
+		};
+
+		$this->subs = $subs;
+
+		$this->_ptree = array();
+		$this->level = 0;
+
+		$this->name_stack = array();
+		$this->done = array();
+		$this->_finalize_tree($parent);
+
+
+	}
+
+	function _finalize_tree($parent)
+	{
+		if (!$this->subs[$parent])
+		{
+			return false;
+		}
+		if ($this->done[$parent])
+		{
+			return false;
+		};
+		$this->done[$parent] = 1;
+
+		$this->_ptree[$parent] = $this->level;
+		$this->level++;
+
+		foreach($this->subs[$parent] as $item)
+		{
+			$this->_finalize_tree($item);
+			$this->_ptree[$item] = $this->level;
+		};
+
+		$this->level--;
+	}
+
+
+	function get_event_overview($arr)
+	{
+		// saan ette project id, alguse ja l6pu
+		$rv = array();
+		$ol = new object_list(array(
+			"parent" => $arr["id"],
+			"sort_by" => "planner.start",
+			"site_id" => array(),
+			new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
+			new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN,array("start1", "end"), array($arr["start"], $arr["end"]))
+		));
+
+		foreach($ol->arr() as $o)
+		{
+			$id = $o->id();
+			$dstart = (int)($o->prop("start1") / DAY_LENGTH_SECONDS);
+			$dend = (int)($o->prop("end") / DAY_LENGTH_SECONDS);
+			$rv[] = array(
+				"url" => "/" . $o->id(),
+				"start" => $o->prop("start1"),
+			);
+			if ($dend > $dstart)
+			{
+				for ($i = $dstart + 1; $i <= $dend; $i = $i + 1)
+				{
+					$rv[] = array(
+						"url" => "/" . $o->id(),
+						"start" => $i * DAY_LENGTH_SECONDS,
+					);
+				};
+			};
+		};
+		return $rv;
+	}
+
+
+
+
+
+
+
+//------------------- saasta l6pp----------------------------
 
 };
 ?>

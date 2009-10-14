@@ -149,22 +149,22 @@ class project_obj extends _int_object
 
 		extract($arr);
 
-		if ($from && $to)
+		if (!empty($from) && !empty($to))
 		{
 			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $from-1, $to);
 		}
 		else
-		if ($from)
+		if (!empty($from))
 		{
 			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
 		}
 		else
-		if ($to)
+		if (!empty($to))
 		{
 			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
 		}
 		
-		if($participant)
+		if(!empty($participant))
 		{
 			if(is_oid($participant))
 			{
@@ -185,7 +185,7 @@ class project_obj extends _int_object
 			}
 		}
 
-		if($status)
+		if(!empty($status))
 		{
 			$filter["bug_status"] = $status;
 		}
@@ -614,6 +614,10 @@ class project_obj extends _int_object
 		$bills = $this->get_bills();
 		foreach($bills->arr() as $bill)
 		{
+			if(!isset($ret[$bill->prop("state")]))
+			{
+				$ret[$bill->prop("state")] = 0;
+			}
 			$ret[$bill->prop("state")]++;
 		}
 		return $ret;
@@ -627,8 +631,9 @@ class project_obj extends _int_object
 	**/
 	public function get_bills($arr = array())
 	{
+		$status = isset($arr["status"]) ? $arr["status"] : null;
 		$ol = new object_list(
-			$this->get_bills_filter($arr["status"])
+			$this->get_bills_filter($status)
 		);
 		return $ol;
 	}
@@ -760,21 +765,25 @@ class project_obj extends _int_object
 		return $sum;
 	}
 
-	private function all_rows_filter()
+	private function all_rows_filter($arr = array())
 	{
-		return array(
+		$filter = array(
 			"class_id" => CL_TASK_ROW,
-//			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
-//			"done" => 1,
 			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
 			"site_id" => array(),
 			"lang_id" => array(),
 		);
+		if(isset($arr["task"]) && (is_oid($arr["task"]) || (is_array($arr["task"]) && sizeof($arr["task"]))))
+		{
+			$filter["task"] = $arr["task"];
+
+		}
+		return $filter;
 	}
 
-	public function get_rows_data()
+	public function get_rows_data($arr = array())
 	{
-		$rows_filter = $this->all_rows_filter();
+		$rows_filter = $this->all_rows_filter($arr);
 		$rowsres = array(
 			CL_TASK_ROW => array(
 				"task",
@@ -915,13 +924,13 @@ class project_obj extends _int_object
 		);
 
 		$clids = array(CL_TASK => "CL_TASK", CL_CRM_MEETING => "CL_CRM_MEETING" , CL_CRM_CALL => "CL_CRM_CALL");
-		if($arr["clid"])
+		if(empty($arr["clid"]))
 		{
-			$search_clids = array($arr["clid"]);
+			$search_clids = array_keys($clids);
 		}
 		else
 		{
-			$search_clids = array_keys($clids);
+			$search_clids = array($arr["clid"]);
 		}
 
 		$filter["class_id"] = $search_clids;
@@ -936,19 +945,22 @@ class project_obj extends _int_object
 			"conditions" => $project_cond,
 		));
 
-		if ($arr["from"] > 1 && $arr["to"])
+		if(!empty($arr["from"]) || !empty($arr["to"]))
 		{
-			$time_filt = new obj_predicate_compare(OBJ_COMP_BETWEEN, $arr["from"], $arr["to"]);
-		}
-		else
-		if ($arr["from"] > 1)
-		{
-			$time_filt = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["from"]);
-		}
-		else
-		if ($arr["to"] > 1)
-		{
-			$time_filt = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["to"]);
+			if ($arr["from"] > 1 && $arr["to"])
+			{
+				$time_filt = new obj_predicate_compare(OBJ_COMP_BETWEEN, $arr["from"], $arr["to"]);
+			}
+			else
+			if ($arr["from"] > 1)
+			{
+				$time_filt = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["from"]);
+			}
+			else
+			if ($arr["to"] > 1)
+			{
+				$time_filt = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["to"]);
+			}
 		}
 
 		if(isset($arr["done"]))
@@ -963,7 +975,7 @@ class project_obj extends _int_object
 			}
 		}
 
-		if($time_filt)
+		if(isset($time_filt))
 		{
 			$time_cond = array();
 			foreach($search_clids as $c)
@@ -979,7 +991,7 @@ class project_obj extends _int_object
 		}
 
 		//kui k6igile osalus, siis toimisk
-		if($arr["participant"])
+		if(!empty($arr["participant"]))
 		{
 			$rows_filter = array("class_id" => CL_TASK_ROW);
 			$rows_filter["CL_TASK_ROW.RELTYPE_PROJECT"] = $this->id();
@@ -1305,6 +1317,59 @@ class project_obj extends _int_object
 		}
 		return $prods;
 	}
+
+	/** Returns an array of subproject id-s, suitable for feeding to object_list
+	**/
+	public function get_subprojects()
+	{
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"from" => $this->id(),
+			"from.class_id" => CL_PROJECT,
+			"type" => "RELTYPE_SUBPROJECT",
+		));
+
+		$res = array();
+		if (is_array($conns))
+		{
+			foreach($conns as $conn)
+			{
+				// this way I should get the translated object
+				//$to = new object($conn["to"]);
+				$to = $conn["to"];
+				//dbg::p1("created object instance is " . $to->name());
+				//dbg::p1("created object instance is " . $to->lang_id());
+				$from = $conn["from"];
+				//$res[$to->id()] = $to->id();
+				$res[$to] = $to;
+			};
+		};
+
+		return $res;
+	}
+
+	/** Returns master project id
+	**/
+	public function get_master_project()
+	{
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"to" => $this->id(),
+			"from.class_id" => CL_PROJECT,
+			"type" => "RELTYPE_SUBPROJECT",
+		));
+
+		if (is_array($conns))
+		{
+			foreach($conns as $conn)
+			{
+				return $conn["from"];
+			};
+		};
+		return null;
+	}
+
+
 
 }
 ?>
