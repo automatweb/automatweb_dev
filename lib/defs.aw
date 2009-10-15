@@ -530,8 +530,11 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		@param addempty optional type=bool
 			Whether to add and empty element to the returned array or not. defaults to false.
 
-		@param only_addable optional type=boool
+		@param only_addable optional type=bool
 			If true, only classes that can be added by the user are listed, if false, all classes. defaults to false
+
+		@param class_ids optional type=array
+			The array of class ids which acts like a filter for the returned list
 
 		@returns
 			returns an array of all classes defined in the system, index is class id, value is class name and path
@@ -541,6 +544,11 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 				"name" => "select_class",
 				"options" => get_class_picker(array("addempty" => true, "only_addable" => true))
 			));
+
+			html::select(array(
+				"name" => "select_class",
+				"options" => get_class_picker(array("addempty" => true, "only_addable" => true, array(CL_MENU, CL_SHOP_PRODUCT)))
+			));
 	**/
 	function get_class_picker($arr = array())
 	{
@@ -548,7 +556,6 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		$only_addable = null;
 		extract($arr);
 		$cls = aw_ini_get("classes");
-		$clfs = aw_ini_get("classfolders");
 
 		$ret = array();
 		if ($addempty)
@@ -562,11 +569,13 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 
 		foreach($cls as $clid => $cld)
 		{
-
-			// what field? it's file
-			//if (isset($cld['field']) && ($cld['field'] != ""))
-			if (isset($cld['file']) && ($cld['file'] != ""))
+			if (!empty($cld['file']))
 			{
+				if (!empty($arr['class_ids']) && !in_array($clid, $arr['class_ids']))
+				{
+					continue;
+				}
+
 				$clname = strtr($cld[$field], $trans);
 				if (isset($index))
 				{
@@ -588,6 +597,39 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		}
 		asort($ret);
 		return $ret;
+	}
+
+	/** returns the data for a class (specified by class_id) which is present in classes.ini
+		@attrib api=1 params=pos
+
+		@param class_id required type=string
+			Class id of the class
+
+		@param field optional type=string
+			The name of the field from result array which value shall be returned. Possible values are for example 'name', 'def' (for class_id constant textual representation) etc.
+
+		@returns
+			returns an array of the data for the class or if the field parameter is set, then the value of that field
+
+		@examples
+			$class_info = get_class_info(CL_MENU);
+
+			$class_name = get_class_info(CL_MENU, 'name');
+
+	**/
+	function get_class_info($class_id, $field = '')
+	{
+		$classes = aw_ini_get('classes');
+
+		if (!empty($classes[$class_id]))
+		{
+			if (!empty($field))
+			{
+				return $classes[$class_id][$field];
+			}
+			return $classes[$class_id];
+		}
+		return false;
 	}
 
 	/** adds or changes a variable in the current or given url
