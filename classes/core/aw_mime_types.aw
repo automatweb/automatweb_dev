@@ -8,7 +8,7 @@ class aw_mime_types
 		"application/andrew-inset" => "ez",
 		"application/mac-binhex40" => "hqx",
 		"application/mac-compactpro" => "cpt",
-		"application/msword" => "doc",
+		"application/msword" => "doc,docx",
 		"application/octet-stream" => "bin,dms,lha,lzh,exe,class,so,dll",
 		"application/oda" => "oda",
 		"application/pdf" => "pdf",
