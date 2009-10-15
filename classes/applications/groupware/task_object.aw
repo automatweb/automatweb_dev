@@ -318,6 +318,24 @@ class task_object extends _int_object
 		return $hours;
 	}
 
+	/** returns task estimated time 
+		@attrib api=1 params=pos
+		@returns double
+	**/
+	public function get_estimated_time()
+	{
+		$hours = 0;
+		foreach($this->get_rows_data() as $bcs)
+		{
+			$hours+= $bcs["time_guess"];
+		}
+		if($this->class_id() == CL_BUG)
+		{
+			$hours+= $this->prop("num_hrs_guess");
+		}
+		return $hours;
+	}
+
 	/** returns all rows real time sum
 		@attrib api=1
 		@returns int
@@ -340,20 +358,28 @@ class task_object extends _int_object
 	**/
 	public function get_rows_data()
 	{
-		$filter = array(
-			"class_id" => CL_TASK_ROW,
-			"task" => $this->id(),
-			"lang_id" => array(),
-		);
-		$req = array
-		(
-			CL_TASK_ROW => array(
-				 "time_real" => "time_real",
-				"time_to_cust" => "time_to_cust",
-			),
-		);
-		$row_arr = new object_data_list($filter , $req);
-		return $row_arr->list_data;
+		enter_function("get_rows_data");
+		if(!isset($this->rows_data))
+		{
+			$filter = array(
+				"class_id" => CL_TASK_ROW,
+				"task" => $this->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+			);
+			$req = array
+			(
+				CL_TASK_ROW => array(
+					"time_real" => "time_real",
+					"time_to_cust" => "time_to_cust",
+					"time_guess" => "time_guess",
+				),
+			);
+			$row_arr = new object_data_list($filter , $req);
+			$this->rows_data =  $row_arr->list_data;
+		}
+		exit_function("get_rows_data");
+		return $this->rows_data;
 	}
 
 	/** makes new task row

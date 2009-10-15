@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.30 2009/07/29 12:57:21 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.31 2009/10/15 13:47:59 markop Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -666,6 +666,17 @@ class development_order extends class_base
 			"format" => "d.m.Y / H:i"
 		));
 		$t->define_field(array(
+			"name" => "time_guess",
+			"caption" => t("Prognoos"),
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aega kulunud"),
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
 			"name" => "comment",
 			"caption" => t("K"),
 			"sortable" => 1,
@@ -720,6 +731,8 @@ class development_order extends class_base
 		{
 			$comments_by_bug[$comm->parent()]++;
 		}
+		$real = array();
+		$guess = array();
 		foreach($bug_list as $bug)
 		{
 			$crea = $bug->createdby();
@@ -745,7 +758,8 @@ class development_order extends class_base
 			{
 				$col = "#f3f27e";
 			}
-
+			$guess[$bug->id()] = $bug->get_estimated_time();
+			$real[$bug->id()] = $bug->get_row_hours();
 			$t->define_data(array(
 				"id" => $bug->id(),
 				"name" => $nl,
@@ -764,9 +778,16 @@ class development_order extends class_base
 				"obj" => $bug,
 				"comment_count" => (int)$comments_by_bug[$bug->id()],
 				"comment" => (int)$comments_by_bug[$bug->id()],
-				"col" => $col
+				"col" => $col,
+				"time_guess" => $guess[$bug->id()],
+				"time" => $real[$bug->id()],
 			));
 		}
+		$t->define_data(array(
+			"name" => t("Kokku"),
+			"time_guess" => array_sum($guess),
+			"time" => array_sum($real),
+		));
 	}
 
 	function _set_bugs_table($arr)
