@@ -2890,16 +2890,29 @@ class shop_order_cart extends class_base
 			{
 				$this->delivery_sum = $o->get_shop_price($oc);
 			}
-		        if($self_validate_delivery_methods)
-	                { 	 
-	                         $delivery.=$this->parse("DELIVERY".($o->valid($delivery_methods_params) ? "" : "_DISABLED")); 	//misasi see $delivery_methods_params on? (Marko)
-				if($o->valid($delivery_methods_params)) $porno++; 
-	                }
+			if($self_validate_delivery_methods)
+			{
+				//misasi see $delivery_methods_params on? (Marko)
+				//	Hea kysimus. Veel parem kysimus on, mis see OLI?
+				//	Sa kirjutasid mu muudatused millalgi yle ja neid taastadedes j2i see j2relikult taastamata.
+				//	Ilmselt on see see sama, millega need k2ttesaamisviisid alguses kysitakse.
+				//	Niiet prolly $delivery_methods_params = $method_params;		-kaarel 15.10.2009
+
+
+//				$delivery.=$this->parse("DELIVERY".($o->valid($delivery_methods_params) ? "" : "_DISABLED"));
+				$delivery .= $this->parse("DELIVERY".($o->valid($method_params) ? "" : "_DISABLED"));
+
+//				if($o->valid($delivery_methods_params))
+				if($o->valid($method_params))
+				{
+					$porno++;
+				}
+			}
 			else 	 
-	                { 	 
-	                        $delivery.=$this->parse("DELIVERY"); 	
+			{ 	 
+				$delivery.=$this->parse("DELIVERY"); 	
 				$porno++;  
-	                }
+			}
 
 		}
 
