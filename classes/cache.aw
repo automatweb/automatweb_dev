@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.67 2009/08/09 21:01:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.68 2009/10/16 16:20:09 instrumental Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -491,6 +491,10 @@ class cache extends core
 		}
 		$f = fopen($fq, "r");
 		if (!$f)
+		{
+			return false;
+		}
+		if(filesize($fq) === 0)
 		{
 			return false;
 		}
