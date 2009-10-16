@@ -450,12 +450,19 @@ class shop_order_cart_obj extends _int_object
 	public function confirm_order()
 	{
 		$order = $this->create_order();
-		$this->reset_cart();
 		$this->set_oc();
 		$order_obj = obj($order);
 		$order_obj->set_prop("order_status" , "5");
 		$order_obj->save();
+
+		if($this->can("view", $this->prop("finish_handler")))
+		{
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$ctrl->eval_controller($this->prop("finish_handler"), &$order_obj, &$this);
+		}
+
 		$this->oc->send_confirm_mail($order);
+		$this->reset_cart();
 		return $order_obj;
 	}
 

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.40 2009/10/08 12:50:09 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.40 2009/10/08 12:50:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.41 2009/10/16 12:44:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.41 2009/10/16 12:44:05 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -766,6 +766,8 @@ $sum+= $delivery_vars["delivery_price"];
 		$form = obj($arr["id"]);
 		$this->oc = obj($form->prop("order_center"));
 		$cart = obj($this->oc->prop("cart"));
+		$cart -> set_order_data($arr);
+
 		$cart->set_oc();
 		if (!is_oid($this->oc->prop("warehouse")))
 		{
@@ -845,12 +847,17 @@ $sum+= $delivery_vars["delivery_price"];
 			$r->save();
 		}
 
-
 		//j2relmaksude arv, juhul kui tegu on j2relmaksuga
 		if($this->is_after_payment($order_data["payment"]))
 		{
 			$o->set_prop("deferred_payment_count" , $order_data["deferred_payment_count"]);
 			$o->save();
+		}
+ 
+		if($this->can("view",$cart->prop("finish_handler")))
+		{
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$ctrl->eval_controller($cart->prop("finish_handler"), &$o, &$cart);
 		}
 
 		$this->clear_order();

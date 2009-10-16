@@ -24,7 +24,7 @@
 	@caption Korvi uuendamise kontroller
 
 	@property finish_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
-	@caption Tellimise kontroller
+	@caption Tellimise kontroller ($form_ref - ostukorvi instants , $entry - loodud tellimus)
 
 	@property order_show_controller type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
 	@caption Tellimuse n&auml;itamise kontroller
@@ -1298,11 +1298,11 @@ class shop_order_cart extends class_base
 			{
 				return aw_ini_get("baseurl");
 			}
-			if(is_oid($cart_o->prop("finish_handler")) && $this->can("view", $cart_o->prop("finish_handler")))
-			{
-				$ctr = get_instance(CL_FORM_CONTROLLER);
-				$ctr->do_check($cart_o->prop("finish_handler"), NULL, $cart_o, $oc);
-			}
+//			if(is_oid($cart_o->prop("finish_handler")) && $this->can("view", $cart_o->prop("finish_handler")))
+//			{
+//				$ctr = get_instance(CL_FORM_CONTROLLER);
+//				$ctr->do_check($cart_o->prop("finish_handler"), NULL, $cart_o, $oc);
+//			}
 			aw_session_del("order.accept_cond");
 
 		// There is no such function ?!? --dragut@28.08.2009
@@ -3123,6 +3123,7 @@ class shop_order_cart extends class_base
 	public function confirm_order($arr)
 	{
 		$cart = obj($arr["cart"]);
+		$cart-> set_order_data($arr);
 		$order_data = $cart->get_order_data();
 		$oc = $cart->get_oc();
 		if($oc->prop("use_bank_payment"))
