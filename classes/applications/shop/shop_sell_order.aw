@@ -314,8 +314,6 @@ class shop_sell_order extends class_base
 		{
 			
 			$row = $c->to();
-			$c_sum = $row->amount * $row->price;
-			$sum+= $c_sum;
 			$prod_data = array();
 
 			if($this->can("view" , $row->prop("prod")))
@@ -324,6 +322,9 @@ class shop_sell_order extends class_base
 				$prod_data = $product->get_data();
 				$this->vars($prod_data);
 			}
+			$c_sum = $row->amount * $prod_data["price"];
+			$sum+= $c_sum;
+
 			$row_data = array(
 				"prod" => $row->prod_name,
 				"amount" => $row->amount,
