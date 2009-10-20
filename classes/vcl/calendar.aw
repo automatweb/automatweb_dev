@@ -843,7 +843,9 @@ class vcalendar extends aw_template
 			$mnames[$i] = locale::get_lc_month($i);
 		};
 
-		for ($i = 2003; $i <= 2010; $i++)
+		$this_fuckin_year = date("Y");
+
+		for ($i = $this_fuckin_year - 5; $i <= $this_fuckin_year + 5; $i++)
 		{
 			$years[$i] = $i;
 			foreach($mnames as $monyear_key => $monyear_val)
@@ -1717,7 +1719,7 @@ class vcalendar extends aw_template
 				}
 
 				$events_str = "";
-				if (is_array($this->overview_items_oids[$dstamp]))
+				if (isset($this->overview_items_oids[$dstamp]) && is_array($this->overview_items_oids[$dstamp]))
 				{
 					foreach ($this->overview_items_oids[$dstamp] as $event_oid)
 					{
