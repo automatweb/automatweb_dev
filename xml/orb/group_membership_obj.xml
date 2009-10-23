@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="group_membership_obj" folder="www/dev/terryf/automatweb_dev/classes/core/users" extends="_int_object">
+	<class name="group_membership_obj" folder="www/automatweb_cvs/classes/core/users" extends="_int_object">
 		<action name="get_valid_memberships">
 			<function name="get_valid_memberships">
 				<arguments>

@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="shop" type="int" acl="view" />
 					<optional name="product" type="int" acl="view" />
+					<optional name="product_packet" type="array/int" acl="view" />
 					<optional name="product_packaging" type="int" acl="view" />
 					<optional name="amount" type="float" default="1" />
 					<optional name="product_category" type="array/int" acl="view" />

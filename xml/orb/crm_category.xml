@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_category" folder="www/dev/terryf/automatweb_dev/classes/crm" extends="class_base">
+	<class name="crm_category" folder="www/automatweb_cvs/classes/crm" extends="class_base">
 		<action name="do_import" all_args="1">
 			<function name="do_import">
 				<arguments>

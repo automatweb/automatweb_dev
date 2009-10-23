@@ -56,5 +56,12 @@
 			</function>
 		</action>
 
+		<action name="cccheck" nologin="1" all_args="1">
+			<function name="mutafuggah">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

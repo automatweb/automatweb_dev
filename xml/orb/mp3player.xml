@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mp3player" folder="www/dev/terryf/automatweb_dev/classes/applications/mp3player" extends="class_base">
+	<class name="mp3player" folder="www/automatweb_cvs/classes/applications/mp3player" extends="class_base">
 		<action name="update_playlist" nologin="1" is_public="1">
 			<function name="update_playlist">
 				<arguments>

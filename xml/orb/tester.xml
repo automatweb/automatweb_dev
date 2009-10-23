@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="tester" folder="www/dev/terryf/automatweb_dev/classes/applications/unittest" extends="class_base">
+	<class name="tester" folder="www/automatweb_cvs/classes/applications/unittest" extends="class_base">
 		<action name="show" default="1">
 			<function name="show">
 				<arguments>

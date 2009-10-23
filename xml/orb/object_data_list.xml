@@ -4,8 +4,8 @@
 		<action name="object_data_list">
 			<function name="object_data_list">
 				<arguments>
-					< name="params" />
-					< name="props" />
+					<optional name="params" />
+					<optional name="props" />
 				</arguments>
 			</function>
 		</action>

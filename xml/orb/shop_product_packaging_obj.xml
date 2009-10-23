@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="shop_product_packaging_obj" folder="www/automatweb_cvs/classes/applications/shop" extends="shop_product_obj">
+		<action name="get_price">
+			<function name="get_price">
+				<arguments>
+					<optional name="shop" />
+					<optional name="product_category" type="array/int" acl="view" />
+					<optional name="amount" type="float" default="1" />
+					<optional name="uid" type="oid" />
+					<optional name="time" type="int" />
+					<optional name="from" type="int" />
+					<optional name="customer_category" type="array/int" acl="view" />
+					<optional name="customer_data" type="int" acl="view" />
+					<optional name="location" type="array/int" acl="view" />
+					<optional name="structure" type="bool" default="false" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

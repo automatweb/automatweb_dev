@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="rostering_workbench" folder="www/dev/terryf/automatweb_dev/classes/applications/rostering" extends="class_base">
+	<class name="rostering_workbench" folder="www/automatweb_cvs/classes/applications/rostering" extends="class_base">
 		<action name="submit_delete_relations">
 			<function name="submit_delete_relations">
 				<arguments>

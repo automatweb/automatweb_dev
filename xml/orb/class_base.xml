@@ -9,6 +9,7 @@
 					<optional name="period" />
 					<optional name="alias_to" />
 					<optional name="alias_to_prop" />
+					<optional name="save_autoreturn" />
 					<optional name="return_url" />
 					<optional name="reltype" type="int" />
 				</arguments>
@@ -23,9 +24,10 @@
 					<optional name="period" />
 					<optional name="alias_to" />
 					<optional name="alias_to_prop" />
+					<optional name="save_autoreturn" />
 					<optional name="return_url" />
 					<optional name="view_property" />
-					<optional name="view_laoyout" />
+					<optional name="view_layout" />
 				</arguments>
 			</function>
 		</action>

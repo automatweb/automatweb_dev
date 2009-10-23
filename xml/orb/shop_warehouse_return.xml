@@ -1,6 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_warehouse_return" folder="applications/shop" extends="class_base">
+	<class name="shop_warehouse_return" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
 	</class>
 </orb>
-		

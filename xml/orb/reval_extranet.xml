@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="reval_extranet" folder="applications/clients/reval" extends="class_base">
+	<class name="reval_extranet" folder="www/automatweb_cvs/classes/applications/clients/reval" extends="class_base">
 		<action name="show_tab1" nologin="1">
 			<function name="show">
 				<arguments>

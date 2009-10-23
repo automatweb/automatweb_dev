@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="group_membership" folder="core/users" extends="class_base">
+	<class name="group_membership" folder="www/automatweb_cvs/classes/core/users" extends="class_base">
 		<action name="brother_destroyer">
 			<function name="brother_destroyer">
 				<arguments>

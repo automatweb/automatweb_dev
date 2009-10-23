@@ -1,10 +1,68 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="orders_form" folder="www/dev/terryf/automatweb_dev/classes/applications/orders" extends="class_base">
+	<class name="orders_form" folder="www/automatweb_cvs/classes/applications/orders" extends="class_base">
 		<action name="delete_from_order" nologin="1">
 			<function name="delete_from_order">
 				<arguments>
 					<required name="id" type="int" acl="delete" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="orderer_data" nologin="1">
+			<function name="orderer_data">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="next_view" />
+					<required name="cart" type="int" acl="view" />
+					<optional name="section" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_order_data" nologin="1" all_args="1">
+			<function name="submit_order_data">
+				<arguments>
+					<optional name="next_action" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="order_data" nologin="1">
+			<function name="order_data">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="cart" type="int" acl="view" />
+					<optional name="next_view" />
+					<optional name="section" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_row" nologin="1" all_args="1">
+			<function name="delete_row">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="confirm_view" nologin="1" all_args="1">
+			<function name="confirm_view">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="confirm" nologin="1" all_args="1">
+			<function name="confirm">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_order" nologin="1" all_args="1">
+			<function name="submit_order">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

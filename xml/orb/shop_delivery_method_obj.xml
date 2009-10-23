@@ -4,8 +4,9 @@
 		<action name="price">
 			<function name="valid">
 				<arguments>
-					<required name="shop" type="int" acl="view" />
-					<required name="product" type="int" acl="view" />
+					<optional name="product_packaging" type="int/array" acl="view" />
+					<optional name="product" type="int/array" acl="view" />
+					<optional name="product_packet" type="array/int" acl="view" />
 					<optional name="amount" type="float" default="1" />
 					<optional name="product_category" type="array/int" acl="view" />
 					<optional name="prices" type="float" />
@@ -13,7 +14,6 @@
 					<optional name="customer_data" type="int" acl="view" />
 					<optional name="customer_category" type="array/int" acl="view" />
 					<optional name="location" type="array/int" acl="view" />
-					<optional name="structure" type="bool" default="false" />
 				</arguments>
 			</function>
 		</action>

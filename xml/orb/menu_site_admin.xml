@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="menu_site_admin" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt" extends="core">
+	<class name="menu_site_admin" folder="www/automatweb_cvs/classes/contentmgmt" extends="core">
 		<action name="hide_menu">
 			<function name="hide_menu">
 				<arguments>

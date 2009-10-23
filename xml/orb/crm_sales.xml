@@ -1,39 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_sales" folder="classes/applications/crm/sales" extends="class_base">
-		<action name="get_entry_choices">
-			<function name="get_entry_choices" all_args="1" nologin="1" is_public="1">
-				<arguments>
-					<required name="id" type="oid" acl="view" />
-					<required name="type" type="string" />
-					<optional name="typed_text" type="string" />
-				</arguments>
-			</function>
-		</action>
-		<action name="get_lead_source_choices">
-			<function name="get_lead_source_choices" all_args="1" nologin="1" is_public="1">
-				<arguments>
-					<required name="id" type="oid" acl="view" />
-					<optional name="typed_text" type="string" />
-				</arguments>
-			</function>
-		</action>
-		<action name="get_contact_details">
-			<function name="get_contact_details" all_args="1" nologin="1" is_public="1">
-				<arguments>
-					<required name="id" type="oid" acl="view" />
-					<required name="contact_id" type="oid" acl="view" />
-				</arguments>
-			</function>
-		</action>
-		<action name="create_calls">
-			<function name="create_calls">
-				<arguments>
-					<required name="id" type="oid" acl="view" />
-					<required name="sel" type="array" />
-					<required name="post_ru" type="string" />
-				</arguments>
-			</function>
-		</action>
+	<class name="crm_sales" folder="www/automatweb_cvs/classes/applications/crm/sales" extends="class_base">
 	</class>
 </orb>

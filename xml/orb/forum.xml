@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="forum" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt/forum" extends="class_base">
+	<class name="forum" folder="www/automatweb_cvs/classes/contentmgmt/forum" extends="class_base">
 		<action name="notify_list">
 			<function name="notify_list">
 				<arguments>

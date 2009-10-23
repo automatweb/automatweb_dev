@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="treeview" folder="www/dev/terryf/automatweb_dev/classes/vcl" extends="class_base">
+	<class name="treeview" folder="www/automatweb_cvs/classes/vcl" extends="class_base">
 		<action name="show">
 			<function name="show">
 				<arguments>
@@ -100,6 +100,7 @@
 					<optional name="checkbox_class_filter" type="array" />
 					<optional name="no_root_item" type="bool" />
 					<optional name="item_name_props" type="array" />
+					<optional name="checked_nodes" type="array" />
 				</arguments>
 			</function>
 		</action>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="admin_if" folder="www/dev/terryf/automatweb_dev/classes/admin" extends="class_base">
+	<class name="admin_if" folder="www/automatweb_cvs/classes/admin" extends="class_base">
 		<action name="gen_folders">
 			<function name="gen_folders">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="image_verification" folder="www/dev/terryf/automatweb_dev/classes/core/util/image_verification" extends="class_base">
+	<class name="image_verification" folder="www/automatweb_cvs/classes/core/util/image_verification" extends="class_base">
 		<action name="draw_image" nologin="1">
 			<function name="draw_image">
 				<arguments>

@@ -13,6 +13,7 @@
 					<optional name="customer_category" type="array/int" acl="view" />
 					<optional name="customer_data" type="int" acl="view" />
 					<optional name="location" type="array/int" acl="view" />
+					<optional name="ocn" type="int" acl="view" />
 					<optional name="structure" type="bool" default="false" />
 				</arguments>
 			</function>

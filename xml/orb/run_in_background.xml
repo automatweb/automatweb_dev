@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="run_in_background" folder="www/dev/terryf/automatweb_dev/classes/core" extends="class_base">
+	<class name="run_in_background" folder="www/automatweb_cvs/classes/core" extends="class_base">
 		<action name="bg_run_get_property_control">
 			<function name="bg_run_get_property_control">
 				<arguments>

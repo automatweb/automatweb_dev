@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="image" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt" extends="class_base">
+	<class name="image" folder="www/automatweb_cvs/classes/contentmgmt" extends="class_base">
 		<action name="get_image_by_id">
 			<function name="get_image_by_id">
 				<arguments>
@@ -122,15 +122,6 @@
 			</function>
 		</action>
 
-		<action name="do_resize_image">
-			<function name="do_resize_image">
-				<arguments>
-					<required name="o" type="object" />
-					<required name="conf" type="object" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="do_resize_image_in_fs">
 			<function name="do_resize_file_in_fs">
 				<arguments>
@@ -149,14 +140,6 @@
 					<optional name="has_big_alt" type="string" default="NULL" />
 					<optional name="size" type="array" />
 					<optional name="arguments" type="array" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_on_click_js">
-			<function name="get_on_click_js">
-				<arguments>
-					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>

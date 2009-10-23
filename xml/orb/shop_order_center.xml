@@ -33,17 +33,6 @@
 			</function>
 		</action>
 
-		<action name="search_categories">
-			<function name="search_categories">
-				<arguments>
-					<optional name="category" />
-					<optional name="name" type="string" />
-					<optional name="menu" type="int" />
-					<optional name="result" type="int/array" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="ajax_remove_category" all_args="1">
 			<function name="ajax_remove_category">
 				<arguments>

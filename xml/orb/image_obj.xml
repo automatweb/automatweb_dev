@@ -1,8 +1,46 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="image_obj" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt" extends="_int_object">
+	<class name="image_obj" folder="www/automatweb_cvs/classes/contentmgmt" extends="_int_object">
 		<action name="view" nologin="1">
-			<function name="get_html">
+			<function name="check_url">
+				<arguments>
+					<required name="url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_url">
+			<function name="fix_url">
+				<arguments>
+					<required name="url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_image_by_id">
+			<function name="get_image_data">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_on_click_js">
+			<function name="get_on_click_js">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_resize_image">
+			<function name="do_resize_image">
+				<arguments>
+					<required name="conf" type="object" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_apply_gal_conf">
+			<function name="do_apply_gal_conf">
 				<arguments>
 				</arguments>
 			</function>

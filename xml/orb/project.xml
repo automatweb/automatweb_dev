@@ -1,48 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="project" folder="www/dev/terryf/automatweb_dev/classes/applications/groupware" extends="class_base">
-		<action name="wtf">
-			<function name="wtf">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="test_it_out" all_args="1">
-			<function name="test_it_out">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="create_bill" all_args="1">
-			<function name="create_bill">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="del_goals">
-			<function name="del_goals">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="del_sides">
-			<function name="del_sides">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="pop_side_search">
-			<function name="pop_side_search">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
+	<class name="project" folder="www/automatweb_cvs/classes/applications/groupware" extends="class_base">
 		<action name="save_pop_s_res">
 			<function name="save_pop_s_res">
 				<arguments>
@@ -145,13 +103,6 @@
 			</function>
 		</action>
 
-		<action name="daily_stats_type_check" nologin="1">
-			<function name="daily_stats_type_check">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="add_cash_cow">
 			<function name="add_cash_cow">
 				<arguments>
@@ -214,6 +165,48 @@
 					<required name="id" type="oid" />
 					<optional name="die" type="boolean" />
 					<optional name="change" type="boolean" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pop_side_search">
+			<function name="pop_side_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="del_sides">
+			<function name="del_sides">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="del_goals">
+			<function name="del_goals">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="create_bill" all_args="1">
+			<function name="create_bill">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="daily_stats_type_check" nologin="1">
+			<function name="daily_stats_type_check">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="test_it_out" all_args="1">
+			<function name="test_it_out">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

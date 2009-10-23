@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="realestate_manager" folder="www/dev/terryf/automatweb_dev/classes/applications/realestate_management" extends="class_base">
+	<class name="realestate_manager" folder="www/automatweb_cvs/classes/applications/realestate_management" extends="class_base">
 		<action name="submit_delete_relations">
 			<function name="submit_delete_relations">
 				<arguments>

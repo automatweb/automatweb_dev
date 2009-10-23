@@ -1,12 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="country_citydistrict" folder="www/dev/terryf/automatweb_dev/classes/common/country" extends="country_administrative_unit">
-		<action name="show">
-			<function name="show">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
+	<class name="country_citydistrict" folder="www/automatweb_cvs/classes/common/country" extends="country_administrative_unit">
 	</class>
 </orb>

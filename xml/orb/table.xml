@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="table" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt" extends="aw_template">
+	<class name="table" folder="www/automatweb_cvs/classes/contentmgmt" extends="aw_template">
 		<action name="aliases">
 			<function name="aliases">
 				<arguments>

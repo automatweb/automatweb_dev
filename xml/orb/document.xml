@@ -75,6 +75,7 @@
 				<arguments>
 					<required name="section" />
 					<optional name="e" type="int" />
+					<optional name="print" type="int" />
 				</arguments>
 			</function>
 		</action>

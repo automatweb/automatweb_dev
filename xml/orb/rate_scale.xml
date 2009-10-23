@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="rate_scale" folder="contentmgmt/rate" extends="class_base">
+	<class name="rate_scale" folder="www/automatweb_cvs/classes/contentmgmt/rate" extends="class_base">
 		<action name="_get_scale">
 			<function name="_get_scale">
 				<arguments>

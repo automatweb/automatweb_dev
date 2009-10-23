@@ -1,5 +1,26 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="shop_orderer_data_site_show_users" folder="www/automatweb_cvs/classes/applications/shop" extends="shop_orderer_data_site_show">
+		<action name="add_slave" nologin="1" is_public="1" all_args="1" caption="Change">
+			<function name="add_slave">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_slave" nologin="1" is_public="1" all_args="1" caption="Change">
+			<function name="remove_slave">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="update_html" nologin="1" is_public="1" all_args="1" caption="Change">
+			<function name="update_html">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

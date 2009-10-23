@@ -13,6 +13,8 @@
 					<optional name="no_sel" type="int" />
 					<optional name="automatic" type="int" />
 					<optional name="no_edit" type="int" />
+					<optional name="no_search" type="int" />
+					<optional name="add_edit_autoreturn" type="int" />
 					<optional name="options" type="array" />
 					<optional name="buttonspos" type="string" />
 					<optional name="value" />

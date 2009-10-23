@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="content_package" folder="www/dev/terryf/automatweb_dev/classes/contentmgmt/content_package" extends="class_base">
+	<class name="content_package" folder="www/automatweb_cvs/classes/contentmgmt/content_package" extends="class_base">
 		<action name="remove_from_group">
 			<function name="remove_from_group">
 				<arguments>

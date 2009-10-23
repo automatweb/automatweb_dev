@@ -70,6 +70,42 @@
 			</function>
 		</action>
 
+		<action name="do_dnotes_import">
+			<function name="do_dnotes_import">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_bills_import">
+			<function name="do_bills_import">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_orders_import">
+			<function name="do_orders_import">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="fill_queue">
+			<function name="fill_queue">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="do_products_import">
 			<function name="do_products_import">
 				<arguments>

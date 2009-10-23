@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="orders_order" folder="www/dev/terryf/automatweb_dev/classes/applications/orders" extends="class_base">
+	<class name="orders_order" folder="www/automatweb_cvs/classes/applications/orders" extends="class_base">
 		<action name="add_to_cart" nologin="1" all_args="1">
 			<function name="add_to_cart">
 				<arguments>

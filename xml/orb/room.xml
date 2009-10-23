@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="room" folder="www/dev/terryf/automatweb_dev/classes/common" extends="class_base">
+	<class name="room" folder="www/automatweb_cvs/classes/common" extends="class_base">
 		<action name="set_bron_cust_arrived_status">
 			<function name="set_bron_cust_arrived_status">
 				<arguments>

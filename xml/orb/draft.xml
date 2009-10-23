@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="draft" folder="contentmgmt" extends="class_base">
+	<class name="draft" folder="www/automatweb_cvs/classes/contentmgmt" extends="class_base">
 	</class>
 </orb>

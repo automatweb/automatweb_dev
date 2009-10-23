@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="db_table_admin" folder="applications/awmyadmin" extends="class_base">
+	<class name="db_table_admin" folder="www/automatweb_cvs/classes/applications/awmyadmin" extends="class_base">
 		<action name="admin_col">
 			<function name="admin_col">
 				<arguments>

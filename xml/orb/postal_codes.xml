@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="postal_codes" folder="www/dev/terryf/automatweb_dev/classes/common" extends="class_base">
+	<class name="postal_codes" folder="www/automatweb_cvs/classes/common" extends="class_base">
 		<action name="export" all_args="1">
 			<function name="export">
 				<arguments>

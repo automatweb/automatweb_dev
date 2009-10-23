@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="foreach_site" folder="admin" extends="class_base">
+	<class name="foreach_site" folder="www/automatweb_cvs/classes/admin" extends="class_base">
 		<action name="exec" default="1">
 			<function name="exec">
 				<arguments>

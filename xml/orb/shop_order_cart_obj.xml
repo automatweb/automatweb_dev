@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="shop_order_cart_obj" folder="www/automatweb_cvs/classes/applications/shop" extends="_int_object">
+		<action name="price">
+			<function name="delivery_methods">
+				<arguments>
+					<required name="product" type="int" acl="view" />
+					<optional name="amount" type="float" default="1" />
+					<optional name="product_category" type="array/int" acl="view" />
+					<optional name="product_packet" type="array/int" acl="view" />
+					<optional name="customer_data" type="int" acl="view" />
+					<optional name="customer_category" type="array/int" acl="view" />
+					<optional name="location" type="array/int" acl="view" />
+					<optional name="validate" type="boolean" default="true" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_price">
+			<function name="get_prod_amount">
+				<arguments>
+					<optional name="product" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

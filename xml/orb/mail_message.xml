@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mail_message" folder="www/dev/terryf/automatweb_dev/classes/applications/messenger" extends="class_base">
+	<class name="mail_message" folder="www/automatweb_cvs/classes/applications/messenger" extends="class_base">
 		<action name="get_autocomplete">
 			<function name="get_autocomplete">
 				<arguments>

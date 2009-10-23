@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="pid" folder="common" extends="">
+	<class name="pid" folder="www/automatweb_cvs/classes/common" extends="">
 		<action name="get">
 			<function name="get">
 				<arguments>

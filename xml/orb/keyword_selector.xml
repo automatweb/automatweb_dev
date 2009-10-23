@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="keyword_selector" folder="www/dev/terryf/automatweb_dev/classes/vcl" extends="class_base">
+	<class name="keyword_selector" folder="www/automatweb_cvs/classes/vcl" extends="class_base">
 	</class>
 </orb>

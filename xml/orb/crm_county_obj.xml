@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_county_obj" folder="crm" extends="_int_object">
+	<class name="crm_county_obj" folder="www/automatweb_cvs/classes/crm" extends="_int_object">
 		<action name="get_job_offers">
 			<function name="get_job_offers">
 				<arguments>

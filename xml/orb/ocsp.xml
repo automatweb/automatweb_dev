@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ocsp" folder="www/dev/terryf/automatweb_dev/classes/protocols/file" extends="class_base">
+	<class name="ocsp" folder="www/automatweb_cvs/classes/protocols/file" extends="class_base">
 	</class>
 </orb>

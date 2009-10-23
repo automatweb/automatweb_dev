@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ml_queue" folder="www/dev/terryf/automatweb_dev/classes/applications/mailinglist" extends="aw_template">
+	<class name="ml_queue" folder="www/automatweb_cvs/classes/applications/mailinglist" extends="aw_template">
 		<action name="submit_manager">
 			<function name="orb_submit_manager">
 				<arguments>
@@ -45,6 +45,13 @@
 
 		<action name="queue_send_now">
 			<function name="orb_queue_send_now">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="check_scheduler" nologin="1">
+			<function name="check_scheduler">
 				<arguments>
 				</arguments>
 			</function>

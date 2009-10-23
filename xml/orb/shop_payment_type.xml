@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="shop_payment_type" folder="www/automatweb_cvs/classes/applications/shop" extends="shop_matrix">
+		<action name="submit_advanced_layer" all_args="1">
+			<function name="submit_advanced_layer">
+				<arguments>
+					<required name="id" type="int/string" />
+					<required name="payment_type" type="int" />
+					<optional name="row" type="int/string" />
+					<optional name="col" type="int/string" />
+					<required name="currency" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cell_description" all_args="1">
+			<function name="cell_description">
+				<arguments>
+					<required name="payment_type" type="int" acl="view" />
+					<required name="row" type="int/string" acl="view" />
+					<required name="col" type="int/string" acl="view" />
+					<required name="currency" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

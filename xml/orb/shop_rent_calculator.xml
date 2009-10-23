@@ -1,13 +1,23 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="shop_rent_calculator" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
-		<action name="calculate">
+		<action name="calculate" nologin="1">
 			<function name="calculate">
 				<arguments>
 					<required name="id" type="int" acl="view" />
 					<optional name="post_ru" type="string" />
 					<optional name="rent_period" type="int" />
-					<optional name="rent_sum_core" type="int" />
+					<optional name="sum_core" type="float" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_rent_periods" nologin="1">
+			<function name="get_rent_periods">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="sum" type="float" />
+					<optional name="format" type="string" />
 				</arguments>
 			</function>
 		</action>
