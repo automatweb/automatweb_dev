@@ -2498,6 +2498,32 @@
             <field>clients_alphabet_tree</field>
       </property>
       <property>
+            <name>clients_status_tree</name>
+            <table>objects</table>
+            <group>
+                  <num_0>purchase_clients</num_0>
+                  <num_1>sales_clients</num_1>
+            </group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>clients_status_lay</parent>
+            <store>no</store>
+            <field>clients_status_tree</field>
+      </property>
+      <property>
+            <name>clients_time_tree</name>
+            <table>objects</table>
+            <group>
+                  <num_0>purchase_clients</num_0>
+                  <num_1>sales_clients</num_1>
+            </group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>clients_start_lay</parent>
+            <store>no</store>
+            <field>clients_time_tree</field>
+      </property>
+      <property>
             <name>clients_tbl</name>
             <table>objects</table>
             <group>
@@ -3934,7 +3960,7 @@
             </clients_left>
             <clients_groups_lay>
                   <type>vbox</type>
-                  <area_caption>Filtreeri&amp;amp;nbsp;kliendigrupi&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <area_caption>Kliendigrupp</area_caption>
                   <group>
                         <num_0>purchase_clients</num_0>
                         <num_1>sales_clients</num_1>
@@ -3943,13 +3969,31 @@
             </clients_groups_lay>
             <clients_alphabet_lay>
                   <type>vbox</type>
-                  <area_caption>Filtreeri&amp;amp;nbsp;nime&amp;amp;nbsp;j&amp;amp;auml;rgi</area_caption>
+                  <area_caption>Nimi</area_caption>
                   <group>
                         <num_0>purchase_clients</num_0>
                         <num_1>sales_clients</num_1>
                   </group>
                   <parent>clients_left</parent>
             </clients_alphabet_lay>
+            <clients_status_lay>
+                  <type>vbox</type>
+                  <area_caption>Staatus</area_caption>
+                  <group>
+                        <num_0>purchase_clients</num_0>
+                        <num_1>sales_clients</num_1>
+                  </group>
+                  <parent>clients_left</parent>
+            </clients_status_lay>
+            <clients_start_lay>
+                  <type>vbox</type>
+                  <area_caption>Kliendisuhte&amp;amp;nbsp;algus</area_caption>
+                  <group>
+                        <num_0>purchase_clients</num_0>
+                        <num_1>sales_clients</num_1>
+                  </group>
+                  <parent>clients_left</parent>
+            </clients_start_lay>
             <shop_orders_split>
                   <type>hbox</type>
                   <width>20%:80%</width>

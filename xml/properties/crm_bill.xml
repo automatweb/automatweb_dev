@@ -306,16 +306,6 @@
             <field>customer_add_meta_cb</field>
       </property>
       <property>
-            <name>customer_address_meta</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <parent>top_right</parent>
-            <field>customer_address_meta</field>
-            <caption>Kliendi aadressi muutujad metas</caption>
-      </property>
-      <property>
             <name>warehouse_info</name>
             <table>aw_crm_bill</table>
             <group>general</group>
@@ -859,11 +849,6 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>L&amp;amp;auml;hetusaadress</caption>
             </ADDRESS>
-            <BUG>
-                  <value>16</value>
-                  <clid>CL_BUG</clid>
-                  <caption>Bugi</caption>
-            </BUG>
             <PROJECT>
                   <value>17</value>
                   <clid>CL_PROJECT</clid>

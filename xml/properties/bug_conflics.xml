@@ -12,6 +12,7 @@
             <table>aw_bugs</table>
             <type>toolbar</type>
             <no_caption>1</no_caption>
+            <save>no</save>
             <store>no</store>
             <field>bug_tb</field>
       </property>
@@ -111,9 +112,10 @@
       <property>
             <name>bug_app</name>
             <group>general</group>
-            <table>aw_bugs</table>
+            <table>objects</table>
             <type>select</type>
-            <field>aw_bug_app</field>
+            <field>meta</field>
+            <method>serialize</method>
             <captionside>top</captionside>
             <parent>settings_col2</parent>
             <caption>Rakendus</caption>
@@ -317,7 +319,6 @@
             <store>no</store>
             <editonly>1</editonly>
             <captionside>top</captionside>
-            <draft>1</draft>
             <field>bug_content_comm</field>
             <caption>Lisa kommentaar</caption>
       </property>
@@ -461,7 +462,6 @@
             <parent>data_r_bot_right</parent>
             <captionside>top</captionside>
             <store>no</store>
-            <max_files>99</max_files>
             <field>multifile_upload</field>
             <caption>Fail</caption>
       </property>
@@ -506,16 +506,6 @@
             <parent>data_r_charts</parent>
             <store>no</store>
             <field>times_chart</field>
-      </property>
-      <property>
-            <name>site_copy</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <parent>data_r_sitecopy</parent>
-            <store>no</store>
-            <field>site_copy</field>
       </property>
       <property>
             <name>submit2</name>
@@ -951,13 +941,6 @@
                   <area_caption>Graafikud</area_caption>
                   <group>general</group>
             </data_r_charts>
-            <data_r_sitecopy>
-                  <type>vbox</type>
-                  <parent>content_right</parent>
-                  <closeable>1</closeable>
-                  <area_caption>Arenduskoopia</area_caption>
-                  <group>general</group>
-            </data_r_sitecopy>
       </layout>
 </properties>
 
