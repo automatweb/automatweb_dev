@@ -39,14 +39,21 @@ class awlc_date_lv implements awlc_date
 		}
 	}
 
+
+
 	public static function get_lc_month($num)
 	{
 		return self::$month[$num-1];
 	}
 
-	public static function get_lc_weekday()
+
+	public static function get_lc_weekday($num, $short = false, $ucfirst = true)
 	{
-		return "";
+		// date("w") returns 0 for sunday, but for historical reasons 7 should also be sunday
+//		$names = array("Sunday","Monday","Tueday","Wednesday","Thursday","Friday","Saturday","Sunday");
+		$names = array("sunday","monday","tuesday","wednesday","thursday","friday","saturday","sunday");
+		$name = ($ucfirst) ? ucfirst($names[$num]) : $names[$num];
+		return $short ? substr($name,0,3) : $name;
 	}
 }
 ?>
