@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="eesti_ehitusturg" folder="applications/first_contact" extends="class_base">
+	</class>
+</orb>
+		
