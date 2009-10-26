@@ -527,6 +527,16 @@
             <caption>Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites)</caption>
       </property>
       <property>
+            <name>cfg_admin_mode_hd</name>
+            <table>users</table>
+            <group>settings_general</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>cfg_admin_mode_hd</field>
+            <caption>Seadete administreerimise vaade</caption>
+      </property>
+      <property>
             <name>cfg_admin_mode</name>
             <table>objects</table>
             <group>settings_general</group>
@@ -534,7 +544,28 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Seadete administreerimise vaade</caption>
+            <caption>Seadete administreerimise vaade on aktiveeritud</caption>
+      </property>
+      <property>
+            <name>cfg_admin_mode_groups</name>
+            <table>objects</table>
+            <group>settings_general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CGF_ADMIN_MODE_GROUPS</reltype>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajagrupid, millele seadistus kehtib</caption>
+            <comment>Kui &amp;amp;uuml;htegi kasutajagruppi pole valitud, kehtib k&amp;amp;otilde;igile</comment>
+      </property>
+      <property>
+            <name>cfg_admin_mode_groups_display</name>
+            <table>users</table>
+            <group>settings_general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>cfg_admin_mode_groups_display</field>
+            <caption>Kasutajagrupid, millele seadistus kehtib</caption>
       </property>
       <property>
             <name>stoppers</name>
@@ -572,6 +603,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <maintainer>kristo</maintainer>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <chpwd>
@@ -652,6 +684,11 @@
                   <clid>CL_SHORTCUT_SET</clid>
                   <caption>Kiirviidete&amp;amp;nbsp;kogu</caption>
             </SHORTCUT_SET>
+            <CGF_ADMIN_MODE_GROUPS>
+                  <value>12</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Kasutajagrupid, millele administreerimise vaates tehtud muudatused m&amp;otilde;juvad</caption>
+            </CGF_ADMIN_MODE_GROUPS>
       </reltypes>
       <layout>
             <settings_shortcuts_top>

@@ -110,6 +110,7 @@ class users_user extends aw_template
 		if ($user_obj->prop("cfg_admin_mode") == 1)
 		{
 			$_SESSION["cfg_admin_mode"] = 1;
+			$_SESSION["cfg_admin_mode_groups"] = $user_obj->prop("cfg_admin_mode_groups");
 		}
 		
 		// init acl

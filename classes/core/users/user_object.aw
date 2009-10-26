@@ -253,6 +253,7 @@ class user_object extends _int_object
 	function awobj_set_cfg_admin_mode($v)
 	{	
 		$_SESSION["cfg_admin_mode"] = $v;
+		$_SESSION["cfg_admin_mode_groups"] = $this->prop("cfg_admin_mode_groups");
 		return $this->set_prop("cfg_admin_mode", $v);
 	}
 	

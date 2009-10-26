@@ -1482,6 +1482,55 @@ class class_base extends aw_template
 		return $retval;
 	}
 
+	private function get_cfgform_for_object_for_exact_group_oids($args)
+	{
+		$hash = md5(serialize($_SESSION["cfg_admin_mode_groups"]));
+		if(!isset($GLOBALS["cfgform_for_object_for_exact_group_oid"][$hash]))
+		{
+			$conditions = array();
+			foreach($_SESSION["cfg_admin_mode_groups"] as $group_id)
+			{
+				$conditions[] = new object_list_filter(array(
+					"logic" => "AND",
+					"conditions" =>  array("CL_CFGFORM.RELTYPE_CFG_FORM(CL_GROUP)" => $group_id)
+				));
+			}
+			// ---
+			$not_allowed_group_oids_ol = new object_list(array(
+				"class_id" => CL_GROUP,
+				"oid" => new obj_predicate_not($_SESSION["cfg_admin_mode_groups"]),
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			if($not_allowed_group_oids_ol->count() > 0)
+			{
+				$no_allowed_cfgform_oids_ol = new object_list(array(
+					"class_id" => CL_CFGFORM,
+					"subclass" => $args["obj_inst"]->class_id(),
+					"CL_CFGFORM.RELTYPE_CFG_FORM(CL_GROUP)" => $not_allowed_group_oids_ol->ids(),
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+			}
+			// ---
+			$oid = false;
+			foreach($_SESSION["cfg_admin_mode_groups"] as $group_oid)
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_CFGFORM,
+					"subclass" => $args["obj_inst"]->class_id(),
+					"CL_CFGFORM.RELTYPE_CFG_FORM(CL_GROUP)" => $group_oid,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				$oid = $oid === false ? $ol->ids() : array_intersect($oid, $ol->ids());
+			}
+			$oid = array_diff($oid, $no_allowed_cfgform_oids_ol->ids());
+			$GLOBALS["cfgform_for_object_for_exact_group_oid"][$hash] = count($oid) ? reset($oid) : "";
+		}
+		return $GLOBALS["cfgform_for_object_for_exact_group_oid"][$hash];
+	}
+
 	function get_cfgform_for_object($args = array())
 	{
 		// or, if configuration form should be loaded from somewhere
@@ -1490,6 +1539,10 @@ class class_base extends aw_template
 		if (!empty($_SESSION["cfg_admin_mode"]) && !isset($args["ignore_cfg_admin_mode"]))
 		{
 			return "";
+		}
+		elseif(!empty($_SESSION["cfg_admin_mode"]) && !empty($_SESSION["cfg_admin_mode_groups"]))
+		{
+			return $this->get_cfgform_for_object_for_exact_group_oids($args);
 		}
 
 		$action = isset($args["args"]["action"]) ? $args["args"]["action"] : "";

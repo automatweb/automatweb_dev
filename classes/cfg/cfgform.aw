@@ -3288,6 +3288,7 @@ class cfgform extends class_base
 				if (!isset($this->cfg_proplist[$pkey]) and isset($this->all_props[$pkey]))
 				{
 					$this->cfg_proplist[$pkey] = $this->all_props[$pkey];
+					$arr["obj_inst"]->restore_property($pkey);
 				}
 
 				// need to add another group
@@ -5319,9 +5320,9 @@ class cfgform extends class_base
 		@param oid required
 		@param prop required
 	**/
-	function cfadm_click_prop($arr)
+	public function cfadm_click_prop($arr)
 	{
-		if (!$_SESSION["cfg_admin_mode"])
+		if (empty($_SESSION["cfg_admin_mode"]))
 		{
 			die("");
 		}
@@ -5344,10 +5345,24 @@ class cfgform extends class_base
 			$cf->set_parent($o->parent());
 			$cf->set_class_id(CL_CFGFORM);
 			$cf->set_name(sprintf(t("Seadete vorm klassile %s"), $clss[$o->class_id()]["name"]));
-			$cf->set_flag(OBJ_FLAG_IS_SELECTED, 1);
 			$cf->set_subclass($o->class_id());
 			$this->cff_init_from_class($cf, $o->class_id());
-			$cf->save();
+			if(empty($_SESSION["cfg_admin_mode_groups"]))
+			{
+				$cf->set_flag(OBJ_FLAG_IS_SELECTED, 1);
+			}
+			$cfid = $cf->save();
+			if(!empty($_SESSION["cfg_admin_mode_groups"]))
+			{
+				foreach(safe_array($_SESSION["cfg_admin_mode_groups"]) as $oid)
+				{
+					$g = obj($oid);
+					$g->connect(array(
+						"to" => $cfid,
+						"type" => "RELTYPE_CFG_FORM"
+					));
+				}
+			}
 		}
 		else
 		{
@@ -5375,7 +5390,7 @@ class cfgform extends class_base
 		@param oid required
 		@param group required
 	**/
-	function cfadm_click_group($arr)
+	public function cfadm_click_group($arr)
 	{	
 		if (!$_SESSION["cfg_admin_mode"])
 		{
@@ -5424,6 +5439,76 @@ class cfgform extends class_base
 			$cf->save();
 			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_edit_red.png");
 		}
+	}
+
+	/**
+		@attrib name=cfadm_click_group_time
+		@param oid required
+		@param group required
+	**/
+	public function cfadm_click_group_time($arr)
+	{
+		if (!$_SESSION["cfg_admin_mode"])
+		{
+			die("");
+		}
+
+		$user_activity = new user_activity();
+		if ($user_activity->is_timer_active_for_group(obj($arr["oid"])->class_id(), $arr["group"]))
+		{
+			$user_activity->inactivate_timer_for_group(obj($arr["oid"])->class_id(), $arr["group"]);
+			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_timer_inactive.png");
+		}
+		else
+		{
+			$user_activity->activate_timer_for_group(obj($arr["oid"])->class_id(), $arr["group"]);
+			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_timer_active.png");
+		}
+	}
+
+	/**
+		@attrib name=cfadm_click_prop_time
+		@param oid required
+		@param prop required
+	**/
+	public function cfadm_click_prop_time($arr)
+	{
+		if (!$_SESSION["cfg_admin_mode"])
+		{
+			die("");
+		}
+
+		$user_activity = new user_activity();
+		if ($user_activity->is_timer_active_for_property(obj($arr["oid"])->class_id(), $arr["prop"]))
+		{
+			$user_activity->inactivate_timer_for_property(obj($arr["oid"])->class_id(), $arr["prop"]);
+			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_timer_inactive.png");
+		}
+		else
+		{
+			$user_activity->activate_timer_for_property(obj($arr["oid"])->class_id(), $arr["prop"]);
+			die(aw_ini_get("baseurl")."/automatweb/images/icons/cfg_timer_active.png");
+		}
+	}
+
+	/**
+		@attrib name=hide_inactive_groups_with_timer
+	**/
+	public function hide_inactive_groups_with_timer()
+	{
+		$user_activity = new user_activity();
+		foreach($user_activity->get_timers_for_group() as $timer)
+		{
+			arr($timer);
+		}
+	}
+
+	/**
+		@attrib name=hide_inactive_properties_with_timer
+	**/
+	public function hide_inactive_properties_with_timer()
+	{
+
 	}
 }
 

@@ -18,7 +18,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 /*
 
-@classinfo syslog_type=ST_USERS relationmgr=yes no_status=1 maintainer=kristo
+@classinfo syslog_type=ST_USERS relationmgr=yes no_status=1 maintainer=kristo prop_cb=1
 
 @groupinfo chpwd caption="Salas&otilde;na muutmine"
 @groupinfo groups caption=Kasutajagrupid
@@ -209,9 +209,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 		@property draft_timeout type=textbox field=meta method=serialize table=objects
 		@caption Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites)
-
-	@property cfg_admin_mode type=checkbox ch_value=1 field=meta method=serialize table=objects
+	
+	@property cfg_admin_mode_hd type=text subtitle=1 store=no
 	@caption Seadete administreerimise vaade
+
+		@property cfg_admin_mode type=checkbox ch_value=1 field=meta method=serialize table=objects
+		@caption Seadete administreerimise vaade on aktiveeritud
+
+		@property cfg_admin_mode_groups type=relpicker reltype=RELTYPE_CGF_ADMIN_MODE_GROUPS multiple=1 field=meta method=serialize table=objects
+		@caption Kasutajagrupid, millele seadistus kehtib
+		@comment Kui &uuml;htegi kasutajagruppi pole valitud, kehtib k&otilde;igile
+
+		@property cfg_admin_mode_groups_display type=text store=no
+		@caption Kasutajagrupid, millele seadistus kehtib
 
 	@property stoppers type=hidden table=objects field=meta method=serialize no_caption=1
 
@@ -261,6 +271,9 @@ caption Kiirviide
 
 @reltype SHORTCUT_SET value=11 clid=CL_SHORTCUT_SET
 @caption Kiirviidete&nbsp;kogu
+
+@reltype CGF_ADMIN_MODE_GROUPS value=12 clid=CL_GROUP
+@caption Kasutajagrupid, millele administreerimise vaates tehtud muudatused mõjuvad
 
 
 
@@ -538,6 +551,58 @@ class user extends class_base
 				break;
 		}
 		return PROP_OK;
+	}
+
+	function _get_cfg_admin_mode_groups($arr)
+	{
+		if(!empty($_SESSION["cfg_admin_mode"]))
+		{
+			return PROP_IGNORE;
+		}
+	}
+
+	function _set_cfg_admin_mode_groups($arr)
+	{
+		if(!empty($_SESSION["cfg_admin_mode"]))
+		{
+			return PROP_IGNORE;
+		}
+		else
+		{
+			$arr["obj_inst"]->set_prop("cfg_admin_mode_groups", $arr["prop"]["value"]);
+		}
+	}
+
+	function _get_cfg_admin_mode_groups_display($arr)
+	{
+		if(empty($_SESSION["cfg_admin_mode"]))
+		{
+			return PROP_IGNORE;
+		}
+		else
+		{
+			$arr["prop"]["value"] = t("Seadistus kehtib k&otilde;igile");
+			if($arr["obj_inst"]->prop("cfg_admin_mode_groups"))
+			{
+				$ol = new object_list(array(
+					"oid" => $arr["obj_inst"]->prop("cfg_admin_mode_groups"),
+					"site_id" => array(),
+					"lang_id" => array(),
+				));
+				$arr["prop"]["value"] = "";
+				foreach($ol->names() as $oid => $name)
+				{
+					$arr["prop"]["value"] .= strlen($arr["prop"]["value"]) == 0 ? "" : ", ";
+					$arr["prop"]["value"] .= html::href(array(
+						"caption" => $name,
+						"url" => $this->mk_my_orb("change", array(
+							"id" => $oid,
+							"return_url" => get_ru(),
+						), CL_GROUP),
+					));
+				}
+			}
+		}
 	}
 
 	function _get_settings_shortcuts_shortcut_sets($arr)
