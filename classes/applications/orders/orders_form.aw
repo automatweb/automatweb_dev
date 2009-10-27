@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.42 2009/10/27 16:37:45 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.42 2009/10/27 16:37:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.43 2009/10/27 17:45:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.43 2009/10/27 17:45:31 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -820,7 +820,7 @@ $sum+= $delivery_vars["delivery_price"];
 			$product = null;
 			if(!empty($row["product_code"]))
 			{
-				$prod = $this->get_product_by_code($data["product_code"]);
+				$prod = $this->get_product_by_code($row["product_code"]);
 				if(is_object($prod))
 				{
 					$packaging = $prod->get_package_by_size($row["product_size"]);
@@ -829,6 +829,10 @@ $sum+= $delivery_vars["delivery_price"];
 					{
 						$product = $packaging->id();
 						$row["product_price"] = $packaging->get_shop_price($cart->id());
+					}
+					else
+					{
+						$product = $prod->id();
 					}
 				}
 			}
