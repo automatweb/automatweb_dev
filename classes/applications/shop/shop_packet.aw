@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.35 2009/10/05 16:44:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.36 2009/10/27 14:33:33 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -799,6 +799,7 @@ class shop_packet extends class_base
 		
 		$purveyances_stuff = $this->get_purveyances($data["packages"]);
 		$this->add_purveyances($data["packages"]);
+
 		foreach($data["packages"] as $product => $packages)
 		{
 			$prod_purveyances_ids = array();
@@ -821,6 +822,7 @@ class shop_packet extends class_base
 				$clrs = 1;
 			}
 			//arr($data);	
+
 			foreach($packages as $package)
 			{
 				if($data["prices"][$package])
@@ -846,8 +848,9 @@ class shop_packet extends class_base
 			$prod_params[$product].="]}";
 			$data["COLORS"].= $this->parse("COLORS");
 
-		}
+		} 
 
+//if(aw_global_get("uid") == "struktuur.markop") arr($prod_params);
 
 		$first_pack = reset($data["packages"]);
 		$n = 0;
@@ -926,6 +929,15 @@ class shop_packet extends class_base
 		foreach($packagings as $products => $packaging_array)
 		{
 			$packaging = reset($packaging_array);
+			if(!is_oid($packaging))//kui seda oid'd pole, siis connection find laseb igatahes masina kooma
+			{
+				$this->vars(array(
+					"purveyance.comment" => trim($o->comment()),
+					"purveyance.name" =>trim($o->name()),
+					"purveyance.code" =>trim($o->prop("code")),
+				));
+				continue;
+			}
 //			foreach($packaging_array as $key => $packaging)
 //			{
 				$conns = connection::find(array(
@@ -933,6 +945,7 @@ class shop_packet extends class_base
 					"from.class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
 					"type" => "RELTYPE_PACKAGING"
 				));
+
 				foreach($conns as $conn)
 				{
 					$o = obj($conn["from"]);
@@ -943,6 +956,10 @@ class shop_packet extends class_base
 					));
 					$show = 1;
 				}
+//			}
+//			if($show)
+//			{
+//				break;
 //			}
 		}
 
