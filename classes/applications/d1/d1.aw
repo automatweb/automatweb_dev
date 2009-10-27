@@ -6,6 +6,9 @@
 @default table=aw_d1
 @default group=general
 
+@property num_rows type=textbox field=aw_num_rows
+@caption Ridade arv
+
 */
 
 class d1 extends class_base
@@ -67,10 +70,10 @@ class d1 extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_num_rows":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
 				));
 				return true;
 		}
