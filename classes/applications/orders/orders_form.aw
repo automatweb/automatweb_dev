@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.41 2009/10/16 12:44:05 markop Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.41 2009/10/16 12:44:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.42 2009/10/27 16:37:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.42 2009/10/27 16:37:45 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -898,13 +898,16 @@ $sum+= $delivery_vars["delivery_price"];
 		@attrib name=submit_order nologin=1 all_args=1
 	**/
 	public function submit_order($arr)
-	{
+	{//arr($arr);
 		$this->set_order($arr["order_row"]);
 		$url = aw_global_get("baseurl")."/".$arr["section"];
 		//$url = $this->mk_my_orb("show" , array("id" => $order) , CL_SHOP_SELL_ORDER);
+		if(!empty($arr["next_url"]))
+		{
+			$url = $arr["next_url"];
+		}
 		header("Location: ".$url);
 		die();
-
 	}
 
 	function parse_alias($arr = array())

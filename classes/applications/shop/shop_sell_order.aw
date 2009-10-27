@@ -284,7 +284,7 @@ class shop_sell_order extends class_base
 		{
 			$data[$pn] = $o->prop_str($pn);
 		}
-
+//arr($data);
 		$t = new aw_table();
 		$t->define_field(array(
 			"name" => "prod",
@@ -322,7 +322,15 @@ class shop_sell_order extends class_base
 				$prod_data = $product->get_data();
 				$this->vars($prod_data);
 			}
-			$c_sum = $row->amount * $prod_data["price"];
+			if(!$row->prop("price"))
+			{
+				$price = $prod_data["price"];
+			}
+			else
+			{
+				$price = $row->prop("price");
+			}
+			$c_sum = $row->amount * $price;
 			$sum+= $c_sum;
 
 			$row_data = array(
