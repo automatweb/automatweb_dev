@@ -1312,7 +1312,7 @@ class shop_warehouse extends class_base
 		));
 
 		$branches = array(
-			"last_week" => t("Eelmine n&auml;dal"),
+			"period_last_week" => t("Eelmine n&auml;dal"),
 			"period_week" => t("K&auml;esolev n&auml;dal"),
 			"period_last_last" => t("&Uuml;leelmine kuu"),
 			"period_last" => t("Eelmine kuu"),
@@ -1353,7 +1353,7 @@ class shop_warehouse extends class_base
 		));
 
 		$branches = array(
-			"last_week" => t("Eelmine n&auml;dal"),
+			"period_last_week" => t("Eelmine n&auml;dal"),
 			"period_week" => t("K&auml;esolev n&auml;dal"),
 			"period_last_last" => t("&Uuml;leelmine kuu"),
 			"period_last" => t("Eelmine kuu"),
@@ -8782,7 +8782,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 
 		$t->define_data(array(
 			"purchaser" => t("Kokku"),
-//			"sum" => $total_sum." ".get_name($o->prop("currency")),
+			"sum" => $total_sum." ".get_name($o->prop("currency")),
 		));
 
 
@@ -9341,7 +9341,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		));
 
 		$branches = array(
-			"last_week" => t("Eelmine n&auml;dal"),
+			"period_last_week" => t("Eelmine n&auml;dal"),
 			"period_week" => t("K&auml;esolev n&auml;dal"),
 			"period_last_last" => t("&Uuml;leelmine kuu"),
 			"period_last" => t("Eelmine kuu"),
@@ -11394,6 +11394,10 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		$total = 0;
 		foreach($ol->names() as $oid => $name)
 		{
+			if(!isset($letters[strtolower(substr($name,0,1))]))
+			{
+				$letters[strtolower(substr($name,0,1))] = 0;
+			}
 			$letters[strtolower(substr($name,0,1))]++;
 			$total++;
 		}
@@ -11479,27 +11483,62 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 	}
 
 	function _get_clients_ol($arr)
-	{
+	{//arr($arr["request"]);
 		$g = $arr["request"]["group"];
 		$owner = $this->config->prop("owner");
 		if(!$this->can("view", $owner))
 		{
 			return new object_list();
 		}
-		$params = array(
-			"class_id" => CL_CRM_COMPANY,
+		$cust_rel_params = array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"CL_CRM_COMPANY_CUSTOMER_DATA.RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER").".oid" => $owner,
+			"limit" => 200,
+			"CL_CRM_COMPANY_CUSTOMER_DATA.RELTYPE_".(strpos($g, "sales") !== false ? "BUYER" : "SELLER").".name" => empty($arr["request"]["filt_cust_name"]) ? array() : $arr["request"]["filt_cust_name"]."%",
+		);
+		if(!empty($arr["request"]["filt_state"]))	$cust_rel_params["sales_state"] = $arr["request"]["filt_state"];
+		if(!empty($arr["request"]["timespan"]))		$cust_rel_params["cust_contract_date"] = $this->get_time_ol_filter($arr["request"]["timespan"]);
+
+		$t = new object_data_list(
+			$cust_rel_params,
+			array(
+				CL_CRM_COMPANY_CUSTOMER_DATA => array("seller", "buyer"),
+			)
+		);
+		if(strpos($g, "sales") !== false)
+		{
+			$buyers = $t->get_element_from_all("buyer");
+		}
+		else
+		{
+			$buyers = $t->get_element_from_all("seller");
+		}
+
+		$ol = new object_list();
+
+		if(sizeof($buyers))
+		{
+			$ol->add($buyers);
+		}
+
+/*
+			"class_id" => array(CL_CRM_COMPANY,CL_CRM_PERSON),
 			"CL_CRM_COMPANY.RELTYPE_".(strpos($g, "sales") !== false ? "BUYER" : "SELLER")."(CL_CRM_COMPANY_CUSTOMER_DATA).RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER").".oid" => $owner,
 			"site_id" => array(),
 			"class_id" => array(),
 			"name" => empty($arr["request"]["filt_cust_name"]) ? array() : $arr["request"]["filt_cust_name"]."%",
 		//	"limit" => "0,200",
 		);
-
-		if(!empty($arr["request"]["filt_state"]))	$params["sales_state"] = $arr["request"]["filt_state"];
-		if(!empty($arr["request"]["timespan"]))		$params["cust_contract_date"] = $this->get_time_ol_filter($arr["request"]["timespan"]);
+		$params = array(
+			"class_id" => array(CL_CRM_COMPANY,CL_CRM_PERSON),
+			"CL_CRM_COMPANY.RELTYPE_".(strpos($g, "sales") !== false ? "BUYER" : "SELLER")."(CL_CRM_COMPANY_CUSTOMER_DATA).RELTYPE_".(strpos($g, "sales") !== false ? "SELLER" : "BUYER").".oid" => $owner,
+			"site_id" => array(),
+			"class_id" => array(),
+			"name" => empty($arr["request"]["filt_cust_name"]) ? array() : $arr["request"]["filt_cust_name"]."%",
+		);
 		if(!empty($arr["request"]["filt_cust"]))	$params["CL_CRM_COMPANY.RELTYPE_CUSTOMER(CL_CRM_CATEGORY).oid"] = $arr["request"]["filt_cust"];
 
-		$ol = new object_list($params);
+		$ol = new object_list($params);*/
 		return $ol;
 	}
 
@@ -11508,12 +11547,12 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		switch($timespan)
 		{
 			case "period_last_week":
-				$from = mktime(0,0,0, date("m")-1, 1, date("Y"));
-				$to = mktime(0,0,0, date("m")-1, 8, date("Y"));
+				$from = mktime(0,0,0, 1, 1+((date("W") - 2) * 7) - date("N"), date("Y"));
+				$to = mktime(0,0,0, 1, 8+((date("W") - 2) * 7 ) - date("N"), date("Y"));
 				break;
 			case "period_week":
-				$from = mktime(0,0,0, date("m"), 1, date("Y"));
-				$to = mktime(0,0,0, date("m"), 8, date("Y"));
+				$from = mktime(0,0,0, 1, 1+((date("W")- 1) * 7) - date("N"), date("Y"));
+				$to = mktime(0,0,0, 1, 8+((date("W")- 1) * 7), date("Y"));
 				break;
 			case "period_last_last":
 				$from = mktime(0,0,0, date("m")-2, 1, date("Y"));

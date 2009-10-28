@@ -206,6 +206,11 @@ class crm_company_customer_data_obj extends _int_object
 			$this->set_prop("sales_state", self::SALESSTATE_NEW);
 		}
 
+		if(!($this->prop("cust_contract_date") > -1))
+		{
+			$this->set_prop("cust_contract_date", time());
+		}
+
 		if (self::SALESSTATE_NEW == $this->prop("sales_state") and is_oid($this->prop("sales_lead_source")))
 		{
 			$this->awobj_set_sales_state(self::SALESSTATE_LEAD);
