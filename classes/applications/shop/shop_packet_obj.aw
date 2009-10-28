@@ -3,7 +3,7 @@
 class shop_packet_obj extends _int_object
 {
 
-	function delete()
+	function delete($full_delete = false)
 	{
 		$ws = $this->get_warehouse_settings();
 		if(is_object($ws) && $ws->prop("delete_all_lower_products"))
@@ -14,7 +14,7 @@ class shop_packet_obj extends _int_object
 			}
 		}
 
-		parent::delete();
+		parent::delete($full_delete);
 	}
 
 	private function get_warehouse_settings()
