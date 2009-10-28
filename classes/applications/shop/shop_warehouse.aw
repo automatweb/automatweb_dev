@@ -66,10 +66,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@layout product_managementleft type=vbox parent=product_managementsplit
 
-			@layout product_managementtree_layout type=vbox closeable=1 area_caption=Tooted parent=product_managementleft
-				@property product_managementtree type=treeview parent=product_managementtree_layout store=no no_caption=1
+#			@layout product_managementtree_layout type=vbox closeable=1 area_caption=Tooted parent=product_managementleft
+#				@property product_managementtree type=treeview parent=product_managementtree_layout store=no no_caption=1
 
-			@layout product_management_tree_layout2 type=vbox closeable=1 area_caption=Kategooriate&nbsp;puu parent=product_managementleft
+			@layout product_management_tree_layout2 type=vbox closeable=1 area_caption=Kategooriad parent=product_managementleft
 				@property product_management_category_tree type=text parent=product_management_tree_layout2 store=no no_caption=1
 
 			@layout product_managementleft_search type=vbox parent=product_managementleft area_caption=Otsing closeable=1
@@ -194,12 +194,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@layout packets_left type=vbox parent=packets_split
 
 			@layout packets_tree_lay type=vbox closeable=1 area_caption=Pakettide&nbsp;puu parent=packets_left
-
+#
 				@property packets_tree type=treeview parent=packets_tree_lay store=no no_caption=1
-
-			@layout packets_tree_lay2 type=vbox closeable=1 area_caption=Kategooriate&nbsp;t&uuml;&uuml;bid parent=packets_left
-
-				@property packets_cat_tree type=text parent=packets_tree_lay2 store=no no_caption=1
+#
+#			@layout packets_tree_lay2 type=vbox closeable=1 area_caption=Kategooriate&nbsp;t&uuml;&uuml;bid parent=packets_left
+#
+#				@property packets_cat_tree type=text parent=packets_tree_lay2 store=no no_caption=1
 
 
 			@layout packets_left_search type=vbox parent=packets_left area_caption=Otsing closeable=1
@@ -228,10 +228,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property packets_s_sbt type=submit store=no captionside=top  parent=packets_left_search value="Otsi"
 				@caption Otsi
 
+		@layout packets_right type=vbox parent=packets_split
 
-		@property packets_list type=table store=no no_caption=1  parent=packets_split
-		@caption Pakettide nimekiri
+			@layout packets_list_lay type=vbox closeable=1 parent=packets_right closeable=1 area_caption="Paketid"
 
+				@property packets_list type=table store=no no_caption=1 parent=packets_list_lay
+				@caption Pakettide nimekiri
 
 @default group=brand
 
@@ -5012,6 +5014,8 @@ $tb->add_delete_button();
 
 	function _get_packets_tree($arr)
 	{
+		return $this->_get_product_management_category_tree($arr);
+/*
 		$ot = new object_tree(array(
 			"parent" => $this->config->prop("pkt_fld"),
 			"class_id" => CL_MENU,
@@ -5028,20 +5032,58 @@ $tb->add_delete_button();
 			"root_item" => obj($this->config->prop("pkt_fld")),
 			"ot" => $ot,
 			"var" => "tree_filter"
-		));
+		));*/
 	}
 
 	function _get_packets_list(&$arr)
 	{
 		$tb = $arr["prop"]["vcl_inst"];
 		$this->_init_pkt_list_list_tbl($tb, $arr["obj_inst"]);
-
-		// get items
-		$ot = new object_tree(array(
+		$tree_filter = array(
 			"parent" => isset($this->pkt_tree_root) ? $this->pkt_tree_root : 1,
 			"class_id" => array(CL_MENU,CL_SHOP_PACKET),
-			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
-		));
+			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
+			"limit" => 100
+		);
+
+
+		if(!empty($arr["request"]["cat"]))
+		{
+			$filter = array(
+				"class_id" => CL_SHOP_PACKET, 
+				"site_id" => array(),
+				"lang_id" => array(),
+			);
+			$cats = $this->get_categories_from_search($arr["request"]);
+
+			$filter["CL_SHOP_PACKET.RELTYPE_CATEGORY"] = $cats;
+			if(is_array($cats) && !sizeof($cats))
+			{
+				$tree_filter["oid"] = 1;
+			}
+			else
+			{
+				$packets = new object_list($filter);
+				if($packets->count())
+				{
+					$tree_filter["oid"] = $packets->ids();
+				}
+				else
+				{
+					$tree_filter["oid"] = 1;
+				}
+			}
+		}
+		if(isset($cats) && sizeof($cats) && $this->can("view" , reset($cats)))
+		{
+			$cat_obj = obj(reset($cats));
+			$tb->set_caption(sprintf(t("Kategooriates: %s"), $cat_obj->name()));
+		}
+		
+
+
+		// get items
+		$ot = new object_tree($tree_filter);
 		$ol = $ot->to_list();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
@@ -11601,7 +11643,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		}
 		$ownerobject = obj($owner);
 
-		if(!$arr["request"]["timespan"])
+		if(empty($arr["request"]["timespan"]))
 		{
 			$arr["request"]["timespan"] = "period_week";
 		}
@@ -12380,10 +12422,57 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 	{
 		$ret = "";
 		$types = $arr["obj_inst"]->get_product_category_types();
-		if(!$types->count())
+//		if(!$types->count())
+//		{
+//			return PROP_IGNORE;
+//		}
+
+//------ esimene puu on selleks, et k6ik saaks kohe kuskilt oksa alt n2htavale
+		$var = "cat";
+		$prod_folder = $this->config->prop("prod_cat_fld");
+
+		$tv = new treeview();
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "product_management_cat_tree",
+		));
+		$tv->set_selected_item(isset($arr["request"][$var]) ? $arr["request"][$var] : $prod_folder);
+
+		$tv->add_item(0,array(
+			"name" => t("Tootet&uuml;&uuml;bid"),
+			"id" => $prod_folder,
+			"reload" => array(
+				"layouts" => array("product_managementright","packets_right"),
+			        "params" => array("cat" => null)
+			) 
+		));
+		$cats = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"parent" => $prod_folder,
+			"lang_id" => array(),
+			"site_id" => array(), 
+			"sort_by" => "name asc"
+		));
+
+		foreach($cats->arr() as $id => $cat)
 		{
-			return PROP_IGNORE;
+			$tv->add_item($prod_folder,array(
+				"name" => $cat->name(),
+				"id" => $id."",
+				"iconurl" => icons::get_icon_url(CL_SHOP_PRODUCT),
+				"reload" => array(
+					"layouts" => array("product_managementright", "packets_right"),
+				        "params" => array("cat" => $id),
+				)
+			));
+			$this->add_prod_management_leaf($tv , $id);
 		}
+		$ret .= "<div style='border: 1px solid gray; background-color: white;margin:5px;'>".$tv->get_html()."</div>";
+
+//-------------------------------- kategooriate tyypide puud
+
+
 
 		foreach($types->arr() as $id => $cat)
 		{

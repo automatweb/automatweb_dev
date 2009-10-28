@@ -125,16 +125,6 @@
             <field>product_management_toolbar</field>
       </property>
       <property>
-            <name>product_managementtree</name>
-            <table>objects</table>
-            <group>product_management</group>
-            <type>treeview</type>
-            <parent>product_managementtree_layout</parent>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>product_managementtree</field>
-      </property>
-      <property>
             <name>product_management_category_tree</name>
             <table>objects</table>
             <group>product_management</group>
@@ -470,16 +460,6 @@
             <field>packets_tree</field>
       </property>
       <property>
-            <name>packets_cat_tree</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>text</type>
-            <parent>packets_tree_lay2</parent>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>packets_cat_tree</field>
-      </property>
-      <property>
             <name>packets_s_name</name>
             <table>objects</table>
             <group>packets</group>
@@ -581,7 +561,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>packets_split</parent>
+            <parent>packets_list_lay</parent>
             <field>packets_list</field>
             <caption>Pakettide nimekiri</caption>
       </property>
@@ -3280,17 +3260,10 @@
                   <group>product_management</group>
                   <area_caption></area_caption>
             </product_managementleft>
-            <product_managementtree_layout>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Tooted</area_caption>
-                  <parent>product_managementleft</parent>
-                  <group>product_management</group>
-            </product_managementtree_layout>
             <product_management_tree_layout2>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Kategooriate&amp;amp;nbsp;puu</area_caption>
+                  <area_caption>Kategooriad</area_caption>
                   <parent>product_managementleft</parent>
                   <group>product_management</group>
             </product_management_tree_layout2>
@@ -3376,13 +3349,6 @@
                   <parent>packets_left</parent>
                   <group>packets</group>
             </packets_tree_lay>
-            <packets_tree_lay2>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Kategooriate&amp;amp;nbsp;t&amp;amp;uuml;&amp;amp;uuml;bid</area_caption>
-                  <parent>packets_left</parent>
-                  <group>packets</group>
-            </packets_tree_lay2>
             <packets_left_search>
                   <type>vbox</type>
                   <parent>packets_left</parent>
@@ -3390,6 +3356,19 @@
                   <closeable>1</closeable>
                   <group>packets</group>
             </packets_left_search>
+            <packets_right>
+                  <type>vbox</type>
+                  <parent>packets_split</parent>
+                  <group>packets</group>
+                  <area_caption></area_caption>
+            </packets_right>
+            <packets_list_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>packets_right</parent>
+                  <area_caption>Paketid</area_caption>
+                  <group>packets</group>
+            </packets_list_lay>
             <brand_toolbar>
                   <type>vbox</type>
                   <group>brand</group>
