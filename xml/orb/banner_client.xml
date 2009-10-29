@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="banner_client" folder="www/automatweb_cvs/classes/applications/banner" extends="class_base">
-		<action name="fetch_banner_content">
+	<class name="banner_client" folder="www/teenused24.automatweb.com/automatweb_dev/classes/applications/banner" extends="class_base">
+		<action name="fetch_banner_content" nologin="1">
 			<function name="fetch_banner_content">
 				<arguments>
 					<required name="loc" />
