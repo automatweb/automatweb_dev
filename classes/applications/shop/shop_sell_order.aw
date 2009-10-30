@@ -310,18 +310,34 @@ class shop_sell_order extends class_base
 		$sum = 0;
 		$different_products = 0;
 		$rows = "";
+		$prod_data_keys = array();
 		foreach($o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
-			
 			$row = $c->to();
 			$prod_data = array();
-
 			if($this->can("view" , $row->prop("prod")))
 			{
 				$product = obj($row->prop("prod"));
 				$prod_data = $product->get_data();
-				$this->vars($prod_data);
+				$prod_data_keys = array_keys($prod_data);
 			}
+			else
+			{
+				if(sizeof($prod_data_keys))//selleks, et kui yhel real on toode kyljes, ja teisel pole, et siis teisel ei t2idaks eelmiste andmetega muutujaid
+				{
+					foreach($prod_data_keys as $key)
+					{
+						$prod_data[$key] = "";
+					}
+					$prod_data_keys = array();
+				}
+				$prod_data["code"] = $row->meta("product_code");
+				$prod_data["size"] = $row->meta("product_size");
+				$prod_data["color"] = $row->meta("product_color");
+				$prod_data["name"] = $row->prop("prod_name");
+				$prod_data["packet_name"] = $row->prop("prod_name");
+			}
+
 			if(!$row->prop("price"))
 			{
 				$price = $prod_data["price"];
@@ -345,22 +361,13 @@ class shop_sell_order extends class_base
 				$row_data[$pn] = $row->prop_str($pn);
 			}		
 
-			if(!sizeof($prod_data))
-			{
-				$prod_data["code"] = $row->meta("product_code");
-				$prod_data["size"] = $row->meta("product_size");
-				$prod_data["color"] = $row->meta("product_color");
-				$prod_data["name"] = $row->prop("prod_name");
-				$prod_data["packet_name"] = $row->prop("prod_name");
-//				if(!$prod_data["sum"])
-//				{
-//					$prod_data["sum"] = t("Hinnakirja<br>alusel");
-//				}
-			}
 			$different_products++;
-			$this->vars($row_data);
+
+			//$row_data - muutujad mis tulevad tellimuse reast, $prod_data - need muutujad, mis tulevad toote juurest
 			$this->vars($prod_data);
-			foreach($prod_data as $key => $val)
+			$this->vars($row_data);
+
+			foreach($prod_data as $key => $val)//v6ibolla peaks samamoobi l2bi laskma ka $row_data muutuja
 			{
 				if($this->is_template("HAS_".strtoupper($key)))
 				{
@@ -376,7 +383,6 @@ class shop_sell_order extends class_base
 				
 			}
 			$rows.= $this->parse("ROW");
-
 
 			foreach($prod_data as $key => $var)
 			{
