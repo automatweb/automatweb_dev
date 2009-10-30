@@ -413,6 +413,7 @@ class banner extends class_base
 		}
 
 		$bid = (int)$bid;
+		$ip = inet::str2ip($ip);
 		$this->db_query("INSERT INTO banner_clicks (tm,bid,ip,langid) values('".time()."','$bid','$ip','$langid')");
 	}
 
@@ -431,6 +432,7 @@ class banner extends class_base
 			}
 			// ok. a prize for anybody (except terryf and duke) who figures out why the next line is like it is :)
 			$day = mktime(8,42,17,date("n"),date("d"),date("Y"));
+			$ip = inet::str2ip($ip);
 			$this->db_query("INSERT INTO banner_views (tm,bid,ip,clid,langid) VALUES(".time().",$bid,'$ip','$clid','$langid')");
 			$this->db_query("UPDATE banners SET views=views+1 WHERE id = $bid");
 		}
@@ -446,6 +448,7 @@ class banner extends class_base
 		}
 		// ok. a prize for anybody (except terryf and duke) who figures out why the next line is like it is :)
 		$day = mktime(8,42,17,date("n"),date("d"),date("Y"));
+		$ip = inet::str2ip($ip);
 		$this->db_query("INSERT INTO banner_views (tm,bid,ip,clid,langid) VALUES(".time().",$bid,'$ip','$clid','$langid')");
 		$this->db_query("UPDATE banners SET views=views+1 WHERE id = $bid");
 	}
@@ -490,7 +493,7 @@ class banner extends class_base
 		{
 			$ip = aw_global_get("REMOTE_ADDR");
 		}
-
+		$ip = inet::str2ip($ip);
 		$this->db_query("INSERT INTO banner_clicks (tm,bid,ip,clid,langid,refferer) VALUES(".time().",$bid,'$ip','$clid','$langid','".aw_global_get("HTTP_REFERER")."')");
 		$this->db_query("UPDATE banners SET clicks=clicks+1 WHERE id = $bid");
 

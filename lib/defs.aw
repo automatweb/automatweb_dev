@@ -2050,6 +2050,16 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 			};
 			return $valid;
 		}
+
+		public function str2ip($ip)
+		{
+			$ip = explode("." , $ip);
+			foreach($ip as $key => $val)
+			{
+				$ip[$key] = (int)$val;
+			}
+			return join("." , $ip);
+		}
 	}
 
 	/** class for debug helpers **/
