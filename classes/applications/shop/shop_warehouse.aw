@@ -12515,6 +12515,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			"background" => "white",
 			"margin" => "5px",
 		));
+
 //"<div style='border: 1px solid gray; background-color: white;margin:5px;'>".$tv->get_html()."</div>";
 
 //-------------------------------- kategooriate tyypide puud
@@ -12543,10 +12544,15 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			));
 
 			$this->add_cat_type_leaf($t , $id);
-			$ret .= "<div style='border: 1px solid gray; background-color: white;margin:5px;'>".$t->get_html()."</div>";
+			$ret .= html::div(array(
+				"content" => $t->get_html(),
+				"border" => "1px solid gray",
+				"background" => "white",
+				"margin" => "5px",
+			));
+	//		$ret .= "<div style='border: 1px solid gray; background-color: white;margin:5px;'>".$t->get_html()."</div>";
 		}
 		$arr["prop"]["value"] = $ret;
-
 		return PROP_OK;
 	}
 
