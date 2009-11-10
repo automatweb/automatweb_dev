@@ -1448,11 +1448,16 @@ class html
 		examples: "10px", "0.7em", "smaller"
 	@param fontweight optional type=string
 		examples: "bold", "normal"
+	@param background optional type=string
+		background color , examples: "white"
+	@param margin optional type=string
+		examples: "5px"
 	@param content optional type=string
 		html to insert between div tags
 	@param id optional type=string
 		div id
 	@param border optional type=string
+		exapmles : "1px solid gray"
 	@param padding optional type=string
 
 
@@ -1469,6 +1474,8 @@ class html
 			"textsize" => "font-size",
 			"fontweight" => "font-weight",
 			"padding" => "padding",
+			"background" => "background-color",
+			"margin" => "margin",
 		);
 
 		$style = "";
@@ -1639,8 +1646,8 @@ class html
 			$params["section"] = $_GET["section"];
 		}
 
-		$inst = get_instance(CL_FILE);
-		$retval = $inst->mk_my_orb($act, $params, $obj->class_id());
+		//$inst = get_instance(CL_FILE);
+		$retval = $GLOBALS["object_loader"]->cache->mk_my_orb($act, $params, $obj->class_id());
 
 		if($caption || (is_integer($caption) && $caption == 0))
 		{

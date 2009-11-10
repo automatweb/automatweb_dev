@@ -8780,11 +8780,13 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 			}
 		}
 
-		$t->define_data(array(
-			"purchaser" => t("Kokku"),
-			"sum" => $total_sum." ".get_name($o->prop("currency")),
-		));
-
+		if(isset($o) && is_object($o))
+		{
+			$t->define_data(array(
+				"purchaser" => t("Kokku"),
+				"sum" => $total_sum." ".get_name($o->prop("currency")),
+			));
+		}
 
 
 		$sell_capt = t("Ostutellimused");
@@ -11171,7 +11173,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 					"id" => $c->prop("to")."_tmp",
 				));
 			}
-			if($arr["show_subs"])
+			if(!empty($arr["show_subs"]))
 			{
 				$conn = $c->to()->connections_from(array(
 					"type" => "RELTYPE_CUSTOMER",
@@ -11706,7 +11708,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 				$fax = $fax->name();
 			}
 
-			$mail = "";
+			$rel = $mail = $fax = $phone =  "";
 			if ($this->can("view", $o->prop("email_id")))
 			{
 				$mail_obj = new object($o->prop("email_id"));
@@ -11738,7 +11740,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 
 			if(is_object($relation))
 			{
-				$rel = html::obj_change_url($relation->id(),  t("(muuda)"));
+				$rel = html::obj_change_url($relation->id(),  $relation->id());
 			}
 
 			$t->define_data(array(
@@ -12507,7 +12509,13 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			));
 			$this->add_prod_management_leaf($tv , $id);
 		}
-		$ret .= "<div style='border: 1px solid gray; background-color: white;margin:5px;'>".$tv->get_html()."</div>";
+		$ret .= html::div(array(
+			"content" => $tv->get_html(),
+			"border" => "1px solid gray",
+			"background" => "white",
+			"margin" => "5px",
+		));
+//"<div style='border: 1px solid gray; background-color: white;margin:5px;'>".$tv->get_html()."</div>";
 
 //-------------------------------- kategooriate tyypide puud
 
