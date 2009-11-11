@@ -1154,6 +1154,9 @@ class htmlclient extends aw_template
 			case "textarea":
 				if (isset($arr["richtext"]))
 				{
+					// It is needed to pass the rich text editor type to textarea drawing function, because for example FCKEditor needs textarea elements to be present in html --dragut@11.11.2009
+					$arr['rte_type'] = (int)$this->rte_type;
+
 					$this->rte = true;
 					$this->rtes[] = $arr["name"];
 					$this->vars_safe(array("rte_type" => $this->rte_type));
