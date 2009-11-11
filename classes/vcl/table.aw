@@ -1653,6 +1653,7 @@ END;
 	**/
 	function get_csv_file($sep = ";")
 	{
+		$this->sort_by();
 		//$sep = "\t";
 		$d = array();
 		reset($this->rowdefs);
