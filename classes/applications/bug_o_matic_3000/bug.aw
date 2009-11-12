@@ -1215,7 +1215,7 @@ class bug extends class_base
 				break;
 
 			case "bug_url":
-				$url = $prop["value"];
+				$url = isset($prop["value"]) ? $prop["value"] : "";
 				if(strpos($url, "?") !== 0 && strpos($url, "orb.aw") !== 0 && strpos($url, "://") === false)
 				{
 					$url = "http://" . $url;
@@ -1477,7 +1477,7 @@ class bug extends class_base
 					break;
 				}
 			case "bug_status":
-				if($arr["request"]["is_order"])
+				if(!empty($arr["request"]["is_order"]))
 				{
 					$c = $arr["obj_inst"]->connections_from(array(
 						"type" => "RELTYPE_DEV_ORDER"
@@ -1487,16 +1487,16 @@ class bug extends class_base
 						$prop["value"] = self::BUG_DEVORDER;
 					}
 				}
-				if(!$this->_ac_old_state || !$this->_ac_new_state)
+				if(empty($this->_ac_old_state) || empty($this->_ac_new_state))
 				{
 					$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
 					$this->_ac_new_state = $prop["value"];
 				}
-				if(!$this->_change_status)
+				if(empty($this->_change_status))
 				{
 					$this->_change_status = "bug";
 				}
-				if (!$arr["new"])
+				if (empty($arr["new"]))
 				{
 					$retval = $this->_handle_status_change(
 						$this->_ac_old_state,
@@ -1529,7 +1529,7 @@ class bug extends class_base
 						$change_bug_status = 1;
 					}
 				}
-				if($change_bug_status && $prop["value"] != $arr["obj_inst"]->prop($prop["name"]))
+				if(!empty($change_bug_status) && $prop["value"] != $arr["obj_inst"]->prop($prop["name"]))
 				{
 					$arr["obj_inst"]->set_prop("cust_status", $bcs[$prop["value"]]);
 				}
@@ -1576,6 +1576,10 @@ class bug extends class_base
 					$this->add_comments[] = $com;
 					$this->_acc_add_wh_cust = $prop["value"] - $old;
 				}
+				else
+				{
+					$this->_acc_add_wh_cust = 0;
+				}
 				break;
 
 			case "who":
@@ -1594,7 +1598,7 @@ class bug extends class_base
 					$this->notify_monitors = true;
 					$this->newwho = $prop["value"];
 				}
-				if($this->who_set)
+				if(!empty($this->who_set))
 				{
 					return PROP_IGNORE;
 				}
@@ -1604,7 +1608,7 @@ class bug extends class_base
 				if (!$arr["new"] && $arr["request"]["who"])
 				{
 					$mon = $arr["request"]["monitors"];
-					if(!$mon[$arr["request"]["who"]])
+					if(empty($mon[$arr["request"]["who"]]))
 					{
 						$mon[$arr["request"]["who"]] = $arr["request"]["who"];
 						$prop["value"] = $mon;
@@ -1614,8 +1618,8 @@ class bug extends class_base
 
 			case "bug_class":
 				$clss = aw_ini_get("classes");
-				$old = $clss[(int)$arr["obj_inst"]->prop($prop["name"])]["name"];
-				$nv = $clss[(int)$prop["value"]]["name"];
+				$old =isset($clss[(int)$arr["obj_inst"]->prop($prop["name"])]) ? $clss[(int)$arr["obj_inst"]->prop($prop["name"])]["name"] : "";
+				$nv = isset($clss[(int)$prop["value"]]) ? $clss[(int)$prop["value"]]["name"] : "";
 				if ($old != $nv && !$arr["new"])
 				{
 					$com = sprintf(t("Klass muudeti %s => %s"), $old, $nv);
@@ -1630,7 +1634,7 @@ class bug extends class_base
 					return PROP_IGNORE;
 				}
 
-				if ($this->_set_feedback && !$arr["obj_inst"]->prop($prop["name"]))
+				if (!empty($this->_set_feedback) && !$arr["obj_inst"]->prop($prop["name"]))
 				{
 					$prop["value"] = $this->_set_feedback;
 				}
@@ -1702,6 +1706,10 @@ class bug extends class_base
 					$this->add_comments[] = $com;
 					$this->_acc_add_wh = $prop["value"];
 				}
+				else
+				{
+					$this->_acc_add_wh = 0;
+				}
 				break;
 
 			case "bug_add_guess":
@@ -1737,6 +1745,10 @@ class bug extends class_base
 					$com = sprintf(t("Isiku prognoositud tundide arv muudeti %s => %s"), $old, $old + $prop["value"]);
 					$this->add_comments[] = $com;
 					$this->_acc_add_wh_guess = $prop["value"];
+				}
+				else
+				{
+					$this->_acc_add_wh_guess = 0;
 				}
 				break;
 		}
@@ -1880,7 +1892,7 @@ class bug extends class_base
 			{
 				$cont = true;
 			}
-			if(!$this->comment_for_all && $mg && $uo = $pi->has_user($person_obj))
+			if(empty($this->comment_for_all) && $mg && $uo = $pi->has_user($person_obj))
 			{
 				$conn = $uo->connections_from(array(
 					"type" => "RELTYPE_GRP",
@@ -1918,7 +1930,7 @@ class bug extends class_base
 					$cont = false;
 				}
 			}
-			elseif($this->comment_for_all  || $this->new_bug)
+			elseif(!empty($this->comment_for_all)  || !empty($this->new_bug))
 			{
 				$cont = false;
 			}
@@ -2463,7 +2475,7 @@ class bug extends class_base
 			$o->set_prop("add_wh", $add_wh);
 			$o->set_prop("add_wh_cust", $add_wh_cust);
 			$o->set_prop("add_wh_guess", $add_wh_guess);
-			$o->set_prop("show_to_all", $this->comment_for_all);
+			if(!empty($this->comment_for_all))$o->set_prop("show_to_all", $this->comment_for_all);
 			$o->save();
 			$bug->connect(array(
 				"to" => $o->id(),
@@ -3351,7 +3363,7 @@ die($email);
 			$ret["grp_".$gn] = $gc["caption"];
 			foreach($props as $pn => $pd)
 			{
-				if ($pd["group"] == $gn)
+				if (isset($pd["group"]) && $pd["group"] == $gn)
 				{
 					$ret["prop_".$pn] = str_repeat("&nbsp;", 3).substr(ifset($pd, "caption"), 0, 20);
 				}
@@ -3396,6 +3408,14 @@ die($email);
 			"link" => html::get_new_url(CL_BUG, $arr["obj_inst"]->id(), array("return_url" => $arr["request"]["return_url"])),
 			"href_id" => "add_bug_hrefp"
 		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "icon.png",
+			"tooltip" => t("Tehku ise..."),
+			"action" => "fuck_you"
+		));
+
 	}
 
 	function _parse_add_bug_content($o)
@@ -4679,6 +4699,43 @@ EOF;
 		exit ($cl_json->encode($option_data));
 	}
 
+	/**
+		@attrib name=fuck_you params=name
+		@param id required
+	**/
+	function fuck_you($arr)
+	{
+		$bug = obj($arr["id"]);
+		$bug->set_prop("bug_status" , BUG_WONTFIX);
+		$u = get_instance(CL_USER);
+		$p = $u->get_person_for_uid($bug->createdby());
+		$bug->set_prop("who" , $p->id());
+		$bug->save();
+
+		$o = obj();
+		$o->set_parent($bug->id());
+		$o->set_class_id(CL_TASK_ROW);
+		$o->set_prop("done" , 1);
+		$o->set_prop("task" , $bug->id());
+		$o->set_comment(t("Tee ise"));
+		$o->set_prop("new_state", BUG_WONTFIX);
+		$o->set_prop("add_wh", 10);
+
+
+		$o->save();
+		$bug->connect(array(
+			"to" => $o->id(),
+			"type" => "RELTYPE_COMMENT"
+		));
+
+		return $this->mk_my_orb('change',array(
+				'id' => $arr['id'],
+				'group' => "general",
+			),
+			"bug"
+		);
+
+	}
 
 
 }

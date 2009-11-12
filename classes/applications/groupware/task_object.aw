@@ -98,7 +98,7 @@ class task_object extends _int_object
 					return;
 				}
 			case "num_hrs_real":
-				if($GLOBALS["do_not_change_task_real_time"])
+				if(!empty($GLOBALS["do_not_change_task_real_time"]))
 				{
 					return "";
 				}
@@ -110,7 +110,7 @@ class task_object extends _int_object
 					$pn = "num_hrs_to_cust";
 				}
 			case "num_hrs_to_cust":
-				if($GLOBALS["do_not_change_task_cust_time"])
+				if(!empty($GLOBALS["do_not_change_task_cust_time"]))
 				{
 					return "";
 				}
@@ -126,7 +126,7 @@ class task_object extends _int_object
 					$pn = "num_hrs_guess";
 				}
 			case "num_hrs_guess":
-				if($GLOBALS["do_not_change_task_guess_time"])
+				if(!empty($GLOBALS["do_not_change_task_guess_time"]))
 				{
 					return "";
 				}
@@ -631,7 +631,7 @@ class task_object extends _int_object
 			"task" => $this->id(),
 			"limit" => 1,
 		));
-		return reset($ol->arr());
+		return $ol->begin();
 	}
 
 

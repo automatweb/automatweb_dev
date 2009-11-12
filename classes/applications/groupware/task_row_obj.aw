@@ -182,7 +182,7 @@ class task_row_obj extends _int_object
 
 	function save($exclusive = false, $previous_state = null)
 	{
-		if ($this->in_save)
+		if (!empty($this->in_save))
 		{
 			return false;
 		}

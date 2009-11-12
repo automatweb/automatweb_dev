@@ -653,7 +653,7 @@ class bug_tracker extends class_base
 				break;
 		}
 
-		if ($prop["name"][0] == "s" && $prop["name"][1] == "_")
+		if ($prop["name"][0] == "s" && $prop["name"][1] == "_" && !empty($arr["request"][$prop["name"]]))
 		{
 			$prop["value"] = $arr["request"][$prop["name"]];
 		}
@@ -2858,7 +2858,7 @@ class bug_tracker extends class_base
 		$search_filt = $this->_get_bug_search_filt($arr["request"]);
 		$ol = new object_list($search_filt);
 
-		if ($arr["request"]["s_find_parens"] != 1 && $ol->count())
+		if (empty($arr["request"]["s_find_parens"]) && $ol->count())
 		{
 			$bugs = $ol->arr();
 
@@ -2893,7 +2893,7 @@ class bug_tracker extends class_base
 		$txtf = array("oid", "name", "bug_url", "bug_component", "bug_mail");
 		foreach($txtf as $field)
 		{
-			if (trim($r["s_".$field]) != "")
+			if (isset($r["s_".$field]) && trim($r["s_".$field]) != "")
 			{
 				$res[$field] = $this->_get_string_filt($r["s_".$field]);
 			}
@@ -2902,13 +2902,13 @@ class bug_tracker extends class_base
 		$sf = array("bug_status", "bug_class", "bug_severity", "bug_priority", "cust_status");
 		foreach($sf as $field)
 		{
-			if (trim($r["s_".$field]) != "")
+			if (isset($r["s_".$field])  && !empty($r["s_".$field]))
 			{
 				$res[$field] = $r["s_".$field];
 			}
 		}
 
-		if($dt = $r["s_date_type"])
+		if(isset($r["s_date_type"]) && $dt = $r["s_date_type"])
 		{
 			switch($dt)
 			{
@@ -2985,7 +2985,7 @@ class bug_tracker extends class_base
                         $res["CL_BUG.bug_app(CL_META).name"] = $this->_get_string_filt($r["s_bug_app"]);
                 }
 
-		if ($r["s_who_empty"] == 1)
+		if (!empty($r["s_who_empty"]))
 		{
 			$res["who"] = new obj_predicate_compare(OBJ_COMP_EQUAL, "");
 			unset($res["CL_BUG.who.name"]);
@@ -3029,6 +3029,7 @@ class bug_tracker extends class_base
 		// separated by commas delimited by "
 		$p = array();
 		$len = strlen($s);
+		$cur_str = "";
 		for ($i = 0; $i < $len; $i++)
 		{
 			if ($s[$i] == "\"" && $in_q)
