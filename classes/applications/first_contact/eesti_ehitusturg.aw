@@ -6,11 +6,25 @@
 @default table=aw_eesti_ehitusturg
 @default group=general
 
+@property url type=textbox field=aw_url
+@caption URL
+
+@property browser type=text store=no
+@caption Sirvi Eesti Ehitusturgu
+
+@property email_templates type=relpicker reltype=RELTYPE_EMAIL_TEMPLATE multiple=1 store=connect
+@caption E-kirjamallid
+
+###
+
+@reltype EMAIL_TEMPLATE value=1 clid=CL_MESSAGE_TEMPLATE
+@caption E-kirjamall
+
 */
 
 class eesti_ehitusturg extends class_base
 {
-	function eesti_ehitusturg()
+	public function eesti_ehitusturg()
 	{
 		$this->init(array(
 			"tpldir" => "applications/first_contact/eesti_ehitusturg",
@@ -18,46 +32,38 @@ class eesti_ehitusturg extends class_base
 		));
 	}
 
-	function get_property($arr)
+	public function _get_url($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
+		if(empty($arr["prop"]["value"]))
 		{
+			$arr["prop"]["value"] = "http://www.eesti-ehitusturg.ee/";
 		}
-
-		return $retval;
 	}
 
-	function set_property($arr = array())
+	public function _get_browser($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
+		$arr["prop"]["value"] = html::href(array(
+			"caption" => t("K&auml;ivita brauser"),
+			"url" => $this->mk_my_orb("browser", array("id" => automatweb::$request->arg("id"))),
+		));
 	}
 
-	function callback_mod_reforb($arr)
+	/**
+		@attrib name=browser all_args=1
+		@param id required type=int acl=view
+	**/
+	public function browser($arr)
+	{
+		$html = obj($arr["id"])->get_browser_html();
+		die($html);
+	}
+
+	public function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 	}
 
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-	function do_db_upgrade($t, $f)
+	public function do_db_upgrade($t, $f)
 	{
 		if ($f == "")
 		{
@@ -67,13 +73,21 @@ class eesti_ehitusturg extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "aw_url":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "text"
 				));
 				return true;
 		}
+	}
+
+	/**
+		@attrib name=send_spam nologin=1
+	**/
+	public function send_spam()
+	{
+		return obj(automatweb::$request->arg("id"))->send_spam();
 	}
 }
 

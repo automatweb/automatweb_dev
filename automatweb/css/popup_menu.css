@@ -1,0 +1,116 @@
+div.menuBar,
+div.menuBar a.menuButton,
+div.menu,
+div.menu a.menuItem {
+	font-family: "MS Sans Serif", Arial, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	text-align: left;
+	color: #000000;
+	float: none ! important;
+}
+
+div.menuBar {
+	background-color: #d0d0d0;
+	border: 2px solid;
+	border-color: #f0f0f0 #909090 #909090 #f0f0f0;
+	padding: 4px 0px 2px 0px;
+	text-align: left;
+	height:17px;
+}
+
+div.menuBar a.menuButton {
+	background-color: transparent;
+	border: 1px solid;
+	color: #000000;
+	cursor: pointer;
+	left: 0px;
+	margin: 1px;
+	margin-right: 0px;
+	padding: 4px 0px 2px 3px;
+	position: relative;
+	text-decoration: none;
+	top: 0px;
+	z-index: 1000;
+
+}
+
+div.menuBar a.menuButton:hover {
+	background-color: #e1e1e1;
+	border-color: #ffffff;
+	color: #000000;
+	cursor: pointer;
+}
+
+div.menuBar a.menuButtonActive,
+div.menuBar a.menuButtonActive:hover {
+	background-color: #a0a0a0;
+	border-color: #909090 #f0f0f0 #f0f0f0 #909090;
+	color: #ffffff;
+	left: 0px;
+	top: 1px;
+}
+
+div.menu {
+  background-color: #ffffff;
+  border: 1px solid #05a6e9;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  z-index: 1001;
+  visibility: hidden;
+  padding-bottom: 1px;
+}
+
+div.menu a.menuItem {
+font-family: Arial, Helvetica, sans-serif;
+font-size: 12px ! important;
+  background-color: #e1e1e1;
+  border-top: solid 1px #ffffff;
+  border-left: solid 1px #ffffff;
+  border-right: solid 1px #ffffff;
+  color: #000000;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  white-space: nowrap;
+  background-image: url(/automatweb/images/aw06/bullet_empty.gif);
+  background-repeat: no-repeat;
+  background-position: 4px 9px;
+  padding: 3px 1em;
+}
+
+div.menu a.menuItem:hover, div.menu a.menuItemHighlight {
+  background-color: #e1e1e1;
+  color: #000000;
+  font-weight: normal;
+  border-top: solid 1px #ffffff;
+  border-left: solid 1px #ffffff;
+  border-right: solid 1px #ffffff;
+  cursor: pointer;
+  background-image: url(/automatweb/images/aw06/bullet_full.gif);
+  background-repeat: no-repeat;
+  text-decoration: underline;
+}
+
+div.menu a.menuItem span.menuItemText {}
+
+div.menu div.menuItemSep {
+  margin-top: 1px;
+  border-top: 0px;
+  border-bottom: 1px solid #05a6e9;
+}
+
+div.menu .menuItemTextSep {
+  border:transparent 1px;
+  color: #333333;
+  cursor: default;
+  display: block;
+  padding: 3px 1em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+div.menu a.menuItem_sub {  padding: 0}
+div.menu a.menuItem_sub span.menuItemText {background: url(/automatweb/images/arr.gif) no-repeat right 6px;  display: block;  padding: 3px 4em 3px 1em;}
