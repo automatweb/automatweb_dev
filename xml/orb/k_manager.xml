@@ -1,0 +1,5 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="k_manager" folder="home/koolitus15/automatweb_dev/classes/koolitus" extends="class_base">
+	</class>
+</orb>

@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="k_test" folder="home/koolitus15/automatweb_dev/classes/koolitus" extends="class_base">
+		<action name="submit_question">
+			<function name="submit_question">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_option_picker_options">
+			<function name="get_option_picker_options">
+				<arguments>
+					<required name="k_test_question" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

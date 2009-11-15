@@ -1,0 +1,72 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>test_entry</name>
+            <table>aw_k_test_answer</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TEST_ENTRY</reltype>
+            <field>test_entry</field>
+            <caption>Testi sisestus</caption>
+      </property>
+      <property>
+            <name>test_question</name>
+            <table>aw_k_test_answer</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TEST_QUESTION</reltype>
+            <field>test_question</field>
+            <caption>Testi k&amp;amp;uuml;simus</caption>
+      </property>
+      <property>
+            <name>option_using</name>
+            <table>aw_k_test_answer</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OPTION_USING</reltype>
+            <field>option_using</field>
+            <caption>Valikvastuse kasutus</caption>
+      </property>
+      <property>
+            <name>answer_value</name>
+            <table>aw_k_test_answer</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>answer_value</field>
+            <caption>Vastuse v&amp;amp;auml;&amp;amp;auml;rtus</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_K_TEST_ANSWER</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+            <maintainer>koolitus15</maintainer>
+      </classinfo>
+      <tableinfo>
+            <aw_k_test_answer>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_k_test_answer>
+      </tableinfo>
+      <reltypes>
+            <TEST_ENTRY>
+                  <value>1</value>
+                  <clid>CL_K_TEST_ENTRY</clid>
+                  <caption>Testi sisestus</caption>
+            </TEST_ENTRY>
+            <TEST_QUESTION>
+                  <value>2</value>
+                  <clid>CL_K_TEST_QUESTION</clid>
+                  <caption>Testi k&amp;amp;uuml;simus</caption>
+            </TEST_QUESTION>
+            <OPTION_USING>
+                  <value>3</value>
+                  <clid>CL_K_OPTION_USING</clid>
+                  <caption>Valikvastuse variant</caption>
+            </OPTION_USING>
+      </reltypes>
+</properties>
+

@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="k_test_completion_rule_condition" folder="koolitus" extends="class_base">
+	</class>
+</orb>
+		

@@ -1,0 +1,63 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>question</name>
+            <table>aw_k_ignore_rule</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_QUESTION</reltype>
+            <field>question</field>
+            <caption>K&amp;amp;uuml;simus</caption>
+      </property>
+      <property>
+            <name>ignore_question</name>
+            <table>aw_k_ignore_rule</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IGNORE_QUESTION</reltype>
+            <field>ignore_question</field>
+            <caption>Seotud k&amp;amp;uuml;simus</caption>
+      </property>
+      <property>
+            <name>ignore_option</name>
+            <table>aw_k_ignore_rule</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OPTION</reltype>
+            <field>ignore_option</field>
+            <caption>Seotud valikvastus</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_K_IGNORE_RULE</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+            <maintainer>koolitus15</maintainer>
+      </classinfo>
+      <tableinfo>
+            <aw_k_ignore_rule>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_k_ignore_rule>
+      </tableinfo>
+      <reltypes>
+            <QUESTION>
+                  <value>1</value>
+                  <clid>CL_K_TEST_QUESTION</clid>
+                  <caption>K&amp;amp;uuml;simus</caption>
+            </QUESTION>
+            <IGNORE_QUESTION>
+                  <value>2</value>
+                  <clid>CL_K_TEST_QUESTION</clid>
+                  <caption>Seotud k&amp;amp;uuml;simus</caption>
+            </IGNORE_QUESTION>
+            <OPTION>
+                  <value>3</value>
+                  <clid>CL_K_OPTION</clid>
+                  <caption>Seotud valikvastus</caption>
+            </OPTION>
+      </reltypes>
+</properties>
+

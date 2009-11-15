@@ -1,0 +1,66 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>value</name>
+            <table>aw_k_option_using</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
+            <field>value</field>
+            <caption>V&amp;amp;auml;&amp;amp;auml;rtus</caption>
+      </property>
+      <property>
+            <name>option</name>
+            <table>aw_k_option_using</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OPTION</reltype>
+            <field>option</field>
+            <caption>Valikvastus</caption>
+      </property>
+      <property>
+            <name>test_question</name>
+            <table>aw_k_option_using</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_QUESTION</reltype>
+            <field>test_question</field>
+            <caption>Testi k&amp;amp;uuml;simus</caption>
+      </property>
+      <property>
+            <name>is_yes_no</name>
+            <table>aw_k_option_using</table>
+            <group>general</group>
+            <type>select</type>
+            <field>is_yes_no</field>
+            <caption>JahEi</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_K_OPTION_USING</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+            <maintainer>koolitus15</maintainer>
+      </classinfo>
+      <tableinfo>
+            <aw_k_option_using>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_k_option_using>
+      </tableinfo>
+      <reltypes>
+            <TEST_QUESTION>
+                  <value>1</value>
+                  <clid>CL_K_TEST_QUESTION</clid>
+                  <caption>Testi k&amp;amp;uuml;simus</caption>
+            </TEST_QUESTION>
+            <OPTION>
+                  <value>2</value>
+                  <clid>CL_K_OPTION</clid>
+                  <caption>Valikvastus</caption>
+            </OPTION>
+      </reltypes>
+</properties>
+

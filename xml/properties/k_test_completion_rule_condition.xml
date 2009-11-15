@@ -1,0 +1,65 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>block</name>
+            <table>aw_k_test_completion_rule_condition</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BLOCK</reltype>
+            <field>block</field>
+            <caption>Plokk</caption>
+      </property>
+      <property>
+            <name>completion_rule</name>
+            <table>aw_k_test_completion_rule_condition</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COMPLETION_RULE</reltype>
+            <field>completion_rule</field>
+            <caption>L&amp;amp;auml;bimise tingimus</caption>
+      </property>
+      <property>
+            <name>type</name>
+            <table>aw_k_test_completion_rule_condition</table>
+            <group>general</group>
+            <type>select</type>
+            <field>type</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>value</name>
+            <table>aw_k_test_completion_rule_condition</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>value</field>
+            <caption>V&amp;amp;auml;&amp;amp;auml;rtus</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_K_TEST_COMPLETION_RULE_CONDITION</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+            <maintainer>koolitus15</maintainer>
+      </classinfo>
+      <tableinfo>
+            <aw_k_test_completion_rule_condition>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_k_test_completion_rule_condition>
+      </tableinfo>
+      <reltypes>
+            <BLOCK>
+                  <value>1</value>
+                  <clid>CL_K_TEST_BLOCK</clid>
+                  <caption>Plokk</caption>
+            </BLOCK>
+            <COMPLETION_RULE>
+                  <value>2</value>
+                  <clid>CL_K_TEST_COMPLETION_RULE</clid>
+                  <caption>L&amp;amp;auml;bimise tingimus</caption>
+            </COMPLETION_RULE>
+      </reltypes>
+</properties>
+
