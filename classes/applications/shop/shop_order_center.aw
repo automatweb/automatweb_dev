@@ -125,6 +125,9 @@
 	@property product_type type=select
 	@caption N&auml;idatavad klassi t&uuml;&uuml;bid
 
+	@property not_available_purveiance type=relpicker reltype=RELTYPE_NOT_AVAILABLE_PURVEIANCE
+	@caption Mitte saadaval tarneinfo
+	@comment Sellised tarneinfod millega tooteid poes ei n&auml;htaks
 
 @property childtitle1 type=text store=no subtitle=1
 @caption Vanad-&uuml;le-vaadata-kas-toimivad-ja-kas-vaja
@@ -348,6 +351,9 @@
 
 @reltype MAIL_RECIEVERS value=22 clid=CL_CRM_PERSON,CL_ML_MEMBER
 @caption Kinnitusmaili saajad
+
+@reltype NOT_AVAILABLE_PURVEIANCE value=23 clid=CL_SHOP_PRODUCT_PURVEYANCE
+@caption Tarneinfo mis t&auml;hendab, et toode ei ole saadaval
 
 */
 

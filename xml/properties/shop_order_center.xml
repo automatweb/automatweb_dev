@@ -278,6 +278,17 @@
             <caption>N&amp;amp;auml;idatavad klassi t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
       </property>
       <property>
+            <name>not_available_purveiance</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_NOT_AVAILABLE_PURVEIANCE</reltype>
+            <caption>Mitte saadaval tarneinfo</caption>
+            <comment>Sellised tarneinfod millega tooteid poes ei n&amp;amp;auml;htaks</comment>
+      </property>
+      <property>
             <name>childtitle1</name>
             <group>appear_settings</group>
             <table>objects</table>
@@ -826,6 +837,11 @@
                   </clid>
                   <caption>Kinnitusmaili saajad</caption>
             </MAIL_RECIEVERS>
+            <NOT_AVAILABLE_PURVEIANCE>
+                  <value>23</value>
+                  <clid>CL_SHOP_PRODUCT_PURVEYANCE</clid>
+                  <caption>Tarneinfo mis t&amp;amp;auml;hendab, et toode ei ole saadaval</caption>
+            </NOT_AVAILABLE_PURVEIANCE>
       </reltypes>
       <layout>
             <appearance_c>
