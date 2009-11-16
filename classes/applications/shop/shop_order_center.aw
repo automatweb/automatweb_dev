@@ -125,7 +125,7 @@
 	@property product_type type=select
 	@caption N&auml;idatavad klassi t&uuml;&uuml;bid
 
-	@property not_available_purveiance type=relpicker reltype=RELTYPE_NOT_AVAILABLE_PURVEIANCE
+	@property not_available_purveiance type=relpicker reltype=RELTYPE_NOT_AVAILABLE_PURVEIANCE multiple=1 store=connect
 	@caption Mitte saadaval tarneinfo
 	@comment Sellised tarneinfod millega tooteid poes ei n&auml;htaks
 

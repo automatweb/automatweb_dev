@@ -285,6 +285,8 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_NOT_AVAILABLE_PURVEIANCE</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
             <caption>Mitte saadaval tarneinfo</caption>
             <comment>Sellised tarneinfod millega tooteid poes ei n&amp;amp;auml;htaks</comment>
       </property>
