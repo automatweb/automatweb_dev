@@ -1997,7 +1997,7 @@ class shop_order_center extends class_base
 			case "aw_default_currency":
 			case "aw_root_menu":
 			case "aw_per_page":
-			case "aw_not_available_purveyance":
+			case "not_available_purveyance":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
