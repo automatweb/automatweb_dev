@@ -284,6 +284,7 @@
             <field>not_available_purveyance</field>
             <method>serialize</method>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita tooteid mis pole saadaval</caption>
             <comment>Toodete mitte n&amp;amp;auml;itamiseks, mis on tarne infoga mis laos defineeritud kui v&amp;amp;auml;lja m&amp;amp;uuml;&amp;amp;uuml;dud</comment>
       </property>
