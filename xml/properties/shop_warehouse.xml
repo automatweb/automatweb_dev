@@ -86,6 +86,16 @@
             <caption>Laoseisu arvestus</caption>
       </property>
       <property>
+            <name>sold_purveyance_code</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>V&amp;amp;auml;ljam&amp;amp;uuml;&amp;amp;uuml;dud kohaletoimetamise kood</caption>
+            <comment>Kohaletoimetamise tingimuse kood, mille puhul toode on v&amp;amp;auml;lja m&amp;amp;uuml;&amp;amp;uuml;dud</comment>
+      </property>
+      <property>
             <name>productgroups_toolbar</name>
             <table>objects</table>
             <group>productgroups</group>

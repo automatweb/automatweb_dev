@@ -42,6 +42,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 	@property status_calc_type type=chooser table=aw_shop_warehouses field=aw_status_calc_type
 	@caption Laoseisu arvestus
 
+	@property sold_purveyance_code type=textbox field=meta method=serialize
+	@caption V&auml;ljam&uuml;&uuml;dud kohaletoimetamise kood
+	@comment Kohaletoimetamise tingimuse kood, mille puhul toode on v&auml;lja m&uuml;&uuml;dud
 
 @default group=productgroups
 
