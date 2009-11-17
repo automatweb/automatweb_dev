@@ -125,9 +125,9 @@
 	@property product_type type=select
 	@caption N&auml;idatavad klassi t&uuml;&uuml;bid
 
-	@property not_available_purveyance type=textbox table=aw_shop_order_center field=aw_not_available_purveyance
-	@caption Mitte saadaval tarneinfo
-	@comment Selliste tarneifode koodid millega tooteid poes ei n&auml;htaks
+	@property dont_show_not_available_purveyance_code type=checkbox table=aw_shop_order_center field=not_available_purveyance
+	@caption &Auml;ra n&auml;ita tooteid mis pole saadaval
+	@comment Toodete mitte n&auml;itamiseks, mis on tarne infoga mis laos defineeritud kui v&auml;lja m&uuml;&uuml;dud
 
 @property childtitle1 type=text store=no subtitle=1
 @caption Vanad-&uuml;le-vaadata-kas-toimivad-ja-kas-vaja
