@@ -278,14 +278,14 @@
             <caption>N&amp;amp;auml;idatavad klassi t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
       </property>
       <property>
-            <name>dont_show_not_available_purveyance_code</name>
+            <name>dont_sell_not_available_products</name>
             <group>appear_settings</group>
-            <table>aw_shop_order_center</table>
-            <field>not_available_purveyance</field>
+            <table>objects</table>
+            <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita tooteid mis pole saadaval</caption>
+            <caption>Auml;ra m&amp;amp;uuml;&amp;amp;uuml; tooteid mis pole saadaval</caption>
             <comment>Toodete mitte n&amp;amp;auml;itamiseks, mis on tarne infoga mis laos defineeritud kui v&amp;amp;auml;lja m&amp;amp;uuml;&amp;amp;uuml;dud</comment>
       </property>
       <property>
