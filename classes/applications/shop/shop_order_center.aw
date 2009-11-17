@@ -125,7 +125,7 @@
 	@property product_type type=select
 	@caption N&auml;idatavad klassi t&uuml;&uuml;bid
 
-	@property not_available_purveiance type=relpicker reltype=RELTYPE_NOT_AVAILABLE_PURVEIANCE multiple=1 store=connect
+	@property not_available_purveiance type=textbox table=aw_shop_order_center field=aw_not_available_purveiance
 	@caption Mitte saadaval tarneinfo
 	@comment Sellised tarneinfod millega tooteid poes ei n&auml;htaks
 
@@ -1997,6 +1997,7 @@ class shop_order_center extends class_base
 			case "aw_default_currency":
 			case "aw_root_menu":
 			case "aw_per_page":
+			case "aw_not_available_purveiance":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
