@@ -125,9 +125,9 @@
 	@property product_type type=select
 	@caption N&auml;idatavad klassi t&uuml;&uuml;bid
 
-	@property not_available_purveiance type=textbox table=aw_shop_order_center field=aw_not_available_purveiance
+	@property not_available_purveyance type=textbox table=aw_shop_order_center field=aw_not_available_purveyance
 	@caption Mitte saadaval tarneinfo
-	@comment Sellised tarneinfod millega tooteid poes ei n&auml;htaks
+	@comment Selliste tarneifode koodid millega tooteid poes ei n&auml;htaks
 
 @property childtitle1 type=text store=no subtitle=1
 @caption Vanad-&uuml;le-vaadata-kas-toimivad-ja-kas-vaja
@@ -1997,7 +1997,7 @@ class shop_order_center extends class_base
 			case "aw_default_currency":
 			case "aw_root_menu":
 			case "aw_per_page":
-			case "aw_not_available_purveiance":
+			case "aw_not_available_purveyance":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
