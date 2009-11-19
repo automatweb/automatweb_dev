@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.35 2009/09/21 15:45:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.36 2009/11/19 13:22:18 dragut Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -446,7 +446,7 @@ class newsfeed extends class_base
 						{
 							$props[$prop] = $o->trans_get_val($prop);
 							$al->parse_oo_aliases($oid,$props[$prop],array("data" => array("rss" => 1)));
-							$di->parse_wiki(& $props[$prop]);
+							$di->parse_wiki(& $props[$prop], null);
 						}
 					}
 				}
@@ -521,7 +521,15 @@ class newsfeed extends class_base
 				print "just go away";
 			
 			default:
-				header('Content-Type: text/xml; charset=ISO-8859-1');
+				$def_charset = aw_global_get('charset');
+				if (!empty($def_charset))
+				{
+					header('Content-Type: text/xml; charset='.$def_charset);
+				}
+				else
+				{
+					header('Content-Type: text/xml; charset=ISO-8859-1');
+				}
 				print $this->rss20_encode($data);
 		};
 		exit;
@@ -531,7 +539,15 @@ class newsfeed extends class_base
 
 	function rss20_encode($data)
 	{
-		$res = "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
+		$def_charset = aw_global_get('charset');
+		if (!empty($def_charset))
+		{
+			$res = "<?xml version='1.0' encoding='".$def_charset."'?>\n";
+		}
+		else
+		{
+			$res = "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
+		}
 		$res .= '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">' . " \n";
 		$res .= "\t<channel>\n";
 		$res .= '<atom:link href="http://www.innove.ee/refernet_rss" rel="self" type="application/rss+xml" />';
