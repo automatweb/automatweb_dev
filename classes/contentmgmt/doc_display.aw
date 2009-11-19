@@ -1030,7 +1030,7 @@ class doc_display extends aw_template
 				"cnt");
 			$this->vars(array(
 				"num_comments" => sprintf("%d",$num_comments),
-				"comm_link" => str_replace("&", "&amp;", $this->mk_my_orb("show_threaded",array("board" => $doc->id(),"section" => $_sect),"forum")),
+				"comm_link" => str_replace("&", "&amp;", $this->mk_my_orb("show_threaded",array("board" => $doc->id(),"section" => $doc->id()),"forum")),
 			));
 			$forum = get_instance(CL_FORUM);
 			$fr = $forum->add_comment(array("board" => $doc->id(),"section" => $_sect));
