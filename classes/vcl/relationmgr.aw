@@ -1073,29 +1073,11 @@ class relationmgr extends aw_template
 			$cn = "to";
 		}
 
-		$conn_ids = array();
-		foreach($conn as $alias)
+		foreach ($conn as $alias)
 		{
 			$oid = $alias->prop($cn);
-			$conn_ids[$oid] = $oid;
-			$conns[$oid] = $alias;
-		}
+			$target_obj = new object($oid);
 
-		if(count($conn_ids))
-		{
-			$loader_ol = new object_list(array(
-				"site_id" => array(),
-				"lang_id" => array(),
-				"oid" => $conn_ids,
-			));
-		}
-		else
-		{
-			$loader_ol = new object_list();
-		}
-		foreach($loader_ol->arr() as $oid => $target_obj)
-		{
-			$alias = $conns[$oid];
 			$adat = array(
 				"createdby" => $target_obj->prop("createdby"),
 				"created" => $target_obj->prop("created"),
