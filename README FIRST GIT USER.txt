@@ -7,3 +7,4 @@ mis omakorda asub githubis.
 Edu!
 
 nii, see peaks olema miskit muudatus veelkorra... 
+?
