@@ -5,3 +5,5 @@ see peaks olema esimene fail, mis on lisatud AW Git-i hoidlasse,
 mis omakorda asub githubis.
 
 Edu!
+
+nii, see peaks olema miskit muudatus veelkorra... 
