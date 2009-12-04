@@ -8,3 +8,6 @@ Edu!
 
 nii, see peaks olema miskit muudatus veelkorra... 
 ?
+
+* coloring...
+* file ext *.aw
