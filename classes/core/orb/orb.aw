@@ -184,7 +184,7 @@ class orb extends aw_template
 				$this->raise_error("ERR_ORB_MNOTFOUND",sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),true,$silent);
 			}
 
-			if ($orb_defs[$class][$action]["xmlrpc"] == 1)
+			if (isset($orb_defs[$class][$action]["xmlrpc"]) and $orb_defs[$class][$action]["xmlrpc"] == 1)
 			{
 				$url = $this->do_orb_xmlrpc_call($orb_defs[$class][$action]["server"],$class,$action,$vars);
 			}
