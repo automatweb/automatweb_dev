@@ -108,6 +108,10 @@ class core extends acl_base
 		{
 			return;
 		}
+		
+		//UnWasted - it seems that there is no definitions anymore?
+		if (!is_int($type) or !is_int($action))
+			return;
 
 		if (empty($this->dc))
 		{
