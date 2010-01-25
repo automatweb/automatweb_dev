@@ -1,8 +1,5 @@
 <?php
 $uid = "";	// for the extra paranoid
-ini_set("session.save_handler", "files");
-session_name("automatweb");
-session_start();
 
 unset($_SESSION["nliug"]);
 
@@ -23,7 +20,6 @@ lc_init();
 // you cannot aw_startup() here, it _will_ break things
 // reset aw_cache_* function globals
 $GLOBALS["__aw_cache"] = array();
-_aw_global_init();
 aw_set_exec_time(AW_SHORT_PROCESS);
 check_pagecache_folders();
 
