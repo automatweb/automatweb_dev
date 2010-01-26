@@ -2531,8 +2531,9 @@ class _int_object
 		// we're gonna clear it all.
 		if (!aw_ini_get("acl.use_new_acl"))
 		{
-			$c = get_instance("cache");
-			$c->file_clear_pt("acl");
+			//$c = get_instance( "cache");
+			//$c->file_clear_pt("acl");
+			Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
 		}
 	}
 

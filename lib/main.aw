@@ -18,6 +18,12 @@ require_once AW_DIR . "lib/site_file_index" . AW_FILE_EXT;
 
 function __autoload($class_name)
 {
+	if (0 === strpos($class_name, 'Zend_')) {
+		require_once AW_DIR . 'library/' . str_replace('_', '/', $class_name) . '.php';
+		return;
+	}
+	
+	
 	$orig_class_name = $class_name;
 	//klassile pakihalduse teemalise versiooni
 	if(function_exists("get_class_version"))

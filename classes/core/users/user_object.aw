@@ -386,8 +386,10 @@ class user_object extends _int_object
 				$brother_id = $this->create_brother($p_o->id());
 			}
 		}
-		$c = get_instance("cache");
-		$c->file_clear_pt("acl");
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
+		//$c = get_instance( "cache");
+		//$c->file_clear_pt("acl");
 	}
 
 

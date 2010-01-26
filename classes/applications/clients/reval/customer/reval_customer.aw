@@ -673,8 +673,11 @@ class reval_customer extends class_base
 	private function _ep_do_city_select($city_id)
 	{
 		$ce = "";
-		$c = get_instance("cache");
-		if (($ct = $c->file_get("ws_city_list")) !== false)
+		//$c = get_instance( "cache");
+		$cache = Zend_Registry::get('Zend_Cache');
+		
+		//if (($ct = $c->file_get("ws_city_list")) !== false)
+		if (false !== ($ct = $cache->load("ws_city_list")))
 		{
 			//$d = unserialize($ct);
 			$ce = $ct;
@@ -697,7 +700,8 @@ class reval_customer extends class_base
 				$ce .= $this->parse("CITY_ENTRY");
 			}
 
-			$c->file_set("ws_city_list", /*serialize($d)*/ $ce);
+			//$c->file_set("ws_city_list", /*serialize($d)*/ $ce);
+			$cache->save($ce, "ws_city_list");
 		}
 
 		$this->vars(array("CITY_ENTRY" => $ce));

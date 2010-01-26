@@ -320,8 +320,9 @@ class expp_journal_management extends class_base
 
         function callback_post_save($arr)
         {
-                $cache_inst = get_instance("cache");
-                $cache_inst->file_invalidate($arr['obj_inst']->prop("code").".cache");
+        	Zend_Registry::get('Zend_Cache')->remove($arr['obj_inst']->prop("code").".cache");
+                //$cache_inst = get_instance( "cache");
+                //$cache_inst->file_invalidate($arr['obj_inst']->prop("code").".cache");
         }
 
 	function callback_get_transl($arr)

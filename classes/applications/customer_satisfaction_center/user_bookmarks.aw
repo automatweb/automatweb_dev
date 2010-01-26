@@ -891,9 +891,14 @@ class user_bookmarks extends class_base
 
 		$pm = get_instance("vcl/popup_menu");
 		$pm->begin_menu("user_bookmarks");
-		$c = get_instance("cache");
-		$time = 5*24*60*60;
-		if (!($cd = $c->file_get_ts("bms".$bm->id(), time() - $time)))
+		
+		$cache = Zend_Registry::get('Zend_Cache');
+		
+		//$c = get_instance( "cache");
+		//$time = 5*24*60*60;
+		
+		if (false === ($cd = $cache->load("bms".$bm->id())))
+		//if (!($cd = $c->file_get_ts("bms".$bm->id(), time() - $time)))
 		{
 			$parents = array();
 			$list = array();
@@ -909,12 +914,14 @@ class user_bookmarks extends class_base
 				"listids" => $listids,
 				"parents" => $parents,
 			);
-			$c->file_set("bms".$bm->id(), aw_serialize($cd));
+			//$c->file_set("bms".$bm->id(), aw_serialize($cd));
+			$cache->save($cd, "bms".$bm->id(), array(), time() + 5*24*60*60);
 		}
-		if($cd && !is_array($cd))
-		{
-			$cd = aw_unserialize($cd);
-		}
+		//if($cd && !is_array($cd))
+		//{
+		//	$cd = aw_unserialize($cd);
+		//}
+		
 		if($cd)
 		{
 			$oids = $cd["listids"];
@@ -1107,8 +1114,9 @@ class user_bookmarks extends class_base
 
 	function clear_cache($bm)
 	{
-		$c = get_instance("cache");
-		$c->file_invalidate("bms".$bm->id());
+		Zend_Registry::get('Zend_Cache')->remove("bms".$bm->id());
+		//$c = get_instance( "cache");
+		//$c->file_invalidate("bms".$bm->id());
 	}
 
 	function show($arr)

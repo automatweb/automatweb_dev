@@ -51,18 +51,29 @@ class old_search_model extends aw_template implements main_subtemplate_handler
 
 	function get_groups($no_strip = false)
 	{
-		$cache = get_instance("cache");
-		$cs = $cache->file_get("search_groups-".$this->cfg["site_id"]);
-		if ($cs)
-		{
-			$ret = aw_unserialize($cs);
-		}
-		else
-		{
+		/* @var $cache Zend_Cache_Core */
+		$cache = Zend_Registry::get('Zend_Cache');
+		
+		if (false === ($ret = $cache->load("search_groups-".$this->cfg["site_id"]))) {
+			
 			$dat = $this->get_cval("search_grps");
 			$ret = aw_unserialize($dat);
-			$cache->file_set("search_groups-".$this->cfg["site_id"],aw_serialize($ret));
-		};
+			
+			$cache->save($ret, "search_groups-".$this->cfg["site_id"]);
+		}
+		
+		//$cache = get_instance( "cache");
+		//$cs = $cache->file_get("search_groups-".$this->cfg["site_id"]);
+		//if ($cs)
+		//{
+		//	$ret = aw_unserialize($cs);
+		//}
+		//else
+		//{
+		//	$dat = $this->get_cval("search_grps");
+		//	$ret = aw_unserialize($dat);
+		//	$cache->file_set("search_groups-".$this->cfg["site_id"],aw_serialize($ret));
+		//};
 
 		if ($no_strip)
 		{

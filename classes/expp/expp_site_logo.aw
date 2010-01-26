@@ -20,7 +20,7 @@ class expp_site_logo extends class_base implements main_subtemplate_handler
 			"tpldir" => "automatweb/menuedit",
 			"clid" => CL_EXPP_SITE_LOGO
 		));
-//		$this->ch = get_instance("cache");
+//		$this->ch = get_instance( "cache");
 	}
 
 	function show($arr) {

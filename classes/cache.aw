@@ -9,8 +9,39 @@
 
 class cache extends core
 {
+	
+	/**
+	 * @var Zend_Cache_Core
+	 */
+	private static $cache;
+	
+	/**
+	 * Returns Zend_Cache_Core instance.
+	 * 
+	 * @return	Zend_Cache_Core
+	 */
+	private function getCache() {
+		if (!self::$cache instanceof Zend_Cache_Core)
+			self::$cache = Zend_Registry::get('Zend_Cache');
+			
+		return self::$cache;
+	}
+	
+	
 	function cache()
 	{
+		//$this->getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+		//Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		//$cache->save($tree, "newbtn_tree_cache_".aw_global_get("uid"));
+		//if (false !== ($ct = $cache->load('xml_datasource_' . $id)))
+		//$this->getCache()->load('xml_datasource_' . $id);
+		
+		//$this->getCache()->save();
+		
+		//Zend_Registry::get('Zend_Cache');
+		
+		// aw_cache_set_array() ??
+		
 		$this->db_init();
 		aw_config_init_class(&$this);
 	}
@@ -715,15 +746,16 @@ class cache extends core
 
 	private function _crea_fld($f)
 	{
-		$fq = $this->cfg["page_cache"]."/".$f;
-		mkdir($fq, 0777);
-		@chmod($fq, 0777);
-		for($i = 0; $i < 16; $i++)
-		{
-			$ffq = $fq ."/".($i < 10 ? $i : chr(ord('a') + ($i- 10)));
-			@mkdir($ffq, 0777);
-			@chmod($ffq, 0777);
-		}
+		trigger_error('DEPRECATED', E_USER_ERROR);
+		//$fq = $this->cfg["page_cache"]."/".$f;
+		//mkdir($fq, 0777);
+		//@chmod($fq, 0777);
+		//for($i = 0; $i < 16; $i++)
+		//{
+		//	$ffq = $fq ."/".($i < 10 ? $i : chr(ord('a') + ($i- 10)));
+		//	@mkdir($ffq, 0777);
+		//	@chmod($ffq, 0777);
+		//}
 	}
 
 	/** Returns client-unserialized cache file
@@ -942,6 +974,10 @@ class cache extends core
 		{
 			return;
 		}
+		
+		$this->_getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
+		//UnWasted - do that for compatiblity
 		$this->cache_files = array();
 		$this->cache_files2 = array();
 		$this->_get_cache_files(aw_ini_get("cache.page_cache"));

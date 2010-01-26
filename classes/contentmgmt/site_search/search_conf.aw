@@ -1006,12 +1006,17 @@ class search_conf extends aw_template
 	{
 		// here we must first sort the $grps array based on user entered order
 		uasort($grps,array($this,"_grp_sort"));
-		$cache = get_instance("cache");
+		//$cache = get_instance( "cache");
 
+		/* @var $cache Zend_Cache_Core */
+		$cache = Zend_Registry::get('Zend_Cache');
+		
 		$lgps = $this->get_groups(true);
 		$lgps[$this->cfg["site_id"]][aw_global_get("lang_id")] = $grps;
 
-		$cache->file_set("search_groups-".$this->cfg["site_id"],aw_serialize($lgps));
+		//$cache->file_set("search_groups-".$this->cfg["site_id"],aw_serialize($lgps));
+		$cache->save($lgps, "search_groups-".$this->cfg["site_id"]);
+		
 		$dat = aw_serialize($lgps,SERIALIZE_XML);
 		$this->quote(&$dat);
 		$c = get_instance("config");

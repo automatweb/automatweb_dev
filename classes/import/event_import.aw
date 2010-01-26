@@ -2590,8 +2590,10 @@ class event_import extends class_base
 
 		print "FLUSHING CACHE<br><br>";
 		flush();
-		$cache = get_instance("cache");
-		$cache->full_flush();
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
+		//$cache = get_instance( "cache");
+		//$cache->full_flush();
 
 //		$this->activate_next_auto_import($arr);
 

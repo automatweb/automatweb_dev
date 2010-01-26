@@ -155,11 +155,11 @@ class version_manager extends class_base
 			$this->db_query($q);
 			$this->db_query("DELETE FROM $tn WHERE $idx = '".$o->id()."' AND version_id = '$sav'");
 
-				
-			$c = get_instance("cache");
-			$c->file_clear_pt("storage_object_data");
-			$c->file_clear_pt("storage_search");
-			$c->file_clear_pt("html");
+			Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+			//$c = get_instance( "cache");
+			//$c->file_clear_pt("storage_object_data");
+			//$c->file_clear_pt("storage_search");
+			//$c->file_clear_pt("html");
 		}
 		return $arr["post_ru"];
 	}

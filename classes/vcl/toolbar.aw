@@ -243,8 +243,12 @@ class toolbar extends aw_template
 			// because there's just too many elements for browser to handle.
 			if ($_SERVER["PHP_SELF"]=="/automatweb/orb.aw")
 			{
-				$cache = get_instance("cache");
-				$cache->file_set("aw_toolbars_".aw_global_get("uid"),$cache->file_get("aw_toolbars_".aw_global_get("uid")).$cdata );
+				//$cache = get_instance( "cache");
+				//$cache->file_set("aw_toolbars_".aw_global_get("uid"),$cache->file_get("aw_toolbars_".aw_global_get("uid")).$cdata );
+				
+				/* @var $cache Zend_Cache_Core */
+				$cache = Zend_Registry::get('Zend_Cache');
+				$cache->save($cache->load("aw_toolbars_".aw_global_get("uid")).$cdata, "aw_toolbars_".aw_global_get("uid"));
 			}
 			else // for site use the old method
 			{

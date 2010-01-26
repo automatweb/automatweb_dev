@@ -35,18 +35,24 @@ class aw_object_quickadd extends class_base
 		classload("core/icons");
 		
 		// although fast enough allready .. caching makes it 3 times as fast
-		$c = get_instance("cache");
-		$tree = $c->file_get("aw_object_quickadd_cache_".aw_global_get("uid"));
-		$tree = unserialize($tree);
+		//$c = get_instance( "cache");
 		
-		if(!is_array($tree))
+		/* @var $cache Zend_Cache_Core */
+		$cache = Zend_Registry::get('Zend_Cache');
+		
+		//$tree = $c->file_get("aw_object_quickadd_cache_".aw_global_get("uid"));
+		//$tree = unserialize($tree);
+		
+		//if(!is_array($tree))
+		if (false === ($tree = $cache->load("aw_object_quickadd_cache_".aw_global_get("uid"))))
 		{
 			$tree = $atc->get_class_tree(array(
 				"docforms" => 1,
 				// those are for docs menu only
 				"parent" => "--p--",
 			));
-			$c->file_set("aw_object_quickadd_cache_".aw_global_get("uid"), serialize($tree));
+			$cache->save($tree, "aw_object_quickadd_cache_".aw_global_get("uid"));
+			//$c->file_set("aw_object_quickadd_cache_".aw_global_get("uid"), serialize($tree));
 		}
 		
 		foreach($tree as $item_id => $item_collection)

@@ -482,8 +482,10 @@ class expp_import extends class_base
 				$this->db_query( $sql );
 			}
 		}
-		$ch = get_instance("cache");
-		$ch->full_flush();
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
+		//$ch = get_instance( "cache");
+		//$ch->full_flush();
 	}
 /*===========================================================================*/
 	function parse_graafik( $temp_arr ) {

@@ -1547,8 +1547,11 @@ class converters extends aw_template
 				flush();
 			}
 		}
-		$c = get_instance("cache");
-		$c->full_flush();
+		//$c = get_instance( "cache");
+		//$c->full_flush();
+		
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
 		die("all done");
 	}
 

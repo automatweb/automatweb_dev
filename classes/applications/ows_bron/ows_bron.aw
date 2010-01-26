@@ -3646,13 +3646,11 @@ die();
 		$parameters["numberOfAdultsPerRoom"] = 1;
 
 enter_function("ws:GetAvailableHotels");
-		$c = get_instance("cache");
-		if (($ct = $c->file_get("ows_hotel_list")))
-		{
-			$return = unserialize($ct);
-		}
-		else
-		{
+
+		/* @var $cache Zend_Cache_Core */
+		$cache = Zend_Registry::get('Zend_Cache');
+		
+		if (false === ($return = $cache->load('ows_hotel_list'))) {
 			$return = $this->do_orb_method_call(array(
 				"action" => "GetHotelDescriptions",
 				"class" => "http://markus.ee/RevalServices/Booking/",
@@ -3660,8 +3658,25 @@ enter_function("ws:GetAvailableHotels");
 				"method" => "soap",
 				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 			));
-			$c->file_set("ows_hotel_list", serialize($return));
+			$cache->save($return, 'ows_hotel_list');
 		}
+		
+		//$c = get_instance( "cache");
+		//if (($ct = $c->file_get("ows_hotel_list")))
+		//{
+		//	$return = unserialize($ct);
+		//}
+		//else
+		//{
+		//	$return = $this->do_orb_method_call(array(
+		//		"action" => "GetHotelDescriptions",
+		//		"class" => "http://markus.ee/RevalServices/Booking/",
+		//		"params" => array(),
+		//		"method" => "soap",
+		//		"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+		//	));
+		//	$c->file_set("ows_hotel_list", serialize($return));
+		//}
 if ($_GET["kk"] == 1)
 {
 echo dbg::dump($return);

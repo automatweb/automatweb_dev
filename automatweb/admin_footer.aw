@@ -320,7 +320,9 @@ if (!empty($html_title_obj))
 	$html_title .=  ": " . $html_title_obj;
 }
 
-$cache = get_instance("cache");
+/* @var $cache Zend_Cache_Core */
+$cache = Zend_Registry::get('Zend_Cache');
+//$cache = get_instance( "cache");
 
 classload("core/util/minify_js_and_css");
 
@@ -330,9 +332,10 @@ $sf->vars(array(
 	"title_action" => $ta,
 	"html_title" => $html_title,
 	"MINIFY_JS_AND_CSS" => aw_ini_get("site_id") != 477 ? (minify_js_and_css::parse_admin_header($sf->parse("MINIFY_JS_AND_CSS"))) : $sf->parse("MINIFY_JS_AND_CSS"),
-	"POPUP_MENUS" => $cache->file_get("aw_toolbars_".aw_global_get("uid")),
+	"POPUP_MENUS" => $cache->load("aw_toolbars_".aw_global_get("uid")),
 ));
-$cache->file_set("aw_toolbars_".aw_global_get("uid"), "");
+$cache->save('', "aw_toolbars_".aw_global_get("uid"));
+//$cache->file_set("aw_toolbars_".aw_global_get("uid"), "");
 
 if ($sf->is_template("aw_styles"))
 {

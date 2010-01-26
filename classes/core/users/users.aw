@@ -862,10 +862,13 @@ die();
 				"type" => "RELTYPE_PERSON"
 			));
 			$u_obj->save();
-			$c = get_instance("cache");
-			$c->file_clear_pt("storage_object_data");
-			$c->file_clear_pt("storage_search");
-			$c->file_clear_pt("acl");
+			
+			Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$c = get_instance( "cache");
+			//$c->file_clear_pt("storage_object_data");
+			//$c->file_clear_pt("storage_search");
+			//$c->file_clear_pt("acl");
 		}
 		else
 		{
@@ -892,10 +895,13 @@ die();
 					"type" => 2,
 				));
 				$o->save();
-				$c = get_instance("cache");
-				$c->file_clear_pt("storage_object_data");
-				$c->file_clear_pt("storage_search");
-				$c->file_clear_pt("acl");
+				
+				Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+				
+				//$c = get_instance("cache");
+				//$c->file_clear_pt("storage_object_data");
+				//$c->file_clear_pt("storage_search");
+				//$c->file_clear_pt("acl");
 			}
 			else
 			{

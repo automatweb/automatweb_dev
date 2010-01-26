@@ -592,7 +592,8 @@ class releditor extends core
 
 		$found = true;
 
-		$cache_inst = get_instance("cache");
+		//UnWasted - no use fot that over here???
+		//$cache_inst = get_instance( "cache");
 
 		if ($edit_id !== false && !empty($edit_id) && is_oid($edit_id) && is_oid($arr["obj_inst"]->id()))
 		{

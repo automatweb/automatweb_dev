@@ -4042,21 +4042,23 @@ class otto_import extends class_base implements warehouse_import_if
 		////////////////
 		// clear cache
 		////////////////
-		$cache = get_instance("cache");
- 		$cache->file_clear_pt("menu_area_cache");
-		$cache->file_clear_pt("storage_search");
-		$cache->file_clear_pt("storage_object_data");
-		$cache->file_clear_pt("html");
-		$cache->file_clear_pt("acl");
+		//$cache = get_instance( "cache");
+ 		//$cache->file_clear_pt("menu_area_cache");
+		//$cache->file_clear_pt("storage_search");
+		//$cache->file_clear_pt("storage_object_data");
+		//$cache->file_clear_pt("html");
+		//$cache->file_clear_pt("acl");
 
-		$fld = aw_ini_get("site_basedir")."/prod_cache";
-		$cache->_get_cache_files($fld);
-		echo 'about to delete '.count($cache->cache_files2).' files<br />';
+		//$fld = aw_ini_get("site_basedir")."/prod_cache";
+		//$cache->_get_cache_files($fld);
+		//echo 'about to delete '.count($cache->cache_files2).' files<br />';
 
-		foreach(safe_array($cache->cache_files2) as $file)
-		{
-			unlink($file);
-		}
+		//foreach(safe_array($cache->cache_files2) as $file)
+		//{
+		//	unlink($file);
+		//}
+		
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
 
 		echo "all done! <br />\n";
 		return;
@@ -6263,9 +6265,11 @@ return false;
 			$sql = 'update aw_shop_products set user4 = '.implode(',', $valid_prods).' where aw_oid='.$data['aw_oid'];
 			$this->db_query($sql);
 		}
-		$cache = get_instance("cache");
-		$cache->full_flush();
+		//$cache = get_instance( "cache");
+		//$cache->full_flush();
 
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
 		echo "valmis! <br />";
 	}
 

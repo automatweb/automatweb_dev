@@ -916,11 +916,14 @@ class admin_if extends class_base
 		$atc = get_instance(CL_ADD_TREE_CONF);
 
 		// although fast enough allready .. caching makes it 3 times as fast
-		$c = get_instance("cache");
+		$cache = Zend_Registry::get('Zend_Cache');
+		//$c = get_instance( "cache");
+		
 		if(aw_ini_get("admin_if.cache_toolbar_new"))
 		{
-			$tree = $c->file_get("newbtn_tree_cache_".aw_global_get("uid"));
-			$tree = unserialize($tree);
+			$tree = $cache->load("newbtn_tree_cache_".aw_global_get("uid"));
+			//$tree = $c->file_get("newbtn_tree_cache_".aw_global_get("uid"));
+			//$tree = unserialize($tree);
 		}
 
 		if(!is_array($tree))
@@ -932,7 +935,8 @@ class admin_if extends class_base
 				"parent" => "--pt--",
 				"period" => "--pr--",
 			));
-			$c->file_set("newbtn_tree_cache_".aw_global_get("uid"), serialize($tree));
+			//$c->file_set("newbtn_tree_cache_".aw_global_get("uid"), serialize($tree));
+			$cache->save($tree, "newbtn_tree_cache_".aw_global_get("uid"));
 		}
 
 		$new_url_template = str_replace("__", "%s", $this->mk_my_orb("new",array("parent" => "__"),"__"));

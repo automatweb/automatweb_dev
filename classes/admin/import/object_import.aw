@@ -856,9 +856,12 @@ class object_import extends class_base
 			}
 			aw_ini_set("cache.use_html_cache", 1);
 			$this->_add_log($o, $this->_delete_objects($o, $properties, $tableinfo, $data_rows, $p2c, $userval, $class_id));
-			$c = get_instance("cache");
+			
+			//$c = get_instance( "cache");
 			aw_global_set("no_cache_flush", 0);
-			$c->full_flush();
+			//$c->full_flush();
+			Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
 			$this->do_mark_finish_import($o);
 			echo t("Valmis! <br>\n");
 			echo "<script language=javascript>setTimeout(\"window.location='".$this->mk_my_orb("change", array("id" => $o->id()))."'\", 5000);</script>";

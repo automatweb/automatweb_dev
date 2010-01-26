@@ -5,14 +5,26 @@
 
 class languages extends aw_template implements request_startup
 {
+	/**
+	 * @var Zend_Cache_Core
+	 */
+	public $cache;
+	
+	/**
+	 * @var string
+	 */
+	public $cf_name;
+	
 	function languages()
 	{
 		$this->init("languages");
 		lc_load("definition");
 		$this->lc_load("languages","lc_languages");
-		$this->file_cache = get_instance("cache");
+		//$this->file_cache = get_instance( "cache");
+		
+		$this->cache = Zend_Registry::get('Zend_Cache');
 		// the name of the cache file
-		$this->cf_name = "languages-cache-site_id-".$this->cfg["site_id"];
+		$this->cf_name = "languages_cache_site_id_".$this->cfg["site_id"];
 		$this->init_cache();
 	}
 
@@ -366,14 +378,16 @@ class languages extends aw_template implements request_startup
 			// this doesn't exactly take much time anyway, but still, can't be bad, can it?
 
 			// if the file cache exists and this is not an update, then read from that
-			if (!$force_read && ($cc = $this->file_cache->file_get($this->cf_name)))
+			//if (!$force_read && ($cc = $this->file_cache->file_get($this->cf_name)))
+			if (!$force_read && false !== ($cc = $this->cache->load($this->cf_name)))
 			{
-				aw_cache_set_array("languages", aw_unserialize($cc));
+				//aw_cache_set_array("languages", aw_unserialize($cc));
+				aw_cache_set_array('languages', $cc);
 			}
 			else
 			{
 				// we must re-read from the db and write the cache
-				aw_cache_flush("languages");
+				aw_cache_flush("languages"); //UnWasted - @FIXME why flush, if you rewrite it anyway?
 				$this->db_query("SELECT languages.*,o.comment as comment FROM languages LEFT JOIN objects o ON languages.oid = o.oid WHERE languages.status != 0 ORDER BY o.jrk");
 				while ($row = $this->db_next())
 				{
@@ -387,7 +401,8 @@ class languages extends aw_template implements request_startup
 						aw_cache_set("languages", $row["id"],$row);
 					}
 				}
-				$this->file_cache->file_set($this->cf_name,aw_serialize(aw_cache_get_array("languages")));
+				//$this->file_cache->file_set($this->cf_name,aw_serialize(aw_cache_get_array("languages")));
+				$this->cache->save(aw_cache_get_array('languages'), $this->cf_name);
 			}
 			aw_global_set("lang_cache_init",1);
 		}

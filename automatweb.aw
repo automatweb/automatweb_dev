@@ -36,11 +36,36 @@ class automatweb
 	public static $instance; // current aw instance. read-only.
 	public static $result; // aw_resource object. result of executing the request
 
+	/**
+	 * @var Zend_Cache_Core
+	 */
+	private $cache;
+	
+	
 	private function __construct()
 	{
 		// initialize object lifetime
 		$this->start_time = microtime(true);
 		$this->mode(self::MODE_DEFAULT);
+	}
+	
+	public function initCache() {
+		
+		$frontendOptions = array(
+   			'lifetime' => aw_ini_get("cache.cacheLifetime"),
+   			'automatic_serialization' => true
+		);
+ 		
+		$backendOptions = array(
+    		'cache_dir' => aw_ini_get("cache.cacheDir")
+		);
+ 		
+		$this->cache = Zend_Cache::factory('Core',
+                            'File',
+                            $frontendOptions,
+                            $backendOptions);
+		
+		Zend_Registry::set('Zend_Cache', $this->cache);
 	}
 
 	/** Shortcut method for running a typical http www request
@@ -205,6 +230,8 @@ class automatweb
 
 		load_config($files, $cache_file);
 
+		$this->initCache(); //UnWasted - initialize cache
+		
 		// configure settings with values from aw configuration
 		date_default_timezone_set(aw_ini_get("date_default_tz"));
 

@@ -286,10 +286,12 @@ class ml_list_obj extends _int_object
 						flush();
 					}
 				}
-				$c = get_instance("cache");
-				$c->file_clear_pt("menu_area_cache");
-				$c->file_clear_pt("storage_search");
-				$c->file_clear_pt("storage_object_data");
+				//$c = get_instance( "cache");
+				//$c->file_clear_pt("menu_area_cache");
+				//$c->file_clear_pt("storage_search");
+				//$c->file_clear_pt("storage_object_data");
+				
+				Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
 			}
 			$log[]= sprintf(t("Importisin %s aadressi"),$cnt);
 			if($debug) print "Importisin $cnt aadressi<br>";

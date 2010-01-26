@@ -86,11 +86,13 @@ class cache_updater extends class_base
 	**/
 	function do_clear($arr)
 	{
-		$mt = get_instance("cache");
-		$mt->file_clear_pt("menu_area_cache");
-		$mt->file_clear_pt("storage_search");
-		$mt->file_clear_pt("storage_object_data");
-		$mt->file_clear_pt("html");
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
+		//$mt = get_instance( "cache");
+		//$mt->file_clear_pt("menu_area_cache");
+		//$mt->file_clear_pt("storage_search");
+		//$mt->file_clear_pt("storage_object_data");
+		//$mt->file_clear_pt("html");
 
 		$this->_add_scheduler(array(obj($arr["id"])));
 	}

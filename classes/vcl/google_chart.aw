@@ -86,6 +86,23 @@ class google_chart extends aw_template
 	var $using_cache;
 	var $uniq_id;
 
+	/**
+	 * @var Zend_Cache_Core
+	 */
+	private static $cache;
+	
+	/**
+	 * Returns Zend_Cache_Core instance.
+	 * 
+	 * @return	Zend_Cache_Core
+	 */
+	private function getCache() {
+		if (!self::$cache instanceof Zend_Cache_Core)
+			self::$cache = Zend_Registry::get('Zend_Cache');
+			
+		return self::$cache;
+	}
+	
 	function google_chart()
 	{
 		$this->init (array (
@@ -568,12 +585,14 @@ class google_chart extends aw_template
 	**/
 	function has_cache()
 	{
-		$c = get_instance("cache");
-		if ($this->uniq_id && $c->file_get("gchart_".$this->uniq_id))
-		{
-			return true;
-		}
-		return false;
+		return (bool)($this->uniq_id and $this->getCache()->test('gchart_'.$this->uniq_id));
+		
+		//$c = get_instance( "cache");
+		//if ($this->uniq_id && $c->file_get("gchart_".$this->uniq_id))
+		//{
+		//	return true;
+		//}
+		//return false;
 	}
 
 	/**
@@ -724,8 +743,9 @@ class google_chart extends aw_template
 
 		if($this->using_cache && $this->uniq_id)
 		{
-			$c = get_instance("cache");
-			$c->file_set("gchart_".$this->uniq_id, $url);
+			$this->getCache()->save($url, 'gchart_' . $this->uniq_id);
+			//$c = get_instance( "cache");
+			//$c->file_set("gchart_".$this->uniq_id, $url);
 		}
 
 		return html::img(array(
@@ -736,12 +756,17 @@ class google_chart extends aw_template
 
 	private function load_from_cache()
 	{
-		$c = get_instance("cache");
-		$url = $c->file_get("gchart_".$this->uniq_id);
 		return html::img(array(
-			"url" => $url,
-			"border" => 0,
+			'url' => $this->getCache()->load('gchart_' . $this->uniq_id), 
+			'border' => 0
 		));
+		
+		//$c = get_instance( "cache");
+		//$url = $c->file_get("gchart_".$this->uniq_id);
+		//return html::img(array(
+		//	"url" => $url,
+		//	"border" => 0,
+		//));
 	}
 
 	private function process_barsizes()

@@ -414,7 +414,7 @@ class persona_import extends class_base
 			"class_id" => array(),
 		));
 		$ol->delete();
-		$cache = get_instance("cache");
+		$cache = get_instance( "cache");
 		$cache->full_flush();
 		exit;
 		*/
@@ -2061,9 +2061,11 @@ class persona_import extends class_base
 		
 		print "flushing cache<br>";
 		flush();
-		$cache = get_instance("cache");
-		$cache->full_flush();
+		//$cache = get_instance( "cache");
+		//$cache->full_flush();
 
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
 		print "everything is done<br>";
 
 		exit;

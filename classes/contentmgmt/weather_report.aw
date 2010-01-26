@@ -104,13 +104,21 @@ class weather_report extends class_base
 		if($ob->prop("report_type")==1)
 		{
 			$this->read_template("show.tpl");
-			$c = get_instance("cache");
+			//$c = get_instance( "cache");
+			
+			/* @var $cache Zend_Cache_Core */
+			$cache = Zend_Registry::get('Zend_Cache');
+			
 			$time = ((int)$ob->prop("cache_time"))*60*60;
-			if (!($ct = $c->file_get_ts("weather_".$ob->id(), time() - $time)))
+			
+			//if (!($ct = $c->file_get_ts("weather_".$ob->id(), time() - $time)))
+			if (false === ($ct = $cache->load("weather_".$ob->id())))
 			{
 				$ct = $this->fetch_data($ob);
 				if($ct)
-				$c->file_set("weather_".$ob->id(), $ct);
+				$cache->save($ct, "weather_".$ob->id(), array(), $time);
+				
+				//$c->file_set("weather_".$ob->id(), $ct);
 			}
 			if($ct)
 			{

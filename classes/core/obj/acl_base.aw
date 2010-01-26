@@ -97,9 +97,12 @@ class acl_base extends db_connector
 		if ($invd)
 		{
 			aw_session_set("__acl_cache", array());
-			$c = get_instance("cache");
-			$c->file_clear_pt("acl");
-			$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
+			//$c = get_instance( "cache");
+			//$c->file_clear_pt("acl");
+			//$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
+			
+			//UnWasted - there is no tag support in memory cache, so clean it all
+			Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
 		}
 	}
 
@@ -160,9 +163,12 @@ class acl_base extends db_connector
 		}
 
 		aw_session_set("__acl_cache", array());
-		$c = get_instance("cache");
-		$c->file_clear_pt("acl");
-		$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
+		// = get_instance( "cache");
+		//$c->file_clear_pt("acl");
+		//$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
+		
+		//UnWasted - there is no tag support in memory cache, so clean it all
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
 	}
 
 	function save_acl($oid,$gid,$aclarr, $invd = true)
@@ -201,9 +207,12 @@ class acl_base extends db_connector
 		if ($invd)
 		{
 			aw_session_set("__acl_cache", array());
-			$c = get_instance("cache");
-			$c->file_clear_pt("acl");
-			$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
+			//$c = get_instance( "cache");
+			//$c->file_clear_pt("acl");
+			//$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
+			
+			//UnWasted - there is no tag support in memory cache, so clean it all
+			Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
 		}
 	}
 
@@ -392,7 +401,10 @@ class acl_base extends db_connector
 		static $acl_cache;
 		if (!$acl_cache)
 		{
-			$acl_cache = get_instance("cache");
+			//$acl_cache = get_instance( "cache");
+			
+			/* @var $acl_cache Zend_Cache_Core */
+			$acl_cache = Zend_Registry::get('Zend_Cache');
 		}
 		if (!$this)
 		{
@@ -403,17 +415,25 @@ class acl_base extends db_connector
 		{
 			$_uid = isset($_SESSION["uid"]) ? $_SESSION["uid"] : "";
 			$fn = "acl-".$oid."-uid-".$_uid;
-			if (($str_max_acl = $acl_cache->file_get_pt_oid("acl", $oid, $fn)) == false)
-			{
+			
+			if (false === ($str_max_acl = $acl_cache->load($fn))) {
+				
 				$max_acl = $this->can_aw($access,$oid);
-
-				$acl_cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_NATIVE));
+				$acl_cache->save($max_acl, $fn);
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
 			}
-			else
-			{
-				$max_acl = aw_unserialize($str_max_acl, false, true);
-			}
+			
+			//if (($str_max_acl = $acl_cache->file_get_pt_oid("acl", $oid, $fn)) == false)
+			//{
+			//	$max_acl = $this->can_aw($access,$oid);
+			//
+			//	$acl_cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_NATIVE));
+			//	aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+			//}
+			//else
+			//{
+			//	$max_acl = aw_unserialize($str_max_acl, false, true);
+			//}
 		}
 
 		$access="can_".$access;

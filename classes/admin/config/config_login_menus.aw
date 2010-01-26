@@ -114,8 +114,10 @@ class config_login_menus extends class_base
 		$this->set_cval("login_menus_".aw_ini_get("site_id"),$data);
 
 		// clear cache 
-		$c = get_instance("cache");
-		$c->full_flush();		
+		//$c = get_instance( "cache");
+		//$c->full_flush();	
+
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
 	}
 
 	function callback_get_login_menus($arr)

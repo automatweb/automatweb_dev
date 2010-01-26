@@ -80,12 +80,19 @@ class datasource extends class_base
 	{
 		extract($args);
 		$obj = new object($id);
-		$c = get_instance("cache");
+		//$c = get_instance( "cache");
+		
+		$cache = Zend_Registry::get('Zend_Cache');
+		
                 classload("core/date/date_calc");
-                if ($ct = $c->file_get_ts("xml_datasource_$id", mktime(date("H"), 0, 0, date("m"), date("d"), date("Y"))))
-                {
-			return $ct;
-                }
+        
+        if (false !== ($ct = $cache->load('xml_datasource_' . $id)))
+        	return $ct;
+        
+        //        if ($ct = $c->file_get_ts("xml_datasource_$id", mktime(date("H"), 0, 0, date("m"), date("d"), date("Y"))))
+        //        {
+		//	return $ct;
+        //        }
 	
 		$type = $obj->prop("type");
 		$url = escapeshellarg($obj->prop("url"));
@@ -108,7 +115,10 @@ class datasource extends class_base
 				$read.= fread($fp,16384);
 			}
 			pclose($fp);
-			$c->file_set("xml_datasource_$id", $read);
+			//$c->file_set("xml_datasource_$id", $read);
+			
+			$cache->save($read, 'xml_datasource_' . $id);
+			
 			return $read;
 		}
 	}

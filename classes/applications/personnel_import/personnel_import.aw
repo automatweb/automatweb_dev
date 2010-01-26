@@ -1110,8 +1110,10 @@ class personnel_import extends class_base
 		unlink($file_name_status);
 		print "Flushing cache...<br>";
 		flush();
-		$cache = get_instance("cache");
-		$cache->full_flush();
+		
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		//$cache = get_instance( "cache");
+		//$cache->full_flush();
 		exit;
 	}
 
