@@ -364,18 +364,36 @@ class orb extends aw_template
 
 	function load_xml_orb_def($class)
 	{
-		$fc = get_instance("cache");
+		//$fc = get_instance("cache");
+		
+		/* @var $cache Zend_Cache_Core */
+		$cache = Zend_Registry::get('Zend_Cache');
+		
 		$fname = "/xml/orb/$class.xml";
+		$cacheKey = 'xml_orb_' . $class;
+		
 		if(function_exists("get_file_version") && is_file(AW_DIR .($fqfn_version = get_file_version($fname))))
 		{
 			$fname = $fqfn_version;
 		}
-		$fc->get_cached_file(array(
-			"fname" => $fname,
-			"unserializer" => array(&$this,"load_xml_orb_def_file"),
-			"loader" => array(&$this,"load_serialized_orb_def"),
-		));
-		return $this->_tmp;
+		
+		//$fc->get_cached_file(array(
+		//	"fname" => $fname,
+		//	"unserializer" => array(&$this,"load_xml_orb_def_file"),
+		//	"loader" => array(&$this,"load_serialized_orb_def"),
+		//));
+		//return $this->_tmp;
+		
+		if (false === ($orbDef = $cache->load($cacheKey))) {
+			
+			$orbDef = $this->load_xml_orb_def_file(array('content' => file_get_contents(AW_DIR . $fname)));
+			
+			$cache->save($orbDef, $cacheKey);
+		}
+		
+		return $this->_tmp = $orbDef;
+		//$this->load_xml_orb_def_file()
+		
 	}
 
 	function load_serialized_orb_def($args = array())

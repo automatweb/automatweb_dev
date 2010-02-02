@@ -1677,10 +1677,10 @@ class mrp_resource extends class_base
 				foreach($jobs_by_day as $day => $jobs)
 				{
 					$dcnt = count($jobs);
-					$branches["date_".$year."_".$month]["date_".$year."_".$month."_".$day] = sprintf(t("%u. %s %u (%u)"), $day, locale::get_lc_month($month), $year, $dcnt);
+					$branches["date_".$year."_".$month]["date_".$year."_".$month."_".$day] = sprintf(t("%u. %s %u (%u)"), $day, aw_locale::get_lc_month($month), $year, $dcnt);
 					$mcnt += $dcnt;
 				}
-				$branches["date_".$year]["date_".$year."_".$month] = sprintf(t("%s %u (%u)"), locale::get_lc_month($month), $year, $mcnt);
+				$branches["date_".$year]["date_".$year."_".$month] = sprintf(t("%s %u (%u)"), aw_locale::get_lc_month($month), $year, $mcnt);
 				$ycnt += $mcnt;
 			}
 			$branches[0]["date_".$year] = sprintf(t("%s (%u)"), $year, $ycnt);

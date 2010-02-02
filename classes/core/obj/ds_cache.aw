@@ -5,12 +5,20 @@
 
 class _int_obj_ds_cache extends _int_obj_ds_decorator
 {
-	var $cache = NULL;
+	//var $cache = NULL;
+	
+	/**
+	 * @var Zend_Cache_Core
+	 */
+	public $cache;
 
 	function _int_obj_ds_cache($contained)
 	{
 		parent::_int_obj_ds_decorator($contained);
-		$this->cache = get_instance("cache");
+		
+		$this->cache = Zend_Registry::get('Zend_Cache');
+		
+		//$this->cache = get_instance( "cache");
 	}
 
 	function get_objdata($oid, $param = array())
@@ -31,26 +39,37 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			return $this->contained->get_objdata($oid, $param);
 		}
 
-		$c_fn = "objdata-$oid";
+		$c_fn = 'objdata_' . $oid;
 
-		$ret = aw_unserialize($this->cache->file_get_pt_oid(
-			"storage_object_data",
-			$oid,
-			$c_fn
-		), false, true);
-		if (!is_array($ret))
-		{
+		
+		if (false === ($ret = $this->cache->load($c_fn)) or !is_array($ret)) {
+			
 			$ret = $this->contained->get_objdata($oid, $param);
 			if (!obj_get_opt("no_cache"))
 			{
-				$this->cache->file_set_pt_oid(
-					"storage_object_data",
-					$oid,
-					$c_fn,
-					aw_serialize($ret, SERIALIZE_NATIVE)
-				);
+				$this->cache->save($ret, $c_fn);
 			}
+			
 		}
+		
+		//$ret = aw_unserialize($this->cache->file_get_pt_oid(
+		//	"storage_object_data",
+		//	$oid,
+		//	$c_fn
+		//), false, true);
+		//if (!is_array($ret))
+		//{
+		//	$ret = $this->contained->get_objdata($oid, $param);
+		//	if (!obj_get_opt("no_cache"))
+		//	{
+		//		$this->cache->file_set_pt_oid(
+		//			"storage_object_data",
+		//			$oid,
+		//			$c_fn,
+		//			aw_serialize($ret, SERIALIZE_NATIVE)
+		//		);
+		//	}
+		//}
 		return $ret;
 	}
 
@@ -73,27 +92,38 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			return $this->contained->read_properties($arr);
 		}
 
-		$c_fn = "properties-$oid";
+		$c_fn = 'properties_' . $oid;
 
-		$ret = aw_unserialize($this->cache->file_get_pt_oid(
-			"storage_object_data",
-			$oid,
-			$c_fn
-		), false, true);
-
-		if (!is_array($ret))
-		{
+		if (false === ($ret = $this->cache->load($c_fn)) or !is_array($ret)) {
+			
 			$ret = $this->contained->read_properties($arr);
 			if (!obj_get_opt("no_cache"))
 			{
-				$this->cache->file_set_pt_oid(
-					"storage_object_data",
-					$oid,
-					$c_fn,
-					aw_serialize($ret, SERIALIZE_NATIVE)
-				);
+				$this->cache->save($ret, $c_fn);
 			}
+			
 		}
+		
+		//$ret = aw_unserialize($this->cache->file_get_pt_oid(
+		//	"storage_object_data",
+		//	$oid,
+		//	$c_fn
+		//), false, true);
+
+		//if (!is_array($ret))
+		//{
+		//	$ret = $this->contained->read_properties($arr);
+		//	if (!obj_get_opt("no_cache"))
+		//	{
+		//		$this->cache->file_set_pt_oid(
+		//			"storage_object_data",
+		//			$oid,
+		//			$c_fn,
+		//			aw_serialize($ret, SERIALIZE_NATIVE)
+		//		);
+		//	}
+		//}
+		
 		return $ret;
 	}
 
@@ -112,7 +142,9 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("storage_search");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("storage_search");
 		}
 		if ($propagate)
 		{
@@ -133,7 +165,9 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		// but html cache clear is done in ds_mysql, not here
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("storage_search");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("storage_search");
 		}
 		if ($propagate)
 		{
@@ -162,11 +196,17 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			$char = array_keys($tarr);
 			foreach($char as $obj_id)
 			{
-				$this->cache->file_clear_pt_oid_fn("storage_object_data", $obj_id, "objdata-$obj_id");
-				$this->cache->file_clear_pt_oid_fn("storage_object_data", $obj_id, "properties-$obj_id");
+				
+				$this->cache->remove('objdata_' . $oid);
+				$this->cache->remove('properties_' . $oid);
+				
+				//$this->cache->file_clear_pt_oid_fn("storage_object_data", $obj_id, "objdata-$obj_id");
+				//$this->cache->file_clear_pt_oid_fn("storage_object_data", $obj_id, "properties-$obj_id");
 			}
 
-			$this->cache->file_clear_pt("storage_search");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("storage_search");
 		}
 		if ($propagate)
 		{
@@ -181,27 +221,43 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			return $this->contained->read_connection($id);
 		}
 
-		$c_fn = "connection-$id";
+		
+		
+		$c_fn = 'connection_' . $id;
 
-		$ret = aw_unserialize($this->cache->file_get_pt_oid(
-			"storage_object_data",
-			$id,
-			$c_fn
-		), false, true);
-
-		if (!is_array($ret))
-		{
+		if (false === ($ret = $this->cache->load($c_fn)) or !is_array($ret)) {
+			
 			$ret = $this->contained->read_connection($id);
 			if (!obj_get_opt("no_cache"))
 			{
-				$this->cache->file_set_pt_oid(
-					"storage_object_data",
-					$id,
-					$c_fn,
-					aw_serialize($ret, SERIALIZE_NATIVE)
-				);
+				$this->cache->save($ret, $c_fn);
 			}
+			
 		}
+		
+		
+		//$c_fn = "connection-$id";
+
+		//$ret = aw_unserialize($this->cache->file_get_pt_oid(
+		//	"storage_object_data",
+		//	$id,
+		//	$c_fn
+		//), false, true);
+
+		//if (!is_array($ret))
+		//{
+		//	$ret = $this->contained->read_connection($id);
+		//	if (!obj_get_opt("no_cache"))
+		//	{
+		//		$this->cache->file_set_pt_oid(
+		//			"storage_object_data",
+		//			$id,
+		//			$c_fn,
+		//			aw_serialize($ret, SERIALIZE_NATIVE)
+		//		);
+		//	}
+		//}
+		
 		return $ret;
 	}
 
@@ -222,13 +278,16 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			if (!obj_get_opt("no_cache"))
 			{
-				$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "connection-".$oid);
+				$this->cache->remove('connection_' . $oid);
+				//$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "connection-".$oid);
 			}
 		}
 
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("storage_search");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("storage_search");
 		}
 		if ($propagate)
 		{
@@ -251,8 +310,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		// also html cache, but that gets done one level deeper
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "connection-".$oid);
-			$this->cache->file_clear_pt("storage_search");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "connection-".$oid);
+			//$this->cache->file_clear_pt("storage_search");
 		}
 		if ($propagate)
 		{
@@ -269,29 +330,39 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			return $this->contained->find_connections($arr);
 		}
 
-		$query_hash = md5(serialize($arr));
+		$c_fn = 'conn_find_' . md5(serialize($arr));
 
-		$c_fn = "conn_find-$query_hash";
-
-		$ret = aw_unserialize($this->cache->file_get_pt(
-			"storage_search",
-			$query_hash[0],
-			$c_fn
-		), false, true);
-
-		if (!is_array($ret))
-		{
+		
+		if (false === ($ret = $this->cache->load($c_fn)) or !is_array($ret)) {
+			
 			$ret = $this->contained->find_connections($arr);
 			if (!obj_get_opt("no_cache"))
 			{
-				$this->cache->file_set_pt(
-					"storage_search",
-					$query_hash[0],
-					$c_fn,
-					aw_serialize($ret, SERIALIZE_NATIVE)
-				);
+				$this->cache->save($ret, $c_fn);
 			}
+			
 		}
+		
+		//$ret = aw_unserialize($this->cache->file_get_pt(
+		//	"storage_search",
+		//	$query_hash[0],
+		//	$c_fn
+		//), false, true);
+
+		//if (!is_array($ret))
+		//{
+		//	$ret = $this->contained->find_connections($arr);
+		//	if (!obj_get_opt("no_cache"))
+		//	{
+		//		$this->cache->file_set_pt(
+		//			"storage_search",
+		//			$query_hash[0],
+		//			$c_fn,
+		//			aw_serialize($ret, SERIALIZE_NATIVE)
+		//		);
+		//	}
+		//}
+		
 		return $ret;
 	}
 
@@ -309,10 +380,12 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		// clear lots of caches here: html, acl for oid, storage_search, storage_objdata for $oid
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt_oid("acl", $oid);
-			$this->cache->file_clear_pt("storage_search");
-			$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-$oid");
-			$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "properties-$oid");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt_oid("acl", $oid);
+			//$this->cache->file_clear_pt("storage_search");
+			//$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-$oid");
+			//$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "properties-$oid");
 		}
 		if ($propagate)
 		{
@@ -336,29 +409,42 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			$tp["site_id"] = aw_ini_get("site_id");
 		}
-		$query_hash = md5(serialize($tp).serialize($to_fetch));
+		
+		
+		
+		$c_fn = 'obj_find_' . md5(serialize($tp).serialize($to_fetch));
 
-		$c_fn = "obj_find-$query_hash";
-
-		$ret = aw_unserialize($this->cache->file_get_pt(
-			"storage_search",
-			$query_hash[0],
-			$c_fn
-		), false, true);
-
-		if (!is_array($ret))
-		{
+		
+		if (false === ($ret = $this->cache->load($c_fn)) or !is_array($ret)) {
+			
 			$ret = $this->contained->search($params, $to_fetch);
 			if (!obj_get_opt("no_cache"))
 			{
-				$this->cache->file_set_pt(
-					"storage_search",
-					$query_hash[0],
-					$c_fn,
-					aw_serialize($ret, SERIALIZE_NATIVE)
-				);
+				$this->cache->save($ret, $c_fn);
 			}
+			
 		}
+		
+		//$ret = aw_unserialize($this->cache->file_get_pt(
+		//	"storage_search",
+		//	$query_hash[0],
+		//	$c_fn
+		//), false, true);
+
+		//if (!is_array($ret))
+		//{
+		//	$ret = $this->contained->search($params, $to_fetch);
+		//	if (!obj_get_opt("no_cache"))
+		//	{
+		//		$this->cache->file_set_pt(
+		//			"storage_search",
+		//			$query_hash[0],
+		//			$c_fn,
+		//			aw_serialize($ret, SERIALIZE_NATIVE)
+		//		);
+		//	}
+		//}
+		
 		return $ret;
 	}
 
@@ -369,9 +455,9 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			return $this->contained->fetch_list($param);
 		}
 
-		$query_hash = md5(serialize($param));
-
-		$c_fn = "obj_fetch-$query_hash";
+		//UnWasted - seems to be unused?
+		//$query_hash = md5(serialize($param));
+		//$c_fn = "obj_fetch-$query_hash";
 
 		$ret = $this->contained->fetch_list($param);
 		return $ret;
@@ -388,8 +474,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("storage_search");
-			$this->cache->file_clear_pt("storage_object_data");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("storage_search");
+			//$this->cache->file_clear_pt("storage_object_data");
 		}
 		if ($propagate)
 		{

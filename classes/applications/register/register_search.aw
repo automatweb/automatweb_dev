@@ -1170,12 +1170,14 @@ die(dbg::dump($filter));
 			$reg_i = $reg->instance();
 			$flds = $reg_i->_get_reg_folders($reg);
 
+			
+			//UnWasted - it seems that this query is never used anyways
 			// this is an expensive query, so cache the results
-			$c = get_instance("cache");
-			$cfn = "register_".$reg->id()."_search_mod_chooser_p_".$pn;
+			//$c = get_instance( "cache");
+			//$cfn = "register_".$reg->id()."_search_mod_chooser_p_".$pn;
 
-			if (true || !($res = $c->file_get_ts($cfn, $c->get_objlastmod())))
-			{
+			//if (true || !($res = $c->file_get_ts($cfn, $c->get_objlastmod())))
+			//{
 				if ($p["store"] == "connect")
 				{
 					$relist = obj();
@@ -1195,11 +1197,11 @@ die(dbg::dump($filter));
 					$opts[$row["val"]] = $row["val"];
 				}
 				$c->file_set($cfn, aw_serialize($opts));
-			}
-			else
-			{
-				$opts = aw_unserialize($res);
-			}
+			//}
+			//else
+			//{
+			//	$opts = aw_unserialize($res);
+			//}
 		}
 
 		$p["type"] = "select";

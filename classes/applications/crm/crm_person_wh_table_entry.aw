@@ -111,7 +111,7 @@ class crm_person_wh_table_entry extends class_base
 		$arr["prop"]["options"] = array();
 		for($i = 1; $i < 12; $i++)
 		{
-			$arr["prop"]["options"][$i] = locale::get_lc_month($i);
+			$arr["prop"]["options"][$i] = aw_locale::get_lc_month($i);
 		}
 	}
 

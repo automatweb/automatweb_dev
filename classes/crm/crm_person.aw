@@ -5147,8 +5147,11 @@ class crm_person extends class_base
 					"type" => "int",
 				));
 				// clear cache
-				$c = get_instance("cache");
-				$c->file_clear_pt("storage_object_data");
+				
+				Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+				
+				//$c = get_instance( "cache");
+				//$c->file_clear_pt("storage_object_data");
 				return true;
 				break;
 

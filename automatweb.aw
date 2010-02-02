@@ -60,11 +60,14 @@ class automatweb
     		'cache_dir' => aw_ini_get("cache.cacheDir")
 		);
  		
-		$this->cache = Zend_Cache::factory('Core',
+		/*$this->cache = Zend_Cache::factory('Core',
                             'File',
                             $frontendOptions,
                             $backendOptions);
+		*/
 		
+		$this->cache = Zend_Cache::factory('Core', 'Zend_Cache_Backend_Apc',
+                             $frontendOptions, $backendOptions, false, true);
 		Zend_Registry::set('Zend_Cache', $this->cache);
 	}
 

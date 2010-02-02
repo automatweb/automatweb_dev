@@ -84,7 +84,7 @@ class site_cache extends aw_template
 			return false;
 		}
 
-		if (aw_global_get("no_cache"))
+		if (aw_global_get("no_cache") or !aw_ini_get("cache.use_page_cache"))
 		{
 			return false;
 		}
@@ -97,12 +97,20 @@ class site_cache extends aw_template
 				return false;
 			}
 		}
+		
 
 		// check cache
 		$cp = $this->get_cache_params($arr);
+		
+		$cacheKey = aw_global_get("raw_section").'_'.aw_global_get("section").'_'.md5(join('', $cp));
 
-		$cache = get_instance("cache");
-		$tmp = $cache->get(aw_global_get("raw_section"), $cp, aw_global_get("section"));
+		/* @var $cache Zend_Cache_Core */
+		$cache = Zend_Registry::get('Zend_Cache');
+		
+		$tmp = $cache->load($cacheKey);
+		
+		//$cache = get_instance( "cache");
+		//$tmp = $cache->get(aw_global_get("raw_section"), $cp, aw_global_get("section"));
 		return $tmp;
 	}
 
@@ -125,8 +133,15 @@ class site_cache extends aw_template
 		// check cache
 		$cp = $this->get_cache_params($arr);
 
-		$cache = get_instance("cache");
-		$cache->set(aw_global_get("raw_section"), $cp, $content, true, aw_global_get("section"));
+		$cacheKey = aw_global_get("raw_section").'_'.aw_global_get("section").'_'.md5(join('', $cp));
+
+		/* @var $cache Zend_Cache_Core */
+		$cache = Zend_Registry::get('Zend_Cache');
+		
+		$cache->save($content, $cacheKey);
+		
+		//$cache = get_instance( "cache");
+		//$cache->set(aw_global_get("raw_section"), $cp, $content, true, aw_global_get("section"));
 	}
 
 	////

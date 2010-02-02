@@ -250,8 +250,8 @@ class multi_calendar extends aw_template
 
 				foreach($slices as $skey => $sval)
 				{
-					$m = locale::get_lc_date($skey,5);
-					$w = strtoupper(locale::get_lc_weekday(date("w",$skey),true));
+					$m = aw_locale::get_lc_date($skey,5);
+					$w = strtoupper(aw_locale::get_lc_weekday(date("w",$skey),true));
 					$opts[$skey] = "${w}, ${m}" . date(" H:i",$skey) . " - " . date("H:i",$sval);
 					/*
 					$this->t->define_data(array(

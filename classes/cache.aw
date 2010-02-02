@@ -38,6 +38,8 @@ class cache extends core
 		
 		//$this->getCache()->save();
 		
+		//$this->getCache()->remove();
+		
 		//Zend_Registry::get('Zend_Cache');
 		
 		// aw_cache_set_array() ??

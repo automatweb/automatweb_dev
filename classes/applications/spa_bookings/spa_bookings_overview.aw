@@ -1325,7 +1325,7 @@ class spa_bookings_overview extends class_base
 				{
 					$t->define_field(array(
 						"name" => $x==7?"0":"$x",
-						"caption" => locale::get_lc_weekday($x , 1 , 1),
+						"caption" => aw_locale::get_lc_weekday($x , 1 , 1),
 						"chgbgcolor" => "color",
 					));
 					$x++;

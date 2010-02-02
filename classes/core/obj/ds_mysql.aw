@@ -5,10 +5,19 @@
 
 class _int_obj_ds_mysql extends _int_obj_ds_base
 {
+	
+	/**
+	 * @var Zend_Cache_Core
+	 */
+	public $cache;
+	
 	function _int_obj_ds_mysql()
 	{
 		$this->init();
-		$this->cache = get_instance("cache");
+		
+		$this->cache = Zend_Registry::get('Zend_Cache');
+		
+		//$this->cache = get_instance( "cache");
 	}
 
 	// returns oid for alias
@@ -856,7 +865,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("html");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);;
+			
+			//$this->cache->file_clear_pt("html");
 		}
 	}
 
@@ -1155,7 +1166,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("html");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("html");
 		}
 	}
 
@@ -1231,7 +1244,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("html");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("html");
 		}
 	}
 
@@ -1245,7 +1260,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("html");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("html");
 		}
 	}
 
@@ -1643,9 +1660,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt_oid("acl", $oid);
-			$this->cache->file_clear_pt("html");
-			$this->cache->file_clear_pt("menu_area_cache");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt_oid("acl", $oid);
+			//$this->cache->file_clear_pt("html");
+			//$this->cache->file_clear_pt("menu_area_cache");
 		}
 	}
 
@@ -1655,9 +1674,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid IN(".$awa->to_sql().")");
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("acl");
-			$this->cache->file_clear_pt("html");
-			$this->cache->file_clear_pt("menu_area_cache");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("acl");
+			//$this->cache->file_clear_pt("html");
+			//$this->cache->file_clear_pt("menu_area_cache");
 		}
 	}
 
@@ -1706,9 +1727,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("acl");
-			$this->cache->file_clear_pt("html");
-			$this->cache->file_clear_pt("menu_area_cache");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("acl");
+			//$this->cache->file_clear_pt("html");
+			//$this->cache->file_clear_pt("menu_area_cache");
 		}
 	}
 
@@ -2439,7 +2462,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("html");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("html");
 		}
 	}
 
@@ -3156,7 +3181,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					"object_id" => $cl2obj[$clid],
 					"full" => true
 				));
-				aw_cache_set("storage::get_read_properties_sql",$clid,$sql);
+				
+				//UnWasted - seems to be unnessecary!
+				//aw_cache_set("storage::get_read_properties_sql",$clid,$sql);
+				
 				//echo "sql = ".dbg::dump($sql)." <br>";
 			}
 			if ($sql["q"] == "")
@@ -3513,7 +3541,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt("html");
+			$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+			
+			//$this->cache->file_clear_pt("html");
 		}
 	}
 

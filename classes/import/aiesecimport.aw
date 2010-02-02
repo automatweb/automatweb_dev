@@ -205,8 +205,12 @@ class aiesecimport extends class_base
 			
 			$k++;
 		}
-		$c = get_instance("cache");
-		$c->full_flush();
+		
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
+		//$c = get_instance( "cache");
+		//$c->full_flush();
+		
 		echo "kokku vaatasin l2bi "+($k-1) +" isikut";
 		echo "cache puhas";
 		ob_flush();
@@ -457,8 +461,13 @@ class aiesecimport extends class_base
 					
 				}
 		}
-		$c = get_instance("cache");
-		$c->full_flush();
+		
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
+		
+		//$c = get_instance( "cache");
+		//$c->full_flush();
+		
 		echo "cache puhas<br>";
 		echo "do_import_finish_fix_meetings ... done<br>";
 		ob_flush();

@@ -208,7 +208,7 @@ class doc_display extends aw_template
 		$tmp = $arr;
 		$tmp["leadonly"] = -1;
 		$this->vars_safe(array(
-			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
+			"date_est_docmod" => $docmod > 1 ? aw_locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
 			"fullcontent" => $this->get_document_text($tmp, $doc),
 			"text_no_aliases" => $text_no_aliases,
@@ -216,9 +216,9 @@ class doc_display extends aw_template
 			"author" => $doc->prop("author"),
 			"docid" => $doc->id(),
 			"modified_by" => $mb_person->name(),
-			"date_est" => locale::get_lc_date($_date, LC_DATE_FORMAT_LONG),
-			"date_est_fullyear" => locale::get_lc_date($_date, LC_DATE_FORMAT_LONG_FULLYEAR),
-			"print_date_est" => locale::get_lc_date(time(), LC_DATE_FORMAT_LONG),
+			"date_est" => aw_locale::get_lc_date($_date, LC_DATE_FORMAT_LONG),
+			"date_est_fullyear" => aw_locale::get_lc_date($_date, LC_DATE_FORMAT_LONG_FULLYEAR),
+			"print_date_est" => aw_locale::get_lc_date(time(), LC_DATE_FORMAT_LONG),
 			"modified" => date("d.m.Y", $doc->modified()),
 			"created_tm" => $doc->created(),
 			"created_hr" => "<?php classload(\"doc_display\"); echo doc_display::get_date_human_readable(".$doc->created()."); ?>",
@@ -753,7 +753,7 @@ class doc_display extends aw_template
 		{
 			$ts = $doc->created();
 			$i_month = (int)gmdate( "n",  $ts);
-			$s_month = ucfirst(locale::get_lc_month($i_month));
+			$s_month = ucfirst(aw_locale::get_lc_month($i_month));
 			$s_created  = gmdate( "H:i, j ",  $ts).$s_month." ". gmdate( "Y (\U\TC)",  $ts);
 			
 			$a_pattern = array();

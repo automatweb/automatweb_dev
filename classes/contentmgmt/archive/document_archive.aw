@@ -230,7 +230,7 @@ class document_archive extends class_base
 			$parents[] = $conn->prop("to");
 		};
 		$_date = $start;
-		$date_est = date("d", $_date).". ".locale::get_lc_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est = date("d", $_date).". ".aw_locale::get_lc_month(date("m", $_date))." ".date("Y", $_date);
 		$d = get_instance(CL_DOCUMENT);
 		$rv = "<h2>$date_est</h2>";
 		if (!empty($parents))

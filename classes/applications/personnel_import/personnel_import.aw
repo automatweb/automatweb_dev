@@ -59,7 +59,7 @@ class personnel_import extends class_base
 		switch($prop["name"])
 		{
 			case "last_import":
-				$prop["value"] = locale::get_lc_date($prop["value"],6) . date(" H:i",$prop["value"]);
+				$prop["value"] = aw_locale::get_lc_date($prop["value"],6) . date(" H:i",$prop["value"]);
 				break;
 
 			case "import":

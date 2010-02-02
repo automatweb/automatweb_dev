@@ -67,6 +67,12 @@
 
 class period extends class_base implements request_startup
 {
+	
+	/**
+	 * @var Zend_Cache_Core
+	 */
+	private $cache;
+	
 	function period($oid = 0)
 	{
 		$this->init(array(
@@ -80,9 +86,11 @@ class period extends class_base implements request_startup
 		lc_load("definition");
 		$this->oid = $this->cfg["per_oid"];
 		$this->lc_load("periods","lc_periods");
-		$this->cf_name = "periods-cache-site_id-".$this->cfg["site_id"]."-period-";
-		$this->cf_ap_name = "active_period-cache-site_id-".$this->cfg["site_id"];
-		$this->cache = get_instance("cache");
+		$this->cf_name = "periods_cache_site_id_".$this->cfg["site_id"]."_period_";
+		$this->cf_ap_name = "active_period_cache_site_id_".$this->cfg["site_id"];
+		$this->cache = Zend_Registry::get('Zend_Cache');
+		
+		//$this->cache = get_instance( "cache");
 		$this->init_active_period_cache();
 	}
 
@@ -181,17 +189,24 @@ class period extends class_base implements request_startup
 		};
 		$perdata = $this->db_fetch_row("SELECT id FROM periods WHERE obj_id = " . $arr["obj_inst"]->id());
 		$id = $perdata["id"];
-		$this->cache->file_invalidate($this->cf_name.$id);
+		
+		$this->cache->remove($this->cf_name.$id);
+		
+		//$this->cache->file_invalidate($this->cf_name.$id);
 		aw_cache_set("per_by_id", $id, false);
 		aw_global_set("aw_period_cache",0);
 	}
 
 	function init_active_period_cache()
 	{
-		if (($cc = $this->cache->file_get($this->cf_ap_name)))
-		{
-			aw_cache_set_array("active_period",aw_unserialize($cc));
+		if (false !== ($cc = $this->cache->load($this->cf_ap_name))) {
+			aw_cache_set_array("active_period",$cc);
 		}
+		
+		//if (($cc = $this->cache->file_get($this->cf_ap_name)))
+		//{
+		//	aw_cache_set_array("active_period",aw_unserialize($cc));
+		//}
 	}
 
 	function mk_percache()
@@ -245,8 +260,11 @@ class period extends class_base implements request_startup
 	{
 		$q = "UPDATE menu SET active_period = '$id' WHERE id = '$oid'";
 		$this->db_query($q);
-		$this->cache->file_invalidate($this->cf_ap_name);
-		$this->cache->file_clear_pt("html");
+		
+		$this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
+		//$this->cache->file_invalidate($this->cf_ap_name);
+		//$this->cache->file_clear_pt("html");
 	}
 
 	// see funktsioon tagastab k2igi eksisteerivate perioodide nimekirja
@@ -316,9 +334,12 @@ class period extends class_base implements request_startup
 			// now add this period to the cache
 			aw_cache_set("active_period", $oid,($ap == 0 ? -1 : $ap));
 
+			
+			$this->cache->save(aw_cache_get_array("active_period"), $this->cf_ap_name);
+			
 			// and also to the file-on-disk cache
-			$str = aw_serialize(aw_cache_get_array("active_period"));
-			$this->cache->file_set($this->cf_ap_name,$str);
+			//$str = aw_serialize(aw_cache_get_array("active_period"));
+			//$this->cache->file_set($this->cf_ap_name,$str);
 			return $ap;
 		}
 	}
@@ -362,25 +383,44 @@ class period extends class_base implements request_startup
 			dbg::p1("period::get cache hit level 1");
 			return $pr;
 		}
-		// 2nd, the file-on-disk cache
-		if (($cc = $this->cache->file_get($this->cf_name.$id)))
-		{
-			$pr = aw_unserialize($cc);
-			aw_cache_set("per_by_id", $id, $pr);
-			return $pr;
+		
+		
+		if (false === ($pr = $this->cache->load($this->cf_name.$id))) {
+			
+			$q = "SELECT *,objects.name,objects.metadata,objects.status as o_status FROM periods LEFT JOIN objects ON (periods.obj_id = objects.oid) WHERE id = '$id'";
+			$this->db_query($q);
+			$pr = $this->db_fetch_row();
+			$pr["data"] = aw_unserialize($pr["metadata"]);
+	
+			$pr_tmp = $pr;
+			unset($pr_tmp["metadata"]);
+			unset($pr_tmp["acldata"]);
+			
+			$this->cache->save($pr_tmp, $this->cf_name.$id);
 		}
+		
+		// 2nd, the file-on-disk cache
+		//if (($cc = $this->cache->file_get($this->cf_name.$id)))
+		//{
+		//	$pr = aw_unserialize($cc);
+		//	aw_cache_set("per_by_id", $id, $pr);
+		//	return $pr;
+		//}
+		
 		// and finally, the db
-		dbg::p1("period::get no hit ");
-		$q = "SELECT *,objects.name,objects.metadata,objects.status as o_status FROM periods LEFT JOIN objects ON (periods.obj_id = objects.oid) WHERE id = '$id'";
-		$this->db_query($q);
-		$pr = $this->db_fetch_row();
-		$pr["data"] = aw_unserialize($pr["metadata"]);
+		//dbg::p1("period::get no hit ");
+		//$q = "SELECT *,objects.name,objects.metadata,objects.status as o_status FROM periods LEFT JOIN objects ON (periods.obj_id = objects.oid) WHERE id = '$id'";
+		//$this->db_query($q);
+		//$pr = $this->db_fetch_row();
+		//$pr["data"] = aw_unserialize($pr["metadata"]);
 
-		$pr_tmp = $pr;
-		unset($pr_tmp["metadata"]);
-		unset($pr_tmp["acldata"]);
-		$str = aw_serialize($pr_tmp);
-		$this->cache->file_set($this->cf_name.$id, $str);
+		//$pr_tmp = $pr;
+		//unset($pr_tmp["metadata"]);
+		//unset($pr_tmp["acldata"]);
+		//$str = aw_serialize($pr_tmp);
+		//$this->cache->file_set($this->cf_name.$id, $str);
+		
+		
 		aw_cache_set("per_by_id", $id, $pr);
 		return $pr;
 	}

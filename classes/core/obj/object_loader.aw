@@ -26,6 +26,11 @@ class _int_object_loader extends core
 	private $acl_ids;
 	private static $tmp_id_count = 0;
 	private $registered = false;
+	
+	/**
+	 * @var Zend_Cache_Core
+	 */
+	public $ZFcache;
 
 	function _int_object_loader()
 	{
@@ -67,7 +72,10 @@ class _int_object_loader extends core
 
 		$this->object_member_funcs = get_class_methods("object");
 		$this->cfgu = get_instance("cfg/cfgutils");
-		$this->cache = get_instance("cache");
+		
+		$this->ZFcache = Zend_Registry::get('Zend_Cache');
+		
+		$this->cache = get_instance( "cache");
 
 		$this->obj_inherit_props_conf = array();
 		$fn = aw_ini_get("site_basedir")."/files/obj_inherit_props.conf";
@@ -365,14 +373,18 @@ class _int_object_loader extends core
 			{
 				if ($GLOBALS["objects"][$t_oid]->class_id() == CL_MENU)
 				{
+					$this->ZFcache->save(time(), 'objlastmod');
+					
 					// write the current time as last modification time of any object.
-					$this->cache->file_set("objlastmod", time());
+					//$this->cache->file_set("objlastmod", time());
 				}
 			}
 			else
 			{
+				$this->ZFcache->save(time(), 'objlastmod');
+				
 				// write the current time as last modification time of any object.
-				$this->cache->file_set("objlastmod", time());
+				//$this->cache->file_set("objlastmod", time());
 			}
 			$lastmod_set = 1;
 		}
@@ -398,7 +410,10 @@ class _int_object_loader extends core
 
 		// copy the object to the new place
 		$GLOBALS["objects"][$t_oid] = $t_o;
-		$this->cache->file_set("objlastmod", time());
+		
+		$this->ZFcache->save(time(), 'objlastmod');
+		
+		//$this->cache->file_set("objlastmod", time());
 
 		post_message_with_param("MSG_STORAGE_SAVE", $GLOBALS["objects"][$t_oid]->class_id(), array(
 			"oid" => $t_oid
@@ -490,12 +505,17 @@ class _int_object_loader extends core
 
 		if (!isset($this->__aw_acl_cache[$oid]) || !($max_acl = $this->__aw_acl_cache[$oid]))
 		{
-			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
-			$fn .= "-nliug-".(isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : "");
-			if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]) && ($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
-			{
-				$max_acl = aw_unserialize($str_max_acl, false, true);
+			$fn = "acl_".$oid."_uid_".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
+			$fn .= "_nliug_".(isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : "");
+			
+			if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]) and false !== ($str_max_acl = $this->ZFcache->load($fn))) {
+				$max_acl = $str_max_acl;
 			}
+			
+			//if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]) && ($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
+			//{
+			//	$max_acl = aw_unserialize($str_max_acl, false, true);
+			//}
 
 			if (!isset($max_acl))
 			{
@@ -507,7 +527,9 @@ class _int_object_loader extends core
 
 				if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
 				{
-					$this->cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_NATIVE));
+					$this->ZFcache->save($max_acl, $fn);
+					
+					//$this->cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_NATIVE));
 				}
 			}
 
@@ -638,7 +660,8 @@ class _int_object_loader extends core
 			$type = 10000;
 		}
 
-		$this->cache->_log($type, ($new ? "SA_ADD" : "SA_CHANGE"), $name, $oid, false, $name);
+		//UnWasted - there is no _log method anymore!
+		//$this->cache->_log($type, ($new ? "SA_ADD" : "SA_CHANGE"), $name, $oid, false, $name);
 	}
 
 	function resolve_reltype($type, $class_id)
@@ -766,11 +789,13 @@ class _int_object_loader extends core
 
 	function handle_no_cache_clear()
 	{
-		$this->cache->file_clear_pt("html");
-		$this->cache->file_clear_pt("acl");
-		$this->cache->file_clear_pt("menu_area_cache");
-		$this->cache->file_clear_pt("storage_search");
-		$this->cache->file_clear_pt("storage_object_data");
+		$this->ZFcache->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
+		//$this->cache->file_clear_pt("html");
+		//$this->cache->file_clear_pt("acl");
+		//$this->cache->file_clear_pt("menu_area_cache");
+		//$this->cache->file_clear_pt("storage_search");
+		//$this->cache->file_clear_pt("storage_object_data");
 	}
 
 	public function set___aw_acl_cache($oid = NULL, $v = array())

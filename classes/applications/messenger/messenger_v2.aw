@@ -944,8 +944,15 @@ class messenger_v2 extends class_base
 	**/
 	function _msg_move($arg)
 	{
-		$cache = get_instance("cache");
-		$enum = aw_unserialize($cache->file_get($this->drv_inst->mbox_msg_list_cache_id));
+		//$cache = get_instance( "cache");
+		//$enum = aw_unserialize($cache->file_get($this->drv_inst->mbox_msg_list_cache_id));
+		
+		/* @var $cache Zend_Cache_Core */
+		$cache = Zend_Registry::get('Zend_Cache');
+		$enum = $cache->load($this->drv_inst->mbox_msg_list_cache_id);
+		
+		!is_array($enum) or $enum = array();
+		
 		$key = array_search($arg["request"]["msgid"], $enum);
 		if($key !== false)
 		{

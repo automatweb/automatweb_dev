@@ -180,7 +180,7 @@ class crm_sales_contacts_view
 					$last_call_timestamp =  $last_call->prop("start1");
 					$last_call_result = crm_call_obj::result_names($last_call->prop("result"));
 					$last_call_result = reset($last_call_result);
-					$last_call = locale::get_lc_date($last_call->prop("real_start"), LC_DATE_FORMAT_SHORT_FULLYEAR);
+					$last_call = aw_locale::get_lc_date($last_call->prop("real_start"), LC_DATE_FORMAT_SHORT_FULLYEAR);
 				}
 				else
 				{

@@ -2355,8 +2355,8 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		return iconv("UTF-8", aw_global_get("charset"), html_entity_decode($string, ENT_COMPAT, "UTF-8"));
 	}
 
-	// deprecated - use locale::get_lc_date instead
-	function get_lc_date($time=0, $format=3) { return locale::get_lc_date($time, $format); }
+	// deprecated - use aw_locale::get_lc_date instead
+	function get_lc_date($time=0, $format=3) { return aw_locale::get_lc_date($time, $format); }
 
 /** returns the parameter or an array if the parameter is not an array
 	@attrib api=1 params=pos

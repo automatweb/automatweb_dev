@@ -1162,13 +1162,13 @@ class document extends aw_template
 		}
 
 		$_date = $doc["doc_modified"] > 1 ? $doc["doc_modified"] : $doc["modified"];
-		$date_est = date("j", $_date).". ".locale::get_lc_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est = date("j", $_date).". ".aw_locale::get_lc_month(date("m", $_date))." ".date("Y", $_date);
 		$date_est_n = "";
 		if (trim($orig_doc_tm) != "")
 		{
 			$date_est_n = $date_est;
 		}
-		$date_est_print = locale::get_lc_date(time(), LC_DATE_FORMAT_SHORT_FULLYEAR);
+		$date_est_print = aw_locale::get_lc_date(time(), LC_DATE_FORMAT_SHORT_FULLYEAR);
 
 		$r_docid = $docid;
 
@@ -1284,7 +1284,7 @@ class document extends aw_template
 			"section"  => $GLOBALS["section"],
 			"section_name" => $s_section_name,
 			"lead_comments" => $lc,
-			"locale_date" => locale::get_lc_date($doc["doc_modified"],6),
+			"locale_date" => aw_locale::get_lc_date($doc["doc_modified"],6),
 			"copyright" => isset($doc["copyright"]) ? $doc["copyright"] : null,
 			"long_title" => isset($doc["long_title"]) ? $doc["long_title"] : null,
 			"link_text" => isset($doc["link_text"]) ? $doc["link_text"] : null,

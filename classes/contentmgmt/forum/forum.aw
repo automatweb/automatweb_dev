@@ -1471,8 +1471,9 @@ topic");
 			$this->db_query($q);
 
 			// need to flush cache here
-			$c = get_instance("cache");
-			$c->file_clear_pt("html");
+			//$c = get_instance( "cache");
+			//$c->file_clear_pt("html");
+			Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
 		}
 		else
 		{

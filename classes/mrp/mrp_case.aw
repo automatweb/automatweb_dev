@@ -458,7 +458,7 @@ class mrp_case extends class_base
 				{
 					$prop["type"] = "text";
 					$prop["caption"] .= ":";
-					$prop["value"] = locale::get_lc_date($prop["value"], 7);
+					$prop["value"] = aw_locale::get_lc_date($prop["value"], 7);
 				}
 				break;
 

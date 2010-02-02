@@ -443,9 +443,13 @@ class recycle_bin extends class_base
 	{
 		$query = "UPDATE objects SET status=1 WHERE oid =".$arr['oid'];
 		$this->db_query($query);
+		
 		// clear cache
-		$c = get_instance("cache");
-		$c->file_clear_pt("acl");
+		//$c = get_instance( "cache");
+		//$c->file_clear_pt("acl");
+		
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
+		
 		
 		$ob = obj($arr["id"]);
 		$oid = $arr["oid"];
@@ -488,8 +492,10 @@ class recycle_bin extends class_base
 		}
 
 		// clear cache
-		$c = get_instance("cache");
-		$c->file_clear_pt("acl");
+		//$c = get_instance( "cache");
+		//$c->file_clear_pt("acl");
+		
+		Zend_Registry::get('Zend_Cache')->clean(Zend_Cache::CLEANING_MODE_ALL);
 
 		return aw_ini_get("baseurl").$arr["return_url"];
 	}

@@ -1163,7 +1163,7 @@ class calendar_view extends class_base
 				"caption" => t("&lt;&lt;"),
 			));
 
-			$rv .= " &nbsp; " . locale::get_lc_date($range["start"],6) . "&nbsp; ";
+			$rv .= " &nbsp; " . aw_locale::get_lc_date($range["start"],6) . "&nbsp; ";
 
 			$rv .= html::href(array(
 				"url" => aw_url_change_var("date",$range["next"]),

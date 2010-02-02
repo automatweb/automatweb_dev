@@ -14,9 +14,14 @@ class expp_va extends class_base {
 
 	var $cy;
 	var $cp;
-	var $ch;
+	//var $ch;
 	var $lang;
 	var $clURL;
+	
+	/**
+	 * @var Zend_Cache_Core
+	 */
+	private $cache;
 
 	function expp_va() {
 		$this->lang = aw_global_get("admin_lang_lc");
@@ -27,7 +32,9 @@ class expp_va extends class_base {
 		));
 //		$this->cy = get_instance( CL_EXPP_JAH );
 		$this->cp = get_instance( CL_EXPP_PARSE );
-		$this->ch = get_instance("cache");
+		//$this->ch = get_instance( "cache");
+		
+		$this->cache = Zend_Registry::get('Zend_Cache');
 
 		lc_site_load( "expp", $this );
 		$GLOBALS['expp_show_footer'] = 1;
@@ -112,11 +119,17 @@ class expp_va extends class_base {
 
 		$this->cp->log( get_class($this), "show" );
 
-		$_cache_name = urlencode( $this->lang.'_va_tyyplist_'.$_tyyp_nimi );
-		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
-		if( !empty( $retHTML )) {
-			return $retHTML;
+		$_cache_name = 'va_tyyplist_' . md5( $this->lang.$_tyyp_nimi );
+		
+		if (false !== ($retHTML = $this->cache->load($_cache_name))) {
+			if (!empty($retHTML))
+				return $retHTML;
 		}
+		
+		//$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+		//if( !empty( $retHTML )) {
+		//	return $retHTML;
+		//}
 
 		$retArr = array();
 		$htmlArr = array();
@@ -214,7 +227,9 @@ class expp_va extends class_base {
 			'VISU_BOX' => $_tmp
 		));
 		$retHTML = $this->parse();
-		$this->ch->file_set( $_cache_name, $retHTML );
+		$this->cache->save($retHTML, $_cache_name, array(), 24*3600);
+		
+		//$this->ch->file_set( $_cache_name, $retHTML );
 		return $retHTML;
 	}
 
@@ -285,12 +300,20 @@ class expp_va extends class_base {
 
 		$this->cp->log( get_class($this), "show" );
 
-		// lisas Rain Viigipuu 03.08.2007 et cache faili nime kokku panemisel peetaks meeles ka tyypi:
-		$_cache_name = urlencode( $this->lang.'_va_liiklist_'.$_tyyp_id.'_'.$_liik_nimi );
-		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
-		if( !empty( $retHTML )) {
-			return $retHTML;
+		
+		$_cache_name = 'va_liiklist_' . md5( $this->lang.$_tyyp_id.$_liik_nimi );
+	
+		if (false !== ($retHTML = $this->cache->load($_cache_name))) {
+			if (!empty($retHTML))
+				return $retHTML;
 		}
+		
+		// lisas Rain Viigipuu 03.08.2007 et cache faili nime kokku panemisel peetaks meeles ka tyypi:
+		//$_cache_name = urlencode( $this->lang.'_va_liiklist_'.$_tyyp_id.'_'.$_liik_nimi );
+		//$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+		//if( !empty( $retHTML )) {
+		//	return $retHTML;
+		//}
 
 		$retArr = array();
 		$htmlArr = array();
@@ -362,7 +385,10 @@ class expp_va extends class_base {
 		));
 
 		$retHTML = $this->parse();
-		$this->ch->file_set( $_cache_name, $retHTML );
+	
+		//$this->ch->file_set( $_cache_name, $retHTML );
+		
+		$this->cache->save($retHTML, $_cache_name, array(), 24*3600);
 		return $retHTML;
 	}
 	
@@ -416,16 +442,27 @@ class expp_va extends class_base {
 		}
 		$this->cp->log( get_class($this), "show", '', '', $__aid );
 
-		$_cache_name = urlencode( $this->lang.'_va_valjaanne_'.$__aid );
-		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
-		if( !empty( $retHTML )) {
-//			$this->clURL .= urlencode( $__aid ).'/';
+	
+		$_cache_name = 'va_valjaanne_' . md5( $this->lang.$__aid );
+	
+		if (false !== ($retHTML = $this->cache->load($_cache_name))) {
 			$myURL = $this->cp->addYah( array(
 					'link' => urlencode( $__aid ),
 					'text' => $_laid
 				));
 			return $retHTML;
 		}
+		
+		//$_cache_name = urlencode( $this->lang.'_va_valjaanne_'.$__aid );
+		//$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+		//if( !empty( $retHTML )) {
+//			$this->clURL .= urlencode( $__aid ).'/';
+		//	$myURL = $this->cp->addYah( array(
+		//			'link' => urlencode( $__aid ),
+		//			'text' => $_laid
+		//		));
+		//	return $retHTML;
+		//}
 
 
 		////
@@ -652,18 +689,22 @@ class expp_va extends class_base {
 					"leadonly" => 1
 				));
 			if( !empty( $retHTML )) {
-				$this->ch->file_set( $_ch_logo, $retHTML );
+				$this->cache->save($retHTML, $_ch_logo);
+				//$this->ch->file_set( $_ch_logo, $retHTML );
 			} else {
-				$this->ch->file_invalidate( $_ch_logo );
+				$this->cache->remove($_ch_logo);
+				//$this->ch->file_invalidate( $_ch_logo );
 			}
 		}
 /**/
 
 		$retHTML = ( empty( $_preview )? $preview : $_preview );
-		$this->ch->file_set( $_cache_name, $retHTML );
+		$this->cache->save($retHTML, $_cache_name, array(), 24*3600);
+		
+		//$this->ch->file_set( $_cache_name, $retHTML );
 		return $retHTML;
 	}
-	
+
 	function showLiigid() {
 
 		global $lc_expp;
@@ -674,13 +715,22 @@ class expp_va extends class_base {
 //		$myURL = $cy->getURL();
 
 		$this->cp->log( get_class($this), "show" );
-
-		$_cache_name = urlencode( $this->lang.'_va_liigid' );
-		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
-
-		if( !empty( $retHTML )) {
-			return $retHTML;
+	
+		$_cache_name = 'va_liigid_' . md5( $this->lang);
+	
+		if (false !== ($retHTML = $this->cache->load($_cache_name))) {
+			if( !empty( $retHTML )) {
+				return $retHTML;
+			}
 		}
+		
+		
+		//$_cache_name = urlencode( $this->lang.'_va_liigid' );
+		//$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+
+		//if( !empty( $retHTML )) {
+		//	return $retHTML;
+		//}
 
 		$this->read_template("expp_liigid.tpl");
 		$retLiik = '';
@@ -760,7 +810,9 @@ class expp_va extends class_base {
 		));
 
 		$retHTML = $this->parse();
-		$this->ch->file_set( $_cache_name, $retHTML );
+	
+		$this->cache->save($retHTML, $_cache_name, array(), 24*3600);
+		//$this->ch->file_set( $_cache_name, $retHTML );
 		return $retHTML;
 	}
 
@@ -820,7 +872,8 @@ class expp_va extends class_base {
 			));
 
 		$this->cp->log( get_class($this), "show_{$_kampaania}", '', '', $__aid );
-
+	
+		//UnWasted - this is commented out, so i will comment out the saving part to :)
 		$_cache_name = urlencode( $this->lang.'_va_valjaanne_'.$_kampaania );
 //		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
@@ -966,7 +1019,8 @@ class expp_va extends class_base {
 		$_preview = '';
 
 		$retHTML = ( empty( $_preview )? $preview : $_preview );
-		$this->ch->file_set( $_cache_name, $retHTML );
+		//UnWasted - loading part is commented ou, so i will comment out the saving part to
+		//$this->ch->file_set( $_cache_name, $retHTML );
 		return $retHTML;
 	}
 }
