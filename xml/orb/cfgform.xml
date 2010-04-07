@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cfgform" folder="www/automatweb_cvs/classes/cfg" extends="class_base">
+	<class name="cfgform" folder="www/automatweb_stable/classes/cfg" extends="class_base">
 		<action name="remove_tbl_field">
 			<function name="remove_tbl_field">
 				<arguments>
@@ -106,6 +106,38 @@
 				<arguments>
 					<required name="oid" />
 					<required name="group" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cfadm_click_group_time">
+			<function name="cfadm_click_group_time">
+				<arguments>
+					<required name="oid" />
+					<required name="group" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cfadm_click_prop_time">
+			<function name="cfadm_click_prop_time">
+				<arguments>
+					<required name="oid" />
+					<required name="prop" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="hide_inactive_groups_with_timer">
+			<function name="hide_inactive_groups_with_timer">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="hide_inactive_properties_with_timer">
+			<function name="hide_inactive_properties_with_timer">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

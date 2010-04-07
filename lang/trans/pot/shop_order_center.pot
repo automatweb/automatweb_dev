@@ -158,18 +158,6 @@ msgstr ""
 msgid "Omaduse Ostukorvi l&ouml;ppvaate template (chart_final_template) help"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:prop_mail_template
-msgid "Omaduse E-maili template (mail_template) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_order_center.aw:prop_mail_template_comment
-msgid "Omaduse E-maili template (mail_template) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_order_center.aw:prop_mail_template_help
-msgid "Omaduse E-maili template (mail_template) help"
-msgstr ""
-
 #: classes/applications/shop/shop_order_center.aw:prop_integration_class
 msgid "Omaduse Integratsiooni klass (integration_class) caption"
 msgstr ""
@@ -240,6 +228,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mail_cust_content_help
 msgid "Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_template
+msgid "Omaduse E-maili template (mail_template) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_template_comment
+msgid "Omaduse E-maili template (mail_template) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_template_help
+msgid "Omaduse E-maili template (mail_template) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mail_to_seller_in_el
@@ -350,16 +350,28 @@ msgstr ""
 msgid "Omaduse J&auml;relmaksu miinumumsumma (rent_min_amt) help"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:prop_rent_configuration
-msgid "Omaduse J&auml;relmaksu konfiguratsioon (rent_configuration) caption"
+#: classes/applications/shop/shop_order_center.aw:prop_payment_types_tlb
+msgid "Omaduse  (payment_types_tlb) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:prop_rent_configuration_comment
-msgid "Omaduse J&auml;relmaksu konfiguratsioon (rent_configuration) kommentaar"
+#: classes/applications/shop/shop_order_center.aw:prop_payment_types_tlb_comment
+msgid "Omaduse  (payment_types_tlb) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:prop_rent_configuration_help
-msgid "Omaduse J&auml;relmaksu konfiguratsioon (rent_configuration) help"
+#: classes/applications/shop/shop_order_center.aw:prop_payment_types_tlb_help
+msgid "Omaduse  (payment_types_tlb) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_payment_types_tbl
+msgid "Omaduse  (payment_types_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_payment_types_tbl_comment
+msgid "Omaduse  (payment_types_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_payment_types_tbl_help
+msgid "Omaduse  (payment_types_tbl) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_appearance_toolbar
@@ -850,12 +862,12 @@ msgstr ""
 msgid "Grupi Maksmine (payment) help"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:group_payment1
-msgid "Grupi Seaded (payment1) pealkiri"
+#: classes/applications/shop/shop_order_center.aw:group_payment_types
+msgid "Grupi Makseviisid (payment_types) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:group_payment1_help
-msgid "Grupi Seaded (payment1) help"
+#: classes/applications/shop/shop_order_center.aw:group_payment_types_help
+msgid "Grupi Makseviisid (payment_types) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:group_payment_settings
@@ -864,6 +876,14 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:group_payment_settings_help
 msgid "Grupi Pangamakse seaded (payment_settings) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:group_payment1
+msgid "Grupi Seaded (payment1) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:group_payment1_help
+msgid "Grupi Seaded (payment1) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:group_appear
@@ -1038,10 +1058,6 @@ msgstr ""
 msgid "Seose Kaust (RELTYPE_RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_RENT_CONFIGURATION
-msgid "Seose J&auml;relmaksu konfiguratsioon (RELTYPE_RENT_CONFIGURATION) tekst"
-msgstr ""
-
 #: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_DEFAULT_CURRENCY
 msgid "Seose Vaikimisi valuuta (RELTYPE_DEFAULT_CURRENCY) tekst"
 msgstr ""
@@ -1062,179 +1078,183 @@ msgstr ""
 msgid "Kasutajap&otilde;hine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:404
+#: classes/applications/shop/shop_order_center.aw:410
 msgid "Kaust"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:516 classes/applications/shop/shop_order_center.aw:1730
+#: classes/applications/shop/shop_order_center.aw:522 classes/applications/shop/shop_order_center.aw:1756
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:521
+#: classes/applications/shop/shop_order_center.aw:527
 msgid "Tabeli kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:527
+#: classes/applications/shop/shop_order_center.aw:533
 msgid "Paketi kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:533
+#: classes/applications/shop/shop_order_center.aw:539
 msgid "Paketi vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:539
+#: classes/applications/shop/shop_order_center.aw:545
 msgid "Paketi teise vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:559 classes/applications/shop/shop_order_center.aw:1555 classes/applications/shop/shop_order_center.aw:1612 classes/applications/shop/shop_order_center.aw:1756
+#: classes/applications/shop/shop_order_center.aw:565 classes/applications/shop/shop_order_center.aw:1561 classes/applications/shop/shop_order_center.aw:1638 classes/applications/shop/shop_order_center.aw:1782
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:635
+#: classes/applications/shop/shop_order_center.aw:641
 msgid "Sorditav v&auml;li"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:641
+#: classes/applications/shop/shop_order_center.aw:647
 msgid "Kasvav / kahanev"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:659
+#: classes/applications/shop/shop_order_center.aw:665
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1384
+#: classes/applications/shop/shop_order_center.aw:1390
 msgid "&nbsp"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1399
+#: classes/applications/shop/shop_order_center.aw:1405
 msgid "Vali t&uuml;hjaks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1502
+#: classes/applications/shop/shop_order_center.aw:1508
 msgid "Tellija andmete vorm valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1529
+#: classes/applications/shop/shop_order_center.aw:1535
 msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1661
+#: classes/applications/shop/shop_order_center.aw:1687
 msgid "Filtrid integratiooniklassist"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1687
+#: classes/applications/shop/shop_order_center.aw:1713
 msgid "Filtrid toote omadustest"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1699
+#: classes/applications/shop/shop_order_center.aw:1725
 msgid "V&auml;li"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1704
+#: classes/applications/shop/shop_order_center.aw:1730
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1735
+#: classes/applications/shop/shop_order_center.aw:1761
 msgid "Kehtiv filter"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1901
+#: classes/applications/shop/shop_order_center.aw:1930
 msgid "K&otilde;ik tooted"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2012
+#: classes/applications/shop/shop_order_center.aw:2041
 msgid "Dokument"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2019
+#: classes/applications/shop/shop_order_center.aw:2048
 msgid "Kategooriad"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2040
+#: classes/applications/shop/shop_order_center.aw:2069
 msgid "T&uuml;&uuml;bid"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2047 classes/applications/shop/shop_order_center.aw:2260
+#: classes/applications/shop/shop_order_center.aw:2076 classes/applications/shop/shop_order_center.aw:2306
 msgid "Templeit"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2054
+#: classes/applications/shop/shop_order_center.aw:2083
 msgid "&Uuml;he toote templeit"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2061 classes/applications/shop/shop_order_center.aw:2130
+#: classes/applications/shop/shop_order_center.aw:2090 classes/applications/shop/shop_order_center.aw:2159
 msgid "Ava"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2167
+#: classes/applications/shop/shop_order_center.aw:2196
 msgid "toodete n&auml;itamine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2218
+#: classes/applications/shop/shop_order_center.aw:2258
 msgid "Sisesta uue kausta nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2226
+#: classes/applications/shop/shop_order_center.aw:2266
 msgid "Aktiivsus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2227
+#: classes/applications/shop/shop_order_center.aw:2267
 msgid "Tee kaustu aktiivseteks ja mitteaktiivseteks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2232
+#: classes/applications/shop/shop_order_center.aw:2272
 msgid "Aktiivseks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2238
+#: classes/applications/shop/shop_order_center.aw:2278
 msgid "Mitteaktiivseks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2244
+#: classes/applications/shop/shop_order_center.aw:2284
+msgid "K&otilde;ik t&uuml;hjad kaustad mitteaktiivseteks"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:2290
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2245
+#: classes/applications/shop/shop_order_center.aw:2291
 msgid "Objektit&uuml;&uuml;p mida tootena kuvatakse"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2261
+#: classes/applications/shop/shop_order_center.aw:2307
 msgid "M&auml;&auml;ra valitud kaustadele templeit"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2276
+#: classes/applications/shop/shop_order_center.aw:2322
 msgid "Toote templeit"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2277
+#: classes/applications/shop/shop_order_center.aw:2323
 msgid "M&auml;&auml;ra valitud kaustadele &uuml;he toote n&auml;itamiseks templeit"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2326
+#: classes/applications/shop/shop_order_center.aw:2373
 msgid "Kategooria nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2333
+#: classes/applications/shop/shop_order_center.aw:2380
 msgid "ID"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2338 classes/applications/shop/shop_order_center.aw:2339
+#: classes/applications/shop/shop_order_center.aw:2385 classes/applications/shop/shop_order_center.aw:2386
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2363
+#: classes/applications/shop/shop_order_center.aw:2410
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2368
+#: classes/applications/shop/shop_order_center.aw:2415
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2396
+#: classes/applications/shop/shop_order_center.aw:2443
 msgid "Vali see"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:2418 classes/applications/shop/shop_order_center.aw:2419
+#: classes/applications/shop/shop_order_center.aw:2465 classes/applications/shop/shop_order_center.aw:2466
 msgid "Salvesta"
 msgstr ""
 

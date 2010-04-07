@@ -8,7 +8,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function _int_obj_ds_mysql()
 	{
 		$this->init();
-		$this->cache = get_instance("cache");
+		$this->cache = &get_static_instance("cache");
 	}
 
 	// returns oid for alias
@@ -713,10 +713,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			"hits" => NULL,
 			"lang_id" => NULL,
 			"comment" => NULL,
-			"jrk" => 0, //UnWasted - db field requires this to be set 0!
+			"jrk" => NULL,
 			"period" => NULL,
 			"alias" => NULL,
-			"periodic" => 0, //UnWasted - db field requires this to be set 0!
+			"periodic" => NULL,
 			"subclass" => NULL,
 			"flags" => NULL,
 		), $objdata);
@@ -735,15 +735,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				'{$objdata["created"]}',	'{$objdata["modified"]}',		'{$objdata["status"]}',	'{$objdata["site_id"]}',
 				'{$objdata["hits"]}',		'{$objdata["lang_id"]}',		'{$objdata["comment"]}',	'{$objdata["modifiedby"]}',
 				'{$objdata["jrk"]}',		'{$objdata["period"]}',		'{$objdata["alias"]}',	'{$objdata["periodic"]}',
-										'{$metadata}',";
-
-		//UnWasted - a bugfix... 
-		//It seems that mysql > 5.1 does not allow empty value if type is int and default is NULL
-		$q .= (null === $objdata['subclass']) ? "NULL" : "'".$objdata['subclass']."'";
-		$q .= ',';
-		$q .= (null === $objdata['flags']) ? "NULL" : "'".$objdata['flags']."'";
-		
-		$q .= "
+										'{$metadata}',				'{$objdata["subclass"]}',	'{$objdata["flags"]}'
 				{$acld_val}
 		)";
 		//echo "q = <pre>". htmlentities($q)."</pre> <br />";

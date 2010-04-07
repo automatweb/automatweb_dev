@@ -201,7 +201,7 @@ class doc_display extends aw_template
 		$this->vars($al->get_vars());
 		
 		$lang_id = aw_global_get("lang_id");
-		$l = get_instance("languages");
+		$l = &get_static_instance("languages");
 		$sel_lang = $l->fetch($lang_id);
 		
 		$title = $doc->trans_get_val("title");
@@ -1030,7 +1030,7 @@ class doc_display extends aw_template
 				"cnt");
 			$this->vars(array(
 				"num_comments" => sprintf("%d",$num_comments),
-				"comm_link" => str_replace("&", "&amp;", $this->mk_my_orb("show_threaded",array("board" => $doc->id(),"section" => $doc->id()),"forum")),
+				"comm_link" => str_replace("&", "&amp;", $this->mk_my_orb("show_threaded",array("board" => $doc->id(),"section" => $_sect),"forum")),
 			));
 			$forum = get_instance(CL_FORUM);
 			$fr = $forum->add_comment(array("board" => $doc->id(),"section" => $_sect));

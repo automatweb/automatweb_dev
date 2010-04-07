@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ftp" folder="www/automatweb_cvs/classes/protocols/file" extends="class_base">
+	<class name="ftp" folder="www/automatweb_stable/classes/protocols/file" extends="class_base">
 		<action name="fetch_tree_node">
 			<function name="fetch_tree_node">
 				<arguments>

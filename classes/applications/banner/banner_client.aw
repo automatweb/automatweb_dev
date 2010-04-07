@@ -96,7 +96,7 @@ class banner_client extends class_base
 	}	
 
 	/**
-		@attrib name=fetch_banner_content nologin=1
+		@attrib name=fetch_banner_content
 		@param loc required
 	**/
 	public function fetch_banner_content($arr)

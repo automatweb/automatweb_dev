@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="image_obj" folder="www/automatweb_cvs/classes/contentmgmt" extends="_int_object">
+	<class name="image_obj" folder="www/automatweb_stable/classes/contentmgmt" extends="_int_object">
 		<action name="view" nologin="1">
 			<function name="check_url">
 				<arguments>

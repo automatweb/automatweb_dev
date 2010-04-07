@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="multifile_upload" folder="www/automatweb_cvs/classes/vcl" extends="class_base">
+	<class name="multifile_upload" folder="www/automatweb_stable/classes/vcl" extends="class_base">
 		<action name="ajax_delete_obj">
 			<function name="ajax_delete_obj">
 				<arguments>

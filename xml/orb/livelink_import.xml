@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="livelink_import" folder="www/automatweb_cvs/classes/import" extends="class_base">
+	<class name="livelink_import" folder="www/automatweb_stable/classes/import" extends="class_base">
 		<action name="invoke" nologin="1">
 			<function name="invoke">
 				<arguments>

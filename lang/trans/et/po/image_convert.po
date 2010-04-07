@@ -14,7 +14,6 @@ msgid "Klassi  help"
 msgstr ""
 
 #: classes/core/converters/image_convert.aw:138
-#: classes/core/converters/image_convert.aw:162
 #: classes/core/converters/image_convert.aw:183
 #: classes/core/converters/image_convert.aw:234
 #: classes/core/converters/image_convert.aw:265
@@ -25,6 +24,10 @@ msgstr ""
 #: classes/core/converters/image_convert.aw:431
 #: classes/core/converters/image_convert.aw:440
 msgid "image_covert: could not detect any supported imagehandlers!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:162
+msgid "image_convert: could not detect any supported imagehandlers!"
 msgstr ""
 
 #: classes/core/converters/image_convert.aw:500

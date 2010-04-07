@@ -15,6 +15,7 @@ class shop_product_search_obj extends _int_object
 			'class_id' => CL_SHOP_PACKET,
 			"lang_id" => array(),
 			"site_id" => array(),
+			"status" => ($this->prop('find_only_active')) ? STAT_ACTIVE : array(STAT_ACTIVE, STAT_NOTACTIVE)
 		);
 		if(strlen(automatweb::$request->arg('search_term')) > 0)
 		{
@@ -22,7 +23,8 @@ class shop_product_search_obj extends _int_object
 				"logic" => "OR",
 				"conditions" => array(
 					'name' => '%'.automatweb::$request->arg('search_term').'%',
-					'CL_SHOP_PACKET.RELTYPE_PRODUCT.code' => '%'.automatweb::$request->arg('search_term').'%'
+					'CL_SHOP_PACKET.RELTYPE_PRODUCT.code' => '%'.automatweb::$request->arg('search_term').'%',
+					'CL_SHOP_PACKET.RELTYPE_PRODUCT.short_code' => '%'.automatweb::$request->arg('search_term').'%'
 				),
 			));
 		}
@@ -66,4 +68,6 @@ class shop_product_search_obj extends _int_object
 		exit_function("shop_product_search_obj::get_search_results");
 		return $products;
 	}
+
+	
 }

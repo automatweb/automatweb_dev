@@ -305,6 +305,8 @@ class orders_form extends class_base
 			}
 		}
 
+		$total = $this->get_cart_total($form);
+
 		if(empty($template))
 		{
 			$template = "orderer_form_data.tpl";
@@ -313,7 +315,7 @@ class orders_form extends class_base
 		lc_site_load("shop", &$cart_instance);
 		$cart_instance->add_cart_vars();
 		$cart_instance->add_orderer_vars();
-		$cart_instance->cart_sum = 15000000;
+		$cart_instance->cart_sum = $total;
 		$cart_instance->add_order_vars();
 
 
@@ -339,12 +341,21 @@ class orders_form extends class_base
 		{
 			$action = "confirm_view";
 		}
-		return $this->mk_my_orb($action, array(
+
+
+
+		$url =  $this->mk_my_orb($action, array(
 			"oc" => $arr["oc"],
 			"cart" => $arr["cart"],
 			"section" => $arr["section"],
 			"id" => $arr["id"],
 		));
+		if(substr($_SERVER["SCRIPT_URI"],0,8) == "https://")
+		{
+			$url = str_replace("http://" ,  "https://" , $url);
+		}
+		return $url;
+
 	}
 
 	/**
@@ -378,6 +389,7 @@ class orders_form extends class_base
 
 		$order_data = $this->get_order();
 		$cart_instance->products = array();
+
 		foreach($order_data as $key => $data)
 		{
 			if($data["product_code"])
@@ -392,85 +404,25 @@ class orders_form extends class_base
 		$cart_instance->categories = $cats;
 
 	//	arr($form);
+		$total = $this->get_cart_total($form);
 		$cart_instance->read_template($template);
 		lc_site_load("shop", &$cart_instance);
 		$cart_instance->cart->get_order_data();
 		$cart_instance->add_orderer_vars();
-		$cart_instance->cart_sum = 15000000000;
+		$cart_instance->cart_sum = $total;
 		$cart_instance->add_order_vars();
 		$cart_instance->add_cart_vars();
 		$cart_instance->vars($arr);
-		$cart_instance->vars(array("id" => $arr["id"]));
+		$cart_instance->vars(array(
+			"id" => $arr["id"],
+			"total" => $total,
+		));
 		return $cart_instance->parse();
 	}
-	function show($arr)
+
+function get_cart_total($form_obj)
 	{
-	//tellimuse info
-
-$is_saved = 1;
-		$form_obj = obj($arr["id"]);
-		$oc = obj($form_obj->prop("order_center"));
-		$cart = obj($oc->prop("cart"));
-		$c_data = $cart->get_order_data();
-		$order_data = $this->get_order();
-		$cart_instance = get_instance(CL_SHOP_ORDER_CART);
-		$cart_instance->cart = $cart;
-		$cart_instance->cart_sum = 1500000000;
-		$cart_instance->add_order_vars();
- 		$this->vars($cart_instance->vars);
-
-	//templeidi valik
-		if(!empty($arr["template"]))
-		{
-			$this->read_template($arr["template"]);
-		}
-		elseif($form_obj->prop("orders_form_template"))
-		{
-			$this->read_template($form_obj->prop("orders_form_template"));
-		}
-		elseif(file_exists($this->site_template_dir."/orders_form.tpl"))
-		{
-			$this->read_site_template("orders_form.tpl");
-		}
-		else
-		{
-			$this->read_template("orders_form.tpl");
-		}
-
-
-		lc_site_load("shop", &$this);
-		foreach($c_data as $key => $val)
-		{
-			$this->vars(array(
-				$key."_value" => $val,
-			));
-		}
-
-		$this->vars(array(
-			"delivery_name" => empty($c_data["delivery"]) ? " " : get_name($c_data["delivery"]),
-			"delivery_value" => empty($c_data["delivery"]) ? "" : $c_data["delivery"],
-		));
-		$this->vars(array(
-			"payment_name" => empty($c_data["payment"]) ? " " : get_name($c_data["payment"]),
-			"payment_value" => empty($c_data["payment"]) ? "" : $c_data["payment"],
-		));
-		//v6imalikud v2ljad mida templeidis kasutada
-		$order_vars = array(
-			"name" => t("Nimi"),
-			"product_code" => t("Tootekood"),
-			"product_color" => t("V&auml;rv"),
-			"product_size" => t("Suurus"),
-			"product_count" => t("Hulk"),
-			"product_page" => t("Lehek&uuml;lg"),
-			"product_image" => t("Pilt"),
-			"product_price" => t("Hind"),
-			"product_sum" => t("Summa")
-		);
-		//v2ljad mida toote leidmisel laost muuta ei saa
-		$disable_vars = array("product_code" , "name" , "product_color", "product_sum", "product_price");
-$required_fields = array("product_code" , "name" , "product_color", "product_sum", "product_price", "product_size","product_count");	
-	
-		$shop_cart_table = "";
+	$order_data = $this->get_order();
 		$count = $total = 0 ;
 		foreach($order_data as $key => $data)
 		{
@@ -487,6 +439,7 @@ $required_fields = array("product_code" , "name" , "product_color", "product_sum
 			if($data["product_code"])//kui koodi j2rgi toode, siis annab ise igast andmeid ette
 			{
 				$product = $this->get_product_by_code($data["product_code"]);
+
 				if($product)
 				{
 					$data["name"] = $product->get_packet_name();
@@ -595,7 +548,208 @@ $required_fields = array("product_code" , "name" , "product_color", "product_sum
 			$shop_cart_table.= $this->parse("shop_cart_table");
 			$count++;
 		}
-		
+
+		return $total;
+	}
+
+
+
+
+	function show($arr)
+	{
+	//tellimuse info
+
+$is_saved = 1;
+		$form_obj = obj($arr["id"]);
+		$oc = obj($form_obj->prop("order_center"));
+		$cart = obj($oc->prop("cart"));
+		$c_data = $cart->get_order_data();
+		$order_data = $this->get_order();
+		$cart_instance = get_instance(CL_SHOP_ORDER_CART);
+		$cart_instance->cart = $cart;
+		$cart_instance->cart_sum = 999;
+		$cart_instance->add_order_vars();
+		$cart_instance->add_orderer_vars();
+ 		$this->vars($cart_instance->vars);
+//arr($cart_instance->vars);
+	//templeidi valik
+		if(!empty($arr["template"]))
+		{
+			$this->read_template($arr["template"]);
+		}
+		elseif($form_obj->prop("orders_form_template"))
+		{
+			$this->read_template($form_obj->prop("orders_form_template"));
+		}
+		elseif(file_exists($this->site_template_dir."/orders_form.tpl"))
+		{
+			$this->read_site_template("orders_form.tpl");
+		}
+		else
+		{
+			$this->read_template("orders_form.tpl");
+		}
+
+
+		lc_site_load("shop", &$this);
+		foreach($c_data as $key => $val)
+		{
+			$this->vars(array(
+				$key."_value" => $val,
+			));
+		}
+
+		$this->vars(array(
+			"delivery_name" => empty($c_data["delivery"]) ? " " : get_name($c_data["delivery"]),
+			"delivery_value" => empty($c_data["delivery"]) ? "" : $c_data["delivery"],
+		));
+		$this->vars(array(
+			"payment_name" => empty($c_data["payment"]) ? " " : get_name($c_data["payment"]),
+			"payment_value" => empty($c_data["payment"]) ? "" : $c_data["payment"],
+		));
+		//v6imalikud v2ljad mida templeidis kasutada
+		$order_vars = array(
+			"name" => t("Nimi"),
+			"product_code" => t("Tootekood"),
+			"product_color" => t("V&auml;rv"),
+			"product_size" => t("Suurus"),
+			"product_count" => t("Hulk"),
+			"product_page" => t("Lehek&uuml;lg"),
+			"product_image" => t("Pilt"),
+			"product_price" => t("Hind"),
+			"product_sum" => t("Summa")
+		);
+		//v2ljad mida toote leidmisel laost muuta ei saa
+		$disable_vars = array("product_code" , "name" , "product_color", "product_sum", "product_price");
+$required_fields = array("product_code" , "name" , "product_color", "product_sum", "product_price", "product_size","product_count");	
+	
+		$shop_cart_table = "";
+		$count = $total = 0 ;
+		foreach($order_data as $key => $data)
+		{
+			$vars = array();
+			$product = null;
+//			$data["product_price"] = t("Hinnakirja<br>alusel");
+
+
+			if(!$data["product_count"])
+			{
+				$order_data[$key]["product_count"] = $data["product_count"] = 1;
+			}
+
+			if($data["product_code"])//kui koodi j2rgi toode, siis annab ise igast andmeid ette
+			{
+				$product = $this->get_product_by_code($data["product_code"]);
+
+				if($product)
+				{
+					$data["name"] = $product->get_packet_name();
+					$data["product_code"] = $product->prop("code");
+
+					$order_data[$key]["product_color"] = $data["product_color"] = $product->get_color_name();
+					if(empty($data["product_size"]))
+					{
+						$order_data[$key]["product_size"] = $data["product_size"] = reset($product->get_size_vals());
+					}
+					if($pr = $product->get_size_price($data["product_size"] , $form_obj->prop("order_center")))
+					{
+						$data["product_price"] = number_format($pr , 2);
+					}
+
+					$vars["image_popup"] = $product->get_image_popup();
+					$vars["image_url"] = $product->get_product_big_image_url();
+				}
+			}
+
+			foreach($order_vars as $order_var => $caption)
+			{
+				$vars[$order_var."_value"] = empty($data[$order_var]) ? "" : $data[$order_var];
+				$vars[$order_var."_caption"] = $caption;
+				$vars[$order_var] = html::textbox(array(
+					"name" => "order_row[".$count."][".$order_var."]",
+					"size" => 11,
+					"value" => $vars[$order_var."_value"],
+					"class" => in_array($order_var,$required_fields) ? "validate[required] text" : "",
+				));
+
+			if($product && in_array($order_var,$disable_vars))
+			{
+				$vars[$order_var] = 
+//html::textbox(array(
+	//					"name" => "order_row[".$count."][".$order_var."]",
+//						"size" => 11,
+//						"value" => $vars[$order_var."_value"],
+//						"disabled" => 1,
+//					)).
+					$vars[$order_var."_value"].
+					html::hidden(array(
+						"name" => "order_row[".$count."][".$order_var."]",
+						"value" => $vars[$order_var."_value"],
+					));
+				}
+			}
+			if($product)
+			{
+				$vars["product_size"] = html::select(array(
+					"name" => "order_row[".$count."][product_size]",
+					"value" => $vars["product_size_value"],
+					"options" => $product->get_size_vals()
+				));
+				if(!(sizeof($product->get_size_vals()) > 1))
+				{
+					$vars["product_size"] = "";
+				}
+				if(!empty($data["product_price"]) && $data["product_count"])
+				{
+					$vars["product_sum"] = number_format(aw_math_calc::string2float($data["product_price"]) * $data["product_count"] , 2);
+					$total+=aw_math_calc::string2float($data["product_price"]) * $data["product_count"];
+				}
+
+
+			}
+			else
+			{
+				if(!$data["product_count"] || !$data["product_code"])
+				{
+					$is_saved = 0;
+				}
+			//	$vars["product_size"] = "";
+				$vars["image_popup"] = "";
+				$vars["image_url"] = "";
+				$vars["product_sum"] = empty($data["product_price"]) ? "" : number_format(aw_math_calc::string2float($data["product_price"]) * $data["product_count"] , 2);
+				$total+= empty($data["product_price"]) ? 0 :aw_math_calc::string2float($data["product_price"]) * $data["product_count"];
+
+			//	$vars["product_sum"] = t("Hinnakirja<br>alusel");
+			}
+
+			$vars["delete"] = html::href(array("url" => "javascript:void(0);" , "onClick" => '$.get("/automatweb/orb.aw?class=orders_form&action=delete_row&row='.$count.'", {
+						}, function (html) {
+							x=document.getElementById("order_row_'.$count.'");
+							//alert(jQuery(x).css("border", "1px solid red"));
+							jQuery(x).remove();
+						}
+					);',
+					"caption" => t("Eemalda<br>toode"),
+			));
+			$vars["tr_id"] = "order_row_".$count;
+			$this->vars($vars);
+			$_vars = $vars;
+			foreach($_vars as $var => $value)
+			{
+				if($value && $this->is_template("HAS_".strtoupper($var)))
+				{
+					$this->vars(array("HAS_".strtoupper($var) => $this->parse("HAS_".strtoupper($var))));
+				}
+				elseif($this->is_template("HAS_".strtoupper($var)))
+				{
+					$this->vars(array("HAS_".strtoupper($var) => " "));
+				}
+			}
+
+			$shop_cart_table.= $this->parse("shop_cart_table");
+			$count++;
+		}
+
 		if(empty($arr["confirm"]))
 		{
 			$x = 0;
@@ -617,6 +771,12 @@ $required_fields = array("product_code" , "name" , "product_color", "product_sum
 		}
 			$confirm_url =$this->mk_my_orb("confirm_view", array("id" => $arr["id"], "section" => aw_global_get("section")));
 		
+		$cart_instance->cart_sum = $total;
+		$cart_instance->add_order_vars();
+ 		$this->vars($cart_instance->vars);
+
+
+
 //add delivery vars
 $sum = $total;
 		if($this->can("view" , $c_data["delivery"]))
@@ -628,6 +788,8 @@ $sum = $total;
 $sum+= $delivery_vars["delivery_price"];
 			$this->vars($delivery_vars);
 		}
+
+
 		$this->vars(array(
 			"total" => $total,
 			"sum" => $sum,
@@ -656,7 +818,7 @@ $sum+= $delivery_vars["delivery_price"];
 		{
 			$payment = obj($order_data["payment"]);
 			$condition = $payment->valid_conditions(array(
-				"sum" => 150000000,
+				"sum" => $total,
 				"currency" => $oc->get_currency(),
 				"product" => array(),
 				"product_packaging" => array(),
@@ -704,27 +866,42 @@ $sum+= $delivery_vars["delivery_price"];
 
 	public function get_product_by_code($code)
 	{
+		$code = trim($code);
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"code" => $code."%",
+			"CL_SHOP_PRODUCT.RELTYPE_PRODUCT(CL_SHOP_PACKET).status" => 2,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"code" => $code."%",
+					"short_code" => $code."%",
+				),
+			))
 		));
-		if($ol->count() == 1)
+		if($ol->count() > 0)
 		{
-			return $ol->begin();
+			return $ol->last();
 		}
 		else
-		{
+		{ 
 			$ol = new object_list(array(
 				"class_id" => CL_SHOP_PRODUCT,
 				"lang_id" => array(),
 				"site_id" => array(),
-				"code" => substr($code , 0 , 6)."%",
+				"CL_SHOP_PRODUCT.RELTYPE_PRODUCT(CL_SHOP_PACKET).status" => 2,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"code" =>  substr($code , 0 , 6)."%",
+						"short_code" =>  substr($code , 0 , 6)."%",
+					),
+				))
 			));
-			if($ol->count() == 1)
+			if($ol->count() > 0)
 			{
-				return $ol->begin();
+				return $ol->last();
 			}
 		}
 		return null;
@@ -828,7 +1005,7 @@ $sum+= $delivery_vars["delivery_price"];
 					if(is_object($packaging))
 					{
 						$product = $packaging->id();
-						$row["product_price"] = $packaging->get_shop_price($cart->id());
+						$row["product_price"] = $packaging->get_special_price($cart->id());
 					}
 					else
 					{
@@ -881,7 +1058,7 @@ $sum+= $delivery_vars["delivery_price"];
 		{
 			$payment = obj($payment);
 			$condition = $payment->valid_conditions(array(
-				"sum" => 15000000,
+				"sum" => 999,
 				"currency" => $this->oc->get_currency(),
 				"product" => array(),
 				"product_packaging" => array(),

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="users" folder="www/automatweb_cvs/classes/core/users" extends="users_user">
+	<class name="users" folder="www/automatweb_stable/classes/core/users" extends="users_user">
 		<action name="change_pwd" is_public="1" caption="Change password">
 			<function name="change_pwd">
 				<arguments>

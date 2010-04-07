@@ -63,15 +63,15 @@ msgid "Omaduse Jrk (jrk) help"
 msgstr ""
 
 #: classes/menu.aw:prop_type
-msgid "Omaduse Kausta tüüp (type) caption"
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"
 msgstr ""
 
 #: classes/menu.aw:prop_type_comment
-msgid "Omaduse Kausta tüüp (type) kommentaar"
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) kommentaar"
 msgstr ""
 
 #: classes/menu.aw:prop_type_help
-msgid "Omaduse Kausta tüüp (type) help"
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"
 msgstr ""
 
 #: classes/menu.aw:prop_pmethod_properties

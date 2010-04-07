@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_call_list" folder="www/automatweb_cvs/classes/applications/crm/sales" extends="crm_task_list">
+	<class name="crm_call_list" folder="www/automatweb_stable/classes/applications/crm/sales" extends="object_list">
 	</class>
 </orb>

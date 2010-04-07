@@ -108,10 +108,6 @@ class core extends acl_base
 		{
 			return;
 		}
-		
-		//UnWasted - it seems that there is no definitions anymore?
-		if (!is_int($type) or !is_int($action))
-			return;
 
 		if (empty($this->dc))
 		{
@@ -859,7 +855,7 @@ class core extends acl_base
 
 		if (true !== $dyc and strlen($dyc))
 		{
-			if ($_GET["return_url"] != "")
+			if (!empty($_GET["return_url"]))
 			{
 				$text = html::href(array(
 					"url" => $_GET["return_url"],

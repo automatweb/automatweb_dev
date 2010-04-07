@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mrp_schedule" folder="www/automatweb_cvs/classes/mrp" extends="db_connector">
+	<class name="mrp_schedule" folder="www/automatweb_stable/classes/mrp" extends="db_connector">
 		<action name="create">
 			<function name="create">
 				<arguments>

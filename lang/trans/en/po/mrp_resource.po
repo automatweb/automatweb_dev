@@ -679,288 +679,288 @@ msgstr ""
 msgid "Kujundusosa Vali&nbsp;materjalid (materials_report_materials_tree) pealkiri"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:216
+#: classes/mrp/mrp_resource.aw:219
 msgid "Vaba"
 msgstr "Free"
 
-#: classes/mrp/mrp_resource.aw:217
+#: classes/mrp/mrp_resource.aw:220
 msgid "Kasutusel"
 msgstr "In use"
 
-#: classes/mrp/mrp_resource.aw:218
+#: classes/mrp/mrp_resource.aw:221
 msgid "Suletud"
 msgstr "Closed"
 
-#: classes/mrp/mrp_resource.aw:219 classes/mrp/mrp_resource.aw:233
+#: classes/mrp/mrp_resource.aw:222 classes/mrp/mrp_resource.aw:236
 msgid "Arhiveeritud"
 msgstr "Archived"
 
-#: classes/mrp/mrp_resource.aw:223 classes/mrp/mrp_resource.aw:1724
+#: classes/mrp/mrp_resource.aw:226 classes/mrp/mrp_resource.aw:1727
 msgid "Uus"
 msgstr "New"
 
-#: classes/mrp/mrp_resource.aw:224
+#: classes/mrp/mrp_resource.aw:227
 msgid "Planeeritud"
 msgstr "Planned"
 
-#: classes/mrp/mrp_resource.aw:225
+#: classes/mrp/mrp_resource.aw:228
 msgid "T&ouml;&ouml;s"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:226
+#: classes/mrp/mrp_resource.aw:229
 msgid "Katkestatud"
 msgstr "Aborted"
 
-#: classes/mrp/mrp_resource.aw:227
+#: classes/mrp/mrp_resource.aw:230
 msgid "Valmis"
 msgstr "Done"
 
-#: classes/mrp/mrp_resource.aw:228
+#: classes/mrp/mrp_resource.aw:231
 msgid "Lukustatud"
 msgstr "Locked"
 
-#: classes/mrp/mrp_resource.aw:229 classes/mrp/mrp_resource.aw:230
+#: classes/mrp/mrp_resource.aw:232 classes/mrp/mrp_resource.aw:233
 msgid "Paus"
 msgstr "Pause"
 
-#: classes/mrp/mrp_resource.aw:231
+#: classes/mrp/mrp_resource.aw:234
 msgid "Kustutatud"
 msgstr "Deleted"
 
-#: classes/mrp/mrp_resource.aw:232
+#: classes/mrp/mrp_resource.aw:235
 msgid "Plaanist v&auml;ljas"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:256
+#: classes/mrp/mrp_resource.aw:259
 msgid "Uut ressurssi saab luua vaid ressursihalduskeskkonnast."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:266
+#: classes/mrp/mrp_resource.aw:269
 msgid "Ressurss ei kuulu &uuml;hessegi ressursihalduss&uuml;steemi."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:272
+#: classes/mrp/mrp_resource.aw:275
 msgid "Viga!"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:305
+#: classes/mrp/mrp_resource.aw:308
 msgid "/Ressursid"
 msgstr "/Resources"
 
-#: classes/mrp/mrp_resource.aw:506
+#: classes/mrp/mrp_resource.aw:509
 msgid "Seda t&uuml;&uuml;pi kordust ei saa kasutada."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:522
+#: classes/mrp/mrp_resource.aw:525
 msgid "Viga kellaaja m&auml;&auml;rangus."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:535
+#: classes/mrp/mrp_resource.aw:538
 msgid "Pikkus ei saa olla suurem kui korduse periood."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:540
+#: classes/mrp/mrp_resource.aw:543
 msgid "Pikkus ei saa olla null."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:548
+#: classes/mrp/mrp_resource.aw:551
 msgid "'Alates' peab olema varasem aeg kui 'Kuni'."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:566
+#: classes/mrp/mrp_resource.aw:569
 msgid "Ressurss on kasutusel. Ei saa hooldusse panna."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:642 classes/mrp/mrp_resource.aw:738
-#: classes/mrp/mrp_resource.aw:951
+#: classes/mrp/mrp_resource.aw:645 classes/mrp/mrp_resource.aw:741
+#: classes/mrp/mrp_resource.aw:954
 msgid "Ava"
 msgstr "Open"
 
-#: classes/mrp/mrp_resource.aw:647 classes/mrp/mrp_resource.aw:743
+#: classes/mrp/mrp_resource.aw:650 classes/mrp/mrp_resource.aw:746
 msgid "Staatus"
 msgstr "Status"
 
-#: classes/mrp/mrp_resource.aw:653 classes/mrp/mrp_resource.aw:749
+#: classes/mrp/mrp_resource.aw:656 classes/mrp/mrp_resource.aw:752
 msgid "Projekti nr."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:660 classes/mrp/mrp_resource.aw:756
+#: classes/mrp/mrp_resource.aw:663 classes/mrp/mrp_resource.aw:759
 msgid "Klient"
 msgstr "Customer"
 
-#: classes/mrp/mrp_resource.aw:667 classes/mrp/mrp_resource.aw:763
+#: classes/mrp/mrp_resource.aw:670 classes/mrp/mrp_resource.aw:766
 msgid "Projekti nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:674
+#: classes/mrp/mrp_resource.aw:677
 msgid "Algus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:684 classes/mrp/mrp_resource.aw:787
+#: classes/mrp/mrp_resource.aw:687 classes/mrp/mrp_resource.aw:790
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:696
+#: classes/mrp/mrp_resource.aw:699
 msgid "Planeeritud kestus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:704
+#: classes/mrp/mrp_resource.aw:707
 msgid "Tegelik kestus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:712
+#: classes/mrp/mrp_resource.aw:715
 msgid "H&auml;lve"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:720 classes/mrp/mrp_resource.aw:797
+#: classes/mrp/mrp_resource.aw:723 classes/mrp/mrp_resource.aw:800
 msgid "Tr&uuml;kiarv"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:728 classes/mrp/mrp_resource.aw:806
+#: classes/mrp/mrp_resource.aw:731 classes/mrp/mrp_resource.aw:809
 msgid "Tr&uuml;kiarv Notes"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:770
+#: classes/mrp/mrp_resource.aw:773
 msgid "L&otilde;petamiseks kuluv aeg (h)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:777
+#: classes/mrp/mrp_resource.aw:780
 msgid "Arvatav j&auml;tkamisaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:987
+#: classes/mrp/mrp_resource.aw:990
 msgid "%.2f (%.2f%%)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:987
+#: classes/mrp/mrp_resource.aw:990
 msgid "N/A"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1230
+#: classes/mrp/mrp_resource.aw:1233
 msgid "Ressurss on valitud aegadel kasutuses:<br>"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1245 classes/mrp/mrp_resource.aw:1260
+#: classes/mrp/mrp_resource.aw:1248 classes/mrp/mrp_resource.aw:1263
 msgid "Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1331
+#: classes/mrp/mrp_resource.aw:1334
 msgid "Isik"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1502
+#: classes/mrp/mrp_resource.aw:1505
 msgid "Ressursi '%s' t&ouml;&ouml;voog"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1508
+#: classes/mrp/mrp_resource.aw:1511
 msgid "Projekt/t&ouml;&ouml;"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1545 classes/mrp/mrp_resource.aw:1643
+#: classes/mrp/mrp_resource.aw:1548 classes/mrp/mrp_resource.aw:1646
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1644
+#: classes/mrp/mrp_resource.aw:1647
 msgid "K&auml;esolev n&auml;dal (%u)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1649
+#: classes/mrp/mrp_resource.aw:1652
 msgid "J&auml;rgmine n&auml;dal (%u)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1653
+#: classes/mrp/mrp_resource.aw:1656
 msgid "M&ouml;&ouml;dunud n&auml;dal (%u)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1656
+#: classes/mrp/mrp_resource.aw:1659
 msgid "K&auml;esolev kuu (%u)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1659
+#: classes/mrp/mrp_resource.aw:1662
 msgid "J&auml;rgmine kuu (%u)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1663
+#: classes/mrp/mrp_resource.aw:1666
 msgid "M&ouml;&ouml;dunud kuu (%u)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1677
+#: classes/mrp/mrp_resource.aw:1680
 msgid "%u. %s %u (%u)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1680
+#: classes/mrp/mrp_resource.aw:1683
 msgid "%s %u (%u)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1683
+#: classes/mrp/mrp_resource.aw:1686
 msgid "%s (%u)"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1764
+#: classes/mrp/mrp_resource.aw:1767
 msgid "Eemalda valitud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1826
+#: classes/mrp/mrp_resource.aw:1829
 msgid "Antud materjal on juba lisatud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1892
+#: classes/mrp/mrp_resource.aw:1895
 msgid "Artiklikategooriad"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2006
+#: classes/mrp/mrp_resource.aw:2009
 msgid "Ressursil kasutatavad materjalid"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2009
+#: classes/mrp/mrp_resource.aw:2012
 msgid "Vali"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2015
+#: classes/mrp/mrp_resource.aw:2018
 msgid "Nimi"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2019
+#: classes/mrp/mrp_resource.aw:2022
 msgid "Tarnetingimus planeerimisel"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2023
+#: classes/mrp/mrp_resource.aw:2026
 msgid "Materjali liikumine materjalilaost"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2025
+#: classes/mrp/mrp_resource.aw:2028
 msgid "Ressursil %s kasutatavad materjalid"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2084
+#: classes/mrp/mrp_resource.aw:2087
 msgid ", mille klient on '%s'"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2088
+#: classes/mrp/mrp_resource.aw:2091
 msgid ", mille klient kuulub kliendikategooriasse '%s'"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2093
+#: classes/mrp/mrp_resource.aw:2096
 msgid ", mille kliendi nime algust&auml;ht on %s"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2098
+#: classes/mrp/mrp_resource.aw:2101
 msgid "Ressursi '%s' t&ouml;&ouml;d"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2104
+#: classes/mrp/mrp_resource.aw:2107
 msgid "Ressursi '%s' tehtud t&ouml;&ouml;d"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2108
+#: classes/mrp/mrp_resource.aw:2111
 msgid "Ressursi '%s' katkestatud t&ouml;&ouml;d"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2112
+#: classes/mrp/mrp_resource.aw:2115
 msgid "Ressursi '%s' eesseisvad t&ouml;&ouml;d"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:2343
+#: classes/mrp/mrp_resource.aw:2346
 msgid "Ressursi %s j&otilde;udlused formaatide ja aja l&otilde;ikes"
 msgstr ""
 

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="package" folder="www/automatweb_cvs/classes/applications/package_management" extends="class_base">
+	<class name="package" folder="www/automatweb_stable/classes/applications/package_management" extends="class_base">
 		<action name="get_file_names" all_args="1">
 			<function name="get_file_names">
 				<arguments>

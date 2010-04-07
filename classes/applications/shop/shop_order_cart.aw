@@ -302,6 +302,7 @@ class shop_order_cart extends class_base
 
 		$this->add_cart_vars();
 		$this->add_product_vars();
+		$cart_total = $this->cart_sum;
 		$this->add_orderer_vars();
 		if($oc->prop("show_delivery"))
 		{
@@ -347,16 +348,18 @@ class shop_order_cart extends class_base
 //		));
 //		$layout = obj($cart_o->prop("prod_layout"));
 
-		$total = 0;
+		$total = $cart_total;
 		$items = 0;
 		$prod_total = 0;
-		$cart_total = 0;
+//		$cart_total = 0;
 		$str = "";
 		$cart = $this->get_cart($oc);
 		$awa = new aw_array($cart["items"]);
 		$show_info_page = true;
 //		$l_inst = $layout->instance();
 //		$l_inst->read_template($layout->prop("template"));
+
+/*
 
 		 $product_str = "";
 
@@ -408,6 +411,22 @@ class shop_order_cart extends class_base
 						$vars["total_price_without_thousand_separator"] = $total_price;
 						$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
 						$this->vars($vars);
+						$subs = array();
+						foreach($vars as $key => $val)
+						{
+							if($this->is_template("HAS_".strtoupper($key)))
+							{
+								if($val)
+								{
+									$subs["HAS_".strtoupper($key)] = $this->parse("HAS_".strtoupper($key));
+								}
+								else
+								{
+									$subs["HAS_".strtoupper($key)] = "";
+								}
+							}
+						}
+						$this->vars($subs);
 						$product_str.= $this->parse("PRODUCT");
 						$show_info_page = false;
 						$total += $total_price;
@@ -461,7 +480,15 @@ class shop_order_cart extends class_base
 
 					$product = obj($i);
 					$vars = $product->get_data();
-					$price = $product->get_shop_price($oc->id());
+					$special_price = $product->get_shop_special_price($oc->id());
+					if (!empty($special_price))
+					{
+						$price = $special_price;
+					}
+					else
+					{
+						$price = $product->get_shop_price($oc->id());
+					}
 					$total_price = $quant["items"] * $price;
 
 					$vars["amount"] = $quant["items"];
@@ -470,6 +497,22 @@ class shop_order_cart extends class_base
 					$vars["total_price_without_thousand_separator"] = $total_price;
 					$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $cart_o->id(), "product" => $iid));
 					$this->vars($vars);
+						$subs = array();
+						foreach($vars as $key => $val)
+						{
+							if($this->is_template("HAS_".strtoupper($key)))
+							{
+								if($val)
+								{
+									$subs["HAS_".strtoupper($key)] = $this->parse("HAS_".strtoupper($key));
+								}
+								else
+								{
+									$subs["HAS_".strtoupper($key)] = "";
+								}
+							}
+						}
+						$this->vars($subs);
 					$product_str.= $this->parse("PRODUCT");
 
 					$show_info_page = false;
@@ -480,6 +523,7 @@ class shop_order_cart extends class_base
 			}
 		}
 		$this->cart_sum = $cart_total;
+*/
 
 		if ($str == "" && $this->is_template("NO_SHOW_EMPTY"))
 		{
@@ -577,13 +621,14 @@ class shop_order_cart extends class_base
 
 
 		$this->vars($delivery_vars + array(
-			"cart_total" => number_format($cart_total, 2),
+			"cart_total" => number_format($this->cart_sum , 2, "." , ""),
+			"unformated_cart_total" => $this->cart_sum,
 			"cart_discount" => number_format($cart_discount, 2),
 			"cart_val_w_disc" => number_format($cart_total - $cart_discount, 2),
 			"user_data_form" => $html,
-			"PROD" => $str,
-			"PRODUCT" => $product_str,
-			"basket_total_price" =>number_format( $cart_total,2),
+//			"PROD" => $str,
+//			"PRODUCT" => $product_str,
+			"basket_total_price" =>number_format($this->cart_sum,2),
 			"total" => number_format($total, 2),
 			"prod_total" => number_format($prod_total, 2),
 			"postal_price" => number_format($postal_price,2),
@@ -614,7 +659,7 @@ class shop_order_cart extends class_base
 			));
 		}
 */
-		if($items && $this->is_template("HAS_PRODUCTS"))
+		if($this->product_count && $this->is_template("HAS_PRODUCTS"))
 		{
 			$this->vars(array(
 				"HAS_PRODUCTS" => $this->parse("HAS_PRODUCTS"),
@@ -1093,7 +1138,7 @@ class shop_order_cart extends class_base
 				unset($cart["items"][$iid]);
 			}
 		}
-		//arr($cart);
+		//arr$(cart);
 		$this->set_cart(array(
 			"oc" => $oc,
 			"cart" => $cart,
@@ -1489,7 +1534,8 @@ class shop_order_cart extends class_base
 				}
 			}
 //------------porno
-			$price = $inst->get_calc_price($i);
+			$price = $i->get_special_price();
+//			$price = $inst->get_calc_price($i);
 			$quantx = new aw_array($quantx);
 			foreach($quantx->get() as $x => $quant)
 			{
@@ -2618,6 +2664,17 @@ class shop_order_cart extends class_base
 		{
 			$product_object = obj($arr["product"]);
 			$vars = $product_object->get_data();
+
+			$vars['special_price_visibility'] = '';
+			$vars['PRODUCT_SPECIAL_PRICE'] = '';
+			if (!empty($vars['special_price']))
+			{
+				$vars['special_price_visibility'] = '_specialPrice';
+				$this->vars(array(
+					'special_price' => number_format($vars['special_price'], 2)
+				));
+				$vars['PRODUCT_SPECIAL_PRICE'] = $this->parse('PRODUCT_SPECIAL_PRICE');
+			}
 		}
 
 		if(!empty($arr["return_url"]))
@@ -2654,7 +2711,6 @@ class shop_order_cart extends class_base
 		$this->add_cart_vars();
 		$this->add_product_vars();
 		$this->add_orderer_vars();
-
 		if($this->oc->prop("show_delivery"))
 		{
 			$this->add_order_vars();
@@ -2737,7 +2793,7 @@ class shop_order_cart extends class_base
 						$vars["birthday_day_value"] = empty($data[$orderer_var]["day"]) ? t("PP") : $data[$orderer_var]["day"];
 						$vars["birthday_month_value"] = empty($data[$orderer_var]["month"]) ? t("KK") : $data[$orderer_var]["month"];
 						$vars["birthday_year_value"] = empty($data[$orderer_var]["year"]) ? t("AAAA") : $data[$orderer_var]["year"];
-						$vars["birthday_value"] = empty($data[$orderer_var]["day"]) ? "" : date("d.m.Y" , mktime(0,0,0,$data[$orderer_var]["day"],$data[$orderer_var]["month"],$data[$orderer_var]["year"]));
+						$vars["birthday_value"] = empty($data[$orderer_var]["day"]) ? "" : date("d.m.Y" , mktime(0,0,0,$data[$orderer_var]["month"],$data[$orderer_var]["day"],$data[$orderer_var]["year"]));
 					}
 					break;
 			}
@@ -2781,7 +2837,7 @@ class shop_order_cart extends class_base
 			"product_packaging" => array(),
 			"validate" => false,
 		));
- 
+
 		$self_validate_payment_types = $this->cart->prop("show_only_valid_payment_types") ? false : true;
 		$self_validate_delivery_methods = $this->cart->prop("show_only_valid_delivery_methods") ? false : true;
 		$payment_types_params = array( 	 
@@ -2828,6 +2884,7 @@ class shop_order_cart extends class_base
 // 				$payment.= $this->parse("PAYMENT");
 // 				$porn++;
 // 			}
+
 			$condition = $o->valid_conditions(array(
 				"sum" => $this->cart_sum,
 				"currency" => $oc->get_currency(),
@@ -3044,20 +3101,70 @@ class shop_order_cart extends class_base
 				$items ++;
 	
 				$vars = $product->get_data();
-				$sum = $quant["items"] * $product->get_shop_price($this->oc->id());
+				$special_price = $product->get_shop_special_price($this->oc->id());
+				$vars['PRODUCT_SPECIAL_PRICE'] = '';
+				$vars['special_price_visibility'] = '';
+				if (!empty($special_price))
+				{
+					$sum = $quant["items"] * $special_price;
+					$vars['special_price_visibility'] = '_specialPrice';
+					$vars['special_price'] = $special_price;
+					$this->vars(array(
+						'special_price' => number_format($special_price, 2),
+						'unformated_special_price' => $special_price
+					));
+					$vars['PRODUCT_SPECIAL_PRICE'] = $this->parse('PRODUCT_SPECIAL_PRICE');
+				}
+				else
+				{
+					$price = $product->get_shop_price($this->oc->id());
+					$sum = $quant["items"] * $price;
+					$vars['special_price_visibility'] = '';
+					$vars['PRODUCT_SPECIAL_PRICE'] = '';
+					$vars['special_price'] = $price;
+				}
+				
 				$vars["amount"] = $quant["items"];
-				$vars["price"] = number_format($product->get_shop_price($this->oc->id()) , 2);
-				$vars["total_price"] = number_format($sum , 2);
+
+				$price = $product->get_shop_price($this->oc->id());
+				$vars["price"] = number_format($price , 2 , "." , "");
+				$vars["unformated_price"] = $price;
+				$vars['unformated_special_price'] = $vars['special_price'];
+				$vars['special_price'] = number_format($vars['special_price'] , 2, "." , "");
+				$vars["unformated_total_price"] = $sum;
+				$vars["total_price"] = number_format($sum , 2, "." , "");
+				$vars["total_price_without_thousand_separator"] = $sum;//see yleliigne vast nyyd
+
 				$vars["remove_url"] = $this->mk_my_orb("remove_product" , array("cart" => $this->cart->id(), "product" => $iid));
 				$this->vars($vars);
+//arr($vars);
+				$subs = array();
+				foreach($vars as $key => $val)
+				{
+					if($this->is_template("HAS_".strtoupper($key)))
+					{
+						if($val)
+						{
+							$subs["HAS_".strtoupper($key)] = $this->parse("HAS_".strtoupper($key));
+						}
+						else
+						{
+							$subs["HAS_".strtoupper($key)] = "";
+						}
+					}
+				}
+				$this->vars($subs);
+
 				$product_str.= $this->parse("PRODUCT");
 				$cart_total += $sum;
 			}
 		}
+		$this->product_count = $items;
 		$this->cart_sum = $cart_total;
 		$this->vars(array(
 			"PRODUCT" => $product_str,
-			"cart_total" => $cart_total,
+			"unformated_cart_total" => $cart_total,
+			"cart_total" => number_format($cart_total , 2, "." , ""),
 		));
 	}
 
@@ -3099,7 +3206,15 @@ class shop_order_cart extends class_base
 			$return_data["confirm_url"] = $arr["confirm_url"];
 		}
 
-		return $this->mk_my_orb($action, $return_data);
+//isikuandmeid jne tihti tahetakse yle ssh, siis t6en2oliselt tahetakse vastust ka selliselt, kud on need isikuandmed tihti n2ha
+		$return = $this->mk_my_orb($action, $return_data);
+		if(substr($_SERVER["SCRIPT_URI"],0,8) == "https://")
+		{
+			$return = str_replace("http://" ,  "https://" , $return);
+		//	if(aw_global_get("uid") == "struktuur.markop"){arr($return);}
+		}
+//if(aw_global_get("uid") == "struktuur.markop"){arr($return);die();}
+		return $return; 
 	}
 
 	/**
@@ -3141,6 +3256,10 @@ class shop_order_cart extends class_base
 		}
 		$order = $cart->confirm_order();
 		$url = aw_global_get("baseurl")."/".$order->id();
+		if(substr($_SERVER["SCRIPT_URI"],0,8) == "https://")
+		{
+			$url = str_replace("http://" ,  "https://" , $url);
+		}
 		header("Location: ".$url);
 		die();
 	}

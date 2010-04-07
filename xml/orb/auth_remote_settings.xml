@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="auth_remote_settings" folder="www/automatweb_cvs/classes/core/users/auth" extends="class_base">
+	<class name="auth_remote_settings" folder="www/automatweb_stable/classes/core/users/auth" extends="class_base">
 		<action name="check_hash">
 			<function name="check_hash">
 				<arguments>

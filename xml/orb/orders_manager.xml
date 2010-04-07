@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="orders_manager" folder="www/automatweb_cvs/classes/applications/orders" extends="class_base">
+	<class name="orders_manager" folder="www/automatweb_stable/classes/applications/orders" extends="class_base">
 		<action name="delete_orders">
 			<function name="delete_orders">
 				<arguments>

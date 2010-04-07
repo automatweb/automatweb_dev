@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_company_bills_impl" folder="www/automatweb_cvs/classes/applications/crm" extends="class_base">
+	<class name="crm_company_bills_impl" folder="www/automatweb_stable/classes/applications/crm" extends="class_base">
 		<action name="search_bill">
 			<function name="search_bill">
 				<arguments>

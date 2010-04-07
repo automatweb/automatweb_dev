@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="budgeting_tax" folder="www/automatweb_cvs/classes/applications/budgeting" extends="class_base">
+	<class name="budgeting_tax" folder="www/automatweb_stable/classes/applications/budgeting" extends="class_base">
 		<action name="create_new_rel">
 			<function name="create_new_rel">
 				<arguments>

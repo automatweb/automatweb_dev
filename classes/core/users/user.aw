@@ -287,7 +287,7 @@ class user extends class_base
 			'tpldir' => 'core/users/user',
 			'clid' => CL_USER
 		));
-		$this->users = get_instance("core/users/users");
+		$this->users = &get_static_instance("users");;
 	}
 
 	function get_property(&$arr)
@@ -2717,7 +2717,7 @@ EOF;
 		@param u_layout required
 	**/
 	function get_layer_state($arr)
-	{
+	{//return 1; // no ei toimi see funktsioon
 		extract($arr);
 		$val = $this->db_query("SELECT aw_state FROM layer_states WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout' AND aw_uid = '".aw_global_get("uid")."'", false);
 		if (!$val)
@@ -2725,7 +2725,12 @@ EOF;
 			$val = $this->db_query("CREATE TABLE layer_states (aw_class varchar(255), aw_group varchar(255), aw_layer varchar(255), aw_state int default 1, aw_uid varchar(255))", false);
 			if (!$val)
 			{
-				$this->db_query("ALTER TABLE layer_states ADD aw_uid varchar(255)");
+				$val = $this->db_query("ALTER TABLE layer_states ADD aw_uid varchar(255)" , false);
+				if(!$val)
+				{
+					//loodan et toimib... pidevalt l2heb katki raibe iseenesest
+					$val = $this->db_query("REPAIR TABLE layer_states");
+				}
 			}
 			$this->db_query("SELECT aw_state FROM layer_states WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout' AND aw_uid = '".aw_global_get("uid")."'");
 		}

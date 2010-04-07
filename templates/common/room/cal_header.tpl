@@ -1,5 +1,5 @@
 {VAR:pop}
-<table border=0>
+<table border="0">
 	<tr>
 		<td>{VAR:week_select_caption}</td>
 		<td>{VAR:week_select}
@@ -21,14 +21,5 @@
 	<tr>
 		<td>{VAR:without_detail_information}</td>
 		<td colspan="2"><input type="checkbox" value="1" name="no_det_info" {VAR:no_det_info}></td>
-		
-	<tr>
-		<td></td>
-		<td></td>
-<!-- SUB: ANCHOR_LINKS -->
-<a href="{VAR:alink}"><input type='button' value='{VAR:acapt}'  /></a> 
-<!-- END SUB: ANCHOR_LINKS -->
-</td>
-	</tr>			
-		
+	</tr>
 </table>

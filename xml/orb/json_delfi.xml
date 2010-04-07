@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="json_delfi" folder="www/automatweb_cvs/classes/applications/event_import_2" extends="class_base">
+	<class name="json_delfi" folder="www/automatweb_stable/classes/applications/event_import_2" extends="class_base">
 		<action name="make_master_import_happy">
 			<function name="make_master_import_happy">
 				<arguments>

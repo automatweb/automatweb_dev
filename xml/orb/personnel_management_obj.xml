@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="personnel_management_obj" folder="www/automatweb_cvs/classes/applications/personnel_management" extends="_int_object">
+	<class name="personnel_management_obj" folder="www/automatweb_stable/classes/applications/personnel_management" extends="_int_object">
 		<action name="notify_of_new_cv">
 			<function name="notify_of_new_cv">
 				<arguments>

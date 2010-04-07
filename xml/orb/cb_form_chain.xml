@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cb_form_chain" folder="www/automatweb_cvs/classes/applications/cb_form_chain" extends="class_base">
+	<class name="cb_form_chain" folder="www/automatweb_stable/classes/applications/cb_form_chain" extends="class_base">
 		<action name="submit_data" nologin="1">
 			<function name="submit_data">
 				<arguments>

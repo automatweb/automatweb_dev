@@ -17,7 +17,7 @@ class cfgutils extends aw_template
 		$this->init("");
 		$this->fbasedir = $this->fbasedir;
 		$this->f_site_basedir = $this->f_site_basedir;
-		$this->cache = get_instance("cache");
+		$this->cache = &get_static_instance("cache");
 	}
 
 	private function _init_clist()

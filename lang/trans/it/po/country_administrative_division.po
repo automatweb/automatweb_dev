@@ -61,6 +61,42 @@ msgstr ""
 msgid "Omaduse Kõrgem haldusüksus (parent_division) help"
 msgstr ""
 
+#: classes/common/country/country_administrative_division.aw:prop_division_name
+msgid "Omaduse Haldusüksuse nimetus (division_name) caption"
+msgstr ""
+
+#: classes/common/country/country_administrative_division.aw:prop_division_name_comment
+msgid "Omaduse Haldusüksuse nimetus (division_name) kommentaar"
+msgstr ""
+
+#: classes/common/country/country_administrative_division.aw:prop_division_name_help
+msgid "Omaduse Haldusüksuse nimetus (division_name) help"
+msgstr ""
+
+#: classes/common/country/country_administrative_division.aw:prop_division_name_as_suffix
+msgid "Omaduse Haldusüksuse nimetus lauses (division_name_as_suffix) caption"
+msgstr ""
+
+#: classes/common/country/country_administrative_division.aw:prop_division_name_as_suffix_comment
+msgid "Omaduse Haldusüksuse nimetus lauses (division_name_as_suffix) kommentaar"
+msgstr ""
+
+#: classes/common/country/country_administrative_division.aw:prop_division_name_as_suffix_help
+msgid "Omaduse Haldusüksuse nimetus lauses (division_name_as_suffix) help"
+msgstr ""
+
+#: classes/common/country/country_administrative_division.aw:prop_ext_id_1
+msgid "Omaduse Identifikaator v&auml;lises s&uuml;steemis 1 (ext_id_1) caption"
+msgstr ""
+
+#: classes/common/country/country_administrative_division.aw:prop_ext_id_1_comment
+msgid "Omaduse Identifikaator v&auml;lises s&uuml;steemis 1 (ext_id_1) kommentaar"
+msgstr ""
+
+#: classes/common/country/country_administrative_division.aw:prop_ext_id_1_help
+msgid "Omaduse Identifikaator v&auml;lises s&uuml;steemis 1 (ext_id_1) help"
+msgstr ""
+
 #: classes/common/country/country_administrative_division.aw:prop_jrk
 msgid "Omaduse Järjekord (jrk) caption"
 msgstr ""
@@ -73,18 +109,18 @@ msgstr ""
 msgid "Omaduse Järjekord (jrk) help"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:rel_RELTYPE_PARENT_ADMINISTRATIVE_UNIT
-msgid "Seose Kõrgem haldusüksus (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
+#: classes/common/country/country_administrative_division.aw:rel_RELTYPE_PARENT_ADMINISTRATIVE_DIVISION
+msgid "Seose Kõrgem haldusüksus (RELTYPE_PARENT_ADMINISTRATIVE_DIVISION) tekst"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:74
+#: classes/common/country/country_administrative_division.aw:83
 msgid "Haldusüksus"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:75
+#: classes/common/country/country_administrative_division.aw:84
 msgid "Linna tüüpi haldusüksus"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:76
+#: classes/common/country/country_administrative_division.aw:85
 msgid "Linnaosa tüüpi haldusüksus"
 msgstr ""

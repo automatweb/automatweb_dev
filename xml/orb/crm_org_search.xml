@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_org_search" folder="www/automatweb_cvs/classes/crm" extends="class_base">
+	<class name="crm_org_search" folder="www/automatweb_stable/classes/crm" extends="class_base">
 		<action name="test" all_args="1">
 			<function name="test">
 				<arguments>

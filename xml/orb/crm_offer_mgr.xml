@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_offer_mgr" folder="www/automatweb_cvs/classes/crm" extends="class_base">
+	<class name="crm_offer_mgr" folder="www/automatweb_stable/classes/crm" extends="class_base">
 		<action name="del_offers">
 			<function name="del_offers">
 				<arguments>

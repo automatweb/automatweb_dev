@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="spa_booking" folder="www/automatweb_cvs/classes/applications/spa_bookings" extends="class_base">
+	<class name="spa_booking" folder="www/automatweb_stable/classes/applications/spa_bookings" extends="class_base">
 		<action name="bank_return" is_public="1" all_args="1">
 			<function name="bank_return">
 				<arguments>

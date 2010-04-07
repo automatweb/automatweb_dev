@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="object_cache_updater" folder="www/automatweb_cvs/classes/core/obj" extends="core">
+	<class name="object_cache_updater" folder="www/automatweb_stable/classes/core/obj" extends="core">
 		<action name="handle_remote_update" nologin="1">
 			<function name="handle_remote_update">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="dronline" folder="www/automatweb_cvs/classes/syslog" extends="class_base">
+	<class name="dronline" folder="www/automatweb_stable/classes/syslog" extends="class_base">
 		<action name="saveblock">
 			<function name="saveblock">
 				<arguments>

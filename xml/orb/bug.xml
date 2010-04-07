@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="bug" folder="www/automatweb_cvs/classes/applications/bug_o_matic_3000" extends="class_base">
+	<class name="bug" folder="www/automatweb_stable/classes/applications/bug_o_matic_3000" extends="class_base">
 		<action name="handle_bug_change_status">
 			<function name="hadle_bug_change_status">
 				<arguments>
@@ -70,6 +70,14 @@
 					<optional name="customer" />
 					<optional name="customer_name" />
 					<optional name="orderer" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="fuck_you">
+			<function name="fuck_you">
+				<arguments>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="calendar_registration_form_conf" folder="www/automatweb_cvs/classes/applications/calendar" extends="class_base">
+	<class name="calendar_registration_form_conf" folder="www/automatweb_stable/classes/applications/calendar" extends="class_base">
 		<action name="submit_register" nologin="1">
 			<function name="submit_register">
 				<arguments>

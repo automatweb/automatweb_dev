@@ -4,9 +4,17 @@
 @classinfo maintainer=voldemar
 */
 
-class crm_call_list extends crm_task_list
+class crm_call_list extends object_list
 {
-	public function filter($param, $task_list_param = array())
+	protected $user_role = crm_sales_obj::ROLE_GENERIC;
+
+	public function __construct($param = array())
+	{
+		$param["class_id"] = CL_CRM_CALL;
+		return parent::object_list($param);
+	}
+
+	public function filter($param)
 	{
 		$param["class_id"] = CL_CRM_CALL;
 		$param["lang_id"] = array();
@@ -15,6 +23,8 @@ class crm_call_list extends crm_task_list
 
 		if ($application->is_a(CL_CRM_SALES))
 		{ // special properties only if in sales application
+			$param["CL_CRM_CALL.RELTYPE_CUSTOMER_RELATION.seller"] = $application->prop("owner")->id();
+
 			// role specific constraints
 			$role = automatweb::$request->get_application()->get_current_user_role();
 			switch ($role)
@@ -45,9 +55,11 @@ class crm_call_list extends crm_task_list
 				case crm_sales_obj::ROLE_MANAGER:
 					break;
 			}
+
+			$param[] = new obj_predicate_sort(array("deadline" => "asc"));
 		}
 
-		return parent::filter($param, $task_list_param);
+		return parent::filter($param);
 	}
 
 	protected function _int_add_to_list($oid_arr)

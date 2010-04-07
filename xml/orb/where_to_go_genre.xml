@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="where_to_go_genre" folder="www/automatweb_cvs/classes/applications/where_to_go" extends="class_base">
+	<class name="where_to_go_genre" folder="www/automatweb_stable/classes/applications/where_to_go" extends="class_base">
 	</class>
 </orb>

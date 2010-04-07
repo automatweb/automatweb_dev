@@ -875,11 +875,15 @@ exit_function("bill::balance");
 		));
 		$sum = 0;
 		$orders = $arr["obj_inst"]->get_sell_orders();
+		
+		//echo '<pre>';var_dump($orders);echo '</pre>';
+		
 		foreach($orders->arr() as $order)
 		{
 			$sum+= $order -> get_sum();
+			
 			$t->define_data(array(
-				"no" => html::obj_change_url($order , $order -> prop("number")),
+				"no" => html::obj_change_url($order), // , $order -> prop("number")
 //				"no" => $order -> prop("number"),
 				"sum" => $order -> get_sum(),
 				"date" => date("d.m.Y" , $order -> prop("date")),

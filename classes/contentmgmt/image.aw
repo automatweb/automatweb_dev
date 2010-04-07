@@ -352,6 +352,12 @@ class image extends class_base
 			return "";
 		}
 
+		if($_SERVER["HTTPS"] == "on")
+		{
+			$idata["url"] = str_replace("http://" , "https://" , $idata["url"]);
+		}
+
+
 		if (!empty($alias["aliaslink"]))
 		{
 			return html::href(array(
@@ -459,7 +465,11 @@ class image extends class_base
 			{
 				$idata['link'] = $args['link_prefix'].$idata['oid'];
 			}
-			$d = get_instance("doc_display");
+			static $d;
+			if(empty($d))
+			{
+				$d = get_instance("doc_display");
+			}
 			$vars = array(
 				"width" => $i_size[0],
 				"height" => $i_size[1],

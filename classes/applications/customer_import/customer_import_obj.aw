@@ -8,7 +8,7 @@ class customer_import_obj extends _int_object
 	{
 		$ps=shell_exec("ps ".$ps_opt."p ".$pid);
 		$ps=explode("\n", $ps);
-
+  
 		if(count($ps) < 2)
 		{
 			return false;
@@ -24,7 +24,7 @@ class customer_import_obj extends _int_object
 			$pidinfo[$val] = $ps[1][$key];
 			unset($ps[1][$key]);
 		}
-
+  
 		if(is_array($ps[1]))
 		{
 			$pidinfo[$val].=" ".implode(" ", $ps[1]);
@@ -54,12 +54,12 @@ class customer_import_obj extends _int_object
 
 	private function _save_state()
 	{
-
+		
 	}
 
 	private function _resume_state()
 	{
-
+		
 	}
 
 	private function _spawn_resume_process()
@@ -114,7 +114,7 @@ class customer_import_obj extends _int_object
 	}
 
 	function import_status($type, $wh_id = "")
-	{
+	{		
 		$tf = self::_status_fn($type, $wh_id);
 		if (file_exists($tf))
 		{
@@ -135,7 +135,7 @@ class customer_import_obj extends _int_object
 	}
 
 	function import_count($type, $wh_id = "")
-	{
+	{		
 		$tf = self::_status_fn($type, $wh_id);
 		if (file_exists($tf))
 		{
@@ -243,8 +243,8 @@ class customer_import_obj extends _int_object
 	function write_import_end_log_entry($type, $reason, $success = true, $wh_id = null)
 	{
 		// need to reload meta from database
-		parent::__construct($GLOBALS["object_loader"]->ds->get_objdata($this->id()));
-
+		$this->_int_object($GLOBALS["object_loader"]->ds->get_objdata($this->id()));
+		
 		$typedata = $this->meta("import_log_".$type."_".$wh_id);
 		if (!is_array($typedata))
 		{
@@ -345,17 +345,38 @@ echo "switching process <br>";
 		die("all done");
 	}
 
+	private function _get_xml_fn($str)
+	{
+		$fn = aw_ini_get("site_basedir")."/files/customer_import";
+		if (!is_dir($fn))
+		{
+			mkdir($fn);
+			chmod($fn, 0777);
+		}
+
+		list($tm) = $this->full_import_status("customer");
+
+		$fn .= "/xml_".$str."_".$tm.".xml";
+		return $fn;
+	}
+
 	private function _users($i)
 	{
 		// status fetch xml
 		$this->_update_status("customer", customer_import_datasource::STATE_FETCH_USER_XML);
 		$xml = $i->get_user_list_xml();
 
-//		$sx = new SimpleXMLElement($xml);
-//		$total = count($sx->user);
+		// save xml file
+		$fn = $this->_get_xml_fn("users");
+		$f = fopen($fn, "w");
+		fwrite($f, $xml);
+		fclose($f);
 
-		$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_USER_XML, null, 0, $total);
-return;
+		$sx = new SimpleXMLElement($xml);
+		$total = count($sx->user);
+
+		$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_USER_XML, null, 0, $total); 
+
 		// process
 		$this->_do_customer_import_process_users($sx);
 	}
@@ -363,6 +384,7 @@ return;
 	private function _do_customer_import_process_users($sx)
 	{
 		$cur_list = $this->_list_current_users();
+
 		$total = count($sx->user);
 		$counter = 0;
 		foreach($sx->user as $cat)
@@ -402,12 +424,13 @@ return;
 		$ol = new object_list(array(
 			"class_id" => CL_USER,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"extern_id" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
 		));
 		$d = array();
 		foreach($ol->arr() as $o)
 		{
-			$d[$o->uid] = $o;
+			$d[$o->extern_id] = $o;
 		}
 		return $d;
 	}
@@ -416,12 +439,13 @@ return;
 	{
 		// check if different
 		$mod = false;
-		foreach($external as $key => $value)
+		foreach($external as $key => $value) 
 		{
-			if ($aw->$key != $value)
+			$value = (string)$value;
+			if ($aw->is_property($key) && $aw->$key != $value)
 			{
 				$mod = true;
-				$aw->set_prop($key, $value);
+				$aw->set_prop($key, html_entity_decode($value, ENT_COMPAT, aw_global_get("charset")));
 			}
 		}
 
@@ -474,13 +498,19 @@ return;
 		$this->_update_status("customer", customer_import_datasource::STATE_FETCH_PERSON_XML);
 		$xml = $i->get_person_list_xml();
 
+		// save xml file
+		$fn = $this->_get_xml_fn("person");
+		$f = fopen($fn, "w");
+		fwrite($f, $xml);
+		fclose($f);
+
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->person);
 
-		$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_PERSON_XML, null, 0, $total);
+		$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_PERSON_XML, null, 0, $total); 
 
 		// process
-		$this->_do_customer_import_process_persons($sx);
+		$this->_do_customer_import_process_persons($sx);	
 	}
 
 	private function _do_customer_import_process_persons($sx)
@@ -549,7 +579,7 @@ echo "add new ".((string)$cat->name)." <br>";
 	private function _update_existing_person($external, $aw, $mod = false, $existing_customers)
 	{
 		// check if different
-		foreach($external as $key => $value)
+		foreach($external as $key => $value) 
 		{
 			$value = (string)$value;
 //echo "key = $key , val = $value <br>";
@@ -599,14 +629,20 @@ echo "delete ".$aw->name()." <br>";
 		$this->_update_status("customer", customer_import_datasource::STATE_FETCH_CUSTOMER_XML);
 		$xml = $i->get_customer_list_xml();
 
+		// save xml file
+		$fn = $this->_get_xml_fn("customer");
+		$f = fopen($fn, "w");
+		fwrite($f, $xml);
+		fclose($f);
+
 		//die("<pre>".htmlentities($xml));
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->customer);
 
-		$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_CUSTOMER_XML, null, 0, $total);
+		$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_CUSTOMER_XML, null, 0, $total); 
 
 		// process
-		$this->_do_customer_import_process_customers($sx);
+		$this->_do_customer_import_process_customers($sx);	
 	}
 
 	private function _do_customer_import_process_customers($sx)
@@ -669,7 +705,7 @@ echo "delete unused ".dbg::dump($cat)." <br>";
 	private function _update_existing_customer($external, $aw, $mod = false, $existing_cats)
 	{
 		// check if different
-		foreach($external as $key => $value)
+		foreach($external as $key => $value) 
 		{
 			$value = (string)$value;
 			if ($aw->is_property($key) && $aw->$key != $value)
@@ -724,13 +760,19 @@ echo "updated ".html::obj_change_url($aw)." <br>";
 		$this->_update_status("customer", customer_import_datasource::STATE_FETCH_CATEGORY_XML);
 		$xml = $i->get_category_list_xml();
 
+		// save xml file
+		$fn = $this->_get_xml_fn("category");
+		$f = fopen($fn, "w");
+		fwrite($f, $xml);
+		fclose($f);
+
 		$sx = new SimpleXMLElement($xml);
 		$total = count($sx->category);
 
-		$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_CATEGORY_XML, null, 0, $total);
+		$this->_update_status("customer", customer_import_datasource::STATE_PROCESS_CATEGORY_XML, null, 0, $total); 
 
 		// process
-		$this->_do_customer_import_process_categories($sx);
+		$this->_do_customer_import_process_categories($sx);	
 	}
 
 	private function _do_customer_import_process_categories($sx)
@@ -791,7 +833,7 @@ echo "delete ".dbg::dump($cat)." <br>";
 	private function _update_existing_cat($external, $aw, $mod = false)
 	{
 		// check if different
-		foreach($external as $key => $value)
+		foreach($external as $key => $value) 
 		{
 			$value = (string)$value;
 			if ($aw->$key != $value)

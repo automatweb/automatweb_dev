@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="bugtrack" folder="www/automatweb_cvs/classes/applications/class_designer" extends="core">
+	<class name="bugtrack" folder="www/automatweb_stable/classes/applications/class_designer" extends="core">
 		<action name="add_error" nologin="1">
 			<function name="add_error">
 				<arguments>

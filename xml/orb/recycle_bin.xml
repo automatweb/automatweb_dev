@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="recycle_bin" folder="www/automatweb_cvs/classes/applications/recycle_bin" extends="class_base">
+	<class name="recycle_bin" folder="www/automatweb_stable/classes/applications/recycle_bin" extends="class_base">
 		<action name="restore_object" all_args="1">
 			<function name="restore_object">
 				<arguments>

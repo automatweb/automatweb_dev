@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_warehouse" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
+	<class name="shop_warehouse" folder="www/automatweb_stable/classes/applications/shop" extends="class_base">
 		<action name="unsent_table">
 			<function name="unsent_table">
 				<arguments>
@@ -226,6 +226,13 @@
 					<optional name="name" type="string" />
 					<optional name="oid" type="int" />
 					<optional name="result" type="int/array" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ajax_set_property" all_args="1">
+			<function name="ajax_set_property">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

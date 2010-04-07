@@ -9,7 +9,7 @@ if (isset($_SERVER["DOCUMENT_ROOT"]))
 	$path = $_SERVER["REQUEST_URI"];
 	if ($path[0] == "/")
 	{
-		$path = "http".(!empty($_SERVER["HTTPS"]) ? "s" : "")."://".$_SERVER["HTTP_HOST"].$path;
+		$path = "http".($_SERVER["HTTPS"] ? "s" : "")."://".$_SERVER["HTTP_HOST"].$path;
 	}
 	$path = parse_url($path);
 	$path = pathinfo($path["path"]);

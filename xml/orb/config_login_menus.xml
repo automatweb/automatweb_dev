@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="config_login_menus" folder="www/automatweb_cvs/classes/admin/config" extends="class_base">
+	<class name="config_login_menus" folder="www/automatweb_stable/classes/admin/config" extends="class_base">
 		<action name="find_active_edit">
 			<function name="find_active_edit">
 				<arguments>

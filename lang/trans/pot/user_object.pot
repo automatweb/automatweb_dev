@@ -18,3 +18,7 @@ msgstr ""
 msgid "%s kodukataloog"
 msgstr ""
 
+#: classes/core/users/user_object.aw:350
+msgid "%s kuulub gruppi %s"
+msgstr ""
+

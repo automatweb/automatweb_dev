@@ -133,7 +133,7 @@ class shop_order_cart_obj extends _int_object
 	public function get_prod_amount($product)
 	{
 		$cart = $this->get_cart();
-		$items = $cart["items"];
+		$items = safe_array($cart["items"]);
 		foreach($items as $prod => $val)
 		{
 			if($prod = $product)
@@ -285,11 +285,20 @@ class shop_order_cart_obj extends _int_object
 					continue;
 				}
 				$product = obj($iid);
-				$sum+= $cart["items"][$iid][$key]["items"] * $product->get_shop_price($this->oc->id());
+				$special_price = $product->get_shop_special_price($this->oc->id());
+				if (!empty($special_price))
+				{
+					$price = $special_price;
+				}
+				else
+				{
+					$price = $product->get_shop_price($this->oc->id());
+				}
+				$sum += $cart["items"][$iid][$key]["items"] * $price;
 				$o->add_row(array(
 					"product" => $iid,
 					"amount" => $cart["items"][$iid][$key]["items"],
-					"price" => $product->get_shop_price($this->oc->id()),
+					"price" => $price,
 				));
 			}
 		}
@@ -338,7 +347,10 @@ class shop_order_cart_obj extends _int_object
 			$person = get_current_person();
 		}
 		//sellisel juhul otsib olemasolevate isikute hulgast, kui on andmeid mille j2rgi otsida
-		if(!empty($data["personalcode"]) || !empty($data["customer_no"]) || (!empty($data["birthday"]) && !empty($data["lastname"])))
+		if(
+			!empty($data["personalcode"]) || 
+			!empty($data["customer_no"]) || 
+			(!empty($data["birthday"]) && !empty($data["lastname"])))
 		{
 			$filter = array(
 				"class_id" => CL_CRM_PERSON,
@@ -394,20 +406,22 @@ class shop_order_cart_obj extends _int_object
 			{
 				$person->set_prop("personal_id" , $data["personalcode"]);
 			}
-			if(!empty($data["birthday"]))
-			{
-				if(is_array($data["birthday"]))
-				{
-					$person->set_prop("birthday" , mktime(0,0,0,$data["birthday"]["month"],$data["birthday"]["day"],$data["birthday"]["year"]));
-					//peaks selle ka salvestama
-				}
-			}
+
 			if(!empty($data["customer_no"]))
 			{
 				$person->set_prop("external_id" , $data["customer_no"]);
 			}
-			$person->save();
 		}
+
+		if(!empty($data["birthday"]))
+		{
+			if(is_array($data["birthday"]))
+			{
+				$person->set_prop("birthday" , mktime(0,0,0,$data["birthday"]["month"],$data["birthday"]["day"],$data["birthday"]["year"]));
+			}
+		}
+
+		$person->save();
 
 		if(!empty($data["email"]))
 		{

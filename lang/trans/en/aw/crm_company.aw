@@ -3,6 +3,7 @@ $GLOBALS["TRANS"]["Omaduse Jrk (jrk) caption"] = "Order";
 $GLOBALS["TRANS"]["Omaduse Organisatsiooni nimi (name) caption"] = "Receptionist's name";
 $GLOBALS["TRANS"]["Omaduse Nime l&uuml;hend (short_name) caption"] = "Name abbreviation";
 $GLOBALS["TRANS"]["Omaduse Registri number (reg_nr) caption"] = "Register number";
+$GLOBALS["TRANS"]["Omaduse &Otilde;iguslik vorm (ettevotlusvorm) caption"] = "Legal form";
 $GLOBALS["TRANS"]["Omaduse Kood (code) caption"] = "Code";
 $GLOBALS["TRANS"]["Omaduse KMKohuslase nr (tax_nr) caption"] = "VAT code";
 $GLOBALS["TRANS"]["Omaduse Organisatsiooni logo (logo) caption"] = "Logo";

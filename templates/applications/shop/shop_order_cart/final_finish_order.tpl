@@ -1,6 +1,7 @@
 <table id="content">
 	<tr>
 		<td id="contentSidebar">
+			<div id="contentSidebarStart"><a href="/"><img src="img/contentSidebarStart{VAR:LC_IMAGE_SUFIX}.gif" alt="{VAR:LC_GO_TO_FRONTPAGE}" title="{VAR:LC_GO_TO_FRONTPAGE}" /></a></div>
 			<div class="contentSidebarBasketNav">
 				<div class="contentSidebarBasketNavHeader"><!-- --></div>
 				<ul class="level4">
@@ -28,7 +29,11 @@
 					
 			<div class="contentMainBasket contentMainBasket2">
 						
-			<form action="{VAR:confirm_url}" method="POST">
+			<form action="{VAR:baseurl}/orb.aw" method="POST">
+				<input type="hidden" name="class" value="shop_order_cart" />
+				<input type="hidden" name="action" value="confirm_order" />
+				<input type="hidden" name="cart" value="{VAR:cart}" />
+				<input type="hidden" name="oc" value="{VAR:oc}" />
 
 				<table class="product_table">
 					<tr>
@@ -40,14 +45,15 @@
 					<tr>
 						<td class="product_image"><img src="{VAR:image_url}" alt="" /></td>
 						<td class="product_info">
-							<p class="product_name">{VAR:name}, {VAR:brand_name}</p>
-							<p>{VAR:LC_PRODUCT_NR}: {VAR:code} ({VAR:price} / {VAR:LC_PIECE2})</p>
+							<p class="product_name">{VAR:packet_name}, {VAR:brand_name}</p>
+							<p>{VAR:LC_COLOR2}: {VAR:color}</p>
+							<p>{VAR:LC_SIZE2}: {VAR:size}</p>
+							<p>{VAR:LC_PRODUCT_NR}: {VAR:code} (€ {VAR:price} / {VAR:LC_PIECE2})</p>
 						</td>
 						<td class="product_amount">{VAR:amount}</td>
 						<td class="product_sum">{VAR:total_price}</td>
 					</tr>
 					<!-- END SUB: PRODUCT -->
-<!-- SUB: HAS_DELIVERY -->
 					<tr>
 						<td></td>
 						<td class="orderer_information" colspan="3">
@@ -63,7 +69,6 @@
 							</table>
 						</td>
 					</tr>
-<!-- END SUB: HAS_DELIVERY -->
 					<tr>
 						<td></td>
 						<td class="orderer_information" colspan="3">
@@ -99,17 +104,14 @@
 						<td class="price_information price_caption" colspan="3">{VAR:LC_PRODUCTS2}:</td>
 						<td class="price_information price">{VAR:cart_total} {VAR:currency}</td>
 					</tr>
-<!-- SUB: HAS_DELIVERY_PRICE -->
 					<tr>
 						<td class="price_information price_caption" colspan="3">{VAR:LC_DELIVERPRICE}:</td>
 						<td class="price_information price">{VAR:delivery_price} {VAR:currency}</td>
 					</tr>
-
 					<tr>
 						<td class="price_information price_caption" colspan="3">{VAR:LC_SUM}:</td>
 						<td class="price_information price total">{VAR:total} {VAR:currency}</td>
 					</tr>
-<!-- END SUB: HAS_DELIVERY_PRICE -->
 				</table>
 
 				<table class="buttons">

@@ -13,10 +13,6 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/common/country/country_administrative_structure_object.aw:78
-msgid "administrative_structure::save(): object (%s) couldn't be saved."
-msgstr ""
-
-#: classes/common/country/country_administrative_structure_object.aw:133
+#: classes/common/country/country_administrative_structure_object.aw:174
 msgid "administrative_structure::as_get_addresses_by_unit(): invalid unit parameter."
 msgstr ""

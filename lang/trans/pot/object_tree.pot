@@ -42,7 +42,7 @@ msgstr ""
 msgid "object_tree::foreach_cb(): callback function %s does not exist!"
 msgstr ""
 
-#: classes/core/obj/object_tree.aw:574
+#: classes/core/obj/object_tree.aw:626
 msgid "object_tree::filter(): parent filter parameter mut always be passed!"
 msgstr ""
 

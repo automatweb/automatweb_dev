@@ -109,18 +109,6 @@ msgstr ""
 msgid "Omaduse Tegevusala kood (kood) help"
 msgstr ""
 
-#: classes/crm/crm_sector.aw:prop_emtak_2008
-msgid "Omaduse EMTAK2008 kood (emtak_2008) caption"
-msgstr ""
-
-#: classes/crm/crm_sector.aw:prop_emtak_2008_comment
-msgid "Omaduse EMTAK2008 kood (emtak_2008) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_sector.aw:prop_emtak_2008_help
-msgid "Omaduse EMTAK2008 kood (emtak_2008) help"
-msgstr ""
-
 #: classes/crm/crm_sector.aw:prop_image
 msgid "Omaduse Pilt (image) caption"
 msgstr ""
@@ -195,8 +183,4 @@ msgstr ""
 
 #: classes/crm/crm_sector.aw:rel_RELTYPE_DOCUMENT
 msgid "Seose Dokument (RELTYPE_DOCUMENT) tekst"
-msgstr ""
-
-#: classes/crm/crm_sector.aw:rel_RELTYPE_PARENT
-msgid "Seose Parent (RELTYPE_PARENT) tekst"
 msgstr ""

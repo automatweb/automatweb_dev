@@ -71,19 +71,19 @@
       <param>CL_CRM_PERSON_WORK_RELATION</param>
 </num_13>
 <num_14>
-      <class>/applications/personnel_management/personnel_management_candidate</class>
-      <func>on_disconnect_job_offer_from_candidate</func>
-      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
-</num_14>
-<num_15>
       <class>/applications/personnel_management/personnel_management_job_wanted</class>
       <func>on_disconnect_person_from_job_wanted</func>
       <param>CL_CRM_PERSON</param>
-</num_15>
-<num_16>
+</num_14>
+<num_15>
       <class>/applications/personnel_management/personnel_management_job_offer</class>
       <func>on_disconnect_candidate_from_job_offer</func>
       <param>CL_PERSONNEL_MANAGEMENT_CANDIDATE</param>
+</num_15>
+<num_16>
+      <class>/applications/personnel_management/personnel_management_candidate</class>
+      <func>on_disconnect_job_offer_from_candidate</func>
+      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
 </num_16>
 <num_17>
       <class>/contentmgmt/content_package/content_item</class>

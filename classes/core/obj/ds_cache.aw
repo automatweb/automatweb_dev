@@ -10,7 +10,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function _int_obj_ds_cache($contained)
 	{
 		parent::_int_obj_ds_decorator($contained);
-		$this->cache = get_instance("cache");
+		$this->cache = &get_static_instance("cache");;
 	}
 
 	function get_objdata($oid, $param = array())

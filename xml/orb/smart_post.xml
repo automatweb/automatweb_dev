@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="smart_post" folder="www/automatweb_cvs/classes/import" extends="class_base">
+	<class name="smart_post" folder="www/automatweb_stable/classes/import" extends="class_base">
 		<action name="get_city_options" nologin="1">
 			<function name="get_city_options">
 				<arguments>

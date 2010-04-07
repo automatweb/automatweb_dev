@@ -80,6 +80,9 @@
 
 @property articles type=table store=no no_caption=1
 
+@property order_rows_to type=hidden store=no no_caption=1
+@caption Order rows to
+
 @reltype PURCHASER value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Hankija
 
@@ -169,6 +172,118 @@ class shop_sell_order extends class_base
 	function callback_mod_reforb($arr)
 	{
 		return get_instance(CL_SHOP_PURCHASE_ORDER)->callback_mod_reforb(&$arr);
+	}
+	
+	function callback_post_save($arr)
+	{
+		//echo'<pre>';var_dump($arr['request']['order_rows_to']);echo'</pre>';
+		
+		//echo'<pre>';var_dump($arr['request']['sel']);echo'</pre>';
+		if (isset($arr['request']['order_rows_to']) and isset($arr['request']['sel'])) {
+			
+			$this->order_rows_to_bill($arr, $arr['request']['sel'], $arr['request']['order_rows_to']);
+			
+		}
+		
+		
+		
+		
+	}
+	
+	function order_rows_to_bill($arr, $rows, $bill) {
+		
+		echo "alvar";
+		
+		/* @var $bill_obj crm_bill_obj */
+		$bill_obj = obj($bill);
+		
+		foreach ($rows as $order_row_id) {
+			
+			/* @var $bill_row_obj crm_bill_row_object */
+			$bill_row_obj = $bill_obj->add_row();
+			
+			
+			
+			/*
+			$bill_row_obj->connect(array(
+				'to' => $order_row_id,
+				'type' => 'RELTYPE_SHOP_ORDER_ROW'
+			));
+			*/
+			
+			
+			/* @var $order_row_obj shop_order_row */
+			$order_row_obj = obj($order_row_id);
+			
+			
+			//var_dump($order_row_obj);
+			
+			$cons = $order_row_obj->connections_from(array("type" => "RELTYPE_PRODUCT"));
+			foreach ($cons as $con) {
+				
+				/* @var $con connection */
+				
+				//$bla = new c
+				
+				//echo'<pre>';var_dump($con);echo'</pre>';
+				
+				//@todo con on objekt, ära kasuta seda arrayna!
+				
+				
+				//var_dump(get_class_methods(get_class($con)));
+				//var_dump($con->to());
+				
+				
+				//$prod_obj = obj();
+				
+				
+				
+				
+				//$bill_row_obj->set_prop('prod', $con['to']);
+			}
+			
+			
+			
+			/*
+			$ol = new object_list(array(
+					"class_id" => CL_SHOP_PRODUCT,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				
+				var_dump($ol);
+			*/
+			
+			//$this->name()." ".t("rida")
+			//@todo save this :)
+			
+			
+			
+			$bill_row_obj->set_prop('price', 10);
+			$bill_row_obj->set_prop('name', $order_row_obj->name());
+			
+			/*
+			 * lisa ylejäänud asjad samuti
+			 */
+			
+			
+			$bill_row_obj->save();
+			
+			/*
+			$this->connect(array(
+				"to" => $br->id(),
+				"type" => "RELTYPE_ROW"
+			));
+			*/
+			
+			/* @var $order_row_obj shop_order_row_obj */
+			//$order_row_obj = obj($order_row_id);
+			
+			
+			
+		}
+		
+		
 	}
 
 	function _get_taxed($arr)
@@ -270,10 +385,13 @@ class shop_sell_order extends class_base
 	**/
 	public function show($arr)
 	{
+			
 		if(empty($arr["template"]))
 		{
 			$arr["template"] = "show.tpl";
 		}
+		
+	//	echo '<pre>';var_dump($arr);echo '</pre>';
 		$this->read_any_template($arr["template"]);
 		lc_site_load("shop", &$this);
 		$data = array();
@@ -307,7 +425,7 @@ class shop_sell_order extends class_base
 			"align" => "right"
 		));
 
-		$sum = 0;
+		$sum = $cart_sum = 0;
 		$different_products = 0;
 		$rows = "";
 		$prod_data_keys = array();
@@ -353,6 +471,7 @@ class shop_sell_order extends class_base
 				"prod" => $row->prod_name,
 				"amount" => $row->amount,
 				"price" => number_format($row->price , 2),
+				"price_with_zeros" => number_format($row->price , 2),
 				"sum" => number_format($c_sum, 2)
 			);
 			$t->define_data($row_data);
@@ -366,6 +485,13 @@ class shop_sell_order extends class_base
 			//$row_data - muutujad mis tulevad tellimuse reast, $prod_data - need muutujad, mis tulevad toote juurest
 			$this->vars($prod_data);
 			$this->vars($row_data);
+
+			//mingi kamm on nende hindade formaadiga... erinevatest kohtadest tulevad ka teised
+			//ylej22nud v6iks tulevikus eest 2ra kustutada, kuid kindlasti keegi kasutab kuskil neid hetkel,,, kuid l6pus kirjutab yle nyyd
+			$this->vars(array(
+				"unformated_price" => $price,
+				"price" => number_format($price, 2, "." , ""),
+			));
 
 			foreach($prod_data as $key => $val)//v6ibolla peaks samamoobi l2bi laskma ka $row_data muutuja
 			{
@@ -382,7 +508,16 @@ class shop_sell_order extends class_base
 				}
 				
 			}
-			$rows.= $this->parse("ROW");
+			if($this->is_template("ROW_".$prod_data["id"]))
+			{
+				$this->vars(array("ROW_".$prod_data["id"] => $this->parse("ROW_".$prod_data["id"])));
+			}
+			else
+			{
+				$cart_sum+= $c_sum;
+				$rows.= $this->parse("ROW");
+			}
+
 
 			foreach($prod_data as $key => $var)
 			{
@@ -391,11 +526,12 @@ class shop_sell_order extends class_base
 				));
 			}
 		}
-		$data["cart_sum"] = number_format($sum , 2);
+		$data["cart_sum"] = number_format($cart_sum , 2);
 		if($this->can("view" , $o->prop("payment_type")))
 		{
 			$payment = obj($o->prop("payment_type"));
-
+			$data["payment_name"] = $payment->name();
+			$data["payment"] = $payment->id();
 			$condition = $payment->valid_conditions(array(
 				"sum" => $sum,
 				"currency" => $o->prop("currency"),
@@ -437,7 +573,6 @@ class shop_sell_order extends class_base
 //			$this->vars($delivery->get_vars($o->meta("order_data") + $o->properties()));
 		}
 
-		$data["payment_name"] = $o->prop("payment_type.name");
 
 		$data["ROW"] = $rows;
 		$data["id"] = $o->id();
@@ -467,12 +602,14 @@ class shop_sell_order extends class_base
 				$data["firstname"] = $orderer->prop("firstname");
 				$data["lastname"] = $orderer->prop("lastname");
 			}
+			$data["customer_no"] = $orderer->prop("external_id");
 		}
 		$data["channel"] = $o->prop("channel");
-		$data["customer_no"] = $orderer->prop("external_id");
+
 
 		$this->vars($data);
 
+//igale muutujale sub selle kohta kas ta on olemas
 		foreach($this->vars as $key => $val)
 		{
 			if($val && $this->is_template("HAS_".strtoupper($key)))
@@ -480,6 +617,19 @@ class shop_sell_order extends class_base
 				$this->vars(array("HAS_".strtoupper($key) => $this->parse("HAS_".strtoupper($key))));
 			}
 		}
+//m6nele muutuja v22rtusele spets sub kujul MUUTUJANIMI_MUUTUJAV22R
+		
+		$sub_vars = array("payment");
+		foreach($sub_vars as $var)
+		{
+			if($this->is_template(strtoupper($var)."_".$data[$var]))
+			{
+				$this->vars(array(strtoupper($var)."_".$data[$var] => $this->parse(strtoupper($var)."_".$data[$var])));
+			}
+		}
+		
+		
+		
 		return $this->parse();
 	}
 

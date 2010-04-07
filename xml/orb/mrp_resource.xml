@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mrp_resource" folder="www/automatweb_cvs/classes/mrp" extends="class_base">
+	<class name="mrp_resource" folder="www/automatweb_stable/classes/mrp" extends="class_base">
 		<action name="remove_materials" all_args="1">
 			<function name="remove_materials">
 				<arguments>

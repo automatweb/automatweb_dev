@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="address" folder="www/automatweb_cvs/classes/common/address" extends="class_base">
+	<class name="address" folder="www/automatweb_stable/classes/common/address" extends="class_base">
 		<action name="location_autocomplete" all_args="1">
 			<function name="location_autocomplete">
 				<arguments>

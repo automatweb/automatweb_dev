@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_payment_type" folder="www/automatweb_cvs/classes/applications/shop" extends="shop_matrix">
+	<class name="shop_payment_type" folder="www/automatweb_stable/classes/applications/shop" extends="shop_matrix">
 		<action name="submit_advanced_layer" all_args="1">
 			<function name="submit_advanced_layer">
 				<arguments>

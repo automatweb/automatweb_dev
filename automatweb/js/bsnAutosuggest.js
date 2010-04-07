@@ -302,11 +302,6 @@ _bsn.AutoSuggest.prototype.doAjaxRequest = function ()
 	var onSuccessFunc = function (req) { pointer.setSuggestions(req) };
 	var onErrorFunc = function (status) { alert("AJAX error: "+status); };
 
-	if (typeof(myAjax) != "undefined")
-	{
-		myAjax.abortRequest();
-	}
-
 	var myAjax = new _bsn.Ajax();
 	myAjax.makeRequest( url, meth, onSuccessFunc, onErrorFunc );
 }
@@ -710,12 +705,6 @@ _bsn.Ajax.prototype.processReqChange = function()
 			this.onError( this.req.status );
 		}
 	}
-}
-
-
-_bsn.Ajax.prototype.abortRequest = function()
-{
-	this.req.abort();
 }
 
 

@@ -41,71 +41,71 @@ msgstr "Not active"
 msgid "Vali"
 msgstr "Select"
 
-#: classes/cfg/htmlclient.aw:551 classes/cfg/htmlclient.aw:685
+#: classes/cfg/htmlclient.aw:554 classes/cfg/htmlclient.aw:688
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/cfg/htmlclient.aw:700
+#: classes/cfg/htmlclient.aw:703
 msgid "&lt;&lt;&lt; Tagasi"
 msgstr "&lt;&lt;&lt; Go back"
 
-#: classes/cfg/htmlclient.aw:701
+#: classes/cfg/htmlclient.aw:704
 msgid "submit_and_back"
 msgstr "Submit and go back"
 
-#: classes/cfg/htmlclient.aw:711
+#: classes/cfg/htmlclient.aw:714
 msgid "Edasi &gt;&gt;&gt;"
 msgstr "Forward &gt;&gt;&gt;"
 
-#: classes/cfg/htmlclient.aw:712
+#: classes/cfg/htmlclient.aw:715
 msgid "submit_and_forward"
 msgstr "Submit and go forward"
 
-#: classes/cfg/htmlclient.aw:931
+#: classes/cfg/htmlclient.aw:934
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr "Data is not saved, do you wish to save before you continue?"
 
-#: classes/cfg/htmlclient.aw:932
+#: classes/cfg/htmlclient.aw:935
 msgid "Andmete salvestamine kahjuks ei &otilde;nnestunud"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:997
+#: classes/cfg/htmlclient.aw:1000
 msgid "Tagasiside"
 msgstr "Feedback"
 
-#: classes/cfg/htmlclient.aw:999
+#: classes/cfg/htmlclient.aw:1002
 msgid "Kasutajatugi"
 msgstr "Support"
 
-#: classes/cfg/htmlclient.aw:1000
+#: classes/cfg/htmlclient.aw:1003
 msgid "Abi"
 msgstr "Help"
 
-#: classes/cfg/htmlclient.aw:1001
+#: classes/cfg/htmlclient.aw:1004
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/cfg/htmlclient.aw:1004
+#: classes/cfg/htmlclient.aw:1007
 msgid "J&auml;rjehoidja"
 msgstr "Bookmarks"
 
-#: classes/cfg/htmlclient.aw:1008
+#: classes/cfg/htmlclient.aw:1011
 msgid "Ajalugu"
 msgstr "History"
 
-#: classes/cfg/htmlclient.aw:1012
+#: classes/cfg/htmlclient.aw:1015
 msgid "Lisa kiiresti"
 msgstr "Add quickly"
 
-#: classes/cfg/htmlclient.aw:1514 classes/cfg/htmlclient.aw:1516
-#: classes/cfg/htmlclient.aw:1592 classes/cfg/htmlclient.aw:1594
-#: classes/cfg/htmlclient.aw:1671 classes/cfg/htmlclient.aw:1673
+#: classes/cfg/htmlclient.aw:1517 classes/cfg/htmlclient.aw:1519
+#: classes/cfg/htmlclient.aw:1595 classes/cfg/htmlclient.aw:1597
+#: classes/cfg/htmlclient.aw:1674 classes/cfg/htmlclient.aw:1676
 msgid "Kinni"
 msgstr "Close"
 
-#: classes/cfg/htmlclient.aw:1515 classes/cfg/htmlclient.aw:1516
-#: classes/cfg/htmlclient.aw:1593 classes/cfg/htmlclient.aw:1594
-#: classes/cfg/htmlclient.aw:1672 classes/cfg/htmlclient.aw:1673
+#: classes/cfg/htmlclient.aw:1518 classes/cfg/htmlclient.aw:1519
+#: classes/cfg/htmlclient.aw:1596 classes/cfg/htmlclient.aw:1597
+#: classes/cfg/htmlclient.aw:1675 classes/cfg/htmlclient.aw:1676
 msgid "Lahti"
 msgstr "Open"
 

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="intellectual_property" folder="www/automatweb_cvs/classes/applications/clients/patent_office" extends="class_base">
+	<class name="intellectual_property" folder="www/automatweb_stable/classes/applications/clients/patent_office" extends="class_base">
 		<action name="show" is_public="1" all_args="1">
 			<function name="show">
 				<arguments>

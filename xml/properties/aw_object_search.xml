@@ -584,13 +584,10 @@
       <groupinfo>
             <srch>
                   <caption>Otsing</caption>
-                  <submit_method>get</submit_method>
-                  <save>no</save>
             </srch>
             <srch_complex>
                   <caption>Detailne otsing</caption>
                   <submit_method>get</submit_method>
-                  <save>no</save>
             </srch_complex>
       </groupinfo>
       <layout>

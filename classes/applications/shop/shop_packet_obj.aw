@@ -27,7 +27,7 @@ class shop_packet_obj extends _int_object
 		return $ol->begin();
 	}
 
-	/** returns 3 same category packets
+	/** returns 4 same category packets
 		@attrib api=1
 		 @returns object list
 			packet object list
@@ -45,7 +45,7 @@ class shop_packet_obj extends _int_object
 		));
 		$ol2 = new object_list();
 		$array = $ol->names();
-		$rnd = min(array(3 , sizeof($array)));
+		$rnd = min(array(4 , sizeof($array)));
 		if($rnd)
 		{
 			$ol2->add(array_rand($array, $rnd));
@@ -55,12 +55,14 @@ class shop_packet_obj extends _int_object
 
 	public function get_products()
 	{
+		enter_function("packet_obj::get_products");
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"CL_SHOP_PRODUCT.RELTYPE_PRODUCT(CL_SHOP_PACKET)" => $this->id()
 		));
+		exit_function("packet_obj::get_products");
 		return $ol;
 	}
 
@@ -78,7 +80,8 @@ class shop_packet_obj extends _int_object
 	
 	public function get_categories()
 	{
-		$ol = new object_list();
+		enter_function("packet_obj::get_cat");
+/*		$ol = new object_list();
 		foreach($this->connections_from(array(
 			"type" => "RELTYPE_CATEGORY",
 
@@ -86,6 +89,14 @@ class shop_packet_obj extends _int_object
 		{
 			$ol->add($c->prop("to"));;
 		}
+		*/
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_SHOP_PRODUCT_CATEGORY.RELTYPE_CATEGORY(CL_SHOP_PACKET)" => $this->id(),
+		));
+		exit_function("packet_obj::get_cat");
 		return $ol;
 	}
 	
@@ -127,7 +138,14 @@ class shop_packet_obj extends _int_object
 		if(!sizeof($params)) $data["colors"] = $this->get_colors();
 		if(!sizeof($params)) $data["packages"] = $this->get_packagings();
 		if(!sizeof($params) || isset($params["prices"])) $data["prices"] = $this->get_prices(!empty($GLOBALS["order_center"]) ? $GLOBALS["order_center"] : null);
-		if(!sizeof($params) || isset($params["min_price"])) $data["min_price"] = $this->get_min_price(!empty($GLOBALS["order_center"]) ? $GLOBALS["order_center"] : null); //$data["min_price"] = min($data["prices"]);
+		if(!sizeof($params) || isset($params["min_price"]))
+		{
+			$data["unformated_min_price"] = $this->get_min_price(!empty($GLOBALS["order_center"]) ? $GLOBALS["order_center"] : null); //$data["min_price"] = min($data["prices"]);
+			$data["min_price"] = number_format($data["unformated_min_price"] , 2, "." , "");
+		}
+		if(!sizeof($params) || isset($params["special_prices"])) $data["special_prices"] = $this->get_special_prices(!empty($GLOBALS["order_center"]) ? $GLOBALS["order_center"] : null);
+		if(!sizeof($params) || isset($params["min_special_price"])) $data["min_special_price"] = $this->get_min_special_price();
+	//	if(!sizeof($params) || isset($params["min_special_price"])) $data["min_special_price"] = $this->get_min_special_price(!empty($GLOBALS["order_center"]) ? $GLOBALS["order_center"] : null); //$data["min_price"] = min($data["prices"]);
 		if(!sizeof($params)) $data["sizes"] = $this->get_sizes();
 		if(!sizeof($params)) $data["descriptions"] = $this->get_descriptions();
 		if(!sizeof($params)) $data["brand_image"] = $this->get_brand_image();
@@ -385,9 +403,24 @@ exit_function("packet_obj::get_brand_image");
 		$this->_set_packagings();
 		foreach($this->packaging_objects->arr() as $packaging)
 		{
-			$ret[$packaging->id()] = $packaging->get_shop_price($shop, $currency);
+			$ret[$packaging->id()] = number_format($packaging->get_shop_price($shop, $currency) , 2, '.', '');
 		}
 		exit_function("packet_obj::get_prices");
+		return $ret;
+	}
+
+	private function get_special_prices($shop = null, $currency = null)
+	{
+//		if (aw_global_get("uid") != "markop") return array();
+
+		enter_function("packet_obj::get_special_prices");
+		$ret = array();
+		$this->_set_packagings();
+		foreach($this->packaging_objects->arr() as $packaging)
+		{
+			$ret[$packaging->id()] = $packaging->get_shop_special_price($shop, $currency);
+		}
+		exit_function("packet_obj::get_special_prices");
 		return $ret;
 	}
 
@@ -424,9 +457,63 @@ exit_function("packet_obj::get_brand_image");
 		exit_function("packet_obj::get_min_price");
 		if(is_array($prices) && sizeof($prices))
 		{
-			return number_format(reset($prices) , 2);
+			return reset($prices);
 		}
 		return $min;
+	}
+
+	/*
+		Apparently I don't get this thing at all, so I just don't use it at the moment :/
+	*/
+	private function get_min_special_price()
+	{
+	//	if(aw_global_get("uid") != "struktuur.markop") return 0;
+		enter_function("packet_obj::get_min_special_price");
+		$min = "";
+//tyra, miks see ei toimi
+/*		$t = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_ITEM_PRICE,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"price" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+			"CL_SHOP_ITEM_PRICE.RELTYPE_PRICE(CL_SHOP_PRODUCT_PACKAGING).RELTYPE_PACKAGING(CL_SHOP_PRODUCT).RELTYPE_PRODUCT(CL_SHOP_PACKET)" => $this->id()
+				),
+			array(
+				CL_SHOP_ITEM_PRICE => array(new obj_sql_func(OBJ_SQL_MIN, 'sum', 'aw_shop_item_prices.price'))
+			)
+		);
+		$prices = $t->get_element_from_all("sum");
+*/
+		$packets = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT_PACKAGING,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"special_price_object" => new obj_predicate_not(0),
+	"CL_SHOP_PRODUCT_PACKAGING.RELTYPE_PACKAGING(CL_SHOP_PRODUCT).RELTYPE_PRODUCT(CL_SHOP_PACKET)" => $this->id(),
+		));//var_dump($packets->count());
+		if(!$packets->count())
+		{
+			return 0;
+		}
+		$t = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_ITEM_PRICE,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"price" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+				"CL_PRICE.RELTYPE_PRICE(CL_SHOP_PRODUCT_PACKAGING)" => $packets->ids()
+			),
+			array(
+		//				CL_PRICE => array("sum")
+
+						CL_SHOP_ITEM_PRICE => array(new obj_sql_func(OBJ_SQL_MIN, 'sum', 'aw_shop_item_prices.price'))
+			)
+		);
+		$prices = $t->get_element_from_all("sum");
+		
+		exit_function("packet_obj::get_min_special_price");//var_dump($prices);
+		return number_format($prices[0],2);
 	}
 
 	private function get_descriptions()
@@ -461,13 +548,23 @@ exit_function("packet_obj::get_brand_image");
 				"class_id" => CL_PRODUCTS_SHOW,
 				"CL_PRODUCTS_SHOW.RELTYPE_CATEGORY" => $categories->ids(),
 			));
-
 		}
+
+		if(!$ol->count())
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_PRODUCTS_SHOW,
+//				"CL_PRODUCTS_SHOW.RELTYPE_CATEGORY" => $categories->ids(),
+				"limit" => 1
+			));
+		}
+		
 		$menus = array();
 		foreach($ol->arr() as $o)
 		{
 			$menus[] = $o->parent();
 		}
+
 		return $menus;
 	}
 

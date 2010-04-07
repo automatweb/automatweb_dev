@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_order_center_obj" folder="www/automatweb_cvs/classes/applications/shop" extends="_int_object">
+	<class name="shop_order_center_obj" folder="www/automatweb_stable/classes/applications/shop" extends="_int_object">
 		<action name="make_new_struct">
 			<function name="make_new_struct">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="template_logger" folder="www/automatweb_cvs/classes/core" extends="core">
+	<class name="template_logger" folder="www/automatweb_stable/classes/core" extends="core">
 		<action name="recieve_log_data" nologin="1" all_args="1">
 			<function name="recieve_log_data">
 				<arguments>

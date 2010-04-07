@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_product_packaging_obj" folder="www/automatweb_cvs/classes/applications/shop" extends="shop_product_obj">
+	<class name="shop_product_packaging_obj" folder="www/automatweb_stable/classes/applications/shop" extends="shop_product_obj">
 		<action name="get_price">
 			<function name="get_price">
 				<arguments>
@@ -14,6 +14,20 @@
 					<optional name="customer_data" type="int" acl="view" />
 					<optional name="location" type="array/int" acl="view" />
 					<optional name="structure" type="bool" default="false" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_price_value">
+			<function name="get_price_value">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_special_price">
+			<function name="get_special_price_value">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="site_search_content_grp_fs" folder="www/automatweb_cvs/classes/contentmgmt/site_search" extends="run_in_background">
+	<class name="site_search_content_grp_fs" folder="www/automatweb_stable/classes/contentmgmt/site_search" extends="run_in_background">
 		<action name="showdoc" nologin="1">
 			<function name="showdoc">
 				<arguments>

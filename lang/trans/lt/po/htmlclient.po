@@ -41,70 +41,70 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:551 classes/cfg/htmlclient.aw:685
+#: classes/cfg/htmlclient.aw:554 classes/cfg/htmlclient.aw:688
 msgid "Salvesta"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:700
+#: classes/cfg/htmlclient.aw:703
 msgid "&lt;&lt;&lt; Tagasi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:701
+#: classes/cfg/htmlclient.aw:704
 msgid "submit_and_back"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:711
+#: classes/cfg/htmlclient.aw:714
 msgid "Edasi &gt;&gt;&gt;"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:712
+#: classes/cfg/htmlclient.aw:715
 msgid "submit_and_forward"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:931
+#: classes/cfg/htmlclient.aw:934
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:932
+#: classes/cfg/htmlclient.aw:935
 msgid "Andmete salvestamine kahjuks ei &otilde;nnestunud"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:997
+#: classes/cfg/htmlclient.aw:1000
 msgid "Tagasiside"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:999
+#: classes/cfg/htmlclient.aw:1002
 msgid "Kasutajatugi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1000
+#: classes/cfg/htmlclient.aw:1003
 msgid "Abi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1001
+#: classes/cfg/htmlclient.aw:1004
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1004
+#: classes/cfg/htmlclient.aw:1007
 msgid "J&auml;rjehoidja"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1008
+#: classes/cfg/htmlclient.aw:1011
 msgid "Ajalugu"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1012
+#: classes/cfg/htmlclient.aw:1015
 msgid "Lisa kiiresti"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1514 classes/cfg/htmlclient.aw:1516
-#: classes/cfg/htmlclient.aw:1592 classes/cfg/htmlclient.aw:1594
-#: classes/cfg/htmlclient.aw:1671 classes/cfg/htmlclient.aw:1673
+#: classes/cfg/htmlclient.aw:1517 classes/cfg/htmlclient.aw:1519
+#: classes/cfg/htmlclient.aw:1595 classes/cfg/htmlclient.aw:1597
+#: classes/cfg/htmlclient.aw:1674 classes/cfg/htmlclient.aw:1676
 msgid "Kinni"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1515 classes/cfg/htmlclient.aw:1516
-#: classes/cfg/htmlclient.aw:1593 classes/cfg/htmlclient.aw:1594
-#: classes/cfg/htmlclient.aw:1672 classes/cfg/htmlclient.aw:1673
+#: classes/cfg/htmlclient.aw:1518 classes/cfg/htmlclient.aw:1519
+#: classes/cfg/htmlclient.aw:1596 classes/cfg/htmlclient.aw:1597
+#: classes/cfg/htmlclient.aw:1675 classes/cfg/htmlclient.aw:1676
 msgid "Lahti"
 msgstr ""

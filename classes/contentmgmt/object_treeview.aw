@@ -932,6 +932,7 @@ class object_treeview extends class_base
 
 	function get_folders_as_object_list($object)
 	{
+		enter_function("get_folders_as_object_list");
 		$t_id = $object->prop("show_object_tree");
 		$first_level = true;
 		if (!$t_id)
@@ -949,7 +950,7 @@ class object_treeview extends class_base
 		}
 
 		if (!is_oid($t_id) || !$this->can("view", $t_id))
-		{
+		{exit_function("get_folders_as_object_list");
 			return new object_list();
 		}
 
@@ -982,7 +983,7 @@ class object_treeview extends class_base
 				}
 			}
 		}
-
+exit_function("get_folders_as_object_list");
 		return $ol;
 	}
 

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="form_alias" folder="www/automatweb_cvs/classes/formgen" extends="form_base">
+	<class name="form_alias" folder="www/automatweb_stable/classes/formgen" extends="form_base">
 		<action name="new">
 			<function name="do_new">
 				<arguments>

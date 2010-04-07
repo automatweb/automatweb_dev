@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="content_package_obj" folder="www/automatweb_cvs/classes/contentmgmt/content_package" extends="_int_object">
+	<class name="content_package_obj" folder="www/automatweb_stable/classes/contentmgmt/content_package" extends="_int_object">
 		<action name="update_acl_for_usergroup">
 			<function name="update_acl_for_usergroup">
 				<arguments>

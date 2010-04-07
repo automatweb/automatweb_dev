@@ -202,8 +202,8 @@
 
 	@property s_res1 type=table no_caption=1
 
-@groupinfo srch caption="Otsing" submit_method=get save=no
-@groupinfo srch_complex caption="Detailne otsing" submit_method=get save=no
+@groupinfo srch caption="Otsing"
+@groupinfo srch_complex caption="Detailne otsing"
 */
 
 class aw_object_search extends class_base
@@ -218,16 +218,26 @@ class aw_object_search extends class_base
 		));
 	}
 
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$prop["value"] = isset($arr["request"][$prop["name"]]) ? $arr["request"][$prop["name"]] : "";
+//		$prop["value"] = isset($arr["request"][$prop["name"]]) ? $arr["request"][$prop["name"]] : "";
 		$nm = $prop["name"];
 		if (substr($nm, -1) == "1")
 		{
 			$nm = substr($nm, 0, -1);
 		}
+		if($nm == "s_name" && !empty($_SESSION["aw_obj_search_params"]) && is_array($_SESSION["aw_obj_search_params"]))
+		{
+			$_POST = $_SESSION["aw_obj_search_params"];
+			$_GET = $_GET + $_SESSION["aw_obj_search_params"];
+			unset($_SESSION["aw_obj_search_params"]);
+		}
+		$arr["request"] = $_GET;
+		$prop["value"] = isset($_POST[$prop["name"]]) ? $_POST[$prop["name"]] : "";
+
 		switch($nm)
 		{
 			case "login":
@@ -412,6 +422,27 @@ class aw_object_search extends class_base
 			"img" => "copy.gif",
 			"tooltip" => t("Kopeeri"),
 		));
+
+		$tb->add_menu_button(array(
+			"name" => "active",
+//			"img" => "delete.gif",
+			"text" => t("Aktiivsus"),
+			"tooltip" => t("Tee objekte aktiivseteks v&otilde; mitteaktiivseteks"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "active",
+			"text" => t("Aktiivseks"),
+	//		"link" => "javascript:set_sel_prop('active' , '2');",
+			"action" => "set_active",
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "active",
+			"text" => t("Mitteaktiivseks"),
+			"action" => "set_inactive",
+		//		"link" => "javascript:set_sel_prop('active' , '1');",
+		));
 	}
 
 	/**
@@ -419,7 +450,8 @@ class aw_object_search extends class_base
 	**/
 	function delete_bms($arr)
 	{
-		object_list::iterate_list($_GET["sel"], "delete");
+		object_list::iterate_list($_POST["sel"], "delete");
+		$_SESSION["aw_obj_search_params"] = $_POST;
 		die("<script>window.back();</script>");
 	}
 
@@ -504,6 +536,7 @@ class aw_object_search extends class_base
 
 	function _search_mk_call($filter, $arr)
 	{
+		$arr["request"] = $_GET;
 		$_parms = array(
 			"class" => "aw_object_search",
 			"action" => "search_object_list",
@@ -556,7 +589,7 @@ class aw_object_search extends class_base
 		{
 			return;
 		}
-
+		$arr["request"] = $_GET;
 		if (!empty($arr["request"]["login"]))
 		{
 			$lo = get_instance(CL_AW_LOGIN);
@@ -568,7 +601,9 @@ class aw_object_search extends class_base
 		}
 
 //nyyd object data listi peal asi
+
 		$data = $this->_search_mk_call($filt,$arr);
+
 		classload("core/icons");
 		$clss = aw_ini_get("classes");
 		$t->set_caption(sprintf(t("Leiti %s objekti"), sizeof($data)));
@@ -656,6 +691,7 @@ class aw_object_search extends class_base
 
 	function get_s_filt($arr)
 	{
+		$arr["request"] = $_GET;
 		foreach($arr["request"] as $k => $v)
 		{
 			if (substr($k, -1) == "1")
@@ -862,20 +898,16 @@ class aw_object_search extends class_base
 		return $filt;
 	}
 
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-		}
-		return $retval;
-	}
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["return_url"] = automatweb::$request->arg("return_url");
+	}
+
+	function callback_post_save()
+	{
+		$_SESSION["aw_obj_search_params"] = $_POST;
+		return true;
 	}
 
 	function callback_mod_tab($arr)
@@ -953,6 +985,8 @@ class aw_object_search extends class_base
 		return html::get_change_url($so->id(), $args);
 	}
 
+
+
 	/** cuts the selected objects
 
 		@attrib name=cut params=name default="0"
@@ -967,7 +1001,8 @@ class aw_object_search extends class_base
 	function cut($arr)
 	{
 		$i = get_instance(CL_ADMIN_IF);
-		$i->if_cut($_GET);
+		$i->if_cut($_POST);
+		$_SESSION["aw_obj_search_params"] = $_POST;
 		die("<script>window.back();</script>");
 	}
 
@@ -977,7 +1012,8 @@ class aw_object_search extends class_base
 	function copy($arr)
 	{
 		$i = get_instance(CL_ADMIN_IF);
-		return $i->if_copy($_GET);
+		return $i->if_copy($_POST);
+		$_SESSION["aw_obj_search_params"] = $_POST;
 		die("<script>window.back();</script>");
 	}
 
@@ -990,6 +1026,38 @@ class aw_object_search extends class_base
 		$rv = $this->_get_relation_type_options($arr["s_clid"]);
 		die($this->picker("", $rv));
 	}
+
+	/**
+		@attrib name=set_inactive all_args=1
+	**/
+	function set_inactive($arr)
+	{
+		$_SESSION["aw_obj_search_params"] = $_POST;
+		foreach($arr["sel"] as $id)
+		{
+			$o = obj($id);
+			$o-> set_prop("status" , 1);
+			$o->save();
+		}
+		return $arr["post_ru"];
+	}
+
+
+	/**
+		@attrib name=set_active all_args=1
+	**/
+	function set_active($arr)
+	{
+		$_SESSION["aw_obj_search_params"] = $_POST;
+		foreach($arr["sel"] as $id)
+		{
+			$o = obj($id);
+			$o-> set_prop("status" , 2);
+			$o->save();
+		}
+		return $arr["post_ru"];
+	}
+
 
 	private function _get_relation_type_options($clid)
 	{

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="events_manager" folder="www/automatweb_cvs/classes/applications/events_manager" extends="class_base">
+	<class name="events_manager" folder="www/automatweb_stable/classes/applications/events_manager" extends="class_base">
 		<action name="delete" is_public="1" caption="Change">
 			<function name="delete">
 				<arguments>

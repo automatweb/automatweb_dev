@@ -82,7 +82,7 @@ class period extends class_base implements request_startup
 		$this->lc_load("periods","lc_periods");
 		$this->cf_name = "periods-cache-site_id-".$this->cfg["site_id"]."-period-";
 		$this->cf_ap_name = "active_period-cache-site_id-".$this->cfg["site_id"];
-		$this->cache = get_instance("cache");
+		$this->cache = &get_static_instance("cache");
 		$this->init_active_period_cache();
 	}
 

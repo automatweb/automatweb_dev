@@ -14,88 +14,88 @@ msgstr ""
 msgid "Klassi Aadress v2 help"
 msgstr ""
 
+#: classes/common/address/address.aw:prop_name
+msgid "Omaduse Aadress (name) caption"
+msgstr ""
+
+#: classes/common/address/address.aw:prop_name_comment
+msgid "Omaduse Aadress (name) kommentaar"
+msgstr ""
+
+#: classes/common/address/address.aw:prop_name_help
+msgid "Omaduse Aadress (name) help"
+msgstr ""
+
 #: classes/common/address/address.aw:prop_administrative_structure
-msgid "Omaduse Riik/haldusjaotus (administrative_structure) caption"
+msgid "Omaduse  (administrative_structure) caption"
 msgstr ""
 
 #: classes/common/address/address.aw:prop_administrative_structure_comment
-msgid "Omaduse Riik/haldusjaotus (administrative_structure) kommentaar"
+msgid "Omaduse  (administrative_structure) kommentaar"
 msgstr ""
 
 #: classes/common/address/address.aw:prop_administrative_structure_help
-msgid "Omaduse Riik/haldusjaotus (administrative_structure) help"
-msgstr ""
-
-#: classes/common/address/address.aw:prop_address_data
-msgid "Omaduse  (address_data) caption"
-msgstr ""
-
-#: classes/common/address/address.aw:prop_address_data_comment
-msgid "Omaduse  (address_data) kommentaar"
-msgstr ""
-
-#: classes/common/address/address.aw:prop_address_data_help
-msgid "Omaduse  (address_data) help"
+msgid "Omaduse  (administrative_structure) help"
 msgstr ""
 
 #: classes/common/address/address.aw:prop_country
-msgid "Omaduse  (country) caption"
+msgid "Omaduse Riik (country) caption"
 msgstr ""
 
 #: classes/common/address/address.aw:prop_country_comment
-msgid "Omaduse  (country) kommentaar"
+msgid "Omaduse Riik (country) kommentaar"
 msgstr ""
 
 #: classes/common/address/address.aw:prop_country_help
-msgid "Omaduse  (country) help"
+msgid "Omaduse Riik (country) help"
 msgstr ""
 
-#: classes/common/address/address.aw:prop_location_country
-msgid "Omaduse  (location_country) caption"
+#: classes/common/address/address.aw:prop_location_data
+msgid "Omaduse  (location_data) caption"
 msgstr ""
 
-#: classes/common/address/address.aw:prop_location_country_comment
-msgid "Omaduse  (location_country) kommentaar"
+#: classes/common/address/address.aw:prop_location_data_comment
+msgid "Omaduse  (location_data) kommentaar"
 msgstr ""
 
-#: classes/common/address/address.aw:prop_location_country_help
-msgid "Omaduse  (location_country) help"
+#: classes/common/address/address.aw:prop_location_data_help
+msgid "Omaduse  (location_data) help"
 msgstr ""
 
 #: classes/common/address/address.aw:prop_location
-msgid "Omaduse  (location) caption"
+msgid "Omaduse Asukoht (location) caption"
 msgstr ""
 
 #: classes/common/address/address.aw:prop_location_comment
-msgid "Omaduse  (location) kommentaar"
+msgid "Omaduse Asukoht (location) kommentaar"
 msgstr ""
 
 #: classes/common/address/address.aw:prop_location_help
-msgid "Omaduse  (location) help"
+msgid "Omaduse Asukoht (location) help"
 msgstr ""
 
-#: classes/common/address/address.aw:prop_postal_code
-msgid "Omaduse Postiindeks (postal_code) caption"
+#: classes/common/address/address.aw:prop_street
+msgid "Omaduse T&auml;nav/asum (street) caption"
 msgstr ""
 
-#: classes/common/address/address.aw:prop_postal_code_comment
-msgid "Omaduse Postiindeks (postal_code) kommentaar"
+#: classes/common/address/address.aw:prop_street_comment
+msgid "Omaduse T&auml;nav/asum (street) kommentaar"
 msgstr ""
 
-#: classes/common/address/address.aw:prop_postal_code_help
-msgid "Omaduse Postiindeks (postal_code) help"
+#: classes/common/address/address.aw:prop_street_help
+msgid "Omaduse T&auml;nav/asum (street) help"
 msgstr ""
 
-#: classes/common/address/address.aw:prop_street_address
-msgid "Omaduse Maja number (street_address) caption"
+#: classes/common/address/address.aw:prop_house
+msgid "Omaduse Maja/number (house) caption"
 msgstr ""
 
-#: classes/common/address/address.aw:prop_street_address_comment
-msgid "Omaduse Maja number (street_address) kommentaar"
+#: classes/common/address/address.aw:prop_house_comment
+msgid "Omaduse Maja/number (house) kommentaar"
 msgstr ""
 
-#: classes/common/address/address.aw:prop_street_address_help
-msgid "Omaduse Maja number (street_address) help"
+#: classes/common/address/address.aw:prop_house_help
+msgid "Omaduse Maja/number (house) help"
 msgstr ""
 
 #: classes/common/address/address.aw:prop_apartment
@@ -110,6 +110,18 @@ msgstr ""
 msgid "Omaduse Korter/Tuba (apartment) help"
 msgstr ""
 
+#: classes/common/address/address.aw:prop_postal_code
+msgid "Omaduse Postiindeks (postal_code) caption"
+msgstr ""
+
+#: classes/common/address/address.aw:prop_postal_code_comment
+msgid "Omaduse Postiindeks (postal_code) kommentaar"
+msgstr ""
+
+#: classes/common/address/address.aw:prop_postal_code_help
+msgid "Omaduse Postiindeks (postal_code) help"
+msgstr ""
+
 #: classes/common/address/address.aw:prop_po_box
 msgid "Omaduse Postkast (po_box) caption"
 msgstr ""
@@ -122,35 +134,7 @@ msgstr ""
 msgid "Omaduse Postkast (po_box) help"
 msgstr ""
 
-#: classes/common/address/address.aw:group_grp_address
-msgid "Grupi Aadress (grp_address) pealkiri"
-msgstr ""
-
-#: classes/common/address/address.aw:group_grp_address_help
-msgid "Grupi Aadress (grp_address) help"
-msgstr ""
-
-#: classes/common/address/address.aw:rel_RELTYPE_ADMINISTRATIVE_STRUCTURE
-msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
-msgstr ""
-
-#: classes/common/address/address.aw:87
-msgid "Haldusjaotus m22ramata."
-msgstr ""
-
-#: classes/common/address/address.aw:106
-msgid "Riik/haldusjaotus peab olema valitud!"
-msgstr ""
-
-#: classes/common/address/address.aw:214
-msgid "Viga: k6rgem haldusjaotus m22ramata."
-msgstr ""
-
-#: classes/common/address/address.aw:236
-msgid "Valikute taotleja-property m22ramata."
-msgstr ""
-
-#: classes/common/address/address.aw:330
-msgid "T&auml;nav"
+#: classes/common/address/address.aw:162
+msgid "Riik peab olema valitud!"
 msgstr ""
 

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shortcut" folder="www/automatweb_cvs/classes/admin/shortcut_manager" extends="class_base">
+	<class name="shortcut" folder="www/automatweb_stable/classes/admin/shortcut_manager" extends="class_base">
 		<action name="get_action">
 			<function name="get_action">
 				<arguments>

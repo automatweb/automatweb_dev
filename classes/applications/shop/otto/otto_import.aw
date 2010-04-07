@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.130 2009/10/02 13:16:00 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.135 2010/02/25 11:51:27 dragut Exp $
 // otto_import.aw - Otto toodete import
 /*
 
@@ -4415,6 +4415,289 @@ class otto_import extends class_base implements warehouse_import_if
 
 	}
 
+	/*
+		new csv files import function
+	*/
+	function load_data_from_csv($o) 
+	{
+		$this->cleanup_tmp_tables();
+
+		if (!headers_sent())
+		{
+			header('Content-type: text/html; charset=UTF-8');
+		}
+
+		echo "Load data from CSV [new and refactored version]<br />\n";
+
+	//	$fext = '.xls';
+	//	$fext = '.txt';
+		$fext = '';
+
+		$fnames = explode("\n", $o->prop('fnames'));
+
+		foreach ($fnames as $fname)
+		{
+			// In case there are some empty lines in file names textarea:
+			$fname = trim($fname);
+			if (empty($fname))
+			{
+				continue;
+			}
+
+			echo "Load data from CSV file \"".$fname."\" <br />\n";
+			// first file (titles and descriptions):
+			$file_path = $o->prop("base_url")."/".trim($fname)."-1".$fext;
+			$prod_descs = $this->read_csv_file_content($file_path);
+			echo " -- Got ".count($prod_descs)." product descriptions from ".$file_path."<br />\n";
+			$this->fill_tmp_product_descs_table($prod_descs);
+
+			// second file (colors and product codes)
+			$file_path = $o->prop("base_url")."/".trim($fname)."-2".$fext;
+			$prod_colors = $this->read_csv_file_content($file_path);
+			echo " -- Got ".count($prod_colors)." product codes/colors from ".$file_path."<br />\n";
+			$this->fill_tmp_product_codes_table($prod_colors);
+
+			// third file (sizes and prices):
+			$file_path = $o->prop("base_url")."/".trim($fname)."-3".$fext;
+			$prod_prices = $this->read_csv_file_content($file_path);
+			echo " -- Got ".count($prod_prices)." product prices/sizes from ".$file_path."<br />\n";
+			$this->fill_tmp_product_prices_table($prod_prices);
+		}
+	}
+	
+	private function read_csv_file_content($file)
+	{
+		$f = file($file);
+
+		// remove the first line:
+		unset($f[0]);
+
+		$result = array();
+		foreach ($f as $k => $l)
+		{
+			// here is 2 important things:
+			// - the line $l has to be ltrim()-d before passed to mb_convert_encoding() fn. I think it removes the null byte in front of the line.
+			// - the from encoding has to be precisely UTF-16LE
+			$l = mb_convert_encoding(ltrim($l), "UTF-8", "UTF-16LE");
+			if (!empty($l))
+			{
+				$result[] = explode("\t", $l);
+			}
+		}
+		return $result;
+	}
+
+	private function cleanup_tmp_tables()
+	{
+		$this->db_query("DELETE FROM otto_imp_t_prod WHERE lang_id=".aw_global_get('lang_id'));
+	
+		$this->db_query("DELETE FROM otto_imp_t_codes WHERE lang_id=".aw_global_get('lang_id'));
+
+		$this->db_query("DELETE FROM otto_imp_t_prices WHERE lang_id=".aw_global_get('lang_id'));
+	}
+
+	// fill the temporary table with the data from csv
+	private function fill_tmp_product_descs_table($data)
+	{
+		/*
+		mysql> desc otto_imp_t_prod;
+		+----------+--------------+------+-----+---------+----------------+
+		| Field    | Type         | Null | Key | Default | Extra          |
+		+----------+--------------+------+-----+---------+----------------+
+		| c        | text         | YES  |     | NULL    |                | 
+		| id       | int(11)      | NO   | PRI | NULL    | auto_increment | 
+		| nr       | varchar(5)   | YES  | MUL | NULL    |                | 
+		| pg       | varchar(50)  | NO   | MUL |         |                | 
+		| title    | varchar(255) | YES  |     | NULL    |                | 
+		| lang_id  | int(11)      | YES  |     | NULL    |                | 
+		| extrafld | varchar(255) | YES  |     | NULL    |                | 
+		+----------+--------------+------+-----+---------+----------------+
+		7 rows in set (0.00 sec)
+		*/
+
+		foreach ($data as $item)
+		{
+			$item = $this->string_cleanup($item);
+
+			$sql = "
+				insert into otto_imp_t_prod set
+					pg = '".addslashes($item[0])."',
+					nr = '".addslashes($item[1])."',
+					title = '".addslashes($item[2])."',
+					c = '".addslashes($item[4])."',
+					extrafld = '".addslashes($item[3])."',
+					lang_id = '".aw_global_get('lang_id')."'
+			";
+			$this->db_query($sql);
+		}
+	
+	}
+
+	// fill the temporary table with the data from csv
+	private function fill_tmp_product_codes_table($data)
+	{
+		/*
+		mysql> desc otto_imp_t_codes;
+		+---------------+--------------+------+-----+---------+----------------+
+		| Field         | Type         | Null | Key | Default | Extra          |
+		+---------------+--------------+------+-----+---------+----------------+
+		| code          | varchar(100) | YES  | MUL | NULL    |                | 
+		| original_code | varchar(255) | YES  |     | NULL    |                | 
+		| color         | varchar(100) | YES  |     | NULL    |                | 
+		| full_code     | varchar(10)  | YES  |     | NULL    |                | 
+		| id            | int(11)      | NO   | PRI | NULL    | auto_increment | 
+		| nr            | varchar(5)   | YES  | MUL | NULL    |                | 
+		| pg            | varchar(50)  | NO   | MUL |         |                | 
+		| s_type        | varchar(255) | YES  |     | NULL    |                | 
+		| set_f_img     | varchar(20)  | YES  |     | NULL    |                | 
+		| size          | varchar(50)  | YES  |     | NULL    |                | 
+		| lang_id       | int(11)      | YES  |     | NULL    |                | 
+		+---------------+--------------+------+-----+---------+----------------+
+		11 rows in set (0.00 sec)
+		*/
+
+		foreach ($data as $item)
+		{
+			$item = $this->string_cleanup($item);
+
+			// not used at the moment
+			$full_code = '';
+			$original_code = ''; 
+			$set_f_img = '';
+
+			$color = (!empty($item[2])) ? $item[3] . '('.$item[2].')' : $item[3];
+
+			$code = $item[4];
+
+			$sql = "
+				insert into otto_imp_t_codes set
+					pg = '".$item[0]."',
+					nr = '".$item[1]."',
+					s_type = '".$item[2]."',
+					color = '".$color."',
+					code = '".$code."',
+					original_code = '".$original_code."',
+					full_code = '".$full_code."',
+					set_f_img = '".$set_f_img."',
+					lang_id = ".aw_global_get('lang_id')."
+			";
+
+			$this->db_query($sql);
+		}
+	}
+
+	// fill the temporary table with the data from csv
+	private function fill_tmp_product_prices_table($data)
+	{
+		/*
+		mysql> desc otto_imp_t_prices;
+		+---------------+--------------+------+-----+---------+----------------+
+		| Field         | Type         | Null | Key | Default | Extra          |
+		+---------------+--------------+------+-----+---------+----------------+
+		| id            | int(11)      | NO   | PRI | NULL    | auto_increment | 
+		| nr            | varchar(5)   | YES  | MUL | NULL    |                | 
+		| pg            | varchar(50)  | NO   | MUL |         |                | 
+		| price         | varchar(100) | YES  |     | NULL    |                | 
+		| special_price | varchar(255) | YES  |     | NULL    |                | 
+		| s_type        | varchar(255) | YES  |     | NULL    |                | 
+		| size          | varchar(50)  | YES  |     | NULL    |                | 
+		| type          | varchar(50)  | YES  |     | NULL    |                | 
+		| unit          | varchar(100) | YES  |     | NULL    |                | 
+		| lang_id       | int(11)      | YES  |     | NULL    |                | 
+		+---------------+--------------+------+-----+---------+----------------+
+		10 rows in set (0.00 sec)
+		*/
+
+		foreach ($data as $item)
+		{
+			$item = $this->string_cleanup($item);
+
+			$price = str_replace(
+				array(',', '-', '_'),
+				array('.', '', ''),
+				$item[5]
+				);
+
+			$price = (double)trim($price);
+
+			$special_price = 0;
+			if (!empty($item[6]))
+			{
+				$special_price = str_replace(
+					array(',', '-', '_'),
+					array('.', '', ''),
+					$item[6]
+					);
+
+				$special_price = (double)trim($special_price);
+			}
+
+			$sql = "
+				insert into otto_imp_t_prices set
+					pg = '".$item[0]."',
+					nr = '".$item[1]."',
+					s_type = '".$item[2]."',
+					size = '".$item[3]."',
+					unit = '".$item[4]."',
+					price = '".$price."',
+					special_price = '".$special_price."',
+					lang_id = ".aw_global_get('lang_id')."
+			";
+			$this->db_query($sql);	
+		}
+	
+	}
+
+	private function string_debug($str) 
+	{
+		echo "[[ STRING DEBUG START ]]<br />\n";
+		for ($i = 0; $i < strlen($str); $i++)
+		{
+			echo "-- [ ".$str{$i}." ] [ ".ord($str{$i})." ] [ ".dechex(ord($str{$i}))." ]<br />\n";
+		}
+		echo "[[ STRING DEBUG END ]]<br />\n";
+	}
+
+	/** 
+		Removes the UTF-8 BOM from the string, anywhere it appears. It is not necessary and only screwes up text processing
+		In dec it is "239 187 191"
+		In hex it is "ef bb bf"
+
+		There is also Unicode space lingering in the texts somewhere, so maybe it is safe to remove this too:
+		In dec it is "226 128 130"
+		In hex it is "e2 80 82"
+		U+2002 EN SPACE 
+		UTF-8: e2 80 82   UTF-16BE: 2002   Decimal: &#8194;
+
+		There is also Unicode space lingering in the texts somewhere, so maybe it is safe to remove this too:
+		In dec it is "226 128 136"
+		In hex it is "e2 80 88"
+		U+2008 PUNCTUATION SPACE 
+		UTF-8: e2 80 88   UTF-16BE: 2008   Decimal: &#8200;
+
+		If the parameter is a string, then those characters/character sequences will be remove and the clean string will be returned
+		If the parameter is an array of strings, then the cleanup will be performed on every string in the array and the array of clean strings will be returned
+
+	**/
+	private function string_cleanup($var)
+	{
+		$search = array(
+			chr(239).chr(187).chr(191), // UTF-8 BOM
+			chr(226).chr(128).chr(130), // Unicode (UTF-16) space
+			chr(226).chr(128).chr(136), // Unicode (UTF-16) space
+		);
+
+		if (is_array($var))
+		{
+			foreach ($var as $k => $v)
+			{
+				$var[$k] = str_replace($search, ' ', $v);
+			}
+			return $var;
+		}
+		return str_replace($search, '', $var);
+	}
+
 	function clean_up_products_to_code_lut()
 	{
 		$products = $this->db_fetch_array("
@@ -5521,17 +5804,18 @@ class otto_import extends class_base implements warehouse_import_if
 		$return_images = array();
 
 		$full_pcode = $arr['pcode'];
-		$pcode = substr($arr['pcode'], 0, 6);
+		$pcode = substr(str_replace(' ', '', $arr['pcode']), 0, 6);
+
 		$import_obj = $arr['import_obj'];
 		$start_time = $arr['start_time'];
 
-		echo "[ OTTO ] Searching images for product code <strong>".$pcode." </strong>(code length: ".strlen($pcode)." / full code length: ".strlen($full_pcode).")<br />\n";
-		$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search;sid=JV7cfTuwQAxofX1y7nscFVe673M6xo8CrLL_UKN1wStaXWmvgBB3ETZoVkw_5Q==?ls=0&commit=true&fh_search=$pcode&fh_search_initial=$pcode&stype=N";
+		echo "[ OTTO ] Searching images for product code <strong>".$pcode." (length: ".strlen($pcode).")</strong> / full code: ".$full_pcode." (length: ".strlen($full_pcode).")<br />\n";
+		$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewFHSearch-Search?ls=0&commit=true&fh_search=".urlencode($pcode)."&fh_search_initial=".urlencode($pcode)."&fh_search_requested=".str_replace(' ', '+', $pcode)."&sterm=".str_replace(' ', '+', $pcode)."&stype=N&noMediaSearchLink=true";
 
 		echo "[ OTTO ] Loading <a href=\"$url\">page</a> content ... ";
 		flush();
 
-		$html = $this->file_get_contents($url);
+		$html = file_get_contents($url);
 
 		echo "[ OK ]<br />\n";
 		flush();
@@ -5581,8 +5865,26 @@ class otto_import extends class_base implements warehouse_import_if
 			foreach($urld as $url)
 			{
 				echo "[ OTTO ] Searching pictures from <a href=\"$url\">url</a> <br />\n";
-				$html = $this->file_get_contents($url);
 
+				// Now this is here because for some reason, otto.de site refuses to accpet query, which contains data that was not urlencoded
+				$url_parts = parse_url($url);
+				$url_params = explode('&', $url_parts['query']);
+				foreach ($url_params as $id => $url_param)
+				{
+					list($key, $value) = explode('=', $url_param);
+					switch ($key)
+					{
+						case 'fh_search_initial':
+						case 'query_text':
+							$url_params[$id] = $key.'='.urlencode($value);
+					}
+				}
+
+				$url = $url_parts['scheme'].'://'.$url_parts['host'].$url_parts['path'].'?'.implode('&', $url_params);
+
+				$html = file_get_contents($url);
+
+				// Getting the main image:
 				if (!preg_match_all("/<img id=\"mainimage\" src=\"(.*)\.jpg\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
 				{
 					echo "[ OTTO ] If we can't find image from otto.de product view, then return false <br />\n";
@@ -6630,6 +6932,11 @@ return false;
 	**/
 	function do_products_amounts_import($arr)
 	{
+		$mail_msg = aw_ini_get('baseurl')." import l2ks k2ima: ".date("d.m.Y H:i:s");
+		mail('rain.viigipuu@automatweb.com', $mail_msg, $mail_msg);
+
+		$log = '';
+
 		ini_set("memory_limit", "2048M");
 		aw_set_exec_time(AW_LONG_PROCESS);
 
@@ -6642,6 +6949,7 @@ return false;
 			exit('OTTO import object is not accessible');
 		}
 
+		$ftp_start_time = microtime(true);
 
 		// Get the file from FTP:
 		$ftp = new ftp();
@@ -6698,38 +7006,46 @@ return false;
 		echo "[done]<br />\n";
 		flush();
 
-		// Start import:
-		$lines = file(aw_ini_get('site_basedir').'/files/ASTAEXP.TXT');
+		$ftp_end_time = microtime(true);
 
-/*
-		$prods = new object_list(array(
-			'class_id' => CL_SHOP_PRODUCT
-		));
-		foreach ($prods->arr() as $prod_id => $prod)
-		{
-			$codes[substr($prod->prop('code'), 0, 6)] = $prod;
-		}
-*/
+		$log .= 'FTP time: '.($ftp_end_time - $ftp_start_time)."\n";
+
+		echo "### START IMPORT ###\n";
+
+		$source_file_load_start = microtime(true);
+		// Start import:
+		echo "Load lines ... ";
+		$lines = file(aw_ini_get('site_basedir').'/files/ASTAEXP.TXT');
+		echo "(".count($lines).") [done]\n";
+		$source_file_load_end = microtime(true);
+
+		$log .= 'source file load time: '.($source_file_load_end - $source_file_load_start)."\n";
+
 		// tarnija seostamiseks
+		echo "Searching for providers ... ";
 		$comps = new object_list(array(
 			'class_id' => CL_CRM_COMPANY,
 			'name' => '%Saksa%',
 			new obj_predicate_limit(1),
 		));
-		$comp = $comps->count() > 0 ? $comps->begin() : false;
+		$comp = ($comps->count() > 0) ? $comps->begin() : false;
+		echo ($comp === false) ? " [fail]\n" : $comp->name()." [done]\n";
 
+		echo "Searching for warehouse ... ";
 		$whs = new object_list(array(
 			'class_id' => CL_SHOP_WAREHOUSE,
 			'name' => '%Eesti%',
 			new obj_predicate_limit(1),
 		));
 		$wh = $whs->count() > 0 ? $whs->begin() : false;
+		echo ($wh === false) ? " [fail]\n" : $wh->name()." [done]\n";
 
+		echo "Creating products look-up-table ... ";
 		$prods = $this->db_query("
 			select
 				aw_shop_products.code as full_code,
 				aw_shop_products.aw_oid as aw_oid,
-				substring(aw_shop_products.code, 1, 6) as code
+				substring(aw_shop_products.short_code, 1, 6) as code
 			from
 				aw_shop_products left join objects on aw_shop_products.aw_oid = objects.oid
 			where
@@ -6739,13 +7055,17 @@ return false;
 		{
 			$codes[$row['code']][] = $row;
 		}
+		echo "(".count($codes).") [done]\n";
 
 		$total_lines = count($lines);
+
 		$counter = 0;
 
 		foreach ($lines as $line)
 		{
 			$fields = explode(';', $line);
+
+			$line_process_start = microtime(true);
 
 			if (array_key_exists($fields[0], $codes))
 			{
@@ -6851,8 +7171,12 @@ return false;
 
 			}
 			$fields = null;
+
+			$line_process_end = microtime(true);
 		}
-		echo "DONE \n";
+		echo "### DONE ###\n";
+		$mail_msg = aw_ini_get('baseurl')." import l6petas: ".date("d.m.Y H:i:s");
+		mail('rain.viigipuu@automatweb.com', $mail_msg, $mail_msg);
 		exit();
 	}
 
@@ -7001,7 +7325,11 @@ return false;
 		));
 		$o = $otto_import_ol->begin();
 
-		$this->import_data_from_csv($o);
+		// XXX
+		$this->load_data_from_csv($o);
+
+//		exit();
+//		$this->import_data_from_csv($o);
 
 /*
 // üks variant kuidas see toodete xml välja võiks näha
@@ -7029,7 +7357,7 @@ return false;
 	</product>
 </products>
 
-teine variant oleks teha xml selline, et vastaks aw objektidele (<packet><product></packagin>) jne.
+teine variant oleks teha xml selline, et vastaks aw objektidele (<packet><product></packaging>) jne.
 Esimese puhul oleks ülesehitus vast loogilisem, aga siis peaks kuidagi konfitavaks tegema selle, et 
 milliste parent tagide järgi packette/tooteid/pakeneid tekitatakse (või kas üldse tehakse)
 
@@ -7061,21 +7389,18 @@ milliste parent tagide järgi packette/tooteid/pakeneid tekitatakse (või kas ü
 	</packet>
 </warehouse_data>
 
-Võtn hetkel kasutusele selle teise variandi
+!!! Võatn hetkel kasutusele selle teise variandi !!!
 
 */
 		$oxml = new XMLWriter();
 	//	$oxml->openMemory();
 		$oxml->openURI($xml_file_path);
-		$oxml->startDocument();
+		$oxml->startDocument('1.0', 'utf-8');
 		$oxml->startElement('warehouse_data');
 
 		$prods = $this->db_fetch_array("select * from otto_imp_t_prod where lang_id = ".aw_global_get('lang_id')." order by pg,nr");
 		foreach ($prods as $prod)
 		{
-			$prod = $this->convert_utf($prod);
-
-
 			$oxml->startElement('packet');
 
 			$oxml->writeElement('page', $prod['pg']);
@@ -7098,12 +7423,11 @@ Võtn hetkel kasutusele selle teise variandi
 			$oxml->endElement();
 
 			echo "- ".$prod['pg'].' -- '.$prod['nr'].' -- '.$prod['title']."<br />\n";
-			$codes = $this->db_fetch_array("select * from otto_imp_t_codes where lang_id = ". aw_global_get("lang_id")." and pg = '". $prod["pg"]."' and nr = ".$prod["nr"]." order by pg,nr,s_type,id" );
+			$codes = $this->db_fetch_array("select * from otto_imp_t_codes where lang_id = ". aw_global_get("lang_id")." and pg = '". $prod["pg"]."' and nr = '".$prod["nr"]."' order by pg,nr,s_type,id" );
 			$oxml->startElement('products');
 			foreach (safe_array($codes) as $product_order => $code)
 			{
 				$orig_code = $code;
-				$code = $this->convert_utf($code);
 
 				$oxml->startElement('product');
 
@@ -7145,7 +7469,7 @@ Võtn hetkel kasutusele selle teise variandi
 				$oxml->endElement();
 
 				echo "---- ".$code['pg']." -- ".$code['nr']." -- ".$code['s_type']." -- ".$code['code']." -- ".$code['color']."<br />\n";
-				$sizes = $this->db_fetch_array("select * from otto_imp_t_prices where lang_id = ".aw_global_get("lang_id")." and pg = '".$orig_code['pg']."' and nr = ".$orig_code['nr']." and s_type = '".$orig_code['s_type']."' order by pg,nr,s_type,id");
+				$sizes = $this->db_fetch_array("select * from otto_imp_t_prices where lang_id = ".aw_global_get("lang_id")." and pg = '".$orig_code['pg']."' and nr = '".$orig_code['nr']."' and s_type = '".$orig_code['s_type']."' order by pg,nr,s_type,id");
 
 				$counter = 0; // packaging order counter
 
@@ -7153,9 +7477,6 @@ Võtn hetkel kasutusele selle teise variandi
 
 				foreach ($sizes as $size)
 				{
-
-					$size = $this->convert_utf($size);
-
 					echo "-------- ".$size['pg']." -- ". $size['nr'] ." -- ".$size['s_type']." -- ".$size['price'].".- -- ".$size['size']." -- ".$size['unit']."<br />\n";
 					$tmp = explode(',', $size['size']);
 					foreach ($tmp as $packaging_order => $s)
@@ -7173,6 +7494,10 @@ Võtn hetkel kasutusele selle teise variandi
 						$oxml->endElement();
 
 						$oxml->writeElement('price', $size['price']);
+						if (!empty($size['special_price']))
+						{
+							$oxml->writeElement('special_price', $size['special_price']);
+						}
 						
 						$oxml->startElement('size');
 						$oxml->writeCData($s);
@@ -7200,18 +7525,51 @@ Võtn hetkel kasutusele selle teise variandi
 		return $xml_file_path;
 	}
 
-	function convert_utf($arr)
-	{
-		foreach ($arr as $k => $v)
-		{
-			$arr[$k] = utf8_encode($v);
-		}
-		return $arr;
-	}
-
 	function parse_csv_file($file)
 	{
 		
+	}
+
+	public function get_driver_config_form()
+	{
+		
+		$hc = new htmlclient();
+		$hc->start_output();
+
+		$hc->add_property(array(
+			'name' => 'csv_file_location',
+			'caption' => t('CSV failid'),
+			'type' => 'textbox'
+		));
+
+		$hc->add_property(array(
+			"name" => "import_files",
+			"caption" => t("Imporditavad failid"),
+			"type" => "textarea",
+			"rows" => 10
+		));
+	
+		
+		$hc->add_property(array(
+			"name" => "sbt",
+			"caption" => t("OK"),
+			"type" => "submit",
+		));
+		
+		
+		$hc->finish_output(array(
+			'data' => array(
+				'class' => 'otto_import',
+				'action' => 'save_config_data'
+			),
+		));
+		return $hc->get_result(array(
+			'form_only' => 1,
+			'element_only' => 1
+		));
+	
+		return $html;
+
 	}
 
 	// for warehouse interface:

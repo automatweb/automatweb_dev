@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="releditor" folder="www/automatweb_cvs/classes/vcl" extends="core">
+	<class name="releditor" folder="www/automatweb_stable/classes/vcl" extends="core">
 		<action name="delo" all_args="1">
 			<function name="delo">
 				<arguments>

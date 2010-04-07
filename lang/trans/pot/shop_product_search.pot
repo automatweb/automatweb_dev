@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Tellimiskeskkond (oc) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_search.aw:prop_search_category_root
+msgid "Omaduse Otsingu kategooriate juurikas (search_category_root) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_search_category_root_comment
+msgid "Omaduse Otsingu kategooriate juurikas (search_category_root) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_search_category_root_help
+msgid "Omaduse Otsingu kategooriate juurikas (search_category_root) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_search.aw:prop_objs_in_res
 msgid "Omaduse Tulemuseks on  (objs_in_res) caption"
 msgstr ""
@@ -48,6 +60,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_search.aw:prop_objs_in_res_help
 msgid "Omaduse Tulemuseks on  (objs_in_res) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_forward_single_product_to_detailview
+msgid "Omaduse Kui leitakse ainult &uuml;ks toode, suuna detailvaatesse (forward_single_product_to_detailview) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_forward_single_product_to_detailview_comment
+msgid "Omaduse Kui leitakse ainult &uuml;ks toode, suuna detailvaatesse (forward_single_product_to_detailview) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_forward_single_product_to_detailview_help
+msgid "Omaduse Kui leitakse ainult &uuml;ks toode, suuna detailvaatesse (forward_single_product_to_detailview) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_search.aw:prop_fld_tb
@@ -134,6 +158,18 @@ msgstr ""
 msgid "Omaduse Tulemuste tabeli kontroller (s_tbl_ctr2) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_search.aw:prop_products_object_list_filter_controller
+msgid "Omaduse Toodete object listi filtri kontroller (products_object_list_filter_controller) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_products_object_list_filter_controller_comment
+msgid "Omaduse Toodete object listi filtri kontroller (products_object_list_filter_controller) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_products_object_list_filter_controller_help
+msgid "Omaduse Toodete object listi filtri kontroller (products_object_list_filter_controller) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_search.aw:prop_search_form
 msgid "Omaduse  (search_form) caption"
 msgstr ""
@@ -156,14 +192,6 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_search.aw:prop_s_res_help
 msgid "Omaduse  (s_res) help"
-msgstr ""
-
-#: classes/applications/shop/shop_product_search.aw:group_data
-msgid "Grupi Andmed (data) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/shop_product_search.aw:group_data_help
-msgid "Grupi Andmed (data) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_search.aw:group_folders
@@ -226,87 +254,95 @@ msgstr ""
 msgid "Seose Otsingu kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:234
+#: classes/applications/shop/shop_product_search.aw:rel_RELTYPE_SEARCH_CATEGORY_ROOT
+msgid "Seose Otsingu kaust (RELTYPE_SEARCH_CATEGORY_ROOT) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:rel_RELTYPE_CFGCONTROLLER
+msgid "Seose Kontroller (class_base liidesega) (RELTYPE_CFGCONTROLLER) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:312
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:240
+#: classes/applications/shop/shop_product_search.aw:318
 msgid "Ka alamkaustad"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:287 classes/applications/shop/shop_product_search.aw:444
+#: classes/applications/shop/shop_product_search.aw:365 classes/applications/shop/shop_product_search.aw:535
 msgid "Klass"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:293 classes/applications/shop/shop_product_search.aw:450
+#: classes/applications/shop/shop_product_search.aw:371 classes/applications/shop/shop_product_search.aw:541
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:299
+#: classes/applications/shop/shop_product_search.aw:377
 msgid "Vormis?"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:305 classes/applications/shop/shop_product_search.aw:462
+#: classes/applications/shop/shop_product_search.aw:383 classes/applications/shop/shop_product_search.aw:553
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:311 classes/applications/shop/shop_product_search.aw:318
+#: classes/applications/shop/shop_product_search.aw:389 classes/applications/shop/shop_product_search.aw:396
 msgid "Tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:456
+#: classes/applications/shop/shop_product_search.aw:547
 msgid "Tabelis?"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:468 classes/applications/shop/shop_product_search.aw:479
+#: classes/applications/shop/shop_product_search.aw:559 classes/applications/shop/shop_product_search.aw:570
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:488
+#: classes/applications/shop/shop_product_search.aw:579
 msgid "Muundaja"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:515
+#: classes/applications/shop/shop_product_search.aw:606
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:568
+#: classes/applications/shop/shop_product_search.aw:659
 msgid "Asendus v&otilde;i ei"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:569
+#: classes/applications/shop/shop_product_search.aw:660
 msgid "Jaehind"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:570
+#: classes/applications/shop/shop_product_search.aw:661
 msgid "Allahindluse %"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:571
+#: classes/applications/shop/shop_product_search.aw:662
 msgid "L&otilde;pphind"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:572
+#: classes/applications/shop/shop_product_search.aw:663
 msgid "Erihind"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:573
+#: classes/applications/shop/shop_product_search.aw:664
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:574
+#: classes/applications/shop/shop_product_search.aw:665
 msgid "Lao staatus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:711
+#: classes/applications/shop/shop_product_search.aw:802
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:848
+#: classes/applications/shop/shop_product_search.aw:940
 msgid "K&uuml;situd"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:852
+#: classes/applications/shop/shop_product_search.aw:944
 msgid "Asendus"
 msgstr ""
 

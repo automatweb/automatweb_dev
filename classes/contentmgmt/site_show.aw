@@ -72,7 +72,7 @@ class site_show extends class_base
 	function site_show()
 	{
 		$this->init("automatweb/menuedit");
-		$this->cache = get_instance("cache");
+		$this->cache = &get_static_instance("cache");;
 		$this->image = get_instance(CL_IMAGE);
 		$this->doc = get_instance(CL_DOCUMENT);
 	}
@@ -1984,7 +1984,7 @@ class site_show extends class_base
 			$var = "set_ct_lang_id";
 			$lang_id = aw_global_get("ct_lang_id");
 		}
-		$langs = get_instance("languages");
+		$langs = &get_static_instance("languages");;
 		$lar = $langs->listall();
 
 		$l = array();
@@ -2295,6 +2295,7 @@ class site_show extends class_base
 
 	function do_draw_menus($arr, $filename = NULL, $tpldir = NULL, $tpl = NULL)
 	{
+		enter_function("site_show::do_draw_menus");
 		tm::s(__CLASS__, __FUNCTION__);
 		if ($filename == NULL)
 		{
@@ -2337,12 +2338,107 @@ class site_show extends class_base
 			}
 		}
 
-		enter_function("site_show::do_draw_menus");
-		if (file_exists($this->compiled_filename))
+		enter_function("site_show::do_draw_menus2");
+
+
+//eksperimentaalne kogu kataloogimuutujate cachemine 
+//m]nel juhul annab errorit....
+//		if(!aw_global_get("uid") && aw_ini_get('site_id') != 494 && false)
+		if(!aw_global_get("uid"))
 		{
-			include_once($this->compiled_filename);
+			$menus_cache_dir =  aw_ini_get("cache.page_cache")."/menus/";
+			$cache_dir = aw_ini_get("cache.page_cache")."/menus/".aw_global_get("section");
+			//	count($files1 = scandir($cache_dir)) > 2
+			//			that's because every directory always contains . and ..
+			//																-- kaarel 25.03.2010
+			if(is_dir($cache_dir) && count($files1 = scandir($cache_dir)) > 2)
+			{
+				$vars = array();
+				foreach($files1 as $file)
+				{
+					if(is_file($cache_dir."/".$file))
+					{
+						$cache = file($cache_dir."/".$file);
+						$vars[substr($file ,0, -4)] = join("" , $cache);
+					}
+				}
+				$this->vars_safe($vars);
+			}
+			else
+			{
+				$existing_vars = $this->vars;
+
+				if (file_exists($this->compiled_filename))
+				{
+					include_once($this->compiled_filename);
+				}
+				if(!file_exists($menus_cache_dir))
+				{
+					mkdir($menus_cache_dir);
+				}
+				if(!file_exists($cache_dir))
+				{
+					mkdir($cache_dir);
+				}
+
+				foreach($this->vars as $var => $val)
+				{
+					if($val != $existing_vars[$var])
+					{
+						$master_cache = $cache_dir."/".$var.".tpl";
+						$fh = fopen($master_cache, 'w');
+						fwrite($fh, $val);
+						fclose($fh);
+					}
+				}
+			}
+
+
+	/*		$cache_dir = aw_ini_get("cache.page_cache")."/menus/";
+			$master_cache = $cache_dir.aw_global_get("section").".tpl";
+			if(false && file_exists($master_cache))
+			{//				print "exist";
+				$cache = file($master_cache);
+				eval(join('
+				' , $cache));
+				$this->vars_safe($arr);
+			}
+			else
+			{
+				$cache_vars = array();
+				$existing_vars = $this->vars;
+
+				if (file_exists($this->compiled_filename))
+				{
+					include_once($this->compiled_filename);
+				}
+				foreach($this->vars as $var => $val)
+				{
+					if($val != $existing_vars[$var])
+					{
+						$cache_vars[$var] = $val;
+					}
+				}
+
+
+				if(!file_exists($cache_dir))
+				{
+					mkdir($cache_dir);
+				}arr(array_keys($cache_vars));
+				$fh = fopen($master_cache, 'w');
+				fwrite($fh, aw_serialize($cache_vars , 1 , SERIALIZE_NATIVE));
+				fclose($fh);
+			}*/
 		}
-		exit_function("site_show::do_draw_menus");
+		else
+		{
+				if (file_exists($this->compiled_filename))
+				{
+					include_once($this->compiled_filename);
+				}
+		}
+
+		exit_function("site_show::do_draw_menus2");
 
 		$this->path_ids = $path_bak;
 
@@ -2352,9 +2448,11 @@ class site_show extends class_base
 		if ($filename !== NULL)
 		{
 			tm::e(__CLASS__, __FUNCTION__);
+					exit_function("site_show::do_draw_menus");
 			return $this->parse();
 		}
 		tm::e(__CLASS__, __FUNCTION__);
+		exit_function("site_show::do_draw_menus");
 	}
 
 	function exec_subtemplate_handlers($arr)
@@ -2513,7 +2611,7 @@ class site_show extends class_base
 			$adt = $adt_o->trans_get_val("title");
 		}
 
-		$u = get_instance(CL_USER);
+		$u = get_static_instance(CL_USER);
 		aw_disable_acl();
 		$tmp = $u->get_current_person();
 		if (is_oid($tmp))
@@ -2829,7 +2927,7 @@ class site_show extends class_base
 			if ($pclass)
 			{
 				list($_cl,$_act) = explode("/",$pclass);
-				$orb = get_instance("core/orb/orb");
+				$orb = get_static_instance("core/orb/orb");
 				if ($_cl == "periods")
 				{
 					$_cl = "period";
@@ -3068,7 +3166,7 @@ if (!$this->brother_level_from && !$o->is_brother() && ($use_trans ? $o->trans_g
 		$str_part = str_replace($what_to_replace, "_", $tpl);
 		$fn = "compiled_menu_template-".$str_part."-".aw_global_get('lang_id');
 
-		$ca = get_instance("cache");
+		$ca = &get_static_instance("cache");;
 		$ca->file_set($fn, $code);
 
 		return $ca->get_fqfn($fn);
@@ -3325,7 +3423,7 @@ if (!$this->brother_level_from && !$o->is_brother() && ($use_trans ? $o->trans_g
 				{
 					continue;
 				}
-				$o = obj($id);if(aw_global_get("uid") == "markop") arr($o);
+				$o = obj($id);//if(aw_global_get("uid") == "markop") arr($o);
 				foreach($o->connections_to(array("type" => 5, "to.lang_id" => aw_global_get("lang_id"))) as $c)
 				{
 					$samenu = $c->from();
@@ -3374,7 +3472,13 @@ if (!$this->brother_level_from && !$o->is_brother() && ($use_trans ? $o->trans_g
 			return;
 		}
 		tm::s(__CLASS__, __FUNCTION__);
-		$pm = get_instance("vcl/popup_menu");
+
+		static $pm;
+		if(!$pm)
+		{
+			$pm = get_instance("vcl/popup_menu");
+		}
+		
 		$pm->begin_menu("site_edit_".$menu->id());
 		if ($this->can("add", $menu->parent()))
 		{

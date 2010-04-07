@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="site_search_content" folder="www/automatweb_cvs/classes/contentmgmt/site_search" extends="class_base">
+	<class name="site_search_content" folder="www/automatweb_stable/classes/contentmgmt/site_search" extends="class_base">
 		<action name="generate_static" nologin="1">
 			<function name="generate_static">
 				<arguments>

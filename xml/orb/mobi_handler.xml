@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mobi_handler" folder="www/automatweb_cvs/classes/common/sms/service_provider" extends="class_base">
+	<class name="mobi_handler" folder="www/automatweb_stable/classes/common/sms/service_provider" extends="class_base">
 		<action name="presend_sms">
 			<function name="presend_sms">
 				<arguments>

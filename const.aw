@@ -6,8 +6,6 @@ if (!defined("AW_CONST_INC"))
 define("AW_CONST_INC", 1);
 // 1:42 PM 8/3/2008 - const.aw now contains only parts of old startup script that are to be moved to new appropriate files or deleted. const.aw file to be removed eventually.
 
-//UnWasted - set_magic_quotes_runtime is deprecated since php 5.3
-if (version_compare(PHP_VERSION, '5.3.0', '<'))
 set_magic_quotes_runtime(0);
 
 foreach ($GLOBALS["cfg"] as $key => $value)
@@ -508,8 +506,27 @@ function classload($args)
 //	exit_function("__global::classload");
 }
 
+function get_static_instance($class)
+{
+	enter_function("__global::get_static_instance");
+	static $instances; 
+	if(empty($instances[$class]))
+	{
+		$instances[$class] = get_instance($class);
+	}
+	exit_function("__global::get_static_instance");
+	return $instances[$class];
+}
+
 function get_instance($class, $args = array(), $errors = true)
 {
+//	if(aw_global_get("uid") == "struktuur.markop") echo "get_instance $class from ".dbg::short_backtrace()." <br>\n";
+/*	$GLOBALS["loaded_instances"][$class]++;
+print "<!--";
+	arr($GLOBALS["loaded_instances"]);
+	arr($class);
+	arr(dbg::short_backtrace());
+	print "-->";*/
 	if (empty($class))
 	{
 		throw new aw_exception("Can't load class when no name given.");
@@ -720,7 +737,7 @@ function aw_startup()
 	//$m = get_instance("menuedit");
 	//$m->request_startup();
 
-	$l = get_instance("languages");
+	$l = &get_static_instance("languages");;
 	$l->request_startup();
 
 	// check multi-lang frontpage
@@ -741,7 +758,7 @@ function aw_startup()
 	// this check reduces the startup memory usage for not logged in users by a whopping 1.3MB! --duke
 	//
 	// the check was if user is logged on. now we need to do this all the time, because public users are acl controlled now.
-	$u = get_instance("users");
+	$u = &get_static_instance("users");;
 	$u->request_startup();
 
 	if (!is_array(aw_global_get("gidlist")))

@@ -78,7 +78,7 @@ FCKConfig.TemplateReplaceCheckbox = true ;
 FCKConfig.ToolbarLocation = 'In' ;
 
 FCKConfig.ToolbarSets["aw"] = [
-	['Cut','Copy','Paste'],
+	['Source','Cut','Copy','Paste'],
 	['clear_styles'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Bold','Italic','Underline','StrikeThrough','-'],

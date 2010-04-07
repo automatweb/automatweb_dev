@@ -111,12 +111,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 		@layout product_managementright type=vbox parent=product_managementsplit
 
-			@property product_management_list type=table store=no no_caption=1  parent=product_managementright
-			@caption Toodete nimekiri
-
 			@property category_list type=table store=no no_caption=1 parent=product_managementright
 			@caption Kategooriate nimekiri
 
+			@property product_management_list type=table store=no no_caption=1  parent=product_managementright
+			@caption Toodete nimekiri
 
 @default group=products
 
@@ -216,7 +215,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property packets_s_barcode type=textbox store=no captionside=top size=30 parent=packets_left_search
 				@caption Ribakood
 
-				@property packets_s_cat type=select store=no captionside=top   parent=packets_left_search
+				@property packets_s_cat type=textbox store=no captionside=top parent=packets_left_search size=30
 				@caption Kategooria
 
 				@property packets_s_count type=select store=no captionside=top parent=packets_left_search
@@ -228,7 +227,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property packets_s_pricelist type=select store=no captionside=top parent=packets_left_search
 				@caption Hinnakiri
 
-				@property packets_s_sbt type=submit store=no captionside=top  parent=packets_left_search value="Otsi"
+				@property packets_s_created_from type=date_select store=no captionside=top parent=packets_left_search
+				@caption Loodud alates
+
+				@property packets_s_created_to type=date_select store=no captionside=top parent=packets_left_search
+				@caption Loodud kuni
+
+				@property packets_s_active type=select store=no captionside=top parent=packets_left_search
+				@caption Aktiivsus
+
+				@property packets_s_sbt type=button store=no captionside=top  parent=packets_left_search value="Otsi"
 				@caption Otsi
 
 		@layout packets_right type=vbox parent=packets_split
@@ -1397,8 +1405,17 @@ class shop_warehouse extends class_base
 		}
 		switch($prop["name"])
 		{
-
-
+			case "packets_s_created_from":
+			case "packets_s_created_to":
+				$prop["format"] = array("day_textbox", "month_textbox", "year_textbox");
+				if(!$prop["value"])
+				{
+					$prop["value"] = -1;
+				}
+				break;
+			case "packets_s_active":
+				$prop["options"] = array(t("K&otilde;ik"), t("Mitteaktiivsed") , t("Aktiivsed"));
+				break;
 			case "product_management_category_tree":
 				die();
 			case "packets_cat_tree":
@@ -1558,6 +1575,9 @@ class shop_warehouse extends class_base
 
 			case "search_cur_ord_text":
 				$prop["value"] = t("<br><br>Hetkel pakkumises olevad tooted:");
+				break;
+			case "packets_s_sbt":
+				$prop['onclick'] = "search_packets();";
 				break;
 		};
 		return $retval;
@@ -5013,6 +5033,25 @@ $tb->add_delete_button();
 			))
 			//"action" => "paste_products"
 		));
+
+		$tb->add_menu_button(array(
+			"name" => "active",
+//			"img" => "delete.gif",
+			"text" => t("Aktiivsus"),
+			"tooltip" => t("Tee pakette aktiivseteks ja mitteaktiivseteks"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "active",
+			"text" => t("Aktiivseks"),
+			"link" => "javascript:set_sel_prop('active' , '2');",
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "active",
+			"text" => t("Mitteaktiivseks"),
+			"link" => "javascript:set_sel_prop('active' , '1');",
+		));
 	}
 
 	function _get_packets_tree($arr)
@@ -5040,15 +5079,83 @@ $tb->add_delete_button();
 
 	function _get_packets_list(&$arr)
 	{
+		$icon = icons::get_class_icon(CL_SHOP_PACKET);
+
+/*		if(aw_global_get("uid") == "struktuur.markop")
+		{
+			$ol = new object_list(array(
+				"class_id" =>CL_SHOP_PACKET,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"created" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, mktime(0, 0, 0, 1, 1, 2010)),
+				"status" => 2
+			));
+			foreach($ol->arr() as $o)
+			{
+				$o-> set_prop("status" , 1);
+				$o->save();
+			}
+			var_dump($ol-> count());
+
+		}*/
 		$tb = $arr["prop"]["vcl_inst"];
+		$request = $arr["request"];
 		$this->_init_pkt_list_list_tbl($tb, $arr["obj_inst"]);
 		$tree_filter = array(
-			"parent" => isset($this->pkt_tree_root) ? $this->pkt_tree_root : 1,
-			"class_id" => array(CL_MENU,CL_SHOP_PACKET),
+//			"parent" => isset($this->pkt_tree_root) ? $this->pkt_tree_root : 1,
+//			"class_id" => array(CL_MENU,CL_SHOP_PACKET),
+			"class_id" => array(CL_SHOP_PACKET),
 			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
-			"limit" => 100
+			"limit" => 300,
+			"sort_by" => "name asc",
 		);
 
+//-----------paketi loomise aja j2rgi filtreerimine------------- toimib kui v2hemalt aasta on valitud
+		$search_from = false;
+		$search_to = false;
+		if(!empty($arr["request"]['packets_s_created_from__year']))
+		{
+			$search_from = true;
+			$search_from_time = mktime(0,0,0,!empty($request['packets_s_created_from__month']) ? $request['packets_s_created_from__month'] : 1,!empty($request['packets_s_created_from__day']) ? $request['packets_s_created_from__day'] : 1,$request['packets_s_created_from__year']);
+
+		}
+		if(!empty($arr["request"]['packets_s_created_to__year']))
+		{
+			$search_to = true;
+			$search_to_time = mktime(0,0,0,
+				empty($request['packets_s_created_to__month']) ? 1 : (empty($request['packets_s_created_to__day']) ? $request['packets_s_created_to__month'] + 1 : $request['packets_s_created_to__month']),
+				!empty($request['packets_s_created_to__day']) ? $request['packets_s_created_to__day'] : 1,
+				empty($request['packets_s_created_to__month']) ? $request['packets_s_created_to__year']+1 :  $request['packets_s_created_to__year']
+			) - 1;
+		}
+
+		if($search_from && $search_to)
+		{
+			$tree_filter["created"]  = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $search_from_time, $search_to_time);
+		}
+		elseif($search_from)
+		{
+			$tree_filter["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $search_from_time);
+		}
+		elseif($search_to)
+		{
+			$tree_filter["created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $search_to_time);
+		}
+
+//-------------------------------
+
+		if(!empty($arr["request"]["packets_s_name"]))
+		{
+			$tree_filter["name"] = "%".$arr["request"]["packets_s_name"]."%";
+		}
+		if(!empty($arr["request"]["packets_s_active"]) && $arr["request"]["packets_s_active"] > 0)
+		{
+			$tree_filter["status"] = $arr["request"]["packets_s_active"];
+		}
+		if(!empty($arr["request"]["packets_s_cat"]))
+		{
+			$tree_filter["CL_SHOP_PACKET.RELTYPE_CATEGORY.name"] = "%".$arr["request"]["packets_s_cat"]."%";
+		}
 
 		if(!empty($arr["request"]["cat"]))
 		{
@@ -5086,8 +5193,25 @@ $tb->add_delete_button();
 
 
 		// get items
-		$ot = new object_tree($tree_filter);
-		$ol = $ot->to_list();
+
+/*		$ot = new object_tree($tree_filter);
+		$ol = $ot->to_list();*/
+
+
+
+		$ol = new object_list($tree_filter);
+
+//		enter_function("packet::get_products");
+//		$products = array();
+//		$products = $arr["obj_inst"]->get_packet_products($ol->ids());
+//		foreach(get_packet_products() as $data)
+//		{
+//			$products[] = $this->change_link($id , $name);	
+//			$products[] = html::obj_change_url($product, $product->name());
+//		}
+//		exit_function("packet::get_products");
+
+
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			if ($o->class_id() == CL_MENU)
@@ -5096,6 +5220,7 @@ $tb->add_delete_button();
 			}
 
 			$get = "";
+//milleks see vajalik on? - Marko
 			if ($o->prop("item_count") > 0)
 			{
 				$get = html::href(array(
@@ -5106,13 +5231,14 @@ $tb->add_delete_button();
 					"caption" => t("V&otilde;ta laost")
 				));
 			}
-
+			enter_function("packet::get_products");
 			$products = array();
-			foreach($o->get_products()->arr() as $product)
+			foreach($o->get_products()->names() as $id => $name)
 			{
-				$products[] = html::obj_change_url($product, $product->name());
+				$products[] = $this->change_link($id , $name);	
+//				$products[] = html::obj_change_url($product, $product->name());
 			}
-
+			exit_function("packet::get_products");
 
 			$tb->define_data(array(
 				"name" => html::obj_change_url($o, $o->path_str(array("to" => $this->pkt_fld))),
@@ -5134,8 +5260,9 @@ $tb->add_delete_button();
 					"caption" => t("Vii lattu")
 				)),
 				"products" => join(",<br>" , $products),
-			//	"icon" => icons::get_class_icon(CL_SHOP_PACKET),
+				"icon" => $icon,
 				"categories" => join(", " , $o->get_categories()->names()),
+				"color" => $o->status() == 2 ? "#99FF99" : "#E1E1E1",
 			));
 		}
 	}
@@ -5146,26 +5273,30 @@ $tb->add_delete_button();
 			"name" => "icon",
 			"caption" => t("&nbsp;"),
 			"sortable" => 0,
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 			"sortable" => 1,
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "code",
 			"caption" => t("Kood"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "products",
 			"caption" => t("Tooted"),
-			"align" => "left"
+			"align" => "left",
+			"chgbgcolor" => "color",
 		));
 /*
 		$t->define_field(array(
@@ -5240,19 +5371,22 @@ $tb->add_delete_button();
 				"name" => "cnt",
 				"caption" => t("Kogus laos"),
 				"align" => "center",
-				"type" => "int"
+				"type" => "int",
+				"chgbgcolor" => "color",
 			));
 
 			$t->define_field(array(
 				"name" => "get",
 				"caption" => t("V&otilde;ta laost"),
-				"align" => "center"
+				"align" => "center",
+				"chgbgcolor" => "color",
 			));
 
 			$t->define_field(array(
 				"name" => "put",
 				"caption" => t("Vii lattu"),
-				"align" => "center"
+				"align" => "center",
+				"chgbgcolor" => "color",
 			));
 		}
 /*
@@ -5266,12 +5400,14 @@ $tb->add_delete_button();
 		$t->define_field(array(
 			"name" => "categories",
 			"caption" => t("Paketiga seotud tootekategooriad"),
-			"align" => "center"
+			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_chooser(array(
 			"name" => "sel",
-			"field" => "oid"
+			"field" => "oid",
+			"chgbgcolor" => "color",
 		));
 	}
 
@@ -7159,6 +7295,38 @@ $tb->add_delete_button();
 		{
 			switch($arr["request"]["group"])
 			{
+				case "packets":
+
+					$vars = array('packets_s_active' , 'packets_s_name', 'packets_s_code', 'packets_s_barcode' , 'packets_s_cat', 'packets_s_count' , 'packets_s_price_from' , 'packets_s_pricelist',
+						'packets_s_created_from__day' , 'packets_s_created_from__month','packets_s_created_from__year',
+						'packets_s_created_to__day' , 'packets_s_created_to__month','packets_s_created_to__year'
+					);
+					$props_to_update = array();
+					foreach($vars as $var)
+					{
+						$props_to_update[] = $var.": $('[id=".$var."]').val()";
+					}
+
+					$js.= "
+						function search_packets()
+						{
+							reload_layout(['packets_list_lay'] , {".join($props_to_update , ",")."});
+						}
+					";
+
+					$js.= "
+						function set_sel_prop(property , value)
+						{
+							result = $('input[name^=sel]');
+							$.get('/automatweb/orb.aw?class=shop_warehouse&id=".$arr["obj_inst"]->id()."&action=ajax_set_property&' + property + '=' + value + '&' + result.serialize(), {
+								}, function (html) {
+									reload_layout(['packets_list_lay']);
+								}
+							);
+						}
+					";
+
+					break;
 				case "sales":
 				case "sell_orders":
 					$js.= "
@@ -7406,6 +7574,33 @@ $tb->add_delete_button();
 	**/
 	function print_orders($arr)
 	{
+		if($_GET["y"])
+		{
+			set_time_limit(1800);
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_SELL_ORDER,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"payment_type" => 668535,
+				"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, mktime(0,0,0,1,25,2010), mktime(0,0,0,1,27,2011)),
+			));
+			print $ol->count();
+
+			foreach($ol-> arr() as $o)
+			{$order_data = $o->meta("order_data");
+				print $o->id()." - " . $o->prop("purchaser.name"). " - " .  $order_data["personalcode"]."<br>";
+
+
+			}
+			
+die();
+
+			$arr["sel"] = $ol->ids();
+		}
+
+
+
+
 		$res = "";
 //		fopen("http://games.swirve.com/utopia/login.htm");
 //		die();
@@ -8558,8 +8753,13 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 		$ui = get_instance(CL_USER);
 		$count = 0;
 		$total_sum = 0;
+		if($this->can("view" , $arr["obj_inst"]->prop("conf.owner")))
+		{
+			$owner = obj($arr["obj_inst"]->prop("conf.owner"));
+		}
 		foreach($ol->arr() as $o)
 		{
+			enter_function("orders_table_loop");
 			$count++;
 			$other_rels = $o->prop("related_orders");
 			$rel_arr = array();
@@ -8575,7 +8775,8 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 					$cnum = $so->prop("number");
 					$rel_arr[] = html::obj_change_url($so, $cnum ? $cnum : t("(Puudub)"));
 				}
-			}
+			}exit_function("orders_table_loop");
+enter_function("orders_table_loop3");
 			$cnum = $o->prop("number");
 			$cid = $o->prop("job");
 			if($this->can("view", $cid))
@@ -8595,14 +8796,11 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 			}
 			$add_row = null;
 			$sum = 0;
-			$conn = $o->connections_from(array(
-				"type" => "RELTYPE_ROW",
-			));
-			foreach($conn as $c)
-			{
-				$row = $c->to();
-				$sum += $row->prop("amount") * $row->prop("price");
-			}
+			exit_function("orders_table_loop3");
+enter_function("orders_table_loop35");
+			$sum+= $o->get_sum();
+exit_function("orders_table_loop35");
+enter_function("orders_table_loop2");
 			$total_sum+=$sum;
 			if(($group == "purchase_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_PURCHASE_MANAGER_WORKSPACE) || ($group == "sell_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_SALES_MANAGER_WORKSPACE))
 			{
@@ -8697,15 +8895,16 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 				}
 				//$add_row .= "<br />";
 			}
-
+exit_function("orders_table_loop2");
+enter_function("orders_table_loop1.5");
 			$cust_code = "";
-			if($this->can("view" , $o->prop("purchaser")) && $this->can("view" , $arr["obj_inst"]->prop("conf.owner")))
+			if($this->can("view" , $o->prop("purchaser")) && $owner)
 			{
-				$orderer_object = obj($o->prop("purchaser"));
-				$cust_rel = $orderer_object->get_customer_relation(obj($arr["obj_inst"]->prop("conf.owner")), true);
+				$cust_rel = $o->get_customer_relation($owner, true);
 				$cust_code =  html::obj_change_url($cust_rel , $cust_rel->id());
 			}
-
+exit_function("orders_table_loop1.5");
+enter_function("orders_table_loop1");
 			$t->define_data(array(
 				"nr" => $count,
 				"number" => html::obj_change_url($o,  $cnum ? $cnum : t("(Puudub)")),
@@ -8736,7 +8935,7 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 				"color" => ($dealnow)?"#FF4444":"",
 				"now" => $dealnow,
 				"add_row" => $add_row?array($add_row, array("style" => "background-color: #BBBBBB; height: 12px;")):"",
-			));
+			));exit_function("orders_table_loop1");
 		}
 		//$t->set_lower_titlebar_display(true);
 		$time_capt = "";
@@ -9591,7 +9790,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			"persist_state" => 1,
 			"get_branch_func" => $gbf,
 		));
-	
+	//v6tsin "all" maha siit et see jama kiiremini liiguks
 		foreach(array("", "yesterday" , "today" , "tomorrow" , "lastweek" , "thisweek" , "nextweek", "lastmonth" , "thismonth", "nextmonth", "all") as $id => $val)
 		{
 			switch($g)
@@ -9599,8 +9798,9 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 				case "purchase_orders":
 				case "sell_orders":
 					$arr["request"]["filt_time"] = $val;
-					$ol = $this->_get_orders_ol($arr);
-					${"count".$id} = $ol->count();
+//					$ol = $this->_get_orders_ol($arr);
+//					${"count".$id} = $ol->count();
+					${"count".$id} = " ";//$ol->count();
 					break;
 				case "purchase_notes":
 				case "purchase_bills":
@@ -12464,6 +12664,9 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 
 	function _get_product_management_category_tree($arr)
 	{
+
+		enter_function("product_management_category_tree1");
+
 		$ret = "";
 		$types = $arr["obj_inst"]->get_product_category_types();
 //		if(!$types->count())
@@ -12491,14 +12694,22 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			        "params" => array("cat" => null)
 			) 
 		));
+
+		//kui keegi n2eb v6imalust, et m6nel inimesel on v2hem 6igusi erinevate tootekategooriate n2gemiseks, siis v6tku see maha
+		//mulle ei tundu aktuaalne igatahes - Marko
+		aw_disable_acl();
+
 		$cats = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 			"parent" => $prod_folder,
 			"lang_id" => array(),
 			"site_id" => array(), 
-			"sort_by" => "name asc"
+			"sort_by" => "name asc",
+			"status" => array(1,2),
 		));
-
+		aw_restore_acl();
+		exit_function("product_management_category_tree1");/*
+		enter_function("product_management_category_tree2");
 		foreach($cats->arr() as $id => $cat)
 		{
 			$tv->add_item($prod_folder,array(
@@ -12510,6 +12721,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 				        "params" => array("cat" => $id),
 				)
 			));
+
 			$this->add_prod_management_leaf($tv , $id);
 		}
 		$ret .= html::div(array(
@@ -12524,7 +12736,8 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 //-------------------------------- kategooriate tyypide puud
 
 
-
+		exit_function("product_management_category_tree2");*/
+		enter_function("product_management_category_tree3");
 		foreach($types->arr() as $id => $cat)
 		{
 			$t = new treeview();
@@ -12555,6 +12768,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			));
 	//		$ret .= "<div style='border: 1px solid gray; background-color: white;margin:5px;'>".$t->get_html()."</div>";
 		}
+		exit_function("product_management_category_tree3");
 		$arr["prop"]["value"] = $ret;
 		return PROP_OK;
 	}
@@ -12597,6 +12811,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		{
 			return;
 		}
+
 		$o = obj($parent);
 		$cats = $o->get_categories();
 
@@ -12611,6 +12826,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 				        "params" => array("cat_".$parent => $id)
 				)
 			));
+
 			$this->add_cat_type_leaf($t , $id);
 		}
 	}
@@ -13092,7 +13308,38 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 		return $content;
 	}
 
-
+	/**
+		@attrib name=ajax_set_property all_args=1
+	**/
+	public function ajax_set_property($arr)
+	{
+		$shop = obj($arr["id"]);
+		foreach($arr["sel"] as $id)
+		{
+			if($this->can("view" , $id))
+			{
+				$o = obj($id);
+				switch($o->class_id())
+				{
+					case CL_SHOP_PACKET:
+						foreach($arr as $key => $val)
+						{
+							switch($key)
+							{
+								case "active":
+									$o->set_prop("status" , $val);
+									$o->save();
+									break;
+								default:
+									break;
+							}
+						}
+						break;
+				}
+			}
+		}
+		die();
+	}
 
 
 }

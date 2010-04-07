@@ -13,7 +13,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/tabpanel.aw:59 classes/vcl/tabpanel.aw:238
+#: classes/vcl/tabpanel.aw:59 classes/vcl/tabpanel.aw:239
 msgid "first"
 msgstr ""
 

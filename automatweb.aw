@@ -111,13 +111,6 @@ class automatweb
 
 		if (!self::$default_cfg_loaded)
 		{
-			/* TMP */
-			ini_set("session.save_handler", "files");
-			session_name("automatweb");
-			session_start();
-			_aw_global_init();
-			/* END TMP */
-
 			// load default configuration
 			load_config(array(AW_DIR . "aw.ini"), AW_DIR . "files/ini.cache.aw");
 			self::$default_cfg_loaded = true;

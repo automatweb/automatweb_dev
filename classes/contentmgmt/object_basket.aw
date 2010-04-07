@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.22 2009/08/31 15:06:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.23 2010/01/21 10:43:34 dragut Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -233,6 +233,7 @@ class object_basket extends class_base
 	**/
 	function get_basket_content($o, $all = false)
 	{
+		enter_function("object_basket::get_basket_content");
 		$rel = $o->connections_to(array(
 			"from.class_id" => CL_OBJECT_BASKET,
 			"type" => "RELTYPE_OBJECT_BASKET",
@@ -251,13 +252,18 @@ class object_basket extends class_base
 		}
 		elseif ($bt[OBJ_BASKET_SESSION])
 		{
-			$rv = safe_array($_SESSION["object_basket"][$o->id()]["content"]);
+			$rv = array();
+			if (!empty($_SESSION["object_basket"]))
+			{
+				$rv = safe_array($_SESSION["object_basket"][$o->id()]["content"]);
+			}
 		}
 		$o = $o_old?$o_old:$o; // if data comes from another basket, count still has to come from current
 		if ($o->max_items && count($rv) > $o->max_items && !$all)
 		{
 			$rv = array_slice($rv, -$o->max_items);
 		}
+		exit_function("object_basket::get_basket_content");
 		return $rv;
 	}
 

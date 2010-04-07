@@ -422,7 +422,7 @@ msgstr ""
 msgid "shop_packet::show(): no order center object selected!"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:732
+#: classes/applications/shop/shop_packet.aw:755
 msgid "Lisa tooted korvi"
 msgstr ""
 

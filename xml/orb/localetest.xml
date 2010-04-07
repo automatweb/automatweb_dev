@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="localetest" folder="www/automatweb_cvs/classes/applications/unittest" extends="testrunner">
+	<class name="localetest" folder="www/automatweb_stable/classes/applications/unittest" extends="testrunner">
 	</class>
 </orb>

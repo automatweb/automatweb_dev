@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="property_tree" folder="www/automatweb_cvs/classes/applications/class_designer" extends="class_base">
+	<class name="property_tree" folder="www/automatweb_stable/classes/applications/class_designer" extends="class_base">
 		<action name="ct_del">
 			<function name="ct_del">
 				<arguments>

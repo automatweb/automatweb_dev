@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="package_client" folder="www/automatweb_cvs/classes/applications/package_management" extends="class_base">
+	<class name="package_client" folder="www/automatweb_stable/classes/applications/package_management" extends="class_base">
 		<action name="download_package">
 			<function name="download_package">
 				<arguments>

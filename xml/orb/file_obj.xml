@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="file_obj" folder="www/automatweb_cvs/classes/contentmgmt" extends="_int_object">
+	<class name="file_obj" folder="www/automatweb_stable/classes/contentmgmt" extends="_int_object">
 		<action name="get_url">
 			<function name="get_url">
 				<arguments>
