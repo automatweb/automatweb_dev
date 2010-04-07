@@ -33,7 +33,7 @@ class ml_mail_gen extends run_in_background
 	
 	function bg_run_step($o)
 	{
-		arr($o);
+	//	arr($o);
 		//if (rand(1,20) < 5) {arr("die....!"); die(); }
 		// process step
 		aw_disable_acl();
@@ -105,12 +105,12 @@ class ml_mail_gen extends run_in_background
 		$from_file = $members["from_file"];
 		set_time_limit(0);
 
-	print 'already generated mails:';arr($this->made_mails);
-		
+	print 'already generated mails:';arr(sizeof($this->made_mails));
+		flush();
 		$mail_object = obj($arr["mail_id"]);
 		$address_selection = $mail_object->meta("chosen_before_sent");
 
-	print 'selected oids:';arr($address_selection);
+//	print 'selected oids:';arr($address_selection);
 
 		foreach($members as $member)
 		{
@@ -216,8 +216,8 @@ class ml_mail_gen extends run_in_background
 		//$vars = join(",", $used_vars);
 		//$this->quote($vars);
 
-	print $target;
-
+	print "genereerib - ".$target."<br>";
+flush();
 		// there is an additional field mail_sent in that table with a default value of 0
 		$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom,qid,target) VALUES ('$mid','$member','".aw_global_get("uid")."','$lid','".time()."','$vars','$message','$subject','$mailfrom','$qid','$target')");
 		//3) process queue then only retrieves messages from that table where mail_sent is 
@@ -330,7 +330,7 @@ class ml_mail_gen extends run_in_background
 		$add_per = substr_count($message, '#isik#');
 		$add_pro = substr_count($message, '#ametinimetus#');
 		$add_sec = substr_count($message, '#osakond#');
-arr($obj); arr($arr["member_id"]); arr($add_co); arr($add_pro);
+//arr($obj); arr($arr["member_id"]); arr($add_co); arr($add_pro);
 		if($obj && ($add_pro || $add_co || $add_sec))
 		{
 			$member = obj($arr["member_id"]);

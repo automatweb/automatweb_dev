@@ -378,18 +378,6 @@ msgstr ""
 msgid "Omaduse Vaikimisi pealkirja stiil (def_caption_style) help"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:prop_def_comment_style
-msgid "Omaduse Vaikimisi kommentaari stiil (def_comment_style) caption"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:prop_def_comment_style_comment
-msgid "Omaduse Vaikimisi kommentaari stiil (def_comment_style) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:prop_def_comment_style_help
-msgid "Omaduse Vaikimisi kommentaari stiil (def_comment_style) help"
-msgstr ""
-
 # classes/contentmgmt/webform.aw:prop_def_prop_style
 #: classes/contentmgmt/webform.aw:prop_def_prop_style
 msgid "Omaduse Vaikimisi elemendi stiil (def_prop_style) caption"

@@ -113,18 +113,18 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_comment.aw:79
+#: classes/contentmgmt/forum/forum_comment.aw:76
 msgid "--vali--"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_comment.aw:80
+#: classes/contentmgmt/forum/forum_comment.aw:77
 msgid "Positiivne"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_comment.aw:81
+#: classes/contentmgmt/forum/forum_comment.aw:78
 msgid "Neutraalne"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_comment.aw:82
+#: classes/contentmgmt/forum/forum_comment.aw:79
 msgid "Negatiivne"
 msgstr ""

@@ -10,7 +10,6 @@ if (!defined("AW_DIR"))
 require_once AW_DIR . "lib/errorhandling" . AW_FILE_EXT;
 require_once AW_DIR . "lib/config" . AW_FILE_EXT;
 require_once AW_DIR . "classes/core/util/class_index" . AW_FILE_EXT;
-require_once AW_DIR . "lib/defs" . AW_FILE_EXT;
 
 // other. later perhaps implement conditional loading.
 require_once AW_DIR . "lib/core/obj/object" . AW_FILE_EXT;

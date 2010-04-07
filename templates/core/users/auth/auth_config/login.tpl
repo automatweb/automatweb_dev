@@ -160,10 +160,10 @@
 				<tr>
 					<td class="left">
 						<p>O&Uuml; Struktuur Varahaldus</p>
-						<p>Aadress: P&auml;rnu mnt. 158b, 11317, Tallinn</p>
+						<p>Aadress: P&auml;rnu mnt. 158/1, 11317, Tallinn</p>
 					</td>
 					<td class="right">
-						<p>Infotelefon: 655 8336</p>
+						<p>Infotelefon: 615 4553</p>
 						<p>E-post: <a href="mailto:info@automatweb.com">info@automatweb.com</a></p>
 					</td>
 				</tr>

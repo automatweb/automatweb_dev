@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -11,18 +11,6 @@ msgstr ""
 
 #: classes/common/country/country_administrative_unit.aw:class_953_help
 msgid "Klassi Halduspiirkond v2 help"
-msgstr ""
-
-#: classes/common/country/country_administrative_unit.aw:prop_administrative_structure
-msgid "Omaduse  (administrative_structure) caption"
-msgstr ""
-
-#: classes/common/country/country_administrative_unit.aw:prop_administrative_structure_comment
-msgid "Omaduse  (administrative_structure) kommentaar"
-msgstr ""
-
-#: classes/common/country/country_administrative_unit.aw:prop_administrative_structure_help
-msgid "Omaduse  (administrative_structure) help"
 msgstr ""
 
 #: classes/common/country/country_administrative_unit.aw:prop_subclass
@@ -35,6 +23,30 @@ msgstr ""
 
 #: classes/common/country/country_administrative_unit.aw:prop_subclass_help
 msgid "Omaduse Tüüp (subclass) help"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_complete_name
+msgid "Omaduse T&auml;isnimi (complete_name) caption"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_complete_name_comment
+msgid "Omaduse T&auml;isnimi (complete_name) kommentaar"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_complete_name_help
+msgid "Omaduse T&auml;isnimi (complete_name) help"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_alt_name
+msgid "Omaduse Paralleelnimi (alt_name) caption"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_alt_name_comment
+msgid "Omaduse Paralleelnimi (alt_name) kommentaar"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_alt_name_help
+msgid "Omaduse Paralleelnimi (alt_name) help"
 msgstr ""
 
 #: classes/common/country/country_administrative_unit.aw:prop_parent
@@ -73,24 +85,40 @@ msgstr ""
 msgid "Omaduse Vali kõrgem halduspiirkond (parent_select) help"
 msgstr ""
 
-#: classes/common/country/country_administrative_unit.aw:prop_transl
-msgid "Omaduse T&otilde;lgi (transl) caption"
+#: classes/common/country/country_administrative_unit.aw:prop_ext_id_1
+msgid "Omaduse Identifikaator v&auml;lises s&uuml;steemis 1 (ext_id_1) caption"
 msgstr ""
 
-#: classes/common/country/country_administrative_unit.aw:prop_transl_comment
-msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+#: classes/common/country/country_administrative_unit.aw:prop_ext_id_1_comment
+msgid "Omaduse Identifikaator v&auml;lises s&uuml;steemis 1 (ext_id_1) kommentaar"
 msgstr ""
 
-#: classes/common/country/country_administrative_unit.aw:prop_transl_help
-msgid "Omaduse T&otilde;lgi (transl) help"
+#: classes/common/country/country_administrative_unit.aw:prop_ext_id_1_help
+msgid "Omaduse Identifikaator v&auml;lises s&uuml;steemis 1 (ext_id_1) help"
 msgstr ""
 
-#: classes/common/country/country_administrative_unit.aw:group_transl
-msgid "Grupi T&otilde;lgi (transl) pealkiri"
+#: classes/common/country/country_administrative_unit.aw:prop_administrative_structure
+msgid "Omaduse  (administrative_structure) caption"
 msgstr ""
 
-#: classes/common/country/country_administrative_unit.aw:group_transl_help
-msgid "Grupi T&otilde;lgi (transl) help"
+#: classes/common/country/country_administrative_unit.aw:prop_administrative_structure_comment
+msgid "Omaduse  (administrative_structure) kommentaar"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_administrative_structure_help
+msgid "Omaduse  (administrative_structure) help"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_indexed
+msgid "Omaduse  (indexed) caption"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_indexed_comment
+msgid "Omaduse  (indexed) kommentaar"
+msgstr ""
+
+#: classes/common/country/country_administrative_unit.aw:prop_indexed_help
+msgid "Omaduse  (indexed) help"
 msgstr ""
 
 #: classes/common/country/country_administrative_unit.aw:rel_RELTYPE_PARENT_ADMINISTRATIVE_UNIT

@@ -157,6 +157,18 @@ msgstr ""
 msgid "Omaduse L&auml;hetusviis (transp_type) help"
 msgstr ""
 
+#: classes/applications/shop/shop_sell_order.aw:prop_shop_delivery_type
+msgid "Omaduse Poe kohaletoimetamise viis (shop_delivery_type) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_shop_delivery_type_comment
+msgid "Omaduse Poe kohaletoimetamise viis (shop_delivery_type) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_shop_delivery_type_help
+msgid "Omaduse Poe kohaletoimetamise viis (shop_delivery_type) help"
+msgstr ""
+
 #: classes/applications/shop/shop_sell_order.aw:prop_currency
 msgid "Omaduse Valuuta (currency) caption"
 msgstr ""
@@ -205,6 +217,18 @@ msgstr ""
 msgid "Omaduse Staatus (order_status) help"
 msgstr ""
 
+#: classes/applications/shop/shop_sell_order.aw:prop_channel
+msgid "Omaduse M&uuml;&uuml;gikanal (channel) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_channel_comment
+msgid "Omaduse M&uuml;&uuml;gikanal (channel) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:prop_channel_help
+msgid "Omaduse M&uuml;&uuml;gikanal (channel) help"
+msgstr ""
+
 #: classes/applications/shop/shop_sell_order.aw:prop_taxed
 msgid "Omaduse Maks (taxed) caption"
 msgstr ""
@@ -227,18 +251,6 @@ msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_payment_type_help
 msgid "Omaduse Maksetingimus (payment_type) help"
-msgstr ""
-
-#: classes/applications/shop/shop_sell_order.aw:prop_sell_channel
-msgid "Omaduse M&uuml;&uuml;gikanal (sell_channel) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_sell_order.aw:prop_sell_channel_comment
-msgid "Omaduse M&uuml;&uuml;gikanal (sell_channel) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_sell_order.aw:prop_sell_channel_help
-msgid "Omaduse M&uuml;&uuml;gikanal (sell_channel) help"
 msgstr ""
 
 #: classes/applications/shop/shop_sell_order.aw:prop_art_toolbar
@@ -309,38 +321,58 @@ msgstr ""
 msgid "Seose Aadress (RELTYPE_ADDRESS) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:116
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_CHANNEL
+msgid "Seose M&uuml;&uuml;gikanal (RELTYPE_CHANNEL) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_RELTYPE_CHANNEL
+msgid "Seose M&uuml;&uuml;gikanal (RELTYPE_RELTYPE_CHANNEL) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:rel_RELTYPE_DELIVERY_METHOD
+msgid "Seose Poe kohaletoimetamise viis (RELTYPE_DELIVERY_METHOD) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:125
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:117
+#: classes/applications/shop/shop_sell_order.aw:126
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:118
+#: classes/applications/shop/shop_sell_order.aw:127
 msgid "Katkestatud"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:119
+#: classes/applications/shop/shop_sell_order.aw:128
 msgid "Saadetud"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:120
+#: classes/applications/shop/shop_sell_order.aw:129
 msgid "T&auml;idetud"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:230
+#: classes/applications/shop/shop_sell_order.aw:130
+msgid "T&ouml;&ouml;tlemisel"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:274
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:235
+#: classes/applications/shop/shop_sell_order.aw:279
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:240
+#: classes/applications/shop/shop_sell_order.aw:284
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_sell_order.aw:245
+#: classes/applications/shop/shop_sell_order.aw:289
 msgid "Summa"
+msgstr ""
+
+#: classes/applications/shop/shop_sell_order.aw:331
+msgid "Hinnakirja<br>alusel"
 msgstr ""

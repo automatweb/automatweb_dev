@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_order" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
+	<class name="shop_order" folder="www/automatweb_stable/classes/applications/shop" extends="class_base">
 		<action name="bank_return" nologin="1">
 			<function name="bank_return">
 				<arguments>

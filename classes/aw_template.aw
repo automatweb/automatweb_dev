@@ -146,6 +146,7 @@ class aw_template extends core
 			"status_msg" => aw_global_get("status_msg"),
 			"baseurl" => aw_ini_get("baseurl"),
 			"baseurl_ssl" => str_replace("http", "https", aw_ini_get("baseurl")),
+			"baseurl_rel" => str_replace("http:", "", aw_ini_get("baseurl")),
 			"cur_lang_id" => aw_global_get("lang_id"),
 			"current_url" => urlencode(get_ru())
 		);

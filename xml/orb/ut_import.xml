@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ut_import" folder="www/automatweb_cvs/classes/applications/personnel_import/ut_xml" extends="class_base">
+	<class name="ut_import" folder="www/automatweb_stable/classes/applications/personnel_import/ut_xml" extends="class_base">
 		<action name="make_master_import_happy">
 			<function name="make_master_import_happy">
 				<arguments>

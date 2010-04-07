@@ -29,7 +29,7 @@ msgstr "Project"
 #: classes/applications/crm/crm_company_bills_impl.aw:1009
 #: classes/applications/crm/crm_company_bills_impl.aw:1294
 #: classes/applications/crm/crm_company_bills_impl.aw:1380
-#: classes/applications/crm/crm_company_bills_impl.aw:3127
+#: classes/applications/crm/crm_company_bills_impl.aw:3135
 msgid "Klient"
 msgstr "Customer"
 
@@ -78,7 +78,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_bills_impl.aw:954
 #: classes/applications/crm/crm_company_bills_impl.aw:2015
-#: classes/applications/crm/crm_company_bills_impl.aw:3487
+#: classes/applications/crm/crm_company_bills_impl.aw:3495
 msgid "Lisa"
 msgstr ""
 
@@ -100,7 +100,7 @@ msgid "Valitud t&ouml;&ouml;d on teostatud erinevatele klientidele!"
 msgstr ""
 
 #: classes/applications/crm/crm_company_bills_impl.aw:1003
-#: classes/applications/crm/crm_company_bills_impl.aw:3548
+#: classes/applications/crm/crm_company_bills_impl.aw:3556
 msgid "Arve"
 msgstr ""
 
@@ -120,7 +120,7 @@ msgid "OID"
 msgstr ""
 
 #: classes/applications/crm/crm_company_bills_impl.aw:1079
-#: classes/applications/crm/crm_company_bills_impl.aw:3542
+#: classes/applications/crm/crm_company_bills_impl.aw:3550
 msgid "Nimi"
 msgstr ""
 
@@ -182,12 +182,12 @@ msgid "Laekumiskuup&auml;ev"
 msgstr ""
 
 #: classes/applications/crm/crm_company_bills_impl.aw:1387
-#: classes/applications/crm/crm_company_bills_impl.aw:3076
+#: classes/applications/crm/crm_company_bills_impl.aw:3084
 msgid "Kliendihaldur"
 msgstr "Client manager"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:1394
-#: classes/applications/crm/crm_company_bills_impl.aw:3021
+#: classes/applications/crm/crm_company_bills_impl.aw:3025
 msgid "Projektijuht"
 msgstr ""
 
@@ -335,86 +335,86 @@ msgstr ""
 msgid "Arvele"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2834
+#: classes/applications/crm/crm_company_bills_impl.aw:2838
 msgid "K&otilde;ik staatused"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2914
+#: classes/applications/crm/crm_company_bills_impl.aw:2918
 msgid "K&otilde;ik ajavahemikud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2920
-#: classes/applications/crm/crm_company_bills_impl.aw:2970
+#: classes/applications/crm/crm_company_bills_impl.aw:2924
+#: classes/applications/crm/crm_company_bills_impl.aw:2974
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2921
+#: classes/applications/crm/crm_company_bills_impl.aw:2925
 msgid "&Uuml;leelmine kuu"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2922
-#: classes/applications/crm/crm_company_bills_impl.aw:3188
+#: classes/applications/crm/crm_company_bills_impl.aw:2926
+#: classes/applications/crm/crm_company_bills_impl.aw:3196
 msgid "Eelmine kuu"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2923
+#: classes/applications/crm/crm_company_bills_impl.aw:2927
 msgid "K&auml;esolev kuu"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2924
-#: classes/applications/crm/crm_company_bills_impl.aw:3259
+#: classes/applications/crm/crm_company_bills_impl.aw:2928
+#: classes/applications/crm/crm_company_bills_impl.aw:3267
 msgid "J&auml;rgmine kuu"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2925
+#: classes/applications/crm/crm_company_bills_impl.aw:2929
 msgid "K&auml;esolev aasta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2926
+#: classes/applications/crm/crm_company_bills_impl.aw:2930
 msgid "Eelmine aasta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2980
+#: classes/applications/crm/crm_company_bills_impl.aw:2984
 msgid "Saadetud arved"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2986
+#: classes/applications/crm/crm_company_bills_impl.aw:2990
 msgid "Saadetud ja laekumata"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2987
+#: classes/applications/crm/crm_company_bills_impl.aw:2991
 msgid "Laekumata &uuml;le makset&auml;htaja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2988
+#: classes/applications/crm/crm_company_bills_impl.aw:2992
 msgid "Laekumata &uuml;le tolerantsi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:2989
+#: classes/applications/crm/crm_company_bills_impl.aw:2993
 msgid "Laekumata kokku"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:3100
+#: classes/applications/crm/crm_company_bills_impl.aw:3108
 msgid "&Uuml;ksus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:3183
+#: classes/applications/crm/crm_company_bills_impl.aw:3191
 msgid "Periood"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:3223
+#: classes/applications/crm/crm_company_bills_impl.aw:3231
 msgid "Jooksev kuu"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:3295
+#: classes/applications/crm/crm_company_bills_impl.aw:3303
 msgid "K&otilde;ik perioodid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:3513
+#: classes/applications/crm/crm_company_bills_impl.aw:3521
 msgid "T&uuml;&uuml;bid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:3554
+#: classes/applications/crm/crm_company_bills_impl.aw:3562
 msgid "Sisu"
 msgstr ""
 

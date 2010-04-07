@@ -10,31 +10,31 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/groupware/task_object.aw:176 classes/applications/groupware/task_object.aw:185 classes/applications/groupware/task_object.aw:202
+#: classes/applications/groupware/task_object.aw:184 classes/applications/groupware/task_object.aw:193 classes/applications/groupware/task_object.aw:210
 msgid "Isiklik"
 msgstr ""
 
-#: classes/applications/groupware/task_object.aw:516
+#: classes/applications/groupware/task_object.aw:524
 msgid "tegevus"
 msgstr ""
 
-#: classes/applications/groupware/task_object.aw:562
+#: classes/applications/groupware/task_object.aw:570
 msgid "osalus"
 msgstr ""
 
-#: classes/applications/groupware/task_object.aw:673 classes/applications/groupware/task_object.aw:684
+#: classes/applications/groupware/task_object.aw:681 classes/applications/groupware/task_object.aw:692
 msgid "tund"
 msgstr ""
 
-#: classes/applications/groupware/task_object.aw:673 classes/applications/groupware/task_object.aw:684
+#: classes/applications/groupware/task_object.aw:681 classes/applications/groupware/task_object.aw:692
 msgid "tundi"
 msgstr ""
 
-#: classes/applications/groupware/task_object.aw:696
+#: classes/applications/groupware/task_object.aw:704
 msgid "p&auml;ev"
 msgstr ""
 
-#: classes/applications/groupware/task_object.aw:696
+#: classes/applications/groupware/task_object.aw:704
 msgid "p&auml;eva"
 msgstr ""
 

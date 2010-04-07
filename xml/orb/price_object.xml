@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="price_object" folder="www/automatweb_cvs/classes/common" extends="_int_object">
+	<class name="price_object" folder="www/automatweb_stable/classes/common" extends="_int_object">
 		<action name="get_price_objects" all_args="1">
 			<function name="get_price_objects">
 				<arguments>

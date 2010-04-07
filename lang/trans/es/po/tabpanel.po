@@ -9,16 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/tabpanel.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/tabpanel.aw:59 classes/vcl/tabpanel.aw:238
+#: classes/vcl/tabpanel.aw:59 classes/vcl/tabpanel.aw:239
 msgid "first"
 msgstr ""
 
 #: classes/vcl/tabpanel.aw:64
 msgid "second"
 msgstr ""
-

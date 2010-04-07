@@ -4,9 +4,18 @@
 @classinfo maintainer=voldemar
 */
 
-class crm_presentation_list extends crm_task_list
+class crm_presentation_list extends object_list
 {
-	public function filter($param, $task_list_param = array())
+	protected $user_role = crm_sales_obj::ROLE_GENERIC;
+
+	public function __construct($param = array())
+	{
+		$param["class_id"] = CL_CRM_PRESENTATION;
+		return parent::object_list($param);
+	}
+
+
+	public function filter($param)
 	{
 		$param["class_id"] = CL_CRM_PRESENTATION;
 		$param["lang_id"] = array();
@@ -15,6 +24,8 @@ class crm_presentation_list extends crm_task_list
 		$application = automatweb::$request->get_application();
 		if ($application->is_a(CL_CRM_SALES))
 		{ // special properties only if in sales application
+			$param["CL_CRM_PRESENTATION.RELTYPE_CUSTOMER_RELATION.seller"] = $application->prop("owner")->id();
+
 			// role specific constraints
 			$role = automatweb::$request->get_application()->get_current_user_role();
 			switch ($role)
@@ -33,14 +44,18 @@ class crm_presentation_list extends crm_task_list
 					break;
 
 				case crm_sales_obj::ROLE_SALESMAN:
+					$param["CL_CRM_PRESENTATION.RELTYPE_ROW.RELTYPE_IMPL"] = get_current_person(); // only salesman's own presentations
+					$param["CL_CRM_PRESENTATION.RELTYPE_ROW.primary"] = 1;
 					break;
 
 				case crm_sales_obj::ROLE_MANAGER:
 					break;
 			}
+
+			$param[] = new obj_predicate_sort(array("start" => "asc"));
 		}
 
-		return parent::filter($param, $task_list_param);
+		return parent::filter($param);
 	}
 
 	protected function _int_add_to_list($oid_arr)

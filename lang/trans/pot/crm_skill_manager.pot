@@ -86,31 +86,31 @@ msgstr ""
 msgid "Seose Tasemed (RELTYPE_LEVELS) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:131
+#: classes/applications/crm/crm_skill_manager.aw:132
 msgid "ID"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:137 classes/applications/crm/crm_skill_manager.aw:150
+#: classes/applications/crm/crm_skill_manager.aw:138 classes/applications/crm/crm_skill_manager.aw:151
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:158
+#: classes/applications/crm/crm_skill_manager.aw:159
 msgid "Vahepealkiri (ei saa siduda isikuga)"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:166
+#: classes/applications/crm/crm_skill_manager.aw:167
 msgid "Saab m&auml;&auml;rata taset"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:171
+#: classes/applications/crm/crm_skill_manager.aw:172
 msgid "Tasemed"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:177
+#: classes/applications/crm/crm_skill_manager.aw:178
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:207
+#: classes/applications/crm/crm_skill_manager.aw:209
 msgid "--vali--"
 msgstr ""
 

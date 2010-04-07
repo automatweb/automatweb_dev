@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mrp_workspace" folder="www/automatweb_cvs/classes/mrp" extends="class_base">
+	<class name="mrp_workspace" folder="www/automatweb_stable/classes/mrp" extends="class_base">
 		<action name="save_pj_comment">
 			<function name="save_pj_comment">
 				<arguments>

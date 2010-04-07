@@ -23,7 +23,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_1()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -33,7 +33,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_2()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -43,7 +43,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_3()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -53,7 +53,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_4()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -63,7 +63,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_5()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -73,7 +73,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_6()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -83,7 +83,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_7()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -93,7 +93,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_8()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -103,7 +103,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_9()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -113,7 +113,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_10()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -123,7 +123,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_11()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -133,7 +133,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_12()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -143,7 +143,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_13()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -153,7 +153,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_14()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -163,7 +163,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_15()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -173,7 +173,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_16()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -183,7 +183,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_17()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -193,7 +193,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_18()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -203,7 +203,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_19()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -213,7 +213,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_20()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -223,7 +223,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_21()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -233,7 +233,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_22()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -243,7 +243,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_23()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -253,7 +253,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_24()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -263,7 +263,7 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_25()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 
 	/**	
@@ -273,6 +273,6 @@ class object_data_list_test extends UnitTestCase
 	function test_string2float_26()
 	{
 		return;
-		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == float("35234.43"));
+		//$this->assertTrue(aw_math_calc::string2float("$35,234.43") == (float) "35234.43");
 	}
 }

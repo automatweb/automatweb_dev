@@ -422,11 +422,11 @@ msgid "Grupi Probleemid (problems) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:group_bugs
-msgid "Grupi Ülesanded (bugs) pealkiri"
+msgid "Grupi &Uuml;lesanded (bugs) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:group_bugs_help
-msgid "Grupi Ülesanded (bugs) help"
+msgid "Grupi &Uuml;lesanded (bugs) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_CUSTOMER
@@ -505,22 +505,22 @@ msgstr ""
 msgid "Kujundusosa Andmed (data) pealkiri"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:254
-#: classes/applications/bug_o_matic_3000/development_order.aw:326
-#: classes/applications/bug_o_matic_3000/development_order.aw:439
-#: classes/applications/bug_o_matic_3000/development_order.aw:457
+#: classes/applications/bug_o_matic_3000/development_order.aw:248
+#: classes/applications/bug_o_matic_3000/development_order.aw:322
+#: classes/applications/bug_o_matic_3000/development_order.aw:451
+#: classes/applications/bug_o_matic_3000/development_order.aw:469
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:512
+#: classes/applications/bug_o_matic_3000/development_order.aw:530
 msgid "Tagasiside kellelt muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:527
+#: classes/applications/bug_o_matic_3000/development_order.aw:545
 msgid "Prioriteet muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:539
+#: classes/applications/bug_o_matic_3000/development_order.aw:557
 msgid "Staatus muudeti %s => %s"
 msgstr ""
 

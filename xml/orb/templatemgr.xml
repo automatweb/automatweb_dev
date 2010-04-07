@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="templatemgr" folder="www/automatweb_cvs/classes/core/util" extends="aw_template">
+	<class name="templatemgr" folder="www/automatweb_stable/classes/core/util" extends="aw_template">
 		<action name="get_template_folder_list" nologin="1">
 			<function name="get_template_folder_list">
 				<arguments>

@@ -53,6 +53,15 @@
             <caption>Kui leitakse ainult &amp;amp;uuml;ks toode, suuna detailvaatesse</caption>
       </property>
       <property>
+            <name>find_only_active</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <caption>Leitakse ainult aktiivseid tooteid</caption>
+      </property>
+      <property>
             <name>fld_tb</name>
             <group>folders</group>
             <table>objects</table>

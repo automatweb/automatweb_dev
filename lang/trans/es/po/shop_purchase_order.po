@@ -285,87 +285,91 @@ msgstr ""
 msgid "Seose Kommentaar (RELTYPE_COMMENT) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:119
+#: classes/applications/shop/shop_purchase_order.aw:120
 msgid "Katkestatud"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:120
+#: classes/applications/shop/shop_purchase_order.aw:121
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:121
+#: classes/applications/shop/shop_purchase_order.aw:122
 msgid "Saadetud"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:122
+#: classes/applications/shop/shop_purchase_order.aw:123
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:123
+#: classes/applications/shop/shop_purchase_order.aw:124
 msgid "T&auml;idetud"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:343
+#: classes/applications/shop/shop_purchase_order.aw:125
+msgid "T&ouml;&ouml;tlemisel"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:345
 msgid "%s rida"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:398
-#: classes/applications/shop/shop_purchase_order.aw:450
+#: classes/applications/shop/shop_purchase_order.aw:400
+#: classes/applications/shop/shop_purchase_order.aw:452
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:433
+#: classes/applications/shop/shop_purchase_order.aw:435
 msgid "Lisa read"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:439
+#: classes/applications/shop/shop_purchase_order.aw:441
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:509
+#: classes/applications/shop/shop_purchase_order.aw:511
 msgid "Artikkel"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:514
+#: classes/applications/shop/shop_purchase_order.aw:516
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:519
+#: classes/applications/shop/shop_purchase_order.aw:521
 msgid "Vajadus"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:524
+#: classes/applications/shop/shop_purchase_order.aw:526
 msgid "Tellitud kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:529
+#: classes/applications/shop/shop_purchase_order.aw:531
 msgid "Saadud kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:534
+#: classes/applications/shop/shop_purchase_order.aw:536
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:539
+#: classes/applications/shop/shop_purchase_order.aw:541
 msgid "&Uuml;hiku hind"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:544
+#: classes/applications/shop/shop_purchase_order.aw:546
 msgid "Hankija artiklikood"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:549
+#: classes/applications/shop/shop_purchase_order.aw:551
 msgid "Maksum&auml;&auml;r"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:554
+#: classes/applications/shop/shop_purchase_order.aw:556
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:559
+#: classes/applications/shop/shop_purchase_order.aw:561
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/shop/shop_purchase_order.aw:564
+#: classes/applications/shop/shop_purchase_order.aw:566
 msgid "Summa KMga"
 msgstr ""

@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="rostering_workplace" folder="www/automatweb_cvs/classes/applications/rostering" extends="class_base">
+	<class name="rostering_workplace" folder="www/automatweb_stable/classes/applications/rostering" extends="class_base">
 	</class>
 </orb>

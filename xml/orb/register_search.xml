@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="register_search" folder="www/automatweb_cvs/classes/applications/register" extends="class_base">
+	<class name="register_search" folder="www/automatweb_stable/classes/applications/register" extends="class_base">
 		<action name="delete">
 			<function name="delete">
 				<arguments>

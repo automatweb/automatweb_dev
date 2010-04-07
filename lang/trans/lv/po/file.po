@@ -409,88 +409,88 @@ msgstr ""
 msgid "Allkirjasta fail"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:313
+#: classes/contentmgmt/file.aw:314
 msgid "fail puudub"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:409
+#: classes/contentmgmt/file.aw:410
 msgid "Paiguta dokumenti"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:431
+#: classes/contentmgmt/file.aw:432
 msgid "V&otilde;imalikud asendused<br>"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:432
+#: classes/contentmgmt/file.aw:433
 msgid "#file# - faili nimi <br>"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:433
+#: classes/contentmgmt/file.aw:434
 msgid "#file_url# - link failile <br>"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:434
+#: classes/contentmgmt/file.aw:435
 msgid "#user_name# - muutja nimi"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:447
+#: classes/contentmgmt/file.aw:448
 msgid ""
 "User %s has added/changed the following file %s. Please click the link below to view the document \n"
 " %s"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:457
+#: classes/contentmgmt/file.aw:458
 msgid "Teavitus muutunud dokumendist"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:531
+#: classes/contentmgmt/file.aw:532
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:800
+#: classes/contentmgmt/file.aw:801
 msgid "faili ikoon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:919
+#: classes/contentmgmt/file.aw:920
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1561
+#: classes/contentmgmt/file.aw:1562
 msgid "Need either id or parent"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1784
+#: classes/contentmgmt/file.aw:1785
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1792
+#: classes/contentmgmt/file.aw:1793
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1867
+#: classes/contentmgmt/file.aw:1868
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1873
+#: classes/contentmgmt/file.aw:1874
 msgid "Kustuta"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1880
+#: classes/contentmgmt/file.aw:1881
 msgid "Saada teavitusmeil"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1890
+#: classes/contentmgmt/file.aw:1891
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1895
+#: classes/contentmgmt/file.aw:1896
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1900
+#: classes/contentmgmt/file.aw:1901
 msgid "Telefon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1905
+#: classes/contentmgmt/file.aw:1906
 msgid "E-mail"
 msgstr ""

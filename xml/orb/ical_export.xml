@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ical_export" folder="www/automatweb_cvs/classes/applications/calendar" extends="class_base">
+	<class name="ical_export" folder="www/automatweb_stable/classes/applications/calendar" extends="class_base">
 		<action name="sync_google" nologin="1" all_args="1">
 			<function name="sync_google">
 				<arguments>

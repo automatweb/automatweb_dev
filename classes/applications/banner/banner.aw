@@ -657,7 +657,7 @@ class banner extends class_base
 				switch($content_o->class_id())
 				{
 					case CL_IMAGE:
-						$i = get_instance("image");
+						$i = get_static_instance("image");
 						$img = $i->get_url_by_id($content_o->id());
 						if ($banner->prop("url") == "")
 						{

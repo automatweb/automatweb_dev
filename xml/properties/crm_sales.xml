@@ -34,112 +34,8 @@
             <reltype>RELTYPE_FOLDER</reltype>
             <clid>CL_MENU</clid>
             <parent>folders_box</parent>
-            <comment>Kaust kuhu salvestatakse ning kust loetakse selle m&amp;amp;uuml;&amp;amp;uuml;gikeskkonna esitlused</comment>
-            <caption>Esitluste kaust</caption>
-      </property>
-      <property>
-            <name>avg_call_duration_est</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>textbox</type>
-            <default>300</default>
-            <datatype>int</datatype>
-            <parent>folders_box</parent>
-            <comment>Hinnanguline keskmine m&amp;amp;uuml;&amp;amp;uuml;gik&amp;amp;otilde;ne kestus (sekundites)</comment>
-            <caption>K&amp;amp;otilde;nekestuse hinnang (s)</caption>
-      </property>
-      <property>
-            <name>call_result_busy_recall_time</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>textbox</type>
-            <default>300</default>
-            <datatype>int</datatype>
-            <parent>folders_box</parent>
-            <comment>Millise ajavahemiku j&amp;amp;auml;rel uuesti helistada kui number oli kinni (sekundites)</comment>
-            <caption>Uus k&amp;amp;otilde;ne kui nr. kinni (s)</caption>
-      </property>
-      <property>
-            <name>call_result_noanswer_recall_time</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>textbox</type>
-            <default>43200</default>
-            <datatype>int</datatype>
-            <parent>folders_box</parent>
-            <comment>Millise ajavahemiku j&amp;amp;auml;rel uuesti helistada kui numbril vastab automaatvastaja v&amp;amp;otilde;i k&amp;amp;otilde;nepost (sekundites). 0 t&amp;amp;auml;hendab</comment>
-            <caption>Uus k&amp;amp;otilde;ne kui automaatvastaja/k&amp;amp;otilde;nepost (s)</caption>
-      </property>
-      <property>
-            <name>call_result_outofservice_recall_time</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>textbox</type>
-            <default>86400</default>
-            <datatype>int</datatype>
-            <parent>folders_box</parent>
-            <comment>Millise ajavahemiku j&amp;amp;auml;rel uuesti helistada kui number on teeninduspiirkonnast v&amp;amp;auml;ljas (sekundites)</comment>
-            <caption>Uus k&amp;amp;otilde;ne kui tel. v&amp;amp;auml;ljas (s)</caption>
-      </property>
-      <property>
-            <name>call_result_recall_retries</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>textbox</type>
-            <default>5</default>
-            <datatype>int</datatype>
-            <parent>folders_box</parent>
-            <comment>Mitu korda uuesti helistada kui kinni, ei vasta, on v&amp;amp;auml;ljas v&amp;amp;otilde;i automaatvastaja</comment>
-            <caption>Uuesti proovida enim (korda)</caption>
-      </property>
-      <property>
-            <name>avg_presentation_duration_est</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>textbox</type>
-            <default>7200</default>
-            <datatype>int</datatype>
-            <parent>folders_box</parent>
-            <comment>Hinnanguline keskmine m&amp;amp;uuml;&amp;amp;uuml;giesinduse kestus (sekundites)</comment>
-            <caption>Esitluse kestuse hinnang (s)</caption>
-      </property>
-      <property>
-            <name>autocomplete_options_limit</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>textbox</type>
-            <default>20</default>
-            <datatype>int</datatype>
-            <parent>folders_box</parent>
-            <comment>Mitu valikut pakkuda autocomplete otsingutes</comment>
-            <caption>Autocomplete valikuid</caption>
-      </property>
-      <property>
-            <name>tables_rows_per_page</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>textbox</type>
-            <default>25</default>
-            <datatype>int</datatype>
-            <parent>folders_box</parent>
-            <comment>Mitu lehel rida kuvada tabelites</comment>
-            <caption>Ridu tabelites</caption>
+            <comment>Kaust kuhu salvestatakse ning kust loetakse selle m&amp;amp;uuml;&amp;amp;uuml;gikeskkonna presentatsioonid</comment>
+            <caption>Presentatsioonide kaust</caption>
       </property>
       <property>
             <name>role_profession_data_entry_clerk</name>
@@ -339,193 +235,6 @@
             <caption>Juht</caption>
       </property>
       <property>
-            <name>cfgf_presentation_generic</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <parent>presentation_cfg_box</parent>
-            <caption>K&amp;amp;otilde;ik kasutajad</caption>
-      </property>
-      <property>
-            <name>cfgf_presentation_data_entry_clerk</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <parent>presentation_cfg_box</parent>
-            <caption>Andmesisestaja</caption>
-      </property>
-      <property>
-            <name>cfgf_presentation_telemarketing_salesman</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <parent>presentation_cfg_box</parent>
-            <caption>Telemarketingit&amp;amp;ouml;&amp;amp;ouml;taja</caption>
-      </property>
-      <property>
-            <name>cfgf_presentation_telemarketing_manager</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <parent>presentation_cfg_box</parent>
-            <caption>Telemarketingi juht</caption>
-      </property>
-      <property>
-            <name>cfgf_presentation_salesman</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <parent>presentation_cfg_box</parent>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
-      </property>
-      <property>
-            <name>cfgf_presentation_manager</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>settings</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <parent>presentation_cfg_box</parent>
-            <caption>Juht</caption>
-      </property>
-      <property>
-            <name>contacts_toolbar</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>contacts_tree</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>treeview</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>contacts_tree_box</parent>
-      </property>
-      <property>
-            <name>contacts_list</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>contacts_vsplitbox</parent>
-      </property>
-      <property>
-            <name>cts_name</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <parent>contacts_search_box</parent>
-            <store>no</store>
-            <size>33</size>
-            <caption>Nimi</caption>
-      </property>
-      <property>
-            <name>cts_address</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <parent>contacts_search_box</parent>
-            <store>no</store>
-            <size>33</size>
-            <caption>Aadress</caption>
-      </property>
-      <property>
-            <name>cts_phone</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <parent>contacts_search_box</parent>
-            <store>no</store>
-            <size>33</size>
-            <caption>Telefon</caption>
-      </property>
-      <property>
-            <name>cts_lead_source</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <parent>contacts_search_box</parent>
-            <store>no</store>
-            <size>33</size>
-            <caption>Soovitaja</caption>
-      </property>
-      <property>
-            <name>cts_salesman</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>select</type>
-            <view_element>1</view_element>
-            <parent>contacts_search_box</parent>
-            <store>no</store>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi-&amp;lt;br/&amp;gt;esindaja</caption>
-      </property>
-      <property>
-            <name>cts_status</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>select</type>
-            <view_element>1</view_element>
-            <parent>contacts_search_box</parent>
-            <store>no</store>
-            <caption>Staatus</caption>
-      </property>
-      <property>
-            <name>cts_submit</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>contacts</group>
-            <type>submit</type>
-            <value>Otsi</value>
-            <view_element>1</view_element>
-            <parent>contacts_search_box</parent>
-            <store>no</store>
-            <caption>Otsi</caption>
-      </property>
-      <property>
             <name>calls_toolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -568,7 +277,20 @@
             <parent>calls_search_box</parent>
             <store>no</store>
             <size>33</size>
-            <caption>Kontakti nimi</caption>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>cs_salesman</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>calls</group>
+            <type>textbox</type>
+            <view_element>1</view_element>
+            <parent>calls_search_box</parent>
+            <store>no</store>
+            <size>33</size>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi-&amp;lt;br/&amp;gt;esindaja</caption>
       </property>
       <property>
             <name>cs_address</name>
@@ -581,7 +303,7 @@
             <parent>calls_search_box</parent>
             <store>no</store>
             <size>33</size>
-            <caption>Kontakti aadress</caption>
+            <caption>Aadress</caption>
       </property>
       <property>
             <name>cs_phone</name>
@@ -597,7 +319,7 @@
             <caption>Telefon</caption>
       </property>
       <property>
-            <name>cs_lead_source</name>
+            <name>cs_status</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -607,31 +329,7 @@
             <parent>calls_search_box</parent>
             <store>no</store>
             <size>33</size>
-            <caption>Soovitaja</caption>
-      </property>
-      <property>
-            <name>cs_salesman</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>calls</group>
-            <type>select</type>
-            <view_element>1</view_element>
-            <parent>calls_search_box</parent>
-            <store>no</store>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi-&amp;lt;br/&amp;gt;esindaja</caption>
-      </property>
-      <property>
-            <name>cs_status</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>calls</group>
-            <type>select</type>
-            <view_element>1</view_element>
-            <parent>calls_search_box</parent>
-            <store>no</store>
-            <caption>Kontakti staatus</caption>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>cs_submit</name>
@@ -647,156 +345,12 @@
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>presentations_toolbar</name>
+            <name>presentations_cal</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>presentations</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>presentations_tree</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>presentations</group>
-            <type>treeview</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>presentations_tree_box</parent>
-      </property>
-      <property>
-            <name>presentations_list</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>presentations</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>presentations_vsplitbox</parent>
-      </property>
-      <property>
-            <name>ps_name</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>presentations</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <parent>presentations_search_box</parent>
-            <store>no</store>
-            <size>33</size>
-            <caption>Kontakti nimi</caption>
-      </property>
-      <property>
-            <name>ps_address</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>presentations</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <parent>presentations_search_box</parent>
-            <store>no</store>
-            <size>33</size>
-            <caption>Kontakti aadress</caption>
-      </property>
-      <property>
-            <name>ps_phone</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>presentations</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <parent>presentations_search_box</parent>
-            <store>no</store>
-            <size>33</size>
-            <caption>Telefon</caption>
-      </property>
-      <property>
-            <name>ps_lead_source</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>presentations</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <parent>presentations_search_box</parent>
-            <store>no</store>
-            <size>33</size>
-            <caption>Soovitaja</caption>
-      </property>
-      <property>
-            <name>ps_salesman</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>presentations</group>
-            <type>select</type>
-            <view_element>1</view_element>
-            <parent>presentations_search_box</parent>
-            <store>no</store>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi-&amp;lt;br/&amp;gt;esindaja</caption>
-      </property>
-      <property>
-            <name>ps_status</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>presentations</group>
-            <type>select</type>
-            <view_element>1</view_element>
-            <parent>presentations_search_box</parent>
-            <store>no</store>
-            <caption>Staatus</caption>
-      </property>
-      <property>
-            <name>ps_submit</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>presentations</group>
-            <type>submit</type>
-            <value>Otsi</value>
-            <view_element>1</view_element>
-            <parent>presentations_search_box</parent>
-            <store>no</store>
-            <caption>Otsi</caption>
-      </property>
-      <property>
-            <name>personal_calendar</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>personal_calendar</group>
             <type>calendar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>general_calendar</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general_calendar</group>
-            <type>calendar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>contact_entry_toolbar</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>data_entry_contact_co</num_0>
-                  <num_1>data_entry_contact_person</num_1>
-            </group>
-            <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
@@ -814,6 +368,11 @@
                   <num_1>fake_phone</num_1>
                   <num_2>fake_mobile</num_2>
                   <num_3>fake_email</num_3>
+                  <num_4>fake_address_address</num_4>
+                  <num_5>fake_address_postal_code</num_5>
+                  <num_6>fake_address_city</num_6>
+                  <num_7>fake_address_county</num_7>
+                  <num_8>fake_address_country_relp</num_8>
             </props>
             <parent>contact_entry_form</parent>
             <caption>Kontakt (organisatsioon)</caption>
@@ -831,130 +390,16 @@
                   <num_0>lastname</num_0>
                   <num_1>firstname</num_1>
                   <num_2>gender</num_2>
-                  <num_3>fake_phone</num_3>
-                  <num_4>fake_email</num_4>
+                  <num_3>fake_address_address</num_3>
+                  <num_4>fake_address_postal_code</num_4>
+                  <num_5>fake_address_city</num_5>
+                  <num_6>fake_address_county</num_6>
+                  <num_7>fake_address_country</num_7>
+                  <num_8>fake_phone</num_8>
+                  <num_9>fake_email</num_9>
             </props>
             <parent>contact_entry_form</parent>
             <caption>Kontakt (isik)</caption>
-      </property>
-      <property>
-            <name>contact_entry_address_title</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>data_entry_contact_co</num_0>
-                  <num_1>data_entry_contact_person</num_1>
-            </group>
-            <type>text</type>
-            <store>no</store>
-            <parent>contact_entry_form</parent>
-            <caption>Aadress:</caption>
-      </property>
-      <property>
-            <name>contact_entry_address</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>data_entry_contact_co</num_0>
-                  <num_1>data_entry_contact_person</num_1>
-            </group>
-            <type>releditor</type>
-            <store>no</store>
-            <props>
-                  <num_0>country</num_0>
-                  <num_1>location_data</num_1>
-                  <num_2>location</num_2>
-                  <num_3>street</num_3>
-                  <num_4>house</num_4>
-                  <num_5>apartment</num_5>
-                  <num_6>postal_code</num_6>
-                  <num_7>po_box</num_7>
-            </props>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>location</num_1>
-                  <num_2>street</num_2>
-                  <num_3>house</num_3>
-                  <num_4>apartment</num_4>
-            </table_fields>
-            <reltype>RELTYPE_TMP1</reltype>
-            <parent>contact_entry_form</parent>
-      </property>
-      <property>
-            <name>contact_entry_separator1</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>data_entry_contact_co</num_0>
-                  <num_1>data_entry_contact_person</num_1>
-            </group>
-            <type>text</type>
-            <store>no</store>
-            <parent>contact_entry_form</parent>
-            <caption>&amp;amp;nbsp;</caption>
-      </property>
-      <property>
-            <name>contact_entry_salesman</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>data_entry_contact_co</num_0>
-                  <num_1>data_entry_contact_person</num_1>
-            </group>
-            <type>select</type>
-            <store>no</store>
-            <parent>contact_entry_form</parent>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindaja</caption>
-      </property>
-      <property>
-            <name>contact_entry_lead_source</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>data_entry_contact_co</num_0>
-                  <num_1>data_entry_contact_person</num_1>
-            </group>
-            <type>textbox</type>
-            <store>no</store>
-            <parent>contact_entry_form</parent>
-            <caption>Soovitaja</caption>
-      </property>
-      <property>
-            <name>contact_entry_lead_source_oid</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>data_entry_contact_co</num_0>
-                  <num_1>data_entry_contact_person</num_1>
-            </group>
-            <type>hidden</type>
-            <store>no</store>
-      </property>
-      <property>
-            <name>import_toolbar</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>data_entry_import</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>import_objects</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>data_entry_import</group>
-            <type>table</type>
-            <store>no</store>
-            <caption>Seadistatud impordid</caption>
       </property>
       <property>
             <name>contact_entry_space</name>
@@ -1023,43 +468,25 @@
             <settings>
                   <caption>Seaded</caption>
             </settings>
-            <contacts>
-                  <caption>Kontaktid</caption>
-                  <submit_method>get</submit_method>
-            </contacts>
             <calls>
                   <caption>K&amp;amp;otilde;ned</caption>
                   <submit_method>get</submit_method>
             </calls>
             <presentations>
                   <caption>Esitlused</caption>
-                  <submit_method>get</submit_method>
+                  <submit>no</submit>
             </presentations>
-            <calendar>
-                  <caption>Kalender</caption>
-                  <submit>no</submit>
-            </calendar>
-            <personal_calendar>
-                  <caption>Minu kalender</caption>
-                  <submit>no</submit>
-                  <parent>calendar</parent>
-            </personal_calendar>
-            <general_calendar>
-                  <caption>&amp;amp;Uuml;ldkalender</caption>
-                  <submit>no</submit>
-                  <parent>calendar</parent>
-            </general_calendar>
             <data_entry>
                   <caption>Sisestamine</caption>
             </data_entry>
-            <data_entry_contact_person>
-                  <caption>Kontakt (isik)</caption>
-                  <parent>data_entry</parent>
-            </data_entry_contact_person>
             <data_entry_contact_co>
                   <caption>Kontakt (organisatsioon)</caption>
                   <parent>data_entry</parent>
             </data_entry_contact_co>
+            <data_entry_contact_person>
+                  <caption>Kontakt (isik)</caption>
+                  <parent>data_entry</parent>
+            </data_entry_contact_person>
             <data_entry_import>
                   <caption>Import</caption>
                   <parent>data_entry</parent>
@@ -1096,16 +523,6 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>Seadete vorm</caption>
             </CFGFORM>
-            <IMPORT>
-                  <value>7</value>
-                  <clid>CL_CSV_IMPORT</clid>
-                  <caption>Kontaktide import</caption>
-            </IMPORT>
-            <TMP1>
-                  <value>8</value>
-                  <clid>CL_ADDRESS</clid>
-                  <caption>tmp1</caption>
-            </TMP1>
       </reltypes>
       <layout>
             <splitbox1>
@@ -1117,30 +534,17 @@
                   <area_caption></area_caption>
             </splitbox1>
             <splitbox2>
-                  <type>vbox</type>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
                   <closeable>1</closeable>
                   <area_caption>Kasutajaliidese&amp;amp;nbsp;vaadete&amp;amp;nbsp;konfiguratsioonid&amp;amp;nbsp;rollide&amp;amp;nbsp;kaupa</area_caption>
                   <group>settings</group>
             </splitbox2>
-            <splitbox21>
-                  <type>hbox</type>
-                  <width>50%:50%</width>
-                  <parent>splitbox2</parent>
-                  <group>settings</group>
-                  <area_caption></area_caption>
-            </splitbox21>
-            <splitbox22>
-                  <type>hbox</type>
-                  <width>50%:50%</width>
-                  <parent>splitbox2</parent>
-                  <group>settings</group>
-                  <area_caption></area_caption>
-            </splitbox22>
             <folders_box>
                   <type>vbox</type>
                   <parent>splitbox1</parent>
                   <closeable>1</closeable>
-                  <area_caption>&amp;amp;Uuml;ldseaded</area_caption>
+                  <area_caption>Kaustad</area_caption>
                   <group>settings</group>
             </folders_box>
             <roles_box>
@@ -1152,48 +556,18 @@
             </roles_box>
             <main_app_cfg_box>
                   <type>vbox</type>
-                  <parent>splitbox21</parent>
+                  <parent>splitbox2</parent>
+                  <closeable>1</closeable>
                   <area_caption>M&amp;amp;uuml;i&amp;amp;uuml;git&amp;amp;ouml;&amp;amp;ouml;laud</area_caption>
                   <group>settings</group>
             </main_app_cfg_box>
             <call_cfg_box>
                   <type>vbox</type>
-                  <parent>splitbox21</parent>
+                  <parent>splitbox2</parent>
+                  <closeable>1</closeable>
                   <area_caption>K&amp;amp;otilde;ne</area_caption>
                   <group>settings</group>
             </call_cfg_box>
-            <presentation_cfg_box>
-                  <type>vbox</type>
-                  <parent>splitbox22</parent>
-                  <area_caption>Esitlus</area_caption>
-                  <group>settings</group>
-            </presentation_cfg_box>
-            <contacts_vsplitbox>
-                  <type>hbox</type>
-                  <width>25%:75%</width>
-                  <group>contacts</group>
-                  <area_caption></area_caption>
-            </contacts_vsplitbox>
-            <contacts_box>
-                  <type>vbox</type>
-                  <parent>contacts_vsplitbox</parent>
-                  <group>contacts</group>
-                  <area_caption></area_caption>
-            </contacts_box>
-            <contacts_tree_box>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Kontaktide&amp;amp;nbsp;valik</area_caption>
-                  <parent>contacts_box</parent>
-                  <group>contacts</group>
-            </contacts_tree_box>
-            <contacts_search_box>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Kontaktide&amp;amp;nbsp;otsing</area_caption>
-                  <parent>contacts_box</parent>
-                  <group>contacts</group>
-            </contacts_search_box>
             <calls_vsplitbox>
                   <type>hbox</type>
                   <width>25%:75%</width>
@@ -1216,43 +590,17 @@
             <calls_search_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>K&amp;amp;otilde;nede&amp;amp;nbsp;otsing</area_caption>
+                  <area_caption>Otsing&amp;amp;nbsp;kontaktidest</area_caption>
                   <parent>calls_box</parent>
                   <group>calls</group>
             </calls_search_box>
-            <presentations_vsplitbox>
-                  <type>hbox</type>
-                  <width>25%:75%</width>
-                  <group>presentations</group>
-                  <area_caption></area_caption>
-            </presentations_vsplitbox>
-            <presentations_box>
-                  <type>vbox</type>
-                  <parent>presentations_vsplitbox</parent>
-                  <group>presentations</group>
-                  <area_caption></area_caption>
-            </presentations_box>
-            <presentations_tree_box>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Esitluste&amp;amp;nbsp;valik</area_caption>
-                  <parent>presentations_box</parent>
-                  <group>presentations</group>
-            </presentations_tree_box>
-            <presentations_search_box>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Esitluste&amp;amp;nbsp;otsing</area_caption>
-                  <parent>presentations_box</parent>
-                  <group>presentations</group>
-            </presentations_search_box>
             <de_form_box>
                   <type>vbox</type>
                   <group>
                         <num_0>data_entry_contact_co</num_0>
                         <num_1>data_entry_contact_person</num_1>
                   </group>
-                  <area_caption>Uus&amp;amp;nbsp;kontakt</area_caption>
+                  <area_caption></area_caption>
             </de_form_box>
             <de_table_box>
                   <type>vbox</type>

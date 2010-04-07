@@ -10,6 +10,7 @@ class crm_bill_row_object extends _int_object
 		$this->set_prop("desc", $name);
 		return $rv;
 	}
+	
 
 	function set_prop($p, $v)
 	{
@@ -66,7 +67,7 @@ class crm_bill_row_object extends _int_object
 		}
 		return 0;
 	}
-
+	
 	/** returns task row ids
 		@attrib api=1
 		@returns array
@@ -80,6 +81,28 @@ class crm_bill_row_object extends _int_object
 			$arr[] = $c->prop("to");
 		}
 		return $arr;
+	}
+	
+	/**
+	 * @return boolean
+	 */
+	function has_order_row() {
+		
+		$rows = $this->order_rows();
+		
+		return !empty($rows);
+	}
+	
+	/**
+	 * @return array Order row IDs
+	 */
+	function order_rows() {
+		
+		 $arr = array();
+		 foreach ($this->connections_from(array('type' => 'RELTYPE_SHOP_ORDER_ROW')) as $c) {
+		 	$arr[] = $c->prop('to');
+		 }
+		 return $arr;
 	}
 
 
@@ -199,6 +222,19 @@ class crm_bill_row_object extends _int_object
 		return 0;
 	}
 
+	//UnWasted
+	//TODO not needed
+	function connect_shop_order_row($row) {
+		
+		if (!is_oid($row)) 
+			return t('Pole piisavalt p&auml;dev klassi id');
+		
+		$row_obj = obj($row);
+		//if (!is_oid())
+		//WTF
+		
+	}
+	
 	/** connects bill row to a task row
 		@attrib api=1
 		@returns 

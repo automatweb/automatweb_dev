@@ -67,8 +67,7 @@ class _int_object_loader extends core
 
 		$this->object_member_funcs = get_class_methods("object");
 		$this->cfgu = get_instance("cfg/cfgutils");
-		$this->cache = get_instance("cache");
-
+		$this->cache = &get_static_instance("cache");
 		$this->obj_inherit_props_conf = array();
 		$fn = aw_ini_get("site_basedir")."/files/obj_inherit_props.conf";
 		if (file_exists($fn) && is_readable($fn))

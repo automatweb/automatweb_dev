@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_delivery_note" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
+	<class name="shop_delivery_note" folder="www/automatweb_stable/classes/applications/shop" extends="class_base">
 		<action name="del_article_rels" all_args="1">
 			<function name="del_article_rels">
 				<arguments>

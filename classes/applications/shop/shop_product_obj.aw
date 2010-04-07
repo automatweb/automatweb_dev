@@ -57,7 +57,7 @@ class shop_product_obj extends _int_object
 		}
 		elseif($this->prop("price"))
 		{
-			$retval = (float)$this->prop("price");
+			$retval = (float)$this->get_price_value();
 		}
 		else
 		{
@@ -65,6 +65,17 @@ class shop_product_obj extends _int_object
 		}
 		exit_function("shop_product_obj::get_shop_price");
 		return $retval;
+	}
+
+//whata??????
+	function get_shop_special_price()
+	{
+		return $this->get_special_price_value();
+	}
+
+	function get_special_price_value()
+	{
+		return 0;
 	}
 
 	/** edaspidi kasutaks vaid seda, et saaks igale ajahetkele erinevaid hindu panna ja loodetavasti ka hinnaobjektiga mitte metast
@@ -138,6 +149,17 @@ class shop_product_obj extends _int_object
 		{
 			return $prices;
 		}
+	}
+
+	/** This should probably be something similar to the same function in shop_product_packaging_obj class, but there are much more different kind of prices in shop_product class so I just leave it be for now until there is a concrete need to start using the price objects.
+
+		@attrib name=get_price_value api=1
+
+		@returns Price property value as float.
+	**/
+	public function get_price_value()
+	{
+		return (float)$this->prop('price');
 	}
 
 	function set_prop($k, $v)
@@ -562,7 +584,7 @@ class shop_product_obj extends _int_object
 		{
 			if(!$size || $pack->prop("size") == $size)
 			{
-				return $pack->get_shop_price($oc);
+				return $pack->get_special_price($oc);
 			}
 		}
 		return null;
@@ -581,6 +603,22 @@ class shop_product_obj extends _int_object
 		return null;
 	}
 
+	public function get_special_price($oc = null)
+	{
+		if(is_oid($this->prop("special_price_object")))
+		{
+			return $this->prop("special_price_object.price");
+		}
+		else
+		return $this->get_shop_price($oc);
+	}
+
+	public function get_formated_price()
+	{
+		$sum = $this->get_special_price();
+		return number_format($sum,2,".","");
+	}
+
 	public function get_data()
 	{
 		$data = $this->properties();
@@ -593,8 +631,13 @@ class shop_product_obj extends _int_object
 			$product = $this->get_product();
 			$data["description"] = $product->prop("description");
 			$data["color"] =  $product->get_color_name();
-					$data["code"] =  $product->prop("code");
-		}
+			$data["code"] =  $product->prop("code");
+			if (!empty($data['special_price_object']))
+			{
+				$special_price_obj = new object($data['special_price_object']);
+				$data["special_price"] = $special_price_obj->prop('price');
+			}
+		}	
 		else
 		{
 			$data["code"] =  $this->prop("code");
@@ -604,7 +647,7 @@ class shop_product_obj extends _int_object
 		{
 			$data["packet_name"] = $packet->name();
 			$data["brand_name"] = $packet->get_brand();
-			$packet_data = $packet-> get_data();
+//			$packet_data = $packet-> get_data();
 		}
 		return $data;
 	}
@@ -756,6 +799,7 @@ class shop_product_obj extends _int_object
 			return "";
 		}
 	}
+
 	public function get_pask()
 	{
 		$packet = $this->get_packet();
@@ -769,7 +813,6 @@ class shop_product_obj extends _int_object
 		}
 		return null;
 	}
-
 
 	public function get_packet()
 	{

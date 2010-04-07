@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="user_object" folder="www/automatweb_cvs/classes/core/users" extends="_int_object">
+	<class name="user_object" folder="www/automatweb_stable/classes/core/users" extends="_int_object">
 		<action name="generate_password">
 			<function name="generate_password">
 				<arguments>

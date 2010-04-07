@@ -362,18 +362,6 @@ msgstr ""
 msgid "Omaduse M&uuml;&uuml;giesindaja (salesman) help"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:prop_lead_source
-msgid "Omaduse Soovitaja/allikas (lead_source) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_lead_source_comment
-msgid "Omaduse Soovitaja/allikas (lead_source) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_lead_source_help
-msgid "Omaduse Soovitaja/allikas (lead_source) help"
-msgstr ""
-
 #: classes/applications/crm/crm_company_customer_data.aw:prop_sales_lead_source
 msgid "Omaduse Soovitaja/allikas (sales_lead_source) caption"
 msgstr ""
@@ -384,6 +372,42 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_sales_lead_source_help
 msgid "Omaduse Soovitaja/allikas (sales_lead_source) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sales_last_call_time
+msgid "Omaduse Viimase m&uuml;&uuml;gik&otilde;ne aeg (sales_last_call_time) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sales_last_call_time_comment
+msgid "Omaduse Viimase m&uuml;&uuml;gik&otilde;ne aeg (sales_last_call_time) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sales_last_call_time_help
+msgid "Omaduse Viimase m&uuml;&uuml;gik&otilde;ne aeg (sales_last_call_time) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sales_calls_made
+msgid "Omaduse Tehtud m&uuml;&uuml;gik&otilde;nesid (sales_calls_made) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sales_calls_made_comment
+msgid "Omaduse Tehtud m&uuml;&uuml;gik&otilde;nesid (sales_calls_made) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sales_calls_made_help
+msgid "Omaduse Tehtud m&uuml;&uuml;gik&otilde;nesid (sales_calls_made) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sales_comments
+msgid "Omaduse M&uuml;&uuml;gikommentaarid (sales_comments) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sales_comments_comment
+msgid "Omaduse M&uuml;&uuml;gikommentaarid (sales_comments) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_sales_comments_help
+msgid "Omaduse M&uuml;&uuml;gikommentaarid (sales_comments) help"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_users_tbl
@@ -484,6 +508,14 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:group_seller_help
 msgid "Grupi M&uuml;&uuml;ja (seller) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:group_sales_data
+msgid "Grupi M&uuml;&uuml;giinfo (sales_data) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:group_sales_data_help
+msgid "Grupi M&uuml;&uuml;giinfo (sales_data) help"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:group_users
@@ -594,123 +626,119 @@ msgstr ""
 msgid "Seose Arve saaja (RELTYPE_BILL_PERSON) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_SALES_EVENT
-msgid "Seose Tehtud, plaanitud m&uuml;&uuml;gitegevus (RELTYPE_SALES_EVENT) tekst"
+#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_SALES_LEAD_SOURCE
+msgid "Seose Soovitaja/allikas (RELTYPE_SALES_LEAD_SOURCE) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_LEAD_SOURCE
-msgid "Seose Soovitaja/allikas (RELTYPE_LEAD_SOURCE) tekst"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:248
+#: classes/applications/crm/crm_company_customer_data.aw:255
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:306 classes/applications/crm/crm_company_customer_data.aw:405 classes/applications/crm/crm_company_customer_data.aw:801 classes/applications/crm/crm_company_customer_data.aw:869
+#: classes/applications/crm/crm_company_customer_data.aw:318 classes/applications/crm/crm_company_customer_data.aw:422 classes/applications/crm/crm_company_customer_data.aw:818 classes/applications/crm/crm_company_customer_data.aw:886
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:315
+#: classes/applications/crm/crm_company_customer_data.aw:327
 msgid "Allahindluse %"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:324
+#: classes/applications/crm/crm_company_customer_data.aw:336
 msgid "Kestus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:332
+#: classes/applications/crm/crm_company_customer_data.aw:344
 msgid "Kehtib"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:340
+#: classes/applications/crm/crm_company_customer_data.aw:352
 msgid "Toode/kategooria"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:348
+#: classes/applications/crm/crm_company_customer_data.aw:360
 msgid "Kasutajaruppidele"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:366
+#: classes/applications/crm/crm_company_customer_data.aw:378
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:366
+#: classes/applications/crm/crm_company_customer_data.aw:378
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:427 classes/applications/crm/crm_company_customer_data.aw:741 classes/applications/crm/crm_company_customer_data.aw:810
+#: classes/applications/crm/crm_company_customer_data.aw:444 classes/applications/crm/crm_company_customer_data.aw:758 classes/applications/crm/crm_company_customer_data.aw:827
 msgid "Number"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:435 classes/applications/crm/crm_company_customer_data.aw:750 classes/applications/crm/crm_company_customer_data.aw:819
+#: classes/applications/crm/crm_company_customer_data.aw:452 classes/applications/crm/crm_company_customer_data.aw:767 classes/applications/crm/crm_company_customer_data.aw:836
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:444
+#: classes/applications/crm/crm_company_customer_data.aw:461
 msgid "Makset&auml;htaeg"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:453
+#: classes/applications/crm/crm_company_customer_data.aw:470
 msgid "<a href='javascript:void(0)' alt='Maksega hilinenud p&auml;evade arv' title='Maksega hilinenud p&auml;evade arv'>MHPA</a>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:460
+#: classes/applications/crm/crm_company_customer_data.aw:477
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:467
+#: classes/applications/crm/crm_company_customer_data.aw:484
 msgid "Kliendihaldur"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:474
+#: classes/applications/crm/crm_company_customer_data.aw:491
 msgid "Projektijuht"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:481 classes/applications/crm/crm_company_customer_data.aw:759 classes/applications/crm/crm_company_customer_data.aw:828 classes/applications/crm/crm_company_customer_data.aw:858
+#: classes/applications/crm/crm_company_customer_data.aw:498 classes/applications/crm/crm_company_customer_data.aw:776 classes/applications/crm/crm_company_customer_data.aw:845 classes/applications/crm/crm_company_customer_data.aw:875
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:490
+#: classes/applications/crm/crm_company_customer_data.aw:507
 msgid "Arve saldo"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:499
+#: classes/applications/crm/crm_company_customer_data.aw:516
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:506
+#: classes/applications/crm/crm_company_customer_data.aw:523
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:580
+#: classes/applications/crm/crm_company_customer_data.aw:597
 msgid "Prindi arve"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:585
+#: classes/applications/crm/crm_company_customer_data.aw:602
 msgid "Prindi arve lisa"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:590
+#: classes/applications/crm/crm_company_customer_data.aw:607
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:597
+#: classes/applications/crm/crm_company_customer_data.aw:614
 msgid "osaliselt"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:607
+#: classes/applications/crm/crm_company_customer_data.aw:624
 msgid "Loo uus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:699
+#: classes/applications/crm/crm_company_customer_data.aw:716
 msgid "<b>Summa</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:768 classes/applications/crm/crm_company_customer_data.aw:837
+#: classes/applications/crm/crm_company_customer_data.aw:785 classes/applications/crm/crm_company_customer_data.aw:854
 msgid "Valuuta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:789
+#: classes/applications/crm/crm_company_customer_data.aw:806
 msgid "Kokku"
 msgstr ""
 

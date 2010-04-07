@@ -138,6 +138,17 @@
             <field>task_row</field>
             <caption>Toimetuse read</caption>
       </property>
+      <property>
+            <name>order_row</name>
+            <table>aw_crm_bill_rows</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SHOP_ORDER_ROW</reltype>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <field>order_row</field>
+            <caption>Tellimuse read</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_BILL_ROW</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -156,7 +167,7 @@
       <reltypes>
             <PROD>
                   <value>1</value>
-                  <clid>CL_CHOP_PRODUCT</clid>
+                  <clid>CL_SHOP_PRODUCT</clid>
                   <caption>Toode</caption>
             </PROD>
             <TASK_ROW>
@@ -184,6 +195,11 @@
                   <clid>CL_BUG</clid>
                   <caption>Bugi</caption>
             </BUG>
+            <SHOP_ORDER_ROW>
+                  <value>7</value>
+                  <clid>CL_SHOP_ORDER_ROW</clid>
+                  <caption>Tellimuse rida</caption>
+            </SHOP_ORDER_ROW>
       </reltypes>
 </properties>
 

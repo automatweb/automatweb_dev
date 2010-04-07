@@ -101,7 +101,7 @@ class site_cache extends aw_template
 		// check cache
 		$cp = $this->get_cache_params($arr);
 
-		$cache = get_instance("cache");
+		$cache = &get_static_instance("cache");;
 		$tmp = $cache->get(aw_global_get("raw_section"), $cp, aw_global_get("section"));
 		return $tmp;
 	}
@@ -125,7 +125,7 @@ class site_cache extends aw_template
 		// check cache
 		$cp = $this->get_cache_params($arr);
 
-		$cache = get_instance("cache");
+		$cache = &get_static_instance("cache");
 		$cache->set(aw_global_get("raw_section"), $cp, $content, true, aw_global_get("section"));
 	}
 

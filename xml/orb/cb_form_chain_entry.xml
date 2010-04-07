@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cb_form_chain_entry" folder="www/automatweb_cvs/classes/applications/cb_form_chain" extends="class_base">
+	<class name="cb_form_chain_entry" folder="www/automatweb_stable/classes/applications/cb_form_chain" extends="class_base">
 		<action name="show_pdf">
 			<function name="show_pdf">
 				<arguments>

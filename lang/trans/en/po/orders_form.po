@@ -104,6 +104,66 @@ msgstr ""
 msgid "Omaduse Kasutajaandmed isikust (no_pdata_check) help"
 msgstr ""
 
+#: classes/applications/orders/orders_form.aw:prop_order_center
+msgid "Omaduse Tellimiskeskkond (order_center) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_order_center_comment
+msgid "Omaduse Tellimiskeskkond (order_center) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_order_center_help
+msgid "Omaduse Tellimiskeskkond (order_center) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_channel
+msgid "Omaduse M&uuml;&uuml;gikanal (channel) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_channel_comment
+msgid "Omaduse M&uuml;&uuml;gikanal (channel) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_channel_help
+msgid "Omaduse M&uuml;&uuml;gikanal (channel) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_mail_subject
+msgid "Omaduse Maili subjekt (mail_subject) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_mail_subject_comment
+msgid "Omaduse Maili subjekt (mail_subject) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_mail_subject_help
+msgid "Omaduse Maili subjekt (mail_subject) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_mail_from
+msgid "Omaduse Mail kellelt (mail_from) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_mail_from_comment
+msgid "Omaduse Mail kellelt (mail_from) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_mail_from_help
+msgid "Omaduse Mail kellelt (mail_from) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_mail_from_address
+msgid "Omaduse Mail kellelt aadress (mail_from_address) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_mail_from_address_comment
+msgid "Omaduse Mail kellelt aadress (mail_from_address) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_mail_from_address_help
+msgid "Omaduse Mail kellelt aadress (mail_from_address) help"
+msgstr ""
+
 # classes/applications/orders/orders_form.aw:prop_orderform
 #: classes/applications/orders/orders_form.aw:prop_orderform
 msgid "Omaduse Tellimuse seadetevorm (orderform) caption"
@@ -201,6 +261,18 @@ msgstr ""
 
 #: classes/applications/orders/orders_form.aw:prop_orders_form_template_help
 msgid "Omaduse Tellija andmete kujundusp&otilde;hi (orders_form_template) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_confirm_template
+msgid "Omaduse Kinnitusvaate templeit (confirm_template) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_confirm_template_comment
+msgid "Omaduse Kinnitusvaate templeit (confirm_template) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_confirm_template_help
+msgid "Omaduse Kinnitusvaate templeit (confirm_template) help"
 msgstr ""
 
 # classes/applications/orders/orders_form.aw:prop_ordering
@@ -323,6 +395,14 @@ msgstr ""
 msgid "Omaduse Makseperioodid (rent_item_types) help"
 msgstr ""
 
+#: classes/applications/orders/orders_form.aw:group_mails
+msgid "Grupi Meiliseaded (mails) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:group_mails_help
+msgid "Grupi Meiliseaded (mails) help"
+msgstr ""
+
 # classes/applications/orders/orders_form.aw:group_config
 #: classes/applications/orders/orders_form.aw:group_config
 msgid "Grupi Seaded (config) pealkiri"
@@ -382,31 +462,108 @@ msgstr "Mail"
 msgid "Seose Maili aadress (RELTYPE_MAIL_ADDRESS) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:987
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_ORDER_CENTER
+msgid "Seose Tellimiskeskkond (RELTYPE_ORDER_CENTER) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_CHANNEL
+msgid "Seose M&uuml;&uuml;gikanal (RELTYPE_CHANNEL) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_RELTYPE_CHANNEL
+msgid "Seose M&uuml;&uuml;gikanal (RELTYPE_RELTYPE_CHANNEL) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_PRODUCT_CATEGORY
+msgid "Seose Tootekategooria (RELTYPE_PRODUCT_CATEGORY) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_RELTYPE_PRODUCT_CATEGORY
+msgid "Seose Tootekategooria (RELTYPE_RELTYPE_PRODUCT_CATEGORY) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:459
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:460
+msgid "Tootekood"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:461
+msgid "V&auml;rv"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:462
+msgid "Suurus"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:463
+msgid "Hulk"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:464
+msgid "Lehek&uuml;lg"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:465
+msgid "Pilt"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:466
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:467
+msgid "Summa"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:478
+#: classes/applications/orders/orders_form.aw:561
+msgid "Hinnakirja<br>alusel"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:571
+msgid "Eemalda<br>toode"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:731
+msgid "tellimuse vormi kinnituse templeit valimata"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:747
+msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for ordering center %s!"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:756
+msgid "M&uuml;&uuml;gitellimus"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:1604
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/applications/orders/orders_form.aw:1046
-#: classes/applications/orders/orders_form.aw:1056
+#: classes/applications/orders/orders_form.aw:1663
+#: classes/applications/orders/orders_form.aw:1673
 msgid "\n"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1067
+#: classes/applications/orders/orders_form.aw:1684
 msgid "Kauba t&uuml;&uuml;p"
 msgstr "Product type"
 
-#: classes/applications/orders/orders_form.aw:1073
+#: classes/applications/orders/orders_form.aw:1690
 msgid "Min. Kuud"
 msgstr "Min. Months"
 
-#: classes/applications/orders/orders_form.aw:1079
+#: classes/applications/orders/orders_form.aw:1696
 msgid "Max. Kuud"
 msgstr "Max. Months"
 
-#: classes/applications/orders/orders_form.aw:1085
+#: classes/applications/orders/orders_form.aw:1702
 msgid "Esmase sissemakse %"
 msgstr "First payment %"
 
-#: classes/applications/orders/orders_form.aw:1091
+#: classes/applications/orders/orders_form.aw:1708
 msgid "Intressi %"
 msgstr "Interest %"

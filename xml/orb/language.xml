@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="language" folder="www/automatweb_cvs/classes/core" extends="class_base">
+	<class name="language" folder="www/automatweb_stable/classes/core" extends="class_base">
 		<action name="lang_pop">
 			<function name="lang_pop">
 				<arguments>

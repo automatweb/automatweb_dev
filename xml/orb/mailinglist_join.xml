@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mailinglist_join" folder="www/automatweb_cvs/classes/applications/mailinglist" extends="class_base">
+	<class name="mailinglist_join" folder="www/automatweb_stable/classes/applications/mailinglist" extends="class_base">
 		<action name="subscribe" nologin="1">
 			<function name="subscribe">
 				<arguments>

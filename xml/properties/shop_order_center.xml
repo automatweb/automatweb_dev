@@ -248,6 +248,18 @@
             <parent>appearance_l</parent>
       </property>
       <property>
+            <name>count_active_products</name>
+            <group>appearance</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>appearance_r</parent>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gil olevaid tooteid kokku</caption>
+      </property>
+      <property>
             <name>appearance_list</name>
             <group>appearance</group>
             <table>objects</table>

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.36 2009/10/27 14:33:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.38 2010/01/15 12:12:34 dragut Exp $
 // shop_packet.aw - Pakett 
 /*
 
-@classinfo syslog_type=ST_SHOP_PACKET relationmgr=yes no_status=1  maintainer=kristo
+@classinfo syslog_type=ST_SHOP_PACKET relationmgr=yes maintainer=kristo
 @tableinfo aw_shop_packets index=aw_oid master_table=objects master_index=brother_of
 
 @default table=objects
@@ -718,10 +718,10 @@ class shop_packet extends class_base
 
 	function show($arr)
 	{
-		error::raise_if(!$this->can("view" , $arr["oc"], array(
+		error::raise_if(!$this->can("view" , $arr["oc"]), array(
 			"id" => ERR_NO_OC,
 			"msg" => t("shop_packet::show(): no order center object selected!")
-		)));
+		));
 
 		$ob = new object($arr["id"]);
 
@@ -805,6 +805,7 @@ class shop_packet extends class_base
 			$prod_purveyances_ids = array();
 			$prod_sizes = array();
 			$prod_prices = array();
+			$prod_special_prices = array();
 			$prod_ids = array();
 			$prod_purveyances = array();
 			$prod_params[$product] = $product." : { ";
@@ -830,6 +831,7 @@ class shop_packet extends class_base
 
 					$prod_sizes[] = "\"".$data["sizes"][$package]."\"";
 					$prod_prices[] = $data["prices"][$package];
+					$prod_special_prices[] = $data["special_prices"][$package];
 					$prod_ids[] = $package;
 					$prod_purveyances[] = !empty($purveyances_stuff[$package]) ? '"'.$purveyances_stuff[$package]['comment'].'"' : '"'.t('Tarneinfo puudub').'"';
  					$prod_purveyances_ids[] = !empty($purveyances_stuff[$package]) ? "\"".trim($purveyances_stuff[$package]['code'])."\"" : "\"\"";
@@ -839,6 +841,8 @@ class shop_packet extends class_base
 			$prod_params[$product].=join(",",$prod_sizes);
 			$prod_params[$product].="], prices : [";
 			$prod_params[$product].=join(",",$prod_prices);
+			$prod_params[$product].="], special_prices : [";
+			$prod_params[$product].=join(",",$prod_special_prices);
 			$prod_params[$product].="], ids : [";
 			$prod_params[$product].=join(",",$prod_ids);
 			$prod_params[$product].="], purveyances : [";
@@ -869,7 +873,16 @@ class shop_packet extends class_base
 			$n++;
 		}
 
-		$data["price"] = number_format($data["prices"][reset($first_pack)] , 2);
+		$data["price"] = number_format($data["prices"][reset($first_pack)] , 2, '.', '');
+		$special_price = $data["special_prices"][reset($first_pack)];
+
+		$data["special_price"] = 0;
+		$data["special_price_visibility"] = "";
+		if (!empty($special_price))
+		{
+			$data["special_price"] = number_format($special_price, 2);
+			$data["special_price_visibility"] = "_showSpecialPrice";
+		}
 		
 		$data["product_params"] = "productParams = {\n";
 		$data["product_params"].= join(",\n" , $prod_params);
@@ -931,11 +944,16 @@ class shop_packet extends class_base
 			$packaging = reset($packaging_array);
 			if(!is_oid($packaging))//kui seda oid'd pole, siis connection find laseb igatahes masina kooma
 			{
+			/*
+			// Marko: vaata see asi yle, et kas sest midagi katki ka v6ib minna et ma selle siit v2lja kommenteerin?
+			// Kui see sisse kommenteerida siis kohati andis vea, sest seda $o muutujat ei olnud olemas ...
+			// Juhul n2iteks kui mingil p6hjusel toote objektil ei ole pakendeid vms. --rain
 				$this->vars(array(
 					"purveyance.comment" => trim($o->comment()),
 					"purveyance.name" =>trim($o->name()),
 					"purveyance.code" =>trim($o->prop("code")),
 				));
+			*/
 				continue;
 			}
 //			foreach($packaging_array as $key => $packaging)

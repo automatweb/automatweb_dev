@@ -9,12 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/db.aw:class__help
-msgid "Klassi  help"
-msgstr ""
-
 #: classes/db.aw:106 classes/db.aw:128
 msgid "this driver is not supported"
 msgstr ""
-

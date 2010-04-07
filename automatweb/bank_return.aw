@@ -6,6 +6,9 @@
 
 include("const.aw");
 
+ini_set("session.save_handler", "files");
+session_name("automatweb");
+session_start();
 unset($_SESSION["nliug"]);
 
 if (is_array($_SESSION["auth_redir_post"]))
@@ -31,6 +34,7 @@ classload("core/error", "core/obj/object");
 // you cannot aw_startup() here, it _will_ break things
 // reset aw_cache_* function globals
 $GLOBALS["__aw_cache"] = array();
+_aw_global_init();
 
 check_pagecache_folders();
 

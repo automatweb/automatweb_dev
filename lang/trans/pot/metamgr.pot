@@ -102,47 +102,47 @@ msgstr ""
 msgid "Grupi translate (translate) help"
 msgstr ""
 
-#: classes/meta/metamgr.aw:143
+#: classes/meta/metamgr.aw:144
 msgid "ID"
 msgstr ""
 
-#: classes/meta/metamgr.aw:148
+#: classes/meta/metamgr.aw:149
 msgid "Nimi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:176
+#: classes/meta/metamgr.aw:177
 msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/meta/metamgr.aw:183
+#: classes/meta/metamgr.aw:184
 msgid "Jrk"
 msgstr ""
 
-#: classes/meta/metamgr.aw:301
+#: classes/meta/metamgr.aw:303
 msgid "$file_name"
 msgstr ""
 
-#: classes/meta/metamgr.aw:472
+#: classes/meta/metamgr.aw:474
 msgid "Salvesta"
 msgstr ""
 
-#: classes/meta/metamgr.aw:480
+#: classes/meta/metamgr.aw:482
 msgid "Liiguta valitud omadused gruppi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:536
+#: classes/meta/metamgr.aw:538
 msgid "Export"
 msgstr ""
 
-#: classes/meta/metamgr.aw:545
+#: classes/meta/metamgr.aw:547
 msgid "Import"
 msgstr ""
 
-#: classes/meta/metamgr.aw:554
+#: classes/meta/metamgr.aw:556
 msgid "Kustuta valitud muutujad"
 msgstr ""
 
-#: classes/meta/metamgr.aw:555
+#: classes/meta/metamgr.aw:557
 msgid "Kustuta valitud muutujad?"
 msgstr ""
 

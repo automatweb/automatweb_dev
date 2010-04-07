@@ -6876,6 +6876,7 @@ class class_base extends aw_template
 //----------------- END mailiga teavitamise komponentide orb funktsuoonid----------
 
 
+//classbasest mugavam ja ilma objekti sisse lugemata objekti muutmise linkide majandamine
 	/**
 	@attrib name=gt_change api=1 params=name
 		@param id required type=oid
@@ -6885,6 +6886,27 @@ class class_base extends aw_template
 	{
 		return html::get_change_url($arr["id"] , array("return_url" => $arr["return_url"]));
 	}
+
+	public function change_link($id, $caption = null)
+	{
+		if(!is_oid($id))
+		{
+			return "";
+		}
+		if(empty($caption))
+		{
+			$caption = t("(Nimetu)");
+		}
+		$url = $this->mk_my_orb("gt_change",array(
+			"id" => $id,
+			"return_url" => get_ru(),
+		));
+		return html::href(array(
+			"caption" => $caption,
+			"url" => $url,
+		));
+	}
+	
 
 	/**
 	@attrib api=1 params=pos

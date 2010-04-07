@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="event_time" folder="www/automatweb_cvs/classes/applications/calendar" extends="class_base">
+	<class name="event_time" folder="www/automatweb_stable/classes/applications/calendar" extends="class_base">
 		<action name="locations_search">
 			<function name="locations_search">
 				<arguments>

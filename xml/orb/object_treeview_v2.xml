@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="object_treeview_v2" folder="www/automatweb_cvs/classes/contentmgmt/object_treeview" extends="class_base">
+	<class name="object_treeview_v2" folder="www/automatweb_stable/classes/contentmgmt/object_treeview" extends="class_base">
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>

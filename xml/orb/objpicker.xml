@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="objpicker" folder="www/automatweb_cvs/classes/vcl" extends="core">
+	<class name="objpicker" folder="www/automatweb_stable/classes/vcl" extends="core">
 		<action name="get_options">
 			<function name="get_options">
 				<arguments>

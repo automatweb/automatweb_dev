@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="rate" folder="www/automatweb_cvs/classes/contentmgmt/rate" extends="class_base">
+	<class name="rate" folder="www/automatweb_stable/classes/contentmgmt/rate" extends="class_base">
 		<action name="rate" nologin="1">
 			<function name="add_rate">
 				<arguments>

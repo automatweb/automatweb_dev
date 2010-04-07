@@ -860,10 +860,10 @@ arr($row);*/
 
 		$awm->create_message(array(
 			"froma" => $address,
-			"subject" => $mail->name(),
+			"subject" => "=?".aw_global_get("charset")."?B?".base64_encode($mail->name())."?=\n",
 			"to" => $args["to"],
 			"body" => strip_tags(str_replace("<br>", "\n",$message)),
-			"fromn" => $mail->prop("mfrom.name"),
+			"fromn" => "=?".aw_global_get("charset")."?B?".base64_encode($mail->prop("mfrom.name"))."?=\n",
 		));
 		$message = str_replace('href="/' , 'href="'.aw_ini_get("baseurl").'/' , $message);
 		if($mail->prop("html_mail"))

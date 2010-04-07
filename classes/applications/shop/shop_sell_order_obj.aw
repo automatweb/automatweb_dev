@@ -10,11 +10,19 @@ class shop_sell_order_obj extends _int_object
 	public function get_sum()
 	{
 		$sum = 0;
-		foreach($this->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+		$odl = new object_data_list(array(
+			"class_id" => CL_SHOP_ORDER_ROW,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_SHOP_ORDER_ROW.RELTYPE_ROW(CL_SHOP_SELL_ORDER)" => $this->id()
+		),
+		array(
+			CL_SHOP_ORDER_ROW => array("amount" , "price"),
+		));
+
+		foreach($odl->arr() as $od)
 		{
-			$row = $c->to();
-			$c_sum = $row->amount * $row->price;
-			$sum += $c_sum;
+			$sum += $od["amount"] * $od["price"];
 		}
 		return $sum;
 	}
@@ -159,6 +167,63 @@ class shop_sell_order_obj extends _int_object
 		}
 		return $this->mk_my_orb("show", array("id" => $this->id()), "shop_order");
 	}
+
+	/** returns customer relation object
+		@attrib api=1 params=pos
+		@param my_co optional
+		@param crea_if_not_exists optional
+			if no customer relation object, makes one
+		@returns object
+	**/
+	public function get_customer_relation($my_co = null, $crea_if_not_exists = false)
+	{
+		if ($my_co === null)
+		{
+			$my_co = get_current_company();
+		}
+
+		if (!is_object($my_co) || !is_oid($my_co->id()) || !$this->prop("purchaser"))
+		{
+			return;
+		}
+
+		static $gcr_cache;
+		if (!is_array($gcr_cache))
+		{
+			$gcr_cache = array();
+		}
+		if (isset($gcr_cache[$this->prop("purchaser")][$crea_if_not_exists][$my_co->id()]))
+		{
+			return $gcr_cache[$this->prop("purchaser")][$crea_if_not_exists][$my_co->id()];
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"buyer" => $this->prop("purchaser"),
+			"seller" => $my_co
+		));
+		if ($ol->count())
+		{
+			$gcr_cache[$this->prop("purchaser")][$crea_if_not_exists][$my_co->id()] = $ol->begin();
+			return $ol->begin();
+		}
+		else
+		if ($crea_if_not_exists)
+		{
+			$my_co = obj($my_co);
+			$o = obj();
+			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+			$o->set_name(t("Kliendisuhe ").$my_co->name()." => ".$this->prop("purchaser.name"));
+			$o->set_parent($my_co->id());
+			$o->set_prop("seller", $my_co->id());
+			$o->set_prop("buyer", $this->prop("purchaser"));
+			$o->save();
+			$gcr_cache[$this->prop("purchaser")][$crea_if_not_exists][$my_co->id()] = $o;
+			return $o;
+		}
+	}
+
+
 
 }
 

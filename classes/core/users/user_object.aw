@@ -100,7 +100,7 @@ class user_object extends _int_object
 	**/
 	function get_groups_for_user()
 	{
-		$ol = get_instance(CL_USER)->get_groups_for_user(parent::prop("uid"));
+		$ol = $this->get_groups();
 		$rv = $ol->arr();
 		// now, the user's own group is not in this list probably, so we go get that as well
 		$ol = new object_list(array(
@@ -118,6 +118,57 @@ class user_object extends _int_object
 		uasort($rv, array(&$this, "_pri_sort"));
 		return $rv;
 	}
+
+	/** user::get_groups_for_user does the same thing
+		@attrib params=pos api=1
+		@comment
+		Gets object list of group objects that user belongs to
+		@returns
+		Object list
+	**/
+	function get_groups()
+	{
+		if(aw_ini_get("users.use_group_membership") == 1)
+		{
+			$groups_list = new object_list(array(
+				"class_id" => CL_GROUP,
+				"status" => object::STAT_ACTIVE,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).RELTYPE_USER" => $tmp,
+				"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).status" => object::STAT_ACTIVE,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).membership_forever" => 1,
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).date_start" => new obj_predicate_compare(
+									OBJ_COMP_LESS_OR_EQ
+									, time()
+								),
+								"CL_GROUP.RELTYPE_GROUP(CL_GROUP_MEMBERSHIP).date_end" => new obj_predicate_compare(
+									OBJ_COMP_GREATER,
+									time()
+								),
+							),
+						)),
+					),
+				)),
+			));
+		}
+		else
+		{
+			$groups_list = new object_list(
+				$this->connections_from(array(
+					"type" => "RELTYPE_GRP",
+				))
+			);
+		}
+		return $groups_list;
+	}
+
 
 	/** returns the user's default group oid
 		@attrib api=1

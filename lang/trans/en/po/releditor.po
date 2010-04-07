@@ -14,88 +14,88 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/releditor.aw:106 classes/vcl/releditor.aw:215
-#: classes/vcl/releditor.aw:1062 classes/vcl/releditor.aw:1298
-#: classes/vcl/releditor.aw:1959 classes/vcl/releditor.aw:2007
-#: classes/vcl/releditor.aw:2284
+#: classes/vcl/releditor.aw:118 classes/vcl/releditor.aw:227
+#: classes/vcl/releditor.aw:1083 classes/vcl/releditor.aw:1319
+#: classes/vcl/releditor.aw:1977 classes/vcl/releditor.aw:2025
+#: classes/vcl/releditor.aw:2302
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/releditor.aw:107 classes/vcl/releditor.aw:220
-#: classes/vcl/releditor.aw:1964 classes/vcl/releditor.aw:2008
+#: classes/vcl/releditor.aw:119 classes/vcl/releditor.aw:232
+#: classes/vcl/releditor.aw:1982 classes/vcl/releditor.aw:2026
 msgid "Kustuta"
 msgstr ""
 
-#: classes/vcl/releditor.aw:467 classes/vcl/releditor.aw:2288
+#: classes/vcl/releditor.aw:483 classes/vcl/releditor.aw:2306
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/releditor.aw:538
+#: classes/vcl/releditor.aw:553
 msgid "Klassi ID"
 msgstr "Class ID"
 
-#: classes/vcl/releditor.aw:539
+#: classes/vcl/releditor.aw:554
 msgid "Klass"
 msgstr "Class"
 
-#: classes/vcl/releditor.aw:557
+#: classes/vcl/releditor.aw:572
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr "Error in the definition of %s (properties not defined!)"
 
-#: classes/vcl/releditor.aw:567
+#: classes/vcl/releditor.aw:582
 msgid "Viga %s definitsioonis (seose t&uuml;&uuml;p defineerimata!)"
 msgstr ""
 
-#: classes/vcl/releditor.aw:603
+#: classes/vcl/releditor.aw:618
 msgid "Seda seost ei saa redigeerida!"
 msgstr "This connection can not be edited"
 
-#: classes/vcl/releditor.aw:805 classes/vcl/releditor.aw:984
+#: classes/vcl/releditor.aw:826 classes/vcl/releditor.aw:1005
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/vcl/releditor.aw:934 classes/vcl/releditor.aw:942
-#: classes/vcl/releditor.aw:953
+#: classes/vcl/releditor.aw:955 classes/vcl/releditor.aw:963
+#: classes/vcl/releditor.aw:974
 msgid "Uus"
 msgstr "New"
 
-#: classes/vcl/releditor.aw:943
+#: classes/vcl/releditor.aw:964
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/vcl/releditor.aw:958
+#: classes/vcl/releditor.aw:979
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/vcl/releditor.aw:961
+#: classes/vcl/releditor.aw:982
 msgid "Kustutada valitud seosed?"
 msgstr "Delete selected relations?"
 
-#: classes/vcl/releditor.aw:993
+#: classes/vcl/releditor.aw:1014
 msgid "Klooni valitud objektid"
 msgstr "Clone selected objects"
 
-#: classes/vcl/releditor.aw:1205
+#: classes/vcl/releditor.aw:1226
 msgid "Vali &uuml;ks"
 msgstr ""
 
-#: classes/vcl/releditor.aw:1215 classes/vcl/releditor.aw:1282
+#: classes/vcl/releditor.aw:1236 classes/vcl/releditor.aw:1303
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/releditor.aw:1289
+#: classes/vcl/releditor.aw:1310
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/vcl/releditor.aw:2130
+#: classes/vcl/releditor.aw:2148
 msgid "Jah"
 msgstr ""
 
-#: classes/vcl/releditor.aw:2130
+#: classes/vcl/releditor.aw:2148
 msgid "Ei"
 msgstr ""
 
-#: classes/vcl/releditor.aw:2298
+#: classes/vcl/releditor.aw:2316
 msgid "Oled kindel, et soovid kustutada?"
 msgstr ""
 

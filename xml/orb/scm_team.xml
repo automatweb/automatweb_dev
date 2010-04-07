@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="scm_team" folder="www/automatweb_cvs/classes/applications/scm" extends="class_base">
+	<class name="scm_team" folder="www/automatweb_stable/classes/applications/scm" extends="class_base">
 		<action name="gen_tree_branch" all_args="1">
 			<function name="gen_tree_branch">
 				<arguments>

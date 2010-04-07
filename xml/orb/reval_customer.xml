@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="reval_customer" folder="www/automatweb_cvs/classes/applications/clients/reval/customer" extends="class_base">
+	<class name="reval_customer" folder="www/automatweb_stable/classes/applications/clients/reval/customer" extends="class_base">
 		<action name="fc_login" nologin="1">
 			<function name="fc_login">
 				<arguments>

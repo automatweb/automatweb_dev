@@ -1087,10 +1087,10 @@ msgid "Liikmete otsingu parameetrid"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:443
-#: classes/applications/mailinglist/ml_list.aw:1773
-#: classes/applications/mailinglist/ml_list.aw:1978
-#: classes/applications/mailinglist/ml_list.aw:4103
-#: classes/applications/mailinglist/ml_list.aw:4392
+#: classes/applications/mailinglist/ml_list.aw:1778
+#: classes/applications/mailinglist/ml_list.aw:1983
+#: classes/applications/mailinglist/ml_list.aw:4112
+#: classes/applications/mailinglist/ml_list.aw:4401
 msgid "Nimi"
 msgstr ""
 
@@ -1099,20 +1099,20 @@ msgid "Mailiaadress"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:453
-#: classes/applications/mailinglist/ml_list.aw:1997
-#: classes/applications/mailinglist/ml_list.aw:4122
+#: classes/applications/mailinglist/ml_list.aw:2002
+#: classes/applications/mailinglist/ml_list.aw:4131
 msgid "Organisatsioon"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:458
-#: classes/applications/mailinglist/ml_list.aw:2007
-#: classes/applications/mailinglist/ml_list.aw:4137
+#: classes/applications/mailinglist/ml_list.aw:2012
+#: classes/applications/mailinglist/ml_list.aw:4146
 msgid "Ametinimetus"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:462
-#: classes/applications/mailinglist/ml_list.aw:2002
-#: classes/applications/mailinglist/ml_list.aw:4131
+#: classes/applications/mailinglist/ml_list.aw:2007
+#: classes/applications/mailinglist/ml_list.aw:4140
 msgid "Osakond"
 msgstr ""
 
@@ -1161,332 +1161,332 @@ msgstr ""
 msgid "Liitumisel vaja t&auml;ita aadressi v&auml;li"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:967
+#: classes/applications/mailinglist/ml_list.aw:972
 msgid "Kasutajanimi"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:968
+#: classes/applications/mailinglist/ml_list.aw:973
 msgid "Nimi Perenimi"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:969
+#: classes/applications/mailinglist/ml_list.aw:974
 msgid "e-mail"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1004
+#: classes/applications/mailinglist/ml_list.aw:1009
 msgid "Tuleb valida mailinglisti liikmete allikaks ka m&otilde;ni kaust!"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1043
+#: classes/applications/mailinglist/ml_list.aw:1048
 msgid "Registri andmed"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1061
-#: classes/applications/mailinglist/ml_list.aw:3515
+#: classes/applications/mailinglist/ml_list.aw:1066
+#: classes/applications/mailinglist/ml_list.aw:3524
 msgid "Asenduste legend"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1062
+#: classes/applications/mailinglist/ml_list.aw:1067
 msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br /><br />\t\t\t\t\t#username# - AutomatWebi kasutajanimi<br />\t\t\t\t\t#organisatsioon# - liikme organisatsioon<br />\t\t\t\t\t#isik# - Isiku nimi<br />\t\t\t\t\t#osakond# - Osakond<br />\t\t\t\t\t#ametinimetus# - ametinimetus<br />\t\t\t\t\t#name# - Listi liikme nimi<br />\t\t\t\t\t#e-mail# - Listi liikme e-mail<br/>\t\t\t\t\t#subject# - Kirja teema<br />\t\t\t\t\t#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />\t\t\t\t\t#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br />\t\t\t\t\t#lahkumine# - link, millel klikkides inimene saab listist lahkuda<br />\t\t\t\t\t<br />\t\t\t\t\tKui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi l&otilde;ppu #traceid#\t\t\t\t\tN&auml;iteks: http://www.struktuur.ee/aw#traceid#"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1069
-#: classes/applications/mailinglist/ml_list.aw:1094
-#: classes/applications/mailinglist/ml_list.aw:3445
-#: classes/applications/mailinglist/ml_list.aw:3466
+#: classes/applications/mailinglist/ml_list.aw:1074
+#: classes/applications/mailinglist/ml_list.aw:1099
+#: classes/applications/mailinglist/ml_list.aw:3454
+#: classes/applications/mailinglist/ml_list.aw:3475
 msgid "- vali -"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1179
+#: classes/applications/mailinglist/ml_list.aw:1184
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1187
-#: classes/applications/mailinglist/ml_list.aw:1823
-#: classes/applications/mailinglist/ml_list.aw:2237
+#: classes/applications/mailinglist/ml_list.aw:1192
+#: classes/applications/mailinglist/ml_list.aw:1828
+#: classes/applications/mailinglist/ml_list.aw:2246
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1189
+#: classes/applications/mailinglist/ml_list.aw:1194
 msgid "Kustutan valitud tegelased listist?"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1195
+#: classes/applications/mailinglist/ml_list.aw:1200
 msgid "Ei kuva"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1196
+#: classes/applications/mailinglist/ml_list.aw:1201
 msgid "AW RTE"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1197
+#: classes/applications/mailinglist/ml_list.aw:1202
 msgid "FCKeditor"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1234
+#: classes/applications/mailinglist/ml_list.aw:1239
 msgid "Saada!"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1242
+#: classes/applications/mailinglist/ml_list.aw:1247
 msgid "Kustuta vanad kirjad!"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1254
+#: classes/applications/mailinglist/ml_list.aw:1259
 msgid "Vanu kirju andmebaasis"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1284
+#: classes/applications/mailinglist/ml_list.aw:1289
 msgid "liitumine"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1285
+#: classes/applications/mailinglist/ml_list.aw:1290
 msgid "lahkumine"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1345
-#: classes/applications/mailinglist/ml_list.aw:2231
+#: classes/applications/mailinglist/ml_list.aw:1350
+#: classes/applications/mailinglist/ml_list.aw:2240
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1359
+#: classes/applications/mailinglist/ml_list.aw:1364
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1369
+#: classes/applications/mailinglist/ml_list.aw:1374
 msgid "Saada"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1370
+#: classes/applications/mailinglist/ml_list.aw:1375
 msgid "Saata kiri &auml;ra?"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1407
+#: classes/applications/mailinglist/ml_list.aw:1412
 msgid "Midagi pole veel saadetud"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1422
+#: classes/applications/mailinglist/ml_list.aw:1427
 msgid "nimi,aadress"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1423
+#: classes/applications/mailinglist/ml_list.aw:1428
 msgid "nimi &lt;aadress&gt;"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1424
+#: classes/applications/mailinglist/ml_list.aw:1429
 msgid "aadress"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1425
+#: classes/applications/mailinglist/ml_list.aw:1430
 msgid "K&otilde;ik andmed"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1515
-#: classes/applications/mailinglist/ml_list.aw:1546
+#: classes/applications/mailinglist/ml_list.aw:1520
+#: classes/applications/mailinglist/ml_list.aw:1551
 msgid "Liitumiseks peab olema valitud m&otilde;ni kaust kuhu liituda"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1534
-#: classes/applications/mailinglist/ml_list.aw:1558
+#: classes/applications/mailinglist/ml_list.aw:1539
+#: classes/applications/mailinglist/ml_list.aw:1563
 msgid "Lahkumiseks peab olema valitud m&otilde;ni kaust kust lahkuda"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1769
-#: classes/applications/mailinglist/ml_list.aw:1973
-#: classes/applications/mailinglist/ml_list.aw:4098
-#: classes/applications/mailinglist/ml_list.aw:4388
+#: classes/applications/mailinglist/ml_list.aw:1774
+#: classes/applications/mailinglist/ml_list.aw:1978
+#: classes/applications/mailinglist/ml_list.aw:4107
+#: classes/applications/mailinglist/ml_list.aw:4397
 msgid "ID"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1777
+#: classes/applications/mailinglist/ml_list.aw:1782
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1810
+#: classes/applications/mailinglist/ml_list.aw:1815
 msgid "(pealkiri puudub)"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1825
+#: classes/applications/mailinglist/ml_list.aw:1830
 msgid "Eemaldan valitud kirjad?"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1983
-#: classes/applications/mailinglist/ml_list.aw:4108
+#: classes/applications/mailinglist/ml_list.aw:1988
+#: classes/applications/mailinglist/ml_list.aw:4117
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1989
-#: classes/applications/mailinglist/ml_list.aw:4114
+#: classes/applications/mailinglist/ml_list.aw:1994
+#: classes/applications/mailinglist/ml_list.aw:4123
 msgid "Allikas"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2014
-#: classes/applications/mailinglist/ml_list.aw:4144
+#: classes/applications/mailinglist/ml_list.aw:2019
+#: classes/applications/mailinglist/ml_list.aw:4153
 msgid "Liitunud"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2057
-#: classes/applications/mailinglist/ml_list.aw:4190
+#: classes/applications/mailinglist/ml_list.aw:2062
+#: classes/applications/mailinglist/ml_list.aw:4199
 msgid "Liitumisinfo"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2120
-#: classes/applications/mailinglist/ml_list.aw:4279
+#: classes/applications/mailinglist/ml_list.aw:2125
+#: classes/applications/mailinglist/ml_list.aw:4288
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2220
+#: classes/applications/mailinglist/ml_list.aw:2229
 msgid "Uus kiri"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2240
+#: classes/applications/mailinglist/ml_list.aw:2249
 msgid "Oled kindel, et soovid valitud kirjad kustutada?"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2248
+#: classes/applications/mailinglist/ml_list.aw:2257
 msgid "#"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2256
+#: classes/applications/mailinglist/ml_list.aw:2265
 msgid "Kiri"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2262
+#: classes/applications/mailinglist/ml_list.aw:2271
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2268
+#: classes/applications/mailinglist/ml_list.aw:2277
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2277
+#: classes/applications/mailinglist/ml_list.aw:2286
 msgid "Viimane"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2286
+#: classes/applications/mailinglist/ml_list.aw:2295
 msgid "Perf"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2292
+#: classes/applications/mailinglist/ml_list.aw:2301
 msgid "Korraga"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2300
+#: classes/applications/mailinglist/ml_list.aw:2309
 msgid "Oota"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2308
+#: classes/applications/mailinglist/ml_list.aw:2317
 msgid "Valmis"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2352
+#: classes/applications/mailinglist/ml_list.aw:2361
 msgid "(Nimetu)"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2364
+#: classes/applications/mailinglist/ml_list.aw:2373
 msgid "k&otilde;ik"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2407
+#: classes/applications/mailinglist/ml_list.aw:2416
 msgid "Pane genereerima"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2408
+#: classes/applications/mailinglist/ml_list.aw:2417
 msgid "bljaad"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3244
+#: classes/applications/mailinglist/ml_list.aw:3253
 msgid "Kellele"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3248
+#: classes/applications/mailinglist/ml_list.aw:3257
 msgid "Millal"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3257
+#: classes/applications/mailinglist/ml_list.aw:3266
 msgid "Klikitud"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3280
+#: classes/applications/mailinglist/ml_list.aw:3289
 msgid "jah"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3280
+#: classes/applications/mailinglist/ml_list.aw:3289
 msgid "ei"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3329
+#: classes/applications/mailinglist/ml_list.aw:3338
 msgid "Liikmeid: %s, saadetud: %s %s"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3334
+#: classes/applications/mailinglist/ml_list.aw:3343
 msgid "Genereeritud"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3458
+#: classes/applications/mailinglist/ml_list.aw:3467
 msgid "Vali template mille sisusse kopeerida"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3475
+#: classes/applications/mailinglist/ml_list.aw:3484
 msgid "Vali template"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3484
+#: classes/applications/mailinglist/ml_list.aw:3493
 msgid "Saada peale salvestamist &auml;ra"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3502
+#: classes/applications/mailinglist/ml_list.aw:3511
 msgid "Saatja e-maili aadress"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3506
+#: classes/applications/mailinglist/ml_list.aw:3515
 msgid "Saatja nimi"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3516
+#: classes/applications/mailinglist/ml_list.aw:3525
 msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br /><br />\t\t\t\t\t\t\t#username# - AutomatWebi kasutajanimi<br />\t\t\t\t\t\t\t#name# - Listi liikme nimi<br />\t\t\t\t\t\t\t#e-mail# - Listi liikme e-mail<br/>\t\t\t\t\t\t\t#subject# - Kirja teema<br />\t\t\t\t\t\t\t#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />\t\t\t\t\t\t\t#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br />\t\t\t\t\t\t\t#lahkumine# - link, millel klikkides inimene saab listist lahkuda<br />\t\t\t\t\t\t\t<br />\t\t\t\t\t\t\tKui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi l&otilde;ppu #traceid#\t\t\t\t\t\t\tN&auml;iteks: http://www.struktuur.ee/aw#traceid#"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3532
+#: classes/applications/mailinglist/ml_list.aw:3541
 msgid "Salvesta uue kirjana"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4043
+#: classes/applications/mailinglist/ml_list.aw:4052
 msgid "all done"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4079
+#: classes/applications/mailinglist/ml_list.aw:4088
 msgid "kirjade registri andmed"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4195
+#: classes/applications/mailinglist/ml_list.aw:4204
 msgid "Ignoreeri"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4396
+#: classes/applications/mailinglist/ml_list.aw:4405
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4415
+#: classes/applications/mailinglist/ml_list.aw:4424
 msgid "Organisatsioonid"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4416
+#: classes/applications/mailinglist/ml_list.aw:4425
 msgid "Isikud"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4417
+#: classes/applications/mailinglist/ml_list.aw:4426
 msgid "T&ouml;&ouml;tajad"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4442
+#: classes/applications/mailinglist/ml_list.aw:4451
 msgid "Kasuta"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4450
+#: classes/applications/mailinglist/ml_list.aw:4459
 msgid "Kasuta ka alamkaustu"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:4556
+#: classes/applications/mailinglist/ml_list.aw:4565
 msgid "Kahjuks sinu kirjalugeja ei oska kuvada HTML-formaadis kirju."
 msgstr ""
 

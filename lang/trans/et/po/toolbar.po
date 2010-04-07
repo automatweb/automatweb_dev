@@ -55,7 +55,7 @@ msgstr ""
 msgid "Oled sa kindel et tahad ikka sinna saidile minna?"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:546 classes/vcl/toolbar.aw:795
+#: classes/vcl/toolbar.aw:546 classes/vcl/toolbar.aw:799
 msgid "Otsi"
 msgstr ""
 
@@ -71,30 +71,30 @@ msgstr ""
 msgid "Sisesta uue objekti nimi"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:690
+#: classes/vcl/toolbar.aw:692
 msgid "Kustuta valitud objektid"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:691
+#: classes/vcl/toolbar.aw:693
 msgid "Oled kindel et soovit valitud objektid kustutada?"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:705 classes/vcl/toolbar.aw:719
+#: classes/vcl/toolbar.aw:709 classes/vcl/toolbar.aw:723
 msgid "Kustuta valitud seosed"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:706 classes/vcl/toolbar.aw:720
+#: classes/vcl/toolbar.aw:710 classes/vcl/toolbar.aw:724
 msgid "Oled kindel et soovid valitud seosed kustutada?"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:733
+#: classes/vcl/toolbar.aw:737
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:821
+#: classes/vcl/toolbar.aw:825
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:843
+#: classes/vcl/toolbar.aw:847
 msgid "Kleebi"
 msgstr ""

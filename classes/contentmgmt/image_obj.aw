@@ -78,6 +78,7 @@ class image_obj extends _int_object
 		{
 			$retval = "";
 		};
+
 		return $retval;
 	}
 
@@ -260,6 +261,12 @@ class image_obj extends _int_object
 				};
 
 			};
+		}
+
+		//kui ssl yhendus, siis anname pildid ka yle ssl
+		if($_SERVER["HTTPS"] == "on")
+		{
+			$url = str_replace("http://" , "https://" , $url);
 		}
 		return $url;
 	}

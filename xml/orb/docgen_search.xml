@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="docgen_search" folder="www/automatweb_cvs/classes/applications/docgen" extends="class_base">
+	<class name="docgen_search" folder="www/automatweb_stable/classes/applications/docgen" extends="class_base">
 		<action name="doc_search_form" all_args="1">
 			<function name="doc_search_form">
 				<arguments>

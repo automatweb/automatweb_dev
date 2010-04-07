@@ -114,6 +114,9 @@
 		@layout appearance_l type=vbox closeable=1 parent=appearance_c area_caption=Kaustade&nbsp;puu
 			@property appearance_tree type=treeview store=no no_caption=1 parent=appearance_l
 		@layout appearance_r type=vbox closeable=1 parent=appearance_c area_caption=Kaustade&nbsp;all&nbsp;toodete&nbsp;kuvamise&nbsp;seaded
+			@property count_active_products type=text store=no no_caption=1 parent=appearance_r
+			@caption M&uuml;&uuml;gil olevaid tooteid kokku
+
 			@property appearance_list type=table store=no no_caption=1 parent=appearance_r
 			@caption N&auml;itamise kaustade seaded
 
@@ -513,6 +516,9 @@ class shop_order_center extends class_base
 					$v[$pn] = isset($pd["caption"]) ? $pd["caption"] : $pd["name"];
 				}
 				$prop["options"] = $v;
+				break;
+			case "count_active_products":
+				$prop["value"] = sprintf(t("M&uuml;&uuml;gil tooteid kokku : %s") , $arr["obj_inst"]->get_active_products_count());
 				break;
 		};
 		return $retval;

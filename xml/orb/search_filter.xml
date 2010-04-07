@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="search_filter" folder="www/automatweb_cvs/classes/formgen" extends="aw_template">
+	<class name="search_filter" folder="www/automatweb_stable/classes/formgen" extends="aw_template">
 		<action name="new">
 			<function name="orb_new">
 				<arguments>

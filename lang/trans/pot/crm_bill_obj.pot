@@ -10,99 +10,103 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_bill_obj.aw:15
+#: classes/applications/crm/crm_bill_obj.aw:21
 msgid "Arve nr"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:21
+#: classes/applications/crm/crm_bill_obj.aw:27
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:123
+#: classes/applications/crm/crm_bill_obj.aw:129
 msgid "Prindi arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:128
+#: classes/applications/crm/crm_bill_obj.aw:134
 msgid "Prindi arve lisa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:133
+#: classes/applications/crm/crm_bill_obj.aw:139
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:270
+#: classes/applications/crm/crm_bill_obj.aw:275
 msgid "laekumine"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:488
+#: classes/applications/crm/crm_bill_obj.aw:469
 msgid "Arve rida"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:492
+#: classes/applications/crm/crm_bill_obj.aw:473
 msgid "lisati rida idga"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:527 classes/applications/crm/crm_bill_obj.aw:947
+#: classes/applications/crm/crm_bill_obj.aw:508 classes/applications/crm/crm_bill_obj.aw:928
 msgid "tund"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:602
+#: classes/applications/crm/crm_bill_obj.aw:583
 msgid "Pole piisavalt p&auml;dev id"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:608
+#: classes/applications/crm/crm_bill_obj.aw:589
 msgid "Kommentaaril pole bugi"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:645
+#: classes/applications/crm/crm_bill_obj.aw:626
 msgid "Projekt"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:737
+#: classes/applications/crm/crm_bill_obj.aw:718
 msgid "Lisati rida ID-ga"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:1536 classes/applications/crm/crm_bill_obj.aw:1541 classes/applications/crm/crm_bill_obj.aw:1546
+#: classes/applications/crm/crm_bill_obj.aw:1542 classes/applications/crm/crm_bill_obj.aw:1547 classes/applications/crm/crm_bill_obj.aw:1552
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:1550
+#: classes/applications/crm/crm_bill_obj.aw:1556
 msgid "Kulunud aeg"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:1612
+#: classes/applications/crm/crm_bill_obj.aw:1618
 msgid "Kommentaar objektile"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:1939
-msgid "Arve nr:"
+#: classes/applications/crm/crm_bill_obj.aw:1971 classes/applications/crm/crm_bill_obj.aw:1984 classes/applications/crm/crm_bill_obj.aw:1997
+msgid "Arve_nr"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:1952
-msgid "Arve lisa nr:"
+#: classes/applications/crm/crm_bill_obj.aw:1984
+msgid "meeldetuletus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:1973
+#: classes/applications/crm/crm_bill_obj.aw:1997
+msgid "aruanne"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_obj.aw:2018
 msgid "saadetud arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:1973
+#: classes/applications/crm/crm_bill_obj.aw:2018
 msgid "kliendile"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:2035
+#: classes/applications/crm/crm_bill_obj.aw:2080
 msgid "saatis arve aadressidele:"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:2131
+#: classes/applications/crm/crm_bill_obj.aw:2176
 msgid "%s saatis arve nr %s; summa %s; kuup&auml;ev: %s; kellaaeg: %s; aadressitele: %s; tekst: %s; lisatud failid: %s."
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:2359
+#: classes/applications/crm/crm_bill_obj.aw:2404
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_bill_obj.aw:2519
+#: classes/applications/crm/crm_bill_obj.aw:2572
 msgid "%s saateleht #%s"
 msgstr ""
 

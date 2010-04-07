@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ecard_manager" folder="www/automatweb_cvs/classes/applications/ecard" extends="class_base">
+	<class name="ecard_manager" folder="www/automatweb_stable/classes/applications/ecard" extends="class_base">
 		<action name="send_card" nologin="1">
 			<function name="send_card">
 				<arguments>

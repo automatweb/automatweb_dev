@@ -14,51 +14,51 @@ msgstr ""
 msgid "Klassi Tabel help"
 msgstr ""
 
-#: classes/vcl/table.aw:928
+#: classes/vcl/table.aw:970
 msgid "Vaata/Muuda"
 msgstr ""
 
-#: classes/vcl/table.aw:932
+#: classes/vcl/table.aw:974
 msgid "Sisseastuja Nr."
 msgstr ""
 
-#: classes/vcl/table.aw:944
+#: classes/vcl/table.aw:986
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/table.aw:2428
+#: classes/vcl/table.aw:2493
 msgid "eelmine leht"
 msgstr ""
 
-#: classes/vcl/table.aw:2438
+#: classes/vcl/table.aw:2503
 msgid "j&auml;rgmine leht"
 msgstr ""
 
-#: classes/vcl/table.aw:2589
+#: classes/vcl/table.aw:2654
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/table.aw:2863
+#: classes/vcl/table.aw:2928
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/vcl/table.aw:3193
+#: classes/vcl/table.aw:3258
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/table.aw:3194
+#: classes/vcl/table.aw:3259 classes/vcl/table.aw:3268
 msgid "Looja"
 msgstr ""
 
-#: classes/vcl/table.aw:3195
+#: classes/vcl/table.aw:3260
 msgid "Loodud"
 msgstr ""
 
-#: classes/vcl/table.aw:3196
+#: classes/vcl/table.aw:3261 classes/vcl/table.aw:3272
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/table.aw:3197
+#: classes/vcl/table.aw:3262
 msgid "Muudetud"
 msgstr ""
 

@@ -262,7 +262,8 @@ class users_user extends aw_template
 	        session_cache_limiter("must-revalidate, max-age=".$ma);
 		header("Cache-Control: must-revalidate, max-age=".$ma);
 		header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");
-		aw_global_set("uid","");
+		aw_global_set("uid", "");
+		aw_global_set("uid_oid", "");
 		$_SESSION["uid"] = null;
 		$this->_log(ST_USERS, SA_LOGOUT ,$uid);
 

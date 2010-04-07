@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="warehouse_import" folder="www/automatweb_cvs/classes/applications/shop" extends="class_base">
+	<class name="warehouse_import" folder="www/automatweb_stable/classes/applications/shop" extends="class_base">
 		<action name="view_xml">
 			<function name="view_xml">
 				<arguments>
@@ -97,8 +97,27 @@
 			</function>
 		</action>
 
-		<action name="fill_queue">
-			<function name="fill_queue">
+		<action name="prepare_products_data">
+			<function name="prepare_products_data">
+				<arguments>
+					<required name="id" type="int" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import_products_data">
+			<function name="import_products_data">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="ts" type="int" />
+					<optional name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="clear_product_show_cache">
+			<function name="clear_product_show_cache">
 				<arguments>
 					<required name="id" type="int" acl="view" />
 					<optional name="return_url" type="string" />

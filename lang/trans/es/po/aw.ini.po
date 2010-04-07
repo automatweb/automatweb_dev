@@ -3198,7 +3198,7 @@ msgid "Klassi K&auml;ttetoimetamise viis (1558) nimi"
 msgstr ""
 
 #: aw.ini:class_1559
-msgid "Klassi J&auml;relmaksu tingimused (1559) nimi"
+msgid "Klassi Makseviisi tingimused (1559) nimi"
 msgstr ""
 
 #: aw.ini:class_1560
@@ -3270,7 +3270,11 @@ msgid "Klassi Toodete n&auml;itamine (1576) nimi"
 msgstr ""
 
 #: aw.ini:class_1577
-msgid "Klassi J&auml;relmaksukonfiguratsioon (1577) nimi"
+msgid "Klassi Makseviis (1577) nimi"
+msgstr ""
+
+#: aw.ini:class_1682
+msgid "Klassi M&uuml;&uuml;gikanal (1682) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29
@@ -6394,7 +6398,7 @@ msgid "syslog.type.ST_SHOP_DELIVERY_METHOD"
 msgstr ""
 
 #: aw.ini:syslogtypes_1559
-msgid "syslog.type.ST_SHOP_RENT_CONDITIONS"
+msgid "syslog.type.ST_SHOP_PAYMENT_TYPE_CONDITIONS"
 msgstr ""
 
 #: aw.ini:syslogtypes_1560
@@ -6471,6 +6475,10 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1589
 msgid "syslog.type.ST_PRODUCT_BRAND"
+msgstr ""
+
+#: aw.ini:syslogtypes_1682
+msgid "syslog.type.ST_WAREHOUSE_SELL_CHANNEL"
 msgstr ""
 
 #: aw.ini:syslogactions_1

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="project" folder="www/automatweb_cvs/classes/applications/groupware" extends="class_base">
+	<class name="project" folder="www/automatweb_stable/classes/applications/groupware" extends="class_base">
 		<action name="save_pop_s_res">
 			<function name="save_pop_s_res">
 				<arguments>

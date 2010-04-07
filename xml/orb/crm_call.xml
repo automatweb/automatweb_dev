@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_call" folder="www/automatweb_cvs/classes/crm" extends="task">
+	<class name="crm_call" folder="www/automatweb_stable/classes/crm" extends="task">
 		<action name="delete_rels">
 			<function name="delete_rels">
 				<arguments>

@@ -317,6 +317,7 @@ class run_in_background extends class_base
 	**/
 	function bg_run($arr)
 	{
+		header('Content-type: text/html; charset=UTF-8') ;
 		echo "enter bg_run $arr[id] <br>\n";
 		flush();
 

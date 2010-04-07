@@ -45,68 +45,68 @@ msgstr ""
 msgid "Autor"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:2848
+#: classes/contentmgmt/document.aw:2849
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:2878
+#: classes/contentmgmt/document.aw:2879
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:2880
+#: classes/contentmgmt/document.aw:2881
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3377
+#: classes/contentmgmt/document.aw:3378
 msgid "jaanuar"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3378
+#: classes/contentmgmt/document.aw:3379
 msgid "veebruar"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3379
+#: classes/contentmgmt/document.aw:3380
 msgid "m&auml;rts"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3380
+#: classes/contentmgmt/document.aw:3381
 msgid "aprill"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3381
+#: classes/contentmgmt/document.aw:3382
 msgid "mai"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3382
+#: classes/contentmgmt/document.aw:3383
 msgid "juuni"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3383
+#: classes/contentmgmt/document.aw:3384
 msgid "juuli"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3384
+#: classes/contentmgmt/document.aw:3385
 msgid "august"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3385
+#: classes/contentmgmt/document.aw:3386
 msgid "september"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3386
+#: classes/contentmgmt/document.aw:3387
 msgid "oktoober"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3387
+#: classes/contentmgmt/document.aw:3388
 msgid "november"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3388
+#: classes/contentmgmt/document.aw:3389
 msgid "detsember"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3395
+#: classes/contentmgmt/document.aw:3396
 msgid "Just postitatud"
 msgstr ""

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_conference_value_days" folder="www/automatweb_cvs/classes/applications/crm" extends="class_base">
+	<class name="crm_conference_value_days" folder="www/automatweb_stable/classes/applications/crm" extends="class_base">
 		<action name="parse_alias" nologin="1" is_public="1" caption="Change">
 			<function name="parse_alias">
 				<arguments>

@@ -287,7 +287,7 @@ msgstr "Banner"
 msgid "N&auml;itamise t&otilde;en&auml;osus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:519
+#: classes/applications/banner/banner.aw:520
 msgid "No banner location id given"
 msgstr "No banner location id given"
 

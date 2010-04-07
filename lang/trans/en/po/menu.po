@@ -62,16 +62,16 @@ msgid "Omaduse Jrk (jrk) help"
 msgstr "order of the objects. Makes it able to order folders that are at the same level."
 
 #: classes/menu.aw:prop_type
-msgid "Omaduse Kausta tüüp (type) caption"
-msgstr ""
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"
+msgstr "Set the type of content"
 
 #: classes/menu.aw:prop_type_comment
-msgid "Omaduse Kausta tüüp (type) kommentaar"
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) kommentaar"
 msgstr ""
 
 #: classes/menu.aw:prop_type_help
-msgid "Omaduse Kausta tüüp (type) help"
-msgstr ""
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"
+msgstr "makes it able to display only documents with a certain content type under this folder."
 
 #: classes/menu.aw:prop_pmethod_properties
 msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) caption"
@@ -1786,12 +1786,6 @@ msgstr ""
 #: classes/menu.aw:2637 classes/menu.aw:2647
 msgid "Selline alias on juba olemas!"
 msgstr "This alias already exists!"
-
-#~ msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"
-#~ msgstr "Set the type of content"
-
-#~ msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"
-#~ msgstr "makes it able to display only documents with a certain content type under this folder."
 
 #~ msgid "Vali meetodiga seotud grupp"
 #~ msgstr "Select group connected to method"

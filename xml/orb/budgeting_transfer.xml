@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="budgeting_transfer" folder="www/automatweb_cvs/classes/applications/budgeting" extends="class_base">
+	<class name="budgeting_transfer" folder="www/automatweb_stable/classes/applications/budgeting" extends="class_base">
 		<action name="apply_transfer">
 			<function name="apply_transfer">
 				<arguments>

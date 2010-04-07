@@ -7,7 +7,7 @@
 		<!-- END SUB: HAS_ICON -->
 
 		<!-- SUB: HAS_TEXT -->
-		<span id='mb_{VAR:menu_id}' >{VAR:text}</span>
+		<span id='mb_{VAR:menu_id}' >{VAR:text}&nbsp;<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></span>
 		<!-- END SUB: HAS_TEXT -->
 
 	</a>

@@ -9,44 +9,58 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/converters/image_convert.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:138 classes/core/converters/image_convert.aw:162 classes/core/converters/image_convert.aw:183 classes/core/converters/image_convert.aw:234 classes/core/converters/image_convert.aw:265 classes/core/converters/image_convert.aw:311 classes/core/converters/image_convert.aw:349 classes/core/converters/image_convert.aw:368 classes/core/converters/image_convert.aw:386 classes/core/converters/image_convert.aw:431 classes/core/converters/image_convert.aw:440
+#: classes/core/converters/image_convert.aw:138
+#: classes/core/converters/image_convert.aw:183
+#: classes/core/converters/image_convert.aw:234
+#: classes/core/converters/image_convert.aw:265
+#: classes/core/converters/image_convert.aw:311
+#: classes/core/converters/image_convert.aw:349
+#: classes/core/converters/image_convert.aw:368
+#: classes/core/converters/image_convert.aw:386
+#: classes/core/converters/image_convert.aw:431
+#: classes/core/converters/image_convert.aw:440
 msgid "image_covert: could not detect any supported imagehandlers!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:499
+#: classes/core/converters/image_convert.aw:162
+msgid "image_convert: could not detect any supported imagehandlers!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:500
 msgid "image_convert::gd_driver::load_from_string(): could not detect image format!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:530
+#: classes/core/converters/image_convert.aw:531
 msgid "image_convert::gd_driver::load_from_file(): could not detect image format!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:572 classes/core/converters/image_convert.aw:725 classes/core/converters/image_convert.aw:906
+#: classes/core/converters/image_convert.aw:573
+#: classes/core/converters/image_convert.aw:726
+#: classes/core/converters/image_convert.aw:907
 msgid "image_convert::get(%s): unknown image type!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:602
+#: classes/core/converters/image_convert.aw:603
 msgid "image_convert::save(%s,%s): unknown image type!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:673
+#: classes/core/converters/image_convert.aw:674
 msgid "image_convert::load_from_file(%s): no such file!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:757
+#: classes/core/converters/image_convert.aw:758
 msgid "image_convert::save(%s, %s): unknown image type!"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:821
+#: classes/core/converters/image_convert.aw:822
 msgid "image_convert::load_from_string(): could not read image from string! reason = %s, desc = %s"
 msgstr ""
 
-#: classes/core/converters/image_convert.aw:837 classes/core/converters/image_convert.aw:854
+#: classes/core/converters/image_convert.aw:838
+#: classes/core/converters/image_convert.aw:855
 msgid "image_convert::load_from_file(%s): could not read image from file! reason = %s, desc = %s"
 msgstr ""
-

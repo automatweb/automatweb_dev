@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="workflow" folder="www/automatweb_cvs/classes/workflow" extends="class_base">
+	<class name="workflow" folder="www/automatweb_stable/classes/workflow" extends="class_base">
 		<action name="view">
 			<function name="view">
 				<arguments>

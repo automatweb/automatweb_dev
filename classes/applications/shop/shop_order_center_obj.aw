@@ -648,6 +648,26 @@ class shop_order_center_obj extends _int_object
 
 		return $ret;
 	}
+  
+	public function get_active_products_count()
+	{//CL_SHOP_PRODUCT_PACKAGE.RELTYPE_CATEGORY.
+		$GLOBALS["SLOW_DUKE"] = 1;
 
+		$t = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_PACKET,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"status" => 2,
+//				"CL_SHOP_PACKET.RELTYPE_CATEGORY.RELTYPE_CATEGORY(CL_PRODUCTS_SHOW)" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+			),
+			array(
+				CL_SHOP_PACKET =>  array(new obj_sql_func(OBJ_SQL_COUNT,"cnt" , "*"))
+			)
+		);
 
+		$cnt = $t->get_element_from_all("cnt");
+		return reset($cnt);
+
+	}
 }

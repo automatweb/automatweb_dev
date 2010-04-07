@@ -256,17 +256,6 @@
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>product_management_list</name>
-            <table>objects</table>
-            <group>product_management</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>product_managementright</parent>
-            <field>product_management_list</field>
-            <caption>Toodete nimekiri</caption>
-      </property>
-      <property>
             <name>category_list</name>
             <table>objects</table>
             <group>product_management</group>
@@ -276,6 +265,17 @@
             <parent>product_managementright</parent>
             <field>category_list</field>
             <caption>Kategooriate nimekiri</caption>
+      </property>
+      <property>
+            <name>product_management_list</name>
+            <table>objects</table>
+            <group>product_management</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>product_managementright</parent>
+            <field>product_management_list</field>
+            <caption>Toodete nimekiri</caption>
       </property>
       <property>
             <name>products_toolbar</name>
@@ -509,10 +509,11 @@
             <name>packets_s_cat</name>
             <table>objects</table>
             <group>packets</group>
-            <type>select</type>
+            <type>textbox</type>
             <store>no</store>
             <captionside>top</captionside>
             <parent>packets_left_search</parent>
+            <size>30</size>
             <field>packets_s_cat</field>
             <caption>Kategooria</caption>
       </property>
@@ -551,10 +552,43 @@
             <caption>Hinnakiri</caption>
       </property>
       <property>
+            <name>packets_s_created_from</name>
+            <table>objects</table>
+            <group>packets</group>
+            <type>date_select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>packets_left_search</parent>
+            <field>packets_s_created_from</field>
+            <caption>Loodud alates</caption>
+      </property>
+      <property>
+            <name>packets_s_created_to</name>
+            <table>objects</table>
+            <group>packets</group>
+            <type>date_select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>packets_left_search</parent>
+            <field>packets_s_created_to</field>
+            <caption>Loodud kuni</caption>
+      </property>
+	  <property>
+            <name>packets_s_active</name>
+            <table>objects</table>
+            <group>packets</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>packets_left_search</parent>
+            <field>packets_s_active</field>
+            <caption>Aktiivsus</caption>
+      </property>
+      <property>
             <name>packets_s_sbt</name>
             <table>objects</table>
             <group>packets</group>
-            <type>submit</type>
+            <type>button</type>
             <store>no</store>
             <captionside>top</captionside>
             <parent>packets_left_search</parent>

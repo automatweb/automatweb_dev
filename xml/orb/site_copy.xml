@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="site_copy" folder="www/automatweb_cvs/classes/contentmgmt/site_copy" extends="class_base">
+	<class name="site_copy" folder="www/automatweb_stable/classes/contentmgmt/site_copy" extends="class_base">
 		<action name="invoke" nologin="1" all_args="1">
 			<function name="invoke">
 				<arguments>

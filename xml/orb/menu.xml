@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="menu" folder="www/automatweb_cvs/classes" extends="class_base">
+	<class name="menu" folder="www/automatweb_stable/classes" extends="class_base">
 		<action name="new" is_public="1" all_args="1" caption="Lisa">
 			<function name="new_change">
 				<arguments>

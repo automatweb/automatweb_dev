@@ -14,71 +14,71 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:158
+#: classes/vcl/popup_search.aw:159
 msgid "--Vali--"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:168 classes/vcl/popup_search.aw:500 classes/vcl/popup_search.aw:501 classes/vcl/popup_search.aw:923
+#: classes/vcl/popup_search.aw:169 classes/vcl/popup_search.aw:501 classes/vcl/popup_search.aw:502 classes/vcl/popup_search.aw:924 classes/vcl/popup_search.aw:1119 classes/vcl/popup_search.aw:1120
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:177
+#: classes/vcl/popup_search.aw:178
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:217
+#: classes/vcl/popup_search.aw:218
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:235
+#: classes/vcl/popup_search.aw:236
 msgid "Lisa uus %s"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:251
+#: classes/vcl/popup_search.aw:252
 msgid "Eemalda"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:336
+#: classes/vcl/popup_search.aw:337
 msgid "Vali eemaldatavad objektid"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:352 classes/vcl/popup_search.aw:634 classes/vcl/popup_search.aw:638 classes/vcl/popup_search.aw:721
+#: classes/vcl/popup_search.aw:353 classes/vcl/popup_search.aw:635 classes/vcl/popup_search.aw:639 classes/vcl/popup_search.aw:722 classes/vcl/popup_search.aw:1240 classes/vcl/popup_search.aw:1323
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:437
+#: classes/vcl/popup_search.aw:438
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:467 classes/vcl/popup_search.aw:610
+#: classes/vcl/popup_search.aw:468 classes/vcl/popup_search.aw:611 classes/vcl/popup_search.aw:1100 classes/vcl/popup_search.aw:1217
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:474
+#: classes/vcl/popup_search.aw:475 classes/vcl/popup_search.aw:1107
 msgid "Objekti id"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:577
+#: classes/vcl/popup_search.aw:578 classes/vcl/popup_search.aw:1205
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:603
+#: classes/vcl/popup_search.aw:604 classes/vcl/popup_search.aw:1210
 msgid "OID"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:616
+#: classes/vcl/popup_search.aw:617 classes/vcl/popup_search.aw:1223
 msgid "Asukoht"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:622
+#: classes/vcl/popup_search.aw:623 classes/vcl/popup_search.aw:1228
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:626
+#: classes/vcl/popup_search.aw:627 classes/vcl/popup_search.aw:1232
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:703
+#: classes/vcl/popup_search.aw:704 classes/vcl/popup_search.aw:1286
 msgid "Vali see"
 msgstr ""
 

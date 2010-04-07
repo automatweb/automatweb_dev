@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_document" folder="www/automatweb_cvs/classes/applications/crm" extends="class_base">
+	<class name="crm_document" folder="www/automatweb_stable/classes/applications/crm" extends="class_base">
 		<action name="add_s_res_to_p_list">
 			<function name="add_s_res_to_p_list">
 				<arguments>

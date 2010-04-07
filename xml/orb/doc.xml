@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="doc" folder="www/automatweb_cvs/classes/contentmgmt" extends="class_base">
+	<class name="doc" folder="www/automatweb_stable/classes/contentmgmt" extends="class_base">
 		<action name="show">
 			<function name="show">
 				<arguments>

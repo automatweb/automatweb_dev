@@ -34,7 +34,7 @@ if(isset($pdf))
 	$text = "{PAGE_NUM}/{PAGE_COUNT}";
 	$width = Font_Metrics::get_text_width("1/2", $font, $size);
 	$x = $w / 2 - $width / 2;
-	$pdf->page_text($x/10, $y, "{VAR:LC_RFP_CONFIRMATION} - {VAR:data_gen_function_name}", $font, $size, $color);
+	$pdf->page_text($x/10, $y, "{VAR:LC_RFP_CONFIRMATION}", $font, $size, $color);
 	$pdf->page_text($x, $y, $text, $font, $size, $color);
 }
 </script>
@@ -43,9 +43,12 @@ if(isset($pdf))
 
 <table class="header">
 <tr>
-	<td><img src="{VAR:baseurl}/img/aw_logo_gray.gif" alt="Reval Hotels"></td>
-	<td>
-		<!-- rekvisiidid -->
+	<td width="70%"><img src="http://www.automatweb.com/img/logo.gif" alt="AutomatWeb"></td>
+	<td width="30%">
+		<strong>AutomatWeb</strong><br>
+		Pärnu mnt 158b, 11317 Tallinn<br>
+		{VAR:LC_RFP_PHONE} +372 655 8334<br>
+		{VAR:LC_RFP_EMAIL} info@automatweb.com<br>
 	</td>
 </tr>
 <tr>
@@ -430,11 +433,11 @@ if(isset($pdf))
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_ORG}: <strong>{VAR:data_company}</strong></td>
-	<td>{VAR:LC_RFP_HOTEL}: <strong>O&Uuml; Struktuur Meedia</strong></td>
+	<td>{VAR:LC_RFP_HOTEL}: <strong>AutomatWeb</strong></td>
 </tr>
 <tr>
-	<td>{VAR:LC_RFP_STREET}: <strong>   {VAR:data_street}</strong></td>
-	<td>{VAR:LC_RFP_STREET}: <strong>   Narva mnt 158b</strong></td>
+	<td>{VAR:LC_RFP_STREET}: <strong>{VAR:data_street}</strong></td>
+	<td>{VAR:LC_RFP_STREET}: <strong>Pärnu mnt 158b</strong></td>
 </tr>
 <tr>
 	<td>{VAR:LC_RFP_CITY}: <strong>{VAR:data_city}</strong></td>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ml_list" folder="www/automatweb_cvs/classes/applications/mailinglist" extends="class_base">
+	<class name="ml_list" folder="www/automatweb_stable/classes/applications/mailinglist" extends="class_base">
 		<action name="submit_choose_addresses" all_args="1">
 			<function name="submit_choose_addresses">
 				<arguments>

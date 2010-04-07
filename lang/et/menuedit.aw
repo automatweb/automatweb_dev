@@ -102,4 +102,6 @@ $lc_menuedit["LC_LOGIN_CAPTION"] = "Logi sisse";
 $lc_menuedit["LC_MENUEDIT_CHOOSE_KEYWORDS"] = "M&auml;rks&otilde;nad";
 $lc_menuedit["LC_MENUEDIT_DISPLAY"] = "N&auml;itamine";
 $lc_menuedit["LC_MENUEDIT_OTHER_SETTINGS"] = "Muud m&auml;&auml;rangud";
+$lc_menuedit["LC_SEARCH"] = "Otsingus&otilde;na / toote number";
+$lc_menuedit["LC_SEARCH_ALL"] = "kogu poest";
 ?>

@@ -42,7 +42,7 @@
 {VAR:add_items}
 <!-- SUB: forward_link -->
 <form method="GET">
-	<input onClick="parent.location='{VAR:forwardurl}'" class="formbutton" type='button' name='' value='Kinnita tellimus' accesskey="s">
+	<input onClick="parent.location='{VAR:forwardurl}'" class="formbutton" type='button' name='' value='Edasi' accesskey="s">
 </form>
 <!-- END SUB: forward_link -->
 {VAR:add_persondata}

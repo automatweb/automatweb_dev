@@ -1165,13 +1165,13 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:368
 #: classes/contentmgmt/forum/forum_v2.aw:376
-#: classes/contentmgmt/forum/forum_v2.aw:2552
+#: classes/contentmgmt/forum/forum_v2.aw:2575
 msgid "Pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:369
-#: classes/contentmgmt/forum/forum_v2.aw:2562
-#: classes/contentmgmt/forum/forum_v2.aw:2742
+#: classes/contentmgmt/forum/forum_v2.aw:2585
+#: classes/contentmgmt/forum/forum_v2.aw:2765
 msgid "Autor"
 msgstr ""
 
@@ -1187,7 +1187,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:372
 #: classes/contentmgmt/forum/forum_v2.aw:380
-#: classes/contentmgmt/forum/forum_v2.aw:2675
+#: classes/contentmgmt/forum/forum_v2.aw:2698
 msgid "Kommentaar"
 msgstr ""
 
@@ -1232,8 +1232,8 @@ msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:2227
-#: classes/contentmgmt/forum/forum_v2.aw:2680
-#: classes/contentmgmt/forum/forum_v2.aw:2735
+#: classes/contentmgmt/forum/forum_v2.aw:2703
+#: classes/contentmgmt/forum/forum_v2.aw:2758
 msgid "Teema"
 msgstr ""
 
@@ -1245,88 +1245,88 @@ msgstr ""
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2399
+#: classes/contentmgmt/forum/forum_v2.aw:2416
 msgid "Teema muutmine"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2399
+#: classes/contentmgmt/forum/forum_v2.aw:2416
 msgid "Kommentaari muutmine"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2464
-#: classes/contentmgmt/forum/forum_v2.aw:2916
+#: classes/contentmgmt/forum/forum_v2.aw:2487
+#: classes/contentmgmt/forum/forum_v2.aw:2939
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2472
+#: classes/contentmgmt/forum/forum_v2.aw:2495
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2557
+#: classes/contentmgmt/forum/forum_v2.aw:2580
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2567
+#: classes/contentmgmt/forum/forum_v2.aw:2590
 msgid "Aeg"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2713
+#: classes/contentmgmt/forum/forum_v2.aw:2736
 msgid "Otsingus&otilde;na"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2719
+#: classes/contentmgmt/forum/forum_v2.aw:2742
 msgid "Kuup&auml;ev alates"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2726
+#: classes/contentmgmt/forum/forum_v2.aw:2749
 msgid "Kuup&auml;ev kuni"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2748
+#: classes/contentmgmt/forum/forum_v2.aw:2771
 msgid "&Uuml;he teema postitusi ei korrata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2754
+#: classes/contentmgmt/forum/forum_v2.aw:2777
 msgid "Otsitakse"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2756
+#: classes/contentmgmt/forum/forum_v2.aw:2779
 msgid "K&otilde;iki"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2757
+#: classes/contentmgmt/forum/forum_v2.aw:2780
 msgid "Teemasid"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2758
+#: classes/contentmgmt/forum/forum_v2.aw:2781
 msgid "Kommentaare"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2765
+#: classes/contentmgmt/forum/forum_v2.aw:2788
 msgid "Otsi"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2848
+#: classes/contentmgmt/forum/forum_v2.aw:2871
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2928
+#: classes/contentmgmt/forum/forum_v2.aw:2951
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2997
+#: classes/contentmgmt/forum/forum_v2.aw:3020
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:3555
+#: classes/contentmgmt/forum/forum_v2.aw:3577
 msgid "teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:3562
+#: classes/contentmgmt/forum/forum_v2.aw:3584
 msgid "aadresside kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:3817
+#: classes/contentmgmt/forum/forum_v2.aw:3839
 msgid "Nimetu"
 msgstr ""
 

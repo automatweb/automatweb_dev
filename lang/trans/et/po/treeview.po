@@ -111,6 +111,6 @@ msgstr ""
 msgid "Seose ikoon (RELTYPE_ICON) tekst"
 msgstr ""
 
-#: classes/vcl/treeview.aw:1560
+#: classes/vcl/treeview.aw:1570
 msgid "(M)"
 msgstr ""

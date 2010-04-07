@@ -26,43 +26,43 @@ msgstr ""
 msgid "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2637
+#: classes/contentmgmt/site_show.aw:2639
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3186
+#: classes/contentmgmt/site_show.aw:3188
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress:"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3381
+#: classes/contentmgmt/site_show.aw:3383
 msgid "Lisa uus k&otilde;rvale"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3391
+#: classes/contentmgmt/site_show.aw:3393
 msgid "Lisa uus alamkaust"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3401
+#: classes/contentmgmt/site_show.aw:3403
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3411
+#: classes/contentmgmt/site_show.aw:3413
 msgid "Muuda &otilde;igusi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3420
+#: classes/contentmgmt/site_show.aw:3422
 msgid "Peida"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3424
+#: classes/contentmgmt/site_show.aw:3426
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3432 classes/contentmgmt/site_show.aw:3465
+#: classes/contentmgmt/site_show.aw:3434 classes/contentmgmt/site_show.aw:3467
 msgid "Kleebi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3453
+#: classes/contentmgmt/site_show.aw:3455
 msgid "Lisa uus"
 msgstr ""
 

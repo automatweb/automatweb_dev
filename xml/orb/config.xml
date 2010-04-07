@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="config" folder="www/automatweb_cvs/classes" extends="aw_template">
+	<class name="config" folder="www/automatweb_stable/classes" extends="aw_template">
 		<action name="grp_redirect">
 			<function name="grp_redirect">
 				<arguments>

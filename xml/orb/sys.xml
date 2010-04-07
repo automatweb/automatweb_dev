@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="sys" folder="www/automatweb_cvs/classes" extends="aw_template">
+	<class name="sys" folder="www/automatweb_stable/classes" extends="aw_template">
 		<action name="gen_db_struct" nologin="1">
 			<function name="gen_db_struct">
 				<arguments>

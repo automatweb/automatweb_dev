@@ -55,7 +55,11 @@
 @property task_row type=relpicker reltype=RELTYPE_TASK_ROW store=connect multiple=1
 @caption Toimetuse read
 
-@reltype PROD value=1 clid=CL_CHOP_PRODUCT
+//UnWasted
+@property order_row type=relpicker reltype=RELTYPE_SHOP_ORDER_ROW store=connect multiple=1
+@caption Tellimuse read
+
+@reltype PROD value=1 clid=CL_SHOP_PRODUCT
 @caption Toode
 
 @reltype TASK_ROW value=2 clid=CL_TASK_ROW
@@ -72,6 +76,10 @@
 
 @reltype BUG value=6 clid=CL_BUG
 @caption Bugi
+
+//UnWasted
+@reltype SHOP_ORDER_ROW value=7 clid=CL_SHOP_ORDER_ROW
+@caption Tellimuse rida
 
 */
 

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="calendar_reminder" folder="www/automatweb_cvs/classes/applications/calendar" extends="class_base">
+	<class name="calendar_reminder" folder="www/automatweb_stable/classes/applications/calendar" extends="class_base">
 		<action name="process_pending_reminders" nologin="1">
 			<function name="process_pending_reminders">
 				<arguments>

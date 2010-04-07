@@ -18,7 +18,7 @@
   <tr>
     <td valign="top" style="padding-right: 15px; padding-top: 1px;"><font class="vmain"><strong>Aeg:</strong> </td>
     <td valign="top" style="padding-top: 1px;"><font class="vmain"><?php
-$d = {VAR:CL_CALENDAR_EVENT.start1};
+$d = "{VAR:CL_CALENDAR_EVENT.start1}" ? "{VAR:CL_CALENDAR_EVENT.start1}" : "";
 echo date('d.m.Y, H:i',$d);
 ?></td>
   </tr>

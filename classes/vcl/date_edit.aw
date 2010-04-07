@@ -160,7 +160,7 @@ class date_edit
 			switch($k)
 			{
 				case "year":
-					$retval .= "<select name=\"{$this->varname}[year]\"{$disabled}{$textsize}{$clid}>\n";
+					$retval .= "<select name=\"{$this->varname}[year]\" id=\"{$this->varname}__year\"{$disabled}{$textsize}{$clid}>\n";
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -207,11 +207,11 @@ class date_edit
 					{
 						$year = "";
 					}
-					$retval .= "<input type='text' name='{$this->varname}[year]' size='4' maxlength='4' value='{$year}'{$disabled}{$textsize}{$clid} \>\n";
+					$retval .= "<input type='text' name='{$this->varname}[year]' id=\"{$this->varname}__year\" size='4' maxlength='4' value='{$year}'{$disabled}{$textsize}{$clid} \>\n";
 					break;
 
 				case "month":
-					$retval .= "<select name='{$this->varname}[month]'{$disabled}{$textsize}{$clid}>\n";
+					$retval .= "<select name='{$this->varname}[month]' id=\"{$this->varname}__month\" {$disabled}{$textsize}{$clid}>\n";
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -252,11 +252,11 @@ class date_edit
 					{
 						$month = "";
 					}
-					$retval .= "<input type='text' name='{$this->varname}[month]' size='2' maxlength='2' value='$month'{$disabled}{$textsize}{$clid} \>\n";
+					$retval .= "<input type='text' name='{$this->varname}[month]' id=\"{$this->varname}__month\" size='2' maxlength='2' value='$month'{$disabled}{$textsize}{$clid} \>\n";
 					break;
 
 				case "day":
-					$retval .= "<select name='{$this->varname}[day]'{$disabled}{$textsize}{$clid}>\n";
+					$retval .= "<select name='{$this->varname}[day]'  id=\"{$this->varname}__day\" {$disabled}{$textsize}{$clid}>\n";
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -273,7 +273,7 @@ class date_edit
 					{
 						$day = "";
 					}
-					$retval .= "<input type='text' name='{$this->varname}[day]' size='2' maxlength='2' value='$day'{$disabled}{$textsize}{$clid} \>\n";
+					$retval .= "<input type='text' name='{$this->varname}[day]' id=\"{$this->varname}__day\" size='2' maxlength='2' value='$day'{$disabled}{$textsize}{$clid} \>\n";
 					break;
 
 				case "hour":

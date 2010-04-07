@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="scala_import" folder="www/automatweb_cvs/classes/import" extends="class_base">
+	<class name="scala_import" folder="www/automatweb_stable/classes/import" extends="class_base">
 		<action name="do_import" nologin="1">
 			<function name="do_import">
 				<arguments>

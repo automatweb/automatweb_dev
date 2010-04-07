@@ -1,7 +1,6 @@
 <?php
 /*
 
-
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE maintainer=kristo
 @tableinfo files index=id master_table=objects master_index=oid
 @default table=files

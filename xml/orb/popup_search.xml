@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="popup_search" folder="www/automatweb_cvs/classes/vcl" extends="aw_template">
+	<class name="popup_search" folder="www/automatweb_stable/classes/vcl" extends="aw_template">
 		<action name="do_unlink">
 			<function name="do_unlink">
 				<arguments>

@@ -20,7 +20,7 @@ function arr($arr, $die=false, $see_html=false)
 {
 	if (isset(automatweb::$instance) and automatweb::MODE_PRODUCTION === automatweb::$instance->mode())
 	{
-		return;
+//		return;
 	}
 
 	echo "<hr/>\n";

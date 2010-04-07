@@ -14,39 +14,39 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/calendar.aw:743
+#: classes/vcl/calendar.aw:747
 msgid "T&auml;na"
 msgstr ""
 
-#: classes/vcl/calendar.aw:744
+#: classes/vcl/calendar.aw:748
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/vcl/calendar.aw:745
+#: classes/vcl/calendar.aw:749
 msgid "N&auml;dal"
 msgstr ""
 
-#: classes/vcl/calendar.aw:746
+#: classes/vcl/calendar.aw:750
 msgid "Kuu"
 msgstr ""
 
-#: classes/vcl/calendar.aw:747
+#: classes/vcl/calendar.aw:751
 msgid "&Uuml;levaade"
 msgstr ""
 
-#: classes/vcl/calendar.aw:808
+#: classes/vcl/calendar.aw:812
 msgid "Toimetused"
 msgstr ""
 
-#: classes/vcl/calendar.aw:1427
+#: classes/vcl/calendar.aw:1426
 msgid "Viimased"
 msgstr ""
 
-#: classes/vcl/calendar.aw:1428
+#: classes/vcl/calendar.aw:1427
 msgid "J&auml;rgmised"
 msgstr ""
 
-#: classes/vcl/calendar.aw:1904
+#: classes/vcl/calendar.aw:1903
 msgid "Lisas [%s] %s /  Muutis [%s] %s"
 msgstr ""
 

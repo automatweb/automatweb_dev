@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="minify_js_and_css" folder="www/automatweb_cvs/classes/core/util" extends="class_base">
+	<class name="minify_js_and_css" folder="www/automatweb_stable/classes/core/util" extends="class_base">
 		<action name="get_js" nologin="1" is_public="1">
 			<function name="get_js">
 				<arguments>

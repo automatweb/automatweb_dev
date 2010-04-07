@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="bank_payment" folder="www/automatweb_cvs/classes/common" extends="class_base">
+	<class name="bank_payment" folder="www/automatweb_stable/classes/common" extends="class_base">
 		<action name="form_test_case" nologin="1" is_public="1" all_args="1">
 			<function name="form_test_case">
 				<arguments>

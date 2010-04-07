@@ -111,7 +111,7 @@ msgstr "root folder"
 msgid "Seose ikoon (RELTYPE_ICON) tekst"
 msgstr "icon"
 
-#: classes/vcl/treeview.aw:1560
+#: classes/vcl/treeview.aw:1570
 msgid "(M)"
 msgstr ""
 

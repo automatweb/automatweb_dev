@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="file_manager" folder="www/automatweb_cvs/classes/admin/editor" extends="aw_editor_manager_base">
+	<class name="file_manager" folder="www/automatweb_stable/classes/admin/editor" extends="aw_editor_manager_base">
 		<action name="manage" default="1">
 			<function name="manage">
 				<arguments>

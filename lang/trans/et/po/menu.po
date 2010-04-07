@@ -62,16 +62,16 @@ msgid "Omaduse Jrk (jrk) help"
 msgstr "järjekorranumber; võimaldab samal tasemel olevaid kaustu omavahel järjestada."
 
 #: classes/menu.aw:prop_type
-msgid "Omaduse Kausta tüüp (type) caption"
-msgstr ""
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"
+msgstr "Kausta tüüp"
 
 #: classes/menu.aw:prop_type_comment
-msgid "Omaduse Kausta tüüp (type) kommentaar"
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) kommentaar"
 msgstr ""
 
 #: classes/menu.aw:prop_type_help
-msgid "Omaduse Kausta tüüp (type) help"
-msgstr ""
+msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"
+msgstr "võimaldab kuvada ainult kindla sisutüübiga dokumente selle kausta all."
 
 #: classes/menu.aw:prop_pmethod_properties
 msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) caption"
@@ -1786,12 +1786,6 @@ msgstr ""
 #: classes/menu.aw:2637 classes/menu.aw:2647
 msgid "Selline alias on juba olemas!"
 msgstr ""
-
-#~ msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) caption"
-#~ msgstr "Kausta tüüp"
-
-#~ msgid "Omaduse Men&uuml;&uuml; t&uuml;&uuml;p (type) help"
-#~ msgstr "võimaldab kuvada ainult kindla sisutüübiga dokumente selle kausta all."
 
 #~ msgid "Omaduse Objektitabeli konf (objtbl_conf) help"
 #~ msgstr "võimaldab kujundada selle kausta all kuvatavate objektide tabelit."

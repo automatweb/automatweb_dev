@@ -95,6 +95,6 @@ msgstr ""
 
 #: classes/applications/crm/crm_skill_level.aw:77
 #: classes/applications/crm/crm_skill_level.aw:101
-#: classes/applications/crm/crm_skill_level.aw:186
+#: classes/applications/crm/crm_skill_level.aw:187
 msgid "--vali--"
 msgstr "--Выбери--"

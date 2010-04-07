@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="person_skill_manager" folder="www/automatweb_cvs/classes/applications/crm" extends="class_base">
+	<class name="person_skill_manager" folder="www/automatweb_stable/classes/applications/crm" extends="class_base">
 		<action name="skills_tree_leaf" all_args="1">
 			<function name="skills_tree_leaf">
 				<arguments>
