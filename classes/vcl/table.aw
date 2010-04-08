@@ -1657,15 +1657,27 @@ END;
 		//$sep = "\t";
 		$d = array();
 		reset($this->rowdefs);
-		$tbl = "";
+		$tbl = array();
+		$parents = array();
 		if(is_array($this->rowdefs))
 		{
 			foreach($this->rowdefs as $v)
 			{
-				$tbl .= ($tbl ? $sep : "").$this->_format_csv_field($v["caption"], $sep);
+				if(!isset($parents[$v["name"]]))
+				{
+					$tbl[$v["name"]] .= ($tbl ? $sep : "").$this->_format_csv_field($v["caption"], $sep);
+				}
+				if(isset($v["parent"]))
+				{
+					$parents[$v["parent"]] = true;
+					if(isset($tbl[$v["parent"]]))
+					{
+						unset($tbl[$v["parent"]]);
+					}
+				}
 			}
 		}
-		$d[] = $tbl;
+		$d[] = join("", $tbl);
 
 		// koostame tabeli sisu
 		if(count($this->data))
@@ -1680,6 +1692,11 @@ END;
 				if(is_array($this->rowdefs))
 				foreach($this->rowdefs as $k1 => $v1)
 				{
+					if(isset($parents[$v1["name"]]))
+					{
+						continue;
+					}
+
 					if ($v1["name"] == "rec")
 					{
 						$val = $cnt;

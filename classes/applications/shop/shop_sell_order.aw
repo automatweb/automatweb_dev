@@ -6,82 +6,89 @@
 @default table=aw_shop_sell_orders
 @default group=general
 
-@property number type=textbox field=aw_number
-@caption Number
+	@property number type=textbox field=aw_number
+	@caption Number
 
-@property purchaser type=relpicker reltype=RELTYPE_PURCHASER field=aw_purchaser
-@caption Tellija
+	@property purchaser type=relpicker reltype=RELTYPE_PURCHASER field=aw_purchaser
+	@caption Tellija
 
-@property job type=relpicker reltype=RELTYPE_JOB field=aw_job
-@caption T&ouml;&ouml;
+	@property job type=relpicker reltype=RELTYPE_JOB field=aw_job
+	@caption T&ouml;&ouml;
 
-@property related_orders type=relpicker multiple=1 reltype=RELTYPE_PURCHASE_ORDER store=connect
-@caption Seotud ostutellimused			
+	@property related_orders type=relpicker multiple=1 reltype=RELTYPE_PURCHASE_ORDER store=connect
+	@caption Seotud ostutellimused			
 
-@property date type=date_select field=aw_date
-@caption Kuup&auml;ev
+	@property date type=date_select field=aw_date
+	@caption Kuup&auml;ev
 
-@property deal_date type=date_select field=aw_deal_date
-@caption Tegelemise kuup&auml;ev
+	@property deal_date type=date_select field=aw_deal_date
+	@caption Tegelemise kuup&auml;ev
 
-@property planned_date type=date_select field=aw_planned_send_date
-@caption Planeeritud saatmise kuup&auml;ev
+	@property planned_date type=date_select field=aw_planned_send_date
+	@caption Planeeritud saatmise kuup&auml;ev
 
-@property buyer_rep type=relpicker reltype=RELTYPE_BUYER_REP field=aw_buyer_rep
-@caption Tellija esindaja
+	@property buyer_rep type=relpicker reltype=RELTYPE_BUYER_REP field=aw_buyer_rep
+	@caption Tellija esindaja
 
-@property our_rep type=relpicker reltype=RELTYPE_OUR_REP field=aw_our_rep
-@caption Meie esindaja
+	@property our_rep type=relpicker reltype=RELTYPE_OUR_REP field=aw_our_rep
+	@caption Meie esindaja
 
-@property trans_cost type=textbox field=aw_trans_cost
-@caption Transpordikulu
+	@property trans_cost type=textbox field=aw_trans_cost
+	@caption Transpordikulu
 
-@property customs_cost type=textbox field=aw_customs_cost datatype=int
-@caption Tollikulu
+	@property customs_cost type=textbox field=aw_customs_cost datatype=int
+	@caption Tollikulu
 
-@property transp_type type=relpicker field=aw_transp_type reltype=RELTYPE_TRANSFER_METHOD
-@caption L&auml;hetusviis
+	@property transp_type type=relpicker field=aw_transp_type reltype=RELTYPE_TRANSFER_METHOD
+	@caption L&auml;hetusviis
 
-@property shop_delivery_type type=relpicker field=aw_delivery_type reltype=RELTYPE_DELIVERY_METHOD
-@caption Poe kohaletoimetamise viis
+	@property shop_delivery_type type=relpicker field=aw_delivery_type reltype=RELTYPE_DELIVERY_METHOD
+	@caption Poe kohaletoimetamise viis
 
-@property currency type=relpicker reltype=RELTYPE_CURRENCY automatic=1 field=aw_currency
-@caption Valuuta
+	@property currency type=relpicker reltype=RELTYPE_CURRENCY automatic=1 field=aw_currency
+	@caption Valuuta
 
-@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 field=aw_warehouse
-@caption Ladu
+	@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 field=aw_warehouse
+	@caption Ladu
 
-@property delivery_address type=relpicker reltype=RELTYPE_ADDRESS automatic=1 field=aw_address
-@caption Kohaletoimetamise aadress
-
-
-@property smartpost_sell_place_name type=hidden field=aw_address_text
-@caption Kohaletoimetamise aadress tekstina (postkontorid jne)
-@comment M&otilde;nel kohaletoimetamise viisil on omal aadresside valik kuhu saadetakse kaup (nt. smartpost)
+	@property delivery_address type=relpicker reltype=RELTYPE_ADDRESS automatic=1 field=aw_address
+	@caption Kohaletoimetamise aadress
 
 
+	@property smartpost_sell_place_name type=hidden field=aw_address_text
+	@caption Kohaletoimetamise aadress tekstina (postkontorid jne)
+	@comment M&otilde;nel kohaletoimetamise viisil on omal aadresside valik kuhu saadetakse kaup (nt. smartpost)
 
-@property order_status type=chooser default=0 field=aw_status default=0
-@caption Staatus
 
-@property channel type=relpicker field=aw_channel reltype=RELTYPE_CHANNEL store=connect
-@caption M&uuml;&uuml;gikanal
 
-@property taxed type=chooser field=aw_taxed
-@caption Maks
+	@property order_status type=chooser default=0 field=aw_status default=0
+	@caption Staatus
 
-@property payment_type type=select field=aw_payment_type
-@caption Maksetingimus
+	@property channel type=relpicker field=aw_channel reltype=RELTYPE_CHANNEL store=connect
+	@caption M&uuml;&uuml;gikanal
 
-@property deferred_payment_count type=hidden field=aw_deferred_payment_count
-@caption J&auml;relmaksude arv
+	@property taxed type=chooser field=aw_taxed
+	@caption Maks
 
-@property art_toolbar type=toolbar no_caption=1 store=no
+	@property payment_type type=select field=aw_payment_type
+	@caption Maksetingimus
 
-@property articles type=table store=no no_caption=1
+	@property deferred_payment_count type=hidden field=aw_deferred_payment_count
+	@caption J&auml;relmaksude arv
 
-@property order_rows_to type=hidden store=no no_caption=1
-@caption Order rows to
+	@property art_toolbar type=toolbar no_caption=1 store=no
+
+	@property articles type=table store=no no_caption=1
+
+	@property order_rows_to type=hidden store=no no_caption=1
+	@caption Order rows to
+
+@groupinfo preview caption="Eelvaade" submit=no
+@default group=preview
+
+	@property preview type=text no_caption=1 store=no
+
+######
 
 @reltype PURCHASER value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Hankija
@@ -156,18 +163,28 @@ class shop_sell_order extends class_base
 				if($prop["value"])
 				{
 					$prop["options"] = array($prop["value"] => get_name($prop["value"]));
-
 				}
-	
-				break;
 
+				break;
 		}
 
 		return $retval;
 	}
 
+	public function _get_preview($arr)
+	{
+		if(!is_oid($arr["obj_inst"]->id()))
+		{
+			return PROP_IGNORE;
+		}
 
-
+		$arr["prop"]["value"] = $this->show(array(
+			"id" => $arr["obj_inst"]->id(),
+			//	Next line assumes the shop_order_center is the parent of the shop_sell_order. -kaarel 7.04.2010
+			"template" => $arr["obj_inst"]->prop("parent.mail_template"),
+		));
+		return PROP_OK;
+	}
 
 	function callback_mod_reforb($arr)
 	{

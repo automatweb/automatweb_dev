@@ -8492,6 +8492,45 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('print_orders')",
 		));
 
+		// CSV
+		$tb->add_menu_button(array(
+			"name" => "csv",
+			"tooltip" => t("Ekspordi CSV"),
+			"text" => "CSV",
+		));
+		
+		$tb->add_menu_item(array(
+			"parent" => "csv",
+			"text" => t("Hetkel kuvatavad tellimused"),
+			"link" => aw_url_change_var("action", "csv_export")
+		));
+		
+		$tb->add_menu_item(array(
+			"parent" => "csv",
+			"text" => t("Valitud tellimused"),
+			"action" => "csv_export",
+		));
+
+		$branches = array(
+			"yesterday" => t("Eilsed tellimused"),
+			"today" => t("T&auml;nased tellimused"),
+			"lastweek" => t("Eelmise n&auml;dala tellimused"),
+			"thisweek" => t("K&auml;esoleva n&auml;dala tellimused"),
+			"lastmonth" => t("Eelmise kuu"),
+			"thismonth" => t("K&auml;esoleva kuu tellimused"),
+		);
+
+		foreach($branches as $id => $caption)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "csv",
+				"text" => $caption,
+				"link" => aw_url_change_var(array(
+					"action" => "csv_export",
+					"time_filt" => $id,
+				)),
+			));
+		}
 
 		$tb->add_menu_button(array(
 			"name" => "type",
@@ -8618,6 +8657,10 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 			return $ol;
 		}
 		$params = array();
+		if(!empty($arr["request"]["sel"]))
+		{
+			$params["oid"] = $arr["request"]["sel"];
+		}
 		if(isset($arr["request"]["channel"]) && is_oid($arr["request"]["channel"]))
 		{
 			$params["channel"] = $arr["request"]["channel"];
@@ -8775,8 +8818,9 @@ $oo = get_instance(CL_SHOP_SELL_ORDER);
 					$cnum = $so->prop("number");
 					$rel_arr[] = html::obj_change_url($so, $cnum ? $cnum : t("(Puudub)"));
 				}
-			}exit_function("orders_table_loop");
-enter_function("orders_table_loop3");
+			}
+			exit_function("orders_table_loop");
+			enter_function("orders_table_loop3");
 			$cnum = $o->prop("number");
 			$cid = $o->prop("job");
 			if($this->can("view", $cid))
@@ -8797,10 +8841,10 @@ enter_function("orders_table_loop3");
 			$add_row = null;
 			$sum = 0;
 			exit_function("orders_table_loop3");
-enter_function("orders_table_loop35");
+			enter_function("orders_table_loop35");
 			$sum+= $o->get_sum();
-exit_function("orders_table_loop35");
-enter_function("orders_table_loop2");
+			exit_function("orders_table_loop35");
+			enter_function("orders_table_loop2");
 			$total_sum+=$sum;
 			if(($group == "purchase_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_PURCHASE_MANAGER_WORKSPACE) || ($group == "sell_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_SALES_MANAGER_WORKSPACE))
 			{
@@ -8895,16 +8939,16 @@ enter_function("orders_table_loop2");
 				}
 				//$add_row .= "<br />";
 			}
-exit_function("orders_table_loop2");
-enter_function("orders_table_loop1.5");
+			exit_function("orders_table_loop2");
+			enter_function("orders_table_loop1.5");
 			$cust_code = "";
 			if($this->can("view" , $o->prop("purchaser")) && $owner)
 			{
 				$cust_rel = $o->get_customer_relation($owner, true);
 				$cust_code =  html::obj_change_url($cust_rel , $cust_rel->id());
 			}
-exit_function("orders_table_loop1.5");
-enter_function("orders_table_loop1");
+			exit_function("orders_table_loop1.5");
+			enter_function("orders_table_loop1");
 			$t->define_data(array(
 				"nr" => $count,
 				"number" => html::obj_change_url($o,  $cnum ? $cnum : t("(Puudub)")),
@@ -8935,7 +8979,8 @@ enter_function("orders_table_loop1");
 				"color" => ($dealnow)?"#FF4444":"",
 				"now" => $dealnow,
 				"add_row" => $add_row?array($add_row, array("style" => "background-color: #BBBBBB; height: 12px;")):"",
-			));exit_function("orders_table_loop1");
+			));
+			exit_function("orders_table_loop1");
 		}
 		//$t->set_lower_titlebar_display(true);
 		$time_capt = "";
@@ -8992,7 +9037,10 @@ enter_function("orders_table_loop1");
 
 
 		$sell_capt = t("Ostutellimused");
-if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitellimused");
+		if($arr["request"]["group"] == "sell_orders")
+		{
+			$sell_capt = t("M&uuml;&uuml;gitellimused");
+		}
 		$t->set_caption(sprintf(t("%s: %s "), $sell_capt , $time_capt));
 		$t->set_sortable(false);
 //		$t->sort_by(array(
@@ -9619,6 +9667,30 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 	}
 
 	/**
+		@attrib name=csv_export all_args=1
+		@param id required type=int acl=view
+		@param sel optional type=array
+		@param time_filt optional type=array
+	**/
+	public function csv_export($arr)
+	{
+		$t = new vcl_table();
+		$args = array(
+			"obj_inst" => obj($arr["id"]),
+			"request" => $arr,
+			"prop" => array("vcl_inst" => $t)
+		);
+
+		$this->_get_purchase_orders($args);
+
+		header("Content-type: application/csv; charset=".aw_global_get("charset"));
+		header("Content-disposition: inline; filename=orders.csv;");
+
+		//	Excel won't display data in UTF-8 correctly. At least not by default. Hence iconv(); -kaarel 7.04.2010
+		die(iconv(aw_global_get("charset"), "ISO-8859-1//IGNORE", aw_html_entity_decode($t->get_csv_file())));
+	}
+
+	/**
 	@attrib name=get_status_orders_time_tree_level all_args=1
 	**/
 	function get_status_orders_time_tree_level($arr)
@@ -9829,12 +9901,15 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			"url" => aw_url_change_var("filt_time", "today"),
 		));
 
-		if(!empty($count3))$t->add_item(0, array(
-			"name" => sprintf("%s %s", t("Homme"), isset($count3) ? "(".$count3.")" : ""),
-			"id" => "tomorrow",
-			"iconurl" => icons::get_icon_url(CL_MENU),
-			"url" => aw_url_change_var("filt_time", "tomorrow"),
-		));
+		if(!in_array($g, array("sell_orders")))
+		{
+			if(!empty($count3))$t->add_item(0, array(
+				"name" => sprintf("%s %s", t("Homme"), isset($count3) ? "(".$count3.")" : ""),
+				"id" => "tomorrow",
+				"iconurl" => icons::get_icon_url(CL_MENU),
+				"url" => aw_url_change_var("filt_time", "tomorrow"),
+			));
+		}
 
 		if(!empty($count4))$t->add_item(0, array(
 			"name" => sprintf("%s %s", t("Eelmine n&auml;dal"), isset($count4) ? "(".$count4.")" : ""),
@@ -9849,12 +9924,16 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			"iconurl" => icons::get_icon_url(CL_MENU),
 			"url" => aw_url_change_var("filt_time", "thisweek"),
 		));
-		if(!empty($count6))$t->add_item(0, array(
-			"name" => sprintf("%s %s", t("J&auml;rgmine n&auml;dal"), isset($count6) ? "(".$count6.")" : ""),
-			"id" => "nextweek",
-			"iconurl" => icons::get_icon_url(CL_MENU),
-			"url" => aw_url_change_var("filt_time", "nextweek"),
-		));
+		
+		if(!in_array($g, array("sell_orders")))
+		{
+			if(!empty($count6))$t->add_item(0, array(
+				"name" => sprintf("%s %s", t("J&auml;rgmine n&auml;dal"), isset($count6) ? "(".$count6.")" : ""),
+				"id" => "nextweek",
+				"iconurl" => icons::get_icon_url(CL_MENU),
+				"url" => aw_url_change_var("filt_time", "nextweek"),
+			));
+		}
 		if(!empty($count7))$t->add_item(0, array(
 			"name" => sprintf("%s %s", t("Eelmine kuu"), isset($count7) ? "(".$count7.")" : ""),
 			"id" => "lastmonth",
@@ -9867,12 +9946,16 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 			"iconurl" => icons::get_icon_url(CL_MENU),
 			"url" => aw_url_change_var("filt_time", "thismonth"),
 		));
-		if(!empty($count9))$t->add_item(0, array(
-			"name" => sprintf("%s %s", t("J&auml;rgmine kuu"), isset($count9) ? "(".$count9.")" : ""),
-			"id" => "nextmonth",
-			"iconurl" => icons::get_icon_url(CL_MENU),
-			"url" => aw_url_change_var("filt_time", "nextmonth"),
-		));
+		
+		if(!in_array($g, array("sell_orders")))
+		{
+			if(!empty($count9))$t->add_item(0, array(
+				"name" => sprintf("%s %s", t("J&auml;rgmine kuu"), isset($count9) ? "(".$count9.")" : ""),
+				"id" => "nextmonth",
+				"iconurl" => icons::get_icon_url(CL_MENU),
+				"url" => aw_url_change_var("filt_time", "nextmonth"),
+			));
+		}
 
 		if(isset($arr["end"]))
 		{
