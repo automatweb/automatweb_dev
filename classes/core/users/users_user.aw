@@ -264,7 +264,7 @@ class users_user extends aw_template
 		header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");
 		aw_global_set("uid", "");
 		aw_global_set("uid_oid", "");
-		$_SESSION["uid"] = null;
+		$_SESSION["uid"] = $_SESSION["uid_oid"] = null;
 		$this->_log(ST_USERS, SA_LOGOUT ,$uid);
 
 		post_message("MSG_USER_LOGOUT", array("uid" => $uid));
