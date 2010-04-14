@@ -2348,9 +2348,11 @@ class site_show extends class_base
 		{
 			$menus_cache_dir =  aw_ini_get("cache.page_cache")."/menus/";
 			$cache_dir = aw_ini_get("cache.page_cache")."/menus/".aw_global_get("section");
-			if(is_dir($cache_dir))
+			//	count($files1 = scandir($cache_dir)) > 2
+			//			that's because every directory always contains . and ..
+			//																-- kaarel 25.03.2010
+			if(is_dir($cache_dir) && count($files1 = scandir($cache_dir)) > 2)
 			{
-				$files1 = scandir($cache_dir);
 				$vars = array();
 				foreach($files1 as $file)
 				{
