@@ -1933,6 +1933,8 @@ echo ("updated order ".html::obj_change_url($o));
 					echo "Add item to queue [count: ".$counter++."]<br />\n";
 				}
 			}
+
+			$clear_statement = $dbh->query("delete from products_queue where timestamp < (select min(timestamp) as min from (select rowid,timestamp from products_queue order by timestamp desc limit 20))");
 		}
 		catch (PDOException $e)
 		{
@@ -1940,7 +1942,7 @@ echo ("updated order ".html::obj_change_url($o));
 			return false;
 		}
 		$dbh = null;
-		echo "All items aaded to queue <br />\n";
+		echo "All items added to queue <br />\n";
 	}
 
 	/** Gets the list of items from the queue
@@ -2055,7 +2057,6 @@ echo ("updated order ".html::obj_change_url($o));
 		}
 		$dbh = null;
 		return $result;
-	
 	}
 
 	public function get_selected_timestamp()
