@@ -1,80 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="otto_import" folder="www/automatweb_stable/classes/applications/shop/otto" extends="class_base">
-		<action name="_delete_bubble_picture">
-			<function name="_delete_bubble_picture">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="_delete_firm_picture">
-			<function name="_delete_firm_picture">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="pictimp">
-			<function name="pictimp">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_add_cart" nologin="1">
-			<function name="submit_add_cart">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="pictfix">
-			<function name="pictfix">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="fix_image_codes">
-			<function name="fix_image_codes">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="fix_prices">
-			<function name="fix_prices">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="swt">
-			<function name="swt">
-				<arguments>
-					<required name="pcode" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="import_discount_products">
-			<function name="import_discount_products">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="clear_discount_products">
-			<function name="clear_discount_products">
-				<arguments>
-					<optional name="id" type="int" />
-					<optional name="lang_id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
+	<class name="otto_import" folder="www/automatweb_dev/classes/applications/shop/otto" extends="class_base">
 		<action name="do_products_amounts_import" nologin="1">
 			<function name="do_products_amounts_import">
 				<arguments>
@@ -85,6 +11,13 @@
 
 		<action name="get_products_xml">
 			<function name="get_products_xml">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_add_cart" nologin="1">
+			<function name="submit_add_cart">
 				<arguments>
 				</arguments>
 			</function>
