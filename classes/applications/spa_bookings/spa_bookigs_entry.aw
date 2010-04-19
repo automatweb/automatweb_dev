@@ -319,7 +319,7 @@ class spa_bookigs_entry extends class_base
 					{
 						if (convert_wday(date("w", $start)) != $wd_start)
 						{
-							$arr["prop"]["error"] = sprintf(t("Reserveering peab algama %s"), locale::get_lc_weekday($wd_start));
+							$arr["prop"]["error"] = sprintf(t("Reserveering peab algama %s"), aw_locale::get_lc_weekday($wd_start));
 							return PROP_FATAL_ERROR;
 						}
 					}

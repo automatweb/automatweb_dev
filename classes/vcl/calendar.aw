@@ -613,7 +613,7 @@ class vcalendar extends aw_template
 						$awt->start("draw-month");
 						$content = $this->draw_month();
 						$awt->stop("draw-month");
-						$caption = locale::get_lc_month(date("m",$this->range["timestamp"]));
+						$caption = aw_locale::get_lc_month(date("m",$this->range["timestamp"]));
 						$caption .= " ";
 						$caption .= date("Y",$this->range["timestamp"]);
 						break;
@@ -621,14 +621,14 @@ class vcalendar extends aw_template
 					case "week":
 					case "last_events":
 						$content = $this->draw_week();
-						$ms = locale::get_lc_month(date("m",$this->range["start"]));
-						$me = locale::get_lc_month(date("m",$this->range["end"]));
+						$ms = aw_locale::get_lc_month(date("m",$this->range["start"]));
+						$me = aw_locale::get_lc_month(date("m",$this->range["end"]));
 						$caption = date("j. ",$this->range["start"]) . "$ms - " . date("j. ",$this->range["end"]) . " " . $me;
 						break;
 
 					case "relative":
 						$content = $this->draw_relative();
-						$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"]));
+						$caption = date("j. ",$this->range["timestamp"]) . aw_locale::get_lc_month(date("m",$this->range["timestamp"]));
 						break;
 
 					case "year":
@@ -638,7 +638,7 @@ class vcalendar extends aw_template
 
 					default:
 						$content = $this->draw_day($arr);
-						$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
+						$caption = date("j. ",$this->range["timestamp"]) . aw_locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
 				};
 			};
 		}
@@ -650,7 +650,7 @@ class vcalendar extends aw_template
 					$awt->start("draw-month");
 					$content = $this->draw_month();
 					$awt->stop("draw-month");
-					$caption = locale::get_lc_month(date("m",$this->range["timestamp"]));
+					$caption = aw_locale::get_lc_month(date("m",$this->range["timestamp"]));
 					$caption .= " ";
 					$caption .= date("Y",$this->range["timestamp"]);
 					break;
@@ -658,14 +658,14 @@ class vcalendar extends aw_template
 				case "week":
 				case "last_events":
 					$content = $this->draw_week();
-					$ms = locale::get_lc_month(date("m",$this->range["start"]));
-					$me = locale::get_lc_month(date("m",$this->range["end"]));
+					$ms = aw_locale::get_lc_month(date("m",$this->range["start"]));
+					$me = aw_locale::get_lc_month(date("m",$this->range["end"]));
 					$caption = date("j. ",$this->range["start"]) . "$ms - " . date("j. ",$this->range["end"]) . " " . $me;
 					break;
 
 				case "relative":
 					$content = $this->draw_relative();
-					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"]));
+					$caption = date("j. ",$this->range["timestamp"]) . aw_locale::get_lc_month(date("m",$this->range["timestamp"]));
 					break;
 
 				case "year":
@@ -675,7 +675,7 @@ class vcalendar extends aw_template
 
 				default:
 					$content = $this->draw_day($arr);
-					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
+					$caption = date("j. ",$this->range["timestamp"]) . aw_locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
 			};
 		}
 		exit_function("draw_calendar_content");
@@ -840,7 +840,7 @@ class vcalendar extends aw_template
 
 		for ($i = 1; $i <= 12; $i++)
 		{
-			$mnames[$i] = locale::get_lc_month($i);
+			$mnames[$i] = aw_locale::get_lc_month($i);
 		};
 
 		$this_fuckin_year = date("Y");
@@ -1021,7 +1021,7 @@ class vcalendar extends aw_template
 			{
 				continue;
 			};
-			$dn = locale::get_lc_weekday($i,true);
+			$dn = aw_locale::get_lc_weekday($i,true);
 			$this->vars(array(
 				"dayname" => $dn,
 			));
@@ -1113,12 +1113,12 @@ class vcalendar extends aw_template
 				if($i == $j)
 				{
 					$d1 = date("j", $reals);
-					$mon1 = locale::get_lc_month(date("m", $reals));
+					$mon1 = aw_locale::get_lc_month(date("m", $reals));
 				}
 				elseif($sz == $wn)
 				{
 					$d2 = date("j", $reals);
-					$mon2 = locale::get_lc_month(date("m", $reals));
+					$mon2 = aw_locale::get_lc_month(date("m", $reals));
 				}
 				$sz++;
 				if (!$this->full_weeks && $wn > 5 && !$this->month_week)
@@ -1140,9 +1140,9 @@ class vcalendar extends aw_template
 					"daynum" => date("j",$reals),
 					"monthnum" => date("m",$reals),
 					"dayname" => date("F d, Y",$reals),
-					"date" => locale::get_lc_date($reals,5),
-					"lc_weekday" => locale::get_lc_weekday(date("w",$reals)),
-					"lc_month" => locale::get_lc_month(date("m",$reals)),
+					"date" => aw_locale::get_lc_date($reals,5),
+					"lc_weekday" => aw_locale::get_lc_weekday(date("w",$reals)),
+					"lc_month" => aw_locale::get_lc_month(date("m",$reals)),
 					"y_num" => date("Y", $reals),
 					"m_num" => date("m", $reals),
 					"d_num" => date("d", $reals),
@@ -1186,7 +1186,7 @@ class vcalendar extends aw_template
 		for($i = 1; $i < 13; $i++)
 		{
 			$nd = $c_d."-".sprintf("%02d", $i)."-".$c_y;
-			$month_opts[aw_url_change_var("date", $nd, $u)] = locale::get_lc_month($i);
+			$month_opts[aw_url_change_var("date", $nd, $u)] = aw_locale::get_lc_month($i);
 		}
 		for($i = $c_y-5; $i < $c_y+5; $i++)
 		{
@@ -1196,7 +1196,7 @@ class vcalendar extends aw_template
 		$this->vars(array(
 			"HEADER" => $header,
 			"WEEK" => $w,
-			"month_name" => locale::get_lc_month($this->range["m"]),
+			"month_name" => aw_locale::get_lc_month($this->range["m"]),
 			"year" => $this->range["y"],
 			"month_options" => $this->picker(get_ru(), $month_opts),
 			"year_options" => $this->picker(get_ru(), $year_opts),
@@ -1224,7 +1224,7 @@ class vcalendar extends aw_template
 		for ($i = 1; $i <= 12; $i++)
 		{
 			$this->vars(array(
-				"month_name" => locale::get_lc_month($i),
+				"month_name" => aw_locale::get_lc_month($i),
 			));
 			$header = $this->parse("HEADER");
 			$footer = $this->parse("FOOTER");
@@ -1363,7 +1363,7 @@ class vcalendar extends aw_template
 			};
 
 			$dt = date("d",$reals);
-			$mn = locale::get_lc_month(date("m",$reals));
+			$mn = aw_locale::get_lc_month(date("m",$reals));
 			$mn2 = $mn . " " . date("H:i",$reals);
 
 
@@ -1374,16 +1374,16 @@ class vcalendar extends aw_template
 				"daynum" => date("j",$reals),
 				"monthnum" => date("m",$reals),
 				"dayname" => date("F d, Y",$reals),
-				"lc_weekday" => locale::get_lc_weekday($wn,$reals),
+				"lc_weekday" => aw_locale::get_lc_weekday($wn,$reals),
 				"lc_month" => $mn,
 				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$reals))),
 				"date_and_time" => $dt . ". " . $mn2,
-				"day_name" => locale::get_lc_weekday($wn,true),
-				"long_day_name" => locale::get_lc_weekday($wn),
+				"day_name" => aw_locale::get_lc_weekday($wn,true),
+				"long_day_name" => aw_locale::get_lc_weekday($wn),
 				"y_num" => date("Y", $reals),
                                 "m_num" => date("m", $reals),
                                 "d_num" => date("d", $reals),
-				"date" => locale::get_lc_date($reals,5),
+				"date" => aw_locale::get_lc_date($reals,5),
 			));
 			$tpl = $dstamp == $now ? "TODAY" : "DAY";
 			$rv .= $this->parse($tpl);
@@ -1448,7 +1448,7 @@ class vcalendar extends aw_template
 
 		$i = $this->range["start"];
 		$dt = date("d",$i);
-		$mn = locale::get_lc_month(date("m",$i));
+		$mn = aw_locale::get_lc_month(date("m",$i));
 		$this->vars(array(
 			"DCHECK" => $dcheck,
 			"EVENT" => $events_for_day,
@@ -1456,10 +1456,10 @@ class vcalendar extends aw_template
 			"daynum" => date("j", $this->range["start"]),
 			"monthnum" => date("m", $this->range["start"]),
 			"dayname" => date("F d, Y",$this->range["start"]),
-			"long_day_name" => locale::get_lc_weekday($this->range["wd"]),
-			"date" => locale::get_lc_date($this->range["start"],5),
+			"long_day_name" => aw_locale::get_lc_weekday($this->range["wd"]),
+			"date" => aw_locale::get_lc_date($this->range["start"],5),
 			"caption" => isset($arr["caption"]) ? $arr["caption"] : "",
-			"lc_weekday" => locale::get_lc_weekday(date("w",$this->range["start"])),
+			"lc_weekday" => aw_locale::get_lc_weekday(date("w",$this->range["start"])),
 		));
 		return $this->parse();
 	}
@@ -1777,7 +1777,7 @@ class vcalendar extends aw_template
 			"WEEK" => $week,
 			"style_title" => $style_title,
 			"style_background" => $style_background,
-			"caption" => locale::get_lc_month(date("m", $arr["timestamp"])) . " " . date("y",$arr["timestamp"]),
+			"caption" => aw_locale::get_lc_month(date("m", $arr["timestamp"])) . " " . date("y",$arr["timestamp"]),
 			"caption_url" => aw_ini_get('baseurl').aw_url_change_var(array(
 				"viewtype" => "month",
 				"date" => date("d-m-Y",$arr["timestamp"]),
@@ -1796,7 +1796,7 @@ class vcalendar extends aw_template
 				"date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
 				"section" => $this->target_section,
 			)),
-			"month_name" => locale::get_lc_month($m),
+			"month_name" => aw_locale::get_lc_month($m),
 			"year" => $y,
 		));
 		return $this->parse();
@@ -1805,7 +1805,7 @@ class vcalendar extends aw_template
 	function draw_event($evt)
 	{
 		$m = date("m", $evt["timestamp"]);
-		$lc_month = locale::get_lc_month($m);
+		$lc_month = aw_locale::get_lc_month($m);
 		if (isset($evt["url"]))
 		{
 			$evt["link"] = $evt["url"];
@@ -1914,7 +1914,7 @@ class vcalendar extends aw_template
 		if (isset($evt["start1"]))
 		{
 			$dt = date("d", $evt["start1"]);
-			$mn = locale::get_lc_month(date("m", $evt["start1"]));
+			$mn = aw_locale::get_lc_month(date("m", $evt["start1"]));
 			$mn .= " " . date("H:i", $evt["start1"]);
 		}
 
@@ -1988,7 +1988,7 @@ class vcalendar extends aw_template
 			"DCHECKED" => isset($dchecked) ? $dchecked : "",
 			"comment" => $evt["comment"],
 			"bgcolor" => empty($evt["bgcolor"]) ? "" : "background-color:{$evt["bgcolor"]};",
-			"day_name" => isset($evt["start1"]) ? strtoupper(substr(locale::get_lc_weekday(date("w", $evt["start1"])),0,1)) : "",
+			"day_name" => isset($evt["start1"]) ? strtoupper(substr(aw_locale::get_lc_weekday(date("w", $evt["start1"])),0,1)) : "",
 			"date_and_time" => $dt . ". " . $mn,
 			"section" => aw_global_get("section")
 		));

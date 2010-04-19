@@ -1653,7 +1653,7 @@ class stats_viewer extends class_base
 			$s_pct = ($row["sessions"]*100.0)/$s_sum;
 			$t->define_data(array(
 				"tm" => $tm,
-				"day" => locale::get_lc_weekday($tm),
+				"day" => aw_locale::get_lc_weekday($tm),
 				"views" => $row["total"],
 				"visits" => $row["sessions"],
 				"views_pct" => html::img(array(
@@ -1756,7 +1756,7 @@ class stats_viewer extends class_base
 			$s_pct = ($row["sessions"]*100.0)/$s_sum;
 			$t->define_data(array(
 				"tm" => $tm,
-				"day" => locale::get_lc_month($tm),
+				"day" => aw_locale::get_lc_month($tm),
 				"views" => $row["total"],
 				"visits" => $row["sessions"],
 				"views_pct" => html::img(array(
@@ -2922,7 +2922,7 @@ class stats_viewer extends class_base
 			));
 			foreach($mons as $m => $days)
 			{
-				$nm = locale::get_lc_month($m);
+				$nm = aw_locale::get_lc_month($m);
 				$t->add_item("y_".$y, array(
 					"id" => "m_".$m,
 					"name" => $m == $arr["request"]["month"] ? "<b>".$nm."</b>" : $nm,

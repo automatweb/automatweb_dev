@@ -69,7 +69,7 @@ class comments extends class_base
 					{
 						$author = $row["createdby"];
 					};
-					$res .= "<p><b>" . $author . "</b>, " . locale::get_lc_date($row["created"], locale::DATETIME_SHORT_FULLYEAR) . "<br>";
+					$res .= "<p><b>" . $author . "</b>, " . aw_locale::get_lc_date($row["created"], aw_locale::DATETIME_SHORT_FULLYEAR) . "<br>";
 					$res .= nl2br(create_links($row["commtext"]));
 					if($prop["edit"])
 					{

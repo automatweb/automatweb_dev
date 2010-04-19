@@ -276,7 +276,7 @@ class document_calendar_view extends class_base
 			"WEEK" => $week,
 			"style_title" => $style_title,
 			"style_background" => $style_background,
-			"caption" => locale::get_lc_month(date("m", $start)) . " " . date("y",$start),
+			"caption" => aw_locale::get_lc_month(date("m", $start)) . " " . date("y",$start),
 			"caption_url" => aw_ini_get('baseurl').aw_url_change_var(array(
 				"date" => date("d-m-Y",$start),
 			)),

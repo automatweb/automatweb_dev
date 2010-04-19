@@ -285,7 +285,7 @@ class mrp_job extends class_base
 				break;
 
 			case "project_due_date":
-				$prop["value"] = locale::get_lc_date(obj($arr["obj_inst"]->prop("project"))->prop("due_date"), 7);
+				$prop["value"] = aw_locale::get_lc_date(obj($arr["obj_inst"]->prop("project"))->prop("due_date"), 7);
 				break;
 
 			case "person":

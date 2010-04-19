@@ -980,7 +980,7 @@ class mrp_order_center extends class_base
 					$mon_id = "month_".$year."_".$mon;
 					$t->add_item("year_".$year, array(
 						"id" => $mon_id,
-						"name" => $this->_count_name(locale::get_lc_month($mon), $arr["request"], "s_period", $mon_id),
+						"name" => $this->_count_name(aw_locale::get_lc_month($mon), $arr["request"], "s_period", $mon_id),
 						"url" => aw_url_change_var("s_period", $mon_id)
 					));
 				}

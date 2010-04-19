@@ -291,7 +291,7 @@ class persona_import extends class_base
 				break;
 
 			case "last_import":
-				$prop["value"] = locale::get_lc_date($prop["value"],6) . date(" H:i",$prop["value"]);
+				$prop["value"] = aw_locale::get_lc_date($prop["value"],6) . date(" H:i",$prop["value"]);
 				break;
 
 			case "show_xml":

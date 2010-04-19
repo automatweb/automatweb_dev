@@ -225,8 +225,8 @@ class calendar_registration_form_conf extends class_base
 		$end = $e->prop("end");
 		$this->vars(array(
 			"ev_title" => $e->name(),
-			"ev_start" => locale::get_lc_date($start, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i",$end),
-			"ev_end" => locale::get_lc_date($end, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i",$end),
+			"ev_start" => aw_locale::get_lc_date($start, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i",$end),
+			"ev_end" => aw_locale::get_lc_date($end, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i",$end),
 			"ev_content" => nl2br($e->prop("content"))
 		));
 

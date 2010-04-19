@@ -1971,7 +1971,7 @@ class event_search extends class_base
 			}
 
 			$this->vars(array(
-				"begin_month_name" => locale::get_lc_month($arr["start_date"]["month"]),
+				"begin_month_name" => aw_locale::get_lc_month($arr["start_date"]["month"]),
 				"begin_year" => $arr["start_date"]["year"],
 				"prev_month_url" => str_replace("event_search", "", $this->mk_my_orb("search", $prev_month_args)),
 				"next_month_url" => str_replace("event_search", "", $this->mk_my_orb("search", $next_month_args)),

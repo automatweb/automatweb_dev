@@ -105,7 +105,7 @@ class expp_arve extends class_base {
 		$_sum_rows = array();
 		while ($row = $this->db_next()) {
 			$_toode = stripslashes( $row["valjaande_nimetus"] );
-			$_algus = ($row["algus"] == "ASAP")?$lc_expp['LC_EXPP_ASAP']."<br />": (($row["algus"] == "CONT")?$lc_expp['LC_EXPP_CONT']."<br />" :	locale::get_lc_month(intval(substr( $row["algus"],4,2)))." ".substr( $row["algus"],0,4));
+			$_algus = ($row["algus"] == "ASAP")?$lc_expp['LC_EXPP_ASAP']."<br />": (($row["algus"] == "CONT")?$lc_expp['LC_EXPP_CONT']."<br />" :	aw_locale::get_lc_month(intval(substr( $row["algus"],4,2)))." ".substr( $row["algus"],0,4));
 			if (!isset( $_out_rows[$row["leping"]]))		$_out_rows[$row["leping"]] = "";
 			$_eksemplar	= intval( $row["eksemplar"] );
 			$_kogus		= intval( $row["kogus"] );

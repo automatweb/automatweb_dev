@@ -10,16 +10,16 @@ class awlc_date_en implements awlc_date
 	{
 		switch ($format)
 		{
-			case locale::DATE_SHORT:
+			case aw_locale::DATE_SHORT:
 				return date("m.d.y", $timestamp);
 
-			case locale::DATE_SHORT_FULLYEAR:
+			case aw_locale::DATE_SHORT_FULLYEAR:
 				return date("m.d.Y", $timestamp);
 
-			case locale::DATE_LONG:
+			case aw_locale::DATE_LONG:
 				return date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y",$timestamp);
 
-			case locale::DATE_LONG_FULLYEAR:
+			case aw_locale::DATE_LONG_FULLYEAR:
 				return date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y",$timestamp);
 
 			case 5:
@@ -31,16 +31,16 @@ class awlc_date_en implements awlc_date
 			case 7:
 				return date("H:i d.m.y", $timestamp);
 
-			case locale::DATETIME_SHORT:
+			case aw_locale::DATETIME_SHORT:
 				return date("m.d.y g:i a", $timestamp);
 
-			case locale::DATETIME_SHORT_FULLYEAR:
+			case aw_locale::DATETIME_SHORT_FULLYEAR:
 				return date("m.d.Y g:i a", $timestamp);
 
-			case locale::DATETIME_LONG:
+			case aw_locale::DATETIME_LONG:
 				return date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y g:i a",$timestamp);
 
-			case locale::DATETIME_LONG_FULLYEAR:
+			case aw_locale::DATETIME_LONG_FULLYEAR:
 				return date("d ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y g:i a",$timestamp);
 		}
 	}

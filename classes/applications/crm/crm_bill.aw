@@ -2985,7 +2985,7 @@ class crm_bill extends class_base
 			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
 			"tax" => number_format($tax, 2,".", " "),
 			"total" => number_format($sum, 2, ".", " "),
-			"total_text" => locale::get_lc_money_text($sum, obj($currency), $lc)
+			"total_text" => aw_locale::get_lc_money_text($sum, obj($currency), $lc)
 		));
 
 	//k6ikidele muutujatele HAS_ sub
@@ -3268,7 +3268,7 @@ class crm_bill extends class_base
 			"total_wo_tax" => number_format($this->sum_wo_tax, 2,".", " "),
 			"tax" => number_format($this->tax, 2,"." , " "),
 			"total" => number_format($this->sum, 2,".", " "),
-			"total_text" => locale::get_lc_money_text($this->sum, $cur, $lc),
+			"total_text" => aw_locale::get_lc_money_text($this->sum, $cur, $lc),
 			"tot_amt" => $this->stats->hours_format($tot_amt),
 			"page_no" => $page_no,
 		));

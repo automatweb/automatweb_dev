@@ -12,19 +12,19 @@ class awlc_date_et implements awlc_date
 
 		switch ($format)
 		{
-			case locale::DATE_SHORT:
+			case aw_locale::DATE_SHORT:
 				$rv = date("j.m.y", $timestamp);
 				break;
 
-			case locale::DATE_SHORT_FULLYEAR:
+			case aw_locale::DATE_SHORT_FULLYEAR:
 				$rv = date("j.m.Y", $timestamp);
 				break;
 
-			case locale::DATE_LONG:
+			case aw_locale::DATE_LONG:
 				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y",$timestamp);
 				break;
 
-			case locale::DATE_LONG_FULLYEAR:
+			case aw_locale::DATE_LONG_FULLYEAR:
 				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				break;
 
@@ -40,19 +40,19 @@ class awlc_date_et implements awlc_date
 				$rv = date("H:i j.m.Y", $timestamp);
 				break;
 
-			case locale::DATETIME_SHORT:
+			case aw_locale::DATETIME_SHORT:
 				$rv = date("j.m.y H:i", $timestamp);
 				break;
 
-			case locale::DATETIME_SHORT_FULLYEAR:
+			case aw_locale::DATETIME_SHORT_FULLYEAR:
 				$rv = date("j.m.Y H:i", $timestamp);
 				break;
 
-			case locale::DATETIME_LONG:
+			case aw_locale::DATETIME_LONG:
 				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" y H:i",$timestamp);
 				break;
 
-			case locale::DATETIME_LONG_FULLYEAR:
+			case aw_locale::DATETIME_LONG_FULLYEAR:
 				$rv = date("j. ", $timestamp).self::$month[date("m", $timestamp)-1].date(" Y H:i",$timestamp);
 				break;
 		}

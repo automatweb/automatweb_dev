@@ -325,7 +325,7 @@ class shop_product_packaging extends class_base
 			$t->define_data(array(
 				"oid" => $o->id(),
 				"name" => html::obj_change_url($o, parse_obj_name($o->name())),
-				"weekday" => $o->prop("weekday") ? locale::get_lc_weekday($o->prop("weekday")) : "",
+				"weekday" => $o->prop("weekday") ? aw_locale::get_lc_weekday($o->prop("weekday")) : "",
 				"company" => html::obj_change_url($o->prop("company"), $o->prop("company.name")),
 				"days" => $o->prop("days"),
 			));

@@ -1090,7 +1090,7 @@ class crm_offer extends class_base
 			"name" => $o->name(),
 			"orderer" => $orderer,
 			"implementor" => $implementor,
-			"date" => locale::get_lc_date(date(), LC_DATE_FORMAT_LONG),
+			"date" => aw_locale::get_lc_date(date(), LC_DATE_FORMAT_LONG),
 			"logo" => $lg
 		));
 
@@ -1215,7 +1215,7 @@ class crm_offer extends class_base
 			"name" => $o->name(),
 			"orderer" => $orderer,
 			"implementor" => $implementor,
-			"date" => locale::get_lc_date(date(), LC_DATE_FORMAT_LONG),
+			"date" => aw_locale::get_lc_date(date(), LC_DATE_FORMAT_LONG),
 			"logo" => $lg,
 			"content" => $html
 		));

@@ -3181,7 +3181,7 @@ class room extends class_base
 			{
 				$t->define_field(array(
 					"name" => "d".$i,
-					"caption" => substr(ucwords(locale::get_lc_weekday(date("w",$tm))) , 0 , 1).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
+					"caption" => substr(ucwords(aw_locale::get_lc_weekday(date("w",$tm))) , 0 , 1).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
 					"width" => $pct."%",
 					"chgbgcolor" => "col".$i,
 					"id" => "id".$i,
@@ -3199,7 +3199,7 @@ class room extends class_base
 					{
 						$t->define_field(array(
 							"name" => "d".$i."_".$x,
-//							"caption" => substr(ucwords(locale::get_lc_weekday(date("w",$tm))) , 0 , 1).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
+//							"caption" => substr(ucwords(aw_locale::get_lc_weekday(date("w",$tm))) , 0 , 1).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
 							"width" => $pct."%",
 							"chgbgcolor" => "col".$i."_".$x,
 							"id" => "id".$i."_".$x,

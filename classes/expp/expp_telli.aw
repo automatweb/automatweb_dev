@@ -228,7 +228,7 @@ class expp_telli extends class_base {
 			$year = date("Y",$ajut);
 			$month = date("m",$ajut);
 			$_value = date("Ym",$ajut);
-			$_text = locale::get_lc_month(intval($month))." $year";
+			$_text = aw_locale::get_lc_month(intval($month))." $year";
 			$_kuup_options[$_value] = $_text;
 		}	// for
 // KAMPAANIA

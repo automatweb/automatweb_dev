@@ -3021,7 +3021,7 @@ class shop_warehouse extends class_base
 		*/
 		for($i = 1; $i <=7; $i++)
 		{
-			$weekdays[$i] = locale::get_lc_weekday($i, true, true);
+			$weekdays[$i] = aw_locale::get_lc_weekday($i, true, true);
 		}
 		$counter = 1;
 		foreach($res["ol"]->arr() as $prodid => $prod)
@@ -3140,7 +3140,7 @@ class shop_warehouse extends class_base
 		));
 		for($i = 1; $i <=7; $i++)
 		{
-			$weekdays[$i] = locale::get_lc_weekday($i, true, true);
+			$weekdays[$i] = aw_locale::get_lc_weekday($i, true, true);
 		}
 		foreach($c_ol->arr() as $oid => $o)
 		{
@@ -9470,7 +9470,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 					for($i = $start; $i <= $end; $i++)
 					{
 						$t->add_item(0, array(
-							"name" => sprintf("%s %s", locale::get_lc_month($i), $tmp[1]),
+							"name" => sprintf("%s %s", aw_locale::get_lc_month($i), $tmp[1]),
 							"id" => "month_".$i."_".$tmp[1],
 							"iconurl" => icons::get_icon_url(CL_MENU),
 							"url" => "#",
@@ -9529,7 +9529,7 @@ if($arr["request"]["group"] == "sell_orders")$sell_capt = t("M&uuml;&uuml;gitell
 								break;
 						}
 						$t->add_item(0, array(
-							"name" => sprintf("%s %s %s %s", $i, locale::get_lc_month($tmp[1]), $tmp[2], isset($count) ? "(".$count.")" : ""),
+							"name" => sprintf("%s %s %s %s", $i, aw_locale::get_lc_month($tmp[1]), $tmp[2], isset($count) ? "(".$count.")" : ""),
 							"id" => "day_".$i."_".$tmp[1]."_".$tmp[2],
 							"iconurl" => icons::get_icon_url(CL_MENU),
 							"url" => aw_url_change_var(array("filt_time" => mktime(0,0,0,$tmp[1],$i,$tmp[2])), false, $arr["set_retu"]),

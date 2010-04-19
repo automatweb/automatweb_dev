@@ -22,7 +22,7 @@ class bt_stat_impl extends core
 		{
 			$t->define_field(array(
 				"name" => "m".sprintf("%02d", $i),
-				"caption" => locale::get_lc_month($i),
+				"caption" => aw_locale::get_lc_month($i),
 				"align" => "center",
 				"sortable" => 1
 			));
@@ -538,7 +538,7 @@ class bt_stat_impl extends core
 		{
 			$t->define_field(array(
 				"name" => "m".sprintf("%02d", $i),
-				"caption" => locale::get_lc_month($i),
+				"caption" => aw_locale::get_lc_month($i),
 				"align" => "center",
 				"sortable" => 1
 			));

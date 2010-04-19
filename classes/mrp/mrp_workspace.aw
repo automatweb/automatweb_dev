@@ -2336,7 +2336,7 @@ class mrp_workspace extends class_base
 							break;
 
 						case "m":
-							$months[$y."_".$i] = locale::get_lc_month((int)$i);
+							$months[$y."_".$i] = aw_locale::get_lc_month((int)$i);
 							break;
 					}
 				}
@@ -4025,8 +4025,8 @@ class mrp_workspace extends class_base
 		{
 			list($M, $D, $Y) = explode("-", date("n-j-Y", $tm));
 			$branches[0]["date_".$Y] = $Y;
-			$branches["date_".$Y]["date_".$Y."_".$M] = sprintf(t("%s %u"), locale::get_lc_month($M), $Y);
-			$branches["date_".$Y."_".$M]["date_".$Y."_".$M."_".$D] = sprintf(t("%u. %s %u"), $D, locale::get_lc_month($M), $Y);
+			$branches["date_".$Y]["date_".$Y."_".$M] = sprintf(t("%s %u"), aw_locale::get_lc_month($M), $Y);
+			$branches["date_".$Y."_".$M]["date_".$Y."_".$M."_".$D] = sprintf(t("%u. %s %u"), $D, aw_locale::get_lc_month($M), $Y);
 			$tm = mktime(0, 0, 0, $M, $D+1, $Y);
 		}
 
@@ -4067,8 +4067,8 @@ class mrp_workspace extends class_base
 		{
 			list($M, $D, $Y) = explode("-", date("n-j-Y", $tm));
 			$branches[0]["date_".$Y] = $Y;
-			$branches["date_".$Y]["date_".$Y."_".$M] = sprintf(t("%s %u"), locale::get_lc_month($M), $Y);
-			$branches["date_".$Y."_".$M]["date_".$Y."_".$M."_".$D] = sprintf(t("%u. %s %u"), $D, locale::get_lc_month($M), $Y);
+			$branches["date_".$Y]["date_".$Y."_".$M] = sprintf(t("%s %u"), aw_locale::get_lc_month($M), $Y);
+			$branches["date_".$Y."_".$M]["date_".$Y."_".$M."_".$D] = sprintf(t("%u. %s %u"), $D, aw_locale::get_lc_month($M), $Y);
 			$tm = mktime(0, 0, 0, $M, $D+1, $Y);
 		}
 */
@@ -4242,7 +4242,7 @@ class mrp_workspace extends class_base
 				"url" => aw_url_change_var(array(
 					"person_show_jobs" => $key,
 				)),
-				"title" => sprintf(t("Vaata %s t&ouml;id valitud ajavahemikus"), locale::get_genitive_for_name($data["name"][$key])),
+				"title" => sprintf(t("Vaata %s t&ouml;id valitud ajavahemikus"), aw_locale::get_genitive_for_name($data["name"][$key])),
 			));
 //			$rows[$key][$kf] = $data["name"][$key];
 			$rows[$key]["inprogress"] = $this->format_hours($data[MRP_STATUS_INPROGRESS][$key]);
@@ -8604,7 +8604,7 @@ class mrp_workspace extends class_base
 
 			case "persons_detailed_hours_tbl":
 				$o = isset($_GET["person_show_jobs"]) ? obj($_GET["person_show_jobs"]) : (obj(isset($_GET["cat"]) ? $_GET["cat"] : NULL));
-				$arr["area_caption"] = sprintf(t("%s t&ouml;&ouml;tundide tabel t&ouml;&ouml;de kaupa"), locale::get_genitive_for_name(parse_obj_name($o->name())));
+				$arr["area_caption"] = sprintf(t("%s t&ouml;&ouml;tundide tabel t&ouml;&ouml;de kaupa"), aw_locale::get_genitive_for_name(parse_obj_name($o->name())));
 				break;
 
 			case "pauses_by_resource_chart":
