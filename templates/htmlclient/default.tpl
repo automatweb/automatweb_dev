@@ -268,7 +268,7 @@
 	{VAR:scripts}
 
 	var awcbChangeFormSubmitted = false;
-	function submit_changeform(action, nosubmit) {
+	function submit_changeform(action, nosubmit, nodisable) {
 		$(document.changeform).trigger("awbeforesubmit");
 		changed = 0;
 
@@ -289,7 +289,9 @@
 			document.changeform.submit();
 		}
 
-		awcbChangeFormSubmitted = true;
+		if(!nodisable){
+			awcbChangeFormSubmitted = true;
+		}
 	}
 </script>
 <!-- END SUB: SHOW_CHANGEFORM2 -->

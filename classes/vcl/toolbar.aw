@@ -97,6 +97,8 @@ class toolbar extends aw_template
 			A action name which item shold trigger.
 		@param onClick
 			An onclick action.(javascript etc)
+		@param onclick_disable optional type=boolean default=true
+			If true, item will be disabled after onclick
 		@comment
 			Adds menu item under specified menu button.
 		@examples
@@ -129,7 +131,14 @@ class toolbar extends aw_template
 
 		if (isset($arr["action"]))
 		{
-			$arr["url"] = "javascript:submit_changeform('{$arr["action"]}');";
+			if(!isset($arr["onclick_disable"]) || $arr["onclick_disable"] === true)
+			{
+				$arr["url"] = "javascript:submit_changeform('{$arr["action"]}');";
+			}
+			else
+			{
+				$arr["url"] = "javascript:submit_changeform('{$arr["action"]}', false, true);";
+			}
 		}
 
 		if (empty($arr["disabled"]))
