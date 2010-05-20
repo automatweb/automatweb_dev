@@ -482,7 +482,7 @@ class mini_gallery extends class_base
 		$fi = get_instance(CL_FILE);
 		foreach($files as $file)
 		{
-			echo "leidsin faili $file <br>\n";
+		//	echo "leidsin faili $file <br>\n";
 			flush();
 			$fp = $tn."/".$file;
 
@@ -534,7 +534,7 @@ class mini_gallery extends class_base
 
 			@unlink($fp);
 		}
-		echo "valmis<br>\n";
+	//	echo "valmis<br>\n";
 		flush();
 		@rmdir($tn);
 	}
