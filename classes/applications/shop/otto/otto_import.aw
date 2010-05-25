@@ -177,6 +177,7 @@ class otto_import extends class_base implements warehouse_import_if
 			"baur" => "baur.de",
 			"bp_pl" => "Poola Bonprix",
 			"bp_de" => "Saksa Bonprix",
+			"heine_2" => "heine_ftp",
 		);
 	
 		if (empty($sites))
@@ -188,7 +189,8 @@ class otto_import extends class_base implements warehouse_import_if
 				"albamoda" => 4,
 				"baur" => 5,
 				"bp_pl" => 6,
-				"bp_de" => 7
+				"bp_de" => 7,
+				"heine_2" => 8
 			);
 		}
 
@@ -546,6 +548,9 @@ class otto_import extends class_base implements warehouse_import_if
 				case "bp_de":
 					$pictures = $this->bonprix_picture_import_de($arr);
 					break;
+				case "heine_2":
+					$pictures = $this->heine_ftp_picture_import($arr);
+					break;
 			}
 			if (!empty($pictures))
 			{
@@ -555,7 +560,56 @@ class otto_import extends class_base implements warehouse_import_if
 		echo "#### [END] Getting pictures #### <br />\n";
 		return $pictures;
 	}
-
+	
+	function heine_ftp_picture_import($arr)
+	{
+		echo "-- Searching pictures from Heine FTP:<br />\n";
+		$pcode = str_replace(' ', '', $arr['pcode']);
+		$pcode_firstnumber=substr($pcode,0,1);
+		$start_time = $arr['start_time'];
+		$import_obj = $arr['import_obj'];
+		
+		$directory='/www/bonprix2.dev.automatweb.com/public/img/heine';
+		
+		$url=$directory.'/'.$pcode_firsnumber;
+		$url_line=$url.'/';
+		
+		$result_images = array();
+		
+		$files=scandir($url);
+		
+		$result_images=scan_filearray($pcode, $files, $url_line);
+		
+		if (empty($result_images))
+		{
+			return false;
+		}
+		else
+		{
+			return $result_images;
+		}
+		
+		
+	}
+	// scan files in an array beginning with product code
+	// return picture urls
+	function scan_filearray($pcode, $files, $url)
+	{
+		$result_images=array();
+		
+		foreach($files as $file)
+		{
+			$temp=substr($file,0,strpos($file,"."));
+			$temp_arr=array();
+			$temp_arr=explode("_",$temp);
+			if($temp_arr[0]==$pcode)
+			{
+				$image_url = $url."/".$file;
+				$result_images[$image_url] = $image_url;
+			}
+		}
+		return $result_images;
+	}
 	////
 	// Picture import from Polish Bonprix (www.bonprix.pl)
 	// Parameters:
@@ -586,7 +640,8 @@ class otto_import extends class_base implements warehouse_import_if
 			{
 				echo '---- '.$pcode ." - ". $line."<br>\n";
 				$mask = $items[2];
-				$filename = basename($items[1], '.jpg');
+				//$filename = basename($items[1], '.jpg');
+				$filename=$items[1];
 				for ( $i = 0; $i < strlen($mask); $i++ )
 				{
 					if ($mask{$i} == 1)
