@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/site_search/site_diff.aw:class_1486_help
+msgid "Klassi Saitide v&otilde;rdlus help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_url_1
+msgid "Omaduse Originaali URL (url_1) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_url_1_comment
+msgid "Omaduse Originaali URL (url_1) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_url_1_help
+msgid "Omaduse Originaali URL (url_1) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_url_2
+msgid "Omaduse V&otilde;rreldava URL (url_2) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_url_2_comment
+msgid "Omaduse V&otilde;rreldava URL (url_2) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_url_2_help
+msgid "Omaduse V&otilde;rreldava URL (url_2) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_email
+msgid "Omaduse E-posti aadress, kuhu saata kiri, kui v&otilde;rdlemine on l&otilde;ppenud (email) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_email_comment
+msgid "Omaduse E-posti aadress, kuhu saata kiri, kui v&otilde;rdlemine on l&otilde;ppenud (email) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_email_help
+msgid "Omaduse E-posti aadress, kuhu saata kiri, kui v&otilde;rdlemine on l&otilde;ppenud (email) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_send_diff_links
+msgid "Omaduse Saada e-postiga ka diff-lingid. (send_diff_links) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_send_diff_links_comment
+msgid "Omaduse Saada e-postiga ka diff-lingid. (send_diff_links) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_send_diff_links_help
+msgid "Omaduse Saada e-postiga ka diff-lingid. (send_diff_links) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_use_hack_diff
+msgid "Omaduse Hack diff (use_hack_diff) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_use_hack_diff_comment
+msgid "Omaduse Hack diff (use_hack_diff) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_use_hack_diff_help
+msgid "Omaduse Hack diff (use_hack_diff) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_start_diff
+msgid "Omaduse V&otilde;rdle (start_diff) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_start_diff_comment
+msgid "Omaduse V&otilde;rdle (start_diff) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_start_diff_help
+msgid "Omaduse V&otilde;rdle (start_diff) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_histtlb
+msgid "Omaduse  (histtlb) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_histtlb_comment
+msgid "Omaduse  (histtlb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_histtlb_help
+msgid "Omaduse  (histtlb) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_histtbl
+msgid "Omaduse  (histtbl) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_histtbl_comment
+msgid "Omaduse  (histtbl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:prop_histtbl_help
+msgid "Omaduse  (histtbl) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:group_history
+msgid "Grupi Ajalugu (history) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:group_history_help
+msgid "Grupi Ajalugu (history) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:70
+msgid "Aeg"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:76 classes/contentmgmt/site_search/site_diff.aw:121
+msgid "Originaal"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:82 classes/contentmgmt/site_search/site_diff.aw:126
+msgid "V&otilde;rreldav"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:88
+msgid "Erinevuste arv"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:131
+msgid "V&otilde;rdlemise aeg"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:137 classes/contentmgmt/site_search/site_diff.aw:167
+msgid "Vaata erinevusi!"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_diff.aw:196
+msgid "Kustuta valitud ajalugu"
+msgstr ""
+

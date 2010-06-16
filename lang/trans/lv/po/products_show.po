@@ -1,0 +1,134 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/applications/shop/products_show.aw:class_1576_help
+msgid "Klassi Toodete n&auml;itamine help"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_packets
+msgid "Omaduse Paketid (packets) caption"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_packets_comment
+msgid "Omaduse Paketid (packets) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_packets_help
+msgid "Omaduse Paketid (packets) help"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_categories
+msgid "Omaduse Tootekategooriad (categories) caption"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_categories_comment
+msgid "Omaduse Tootekategooriad (categories) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_categories_help
+msgid "Omaduse Tootekategooriad (categories) help"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_columns
+msgid "Omaduse Tulpasid (columns) caption"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_columns_comment
+msgid "Omaduse Tulpasid (columns) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_columns_help
+msgid "Omaduse Tulpasid (columns) help"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_template
+msgid "Omaduse Toodete n&auml;itamise template (template) caption"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_template_comment
+msgid "Omaduse Toodete n&auml;itamise template (template) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_template_help
+msgid "Omaduse Toodete n&auml;itamise template (template) help"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_product_template
+msgid "Omaduse &Uuml;he toote n&auml;itamise templeit (product_template) caption"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_product_template_comment
+msgid "Omaduse &Uuml;he toote n&auml;itamise templeit (product_template) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_product_template_help
+msgid "Omaduse &Uuml;he toote n&auml;itamise templeit (product_template) help"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_type
+msgid "Omaduse N&auml;idatavad klassi t&uuml;&uuml;bid (type) caption"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_type_comment
+msgid "Omaduse N&auml;idatavad klassi t&uuml;&uuml;bid (type) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_type_help
+msgid "Omaduse N&auml;idatavad klassi t&uuml;&uuml;bid (type) help"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_oc
+msgid "Omaduse Tellimiskeskkond (oc) caption"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_oc_comment
+msgid "Omaduse Tellimiskeskkond (oc) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:prop_oc_help
+msgid "Omaduse Tellimiskeskkond (oc) help"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:rel_RELTYPE_CATEGORY
+msgid "Seose Tootekategooria (RELTYPE_CATEGORY) tekst"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:rel_RELTYPE_PACKET
+msgid "Seose Pakett (RELTYPE_PACKET) tekst"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:rel_RELTYPE_OC
+msgid "Seose Tellimiskeskkond (RELTYPE_OC) tekst"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:57
+msgid "Toode"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:58
+msgid "Pakend"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:59
+msgid "Pakett"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:111
+msgid "templates/applications/shop/products_show/"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:138
+msgid "templates/"
+msgstr ""
+
+#: classes/applications/shop/products_show.aw:374
+msgid "Lisa tooted korvi"
+msgstr ""

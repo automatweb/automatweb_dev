@@ -1,0 +1,116 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/crm/crm_offer_type.aw:class_1480_help
+msgid "Klassi Pakkumise T&uuml;&uuml;p help"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_offer_template
+msgid "Omaduse Pakkumise kujundusp&otilde&hi (offer_template) caption"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_offer_template_comment
+msgid "Omaduse Pakkumise kujundusp&otilde&hi (offer_template) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_offer_template_help
+msgid "Omaduse Pakkumise kujundusp&otilde&hi (offer_template) help"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_warehouse
+msgid "Omaduse Ladu (warehouse) caption"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_warehouse_comment
+msgid "Omaduse Ladu (warehouse) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_warehouse_help
+msgid "Omaduse Ladu (warehouse) help"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_products
+msgid "Omaduse Pakkumises sisalduvad tootekategooriad/kaustad (products) caption"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_products_comment
+msgid "Omaduse Pakkumises sisalduvad tootekategooriad/kaustad (products) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_products_help
+msgid "Omaduse Pakkumises sisalduvad tootekategooriad/kaustad (products) help"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_obligatory_products
+msgid "Omaduse Kohustuslikud tootekategooriad ja nende j&auml;rjekord (obligatory_products) caption"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_obligatory_products_comment
+msgid "Omaduse Kohustuslikud tootekategooriad ja nende j&auml;rjekord (obligatory_products) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_obligatory_products_help
+msgid "Omaduse Kohustuslikud tootekategooriad ja nende j&auml;rjekord (obligatory_products) help"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_free_products
+msgid "Omaduse Vabad tootekategooriad (free_products) caption"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_free_products_comment
+msgid "Omaduse Vabad tootekategooriad (free_products) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_free_products_help
+msgid "Omaduse Vabad tootekategooriad (free_products) help"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_resource_manager
+msgid "Omaduse Ressursihalduskeskkond (resource_manager) caption"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_resource_manager_comment
+msgid "Omaduse Ressursihalduskeskkond (resource_manager) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_resource_manager_help
+msgid "Omaduse Ressursihalduskeskkond (resource_manager) help"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_uservars
+msgid "Omaduse Hulk vabalt defineeritavaid tekstiv&auml;lju (uservars) caption"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_uservars_comment
+msgid "Omaduse Hulk vabalt defineeritavaid tekstiv&auml;lju (uservars) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:prop_uservars_help
+msgid "Omaduse Hulk vabalt defineeritavaid tekstiv&auml;lju (uservars) help"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:rel_RELTYPE_WAREHOUSE
+msgid "Seose File (RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:rel_RELTYPE_RELTYPE_WAREHOUSE
+msgid "Seose File (RELTYPE_RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:rel_RELTYPE_RESOURCE_MANAGER
+msgid "Seose Ressursihalduskeskkond (RELTYPE_RESOURCE_MANAGER) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer_type.aw:rel_RELTYPE_RELTYPE_RESOURCE_MANAGER
+msgid "Seose Ressursihalduskeskkond (RELTYPE_RELTYPE_RESOURCE_MANAGER) tekst"
+msgstr ""
+

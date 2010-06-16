@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_price_list_condition.aw:class_1573_help
+msgid "Klassi Hinnakirja tingimus help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_jrk
+msgid "Omaduse J&auml;rjekorra number (jrk) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_jrk_comment
+msgid "Omaduse J&auml;rjekorra number (jrk) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_jrk_help
+msgid "Omaduse J&auml;rjekorra number (jrk) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_price_list
+msgid "Omaduse Hinnakiri (price_list) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_price_list_comment
+msgid "Omaduse Hinnakiri (price_list) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_price_list_help
+msgid "Omaduse Hinnakiri (price_list) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_currency
+msgid "Omaduse Valuuta (currency) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_currency_comment
+msgid "Omaduse Valuuta (currency) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_currency_help
+msgid "Omaduse Valuuta (currency) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_row
+msgid "Omaduse Rida (row) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_row_comment
+msgid "Omaduse Rida (row) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_row_help
+msgid "Omaduse Rida (row) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_col
+msgid "Omaduse Veerg (col) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_col_comment
+msgid "Omaduse Veerg (col) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_col_help
+msgid "Omaduse Veerg (col) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_type
+msgid "Omaduse T&uuml;&uuml;p (type) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_type_comment
+msgid "Omaduse T&uuml;&uuml;p (type) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_type_help
+msgid "Omaduse T&uuml;&uuml;p (type) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_value
+msgid "Omaduse V&auml;&auml;rtus (value) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_value_comment
+msgid "Omaduse V&auml;&auml;rtus (value) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_value_help
+msgid "Omaduse V&auml;&auml;rtus (value) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_bonus
+msgid "Omaduse Boonus (bonus) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_bonus_comment
+msgid "Omaduse Boonus (bonus) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_bonus_help
+msgid "Omaduse Boonus (bonus) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_quantities
+msgid "Omaduse Kogused (quantities) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_quantities_comment
+msgid "Omaduse Kogused (quantities) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:prop_quantities_help
+msgid "Omaduse Kogused (quantities) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_condition.aw:50
+msgid "Auto"
+msgstr ""
+

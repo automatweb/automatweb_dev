@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/mrp_resource_setting.aw:class_1546_help
+msgid "Klassi ERP Ressursi seade help"
+msgstr ""
+
+#: classes/mrp/mrp_resource_setting.aw:prop_applies_resources_tb
+msgid "Omaduse Kehtib resurssidele toolbar (applies_resources_tb) caption"
+msgstr ""
+
+#: classes/mrp/mrp_resource_setting.aw:prop_applies_resources_tb_comment
+msgid "Omaduse Kehtib resurssidele toolbar (applies_resources_tb) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_resource_setting.aw:prop_applies_resources_tb_help
+msgid "Omaduse Kehtib resurssidele toolbar (applies_resources_tb) help"
+msgstr ""
+
+#: classes/mrp/mrp_resource_setting.aw:prop_applies_resources
+msgid "Omaduse Kehtib resurssidele (applies_resources) caption"
+msgstr ""
+
+#: classes/mrp/mrp_resource_setting.aw:prop_applies_resources_comment
+msgid "Omaduse Kehtib resurssidele (applies_resources) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_resource_setting.aw:prop_applies_resources_help
+msgid "Omaduse Kehtib resurssidele (applies_resources) help"
+msgstr ""
+
+#: classes/mrp/mrp_resource_setting.aw:rel_RELTYPE_APPLIES_RESOURCE
+msgid "Seose Kehtib ressursile (RELTYPE_APPLIES_RESOURCE) tekst"
+msgstr ""
+
+#: classes/mrp/mrp_resource_setting.aw:layout_applies_resources_lay
+msgid "Kujundusosa Kehtib&nbsp;ressurssidele (applies_resources_lay) pealkiri"
+msgstr ""
+

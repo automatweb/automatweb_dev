@@ -1,0 +1,108 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:class_1522_help
+msgid "Klassi ERP Hinnakirja rida help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_pricelist
+msgid "Omaduse Hinnakiri (pricelist) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_pricelist_comment
+msgid "Omaduse Hinnakiri (pricelist) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_pricelist_help
+msgid "Omaduse Hinnakiri (pricelist) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_resource
+msgid "Omaduse Ressurss (resource) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_resource_comment
+msgid "Omaduse Ressurss (resource) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_resource_help
+msgid "Omaduse Ressurss (resource) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_cnt_from
+msgid "Omaduse Kogus alates (cnt_from) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_cnt_from_comment
+msgid "Omaduse Kogus alates (cnt_from) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_cnt_from_help
+msgid "Omaduse Kogus alates (cnt_from) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_cnt_to
+msgid "Omaduse Kogus kuni (cnt_to) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_cnt_to_comment
+msgid "Omaduse Kogus kuni (cnt_to) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_cnt_to_help
+msgid "Omaduse Kogus kuni (cnt_to) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_config_price
+msgid "Omaduse Seadistamise hind (config_price) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_config_price_comment
+msgid "Omaduse Seadistamise hind (config_price) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_config_price_help
+msgid "Omaduse Seadistamise hind (config_price) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_item_price
+msgid "Omaduse T&uuml;ki hind (item_price) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_item_price_comment
+msgid "Omaduse T&uuml;ki hind (item_price) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_item_price_help
+msgid "Omaduse T&uuml;ki hind (item_price) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_row_type
+msgid "Omaduse Rea t&uuml;&uuml;p (row_type) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_row_type_comment
+msgid "Omaduse Rea t&uuml;&uuml;p (row_type) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:prop_row_type_help
+msgid "Omaduse Rea t&uuml;&uuml;p (row_type) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:rel_RELTYPE_PRICELIST
+msgid "Seose Hinnakiri (RELTYPE_PRICELIST) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist_row.aw:rel_RELTYPE_RESOURCE
+msgid "Seose Ressurss (RELTYPE_RESOURCE) tekst"
+msgstr ""
+

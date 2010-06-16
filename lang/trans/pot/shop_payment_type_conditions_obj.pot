@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_payment_type_conditions_obj.aw:36 classes/applications/shop/shop_payment_type_conditions_obj.aw:41
+msgid "Minimaalne lubatud summa j&auml;relmaksuks on %s!"
+msgstr ""
+
+#: classes/applications/shop/shop_payment_type_conditions_obj.aw:48
+msgid "Maksimaalne lubatud summa j&auml;relmaksuks on %s!"
+msgstr ""
+
+#: classes/applications/shop/shop_payment_type_conditions_obj.aw:63
+msgid "Valitud j&auml;relmaksuperiood ei ole lubatud!"
+msgstr ""
+
+#: classes/applications/shop/shop_payment_type_conditions_obj.aw:75
+msgid "Minimaalne lubatud summa igakuiseks osamakseks on %s!"
+msgstr ""
+
+#: classes/applications/shop/shop_payment_type_conditions_obj.aw:125
+msgid "%s %s kuni %s %s (min %s %s)<br />Sissemakse %s%%, intress %s%% aastas<br />%s kuni %s kuud (samm %s)"
+msgstr ""
+
+#: classes/applications/shop/shop_payment_type_conditions_obj.aw:137
+msgid "M&auml;&auml;ramata"
+msgstr ""
+

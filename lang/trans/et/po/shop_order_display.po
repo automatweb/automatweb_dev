@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_order_display.aw:class_1556_help
+msgid "Klassi Lao tellimused veebis help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_display.aw:prop_warehouse_list
+msgid "Omaduse Laod, kust tellimusi n&auml;idatakse (warehouse_list) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_display.aw:prop_warehouse_list_comment
+msgid "Omaduse Laod, kust tellimusi n&auml;idatakse (warehouse_list) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_display.aw:prop_warehouse_list_help
+msgid "Omaduse Laod, kust tellimusi n&auml;idatakse (warehouse_list) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_display.aw:rel_RELTYPE_WAREHOUSE
+msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_order_display.aw:72
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/shop/shop_order_display.aw:77
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/shop/shop_order_display.aw:84
+msgid "Summa"
+msgstr ""
+

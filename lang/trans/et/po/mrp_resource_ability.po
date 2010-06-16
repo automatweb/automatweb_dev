@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/mrp_resource_ability.aw:class_1551_help
+msgid "Klassi ERP Ressursi j&otilde;udluse kirje help"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_act_from
+msgid "Omaduse Kehtib alates (act_from) caption"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_act_from_comment
+msgid "Omaduse Kehtib alates (act_from) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_act_from_help
+msgid "Omaduse Kehtib alates (act_from) help"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_act_to
+msgid "Omaduse Kehtib kuni (act_to) caption"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_act_to_comment
+msgid "Omaduse Kehtib kuni (act_to) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_act_to_help
+msgid "Omaduse Kehtib kuni (act_to) help"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_format
+msgid "Omaduse Formaat (format) caption"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_format_comment
+msgid "Omaduse Formaat (format) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_format_help
+msgid "Omaduse Formaat (format) help"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_ability_per_hr
+msgid "Omaduse J&otilde;udlus tunnis (ability_per_hr) caption"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_ability_per_hr_comment
+msgid "Omaduse J&otilde;udlus tunnis (ability_per_hr) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:prop_ability_per_hr_help
+msgid "Omaduse J&otilde;udlus tunnis (ability_per_hr) help"
+msgstr ""
+
+#: classes/mrp/mrp_resource_ability.aw:rel_RELTYPE_FORMAT
+msgid "Seose Formaat (RELTYPE_FORMAT) tekst"
+msgstr ""
+

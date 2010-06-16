@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/material_movement_relation.aw:class_1516_help
+msgid "Klassi Materjali liikumisseos help"
+msgstr ""
+
+#: classes/mrp/material_movement_relation.aw:prop_job
+msgid "Omaduse Tegevus (job) caption"
+msgstr ""
+
+#: classes/mrp/material_movement_relation.aw:prop_job_comment
+msgid "Omaduse Tegevus (job) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_movement_relation.aw:prop_job_help
+msgid "Omaduse Tegevus (job) help"
+msgstr ""
+
+#: classes/mrp/material_movement_relation.aw:prop_dn
+msgid "Omaduse Saateleht (dn) caption"
+msgstr ""
+
+#: classes/mrp/material_movement_relation.aw:prop_dn_comment
+msgid "Omaduse Saateleht (dn) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_movement_relation.aw:prop_dn_help
+msgid "Omaduse Saateleht (dn) help"
+msgstr ""
+
+#: classes/mrp/material_movement_relation.aw:rel_RELTYPE_JOB
+msgid "Seose Tegevus (RELTYPE_JOB) tekst"
+msgstr ""
+
+#: classes/mrp/material_movement_relation.aw:rel_RELTYPE_DN
+msgid "Seose Saateleht (RELTYPE_DN) tekst"
+msgstr ""
+

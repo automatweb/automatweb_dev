@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_order_cart_obj.aw:102
+msgid "shop_order_cart_obj::creat_osell_order(): no order_center set for cart %s!"
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart_obj.aw:211
+msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for ordering center %s!"
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart_obj.aw:219
+msgid "M&uuml;&uuml;gitellimus"
+msgstr ""
+

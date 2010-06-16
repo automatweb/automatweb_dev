@@ -1,0 +1,56 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/admin/admin_object_importer.aw:class_1555_help
+msgid "Klassi Objektide &uuml;leslaadimine help"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:prop_folder
+msgid "Omaduse Kaust kuhu importida (folder) caption"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:prop_folder_comment
+msgid "Omaduse Kaust kuhu importida (folder) kommentaar"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:prop_folder_help
+msgid "Omaduse Kaust kuhu importida (folder) help"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:prop_fupload
+msgid "Omaduse Vali fail (fupload) caption"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:prop_fupload_comment
+msgid "Omaduse Vali fail (fupload) kommentaar"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:prop_fupload_help
+msgid "Omaduse Vali fail (fupload) help"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:prop_log
+msgid "Omaduse Logi (log) caption"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:prop_log_comment
+msgid "Omaduse Logi (log) kommentaar"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:prop_log_help
+msgid "Omaduse Logi (log) help"
+msgstr ""
+
+#: classes/admin/admin_object_importer.aw:rel_RELTYPE_FOLDER
+msgid "Seose Kaust (RELTYPE_FOLDER) tekst"
+msgstr ""
+

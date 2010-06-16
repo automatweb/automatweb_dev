@@ -1,0 +1,248 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/import/csv_import.aw:class_1562_help
+msgid "Klassi CSV import help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_class
+msgid "Omaduse Imporditavate objektide klass (import_class) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_class_comment
+msgid "Omaduse Imporditavate objektide klass (import_class) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_class_help
+msgid "Omaduse Imporditavate objektide klass (import_class) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_folder
+msgid "Omaduse Kaust kuhu importida (folder) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_folder_comment
+msgid "Omaduse Kaust kuhu importida (folder) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_folder_help
+msgid "Omaduse Kaust kuhu importida (folder) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_record_separator
+msgid "Omaduse CSV kirjete eraldaja (csv_record_separator) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_record_separator_comment
+msgid "Omaduse CSV kirjete eraldaja (csv_record_separator) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_record_separator_help
+msgid "Omaduse CSV kirjete eraldaja (csv_record_separator) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_separator
+msgid "Omaduse CSV v&auml;ljade eraldaja (csv_field_separator) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_separator_comment
+msgid "Omaduse CSV v&auml;ljade eraldaja (csv_field_separator) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_separator_help
+msgid "Omaduse CSV v&auml;ljade eraldaja (csv_field_separator) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_quote_start
+msgid "Omaduse CSV v&auml;lja algusm&auml;rk (csv_field_quote_start) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_quote_start_comment
+msgid "Omaduse CSV v&auml;lja algusm&auml;rk (csv_field_quote_start) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_quote_start_help
+msgid "Omaduse CSV v&auml;lja algusm&auml;rk (csv_field_quote_start) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_quote_end
+msgid "Omaduse CSV v&auml;lja l&otilde;pum&auml;rk (csv_field_quote_end) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_quote_end_comment
+msgid "Omaduse CSV v&auml;lja l&otilde;pum&auml;rk (csv_field_quote_end) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_quote_end_help
+msgid "Omaduse CSV v&auml;lja l&otilde;pum&auml;rk (csv_field_quote_end) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_quote_escape
+msgid "Omaduse CSV v&auml;lja escape m&auml;rk (csv_field_quote_escape) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_quote_escape_comment
+msgid "Omaduse CSV v&auml;lja escape m&auml;rk (csv_field_quote_escape) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_field_quote_escape_help
+msgid "Omaduse CSV v&auml;lja escape m&auml;rk (csv_field_quote_escape) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_fields_in_record
+msgid "Omaduse CSV v&auml;ljade arv kirjes (csv_fields_in_record) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_fields_in_record_comment
+msgid "Omaduse CSV v&auml;ljade arv kirjes (csv_fields_in_record) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_fields_in_record_help
+msgid "Omaduse CSV v&auml;ljade arv kirjes (csv_fields_in_record) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_row_comment_token
+msgid "Omaduse Kommentaaris&uuml;mbol (csv_row_comment_token) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_row_comment_token_comment
+msgid "Omaduse Kommentaaris&uuml;mbol (csv_row_comment_token) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_csv_row_comment_token_help
+msgid "Omaduse Kommentaaris&uuml;mbol (csv_row_comment_token) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_property_map
+msgid "Omaduse  (property_map) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_property_map_comment
+msgid "Omaduse  (property_map) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_property_map_help
+msgid "Omaduse  (property_map) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_property_map_table
+msgid "Omaduse Omaduste vastavused csv v&auml;ljadele (property_map_table) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_property_map_table_comment
+msgid "Omaduse Omaduste vastavused csv v&auml;ljadele (property_map_table) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_property_map_table_help
+msgid "Omaduse Omaduste vastavused csv v&auml;ljadele (property_map_table) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_file
+msgid "Omaduse Impordi failist (import_file) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_file_comment
+msgid "Omaduse Impordi failist (import_file) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_file_help
+msgid "Omaduse Impordi failist (import_file) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_url
+msgid "Omaduse Impordi urlilt (import_url) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_url_comment
+msgid "Omaduse Impordi urlilt (import_url) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_url_help
+msgid "Omaduse Impordi urlilt (import_url) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_string
+msgid "Omaduse Impordi tekst (import_string) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_string_comment
+msgid "Omaduse Impordi tekst (import_string) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_string_help
+msgid "Omaduse Impordi tekst (import_string) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_simulate_import
+msgid "Omaduse Impordi ainult ekraanile (simulate_import) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_simulate_import_comment
+msgid "Omaduse Impordi ainult ekraanile (simulate_import) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_simulate_import_help
+msgid "Omaduse Impordi ainult ekraanile (simulate_import) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_submit
+msgid "Omaduse Impordi (import_submit) caption"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_submit_comment
+msgid "Omaduse Impordi (import_submit) kommentaar"
+msgstr ""
+
+#: classes/import/csv_import.aw:prop_import_submit_help
+msgid "Omaduse Impordi (import_submit) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:group_import
+msgid "Grupi Import (import) pealkiri"
+msgstr ""
+
+#: classes/import/csv_import.aw:group_import_help
+msgid "Grupi Import (import) help"
+msgstr ""
+
+#: classes/import/csv_import.aw:rel_RELTYPE_FOLDER
+msgid "Seose Kaust (RELTYPE_FOLDER) tekst"
+msgstr ""
+
+#: classes/import/csv_import.aw:rel_RELTYPE_CONTROLLER
+msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/import/csv_import.aw:96
+msgid "Klass m&auml;&auml;ramata"
+msgstr ""
+
+#: classes/import/csv_import.aw:110
+msgid "CSV v&auml;lja nr."
+msgstr ""
+
+#: classes/import/csv_import.aw:114
+msgid "Vastav objekti omadus"
+msgstr ""
+
+#: classes/import/csv_import.aw:118
+msgid "Unikaalne v&auml;&auml;rtus"
+msgstr ""
+
+#: classes/import/csv_import.aw:122
+msgid "Kirjuta olemasolev &uuml;le"
+msgstr ""
+
+#: classes/import/csv_import.aw:126
+msgid "Kontroller"
+msgstr ""
+

@@ -1,0 +1,144 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_product_purveyance.aw:class_1500_help
+msgid "Klassi Toote tarnetingimus help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_code
+msgid "Omaduse Kood (code) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_product
+msgid "Omaduse Toode (product) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_product_comment
+msgid "Omaduse Toode (product) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_product_help
+msgid "Omaduse Toode (product) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_packaging
+msgid "Omaduse Pakend (packaging) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_packaging_comment
+msgid "Omaduse Pakend (packaging) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_packaging_help
+msgid "Omaduse Pakend (packaging) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_company
+msgid "Omaduse Tarnija (company) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_company_comment
+msgid "Omaduse Tarnija (company) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_company_help
+msgid "Omaduse Tarnija (company) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_warehouse
+msgid "Omaduse Ladu (warehouse) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_warehouse_comment
+msgid "Omaduse Ladu (warehouse) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_warehouse_help
+msgid "Omaduse Ladu (warehouse) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_weekday
+msgid "Omaduse Tarnep&auml;ev (weekday) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_weekday_comment
+msgid "Omaduse Tarnep&auml;ev (weekday) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_weekday_help
+msgid "Omaduse Tarnep&auml;ev (weekday) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_days
+msgid "Omaduse Tarneaeg p&auml;evades (days) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_days_comment
+msgid "Omaduse Tarneaeg p&auml;evades (days) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_days_help
+msgid "Omaduse Tarneaeg p&auml;evades (days) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_date1
+msgid "Omaduse Kuup&auml;ev 1 (date1) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_date1_comment
+msgid "Omaduse Kuup&auml;ev 1 (date1) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_date1_help
+msgid "Omaduse Kuup&auml;ev 1 (date1) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_date2
+msgid "Omaduse Kuup&auml;ev 2 (date2) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_date2_comment
+msgid "Omaduse Kuup&auml;ev 2 (date2) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:prop_date2_help
+msgid "Omaduse Kuup&auml;ev 2 (date2) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:rel_RELTYPE_PRODUCT
+msgid "Seose Toode (RELTYPE_PRODUCT) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:rel_RELTYPE_COMPANY
+msgid "Seose Tarnija (RELTYPE_COMPANY) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:rel_RELTYPE_WAREHOUSE
+msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:rel_RELTYPE_PACKAGING
+msgid "Seose Pakend (RELTYPE_PACKAGING) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_purveyance.aw:75
+msgid "--vali--"
+msgstr ""
+

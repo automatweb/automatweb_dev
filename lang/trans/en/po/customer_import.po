@@ -1,0 +1,206 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/applications/customer_import/customer_import.aw:class_1541_help
+msgid "Klassi Klientide import help"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_data_source
+msgid "Omaduse Andmeallikas (data_source) caption"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_data_source_comment
+msgid "Omaduse Andmeallikas (data_source) kommentaar"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_data_source_help
+msgid "Omaduse Andmeallikas (data_source) help"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_company
+msgid "Omaduse Organisatsioon kellele kliente importida (company) caption"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_company_comment
+msgid "Omaduse Organisatsioon kellele kliente importida (company) kommentaar"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_company_help
+msgid "Omaduse Organisatsioon kellele kliente importida (company) help"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_timing
+msgid "Omaduse Impordi ajastus (timing) caption"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_timing_comment
+msgid "Omaduse Impordi ajastus (timing) kommentaar"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_timing_help
+msgid "Omaduse Impordi ajastus (timing) help"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_imp_status
+msgid "Omaduse  (imp_status) caption"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_imp_status_comment
+msgid "Omaduse  (imp_status) kommentaar"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:prop_imp_status_help
+msgid "Omaduse  (imp_status) help"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:group_import_timing
+msgid "Grupi Impordi ajastus (import_timing) pealkiri"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:group_import_timing_help
+msgid "Grupi Impordi ajastus (import_timing) help"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:group_import_status
+msgid "Grupi Impordi staatus (import_status) pealkiri"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:group_import_status_help
+msgid "Grupi Impordi staatus (import_status) help"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:rel_RELTYPE_COMPANY
+msgid "Seose Organisatsioon (RELTYPE_COMPANY) tekst"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:rel_RELTYPE_REPEATER
+msgid "Seose Kordaja (RELTYPE_REPEATER) tekst"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:layout_timing_lay
+msgid "Kujundusosa Impordi&nbsp;ajastus (timing_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:layout_stat_lay
+msgid "Kujundusosa Impordi&nbsp;staatus (stat_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:119
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:133
+msgid "Import k&auml;ib!"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:134
+msgid "Staatus: %s, protsess: %s, andmeid t&ouml;&ouml;deldud %s andmeid kokku %s, algusaeg %s"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:146
+msgid "Reset"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:153
+msgid "Peata kohe"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:165
+msgid "J&auml;rgmine import algab %s"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:169
+msgid "Impordi kordaja on l&otilde;ppenud!"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:174
+msgid "Impordile pole automaatset k&auml;ivitust m&auml;&auml;ratud!"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:179
+msgid "K&auml;ivita kohe"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:187
+msgid "Alustati"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:195
+msgid "L&otilde;petati"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:203
+msgid "Edukas"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:208
+msgid "Imporditud andmete arv"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:214
+msgid "Kogu andmete arv"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:220
+msgid "L&otilde;petamise p&otilde;hjus"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:230
+msgid "Jah"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:230
+msgid "Ei"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:239
+msgid "Eelneva 10 impordi info"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:334
+msgid "Alustamine"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:335
+msgid "Kategooriate XML laadimine"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:336
+msgid "Kategooriate XML t&ouml;&ouml;tlemine"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:337
+msgid "Klientide XML laadimine"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:338
+msgid "Klientide XML t&ouml;&ouml;tlemine"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:339
+msgid "Isikute XML laadimine"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:340
+msgid "Isikute XML t&ouml;&ouml;tlemine"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:341
+msgid "Kasutajate XML laadimine"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:342
+msgid "Kasutajate XML t&ouml;&ouml;tlemine"
+msgstr ""
+
+#: classes/applications/customer_import/customer_import.aw:343
+msgid "L&otilde;petamine"
+msgstr ""

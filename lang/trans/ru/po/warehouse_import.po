@@ -1,0 +1,640 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/warehouse_import.aw:class_1535_help
+msgid "Klassi Lao import help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_data_source
+msgid "Omaduse Andmeallikas (data_source) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_data_source_comment
+msgid "Omaduse Andmeallikas (data_source) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_data_source_help
+msgid "Omaduse Andmeallikas (data_source) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_price_list
+msgid "Omaduse Hinnakiri (price_list) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_price_list_comment
+msgid "Omaduse Hinnakiri (price_list) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_price_list_help
+msgid "Omaduse Hinnakiri (price_list) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_aw_warehouses_tb
+msgid "Omaduse AW Laod toolbar (aw_warehouses_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_aw_warehouses_tb_comment
+msgid "Omaduse AW Laod toolbar (aw_warehouses_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_aw_warehouses_tb_help
+msgid "Omaduse AW Laod toolbar (aw_warehouses_tb) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_aw_warehouses
+msgid "Omaduse AW Laod (aw_warehouses) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_aw_warehouses_comment
+msgid "Omaduse AW Laod (aw_warehouses) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_aw_warehouses_help
+msgid "Omaduse AW Laod (aw_warehouses) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_config_table
+msgid "Omaduse Seaded (config_table) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_config_table_comment
+msgid "Omaduse Seaded (config_table) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_config_table_help
+msgid "Omaduse Seaded (config_table) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_prods
+msgid "Omaduse Toodete impordi ajastus (timing_prods) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_prods_comment
+msgid "Omaduse Toodete impordi ajastus (timing_prods) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_prods_help
+msgid "Omaduse Toodete impordi ajastus (timing_prods) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_prices
+msgid "Omaduse Hindade impordi ajastus (timing_prices) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_prices_comment
+msgid "Omaduse Hindade impordi ajastus (timing_prices) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_prices_help
+msgid "Omaduse Hindade impordi ajastus (timing_prices) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_amounts
+msgid "Omaduse Koguste impordi ajastus (timing_amounts) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_amounts_comment
+msgid "Omaduse Koguste impordi ajastus (timing_amounts) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_amounts_help
+msgid "Omaduse Koguste impordi ajastus (timing_amounts) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_price_lists
+msgid "Omaduse Hinnakirjade impordi ajastus (timing_price_lists) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_price_lists_comment
+msgid "Omaduse Hinnakirjade impordi ajastus (timing_price_lists) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_price_lists_help
+msgid "Omaduse Hinnakirjade impordi ajastus (timing_price_lists) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_dnotes
+msgid "Omaduse Saatelehtede impordi ajastus (timing_dnotes) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_dnotes_comment
+msgid "Omaduse Saatelehtede impordi ajastus (timing_dnotes) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_dnotes_help
+msgid "Omaduse Saatelehtede impordi ajastus (timing_dnotes) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_bills
+msgid "Omaduse Arvete impordi ajastus (timing_bills) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_bills_comment
+msgid "Omaduse Arvete impordi ajastus (timing_bills) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_bills_help
+msgid "Omaduse Arvete impordi ajastus (timing_bills) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_orders
+msgid "Omaduse Tellimuste impordi ajastus (timing_orders) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_orders_comment
+msgid "Omaduse Tellimuste impordi ajastus (timing_orders) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_timing_orders_help
+msgid "Omaduse Tellimuste impordi ajastus (timing_orders) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_product_status_dev_imports
+msgid "Omaduse  (product_status_dev_imports) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_product_status_dev_imports_comment
+msgid "Omaduse  (product_status_dev_imports) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_product_status_dev_imports_help
+msgid "Omaduse  (product_status_dev_imports) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_product_status_dev_info
+msgid "Omaduse  (product_status_dev_info) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_product_status_dev_info_comment
+msgid "Omaduse  (product_status_dev_info) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_product_status_dev_info_help
+msgid "Omaduse  (product_status_dev_info) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_product_status_dev_files
+msgid "Omaduse  (product_status_dev_files) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_product_status_dev_files_comment
+msgid "Omaduse  (product_status_dev_files) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_product_status_dev_files_help
+msgid "Omaduse  (product_status_dev_files) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_prices_status
+msgid "Omaduse  (prices_status) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_prices_status_comment
+msgid "Omaduse  (prices_status) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_prices_status_help
+msgid "Omaduse  (prices_status) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_amounts_status
+msgid "Omaduse  (amounts_status) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_amounts_status_comment
+msgid "Omaduse  (amounts_status) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_amounts_status_help
+msgid "Omaduse  (amounts_status) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_pricelists_status
+msgid "Omaduse  (pricelists_status) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_pricelists_status_comment
+msgid "Omaduse  (pricelists_status) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_pricelists_status_help
+msgid "Omaduse  (pricelists_status) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_dnotes_status
+msgid "Omaduse  (dnotes_status) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_dnotes_status_comment
+msgid "Omaduse  (dnotes_status) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_dnotes_status_help
+msgid "Omaduse  (dnotes_status) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_bills_status
+msgid "Omaduse  (bills_status) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_bills_status_comment
+msgid "Omaduse  (bills_status) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_bills_status_help
+msgid "Omaduse  (bills_status) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_orders_status
+msgid "Omaduse  (orders_status) caption"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_orders_status_comment
+msgid "Omaduse  (orders_status) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:prop_orders_status_help
+msgid "Omaduse  (orders_status) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_general_general
+msgid "Grupi &Uuml;ldine (general_general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_general_general_help
+msgid "Grupi &Uuml;ldine (general_general) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_aw_warehouses
+msgid "Grupi AW Laod (aw_warehouses) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_aw_warehouses_help
+msgid "Grupi AW Laod (aw_warehouses) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_import_warehouses
+msgid "Grupi Imporditavad laod (import_warehouses) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_import_warehouses_help
+msgid "Grupi Imporditavad laod (import_warehouses) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_import_status
+msgid "Grupi Importide staatus (import_status) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_import_status_help
+msgid "Grupi Importide staatus (import_status) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_product_status_dev
+msgid "Grupi Toodete import (product_status_dev) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_product_status_dev_help
+msgid "Grupi Toodete import (product_status_dev) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_product_prices
+msgid "Grupi Toodete hinnad (product_prices) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_product_prices_help
+msgid "Grupi Toodete hinnad (product_prices) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_product_amounts
+msgid "Grupi Toodete laoseisud (product_amounts) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_product_amounts_help
+msgid "Grupi Toodete laoseisud (product_amounts) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_pricelists
+msgid "Grupi Hinnakirjad (pricelists) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_pricelists_help
+msgid "Grupi Hinnakirjad (pricelists) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_customers
+msgid "Grupi Kliendid (customers) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_customers_help
+msgid "Grupi Kliendid (customers) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_delivery_notes
+msgid "Grupi Saatelehed (delivery_notes) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_delivery_notes_help
+msgid "Grupi Saatelehed (delivery_notes) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_bills
+msgid "Grupi Arved (bills) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_bills_help
+msgid "Grupi Arved (bills) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_orders
+msgid "Grupi Tellimused (orders) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_orders_help
+msgid "Grupi Tellimused (orders) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_import_timing
+msgid "Grupi Importide ajastus (import_timing) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:group_import_timing_help
+msgid "Grupi Importide ajastus (import_timing) help"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:rel_RELTYPE_WAREHOUSE
+msgid "Seose AW Ladu (RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:rel_RELTYPE_PROD_REPEATER
+msgid "Seose Toodete kordaja (RELTYPE_PROD_REPEATER) tekst"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:rel_RELTYPE_PRICES_REPEATER
+msgid "Seose Hindade kordaja (RELTYPE_PRICES_REPEATER) tekst"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:rel_RELTYPE_AMOUNTS_REPEATER
+msgid "Seose Koguste kordaja (RELTYPE_AMOUNTS_REPEATER) tekst"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:rel_RELTYPE_PRICE_LISTS_REPEATER
+msgid "Seose Hinnakirjade kordaja (RELTYPE_PRICE_LISTS_REPEATER) tekst"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:rel_RELTYPE_DNOTES_REPEATER
+msgid "Seose Saatelehtede kordaja (RELTYPE_DNOTES_REPEATER) tekst"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:rel_RELTYPE_BILLS_REPEATER
+msgid "Seose Arvete kordaja (RELTYPE_BILLS_REPEATER) tekst"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:rel_RELTYPE_ORDERS_REPEATER
+msgid "Seose Tellimuste kordaja (RELTYPE_ORDERS_REPEATER) tekst"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_timing_prods_lay
+msgid "Kujundusosa Toodete&nbsp;impordi&nbsp;ajastus (timing_prods_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_timing_prices_lay
+msgid "Kujundusosa Hindade&nbsp;impordi&nbsp;ajastus (timing_prices_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_timing_amounts_lay
+msgid "Kujundusosa Koguste&nbsp;impordi&nbsp;ajastus (timing_amounts_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_timing_price_lists_lay
+msgid "Kujundusosa Hinnakirjade&nbsp;impordi&nbsp;ajastus (timing_price_lists_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_timing_dnotes_lay
+msgid "Kujundusosa Saatelehtede&nbsp;impordi&nbsp;ajastus (timing_dnotes_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_timing_bills_lay
+msgid "Kujundusosa Arvete&nbsp;impordi&nbsp;ajastus (timing_bills_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_timing_orders_lay
+msgid "Kujundusosa Tellimuste&nbsp;impordi&nbsp;ajastus (timing_orders_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_product_status_dev_imports_frame
+msgid "Kujundusosa Impordid (product_status_dev_imports_frame) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_product_status_dev_info_frame
+msgid "Kujundusosa Info (product_status_dev_info_frame) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_product_status_dev_files_frame
+msgid "Kujundusosa Impordi&nbsp;failid (product_status_dev_files_frame) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_stat_prices_lay
+msgid "Kujundusosa Hindade&nbsp;impordi&nbsp;staatus (stat_prices_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_stat_amounts_lay
+msgid "Kujundusosa Koguste&nbsp;impordi&nbsp;staatus (stat_amounts_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_stat_pricelists_lay
+msgid "Kujundusosa Hinnakirjade&nbsp;impordi&nbsp;staatus (stat_pricelists_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_stat_dnotes_lay
+msgid "Kujundusosa Saatelehtede&nbsp;impordi&nbsp;staatus (stat_dnotes_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_stat_bills_lay
+msgid "Kujundusosa Arvete&nbsp;impordi&nbsp;staatus (stat_bills_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:layout_stat_orders_lay
+msgid "Kujundusosa Tellimuste&nbsp;impordi&nbsp;staatus (stat_orders_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:212
+msgid "Ladu"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:217
+msgid "Vali kust imporditakse"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:223
+msgid "Tooted"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:229
+msgid "Laoseis"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:234
+msgid "Hinnad"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:239
+msgid "Hinnakiri"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:247 classes/applications/shop/warehouse_import.aw:331 classes/applications/shop/warehouse_import.aw:337
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:369
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:374
+msgid "Kasutusel"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:379
+msgid "Lisainfo"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:413
+msgid "Impordi t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:418
+msgid "Impordi ajakava"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:443
+msgid "Ladu %s"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:474
+msgid "Import k&auml;ib!"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:475
+msgid "Staatus: %s, protsess: %s, t&ouml;&ouml;deldud %s, kokku %s, algusaeg %s"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:487
+msgid "Reset"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:494
+msgid "Peata kohe"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:506
+msgid "J&auml;rgmine import algab %s"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:510
+msgid "Impordi kordaja on l&otilde;ppenud!"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:515
+msgid "Impordile pole automaatset k&auml;ivitust m&auml;&auml;ratud!"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:520
+msgid "K&auml;ivita kohe"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:530
+msgid "Alustati"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:538
+msgid "L&otilde;petati"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:546
+msgid "Edukas"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:551
+msgid "Imporditud"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:557
+msgid "Kokku"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:563
+msgid "L&otilde;petamise p&otilde;hjus"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:568
+msgid "XML Failid"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:587
+msgid "Jah"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:587
+msgid "Ei"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:595
+msgid "Eelneva 10 impordi info"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:745
+msgid "Alustamine"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:746
+msgid "Andmete t&otilde;mbamine"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:747
+msgid "Andmete t&ouml;&ouml;tlemine"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:748
+msgid "Andmete salvestamine"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:749
+msgid "L&otilde;petamine"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:918
+msgid "Staatus: alustatud"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:919
+msgid "Alguse aeg: %s"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:926
+msgid "K&auml;ivita toodete import"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:938
+msgid "Seadista mis faile imporditakse"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:957
+msgid "Nr"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:962
+msgid "Faili nimi"
+msgstr ""
+
+#: classes/applications/shop/warehouse_import.aw:966
+msgid "Staatus"
+msgstr ""
+

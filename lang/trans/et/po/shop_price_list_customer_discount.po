@@ -1,0 +1,76 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:class_1534_help
+msgid "Klassi Kliendigrupi allahindlus help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_pricelist
+msgid "Omaduse Hinnakiri (pricelist) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_pricelist_comment
+msgid "Omaduse Hinnakiri (pricelist) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_pricelist_help
+msgid "Omaduse Hinnakiri (pricelist) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_crm_category
+msgid "Omaduse Kliendigrupp (crm_category) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_crm_category_comment
+msgid "Omaduse Kliendigrupp (crm_category) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_crm_category_help
+msgid "Omaduse Kliendigrupp (crm_category) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_prod_category
+msgid "Omaduse Tootegrupp (prod_category) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_prod_category_comment
+msgid "Omaduse Tootegrupp (prod_category) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_prod_category_help
+msgid "Omaduse Tootegrupp (prod_category) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_discount
+msgid "Omaduse Allahindluse protsent (discount) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_discount_comment
+msgid "Omaduse Allahindluse protsent (discount) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:prop_discount_help
+msgid "Omaduse Allahindluse protsent (discount) help"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:rel_RELTYPE_PRICELIST
+msgid "Seose Hinnakiri (RELTYPE_PRICELIST) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:rel_RELTYPE_CRM_CATEGORY
+msgid "Seose Kliendigrupp (RELTYPE_CRM_CATEGORY) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_price_list_customer_discount.aw:rel_RELTYPE_PROD_CATEGORY
+msgid "Seose Tootegrupp (RELTYPE_PROD_CATEGORY) tekst"
+msgstr ""
+

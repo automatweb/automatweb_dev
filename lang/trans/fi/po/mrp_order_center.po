@@ -1,0 +1,556 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/orders/mrp_order_center.aw:class_1518_help
+msgid "Klassi ERP Tellimuste haldus help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_owner_co
+msgid "Omaduse Omanik (owner_co) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_owner_co_comment
+msgid "Omaduse Omanik (owner_co) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_owner_co_help
+msgid "Omaduse Omanik (owner_co) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_mrp_workspace
+msgid "Omaduse Ressursihalduse t&ouml;&ouml;laud (mrp_workspace) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_mrp_workspace_comment
+msgid "Omaduse Ressursihalduse t&ouml;&ouml;laud (mrp_workspace) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_mrp_workspace_help
+msgid "Omaduse Ressursihalduse t&ouml;&ouml;laud (mrp_workspace) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_mail_template
+msgid "Omaduse Saadetud pakkumise alus (mail_template) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_mail_template_comment
+msgid "Omaduse Saadetud pakkumise alus (mail_template) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_mail_template_help
+msgid "Omaduse Saadetud pakkumise alus (mail_template) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_order_tb
+msgid "Omaduse  (order_tb) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_order_tb_comment
+msgid "Omaduse  (order_tb) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_order_tb_help
+msgid "Omaduse  (order_tb) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_order_filter_tree
+msgid "Omaduse  (order_filter_tree) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_order_filter_tree_comment
+msgid "Omaduse  (order_filter_tree) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_order_filter_tree_help
+msgid "Omaduse  (order_filter_tree) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_order_list
+msgid "Omaduse  (order_list) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_order_list_comment
+msgid "Omaduse  (order_list) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_order_list_help
+msgid "Omaduse  (order_list) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_customer_tb
+msgid "Omaduse  (customer_tb) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_customer_tb_comment
+msgid "Omaduse  (customer_tb) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_customer_tb_help
+msgid "Omaduse  (customer_tb) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_customer_filter_tree
+msgid "Omaduse  (customer_filter_tree) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_customer_filter_tree_comment
+msgid "Omaduse  (customer_filter_tree) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_customer_filter_tree_help
+msgid "Omaduse  (customer_filter_tree) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_customer_list
+msgid "Omaduse  (customer_list) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_customer_list_comment
+msgid "Omaduse  (customer_list) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_customer_list_help
+msgid "Omaduse  (customer_list) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_pr_tb
+msgid "Omaduse  (pr_tb) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_pr_tb_comment
+msgid "Omaduse  (pr_tb) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_pr_tb_help
+msgid "Omaduse  (pr_tb) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_pr_table
+msgid "Omaduse  (pr_table) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_pr_table_comment
+msgid "Omaduse  (pr_table) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_pr_table_help
+msgid "Omaduse  (pr_table) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_co_tb
+msgid "Omaduse  (co_tb) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_co_tb_comment
+msgid "Omaduse  (co_tb) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_co_tb_help
+msgid "Omaduse  (co_tb) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_cover_tree_cats
+msgid "Omaduse  (cover_tree_cats) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_cover_tree_cats_comment
+msgid "Omaduse  (cover_tree_cats) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_cover_tree_cats_help
+msgid "Omaduse  (cover_tree_cats) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_cover_tree
+msgid "Omaduse  (cover_tree) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_cover_tree_comment
+msgid "Omaduse  (cover_tree) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_cover_tree_help
+msgid "Omaduse  (cover_tree) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_co_table
+msgid "Omaduse  (co_table) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_co_table_comment
+msgid "Omaduse  (co_table) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_co_table_help
+msgid "Omaduse  (co_table) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_status
+msgid "Omaduse  (stats_status) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_status_comment
+msgid "Omaduse  (stats_status) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_status_help
+msgid "Omaduse  (stats_status) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_period
+msgid "Omaduse  (stats_period) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_period_comment
+msgid "Omaduse  (stats_period) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_period_help
+msgid "Omaduse  (stats_period) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_customer
+msgid "Omaduse  (stats_customer) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_customer_comment
+msgid "Omaduse  (stats_customer) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_customer_help
+msgid "Omaduse  (stats_customer) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_unit
+msgid "Omaduse  (stats_unit) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_unit_comment
+msgid "Omaduse  (stats_unit) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_unit_help
+msgid "Omaduse  (stats_unit) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_table
+msgid "Omaduse  (stats_table) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_table_comment
+msgid "Omaduse  (stats_table) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:prop_stats_table_help
+msgid "Omaduse  (stats_table) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_gen_gen
+msgid "Grupi &Uuml;ldine (gen_gen) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_gen_gen_help
+msgid "Grupi &Uuml;ldine (gen_gen) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_pricelists
+msgid "Grupi Hinnakirjad (pricelists) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_pricelists_help
+msgid "Grupi Hinnakirjad (pricelists) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_covers
+msgid "Grupi Katted (covers) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_covers_help
+msgid "Grupi Katted (covers) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_customer
+msgid "Grupi Kliendid (customer) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_customer_help
+msgid "Grupi Kliendid (customer) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_order
+msgid "Grupi Tellimused (order) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_order_help
+msgid "Grupi Tellimused (order) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_order_order
+msgid "Grupi Tellimused (order_order) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_order_order_help
+msgid "Grupi Tellimused (order_order) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_stats
+msgid "Grupi Aruanded (stats) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:group_stats_help
+msgid "Grupi Aruanded (stats) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:rel_RELTYPE_OWNER
+msgid "Seose Omanik (RELTYPE_OWNER) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:rel_RELTYPE_MRP_WORKSPACE
+msgid "Seose ERP T&ouml;&ouml;laud (RELTYPE_MRP_WORKSPACE) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:rel_RELTYPE_MRP_PRICELIST
+msgid "Seose Hinnakiri (RELTYPE_MRP_PRICELIST) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:rel_RELTYPE_MRP_COVER
+msgid "Seose Kate (RELTYPE_MRP_COVER) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:rel_RELTYPE_MAIL_TEMPLATE
+msgid "Seose Saadetud pakkumise alus (RELTYPE_MAIL_TEMPLATE) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:layout_order_left_top
+msgid "Kujundusosa Filter (order_left_top) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:layout_customer_left_top
+msgid "Kujundusosa Filter (customer_left_top) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:layout_cover_left_top
+msgid "Kujundusosa Kategooriad (cover_left_top) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:layout_cover_left_bottom
+msgid "Kujundusosa Millele&nbsp;kehtib (cover_left_bottom) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:layout_stats_status_lay
+msgid "Kujundusosa Filtreeri&nbsp;staatuse&nbsp;j&auml;rgi (stats_status_lay) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:layout_stats_period_lay
+msgid "Kujundusosa Filtreeri&nbsp;perioodi&nbsp;j&auml;rgi (stats_period_lay) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:layout_stats_customer_lay
+msgid "Kujundusosa Filtreeri&nbsp;kliendi&nbsp;j&auml;rgi (stats_customer_lay) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:layout_stats_unit_lay
+msgid "Kujundusosa Filtreeri&nbsp;&uuml;ksuse&nbsp;j&auml;rgi (stats_unit_lay) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:208
+msgid "Staatused"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:250
+msgid "Teostajapoolne kontakt"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:301
+msgid "Kliendid"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:356 classes/mrp/orders/mrp_order_center.aw:530 classes/mrp/orders/mrp_order_center.aw:647
+msgid "Nimi"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:362 classes/mrp/orders/mrp_order_center.aw:1071
+msgid "Klient"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:368
+msgid "Kliendi kontakt"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:374
+msgid "Teostaja kontakt"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:380 classes/mrp/orders/mrp_order_center.aw:1078
+msgid "Staatus"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:386
+msgid "hind"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:393
+msgid "Loomise kp"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:440
+msgid "Tellimused kliendipoolse kontaktiga %s ja staatusega %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:449
+msgid "Tellimused teostajapoolse kontaktiga %s ja staatusega %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:457
+msgid "Tellimused staatusega %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:463
+msgid "Tellimused kliendipoolse kontaktiga %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:469
+msgid "Tellimused teostajapoolse kontaktiga %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:473
+msgid "Tellimused"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:536 classes/mrp/orders/mrp_order_center.aw:1090
+msgid "Loodud"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:545
+msgid "Kehtib alates"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:554
+msgid "Kehtib kuni"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:563
+msgid "Hinnakirja t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:600
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:625
+msgid "Kleebi"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:668
+msgid "Katted, mis on kaustas %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:682
+msgid "Katted, mis kehtivad %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:683
+msgid "igalpool"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:693
+msgid "ressurssidele"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:699
+msgid "materjalidele"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:709
+msgid "ressursile %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:714
+msgid "materjalile %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:719
+msgid "grupis %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:802
+msgid "Kehtivad kogusummale"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:808
+msgid "Kehtivad resurssidele"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:814
+msgid "Kehtivad materjalidele"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:936
+msgid "Jooksev n&auml;dal"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:941
+msgid "Eelmine n&auml;dal"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:946
+msgid "Jooksev kuu"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:951
+msgid "Eelmine kuu"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:992
+msgid "K&otilde;ik perioodid"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1015
+msgid "K&otilde;ik kliendid"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1054
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1084
+msgid "Tellimus"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1099
+msgid "Hind"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1104
+msgid "Materjalide"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1112
+msgid "Resursside"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1120
+msgid "Katete"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1128
+msgid "Kokku"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1189 classes/mrp/orders/mrp_order_center.aw:1235
+msgid "Kokku kliendile"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_center.aw:1254
+msgid "Summa"
+msgstr ""
+

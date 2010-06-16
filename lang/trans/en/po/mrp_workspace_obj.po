@@ -1,0 +1,42 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/mrp/mrp_workspace_obj.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/mrp/mrp_workspace_obj.aw:209
+msgid "Kliendi %s projekt"
+msgstr ""
+
+#: classes/mrp/mrp_workspace_obj.aw:247
+msgid "Ressurss '%s'"
+msgstr ""
+
+#: classes/mrp/mrp_workspace_obj.aw:286
+msgid "Ameti '%s' ressurss"
+msgstr ""
+
+#: classes/mrp/mrp_workspace_obj.aw:336
+msgid "Systeemi inimressursside halduskeskkond"
+msgstr ""
+
+#: classes/mrp/mrp_workspace_obj.aw:344
+msgid "Projektid"
+msgstr ""
+
+#: classes/mrp/mrp_workspace_obj.aw:348
+msgid "Ressursid"
+msgstr ""
+
+#: classes/mrp/mrp_workspace_obj.aw:352
+msgid "T&ouml;&ouml;d"
+msgstr ""

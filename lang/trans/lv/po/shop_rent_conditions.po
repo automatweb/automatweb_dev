@@ -1,0 +1,160 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_rent_conditions.aw:class_1559_help
+msgid "Klassi J&auml;relmaksu tingimused help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_rent_configuration
+msgid "Omaduse  (rent_configuration) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_rent_configuration_comment
+msgid "Omaduse  (rent_configuration) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_rent_configuration_help
+msgid "Omaduse  (rent_configuration) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_row
+msgid "Omaduse  (row) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_row_comment
+msgid "Omaduse  (row) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_row_help
+msgid "Omaduse  (row) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_col
+msgid "Omaduse  (col) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_col_comment
+msgid "Omaduse  (col) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_col_help
+msgid "Omaduse  (col) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_currency
+msgid "Omaduse  (currency) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_currency_comment
+msgid "Omaduse  (currency) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_currency_help
+msgid "Omaduse  (currency) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_min_amt
+msgid "Omaduse J&auml;relmaksu miinumumsumma (min_amt) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_min_amt_comment
+msgid "Omaduse J&auml;relmaksu miinumumsumma (min_amt) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_min_amt_help
+msgid "Omaduse J&auml;relmaksu miinumumsumma (min_amt) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_max_amt
+msgid "Omaduse Järelmaksu maksimumsumma (max_amt) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_max_amt_comment
+msgid "Omaduse Järelmaksu maksimumsumma (max_amt) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_max_amt_help
+msgid "Omaduse Järelmaksu maksimumsumma (max_amt) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_min_payment
+msgid "Omaduse &Uuml;he makse miinimumsumma (min_payment) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_min_payment_comment
+msgid "Omaduse &Uuml;he makse miinimumsumma (min_payment) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_min_payment_help
+msgid "Omaduse &Uuml;he makse miinimumsumma (min_payment) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_prepayment_interest
+msgid "Omaduse Esmase sissemakse protsent (prepayment_interest) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_prepayment_interest_comment
+msgid "Omaduse Esmase sissemakse protsent (prepayment_interest) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_prepayment_interest_help
+msgid "Omaduse Esmase sissemakse protsent (prepayment_interest) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_yearly_interest
+msgid "Omaduse Aastaintressi protsent (yearly_interest) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_yearly_interest_comment
+msgid "Omaduse Aastaintressi protsent (yearly_interest) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_yearly_interest_help
+msgid "Omaduse Aastaintressi protsent (yearly_interest) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_period_min
+msgid "Omaduse Minimaalne järelmaksuperioodi pikkus kuudes (period_min) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_period_min_comment
+msgid "Omaduse Minimaalne järelmaksuperioodi pikkus kuudes (period_min) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_period_min_help
+msgid "Omaduse Minimaalne järelmaksuperioodi pikkus kuudes (period_min) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_period_max
+msgid "Omaduse Maksimaalne järelmaksuperioodi pikkus kuudes (period_max) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_period_max_comment
+msgid "Omaduse Maksimaalne järelmaksuperioodi pikkus kuudes (period_max) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_period_max_help
+msgid "Omaduse Maksimaalne järelmaksuperioodi pikkus kuudes (period_max) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_period_step
+msgid "Omaduse Järelmaksuperioodi samm (period_step) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_period_step_comment
+msgid "Omaduse Järelmaksuperioodi samm (period_step) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_conditions.aw:prop_period_step_help
+msgid "Omaduse Järelmaksuperioodi samm (period_step) help"
+msgstr ""
+

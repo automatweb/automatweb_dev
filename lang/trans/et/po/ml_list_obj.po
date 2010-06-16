@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/mailinglist/ml_list_obj.aw:226 classes/applications/mailinglist/ml_list_obj.aw:227
+msgid "Liituda saab ainult kaustadesse - %s ei ole kaust"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list_obj.aw:232 classes/applications/mailinglist/ml_list_obj.aw:233
+msgid "Impordin kasutajaid kataloogi %s / %s"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list_obj.aw:263 classes/applications/mailinglist/ml_list_obj.aw:264
+msgid "OK - nimi: %s , aadress:  %s"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list_obj.aw:278
+msgid "Juba olemas listis - nimi: %s , aadress:  %s"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list_obj.aw:284
+msgid "Vale aadress - nimi: %s , aadress:  %s"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list_obj.aw:294
+msgid "Importisin %s aadressi"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list_obj.aw:347 classes/applications/mailinglist/ml_list_obj.aw:348
+msgid "Lahkuda saab ainult kaustadest - %s ei ole kaust"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list_obj.aw:352 classes/applications/mailinglist/ml_list_obj.aw:353
+msgid "Kustutan kasutajad kataloogist %s / %s"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list_obj.aw:395
+msgid "Kustutasin %s aadressi"
+msgstr ""
+

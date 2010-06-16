@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_company_sector_membership.aw:class_1524_help
+msgid "Klassi Organisatsiooni seos tegevusalaga help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_sector_membership.aw:prop_company
+msgid "Omaduse Organisatsioon (company) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_sector_membership.aw:prop_company_comment
+msgid "Omaduse Organisatsioon (company) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_sector_membership.aw:prop_company_help
+msgid "Omaduse Organisatsioon (company) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_sector_membership.aw:prop_sector
+msgid "Omaduse Tegevusala (sector) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_sector_membership.aw:prop_sector_comment
+msgid "Omaduse Tegevusala (sector) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_sector_membership.aw:prop_sector_help
+msgid "Omaduse Tegevusala (sector) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_sector_membership.aw:rel_RELTYPE_COMPANY
+msgid "Seose Organisatsioon (RELTYPE_COMPANY) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_sector_membership.aw:rel_RELTYPE_SECTOR
+msgid "Seose Tegevusala (RELTYPE_SECTOR) tekst"
+msgstr ""
+

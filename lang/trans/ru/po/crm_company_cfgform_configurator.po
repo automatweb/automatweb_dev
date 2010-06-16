@@ -1,0 +1,328 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:class_1515_help
+msgid "Klassi Organisatsiooni seadete vormi seadistaja help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_org_cfgform
+msgid "Omaduse Organisatsiooni seadete vorm (org_cfgform) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_org_cfgform_comment
+msgid "Omaduse Organisatsiooni seadete vorm (org_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_org_cfgform_help
+msgid "Omaduse Organisatsiooni seadete vorm (org_cfgform) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_cfgview_action
+msgid "Omaduse Lisamine/muutmine (cfgview_action) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_cfgview_action_comment
+msgid "Omaduse Lisamine/muutmine (cfgview_action) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_cfgview_action_help
+msgid "Omaduse Lisamine/muutmine (cfgview_action) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_ca_change
+msgid "Omaduse Millist organisatsiooni muutmisvaates kuvada? (ca_change) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_ca_change_comment
+msgid "Omaduse Millist organisatsiooni muutmisvaates kuvada? (ca_change) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_ca_change_help
+msgid "Omaduse Millist organisatsiooni muutmisvaates kuvada? (ca_change) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_ca_change_org
+msgid "Omaduse Muutmisvaates kuvatav organisatsioon (ca_change_org) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_ca_change_org_comment
+msgid "Omaduse Muutmisvaates kuvatav organisatsioon (ca_change_org) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_ca_change_org_help
+msgid "Omaduse Muutmisvaates kuvatav organisatsioon (ca_change_org) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_org_parent
+msgid "Omaduse Kaust, kuhu organisatsioon salvestatakse (org_parent) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_org_parent_comment
+msgid "Omaduse Kaust, kuhu organisatsioon salvestatakse (org_parent) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_org_parent_help
+msgid "Omaduse Kaust, kuhu organisatsioon salvestatakse (org_parent) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_make_user
+msgid "Omaduse Tee organisatsioonile kasutaja (make_user) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_make_user_comment
+msgid "Omaduse Tee organisatsioonile kasutaja (make_user) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_make_user_help
+msgid "Omaduse Tee organisatsioonile kasutaja (make_user) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_add_to_groups
+msgid "Omaduse Grupid, millega organisatsioonile loodud kasutaja liitub (mu_add_to_groups) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_add_to_groups_comment
+msgid "Omaduse Grupid, millega organisatsioonile loodud kasutaja liitub (mu_add_to_groups) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_add_to_groups_help
+msgid "Omaduse Grupid, millega organisatsioonile loodud kasutaja liitub (mu_add_to_groups) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_send_welcome_mail
+msgid "Omaduse Saada kasutajale logimisandmetega e-kiri (mu_send_welcome_mail) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_send_welcome_mail_comment
+msgid "Omaduse Saada kasutajale logimisandmetega e-kiri (mu_send_welcome_mail) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_send_welcome_mail_help
+msgid "Omaduse Saada kasutajale logimisandmetega e-kiri (mu_send_welcome_mail) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_to
+msgid "Omaduse Omadus, kust v&otilde;etakse e-postiaadress, millele logimisandmed saata (mu_welcome_mail_to) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_to_comment
+msgid "Omaduse Omadus, kust v&otilde;etakse e-postiaadress, millele logimisandmed saata (mu_welcome_mail_to) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_to_help
+msgid "Omaduse Omadus, kust v&otilde;etakse e-postiaadress, millele logimisandmed saata (mu_welcome_mail_to) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_from
+msgid "Omaduse Logimisandmetega e-kirja saatja (mu_welcome_mail_from) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_from_comment
+msgid "Omaduse Logimisandmetega e-kirja saatja (mu_welcome_mail_from) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_from_help
+msgid "Omaduse Logimisandmetega e-kirja saatja (mu_welcome_mail_from) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_subject
+msgid "Omaduse Logimisandmetega e-kirja pealkiri (mu_welcome_mail_subject) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_subject_comment
+msgid "Omaduse Logimisandmetega e-kirja pealkiri (mu_welcome_mail_subject) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_subject_help
+msgid "Omaduse Logimisandmetega e-kirja pealkiri (mu_welcome_mail_subject) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_content
+msgid "Omaduse Logimisandmetega e-kirja sisu (mu_welcome_mail_content) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_content_comment
+msgid "Omaduse Logimisandmetega e-kirja sisu (mu_welcome_mail_content) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_welcome_mail_content_help
+msgid "Omaduse Logimisandmetega e-kirja sisu (mu_welcome_mail_content) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_login
+msgid "Omaduse Logi p&auml;rast organisatsiooni salvestamist sisse (mu_login) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_login_comment
+msgid "Omaduse Logi p&auml;rast organisatsiooni salvestamist sisse (mu_login) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_login_help
+msgid "Omaduse Logi p&auml;rast organisatsiooni salvestamist sisse (mu_login) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_generate_username
+msgid "Omaduse Kasutajanime genereerimise meetod (mu_generate_username) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_generate_username_comment
+msgid "Omaduse Kasutajanime genereerimise meetod (mu_generate_username) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_mu_generate_username_help
+msgid "Omaduse Kasutajanime genereerimise meetod (mu_generate_username) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_check_email
+msgid "Omaduse Kontrolli e-postiaadressi &otilde;igsust (check_email) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_check_email_comment
+msgid "Omaduse Kontrolli e-postiaadressi &otilde;igsust (check_email) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_check_email_help
+msgid "Omaduse Kontrolli e-postiaadressi &otilde;igsust (check_email) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_sector_limit
+msgid "Omaduse Tegevusalade maksimaalne arv (sector_limit) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_sector_limit_comment
+msgid "Omaduse Tegevusalade maksimaalne arv (sector_limit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_sector_limit_help
+msgid "Omaduse Tegevusalade maksimaalne arv (sector_limit) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_create_customer_data
+msgid "Omaduse Loo kliendisuhe (create_customer_data) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_create_customer_data_comment
+msgid "Omaduse Loo kliendisuhe (create_customer_data) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_create_customer_data_help
+msgid "Omaduse Loo kliendisuhe (create_customer_data) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_ccd_sample_object
+msgid "Omaduse N&auml;idiskliendisuhe (ccd_sample_object) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_ccd_sample_object_comment
+msgid "Omaduse N&auml;idiskliendisuhe (ccd_sample_object) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_ccd_sample_object_help
+msgid "Omaduse N&auml;idiskliendisuhe (ccd_sample_object) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_add_user
+msgid "Omaduse Organisatsioonile kasutaja tegemise kontroller (controller_add_user) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_add_user_comment
+msgid "Omaduse Organisatsioonile kasutaja tegemise kontroller (controller_add_user) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_add_user_help
+msgid "Omaduse Organisatsioonile kasutaja tegemise kontroller (controller_add_user) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_check_email
+msgid "Omaduse E-postiaadressi &otilde;igsust kontrolliv kontroller (controller_check_email) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_check_email_comment
+msgid "Omaduse E-postiaadressi &otilde;igsust kontrolliv kontroller (controller_check_email) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_check_email_help
+msgid "Omaduse E-postiaadressi &otilde;igsust kontrolliv kontroller (controller_check_email) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_sector_limit
+msgid "Omaduse Tegevusalade arvu piirang (controller_sector_limit) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_sector_limit_comment
+msgid "Omaduse Tegevusalade arvu piirang (controller_sector_limit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_sector_limit_help
+msgid "Omaduse Tegevusalade arvu piirang (controller_sector_limit) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_customer_data
+msgid "Omaduse Kliendisuhte kontroller (controller_customer_data) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_customer_data_comment
+msgid "Omaduse Kliendisuhte kontroller (controller_customer_data) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:prop_controller_customer_data_help
+msgid "Omaduse Kliendisuhte kontroller (controller_customer_data) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:rel_RELTYPE_ORG_CFGFORM
+msgid "Seose Organisatsiooni seadete vorm (RELTYPE_ORG_CFGFORM) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:rel_RELTYPE_ORG_PARENT
+msgid "Seose Kaust, kuhu organisatsioon salvestatakse (RELTYPE_ORG_PARENT) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:rel_RELTYPE_CHANGE_ORG
+msgid "Seose Muutmisvaates kuvatav organisatsioon (RELTYPE_CHANGE_ORG) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:rel_RELTYPE_STM_LISTS
+msgid "Seose Meilinglistid, millega liituda (RELTYPE_STM_LISTS) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:rel_RELTYPE_ADD_TO_GROUP
+msgid "Seose Kasutajagrupp, kuhu lisatakse loodud kasutaja (RELTYPE_ADD_TO_GROUP) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:rel_RELTYPE_CUSTOMER_DATA
+msgid "Seose N&auml;idiskliendisuhe (RELTYPE_CUSTOMER_DATA) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:142
+msgid "Lisamine"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:143
+msgid "Muutmine"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:144
+msgid "Lisamine ja muutmine"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:151
+msgid "Kasuta sisseloginud kasutaja organisatsiooni"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:152
+msgid "Kasuta m&auml;&auml;ratud organisatsiooni"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cfgform_configurator.aw:161
+msgid "Kasuta omadust '%s' (%s)"
+msgstr ""
+

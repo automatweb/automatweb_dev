@@ -1,0 +1,328 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/html_import/html_import.aw:class_1492_help
+msgid "Klassi Tekstipeksja help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_file_list
+msgid "Omaduse failid remote/local (file_list) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_file_list_comment
+msgid "Omaduse failid remote/local (file_list) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_file_list_help
+msgid "Omaduse failid remote/local (file_list) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_source_path
+msgid "Omaduse kohalikud failid asuvad siin (source_path) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_source_path_comment
+msgid "Omaduse kohalikud failid asuvad siin (source_path) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_source_path_help
+msgid "Omaduse kohalikud failid asuvad siin (source_path) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_files
+msgid "Omaduse urlid/failid (files) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_files_comment
+msgid "Omaduse urlid/failid (files) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_files_help
+msgid "Omaduse urlid/failid (files) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_example
+msgid "Omaduse n&auml;itefailid t&ouml;&ouml;tlemiseks (example) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_example_comment
+msgid "Omaduse n&auml;itefailid t&ouml;&ouml;tlemiseks (example) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_example_help
+msgid "Omaduse n&auml;itefailid t&ouml;&ouml;tlemiseks (example) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_single
+msgid "Omaduse t&uuml;&uuml;p (single) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_single_comment
+msgid "Omaduse t&uuml;&uuml;p (single) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_single_help
+msgid "Omaduse t&uuml;&uuml;p (single) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_output
+msgid "Omaduse t&uuml;&uuml;p (output) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_output_comment
+msgid "Omaduse t&uuml;&uuml;p (output) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_output_help
+msgid "Omaduse t&uuml;&uuml;p (output) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_mk_my_table
+msgid "Omaduse sql tabeli nimi 'html_import_' (mk_my_table) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_mk_my_table_comment
+msgid "Omaduse sql tabeli nimi 'html_import_' (mk_my_table) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_mk_my_table_help
+msgid "Omaduse sql tabeli nimi 'html_import_' (mk_my_table) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_olemas
+msgid "Omaduse NB olemasolevad tabelid (olemas) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_olemas_comment
+msgid "Omaduse NB olemasolevad tabelid (olemas) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_olemas_help
+msgid "Omaduse NB olemasolevad tabelid (olemas) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_reset
+msgid "Omaduse reset table (reset) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_reset_comment
+msgid "Omaduse reset table (reset) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_reset_help
+msgid "Omaduse reset table (reset) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_starts
+msgid "Omaduse hidden (starts) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_starts_comment
+msgid "Omaduse hidden (starts) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_starts_help
+msgid "Omaduse hidden (starts) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_match
+msgid "Omaduse faili unikaalne string siia: (match) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_match_comment
+msgid "Omaduse faili unikaalne string siia: (match) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_match_help
+msgid "Omaduse faili unikaalne string siia: (match) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_testi
+msgid "Omaduse testi (testi) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_testi_comment
+msgid "Omaduse testi (testi) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_testi_help
+msgid "Omaduse testi (testi) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_ruuls_setup
+msgid "Omaduse ruuls setup (ruuls_setup) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_ruuls_setup_comment
+msgid "Omaduse ruuls setup (ruuls_setup) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_ruuls_setup_help
+msgid "Omaduse ruuls setup (ruuls_setup) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_ruul
+msgid "Omaduse  (ruul) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_ruul_comment
+msgid "Omaduse  (ruul) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_ruul_help
+msgid "Omaduse  (ruul) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_making_sql
+msgid "Omaduse tabeli kokkupanek (making_sql) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_making_sql_comment
+msgid "Omaduse tabeli kokkupanek (making_sql) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_making_sql_help
+msgid "Omaduse tabeli kokkupanek (making_sql) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_show_create
+msgid "Omaduse selline tabel on olemas (show_create) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_show_create_comment
+msgid "Omaduse selline tabel on olemas (show_create) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_show_create_help
+msgid "Omaduse selline tabel on olemas (show_create) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_show_create_table
+msgid "Omaduse selline tabel tehakse (show_create_table) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_show_create_table_comment
+msgid "Omaduse selline tabel tehakse (show_create_table) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_show_create_table_help
+msgid "Omaduse selline tabel tehakse (show_create_table) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_add_id
+msgid "Omaduse lisa id veerg (id int primary key auto_increment) (add_id) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_add_id_comment
+msgid "Omaduse lisa id veerg (id int primary key auto_increment) (add_id) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_add_id_help
+msgid "Omaduse lisa id veerg (id int primary key auto_increment) (add_id) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_create_link
+msgid "Omaduse loo tabel (create_link) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_create_link_comment
+msgid "Omaduse loo tabel (create_link) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_create_link_help
+msgid "Omaduse loo tabel (create_link) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_drop_link
+msgid "Omaduse kustuta tabel (drop_link) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_drop_link_comment
+msgid "Omaduse kustuta tabel (drop_link) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_drop_link_help
+msgid "Omaduse kustuta tabel (drop_link) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_empty_link
+msgid "Omaduse t&uuml;hjenda tabel (empty_link) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_empty_link_comment
+msgid "Omaduse t&uuml;hjenda tabel (empty_link) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_empty_link_help
+msgid "Omaduse t&uuml;hjenda tabel (empty_link) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_view_link
+msgid "Omaduse vaata tabelit (view_link) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_view_link_comment
+msgid "Omaduse vaata tabelit (view_link) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_view_link_help
+msgid "Omaduse vaata tabelit (view_link) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_import_link
+msgid "Omaduse IMPORT (import_link) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_import_link_comment
+msgid "Omaduse IMPORT (import_link) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_import_link_help
+msgid "Omaduse IMPORT (import_link) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_sql_ruul
+msgid "Omaduse sql_ruul hidden (sql_ruul) caption"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_sql_ruul_comment
+msgid "Omaduse sql_ruul hidden (sql_ruul) kommentaar"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:prop_sql_ruul_help
+msgid "Omaduse sql_ruul hidden (sql_ruul) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:group_output_conf
+msgid "Grupi v&auml;ljund (output_conf) pealkiri"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:group_output_conf_help
+msgid "Grupi v&auml;ljund (output_conf) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:group_visual_conf
+msgid "Grupi visio (visual_conf) pealkiri"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:group_visual_conf_help
+msgid "Grupi visio (visual_conf) help"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:group_sqlconf
+msgid "Grupi sql (sqlconf) pealkiri"
+msgstr ""
+
+#: classes/applications/html_import/html_import.aw:group_sqlconf_help
+msgid "Grupi sql (sqlconf) help"
+msgstr ""
+

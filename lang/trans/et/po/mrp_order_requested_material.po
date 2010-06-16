@@ -1,0 +1,96 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:class_1536_help
+msgid "Klassi ERP Tellimuses kasutatav materjal help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_material
+msgid "Omaduse Materjal (material) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_material_comment
+msgid "Omaduse Materjal (material) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_material_help
+msgid "Omaduse Materjal (material) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_amount
+msgid "Omaduse Kogus (amount) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_amount_comment
+msgid "Omaduse Kogus (amount) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_amount_help
+msgid "Omaduse Kogus (amount) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_pages_with_this
+msgid "Omaduse Lehti selle materjaliga (pages_with_this) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_pages_with_this_comment
+msgid "Omaduse Lehti selle materjaliga (pages_with_this) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_pages_with_this_help
+msgid "Omaduse Lehti selle materjaliga (pages_with_this) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_for_covers
+msgid "Omaduse Kaante jaoks (for_covers) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_for_covers_comment
+msgid "Omaduse Kaante jaoks (for_covers) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_for_covers_help
+msgid "Omaduse Kaante jaoks (for_covers) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_connected_job
+msgid "Omaduse Materjaliga seotud t&ouml;&ouml; (connected_job) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_connected_job_comment
+msgid "Omaduse Materjaliga seotud t&ouml;&ouml; (connected_job) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_connected_job_help
+msgid "Omaduse Materjaliga seotud t&ouml;&ouml; (connected_job) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_resource
+msgid "Omaduse Ressurss (resource) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_resource_comment
+msgid "Omaduse Ressurss (resource) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:prop_resource_help
+msgid "Omaduse Ressurss (resource) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:rel_RELTYPE_MRP_JOB
+msgid "Seose Materjaliga seotud t&ouml;&ouml; (RELTYPE_MRP_JOB) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_requested_material.aw:rel_RELTYPE_RESOURCE
+msgid "Seose Ressurss (RELTYPE_RESOURCE) tekst"
+msgstr ""
+
