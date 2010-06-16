@@ -829,7 +829,7 @@ class shop_packet extends class_base
 				if($data["prices"][$package])
 				{
 
-					$prod_sizes[] = "\"".$data["sizes"][$package]."\"";
+					$prod_sizes[] = "\"".trim($data["sizes"][$package], "\"\n")."\"";
 					$prod_prices[] = $data["prices"][$package];
 					$prod_special_prices[] = $data["special_prices"][$package];
 					$prod_ids[] = $package;
@@ -850,6 +850,7 @@ class shop_packet extends class_base
 			$prod_params[$product].="], purveyances_id : [";
 			$prod_params[$product].=join(",",$prod_purveyances_ids);
 			$prod_params[$product].="]}";
+
 			$data["COLORS"].= $this->parse("COLORS");
 
 		} 
