@@ -3013,6 +3013,39 @@ class shop_order_cart extends class_base
 			$SMARTPOST_SELL_PLACE.= $this->parse("SMARTPOST_SELL_PLACE");
 		}
 
+		$post_office_list = new object_list(array(
+			"class_id" => CL_POST_OFFICE,
+			new obj_predicate_sort(array(
+				"county.ord" => "asc",
+				"county.name" => "asc",
+				"ord" => "asc",
+				"name" => "asc",
+			)),
+		));
+			
+		$POST_OFFICE_SELL_PLACE = "";
+		$previous_post_office_county = NULL;
+		foreach($post_office_list->arr() as $post_office)
+		{
+			if($previous_post_office_county != $post_office->prop("county"))
+			{
+				$this->vars(array(
+					"post_office_county" => $post_office->prop("county"),
+					"post_office_county_name" => $post_office->prop("county.name")
+				));
+				$previous_post_office_county = $post_office->prop("county");
+				$POST_OFFICE_SELL_PLACE .= $this->parse("POST_OFFICE_SELL_PLACE_NAME");
+			}
+			
+			$this->vars(array(
+				"post_office_value" => $post_office->id(),
+				"post_office_name" => $post_office->prop("name"),
+				"post_office_place_selected" => !empty($data["post_office_sell_place"]) &&  $data["post_office_sell_place"] == $post_office->id() ? 'selected="selected"' : "",
+			));
+			$previous_post_office_county = $post_office->prop("county");
+			$POST_OFFICE_SELL_PLACE .= $this->parse("POST_OFFICE_SELL_PLACE");
+		}
+
 //---------- kui miskit suva porno checkboxi v6i radiobuttoni muutujat vaja kasutada, mis on templeidis, siis siit annaks v22rtus
 
 		$checkbox_vars = array("client_status");
@@ -3034,6 +3067,8 @@ class shop_order_cart extends class_base
 			"delivery_value" => empty($data["delivery"]) ? "" : $data["delivery"],
 			"COUNTY" => $county,
 			"SMARTPOST_SELL_PLACE" => $SMARTPOST_SELL_PLACE,
+			"POST_OFFICE_SELL_PLACE" => $POST_OFFICE_SELL_PLACE,
+			"POST_OFFICE_SELL_PLACE_NAME" => "",
 		));
 
 		if(isset($data["delivery"]) && $this->can("view" , $data["delivery"]))

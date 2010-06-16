@@ -284,6 +284,11 @@ class shop_delivery_method_obj extends shop_matrix_obj
 			$vars["smartpost_sell_place_name"] = $sm->get_place_name_by_id($order_data["smartpost_sell_place"]);
 
 		}
+		elseif($order_data["post_office_sell_place"])
+		{
+			$vars["smartpost_sell_place_name"] = obj($order_data["post_office_sell_place"])->name();
+
+		}
 		return $vars;
 	}
 }
