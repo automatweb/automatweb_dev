@@ -8695,7 +8695,7 @@ die();
 		}
 		if(isset($arr["request"]["channel"]) && is_oid($arr["request"]["channel"]))
 		{
-			$params["channel"] = $arr["request"]["channel"];
+			$params["channel.id"] = $arr["request"]["channel"];
 		}
 		if(!empty($arr["request"][$group."_s_number"]) && $n = $arr["request"][$group."_s_number"])
 		{
@@ -10061,6 +10061,12 @@ die();
 		$this->init_csv_export($t);
 		foreach($data as $odata)
 		{
+			$product_name = isset($odata["meta"]["name"]) ? $odata["meta"]["name"] : (strlen(trim($odata["prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).name"])) > 0 ? trim($odata["prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).name"]) : trim($odata["prod(CL_SHOP_PRODUCT).name"]));
+
+			$product_size = isset($odata["meta"]["product_size"]) ? $odata["meta"]["product_size"] : $odata["prod(CL_SHOP_PRODUCT_PACKAGING).size"];
+
+			$product_code = isset($odata["meta"]["product_code"]) ? $odata["meta"]["product_code"] : trim($odata["prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).code"]);
+
 			$table_data = array(
 				"order.oid" => $odata["order.oid"],
 				"order.number" => $odata["order.number"],
@@ -10094,9 +10100,9 @@ die();
 				"order.order_data.homephone" => $odata["order.order_data.homephone"],
 
 				"prod_name" => $odata["prod_name"],
-				"product.name" => strlen(trim($odata["prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).name"])) > 0 ? trim($odata["prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).name"]) : trim($odata["prod(CL_SHOP_PRODUCT).name"]),
-				"product.size" => $odata["prod(CL_SHOP_PRODUCT_PACKAGING).size"],
-				"product.code" => trim($odata["prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).code"]),
+				"product.name" => $product_name,
+				"product.size" => $product_size,
+				"product.code" => $product_code,
 				"amount" => $odata["amount"],
 				"price" => $odata["price"],
 				"order.currency" => obj($odata["order.currency"])->name(),
