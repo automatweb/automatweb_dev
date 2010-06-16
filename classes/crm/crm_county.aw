@@ -8,6 +8,9 @@
 
 	@property name type=textbox size=20
 	@caption Maakonna nimetus
+
+	@property ord type=textbox table=objects field=jrk
+	@caption Jrk
 		
 	@default field=meta
 	@property country type=relpicker reltype=RELTYPE_COUNTRY

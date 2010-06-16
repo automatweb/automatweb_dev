@@ -2,6 +2,149 @@
 
 class shop_sell_order_obj extends _int_object
 {
+	static $gcr_cache;
+
+	public static function get_purchaser_data_by_ids($ids, $properties = array())
+	{
+		$odl = count($ids) > 0 ? new object_data_list(
+			array(
+				"class_id" => array(CL_CRM_PERSON, CL_CRM_COMPANY),
+				"oid" => $ids,
+			),
+			array(
+				CL_CRM_PERSON => array("external_id", "firstname", "lastname", "birthday", "personal_id"),
+				CL_CRM_COMPANY => array("name"),
+			)
+		) : new object_data_list();
+		return $odl;
+	}
+
+	public static function get_rows_by_ids($ids)
+	{
+		if(count($ids) === 0)
+		{
+			return array();
+		}
+
+		$rows = array();
+		//	Initialize
+		foreach($ids as $id)
+		{
+			$sums[$id] = array();
+		}
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_ORDER_ROW,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_SHOP_ORDER_ROW.RELTYPE_ROW(CL_SHOP_SELL_ORDER)" => $ids,
+			),
+			array(
+				CL_SHOP_ORDER_ROW => array("amount" , "price", "prod_name", "prod(CL_SHOP_PRODUCT_PACKAGING).size", "prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).name", "prod(CL_SHOP_PRODUCT).name", "prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).code"),
+			)
+		);
+		//	This part could be optimized if CL_SHOP_ORDER_ROW knew which order it belongs to. -kaarel 8.04.2010
+		//	----------	OPTIMIZEABLE PART OF CODE
+		$conns = connection::find(array(
+			"from.class_id" => CL_SHOP_SELL_ORDER,
+			"to.class_id" => CL_SHOP_ORDER_ROW,
+			"from" => $ids,
+			"to" => $odl->ids(),
+			"reltype" => "RELTYPE_ROW",
+		));
+		//	Assume every order_row has exactly one order
+		$order_by_order_row = array();
+		foreach($conns as $conn)
+		{
+			$order_by_order_row[$conn["to"]] = $conn["from"];
+		}
+		//	----------	END OF OPTIMIZEABLE PART OF CODE
+
+		foreach($odl->arr() as $oid => $odata)
+		{
+			$rows[$order_by_order_row[$oid]][] = $odata;
+		}
+		return $rows;
+	}
+
+	public static function get_sums_by_ids($ids)
+	{
+		if(count($ids) === 0)
+		{
+			return array();
+		}
+
+		$sums = array();
+		//	Initialize
+		foreach($ids as $id)
+		{
+			$sums[$id] = 0;
+		}
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_ORDER_ROW,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_SHOP_ORDER_ROW.RELTYPE_ROW(CL_SHOP_SELL_ORDER)" => $ids,
+			),
+			array(
+				CL_SHOP_ORDER_ROW => array("amount" , "price"),
+			)
+		);
+		//	This part could be optimized if CL_SHOP_ORDER_ROW knew which order it belongs to. -kaarel 8.04.2010
+		//	----------	OPTIMIZEABLE PART OF CODE
+		$conns = connection::find(array(
+			"from.class_id" => CL_SHOP_SELL_ORDER,
+			"to.class_id" => CL_SHOP_ORDER_ROW,
+			"from" => $ids,
+			"to" => $odl->ids(),
+			"reltype" => "RELTYPE_ROW",
+		));
+		//	Assume every order_row has exactly one order
+		$order_by_order_row = array();
+		foreach($conns as $conn)
+		{
+			$order_by_order_row[$conn["to"]] = $conn["from"];
+		}
+		//	----------	END OF OPTIMIZEABLE PART OF CODE
+
+		foreach($odl->arr() as $oid => $odata)
+		{
+			$sums[$order_by_order_row[$oid]] += $odata["amount"] * $odata["price"];
+		}
+		return $sums;
+	}
+
+	/** returns order price
+		@attrib api=1 params=pos
+		@param id required type=int acl=view
+		@returns double
+			order rows price sum
+	**/
+	public static function get_sum_by_id($id)
+	{
+		$sum = 0;
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_SHOP_ORDER_ROW,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_SHOP_ORDER_ROW.RELTYPE_ROW(CL_SHOP_SELL_ORDER)" => $id
+			),
+			array(
+				CL_SHOP_ORDER_ROW => array("amount" , "price"),
+			)
+		);
+
+		foreach($odl->arr() as $od)
+		{
+			$sum += $od["amount"] * $od["price"];
+		}
+		return $sum;
+	}
+
 	/** returns order price
 		@attrib api=1
 		@returns double
@@ -9,22 +152,7 @@ class shop_sell_order_obj extends _int_object
 	**/
 	public function get_sum()
 	{
-		$sum = 0;
-		$odl = new object_data_list(array(
-			"class_id" => CL_SHOP_ORDER_ROW,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_SHOP_ORDER_ROW.RELTYPE_ROW(CL_SHOP_SELL_ORDER)" => $this->id()
-		),
-		array(
-			CL_SHOP_ORDER_ROW => array("amount" , "price"),
-		));
-
-		foreach($odl->arr() as $od)
-		{
-			$sum += $od["amount"] * $od["price"];
-		}
-		return $sum;
+		return self::get_sum_by_id($this->id());
 	}
 
 	/** returns all product names
@@ -168,6 +296,136 @@ class shop_sell_order_obj extends _int_object
 		return $this->mk_my_orb("show", array("id" => $this->id()), "shop_order");
 	}
 
+	/** returns array of customer relation IDs indexed by purchaser ID
+		@attrib api=1 params=pos
+		@param purchaser required type=int[] acl=view
+		@param my_co optional
+		@param crea_if_not_exists optional
+			if no customer relation object, makes one
+		@returns object
+	**/
+	public static function get_customer_relation_ids_for_purchasers($purchasers, $my_co = null, $crea_if_not_exists = false)
+	{
+		enter_function("shop_sell_order_obj::get_customer_relation_ids_for_purchasers");
+		$customer_relation_ids = array();
+		if ($my_co === null)
+		{
+			$my_co = get_current_company();
+		}
+
+		if (!is_object($my_co) || !is_oid($my_co->id()))
+		{
+			exit_function("shop_sell_order_obj::get_customer_relation_ids_for_purchasers");
+			return $customer_relation_ids;
+		}
+
+		if (!isset(self::$gcr_cache) || !is_array(self::$gcr_cache))
+		{
+			self::$gcr_cache = array();
+		}
+		else
+		{
+			foreach($purchasers as $i => $purchaser)
+			{				
+				if (isset(self::$gcr_cache[$purchaser][$crea_if_not_exists][$my_co->id()]))
+				{
+					$customer_relation_ids[$purchaser] = self::$gcr_cache[$purchaser][$crea_if_not_exists][$my_co->id()];
+					unset($purchasers[$i]);
+				}
+			}
+		}
+
+		$purchasers_without_customer_relations = array_flip($purchasers);
+		if(count($purchasers) > 0)
+		{
+			$odl = new object_data_list(
+				array(
+					"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+					"buyer" => $purchasers,
+					"seller" => $my_co
+				),
+				array(
+					CL_CRM_COMPANY_CUSTOMER_DATA => array("buyer"),
+				)
+			);
+
+			foreach($odl->arr() as $oid => $odata)
+			{
+				self::$gcr_cache[$odata["buyer"]][$crea_if_not_exists][$my_co->id()] = $customer_relation_ids[$odata["buyer"]] = $oid;
+				unset($purchasers_without_customer_relations[$odata["buyer"]]);
+			}
+		}
+
+		foreach(array_flip($purchasers_without_customer_relations) as $purchaser)
+		{
+			$my_co = obj($my_co);
+			$o = obj();
+			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+			$o->set_name(t("Kliendisuhe ") . $my_co->name() . " => " . obj($purchaser)->prop("name"));
+			$o->set_parent($my_co->id());
+			$o->set_prop("seller", $my_co->id());
+			$o->set_prop("buyer", $purchaser);
+			self::$gcr_cache[$purchaser][$crea_if_not_exists][$my_co->id()] = $customer_relation_ids[$purchaser] = $o->save();
+		}
+
+		exit_function("shop_sell_order_obj::get_customer_relation_ids_for_purchasers");
+		return $customer_relation_ids;
+	}
+
+	/** returns customer relation object
+		@attrib api=1 params=pos
+		@param purchaser required type=int acl=view
+		@param my_co optional
+		@param crea_if_not_exists optional
+			if no customer relation object, makes one
+		@returns object
+	**/
+	public static function get_customer_relation_for_purchaser($purchaser, $my_co = null, $crea_if_not_exists = false)
+	{
+		if ($my_co === null)
+		{
+			$my_co = get_current_company();
+		}
+
+		if (!is_object($my_co) || !is_oid($my_co->id()) || !is_oid($purchaser))
+		{
+			return;
+		}
+
+		if (!isset(self::$gcr_cache) || !is_array(self::$gcr_cache))
+		{
+			self::$gcr_cache = array();
+		}
+		if (isset(self::$gcr_cache[$purchaser][$crea_if_not_exists][$my_co->id()]))
+		{
+			return self::$gcr_cache[$purchaser][$crea_if_not_exists][$my_co->id()];
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"buyer" => $purchaser,
+			"seller" => $my_co
+		));
+		if ($ol->count())
+		{
+			self::$gcr_cache[$purchaser][$crea_if_not_exists][$my_co->id()] = $ol->begin();
+			return $ol->begin();
+		}
+		elseif ($crea_if_not_exists)
+		{
+			$my_co = obj($my_co);
+			$o = obj();
+			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+			$o->set_name(t("Kliendisuhe ") . $my_co->name() . " => " . obj($purchaser)->prop("name"));
+			$o->set_parent($my_co->id());
+			$o->set_prop("seller", $my_co->id());
+			$o->set_prop("buyer", $purchaser);
+			$o->save();
+			self::$gcr_cache[$purchaser][$crea_if_not_exists][$my_co->id()] = $o;
+			return $o;
+		}
+	}
+
 	/** returns customer relation object
 		@attrib api=1 params=pos
 		@param my_co optional
@@ -177,50 +435,7 @@ class shop_sell_order_obj extends _int_object
 	**/
 	public function get_customer_relation($my_co = null, $crea_if_not_exists = false)
 	{
-		if ($my_co === null)
-		{
-			$my_co = get_current_company();
-		}
-
-		if (!is_object($my_co) || !is_oid($my_co->id()) || !$this->prop("purchaser"))
-		{
-			return;
-		}
-
-		static $gcr_cache;
-		if (!is_array($gcr_cache))
-		{
-			$gcr_cache = array();
-		}
-		if (isset($gcr_cache[$this->prop("purchaser")][$crea_if_not_exists][$my_co->id()]))
-		{
-			return $gcr_cache[$this->prop("purchaser")][$crea_if_not_exists][$my_co->id()];
-		}
-
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-			"buyer" => $this->prop("purchaser"),
-			"seller" => $my_co
-		));
-		if ($ol->count())
-		{
-			$gcr_cache[$this->prop("purchaser")][$crea_if_not_exists][$my_co->id()] = $ol->begin();
-			return $ol->begin();
-		}
-		else
-		if ($crea_if_not_exists)
-		{
-			$my_co = obj($my_co);
-			$o = obj();
-			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
-			$o->set_name(t("Kliendisuhe ").$my_co->name()." => ".$this->prop("purchaser.name"));
-			$o->set_parent($my_co->id());
-			$o->set_prop("seller", $my_co->id());
-			$o->set_prop("buyer", $this->prop("purchaser"));
-			$o->save();
-			$gcr_cache[$this->prop("purchaser")][$crea_if_not_exists][$my_co->id()] = $o;
-			return $o;
-		}
+		return self::get_customer_relation_for_purchaser($this->prop("purchaser"), $my_co = null, $crea_if_not_exists = false);
 	}
 
 

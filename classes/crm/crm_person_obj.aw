@@ -16,6 +16,34 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 		}
 	}
 
+	/**	Returns array of external_id values using person OID as indexes.
+		@attrib api=1 params=pos
+		@param ids required type=int[] acl=view
+	**/
+	public static function get_external_ids_for_person_ids($ids)
+	{
+		enter_function("crm_person_obj::get_external_ids_for_person_ids");
+		if(!is_array($ids) || count($ids) === 0)
+		{
+			exit_function("crm_person_obj::get_external_ids_for_person_ids");
+			return array();
+		}
+		
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_CRM_PERSON,
+				"oid" => $ids,
+				"lang_id" => array(),
+				"site_id" => array(),
+			),
+			array(
+				CL_CRM_PERSON => array("external_id"),
+			)
+		);
+		exit_function("crm_person_obj::get_external_ids_for_person_ids");
+		return $odl->get_element_from_all("external_id");
+	}
+
 	function set_rank($v)
 	{
 		// It won't work with new object, so we need to save it first.
@@ -162,7 +190,6 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 			case "fake_mobile":
 			case "fake_fax":
 				return $this->get_prop_phone($k);
-				return parent::prop("phone.name");
 
 			case "fake_address_country":
 				return parent::prop("address.riik.name");
@@ -214,32 +241,38 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 		{
 			return $return_oid ? $this->prop("phone") : $this->prop("phone.name");
 		}
-		elseif($type === "fake_fax")
+		elseif(is_oid($this->id()))
 		{
-			$args = array(
-				"class_id" => CL_CRM_PHONE,
-				"CL_CRM_PHONE.RELTYPE_FAX(CL_CRM_PERSON).oid" => $this->id(),
-				"limit" => 1,
-				"type" => "fax",
-			);
+			if($type === "fake_fax")
+			{
+				$args = array(
+					"class_id" => CL_CRM_PHONE,
+					"CL_CRM_PHONE.RELTYPE_FAX(CL_CRM_PERSON).oid" => $this->id(),
+					"limit" => 1,
+					"type" => "fax",
+				);
+			}
+			else
+			{
+				$args = array(
+					"class_id" => CL_CRM_PHONE,
+					"CL_CRM_PHONE.RELTYPE_PHONE(CL_CRM_PERSON).oid" => $this->id(),
+					"limit" => 1,
+					"type" => new obj_predicate_not(array("mobile", "fax", "skype")),
+				);
+				if(in_array(substr($type, 5), array_keys(get_instance("crm_phone")->phone_types)))
+				{
+					$args["type"] = substr($type, 5);
+				}
+			}
+			$ol = new object_list($args);
+			$names = $ol->names();
+			return $return_oid ? key($names) : reset($names);
 		}
 		else
 		{
-			$args = array(
-				"class_id" => CL_CRM_PHONE,
-				"CL_CRM_PHONE.RELTYPE_PHONE(CL_CRM_PERSON).oid" => $this->id(),
-				"limit" => 1,
-				"type" => new obj_predicate_not(array("mobile", "fax", "skype")),
-			);
-			if(in_array(substr($type, 5), array_keys(get_instance("crm_phone")->phone_types)))
-			{
-				$args["type"] = substr($type, 5);
-			}
+			return NULL;
 		}
-		$ol = new object_list($args);
-		$names = $ol->names();
-		$name = reset($names);
-		return $return_oid ? key($names) : $name;
 	}
 
 	function find_work_contact()
@@ -643,9 +676,7 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 	/** sets the default email adress content or creates it if needed **/
 	private function set_fake_email($mail, $set_into_meta = true)
 	{
-		$n = false;
-		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("email")))
-
+		if ($set_into_meta === true)
 		{
 			$this->set_meta("tmp_fake_email", $mail);
 			$this->set_meta("sim_fake_email", 1);
@@ -705,8 +736,7 @@ class crm_person_obj extends _int_object implements crm_customer_interface
 				$n = true;
 			}
 
-			$type = in_array(substr($type, 5), array_keys(get_instance("crm_phone")->phone_types)) ? substr($type, 5) : "home";
-			$eo->set_prop("type", $type);
+			$eo->set_prop("type", in_array(substr($type, 5), array_keys(get_instance("crm_phone")->phone_types)) ? substr($type, 5) : "home");
 			$eo->set_name($phone);
 			$eo->save();
 

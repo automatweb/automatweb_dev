@@ -98,7 +98,7 @@ class toolbar extends aw_template
 		@param onClick
 			An onclick action.(javascript etc)
 		@param onclick_disable optional type=boolean default=true
-			If true, item will be disabled after onclick
+			If true, submit will be disabled after onclick
 		@comment
 			Adds menu item under specified menu button.
 		@examples
@@ -282,6 +282,8 @@ class toolbar extends aw_template
 			If is set, asks for confirmation displaying given text as question.
 		@param onClick optional type=string
 			If set, this javascript code etc is triggered on click of the button:)
+		@param onclick_disable optional type=boolean default=true
+			If true, submit will be disabled after onclick
 		@comment
 			Adds button to toolbar.
 		@examples
@@ -307,8 +309,15 @@ class toolbar extends aw_template
 			$args["type"] = "text_button";
 		};
 		if (isset($args["action"]))
-		{
-			$args["url"] = "javascript:submit_changeform('$args[action]');";
+		{			
+			if(!isset($args["onclick_disable"]) || $args["onclick_disable"] === true)
+			{
+				$args["url"] = "javascript:submit_changeform('{$args["action"]}');";
+			}
+			else
+			{
+				$args["url"] = "javascript:submit_changeform('{$args["action"]}', false, true);";
+			}
 		};
 		if (empty($args["target"]) && !empty($this->button_target))
 		{

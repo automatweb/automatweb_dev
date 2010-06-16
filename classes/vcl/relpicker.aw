@@ -167,10 +167,10 @@ class relpicker extends  core
 			"multiple" => $multiple
 		), "popup_search", false, true);
 
-		if (!$no_edit and !$no_search)
+		if (!$no_edit and !$no_search or $do_search)
 		{
 			$r .= " ".html::href(array(
-				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
+				"url" => "javascript:aw_popup_scroll('$url','Otsing',".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
 				"title" => t("Otsi"),
 			));
@@ -255,7 +255,7 @@ class relpicker extends  core
 							)
 						),
 						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/new.gif' border=0>",
-						"title" => sprintf(t("Lisa uus %s"), $clss[$_clid]["name"]),
+						"title" => sprintf(t("Lisa uus %s"), $clss[$clid]["name"]),
 					));
 				}
 			}

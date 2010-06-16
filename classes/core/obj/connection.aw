@@ -192,7 +192,7 @@ class connection
 			));
 			foreach($results as $result)
 			{
-				echo "from = $result[from] , to = $retult[to] <br>";
+				echo "from = $result[from] , to = $result[to] <br>";
 			}
 	**/
 	public static function find($param)

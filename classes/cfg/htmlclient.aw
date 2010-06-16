@@ -1179,11 +1179,13 @@ class htmlclient extends aw_template
 				if (!empty($arr["no_caption"]))
 				{
 					unset($arr["caption"]);
+					unset($arr["orig_caption"]);
 				}
 				$tmp = $arr;
 				if (!empty($tmp["parent"]))
 				{
 					unset($tmp["caption"]);
+					unset($tmp["orig_caption"]);
 				}
 				$retval = html::checkbox($tmp);
 				/*

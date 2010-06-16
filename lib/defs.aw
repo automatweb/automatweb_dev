@@ -2355,6 +2355,15 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 		return iconv("UTF-8", aw_global_get("charset"), html_entity_decode($string, ENT_COMPAT, "UTF-8"));
 	}
 
+	function aw_htmlspecialchars($string, $quote_style = ENT_COMPAT, $charset = NULL, $double_encode = true)
+	{
+		if($charset === NULL)
+		{
+			$charset = aw_global_get("charset");
+		}
+		return iconv("UTF-8", $charset, htmlspecialchars($string, $quote_style, "UTF-8", $double_encode));
+	}
+
 	// deprecated - use locale::get_lc_date instead
 	function get_lc_date($time=0, $format=3) { return locale::get_lc_date($time, $format); }
 

@@ -10,6 +10,14 @@
             <caption>Maakonna nimetus</caption>
       </property>
       <property>
+            <name>ord</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>jrk</field>
+            <caption>Jrk</caption>
+      </property>
+      <property>
             <name>country</name>
             <table>objects</table>
             <group>general</group>

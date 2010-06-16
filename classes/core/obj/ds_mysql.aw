@@ -761,7 +761,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->can("admin", $oid);
 
 		// hits
-		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
+		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )", false);
 
 		// now we need to create entries in all tables that are in properties as well.
 		$tbls = array();
@@ -2420,7 +2420,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		// hits
-		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
+		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )", false);
 
 		$this->create_brother_cache_update(null);
 

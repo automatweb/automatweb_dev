@@ -36,7 +36,9 @@ class class_index
 		Updates entire class index. Reads all files in class directory and parses them, looking for php class definitions.
 	**/
 	public static function update($full_update = true)
-	{if($_SERVER['REMOTE_ADDR']!= "90.190.41.178") die(); 
+	{
+		//	Tyra, kes see munn oli, kes selle siia kirjutas?!?!?!?! J2rgmine kord pane v2hemalt mingi teade ka!	-kaarel
+		//if($_SERVER['REMOTE_ADDR']!= "90.190.41.178") die(); 
 		// ...
 		$max_execution_time_prev_val = ini_get("max_execution_time");
 		set_time_limit(self::UPDATE_EXEC_TIMELIMIT);

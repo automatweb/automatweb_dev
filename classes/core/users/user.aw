@@ -1940,21 +1940,21 @@ EOF;
 	/** creates a new user object and returns the object
 		@attrib params=name api=1
 		@param uid required type=int
-		User id
+			User id
 		@param email optional type=string
-		Users email
+			Users email
 		@param password optional type=string
-		Users password
+			Users password
 		@param real_name optional type=string
-		Users name
+			Users name
 		@param person optional type=oid
-		The OID of person object.
+			The OID of person object.
 		@param parent optional type=oid default="users.root_folder"
 			Parent for user object
 		@comment
-		Creates new user object
+			Creates new user object
 		@returns
-		New users object
+			New users object
 	**/
 	public function add_user($arr)
 	{

@@ -1292,7 +1292,7 @@ class html
 	**/
 	public static function href($args = array())
 	{
-
+		enter_function("html::href");
 		extract($args);
 		if (!isset($onClick) && isset($onclick))
 		{
@@ -1326,6 +1326,7 @@ class html
 		// We use double quotes in HTML, so we need to escape those in the url.
 		$url = str_replace("\"", "\\\"", $url);
 
+		exit_function("html::href");
 		return "<a href=\"{$url}\"{$target}{$title}{$onClick}{$onMouseOver}{$onMouseOut}{$ti}{$textsize}{$class}{$id}{$name}{$rel}{$style}>{$caption}</a>";
 	}
 
@@ -1610,6 +1611,8 @@ class html
 		the text user can see, if set, returns html href tags
 	@param title optional type=string
 		you can see this text when scrolling over the link
+	@param class_id optional type=int
+		Please add this option to avoid initializing an object with given OID to find out the class ID.
 	@returns string/url or string/html href
 
 	@comments
@@ -1617,20 +1620,28 @@ class html
 	@example
 		$url = html::get_change_url($val["oid"], array("return_url" => get_ru()), $val["name"];
 	**/
-	public static function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
+	public static function get_change_url($oid, $params = array(), $caption = false, $title = NULL, $class_id = NULL)
 	{
-
+		enter_function("html::get_change_url");
 		if (!$GLOBALS["object_loader"]->cache->can("view", $oid))
 		{
 			if ($caption != "")
 			{
+				exit_function("html::get_change_url");
 				return $caption;
 			}
+			exit_function("html::get_change_url");
 			return "";
 		}
 
-		$obj = obj($oid);
-		$params["id"] = $obj->id();
+		if($class_id === NULL)
+		{
+			enter_function("html::get_change_url::obj");
+			$obj = obj($oid);
+			exit_function("html::get_change_url::obj");
+			$class_id = $obj->class_id();
+		}
+		$params["id"] = $oid;
 
 		if ((!isset($_GET["action"]) || $_GET["action"] !== "view") && $GLOBALS["object_loader"]->cache->can("edit", $oid))
 		{
@@ -1646,8 +1657,7 @@ class html
 			$params["section"] = $_GET["section"];
 		}
 
-		//$inst = get_instance(CL_FILE);
-		$retval = $GLOBALS["object_loader"]->cache->mk_my_orb($act, $params, $obj->class_id());
+		$retval = $GLOBALS["object_loader"]->cache->mk_my_orb($act, $params, $class_id);
 
 		if($caption || (is_integer($caption) && $caption == 0))
 		{
@@ -1658,6 +1668,7 @@ class html
 			));
 		}
 
+		exit_function("html::get_change_url");
 		return $retval;
 	}
 

@@ -269,6 +269,11 @@
 	@property integration_class type=select
 	@caption Integratsiooni klass
 
+@default group=bonus
+
+	@property bonus_toolbar type=toolbar store=no no_caption=1
+	@property bonus_table type=table store=no no_caption=1
+
 
 @groupinfo general_ parent=general caption="&Uuml;ldine"
 @groupinfo settings caption="Seaded" parent=general
@@ -302,8 +307,9 @@
 	@groupinfo filter_select caption="Koosta filter" parent=filter submit=no
 	@groupinfo filter_set_folders caption="Vali kehtivad filtrid" parent=filter
 
+@groupinfo bonus caption="Boonuskoodid"
 
-
+##################### RELTYPES
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption ladu
@@ -358,6 +364,9 @@
 
 @reltype NOT_AVAILABLE_PURVEIANCE value=23 clid=CL_SHOP_PRODUCT_PURVEYANCE
 @caption Tarneinfo mis t&auml;hendab, et toode ei ole saadaval
+
+@reltype BONUS_CODE_PRODUCT value=24 clid=CL_SHOP_PRODUCT,CL_SHOP_PRODUCT_PACKAGING,CL_SHOP_PACKET
+@caption Boonuskoodi toode
 
 */
 
@@ -571,6 +580,114 @@ class shop_order_center extends class_base
 			"obj_inst" => obj($arr["request"]["bank_payment"]["id"]),
 			"prop" => array("name" => "bank"),
 		));
+	}
+
+	function _get_bonus_toolbar($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+
+		$t->add_save_button();
+	}
+
+	protected function _define_bonus_table_header($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "code",
+			"caption" => t("Boonuskood"),
+			"callback" => array($this, "_callback_bonus_table_code"),
+			"callb_pass_row" => true,
+		));
+		$t->define_field(array(
+			"name" => "products",
+			"caption" => t("Tooted, mis selle koodi sisestamise korral kliendi tellimusse lisatakse"),
+			"callback" => array($this, "_callback_bonus_table_products"),
+			"callb_pass_row" => true,
+		));
+	}
+
+	function _callback_bonus_table_code($row)
+	{
+		return html::textbox(array(
+			"name" => "bonus_codes[{$row["products"]["i"]}][code]",
+			"value" => $row["code"],
+		));
+	}
+
+	function _callback_bonus_table_products($row)
+	{
+		$relpicker = new relpicker();
+		return $relpicker->create_relpicker(array(
+			"name" => "bonus_codes[{$row["products"]["i"]}][products]",
+			"reltype" => "RELTYPE_BONUS_CODE_PRODUCT",
+			"oid" => $row["products"]["id"],
+			"property" => "bonus_codes[{$row["products"]["i"]}][products]",
+			"multiple" => true,
+			"value" => $row["products"]["product_oids"],
+			"options" => $row["products"]["product_names"],
+			"no_edit" => true,
+			"do_search" => true,
+		));
+	}
+
+	function _get_bonus_table($arr)
+	{
+		if(!is_oid($arr["obj_inst"]->id()))
+		{
+			return PROP_IGNORE;
+		}
+
+		$this->_define_bonus_table_header($arr);
+		
+		$t = $arr["prop"]["vcl_inst"];
+
+		$bonuscodes = $arr["obj_inst"]->get_bonus_codes();
+		$i = 0;
+		foreach($bonuscodes as $bonuscode => $products)
+		{
+			$product_oids = $product_names = array();
+			foreach($products as $product)
+			{
+				$product_oids[$product] = $product;
+				$product_names[$product] = obj($product)->name();
+			}
+
+			$t->define_data(array(
+				"code" => $bonuscode,
+				//	The following is a workaround, cuz apparently I can't define data for which there hasn't been a field defined.
+				"products" => array(
+					"id" => $arr["obj_inst"]->id(),
+					"i" => $i++,
+					"product_oids" => $product_oids,
+					"product_names" => $product_names
+				)
+			));
+		}
+
+		$t->define_data(array(
+			"code" => "",
+			"products" =>  array(
+				"id" => $arr["obj_inst"]->id(),
+				"i" => $i++,
+				"products" => array(),
+			),
+		));
+	}
+
+	function _set_bonus_table($arr)
+	{
+		$bonus_codes = array();
+		foreach($arr["request"]["bonus_codes"] as $data)
+		{
+			$code = trim($data["code"]);
+			if(strlen($code) > 0)
+			{
+				$bonus_codes[$code] = $data["products"];
+			}
+		}
+
+		$arr["obj_inst"]->set_bonus_codes($bonus_codes);
 	}
 
 	function _get_person_properties($arr)

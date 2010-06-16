@@ -670,4 +670,25 @@ class shop_order_center_obj extends _int_object
 		return reset($cnt);
 
 	}
+
+	public function get_bonus_codes()
+	{
+		$bonus_codes = array();
+
+		$data = $this->meta("bonus_codes");
+		if(is_array($data))
+		{
+			foreach($data as $code => $products)
+			{
+				$bonus_codes[$code] = $products;
+			}
+		}
+
+		return $bonus_codes;
+	}
+
+	public function set_bonus_codes($bonus_codes)
+	{
+		$this->set_meta("bonus_codes", $bonus_codes);
+	}
 }

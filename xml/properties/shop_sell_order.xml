@@ -224,6 +224,15 @@
             <field>order_rows_to</field>
             <caption>Order rows to</caption>
       </property>
+      <property>
+            <name>preview</name>
+            <table>aw_shop_sell_orders</table>
+            <group>preview</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>preview</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_SELL_ORDER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -232,6 +241,12 @@
             <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
+      <groupinfo>
+            <preview>
+                  <caption>Eelvaade</caption>
+                  <submit>no</submit>
+            </preview>
+      </groupinfo>
       <tableinfo>
             <aw_shop_sell_orders>
                   <master_index>brother_of</master_index>

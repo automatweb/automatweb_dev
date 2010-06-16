@@ -573,7 +573,7 @@
             <field>packets_s_created_to</field>
             <caption>Loodud kuni</caption>
       </property>
-	  <property>
+      <property>
             <name>packets_s_active</name>
             <table>objects</table>
             <group>packets</group>
@@ -2002,7 +2002,7 @@
             <size>30</size>
             <parent>sell_orders_left_search</parent>
             <field>sell_orders_s_buyer</field>
-            <caption>Ostja</caption>
+            <caption>Kliendi nimi</caption>
       </property>
       <property>
             <name>sell_orders_s_number</name>
@@ -2014,7 +2014,31 @@
             <size>30</size>
             <parent>sell_orders_left_search</parent>
             <field>sell_orders_s_number</field>
-            <caption>Number</caption>
+            <caption>Tellimuse number</caption>
+      </property>
+      <property>
+            <name>sell_orders_s_purchaser_id</name>
+            <table>objects</table>
+            <group>sell_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>sell_orders_left_search</parent>
+            <field>sell_orders_s_purchaser_id</field>
+            <caption>AW kliendikood</caption>
+      </property>
+      <property>
+            <name>sell_orders_s_purchaser_other_id</name>
+            <table>objects</table>
+            <group>sell_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>sell_orders_left_search</parent>
+            <field>sell_orders_s_purchaser_other_id</field>
+            <caption>Naabri kliendikood</caption>
       </property>
       <property>
             <name>sell_orders_s_status</name>
@@ -3814,7 +3838,7 @@
             <sell_orders_left_search>
                   <type>vbox</type>
                   <parent>sell_orders_left</parent>
-                  <area_caption>Otsing</area_caption>
+                  <area_caption>Tellimuste&amp;amp;nbsp;otsing</area_caption>
                   <closeable>1</closeable>
                   <group>sell_orders</group>
             </sell_orders_left_search>

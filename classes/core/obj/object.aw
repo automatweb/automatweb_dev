@@ -1700,7 +1700,7 @@ class object
 	**/
 	function prop_xml($param)
 	{
-		return htmlspecialchars($this->prop($param));
+		return aw_htmlspecialchars($this->prop($param), ENT_COMPAT, aw_global_get("charset"), false);
 	}
 
 	/** returns the value for the specified property for the current object, suitable for displaying to the user
