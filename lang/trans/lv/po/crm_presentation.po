@@ -1,0 +1,182 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/applications/crm/sales/crm_presentation.aw:class_1560_help
+msgid "Klassi Esitlus help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_presentation_tools
+msgid "Omaduse Esitluse toimingud (presentation_tools) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_presentation_tools_comment
+msgid "Omaduse Esitluse toimingud (presentation_tools) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_presentation_tools_help
+msgid "Omaduse Esitluse toimingud (presentation_tools) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_result
+msgid "Omaduse Tulemus (result) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_result_comment
+msgid "Omaduse Tulemus (result) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_result_help
+msgid "Omaduse Tulemus (result) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_start1
+msgid "Omaduse Algus (start1) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_start1_comment
+msgid "Omaduse Algus (start1) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_start1_help
+msgid "Omaduse Algus (start1) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_end
+msgid "Omaduse L&otilde;pp (end) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_end_comment
+msgid "Omaduse L&otilde;pp (end) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_end_help
+msgid "Omaduse L&otilde;pp (end) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_real_start
+msgid "Omaduse Tegelik algus (real_start) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_real_start_comment
+msgid "Omaduse Tegelik algus (real_start) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_real_start_help
+msgid "Omaduse Tegelik algus (real_start) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_real_duration
+msgid "Omaduse Tegelik kestus (h) (real_duration) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_real_duration_comment
+msgid "Omaduse Tegelik kestus (h) (real_duration) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_real_duration_help
+msgid "Omaduse Tegelik kestus (h) (real_duration) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_customer_relation
+msgid "Omaduse  (customer_relation) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_customer_relation_comment
+msgid "Omaduse  (customer_relation) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_customer_relation_help
+msgid "Omaduse  (customer_relation) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_hr_schedule_job
+msgid "Omaduse  (hr_schedule_job) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_hr_schedule_job_comment
+msgid "Omaduse  (hr_schedule_job) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_hr_schedule_job_help
+msgid "Omaduse  (hr_schedule_job) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_impl_tb
+msgid "Omaduse  (impl_tb) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_impl_tb_comment
+msgid "Omaduse  (impl_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_impl_tb_help
+msgid "Omaduse  (impl_tb) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_parts_table
+msgid "Omaduse  (parts_table) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_parts_table_comment
+msgid "Omaduse  (parts_table) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_parts_table_help
+msgid "Omaduse  (parts_table) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_customer_info
+msgid "Omaduse  (customer_info) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_customer_info_comment
+msgid "Omaduse  (customer_info) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:prop_customer_info_help
+msgid "Omaduse  (customer_info) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:group_customer
+msgid "Grupi Klient (customer) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:group_customer_help
+msgid "Grupi Klient (customer) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:rel_RELTYPE_ROW
+msgid "Seose Rida (RELTYPE_ROW) tekst"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:layout_impl_bit
+msgid "Kujundusosa Osalejad (impl_bit) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:78
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:189
+msgid "Kui esitlus on tehtud, peab sisestama ka kestuse"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:206
+msgid "Kui esitlus on tehtud, peab sisestama ka tegeliku algusaja"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:231
+msgid "Esitluse algusaeg ei saa olla minevikus"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_presentation.aw:250
+msgid "Kui esitlus on tehtud, peab valima ka tulemuse"
+msgstr ""

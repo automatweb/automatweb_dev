@@ -1,0 +1,804 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/orders/mrp_order_print.aw:class_1520_help
+msgid "Klassi ERP Tr&uuml;kit&ouml;&ouml;stuse tellimus help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_workspace
+msgid "Omaduse T&ouml;&ouml;laud (workspace) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_workspace_comment
+msgid "Omaduse T&ouml;&ouml;laud (workspace) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_workspace_help
+msgid "Omaduse T&ouml;&ouml;laud (workspace) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_orderer_person
+msgid "Omaduse Kliendipoolne kontakt (orderer_person) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_orderer_person_comment
+msgid "Omaduse Kliendipoolne kontakt (orderer_person) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_orderer_person_help
+msgid "Omaduse Kliendipoolne kontakt (orderer_person) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_seller_person
+msgid "Omaduse Teostajapoolne kontakt (seller_person) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_seller_person_comment
+msgid "Omaduse Teostajapoolne kontakt (seller_person) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_seller_person_help
+msgid "Omaduse Teostajapoolne kontakt (seller_person) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_mrp_case
+msgid "Omaduse Arendustoode (mrp_case) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_mrp_case_comment
+msgid "Omaduse Arendustoode (mrp_case) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_mrp_case_help
+msgid "Omaduse Arendustoode (mrp_case) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_mrp_case_view
+msgid "Omaduse Arendustoode (mrp_case_view) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_mrp_case_view_comment
+msgid "Omaduse Arendustoode (mrp_case_view) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_mrp_case_view_help
+msgid "Omaduse Arendustoode (mrp_case_view) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_mrp_pricelist
+msgid "Omaduse Hinnakiri (mrp_pricelist) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_mrp_pricelist_comment
+msgid "Omaduse Hinnakiri (mrp_pricelist) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_mrp_pricelist_help
+msgid "Omaduse Hinnakiri (mrp_pricelist) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_state
+msgid "Omaduse Staatus (state) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_state_comment
+msgid "Omaduse Staatus (state) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_state_help
+msgid "Omaduse Staatus (state) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_amount
+msgid "Omaduse Kogus (amount) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_amount_comment
+msgid "Omaduse Kogus (amount) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_amount_help
+msgid "Omaduse Kogus (amount) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_page_count
+msgid "Omaduse Lehtede arv (page_count) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_page_count_comment
+msgid "Omaduse Lehtede arv (page_count) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_page_count_help
+msgid "Omaduse Lehtede arv (page_count) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_colour_page_count
+msgid "Omaduse V&auml;rviliste lehtede arv (colour_page_count) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_colour_page_count_comment
+msgid "Omaduse V&auml;rviliste lehtede arv (colour_page_count) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_colour_page_count_help
+msgid "Omaduse V&auml;rviliste lehtede arv (colour_page_count) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_deadline
+msgid "Omaduse T&auml;htaeg (deadline) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_deadline_comment
+msgid "Omaduse T&auml;htaeg (deadline) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_deadline_help
+msgid "Omaduse T&auml;htaeg (deadline) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_format
+msgid "Omaduse Tr&uuml;kise formaat (e_format) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_format_comment
+msgid "Omaduse Tr&uuml;kise formaat (e_format) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_format_help
+msgid "Omaduse Tr&uuml;kise formaat (e_format) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_covers
+msgid "Omaduse Kaaned? (e_covers) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_covers_comment
+msgid "Omaduse Kaaned? (e_covers) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_covers_help
+msgid "Omaduse Kaaned? (e_covers) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_workflow_errors
+msgid "Omaduse  (workflow_errors) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_workflow_errors_comment
+msgid "Omaduse  (workflow_errors) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_workflow_errors_help
+msgid "Omaduse  (workflow_errors) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_resource_tree
+msgid "Omaduse  (resource_tree) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_resource_tree_comment
+msgid "Omaduse  (resource_tree) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_resource_tree_help
+msgid "Omaduse  (resource_tree) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_workflow_table
+msgid "Omaduse  (workflow_table) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_workflow_table_comment
+msgid "Omaduse  (workflow_table) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_workflow_table_help
+msgid "Omaduse  (workflow_table) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_materials_tree
+msgid "Omaduse  (materials_tree) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_materials_tree_comment
+msgid "Omaduse  (materials_tree) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_materials_tree_help
+msgid "Omaduse  (materials_tree) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_materials_table
+msgid "Omaduse  (materials_table) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_materials_table_comment
+msgid "Omaduse  (materials_table) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_materials_table_help
+msgid "Omaduse  (materials_table) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_material_price
+msgid "Omaduse Materjalide hind (material_price) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_material_price_comment
+msgid "Omaduse Materjalide hind (material_price) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_material_price_help
+msgid "Omaduse Materjalide hind (material_price) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_resource_price
+msgid "Omaduse Ressursside hind (resource_price) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_resource_price_comment
+msgid "Omaduse Ressursside hind (resource_price) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_resource_price_help
+msgid "Omaduse Ressursside hind (resource_price) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_cover_price
+msgid "Omaduse Katete hind (cover_price) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_cover_price_comment
+msgid "Omaduse Katete hind (cover_price) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_cover_price_help
+msgid "Omaduse Katete hind (cover_price) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_tot_price
+msgid "Omaduse Koguhind (tot_price) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_tot_price_comment
+msgid "Omaduse Koguhind (tot_price) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_tot_price_help
+msgid "Omaduse Koguhind (tot_price) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_final_price
+msgid "Omaduse L&otilde;plik hind (final_price) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_final_price_comment
+msgid "Omaduse L&otilde;plik hind (final_price) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_final_price_help
+msgid "Omaduse L&otilde;plik hind (final_price) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_preview_tb
+msgid "Omaduse  (preview_tb) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_preview_tb_comment
+msgid "Omaduse  (preview_tb) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_preview_tb_help
+msgid "Omaduse  (preview_tb) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_preview
+msgid "Omaduse  (preview) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_preview_comment
+msgid "Omaduse  (preview) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_preview_help
+msgid "Omaduse  (preview) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_prev_tb
+msgid "Omaduse  (prev_tb) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_prev_tb_comment
+msgid "Omaduse  (prev_tb) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_prev_tb_help
+msgid "Omaduse  (prev_tb) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_files_table
+msgid "Omaduse  (files_table) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_files_table_comment
+msgid "Omaduse  (files_table) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_files_table_help
+msgid "Omaduse  (files_table) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_pending_table
+msgid "Omaduse  (pending_table) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_pending_table_comment
+msgid "Omaduse  (pending_table) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_pending_table_help
+msgid "Omaduse  (pending_table) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_sent_table
+msgid "Omaduse  (sent_table) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_sent_table_comment
+msgid "Omaduse  (sent_table) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_sent_table_help
+msgid "Omaduse  (sent_table) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_main_paper
+msgid "Omaduse Sisupaber (e_main_paper) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_main_paper_comment
+msgid "Omaduse Sisupaber (e_main_paper) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_main_paper_help
+msgid "Omaduse Sisupaber (e_main_paper) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_cover_paper
+msgid "Omaduse Kaanepaber (e_cover_paper) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_cover_paper_comment
+msgid "Omaduse Kaanepaber (e_cover_paper) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_cover_paper_help
+msgid "Omaduse Kaanepaber (e_cover_paper) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_main_colour
+msgid "Omaduse Sisu v&auml;rvilisus (e_main_colour) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_main_colour_comment
+msgid "Omaduse Sisu v&auml;rvilisus (e_main_colour) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_main_colour_help
+msgid "Omaduse Sisu v&auml;rvilisus (e_main_colour) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_cover_colour
+msgid "Omaduse Kaante v&auml;rvilisus (e_cover_colour) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_cover_colour_comment
+msgid "Omaduse Kaante v&auml;rvilisus (e_cover_colour) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_cover_colour_help
+msgid "Omaduse Kaante v&auml;rvilisus (e_cover_colour) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_post_processing
+msgid "Omaduse J&auml;relt&ouml;&ouml;tlus (e_post_processing) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_post_processing_comment
+msgid "Omaduse J&auml;relt&ouml;&ouml;tlus (e_post_processing) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_post_processing_help
+msgid "Omaduse J&auml;relt&ouml;&ouml;tlus (e_post_processing) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_binding
+msgid "Omaduse K&ouml;ide v&otilde;i kinnitus (e_binding) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_binding_comment
+msgid "Omaduse K&ouml;ide v&otilde;i kinnitus (e_binding) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_binding_help
+msgid "Omaduse K&ouml;ide v&otilde;i kinnitus (e_binding) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_measures
+msgid "Omaduse M&otilde;&otilde;dud (e_measures) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_measures_comment
+msgid "Omaduse M&otilde;&otilde;dud (e_measures) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_measures_help
+msgid "Omaduse M&otilde;&otilde;dud (e_measures) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_materials
+msgid "Omaduse Materjalid (e_materials) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_materials_comment
+msgid "Omaduse Materjalid (e_materials) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_materials_help
+msgid "Omaduse Materjalid (e_materials) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_co
+msgid "Omaduse Tellija organisatsioon (e_orderer_co) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_co_comment
+msgid "Omaduse Tellija organisatsioon (e_orderer_co) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_co_help
+msgid "Omaduse Tellija organisatsioon (e_orderer_co) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_person
+msgid "Omaduse Tellija isik (e_orderer_person) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_person_comment
+msgid "Omaduse Tellija isik (e_orderer_person) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_person_help
+msgid "Omaduse Tellija isik (e_orderer_person) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_email
+msgid "Omaduse Tellija email (e_orderer_email) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_email_comment
+msgid "Omaduse Tellija email (e_orderer_email) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_email_help
+msgid "Omaduse Tellija email (e_orderer_email) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_phone
+msgid "Omaduse Tellija telefon (e_orderer_phone) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_phone_comment
+msgid "Omaduse Tellija telefon (e_orderer_phone) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:prop_e_orderer_phone_help
+msgid "Omaduse Tellija telefon (e_orderer_phone) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_data
+msgid "Grupi Sisestatavad andmed (data) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_data_help
+msgid "Grupi Sisestatavad andmed (data) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_grp_case_workflow
+msgid "Grupi Ressursid ja t&ouml;&ouml;voog (grp_case_workflow) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_grp_case_workflow_help
+msgid "Grupi Ressursid ja t&ouml;&ouml;voog (grp_case_workflow) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_grp_case_materials
+msgid "Grupi Materjalid (grp_case_materials) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_grp_case_materials_help
+msgid "Grupi Materjalid (grp_case_materials) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_price
+msgid "Grupi Hind (price) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_price_help
+msgid "Grupi Hind (price) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_preview
+msgid "Grupi Eelvaade (preview) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_preview_help
+msgid "Grupi Eelvaade (preview) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_preview_preview
+msgid "Grupi Eelvaade (preview_preview) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_preview_preview_help
+msgid "Grupi Eelvaade (preview_preview) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_preview_saved
+msgid "Grupi Salvestatud (preview_saved) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:group_preview_saved_help
+msgid "Grupi Salvestatud (preview_saved) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_WORKSPACE
+msgid "Seose T&ouml;&ouml;laud (RELTYPE_WORKSPACE) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_CUSTOMER
+msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_ORDERER_PERSON
+msgid "Seose Tellija isik (RELTYPE_ORDERER_PERSON) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_CASE
+msgid "Seose Arendustoode (RELTYPE_CASE) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_SELLER_PERSON
+msgid "Seose M&uuml;&uuml;ja isik (RELTYPE_SELLER_PERSON) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_MRP_PRICELIST
+msgid "Seose ERP Hinnakiri (RELTYPE_MRP_PRICELIST) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_SEL_COVER
+msgid "Seose Kate (RELTYPE_SEL_COVER) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_FORMAT
+msgid "Seose Formaat (RELTYPE_FORMAT) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_MAIN_PAPER
+msgid "Seose Sisupaber (RELTYPE_MAIN_PAPER) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_COVER_PAPER
+msgid "Seose Kaanepaber (RELTYPE_COVER_PAPER) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_SAVED_FILE
+msgid "Seose Salvestatud pakkumine (RELTYPE_SAVED_FILE) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_SENT_OFFER
+msgid "Seose Saadetud pakkumine (RELTYPE_SENT_OFFER) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:rel_RELTYPE_REQUESTED_MATERIAL
+msgid "Seose Soovitud materjal (RELTYPE_REQUESTED_MATERIAL) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:layout_general_info
+msgid "Kujundusosa Projekti&nbsp;&uuml;ldandmed (general_info) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:layout_resource_tree
+msgid "Kujundusosa Ressursid&nbsp;kategooriate&nbsp;kaupa (resource_tree) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:layout_tree_border
+msgid "Kujundusosa Materjalide&nbsp;kaustad (tree_border) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:197 classes/mrp/orders/mrp_order_print.aw:216
+msgid "--vali--"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:342 classes/mrp/orders/mrp_order_print.aw:343
+msgid "M&uuml;&uuml;gi kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:347 classes/mrp/orders/mrp_order_print.aw:348
+msgid "Hind"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:445
+msgid "Kasuta kaante jaoks"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:450 classes/mrp/orders/mrp_order_print.aw:714
+msgid "Materjal"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:455
+msgid "V&otilde;imalikud &uuml;hikud"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:460
+msgid "M&uuml;&uuml;gihind"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:465
+msgid "Ostuhind"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:470
+msgid "Lehti selle materjaliga"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:475
+msgid "Arvutatud vajalik kogus"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:480
+msgid "Ostuhinna summa"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:485
+msgid "M&uuml;&uuml;gihinna summa"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:491
+msgid "L&otilde;plik kogus"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:497
+msgid "L&otilde;plik m&uuml;&uuml;gihind"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:503 classes/mrp/orders/mrp_order_print.aw:864
+msgid "Resurss"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:508
+msgid "Ressursi tunde"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:513
+msgid "Ressursi hind"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:591
+msgid "%s kg"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:605
+msgid "Materjalid kaustas %s"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:666
+msgid "Automaatselt lisatud materjali %s kaudu"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:703
+msgid "Materjalide hind vastavalt kogustele"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:762 classes/mrp/orders/mrp_order_print.aw:909
+msgid "Kate: %s:"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:856
+msgid "Resursside kasutuse hind vastavalt kogustele"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:956
+msgid "Koguhinnale kehtivad katted"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:966
+msgid "Kate"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1031
+msgid "Kogu hind vastavalt kogustele"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1108 classes/mrp/orders/mrp_order_print.aw:1248
+msgid "Jah"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1108 classes/mrp/orders/mrp_order_print.aw:1248
+msgid "Ei"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1184
+msgid "Pakkumine %s tellimusele %s (%s).pdf"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1202
+msgid "Fail"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1207 classes/mrp/orders/mrp_order_print.aw:1322
+msgid "Loodud"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1215 classes/mrp/orders/mrp_order_print.aw:1330
+msgid "Looja"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1220
+msgid "Saadetud"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1225 classes/mrp/orders/mrp_order_print.aw:1250
+msgid "Saada"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1263
+msgid "Salvestatud pakkumised"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1271
+msgid "Millal"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1279
+msgid "Kellele"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1284
+msgid "Teema"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1289 classes/mrp/orders/mrp_order_print.aw:1335
+msgid "Vaata"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1314
+msgid "Saadetud pakkumised"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_print.aw:1359
+msgid "Toimetamisel pakkumised"
+msgstr ""
+

@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:49
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:234
+msgid "Otsingu tulemused"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:245
+msgid "Kliendi nimi"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:249
+msgid "Telefon(id)"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:253
+msgid "Osakond"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:257
+msgid "Aadress"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:261
+msgid "Allikas/soovitaja"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:265
+msgid "Aeg"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:269
+msgid "Tulemus"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_presentations_view.aw:273
+msgid "M&uuml;&uuml;giesindaja"
+msgstr ""
+

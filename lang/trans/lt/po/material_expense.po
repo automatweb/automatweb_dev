@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/material_expense.aw:class_1513_help
+msgid "Klassi Materjalikulu help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_product
+msgid "Omaduse Materjal (product) caption"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_product_comment
+msgid "Omaduse Materjal (product) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_product_help
+msgid "Omaduse Materjal (product) help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_job
+msgid "Omaduse Tegevus (job) caption"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_job_comment
+msgid "Omaduse Tegevus (job) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_job_help
+msgid "Omaduse Tegevus (job) help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_case
+msgid "Omaduse Projekt (case) caption"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_case_comment
+msgid "Omaduse Projekt (case) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_case_help
+msgid "Omaduse Projekt (case) help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_amount
+msgid "Omaduse Planeeritud kogus (amount) caption"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_amount_comment
+msgid "Omaduse Planeeritud kogus (amount) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_amount_help
+msgid "Omaduse Planeeritud kogus (amount) help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_used_amount
+msgid "Omaduse Kulutatud kogus (used_amount) caption"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_used_amount_comment
+msgid "Omaduse Kulutatud kogus (used_amount) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_used_amount_help
+msgid "Omaduse Kulutatud kogus (used_amount) help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_base_amount
+msgid "Omaduse Kogus p&otilde;hi&uuml;hikus (base_amount) caption"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_base_amount_comment
+msgid "Omaduse Kogus p&otilde;hi&uuml;hikus (base_amount) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_base_amount_help
+msgid "Omaduse Kogus p&otilde;hi&uuml;hikus (base_amount) help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_unit
+msgid "Omaduse &Uuml;hik (unit) caption"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_unit_comment
+msgid "Omaduse &Uuml;hik (unit) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_unit_help
+msgid "Omaduse &Uuml;hik (unit) help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_planning
+msgid "Omaduse Planeerimine (planning) caption"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_planning_comment
+msgid "Omaduse Planeerimine (planning) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_planning_help
+msgid "Omaduse Planeerimine (planning) help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_movement
+msgid "Omaduse Materjali liikumine (movement) caption"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_movement_comment
+msgid "Omaduse Materjali liikumine (movement) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:prop_movement_help
+msgid "Omaduse Materjali liikumine (movement) help"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:rel_RELTYPE_PRODUCT
+msgid "Seose Materjal (RELTYPE_PRODUCT) tekst"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:rel_RELTYPE_JOB
+msgid "Seose Tegevus (RELTYPE_JOB) tekst"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:rel_RELTYPE_UNIT
+msgid "Seose &Uuml;hik (RELTYPE_UNIT) tekst"
+msgstr ""
+
+#: classes/mrp/material_expense.aw:rel_RELTYPE_CASE
+msgid "Seose Projekt (RELTYPE_CASE) tekst"
+msgstr ""
+

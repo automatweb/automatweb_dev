@@ -1,0 +1,244 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/class_designer/aw_class_property.aw:class_1506_help
+msgid "Klassi AW Klassi omadus help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_c_class
+msgid "Omaduse Klass (c_class) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_c_class_comment
+msgid "Omaduse Klass (c_class) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_c_class_help
+msgid "Omaduse Klass (c_class) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_caption
+msgid "Omaduse Caption (p_caption) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_caption_comment
+msgid "Omaduse Caption (p_caption) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_caption_help
+msgid "Omaduse Caption (p_caption) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_name
+msgid "Omaduse Nimi (p_name) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_name_comment
+msgid "Omaduse Nimi (p_name) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_name_help
+msgid "Omaduse Nimi (p_name) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_type
+msgid "Omaduse T&uuml;&uuml;p (p_type) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_type_comment
+msgid "Omaduse T&uuml;&uuml;p (p_type) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_type_help
+msgid "Omaduse T&uuml;&uuml;p (p_type) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_store
+msgid "Omaduse Salvestatav (p_store) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_store_comment
+msgid "Omaduse Salvestatav (p_store) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_store_help
+msgid "Omaduse Salvestatav (p_store) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_table
+msgid "Omaduse Tabel (p_table) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_table_comment
+msgid "Omaduse Tabel (p_table) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_table_help
+msgid "Omaduse Tabel (p_table) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_field
+msgid "Omaduse Tulp (p_field) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_field_comment
+msgid "Omaduse Tulp (p_field) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_field_help
+msgid "Omaduse Tulp (p_field) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_method
+msgid "Omaduse Salvestamise meetod (p_method) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_method_comment
+msgid "Omaduse Salvestamise meetod (p_method) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_method_help
+msgid "Omaduse Salvestamise meetod (p_method) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_reltype
+msgid "Omaduse Seoset&uuml;&uuml;p (p_reltype) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_reltype_comment
+msgid "Omaduse Seoset&uuml;&uuml;p (p_reltype) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_reltype_help
+msgid "Omaduse Seoset&uuml;&uuml;p (p_reltype) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_no_caption
+msgid "Omaduse &Auml;ra n&auml;ita captionit (p_no_caption) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_no_caption_comment
+msgid "Omaduse &Auml;ra n&auml;ita captionit (p_no_caption) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_no_caption_help
+msgid "Omaduse &Auml;ra n&auml;ita captionit (p_no_caption) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_group
+msgid "Omaduse Kaart (p_group) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_group_comment
+msgid "Omaduse Kaart (p_group) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_group_help
+msgid "Omaduse Kaart (p_group) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_parent
+msgid "Omaduse Layout (p_parent) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_parent_comment
+msgid "Omaduse Layout (p_parent) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_parent_help
+msgid "Omaduse Layout (p_parent) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_default
+msgid "Omaduse Vaikimisi v&auml;&auml;rtus (p_default) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_default_comment
+msgid "Omaduse Vaikimisi v&auml;&auml;rtus (p_default) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_p_default_help
+msgid "Omaduse Vaikimisi v&auml;&auml;rtus (p_default) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_project
+msgid "Omaduse Projekt (project) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_project_comment
+msgid "Omaduse Projekt (project) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_project_help
+msgid "Omaduse Projekt (project) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_toolbar
+msgid "Omaduse  (toolbar) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_toolbar_comment
+msgid "Omaduse  (toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_toolbar_help
+msgid "Omaduse  (toolbar) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_table
+msgid "Omaduse  (table) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_table_comment
+msgid "Omaduse  (table) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:prop_table_help
+msgid "Omaduse  (table) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:group_groups
+msgid "Grupi Grupid (groups) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:group_groups_help
+msgid "Grupi Grupid (groups) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:rel_RELTYPE_PROJECT
+msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:rel_RELTYPE_CUSTOMER
+msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:150
+msgid "Grupp"
+msgstr ""
+
+#: classes/applications/class_designer/aw_class_property.aw:157
+msgid "Omaduste grupid, kuhu see omadus kuulub"
+msgstr ""
+

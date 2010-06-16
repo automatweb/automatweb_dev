@@ -1,0 +1,76 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_matrix.aw:9
+msgid "Asukohad"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:10
+msgid "Kliendikategooriad"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:47
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:53
+msgid "Veeru grupp"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:87
+msgid "Tootegrupid"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:88
+msgid "Tooted"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:89
+msgid "Pakendid"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:107
+msgid "Vali valuuta, mille maatriksit kuvada (valitud %s)"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:129
+msgid "Prioriteet"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:143
+msgid "Asukoht"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:151
+msgid "Tootegrupp"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:159
+msgid "Kliendigrupp"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:284
+msgid "Toode/tootekategooria"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:288 classes/applications/shop/shop_matrix.aw:316 classes/applications/shop/shop_matrix.aw:346
+msgid "*"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:289
+msgid "Vaikimisi"
+msgstr ""
+
+#: classes/applications/shop/shop_matrix.aw:317
+msgid "K&otilde;ik \"%s\" kliendid"
+msgstr ""
+

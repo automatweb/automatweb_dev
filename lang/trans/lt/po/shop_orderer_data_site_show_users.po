@@ -1,0 +1,116 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:class_1570_help
+msgid "Klassi Kliendi kasutajate veebis kuvamine help"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:prop_template
+msgid "Omaduse Template (template) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:prop_template_comment
+msgid "Omaduse Template (template) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:prop_template_help
+msgid "Omaduse Template (template) help"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:prop_slave_groups
+msgid "Omaduse Alamkasutajate kasutajagrupid (slave_groups) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:prop_slave_groups_comment
+msgid "Omaduse Alamkasutajate kasutajagrupid (slave_groups) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:prop_slave_groups_help
+msgid "Omaduse Alamkasutajate kasutajagrupid (slave_groups) help"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:rel_RELTYPE_GROUP
+msgid "Seose Kasutajagrupp (RELTYPE_GROUP) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:104
+msgid "Parool liiga l&uuml;hike"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:108
+msgid "Paroolid erinevad"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:183
+msgid "Uus kasutajanimi"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:191
+msgid "Eesnimi"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:198
+msgid "Perekonnanimi"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:207
+msgid "Telefoni number"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:214 classes/applications/shop/shop_orderer_data_site_show_users.aw:292
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:221
+msgid "Parool"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:228
+msgid "Parool uuesti"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:234
+msgid "Salvesta uus kasutaja"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:247
+msgid "Lisa uus kasutaja"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:283
+msgid "Kasutajanimi"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:287
+msgid "Isiku nimi"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:297
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:302
+msgid "Grupp"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:346
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:355
+msgid "Oled kindel, et soovid valitud kasutajad kustutada?"
+msgstr ""
+
+#: classes/applications/shop/shop_orderer_data_site_show_users.aw:363
+msgid "Pole &uuml;htegi alamkasutajat"
+msgstr ""
+

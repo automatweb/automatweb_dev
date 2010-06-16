@@ -1,0 +1,160 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/orders/mrp_pricelist.aw:class_1521_help
+msgid "Klassi ERP Hinnakiri help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_act_from
+msgid "Omaduse Kehtib alates (act_from) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_act_from_comment
+msgid "Omaduse Kehtib alates (act_from) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_act_from_help
+msgid "Omaduse Kehtib alates (act_from) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_act_to
+msgid "Omaduse Kehtib kuni (act_to) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_act_to_comment
+msgid "Omaduse Kehtib kuni (act_to) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_act_to_help
+msgid "Omaduse Kehtib kuni (act_to) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_folder_tree
+msgid "Omaduse  (res_folder_tree) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_folder_tree_comment
+msgid "Omaduse  (res_folder_tree) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_folder_tree_help
+msgid "Omaduse  (res_folder_tree) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_prices
+msgid "Omaduse  (res_prices) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_prices_comment
+msgid "Omaduse  (res_prices) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_prices_help
+msgid "Omaduse  (res_prices) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_folder_tree_hr
+msgid "Omaduse  (res_folder_tree_hr) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_folder_tree_hr_comment
+msgid "Omaduse  (res_folder_tree_hr) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_folder_tree_hr_help
+msgid "Omaduse  (res_folder_tree_hr) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_prices_hr
+msgid "Omaduse  (res_prices_hr) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_prices_hr_comment
+msgid "Omaduse  (res_prices_hr) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:prop_res_prices_hr_help
+msgid "Omaduse  (res_prices_hr) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:group_res_prices
+msgid "Grupi Ressursside hinnad (res_prices) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:group_res_prices_help
+msgid "Grupi Ressursside hinnad (res_prices) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:group_res_prices_amt
+msgid "Grupi T&uuml;kkide hinnad (res_prices_amt) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:group_res_prices_amt_help
+msgid "Grupi T&uuml;kkide hinnad (res_prices_amt) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:group_res_prices_hr
+msgid "Grupi Tundide hinnad (res_prices_hr) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:group_res_prices_hr_help
+msgid "Grupi Tundide hinnad (res_prices_hr) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:layout_left_tree
+msgid "Kujundusosa Resursside&nbsp;kaustad (left_tree) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:layout_left_tree_hr
+msgid "Kujundusosa Resursside&nbsp;kaustad (left_tree_hr) pealkiri"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:119 classes/mrp/orders/mrp_pricelist.aw:161
+msgid "Kogused"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:124 classes/mrp/orders/mrp_pricelist.aw:166
+msgid "Alates"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:130 classes/mrp/orders/mrp_pricelist.aw:172
+msgid "Kuni"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:137 classes/mrp/orders/mrp_pricelist.aw:179
+msgid "Hinnad"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:143
+msgid "Seadistamine"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:149
+msgid "Tk hind"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:185
+msgid "P&uuml;sikulu"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:191
+msgid "Tunnihind"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:236
+msgid "Ressursside hinnad"
+msgstr ""
+
+#: classes/mrp/orders/mrp_pricelist.aw:342
+msgid "Ressursside tunnihinnad"
+msgstr ""
+

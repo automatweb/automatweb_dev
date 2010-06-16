@@ -1,0 +1,80 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/class_designer/site_notification_rule.aw:class_1502_help
+msgid "Klassi Saidi teavituse reegel help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_err_content
+msgid "Omaduse Veeateate sisu (err_content) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_err_content_comment
+msgid "Omaduse Veeateate sisu (err_content) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_err_content_help
+msgid "Omaduse Veeateate sisu (err_content) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_to
+msgid "Omaduse Meil kellele (mail_to) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_to_comment
+msgid "Omaduse Meil kellele (mail_to) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_to_help
+msgid "Omaduse Meil kellele (mail_to) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_subj
+msgid "Omaduse Meili teema (mail_subj) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_subj_comment
+msgid "Omaduse Meili teema (mail_subj) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_subj_help
+msgid "Omaduse Meili teema (mail_subj) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_content_legend
+msgid "Omaduse Legend (mail_content_legend) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_content_legend_comment
+msgid "Omaduse Legend (mail_content_legend) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_content_legend_help
+msgid "Omaduse Legend (mail_content_legend) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_content
+msgid "Omaduse Meili sisu (mail_content) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_content_comment
+msgid "Omaduse Meili sisu (mail_content) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:prop_mail_content_help
+msgid "Omaduse Meili sisu (mail_content) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_rule.aw:39
+msgid "Teksti sees v&otilde;ib kasutada: %site% - saidi url, kus viga esines. %error% - veateate sisu"
+msgstr ""
+

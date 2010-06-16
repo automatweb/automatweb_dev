@@ -1,0 +1,72 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/material_expense_condition.aw:class_1511_help
+msgid "Klassi Materjali kulutingimus help"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_product
+msgid "Omaduse Materjal (product) caption"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_product_comment
+msgid "Omaduse Materjal (product) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_product_help
+msgid "Omaduse Materjal (product) help"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_resource
+msgid "Omaduse Ressurss (resource) caption"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_resource_comment
+msgid "Omaduse Ressurss (resource) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_resource_help
+msgid "Omaduse Ressurss (resource) help"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_planning
+msgid "Omaduse Planeerimine (planning) caption"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_planning_comment
+msgid "Omaduse Planeerimine (planning) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_planning_help
+msgid "Omaduse Planeerimine (planning) help"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_movement
+msgid "Omaduse Materjali liikumine (movement) caption"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_movement_comment
+msgid "Omaduse Materjali liikumine (movement) kommentaar"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:prop_movement_help
+msgid "Omaduse Materjali liikumine (movement) help"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:rel_RELTYPE_PRODUCT
+msgid "Seose Materjal (RELTYPE_PRODUCT) tekst"
+msgstr ""
+
+#: classes/mrp/material_expense_condition.aw:rel_RELTYPE_RESOURCE
+msgid "Seose Ressurss (RELTYPE_RESOURCE) tekst"
+msgstr ""
+

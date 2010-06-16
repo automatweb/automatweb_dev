@@ -1,0 +1,1217 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/applications/crm/sales/crm_sales.aw:class_1347_help
+msgid "Klassi M&uuml;&uuml;gikeskkond help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_owner
+msgid "Omaduse Keskkonna omanik (owner) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_owner_comment
+msgid "Omaduse Keskkonna omanik (owner) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_owner_help
+msgid "Omaduse Keskkonna omanik (owner) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_folder
+msgid "Omaduse K&otilde;nede kaust (calls_folder) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_folder_comment
+msgid "Omaduse K&otilde;nede kaust (calls_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_folder_help
+msgid "Omaduse K&otilde;nede kaust (calls_folder) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_folder
+msgid "Omaduse Esitluste kaust (presentations_folder) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_folder_comment
+msgid "Omaduse Esitluste kaust (presentations_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_folder_help
+msgid "Omaduse Esitluste kaust (presentations_folder) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_avg_call_duration_est
+msgid "Omaduse K&otilde;nekestuse hinnang (s) (avg_call_duration_est) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_avg_call_duration_est_comment
+msgid "Omaduse K&otilde;nekestuse hinnang (s) (avg_call_duration_est) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_avg_call_duration_est_help
+msgid "Omaduse K&otilde;nekestuse hinnang (s) (avg_call_duration_est) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_busy_recall_time
+msgid "Omaduse Uus k&otilde;ne kui nr. kinni (s) (call_result_busy_recall_time) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_busy_recall_time_comment
+msgid "Omaduse Uus k&otilde;ne kui nr. kinni (s) (call_result_busy_recall_time) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_busy_recall_time_help
+msgid "Omaduse Uus k&otilde;ne kui nr. kinni (s) (call_result_busy_recall_time) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_noanswer_recall_time
+msgid "Omaduse Uus k&otilde;ne kui automaatvastaja/k&otilde;nepost (s) (call_result_noanswer_recall_time) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_noanswer_recall_time_comment
+msgid "Omaduse Uus k&otilde;ne kui automaatvastaja/k&otilde;nepost (s) (call_result_noanswer_recall_time) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_noanswer_recall_time_help
+msgid "Omaduse Uus k&otilde;ne kui automaatvastaja/k&otilde;nepost (s) (call_result_noanswer_recall_time) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_outofservice_recall_time
+msgid "Omaduse Uus k&otilde;ne kui tel. v&auml;ljas (s) (call_result_outofservice_recall_time) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_outofservice_recall_time_comment
+msgid "Omaduse Uus k&otilde;ne kui tel. v&auml;ljas (s) (call_result_outofservice_recall_time) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_outofservice_recall_time_help
+msgid "Omaduse Uus k&otilde;ne kui tel. v&auml;ljas (s) (call_result_outofservice_recall_time) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_recall_retries
+msgid "Omaduse Uuesti proovida enim (korda) (call_result_recall_retries) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_recall_retries_comment
+msgid "Omaduse Uuesti proovida enim (korda) (call_result_recall_retries) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_call_result_recall_retries_help
+msgid "Omaduse Uuesti proovida enim (korda) (call_result_recall_retries) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_avg_presentation_duration_est
+msgid "Omaduse Esitluse kestuse hinnang (s) (avg_presentation_duration_est) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_avg_presentation_duration_est_comment
+msgid "Omaduse Esitluse kestuse hinnang (s) (avg_presentation_duration_est) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_avg_presentation_duration_est_help
+msgid "Omaduse Esitluse kestuse hinnang (s) (avg_presentation_duration_est) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_autocomplete_options_limit
+msgid "Omaduse Autocomplete valikuid (autocomplete_options_limit) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_autocomplete_options_limit_comment
+msgid "Omaduse Autocomplete valikuid (autocomplete_options_limit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_autocomplete_options_limit_help
+msgid "Omaduse Autocomplete valikuid (autocomplete_options_limit) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_tables_rows_per_page
+msgid "Omaduse Ridu tabelites (tables_rows_per_page) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_tables_rows_per_page_comment
+msgid "Omaduse Ridu tabelites (tables_rows_per_page) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_tables_rows_per_page_help
+msgid "Omaduse Ridu tabelites (tables_rows_per_page) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_data_entry_clerk
+msgid "Omaduse Andmesisestaja amet (role_profession_data_entry_clerk) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_data_entry_clerk_comment
+msgid "Omaduse Andmesisestaja amet (role_profession_data_entry_clerk) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_data_entry_clerk_help
+msgid "Omaduse Andmesisestaja amet (role_profession_data_entry_clerk) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_telemarketing_salesman
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja amet (role_profession_telemarketing_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_telemarketing_salesman_comment
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja amet (role_profession_telemarketing_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_telemarketing_salesman_help
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja amet (role_profession_telemarketing_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_telemarketing_manager
+msgid "Omaduse Telemarketingi juhi amet (role_profession_telemarketing_manager) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_telemarketing_manager_comment
+msgid "Omaduse Telemarketingi juhi amet (role_profession_telemarketing_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_telemarketing_manager_help
+msgid "Omaduse Telemarketingi juhi amet (role_profession_telemarketing_manager) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_salesman
+msgid "Omaduse M&uuml;&uuml;giesindaja amet (role_profession_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_salesman_comment
+msgid "Omaduse M&uuml;&uuml;giesindaja amet (role_profession_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_salesman_help
+msgid "Omaduse M&uuml;&uuml;giesindaja amet (role_profession_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_manager
+msgid "Omaduse Juhi amet (role_profession_manager) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_manager_comment
+msgid "Omaduse Juhi amet (role_profession_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_role_profession_manager_help
+msgid "Omaduse Juhi amet (role_profession_manager) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_generic
+msgid "Omaduse K&otilde;ik kasutajad (cfgf_main_generic) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_generic_comment
+msgid "Omaduse K&otilde;ik kasutajad (cfgf_main_generic) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_generic_help
+msgid "Omaduse K&otilde;ik kasutajad (cfgf_main_generic) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_data_entry_clerk
+msgid "Omaduse Andmesisestaja (cfgf_main_data_entry_clerk) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_data_entry_clerk_comment
+msgid "Omaduse Andmesisestaja (cfgf_main_data_entry_clerk) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_data_entry_clerk_help
+msgid "Omaduse Andmesisestaja (cfgf_main_data_entry_clerk) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_telemarketing_salesman
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja (cfgf_main_telemarketing_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_telemarketing_salesman_comment
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja (cfgf_main_telemarketing_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_telemarketing_salesman_help
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja (cfgf_main_telemarketing_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_telemarketing_manager
+msgid "Omaduse Telemarketingi juht (cfgf_main_telemarketing_manager) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_telemarketing_manager_comment
+msgid "Omaduse Telemarketingi juht (cfgf_main_telemarketing_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_telemarketing_manager_help
+msgid "Omaduse Telemarketingi juht (cfgf_main_telemarketing_manager) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_salesman
+msgid "Omaduse M&uuml;&uuml;giesindaja (cfgf_main_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_salesman_comment
+msgid "Omaduse M&uuml;&uuml;giesindaja (cfgf_main_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_salesman_help
+msgid "Omaduse M&uuml;&uuml;giesindaja (cfgf_main_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_manager
+msgid "Omaduse Juht (cfgf_main_manager) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_manager_comment
+msgid "Omaduse Juht (cfgf_main_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_main_manager_help
+msgid "Omaduse Juht (cfgf_main_manager) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_generic
+msgid "Omaduse K&otilde;ik kasutajad (cfgf_call_generic) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_generic_comment
+msgid "Omaduse K&otilde;ik kasutajad (cfgf_call_generic) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_generic_help
+msgid "Omaduse K&otilde;ik kasutajad (cfgf_call_generic) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_data_entry_clerk
+msgid "Omaduse Andmesisestaja (cfgf_call_data_entry_clerk) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_data_entry_clerk_comment
+msgid "Omaduse Andmesisestaja (cfgf_call_data_entry_clerk) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_data_entry_clerk_help
+msgid "Omaduse Andmesisestaja (cfgf_call_data_entry_clerk) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_telemarketing_salesman
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja (cfgf_call_telemarketing_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_telemarketing_salesman_comment
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja (cfgf_call_telemarketing_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_telemarketing_salesman_help
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja (cfgf_call_telemarketing_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_telemarketing_manager
+msgid "Omaduse Telemarketingi juht (cfgf_call_telemarketing_manager) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_telemarketing_manager_comment
+msgid "Omaduse Telemarketingi juht (cfgf_call_telemarketing_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_telemarketing_manager_help
+msgid "Omaduse Telemarketingi juht (cfgf_call_telemarketing_manager) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_salesman
+msgid "Omaduse M&uuml;&uuml;giesindaja (cfgf_call_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_salesman_comment
+msgid "Omaduse M&uuml;&uuml;giesindaja (cfgf_call_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_salesman_help
+msgid "Omaduse M&uuml;&uuml;giesindaja (cfgf_call_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_manager
+msgid "Omaduse Juht (cfgf_call_manager) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_manager_comment
+msgid "Omaduse Juht (cfgf_call_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_call_manager_help
+msgid "Omaduse Juht (cfgf_call_manager) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_generic
+msgid "Omaduse K&otilde;ik kasutajad (cfgf_presentation_generic) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_generic_comment
+msgid "Omaduse K&otilde;ik kasutajad (cfgf_presentation_generic) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_generic_help
+msgid "Omaduse K&otilde;ik kasutajad (cfgf_presentation_generic) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_data_entry_clerk
+msgid "Omaduse Andmesisestaja (cfgf_presentation_data_entry_clerk) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_data_entry_clerk_comment
+msgid "Omaduse Andmesisestaja (cfgf_presentation_data_entry_clerk) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_data_entry_clerk_help
+msgid "Omaduse Andmesisestaja (cfgf_presentation_data_entry_clerk) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_telemarketing_salesman
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja (cfgf_presentation_telemarketing_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_telemarketing_salesman_comment
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja (cfgf_presentation_telemarketing_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_telemarketing_salesman_help
+msgid "Omaduse Telemarketingit&ouml;&ouml;taja (cfgf_presentation_telemarketing_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_telemarketing_manager
+msgid "Omaduse Telemarketingi juht (cfgf_presentation_telemarketing_manager) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_telemarketing_manager_comment
+msgid "Omaduse Telemarketingi juht (cfgf_presentation_telemarketing_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_telemarketing_manager_help
+msgid "Omaduse Telemarketingi juht (cfgf_presentation_telemarketing_manager) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_salesman
+msgid "Omaduse M&uuml;&uuml;giesindaja (cfgf_presentation_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_salesman_comment
+msgid "Omaduse M&uuml;&uuml;giesindaja (cfgf_presentation_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_salesman_help
+msgid "Omaduse M&uuml;&uuml;giesindaja (cfgf_presentation_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_manager
+msgid "Omaduse Juht (cfgf_presentation_manager) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_manager_comment
+msgid "Omaduse Juht (cfgf_presentation_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cfgf_presentation_manager_help
+msgid "Omaduse Juht (cfgf_presentation_manager) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contacts_toolbar
+msgid "Omaduse  (contacts_toolbar) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contacts_toolbar_comment
+msgid "Omaduse  (contacts_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contacts_toolbar_help
+msgid "Omaduse  (contacts_toolbar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contacts_tree
+msgid "Omaduse  (contacts_tree) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contacts_tree_comment
+msgid "Omaduse  (contacts_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contacts_tree_help
+msgid "Omaduse  (contacts_tree) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contacts_list
+msgid "Omaduse  (contacts_list) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contacts_list_comment
+msgid "Omaduse  (contacts_list) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contacts_list_help
+msgid "Omaduse  (contacts_list) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_name
+msgid "Omaduse Nimi (cts_name) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_name_comment
+msgid "Omaduse Nimi (cts_name) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_name_help
+msgid "Omaduse Nimi (cts_name) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_address
+msgid "Omaduse Aadress (cts_address) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_address_comment
+msgid "Omaduse Aadress (cts_address) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_address_help
+msgid "Omaduse Aadress (cts_address) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_phone
+msgid "Omaduse Telefon (cts_phone) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_phone_comment
+msgid "Omaduse Telefon (cts_phone) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_phone_help
+msgid "Omaduse Telefon (cts_phone) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_lead_source
+msgid "Omaduse Soovitaja (cts_lead_source) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_lead_source_comment
+msgid "Omaduse Soovitaja (cts_lead_source) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_lead_source_help
+msgid "Omaduse Soovitaja (cts_lead_source) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_salesman
+msgid "Omaduse M&uuml;&uuml;gi-<br/>esindaja (cts_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_salesman_comment
+msgid "Omaduse M&uuml;&uuml;gi-<br/>esindaja (cts_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_salesman_help
+msgid "Omaduse M&uuml;&uuml;gi-<br/>esindaja (cts_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_status
+msgid "Omaduse Staatus (cts_status) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_status_comment
+msgid "Omaduse Staatus (cts_status) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_status_help
+msgid "Omaduse Staatus (cts_status) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_submit
+msgid "Omaduse Otsi (cts_submit) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_submit_comment
+msgid "Omaduse Otsi (cts_submit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cts_submit_help
+msgid "Omaduse Otsi (cts_submit) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_toolbar
+msgid "Omaduse  (calls_toolbar) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_toolbar_comment
+msgid "Omaduse  (calls_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_toolbar_help
+msgid "Omaduse  (calls_toolbar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_tree
+msgid "Omaduse  (calls_tree) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_tree_comment
+msgid "Omaduse  (calls_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_tree_help
+msgid "Omaduse  (calls_tree) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_list
+msgid "Omaduse  (calls_list) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_list_comment
+msgid "Omaduse  (calls_list) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_calls_list_help
+msgid "Omaduse  (calls_list) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_name
+msgid "Omaduse Kontakti nimi (cs_name) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_name_comment
+msgid "Omaduse Kontakti nimi (cs_name) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_name_help
+msgid "Omaduse Kontakti nimi (cs_name) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_address
+msgid "Omaduse Kontakti aadress (cs_address) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_address_comment
+msgid "Omaduse Kontakti aadress (cs_address) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_address_help
+msgid "Omaduse Kontakti aadress (cs_address) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_phone
+msgid "Omaduse Telefon (cs_phone) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_phone_comment
+msgid "Omaduse Telefon (cs_phone) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_phone_help
+msgid "Omaduse Telefon (cs_phone) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_lead_source
+msgid "Omaduse Soovitaja (cs_lead_source) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_lead_source_comment
+msgid "Omaduse Soovitaja (cs_lead_source) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_lead_source_help
+msgid "Omaduse Soovitaja (cs_lead_source) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_salesman
+msgid "Omaduse M&uuml;&uuml;gi-<br/>esindaja (cs_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_salesman_comment
+msgid "Omaduse M&uuml;&uuml;gi-<br/>esindaja (cs_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_salesman_help
+msgid "Omaduse M&uuml;&uuml;gi-<br/>esindaja (cs_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_status
+msgid "Omaduse Kontakti staatus (cs_status) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_status_comment
+msgid "Omaduse Kontakti staatus (cs_status) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_status_help
+msgid "Omaduse Kontakti staatus (cs_status) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_submit
+msgid "Omaduse Otsi (cs_submit) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_submit_comment
+msgid "Omaduse Otsi (cs_submit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_cs_submit_help
+msgid "Omaduse Otsi (cs_submit) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_toolbar
+msgid "Omaduse  (presentations_toolbar) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_toolbar_comment
+msgid "Omaduse  (presentations_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_toolbar_help
+msgid "Omaduse  (presentations_toolbar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_tree
+msgid "Omaduse  (presentations_tree) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_tree_comment
+msgid "Omaduse  (presentations_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_tree_help
+msgid "Omaduse  (presentations_tree) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_list
+msgid "Omaduse  (presentations_list) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_list_comment
+msgid "Omaduse  (presentations_list) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_presentations_list_help
+msgid "Omaduse  (presentations_list) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_name
+msgid "Omaduse Kontakti nimi (ps_name) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_name_comment
+msgid "Omaduse Kontakti nimi (ps_name) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_name_help
+msgid "Omaduse Kontakti nimi (ps_name) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_address
+msgid "Omaduse Kontakti aadress (ps_address) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_address_comment
+msgid "Omaduse Kontakti aadress (ps_address) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_address_help
+msgid "Omaduse Kontakti aadress (ps_address) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_phone
+msgid "Omaduse Telefon (ps_phone) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_phone_comment
+msgid "Omaduse Telefon (ps_phone) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_phone_help
+msgid "Omaduse Telefon (ps_phone) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_lead_source
+msgid "Omaduse Soovitaja (ps_lead_source) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_lead_source_comment
+msgid "Omaduse Soovitaja (ps_lead_source) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_lead_source_help
+msgid "Omaduse Soovitaja (ps_lead_source) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_salesman
+msgid "Omaduse M&uuml;&uuml;gi-<br/>esindaja (ps_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_salesman_comment
+msgid "Omaduse M&uuml;&uuml;gi-<br/>esindaja (ps_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_salesman_help
+msgid "Omaduse M&uuml;&uuml;gi-<br/>esindaja (ps_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_status
+msgid "Omaduse Staatus (ps_status) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_status_comment
+msgid "Omaduse Staatus (ps_status) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_status_help
+msgid "Omaduse Staatus (ps_status) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_submit
+msgid "Omaduse Otsi (ps_submit) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_submit_comment
+msgid "Omaduse Otsi (ps_submit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_ps_submit_help
+msgid "Omaduse Otsi (ps_submit) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_personal_calendar
+msgid "Omaduse  (personal_calendar) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_personal_calendar_comment
+msgid "Omaduse  (personal_calendar) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_personal_calendar_help
+msgid "Omaduse  (personal_calendar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_general_calendar
+msgid "Omaduse  (general_calendar) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_general_calendar_comment
+msgid "Omaduse  (general_calendar) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_general_calendar_help
+msgid "Omaduse  (general_calendar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_toolbar
+msgid "Omaduse  (contact_entry_toolbar) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_toolbar_comment
+msgid "Omaduse  (contact_entry_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_toolbar_help
+msgid "Omaduse  (contact_entry_toolbar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_co
+msgid "Omaduse Kontakt (organisatsioon) (contact_entry_co) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_co_comment
+msgid "Omaduse Kontakt (organisatsioon) (contact_entry_co) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_co_help
+msgid "Omaduse Kontakt (organisatsioon) (contact_entry_co) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_person
+msgid "Omaduse Kontakt (isik) (contact_entry_person) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_person_comment
+msgid "Omaduse Kontakt (isik) (contact_entry_person) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_person_help
+msgid "Omaduse Kontakt (isik) (contact_entry_person) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_address_title
+msgid "Omaduse Aadress: (contact_entry_address_title) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_address_title_comment
+msgid "Omaduse Aadress: (contact_entry_address_title) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_address_title_help
+msgid "Omaduse Aadress: (contact_entry_address_title) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_address
+msgid "Omaduse  (contact_entry_address) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_address_comment
+msgid "Omaduse  (contact_entry_address) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_address_help
+msgid "Omaduse  (contact_entry_address) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_separator1
+msgid "Omaduse &nbsp; (contact_entry_separator1) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_separator1_comment
+msgid "Omaduse &nbsp; (contact_entry_separator1) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_separator1_help
+msgid "Omaduse &nbsp; (contact_entry_separator1) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_salesman
+msgid "Omaduse M&uuml;&uuml;giesindaja (contact_entry_salesman) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_salesman_comment
+msgid "Omaduse M&uuml;&uuml;giesindaja (contact_entry_salesman) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_salesman_help
+msgid "Omaduse M&uuml;&uuml;giesindaja (contact_entry_salesman) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_lead_source
+msgid "Omaduse Soovitaja (contact_entry_lead_source) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_lead_source_comment
+msgid "Omaduse Soovitaja (contact_entry_lead_source) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_lead_source_help
+msgid "Omaduse Soovitaja (contact_entry_lead_source) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_lead_source_oid
+msgid "Omaduse  (contact_entry_lead_source_oid) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_lead_source_oid_comment
+msgid "Omaduse  (contact_entry_lead_source_oid) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_lead_source_oid_help
+msgid "Omaduse  (contact_entry_lead_source_oid) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_import_toolbar
+msgid "Omaduse  (import_toolbar) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_import_toolbar_comment
+msgid "Omaduse  (import_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_import_toolbar_help
+msgid "Omaduse  (import_toolbar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_import_objects
+msgid "Omaduse Seadistatud impordid (import_objects) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_import_objects_comment
+msgid "Omaduse Seadistatud impordid (import_objects) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_import_objects_help
+msgid "Omaduse Seadistatud impordid (import_objects) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_space
+msgid "Omaduse  (contact_entry_space) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_space_comment
+msgid "Omaduse  (contact_entry_space) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_space_help
+msgid "Omaduse  (contact_entry_space) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_submit
+msgid "Omaduse Salvesta (contact_entry_submit) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_submit_comment
+msgid "Omaduse Salvesta (contact_entry_submit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_submit_help
+msgid "Omaduse Salvesta (contact_entry_submit) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_reset
+msgid "Omaduse  (contact_entry_reset) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_reset_comment
+msgid "Omaduse  (contact_entry_reset) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_contact_entry_reset_help
+msgid "Omaduse  (contact_entry_reset) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_last_entries_list
+msgid "Omaduse  (last_entries_list) caption"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_last_entries_list_comment
+msgid "Omaduse  (last_entries_list) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:prop_last_entries_list_help
+msgid "Omaduse  (last_entries_list) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_settings
+msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_contacts
+msgid "Grupi Kontaktid (contacts) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_contacts_help
+msgid "Grupi Kontaktid (contacts) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_calls
+msgid "Grupi K&otilde;ned (calls) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_calls_help
+msgid "Grupi K&otilde;ned (calls) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_presentations
+msgid "Grupi Esitlused (presentations) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_presentations_help
+msgid "Grupi Esitlused (presentations) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_calendar
+msgid "Grupi Kalender (calendar) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_calendar_help
+msgid "Grupi Kalender (calendar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_personal_calendar
+msgid "Grupi Minu kalender (personal_calendar) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_personal_calendar_help
+msgid "Grupi Minu kalender (personal_calendar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_general_calendar
+msgid "Grupi &Uuml;ldkalender (general_calendar) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_general_calendar_help
+msgid "Grupi &Uuml;ldkalender (general_calendar) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_data_entry
+msgid "Grupi Sisestamine (data_entry) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_data_entry_help
+msgid "Grupi Sisestamine (data_entry) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_data_entry_contact_person
+msgid "Grupi Kontakt (isik) (data_entry_contact_person) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_data_entry_contact_person_help
+msgid "Grupi Kontakt (isik) (data_entry_contact_person) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_data_entry_contact_co
+msgid "Grupi Kontakt (organisatsioon) (data_entry_contact_co) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_data_entry_contact_co_help
+msgid "Grupi Kontakt (organisatsioon) (data_entry_contact_co) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_data_entry_import
+msgid "Grupi Import (data_entry_import) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:group_data_entry_import_help
+msgid "Grupi Import (data_entry_import) help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:rel_RELTYPE_OWNER
+msgid "Seose Keskkonna omanikfirma (RELTYPE_OWNER) tekst"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:rel_RELTYPE_CONTACT_CO
+msgid "Seose Kontakt (organisatsioon) (RELTYPE_CONTACT_CO) tekst"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:rel_RELTYPE_FOLDER
+msgid "Seose Kaust (RELTYPE_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:rel_RELTYPE_ROLE_PROFESSION
+msgid "Seose Rollile vastav amet (RELTYPE_ROLE_PROFESSION) tekst"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:rel_RELTYPE_CONTACT_PERSON
+msgid "Seose Kontakt (isik) (RELTYPE_CONTACT_PERSON) tekst"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:rel_RELTYPE_CFGFORM
+msgid "Seose Seadete vorm (RELTYPE_CFGFORM) tekst"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:rel_RELTYPE_IMPORT
+msgid "Seose Kontaktide import (RELTYPE_IMPORT) tekst"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:rel_RELTYPE_TMP1
+msgid "Seose tmp1 (RELTYPE_TMP1) tekst"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_splitbox2
+msgid "Kujundusosa Kasutajaliidese&nbsp;vaadete&nbsp;konfiguratsioonid&nbsp;rollide&nbsp;kaupa (splitbox2) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_folders_box
+msgid "Kujundusosa &Uuml;ldseaded (folders_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_roles_box
+msgid "Kujundusosa Rollid (roles_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_main_app_cfg_box
+msgid "Kujundusosa M&uuml;i&uuml;git&ouml;&ouml;laud (main_app_cfg_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_call_cfg_box
+msgid "Kujundusosa K&otilde;ne (call_cfg_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_presentation_cfg_box
+msgid "Kujundusosa Esitlus (presentation_cfg_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_contacts_tree_box
+msgid "Kujundusosa Kontaktide&nbsp;valik (contacts_tree_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_contacts_search_box
+msgid "Kujundusosa Kontaktide&nbsp;otsing (contacts_search_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_calls_tree_box
+msgid "Kujundusosa K&otilde;nede&nbsp;valik (calls_tree_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_calls_search_box
+msgid "Kujundusosa K&otilde;nede&nbsp;otsing (calls_search_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_presentations_tree_box
+msgid "Kujundusosa Esitluste&nbsp;valik (presentations_tree_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_presentations_search_box
+msgid "Kujundusosa Esitluste&nbsp;otsing (presentations_search_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:layout_de_form_box
+msgid "Kujundusosa Uus&nbsp;kontakt (de_form_box) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:371
+msgid "T&auml;nased k&otilde;ned"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:375
+#: classes/applications/crm/sales/crm_sales.aw:387
+#: classes/applications/crm/sales/crm_sales.aw:399
+msgid "Otsingu tulemused"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:383
+msgid "Kontaktid"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:395
+msgid "Esitlused"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:445
+#: classes/applications/crm/sales/crm_sales.aw:643
+#: classes/applications/crm/sales/crm_sales.aw:666
+msgid "Kontakti '%s' muutmine"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:542
+msgid "Sisesta uus kontakt"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:551
+msgid "Import"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:1007
+msgid "T&uuml;hjenda"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:1019
+#: classes/applications/crm/sales/crm_sales.aw:1161
+msgid "Telefoninumber on kohustuslik"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:1024
+#: classes/applications/crm/sales/crm_sales.aw:1166
+msgid "Viga m&uuml;&uuml;giesindaja salvestamisel. &Otilde;igused puuduvad."
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:1029
+#: classes/applications/crm/sales/crm_sales.aw:1171
+msgid "Viga soovitaja salvestamisel. &Otilde;igused puuduvad."
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:1303
+msgid "Kliendi nimi"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales.aw:1336
+msgid "Viimased sisestused"
+msgstr ""

@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_amount_limit.aw:class_1530_help
+msgid "Klassi Kogusepiirang help"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_start
+msgid "Omaduse Algus (start) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_start_comment
+msgid "Omaduse Algus (start) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_start_help
+msgid "Omaduse Algus (start) help"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_end
+msgid "Omaduse L&otilde;pp (end) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_end_comment
+msgid "Omaduse L&otilde;pp (end) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_end_help
+msgid "Omaduse L&otilde;pp (end) help"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_time
+msgid "Omaduse Kellaaeg (tund:minut) (time) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_time_comment
+msgid "Omaduse Kellaaeg (tund:minut) (time) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_time_help
+msgid "Omaduse Kellaaeg (tund:minut) (time) help"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_length
+msgid "Omaduse Pikkus (h) (length) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_length_comment
+msgid "Omaduse Pikkus (h) (length) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_length_help
+msgid "Omaduse Pikkus (h) (length) help"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_recur_type
+msgid "Omaduse Korduse t&uuml;&uuml;p (recur_type) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_recur_type_comment
+msgid "Omaduse Korduse t&uuml;&uuml;p (recur_type) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_recur_type_help
+msgid "Omaduse Korduse t&uuml;&uuml;p (recur_type) help"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_recur_interval
+msgid "Omaduse Korduse intervall (recur_interval) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_recur_interval_comment
+msgid "Omaduse Korduse intervall (recur_interval) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_recur_interval_help
+msgid "Omaduse Korduse intervall (recur_interval) help"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_amount
+msgid "Omaduse Kogus (amount) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_amount_comment
+msgid "Omaduse Kogus (amount) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_amount_help
+msgid "Omaduse Kogus (amount) help"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_unit
+msgid "Omaduse &Uuml;hik (unit) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_unit_comment
+msgid "Omaduse &Uuml;hik (unit) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:prop_unit_help
+msgid "Omaduse &Uuml;hik (unit) help"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:rel_RELTYPE_UNIT
+msgid "Seose &Uuml;hik (RELTYPE_UNIT) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:56
+msgid "päev"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:57
+msgid "nädal"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:58
+msgid "kuu"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:59
+msgid "aasta"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:60
+msgid "minut"
+msgstr ""
+
+#: classes/applications/shop/shop_amount_limit.aw:61
+msgid "tund"
+msgstr ""
+

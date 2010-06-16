@@ -1,0 +1,84 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/core/users/group_membership.aw:class_1481_help
+msgid "Klassi Grupikuuluvus help"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_gms_user
+msgid "Omaduse Kasutaja (gms_user) caption"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_gms_user_comment
+msgid "Omaduse Kasutaja (gms_user) kommentaar"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_gms_user_help
+msgid "Omaduse Kasutaja (gms_user) help"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_gms_group
+msgid "Omaduse Grupp (gms_group) caption"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_gms_group_comment
+msgid "Omaduse Grupp (gms_group) kommentaar"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_gms_group_help
+msgid "Omaduse Grupp (gms_group) help"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_date_start
+msgid "Omaduse Alguskuup&auml;ev (date_start) caption"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_date_start_comment
+msgid "Omaduse Alguskuup&auml;ev (date_start) kommentaar"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_date_start_help
+msgid "Omaduse Alguskuup&auml;ev (date_start) help"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_date_end
+msgid "Omaduse L&otilde;ppkuup&auml;ev (date_end) caption"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_date_end_comment
+msgid "Omaduse L&otilde;ppkuup&auml;ev (date_end) kommentaar"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_date_end_help
+msgid "Omaduse L&otilde;ppkuup&auml;ev (date_end) help"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_membership_forever
+msgid "Omaduse Ajaliselt piiramata (membership_forever) caption"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_membership_forever_comment
+msgid "Omaduse Ajaliselt piiramata (membership_forever) kommentaar"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:prop_membership_forever_help
+msgid "Omaduse Ajaliselt piiramata (membership_forever) help"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:rel_RELTYPE_USER
+msgid "Seose Kasutaja (RELTYPE_USER) tekst"
+msgstr ""
+
+#: classes/core/users/group_membership.aw:rel_RELTYPE_GROUP
+msgid "Seose Grupp (RELTYPE_GROUP) tekst"
+msgstr ""
+

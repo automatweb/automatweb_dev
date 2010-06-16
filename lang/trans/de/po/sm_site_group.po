@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/class_designer/sm_site_group.aw:class_1508_help
+msgid "Klassi AW Saitide grupp help"
+msgstr ""
+
+#: classes/applications/class_designer/sm_site_group.aw:prop_sites_tb
+msgid "Omaduse  (sites_tb) caption"
+msgstr ""
+
+#: classes/applications/class_designer/sm_site_group.aw:prop_sites_tb_comment
+msgid "Omaduse  (sites_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/sm_site_group.aw:prop_sites_tb_help
+msgid "Omaduse  (sites_tb) help"
+msgstr ""
+
+#: classes/applications/class_designer/sm_site_group.aw:prop_sites
+msgid "Omaduse  (sites) caption"
+msgstr ""
+
+#: classes/applications/class_designer/sm_site_group.aw:prop_sites_comment
+msgid "Omaduse  (sites) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/sm_site_group.aw:prop_sites_help
+msgid "Omaduse  (sites) help"
+msgstr ""
+
+#: classes/applications/class_designer/sm_site_group.aw:group_sites
+msgid "Grupi Saidid (sites) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/sm_site_group.aw:group_sites_help
+msgid "Grupi Saidid (sites) help"
+msgstr ""
+
+#: classes/applications/class_designer/sm_site_group.aw:rel_RELTYPE_SITE
+msgid "Seose Sait (RELTYPE_SITE) tekst"
+msgstr ""
+

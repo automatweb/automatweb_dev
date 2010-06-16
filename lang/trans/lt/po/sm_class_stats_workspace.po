@@ -1,0 +1,116 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:class_1493_help
+msgid "Klassi SM Klasside statisika t&ouml;&ouml;laud help"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_toolbar
+msgid "Omaduse  (toolbar) caption"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_toolbar_comment
+msgid "Omaduse  (toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_toolbar_help
+msgid "Omaduse  (toolbar) help"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_classes_tree
+msgid "Omaduse  (classes_tree) caption"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_classes_tree_comment
+msgid "Omaduse  (classes_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_classes_tree_help
+msgid "Omaduse  (classes_tree) help"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_classes_groups
+msgid "Omaduse  (classes_groups) caption"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_classes_groups_comment
+msgid "Omaduse  (classes_groups) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_classes_groups_help
+msgid "Omaduse  (classes_groups) help"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_classes_list
+msgid "Omaduse  (classes_list) caption"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_classes_list_comment
+msgid "Omaduse  (classes_list) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:prop_classes_list_help
+msgid "Omaduse  (classes_list) help"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:group_classes
+msgid "Grupi Klassid (classes) pealkiri"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:group_classes_help
+msgid "Grupi Klassid (classes) help"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:layout_classes_tree
+msgid "Kujundusosa Klasside&nbsp;puu (classes_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:layout_classes_groups
+msgid "Kujundusosa Klasside&nbsp;grupid (classes_groups) pealkiri"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:112
+msgid "Klassid"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:174
+msgid "Summa"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:238
+msgid "ID"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:244
+msgid "Name"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:250
+msgid "Fail"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:257
+msgid "Omadusi"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:264
+msgid "Seoset&uuml;&uuml;pe"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:271
+msgid "Omadusi tabelis"
+msgstr ""
+
+#: classes/applications/clients/sm/class_stats/sm_class_stats_workspace.aw:278
+msgid "Omadusi metadatas"
+msgstr ""
+

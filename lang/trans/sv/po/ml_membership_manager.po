@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:class_1504_help
+msgid "Klassi Mailinglisti liikmelisuse haldus help"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_folders
+msgid "Omaduse Kaustad, mida tabelis kuvada (folders) caption"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_folders_comment
+msgid "Omaduse Kaustad, mida tabelis kuvada (folders) kommentaar"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_folders_help
+msgid "Omaduse Kaustad, mida tabelis kuvada (folders) help"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_ml_list
+msgid "Omaduse Mailinglist (ml_list) caption"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_ml_list_comment
+msgid "Omaduse Mailinglist (ml_list) kommentaar"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_ml_list_help
+msgid "Omaduse Mailinglist (ml_list) help"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_from
+msgid "Omaduse Liitumis-/lahkumiskirjade saatja (from) caption"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_from_comment
+msgid "Omaduse Liitumis-/lahkumiskirjade saatja (from) kommentaar"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_from_help
+msgid "Omaduse Liitumis-/lahkumiskirjade saatja (from) help"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_send_mail
+msgid "Omaduse Saada liitumis-/lahkumiskirju (send_mail) caption"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_send_mail_comment
+msgid "Omaduse Saada liitumis-/lahkumiskirju (send_mail) kommentaar"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_send_mail_help
+msgid "Omaduse Saada liitumis-/lahkumiskirju (send_mail) help"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_membership
+msgid "Omaduse Liikmelisuse tabel (membership) caption"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_membership_comment
+msgid "Omaduse Liikmelisuse tabel (membership) kommentaar"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:prop_membership_help
+msgid "Omaduse Liikmelisuse tabel (membership) help"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:rel_RELTYPE_LIST
+msgid "Seose Mailinglistid, mida tabelis kuvada (RELTYPE_LIST) tekst"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:rel_RELTYPE_FOLDER
+msgid "Seose Kaustad, mida tabelis kuvada (RELTYPE_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:rel_RELTYPE_ML_LIST
+msgid "Seose Mailinglist (RELTYPE_ML_LIST) tekst"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:rel_RELTYPE_FROM
+msgid "Seose Saatja (RELTYPE_FROM) tekst"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:60
+msgid "List"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_membership_manager.aw:64
+msgid "Olen liige"
+msgstr ""
+

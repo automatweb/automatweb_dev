@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:class_1543_help
+msgid "Klassi Sisupaketi hinnatingimused help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:prop_price
+msgid "Omaduse Hind (price) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:prop_price_comment
+msgid "Omaduse Hind (price) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:prop_price_help
+msgid "Omaduse Hind (price) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:prop_duration
+msgid "Omaduse Paketi kasutamise aeg p&auml;evades (duration) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:prop_duration_comment
+msgid "Omaduse Paketi kasutamise aeg p&auml;evades (duration) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:prop_duration_help
+msgid "Omaduse Paketi kasutamise aeg p&auml;evades (duration) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:prop_cp_spp
+msgid "Omaduse Pakendi OID (cp_spp) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:prop_cp_spp_comment
+msgid "Omaduse Pakendi OID (cp_spp) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package_price_conditions.aw:prop_cp_spp_help
+msgid "Omaduse Pakendi OID (cp_spp) help"
+msgstr ""
+

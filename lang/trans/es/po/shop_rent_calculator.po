@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/applications/shop/shop_rent_calculator.aw:class_1557_help
+msgid "Klassi J&auml;relmaksukalkulaator help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_calculator.aw:prop_payment_type
+msgid "Omaduse Makseviis (payment_type) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_calculator.aw:prop_payment_type_comment
+msgid "Omaduse Makseviis (payment_type) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_calculator.aw:prop_payment_type_help
+msgid "Omaduse Makseviis (payment_type) help"
+msgstr ""
+
+#: classes/applications/shop/shop_rent_calculator.aw:rel_RELTYPE_PAYMENT_TYPE
+msgid "Seose Makseviis (RELTYPE_PAYMENT_TYPE) tekst"
+msgstr ""

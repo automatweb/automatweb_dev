@@ -1,0 +1,156 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/class_designer/aw_server_entry.aw:class_1499_help
+msgid "Klassi AW Serveri kirje help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_server_id
+msgid "Omaduse Serveri ID (server_id) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_server_id_comment
+msgid "Omaduse Serveri ID (server_id) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_server_id_help
+msgid "Omaduse Serveri ID (server_id) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_ip
+msgid "Omaduse IP (ip) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_ip_comment
+msgid "Omaduse IP (ip) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_ip_help
+msgid "Omaduse IP (ip) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_sl
+msgid "Omaduse Saidid (sl) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_sl_comment
+msgid "Omaduse Saidid (sl) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_sl_help
+msgid "Omaduse Saidid (sl) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_customer_contact
+msgid "Omaduse Kontaktisik (customer_contact) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_customer_contact_comment
+msgid "Omaduse Kontaktisik (customer_contact) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_customer_contact_help
+msgid "Omaduse Kontaktisik (customer_contact) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_customer_info
+msgid "Omaduse  (customer_info) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_customer_info_comment
+msgid "Omaduse  (customer_info) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_customer_info_help
+msgid "Omaduse  (customer_info) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_manager
+msgid "Omaduse Serveri haldaja (manager) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_manager_comment
+msgid "Omaduse Serveri haldaja (manager) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_manager_help
+msgid "Omaduse Serveri haldaja (manager) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_manager_contact
+msgid "Omaduse Serveri haldaja kontaktisik (manager_contact) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_manager_contact_comment
+msgid "Omaduse Serveri haldaja kontaktisik (manager_contact) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_manager_contact_help
+msgid "Omaduse Serveri haldaja kontaktisik (manager_contact) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_manager_info
+msgid "Omaduse  (manager_info) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_manager_info_comment
+msgid "Omaduse  (manager_info) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:prop_manager_info_help
+msgid "Omaduse  (manager_info) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:rel_RELTYPE_CUSTOMER
+msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:rel_RELTYPE_CONTACT
+msgid "Seose Kontaktisik (RELTYPE_CONTACT) tekst"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:rel_RELTYPE_MANAGER
+msgid "Seose Haldaja (RELTYPE_MANAGER) tekst"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:rel_RELTYPE_MANAGER_CONTACT
+msgid "Seose Haldaja kontaktisik (RELTYPE_MANAGER_CONTACT) tekst"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:layout_top
+msgid "Kujundusosa Andmed (top) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:layout_customer
+msgid "Kujundusosa Klient (customer) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:layout_manager
+msgid "Kujundusosa Haldaja (manager) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/aw_server_entry.aw:182 classes/applications/class_designer/aw_server_entry.aw:192
+msgid "Telefon: %s , Email: %s"
+msgstr ""
+

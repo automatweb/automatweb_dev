@@ -1,0 +1,228 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_person_wh_table.aw:class_1509_help
+msgid "Klassi Isiku t&ouml;&ouml;tundide tabel help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_owner
+msgid "Omaduse Organisatsioon (owner) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_owner_comment
+msgid "Omaduse Organisatsioon (owner) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_owner_help
+msgid "Omaduse Organisatsioon (owner) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_ppl
+msgid "Omaduse Isikud (ppl) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_ppl_comment
+msgid "Omaduse Isikud (ppl) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_ppl_help
+msgid "Omaduse Isikud (ppl) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_wanted_hours_tb
+msgid "Omaduse  (wanted_hours_tb) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_wanted_hours_tb_comment
+msgid "Omaduse  (wanted_hours_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_wanted_hours_tb_help
+msgid "Omaduse  (wanted_hours_tb) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_wanted_hours_table
+msgid "Omaduse  (wanted_hours_table) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_wanted_hours_table_comment
+msgid "Omaduse  (wanted_hours_table) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_wanted_hours_table_help
+msgid "Omaduse  (wanted_hours_table) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_current_hours_table
+msgid "Omaduse  (current_hours_table) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_current_hours_table_comment
+msgid "Omaduse  (current_hours_table) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_current_hours_table_help
+msgid "Omaduse  (current_hours_table) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_hour_entry_tb
+msgid "Omaduse  (hour_entry_tb) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_hour_entry_tb_comment
+msgid "Omaduse  (hour_entry_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_hour_entry_tb_help
+msgid "Omaduse  (hour_entry_tb) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_hour_entry_tree
+msgid "Omaduse  (hour_entry_tree) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_hour_entry_tree_comment
+msgid "Omaduse  (hour_entry_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_hour_entry_tree_help
+msgid "Omaduse  (hour_entry_tree) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_hour_entry_table
+msgid "Omaduse  (hour_entry_table) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_hour_entry_table_comment
+msgid "Omaduse  (hour_entry_table) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:prop_hour_entry_table_help
+msgid "Omaduse  (hour_entry_table) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:group_wanted_hours
+msgid "Grupi Kohustuslikud tunnid (wanted_hours) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:group_wanted_hours_help
+msgid "Grupi Kohustuslikud tunnid (wanted_hours) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:group_current_hours
+msgid "Grupi Kehtivad tunnid (current_hours) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:group_current_hours_help
+msgid "Grupi Kehtivad tunnid (current_hours) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:group_modify_hours
+msgid "Grupi Muuda kehtivaid tunde (modify_hours) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:group_modify_hours_help
+msgid "Grupi Muuda kehtivaid tunde (modify_hours) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:group_hour_entries
+msgid "Grupi Reaalsed tunnid (hour_entries) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:group_hour_entries_help
+msgid "Grupi Reaalsed tunnid (hour_entries) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:rel_RELTYPE_OWNER
+msgid "Seose Omanik (RELTYPE_OWNER) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:rel_RELTYPE_PERSON
+msgid "Seose Isik (RELTYPE_PERSON) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:layout_hour_entry_tree
+msgid "Kujundusosa Aja&nbsp;filter (hour_entry_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:138
+msgid "Kehtib"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:144
+msgid "Kehtib alates"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:154
+msgid "Kehtib kuni"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:165
+msgid "Tunnid"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:171
+msgid "Kokku"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:180
+msgid "Muutuvad"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:189
+msgid "P&uuml;sivad"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:198
+msgid "&nbsp;"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:228 classes/applications/crm/crm_person_wh_table.aw:398
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:246 classes/applications/crm/crm_person_wh_table.aw:326
+msgid "Isikute kohustuslikud t&ouml;&ouml;tunnid"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:279
+msgid "Isik"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:285
+msgid "Muutuvtunnid"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:292
+msgid "P&uuml;&uuml;situnnid"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:299
+msgid "Kokku tunnid"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:331
+msgid "Summa"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:381
+msgid "T&ouml;&ouml;tundide sisestused"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:384
+msgid "Aasta"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table.aw:391
+msgid "Kuu"
+msgstr ""
+

@@ -1,0 +1,64 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/import/infrastructure_import.aw:class_1542_help
+msgid "Klassi Infrastruktuuri import help"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:prop_countries_json
+msgid "Omaduse Riikide JSON fail (countries_json) caption"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:prop_countries_json_comment
+msgid "Omaduse Riikide JSON fail (countries_json) kommentaar"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:prop_countries_json_help
+msgid "Omaduse Riikide JSON fail (countries_json) help"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:prop_countries_parent
+msgid "Omaduse Riikide kaust (countries_parent) caption"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:prop_countries_parent_comment
+msgid "Omaduse Riikide kaust (countries_parent) kommentaar"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:prop_countries_parent_help
+msgid "Omaduse Riikide kaust (countries_parent) help"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:prop_invoke
+msgid "Omaduse Import (invoke) caption"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:prop_invoke_comment
+msgid "Omaduse Import (invoke) kommentaar"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:prop_invoke_help
+msgid "Omaduse Import (invoke) help"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:rel_RELTYPE_JSON_FILE
+msgid "Seose JSON fail (RELTYPE_JSON_FILE) tekst"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:rel_RELTYPE_PARENT
+msgid "Seose Parent (RELTYPE_PARENT) tekst"
+msgstr ""
+
+#: classes/import/infrastructure_import.aw:51
+msgid "K&auml;ivita"
+msgstr ""
+

@@ -1,0 +1,46 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/applications/crm/sales/crm_sales_obj.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_obj.aw:54
+msgid "&Uuml;ldine"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_obj.aw:55
+msgid "Andmesisestaja"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_obj.aw:56
+msgid "Telemarketingit&ouml;&ouml;taja"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_obj.aw:57
+msgid "Telemarketingi juht"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_obj.aw:58
+msgid "M&uuml;&uuml;giesindaja"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_obj.aw:59
+msgid "Juht"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_obj.aw:180
+msgid "Esitlus kliendile %s"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_obj.aw:204
+msgid "K&otilde;ne %s kliendile %s"
+msgstr ""

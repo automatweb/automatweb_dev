@@ -1,0 +1,54 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/crm/crm_call_obj.aw:59
+msgid "Uus k&otilde;ne"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:60
+msgid "Esitlus"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:61
+msgid "Ei vasta"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:62
+msgid "Kinni"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:63
+msgid "Teenindusest v&auml;ljas"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:64
+msgid "K&otilde;nepost/automaatvastaja"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:65
+msgid "Keeldub kontaktist"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:66
+msgid "Katkestas k&otilde;ne"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:67
+msgid "Vigane number/pole kasutusel"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:68
+msgid "K&otilde;ne katkes"
+msgstr ""
+
+#: classes/crm/crm_call_obj.aw:69
+msgid "Number muutund"
+msgstr ""

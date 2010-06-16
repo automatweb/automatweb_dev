@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/admin/admin_object_exporter.aw:class_1554_help
+msgid "Klassi Objektide allalaadimine help"
+msgstr ""
+
+#: classes/admin/admin_object_exporter.aw:prop_folder
+msgid "Omaduse Kaust (folder) caption"
+msgstr ""
+
+#: classes/admin/admin_object_exporter.aw:prop_folder_comment
+msgid "Omaduse Kaust (folder) kommentaar"
+msgstr ""
+
+#: classes/admin/admin_object_exporter.aw:prop_folder_help
+msgid "Omaduse Kaust (folder) help"
+msgstr ""
+
+#: classes/admin/admin_object_exporter.aw:prop_download
+msgid "Omaduse Laadi alla (download) caption"
+msgstr ""
+
+#: classes/admin/admin_object_exporter.aw:prop_download_comment
+msgid "Omaduse Laadi alla (download) kommentaar"
+msgstr ""
+
+#: classes/admin/admin_object_exporter.aw:prop_download_help
+msgid "Omaduse Laadi alla (download) help"
+msgstr ""
+
+#: classes/admin/admin_object_exporter.aw:rel_RELTYPE_FOLDER
+msgid "Seose Kaust (RELTYPE_FOLDER) tekst"
+msgstr ""
+
+#: classes/admin/admin_object_exporter.aw:45
+msgid "Lae alla"
+msgstr ""
+

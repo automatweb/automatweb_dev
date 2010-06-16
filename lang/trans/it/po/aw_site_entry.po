@@ -1,0 +1,212 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/class_designer/aw_site_entry.aw:class_1498_help
+msgid "Klassi AW Saidi kirje help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_short_name
+msgid "Omaduse L&uuml;hend (short_name) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_short_name_comment
+msgid "Omaduse L&uuml;hend (short_name) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_short_name_help
+msgid "Omaduse L&uuml;hend (short_name) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_site_id
+msgid "Omaduse Saidi ID (site_id) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_site_id_comment
+msgid "Omaduse Saidi ID (site_id) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_site_id_help
+msgid "Omaduse Saidi ID (site_id) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_url
+msgid "Omaduse URL (url) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_url_comment
+msgid "Omaduse URL (url) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_url_help
+msgid "Omaduse URL (url) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_server_oid
+msgid "Omaduse Server (server_oid) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_server_oid_comment
+msgid "Omaduse Server (server_oid) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_server_oid_help
+msgid "Omaduse Server (server_oid) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_ip
+msgid "Omaduse IP (ip) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_ip_comment
+msgid "Omaduse IP (ip) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_ip_help
+msgid "Omaduse IP (ip) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_site_used
+msgid "Omaduse Sait kasutusel (site_used) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_site_used_comment
+msgid "Omaduse Sait kasutusel (site_used) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_site_used_help
+msgid "Omaduse Sait kasutusel (site_used) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_no_notify
+msgid "Omaduse &Auml;ra teavita maasolekust (no_notify) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_no_notify_comment
+msgid "Omaduse &Auml;ra teavita maasolekust (no_notify) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_no_notify_help
+msgid "Omaduse &Auml;ra teavita maasolekust (no_notify) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_code_branch
+msgid "Omaduse Koodiversioon (code_branch) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_code_branch_comment
+msgid "Omaduse Koodiversioon (code_branch) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_code_branch_help
+msgid "Omaduse Koodiversioon (code_branch) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_basedir
+msgid "Omaduse Kaust serveris (basedir) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_basedir_comment
+msgid "Omaduse Kaust serveris (basedir) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_basedir_help
+msgid "Omaduse Kaust serveris (basedir) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_updater_uid
+msgid "Omaduse Uuendaja UID (updater_uid) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_updater_uid_comment
+msgid "Omaduse Uuendaja UID (updater_uid) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_updater_uid_help
+msgid "Omaduse Uuendaja UID (updater_uid) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_last_update
+msgid "Omaduse Viimati uuendatud (last_update) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_last_update_comment
+msgid "Omaduse Viimati uuendatud (last_update) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_last_update_help
+msgid "Omaduse Viimati uuendatud (last_update) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_mail_to
+msgid "Omaduse Kellele meil saata, kui sait maas (mail_to) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_mail_to_comment
+msgid "Omaduse Kellele meil saata, kui sait maas (mail_to) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_mail_to_help
+msgid "Omaduse Kellele meil saata, kui sait maas (mail_to) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_data
+msgid "Omaduse Andmed (data) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_data_comment
+msgid "Omaduse Andmed (data) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_data_help
+msgid "Omaduse Andmed (data) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_critical_services
+msgid "Omaduse Kriitilised teenused (critical_services) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_critical_services_comment
+msgid "Omaduse Kriitilised teenused (critical_services) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_critical_services_help
+msgid "Omaduse Kriitilised teenused (critical_services) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_used_class_list
+msgid "Omaduse Kasutusel klassid (used_class_list) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_used_class_list_comment
+msgid "Omaduse Kasutusel klassid (used_class_list) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_used_class_list_help
+msgid "Omaduse Kasutusel klassid (used_class_list) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_server_id
+msgid "Omaduse  (server_id) caption"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_server_id_comment
+msgid "Omaduse  (server_id) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:prop_server_id_help
+msgid "Omaduse  (server_id) help"
+msgstr ""
+
+#: classes/applications/class_designer/aw_site_entry.aw:rel_RELTYPE_AW_SERVER_ENTRY
+msgid "Seose Server (RELTYPE_AW_SERVER_ENTRY) tekst"
+msgstr ""
+

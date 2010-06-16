@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_expense_spot_row.aw:class_1540_help
+msgid "Klassi Kulukoha rida help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_product
+msgid "Omaduse Artikkel (product) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_product_comment
+msgid "Omaduse Artikkel (product) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_product_help
+msgid "Omaduse Artikkel (product) help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_unit
+msgid "Omaduse &Uuml;hik (unit) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_unit_comment
+msgid "Omaduse &Uuml;hik (unit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_unit_help
+msgid "Omaduse &Uuml;hik (unit) help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_amount
+msgid "Omaduse Kogus (amount) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_amount_comment
+msgid "Omaduse Kogus (amount) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_amount_help
+msgid "Omaduse Kogus (amount) help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_unit_price
+msgid "Omaduse &Uuml;hiku omahind (unit_price) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_unit_price_comment
+msgid "Omaduse &Uuml;hiku omahind (unit_price) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_unit_price_help
+msgid "Omaduse &Uuml;hiku omahind (unit_price) help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_sum
+msgid "Omaduse Summa/Eelarve (sum) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_sum_comment
+msgid "Omaduse Summa/Eelarve (sum) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_sum_help
+msgid "Omaduse Summa/Eelarve (sum) help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_supplier
+msgid "Omaduse Tarnija/Hankija (supplier) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_supplier_comment
+msgid "Omaduse Tarnija/Hankija (supplier) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:prop_supplier_help
+msgid "Omaduse Tarnija/Hankija (supplier) help"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:rel_RELTYPE_PRODUCT
+msgid "Seose Toode (RELTYPE_PRODUCT) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:rel_RELTYPE_UNIT
+msgid "Seose &Uuml;hik (RELTYPE_UNIT) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_expense_spot_row.aw:rel_RELTYPE_SUPPLIER
+msgid "Seose Tarnija/Hankija (RELTYPE_SUPPLIER) tekst"
+msgstr ""
+

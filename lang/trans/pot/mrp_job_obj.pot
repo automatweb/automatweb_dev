@@ -1,0 +1,92 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/mrp_job_obj.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:202
+msgid "Uus"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:203
+msgid "Planeeritud"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:204
+msgid "T&ouml;&ouml;s"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:205
+msgid "Katkestatud"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:206
+msgid "Valmis"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:207
+msgid "Lukustatud"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:208 classes/mrp/mrp_job_obj.aw:209
+msgid "Paus"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:210
+msgid "Kustutatud"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:249
+msgid "Projektita"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:250
+msgid "Ressursita"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:361
+msgid "Materjali liikumisseos t&ouml;&ouml;ga %s"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:366
+msgid "%s saateleht"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:482
+msgid "%s kulu %s jaoks"
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:1414
+msgid "Andmete laadimine ei &otilde;nnestunud."
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:1433
+msgid "Projekti staatus sobimatu."
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:1451
+msgid "Staatus sobimatu."
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:1464
+msgid "Ressurss kinni."
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:1477
+msgid "Eeldust&ouml;&ouml;d tegemata."
+msgstr ""
+
+#: classes/mrp/mrp_job_obj.aw:1634
+msgid "Lisas kommentaari"
+msgstr ""
+

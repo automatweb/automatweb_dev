@@ -1,0 +1,416 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/site_copy/site_copy.aw:class_1487_help
+msgid "Klassi Saitide kopeerimine help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_disk_usage
+msgid "Omaduse Kettakasutus (disk_usage) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_disk_usage_comment
+msgid "Omaduse Kettakasutus (disk_usage) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_disk_usage_help
+msgid "Omaduse Kettakasutus (disk_usage) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_du_www
+msgid "Omaduse WWW (du_www) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_du_www_comment
+msgid "Omaduse WWW (du_www) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_du_www_help
+msgid "Omaduse WWW (du_www) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_du_db
+msgid "Omaduse DB (du_db) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_du_db_comment
+msgid "Omaduse DB (du_db) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_du_db_help
+msgid "Omaduse DB (du_db) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_url
+msgid "Omaduse URL (url) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_url_comment
+msgid "Omaduse URL (url) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_url_help
+msgid "Omaduse URL (url) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_email
+msgid "Omaduse Tellija e-post (email) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_email_comment
+msgid "Omaduse Tellija e-post (email) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_email_help
+msgid "Omaduse Tellija e-post (email) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_local_copy
+msgid "Omaduse Tehakse lokaalne koopia saidi files kausta (local_copy) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_local_copy_comment
+msgid "Omaduse Tehakse lokaalne koopia saidi files kausta (local_copy) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_local_copy_help
+msgid "Omaduse Tehakse lokaalne koopia saidi files kausta (local_copy) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_local_copy_prms
+msgid "Omaduse Koopia tehakse j&auml;rgnevast (local_copy_prms) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_local_copy_prms_comment
+msgid "Omaduse Koopia tehakse j&auml;rgnevast (local_copy_prms) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_local_copy_prms_help
+msgid "Omaduse Koopia tehakse j&auml;rgnevast (local_copy_prms) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_cvs_copy
+msgid "Omaduse Tehakse koopia CVS koodile (cvs_copy) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_cvs_copy_comment
+msgid "Omaduse Tehakse koopia CVS koodile (cvs_copy) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_cvs_copy_help
+msgid "Omaduse Tehakse koopia CVS koodile (cvs_copy) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_submit
+msgid "Omaduse Alusta kopeerimist (submit) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_submit_comment
+msgid "Omaduse Alusta kopeerimist (submit) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_submit_help
+msgid "Omaduse Alusta kopeerimist (submit) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_todo_tlb
+msgid "Omaduse  (todo_tlb) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_todo_tlb_comment
+msgid "Omaduse  (todo_tlb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_todo_tlb_help
+msgid "Omaduse  (todo_tlb) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_todo_tbl
+msgid "Omaduse  (todo_tbl) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_todo_tbl_comment
+msgid "Omaduse  (todo_tbl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_todo_tbl_help
+msgid "Omaduse  (todo_tbl) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_sites_tlb
+msgid "Omaduse  (sites_tlb) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_sites_tlb_comment
+msgid "Omaduse  (sites_tlb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_sites_tlb_help
+msgid "Omaduse  (sites_tlb) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_sites_tbl
+msgid "Omaduse  (sites_tbl) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_sites_tbl_comment
+msgid "Omaduse  (sites_tbl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_sites_tbl_help
+msgid "Omaduse  (sites_tbl) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_default_mail
+msgid "Omaduse Deafult e-postiaadress (default_mail) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_default_mail_comment
+msgid "Omaduse Deafult e-postiaadress (default_mail) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_default_mail_help
+msgid "Omaduse Deafult e-postiaadress (default_mail) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_time_limit
+msgid "Omaduse Ajalimiit (time_limit) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_time_limit_comment
+msgid "Omaduse Ajalimiit (time_limit) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_time_limit_help
+msgid "Omaduse Ajalimiit (time_limit) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_apache_logs
+msgid "Omaduse Apache'i logide kaust (apache_logs) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_apache_logs_comment
+msgid "Omaduse Apache'i logide kaust (apache_logs) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_apache_logs_help
+msgid "Omaduse Apache'i logide kaust (apache_logs) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_apache_vhosts
+msgid "Omaduse Apache'i vhostide kaust (apache_vhosts) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_apache_vhosts_comment
+msgid "Omaduse Apache'i vhostide kaust (apache_vhosts) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_apache_vhosts_help
+msgid "Omaduse Apache'i vhostide kaust (apache_vhosts) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_cvs_user
+msgid "Omaduse CVS kasutajanimi (cvs_user) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_cvs_user_comment
+msgid "Omaduse CVS kasutajanimi (cvs_user) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_cvs_user_help
+msgid "Omaduse CVS kasutajanimi (cvs_user) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_mysql_host
+msgid "Omaduse MySQLi host (mysql_host) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_mysql_host_comment
+msgid "Omaduse MySQLi host (mysql_host) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_mysql_host_help
+msgid "Omaduse MySQLi host (mysql_host) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_mysql_root_password
+msgid "Omaduse MySQLi root-kasutaja parool (mysql_root_password) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_mysql_root_password_comment
+msgid "Omaduse MySQLi root-kasutaja parool (mysql_root_password) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_mysql_root_password_help
+msgid "Omaduse MySQLi root-kasutaja parool (mysql_root_password) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_dir_sites
+msgid "Omaduse Saidi objektide kaust (dir_sites) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_dir_sites_comment
+msgid "Omaduse Saidi objektide kaust (dir_sites) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_dir_sites_help
+msgid "Omaduse Saidi objektide kaust (dir_sites) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_as_tlb
+msgid "Omaduse  (as_tlb) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_as_tlb_comment
+msgid "Omaduse  (as_tlb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_as_tlb_help
+msgid "Omaduse  (as_tlb) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_as_tbl
+msgid "Omaduse  (as_tbl) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_as_tbl_comment
+msgid "Omaduse  (as_tbl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:prop_as_tbl_help
+msgid "Omaduse  (as_tbl) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_add_site
+msgid "Grupi Lisa sait (add_site) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_add_site_help
+msgid "Grupi Lisa sait (add_site) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_todo
+msgid "Grupi Pooleliolevad t&ouml;&ouml;d (todo) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_todo_help
+msgid "Grupi Pooleliolevad t&ouml;&ouml;d (todo) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_sites
+msgid "Grupi Kopeeritud saidid (sites) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_sites_help
+msgid "Grupi Kopeeritud saidid (sites) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_settings
+msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_settings_general
+msgid "Grupi &Uuml;ldised seaded (settings_general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_settings_general_help
+msgid "Grupi &Uuml;ldised seaded (settings_general) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_allowed_servers
+msgid "Grupi Lubatud serverid (allowed_servers) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:group_allowed_servers_help
+msgid "Grupi Lubatud serverid (allowed_servers) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:rel_RELTYPE_DIR_SITES
+msgid "Seose Saidi objektide kaust (RELTYPE_DIR_SITES) tekst"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:174
+msgid "http://"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:180
+msgid "Sait"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:181
+msgid "Kood"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:182
+msgid "Baas"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:215
+msgid "Sellist kausta ei eksisteeri!"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:223
+msgid "Ajalimiit peab olema positiivne arv!"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:235
+msgid "Saidi kopeerimisel devsaitide serverisse peab olema m&auml;&auml;ratud ka e-postiaadress!"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:291 classes/contentmgmt/site_copy/site_copy.aw:389
+msgid "URL"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:295
+msgid "Koopia URL"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:299
+msgid "Koopia URL (CVS koodil)"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:303
+msgid "Saidi kaust kettal"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:307
+msgid "V&otilde;rdluse objekt"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:318
+msgid "CVS"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:324
+msgid "DIFF"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:373
+msgid "Lisa sait"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:393
+msgid "Staatus"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:419
+msgid "%u/%u"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy.aw:508
+msgid "Sait on lisatud kopeerimise j&auml;rjekorda!"
+msgstr ""
+

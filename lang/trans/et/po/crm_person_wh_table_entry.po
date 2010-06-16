@@ -1,0 +1,96 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:class_1510_help
+msgid "Klassi Isiku t&ouml;&ouml;tundide tabeli sisestus help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_wh_table
+msgid "Omaduse T&ouml;&ouml;laud (wh_table) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_wh_table_comment
+msgid "Omaduse T&ouml;&ouml;laud (wh_table) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_wh_table_help
+msgid "Omaduse T&ouml;&ouml;laud (wh_table) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_year
+msgid "Omaduse Aasta (year) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_year_comment
+msgid "Omaduse Aasta (year) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_year_help
+msgid "Omaduse Aasta (year) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_month
+msgid "Omaduse Kuu (month) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_month_comment
+msgid "Omaduse Kuu (month) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_month_help
+msgid "Omaduse Kuu (month) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_entry_table
+msgid "Omaduse  (entry_table) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_entry_table_comment
+msgid "Omaduse  (entry_table) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:prop_entry_table_help
+msgid "Omaduse  (entry_table) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:group_table
+msgid "Grupi Tabel (table) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:group_table_help
+msgid "Grupi Tabel (table) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:rel_RELTYPE_TABLE
+msgid "Seose T&ouml;&ouml;laud (RELTYPE_TABLE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:130
+msgid "Isik"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:136
+msgid "Muutuvtunnid"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:143
+msgid "P&uuml;&uuml;situnnid"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:150
+msgid "Kokku tunnid"
+msgstr ""
+
+#: classes/applications/crm/crm_person_wh_table_entry.aw:197
+msgid "Isiku %s t&ouml;&ouml;tundide sisestus %s/%s"
+msgstr ""
+

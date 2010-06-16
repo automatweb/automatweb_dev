@@ -1,0 +1,84 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/draft.aw:class_1497_help
+msgid "Klassi Property mustand help"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_property
+msgid "Omaduse Property (draft_property) caption"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_property_comment
+msgid "Omaduse Property (draft_property) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_property_help
+msgid "Omaduse Property (draft_property) help"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_user
+msgid "Omaduse Kasutaja (draft_user) caption"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_user_comment
+msgid "Omaduse Kasutaja (draft_user) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_user_help
+msgid "Omaduse Kasutaja (draft_user) help"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_object
+msgid "Omaduse Objekt (draft_object) caption"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_object_comment
+msgid "Omaduse Objekt (draft_object) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_object_help
+msgid "Omaduse Objekt (draft_object) help"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_new
+msgid "Omaduse Uus (draft_new) caption"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_new_comment
+msgid "Omaduse Uus (draft_new) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_new_help
+msgid "Omaduse Uus (draft_new) help"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_content
+msgid "Omaduse Sisu (draft_content) caption"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_content_comment
+msgid "Omaduse Sisu (draft_content) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:prop_draft_content_help
+msgid "Omaduse Sisu (draft_content) help"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:rel_RELTYPE_USER
+msgid "Seose Kasutaja (RELTYPE_USER) tekst"
+msgstr ""
+
+#: classes/contentmgmt/draft.aw:rel_RELTYPE_OBJECT
+msgid "Seose Objekt (RELTYPE_OBJECT) tekst"
+msgstr ""
+

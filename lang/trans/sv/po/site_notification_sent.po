@@ -1,0 +1,96 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/class_designer/site_notification_sent.aw:class_1503_help
+msgid "Klassi Saidi kohta saadetud teavitus help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_site
+msgid "Omaduse Sait mille kohta saadeti (site) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_site_comment
+msgid "Omaduse Sait mille kohta saadeti (site) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_site_help
+msgid "Omaduse Sait mille kohta saadeti (site) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_rule
+msgid "Omaduse Teavituse reegel (rule) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_rule_comment
+msgid "Omaduse Teavituse reegel (rule) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_rule_help
+msgid "Omaduse Teavituse reegel (rule) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_when
+msgid "Omaduse Millal saadeti (when) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_when_comment
+msgid "Omaduse Millal saadeti (when) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_when_help
+msgid "Omaduse Millal saadeti (when) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_who
+msgid "Omaduse Kellele saadeti (who) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_who_comment
+msgid "Omaduse Kellele saadeti (who) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_who_help
+msgid "Omaduse Kellele saadeti (who) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_content
+msgid "Omaduse Sisu (content) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_content_comment
+msgid "Omaduse Sisu (content) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_content_help
+msgid "Omaduse Sisu (content) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_error
+msgid "Omaduse Viga (error) caption"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_error_comment
+msgid "Omaduse Viga (error) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:prop_error_help
+msgid "Omaduse Viga (error) help"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:rel_RELTYPE_SITE
+msgid "Seose Sait (RELTYPE_SITE) tekst"
+msgstr ""
+
+#: classes/applications/class_designer/site_notification_sent.aw:rel_RELTYPE_RULE
+msgid "Seose Teavituse reegel (RELTYPE_RULE) tekst"
+msgstr ""
+

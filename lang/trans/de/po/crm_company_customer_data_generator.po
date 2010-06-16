@@ -1,0 +1,116 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:class_1507_help
+msgid "Klassi Kliendisuhetegeneraator help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_dirs
+msgid "Omaduse Organisatsioonide kaustad (dirs) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_dirs_comment
+msgid "Omaduse Organisatsioonide kaustad (dirs) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_dirs_help
+msgid "Omaduse Organisatsioonide kaustad (dirs) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_subdirs
+msgid "Omaduse Kasuta alamkaustasid (subdirs) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_subdirs_comment
+msgid "Omaduse Kasuta alamkaustasid (subdirs) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_subdirs_help
+msgid "Omaduse Kasuta alamkaustasid (subdirs) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_sample_object
+msgid "Omaduse N&auml;idisobjekt (sample_object) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_sample_object_comment
+msgid "Omaduse N&auml;idisobjekt (sample_object) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_sample_object_help
+msgid "Omaduse N&auml;idisobjekt (sample_object) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_seller_vs_buyer
+msgid "Omaduse Organisatsioon kaustast on (seller_vs_buyer) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_seller_vs_buyer_comment
+msgid "Omaduse Organisatsioon kaustast on (seller_vs_buyer) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_seller_vs_buyer_help
+msgid "Omaduse Organisatsioon kaustast on (seller_vs_buyer) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_start_generating
+msgid "Omaduse Kliendisuhete genereerimine (start_generating) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_start_generating_comment
+msgid "Omaduse Kliendisuhete genereerimine (start_generating) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:prop_start_generating_help
+msgid "Omaduse Kliendisuhete genereerimine (start_generating) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:rel_RELTYPE_DIR
+msgid "Seose Organisatsioonide kaust (RELTYPE_DIR) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:rel_RELTYPE_CFGFORM
+msgid "Seose Seadete vorm (RELTYPE_CFGFORM) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:rel_RELTYPE_SAMPLE_OBJECT
+msgid "Seose N&auml;idisobjekt (RELTYPE_SAMPLE_OBJECT) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:87
+msgid "M&uuml;&uuml;ja"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:88
+msgid "Ostja"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:98
+msgid "Alusta"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:98
+msgid "J&auml;tka"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:99
+msgid "%s kliendisuhete genereerimist %u organisatsioonile"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:100
+msgid "(tehtud %u)"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data_generator.aw:101
+msgid "(korraga genereeritakse %u)"
+msgstr ""
+

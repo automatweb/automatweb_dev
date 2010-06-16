@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/practices/practices.aw:class_1525_help
+msgid "Klassi Praktikad help"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_data_folder
+msgid "Omaduse Andmete kaust (data_folder) caption"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_data_folder_comment
+msgid "Omaduse Andmete kaust (data_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_data_folder_help
+msgid "Omaduse Andmete kaust (data_folder) help"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_toolbar
+msgid "Omaduse Tootjate t&ouml;&ouml;riistariba (toolbar) caption"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_toolbar_comment
+msgid "Omaduse Tootjate t&ouml;&ouml;riistariba (toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_toolbar_help
+msgid "Omaduse Tootjate t&ouml;&ouml;riistariba (toolbar) help"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_categories_tree
+msgid "Omaduse Kategooriad (categories_tree) caption"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_categories_tree_comment
+msgid "Omaduse Kategooriad (categories_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_categories_tree_help
+msgid "Omaduse Kategooriad (categories_tree) help"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_table
+msgid "Omaduse Praktikad (table) caption"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_table_comment
+msgid "Omaduse Praktikad (table) kommentaar"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:prop_table_help
+msgid "Omaduse Praktikad (table) help"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:group_practices
+msgid "Grupi Praktikad (practices) pealkiri"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:group_practices_help
+msgid "Grupi Praktikad (practices) help"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:rel_RELTYPE_DATA_FOLDER
+msgid "Seose Andmete kaust (RELTYPE_DATA_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:73
+msgid "Uus Praktika"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:83
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:90
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:92
+msgid "Oled kindel et soovid valitud objektid kustutada?"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:138
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/practices/practices.aw:143
+msgid "T&uuml;&uuml;p"
+msgstr ""
+

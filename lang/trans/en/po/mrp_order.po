@@ -1,0 +1,168 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/orders/mrp_order.aw:class_1519_help
+msgid "Klassi ERP Tellimus help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_workspace
+msgid "Omaduse T&ouml;&ouml;laud (workspace) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_workspace_comment
+msgid "Omaduse T&ouml;&ouml;laud (workspace) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_workspace_help
+msgid "Omaduse T&ouml;&ouml;laud (workspace) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_orderer_person
+msgid "Omaduse Kliendipoolne kontakt (orderer_person) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_orderer_person_comment
+msgid "Omaduse Kliendipoolne kontakt (orderer_person) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_orderer_person_help
+msgid "Omaduse Kliendipoolne kontakt (orderer_person) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_seller_person
+msgid "Omaduse Teostajapoolne kontakt (seller_person) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_seller_person_comment
+msgid "Omaduse Teostajapoolne kontakt (seller_person) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_seller_person_help
+msgid "Omaduse Teostajapoolne kontakt (seller_person) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_mrp_case
+msgid "Omaduse Arendustoode (mrp_case) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_mrp_case_comment
+msgid "Omaduse Arendustoode (mrp_case) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_mrp_case_help
+msgid "Omaduse Arendustoode (mrp_case) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_mrp_case_view
+msgid "Omaduse Arendustoode (mrp_case_view) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_mrp_case_view_comment
+msgid "Omaduse Arendustoode (mrp_case_view) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_mrp_case_view_help
+msgid "Omaduse Arendustoode (mrp_case_view) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_mrp_pricelist
+msgid "Omaduse Hinnakiri (mrp_pricelist) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_mrp_pricelist_comment
+msgid "Omaduse Hinnakiri (mrp_pricelist) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_mrp_pricelist_help
+msgid "Omaduse Hinnakiri (mrp_pricelist) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_state
+msgid "Omaduse Staatus (state) caption"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_state_comment
+msgid "Omaduse Staatus (state) kommentaar"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:prop_state_help
+msgid "Omaduse Staatus (state) help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:rel_RELTYPE_WORKSPACE
+msgid "Seose T&ouml;&ouml;laud (RELTYPE_WORKSPACE) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:rel_RELTYPE_CUSTOMER
+msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:rel_RELTYPE_ORDERER_PERSON
+msgid "Seose Tellija isik (RELTYPE_ORDERER_PERSON) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:rel_RELTYPE_CASE
+msgid "Seose Arendustoode (RELTYPE_CASE) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:rel_RELTYPE_SELLER_PERSON
+msgid "Seose M&uuml;&uuml;ja isik (RELTYPE_SELLER_PERSON) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:rel_RELTYPE_MRP_PRICELIST
+msgid "Seose ERP Hinnakiri (RELTYPE_MRP_PRICELIST) tekst"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:69
+msgid "Uus"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:70
+msgid "Koostamisel"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:71
+msgid "Saadetud"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:72
+msgid "T&auml;psustamisel"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:73
+msgid "Kinnitatud"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:74
+msgid "Tagasi l&uuml;katud"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:75
+msgid "T&uuml;histatud"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order.aw:243
+msgid "Vaata"
+msgstr ""
+

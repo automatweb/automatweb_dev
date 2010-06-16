@@ -1,0 +1,56 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:56
+msgid "Omk!\n\n"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:56
+msgid "\n\nCheers,\nSinu AW Site Copy"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:586
+msgid "Can't set status to transfer! Current status is %s."
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:781
+msgid "Ei saa installida, konfifail puudu!\nLahti pakitud failid asuvad kaustas %s"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:848
+msgid "Baas selle saidi jaoks on juba olemas.\nKui soovid selle siiski paigaldada, siis uue baasi leiad siit: %s/"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:1037
+msgid "Vhosti ei leidnud!"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:1053
+msgid "Sait on lahti pakitud ning asub kaustas %s. Veebist pääseb ligi aadressilt http://%s\n"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:1068
+msgid "Saidi CVS koopia on valmis ning asub kaustas %s. Veebist pääseb ligi aadressilt http://%s\n"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:1167
+msgid "Saidi URL peab kindlasti olemas olema!"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:1183
+msgid "Sellise URLiga sait on juba kopeeritud!"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_obj.aw:1197
+msgid "Sellise URLiga sait on juba kopeerimisel!"
+msgstr ""
+

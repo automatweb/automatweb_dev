@@ -1,0 +1,72 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_party.aw:class_1490_help
+msgid "Klassi Osapool help"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_participant
+msgid "Omaduse Osaleja (participant) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_participant_comment
+msgid "Omaduse Osaleja (participant) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_participant_help
+msgid "Omaduse Osaleja (participant) help"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_task
+msgid "Omaduse Tegevus (task) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_task_comment
+msgid "Omaduse Tegevus (task) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_task_help
+msgid "Omaduse Tegevus (task) help"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_percentage
+msgid "Omaduse Osaluse % (percentage) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_percentage_comment
+msgid "Omaduse Osaluse % (percentage) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_percentage_help
+msgid "Omaduse Osaluse % (percentage) help"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_hours
+msgid "Omaduse Tundides (hours) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_hours_comment
+msgid "Omaduse Tundides (hours) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:prop_hours_help
+msgid "Omaduse Tundides (hours) help"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:rel_RELTYPE_PARTICIPANT
+msgid "Seose Osaleja (RELTYPE_PARTICIPANT) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_party.aw:rel_RELTYPE_TASK
+msgid "Seose Tegevus (RELTYPE_TASK) tekst"
+msgstr ""
+

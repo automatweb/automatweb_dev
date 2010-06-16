@@ -1,0 +1,92 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:class_1489_help
+msgid "Klassi Kopeeritud sait help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_url
+msgid "Omaduse URL (url) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_url_comment
+msgid "Omaduse URL (url) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_url_help
+msgid "Omaduse URL (url) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_copy_url
+msgid "Omaduse Saidi koopia URL (copy_url) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_copy_url_comment
+msgid "Omaduse Saidi koopia URL (copy_url) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_copy_url_help
+msgid "Omaduse Saidi koopia URL (copy_url) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_copy_url_cvs
+msgid "Omaduse Saidi koopia URL (CVS koodil) (copy_url_cvs) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_copy_url_cvs_comment
+msgid "Omaduse Saidi koopia URL (CVS koodil) (copy_url_cvs) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_copy_url_cvs_help
+msgid "Omaduse Saidi koopia URL (CVS koodil) (copy_url_cvs) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_site_dir
+msgid "Omaduse Saidi kaust kettal (site_dir) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_site_dir_comment
+msgid "Omaduse Saidi kaust kettal (site_dir) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_site_dir_help
+msgid "Omaduse Saidi kaust kettal (site_dir) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_site_dir_cvs
+msgid "Omaduse Saidi kaust kettal (CVS koodil) (site_dir_cvs) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_site_dir_cvs_comment
+msgid "Omaduse Saidi kaust kettal (CVS koodil) (site_dir_cvs) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_site_dir_cvs_help
+msgid "Omaduse Saidi kaust kettal (CVS koodil) (site_dir_cvs) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_site_diff
+msgid "Omaduse Saitide v&otilde;rdlus (site_diff) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_site_diff_comment
+msgid "Omaduse Saitide v&otilde;rdlus (site_diff) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:prop_site_diff_help
+msgid "Omaduse Saitide v&otilde;rdlus (site_diff) help"
+msgstr ""
+
+#: classes/contentmgmt/site_copy/site_copy_site.aw:rel_RELTYPE_SITE_DIFF
+msgid "Seose Saitide v&otilde;rdlus (RELTYPE_SITE_DIFF) tekst"
+msgstr ""
+

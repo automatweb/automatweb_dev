@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:class_1561_help
+msgid "Klassi K&auml;ttetoimetamise viisi tingimused help"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_delivery_method
+msgid "Omaduse K&auml;ttetoimetamise viis (delivery_method) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_delivery_method_comment
+msgid "Omaduse K&auml;ttetoimetamise viis (delivery_method) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_delivery_method_help
+msgid "Omaduse K&auml;ttetoimetamise viis (delivery_method) help"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_row
+msgid "Omaduse Rida (row) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_row_comment
+msgid "Omaduse Rida (row) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_row_help
+msgid "Omaduse Rida (row) help"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_col
+msgid "Omaduse Veerg (col) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_col_comment
+msgid "Omaduse Veerg (col) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_col_help
+msgid "Omaduse Veerg (col) help"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_enable
+msgid "Omaduse Lubatud (enable) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_enable_comment
+msgid "Omaduse Lubatud (enable) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:prop_enable_help
+msgid "Omaduse Lubatud (enable) help"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_method_conditions.aw:rel_RELTYPE_DELIVERY_METHOD
+msgid "Seose K&auml;ttetoimetamise viis (RELTYPE_DELIVERY_METHOD) tekst"
+msgstr ""
+

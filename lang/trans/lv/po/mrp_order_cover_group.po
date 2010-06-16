@@ -1,0 +1,20 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/orders/mrp_order_cover_group.aw:class_1537_help
+msgid "Klassi ERP M&uuml;&uuml;gi katte grupp help"
+msgstr ""
+
+#: classes/mrp/orders/mrp_order_cover_group.aw:rel_RELTYPE_MRP_COVER
+msgid "Seose Kate (RELTYPE_MRP_COVER) tekst"
+msgstr ""
+

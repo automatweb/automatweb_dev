@@ -1,0 +1,64 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:52
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:259
+msgid "L&otilde;petamata k&otilde;ne"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:293
+msgid "Otsingu tulemused"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:315
+msgid "Kliendi nimi"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:319
+msgid "Telefon(id)"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:323
+msgid "Osakond"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:327
+msgid "Aadress"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:331
+msgid "Allikas/soovitaja"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:335
+msgid "Viimase k&otilde;ne aeg"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:340
+msgid "Helistada"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:344
+msgid "Kontakti staatus"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:348
+msgid "K&otilde;nesid"
+msgstr ""
+
+#: classes/applications/crm/sales/crm_sales_calls_view.aw:352
+msgid "M&uuml;&uuml;giesindaja"
+msgstr ""
+

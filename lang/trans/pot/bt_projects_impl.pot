@@ -1,0 +1,168 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:31
+msgid "Projektid"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:52
+msgid "Kategooriad"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:60
+msgid "Kliendid"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:65
+msgid "Staatused"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:70
+msgid "Projektijuhid"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:75
+msgid "Perioodid"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:374
+msgid "Algus"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:379
+msgid "L&otilde;pp"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:384
+msgid "T&auml;htaeg"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:455
+msgid "Jaanuar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:456
+msgid "Veebruar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:457
+msgid "M&auml;rts"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:458
+msgid "Aprill"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:459
+msgid "Mai"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:460
+msgid "Juuni"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:461
+msgid "Juuli"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:462
+msgid "August"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:463
+msgid "September"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:464
+msgid "Oktoober"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:465
+msgid "November"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:466
+msgid "Detsember"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:577
+msgid "Projektide otsingu tulemused"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:588 classes/applications/bug_o_matic_3000/bt_projects_impl.aw:640
+msgid "Projektid, milles %s on projektijuht"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:603
+msgid "Projektid kategoorias %s"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:616
+msgid "Projektid kliendiga %s"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:628
+msgid "Projektid staatusega %s"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:650
+msgid "algus"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:653
+msgid "l&otilde;pp"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:656
+msgid "t&auml;htaeg"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:669
+msgid "Projektid, mille %s on %s %s"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:690 classes/applications/bug_o_matic_3000/bt_projects_impl.aw:731
+msgid "Tegevused"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:707
+msgid "Projektid, milles %s on osaleja"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:741
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:747
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:770
+msgid "BT omanik on m&auml;&auml;ramata!"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:784
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:791
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bt_projects_impl.aw:800
+msgid "Kleebi"
+msgstr ""
+

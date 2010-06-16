@@ -1,0 +1,80 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/clients/taket/taket_afp_import.aw:class_1496_help
+msgid "Klassi Taketi toodete import help"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:prop_main_tb
+msgid "Omaduse  (main_tb) caption"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:prop_main_tb_comment
+msgid "Omaduse  (main_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:prop_main_tb_help
+msgid "Omaduse  (main_tb) help"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:prop_local_products_file
+msgid "Omaduse Kohalik toodete fail (local_products_file) caption"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:prop_local_products_file_comment
+msgid "Omaduse Kohalik toodete fail (local_products_file) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:prop_local_products_file_help
+msgid "Omaduse Kohalik toodete fail (local_products_file) help"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:prop_warehouses_table
+msgid "Omaduse Laod (warehouses_table) caption"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:prop_warehouses_table_comment
+msgid "Omaduse Laod (warehouses_table) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:prop_warehouses_table_help
+msgid "Omaduse Laod (warehouses_table) help"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:rel_RELTYPE_WAREHOUSE
+msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:rel_RELTYPE_CODE_CONTROLLER
+msgid "Seose L&uuml;hikese koodi kontroller (RELTYPE_CODE_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:rel_RELTYPE_ORG_FLD
+msgid "Seose Organisatsioonide kaust (RELTYPE_ORG_FLD) tekst"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:rel_RELTYPE_PROD_FLD
+msgid "Seose Toodete kaust (RELTYPE_PROD_FLD) tekst"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:76
+msgid "Impordi tooteandmed"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:87
+msgid "Ladu"
+msgstr ""
+
+#: classes/applications/clients/taket/taket_afp_import.aw:92
+msgid "Aadress"
+msgstr ""
+

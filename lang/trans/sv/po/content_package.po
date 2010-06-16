@@ -1,0 +1,252 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/content_package/content_package.aw:class_1477_help
+msgid "Klassi Sisupakett help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_cp_ug
+msgid "Omaduse Kasutajagrupi OID (cp_ug) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_cp_ug_comment
+msgid "Omaduse Kasutajagrupi OID (cp_ug) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_cp_ug_help
+msgid "Omaduse Kasutajagrupi OID (cp_ug) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_cp_sp
+msgid "Omaduse Toote OID (cp_sp) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_cp_sp_comment
+msgid "Omaduse Toote OID (cp_sp) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_cp_sp_help
+msgid "Omaduse Toote OID (cp_sp) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_priority
+msgid "Omaduse Prioriteet (priority) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_priority_comment
+msgid "Omaduse Prioriteet (priority) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_priority_help
+msgid "Omaduse Prioriteet (priority) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_date_start
+msgid "Omaduse Tellimisaja algus (date_start) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_date_start_comment
+msgid "Omaduse Tellimisaja algus (date_start) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_date_start_help
+msgid "Omaduse Tellimisaja algus (date_start) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_date_end
+msgid "Omaduse Tellimisaja l&otilde;pp (date_end) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_date_end_comment
+msgid "Omaduse Tellimisaja l&otilde;pp (date_end) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_date_end_help
+msgid "Omaduse Tellimisaja l&otilde;pp (date_end) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_subscribers_tlb
+msgid "Omaduse  (subscribers_tlb) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_subscribers_tlb_comment
+msgid "Omaduse  (subscribers_tlb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_subscribers_tlb_help
+msgid "Omaduse  (subscribers_tlb) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_subscribers_tbl
+msgid "Omaduse  (subscribers_tbl) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_subscribers_tbl_comment
+msgid "Omaduse  (subscribers_tbl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_subscribers_tbl_help
+msgid "Omaduse  (subscribers_tbl) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_subscribers_tmp
+msgid "Omaduse  (subscribers_tmp) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_subscribers_tmp_comment
+msgid "Omaduse  (subscribers_tmp) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_subscribers_tmp_help
+msgid "Omaduse  (subscribers_tmp) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_prices_tlb
+msgid "Omaduse  (prices_tlb) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_prices_tlb_comment
+msgid "Omaduse  (prices_tlb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_prices_tlb_help
+msgid "Omaduse  (prices_tlb) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_prices_tbl
+msgid "Omaduse  (prices_tbl) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_prices_tbl_comment
+msgid "Omaduse  (prices_tbl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_prices_tbl_help
+msgid "Omaduse  (prices_tbl) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_conditions_tlb
+msgid "Omaduse  (conditions_tlb) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_conditions_tlb_comment
+msgid "Omaduse  (conditions_tlb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_conditions_tlb_help
+msgid "Omaduse  (conditions_tlb) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_conditions_tbl
+msgid "Omaduse  (conditions_tbl) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_conditions_tbl_comment
+msgid "Omaduse  (conditions_tbl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:prop_conditions_tbl_help
+msgid "Omaduse  (conditions_tbl) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:group_subscribers
+msgid "Grupi Tellijad (subscribers) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:group_subscribers_help
+msgid "Grupi Tellijad (subscribers) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:group_prices
+msgid "Grupi Hinnatingimused (prices) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:group_prices_help
+msgid "Grupi Hinnatingimused (prices) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:group_conditions
+msgid "Grupi Sisutingimused (conditions) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:group_conditions_help
+msgid "Grupi Sisutingimused (conditions) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:rel_RELTYPE_PRICE_CONDITIONS
+msgid "Seose Hinnatingimused (RELTYPE_PRICE_CONDITIONS) tekst"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:86 classes/contentmgmt/content_package/content_package.aw:369
+msgid "Sisupaketi \""
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:91 classes/contentmgmt/content_package/content_package.aw:286 classes/contentmgmt/content_package/content_package.aw:377
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:96 classes/contentmgmt/content_package/content_package.aw:382
+msgid "Hind"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:101
+msgid "Paketi kasutamise aeg p&auml;evades"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:268
+msgid "Eemalda tellijad paketist"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:278
+msgid "Paketi \"%s\" tellijad"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:291
+msgid "Kasutusaja algus"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:296
+msgid "Kasutusaja l&otilde;pp"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:301
+msgid "Kasutusaega j&auml&auml;nud"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:306
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:387 classes/contentmgmt/content_package/content_package.aw:441
+msgid "ACL"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:431
+msgid "M"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:436
+msgid "L"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:446
+msgid "K"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:451
+msgid "V"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_package.aw:465
+msgid "Sisutingimus"
+msgstr ""
+

@@ -1,0 +1,152 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/content_package/content_item.aw:class_1478_help
+msgid "Klassi Sisutingimus help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_content_package
+msgid "Omaduse Sisupakett (content_package) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_content_package_comment
+msgid "Omaduse Sisupakett (content_package) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_content_package_help
+msgid "Omaduse Sisupakett (content_package) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_price
+msgid "Omaduse Hind (price) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_price_comment
+msgid "Omaduse Hind (price) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_price_help
+msgid "Omaduse Hind (price) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acls
+msgid "Omaduse &Otilde;igused (acls) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acls_comment
+msgid "Omaduse &Otilde;igused (acls) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acls_help
+msgid "Omaduse &Otilde;igused (acls) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_change
+msgid "Omaduse Muutmine (acl_change) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_change_comment
+msgid "Omaduse Muutmine (acl_change) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_change_help
+msgid "Omaduse Muutmine (acl_change) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_add
+msgid "Omaduse Lisamine (acl_add) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_add_comment
+msgid "Omaduse Lisamine (acl_add) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_add_help
+msgid "Omaduse Lisamine (acl_add) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_admin
+msgid "Omaduse ACLi muutmine (acl_admin) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_admin_comment
+msgid "Omaduse ACLi muutmine (acl_admin) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_admin_help
+msgid "Omaduse ACLi muutmine (acl_admin) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_delete
+msgid "Omaduse Kustutamine (acl_delete) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_delete_comment
+msgid "Omaduse Kustutamine (acl_delete) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_delete_help
+msgid "Omaduse Kustutamine (acl_delete) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_view
+msgid "Omaduse Vaatamine (acl_view) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_view_comment
+msgid "Omaduse Vaatamine (acl_view) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_acl_view_help
+msgid "Omaduse Vaatamine (acl_view) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_objects
+msgid "Omaduse Sisuobjektid (objects) caption"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_objects_comment
+msgid "Omaduse Sisuobjektid (objects) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:prop_objects_help
+msgid "Omaduse Sisuobjektid (objects) help"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:rel_RELTYPE_CONTENT_PACKAGE
+msgid "Seose Sisupakett (RELTYPE_CONTENT_PACKAGE) tekst"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:rel_RELTYPE_CONTENT_OBJECT
+msgid "Seose Sisuobjekt (RELTYPE_CONTENT_OBJECT) tekst"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:94
+msgid "Muutmine"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:95
+msgid "Lisamine"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:96
+msgid "ACLi muutmine"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:97
+msgid "Kustutamine"
+msgstr ""
+
+#: classes/contentmgmt/content_package/content_item.aw:98
+msgid "Vaatamine"
+msgstr ""
+
