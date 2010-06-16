@@ -216,12 +216,21 @@
       </property>
       <property>
             <name>password</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>general2</group>
             <type>password</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>no</store>
+            <field>password</field>
             <caption>Parool</caption>
+      </property>
+      <property>
+            <name>password_again</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>password</type>
+            <store>no</store>
+            <field>password_again</field>
+            <caption>Parool uuesti</caption>
       </property>
       <property>
             <name>client_manager</name>
@@ -1961,6 +1970,15 @@
             <user>1</user>
             <field>fake_address_address</field>
             <caption>Aadress</caption>
+      </property>
+      <property>
+            <name>fake_address_address2</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>fake_address_address2</field>
+            <caption>Aadress2</caption>
       </property>
       <property>
             <name>fake_address_postal_code</name>

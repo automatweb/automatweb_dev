@@ -94,8 +94,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @comment Kasutajanimes on lubatud ladina t&auml;hestiku suur- ja v&auml;iket&auml;hed, numbrid 0-9 ning m&auml;rgid alakriips ja punkt
 @caption Kasutaja
 
-@property password type=password table=objects field=meta method=serialize
+@property password type=password store=no
 @caption Parool
+
+@property password_again type=password store=no
+@caption Parool uuesti
 
 @property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER
 @caption Kliendihaldur
@@ -685,6 +688,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 // fake address props here, so we can write to them and they go to the real address property
 @property fake_address_address type=textbox user=1
 @caption Aadress
+
+@property fake_address_address2 type=textbox user=1
+@caption Aadress2
 
 @property fake_address_postal_code type=textbox user=1
 @caption Postiindeks
@@ -1295,6 +1301,14 @@ class crm_person extends class_base
 							$arr["obj_inst"]->set_meta("no_create_user_yet", NULL);
 						}
 					}
+				}
+				break;
+
+			case "password":
+				if (!empty($arr["request"]["password"]) && $arr["request"]["password"] !== $arr["request"]["password_again"])
+				{
+					$prop["error"] = t('Sisestatud paroolid peavad olema identsed!');
+					return PROP_FATAL_ERROR;
 				}
 				break;
 
@@ -2632,22 +2646,10 @@ class crm_person extends class_base
 				}
 				break;
 
-			case "password":
-				if ($this->has_user($arr["obj_inst"]))
-				{
-					return PROP_IGNORE;
-				}
-				break;
-
 			case "username":
 				if ($arr["new"] || !($tmp = $this->has_user($arr["obj_inst"])))
 				{
 					$data["type"] = "textbox";
-					if(!$arr["obj_inst"]->company_property("do_create_users"))
-					{
-						$data["error"] = t("Isikule kasutaja tegemiseks peab olema organisatsioonis, kus ta on t&ouml;&ouml;taja, valitud 'Kas isikud on kasutajad' seade");
-						//return PROP_ERROR;
-					}
 				}
 				else
 				{
@@ -4570,6 +4572,13 @@ class crm_person extends class_base
 			if ($u->prop("email") != $arr["obj_inst"]->prop_str("email"))
 			{
 				$u->set_prop("email", $arr["obj_inst"]->prop("email.mail"));
+				$mod = true;
+			}
+
+			//	Change password. Double checking if the two entered passwords match, the checking is also done in set_property() and returns an error there if neccessary.
+			if (!empty($arr["request"]["password"]) && $arr["request"]["password"] === $arr["request"]["password_again"])
+			{
+				$u->set_password($arr["request"]["password"]);
 				$mod = true;
 			}
 
