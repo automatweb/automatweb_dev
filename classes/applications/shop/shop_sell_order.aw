@@ -622,7 +622,8 @@ class shop_sell_order extends class_base
 			$data["customer_no"] = $orderer->prop("external_id");
 		}
 		$data["channel"] = $o->prop("channel");
-
+		$customer_data_ids = shop_sell_order_obj::get_customer_relation_ids_for_purchasers(array($o->prop("purchaser")), obj($o->prop("warehouse.conf.owner")));
+		$data["customer_data_id"] = reset($customer_data_ids);
 
 		$this->vars($data);
 

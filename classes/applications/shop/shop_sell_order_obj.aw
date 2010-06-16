@@ -41,7 +41,7 @@ class shop_sell_order_obj extends _int_object
 				"CL_SHOP_ORDER_ROW.RELTYPE_ROW(CL_SHOP_SELL_ORDER)" => $ids,
 			),
 			array(
-				CL_SHOP_ORDER_ROW => array("amount" , "price", "prod_name", "prod(CL_SHOP_PRODUCT_PACKAGING).size", "prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).name", "prod(CL_SHOP_PRODUCT).name", "prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).code"),
+				CL_SHOP_ORDER_ROW => array("amount" , "price", "prod_name", "prod(CL_SHOP_PRODUCT_PACKAGING).size", "prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).name", "prod(CL_SHOP_PRODUCT).name", "prod(CL_SHOP_PRODUCT_PACKAGING).product(CL_SHOP_PRODUCT).code", /* Now the worst part! -> */ "metadata"),
 			)
 		);
 		//	This part could be optimized if CL_SHOP_ORDER_ROW knew which order it belongs to. -kaarel 8.04.2010
@@ -63,6 +63,12 @@ class shop_sell_order_obj extends _int_object
 
 		foreach($odl->arr() as $oid => $odata)
 		{
+			$meta = aw_unserialize($odata["metadata"]);
+			unset($odata["metadata"]);
+			foreach($meta as $meta_key => $meta_value)
+			{
+				$odata["meta"][$meta_key] = trim($meta_value);
+			}
 			$rows[$order_by_order_row[$oid]][] = $odata;
 		}
 		return $rows;
