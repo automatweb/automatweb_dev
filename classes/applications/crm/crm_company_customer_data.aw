@@ -33,6 +33,9 @@
 	@property tax_rate type=relpicker reltype=RELTYPE_TAX_RATE store=connect
 	@caption M&uuml;&uuml;gi KM-kood
 
+	@property language type=relpicker reltype=RELTYPE_LANGUAGE table=aw_crm_customer_data field=aw_language automatic=1
+	@caption Suhtluskeel
+
 	@property show_in_webview type=checkbox ch_value=1 field= table=aw_crm_customer_data field=aw_show_in_webview
 	@caption Kuva veebis
 
@@ -216,6 +219,9 @@
 // isik, firma v6i kampaania
 @reltype SALES_LEAD_SOURCE value=101 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Soovitaja/allikas
+
+@reltype LANGUAGE value=102 clid=CL_LANGUAGE
+@caption Suhtluskeel
 
 */
 
@@ -966,6 +972,7 @@ exit_function("bill::balance");
 			case "aw_lead_source":
 			case "aw_sales_status":
 			case "aw_sales_last_call":
+			case "aw_language":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int(11)"

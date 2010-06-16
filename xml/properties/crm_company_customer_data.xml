@@ -71,6 +71,16 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gi KM-kood</caption>
       </property>
       <property>
+            <name>language</name>
+            <table>aw_crm_customer_data</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <field>aw_language</field>
+            <automatic>1</automatic>
+            <caption>Suhtluskeel</caption>
+      </property>
+      <property>
             <name>show_in_webview</name>
             <table>aw_crm_customer_data</table>
             <group>general</group>
@@ -503,6 +513,11 @@
                   </clid>
                   <caption>Soovitaja/allikas</caption>
             </SALES_LEAD_SOURCE>
+            <LANGUAGE>
+                  <value>102</value>
+                  <clid>CL_LANGUAGE</clid>
+                  <caption>Suhtluskeel</caption>
+            </LANGUAGE>
       </reltypes>
       <layout>
             <splitbox1>
