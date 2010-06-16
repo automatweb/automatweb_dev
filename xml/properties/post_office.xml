@@ -1,0 +1,43 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>ord</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>jrk</field>
+            <caption>Jrk</caption>
+      </property>
+      <property>
+            <name>county</name>
+            <table>aw_post_office</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COUNTY</reltype>
+            <field>aw_county</field>
+            <caption>Maakond</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_POST_OFFICE</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+            <maintainer>smeedia</maintainer>
+      </classinfo>
+      <tableinfo>
+            <aw_post_office>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_post_office>
+      </tableinfo>
+      <reltypes>
+            <COUNTY>
+                  <value>1</value>
+                  <clid>CL_CRM_COUNTY</clid>
+                  <caption>Maakond</caption>
+            </COUNTY>
+      </reltypes>
+</properties>
+
