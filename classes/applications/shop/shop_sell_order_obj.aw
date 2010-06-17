@@ -362,16 +362,19 @@ class shop_sell_order_obj extends _int_object
 			}
 		}
 
-		foreach(array_flip($purchasers_without_customer_relations) as $purchaser)
+		if($crea_if_not_exists)
 		{
-			$my_co = obj($my_co);
-			$o = obj();
-			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
-			$o->set_name(t("Kliendisuhe ") . $my_co->name() . " => " . obj($purchaser)->prop("name"));
-			$o->set_parent($my_co->id());
-			$o->set_prop("seller", $my_co->id());
-			$o->set_prop("buyer", $purchaser);
-			self::$gcr_cache[$purchaser][$crea_if_not_exists][$my_co->id()] = $customer_relation_ids[$purchaser] = $o->save();
+			foreach(array_flip($purchasers_without_customer_relations) as $purchaser)
+			{
+				$my_co = obj($my_co);
+				$o = obj();
+				$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+				$o->set_name(t("Kliendisuhe ") . $my_co->name() . " => " . obj($purchaser)->prop("name"));
+				$o->set_parent($my_co->id());
+				$o->set_prop("seller", $my_co->id());
+				$o->set_prop("buyer", $purchaser);
+				self::$gcr_cache[$purchaser][$crea_if_not_exists][$my_co->id()] = $customer_relation_ids[$purchaser] = $o->save();
+			}
 		}
 
 		exit_function("shop_sell_order_obj::get_customer_relation_ids_for_purchasers");
