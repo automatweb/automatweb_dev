@@ -9300,7 +9300,7 @@ die();
 
 
 		$sell_capt = t("Ostutellimused");
-		if($arr["request"]["group"] == "sell_orders")
+		if($arr["request"]["group"] === "sell_orders" || $arr["request"]["group"] === "sales")
 		{
 			$sell_capt = t("M&uuml;&uuml;gitellimused");
 		}
