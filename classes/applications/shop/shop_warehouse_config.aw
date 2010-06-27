@@ -70,6 +70,9 @@
 			@property show_purveyance type=checkbox parent=left
 			@caption Kuva tarnijaid
 
+			@property csv_file_encoding type=textbox parent=left
+			@caption CSV faili kodeering
+
 		@layout right type=vbox area_caption=Kaustad closeable=1 parent=split
 
 			@property prod_fld type=relpicker reltype=RELTYPE_FOLDER parent=right
