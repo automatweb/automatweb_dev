@@ -201,6 +201,16 @@
             <caption>Kuva tarnijaid</caption>
       </property>
       <property>
+            <name>csv_file_encoding</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>left</parent>
+            <caption>CSV faili kodeering</caption>
+      </property>
+      <property>
             <name>prod_fld</name>
             <table>objects</table>
             <group>general</group>

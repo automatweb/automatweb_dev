@@ -10003,11 +10003,12 @@ die();
 	**/
 	public function csv_export($arr)
 	{
+		$o = obj($arr["id"]);
 		$order_instance = get_instance(CL_SHOP_PURCHASE_ORDER);
 
 		$odl = $this->_get_orders_odl(
 			array(
-				"obj_inst" => obj($arr["id"]),
+				"obj_inst" => $o,
 				"request" => $arr
 			),
 			array("payment_type", "deferred_payment_count", "order_status", "smartpost_sell_place_name", "delivery_address.name", "shop_delivery_type.name", /* Now the worst part! -> */ "metadata")
@@ -10133,8 +10134,14 @@ die();
 		header("Content-type: application/csv");
 		header("Content-disposition: inline; filename=\"{$filename}\";");
 
+		$encoding = "ISO-8859-1";
+		if(strlen(trim($o->prop("conf.csv_file_encoding"))) > 0)
+		{
+			$encoding = $o->prop("conf.csv_file_encoding");
+		}
+
 		//	Excel won't display data in UTF-8 correctly. At least not by default. Hence iconv(); -kaarel 7.04.2010
-		die(iconv(aw_global_get("charset"), "ISO-8859-1//IGNORE", aw_html_entity_decode($t->get_csv_file())));
+		die(iconv(aw_global_get("charset"), $encoding."//IGNORE", aw_html_entity_decode($t->get_csv_file())));
 	}
 
 	/**
