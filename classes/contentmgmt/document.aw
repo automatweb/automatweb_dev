@@ -19,7 +19,7 @@ class document extends aw_template
 		lc_load("definition");
 
 		// this takes less than 0.1 seconds btw
-		$xml_def = $this->get_file(array("file" => $this->cfg["basedir"]."/xml/documents/defaults.xml"));
+		$xml_def = $this->get_file(array("file" => aw_ini_get("basedir")."/xml/documents/defaults.xml"));
 		if ($xml_def)
 		{
 			$this->define_styles($xml_def);
@@ -115,8 +115,8 @@ class document extends aw_template
 
 
 
-		$baseurl = $this->cfg["baseurl"];
-		$ext = $this->cfg["ext"];
+		$baseurl = aw_ini_get("baseurl");
+		$ext = aw_ini_get("ext");
 
 		$lang_id = aw_global_get("lang_id");
 
@@ -449,7 +449,7 @@ class document extends aw_template
 
 		// would be nice if I could check whether the template _has_ one of those period variables
 		// and only _then_ load the period class --duke
-		$db_periods = get_instance(CL_PERIOD, $this->cfg["per_oid"]);
+		$db_periods = get_instance(CL_PERIOD, aw_ini_get("per_oid"));
 		$act_per = aw_global_get("act_per_id");
 		$pdat = $db_periods->get($act_per);
 
@@ -1558,9 +1558,9 @@ class document extends aw_template
 	{
 		global $from_name, $from, $section, $copy,$to_name, $to,$comment;
 
-		$baseurl = $this->cfg["baseurl"];
-		$ext = $this->cfg["ext"];
-		$SITE_ID = $this->cfg["site_id"];
+		$baseurl = aw_ini_get("baseurl");
+		$ext = aw_ini_get("ext");
+		$SITE_ID = aw_ini_get("site_id");
 
 		if ($SITE_ID == 5)
 		{
@@ -1672,7 +1672,7 @@ class document extends aw_template
 	**/
 	function change($arr)
 	{
-		$baseurl = $this->cfg["baseurl"];
+		$baseurl = aw_ini_get("baseurl");
 		extract($arr);
 
 		$oob = obj($id);
@@ -1753,7 +1753,7 @@ class document extends aw_template
 
 		// besides, mulle tundub, et otsingutulemusi kuvades taidetakse seda koodi
 		// 2 korda .. teine kord menueditis. Tyhi too?
-		if ($this->cfg["lang_menus"] == 1)
+		if (aw_ini_get("lang_menus") == 1)
 		{
 			$ss = " AND (objects.lang_id = ".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT.")";
 		}
@@ -1967,7 +1967,7 @@ class document extends aw_template
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent
 										 FROM documents
 										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE ($docmatch) AND objects.status = 2 $perstr AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
+										 WHERE ($docmatch) AND objects.status = 2 $perstr AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . aw_ini_get("site_id") . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
 		$si = __get_site_instance();
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -2272,7 +2272,7 @@ class document extends aw_template
 	**/
 	function lookup($args = array())
 	{
-		$SITE_ID = $this->cfg["site_id"];
+		$SITE_ID = aw_ini_get("site_id");
 		extract($args);
 		$id = (int)$id;
 		$q = "SELECT documents.author as author, objects.oid as oid, objects.name as name, documents.modified as modified FROM objects LEFT JOIN keywordrelations ON (keywordrelations.id = objects.oid) LEFT JOIN documents ON (documents.docid = objects.oid) WHERE status = 2 AND class_id IN (" . CL_DOCUMENT . "," . CL_PERIODIC_SECTION . ") AND site_id = '$SITE_ID' AND keywordrelations.keyword_id = '$id' ORDER BY documents.modified DESC";
@@ -2284,7 +2284,7 @@ class document extends aw_template
 			"tbgcolor" => "#C3D0DC",
 		));
 
-		$tt->parse_xml_def($this->cfg["site_basedir"]."/xml/generic_table.xml");
+		$tt->parse_xml_def(aw_ini_get("site_basedir")."/xml/generic_table.xml");
 		$tt->define_field(array(
 			"name" => "name",
 			"caption" => t("Pealkiri"),
@@ -2405,11 +2405,11 @@ class document extends aw_template
 		{
 			if (aw_ini_get("menuedit.long_section_url"))
 			{
-				$replacement = sprintf("<a class=\"documentlink\" href='%s/?section=%d'>%s</a>",$this->cfg["baseurl"],$d["target"],$d["name"]);
+				$replacement = sprintf("<a class=\"documentlink\" href='%s/?section=%d'>%s</a>",aw_ini_get("baseurl"),$d["target"],$d["name"]);
 			}
 			else
 			{
-				$replacement = sprintf("<a class=\"documentlink\" href='%s/%d'>%s</a>",$this->cfg["baseurl"],$d["target"],$d["name"]);
+				$replacement = sprintf("<a class=\"documentlink\" href='%s/%d'>%s</a>",aw_ini_get("baseurl"),$d["target"],$d["name"]);
 			}
 		}
 		else
@@ -2537,14 +2537,14 @@ class document extends aw_template
 		}
 
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $section ","name");
-		$this->_log(ST_DOCUMENT, SA_SEND, "$from_name  $from saatis dokumendi <a href='".$this->cfg["baseurl"]."/?section=".$section."'>$name</a> $to_name $to  'le",$section);
+		$this->_log(ST_DOCUMENT, SA_SEND, "$from_name  $from saatis dokumendi <a href='".aw_ini_get("baseurl")."/?section=".$section."'>$name</a> $to_name $to  'le",$section);
 
 		$si = __get_site_instance();
 		if (method_exists($si, "handle_send_to_friend_redirect"))
 		{
 			return $si->handle_send_to_friend_redirect();
 		}
-		return $this->cfg["baseurl"]."/?section=".$section;
+		return aw_ini_get("baseurl")."/?section=".$section;
 	}
 
 	/**
@@ -2801,11 +2801,11 @@ class document extends aw_template
 
 			if ($lsu)
 			{
-				$link = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$row["docid"];
+				$link = aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."/section=".$row["docid"];
 			}
 			else
 			{
-				$link = $this->cfg["baseurl"]."/".$row["docid"];
+				$link = aw_ini_get("baseurl")."/".$row["docid"];
 			}
 
 			$this->vars(array(
@@ -2857,14 +2857,14 @@ class document extends aw_template
 		$obj = obj($id);
 
 		// doc parent
-		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$obj->parent(), $obj->lang_id(), true);
+		$exp->fetch_and_save_page(aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".$obj->parent(), $obj->lang_id(), true);
 
 		$exp->exp_reset();
 
 		// doc
-		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id, $obj->lang_id(), true);
+		$exp->fetch_and_save_page(aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".$id, $obj->lang_id(), true);
 		// print doc
-		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id."&print=1", $obj->lang_id(), true);
+		$exp->fetch_and_save_page(aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".$id."&print=1", $obj->lang_id(), true);
 
 
 		// if the document is on the front page, then do the damn
@@ -2872,7 +2872,7 @@ class document extends aw_template
 		$fp = $this->db_fetch_field("SELECT frontpage_left FROM documents WHERE docid = $id", "frontpage_left");
 		if ($fp == 1)
 		{
-			$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".aw_ini_get("frontpage"), $obj->lang_id(), true);
+			$exp->fetch_and_save_page(aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".aw_ini_get("frontpage"), $obj->lang_id(), true);
 		}
 
 		ob_end_clean();

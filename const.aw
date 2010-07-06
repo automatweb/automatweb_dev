@@ -114,6 +114,14 @@ else
 			}
 		}
 
+		// support for links like http://bla/index.aw?291?lcb=117 ?424242?view=3&date=20
+		// this is a quick fix for a specific problem on june 22th 2010 with opera.ee site
+		// might have been a configuration error, for increase of tolerance in that case then
+		if (preg_match("/^\\?([0-9]+)\\?/", $pi, $section_info))
+		{
+			$section = $section_info[1];
+		}
+
 		if (($_pos = strpos($pi, "section=")) !== false)
 		{
 			// this here adds support for links like http://bla/index.aw/section=291/lcb=117

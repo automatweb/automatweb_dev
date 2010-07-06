@@ -518,6 +518,7 @@ class _int_object_loader extends core
 		{
 			return $GLOBALS["cfg"]["acl"]["default"]; //!!! acl.default setting on array! default on 1 view-l. teistel ini-s m22ramata. parandada!
 		}
+
 		return (int) isset($max_acl[$acl_name]) ? $max_acl[$acl_name] : 0;
 	}
 

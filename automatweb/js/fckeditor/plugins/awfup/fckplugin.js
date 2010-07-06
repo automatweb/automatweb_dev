@@ -8,7 +8,7 @@ InsertAWFupCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWFupCommand.Execute=function() {
 	if ( _fck_awdoc_exists() )
 	{
-		w = window.open(FCKConfig.AWBaseurl+'/automatweb/orb.aw?class=file_manager&doc='+escape(window.parent.location.href), 
+		w = window.open(FCKConfig.AWBaseurl+'/automatweb/orb.aw?class=file_manager&action=manage&doc='+escape(window.parent.location.href),
 				'InsertAWFupCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
 	}
 	else
@@ -16,7 +16,7 @@ InsertAWFupCommand.Execute=function() {
 		alert (FCKLang.ErrorNotSaved);
 	}
 }
-FCKCommands.RegisterCommand('awfup', InsertAWFupCommand ); 
+FCKCommands.RegisterCommand('awfup', InsertAWFupCommand );
 var oawfupItem = new FCKToolbarButton('awfup', FCKLang.AWFileUpload);
 if ( _fck_awdoc_exists() )
 {
@@ -34,7 +34,7 @@ InsertAWFupCommand.Name='FileChange';
 InsertAWFupCommand.prototype.Execute=function(){}
 InsertAWFupCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWFupCommand.Execute=function() {
-	window.open(FCKConfig.AWBaseurl+'/automatweb/orb.aw?class=file_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&file_id="+FCK.Selection.GetSelectedElement()._oid, 
+	window.open(FCKConfig.AWBaseurl+'/automatweb/orb.aw?class=file_manager&action=manage&doc='+escape(window.parent.location.href)+"&in_popup=1&file_id="+FCK.Selection.GetSelectedElement()._oid,
 		'InsertAWFupCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awfilechange', InsertAWFupCommand );
@@ -87,23 +87,23 @@ FCKAWFilePlaceholders.GUP = function(param)
 FCKAWFilePlaceholders.GetUrlContents = function( url )
 {
 	var req;
-	if (window.XMLHttpRequest) 
+	if (window.XMLHttpRequest)
 	{
 		req = new XMLHttpRequest();
 		req.open('GET', url, false);
 		req.send(null);
-	} 
-	else 
-	if (window.ActiveXObject) 
+	}
+	else
+	if (window.ActiveXObject)
 	{
 		req = new ActiveXObject('Microsoft.XMLHTTP');
-		if (req) 
+		if (req)
 		{
 			req.open('GET', url, false);
 			req.send();
 		}
 	}
-	return req.responseText; 
+	return req.responseText;
 }
 
 FCKAWFilePlaceholders.SetupSpan = function( span, name )
@@ -115,7 +115,7 @@ FCKAWFilePlaceholders.SetupSpan = function( span, name )
 
 	span.style.backgroundColor = '#ffff00' ;
 	span.style.color = '#000000' ;
-	
+
 	if ( FCKBrowserInfo.IsGecko )
 		span.style.cursor = 'default' ;
 
@@ -182,7 +182,7 @@ if ( FCKBrowserInfo.IsIE )
 		var aPlaholders = FCK.EditorDocument.body.innerText.match( /(#file[^#]+#)/g ) ;
 		if ( !aPlaholders )
 			return ;
-			
+
 		var oRange = FCK.EditorDocument.body.createTextRange() ;
 
 		for ( var i = 0 ; i < aPlaholders.length ; i++ )
@@ -190,7 +190,7 @@ if ( FCKBrowserInfo.IsIE )
 			if ( oRange.findText( aPlaholders[i] ) )
 			{
 				var name = aPlaholders[i].match( /#([^#]*?)#/ )[1] ;
-			
+
 				doc_id = FCKAWFilePlaceholders.GUP("id");
 				tmp = FCKAWFilePlaceholders.GetUrlContents(FCKConfig.AWBaseurl+"/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 				eval(tmp);

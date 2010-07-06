@@ -1,8 +1,8 @@
 <?php
 // $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.26 2008/06/06 08:07:11 kristo Exp $
-// register.aw - Register 
+// register.aw - Register
 /*
- 
+
 @classinfo syslog_type=ST_REGISTER relationmgr=yes no_status=1  maintainer=kristo
 
 @default table=objects
@@ -117,7 +117,7 @@ class register extends class_base
 			case "search":
 				if (!$arr["obj_inst"]->prop("search_o"))
 				{
-					$prop["value"] = t("Otsingu konfiguratsioon valimatta!");
+					$prop["value"] = t("Otsingu konfiguratsioon valimata!");
 				}
 				else
 				{
@@ -161,7 +161,7 @@ class register extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function do_data_toolbar($arr)
 	{
@@ -317,7 +317,7 @@ class register extends class_base
 				"modified" => $o->modified(),
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
-						"section" => aw_global_get("section"), 
+						"section" => aw_global_get("section"),
 						"id" => $o->id(),
 						"return_url" => html::get_change_url($arr["request"]["id"], array(
 							"group" => $arr["request"]["group"],
@@ -374,7 +374,7 @@ class register extends class_base
 			$t = new aw_table(array(
 				"layout" => "generic"
 			));
-		
+
 			$this->do_data_tbl(array(
 				"prop" => array(
 					"vcl_inst" => &$t
@@ -384,7 +384,7 @@ class register extends class_base
 			));
 			$html .=  $t->draw();
 		}
-	
+
 		return $html ;
 	}
 
@@ -394,11 +394,18 @@ class register extends class_base
 		$ps = $rs->get_props_from_reg($o);
 		$clid = $rs->get_clid_from_reg($o);
 
-		// load props for entire class, cause from cfgform we don't get all dat
-		$cfgu = get_instance("cfg/cfgutils");
-		$f_props = $cfgu->load_properties(array(
-			"clid" => $clid
-		));
+		if ($clid)
+		{
+			// load props for entire class, cause from cfgform we don't get all dat
+			$cfgu = get_instance("cfg/cfgutils");
+			$f_props = $cfgu->load_properties(array(
+				"clid" => $clid
+			));
+		}
+		else
+		{
+			$f_props = array();
+		}
 
 		$ret = array("" => "");
 		foreach($ps as $pn => $pd)
@@ -430,7 +437,7 @@ class register extends class_base
 			"name" => $o->prop("data_tree_field"),
 			"clid" => CL_REGISTER_DATA
 		));
-		
+
 		// insert into tree
 		foreach($vals as $v_id => $v_name)
 		{

@@ -33,7 +33,7 @@
 	@property link type=textbox table=images field=link
 	@caption Link
 
-	@property date_taken type=datetime_select table=images field=aw_date_taken 
+	@property date_taken type=datetime_select table=images field=aw_date_taken
 	@caption Pildistamise aeg
 
 	@property can_comment type=checkbox table=objects field=flags method=bitmask ch_value=1
@@ -44,7 +44,7 @@
 
 
 	/@property file_show type=text store=no editonly=1
-	/@caption Eelvaade 
+	/@caption Eelvaade
 
 @groupinfo show caption="N&auml;itamine"
 @groupinfo show_def caption="N&auml;itamine" parent=show
@@ -72,8 +72,8 @@
 	@caption Kustuta suur pilt
 
 	@property big_flash type=relpicker reltype=RELTYPE_FLASH table=objects field=meta method=serialize
-	@caption Flash 
-	
+	@caption Flash
+
 @groupinfo resize caption="Muuda suurust"
 @default group=resize
 
@@ -91,7 +91,7 @@
 
 	@property dimensions_big type=text store=no
 	@caption M&otilde;&otilde;tmed
-	
+
 	@property new_w_big type=textbox field=meta method=serialize size=6 store=no
 	@caption Uus laius (suur)
 
@@ -117,14 +117,14 @@
 
 @groupinfo comments caption="Kommentaarid"
 @default group=comments
-	
+
 	@property comments_tb type=toolbar no_caption=1 store=no
 
 	@property comments_tbl type=table no_caption=1 store=no
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
@@ -153,21 +153,21 @@ class image extends class_base
 		);
 	}
 
-	/** 
+	/**
 
 		@attrib name=get_image_by_id api=1 params=pos
 
 		@param id required type=int
 			id of the image in images database table
-		@errors 
+		@errors
 			none
 
-		@returns 
+		@returns
 			- array with image data
 			- false if the id parameter is array
 			- false if the id parameter is not numeric
 
-		@comment 
+		@comment
 			none
 
 		@examples
@@ -197,7 +197,7 @@ class image extends class_base
 
 			if ($row)
 			{
-				array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
+				array_walk($row ,create_function('&$arr','$arr=trim($arr);'));
 				$row["url"] = $this->get_url($row["file"]);
 				/*
 				if (aw_ini_get("image.imgbaseurl") == "")
@@ -252,18 +252,18 @@ class image extends class_base
 
 		@param url required type=string
 			url to be fixed
-		@errors 
+		@errors
 			none
 
-		@returns 
+		@returns
 			If url parameter evaluates false (ie. '', 0) then returns empty value.
-		@comment 
+		@comment
 			none
 
 		@examples
 			none
 	**/
-	function get_url($url) 
+	function get_url($url)
 	{
 		if ($url)
 		{
@@ -310,7 +310,7 @@ class image extends class_base
 		$tmp = aw_ini_get("site_basedir")."/files/".substr($tmp, $slp)."/".basename($path);
 		return $tmp;
 	}
-	
+
 	///
 	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse v&auml;lja callbackina
 	//  force_comments - shows comment count and links to comment window even if not set in images prop
@@ -362,15 +362,15 @@ class image extends class_base
 		}
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
-		$alstr = array("k" => "center","v" => "left","p" => "right","" => "");
-		
+		$alstr = array("k" => "center","v" => "left","p" => "right","" => "center");
+
 		if(!empty($htmlentities))
 		{
 			$idata["comment"] = htmlentities($idata["comment"]);
 			$idata["meta"]["alt"] = htmlentities($idata["meta"]["alt"]);
 			$idata["meta"]["author"] = htmlentities($idata["meta"]["author"]);
 		}
-		
+
 		if ($idata)
 		{
 			// Count comments, if needed
@@ -390,7 +390,7 @@ class image extends class_base
 
 				$idata["comment"] .= ' ('.$num_comments.' '. ($num_comments == 1 ? t("kommentaar") : t("kommentaari")) .')';
 			}
-		
+
 			$alt = $idata["meta"]["alt"];
 
 			$size = array(0 => null, 1 => null);
@@ -454,7 +454,7 @@ class image extends class_base
 			{
 				return "";
 			}
-			
+
 			if (!empty($args['link_prefix'])) // Override image link
 			{
 				$idata['link'] = $args['link_prefix'].$idata['oid'];
@@ -498,7 +498,7 @@ class image extends class_base
 			{
 				$idata["big_url"] = " ";
 			}
-			$ha = ""; 
+			$ha = "";
 			if ($idata["meta"]["author"] != "")
 			{
 				$ha = localparse($tpls["HAS_AUTHOR"], $vars);
@@ -527,12 +527,12 @@ class image extends class_base
 					$replacement = localparse($tpls["image_inplace_linked"],$vars);
 					$inplace = "image_inplace_linked";
 				}
-				else 
+				else
 				if (isset($tpls["image_linked"]))
 				{
 					$replacement = localparse($tpls["image_linked"],$vars);
 				}
-				else 
+				else
 				if (!aw_ini_get("image.no_default_template"))
 				{
 					$authortxt = "";
@@ -614,7 +614,7 @@ class image extends class_base
 					{
 						$replacement .= "</a>";
 					}
-					
+
 					$subtxt = "";
 					if (!empty($idata["comment"]))
 					{
@@ -637,7 +637,7 @@ class image extends class_base
 						$replacement .= "</td></tr></table>";
 					}
 				};
-			}	
+			}
 		}
 
 		$retval = array(
@@ -647,7 +647,7 @@ class image extends class_base
 		return str_replace("\n", "", $retval);
 	}
 
-	function get_img_by_oid($oid,$idx) 
+	function get_img_by_oid($oid,$idx)
 	{
 		$o = obj($oid);
 		$c = reset($o->connections_from(array("idx" => $idx, "to.class_id" => CL_IMAGE)));
@@ -665,7 +665,7 @@ class image extends class_base
 			$row = $this->db_next();
 			if (is_array($row))
 			{
-				array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
+				array_walk($row ,create_function('&$arr','$arr=trim($arr);'));
 			}
 
 			$row["url"] = $this->get_url($row["file"]);
@@ -690,13 +690,13 @@ class image extends class_base
 
 		@param file required type=string
 			path to the imagefile
-		@errors 
+		@errors
 			none
 
-		@returns 
+		@returns
 			true if it is flash file, false othervise
 
-		@comment 
+		@comment
 			none
 
 		@examples
@@ -763,14 +763,14 @@ class image extends class_base
 		@param img_id optional type=int
 			image id, if not specified, image will be added, else changed
 
-		@errors 
+		@errors
 			none
 
-		@returns 
+		@returns
 			- array of image data (image_id, image url and image size)
 			- false if img_id is set and evaluates to false
 
-		@comment 
+		@comment
 			none
 
 		@examples
@@ -849,15 +849,15 @@ class image extends class_base
 		return array("id" => $img_id,"url" => $this->get_url($fl), "sz" => $sz);
 	}
 
-	/**  
-		
-		@attrib name=show params=name nologin="1" 
-		
+	/**
+
+		@attrib name=show params=name nologin="1"
+
 		@param file required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -869,15 +869,15 @@ class image extends class_base
 		$fname = $rootdir . "/img/$f1/" . $file;
 		if ($file)
 		{
-			if (strpos("/",$file) !== false) 
+			if (strpos("/",$file) !== false)
 			{
 				header("Content-type: text/html");
 				print "access denied,";
-			} 
+			}
 
 			// the site's img folder
-			$passed = false;	
-			if (@is_file($fname) && @is_readable($fname)) 
+			$passed = false;
+			if (@is_file($fname) && @is_readable($fname))
 			{
 				$passed = true;
 			}
@@ -886,7 +886,7 @@ class image extends class_base
 			{
 				$rootdir = aw_ini_get("site_basedir");
 				$fname = $rootdir . "/files/$f1/" . $file;
-				if (is_file($fname) && is_readable($fname)) 
+				if (is_file($fname) && is_readable($fname))
 				{
 					$passed = true;
 				}
@@ -902,13 +902,13 @@ class image extends class_base
 					$size = GetImageSize($fname);
 				};
 
-				if (!is_array($size)) 
+				if (!is_array($size))
 				{
 					print "access denied.";
-				} 
-				else 
+				}
+				else
 				{
-					switch($size[2]) 
+					switch($size[2])
 					{
 						case "1":
 							$type = "image/gif";
@@ -925,7 +925,7 @@ class image extends class_base
 
 					};
 
-					// if resize requested 
+					// if resize requested
 					if ($GLOBALS["resize_x"] > 0 || $GLOBALS["resize_y"] > 0)
 					{
 						$im = imagecreatefromstring(file_get_contents($fname));
@@ -945,7 +945,7 @@ class image extends class_base
 						imagedestroy($im);
 
 						header("Content-type: $type");
-						switch($size[2]) 
+						switch($size[2])
 						{
 							case "1":
 								imagegif($tmpimg);
@@ -992,13 +992,13 @@ class image extends class_base
 
 					readfile($fname);
 				};
-			} 
-			else 
+			}
+			else
 			{
 				print "access denied:";
 			};
-		} 
-		else 
+		}
+		else
 		{
 			print "access denied;";
 		};
@@ -1006,9 +1006,9 @@ class image extends class_base
 	}
 
 	/** Creates HTML image tag
-		
-		@attrib name=view params=name nologin="1" 
-		
+
+		@attrib name=view params=name nologin="1"
+
 		@param id required type=int
 			image id
 		@param height optional type=int
@@ -1019,7 +1019,7 @@ class image extends class_base
 
 		@comment
 			none
-		
+
 		@examples
 			none
 	**/
@@ -1035,9 +1035,9 @@ class image extends class_base
 	}
 
 	/** Rewrites the image's url to the correct value
-		
-		@attrib name=view params=name nologin="1" 
-		
+
+		@attrib name=view params=name nologin="1"
+
 		@param url required type=string
 			URL to be rewritten
 
@@ -1049,7 +1049,7 @@ class image extends class_base
 			removes host name from url
 			if url is site/img.aw , rewrites to the correct orb fastcall
 			adds baseurl
-		
+
 		@examples
 			none
 	**/
@@ -1097,8 +1097,8 @@ class image extends class_base
 
 
 	/** Creates HTML image tag
-		@attrib name=make_img_tag params=pos 
-		
+		@attrib name=make_img_tag params=pos
+
 		@param url required type=string
 			URL to the image
 		@param alt optional type=string
@@ -1123,7 +1123,7 @@ class image extends class_base
 			removes host name from url
 			if url is site/img.aw , rewrites to the correct orb fastcall
 			adds baseurl
-		
+
 		@examples
 			none
 	**/
@@ -1380,7 +1380,7 @@ class image extends class_base
 					{
 						// also, we should check if any OTHER file objects point to this file.
 						// if they do, then don't delete the old one. this is sort-of like reference counting:P
-						// because copy/paste on images creates a new object that points to the same file. 
+						// because copy/paste on images creates a new object that points to the same file.
 						$ol = new object_list(array(
 							"class_id" => CL_IMAGE,
 							"lang_id" => array(),
@@ -1444,11 +1444,11 @@ class image extends class_base
 			case "new_h":
 				$this->new_h = $prop["value"];
 				break;
-			
+
 			case "new_h_big":
 				$this->new_h_big = $prop["value"];
 				break;
-			
+
 			case "new_w_big":
 				$this->new_w_big = $prop["value"];
 				break;
@@ -1460,7 +1460,7 @@ class image extends class_base
 
 		@attrib name=add_image params=name default="0" nologin="1" api=1 all_args=1 caption="foo" is_public=1
 
-		@param from required type=string 
+		@param from required type=string
 			Method how image is passed to the function. Options: [file|string|url]
 		@param str optional type=string
 			if from value is "string", then this is the file content
@@ -1475,10 +1475,10 @@ class image extends class_base
 		@param id optional type=int
 			the id of the image to change
 
-		@errors 
-			none			
+		@errors
+			none
 
-		@returns 
+		@returns
 			array with image data:
 
 			Array
@@ -1488,7 +1488,7 @@ class image extends class_base
 				[sz] => Image size
 			)
 
-		@comment 
+		@comment
 			none
 
 		@examples
@@ -1504,7 +1504,7 @@ class image extends class_base
 
 		if ($from == "url" && !empty($url))
 		{
-			$str = file_get_contents($url); // since php 4.3.0 
+			$str = file_get_contents($url); // since php 4.3.0
 		}
 
 		if (!$id)
@@ -1540,20 +1540,20 @@ class image extends class_base
 		@attrib name=resize_picture params=name api=1
 
 		@param id required type=int
-			image id 
+			image id
 		@param file required type=string
 
 		@param width required type=int
 			new width of the picture
 		@param height required type=int
 			new height of the picture
-		@errors 
+		@errors
 			none
 
-		@returns 
+		@returns
 			none
 
-		@comment 
+		@comment
 			after resizing picture converts all pictures to JPG format!
 		@examples
 			none
@@ -1635,7 +1635,7 @@ class image extends class_base
 	}
 
 	function callback_pre_save($arr)
-	{	
+	{
 		if ($this->_set_dt)
 		{
 			$arr["obj_inst"]->set_prop("date_taken", $this->_set_dt);
@@ -1654,7 +1654,7 @@ class image extends class_base
 			echo $arr['width'],"<br>";*/
 			$this->resize_picture($arr);
 		}
-		
+
 		if($this->new_w || $this->new_h)
 		{
 			$arr['file'] = 'file';
@@ -1665,7 +1665,7 @@ class image extends class_base
 			echo $arr['width'],"<br>";*/
 			$this->resize_picture($arr);
 		}
-		
+
 		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
 		if ($arr["request"]["save_and_doc"] != "")
 		{
@@ -1679,11 +1679,11 @@ class image extends class_base
 			die("
 				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/jquery/jquery-1.2.3.min.js\"></script>
 				<script language='javascript'>
-				
+
 				FCK=window.parent.opener.FCK;
-				
+
 				var eSelected = FCK.Selection.GetSelectedElement() ;
-				
+
 				if (eSelected)
 				{
 					if (eSelected.tagName == 'TABLE' && eSelected._awimageplaceholder  )
@@ -1716,13 +1716,13 @@ class image extends class_base
 	}
 
 
-	/** Adding comment 
-		
+	/** Adding comment
+
 		@attrib name=submit_comment params=name nologin="1" api=1
-		
+
 		@param id required type=int
 		@param comments optional type=int
-		
+
 		@returns
 			URL to the big image view
 	**/
@@ -1750,16 +1750,16 @@ class image extends class_base
 					'action' => "show_big",
 				));
 			}
-			
+
 		}
 		return (aw_global_get("HTTP_REFERER"));
-		
+
 	}
 
-	/** Shows the big image 
-		
+	/** Shows the big image
+
 		@attrib name=show_big params=name nologin="1" api=1
-		
+
 		@param id required type=int
 		@param comments optional type=int
 		@param minigal optional type=int
@@ -1772,7 +1772,7 @@ class image extends class_base
 		$comments = 0;
 		$parse = "minimal"; // name of SUB in template
 		extract($arr);
-	
+
 		$im = $this->get_image_by_id($id);
 		$imo = obj($id);
 		$this->read_any_template("show_big.tpl");
@@ -1847,7 +1847,7 @@ class image extends class_base
 				'data' => array('orb_class' => 'image'),
 			));
 			$out = $hc_inst->get_result(array('form_only' => true));
-		
+
 			$this->vars(array(
 				'comments'=> $out,
 			));
@@ -1900,20 +1900,20 @@ class image extends class_base
 		}
 		if (!$this->is_template($parse))
 		{
-			die($this->parse());	
+			die($this->parse());
 		}
 		die($this->parse($parse));
 	}
 
-	/**  
-		
-		@attrib name=show_small params=name nologin="1" 
-		
+	/**
+
+		@attrib name=show_small params=name nologin="1"
+
 		@param id required type=int
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1938,17 +1938,17 @@ class image extends class_base
 
 	/** Get image url by image id
 
-		@attrib name=get_url_by_id params=pos api=1 
+		@attrib name=get_url_by_id params=pos api=1
 
 		@param id required type=int
 			Image object's id
-		@errors 
+		@errors
 			none
 
-		@returns 
+		@returns
 			empty value if the image object has no view access, url to the image othervise
 
-		@comment 
+		@comment
 			none
 
 		@examples
@@ -1967,17 +1967,17 @@ class image extends class_base
 
 	/** Get big image url by image id
 
-		@attrib params=pos api=1 
+		@attrib params=pos api=1
 
 		@param id required type=int
 			Image object's id
-		@errors 
+		@errors
 			none
 
-		@returns 
+		@returns
 			empty value if the image object has no view access, url to the big image othervise
 
-		@comment 
+		@comment
 			none
 
 		@examples
@@ -2029,17 +2029,17 @@ class image extends class_base
 
 	/** Apply gallery conf to an image
 
-		@attrib name=do_apply_gal_conf params=pos api=1 
+		@attrib name=do_apply_gal_conf params=pos api=1
 
 		@param o required type=object
 			Image object
-		@errors 
+		@errors
 			none
 
-		@returns 
+		@returns
 			none
 
-		@comment 
+		@comment
 			Applies the gallery configuration to an image. Gallery configuration is set to the image's parent.
 
 		@examples
@@ -2059,22 +2059,22 @@ class image extends class_base
 
 	/** Resizes images in filesystem
 
-		@attrib name=do_resize_image_in_fs params=pos api=1 
+		@attrib name=do_resize_image_in_fs params=pos api=1
 
 		@param file required type=string
 			Image file
 		@param conf required type=object
 			Gallery configuration object
 		@param prefix required type=string
-			
-	
-		@errors 
+
+
+		@errors
 			none
 
-		@returns 
+		@returns
 			none
 
-		@comment 
+		@comment
 			none
 
 		@examples
@@ -2092,9 +2092,9 @@ class image extends class_base
 
 		$conf_i = $conf->instance();
 		$xyd = $conf_i->get_xydata_from_conf(array(
-			"conf" => $conf, 
-			"prefix" => $prefix, 
-			"w" => $i_width, 
+			"conf" => $conf,
+			"prefix" => $prefix,
+			"w" => $i_width,
 			"h" => $i_height
 		));
 
@@ -2133,7 +2133,7 @@ class image extends class_base
 		{
 			$img->resize_simple($xyd["width"], $xyd["height"]);
 		}
-		
+
 		$gv = get_instance(CL_GALLERY_V2);
 		$img = $gv->_do_logo($img, $conf, $prefix);
 
@@ -2142,14 +2142,14 @@ class image extends class_base
 
 	/** Composes img tag with a link to the big image
 
-		@attrib name=make_img_tag_wl params=pos api=1 
+		@attrib name=make_img_tag_wl params=pos api=1
 
 		@param id required type=int
 			Image object's id
 		@param alt optional type=string default=NULL
 			Images alternate text
 		@param has_big_alt optional type=string default=NULL
-			If big image is set, then this is the big image's alternate text.	
+			If big image is set, then this is the big image's alternate text.
 		@param size optional type=array
 			array(
 				height => int,
@@ -2161,13 +2161,13 @@ class image extends class_base
 				show_title => true	// default true
 			)
 
-		@errors 
+		@errors
 			none
 
-		@returns 
+		@returns
 			HTML image tag, with link when big image is set
 
-		@comment 
+		@comment
 			none
 
 		@examples
@@ -2303,7 +2303,7 @@ class image extends class_base
 	}
 
 	/**
-		@attrib name=fetch_image_tag_for_doc params=name 
+		@attrib name=fetch_image_tag_for_doc params=name
 
 		@param id required type=int
 	**/
@@ -2312,11 +2312,11 @@ class image extends class_base
 		$s = $this->parse_alias(array("alias" => array("target" => $arr["id"]), "htmlentities" => true));
 		die(str_replace("automatweb/", "", $s["replacement"]));
 	}
-	
+
 	/**
 		@attrib name=gen_image_alias_for_doc params=name
 		@param img_id required type=int
-		@param doc_id optional 
+		@param doc_id optional
 		@param close optional type=bool
 	**/
 	function gen_image_alias_for_doc($arr)
@@ -2334,7 +2334,7 @@ class image extends class_base
 			die($arr["img_id"]);
 		}
 	}
-	
+
 	/**
 		@attrib name=fetch_image_alias_for_doc
 		@param doc_id required
@@ -2344,7 +2344,7 @@ class image extends class_base
 	{
 		$alp = get_instance("alias_parser");
 		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
-		
+
 		foreach($alias_list as $obj_id => $alias_string)
 		{
 			if ($obj_id == $arr["image_id"])
@@ -2352,15 +2352,15 @@ class image extends class_base
 				die(str_replace("#", "", $alias_string));
 			}
 		}
-		
+
 		$this->gen_image_alias_for_doc(array(
 			"img_id" => $arr["image_id"],
 			"doc_id" => $arr["doc_id"],
 			"no_die" => true
 		));
-		
+
 		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
-		
+
 		foreach($alias_list as $obj_id => $alias_string)
 		{
 			if ($obj_id == $arr["image_id"])
@@ -2368,10 +2368,10 @@ class image extends class_base
 				die(str_replace("#", "", $alias_string));
 			}
 		}
-		
+
 		die();
 	}
-	
+
 	/**
 		@attrib name=get_connection_details_for_doc params=name
 		@param doc_id required type=int
@@ -2489,7 +2489,7 @@ class image extends class_base
 				"type" => "RELTYPE_GRP"
 			));
 			$cfo = obj($cfid);
-			$grps = $cfo->prop("comm_edit_grp");	
+			$grps = $cfo->prop("comm_edit_grp");
 			$edit_ok = 0;
 			foreach($grps as $grp)
 			{
