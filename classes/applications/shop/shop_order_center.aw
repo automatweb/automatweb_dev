@@ -132,12 +132,15 @@
 	@caption Auml;ra m&uuml;&uuml; tooteid mis pole saadaval
 	@comment Toodete mitte n&auml;itamiseks, mis on tarne infoga mis laos defineeritud kui v&auml;lja m&uuml;&uuml;dud
 
+	@property only_active_items type=checkbox ch_value=1
+	@caption Ainult aktiivsed tooted
+	@comment Deaktiivseid pakette/tooteid/pakendeid ei kuvata ning ka ostukorvi neid lisada ei saa
+
+	@property inactive_item_tpl type=textbox
+	@caption Deaktiivse toote kuvamise templeit
 
 @property childtitle1 type=text store=no subtitle=1
 @caption Vanad-&uuml;le-vaadata-kas-toimivad-ja-kas-vaja
-
-	@property only_active_items type=checkbox ch_value=1
-	@caption Ainult aktiivsed tooted
 
 	@property use_controller type=checkbox ch_value=1
 	@caption N&auml;itamiseks kasuta kontrollerit

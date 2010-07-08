@@ -2,6 +2,21 @@
 
 class shop_product_obj extends _int_object
 {
+
+	function delete($full_delete = false)
+	{
+		$this->delete_product_show_cache();
+
+		return parent::delete($full_delete);
+	}
+
+	public function save($exclusive = false, $previous_state = null)
+	{
+		$this->delete_product_show_cache();
+
+		return parent::save($exclusive, $previous_state);
+	}
+
 	/** Sets the price for the product by currency
 		@attrib api=1 params=pos
 
@@ -829,6 +844,15 @@ class shop_product_obj extends _int_object
 		$ids = $ol->ids();
 //		var_dump($product->id(), $ol);
 		return reset($ids);
+	}
+
+	protected function delete_product_show_cache()
+	{
+		$cache_dir = aw_ini_get("cache.page_cache")."/product_show/";
+		foreach(glob(sprintf($cache_dir."*product=%u&*.tpl*", $this->id())) as $file)
+		{
+			unlink($file);
+		}
 	}
 
 }

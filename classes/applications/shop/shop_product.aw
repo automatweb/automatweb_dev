@@ -3172,9 +3172,13 @@ class shop_product extends class_base
 
 
 
-	private function get_template()
+	private function get_template($ob, $oc)
 	{
-		if($this->template)
+		if ($ob->status() != object::STAT_ACTIVE and $oc->prop("only_active_items"))
+		{
+			return $oc->prop("inactive_item_tpl");
+		}
+		elseif($this->template)
 		{
 			return $this->template;
 		}
@@ -3192,8 +3196,9 @@ class shop_product extends class_base
 		)));
 
 		$ob = new object($arr["id"]);
+		$oc = obj($arr["oc"]);
 
-		$this->read_template($this->get_template());
+		$this->read_template($this->get_template($ob, $oc));
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
@@ -3203,7 +3208,6 @@ class shop_product extends class_base
 
 		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
 
-		$oc = obj($arr["oc"]);
 		$data["oc"] = $arr["oc"];
 		$data["submit"] = html::submit(array(
 			"value" => t("Lisa tooted korvi"),

@@ -226,7 +226,7 @@ class products_show extends class_base
 			return join ("" , $cache);
 		}
 
-enter_function("products_show::show");
+		enter_function("products_show::show");
 		$ob = new object($arr["id"]);
 		if(!empty($_GET["product"]) && $this->can("view" , $_GET["product"]))
 		{
@@ -241,7 +241,7 @@ enter_function("products_show::show");
 			$this->set_cache($ret);
 			return $ret;
 		}
-enter_function("products_show::start");
+		enter_function("products_show::start");
 		$oc = $ob->get_oc();
 		$this->read_template($ob->get_template());
 		$this->vars(array(

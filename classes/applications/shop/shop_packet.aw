@@ -704,9 +704,13 @@ class shop_packet extends class_base
 
 	}
 
-	private function get_template()
+	private function get_template($ob, $oc)
 	{
-		if($this->template)
+		if ($ob->status() != object::STAT_ACTIVE and $oc->prop("only_active_items"))
+		{
+			return $oc->prop("inactive_item_tpl");
+		}
+		elseif ($this->template)
 		{
 			return $this->template;
 		}
@@ -723,9 +727,10 @@ class shop_packet extends class_base
 			"msg" => t("shop_packet::show(): no order center object selected!")
 		));
 
+		$oc = obj($arr["oc"]);
 		$ob = new object($arr["id"]);
 
-		$this->read_template($this->get_template());
+		$this->read_template($this->get_template($ob, $oc));
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
@@ -771,17 +776,7 @@ class shop_packet extends class_base
 
 
 		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
- //		$data["submit_url"] = $this->mk_my_orb("submit_add_cart", array(
-//			"oc" => $oc->id(),
-//			"id" => $oc->prop("cart"),
-//		),CL_SHOP_ORDER_CART,false,false,"&amp;");
-//
-//		if(!substr_count("orb.aw" ,$data["submit_url"] ))
-//		{
-//			$data["submit_url"] = str_replace(aw_ini_get("baseurl")."/" ,aw_ini_get("baseurl")."/orb.aw" , $data["submit_url"]);
-//
-//		}
-		$oc = obj($arr["oc"]);
+
 		$data["oc"] = $arr["oc"];
 		$data["submit"] = html::submit(array(
 			"value" => t("Lisa tooted korvi"),
