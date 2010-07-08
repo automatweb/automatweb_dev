@@ -301,6 +301,26 @@
             <comment>Toodete mitte n&amp;amp;auml;itamiseks, mis on tarne infoga mis laos defineeritud kui v&amp;amp;auml;lja m&amp;amp;uuml;&amp;amp;uuml;dud</comment>
       </property>
       <property>
+            <name>only_active_items</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ainult aktiivsed tooted</caption>
+            <comment>Deaktiivseid pakette/tooteid/pakendeid ei kuvata ning ka ostukorvi neid lisada ei saa</comment>
+      </property>
+      <property>
+            <name>inactive_item_tpl</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Deaktiivse toote kuvamise templeit</caption>
+      </property>
+      <property>
             <name>childtitle1</name>
             <group>appear_settings</group>
             <table>objects</table>
@@ -310,16 +330,6 @@
             <store>no</store>
             <subtitle>1</subtitle>
             <caption>Vanad-&amp;amp;uuml;le-vaadata-kas-toimivad-ja-kas-vaja</caption>
-      </property>
-      <property>
-            <name>only_active_items</name>
-            <group>appear_settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Ainult aktiivsed tooted</caption>
       </property>
       <property>
             <name>use_controller</name>
