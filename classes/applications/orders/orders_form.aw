@@ -876,7 +876,7 @@ $sum+= $delivery_vars["delivery_price"];
 				"logic" => "OR",
 				"conditions" => array(
 					"code" => $code."%",
-					"short_code" => $code."%",
+					"short_code" => str_replace(" ", "", $code)."%",
 				),
 			))
 		));
@@ -894,8 +894,8 @@ $sum+= $delivery_vars["delivery_price"];
 				new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"code" =>  substr($code , 0 , 6)."%",
-						"short_code" =>  substr($code , 0 , 6)."%",
+						"code" =>  substr($code, 0, 6)."%",
+						"short_code" =>  substr(str_replace(" ", "", $code), 0, 6)."%",
 					),
 				))
 			));
