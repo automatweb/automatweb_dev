@@ -347,6 +347,7 @@ class shop_order_cart_obj extends _int_object
 			$person = get_current_person();
 		}
 		//sellisel juhul otsib olemasolevate isikute hulgast, kui on andmeid mille j2rgi otsida
+		/*	This is causing incorrect client data to be found if a customer mistypes his/her client code
 		if(
 			!empty($data["personalcode"]) || 
 			!empty($data["customer_no"]) || 
@@ -393,6 +394,7 @@ class shop_order_cart_obj extends _int_object
 				}
 			}
 		}
+		*/
 
 		if(!is_object($person))
 		{
